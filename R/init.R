@@ -26,21 +26,22 @@
 #' @examples
 #' \dontrun{
 #' ASL <- generate_sample_data('ASL')
+#' ARS <- generate_sample_data('ars')
 #'
 #' x <- teal::init(
-#'   data =  list(asl=ASL),
+#'   data =  list(asl = ASL, ars = ARS),
 #'   analysis = list(
 #'     list(
 #'       name = "spaghetti plot",
-#'       server = function(input, output, session, data) {},
+#'       server = function(input, output, session, ars) {},
 #'       ui = function(id) div(p("spaghetti plot")),
 #'       data = c(ars="ars")
 #'     ),
 #'     list(
 #'       name = "survival curves",
-#'       server = function(input, output, session, data) {},
+#'       server = function(input, output, session, asl, ars) {},
 #'       ui = function(id) div(p("Kaplan Meier Curve")),
-#'       data = c(ars='ars')
+#'       data = c(asl = 'asl', ars='ars')
 #'     )
 #'   ),
 #'   header = tags$h1("Sample App"),
@@ -105,19 +106,19 @@ init <- function(data,
     #callModule(srv_page_variable_browser, "page_variable_browser")
 
     # enclosing function is a closure
-    # Map(function(x, i) {
-    #   do.call(
-    #     callModule,
-    #     c(
-    #       list(
-    #         module = x$server,
-    #         id = paste0("analysis_item_", i)
-    #       ),
-    #       Map(function(d) datasets$get_data(d, filtered = TRUE, reactive = FALSE), x$data),
-    #       x$options
-    #     )
-    #   )
-    # }, analysis, seq_along(analysis))
+    Map(function(x, i) {
+     do.call(
+       callModule,
+       c(
+         list(
+           module = x$server,
+           id = paste0("analysis_item_", i)
+         ),
+         Map(function(d) datasets$get_data(d, filtered = TRUE, reactive = FALSE), x$data),
+         x$options
+       )
+     )
+    }, analysis, seq_along(analysis))
   }
 
   list(server = server, ui = ui)
