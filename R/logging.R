@@ -1,13 +1,12 @@
 
 
-logging <- TRUE
 .log_depth <- 0
 
 # Teal Internally Used Logger functions
 #
 .log <- function(..., sep=" ", type="debug") {
 
-  if (!logging) return()
+  if (!options()$teal_logging) return()
 
   ## force the evaluation of arguments
   args <- unlist(Map(function(x) if(length(x)>1) paste(x, collapse = ", ") else x, list(...)))
@@ -19,12 +18,15 @@ logging <- TRUE
 
 logger_in <- function() {
 
-  if (!logging) return()
+  if (!options()$teal_logging) return()
 
   .log_depth <<- .log_depth + 1
 }
 
 logger_out <- function() {
+
+  if (!options()$teal_logging) return()
+
   .log_depth <<- .log_depth - 1
 
   if (.log_depth < 0) {

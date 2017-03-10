@@ -25,12 +25,7 @@
 #'
 #' @examples
 #' \dontrun{
-#' ASL <- data.frame(
-#'   STUDYID = rep(LETTERS[1:4], each = 10),
-#'   USUBJID = paste0("id_", 1:40),
-#'   stringsAsFactors = FALSE
-#' )
-#'
+#' ASL <- generate_sample_data('ASL')
 #'
 #' x <- teal::init(
 #'   data =  list(asl=ASL),
@@ -47,7 +42,9 @@
 #'       ui = function(id) div(p("Kaplan Meier Curve")),
 #'       data = c(ars='ars')
 #'     )
-#'   )
+#'   ),
+#'   header = tags$h1("Sample App"),
+#'   footer = tags$p("Copyright 2017")
 #' )
 #'
 #' shinyApp(x$ui, x$server)
@@ -95,10 +92,11 @@ init <- function(data,
   )
 
 
-#  datasets <- FilteredData$new(tolower(names(data)))
-#  Map(function(x, name) {
-#   datasets$load_data()
-#  }, data, names(data))
+  datasets <- FilteredData$new(tolower(names(data)))
+
+  Map(function(x, name) {
+   datasets$set_data(name, x)
+  }, data, names(data))
 
   server <- function(input, output) {
 

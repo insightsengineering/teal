@@ -71,6 +71,7 @@ FilteredData <- R6Class(
 
 
 
+
     load_data = function(path, dataname=NULL, ...) {
 
       if (is.null(path) || !file.exists(path)) stop(paste("invalid path:", path))
@@ -100,21 +101,21 @@ FilteredData <- R6Class(
       attr(df, "md5sum") <- tools::md5sum(path)
       attr(df, "last_modified") <- file.info(path)$mtime[1]
 
-      private$datasets[[dataname]] <- df
-
-      private$update_filter_info(dataname)
-
       .log("load data", dataname)
       logger_out()
+
+      self$set_data(dataname, df)
+
+    },
+
+    set_data = function(dataname, data) {
+
+      private$datasets[[dataname]] <- data
+      private$update_filter_info(dataname)
 
       private$apply_filter(dataname)
 
       invisible(self)
-    },
-
-    set_data = function(name, data) {
-
-
     },
 
 
