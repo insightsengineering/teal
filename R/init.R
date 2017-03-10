@@ -56,6 +56,15 @@ init <- function(data,
                  header = tags$p("title here"),
                  footer = tags$p("footer here")) {
 
+
+  datasets <- FilteredData$new(tolower(names(data)))
+
+  Map(function(x, name) {
+    datasets$set_data(name, x)
+  }, data, names(data))
+
+
+
   ui <- shinyUI(
       fluidPage(
         tags$header(header),
@@ -67,7 +76,7 @@ init <- function(data,
               list(
                 tabPanel("data source", p("data source")),
                 tabPanel("overview", p("overview page")),
-                tabPanel("data table", p("data table")),
+                tabPanel("data tables", ui_page_data_table("teal_data_table", datasets)),
                 tabPanel("variable browser", p("variable-browser"))
               ),
               unname(Map(function(x,i) tabPanel(x$name, x$ui(paste0("analysis_item_", i))), analysis, seq_along(analysis))),
@@ -82,7 +91,7 @@ init <- function(data,
             tags$hr(),
             fluidRow(
               column(9, tp$children[[2]]),
-              column(3, div(id="teal_filter_panel", class="well", style="height: 200px;", p("Filters")))
+              column(3, div(id="teal_filter_panel", class="well", style="height: 500px;", p("Filters")))
             )
           )
           tp
@@ -93,16 +102,10 @@ init <- function(data,
   )
 
 
-  datasets <- FilteredData$new(tolower(names(data)))
-
-  Map(function(x, name) {
-   datasets$set_data(name, x)
-  }, data, names(data))
-
   server <- function(input, output) {
 
 
-    #callModule(srv_page_data_table, "page_data_table")
+    callModule(srv_page_data_table, "teal_data_table", datasets = datasets)
     #callModule(srv_page_variable_browser, "page_variable_browser")
 
     # enclosing function is a closure
