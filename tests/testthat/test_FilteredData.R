@@ -2,6 +2,9 @@
 library(teal)
 context("FilteredData")
 
-x <- FilteredData$new
+x <- teal:::FilteredData$new(datanames = c('asl', 'atr'))
 
-test_that()
+test_that(
+  "Initialization is correct",
+  expect_identical(x$datanames(), c('asl', 'atr'))
+)
