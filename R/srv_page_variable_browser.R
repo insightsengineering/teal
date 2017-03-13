@@ -114,6 +114,30 @@ srv_page_variable_browser <- function(input, output, session, datasets) {
   })
 
 
+  observeEvent(input$add_filter_variable, {
+
+    dataname   <- plot_var$data
+    varname  <- plot_var$variable
+    active <- plot_var$active
+
+    .log("add filter variable", dataname, "and", varname, "and active:", active)
+
+    if (!is.null(dataname) && identical(dataname, active)) {
+      if (!is.null(varname)) {
+        if (datasets$get_filter_type(dataname, varname) == "unknown") {
+          # warning_messages$varinfo <- paste("variable", varname, "in dataset", dataname, "can currently not be used as a filter variable.")
+        } else {
+          datasets$set_default_filter_state(dataname, varname)
+          # warning_messages$varinfo <- ""
+          .log("filter added:", varname)
+        }
+      }
+    }
+
+#    if (var %in% names(df)) datasets$set_default_filter_state(dataname, var)
+
+  })
+
   plot_var
 
   NULL

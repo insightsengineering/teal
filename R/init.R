@@ -76,7 +76,7 @@ init <- function(data,
               list(
                 tabPanel("data source", p("data source")),
                 tabPanel("overview", p("overview page")),
-                tabPanel("data tables", ui_page_data_table("teal_data_table", datasets)),
+                tabPanel("data table", ui_page_data_table("teal_data_table", datasets)),
                 tabPanel("variable browser", ui_page_variable_browser("teal_variable_browser", datasets))
               ),
               unname(Map(function(x,i) tabPanel(x$name, x$ui(paste0("analysis_item_", i))), analysis, seq_along(analysis))),
@@ -92,9 +92,23 @@ init <- function(data,
             fluidRow(
               column(9, tp$children[[2]]),
               column(3, div(id="teal_filter_panel",
-                            div(class="well", tags$label("Active Filters")),
-                            div(class="well", tags$label("Add Filters"))
-                            ))
+                            div(class="well",
+                                tags$label("Active Filter Variables", class="text-primary", style="margin-bottom: 15px;"),
+                                tagList(
+                                  lapply(datasets$datanames(), function(dataname) {
+                                    ui_filter_items(paste0("teal_filters_", dataname))
+                                  })
+                                )
+                            ),
+                            div(class="well",
+                                tags$label("Add Filter Variables", class="text-primary", style="margin-bottom: 15px;"),
+                                tagList(
+                                  lapply(datasets$datanames(), function(dataname) {
+                                    ui_add_filter_variable(paste0("teal_add_", dataname, "_filters"), toupper(dataname))
+                                  })
+                                )
+                            )
+              ))
             )
           )
           tp
@@ -110,6 +124,18 @@ init <- function(data,
 
     callModule(srv_page_data_table, "teal_data_table", datasets = datasets)
     callModule(srv_page_variable_browser, "teal_variable_browser", datasets = datasets)
+
+
+    # --
+    lapply(datasets$datanames(), function(dataname) {
+      callModule(srv_filter_items, paste0("teal_filters_", dataname), datasets, dataname)
+    })
+
+    lapply(datasets$datanames(), function(dataname) {
+      callModule(srv_add_filter_variable, paste0("teal_add_", dataname, "_filters"), datasets, dataname)
+    })
+    # --
+
 
     # enclosing function is a closure
     Map(function(x, i) {
