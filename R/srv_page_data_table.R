@@ -53,7 +53,7 @@ srv_page_data_table <- function(input, output, session, datasets) {
     validate(need(df, paste("data", dataname, "is empty")))
     validate(need(all(variables %in% names(df)), "not all selected variables exist"))
 
-    df_s <- if (distinct) count_(df, variables) else df[,variables]
+    df_s <- if (distinct) dplyr::count_(df, variables) else df[,variables]
 
     # filter = 'top'
     datatable(

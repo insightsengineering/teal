@@ -77,7 +77,7 @@ init <- function(data,
                 tabPanel("data source", p("data source")),
                 tabPanel("overview", p("overview page")),
                 tabPanel("data tables", ui_page_data_table("teal_data_table", datasets)),
-                tabPanel("variable browser", p("variable-browser"))
+                tabPanel("variable browser", ui_page_variable_browser("teal_variable_browser", datasets))
               ),
               unname(Map(function(x,i) tabPanel(x$name, x$ui(paste0("analysis_item_", i))), analysis, seq_along(analysis))),
               list(
@@ -91,7 +91,10 @@ init <- function(data,
             tags$hr(),
             fluidRow(
               column(9, tp$children[[2]]),
-              column(3, div(id="teal_filter_panel", class="well", style="height: 500px;", p("Filters")))
+              column(3, div(id="teal_filter_panel",
+                            div(class="well", tags$label("Active Filters")),
+                            div(class="well", tags$label("Add Filters"))
+                            ))
             )
           )
           tp
@@ -106,7 +109,7 @@ init <- function(data,
 
 
     callModule(srv_page_data_table, "teal_data_table", datasets = datasets)
-    #callModule(srv_page_variable_browser, "page_variable_browser")
+    callModule(srv_page_variable_browser, "teal_variable_browser", datasets = datasets)
 
     # enclosing function is a closure
     Map(function(x, i) {
