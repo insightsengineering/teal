@@ -11,7 +11,7 @@ ui_page_data_table <- function(id, datasets) {
       div(class="col-md-3",
           radioButtons(ns("dataset"), "data", choices = datanames,
                        selected=sel_data, inline = TRUE),
-          radioButtons(ns("dataraworfiltered"), NULL, choices = c("raw data"="raw", "filtered data"="filtered"),
+          radioButtons(ns("dataraworfiltered"), NULL, choices = c("unfiltered data"="raw", "filtered data"="filtered"),
                        selected="filtered", inline = TRUE),
           checkboxInput(ns("distinct"), "show only distinct rows", value = FALSE)
       ),

@@ -55,6 +55,8 @@ FilteredData <- R6Class(
           stop(paste0("invalid dataname '", dataname, "' datanames without spaces"))
       }
 
+      private$init_datanames <- datanames
+
       create_rv <- function()  do.call(reactiveValues, setNames(lapply(datanames, function(x)NULL), datanames))
 
       private$datasets          <- create_rv()
@@ -66,7 +68,9 @@ FilteredData <- R6Class(
 
 
     datanames = function() {
-      isolate(.subset2(private$datasets, "impl")$names())
+      dn <- isolate(.subset2(private$datasets, "impl")$names())
+
+      c(intersect(private$init_datanames, dn), setdiff(dn, private$init_datanames))
     },
 
 
@@ -455,6 +459,7 @@ FilteredData <- R6Class(
 
   private = list(
 
+    init_datanames = NULL,
     datasets = NULL,
     filtered_datasets = NULL,
     filter_state = NULL,
