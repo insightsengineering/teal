@@ -36,28 +36,34 @@
 #'
 #' x <- teal::init(
 #'   data =  list(asl = ASL, ars = ARS),
-#'   analysis = list(
-#'     list(
-#'       name = "spaghetti plot",
+#'   tabs = tabs(
+#'     tab_item(
+#'       'data_source', "data source",
 #'       server = function(input, output, session, datasets) {},
-#'       ui = function(id) div(p("spaghetti plot"))
+#'       ui = function(id) div(p("data source")),
+#'       filter = c(),
+#'       server_args = list(datasets = "teal_datasets")
 #'     ),
-#'     list(
-#'       name = "survival curves",
-#'       server = function(input, output, session, datasets) {},
-#'       ui = function(id) div(p("Kaplan Meier Curve"))
+#'     data_table_item(),
+#'     variable_browser_item(),
+#'     tabs_item(
+#'       'analysis_items', "analysis items",
+#'       tabs = tabs(
+#'         tab_item(
+#'           "spaghetti_plot", "spaghetti plot",
+#'           server = function(input, output, session, datasets) {},
+#'           ui = function(id) div(p("spaghetti plot")),
+#'           filters = c('ars'),
+#'           server_args = list(datasets = "teal_datasets")
+#'         ),
+#'         tab_item(
+#'           "survival_curve", "survival curves",
+#'           server = function(input, output, session) {},
+#'           ui = function(id) div(p("Kaplan Meier Curve")),
+#'           filters = c()
+#'         )
+#'       )
 #'     )
-#'   ),
-#'   elements = list(
-#'       data = list(
-#'         name = "data source",
-#'         server = function(input, output, session) {},
-#'         ui = function(id) {p(paste(id, "Information"))},
-#'         id = "data"
-#'       ),
-#'       'data_table',
-#'       'variable_browser',
-#'       'analysis'
 #'   ),
 #'   header = tags$h1("Sample App"),
 #'   footer = tags$p("Copyright 2017")
@@ -67,13 +73,13 @@
 #'
 #' }
 init <- function(data,
-                 analysis,
-                 elements = c('data_table', 'variable_browser', 'analysis'),
+                 tabs,
                  filter = NULL,
                  header = tags$p("title here"),
                  footer = tags$p("footer here")) {
 
 
+  # initialize FilteredData object
   datasets <- FilteredData$new(tolower(names(data)))
 
   Map(function(x, name) {
@@ -87,48 +93,23 @@ init <- function(data,
     }, filter$init, names(filter$init))
   }
 
+  # ui function
   ui <- shinyUI(
       fluidPage(
+        tags$head(
+          tags$script(
+            HTML("
+                  Shiny.addCustomMessageHandler('setDisplayCss', function(message) {
+                    $(message.selector).css('display', message.type);
+                  });"
+            )
+          )
+        ),
         tags$header(header),
         tags$hr(style="margin: 7px 0;"),
         local({
-          tp <- do.call(
-            tabsetPanel,
-            c(
-              list(
-                id = "teal_tabset",
-                type = 'pills'
-              ),
-              unname(Map(function(x) {
-                if (is.list(x)) {
-                  tabPanel(x$name, x$ui(x$id))
-                } else {
-                  switch(
-                    x,
-                    analysis = {
-                        tabPanel("analysis items", do.call(
-                          tabsetPanel,
-                          c(
-                            list(id = "teal_analysis_items"),
-                            unname(Map(function(x,i) tabPanel(x$name,
-                                                              tagList(div(style="margin-top: 25px;"),
-                                                                      x$ui(paste0("analysis_item_", i)))),
-                                       analysis, seq_along(analysis)))
-                          )
-                        ))
-                    },
-                    variable_browser = {
-                      tabPanel("variable browser", ui_page_variable_browser("teal_variable_browser", datasets))
-                    },
-                    data_table = {
-                      tabPanel("data table", ui_page_data_table("teal_data_table", datasets))
-                    },
-                    stop(paste("element type:", x, "not known."))
-                  )
-                }
-              }, elements))
-            )
-          )
+          tp <- ui_tabs(tabs, datasets)
+
           tp$children <- list(
             tp$children[[1]],
             tags$hr(style="margin: 7px 0;"),
@@ -162,14 +143,17 @@ init <- function(data,
   )
 
 
-  server <- function(input, output) {
+  server <- function(input, output, session) {
+
+    showFilterPanel <- function(bool=TRUE) {
+      session$sendCustomMessage(type="setDisplayCss", list(selector="#teal_filter_panel", type=if(bool)'block'else'none'))
+    }
+
+    # evaluate the server functions
+    server_tabs(tabs, datasets)
 
 
-    callModule(srv_page_data_table, "teal_data_table", datasets = datasets)
-    callModule(srv_page_variable_browser, "teal_variable_browser", datasets = datasets)
-
-
-    # --
+    # -- filters
     lapply(datasets$datanames(), function(dataname) {
       callModule(srv_filter_items, paste0("teal_filters_", dataname), datasets, dataname)
     })
@@ -179,42 +163,8 @@ init <- function(data,
     })
     # --
 
-
-    # enclosing function is a closure
-    Map(function(x) {
-      if (is.list(x)) {
-        do.call(
-          callModule,
-          c(
-            list(
-              module = x$server,
-              id = x$id
-            ),
-            Map(function(d) datasets$get_data(d, filtered = TRUE, reactive = FALSE), x$data),
-            x$options
-          )
-        )
-      }
-    }, elements)
-
-
-
-    # enclosing function is a closure
-    Map(function(x, i) {
-     do.call(
-       callModule,
-       c(
-         list(
-           module = x$server,
-           id = paste0("analysis_item_", i),
-           datasets = datasets
-         ),
-         x$options
-       )
-     )
-    }, analysis, seq_along(analysis))
   }
 
-  list(server = server, ui = ui)
+  list(server = server, ui = ui, datasets = datasets)
 }
 
