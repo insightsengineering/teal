@@ -3,7 +3,8 @@
 .log_depth <- 0
 
 # Teal Internally Used Logger functions
-#
+
+#' @export
 .log <- function(..., sep=" ", type="debug") {
 
   if (!options()$teal_logging) return()

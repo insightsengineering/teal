@@ -22,26 +22,26 @@ tabs <- function(...) {
 
 
 #' @export
-tab_item <- function(id, label, server, ui, filters, server_args=NULL, ui_args=NULL) {
+tab_item <- function(label, server, ui, filters, server_args=NULL, ui_args=NULL) {
 
-  structure(list(id = id, label = label, server = server, ui = ui, filter = filter,
+  structure(list(label = label, server = server, ui = ui, filter = filter,
                  server_args = server_args, ui_args = ui_args), class="teal_tab_item")
 }
 
 
 #' @export
-tabs_item <- function(id, label, tabs) {
+tabs_item <- function(label, tabs) {
 
   if (any(!vapply(tabs, function(x) is(x, "teal_tab_item"), logical(1))))
     stop("tabs_item: not all argument are of class teal_tab_item")
 
-  structure(list(id = id, label = label, tabs=tabs), class="teal_tabs_item")
+  structure(list(label = label, tabs=tabs), class="teal_tabs_item")
 }
 
 #' @export
-data_table_item <- function(id = "teal_data_table", label = "data table") {
+data_table_item <- function(label = "data table") {
   tab_item(
-    id, label,
+    label,
     server = srv_page_data_table,
     ui = ui_page_data_table,
     filters = "all",
@@ -51,9 +51,9 @@ data_table_item <- function(id = "teal_data_table", label = "data table") {
 }
 
 #' @export
-variable_browser_item <- function(id = "teal_variable_browser", label = "variable browser") {
+variable_browser_item <- function(label = "variable browser") {
   tab_item(
-    id, label,
+    label,
     server = srv_page_variable_browser,
     ui = ui_page_variable_browser,
     filters = "all",
@@ -64,61 +64,83 @@ variable_browser_item <- function(id = "teal_variable_browser", label = "variabl
 
 
 
+
+
+label_to_id <- function(label, prefix = NULL) {
+  x <- gsub("[[:space:]]+", "_", label)
+  if (!is.null(prefix)) paste(prefix, x , sep="_") else x
+}
+
+main_nav_id <- "teal_nav"
+
 ## create ui part
-ui_tabs <- function(x, datasets) {
+ui_tabs <- function(x, datasets, idprefix = main_nav_id) {
   tp <- do.call(
     shiny::tabsetPanel,
     c(
-      list(id = "teal_main_naviation", type = "pills"),
+      list(id = main_nav_id, type = "pills"),
       as.vector(lapply(x, function(xi) {
-        if (class(xi) == "teal_tab_item") ui_tab_item(xi, datasets) else ui_tabs_item(xi, datasets)
+        if (class(xi) == "teal_tab_item") ui_tab_item(xi, datasets, idprefix) else ui_tabs_item(xi, datasets, idprefix)
       }))
     )
   )
   tp
 }
 
-ui_tab_item <- function(x, datasets) {
+ui_tab_item <- function(x, datasets, idprefix) {
   args <- Map(function(arg) {if(identical(arg, "teal_datasets")) datasets else arg}, x$ui_args)
 
-  shiny::tabPanel(x$label, tagList(div(style="margin-top: 25px;"), do.call(x$ui, c(list(x$id), args))))
+  uiid <- label_to_id(x$label, idprefix)
+
+  .log("UI id for tab_item is", uiid)
+
+  shiny::tabPanel(x$label, tagList(div(style="margin-top: 25px;"), do.call(x$ui, c(list(uiid), args))))
 }
 
-ui_tabs_item <- function(x, datasets) {
+ui_tabs_item <- function(x, datasets, idprefix) {
+
+  id <- label_to_id(x$label, main_nav_id)
+
+  .log("** UI id for tabs_item is", id)
+
   tabPanel(
     x$label,
     do.call(
       shiny::tabsetPanel,
       c(
-        list(id = x$id),
-        as.vector(lapply(x$tabs, function(xi)ui_tab_item(xi, datasets)))
+        list(id = id),
+        as.vector(lapply(x$tabs, function(xi)ui_tab_item(xi, datasets, label_to_id(x$label, idprefix))))
       )
     )
   )
 }
 
 
-server_tabs <- function(x, datasets) {
-  lapply(x, function(xi) if (class(xi) == "teal_tab_item") server_tab_item(xi, datasets) else server_tabs_item(xi, datasets))
+server_tabs <- function(x, datasets, idprefix = main_nav_id) {
+  lapply(x, function(xi) if (class(xi) == "teal_tab_item") server_tab_item(xi, datasets, idprefix) else server_tabs_item(xi, datasets, idprefix))
   invisible(NULL)
 }
 
-server_tab_item <- function(x, datasets) {
+server_tab_item <- function(x, datasets, idprefix) {
 
   args <- Map(function(arg) {if(identical(arg, "teal_datasets")) datasets else arg}, x$server_args)
+
+  id <-  label_to_id(x$label, idprefix)
+
+  .log("server tab_item  id:", id)
 
   do.call(
     shiny::callModule,
     c(
-     list(module = x$server, id = x$id),
+     list(module = x$server, id = id),
      args
     )
   )
   invisible(NULL)
 }
 
-server_tabs_item <- function(x, datasets) {
-  server_tabs(x$tabs, datasets)
+server_tabs_item <- function(x, datasets, idprefix) {
+  server_tabs(x$tabs, datasets, label_to_id(x$label, idprefix))
   invisible(NULL)
 }
 

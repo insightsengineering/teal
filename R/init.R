@@ -38,7 +38,7 @@
 #'   data =  list(asl = ASL, ars = ARS),
 #'   tabs = tabs(
 #'     tab_item(
-#'       'data_source', "data source",
+#'       "data source",
 #'       server = function(input, output, session, datasets) {},
 #'       ui = function(id) div(p("data source")),
 #'       filter = c(),
@@ -47,17 +47,17 @@
 #'     data_table_item(),
 #'     variable_browser_item(),
 #'     tabs_item(
-#'       'analysis_items', "analysis items",
+#'       "analysis items",
 #'       tabs = tabs(
 #'         tab_item(
-#'           "spaghetti_plot", "spaghetti plot",
+#'           "spaghetti plot",
 #'           server = function(input, output, session, datasets) {},
 #'           ui = function(id) div(p("spaghetti plot")),
 #'           filters = c('ars'),
 #'           server_args = list(datasets = "teal_datasets")
 #'         ),
 #'         tab_item(
-#'           "survival_curve", "survival curves",
+#'           "survival curves",
 #'           server = function(input, output, session) {},
 #'           ui = function(id) div(p("Kaplan Meier Curve")),
 #'           filters = c()
@@ -161,7 +161,33 @@ init <- function(data,
     lapply(datasets$datanames(), function(dataname) {
       callModule(srv_add_filter_variable, paste0("teal_add_", dataname, "_filters"), datasets, dataname)
     })
+
+
+
+    ## hide-show filters based on tab-item filter property
+    tabs_ids <- unlist(Map(function(x) {
+      setNames(paste(main_nav_id, label_to_id(x$label), sep="_"), x$label)
+    } , Filter(function(x) is(x, "teal_tabs_item"), tabs)))
+
+
+    .GlobalEnv$tabs_ids <- tabs_ids
+    observe({
+
+      main_tab <- input[[main_nav_id]]
+
+      tabs_items <- sapply(tabs_ids, function(id) input[[id]],  USE.NAMES = TRUE)
+
+      .GlobalEnv$tabs_items <- tabs_items
+
+
+      .log("AAAAAAAAAAAAAAAAAAAAAAAA:", main_tab)
+      .log("AAAAAAAAAAAAAAAAAAAAAAAA:", paste(tabs_items, collapse = ", "))
+
+
+    })
+
     # --
+
 
   }
 
