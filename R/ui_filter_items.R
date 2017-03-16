@@ -1,7 +1,9 @@
-ui_filter_items <- function(id, title=NULL) {
-  
+ui_filter_items <- function(id, dataname, title=NULL) {
+
   ns <- NS(id)
-  
-  uiOutput(ns("uifilters"))
-  
+
+  div(class = paste0("teal_filter_", tolower(dataname)),
+      uiOutput(ns("uifilters"))
+  )
+
 }

@@ -24,7 +24,9 @@ tabs <- function(...) {
 #' @export
 tab_item <- function(label, server, ui, filters, server_args=NULL, ui_args=NULL) {
 
-  structure(list(label = label, server = server, ui = ui, filter = filter,
+  force(label); force(server); force(ui); force(filters)
+
+  structure(list(label = label, server = server, ui = ui, filters = filters,
                  server_args = server_args, ui_args = ui_args), class="teal_tab_item")
 }
 
@@ -68,7 +70,7 @@ variable_browser_item <- function(label = "variable browser") {
 
 label_to_id <- function(label, prefix = NULL) {
   x <- gsub("[[:space:]]+", "_", label)
-  if (!is.null(prefix)) paste(prefix, x , sep="_") else x
+  if (!is.null(prefix)) paste(prefix, x , sep=".") else x
 }
 
 main_nav_id <- "teal_nav"

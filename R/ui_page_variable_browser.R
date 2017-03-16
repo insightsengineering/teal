@@ -33,7 +33,7 @@ ui_page_variable_browser <- function(id, datasets) {
           style="margin-top: 15px;",
           div(
             class="pull-left",
-            radioButtons(ns("raw_or_filtered"), NULL, choices = c("unfiltered data"='raw', "filtered data"='filtered'), inline = TRUE)
+            radioButtons(ns("raw_or_filtered"), NULL, choices = c("unfiltered data"='raw', "filtered data"='filtered'), selected="filtered", inline = TRUE)
           ),
           actionLink(ns("add_filter_variable"), "add as filter variable", class="pull-right")
         )
