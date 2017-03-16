@@ -8,3 +8,10 @@
   }
 }
 
+.onAttach <- function(libname, pkgname) {
+
+  packageStartupMessage("\nteal version ",
+                        utils::packageDescription(pkg = pkgname,
+                                                  lib.loc = libname,
+                                                  field="Version"))
+}
