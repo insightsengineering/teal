@@ -18,6 +18,7 @@ srv_add_filter_variable <- function(input, output, session, datasets, dataname) 
     updateSelectInput(session, "variables", choices = c("", choices), selected=NULL)
   })
 
+  warning_messages <- reactiveValues(varinfo = "", i = 0)
 
   observeEvent(input$variables, {
 
@@ -28,11 +29,27 @@ srv_add_filter_variable <- function(input, output, session, datasets, dataname) 
 
    .log("add filter variable", var)
 
-   if (var %in% names(df) && datasets$get_filter_type(dataname, var) != "unknown") {
-     datasets$set_default_filter_state(dataname, var)
+   if (var %in% names(df)) {
+     if (datasets$get_filter_type(dataname, var) != "unknown") {
+       datasets$set_default_filter_state(dataname, var)
+       warning_messages$varinfo <- ""
+     } else {
+       warning_messages$varinfo <- paste("variable", paste(toupper(dataname), var, sep="."), "can currently not be used as a filter variable.")
+     }
+     warning_messages$i <- warning_messages$i + 1
    }
-
-
   })
 
+  output$warning <- renderUI({
+    warning_messages$i
+    msg <- warning_messages$varinfo
+
+    if (is.null(msg)  || msg == "" ) {
+      div(style="display: none;")
+    } else {
+      div(class="text-warning", style="margin-bottom: 15px;", msg)
+    }
+  })
+
+  NULL
 }
