@@ -105,7 +105,12 @@ srv_page_variable_browser <- function(input, output, session, datasets) {
         p <- ggplot2::qplot(var) + ggplot2::xlab(Dvarname) + ggplot2::theme_light() + ggplot2::coord_flip()
         ggplot2::ggplotGrob(p)
       } else {
-        grid::textGrob(str(var), x=grid::unit(1, "line"), y=grid::unit(1,"npc")-grid::unit(1,"line"))
+
+        grid::textGrob(
+          paste(strwrap(capture.output(str(var)), width = .9* grid::convertWidth(grid::unit(1, "npc"), "char", TRUE)), collapse = "\n"),
+          x=grid::unit(1, "line"), y=grid::unit(1,"npc")-grid::unit(1,"line"), just=c("left", "top")
+        )
+
       }
 
       grid::grid.draw(plot_grob)
