@@ -33,15 +33,16 @@
 #' \dontrun{
 #' ASL <- generate_sample_data('ASL')
 #' ARS <- generate_sample_data('ars')
+#' AAE <- generate_sample_data('ars')
 #'
 #' x <- teal::init(
-#'   data =  list(asl = ASL, ars = ARS),
+#'   data =  list(asl = ASL, ars = ARS, aae = AAE),
 #'   tabs = tabs(
 #'     tab_item(
 #'       "data source",
 #'       server = function(input, output, session, datasets) {},
 #'       ui = function(id) div(p("data source")),
-#'       filter = c(),
+#'       filters = NULL,
 #'       server_args = list(datasets = "teal_datasets")
 #'     ),
 #'     data_table_item(),
@@ -53,14 +54,14 @@
 #'           "spaghetti plot",
 #'           server = function(input, output, session, datasets) {},
 #'           ui = function(id) div(p("spaghetti plot")),
-#'           filters = c('ars'),
+#'           filters = 'ars',
 #'           server_args = list(datasets = "teal_datasets")
 #'         ),
 #'         tab_item(
 #'           "survival curves",
 #'           server = function(input, output, session) {},
 #'           ui = function(id) div(p("Kaplan Meier Curve")),
-#'           filters = c()
+#'           filters = "aae"
 #'         )
 #'       )
 #'     )
@@ -115,12 +116,12 @@ init <- function(data,
             tags$hr(style="margin: 7px 0;"),
             fluidRow(
               column(9, tp$children[[2]]),
-              column(3, div(id="teal_filter_panel",
+              column(3, div(id="teal_filter-panel",
                             div(class="well",
                                 tags$label("Active Filter Variables", class="text-primary", style="margin-bottom: 15px;"),
                                 tagList(
                                   lapply(datasets$datanames(), function(dataname) {
-                                    ui_filter_items(paste0("teal_filters_", dataname))
+                                    ui_filter_items(paste0("teal_filters_", dataname), dataname)
                                   })
                                 )
                             ),
@@ -166,23 +167,58 @@ init <- function(data,
 
     ## hide-show filters based on tab-item filter property
     tabs_ids <- unlist(Map(function(x) {
-      setNames(paste(main_nav_id, label_to_id(x$label), sep="_"), x$label)
+      setNames(label_to_id(x$label, main_nav_id), x$label)
     } , Filter(function(x) is(x, "teal_tabs_item"), tabs)))
 
+    ## create a lookup list
+    filter_info <- list()
 
-    .GlobalEnv$tabs_ids <- tabs_ids
+    add_filter <- function(x, prefix=main_nav_id) {
+      if (is(x, "teal_tabs")) {
+        lapply(x, add_filter, prefix = prefix)
+      } else if (is(x, "teal_tab_item")) {
+        filter_info[[label_to_id(x$label, prefix)]] <<- x$filters
+      } else if (is(x, "teal_tabs_item")) {
+        .log(x$label)
+        add_filter(x$tabs, label_to_id(x$label, prefix))
+      } else {
+        stop("should not happen")
+      }
+    }
+    add_filter(tabs)
+
+
+
+
     observe({
-
       main_tab <- input[[main_nav_id]]
-
       tabs_items <- sapply(tabs_ids, function(id) input[[id]],  USE.NAMES = TRUE)
 
-      .GlobalEnv$tabs_items <- tabs_items
+      main_tab_id <- label_to_id(main_tab, main_nav_id)
+      sub_tab_id <- label_to_id(tabs_items[main_tab], main_tab_id)
 
+      filters <- if (is.null(filter_info[[sub_tab_id]])) {
+        .log("main", main_tab_id, "filters:", filter_info[[main_tab_id]])
+        filter_info[[main_tab_id]]
+      }  else {
+        .log("subtab",  sub_tab_id, "filters:", filter_info[[sub_tab_id]])
+        filter_info[[sub_tab_id]]
+      }
 
-      .log("AAAAAAAAAAAAAAAAAAAAAAAA:", main_tab)
-      .log("AAAAAAAAAAAAAAAAAAAAAAAA:", paste(tabs_items, collapse = ", "))
+      if (is.null(filters)) {
+        session$sendCustomMessage(type="setDisplayCss", list(selector = "#teal_filter-panel", type = "none"))
+      } else {
+        session$sendCustomMessage(type="setDisplayCss", list(selector = "#teal_filter-panel", type = "block"))
 
+        if ("all" %in% filters) {
+          lapply(datasets$datanames(), function(x) session$sendCustomMessage(type="setDisplayCss", list(selector = paste0(".teal_filter_",x), type = "block")))
+        } else {
+          dnames <- setdiff(datasets$datanames(), "asl")
+          Map(function(dataname, show) {
+            session$sendCustomMessage(type="setDisplayCss", list(selector = paste0(".teal_filter_",dataname), type = if (show) "block" else "none"))
+          },  dnames, dnames %in% filters)
+        }
+      }
 
     })
 
