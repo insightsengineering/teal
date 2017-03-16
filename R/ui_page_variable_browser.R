@@ -36,8 +36,8 @@ ui_page_variable_browser <- function(id, datasets) {
             radioButtons(ns("raw_or_filtered"), NULL, choices = c("unfiltered data"='raw', "filtered data"='filtered'), selected="filtered", inline = TRUE)
           ),
           actionLink(ns("add_filter_variable"), "add as filter variable", class="pull-right")
-        )
-        #           style="margin-top: 15px; margin-bottom: -15px;",
+        ),
+        uiOutput(ns("warning"))
       )
     )
   )

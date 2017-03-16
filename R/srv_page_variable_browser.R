@@ -114,6 +114,8 @@ srv_page_variable_browser <- function(input, output, session, datasets) {
   })
 
 
+
+  warning_messages <- reactiveValues(varinfo = "", i = 0)
   observeEvent(input$add_filter_variable, {
 
     dataname   <- plot_var$data
@@ -125,20 +127,31 @@ srv_page_variable_browser <- function(input, output, session, datasets) {
     if (!is.null(dataname) && identical(dataname, active)) {
       if (!is.null(varname)) {
         if (datasets$get_filter_type(dataname, varname) == "unknown") {
-          # warning_messages$varinfo <- paste("variable", varname, "in dataset", dataname, "can currently not be used as a filter variable.")
+          warning_messages$varinfo <- paste("variable", paste(toupper(dataname), varname, sep="."), "can currently not be used as a filter variable.")
         } else {
           datasets$set_default_filter_state(dataname, varname)
-          # warning_messages$varinfo <- ""
+          warning_messages$varinfo <- ""
           .log("filter added:", varname)
         }
+        warning_messages$i <- warning_messages$i + 1
       }
     }
 
-#    if (var %in% names(df)) datasets$set_default_filter_state(dataname, var)
-
   })
 
-  plot_var
+
+  output$warning <- renderUI({
+    warning_messages$i
+    msg <- warning_messages$varinfo
+
+    if (is.null(msg)  || msg == "" ) {
+      div(style="display: none;")
+    } else {
+      div(class="text-warning", style="margin-bottom: 15px;", msg)
+    }
+  })
+
+
 
   NULL
 
