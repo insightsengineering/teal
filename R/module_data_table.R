@@ -2,13 +2,14 @@
 
 
 #' @export
-data_table_item <- function(label = "data table") {
+data_table_item <- function(label = "data table", variables_selected=NULL) {
   tab_item(
     label,
     server = srv_page_data_table,
     ui = ui_page_data_table,
     filters = "all",
-    server_args = list(datasets='teal_datasets'),
+    server_args = list(datasets='teal_datasets',
+                       cache_selected = if (is.null(variables_selected)) list() else variables_selected),
     ui_args = list(datasets='teal_datasets')
   )
 }
@@ -47,10 +48,9 @@ ui_page_data_table <- function(id, datasets) {
 
 ## data table
 
-srv_page_data_table <- function(input, output, session, datasets) {
+srv_page_data_table <- function(input, output, session, datasets, cache_selected = list()) {
 
 
-  cache_selected <- list()
 
   observe({
 
