@@ -169,8 +169,10 @@ init <- function(data,
       callModule(srv_filter_items, paste0("teal_filters_", dataname), datasets, dataname)
     })
 
+    asl_vars <- names(datasets$get_data('asl'))
     lapply(datasets$datanames(), function(dataname) {
-      callModule(srv_add_filter_variable, paste0("teal_add_", dataname, "_filters"), datasets, dataname)
+      callModule(srv_add_filter_variable, paste0("teal_add_", dataname, "_filters"), datasets, dataname,
+                 omit_vars = if (dataname == "asl") NULL else asl_vars)
     })
 
 

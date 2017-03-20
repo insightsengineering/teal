@@ -16,7 +16,7 @@ ui_add_filter_variable <- function(id, dataname) {
 
 
 
-srv_add_filter_variable <- function(input, output, session, datasets, dataname) {
+srv_add_filter_variable <- function(input, output, session, datasets, dataname, omit_vars=NULL) {
 
 
   observe({
@@ -26,9 +26,9 @@ srv_add_filter_variable <- function(input, output, session, datasets, dataname) 
     choices <- if (is.null(df)) {
       NULL
     } else if (is.null(fs)) {
-      names(df)
+      setdiff(names(df), omit_vars)
     } else {
-      setdiff(names(df), names(fs))
+      setdiff(names(df), c(names(fs), omit_vars))
     }
 
     .log("update add filter variables", dataname)
