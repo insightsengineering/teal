@@ -1,3 +1,11 @@
+
+#' Create a variable browser item that plots a variable summary
+#'
+#' The variable browser provides a table with variable names and labels and a
+#' plot the visualizes the content of a particular variable.
+#'
+#' @inheritParams tab_item
+#'
 #' @export
 variable_browser_item <- function(label = "variable browser") {
   tab_item(

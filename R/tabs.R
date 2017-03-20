@@ -1,6 +1,12 @@
 
 
-#' Create a tabItem/tabsItem collection
+#' Create a collection of \code{tab_item} and \code{tabs_item} object
+#'
+#' Tabs collects a tree of \code{\link{tab_item}} and \code{\link{tabs_item}}
+#' objects. This is useful to define the navigation structure of a teal app.
+#'
+#'
+#' @param ... \code{\link{tab_item}} and \code{\link{tabs_item}} object
 #'
 #' @export
 #'
@@ -21,7 +27,28 @@ tabs <- function(...) {
 }
 
 
+
+#' Create a tabItem with a new shiny page
+#'
+#' Tab items allows you to add a shiny module to the teal app
+#'
+#' @param label label shown in the navigation for the item
+#' @param server shiny server module function, see
+#'   \code{link[shiny]{callModule}}
+#' @param ui shiny ui module function, see \code{link[shiny]{callModule}}
+#' @param filters a vector with datanames that are relevant for the item. The
+#'   filter panel will automatically update the shown filters to include only
+#'   filters in the listed data sets. \code{NULL} will hide the filter panel,
+#'   and the keyowrd \code{'all'} will show the filters of all datasets.
+#' @param server_args is a named list with additional arguments passed on to the
+#'   server function. The argument \code{'teal_datasets'} will always be
+#'   replaced by the \code{FilteredData} object.
+#' @param ui_args is a named list with additional arguments passed on to the
+#'   ui function. The argument \code{'teal_datasets'} will always be
+#'   replaced by the \code{FilteredData} object.
+#'
 #' @export
+#'
 tab_item <- function(label, server, ui, filters, server_args=NULL, ui_args=NULL) {
 
   force(label); force(server); force(ui); force(filters)
@@ -31,6 +58,16 @@ tab_item <- function(label, server, ui, filters, server_args=NULL, ui_args=NULL)
 }
 
 
+#' A parent navigation item
+#'
+#' This is a labeled parent item in order to be able to create a navigation
+#' tree.
+#'
+#' @inheritParams tab_item
+#' @param tabs an object that is returend from the \code{\link{tabs}} function.
+#'   Note currently teal only suppors trees of depth 2, hence this tabs object
+#'   can not contain any other \code{tabs_item} objects.
+#'
 #' @export
 tabs_item <- function(label, tabs) {
 

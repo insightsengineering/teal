@@ -1,6 +1,13 @@
 
 
-
+#' Create A Data Table Viewer
+#'
+#' A data table viewer shows the data using a paginated table.
+#'
+#' @inheritParams tab_item
+#' @param variables_selected a named list that says which variables should be
+#'   initially  shown for which dataset
+#'
 #' @export
 data_table_item <- function(label = "data table", variables_selected=NULL) {
   tab_item(
