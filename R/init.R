@@ -33,10 +33,10 @@
 #' \dontrun{
 #' ASL <- generate_sample_data('ASL')
 #' ARS <- generate_sample_data('ars')
-#' AAE <- generate_sample_data('ars')
+#' ATE <- generate_sample_data('ars')
 #'
 #' x <- teal::init(
-#'   data =  list(asl = ASL, ars = ARS, aae = AAE),
+#'   data =  list(asl = ASL, ars = ARS, ate = ATE),
 #'   tabs = tabs(
 #'     tab_item(
 #'       "data source",
@@ -61,7 +61,7 @@
 #'           "survival curves",
 #'           server = function(input, output, session) {},
 #'           ui = function(id) div(p("Kaplan Meier Curve")),
-#'           filters = "aae"
+#'           filters = "ate"
 #'         )
 #'       )
 #'     )
@@ -99,9 +99,19 @@ init <- function(data,
       fluidPage(
         tags$head(
           tags$script(
+            # show/hide see https://groups.google.com/forum/#!topic/shiny-discuss/yxFuGgDOIuM
             HTML("
-                  Shiny.addCustomMessageHandler('setDisplayCss', function(message) {
-                    $(message.selector).css('display', message.type);
+                  Shiny.addCustomMessageHandler('tealShowHide', function(message) {
+                        var els = $(message.selector);
+                        if (message.action == 'show') {
+                          els.trigger('show');
+                          els.removeClass('hide');
+                          els.trigger('shown');
+                        } else {
+                          els.trigger('hide');
+                          els.addClass('hide');
+                          els.trigger('hidden');
+                        }
                   });"
             )
           )
@@ -206,19 +216,28 @@ init <- function(data,
       }
 
       if (is.null(filters)) {
-        session$sendCustomMessage(type="setDisplayCss", list(selector = "#teal_filter-panel", type = "none"))
+        session$sendCustomMessage(type="tealShowHide", list(selector = "#teal_filter-panel", action = "hide"))
       } else {
-        session$sendCustomMessage(type="setDisplayCss", list(selector = "#teal_filter-panel", type = "block"))
+        as.global(session)
+        session$sendCustomMessage(type="tealShowHide", list(selector = "#teal_filter-panel", action = "show"))
 
         if ("all" %in% filters) {
-          lapply(datasets$datanames(), function(x) session$sendCustomMessage(type="setDisplayCss", list(selector = paste0(".teal_filter_",x), type = "block")))
+          lapply(datasets$datanames(), function(dataname) {
+            session$sendCustomMessage(type="tealShowHide", list(selector = paste0(".teal_filter_",dataname),
+                                                                   action="show"))
+          })
         } else {
-          dnames <- setdiff(datasets$datanames(), "asl")
-          Map(function(dataname, show) {
-            session$sendCustomMessage(type="setDisplayCss", list(selector = paste0(".teal_filter_",dataname), type = if (show) "block" else "none"))
-          },  dnames, dnames %in% filters)
+          Map(function(dataname) {
+            session$sendCustomMessage(
+              type="tealShowHide",
+              list(selector = paste0(".teal_filter_",dataname),
+                   action = if (dataname == "asl" || dataname %in% filters) "show" else "hide"
+              )
+            )
+          },  datasets$datanames())
         }
       }
+
 
     })
 
