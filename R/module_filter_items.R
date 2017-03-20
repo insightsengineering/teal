@@ -1,3 +1,12 @@
+ui_filter_items <- function(id, dataname, title=NULL) {
+
+  ns <- NS(id)
+
+  div(class = paste0("teal_filter_", tolower(dataname)),
+      uiOutput(ns("uifilters"))
+  )
+
+}
 
 
 srv_filter_items <- function(input, output, session, datasets, dataname, container=div) {

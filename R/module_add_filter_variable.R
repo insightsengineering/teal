@@ -1,4 +1,21 @@
 
+
+ui_add_filter_variable <- function(id, dataname) {
+
+  ns <- NS(id)
+
+  div( class = paste0("teal_filter_", tolower(dataname)),
+       selectInput(ns("variables"), label=dataname , choices=NULL),
+       uiOutput(ns("warning"))
+  )
+
+
+  #    actionButton(ns("add"), label=NULL, icon=icon("plus"))
+
+}
+
+
+
 srv_add_filter_variable <- function(input, output, session, datasets, dataname) {
 
 
@@ -22,22 +39,22 @@ srv_add_filter_variable <- function(input, output, session, datasets, dataname) 
 
   observeEvent(input$variables, {
 
-   var <- input$variables
-   df <- datasets$get_data(dataname)
+    var <- input$variables
+    df <- datasets$get_data(dataname)
 
-   validate(need(var, "need valid variable"))
+    validate(need(var, "need valid variable"))
 
-   .log("add filter variable", var)
+    .log("add filter variable", var)
 
-   if (var %in% names(df)) {
-     if (datasets$get_filter_type(dataname, var) != "unknown") {
-       datasets$set_default_filter_state(dataname, var)
-       warning_messages$varinfo <- ""
-     } else {
-       warning_messages$varinfo <- paste("variable", paste(toupper(dataname), var, sep="."), "can currently not be used as a filter variable.")
-     }
-     warning_messages$i <- warning_messages$i + 1
-   }
+    if (var %in% names(df)) {
+      if (datasets$get_filter_type(dataname, var) != "unknown") {
+        datasets$set_default_filter_state(dataname, var)
+        warning_messages$varinfo <- ""
+      } else {
+        warning_messages$varinfo <- paste("variable", paste(toupper(dataname), var, sep="."), "can currently not be used as a filter variable.")
+      }
+      warning_messages$i <- warning_messages$i + 1
+    }
   })
 
   output$warning <- renderUI({

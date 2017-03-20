@@ -40,30 +40,6 @@ tabs_item <- function(label, tabs) {
   structure(list(label = label, tabs=tabs), class="teal_tabs_item")
 }
 
-#' @export
-data_table_item <- function(label = "data table") {
-  tab_item(
-    label,
-    server = srv_page_data_table,
-    ui = ui_page_data_table,
-    filters = "all",
-    server_args = list(datasets='teal_datasets'),
-    ui_args = list(datasets='teal_datasets')
-  )
-}
-
-#' @export
-variable_browser_item <- function(label = "variable browser") {
-  tab_item(
-    label,
-    server = srv_page_variable_browser,
-    ui = ui_page_variable_browser,
-    filters = "all",
-    server_args = list(datasets='teal_datasets'),
-    ui_args = list(datasets='teal_datasets')
-  )
-}
-
 
 
 
