@@ -126,7 +126,7 @@ init <- function(data,
             tags$hr(style="margin: 7px 0;"),
             fluidRow(
               column(9, tp$children[[2]]),
-              column(3, div(id="teal_filter-panel",
+              column(3, div(id="teal_filter-panel", class="hide",
                             div(class="well",
                                 tags$label("Active Filter Variables", class="text-primary", style="margin-bottom: 15px;"),
                                 tagList(
