@@ -35,7 +35,7 @@ ui_page_variable_browser <- function(id, datasets) {
             c(id = ns("tsp"),
               do.call(tagList, setNames(lapply(datasets$datanames(), function(domain) {
                 ui_id <- paste0('variable_browser_', domain)
-                tabPanel(toupper(domain), div(
+                tabPanel(domain, div(
                   style="margin-top: 15px;",
                   DT::dataTableOutput(ns(ui_id), width="100%")))
               }), NULL)
@@ -77,7 +77,7 @@ srv_page_variable_browser <- function(input, output, session, datasets) {
 
   current_rows <- new.env()
 
-  asl_vars <- names(datasets$get_data('asl'))
+  asl_vars <- names(datasets$get_data('ASL'))
 
 
   lapply(datasets$datanames(), function(name) {
@@ -104,8 +104,8 @@ srv_page_variable_browser <- function(input, output, session, datasets) {
           if (is.null(lab)) "" else lab
         }))
 
-        if (!showAslVars && name != "asl") {
-          asl_vars <- names(datasets$get_data("asl", filtered = FALSE, reactive = FALSE))
+        if (!showAslVars && name != "ASL") {
+          asl_vars <- names(datasets$get_data("ASL", filtered = FALSE, reactive = FALSE))
           labels <- labels[!(names(labels) %in% asl_vars)]
         }
 
@@ -153,7 +153,7 @@ srv_page_variable_browser <- function(input, output, session, datasets) {
       validate(need(datasets$has_variable(data, varname), "variable not available"))
 
       var <- df[[varname]]
-      Dvarname <- paste0(toupper(data),".",varname)
+      Dvarname <- paste0(data,".",varname)
 
       grid::grid.newpage()
 
@@ -199,10 +199,10 @@ srv_page_variable_browser <- function(input, output, session, datasets) {
     if (!is.null(dataname) && identical(dataname, active)) {
       if (!is.null(varname)) {
 
-        if (dataname != "asl" && varname %in% asl_vars) {
+        if (dataname != "ASL" && varname %in% asl_vars) {
           warning_messages$varinfo <- paste("You can not add an ASL variable from any dataset other than ASL. Switch to the ASL data and add the variable from there.")
         } else if (datasets$get_filter_type(dataname, varname) == "unknown") {
-          warning_messages$varinfo <- paste("variable", paste(toupper(dataname), varname, sep="."), "can currently not be used as a filter variable.")
+          warning_messages$varinfo <- paste("variable", paste(dataname, varname, sep="."), "can currently not be used as a filter variable.")
         } else {
           datasets$set_default_filter_state(dataname, varname)
           warning_messages$varinfo <- ""

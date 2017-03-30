@@ -1,0 +1,9 @@
+Teal R package News
+-------------------
+
+Version 0.0.2
+ - new '01_getting_started' vignette
+ - datanames in FilteredData are now case sensitive
+
+March 28, 2016 - Version 0.0.1
+ - Initial Release
