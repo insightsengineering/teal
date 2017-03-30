@@ -2,7 +2,7 @@ ui_filter_items <- function(id, dataname, title=NULL) {
 
   ns <- NS(id)
 
-  div(class = paste0("teal_filter_", tolower(dataname)),
+  div(class = paste0("teal_filter_", dataname),
       uiOutput(ns("uifilters"))
   )
 
@@ -51,7 +51,7 @@ srv_filter_items <- function(input, output, session, datasets, dataname, contain
         id <- paste0("var_",var)
         id_rm <- paste0("rm_", var)
 
-        varlabel <- tagList(tags$span(paste0(toupper(dataname),".", var)), actionLink(ns(id_rm), "remove", style="font-weight:normal;"))
+        varlabel <- tagList(tags$span(paste0(dataname,".", var)), actionLink(ns(id_rm), "remove", style="font-weight:normal;"))
 
         el <- if (fi$type == "choices") {
           if (length(fi$choices) > 5) {

@@ -36,7 +36,7 @@
 #' ATE <- generate_sample_data('ars')
 #'
 #' x <- teal::init(
-#'   data =  list(asl = ASL, ars = ARS, ate = ATE),
+#'   data =  list(ASL = ASL, ars = ARS, ate = ATE),
 #'   tabs = tabs(
 #'     tab_item(
 #'       "data source",
@@ -81,7 +81,7 @@ init <- function(data,
 
 
   # initialize FilteredData object
-  datasets <- FilteredData$new(tolower(names(data)))
+  datasets <- FilteredData$new(names(data))
 
   Map(function(x, name) {
     datasets$set_data(name, x)
@@ -139,7 +139,7 @@ init <- function(data,
                                 tags$label("Add Filter Variables", class="text-primary", style="margin-bottom: 15px;"),
                                 tagList(
                                   lapply(datasets$datanames(), function(dataname) {
-                                    ui_add_filter_variable(paste0("teal_add_", dataname, "_filters"), toupper(dataname))
+                                    ui_add_filter_variable(paste0("teal_add_", dataname, "_filters"), dataname)
                                   })
                                 )
                             )
@@ -169,10 +169,10 @@ init <- function(data,
       callModule(srv_filter_items, paste0("teal_filters_", dataname), datasets, dataname)
     })
 
-    asl_vars <- names(datasets$get_data('asl'))
+    asl_vars <- names(datasets$get_data('ASL'))
     lapply(datasets$datanames(), function(dataname) {
       callModule(srv_add_filter_variable, paste0("teal_add_", dataname, "_filters"), datasets, dataname,
-                 omit_vars = if (dataname == "asl") NULL else asl_vars)
+                 omit_vars = if (dataname == "ASL") NULL else asl_vars)
     })
 
 
@@ -233,7 +233,7 @@ init <- function(data,
             session$sendCustomMessage(
               type="tealShowHide",
               list(selector = paste0(".teal_filter_",dataname),
-                   action = if (dataname == "asl" || dataname %in% filters) "show" else "hide"
+                   action = if (dataname == "ASL" || dataname %in% filters) "show" else "hide"
               )
             )
           },  datasets$datanames())

@@ -34,21 +34,21 @@
 #
 # x$datanames()
 #
-# x$list_data_info("asl")
-# x$get_filter_info("asl")
+# x$list_data_info("ASL")
+# x$get_filter_info("ASL")
 #
-# df <- x$get_data("asl")
+# df <- x$get_data("ASL")
 #
-# x$get_filter_info("asl")[['USUBJID']]$type
+# x$get_filter_info("ASL")[['USUBJID']]$type
 #
-# x$set_filter("asl", list(AGE=c(3,5), SEX=c('M', 'F')))
+# x$set_filter("ASL", list(AGE=c(3,5), SEX=c('M', 'F')))
 #
 FilteredData <- R6Class(
   "FilteredData",
 
   public = list(
 
-    initialize = function(datanames = c("asl")) {
+    initialize = function(datanames = c("ASL")) {
 
       for (dataname in datanames) {
         if (grepl("[[:space:]]", dataname))
@@ -84,7 +84,7 @@ FilteredData <- R6Class(
       .log("load data:", path)
 
       dataname <- if (is.null(dataname)) {
-        tolower(tools::file_path_sans_ext(basename(path)))
+        tools::file_path_sans_ext(basename(path))
       } else {
         dataname
       }
@@ -196,7 +196,7 @@ FilteredData <- R6Class(
       }
 
       # run if only asl data was reset
-      if (identical(dataname, "asl")) private$apply_filter()
+      if (identical(dataname, "ASL")) private$apply_filter()
 
       invisible(self)
     },
@@ -221,7 +221,11 @@ FilteredData <- R6Class(
 
       private$error_if_not_valid(dataname)
 
-      f <- if(reactive) function(x)x else function(x)isolate(x)
+      f <- if(reactive) {
+        function(x) x
+      } else {
+        function(x) isolate(x)
+      }
 
       if (filtered) {
         f(private$filtered_datasets[[dataname]])
@@ -424,14 +428,14 @@ FilteredData <- R6Class(
 
       private$error_if_not_valid(dataname)
 
-      asl_filter_call <- private$get_subset_call("asl", "ASL_FILTERED")
+      asl_filter_call <- private$get_subset_call("ASL", "ASL_FILTERED")
 
-      if (dataname == "asl") {
+      if (dataname == "ASL") {
         asl_filter_call
       } else {
 
-        out <- paste0(toupper(dataname), "_FILTERED")
-        out_dat <- paste0(toupper(dataname), "_FILTERED_ALONE")
+        out <- paste0(dataname, "_FILTERED")
+        out_dat <- paste0(dataname, "_FILTERED_ALONE")
 
         filter_call <- private$get_subset_call(dataname, out_dat)
         merge_call <- call("<-", as.name(out),
@@ -527,7 +531,7 @@ FilteredData <- R6Class(
 
       data_filter_call <- if (length(fs) == 0) {
 
-        call('<-', as.name(out), as.name(toupper(dataname)))
+        call('<-', as.name(out), as.name(dataname))
 
       } else {
 
@@ -559,7 +563,7 @@ FilteredData <- R6Class(
           Reduce(function(x,y) call('&', x, y), data_filter_call_items[-1], init=data_filter_call_items[[1]])
         }
 
-        as.call(list(as.name("<-"), as.name(out), call("subset", as.name(toupper(dataname)), condition)))
+        as.call(list(as.name("<-"), as.name(out), call("subset", as.name(dataname), condition)))
       }
 
     },
@@ -568,7 +572,7 @@ FilteredData <- R6Class(
 
       .log("apply filter for", dataname)
 
-      if (is.null(self$get_data("asl", filtered = FALSE))) {
+      if (is.null(self$get_data("ASL", filtered = FALSE))) {
 
         # set all filtered datasets to NULL
         for(name in self$datanames())
@@ -580,27 +584,26 @@ FilteredData <- R6Class(
         e <- new.env(parent = globalenv())
 
         # ASL
-        e$ASL <- self$get_data("asl", filtered = FALSE)
+        e$ASL <- self$get_data("ASL", filtered = FALSE)
 
-        eval(self$get_filter_call('asl', merge=FALSE, asl=FALSE), e)
+        eval(self$get_filter_call('ASL', merge=FALSE, asl=FALSE), e)
 
         # re-run all filters
-        if(identical(dataname, "asl")) dataname <- NULL
+        if(identical(dataname, "ASL")) dataname <- NULL
 
         if (is.null(dataname)) {
 
           # filter all except asl
-          dnnasl <- setdiff(self$datanames(), "asl")
+          dnnasl <- setdiff(self$datanames(), "ASL")
 
           for(name in dnnasl) {
 
-            DN <- toupper(name)
             df <- self$get_data(name, filtered=FALSE)
 
             if (is.null(df)) {
               e[[paste0(name, "_FILTERED")]] <- NULL
             } else {
-              e[[DN]] <- self$get_data(name, reactive = FALSE, filtered = "FALSE")
+              e[[name]] <- self$get_data(name, reactive = FALSE, filtered = FALSE)
               calls <- self$get_filter_call(name, merge = TRUE, asl = FALSE)
               eval(calls[[1]], e)
               eval(calls[[2]], e)
@@ -608,23 +611,22 @@ FilteredData <- R6Class(
           }
 
           ## to not trigger multiple events
-          private$filtered_datasets[['asl']] <- e[['ASL_FILTERED']]
+          private$filtered_datasets[['ASL']] <- e[['ASL_FILTERED']]
           for(name in dnnasl) {
-            FDN <- paste0(toupper(name), "_FILTERED")
+            FDN <- paste0(name, "_FILTERED")
             private$filtered_datasets[[name]] <- e[[FDN]]
           }
 
         } else {
           # filter dataname
-          DN <- toupper(dataname)
-          FDN <- paste0(DN, "_FILTERED")
+          FDN <- paste0(dataname, "_FILTERED")
 
           df <- self$get_data(dataname, filtered = FALSE)
 
           if (is.null(df)) {
             e[[FDN]] <- NULL
           } else {
-            e[[DN]] <- df
+            e[[dataname]] <- df
             calls <- self$get_filter_call(dataname, merge = TRUE, asl=FALSE)
             eval(calls[[1]], e)
             eval(calls[[2]], e)

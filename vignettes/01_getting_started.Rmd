@@ -15,7 +15,7 @@ vignette: >
 
 *teal* is a shiny based interactive exploration framework for analyzing clinical
 trials data. `teal` currently provides a dynamic filtering facility and 
-different data viewers. `teal` shiny applications are build using standard
+different data viewers. `teal` shiny applications are built using standard
 [shiny modules][shiny_modules].
 
 The introduction example in this document is very basic, you can study the code
@@ -121,10 +121,10 @@ And the following items can currently not be controlled:
 
 In the code listing above we specified the analysis data with a named list that 
 is passed to the `data` argument of `teal::init`. Because we filter every other 
-data set with the asl filters (more on this below) you always need to specify
-the `asl` data with the `USUBJID` variable.
+data set with the ASL filters (more on this below) you always need to specify 
+the `ASL` data with the `USUBJID` variable. Note that the dataset names are case
+sensitive.
 
-<div style="background: #ff6666; padding: 20px; color: white;">Note that currently the list names need to be lower case. This currently makes the API inconsistent. We will address this in the coming releases of teal.</div>
 
 ### Navigation Tabs, Application Content, Shiny Modules
 
