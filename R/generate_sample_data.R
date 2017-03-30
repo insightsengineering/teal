@@ -11,107 +11,95 @@
 #' @return a data.frame
 #'
 #' @examples
+#' \dontrun{
+#' file <- "~/Desktop/STREAM_DAP_M3_AnalysisDataDefinitions.xls"
+#' STREAM_DAP_M3 <- Map(function(i) {
+#'   df <- read_excel(file, i)
+#'   df[1:max(which(!is.na(df$`VARIABLE NAME`))), ]
+#' }, 10:28)
+#' names(STREAM_DAP_M3) <- readxl::excel_sheets(file)[10:28]
+#' devtools::use_data(STREAM_DAP_M3)
+#' }
 #'
 #' ASL <- generate_sample_data('ASL')
-generate_sample_data <- function(type = c('asl', 'ars')) {
+#' head(ASL)
+#'
+#' ATX <- generate_sample_data('ATX')
+#' head(ATX)
+#'
+#' ATE <- generate_sample_data('ATE')
+#' head(ATE)
+generate_sample_data <- function(type = c("ATX", "ASL", "AAG", "AAE", "XAAE", "ACM", "ADD", "AEG", "XAEG",
+                                          "AEX", "AHY", "AHYTE", "ALB", "XALB", "AMH", "AVS", "XAVS", "ARS",
+                                          "ATE"),
+                                 N = 100) {
 
-  type <- tolower(type)
   type <- match.arg(type)
 
   if (length(type) != 1) stop("specify only one dataset name")
 
-  switch(
-    type,
-    'asl' = {
 
-      # x <- read.csv("~/Desktop/stream_csv/asl.csv", header = FALSE)
-      # dput(as.character(x[,4]))
-      vars <-  c( "USUBJID", "STUDYID", "SUBJID",
-                  "AEWITHFL",
-                  "AGEGRP", "AGExx", "ALIVDT", "BAGE", "BAGEU", "BBMI", "BHT",
-                  "BHTU", "BTEMP", "BTEMPU", "BWT", "BWTU", "COMPSDT", "COMPSFU",
-                  "COMPSTUD", "COMPTRT", "DISCAE", "DISCDEAT", "DISCSTUD", "DISTRTFL",
-                  "IBRTHDT", "IBRTHDTF", "INFCODT", "ITTFL", "RANDDT", "REGION",
-                  "SAFFL", "STDDRS", "STDSSDT", "TRT01A", "TRT01AN", "TRT01P",
-                  "TRT01PN", "TRT0xA", "TRT0xAN", "TRT0xP", "TRT0xPN", "TRTDRS",
-                  "TRTDUR", "TRTEDTM", "TRTETMF", "TRTSDTC", "TRTSDTM", "TRTSEQA",
-                  "TRTSEQAN", "TRTSEQP", "TRTSEQPN", "TRTSTMF")
-      labels <- c("Unique Subject Identifier",
-                 "Study Identifier",
-                 "Subject Identifier for the Study",
-                 "Actual Sequence of Treatments",
-                 "Actual Sequence of Treatments(N)", "Actual Treatment for Period 01",
-                 "Actual Treatment for Period 01(N)", "Actual Treatment for Period 0x",
-                 "Actual Treatment for Period 0x(N)", "AE Leading to Drug Withdrawal Flag",
-                 "Age Group", "Age Group xx", "Baseline Age", "Baseline Age Unit",
-                 "Baseline Body Mass Index (kg/m2)", "Baseline Height", "Baseline Height Unit",
-                 "Baseline Temp", "Baseline Temp Unit", "Baseline Weight", "Baseline Weight Unit",
-                 "Date Last Known to be Alive (N)", "Date of First Exposure to Treatment (C)",
-                 "Date of Randomization ", "Datetime of First Exposure to Treatment",
-                 "Datetime of Last Exposure to Treatment", "Duration of Exposure(days)",
-                 "First Exposure Time Imputation Flag", "Imputed Birth Date",
-                 "Imputed Birth Date Flag", "Informed Consent Date", "Intent-To-Treat Population Flag",
-                 "Last Exposure Time Imputation Flag", "Patient Completed Study",
-                 "Patient Completed Treatment ", "Patient Complete Safety Follow-Up",
-                 "Patient Died", "Patient Discontinued Study", "Patient Discontinued Study Due to AE",
-                 "Patient Discontinued Treatment ", "Planned Sequence of Treatments",
-                 "Planned Sequence of Treatments(N)", "Planned Treatment for Period 01",
-                 "Planned Treatment for Period 01(N)", "Planned Treatment for Period 0x",
-                 "Planned Treatment for Period 0x(N)", "Reason for Study Discontinuation",
-                 "Reason for Treatment Discontinuation", "Region", "Safety Population Flag",
-                 "Study Completion Date", "Study Discontinuation Date")
-      type <- c("Char", "Char","Char",
-                "Char", "Char", "Date", "Char", "Num", "Char", "Num", "Char",
-                "Num", "Char", "Num", "Char", "Num", "Char", "Char", "Num", "Num",
-                "Char", "Num", "Char", "Num", "Char", "Num", "Char", "Char",
-                "Char", "Num", "Num", "Char", "Char", "Char", "Char", "Char",
-                "Char", "Char", "Num", "Char", "Num", "Char", "Num", "Char",
-                "Num", "Char", "Num", "Char", "Num", "Char", "Char", "Num")
+  tvn <- STREAM_DAP_M3[[type]]$`VARIABLE NAME`
+
+  df_raw <-  subset(STREAM_DAP_M3[[type]], !is.na(tvn) & toupper(tvn) == tvn,
+                select=c("VARIABLE NAME", "VARIABLE LABEL", "VARIABLE TYPE"))
 
 
-      N <- 100
+  names(df_raw) <- gsub(" ", "_", names(df_raw))
 
-      df <- data.frame(
-        USUBJID = structure(paste0("id-", 1:N), label=labels[1]),
-        STUDYID = structure(sample(LETTERS[1:5], N, replace = TRUE), label=labels[2]),
-        USUBJID = structure(paste0("id-", 1:N), label=labels[3]),
-        stringsAsFactors = FALSE
-      )
 
-      Map(function(name, label, type) {
+  is_dupli <- duplicated(df_raw$VARIABLE_NAME)
 
-        df[[name]] <<- structure(
-          switch(
-            type,
-            Char = {
-              sample(paste("Character Data:", LETTERS[1:20]), N, replace = TRUE)
-            },
-            Date = {
-              Sys.Date() + floor(runif(N) * 200)
-            },
-            Num = {
-              round(rnorm(N, 100, 20), 2)
-            },
-            rep("unknown", N)
-          ),
-          label = label
-        )
+  df_clean_tmp <- Reduce(rbind, Map(function(x) {
+    switch(
+      x$VARIABLE_NAME,
+      "USUBJID" = {x$VARIABLE_LABEL <- ""; x$VARIABLE_TYPE <- "Char"},
+      "STUDYID" = {x$VARIABLE_LABEL <- "Study Identifier"; x$VARIABLE_TYPE <- "Char"},
+      "SUBJID" = {x$VARIABLE_LABEL <- "Subject Identifier for the Study"; x$VARIABLE_TYPE <- "Char"}
+    )
 
-        NULL
+    if (is.na(x$VARIABLE_TYPE)) x$VARIABLE_TYPE <- "Char"
 
-      }, vars[-(1:3)], labels[-(1:3)], type[-(1:3)])
+    x
+  } , split(df_raw[!is_dupli, ], 1:sum(!is_dupli))))
 
-      df
+  df_clean <- df_clean_tmp[!df_clean_tmp$VARIABLE_NAME %in% c("USUBJID", "STUDYID", "SUBJID"), ]
 
-    },
-    'ars' = {
-      data.frame(
-        STUDYID = rep(LETTERS[1:4], each = 10),
-        USUBJID = paste0("id-", 1:40),
-        stringsAsFactors = FALSE
-      )
-    },
-    NULL
+  df <- data.frame(
+    USUBJID = structure(paste0("id-", 1:N), label="Unique Subject Identifier"),
+    STUDYID = structure(sample(LETTERS[1:5], N, replace = TRUE), label="Study Identifie"),
+    USUBJID = structure(paste0("id-", 1:N), label="Subject Identifier for the Study"),
+    stringsAsFactors = FALSE
   )
 
+  Map(function(name, label, type) {
+
+    df[[name]] <<- structure(
+      switch(
+        type,
+        Char = {
+          sample(paste("Character Data:", LETTERS[1:20]), N, replace = TRUE)
+        },
+        Date = {
+          Sys.Date() + floor(runif(N) * 200)
+        },
+        Num = {
+          round(rnorm(N, 100, 20), 2)
+        },
+        rep("unknown", N)
+      ),
+      label = label
+    )
+
+    NULL
+
+  }, df_clean$VARIABLE_NAME, df_clean$VARIABLE_LABEL, df_clean$VARIABLE_TYPE)
+
+
+  df
 }
+
+
+
+
+

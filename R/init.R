@@ -32,11 +32,11 @@
 #' @examples
 #' \dontrun{
 #' ASL <- generate_sample_data('ASL')
-#' ARS <- generate_sample_data('ars')
-#' ATE <- generate_sample_data('ars')
+#' ARS <- generate_sample_data('ARS')
+#' ATE <- generate_sample_data('ATE')
 #'
 #' x <- teal::init(
-#'   data =  list(ASL = ASL, ars = ARS, ate = ATE),
+#'   data =  list(ASL = ASL, ARS = ARS, ATE = ATE),
 #'   tabs = tabs(
 #'     tab_item(
 #'       "data source",
@@ -54,14 +54,14 @@
 #'           "spaghetti plot",
 #'           server = function(input, output, session, datasets) {},
 #'           ui = function(id) div(p("spaghetti plot")),
-#'           filters = 'ars',
+#'           filters = 'ARS',
 #'           server_args = list(datasets = "teal_datasets")
 #'         ),
 #'         tab_item(
 #'           "survival curves",
 #'           server = function(input, output, session) {},
 #'           ui = function(id) div(p("Kaplan Meier Curve")),
-#'           filters = "ate"
+#'           filters = "ATE"
 #'         )
 #'       )
 #'     )
