@@ -8,8 +8,8 @@ init(data, tabs, filter = NULL, header = tags$p("title here"),
   footer = tags$p("footer here"))
 }
 \arguments{
-\item{data}{named list with datasets. Dataset names are converted to
-lowercase. The `asl` data is madatory.}
+\item{data}{named list with datasets. Dataset names are case sensitive. The
+`ASL` data is mandatory.}
 
 \item{filter}{filter settings. Nested named list, currently with \code{init}
 list element.}
@@ -41,11 +41,11 @@ Creates the server and ui part for a teal shiny app
 \examples{
 \dontrun{
 ASL <- generate_sample_data('ASL')
-ARS <- generate_sample_data('ars')
-ATE <- generate_sample_data('ars')
+ARS <- generate_sample_data('ARS')
+ATE <- generate_sample_data('ATE')
 
 x <- teal::init(
-  data =  list(asl = ASL, ars = ARS, ate = ATE),
+  data =  list(ASL = ASL, ARS = ARS, ATE = ATE),
   tabs = tabs(
     tab_item(
       "data source",
@@ -63,14 +63,14 @@ x <- teal::init(
           "spaghetti plot",
           server = function(input, output, session, datasets) {},
           ui = function(id) div(p("spaghetti plot")),
-          filters = 'ars',
+          filters = 'ARS',
           server_args = list(datasets = "teal_datasets")
         ),
         tab_item(
           "survival curves",
           server = function(input, output, session) {},
           ui = function(id) div(p("Kaplan Meier Curve")),
-          filters = "ate"
+          filters = "ATE"
         )
       )
     )

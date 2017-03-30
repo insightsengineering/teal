@@ -4,8 +4,8 @@
 #'
 #' Creates the server and ui part for a teal shiny app
 #'
-#' @param data named list with datasets. Dataset names are converted to
-#'   lowercase. The `asl` data is madatory.
+#' @param data named list with datasets. Dataset names are case sensitive. The
+#'   `ASL` data is mandatory.
 #' @param analysis nested list with one list per analysis item with the
 #'   following named list elements: \tabular{ll}{ name \tab string with name
 #'   shown in menu for the analysis item \cr server \tab required, shiny server
