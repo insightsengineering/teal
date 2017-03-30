@@ -4,7 +4,9 @@
 \alias{generate_sample_data}
 \title{Generate a Sample Dataset}
 \usage{
-generate_sample_data(type = c("asl", "ars"))
+generate_sample_data(type = c("ATX", "ASL", "AAG", "AAE", "XAAE", "ACM",
+  "ADD", "AEG", "XAEG", "AEX", "AHY", "AHYTE", "ALB", "XALB", "AMH", "AVS",
+  "XAVS", "ARS", "ATE"), N = 100)
 }
 \arguments{
 \item{type}{case insensitiv, specify which data to generate}
@@ -16,6 +18,22 @@ a data.frame
 This dataset generator function is useful to produce
 }
 \examples{
+\dontrun{
+file <- "~/Desktop/STREAM_DAP_M3_AnalysisDataDefinitions.xls"
+STREAM_DAP_M3 <- Map(function(i) {
+  df <- read_excel(file, i)
+  df[1:max(which(!is.na(df$`VARIABLE NAME`))), ]
+}, 10:28)
+names(STREAM_DAP_M3) <- readxl::excel_sheets(file)[10:28]
+devtools::use_data(STREAM_DAP_M3)
+}
 
 ASL <- generate_sample_data('ASL')
+head(ASL)
+
+ATX <- generate_sample_data('ATX')
+head(ATX)
+
+ATE <- generate_sample_data('ATE')
+head(ATE)
 }
