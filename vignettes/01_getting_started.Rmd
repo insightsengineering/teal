@@ -4,7 +4,7 @@ author: "Adrian Waddell"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Vignette Title}
+  %\VignetteIndexEntry{Getting Started with Teal}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -242,7 +242,7 @@ tags$div(tags$h1("My New Analysis Web-app"), tags$p(class="pull-left", "Logo"))
 ### Production Setup and Version Control
 
 Teal is currently under active development and features and bug-fixes get added 
-frequently and we also reserve the freedom to change the API. You can download 
+frequently and we also reserve the freedom to change the API. You can download
 the latest `teal` versions from the [GithHub repository][teal_git] and
 eventually we will release versions also on the [GRAN][gran] server that you can
 install via `devtools::install_version`.
@@ -274,6 +274,9 @@ following code
 
 before you load the `teal` library with `library(teal)`.
 
+You may also watch the video
+[here](https://github.roche.com/waddella/videos/raw/master/teal/getting_started_with_teal.mp4)
+that explains these steps to set up a teal project.
 
 
 [shiny_modules]: https://shiny.rstudio.com/articles/modules.html "Modularizing Shiny app code"
