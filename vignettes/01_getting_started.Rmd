@@ -34,43 +34,46 @@ app][shiny_single_file_app].
 ```{r, eval=FALSE} 
 library(teal)
 
-ASL <- teal::generate_sample_data("asl")
-ARS <- teal::generate_sample_data("ars")
+ASL <- generate_sample_data('ASL')
+ARS <- generate_sample_data('ARS')
+ATE <- generate_sample_data('ATE')
 
 x <- teal::init(
-  data = list(asl = ASL, ars = ARS),
-  tabs = tabs(
-    tab_item(
-      "data source",
-      server = function(input, output, session, datasets) {},
-      ui = function(id) div(p("data source")),
-      filters = NULL,
-      server_args = list(datasets = "teal_datasets")
-    ),
-    data_table_item(),
-    variable_browser_item(),
-    tabs_item(
-      "analysis items",
-      tabs = tabs(
-        tab_item(
-          "spaghetti plot",
-          server = function(input, output, session, datasets) {},
-          ui = function(id) div(p("spaghetti plot")),
-          filters = 'ars',
-          server_args = list(datasets = "teal_datasets")
-        ),
-        tab_item(
-          "survival curves",
-          server = function(input, output, session) {},
-          ui = function(id) div(p("Kaplan Meier Curve")),
-          filters = "ate"
-        )
-      )
-    )
-  )
+ data =  list(ASL = ASL, ARS = ARS, ATE = ATE),
+ tabs = tabs(
+   tab_item(
+     "data source",
+     server = function(input, output, session, datasets) {},
+     ui = function(id) div(p("data source")),
+     filters = NULL,
+     server_args = list(datasets = "teal_datasets")
+   ),
+   data_table_item(),
+   variable_browser_item(),
+   tabs_item(
+     "analysis items",
+     tabs = tabs(
+       tab_item(
+         "spaghetti plot",
+         server = function(input, output, session, datasets) {},
+         ui = function(id) div(p("spaghetti plot")),
+         filters = 'ARS',
+         server_args = list(datasets = "teal_datasets")
+       ),
+       tab_item(
+         "survival curves",
+         server = function(input, output, session) {},
+         ui = function(id) div(p("Kaplan Meier Curve")),
+         filters = "ATE"
+       )
+     )
+   )
+ ),
+ header = tags$h1("Sample App"),
+ footer = tags$p("Copyright 2017")
 )
 
-shinyApp(ui = x$ui, server = x$server)
+shinyApp(x$ui, x$server)
 ```
 
 
