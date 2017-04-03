@@ -58,6 +58,11 @@ ui_page_data_table <- function(id, datasets) {
 srv_page_data_table <- function(input, output, session, datasets, cache_selected = list()) {
 
 
+  # select first 6 variables for each dataset if not otherwise specified
+  for (name in setdiff(datasets$datanames(), names(cache_selected))) {
+    cache_selected[[name]] <- head(names(datasets$get_data(name, filtered = FALSE, reactive=FALSE)), 6)
+  }
+
 
   observe({
 
