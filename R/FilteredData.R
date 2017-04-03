@@ -439,7 +439,7 @@ FilteredData <- R6Class(
 
         filter_call <- private$get_subset_call(dataname, out_dat)
         merge_call <- call("<-", as.name(out),
-                           call("merge", x = as.name('ASL_FILTERED'),
+                           call("merge", x = call("[", as.name('ASL_FILTERED'), quote(expr =), c("USUBJID", "STUDYID")),
                                 y = as.name(out_dat),
                                 by = c("USUBJID", "STUDYID"),
                                 all.x=FALSE, all.y=FALSE))
