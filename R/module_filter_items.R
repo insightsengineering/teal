@@ -36,14 +36,14 @@ srv_filter_items <- function(input, output, session, datasets, dataname, contain
 
     ns <- session$ns
 
-    fs <- datasets$get_filter_state(dataname)
+    fs_data <- datasets$get_filter_state(dataname)
 
-    if (is.null(fs) || length(fs) == 0) {
+    if (is.null(fs_data) || length(fs_data) == 0) {
       #      tags$p("No filter variables selected")
       div()
     } else {
 
-      els <- lapply(names(fs), function(var) {
+      els <- lapply(names(fs_data), function(var) {
 
         fi <- datasets$get_filter_info(dataname, var)
         fs <- datasets$get_filter_state(dataname, var)
@@ -92,21 +92,19 @@ srv_filter_items <- function(input, output, session, datasets, dataname, contain
     force(varname)
 
     if (!(id %in% id_has_bindings)) {
-
       observe({
         value <- input[[id]]
 
-        .log("Filter Observer:", id, "with value", value)
-
         type <- datasets$get_filter_type(dataname, varname)
+
+        .log("Filter Observer: '", id, "', type '", type, "', with value: ", if (is.null(value)) "NULL" else value, sep="")
 
         if (type == "range") {
           if (length(value) == 2) {
             datasets$set_filter_state(dataname, varname, value)
           }
         } else if (type == "choices") {
-          val_state <- if(length(value) == 0) character(0) else value
-          datasets$set_filter_state(dataname, varname, val_state)
+          datasets$set_filter_state(dataname, varname, if(length(value) == 0) character(0) else value)
         }
 
       })
