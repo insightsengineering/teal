@@ -347,8 +347,8 @@ FilteredData <- R6Class(
         )
 
         fs <- self$get_filter_state(dataname)
+        if (is.null(fs)) fs <- list()
         fs[[varname]] <- state
-
         private$filter_state[[dataname]] <- fs
       }
 
