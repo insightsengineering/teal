@@ -37,23 +37,34 @@ sdtm_labels <- local({
 
 # @examples
 # domain_to_label("asl")
-# domain_to_label("MB")
-domain_to_label <- function(x, na.string = "-", USE.NAMES=FALSE, addDomain=TRUE) {
+# teal:::domain_to_label("MB")
+domain_to_label <- function(x, na.string = "-", USE.NAMES=FALSE, addDomain=TRUE, additionalDomains = NULL) {
+
+
   vapply(x, function(xi) {
     XI <- toupper(xi)
-    lab <- if (XI == "ATR") {
-      "Tumor Response Analysis Dataset"
-    } else if (XI == "RS") {
-      "Response"
-    } else if (nchar(XI) == 3) {
-      vad_labels[XI]
+
+    lab <- if (!is.null(additionalDomains)) {
+      additionalDomains[XI]
     } else {
-      sdtm_labels[XI]
+      NA
+    }
+
+    if (is.na(lab)) {
+      lab <- if (XI == "ATR") {
+        "Tumor Response Analysis Dataset"
+      } else if (XI == "RS") {
+        "Response"
+      } else if (nchar(XI) == 3) {
+        vad_labels[XI]
+      } else {
+        sdtm_labels[XI]
+      }
     }
 
     lab <- if (is.na(lab)) na.string else lab
 
-    if (addDomain) paste(lab, " (", tolower(x), ")" , sep="") else lab
+    if (addDomain) paste(lab, " (", x, ")" , sep="") else lab
 
   }, character(1), USE.NAMES = USE.NAMES)
 }
