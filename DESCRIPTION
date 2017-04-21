@@ -1,12 +1,14 @@
 Package: teal
 Type: Package
-Title: What the Package Does (Title Case)
-Version: 0.0.1.1
-Author: Who wrote it
-Maintainer: The package maintainer <yourself@somewhere.net>
-Description: More about what it does (maybe more than one line)
-    Use four spaces when indenting paragraphs within the Description.
-License: What license is it under?
+Title: Exploratory Web Apps for Analyzing Clinical Trials Data
+Version: 0.0.2
+Author: Adrian Waddell
+Maintainer: Adrian Waddell <adrian.waddell@roche.com>
+Description: teal is a shiny based interactive exploration framework for
+ analyzing clinical trials data. teal currently provides a dynamic filtering
+ facility and different data viewers. teal shiny applications are built using
+ standard shiny modules.
+License: Copyright Roche
 Encoding: UTF-8
 LazyData: true
 Depends:

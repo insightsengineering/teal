@@ -14,7 +14,6 @@
 #
 #
 # load_data
-# ==================
 # 1 load data
 # 2 specify filer_info
 # 3 apply filters
@@ -46,6 +45,7 @@
 FilteredData <- R6Class(
   "FilteredData",
 
+  ## Public Methods ====
   public = list(
 
     initialize = function(datanames = c("ASL")) {
@@ -459,7 +459,7 @@ FilteredData <- R6Class(
     }
   ),
 
-  ## ---------------------
+  ## Private Methods---------------------
 
   private = list(
 
