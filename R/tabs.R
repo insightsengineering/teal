@@ -109,7 +109,7 @@ ui_tab_item <- function(x, datasets, idprefix) {
 
   .log("UI id for tab_item is", uiid)
 
-  shiny::tabPanel(x$label, tagList(div(style="margin-top: 25px;"), do.call(x$ui, c(list(uiid), args))))
+  shiny::tabPanel(x$label, tagList(div(style="margin-top: 25px;"), do.call(x$ui, c(list(id = uiid), args))))
 }
 
 ui_tabs_item <- function(x, datasets, idprefix) {
