@@ -456,6 +456,15 @@ FilteredData <- R6Class(
           calls[[2]]
         }
       }
+    },
+    hold_filtering = function() {
+      private$on_hold <- TRUE
+      invisible(NULL)
+    },
+    continue_filtering = function() {
+      private$on_hold <- FALSE
+      private$apply_filter("ASL") # rerun all filtering
+      invisible(NULL)
     }
   ),
 
@@ -468,6 +477,7 @@ FilteredData <- R6Class(
     filtered_datasets = NULL,
     filter_state = NULL,
     filter_info = list(),
+    on_hold = FALSE,
 
     error_if_not_valid = function(dataname, varname=NULL) {
 
@@ -569,6 +579,8 @@ FilteredData <- R6Class(
     },
 
     apply_filter = function(dataname=NULL) {
+
+      if (private$on_hold) return()
 
       .log("apply filter for", dataname)
 
