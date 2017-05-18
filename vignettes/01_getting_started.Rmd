@@ -255,6 +255,19 @@ then load that `teal` package explicitly. To do so we
 ```{bash, eval=FALSE}
 ssh bee.roche.com
 
+module load R-library/2017Q1-gompi-2017a-R-3.3.1
+R 
+```
+
+In R install these packages if you havent already
+
+```{r, eval = FALSE}
+install.packages(c('roxygen2', 'whiksers', 'devtools'), dependencies = TRUE)
+```
+
+Then exit `R` with `q()` and back on the bash clone the teal repository, build it and install it locally
+
+```{bash, eval = FALSE}
 cd ~/
 git clone https://github.roche.com/waddella/teal
 R CMD BUILD teal
