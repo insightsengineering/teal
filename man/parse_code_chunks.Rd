@@ -27,14 +27,30 @@ Code chunks should be non-overlapping, start with a valid start tag
 }
 \examples{
 
-\dontrun{
+file <- tempfile()
 
-file <- "~/test_r_chunk.R"
-file <- "~/test_spaghetti_chunk.R"
+cat("
+# @start_aaa
+x <- 10
+y <- -10
+x*y
+# @end_aaa
+
+#   @start_aaa_part2
+x <- data.frame(y = 1:3, z = 1:3)
+x$y == x$z
+#@end_aaa_part2
+
+x <- c(\\"abc\\", \\"abcd\\")     # @start_bbb some text
+y <- pi * 2
+round(y, 2)
+   #@end_bbb more text
+
+#@start_ not part of a function
+plot(1:10) #@end_
+   ", file = file, append = FALSE)
 
 parse_code_chunks(file)
-
-}
 
 }
 
