@@ -15,14 +15,18 @@ A list of individual code chunks, with each element consisting
   that corresponds to the specific code chunk
 }
 \description{
-Save code chunks between specified start and end tags
-  from a code script as a list of individual code chunks, each named
-  according to the code chunk name included in the tags
+Save code chunks between specified (a) start and end tags for
+  multi-line chunks (using '@start_' and '@end_') and (b) one-line tags for
+  single-line chunks (using '@oneline_') from a code script as a list of
+  individual code chunks, each named according to the code chunk name
+  specified in the corresponding tag
 }
 \details{
 Code chunks should be non-overlapping, start with a valid start tag
-  beginning after '#' (e.g. "# @start_chunk1") and end with a valid end tag,
-  with non-duplicated code chunk names that adhere to variable naming rules in R.
+  beginning after '#' (e.g. "# @start_chunk1", "# @oneline_chunk2") and,
+  in the case of multi-line code chunks, end with a valid end tag
+  (e.g. "# @end_chunk1"), with non-duplicated code chunk names that
+  adhere to variable naming rules in R.
   Otherwise, the function will throw an error
 }
 \examples{
@@ -36,18 +40,21 @@ y <- -10
 x*y
 # @end_aaa
 
-#   @start_aaa_part2
+#  @start_aaa_part2
 x <- data.frame(y = 1:3, z = 1:3)
 x$y == x$z
 #@end_aaa_part2
 
+# @oneline_ccc
+plot(1:100)
+
 x <- c(\\"abc\\", \\"abcd\\")     # @start_bbb some text
 y <- pi * 2
 round(y, 2)
-   #@end_bbb more text
+# @end_bbb more text
 
-#@start_ not part of a function
-plot(1:10) #@end_
+#@start_ not part of a chunk
+plot(1:10) #@end_ also not part of a chunk
    ", file = file, append = FALSE)
 
 parse_code_chunks(file)
