@@ -7,6 +7,9 @@
 #'   specified in the corresponding tag
 #'
 #' @param file path to the file containing the code chunks
+#' @param reindent boolean value for whether code chunks should be reindented
+#'   such that the first line of each code chunk does not start with whitespaces.
+#'   Defaults to TRUE
 #'
 #' @return A list of individual code chunks, with each element consisting
 #'   of a character vector of length the number of lines from `file`
@@ -49,9 +52,9 @@
 #' plot(1:10) #@end_ also not part of a chunk
 #'    ", file = file, append = FALSE)
 #'
-#' parse_code_chunks(file)
+#' parse_code_chunks(file, reindent = TRUE)
 #'
-parse_code_chunks <- function(file) {
+parse_code_chunks <- function(file, reindent = TRUE) {
 
   if (!file.exists(file)) stop("File does not exist.")
 
@@ -195,6 +198,17 @@ parse_code_chunks <- function(file) {
   names(y) <- vapply(matched_obj_single, function(x) x$name, character(1))
 
   chunks <- append(x, y)
-  chunks[order(c(starts, match_single))] # Make sure the code chunks appear in same order as in the script
+  chunks <- chunks[order(c(starts, match_single))] # Make sure the code chunks appear in same order as in the script
+
+  # Remove indentation at the beginning of the code
+  if (reindent) {
+    chunks <- lapply(chunks, function(k) {
+
+      nws <- nchar(k[1]) - nchar(sub("^[[:space:]]*", "", k[1])) # No. of white space at the start of 1st line
+      vapply(1:length(k), function(i) { sub(paste0("^[[:space:]]{", nws,"}"), "", k[i])}, character(1)) })
+
+  }
+
+  chunks
 
 }

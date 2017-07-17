@@ -4,10 +4,14 @@
 \alias{parse_code_chunks}
 \title{Parse Code Chunks}
 \usage{
-parse_code_chunks(file)
+parse_code_chunks(file, reindent = TRUE)
 }
 \arguments{
 \item{file}{path to the file containing the code chunks}
+
+\item{reindent}{boolean value for whether code chunks should be reindented
+such that the first line of each code chunk does not start with whitespaces.
+Defaults to TRUE}
 }
 \value{
 A list of individual code chunks, with each element consisting
@@ -57,7 +61,7 @@ round(y, 2)
 plot(1:10) #@end_ also not part of a chunk
    ", file = file, append = FALSE)
 
-parse_code_chunks(file)
+parse_code_chunks(file, reindent = TRUE)
 
 }
 
