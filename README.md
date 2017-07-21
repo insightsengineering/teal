@@ -1,4 +1,10 @@
 
+# Note
+
+Active development happens on the beta branch!. Please contribute to the beta branch. 
+We use the master branch for R package releases (i.e. versions) only.
+
+
 # Teal R Package for Creating Interactive Shiny Apps
 
 *teal* is a shiny based interactive exploration framework for analyzing clinical
