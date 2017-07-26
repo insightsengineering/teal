@@ -17,6 +17,8 @@
 #'
 #' @return A character string for the header text
 #'
+#' @export
+#'
 output_header <- function(title, description, libraries = c("ggplot2", "haven", "dplyr"), git_repo = NULL, data = c()) {
 
   descrip_str <- strsplit(description, "\n")[[1]] # In case of multi-line descriptions
@@ -77,6 +79,8 @@ output_header <- function(title, description, libraries = c("ggplot2", "haven", 
 #' @param datasets datasets used for the teal module
 #'
 #' @return A character string for the code to generate the filtered datasets
+#'
+#' @export
 #'
 get_filter_txt <- function(datasets) {
 
