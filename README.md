@@ -1,7 +1,7 @@
 
 # Note
 
-Active development happens on the beta branch!. Please contribute to the beta branch. 
+Active development happens on the beta branch! Please contribute to the beta branch. 
 We use the master branch for R package releases (i.e. versions) only.
 
 
@@ -19,7 +19,7 @@ While on the Roche network, open R or RStudio and execute the following:
 ```r
 # install.packages("devtools")
 library(devtools)
-install_github('waddella/teal', host='https://github.roche.com/api/v3', build_vignettes = TRUE)
+install_github('Rpackages/teal', host='https://github.roche.com/api/v3', build_vignettes = TRUE)
 ```
 
 # Getting Started
