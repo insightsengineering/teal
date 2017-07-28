@@ -3,3 +3,7 @@
 .RData
 .Ruserdata
 inst/doc
+.DS_Store
+*~
+vignettes/*.html
+vignettes/*.md
