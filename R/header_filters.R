@@ -48,30 +48,22 @@ output_header <- function(title, description, libraries = c("ggplot2", "haven", 
     data_str <- paste0(data_str, checksums_str, collapse = "\n") # Add checksums as comments
   }
 
-  if (exists("git_commit")) {
-    paste(
-      paste0("\n# ", title, "\n"),
-      paste0(paste0("# ", descrip_str), collapse = "\n"),
-      paste0("# Source: ", source_str),
-      paste0("# Git-commit: ", git_commit),
-      paste0("# Date: ", date),
-      "#\n# You can run this code interactively in http://r.roche.com \n",
-      paste0(lib_str, "\n"),
-      if (exists("data_str")) data_str,
-      sep = "\n"
-    )
-  } else {
-    paste(
-      paste0("\n# ", title, "\n"),
-      paste0(paste0("# ", descrip_str), collapse = "\n"),
-      paste0("# Source: ", source_str),
-      paste0("# Date: ", date),
-      "#\n# You can run this code interactively in http://r.roche.com \n",
-      paste0(lib_str, "\n"),
-      if (exists("data_str")) data_str,
-      sep = "\n"
-    )
-  }
+  header <- paste(paste0("\n# ", title, "\n"),
+                  paste0(paste0("# ", descrip_str), collapse = "\n"),
+                  paste0("# Source: ", source_str),
+                  sep = "\n")
+
+  if (exists("git_commit")) header <- paste(header, git_commit, sep = "\n")
+
+  header <- paste(header,
+                  paste0("# Date: ", date),
+                  "#\n# You can run this code interactively in http://r.roche.com \n",
+                  lib_str,
+                  sep = "\n")
+
+  if (exists("data_str")) header <- paste(header, data_str, sep = "\n")
+
+  header
 }
 
 #' @title Generates text for the code to filter datasets
