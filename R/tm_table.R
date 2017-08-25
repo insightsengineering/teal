@@ -123,8 +123,6 @@ srv_table <- function(input, output, session, datasets, dataname) {
     yvar <- input$yvar
     useNA <- input$useNA
 
-    teal:::as.global(xvar)
-    teal:::as.global(yvar)
 
     validate(need(!is.null(ANL) && is.data.frame(ANL), "no data left"))
     validate(need(nrow(ANL) > 0 , "no observations left"))
@@ -137,12 +135,6 @@ srv_table <- function(input, output, session, datasets, dataname) {
 
 
     tbl <- table(ANL[[xvar]], ANL[[yvar]], useNA = useNA)
-    ##knitr::kable(tbl)
-
-    #.GlobalEnv$tbl <- tbl
-
-    #HTML(print.xtable(xtable(tbl), type="html", html.table.attributes =  c("class=table")))
-
 
     as.data.frame.matrix(tbl, row.names = rownames(tbl))
 
