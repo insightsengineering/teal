@@ -309,5 +309,9 @@ generate_sample_data <- function(type = c("ATX", "ASL", "AAG", "AAE", "XAAE", "A
 
   }
 
-  df
+  structure(
+    df,
+    md5sum = setNames("-", paste0("generate_sample_data('", type, "')")),
+    import = paste0("generate_sample_data('", type, "')")
+  )
 }
