@@ -1,6 +1,6 @@
 
 
-#' Create A Data Table Viewer
+#' Data Table Viewer Teal Module
 #'
 #' A data table viewer shows the data using a paginated table.
 #'
@@ -9,7 +9,7 @@
 #'   initially  shown for which dataset
 #'
 #' @export
-data_table_item <- function(label = "data table", variables_selected=NULL) {
+tm_data_table <- function(label = "data table", variables_selected=NULL) {
   tab_item(
     label,
     server = srv_page_data_table,
@@ -19,6 +19,18 @@ data_table_item <- function(label = "data table", variables_selected=NULL) {
                        cache_selected = if (is.null(variables_selected)) list() else variables_selected),
     ui_args = list(datasets='teal_datasets')
   )
+}
+
+#' Deprecated: Data Table Viewer Teal Module
+#'
+#' Please use the \code{\link{tm_data_table}} function instead.
+#'
+#' @param ... arguments passed on to \code{\link{tm_data_table}}
+#'
+#' @export
+data_table_item <- function(...) {
+  warning("data_table_item is deprecated, pleas use data_table instead")
+  tm_data_table(...)
 }
 
 

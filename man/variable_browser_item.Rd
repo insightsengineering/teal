@@ -2,14 +2,13 @@
 % Please edit documentation in R/module_variable_browser.R
 \name{variable_browser_item}
 \alias{variable_browser_item}
-\title{Create a variable browser item that plots a variable summary}
+\title{Deprecated: Variable Browser Teal Module}
 \usage{
-variable_browser_item(label = "variable browser")
+variable_browser_item(...)
 }
 \arguments{
-\item{label}{label shown in the navigation for the item}
+\item{...}{arguments passed on to \code{\link{tm_variable_browser}}}
 }
 \description{
-The variable browser provides a table with variable names and labels and a
-plot the visualizes the content of a particular variable.
+Please use the \code{\link{tm_variable_browser}} function instead.
 }
