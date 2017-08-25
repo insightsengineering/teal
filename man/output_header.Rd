@@ -4,8 +4,8 @@
 \alias{output_header}
 \title{Generates header text for analysis items}
 \usage{
-output_header(title, description, libraries = c("ggplot2", "haven", "dplyr"),
-  git_repo = NULL, data = c())
+output_header(title, description = NULL, libraries = NULL,
+  git_repo = NULL, data = NULL)
 }
 \arguments{
 \item{title}{A character title of the module}
@@ -14,19 +14,19 @@ output_header(title, description, libraries = c("ggplot2", "haven", "dplyr"),
 information not reflected in the title}
 
 \item{libraries}{A character vector of the names of libraries required for
-the module. Defaults to c("ggplot2", "haven", "dplyr")}
+the module.}
 
 \item{git_repo}{A character vector of the link to the GitHub repository
-containing the script for the module. Optional argument}
+containing the R-code for the teal module. Optional argument}
 
-\item{data}{A character vector listing the code for data variable assignments,
-one for each dataset and with the file paths to the datasets
-(e.g. data = "ASL <- haven::read_sas("/opt/BIOSTAT/qa/cdt7876a/libraries/asl.sas7bdat")").
-Note that if any of the dataset paths are not found under /opt/BIOSTAT/...,
-then \code{output_header} would not generate the text corresponding to the
-code for reading in data, and user would need to manually add it within
-the module code. Defaults to c(), or no data lines generated}
+\item{data}{optionally either an FilteredData object, or a named list of
+datasets. The data sets need the \code{import} attribute and optionally the
+\code{md5sum} attribute.}
 }
 \value{
 A character string for the header text
+}
+\examples{
+
+
 }
