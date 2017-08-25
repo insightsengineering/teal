@@ -64,4 +64,3 @@ plot(1:10) #@end_ also not part of a chunk
 parse_code_chunks(file, reindent = TRUE)
 
 }
-

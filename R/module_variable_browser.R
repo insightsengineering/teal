@@ -1,5 +1,5 @@
 
-#' Create a variable browser item that plots a variable summary
+#' Variable Browser Teal Module
 #'
 #' The variable browser provides a table with variable names and labels and a
 #' plot the visualizes the content of a particular variable.
@@ -7,7 +7,8 @@
 #' @inheritParams tab_item
 #'
 #' @export
-variable_browser_item <- function(label = "variable browser") {
+#'
+tm_variable_browser <- function(label = "variable browser") {
   tab_item(
     label,
     server = srv_page_variable_browser,
@@ -16,6 +17,19 @@ variable_browser_item <- function(label = "variable browser") {
     server_args = list(datasets='teal_datasets'),
     ui_args = list(datasets='teal_datasets')
   )
+}
+
+
+#' Deprecated: Variable Browser Teal Module
+#'
+#' Please use the \code{\link{tm_variable_browser}} function instead.
+#'
+#' @param ... arguments passed on to \code{\link{tm_variable_browser}}
+#'
+#' @export
+variable_browser_item <- function(...) {
+  warning("variable_browser_item is deprecated, pleas use tm_variable_browser instead")
+  tm_variable_browser(...)
 }
 
 ## ui function

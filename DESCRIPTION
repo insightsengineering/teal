@@ -5,9 +5,9 @@ Version: 0.0.2.1
 Author: Adrian Waddell
 Maintainer: Adrian Waddell <adrian.waddell@roche.com>
 Description: teal is a shiny based interactive exploration framework for
- analyzing clinical trials data. teal currently provides a dynamic filtering
- facility and different data viewers. teal shiny applications are built using
- standard shiny modules.
+    analyzing clinical trials data. teal currently provides a dynamic filtering
+    facility and different data viewers. teal shiny applications are built using
+    standard shiny modules.
 License: Copyright Roche
 Encoding: UTF-8
 LazyData: true
@@ -23,8 +23,9 @@ Imports:
     whisker,
     haven,
     tibble
-RoxygenNote: 6.0.1.9000
-Suggests: testthat,
+RoxygenNote: 6.0.1
+Suggests:
+    testthat,
     knitr,
     rmarkdown
 VignetteBuilder: knitr

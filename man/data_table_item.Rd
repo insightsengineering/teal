@@ -2,16 +2,13 @@
 % Please edit documentation in R/module_data_table.R
 \name{data_table_item}
 \alias{data_table_item}
-\title{Create A Data Table Viewer}
+\title{Deprecated: Data Table Viewer Teal Module}
 \usage{
-data_table_item(label = "data table", variables_selected = NULL)
+data_table_item(...)
 }
 \arguments{
-\item{label}{label shown in the navigation for the item}
-
-\item{variables_selected}{a named list that says which variables should be
-initially  shown for which dataset}
+\item{...}{arguments passed on to \code{\link{tm_data_table}}}
 }
 \description{
-A data table viewer shows the data using a paginated table.
+Please use the \code{\link{tm_data_table}} function instead.
 }
