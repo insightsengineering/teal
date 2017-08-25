@@ -4,10 +4,12 @@
 \alias{get_filter_txt}
 \title{Generates text for the code to filter datasets}
 \usage{
-get_filter_txt(datasets)
+get_filter_txt(datanames, datasets)
 }
 \arguments{
-\item{datasets}{datasets used for the teal module}
+\item{datanames}{vector with data names}
+
+\item{datasets}{datasets object}
 }
 \value{
 A character string for the code to generate the filtered datasets
