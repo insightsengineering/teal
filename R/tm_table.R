@@ -22,9 +22,11 @@
 #'      tm_data_table(),
 #'      tm_variable_browser(),
 #'      tm_table("Table Choices", 'ASL', xvar = 'SEX', yvar = 'RACE',
-#'       xvar_choices = c('SEX', 'RACE', 'STUDYID'),
-#'       yvar_choices = c('RACE', 'SAFFL')),
-#'      tm_table("Table No Choices", 'ASL', 'SEX', 'RACE')
+#'               xvar_choices = c('SEX', 'RACE', 'STUDYID'),
+#'               yvar_choices = c('RACE', 'SAFFL')),
+#'      tm_table("Table No Choices", 'ASL', 'SEX', 'RACE',
+#'               pre_output = helpText("Titles"),
+#'               post_output = helpText("Footnotes"))
 #'   )
 #' )
 #'
@@ -39,15 +41,14 @@ tm_table <- function(label, dataname, xvar, yvar,
   useNA <- match.arg(useNA)
 
   if (!(xvar %in% xvar_choices)) stop("xvar is not in xvar_choices")
-  if (!(yvar %in% yvar_choices)) stop("xvar is not in xvar_choices")
-
+  if (!(yvar %in% yvar_choices)) stop("yvar is not in yvar_choices")
 
   tab_item(
     label = label,
     server = srv_table,
     ui = ui_table,
     server_args = list(datasets = 'teal_datasets', dataname),
-    ui_args = list(xvar, yvar,
+    ui_args = list(dataname, xvar, yvar,
                    xvar_choices, yvar_choices, useNA,
                    pre_output, post_output),
     filters = dataname
@@ -56,7 +57,7 @@ tm_table <- function(label, dataname, xvar, yvar,
 }
 
 
-ui_table <- function(id, xvar, yvar,
+ui_table <- function(id, dataname, xvar, yvar,
                      xvar_choices, yvar_choices,
                      useNA = c("no", "ifany", "always"),
                      pre_output, post_output) {
@@ -64,51 +65,20 @@ ui_table <- function(id, xvar, yvar,
 
   ns <- NS(id)
 
-  sel_x <- selectInput(ns("xvar"), label = "x variable (row)",
-                       choices = xvar_choices, selected = xvar, multiple = FALSE)
 
-  sel_y <- selectInput(ns("yvar"), label = "y variable (column)",
-                       choices = yvar_choices, selected = yvar, multiple = FALSE)
-
-  fluidRow(
-    div(
-      class="col-md-3",
-      div(
-        class = "well",
-        tags$label("Encodings", class="text-primary"),
-        if (length(xvar_choices) == 1) {
-          div(
-            hidden(sel_x),
-            tags$label("x variable (row):"),
-            tags$p(xvar)
-          )
-        } else {
-          sel_x
-        },
-        if (length(yvar_choices) == 1) {
-          div(
-            hidden(sel_y),
-            tags$label("y variable (column):"),
-            tags$p(yvar)
-          )
-        } else {
-          sel_y
-        },
-        radioButtons(ns("useNA"), label = "Display Missing Values",
-                     choices = c("no", "ifany", "always"), selected = useNA)
-      ),
-      div(class="form-group", actionButton(ns("show_rcode"), "Show R Code", width = "100%"))
-      # div(class="form-group", actionButton(ns("create_pdf"), "Generate PDF", width = "100%"))
+  standard_layout(
+    output = tableOutput(ns("table")),
+    encoding = div(
+      tags$label("Encodings", class="text-primary"),
+      helpText("Analysis data:", tags$code(dataname)),
+      optionalSelectInput(ns("xvar"), "x variable (row)", xvar_choices, xvar, multiple = FALSE),
+      optionalSelectInput(ns("yvar"), "y variable (column)", yvar_choices, yvar, multiple = FALSE),
+      radioButtons(ns("useNA"), label = "Display Missing Values",
+                   choices = c("no", "ifany", "always"), selected = useNA)
     ),
-    div(
-      class = "col-md-9",
-      div(
-        class="well",
-        div(id = "pre-output", pre_output),
-        div(tableOutput(ns('table'))),
-        div(id = "post-output", post_output)
-      )
-    )
+    forms = actionButton(ns("show_rcode"), "Show R Code", width = "100%"),
+    pre_output = pre_output,
+    post_output = post_output
   )
 
 }

@@ -15,3 +15,22 @@ hidden <- function(x) {
   x$attribs$class <- paste(x$attribs$class, "hidden")
   x
 }
+
+
+# this control widget does not show the selectInput if there is nothing to
+# select from
+optionalSelectInput <- function(inputId, label, choices, selected, ...) {
+
+  selIn <- selectInput(inputId, label, choices, selected, ...)
+
+  if (is.null(choices)) {
+    hidden(selIn)
+  } else if (length(choices) <= 1) {
+    div(
+      hidden(selIn),
+      tags$span(tags$label(paste0(sub(":[[:space:]]+$", "", label), ":")), selected)
+    )
+  } else {
+    selIn
+  }
+}

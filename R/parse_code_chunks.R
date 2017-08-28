@@ -6,7 +6,8 @@
 #'   individual code chunks, each named according to the code chunk name
 #'   specified in the corresponding tag
 #'
-#' @param file path to the file containing the code chunks
+#' @param txt character vector with code, if missing then the file argument is expected
+#' @param file if txt is missing then: path to the file containing the code chunks
 #' @param reindent boolean value for whether code chunks should be reindented
 #'   such that the first line of each code chunk does not start with whitespaces.
 #'   Defaults to TRUE
@@ -52,16 +53,22 @@
 #' plot(1:10) #@end_ also not part of a chunk
 #'    ", file = file, append = FALSE)
 #'
-#' parse_code_chunks(file, reindent = TRUE)
+#' parse_code_chunks(file = file, reindent = TRUE)
 #'
-parse_code_chunks <- function(file, reindent = TRUE) {
+parse_code_chunks <- function(txt, file, reindent = TRUE) {
 
-  if (!file.exists(file)) stop("File does not exist.")
+  if (missing(txt) && missing(file)) stop("either need to specify txt or file")
 
-  con <- file(file)
-  code <- readLines(con, warn = FALSE)
-  close(con)
+  code <- if (missing(txt)) {
+    if (!file.exists(file)) stop("File does not exist.")
 
+    con <- file(file)
+    code <- readLines(con, warn = FALSE)
+    close(con)
+    code
+  } else {
+    txt
+  }
 
   re <- "#[[:space:]]*"
   re_start <- paste0(re, "@start_")

@@ -118,7 +118,13 @@ get_filter_txt <- function(datanames, datasets) {
 
 
   calls <-  lapply(dnames, function(dn) {
-    paste(deparse(datasets$get_filter_call(dn, merge = TRUE, asl=FALSE), width.cutoff = 80), collapse = "\n")
+    cl <- datasets$get_filter_call(dn, merge = TRUE, asl=FALSE)
+    x <- if (is.list(cl)) {
+      unlist(lapply(cl, deparse, width.cutoff = 80))
+    } else {
+      deparse(cl, width.cutoff = 80)
+    }
+    paste(x, collapse = "\n")
   })
 
 
