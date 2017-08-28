@@ -28,9 +28,11 @@ x <- teal::init(
      tm_data_table(),
      tm_variable_browser(),
      tm_table("Table Choices", 'ASL', xvar = 'SEX', yvar = 'RACE',
-      xvar_choices = c('SEX', 'RACE', 'STUDYID'),
-      yvar_choices = c('RACE', 'SAFFL')),
-     tm_table("Table No Choices", 'ASL', 'SEX', 'RACE')
+              xvar_choices = c('SEX', 'RACE', 'STUDYID'),
+              yvar_choices = c('RACE', 'SAFFL')),
+     tm_table("Table No Choices", 'ASL', 'SEX', 'RACE',
+              pre_output = helpText("Titles"),
+              post_output = helpText("Footnotes"))
   )
 )
 

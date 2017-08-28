@@ -28,5 +28,28 @@ A character string for the header text
 }
 \examples{
 
+cat(output_header(
+ title = "Cross-Table",
+ description = "A cross-table counts ..."
+))
+
+cat(output_header(
+ title = "Cross-Table",
+ description = "A cross-table counts ...",
+ libraries = c('haven', 'ggplot2', 'dplyr')
+))
+
+cat(output_header(
+ title = "Cross-Table",
+ description = "A cross-table counts ...",
+ libraries = c('haven', 'ggplot2', 'dplyr'),
+ git_repo = "http://github.roche.com/Rpackages/teal/",
+ data = list(
+   ASL = structure(data.frame(a = 1), import = "haven::read_sas('/opt/BIOSTAT/asl.sas7bdat')"),
+   ATE = structure(data.frame(a = 1),
+                   import = "haven::read_sas('/opt/BIOSTAT/ate.sas7bdat')",
+                   md5sum = "32sdf32fds324")
+ )
+))
 
 }
