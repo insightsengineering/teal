@@ -14,4 +14,3 @@ reindent(str, nws)
 \description{
 Function for adding extra whitespaces at the beginning for indentation
 }
-
