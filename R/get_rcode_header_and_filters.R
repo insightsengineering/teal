@@ -17,18 +17,18 @@
 #'
 #' @examples
 #'
-#' cat(output_header(
+#' cat(get_rcode_header(
 #'  title = "Cross-Table",
 #'  description = "A cross-table counts ..."
 #' ))
 #'
-#' cat(output_header(
+#' cat(get_rcode_header(
 #'  title = "Cross-Table",
 #'  description = "A cross-table counts ...",
 #'  libraries = c('haven', 'ggplot2', 'dplyr')
 #' ))
 #'
-#' cat(output_header(
+#' cat(get_rcode_header(
 #'  title = "Cross-Table",
 #'  description = "A cross-table counts ...",
 #'  libraries = c('haven', 'ggplot2', 'dplyr'),
@@ -41,7 +41,7 @@
 #'  )
 #' ))
 #'
-output_header <- function(title, description=NULL, libraries = NULL, git_repo = NULL, data = NULL) {
+get_rcode_header <- function(title, description=NULL, libraries = NULL, git_repo = NULL, data = NULL) {
 
   descrip_str <- description # unlist(strsplit(description, "\n")) # In case of multi-line descriptions
 
