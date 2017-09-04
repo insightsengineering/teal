@@ -767,7 +767,7 @@ ui_spaghetti_chunks <- function(id, color_by = "STUDYID", choices, show_points =
 
 Then, within the `server` function, an event on the "Show R Code" button will
 produce a modal dialog that displays the reproducible code whenever user clicks
-the button. Note the use of `output_header` (explained at the end of this
+the button. Note the use of `get_rcode_header` (explained at the end of this
 section) and `get_filter_txt` to create the text for the header and the code for
 filtering datasets.
 
@@ -780,7 +780,7 @@ using `paste`.
 observeEvent(input$show_rcode, {
   
   # Header
-  str_head <- output_header(title = "Demo Spaghetti Plot",
+  str_head <- get_rcode_header(title = "Demo Spaghetti Plot",
                             description = "Demo used for the walkthrough on building a teal Shiny module with reproducible code")
   
   # Code for filtering datasets
@@ -835,7 +835,7 @@ regular expression pattern matching. See below:
 ####### Method 1 #######
 observeEvent(input$show_rcode, {
   
-  str_head <- output_header(title = "Demo Spaghetti Plot",
+  str_head <- get_rcode_header(title = "Demo Spaghetti Plot",
                             description = "Demo used for the walkthrough on building a teal Shiny module with reproducible code")
   
   str_filter <- get_filter_txt(datasets = datasets)
@@ -872,7 +872,7 @@ observeEvent(input$show_rcode, {
 ####### Method 2 #######
 observeEvent(input$show_rcode, {
   
-  str_head <- output_header(title = "Demo Spaghetti Plot",
+  str_head <- get_rcode_header(title = "Demo Spaghetti Plot",
                             description = "Demo used for the walkthrough on building a teal Shiny module with reproducible code")
   
   str_filter <- get_filter_txt(datasets = datasets)
@@ -928,7 +928,7 @@ are needed, as illustrated below for the show_points encoding example, where the
 ```{r, eval = F}
 observeEvent(input$show_rcode, {
   
-    str_head <- output_header(title = "Demo Spaghetti Plot",
+    str_head <- get_rcode_header(title = "Demo Spaghetti Plot",
                               description = "Demo used for the walkthrough on building a teal Shiny module with reproducible code")
   
     str_filter <- get_filter_txt(datasets = datasets)
@@ -970,28 +970,31 @@ observeEvent(input$show_rcode, {
 })
 ```
 
-### `output_header` function
+### `get_rcode_header` function
 
-The `output_header` function takes in the title, description (e.g. link to the 
+The `get_rcode_header` function takes in the title, description (e.g. link to the 
 Shiny app), packages/libraries needed, (optional) git repository of where the 
 code is stored, and (optional) code lines (as a character vector, one element 
 per dataset) for reading in the data needed for the module, and conveniently 
 returns a single string containing the header text for the analysis item.
 
-If the datasets used are not from *"/opt/BIOSTAT/..."*, then `output_header` 
+If the datasets used are not from *"/opt/BIOSTAT/..."*, then `get_rcode_header` 
 would not generate the code for reading in the data, so users need to manually 
 add those lines when putting together the code chunks to display, as 
 demonstrated here:
 
 ```{r, comment = ""}
-# The call produces the header text below
-cat(output_header(title = "Demo Spaghetti Plot",
-                  description = "Demo used for the walkthrough on building a teal Shiny module with reproducible code",
-                  libraries = c("ggplot2", "dplyr", "haven"),
-                  git_repo = "https://github.roche.com/Rpackages/teal",
-                  data = c("ASL <- generate_sample_data('ASL', N = 1000)",
-                           "ARS <- generate_sample_data('ARS', N = 1000)")))
+ASL <- generate_sample_data("ASL", N = 10)
+ARS <- generate_sample_data("ARS", N = 10)
 
+# The call produces the header text below
+cat(get_rcode_header(
+  title = "Demo Spaghetti Plot",
+  description = "Demo used for the walkthrough on building a teal Shiny module with reproducible code",
+  libraries = c("ggplot2", "dplyr", "haven"),
+  git_repo = "https://github.roche.com/Rpackages/teal",
+  data = list(ASL = ASL, ARS=ARS)
+))
 ```
 
 ### Complete Scripts
@@ -1124,7 +1127,7 @@ srv_spaghetti_chunks <- function(input, output, session, datasets) {
   # Produce R Code
   observeEvent(input$show_rcode, {
     
-    str_head <- output_header(title = "Demo Spaghetti Plot",
+    str_head <- get_rcode_header(title = "Demo Spaghetti Plot",
                               description = "Demo used for the walkthrough on building a teal Shiny module with reproducible code")
     
     str_filter <- get_filter_txt(datasets = datasets)

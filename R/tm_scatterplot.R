@@ -191,7 +191,7 @@ srv_scatterplot <- function(input, output, session, datasets, dataname) {
 
     if (color_by %in% c("", "_none_")) color_by <- NULL
 
-    str_header <- output_header(
+    str_header <- get_rcode_header(
       title = paste("Scatterplot of", yvar, "vs.", xvar),
       description = "",
       libraries = c(),

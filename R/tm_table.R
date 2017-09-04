@@ -115,7 +115,7 @@ srv_table <- function(input, output, session, datasets, dataname) {
     useNA <- input$useNA
 
 
-    str_header <- output_header(
+    str_header <- get_rcode_header(
       title = paste("Cross-Table of", yvar, "vs.", xvar),
       description = "",
       libraries = c(),
