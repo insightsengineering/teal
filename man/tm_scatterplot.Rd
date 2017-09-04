@@ -6,14 +6,52 @@
 \usage{
 tm_scatterplot(label, dataname, xvar, yvar, xvar_choices = xvar,
   yvar_choices = yvar, color_by = NULL, color_by_choices = color_by,
-  pre_output = NULL, post_output = NULL, plot_height = 600)
+  plot_height = c(600, 200, 2000), alpha = c(1, 0, 1), size = c(4, 1, 12),
+  pre_output = NULL, post_output = NULL)
 }
 \arguments{
-\item{label}{menu label}
+\item{label}{label shown in the navigation for the item}
 
-\item{pre_output}{html tags appended below the output}
+\item{xvar}{variable name of x varbiable}
 
-\item{post_output}{html tags appended after the output}
+\item{yvar}{variable name of y variable}
+
+\item{xvar_choices}{vector with variable names of possible x variables. If
+missing or identincal to \code{xvar} then the plot will be fixed to the
+\code{xvar}.}
+
+\item{yvar_choices}{vector with variable names of possible y variables. If
+missing or identincal to \code{xvar} then the plot will be fixed to the
+\code{yvar}.}
+
+\item{color_by}{variable name of variable that defines the color encoding. If
+\code{NULL} then no color encoding option will be displayed. Note
+\code{_none_} is a keyword and means that no color encoding should be used.}
+
+\item{color_by_choices}{vector with variable names that can be used for color
+encodings. If missing or identical to \code{color_by} then the color
+encoding of the scatterplot points will be fixed to the \code{color_by}
+variable.}
+
+\item{plot_height}{if scalar then the plot will have a fixed height. If a
+slider should be presented to adjust the plot height dynamically then it
+can be a vector of length three with vlaue, min and max.}
+
+\item{alpha}{if scalar then the plot points will have a fixed opacity. If a
+slider should be presented to adjust the plot point opacity dynamically
+then it can be a vector of length three with vlaue, min and max.}
+
+\item{size}{if scalar then the plot points sizes will have a fixed opacity.
+If a slider should be presented to adjust the plot point sizes dynamically
+then it can be a vector of length three with vlaue, min and max.}
+
+\item{pre_output}{optional, \code{shiny.tag} with text placed before the
+output to put the output into context. For example the
+\code{\link[shiny]{helpText}} elements are useful.}
+
+\item{post_output}{optional, \code{shiny.tag} with text placed before the
+output to put the output into context. For example the
+\code{\link[shiny]{helpText}} elements are useful.}
 }
 \description{
 Create a table with the \code{\link{table}[base]} function
@@ -30,12 +68,12 @@ x <- teal::init(
      tm_variable_browser(),
      tm_scatterplot("Scatterplot Choices",
                     dataname = 'AAE',
-                    xvar = 'AESDY', yvar = 'AEEDY',
-                    color_by = "none", color_by_choices = c("none", "AESTMF", "ANLFL")
+                    xvar = 'AESDY', yvar = 'AEEDY', xvar_choices =  c('AESDY',  'AEEDY'),
+                    color_by = "_none_", color_by_choices = c("_none_", "AESTMF", "ANLFL")
      ),
      tm_scatterplot("Scatterplot No Color Choices",
                     dataname = 'ASL',
-                    xvar = 'AGE', yvar = 'TRTDUR'
+                    xvar = 'AGE', yvar = 'TRTDUR', size = 3, alpha = 1, plot_height=600
      )
   )
 )
