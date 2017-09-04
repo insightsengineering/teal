@@ -219,3 +219,15 @@ parse_code_chunks <- function(txt, file, reindent = TRUE) {
   chunks
 
 }
+
+
+#' Function for adding extra whitespaces at the beginning for indentation
+#'
+#' @param str Character string
+#' @param nws Number of whitespaces to add in front of \code{str}
+#'
+#' @export
+#'
+reindent <- function(str, nws) {
+  paste0(c(rep(" ", nws), str), collapse = "")
+}
