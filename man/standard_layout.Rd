@@ -42,12 +42,36 @@ ui_test <- function(id) {
  standard_layout(
    output = plotOutput(ns("plot")),
    encoding = helpText("Ecoding Panel"),
+   forms = tags$div(
+      actionButton(ns("show_r_code"), "Show R Code"),
+      actionButton(ns("export_plot"), "Export Plot")
+   ),
    pre_output = helpText("This is a plot of the", tags$code("iris"), "data"),
    post_output = helpText("More information can be added here.")
  )
 }
 
 srv_test <- function(input, output, session) {
+   output$plot <- renderPlot({
+      with(iris, plot(Sepal.Length, Petal.Length, col = Species))
+   })
+}
+
+ui_test2 <- function(id) {
+ ns <- NS(id)
+ standard_layout(
+   output = plotOutput(ns("plot")),
+   encoding = NULL,
+   forms = tags$div(
+      actionButton(ns("show_r_code"), "Show R Code"),
+      actionButton(ns("export_plot"), "Export Plot")
+   ),
+   pre_output = helpText("This is a plot of the", tags$code("iris"), "data"),
+   post_output = helpText("More information can be added here.")
+ )
+}
+
+srv_test2 <- function(input, output, session) {
    output$plot <- renderPlot({
       with(iris, plot(Sepal.Length, Petal.Length, col = Species))
    })
@@ -60,6 +84,12 @@ x <- teal::init(
          "example",
          ui = ui_test,
          server = srv_test,
+         filters = "ASL"
+      ),
+      tab_item(
+         "example no encoding",
+         ui = ui_test2,
+         server = srv_test2,
          filters = "ASL"
       )
    )

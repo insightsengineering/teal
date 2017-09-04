@@ -38,28 +38,26 @@ tm_table <- function(label, dataname, xvar, yvar,
                      useNA = c("ifany", "no","always"),
                      pre_output=NULL, post_output=NULL) {
 
-  useNA <- match.arg(useNA)
+  args <- as.list(environment())
 
-  if (!(xvar %in% xvar_choices)) stop("xvar is not in xvar_choices")
-  if (!(yvar %in% yvar_choices)) stop("yvar is not in yvar_choices")
+  args$useNA <- match.arg(useNA)
+
 
   tab_item(
     label = label,
     server = srv_table,
     ui = ui_table,
     server_args = list(datasets = 'teal_datasets', dataname),
-    ui_args = list(dataname, xvar, yvar,
-                   xvar_choices, yvar_choices, useNA,
-                   pre_output, post_output),
+    ui_args = args,
     filters = dataname
   )
 
 }
 
 
-ui_table <- function(id, dataname, xvar, yvar,
+ui_table <- function(id, label, dataname, xvar, yvar,
                      xvar_choices, yvar_choices,
-                     useNA = c("no", "ifany", "always"),
+                     useNA,
                      pre_output, post_output) {
 
 

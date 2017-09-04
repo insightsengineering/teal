@@ -33,12 +33,36 @@
 #'  standard_layout(
 #'    output = plotOutput(ns("plot")),
 #'    encoding = helpText("Ecoding Panel"),
+#'    forms = tags$div(
+#'       actionButton(ns("show_r_code"), "Show R Code"),
+#'       actionButton(ns("export_plot"), "Export Plot")
+#'    ),
 #'    pre_output = helpText("This is a plot of the", tags$code("iris"), "data"),
 #'    post_output = helpText("More information can be added here.")
 #'  )
 #' }
 #'
 #' srv_test <- function(input, output, session) {
+#'    output$plot <- renderPlot({
+#'       with(iris, plot(Sepal.Length, Petal.Length, col = Species))
+#'    })
+#' }
+#'
+#' ui_test2 <- function(id) {
+#'  ns <- NS(id)
+#'  standard_layout(
+#'    output = plotOutput(ns("plot")),
+#'    encoding = NULL,
+#'    forms = tags$div(
+#'       actionButton(ns("show_r_code"), "Show R Code"),
+#'       actionButton(ns("export_plot"), "Export Plot")
+#'    ),
+#'    pre_output = helpText("This is a plot of the", tags$code("iris"), "data"),
+#'    post_output = helpText("More information can be added here.")
+#'  )
+#' }
+#'
+#' srv_test2 <- function(input, output, session) {
 #'    output$plot <- renderPlot({
 #'       with(iris, plot(Sepal.Length, Petal.Length, col = Species))
 #'    })
@@ -52,6 +76,12 @@
 #'          ui = ui_test,
 #'          server = srv_test,
 #'          filters = "ASL"
+#'       ),
+#'       tab_item(
+#'          "example no encoding",
+#'          ui = ui_test2,
+#'          server = srv_test2,
+#'          filters = "ASL"
 #'       )
 #'    )
 #' )
@@ -64,28 +94,38 @@ standard_layout <- function(output,
                             encoding=NULL, forms=NULL,
                             pre_output=NULL, post_output=NULL) {
 
+  # checking arguments
   if (!is(output, "shiny.tag")) stop("output is supposed to be of class shiny.tag")
   for (el in c("encoding", "pre_output", "post_output")) {
     x_el <- get(el)
     if (!is.null(x_el) && !is(x_el, "shiny.tag")) stop(paste(el, "is supposed to be of class shiny.tag"))
   }
 
+  # if encoding=NULL then forms is placed below output
 
-  fluidRow(
-    div(
-      class="col-md-3",
-      if (is.null(encoding)) NULL else div(class="well", encoding),
-      if (is.null(forms)) NULL else div(class="form-group", forms)
-    ),
-    div(
-      class = "col-md-9",
-      div(
-        class="well",
-        div(id = "pre-output", pre_output),
-        div(id = "output", output),
-        div(id = "post-output", post_output)
-      )
-    )
+  tag_output <- div(
+    class="well",
+    div(id = "pre-output", pre_output),
+    div(id = "output", output),
+    div(id = "post-output", post_output)
   )
+
+  tag_enc_out <- if (!is.null(encoding)) {
+    div(
+      div(
+        class="col-md-3",
+        div(class="well", encoding),
+        if (is.null(forms)) NULL else div(class="form-group", forms)
+      ),
+      div(class = "col-md-9", tag_output)
+    )
+  } else {
+    div(
+      div(class = "well", tag_output),
+      if (is.null(forms)) NULL else div(class="form-group", forms)
+    )
+  }
+
+  fluidRow(tag_enc_out)
 
 }

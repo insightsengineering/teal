@@ -3,13 +3,36 @@
 #'
 #' Create a table with the \code{\link{table}[base]} function
 #'
-#' @param label menu label
-#' @param pre_output html tags appended below the output
-#' @param post_output html tags appended after the output
+#' @inheritParams tab_item
+#' @inheritParams standard_layout
+#' @param xvar variable name of x varbiable
+#' @param yvar variable name of y variable
+#' @param xvar_choices vector with variable names of possible x variables. If
+#'   missing or identincal to \code{xvar} then the plot will be fixed to the
+#'   \code{xvar}.
+#' @param yvar_choices vector with variable names of possible y variables. If
+#'   missing or identincal to \code{xvar} then the plot will be fixed to the
+#'   \code{yvar}.
+#' @param color_by variable name of variable that defines the color encoding. If
+#'   \code{NULL} then no color encoding option will be displayed. Note
+#'   \code{_none_} is a keyword and means that no color encoding should be used.
+#' @param color_by_choices vector with variable names that can be used for color
+#'   encodings. If missing or identical to \code{color_by} then the color
+#'   encoding of the scatterplot points will be fixed to the \code{color_by}
+#'   variable.
+#' @param plot_height if scalar then the plot will have a fixed height. If a
+#'   slider should be presented to adjust the plot height dynamically then it
+#'   can be a vector of length three with vlaue, min and max.
+#' @param alpha if scalar then the plot points will have a fixed opacity. If a
+#'   slider should be presented to adjust the plot point opacity dynamically
+#'   then it can be a vector of length three with vlaue, min and max.
+#' @param size if scalar then the plot points sizes will have a fixed opacity.
+#'   If a slider should be presented to adjust the plot point sizes dynamically
+#'   then it can be a vector of length three with vlaue, min and max.
+#'
 #'
 #' @export
 #' @importFrom ggplot2 aes_string ggplot geom_point
-#'
 #'
 #' @examples
 #'
@@ -23,12 +46,12 @@
 #'      tm_variable_browser(),
 #'      tm_scatterplot("Scatterplot Choices",
 #'                     dataname = 'AAE',
-#'                     xvar = 'AESDY', yvar = 'AEEDY',
-#'                     color_by = "none", color_by_choices = c("none", "AESTMF", "ANLFL")
+#'                     xvar = 'AESDY', yvar = 'AEEDY', xvar_choices =  c('AESDY',  'AEEDY'),
+#'                     color_by = "_none_", color_by_choices = c("_none_", "AESTMF", "ANLFL")
 #'      ),
 #'      tm_scatterplot("Scatterplot No Color Choices",
 #'                     dataname = 'ASL',
-#'                     xvar = 'AGE', yvar = 'TRTDUR'
+#'                     xvar = 'AGE', yvar = 'TRTDUR', size = 3, alpha = 1, plot_height=600
 #'      )
 #'   )
 #' )
@@ -37,39 +60,41 @@
 #'
 #'
 #' }
-tm_scatterplot <- function(label, dataname, xvar, yvar,
-                     xvar_choices = xvar, yvar_choices = yvar,
-                     color_by = NULL, color_by_choices=color_by,
-                     pre_output=NULL, post_output=NULL,
-                     plot_height = 600) {
+tm_scatterplot <- function(label,
+                           dataname,
+                           xvar, yvar,
+                           xvar_choices = xvar, yvar_choices = yvar,
+                           color_by = NULL,
+                           color_by_choices = color_by,
+                           plot_height = c(600, 200, 2000),
+                           alpha = c(1, 0, 1),
+                           size = c(4, 1, 12),
+                           pre_output=NULL, post_output=NULL) {
 
-  if (!(xvar %in% xvar_choices)) stop("xvar is not in xvar_choices")
-  if (!(yvar %in% yvar_choices)) stop("yvar is not in yvar_choices")
-  if (!is.null(color_by) && !(color_by %in% color_by_choices)) stop("color_by is not in color_by_choices")
+  args <- as.list(environment())
 
   tab_item(
     label = label,
     server = srv_scatterplot,
     ui = ui_scatterplot,
     server_args = list(datasets = 'teal_datasets', dataname),
-    ui_args = list(dataname, xvar, yvar,
-                   xvar_choices, yvar_choices,
-                   color_by, color_by_choices,
-                   pre_output, post_output,
-                   plot_height = plot_height),
+    ui_args = args,
     filters = dataname
   )
 
 }
 
 
-ui_scatterplot <- function(id, dataname, xvar, yvar,
-                     xvar_choices, yvar_choices,
-                     color_by, color_by_choices,
-                     pre_output, post_output, plot_height) {
+ui_scatterplot <- function(id, label,
+                           dataname, xvar, yvar,
+                           xvar_choices, yvar_choices,
+                           color_by, color_by_choices,
+                           plot_height, alpha, size,
+                           pre_output, post_output) {
 
 
   if (plot_height < 200 || plot_height > 2000) stop("plot_height must be between 200 and 2000")
+
 
   ns <- NS(id)
 
@@ -82,10 +107,18 @@ ui_scatterplot <- function(id, dataname, xvar, yvar,
       optionalSelectInput(ns("yvar"), "y variable", yvar_choices, yvar, multiple = FALSE),
       optionalSelectInput(ns("color_by"), "color by", color_by_choices, color_by, multiple = FALSE),
 
-      tags$label("Plot Settings", class="text-primary", style="margin-top: 15px;"),
-      sliderInput(ns("plot_height"), "plot height", 200, 2000, plot_height, ticks = FALSE),
-      sliderInput(ns("alpha"), "opacity", 0, 1, 1, 0.05, ticks = FALSE),
-      sliderInput(ns("size"), "point size", 0.2, 12, 3, 0.2, ticks = FALSE)
+      if (all(c(
+        length(plot_height) == 1,
+        length(size) == 1,
+        length(alpha) == 1
+      ))) {
+        NULL
+      } else {
+        tags$label("Plot Settings", class="text-primary", style="margin-top: 15px;")
+      },
+      optionalSliderInputValMinMax(ns("plot_height"), "plot height", plot_height, ticks = FALSE),
+      optionalSliderInputValMinMax(ns("alpha"), "opacity", alpha, ticks = FALSE),
+      optionalSliderInputValMinMax(ns("size"), "point size", size, ticks = FALSE)
     ),
     forms = actionButton(ns("show_rcode"), "Show R Code", width = "100%"),
     pre_output = pre_output,
@@ -113,14 +146,8 @@ srv_scatterplot <- function(input, output, session, datasets, dataname) {
     color_by <- input$color_by
     size <- input$size
 
-    if (identical(color_by, "none")) color_by <- NULL
+    if (color_by %in% c("", "_none_")) color_by <- NULL
 
-    as.global(ANL)
-    as.global(xvar)
-    as.global(yvar)
-    as.global(alpha)
-    as.global(color_by)
-    as.global(size)
 
     validate(need(alpha, "need alpha"))
     validate(need(!is.null(ANL) && is.data.frame(ANL), "no data left"))
@@ -131,6 +158,11 @@ srv_scatterplot <- function(input, output, session, datasets, dataname) {
                   paste("variable", xvar, " is not available in data", dataname)))
     validate(need(yvar %in% names(ANL),
                   paste("variable", yvar, " is not available in data", dataname)))
+
+
+
+    p <- ggplot(ANL, aes_string(x = xvar, y = yvar, color = color_by)) +
+      geom_point(alpha = alpha, size = size)
 
 
     if (is.null(color_by)) {
@@ -157,7 +189,7 @@ srv_scatterplot <- function(input, output, session, datasets, dataname) {
     size <- input$size
     color_by <- input$color_by
 
-    if (identical(color_by, "none"))  color_by <- NULL
+    if (color_by %in% c("", "_none_")) color_by <- NULL
 
     str_header <- output_header(
       title = paste("Scatterplot of", yvar, "vs.", xvar),
@@ -171,14 +203,26 @@ srv_scatterplot <- function(input, output, session, datasets, dataname) {
 
     chunks <- parse_code_chunks(txt = capture.output(teal:::srv_scatterplot))
 
+    plot_code <-  if (is.null(color_by)) chunks$plot_no_color else chunks$plot_color
+
+
+
+    plot_code_subst <- plot_code %>%
+      sub("ggplot(ANL", paste0("ggplot(", dataname, "_FILTERED"), ., fixed = TRUE) %>%
+      sub("x = xvar", paste0("x = ", xvar), .) %>%
+      sub("y = yvar", paste0("y = ", yvar), .) %>%
+      sub("alpha = alpha", paste0("alpha = ", alpha), .) %>%
+      sub("size = size", paste0("size = ", size), .)
+
+
     code <- paste(
       c(
         "\n",
-        str_header, "\n\n",
-        str_filter, "\n\n",
-        if (is.null(color_by)) chunks$plot_no_color else chunks$plot_color, "\n",
+        str_header, "\n",
+        str_filter, "\n",
+        plot_code_subst, "\n",
         "p", "\n"
-      ), collapse = ""
+      ), collapse = "\n"
     )
 
 
