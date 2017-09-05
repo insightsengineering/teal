@@ -79,14 +79,14 @@ srv_test2 <- function(input, output, session) {
 
 x <- teal::init(
    data = list(ASL = generate_sample_data('ASL')),
-   tabs = tabs(
-      tab_item(
+   modules = root_modules(
+      module(
          "example",
          ui = ui_test,
          server = srv_test,
          filters = "ASL"
       ),
-      tab_item(
+      module(
          "example no encoding",
          ui = ui_test2,
          server = srv_test2,

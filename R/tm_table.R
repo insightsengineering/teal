@@ -18,7 +18,7 @@
 #'
 #' x <- teal::init(
 #'   data = list(ASL = generate_sample_data('ASL')),
-#'   tabs(
+#'   root_modules(
 #'      tm_data_table(),
 #'      tm_variable_browser(),
 #'      tm_table("Table Choices", 'ASL', xvar = 'SEX', yvar = 'RACE',
@@ -43,7 +43,7 @@ tm_table <- function(label, dataname, xvar, yvar,
   args$useNA <- match.arg(useNA)
 
 
-  tab_item(
+  module(
     label = label,
     server = srv_table,
     ui = ui_table,
