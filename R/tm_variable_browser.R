@@ -9,7 +9,7 @@
 #' @export
 #'
 tm_variable_browser <- function(label = "variable browser") {
-  tab_item(
+  module(
     label,
     server = srv_page_variable_browser,
     ui = ui_page_variable_browser,

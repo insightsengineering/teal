@@ -156,7 +156,7 @@ create_ui.teal_module <- function(x, datasets, idprefix, is_root = FALSE) {
 
   uiid <- label_to_id(x$label, idprefix)
 
-  .log("UI id for tab_item is", uiid)
+  .log("UI id for module is", uiid)
 
   shiny::tabPanel(x$label, tagList(div(style="margin-top: 25px;"), do.call(x$ui, c(list(id = uiid), args))))
 }

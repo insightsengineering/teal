@@ -21,7 +21,7 @@
 #'
 tm_splom <- function(label) {
 
-  tab_item(
+  module(
     label = label
   )
 

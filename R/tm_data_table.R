@@ -10,7 +10,7 @@
 #'
 #' @export
 tm_data_table <- function(label = "data table", variables_selected=NULL) {
-  tab_item(
+  module(
     label,
     server = srv_page_data_table,
     ui = ui_page_data_table,
