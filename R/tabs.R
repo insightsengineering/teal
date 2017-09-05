@@ -1,34 +1,45 @@
 
 
-#' Create a collection of \code{tab_item} and \code{tabs_item} object
+#' Create a collection of \code{module} and \code{modules} object
 #'
-#' Tabs collects a tree of \code{\link{tab_item}} and \code{\link{tabs_item}}
+#' Modules collects a tree of \code{\link{module}} and \code{\link{modules}}
 #' objects. This is useful to define the navigation structure of a teal app.
 #'
-#'
-#' @param ... \code{\link{tab_item}} and \code{\link{tabs_item}} object
+#' @param label label of modules collection
+#' @param ... \code{\link{module}} and \code{\link{modules}} object
 #'
 #' @export
 #'
-#' @return object of class \code{teal_tabs}
+#' @return object of class \code{teal_modules}
 #'
-tabs <- function(...) {
+modules <- function(label, ...) {
+
   args <- list(...)
 
-  class_check <- vapply(args, function(x) {is(x, "teal_tab_item") || is(x, "teal_tabs_item")}, logical(1))
+  class_check <- vapply(args, function(x) {is(x, "teal_module") || is(x, "teal_modules")}, logical(1))
 
   if (any(!class_check)) {
-    stop(paste("tabs: not all argument are of class teal_tab_item or teal_tabs_item. Index:",
+    stop(paste("modules: not all argument are of class teal_module or teal_modules. Index:",
                paste(which(!class_check), collapse = ", ")))
   }
 
-  class(args) <- "teal_tabs"
-  args
+  structure(list(label = label, modules=args), class = "teal_modules")
 }
 
 
+#' Create the root modules container
+#'
+#' sets the label to root in \code{\link{modules}}
+#'
+#' @inheritParams modules
+#'
+#' @export
+#'
+root_modules <- function(...) {
+  modules(label = "root", ...)
+}
 
-#' Create a tabItem with a new shiny page
+#' Create a module with a new shiny page
 #'
 #' Tab items allows you to add a shiny module to the teal app
 #'
@@ -49,60 +60,63 @@ tabs <- function(...) {
 #'
 #' @export
 #'
-tab_item <- function(label, server, ui, filters, server_args=NULL, ui_args=NULL) {
+module <- function(label, server, ui, filters, server_args=NULL, ui_args=NULL) {
 
   force(label); force(server); force(ui); force(filters)
 
-  structure(list(label = label, server = server, ui = ui, filters = filters,
-                 server_args = server_args, ui_args = ui_args), class="teal_tab_item")
+  structure(
+    list(label = label, server = server, ui = ui, filters = filters,
+         server_args = server_args, ui_args = ui_args),
+    class="teal_module"
+  )
 }
 
 
-#' A parent navigation item
-#'
-#' This is a labeled parent item in order to be able to create a navigation
-#' tree.
-#'
-#' @inheritParams tab_item
-#' @param tabs an object that is returend from the \code{\link{tabs}} function.
-#'   Note currently teal only suppors trees of depth 2, hence this tabs object
-#'   can not contain any other \code{tabs_item} objects.
-#'
-#' @export
-tabs_item <- function(label, tabs) {
-
-  if (any(!vapply(tabs, function(x) is(x, "teal_tab_item"), logical(1))))
-    stop("tabs_item: not all argument are of class teal_tab_item")
-
-  structure(list(label = label, tabs=tabs), class="teal_tabs_item")
-}
-
-
-
-
-
+# turns a label into a valid html id
 label_to_id <- function(label, prefix = NULL) {
   x <- gsub("[[:space:]]+", "_", label)
   if (!is.null(prefix)) paste(prefix, x , sep=".") else x
 }
 
-main_nav_id <- "teal_nav"
 
-## create ui part
-ui_tabs <- function(x, datasets, idprefix = main_nav_id) {
-  tp <- do.call(
-    shiny::tabsetPanel,
-    c(
-      list(id = main_nav_id, type = "pills"),
-      as.vector(lapply(x, function(xi) {
-        if (class(xi) == "teal_tab_item") ui_tab_item(xi, datasets, idprefix) else ui_tabs_item(xi, datasets, idprefix)
-      }))
-    )
+#
+# somehow unexported S3 methods do not work as expected
+#
+create_ui <- function(x, datasets, idprefix, is_root = FALSE) {
+  switch(
+    class(x),
+    teal_module = create_ui.teal_module(x, datasets, idprefix, is_root),
+    teal_modules = create_ui.teal_modules(x, datasets, idprefix, is_root),
+    stop("no default implementation for create_ui")
   )
-  tp
 }
 
-ui_tab_item <- function(x, datasets, idprefix) {
+
+create_ui.teal_modules <- function(x, datasets, idprefix, is_root = FALSE) {
+
+#  as.global(x)
+#  as.global(datasets)
+#  as.global(idprefix)
+#  as.global(is_root)
+
+  id <- label_to_id(x$label, idprefix)
+
+  .log("** UI id for modules is", id)
+
+  tsp <- do.call(
+    shiny::tabsetPanel,
+    c(
+      list(id = id, type = if (is_root) "pills" else "tabs"),
+      as.vector(lapply(x$modules, create_ui, datasets=datasets, idprefix=id))
+    )
+  )
+
+  if (is_root) tsp else tabPanel(x$label, tsp)
+}
+
+
+create_ui.teal_module <- function(x, datasets, idprefix, is_root = FALSE) {
+
   args <- Map(function(arg) {if(identical(arg, "teal_datasets")) datasets else arg}, x$ui_args)
 
   uiid <- label_to_id(x$label, idprefix)
@@ -112,37 +126,32 @@ ui_tab_item <- function(x, datasets, idprefix) {
   shiny::tabPanel(x$label, tagList(div(style="margin-top: 25px;"), do.call(x$ui, c(list(id = uiid), args))))
 }
 
-ui_tabs_item <- function(x, datasets, idprefix) {
 
-  id <- label_to_id(x$label, main_nav_id)
-
-  .log("** UI id for tabs_item is", id)
-
-  tabPanel(
-    x$label,
-    do.call(
-      shiny::tabsetPanel,
-      c(
-        list(id = id),
-        as.vector(lapply(x$tabs, function(xi)ui_tab_item(xi, datasets, label_to_id(x$label, idprefix))))
-      )
-    )
+call_modules <- function(x, datasets, idprefix) {
+  switch(
+    class(x),
+    teal_modules = call_modules.teal_modules(x, datasets, idprefix),
+    teal_module = call_modules.teal_module(x, datasets, idprefix),
+    stop("no default implementation for call_modules")
   )
 }
 
 
-server_tabs <- function(x, datasets, idprefix = main_nav_id) {
-  lapply(x, function(xi) if (class(xi) == "teal_tab_item") server_tab_item(xi, datasets, idprefix) else server_tabs_item(xi, datasets, idprefix))
+call_modules.teal_modules <- function(x, datasets, idprefix) {
+  id <- label_to_id(x$label, idprefix)
+
+  lapply(x$modules, call_modules, datasets = datasets, idprefix = id)
+
   invisible(NULL)
 }
 
-server_tab_item <- function(x, datasets, idprefix) {
+call_modules.teal_module <- function(x, datasets, idprefix) {
 
   args <- Map(function(arg) {if(identical(arg, "teal_datasets")) datasets else arg}, x$server_args)
 
   id <-  label_to_id(x$label, idprefix)
 
-  .log("server tab_item  id:", id)
+  .log("server tab_module  id:", id)
 
   do.call(
     shiny::callModule,
@@ -151,45 +160,30 @@ server_tab_item <- function(x, datasets, idprefix) {
      args
     )
   )
+
   invisible(NULL)
 }
 
-server_tabs_item <- function(x, datasets, idprefix) {
-  server_tabs(x$tabs, datasets, label_to_id(x$label, idprefix))
-  invisible(NULL)
-}
 
 #' @export
-toString.teal_tabs <- function(x, ...) {
+toString.teal_modules <- function(x, ...) {
    paste(unlist(lapply(x, function(xi) toString(xi, ...))) , collapse = "\n")
 }
 
 #' @export
-toString.teal_tab_item <- function(x, indent = 0, ...) {
+toString.teal_module <- function(x, indent = 0, ...) {
   paste0(paste0(rep(" ", indent), collapse = ""), "+ ", x$label)
 }
 
 #' @export
-toString.teal_tabs_item <- function(x, ...) {
-  paste0(paste0("* ", x$label, ":\n"), toString(x$tabs, indent = 4))
-}
-
-#' @export
-print.teal_tabs <- function(x, ...) {
+print.teal_modules <- function(x, ...) {
   s <- toString(x)
   cat(s)
   invisible(s)
 }
 
 #' @export
-print.teal_tab_item <- function(x, ...) {
-  s <- toString(x)
-  cat(s)
-  invisible(s)
-}
-
-#' @export
-print.teal_tabs_item <- function(x, ...) {
+print.teal_module <- function(x, ...) {
   s <- toString(x)
   cat(s)
   invisible(s)
