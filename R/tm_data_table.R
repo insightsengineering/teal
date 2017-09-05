@@ -21,17 +21,6 @@ tm_data_table <- function(label = "data table", variables_selected=NULL) {
   )
 }
 
-#' Deprecated: Data Table Viewer Teal Module
-#'
-#' Please use the \code{\link{tm_data_table}} function instead.
-#'
-#' @param ... arguments passed on to \code{\link{tm_data_table}}
-#'
-#' @export
-data_table_item <- function(...) {
-  warning("data_table_item is deprecated, pleas use data_table instead")
-  tm_data_table(...)
-}
 
 
 ## ui function

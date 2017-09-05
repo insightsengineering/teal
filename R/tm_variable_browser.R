@@ -20,17 +20,6 @@ tm_variable_browser <- function(label = "variable browser") {
 }
 
 
-#' Deprecated: Variable Browser Teal Module
-#'
-#' Please use the \code{\link{tm_variable_browser}} function instead.
-#'
-#' @param ... arguments passed on to \code{\link{tm_variable_browser}}
-#'
-#' @export
-variable_browser_item <- function(...) {
-  warning("variable_browser_item is deprecated, pleas use tm_variable_browser instead")
-  tm_variable_browser(...)
-}
 
 ## ui function
 
