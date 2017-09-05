@@ -3,7 +3,7 @@
 #'
 #' Create a table with the \code{\link{table}[base]} function
 #'
-#' @inheritParams tab_item
+#' @inheritParams module
 #' @inheritParams standard_layout
 #' @param xvar variable name of x varbiable
 #' @param yvar variable name of y variable
@@ -41,7 +41,7 @@
 #' x <- teal::init(
 #'   data = list(ASL = generate_sample_data('ASL'),
 #'               AAE = generate_sample_data('AAE')),
-#'   tabs(
+#'   root_modules(
 #'      tm_data_table(),
 #'      tm_variable_browser(),
 #'      tm_scatterplot("Scatterplot Choices",
@@ -73,7 +73,7 @@ tm_scatterplot <- function(label,
 
   args <- as.list(environment())
 
-  tab_item(
+  module(
     label = label,
     server = srv_scatterplot,
     ui = ui_scatterplot,

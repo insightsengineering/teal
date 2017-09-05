@@ -229,9 +229,9 @@ interactive data filtering functionality: `datasets$get_data("ASL", filtered = T
 
 ```{r, eval = F}
 # Spaghetti Plot Teal Module
-module_spaghetti_chunks <- function(label = "Spaghetti Plot") {
+tm_spaghetti_chunks <- function(label = "Spaghetti Plot") {
 
-  tab_item(
+  module(
     label = label,
     filters = "ARS",
     server = srv_spaghetti_chunks,
@@ -322,10 +322,10 @@ ARS <- generate_sample_data("ARS", N = 1000)
 ## Initialize Teal
 x <- teal::init(
   data = list(ASL = ASL, ARS = ARS),
-  tabs = tabs(
-    data_table_item(),
-    variable_browser_item(),
-    module_spaghetti_chunks(label = "Spaghetti Plot") # Spaghetti Plot module
+  modules = root_modules(
+    tm_data_table(),
+    tm_variable_browser(),
+    tm_spaghetti_chunks(label = "Spaghetti Plot") # Spaghetti Plot module
     )
   )
 
@@ -486,9 +486,9 @@ menu with options users can choose from, then the code to implement this within
 the module would be as follows:
 
 ```{r, eval = F}
-module_spaghetti_chunks <- function(label) {
+tm_spaghetti_chunks <- function(label) {
   
-  tab_item(
+  module(
     label = label,
     filters = "ARS",
     server = srv_spaghetti_chunks,
@@ -602,9 +602,9 @@ via a checkbox (in addition to the existing lines plotted), then the `ui` and
 `server` functions need to be further modified as follows:
 
 ```{r, eval = F}
-module_spaghetti_chunks <- function(label) {
+tm_spaghetti_chunks <- function(label) {
   
-  tab_item(
+  module(
     label = label,
     filters = "ARS",
     server = srv_spaghetti_chunks,
@@ -1002,9 +1002,9 @@ cat(get_rcode_header(
 To recap, here is the complete script for the spaghetti plot demo module:
 
 ```{r, eval = F}
-module_spaghetti_chunks <- function(label) {
+tm_spaghetti_chunks <- function(label) {
   
-  tab_item(
+  module(
     label = label,
     filters = "ARS",
     server = srv_spaghetti_chunks,
@@ -1191,10 +1191,10 @@ ARS <- generate_sample_data("ARS", N = 1000)
 ## Initialize Teal
 x <- teal::init(
   data = list(ASL = ASL, ARS = ARS),
-  tabs = tabs(
-    data_table_item(),
-    variable_browser_item(),
-    module_spaghetti_chunks(label = "Spaghetti Plot") # Spaghetti Plot module
+  modules = root_modules(
+    tm_data_table(),
+    tm_variable_browser(),
+    tm_spaghetti_chunks(label = "Spaghetti Plot") # Spaghetti Plot module
     )
   )
 
