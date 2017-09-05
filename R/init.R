@@ -78,6 +78,10 @@ init <- function(data,
                  footer = tags$p("footer here")) {
 
 
+  if (modules_depth(modules) > 2) {
+    stop("teal currently only supports module nesting of depth two.")
+  }
+
   # initialize FilteredData object
   datasets <- FilteredData$new(names(data))
 
