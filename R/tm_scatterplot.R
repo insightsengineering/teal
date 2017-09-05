@@ -3,7 +3,7 @@
 #'
 #' Create a table with the \code{\link{table}[base]} function
 #'
-#' @inheritParams tab_item
+#' @inheritParams module
 #' @inheritParams standard_layout
 #' @param xvar variable name of x varbiable
 #' @param yvar variable name of y variable

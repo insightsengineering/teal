@@ -4,7 +4,7 @@
 #' The variable browser provides a table with variable names and labels and a
 #' plot the visualizes the content of a particular variable.
 #'
-#' @inheritParams tab_item
+#' @inheritParams module
 #'
 #' @export
 #'

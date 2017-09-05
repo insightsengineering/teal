@@ -4,7 +4,7 @@
 #'
 #' A data table viewer shows the data using a paginated table.
 #'
-#' @inheritParams tab_item
+#' @inheritParams module
 #' @param variables_selected a named list that says which variables should be
 #'   initially  shown for which dataset
 #'

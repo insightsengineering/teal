@@ -37,32 +37,30 @@
 #'
 #' x <- teal::init(
 #'   data =  list(ASL = ASL, ARS = ARS, ATE = ATE),
-#'   tabs = tabs(
-#'     tab_item(
+#'   modules = root_modules(
+#'     module(
 #'       "data source",
 #'       server = function(input, output, session, datasets) {},
 #'       ui = function(id) div(p("data source")),
 #'       filters = NULL,
 #'       server_args = list(datasets = "teal_datasets")
 #'     ),
-#'     data_table_item(),
-#'     variable_browser_item(),
-#'     tabs_item(
-#'       "analysis items",
-#'       tabs = tabs(
-#'         tab_item(
-#'           "spaghetti plot",
-#'           server = function(input, output, session, datasets) {},
-#'           ui = function(id) div(p("spaghetti plot")),
-#'           filters = 'ARS',
-#'           server_args = list(datasets = "teal_datasets")
-#'         ),
-#'         tab_item(
-#'           "survival curves",
-#'           server = function(input, output, session) {},
-#'           ui = function(id) div(p("Kaplan Meier Curve")),
-#'           filters = "ATE"
-#'         )
+#'     tm_data_table(),
+#'     tm_variable_browser(),
+#'     modules(
+#'       label = "analysis items",
+#'       module(
+#'         label = "spaghetti plot",
+#'         server = function(input, output, session, datasets) {},
+#'         ui = function(id) div(p("spaghetti plot")),
+#'         filters = 'ARS',
+#'         server_args = list(datasets = "teal_datasets")
+#'       ),
+#'       module(
+#'        label = "survival curves",
+#'        server = function(input, output, session) {},
+#'        ui = function(id) div(p("Kaplan Meier Curve")),
+#'        filters = "ATE"
 #'       )
 #'     )
 #'   ),
@@ -74,7 +72,7 @@
 #'
 #' }
 init <- function(data,
-                 tabs,
+                 modules,
                  filter = NULL,
                  header = tags$p("title here"),
                  footer = tags$p("footer here")) {
@@ -119,8 +117,9 @@ init <- function(data,
         tags$header(header),
         tags$hr(style="margin: 7px 0;"),
         local({
-          tp <- ui_tabs(tabs, datasets)
+          tp <- create_ui(modules, datasets, idprefix="teal_modules", is_root = TRUE)
 
+          # separate the nested tabs
           tp$children <- list(
             tp$children[[1]],
             tags$hr(style="margin: 7px 0;"),
@@ -161,87 +160,89 @@ init <- function(data,
     }
 
     # evaluate the server functions
-    server_tabs(tabs, datasets)
-
-
-    # -- filters
-    lapply(datasets$datanames(), function(dataname) {
-      callModule(srv_filter_items, paste0("teal_filters_", dataname), datasets, dataname)
-    })
-
-    asl_vars <- names(datasets$get_data('ASL'))
-    lapply(datasets$datanames(), function(dataname) {
-      callModule(srv_add_filter_variable, paste0("teal_add_", dataname, "_filters"), datasets, dataname,
-                 omit_vars = if (dataname == "ASL") NULL else asl_vars)
-    })
-
-
-
-    ## hide-show filters based on tab-item filter property
-    tabs_ids <- unlist(Map(function(x) {
-      setNames(label_to_id(x$label, main_nav_id), x$label)
-    } , Filter(function(x) is(x, "teal_tabs_item"), tabs)))
-
-    ## create a lookup list
-    filter_info <- list()
-
-    add_filter <- function(x, prefix=main_nav_id) {
-      if (is(x, "teal_tabs")) {
-        lapply(x, add_filter, prefix = prefix)
-      } else if (is(x, "teal_tab_item")) {
-        filter_info[[label_to_id(x$label, prefix)]] <<- x$filters
-      } else if (is(x, "teal_tabs_item")) {
-        .log(x$label)
-        add_filter(x$tabs, label_to_id(x$label, prefix))
-      } else {
-        stop("should not happen")
-      }
-    }
-    add_filter(tabs)
-
-
-
-
-    observe({
-      main_tab <- input[[main_nav_id]]
-      tabs_items <- sapply(tabs_ids, function(id) input[[id]],  USE.NAMES = TRUE)
-
-      main_tab_id <- label_to_id(main_tab, main_nav_id)
-      sub_tab_id <- label_to_id(tabs_items[main_tab], main_tab_id)
-
-      filters <- if (is.null(filter_info[[sub_tab_id]])) {
-        .log("main", main_tab_id, "filters:", filter_info[[main_tab_id]])
-        filter_info[[main_tab_id]]
-      }  else {
-        .log("subtab",  sub_tab_id, "filters:", filter_info[[sub_tab_id]])
-        filter_info[[sub_tab_id]]
-      }
-
-      if (is.null(filters)) {
-        session$sendCustomMessage(type="tealShowHide", list(selector = "#teal_filter-panel", action = "hide"))
-      } else {
-        as.global(session)
-        session$sendCustomMessage(type="tealShowHide", list(selector = "#teal_filter-panel", action = "show"))
-
-        if ("all" %in% filters) {
-          lapply(datasets$datanames(), function(dataname) {
-            session$sendCustomMessage(type="tealShowHide", list(selector = paste0(".teal_filter_",dataname),
-                                                                   action="show"))
-          })
-        } else {
-          Map(function(dataname) {
-            session$sendCustomMessage(
-              type="tealShowHide",
-              list(selector = paste0(".teal_filter_",dataname),
-                   action = if (dataname == "ASL" || dataname %in% filters) "show" else "hide"
-              )
-            )
-          },  datasets$datanames())
-        }
-      }
-
-
-    })
+    call_modules(modules, datasets, idprefix="teal_modules")
+#
+#    cat("AAAAA\n")
+#
+#    # -- filters
+#    lapply(datasets$datanames(), function(dataname) {
+#      callModule(srv_filter_items, paste0("teal_filters_", dataname), datasets, dataname)
+#    })
+#
+#    asl_vars <- names(datasets$get_data('ASL'))
+#    lapply(datasets$datanames(), function(dataname) {
+#      callModule(srv_add_filter_variable, paste0("teal_add_", dataname, "_filters"), datasets, dataname,
+#                 omit_vars = if (dataname == "ASL") NULL else asl_vars)
+#    })
+#
+#
+#
+#    ## hide-show filters based on tab-item filter property
+#    tabs_ids <- unlist(Map(function(x) {
+#
+#      setNames(label_to_id(x$label, main_nav_id), x$label)
+#    } , Filter(function(x) is(x, "teal_module"), modules)))
+#
+#    ## create a lookup list
+#    filter_info <- list()
+#
+#    add_filter <- function(x, prefix=main_nav_id) {
+#      if (is(x, "teal_tabs")) {
+#        lapply(x, add_filter, prefix = prefix)
+#      } else if (is(x, "teal_tab_item")) {
+#        filter_info[[label_to_id(x$label, prefix)]] <<- x$filters
+#      } else if (is(x, "teal_tabs_item")) {
+#        .log(x$label)
+#        add_filter(x$tabs, label_to_id(x$label, prefix))
+#      } else {
+#        stop("should not happen")
+#      }
+#    }
+#    add_filter(tabs)
+#
+#
+#
+#
+#    observe({
+#      main_tab <- input[[main_nav_id]]
+#      tabs_items <- sapply(tabs_ids, function(id) input[[id]],  USE.NAMES = TRUE)
+#
+#      main_tab_id <- label_to_id(main_tab, main_nav_id)
+#      sub_tab_id <- label_to_id(tabs_items[main_tab], main_tab_id)
+#
+#      filters <- if (is.null(filter_info[[sub_tab_id]])) {
+#        .log("main", main_tab_id, "filters:", filter_info[[main_tab_id]])
+#        filter_info[[main_tab_id]]
+#      }  else {
+#        .log("subtab",  sub_tab_id, "filters:", filter_info[[sub_tab_id]])
+#        filter_info[[sub_tab_id]]
+#      }
+#
+#      if (is.null(filters)) {
+#        session$sendCustomMessage(type="tealShowHide", list(selector = "#teal_filter-panel", action = "hide"))
+#      } else {
+#        as.global(session)
+#        session$sendCustomMessage(type="tealShowHide", list(selector = "#teal_filter-panel", action = "show"))
+#
+#        if ("all" %in% filters) {
+#          lapply(datasets$datanames(), function(dataname) {
+#            session$sendCustomMessage(type="tealShowHide", list(selector = paste0(".teal_filter_",dataname),
+#                                                                   action="show"))
+#          })
+#        } else {
+#          Map(function(dataname) {
+#            session$sendCustomMessage(
+#              type="tealShowHide",
+#              list(selector = paste0(".teal_filter_",dataname),
+#                   action = if (dataname == "ASL" || dataname %in% filters) "show" else "hide"
+#              )
+#            )
+#          },  datasets$datanames())
+#        }
+#      }
+#
+#
+#    })
 
     # --
 

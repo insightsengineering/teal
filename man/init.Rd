@@ -4,7 +4,7 @@
 \alias{init}
 \title{Create the Server and Ui Function for the Shiny App}
 \usage{
-init(data, tabs, filter = NULL, header = tags$p("title here"),
+init(data, modules, filter = NULL, header = tags$p("title here"),
   footer = tags$p("footer here"))
 }
 \arguments{
@@ -46,32 +46,30 @@ ATE <- generate_sample_data('ATE')
 
 x <- teal::init(
   data =  list(ASL = ASL, ARS = ARS, ATE = ATE),
-  tabs = tabs(
-    tab_item(
+  modules = root_modules(
+    module(
       "data source",
       server = function(input, output, session, datasets) {},
       ui = function(id) div(p("data source")),
       filters = NULL,
       server_args = list(datasets = "teal_datasets")
     ),
-    data_table_item(),
-    variable_browser_item(),
-    tabs_item(
-      "analysis items",
-      tabs = tabs(
-        tab_item(
-          "spaghetti plot",
-          server = function(input, output, session, datasets) {},
-          ui = function(id) div(p("spaghetti plot")),
-          filters = 'ARS',
-          server_args = list(datasets = "teal_datasets")
-        ),
-        tab_item(
-          "survival curves",
-          server = function(input, output, session) {},
-          ui = function(id) div(p("Kaplan Meier Curve")),
-          filters = "ATE"
-        )
+    tm_data_table(),
+    tm_variable_browser(),
+    modules(
+      label = "analysis items",
+      module(
+        label = "spaghetti plot",
+        server = function(input, output, session, datasets) {},
+        ui = function(id) div(p("spaghetti plot")),
+        filters = 'ARS',
+        server_args = list(datasets = "teal_datasets")
+      ),
+      module(
+       label = "survival curves",
+       server = function(input, output, session) {},
+       ui = function(id) div(p("Kaplan Meier Curve")),
+       filters = "ATE"
       )
     )
   ),
