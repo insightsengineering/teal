@@ -63,7 +63,7 @@ Create a table with the \code{\link{table}[base]} function
 x <- teal::init(
   data = list(ASL = generate_sample_data('ASL'),
               AAE = generate_sample_data('AAE')),
-  tabs(
+  root_modules(
      tm_data_table(),
      tm_variable_browser(),
      tm_scatterplot("Scatterplot Choices",
