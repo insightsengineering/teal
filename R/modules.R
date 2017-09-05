@@ -39,6 +39,7 @@ root_modules <- function(...) {
   modules(label = "root", ...)
 }
 
+
 #' Create a module with a new shiny page
 #'
 #' Tab items allows you to add a shiny module to the teal app
@@ -70,6 +71,40 @@ module <- function(label, server, ui, filters, server_args=NULL, ui_args=NULL) {
     class="teal_module"
   )
 }
+
+
+# check that modules has not more than depth 2
+# m <- module("aaa", server=NULL, ui=NULL, filters=NULL)
+# x <- modules(
+#   "d1",
+#   modules(
+#     "d2",
+#     modules(
+#       "d3",
+#       m,m,m
+#     ),
+#     m
+#   ),
+#   m
+# )
+#
+# x <- modules(
+#   "a",
+#   modules(
+#     "b", m
+#   ),
+#   m
+# )
+# modules_depth(x)
+modules_depth <- function(x, depth = 0) {
+  children_depth <- if (is(x, "teal_modules")) {
+    vapply(x$modules, modules_depth, numeric(1), depth=depth+1)
+  } else {
+    depth
+  }
+  max(children_depth)
+}
+
 
 
 # turns a label into a valid html id
