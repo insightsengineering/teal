@@ -194,7 +194,7 @@ srv_scatterplot <- function(input, output, session, datasets, dataname) {
     str_header <- get_rcode_header(
       title = paste("Scatterplot of", yvar, "vs.", xvar),
       description = "",
-      libraries = c(),
+      libraries = c("ggplot2"),
       data = setNames(list(datasets$get_data(dataname, reactive=FALSE, filtered = FALSE)), dataname),
       git_repo = "http://github.roche.com/Rpackages/teal/R/tm_scatterplot.R"
     )
@@ -203,12 +203,17 @@ srv_scatterplot <- function(input, output, session, datasets, dataname) {
 
     chunks <- parse_code_chunks(txt = capture.output(teal:::srv_scatterplot))
 
-    plot_code <-  if (is.null(color_by)) chunks$plot_no_color else chunks$plot_color
-
+    plot_code <-  if (is.null(color_by) || color_by == "_none_") {
+      chunks$plot_no_color
+    } else {
+      chunks$plot_color %>%
+        sub("color = color_by", paste("color =", color_by), ., fixed=TRUE)
+    }
 
 
     plot_code_subst <- plot_code %>%
       sub("ggplot(ANL", paste0("ggplot(", dataname, "_FILTERED"), ., fixed = TRUE) %>%
+      sub("aes_string(", "aes(", ., fixed=TRUE) %>%
       sub("x = xvar", paste0("x = ", xvar), .) %>%
       sub("y = yvar", paste0("y = ", yvar), .) %>%
       sub("alpha = alpha", paste0("alpha = ", alpha), .) %>%
