@@ -57,7 +57,7 @@
 #'          yvar_choices = c("RACE", "AGEGR", "REGION")
 #'       ),
 #'       tm_scatterplot(
-#'          label = "scatterplot example",
+#'          label = "scatterplot",
 #'          dataname = "ASL",
 #'          xvar = "AGE",
 #'          yvar = "BBMI",
