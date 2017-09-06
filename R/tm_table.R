@@ -135,12 +135,10 @@ srv_table <- function(input, output, session, datasets, dataname) {
     )
 
 
-    showModal(modalDialog(
-      title = "R Code for the Current Spaghetti Plot",
-      tags$pre(tags$code(class="R", code)),
-      easyClose = TRUE,
-      size = "l"
-    ))
+    showRCodeModal(
+      title = "R Code for the Current Table",
+      rcode = code
+    )
 
   })
 
