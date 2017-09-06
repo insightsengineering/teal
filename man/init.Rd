@@ -50,7 +50,7 @@ x <- teal::init(
     module(
       "data source",
       server = function(input, output, session, datasets) {},
-      ui = function(id) div(p("data source")),
+      ui = function(id) div(p("information about data source")),
       filters = NULL,
       server_args = list(datasets = "teal_datasets")
     ),
@@ -58,18 +58,26 @@ x <- teal::init(
     tm_variable_browser(),
     modules(
       label = "analysis items",
-      module(
-        label = "spaghetti plot",
-        server = function(input, output, session, datasets) {},
-        ui = function(id) div(p("spaghetti plot")),
-        filters = 'ARS',
-        server_args = list(datasets = "teal_datasets")
+      tm_table(
+         label = "demographic table",
+         dataname = "ASL",
+         xvar = "SEX",
+         yvar = "RACE",
+         yvar_choices = c("RACE", "AGEGR", "REGION")
+      ),
+      tm_scatterplot(
+         label = "scatterplot example",
+         dataname = "ASL",
+         xvar = "AGE",
+         yvar = "BBMI",
+         color_by = "_none_",
+         color_by_choices = c("_none_", "STUDYID")
       ),
       module(
-       label = "survival curves",
-       server = function(input, output, session) {},
-       ui = function(id) div(p("Kaplan Meier Curve")),
-       filters = "ATE"
+         label = "survival curves",
+         server = function(input, output, session) {},
+         ui = function(id) div(p("Kaplan Meier Curve")),
+         filters = "ATE"
       )
     )
   ),
