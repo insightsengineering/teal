@@ -225,14 +225,10 @@ srv_scatterplot <- function(input, output, session, datasets, dataname) {
       ), collapse = "\n"
     )
 
-
-    showModal(modalDialog(
-      title = "R Code for the Current Spaghetti Plot",
-      tags$pre(tags$code(class="R", code)),
-      easyClose = TRUE,
-      size = "l"
-    ))
-
+    showRCodeModal(
+      title = "R Code for the Current Scatterplot",
+      rcode = code
+    )
   })
 
 }
