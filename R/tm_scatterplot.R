@@ -206,8 +206,8 @@ srv_scatterplot <- function(input, output, session, datasets, dataname) {
     plot_code <-  if (is.null(color_by) || color_by == "_none_") {
       chunks$plot_no_color
     } else {
-      chunks$plot_color %>%
-        sub("color = color_by", paste("color =", color_by), ., fixed=TRUE)
+      pc <- chunks$plot_color
+      sub("color = color_by", paste("color =", color_by), pc, fixed=TRUE)
     }
 
 
