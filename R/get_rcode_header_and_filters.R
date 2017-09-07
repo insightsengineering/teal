@@ -47,8 +47,10 @@ get_rcode_header <- function(title, description=NULL, libraries = NULL, git_repo
 
   source_str <- ifelse(is.null(git_repo), "Not given", git_repo)
 
-  git_commit <- try(system("git rev-parse --short HEAD", intern = TRUE), silent = TRUE)
-  if (is(git_commit, "try-error")) git_commit <- ""
+  #git_commit <- try(system("git rev-parse --short HEAD", intern = TRUE), silent = TRUE)
+  #if (is(git_commit, "try-error")) git_commit <- ""
+
+  git_commit <- "-"
 
   lib_str <- if (!is.null(libraries)) {
     paste0("library(", libraries, ")", collapse = "\n")
