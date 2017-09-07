@@ -1,7 +1,7 @@
 Package: teal
 Type: Package
 Title: Exploratory Web Apps for Analyzing Clinical Trials Data
-Version: 0.0.2.1
+Version: 0.0.2.2
 Author: Adrian Waddell
 Maintainer: Adrian Waddell <adrian.waddell@roche.com>
 Description: teal is a shiny based interactive exploration framework for
