@@ -44,8 +44,8 @@
 #
 FilteredData <- R6Class(
   "FilteredData",
-
-  ## Public Methods ====
+  ## FilteredData ====
+  ## __Public Methods ====
   public = list(
 
     initialize = function(datanames = c("ASL")) {
@@ -468,7 +468,7 @@ FilteredData <- R6Class(
     }
   ),
 
-  ## Private Methods---------------------
+  ## __Private Methods---------------------
 
   private = list(
 
@@ -651,4 +651,27 @@ FilteredData <- R6Class(
     }
   )
 )
+
+
+
+
+# SimpleFiteredData ====
+
+SimpleFilteredData <- R6Class(
+  "SimpleFilteredData",
+  public = list(
+
+  ),
+  inherit = FilteredData
+)
+
+
+
+# CDISCFiteredData ====
+
+CDISCFilteredData <- R6Class(
+  "CDISCFilteredData",
+  inherit = FilteredData
+)
+
 
