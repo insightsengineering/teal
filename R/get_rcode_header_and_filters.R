@@ -120,7 +120,11 @@ get_filter_txt <- function(datanames, datasets) {
 
 
   calls <-  lapply(dnames, function(dn) {
-    cl <- datasets$get_filter_call(dn, merge = TRUE, asl=FALSE)
+    cl <- if (dn == "ASL") {
+      datasets$get_filter_call(dn, merge = FALSE, asl=TRUE)
+    } else {
+      datasets$get_filter_call(dn, merge = TRUE, asl=FALSE)
+    }
     x <- if (is.list(cl)) {
       unlist(lapply(cl, deparse, width.cutoff = 80))
     } else {
