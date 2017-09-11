@@ -15,8 +15,7 @@ tm_data_table <- function(label = "data table", variables_selected=NULL) {
     server = srv_page_data_table,
     ui = ui_page_data_table,
     filters = "all",
-    server_args = list(datasets='teal_datasets',
-                       cache_selected = if (is.null(variables_selected)) list() else variables_selected),
+    server_args = list(cache_selected = if (is.null(variables_selected)) list() else variables_selected),
     ui_args = list(datasets='teal_datasets')
   )
 }

@@ -47,7 +47,7 @@ tm_table <- function(label, dataname, xvar, yvar,
     label = label,
     server = srv_table,
     ui = ui_table,
-    server_args = list(datasets = 'teal_datasets', dataname),
+    server_args = list(dataname = dataname),
     ui_args = args,
     filters = dataname
   )

@@ -77,7 +77,6 @@ tm_scatterplot <- function(label,
     label = label,
     server = srv_scatterplot,
     ui = ui_scatterplot,
-    server_args = list(datasets = 'teal_datasets', dataname),
     ui_args = args,
     filters = dataname
   )

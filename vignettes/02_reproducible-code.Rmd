@@ -235,7 +235,6 @@ tm_spaghetti <- function(label = "Spaghetti Plot") {
     label = label,
     filters = "ARS",
     server = srv_spaghetti_chunks,
-    server_args = list(datasets = "teal_datasets"),
     ui = ui_spaghetti_chunks
   )
 
@@ -491,7 +490,6 @@ tm_spaghetti <- function(label) {
     label = label,
     filters = "ARS",
     server = srv_spaghetti_chunks,
-    server_args = list(datasets = "teal_datasets"),
     ui = ui_spaghetti_chunks,
     ui_args = list(
       choices = c("STUDYID", "TRT01P", "TRT01A", "Response")
@@ -600,7 +598,6 @@ tm_spaghetti <- function(label) {
     label = label,
     filters = "ARS",
     server = srv_spaghetti_chunks,
-    server_args = list(datasets = "teal_datasets"),
     ui = ui_spaghetti_chunks,
     ui_args = list(
       choices = c("STUDYID", "TRT01P", "TRT01A", "Response")
@@ -983,7 +980,6 @@ tm_spaghetti <- function(label) {
     label = label,
     filters = "ARS",
     server = srv_spaghetti_chunks,
-    server_args = list(datasets = "teal_datasets"),
     ui = ui_spaghetti_chunks,
     ui_args = list(
       choices = c("STUDYID", "TRT01P", "TRT01A", "Response")
