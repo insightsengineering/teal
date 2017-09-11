@@ -120,8 +120,8 @@ standard_layout <- function(output,
       div(class = "col-md-9", tag_output)
     )
   } else {
-    div(
-      div(class = "well", tag_output),
+    div(class="col-md-12",
+      tag_output,
       if (is.null(forms)) NULL else div(class="form-group", forms)
     )
   }
