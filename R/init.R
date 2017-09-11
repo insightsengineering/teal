@@ -42,8 +42,7 @@
 #'       "data source",
 #'       server = function(input, output, session, datasets) {},
 #'       ui = function(id) div(p("information about data source")),
-#'       filters = NULL,
-#'       server_args = list(datasets = "teal_datasets")
+#'       filters = NULL
 #'     ),
 #'     tm_data_table(),
 #'     tm_variable_browser(),
@@ -66,7 +65,7 @@
 #'       ),
 #'       module(
 #'          label = "survival curves",
-#'          server = function(input, output, session) {},
+#'          server = function(input, output, session, datasets) {},
 #'          ui = function(id) div(p("Kaplan Meier Curve")),
 #'          filters = "ATE"
 #'       )

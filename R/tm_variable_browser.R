@@ -14,7 +14,6 @@ tm_variable_browser <- function(label = "variable browser") {
     server = srv_page_variable_browser,
     ui = ui_page_variable_browser,
     filters = "all",
-    server_args = list(datasets='teal_datasets'),
     ui_args = list(datasets='teal_datasets')
   )
 }

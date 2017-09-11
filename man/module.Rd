@@ -20,8 +20,8 @@ filters in the listed data sets. \code{NULL} will hide the filter panel,
 and the keyowrd \code{'all'} will show the filters of all datasets.}
 
 \item{server_args}{is a named list with additional arguments passed on to the
-server function. The argument \code{'teal_datasets'} will always be
-replaced by the \code{FilteredData} object.}
+server function. Note that the \code{FilteredDatasets} object gets
+atomatically passed to the server function as arguments \code{datasets}.}
 
 \item{ui_args}{is a named list with additional arguments passed on to the
 ui function. The argument \code{'teal_datasets'} will always be

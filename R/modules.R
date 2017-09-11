@@ -53,8 +53,8 @@ root_modules <- function(...) {
 #'   filters in the listed data sets. \code{NULL} will hide the filter panel,
 #'   and the keyowrd \code{'all'} will show the filters of all datasets.
 #' @param server_args is a named list with additional arguments passed on to the
-#'   server function. The argument \code{'teal_datasets'} will always be
-#'   replaced by the \code{FilteredData} object.
+#'   server function. Note that the \code{FilteredDatasets} object gets
+#'   atomatically passed to the server function as arguments \code{datasets}.
 #' @param ui_args is a named list with additional arguments passed on to the
 #'   ui function. The argument \code{'teal_datasets'} will always be
 #'   replaced by the \code{FilteredData} object.
@@ -64,6 +64,15 @@ root_modules <- function(...) {
 module <- function(label, server, ui, filters, server_args=NULL, ui_args=NULL) {
 
   force(label); force(server); force(ui); force(filters)
+
+  if (any(vapply(server_args, function(x)identical(x, "teal_datasets"), logical(1)))) {
+    warning("teal_datasets is now deprecated, the datasets object gets atomatically passed to the server function")
+    server_args <- Filter(function(x) !identical(x, "teal_datasets"), server_args)
+  }
+
+  if (!identical(names(formals(server))[1:4], c("input", "output", "session", "datasets"))) {
+    stop("teal modules need the arguments input, output, session, and datasets in that order in ther server function")
+  }
 
   structure(
     list(label = label, server = server, ui = ui, filters = filters,
@@ -182,8 +191,6 @@ call_modules.teal_modules <- function(x, datasets, idprefix) {
 
 call_modules.teal_module <- function(x, datasets, idprefix) {
 
-  args <- Map(function(arg) {if(identical(arg, "teal_datasets")) datasets else arg}, x$server_args)
-
   id <-  label_to_id(x$label, idprefix)
 
   .log("server tab_module  id:", id)
@@ -192,7 +199,8 @@ call_modules.teal_module <- function(x, datasets, idprefix) {
     shiny::callModule,
     c(
      list(module = x$server, id = id),
-     args
+     datasets = datasets,
+     x$server_args
     )
   )
 
