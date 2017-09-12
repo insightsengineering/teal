@@ -19,16 +19,26 @@
 #' anl_ver
 #'
 #'
-tm_splom <- function(label) {
+tm_splom_wide_data <- function(label) {
 
   module(
     label = label
   )
 
+}
+
+
+tm_splot_long_data <- function(label) {
 
 }
 
-ui_splom <- function(id) {
+ui_splom <- function(id, label_select_var = "Variable", choices, selected = head(choices, 5),
+                     plot_height = c(800, 400, 3000),
+                     alpha = c(0.5, 0, 1),
+                     point_size = c(.65, .2, 3),
+                     pre_output,
+                     post_output
+                     ) {
 
   ns <- NS(id)
 
@@ -36,14 +46,16 @@ ui_splom <- function(id) {
      output = plotOutput(ns("plot_ui")),
      encoding = div(
        tags$label("Encodings", class="text-primary"),
-       selectInput(ns("biomarker"), "Biomarker", choices=choices, selected = head(choices, 5),
+       selectInput(ns("splom_vars"), label_select_var, choices=choices, selected = selected,
                    multiple = TRUE),
+       optionalSelectInput(ns("color_by")),
        tags$label("Plot Settings", class="text-primary"),
-       sliderInput(ns("plot_height"), "Plot Height", min=400, max=3000, step = 10, value = 800),
-       sliderInput(ns("alpha"), "Transparency", min=0, max=1, step = .05, value = .5),
-       sliderInput(ns("cex"), "Point Size", min=0.2, max=3, step = .05, value = .65)
+       sliderInput(ns("plot_height"), "Plot Height", min=plot_height[2], max=plot_height[3], value = plot_height[1]),
+       sliderInput(ns("alpha"), "Transparency", min=alpha[2], max=alpha[3], step = .05, value = alpha[1]),
+       sliderInput(ns("cex"), "Point Size", min=point_size[2], max=point_size[3], step = .05, value = point_size[1])
      ),
-     pre_output = helpText("This scatterplot maxtrix shows the expression data <code>ABM2.AVAL</code> for the different biomarkers <code>ABM2.PARAM</code>.")
+     pre_output = pre_output,
+     post_output = post_output
    )
 }
 
