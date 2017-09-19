@@ -13,65 +13,71 @@ diverse data viewers. `teal` shiny applications are built using standard
 1. Install `teal` as in [Installation below](#installation).
 1. Create a new file `app.R`, and paste this code into it:
 
-		library(teal)
+	```r
+	library(teal)
 		
-		ASL <- generate_sample_data('ASL')
-		ARS <- generate_sample_data('ARS')
-		ATE <- generate_sample_data('ATE')
-		
-		x <- teal::init(
-		  data =  list(ASL = ASL, ARS = ARS, ATE = ATE),
-		  modules = root_modules(
-		    module(
-		      "data source",
-		      server = function(input, output, session, datasets) {},
-		      ui = function(id) div(p("information about data source")),
-		      filters = NULL
-		    ),
-		    tm_data_table(),
-		    tm_variable_browser(),
-		    modules(
-		      label = "analysis items",
-		      tm_table(
-		        label = "demographic table",
-		        dataname = "ASL",
-		        xvar = "SEX",
-		        yvar = "RACE",
-		        yvar_choices = c("RACE", "AGEGR", "REGION")
-		      ),
-		      tm_scatterplot(
-		        label = "scatterplot",
-		        dataname = "ASL",
-		        xvar = "AGE",
-		        yvar = "BBMI",
-		        color_by = "_none_",
-		        color_by_choices = c("_none_", "STUDYID")
-		      ),
-		      module(
-		        label = "survival curves",
-		        server = function(input, output, session, datasets) {},
-		        ui = function(id) div(p("Kaplan Meier Curve")),
-		        filters = "ATE"
-		      )
-		    )
-		  ),
-		  header = tags$h1("Sample App"),
-		  footer = tags$p("Copyright 2017")
-		)
-		
-		shinyApp(x$ui, x$server)
+	ASL <- generate_sample_data('ASL')
+	ARS <- generate_sample_data('ARS')
+	ATE <- generate_sample_data('ATE')
+	
+	x <- teal::init(
+	  data =  list(ASL = ASL, ARS = ARS, ATE = ATE),
+	  modules = root_modules(
+	    module(
+	      "data source",
+	      server = function(input, output, session, datasets) {},
+	      ui = function(id) div(p("information about data source")),
+	      filters = NULL
+	    ),
+	    tm_data_table(),
+	    tm_variable_browser(),
+	    modules(
+	      label = "analysis items",
+	      tm_table(
+	        label = "demographic table",
+	        dataname = "ASL",
+	        xvar = "SEX",
+	        yvar = "RACE",
+	        yvar_choices = c("RACE", "AGEGR", "REGION")
+	      ),
+	      tm_scatterplot(
+	        label = "scatterplot",
+	        dataname = "ASL",
+	        xvar = "AGE",
+	        yvar = "BBMI",
+	        color_by = "_none_",
+	        color_by_choices = c("_none_", "STUDYID")
+	      ),
+	      module(
+	        label = "survival curves",
+	        server = function(input, output, session, datasets) {},
+	        ui = function(id) div(p("Kaplan Meier Curve")),
+	        filters = "ATE"
+	      )
+	    )
+	  ),
+	  header = tags$h1("Sample App"),
+	  footer = tags$p("Copyright 2017")
+	)
+	
+	shinyApp(x$ui, x$server)
+	```
 	
 1. Execute the above code to run a sample app.
 1. You can now modify this sample app to fit your need. For example, delete
    `ARS` and `ATE`, and change `ASL` to your dataset, for example:
 
-		ASL <- read_bce("/opt/BIOSTAT/qa/ts00010/libraries/asl.sas7bdat")
+	```r
+	ASL <- read_bce("/opt/BIOSTAT/qa/ts00010/libraries/asl.sas7bdat")
+	```
    
 1. Edit the modules in the `modules = ` argument. For example, you can
    rearrange, delete, or add new modules
 1. For  more info, run this vignette (paste into R console and run):
 
-		vignette("01_getting_started", package = "teal")
+	```r
+	vignette("01_getting_started", package = "teal")
+	```
     
     
 # Installation 
