@@ -73,6 +73,13 @@ diverse data viewers. `teal` shiny applications are built using standard
    
 1. Edit the modules in the `modules = ` argument. For example, you can
    rearrange, delete, or add new modules
+1. Push this app to the shiny server (only you can access), with:
+
+	```r
+	## setwd() to location of app.R
+	rocheBCE::shinypub("./", "users/your-unix-id/sample-app")
+	```
+
 1. For  more info, run this vignette (paste into R console and run):
 
 	```r
