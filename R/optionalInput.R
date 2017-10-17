@@ -36,8 +36,9 @@ optionalSelectInput <- function(inputId, label, choices, selected, ...) {
     selected <- NULL
     disp <- "nothing"
   } else {
-    if (!(selected %in% choices)) {
-      stop(paste0("argument selected", selected, "is not in choices:", paste(choices, collapse = ", ")))
+    if (!all(selected %in% choices)) {
+      stop(paste0("argument selected", paste(selected, collapse = ", "),
+                  "is not in choices:", paste(choices, collapse = ", ")))
     }
     choices <- choices
     selected <- selected
