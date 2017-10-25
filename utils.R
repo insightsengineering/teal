@@ -38,5 +38,32 @@
 }
 
 
-
+#' return a vector with the variable labels and names if variable labels do not exist
+#' 
+#' 
+#' @param df data.frame object
+#' 
+#' @export
+#' 
+#' @examples 
+#' 
+#' X <- data.frame(
+#'  a = structure(1:4, label = "label for a"),
+#'  b = 3:6,
+#'  d = structure(letters[1:4], label = "label for d"),
+#'  stringsAsFactors = FALSE
+#' )
+#' 
+#' View(X)
+#' 
+#' names(X)
+#' 
+labels_over_names <- function(df) {
+  
+  as.vector(unlist(Map(function(var, varname) {
+    label <- attr(var, "label")
+    if (!is.null(label)) label else varname
+  }, df, names(df))))
+  
+}
 
