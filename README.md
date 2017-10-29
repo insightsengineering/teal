@@ -89,10 +89,33 @@ diverse data viewers. `teal` shiny applications are built using standard
     
 # Installation 
 
-While on the Roche network, [open R or RStudio](https://r.roche.com) and execute the following:
+While on the Roche network, [open R or RStudio](https://r.roche.com) and execute
+the following:
 
 ```r
 # install.packages("devtools")
 library(devtools)
 install_github('Rpackages/teal', host='https://github.roche.com/api/v3', build_vignettes = TRUE)
 ```
+
+# Documentation
+
+Currently there are a number of resources with documentation:
+
+1. The `teal` package vignettes run
+
+    ```
+    library(teal)
+    vignettes(package = "teal")
+    ```
+
+2. The `teal` R manual pages
+
+    ```
+    help(package = "teal")
+    ```
+    
+3. Training slides and screencasts:
+
+    + [Using teal](https://docs.google.com/presentation/d/1RTzALidxFQrUV4oH0OoIE_4EZRQPOf8Qw-EX06r-fp8/edit) ([screencast](https://streamingmedia.roche.com/media/Teal+Introduction+Workshop+with+Shanghai+via+Webex/1_k51jv1jo))
+    + [Creating teal modules](https://docs.google.com/presentation/d/1_V0w4x9Ve5rw0nZydkpyfe5NZnA00MlzSgSPr3tANkk/edit#slide=id.g23552d0ebb_0_0) ([screencast](https://streamingmedia.roche.com/media/advanced_teal_workshop_GSC_2017/1_tltjoz5m))
