@@ -116,7 +116,7 @@ srv_page_data_table <- function(input, output, session, datasets, cache_selected
     df_s <- if (distinct) dplyr::count_(df, variables) else df[variables]
 
     # filter = 'top'
-    datatable(
+    DT::datatable(
       df_s,
       options = list(
         searching = FALSE,
