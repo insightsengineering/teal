@@ -67,3 +67,10 @@ labels_over_names <- function(df) {
   
 }
 
+whiteSmallWell <- function(...) {
+  shiny::tags$div(class = "well well-sm", style = "background-color: white;", ...)
+}
+
+
+         
+
