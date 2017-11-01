@@ -12,10 +12,10 @@ License: Copyright Roche
 Encoding: UTF-8
 LazyData: true
 Depends:
-    shiny,
-    DT,
-    R6
+    shiny
 Imports:
+    DT,
+    R6,
     dplyr,
     xtable,
     ggplot2,
@@ -23,7 +23,7 @@ Imports:
     whisker,
     haven,
     tibble
-RoxygenNote: 5.0.1
+RoxygenNote: 6.0.1
 Suggests:
     testthat,
     knitr,

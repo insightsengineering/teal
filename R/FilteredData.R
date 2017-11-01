@@ -42,7 +42,7 @@
 #
 # x$set_filter("ASL", list(AGE=c(3,5), SEX=c('M', 'F')))
 #
-FilteredData <- R6Class(
+FilteredData <- R6::R6Class(
   "FilteredData",
   ## FilteredData ====
   ## __Public Methods ====
@@ -657,7 +657,7 @@ FilteredData <- R6Class(
 
 # SimpleFiteredData ====
 
-SimpleFilteredData <- R6Class(
+SimpleFilteredData <- R6::R6Class(
   "SimpleFilteredData",
   public = list(
 
@@ -669,7 +669,7 @@ SimpleFilteredData <- R6Class(
 
 # CDISCFiteredData ====
 
-CDISCFilteredData <- R6Class(
+CDISCFilteredData <- R6::R6Class(
   "CDISCFilteredData",
   inherit = FilteredData
 )
