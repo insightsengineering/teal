@@ -67,6 +67,36 @@ labels_over_names <- function(df) {
   
 }
 
+#' re-attach labels to variables
+#' 
+#' @param df a data.frame
+#' @param labels a named vector with the labels. names are variable names
+#' 
+#' 
+#' @examples
+#' 
+#' df <- data.frame(c = c(1, 2), b = c("a", "b"), a = c(3,4))
+#' 
+#' labels <- setNames(c("a var", "b var"), c("a", "b"))
+#' 
+#' 
+#' X <- add_labels(df, labels)
+#' 
+#' View(X)
+#' 
+add_labels <- function(df, labels) {
+  for (name in names(df)) {
+    
+    lab <- labels[name]
+    if (!is.na(lab[1]) && length(lab) == 1) {
+      attr(df[[name]], "label") <- lab
+    }
+  }
+  df
+}
+
+
+
 whiteSmallWell <- function(...) {
   shiny::tags$div(class = "well well-sm", style = "background-color: white;", ...)
 }
