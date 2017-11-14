@@ -19,6 +19,8 @@ hidden <- function(x) {
 #'   character string will be displayed and the selectInput widget will be
 #'   hidden. If the length of \code{choices} is more than one the selectInput
 #'   element will be displayed.
+#' @param label_help optional an object of class \code{shiny.tag}. E.g. an object
+#'   returned by \code{\link[shiny]{helpText}}
 #'
 #'
 #'
@@ -29,7 +31,7 @@ hidden <- function(x) {
 #' optionalSelectInput("xvar", "x variable", 'A', 'A')
 #' optionalSelectInput("xvar", "x variable", LETTERS[1:5], 'A')
 #'
-optionalSelectInput <- function(inputId, label, choices, selected, ...) {
+optionalSelectInput <- function(inputId, label, choices, selected, ..., label_help=NULL) {
 
   if (is.null(choices)) {
     choices <- ""
@@ -48,13 +50,20 @@ optionalSelectInput <- function(inputId, label, choices, selected, ...) {
 
   selIn <- selectInput(inputId, label, choices, selected, ...)
 
+  if (!is.null(label_help)) {
+    label_help$attribs$style <- "margin-top: -5px; margin-bottom: 4px;"
+    selIn[[3]] <- list(selIn[[3]][[1]], label_help, selIn[[3]][[2]])
+  }
+
+
   switch(
     disp,
     nothing = hidden(selIn),
     label = {
       div(
         hidden(selIn),
-        tags$span(tags$label(paste0(sub(":[[:space:]]+$", "", label), ":")), selected)
+        tags$span(tags$label(paste0(sub(":[[:space:]]+$", "", label), ":")), selected),
+        label_help
       )
     },
     all = selIn
