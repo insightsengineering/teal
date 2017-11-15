@@ -353,6 +353,10 @@ knitr::include_graphics('./images/design_simple_filtered_data.png')
 
 Lets call this particular filtering the `SimpleFilteredData` class.
 
+
+And finally the eSet filter....
+
+
 Hence, the `FilteredData` class needs to become abstract with multiple
 concrete classes that inherit from `FilteredData`:
 
