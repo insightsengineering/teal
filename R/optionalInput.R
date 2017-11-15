@@ -51,7 +51,7 @@ optionalSelectInput <- function(inputId, label, choices, selected, ..., label_he
   selIn <- selectInput(inputId, label, choices, selected, ...)
 
   if (!is.null(label_help)) {
-    label_help$attribs$style <- "margin-top: -5px; margin-bottom: 4px;"
+    label_help$attribs$style <- "margin-top: -4px; margin-bottom: 3px;"
     selIn[[3]] <- list(selIn[[3]][[1]], label_help, selIn[[3]][[2]])
   }
 
