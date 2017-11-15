@@ -72,7 +72,8 @@ ui_table <- function(id, label, dataname, xvar, yvar,
       optionalSelectInput(ns("xvar"), "x variable (row)", xvar_choices, xvar, multiple = FALSE),
       optionalSelectInput(ns("yvar"), "y variable (column)", yvar_choices, yvar, multiple = FALSE),
       radioButtons(ns("useNA"), label = "Display Missing Values",
-                   choices = c("no", "ifany", "always"), selected = useNA)
+                   choices = c("no", "ifany", "always"), selected = useNA),
+      checkboxInput(ns("margins"), "Add margins", value = FALSE)
     ),
     forms = actionButton(ns("show_rcode"), "Show R Code", width = "100%"),
     pre_output = pre_output,
@@ -90,7 +91,7 @@ srv_table <- function(input, output, session, datasets, dataname) {
     xvar <- input$xvar
     yvar <- input$yvar
     useNA <- input$useNA
-
+    add_margins <- input$margins
 
     validate(need(!is.null(ANL) && is.data.frame(ANL), "no data left"))
     validate(need(nrow(ANL) > 0 , "no observations left"))
@@ -104,6 +105,8 @@ srv_table <- function(input, output, session, datasets, dataname) {
 
     tbl <- table(ANL[[xvar]], ANL[[yvar]], useNA = useNA)
 
+    if (add_margins) tbl <- addmargins(tbl)
+
     as.data.frame.matrix(tbl, row.names = rownames(tbl))
 
   }, rownames=TRUE, bordered=TRUE, html.table.attributes = 'style="background-color:white;"')
@@ -113,7 +116,7 @@ srv_table <- function(input, output, session, datasets, dataname) {
     xvar <- input$xvar
     yvar <- input$yvar
     useNA <- input$useNA
-
+    add_margins <- input$margins
 
     str_header <- get_rcode_header(
       title = paste("Cross-Table of", yvar, "vs.", xvar),
@@ -130,7 +133,12 @@ srv_table <- function(input, output, session, datasets, dataname) {
         "\n",
         str_header, "\n\n",
         str_filter, "\n\n",
-        paste0("with(",dataname, "_FILTERED, table(", xvar, ", ", yvar,", useNA = '", useNA, "'))"), "\n"
+        if (add_margins) {
+          paste0("with(", dataname, "_FILTERED, addmargins(table(", xvar, ", ", yvar,", useNA = '", useNA, "')))")
+        } else {
+          paste0("with(", dataname, "_FILTERED, table(", xvar, ", ", yvar,", useNA = '", useNA, "'))")
+        },
+        "\n"
       ), collapse = ""
     )
 
