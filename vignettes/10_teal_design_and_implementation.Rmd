@@ -354,7 +354,14 @@ knitr::include_graphics('./images/design_simple_filtered_data.png')
 Lets call this particular filtering the `SimpleFilteredData` class.
 
 
-And finally the eSet filter....
+And finally we would also need a filtering for expression sets
+
+```{r echo=FALSE}
+knitr::include_graphics('./images/expressionset.png')
+```
+
+Where we have a slighlty more advanced filtering on sample level and on feature
+meta data.
 
 
 Hence, the `FilteredData` class needs to become abstract with multiple

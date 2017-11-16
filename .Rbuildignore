@@ -1,4 +1,5 @@
 ^.*\.Rproj$
 ^\.Rproj\.user$
-man-roxygen/*
-drawings/*
+^man-roxygen/*
+^drawings/*
+^vignettes/*.html
