@@ -4,7 +4,7 @@
 \alias{optionalSelectInput}
 \title{Hide, Show Label only or display a selectInput}
 \usage{
-optionalSelectInput(inputId, label, choices, selected, ...)
+optionalSelectInput(inputId, label, choices, selected, ..., label_help = NULL)
 }
 \arguments{
 \item{inputId}{The \code{input} slot that will be used to access the value.}
@@ -23,6 +23,9 @@ element will be displayed.}
 for single-select lists and no values for multiple select lists.}
 
 \item{...}{Arguments passed to \code{selectInput()}.}
+
+\item{label_help}{optional an object of class \code{shiny.tag}. E.g. an object
+returned by \code{\link[shiny]{helpText}}}
 }
 \description{
 Hide, Show Label only or display a selectInput
