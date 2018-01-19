@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Create a module with a new shiny page — module • teal</title>
+<title>All news • teal</title>
 
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script>
@@ -37,7 +37,7 @@
   </head>
 
   <body>
-    <div class="container template-reference-topic">
+    <div class="container template-news">
       <header>
       <div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -99,63 +99,64 @@
       </header>
 
       <div class="row">
-  <div class="col-md-9 contents">
+
+  <div class="col-md-9">
     <div class="page-header">
-    <h1>Create a module with a new shiny page</h1>
+      <h1>Change log <small>All releases</small></h1>
     </div>
 
-    
-    <p>Tab items allows you to add a shiny module to the teal app</p>
-    
-
-    <pre class="usage"><span class='fu'>module</span>(<span class='no'>label</span>, <span class='no'>server</span>, <span class='no'>ui</span>, <span class='no'>filters</span>, <span class='kw'>server_args</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>ui_args</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)</pre>
-    
-    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
-    <table class="ref-arguments">
-    <colgroup><col class="name" /><col class="desc" /></colgroup>
-    <tr>
-      <th>label</th>
-      <td><p>label shown in the navigation for the item</p></td>
-    </tr>
-    <tr>
-      <th>server</th>
-      <td><p>shiny server module function, see
-<code>link[shiny]{callModule}</code></p></td>
-    </tr>
-    <tr>
-      <th>ui</th>
-      <td><p>shiny ui module function, see <code>link[shiny]{callModule}</code></p></td>
-    </tr>
-    <tr>
-      <th>filters</th>
-      <td><p>a vector with datanames that are relevant for the item. The
-filter panel will automatically update the shown filters to include only
-filters in the listed data sets. <code>NULL</code> will hide the filter panel,
-and the keyowrd <code>'all'</code> will show the filters of all datasets.</p></td>
-    </tr>
-    <tr>
-      <th>server_args</th>
-      <td><p>is a named list with additional arguments passed on to the
-server function. Note that the <code>FilteredDatasets</code> object gets
-atomatically passed to the server function as arguments <code>datasets</code>.</p></td>
-    </tr>
-    <tr>
-      <th>ui_args</th>
-      <td><p>is a named list with additional arguments passed on to the
-ui function. The argument <code>'teal_datasets'</code> will always be
-replaced by the <code>FilteredData</code> object.</p></td>
-    </tr>
-    </table>
-    
-
+    <div class="contents">
+    <div id="teal-0-0-3" class="section level1">
+<h1 class="hasAnchor">
+<a href="#teal-0-0-3" class="anchor"></a>teal 0.0.3</h1>
+<div id="new-features" class="section level2">
+<h2 class="hasAnchor">
+<a href="#new-features" class="anchor"></a>New features</h2>
+<ul>
+<li>added tm_scatterplot module</li>
+<li>added tm_table module</li>
+</ul>
+</div>
+<div id="changes" class="section level2">
+<h2 class="hasAnchor">
+<a href="#changes" class="anchor"></a>Changes</h2>
+<ul>
+<li>tabs arguments was renamed to modules</li>
+<li>tab_item function is now called module</li>
+<li>tab_items function is now called modules</li>
+<li>tabs function was removed</li>
+<li>variable_browser_item is now called tm_variable_browser</li>
+<li>data_table_item is now called tm_data_table</li>
+</ul>
+</div>
+</div>
+    <div id="teal-0-0-2" class="section level1">
+<h1 class="hasAnchor">
+<a href="#teal-0-0-2" class="anchor"></a>teal 0.0.2</h1>
+<ul>
+<li>new ‘01_getting_started’ vignette</li>
+<li>datanames in FilteredData are now case sensitive</li>
+</ul>
+</div>
+    <div id="teal-0-0-1" class="section level1">
+<h1 class="hasAnchor">
+<a href="#teal-0-0-1" class="anchor"></a>teal 0.0.1</h1>
+<p>March 28, 2016 - Initial Release</p>
+</div>
+    </div>
   </div>
+
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
-    <h2>Contents</h2>
-    <ul class="nav nav-pills nav-stacked">
-      <li><a href="#arguments">Arguments</a></li>
-                </ul>
-
+    <div id="tocnav">
+      <h2>Contents</h2>
+      <ul class="nav nav-pills nav-stacked">
+        <li><a href="#teal-0-0-3">0.0.3</a></li>
+        <li><a href="#teal-0-0-2">0.0.2</a></li>
+        <li><a href="#teal-0-0-1">0.0.1</a></li>
+      </ul>
+    </div>
   </div>
+
 </div>
 
       <footer>
