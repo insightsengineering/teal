@@ -8,6 +8,8 @@
 #' 
 #' @return \code{TRUE} if all variables exist and an appropriate error if not.
 #' 
+#' @noRd
+#' 
 #' @author Adrian Waddell (waddella), \email{adrian.waddell@roche.com}
 #' 
 #' @examples 
