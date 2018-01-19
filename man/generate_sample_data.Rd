@@ -17,6 +17,12 @@ a data.frame
 \description{
 This dataset generator function is useful to produce
 }
+\details{
+Note that we plan to deprecate this function as we are working on
+  the \code{random.cdisc.data}
+  \url{https://github.roche.com/Rpackages/random.cdisc.data} R package to
+  provide this functionality.
+}
 \examples{
 \dontrun{
 file <- "~/Desktop/STREAM_DAP_M3_AnalysisDataDefinitions.xls"

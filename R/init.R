@@ -37,32 +37,37 @@
 #'
 #' x <- teal::init(
 #'   data =  list(ASL = ASL, ARS = ARS, ATE = ATE),
-#'   tabs = tabs(
-#'     tab_item(
+#'   modules = root_modules(
+#'     module(
 #'       "data source",
 #'       server = function(input, output, session, datasets) {},
-#'       ui = function(id) div(p("data source")),
-#'       filters = NULL,
-#'       server_args = list(datasets = "teal_datasets")
+#'       ui = function(id) div(p("information about data source")),
+#'       filters = NULL
 #'     ),
-#'     data_table_item(),
-#'     variable_browser_item(),
-#'     tabs_item(
-#'       "analysis items",
-#'       tabs = tabs(
-#'         tab_item(
-#'           "spaghetti plot",
-#'           server = function(input, output, session, datasets) {},
-#'           ui = function(id) div(p("spaghetti plot")),
-#'           filters = 'ARS',
-#'           server_args = list(datasets = "teal_datasets")
-#'         ),
-#'         tab_item(
-#'           "survival curves",
-#'           server = function(input, output, session) {},
-#'           ui = function(id) div(p("Kaplan Meier Curve")),
-#'           filters = "ATE"
-#'         )
+#'     tm_data_table(),
+#'     tm_variable_browser(),
+#'     modules(
+#'       label = "analysis items",
+#'       tm_table(
+#'          label = "demographic table",
+#'          dataname = "ASL",
+#'          xvar = "SEX",
+#'          yvar = "RACE",
+#'          yvar_choices = c("RACE", "AGEGR", "REGION")
+#'       ),
+#'       tm_scatterplot(
+#'          label = "scatterplot",
+#'          dataname = "ASL",
+#'          xvar = "AGE",
+#'          yvar = "BBMI",
+#'          color_by = "_none_",
+#'          color_by_choices = c("_none_", "STUDYID")
+#'       ),
+#'       module(
+#'          label = "survival curves",
+#'          server = function(input, output, session, datasets) {},
+#'          ui = function(id) div(p("Kaplan Meier Curve")),
+#'          filters = "ATE"
 #'       )
 #'     )
 #'   ),
@@ -74,11 +79,15 @@
 #'
 #' }
 init <- function(data,
-                 tabs,
+                 modules,
                  filter = NULL,
                  header = tags$p("title here"),
                  footer = tags$p("footer here")) {
 
+
+  if (modules_depth(modules) > 2) {
+    stop("teal currently only supports module nesting of depth two.")
+  }
 
   # initialize FilteredData object
   datasets <- FilteredData$new(names(data))
@@ -119,8 +128,9 @@ init <- function(data,
         tags$header(header),
         tags$hr(style="margin: 7px 0;"),
         local({
-          tp <- ui_tabs(tabs, datasets)
+          tp <- create_ui(modules, datasets, idprefix="teal_modules", is_root = TRUE)
 
+          # separate the nested tabs
           tp$children <- list(
             tp$children[[1]],
             tags$hr(style="margin: 7px 0;"),
@@ -161,8 +171,7 @@ init <- function(data,
     }
 
     # evaluate the server functions
-    server_tabs(tabs, datasets)
-
+    call_modules(modules, datasets, idprefix="teal_modules")
 
     # -- filters
     lapply(datasets$datanames(), function(dataname) {
@@ -177,47 +186,50 @@ init <- function(data,
 
 
 
-    ## hide-show filters based on tab-item filter property
-    tabs_ids <- unlist(Map(function(x) {
-      setNames(label_to_id(x$label, main_nav_id), x$label)
-    } , Filter(function(x) is(x, "teal_tabs_item"), tabs)))
+    ## hide-show filters based on module filter property
+    recurse <- function(x, idprefix) {
+      id <- label_to_id(x$label, idprefix)
 
-    ## create a lookup list
-    filter_info <- list()
-
-    add_filter <- function(x, prefix=main_nav_id) {
-      if (is(x, "teal_tabs")) {
-        lapply(x, add_filter, prefix = prefix)
-      } else if (is(x, "teal_tab_item")) {
-        filter_info[[label_to_id(x$label, prefix)]] <<- x$filters
-      } else if (is(x, "teal_tabs_item")) {
-        .log(x$label)
-        add_filter(x$tabs, label_to_id(x$label, prefix))
-      } else {
-        stop("should not happen")
+      if (is(x, "teal_module")) {
+        setNames(list(if (is.null(x$filters)) NA else x$filters), id)
+      } else if (is(x, "teal_modules")) {
+        lapply(x$modules, recurse, idprefix=id)
       }
     }
-    add_filter(tabs)
 
+    # named vector with ids and datasets
+    filters_tab_lookup <- unlist(recurse(modules, "teal_modules"))
 
+    recurse_modules <- function(x, idprefix) {
+      id <- label_to_id(x$label, idprefix)
 
+      if (is(x, "teal_modules")) {
+        c(id, lapply(x$modules, recurse_modules, idprefix = id))
+      } else {
+        NULL
+      }
+    }
+    id_modules <- unlist(recurse_modules(modules, "teal_modules"))
 
+    ## now show or hide the filter panels based on active tab
     observe({
-      main_tab <- input[[main_nav_id]]
-      tabs_items <- sapply(tabs_ids, function(id) input[[id]],  USE.NAMES = TRUE)
+      # define reactivity dependence
+      main_tab <- input[['teal_modules.root']]
+      secondary_tabs <- sapply(id_modules, function(id) input[[id]],  USE.NAMES = TRUE)
 
-      main_tab_id <- label_to_id(main_tab, main_nav_id)
-      sub_tab_id <- label_to_id(tabs_items[main_tab], main_tab_id)
+      # figure out which is the active tab/module
+      main_tab_id <- label_to_id(main_tab, "teal_modules.root")
 
-      filters <- if (is.null(filter_info[[sub_tab_id]])) {
-        .log("main", main_tab_id, "filters:", filter_info[[main_tab_id]])
-        filter_info[[main_tab_id]]
-      }  else {
-        .log("subtab",  sub_tab_id, "filters:", filter_info[[sub_tab_id]])
-        filter_info[[sub_tab_id]]
+      active_module_id <- if (main_tab_id %in% id_modules) {
+        label_to_id(secondary_tabs[[main_tab_id]], main_tab_id)
+      } else {
+        main_tab_id
       }
 
-      if (is.null(filters)) {
+      filters <- filters_tab_lookup[[active_module_id]]
+      .log("Active filter for tab", active_module_id, "is", filters)
+
+      if (is.na(filters)) {
         session$sendCustomMessage(type="tealShowHide", list(selector = "#teal_filter-panel", action = "hide"))
       } else {
         as.global(session)

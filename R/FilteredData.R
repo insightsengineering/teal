@@ -42,10 +42,10 @@
 #
 # x$set_filter("ASL", list(AGE=c(3,5), SEX=c('M', 'F')))
 #
-FilteredData <- R6Class(
+FilteredData <- R6::R6Class(
   "FilteredData",
-
-  ## Public Methods ====
+  ## FilteredData ====
+  ## __Public Methods ====
   public = list(
 
     initialize = function(datanames = c("ASL")) {
@@ -125,13 +125,15 @@ FilteredData <- R6Class(
 
     list_data_info = function(dataname, filtered=FALSE, variables=NULL) {
 
+      log2 <- function(...) {cat(paste(..., collapse = " ")); cat("\n")}
+
       private$error_if_not_valid(dataname)
 
-      .log("====", dataname, "=======================")
+      log2("====", dataname, "=======================")
 
       df <- isolate(private$datasets[[dataname]])
       if (is.null(df)) {
-        .log("The", dataname, "data is NULL")
+        log2("The", dataname, "data is NULL")
       } else {
 
         fi <- private$filter_info[[dataname]]
@@ -169,11 +171,11 @@ FilteredData <- R6Class(
             ""
           )
 
-          .log(sprintf(paste0("%-", nmax, "s has filter type %-10s: %s"), name, fi_i$type, info))
+          log2(sprintf(paste0("%-", nmax, "s has filter type %-10s: %s"), name, fi_i$type, info))
 
         }
       }
-      .log("===========================")
+      log2("===========================")
     },
 
 
@@ -468,7 +470,7 @@ FilteredData <- R6Class(
     }
   ),
 
-  ## Private Methods---------------------
+  ## __Private Methods---------------------
 
   private = list(
 
@@ -651,4 +653,27 @@ FilteredData <- R6Class(
     }
   )
 )
+
+
+
+
+# SimpleFiteredData ====
+
+SimpleFilteredData <- R6::R6Class(
+  "SimpleFilteredData",
+  public = list(
+
+  ),
+  inherit = FilteredData
+)
+
+
+
+# CDISCFiteredData ====
+
+CDISCFilteredData <- R6::R6Class(
+  "CDISCFilteredData",
+  inherit = FilteredData
+)
+
 

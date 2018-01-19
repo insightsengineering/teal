@@ -1,25 +1,25 @@
 
 
-#' Create A Data Table Viewer
+#' Data Table Viewer Teal Module
 #'
 #' A data table viewer shows the data using a paginated table.
 #'
-#' @inheritParams tab_item
+#' @inheritParams module
 #' @param variables_selected a named list that says which variables should be
 #'   initially  shown for which dataset
 #'
 #' @export
-data_table_item <- function(label = "data table", variables_selected=NULL) {
-  tab_item(
+tm_data_table <- function(label = "data table", variables_selected=NULL) {
+  module(
     label,
     server = srv_page_data_table,
     ui = ui_page_data_table,
     filters = "all",
-    server_args = list(datasets='teal_datasets',
-                       cache_selected = if (is.null(variables_selected)) list() else variables_selected),
+    server_args = list(cache_selected = if (is.null(variables_selected)) list() else variables_selected),
     ui_args = list(datasets='teal_datasets')
   )
 }
+
 
 
 ## ui function
@@ -113,10 +113,10 @@ srv_page_data_table <- function(input, output, session, datasets, cache_selected
     validate(need(df, paste("data", dataname, "is empty")))
     validate(need(all(variables %in% names(df)), "not all selected variables exist"))
 
-    df_s <- if (distinct) dplyr::count_(df, variables) else df[,variables]
+    df_s <- if (distinct) dplyr::count_(df, variables) else df[variables]
 
     # filter = 'top'
-    datatable(
+    DT::datatable(
       df_s,
       options = list(
         searching = FALSE,

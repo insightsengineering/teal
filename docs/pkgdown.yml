@@ -1,0 +1,8 @@
+urls:
+  reference: https://pages.github.roche.com/Rpackages/teal/reference
+  article: https://pages.github.roche.com/Rpackages/teal/articles
+articles:
+  01_getting_started: 01_getting_started.html
+  02_reproducible-code: 02_reproducible-code.html
+  10_teal_design_and_implementation: 10_teal_design_and_implementation.html
+
