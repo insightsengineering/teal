@@ -39,6 +39,6 @@ variable_browser_item <- function(...) {
 #'
 #' @export
 data_table_item <- function(...) {
-  warning("data_table_item is deprecated, pleas use data_table instead")
+  warning("data_table_item is deprecated, pleas use tm_data_table instead")
   tm_data_table(...)
 }
