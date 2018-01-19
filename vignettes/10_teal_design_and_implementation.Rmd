@@ -23,7 +23,7 @@ implementation details.
 * modularized approach to build customized web-apps with `teal`-modules
 
 `teal` modules are `shiny` modules with an additional `datasets` argument for
-the the `server` function that provies an access to the filtered data.
+the `server` function that provies an access to the filtered data.
 
 # Shiny Basics
 
@@ -39,25 +39,21 @@ library(shiny)
 ```{r, eval = FALSE}
 library(shiny)
 shinyApp(
-  ui = function() {
-    tags$p("Hello World")
-  },
+  ui = tags$p("Hello World"),
   server = function(input, output, session) {}
 )
 ```
 
 You can paste this code to the `R` command line which will initialize the shiny
-app. `shiny` provides a reactivity environment to update and get information
-from the ui:
+app. `shiny` provides a [reactivity programming model][shiny_reactivity] to
+update and get information from the ui:
 
 ```{r, eval = FALSE}
 shinyApp(
-  ui = function() {
-    fluidPage( 
-      selectInput(inputId = "select_data", label = "select data", choices = c("iris", "mtcars")),
-      plotOutput(outputId = "scatterplotmatrix")
-    )
-  },
+  ui = fluidPage( 
+    selectInput(inputId = "select_data", label = "select data", choices = c("iris", "mtcars")),
+    plotOutput(outputId = "scatterplotmatrix")
+  ),
   server = function(input, output, session) {
     output$scatterplotmatrix <- renderPlot({
       data <- input$select_data
@@ -75,9 +71,9 @@ Note that reactivity is used on the server side for capturing the input (i.e.
 `input$select_data`) and to update the output (i.e. `output$scatterplot`). On
 the ui side shiny keeps the `html` code up-to-date and propagates user interface
 input changes to the reactive environment on the server side. Please inspect the
-`html` code from the previous example app (running) with Chrome's developer
-tools and then stop the shiny app and compare that html code with the ui code
-created by running the following code in the R console:
+`html` code from the previous example app while the app is running with Chrome's
+developer tools and then stop the shiny app and compare that html code with the
+ui code created by running the following code in the R console:
 
 ```{r, eval = FALSE}
 fluidPage( 
@@ -132,9 +128,9 @@ shinyApp(
 )
 ```
 
-Note that because of the namspace `id` the two modules don't conflict with their
-`html` and reactivity names. Please inspect the `html` code for the above
-example and pay attention to the `html` `id` attributes.
+Note that because of the namspace `id` the two modules do not conflict with
+their `html` ids and reactivity names. Please inspect the `html` code for the
+above example and pay attention to the `html` `id` attributes.
 
 Here is a visual representation of this modularization:
 
@@ -142,10 +138,10 @@ Here is a visual representation of this modularization:
 knitr::include_graphics('./images/design_shiny_module.png')
 ```
 
-This modularized construction of the shiny app is one of the foundations for
-making `teal` work. Modularizing code also makes it easier to build a company
-wide standard for creating and sharing shiny code and also for creating project
-specific applications quickly.
+This modularized construction of shiny apps is one of the foundations of `teal`.
+Modularizing code also makes it easier to build a company wide standard for
+creating and sharing shiny code and also for creating project specific
+applications quickly.
 
 Finally, the user interface layout is based on [Bootstrap 3][bootstrap_3] when
 using the `fluidPage` and `fixedPage` layout functions (which we do for `teal`).
@@ -160,7 +156,7 @@ The general `teal` workflow is as follows:
 the `teal::init` function.
 
 2. `teal::init` composes the `ui` and `server` functions that can then be passed
-to `shiny::shinyApp`
+to the `shiny::shinyApp` function
 
 ```{r echo=FALSE}
 knitr::include_graphics('./images/design_use_teal.png')
@@ -195,11 +191,11 @@ shinyApp(x$ui, x$server)
 ```
 
 Please run the above code by copy pasting it to the command line. The example
-shows how simple it is to create a module that has no dynamic encodings and will
-be only interactive in terms of filtering the data which is provided by `teal`.
-The example also highlights a current issue where we require a dataset with the
-name `ASL` that has the variables `USUBJID` and `SUBJID`. We decribe the reason
-and the future refactoring needed to overcome this later in this document.
+shows how simple it is to create a module that has no dynamic encodings but
+still is interactive due to the possibility of filtering the data. The example
+also highlights a current issue where we require a dataset with the name `ASL`
+that has the variables `USUBJID` and `SUBJID`. We decribe the reason and the
+future refactoring needed to overcome this later in this document.
 
 
 The default `teal` web application has the following components
@@ -274,24 +270,24 @@ For clinical trials the datasets are standardized following the [CDISC][CDISC]
 standards [SDTM][SDTM] and [ADaM][ADAM]. Both SDTM and ADaM are based on
 rectangular data structures and a simplified generalization is that SDTM
 contains observed raw data and ADaM adds meta data and derives new data so that
-an output can be computed directly from a single ADaM data set. Here is a diagram
-of some SDTM datasets:
+an output (table/graph) can be computed directly from a single ADaM data set.
+Here is a diagram of some SDTM datasets:
 
 ```{r echo=FALSE, out.width='80%'}
 knitr::include_graphics('./images/sdtm_overview.png')
 ```
 
-The ADaM datasets names often add a `AD` or `A` in front of their corresponding
+The names of ADaM datasets often prefix a `AD` or `A` to their corresponding
 `SDTM` dataset names.
 
-There is a particularly important dataset called `ASL` or `ADLS` that contains
+There is one particularly important dataset called `ASL` or `ADLS` that contains
 patient information (e.g. Unique Subject Identifier `USUBJID`, `ARM`, `SEX`,
 `Age`, randomization date, etc.) with one row per patient. Often this dataset is
 merged to all other `ADaM` datasets as its information is frequently used for
 most outputs (e.g. `ARM`). The key for merging `ASL` and any other analysis
 dataset is the `USUBJID` and `STUDYID` variable (if not specified otherwise).
 
-### FilteredData for Clinical Trials Data
+### FilteredData Class for Clinical Trials Data
 
 Because of the central role of the `ASL` dataset and due to tight project
 delivery timelines I have unfortunately implemented a filtering mechanism that
@@ -349,14 +345,11 @@ display the filter options for each variable:
 
 
 ```{r}
-options(teal_logging = TRUE)
 datasets$list_data_info('ASL')
-options(teal_logging = FALSE)
 ```
 
-Two `options` calls are necessary due to a bug (i.e. `list_data_info` should not
-use `.log` for listing the info). Now say we want to filter out all the patients
-except patients with `USUBJID` equal to `id-1`, `id-2`, `id-3`, or `id-4`:
+Now say we want to filter out all the patients except patients with `USUBJID`
+equal to `id-1`, `id-2`, `id-3`, or `id-4`:
 
 ```{r}
 datasets$set_filter_state("ASL", "USUBJID", state = paste0("id-", 1:4))
@@ -387,8 +380,8 @@ used in the reactive environment of the teal module `server` functions.
 
 ### Needed Generalization of FilteredData
 
-From now on we refer to the CDISC filtering introduced in the previous section
-with the following diagram:
+The CDISC filtering machansim which we have introduced in the previous section
+can be abstracted with the following diagram:
 
 ```{r echo=FALSE}
 knitr::include_graphics('./images/design_cdisc_filtered_data.png')
@@ -432,14 +425,14 @@ knitr::include_graphics('./images/design_FilteredData.png')
 ### Optimizing The FilteredData Class
 
 The arrows that point downwards in the filtering related diagrams above indicate
-a propagation mechanism that happens to be inefficient. That is, if when
-filtering with `ASL` variables then all the dependent datasets (that is
-currently every other dataset) gets updated regardless if there is any ouptut
-currently displayed that requires the information from a particular dataset.
-This partly breaks the lazy evaluation that is provided with shiny's reactivity
-framework. It would be better to set up the datasets reactive and only have them
-apply the filtering and merging if there is actually something displayed in the
-shiny app that requires the particular dataset.
+a propagation mechanism that happens to be inefficient. That is, when filtering
+with `ASL` variables then all the dependent datasets (that is currently every
+other dataset) gets updated regardless if there is any ouptut currently
+displayed that requires the information from a particular dataset. Hence we
+loose the lazy evaluation that is provided with shiny's reactivity framework. It
+would be better to set up the datasets reactive and only have them apply the
+filtering and merging if there is actually something displayed in the shiny app
+that requires the particular dataset.
 
 
 ```{r echo=FALSE}
@@ -462,14 +455,14 @@ Also, a simple feature but still useful improvement is to support:
 * filtering with variables of class `Date`
 
 
-## Composition of the ui and server functions with `teal::init`
+## Composition of the ui and server functions with teal::init
 
 
 In this section we discuss the code in `R/init.R`. The `init` function composes
 the `ui` object and the `server` function which are returned and then passed to
 `shinyApp` to start the web app.
 
-The datasets passed to the `data` argumemnts get encapsulated within the `init`
+The datasets passed to the `data` arguments get encapsulated within the `init`
 function into a local instance of `FilteredData` (i.e. the `datasets` object).
 
 Next, the `ui` object is created. The compisition of ui and server happens
@@ -509,28 +502,30 @@ filtered data panel. Again, a nice improvement here would be to
 
 There are multiple parts to create reproducibile code for the displayed outputs:
 
-1) what librariers are used, and which version
+1. what `R` version is used and on which platform
 
-2) data used and hashsum (currently on BCE the path is the identifier and the
+1. what librariers are used, and which version
+
+1. data used and hashsum (currently on BCE the path is the identifier and the
 hashsum in needed as the data may change over time)
 
-3) subset call to get the filtered data
+1. subset call to get the filtered data
 
-4) code to create the output
+1. code to create the output
 
-We started to streamline 1) and 2) with the `get_rcode_header` function. This
-funciton needs to be improved but that is a simple exercise. Next, 3) can either
-be achieved via the `get_filter_call` method of the `datasets` object or simpler
-via the `get_filter_txt` function. Finally 4) is currently the most difficult to
-achive well. We have tried to create the R call (in a string to preserve the
-formatting) and then evaluating that string to create the output, however that
-is not a good approach as it makes it essentially impossible to debug the
-modules. Another approach that we have tried is to use tagging with
-`@start_label` and `@end_label` as documented in the `02_reproducible-code`
-vignette. Two more promising approaches are to tag the code chunks via a
-function call with tag and chunk-code and then remove the function call but
-leave the code when creating the server function (as proposed by Michael) and
-another approach is developed by Doug and Gabe.
+In `teal` we started to streamline 1) and 2) with the `get_rcode_header`
+function. This funciton needs to be improved but that is a simple exercise.
+Next, 3) can either be achieved via the `get_filter_call` method of the
+`datasets` object or simpler via the `get_filter_txt` function. Finally 4) is
+currently the most difficult to achive well. We have tried to create the R call
+(in a string to preserve the formatting) and then evaluating that string to
+create the output, however that is not a good approach as it makes it
+essentially impossible to debug the modules. Another approach that we have tried
+is to use tagging with `@start_label` and `@end_label` as documented in the
+`02_reproducible-code` vignette. Two more promising approaches are to tag the
+code chunks via a function call with tag and chunk-code and then remove the
+function call but leave the code when creating the server function (as proposed
+by Michael) and another approach is developed by Doug and Gabe.
 
 
 After having created a number of modules for
@@ -539,10 +534,11 @@ probably easiest to keep the modules simple by making a module to be a user
 interface for a simple function call with dynamic arguments. E.g. we created am
 analysis package [tern](https://github.roche.com/Rpackages/tern) which has the
 function `kmplot` to create a kaplan meier plot. We have then also created the
-`teal.oncology` R package which has the module `tm_kplot` which provides a user
-interface that allows one to modify certain arguments of `tern::kmplot` via the
-encodings panel. This reduces 4) essentially to an argument tracking problem.
-This is, however, work in progress.
+[`teal.oncology`](https://github.roche.com/Rpackages/teal.oncology) R package
+which has the module `tm_kplot` which provides a user interface that allows one
+to modify certain arguments of `tern::kmplot` via the encodings panel. This
+reduces 4) essentially to an argument tracking problem. This is, however, work
+in progress.
 
 ## Desiderata
 
@@ -553,8 +549,13 @@ the analysis/app
 needs to be better formulated, e.g. what exactly changes: output arguments,
 encoding ui/logic, etc...?
 
+* `teal` modules probably need a shared state such as selected arm variable.
+This could be achieved by a reactive value that is passed as an argument to the
+modules.
+
 
 [shiny_modules]: https://shiny.rstudio.com/articles/modules.html
+[shiny_reactivity]: https://shiny.rstudio.com/articles/reactivity-overview.html
 [bootstrap_3]: http://bootstrapdocs.com/v3.0.3/docs/
 [R6]: https://cran.r-project.org/web/packages/R6/vignettes/Introduction.html
 [SDTM]: https://www.cdisc.org/standards/foundational/sdtm

@@ -4,7 +4,7 @@
 #'
 #' Accepts Vertical and Horizontal Data
 #'
-#'
+#' @noRd
 #'
 #' @examples
 #' anl_hor <- data.frame(

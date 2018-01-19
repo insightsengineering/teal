@@ -3,3 +3,5 @@
 ^man-roxygen/*
 ^drawings/*
 ^vignettes/*.html
+^docs$
+^_pkgdown\.yml$

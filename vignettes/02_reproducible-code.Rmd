@@ -13,6 +13,11 @@ vignette: >
 library(teal)
 ```
 
+## Note
+
+We are currently working on less involved alternative ways to create
+reproducible code.
+
 ## Introduction
 
 This vignette details how to create visualizations in a teal/Shiny app with a 
