@@ -109,24 +109,37 @@
     <div id="teal-0-0-3" class="section level1">
 <h1 class="hasAnchor">
 <a href="#teal-0-0-3" class="anchor"></a>teal 0.0.3</h1>
+<p>Note version 0.0.3 is not backwards compatible. Reading the changes and studying the example app should, however, clarify most the changes.</p>
 <div id="new-features" class="section level2">
 <h2 class="hasAnchor">
 <a href="#new-features" class="anchor"></a>New features</h2>
 <ul>
-<li>added tm_scatterplot module</li>
-<li>added tm_table module</li>
+<li>tm_scatterplot module</li>
+<li>tm_table module</li>
 </ul>
 </div>
 <div id="changes" class="section level2">
 <h2 class="hasAnchor">
 <a href="#changes" class="anchor"></a>Changes</h2>
 <ul>
-<li>tabs arguments was renamed to modules</li>
-<li>tab_item function is now called module</li>
-<li>tab_items function is now called modules</li>
-<li>tabs function was removed</li>
-<li>variable_browser_item is now called tm_variable_browser</li>
-<li>data_table_item is now called tm_data_table</li>
+<li>all <code>tabs</code> arguments were renamed to <code>modules</code>
+</li>
+<li>
+<code>tab_item</code> function is now called <code>module</code>
+</li>
+<li>
+<code>tab_items</code> function is now called <code>modules</code>
+</li>
+<li>
+<code>tabs</code> function was removed</li>
+<li>
+<code>variable_browser_item</code> is now called <code>tm_variable_browser</code>
+</li>
+<li>
+<code>data_table_item</code> is now called <code>tm_data_table</code>
+</li>
+<li>
+<code>datasets</code> argument is automatically added to the server functions specified with <code>module</code>. Hence <code>teal_datasets</code> has been removed as a <code>server_args</code> element.</li>
 </ul>
 </div>
 </div>
