@@ -39,38 +39,43 @@ ARS <- generate_sample_data('ARS')
 ATE <- generate_sample_data('ATE')
 
 x <- teal::init(
- data =  list(ASL = ASL, ARS = ARS, ATE = ATE),
- tabs = tabs(
-   tab_item(
-     "data source",
-     server = function(input, output, session, datasets) {},
-     ui = function(id) div(p("data source")),
-     filters = NULL,
-     server_args = list(datasets = "teal_datasets")
-   ),
-   data_table_item(),
-   variable_browser_item(),
-   tabs_item(
-     "analysis items",
-     tabs = tabs(
-       tab_item(
-         "spaghetti plot",
-         server = function(input, output, session, datasets) {},
-         ui = function(id) div(p("spaghetti plot")),
-         filters = 'ARS',
-         server_args = list(datasets = "teal_datasets")
-       ),
-       tab_item(
-         "survival curves",
-         server = function(input, output, session) {},
-         ui = function(id) div(p("Kaplan Meier Curve")),
-         filters = "ATE"
-       )
-     )
-   )
- ),
- header = tags$h1("Sample App"),
- footer = tags$p("Copyright 2017")
+  data =  list(ASL = ASL, ARS = ARS, ATE = ATE),
+  modules = root_modules(
+    module(
+      "data source",
+      server = function(input, output, session, datasets) {},
+      ui = function(id) div(p("information about data source")),
+      filters = NULL
+    ),
+    tm_data_table(),
+    tm_variable_browser(),
+    modules(
+      label = "analysis items",
+      tm_table(
+        label = "demographic table",
+        dataname = "ASL",
+        xvar = "SEX",
+        yvar = "RACE",
+        yvar_choices = c("RACE", "AGEGR", "REGION")
+      ),
+      tm_scatterplot(
+        label = "scatterplot",
+        dataname = "ASL",
+        xvar = "AGE",
+        yvar = "BBMI",
+        color_by = "_none_",
+        color_by_choices = c("_none_", "STUDYID")
+      ),
+      module(
+        label = "survival curves",
+        server = function(input, output, session, datasets) {},
+        ui = function(id) div(p("Kaplan Meier Curve")),
+        filters = "ATE"
+      )
+    )
+  ),
+  header = tags$h1("Sample App"),
+  footer = tags$p("Copyright 2017")
 )
 
 shinyApp(x$ui, x$server)
@@ -132,20 +137,20 @@ sensitive.
 ### Navigation Tabs, Application Content, Shiny Modules
 
 The second argument of `teal::init` that we specified in the code listing above 
-is the `tabs` arguments. Tabs define the elements in the *Navbar* and their 
-corresponding content in the *Tabs Content* box. A `tabs` object can contain 
-`tab_item` and `tabs_item` objects where the `tabs_item` contains a `tabs` slot 
-in order to create a tree of page content for the web app. For the app defined
+is the `modules` arguments. Modules define the elements displayed with tabs in
+the *Navbar* and their corresponding content in the *Tabs Content* box. A
+`modules` object can contain `module` and `modules` objects. For the app defined
 above this tree looks as follows:
 
-<img src="images/tabs.png" alt="Navigation Tree" style="width: 100%;"/>
+<img src="images/module_tree.png" alt="Navigation Tree" style="width: 100%;"/>
 
-Note that we currently only allow a tree of depth 2, so the `tabs_item` object 
-can not contain any other `tabs_item` objects in its `tabs` slot.
+Note that we currently only allow a tree of depth 2 and we start the tree with
+the `root_modules` function which is a wrapper around `modules` that sets the
+`label` argument to `"root"`.
 
-The [shiny modules][shiny_modules] are specified in the `tab_item` function with
-the `server` and `ui` argument. Both, `tab_item` and `tabs_item` are documented 
-in the `teal` package, see `?tab_item` and `?tabs_item`.
+The [shiny modules][shiny_modules] are specified in the `module` function with
+the `server` and `ui` argument. Both, `module` and `modules` are documented 
+in the `teal` package, see `?module` and `?modules`.
 
 
 ## Accessing the Analysis Data in Shiny Modules
@@ -160,10 +165,10 @@ the `FilteredData` class that are not safe to use. It's best to only use the
 method returns either a reactive or a static version of the filtered or
 unfitered dataset of interest.
 
-Assume we create the following `tab_item` with the shiny modules
+Assume we create the following `module` with the shiny modules
 
 ```{r, eval = FALSE}
-tab_item(
+module(
   label = "Frequency Table",
   ui = function(id) {
     ns <- NS(id)
@@ -174,8 +179,7 @@ tab_item(
       asl <- datasets$get_data("asl", reactive = TRUE, filtered=TRUE)
       table(asl$SEX)
     })
-  },
-  server_args = list(datasets = "teal_datasets")
+  }
 )
 ```
 
@@ -185,7 +189,7 @@ table of the `ASL.SEX` variable in the *Tab Contents* section of the app. The
 modules][shiny_modules] and the `server` function requires the three arguments 
 `input`, `output`, and `session`. The `dataset` argument is added to the 
 `server` function call by `teal` based on the `server_args` argument list 
-specified in the `tab_item` function. The `server_args` expects a named list 
+specified in the `module` function. The `server_args` expects a named list 
 with additional arguments that should be passed to the server function. The list
 names (e.g. `datasets` in the above code) map to the argument names and the 
 content is usually mapped one-to-one with the expection of some keywords such as
