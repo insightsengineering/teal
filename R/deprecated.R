@@ -24,6 +24,8 @@ tabs <- function(...) {
 #'
 #' @param ... arguments passed on to \code{\link{tm_variable_browser}}
 #'
+#' @noRd
+#'
 #' @export
 variable_browser_item <- function(...) {
   warning("variable_browser_item is deprecated, pleas use tm_variable_browser instead")
@@ -36,6 +38,8 @@ variable_browser_item <- function(...) {
 #' Please use the \code{\link{tm_data_table}} function instead.
 #'
 #' @param ... arguments passed on to \code{\link{tm_data_table}}
+#'
+#' @noRd
 #'
 #' @export
 data_table_item <- function(...) {

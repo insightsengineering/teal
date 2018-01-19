@@ -9,3 +9,7 @@
 The teal package provides a shiny based framework for creating an
 interactinve data analysis environment.
 }
+\details{
+To learn mode about the package either read the project website at
+\url{Project Website} or read the \code{\link{init}} manual pages.
+}

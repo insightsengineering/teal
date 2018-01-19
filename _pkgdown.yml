@@ -1,0 +1,11 @@
+
+url: https://pages.github.roche.com/Rpackages/teal
+
+template:
+  params:
+    bootswatch: cerulean
+
+navbar:
+  right:
+    - icon: fa-github
+      href: https://github.roche.com/Rpackages/teal

@@ -24,7 +24,7 @@ optional slider input with one argument here called \code{value_min_max}.
 }
 \examples{
 
-optionalSliderInput2("a", "b", 1)
-optionalSliderInput2("a", "b", c(3, 1, 5))
+optionalSliderInputValMinMax("a", "b", 1)
+optionalSliderInputValMinMax("a", "b", c(3, 1, 5))
 
 }

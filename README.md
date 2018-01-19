@@ -1,16 +1,21 @@
-# Teal: Interactive exploration and analysis of clinical trial data
 
-*Active development happens on the `beta` branch, so contribute to that branch.
-We use the `master` branch only for R package releases (i.e. versions).*
+
+[Project Website](https://pages.github.roche.com/Rpackages/teal/)
+ 
+# Teal: Interactive Exploratory Analysis Environments for the Web
+
+Active development happens on the `develop` branch, so please contribute to the
+`develop` branch. We use the `master` branch only for R package releases (i.e.
+versions).
 
 *teal* is a shiny-based interactive exploration framework for analyzing clinical
-trials data. `teal` currently provides a dynamic filtering facility and 
-diverse data viewers. `teal` shiny applications are built using standard
-[shiny modules](https://shiny.rstudio.com/articles/modules.html).
+trials data. `teal` currently provides a dynamic filtering facility and diverse
+data viewers. `teal` shiny applications are built using standard [shiny
+modules](https://shiny.rstudio.com/articles/modules.html).
 
 # Getting Started
 
-1. Install `teal` as in [Installation below](#installation).
+1. Install `teal` as described in the [installation section](#installation) below.
 1. Create a new file `app.R`, and paste this code into it:
 
 	```r
@@ -63,8 +68,8 @@ diverse data viewers. `teal` shiny applications are built using standard
 	shinyApp(x$ui, x$server)
 	```
 	
-1. Execute the above code to run a sample app.
-1. You can now modify this sample app to fit your need. For example, delete
+1. Execute the above code to run the sample app.
+1. You can now modify this sample app to fit your needs. For example, delete
    `ARS` and `ATE`, and change `ASL` to your dataset, for example:
 
 	```r
@@ -98,9 +103,18 @@ library(devtools)
 install_github('Rpackages/teal', host='https://github.roche.com/api/v3', build_vignettes = TRUE)
 ```
 
+# More Teal Modules
+
+Where there are quite a few teal modules in the wild, we are currently working
+on high-quality reusable teal modules which are available in the
+[teal.oncology](https://pages.github.roche.com/Rpackages/teal.oncology)
+package.
+
 # Documentation
 
 Currently there are a number of resources with documentation:
+
+1. The [project website](https://pages.github.roche.com/Rpackages/teal/)
 
 1. The `teal` package vignettes run
 
@@ -109,13 +123,13 @@ Currently there are a number of resources with documentation:
     vignettes(package = "teal")
     ```
 
-2. The `teal` R manual pages
+1. The `teal` R manual pages
 
     ```
     help(package = "teal")
     ```
     
-3. Training slides and screencasts:
+1. Training slides and screencasts:
 
     + [Using teal](https://docs.google.com/presentation/d/1RTzALidxFQrUV4oH0OoIE_4EZRQPOf8Qw-EX06r-fp8/edit) ([screencast](https://streamingmedia.roche.com/media/Teal+Introduction+Workshop+with+Shanghai+via+Webex/1_k51jv1jo))
     + [Creating teal modules](https://docs.google.com/presentation/d/1_V0w4x9Ve5rw0nZydkpyfe5NZnA00MlzSgSPr3tANkk/edit#slide=id.g23552d0ebb_0_0) ([screencast](https://streamingmedia.roche.com/media/advanced_teal_workshop_GSC_2017/1_tltjoz5m))

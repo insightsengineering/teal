@@ -117,8 +117,8 @@ optionalSliderInput <- function(inputId, label, min, max, value, ...) {
 #'
 #' @examples
 #'
-#' optionalSliderInput2("a", "b", 1)
-#' optionalSliderInput2("a", "b", c(3, 1, 5))
+#' optionalSliderInputValMinMax("a", "b", 1)
+#' optionalSliderInputValMinMax("a", "b", c(3, 1, 5))
 #'
 optionalSliderInputValMinMax <- function(inputId, label, value_min_max, ...) {
 

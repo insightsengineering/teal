@@ -6,6 +6,11 @@
 #'
 #' @param type case insensitiv, specify which data to generate
 #'
+#' @details Note that we plan to deprecate this function as we are working on
+#'   the \code{random.cdisc.data}
+#'   \url{https://github.roche.com/Rpackages/random.cdisc.data} R package to
+#'   provide this functionality.
+#'
 #' @export
 #'
 #' @importFrom dplyr %>% arrange
