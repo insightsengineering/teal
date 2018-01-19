@@ -210,15 +210,20 @@ srv_scatterplot <- function(input, output, session, datasets, dataname) {
       sub("color = color_by", paste("color =", color_by), pc, fixed=TRUE)
     }
 
+    plot_code <- plot_code
+    subst_pairs <- c(
+      "ggplot(ANL" = paste0("ggplot(", dataname, "_FILTERED"),
+      "x = xvar" = paste0("x = ", xvar),
+      "y = yvar" = paste0("y = ", yvar),
+      "alpha = alpha" = paste0("alpha = ", alpha),
+      "size = size" = paste0("size = ", size)
+    )
 
-    plot_code_subst <- plot_code %>%
-      sub("ggplot(ANL", paste0("ggplot(", dataname, "_FILTERED"), ., fixed = TRUE) %>%
-      sub("aes_string(", "aes(", ., fixed=TRUE) %>%
-      sub("x = xvar", paste0("x = ", xvar), .) %>%
-      sub("y = yvar", paste0("y = ", yvar), .) %>%
-      sub("alpha = alpha", paste0("alpha = ", alpha), .) %>%
-      sub("size = size", paste0("size = ", size), .)
+    f_sub <- Map(function(pattern, repl) {
+      function(txt) sub(pattern, repl, txt, fixed=TRUE)
+    }, names(subst_pairs), subst_pairs)
 
+    plot_code_subst <- Reduce(function(txt, f) f(txt), f_sub, init = plot_code)
 
     code <- paste(
       c(
