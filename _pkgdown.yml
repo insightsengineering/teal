@@ -9,3 +9,35 @@ navbar:
   right:
     - icon: fa-github
       href: https://github.roche.com/Rpackages/teal
+
+reference:
+  - title: Teal Core Functions
+    desc:  These are the main functions needed to build a teal app.
+    contents:
+    - init
+    - module
+    - modules
+    - root_modules
+  - title: Teal Modules
+    contents:
+    - tm_data_table
+    - tm_variable_browser
+    - tm_scatterplot
+    - tm_table
+  - title: Custom Widgets and Layout
+    contents:
+    - optionalSelectInput
+    - optionalSliderInput
+    - optionalSliderInputValMinMax
+    - standard_layout
+  - title: Reproducibility
+    contents:
+    - get_rcode_header
+    - get_filter_txt
+    - parse_code_chunks
+    - reindent
+    - showRCodeModal
+  - title: Helpers
+    contents:
+    - as.global
+    - generate_sample_data
