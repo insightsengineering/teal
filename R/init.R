@@ -35,7 +35,7 @@
 #' ARS <- generate_sample_data('ARS')
 #' ATE <- generate_sample_data('ATE')
 #'
-#' x <- teal::init(
+#' app <- teal::init(
 #'   data =  list(ASL = ASL, ARS = ARS, ATE = ATE),
 #'   modules = root_modules(
 #'     module(
@@ -75,7 +75,7 @@
 #'   footer = tags$p("Copyright 2017")
 #' )
 #'
-#' shinyApp(x$ui, x$server)
+#' shinyApp(app$ui, app$server)
 #'
 #' }
 init <- function(data,
