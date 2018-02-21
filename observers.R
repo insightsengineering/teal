@@ -1,36 +1,36 @@
 
 
-
-arm_ref_comp_observer <- function(session, input, output, id_ref, id_comp, id_arm_var, ASL, arm_var, arm_ref_comp) {
- 
-  if (is(arm_var, "reactiveVal")) {
-    observeEvent(arm_var, {
-      
-    })    
-  }
-
+arm_ref_comp_observer <- function(session, input,
+                                  id_ref, id_comp, id_arm_var,
+                                  ASL, arm_ref_comp, module) {
+  
+  check_arm_ref_comp(arm_ref_comp, ASL, module)  ## throws an error if there are issues
   
   observe({
     
     arm_var <- input[[id_arm_var]]
+    
     arm <- ASL[[arm_var]]
-    arms <- if (is.factor(arm)) levels(arm) else unique(arm)
-        
-    if (length(arms) > 0) {
+    arm_levels <- if (is.factor(arm)) levels(arm) else unique(arm)
+    
+    if (length(arm_levels) > 0) {
       
-      if (!is.null(arm_ref_comp[[]]))
+      default_settings <- arm_ref_comp[[arm_var]]
       
-      ref_arm <- arms[1]
-      comp_arm <- setdiff(arms, ref_arm)
-      
-      
+      if (is.null(default_settings)) {
+        ref_arm <- arm_levels[1]
+        comp_arm <- setdiff(arm_levels, ref_arm)
+      } else {
+        ref_arm <- default_settings$ref
+        comp_arm <- default_settings$comp
+      }
     } else {
       ref_arm <- NULL
       comp_arm <- NULL
     }
     
-    updateSelectInput(session, "ref_arm", selected = ref_arm, choices = arms)
-    updateSelectInput(session, "comp_arm", selected = comp_arm, choices = arms)
+    updateSelectInput(session, id_ref, selected = ref_arm, choices = arm_levels)
+    updateSelectInput(session, id_comp, selected = comp_arm, choices = arm_levels)
   })
   
 }
