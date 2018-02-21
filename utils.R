@@ -104,5 +104,20 @@ whiteSmallWell <- function(...) {
 }
 
 
+as.global <- function(...) {
+  
+  dots <- substitute(list(...))[-1]
+  names <- sapply(dots, deparse)
+  
+  args <- list(...)
+  
+  ge <- globalenv()
+  
+  Map(function(x, name) {
+    ge[[name]] <- x
+  }, args, names)
+
+}
+
          
 
