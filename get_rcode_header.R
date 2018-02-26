@@ -27,16 +27,18 @@
 #' 
 #' }
 #' 
-get_rcode_header <- function(title, dataname, datasets, code_data_processing = NULL) {
+get_rcode_header <- function(title, datanames, datasets, code_data_processing = NULL) {
 
-  dataname <- if (is.null(code_data_processing)) {
-    c("ASL", setdiff(dataname, "ASL"))
+  datanames <- c("ASL", setdiff(datanames, "ASL"))
+  
+  datanames_import <- if (is.null(code_data_processing)) {
+    datanames
   } else {
     datasets$datanames() # because the code_data_processing might have references to all datasets
   }
   
-  data <- lapply(dataname, function(x)datasets$get_data(x, reactive = FALSE, filtered=FALSE))
-  names(data) <- dataname
+  data <- lapply(datanames_import, function(x)datasets$get_data(x, reactive = FALSE, filtered=FALSE))
+  names(data) <- datanames_import
   
   comment <- function(txt) {
     paste0("# ", gsub("\n", "\n# ", txt, fixed = TRUE))  
@@ -91,7 +93,7 @@ get_rcode_header <- function(title, dataname, datasets, code_data_processing = N
       paste(c(code_data_processing, ""), collapse = "\n")
     }
     
-    txt_filter <- teal::get_filter_txt(dataname, datasets)    
+    txt_filter <- teal::get_filter_txt(datanames, datasets)    
     
     paste(
       comment(txt_comment),
