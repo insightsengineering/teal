@@ -27,9 +27,13 @@
 #' 
 #' }
 #' 
-get_rcode_header <- function(title, dataname, datasets) {
+get_rcode_header <- function(title, dataname, datasets, code_data_processing = NULL) {
 
-  dataname <- c("ASL", setdiff(dataname, "ASL"))
+  dataname <- if (is.null(code_data_processing)) {
+    c("ASL", setdiff(dataname, "ASL"))
+  } else {
+    datasets$datanames() # because the code_data_processing might have references to all datasets
+  }
   
   data <- lapply(dataname, function(x)datasets$get_data(x, reactive = FALSE, filtered=FALSE))
   names(data) <- dataname
@@ -64,7 +68,7 @@ get_rcode_header <- function(title, dataname, datasets) {
         gsub(
           "^[[:space:]]+", "",
           {
-            txt <- deparse(tern:::install_tern(ref = NULL, dependencies = 'depends', eval=FALSE), width.cutoff = 100)
+            txt <- deparse(tern:::install_tern(ref = "devel", dependencies = 'depends', eval=FALSE), width.cutoff = 100)
             txt[c(-1, -length(txt))]
           }
         ), collapse = "\n"),
@@ -81,6 +85,12 @@ get_rcode_header <- function(title, dataname, datasets) {
       collapse = "\n"
     )
     
+    txt_data_processing <- if (is.null(code_data_processing)) {
+      ""
+    } else {
+      paste(c(code_data_processing, ""), collapse = "\n")
+    }
+    
     txt_filter <- teal::get_filter_txt(dataname, datasets)    
     
     paste(
@@ -90,6 +100,7 @@ get_rcode_header <- function(title, dataname, datasets) {
       "",
       txt_data,
       "",
+      txt_data_processing,
       txt_filter,
       "",
       sep = "\n"
