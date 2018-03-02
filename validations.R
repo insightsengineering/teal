@@ -26,3 +26,9 @@ validate_no_intersection <- function(x, y, msg) {
   validate(need(length(intersect(x, y)) == 0, msg))
 }
 
+
+validate_has_variable <- function(data, varname, msg) {
+  
+  validate(need(length(varname) > 0 && all(varname %in% names(data)), msg))
+  
+}
