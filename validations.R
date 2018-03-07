@@ -18,6 +18,7 @@ validate_standard_inputs <- function(ASL = NULL, aslvars = character(0),
     validate_n_levels(ASL[[arm_var]], more_than = 1, less_than = 15,
                       msg = "arm variable needs more than 2 levels and less than 15 levels")
     
+    validate(need(!("" %in% ASL[[arm_var]]), "arm values can not contain empty strings ''"))
     
   }
   
