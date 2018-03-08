@@ -254,42 +254,44 @@ install via `devtools::install_version`.
 I recommend not to version control your whole shiny app with [packrat][packrat]
 if not necessary. In order to version control teal for your deployed shiny app
 you can install the teal version of choice into folder within the shiny app and
-then load that `teal` package explicitly. To do so we 
-
-```{bash, eval=FALSE}
-ssh bee.roche.com
-
-module load R-library/2017Q1-gompi-2017a-R-3.3.1
-R 
-```
-
-In R install these packages if you havent already
-
-```{r, eval = FALSE}
-install.packages(c('roxygen2', 'whiksers', 'devtools'), dependencies = TRUE)
-```
-
-Then exit `R` with `q()` and back on the bash clone the teal repository, build it and install it locally
-
-```{bash, eval = FALSE}
-cd ~/
-git clone https://github.roche.com/waddella/teal
-R CMD BUILD teal
-
-cd /srv/shiny-server/MY-APP
-
-mkdir libs
-R CMD INSTALL -l ./libs ~/teal_0.0.1.tar.gz
-```
-
-And then in your `app.R` file in the `/srv/shiny-server/MY-APP` folder add the
-following code
+then load that `teal` package explicitly. To run the following code (say from
+the [RStudio on bee](http://r.roche.com))
 
 ```{r, eval=FALSE}
+
+project.path <- "/srv/shiny-server/<path>"
+
+current.path <- getwd()
+setwd(project.path) 
+
+orig.libpaths <- .libPaths()
+
+path.teal.libs <-  file.path(project.path, "libs")
+
+if (!dir.exists(path.teal.libs)) dir.create(path.teal.libs)
+
+.libPaths(c(path.teal.libs, .libPaths()))
+
+devtools::install_github(
+  "Rpackages/teal",
+  ref = "devel",
+  host = "https://github.roche.com/api/v3",
+  build_vignettes = FALSE,
+  upgrade_dependencies = FALSE
+)
+
+.libPaths(orig.libpaths)
+setwd(current.path)
+```
+
+Then in you `app.R` add the following line as the first line:
+
+```{r, eval = FALSE}
 .libPaths(c(normalizePath("./libs"), .libPaths()))
 ```
 
-before you load the `teal` library with `library(teal)`.
+The above line needs to be loaded before you load the `teal` library with
+`library(teal)`.
 
 You may also watch the video
 [here](https://github.roche.com/waddella/videos/raw/master/teal/getting_started_with_teal.mp4)

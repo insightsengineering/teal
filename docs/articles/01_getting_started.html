@@ -84,7 +84,7 @@
       <h1>Getting Started with Teal</h1>
                         <h4 class="author">Adrian Waddell</h4>
             
-            <h4 class="date">2018-02-09</h4>
+            <h4 class="date">2018-03-08</h4>
           </div>
 
     
@@ -239,25 +239,33 @@ ARS_FILTERED &lt;-<span class="st"> </span><span class="kw">merge</span>(<span c
 <h3 class="hasAnchor">
 <a href="#production-setup-and-version-control" class="anchor"></a>Production Setup and Version Control</h3>
 <p>Teal is currently under active development and features and bug-fixes get added frequently and we also reserve the freedom to change the API. You can download the latest <code>teal</code> versions from the <a href="https://github.roche.com/waddella/teal" title="Teal GitHub Repository">GithHub repository</a> and eventually we will release versions also on the <a href="http://gran.roche.com" title="Roche R Package Server">GRAN</a> server that you can install via <code><a href="http://www.rdocumentation.org/packages/devtools/topics/install_version">devtools::install_version</a></code>.</p>
-<p>I recommend not to version control your whole shiny app with <a href="https://rstudio.github.io/packrat/" title="Packrat is a dependency management system for R">packrat</a> if not necessary. In order to version control teal for your deployed shiny app you can install the teal version of choice into folder within the shiny app and then load that <code>teal</code> package explicitly. To do so we</p>
-<div class="sourceCode"><pre class="sourceCode bash"><code class="sourceCode bash"><span class="fu">ssh</span> bee.roche.com
+<p>I recommend not to version control your whole shiny app with <a href="https://rstudio.github.io/packrat/" title="Packrat is a dependency management system for R">packrat</a> if not necessary. In order to version control teal for your deployed shiny app you can install the teal version of choice into folder within the shiny app and then load that <code>teal</code> package explicitly. To run the following code (say from the <a href="http://r.roche.com">RStudio on bee</a>)</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">project.path &lt;-<span class="st"> "/srv/shiny-server/&lt;path&gt;"</span>
 
-<span class="ex">module</span> load R-library/2017Q1-gompi-2017a-R-3.3.1
-<span class="ex">R</span> </code></pre></div>
-<p>In R install these packages if you havent already</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">install.packages</span>(<span class="kw">c</span>(<span class="st">'roxygen2'</span>, <span class="st">'whiksers'</span>, <span class="st">'devtools'</span>), <span class="dt">dependencies =</span> <span class="ot">TRUE</span>)</code></pre></div>
-<p>Then exit <code>R</code> with <code>q()</code> and back on the bash clone the teal repository, build it and install it locally</p>
-<div class="sourceCode"><pre class="sourceCode bash"><code class="sourceCode bash"><span class="bu">cd</span> ~/
-<span class="fu">git</span> clone https://github.roche.com/waddella/teal
-<span class="ex">R</span> CMD BUILD teal
+current.path &lt;-<span class="st"> </span><span class="kw">getwd</span>()
+<span class="kw">setwd</span>(project.path) 
 
-<span class="bu">cd</span> /srv/shiny-server/MY-APP
+orig.libpaths &lt;-<span class="st"> </span><span class="kw">.libPaths</span>()
 
-<span class="fu">mkdir</span> libs
-<span class="ex">R</span> CMD INSTALL -l ./libs ~/teal_0.0.1.tar.gz</code></pre></div>
-<p>And then in your <code>app.R</code> file in the <code>/srv/shiny-server/MY-APP</code> folder add the following code</p>
+path.teal.libs &lt;-<span class="st">  </span><span class="kw">file.path</span>(project.path, <span class="st">"libs"</span>)
+
+<span class="cf">if</span> (<span class="op">!</span><span class="kw">dir.exists</span>(path.teal.libs)) <span class="kw">dir.create</span>(path.teal.libs)
+
+<span class="kw">.libPaths</span>(<span class="kw">c</span>(path.teal.libs, <span class="kw">.libPaths</span>()))
+
+devtools<span class="op">::</span><span class="kw"><a href="http://www.rdocumentation.org/packages/devtools/topics/install_github">install_github</a></span>(
+  <span class="st">"Rpackages/teal"</span>,
+  <span class="dt">ref =</span> <span class="st">"devel"</span>,
+  <span class="dt">host =</span> <span class="st">"https://github.roche.com/api/v3"</span>,
+  <span class="dt">build_vignettes =</span> <span class="ot">FALSE</span>,
+  <span class="dt">upgrade_dependencies =</span> <span class="ot">FALSE</span>
+)
+
+<span class="kw">.libPaths</span>(orig.libpaths)
+<span class="kw">setwd</span>(current.path)</code></pre></div>
+<p>Then in you <code>app.R</code> add the following line as the first line:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">.libPaths</span>(<span class="kw">c</span>(<span class="kw">normalizePath</span>(<span class="st">"./libs"</span>), <span class="kw">.libPaths</span>()))</code></pre></div>
-<p>before you load the <code>teal</code> library with <code>library(teal)</code>.</p>
+<p>The above line needs to be loaded before you load the <code>teal</code> library with <code>library(teal)</code>.</p>
 <p>You may also watch the video <a href="https://github.roche.com/waddella/videos/raw/master/teal/getting_started_with_teal.mp4">here</a> that explains these steps to set up a teal project.</p>
 </div>
 </div>
