@@ -66,14 +66,7 @@ get_rcode_header <- function(title, datanames, datasets, code_data_processing = 
       "",
       paste(R.version$version.string, "on", info['nodename']), 
       "",
-      paste(
-        gsub(
-          "^[[:space:]]+", "",
-          {
-            txt <- deparse(tern:::install_tern(ref = "devel", dependencies = 'depends', eval=FALSE), width.cutoff = 100)
-            txt[c(-1, -length(txt))]
-          }
-        ), collapse = "\n"),
+      "rtables & tern installation instructions",
       sep = "\n"
     )
     
