@@ -57,18 +57,9 @@ get_rcode_header <- function(title, datanames, datasets, code_data_processing = 
     }
     
     
+
     
-    txt_comment <- paste(
-      title,
-      "",
-      paste("Output Created on", format(Sys.time(), "%b %d, %Y"), "by", info['user']),
-      paste("with teal app under", txt_location), 
-      "",
-      paste(R.version$version.string, "on", info['nodename']), 
-      "",
-      "rtables & tern installation instructions",
-      sep = "\n"
-    )
+
     
     
     txt_data <- paste(
@@ -88,10 +79,42 @@ get_rcode_header <- function(title, datanames, datasets, code_data_processing = 
     
     txt_filter <- teal::get_filter_txt(datanames, datasets)    
     
+    
+    ## header
+    txt_inst_pkgs <- c(
+      paste0('devtools::install_github("Roche/rtables", ref="v',
+             packageDescription("rtables")$Version,'")'),
+      paste0('devtools::install_github("Rpackages/tern", ref="v',
+             packageDescription("tern")$Version,'", host="https://github.roche.com/api/v3")')
+    )
+    
+    needs_rcd <- any(grepl("radam\\(", txt_data))
+    if (needs_rcd) {
+      txt_inst_pkgs <- c(
+        paste0('devtools::install_github("Rpackages/random.cdisc.data", ref="v',
+               packageDescription("random.cdisc.data")$Version,'", host="https://github.roche.com/api/v3")'),
+        txt_inst_pkgs
+      )
+    }  
+
+    
+    txt_comment <- paste(c(
+      title,
+      "",
+      paste("Output Created on", format(Sys.time(), "%b %d, %Y"), "by", info['user']),
+      paste("with teal app under", txt_location), 
+      "",
+      paste(R.version$version.string, "on", info['nodename']), 
+      "",
+      txt_inst_pkgs
+    ), collapse = "\n")
+    
+    
     paste(
       comment(txt_comment),
       "",
       "library(tern)",
+      if (needs_rcd) "library(random.cdisc.data)" else NULL,
       "",
       txt_data,
       "",
