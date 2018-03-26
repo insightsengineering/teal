@@ -2,6 +2,7 @@
 #' Used to get the header for "Show R-Code"
 #' 
 #' 
+#' @importFrom utils packageDescription
 #' @noRd
 #' 
 #' @examples 
