@@ -19,7 +19,7 @@
 #' d$set_data("ASL", ASL)
 #' d$set_data("ATE", ATE)
 #' 
-#' cat(teal.oncology:::get_rcode_header(
+#' cat(teal.tern:::get_rcode_header(
 #'   title = "Hello World\nsubtitle",
 #'   dataname = c("ATE"),
 #'   datasets = d

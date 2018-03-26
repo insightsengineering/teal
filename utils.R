@@ -12,17 +12,6 @@
 #' 
 #' @author Adrian Waddell (waddella), \email{adrian.waddell@roche.com}
 #' 
-#' @examples 
-#' \dontrun{
-#' # function is not exported
-#' `%needs%` <- teal.oncology:::`%needs%`
-#' 
-#' iris %needs% c("Sepal.Length", "Petal.Width")
-#' 
-#' iris %needs% "ABC"
-#' 
-#' }
-#' 
 `%needs%` <- function(data, names) {
   
   i <- is.na(match(names, names(data)))
