@@ -32,7 +32,7 @@
 
 
 whiteSmallWell <- function(...) {
-  shiny::tags$div(class = "well well-sm", style = "background-color: white;", shiny::tags$div(style = "overflow-x: scroll;",...))
+  shiny::tags$div(class = "well well-sm", style = "background-color: white;", shiny::tags$div(style = "overflow-x: auto;",...))
 }
 
 
