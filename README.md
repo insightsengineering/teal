@@ -1,11 +1,8 @@
 
-
-[Project Website](https://pages.github.roche.com/Rpackages/teal/)
- 
 # Teal: Interactive Exploratory Analysis Environments for the Web
 
-Active development happens on the `develop` branch, so please contribute to the
-`develop` branch. We use the `master` branch only for R package releases (i.e.
+Active development happens on the `devel` branch, so please contribute to the
+`devel` branch. We use the `master` branch only for R package releases (i.e.
 versions).
 
 *teal* is a shiny-based interactive exploration framework for analyzing clinical
@@ -107,7 +104,7 @@ install_github('Rpackages/teal', host='https://github.roche.com/api/v3', build_v
 
 Where there are quite a few teal modules in the wild, we are currently working
 on high-quality reusable teal modules which are available in the
-[teal.oncology](https://pages.github.roche.com/Rpackages/teal.oncology)
+[teal.tern](https://pages.github.roche.com/Rpackages/teal.tern)
 package.
 
 # Documentation
