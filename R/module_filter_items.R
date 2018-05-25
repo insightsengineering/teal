@@ -66,7 +66,7 @@ srv_filter_items <- function(input, output, session, datasets, dataname, contain
           }
         } else if (fi$type == "range") {
           sliderInput(ns(id), varlabel,
-                      min = fi$range[1], max = fi$range[2],
+                      min = floor(fi$range[1]*100)/100, max = ceiling(fi$range[2]*100)/100,
                       value = fs,
                       width = "100%")
         } else {

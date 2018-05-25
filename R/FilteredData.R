@@ -310,12 +310,12 @@ FilteredData <- R6::R6Class(
               if (length(state_i) != 2)
                 stop(paste("data", dataname, "variable", var, "not of length 2"))
 
-              x0 <- state_i[1]
-              x1 <- state_i[2]
-              lb <- fii$range[1]
-              ub <- fii$range[2]
-              if (!(lb <= x0 && x0 <= x1 && x1 <= ub))
-                stop(paste("data", dataname, "variable", var, "values do not lie within range"))
+              #x0 <- state_i[1]
+              #x1 <- state_i[2]
+              #lb <- fii$range[1]
+              #ub <- fii$range[2]
+              #if (!(lb <= x0 && x0 <= x1 && x1 <= ub))
+              #  stop(paste("data", dataname, "variable", var, "values do not lie within range"))
             },
             stop(paste("data", dataname, "variable", var, ": cannot filter this variable (type issue)"))
           )
@@ -338,12 +338,12 @@ FilteredData <- R6::R6Class(
             if (length(state_i) != 2)
               stop(paste("data", dataname, "variable", var, "not of length 2"))
 
-            x0 <- state_i[1]
-            x1 <- state_i[2]
-            lb <- fii$range[1]
-            ub <- fii$range[2]
-            if (!(lb <= x0 && x0 <= x1 && x1 <= ub))
-              stop(paste("data", dataname, "variable", var, "values do not lie within range"))
+           # x0 <- state_i[1]
+           # x1 <- state_i[2]
+           # lb <- fii$range[1]
+           # ub <- fii$range[2]
+           # if (!(lb <= x0 && x0 <= x1 && x1 <= ub))
+           #   stop(paste("data", dataname, "variable", var, "values do not lie within range"))
           },
           stop(paste("data", dataname, "variable", var, ": cannot filter this variable (type issue)"))
         )
