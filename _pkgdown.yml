@@ -10,6 +10,9 @@ navbar:
     - icon: fa-github
       href: https://github.roche.com/Rpackages/teal
 
+development:
+  mode: devel
+
 reference:
   - title: Teal Core Functions
     desc:  These are the main functions needed to build a teal app.
