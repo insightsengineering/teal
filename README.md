@@ -94,20 +94,40 @@ modules](https://shiny.rstudio.com/articles/modules.html).
     
 # Installation 
 
+## Stable Release
+
 While on the Roche network, [open R or RStudio](https://r.roche.com) and execute
 the following:
 
 ```r
 # install.packages("devtools")
 library(devtools)
-install_github('Rpackages/teal', host='https://github.roche.com/api/v3', build_vignettes = TRUE)
+install_github(
+  'Rpackages/teal', ref = "v0.0.3",
+  host = 'https://github.roche.com/api/v3',
+  upgrade_dependencies = FALSE,
+  build_vignettes = TRUE
+)
+```
+
+## Development Version
+
+Please read the [web-manual for the development version](https://pages.github.roche.com/Rpackages/teal/dev/). To install the development version use 
+
+```r
+devtools::install_github(
+  'Rpackages/teal', ref = "master",
+  host = 'https://github.roche.com/api/v3',
+  upgrade_dependencies = FALSE,
+  build_vignettes = TRUE
+)
 ```
 
 # More Teal Modules
 
 Where there are quite a few teal modules in the wild, we are currently working
 on high-quality reusable teal modules which are available in the
-[teal.oncology](https://pages.github.roche.com/Rpackages/teal.oncology)
+[teal.tern](https://pages.github.roche.com/Rpackages/teal.tern)
 package.
 
 # Documentation
@@ -132,4 +152,4 @@ Currently there are a number of resources with documentation:
 1. Training slides and screencasts:
 
     + [Using teal](https://docs.google.com/presentation/d/1RTzALidxFQrUV4oH0OoIE_4EZRQPOf8Qw-EX06r-fp8/edit) ([screencast](https://streamingmedia.roche.com/media/Teal+Introduction+Workshop+with+Shanghai+via+Webex/1_k51jv1jo))
-    + [Creating teal modules](https://docs.google.com/presentation/d/1_V0w4x9Ve5rw0nZydkpyfe5NZnA00MlzSgSPr3tANkk/edit#slide=id.g23552d0ebb_0_0) ([screencast](https://streamingmedia.roche.com/media/advanced_teal_workshop_GSC_2017/1_tltjoz5m))
+    + [Creating teal modules](https://docs.google.com/presentation/d/1_V0w4x9Ve5rw0nZydkpyfe5NZnA00MlzSgSPr3tANkk/edit#slide=id.g23552d0ebb_0_0)
