@@ -11,7 +11,7 @@ navbar:
       href: https://github.roche.com/Rpackages/teal
 
 development:
-  mode: devel
+  mode: release
 
 reference:
   - title: Teal Core Functions

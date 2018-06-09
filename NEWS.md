@@ -1,3 +1,9 @@
+
+# teal 0.0.4
+
+* Bug fix where teal crashes when a filter variable gets added that has many
+decimal places
+
 # teal 0.0.3
 
 Note version 0.0.3 is not backwards compatible. Reading the changes and studying
