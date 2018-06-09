@@ -18,13 +18,23 @@
 <!-- Font Awesome icons -->
 <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-T8Gy5hrqNKT+hzMclPo118YTQO6cYprQmhrYwIiQ/3axmI1hQomh7Ud2hPOy8SP1" crossorigin="anonymous">
 
+<!-- clipboard.js -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/1.7.1/clipboard.min.js" integrity="sha384-cV+rhyOuRHc9Ub/91rihWcGmMmCXDeksTtCihMupQHSsi8GIIRDG0ThDc3HGQFJ3" crossorigin="anonymous"></script>
+
+<!-- sticky kit -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/sticky-kit/1.1.3/sticky-kit.min.js" integrity="sha256-c4Rlo1ZozqTPE2RLuvbusY3+SU1pQaJC0TjuhygMipw=" crossorigin="anonymous"></script>
 
 <!-- pkgdown -->
 <link href="../pkgdown.css" rel="stylesheet">
-<script src="../jquery.sticky-kit.min.js"></script>
 <script src="../pkgdown.js"></script>
-  
-  
+
+
+
+<meta property="og:title" content="Generates header text for analysis items — get_rcode_header" />
+<meta name="twitter:card" content="summary" />
+
+
+
 <!-- mathjax -->
 <script src='https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML'></script>
 
@@ -47,12 +57,16 @@
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <a class="navbar-brand" href="../index.html">teal</a>
+      <span class="navbar-brand">
+        <a class="navbar-link" href="../index.html">teal</a>
+        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">0.0.4</span>
+      </span>
     </div>
+
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>
-  <a href="..//index.html">
+  <a href="../index.html">
     <span class="fa fa-home fa-lg"></span>
      
   </a>
@@ -71,9 +85,6 @@
       <a href="../articles/01_getting_started.html">Getting Started with Teal</a>
     </li>
     <li>
-      <a href="../articles/02_reproducible-code.html">Creating Reproducible Code for teal Modules</a>
-    </li>
-    <li>
       <a href="../articles/10_teal_design_and_implementation.html">Teal Design and Implementation</a>
     </li>
     <li>
@@ -82,7 +93,7 @@
   </ul>
 </li>
 <li>
-  <a href="../news/index.html">News</a>
+  <a href="../news/index.html">Changelog</a>
 </li>
       </ul>
       
@@ -94,6 +105,7 @@
   </a>
 </li>
       </ul>
+      
     </div><!--/.nav-collapse -->
   </div><!--/.container -->
 </div><!--/.navbar -->
@@ -101,18 +113,22 @@
       
       </header>
 
-      <div class="row">
+<div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Generates header text for analysis items</h1>
+    
+    <div class="hidden name"><code>get_rcode_header.Rd</code></div>
     </div>
 
+    <div class="ref-description">
 
+    </div>
 
     <pre class="usage"><span class='fu'>get_rcode_header</span>(<span class='no'>title</span>, <span class='kw'>description</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>libraries</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
   <span class='kw'>git_repo</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>data</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)</pre>
     
-    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
+    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
@@ -158,7 +174,7 @@ datasets. The data sets need the <code>import</code> attribute and optionally th
 #&gt; # 
 #&gt; # Module Source: Not given
 #&gt; # Git-commit Shiny App: -
-#&gt; # Date: Fri Feb  9 14:58:16 2018
+#&gt; # Date: Sat Jun  9 21:08:39 2018
 #&gt; # 
 #&gt; # You can run this code interactively in http://r.roche.com
 #&gt; </div><div class='input'>
@@ -172,7 +188,7 @@ datasets. The data sets need the <code>import</code> attribute and optionally th
 #&gt; # 
 #&gt; # Module Source: Not given
 #&gt; # Git-commit Shiny App: -
-#&gt; # Date: Fri Feb  9 14:58:16 2018
+#&gt; # Date: Sat Jun  9 21:08:39 2018
 #&gt; # 
 #&gt; # You can run this code interactively in http://r.roche.com
 #&gt; 
@@ -197,7 +213,7 @@ datasets. The data sets need the <code>import</code> attribute and optionally th
 #&gt; # 
 #&gt; # Module Source: http://github.roche.com/Rpackages/teal/
 #&gt; # Git-commit Shiny App: -
-#&gt; # Date: Fri Feb  9 14:58:16 2018
+#&gt; # Date: Sat Jun  9 21:08:39 2018
 #&gt; # 
 #&gt; # You can run this code interactively in http://r.roche.com
 #&gt; 
@@ -228,11 +244,14 @@ datasets. The data sets need the <code>import</code> attribute and optionally th
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="http://hadley.github.io/pkgdown/">pkgdown</a>.</p>
+  <p>Site built with <a href="http://pkgdown.r-lib.org/">pkgdown</a>.</p>
 </div>
 
       </footer>
    </div>
 
+  
+
   </body>
 </html>
+
