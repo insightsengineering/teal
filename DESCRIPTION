@@ -1,7 +1,7 @@
 Package: teal
 Type: Package
 Title: Exploratory Web Apps for Analyzing Clinical Trials Data
-Version: 0.0.3
+Version: 0.0.4
 Authors@R: c(
   person("Adrian", "Waddell", email = "adrian.waddell@roche.com", role = c("aut", "cre"))
   )
@@ -9,7 +9,7 @@ Description: teal is a shiny based interactive exploration framework for
     analyzing clinical trials data. teal currently provides a dynamic filtering
     facility and different data viewers. teal shiny applications are built using
     standard shiny modules.
-License: Copyright Roche
+License: file LICENSE
 Encoding: UTF-8
 LazyData: true
 Depends:

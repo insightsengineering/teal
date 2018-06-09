@@ -35,7 +35,7 @@ test_that(
 test_that(
   "data info", {
 
-    expect_false(
+    expect_true(
       info = "list_data_info does not work as expected",
       is.null(x$list_data_info("ASL", variables = c("AGE", "SEX")))
     )
