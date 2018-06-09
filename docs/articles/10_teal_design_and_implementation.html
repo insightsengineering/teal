@@ -8,14 +8,17 @@
 <title>Teal Design and Implementation • teal</title>
 <!-- jquery --><script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script><!-- Bootstrap --><link href="https://maxcdn.bootstrapcdn.com/bootswatch/3.3.7/cerulean/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script><!-- Font Awesome icons --><link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-T8Gy5hrqNKT+hzMclPo118YTQO6cYprQmhrYwIiQ/3axmI1hQomh7Ud2hPOy8SP1" crossorigin="anonymous">
-<!-- pkgdown --><link href="../pkgdown.css" rel="stylesheet">
-<script src="../jquery.sticky-kit.min.js"></script><script src="../pkgdown.js"></script><!-- mathjax --><script src="https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><!--[if lt IE 9]>
+<!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/1.7.1/clipboard.min.js" integrity="sha384-cV+rhyOuRHc9Ub/91rihWcGmMmCXDeksTtCihMupQHSsi8GIIRDG0ThDc3HGQFJ3" crossorigin="anonymous"></script><!-- sticky kit --><script src="https://cdnjs.cloudflare.com/ajax/libs/sticky-kit/1.1.3/sticky-kit.min.js" integrity="sha256-c4Rlo1ZozqTPE2RLuvbusY3+SU1pQaJC0TjuhygMipw=" crossorigin="anonymous"></script><!-- pkgdown --><link href="../pkgdown.css" rel="stylesheet">
+<script src="../pkgdown.js"></script><meta property="og:title" content="Teal Design and Implementation">
+<meta property="og:description" content="">
+<meta name="twitter:card" content="summary">
+<!-- mathjax --><script src="https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><!--[if lt IE 9]>
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
 <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
 <![endif]-->
 </head>
 <body>
-    <div class="container template-vignette">
+    <div class="container template-article">
       <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
     <div class="navbar-header">
@@ -24,12 +27,16 @@
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <a class="navbar-brand" href="../index.html">teal</a>
+      <span class="navbar-brand">
+        <a class="navbar-link" href="../index.html">teal</a>
+        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">0.0.4</span>
+      </span>
     </div>
+
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
 <li>
-  <a href="..//index.html">
+  <a href="../index.html">
     <span class="fa fa-home fa-lg"></span>
      
   </a>
@@ -48,9 +55,6 @@
       <a href="../articles/01_getting_started.html">Getting Started with Teal</a>
     </li>
     <li>
-      <a href="../articles/02_reproducible-code.html">Creating Reproducible Code for teal Modules</a>
-    </li>
-    <li>
       <a href="../articles/10_teal_design_and_implementation.html">Teal Design and Implementation</a>
     </li>
     <li>
@@ -59,7 +63,7 @@
   </ul>
 </li>
 <li>
-  <a href="../news/index.html">News</a>
+  <a href="../news/index.html">Changelog</a>
 </li>
       </ul>
 <ul class="nav navbar-nav navbar-right">
@@ -79,17 +83,20 @@
 
       
       </header><div class="row">
-  <div class="col-md-9">
+  <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1>Teal Design and Implementation</h1>
                         <h4 class="author">Adrian Waddell</h4>
             
             <h4 class="date">10/29/2017</h4>
-          </div>
+      
+      
+      <div class="hidden name"><code>10_teal_design_and_implementation.Rmd</code></div>
+
+    </div>
 
     
     
-<div class="contents">
 <div id="introduction" class="section level1">
 <h1 class="hasAnchor">
 <a href="#introduction" class="anchor"></a>Introduction</h1>
@@ -176,8 +183,8 @@ srv_example &lt;-<span class="st"> </span><span class="cf">function</span>(input
 <a href="#the-teal-overall-design" class="anchor"></a>The Teal Overall Design</h1>
 <p>The general <code>teal</code> workflow is as follows:</p>
 <ol style="list-style-type: decimal">
-<li><p>pass a collection of data sets and a collection of configured teal modules to the <code><a href="http://www.rdocumentation.org/packages/teal/topics/init">teal::init</a></code> function.</p></li>
-<li><p><code><a href="http://www.rdocumentation.org/packages/teal/topics/init">teal::init</a></code> composes the <code>ui</code> and <code>server</code> functions that can then be passed to the <code><a href="http://www.rdocumentation.org/packages/shiny/topics/shinyApp">shiny::shinyApp</a></code> function</p></li>
+<li><p>pass a collection of data sets and a collection of configured teal modules to the <code><a href="../reference/init.html">teal::init</a></code> function.</p></li>
+<li><p><code><a href="../reference/init.html">teal::init</a></code> composes the <code>ui</code> and <code>server</code> functions that can then be passed to the <code><a href="http://www.rdocumentation.org/packages/shiny/topics/shinyApp">shiny::shinyApp</a></code> function</p></li>
 </ol>
 <p><img src="images/design_use_teal.png" width="676"></p>
 <p>A simple example for a completely custom <code>teal</code> module is the following</p>
@@ -288,25 +295,25 @@ datasets<span class="op">$</span><span class="kw">set_data</span>(<span class="s
 <pre><code>## ==== ASL =======================
 ## USUBJID has filter type choices   : id-1, id-2, id-3, id-4, id-5, ...
 ## STUDYID has filter type choices   : studyA
-## AGE     has filter type range     : 1.52066848725063 - 98.6419740233035
+## AGE     has filter type range     : 1.31794024379322 - 89.0643905251268
 ## SEX     has filter type choices   : F, M
 ## ===========================</code></pre>
 <p>Now say we want to filter out all the patients except patients with <code>USUBJID</code> equal to <code>id-1</code>, <code>id-2</code>, <code>id-3</code>, or <code>id-4</code>:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">datasets<span class="op">$</span><span class="kw">set_filter_state</span>(<span class="st">"ASL"</span>, <span class="st">"USUBJID"</span>, <span class="dt">state =</span> <span class="kw">paste0</span>(<span class="st">"id-"</span>, <span class="dv">1</span><span class="op">:</span><span class="dv">4</span>))
 
 datasets<span class="op">$</span><span class="kw">get_data</span>(<span class="st">"ASL"</span>, <span class="dt">reactive =</span> <span class="ot">FALSE</span>, <span class="dt">filtered =</span> <span class="ot">TRUE</span>)</code></pre></div>
-<pre><code>##   USUBJID STUDYID       AGE SEX
-## 1    id-1  studyA 51.432119   F
-## 2    id-2  studyA 24.192576   F
-## 3    id-3  studyA  2.716574   M
-## 4    id-4  studyA 31.084643   F</code></pre>
+<pre><code>##   USUBJID STUDYID      AGE SEX
+## 1    id-1  studyA 50.86329   F
+## 2    id-2  studyA 57.98305   F
+## 3    id-3  studyA 33.70698   F
+## 4    id-4  studyA 25.20823   F</code></pre>
 <p>Note that this <code>USUBJID</code> variable based filtering also filters the <code>ATE</code> data (with an inner join based on <code>USUBJID</code> and <code>STUDYID</code>), as illustrated in the previous figure:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">datasets<span class="op">$</span><span class="kw">get_data</span>(<span class="st">"ATE"</span>, <span class="dt">reactive =</span> <span class="ot">FALSE</span>, <span class="dt">filtered =</span> <span class="ot">TRUE</span>)</code></pre></div>
 <pre><code>##   USUBJID STUDYID      AVAL CNSR PARAMCD
-## 1    id-1  studyA  3.694831    1      OS
-## 2    id-2  studyA  9.058264    1      OS
-## 3    id-3  studyA  6.395684    1      OS
-## 4    id-4  studyA 13.068021    0      OS</code></pre>
+## 1    id-1  studyA  8.007029    0      OS
+## 2    id-2  studyA 10.411633    1      OS
+## 3    id-3  studyA 30.327016    0      OS
+## 4    id-4  studyA 22.050141    0      OS</code></pre>
 <p>The two <code>get_data</code> method calls return the <code>ASL_FILTERED</code> and <code>ATE_FILTERED</code> data, respectively, as illustrated from the above figure. We can also get the <code>call</code> object that was used for the filtering:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">datasets<span class="op">$</span><span class="kw">get_filter_call</span>(<span class="st">"ATE"</span>, <span class="dt">merge =</span> <span class="ot">TRUE</span>, <span class="dt">asl =</span> <span class="ot">TRUE</span>)</code></pre></div>
 <pre><code>## [[1]]
@@ -389,7 +396,7 @@ datasets<span class="op">$</span><span class="kw">get_data</span>(<span class="s
 <li><p>code to create the output</p></li>
 </ol>
 <p>In <code>teal</code> we started to streamline 1) and 2) with the <code>get_rcode_header</code> function. This funciton needs to be improved but that is a simple exercise. Next, 3) can either be achieved via the <code>get_filter_call</code> method of the <code>datasets</code> object or simpler via the <code>get_filter_txt</code> function. Finally 4) is currently the most difficult to achive well. We have tried to create the R call (in a string to preserve the formatting) and then evaluating that string to create the output, however that is not a good approach as it makes it essentially impossible to debug the modules. Another approach that we have tried is to use tagging with <code>@start_label</code> and <code>@end_label</code> as documented in the <code>02_reproducible-code</code> vignette. Two more promising approaches are to tag the code chunks via a function call with tag and chunk-code and then remove the function call but leave the code when creating the server function (as proposed by Michael) and another approach is developed by Doug and Gabe.</p>
-<p>After having created a number of modules for <a href="https://github.roche.com/Rpackages/teal.oncology"><code>teal.oncology</code></a> it seems probably easiest to keep the modules simple by making a module to be a user interface for a simple function call with dynamic arguments. E.g. we created am analysis package <a href="https://github.roche.com/Rpackages/tern">tern</a> which has the function <code>kmplot</code> to create a kaplan meier plot. We have then also created the <a href="https://github.roche.com/Rpackages/teal.oncology"><code>teal.oncology</code></a> R package which has the module <code>tm_kplot</code> which provides a user interface that allows one to modify certain arguments of <code><a href="http://www.rdocumentation.org/packages/tern/topics/kmplot">tern::kmplot</a></code> via the encodings panel. This reduces 4) essentially to an argument tracking problem. This is, however, work in progress.</p>
+<p>After having created a number of modules for <a href="https://github.roche.com/Rpackages/teal.oncology"><code>teal.oncology</code></a> it seems probably easiest to keep the modules simple by making a module to be a user interface for a simple function call with dynamic arguments. E.g. we created am analysis package <a href="https://github.roche.com/Rpackages/tern">tern</a> which has the function <code>kmplot</code> to create a kaplan meier plot. We have then also created the <a href="https://github.roche.com/Rpackages/teal.oncology"><code>teal.oncology</code></a> R package which has the module <code>tm_kplot</code> which provides a user interface that allows one to modify certain arguments of <code>tern::kmplot</code> via the encodings panel. This reduces 4) essentially to an argument tracking problem. This is, however, work in progress.</p>
 </div>
 <div id="desiderata" class="section level2">
 <h2 class="hasAnchor">
@@ -399,7 +406,6 @@ datasets<span class="op">$</span><span class="kw">get_data</span>(<span class="s
 <li><p>inheritance model for teal modules, e.g. make slightly modified modules (this needs to be better formulated, e.g. what exactly changes: output arguments, encoding ui/logic, etc…?</p></li>
 <li><p><code>teal</code> modules probably need a shared state such as selected arm variable. This could be achieved by a reactive value that is passed as an argument to the modules.</p></li>
 </ul>
-</div>
 </div>
 </div>
   </div>
@@ -431,11 +437,13 @@ datasets<span class="op">$</span><span class="kw">get_data</span>(<span class="s
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="http://hadley.github.io/pkgdown/">pkgdown</a>.</p>
+  <p>Site built with <a href="http://pkgdown.r-lib.org/">pkgdown</a>.</p>
 </div>
 
       </footer>
 </div>
+
+  
 
   </body>
 </html>
