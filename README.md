@@ -100,7 +100,7 @@ the following:
 # install.packages("devtools")
 library(devtools)
 install_github(
-  'Rpackages/teal', ref = "v0.0.3",
+  'Rpackages/teal', ref = "v0.0.4",
   host = 'https://github.roche.com/api/v3',
   upgrade_dependencies = FALSE,
   build_vignettes = TRUE
