@@ -15,3 +15,18 @@ initially  shown for which dataset}
 \description{
 A data table viewer shows the data using a paginated table.
 }
+\examples{
+
+\dontrun{
+ASL <- generate_sample_data('ASL')
+
+x <- teal::init(
+  data =  list(ASL = ASL),
+  modules = root_modules(
+    tm_data_table()
+  )
+)
+
+shinyApp(x$ui, x$server)
+}
+}

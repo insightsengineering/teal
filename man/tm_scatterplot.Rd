@@ -6,8 +6,8 @@
 \usage{
 tm_scatterplot(label, dataname, xvar, yvar, xvar_choices = xvar,
   yvar_choices = yvar, color_by = NULL, color_by_choices = color_by,
-  plot_height = c(600, 200, 2000), alpha = c(1, 0, 1), size = c(4, 1, 12),
-  pre_output = NULL, post_output = NULL)
+  plot_height = c(600, 200, 2000), alpha = c(1, 0, 1), size = c(4, 1,
+  12), pre_output = NULL, post_output = NULL)
 }
 \arguments{
 \item{label}{label shown in the navigation for the item}

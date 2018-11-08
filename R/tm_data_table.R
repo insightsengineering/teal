@@ -9,6 +9,22 @@
 #'   initially  shown for which dataset
 #'
 #' @export
+#'
+#'
+#' @examples
+#'
+#' \dontrun{
+#' ASL <- generate_sample_data('ASL')
+#'
+#' x <- teal::init(
+#'   data =  list(ASL = ASL),
+#'   modules = root_modules(
+#'     tm_data_table()
+#'   )
+#' )
+#'
+#' shinyApp(x$ui, x$server)
+#' }
 tm_data_table <- function(label = "data table", variables_selected=NULL) {
   module(
     label,
