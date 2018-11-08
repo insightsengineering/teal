@@ -47,7 +47,7 @@ ui_page_data_table <- function(id, datasets) {
     ),
     tags$hr(),
     fluidRow(
-      div(class="col-md-12", DT::dataTableOutput(ns('tbl')))
+      div(class="col-md-12", DT::dataTableOutput(ns('tbl'), width = "100%"))
     ),
     div(style="height:30px;")
   )
@@ -121,7 +121,8 @@ srv_page_data_table <- function(input, output, session, datasets, cache_selected
       options = list(
         searching = FALSE,
         pageLength = 30,
-        lengthMenu = c(5, 15, 30, 100)
+        lengthMenu = c(5, 15, 30, 100),
+        scrollX = TRUE
       )
     )
 
