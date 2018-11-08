@@ -26,6 +26,9 @@ datasets. The data sets need the \code{import} attribute and optionally the
 \value{
 A character string for the header text
 }
+\description{
+Generates header text for analysis items
+}
 \examples{
 
 cat(get_rcode_header(

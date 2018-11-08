@@ -14,3 +14,6 @@ get_filter_txt(datanames, datasets)
 \value{
 A character string for the code to generate the filtered datasets
 }
+\description{
+Generates text for the code to filter datasets
+}

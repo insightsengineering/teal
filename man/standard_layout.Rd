@@ -5,8 +5,8 @@
 \title{Create a standard ui layout with output on the right and an encoding panel on
 the left}
 \usage{
-standard_layout(output, encoding = NULL, forms = NULL, pre_output = NULL,
-  post_output = NULL)
+standard_layout(output, encoding = NULL, forms = NULL,
+  pre_output = NULL, post_output = NULL)
 }
 \arguments{
 \item{output}{\code{shiny.tag} object with the output element (table, plot,

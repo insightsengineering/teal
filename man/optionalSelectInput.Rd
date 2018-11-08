@@ -4,7 +4,8 @@
 \alias{optionalSelectInput}
 \title{Hide, Show Label only or display a selectInput}
 \usage{
-optionalSelectInput(inputId, label, choices, selected, ..., label_help = NULL)
+optionalSelectInput(inputId, label, choices, selected, ...,
+  label_help = NULL)
 }
 \arguments{
 \item{inputId}{The \code{input} slot that will be used to access the value.}
@@ -28,8 +29,6 @@ for single-select lists and no values for multiple select lists.}
 returned by \code{\link[shiny]{helpText}}}
 }
 \description{
-Hide, Show Label only or display a selectInput
-
 Hidden input widgets are useful to have the \code{input[[inputId]]} variable
 on available in the server funciont but no corresponding visual clutter from
 input widgets that provide only a single choice.
