@@ -69,6 +69,8 @@ srv_filter_items <- function(input, output, session, datasets, dataname, contain
                       min = floor(fi$range[1]*100)/100, max = ceiling(fi$range[2]*100)/100,
                       value = fs,
                       width = "100%")
+        } else if (fi$type == "logical") {
+          radioButtons(ns(id), varlabel, choices = fi$choices, selected = fs, inline = TRUE)
         } else {
           tags$p(paste(var, "in data", dataname, "has unknown type:", type$class))
         }
@@ -105,6 +107,8 @@ srv_filter_items <- function(input, output, session, datasets, dataname, contain
           }
         } else if (type == "choices") {
           datasets$set_filter_state(dataname, varname, if(length(value) == 0) character(0) else value)
+        } else if (type == "logical") {
+          if (!is.null(value)) datasets$set_filter_state(dataname, varname, value)
         }
 
       })

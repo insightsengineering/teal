@@ -168,6 +168,7 @@ FilteredData <- R6::R6Class(
                 paste(fi_i$choices, collapse = ", ")
               }
             },
+            logical = paste(fi_i$choices, collapse = ", "),
             ""
           )
 
@@ -309,14 +310,8 @@ FilteredData <- R6::R6Class(
             range = {
               if (length(state_i) != 2)
                 stop(paste("data", dataname, "variable", var, "not of length 2"))
-
-              #x0 <- state_i[1]
-              #x1 <- state_i[2]
-              #lb <- fii$range[1]
-              #ub <- fii$range[2]
-              #if (!(lb <= x0 && x0 <= x1 && x1 <= ub))
-              #  stop(paste("data", dataname, "variable", var, "values do not lie within range"))
             },
+            logical = NULL,
             stop(paste("data", dataname, "variable", var, ": cannot filter this variable (type issue)"))
           )
         }
@@ -337,14 +332,8 @@ FilteredData <- R6::R6Class(
           range = {
             if (length(state_i) != 2)
               stop(paste("data", dataname, "variable", var, "not of length 2"))
-
-           # x0 <- state_i[1]
-           # x1 <- state_i[2]
-           # lb <- fii$range[1]
-           # ub <- fii$range[2]
-           # if (!(lb <= x0 && x0 <= x1 && x1 <= ub))
-           #   stop(paste("data", dataname, "variable", var, "values do not lie within range"))
           },
+          logical = NULL,
           stop(paste("data", dataname, "variable", var, ": cannot filter this variable (type issue)"))
         )
 
@@ -410,6 +399,7 @@ FilteredData <- R6::R6Class(
           }
         },
         range = fi$range,
+        logical = "TRUE or FALSE",
         stop("unknown type")
       )
 
@@ -513,6 +503,11 @@ FilteredData <- R6::R6Class(
             type = "range",
             range = range(var, na.rm = TRUE)
           )
+        } else if (is.logical(var)) {
+          list(
+            type = "logical",
+            choices = c("TRUE", "FALSE", "TRUE or FALSE")
+          )
         } else {
           .log("variable '", varname, "' is of class '",
                class(var), "' which has currently no filter UI element", sep="")
@@ -565,6 +560,14 @@ FilteredData <- R6::R6Class(
               }
             },
             range   = call("(", call('&', call('>=', as.name(name) , state[1]), call("<=", as.name(name) , state[2]))),
+            logical = {
+              switch(
+                state,
+                "TRUE" = as.name(name),
+                "FALSE" = call("!", as.name(name)),
+                "TRUE or FALSE" = call("%in%", as.name(name), c(TRUE, FALSE))
+              )
+            },
             stop(paste("filter type for variable", name, "in", dataname, "not known"))
           )
         }, names(fs))
@@ -657,23 +660,22 @@ FilteredData <- R6::R6Class(
 
 
 
-# SimpleFiteredData ====
-
-SimpleFilteredData <- R6::R6Class(
-  "SimpleFilteredData",
-  public = list(
-
-  ),
-  inherit = FilteredData
-)
-
-
-
-# CDISCFiteredData ====
-
-CDISCFilteredData <- R6::R6Class(
-  "CDISCFilteredData",
-  inherit = FilteredData
-)
-
+# # SimpleFiteredData ====
+#
+# SimpleFilteredData <- R6::R6Class(
+#   "SimpleFilteredData",
+#   public = list(
+#
+#   ),
+#   inherit = FilteredData
+# )
+#
+#
+#
+# # CDISCFiteredData ====
+#
+# CDISCFilteredData <- R6::R6Class(
+#   "CDISCFilteredData",
+#   inherit = FilteredData
+# )
 
