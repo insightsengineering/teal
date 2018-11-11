@@ -1,3 +1,7 @@
+# teal 0.0.5
+
+* add limit to data_table with scrolling, preventing overlap of ui elements
+* boolean filtering
 
 # teal 0.0.4
 

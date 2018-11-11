@@ -1,9 +1,9 @@
 
-# Teal: Interactive Exploratory Analysis Environments for the Web
+# Teal: Interactive Exploratory Analysis Shiny Web-Applications
 
-Active development happens on the `devel` branch, so please contribute to the
-`devel` branch. We use the `master` branch only for R package releases (i.e.
-versions).
+We are working on a next major version that we expect to release in mid 2019.
+
+Please read more about teal on our agile-R website at [go.roche.com/agile-R](http://go.roche.com/agile-R).
 
 *teal* is a shiny-based interactive exploration framework for analyzing clinical
 trials data. `teal` currently provides a dynamic filtering facility and diverse
@@ -131,6 +131,8 @@ package.
 
 Currently there are a number of resources with documentation:
 
+1. The [agile-R website](http://go.roche.com/agile-R)
+
 1. The [project website](https://pages.github.roche.com/Rpackages/teal/)
 
 1. The `teal` package vignettes run
@@ -145,8 +147,3 @@ Currently there are a number of resources with documentation:
     ```
     help(package = "teal")
     ```
-    
-1. Training slides and screencasts:
-
-    + [Using teal](https://docs.google.com/presentation/d/1RTzALidxFQrUV4oH0OoIE_4EZRQPOf8Qw-EX06r-fp8/edit) ([screencast](https://streamingmedia.roche.com/media/Teal+Introduction+Workshop+with+Shanghai+via+Webex/1_k51jv1jo))
-    + [Creating teal modules](https://docs.google.com/presentation/d/1_V0w4x9Ve5rw0nZydkpyfe5NZnA00MlzSgSPr3tANkk/edit#slide=id.g23552d0ebb_0_0)
