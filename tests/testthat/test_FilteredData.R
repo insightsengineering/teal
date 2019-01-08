@@ -6,7 +6,7 @@ context("FilteredData")
 
 options(teal_logging = FALSE)
 
-x <- teal:::CDISCFilteredData$new(datanames = c('ASL', 'AAE'))
+x <- teal:::FilteredData$new(datanames = c('ASL', 'AAE'))
 
 test_that(
   "Initialization is correct",
@@ -123,19 +123,3 @@ test_that(
 # eval(calls[[3]], e)
 #
 # e$ARS_FILTERED
-
-
-
-context("Test SimpleFilteredData")
-
-# sfd <- teal:::SimpleFilteredData$new(c("iris", "mtcars"))
-#
-# sfd$set_data("iris", iris)
-#
-# sfd$set_data("mtcars", mtcars)
-#
-# ## add indiviual filters
-
-
-
-

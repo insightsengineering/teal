@@ -656,27 +656,3 @@ FilteredData <- R6::R6Class(
     }
   )
 )
-
-
-
-## PR: to remove until end of file
-
-# # SimpleFiteredData ====
-#
-# SimpleFilteredData <- R6::R6Class(
-#   "SimpleFilteredData",
-#   public = list(
-#
-#   ),
-#   inherit = FilteredData
-# )
-#
-#
-#
-# # CDISCFiteredData ====
-#
-# CDISCFilteredData <- R6::R6Class(
-#   "CDISCFilteredData",
-#   inherit = FilteredData
-# )
-
