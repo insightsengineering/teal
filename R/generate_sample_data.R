@@ -7,6 +7,7 @@
 #'
 #'
 #' @param type case insensitiv, specify which data to generate
+#' @param N number of rows
 #'
 #' @details Note that we plan to deprecate this function as we are working on
 #'   the \code{random.cdisc.data}

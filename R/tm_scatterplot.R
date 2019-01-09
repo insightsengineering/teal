@@ -5,6 +5,7 @@
 #'
 #' @inheritParams module
 #' @inheritParams standard_layout
+#' @param dataname name of dataset used to generate table
 #' @param xvar variable name of x varbiable
 #' @param yvar variable name of y variable
 #' @param xvar_choices vector with variable names of possible x variables. If
@@ -51,7 +52,7 @@
 #'      ),
 #'      tm_scatterplot("Scatterplot No Color Choices",
 #'                     dataname = 'ASL',
-#'                     xvar = 'AGE', yvar = 'TRTDUR', size = 3, alpha = 1, plot_height=600
+#'                     xvar = 'AGE', yvar = 'TRTDUR', size = 3, alpha = 1, plot_height = 600
 #'      )
 #'   )
 #' )
@@ -127,6 +128,7 @@ ui_scatterplot <- function(id, label,
 
 }
 
+#' @import stats utils
 srv_scatterplot <- function(input, output, session, datasets, dataname) {
 
 
@@ -201,7 +203,7 @@ srv_scatterplot <- function(input, output, session, datasets, dataname) {
 
     str_filter <- get_filter_txt(dataname, datasets)
 
-    chunks <- parse_code_chunks(txt = capture.output(teal:::srv_scatterplot))
+    chunks <- parse_code_chunks(txt = capture.output(srv_scatterplot))
 
     plot_code <-  if (is.null(color_by) || color_by == "_none_") {
       chunks$plot_no_color

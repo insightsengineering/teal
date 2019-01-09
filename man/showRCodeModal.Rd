@@ -7,6 +7,8 @@
 showRCodeModal(title, rcode)
 }
 \arguments{
+\item{title}{modal title}
+
 \item{rcode}{character string with R code}
 }
 \description{
