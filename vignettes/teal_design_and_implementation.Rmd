@@ -2,9 +2,13 @@
 title: "Teal Design and Implementation"
 author: "Adrian Waddell"
 date: "10/29/2017"
-output: html_document
+output: rmarkdown::html_vignette
 editor_options: 
   chunk_output_type: console
+vignette: >
+  %\VignetteIndexEntry{Teal Desiderata}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
 ---
 
 ```{r setup, include=FALSE}

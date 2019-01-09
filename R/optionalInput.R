@@ -1,6 +1,7 @@
 
 
 
+#' @import methods
 # add hidden class to a \code{shiny.tag} object
 hidden <- function(x) {
   if(!is(x, "shiny.tag")) stop("x needs to be of class shiny.tag")
@@ -13,6 +14,7 @@ hidden <- function(x) {
 #' @template descr_hidden_input
 #'
 #' @inheritParams shiny::selectInput
+#'
 #' @param choices character vector or \code{NULL}. If \code{choices} is
 #'   \code{NULL} no selectInput widget is displayed and \code{input[[inputId]]}
 #'   will be \code{""}. If \code{choices} is of length 1 then a label and
@@ -76,6 +78,7 @@ optionalSelectInput <- function(inputId, label, choices, selected, ..., label_he
 #' @template descr_hidden_input
 #'
 #' @inheritParams shiny::sliderInput
+#' @param ... optional arguments to \code{sliderInput}
 #'
 #' @export
 #'
@@ -103,11 +106,12 @@ optionalSliderInput <- function(inputId, label, min, max, value, ...) {
 #' For teal modules we parameterize an optionalSliderInput with one argument
 #' \code{value_min_max}
 #'
-#' The \code{\link{optionSliderInput}} argument needs three arguments to decided
+#' The \code{\link{optionalSliderInput}} function needs three arguments to decided
 #' wheter to hide the sliderInput widget or not. For teal modules we specify an
 #' optional slider input with one argument here called \code{value_min_max}.
 #'
 #' @inheritParams optionalSliderInput
+#'
 #' @param value_min_max numeric vector. If of length 1 then the value gets set
 #'   to that number and the sliderInput will be hidden. Otherwise, if it is of
 #'   length three the three elements will map to \code{value}, \code{min} and

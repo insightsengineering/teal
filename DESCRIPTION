@@ -13,8 +13,10 @@ License: file LICENSE
 Encoding: UTF-8
 LazyData: true
 Depends:
+    R (>= 2.10),
     shiny
 Imports:
+    methods,
     DT,
     R6,
     dplyr,

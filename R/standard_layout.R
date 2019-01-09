@@ -6,6 +6,8 @@
 #'
 #' This is the layout used for the teal modules in the \code{beam} package
 #'
+#' @import methods
+#'
 #' @param output \code{shiny.tag} object with the output element (table, plot,
 #'   listing) such as for example returned by \code{\link[shiny]{plotOutput}}.
 #' @param encoding a \code{shiny.tag} object containing the encoding elements.

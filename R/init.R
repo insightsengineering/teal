@@ -4,9 +4,11 @@
 #'
 #' Creates the server and ui part for a teal shiny app
 #'
+#' @import methods stats
+#'
 #' @param data named list with datasets. Dataset names are case sensitive. The
 #'   `ASL` data is mandatory.
-#' @param analysis nested list with one list per analysis item with the
+#' @param modules nested list with one list per module with the
 #'   following named list elements: \tabular{ll}{ name \tab string with name
 #'   shown in menu for the analysis item \cr server \tab required, shiny server
 #'   module function, see \code{\link[shiny]{callModule}} for more
@@ -15,9 +17,6 @@
 #'   vector with datasets names that are passed on (filtered) to the server
 #'   function\cr options \tab optional, other arguments passed on to the server
 #'   function }
-#' @param elements list with lists defining new pages (as for analysis) or one
-#'   of the keywords \code{data_table}, \code{variable_browser},
-#'   \code{analysis}.
 #' @param filter filter settings. Nested named list, currently with \code{init}
 #'   list element.
 #' @param header object of class `shiny.tag` to be used as the header of the app
@@ -29,6 +28,8 @@
 #'
 #' @return named list with server and ui function
 #'
+#' @import shiny
+#'
 #' @examples
 #' \dontrun{
 #' ASL <- generate_sample_data('ASL')
@@ -36,7 +37,7 @@
 #' ATE <- generate_sample_data('ATE')
 #'
 #' x <- teal::init(
-#'   data =  list(ASL = ASL, ARS = ARS, ATE = ATE),
+#'   data = list(ASL = ASL, ARS = ARS, ATE = ATE),
 #'   modules = root_modules(
 #'     module(
 #'       "data source",

@@ -10,6 +10,8 @@ generate_sample_data(type = c("ATX", "ASL", "AAG", "AAE", "XAAE", "ACM",
 }
 \arguments{
 \item{type}{case insensitiv, specify which data to generate}
+
+\item{N}{number of rows}
 }
 \value{
 a data.frame

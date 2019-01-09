@@ -16,9 +16,11 @@ optionalSliderInputValMinMax(inputId, label, value_min_max, ...)
 to that number and the sliderInput will be hidden. Otherwise, if it is of
 length three the three elements will map to \code{value}, \code{min} and
 \code{max} of the \code{\link{optionalSliderInput}} function.}
+
+\item{...}{optional arguments to \code{sliderInput}}
 }
 \description{
-The \code{\link{optionSliderInput}} argument needs three arguments to decided
+The \code{\link{optionalSliderInput}} function needs three arguments to decided
 wheter to hide the sliderInput widget or not. For teal modules we specify an
 optional slider input with one argument here called \code{value_min_max}.
 }

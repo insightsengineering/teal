@@ -12,6 +12,8 @@ tm_scatterplot(label, dataname, xvar, yvar, xvar_choices = xvar,
 \arguments{
 \item{label}{label shown in the navigation for the item}
 
+\item{dataname}{name of dataset used to generate table}
+
 \item{xvar}{variable name of x varbiable}
 
 \item{yvar}{variable name of y variable}
@@ -73,7 +75,7 @@ x <- teal::init(
      ),
      tm_scatterplot("Scatterplot No Color Choices",
                     dataname = 'ASL',
-                    xvar = 'AGE', yvar = 'TRTDUR', size = 3, alpha = 1, plot_height=600
+                    xvar = 'AGE', yvar = 'TRTDUR', size = 3, alpha = 1, plot_height = 600
      )
   )
 )

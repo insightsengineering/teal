@@ -1,4 +1,4 @@
-ui_filter_items <- function(id, dataname, title=NULL) {
+ui_filter_items <- function(id, dataname, title = NULL) {
 
   ns <- NS(id)
 
@@ -8,8 +8,8 @@ ui_filter_items <- function(id, dataname, title=NULL) {
 
 }
 
-
-srv_filter_items <- function(input, output, session, datasets, dataname, container=div) {
+#' @import methods
+srv_filter_items <- function(input, output, session, datasets, dataname, container = div) {
 
   uistate <- reactiveValues(filters_shown=character(0))
 

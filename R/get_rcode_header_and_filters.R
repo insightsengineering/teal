@@ -1,5 +1,7 @@
 #' @title Generates header text for analysis items
 #'
+#' @import methods
+#'
 #' @param title A character title of the module
 #' @param description A character description of the module with additional
 #'   information not reflected in the title
@@ -41,7 +43,7 @@
 #'  )
 #' ))
 #'
-get_rcode_header <- function(title, description=NULL, libraries = NULL, git_repo = NULL, data = NULL) {
+get_rcode_header <- function(title, description = NULL, libraries = NULL, git_repo = NULL, data = NULL) {
 
   descrip_str <- description # unlist(strsplit(description, "\n")) # In case of multi-line descriptions
 
