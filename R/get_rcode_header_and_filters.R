@@ -1,7 +1,5 @@
 #' @title Generates header text for analysis items
 #'
-#' @import methods
-#'
 #' @param title A character title of the module
 #' @param description A character description of the module with additional
 #'   information not reflected in the title
@@ -12,8 +10,11 @@
 #' @param data optionally either an FilteredData object, or a named list of
 #'   datasets. The data sets need the \code{import} attribute and optionally the
 #'   \code{md5sum} attribute.
+#' @param datasets required only if \code{data} argument is FilteredData object
 #'
 #' @return A character string for the header text
+
+#' @import methods
 #'
 #' @export
 #'
@@ -43,7 +44,7 @@
 #'  )
 #' ))
 #'
-get_rcode_header <- function(title, description = NULL, libraries = NULL, git_repo = NULL, data = NULL) {
+get_rcode_header <- function(title, description = NULL, libraries = NULL, git_repo = NULL, data = NULL, datasets = NULL) {
 
   descrip_str <- description # unlist(strsplit(description, "\n")) # In case of multi-line descriptions
 

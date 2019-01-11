@@ -1,4 +1,3 @@
-
 #' Create a simple cross-table
 #'
 #' Create a table with the \code{\link{table}[base]} function
@@ -21,16 +20,19 @@
 #' @param post_output html tags appended after the output
 #'
 #' @export
+#'
 #' @importFrom xtable xtable
 #' @importFrom xtable print.xtable
-#'
 #'
 #' @examples
 #'
 #' \dontrun{
+#' library(random.cdisc.data)
+#'
+#' ASL <- radsl()
 #'
 #' x <- teal::init(
-#'   data = list(ASL = generate_sample_data('ASL')),
+#'   data = list(ASL = ASL),
 #'   root_modules(
 #'      tm_data_table(),
 #'      tm_variable_browser(),
@@ -139,6 +141,7 @@ srv_table <- function(input, output, session, datasets, dataname) {
       description = "",
       libraries = c(),
       data = setNames(list(datasets$get_data(dataname, reactive=FALSE, filtered = FALSE)), dataname),
+      datasets = datasets,
       git_repo = "http://github.roche.com/Rpackages/teal/R/tm_table.R"
     )
 

@@ -84,13 +84,13 @@
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
-      <a href="../articles/01_getting_started.html">Getting Started with Teal</a>
+      <a href="../articles/getting_started.html">Getting Started with Teal</a>
     </li>
     <li>
-      <a href="../articles/10_teal_design_and_implementation.html">Teal Design and Implementation</a>
+      <a href="../articles/teal_desiderata.html">Teal Desiderata</a>
     </li>
     <li>
-      <a href="../articles/11_teal_desiderata.html">Teal Desiderata</a>
+      <a href="../articles/teal_design_and_implementation.html">Teal Design and Implementation</a>
     </li>
   </ul>
 </li>
@@ -141,6 +141,37 @@
       <td><p>menu label</p></td>
     </tr>
     <tr>
+      <th>dataname</th>
+      <td><p>name of dataset used to generate table</p></td>
+    </tr>
+    <tr>
+      <th>xvar</th>
+      <td><p>variable name of x varbiable</p></td>
+    </tr>
+    <tr>
+      <th>yvar</th>
+      <td><p>variable name of y variable</p></td>
+    </tr>
+    <tr>
+      <th>xvar_choices</th>
+      <td><p>vector with variable names of possible x variables. If
+missing or identincal to <code>xvar</code> then the table will be fixed to the
+<code>xvar</code>.</p></td>
+    </tr>
+    <tr>
+      <th>yvar_choices</th>
+      <td><p>vector with variable names of possible y variables. If
+missing or identincal to <code>xvar</code> then the table will be fixed to the
+<code>yvar</code>.</p></td>
+    </tr>
+    <tr>
+      <th>useNA</th>
+      <td><p>optional pre-selected option indicating how to utilize NA in
+table display. One of <code>'ifany'</code>, <code>'always'</code>, <code>'no'</code>. If
+missing then <code>'ifany'</code> will be used. If vector then only the first
+one will be used.</p></td>
+    </tr>
+    <tr>
       <th>pre_output</th>
       <td><p>html tags appended below the output</p></td>
     </tr>
@@ -154,8 +185,12 @@
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'>
 </div><span class='co'># NOT RUN {</span>
+<span class='fu'>library</span>(<span class='no'>random.cdisc.data</span>)
+
+<span class='no'>ASL</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='http://www.rdocumentation.org/packages/random.cdisc.data/topics/radsl'>radsl</a></span>()
+
 <span class='no'>x</span> <span class='kw'>&lt;-</span> <span class='kw pkg'>teal</span><span class='kw ns'>::</span><span class='fu'><a href='http://www.rdocumentation.org/packages/teal/topics/init'>init</a></span>(
-  <span class='kw'>data</span> <span class='kw'>=</span> <span class='fu'>list</span>(<span class='kw'>ASL</span> <span class='kw'>=</span> <span class='fu'><a href='generate_sample_data.html'>generate_sample_data</a></span>(<span class='st'>'ASL'</span>)),
+  <span class='kw'>data</span> <span class='kw'>=</span> <span class='fu'>list</span>(<span class='kw'>ASL</span> <span class='kw'>=</span> <span class='no'>ASL</span>),
   <span class='fu'><a href='root_modules.html'>root_modules</a></span>(
      <span class='fu'><a href='tm_data_table.html'>tm_data_table</a></span>(),
      <span class='fu'><a href='tm_variable_browser.html'>tm_variable_browser</a></span>(),

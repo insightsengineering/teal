@@ -1,5 +1,3 @@
-
-
 #' Data Table Viewer Teal Module
 #'
 #' A data table viewer shows the data using a paginated table.
@@ -10,11 +8,12 @@
 #'
 #' @export
 #'
-#'
 #' @examples
 #'
 #' \dontrun{
-#' ASL <- generate_sample_data('ASL')
+#' library(random.cdisc.data)
+#'
+#' ASL <- radsl()
 #'
 #' x <- teal::init(
 #'   data =  list(ASL = ASL),
@@ -35,7 +34,6 @@ tm_data_table <- function(label = "data table", variables_selected=NULL) {
     ui_args = list(datasets='teal_datasets')
   )
 }
-
 
 
 #' @import stats
@@ -68,6 +66,7 @@ ui_page_data_table <- function(id, datasets) {
     div(style="height:30px;")
   )
 }
+
 
 ## data table
 #' @import utils

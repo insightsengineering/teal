@@ -1,4 +1,3 @@
-
 #' Variable Browser Teal Module
 #'
 #' The variable browser provides a table with variable names and labels and a
