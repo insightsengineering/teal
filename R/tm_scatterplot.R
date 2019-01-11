@@ -1,4 +1,3 @@
-
 #' Create a simple cross-table
 #'
 #' Create a table with the \code{\link{table}[base]} function
@@ -31,28 +30,32 @@
 #'   If a slider should be presented to adjust the plot point sizes dynamically
 #'   then it can be a vector of length three with vlaue, min and max.
 #'
-#'
 #' @export
+#'
 #' @importFrom ggplot2 aes_string ggplot geom_point
 #'
 #' @examples
 #'
 #' \dontrun{
+#' library(random.cdisc.data)
+#'
+#' ASL <- radsl()
+#' AAE <- radae(ASL)
 #'
 #' x <- teal::init(
-#'   data = list(ASL = generate_sample_data('ASL'),
-#'               AAE = generate_sample_data('AAE')),
+#'   data = list(ASL = ASL,
+#'               AAE = AAE),
 #'   root_modules(
 #'      tm_data_table(),
 #'      tm_variable_browser(),
 #'      tm_scatterplot("Scatterplot Choices",
 #'                     dataname = 'AAE',
-#'                     xvar = 'AESDY', yvar = 'AEEDY', xvar_choices =  c('AESDY',  'AEEDY'),
-#'                     color_by = "_none_", color_by_choices = c("_none_", "AESTMF", "ANLFL")
+#'                     xvar = 'AEDECOD', yvar = 'AETOXGR', xvar_choices = c('AEDECOD', 'AETOXGR'),
+#'                     color_by = "_none_", color_by_choices = c("_none_", "AEBODSYS")
 #'      ),
 #'      tm_scatterplot("Scatterplot No Color Choices",
 #'                     dataname = 'ASL',
-#'                     xvar = 'AGE', yvar = 'TRTDUR', size = 3, alpha = 1, plot_height = 600
+#'                     xvar = 'AGE', yvar = 'BMRKR1', size = 3, alpha = 1, plot_height = 600
 #'      )
 #'   )
 #' )
@@ -198,6 +201,7 @@ srv_scatterplot <- function(input, output, session, datasets, dataname) {
       description = "",
       libraries = c("ggplot2"),
       data = setNames(list(datasets$get_data(dataname, reactive=FALSE, filtered = FALSE)), dataname),
+      datasets = datasets,
       git_repo = "http://github.roche.com/Rpackages/teal/R/tm_scatterplot.R"
     )
 

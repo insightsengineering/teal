@@ -36,9 +36,11 @@ Creates the server and ui part for a teal shiny app
 }
 \examples{
 \dontrun{
-ASL <- generate_sample_data('ASL')
-ARS <- generate_sample_data('ARS')
-ATE <- generate_sample_data('ATE')
+library(random.cdisc.data)
+
+ASL <- radsl()
+ARS <- radrs(ASL)
+ATE <- radtte(ASL)
 
 x <- teal::init(
   data = list(ASL = ASL, ARS = ARS, ATE = ATE),
@@ -64,7 +66,7 @@ x <- teal::init(
          label = "scatterplot",
          dataname = "ASL",
          xvar = "AGE",
-         yvar = "BBMI",
+         yvar = "BMRKR1",
          color_by = "_none_",
          color_by_choices = c("_none_", "STUDYID")
       ),

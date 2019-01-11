@@ -1,10 +1,6 @@
-
-
 #' Create the Server and Ui Function for the Shiny App
 #'
 #' Creates the server and ui part for a teal shiny app
-#'
-#' @import methods stats
 #'
 #' @param data named list with datasets. Dataset names are case sensitive. The
 #'   `ASL` data is mandatory.
@@ -22,19 +18,19 @@
 #' @param header object of class `shiny.tag` to be used as the header of the app
 #' @param footer object of class `shiny.tag` to be used as the footer of the app
 #'
-#'
+#' @return named list with server and ui function
 #'
 #' @export
 #'
-#' @return named list with server and ui function
-#'
-#' @import shiny
+#' @import shiny methods stats
 #'
 #' @examples
 #' \dontrun{
-#' ASL <- generate_sample_data('ASL')
-#' ARS <- generate_sample_data('ARS')
-#' ATE <- generate_sample_data('ATE')
+#' library(random.cdisc.data)
+#'
+#' ASL <- radsl()
+#' ARS <- radrs(ASL)
+#' ATE <- radtte(ASL)
 #'
 #' x <- teal::init(
 #'   data = list(ASL = ASL, ARS = ARS, ATE = ATE),
@@ -60,7 +56,7 @@
 #'          label = "scatterplot",
 #'          dataname = "ASL",
 #'          xvar = "AGE",
-#'          yvar = "BBMI",
+#'          yvar = "BMRKR1",
 #'          color_by = "_none_",
 #'          color_by_choices = c("_none_", "STUDYID")
 #'       ),

@@ -11,7 +11,7 @@ ui_filter_items <- function(id, dataname, title = NULL) {
 #' @import methods
 srv_filter_items <- function(input, output, session, datasets, dataname, container = div) {
 
-  uistate <- reactiveValues(filters_shown=character(0))
+  uistate <- reactiveValues(filters_shown = character(0))
 
   observeEvent(datasets$get_filter_state(dataname, reactive = TRUE), {
 
@@ -72,7 +72,7 @@ srv_filter_items <- function(input, output, session, datasets, dataname, contain
         } else if (fi$type == "logical") {
           radioButtons(ns(id), varlabel, choices = fi$choices, selected = fs, inline = TRUE)
         } else {
-          tags$p(paste(var, "in data", dataname, "has unknown type:", type$class))
+          tags$p(paste(var, "in data", dataname, "has unknown type:", fi$type))
         }
 
         create_listener(id, id_rm, var)

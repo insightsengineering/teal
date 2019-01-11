@@ -5,7 +5,7 @@
 \title{Generates header text for analysis items}
 \usage{
 get_rcode_header(title, description = NULL, libraries = NULL,
-  git_repo = NULL, data = NULL)
+  git_repo = NULL, data = NULL, datasets = NULL)
 }
 \arguments{
 \item{title}{A character title of the module}
@@ -22,6 +22,8 @@ containing the R-code for the teal module. Optional argument}
 \item{data}{optionally either an FilteredData object, or a named list of
 datasets. The data sets need the \code{import} attribute and optionally the
 \code{md5sum} attribute.}
+
+\item{datasets}{required only if \code{data} argument is FilteredData object}
 }
 \value{
 A character string for the header text

@@ -1,5 +1,3 @@
-
-
 .onLoad <- function(libname = find.package("teal"), pkgname = "teal") {
   #utils::data(cell.ext, package = "gmailR")
 

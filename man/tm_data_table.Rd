@@ -18,7 +18,9 @@ A data table viewer shows the data using a paginated table.
 \examples{
 
 \dontrun{
-ASL <- generate_sample_data('ASL')
+library(random.cdisc.data)
+
+ASL <- radsl()
 
 x <- teal::init(
   data =  list(ASL = ASL),

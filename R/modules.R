@@ -1,5 +1,3 @@
-
-
 #' Create a collection of \code{module} and \code{modules} object
 #'
 #' Modules collects a tree of \code{\link{module}} and \code{\link{modules}}

@@ -43,4 +43,3 @@ reference:
   - title: Helpers
     contents:
     - as.global
-    - generate_sample_data

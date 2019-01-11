@@ -7,9 +7,6 @@
     <loc>https://pages.github.roche.com/Rpackages/teal/reference/as.global.html</loc>
   </url>
   <url>
-    <loc>https://pages.github.roche.com/Rpackages/teal/reference/generate_sample_data.html</loc>
-  </url>
-  <url>
     <loc>https://pages.github.roche.com/Rpackages/teal/reference/get_filter_txt.html</loc>
   </url>
   <url>
@@ -64,12 +61,12 @@
     <loc>https://pages.github.roche.com/Rpackages/teal/reference/tm_variable_browser.html</loc>
   </url>
   <url>
-    <loc>https://pages.github.roche.com/Rpackages/teal/articles/01_getting_started.html</loc>
+    <loc>https://pages.github.roche.com/Rpackages/teal/articles/getting_started.html</loc>
   </url>
   <url>
-    <loc>https://pages.github.roche.com/Rpackages/teal/articles/10_teal_design_and_implementation.html</loc>
+    <loc>https://pages.github.roche.com/Rpackages/teal/articles/teal_desiderata.html</loc>
   </url>
   <url>
-    <loc>https://pages.github.roche.com/Rpackages/teal/articles/11_teal_desiderata.html</loc>
+    <loc>https://pages.github.roche.com/Rpackages/teal/articles/teal_design_and_implementation.html</loc>
   </url>
 </urlset>

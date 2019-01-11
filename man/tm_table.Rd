@@ -40,9 +40,12 @@ Create a table with the \code{\link{table}[base]} function
 \examples{
 
 \dontrun{
+library(random.cdisc.data)
+
+ASL <- radsl()
 
 x <- teal::init(
-  data = list(ASL = generate_sample_data('ASL')),
+  data = list(ASL = ASL),
   root_modules(
      tm_data_table(),
      tm_variable_browser(),

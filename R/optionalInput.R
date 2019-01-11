@@ -1,6 +1,3 @@
-
-
-
 #' @import methods
 # add hidden class to a \code{shiny.tag} object
 hidden <- function(x) {
@@ -23,8 +20,6 @@ hidden <- function(x) {
 #'   element will be displayed.
 #' @param label_help optional an object of class \code{shiny.tag}. E.g. an object
 #'   returned by \code{\link[shiny]{helpText}}
-#'
-#'
 #'
 #' @export
 #'
