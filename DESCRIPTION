@@ -1,7 +1,7 @@
 Package: teal
 Type: Package
 Title: Exploratory Web Apps for Analyzing Clinical Trials Data
-Version: 0.0.5
+Version: 0.0.5.9000
 Authors@R: c(
   person("Adrian", "Waddell", email = "adrian.waddell@roche.com", role = c("aut", "cre"))
   )
@@ -26,7 +26,7 @@ Imports:
     whisker,
     haven,
     tibble
-RoxygenNote: 6.1.0
+RoxygenNote: 6.1.1
 Suggests:
     testthat,
     knitr,

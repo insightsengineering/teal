@@ -1,3 +1,9 @@
+# teal 0.0.6
+
+* Removed deprecated functions `tab*`
+* Removed data generation functions including `generate_sample_data`
+* 
+
 # teal 0.0.5
 
 * add limit to data_table with scrolling, preventing overlap of ui elements
