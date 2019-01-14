@@ -20,10 +20,8 @@ the module.}
 containing the R-code for the teal module. Optional argument}
 
 \item{data}{optionally either an FilteredData object, or a named list of
-datasets. The data sets need the \code{import} attribute and optionally the
+datasets. The data sets need the \code{scource} attribute and optionally the
 \code{md5sum} attribute.}
-
-\item{datasets}{required only if \code{data} argument is FilteredData object}
 }
 \value{
 A character string for the header text

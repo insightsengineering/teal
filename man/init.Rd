@@ -42,6 +42,11 @@ ASL <- radsl()
 ARS <- radrs(ASL)
 ATE <- radtte(ASL)
 
+# for reproducibility
+attr(ASL, "source") <- "random.cdisc.data::radsl()"
+attr(ARS, "source") <- "random.cdisc.data::radrs(ASL)"
+attr(ATE, "source") <- "random.cdisc.data::radtte(ASL)"
+
 x <- teal::init(
   data = list(ASL = ASL, ARS = ARS, ATE = ATE),
   modules = root_modules(
@@ -60,7 +65,7 @@ x <- teal::init(
          dataname = "ASL",
          xvar = "SEX",
          yvar = "RACE",
-         yvar_choices = c("RACE", "AGEGR", "REGION")
+         yvar_choices = c("RACE", "BMRKR2", "COUNTRY")
       ),
       tm_scatterplot(
          label = "scatterplot",
@@ -70,6 +75,7 @@ x <- teal::init(
          color_by = "_none_",
          color_by_choices = c("_none_", "STUDYID")
       ),
+      # ad-hoc module
       module(
          label = "survival curves",
          server = function(input, output, session, datasets) {},
