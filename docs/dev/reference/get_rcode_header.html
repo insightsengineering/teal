@@ -61,7 +61,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">teal</a>
-        <span class="label label-danger" data-toggle="tooltip" data-placement="bottom" title="In-development package">0.0.5</span>
+        <span class="label label-danger" data-toggle="tooltip" data-placement="bottom" title="In-development package">0.0.5.9000</span>
       </span>
     </div>
 
@@ -130,7 +130,7 @@
     </div>
 
     <pre class="usage"><span class='fu'>get_rcode_header</span>(<span class='no'>title</span>, <span class='kw'>description</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>libraries</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>git_repo</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>data</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>datasets</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)</pre>
+  <span class='kw'>git_repo</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>data</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -157,12 +157,8 @@ containing the R-code for the teal module. Optional argument</p></td>
     <tr>
       <th>data</th>
       <td><p>optionally either an FilteredData object, or a named list of
-datasets. The data sets need the <code>import</code> attribute and optionally the
+datasets. The data sets need the <code>source</code> attribute and optionally the
 <code>md5sum</code> attribute.</p></td>
-    </tr>
-    <tr>
-      <th>datasets</th>
-      <td><p>required only if <code>data</code> argument is FilteredData object</p></td>
     </tr>
     </table>
     
@@ -182,7 +178,7 @@ datasets. The data sets need the <code>import</code> attribute and optionally th
 #&gt; # 
 #&gt; # Module Source: Not given
 #&gt; # Git-commit Shiny App: -
-#&gt; # Date: Fri Jan 11 10:58:13 2019
+#&gt; # Date: Tue Jan 15 15:04:18 2019
 #&gt; # 
 #&gt; # You can run this code interactively in http://r.roche.com
 #&gt; </div><div class='input'>
@@ -196,7 +192,7 @@ datasets. The data sets need the <code>import</code> attribute and optionally th
 #&gt; # 
 #&gt; # Module Source: Not given
 #&gt; # Git-commit Shiny App: -
-#&gt; # Date: Fri Jan 11 10:58:13 2019
+#&gt; # Date: Tue Jan 15 15:04:18 2019
 #&gt; # 
 #&gt; # You can run this code interactively in http://r.roche.com
 #&gt; 
@@ -210,9 +206,9 @@ datasets. The data sets need the <code>import</code> attribute and optionally th
  <span class='kw'>libraries</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='st'>'haven'</span>, <span class='st'>'ggplot2'</span>, <span class='st'>'dplyr'</span>),
  <span class='kw'>git_repo</span> <span class='kw'>=</span> <span class='st'>"http://github.roche.com/Rpackages/teal/"</span>,
  <span class='kw'>data</span> <span class='kw'>=</span> <span class='fu'>list</span>(
-   <span class='kw'>ASL</span> <span class='kw'>=</span> <span class='fu'>structure</span>(<span class='fu'>data.frame</span>(<span class='kw'>a</span> <span class='kw'>=</span> <span class='fl'>1</span>), <span class='kw'>import</span> <span class='kw'>=</span> <span class='st'>"haven::read_sas('/opt/BIOSTAT/asl.sas7bdat')"</span>),
+   <span class='kw'>ASL</span> <span class='kw'>=</span> <span class='fu'>structure</span>(<span class='fu'>data.frame</span>(<span class='kw'>a</span> <span class='kw'>=</span> <span class='fl'>1</span>), <span class='kw'>source</span> <span class='kw'>=</span> <span class='st'>"haven::read_sas('/opt/BIOSTAT/asl.sas7bdat')"</span>),
    <span class='kw'>ATE</span> <span class='kw'>=</span> <span class='fu'>structure</span>(<span class='fu'>data.frame</span>(<span class='kw'>a</span> <span class='kw'>=</span> <span class='fl'>1</span>),
-                   <span class='kw'>import</span> <span class='kw'>=</span> <span class='st'>"haven::read_sas('/opt/BIOSTAT/ate.sas7bdat')"</span>,
+                   <span class='kw'>source</span> <span class='kw'>=</span> <span class='st'>"haven::read_sas('/opt/BIOSTAT/ate.sas7bdat')"</span>,
                    <span class='kw'>md5sum</span> <span class='kw'>=</span> <span class='st'>"32sdf32fds324"</span>)
  )
 ))</div><div class='output co'>#&gt; # Cross-Table
@@ -221,7 +217,7 @@ datasets. The data sets need the <code>import</code> attribute and optionally th
 #&gt; # 
 #&gt; # Module Source: http://github.roche.com/Rpackages/teal/
 #&gt; # Git-commit Shiny App: -
-#&gt; # Date: Fri Jan 11 10:58:13 2019
+#&gt; # Date: Tue Jan 15 15:04:18 2019
 #&gt; # 
 #&gt; # You can run this code interactively in http://r.roche.com
 #&gt; 

@@ -205,7 +205,6 @@ srv_scatterplot <- function(input, output, session, datasets, dataname) {
       description = "",
       libraries = c("ggplot2"),
       data = setNames(list(datasets$get_data(dataname, reactive=FALSE, filtered = FALSE)), dataname),
-      datasets = datasets,
       git_repo = "http://github.roche.com/Rpackages/teal/R/tm_scatterplot.R"
     )
 
