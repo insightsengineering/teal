@@ -33,6 +33,7 @@ app][shiny_single_file_app].
 
 ```{r, eval=FALSE} 
 library(teal)
+library(random.cdisc.data)
 
 ASL <- radsl()
 ARS <- radrs(ASL)

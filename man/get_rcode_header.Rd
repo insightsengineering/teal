@@ -5,7 +5,7 @@
 \title{Generates header text for analysis items}
 \usage{
 get_rcode_header(title, description = NULL, libraries = NULL,
-  git_repo = NULL, data = NULL, datasets = NULL)
+  git_repo = NULL, data = NULL)
 }
 \arguments{
 \item{title}{A character title of the module}
@@ -20,7 +20,7 @@ the module.}
 containing the R-code for the teal module. Optional argument}
 
 \item{data}{optionally either an FilteredData object, or a named list of
-datasets. The data sets need the \code{scource} attribute and optionally the
+datasets. The data sets need the \code{source} attribute and optionally the
 \code{md5sum} attribute.}
 }
 \value{
@@ -48,9 +48,9 @@ cat(get_rcode_header(
  libraries = c('haven', 'ggplot2', 'dplyr'),
  git_repo = "http://github.roche.com/Rpackages/teal/",
  data = list(
-   ASL = structure(data.frame(a = 1), import = "haven::read_sas('/opt/BIOSTAT/asl.sas7bdat')"),
+   ASL = structure(data.frame(a = 1), source = "haven::read_sas('/opt/BIOSTAT/asl.sas7bdat')"),
    ATE = structure(data.frame(a = 1),
-                   import = "haven::read_sas('/opt/BIOSTAT/ate.sas7bdat')",
+                   source = "haven::read_sas('/opt/BIOSTAT/ate.sas7bdat')",
                    md5sum = "32sdf32fds324")
  )
 ))

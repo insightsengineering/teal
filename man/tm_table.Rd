@@ -42,7 +42,9 @@ Create a table with the \code{\link{table}[base]} function
 \dontrun{
 library(random.cdisc.data)
 
-ASL <- radsl()
+ASL <- radsl(seed = 1)
+
+attr(ASL, "source") <- "random.cdisc.data::radsl(seed = 1)"
 
 x <- teal::init(
   data = list(ASL = ASL),

@@ -8,7 +8,7 @@
 #' @param git_repo A character vector of the link to the GitHub repository
 #'   containing the R-code for the teal module. Optional argument
 #' @param data optionally either an FilteredData object, or a named list of
-#'   datasets. The data sets need the \code{scource} attribute and optionally the
+#'   datasets. The data sets need the \code{source} attribute and optionally the
 #'   \code{md5sum} attribute.
 #'
 #' @return A character string for the header text
