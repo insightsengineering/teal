@@ -39,8 +39,12 @@
 #' \dontrun{
 #' library(random.cdisc.data)
 #'
-#' ASL <- radsl()
-#' AAE <- radae(ASL)
+#' ASL <- radsl(seed = 1)
+#' AAE <- radae(ASL, seed = 99)
+#'
+#' # for reproducibility
+#' attr(ASL, "source") <- "random.cdisc.data::radsl(seed = 1)"
+#' attr(AAE, "source") <- "random.cdisc.data::radae(ASL, seed = 99)"
 #'
 #' x <- teal::init(
 #'   data = list(ASL = ASL,
