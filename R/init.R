@@ -28,9 +28,14 @@
 #' \dontrun{
 #' library(random.cdisc.data)
 #'
-#' ASL <- radsl()
-#' ARS <- radrs(ASL)
-#' ATE <- radtte(ASL)
+#' ASL <- radsl(seed = 1)
+#' ARS <- radrs(ASL, seed = 100)
+#' ATE <- radtte(ASL, seed = 1000)
+#'
+#' # for reproducibility
+#' attr(ASL, "source") <- "random.cdisc.data::radsl(seed = 1)"
+#' attr(ARS, "source") <- "random.cdisc.data::radrs(ASL, seed = 100)"
+#' attr(ATE, "source") <- "random.cdisc.data::radtte(ASL, seed = 1000)"
 #'
 #' x <- teal::init(
 #'   data = list(ASL = ASL, ARS = ARS, ATE = ATE),
@@ -50,7 +55,7 @@
 #'          dataname = "ASL",
 #'          xvar = "SEX",
 #'          yvar = "RACE",
-#'          yvar_choices = c("RACE", "AGEGR", "REGION")
+#'          yvar_choices = c("RACE", "BMRKR2", "COUNTRY")
 #'       ),
 #'       tm_scatterplot(
 #'          label = "scatterplot",
@@ -60,6 +65,7 @@
 #'          color_by = "_none_",
 #'          color_by_choices = c("_none_", "STUDYID")
 #'       ),
+#'       # ad-hoc module
 #'       module(
 #'          label = "survival curves",
 #'          server = function(input, output, session, datasets) {},
