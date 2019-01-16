@@ -1,10 +1,10 @@
-
 #' Create a simple cross-table
 #'
 #' Create a table with the \code{\link{table}[base]} function
 #'
 #' @inheritParams module
 #' @inheritParams standard_layout
+#' @param dataname name of dataset used to generate table
 #' @param xvar variable name of x varbiable
 #' @param yvar variable name of y variable
 #' @param xvar_choices vector with variable names of possible x variables. If
@@ -30,28 +30,36 @@
 #'   If a slider should be presented to adjust the plot point sizes dynamically
 #'   then it can be a vector of length three with vlaue, min and max.
 #'
-#'
 #' @export
+#'
 #' @importFrom ggplot2 aes_string ggplot geom_point
 #'
 #' @examples
 #'
 #' \dontrun{
+#' library(random.cdisc.data)
+#'
+#' ASL <- radsl(seed = 1)
+#' AAE <- radae(ASL, seed = 99)
+#'
+#' # for reproducibility
+#' attr(ASL, "source") <- "random.cdisc.data::radsl(seed = 1)"
+#' attr(AAE, "source") <- "random.cdisc.data::radae(ASL, seed = 99)"
 #'
 #' x <- teal::init(
-#'   data = list(ASL = generate_sample_data('ASL'),
-#'               AAE = generate_sample_data('AAE')),
+#'   data = list(ASL = ASL,
+#'               AAE = AAE),
 #'   root_modules(
 #'      tm_data_table(),
 #'      tm_variable_browser(),
 #'      tm_scatterplot("Scatterplot Choices",
 #'                     dataname = 'AAE',
-#'                     xvar = 'AESDY', yvar = 'AEEDY', xvar_choices =  c('AESDY',  'AEEDY'),
-#'                     color_by = "_none_", color_by_choices = c("_none_", "AESTMF", "ANLFL")
+#'                     xvar = 'AEDECOD', yvar = 'AETOXGR', xvar_choices = c('AEDECOD', 'AETOXGR'),
+#'                     color_by = "_none_", color_by_choices = c("_none_", "AEBODSYS")
 #'      ),
 #'      tm_scatterplot("Scatterplot No Color Choices",
 #'                     dataname = 'ASL',
-#'                     xvar = 'AGE', yvar = 'TRTDUR', size = 3, alpha = 1, plot_height=600
+#'                     xvar = 'AGE', yvar = 'BMRKR1', size = 3, alpha = 1, plot_height = 600
 #'      )
 #'   )
 #' )
@@ -127,6 +135,7 @@ ui_scatterplot <- function(id, label,
 
 }
 
+#' @import stats utils
 srv_scatterplot <- function(input, output, session, datasets, dataname) {
 
 
@@ -201,7 +210,7 @@ srv_scatterplot <- function(input, output, session, datasets, dataname) {
 
     str_filter <- get_filter_txt(dataname, datasets)
 
-    chunks <- parse_code_chunks(txt = capture.output(teal:::srv_scatterplot))
+    chunks <- parse_code_chunks(txt = capture.output(srv_scatterplot))
 
     plot_code <-  if (is.null(color_by) || color_by == "_none_") {
       chunks$plot_no_color

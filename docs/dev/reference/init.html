@@ -61,7 +61,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">teal</a>
-        <span class="label label-danger" data-toggle="tooltip" data-placement="bottom" title="In-development package">0.0.5</span>
+        <span class="label label-danger" data-toggle="tooltip" data-placement="bottom" title="In-development package">0.0.5.9000</span>
       </span>
     </div>
 
@@ -84,13 +84,13 @@
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
-      <a href="../articles/01_getting_started.html">Getting Started with Teal</a>
+      <a href="../articles/getting_started.html">Getting Started with Teal</a>
     </li>
     <li>
-      <a href="../articles/10_teal_design_and_implementation.html">Teal Design and Implementation</a>
+      <a href="../articles/teal_desiderata.html">Teal Desiderata</a>
     </li>
     <li>
-      <a href="../articles/11_teal_desiderata.html">Teal Desiderata</a>
+      <a href="../articles/teal_design_and_implementation.html">Teal Design and Implementation</a>
     </li>
   </ul>
 </li>
@@ -141,21 +141,8 @@
 `ASL` data is mandatory.</p></td>
     </tr>
     <tr>
-      <th>filter</th>
-      <td><p>filter settings. Nested named list, currently with <code>init</code>
-list element.</p></td>
-    </tr>
-    <tr>
-      <th>header</th>
-      <td><p>object of class `shiny.tag` to be used as the header of the app</p></td>
-    </tr>
-    <tr>
-      <th>footer</th>
-      <td><p>object of class `shiny.tag` to be used as the footer of the app</p></td>
-    </tr>
-    <tr>
-      <th>analysis</th>
-      <td><p>nested list with one list per analysis item with the
+      <th>modules</th>
+      <td><p>nested list with one list per module with the
 following named list elements:</p><table class='table'>
 <tr><td>name</td><td>string with name
 shown in menu for the analysis item</td></tr>
@@ -173,10 +160,17 @@ function</td></tr>
 </td>
     </tr>
     <tr>
-      <th>elements</th>
-      <td><p>list with lists defining new pages (as for analysis) or one
-of the keywords <code>data_table</code>, <code>variable_browser</code>,
-<code>analysis</code>.</p></td>
+      <th>filter</th>
+      <td><p>filter settings. Nested named list, currently with <code>init</code>
+list element.</p></td>
+    </tr>
+    <tr>
+      <th>header</th>
+      <td><p>object of class `shiny.tag` to be used as the header of the app</p></td>
+    </tr>
+    <tr>
+      <th>footer</th>
+      <td><p>object of class `shiny.tag` to be used as the footer of the app</p></td>
     </tr>
     </table>
     
@@ -187,12 +181,19 @@ of the keywords <code>data_table</code>, <code>variable_browser</code>,
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><span class='co'># NOT RUN {</span>
-<span class='no'>ASL</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='generate_sample_data.html'>generate_sample_data</a></span>(<span class='st'>'ASL'</span>)
-<span class='no'>ARS</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='generate_sample_data.html'>generate_sample_data</a></span>(<span class='st'>'ARS'</span>)
-<span class='no'>ATE</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='generate_sample_data.html'>generate_sample_data</a></span>(<span class='st'>'ATE'</span>)
+<span class='fu'>library</span>(<span class='no'>random.cdisc.data</span>)
+
+<span class='no'>ASL</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='http://www.rdocumentation.org/packages/random.cdisc.data/topics/radsl'>radsl</a></span>(<span class='kw'>seed</span> <span class='kw'>=</span> <span class='fl'>1</span>)
+<span class='no'>ARS</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='http://www.rdocumentation.org/packages/random.cdisc.data/topics/radrs'>radrs</a></span>(<span class='no'>ASL</span>, <span class='kw'>seed</span> <span class='kw'>=</span> <span class='fl'>100</span>)
+<span class='no'>ATE</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='http://www.rdocumentation.org/packages/random.cdisc.data/topics/radtte'>radtte</a></span>(<span class='no'>ASL</span>, <span class='kw'>seed</span> <span class='kw'>=</span> <span class='fl'>1000</span>)
+
+<span class='co'># for reproducibility</span>
+<span class='fu'>attr</span>(<span class='no'>ASL</span>, <span class='st'>"source"</span>) <span class='kw'>&lt;-</span> <span class='st'>"random.cdisc.data::radsl(seed = 1)"</span>
+<span class='fu'>attr</span>(<span class='no'>ARS</span>, <span class='st'>"source"</span>) <span class='kw'>&lt;-</span> <span class='st'>"random.cdisc.data::radrs(ASL, seed = 100)"</span>
+<span class='fu'>attr</span>(<span class='no'>ATE</span>, <span class='st'>"source"</span>) <span class='kw'>&lt;-</span> <span class='st'>"random.cdisc.data::radtte(ASL, seed = 1000)"</span>
 
 <span class='no'>x</span> <span class='kw'>&lt;-</span> <span class='kw pkg'>teal</span><span class='kw ns'>::</span><span class='fu'><a href='http://www.rdocumentation.org/packages/teal/topics/init'>init</a></span>(
-  <span class='kw'>data</span> <span class='kw'>=</span>  <span class='fu'>list</span>(<span class='kw'>ASL</span> <span class='kw'>=</span> <span class='no'>ASL</span>, <span class='kw'>ARS</span> <span class='kw'>=</span> <span class='no'>ARS</span>, <span class='kw'>ATE</span> <span class='kw'>=</span> <span class='no'>ATE</span>),
+  <span class='kw'>data</span> <span class='kw'>=</span> <span class='fu'>list</span>(<span class='kw'>ASL</span> <span class='kw'>=</span> <span class='no'>ASL</span>, <span class='kw'>ARS</span> <span class='kw'>=</span> <span class='no'>ARS</span>, <span class='kw'>ATE</span> <span class='kw'>=</span> <span class='no'>ATE</span>),
   <span class='kw'>modules</span> <span class='kw'>=</span> <span class='fu'><a href='root_modules.html'>root_modules</a></span>(
     <span class='fu'><a href='module.html'>module</a></span>(
       <span class='st'>"data source"</span>,
@@ -209,16 +210,17 @@ of the keywords <code>data_table</code>, <code>variable_browser</code>,
          <span class='kw'>dataname</span> <span class='kw'>=</span> <span class='st'>"ASL"</span>,
          <span class='kw'>xvar</span> <span class='kw'>=</span> <span class='st'>"SEX"</span>,
          <span class='kw'>yvar</span> <span class='kw'>=</span> <span class='st'>"RACE"</span>,
-         <span class='kw'>yvar_choices</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='st'>"RACE"</span>, <span class='st'>"AGEGR"</span>, <span class='st'>"REGION"</span>)
+         <span class='kw'>yvar_choices</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='st'>"RACE"</span>, <span class='st'>"BMRKR2"</span>, <span class='st'>"COUNTRY"</span>)
       ),
       <span class='fu'><a href='tm_scatterplot.html'>tm_scatterplot</a></span>(
          <span class='kw'>label</span> <span class='kw'>=</span> <span class='st'>"scatterplot"</span>,
          <span class='kw'>dataname</span> <span class='kw'>=</span> <span class='st'>"ASL"</span>,
          <span class='kw'>xvar</span> <span class='kw'>=</span> <span class='st'>"AGE"</span>,
-         <span class='kw'>yvar</span> <span class='kw'>=</span> <span class='st'>"BBMI"</span>,
+         <span class='kw'>yvar</span> <span class='kw'>=</span> <span class='st'>"BMRKR1"</span>,
          <span class='kw'>color_by</span> <span class='kw'>=</span> <span class='st'>"_none_"</span>,
          <span class='kw'>color_by_choices</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='st'>"_none_"</span>, <span class='st'>"STUDYID"</span>)
       ),
+      <span class='co'># ad-hoc module</span>
       <span class='fu'><a href='module.html'>module</a></span>(
          <span class='kw'>label</span> <span class='kw'>=</span> <span class='st'>"survival curves"</span>,
          <span class='kw'>server</span> <span class='kw'>=</span> <span class='kw'>function</span>(<span class='no'>input</span>, <span class='no'>output</span>, <span class='no'>session</span>, <span class='no'>datasets</span>) {},

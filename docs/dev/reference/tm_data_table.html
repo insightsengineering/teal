@@ -61,7 +61,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">teal</a>
-        <span class="label label-danger" data-toggle="tooltip" data-placement="bottom" title="In-development package">0.0.5</span>
+        <span class="label label-danger" data-toggle="tooltip" data-placement="bottom" title="In-development package">0.0.5.9000</span>
       </span>
     </div>
 
@@ -84,13 +84,13 @@
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
-      <a href="../articles/01_getting_started.html">Getting Started with Teal</a>
+      <a href="../articles/getting_started.html">Getting Started with Teal</a>
     </li>
     <li>
-      <a href="../articles/10_teal_design_and_implementation.html">Teal Design and Implementation</a>
+      <a href="../articles/teal_desiderata.html">Teal Desiderata</a>
     </li>
     <li>
-      <a href="../articles/11_teal_desiderata.html">Teal Desiderata</a>
+      <a href="../articles/teal_design_and_implementation.html">Teal Design and Implementation</a>
     </li>
   </ul>
 </li>
@@ -149,7 +149,9 @@ initially  shown for which dataset</p></td>
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'>
 </div><span class='co'># NOT RUN {</span>
-<span class='no'>ASL</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='generate_sample_data.html'>generate_sample_data</a></span>(<span class='st'>'ASL'</span>)
+<span class='fu'>library</span>(<span class='no'>random.cdisc.data</span>)
+
+<span class='no'>ASL</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='http://www.rdocumentation.org/packages/random.cdisc.data/topics/radsl'>radsl</a></span>()
 
 <span class='no'>x</span> <span class='kw'>&lt;-</span> <span class='kw pkg'>teal</span><span class='kw ns'>::</span><span class='fu'><a href='http://www.rdocumentation.org/packages/teal/topics/init'>init</a></span>(
   <span class='kw'>data</span> <span class='kw'>=</span>  <span class='fu'>list</span>(<span class='kw'>ASL</span> <span class='kw'>=</span> <span class='no'>ASL</span>),

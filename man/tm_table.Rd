@@ -11,6 +11,25 @@ tm_table(label, dataname, xvar, yvar, xvar_choices = xvar,
 \arguments{
 \item{label}{menu label}
 
+\item{dataname}{name of dataset used to generate table}
+
+\item{xvar}{variable name of x varbiable}
+
+\item{yvar}{variable name of y variable}
+
+\item{xvar_choices}{vector with variable names of possible x variables. If
+missing or identincal to \code{xvar} then the table will be fixed to the
+\code{xvar}.}
+
+\item{yvar_choices}{vector with variable names of possible y variables. If
+missing or identincal to \code{xvar} then the table will be fixed to the
+\code{yvar}.}
+
+\item{useNA}{optional pre-selected option indicating how to utilize NA in
+table display. One of \code{'ifany'}, \code{'always'}, \code{'no'}. If
+missing then \code{'ifany'} will be used. If vector then only the first
+one will be used.}
+
 \item{pre_output}{html tags appended below the output}
 
 \item{post_output}{html tags appended after the output}
@@ -21,9 +40,14 @@ Create a table with the \code{\link{table}[base]} function
 \examples{
 
 \dontrun{
+library(random.cdisc.data)
+
+ASL <- radsl(seed = 1)
+
+attr(ASL, "source") <- "random.cdisc.data::radsl(seed = 1)"
 
 x <- teal::init(
-  data = list(ASL = generate_sample_data('ASL')),
+  data = list(ASL = ASL),
   root_modules(
      tm_data_table(),
      tm_variable_browser(),

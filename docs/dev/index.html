@@ -33,7 +33,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">teal</a>
-        <span class="label label-danger" data-toggle="tooltip" data-placement="bottom" title="In-development package">0.0.5</span>
+        <span class="label label-danger" data-toggle="tooltip" data-placement="bottom" title="In-development package">0.0.5.9000</span>
       </span>
     </div>
 
@@ -56,13 +56,13 @@
   </a>
   <ul class="dropdown-menu" role="menu">
 <li>
-      <a href="articles/01_getting_started.html">Getting Started with Teal</a>
+      <a href="articles/getting_started.html">Getting Started with Teal</a>
     </li>
     <li>
-      <a href="articles/10_teal_design_and_implementation.html">Teal Design and Implementation</a>
+      <a href="articles/teal_desiderata.html">Teal Desiderata</a>
     </li>
     <li>
-      <a href="articles/11_teal_desiderata.html">Teal Desiderata</a>
+      <a href="articles/teal_design_and_implementation.html">Teal Design and Implementation</a>
     </li>
   </ul>
 </li>
@@ -104,10 +104,11 @@
 <li>
 <p>Create a new file <code>app.R</code>, and paste this code into it:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(teal)
+<span class="kw">library</span>(random.cdisc.data)
 
-ASL &lt;-<span class="st"> </span><span class="kw"><a href="reference/generate_sample_data.html">generate_sample_data</a></span>(<span class="st">'ASL'</span>)
-ARS &lt;-<span class="st"> </span><span class="kw"><a href="reference/generate_sample_data.html">generate_sample_data</a></span>(<span class="st">'ARS'</span>)
-ATE &lt;-<span class="st"> </span><span class="kw"><a href="reference/generate_sample_data.html">generate_sample_data</a></span>(<span class="st">'ATE'</span>)
+ASL &lt;-<span class="st"> </span><span class="kw">radsl</span>()
+ARS &lt;-<span class="st"> </span><span class="kw">radrs</span>(ASL)
+ATE &lt;-<span class="st"> </span><span class="kw">radtte</span>(ASL)
 
 x &lt;-<span class="st"> </span>teal<span class="op">::</span><span class="kw"><a href="http://www.rdocumentation.org/packages/teal/topics/init">init</a></span>(
   <span class="dt">data =</span>  <span class="kw">list</span>(<span class="dt">ASL =</span> ASL, <span class="dt">ARS =</span> ARS, <span class="dt">ATE =</span> ATE),
@@ -160,7 +161,7 @@ x &lt;-<span class="st"> </span>teal<span class="op">::</span><span class="kw"><
 <li>
 <p>Push this app to the shiny server (only you can access), with:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">## setwd() to location of app.R
-rocheBCE<span class="op">::</span><span class="kw"><a href="http://www.rdocumentation.org/packages/rocheBCE/topics/shinypub">shinypub</a></span>(<span class="st">"./"</span>, <span class="st">"users/your-unix-id/sample-app"</span>)</code></pre></div>
+rocheBCE<span class="op">::</span><span class="kw">shinypub</span>(<span class="st">"./"</span>, <span class="st">"users/your-unix-id/sample-app"</span>)</code></pre></div>
 </li>
 <li>
 <p>For more info, run this vignette (paste into R console and run):</p>
@@ -177,7 +178,7 @@ rocheBCE<span class="op">::</span><span class="kw"><a href="http://www.rdocument
 <p>While on the Roche network, <a href="https://r.roche.com">open R or RStudio</a> and execute the following:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># install.packages("devtools")</span>
 <span class="kw">library</span>(devtools)
-<span class="kw"><a href="http://www.rdocumentation.org/packages/devtools/topics/install_github">install_github</a></span>(
+<span class="kw">install_github</span>(
   <span class="st">'Rpackages/teal'</span>, <span class="dt">ref =</span> <span class="st">"v0.0.4"</span>,
   <span class="dt">host =</span> <span class="st">'https://github.roche.com/api/v3'</span>,
   <span class="dt">upgrade_dependencies =</span> <span class="ot">FALSE</span>,
@@ -188,7 +189,7 @@ rocheBCE<span class="op">::</span><span class="kw"><a href="http://www.rdocument
 <h2 class="hasAnchor">
 <a href="#development-version" class="anchor"></a>Development Version</h2>
 <p>Please read the <a href="https://pages.github.roche.com/Rpackages/teal/dev/">web-manual for the development version</a>. To install the development version use</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">devtools<span class="op">::</span><span class="kw"><a href="http://www.rdocumentation.org/packages/devtools/topics/install_github">install_github</a></span>(
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">devtools<span class="op">::</span><span class="kw"><a href="http://www.rdocumentation.org/packages/devtools/topics/reexports">install_github</a></span>(
   <span class="st">'Rpackages/teal'</span>, <span class="dt">ref =</span> <span class="st">"master"</span>,
   <span class="dt">host =</span> <span class="st">'https://github.roche.com/api/v3'</span>,
   <span class="dt">upgrade_dependencies =</span> <span class="ot">FALSE</span>,
@@ -215,7 +216,7 @@ vignettes(package = "teal")</code></pre>
 </li>
 <li>
 <p>The <code>teal</code> R manual pages</p>
-<pre><code><a href="http://www.rdocumentation.org/packages/devtools/topics/help">help(package = "teal")</a></code></pre>
+<pre><code>help(package = "teal")</code></pre>
 </li>
 </ol>
 </div>

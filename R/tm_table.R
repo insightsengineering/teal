@@ -1,23 +1,40 @@
-
 #' Create a simple cross-table
 #'
 #' Create a table with the \code{\link{table}[base]} function
 #'
 #' @param label menu label
+#' @param dataname name of dataset used to generate table
+#' @param xvar variable name of x varbiable
+#' @param yvar variable name of y variable
+#' @param xvar_choices vector with variable names of possible x variables. If
+#'   missing or identincal to \code{xvar} then the table will be fixed to the
+#'   \code{xvar}.
+#' @param yvar_choices vector with variable names of possible y variables. If
+#'   missing or identincal to \code{xvar} then the table will be fixed to the
+#'   \code{yvar}.
+#' @param useNA optional pre-selected option indicating how to utilize NA in
+#'   table display. One of \code{'ifany'}, \code{'always'}, \code{'no'}. If
+#'   missing then \code{'ifany'} will be used. If vector then only the first
+#'   one will be used.
 #' @param pre_output html tags appended below the output
 #' @param post_output html tags appended after the output
 #'
 #' @export
+#'
 #' @importFrom xtable xtable
 #' @importFrom xtable print.xtable
-#'
 #'
 #' @examples
 #'
 #' \dontrun{
+#' library(random.cdisc.data)
+#'
+#' ASL <- radsl(seed = 1)
+#'
+#' attr(ASL, "source") <- "random.cdisc.data::radsl(seed = 1)"
 #'
 #' x <- teal::init(
-#'   data = list(ASL = generate_sample_data('ASL')),
+#'   data = list(ASL = ASL),
 #'   root_modules(
 #'      tm_data_table(),
 #'      tm_variable_browser(),
@@ -33,10 +50,12 @@
 #' shinyApp(x$ui, x$server)
 #'
 #' }
-tm_table <- function(label, dataname, xvar, yvar,
+tm_table <- function(label,
+                     dataname,
+                     xvar, yvar,
                      xvar_choices = xvar, yvar_choices = yvar,
-                     useNA = c("ifany", "no","always"),
-                     pre_output=NULL, post_output=NULL) {
+                     useNA = c("ifany", "no", "always"),
+                     pre_output = NULL, post_output = NULL) {
 
   args <- as.list(environment())
 
@@ -82,8 +101,9 @@ ui_table <- function(id, label, dataname, xvar, yvar,
 
 }
 
-srv_table <- function(input, output, session, datasets, dataname) {
 
+#' @import stats
+srv_table <- function(input, output, session, datasets, dataname) {
 
   output$table <- renderTable({
 
