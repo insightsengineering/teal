@@ -19,6 +19,8 @@ optionalSliderInput(inputId, label, min, max, value, ...)
 will create a regular slider; a numeric vector of length two will create a
 double-ended range slider. A warning will be issued if the value doesn't
 fit between \code{min} and \code{max}.}
+
+\item{...}{optional arguments to \code{sliderInput}}
 }
 \description{
 Hidden input widgets are useful to have the \code{input[[inputId]]} variable

@@ -61,7 +61,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">teal</a>
-        <span class="label label-danger" data-toggle="tooltip" data-placement="bottom" title="In-development package">0.0.5</span>
+        <span class="label label-danger" data-toggle="tooltip" data-placement="bottom" title="In-development package">0.0.5.9000</span>
       </span>
     </div>
 
@@ -84,13 +84,13 @@
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
-      <a href="../articles/01_getting_started.html">Getting Started with Teal</a>
+      <a href="../articles/getting_started.html">Getting Started with Teal</a>
     </li>
     <li>
-      <a href="../articles/10_teal_design_and_implementation.html">Teal Design and Implementation</a>
+      <a href="../articles/teal_desiderata.html">Teal Desiderata</a>
     </li>
     <li>
-      <a href="../articles/11_teal_desiderata.html">Teal Desiderata</a>
+      <a href="../articles/teal_design_and_implementation.html">Teal Design and Implementation</a>
     </li>
   </ul>
 </li>
@@ -140,6 +140,10 @@
     <tr>
       <th>label</th>
       <td><p>label shown in the navigation for the item</p></td>
+    </tr>
+    <tr>
+      <th>dataname</th>
+      <td><p>name of dataset used to generate table</p></td>
     </tr>
     <tr>
       <th>xvar</th>
@@ -210,20 +214,29 @@ output to put the output into context. For example the
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'>
 </div><span class='co'># NOT RUN {</span>
+<span class='fu'>library</span>(<span class='no'>random.cdisc.data</span>)
+
+<span class='no'>ASL</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='http://www.rdocumentation.org/packages/random.cdisc.data/topics/radsl'>radsl</a></span>(<span class='kw'>seed</span> <span class='kw'>=</span> <span class='fl'>1</span>)
+<span class='no'>AAE</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='http://www.rdocumentation.org/packages/random.cdisc.data/topics/radae'>radae</a></span>(<span class='no'>ASL</span>, <span class='kw'>seed</span> <span class='kw'>=</span> <span class='fl'>99</span>)
+
+<span class='co'># for reproducibility</span>
+<span class='fu'>attr</span>(<span class='no'>ASL</span>, <span class='st'>"source"</span>) <span class='kw'>&lt;-</span> <span class='st'>"random.cdisc.data::radsl(seed = 1)"</span>
+<span class='fu'>attr</span>(<span class='no'>AAE</span>, <span class='st'>"source"</span>) <span class='kw'>&lt;-</span> <span class='st'>"random.cdisc.data::radae(ASL, seed = 99)"</span>
+
 <span class='no'>x</span> <span class='kw'>&lt;-</span> <span class='kw pkg'>teal</span><span class='kw ns'>::</span><span class='fu'><a href='http://www.rdocumentation.org/packages/teal/topics/init'>init</a></span>(
-  <span class='kw'>data</span> <span class='kw'>=</span> <span class='fu'>list</span>(<span class='kw'>ASL</span> <span class='kw'>=</span> <span class='fu'><a href='generate_sample_data.html'>generate_sample_data</a></span>(<span class='st'>'ASL'</span>),
-              <span class='kw'>AAE</span> <span class='kw'>=</span> <span class='fu'><a href='generate_sample_data.html'>generate_sample_data</a></span>(<span class='st'>'AAE'</span>)),
+  <span class='kw'>data</span> <span class='kw'>=</span> <span class='fu'>list</span>(<span class='kw'>ASL</span> <span class='kw'>=</span> <span class='no'>ASL</span>,
+              <span class='kw'>AAE</span> <span class='kw'>=</span> <span class='no'>AAE</span>),
   <span class='fu'><a href='root_modules.html'>root_modules</a></span>(
      <span class='fu'><a href='tm_data_table.html'>tm_data_table</a></span>(),
      <span class='fu'><a href='tm_variable_browser.html'>tm_variable_browser</a></span>(),
      <span class='fu'>tm_scatterplot</span>(<span class='st'>"Scatterplot Choices"</span>,
                     <span class='kw'>dataname</span> <span class='kw'>=</span> <span class='st'>'AAE'</span>,
-                    <span class='kw'>xvar</span> <span class='kw'>=</span> <span class='st'>'AESDY'</span>, <span class='kw'>yvar</span> <span class='kw'>=</span> <span class='st'>'AEEDY'</span>, <span class='kw'>xvar_choices</span> <span class='kw'>=</span>  <span class='fu'>c</span>(<span class='st'>'AESDY'</span>,  <span class='st'>'AEEDY'</span>),
-                    <span class='kw'>color_by</span> <span class='kw'>=</span> <span class='st'>"_none_"</span>, <span class='kw'>color_by_choices</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='st'>"_none_"</span>, <span class='st'>"AESTMF"</span>, <span class='st'>"ANLFL"</span>)
+                    <span class='kw'>xvar</span> <span class='kw'>=</span> <span class='st'>'AEDECOD'</span>, <span class='kw'>yvar</span> <span class='kw'>=</span> <span class='st'>'AETOXGR'</span>, <span class='kw'>xvar_choices</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='st'>'AEDECOD'</span>, <span class='st'>'AETOXGR'</span>),
+                    <span class='kw'>color_by</span> <span class='kw'>=</span> <span class='st'>"_none_"</span>, <span class='kw'>color_by_choices</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='st'>"_none_"</span>, <span class='st'>"AEBODSYS"</span>)
      ),
      <span class='fu'>tm_scatterplot</span>(<span class='st'>"Scatterplot No Color Choices"</span>,
                     <span class='kw'>dataname</span> <span class='kw'>=</span> <span class='st'>'ASL'</span>,
-                    <span class='kw'>xvar</span> <span class='kw'>=</span> <span class='st'>'AGE'</span>, <span class='kw'>yvar</span> <span class='kw'>=</span> <span class='st'>'TRTDUR'</span>, <span class='kw'>size</span> <span class='kw'>=</span> <span class='fl'>3</span>, <span class='kw'>alpha</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>plot_height</span><span class='kw'>=</span><span class='fl'>600</span>
+                    <span class='kw'>xvar</span> <span class='kw'>=</span> <span class='st'>'AGE'</span>, <span class='kw'>yvar</span> <span class='kw'>=</span> <span class='st'>'BMRKR1'</span>, <span class='kw'>size</span> <span class='kw'>=</span> <span class='fl'>3</span>, <span class='kw'>alpha</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>plot_height</span> <span class='kw'>=</span> <span class='fl'>600</span>
      )
   )
 )

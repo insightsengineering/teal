@@ -33,10 +33,11 @@ app][shiny_single_file_app].
 
 ```{r, eval=FALSE} 
 library(teal)
+library(random.cdisc.data)
 
-ASL <- generate_sample_data('ASL')
-ARS <- generate_sample_data('ARS')
-ATE <- generate_sample_data('ATE')
+ASL <- radsl()
+ARS <- radrs(ASL)
+ATE <- radtte(ASL)
 
 x <- teal::init(
   data =  list(ASL = ASL, ARS = ARS, ATE = ATE),
@@ -62,7 +63,7 @@ x <- teal::init(
         label = "scatterplot",
         dataname = "ASL",
         xvar = "AGE",
-        yvar = "BBMI",
+        yvar = "BMRKR1",
         color_by = "_none_",
         color_by_choices = c("_none_", "STUDYID")
       ),

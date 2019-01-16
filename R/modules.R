@@ -1,9 +1,9 @@
-
-
 #' Create a collection of \code{module} and \code{modules} object
 #'
 #' Modules collects a tree of \code{\link{module}} and \code{\link{modules}}
 #' objects. This is useful to define the navigation structure of a teal app.
+#'
+#' @import methods
 #'
 #' @param label label of modules collection
 #' @param ... \code{\link{module}} and \code{\link{modules}} object
@@ -82,8 +82,9 @@ module <- function(label, server, ui, filters, server_args=NULL, ui_args=NULL) {
 }
 
 
+#' @import methods
 # check that modules has not more than depth 2
-# m <- module("aaa", server=NULL, ui=NULL, filters=NULL)
+# m <- module("aaa", server = NULL, ui = NULL, filters = NULL)
 # x <- modules(
 #   "d1",
 #   modules(
@@ -104,6 +105,7 @@ module <- function(label, server, ui, filters, server_args=NULL, ui_args=NULL) {
 #   ),
 #   m
 # )
+#
 # modules_depth(x)
 modules_depth <- function(x, depth = 0) {
   children_depth <- if (is(x, "teal_modules")) {
@@ -123,9 +125,7 @@ label_to_id <- function(label, prefix = NULL) {
 }
 
 
-#
 # somehow unexported S3 methods do not work as expected
-#
 create_ui <- function(x, datasets, idprefix, is_root = FALSE) {
   switch(
     class(x),

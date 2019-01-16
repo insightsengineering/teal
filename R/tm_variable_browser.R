@@ -1,4 +1,3 @@
-
 #' Variable Browser Teal Module
 #'
 #' The variable browser provides a table with variable names and labels and a
@@ -20,8 +19,8 @@ tm_variable_browser <- function(label = "variable browser") {
 
 
 
-## ui function
-
+#' @import stats
+# ui function
 ui_page_variable_browser <- function(id, datasets) {
 
   ns <- NS(id)
@@ -70,7 +69,7 @@ ui_page_variable_browser <- function(id, datasets) {
 
 
 ## server function
-
+#' @import utils
 srv_page_variable_browser <- function(input, output, session, datasets) {
 
 

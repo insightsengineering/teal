@@ -1,5 +1,6 @@
 #' Show R Code Modal
 #'
+#' @param title modal title
 #' @param rcode character string with R code
 #'
 #' @export

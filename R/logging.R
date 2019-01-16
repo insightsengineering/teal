@@ -1,5 +1,3 @@
-
-
 .log_depth <- 0
 
 # Teal Internally Used Logger functions

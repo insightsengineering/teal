@@ -11,14 +11,7 @@ init(data, modules, filter = NULL, header = tags$p("title here"),
 \item{data}{named list with datasets. Dataset names are case sensitive. The
 `ASL` data is mandatory.}
 
-\item{filter}{filter settings. Nested named list, currently with \code{init}
-list element.}
-
-\item{header}{object of class `shiny.tag` to be used as the header of the app}
-
-\item{footer}{object of class `shiny.tag` to be used as the footer of the app}
-
-\item{analysis}{nested list with one list per analysis item with the
+\item{modules}{nested list with one list per module with the
 following named list elements: \tabular{ll}{ name \tab string with name
 shown in menu for the analysis item \cr server \tab required, shiny server
 module function, see \code{\link[shiny]{callModule}} for more
@@ -28,9 +21,12 @@ vector with datasets names that are passed on (filtered) to the server
 function\cr options \tab optional, other arguments passed on to the server
 function }}
 
-\item{elements}{list with lists defining new pages (as for analysis) or one
-of the keywords \code{data_table}, \code{variable_browser},
-\code{analysis}.}
+\item{filter}{filter settings. Nested named list, currently with \code{init}
+list element.}
+
+\item{header}{object of class `shiny.tag` to be used as the header of the app}
+
+\item{footer}{object of class `shiny.tag` to be used as the footer of the app}
 }
 \value{
 named list with server and ui function
@@ -40,12 +36,19 @@ Creates the server and ui part for a teal shiny app
 }
 \examples{
 \dontrun{
-ASL <- generate_sample_data('ASL')
-ARS <- generate_sample_data('ARS')
-ATE <- generate_sample_data('ATE')
+library(random.cdisc.data)
+
+ASL <- radsl(seed = 1)
+ARS <- radrs(ASL, seed = 100)
+ATE <- radtte(ASL, seed = 1000)
+
+# for reproducibility
+attr(ASL, "source") <- "random.cdisc.data::radsl(seed = 1)"
+attr(ARS, "source") <- "random.cdisc.data::radrs(ASL, seed = 100)"
+attr(ATE, "source") <- "random.cdisc.data::radtte(ASL, seed = 1000)"
 
 x <- teal::init(
-  data =  list(ASL = ASL, ARS = ARS, ATE = ATE),
+  data = list(ASL = ASL, ARS = ARS, ATE = ATE),
   modules = root_modules(
     module(
       "data source",
@@ -62,16 +65,17 @@ x <- teal::init(
          dataname = "ASL",
          xvar = "SEX",
          yvar = "RACE",
-         yvar_choices = c("RACE", "AGEGR", "REGION")
+         yvar_choices = c("RACE", "BMRKR2", "COUNTRY")
       ),
       tm_scatterplot(
          label = "scatterplot",
          dataname = "ASL",
          xvar = "AGE",
-         yvar = "BBMI",
+         yvar = "BMRKR1",
          color_by = "_none_",
          color_by_choices = c("_none_", "STUDYID")
       ),
+      # ad-hoc module
       module(
          label = "survival curves",
          server = function(input, output, session, datasets) {},

@@ -1,5 +1,3 @@
-
-
 ui_add_filter_variable <- function(id, dataname) {
 
   ns <- NS(id)

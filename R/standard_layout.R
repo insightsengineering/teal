@@ -1,6 +1,3 @@
-
-
-
 #' Create a standard ui layout with output on the right and an encoding panel on
 #' the left
 #'
@@ -24,9 +21,12 @@
 #'
 #' @export
 #'
+#' @import methods
+#'
 #' @examples
 #'
 #' \dontrun{
+#' library(random.cdisc.data)
 #'
 #' ui_test <- function(id) {
 #'  ns <- NS(id)
@@ -42,7 +42,7 @@
 #'  )
 #' }
 #'
-#' srv_test <- function(input, output, session) {
+#' srv_test <- function(input, output, session, datasets) {
 #'    output$plot <- renderPlot({
 #'       with(iris, plot(Sepal.Length, Petal.Length, col = Species))
 #'    })
@@ -62,14 +62,14 @@
 #'  )
 #' }
 #'
-#' srv_test2 <- function(input, output, session) {
+#' srv_test2 <- function(input, output, session, datasets) {
 #'    output$plot <- renderPlot({
 #'       with(iris, plot(Sepal.Length, Petal.Length, col = Species))
 #'    })
 #' }
 #'
 #' x <- teal::init(
-#'    data = list(ASL = generate_sample_data('ASL')),
+#'    data = list(ASL = radsl()),
 #'    modules = root_modules(
 #'       module(
 #'          "example",

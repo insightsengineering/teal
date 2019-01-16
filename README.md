@@ -17,10 +17,11 @@ modules](https://shiny.rstudio.com/articles/modules.html).
 
 	```r
 	library(teal)
+	library(random.cdisc.data)
 		
-	ASL <- generate_sample_data('ASL')
-	ARS <- generate_sample_data('ARS')
-	ATE <- generate_sample_data('ATE')
+	ASL <- radsl()
+	ARS <- radrs(ASL)
+	ATE <- radtte(ASL)
 	
 	x <- teal::init(
 	  data =  list(ASL = ASL, ARS = ARS, ATE = ATE),
