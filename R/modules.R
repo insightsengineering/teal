@@ -120,8 +120,13 @@ modules_depth <- function(x, depth = 0) {
 
 # turns a label into a valid html id
 label_to_id <- function(label, prefix = NULL) {
-  x <- gsub("[[:space:]]+", "_", label)
-  if (!is.null(prefix)) paste(prefix, x , sep=".") else x
+  label <- gsub("^_|_$", '', gsub("[^[:alnum:]]", "_", label))
+  if (!is.null(prefix)) {
+    prefix <- gsub("^_|_$", '', gsub("[^[:alnum:]]", "_", prefix))
+    paste(prefix, label , sep=".")
+  } else {
+    label
+  }
 }
 
 

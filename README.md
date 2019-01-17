@@ -23,6 +23,10 @@ modules](https://shiny.rstudio.com/articles/modules.html).
 	ARS <- radrs(ASL)
 	ATE <- radtte(ASL)
 	
+	attr(ASL, "source") <- "random.cdisc.data::radsl()"
+	attr(ARS, "source") <- "random.cdisc.data::radrs(ASL)"
+	attr(ATE, "source") <- "random.cdisc.data::radtte(ASL)"
+	
 	x <- teal::init(
 	  data =  list(ASL = ASL, ARS = ARS, ATE = ATE),
 	  modules = root_modules(
