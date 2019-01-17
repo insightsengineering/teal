@@ -48,8 +48,8 @@ srv_filter_items <- function(input, output, session, datasets, dataname, contain
         fi <- datasets$get_filter_info(dataname, var)
         fs <- datasets$get_filter_state(dataname, var)
 
-        id <- paste0("var_",var)
-        id_rm <- paste0("rm_", var)
+        id <- paste0("var_", label_to_id(var))
+        id_rm <- paste0("rm_", label_to_id(var))
 
         varlabel <- tagList(tags$span(paste0(dataname,".", var)), actionLink(ns(id_rm), "remove", style="font-weight:normal;"))
 
