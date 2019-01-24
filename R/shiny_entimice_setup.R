@@ -1,26 +1,60 @@
-#' Create page to collect username/password to pass to SAICE during entimICE connection
+#' Creates page to collect username/password to pass to SAICE during entimICE connection
 #' 
-#' Helpful for shiny app on BEE server that requires entimICE data
+#' Helpful for shiny app on BEE server that requires entimICE data. When developing and testing shiny apps locally, please do not run shiny_entimice_setup(). It is best to add when ready to publish.
 #' 
-#' @param
+#' @author Jennifer Li \email{lij201@gene.com}
+#' 
+#' @references \url{https://en.wikipedia.org/wiki/List_of_Crayola_crayon_colors}
+#' 
+#' @param url string of the url link to the main shiny app. The defaul value is blank, meaning the url will be automatically determined by parsing the directory of main shiny app.
+#' 
+#' @return The success or failure of entimICE connection, and automatically redirect to the main shiny app page.
 #' 
 #' @importFrom shiny shinyApp
 #' @export
 #' 
 #' @examples 
-#' \dontrun{
+#' \dontrun
+#' {
+#' #install the branch that enables interactive password entering in shiny
+#' #devtools::install_github(
+      #repo = 'Rpackages/SAICE', 
+      #host = 'https://github.roche.com/api/v3',
+      #ref = "shiny_passwordInput_SAICE",
+      #force = TRUE
+   #)
+#' 
 #' shiny_entimice_setup()
+#' shiny_entimice_setup("shiny.roche.com/drug/ro5541267/go29537/SREP/")
+#' # data_path <- "root/clinical_studies/RO5541267/CDT30018/GO29437/data_analysis/Final_OS/qa/outdata_vad"
+#' # ASL <- SAICE::get_entimice(file.path(data_path, "aslpd.sas7bdat"))
+#' # vads_list = read_entimice(data_path)
+#' # list2env(vads_list, envir = environment())
+#' # ARS <- ars
+#' # ATE <- ate
 #' }
 #' 
 
-
-shiny_entimice_setup <- function() {
+shiny_entimice_setup <- function(url="") {
+  if (!dir.exists("~/key_pass_sso")) {
   library(SAICE)
+  
+  #get the url of current app by looking for patterns in the directory
+  wd <- getwd()
+  if (grepl('\\/srv\\/shiny-server',wd,perl=T)) {
+    link <- gsub('\\/srv\\/shiny\\-server', "shiny.roche.com", wd)
+  } else {
+    link <- ""
+  }
+  
+  if (nchar(url)<3){
+    url <- link
+  }
   
   shinyApp(
     ui = function() {
       fixedPage(
-        div(
+        div(id="login",
           class="jumbotron",
           tags$h1("Setup User Access for entimICE"),
           tags$p("Please enter your username and password in order to initialize your entimice access.",
@@ -31,7 +65,8 @@ shiny_entimice_setup <- function() {
             passwordInput("pass", "Password"),
             actionButton("submit", "submit")
           )
-        )
+        ),
+        uiOutput("reload")
       )
     }, 
     server = function(input, output, session) {
@@ -55,10 +90,16 @@ shiny_entimice_setup <- function() {
           updateTextInput(session, "pass", value = "")
         }
         else{
-          next
+          removeUI(
+            selector = "div#login"
+          )
+          output$reload<-renderUI({
+            tags$p("entimICE connected successfully!",
+                   tags$a(href = url, "Click to reload."))
+          })
         }
       })
     }
   )
-  
+}  
 } 
