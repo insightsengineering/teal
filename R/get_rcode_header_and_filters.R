@@ -1,4 +1,4 @@
-#' @title Generates header text for analysis items
+#' Generates header text for analysis items
 #'
 #' @param title A character title of the module
 #' @param description A character description of the module with additional
@@ -102,7 +102,7 @@ get_rcode_header <- function(title, description = NULL, libraries = NULL, git_re
 
 }
 
-#' @title Generates text for the code to filter datasets
+#' Generates text for the code to filter datasets
 #'
 #' @param datanames vector with data names
 #' @param datasets datasets object

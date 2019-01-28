@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Hide, Show Label only or display a selectInput — optionalSelectInput • teal</title>
+<title>Check if an object is a choices_selected class. — is.choices_selected • teal</title>
 
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script>
@@ -30,12 +30,9 @@
 
 
 
-<meta property="og:title" content="Hide, Show Label only or display a selectInput — optionalSelectInput" />
+<meta property="og:title" content="Check if an object is a choices_selected class. — is.choices_selected" />
 
-<meta property="og:description" content="Hide, Show Label only or display a selectInput
-Hidden input widgets are useful to have the input[[inputId]] variable
-on available in the server funciont but no corresponding visual clutter from
-input widgets that provide only a single choice." />
+<meta property="og:description" content="Check if an object is a choices_selected class." />
 <meta name="twitter:card" content="summary" />
 
 <meta name="robots" content="noindex">
@@ -121,94 +118,35 @@ input widgets that provide only a single choice." />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Hide, Show Label only or display a selectInput</h1>
+    <h1>Check if an object is a choices_selected class.</h1>
     
-    <div class="hidden name"><code>optionalSelectInput.Rd</code></div>
+    <div class="hidden name"><code>is.choices_selected.Rd</code></div>
     </div>
 
     <div class="ref-description">
     
-    <p>Hide, Show Label only or display a selectInput</p>
-<p>Hidden input widgets are useful to have the <code>input[[inputId]]</code> variable
-on available in the server funciont but no corresponding visual clutter from
-input widgets that provide only a single choice.</p>
+    <p>Check if an object is a choices_selected class.</p>
     
     </div>
 
-    <pre class="usage"><span class='fu'>optionalSelectInput</span>(<span class='no'>inputId</span>, <span class='no'>label</span>, <span class='no'>choices</span>, <span class='no'>selected</span>, <span class='no'>...</span>, <span class='kw'>label_help</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)</pre>
+    <pre class="usage"><span class='fu'>is.choices_selected</span>(<span class='no'>x</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>inputId</th>
-      <td><p>The <code>input</code> slot that will be used to access the value.</p></td>
-    </tr>
-    <tr>
-      <th>label</th>
-      <td><p>Display label for the control, or <code>NULL</code> for no label.</p></td>
-    </tr>
-    <tr>
-      <th>choices</th>
-      <td><p>character vector or <code>NULL</code>. If <code>choices</code> is
-<code>NULL</code> no selectInput widget is displayed and <code>input[[inputId]]</code>
-will be <code>""</code>. If <code>choices</code> is of length 1 then a label and
-character string will be displayed and the selectInput widget will be
-hidden. If the length of <code>choices</code> is more than one the selectInput
-element will be displayed.</p></td>
-    </tr>
-    <tr>
-      <th>selected</th>
-      <td><p>The initially selected value (or multiple values if
-<code>multiple = TRUE</code>). If not specified then defaults to the first value
-for single-select lists and no values for multiple select lists.</p></td>
-    </tr>
-    <tr>
-      <th>...</th>
-      <td><p>Arguments passed to <code>selectInput()</code>.</p></td>
-    </tr>
-    <tr>
-      <th>label_help</th>
-      <td><p>optional an object of class <code>shiny.tag</code>. E.g. an object
-returned by <code><a href='http://www.rdocumentation.org/packages/shiny/topics/helpText'>helpText</a></code></p></td>
+      <th>x</th>
+      <td><p>object to check</p></td>
     </tr>
     </table>
     
 
-    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'>
-<span class='fu'>optionalSelectInput</span>(<span class='st'>"xvar"</span>, <span class='st'>"x variable"</span>, <span class='st'>'A'</span>, <span class='st'>'A'</span>)</div><div class='output co'>#&gt; &lt;div&gt;
-#&gt;   &lt;div class="form-group shiny-input-container hidden"&gt;
-#&gt;     &lt;label class="control-label" for="xvar"&gt;x variable&lt;/label&gt;
-#&gt;     &lt;div&gt;
-#&gt;       &lt;select id="xvar"&gt;&lt;option value="A" selected&gt;A&lt;/option&gt;&lt;/select&gt;
-#&gt;       &lt;script type="application/json" data-for="xvar" data-nonempty=""&gt;{}&lt;/script&gt;
-#&gt;     &lt;/div&gt;
-#&gt;   &lt;/div&gt;
-#&gt;   &lt;span&gt;
-#&gt;     &lt;label&gt;x variable:&lt;/label&gt;
-#&gt;     A
-#&gt;   &lt;/span&gt;
-#&gt; &lt;/div&gt;</div><div class='input'><span class='fu'>optionalSelectInput</span>(<span class='st'>"xvar"</span>, <span class='st'>"x variable"</span>, <span class='no'>LETTERS</span>[<span class='fl'>1</span>:<span class='fl'>5</span>], <span class='st'>'A'</span>)</div><div class='output co'>#&gt; &lt;div class="form-group shiny-input-container"&gt;
-#&gt;   &lt;label class="control-label" for="xvar"&gt;x variable&lt;/label&gt;
-#&gt;   &lt;div&gt;
-#&gt;     &lt;select id="xvar"&gt;&lt;option value="A" selected&gt;A&lt;/option&gt;
-#&gt; &lt;option value="B"&gt;B&lt;/option&gt;
-#&gt; &lt;option value="C"&gt;C&lt;/option&gt;
-#&gt; &lt;option value="D"&gt;D&lt;/option&gt;
-#&gt; &lt;option value="E"&gt;E&lt;/option&gt;&lt;/select&gt;
-#&gt;     &lt;script type="application/json" data-for="xvar" data-nonempty=""&gt;{}&lt;/script&gt;
-#&gt;   &lt;/div&gt;
-#&gt; &lt;/div&gt;</div><div class='input'>
-</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
       <li><a href="#arguments">Arguments</a></li>
-            
-      <li><a href="#examples">Examples</a></li>
-    </ul>
+                </ul>
 
   </div>
 </div>
