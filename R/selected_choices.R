@@ -2,6 +2,8 @@ no_select_keyword <- "-- no selection --"
 
 #' Choices function
 #'
+#' @param choices vector of possible choices
+#' @param selected vector of pre-selected options, first element of \code{choices} if blank
 #'
 #' @export
 #'
@@ -11,7 +13,6 @@ no_select_keyword <- "-- no selection --"
 #'    choices = setNames(LETTERS[1:5], paste("Letter", LETTERS[1:5])),
 #'    selected = "X"
 #' )
-#'
 #'
 choices_selected <- function(choices, selected = choices[1]) {
 
@@ -33,6 +34,10 @@ choices_selected <- function(choices, selected = choices[1]) {
   )
 }
 
+#' Check if an object is a choices_selected class.
+#'
+#' @param x object to check
+#'
 #' @export
 is.choices_selected <- function(x) is(x, "choices_selected")
 

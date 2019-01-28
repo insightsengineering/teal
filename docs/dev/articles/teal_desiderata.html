@@ -89,7 +89,7 @@
       <h1>Teal Desiderata</h1>
                         <h4 class="author">Adrian Waddell</h4>
             
-            <h4 class="date">2019-01-15</h4>
+            <h4 class="date">2019-01-28</h4>
       
       
       <div class="hidden name"><code>teal_desiderata.Rmd</code></div>
@@ -229,7 +229,7 @@ ANL &lt;-<span class="st"> </span>ATE_filtered <span class="op">%&gt;%</span>
 <span class="st">          </span><span class="kw">filter</span>(ITTFL <span class="op">==</span><span class="st"> 'Y'</span>, PARAMCD <span class="op">==</span><span class="st"> 'OS'</span>)
 
 p &lt;-<span class="st"> </span><span class="kw">p_km</span>(
-  <span class="dt">formula =</span> <span class="kw">Surv</span>(AVAL, <span class="op">!</span>CNSR) <span class="op">~</span><span class="st"> </span>ARM <span class="op">+</span><span class="st"> </span><span class="kw">strata</span>(ECOG, BAGE),
+  <span class="dt">formula =</span> <span class="kw"><a href="http://www.rdocumentation.org/packages/survival/topics/Surv">Surv</a></span>(AVAL, <span class="op">!</span>CNSR) <span class="op">~</span><span class="st"> </span>ARM <span class="op">+</span><span class="st"> </span><span class="kw"><a href="http://www.rdocumentation.org/packages/survival/topics/strata">strata</a></span>(ECOG, BAGE),
   <span class="dt">data =</span> ANL
 )</code></pre></div>
 <p>Also note that the reproducible code should not depend on teal.</p>
