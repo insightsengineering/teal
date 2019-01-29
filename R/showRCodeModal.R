@@ -11,10 +11,14 @@ showRCodeModal <- function(title, rcode) {
 
 
   showModal(modalDialog(
+    tags$pre(id = "r_code", rcode),
     title = title,
-    tags$pre(tags$code(class="R", rcode)),
-    easyClose = TRUE,
-    size = "l"
+    footer = tagList(
+      actionButton('copyRCode', 'Copy to Clipboard', `data-clipboard-target` = "#r_code"),
+      modalButton("Dissmiss")
+    ),
+    size = "l",
+    easyClose = TRUE
   ))
 
 }

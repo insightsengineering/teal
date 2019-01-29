@@ -2,7 +2,8 @@
 
 * Removed deprecated functions `tab*`
 * Removed data generation functions including `generate_sample_data`
-* 
+* Incorporate `shinyjs` package
+* Added "Copy R code to clipboard" button
 
 # teal 0.0.5
 

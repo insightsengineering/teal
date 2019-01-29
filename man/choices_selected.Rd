@@ -6,6 +6,11 @@
 \usage{
 choices_selected(choices, selected = choices[1])
 }
+\arguments{
+\item{choices}{vector of possible choices}
+
+\item{selected}{vector of pre-selected options, first element of \code{choices} if blank}
+}
 \description{
 Choices function
 }
@@ -15,6 +20,5 @@ choices_selected(
    choices = setNames(LETTERS[1:5], paste("Letter", LETTERS[1:5])),
    selected = "X"
 )
-
 
 }

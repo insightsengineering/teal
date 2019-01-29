@@ -25,7 +25,8 @@ Imports:
     grid,
     whisker,
     haven,
-    tibble
+    tibble,
+    shinyjs
 RoxygenNote: 6.1.1
 Suggests:
     testthat,
