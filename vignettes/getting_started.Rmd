@@ -37,7 +37,7 @@ library(random.cdisc.data)
 
 ASL <- radsl()
 ARS <- radrs(ASL)
-ATE <- radte(ASL)
+ATE <- radtte(ASL)
 
 x <- teal::init(
   data =  list(ASL = ASL, ARS = ARS, ATE = ATE),

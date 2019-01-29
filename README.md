@@ -21,7 +21,7 @@ modules](https://shiny.rstudio.com/articles/modules.html).
 		
 	ASL <- radsl()
 	ARS <- radrs(ASL)
-	ATE <- radte(ASL)
+	ATE <- radtte(ASL)
 	
 	attr(ASL, "source") <- "random.cdisc.data::radsl()"
 	attr(ARS, "source") <- "random.cdisc.data::radrs(ASL)"

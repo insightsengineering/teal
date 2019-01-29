@@ -40,12 +40,12 @@ library(random.cdisc.data)
 
 ASL <- radsl(seed = 1)
 ARS <- radrs(ASL, seed = 100)
-ATE <- radte(ASL, seed = 1000)
+ATE <- radtte(ASL, seed = 1000)
 
 # for reproducibility
 attr(ASL, "source") <- "random.cdisc.data::radsl(seed = 1)"
 attr(ARS, "source") <- "random.cdisc.data::radrs(ASL, seed = 100)"
-attr(ATE, "source") <- "random.cdisc.data::radte(ASL, seed = 1000)"
+attr(ATE, "source") <- "random.cdisc.data::radtte(ASL, seed = 1000)"
 
 x <- teal::init(
   data = list(ASL = ASL, ARS = ARS, ATE = ATE),

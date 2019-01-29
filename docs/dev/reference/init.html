@@ -185,12 +185,12 @@ list element.</p></td>
 
 <span class='no'>ASL</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='http://www.rdocumentation.org/packages/random.cdisc.data/topics/radsl'>radsl</a></span>(<span class='kw'>seed</span> <span class='kw'>=</span> <span class='fl'>1</span>)
 <span class='no'>ARS</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='http://www.rdocumentation.org/packages/random.cdisc.data/topics/radrs'>radrs</a></span>(<span class='no'>ASL</span>, <span class='kw'>seed</span> <span class='kw'>=</span> <span class='fl'>100</span>)
-<span class='no'>ATE</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='http://www.rdocumentation.org/packages/random.cdisc.data/topics/radte'>radte</a></span>(<span class='no'>ASL</span>, <span class='kw'>seed</span> <span class='kw'>=</span> <span class='fl'>1000</span>)
+<span class='no'>ATE</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='http://www.rdocumentation.org/packages/random.cdisc.data/topics/radtte'>radtte</a></span>(<span class='no'>ASL</span>, <span class='kw'>seed</span> <span class='kw'>=</span> <span class='fl'>1000</span>)
 
 <span class='co'># for reproducibility</span>
 <span class='fu'>attr</span>(<span class='no'>ASL</span>, <span class='st'>"source"</span>) <span class='kw'>&lt;-</span> <span class='st'>"random.cdisc.data::radsl(seed = 1)"</span>
 <span class='fu'>attr</span>(<span class='no'>ARS</span>, <span class='st'>"source"</span>) <span class='kw'>&lt;-</span> <span class='st'>"random.cdisc.data::radrs(ASL, seed = 100)"</span>
-<span class='fu'>attr</span>(<span class='no'>ATE</span>, <span class='st'>"source"</span>) <span class='kw'>&lt;-</span> <span class='st'>"random.cdisc.data::radte(ASL, seed = 1000)"</span>
+<span class='fu'>attr</span>(<span class='no'>ATE</span>, <span class='st'>"source"</span>) <span class='kw'>&lt;-</span> <span class='st'>"random.cdisc.data::radtte(ASL, seed = 1000)"</span>
 
 <span class='no'>x</span> <span class='kw'>&lt;-</span> <span class='kw pkg'>teal</span><span class='kw ns'>::</span><span class='fu'><a href='http://www.rdocumentation.org/packages/teal/topics/init'>init</a></span>(
   <span class='kw'>data</span> <span class='kw'>=</span> <span class='fu'>list</span>(<span class='kw'>ASL</span> <span class='kw'>=</span> <span class='no'>ASL</span>, <span class='kw'>ARS</span> <span class='kw'>=</span> <span class='no'>ARS</span>, <span class='kw'>ATE</span> <span class='kw'>=</span> <span class='no'>ATE</span>),
