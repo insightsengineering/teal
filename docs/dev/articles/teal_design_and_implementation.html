@@ -115,18 +115,18 @@
 <a href="#shiny-basics" class="anchor"></a>Shiny Basics</h1>
 <p>Shiny apps have the following two main components: the <code>server</code> function and an <code>ui</code> object. The <code>ui</code> object is a representation of the <code>html</code> for the webpage and the <code>server</code> function provides the logic to modify the html code. Hence, a minimal shiny app with no server logic is as follows:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(shiny)
-<span class="kw">shinyApp</span>(
-  <span class="dt">ui =</span> tags<span class="op">$</span><span class="kw">p</span>(<span class="st">"Hello World"</span>),
+<span class="kw"><a href="http://www.rdocumentation.org/packages/shiny/topics/shinyApp">shinyApp</a></span>(
+  <span class="dt">ui =</span> tags<span class="op">$</span><span class="kw"><a href="http://www.rdocumentation.org/packages/shiny/topics/builder">p</a></span>(<span class="st">"Hello World"</span>),
   <span class="dt">server =</span> <span class="cf">function</span>(input, output, session) {}
 )</code></pre></div>
 <p>You can paste this code to the <code>R</code> command line which will initialize the shiny app. <code>shiny</code> provides a <a href="https://shiny.rstudio.com/articles/reactivity-overview.html">reactivity programming model</a> to update and get information from the ui:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">shinyApp</span>(
-  <span class="dt">ui =</span> <span class="kw">fluidPage</span>( 
-    <span class="kw">selectInput</span>(<span class="dt">inputId =</span> <span class="st">"select_data"</span>, <span class="dt">label =</span> <span class="st">"select data"</span>, <span class="dt">choices =</span> <span class="kw">c</span>(<span class="st">"iris"</span>, <span class="st">"mtcars"</span>)),
-    <span class="kw">plotOutput</span>(<span class="dt">outputId =</span> <span class="st">"scatterplotmatrix"</span>)
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="http://www.rdocumentation.org/packages/shiny/topics/shinyApp">shinyApp</a></span>(
+  <span class="dt">ui =</span> <span class="kw"><a href="http://www.rdocumentation.org/packages/shiny/topics/fluidPage">fluidPage</a></span>( 
+    <span class="kw"><a href="http://www.rdocumentation.org/packages/shiny/topics/selectInput">selectInput</a></span>(<span class="dt">inputId =</span> <span class="st">"select_data"</span>, <span class="dt">label =</span> <span class="st">"select data"</span>, <span class="dt">choices =</span> <span class="kw">c</span>(<span class="st">"iris"</span>, <span class="st">"mtcars"</span>)),
+    <span class="kw"><a href="http://www.rdocumentation.org/packages/shiny/topics/plotOutput">plotOutput</a></span>(<span class="dt">outputId =</span> <span class="st">"scatterplotmatrix"</span>)
   ),
   <span class="dt">server =</span> <span class="cf">function</span>(input, output, session) {
-    output<span class="op">$</span>scatterplotmatrix &lt;-<span class="st"> </span><span class="kw">renderPlot</span>({
+    output<span class="op">$</span>scatterplotmatrix &lt;-<span class="st"> </span><span class="kw"><a href="http://www.rdocumentation.org/packages/shiny/topics/renderPlot">renderPlot</a></span>({
       data &lt;-<span class="st"> </span>input<span class="op">$</span>select_data
       <span class="cf">if</span> (data <span class="op">==</span><span class="st"> "iris"</span>) {
         <span class="kw">pairs</span>(iris[,<span class="op">-</span><span class="dv">5</span>], <span class="dt">col =</span> iris<span class="op">$</span>Species)
@@ -137,21 +137,21 @@
   }
 )</code></pre></div>
 <p>Note that reactivity is used on the server side for capturing the input (i.e. <code>input$select_data</code>) and to update the output (i.e. <code>output$scatterplot</code>). On the ui side shiny keeps the <code>html</code> code up-to-date and propagates user interface input changes to the reactive environment on the server side. Please inspect the <code>html</code> code from the previous example app while the app is running with Chrome’s developer tools and then stop the shiny app and compare that html code with the ui code created by running the following code in the R console:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">fluidPage</span>( 
-  <span class="kw">selectInput</span>(<span class="dt">inputId =</span> <span class="st">"select_data"</span>, <span class="dt">label =</span> <span class="st">"select data"</span>, <span class="dt">choices =</span> <span class="kw">c</span>(<span class="st">"iris"</span>, <span class="st">"mtcars"</span>)),
-  <span class="kw">plotOutput</span>(<span class="dt">outputId =</span> <span class="st">"scatterplotmatrix"</span>)
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="http://www.rdocumentation.org/packages/shiny/topics/fluidPage">fluidPage</a></span>( 
+  <span class="kw"><a href="http://www.rdocumentation.org/packages/shiny/topics/selectInput">selectInput</a></span>(<span class="dt">inputId =</span> <span class="st">"select_data"</span>, <span class="dt">label =</span> <span class="st">"select data"</span>, <span class="dt">choices =</span> <span class="kw">c</span>(<span class="st">"iris"</span>, <span class="st">"mtcars"</span>)),
+  <span class="kw"><a href="http://www.rdocumentation.org/packages/shiny/topics/plotOutput">plotOutput</a></span>(<span class="dt">outputId =</span> <span class="st">"scatterplotmatrix"</span>)
 )</code></pre></div>
 <p><a href="https://shiny.rstudio.com/articles/modules.html">Shiny modules</a> provide an elegant way to split both the <em>ui</em> object and <em>server</em> function into resuable and self-contained functions. Please read the <a href="https://shiny.rstudio.com/articles/modules.html">official tutorial</a> and note that input and output elements are separated by using namespaces. For the above example, we can modularize the selection and the plotting of the data as follows:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">ui_example &lt;-<span class="st"> </span><span class="cf">function</span>(id) {
-  ns &lt;-<span class="st"> </span><span class="kw">NS</span>(id)
-  <span class="kw">tagList</span>(
-    <span class="kw">selectInput</span>(<span class="dt">inputId =</span> <span class="kw">ns</span>(<span class="st">"select_data"</span>), <span class="dt">label =</span> <span class="st">"select data"</span>, <span class="dt">choices =</span> <span class="kw">c</span>(<span class="st">"iris"</span>, <span class="st">"mtcars"</span>)),
-    <span class="kw">plotOutput</span>(<span class="dt">outputId =</span> <span class="kw">ns</span>(<span class="st">"scatterplotmatrix"</span>))
+  ns &lt;-<span class="st"> </span><span class="kw"><a href="http://www.rdocumentation.org/packages/shiny/topics/NS">NS</a></span>(id)
+  <span class="kw"><a href="http://www.rdocumentation.org/packages/shiny/topics/tag">tagList</a></span>(
+    <span class="kw"><a href="http://www.rdocumentation.org/packages/shiny/topics/selectInput">selectInput</a></span>(<span class="dt">inputId =</span> <span class="kw">ns</span>(<span class="st">"select_data"</span>), <span class="dt">label =</span> <span class="st">"select data"</span>, <span class="dt">choices =</span> <span class="kw">c</span>(<span class="st">"iris"</span>, <span class="st">"mtcars"</span>)),
+    <span class="kw"><a href="http://www.rdocumentation.org/packages/shiny/topics/plotOutput">plotOutput</a></span>(<span class="dt">outputId =</span> <span class="kw">ns</span>(<span class="st">"scatterplotmatrix"</span>))
   )
 }
 
 srv_example &lt;-<span class="st"> </span><span class="cf">function</span>(input, output, session) {
-  output<span class="op">$</span>scatterplotmatrix &lt;-<span class="st"> </span><span class="kw">renderPlot</span>({
+  output<span class="op">$</span>scatterplotmatrix &lt;-<span class="st"> </span><span class="kw"><a href="http://www.rdocumentation.org/packages/shiny/topics/renderPlot">renderPlot</a></span>({
     data &lt;-<span class="st"> </span>input<span class="op">$</span>select_data
     <span class="cf">if</span> (data <span class="op">==</span><span class="st"> "iris"</span>) {
       <span class="kw">pairs</span>(iris[,<span class="op">-</span><span class="dv">5</span>], <span class="dt">col =</span> iris<span class="op">$</span>Species)
@@ -161,16 +161,16 @@ srv_example &lt;-<span class="st"> </span><span class="cf">function</span>(input
   })
 }</code></pre></div>
 <p>Note that <code>ui_example</code> and <code>srv_example</code> functions constitute our <em>example</em> module. To use this module twice in an app run the following code:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">shinyApp</span>(
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="http://www.rdocumentation.org/packages/shiny/topics/shinyApp">shinyApp</a></span>(
   <span class="dt">ui =</span> <span class="cf">function</span>() {
-    <span class="kw">tagList</span>(
+    <span class="kw"><a href="http://www.rdocumentation.org/packages/shiny/topics/tag">tagList</a></span>(
       <span class="kw">ui_example</span>(<span class="dt">id =</span> <span class="st">"first"</span>),
       <span class="kw">ui_example</span>(<span class="dt">id =</span> <span class="st">"second"</span>)
     )
   },
   <span class="dt">server =</span> <span class="cf">function</span>(input, output, session) {
-    <span class="kw">callModule</span>(srv_example, <span class="dt">id =</span> <span class="st">"first"</span>)
-    <span class="kw">callModule</span>(srv_example, <span class="dt">id =</span> <span class="st">"second"</span>)
+    <span class="kw"><a href="http://www.rdocumentation.org/packages/shiny/topics/callModule">callModule</a></span>(srv_example, <span class="dt">id =</span> <span class="st">"first"</span>)
+    <span class="kw"><a href="http://www.rdocumentation.org/packages/shiny/topics/callModule">callModule</a></span>(srv_example, <span class="dt">id =</span> <span class="st">"second"</span>)
   }
 )</code></pre></div>
 <p>Note that because of the namspace <code>id</code> the two modules do not conflict with their <code>html</code> ids and reactivity names. Please inspect the <code>html</code> code for the above example and pay attention to the <code>html</code> <code>id</code> attributes.</p>
@@ -193,25 +193,25 @@ srv_example &lt;-<span class="st"> </span><span class="cf">function</span>(input
 <span class="kw">library</span>(dplyr)
 
 x &lt;-<span class="st"> </span>teal<span class="op">::</span><span class="kw"><a href="http://www.rdocumentation.org/packages/teal/topics/init">init</a></span>(
-  <span class="dt">data =</span> <span class="kw">list</span>(<span class="dt">ASL =</span> iris <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mutate</span>(<span class="dt">USUBJID =</span> <span class="dv">1</span><span class="op">:</span><span class="kw">n</span>(), <span class="dt">STUDYID =</span> <span class="st">"A"</span>)),
+  <span class="dt">data =</span> <span class="kw">list</span>(<span class="dt">ASL =</span> iris <span class="op">%&gt;%</span><span class="st"> </span><span class="kw"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span>(<span class="dt">USUBJID =</span> <span class="dv">1</span><span class="op">:</span><span class="kw"><a href="https://dplyr.tidyverse.org/reference/n.html">n</a></span>(), <span class="dt">STUDYID =</span> <span class="st">"A"</span>)),
   <span class="dt">modules =</span> <span class="kw"><a href="../reference/root_modules.html">root_modules</a></span>(
     <span class="kw"><a href="../reference/module.html">module</a></span>(
       <span class="dt">label =</span> <span class="st">"sample module"</span>,
       <span class="dt">server =</span> <span class="cf">function</span>(input, output, session, datasets) {
-        output<span class="op">$</span>scatterplot &lt;-<span class="st"> </span><span class="kw">renderPlot</span>({
+        output<span class="op">$</span>scatterplot &lt;-<span class="st"> </span><span class="kw"><a href="http://www.rdocumentation.org/packages/shiny/topics/renderPlot">renderPlot</a></span>({
           iris &lt;-<span class="st"> </span>datasets<span class="op">$</span><span class="kw">get_data</span>(<span class="st">"ASL"</span>, <span class="dt">filtered =</span> <span class="ot">TRUE</span>, <span class="dt">reactive =</span> <span class="ot">TRUE</span>)
           <span class="kw">with</span>(iris, <span class="kw">plot</span>(Sepal.Length, Sepal.Width, <span class="dt">col =</span> Species))
         })
       },
       <span class="dt">ui =</span> <span class="cf">function</span>(id) {
-        ns &lt;-<span class="st"> </span><span class="kw">NS</span>(id)
-        <span class="kw">plotOutput</span>(<span class="kw">ns</span>(<span class="st">"scatterplot"</span>))
+        ns &lt;-<span class="st"> </span><span class="kw"><a href="http://www.rdocumentation.org/packages/shiny/topics/NS">NS</a></span>(id)
+        <span class="kw"><a href="http://www.rdocumentation.org/packages/shiny/topics/plotOutput">plotOutput</a></span>(<span class="kw">ns</span>(<span class="st">"scatterplot"</span>))
       },
       <span class="dt">filters =</span> <span class="st">'ASL'</span>
     ) 
   )
 )
-<span class="kw">shinyApp</span>(x<span class="op">$</span>ui, x<span class="op">$</span>server)</code></pre></div>
+<span class="kw"><a href="http://www.rdocumentation.org/packages/shiny/topics/shinyApp">shinyApp</a></span>(x<span class="op">$</span>ui, x<span class="op">$</span>server)</code></pre></div>
 <p>Please run the above code by copy pasting it to the command line. The example shows how simple it is to create a module that has no dynamic encodings but still is interactive due to the possibility of filtering the data. The example also highlights a current issue where we require a dataset with the name <code>ASL</code> that has the variables <code>USUBJID</code> and <code>SUBJID</code>. We decribe the reason and the future refactoring needed to overcome this later in this document.</p>
 <p>The default <code>teal</code> web application has the following components</p>
 <p><img src="images/teal_containers.png"><!-- --></p>
@@ -264,7 +264,7 @@ ASL &lt;-<span class="st"> </span><span class="kw">data.frame</span>(
   <span class="dt">USUBJID =</span> <span class="kw">paste0</span>(<span class="st">"id-"</span>, <span class="dv">1</span><span class="op">:</span><span class="dv">100</span>),
   <span class="dt">STUDYID =</span> <span class="st">"studyA"</span>,
   <span class="dt">AGE =</span> <span class="kw">abs</span>(<span class="kw">rnorm</span>(<span class="dv">100</span>, <span class="dt">sd =</span> <span class="dv">20</span>) <span class="op">+</span><span class="st"> </span><span class="dv">40</span>),
-  <span class="dt">SEX =</span> <span class="kw">sample</span>(<span class="kw">c</span>(<span class="st">'M'</span>, <span class="st">'F'</span>), <span class="dv">100</span>, <span class="ot">TRUE</span>),
+  <span class="dt">SEX =</span> <span class="kw"><a href="https://dplyr.tidyverse.org/reference/sample.html">sample</a></span>(<span class="kw">c</span>(<span class="st">'M'</span>, <span class="st">'F'</span>), <span class="dv">100</span>, <span class="ot">TRUE</span>),
   <span class="dt">stringsAsFactors =</span> <span class="ot">FALSE</span>
 )
 
@@ -272,7 +272,7 @@ ATE &lt;-<span class="st"> </span><span class="kw">data.frame</span>(
   <span class="dt">USUBJID =</span> <span class="kw">paste0</span>(<span class="st">"id-"</span>, <span class="dv">1</span><span class="op">:</span><span class="dv">100</span>),
   <span class="dt">STUDYID =</span> <span class="st">"studyA"</span>,
   <span class="dt">AVAL =</span> <span class="kw">abs</span>(<span class="kw">rexp</span>(<span class="dv">100</span>, <span class="dt">rate =</span> <span class="dv">1</span><span class="op">/</span><span class="dv">20</span>)),
-  <span class="dt">CNSR =</span> <span class="kw">sample</span>(<span class="kw">c</span>(<span class="dv">0</span>,<span class="dv">1</span>), <span class="dv">100</span>, <span class="ot">TRUE</span>),
+  <span class="dt">CNSR =</span> <span class="kw"><a href="https://dplyr.tidyverse.org/reference/sample.html">sample</a></span>(<span class="kw">c</span>(<span class="dv">0</span>,<span class="dv">1</span>), <span class="dv">100</span>, <span class="ot">TRUE</span>),
   <span class="dt">PARAMCD =</span> <span class="st">"OS"</span>,
   <span class="dt">stringsAsFactors =</span> <span class="ot">FALSE</span>
 )
@@ -363,7 +363,7 @@ datasets<span class="op">$</span><span class="kw">get_data</span>(<span class="s
 <p>First the main issues mentioned above:</p>
 <ul>
 <li><p>make <code>FilteredData</code> class abstract and implement concrete classes (as outlined above) inheriting from <code>FilteredData</code>.</p></li>
-<li><p>make the filtering lazy by making better use of reativity (using <code>reactiveValues()</code>).</p></li>
+<li><p>make the filtering lazy by making better use of reativity (using <code><a href="http://www.rdocumentation.org/packages/shiny/topics/reactiveValues">reactiveValues()</a></code>).</p></li>
 </ul>
 <p>Also, a simple feature but still useful improvement is to support:</p>
 <ul>

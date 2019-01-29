@@ -106,9 +106,13 @@
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(teal)
 <span class="kw">library</span>(random.cdisc.data)
 
-ASL &lt;-<span class="st"> </span><span class="kw">radsl</span>()
-ARS &lt;-<span class="st"> </span><span class="kw">radrs</span>(ASL)
-ATE &lt;-<span class="st"> </span><span class="kw">radtte</span>(ASL)
+ASL &lt;-<span class="st"> </span><span class="kw"><a href="http://www.rdocumentation.org/packages/random.cdisc.data/topics/radsl">radsl</a></span>()
+ARS &lt;-<span class="st"> </span><span class="kw"><a href="http://www.rdocumentation.org/packages/random.cdisc.data/topics/radrs">radrs</a></span>(ASL)
+ATE &lt;-<span class="st"> </span><span class="kw"><a href="http://www.rdocumentation.org/packages/random.cdisc.data/topics/radtte">radtte</a></span>(ASL)
+
+<span class="kw">attr</span>(ASL, <span class="st">"source"</span>) &lt;-<span class="st"> "random.cdisc.data::radsl()"</span>
+<span class="kw">attr</span>(ARS, <span class="st">"source"</span>) &lt;-<span class="st"> "random.cdisc.data::radrs(ASL)"</span>
+<span class="kw">attr</span>(ATE, <span class="st">"source"</span>) &lt;-<span class="st"> "random.cdisc.data::radtte(ASL)"</span>
 
 x &lt;-<span class="st"> </span>teal<span class="op">::</span><span class="kw"><a href="http://www.rdocumentation.org/packages/teal/topics/init">init</a></span>(
   <span class="dt">data =</span>  <span class="kw">list</span>(<span class="dt">ASL =</span> ASL, <span class="dt">ARS =</span> ARS, <span class="dt">ATE =</span> ATE),
@@ -178,7 +182,7 @@ rocheBCE<span class="op">::</span><span class="kw">shinypub</span>(<span class="
 <p>While on the Roche network, <a href="https://r.roche.com">open R or RStudio</a> and execute the following:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># install.packages("devtools")</span>
 <span class="kw">library</span>(devtools)
-<span class="kw">install_github</span>(
+<span class="kw"><a href="http://www.rdocumentation.org/packages/devtools/topics/reexports">install_github</a></span>(
   <span class="st">'Rpackages/teal'</span>, <span class="dt">ref =</span> <span class="st">"v0.0.4"</span>,
   <span class="dt">host =</span> <span class="st">'https://github.roche.com/api/v3'</span>,
   <span class="dt">upgrade_dependencies =</span> <span class="ot">FALSE</span>,

@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Changelog • teal</title>
+<title>Check if an object is a choices_selected class. — is.choices_selected • teal</title>
 
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script>
@@ -30,7 +30,10 @@
 
 
 
-<meta property="og:title" content="Changelog" />
+<meta property="og:title" content="Check if an object is a choices_selected class. — is.choices_selected" />
+
+<meta property="og:description" content="Check if an object is a choices_selected class." />
+<meta name="twitter:card" content="summary" />
 
 <meta name="robots" content="noindex">
 
@@ -46,7 +49,7 @@
   </head>
 
   <body>
-    <div class="container template-news">
+    <div class="container template-reference-topic">
       <header>
       <div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -115,103 +118,37 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-      <h1>Changelog <small></small></h1>
-      
+    <h1>Check if an object is a choices_selected class.</h1>
+    
+    <div class="hidden name"><code>is.choices_selected.Rd</code></div>
     </div>
 
-    <div id="teal-0-0-6" class="section level1">
-<h1 class="page-header">
-<a href="#teal-0-0-6" class="anchor"></a>teal 0.0.6</h1>
-<ul>
-<li>Removed deprecated functions <code>tab*</code>
-</li>
-<li>Removed data generation functions including <code>generate_sample_data</code>
-</li>
-<li>Incorporate <code>shinyjs</code> package</li>
-<li>Added “Copy R code to clipboard” button</li>
-</ul>
-</div>
-    <div id="teal-0-0-5" class="section level1">
-<h1 class="page-header">
-<a href="#teal-0-0-5" class="anchor"></a>teal 0.0.5</h1>
-<ul>
-<li>add limit to data_table with scrolling, preventing overlap of ui elements</li>
-<li>boolean filtering</li>
-</ul>
-</div>
-    <div id="teal-0-0-4" class="section level1">
-<h1 class="page-header">
-<a href="#teal-0-0-4" class="anchor"></a>teal 0.0.4</h1>
-<ul>
-<li>Bug fix where teal crashes when a filter variable gets added that has many decimal places</li>
-</ul>
-</div>
-    <div id="teal-0-0-3" class="section level1">
-<h1 class="page-header">
-<a href="#teal-0-0-3" class="anchor"></a>teal 0.0.3</h1>
-<p>Note version 0.0.3 is not backwards compatible. Reading the changes and studying the example app should, however, clarify most the changes.</p>
-<div id="new-features" class="section level2">
-<h2 class="hasAnchor">
-<a href="#new-features" class="anchor"></a>New features</h2>
-<ul>
-<li>tm_scatterplot module</li>
-<li>tm_table module</li>
-</ul>
-</div>
-<div id="changes" class="section level2">
-<h2 class="hasAnchor">
-<a href="#changes" class="anchor"></a>Changes</h2>
-<ul>
-<li>all <code>tabs</code> arguments were renamed to <code>modules</code>
-</li>
-<li>
-<code>tab_item</code> function is now called <code>module</code>
-</li>
-<li>
-<code>tab_items</code> function is now called <code>modules</code>
-</li>
-<li>
-<code>tabs</code> function was removed</li>
-<li>
-<code>variable_browser_item</code> is now called <code>tm_variable_browser</code>
-</li>
-<li>
-<code>data_table_item</code> is now called <code>tm_data_table</code>
-</li>
-<li>
-<code>datasets</code> argument is automatically added to the server functions specified with <code>module</code>. Hence <code>teal_datasets</code> has been removed as a <code>server_args</code> element.</li>
-</ul>
-</div>
-</div>
-    <div id="teal-0-0-2" class="section level1">
-<h1 class="page-header">
-<a href="#teal-0-0-2" class="anchor"></a>teal 0.0.2</h1>
-<ul>
-<li>new ‘01_getting_started’ vignette</li>
-<li>datanames in FilteredData are now case sensitive</li>
-</ul>
-</div>
-    <div id="teal-0-0-1" class="section level1">
-<h1 class="page-header">
-<a href="#teal-0-0-1" class="anchor"></a>teal 0.0.1</h1>
-<p>March 28, 2016 - Initial Release</p>
-</div>
-  </div>
+    <div class="ref-description">
+    
+    <p>Check if an object is a choices_selected class.</p>
+    
+    </div>
 
+    <pre class="usage"><span class='fu'>is.choices_selected</span>(<span class='no'>x</span>)</pre>
+    
+    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
+    <table class="ref-arguments">
+    <colgroup><col class="name" /><col class="desc" /></colgroup>
+    <tr>
+      <th>x</th>
+      <td><p>object to check</p></td>
+    </tr>
+    </table>
+    
+
+  </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
-    <div id="tocnav">
-      <h2>Contents</h2>
-      <ul class="nav nav-pills nav-stacked">
-        <li><a href="#teal-0-0-6">0.0.6</a></li>
-        <li><a href="#teal-0-0-5">0.0.5</a></li>
-        <li><a href="#teal-0-0-4">0.0.4</a></li>
-        <li><a href="#teal-0-0-3">0.0.3</a></li>
-        <li><a href="#teal-0-0-2">0.0.2</a></li>
-        <li><a href="#teal-0-0-1">0.0.1</a></li>
-      </ul>
-    </div>
-  </div>
+    <h2>Contents</h2>
+    <ul class="nav nav-pills nav-stacked">
+      <li><a href="#arguments">Arguments</a></li>
+                </ul>
 
+  </div>
 </div>
 
       <footer>

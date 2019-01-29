@@ -89,7 +89,7 @@
       <h1>Getting Started with Teal</h1>
                         <h4 class="author">Adrian Waddell</h4>
             
-            <h4 class="date">2019-01-15</h4>
+            <h4 class="date">2019-01-29</h4>
       
       
       <div class="hidden name"><code>getting_started.Rmd</code></div>
@@ -110,10 +110,11 @@
 <a href="#initializing-a-teal-application" class="anchor"></a>Initializing A Teal application</h2>
 <p>The workflow to create a shiny app using teal is as follows. The <code><a href="../reference/init.html">teal::init</a></code> function is used to create a shiny <code>server</code> and <code>ui</code> function which in turn can then be passed to the <code><a href="http://www.rdocumentation.org/packages/shiny/topics/shinyApp">shiny::shinyApp</a></code> function to start a shiny application. The following code is sufficient for a <a href="https://shiny.rstudio.com/articles/single-file.html" title="Single-file Shiny apps">single file shiny app</a>.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(teal)
+<span class="kw">library</span>(random.cdisc.data)
 
-ASL &lt;-<span class="st"> </span><span class="kw">radsl</span>()
-ARS &lt;-<span class="st"> </span><span class="kw">radrs</span>(ASL)
-ATE &lt;-<span class="st"> </span><span class="kw">radtte</span>(ASL)
+ASL &lt;-<span class="st"> </span><span class="kw"><a href="http://www.rdocumentation.org/packages/random.cdisc.data/topics/radsl">radsl</a></span>()
+ARS &lt;-<span class="st"> </span><span class="kw"><a href="http://www.rdocumentation.org/packages/random.cdisc.data/topics/radrs">radrs</a></span>(ASL)
+ATE &lt;-<span class="st"> </span><span class="kw"><a href="http://www.rdocumentation.org/packages/random.cdisc.data/topics/radtte">radtte</a></span>(ASL)
 
 x &lt;-<span class="st"> </span>teal<span class="op">::</span><span class="kw"><a href="http://www.rdocumentation.org/packages/teal/topics/init">init</a></span>(
   <span class="dt">data =</span>  <span class="kw">list</span>(<span class="dt">ASL =</span> ASL, <span class="dt">ARS =</span> ARS, <span class="dt">ATE =</span> ATE),
