@@ -37,8 +37,8 @@
 #' attr(ARS, "source") <- "random.cdisc.data::radrs(ASL, seed = 100)"
 #' attr(ATE, "source") <- "random.cdisc.data::radtte(ASL, seed = 1000)"
 #'
-#' x <- teal::init(
-#'   data = list(ASL = ASL, ARS = ARS, ATE = ATE),
+#' app <- teal::init(
+#'   data =  list(ASL = ASL, ARS = ARS, ATE = ATE),
 #'   modules = root_modules(
 #'     module(
 #'       "data source",
@@ -78,7 +78,7 @@
 #'   footer = tags$p("Copyright 2017")
 #' )
 #'
-#' shinyApp(x$ui, x$server)
+#' shinyApp(app$ui, app$server)
 #'
 #' }
 init <- function(data,
