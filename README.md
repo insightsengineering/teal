@@ -27,7 +27,7 @@ modules](https://shiny.rstudio.com/articles/modules.html).
 	attr(ARS, "source") <- "random.cdisc.data::radrs(ASL)"
 	attr(ATE, "source") <- "random.cdisc.data::radtte(ASL)"
 	
-	x <- teal::init(
+	app <- teal::init(
 	  data =  list(ASL = ASL, ARS = ARS, ATE = ATE),
 	  modules = root_modules(
 	    module(
@@ -67,7 +67,7 @@ modules](https://shiny.rstudio.com/articles/modules.html).
 	  footer = tags$p("Copyright 2017")
 	)
 	
-	shinyApp(x$ui, x$server)
+	shinyApp(app$ui, app$server)
 	```
 	
 1. Execute the above code to run the sample app.
