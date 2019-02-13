@@ -109,7 +109,7 @@ ui_scatterplot <- function(id, label,
   standard_layout(
     output = uiOutput(ns("plot_ui")),
     encoding = div(
-      tags$label("Encodings", class="text-primary"),
+      tags$label("Encodings", class = "text-primary"),
       helpText("Analysis data:", tags$code(dataname)),
       optionalSelectInput(ns("xvar"), "x variable", xvar_choices, xvar, multiple = FALSE),
       optionalSelectInput(ns("yvar"), "y variable", yvar_choices, yvar, multiple = FALSE),
@@ -122,7 +122,7 @@ ui_scatterplot <- function(id, label,
       ))) {
         NULL
       } else {
-        tags$label("Plot Settings", class="text-primary", style="margin-top: 15px;")
+        tags$label("Plot Settings", class = "text-primary", style = "margin-top: 15px;")
       },
       optionalSliderInputValMinMax(ns("plot_height"), "plot height", plot_height, ticks = FALSE),
       optionalSliderInputValMinMax(ns("alpha"), "opacity", alpha, ticks = FALSE),
@@ -143,12 +143,12 @@ srv_scatterplot <- function(input, output, session, datasets, dataname) {
   output$plot_ui <- renderUI({
     plot_height <- input$plot_height
     validate(need(plot_height, "need valid plot height"))
-    plotOutput(session$ns("scatterplot"), height=plot_height)
+    plotOutput(session$ns("scatterplot"), height = plot_height)
   })
 
   output$scatterplot <- renderPlot({
 
-    ANL <- datasets$get_data(dataname, reactive = TRUE, filtered = TRUE)
+    ANL <- datasets$get_data(dataname, reactive = TRUE, filtered = TRUE) # nolint
     xvar <- input$xvar
     yvar <- input$yvar
     alpha <- input$alpha
@@ -160,7 +160,7 @@ srv_scatterplot <- function(input, output, session, datasets, dataname) {
 
     validate(need(alpha, "need alpha"))
     validate(need(!is.null(ANL) && is.data.frame(ANL), "no data left"))
-    validate(need(nrow(ANL) > 0 , "no observations left"))
+    validate(need(nrow(ANL) > 0, "no observations left"))
     validate(need(xvar, "no valid x variable selected"))
     validate(need(yvar, "no valid y variable selected"))
     validate(need(xvar %in% names(ANL),
@@ -204,7 +204,7 @@ srv_scatterplot <- function(input, output, session, datasets, dataname) {
       title = paste("Scatterplot of", yvar, "vs.", xvar),
       description = "",
       libraries = c("ggplot2"),
-      data = setNames(list(datasets$get_data(dataname, reactive=FALSE, filtered = FALSE)), dataname),
+      data = setNames(list(datasets$get_data(dataname, reactive = FALSE, filtered = FALSE)), dataname),
       git_repo = "http://github.roche.com/Rpackages/teal/R/tm_scatterplot.R"
     )
 
@@ -216,7 +216,7 @@ srv_scatterplot <- function(input, output, session, datasets, dataname) {
       chunks$plot_no_color
     } else {
       pc <- chunks$plot_color
-      sub("color = color_by", paste("color =", color_by), pc, fixed=TRUE)
+      sub("color = color_by", paste("color =", color_by), pc, fixed = TRUE)
     }
 
     plot_code <- plot_code
@@ -229,7 +229,7 @@ srv_scatterplot <- function(input, output, session, datasets, dataname) {
     )
 
     f_sub <- Map(function(pattern, repl) {
-      function(txt) sub(pattern, repl, txt, fixed=TRUE)
+      function(txt) sub(pattern, repl, txt, fixed = TRUE)
     }, names(subst_pairs), subst_pairs)
 
     plot_code_subst <- Reduce(function(txt, f) f(txt), f_sub, init = plot_code)
@@ -244,12 +244,10 @@ srv_scatterplot <- function(input, output, session, datasets, dataname) {
       ), collapse = "\n"
     )
 
-    showRCodeModal(
+    show_r_code_modal(
       title = "R Code for the Current Scatterplot",
       rcode = code
     )
   })
 
 }
-
-

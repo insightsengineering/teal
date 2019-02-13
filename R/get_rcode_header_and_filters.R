@@ -45,12 +45,7 @@
 #'
 get_rcode_header <- function(title, description = NULL, libraries = NULL, git_repo = NULL, data = NULL) {
 
-  descrip_str <- description # unlist(strsplit(description, "\n")) # In case of multi-line descriptions
-
   source_str <- ifelse(is.null(git_repo), "Not given", git_repo)
-
-  #git_commit <- try(system("git rev-parse --short HEAD", intern = TRUE), silent = TRUE)
-  #if (is(git_commit, "try-error")) git_commit <- ""
 
   git_commit <- "-"
 
@@ -92,11 +87,11 @@ get_rcode_header <- function(title, description = NULL, libraries = NULL, git_re
   commented <- gsub("\n", "\n# ", paste(c(
     paste("#", title), "\n\n",
     pad(description),
-    pad(paste("Module Source:", source_str), post="\n"),
-    pad(paste("Git-commit Shiny App:", git_commit), post="\n"),
+    pad(paste("Module Source:", source_str), post = "\n"),
+    pad(paste("Git-commit Shiny App:", git_commit), post = "\n"),
     pad(paste("Date:", date()), post = "\n"),  "\n",
     "You can run this code interactively in http://r.roche.com"
-  ), collapse = ""), fixed=TRUE)
+  ), collapse = ""), fixed = TRUE)
 
   paste(c(pad(commented), pad(lib_str), data_str), collapse = "")
 
@@ -123,9 +118,9 @@ get_filter_txt <- function(datanames, datasets) {
 
   calls <-  lapply(dnames, function(dn) {
     cl <- if (dn == "ASL") {
-      datasets$get_filter_call(dn, merge = FALSE, asl=TRUE)
+      datasets$get_filter_call(dn, merge = FALSE, asl = TRUE)
     } else {
-      datasets$get_filter_call(dn, merge = TRUE, asl=FALSE)
+      datasets$get_filter_call(dn, merge = TRUE, asl = FALSE)
     }
     x <- if (is.list(cl)) {
       unlist(lapply(cl, deparse, width.cutoff = 80))

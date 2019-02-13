@@ -31,7 +31,7 @@ tm_data_table <- function(label = "data table", variables_selected=NULL) {
     ui = ui_page_data_table,
     filters = "all",
     server_args = list(cache_selected = if (is.null(variables_selected)) list() else variables_selected),
-    ui_args = list(datasets='teal_datasets')
+    ui_args = list(datasets = "teal_datasets")
   )
 }
 
@@ -48,22 +48,23 @@ ui_page_data_table <- function(id, datasets) {
 
   tagList(
     fluidRow(
-      div(class="col-md-3",
+      div(class = "col-md-3",
           radioButtons(ns("dataset"), "data", choices = datanames,
-                       selected=sel_data, inline = TRUE),
-          radioButtons(ns("dataraworfiltered"), NULL, choices = c("unfiltered data"="raw", "filtered data"="filtered"),
-                       selected="filtered", inline = TRUE),
+                       selected = sel_data, inline = TRUE),
+          radioButtons(ns("dataraworfiltered"), NULL,
+                       choices = c("unfiltered data" = "raw", "filtered data" = "filtered"),
+                       selected = "filtered", inline = TRUE),
           checkboxInput(ns("distinct"), "show only distinct rows", value = FALSE)
       ),
-      div(class="col-md-9", selectInput(ns("variables"), "select variables",
-                                        choices=sel_varnames, selected = head(sel_varnames),
+      div(class = "col-md-9", selectInput(ns("variables"), "select variables",
+                                        choices = sel_varnames, selected = head(sel_varnames),
                                         multiple = TRUE, width = "100%"))
     ),
     tags$hr(),
     fluidRow(
-      div(class="col-md-12", DT::dataTableOutput(ns('tbl'), width = "100%"))
+      div(class = "col-md-12", DT::dataTableOutput(ns("tbl"), width = "100%"))
     ),
-    div(style="height:30px;")
+    div(style = "height:30px;")
   )
 }
 
@@ -75,7 +76,7 @@ srv_page_data_table <- function(input, output, session, datasets, cache_selected
 
   # select first 6 variables for each dataset if not otherwise specified
   for (name in setdiff(datasets$datanames(), names(cache_selected))) {
-    cache_selected[[name]] <- head(names(datasets$get_data(name, filtered = FALSE, reactive=FALSE)), 6)
+    cache_selected[[name]] <- head(names(datasets$get_data(name, filtered = FALSE, reactive = FALSE)), 6)
   }
 
 
@@ -130,7 +131,6 @@ srv_page_data_table <- function(input, output, session, datasets, cache_selected
 
     df_s <- if (distinct) dplyr::count_(df, variables) else df[variables]
 
-    # filter = 'top'
     DT::datatable(
       df_s,
       options = list(
