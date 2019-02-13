@@ -104,7 +104,7 @@ standard_layout <- function(output,
   # if encoding=NULL then forms is placed below output
 
   tag_output <- div(
-    class="well",
+    class = "well",
     div(id = "pre-output", pre_output),
     div(id = "output", output),
     div(id = "post-output", post_output)
@@ -113,16 +113,16 @@ standard_layout <- function(output,
   tag_enc_out <- if (!is.null(encoding)) {
     div(
       div(
-        class="col-md-3",
-        div(class="well", encoding),
-        if (is.null(forms)) NULL else div(class="form-group", forms)
+        class = "col-md-3",
+        div(class = "well", encoding),
+        if (is.null(forms)) NULL else div(class = "form-group", forms)
       ),
       div(class = "col-md-9", tag_output)
     )
   } else {
-    div(class="col-md-12",
+    div(class = "col-md-12",
       tag_output,
-      if (is.null(forms)) NULL else div(class="form-group", forms)
+      if (is.null(forms)) NULL else div(class = "form-group", forms)
     )
   }
 

@@ -5,7 +5,7 @@
 \title{Create a simple cross-table}
 \usage{
 tm_table(label, dataname, xvar, yvar, xvar_choices = xvar,
-  yvar_choices = yvar, useNA = c("ifany", "no", "always"),
+  yvar_choices = yvar, use_na = c("ifany", "no", "always"),
   pre_output = NULL, post_output = NULL)
 }
 \arguments{
@@ -25,7 +25,7 @@ missing or identincal to \code{xvar} then the table will be fixed to the
 missing or identincal to \code{xvar} then the table will be fixed to the
 \code{yvar}.}
 
-\item{useNA}{optional pre-selected option indicating how to utilize NA in
+\item{use_na}{optional pre-selected option indicating how to utilize NA in
 table display. One of \code{'ifany'}, \code{'always'}, \code{'no'}. If
 missing then \code{'ifany'} will be used. If vector then only the first
 one will be used.}
