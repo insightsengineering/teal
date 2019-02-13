@@ -238,7 +238,7 @@ FilteredData <- R6::R6Class( # nolint
       }
     },
 
-
+    # TODO add remove_filter method
 
     get_filter_type = function(dataname, varname) {
       private$error_if_not_valid(dataname, varname)
