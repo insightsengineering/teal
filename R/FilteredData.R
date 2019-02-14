@@ -387,7 +387,7 @@ FilteredData <- R6::R6Class( # nolint
 
 
     is_filter_variable = function(dataname, varname) {
-      self$get_filter_type(dataname, variane) != "unknown"
+      self$get_filter_type(dataname, varname) != "unknown"
     },
 
 
