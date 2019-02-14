@@ -227,7 +227,6 @@ test_that("has_source_attribute", {
 })
 
 test_that("get_filter_txt", {
-
   ASL <- random.cdisc.data::radsl(600)
   ATE <- random.cdisc.data::radtte(ASL)
 
@@ -242,25 +241,91 @@ test_that("get_filter_txt", {
 
   expect_equal(tc1, "ASL_FILTERED <- ASL")
 
-  tc2 <- get_filter_txt("ATE", d) %>% strsplit(split = "\n") %>%
-      unlist() %>%
-      unname()
+  tc2 <- get_filter_txt("ATE", d) %>%
+    strsplit(split = "\n") %>%
+    unlist() %>%
+    unname()
 
-  expect_equal(tc2,
-      c(
-          "ASL_FILTERED <- ASL",
-          "ATE_FILTERED_ALONE <- ATE",
-          "ATE_FILTERED <- merge(x = ASL_FILTERED[, c(\"USUBJID\", \"STUDYID\")], y = ATE_FILTERED_ALONE, ",
-          "    by = c(\"USUBJID\", \"STUDYID\"), all.x = FALSE, all.y = FALSE)"
-          )
+  expect_equal(
+    tc2,
+    c(
+      "ASL_FILTERED <- ASL",
+      "ATE_FILTERED_ALONE <- ATE",
+      "ATE_FILTERED <- merge(x = ASL_FILTERED[, c(\"USUBJID\", \"STUDYID\")], y = ATE_FILTERED_ALONE, ",
+      "    by = c(\"USUBJID\", \"STUDYID\"), all.x = FALSE, all.y = FALSE)"
+    )
+  )
+  d$set_filter_state("ASL", "ARM", "A: Drug X")
+  tc3 <- get_filter_txt("ASL", d) %>%
+    strsplit(split = "\n") %>%
+    unlist() %>%
+    unname()
 
+  expect_equal(
+    tc3,
+    deparse(d$get_filter_call("ASL"))
+  )
+
+  # empty datanames argument shall lead to use ASL
+  tc4 <- get_filter_txt(datanames = c(), datasets = d) %>%
+    strsplit(split = "\n") %>%
+    unlist() %>%
+    unname()
+
+  expect_equal(
+    tc4,
+    deparse(d$get_filter_call("ASL"))
+  )
+})
+
+test_that("get_rcode_datasets", {
+  ASL <- random.cdisc.data::radsl(600)
+  ATE <- random.cdisc.data::radtte(ASL)
+
+  attr(ASL, "source") <- "radsl(600)"
+  attr(ATE, "source") <- "radtte(ASL)"
+
+  d <- teal:::FilteredData$new()
+  d$set_data("ASL", ASL)
+  d$set_data("ATE", ATE)
+
+  tc1 <- get_rcode_datasets(d) %>%
+    strsplit(split = "\n") %>%
+    unlist() %>%
+    unname() %>% trimws
+
+  expect_equal(
+      tc1,
+      c("ASL <- radsl(600)","ATE <- radtte(ASL)")
       )
-  d$set_filter_state("ASL","ARM","A: Drug X")
-  tc3 <- get_filter_txt("ASL", d) %>% strsplit(split = "\n") %>%
-      unlist() %>%
-      unname()
 
-  expect_equal(tc3,
-      deparse(d$get_filter_call("ASL")))
+  tc2 <- list(
+     ASL = structure(data.frame(a = 1), source = "haven::read_sas('/opt/BIOSTAT/asl.sas7bdat')"),
+     ATE = structure(data.frame(a = 1),
+       source = "haven::read_sas('/opt/BIOSTAT/ate.sas7bdat')",
+       md5sum = "32sdf32fds324"
+     )
+   ) %>% get_rcode_datasets  %>%
+   strsplit(split = "\n") %>%
+   unlist() %>%
+   unname() %>% trimws
 
+
+   expect_equal(
+       tc2,
+       c(
+           "ASL <- haven::read_sas('/opt/BIOSTAT/asl.sas7bdat')",
+           "ATE <- haven::read_sas('/opt/BIOSTAT/ate.sas7bdat')  # md5sum at time of analysis: 32sdf32fds324"
+           )
+       )
+
+  expect_error(
+      get_rcode_datasets(datasets <- list(one = structure(data.frame(a=1)), two = data.frame(a=1)))
+      ,"source attribute"
+  )
+
+  expect_error(
+      get_rcode_datasets(datasets <- list(one = c(), two = data.frame(a=1)))
+      ,"FilteredData object or"
+  )
 })
