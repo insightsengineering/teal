@@ -4,7 +4,12 @@
 #' @param xnames vector conatining names to be applied to \code{x}
 #' 
 #' @details If either \code{x} or \code{xnames} are factors, they are coerced 
-#'   to character. This is function is useful to create the vectors passed on to 
+#'   to character. If the names of \code{x} and \code{xnames} are the same or similar, 
+#'   the unique name is kept. For example if a variable "AGE" should be named 
+#'   "Age" according to \code{xnames}, the vector returned will be named just "Age" 
+#'   instead of "AGE - Age". See examples.
+#'   
+#'   This is function is useful to create the vectors passed on to 
 #'   the arguments of the \code{choices_selected} arguments in \code{teal} modules.
 #' 
 #' @return a named character vector 
@@ -22,6 +27,9 @@
 #' 
 #' choices1 <- name_choices(ADSL, tern::var_labels(ADSL))
 #' choices2 <- name_choices(ADTTE$PARAMCD, ADTTE$PARAM)
+#' 
+#' #similar names are not duplicated
+#' choices3 <- name_choices(ADTTE$PARAMCD, ADTTE$PARAMCD)
 #' 
 #' \dontrun{
 #' 
@@ -53,21 +61,27 @@ name_choices <- function(x, xnames){
   
   (is.data.frame(x)||is.character(x)) || stop("x must be data.frame or character vector.")
   
-  named_x <- if (is.data.frame(x)){
+  if (is.data.frame(x)){
     
     nam <- names(x)
     ncol(x) == length(xnames) || stop("length of xnames must match the number of columns in x")
     vl <- xnames
-    stats::setNames(nam, paste(nam, vl, sep = " - "))
     
   }else if(is.character(x)){
     
     length(x) == length(xnames) || stop("length of xnames must be the same as x")
     df <- unique(data.frame(xnames, x, stringsAsFactors = FALSE))
-    stats::setNames(df$x, paste(df$x, df$xnames, sep = " - "))
     
+    nam <- df$x 
+    vl <- df$xnames
+  
   }
   
+  nam_vl = paste(nam, vl, sep = " - ")
+  keep_id <- seq_along(nam_vl)[tolower(nam) == tolower(vl)]
+  nam_vl[keep_id] <- vl[keep_id]
+  
+  named_x <-stats::setNames(nam, nam_vl)
   named_x
 }
 
