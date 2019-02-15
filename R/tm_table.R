@@ -12,7 +12,7 @@
 #' @param yvar_choices vector with variable names of possible y variables. If
 #'   missing or identincal to \code{xvar} then the table will be fixed to the
 #'   \code{yvar}.
-#' @param useNA optional pre-selected option indicating how to utilize NA in
+#' @param use_na optional pre-selected option indicating how to utilize NA in
 #'   table display. One of \code{'ifany'}, \code{'always'}, \code{'no'}. If
 #'   missing then \code{'ifany'} will be used. If vector then only the first
 #'   one will be used.
@@ -54,12 +54,12 @@ tm_table <- function(label,
                      dataname,
                      xvar, yvar,
                      xvar_choices = xvar, yvar_choices = yvar,
-                     useNA = c("ifany", "no", "always"),
+                     use_na = c("ifany", "no", "always"), # nolint
                      pre_output = NULL, post_output = NULL) {
 
   args <- as.list(environment())
 
-  args$useNA <- match.arg(useNA)
+  args$use_na <- match.arg(use_na)
 
 
   module(
@@ -76,7 +76,7 @@ tm_table <- function(label,
 
 ui_table <- function(id, label, dataname, xvar, yvar,
                      xvar_choices, yvar_choices,
-                     useNA,
+                     use_na,
                      pre_output, post_output) {
 
 
@@ -86,12 +86,12 @@ ui_table <- function(id, label, dataname, xvar, yvar,
   standard_layout(
     output = tableOutput(ns("table")),
     encoding = div(
-      tags$label("Encodings", class="text-primary"),
+      tags$label("Encodings", class = "text-primary"),
       helpText("Analysis data:", tags$code(dataname)),
       optionalSelectInput(ns("xvar"), "x variable (row)", xvar_choices, xvar, multiple = FALSE),
       optionalSelectInput(ns("yvar"), "y variable (column)", yvar_choices, yvar, multiple = FALSE),
-      radioButtons(ns("useNA"), label = "Display Missing Values",
-                   choices = c("no", "ifany", "always"), selected = useNA),
+      radioButtons(ns("use_na"), label = "Display Missing Values",
+                   choices = c("no", "ifany", "always"), selected = use_na),
       checkboxInput(ns("margins"), "Add margins", value = FALSE)
     ),
     forms = actionButton(ns("show_rcode"), "Show R Code", width = "100%"),
@@ -107,14 +107,14 @@ srv_table <- function(input, output, session, datasets, dataname) {
 
   output$table <- renderTable({
 
-    ANL <- datasets$get_data(dataname, reactive = TRUE, filtered = TRUE)
+    ANL <- datasets$get_data(dataname, reactive = TRUE, filtered = TRUE) # nolint
     xvar <- input$xvar
     yvar <- input$yvar
-    useNA <- input$useNA
+    use_na <- input$use_na
     add_margins <- input$margins
 
     validate(need(!is.null(ANL) && is.data.frame(ANL), "no data left"))
-    validate(need(nrow(ANL) > 0 , "no observations left"))
+    validate(need(nrow(ANL) > 0, "no observations left"))
     validate(need(xvar, "no valid x variable selected"))
     validate(need(yvar, "no valid y variable selected"))
     validate(need(xvar %in% names(ANL),
@@ -123,26 +123,26 @@ srv_table <- function(input, output, session, datasets, dataname) {
                   paste("variable", yvar, " is not available in data", dataname)))
 
 
-    tbl <- table(ANL[[xvar]], ANL[[yvar]], useNA = useNA)
+    tbl <- table(ANL[[xvar]], ANL[[yvar]], useNA = use_na)
 
     if (add_margins) tbl <- addmargins(tbl)
 
     as.data.frame.matrix(tbl, row.names = rownames(tbl))
 
-  }, rownames=TRUE, bordered=TRUE, html.table.attributes = 'style="background-color:white;"')
+  }, rownames = TRUE, bordered = TRUE, html.table.attributes = 'style="background-color:white;"')
 
   observeEvent(input$show_rcode, {
 
     xvar <- input$xvar
     yvar <- input$yvar
-    useNA <- input$useNA
+    use_na <- input$use_na
     add_margins <- input$margins
 
     str_header <- get_rcode_header(
       title = paste("Cross-Table of", yvar, "vs.", xvar),
       description = "",
       libraries = c(),
-      data = setNames(list(datasets$get_data(dataname, reactive=FALSE, filtered = FALSE)), dataname),
+      data = setNames(list(datasets$get_data(dataname, reactive = FALSE, filtered = FALSE)), dataname),
       git_repo = "http://github.roche.com/Rpackages/teal/R/tm_table.R"
     )
 
@@ -154,16 +154,16 @@ srv_table <- function(input, output, session, datasets, dataname) {
         str_header, "\n\n",
         str_filter, "\n\n",
         if (add_margins) {
-          paste0("with(", dataname, "_FILTERED, addmargins(table(", xvar, ", ", yvar,", useNA = '", useNA, "')))")
+          paste0("with(", dataname, "_FILTERED, addmargins(table(", xvar, ", ", yvar, ", useNA = '", use_na, "')))")
         } else {
-          paste0("with(", dataname, "_FILTERED, table(", xvar, ", ", yvar,", useNA = '", useNA, "'))")
+          paste0("with(", dataname, "_FILTERED, table(", xvar, ", ", yvar, ", useNA = '", use_na, "'))")
         },
         "\n"
       ), collapse = ""
     )
 
 
-    showRCodeModal(
+    show_r_code_modal(
       title = "R Code for the Current Table",
       rcode = code
     )
@@ -171,5 +171,3 @@ srv_table <- function(input, output, session, datasets, dataname) {
   })
 
 }
-
-
