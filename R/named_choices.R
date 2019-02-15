@@ -1,4 +1,4 @@
-#' Set the names of a data.frame of vector
+#' Set the names of a data.frame or vector
 #'
 #' @param x either data.frame or character vector
 #' @param xnames vector conatining names to be applied to \code{x}
@@ -25,11 +25,11 @@
 #' ADSL <- radsl(N=10, seed = 1)
 #' ADTTE <- radtte(ADSL, seed = 1)
 #' 
-#' choices1 <- name_choices(ADSL, tern::var_labels(ADSL))
-#' choices2 <- name_choices(ADTTE$PARAMCD, ADTTE$PARAM)
+#' choices1 <- named_choices(ADSL, tern::var_labels(ADSL))
+#' choices2 <- named_choices(ADTTE$PARAMCD, ADTTE$PARAM)
 #' 
 #' #similar names are not duplicated
-#' choices3 <- name_choices(ADTTE$PARAMCD, ADTTE$PARAMCD)
+#' choices3 <- named_choices(ADTTE$PARAMCD, ADTTE$PARAMCD)
 #' 
 #' \dontrun{
 #' 
@@ -49,7 +49,7 @@
 #' 
 #' }
 
-name_choices <- function(x, xnames){
+named_choices <- function(x, xnames){
   
   if(is.factor(x)){
     x <- as.character(x)
