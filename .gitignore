@@ -12,3 +12,4 @@ vignettes/*.md
 vignettes/*.R
 devel/*
 temp/*
+^docs/*
