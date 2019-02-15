@@ -5,7 +5,7 @@
 #'
 #' @export
 #'
-showRCodeModal <- function(title, rcode) {
+show_r_code_modal <- function(title, rcode) {
 
   rcode <- paste(rcode, collapse = "\n")
 
@@ -14,7 +14,7 @@ showRCodeModal <- function(title, rcode) {
     tags$pre(id = "r_code", rcode),
     title = title,
     footer = tagList(
-      actionButton('copyRCode', 'Copy to Clipboard', `data-clipboard-target` = "#r_code"),
+      actionButton("copyRCode", "Copy to Clipboard", `data-clipboard-target` = "#r_code"),
       modalButton("Dissmiss")
     ),
     size = "l",

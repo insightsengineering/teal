@@ -1,9 +1,6 @@
-^Meta$
-^doc$
 ^.*\.Rproj$
 ^\.Rproj\.user$
 ^man-roxygen/*
-^drawings/*
 ^vignettes/*.html
 ^docs$
 ^_pkgdown\.yml$

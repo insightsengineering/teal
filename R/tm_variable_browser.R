@@ -13,7 +13,7 @@ tm_variable_browser <- function(label = "variable browser") {
     server = srv_page_variable_browser,
     ui = ui_page_variable_browser,
     filters = "all",
-    ui_args = list(datasets='teal_datasets')
+    ui_args = list(datasets = "teal_datasets")
   )
 }
 
@@ -26,40 +26,42 @@ ui_page_variable_browser <- function(id, datasets) {
   ns <- NS(id)
 
   div(
-    class="row",
+    class = "row",
     div(
-      class="col-md-6",
+      class = "col-md-6",
       # variable browser
-      div(class="well", style="background: transparent;",
+      div(class = "well", style = "background: transparent;",
           do.call(
             tabsetPanel,
             c(id = ns("tsp"),
               do.call(tagList, setNames(lapply(datasets$datanames(), function(domain) {
-                ui_id <- paste0('variable_browser_', domain)
+                ui_id <- paste0("variable_browser_", domain)
                 tabPanel(domain, div(
-                  style="margin-top: 15px;",
-                  DT::dataTableOutput(ns(ui_id), width="100%")))
+                  style = "margin-top: 15px;",
+                  DT::dataTableOutput(ns(ui_id), width = "100%")))
               }), NULL)
               )
             )
           ),
-          checkboxInput(ns("showAslVars"),  "Show ASL variables datasets other than ASL", value = FALSE)
+          checkboxInput(ns("show_asl_vars"),  "Show ASL variables datasets other than ASL", value = FALSE)
       )
     ),
     div(
-      class="col-md-6",
+      class = "col-md-6",
       div(
-        class="well",
-        style="padding-bottom: 0px",
-        plotOutput(ns("variable_plot"), height="500px"),
+        class = "well",
+        style = "padding-bottom: 0px",
+        plotOutput(ns("variable_plot"), height = "500px"),
         div(
-          class="clearfix",
-          style="margin-top: 15px;",
+          class = "clearfix",
+          style = "margin-top: 15px;",
           div(
-            class="pull-left",
-            radioButtons(ns("raw_or_filtered"), NULL, choices = c("unfiltered data"='raw', "filtered data"='filtered'), selected="filtered", inline = TRUE)
+            class = "pull-left",
+            radioButtons(ns("raw_or_filtered"), NULL,
+                         choices = c("unfiltered data" = "raw", "filtered data" = "filtered"),
+                         selected = "filtered", inline = TRUE)
           ),
-          actionLink(ns("add_filter_variable"), "add as filter variable", class="pull-right")
+          actionLink(ns("add_filter_variable"), "add as filter variable", class = "pull-right")
         ),
         uiOutput(ns("warning"))
       )
@@ -74,11 +76,11 @@ srv_page_variable_browser <- function(input, output, session, datasets) {
 
 
   # useful to pass on to parent program
-  plot_var <- reactiveValues(data=NULL, variable=NULL)
+  plot_var <- reactiveValues(data = NULL, variable = NULL)
 
-  current_rows <- new.env()
+  current_rows <- new.env() # nolint
 
-  asl_vars <- names(datasets$get_data('ASL'))
+  asl_vars <- names(datasets$get_data("ASL"))
 
 
   lapply(datasets$datanames(), function(name) {
@@ -91,12 +93,12 @@ srv_page_variable_browser <- function(input, output, session, datasets) {
 
       df <- datasets$get_data(name, filtered = FALSE, reactive = TRUE)
 
-      showAslVars <- input$showAslVars
+      show_asl_vars <- input$show_asl_vars
 
-      if(is.null(df)) {
+      if (is.null(df)) {
 
         current_rows[[name]] <- character(0)
-        data.frame(Variable = character(0), Label=character(0), stringsAsFactors = FALSE)
+        data.frame(Variable = character(0), Label = character(0), stringsAsFactors = FALSE)
 
       } else {
 
@@ -105,16 +107,16 @@ srv_page_variable_browser <- function(input, output, session, datasets) {
           if (is.null(lab)) "" else lab
         }))
 
-        if (!showAslVars && name != "ASL") {
+        if (!show_asl_vars && name != "ASL") {
           asl_vars <- names(datasets$get_data("ASL", filtered = FALSE, reactive = FALSE))
           labels <- labels[!(names(labels) %in% asl_vars)]
         }
 
         current_rows[[name]] <- names(labels)
-        data.frame(Variable = names(labels), Label=labels, stringsAsFactors = FALSE)
+        data.frame(Variable = names(labels), Label = labels, stringsAsFactors = FALSE)
       }
 
-    }, rownames = FALSE, selection = list(mode='single', target='row', selected=1), server = TRUE)
+    }, rownames = FALSE, selection = list(mode = "single", target = "row", selected = 1), server = TRUE)
 
 
     ui_id_sel <- paste0(ui_id, "_rows_selected")
@@ -125,7 +127,9 @@ srv_page_variable_browser <- function(input, output, session, datasets) {
 
   })
 
-  observe({plot_var$active <- tolower(input$tsp)})
+  observe({
+    plot_var$active <- tolower(input$tsp)
+  })
 
   output$variable_plot <- renderPlot({
 
@@ -145,7 +149,7 @@ srv_page_variable_browser <- function(input, output, session, datasets) {
 
     validate(need(tolower(active) == tolower(data), "select a variable"))
 
-    df <- datasets$get_data(data, filtered = (type=="filtered"), reactive = TRUE)
+    df <- datasets$get_data(data, filtered = (type == "filtered"), reactive = TRUE)
 
     if (is.null(varname)) {
       validate(need(NULL, "no valid variable was selected"))
@@ -154,29 +158,32 @@ srv_page_variable_browser <- function(input, output, session, datasets) {
       validate(need(datasets$has_variable(data, varname), "variable not available"))
 
       var <- df[[varname]]
-      Dvarname <- paste0(data,".",varname)
+      d_var_name <- paste0(data, ".", varname)
 
       grid::grid.newpage()
 
       plot_grob <- if (is.factor(var) || is.character(var)) {
         groups <- unique(as.character(var))
         if (length(groups) > 30) {
-          grid::textGrob( paste0(Dvarname, ":\n  ", paste(groups[1:min(10, length(groups))], collapse = "\n  "), "\n   ...") ,
-                          x=grid::unit(1, "line"), y=grid::unit(1,"npc")-grid::unit(1,"line"),
-                          just=c("left", "top"))
+          grid::textGrob(paste0(d_var_name, ":\n  ",
+                                paste(groups[1:min(10, length(groups))], collapse = "\n  "),
+                                "\n   ..."),
+                         x = grid::unit(1, "line"), y = grid::unit(1, "npc") - grid::unit(1, "line"),
+                         just = c("left", "top"))
         } else {
-          p <- ggplot2::qplot(var) + ggplot2::xlab(Dvarname) + ggplot2::theme_light() + ggplot2::coord_flip()
+          p <- ggplot2::qplot(var) + ggplot2::xlab(d_var_name) + ggplot2::theme_light() + ggplot2::coord_flip()
           ggplot2::ggplotGrob(p)
         }
       } else if (is.numeric(var)) {
         ## histogram
-        p <- ggplot2::qplot(var) + ggplot2::xlab(Dvarname) + ggplot2::theme_light() + ggplot2::coord_flip()
+        p <- ggplot2::qplot(var) + ggplot2::xlab(d_var_name) + ggplot2::theme_light() + ggplot2::coord_flip()
         ggplot2::ggplotGrob(p)
       } else {
 
         grid::textGrob(
-          paste(strwrap(capture.output(str(var)), width = .9* grid::convertWidth(grid::unit(1, "npc"), "char", TRUE)), collapse = "\n"),
-          x=grid::unit(1, "line"), y=grid::unit(1,"npc")-grid::unit(1,"line"), just=c("left", "top")
+          paste(strwrap(capture.output(str(var)), width = .9 * grid::convertWidth(grid::unit(1, "npc"), "char", TRUE)),
+                collapse = "\n"),
+          x = grid::unit(1, "line"), y = grid::unit(1, "npc") - grid::unit(1, "line"), just = c("left", "top")
         )
 
       }
@@ -201,9 +208,16 @@ srv_page_variable_browser <- function(input, output, session, datasets) {
       if (!is.null(varname)) {
 
         if (dataname != "ASL" && varname %in% asl_vars) {
-          warning_messages$varinfo <- paste("You can not add an ASL variable from any dataset other than ASL. Switch to the ASL data and add the variable from there.")
+          warning_messages$varinfo <- paste(
+            "You can not add an ASL variable from any dataset other than ASL.",
+            "Switch to the ASL data and add the variable from there."
+          )
         } else if (datasets$get_filter_type(dataname, varname) == "unknown") {
-          warning_messages$varinfo <- paste("variable", paste(dataname, varname, sep="."), "can currently not be used as a filter variable.")
+          warning_messages$varinfo <- paste(
+            "variable",
+            paste(dataname, varname, sep = "."),
+            "can currently not be used as a filter variable."
+          )
         } else {
           datasets$set_default_filter_state(dataname, varname)
           warning_messages$varinfo <- ""
@@ -220,14 +234,12 @@ srv_page_variable_browser <- function(input, output, session, datasets) {
     warning_messages$i
     msg <- warning_messages$varinfo
 
-    if (is.null(msg)  || msg == "" ) {
-      div(style="display: none;")
+    if (is.null(msg)  || msg == "") {
+      div(style = "display: none;")
     } else {
-      div(class="text-warning", style="margin-bottom: 15px;", msg)
+      div(class = "text-warning", style = "margin-bottom: 15px;", msg)
     }
   })
-
-
 
   NULL
 

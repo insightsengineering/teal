@@ -139,9 +139,7 @@ parse_code_chunks <- function(txt, file, reindent = TRUE) {
   matched_obj_single <- if (length(match_single) != 0) {
 
     Map(function(i) {
-
         m <- code[i]
-
         # Extract name
         name <- sub("[[:space:]](.*)", "", sub(paste0("(.*?)", re_oneline), "", m))
 
@@ -149,9 +147,9 @@ parse_code_chunks <- function(txt, file, reindent = TRUE) {
           name = name,
           start = i
         )
+    }, match_single)
 
-
-  }, match_single) } else {
+  } else {
 
     NULL
 
@@ -159,8 +157,10 @@ parse_code_chunks <- function(txt, file, reindent = TRUE) {
 
 
   # Checking validity of input
+  # nolint start
   if (any(vapply(matched_obj_multi, function(x) {name <- x$name; make.names(name) != name}, logical(1))) |
       any(vapply(matched_obj_single, function(x) {name <- x$name; make.names(name) != name}, logical(1)))) {
+    # nolint end
 
     stop("Each code chunk must have a valid name in adherence to variable naming
          restrictions in R (e.g. does not begin with a number).")
@@ -168,11 +168,12 @@ parse_code_chunks <- function(txt, file, reindent = TRUE) {
   }
 
   # 1. Check if chunk starting tag appears after ending tag
-  # 2. Check if chunks are overlapping (file is read line by line, so it should always be start -> end -> start -> end...
-  # 3. Check fi single-line code chunks overlap with the multi-line code chunks (i.e. a single-line code chunk within a multi-line code chunk)
-  if (any(vapply(matched_obj_multi, function(x) {x$start >= x$end}, logical(1)))
+  # 2. Check if chunks are overlapping (file is read line by line, so it should always be start -> end -> start -> end
+  # 3. Check fi single-line code chunks overlap with the multi-line code chunks
+  #  (i.e. a single-line code chunk within a multi-line code chunk)
+  if (any(vapply(matched_obj_multi, function(x) x$start >= x$end, logical(1)))
       | any(diff(c(starts_ends)) < 1)
-      | any(vapply(match_single, function(x) any(starts_ends[1,] < x & starts_ends[2,] > x), logical(1))) ) {
+      | any(vapply(match_single, function(x) any(starts_ends[1, ] < x & starts_ends[2, ] > x), logical(1)))) {
 
     stop("Code chunks must be non-overlapping. Each code chunk should start
          with \"#@start_<chunkname>\" to mark the start, and end on a different
@@ -190,8 +191,8 @@ parse_code_chunks <- function(txt, file, reindent = TRUE) {
   }
 
 
-  x <- Map(function(x) code[seq(x$start+1, x$end)], matched_obj_multi)
-  y <- Map(function(x) code[x$start+1], matched_obj_single)
+  x <- Map(function(x) code[seq(x$start + 1, x$end)], matched_obj_multi)
+  y <- Map(function(x) code[x$start + 1], matched_obj_single)
 
   # Removes any text that appears on and after the end tag on the last line of each code chunk,
   # while preserving any text that appears right before the end tag on the same line
@@ -212,7 +213,12 @@ parse_code_chunks <- function(txt, file, reindent = TRUE) {
     chunks <- lapply(chunks, function(k) {
 
       nws <- nchar(k[1]) - nchar(sub("^[[:space:]]*", "", k[1])) # No. of white space at the start of 1st line
-      vapply(1:length(k), function(i) { sub(paste0("^[[:space:]]{", nws,"}"), "", k[i])}, character(1)) })
+      vapply(
+        1:length(k),
+        function(i) {
+          sub(paste0("^[[:space:]]{", nws, "}"), "", k[i])}, character(1))
+        }
+      )
 
   }
 

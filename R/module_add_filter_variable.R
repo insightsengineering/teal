@@ -2,20 +2,15 @@ ui_add_filter_variable <- function(id, dataname) {
 
   ns <- NS(id)
 
-  div( class = paste0("teal_filter_", dataname),
-       selectInput(ns("variables"), label=dataname , choices=NULL),
-       uiOutput(ns("warning"))
+  div(class = paste0("teal_filter_", dataname),
+      selectInput(ns("variables"), label = dataname, choices = NULL),
+      uiOutput(ns("warning"))
   )
-
-
-  #    actionButton(ns("add"), label=NULL, icon=icon("plus"))
 
 }
 
 
-
 srv_add_filter_variable <- function(input, output, session, datasets, dataname, omit_vars=NULL) {
-
 
   observe({
     fs <- datasets$get_filter_state(dataname, reactive = TRUE)
@@ -30,7 +25,7 @@ srv_add_filter_variable <- function(input, output, session, datasets, dataname, 
     }
 
     .log("update add filter variables", dataname)
-    updateSelectInput(session, "variables", choices = c("", choices), selected=NULL)
+    updateSelectInput(session, "variables", choices = c("", choices), selected = NULL)
   })
 
   warning_messages <- reactiveValues(varinfo = "", i = 0)
@@ -49,7 +44,11 @@ srv_add_filter_variable <- function(input, output, session, datasets, dataname, 
         datasets$set_default_filter_state(dataname, var)
         warning_messages$varinfo <- ""
       } else {
-        warning_messages$varinfo <- paste("variable", paste(dataname, var, sep="."), "can currently not be used as a filter variable.")
+        warning_messages$varinfo <- paste(
+          "variable",
+          paste(dataname, var, sep = "."),
+          "can currently not be used as a filter variable."
+        )
       }
       warning_messages$i <- warning_messages$i + 1
     }
@@ -59,10 +58,10 @@ srv_add_filter_variable <- function(input, output, session, datasets, dataname, 
     warning_messages$i
     msg <- warning_messages$varinfo
 
-    if (is.null(msg)  || msg == "" ) {
-      div(style="display: none;")
+    if (is.null(msg)  || msg == "") {
+      div(style = "display: none;")
     } else {
-      div(class="text-warning", style="margin-bottom: 15px;", msg)
+      div(class = "text-warning", style = "margin-bottom: 15px;", msg)
     }
   })
 

@@ -18,10 +18,7 @@ trials data. `teal` currently provides a dynamic filtering facility and
 different data viewers. `teal` shiny applications are built using standard
 [shiny modules][shiny_modules].
 
-The introduction example in this document is very basic, you can study the code
-for an actial application that we deployed to analyze ATEZO data. You can find
-that application code
-[here](https://github.roche.com/waddella/atezo-pooled-analysis-shinyapp).
+More information can be found on the [agile-R website][agileR].
 
 ## Initializing A Teal application
 
@@ -244,64 +241,11 @@ tags$div(tags$h1("My New Analysis Web-app"), tags$p(class="pull-left", "Logo"))
 ```
 
 
-### Production Setup and Version Control
-
-Teal is currently under active development and features and bug-fixes get added 
-frequently and we also reserve the freedom to change the API. You can download
-the latest `teal` versions from the [GithHub repository][teal_git] and
-eventually we will release versions also on the [GRAN][gran] server that you can
-install via `devtools::install_version`.
-
-I recommend not to version control your whole shiny app with [packrat][packrat]
-if not necessary. In order to version control teal for your deployed shiny app
-you can install the teal version of choice into folder within the shiny app and
-then load that `teal` package explicitly. To run the following code (say from
-the [RStudio on bee](http://r.roche.com))
-
-```{r, eval=FALSE}
-
-project.path <- "/srv/shiny-server/<path>"
-
-current.path <- getwd()
-setwd(project.path) 
-
-orig.libpaths <- .libPaths()
-
-path.teal.libs <-  file.path(project.path, "libs")
-
-if (!dir.exists(path.teal.libs)) dir.create(path.teal.libs)
-
-.libPaths(c(path.teal.libs, .libPaths()))
-
-devtools::install_github(
-  "Rpackages/teal",
-  ref = "devel",
-  host = "https://github.roche.com/api/v3",
-  build_vignettes = FALSE,
-  upgrade_dependencies = FALSE
-)
-
-.libPaths(orig.libpaths)
-setwd(current.path)
-```
-
-Then in you `app.R` add the following line as the first line:
-
-```{r, eval = FALSE}
-.libPaths(c(normalizePath("./libs"), .libPaths()))
-```
-
-The above line needs to be loaded before you load the `teal` library with
-`library(teal)`.
-
-You may also watch the video
-[here](https://github.roche.com/waddella/videos/raw/master/teal/getting_started_with_teal.mp4)
-that explains these steps to set up a teal project.
-
-
 [shiny_modules]: https://shiny.rstudio.com/articles/modules.html "Modularizing Shiny app code"
 [shiny_single_file_app]: https://shiny.rstudio.com/articles/single-file.html "Single-file Shiny apps"
 [R6]: https://cran.r-project.org/web/packages/R6/vignettes/Introduction.html "Introduction to R6 classes"
 [teal_git]: https://github.roche.com/waddella/teal "Teal GitHub Repository"
 [gran]: http://gran.roche.com "Roche R Package Server"
 [packrat]: https://rstudio.github.io/packrat/ "Packrat is a dependency management system for R"
+[agileR]: http://go.roche.com/agile-R
+
