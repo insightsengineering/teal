@@ -538,12 +538,12 @@ by Michael) and another approach is developed by Doug and Gabe.
 
 
 After having created a number of modules for
-[`teal.oncology`](https://github.roche.com/Rpackages/teal.oncology) it seems
+[`teal.oncology`](https://github.roche.com/NEST/teal.modules.clinical) it seems
 probably easiest to keep the modules simple by making a module to be a user
 interface for a simple function call with dynamic arguments. E.g. we created am
 analysis package [tern](https://github.roche.com/NEST/tern) which has the
 function `kmplot` to create a kaplan meier plot. We have then also created the
-[`teal.oncology`](https://github.roche.com/Rpackages/teal.oncology) R package
+[`teal.oncology`](https://github.roche.com/NEST/teal.modules.clinical) R package
 which has the module `tm_kplot` which provides a user interface that allows one
 to modify certain arguments of `tern::kmplot` via the encodings panel. This
 reduces 4) essentially to an argument tracking problem. This is, however, work
