@@ -143,7 +143,7 @@ srv_table <- function(input, output, session, datasets, dataname) {
       description = "",
       libraries = c(),
       data = setNames(list(datasets$get_data(dataname, reactive = FALSE, filtered = FALSE)), dataname),
-      git_repo = "http://github.roche.com/Rpackages/teal/R/tm_table.R"
+      git_repo = "http://github.roche.com/NEST/teal/R/tm_table.R"
     )
 
     str_filter <- get_filter_txt(dataname, datasets)

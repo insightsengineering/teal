@@ -1,4 +1,4 @@
-# teal 0.0.6
+# teal 0.6.0
 
 * Removed deprecated functions `tab*`
 * Removed data generation functions including `generate_sample_data`

@@ -93,7 +93,8 @@ the following:
 # install.packages("devtools")
 library(devtools)
 install_github(
-  'Rpackages/teal', ref = "v0.0.4",
+  'NEST/teal', 
+  ref = "master",
   host = 'https://github.roche.com/api/v3',
   upgrade_dependencies = FALSE,
   build_vignettes = TRUE
@@ -104,7 +105,7 @@ install_github(
 
 Where there are quite a few teal modules in the wild, we are currently working
 on high-quality reusable teal modules which are available in the
-[teal.tern](https://pages.github.roche.com/Rpackages/teal.tern)
+[teal.modules.clinical](https://pages.github.roche.com/NEST/teal.modules.clinical)
 package.
 
 # Documentation
@@ -113,7 +114,7 @@ Currently there are a number of resources with documentation:
 
 1. The [agile-R website](http://go.roche.com/agile-R)
 
-1. The [project website](https://pages.github.roche.com/Rpackages/teal/)
+1. The [project website](https://pages.github.roche.com/NEST/teal/)
 
 1. The `teal` package vignettes run
 
