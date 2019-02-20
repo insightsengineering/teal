@@ -1,5 +1,5 @@
+#' @noRd
 
-#' @export
 shiny_has_data_access <- function(path) {
   
   has_access <- file.access(path, 4) == 0
