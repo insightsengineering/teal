@@ -22,7 +22,7 @@ If either \code{x} or \code{xnames} are factors, they are coerced
   to character. If the names of \code{x} and \code{xnames} are the same or similar, 
   the unique name is kept. For example if a variable "AGE" should be named 
   "Age" according to \code{xnames}, the vector returned will be named just "Age" 
-  instead of "AGE - Age". See examples.
+  instead of "AGE: Age". See examples.
   
   This is function is useful to create the vectors passed on to 
   the arguments of the \code{choices_selected} arguments in \code{teal} modules.

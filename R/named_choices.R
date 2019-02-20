@@ -7,7 +7,7 @@
 #'   to character. If the names of \code{x} and \code{xnames} are the same or similar, 
 #'   the unique name is kept. For example if a variable "AGE" should be named 
 #'   "Age" according to \code{xnames}, the vector returned will be named just "Age" 
-#'   instead of "AGE - Age". See examples.
+#'   instead of "AGE: Age". See examples.
 #'   
 #'   This is function is useful to create the vectors passed on to 
 #'   the arguments of the \code{choices_selected} arguments in \code{teal} modules.
@@ -77,7 +77,10 @@ named_choices <- function(x, xnames){
   
   }
   
-  nam_vl = paste(nam, vl, sep = " - ")
+  nam_vl = paste0(nam, ": ", vl)
+  
+  # if variable name(nam) and label (vl) are similar
+  # then keep only variable name.
   keep_id <- seq_along(nam_vl)[tolower(nam) == tolower(vl)]
   nam_vl[keep_id] <- vl[keep_id]
   
