@@ -2,6 +2,8 @@
 #' 
 #' Helpful for shiny app on BEE server that requires entimICE data. When developing and testing shiny apps locally, please do not run shiny_entimice_setup(). It is best to add when ready to publish.
 #' 
+#' @noRd
+#' 
 #' @author Jennifer Li \email{lij201@gene.com}
 #' 
 #' @references \url{https://en.wikipedia.org/wiki/List_of_Crayola_crayon_colors}
@@ -10,19 +12,19 @@
 #' 
 #' @return The success or failure of entimICE connection, and automatically redirect to the main shiny app page.
 #' 
+#' @import SAICE
 #' @importFrom shiny shinyApp
-#' @export
+#' @importFrom stats start
 #' 
 #' @examples 
-#' \dontrun
-#' {
+#' \dontrun{
 #' #install the branch that enables interactive password entering in shiny
 #' #devtools::install_github(
-#repo = 'Rpackages/SAICE', 
-#host = 'https://github.roche.com/api/v3',
-#ref = "shiny_passwordInput_SAICE",
-#force = TRUE
-#)
+#' #repo = 'Rpackages/SAICE', 
+#' #host = 'https://github.roche.com/api/v3',
+#' #ref = "shiny_passwordInput_SAICE",
+#' #force = TRUE
+#' # )
 #' 
 #' shiny_entimice_setup()
 #' shiny_entimice_setup("shiny.roche.com/drug/ro5541267/go29537/SREP/")
@@ -38,7 +40,7 @@
 shiny_entimice_setup <- function(url="") {
   start("shiny_entimice_setup")
   if (!dir.exists("~/key_pass_sso")) {
-    library(SAICE)
+    #library(SAICE)
     
     #get the url of current app by looking for patterns in the directory
     wd <- getwd()
