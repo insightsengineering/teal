@@ -1,16 +1,13 @@
 #' Set the names of a data.frame or vector
 #'
 #' @param x either data.frame or character vector
-#' @param xnames vector conatining names to be applied to \code{x}
+#' @param xnames vector containing names to be applied to \code{x}
 #' 
 #' @details If either \code{x} or \code{xnames} are factors, they are coerced 
-#'   to character. If the names of \code{x} and \code{xnames} are the same or similar, 
-#'   the unique name is kept. For example if a variable "AGE" should be named 
-#'   "Age" according to \code{xnames}, the vector returned will be named just "Age" 
-#'   instead of "AGE: Age". See examples.
+#'   to character.
 #'   
-#'   This is function is useful to create the vectors passed on to 
-#'   the arguments of the \code{choices_selected} arguments in \code{teal} modules.
+#'   This function is useful to create the vectors passed on to 
+#'   the \code{choices_selected} arguments in \code{teal} modules.
 #' 
 #' @return a named character vector 
 #' 
@@ -19,7 +16,6 @@
 #' @export
 #'
 #' @examples
-#' 
 #' library(random.cdisc.data)
 #' library(tern)
 #' ADSL <- radsl(N=10, seed = 1)
@@ -27,9 +23,6 @@
 #' 
 #' choices1 <- named_choices(ADSL, tern::var_labels(ADSL))
 #' choices2 <- named_choices(ADTTE$PARAMCD, ADTTE$PARAM)
-#' 
-#' #similar names are not duplicated
-#' choices3 <- named_choices(ADTTE$PARAMCD, ADTTE$PARAMCD)
 #' 
 #' \dontrun{
 #' 
@@ -77,14 +70,9 @@ named_choices <- function(x, xnames){
   
   }
   
-  nam_vl = paste0(nam, ": ", vl)
+  nam_vl <- paste0(nam, ": ", vl)
+  named_x <- stats::setNames(nam, nam_vl)
   
-  # if variable name(nam) and label (vl) are similar
-  # then keep only variable name.
-  keep_id <- seq_along(nam_vl)[tolower(nam) == tolower(vl)]
-  nam_vl[keep_id] <- vl[keep_id]
-  
-  named_x <-stats::setNames(nam, nam_vl)
   named_x
 }
 

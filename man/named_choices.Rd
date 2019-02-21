@@ -9,7 +9,7 @@ named_choices(x, xnames)
 \arguments{
 \item{x}{either data.frame or character vector}
 
-\item{xnames}{vector conatining names to be applied to \code{x}}
+\item{xnames}{vector containing names to be applied to \code{x}}
 }
 \value{
 a named character vector
@@ -19,16 +19,12 @@ Set the names of a data.frame or vector
 }
 \details{
 If either \code{x} or \code{xnames} are factors, they are coerced 
-  to character. If the names of \code{x} and \code{xnames} are the same or similar, 
-  the unique name is kept. For example if a variable "AGE" should be named 
-  "Age" according to \code{xnames}, the vector returned will be named just "Age" 
-  instead of "AGE: Age". See examples.
+  to character.
   
-  This is function is useful to create the vectors passed on to 
-  the arguments of the \code{choices_selected} arguments in \code{teal} modules.
+  This function is useful to create the vectors passed on to 
+  the \code{choices_selected} arguments in \code{teal} modules.
 }
 \examples{
-
 library(random.cdisc.data)
 library(tern)
 ADSL <- radsl(N=10, seed = 1)
@@ -36,9 +32,6 @@ ADTTE <- radtte(ADSL, seed = 1)
 
 choices1 <- named_choices(ADSL, tern::var_labels(ADSL))
 choices2 <- named_choices(ADTTE$PARAMCD, ADTTE$PARAM)
-
-#similar names are not duplicated
-choices3 <- named_choices(ADTTE$PARAMCD, ADTTE$PARAMCD)
 
 \dontrun{
 
