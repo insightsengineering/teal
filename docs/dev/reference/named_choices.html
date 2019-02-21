@@ -121,7 +121,7 @@
     </tr>
     <tr>
       <th>xnames</th>
-      <td><p>vector conatining names to be applied to <code>x</code></p></td>
+      <td><p>vector containing names to be applied to <code>x</code></p></td>
     </tr>
     </table>
     
@@ -132,27 +132,20 @@
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
     <p>If either <code>x</code> or <code>xnames</code> are factors, they are coerced 
-  to character. If the names of <code>x</code> and <code>xnames</code> are the same or similar, 
-  the unique name is kept. For example if a variable "AGE" should be named 
-  "Age" according to <code>xnames</code>, the vector returned will be named just "Age" 
-  instead of "AGE: Age". See examples.</p>  
-<p>This is function is useful to create the vectors passed on to 
-  the arguments of the <code>choices_selected</code> arguments in <code>teal</code> modules.</p>
+  to character.</p>  
+<p>This function is useful to create the vectors passed on to 
+  the <code>choices_selected</code> arguments in <code>teal</code> modules.</p>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'>
-<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/library'>library</a></span>(<span class='no'>random.cdisc.data</span>)
+    <pre class="examples"><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/library'>library</a></span>(<span class='no'>random.cdisc.data</span>)
 <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/library'>library</a></span>(<span class='no'>tern</span>)</div><div class='output co'>#&gt; <span class='message'>Loading required package: survival</span></div><div class='output co'>#&gt; <span class='message'>Loading required package: grid</span></div><div class='output co'>#&gt; <span class='message'>Loading required package: rtables</span></div><div class='output co'>#&gt; <span class='message'></span>
 #&gt; <span class='message'>This is a beta version for tern v0.5.1. Install the current stable tern v0.5.0 with:</span>
 #&gt; <span class='message'>  devtools::install_github("Rpackages/tern", "v0.5.0", host = "https://github.roche.com/api/v3")</span></div><div class='input'><span class='no'>ADSL</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/random.cdisc.data/topics/radsl'>radsl</a></span>(<span class='kw'>N</span><span class='kw'>=</span><span class='fl'>10</span>, <span class='kw'>seed</span> <span class='kw'>=</span> <span class='fl'>1</span>)
 <span class='no'>ADTTE</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/random.cdisc.data/topics/radtte'>radtte</a></span>(<span class='no'>ADSL</span>, <span class='kw'>seed</span> <span class='kw'>=</span> <span class='fl'>1</span>)
 
 <span class='no'>choices1</span> <span class='kw'>&lt;-</span> <span class='fu'>named_choices</span>(<span class='no'>ADSL</span>, <span class='kw pkg'>tern</span><span class='kw ns'>::</span><span class='fu'><a href='https://www.rdocumentation.org/packages/tern/topics/var_labels'>var_labels</a></span>(<span class='no'>ADSL</span>))
-<span class='no'>choices2</span> <span class='kw'>&lt;-</span> <span class='fu'>named_choices</span>(<span class='no'>ADTTE</span>$<span class='no'>PARAMCD</span>, <span class='no'>ADTTE</span>$<span class='no'>PARAM</span>)
-
-<span class='co'>#similar names are not duplicated</span>
-<span class='no'>choices3</span> <span class='kw'>&lt;-</span> <span class='fu'>named_choices</span>(<span class='no'>ADTTE</span>$<span class='no'>PARAMCD</span>, <span class='no'>ADTTE</span>$<span class='no'>PARAMCD</span>)</div><span class='co'># NOT RUN {</span>
+<span class='no'>choices2</span> <span class='kw'>&lt;-</span> <span class='fu'>named_choices</span>(<span class='no'>ADTTE</span>$<span class='no'>PARAMCD</span>, <span class='no'>ADTTE</span>$<span class='no'>PARAM</span>)</div><span class='co'># NOT RUN {</span>
 <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/library'>library</a></span>(<span class='no'>shiny</span>)
 
 <span class='fu'><a href='https://www.rdocumentation.org/packages/shiny/topics/shinyApp'>shinyApp</a></span>(
