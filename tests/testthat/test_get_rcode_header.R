@@ -252,24 +252,24 @@ test_that("get_filter_txt", {
   d$set_data("ATE", ATE)
 
   tc1 <- get_filter_txt("ASL", d)
-
-  expect_equal(tc1, "ASL_FILTERED <- ASL", info = "Simple filtered data test failed.")
+  tc1_expect <- ""
+  attr(tc1_expect,"unfiltered") <- "ASL"
+  
+  expect_equal(tc1, tc1_expect, info = "Simple filtered data test failed.")
 
   tc2 <- get_filter_txt("ATE", d) %>%
     strsplit(split = "\n") %>%
     unlist() %>%
     unname()
-
-  expect_equal(
-    tc2,
-    c(
-      "ASL_FILTERED <- ASL",
-      "ATE_FILTERED_ALONE <- ATE",
-      "ATE_FILTERED <- merge(x = ASL_FILTERED[, c(\"USUBJID\", \"STUDYID\")], y = ATE_FILTERED_ALONE, ",
-      "    by = c(\"USUBJID\", \"STUDYID\"), all.x = FALSE, all.y = FALSE)"
-    ),
-    "Merged data check failed."
-  )
+   
+  expect_true(
+    tc2[1] == "", "Merged data check failed. [1]")
+  expect_true(
+    tc2[2] == "ATE_FILTERED_ALONE <- ATE", "Merged data check failed. [2]")
+  expect_true(
+    tc2[3] == "ATE_FILTERED <- merge(x = ASL_FILTERED[, c(\"USUBJID\", \"STUDYID\")], y = ATE_FILTERED_ALONE, ", "Merged data check failed. [3]")
+  expect_true(
+    tc2[4] == "    by = c(\"USUBJID\", \"STUDYID\"), all.x = FALSE, all.y = FALSE)", "Merged data check failed. [4]")
 
   d$set_filter_state("ASL", "ARM", "A: Drug X")
 
@@ -434,7 +434,7 @@ test_that("get_rcode_datalist", {
       "",
       "ASL <- ASL %>% filter(AGE > 20)",
       "",
-      "ASL_FILTERED <- ASL"
+      ""
     ),
     info = "One data sets with teal filtering."
   )
@@ -448,6 +448,12 @@ test_that("get_rcode_datalist", {
     unname() %>%
     trimws()
 
+  filtered_strings <- lapply(d$get_filter_call("ATE"), function(x) x %>%
+            deparse(width.cutoff = 80) %>%
+            trimws()) %>% unlist()
+  
+  filtered_strings[[1]] <- ""
+  
   expect_equal(
     tc4,
     c(
@@ -457,11 +463,9 @@ test_that("get_rcode_datalist", {
       "",
       "ASL <- ASL %>% filter(AGE > 20)",
       "",
-      lapply(d$get_filter_call("ATE"), function(x) x %>%
-          deparse(width.cutoff = 80) %>%
-          trimws()) %>% unlist()
+      filtered_strings
     ),
-    info = "One data sets with teal filtering."
+    info = "two data sets with teal filtering."
   )
 })
 
