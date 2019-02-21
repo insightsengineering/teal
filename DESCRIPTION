@@ -2,7 +2,7 @@ Package: teal
 Type: Package
 Title: Exploratory Web Apps for Analyzing Clinical Trials Data
 Date: 2019-02-16
-Version: 0.0.6.1000
+Version: 0.6.0.1000
 Authors@R: c(
   person("Adrian", "Waddell", email = "adrian.waddell@roche.com", role = c("aut", "cre"))
   )
