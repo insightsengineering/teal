@@ -5,3 +5,4 @@
 ^\.github$
 README.*
 man-roxygen/*
+^_dev$
