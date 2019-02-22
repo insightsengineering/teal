@@ -249,17 +249,12 @@ init <- function(data,
       if (is.na(filters)) {
         session$sendCustomMessage(type = "tealShowHide", list(selector = "#teal_filter-panel", action = "hide"))
       } else {
-<<<<<<< HEAD
 
         # Making session global (don't know if necessary, as session is an environment globally available in
         # all shiny calls)
         .GlobalEnv[["session"]] <- session
 
         session$sendCustomMessage(type="tealShowHide", list(selector = "#teal_filter-panel", action = "show"))
-=======
-        as.global(session)
-        session$sendCustomMessage(type = "tealShowHide", list(selector = "#teal_filter-panel", action = "show"))
->>>>>>> origin/devel
 
         if ("all" %in% filters) {
           lapply(datasets$datanames(), function(dataname) {

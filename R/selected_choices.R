@@ -65,7 +65,6 @@ add_no_selected_choices <- function(x, multiple = FALSE) {
 
 }
 
-<<<<<<< HEAD
 #' Check select choices for no choice made
 #'
 #' @export
@@ -76,10 +75,6 @@ add_no_selected_choices <- function(x, multiple = FALSE) {
 #' @return the word or NULL
 no_selected_as_NULL <- function(x) {
   if(is.null(x) || identical(x, no_select_keyword) || x == "") {
-=======
-no_selected_as_NULL <- function(x) { # nolint
-  if (is.null(x) || identical(x, no_select_keyword) || x == "") {
->>>>>>> origin/devel
     NULL
   } else {
     x
