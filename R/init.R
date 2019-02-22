@@ -250,8 +250,7 @@ init <- function(data,
         session$sendCustomMessage(type = "tealShowHide", list(selector = "#teal_filter-panel", action = "hide"))
       } else {
 
-        # Making session global (don't know if necessary, as session is an environment globally available in
-        # all shiny calls)
+        # make session global
         .GlobalEnv[["session"]] <- session
 
         session$sendCustomMessage(type="tealShowHide", list(selector = "#teal_filter-panel", action = "show"))
