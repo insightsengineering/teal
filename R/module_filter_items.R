@@ -18,10 +18,9 @@ srv_filter_items <- function(input, output, session, datasets, dataname, contain
     fs <- datasets$get_filter_state(dataname)
     current <- uistate$filters_shown
 
-    # session$ns("")
     .log("filter items observer updated for data", dataname)
 
-    if(!identical(names(fs), current)) {
+    if (!identical(names(fs), current)) {
       uistate$filters_shown <- names(fs)
     }
 
@@ -39,7 +38,6 @@ srv_filter_items <- function(input, output, session, datasets, dataname, contain
     fs_data <- datasets$get_filter_state(dataname)
 
     if (is.null(fs_data) || length(fs_data) == 0) {
-      #      tags$p("No filter variables selected")
       div()
     } else {
 
@@ -51,7 +49,8 @@ srv_filter_items <- function(input, output, session, datasets, dataname, contain
         id <- paste0("var_", label_to_id(var))
         id_rm <- paste0("rm_", label_to_id(var))
 
-        varlabel <- tagList(tags$span(paste0(dataname,".", var)), actionLink(ns(id_rm), "remove", style="font-weight:normal;"))
+        varlabel <- tagList(tags$span(paste0(dataname, ".", var)),
+                            actionLink(ns(id_rm), "remove", style = "font-weight:normal;"))
 
         el <- if (fi$type == "choices") {
           if (length(fi$choices) > 5) {
@@ -66,7 +65,7 @@ srv_filter_items <- function(input, output, session, datasets, dataname, contain
           }
         } else if (fi$type == "range") {
           sliderInput(ns(id), varlabel,
-                      min = floor(fi$range[1]*100)/100, max = ceiling(fi$range[2]*100)/100,
+                      min = floor(fi$range[1] * 100) / 100, max = ceiling(fi$range[2] * 100) / 100,
                       value = fs,
                       width = "100%")
         } else if (fi$type == "logical") {
@@ -99,14 +98,15 @@ srv_filter_items <- function(input, output, session, datasets, dataname, contain
 
         type <- datasets$get_filter_type(dataname, varname)
 
-        .log("Filter Observer: '", id, "', type '", type, "', with value: ", if (is.null(value)) "NULL" else value, sep="")
+        .log("Filter Observer: '", id, "', type '", type, "', with value: ",
+             if (is.null(value)) "NULL" else value, sep = "")
 
         if (type == "range") {
           if (length(value) == 2) {
             datasets$set_filter_state(dataname, varname, value)
           }
         } else if (type == "choices") {
-          datasets$set_filter_state(dataname, varname, if(length(value) == 0) character(0) else value)
+          datasets$set_filter_state(dataname, varname, if (length(value) == 0) character(0) else value)
         } else if (type == "logical") {
           if (!is.null(value)) datasets$set_filter_state(dataname, varname, value)
         }
@@ -124,8 +124,6 @@ srv_filter_items <- function(input, output, session, datasets, dataname, contain
       id_has_bindings <<- c(id_has_bindings, id)
     }
   }
-
-
 
   NULL
 

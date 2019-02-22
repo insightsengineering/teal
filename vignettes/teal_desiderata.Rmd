@@ -233,5 +233,5 @@ Currently teal comes with the following standard modules:
 
 It would be nice to extend the catalogue of very general modules. Specialized
 modules (kaplan meier plot, time to event analysis, etc.) live in other packages
-such as `teal.oncology`.
+such as `teal.modules.clinical`.
 

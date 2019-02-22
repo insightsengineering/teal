@@ -1,7 +1,7 @@
 #' @import methods
 # add hidden class to a \code{shiny.tag} object
 hidden <- function(x) {
-  if(!is(x, "shiny.tag")) stop("x needs to be of class shiny.tag")
+  if (!is(x, "shiny.tag")) stop("x needs to be of class shiny.tag")
   x$attribs$class <- paste(x$attribs$class, "hidden")
   x
 }
@@ -28,7 +28,7 @@ hidden <- function(x) {
 #' optionalSelectInput("xvar", "x variable", 'A', 'A')
 #' optionalSelectInput("xvar", "x variable", LETTERS[1:5], 'A')
 #'
-optionalSelectInput <- function(inputId, label, choices, selected, ..., label_help=NULL) {
+optionalSelectInput <- function(inputId, label, choices, selected, ..., label_help = NULL) { # nolint
 
   if (is.null(choices)) {
     choices <- ""
@@ -41,29 +41,29 @@ optionalSelectInput <- function(inputId, label, choices, selected, ..., label_he
     }
     choices <- choices
     selected <- selected
-    disp <- if(length(choices) == 1) "label" else "all"
+    disp <- if (length(choices) == 1) "label" else "all"
   }
 
 
-  selIn <- selectInput(inputId, label, choices, selected, ...)
+  sel_in <- selectInput(inputId, label, choices, selected, ...)
 
   if (!is.null(label_help)) {
     label_help$attribs$style <- "margin-top: -4px; margin-bottom: 3px;"
-    selIn[[3]] <- list(selIn[[3]][[1]], label_help, selIn[[3]][[2]])
+    sel_in[[3]] <- list(sel_in[[3]][[1]], label_help, sel_in[[3]][[2]])
   }
 
 
   switch(
     disp,
-    nothing = hidden(selIn),
+    nothing = hidden(sel_in),
     label = {
       div(
-        hidden(selIn),
+        hidden(sel_in),
         tags$span(tags$label(paste0(sub(":[[:space:]]+$", "", label), ":")), selected),
         label_help
       )
     },
-    all = selIn
+    all = sel_in
   )
 }
 
@@ -79,7 +79,7 @@ optionalSelectInput <- function(inputId, label, choices, selected, ..., label_he
 #'
 #' @examples
 #' optionalSliderInput("a", "b", 0, 1, 0.2)
-optionalSliderInput <- function(inputId, label, min, max, value, ...) {
+optionalSliderInput <- function(inputId, label, min, max, value, ...) { # nolint
 
   hide <- if (is.na(min) || is.na(max)) {
     min <- value - 1
@@ -91,9 +91,9 @@ optionalSliderInput <- function(inputId, label, min, max, value, ...) {
     FALSE
   }
 
-  sIn <- sliderInput(inputId, label, min, max, value, ...)
+  slider <- sliderInput(inputId, label, min, max, value, ...)
 
-  if (hide) hidden(sIn) else sIn
+  if (hide) hidden(slider) else slider
 }
 
 
@@ -119,14 +119,15 @@ optionalSliderInput <- function(inputId, label, min, max, value, ...) {
 #' optionalSliderInputValMinMax("a", "b", 1)
 #' optionalSliderInputValMinMax("a", "b", c(3, 1, 5))
 #'
-optionalSliderInputValMinMax <- function(inputId, label, value_min_max, ...) {
+optionalSliderInputValMinMax <- function(inputId, label, value_min_max, ...) { # nolint
 
   x <- value_min_max
 
   if (!is.numeric(x)) stop("value_min_max is expected to be numeric")
 
   vals <- if (length(x) == 3) {
-    if (any(diff(x[c(2,1,3)]) < 0)) stop(paste("value_min_max is expected to be (value, min, max) where min <= value <= max"))
+    if (any(diff(x[c(2, 1, 3)]) < 0))
+      stop(paste("value_min_max is expected to be (value, min, max) where min <= value <= max"))
     list(value = x[1], min = x[2], max = x[3])
   } else if (length(x) == 1) {
     list(value = x, min = NA_real_, max = NA_real_)

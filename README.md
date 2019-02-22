@@ -1,7 +1,7 @@
 
-# Teal: Interactive Exploratory Analysis Shiny Web-Applications
+# Teal: Interactive Exploratory Data Analysis with Shiny Web-Applications
 
-We are working on a next major version that we expect to release in mid 2019.
+We are working on a next major version that is data standard independent which we expect to release in Q3 2019.
 
 Please read more about teal on our agile-R website at [go.roche.com/agile-R](http://go.roche.com/agile-R).
 
@@ -12,7 +12,7 @@ modules](https://shiny.rstudio.com/articles/modules.html).
 
 # Getting Started
 
-1. Install `teal` as described in the [installation section](#installation) below.
+1. Install `teal` as described in the [agile-R website](http://go.roche.com/agile-R).
 1. Create a new file `app.R`, and paste this code into it:
 
 	```r
@@ -80,19 +80,7 @@ modules](https://shiny.rstudio.com/articles/modules.html).
    
 1. Edit the modules in the `modules = ` argument. For example, you can
    rearrange, delete, or add new modules
-1. Push this app to the shiny server (only you can access), with:
 
-	```r
-	## setwd() to location of app.R
-	rocheBCE::shinypub("./", "users/your-unix-id/sample-app")
-	```
-
-1. For  more info, run this vignette (paste into R console and run):
-
-	```r
-	vignette("01_getting_started", package = "teal")
-	```
-    
     
 # Installation 
 
@@ -105,20 +93,8 @@ the following:
 # install.packages("devtools")
 library(devtools)
 install_github(
-  'Rpackages/teal', ref = "v0.0.4",
-  host = 'https://github.roche.com/api/v3',
-  upgrade_dependencies = FALSE,
-  build_vignettes = TRUE
-)
-```
-
-## Development Version
-
-Please read the [web-manual for the development version](https://pages.github.roche.com/Rpackages/teal/dev/). To install the development version use 
-
-```r
-devtools::install_github(
-  'Rpackages/teal', ref = "master",
+  'NEST/teal', 
+  ref = "master",
   host = 'https://github.roche.com/api/v3',
   upgrade_dependencies = FALSE,
   build_vignettes = TRUE
@@ -129,7 +105,7 @@ devtools::install_github(
 
 Where there are quite a few teal modules in the wild, we are currently working
 on high-quality reusable teal modules which are available in the
-[teal.tern](https://pages.github.roche.com/Rpackages/teal.tern)
+[teal.modules.clinical](https://pages.github.roche.com/NEST/teal.modules.clinical)
 package.
 
 # Documentation
@@ -138,7 +114,7 @@ Currently there are a number of resources with documentation:
 
 1. The [agile-R website](http://go.roche.com/agile-R)
 
-1. The [project website](https://pages.github.roche.com/Rpackages/teal/)
+1. The [project website](https://pages.github.roche.com/NEST/teal/)
 
 1. The `teal` package vignettes run
 

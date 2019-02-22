@@ -38,7 +38,7 @@
 #' attr(ATE, "source") <- "random.cdisc.data::radtte(ASL, seed = 1000)"
 #'
 #' app <- teal::init(
-#'   data =  list(ASL = ASL, ARS = ARS, ATE = ATE),
+#'   data = list(ASL = ASL, ARS = ARS, ATE = ATE),
 #'   modules = root_modules(
 #'     module(
 #'       "data source",
@@ -132,27 +132,35 @@ init <- function(data,
           )
         ),
         tags$header(header),
-        tags$hr(style="margin: 7px 0;"),
+        tags$hr(style = "margin: 7px 0;"),
         local({
-          tp <- create_ui(modules, datasets, idprefix="teal_modules", is_root = TRUE)
+          tp <- create_ui(modules, datasets, idprefix = "teal_modules", is_root = TRUE)
 
           # separate the nested tabs
           tp$children <- list(
             tp$children[[1]],
-            tags$hr(style="margin: 7px 0;"),
+            tags$hr(style = "margin: 7px 0;"),
             fluidRow(
               column(9, tp$children[[2]]),
-              column(3, div(id="teal_filter-panel", class="hide",
-                            div(class="well",
-                                tags$label("Active Filter Variables", class="text-primary", style="margin-bottom: 15px;"),
+              column(3, div(id = "teal_filter-panel", class = "hide",
+                            div(class = "well",
+                                tags$label(
+                                  "Active Filter Variables",
+                                  class = "text-primary",
+                                  style = "margin-bottom: 15px;"
+                                ),
                                 tagList(
                                   lapply(datasets$datanames(), function(dataname) {
                                     ui_filter_items(paste0("teal_filters_", dataname), dataname)
                                   })
                                 )
                             ),
-                            div(class="well",
-                                tags$label("Add Filter Variables", class="text-primary", style="margin-bottom: 15px;"),
+                            div(class = "well",
+                                tags$label(
+                                  "Add Filter Variables",
+                                  class = "text-primary",
+                                  style = "margin-bottom: 15px;"
+                                ),
                                 tagList(
                                   lapply(datasets$datanames(), function(dataname) {
                                     ui_add_filter_variable(paste0("teal_add_", dataname, "_filters"), dataname)
@@ -172,25 +180,28 @@ init <- function(data,
 
   server <- function(input, output, session) {
 
-    showFilterPanel <- function(bool=TRUE) {
-      session$sendCustomMessage(type="setDisplayCss", list(selector="#teal_filter_panel", type=if(bool)'block'else'none'))
+    show_filter_panel <- function(bool = TRUE) {
+      session$sendCustomMessage(
+        type = "setDisplayCss",
+        list(selector = "#teal_filter_panel",
+             type = ifelse(bool, "block", "none")
+        )
+      )
     }
 
     # evaluate the server functions
-    call_modules(modules, datasets, idprefix="teal_modules")
+    call_modules(modules, datasets, idprefix = "teal_modules")
 
     # -- filters
     lapply(datasets$datanames(), function(dataname) {
       callModule(srv_filter_items, paste0("teal_filters_", dataname), datasets, dataname)
     })
 
-    asl_vars <- names(datasets$get_data('ASL'))
+    asl_vars <- names(datasets$get_data("ASL"))
     lapply(datasets$datanames(), function(dataname) {
       callModule(srv_add_filter_variable, paste0("teal_add_", dataname, "_filters"), datasets, dataname,
                  omit_vars = if (dataname == "ASL") NULL else asl_vars)
     })
-
-
 
     ## hide-show filters based on module filter property
     recurse <- function(x, idprefix) {
@@ -199,7 +210,7 @@ init <- function(data,
       if (is(x, "teal_module")) {
         setNames(list(if (is.null(x$filters)) NA else x$filters), id)
       } else if (is(x, "teal_modules")) {
-        lapply(x$modules, recurse, idprefix=id)
+        lapply(x$modules, recurse, idprefix = id)
       }
     }
 
@@ -220,7 +231,7 @@ init <- function(data,
     ## now show or hide the filter panels based on active tab
     observe({
       # define reactivity dependence
-      main_tab <- input[['teal_modules.root']]
+      main_tab <- input[["teal_modules.root"]]
       secondary_tabs <- sapply(id_modules, function(id) input[[id]],  USE.NAMES = TRUE)
 
       # figure out which is the active tab/module
@@ -236,25 +247,30 @@ init <- function(data,
       .log("Active filter for tab", active_module_id, "is", filters)
 
       if (is.na(filters)) {
-        session$sendCustomMessage(type="tealShowHide", list(selector = "#teal_filter-panel", action = "hide"))
+        session$sendCustomMessage(type = "tealShowHide", list(selector = "#teal_filter-panel", action = "hide"))
       } else {
+<<<<<<< HEAD
 
         # Making session global (don't know if necessary, as session is an environment globally available in
         # all shiny calls)
         .GlobalEnv[["session"]] <- session
 
         session$sendCustomMessage(type="tealShowHide", list(selector = "#teal_filter-panel", action = "show"))
+=======
+        as.global(session)
+        session$sendCustomMessage(type = "tealShowHide", list(selector = "#teal_filter-panel", action = "show"))
+>>>>>>> origin/devel
 
         if ("all" %in% filters) {
           lapply(datasets$datanames(), function(dataname) {
-            session$sendCustomMessage(type="tealShowHide", list(selector = paste0(".teal_filter_",dataname),
-                                                                   action="show"))
+            session$sendCustomMessage(type = "tealShowHide", list(selector = paste0(".teal_filter_", dataname),
+                                                                   action = "show"))
           })
         } else {
           Map(function(dataname) {
             session$sendCustomMessage(
-              type="tealShowHide",
-              list(selector = paste0(".teal_filter_",dataname),
+              type = "tealShowHide",
+              list(selector = paste0(".teal_filter_", dataname),
                    action = if (dataname == "ASL" || dataname %in% filters) "show" else "hide"
               )
             )
@@ -262,14 +278,9 @@ init <- function(data,
         }
       }
 
-
     })
-
-    # --
-
 
   }
 
   list(server = server, ui = ui, datasets = datasets)
 }
-

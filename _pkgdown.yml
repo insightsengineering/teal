@@ -1,5 +1,5 @@
 
-url: https://pages.github.roche.com/Rpackages/teal
+url: https://pages.github.roche.com/NEST/teal
 
 template:
   params:
@@ -8,7 +8,7 @@ template:
 navbar:
   right:
     - icon: fa-github
-      href: https://github.roche.com/Rpackages/teal
+      href: https://github.roche.com/NEST/teal
 
 development:
   mode: devel
@@ -39,7 +39,7 @@ reference:
     - get_filter_txt
     - parse_code_chunks
     - reindent
-    - showRCodeModal
+    - show_r_code_modal
   - title: Helpers
     contents:
     - as.global

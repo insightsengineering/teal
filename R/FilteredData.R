@@ -1,48 +1,36 @@
-# @title Class to encapsulate filtered data sets
-#
-#
-#
-# @details This class encapsulates data import and filtering.
-#
-#   Once a dataname was specified it won't be deleted at runtime to keep
-#   reactive relations intact. If a dataset is not needed anymore then you can
-#   set it to NULL with load_data.
-#
-#   Every data set is also filtered with ASL, hence ASL is given by default (NULL)
-#
-#
-#
-#
-# load_data
-# 1 load data
-# 2 specify filer_info
-# 3 apply filters
-#
-# @param path path to file, if NULL then dataname must be specified and the dataset gets set to NULL
-# @param dataname optional, filename taken otherwise
-# @param ... arguments passed on to the respective import function
-#   (depending on file format)
-#
-#
-# @examples
-# path <- "/opt/BIOSTAT/qa/cdt7876a/libraries/asl.sas7bdat"
-#
-# x <- FilteredData$new()
-#
-# x$load_data(path)
-#
-# x$datanames()
-#
-# x$list_data_info("ASL")
-# x$get_filter_info("ASL")
-#
-# df <- x$get_data("ASL")
-#
-# x$get_filter_info("ASL")[['USUBJID']]$type
-#
-# x$set_filter("ASL", list(AGE=c(3,5), SEX=c('M', 'F')))
-#
-FilteredData <- R6::R6Class(
+#' @title Class to encapsulate filtered data sets
+#'
+#' @details This class encapsulates data import and filtering.
+#'   Once a dataname was specified it won't be deleted at runtime to keep
+#'   reactive relations intact. If a dataset is not needed anymore then you can
+#'   set it to NULL with load_data.
+#'   Every data set is also filtered with ASL, hence ASL is given by default (NULL)
+#'
+#' load_data
+#' 1 load data
+#' 2 specify filer_info
+#' 3 apply filters
+#'
+#' @examples
+#' \dontrun{
+#' path <- "/opt/BIOSTAT/qa/cdt7876a/libraries/asl.sas7bdat"
+#'
+#' x <- FilteredData$new()
+#'
+#' x$load_data(path)
+#'
+#' x$datanames()
+#'
+#' x$list_data_info("ASL")
+#' x$get_filter_info("ASL")
+#'
+#' df <- x$get_data("ASL")
+#'
+#' x$get_filter_info("ASL")[['USUBJID']]$type
+#'
+#' x$set_filter("ASL", list(AGE=c(3,5), SEX=c('M', 'F')))
+#' }
+FilteredData <- R6::R6Class( # nolint
   "FilteredData",
   ## FilteredData ====
   ## __Public Methods ====
@@ -125,7 +113,9 @@ FilteredData <- R6::R6Class(
 
     list_data_info = function(dataname, filtered=FALSE, variables=NULL) {
 
-      log2 <- function(...) {cat(paste(..., collapse = " ")); cat("\n")}
+      log2 <- function(...) {
+        cat(paste(..., collapse = " ")); cat("\n")
+      }
 
       private$error_if_not_valid(dataname)
 
@@ -224,7 +214,7 @@ FilteredData <- R6::R6Class(
 
       private$error_if_not_valid(dataname)
 
-      f <- if(reactive) {
+      f <- if (reactive) {
         function(x) x
       } else {
         function(x) isolate(x)
@@ -241,34 +231,19 @@ FilteredData <- R6::R6Class(
 
     get_filter_info = function(dataname, varname=NULL) {
       private$error_if_not_valid(dataname, varname)
-      if(is.null(varname)) {
+      if (is.null(varname)) {
         private$filter_info[[dataname]]
       } else {
         private$filter_info[[dataname]][[varname]]
       }
     },
 
-
+    # TODO add remove_filter method
 
     get_filter_type = function(dataname, varname) {
       private$error_if_not_valid(dataname, varname)
       private$filter_info[[dataname]][[varname]][["type"]]
     },
-
-    # remove_filter = function(dataname, varname=NULL) {
-    #
-    #   private$error_if_not_valid(dataname, varname)
-    #
-    #   if (is.null(varname)) {
-    #
-    #   } else {
-    #
-    #   }
-    #
-    #   invisible(self)
-    # },
-
-
 
     set_filter_state = function(dataname, varname=NULL, state) {
 
@@ -282,14 +257,15 @@ FilteredData <- R6::R6Class(
       if (is.null("state")) stop("use remove_filter and not set_filter_state if to remove a filter")
 
       if (is.null(varname)) {
-        if (!(is.null(state) || is.list(state))) stop("filter state needs to be a list when specified for all variables")
+        if (!(is.null(state) || is.list(state)))
+          stop("filter state needs to be a list when specified for all variables")
 
         fs_names <- names(state)
         varnames <- names(self$get_data(dataname))
 
         # check if variables exist
         non_valid_vars_i <- which(!(fs_names %in% varnames))
-        if (length(non_valid_vars_i)>0) {
+        if (length(non_valid_vars_i) > 0) {
           stop(paste("variables", paste(fs_names[non_valid_vars_i], collapse = ", "),
                      "are not available in data", dataname))
         }
@@ -326,7 +302,7 @@ FilteredData <- R6::R6Class(
         switch(
           fii$type,
           choices = {
-            if (length(state_i)>0 && any(!(state_i %in% fii$choices)))
+            if (length(state_i) > 0 && any(!(state_i %in% fii$choices)))
               stop(paste("data", dataname, "variable", var, "not all valid choices"))
           },
           range = {
@@ -384,7 +360,7 @@ FilteredData <- R6::R6Class(
 
 
 
-    set_default_filter_state = function(dataname, varname, nchoices=10) {
+    set_default_filter_state = function(dataname, varname, nchoices = 10) {
       private$error_if_not_valid(dataname, varname)
 
       fi <- self$get_filter_info(dataname, varname)
@@ -392,7 +368,7 @@ FilteredData <- R6::R6Class(
       state <- switch(
         fi$type,
         choices = {
-          if (length(fi$choices)>nchoices) {
+          if (length(fi$choices) > nchoices) {
             character(0)
           } else {
             fi$choices
@@ -411,7 +387,7 @@ FilteredData <- R6::R6Class(
 
 
     is_filter_variable = function(dataname, varname) {
-      self$get_filter_type(dataname, variane) != "unknown"
+      self$get_filter_type(dataname, varname) != "unknown"
     },
 
 
@@ -431,10 +407,10 @@ FilteredData <- R6::R6Class(
 
         filter_call <- private$get_subset_call(dataname, out_dat)
         merge_call <- call("<-", as.name(out),
-                           call("merge", x = call("[", as.name('ASL_FILTERED'), quote(expr =), c("USUBJID", "STUDYID")),
+                           call("merge", x = call("[", as.name("ASL_FILTERED"), quote(expr =), c("USUBJID", "STUDYID")), # nolint
                                 y = as.name(out_dat),
                                 by = c("USUBJID", "STUDYID"),
-                                all.x=FALSE, all.y=FALSE))
+                                all.x = FALSE, all.y = FALSE))
 
         calls <- list(asl_filter_call, filter_call, merge_call)
 
@@ -498,7 +474,7 @@ FilteredData <- R6::R6Class(
             type = "choices",
             choices = choices
           )
-        } else if(is.numeric(var)) {
+        } else if (is.numeric(var)) {
           list(
             type = "range",
             range = range(var, na.rm = TRUE)
@@ -510,7 +486,7 @@ FilteredData <- R6::R6Class(
           )
         } else {
           .log("variable '", varname, "' is of class '",
-               class(var), "' which has currently no filter UI element", sep="")
+               class(var), "' which has currently no filter UI element", sep = "")
           list(
             type = "unknown",
             class = class(var)
@@ -538,7 +514,7 @@ FilteredData <- R6::R6Class(
 
       data_filter_call <- if (length(fs) == 0) {
 
-        call('<-', as.name(out), as.name(dataname))
+        call("<-", as.name(out), as.name(dataname))
 
       } else {
 
@@ -559,7 +535,7 @@ FilteredData <- R6::R6Class(
                 call("%in%", as.name(name), state)
               }
             },
-            range   = call("(", call('&', call('>=', as.name(name) , state[1]), call("<=", as.name(name) , state[2]))),
+            range   = call("(", call("&", call(">=", as.name(name), state[1]), call("<=", as.name(name), state[2]))),
             logical = {
               switch(
                 state,
@@ -575,7 +551,7 @@ FilteredData <- R6::R6Class(
         condition <- if (length(data_filter_call_items) == 1) {
           data_filter_call_items[[1]]
         } else {
-          Reduce(function(x,y) call('&', x, y), data_filter_call_items[-1], init=data_filter_call_items[[1]])
+          Reduce(function(x, y) call("&", x, y), data_filter_call_items[-1], init = data_filter_call_items[[1]])
         }
 
         as.call(list(as.name("<-"), as.name(out), call("subset", as.name(dataname), condition)))
@@ -592,7 +568,7 @@ FilteredData <- R6::R6Class(
       if (is.null(self$get_data("ASL", filtered = FALSE))) {
 
         # set all filtered datasets to NULL
-        for(name in self$datanames())
+        for (name in self$datanames())
           private$filtered_datasets[[name]] <- NULL
 
       } else {
@@ -601,21 +577,21 @@ FilteredData <- R6::R6Class(
         e <- new.env(parent = globalenv())
 
         # ASL
-        e$ASL <- self$get_data("ASL", filtered = FALSE)
+        e$ASL <- self$get_data("ASL", filtered = FALSE) # nolint
 
-        eval(self$get_filter_call('ASL', merge=FALSE, asl=FALSE), e)
+        eval(self$get_filter_call("ASL", merge = FALSE, asl = FALSE), e)
 
         # re-run all filters
-        if(identical(dataname, "ASL")) dataname <- NULL
+        if (identical(dataname, "ASL")) dataname <- NULL
 
         if (is.null(dataname)) {
 
           # filter all except asl
           dnnasl <- setdiff(self$datanames(), "ASL")
 
-          for(name in dnnasl) {
+          for (name in dnnasl) {
 
-            df <- self$get_data(name, filtered=FALSE)
+            df <- self$get_data(name, filtered = FALSE)
 
             if (is.null(df)) {
               e[[paste0(name, "_FILTERED")]] <- NULL
@@ -628,15 +604,15 @@ FilteredData <- R6::R6Class(
           }
 
           ## to not trigger multiple events
-          private$filtered_datasets[['ASL']] <- e[['ASL_FILTERED']]
-          for(name in dnnasl) {
-            FDN <- paste0(name, "_FILTERED")
-            private$filtered_datasets[[name]] <- e[[FDN]]
+          private$filtered_datasets[["ASL"]] <- e[["ASL_FILTERED"]]
+          for (name in dnnasl) {
+            fdn <- paste0(name, "_FILTERED")
+            private$filtered_datasets[[name]] <- e[[fdn]]
           }
 
         } else {
           # filter dataname
-          FDN <- paste0(dataname, "_FILTERED")
+          fdn <- paste0(dataname, "_FILTERED")
 
           df <- self$get_data(dataname, filtered = FALSE)
 
@@ -644,12 +620,12 @@ FilteredData <- R6::R6Class(
             e[[FDN]] <- NULL
           } else {
             e[[dataname]] <- df
-            calls <- self$get_filter_call(dataname, merge = TRUE, asl=FALSE)
+            calls <- self$get_filter_call(dataname, merge = TRUE, asl = FALSE)
             eval(calls[[1]], e)
             eval(calls[[2]], e)
           }
 
-          private$filtered_datasets[[dataname]] <- e[[FDN]]
+          private$filtered_datasets[[dataname]] <- e[[fdn]]
         }
         rm(e)
       }

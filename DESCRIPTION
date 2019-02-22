@@ -27,4 +27,5 @@ Suggests:
     knitr,
     rmarkdown,
     random.cdisc.data (>= 0.1.2.1)
+    test.nest
 VignetteBuilder: knitr
