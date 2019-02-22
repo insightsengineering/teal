@@ -1,7 +1,8 @@
 Package: teal
 Type: Package
 Title: Exploratory Web Apps for Analyzing Clinical Trials Data
-Version: 0.0.5.9000
+Date: 2019-02-16
+Version: 0.6.0.1000
 Authors@R: c(
   person("Adrian", "Waddell", email = "adrian.waddell@roche.com", role = c("aut", "cre"))
   )
@@ -17,19 +18,13 @@ Depends:
     shiny
 Imports:
     methods,
-    DT,
     R6,
     dplyr,
-    xtable,
-    ggplot2,
-    grid,
-    whisker,
-    haven,
-    tibble,
     shinyjs
 RoxygenNote: 6.1.1
 Suggests:
     testthat,
     knitr,
-    rmarkdown
+    rmarkdown,
+    random.cdisc.data (>= 0.1.2.1)
 VignetteBuilder: knitr
