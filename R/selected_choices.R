@@ -73,8 +73,8 @@ add_no_selected_choices <- function(x, multiple = FALSE) {
 #'   NULL, empty, "--no-selection"
 #'
 #' @return the word or NULL
-no_selected_as_NULL <- function(x) {
-  if(is.null(x) || identical(x, no_select_keyword) || x == "") {
+no_selected_as_NULL <- function(x) { #nolint
+  if (is.null(x) || identical(x, no_select_keyword) || x == "") {
     NULL
   } else {
     x
