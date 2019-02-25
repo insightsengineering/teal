@@ -1,3 +1,4 @@
+Meta
 .Rproj.user
 .Rhistory
 .RData
@@ -10,3 +11,4 @@ vignettes/*.md
 vignettes/*.R
 devel/*
 temp/*
+docs

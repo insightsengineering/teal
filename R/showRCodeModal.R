@@ -1,19 +1,24 @@
 #' Show R Code Modal
 #'
+#' @param title modal title
 #' @param rcode character string with R code
 #'
 #' @export
 #'
-showRCodeModal <- function(title, rcode) {
+show_r_code_modal <- function(title, rcode) {
 
   rcode <- paste(rcode, collapse = "\n")
 
 
   showModal(modalDialog(
+    tags$pre(id = "r_code", rcode),
     title = title,
-    tags$pre(tags$code(class="R", rcode)),
-    easyClose = TRUE,
-    size = "l"
+    footer = tagList(
+      actionButton("copyRCode", "Copy to Clipboard", `data-clipboard-target` = "#r_code"),
+      modalButton("Dissmiss")
+    ),
+    size = "l",
+    easyClose = TRUE
   ))
 
 }
