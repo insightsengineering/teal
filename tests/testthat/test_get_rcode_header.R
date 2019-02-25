@@ -253,23 +253,27 @@ test_that("get_filter_txt", {
 
   tc1 <- get_filter_txt("ASL", d)
   tc1_expect <- ""
-  attr(tc1_expect,"unfiltered") <- "ASL"
-  
+  attr(tc1_expect, "unfiltered") <- "ASL"
+
   expect_equal(tc1, tc1_expect, info = "Simple filtered data test failed.")
 
   tc2 <- get_filter_txt("ATE", d) %>%
     strsplit(split = "\n") %>%
     unlist() %>%
     unname()
-   
+
   expect_true(
-    tc2[1] == "", "Merged data check failed. [1]")
+    tc2[1] == "", "Merged data check failed. [1]"
+  )
   expect_true(
-    tc2[2] == "ATE_FILTERED_ALONE <- ATE", "Merged data check failed. [2]")
+    tc2[2] == "ATE_FILTERED_ALONE <- ATE", "Merged data check failed. [2]"
+  )
   expect_true(
-    tc2[3] == "ATE_FILTERED <- merge(x = ASL_FILTERED[, c(\"USUBJID\", \"STUDYID\")], y = ATE_FILTERED_ALONE, ", "Merged data check failed. [3]")
+    tc2[3] == "ATE_FILTERED <- merge(x = ASL_FILTERED[, c(\"USUBJID\", \"STUDYID\")], y = ATE_FILTERED_ALONE, ", "Merged data check failed. [3]"
+  )
   expect_true(
-    tc2[4] == "    by = c(\"USUBJID\", \"STUDYID\"), all.x = FALSE, all.y = FALSE)", "Merged data check failed. [4]")
+    tc2[4] == "    by = c(\"USUBJID\", \"STUDYID\"), all.x = FALSE, all.y = FALSE)", "Merged data check failed. [4]"
+  )
 
   d$set_filter_state("ASL", "ARM", "A: Drug X")
 
@@ -449,11 +453,11 @@ test_that("get_rcode_datalist", {
     trimws()
 
   filtered_strings <- lapply(d$get_filter_call("ATE"), function(x) x %>%
-            deparse(width.cutoff = 80) %>%
-            trimws()) %>% unlist()
-  
+      deparse(width.cutoff = 80) %>%
+      trimws()) %>% unlist()
+
   filtered_strings[[1]] <- ""
-  
+
   expect_equal(
     tc4,
     c(
