@@ -36,6 +36,7 @@ This is the layout used for the teal modules in the \code{beam} package
 \examples{
 
 \dontrun{
+library(random.cdisc.data)
 
 ui_test <- function(id) {
  ns <- NS(id)
@@ -51,7 +52,7 @@ ui_test <- function(id) {
  )
 }
 
-srv_test <- function(input, output, session) {
+srv_test <- function(input, output, session, datasets) {
    output$plot <- renderPlot({
       with(iris, plot(Sepal.Length, Petal.Length, col = Species))
    })
@@ -71,14 +72,14 @@ ui_test2 <- function(id) {
  )
 }
 
-srv_test2 <- function(input, output, session) {
+srv_test2 <- function(input, output, session, datasets) {
    output$plot <- renderPlot({
       with(iris, plot(Sepal.Length, Petal.Length, col = Species))
    })
 }
 
 x <- teal::init(
-   data = list(ASL = generate_sample_data('ASL')),
+   data = list(ASL = radsl()),
    modules = root_modules(
       module(
          "example",

@@ -1,3 +1,10 @@
+# teal 0.6.0
+
+* Removed deprecated functions `tab*`
+* Removed data generation functions including `generate_sample_data`
+* Incorporate `shinyjs` package
+* Added "Copy R code to clipboard" button
+
 # teal 0.0.5
 
 * add limit to data_table with scrolling, preventing overlap of ui elements

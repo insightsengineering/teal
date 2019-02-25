@@ -1,10 +1,10 @@
-
 #' Create a simple cross-table
 #'
 #' Create a table with the \code{\link{table}[base]} function
 #'
 #' @inheritParams module
 #' @inheritParams standard_layout
+#' @param dataname name of dataset used to generate table
 #' @param xvar variable name of x varbiable
 #' @param yvar variable name of y variable
 #' @param xvar_choices vector with variable names of possible x variables. If
@@ -30,28 +30,36 @@
 #'   If a slider should be presented to adjust the plot point sizes dynamically
 #'   then it can be a vector of length three with vlaue, min and max.
 #'
-#'
 #' @export
+#'
 #' @importFrom ggplot2 aes_string ggplot geom_point
 #'
 #' @examples
 #'
 #' \dontrun{
+#' library(random.cdisc.data)
+#'
+#' ASL <- radsl(seed = 1)
+#' AAE <- radae(ASL, seed = 99)
+#'
+#' # for reproducibility
+#' attr(ASL, "source") <- "random.cdisc.data::radsl(seed = 1)"
+#' attr(AAE, "source") <- "random.cdisc.data::radae(ASL, seed = 99)"
 #'
 #' x <- teal::init(
-#'   data = list(ASL = generate_sample_data('ASL'),
-#'               AAE = generate_sample_data('AAE')),
+#'   data = list(ASL = ASL,
+#'               AAE = AAE),
 #'   root_modules(
 #'      tm_data_table(),
 #'      tm_variable_browser(),
 #'      tm_scatterplot("Scatterplot Choices",
 #'                     dataname = 'AAE',
-#'                     xvar = 'AESDY', yvar = 'AEEDY', xvar_choices =  c('AESDY',  'AEEDY'),
-#'                     color_by = "_none_", color_by_choices = c("_none_", "AESTMF", "ANLFL")
+#'                     xvar = 'AEDECOD', yvar = 'AETOXGR', xvar_choices = c('AEDECOD', 'AETOXGR'),
+#'                     color_by = "_none_", color_by_choices = c("_none_", "AEBODSYS")
 #'      ),
 #'      tm_scatterplot("Scatterplot No Color Choices",
 #'                     dataname = 'ASL',
-#'                     xvar = 'AGE', yvar = 'TRTDUR', size = 3, alpha = 1, plot_height=600
+#'                     xvar = 'AGE', yvar = 'BMRKR1', size = 3, alpha = 1, plot_height = 600
 #'      )
 #'   )
 #' )
@@ -101,7 +109,7 @@ ui_scatterplot <- function(id, label,
   standard_layout(
     output = uiOutput(ns("plot_ui")),
     encoding = div(
-      tags$label("Encodings", class="text-primary"),
+      tags$label("Encodings", class = "text-primary"),
       helpText("Analysis data:", tags$code(dataname)),
       optionalSelectInput(ns("xvar"), "x variable", xvar_choices, xvar, multiple = FALSE),
       optionalSelectInput(ns("yvar"), "y variable", yvar_choices, yvar, multiple = FALSE),
@@ -114,7 +122,7 @@ ui_scatterplot <- function(id, label,
       ))) {
         NULL
       } else {
-        tags$label("Plot Settings", class="text-primary", style="margin-top: 15px;")
+        tags$label("Plot Settings", class = "text-primary", style = "margin-top: 15px;")
       },
       optionalSliderInputValMinMax(ns("plot_height"), "plot height", plot_height, ticks = FALSE),
       optionalSliderInputValMinMax(ns("alpha"), "opacity", alpha, ticks = FALSE),
@@ -127,6 +135,7 @@ ui_scatterplot <- function(id, label,
 
 }
 
+#' @import stats utils
 srv_scatterplot <- function(input, output, session, datasets, dataname) {
 
 
@@ -134,12 +143,12 @@ srv_scatterplot <- function(input, output, session, datasets, dataname) {
   output$plot_ui <- renderUI({
     plot_height <- input$plot_height
     validate(need(plot_height, "need valid plot height"))
-    plotOutput(session$ns("scatterplot"), height=plot_height)
+    plotOutput(session$ns("scatterplot"), height = plot_height)
   })
 
   output$scatterplot <- renderPlot({
 
-    ANL <- datasets$get_data(dataname, reactive = TRUE, filtered = TRUE)
+    ANL <- datasets$get_data(dataname, reactive = TRUE, filtered = TRUE) # nolint
     xvar <- input$xvar
     yvar <- input$yvar
     alpha <- input$alpha
@@ -151,7 +160,7 @@ srv_scatterplot <- function(input, output, session, datasets, dataname) {
 
     validate(need(alpha, "need alpha"))
     validate(need(!is.null(ANL) && is.data.frame(ANL), "no data left"))
-    validate(need(nrow(ANL) > 0 , "no observations left"))
+    validate(need(nrow(ANL) > 0, "no observations left"))
     validate(need(xvar, "no valid x variable selected"))
     validate(need(yvar, "no valid y variable selected"))
     validate(need(xvar %in% names(ANL),
@@ -195,19 +204,19 @@ srv_scatterplot <- function(input, output, session, datasets, dataname) {
       title = paste("Scatterplot of", yvar, "vs.", xvar),
       description = "",
       libraries = c("ggplot2"),
-      data = setNames(list(datasets$get_data(dataname, reactive=FALSE, filtered = FALSE)), dataname),
-      git_repo = "http://github.roche.com/Rpackages/teal/R/tm_scatterplot.R"
+      data = setNames(list(datasets$get_data(dataname, reactive = FALSE, filtered = FALSE)), dataname),
+      git_repo = "http://github.roche.com/NEST/teal/R/tm_scatterplot.R"
     )
 
     str_filter <- get_filter_txt(dataname, datasets)
 
-    chunks <- parse_code_chunks(txt = capture.output(teal:::srv_scatterplot))
+    chunks <- parse_code_chunks(txt = capture.output(srv_scatterplot))
 
     plot_code <-  if (is.null(color_by) || color_by == "_none_") {
       chunks$plot_no_color
     } else {
       pc <- chunks$plot_color
-      sub("color = color_by", paste("color =", color_by), pc, fixed=TRUE)
+      sub("color = color_by", paste("color =", color_by), pc, fixed = TRUE)
     }
 
     plot_code <- plot_code
@@ -220,7 +229,7 @@ srv_scatterplot <- function(input, output, session, datasets, dataname) {
     )
 
     f_sub <- Map(function(pattern, repl) {
-      function(txt) sub(pattern, repl, txt, fixed=TRUE)
+      function(txt) sub(pattern, repl, txt, fixed = TRUE)
     }, names(subst_pairs), subst_pairs)
 
     plot_code_subst <- Reduce(function(txt, f) f(txt), f_sub, init = plot_code)
@@ -235,12 +244,10 @@ srv_scatterplot <- function(input, output, session, datasets, dataname) {
       ), collapse = "\n"
     )
 
-    showRCodeModal(
+    show_r_code_modal(
       title = "R Code for the Current Scatterplot",
       rcode = code
     )
   })
 
 }
-
-

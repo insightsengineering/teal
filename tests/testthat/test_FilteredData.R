@@ -1,32 +1,28 @@
-
 library(teal)
 library(testthat)
+library(random.cdisc.data)
 
 context("FilteredData")
 
 options(teal_logging = FALSE)
 
-x <- teal:::CDISCFilteredData$new(datanames = c('ASL', 'AAE'))
+x <- teal:::FilteredData$new(datanames = c("ASL", "AAE"))
 
 test_that(
   "Initialization is correct",
-  expect_identical(x$datanames(), c('ASL', 'AAE'))
+  expect_identical(x$datanames(), c("ASL", "AAE"))
 )
 
-ASL <- generate_sample_data("ASL")
+ADSL <- radsl() # nolint
+ADAE <- radae(ADSL) # nolint
 
-ASL$AGE <- c(0, runif(nrow(ASL) - 2), 1) *60 + 20 # guarantee a certain range
-ASL$SEX <- c("M", "F", ASL$SEX[-c(1,2)])
-
-AAE <- generate_sample_data("AAE")
-
-x$set_data("ASL", ASL)
-x$set_data("AAE", AAE)
+x$set_data("ASL", ADSL)
+x$set_data("AAE", ADAE)
 
 test_that(
-  "load and set_datasets",{
-    expect_identical(x$get_data('ASL'), ASL)
-    expect_identical(x$get_data('AAE'), AAE)
+  "load and set_datasets", {
+    expect_identical(x$get_data("ASL"), ADSL)
+    expect_identical(x$get_data("AAE"), ADAE)
 
     expect_identical(x$datanames(), c("ASL", "AAE"))
   }
@@ -48,11 +44,11 @@ test_that(
     x$set_default_filter_state("ASL", "AGE")
 
     expect_equal(names(x$get_filter_state("ASL")), "AGE")
-    expect_identical(x$get_filter_state("ASL")$AGE, range(ASL$AGE))
+    expect_identical(x$get_filter_state("ASL")$AGE, range(ADSL$AGE))
 
     x$set_default_filter_state("ASL", "SEX")
     expect_equal(names(x$get_filter_state("ASL")), c("AGE", "SEX"))
-    expect_identical(x$get_filter_state("ASL")$SEX, unique(ASL$SEX))
+    expect_identical(x$get_filter_state("ASL")$SEX, as.character(unique(ADSL$SEX)))
 
   }
 )
@@ -61,18 +57,18 @@ test_that(
 test_that(
   "overwrite filter states", {
 
-    x$set_filter_state("ASL", state = list(AGE = range(ASL$AGE) + c(+1, -1)))
+    x$set_filter_state("ASL", state = list(AGE = range(ADSL$AGE) + c(+1, -1)))
 
     expect_equal(
       x$get_filter_state("ASL")$AGE,
-      range(ASL$AGE) + c(+1, -1)
+      range(ADSL$AGE) + c(+1, -1)
     )
 
-    x$set_filter_state("ASL", state = list(AGE=c(38, 40), SEX = "F"))
+    x$set_filter_state("ASL", state = list(AGE = c(38, 40), SEX = "F"))
 
     expect_identical(
       x$get_data("ASL", filtered = TRUE, reactive = FALSE),
-      subset(ASL, SEX == "F" & AGE >= 38 & AGE <= 40)
+      subset(ADSL, SEX == "F" & AGE >= 38 & AGE <= 40)
     )
   }
 )
@@ -84,58 +80,7 @@ test_that(
 
     expect_identical(
       x$get_data("ASL", filtered = TRUE, reactive = FALSE),
-      ASL
+      ADSL
     )
   }
 )
-
-
-# more detailed testing that needs refactoring
-# x$load_data("devel/ars.sas7bdat")
-#
-# x$list_data_info("ars")
-#
-# x$set_filter_state("ars", state=list(PARAMCD=c("BESRSPI", "OVRINV"), ADY=c(4,100)))
-# x$set_filter_state("ars", state=list())
-#
-# x$get_filter_call("ars")
-#
-# x$get_filter_call("ars")
-# x$get_filter_call("ars", merge=FALSE, asl=FALSE)
-# x$get_filter_call("ars", merge=FALSE)
-# x$get_filter_call("ars", merge=TRUE, asl=TRUE)
-#
-# df_11 <- x$get_data("ars")
-# df_12 <- x$get_data("ars", filtered = TRUE)
-#
-# nrow(df_11)
-# nrow(df_12)
-#
-# e <- new.env()
-#
-# e$ASL <- x$get_data("asl")
-# e$ARS <- x$get_data("ars")
-#
-# calls <- x$get_filter_call("ars", merge=TRUE, asl=TRUE)
-#
-# eval(calls[[1]], e)
-# eval(calls[[2]], e)
-# eval(calls[[3]], e)
-#
-# e$ARS_FILTERED
-
-
-
-context("Test SimpleFilteredData")
-
-# sfd <- teal:::SimpleFilteredData$new(c("iris", "mtcars"))
-#
-# sfd$set_data("iris", iris)
-#
-# sfd$set_data("mtcars", mtcars)
-#
-# ## add indiviual filters
-
-
-
-

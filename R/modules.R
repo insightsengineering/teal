@@ -1,9 +1,9 @@
-
-
 #' Create a collection of \code{module} and \code{modules} object
 #'
 #' Modules collects a tree of \code{\link{module}} and \code{\link{modules}}
 #' objects. This is useful to define the navigation structure of a teal app.
+#'
+#' @import methods
 #'
 #' @param label label of modules collection
 #' @param ... \code{\link{module}} and \code{\link{modules}} object
@@ -16,14 +16,14 @@ modules <- function(label, ...) {
 
   args <- list(...)
 
-  class_check <- vapply(args, function(x) {is(x, "teal_module") || is(x, "teal_modules")}, logical(1))
+  class_check <- vapply(args, function(x) is(x, "teal_module") || is(x, "teal_modules"), logical(1))
 
   if (any(!class_check)) {
     stop(paste("modules: not all argument are of class teal_module or teal_modules. Index:",
                paste(which(!class_check), collapse = ", ")))
   }
 
-  structure(list(label = label, modules=args), class = "teal_modules")
+  structure(list(label = label, modules = args), class = "teal_modules")
 }
 
 
@@ -77,37 +77,47 @@ module <- function(label, server, ui, filters, server_args=NULL, ui_args=NULL) {
   structure(
     list(label = label, server = server, ui = ui, filters = filters,
          server_args = server_args, ui_args = ui_args),
-    class="teal_module"
+    class = "teal_module"
   )
 }
 
 
-# check that modules has not more than depth 2
-# m <- module("aaa", server=NULL, ui=NULL, filters=NULL)
-# x <- modules(
-#   "d1",
-#   modules(
-#     "d2",
-#     modules(
-#       "d3",
-#       m,m,m
-#     ),
-#     m
-#   ),
-#   m
-# )
-#
-# x <- modules(
-#   "a",
-#   modules(
-#     "b", m
-#   ),
-#   m
-# )
-# modules_depth(x)
+#' check that modules has not more than depth 2
+#'
+#' @param x \code{teal.modules} object
+#' @param depth optional, integer determinint current depth level
+#'
+#' @return depth level for given module
+#'
+#' @import methods
+#'
+#' @examples
+#' m <- module("aaa", server = function(input, output, session, datasets){}, ui = NULL, filters = NULL)
+#' x <- modules(
+#'   "d1",
+#'   modules(
+#'     "d2",
+#'     modules(
+#'       "d3",
+#'       m, m, m
+#'     ),
+#'     m
+#'   ),
+#'   m
+#' )
+#'
+#' x <- modules(
+#'   "a",
+#'   modules(
+#'     "b", m
+#'   ),
+#'   m
+#' )
+#'
+#' teal:::modules_depth(x)
 modules_depth <- function(x, depth = 0) {
   children_depth <- if (is(x, "teal_modules")) {
-    vapply(x$modules, modules_depth, numeric(1), depth=depth+1)
+    vapply(x$modules, modules_depth, numeric(1), depth = depth + 1)
   } else {
     depth
   }
@@ -118,30 +128,27 @@ modules_depth <- function(x, depth = 0) {
 
 # turns a label into a valid html id
 label_to_id <- function(label, prefix = NULL) {
-  x <- gsub("[[:space:]]+", "_", label)
-  if (!is.null(prefix)) paste(prefix, x , sep=".") else x
+  label <- gsub("^_|_$", "", gsub("[^[:alnum:]]", "_", label))
+  if (!is.null(prefix)) {
+    prefix <- gsub("^_|_$", "", gsub("[^[:alnum:]]", "_", prefix))
+    paste(prefix, label, sep = ".")
+  } else {
+    label
+  }
 }
 
 
-#
 # somehow unexported S3 methods do not work as expected
-#
 create_ui <- function(x, datasets, idprefix, is_root = FALSE) {
   switch(
     class(x),
-    teal_module = create_ui.teal_module(x, datasets, idprefix, is_root),
-    teal_modules = create_ui.teal_modules(x, datasets, idprefix, is_root),
+    teal_module = create_ui_teal_module(x, datasets, idprefix, is_root),
+    teal_modules = create_ui_teal_modules(x, datasets, idprefix, is_root),
     stop("no default implementation for create_ui")
   )
 }
 
-
-create_ui.teal_modules <- function(x, datasets, idprefix, is_root = FALSE) {
-
-#  as.global(x)
-#  as.global(datasets)
-#  as.global(idprefix)
-#  as.global(is_root)
+create_ui_teal_modules <- function(x, datasets, idprefix, is_root = FALSE) {
 
   id <- label_to_id(x$label, idprefix)
 
@@ -151,37 +158,35 @@ create_ui.teal_modules <- function(x, datasets, idprefix, is_root = FALSE) {
     shiny::tabsetPanel,
     c(
       list(id = id, type = if (is_root) "pills" else "tabs"),
-      as.vector(lapply(x$modules, create_ui, datasets=datasets, idprefix=id))
+      as.vector(lapply(x$modules, create_ui, datasets = datasets, idprefix = id))
     )
   )
 
   if (is_root) tsp else tabPanel(x$label, tsp)
 }
 
+create_ui_teal_module <- function(x, datasets, idprefix, is_root = FALSE) {
 
-create_ui.teal_module <- function(x, datasets, idprefix, is_root = FALSE) {
-
-  args <- Map(function(arg) {if(identical(arg, "teal_datasets")) datasets else arg}, x$ui_args)
+  args <- Map(function(arg) if (identical(arg, "teal_datasets")) datasets else arg, x$ui_args)
 
   uiid <- label_to_id(x$label, idprefix)
 
   .log("UI id for module is", uiid)
 
-  shiny::tabPanel(x$label, tagList(div(style="margin-top: 25px;"), do.call(x$ui, c(list(id = uiid), args))))
+  shiny::tabPanel(x$label, tagList(div(style = "margin-top: 25px;"), do.call(x$ui, c(list(id = uiid), args))))
 }
 
 
 call_modules <- function(x, datasets, idprefix) {
   switch(
     class(x),
-    teal_modules = call_modules.teal_modules(x, datasets, idprefix),
-    teal_module = call_modules.teal_module(x, datasets, idprefix),
+    teal_modules = call_modules_teal_modules(x, datasets, idprefix),
+    teal_module = call_modules_teal_module(x, datasets, idprefix),
     stop("no default implementation for call_modules")
   )
 }
 
-
-call_modules.teal_modules <- function(x, datasets, idprefix) {
+call_modules_teal_modules <- function(x, datasets, idprefix) {
   id <- label_to_id(x$label, idprefix)
 
   lapply(x$modules, call_modules, datasets = datasets, idprefix = id)
@@ -189,7 +194,7 @@ call_modules.teal_modules <- function(x, datasets, idprefix) {
   invisible(NULL)
 }
 
-call_modules.teal_module <- function(x, datasets, idprefix) {
+call_modules_teal_module <- function(x, datasets, idprefix) {
 
   id <-  label_to_id(x$label, idprefix)
 
@@ -209,12 +214,12 @@ call_modules.teal_module <- function(x, datasets, idprefix) {
 
 
 #' @export
-toString.teal_modules <- function(x, ...) {
-   paste(unlist(lapply(x, function(xi) toString(xi, ...))) , collapse = "\n")
+toString.teal_modules <- function(x, ...) { # nolint
+   paste(unlist(lapply(x, function(xi) toString(xi, ...))), collapse = "\n")
 }
 
 #' @export
-toString.teal_module <- function(x, indent = 0, ...) {
+toString.teal_module <- function(x, indent = 0, ...) { # nolint
   paste0(paste0(rep(" ", indent), collapse = ""), "+ ", x$label)
 }
 
@@ -231,4 +236,3 @@ print.teal_module <- function(x, ...) {
   cat(s)
   invisible(s)
 }
-

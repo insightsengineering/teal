@@ -1,6 +1,3 @@
-
-
-
 #' Create a standard ui layout with output on the right and an encoding panel on
 #' the left
 #'
@@ -24,9 +21,12 @@
 #'
 #' @export
 #'
+#' @import methods
+#'
 #' @examples
 #'
 #' \dontrun{
+#' library(random.cdisc.data)
 #'
 #' ui_test <- function(id) {
 #'  ns <- NS(id)
@@ -42,7 +42,7 @@
 #'  )
 #' }
 #'
-#' srv_test <- function(input, output, session) {
+#' srv_test <- function(input, output, session, datasets) {
 #'    output$plot <- renderPlot({
 #'       with(iris, plot(Sepal.Length, Petal.Length, col = Species))
 #'    })
@@ -62,14 +62,14 @@
 #'  )
 #' }
 #'
-#' srv_test2 <- function(input, output, session) {
+#' srv_test2 <- function(input, output, session, datasets) {
 #'    output$plot <- renderPlot({
 #'       with(iris, plot(Sepal.Length, Petal.Length, col = Species))
 #'    })
 #' }
 #'
 #' x <- teal::init(
-#'    data = list(ASL = generate_sample_data('ASL')),
+#'    data = list(ASL = radsl()),
 #'    modules = root_modules(
 #'       module(
 #'          "example",
@@ -104,7 +104,7 @@ standard_layout <- function(output,
   # if encoding=NULL then forms is placed below output
 
   tag_output <- div(
-    class="well",
+    class = "well",
     div(id = "pre-output", pre_output),
     div(id = "output", output),
     div(id = "post-output", post_output)
@@ -113,16 +113,16 @@ standard_layout <- function(output,
   tag_enc_out <- if (!is.null(encoding)) {
     div(
       div(
-        class="col-md-3",
-        div(class="well", encoding),
-        if (is.null(forms)) NULL else div(class="form-group", forms)
+        class = "col-md-3",
+        div(class = "well", encoding),
+        if (is.null(forms)) NULL else div(class = "form-group", forms)
       ),
       div(class = "col-md-9", tag_output)
     )
   } else {
-    div(class="col-md-12",
+    div(class = "col-md-12",
       tag_output,
-      if (is.null(forms)) NULL else div(class="form-group", forms)
+      if (is.null(forms)) NULL else div(class = "form-group", forms)
     )
   }
 
