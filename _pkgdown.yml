@@ -11,7 +11,7 @@ navbar:
       href: https://github.roche.com/NEST/teal
 
 development:
-  mode: release
+  mode: devel
 
 reference:
   - title: Teal Core Functions

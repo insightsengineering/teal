@@ -94,7 +94,7 @@ the following:
 library(devtools)
 install_github(
   'NEST/teal', 
-  ref = "v0.6.0",
+  ref = "devel",
   host = 'https://github.roche.com/api/v3',
   upgrade_dependencies = FALSE,
   build_vignettes = TRUE
