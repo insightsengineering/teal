@@ -11,7 +11,7 @@ navbar:
       href: https://github.roche.com/NEST/teal
 
 development:
-  mode: devel
+  mode: release
 
 reference:
   - title: Teal Core Functions
@@ -21,6 +21,7 @@ reference:
     - module
     - modules
     - root_modules
+    - choices_selected
   - title: Teal Modules
     contents:
     - tm_data_table
