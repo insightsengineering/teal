@@ -1,4 +1,4 @@
-#' Teal application usage logging.
+#' Teal Application Usage Logging.
 #'
 #' Analysis of Teal application utilization is a key component towards ongoing enhancements
 #' of the framework. The utilization logs provide source data for better understanding
@@ -28,85 +28,80 @@
 #' log_app_usage(ta = "Oncology", molecule = "Tecentriq", ind = "NSCLC", anl_type = "Exploratory")
 #' }
 #' 
-log_app_usage <- function(ta = NULL,
-                          molecule = NULL,
-                          indication = NULL,
-                          anl_type = NULL,
+log_app_usage <- function(ta,
+                          molecule,
+                          indication,
+                          anl_type,
                           pkg_meta = c("Package", "Title", "Version", "RemoteRef")) {
   
-  # collect argument values into list for verification
   args <- as.list(environment())
+  
+  # BEGIN verify requirements
+  if (!all(vapply(args, is.character, logical(1)))) {
+    stop("all arguments of log_app_usage are required to be of type character")
+  }
 
-  # # BEGIN verify requirements
-  if (!dir.exists("./libs")){
-    stop(cat(match.call()[[1]], "function exception: <your app>/libs directory does not exist.\n",
-             "Please install R Packages required for your app in ./libs. Required by this function to log package 
-             metadata."))
+  if (!dir.exists("./libs")) {
+    stop("<your app dir>/libs directory does not exist.\n",
+         "Please install R Packages required for your app in ./libs.",
+         "This is required by this function to log package metadata.")
     # processing stops here
   }
-  for (n in 1:length(args)){
-    if (args[n] == "NULL" | args[n] == ""){
-      stop(paste(match.call()[[1]], "function exception: Argument values can not be NULL.\n",
-                 "Exception is:", args[n]))
-      # processing stops here
-    }
-  }
-  for (p in 1:length(args)){
-    if (grepl("\\|", args[p])){
-      stop(paste(match.call()[[1]], "function exception: argument values can not contain pipe character.\n",
-                 "Exception is:", args[p]))
-    # processing stops here
-    }
+  
+  has_pipe <- grepl("\\|", args)
+  if (any(has_pipe)) {
+    args_with_pipe <- names(args)[has_pipe]
+    stop("the arguments ", paste(args_with_pipe, collapse = ","), " can not contain pipe character.")
   }
   # END verify requirement
-
-    # log user activity
-    # conditionally create logs directory
-    dir.exists("./logs") || dir.create("./logs")
-    # set permisions so all users can write to the utilization log directory
-    Sys.chmod("./logs", mode = "0777", use_umask = FALSE)
+  
+  
+  # log user activity
+  # conditionally create logs directory
+  dir.exists("./logs") || dir.create("./logs")
+  # set permisions so all users can write to the utilization log directory
+  Sys.chmod("./logs", mode = "0777", use_umask = FALSE)
+  
+  # conditionally initialize log file
+  if (!file.exists("./logs/utilization.log")){
+    file.create("./logs/utilization.log")
+    # set permisions so all users can write to the utilization log file
+    Sys.chmod("./logs/utilization.log", mode = "0666", use_umask = FALSE)
     
-    # conditionally initialize log file
-    if (!file.exists("./logs/utilization.log")){
-      file.create("./logs/utilization.log")
-      # set permisions so all users can write to the utilization log file
-      Sys.chmod("./logs/utilization.log", mode = "0666", use_umask = FALSE)
-      
-      # add header record      
-      logHandle <- file("./logs/utilization.log")
-      writeLines(c("UNIXID|SESSIONDTM|APP_DIR|TA|MOLECULE|INDICATION|ANL_TYPE|VALUE_NAME|VALUE_CAT|VALUE|"),
-                 logHandle)
-      close(logHandle)
-    }
-    
-    # get packages installed with app
-    app_packages <- system("ls ./libs", intern = TRUE)
-
-    # initialize the description collector and collect metadata for all packages 
-    pkg_desc <- NULL
-    for (i in 1:length(app_packages)){
-      pkg_desc <- append(pkg_desc, packageDescription(app_packages[i], fields = pkg_meta))
-    }
-    
-    # create data frame to output normalized values to log file
-    pkg_cat_value <- data.frame(VALUE_CAT = names(pkg_desc), VALUE = unlist(pkg_desc, use.names = FALSE))
-    
-    # identify package names to add to every record. this allows each metatdata record to be associated to a package.
-    pkg_names <- pkg_cat_value %>%
-      subset(VALUE_CAT == "Package") %>%
-      mutate(package = VALUE) %>%
-      select(package)
-    VALUE_NAME <- pkg_names[rep(seq_len(nrow(pkg_names)), each=length(pkg_meta)),]
-    
-    # create metadata string to write to log
-    to_log <- cbind(VALUE_NAME, pkg_cat_value) %>% 
-      mutate(TO_LOG = paste0(VALUE_NAME, "|", VALUE_CAT, "|", VALUE))
-    
-    
-    # log app user activity and meta data
-    for (i in 1:nrow(to_log)){
-      cat(paste(Sys.info()['user'], Sys.time(), getwd(), ta, molecule, indication, anl_type,
-                to_log[i, 4:4], "\n",
-                sep = "|"), file="./logs/utilization.log", append=TRUE)
-    }
+    # add header record      
+    logHandle <- file("./logs/utilization.log")
+    writeLines(c("UNIXID|SESSIONDTM|APP_DIR|TA|MOLECULE|INDICATION|ANL_TYPE|VALUE_NAME|VALUE_CAT|VALUE|"),
+               logHandle)
+    close(logHandle)
+  }
+  
+  # get packages installed with app
+  app_packages <- list.dirs("./libs", full.names = FALSE, recursive = FALSE)
+  
+  # initialize the description collector and collect metadata for all packages 
+  pkg_desc <- lapply(app_packages, function(pkg) packageDescription(pkg, fields = pkg_meta))
+  
+  # create data frame to output normalized values to log file
+  pkg_cat_value <- data.frame(VALUE_CAT = names(pkg_desc), VALUE = unlist(pkg_desc, use.names = FALSE))
+  
+  # identify package names to add to every record. this allows each metatdata record to be associated to a package.
+  pkg_names <- pkg_cat_value %>%
+    subset(VALUE_CAT == "Package") %>%
+    mutate(package = VALUE) %>%
+    select(package)
+  VALUE_NAME <- pkg_names[rep(seq_len(nrow(pkg_names)), each=length(pkg_meta)),]
+  
+  # create metadata string to write to log
+  to_log <- cbind(VALUE_NAME, pkg_cat_value) %>% 
+    mutate(TO_LOG = paste0(VALUE_NAME, "|", VALUE_CAT, "|", VALUE))
+  
+  
+  # log app user activity and meta data
+  for (i in 1:nrow(to_log)){
+    cat(paste(Sys.info()['user'], Sys.time(), getwd(), ta, molecule, indication, anl_type,
+              to_log[i, 4:4], "\n",
+              sep = "|"), file="./logs/utilization.log", append=TRUE)
+  }
+  
+  
 }
