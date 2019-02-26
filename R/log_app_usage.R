@@ -24,8 +24,15 @@
 #' @export
 #'
 #' @examples
-#'\dontrun{
+#' \dontrun{
+#' wd <- getwd()
+#' d <- tempfile(); dir.create(d); dir.create(file.path(d, "libs"))
+#' lapply(file.path(d, "libs", c("rtables", "tern", "teal")), dir.create)
+#' setwd(d)
 #' log_app_usage(ta = "Oncology", molecule = "Tecentriq", ind = "NSCLC", anl_type = "Exploratory")
+#' readLines(file.path(d, "logs", "utilization.log"))
+#' setwd(wd)
+#' unlink(d, recursive = TRUE)
 #' }
 #' 
 log_app_usage <- function(ta,
@@ -34,33 +41,28 @@ log_app_usage <- function(ta,
                           anl_type,
                           pkg_meta = c("Package", "Title", "Version", "RemoteRef")) {
   
-  args <- as.list(environment())
-  
-  # BEGIN verify requirements
-  if (!all(vapply(args, is.character, logical(1)))) {
-    stop("all arguments of log_app_usage are required to be of type character")
-  }
 
   if (!dir.exists("./libs")) {
     stop("<your app dir>/libs directory does not exist.\n",
          "Please install R Packages required for your app in ./libs.",
          "This is required by this function to log package metadata.")
-    # processing stops here
   }
   
-  has_pipe <- grepl("\\|", args)
-  if (any(has_pipe)) {
-    args_with_pipe <- names(args)[has_pipe]
-    stop("the arguments ", paste(args_with_pipe, collapse = ","), " can not contain pipe character.")
-  }
-  # END verify requirement
   
+  # get packages installed with app
+  app_packages <- list.dirs("./libs", full.names = FALSE, recursive = FALSE)
+  log_pkgs <- line_pkg_log(app_packages, fields = pkg_meta)
   
-  # log user activity
+  log_usage <- line_usage_log(ta, molecule, indication, anl_type)
+  
+  # Save log to file
+
   # conditionally create logs directory
-  dir.exists("./logs") || dir.create("./logs")
-  # set permisions so all users can write to the utilization log directory
-  Sys.chmod("./logs", mode = "0777", use_umask = FALSE)
+  if (!dir.exists("./logs")) {
+    dir.create("./logs")
+    # set permisions so all users can write to the utilization log directory
+    Sys.chmod("./logs", mode = "0777", use_umask = FALSE)
+  } 
   
   # conditionally initialize log file
   if (!file.exists("./logs/utilization.log")){
@@ -70,38 +72,51 @@ log_app_usage <- function(ta,
     
     # add header record      
     logHandle <- file("./logs/utilization.log")
-    writeLines(c("UNIXID|SESSIONDTM|APP_DIR|TA|MOLECULE|INDICATION|ANL_TYPE|VALUE_NAME|VALUE_CAT|VALUE|"),
+    writeLines(c("UNIXID|SESSIONDTM|APP_DIR|TA|MOLECULE|INDICATION|ANL_TYPE|PKGS"),
                logHandle)
     close(logHandle)
   }
   
-  # get packages installed with app
-  app_packages <- list.dirs("./libs", full.names = FALSE, recursive = FALSE)
+
+  cat(paste(log_usage, log_pkgs, sep = "|"), file="./logs/utilization.log", append=TRUE)
+
+}
+
+
+
+#' usage log line
+#' 
+#' @examples 
+#' 
+#' \dontrun{
+#' line_usage_log("AAA", "BBB", "CCC")
+#' }
+line_usage_log <- function(...) {
+  args <- list(...)
   
-  # initialize the description collector and collect metadata for all packages 
-  pkg_desc <- lapply(app_packages, function(pkg) packageDescription(pkg, fields = pkg_meta))
-  
-  # create data frame to output normalized values to log file
-  pkg_cat_value <- data.frame(VALUE_CAT = names(pkg_desc), VALUE = unlist(pkg_desc, use.names = FALSE))
-  
-  # identify package names to add to every record. this allows each metatdata record to be associated to a package.
-  pkg_names <- pkg_cat_value %>%
-    subset(VALUE_CAT == "Package") %>%
-    mutate(package = VALUE) %>%
-    select(package)
-  VALUE_NAME <- pkg_names[rep(seq_len(nrow(pkg_names)), each=length(pkg_meta)),]
-  
-  # create metadata string to write to log
-  to_log <- cbind(VALUE_NAME, pkg_cat_value) %>% 
-    mutate(TO_LOG = paste0(VALUE_NAME, "|", VALUE_CAT, "|", VALUE))
-  
-  
-  # log app user activity and meta data
-  for (i in 1:nrow(to_log)){
-    cat(paste(Sys.info()['user'], Sys.time(), getwd(), ta, molecule, indication, anl_type,
-              to_log[i, 4:4], "\n",
-              sep = "|"), file="./logs/utilization.log", append=TRUE)
+  if (!all(vapply(args, is.character, logical(1)))) {
+    stop("all arguments of log_app_usage are required to be of type character")
   }
   
+  has_pipe <- grepl("\\|", args)
+  if (any(has_pipe)) {
+    args_with_pipe <- names(args)[has_pipe]
+    stop("the arguments ", paste(args_with_pipe, collapse = ","), " can not contain pipe character.")
+  }
   
+  paste(Sys.info()['user'], Sys.time(), getwd(), ..., sep = "|")
+}
+
+#' package versions line
+#' 
+#' @examples 
+#' \dontrun{
+#' line_pkg_log(pkgs = c("rtables", "tern", "teal"), fields = c("Package", "Title", "Version", "RemoteRef") )
+#' }
+line_pkg_log <- function(pkgs, fields) {
+  pkg_desc <- lapply(pkgs, packageDescription, fields = fields)
+  pkg_desc_no_pipe <- lapply(pkg_desc, function(x) sub("|", "/", x, fixed = TRUE))
+  pkg_desc_save <- lapply(pkg_desc_no_pipe, setNames, fields)
+  
+  paste(capture.output(dput(pkg_desc_save, file = "")), collapse = "")
 }
