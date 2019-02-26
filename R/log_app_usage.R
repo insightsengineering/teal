@@ -6,9 +6,9 @@
 #'
 #' @details Each Teal application can implement usage logging by calling this
 #' function in the application startup file(s) like app.R. The following data are 
-#' captured by default: UNIX ID, System Date, Application Directory, Therapeutic Area, Indication, Package Name,
-#' Package Title, Package Version and Remotes Definition. Capture frequency is currently per user at session
-#' start only.
+#' captured by default: UNIX ID, System Date, Application Directory, Therapeutic Area, Indication,
+#' Package Name, Package Title, Package Version and Remotes Definition. Capture frequency is 
+#' currently per user at session start only.
 #' Suggested values for ta: "Oncology" or "I2ON"
 #' Suggested values for anl_type: "Exploratory", "Interim Analysis", "CSR"
 #'
@@ -30,33 +30,23 @@
 #' lapply(file.path(d, "libs", c("rtables", "tern", "teal")), dir.create)
 #' setwd(d)
 #' log_app_usage(ta = "Oncology", molecule = "Tecentriq", ind = "NSCLC", anl_type = "Exploratory")
-#' readLines(file.path(d, "logs", "utilization.log"))
+#' readLines(file.path(d, "logs", "utilization.log"), warn = FALSE)
 #' setwd(wd)
 #' unlink(d, recursive = TRUE)
 #' }
-#' 
 log_app_usage <- function(ta,
                           molecule,
                           indication,
                           anl_type,
                           pkg_meta = c("Package", "Title", "Version", "RemoteRef")) {
   
-
+  
   if (!dir.exists("./libs")) {
     stop("<your app dir>/libs directory does not exist.\n",
          "Please install R Packages required for your app in ./libs.",
          "This is required by this function to log package metadata.")
   }
   
-  
-  # get packages installed with app
-  app_packages <- list.dirs("./libs", full.names = FALSE, recursive = FALSE)
-  log_pkgs <- line_pkg_log(app_packages, fields = pkg_meta)
-  
-  log_usage <- line_usage_log(ta, molecule, indication, anl_type)
-  
-  # Save log to file
-
   # conditionally create logs directory
   if (!dir.exists("./logs")) {
     dir.create("./logs")
@@ -65,7 +55,7 @@ log_app_usage <- function(ta,
   } 
   
   # conditionally initialize log file
-  if (!file.exists("./logs/utilization.log")){
+  if (!file.exists("./logs/utilization.log")) {
     file.create("./logs/utilization.log")
     # set permisions so all users can write to the utilization log file
     Sys.chmod("./logs/utilization.log", mode = "0666", use_umask = FALSE)
@@ -77,19 +67,24 @@ log_app_usage <- function(ta,
     close(logHandle)
   }
   
-
+  # assign app usage data fields
+  log_usage <- line_usage_log(ta, molecule, indication, anl_type)
+  
+  # get packages installed with app
+  app_packages <- list.dirs("./libs", full.names = FALSE, recursive = FALSE)
+  # retrieve and assign package metadata
+  log_pkgs <- line_pkg_log(app_packages, fields = pkg_meta)
+  
+  # save usage and package metadata to log file as single record per session
   cat(paste(log_usage, log_pkgs, sep = "|"), file="./logs/utilization.log", append=TRUE)
-
+  
 }
 
-
-
-#' usage log line
+#' app usage data fields to add to log file
 #' 
 #' @examples 
-#' 
 #' \dontrun{
-#' teal.utils:::line_usage_log("AAA", "BBB", "CCC")
+#' teal.utils:::line_usage_log("Oncology", "Tecentriq", "NSCLC", "Exploratory")
 #' }
 line_usage_log <- function(...) {
   args <- c(...)
@@ -107,11 +102,15 @@ line_usage_log <- function(...) {
   paste(Sys.info()['user'], Sys.time(), getwd(), ..., sep = "|")
 }
 
-#' package versions line
+#' package metadata to add to log file
+#' 
+#' @param pkgs package names
+#' @param fields package metadata to be retrieved
 #' 
 #' @examples 
 #' \dontrun{
-#' teal.utils:::line_pkg_log(pkgs = c("rtables", "tern", "teal"), fields = c("Package", "Title", "Version", "RemoteRef") )
+#' teal.utils:::line_pkg_log(pkgs = c("rtables", "tern", "teal"), 
+#' fields = c("Package", "Title", "Version", "RemoteRef"))
 #' }
 line_pkg_log <- function(pkgs, fields) {
   pkg_desc <- lapply(pkgs, packageDescription, fields = fields)
