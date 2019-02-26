@@ -89,10 +89,10 @@ log_app_usage <- function(ta,
 #' @examples 
 #' 
 #' \dontrun{
-#' line_usage_log("AAA", "BBB", "CCC")
+#' teal.utils:::line_usage_log("AAA", "BBB", "CCC")
 #' }
 line_usage_log <- function(...) {
-  args <- list(...)
+  args <- c(...)
   
   if (!all(vapply(args, is.character, logical(1)))) {
     stop("all arguments of log_app_usage are required to be of type character")
@@ -111,7 +111,7 @@ line_usage_log <- function(...) {
 #' 
 #' @examples 
 #' \dontrun{
-#' line_pkg_log(pkgs = c("rtables", "tern", "teal"), fields = c("Package", "Title", "Version", "RemoteRef") )
+#' teal.utils:::line_pkg_log(pkgs = c("rtables", "tern", "teal"), fields = c("Package", "Title", "Version", "RemoteRef") )
 #' }
 line_pkg_log <- function(pkgs, fields) {
   pkg_desc <- lapply(pkgs, packageDescription, fields = fields)
