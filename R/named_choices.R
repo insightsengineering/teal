@@ -1,13 +1,15 @@
-#' Set the names of a data.frame or vector
-#'
-#' @param x either data.frame or character vector
-#' @param xnames vector containing names to be applied to \code{x}
+#' Set "<choice>: <label>" type of Names
 #' 
-#' @details If either \code{x} or \code{xnames} are factors, they are coerced 
+#' This is often useful for \code{\link[teal]{choices_selected}} as it marks up the dropdown boxes
+#' \code{\link[shiny]{selectInput}}. Duplicate Choices are removed.
+#' 
+#' @param choices a character vector
+#' @param labels vector containing label to be applied to \code{choices}
+#' 
+#' @details If either \code{choices} or \code{labels} are factors, they are coerced 
 #'   to character.
 #'   
-#'   This function is useful to create the vectors passed on to 
-#'   the \code{choices_selected} arguments in \code{teal} modules.
+#'   Duplicated choices get removed.
 #' 
 #' @return a named character vector 
 #' 
@@ -16,65 +18,55 @@
 #' @export
 #'
 #' @examples
+#' 
 #' library(random.cdisc.data)
 #' library(tern)
 #' ADSL <- radsl(N=10, seed = 1)
 #' ADTTE <- radtte(ADSL, seed = 1)
 #' 
-#' choices1 <- named_choices(ADSL, tern::var_labels(ADSL))
+#' choices1 <- named_choices(names(ADSL), tern::var_labels(ADSL))
 #' choices2 <- named_choices(ADTTE$PARAMCD, ADTTE$PARAM)
+#' 
+#' # if only a subset of variables are of intereste then the following code will work
+#' vl_ADSL <- tern::var_labels(ADSL)
+#' vl_arm <- vl_ADSL[c("ARM", "ARMCD")]
+#' choices3 <- named_choices(names(vl_arm), vl_arm)
+#' 
 #' 
 #' \dontrun{
 #' 
 #' library(shiny)
 #' 
 #' shinyApp(
-#' ui = fluidPage(selectInput("c1", label = "Choices from ADSL",
-#'                 choices = choices1,
-#'                 selected = choices1[1]),
+#'   ui = fluidPage(selectInput("c1", label = "Choices from ADSL",
+#'                              choices = choices1,
+#'                              selected = choices1[1]),
 #'                  
-#'                selectInput("c2", label = "Choices from ADTTE",
-#'                 choices = choices2,
-#'                 selected = choices2[1])),
-#'                   
-#' server = function(input, output) {}
+#'                  selectInput("c2", label = "Choices from ADTTE",
+#'                              choices = choices2,
+#'                              selected = choices2[1])),
+#'   
+#'   server = function(input, output) {}
 #' )
 #' 
 #' }
 
-named_choices <- function(x, xnames){
+named_choices <- function(choices, labels){
   
-  if(is.factor(x)){
-    x <- as.character(x)
+  if(is.factor(choices)){
+    choices <- as.character(choices)
   }
   
-  if(is.factor(xnames)){
-    xnames <- as.character(xnames)
+  if(is.factor(labels)){
+    labels <- as.character(labels)
   }
   
-  (is.data.frame(x)||is.character(x)) || stop("x must be data.frame or character vector.")
+  stopifnot(is.character(choices))
+  length(choices) == length(labels) || stop("length of xnames must be the same as x")
   
-  if (is.data.frame(x)){
-    
-    nam <- names(x)
-    ncol(x) == length(xnames) || stop("length of xnames must match the number of columns in x")
-    vl <- xnames
-    
-  }else if(is.character(x)){
-    
-    length(x) == length(xnames) || stop("length of xnames must be the same as x")
-    df <- unique(data.frame(xnames, x, stringsAsFactors = FALSE))
-    
-    nam <- df$x 
-    vl <- df$xnames
+  is_dupl <- duplicated(choices)
   
-  }
-  
-  nam_vl <- paste0(nam, ": ", vl)
-  named_x <- stats::setNames(nam, nam_vl)
-  
-  named_x
+  stats::setNames(choices[!is_dupl], paste0(choices[!is_dupl], ": ", labels[!is_dupl]))
 }
-
 
 
