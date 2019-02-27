@@ -4,7 +4,8 @@ Title: Exploratory Web Apps for Analyzing Clinical Trials Data
 Date: 2019-02-16
 Version: 0.6.0.1000
 Authors@R: c(
-  person("Adrian", "Waddell", email = "adrian.waddell@roche.com", role = c("aut", "cre"))
+  person("Adrian", "Waddell", email = "adrian.waddell@roche.com", role = c("aut", "cre")),
+  person("Tadeusz", "Lewandowski", email = "tadeusz.lewandowski@roche.com", role = "ctb")
   )
 Description: teal is a shiny based interactive exploration framework for
     analyzing clinical trials data. teal currently provides a dynamic filtering
@@ -17,14 +18,19 @@ Depends:
     R (>= 3.3),
     shiny
 Imports:
+    dplyr,
+    ggplot2,
+    grid,
+    haven,
     methods,
     R6,
-    dplyr,
-    shinyjs
+    shinyjs,
+    xtable
 RoxygenNote: 6.1.1
 Suggests:
-    testthat,
     knitr,
+    random.cdisc.data (>= 0.1.2.1),
     rmarkdown,
-    random.cdisc.data (>= 0.1.2.1)
+    testthat,
+    test.nest
 VignetteBuilder: knitr
