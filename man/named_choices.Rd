@@ -9,20 +9,20 @@ named_choices(choices, labels)
 \arguments{
 \item{choices}{a character vector}
 
-\item{labels}{vector containing label to be applied to \code{choices}}
+\item{labels}{vector containing labels to be applied to \code{choices}}
 }
 \value{
 a named character vector
 }
 \description{
 This is often useful for \code{\link[teal]{choices_selected}} as it marks up the dropdown boxes
-\code{\link[shiny]{selectInput}}. Duplicate Choices are removed.
+for \code{\link[shiny]{selectInput}}.
 }
 \details{
 If either \code{choices} or \code{labels} are factors, they are coerced 
   to character.
   
-  Duplicated choices get removed.
+  Duplicated elements from \code{choices} get removed.
 }
 \examples{
 
