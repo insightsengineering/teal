@@ -1,15 +1,15 @@
 #' Set "<choice>: <label>" type of Names
 #' 
 #' This is often useful for \code{\link[teal]{choices_selected}} as it marks up the dropdown boxes
-#' \code{\link[shiny]{selectInput}}. Duplicate Choices are removed.
+#' for \code{\link[shiny]{selectInput}}. 
 #' 
 #' @param choices a character vector
-#' @param labels vector containing label to be applied to \code{choices}
+#' @param labels vector containing labels to be applied to \code{choices}
 #' 
 #' @details If either \code{choices} or \code{labels} are factors, they are coerced 
 #'   to character.
 #'   
-#'   Duplicated choices get removed.
+#'   Duplicated elements from \code{choices} get removed.
 #' 
 #' @return a named character vector 
 #' 
@@ -62,7 +62,7 @@ named_choices <- function(choices, labels){
   }
   
   stopifnot(is.character(choices))
-  length(choices) == length(labels) || stop("length of xnames must be the same as x")
+  length(choices) == length(labels) || stop("length of choices must be the same as labels")
   
   is_dupl <- duplicated(choices)
   
