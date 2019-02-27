@@ -18,18 +18,19 @@ Depends:
     R (>= 3.3),
     shiny
 Imports:
-    methods,
-    R6,
     dplyr,
-    xtable,
     ggplot2,
     grid,
     haven,
-    shinyjs
+    methods,
+    R6,
+    shinyjs,
+    xtable
 RoxygenNote: 6.1.1
 Suggests:
-    testthat,
     knitr,
+    random.cdisc.data (>= 0.1.2.1),
     rmarkdown,
-    random.cdisc.data (>= 0.1.2.1)
+    testthat,
+    test.nest
 VignetteBuilder: knitr
