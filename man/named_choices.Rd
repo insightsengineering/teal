@@ -4,12 +4,16 @@
 \alias{named_choices}
 \title{Set "<choice>: <label>" type of Names}
 \usage{
-named_choices(choices, labels)
+named_choices(choices, labels, select = NULL)
 }
 \arguments{
 \item{choices}{a character vector}
 
 \item{labels}{vector containing labels to be applied to \code{choices}}
+
+\item{select}{a character vector that is a subset of \code{choices}. This is useful if 
+only a few variables need to be named. If this argument is used, the returned vector will 
+match it's order.}
 }
 \value{
 a named character vector
@@ -34,10 +38,9 @@ ADTTE <- radtte(ADSL, seed = 1)
 choices1 <- named_choices(names(ADSL), tern::var_labels(ADSL))
 choices2 <- named_choices(ADTTE$PARAMCD, ADTTE$PARAM)
 
-# if only a subset of variables are of intereste then the following code will work
-vl_ADSL <- tern::var_labels(ADSL)
-vl_arm <- vl_ADSL[c("ARM", "ARMCD")]
-choices3 <- named_choices(names(vl_arm), vl_arm)
+# if only a subset of variables are needed, use select argument
+choices3 <- named_choices(names(ADSL), tern::var_labels(ADSL), 
+                         select = c("ARMCD", "ARM"))
 
 
 \dontrun{
@@ -51,7 +54,11 @@ shinyApp(
                  
                  selectInput("c2", label = "Choices from ADTTE",
                              choices = choices2,
-                             selected = choices2[1])),
+                             selected = choices2[1]),
+                             
+                 selectInput("c3", label = "Arm choices from ADSL",
+                             choices = choices3,
+                             selected = choices3[1])),
   
   server = function(input, output) {}
 )
