@@ -5,7 +5,7 @@
 #' 
 #' @param choices a character vector
 #' @param labels vector containing labels to be applied to \code{choices}
-#' @param select a character vector that is a subset of \code{choices}. This is useful if 
+#' @param subset a character vector that is a subset of \code{choices}. This is useful if 
 #' only a few variables need to be named. If this argument is used, the returned vector will 
 #' match it's order.
 #' 
@@ -27,12 +27,12 @@
 #' ADSL <- radsl(N=10, seed = 1)
 #' ADTTE <- radtte(ADSL, seed = 1)
 #' 
-#' choices1 <- named_choices(names(ADSL), tern::var_labels(ADSL))
-#' choices2 <- named_choices(ADTTE$PARAMCD, ADTTE$PARAM)
+#' choices1 <- choices_labeled(names(ADSL), tern::var_labels(ADSL))
+#' choices2 <- choices_labeled(ADTTE$PARAMCD, ADTTE$PARAM)
 #' 
-#' # if only a subset of variables are needed, use select argument
-#' choices3 <- named_choices(names(ADSL), tern::var_labels(ADSL), 
-#'                          select = c("ARMCD", "ARM"))
+#' # if only a subset of variables are needed, use subset argument
+#' choices3 <- choices_labeled(names(ADSL), tern::var_labels(ADSL), 
+#'                          subset = c("ARMCD", "ARM"))
 #' 
 #' 
 #' \dontrun{
@@ -57,7 +57,7 @@
 #' 
 #' }
 
-named_choices <- function(choices, labels, select=NULL){
+choices_labeled <- function(choices, labels, subset=NULL){
   
   if(is.factor(choices)){
     choices <- as.character(choices)
@@ -71,22 +71,25 @@ named_choices <- function(choices, labels, select=NULL){
   
   length(choices) == length(labels) || stop("length of choices must be the same as labels")
   
-  stopifnot(is.null(select) || is.character(select))
+  stopifnot(is.null(subset) || is.character(subset))
   
-  if(is.character(select)){
-    all(select %in% choices) || stop("all of select variables must be in choices")
+  if(is.character(subset)){
+    all(subset %in% choices) || stop("all of subset variables must be in choices")
     
-    #subset choices + labels based on variables in select
-    labels <- labels[choices %in% select]
-    choices <- choices[choices %in% select]
+    #subset choices + labels based on variables in subset
+    labels <- labels[choices %in% subset]
+    choices <- choices[choices %in% subset]
   }
   
   is_dupl <- duplicated(choices)
   choices <- choices[!is_dupl]
-  labels <- paste0(choices[!is_dupl], ": ", labels[!is_dupl])
+  labels <- labels[!is_dupl]
+
+  labels[is.na(labels)] <- "Label Missing"
+  labels <- paste0(choices, ": ", labels)
     
-  if(is.character(select)){
-    ord <- match(choices, select)
+  if(is.character(subset)){
+    ord <- match(subset, choices)
     choices <- choices[ord]
     labels <- labels[ord]
   }  
