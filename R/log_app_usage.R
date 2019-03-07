@@ -77,11 +77,12 @@ log_app_usage <- function(ta,
   
   # save usage and package metadata to log file as single record per session
   cat(paste(log_usage, log_pkgs, sep = "|"), file="./logs/utilization.log", append=TRUE)
-  
+  cat("\n", file="./logs/utilization.log", append=TRUE)
 }
 
 #' app usage data fields to add to log file
 #' 
+#' @noRd
 #' @examples 
 #' \dontrun{
 #' teal.utils:::line_usage_log("Oncology", "Tecentriq", "NSCLC", "Exploratory")
@@ -106,7 +107,9 @@ line_usage_log <- function(...) {
 #' 
 #' @param pkgs package names
 #' @param fields package metadata to be retrieved
+#' @noRd
 #' 
+#' @importFrom utils capture.output
 #' @examples 
 #' \dontrun{
 #' teal.utils:::line_pkg_log(pkgs = c("rtables", "tern", "teal"), 
