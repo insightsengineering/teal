@@ -251,7 +251,7 @@ init <- function(data,
       } else {
 
         # make session global
-        .GlobalEnv[["session"]] <- session
+        # .GlobalEnv[["session"]] <- session nolint
 
         session$sendCustomMessage(type = "tealShowHide", list(selector = "#teal_filter-panel", action = "show"))
 
