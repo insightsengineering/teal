@@ -5,6 +5,11 @@
 #' @param title string with title
 #' @param body either a string or an object of class \code{shiny.tag}
 #' 
+#' 
+#' @importFrom methods is
+#' @importFrom htmltools div tags
+#' @importFrom shiny fixedPage shinyApp
+#' 
 #' @export
 #' 
 #' @examples
