@@ -250,9 +250,6 @@ init <- function(data,
         session$sendCustomMessage(type = "tealShowHide", list(selector = "#teal_filter-panel", action = "hide"))
       } else {
 
-        # make session global
-        .GlobalEnv[["session"]] <- session
-
         session$sendCustomMessage(type = "tealShowHide", list(selector = "#teal_filter-panel", action = "show"))
 
         if ("all" %in% filters) {
