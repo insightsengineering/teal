@@ -93,7 +93,7 @@ data_extract_input_single <- function(id = NULL, value = data_extract(), filteri
       if(value$columns$show){
         optionalSelectInput(
             inputId = ns("column"),
-            label = if(is.null(values$columns$label)){
+            label = if(is.null(value$columns$label)){
               "Column"
             }else{
               values$columns$label
@@ -131,13 +131,16 @@ data_extractor <- function(input, output, session, datasets, constant_values){
     
     data <- get_data_with_keys(datasets = datasets, dataname = input$ds)
         
-    constant_values <- constant_values[[
-        which(
-            unlist(
-                lapply(constant_values, function(x){x$dataname == input$ds})
-            )
-        )
-    ]]
+    if(!is(constant_values,"data_extract")){
+      
+      constant_values <- constant_values[[
+          which(
+              unlist(
+                  lapply(constant_values, function(x){x$dataname == input$ds})
+              )
+          )
+      ]]
+    }
     
     if(is.logical(input[[ns_data("filter")]])){
       filters <- NULL      

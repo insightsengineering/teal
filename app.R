@@ -32,12 +32,10 @@ adte_filters <- keys_filter_from_sep(
 adte_extracted1 <- data_extract(
     dataname = "ADTE", 
     keys_filtering = adte_filters,
-    columns = column_filter(
-        cs = choices_selected(
+    columns = choices_selected(
             choices =  c("AVAL", "AVALC"),
             selected = c("AVAL", "AVALC"),
-            multiple = FALSE
-        ),
+            multiple = FALSE,
         # optional
         # - choices
         # - selected
@@ -50,12 +48,10 @@ adte_extracted1 <- data_extract(
 adte_extracted <- data_extract(
     dataname = "ADTE", 
     keys_filtering = adte_filters,
-    columns = column_filter(
-        cs = choices_selected(
+    columns =choices_selected(
             choices =  c("AVAL"),
             selected = c("AVAL"),
-            multiple = FALSE
-        ),
+            multiple = FALSE,
         show = FALSE, # Whether the user can select the item
         label = "" # Label the column select dropdown (optional)
     )
@@ -63,14 +59,13 @@ adte_extracted <- data_extract(
 
 asl_extracted <- data_extract(
     dataname = "ASL", 
-    columns = column_filter(
-        cs = choices_selected(
+    columns =choices_selected(
             choices =  c("SEX", "AGE"),
             selected = c("AGE"),
-            multiple = FALSE
+            multiple = FALSE,
+            show = TRUE
         )
     )
-)
 
 x <- teal::init(
     data = CDISC_data(

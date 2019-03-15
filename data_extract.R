@@ -1,11 +1,15 @@
 
 
-choices_selected <- function(choices, selected, multiple) {
+choices_selected <- function(choices, selected, multiple, show = FALSE, label = NULL) {
   stopifnot(length(choices)>=1)
   stopifnot(length(selected)>=1)
   stopifnot(is.logical(multiple))
   stopifnot(all(selected %in% choices))
-  list(choices=choices, selected=selected, multiple=multiple)
+  
+  choices %<>% setNames(choices)
+  selected %<>% setNames(selected)
+  
+  list(choices = choices, selected = selected, multiple = multiple, show=show, label=label)
 }
 
 keys_filter <- function(vars, choices, selected, multiple) {
@@ -30,14 +34,6 @@ keys_filter_from_sep <- function(vars, sep, choices, selected, multiple) {
       selected = selected,
       multiple = multiple
   )
-}
-
-column_filter <- function(cs, show = FALSE, label = NULL) {
-  
-  cs$choices %<>% setNames(cs$choices)
-  cs$selected %<>% setNames(cs$selected)
-  
-  list(choices = cs$choices, selected = cs$selected, multiple = cs$multiple, show=show, label=label)
 }
 
 data_for_teal <- function(ds, keys, source = NULL){
