@@ -107,7 +107,7 @@ data_extract_input <- function(id = NULL, label = NULL, value = data_extract()){
   )
 }
 
-data_extract_input_single <- function(id = NULL, value = data_extract()){
+data_extract_input_single <- function(id = NULL, value = data_extract(), filtering_sep = " - "){
   
   ns <- NS(id)
   
@@ -120,13 +120,14 @@ data_extract_input_single <- function(id = NULL, value = data_extract()){
           optionalSelectInput(
               inputId = ns("filter"),
               label = "Filter",
-              choices = value$filtering$choices,
-              selected = value$filtering$selected,
+              choices = construct_choices(value$filtering$choices, filtering_sep),
+              selected = construct_choices(value$filtering$selected, filtering_sep),
               multiple = value$filtering$multiple
           ),
+          
           hidden(shiny::selectInput(inputId = ns("vars")," ",
                 choices = value$filtering$vars,
-                selected = value$filtering$vars))
+                selected = value$filtering$vars)),
          )
       }else{
         hidden(shiny::checkboxInput(inputId=ns("filter")," ",value=FALSE))
@@ -149,40 +150,47 @@ data_extract_input_single <- function(id = NULL, value = data_extract()){
   )
 }
 
-data_extractor <- function(input, output, session, data_merged){
+get_data_with_keys <- function(datasets, dataname){
+  
+  data <- datasets$get_data(dataname, reactive = TRUE, filtered = FALSE)
+  
+  keys_stored <- attr(data$keys)
+  
+  data <- datasets$get_data(dataname, reactive = TRUE, filtered = TRUE)
+  
+  attr(data,"keys") <- keys_stored
+  
+  return(data)
+}
+
+data_extractor <- function(input, output, session, datasets, constant_values){
+  
+  # Filtering-sep / Filtering-vars / Filtering-choices (inkl mapping) / Columns-choices
+  response_extract <- keys_filter_from_sep_backward(constant_values)
   
   data <- reactive({
         
-    browser()
     ns_data <- function(x)paste0(input$ds,"-",x)
-    data <- datasets$get_data(input$ds, reactive = TRUE, filtered = TRUE)
     
-    
-    filtering <- input[[ns_data("filter")]]
-    # In case no filtering was applied
-    if(is.logical(filtering)){
-      data %>% select(c(data$keys,
-              unlist(input[[ns_dataset("column")]], recursive=FALSE))
-      )
+    data <- get_data_with_keys(datasets = datasets, dataname = input$ds)
+        
+    if(is.logical(input[[ns_data("filter")]])){
+      filters <- NULL      
     }else{
-      # PROBLEM HERE, KEYS get lost
       
-      keys_to_remove <- input[[ns_data("vars")]]
+      filtering_names <- input[[ns_data("filter")]]
       
-      stopifnot(keys_to_remove %in% attr(data, "keys"))
+      filtering_list <- response_extract$filtering_list
       
-      new_keys <- setdiff(attr(data, "keys"), keys_to_remove)
+      filters <- construct_filters(filtering_names, filtering_list)
       
-      accepted_combinations <- lapply(input[[ns_data("filter")]],
-          function(comb) paste(comb, collapse="_"))
-      
-          data %>%
-              unite("tmp_keys_to_remove", keys_to_remove, sep="_") %>%
-              filter(tmp_keys_to_remove %in% accepted_combinations) %>%
-              select(c(new_keys, unlist(input[[ns_data("column")]], recursive=FALSE))
-      )
     }
-    return(data)
+    
+    data_filter_select(
+        data = data,
+        filters = filters,
+        columns = input[[ns_data("column")]]
+        )
   })
   
   # Merge mit anderem dataset
@@ -196,9 +204,9 @@ data_extractor <- function(input, output, session, data_merged){
 #---------------------------------------------------------------------------------------
 tm_made_up <- function(
       label = "Regression Analysis",
-      dataname,
       response,
       regressor,
+      facetting,
       pre_output = NULL,
       post_output = NULL){
     
@@ -209,7 +217,7 @@ tm_made_up <- function(
         server = srv_made_up,
         ui = ui_made_up,
         ui_args = args,
-        server_args = list(dataname = dataname),
+        server_args = list(regressor = regressor, response = response, facetting = facetting),
         filters = dataname
     )
   }
@@ -234,30 +242,41 @@ ui_made_up <- function(id, ...){
               id = ns("response"),
               label = "Response Variable",
               value = a$response
+          ),
+          data_extract_input(
+              id = ns("facetting"),
+              label = "Facetting Variable",
+              value = a$facetting
           )
       
       )
   )# standard_layout
 }
 
-srv_made_up <- function(input, output, session, datasets, response, regressor) {
+srv_made_up <- function(input, output, session, datasets, response, regressor, facetting) {
+  
+ 
+  # data_extractor, "response",
+  # dataname + filtering (yes/no) + Names(Filtering-selected) + Names(Columns-Selected) 
+                                
+  response_column   <- callModule(data_extractor, id="response", datasets, response)
+  regressor_column  <- callModule(data_extractor, id="regressor", datasets, regressor)
+  facetting_column  <- callModule(data_extractor, id="facetting", datasets, facetting)
   
   data_merged <- reactive({
-        data_merger(datasets, regressor, response)
-  })
-#  
-#  regressor_column <- callModule(data_extractor, "regressor", data_merged)
-#  response_column  <- callModule(data_extractor, "response", data_merged)
-#  
+        data_merger(datasets, regressor_column(), response_column())
+      })
+  
   output$myplot <- renderPlot(
       {
-        plot(x = regressor_column(), y = response_column())
+        plot(data = data_merged(), 
+            x = regressor_column(),
+            y = response_column())
       }
   )
   
   
 }
-
 #---------------------------------------------------------------------------------------
 #---------------------------------------------------------------------------------------
 #------------------ App Code -----------------------------------------------------------
