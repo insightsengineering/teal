@@ -1,70 +1,97 @@
-#' @import methods
-# add hidden class to a \code{shiny.tag} object
-hidden <- function(x) {
-  if (!is(x, "shiny.tag")) stop("x needs to be of class shiny.tag")
-  x$attribs$class <- paste(x$attribs$class, "hidden")
-  x
-}
-
-#' Hide, Show Label only or display a selectInput
+#' Hide, Show Label only or display a pickerInput
 #'
 #' @template descr_hidden_input
 #'
-#' @inheritParams shiny::selectInput
+#' @inheritParams shinyWidgets::pickerInput
 #'
 #' @param choices character vector or \code{NULL}. If \code{choices} is
-#'   \code{NULL} no selectInput widget is displayed and \code{input[[inputId]]}
+#'   \code{NULL} no pickerInput widget is displayed and \code{input[[inputId]]}
 #'   will be \code{""}. If \code{choices} is of length 1 then a label and
-#'   character string will be displayed and the selectInput widget will be
-#'   hidden. If the length of \code{choices} is more than one the selectInput
+#'   character string will be displayed and the pickerInput widget will be
+#'   hidden. If the length of \code{choices} is more than one the pickerInput
 #'   element will be displayed.
+#' @param ... arguments passed to \code{\link[shinyWidgets]{pickerInput}}
 #' @param label_help optional an object of class \code{shiny.tag}. E.g. an object
 #'   returned by \code{\link[shiny]{helpText}}
 #'
 #' @export
+#'
+#' @importFrom shinyjs hidden
+#' @importFrom shinyWidgets pickerInput
 #'
 #' @examples
 #'
 #' optionalSelectInput("xvar", "x variable", 'A', 'A')
 #' optionalSelectInput("xvar", "x variable", LETTERS[1:5], 'A')
 #'
-optionalSelectInput <- function(inputId, label, choices, selected, ..., label_help = NULL) { # nolint
+optionalSelectInput <- function(inputId, # nolint
+                                label,
+                                choices = NULL,
+                                selected = NULL,
+                                multiple = FALSE,
+                                options = list(),
+                                ...,
+                                label_help = NULL) {
+  stopifnot(
+    is.character(inputId),
+    length(inputId) == 1,
+    (is.character(label) && length(label) == 1) || inherits(label, "shiny.tag") || inherits(label, "shiny.tag.list"),
+    is.null(choices) || length(choices) >= 1,
+    is.null(selected) || length(selected) == 0 || all(selected %in% choices),
+    is.logical(multiple),
+    length(multiple) == 1,
+    is.list(options)
+  )
+  print(label)
+
+  default_options <- list(`actions-box` = TRUE)
+
+  options <- if (!identical(options, list())) {
+    c(options, default_options)
+  } else {
+    default_options
+  }
+
+  ui <- pickerInput(
+    inputId = inputId,
+    label = label,
+    choices = choices,
+    selected = selected,
+    multiple = multiple,
+    options = options,
+    ...
+  )
 
   if (is.null(choices)) {
+
     choices <- ""
     selected <- NULL
-    disp <- "nothing"
+    return(hidden(ui))
+
   } else {
-    if (!all(selected %in% choices)) {
-      stop(paste0("argument selected", paste(selected, collapse = ", "),
-                  "is not in choices:", paste(choices, collapse = ", ")))
+
+    if (!is.null(label_help)) {
+      label_help <- tagAppendAttributes(label_help, style = "margin-top: -4px; margin-bottom: 3px;")
     }
-    choices <- choices
-    selected <- selected
-    disp <- if (length(choices) == 1) "label" else "all"
-  }
 
+    if (length(choices) == 1) {
 
-  sel_in <- selectInput(inputId, label, choices, selected, ...)
-
-  if (!is.null(label_help)) {
-    label_help$attribs$style <- "margin-top: -4px; margin-bottom: 3px;"
-    sel_in[[3]] <- list(sel_in[[3]][[1]], label_help, sel_in[[3]][[2]])
-  }
-
-
-  switch(
-    disp,
-    nothing = hidden(sel_in),
-    label = {
-      div(
-        hidden(sel_in),
+      return(div(
+        hidden(ui),
         tags$span(tags$label(paste0(sub(":[[:space:]]+$", "", label), ":")), selected),
         label_help
-      )
-    },
-    all = sel_in
-  )
+      ))
+
+    } else {
+
+      if (!is.null(label_help)) {
+        ui[[3]] <- list(ui[[3]][[1]], label_help, ui[[3]][[2]], ui[[3]][[3]])
+      }
+
+      return(ui)
+
+    }
+  }
 }
 
 
@@ -93,7 +120,11 @@ optionalSliderInput <- function(inputId, label, min, max, value, ...) { # nolint
 
   slider <- sliderInput(inputId, label, min, max, value, ...)
 
-  if (hide) hidden(slider) else slider
+  if (hide) {
+    hidden(slider)
+  } else {
+    slider
+  }
 }
 
 
@@ -114,6 +145,8 @@ optionalSliderInput <- function(inputId, label, min, max, value, ...) { # nolint
 #'
 #' @export
 #'
+#' @importFrom shinyjs hidden
+#'
 #' @examples
 #'
 #' optionalSliderInputValMinMax("a", "b", 1)
@@ -126,8 +159,9 @@ optionalSliderInputValMinMax <- function(inputId, label, value_min_max, ...) { #
   if (!is.numeric(x)) stop("value_min_max is expected to be numeric")
 
   vals <- if (length(x) == 3) {
-    if (any(diff(x[c(2, 1, 3)]) < 0))
+    if (any(diff(x[c(2, 1, 3)]) < 0)) {
       stop(paste("value_min_max is expected to be (value, min, max) where min <= value <= max"))
+    }
     list(value = x[1], min = x[2], max = x[3])
   } else if (length(x) == 1) {
     list(value = x, min = NA_real_, max = NA_real_)

@@ -2,28 +2,33 @@
 % Please edit documentation in R/optionalInput.R
 \name{optionalSelectInput}
 \alias{optionalSelectInput}
-\title{Hide, Show Label only or display a selectInput}
+\title{Hide, Show Label only or display a pickerInput}
 \usage{
-optionalSelectInput(inputId, label, choices, selected, ...,
-  label_help = NULL)
+optionalSelectInput(inputId, label, choices = NULL, selected = NULL,
+  multiple = FALSE, options = list(), ..., label_help = NULL)
 }
 \arguments{
 \item{inputId}{The \code{input} slot that will be used to access the value.}
 
-\item{label}{Display label for the control, or \code{NULL} for no label.}
+\item{label}{Display a text in the center of the switch.}
 
 \item{choices}{character vector or \code{NULL}. If \code{choices} is
-\code{NULL} no selectInput widget is displayed and \code{input[[inputId]]}
+\code{NULL} no pickerInput widget is displayed and \code{input[[inputId]]}
 will be \code{""}. If \code{choices} is of length 1 then a label and
-character string will be displayed and the selectInput widget will be
-hidden. If the length of \code{choices} is more than one the selectInput
+character string will be displayed and the pickerInput widget will be
+hidden. If the length of \code{choices} is more than one the pickerInput
 element will be displayed.}
 
-\item{selected}{The initially selected value (or multiple values if
-\code{multiple = TRUE}). If not specified then defaults to the first value
-for single-select lists and no values for multiple select lists.}
+\item{selected}{The initially selected value (or multiple values if multiple = TRUE).
+If not specified then defaults to the first value for single-select lists
+ and no values for multiple select lists.}
 
-\item{...}{Arguments passed to \code{selectInput()}.}
+\item{multiple}{Is selection of multiple items allowed?}
+
+\item{options}{List of options, see \link{pickerOptions} for all available options.
+For limit the number of selections, see example below.}
+
+\item{...}{arguments passed to \code{\link[shinyWidgets]{pickerInput}}}
 
 \item{label_help}{optional an object of class \code{shiny.tag}. E.g. an object
 returned by \code{\link[shiny]{helpText}}}

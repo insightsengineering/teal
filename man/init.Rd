@@ -36,6 +36,7 @@ Creates the server and ui part for a teal shiny app
 }
 \examples{
 \dontrun{
+library(teal.modules.general)
 library(random.cdisc.data)
 
 ASL <- radsl(seed = 1)
@@ -63,9 +64,8 @@ app <- teal::init(
       tm_table(
          label = "demographic table",
          dataname = "ASL",
-         xvar = "SEX",
-         yvar = "RACE",
-         yvar_choices = c("RACE", "BMRKR2", "COUNTRY")
+         xvar = choices_selected("SEX"),
+         yvar = choices_selected(c("RACE", "BMRKR2", "COUNTRY"), "RACE")
       ),
       tm_scatterplot(
          label = "scatterplot",
