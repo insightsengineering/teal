@@ -8,31 +8,31 @@ choices_selected <- function(choices, selected, multiple) {
   list(choices=choices, selected=selected, multiple=multiple)
 }
 
-column_combinations <- function(vars, choices, selected, multiple) {
+keys_filter <- function(vars, choices, selected, multiple) {
   stopifnot(is.atomic(vars))
   stopifnot(all(vapply(choices, length, 0) == length(vars)))
   c(vars=list(vars), choices_selected(choices, selected, multiple))
 }
 
-column_combinations_from_sep <- function(vars, sep, cs = choices_selected()) {
+keys_filter_from_sep <- function(vars, sep, choices, selected, multiple) {
   
   split_by_sep <- function(txt) strsplit(txt, sep, fixed=TRUE)[[1]]
   
-  choices <- lapply(cs$choices, split_by_sep)
-  choices %<>% setNames(cs$choices)
+  choices <- lapply(choices, split_by_sep)
+  choices %<>% setNames(choices)
   
-  selected <- lapply(cs$selected, split_by_sep)
-  selected %<>% setNames(cs$selected)
+  selected <- lapply(selected, split_by_sep)
+  selected %<>% setNames(selected)
   
-  column_combinations(
+  keys_filter(
       vars = vars,
       choices = choices,
       selected = selected,
-      multiple = cs$multiple
+      multiple = multiple
   )
 }
 
-variable_choices <- function(cs, show = FALSE, label = NULL) {
+column_filter <- function(cs, show = FALSE, label = NULL) {
   
   cs$choices %<>% setNames(cs$choices)
   cs$selected %<>% setNames(cs$selected)
@@ -62,8 +62,38 @@ CDISC_data <- function(...){
   return(list(...))	
 }
 
-data_extract <- function(dataname = NULL, filtering = NULL, vars = NULL) {
-  output <- list(dataname = dataname, filtering = filtering, vars = vars)
+data_extract <- function(dataname = NULL, keys_filtering = NULL, columns = NULL) {
+  output <- list(dataname = dataname, keys_filtering = keys_filtering, columns = columns)
   class(output) <- c("list","data_extract")
   return(output)
+}
+
+get_selected_columns <- function(data, columnname){
+  
+  dataname <- attr(data, "dataname")
+  
+  keys <- attr(data, "keys")
+  
+  leftover <- setdiff(names(data),"keys")
+  
+  return(paste0(dataname, leftover, sep="."))
+}
+
+# ---- TODO
+data_merger <- function(...){
+  
+  # Please double check keys
+  # Please add "Dataname"."ColumnName" to data --> Problem, where to get dataname from ?
+  datasets <- list(...)
+  keys <- attr(datasets[[1]],"keys")
+  merge(..., by = keys)
+  
+}
+
+# ---- TODO
+data_filter_select <- function(data, filters, columns, dataname = ""){
+  
+  # Please return data with attr(.., "keys") and attr(..., "dataname")
+  
+  return(data)
 }

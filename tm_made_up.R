@@ -1,8 +1,9 @@
 tm_made_up <- function(
     label = "Regression Analysis",
+    dataname = NULL,
     response,
     regressor,
-    facetting,
+    facetting=NULL,
     pre_output = NULL,
     post_output = NULL){
   
@@ -19,7 +20,7 @@ tm_made_up <- function(
 }
 
 ui_made_up <- function(id, ...){
-  a <- list(...)
+  arguments <- list(...)
   
   ns <- NS(id)
   
@@ -32,17 +33,17 @@ ui_made_up <- function(id, ...){
           data_extract_input(
               id = ns("regressor"),
               label = "regressor Variable",
-              value = a$regressor
+              value = arguments$regressor
           ),
           data_extract_input(
               id = ns("response"),
               label = "Response Variable",
-              value = a$response
+              value = arguments$response
           ),
           data_extract_input(
               id = ns("facetting"),
               label = "Facetting Variable",
-              value = a$facetting
+              value = arguments$facetting
           )
       
       )
@@ -55,19 +56,20 @@ srv_made_up <- function(input, output, session, datasets, response, regressor, f
   # data_extractor, "response",
   # dataname + filtering (yes/no) + Names(Filtering-selected) + Names(Columns-Selected) 
   
-  response_column   <- callModule(data_extractor, id="response", datasets, response)
-  regressor_column  <- callModule(data_extractor, id="regressor", datasets, regressor)
-  facetting_column  <- callModule(data_extractor, id="facetting", datasets, facetting)
+  response_data   <- callModule(data_extractor, id="response", datasets = datasets, constant_values = response)
+  regressor_data  <- callModule(data_extractor, id="regressor", datasets = datasets, constant_values = regressor)
+  facetting_data  <- callModule(data_extractor, id="facetting", datasets = datasets, constant_values = facetting)
   
   data_merged <- reactive({
-        data_merger(datasets, regressor_column(), response_column())
+        data_merger(datasets, regressor_data(), response_data())
       })
   
   output$myplot <- renderPlot(
       {
         plot(data = data_merged(), 
-            x = regressor_column(),
-            y = response_column())
+            x = get_selected_columns(regressor_data()),
+            y = get_selected_columns(response_data())
+        )
       }
   )
   

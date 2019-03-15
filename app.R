@@ -19,23 +19,20 @@ ADTE <- radaette(ASL)
 
 modified_data <- ASL %>% mutate(A = 1) 
 
-adte_filters <- column_combinations_from_sep(
+adte_filters <- keys_filter_from_sep(
     vars = c("PARAMCD", "AVISIT"), # only key variables are allowed
     sep = " - ",
-    # Choices selected can be split
-#    cs = choices_selected(
     choices = c("CLV - BASELINE", "CLV - VISIT 1", "LTG - BASELINE"),
     selected = "CLV - BASELINE", 
     multiple = FALSE # if multiple, then a spread is needed
-#    )
 )
 
-# Instead of variable_choices overwrite choices_selected
+# Instead of column_filter overwrite choices_selected
 # backwards compatible with new arguments show and label
 adte_extracted1 <- data_extract(
     dataname = "ADTE", 
-    filtering = adte_filters,
-    vars = variable_choices(
+    keys_filtering = adte_filters,
+    columns = column_filter(
         cs = choices_selected(
             choices =  c("AVAL", "AVALC"),
             selected = c("AVAL", "AVALC"),
@@ -52,8 +49,8 @@ adte_extracted1 <- data_extract(
 
 adte_extracted <- data_extract(
     dataname = "ADTE", 
-    filtering = adte_filters,
-    vars = variable_choices(
+    keys_filtering = adte_filters,
+    columns = column_filter(
         cs = choices_selected(
             choices =  c("AVAL"),
             selected = c("AVAL"),
@@ -66,7 +63,7 @@ adte_extracted <- data_extract(
 
 asl_extracted <- data_extract(
     dataname = "ASL", 
-    vars = variable_choices(
+    columns = column_filter(
         cs = choices_selected(
             choices =  c("SEX", "AGE"),
             selected = c("AGE"),
@@ -89,6 +86,7 @@ x <- teal::init(
     modules = root_modules(
         tm_made_up(
             label = "Qplot",
+            dataname = c("ASL","ADTE"),
             response = adte_extracted,
             regressor = list(
                 adte_extracted1,
