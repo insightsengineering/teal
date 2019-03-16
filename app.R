@@ -17,16 +17,17 @@ library(dplyr)
 
 ASL <- radsl(N = 600)
 
-ADTE <- radaette(ASL)
+ADTE <- radtte(ASL, event.descr = c("STUDYID", "USUBJID", "PARAMCD"))
 
 modified_data <- ASL %>% mutate(A = 1) 
 
 adte_filters <- keys_filter_from_sep(
-    vars = c("PARAMCD", "BMRKR2"), # only key variables are allowed
+    vars = c("PARAMCD"), # only key variables are allowed
     sep = " - ",
-    choices = c("AETTE1 - LOW", "AETTE1 - LOW", "AETTE2 - MEDIUM"),
-    selected = "AETTE1 - LOW", 
-    multiple = FALSE # if multiple, then a spread is needed
+    choices = c("OS", "PFS", "EFS"),
+    selected = "OS", 
+    multiple = TRUE, # if multiple, then a spread is needed
+    label = "Choose endpoint"
 )
 
 # Instead of column_filter overwrite choices_selected
@@ -35,15 +36,15 @@ adte_extracted1 <- data_extract(
     dataname = "ADTE", 
     keys_filtering = adte_filters,
     columns = choices_selected(
-            choices =  c("AVAL", "AVALU"),
+            choices =  c("AVAL", "AVALU", "BMRKR1", "SITEID"),
             selected = c("AVAL"),
             multiple = FALSE,
         # optional
         # - choices
         # - selected
         # - multiple
-        show = FALSE, # Whether the user can select the item (optional)
-        label = "" # Label the column select dropdown (optional)
+        show = TRUE, # Whether the user can select the item (optional)
+        label = "Column" # Label the column select dropdown (optional)
     )
 )
 
@@ -51,10 +52,10 @@ adte_extracted <- data_extract(
     dataname = "ADTE", 
     keys_filtering = adte_filters,
     columns =choices_selected(
-            choices =  c("AVAL"),
+            choices =  c("AVAL", "BMRKR1"),
             selected = c("AVAL"),
             multiple = FALSE,
-        show = FALSE, # Whether the user can select the item
+        show = TRUE, # Whether the user can select the item
         label = "" # Label the column select dropdown (optional)
     )
 )
@@ -77,7 +78,7 @@ x <- teal::init(
             "radsl(N = 600)  %>% dplyr::mutate(A = 1)"),
         ADTE = data_for_teal(
             ADTE,
-            c("USUBJID", "STUDYID", "PARAMCD", "BMRKR2"),
+            c("USUBJID", "STUDYID", "PARAMCD"),
             "radaette(radsl(N = 600))")
     ),
     modules = root_modules(

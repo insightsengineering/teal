@@ -12,13 +12,13 @@ choices_selected <- function(choices, selected, multiple, show = FALSE, label = 
   list(choices = choices, selected = selected, multiple = multiple, show=show, label=label)
 }
 
-keys_filter <- function(vars, choices, selected, multiple) {
+keys_filter <- function(vars, choices, selected, multiple, label) {
   stopifnot(is.atomic(vars))
   stopifnot(all(vapply(choices, length, 0) == length(vars)))
-  c(vars=list(vars), choices_selected(choices, selected, multiple))
+  c(vars=list(vars), choices_selected(choices, selected, multiple, label = label))
 }
 
-keys_filter_from_sep <- function(vars, sep, choices, selected, multiple) {
+keys_filter_from_sep <- function(vars, sep, choices, selected, multiple, label = "Filter") {
   
   split_by_sep <- function(txt) strsplit(txt, sep, fixed=TRUE)[[1]]
   
@@ -27,12 +27,13 @@ keys_filter_from_sep <- function(vars, sep, choices, selected, multiple) {
   
   selected <- lapply(selected, split_by_sep)
   selected %<>% setNames(selected)
-  
+
   keys_filter(
       vars = vars,
       choices = choices,
       selected = selected,
-      multiple = multiple
+      multiple = multiple,
+      label = label
   )
 }
 
@@ -90,8 +91,16 @@ set_selected_column_names <- function(data){
 extracted_data <- function(...){
   
   datasets <- list(...)
+  lapply(datasets, function(x){
+        if (is.null(dim(x))){
+          stop(paste0("The dataset ", attr(x, "dataname"),"does not contain any data in your setup."))
+        }
+  })
   all_keys <- lapply(datasets, function(dataset) attr(dataset, "keys"))
-  stopifnot(all(vapply(all_keys, function(keys) identical(keys, all_keys[[1]]), TRUE)))
+  
+  if (!all(vapply(all_keys, function(keys) identical(keys, all_keys[[1]]), TRUE))){
+    stop("The datasets chosen cannot be merged as the keys are not equal.")
+  }
   keys <- all_keys[[1]]
   
   datanames <- lapply(datasets, function(dataset) attr(dataset, "dataname")) %>% unlist()

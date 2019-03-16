@@ -15,7 +15,7 @@ tm_made_up <- function(
       ui = ui_made_up,
       ui_args = args,
       server_args = list(regressor = regressor, response = response, facetting = facetting),
-      filters = NULL
+      filters = "all"
   )
 }
 

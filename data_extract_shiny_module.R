@@ -54,18 +54,22 @@ data_extract_input <- function(id = NULL, label = NULL, value = data_extract()){
   }
   
   datanames %<>% setNames(datanames)
-  
-  div(
-      tags$label(label),
-      optionalSelectInput(
-          inputId = ns("ds"),
-          label = "Dataset",
-          choices = datanames,
-          selected = datanames[1],
-          multiple = FALSE
-      ),
-      build_extract_inputs(output_panel)    
-  )
+  if(!is.null(value)){
+    
+    div(
+        tags$label(label),
+        optionalSelectInput(
+            inputId = ns("ds"),
+            label = "Dataset",
+            choices = datanames,
+            selected = datanames[1],
+            multiple = FALSE
+        ),
+        build_extract_inputs(output_panel)    
+    )
+  }else{
+    div()
+  }
 }
 
 data_extract_input_single <- function(id = NULL, value = data_extract(), filtering_sep = " - "){
@@ -80,7 +84,7 @@ data_extract_input_single <- function(id = NULL, value = data_extract(), filteri
             
           optionalSelectInput(
               inputId = ns("filter"),
-              label = "Filter",
+              label = if(!is.null(value$keys_filtering$label)){value$keys_filtering$label}else{"Filter"},
               choices = filter2choices(value$keys_filtering$choices, filtering_sep),
               selected = filter2choices(value$keys_filtering$selected, filtering_sep),
               multiple = value$keys_filtering$multiple
@@ -95,7 +99,7 @@ data_extract_input_single <- function(id = NULL, value = data_extract(), filteri
             label = if(is.null(value$columns$label)){
               "Column"
             }else{
-              values$columns$label
+              value$columns$label
             },
             choices = value$columns$choices,
             selected = value$columns$selected,
