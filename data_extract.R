@@ -54,7 +54,6 @@ CDISC_data <- function(...){
           )
       )
   )
-  
   return(list(...))	
 }
 
@@ -64,32 +63,95 @@ data_extract <- function(dataname = NULL, keys_filtering = NULL, columns = NULL)
   return(output)
 }
 
-get_selected_columns <- function(data, columnname){
+get_selected_columns <- function(data){
   
   dataname <- attr(data, "dataname")
   
   keys <- attr(data, "keys")
   
-  leftover <- setdiff(names(data),"keys")
+  leftover <- setdiff(names(data),keys)
   
-  return(paste0(dataname, leftover, sep="."))
+  new_names <- paste(leftover, dataname, sep=".")
+  names(new_names) <- leftover
+  
+  return(new_names)
 }
 
-# ---- TODO
-data_merger <- function(...){
+set_selected_column_names <- function(data){
   
-  # Please double check keys
-  # Please add "Dataname"."ColumnName" to data --> Problem, where to get dataname from ?
-  datasets <- list(...)
-  keys <- attr(datasets[[1]],"keys")
-  merge(..., by = keys)
+  overwrite_names <- get_selected_columns(data)
   
-}
-
-# ---- TODO
-data_filter_select <- function(data, filters, columns, dataname = ""){
-  
-  # Please return data with attr(.., "keys") and attr(..., "dataname")
+  names(data)[which(names(data) %in% names(overwrite_names))] <- overwrite_names
   
   return(data)
+  
+}
+# ---- TODO
+extracted_data <- function(...){
+  
+  datasets <- list(...)
+  all_keys <- lapply(datasets, function(dataset) attr(dataset, "keys"))
+  stopifnot(all(vapply(all_keys, function(keys) identical(keys, all_keys[[1]]), TRUE)))
+  keys <- all_keys[[1]]
+  
+  datanames <- lapply(datasets, function(dataset) attr(dataset, "dataname")) %>% unlist()
+  
+  datasets <- lapply(datasets, set_selected_column_names)
+  
+  # Please add "Dataname"."ColumnName" to data --> Problem, where to get dataname from ?
+  merged_data <- purrr::reduce(
+      .x = lapply(datasets, function(dataset) dataset),
+      .f = left_join,
+      by=keys,
+      suffix = paste0(".", datanames)
+      )
+  if(any(duplicated(datanames))){
+    
+    merged_data <- merged_data[, !duplicated(colnames(merged_data ))]
+    
+    # Remove duplicated datanames by regular expression
+    names(merged_data) <- stringr::str_replace_all(
+        string = names(merged_data),
+        pattern = "\\b([^\\.]+)\\.(\\1)\\b",
+        replacement = c("\\1" = "\\1")
+    )
+    
+  }
+  attr(merged_data, "keys") <- keys
+  return(merged_data)    
+}
+
+data_filter_select <- function(input_data, filters, columns, dataname = ""){
+  
+  old_keys <- attr(input_data, "keys")
+  new_keys <- setdiff(old_keys, filters$variable_names)
+  
+  if (is.null(filters$filtering_sep)){
+    filters$filtering_sep <- "_"
+  }
+  
+  accepted_combinations <- lapply(filters$filters,
+      function(comb) paste(comb, collapse=filters$filtering_sep))
+  
+  if (!is.null(filters$filters)){
+    
+    input_data %<>%
+        tidyr::unite("tmp_keys_to_remove",
+            filters$variable_names,
+            sep=filters$filtering_sep) %>%
+        dplyr::filter(tmp_keys_to_remove %in% accepted_combinations)
+    
+  }
+  
+  if (!is.null(columns)){
+  
+    input_data %<>%
+        select(c(new_keys, unlist(columns), recursive=FALSE))
+    
+  }
+  
+  attr(input_data, "keys") <- new_keys
+  attr(input_data, "dataname") <- dataname
+  
+  return(input_data)
 }

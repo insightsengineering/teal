@@ -17,19 +17,18 @@ choices2filter <- function(filter_choices, list_of_filters, filtering_sep, varia
   if(is.null(filter_choices) || is.null(list_of_filters)){
     return(NULL)
   }else{
-    
     names(list_of_filters) <- filter2choices(list_of_filters, filtering_sep = filtering_sep)
     
     list_of_filters <- list_of_filters[filter_choices]
-    out <- lapply(seq_along(variable_names),function(x){
-          unlist(lapply(list_of_filters, function(filter_vector){
-                out[[variable_names[x]]] <- c(out[[variable_names[x]]], filter_vector[x])
-              })
-      )
-    })
-
-    names(out) <- variable_names
-    return(out)
+    
+    return(
+        list(
+            variable_names = variable_names,
+            filters = list_of_filters,
+            filtering_sep = filtering_sep
+            )
+        )
+    
   }
   
 }
@@ -49,7 +48,7 @@ data_extract_input <- function(id = NULL, label = NULL, value = data_extract()){
     })#lapply
     datanames <- unlist(lapply(value,function(x) x$dataname))
   }else{
-    output_panel <- list(data_extract_input_single(value$dataname, value))
+    output_panel <- list(data_extract_input_single(ns(value$dataname), value))
     
     datanames <- value$dataname
   }
@@ -103,7 +102,8 @@ data_extract_input_single <- function(id = NULL, value = data_extract(), filteri
             multiple = value$columns$multiple
         )
       }else{
-        helpText("Column:", tags$code(value$columns$selected))
+        helpText("Column:", tags$code(paste(value$columns$selected, collapse =" ")))
+        
       }
   )
 }
@@ -130,7 +130,7 @@ data_extractor <- function(input, output, session, datasets, constant_values){
     ns_data <- function(x)paste0(input$ds,"-",x)
     
     data <- get_data_with_keys(datasets = datasets, dataname = input$ds)
-        
+
     if(!is(constant_values,"data_extract")){
       
       constant_values <- constant_values[[
@@ -159,15 +159,20 @@ data_extractor <- function(input, output, session, datasets, constant_values){
       
     }
     
+    if(constant_values$columns$show){
+      columns <- input[[ns_data("column")]]
+    }else{
+      columns <- constant_values$columns$selected
+    }
+    
     data_filter_select(
-        data = data,
+        input_data = data,
         filters = filters,
-        columns = input[[ns_data("column")]],
+        columns = columns,
         dataname = input$ds
     )
   })
   
-  # Merge mit anderem dataset
   return(data)
 }
 

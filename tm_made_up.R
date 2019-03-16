@@ -3,7 +3,7 @@ tm_made_up <- function(
     dataname = NULL,
     response,
     regressor,
-    facetting=NULL,
+    facetting = NULL,
     pre_output = NULL,
     post_output = NULL){
   
@@ -15,7 +15,7 @@ tm_made_up <- function(
       ui = ui_made_up,
       ui_args = args,
       server_args = list(regressor = regressor, response = response, facetting = facetting),
-      filters = dataname
+      filters = NULL
   )
 }
 
@@ -26,13 +26,15 @@ ui_made_up <- function(id, ...){
   
   standard_layout(
       output = teal.devel::white_small_well(
-          # This shall be wrapped in a teal::plot
-          plotOutput(ns("myplot"))
+          tags$div(
+              # This shall be wrapped in a teal::plot
+              teal.devel::plot_height_output(id=ns("outplot"))
+          )
       ),
       encoding = div(
           data_extract_input(
               id = ns("regressor"),
-              label = "regressor Variable",
+              label = "Regressor Variable",
               value = arguments$regressor
           ),
           data_extract_input(
@@ -44,7 +46,9 @@ ui_made_up <- function(id, ...){
               id = ns("facetting"),
               label = "Facetting Variable",
               value = arguments$facetting
-          )
+          ),
+          teal.devel::plot_height_input(id=ns("height"))
+          # This shall be wrapped in a teal::plot
       
       )
   )# standard_layout
@@ -52,26 +56,28 @@ ui_made_up <- function(id, ...){
 
 srv_made_up <- function(input, output, session, datasets, response, regressor, facetting) {
   
-  
   # data_extractor, "response",
   # dataname + filtering (yes/no) + Names(Filtering-selected) + Names(Columns-Selected) 
   
-  response_data   <- callModule(data_extractor, id="response", datasets = datasets, constant_values = response)
   regressor_data  <- callModule(data_extractor, id="regressor", datasets = datasets, constant_values = regressor)
+  response_data   <- callModule(data_extractor, id="response", datasets = datasets, constant_values = response)
   facetting_data  <- callModule(data_extractor, id="facetting", datasets = datasets, constant_values = facetting)
   
-  data_merged <- reactive({
-        data_merger(datasets, regressor_data(), response_data())
-      })
-  
-  output$myplot <- renderPlot(
+  output$plot <- renderPlot(
       {
-        plot(data = data_merged(), 
-            x = get_selected_columns(regressor_data()),
-            y = get_selected_columns(response_data())
-        )
+        
+  #  plot(lm(
+  #      as.formula(paste(get_selected_columns(response_data()), paste(get_selected_columns(regressor_data()), collapse=" + "), sep=" ~ "))
+  #  , data = extracted_data(regressor_data(), response_data())))
+        
+        ggplot(
+            data = extracted_data(regressor_data(), response_data()),
+            aes_string(
+                x = get_selected_columns(regressor_data()),
+                y = get_selected_columns(response_data()))
+        ) + geom_point()
       }
   )
-  
+  callModule(teal.devel::plot_with_height, id = "outplot", plot_id = session$ns("plot"), plot_height = reactive(input$height))
   
 }

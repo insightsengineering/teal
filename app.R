@@ -4,6 +4,8 @@
 #------------------ App Code -----------------------------------------------------------
 #---------------------------------------------------------------------------------------
 #---------------------------------------------------------------------------------------
+tryCatch(unloadNamespace("teal.modules.general"))
+tryCatch(unloadNamespace("teal.modules.clinical"))
 tryCatch(unloadNamespace("teal.devel"))
 tryCatch(unloadNamespace("teal"))
 devtools::load_all("../teal")
@@ -20,10 +22,10 @@ ADTE <- radaette(ASL)
 modified_data <- ASL %>% mutate(A = 1) 
 
 adte_filters <- keys_filter_from_sep(
-    vars = c("PARAMCD", "AVISIT"), # only key variables are allowed
+    vars = c("PARAMCD", "BMRKR2"), # only key variables are allowed
     sep = " - ",
-    choices = c("CLV - BASELINE", "CLV - VISIT 1", "LTG - BASELINE"),
-    selected = "CLV - BASELINE", 
+    choices = c("AETTE1 - LOW", "AETTE1 - LOW", "AETTE2 - MEDIUM"),
+    selected = "AETTE1 - LOW", 
     multiple = FALSE # if multiple, then a spread is needed
 )
 
@@ -33,8 +35,8 @@ adte_extracted1 <- data_extract(
     dataname = "ADTE", 
     keys_filtering = adte_filters,
     columns = choices_selected(
-            choices =  c("AVAL", "AVALC"),
-            selected = c("AVAL", "AVALC"),
+            choices =  c("AVAL", "AVALU"),
+            selected = c("AVAL"),
             multiple = FALSE,
         # optional
         # - choices
@@ -75,10 +77,11 @@ x <- teal::init(
             "radsl(N = 600)  %>% dplyr::mutate(A = 1)"),
         ADTE = data_for_teal(
             ADTE,
-            c("USUBJID", "STUDYID", "PARAMCD", "AVISIT"),
+            c("USUBJID", "STUDYID", "PARAMCD", "BMRKR2"),
             "radaette(radsl(N = 600))")
     ),
     modules = root_modules(
+        teal.modules.general::tm_data_table("Data Table"),
         tm_made_up(
             label = "Qplot",
             dataname = c("ASL","ADTE"),
