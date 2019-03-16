@@ -24,6 +24,7 @@ ui_made_up <- function(id, ...){
   
   ns <- NS(id)
   
+  # layout
   standard_layout(
       output = teal.devel::white_small_well(
           tags$div(
