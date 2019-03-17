@@ -54,22 +54,38 @@ srv_filter_items <- function(input, output, session, datasets, dataname, contain
 
         el <- if (fi$type == "choices") {
           if (length(fi$choices) > 5) {
-            selectInput(ns(id), varlabel,
-                        choices =  fi$choices,
-                        selected = fs,
-                        multiple = TRUE)
+            optionalSelectInput(
+              ns(id),
+              varlabel,
+              choices =  fi$choices,
+              selected = fs,
+              multiple = TRUE
+            )
           } else {
-            checkboxGroupInput(ns(id), varlabel,
-                               choices =  fi$choices,
-                               selected = fs)
+            checkboxGroupInput(
+              ns(id),
+              varlabel,
+              choices =  fi$choices,
+              selected = fs
+            )
           }
         } else if (fi$type == "range") {
-          sliderInput(ns(id), varlabel,
-                      min = floor(fi$range[1] * 100) / 100, max = ceiling(fi$range[2] * 100) / 100,
-                      value = fs,
-                      width = "100%")
+          sliderInput(
+            ns(id),
+            varlabel,
+            min = floor(fi$range[1] * 100) / 100,
+            max = ceiling(fi$range[2] * 100) / 100,
+            value = fs,
+            width = "100%"
+          )
         } else if (fi$type == "logical") {
-          radioButtons(ns(id), varlabel, choices = fi$choices, selected = fs, inline = TRUE)
+          radioButtons(
+            ns(id),
+            varlabel,
+            choices = fi$choices,
+            selected = fs,
+            inline = TRUE
+          )
         } else {
           tags$p(paste(var, "in data", dataname, "has unknown type:", fi$type))
         }

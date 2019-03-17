@@ -25,6 +25,7 @@ Imports:
     methods,
     R6,
     shinyjs,
+    shinyWidgets,
     xtable
 RoxygenNote: 6.1.1
 Suggests:

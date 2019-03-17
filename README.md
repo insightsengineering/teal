@@ -17,6 +17,7 @@ modules](https://shiny.rstudio.com/articles/modules.html).
 
 	```r
 	library(teal)
+	library(teal.modules.general)
 	library(random.cdisc.data)
 		
 	ASL <- radsl()
@@ -43,9 +44,8 @@ modules](https://shiny.rstudio.com/articles/modules.html).
 	      tm_table(
 	        label = "demographic table",
 	        dataname = "ASL",
-	        xvar = "SEX",
-	        yvar = "RACE",
-	        yvar_choices = c("RACE", "AGEGR", "REGION")
+	        xvar = choices_selected("SEX"),
+	        yvar = choices_selected(c("RACE", "AGEGR", "REGION"), "RACE")
 	      ),
 	      tm_scatterplot(
 	        label = "scatterplot",

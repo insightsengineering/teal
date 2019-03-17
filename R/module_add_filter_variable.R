@@ -1,16 +1,17 @@
+#' @importFrom shinyWidgets pickerInput
 ui_add_filter_variable <- function(id, dataname) {
 
   ns <- NS(id)
 
   div(class = paste0("teal_filter_", dataname),
-      selectInput(ns("variables"), label = dataname, choices = NULL),
+      pickerInput(ns("variables"), label = dataname, choices = NULL),
       uiOutput(ns("warning"))
   )
 
 }
 
-
-srv_add_filter_variable <- function(input, output, session, datasets, dataname, omit_vars=NULL) {
+#' @importFrom shinyWidgets updatePickerInput
+srv_add_filter_variable <- function(input, output, session, datasets, dataname, omit_vars = NULL) {
 
   observe({
     fs <- datasets$get_filter_state(dataname, reactive = TRUE)
@@ -25,7 +26,7 @@ srv_add_filter_variable <- function(input, output, session, datasets, dataname, 
     }
 
     .log("update add filter variables", dataname)
-    updateSelectInput(session, "variables", choices = c("", choices), selected = NULL)
+    updatePickerInput(session, "variables", choices = c("", choices), selected = NULL)
   })
 
   warning_messages <- reactiveValues(varinfo = "", i = 0)
