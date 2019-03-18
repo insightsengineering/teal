@@ -15,23 +15,23 @@ License: file LICENSE
 Encoding: UTF-8
 LazyData: true
 Depends:
-    R (>= 3.3),
-    shiny
+  R (>= 3.3),
+  shiny
 Imports:
-    dplyr,
-    ggplot2,
-    grid,
-    haven,
-    methods,
-    R6,
-    shinyjs,
-    shinyWidgets,
-    xtable
+  dplyr,
+  ggplot2,
+  grid,
+  haven,
+  methods,
+  R6,
+  shinyWidgets,
+  xtable
 RoxygenNote: 6.1.1
 Suggests:
-    knitr,
-    random.cdisc.data (>= 0.1.2.1),
-    rmarkdown,
-    testthat,
-    test.nest
+  knitr,
+  random.cdisc.data (>= 0.1.2.1),
+  rmarkdown,
+  shinyjs,
+  testthat,
+  test.nest
 VignetteBuilder: knitr

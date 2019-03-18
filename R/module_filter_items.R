@@ -54,7 +54,7 @@ srv_filter_items <- function(input, output, session, datasets, dataname, contain
 
         el <- if (fi$type == "choices") {
           if (length(fi$choices) > 5) {
-            optionalSelectInput(
+            pickerInput(
               ns(id),
               varlabel,
               choices =  fi$choices,
