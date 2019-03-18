@@ -63,9 +63,8 @@ data_extract_input_single <- function(id = NULL, data_extract_spec = data_extrac
     # Construct a filtering for the key variables. In case no filtering
     # was set up return a logical false by a hidden checkbox
     if (!is.null(data_extract_spec$keys_filtering)) {
-      
       stopifnot(methods::is(data_extract_spec$keys_filtering, "KeysFilteringSpec"))
-      
+
       shiny::tagList(
         optionalSelectInput(
           inputId = ns("filter"),
@@ -74,8 +73,8 @@ data_extract_input_single <- function(id = NULL, data_extract_spec = data_extrac
           } else {
             "Filter"
           },
-          choices = filter2choices(data_extract_spec$keys_filtering$cs$choices, filtering_sep),
-          selected = filter2choices(data_extract_spec$keys_filtering$cs$selected, filtering_sep),
+          choices = list_of_filters_to_label(data_extract_spec$keys_filtering$cs$choices, filtering_sep),
+          selected = list_of_filters_to_label(data_extract_spec$keys_filtering$cs$selected, filtering_sep),
           multiple = data_extract_spec$keys_filtering$cs$multiple
         )
       )
@@ -101,33 +100,33 @@ data_extract_input_single <- function(id = NULL, data_extract_spec = data_extrac
   )
 }
 
-data_extract_single_module  <- function(input, output, session, data_extract_spec){
+data_extract_single_module <- function(input, output, session, data_extract_spec) {
   reactive({
-        if (is.null(input$filter)) {
-          filters <- NULL
-        } else {
-          filtering_names <- input$filter
-          
-          filtering_list <- data_extract_spec$keys_filtering$cs$choices
-          
-          filters <- choices2filter(
-              filter_choices = filtering_names,
-              list_of_filters = filtering_list,
-              filtering_sep = " - ",
-              variable_names = data_extract_spec$keys_filtering$vars
-          )
-        }
-        
-        if (data_extract_spec$columns$show) {
-          columns <- input$column
-        } else {
-          columns <- data_extract_spec$columns$selected
-        }
-        return(list(filters = filters, columns = columns))
-      })
+    if (is.null(input$filter)) {
+      filters <- NULL
+    } else {
+      filtering_names <- input$filter
+
+      filtering_list <- data_extract_spec$keys_filtering$cs$choices
+
+      filters <- label_to_list_of_filters(
+        filter_choices = filtering_names,
+        list_of_filters = filtering_list,
+        filtering_sep = " - ",
+        variable_names = data_extract_spec$keys_filtering$vars
+      )
+    }
+
+    if (data_extract_spec$columns$show) {
+      columns <- input$column
+    } else {
+      columns <- data_extract_spec$columns$selected
+    }
+    return(list(filters = filters, columns = columns))
+  })
 }
 # List value 2 label
-filter2choices <- function(list_of_filters, filtering_sep) {
+list_of_filters_to_label <- function(list_of_filters, filtering_sep) {
   choices <- unlist(
     lapply(list_of_filters, function(x) paste0(x, collapse = filtering_sep))
   )
@@ -155,7 +154,6 @@ data_extract_module <- function(input, output, session, datasets, data_extract_s
   # Filtering-sep / Filtering-vars / Filtering-choices (inkl mapping) / Columns-choices
 
   data <- reactive({
-    ns_data <- function(x) paste0(input$ds, "-", x)
 
     data <- get_data_with_keys(datasets = datasets, dataname = input$ds)
     if (!methods::is(data_extract_spec, "DataExtractSpec")) {
@@ -183,51 +181,13 @@ data_extract_module <- function(input, output, session, datasets, data_extract_s
   return(data)
 }
 
-#' @importFrom dplyr filter select
-#' @importFrom tidyr unite
-#' @importFrom rlang .data
-data_filter_select <- function(input_data, filters, columns, dataname = "") {
-  old_keys <- attr(input_data, "keys")
-  new_keys <- setdiff(old_keys, filters$variable_names)
 
-  if (is.null(filters$filtering_sep)) {
-    filters$filtering_sep <- "_"
-  }
 
-  accepted_combinations <- lapply(
-    filters$filters,
-    function(comb) paste(comb, collapse = filters$filtering_sep)
-  )
-
-  
-  # Insert the get_keysfilter_str from Max + 
-  # apply_dataview from Max
-  
-  if (!is.null(filters$filters)) {
-    input_data %<>%
-      tidyr::unite("tmp_keys_to_remove",
-        filters$variable_names,
-        sep = filters$filtering_sep
-      ) %>%
-      dplyr::filter(.data$tmp_keys_to_remove %in% accepted_combinations)
-  }
-
-  if (!is.null(columns)) {
-    input_data %<>%
-      select(c(new_keys, unlist(columns), recursive = FALSE))
-  }
-
-  attr(input_data, "keys") <- new_keys
-  attr(input_data, "dataname") <- dataname
-
-  return(input_data)
-}
-
-choices2filter <- function(filter_choices, list_of_filters, filtering_sep, variable_names) {
+label_to_list_of_filters <- function(filter_choices, list_of_filters, filtering_sep, variable_names) {
   if (is.null(filter_choices) || is.null(list_of_filters)) {
     return(NULL)
   } else {
-    names(list_of_filters) <- filter2choices(list_of_filters, filtering_sep = filtering_sep)
+    names(list_of_filters) <- list_of_filters_to_label(list_of_filters, filtering_sep = filtering_sep)
 
     list_of_filters <- list_of_filters[filter_choices]
 
@@ -240,4 +200,3 @@ choices2filter <- function(filter_choices, list_of_filters, filtering_sep, varia
     )
   }
 }
-

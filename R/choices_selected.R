@@ -32,7 +32,7 @@ choices_selected <- function(choices, selected, multiple, show = FALSE, label = 
   if (is.null(names(selected))) {
     selected %<>% setNames(selected)
   }
-  out <-list(choices = choices, selected = selected, multiple = multiple, show = show, label = label)
+  out <- list(choices = choices, selected = selected, multiple = multiple, show = show, label = label)
   class(out) <- "choices_selected"
   return(out)
 }
