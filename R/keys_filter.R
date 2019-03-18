@@ -1,7 +1,7 @@
 #' Setup of Key Filtering for teal data sets
 #'
 #' @name KeysFilteringSpec
-#' @aliases keys_filtering_spec_class
+#' @aliases keys_filtering_spec_class keys_filtering_spec
 #' @field vars \code{character} The variables that shall be filtered with this specification
 #' @field cs \code{choices_seleced} \link{choices_selected} outcome including \code{choices},
 #'   \code{selected}, \code{multiple} and \code{label}
@@ -31,8 +31,6 @@
 #' 	selected and choices inputs.
 #' 
 #' 
-#' @usage keys_filtering_spec_class(vars, sep, selected, choices, multiple, label = "Filter")
-#' 
 #' @keywords data
 #' @importFrom stats setNames
 #' @export
@@ -61,9 +59,11 @@ keys_filtering_spec_class <- R6Class("KeysFilteringSpec",
 )
 
 #' Constructor for \link{KeysFilteringSpec}
-#'
+#' 
+#' @inheritParams KeysFilteringSpec
+#' @rdname KeysFilteringSpec
 #' @export
-#' @param ... params of \link{KeysFilteringSpec}
-keys_filtering_spec <- function(...) {
-  keys_filtering_spec_class$new(...)
+keys_filtering_spec <- function(vars, sep, choices, selected, multiple, label = "Filter") {
+  keys_filtering_spec_class$new(vars = vars, sep = sep,
+      choices = choices, selected = selected, multiple = multiple, label = label)
 }
