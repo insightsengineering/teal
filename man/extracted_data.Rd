@@ -2,7 +2,7 @@
 % Please edit documentation in R/data_extract.R
 \name{extracted_data}
 \alias{extracted_data}
-\title{Extract a single data set from multiple outcomes of data_extractor}
+\title{Extract a single data set from multiple outcomes of data_extract_module}
 \usage{
 extracted_data(...)
 }
