@@ -17,10 +17,10 @@ values of a shiny select input.}
 \item{multiple}{(\code{logical}) Whether multiple values shall be allowed in the
 shiny select input.}
 
-\item{show}{(\code{logical}) (optional) \link{data_extract} specific feature to
+\item{show}{(\code{logical}) (optional) \link{DataExtractSpec} specific feature to
 hide the choices selected in case they are not needed.}
 
-\item{label}{(\code{logical}) (optional) \link{data_extract} specific feature to
+\item{label}{(\code{logical}) (optional) \link{DataExtractSpec} specific feature to
 show a different label on top of this specific \link{shiny}{selectInput}.}
 }
 \value{

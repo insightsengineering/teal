@@ -29,7 +29,10 @@
 #'
 #' @return A list of \code{vars} + a \link{choices_selected} outcome built by the split
 #' 	selected and choices inputs.
-#'
+#' 
+#' 
+#' @usage keys_filtering_spec_class(vars, sep, selected, choices, multiple, label = "Filter")
+#' 
 #' @keywords data
 #' @importFrom stats setNames
 #' @export

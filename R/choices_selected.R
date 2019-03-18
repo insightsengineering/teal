@@ -8,9 +8,9 @@
 #'  values of a shiny select input.
 #' @param multiple (\code{logical}) Whether multiple values shall be allowed in the
 #'  shiny select input.
-#' @param show (\code{logical}) (optional) \link{data_extract} specific feature to
+#' @param show (\code{logical}) (optional) \link{DataExtractSpec} specific feature to
 #'   hide the choices selected in case they are not needed.
-#' @param label (\code{logical}) (optional) \link{data_extract} specific feature to
+#' @param label (\code{logical}) (optional) \link{DataExtractSpec} specific feature to
 #'   show a different label on top of this specific \link{shiny}{selectInput}.
 #'
 #' @return A \code{list} of all input values. The function double checks the \code{choices}
