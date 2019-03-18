@@ -22,7 +22,8 @@ data_extract_class <- R6::R6Class("DataExtractSpec",
     dataname = character(0),
     keys_filtering = NULL,
     columns = NULL,
-    initialize = function(dataname = NULL, keys_filtering = NULL, columns = NULL) {
+    initialize = function(dataname, keys_filtering = NULL, columns = NULL) {
+      stopifnot(!is.null(dataname))
       self$dataname <- dataname
       self$set_keys_filtering(keys_filtering)
       self$set_columns(columns)
