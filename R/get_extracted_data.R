@@ -26,7 +26,7 @@ get_extracted_data <- function(...) {
   }
   keys <- all_keys[[1]]
 
-  datasets <- lapply(datasets, prefix_column_names_with_dataset)
+  datasets <- lapply(datasets, prefix_col_names_with_dataset)
 
   # Take merge from Max merge_datasets
   # Create merged data set
@@ -42,13 +42,18 @@ get_extracted_data <- function(...) {
 #' @importFrom dplyr select
 left_join_without_duplicated <- function(x, y, by, ...) {
   # removes duplicated columns before left joining so they don't appear with suffix
-  {
-    common_cols <- union(names(x), names(y))
-    stopifnot(identical(
-      x %>% select(common_cols), 
-      y %>% select(common_cols))
-    )  
-  } 
+  { # nolint
+    if (attr(x, "dataname") == attr(y, "dataname")) {
+      common_cols <- union(names(x), names(y))
+      if (!identical(
+        x %>% select(common_cols),
+        y %>% select(common_cols)
+      )
+      ) {
+        stop("Datasets could not be merged due to difference in data filtering.")
+      }
+    }
+  }
   new_y_cols <- union(by, setdiff(names(y), names(x)))
   y <- y %>% select(new_y_cols)
   left_join(x, y, by = by, ...)
