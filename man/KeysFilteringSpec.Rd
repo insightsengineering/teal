@@ -14,13 +14,14 @@ keys_filtering_spec(vars, sep, choices, selected, multiple,
   label = "Filter")
 }
 \arguments{
-\item{vars}{(\code{character}) Character vector giving the columns to be filtered}
+\item{vars}{(\code{character}) Character vector giving the key columns to be filtered}
 
 \item{sep}{(\code{character}) A separator string to split the \code{choices} or
 \code{selected} inputs into the values of the different columns}
 
 \item{choices}{(\code{character}) Named character vector to define the choices
-    of a shiny select input. These shall be filter values of the \code{vars} input.
+    of a shiny select input. These shall be filter values of the \code{vars} input
+    separated by \code{sep}.
 
 E.g. \code{vars = c("PARAMCD","AVISITN")} and \code{choices = c("CRP - BASELINE","ALT - BASELINE")}
  will lead to a filtering of
@@ -55,4 +56,15 @@ Constructor for \link{KeysFilteringSpec}
 \code{selected}, \code{multiple} and \code{label}}
 }}
 
+\examples{
+\dontrun{
+keys_filtering_spec(
+  vars = c("PARAMCD", "AVISIT"),
+  sep = " - ",
+  choices = c("CRP - BASELINE", "CRP - SCREENING", "ALT - BASELINE"),
+  selected = c("CRP - BASELINE"),
+  multiple=TRUE
+)
+}
+}
 \keyword{data}
