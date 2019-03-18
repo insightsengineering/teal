@@ -29,8 +29,8 @@
 #'
 #' @return A list of \code{vars} + a \link{choices_selected} outcome built by the split
 #' 	selected and choices inputs.
-#' 
-#' 
+#'
+#'
 #' @keywords data
 #' @importFrom stats setNames
 #' @export
@@ -59,11 +59,13 @@ keys_filtering_spec_class <- R6Class("KeysFilteringSpec",
 )
 
 #' Constructor for \link{KeysFilteringSpec}
-#' 
+#'
 #' @inheritParams KeysFilteringSpec
 #' @rdname KeysFilteringSpec
 #' @export
 keys_filtering_spec <- function(vars, sep, choices, selected, multiple, label = "Filter") {
-  keys_filtering_spec_class$new(vars = vars, sep = sep,
-      choices = choices, selected = selected, multiple = multiple, label = label)
+  keys_filtering_spec_class$new(
+    vars = vars, sep = sep,
+    choices = choices, selected = selected, multiple = multiple, label = label
+  )
 }

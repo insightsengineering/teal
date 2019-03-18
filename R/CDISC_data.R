@@ -9,7 +9,7 @@
 #'
 #' @export
 #'
-CDISC_data <- function(...) {
+cdisc_data <- function(...) {
   all_keys <- lapply(list(...), function(dataset) attr(dataset, "keys"))
 
   stopifnot(
