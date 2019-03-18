@@ -43,8 +43,9 @@ get_extracted_data <- function(...) {
 #'
 #' @param ... \code{data.frame} Each input to this function shall be a data.frame that
 #'   has the attributes: \code{keys}, \code{dataname}
-#'
-#' @return
+#' @param dataset (\code{data.frame}) with \code{keys} attribute
+#' 
+#' @return A \code{data.frame} or \code{vector} with the selected data
 #'
 #' @export
 get_extracted_data_single_ds <- function(dataset = NULL, ...) {
