@@ -4,7 +4,7 @@
 #------------------ App Code -----------------------------------------------------------
 #---------------------------------------------------------------------------------------
 #---------------------------------------------------------------------------------------
-devtools::load_all("../..", export_all = FALSE)
+#devtools::load_all("../..", export_all = FALSE)
 library(teal.devel)
 library(teal)
 library(magrittr)
@@ -83,7 +83,6 @@ x <- teal::init(
     teal.modules.general::tm_data_table("Data Table"),
     tm_plot_xy(
       label = "Qplot",
-      dataname = c("ASL", "ADTE"),
       response = adte_extracted,
       regressor = list(
         adte_extracted1,
@@ -95,3 +94,4 @@ x <- teal::init(
 
 
 shinyApp(x$ui, x$server)
+

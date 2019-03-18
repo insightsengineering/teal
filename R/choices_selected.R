@@ -21,11 +21,12 @@
 #'
 #' @export
 choices_selected <- function(choices, selected, multiple, show = FALSE, label = NULL) {
-  stopifnot(length(choices) >= 1)
-  stopifnot(length(selected) >= 1)
+  stopifnot((length(choices) >= 1) && (all_true(choices, is.atomic)))
+  stopifnot((length(selected) >= 1) && (all_true(selected, is.atomic)))
   stopifnot(is.logical(multiple))
   stopifnot(all(selected %in% choices))
 
+  # if names is NULL, shiny will put strange labels (with quotes etc.) in the selectInput, so we set it to the values
   if (is.null(names(choices))) {
     choices %<>% setNames(choices)
   }
@@ -34,5 +35,10 @@ choices_selected <- function(choices, selected, multiple, show = FALSE, label = 
   }
   out <- list(choices = choices, selected = selected, multiple = multiple, show = show, label = label)
   class(out) <- "choices_selected"
-  return(out)
+  out
+}
+
+# returns true if fcn evaluates to true on all elements
+all_true <- function(lst, fcn) {
+  all(vapply(lst, fcn, TRUE))
 }

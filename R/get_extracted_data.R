@@ -21,12 +21,12 @@ get_extracted_data <- function(...) {
   })
   all_keys <- lapply(datasets, function(dataset) attr(dataset, "keys"))
 
-  if (!all(vapply(all_keys, function(keys) identical(keys, all_keys[[1]]), TRUE))) {
+  if (!all_true(all_keys, function(keys) identical(keys, all_keys[[1]]))) {
     stop("The datasets chosen cannot be merged as the keys are not equal.")
   }
   keys <- all_keys[[1]]
 
-  datasets <- lapply(datasets, set_selected_column_names)
+  datasets <- lapply(datasets, prefix_column_names_with_dataset)
 
   # Take merge from Max merge_datasets
   # Create merged data set
@@ -36,33 +36,19 @@ get_extracted_data <- function(...) {
     by = keys
   )
   attr(merged_data, "keys") <- keys
-  return(merged_data)
-}
-
-#' Derive data column for multiple data sets selected
-#'
-#' @param ... \code{data.frame} Each input to this function shall be a data.frame that
-#'   has the attributes: \code{keys}, \code{dataname}
-#' @param dataset (\code{data.frame}) with \code{keys} attribute
-#' 
-#' @return A \code{data.frame} or \code{vector} with the selected data
-#'
-#' @export
-get_extracted_data_single_ds <- function(dataset = NULL, ...) {
-  datasets <- list(...)
-  columns <- lapply(datasets, function(x) {
-    if (attr(x, "dataname") == attr(dataset, "dataname")) {
-      get_selected_column_names(dataset)
-    }
-  }) %>%
-   unlist() %>%
-   unique()
-
-  get_extracted_data(...)[, columns]
+  merged_data
 }
 
 #' @importFrom dplyr select
 left_join_without_duplicated <- function(x, y, by, ...) {
+  # removes duplicated columns before left joining so they don't appear with suffix
+  {
+    common_cols <- union(names(x), names(y))
+    stopifnot(identical(
+      x %>% select(common_cols), 
+      y %>% select(common_cols))
+    )  
+  } 
   new_y_cols <- union(by, setdiff(names(y), names(x)))
   y <- y %>% select(new_y_cols)
   left_join(x, y, by = by, ...)

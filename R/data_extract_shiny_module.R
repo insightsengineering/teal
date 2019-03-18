@@ -23,7 +23,7 @@ data_extract_input <- function(id, label, data_extract_spec = data_extract_spec(
     output_panel <- lapply(data_extract_spec, function(dataset_extract_spec) {
       dataname <- dataset_extract_spec$dataname
       conditionalPanel(
-        condition = paste0("input['", ns("ds"), "'] == '", dataset_extract_spec$dataname, "'"),
+        condition = paste0("input['", ns("dataset"), "'] == '", dataset_extract_spec$dataname, "'"),
         data_extract_input_single(id = ns(dataname), data_extract_spec = dataset_extract_spec)
       )
     }) # lapply
@@ -39,7 +39,7 @@ data_extract_input <- function(id, label, data_extract_spec = data_extract_spec(
     div(
       tags$label(label),
       optionalSelectInput(
-        inputId = ns("ds"),
+        inputId = ns("dataset"),
         label = "Dataset",
         choices = datanames,
         selected = datanames[1],
@@ -154,27 +154,27 @@ data_extract_module <- function(input, output, session, datasets, data_extract_s
   # Filtering-sep / Filtering-vars / Filtering-choices (inkl mapping) / Columns-choices
 
   data <- reactive({
-
-    data <- get_data_with_keys(datasets = datasets, dataname = input$ds)
+    
+    data <- get_data_with_keys(datasets = datasets, dataname = input$dataset)
     if (!methods::is(data_extract_spec, "DataExtractSpec")) {
       data_extract_spec <- data_extract_spec[[
       which(
         unlist(
           lapply(data_extract_spec, function(x) {
-            x$dataname == input$ds
+            x$dataname == input$dataset
           })
         )
       )
       ]]
     }
 
-    filter_columns <- callModule(data_extract_single_module, input$ds, data_extract_spec = data_extract_spec)
+    filter_columns <- callModule(data_extract_single_module, input$dataset, data_extract_spec = data_extract_spec)
 
     data_filter_select(
       input_data = data,
       filters = filter_columns()$filters,
       columns = filter_columns()$columns,
-      dataname = input$ds
+      dataname = input$dataset
     )
   })
 
