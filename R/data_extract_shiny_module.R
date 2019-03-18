@@ -6,7 +6,7 @@
 #'
 #' @param id (\code{character}) Shiny input ID
 #' @param label (\code{character}) Label above the Data extract input
-#' @param value (\code{data_extract}) This is the outcome of a \link{data_extract}
+#' @param data_extract_spec (\code{DataExtractSpec}) This is the outcome of a \link{DataExtractSpec}
 #'  function. It shall be used
 #'
 #' @return shiny Input that allows to define a filtering of key variables of
@@ -15,7 +15,7 @@
 #'
 #' @import shiny
 #'
-data_extract_input <- function(id, label, data_extract_spec = data_extract()) {
+data_extract_input <- function(id, label, data_extract_spec = data_extract_spec()) {
   ns <- NS(id)
 
   # List of elements
@@ -54,7 +54,7 @@ data_extract_input <- function(id, label, data_extract_spec = data_extract()) {
 
 #' @importFrom shinyjs hidden
 #' @importFrom methods is
-data_extract_input_single <- function(id = NULL, data_extract_spec = data_extract(), filtering_sep = " - ") {
+data_extract_input_single <- function(id = NULL, data_extract_spec = data_extract_spec(), filtering_sep = " - ") {
   ns <- NS(id)
 
   stopifnot(methods::is(data_extract_spec, "DataExtractSpec"))
@@ -142,8 +142,8 @@ list_of_filters_to_label <- function(list_of_filters, filtering_sep) {
 #' @param output \code{shiny output}
 #' @param session \code{shiny session}
 #' @param datasets (\code{teal::FilteredData}) Data build up by teal
-#' @param data_extract_spec (\code{data_extract}) A list of data filter and select
-#'  information constructed by \link{data_extract}
+#' @param data_extract_spec (\code{DataExtractSpec}) A list of data filter and select
+#'  information constructed by \link{DataExtractSpec}
 #'
 #' @return A \code{data.frame} where the keys are filtered and the columns selected
 #'  due to the \link{data_extract_input} that is called with this module.

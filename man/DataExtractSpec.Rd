@@ -7,7 +7,7 @@
 \title{Data Extract input for teal modules}
 \format{An object of class \code{R6ClassGenerator} of length 24.}
 \usage{
-data_extract_class
+data_extract_class(dataname, keys_filtering, columns)
 }
 \arguments{
 \item{dataname}{(\code{character}) Name of a teal data set}

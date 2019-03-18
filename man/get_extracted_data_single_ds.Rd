@@ -7,11 +7,13 @@
 get_extracted_data_single_ds(dataset = NULL, ...)
 }
 \arguments{
+\item{dataset}{(\code{data.frame}) with \code{keys} attribute}
+
 \item{...}{\code{data.frame} Each input to this function shall be a data.frame that
 has the attributes: \code{keys}, \code{dataname}}
 }
 \value{
-
+A \code{data.frame} or \code{vector} with the selected data
 }
 \description{
 Derive data column for multiple data sets selected
