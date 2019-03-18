@@ -7,7 +7,7 @@
 #' @export
 #' @name DataExtractSpec
 #' @aliases data_extract_class data_extract_spec
-#' 
+#'
 #' @param dataname (\code{character}) Name of a teal data set
 #' @param keys_filtering (\code{list}) Define how to filter the
 #'  key columns of the data set. This is the outcome of \link{keys_filtering_spec}
