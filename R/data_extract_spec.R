@@ -6,7 +6,7 @@
 #'
 #' @export
 #' @name DataExtractSpec
-#' @aliases data_extract_class
+#' @aliases data_extract_class data_extract_spec
 #' 
 #' @param dataname (\code{character}) Name of a teal data set
 #' @param keys_filtering (\code{list}) Define how to filter the
@@ -17,7 +17,6 @@
 #' @field dataname (\code{character}) Data set to be extracted and selected
 #' @field keys_filtering (\code{KeysFilteringSpec}) Setup of the dataset filtering
 #' @field columns (\code{choices_selected}) Columns to be selected from the input dataset
-#' @usage data_extract_class(dataname, keys_filtering, columns)
 data_extract_class <- R6::R6Class("DataExtractSpec",
   public = list(
     dataname = character(0),
@@ -41,8 +40,9 @@ data_extract_class <- R6::R6Class("DataExtractSpec",
 
 #' Constructor for \link{DataExtractSpec}
 #'
+#' @inheritParams DataExtractSpec
+#' @rdname DataExtractSpec
 #' @export
-#' @param ... params of \link{DataExtractSpec}
-data_extract_spec <- function(...) {
-  data_extract_class$new(...)
+data_extract_spec <- function(dataname = NULL, keys_filtering = NULL, columns = NULL) {
+  data_extract_class$new(dataname = dataname, keys_filtering = keys_filtering, columns = columns)
 }

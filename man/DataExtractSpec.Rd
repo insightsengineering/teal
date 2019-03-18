@@ -4,10 +4,14 @@
 \name{DataExtractSpec}
 \alias{DataExtractSpec}
 \alias{data_extract_class}
+\alias{data_extract_spec}
 \title{Data Extract input for teal modules}
 \format{An object of class \code{R6ClassGenerator} of length 24.}
 \usage{
-data_extract_class(dataname, keys_filtering, columns)
+data_extract_class
+
+data_extract_spec(dataname = NULL, keys_filtering = NULL,
+  columns = NULL)
 }
 \arguments{
 \item{dataname}{(\code{character}) Name of a teal data set}
