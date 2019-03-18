@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Made Up data table module — tm_made_up_data_table • choicesselecteddev</title>
+<title>Constructor for <a href='KeysFilteringSpec.html'>KeysFilteringSpec</a> — keys_filtering_spec • choicesselecteddev</title>
 
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
@@ -30,9 +30,9 @@
 
 
 
-<meta property="og:title" content="Made Up data table module — tm_made_up_data_table" />
+<meta property="og:title" content="Constructor for <a href='KeysFilteringSpec.html'>KeysFilteringSpec</a> — keys_filtering_spec" />
 
-<meta property="og:description" content="Made Up data table module" />
+<meta property="og:description" content="Constructor for KeysFilteringSpec" />
 <meta name="twitter:card" content="summary" />
 
 
@@ -94,56 +94,87 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Made Up data table module</h1>
+    <h1>Constructor for <a href='KeysFilteringSpec.html'>KeysFilteringSpec</a></h1>
     
-    <div class="hidden name"><code>tm_made_up_data_table.Rd</code></div>
+    <div class="hidden name"><code>keys_filtering_spec.Rd</code></div>
     </div>
 
     <div class="ref-description">
     
-    <p>Made Up data table module</p>
+    <p>Constructor for <a href='KeysFilteringSpec.html'>KeysFilteringSpec</a></p>
     
     </div>
 
-    <pre class="usage"><span class='fu'>tm_made_up_data_table</span>(<span class='kw'>label</span> <span class='kw'>=</span> <span class='st'>"Regression Analysis"</span>, <span class='no'>variable2</span>,
-  <span class='no'>variable1</span>, <span class='kw'>pre_output</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>post_output</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)</pre>
+    <pre class="usage"><span class='fu'>keys_filtering_spec</span>(<span class='no'>vars</span>, <span class='no'>sep</span>, <span class='no'>choices</span>, <span class='no'>selected</span>, <span class='no'>multiple</span>,
+  <span class='kw'>label</span> <span class='kw'>=</span> <span class='st'>"Filter"</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
+      <th>vars</th>
+      <td><p>(<code>character</code>) Character vector giving the key columns to be filtered</p></td>
+    </tr>
+    <tr>
+      <th>sep</th>
+      <td><p>(<code>character</code>) A separator string to split the <code>choices</code> or
+<code>selected</code> inputs into the values of the different columns</p></td>
+    </tr>
+    <tr>
+      <th>choices</th>
+      <td><p>(<code>character</code>) Named character vector to define the choices
+    of a shiny select input. These shall be filter values of the <code>vars</code> input
+    separated by <code>sep</code>.</p>
+<p>E.g. <code>vars = c("PARAMCD","AVISITN")</code> and <code>choices = c("CRP - BASELINE","ALT - BASELINE")</code>
+ will lead to a filtering of
+ <code>(PARAMCD == "CRP" &amp; AVISITN == "BASELINE") | (PARAMCD == "ALT" &amp; AVISITN == "BASELINE")</code>.</p>
+<p>Please make sure the order is right. The <code>sep</code> input has to be <code>" - "</code> in this case.</p></td>
+    </tr>
+    <tr>
+      <th>selected</th>
+      <td><p>(<code>character</code>) Named character vector to define the selected
+values of a shiny select input. Please check the <code>choices</code> description for further
+details</p></td>
+    </tr>
+    <tr>
+      <th>multiple</th>
+      <td><p>(<code>logical</code>) Whether multiple values shall be allowed in the
+shiny select input.</p></td>
+    </tr>
+    <tr>
       <th>label</th>
-      <td><p>character</p></td>
-    </tr>
-    <tr>
-      <th>variable2</th>
-      <td><p>(<code>DataExtractSpec</code>)</p></td>
-    </tr>
-    <tr>
-      <th>variable1</th>
-      <td><p>(<code>DataExtractSpec</code>)</p></td>
-    </tr>
-    <tr>
-      <th>pre_output</th>
-      <td><p>optional, <code>shiny.tag</code> with text placed before the
-output to put the output into context. For example the
-<code><a href='https://www.rdocumentation.org/packages/shiny/topics/helpText'>helpText</a></code> elements are useful.</p></td>
-    </tr>
-    <tr>
-      <th>post_output</th>
-      <td><p>optional, <code>shiny.tag</code> with text placed before the
-output to put the output into context. For example the
-<code><a href='https://www.rdocumentation.org/packages/shiny/topics/helpText'>helpText</a></code> elements are useful.</p></td>
+      <td><p>(<code>character</code>) Label of the Key Filtering Input inside the shiny app.</p></td>
     </tr>
     </table>
     
+    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
+    <p><code><a href='KeysFilteringSpec.html'>KeysFilteringSpec</a></code>-class object</p>
+    
+
+    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
+    <pre class="examples"><div class='input'><span class='fu'>keys_filtering_spec</span>(
+  <span class='kw'>vars</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"PARAMCD"</span>, <span class='st'>"AVISIT"</span>),
+  <span class='kw'>sep</span> <span class='kw'>=</span> <span class='st'>" - "</span>,
+  <span class='kw'>choices</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"CRP - BASELINE"</span>, <span class='st'>"CRP - SCREENING"</span>, <span class='st'>"ALT - BASELINE"</span>),
+  <span class='kw'>selected</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"CRP - BASELINE"</span>),
+  <span class='kw'>multiple</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>
+)</div><div class='output co'>#&gt; &lt;KeysFilteringSpec&gt;
+#&gt;   Public:
+#&gt;     clone: function (deep = FALSE) 
+#&gt;     cs: choices_selected
+#&gt;     initialize: function (vars, sep, choices, selected, multiple, label = "Filter") 
+#&gt;     vars: PARAMCD AVISIT</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
       <li><a href="#arguments">Arguments</a></li>
-                </ul>
+      
+      <li><a href="#value">Value</a></li>
+      
+      <li><a href="#examples">Examples</a></li>
+    </ul>
 
   </div>
 </div>

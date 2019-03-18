@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Data Extract input for teal modules — DataExtractSpec • choicesselecteddev</title>
+<title>Returns the keysfilter_str — .get_keysfilter_str • choicesselecteddev</title>
 
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
@@ -30,11 +30,9 @@
 
 
 
-<meta property="og:title" content="Data Extract input for teal modules — DataExtractSpec" />
+<meta property="og:title" content="Returns the keysfilter_str — .get_keysfilter_str" />
 
-<meta property="og:description" content="The Data Extract input can be used to filter and select columns from a data
-set to be used in teal. Please use the constructor function data_extract_spec
-to set it up." />
+<meta property="og:description" content="Returns the keysfilter_str" />
 <meta name="twitter:card" content="summary" />
 
 
@@ -96,61 +94,44 @@ to set it up." />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Data Extract input for teal modules</h1>
+    <h1>Returns the keysfilter_str</h1>
     
-    <div class="hidden name"><code>DataExtractSpec.Rd</code></div>
+    <div class="hidden name"><code>dot-get_keysfilter_str.Rd</code></div>
     </div>
 
     <div class="ref-description">
     
-    <p>The Data Extract input can be used to filter and select columns from a data
-set to be used in teal. Please use the constructor function <a href='data_extract_spec.html'>data_extract_spec</a>
-to set it up.</p>
+    <p>Returns the keysfilter_str</p>
     
     </div>
 
-    <pre class="usage"><span class='no'>DataExtractSpec</span></pre>
-        
-    <h2 class="hasAnchor" id="format"><a class="anchor" href="#format"></a>Format</h2>
-
-    <p>An object of class <code>R6ClassGenerator</code> of length 24.</p>
+    <pre class="usage"><span class='fu'>.get_keysfilter_str</span>(<span class='no'>keys_filter</span>)</pre>
     
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
-
-    <p>From this function's output a <code><a href='data_extract_input.html'>data_extract_input</a></code> can
-be constructed. This input can be read by a <a href='data_extract_module.html'>data_extract_module</a> module.</p>
-    
-    <h2 class="hasAnchor" id="fields"><a class="anchor" href="#fields"></a>Fields</h2>
-
-    
-    <dl class='dl-horizontal'>
-<dt><code>dataname</code></dt><dd><p>(<code>character</code>) Data set to be extracted and selected</p></dd>
-    <dt><code>keys_filtering</code></dt><dd><p>(<code><a href='KeysFilteringSpec.html'>KeysFilteringSpec</a></code>) Setup of the dataset filtering</p></dd>
-    <dt><code>columns</code></dt><dd><p>(<code><a href='choices_selected.html'>choices_selected</a></code>) Columns to be selected from the input dataset</p></dd>
-</dl>
-    
-    <h2 class="hasAnchor" id="initialize"><a class="anchor" href="#initialize"></a>Initialize</h2>
-
-    
-    <dl class='dl-horizontal'>
-  <dt>via new</dt><dd><p><code>DataExtractSpec$new(dataname, keys_filtering = NULL, columns = NULL)</code></p></dd>
-  <dt>via constructor</dt><dd><p><code><a href='data_extract_spec.html'>data_extract_spec</a>(dataname, keys_filtering = NULL, columns = NULL)</code></p></dd>
-</dl>
+    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
+    <table class="ref-arguments">
+    <colgroup><col class="name" /><col class="desc" /></colgroup>
+    <tr>
+      <th>keys_filter</th>
+      <td><p>(<code>list</code>) List of key filtering including
+<code>variable_names</code> and <code>filters</code> item</p></td>
+    </tr>
+    </table>
     
 
+    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
+    <pre class="examples"><div class='input'><span class='fu'>.get_keysfilter_str</span>(
+  <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/list'>list</a></span>(
+   <span class='kw'>variable_names</span><span class='kw'>=</span><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"PARAMCD"</span>, <span class='st'>"AVISIT"</span>),
+   <span class='kw'>filters</span><span class='kw'>=</span><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/list'>list</a></span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"ALT"</span>, <span class='st'>"SCREENING"</span>), <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"CRP"</span>, <span class='st'>"BASELINE"</span>)))
+)</div><div class='output co'>#&gt; [1] "PARAMCD == 'ALT' &amp; AVISIT == 'SCREENING' | PARAMCD == 'CRP' &amp; AVISIT == 'BASELINE'"</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
-      
-      <li><a href="#format">Format</a></li>
-
-      <li><a href="#details">Details</a></li>
-
-      <li><a href="#fields">Fields</a></li>
-
-      <li><a href="#initialize">Initialize</a></li>
-          </ul>
+      <li><a href="#arguments">Arguments</a></li>
+            
+      <li><a href="#examples">Examples</a></li>
+    </ul>
 
   </div>
 </div>
