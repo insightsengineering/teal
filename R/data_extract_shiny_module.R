@@ -154,7 +154,7 @@ data_extract_module <- function(input, output, session, datasets, data_extract_s
   # Filtering-sep / Filtering-vars / Filtering-choices (inkl mapping) / Columns-choices
 
   data <- reactive({
-    
+
     data <- get_data_with_keys(datasets = datasets, dataname = input$dataset)
     if (!methods::is(data_extract_spec, "DataExtractSpec")) {
       data_extract_spec <- data_extract_spec[[
