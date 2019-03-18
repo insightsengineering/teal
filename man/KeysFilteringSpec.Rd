@@ -3,40 +3,10 @@
 \docType{data}
 \name{KeysFilteringSpec}
 \alias{KeysFilteringSpec}
-\alias{keys_filtering_spec_class}
-\alias{keys_filtering_spec}
 \title{Setup of Key Filtering for teal data sets}
 \format{An object of class \code{R6ClassGenerator} of length 24.}
 \usage{
-keys_filtering_spec_class
-
-keys_filtering_spec(vars, sep, choices, selected, multiple,
-  label = "Filter")
-}
-\arguments{
-\item{vars}{(\code{character}) Character vector giving the key columns to be filtered}
-
-\item{sep}{(\code{character}) A separator string to split the \code{choices} or
-\code{selected} inputs into the values of the different columns}
-
-\item{choices}{(\code{character}) Named character vector to define the choices
-    of a shiny select input. These shall be filter values of the \code{vars} input
-    separated by \code{sep}.
-
-E.g. \code{vars = c("PARAMCD","AVISITN")} and \code{choices = c("CRP - BASELINE","ALT - BASELINE")}
- will lead to a filtering of
- \code{(PARAMCD == "CRP" & AVISITN == "BASELINE") | (PARAMCD == "ALT" & AVISITN == "BASELINE")}.
-
-Please make sure the order is right. The \code{sep} input has to be \code{" - "} in this case.}
-
-\item{selected}{(\code{character}) Named character vector to define the selected
-values of a shiny select input. Please check the \code{choices} description for further
-details}
-
-\item{multiple}{(\code{logical}) Whether multiple values shall be allowed in the
-shiny select input.}
-
-\item{label}{(\code{character}) Label of the Key Filtering Input inside the shiny app.}
+KeysFilteringSpec
 }
 \value{
 A list of \code{vars} + a \link{choices_selected} outcome built by the split
@@ -44,8 +14,6 @@ A list of \code{vars} + a \link{choices_selected} outcome built by the split
 }
 \description{
 Setup of Key Filtering for teal data sets
-
-Constructor for \link{KeysFilteringSpec}
 }
 \section{Fields}{
 
@@ -56,15 +24,21 @@ Constructor for \link{KeysFilteringSpec}
 \code{selected}, \code{multiple} and \code{label}}
 }}
 
-\examples{
-\dontrun{
-keys_filtering_spec(
-  vars = c("PARAMCD", "AVISIT"),
-  sep = " - ",
-  choices = c("CRP - BASELINE", "CRP - SCREENING", "ALT - BASELINE"),
-  selected = c("CRP - BASELINE"),
-  multiple=TRUE
-)
+\section{Arguments}{
+
+\describe{
+ \item{\link{keys_filtering_spec}}{ Please see \link{keys_filtering_spec} for detailed argument descriptions}
 }
 }
+
+\section{Initialize}{
+
+\describe{
+   \item{via new}{ \code{KeysFilteringSpec$new(vars, sep, choices, selected, multiple, label = "Filter")} }
+  \item{via constructor}{
+   \code{\link{keys_filtering_spec}(vars, sep, choices, selected, multiple, label = "Filter")}
+  }
+}
+}
+
 \keyword{data}
