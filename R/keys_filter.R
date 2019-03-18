@@ -6,11 +6,12 @@
 #' @field cs \code{choices_seleced} \link{choices_selected} outcome including \code{choices},
 #'   \code{selected}, \code{multiple} and \code{label}
 #'
-#' @param vars (\code{character}) Character vector giving the columns to be filtered
+#' @param vars (\code{character}) Character vector giving the key columns to be filtered
 #' @param sep (\code{character}) A separator string to split the \code{choices} or
 #'   \code{selected} inputs into the values of the different columns
 #' @param choices (\code{character}) Named character vector to define the choices
-#' 	of a shiny select input. These shall be filter values of the \code{vars} input.
+#' 	of a shiny select input. These shall be filter values of the \code{vars} input
+#' 	separated by \code{sep}.
 #'
 #' E.g. \code{vars = c("PARAMCD","AVISITN")} and \code{choices = c("CRP - BASELINE","ALT - BASELINE")}
 #'  will lead to a filtering of
@@ -29,8 +30,8 @@
 #'
 #' @return A list of \code{vars} + a \link{choices_selected} outcome built by the split
 #' 	selected and choices inputs.
-#'
-#'
+#' 
+#' 
 #' @keywords data
 #' @importFrom stats setNames
 #' @export
@@ -41,17 +42,18 @@ keys_filtering_spec_class <- R6Class("KeysFilteringSpec",
     cs = NULL,
 
     initialize = function(vars, sep, choices, selected, multiple, label = "Filter") {
-      split_by_sep <- function(txt) strsplit(txt, sep, fixed = TRUE)[[1]]
-
-      choices <- lapply(choices, split_by_sep)
-      choices %<>% setNames(choices)
-
-      selected <- lapply(selected, split_by_sep)
-      selected %<>% setNames(selected)
-
       stopifnot(is.atomic(vars))
-      stopifnot(all(vapply(choices, length, 0) == length(vars)))
+      stopifnot(is.atomic(choices))
+      stopifnot(is.atomic(selected))
+      stopifnot(multiple || (length(selected) == 1))
+      
+      split_by_sep <- function(txt) strsplit(txt, sep, fixed = TRUE)
 
+      choices <- split_by_sep(choices)
+      stopifnot(all(vapply(choices, length, 0) == length(vars)))
+      
+      selected <- split_by_sep(selected) # also a list if only a single element
+      
       self$vars <- vars
       self$cs <- choices_selected(choices, selected, multiple, label = label)
     }
@@ -59,13 +61,22 @@ keys_filtering_spec_class <- R6Class("KeysFilteringSpec",
 )
 
 #' Constructor for \link{KeysFilteringSpec}
-#'
+#' 
 #' @inheritParams KeysFilteringSpec
 #' @rdname KeysFilteringSpec
 #' @export
+#' 
+#' @examples 
+#' \dontrun{
+#' keys_filtering_spec(
+#'   vars = c("PARAMCD", "AVISIT"),
+#'   sep = " - ",
+#'   choices = c("CRP - BASELINE", "CRP - SCREENING", "ALT - BASELINE"),
+#'   selected = c("CRP - BASELINE"),
+#'   multiple=TRUE
+#' )
+#' }
 keys_filtering_spec <- function(vars, sep, choices, selected, multiple, label = "Filter") {
-  keys_filtering_spec_class$new(
-    vars = vars, sep = sep,
-    choices = choices, selected = selected, multiple = multiple, label = label
-  )
+  keys_filtering_spec_class$new(vars = vars, sep = sep,
+      choices = choices, selected = selected, multiple = multiple, label = label)
 }
