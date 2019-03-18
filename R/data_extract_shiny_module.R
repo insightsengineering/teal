@@ -7,7 +7,7 @@
 #' @param id (\code{character}) Shiny input ID
 #' @param label (\code{character}) Label above the Data extract input
 #' @param data_extract_spec (\code{DataExtractSpec}) This is the outcome of a \link{DataExtractSpec}
-#'  function. It shall be used
+#'  function constructor call.
 #'
 #' @return shiny Input that allows to define a filtering of key variables of
 #'  a data set and the selection of non-key variables. This input is the UI function

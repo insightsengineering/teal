@@ -4,10 +4,14 @@
 \name{KeysFilteringSpec}
 \alias{KeysFilteringSpec}
 \alias{keys_filtering_spec_class}
+\alias{keys_filtering_spec}
 \title{Setup of Key Filtering for teal data sets}
 \format{An object of class \code{R6ClassGenerator} of length 24.}
 \usage{
-keys_filtering_spec_class(vars, sep, selected, choices, multiple, label = "Filter")
+keys_filtering_spec_class
+
+keys_filtering_spec(vars, sep, choices, selected, multiple,
+  label = "Filter")
 }
 \arguments{
 \item{vars}{(\code{character}) Character vector giving the columns to be filtered}
@@ -39,6 +43,8 @@ A list of \code{vars} + a \link{choices_selected} outcome built by the split
 }
 \description{
 Setup of Key Filtering for teal data sets
+
+Constructor for \link{KeysFilteringSpec}
 }
 \section{Fields}{
 
