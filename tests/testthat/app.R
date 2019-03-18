@@ -18,7 +18,7 @@ ADTE <- radtte(ASL, event.descr = c("STUDYID", "USUBJID", "PARAMCD"))
 
 modified_data <- ASL %>% mutate(A = 1)
 
-adte_filters <- keys_filter_from_sep(
+adte_filters <- keys_filtering_spec(
   vars = c("PARAMCD"), # only key variables are allowed
   sep = " - ",
   choices = c("OS", "PFS", "EFS"),
@@ -28,7 +28,7 @@ adte_filters <- keys_filter_from_sep(
 )
 
 
-adte_extracted1 <- data_extract(
+adte_extracted1 <- data_extract_spec(
   dataname = "ADTE",
   keys_filtering = adte_filters,
   columns = choices_selected(
@@ -44,7 +44,7 @@ adte_extracted1 <- data_extract(
   )
 )
 
-adte_extracted <- data_extract(
+adte_extracted <- data_extract_spec(
   dataname = "ADTE",
   keys_filtering = adte_filters,
   columns = choices_selected(
@@ -56,7 +56,7 @@ adte_extracted <- data_extract(
   )
 )
 
-asl_extracted <- data_extract(
+asl_extracted <- data_extract_spec(
   dataname = "ASL",
   columns = choices_selected(
     choices = c("SEX", "AGE"),
@@ -81,7 +81,7 @@ x <- teal::init(
   ),
   modules = root_modules(
     teal.modules.general::tm_data_table("Data Table"),
-    tm_made_up(
+    tm_plot_xy(
       label = "Qplot",
       dataname = c("ASL", "ADTE"),
       response = adte_extracted,

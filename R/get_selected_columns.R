@@ -14,7 +14,7 @@ get_selected_columns <- function(data) {
 
   leftover <- setdiff(names(data), keys)
 
-  new_names <- paste(leftover, dataname, sep = ".")
+  new_names <- paste(dataname, leftover, sep = ".")
   names(new_names) <- leftover
 
   return(new_names)
