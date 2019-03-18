@@ -234,14 +234,3 @@ choices2filter <- function(filter_choices, list_of_filters, filtering_sep, varia
   }
 }
 
-get_data_with_keys <- function(datasets, dataname) {
-  data <- datasets$get_data(dataname, reactive = TRUE, filtered = FALSE)
-
-  keys_stored <- attr(data, "keys")
-
-  data <- datasets$get_data(dataname, reactive = TRUE, filtered = TRUE)
-
-  attr(data, "keys") <- keys_stored
-
-  return(data)
-}
