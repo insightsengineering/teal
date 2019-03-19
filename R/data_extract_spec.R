@@ -47,7 +47,7 @@ DataExtractSpec <- R6::R6Class("DataExtractSpec", # nolint
 #' Constructor for \link{DataExtractSpec}
 #'
 #' @param dataname (\code{character}) Name of a teal data set
-#' @param keys_filtering (\code{list}) Define how to filter the
+#' @param keys_filtering (\code{KeysFilteringSpec}) Define how to filter the
 #'  key columns of the data set. This is the outcome of \link{keys_filtering_spec}
 #' @param columns (\code{choices_selected}) Define which columns of the data set shall
 #'  be selected next to the key variables. This shall be the outcome of \link{choices_selected}
