@@ -15,7 +15,7 @@
 #'
 #' @import shiny
 #'
-data_extract_input <- function(id, label, data_extract_spec = data_extract_spec()) {
+data_extract_input2 <- function(id, label, data_extract_spec = data_extract_spec()) {
   ns <- NS(id)
 
   # List of elements
@@ -54,7 +54,7 @@ data_extract_input <- function(id, label, data_extract_spec = data_extract_spec(
 
 #' @importFrom shinyjs hidden
 #' @importFrom methods is
-data_extract_input_single <- function(id = NULL, data_extract_spec = data_extract_spec(), filtering_sep = " - ") {
+data_extract_input_single2 <- function(id = NULL, data_extract_spec = data_extract_spec(), filtering_sep = " - ") {
   ns <- NS(id)
 
   stopifnot(methods::is(data_extract_spec, "DataExtractSpec"))
@@ -68,14 +68,14 @@ data_extract_input_single <- function(id = NULL, data_extract_spec = data_extrac
       shiny::tagList(
         optionalSelectInput(
           inputId = ns("filter"),
-          label = if (!is.null(data_extract_spec$keys_filtering$cs$label)) {
-            data_extract_spec$keys_filtering$cs$label
+          label = if (!is.null(data_extract_spec$keys_filtering$choice_spec$label)) {
+            data_extract_spec$keys_filtering$choice_spec$label
           } else {
             "Filter"
           },
-          choices = list_of_filters_to_label(data_extract_spec$keys_filtering$cs$choices, filtering_sep),
-          selected = list_of_filters_to_label(data_extract_spec$keys_filtering$cs$selected, filtering_sep),
-          multiple = data_extract_spec$keys_filtering$cs$multiple
+          choices = list_of_filters_to_label(data_extract_spec$keys_filtering$choice_spec$choices, filtering_sep),
+          selected = list_of_filters_to_label(data_extract_spec$keys_filtering$choice_spec$selected, filtering_sep),
+          multiple = data_extract_spec$keys_filtering$choice_spec$multiple
         )
       )
     },
@@ -100,14 +100,14 @@ data_extract_input_single <- function(id = NULL, data_extract_spec = data_extrac
   )
 }
 
-data_extract_single_module <- function(input, output, session, data_extract_spec) {
+data_extract_single_module2 <- function(input, output, session, data_extract_spec) {
   reactive({
     if (is.null(input$filter)) {
       filters <- NULL
     } else {
       filtering_names <- input$filter
 
-      filtering_list <- data_extract_spec$keys_filtering$cs$choices
+      filtering_list <- data_extract_spec$keys_filtering$choice_spec$choices
 
       filters <- label_to_list_of_filters(
         filter_choices = filtering_names,
@@ -149,7 +149,7 @@ list_of_filters_to_label <- function(list_of_filters, filtering_sep) {
 #'  due to the \link{data_extract_input} that is called with this module.
 #'
 #' @export
-data_extract_module <- function(input, output, session, datasets, data_extract_spec) {
+data_extract_module2 <- function(input, output, session, datasets, data_extract_spec) {
 
   # Filtering-sep / Filtering-vars / Filtering-choices (inkl mapping) / Columns-choices
 
@@ -168,12 +168,12 @@ data_extract_module <- function(input, output, session, datasets, data_extract_s
       ]]
     }
 
-    filter_columns <- callModule(data_extract_single_module, input$dataset, data_extract_spec = data_extract_spec)
+    filter_and_columns <- callModule(data_extract_single_module, input$dataset, data_extract_spec = data_extract_spec)
 
     data_filter_select(
       input_data = data,
-      filters = filter_columns()$filters,
-      columns = filter_columns()$columns,
+      filters = filter_and_columns()$filters,
+      columns = filter_and_columns()$columns,
       dataname = input$dataset
     )
   })
@@ -193,8 +193,8 @@ label_to_list_of_filters <- function(filter_choices, list_of_filters, filtering_
 
     return(
       list(
-        variable_names = variable_names,
-        filters = list_of_filters,
+        columns = variable_names,
+        selected = list_of_filters,
         filtering_sep = filtering_sep
       )
     )
