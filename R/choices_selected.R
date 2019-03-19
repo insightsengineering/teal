@@ -37,8 +37,3 @@ choices_selected <- function(choices, selected, multiple, show = FALSE, label = 
   class(out) <- "choices_selected"
   out
 }
-
-# returns true if fcn evaluates to true on all elements
-all_true <- function(lst, fcn) {
-  all(vapply(lst, fcn, TRUE))
-}

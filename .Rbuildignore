@@ -1,3 +1,4 @@
+^dev$
 ^.*\.Rproj$
 ^\.Rproj\.user$
 ^README.md$
