@@ -2,7 +2,7 @@
 #'
 #' @name KeysFilteringSpec
 #' @field vars \code{character} The variables that shall be filtered with this specification
-#' @field cs \code{choices_seleced} \link{choices_selected} outcome including \code{choices},
+#' @field choice_spec specification of choices to select with fields \code{choices},
 #'   \code{selected}, \code{multiple} and \code{label}
 #' @section Arguments:
 #' \describe{
@@ -27,7 +27,7 @@
 KeysFilteringSpec <- R6Class("KeysFilteringSpec", # nolint
   public = list(
     vars = character(0),
-    cs = NULL,
+    choice_spec = NULL,
 
     initialize = function(vars, sep, choices, selected, multiple, label = "Filter") {
       stopifnot(is.atomic(vars))
@@ -43,7 +43,7 @@ KeysFilteringSpec <- R6Class("KeysFilteringSpec", # nolint
       selected <- split_by_sep(selected) # also a list if only a single element
 
       self$vars <- vars
-      self$cs <- choices_selected(choices, selected, multiple, label = label)
+      self$choice_spec <- choices_selected(choices, selected, multiple, label = label)
     }
   )
 )
@@ -66,7 +66,7 @@ KeysFilteringSpec <- R6Class("KeysFilteringSpec", # nolint
 #' Please make sure the order is right. The \code{sep} input has to be \code{" - "} in this case.
 #'
 #' @param selected (\code{character}) Named character vector to define the selected
-#'  values of a shiny select input. Please check the \code{choices} description for further
+#'  values of a shiny select input (default values). Please check the \code{choices} description for further
 #'  details
 #'
 #' @param multiple (\code{logical}) Whether multiple values shall be allowed in the
