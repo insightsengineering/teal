@@ -24,7 +24,7 @@ E.g. \code{vars = c("PARAMCD","AVISITN")} and \code{choices = c("CRP - BASELINE"
 Please make sure the order is right. The \code{sep} input has to be \code{" - "} in this case.}
 
 \item{selected}{(\code{character}) Named character vector to define the selected
-values of a shiny select input. Please check the \code{choices} description for further
+values of a shiny select input (default values). Please check the \code{choices} description for further
 details}
 
 \item{multiple}{(\code{logical}) Whether multiple values shall be allowed in the
