@@ -19,12 +19,12 @@ cdisc_data <- function(...) {
       )
     )
   )
-  return(list(...))
+  list(...)
 }
 
 #' Constructor for teal data set
 #'
-#' @param ds (\code{data.frame}) data to be handled inside
+#' @param df (\code{data.frame}) data to be handled inside
 #' @param keys (\code{character}) vector telling which columns of the \code{ds} are
 #'   key variables.
 #' @param source (\code{character}) string defining how the data was constructed. Important
@@ -34,8 +34,12 @@ cdisc_data <- function(...) {
 #'
 #' @export
 #'
-data_for_teal <- function(ds, keys, source = NULL) {
-  attr(ds, "keys") <- keys
-  attr(ds, "source") <- source
-  return(ds)
+data_for_teal <- function(df, keys, source = NULL) {
+  stopifnot(methods::is(df, "data.frame"))
+  stopifnot(is.atomic(keys) && all_true(keys, is.character))
+  stopifnot(is.character(source))
+
+  attr(df, "keys") <- keys
+  attr(df, "source") <- source
+  df
 }
