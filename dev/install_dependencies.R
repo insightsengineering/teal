@@ -63,13 +63,11 @@ from_source <- function(x){
 }
 
 clone_source <- function(repo = "NEST/teal.modules.general",
-                         user.name = user.name,
                          token = readLines("~/.github_token"),
                          download_dir = "/tmp",
                          github = "https://github.roche.com/",
                          ...){
   
-  system(paste0("git config --global user.name '",user.name,"'"))
   Sys.setenv("GITHUB_PAT"=token)
   
   package_name <- strsplit(repo,"/")[[1]][2]
