@@ -1,4 +1,5 @@
 # starting from https://github.roche.com/wolfs25/shinytestdocker docker Dockerfile
+# Please change the identification with Roche github
 system("git config user.name 'wolfs25'")
 system("git config user.email 'sebastian.wolf.sw1@roche.com'")
 
