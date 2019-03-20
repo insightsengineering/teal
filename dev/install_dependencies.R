@@ -1,6 +1,6 @@
 # starting from https://github.roche.com/wolfs25/shinytestdocker docker Dockerfile
-system("git config --global user.name 'wolfs25'")
-system("git config --global user.name 'sebastian.wolf.sw1@roche.com'")
+system("git config user.name 'wolfs25'")
+system("git config user.email 'sebastian.wolf.sw1@roche.com'")
 
 # Please get a github token and store it in ~/.github_token
 
