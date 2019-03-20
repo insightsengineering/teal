@@ -1,5 +1,12 @@
-# starting from nestbasertudio:v1 docker image
+# starting from https://github.roche.com/wolfs25/shinytestdocker docker Dockerfile
+system("git config --global user.name 'wolfs25'")
+system("git config --global user.name 'sebastian.wolf.sw1@roche.com'")
 
+# Please get a github token and store it in ~/.github_token
+
+#
+############################################################################
+#
 devtools::install_github(
   'NEST/random.cdisc.data',
   ref = "devel",
@@ -33,38 +40,59 @@ devtools::install_github(
   upgrade_dependencies = FALSE, build_vignettes = FALSE
 )
 
-from_source <- function(path_to_file) install.packages(path_to_file, repos = NULL, type="source")
-download_dir <- "../scratch/install_packages"
-from_source(file.path(download_dir, "teal.modules.clinical"))
-install.packages("DT")
-from_source(file.path(download_dir, "teal.modules.general"))
-
-# not working
-
-# unloadNamespace("plyr")
-#install.packages("automation.utils", repos = "http://3.121.104.44:8081/repository/NEST-R/")
-
-#runApp("tests/testthat/app.R")
-
-#install.packages(c("data.table", "ggmosaic"))
-
-
-
-
-
+git2r::clone(url="https://github.com/hadley/strict",local_path="/home/rstudio/strict")
+devtools::install("/home/rstudio/strict")
 devtools::install_github(
-  repo = "NEST/teal.modules.clinical",
+  repo = "NEST/test.nest",
   ref = "devel",
   host = "https://github.roche.com/api/v3",
-  upgrade_dependencies = FALSE, build_vignettes = FALSE,
-  auth_token = readLines("~/.github_token") # because private repo
+  upgrade_dependencies = FALSE, build_vignettes = FALSE
 )
 
-install_github(
-  'NEST/teal.modules.general',
-  ref = "master",
-  host = 'https://github.roche.com/api/v3',
-  upgrade_dependencies = FALSE,
-  build_vignettes = TRUE,
-  auth_token = readLines("~/.github_token") # because private repo
-)
+install_deps <- function(package_folder){
+  package_desc <- desc::description$new(file = file.path(package_folder,"DESCRIPTION"))
+  packages_to_install <- setdiff(package_desc$get_deps()$package,
+                                   as.character(installed.packages()[,"Package"])
+                                   )
+  install.packages(packages_to_install)
+}
+
+from_source <- function(x){
+  install.packages(devtools::build(x), type="source", repos=NULL)
+}
+
+clone_source <- function(repo = "NEST/teal.modules.general",
+                         user.name = "wolfs25",
+                         token = readLines("~/.github_token"),
+                         download_dir = "/tmp",
+                         github = "https://github.roche.com/",
+                         ...){
+  
+  system(paste0("git config --global user.name '",user.name,"'"))
+  Sys.setenv("GITHUB_PAT"=token)
+  
+  package_name <- strsplit(repo,"/")[[1]][2]
+  
+  download_path <- file.path(download_dir, package_name)
+  
+  system(paste0("rm -rf ", download_path))
+  
+  git2r::clone(url = paste0("https://github.roche.com/",repo),
+               local_path = download_path,
+               credentials = git2r::cred_token(),
+               ...
+  )
+    
+  return(download_path)
+  
+  
+}
+
+download_package <- clone_source(repo = "NEST/teal.modules.general", branch = "devel", download_dir = "/home/rstudio")
+install_deps(download_package)
+from_source(download_package)
+
+
+download_package <- clone_source(repo = "NEST/teal.modules.clinical", branch = "devel", download_dir = "/home/rstudio")
+from_source(download_package)
+
