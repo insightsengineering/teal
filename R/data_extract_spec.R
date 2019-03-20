@@ -38,7 +38,7 @@ DataExtractSpec <- R6::R6Class("DataExtractSpec", # nolint
       self$keys_filtering <- keys_filtering
     },
     set_columns = function(columns) {
-      stopifnot(methods::is(columns, "choices_selected"))
+      stopifnot(methods::is(columns, "column_choices_spec"))
       self$columns <- columns
     }
   )
