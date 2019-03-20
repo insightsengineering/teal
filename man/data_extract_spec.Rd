@@ -10,7 +10,7 @@ data_extract_spec(dataname = NULL, keys_filtering = NULL,
 \arguments{
 \item{dataname}{(\code{character}) Name of a teal data set}
 
-\item{keys_filtering}{(\code{list}) Define how to filter the
+\item{keys_filtering}{(\code{KeysFilteringSpec}) Define how to filter the
 key columns of the data set. This is the outcome of \link{keys_filtering_spec}}
 
 \item{columns}{(\code{choices_selected}) Define which columns of the data set shall

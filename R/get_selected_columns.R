@@ -10,9 +10,9 @@ get_non_key_columns <- function(data) {
 }
 
 #' Derive non-key column names from data
-#' 
+#'
 #' Called by the user writing functions like tm_plot_xy
-#' 
+#'
 #' @export
 #'
 #' @param data (\code{data.frame}) Data with attribute \code{keys} and \code{dataname}
@@ -20,7 +20,7 @@ get_non_key_columns <- function(data) {
 #'
 #' @return A named character vector with <variable> ---> <dataname>.<variable>
 #'
-get_dataset_prefixed_col_names <- function(data, remove_rowid=TRUE) {
+get_dataset_prefixed_col_names <- function(data, remove_rowid = TRUE) {
   keys <- attr(data, "keys")
   non_key_columns <- setdiff(names(data), keys)
   stopifnot("rowid" %in% non_key_columns)
@@ -48,5 +48,3 @@ get_nonkey_col_values <- function(data) {
   non_key_columns <- setdiff(names(data), keys)
   data %>% dplyr::select(non_key_columns)
 }
-
-

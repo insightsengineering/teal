@@ -20,7 +20,7 @@ Setup of Key Filtering for teal data sets
 \describe{
 \item{\code{vars}}{\code{character} The variables that shall be filtered with this specification}
 
-\item{\code{cs}}{\code{choices_seleced} \link{choices_selected} outcome including \code{choices},
+\item{\code{choice_spec}}{specification of choices to select with fields \code{choices},
 \code{selected}, \code{multiple} and \code{label}}
 }}
 
