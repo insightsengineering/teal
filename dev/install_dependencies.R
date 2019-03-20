@@ -8,6 +8,7 @@ user.name <- "wolfs25"
 #
 ############################################################################
 #
+install.packages(c("gridExtra","ggmosaic","forcats","ggplot2","lintr","roxygen2"))
 devtools::install_github(
   'NEST/random.cdisc.data',
   ref = "devel",
