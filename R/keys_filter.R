@@ -29,26 +29,26 @@ KeysFilteringSpec <- R6Class("KeysFilteringSpec", # nolint
     vars = character(0),
     choice_spec = NULL,
 
+    # todo: put ... args
     initialize = function(vars, sep, choices, selected, multiple, label = "Filter") {
       stopifnot(is.atomic(vars))
       stopifnot(is.atomic(choices))
       stopifnot(is.atomic(selected))
       stopifnot(multiple || (length(selected) == 1))
 
-      split_by_sep <- function(txt) strsplit(txt, sep, fixed = TRUE)
+      choices <- split_by_sep(choices, sep)
+      selected <- split_by_sep(selected, sep)
 
-      choices <- split_by_sep(choices)
-      stopifnot(all(vapply(choices, length, 0) == length(vars)))
-
-      selected <- split_by_sep(selected) # also a list if only a single element
-
+      #todo: merge into one list
       self$vars <- vars
-      self$choice_spec <- choices_selected(choices, selected, multiple, label = label)
+      self$choice_spec <- column_choices_spec(choices, selected, multiple, label = label)
     }
   )
 )
 
 #' Constructor for \link{KeysFilteringSpec}
+#'
+#' It consists in choices and additionally the variable names for the choices
 #'
 #' @export
 #'
