@@ -21,8 +21,8 @@
 #'
 #' @export
 choices_selected <- function(choices, selected, multiple, show = FALSE, label = NULL) {
-  stopifnot((length(choices) >= 1) && (all_true(choices, is.atomic)))
-  stopifnot((length(selected) >= 1) && (all_true(selected, is.atomic)))
+  stopifnot(length(choices) >= 1 && all_true(choices, is.atomic))
+  stopifnot(length(selected) >= 1 && all_true(selected, is.atomic))
   stopifnot(is.logical(multiple))
   stopifnot(all(selected %in% choices))
 
