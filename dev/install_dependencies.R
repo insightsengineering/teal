@@ -2,7 +2,7 @@
 # Please change the identification with Roche github
 system("git config user.name 'wolfs25'")
 system("git config user.email 'sebastian.wolf.sw1@roche.com'")
-
+user.name <- "wolfs25"
 # Please get a github token and store it in ~/.github_token
 
 #
@@ -63,7 +63,7 @@ from_source <- function(x){
 }
 
 clone_source <- function(repo = "NEST/teal.modules.general",
-                         user.name = "wolfs25",
+                         user.name = user.name,
                          token = readLines("~/.github_token"),
                          download_dir = "/tmp",
                          github = "https://github.roche.com/",
