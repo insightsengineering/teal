@@ -19,8 +19,9 @@
 #'   }
 #' }
 #'
+#' @importFrom methods is
 #' @field dataname (\code{character}) Data set to be extracted and selected
-#' @field keys_filtering (\code{\link{KeysFilteringSpec}}) Setup of the dataset filtering
+#' @field keys_filtering (\code{filter_choices_spec}-S3-class) Setup of the dataset filtering
 #' @field columns (\code{\link{choices_selected}}) Columns to be selected from the input dataset
 DataExtractSpec <- R6::R6Class("DataExtractSpec", # nolint
   public = list(
@@ -35,11 +36,11 @@ DataExtractSpec <- R6::R6Class("DataExtractSpec", # nolint
       self$set_columns(columns)
     },
     set_filter = function(filter) {
-      stopifnot(methods::is(filter, "filter_choices_spec") || is.null(filter))
+      stopifnot(is(filter, "filter_choices_spec") || is.null(filter))
       self$filter <- filter
     },
     set_columns = function(columns) {
-      stopifnot(methods::is(columns, "column_choices_spec"))
+      stopifnot(is(columns, "column_choices_spec"))
       self$columns <- columns
     }
   )
@@ -48,10 +49,10 @@ DataExtractSpec <- R6::R6Class("DataExtractSpec", # nolint
 #' Constructor for \link{DataExtractSpec}
 #'
 #' @param dataname (\code{character}) Name of a teal data set
-#' @param keys_filtering (\code{KeysFilteringSpec}) Define how to filter the
-#'  key columns of the data set. This is the outcome of \link{keys_filtering_spec}
 #' @param columns (\code{choices_selected}) Define which columns of the data set shall
 #'  be selected next to the key variables. This shall be the outcome of \link{choices_selected}
+#' @param filter (\code{filter_choices_spec}-S3-class) Define how to filter the
+#'  key columns of the data set. This is the outcome of \link{filter_spec}
 #'
 #' @return \link{DataExtractSpec} class object
 #' @export
