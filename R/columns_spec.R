@@ -21,17 +21,16 @@
 #'
 #'
 #' @export
-column_choices_spec <- function(choices, selected, multiple, show = FALSE, label = NULL, ...) {
-  #todo: remove show and label
+columns_spec <- function(choices, selected, multiple, show = TRUE, label = "Column(s)", ...) {
   # when choices and selected is not a list, we convert it to a list (because each entry is an atomic vector of possibly several entries)
   choices <- as.list(choices)
   selected <- as.list(selected)
-  browser()
   stopifnot(is.list(choices) && length(choices) >= 1 && all_true(choices, is.atomic))
   stopifnot(is.list(selected) && length(selected) >= 1 && all_true(selected, is.atomic))
+  stopifnot(all(selected %in% choices)) # selected and choices must be a list to work correcty
   stopifnot(is.logical(multiple))
   stopifnot(is.logical(show))
-  stopifnot(all(selected %in% choices)) # selected and choices must be a list to work correcty
+  stopifnot(is.character(label) && length(label) == 1)
   # check for correct lengths
   stopifnot(multiple || length(selected) == 1)
   length_selected <- length(selected[[1]])
@@ -48,7 +47,7 @@ column_choices_spec <- function(choices, selected, multiple, show = FALSE, label
   if (is.null(names(selected))) {
     selected %<>% setNames(selected)
   }
-  out <- list(choices = choices, selected = selected, multiple = multiple, show = show, label = label, ...)
-  class(out) <- "column_choices_spec"
-  out
+  res <- list(choices = choices, selected = selected, multiple = multiple, show = show, label = label, ...)
+  class(res) <- "column_choices_spec"
+  res
 }
