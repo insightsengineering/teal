@@ -22,7 +22,8 @@
 #'
 #' @export
 columns_spec <- function(choices, selected, multiple, show = TRUE, label = "Column(s)", ...) {
-  # when choices and selected is not a list, we convert it to a list (because each entry is an atomic vector of possibly several entries)
+  # when choices and selected is not a list, we convert it to a list (because each
+  # entry is an atomic vector of possibly several entries, needed for filter_spec currently)
   choices <- as.list(choices)
   selected <- as.list(selected)
   stopifnot(is.list(choices) && length(choices) >= 1 && all_true(choices, is.atomic))

@@ -10,16 +10,23 @@
 #' @export
 #'
 cdisc_data <- function(...) {
-  all_keys <- lapply(list(...), function(dataset) attr(dataset, "keys"))
+  datasets <- list(...)
+  stopifnot(is_named_list(datasets))
 
+  # set dataname attribute
+  # todo: how to simplify the following
+  dataset_names <- names(datasets)
+  datasets <- lapply(seq_along(datasets), function(i) structure(datasets[[i]], dataname = dataset_names[[i]]))
+  names(datasets) <- dataset_names
+
+  # check for key intersection (at least one key), otherwise merge won't be possible
+  all_keys <- lapply(list(...), function(dataset) attr(dataset, "keys"))
   stopifnot(
-    all(
-      vapply(
-        all_keys, function(keys) length(intersect(keys, all_keys[[1]])) > 0, TRUE
-      )
+    all_true(
+      all_keys, function(keys) length(intersect(keys, all_keys[[1]])) > 0
     )
   )
-  list(...)
+  datasets
 }
 
 #' Constructor for teal data set
@@ -35,7 +42,7 @@ cdisc_data <- function(...) {
 #' @export
 #'
 data_for_teal <- function(df, keys, source = NULL) {
-  stopifnot(methods::is(df, "data.frame"))
+  stopifnot(is.data.frame(df))
   stopifnot(is.atomic(keys) && all_true(keys, is.character))
   stopifnot(is.character(source))
 
