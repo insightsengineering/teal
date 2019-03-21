@@ -25,17 +25,18 @@
 DataExtractSpec <- R6::R6Class("DataExtractSpec", # nolint
   public = list(
     dataname = character(0),
-    keys_filtering = NULL,
+    filter = NULL,
     columns = NULL,
-    initialize = function(dataname, keys_filtering = NULL, columns = NULL) {
+    initialize = function(dataname, columns, filter = NULL) {
       stopifnot(!is.null(dataname))
+      stopifnot(!is.null(columns))
       self$dataname <- dataname
-      self$set_keys_filtering(keys_filtering)
+      self$set_filter(filter)
       self$set_columns(columns)
     },
-    set_keys_filtering = function(keys_filtering) {
-      stopifnot(methods::is(keys_filtering, "KeysFilteringSpec") || is.null(keys_filtering))
-      self$keys_filtering <- keys_filtering
+    set_filter = function(filter) {
+      stopifnot(methods::is(filter, "filter_choices_spec") || is.null(filter))
+      self$filter <- filter
     },
     set_columns = function(columns) {
       stopifnot(methods::is(columns, "column_choices_spec"))
@@ -54,6 +55,6 @@ DataExtractSpec <- R6::R6Class("DataExtractSpec", # nolint
 #'
 #' @return \link{DataExtractSpec} class object
 #' @export
-data_extract_spec <- function(dataname = NULL, keys_filtering = NULL, columns = NULL) {
-  DataExtractSpec$new(dataname = dataname, keys_filtering = keys_filtering, columns = columns)
+data_extract_spec <- function(dataname, columns, filter = NULL) {
+  DataExtractSpec$new(dataname = dataname, columns = columns, filter = filter)
 }
