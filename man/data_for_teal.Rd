@@ -4,10 +4,10 @@
 \alias{data_for_teal}
 \title{Constructor for teal data set}
 \usage{
-data_for_teal(ds, keys, source = NULL)
+data_for_teal(df, keys, source = NULL)
 }
 \arguments{
-\item{ds}{(\code{data.frame}) data to be handled inside}
+\item{df}{(\code{data.frame}) data to be handled inside}
 
 \item{keys}{(\code{character}) vector telling which columns of the \code{ds} are
 key variables.}
