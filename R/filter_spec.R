@@ -26,7 +26,7 @@
 #'
 #' @param label (\code{character}) Label of the Key Filtering Input inside the shiny app.
 #'
-#' @return \code{\link{KeysFilteringSpec}}-class object
+#' @return \code{filter_choices_spec}-S3-class object
 #'
 #' @examples
 #' filter_spec(
@@ -45,6 +45,7 @@ filter_spec <- function(vars, choices, selected, multiple, label = "Filter", sep
   stopifnot(all(is.character(selected)))
   stopifnot(is.character(sep) && length(sep) == 1 && is.atomic(sep))
   stopifnot(multiple || length(selected) == 1)
+  stopifnot(is.character(label) && length(label) == 1)
 
   choices <- split_by_sep(choices, sep)
   selected <- split_by_sep(selected, sep)
