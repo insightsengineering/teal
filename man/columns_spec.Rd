@@ -4,8 +4,8 @@
 \alias{columns_spec}
 \title{column_choices_spec}
 \usage{
-columns_spec(choices, selected, multiple, show = TRUE,
-  label = "Column(s)", ...)
+columns_spec(choices, selected, multiple, fixed = TRUE,
+  label = "Column(s)")
 }
 \arguments{
 \item{choices}{(\code{character}) Named character vector to define the choices
@@ -17,13 +17,11 @@ values of a shiny select input.}
 \item{multiple}{(\code{logical}) Whether multiple values shall be allowed in the
 shiny select input.}
 
-\item{show}{(\code{logical}) (optional) \link{DataExtractSpec} specific feature to
+\item{fixed}{(\code{logical}) (optional) \link{DataExtractSpec} specific feature to
 hide the choices selected in case they are not needed.}
 
 \item{label}{(\code{logical}) (optional) \link{DataExtractSpec} specific feature to
-show a different label on top of this specific \link{shiny}{selectInput}.}
-
-\item{...}{additional parameters}
+fixed a different label on top of this specific \link{shiny}{selectInput}.}
 }
 \value{
 A \code{list} of all input values. The function double checks the \code{choices}
