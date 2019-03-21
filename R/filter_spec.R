@@ -50,7 +50,7 @@ filter_spec <- function(vars, choices, selected, multiple, label = "Filter", sep
   selected <- split_by_sep(selected, sep)
   stopifnot(all(vapply(choices, length, 0) == length(vars)))
 
-  res <- c(vars=vars, columns_spec(choices, selected, multiple, label = label))
+  res <- c(vars = vars, columns_spec(choices = choices, selected = selected, multiple, label = label))
   class(res) <- "filter_choices_spec"
   res
 }
