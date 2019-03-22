@@ -22,7 +22,14 @@ devtools::install_github(
   build_vignettes = TRUE,
   auth_token = readLines("~/.github_token") # because private repo
 )
-
+devtools::install_github("hadley/strict")
+devtools::install_github(
+  'NEST/test.nest',
+  ref = "devel",
+  host = 'https://github.roche.com/api/v3',
+  upgrade_dependencies = FALSE,
+  build_vignettes = TRUE
+)
 devtools::install_github("Roche/rtables",
                          upgrade_dependencies = FALSE, build_vignettes = FALSE)
 
@@ -38,6 +45,8 @@ download_dir <- "../scratch/install_packages"
 from_source(file.path(download_dir, "teal.modules.clinical"))
 install.packages("DT")
 from_source(file.path(download_dir, "teal.modules.general"))
+
+install.packages("styler")
 
 # not working
 
