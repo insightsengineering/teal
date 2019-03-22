@@ -31,7 +31,14 @@ devtools::install_github(
   build_vignettes = TRUE,
   auth_token = readLines("~/.github_token") # because private repo
 )
-
+devtools::install_github("hadley/strict")
+devtools::install_github(
+  'NEST/test.nest',
+  ref = "devel",
+  host = 'https://github.roche.com/api/v3',
+  upgrade_dependencies = FALSE,
+  build_vignettes = TRUE
+)
 devtools::install_github("Roche/rtables",
                          upgrade_dependencies = FALSE, build_vignettes = FALSE)
 
@@ -42,6 +49,7 @@ devtools::install_github(
   upgrade_dependencies = FALSE, build_vignettes = FALSE
 )
 
+
 git2r::clone(url="https://github.com/hadley/strict",local_path="/home/rstudio/strict")
 devtools::install("/home/rstudio/strict")
 devtools::install_github(
@@ -50,6 +58,7 @@ devtools::install_github(
   host = "https://github.roche.com/api/v3",
   upgrade_dependencies = FALSE, build_vignettes = FALSE
 )
+
 
 install_deps <- function(package_folder){
   package_desc <- desc::description$new(file = file.path(package_folder,"DESCRIPTION"))
