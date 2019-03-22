@@ -22,7 +22,7 @@ be constructed. This input can be read by a \link{data_extract_module} module.
 \describe{
 \item{\code{dataname}}{(\code{character}) Data set to be extracted and selected}
 
-\item{\code{keys_filtering}}{(\code{\link{KeysFilteringSpec}}) Setup of the dataset filtering}
+\item{\code{keys_filtering}}{(\code{filter_choices_spec}-S3-class) Setup of the dataset filtering}
 
 \item{\code{columns}}{(\code{\link{choices_selected}}) Columns to be selected from the input dataset}
 }}

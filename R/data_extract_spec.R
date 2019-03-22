@@ -19,26 +19,28 @@
 #'   }
 #' }
 #'
+#' @importFrom methods is
 #' @field dataname (\code{character}) Data set to be extracted and selected
-#' @field keys_filtering (\code{\link{KeysFilteringSpec}}) Setup of the dataset filtering
+#' @field keys_filtering (\code{filter_choices_spec}-S3-class) Setup of the dataset filtering
 #' @field columns (\code{\link{choices_selected}}) Columns to be selected from the input dataset
 DataExtractSpec <- R6::R6Class("DataExtractSpec", # nolint
   public = list(
     dataname = character(0),
-    keys_filtering = NULL,
+    filter = NULL,
     columns = NULL,
-    initialize = function(dataname, keys_filtering = NULL, columns = NULL) {
+    initialize = function(dataname, columns, filter = NULL) {
       stopifnot(!is.null(dataname))
+      stopifnot(!is.null(columns))
       self$dataname <- dataname
-      self$set_keys_filtering(keys_filtering)
+      self$set_filter(filter)
       self$set_columns(columns)
     },
-    set_keys_filtering = function(keys_filtering) {
-      stopifnot(methods::is(keys_filtering, "KeysFilteringSpec") || is.null(keys_filtering))
-      self$keys_filtering <- keys_filtering
+    set_filter = function(filter) {
+      stopifnot(is(filter, "filter_choices_spec") || is.null(filter))
+      self$filter <- filter
     },
     set_columns = function(columns) {
-      stopifnot(methods::is(columns, "choices_selected"))
+      stopifnot(is(columns, "column_choices_spec"))
       self$columns <- columns
     }
   )
@@ -47,13 +49,13 @@ DataExtractSpec <- R6::R6Class("DataExtractSpec", # nolint
 #' Constructor for \link{DataExtractSpec}
 #'
 #' @param dataname (\code{character}) Name of a teal data set
-#' @param keys_filtering (\code{KeysFilteringSpec}) Define how to filter the
-#'  key columns of the data set. This is the outcome of \link{keys_filtering_spec}
 #' @param columns (\code{choices_selected}) Define which columns of the data set shall
 #'  be selected next to the key variables. This shall be the outcome of \link{choices_selected}
+#' @param filter (\code{filter_choices_spec}-S3-class) Define how to filter the
+#'  key columns of the data set. This is the outcome of \link{filter_spec}
 #'
 #' @return \link{DataExtractSpec} class object
 #' @export
-data_extract_spec <- function(dataname = NULL, keys_filtering = NULL, columns = NULL) {
-  DataExtractSpec$new(dataname = dataname, keys_filtering = keys_filtering, columns = columns)
+data_extract_spec <- function(dataname, columns, filter = NULL) {
+  DataExtractSpec$new(dataname = dataname, columns = columns, filter = filter)
 }
