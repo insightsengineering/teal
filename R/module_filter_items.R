@@ -62,6 +62,7 @@ srv_filter_items <- function(input, output, session, datasets, dataname, contain
               selected = fs,
               multiple = TRUE,
               options = pickerOptions(
+                  actionsBox = TRUE,
                   liveSearch = (length(fi$choices) > 20)
               )
             )
