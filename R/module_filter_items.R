@@ -9,6 +9,7 @@ ui_filter_items <- function(id, dataname, title = NULL) {
 }
 
 #' @import methods
+#' @importFrom shinyWidgets pickerOptions
 srv_filter_items <- function(input, output, session, datasets, dataname, container = div) {
 
   uistate <- reactiveValues(filters_shown = character(0))
@@ -59,7 +60,10 @@ srv_filter_items <- function(input, output, session, datasets, dataname, contain
               varlabel,
               choices =  fi$choices,
               selected = fs,
-              multiple = TRUE
+              multiple = TRUE,
+              options = pickerOptions(
+                  liveSearch = (length(fi$choices) > 20)
+              )
             )
           } else {
             checkboxGroupInput(
