@@ -469,10 +469,13 @@ FilteredData <- R6::R6Class( # nolint
             class = class(var)
           )
         } else if (is.factor(var) || is.character(var)) {
-          choices <- unique(as.character(var))
           list(
             type = "choices",
-            choices = choices
+            choices = if (is.factor(var)) {
+                levels(var)
+              } else {
+                unique(as.character(var))
+              }
           )
         } else if (is.numeric(var)) {
           list(
