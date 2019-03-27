@@ -48,7 +48,7 @@ test_that(
 
     x$set_default_filter_state("ASL", "SEX")
     expect_equal(names(x$get_filter_state("ASL")), c("AGE", "SEX"))
-    expect_identical(x$get_filter_state("ASL")$SEX, as.character(unique(ADSL$SEX)))
+    expect_identical(x$get_filter_state("ASL")$SEX, as.character(levels(ADSL$SEX)))
 
   }
 )
