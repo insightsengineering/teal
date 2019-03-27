@@ -21,9 +21,9 @@ the \code{datasets} input}
 \value{
 R code with three segments
 \itemize{
-	\item{data }{data generation information}
-	\item{preprocessing }{If \code{code_data_preprocessing} was added, it will be shown}
-	\item{filters }{In case data is filtered data, how this is done}
+  \item{data }{data generation information}
+  \item{preprocessing }{If \code{code_data_preprocessing} was added, it will be shown}
+  \item{filters }{In case data is filtered data, how this is done}
 }
 }
 \description{
