@@ -10,7 +10,7 @@ get_rcode_git_pkgs(git_repo = c(global = "https://github.com", roche =
 }
 \arguments{
 \item{git_repo}{(\code{character}) Character vector with addresses of git repos such as
-   \code{https://github.com}. You can also leave \code{git_pkgs} empty and just
+ \code{https://github.com}. You can also leave \code{git_pkgs} empty and just
 hand over a single character string to \code{git_repo} and only this single
 repo will be installed. Therefore it needs to be specified like:
 \code{https://github.com/hadley/tidyverse}}
