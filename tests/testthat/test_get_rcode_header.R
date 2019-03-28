@@ -267,8 +267,8 @@ test_that("get_filter_txt", {
   d$set_data("ATE", ATE) # nolint
 
   tc1 <- get_filter_txt("ASL", d)
-  tc1_expect <- "ASL_FILTERED <- ASL"
 
+  tc1_expect <- "ASL_FILTERED <- ASL"
   expect_equal(tc1, tc1_expect, info = "Simple filtered data test failed.")
 
   tc2 <- get_filter_txt("ATE", d) %>%
@@ -282,7 +282,7 @@ test_that("get_filter_txt", {
   expect_true(
     tc2[2] == "ATE_FILTERED_ALONE <- ATE", "Merged data check failed. [2]"
   )
-  expect_true(
+  expect_true
     tc2[3] == "ATE_FILTERED <- merge(x = ASL_FILTERED[, c(\"USUBJID\", \"STUDYID\")], y = ATE_FILTERED_ALONE, ",
         "Merged data check failed. [3]"
   )
