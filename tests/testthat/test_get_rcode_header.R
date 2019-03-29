@@ -282,9 +282,8 @@ test_that("get_filter_txt", {
   expect_true(
     tc2[2] == "ATE_FILTERED_ALONE <- ATE", "Merged data check failed. [2]"
   )
-  expect_true
-    tc2[3] == "ATE_FILTERED <- merge(x = ASL_FILTERED[, c(\"USUBJID\", \"STUDYID\")], y = ATE_FILTERED_ALONE, ",
-        "Merged data check failed. [3]"
+  expect_true(
+    tc2[3] == "ATE_FILTERED <- merge(x = ASL_FILTERED[, c(\"USUBJID\", \"STUDYID\")], y = ATE_FILTERED_ALONE, "
   )
   expect_true(
     tc2[4] == "    by = c(\"USUBJID\", \"STUDYID\"), all.x = FALSE, all.y = FALSE)", "Merged data check failed. [4]"
