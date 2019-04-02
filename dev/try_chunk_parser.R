@@ -136,3 +136,113 @@ if (plot_type == "Response vs Regressor") {
 global_chunks$code_chunks$plot$eval()
 print(global_chunks$code_chunks$fit$eval())
 print(global_chunks$code_chunks$fit$get_rcode())
+
+
+my_env <- new.env()
+
+my_chunk1 <- rlang::call2("<-",rlang::sym("x"),1)
+
+my_chunk2 <- rlang::expr(x * 2)
+
+eval(my_chunk1, envir = my_env)
+
+eval(my_chunk2, envir = my_env)
+
+#---- My Chunks ----
+library(magrittr)
+rm(list = ls())
+
+source("teal.devel/R/chunks.R")
+
+
+my_chunks <- chunks$new()
+
+y <- 3
+
+init_chunk_environment(chunks = my_chunks)
+
+set_chunk(id="one",expression = rlang::call2("<-",rlang::sym("x"), 2), chunks = my_chunks)
+set_chunk(expression = rlang::expr(x * y), chunks = my_chunks)
+
+my_chunks$pop()
+
+stopifnot(length(my_chunks$get_chunks()) == 1)
+
+set_chunk(expression = rlang::expr(x * y), chunks = my_chunks)
+
+set_chunk(id="three", expression = rlang::expr(x * y), chunks = my_chunks)
+
+stopifnot(eval_chunk("one", my_chunks) == 2)
+
+testthat::expect_error(eval_chunk("three", my_chunks), "order")
+
+stopifnot(length(my_chunks$.__enclos_env__$private$remaining) == 2)
+
+stopifnot(my_chunks$.__enclos_env__$private$envir$x == 2)
+
+testthat::expect_error(eval_chunk(chunks = my_chunks), "remaining")
+
+stopifnot(eval_remaining(chunks = my_chunks) == 6)
+stopifnot(my_chunks$get_env()$x == 2)
+
+testthat::expect_error(my_chunks$pop())
+
+
+#----------------------------------------------------- PART2 - PIPES
+rm(list = ls())
+source("teal.devel/R/chunks.R")
+source("teal.devel/R/chunks_pipe.R")
+
+
+ANL <- data.frame(x = c(1,2),y=c(2,2))
+x <- "x"
+y <- "y"
+session <<- new.env()
+session$userData <- new.env()
+session$userData$chunks <- chunks$new()
+
+renew_chunk_environment(chunks = session$userData$chunks)
+
+form %<chunk_env%
+    as.formula(paste(y,
+    paste(x,
+        collapse = " + "
+    ),
+    sep = " ~ "
+))
+
+# GOOD
+fit %<chunk% rlang::expr(lm(!!form, data = ANL))
+session$userData$chunks$get_remaining()
+#fit$eval(chunks = session$userData$chunks)
+
+eval_chunk(fit$id, chunks = session$userData$chunks)
+session$userData$chunks$get_remaining()
+# BAD
+fit %<chunk% lm(form, data = ANL)
+
+fit$eval(chunks = session$userData$chunks)
+
+rm(list = ls())
+
+ANL <- data.frame(x = c(1,2),y=c(2,2))
+x <- "x"
+y <- "y"
+my_chunks <- chunks$new()
+
+# Init chunk environment without form
+init_chunk_environment(chunks = my_chunks)
+
+form <-
+    paste(y,
+        paste(x,
+            collapse = " + "
+        ),
+        sep = " ~ "
+    )
+
+# substitute form
+fit %<chunk% lm(form, data = ANL) %substitute%
+    list(form = as.formula(form))
+
+stopifnot(is(eval_remaining(my_chunks),"lm"))
