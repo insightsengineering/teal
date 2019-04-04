@@ -189,6 +189,8 @@ form <-
 fit %<chunk% lm(form, data = ANL) %substitute%
     list(form = as.formula(form))
 
+fit$eval(chunks = session$userData$chunks)
+
 #----------------------------------------------------- PART3.1 - SUBS without pipes
 rm(list = ls())
 
