@@ -1,166 +1,239 @@
-library(rlang)
-library(purrr)
-library(stringr)
-library(stringi)
+#----------------------------------------------------- PART1 - set chunks
 library(magrittr)
-devtools::load_all("teal.devel", export_all = FALSE)
-
+library(R6)
 rm(list = ls())
 
-#-- Function definition --
-global_chunks <<- chunks$new()
-locate_variables <- function(string, pattern){
-  tryCatch(
-      stringr::str_extract_all(string, pattern, simplify = TRUE) %>% unique %>% stri_remove_empty,
-      error = function(e){
-        NULL
-      }
-      )
-}
-length_check <- function(x){
-  length(x)>0
-}
+source("../R/chunks.R")
 
-is_teal_data <- function(x){
+my_chunks <- chunks$new()
 
-  if (is.data.frame(x)) {
-    # Teal data || merged_data
-    is(x, "FilteredData") || !is.null(attr(x, "keys")) || !is.null(attr(x, "source"))
-  }else{
-    FALSE
-  }
+y <- 3
 
-}
+renew_chunk_environment(chunks = my_chunks)
 
-get_variables_from_call <- function(input_call, envir = parent.frame()){
+# Add one Chunk with ID
+my_chunks$push(id = "one",
+    expression = rlang::call2("<-",rlang::sym("x"), 2)
+    )
+# Try to overwrite this chunk - should fail
+set_chunk(id="one",
+    expression = rlang::call2("<-",rlang::sym("x"), 2),
+    chunks = my_chunks)
 
-  variables_to_define <- ls(envir)
+# Set a chunk without ID - should get random ID
+set_chunk(expression = rlang::expr(x * y), chunks = my_chunks)
 
-  variables_to_define %<>% map(~ get(., envir)) %>% setNames(variables_to_define)
+#remove the last added chunk
+my_chunks$pop()
 
-  teal_ds_in_variables <- Filter(is_teal_data, variables_to_define) %>% names()
+# have one chunk left
+stopifnot(length(my_chunks$get_chunks()) == 1)
 
-  if (length(teal_ds_in_variables) == 1){
+# adding random chunk again
+set_chunk(expression = rlang::expr(x * y), chunks = my_chunks)
 
-    variables_to_define$dataset <- variables_to_define[[teal_ds_in_variables]]
-    variables_to_define$dataname <- teal_ds_in_variables
+# adding an id chunk again
+set_chunk(id="three", expression = rlang::expr(x * y), chunks = my_chunks)
 
-  }
+# eval the first chunk
+stopifnot(eval_chunk("one", my_chunks) == 2)
 
-  return(variables_to_define)
+# Expect an error if you try to run the third chunk
+testthat::expect_error(eval_chunk("three", my_chunks), "order")
 
-}
+# Are two chunks not executed
+stopifnot(length(my_chunks$.__enclos_env__$private$remaining) == 2)
 
-#' @importFrom rlang call2
-#' @importFrom magrittr %>%
-pipe_chunk_test <- function()
-{
+# Check if the first chunk was executed and changed the value of x
+stopifnot(my_chunks$.__enclos_env__$private$envir$x == 2)
 
-  function(lhs, rhs){
-    pipe <- as.character(match.call()[[1]]) %>% gsub(pattern="%", replacement = "")
+# Evaluation of one chunk is not allowed without an ID
+testthat::expect_error(eval_chunk(chunks = my_chunks), "remaining")
 
-    chunk_name <- match.call()[[2]] %>% as.character
-    right_hand_side <- match.call()[[3]]
+# Evaluate all reamining chunks and return the value of the last evaluated
+stopifnot(eval_remaining(chunks = my_chunks) == 6)
 
-    if(!is.null(global_chunks$code_chunks[[chunk_name]])){
+# Check that x was not changed
+stopifnot(my_chunks$get_env()$x == 2)
 
-      chunk_existing <- global_chunks$code_chunks[[chunk_name]]$expression
-      right_hand_side <- paste(chunk_existing %>% deparse(), right_hand_side %>% deparse(width = 2000)) %>% parse_expr()
-    }
-    # chunk with assignment
-    if (pipe == "<chunk>"){
-      p <- parent.frame()
-      attr(rhs, "from_chunk") <- TRUE
-      p[[chunk_name]] <- rhs
-      right_hand_side <- call2("<-",sym(chunk_name),right_hand_side)
-    }
+# You cannot delete a chunk anymore, as everything was evaluated already.
+testthat::expect_error(my_chunks$pop())
 
-    variable_list <- get_variables_from_call(right_hand_side, parent.frame())
+# Set an environment variable, just a PRO-user function. NEST needs to be provided
+my_chunks$set_env_var("x", 5, "NEST")
 
-    if("dataset" %in% names(variable_list) && "dataname" %in% names(variable_list)){
-      right_hand_side <- right_hand_side %>% deparse() %>% paste(collapse = "") %>%
-          gsub(pattern = variable_list$dataname, replacement = "dataset")  %>%
-          parse_expr()
-    }
-    set_chunk(
-        id = chunk_name,
-        expr = right_hand_side,
-        vars = parent.frame(),
-        chunks = global_chunks
-        )
+stopifnot(my_chunks$get_env()$x == 5)
 
-  }
-}
-`%<chunk%` <- pipe_chunk_test()
+#----------------------------------------------------- PART1.1 get_rcode
 
-`%<chunk>%` <- pipe_chunk_test()
+# get a list of all stacked code-chunks R-Code
+my_chunks$get_rcode()
 
-# Evaluation as user sees it:
+# get a single one - e.g. "one"
+my_chunks$get_rcode_id("one")
 
-a <- 3
+rm(list=c("my_chunks"))
 
-chunk1 <- quote(a + y + 5)
-chunk1 %<>% substituteDirect(list(y = 3))
-chunk1 %>% eval()
+my_chunks <- chunks$new()
 
+my_chunks$push("one",
+    substitute(y <- x, list(x = 5))
+    )
+
+my_chunks$get_rcode()
+
+# Do not replace x by 5
+my_chunks <- chunks$new()
+my_chunks$set_env_var("x", 5, "NEST")
+
+my_chunks$push("one",
+    bquote(y <- x)
+    )
+my_chunks$get_rcode()
+
+# Get x replaced by 5 with rlang
+my_chunks <- chunks$new()
+x <- 5
+my_chunks$set_env_var("x", 5, "NEST")
+my_chunks$push(expression = rlang::expr({y <- !!x}))
+my_chunks$get_rcode()
 
 
-# Merged dataset is a teal dataset and will by default never
-# be substituted
-merged_dataset <- data.frame(x = c(1,2), y = c(2,2))
-attr(merged_dataset, "keys") <- "x"
+#----------------------------------------------------- PART2 - PIPES
+rm(list = ls())
+source("../R/chunks.R")
+source("../R/chunks_pipe.R")
 
-a %<chunk>% data.frame(x = c(1,2), y = c(2,2))
 
-b %<chunk>% 13
+ANL <- data.frame(x = c(1,2),y=c(2,2))
+x <- "x"
+y <- "y"
+session <<- new.env()
+session$userData <- new.env()
+session$userData$chunks <- chunks$new()
 
-a1 %<chunk% ggplot(data = a, aes(x = x, y = y))
-a1 %<chunk% + theme_bw(base_size = b)
-a1 %<chunk% +geom_point()
+renew_chunk_environment(chunks = session$userData$chunks)
 
-print(eval_chunk("a1", global_chunks))
-print(get_code_chunk(id = "a1", chunks = global_chunks))
-global_chunks$get_rcode(chunk_ids = c("a","b","a1")) %>%
-    paste(collapse = "\n") %>%
-    cat
+# chunk_env does exactly the same as set_env_var
+# it also sets the variable in the current environment
+form %<chunk_env%
+    as.formula(paste(y,
+    paste(x,
+        collapse = " + "
+    ),
+    sep = " ~ "
+))
 
-remove_chunk("b", global_chunks)
+# GOOD
+# Fit is a link to the right chunk afterwards
+fit %<chunk% rlang::expr(lm(!!form, data = ANL))
+# get nice Rcode out from the session chunks
+session$userData$chunks$get_rcode()
 
-global_chunks$
+session$userData$chunks$get_remaining()
 
-stop("X")
-fit %<chunk>%
-  lm(as.formula("x ~ x"), data = !!merged_dataset)
+# test that the evaluation works from the return value
+# wich is just a link
+stopifnot(class(fit$eval(chunks = session$userData$chunks)) == "lm")
 
-#fit <- lm(as.formula("x ~ x"), data = merged_dataset)
+# get Rcode by chunk link
+stopifnot(
+    get_code_chunk(
+        session$userData$chunks$latest,
+        chunks=session$userData$chunks) == "lm(y ~ x, data = ANL)")
 
-plot_type <- "Response vs Regressor"
 
-i <- which(plot_type == c(
-        "Residuals vs Fitted",
-        "Normal Q-Q", "Scale-Location", "Cook's distance", "Residuals vs Leverage",
-        "Cook's dist vs Leverage h[ii]/(1 - h[ii]"
-    ))
+stopifnot(is.null(eval_chunk(fit$id, chunks = session$userData$chunks)))
 
-if (plot_type == "Response vs Regressor") {
-  if (ncol(fit$model) > 1) {
-    validate(need(dim(fit$model)[2] < 3, "Response vs Regressor is not provided for >2 Regressors"))
-    "plot" %<chunk%
-        plot(fit$model[, 2:1])
-  } else {
-    plot %chunk>% {
-      plot_data <- data.frame(fit$model[, 1], fit$model[, 1])
-      names(plot_data) <- rep(names(fit$model), 2)
-      plot(plot_data)
-      abline(merged_dataset)
-    }
-  }
-} else {
-  plot %chunk>%
-      plot(merged_dataset, which = i, id.n = NULL)
-}
+stopifnot(length(session$userData$chunks$get_remaining()) == 0)
 
-# EVALUATION PERFORMED THAT SHOULD GIVE PLOT
-global_chunks$code_chunks$plot$eval()
-print(global_chunks$code_chunks$fit$eval())
-print(global_chunks$code_chunks$fit$get_rcode())
+# BAD
+# People can set variables like form, that are never shown
+# as R-Code. So they can kill reproducibilty
+fit %<chunk% lm(form, data = ANL)
+stopifnot(
+    get_code_chunk(
+        session$userData$chunks$latest,
+        chunks=session$userData$chunks) == "lm(form, data = ANL)")
+
+stopifnot(class(fit$eval(chunks = session$userData$chunks)) == "lm")
+
+
+#----------------------------------------------------- PART3 - PIPES WITH SUBS
+rm(list = ls())
+
+ANL <- data.frame(x = c(1,2),y=c(2,2))
+x <- "x"
+y <- "y"
+source("../R/chunks.R")
+source("../R/chunks_pipe.R")
+session <<- new.env()
+session$userData <- new.env()
+session$userData$chunks <- chunks$new()
+
+# Init chunk environment without form
+renew_chunk_environment(chunks = session$userData$chunks)
+
+# just set form outside
+form <-
+    paste(y,
+        paste(x,
+            collapse = " + "
+        ),
+        sep = " ~ "
+    )
+
+# substitute form
+# equal to subsitute(lm(form, data = ANL), list(form = as.formula(form)))
+# currently broken
+fit %<chunk% lm(form, data = ANL) %substitute%
+    list(form = as.formula(form))
+
+fit$eval(chunks = session$userData$chunks)
+
+#----------------------------------------------------- PART3.1 - SUBS without pipes
+rm(list = ls())
+
+ANL <- data.frame(x = c(1,2),y=c(2,2))
+x <- "x"
+y <- "y"
+source("../R/chunks.R")
+source("../R/chunks_pipe.R")
+session <<- new.env()
+session$userData <- new.env()
+session$userData$chunks <- chunks$new()
+
+# Init chunk environment without form
+renew_chunk_environment(chunks = session$userData$chunks)
+
+form <-
+    paste(y,
+        paste(x,
+            collapse = " + "
+        ),
+        sep = " ~ "
+    )
+
+# substitute form
+fit %<chunk% substituteDirect(
+    lm(form, data = ANL),
+    list(
+        form = form)
+    )
+
+stopifnot(class(fit$eval(chunks = session$userData$chunks)) == "lm")
+
+#' session <- new.env()
+#' session$userData <- new.env()
+#' session$userData$chunks <- chunks$new()
+#'
+#' x <- 5
+#'
+#' myval %<chunk% {
+#'   x + 3
+#' }
+#'
+#' mysum %<chunk% sum(x, 5)
+#'
+#' eval_remaining(session$userData$chunks)
+#' #>[1] 10
