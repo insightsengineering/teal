@@ -267,9 +267,8 @@ test_that("get_filter_txt", {
   d$set_data("ATE", ATE) # nolint
 
   tc1 <- get_filter_txt("ASL", d)
-  tc1_expect <- ""
-  attr(tc1_expect, "unfiltered") <- "ASL"
 
+  tc1_expect <- "ASL_FILTERED <- ASL"
   expect_equal(tc1, tc1_expect, info = "Simple filtered data test failed.")
 
   tc2 <- get_filter_txt("ATE", d) %>%
@@ -278,14 +277,13 @@ test_that("get_filter_txt", {
     unname()
 
   expect_true(
-    tc2[1] == "", "Merged data check failed. [1]"
+    tc2[1] == "ASL_FILTERED <- ASL", "Merged data check failed. [1]"
   )
   expect_true(
     tc2[2] == "ATE_FILTERED_ALONE <- ATE", "Merged data check failed. [2]"
   )
   expect_true(
-    tc2[3] == "ATE_FILTERED <- merge(x = ASL[, c(\"USUBJID\", \"STUDYID\")], y = ATE_FILTERED_ALONE, ",
-        "Merged data check failed. [3]"
+    tc2[3] == "ATE_FILTERED <- merge(x = ASL_FILTERED[, c(\"USUBJID\", \"STUDYID\")], y = ATE_FILTERED_ALONE, "
   )
   expect_true(
     tc2[4] == "    by = c(\"USUBJID\", \"STUDYID\"), all.x = FALSE, all.y = FALSE)", "Merged data check failed. [4]"
@@ -454,7 +452,7 @@ test_that("get_rcode_datalist", {
       "",
       "ASL <- ASL %>% filter(AGE > 20)",
       "",
-      ""
+      "ASL_FILTERED <- ASL"
     ),
     info = "One data sets with teal filtering."
   )
@@ -472,8 +470,6 @@ test_that("get_rcode_datalist", {
       deparse(width.cutoff = 80) %>%
       trimws()) %>%
     unlist()
-
-  filtered_strings[[1]] <- ""
 
   expect_equal(
     tc4,
@@ -694,7 +690,7 @@ test_that("get_rcode_header", {
       strsplit(split = "\n") %>%
       unlist() %>%
       unname() %>%
-      choose_index(c(9)),
+      choose_index(c(18)),
     c(
       "library(dplyr)"
     ),
