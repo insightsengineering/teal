@@ -34,8 +34,8 @@ columns_spec <- function(choices, selected, multiple, fixed = TRUE, label = "Col
   # check for correct lengths
   stopifnot(multiple || length(selected) == 1)
 
-  stopifnot(all(map_lgl(selected, ~length(.) == length(selected[[1]]))))
-  stopifnot(all(map_lgl(choices, ~length(.) == length(choices[[1]]))))
+  stopifnot(all(map_lgl(selected, ~ length(.) == length(selected[[1]]))))
+  stopifnot(all(map_lgl(choices, ~ length(.) == length(choices[[1]]))))
   # if names is NULL, shiny will put strange labels (with quotes etc.) in the selectInput, so we set it to the values
   if (is.null(names(choices))) {
     choices %<>% setNames(choices)
