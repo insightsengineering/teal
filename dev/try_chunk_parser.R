@@ -222,3 +222,18 @@ fit %<chunk% substituteDirect(
     )
 
 stopifnot(class(fit$eval(chunks = session$userData$chunks)) == "lm")
+
+#' session <- new.env()
+#' session$userData <- new.env()
+#' session$userData$chunks <- chunks$new()
+#'
+#' x <- 5
+#'
+#' myval %<chunk% {
+#'   x + 3
+#' }
+#'
+#' mysum %<chunk% sum(x, 5)
+#'
+#' eval_remaining(session$userData$chunks)
+#' #>[1] 10
