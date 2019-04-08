@@ -83,7 +83,7 @@ test_that("Excludes #nocode sigle and multi line", {
 
 
 test_that("Include sourced code", {
-  code_lines8 <- get_code(files_path = file_path, exclude_comments = TRUE, read_sources = TRUE) %>%
+  code_lines8 <- get_code(files_path = file_path, exclude_comments = FALSE, read_sources = TRUE) %>%
     strsplit("\n") %>%
     .[[1]]
 
