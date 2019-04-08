@@ -114,18 +114,6 @@ test_that("Empty code", {
   expect_identical(attr(result$arg2, "source"), "# !!! Preprocessing code is empty")
 })
 
-# test_that("Non empty code", {
-#   x <- 1
-#   attr(x, "keys") <- "test"
-#
-#   result <- cdisc_data(x, code = "test code", check = FALSE)
-#   expect_identical(attr(result[[1]], "source"), "test code")
-#
-#   result <- cdisc_data(x, arg1 = x, arg2 = x, code = "test code", check = FALSE)
-#   expect_identical(attr(result$ASL, "source"), "test code")
-#   expect_identical(attr(result$arg1, "source"), "test code")
-#   expect_identical(attr(result$arg2, "source"), "test code")
-# })
 
 test_that("Arguments creaded by code", {
   result <- cdisc_data(x, code = "x <- 1; attr(x, 'keys') <- 'test'", check = FALSE)
@@ -238,21 +226,3 @@ test_that("Error - keys do not match", {
     "Cannot find match of .* keys"
   )
 })
-
-# test_that("Error - cannot reproduce object", {
-#   x1 <- 1
-#   attr(x1, "keys") <- "test"
-#
-#   x2 <- 2
-#   attr(x2, "keys") <- "test"
-#
-#   code <- paste(
-#     "x1 <- 10; attr(x1, 'keys') <- 'test';",
-#     "x2 <- 20; attr(x2, 'keys') <- 'test';"
-#   )
-#
-#   expect_error(
-#     cdisc_data(x1, arg1 = x2, code = code, check = TRUE),
-#     "Cannot reproduce"
-#   )
-# })
