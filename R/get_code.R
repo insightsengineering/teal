@@ -145,7 +145,7 @@ code_exclude <- function(lines, exclude_comments) {
 #' @inheritParams code_exclude
 code_remove_library <- function(lines) {
   stopifnot(is.character(lines), length(lines) >= 1)
-  gsub("(library|require)\\([^\\(\\)]+\\)", "", lines)
+  gsub("(library|require|devtools::load_all|load_all)\\([^\\(\\)]*\\)", "", lines)
 }
 
 
