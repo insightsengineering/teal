@@ -25,14 +25,14 @@ test_that("Reads code from starts_at to stops_at", {
 
 
   code_lines2 <- get_code(files_path = file_path,
-                          starts_at = "source\\(",
+                          starts_at = "set.seed",
                           stops_at = "teal::init",
                           read_sources = FALSE) %>%
                   strsplit("\n") %>%
                   .[[1]]
 
   expect_identical(code_lines2[c(1, length(code_lines2))],
-                   c("source(\"app_source1.R\")", "x <- teal::init("))
+                   c("set.seed(1)", "x <- teal::init("))
 
 })
 

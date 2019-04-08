@@ -117,7 +117,7 @@ code_exclude <- function(lines, exclude_comments) {
   no_preproc_stop   <- grep("[[:space:]]*#[[:space:]]*<+[[:space:]]*nocode[[:space:]]*", lines)
 
   if (length(no_preproc_start) != length(no_preproc_stop)) {
-    stop(paste("Unequal number of no-code starts and stops in ", file_path))
+    stop(paste("Unequal number of no-code starts and stops in ", file_path)) #nolint
   }
 
   no_preproc_multi <- NULL
