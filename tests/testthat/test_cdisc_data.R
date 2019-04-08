@@ -61,8 +61,8 @@ test_that("List values", {
   attr(x2, "keys") <- "test"
   x3 <- 3
   attr(x3, "keys") <- "test"
-
   result <- cdisc_data(x1, arg2 = x2, arg3 = x3)
+
 
   result_to_compare <- list(ASL = 1, arg2 = 2, arg3 = 3)
   attr(result_to_compare[["ASL"]], "keys") <- "test"
