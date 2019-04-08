@@ -4,10 +4,17 @@
 \alias{cdisc_data}
 \title{CDISC data check}
 \usage{
-cdisc_data(...)
+cdisc_data(ASL, ..., code = NULL, check = TRUE)
 }
 \arguments{
-\item{...}{datasets constructed with \link{data_for_teal}}
+\item{ASL}{ASL dataset constructed with \link{data_for_teal}}
+
+\item{...}{other datasets constructed with \link{data_for_teal}}
+
+\item{code}{(\code{NULL} or \code{character}) preprocessing code}
+
+\item{check}{(\code{logical}) reproducibility check - whether evaluated preprocessing code gives the same objects
+as provided in arguments. Check is run only if flag is true and preprocessing code is not empty}
 }
 \value{
 a list of the input data sets
