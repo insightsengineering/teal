@@ -7,13 +7,20 @@
 include_source_lines(lines, starts_at, stops_at, exclude_comments, dir)
 }
 \arguments{
-\item{lines}{(\code{character}) of code as seperate element in vector}
+\item{lines}{(\code{character}) of code as separate element in vector}
 
-\item{starts_at}{(\code{character}) regular expression determining start of the block of code}
+\item{starts_at}{(\code{character}) regexp determining start of preprocessing code. Function returns code from
+line where \code{starts_at} is detected. If no regexp found, function reads from first line.}
 
-\item{stops_at}{(\code{character}) regular expression determining stop  of the block of code}
+\item{stops_at}{(\code{character}) regexp determining stop  of preprocessing code. Function returns code until line
+where \code{stops_at} is detected. If no regexp found, function reads to the end of the file. \code{stops_at} is
+important to be specified, because otherwise it can include \code{teal::init()} which mustn't be included.}
 
-\item{exclude_comments}{(\code{logical}) whether exclude commented-out lines of code}
+\item{exclude_comments}{(\code{logical}) whether exclude commented-out lines of code. Lines to be excluded
+should be ended with \code{# nocode}. For multiple line exclusions one should enclose ignored block of code with
+\code{# nocode>} and \code{# <nocode}}
+
+\item{dir}{of the file where source is called from.}
 }
 \value{
 lines of code with source text included

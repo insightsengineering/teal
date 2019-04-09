@@ -2,27 +2,43 @@
 % Please edit documentation in R/dataset.R
 \name{cdisc_data}
 \alias{cdisc_data}
-\title{CDISC data check}
+\title{Data input for teal app}
 \usage{
 cdisc_data(ASL, ..., code = NULL, check = TRUE)
 }
 \arguments{
-\item{ASL}{ASL dataset constructed with \link{data_for_teal}}
+\item{ASL}{ASL dataset}
 
-\item{...}{other datasets constructed with \link{data_for_teal}}
+\item{...}{other datasets}
 
-\item{code}{(\code{NULL} or \code{character}) preprocessing code}
+\item{code}{(\code{NULL} or \code{character}) preprocessing code.}
 
 \item{check}{(\code{logical}) reproducibility check - whether evaluated preprocessing code gives the same objects
-as provided in arguments. Check is run only if flag is true and preprocessing code is not empty}
+as provided in arguments. Check is run only if flag is true and preprocessing code is not empty.}
 }
 \value{
 a list of the input data sets
 }
 \description{
-CDISC data check
+Function passes datasets to teal application with option to read preprocessing code and reproducibility checking.
 }
 \details{
 This function checks if there were keys added to all data
 	sets that shall be analyzed inside a teal app.
+}
+\examples{
+set.seed(123)
+asl <- radsl(N = 600)
+adte <- radtte(asl, event.descr = c("STUDYID", "USUBJID", "PARAMCD"))
+keys(asl) <- c("USUBJID", "STUDYID")
+keys(adte) <- c("USUBJID", "STUDYID", "PARAMCD")
+
+ cdisc_data(
+ ASL = asl,
+ ADTE = adte,
+ code = 'set.seed(123)
+         asl <- radsl(N = 600)
+         adte <- radtte(asl, event.descr = c("STUDYID", "USUBJID", "PARAMCD"))
+         keys(asl) <- c("USUBJID", "STUDYID")
+         keys(adte) <- c("USUBJID", "STUDYID", "PARAMCD")')
 }

@@ -1,10 +1,11 @@
-#' CDISC data check
+#' Data input for teal app
 #'
-#' @param ASL ASL dataset constructed with \link{data_for_teal}
-#' @param ... other datasets constructed with \link{data_for_teal}
-#' @param code (\code{NULL} or \code{character}) preprocessing code
+#' Function passes datasets to teal application with option to read preprocessing code and reproducibility checking.
+#' @param ASL ASL dataset
+#' @param ... other datasets
+#' @param code (\code{NULL} or \code{character}) preprocessing code.
 #' @param check (\code{logical}) reproducibility check - whether evaluated preprocessing code gives the same objects
-#'   as provided in arguments. Check is run only if flag is true and preprocessing code is not empty
+#'   as provided in arguments. Check is run only if flag is true and preprocessing code is not empty.
 #'
 #' @return a list of the input data sets
 #'
@@ -13,6 +14,21 @@
 #'
 #' @export
 #'
+#' @examples
+#' set.seed(123)
+#' asl <- radsl(N = 600)
+#' adte <- radtte(asl, event.descr = c("STUDYID", "USUBJID", "PARAMCD"))
+#' keys(asl) <- c("USUBJID", "STUDYID")
+#' keys(adte) <- c("USUBJID", "STUDYID", "PARAMCD")
+#'
+#'  cdisc_data(
+#'  ASL = asl,
+#'  ADTE = adte,
+#'  code = 'set.seed(123)
+#'          asl <- radsl(N = 600)
+#'          adte <- radtte(asl, event.descr = c("STUDYID", "USUBJID", "PARAMCD"))
+#'          keys(asl) <- c("USUBJID", "STUDYID")
+#'          keys(adte) <- c("USUBJID", "STUDYID", "PARAMCD")')
 cdisc_data <- function(ASL, # nolint
                        ...,
                        code = NULL,

@@ -7,7 +7,7 @@
 code_remove_library(lines)
 }
 \arguments{
-\item{lines}{(\code{character}) of code as seperate element in vector}
+\item{lines}{(\code{character}) of code as separate element in vector}
 }
 \description{
 Removes \code{library()} or \code{require()} calls from code

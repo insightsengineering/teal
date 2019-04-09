@@ -115,7 +115,7 @@ test_that("Empty code", {
 })
 
 
-test_that("Arguments creaded by code", {
+test_that("Arguments created by code", {
   result <- cdisc_data(x, code = "x <- 1; attr(x, 'keys') <- 'test'", check = FALSE)
 
   result_to_compare <- list(ASL = 1)
