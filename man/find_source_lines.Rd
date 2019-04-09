@@ -7,7 +7,7 @@
 find_source_lines(lines)
 }
 \arguments{
-\item{lines}{(\code{character}) of code as seperate element in vector}
+\item{lines}{(\code{character}) of code as separate element in vector}
 }
 \description{
 Finds lines where \code{source()} call is located
