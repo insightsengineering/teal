@@ -18,7 +18,7 @@
 #' @return (\code{character}) code of import and preparation of data for teal application.
 #'
 #' @export
-#' @importFrom rstudioapi getActiveDocumentContext
+#' @importFrom magrittr %>%
 get_code <- function(files_path,
                      starts_at = "#\ @start_code",
                      stops_at = "#\ @end_code",
@@ -38,7 +38,7 @@ get_code <- function(files_path,
     exclude_comments = exclude_comments,
     read_sources = read_sources
   ) %>%
-    paste0(., collapse = "\n")
+    paste0(collapse = "\n")
 
 }
 
@@ -47,6 +47,7 @@ get_code <- function(files_path,
 #' Get code from specified file.
 #' @param file_path (\code{character}) path of the file to be parsed
 #' @inheritParams get_code
+#' @importFrom magrittr %>%
 #'
 #' @return code (\code{character}) preprocessing code
 get_code_single <- function(file_path,
@@ -63,9 +64,9 @@ get_code_single <- function(file_path,
 
   # clean from comments and exclusions
   lines <- lines %>%
-    enclosed_with(., starts_at = starts_at, stops_at = stops_at) %>%
-    code_exclude(., exclude_comments = exclude_comments) %>%
-    code_remove_library(.)
+    enclosed_with(starts_at = starts_at, stops_at = stops_at) %>%
+    code_exclude(exclude_comments = exclude_comments) %>%
+    code_remove_library()
 
   if (read_sources) {
     lines <- include_source_lines(
@@ -84,6 +85,7 @@ get_code_single <- function(file_path,
 #' Name of executed file
 #'
 #' Assumes name of executed teal app using Rstudio API or \code{commandArgs}.
+#' @importFrom rstudioapi getActiveDocumentContext
 get_filename <- function() {
   if (rstudioapi::isAvailable()) {
     # if called in RStudio
@@ -96,9 +98,10 @@ get_filename <- function() {
 
   } else if (any(grepl("--file=", commandArgs()))) {
     # if called by Rscript
-    commandArgs() %>%
-      grep("--file=", x = ., value = TRUE) %>%
-      gsub("--file=", "", x = .)
+    args <- commandArgs()
+    file_path <- grep("--file=", x = args, value = TRUE)
+
+    gsub("--file=", "", x = file_path)
 
   } else if (Sys.info()["nodename"] == "rkaub00459.kau.roche.com") {
     # if called from BEE
@@ -115,7 +118,7 @@ get_filename <- function() {
 #'
 #' Excludes lines from code. It is possible to exclude one line ended by \code{# nocode}
 #' @param lines (\code{character}) of code as separate element in vector
-#' @inheritParams get_code
+#' @inheritParams get_code_single
 code_exclude <- function(lines, exclude_comments, file_path) {
   stopifnot(is.character(lines), length(lines) >= 1)
   stopifnot(is.logical(exclude_comments), length(exclude_comments) == 1)
@@ -224,6 +227,8 @@ find_source_lines <- function(lines) {
 #' @inheritParams code_exclude
 #' @param dir of the file where source is called from.
 #' @return lines of code with source text included
+#'
+#' @importFrom magrittr %>%
 include_source_lines <- function(lines,
                                  starts_at,
                                  stops_at,
@@ -256,14 +261,12 @@ include_source_lines <- function(lines,
   sources_path <- normalizePath(sources_path)
 
   sources_code <- lapply(sources_path, function(s) {
-    get_code_single(
-      file_path = s,
-      starts_at = starts_at,
-      stops_at  = stops_at,
-      exclude_comments = exclude_comments,
-      read_sources = TRUE
-    ) %>%
-      c(sprintf("# Beginning of the source() - %s", s), ., sprintf("# End of the source - %s", s))
+    code <- get_code_single(file_path = s,
+                            starts_at = starts_at,
+                            stops_at  = stops_at,
+                            exclude_comments = exclude_comments,
+                            read_sources = TRUE)
+    c(sprintf("# Beginning of the source() - %s", s), code, sprintf("# End of the source - %s", s))
   })
 
   lines[idx] <- sources_code

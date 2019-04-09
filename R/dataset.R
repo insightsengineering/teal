@@ -15,6 +15,7 @@
 #' @export
 #'
 #' @examples
+#' library(random.cdisc.data)
 #' set.seed(123)
 #' asl <- radsl(N = 600)
 #' adte <- radtte(asl, event.descr = c("STUDYID", "USUBJID", "PARAMCD"))
