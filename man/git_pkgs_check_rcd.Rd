@@ -8,14 +8,18 @@ git_pkgs_check_rcd(git_repo = c(), git_pkgs = list(),
   needs_rcd = TRUE)
 }
 \arguments{
-\item{git_repo}{character vector of git repositories}
+\item{git_repo}{(\code{character}) Character vector with addresses of git repos such as
+ \code{https://github.com}. You can also leave \code{git_pkgs} empty and just
+hand over a single character string to \code{git_repo} and only this single
+repo will be installed. Therefore it needs to be specified like:
+\code{https://github.com/hadley/tidyverse}}
 
-\item{git_pkgs}{list of git laying r packages}
+\item{git_pkgs}{(\code{list}) of packages to install from the git repositories.}
 
-\item{needs_rcd}{(\code{logical}) wheter random cdisk data is needed}
+\item{needs_rcd}{(\code{logical}) whether to use \code{random.cdisc.data}.}
 }
 \value{
-\code{git_repo} and \code{git_pkgs} with random.cdisk.data added in case
+\code{git_repo} and \code{git_pkgs} with \code{random.cdisc.data} added in case
   it was not in them before. Both are setup in one single list that
   is returned.
 }
