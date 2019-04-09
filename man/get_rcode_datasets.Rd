@@ -2,20 +2,20 @@
 % Please edit documentation in R/get_rcode_header.R
 \name{get_rcode_datasets}
 \alias{get_rcode_datasets}
-\title{Generate R code for a list of datasets or list of FilteredData objects}
+\title{Generate R code for a list of datasets or list of \code{FilteredData} objects}
 \usage{
 get_rcode_datasets(datasets)
 }
 \arguments{
 \item{datasets}{(\code{list}) or (\code{FilteredData}) object from
-which md5 and source shall be shown}
+which \code{md5} and source shall be shown}
 }
 \value{
 The code to generate each single data set + as a comment
-  the md5 hash of this data set
+  the \code{md5} hash of this data set
 }
 \description{
-Generate R code for a list of datasets or list of FilteredData objects
+Generate R code for a list of datasets or list of \code{FilteredData} objects
 }
 \author{
 wolfs25

@@ -12,7 +12,7 @@ get_rcode_data_list(datanames = NULL, datasets = NULL,
 element \code{ASL}.}
 
 \item{datasets}{(\code{list}) or (\code{FilteredData}) object from
-which md5 and source shall be shown}
+which \code{md5} and source shall be shown}
 
 \item{code_data_processing}{(\code{character}) You can hard copy your data preprocessing
 and add it to the head instead of using a \code{FilteredData} object as
