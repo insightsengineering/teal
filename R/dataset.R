@@ -15,21 +15,20 @@
 #' @export
 #'
 #' @examples
+#' library(teal.devel)
 #' library(random.cdisc.data)
-#' set.seed(123)
-#' asl <- radsl(N = 600)
-#' adte <- radtte(asl, event.descr = c("STUDYID", "USUBJID", "PARAMCD"))
+#' asl <- radsl(N = 600, seed = 123)
+#' adte <- radtte(asl, event.descr = c("STUDYID", "USUBJID", "PARAMCD"), seed = 123)
 #' keys(asl) <- c("USUBJID", "STUDYID")
 #' keys(adte) <- c("USUBJID", "STUDYID", "PARAMCD")
 #'
-#'  cdisc_data(
-#'  ASL = asl,
-#'  ADTE = adte,
-#'  code = 'set.seed(123)
-#'          asl <- radsl(N = 600)
-#'          adte <- radtte(asl, event.descr = c("STUDYID", "USUBJID", "PARAMCD"))
-#'          keys(asl) <- c("USUBJID", "STUDYID")
-#'          keys(adte) <- c("USUBJID", "STUDYID", "PARAMCD")')
+#' cdisc_data(
+#'   ASL = asl,
+#'   ADTE = adte,
+#'   code = 'asl <- radsl(N = 600, seed = 123)
+#'           adte <- radtte(asl, event.descr = c("STUDYID", "USUBJID", "PARAMCD"), seed = 123)
+#'           keys(asl) <- c("USUBJID", "STUDYID")
+#'           keys(adte) <- c("USUBJID", "STUDYID", "PARAMCD")')
 cdisc_data <- function(ASL, # nolint
                        ...,
                        code = NULL,
@@ -83,9 +82,14 @@ cdisc_data <- function(ASL, # nolint
 
   arg_values <- setNames(append(list(ASL), list(...)), NULL)
 
-  arg_names <- names(list(...)) %>%
-    `if`(is.null(.), rep("", length(arg_values) - 1), .) %>%
-    c("ASL", .)
+  arg_names <- c(
+    "ASL",
+    if (is.null(names(list(...)))) {
+      rep("", length(arg_values) - 1)
+    } else {
+      names(list(...))
+    }
+  )
 
   if (any(arg_names == "")) {
     stop("All arguments passed to '...' should be named.")
