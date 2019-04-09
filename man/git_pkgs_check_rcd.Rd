@@ -11,11 +11,9 @@ git_pkgs_check_rcd(git_repo = c(), git_pkgs = list(),
 \item{git_repo}{character vector of git repositories}
 
 \item{git_pkgs}{list of git laying r packages}
-
-\item{needs_rcd}{(\code{logical}) wheter random cdisk data is needed}
 }
 \value{
-\code{git_repo} and \code{git_pkgs} with random.cdisk.data added in case
+\code{git_repo} and \code{git_pkgs} with \code{random.cdisc.data} added in case
   it was not in them before. Both are setup in one single list that
   is returned.
 }

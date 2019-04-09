@@ -8,13 +8,13 @@ get_rcode_data(data = NULL, datanames = NULL, datasets = NULL,
   code_data_processing = NULL)
 }
 \arguments{
-\item{data}{optionally either an FilteredData object, or a named list of
+\item{data}{optionally either an \code{FilteredData} object, or a named list of
 datasets. The data sets need the \code{source} attribute and optionally the
 \code{md5sum} attribute. NOTE: Just use either \code{data} or \code{datasets}}
 
 \item{datanames}{(\code{character}) Selection of data sets from datasets or data}
 
-\item{datasets}{optionally either an FilteredData object, or a named list of
+\item{datasets}{optionally either an \code{FilteredData} object, or a named list of
 datasets. The data sets need the \code{source} attribute and optionally the
 \code{md5sum} attribute. NOTE: Just use either \code{data} or \code{datasets}}
 
@@ -29,7 +29,7 @@ A string that contains the R code calls that are needed to reproduce
 Get R code to generate data of teal module
 }
 \references{
-\link{get_rcode_datasets}, \link{get_rcode_data_list}
+\code{\link{get_rcode_datasets}}, \code{\link{get_rcode_data_list}}
 }
 \author{
 wolfs25

@@ -15,7 +15,7 @@ hand over a single character string to \code{git_repo} and only this single
 repo will be installed. Therefore it needs to be specified like:
 \code{https://github.com/hadley/tidyverse}}
 
-\item{git_pkgs}{(\code{list}) of packages to install from the git repositoires}
+\item{git_pkgs}{(\code{list}) of packages to install from the git repositories}
 
 \item{needs_rcd}{(\code{logical}) Whether to use \code{random.cdisc.data}}
 }
