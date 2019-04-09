@@ -116,7 +116,11 @@ test_that("Empty code", {
 
 
 test_that("Arguments created by code", {
+
+  x <- 1
+  attr(x, "keys") <- "test"
   result <- cdisc_data(x, code = "x <- 1; attr(x, 'keys') <- 'test'", check = FALSE)
+  expect_silent(result)
 
   result_to_compare <- list(ASL = 1)
   attr(result_to_compare[["ASL"]], "keys") <- "test"
