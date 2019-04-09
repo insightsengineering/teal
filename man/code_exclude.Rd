@@ -4,12 +4,14 @@
 \alias{code_exclude}
 \title{Exclude from code}
 \usage{
-code_exclude(lines, exclude_comments)
+code_exclude(lines, exclude_comments, file_path)
 }
 \arguments{
-\item{lines}{(\code{character}) of code as seperate element in vector}
+\item{lines}{(\code{character}) of code as separate element in vector}
 
-\item{exclude_comments}{(\code{logical}) whether exclude commented-out lines of code}
+\item{exclude_comments}{(\code{logical}) whether exclude commented-out lines of code. Lines to be excluded
+should be ended with \code{# nocode}. For multiple line exclusions one should enclose ignored block of code with
+\code{# nocode>} and \code{# <nocode}}
 }
 \description{
 Excludes lines from code. It is possible to exclude one line ended by \code{# nocode}

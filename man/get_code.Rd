@@ -9,15 +9,22 @@ get_code(files_path, starts_at = "# @start_code",
   read_sources = TRUE)
 }
 \arguments{
-\item{files_path}{(\code{character}) (optional) vector of files path, if \code{NULL} then current file is used}
+\item{files_path}{(\code{character}) (optional) vector of files path to be read for preprocessing. Code from
+multiple files is joined together.}
 
-\item{starts_at}{(\code{character}) regular expression determining start of the block of code}
+\item{starts_at}{(\code{character}) regexp determining start of preprocessing code. Function returns code from
+line where \code{starts_at} is detected. If no regexp found, function reads from first line.}
 
-\item{stops_at}{(\code{character}) regular expression determining stop  of the block of code}
+\item{stops_at}{(\code{character}) regexp determining stop  of preprocessing code. Function returns code until line
+where \code{stops_at} is detected. If no regexp found, function reads to the end of the file. \code{stops_at} is
+important to be specified, because otherwise it can include \code{teal::init()} which mustn't be included.}
 
-\item{exclude_comments}{(\code{logical}) whether exclude commented-out lines of code}
+\item{exclude_comments}{(\code{logical}) whether exclude commented-out lines of code. Lines to be excluded
+should be ended with \code{# nocode}. For multiple line exclusions one should enclose ignored block of code with
+\code{# nocode>} and \code{# <nocode}}
 
-\item{read_sources}{(\code{logical}) whether to replace \code{source("path")} with code lines from sourced file.}
+\item{read_sources}{(\code{logical}) whether to replace \code{source("path")} with code lines from sourced file.
+If \code{read_sources = TRUE} changing working directory inside preprocessing is not allowed.}
 }
 \value{
 (\code{character}) code of import and preparation of data for teal application.

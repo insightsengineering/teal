@@ -2,15 +2,23 @@
 #'
 #' Reads code from specified files, including code from source. Method reads code without
 #' \code{library()} or \code{require()} calls. Function created for teal app, but can be used with any file.
-#' @param files_path (\code{character}) (optional) vector of files path, if \code{NULL} then current file is used
-#' @param starts_at (\code{character}) regular expression determining start of the block of code
-#' @param stops_at (\code{character}) regular expression determining stop  of the block of code
-#' @param exclude_comments (\code{logical}) whether exclude commented-out lines of code
+#' @param files_path (\code{character}) (optional) vector of files path to be read for preprocessing. Code from
+#' multiple files is joined together.
+#' @param starts_at (\code{character}) regexp determining start of preprocessing code. Function returns code from
+#' line where \code{starts_at} is detected. If no regexp found, function reads from first line.
+#' @param stops_at (\code{character}) regexp determining stop  of preprocessing code. Function returns code until line
+#' where \code{stops_at} is detected. If no regexp found, function reads to the end of the file. \code{stops_at} is
+#' important to be specified, because otherwise it can include \code{teal::init()} which mustn't be included.
+#' @param exclude_comments (\code{logical}) whether exclude commented-out lines of code. Lines to be excluded
+#' should be ended with \code{# nocode}. For multiple line exclusions one should enclose ignored block of code with
+#' \code{# nocode>} and \code{# <nocode}
 #' @param read_sources (\code{logical}) whether to replace \code{source("path")} with code lines from sourced file.
+#' If \code{read_sources = TRUE} changing working directory inside preprocessing is not allowed.
 #'
 #' @return (\code{character}) code of import and preparation of data for teal application.
 #'
 #' @export
+#' @importFrom rstudioapi getActiveDocumentContext
 get_code <- function(files_path,
                      starts_at = "#\ @start_code",
                      stops_at = "#\ @end_code",
@@ -75,11 +83,11 @@ get_code_single <- function(file_path,
 
 #' Name of executed file
 #'
-#' Assumes name of executed teal app using Rstudio API or commandArgs.
+#' Assumes name of executed teal app using Rstudio API or \code{commandArgs}.
 get_filename <- function() {
   if (rstudioapi::isAvailable()) {
     # if called in RStudio
-    context <- rstudioapi::getActiveDocumentContext()
+    context <- getActiveDocumentContext()
     if (context$path == "") {
       stop("Cannot automatically get preprocessing code when executed from RStudio console. Please either execute from app.R file or provide code as an argument.") #nolint
     } else {
@@ -106,9 +114,9 @@ get_filename <- function() {
 #' Exclude from code
 #'
 #' Excludes lines from code. It is possible to exclude one line ended by \code{# nocode}
-#' @param lines (\code{character}) of code as seperate element in vector
+#' @param lines (\code{character}) of code as separate element in vector
 #' @inheritParams get_code
-code_exclude <- function(lines, exclude_comments) {
+code_exclude <- function(lines, exclude_comments, file_path) {
   stopifnot(is.character(lines), length(lines) >= 1)
   stopifnot(is.logical(exclude_comments), length(exclude_comments) == 1)
 
@@ -214,6 +222,7 @@ find_source_lines <- function(lines) {
 #' Includes source in code lines
 #' @inheritParams get_code
 #' @inheritParams code_exclude
+#' @param dir of the file where source is called from.
 #' @return lines of code with source text included
 include_source_lines <- function(lines,
                                  starts_at,
@@ -237,7 +246,7 @@ include_source_lines <- function(lines,
     stop("Couldn't detect R file name from source() call.")
   }
 
-  sources_path <- ifelse(grepl("^/", sources_path), sources_path, file.path(dir, sources_path))
+  sources_path <- ifelse(grepl("^(/)|^([\\])|^([A-Za-z]:)", sources_path), sources_path, file.path(dir, sources_path))
   if (!all(file.exists(sources_path))) {
     msg <- paste0("File(s) provided in the source() calls don't exist: \n",
                   paste(sources_path[!file.exists(sources_path)], collapse = "\n"))
