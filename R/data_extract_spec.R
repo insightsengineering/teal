@@ -1,11 +1,8 @@
 #' Data Extract input for teal modules
 #'
 #' The Data Extract input can be used to filter and select columns from a data
-#' set to be used in teal. Please use the constructor function \link{data_extract_spec}
-#' to set it up.
-#'
-#' From this function's output a \code{\link{data_extract_input}} can
-#' be constructed. This input can be read by a \link{data_extract_module} module.
+#' set. This function enables such an input in \code{\link[teal]{teal}}.
+#' Please use the constructor function \link{data_extract_spec} to set it up.
 #'
 #' @export
 #' @name DataExtractSpec
@@ -13,16 +10,85 @@
 #' @docType class
 #' @section Initialize:
 #' \describe{
-#'   \item{via new}{ \code{DataExtractSpec$new(dataname, keys_filtering = NULL, columns = NULL)} }
 #'   \item{via constructor}{
 #'    \code{\link{data_extract_spec}(dataname, keys_filtering = NULL, columns = NULL)}
 #'   }
+#'   \item{via new}{ \code{DataExtractSpec$new(dataname, keys_filtering = NULL, columns = NULL)} }
+#' }
+#'
+#' @section Module Development:
+#' \describe{
+#' From this function's output a \code{\link[teal.devel]{data_extract_input}} can
+#' be constructed. This input can be read by a \code{\link[teal.devel]{data_extract_module}} module.
 #' }
 #'
 #' @importFrom methods is
-#' @field dataname (\code{character}) Data set to be extracted and selected
-#' @field keys_filtering (\code{filter_choices_spec}-S3-class) Setup of the dataset filtering
-#' @field columns (\code{\link{choices_selected}}) Columns to be selected from the input dataset
+#' @field dataname (\code{character}) The name of the \code{\link[teal]{teal}} dataset to
+#'   be extracted. This dataset has to be handed over to the \code{data} argument of the
+#'   \code{teal::}\code{\link[teal]{init}} function.
+#' @field keys_filtering (\code{filter_choices_spec}-S3-class) Setup of the filtering of
+#'  key columns inside the dataset. This setup can be created using the \code{\link{filter_spec}}
+#'  function.
+#' @field columns (\code{column_choices_spec-S3 class}) Columns to be selected from the input dataset
+#'  mentioned in \code{dataname.} The setup can be created using \code{\link{columns_spec}} function.
+#'
+#' @section Examples:
+#' \describe{
+#' \enumerate{
+#'   \item{Dataset with multiple filters and column selection}{
+#'     \preformatted{
+#'adte_filters <- filter_spec(
+#' vars = c("PARAMCD", "CNSR"),
+#' sep = "-",
+#' choices = c("OS-1" = "OS-1", "OS-0" = "OS-0", "PFS-1" = "PFS-1"),
+#' selected = "OS-1",
+#' multiple = FALSE,
+#' label = "Choose endpoint and Censor"
+#' )
+#'
+#' data_extract_spec(
+#'   dataname = "ADTE",
+#'   filter = adte_filters,
+#'   columns = columns_spec(
+#'     choices = c("AVAL", "BMRKR1", "AGE"),
+#'         selected = c("AVAL", "BMRKR1"),
+#'         multiple = TRUE,
+#'         fixed = FALSE,
+#'         label = "Column"
+#'     )
+#' )
+#'     }
+#'     \if{html}{
+#'       \figure{data_extract_spec_1.png}{options: alt="Dataset with multiple filters and column selection"}
+#'     }
+#'     \if{html}{
+#'       \figure{data_extract_spec_12.png}{options: alt="Dataset with multiple filters and column selection"}
+#'     }
+#'     \if{html}{
+#'       \figure{data_extract_spec_11.png}{options: alt="Dataset with multiple filters and column selection"}
+#'     }
+#'   }
+#'   \item{Data extract without filtering}{
+#'   \preformatted{
+#'
+#' data_extract_spec(
+#'   dataname = "ASL",
+#'   filter = NULL,
+#'   columns = columns_spec(
+#'     choices = c("AGE", "SEX", "USUBJID"),
+#'         selected = c("SEX"),
+#'         multiple = FALSE,
+#'         fixed = FALSE
+#'     )
+#' )
+#'   }
+#'   }
+#'   \if{html}{
+#'       \figure{data_extract_spec_2.png}{options: alt="Data extract without filtering"}
+#'     }
+#' }
+#'}
+#'
 DataExtractSpec <- R6::R6Class("DataExtractSpec", # nolint
   public = list(
     dataname = character(0),
@@ -48,11 +114,16 @@ DataExtractSpec <- R6::R6Class("DataExtractSpec", # nolint
 
 #' Constructor for \link{DataExtractSpec}
 #'
-#' @param dataname (\code{character}) Name of a teal data set
-#' @param columns (\code{choices_selected}) Define which columns of the data set shall
-#'  be selected next to the key variables. This shall be the outcome of \link{choices_selected}
-#' @param filter (\code{filter_choices_spec}-S3-class) Define how to filter the
-#'  key columns of the data set. This is the outcome of \link{filter_spec}
+#' For the description please look into \link{DataExtractSpec}
+#'
+#' @param dataname (\code{character}) The name of the \code{\link[teal]{teal}} dataset to
+#'   be extracted. This dataset has to be handed over to the \code{data} argument of the
+#'   \code{teal::}\code{\link[teal]{init}} function.
+#' @param filter (\code{filter_choices_spec}-S3-class) Setup of the filtering of
+#'  key columns inside the dataset. This setup can be created using the \code{\link{filter_spec}}
+#'  function.
+#' @param columns (\code{column_choices_spec-S3 class}) Columns to be selected from the input dataset
+#'  mentioned in \code{dataname.} The setup can be created using \code{\link{columns_spec}} function.
 #'
 #' @return \link{DataExtractSpec} class object
 #' @export
