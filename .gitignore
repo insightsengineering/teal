@@ -7,3 +7,7 @@ InputVads.Rdata
 t_ae_ctc_SE.out
 t_ae_ctc_ATEZOREL_SENBX.out
 inst/doc
+/teal.devel.Rcheck/
+/teal.devel_0.0.0.9000.tar.gz
+.project
+.settings/**

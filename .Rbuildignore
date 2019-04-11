@@ -5,3 +5,7 @@
 ^\.github$
 README.*
 man-roxygen/*
+^_dev$
+^.*\.png$
+^build_docker_image$
+^dev$
