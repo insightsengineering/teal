@@ -7,17 +7,20 @@
 data_extract_spec(dataname, columns, filter = NULL)
 }
 \arguments{
-\item{dataname}{(\code{character}) Name of a teal data set}
+\item{dataname}{(\code{character}) The name of the \code{\link[teal]{teal}} dataset to
+be extracted. This dataset has to be handed over to the \code{data} argument of the
+\code{teal::}\code{\link[teal]{init}} function.}
 
-\item{columns}{(\code{choices_selected}) Define which columns of the data set shall
-be selected next to the key variables. This shall be the outcome of \link{choices_selected}}
+\item{columns}{(\code{column_choices_spec-S3 class}) Columns to be selected from the input dataset
+mentioned in \code{dataname.} The setup can be created using \code{\link{columns_spec}} function.}
 
-\item{filter}{(\code{filter_choices_spec}-S3-class) Define how to filter the
-key columns of the data set. This is the outcome of \link{filter_spec}}
+\item{filter}{(\code{filter_choices_spec}-S3-class) Setup of the filtering of
+key columns inside the dataset. This setup can be created using the \code{\link{filter_spec}}
+function.}
 }
 \value{
 \link{DataExtractSpec} class object
 }
 \description{
-Constructor for \link{DataExtractSpec}
+For the description please look into \link{DataExtractSpec}
 }
