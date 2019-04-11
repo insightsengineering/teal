@@ -99,7 +99,10 @@ test_that("get_rcode_git_pkgs", {
   tc1 <- get_rcode_git_pkgs(
     git_repo = c(roche = "https://github.roche.com"),
     git_pkgs = list(roche = c("NEST/teal", "NEST/random.cdisc.data"))
-  ) %>% strsplit(split = "\n") %>% unlist() %>% unname()
+  ) %>%
+    strsplit(split = "\n") %>%
+    unlist() %>%
+    unname()
 
   expect_equal(
     tc1,
@@ -115,7 +118,10 @@ test_that("get_rcode_git_pkgs", {
   tc2 <- get_rcode_git_pkgs(
     git_repo = c(roche = "https://github.roche.com", "global" = "http://github.com"),
     git_pkgs = list(roche = c("NEST/teal", "NEST/random.cdisc.data"), global = "hadley/strict")
-  ) %>% strsplit(split = "\n") %>% unlist() %>% unname()
+  ) %>%
+    strsplit(split = "\n") %>%
+    unlist() %>%
+    unname()
 
   expect_equal(
     tc2,
@@ -136,7 +142,10 @@ test_that("get_rcode_git_pkgs", {
       roche = c("NEST/teal", "NEST/random.cdisc.data"),
       global = c("hadley/strict", "Roche/rtables")
     )
-  ) %>% strsplit(split = "\n") %>% unlist() %>% unname()
+  ) %>%
+    strsplit(split = "\n") %>%
+    unlist() %>%
+    unname()
 
   expect_equal(
     tc3,
@@ -159,7 +168,10 @@ test_that("get_rcode_git_pkgs", {
       roche = c("NEST/teal", "NEST/random.cdisc.data"),
       global = c("hadley/strict", "Roche/rtables")
     ), needs_rcd = TRUE
-  ) %>% strsplit(split = "\n") %>% unlist() %>% unname()
+  ) %>%
+    strsplit(split = "\n") %>%
+    unlist() %>%
+    unname()
 
   expect_equal(
     tc4,
@@ -179,7 +191,10 @@ test_that("get_rcode_git_pkgs", {
   tc5 <- get_rcode_git_pkgs(
     git_repo = c("http://github.com"),
     git_pkgs = list(c("hadley/strict", "Roche/rtables")), needs_rcd = TRUE
-  ) %>% strsplit(split = "\n") %>% unlist() %>% unname()
+  ) %>%
+    strsplit(split = "\n") %>%
+    unlist() %>%
+    unname()
 
   expect_equal(
     tc5,
@@ -241,34 +256,37 @@ test_that("has_source_attribute", {
 })
 
 test_that("get_filter_txt", {
-  ASL <- random.cdisc.data::radsl(600)
-  ATE <- random.cdisc.data::radtte(ASL)
+  ASL <- random.cdisc.data::radsl(600) # nolint
+  ATE <- random.cdisc.data::radtte(ASL) # nolint
 
-  attr(ASL, "source") <- "radsl(600)"
-  attr(ATE, "source") <- "radtte(ASL)"
+  attr(ASL, "source") <- "radsl(600)" # nolint
+  attr(ATE, "source") <- "radtte(ASL)" # nolint
 
   d <- teal:::FilteredData$new()
-  d$set_data("ASL", ASL)
-  d$set_data("ATE", ATE)
+  d$set_data("ASL", ASL) # nolint
+  d$set_data("ATE", ATE) # nolint
 
   tc1 <- get_filter_txt("ASL", d)
 
-  expect_equal(tc1, "ASL_FILTERED <- ASL", info = "Simple filtered data test failed.")
+  tc1_expect <- "ASL_FILTERED <- ASL"
+  expect_equal(tc1, tc1_expect, info = "Simple filtered data test failed.")
 
   tc2 <- get_filter_txt("ATE", d) %>%
     strsplit(split = "\n") %>%
     unlist() %>%
     unname()
 
-  expect_equal(
-    tc2,
-    c(
-      "ASL_FILTERED <- ASL",
-      "ATE_FILTERED_ALONE <- ATE",
-      "ATE_FILTERED <- merge(x = ASL_FILTERED[, c(\"USUBJID\", \"STUDYID\")], y = ATE_FILTERED_ALONE, ",
-      "    by = c(\"USUBJID\", \"STUDYID\"), all.x = FALSE, all.y = FALSE)"
-    ),
-    "Merged data check failed."
+  expect_true(
+    tc2[1] == "ASL_FILTERED <- ASL", "Merged data check failed. [1]"
+  )
+  expect_true(
+    tc2[2] == "ATE_FILTERED_ALONE <- ATE", "Merged data check failed. [2]"
+  )
+  expect_true(
+    tc2[3] == "ATE_FILTERED <- merge(x = ASL_FILTERED[, c(\"USUBJID\", \"STUDYID\")], y = ATE_FILTERED_ALONE, "
+  )
+  expect_true(
+    tc2[4] == "    by = c(\"USUBJID\", \"STUDYID\"), all.x = FALSE, all.y = FALSE)", "Merged data check failed. [4]"
   )
 
   d$set_filter_state("ASL", "ARM", "A: Drug X")
@@ -298,11 +316,11 @@ test_that("get_filter_txt", {
 })
 
 test_that("get_rcode_datasets", {
-  ASL <- random.cdisc.data::radsl(600)
-  ATE <- random.cdisc.data::radtte(ASL)
+  ASL <- random.cdisc.data::radsl(600) # nolint
+  ATE <- random.cdisc.data::radtte(ASL) # nolint
 
-  attr(ASL, "source") <- "radsl(600)"
-  attr(ATE, "source") <- "radtte(ASL)"
+  attr(ASL, "source") <- "radsl(600)" # nolint
+  attr(ATE, "source") <- "radtte(ASL)" # nolint
 
   d <- teal:::FilteredData$new()
   d$set_data("ASL", ASL)
@@ -358,8 +376,8 @@ test_that("get_rcode_datasets", {
 
 test_that("get_rcode_datalist", {
   tc1 <- list(
-    ASL = structure(data.frame(a = 1), source = "haven::read_sas('/opt/BIOSTAT/asl.sas7bdat')"),
-    ATE = structure(data.frame(a = 1),
+    ASL = structure(data.frame(a = 1), source = "haven::read_sas('/opt/BIOSTAT/asl.sas7bdat')"), # nolint
+    ATE = structure(data.frame(a = 1), # nolint
       source = "haven::read_sas('/opt/BIOSTAT/ate.sas7bdat')",
       md5sum = "32sdf32fds324"
     )
@@ -384,8 +402,8 @@ test_that("get_rcode_datalist", {
   )
 
   tc2 <- list(
-    ASL = structure(data.frame(a = 1), source = "haven::read_sas('/opt/BIOSTAT/asl.sas7bdat')"),
-    ATE = structure(data.frame(a = 1),
+    ASL = structure(data.frame(a = 1), source = "haven::read_sas('/opt/BIOSTAT/asl.sas7bdat')"), # nolint
+    ATE = structure(data.frame(a = 1), # nolint
       source = "haven::read_sas('/opt/BIOSTAT/ate.sas7bdat')",
       md5sum = "32sdf32fds324"
     )
@@ -409,11 +427,11 @@ test_that("get_rcode_datalist", {
     info = "get_rcode_datalist: Two data sets with no filtering."
   )
 
-  ASL <- random.cdisc.data::radsl(600)
-  ATE <- random.cdisc.data::radtte(ASL)
+  ASL <- random.cdisc.data::radsl(600) # nolint
+  ATE <- random.cdisc.data::radtte(ASL) # nolint
 
-  attr(ASL, "source") <- "radsl(600)"
-  attr(ATE, "source") <- "radtte(ASL)"
+  attr(ASL, "source") <- "radsl(600)" # nolint
+  attr(ATE, "source") <- "radtte(ASL)" # nolint
 
   d <- teal:::FilteredData$new()
   d$set_data("ASL", ASL)
@@ -448,6 +466,11 @@ test_that("get_rcode_datalist", {
     unname() %>%
     trimws()
 
+  filtered_strings <- lapply(d$get_filter_call("ATE"), function(x) x %>%
+      deparse(width.cutoff = 80) %>%
+      trimws()) %>%
+    unlist()
+
   expect_equal(
     tc4,
     c(
@@ -457,18 +480,16 @@ test_that("get_rcode_datalist", {
       "",
       "ASL <- ASL %>% filter(AGE > 20)",
       "",
-      lapply(d$get_filter_call("ATE"), function(x) x %>%
-          deparse(width.cutoff = 80) %>%
-          trimws()) %>% unlist()
+      filtered_strings
     ),
-    info = "One data sets with teal filtering."
+    info = "two data sets with teal filtering."
   )
 })
 
 test_that("get_rcode_data", {
   tc1 <- list(
-    ASL = structure(data.frame(a = 1), source = "haven::read_sas('/opt/BIOSTAT/asl.sas7bdat')"),
-    ATE = structure(data.frame(a = 1),
+    ASL = structure(data.frame(a = 1), source = "haven::read_sas('/opt/BIOSTAT/asl.sas7bdat')"), # nolint
+    ATE = structure(data.frame(a = 1), # nolint
       source = "haven::read_sas('/opt/BIOSTAT/ate.sas7bdat')",
       md5sum = "32sdf32fds324"
     )
@@ -493,8 +514,8 @@ test_that("get_rcode_data", {
   )
 
   data <- list(
-    ASL = structure(data.frame(a = 1), source = "haven::read_sas('/opt/BIOSTAT/asl.sas7bdat')"),
-    ATE = structure(data.frame(a = 1),
+    ASL = structure(data.frame(a = 1), source = "haven::read_sas('/opt/BIOSTAT/asl.sas7bdat')"), # nolint
+    ATE = structure(data.frame(a = 1), # nolint
       source = "haven::read_sas('/opt/BIOSTAT/ate.sas7bdat')",
       md5sum = "32sdf32fds324"
     )
@@ -525,8 +546,8 @@ test_that("get_rcode_data", {
   )
 
   tc3 <- list(
-    ASL = structure(data.frame(a = 1), source = "haven::read_sas('/opt/BIOSTAT/asl.sas7bdat')"),
-    ATE = structure(data.frame(a = 1),
+    ASL = structure(data.frame(a = 1), source = "haven::read_sas('/opt/BIOSTAT/asl.sas7bdat')"), # nolint
+    ATE = structure(data.frame(a = 1), # nolint
       source = "haven::read_sas('/opt/BIOSTAT/ate.sas7bdat')",
       md5sum = "32sdf32fds324"
     )
@@ -551,8 +572,8 @@ test_that("get_rcode_data", {
   )
 
   data <- list(
-    ASL = structure(data.frame(a = 1), source = "haven::read_sas('/opt/BIOSTAT/asl.sas7bdat')"),
-    ATE = structure(data.frame(a = 1),
+    ASL = structure(data.frame(a = 1), source = "haven::read_sas('/opt/BIOSTAT/asl.sas7bdat')"), # nolint
+    ATE = structure(data.frame(a = 1), # nolint
       source = "haven::read_sas('/opt/BIOSTAT/ate.sas7bdat')",
       md5sum = "32sdf32fds324"
     )
@@ -576,8 +597,8 @@ test_that("get_rcode_data", {
   )
 
   data <- list(
-    ASL = structure(data.frame(a = 1), source = "haven::read_sas('/opt/BIOSTAT/asl.sas7bdat')"),
-    ATE = structure(data.frame(a = 1),
+    ASL = structure(data.frame(a = 1), source = "haven::read_sas('/opt/BIOSTAT/asl.sas7bdat')"), # nolint
+    ATE = structure(data.frame(a = 1), # nolint
       source = "haven::read_sas('/opt/BIOSTAT/ate.sas7bdat')",
       md5sum = "32sdf32fds324"
     )
@@ -669,7 +690,7 @@ test_that("get_rcode_header", {
       strsplit(split = "\n") %>%
       unlist() %>%
       unname() %>%
-      choose_index(c(9)),
+      choose_index(c(18)),
     c(
       "library(dplyr)"
     ),
