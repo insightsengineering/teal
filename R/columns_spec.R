@@ -1,6 +1,6 @@
 # Instead of column_filter overwrite choices_selected
 # backwards compatible with new arguments fixed and label
-#' column_choices_spec
+#' column_spec
 #'
 #' @param choices (\code{character}) Named character vector to define the choices
 #' 	of a shiny select input.
@@ -8,9 +8,9 @@
 #'  values of a shiny select input.
 #' @param multiple (\code{logical}) Whether multiple values shall be allowed in the
 #'  shiny select input.
-#' @param fixed (\code{logical}) (optional) \link{DataExtractSpec} specific feature to
+#' @param fixed (\code{logical}) (optional) \code{\link{data_extract_spec}} specific feature to
 #'   hide the choices selected in case they are not needed.
-#' @param label (\code{logical}) (optional) \link{DataExtractSpec} specific feature to
+#' @param label (\code{logical}) (optional) \code{\link{data_extract_spec}} specific feature to
 #'   fixed a different label on top of this specific \link{shiny}{selectInput}.
 #'
 #' @return A \code{list} of all input values. The function double checks the \code{choices}
@@ -44,6 +44,6 @@ columns_spec <- function(choices, selected, multiple, fixed = TRUE, label = "Col
     selected %<>% setNames(selected)
   }
   res <- list(choices = choices, selected = selected, multiple = multiple, fixed = fixed, label = label)
-  class(res) <- "column_choices_spec"
+  class(res) <- "column_spec"
   res
 }

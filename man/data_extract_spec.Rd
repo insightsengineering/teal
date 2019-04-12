@@ -2,7 +2,7 @@
 % Please edit documentation in R/data_extract_spec.R
 \name{data_extract_spec}
 \alias{data_extract_spec}
-\title{Constructor for \link{DataExtractSpec}}
+\title{Constructor for \code{data_extract_spec}}
 \usage{
 data_extract_spec(dataname, columns, filter = NULL)
 }
@@ -12,12 +12,12 @@ data_extract_spec(dataname, columns, filter = NULL)
 \item{columns}{(\code{choices_selected}) Define which columns of the data set shall
 be selected next to the key variables. This shall be the outcome of \link{choices_selected}}
 
-\item{filter}{(\code{filter_choices_spec}-S3-class) Define how to filter the
+\item{filter}{(\code{filter_spec}-S3-class) Define how to filter the
 key columns of the data set. This is the outcome of \link{filter_spec}}
 }
 \value{
-\link{DataExtractSpec} class object
+\code{data_extract_spec}-S3-class object
 }
 \description{
-Constructor for \link{DataExtractSpec}
+Constructor for \code{data_extract_spec}
 }
