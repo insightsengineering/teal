@@ -18,8 +18,6 @@ get_code <- function(files_path,
                      exclude_comments = TRUE,
                      read_sources = TRUE) {
   stopifnot(is.character(files_path) && length(files_path) >= 1)
-  stopifnot(is.character(starts_at), length(starts_at) == 1)
-  stopifnot(is.character(stops_at), length(stops_at) == 1)
   stopifnot(is.logical(exclude_comments), length(exclude_comments) == 1)
   stopifnot(is.logical(read_sources), length(read_sources) == 1)
 
@@ -28,14 +26,15 @@ get_code <- function(files_path,
     files_path,
     get_code_single,
     read_sources = read_sources
-  ) %>% unlist
-
-  code %>%
+  ) %>%
+    unlist %>%
     code_exclude(exclude_comments = exclude_comments) %>%
-    code_remove_library() %>% attributes()
-    paste0(collapse = "\n")
+    code_libraries()
 
 
+  structure(paste(code, collapse = "\n"),
+            libs_excluded = attr(code, "libs_excluded"),
+            libs_loaded   = attr(code, "libs_loaded"))
 }
 
 #' Get code
@@ -144,7 +143,7 @@ code_exclude <- function(code, exclude_comments, file_path) {
 #'
 #' Removes \code{library()} or \code{require()} calls from code
 #' @inheritParams code_exclude
-code_remove_library <- function(code) {
+code_libraries <- function(code) {
   stopifnot(is.character(code), length(code) >= 1)
   libs_loaded <- unique(read_lib_names(code))
 
