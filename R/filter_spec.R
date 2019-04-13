@@ -12,7 +12,7 @@
 #'   of a shiny \code{\link[shiny]{selectInput}}. These choices will be used to filter the
 #'   dataset.
 #'
-#'   These shall be filter values of the \code{vars} input separated by the seperator(\code{sep}). Please
+#'   These shall be filter values of the \code{vars} input separated by the separator(\code{sep}). Please
 #'   watch out that the filter values have to follow the order of the \code{vars} input. In the following
 #'   example we will show how to filter two columns:
 #'
