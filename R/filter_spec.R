@@ -34,7 +34,7 @@
 #' @param label (\code{character}) Label on top of the shiny \code{\link[shiny]{selectInput}}
 #'  created from this specification.
 #'
-#' @return \code{filter_choices_spec}-S3-class object
+#' @return \code{filter_spec}-S3-class object
 #'
 #' @examples
 #' filter_spec(
@@ -135,6 +135,6 @@ filter_spec <- function(vars, choices, selected, multiple, label = "Filter", sep
   stopifnot(all(vapply(choices, length, 0) == length(vars)))
 
   res <- c(vars = vars, columns_spec(choices = choices, selected = selected, multiple, label = label))
-  class(res) <- "filter_choices_spec"
+  class(res) <- "filter_spec"
   res
 }
