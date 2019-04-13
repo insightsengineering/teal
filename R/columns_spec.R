@@ -1,5 +1,3 @@
-# Instead of column_filter overwrite choices_selected
-# backwards compatible with new arguments fixed and label
 #' Column selection input specification
 #'
 #' \code{columns_spec} is used inside \code{\link[teal]{teal}} to create a \code{\link[shiny]{selectInput}}
