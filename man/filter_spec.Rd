@@ -41,7 +41,7 @@ created from this specification.}
 \code{selected} inputs into the values of the different columns}
 }
 \value{
-\code{filter_choices_spec}-S3-class object
+\code{filter_spec}-S3-class object
 }
 \description{
 It consists in choices and additionally the variable names for the choices

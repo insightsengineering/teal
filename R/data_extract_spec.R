@@ -5,16 +5,7 @@
 #' Please use the constructor function \link{data_extract_spec} to set it up.
 #'
 #' @export
-#' @name DataExtractSpec
-#' @keywords data
-#' @docType class
-#' @section Initialize:
-#' \describe{
-#'   \item{via constructor}{
-#'    \code{\link{data_extract_spec}(dataname, keys_filtering = NULL, columns = NULL)}
-#'   }
-#'   \item{via new}{ \code{DataExtractSpec$new(dataname, keys_filtering = NULL, columns = NULL)} }
-#' }
+#' @name data_extract_spec
 #'
 #' @section Module Development:
 #' \describe{
@@ -23,13 +14,13 @@
 #' }
 #'
 #' @importFrom methods is
-#' @field dataname (\code{character}) The name of the \code{\link[teal]{teal}} dataset to
+#' @param dataname (\code{character}) The name of the \code{\link[teal]{teal}} dataset to
 #'   be extracted. This dataset has to be handed over to the \code{data} argument of the
 #'   \code{teal::}\code{\link[teal]{init}} function.
-#' @field keys_filtering (\code{filter_choices_spec}-S3-class) Setup of the filtering of
+#' @param filter (\code{filter_spec}-S3-class) Setup of the filtering of
 #'  key columns inside the dataset. This setup can be created using the \code{\link{filter_spec}}
 #'  function.
-#' @field columns (\code{column_choices_spec-S3 class}) Columns to be selected from the input dataset
+#' @param columns (\code{column_spec}-S3 class) Columns to be selected from the input dataset
 #'  mentioned in \code{dataname.} The setup can be created using \code{\link{columns_spec}} function.
 #'
 #' @section Examples:
@@ -89,44 +80,14 @@
 #' }
 #'}
 #'
-DataExtractSpec <- R6::R6Class("DataExtractSpec", # nolint
-  public = list(
-    dataname = character(0),
-    filter = NULL,
-    columns = NULL,
-    initialize = function(dataname, columns, filter = NULL) {
-      stopifnot(!is.null(dataname))
-      stopifnot(!is.null(columns))
-      self$dataname <- dataname
-      self$set_filter(filter)
-      self$set_columns(columns)
-    },
-    set_filter = function(filter) {
-      stopifnot(is(filter, "filter_choices_spec") || is.null(filter))
-      self$filter <- filter
-    },
-    set_columns = function(columns) {
-      stopifnot(is(columns, "column_choices_spec"))
-      self$columns <- columns
-    }
-  )
-)
-
-#' Constructor for \link{DataExtractSpec}
-#'
-#' For the description please look into \link{DataExtractSpec}
-#'
-#' @param dataname (\code{character}) The name of the \code{\link[teal]{teal}} dataset to
-#'   be extracted. This dataset has to be handed over to the \code{data} argument of the
-#'   \code{teal::}\code{\link[teal]{init}} function.
-#' @param filter (\code{filter_choices_spec}-S3-class) Setup of the filtering of
-#'  key columns inside the dataset. This setup can be created using the \code{\link{filter_spec}}
-#'  function.
-#' @param columns (\code{column_choices_spec-S3 class}) Columns to be selected from the input dataset
-#'  mentioned in \code{dataname.} The setup can be created using \code{\link{columns_spec}} function.
-#'
-#' @return \link{DataExtractSpec} class object
-#' @export
+#' @references \link{columns_spec} \link{filter_spec}
 data_extract_spec <- function(dataname, columns, filter = NULL) {
-  DataExtractSpec$new(dataname = dataname, columns = columns, filter = filter)
+  stopifnot(is.character(dataname), length(dataname) == 1)
+  stopifnot(is(columns, "column_spec"), length(columns) >= 1)
+  stopifnot(is.null(filter) || (is(filter, "filter_spec") & length(filter) >= 1))
+
+  res <- list(dataname = dataname, columns = columns, filter = filter)
+  class(res) <- "data_extract_spec"
+
+  res
 }
