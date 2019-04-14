@@ -21,7 +21,6 @@ get_code <- function(files_path,
   stopifnot(is.logical(exclude_comments), length(exclude_comments) == 1)
   stopifnot(is.logical(read_sources), length(read_sources) == 1)
 
-  # files_path <- c("tests/testthat/app_get_code/app.R", "inst/app.R");file_path <- files_path[1]
   code <- lapply(
     files_path,
     get_code_single,
