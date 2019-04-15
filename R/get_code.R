@@ -106,7 +106,7 @@ code_exclude <- function(code, exclude_comments, file_path) {
   stopifnot(is.character(code), length(code) >= 1)
   stopifnot(is.logical(exclude_comments), length(exclude_comments) == 1)
 
-  excluded <- character()
+  libs_excluded <- character()
 
   nocode_single <- grep("^.+#[[:space:]]*nocode", code)
   nocode_start  <- grep("[[:space:]]*#[[:space:]]*nocode[[:space:]]*>+", code)
@@ -118,7 +118,7 @@ code_exclude <- function(code, exclude_comments, file_path) {
 
   nocode_multi <- NULL
   if (length(nocode_start) > 0) {
-    code_multi <- unlist(Map(seq, from = nocode_start, to = nocode_stop))
+    nocode_multi <- unlist(Map(seq, from = nocode_start, to = nocode_stop))
   }
 
   nocode <- c(nocode_single, nocode_multi)
@@ -209,8 +209,7 @@ include_source_code <- function(code, dir) {
   sources_path <- normalizePath(sources_path)
 
   sources_code <- lapply(sources_path, function(s) {
-    code <- get_code_single(file_path = s, read_sources = TRUE)
-    c(sprintf("# Beginning of the source() - %s", s), code, sprintf("# End of the source - %s", s))
+    get_code_single(file_path = s, read_sources = TRUE)
   })
 
   code[idx] <- sources_code
@@ -221,7 +220,7 @@ include_source_code <- function(code, dir) {
 
 #' Libraries names from code
 #'
-#' Reads library nammes from code
+#' Reads library names from code
 #' @inheritParams enclosed_with
 #' @return libraries names loaded in preprocessing code
 read_lib_names <- function(code) {
