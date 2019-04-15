@@ -153,18 +153,10 @@ cdisc_data <- function(ASL, # nolint
   res <- lapply(
     seq_along(res),
     function(i) {
-      structure(
-        res[[i]],
-        dataname = arg_names[[i]],
-        source = if (identical(code, "")) {
-          "# !!! Preprocessing code is empty"
-        } else {
-          code
-        }
-      )
+      structure(res[[i]], dataname = arg_names[[i]])
     }
   )
   res <- setNames(res, arg_names)
 
-  res
+  structure(res, code = code)
 }
