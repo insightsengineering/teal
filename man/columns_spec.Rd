@@ -2,7 +2,7 @@
 % Please edit documentation in R/columns_spec.R
 \name{columns_spec}
 \alias{columns_spec}
-\title{column_choices_spec}
+\title{column_spec}
 \usage{
 columns_spec(choices, selected, multiple, fixed = TRUE,
   label = "Column(s)")
@@ -17,10 +17,10 @@ values of a shiny select input.}
 \item{multiple}{(\code{logical}) Whether multiple values shall be allowed in the
 shiny select input.}
 
-\item{fixed}{(\code{logical}) (optional) \link{DataExtractSpec} specific feature to
+\item{fixed}{(\code{logical}) (optional) \code{\link{data_extract_spec}} specific feature to
 hide the choices selected in case they are not needed.}
 
-\item{label}{(\code{logical}) (optional) \link{DataExtractSpec} specific feature to
+\item{label}{(\code{logical}) (optional) \code{\link{data_extract_spec}} specific feature to
 fixed a different label on top of this specific \link{shiny}{selectInput}.}
 }
 \value{
@@ -28,5 +28,5 @@ A \code{list} of all input values. The function double checks the \code{choices}
   and \code{selected} inputs.
 }
 \description{
-column_choices_spec
+column_spec
 }
