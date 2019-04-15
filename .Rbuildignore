@@ -6,6 +6,6 @@
 README.*
 man-roxygen/*
 ^_dev$
-^.*\.png$
+^[^\/|\\]*\.png$
 ^build_docker_image$
 ^dev$
