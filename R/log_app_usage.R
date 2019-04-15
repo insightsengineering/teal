@@ -25,14 +25,8 @@
 #'
 #' @examples
 #' \dontrun{
-#' wd <- getwd()
-#' d <- tempfile(); dir.create(d); dir.create(file.path(d, "libs"))
-#' lapply(file.path(d, "libs", c("rtables", "tern", "teal")), dir.create)
-#' setwd(d)
 #' log_app_usage(ta = "Oncology", molecule = "Tecentriq", ind = "NSCLC", anl_type = "Exploratory")
-#' readLines(file.path(d, "logs", "utilization.log"), warn = FALSE)
-#' setwd(wd)
-#' unlink(d, recursive = TRUE)
+#' readLines(file.path("logs", "utilization.log"), warn = FALSE)
 #' }
 log_app_usage <- function(ta,
                           molecule,
@@ -41,12 +35,7 @@ log_app_usage <- function(ta,
                           pkg_meta = c("Package", "Title", "Version", "RemoteRef")) {
   
   
-  if (!dir.exists("./libs")) {
-    stop("<your app dir>/libs directory does not exist.\n",
-         "Please install R Packages required for your app in ./libs.",
-         "This is required by this function to log package metadata.")
-  }
-  
+
   # conditionally create logs directory
   if (!dir.exists("./logs")) {
     dir.create("./logs")
@@ -71,7 +60,7 @@ log_app_usage <- function(ta,
   log_usage <- line_usage_log(ta, molecule, indication, anl_type)
   
   # get packages installed with app
-  app_packages <- list.dirs("./libs", full.names = FALSE, recursive = FALSE)
+  app_packages <- c("teal", "tern", "rtables", "teal.modules.clinical")
   # retrieve and assign package metadata
   log_pkgs <- line_pkg_log(app_packages, fields = pkg_meta)
   
