@@ -3,6 +3,7 @@
 \name{data_extract_spec}
 \alias{data_extract_spec}
 \title{Data Extract input for teal modules}
+
 \usage{
 data_extract_spec(dataname, columns, filter = NULL)
 }
@@ -92,4 +93,5 @@ data_extract_spec(
 
 \references{
 \link{columns_spec} \link{filter_spec}
+
 }

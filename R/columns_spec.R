@@ -12,6 +12,7 @@
 #'  name or multiple column names.
 #'
 #' @param multiple (\code{logical}) Whether multiple values shall be allowed in the
+
 #'  shiny \code{\link[shiny]{selectInput}}.
 #'
 #' @param fixed (\code{logical}) (optional) \link{data_extract_spec} specific feature to
