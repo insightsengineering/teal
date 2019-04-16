@@ -134,7 +134,11 @@ filter_spec <- function(vars, choices, selected, multiple, label = "Filter", sep
   selected <- split_by_sep(selected, sep)
   stopifnot(all(vapply(choices, length, 0) == length(vars)))
 
-  res <- c(vars = vars, columns_spec(choices = choices, selected = selected, multiple, label = label))
+  res <- append(
+      list(vars),
+      columns_spec(choices = choices, selected = selected, multiple, label = label)
+  )
+  names(res)[1] <- "vars"
   class(res) <- "filter_spec"
   res
 }
