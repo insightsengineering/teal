@@ -24,15 +24,13 @@ get_code <- function(files_path,
   code <- lapply(
     files_path,
     get_code_single,
+    exclude_comments = exclude_comments,
     read_sources = read_sources
   ) %>%
-    unlist %>%
-    code_exclude(exclude_comments = exclude_comments) %>%
-    code_libraries()
+    unlist
 
-  structure(paste(code, collapse = "\n"),
-            libs_excluded = attr(code, "libs_excluded"),
-            libs_loaded   = attr(code, "libs_loaded"))
+
+  paste(code, collapse = "\n")
 }
 
 #' Get code
@@ -43,17 +41,19 @@ get_code <- function(files_path,
 #' @importFrom magrittr %>%
 #'
 #' @return code (\code{character}) preprocessing code
-get_code_single <- function(file_path, read_sources) {
+get_code_single <- function(file_path, exclude_comments, read_sources) {
   stopifnot(is.character(file_path), length(file_path) == 1)
   stopifnot(file.exists(file_path))
   stopifnot(is.logical(read_sources), length(read_sources) == 1)
 
-  code <- readLines(file_path)
-  code <- enclosed_with(code)
+  code <- readLines(file_path) %>%
+            enclosed_with() %>%
+            code_exclude(exclude_comments = exclude_comments)
 
   if (read_sources) {
     code <- include_source_code(
       code = code,
+      exclude_comments = exclude_comments,
       dir = dirname(file_path)
     )
   }
@@ -73,9 +73,9 @@ enclosed_with <- function(code) {
   idx_start <- grep("#\\s*code>", code)
   line_starts <- if (length(idx_start) > 1) {
     warning("More than one preproc start found - using the first one.")
-    idx_start[1]
+    idx_start[1] + 1
   } else if (length(idx_start) == 1) {
-    idx_start
+    idx_start + 1
   } else {
     1L
   }
@@ -83,9 +83,9 @@ enclosed_with <- function(code) {
   idx_stop <- grep("#\\s*<code", code)
   line_stops <- if (length(idx_stop) > 1) {
     warning("More than one preproc stops found - using the last one.")
-    tail(idx_stop, 1)
+    tail(idx_stop, 1) - 1
   } else if (length(idx_stop) == 1) {
-    idx_stop
+    idx_stop - 1
   } else {
     length(code)
   }
@@ -105,8 +105,6 @@ code_exclude <- function(code, exclude_comments, file_path) {
   stopifnot(is.character(code), length(code) >= 1)
   stopifnot(is.logical(exclude_comments), length(exclude_comments) == 1)
 
-  libs_excluded <- character()
-
   nocode_single <- grep("^.+#[[:space:]]*nocode", code)
   nocode_start  <- grep("[[:space:]]*#[[:space:]]*nocode[[:space:]]*>+", code)
   nocode_stop   <- grep("[[:space:]]*#[[:space:]]*<+[[:space:]]*nocode[[:space:]]*", code)
@@ -123,7 +121,6 @@ code_exclude <- function(code, exclude_comments, file_path) {
   nocode <- c(nocode_single, nocode_multi)
 
   if (length(nocode) > 0) {
-    libs_excluded <- read_lib_names(code[nocode])
     code <- code[-nocode]
   }
 
@@ -133,20 +130,6 @@ code_exclude <- function(code, exclude_comments, file_path) {
   }
 
   #
-
-  structure(code, libs_excluded = libs_excluded)
-}
-
-#' Remove library call from code
-#'
-#' Removes \code{library()} or \code{require()} calls from code
-#' @inheritParams code_exclude
-code_libraries <- function(code) {
-  stopifnot(is.character(code), length(code) >= 1)
-  libs_loaded <- unique(read_lib_names(code))
-
-  code <- gsub("(library|require|devtools::load_all|load_all)\\([^\\(\\)]*\\)", "", code)
-  attr(code, "libs_loaded") <- libs_loaded
 
   code
 }
@@ -181,7 +164,7 @@ find_source_code <- function(code) {
 #' @return lines of code with source text included
 #'
 #' @importFrom magrittr %>%
-include_source_code <- function(code, dir) {
+include_source_code <- function(code, exclude_comments, dir) {
   stopifnot(is.character(code), length(code) >= 1)
   stopifnot(dir.exists(dir))
 
@@ -208,7 +191,9 @@ include_source_code <- function(code, dir) {
   sources_path <- normalizePath(sources_path)
 
   sources_code <- lapply(sources_path, function(s) {
-    get_code_single(file_path = s, read_sources = TRUE)
+    get_code_single(file_path = s,
+                    exclude_comments = exclude_comments,
+                    read_sources = TRUE)
   })
 
   code[idx] <- sources_code
