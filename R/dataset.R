@@ -95,22 +95,6 @@ cdisc_data <- function(ASL, # nolint
     stop("All arguments passed to '...' should be named.")
   }
 
-  # if user changes variable name via argument
-  if (any(arg_names != arg_values_char)) {
-    idx <- which(arg_names != arg_values_char)
-    code_attrs <- attributes(code)
-
-
-    code_from_args <- paste0(
-      arg_names[idx], " <- ", arg_values_char[idx],
-      collapse = "\n"
-    ) %>%
-      paste0("\n\n", "# code from function argument(s)", "\n", ., "\n")
-
-    code <- paste0(code, code_from_args)
-    attributes(code) <- code_attrs
-  }
-
   # check keys
   for (i in seq_along(arg_values)) {
     if (is.null(attr(arg_values[[i]], "keys"))) {
@@ -165,6 +149,27 @@ cdisc_data <- function(ASL, # nolint
       stop(msg)
     }
   }
+
+  # if user changes variable name via argument
+  if (any(arg_names != arg_values_char)) {
+    idx <- which(arg_names != arg_values_char)
+    code_attrs <- attributes(code)
+
+
+    code_from_args <- paste0(
+      arg_names[idx], " <- ", arg_values_char[idx],
+      collapse = "\n"
+    ) %>%
+      paste0("\n\n", "# code from function argument(s)", "\n", ., "\n")
+
+    code <- paste0(code, code_from_args)
+    attributes(code) <- code_attrs
+  }
+
+  if(code == "") {
+    code <- "# !!! Preprocessing code is empty"
+  }
+
 
   res <- lapply(
     seq_along(res),
