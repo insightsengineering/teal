@@ -30,7 +30,6 @@ get_code <- function(files_path,
     code_exclude(exclude_comments = exclude_comments) %>%
     code_libraries()
 
-
   structure(paste(code, collapse = "\n"),
             libs_excluded = attr(code, "libs_excluded"),
             libs_loaded   = attr(code, "libs_loaded"))
