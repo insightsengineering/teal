@@ -50,7 +50,6 @@ test_that("List values", {
   result_to_compare <- list(ASL = 1)
   attr(result_to_compare[["ASL"]], "keys") <- "test"
   attr(result_to_compare[["ASL"]], "dataname") <- "ASL"
-  attr(result_to_compare[["ASL"]], "source") <- "# !!! Preprocessing code is empty"
 
   expect_identical(result, result_to_compare)
 
