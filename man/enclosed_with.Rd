@@ -2,19 +2,12 @@
 % Please edit documentation in R/get_code.R
 \name{enclosed_with}
 \alias{enclosed_with}
-\title{Get lines enclosed in}
+\title{Get code enclosed within}
 \usage{
-enclosed_with(lines, starts_at, stops_at)
+enclosed_with(code)
 }
 \arguments{
-\item{lines}{(\code{character}) of code as separate element in vector}
-
-\item{starts_at}{(\code{character}) regexp determining start of preprocessing code. Function returns code from
-line where \code{starts_at} is detected. If no regexp found, function reads from first line.}
-
-\item{stops_at}{(\code{character}) regexp determining stop  of preprocessing code. Function returns code until line
-where \code{stops_at} is detected. If no regexp found, function reads to the end of the file. \code{stops_at} is
-important to be specified, because otherwise it can include \code{teal::init()} which mustn't be included.}
+\item{code}{(\code{character}) containing preprocessing code lines.}
 }
 \description{
 Extracts lines from code which are enclosed within regexp starts_at and stops_at
