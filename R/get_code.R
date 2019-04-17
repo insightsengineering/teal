@@ -208,7 +208,7 @@ include_source_code <- function(code, exclude_comments, dir) {
 #' @inheritParams enclosed_with
 #' @return libraries names loaded in preprocessing code
 read_lib_names <- function(code) {
-  lib_calls <- unlist(regmatches(code, gregexpr("(?=(library|require)\\([\"\']{0,1}).*?(?<=\\))", code, perl = TRUE)))
+  lib_calls <- unlist(regmatches(code, gregexpr("(?=(library|require)\\([\"\' ]{0,2}).*?(?<=\\))", code, perl = TRUE)))
   if (length(lib_calls) == 0) {
     return(character())
   }
