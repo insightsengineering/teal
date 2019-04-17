@@ -2,7 +2,7 @@ context("cdisc_data")
 
 test_that("Basic example - without code and check", {
   x <- 1
-  attr(x, "keys") <- "test"
+  keys(x) <- "test"
 
   expect_silent(cdisc_data(x, code = NULL, check = FALSE))
   expect_silent(cdisc_data(x, arg1 = x, arg2 = x, code = NULL, check = FALSE))
@@ -10,7 +10,7 @@ test_that("Basic example - without code and check", {
 
 test_that("Basic example - with code without check", {
   x <- 1
-  attr(x, "keys") <- "test"
+  keys(x) <- "test"
 
   expect_silent(cdisc_data(ASL = x, code = "x <- 1; attr(x, 'keys') <- 'test'", check = FALSE))
   expect_silent(cdisc_data(ASL = x, arg1 = x, arg2 = x, code = "x <- 1; attr(x, 'keys') <- 'test'", check = FALSE))
@@ -18,7 +18,7 @@ test_that("Basic example - with code without check", {
 
 test_that("Basic example - with code and check", {
   x <- 1
-  attr(x, "keys") <- "test"
+  keys(x) <- "test"
 
   expect_silent(cdisc_data(ASL = x, code = "x <- 1; attr(x, 'keys') <- 'test'", check = TRUE))
   expect_silent(cdisc_data(ASL = x, arg1 = x, arg2 = x, code = "x <- 1; attr(x, 'keys') <- 'test'", check = TRUE))
@@ -26,7 +26,7 @@ test_that("Basic example - with code and check", {
 
 test_that("Check is skipped if code is empty", {
   x <- 1
-  attr(x, "keys") <- "test"
+  keys(x) <- "test"
 
   expect_silent(cdisc_data(ASL = x, check = TRUE))
   expect_silent(cdisc_data(ASL = x, code = NULL, check = TRUE))
@@ -50,7 +50,7 @@ test_that("List values", {
   result_to_compare <- list(ASL = 1)
   keys(result_to_compare[["ASL"]]) <- "test"
   attr(result_to_compare[["ASL"]], "dataname") <- "ASL"
-  attr(result_to_compare, "code") <- "\n\n# code from function argument(s)\nASL <- x\n"
+  attr(result_to_compare, "code") <- "\n# code from cdisc_data argument(s)\n\nASL <- x"
 
   expect_identical(result, result_to_compare)
 
@@ -71,13 +71,13 @@ test_that("List values", {
   attr(result_to_compare[["ASL"]], "dataname")  <- "ASL"
   attr(result_to_compare[["arg2"]], "dataname") <- "arg2"
   attr(result_to_compare[["arg3"]], "dataname") <- "arg3"
-  attr(result_to_compare, "code") <- "\n\n# code from function argument(s)\nASL <- x1\narg2 <- x2\narg3 <- x3\n"
+  attr(result_to_compare, "code") <- "\n# code from cdisc_data argument(s)\n\nASL <- x1\narg2 <- x2\narg3 <- x3"
 
   expect_identical(result, result_to_compare)
 })
 
 test_that("Empty code", {
-  ASL <- 1
+  ASL <- 1 #nolint
   keys(ASL) <- "test"
 
   # missing code
@@ -95,7 +95,6 @@ test_that("Empty code", {
 
 
 test_that("Arguments created by code", {
-
   x <- 1
   keys(x) <- "test"
   result <- cdisc_data(x, code = "x <- 1; keys(x) <- 'test'", check = FALSE)
@@ -104,10 +103,9 @@ test_that("Arguments created by code", {
   result_to_compare <- list(ASL = 1)
   keys(result_to_compare[["ASL"]]) <- "test"
   attr(result_to_compare[["ASL"]], "dataname") <- "ASL"
-  attr(result_to_compare, "code") <- "x <- 1; keys(x) <- 'test'\n\n# code from function argument(s)\nASL <- x\n"
+  attr(result_to_compare, "code") <- "x <- 1; keys(x) <- 'test'\n# code from cdisc_data argument(s)\n\nASL <- x"
 
   expect_identical(result, result_to_compare)
-
 })
 
 test_that("Error - ASL is missing", {
@@ -120,7 +118,6 @@ test_that("Error - checking is forbidden if any argument is call", {
     cdisc_data(1 + 2, code = "test code", check = TRUE),
     "Automatic checking is not supported if arguments provided as calls"
   )
-
 
   x <- 1
   keys(x) <- "test"
