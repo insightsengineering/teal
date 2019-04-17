@@ -17,7 +17,7 @@ should be ended with \code{# nocode}. For multiple line exclusions one should en
 If \code{read_sources = TRUE} changing working directory inside preprocessing is not allowed.}
 }
 \value{
-code (\code{character}) preprocessing code
+lines (\code{character}) of preprocessing code
 }
 \description{
 Get code from specified file.

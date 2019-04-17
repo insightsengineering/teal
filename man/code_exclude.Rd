@@ -4,10 +4,10 @@
 \alias{code_exclude}
 \title{Exclude from code}
 \usage{
-code_exclude(code, exclude_comments, file_path)
+code_exclude(lines, exclude_comments, file_path)
 }
 \arguments{
-\item{code}{(\code{code}) class object, containing preprocessing code and additional information from parsed files.}
+\item{lines}{(\code{character}) of preprocessing code.}
 
 \item{exclude_comments}{(\code{logical}) whether exclude commented-out lines of code. Lines to be excluded
 should be ended with \code{# nocode}. For multiple line exclusions one should enclose ignored block of code with

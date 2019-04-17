@@ -17,7 +17,7 @@ test_that("Reads code from starts_at to stops_at", {
     strsplit("\n") %>%
     .[[1]]
 
-  expect_identical(code_lines1[c(1, length(code_lines1))], c("library(teal.devel)", "# \"this is a comment\""))
+  expect_identical(code_lines1[c(1, length(code_lines1))], c("library( teal.devel ) #nolint", "# \"this is a comment\""))
 })
 
 test_that("Excludes commented, keep quoted comments", {
