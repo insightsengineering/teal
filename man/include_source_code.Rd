@@ -2,12 +2,12 @@
 % Please edit documentation in R/get_code.R
 \name{include_source_code}
 \alias{include_source_code}
-\title{Includes source in code lines}
+\title{Includes source in preprocessing code lines}
 \usage{
-include_source_code(code, exclude_comments, dir)
+include_source_code(lines, exclude_comments, dir)
 }
 \arguments{
-\item{code}{(\code{code}) class object, containing preprocessing code and additional information from parsed files.}
+\item{lines}{(\code{character}) of preprocessing code.}
 
 \item{exclude_comments}{(\code{logical}) whether exclude commented-out lines of code. Lines to be excluded
 should be ended with \code{# nocode}. For multiple line exclusions one should enclose ignored block of code with
@@ -19,5 +19,5 @@ should be ended with \code{# nocode}. For multiple line exclusions one should en
 lines of code with source text included
 }
 \description{
-Includes source in code lines
+Includes source in preprocessing code lines
 }

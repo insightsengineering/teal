@@ -2,13 +2,13 @@
 % Please edit documentation in R/get_code.R
 \name{find_source_code}
 \alias{find_source_code}
-\title{Finds code with source call}
+\title{Finds lines of code with source call}
 \usage{
-find_source_code(code)
+find_source_code(lines)
 }
 \arguments{
-\item{code}{(\code{character}) containing preprocessing code lines.}
+\item{lines}{(\code{character}) of preprocessing code.}
 }
 \description{
-Finds code where \code{source()} call is located
+Finds lines in preprocessing code where \code{source()} call is located
 }

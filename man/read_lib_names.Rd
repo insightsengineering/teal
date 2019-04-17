@@ -2,16 +2,16 @@
 % Please edit documentation in R/get_code.R
 \name{read_lib_names}
 \alias{read_lib_names}
-\title{Libraries names from code}
+\title{Libraries names from preprocessing code}
 \usage{
-read_lib_names(code)
+read_lib_names(lines)
 }
 \arguments{
-\item{code}{(\code{character}) containing preprocessing code lines.}
+\item{lines}{(\code{character}) of preprocessing code.}
 }
 \value{
 libraries names loaded in preprocessing code
 }
 \description{
-Reads library names from code
+Reads library names from preprocessing code
 }

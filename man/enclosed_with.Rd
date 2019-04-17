@@ -4,10 +4,10 @@
 \alias{enclosed_with}
 \title{Get code enclosed within}
 \usage{
-enclosed_with(code)
+enclosed_with(lines)
 }
 \arguments{
-\item{code}{(\code{character}) containing preprocessing code lines.}
+\item{lines}{(\code{character}) of preprocessing code.}
 }
 \description{
 Extracts lines from code which are enclosed within regexp starts_at and stops_at
