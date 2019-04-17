@@ -155,12 +155,13 @@ cdisc_data <- function(ASL, # nolint
     idx <- which(arg_names != arg_values_char)
     code_attrs <- attributes(code)
 
-
-    code_from_args <- paste0(
-      arg_names[idx], " <- ", arg_values_char[idx],
-      collapse = "\n"
-    ) %>%
-      paste0("\n\n", "# code from function argument(s)", "\n", ., "\n")
+    code_from_args <- sprintf(
+      "\n# code from cdisc_data argument(s)\n\n%s",
+      paste(
+        paste0(arg_names[idx], " <- ", arg_values_char[idx]),
+        collapse = "\n"
+      )
+    )
 
     code <- paste0(code, code_from_args)
     attributes(code) <- code_attrs
