@@ -166,7 +166,7 @@ cdisc_data <- function(ASL, # nolint
     attributes(code) <- code_attrs
   }
 
-  if(code == "") {
+  if (code == "") {
     code <- "# !!! Preprocessing code is empty"
   }
 
