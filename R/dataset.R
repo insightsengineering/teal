@@ -150,21 +150,35 @@ cdisc_data <- function(ASL, # nolint
     }
   }
 
+  # if user changes variable name via argument
+  if (any(arg_names != arg_values_char)) {
+    idx <- which(arg_names != arg_values_char)
+    code_attrs <- attributes(code)
+
+    code_from_args <- sprintf(
+      "\n# code from cdisc_data argument(s)\n\n%s",
+      paste(
+        paste0(arg_names[idx], " <- ", arg_values_char[idx]),
+        collapse = "\n"
+      )
+    )
+
+    code <- paste0(code, code_from_args)
+    attributes(code) <- code_attrs
+  }
+
+  if (code == "") {
+    code <- "# !!! Preprocessing code is empty"
+  }
+
+
   res <- lapply(
     seq_along(res),
     function(i) {
-      structure(
-        res[[i]],
-        dataname = arg_names[[i]],
-        source = if (identical(code, "")) {
-          "# !!! Preprocessing code is empty"
-        } else {
-          code
-        }
-      )
+      structure(res[[i]], dataname = arg_names[[i]])
     }
   )
   res <- setNames(res, arg_names)
 
-  res
+  structure(res, code = code)
 }
