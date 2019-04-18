@@ -110,6 +110,21 @@ FilteredData <- R6::R6Class( # nolint
       invisible(self)
     },
 
+    set_data_attrs = function(data) {
+      private$data_attrs <- attributes(data)
+      invisible(self)
+    },
+    get_data_attrs = function() {
+      private$data_attrs
+
+    },
+    get_data_attr = function(attr) {
+      stopifnot(is.character(attr))
+      stopifnot(length(attr) == 1)
+
+      private$data_attrs[[attr]]
+
+    },
 
     list_data_info = function(dataname, filtered=FALSE, variables=NULL) {
 
@@ -442,6 +457,7 @@ FilteredData <- R6::R6Class( # nolint
 
     init_datanames = NULL,
     datasets = NULL,
+    data_attrs = NULL,
     filtered_datasets = NULL,
     filter_state = NULL,
     filter_info = list(),
