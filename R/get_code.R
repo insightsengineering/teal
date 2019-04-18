@@ -4,11 +4,6 @@
 #' \code{library()} or \code{require()} calls. Function created for teal app, but can be used with any file.
 #' @param files_path (\code{character}) (optional) vector of files path to be read for preprocessing. Code from
 #' multiple files is joined together.
-#' @param starts_at (\code{character}) regexp determining start of preprocessing code. Function returns code from
-#' line where \code{starts_at} is detected. If no regexp found, function reads from first line.
-#' @param stops_at (\code{character}) regexp determining stop  of preprocessing code. Function returns code until line
-#' where \code{stops_at} is detected. If no regexp found, function reads to the end of the file. \code{stops_at} is
-#' important to be specified, because otherwise it can include \code{teal::init()} which mustn't be included.
 #' @param exclude_comments (\code{logical}) whether exclude commented-out lines of code. Lines to be excluded
 #' should be ended with \code{# nocode}. For multiple line exclusions one should enclose ignored block of code with
 #' \code{# nocode>} and \code{# <nocode}
@@ -20,26 +15,22 @@
 #' @export
 #' @importFrom magrittr %>%
 get_code <- function(files_path,
-                     starts_at = "#\ @start_code",
-                     stops_at = "#\ @end_code",
                      exclude_comments = TRUE,
                      read_sources = TRUE) {
   stopifnot(is.character(files_path) && length(files_path) >= 1)
-  stopifnot(is.character(starts_at), length(starts_at) == 1)
-  stopifnot(is.character(stops_at), length(stops_at) == 1)
   stopifnot(is.logical(exclude_comments), length(exclude_comments) == 1)
   stopifnot(is.logical(read_sources), length(read_sources) == 1)
 
-  sapply(
+  lines <- lapply(
     files_path,
     get_code_single,
-    starts_at = starts_at,
-    stops_at = stops_at,
     exclude_comments = exclude_comments,
     read_sources = read_sources
   ) %>%
-    paste0(collapse = "\n")
+    unlist
 
+
+  paste(lines, collapse = "\n")
 }
 
 #' Get code
@@ -49,146 +40,52 @@ get_code <- function(files_path,
 #' @inheritParams get_code
 #' @importFrom magrittr %>%
 #'
-#' @return code (\code{character}) preprocessing code
-get_code_single <- function(file_path,
-                            starts_at,
-                            stops_at,
-                            exclude_comments,
-                            read_sources) {
+#' @return lines (\code{character}) of preprocessing code
+get_code_single <- function(file_path, exclude_comments, read_sources) {
   stopifnot(is.character(file_path), length(file_path) == 1)
   stopifnot(file.exists(file_path))
-  stopifnot(is.logical(exclude_comments), length(exclude_comments) == 1)
   stopifnot(is.logical(read_sources), length(read_sources) == 1)
 
-  lines <- readLines(file_path)
-
-  # clean from comments and exclusions
-  lines <- lines %>%
-    enclosed_with(starts_at = starts_at, stops_at = stops_at) %>%
-    code_exclude(exclude_comments = exclude_comments) %>%
-    code_remove_library()
+  lines <- readLines(file_path) %>%
+            enclosed_with() %>%
+            code_exclude(exclude_comments = exclude_comments)
 
   if (read_sources) {
-    lines <- include_source_lines(
+    lines <- include_source_code(
       lines = lines,
-      starts_at = starts_at,
-      stops_at = stops_at,
       exclude_comments = exclude_comments,
       dir = dirname(file_path)
     )
   }
 
-
   lines
 }
 
-#' Name of executed file
-#'
-#' Assumes name of executed teal app using Rstudio API or \code{commandArgs}.
-#' @importFrom rstudioapi getActiveDocumentContext
-get_filename <- function() {
-  if (rstudioapi::isAvailable()) {
-    # if called in RStudio
-    context <- getActiveDocumentContext()
-    if (context$path == "") {
-      stop("Cannot automatically get preprocessing code when executed from RStudio console. Please either execute from app.R file or provide code as an argument.") #nolint
-    } else {
-      context$path
-    }
-
-  } else if (any(grepl("--file=", commandArgs()))) {
-    # if called by Rscript
-    args <- commandArgs()
-    file_path <- grep("--file=", x = args, value = TRUE)
-
-    gsub("--file=", "", x = file_path)
-
-  } else if (Sys.info()["nodename"] == "rkaub00459.kau.roche.com") {
-    # if called from BEE
-    list.files(pattern = "^app\\.R$")[1]
-
-  } else {
-    # application executed outstide RStudio
-    list.files(pattern = "^app\\.R$")[1]
-  }
-}
-
-
-#' Exclude from code
-#'
-#' Excludes lines from code. It is possible to exclude one line ended by \code{# nocode}
-#' @param lines (\code{character}) of code as separate element in vector
-#' @inheritParams get_code_single
-code_exclude <- function(lines, exclude_comments, file_path) {
-  stopifnot(is.character(lines), length(lines) >= 1)
-  stopifnot(is.logical(exclude_comments), length(exclude_comments) == 1)
-
-  no_preproc_single <- grep("^.+#[[:space:]]*nocode", lines)
-  no_preproc_start  <- grep("[[:space:]]*#[[:space:]]*nocode[[:space:]]*>+", lines)
-  no_preproc_stop   <- grep("[[:space:]]*#[[:space:]]*<+[[:space:]]*nocode[[:space:]]*", lines)
-
-  if (length(no_preproc_start) != length(no_preproc_stop)) {
-    stop(paste("Unequal number of no-code starts and stops in ", file_path)) #nolint
-  }
-
-  no_preproc_multi <- NULL
-  if (length(no_preproc_start) > 0) {
-    no_preproc_multi <- unlist(Map(seq, from = no_preproc_start, to = no_preproc_stop))
-  }
-
-  no_preproc <- c(no_preproc_single, no_preproc_multi)
-
-  if (length(no_preproc) > 0) {
-    lines <- lines[-no_preproc]
-  }
-
-  if (exclude_comments) {
-    lines <- grep("^\\s*#.+$", x = lines, invert = TRUE, value = TRUE)
-    lines <- gsub("(^\\s*#.+$)|(#[^\'\"]*$)", "", x = lines, perl = TRUE)
-  }
-
-  lines
-}
-
-#' Remove library call from code
-#'
-#' Removes \code{library()} or \code{require()} calls from code
-#' @inheritParams code_exclude
-code_remove_library <- function(lines) {
-  stopifnot(is.character(lines), length(lines) >= 1)
-  gsub("(library|require|devtools::load_all|load_all)\\([^\\(\\)]*\\)", "", lines)
-}
-
-
-#' Get lines enclosed in
+#' Get code enclosed within
 #'
 #' Extracts lines from code which are enclosed within regexp starts_at and stops_at
+#' @param lines (\code{character}) of preprocessing code.
 #' @inheritParams get_code
-#' @inheritParams code_exclude
-enclosed_with <- function(lines,
-                          starts_at,
-                          stops_at) {
+enclosed_with <- function(lines) {
   stopifnot(is.character(lines), length(lines) >= 1)
-  stopifnot(is.character(starts_at), length(starts_at) == 1)
-  stopifnot(is.character(stops_at), length(stops_at) == 1)
 
   # set beginning of preprocessing
-  idx_start <- grep(starts_at, lines)
+  idx_start <- grep("#\\s*code>", lines)
   line_starts <- if (length(idx_start) > 1) {
     warning("More than one preproc start found - using the first one.")
-    idx_start[1]
+    idx_start[1] + 1
   } else if (length(idx_start) == 1) {
-    idx_start
+    idx_start + 1
   } else {
     1L
   }
 
-  idx_stop <- grep(stops_at, lines)
+  idx_stop <- grep("#\\s*<code", lines)
   line_stops <- if (length(idx_stop) > 1) {
     warning("More than one preproc stops found - using the last one.")
-    tail(idx_stop, 1)
+    tail(idx_stop, 1) - 1
   } else if (length(idx_stop) == 1) {
-    idx_stop
+    idx_stop - 1
   } else {
     length(lines)
   }
@@ -198,11 +95,50 @@ enclosed_with <- function(lines,
   lines[line_numbers]
 }
 
-#' Finds lines with source call
+#' Exclude from code
 #'
-#' Finds lines where \code{source()} call is located
-#' @inheritParams code_exclude
-find_source_lines <- function(lines) {
+#' Excludes lines from code. It is possible to exclude one line ended by \code{# nocode}
+#' @inheritParams enclosed_with
+#' @inheritParams get_code
+#' @inheritParams get_code_single
+code_exclude <- function(lines, exclude_comments, file_path) {
+  stopifnot(is.character(lines), length(lines) >= 1)
+  stopifnot(is.logical(exclude_comments), length(exclude_comments) == 1)
+
+  nocode_single <- grep("^.+#[[:space:]]*nocode", lines)
+  nocode_start  <- grep("[[:space:]]*#[[:space:]]*nocode[[:space:]]*>+", lines)
+  nocode_stop   <- grep("[[:space:]]*#[[:space:]]*<+[[:space:]]*nocode[[:space:]]*", lines)
+
+  if (length(nocode_start) != length(nocode_stop)) {
+    stop(paste("Unequal number of no-code starts and stops in ", file_path)) #nolint
+  }
+
+  nocode_multi <- NULL
+  if (length(nocode_start) > 0) {
+    nocode_multi <- unlist(Map(seq, from = nocode_start, to = nocode_stop))
+  }
+
+  nocode <- c(nocode_single, nocode_multi)
+
+  if (length(nocode) > 0) {
+    lines <- lines[-nocode]
+  }
+
+  if (exclude_comments) {
+    lines <- grep("^\\s*#.+$", x = lines, invert = TRUE, value = TRUE)
+    lines <- gsub("(^\\s*#.+$)|(#[^\'\"]*$)", "", x = lines, perl = TRUE)
+  }
+
+  #
+
+  lines
+}
+
+#' Finds lines of code with source call
+#'
+#' Finds lines in preprocessing code where \code{source()} call is located
+#' @inheritParams enclosed_with
+find_source_code <- function(lines) {
   stopifnot(is.character(lines), length(lines) >= 1)
   idx <- grep("^[^#]*source\\([\'\"]([A-Za-z0-9_/.]+\\.R)[\"\']\\)+.*$", lines)
 
@@ -219,27 +155,21 @@ find_source_lines <- function(lines) {
   idx
 }
 
-
-#' Includes source in code lines
+#' Includes source in preprocessing code lines
 #'
-#' Includes source in code lines
+#' Includes source in preprocessing code lines
 #' @inheritParams get_code
 #' @inheritParams code_exclude
 #' @param dir of the file where source is called from.
 #' @return lines of code with source text included
 #'
 #' @importFrom magrittr %>%
-include_source_lines <- function(lines,
-                                 starts_at,
-                                 stops_at,
-                                 exclude_comments,
-                                 dir) {
+include_source_code <- function(lines, exclude_comments, dir) {
   stopifnot(is.character(lines), length(lines) >= 1)
-  stopifnot(is.character(starts_at), length(starts_at) == 1)
-  stopifnot(is.character(stops_at), length(stops_at) == 1)
-  stopifnot(is.logical(exclude_comments), length(exclude_comments) == 1)
+  stopifnot(dir.exists(dir))
 
-  idx <- find_source_lines(lines)
+
+  idx <- find_source_code(lines)
 
   if (length(idx) == 0) {
     return(lines)
@@ -261,16 +191,36 @@ include_source_lines <- function(lines,
   sources_path <- normalizePath(sources_path)
 
   sources_code <- lapply(sources_path, function(s) {
-    code <- get_code_single(file_path = s,
-                            starts_at = starts_at,
-                            stops_at  = stops_at,
-                            exclude_comments = exclude_comments,
-                            read_sources = TRUE)
-    c(sprintf("# Beginning of the source() - %s", s), code, sprintf("# End of the source - %s", s))
+    get_code_single(file_path = s,
+                    exclude_comments = exclude_comments,
+                    read_sources = TRUE)
   })
 
   lines[idx] <- sources_code
   lines <- unlist(lines)
 
   lines
+}
+
+#' Libraries names from preprocessing code
+#'
+#' Reads library names from preprocessing code
+#' @inheritParams enclosed_with
+#' @return libraries names loaded in preprocessing code
+read_lib_names <- function(lines) {
+  lib_calls <- unlist(
+    regmatches(
+      lines,
+      gregexpr("(?=(library|require)\\([\"\' ]{0,2}).*?(?<=\\))", lines, perl = TRUE)
+    )
+  )
+  if (length(lib_calls) == 0) {
+    return(character())
+  }
+  lib_names <- gsub("[\"\'\\)\\(]",
+                    "",
+                    regmatches(lib_calls, gregexpr("\\(.*?\\)", lib_calls)),
+                    perl = TRUE)
+
+  lib_names
 }
