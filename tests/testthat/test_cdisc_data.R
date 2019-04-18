@@ -2,7 +2,7 @@ context("cdisc_data")
 
 test_that("Basic example - without code and check", {
   x <- 1
-  attr(x, "keys") <- "test"
+  keys(x) <- "test"
 
   expect_silent(cdisc_data(x, code = NULL, check = FALSE))
   expect_silent(cdisc_data(x, arg1 = x, arg2 = x, code = NULL, check = FALSE))
@@ -10,7 +10,7 @@ test_that("Basic example - without code and check", {
 
 test_that("Basic example - with code without check", {
   x <- 1
-  attr(x, "keys") <- "test"
+  keys(x) <- "test"
 
   expect_silent(cdisc_data(ASL = x, code = "x <- 1; attr(x, 'keys') <- 'test'", check = FALSE))
   expect_silent(cdisc_data(ASL = x, arg1 = x, arg2 = x, code = "x <- 1; attr(x, 'keys') <- 'test'", check = FALSE))
@@ -18,7 +18,7 @@ test_that("Basic example - with code without check", {
 
 test_that("Basic example - with code and check", {
   x <- 1
-  attr(x, "keys") <- "test"
+  keys(x) <- "test"
 
   expect_silent(cdisc_data(ASL = x, code = "x <- 1; attr(x, 'keys') <- 'test'", check = TRUE))
   expect_silent(cdisc_data(ASL = x, arg1 = x, arg2 = x, code = "x <- 1; attr(x, 'keys') <- 'test'", check = TRUE))
@@ -26,7 +26,7 @@ test_that("Basic example - with code and check", {
 
 test_that("Check is skipped if code is empty", {
   x <- 1
-  attr(x, "keys") <- "test"
+  keys(x) <- "test"
 
   expect_silent(cdisc_data(ASL = x, check = TRUE))
   expect_silent(cdisc_data(ASL = x, code = NULL, check = TRUE))
@@ -43,110 +43,67 @@ test_that("Naming list elements", {
 
 test_that("List values", {
   x <- 1
-  attr(x, "keys") <- "test"
+  keys(x) <- "test"
 
   result <- cdisc_data(x)
 
   result_to_compare <- list(ASL = 1)
-  attr(result_to_compare[["ASL"]], "keys") <- "test"
+  keys(result_to_compare[["ASL"]]) <- "test"
   attr(result_to_compare[["ASL"]], "dataname") <- "ASL"
-  attr(result_to_compare[["ASL"]], "source") <- "# !!! Preprocessing code is empty"
+  attr(result_to_compare, "code") <- "\n# code from cdisc_data argument(s)\n\nASL <- x"
 
   expect_identical(result, result_to_compare)
 
 
   x1 <- 1
-  attr(x1, "keys") <- "test"
+  keys(x1) <- "test"
   x2 <- 2
-  attr(x2, "keys") <- "test"
+  keys(x2) <- "test"
   x3 <- 3
-  attr(x3, "keys") <- "test"
+  keys(x3) <- "test"
   result <- cdisc_data(x1, arg2 = x2, arg3 = x3)
 
 
   result_to_compare <- list(ASL = 1, arg2 = 2, arg3 = 3)
-  attr(result_to_compare[["ASL"]], "keys") <- "test"
-  attr(result_to_compare[["arg2"]], "keys") <- "test"
-  attr(result_to_compare[["arg3"]], "keys") <- "test"
-  attr(result_to_compare[["ASL"]], "dataname") <- "ASL"
+  keys(result_to_compare[["ASL"]])  <- "test"
+  keys(result_to_compare[["arg2"]]) <- "test"
+  keys(result_to_compare[["arg3"]]) <- "test"
+  attr(result_to_compare[["ASL"]], "dataname")  <- "ASL"
   attr(result_to_compare[["arg2"]], "dataname") <- "arg2"
   attr(result_to_compare[["arg3"]], "dataname") <- "arg3"
-  attr(result_to_compare[["ASL"]], "source") <- "# !!! Preprocessing code is empty"
-  attr(result_to_compare[["arg2"]], "source") <- "# !!! Preprocessing code is empty"
-  attr(result_to_compare[["arg3"]], "source") <- "# !!! Preprocessing code is empty"
+  attr(result_to_compare, "code") <- "\n# code from cdisc_data argument(s)\n\nASL <- x1\narg2 <- x2\narg3 <- x3"
 
   expect_identical(result, result_to_compare)
 })
 
 test_that("Empty code", {
-  x <- 1
-  attr(x, "keys") <- "test"
+  ASL <- 1 #nolint
+  keys(ASL) <- "test"
 
   # missing code
-  result <- cdisc_data(x, check = FALSE)
-  expect_identical(attr(result[[1]], "source"), "# !!! Preprocessing code is empty")
+  result <- cdisc_data(ASL, check = FALSE)
+  expect_identical(attr(result, "code"), "# !!! Preprocessing code is empty")
 
   # NULL code
-  result <- cdisc_data(x, code = NULL, check = FALSE)
-  expect_identical(attr(result[[1]], "source"), "# !!! Preprocessing code is empty")
+  result <- cdisc_data(ASL, code = NULL, check = FALSE)
+  expect_identical(attr(result, "code"), "# !!! Preprocessing code is empty")
 
   # empty code
-  result <- cdisc_data(x, code = "", check = FALSE)
-  expect_identical(attr(result[[1]], "source"), "# !!! Preprocessing code is empty")
-
-  # multiple datasets
-  # missing code
-  result <- cdisc_data(x, arg1 = x, arg2 = x, check = FALSE)
-  expect_identical(attr(result$ASL, "source"), "# !!! Preprocessing code is empty")
-  expect_identical(attr(result$arg1, "source"), "# !!! Preprocessing code is empty")
-  expect_identical(attr(result$arg2, "source"), "# !!! Preprocessing code is empty")
-
-  # NULL code
-  result <- cdisc_data(x, arg1 = x, arg2 = x, code = NULL, check = FALSE)
-  expect_identical(attr(result$ASL, "source"), "# !!! Preprocessing code is empty")
-  expect_identical(attr(result$arg1, "source"), "# !!! Preprocessing code is empty")
-  expect_identical(attr(result$arg2, "source"), "# !!! Preprocessing code is empty")
-
-  # empty code
-  result <- cdisc_data(x, arg1 = x, arg2 = x, code = "", check = FALSE)
-  expect_identical(attr(result$ASL, "source"), "# !!! Preprocessing code is empty")
-  expect_identical(attr(result$arg1, "source"), "# !!! Preprocessing code is empty")
-  expect_identical(attr(result$arg2, "source"), "# !!! Preprocessing code is empty")
+  result <- cdisc_data(ASL, code = "", check = FALSE)
+  expect_identical(attr(result, "code"), "# !!! Preprocessing code is empty")
 })
 
 
 test_that("Arguments created by code", {
-
   x <- 1
-  attr(x, "keys") <- "test"
-  result <- cdisc_data(x, code = "x <- 1; attr(x, 'keys') <- 'test'", check = FALSE)
+  keys(x) <- "test"
+  result <- cdisc_data(x, code = "x <- 1; keys(x) <- 'test'", check = FALSE)
   expect_silent(result)
 
   result_to_compare <- list(ASL = 1)
-  attr(result_to_compare[["ASL"]], "keys") <- "test"
+  keys(result_to_compare[["ASL"]]) <- "test"
   attr(result_to_compare[["ASL"]], "dataname") <- "ASL"
-  attr(result_to_compare[["ASL"]], "source") <- "x <- 1; attr(x, 'keys') <- 'test'"
-
-  expect_identical(result, result_to_compare)
-
-
-  code <- paste(
-    "x <- 1; attr(x, 'keys') <- 'test';",
-    "y <- 2; attr(y, 'keys') <- 'test';",
-    "z <- 3; attr(z, 'keys') <- 'test';"
-  )
-  result <- cdisc_data(x, arg2 = y, arg3 = z, code = code, check = FALSE)
-
-  result_to_compare <- list(ASL = 1, arg2 = 2, arg3 = 3)
-  attr(result_to_compare[["ASL"]], "keys") <- "test"
-  attr(result_to_compare[["arg2"]], "keys") <- "test"
-  attr(result_to_compare[["arg3"]], "keys") <- "test"
-  attr(result_to_compare[["ASL"]], "dataname") <- "ASL"
-  attr(result_to_compare[["arg2"]], "dataname") <- "arg2"
-  attr(result_to_compare[["arg3"]], "dataname") <- "arg3"
-  attr(result_to_compare[["ASL"]], "source") <- code
-  attr(result_to_compare[["arg2"]], "source") <- code
-  attr(result_to_compare[["arg3"]], "source") <- code
+  attr(result_to_compare, "code") <- "x <- 1; keys(x) <- 'test'\n# code from cdisc_data argument(s)\n\nASL <- x"
 
   expect_identical(result, result_to_compare)
 })
@@ -162,9 +119,8 @@ test_that("Error - checking is forbidden if any argument is call", {
     "Automatic checking is not supported if arguments provided as calls"
   )
 
-
   x <- 1
-  attr(x, "keys") <- "test"
+  keys(x) <- "test"
 
   expect_error(
     cdisc_data(1 + 2, code = "test code", check = TRUE),
@@ -198,7 +154,7 @@ test_that("Error - no keys attribute", {
   )
 
   x <- 1
-  attr(x, "keys") <- "test"
+  keys(x) <- "test"
   y <- 2
   expect_error(
     cdisc_data(x, arg1 = y, code = NULL, check = FALSE),
@@ -206,7 +162,8 @@ test_that("Error - no keys attribute", {
   )
 
   x <- 1
-  attr(x, "keys") <- "test"
+  keys(x) <- "test"
+  z <- 3
   expect_error(
     cdisc_data(x, arg1 = z, code = "z <- 3", check = FALSE),
     "Cannot find 'keys' attribute"
@@ -215,14 +172,14 @@ test_that("Error - no keys attribute", {
 
 test_that("Error - keys do not match", {
   x1 <- 1
-  attr(x1, "keys") <- "test1"
+  keys(x1) <- "test1"
 
   x2 <- 1
-  attr(x2, "keys") <- "test2"
+  keys(x2) <- "test2"
 
   code <- paste(
-    "x1 <- 1; attr(x1, 'keys') <- 'test1';",
-    "x2 <- 1; attr(x2, 'keys') <- 'test2';"
+    "x1 <- 1; keys(x1) <- 'test1';",
+    "x2 <- 1; keys(x2) <- 'test2';"
   )
 
   expect_error(

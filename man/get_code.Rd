@@ -4,20 +4,11 @@
 \alias{get_code}
 \title{Get code}
 \usage{
-get_code(files_path, starts_at = "# @start_code",
-  stops_at = "# @end_code", exclude_comments = TRUE,
-  read_sources = TRUE)
+get_code(files_path, exclude_comments = TRUE, read_sources = TRUE)
 }
 \arguments{
 \item{files_path}{(\code{character}) (optional) vector of files path to be read for preprocessing. Code from
 multiple files is joined together.}
-
-\item{starts_at}{(\code{character}) regexp determining start of preprocessing code. Function returns code from
-line where \code{starts_at} is detected. If no regexp found, function reads from first line.}
-
-\item{stops_at}{(\code{character}) regexp determining stop  of preprocessing code. Function returns code until line
-where \code{stops_at} is detected. If no regexp found, function reads to the end of the file. \code{stops_at} is
-important to be specified, because otherwise it can include \code{teal::init()} which mustn't be included.}
 
 \item{exclude_comments}{(\code{logical}) whether exclude commented-out lines of code. Lines to be excluded
 should be ended with \code{# nocode}. For multiple line exclusions one should enclose ignored block of code with
