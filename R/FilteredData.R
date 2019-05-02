@@ -11,6 +11,11 @@
 #' 2 specify filer_info
 #' 3 apply filters
 #'
+#' @importFrom haven read_sas
+#' @importFrom R6 R6Class
+#' @importFrom readr read_csv
+#' @importFrom tools file_ext file_path_sans_ext md5sum
+#'
 #' @examples
 #' \dontrun{
 #' path <- "/opt/BIOSTAT/qa/cdt7876a/libraries/asl.sas7bdat"
@@ -72,7 +77,7 @@ FilteredData <- R6::R6Class( # nolint
       .log("load data:", path)
 
       dataname <- if (is.null(dataname)) {
-        tools::file_path_sans_ext(basename(path))
+        file_path_sans_ext(basename(path))
       } else {
         dataname
       }
@@ -82,9 +87,9 @@ FilteredData <- R6::R6Class( # nolint
 
       path <- normalizePath(path, mustWork = TRUE)
 
-      df <- switch(tolower(tools::file_ext(path)),
-                   sas7bdat = haven::read_sas(path, ...),
-                   csv      = readr::read_csv(path, ...),
+      df <- switch(tolower(file_ext(path)),
+                   sas7bdat = read_sas(path, ...),
+                   csv      = read_csv(path, ...),
                    rds      = readRDS(path, ...),
                    stop(paste("The format of", path, "is currently not supported."))
       )
