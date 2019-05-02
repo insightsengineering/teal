@@ -1,4 +1,3 @@
-
 # Teal: Interactive Exploratory Data Analysis with Shiny Web-Applications
 
 We are working on a next major version that is data standard independent which we expect to release in Q3 2019.
