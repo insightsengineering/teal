@@ -22,7 +22,11 @@
 #'
 #' @export
 #'
-#' @import shiny methods stats
+#' @import methods shiny stats
+#' @importFrom shinyjs useShinyjs
+#'
+#' @include FilteredData.R
+#' @include modules.R
 #'
 #' @examples
 #' \dontrun{

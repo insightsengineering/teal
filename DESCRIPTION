@@ -18,20 +18,30 @@ Depends:
   R (>= 3.3),
   shiny
 Imports:
-  dplyr,
-  ggplot2,
-  grid,
   haven,
   methods,
   R6,
+  shinyjs,
   shinyWidgets,
-  xtable
+  readr
 RoxygenNote: 6.1.1
 Suggests:
+  dplyr,
   knitr,
   random.cdisc.data (>= 0.1.2.1),
   rmarkdown,
-  shinyjs,
   testthat,
   test.nest
 VignetteBuilder: knitr
+Collate: 
+    'FilteredData.R'
+    'modules.R'
+    'init.R'
+    'logging.R'
+    'module_add_filter_variable.R'
+    'module_filter_items.R'
+    'selected_choices.R'
+    'standard_layout.R'
+    'teal.R'
+    'utils.R'
+    'zzz.R'
