@@ -29,7 +29,8 @@ This function checks if there were keys added to all data
 \examples{
 library(teal.devel)
 library(random.cdisc.data)
-asl <- radsl(N = 600, seed = 123)
+
+asl <-  suppressWarnings(radsl(N = 600, seed = 123))
 adte <- radtte(asl, event.descr = c("STUDYID", "USUBJID", "PARAMCD"), seed = 123)
 keys(asl) <- c("USUBJID", "STUDYID")
 keys(adte) <- c("USUBJID", "STUDYID", "PARAMCD")
