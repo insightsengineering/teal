@@ -1,3 +1,5 @@
+^\.CI-FORCE-RELEASE-VERSION$
+^\.drone\.yml$
 ^.*\.Rproj$
 ^\.Rproj\.user$
 ^_pkgdown\.yml$
