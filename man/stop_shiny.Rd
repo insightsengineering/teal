@@ -2,7 +2,8 @@
 % Please edit documentation in R/stop_shiny.R
 \name{stop_shiny}
 \alias{stop_shiny}
-\title{Stop app.R evaluation with a Jumbotron Shiny App}
+\title{Stop app.R evaluation with a Jumbotron Shiny App
+This will start a seperate shiny app with a message}
 \usage{
 stop_shiny(title, body)
 }
@@ -12,14 +13,14 @@ stop_shiny(title, body)
 \item{body}{either a string or an object of class \code{shiny.tag}}
 }
 \description{
+Stop app.R evaluation with a Jumbotron Shiny App
 This will start a seperate shiny app with a message
 }
 \examples{
-
 \dontrun{
 stop_shiny("No data access", "You do not seem to have data access")
 library(htmltools)
 stop_shiny("No data access", tagList(tags$h2("Hello World"), tags$p("paragraph"),
-  tags$footer("Please contact", tags$a(href = "mailto:john@doe.com", "John Doe"))))
+tags$footer("Please contact", tags$a(href = "mailto:john@doe.com", "John Doe"))))
 }
 }

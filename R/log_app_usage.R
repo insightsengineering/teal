@@ -48,23 +48,23 @@ log_app_usage <- function(ta,
     Sys.chmod("./logs/utilization.log", mode = "0666", use_umask = FALSE)
 
     # add header record
-    logHandle <- file("./logs/utilization.log")
+    log_handle <- file("./logs/utilization.log")
     writeLines(c("UNIXID|SESSIONDTM|APP_DIR|TA|MOLECULE|INDICATION|ANL_TYPE|PKGS"),
-               logHandle)
-    close(logHandle)
+               log_handle)
+    close(log_handle)
   }
 
   # assign app usage data fields
-  log_usage <- line_usage_log(ta, molecule, indication, anl_type)
+  log_usage <- line_usage_log(ta, molecule, indication, anl_type) #nolint
 
   # get packages installed with app
   app_packages <- c("teal", "tern", "rtables", "teal.modules.clinical")
   # retrieve and assign package metadata
-  log_pkgs <- line_pkg_log(app_packages, fields = pkg_meta)
+  log_pkgs <- line_pkg_log(app_packages, fields = pkg_meta)  #nolint
 
   # save usage and package metadata to log file as single record per session
-  cat(paste(log_usage, log_pkgs, sep = "|"), file="./logs/utilization.log", append=TRUE)
-  cat("\n", file="./logs/utilization.log", append=TRUE)
+  cat(paste(log_usage, log_pkgs, sep = "|"), file = "./logs/utilization.log", append = TRUE)
+  cat("\n", file = "./logs/utilization.log", append = TRUE)
 }
 
 #' app usage data fields to add to log file
@@ -87,7 +87,7 @@ line_usage_log <- function(...) {
     stop("the arguments ", paste(args_with_pipe, collapse = ","), " can not contain pipe character.")
   }
 
-  paste(Sys.info()['user'], Sys.time(), getwd(), ..., sep = "|")
+  paste(Sys.info()["user"], Sys.time(), getwd(), ..., sep = "|")
 }
 
 #' package metadata to add to log file
