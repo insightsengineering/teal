@@ -24,11 +24,12 @@ Function passes datasets to teal application with option to read preprocessing c
 }
 \details{
 This function checks if there were keys added to all data
-	sets that shall be analyzed inside a teal app.
+  sets that shall be analyzed inside a teal app.
 }
 \examples{
-library(teal.devel)
+library(teal)
 library(random.cdisc.data)
+library(tern)
 
 asl <-  suppressWarnings(radsl(N = 600, seed = 123))
 adte <- radtte(asl, event.descr = c("STUDYID", "USUBJID", "PARAMCD"), seed = 123)

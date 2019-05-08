@@ -6,7 +6,7 @@
 #' To learn mode about the package either read the project website at
 #' \url{Project Website} or read the \code{\link{init}} manual pages.
 #'
-#'
+#' @importFrom utils tail
 #' @docType package
 #' @name teal
 NULL
