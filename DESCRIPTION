@@ -18,24 +18,24 @@ Depends:
   R (>= 3.3),
   shiny
 Imports:
-  tern,
-  haven,
   dplyr,
+  haven,
   htmltools,
   magrittr,
   methods,
   purrr,
   R6,
+  readr,
   shinyjs,
   shinyWidgets,
-  readr
+  tern
 RoxygenNote: 6.1.1
 Suggests:
   knitr,
   random.cdisc.data (>= 0.1.2.1),
   rmarkdown,
-  testthat,
-  test.nest
+  test.nest,
+  testthat
 VignetteBuilder: knitr
 Collate:
     'FilteredData.R'
