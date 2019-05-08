@@ -1,4 +1,5 @@
 context("cdisc_data")
+library(tern)
 
 test_that("Basic example - without code and check", {
   x <- 1
