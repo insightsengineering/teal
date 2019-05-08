@@ -7,6 +7,9 @@
 #' \url{Project Website} or read the \code{\link{init}} manual pages.
 #'
 #' @importFrom utils tail
+#' @importFrom dplyr mutate
+#' @import tern
+#' @import magrittr
 #' @docType package
 #' @name teal
 NULL
