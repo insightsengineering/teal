@@ -25,9 +25,9 @@ frequency and extent of use.
 }
 \details{
 Each Teal application can implement usage logging by calling this
-function in the application startup file(s) like app.R. The following data are 
+function in the application startup file(s) like app.R. The following data are
 captured by default: UNIX ID, System Date, Application Directory, Therapeutic Area, Indication,
-Package Name, Package Title, Package Version and Remotes Definition. Capture frequency is 
+Package Name, Package Title, Package Version and Remotes Definition. Capture frequency is
 currently per user at session start only.
 Suggested values for ta: "Oncology" or "I2ON"
 Suggested values for anl_type: "Exploratory", "Interim Analysis", "CSR"
