@@ -1,6 +1,6 @@
 ASL <- radsl(N = 600) #nolint
 adte <- radtte(ASL, event.descr = c("STUDYID", "USUBJID", "PARAMCD"))
 
-library(tern)
+library(utils.nest)
 keys(ASL) <- c("USUBJID", "STUDYID")
 keys(adte) <- c("USUBJID", "STUDYID", "PARAMCD")
