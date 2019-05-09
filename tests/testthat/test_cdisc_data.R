@@ -12,7 +12,7 @@ test_that("Basic example - without code and check", {
 
 test_that("Basic example - with code and check", {
   x <- 1
-  attr(x, "test") <- "test"
+  attr(x, "keys") <- "test"
 
   expect_silent(cdisc_data(ASL = x, code = "x <- 1; attr(x, 'keys') <- 'test'", check = TRUE))
   expect_silent(cdisc_data(ASL = x, arg1 = x, arg2 = x, code = "x <- 1; attr(x, 'keys') <- 'test'", check = TRUE))
