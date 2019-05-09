@@ -6,7 +6,10 @@
 #' To learn mode about the package either read the project website at
 #' \url{Project Website} or read the \code{\link{init}} manual pages.
 #'
-#'
+#' @importFrom utils tail
+#' @importFrom dplyr mutate
+#' @import tern
+#' @import magrittr
 #' @docType package
 #' @name teal
 NULL
