@@ -1,5 +1,7 @@
 context("cdisc_data")
 
+library(utils.nest)
+
 test_that("Basic example - without code and check", {
   x <- 1
   keys(x) <- "test"

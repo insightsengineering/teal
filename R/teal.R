@@ -8,7 +8,6 @@
 #'
 #' @importFrom utils tail
 #' @importFrom dplyr mutate
-#' @import tern
 #' @import magrittr
 #' @docType package
 #' @name teal
