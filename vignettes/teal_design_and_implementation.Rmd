@@ -3,7 +3,7 @@ title: "Teal Design and Implementation"
 author: "Adrian Waddell"
 date: "10/29/2017"
 output: rmarkdown::html_vignette
-editor_options: 
+editor_options:
   chunk_output_type: console
 vignette: >
   %\VignetteIndexEntry{Teal Desiderata}
@@ -54,7 +54,7 @@ update and get information from the ui:
 
 ```{r, eval = FALSE}
 shinyApp(
-  ui = fluidPage( 
+  ui = fluidPage(
     selectInput(inputId = "select_data", label = "select data", choices = c("iris", "mtcars")),
     plotOutput(outputId = "scatterplotmatrix")
   ),
@@ -80,7 +80,7 @@ developer tools and then stop the shiny app and compare that html code with the
 ui code created by running the following code in the R console:
 
 ```{r, eval = FALSE}
-fluidPage( 
+fluidPage(
   selectInput(inputId = "select_data", label = "select data", choices = c("iris", "mtcars")),
   plotOutput(outputId = "scatterplotmatrix")
 )
@@ -170,10 +170,10 @@ A simple example for a completely custom `teal` module is the following
 
 ```{r, eval = FALSE}
 library(teal)
-library(dplyr)
+library(magrittr)
 
 x <- teal::init(
-  data = list(ASL = iris %>% mutate(USUBJID = 1:n(), STUDYID = "A")),
+  data = list(ASL = iris %>% dplyr::mutate(USUBJID = 1:n(), STUDYID = "A")),
   modules = root_modules(
     module(
       label = "sample module",
@@ -188,7 +188,7 @@ x <- teal::init(
         plotOutput(ns("scatterplot"))
       },
       filters = 'ASL'
-    ) 
+    )
   )
 )
 shinyApp(x$ui, x$server)
@@ -238,8 +238,8 @@ are in the [teal repository][tealGitHub] in the following files:
 * `R/init.R`, `R/module_filter_items.R`, `R/module_add_filter_variables.R`
 * `R/init.R`
 
-We have also a logging facility with the `.log` function with the corresponding 
-code saved in `R/logging.R`. Logging to the prompt can be disabled with 
+We have also a logging facility with the `.log` function with the corresponding
+code saved in `R/logging.R`. Logging to the prompt can be disabled with
 `options(teal_logging = FALSE)`.
 
 We now discuss each of the three core components in detail. This would be a good
