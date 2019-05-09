@@ -97,17 +97,6 @@ cdisc_data <- function(ASL, # nolint
     stop("All arguments passed to '...' should be named.")
   }
 
-  # check keys
-  for (i in seq_along(arg_values)) {
-    if (is.null(attr(arg_values[[i]], "keys"))) {
-      msg <- paste0("Cannot find 'keys' attribute in '", arg_names[i], "' argument")
-      stop(msg)
-    } else if (length(intersect(attr(arg_values[[i]], "keys"), attr(arg_values[[1]], "keys"))) == 0) {
-      msg <- paste0("Cannot find match of '", arg_names[i], "' keys and ASL keys")
-      stop(msg)
-    }
-  }
-
   res <- setNames(arg_values, arg_names)
 
   if (check && !identical(code, "")) {

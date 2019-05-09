@@ -1,5 +1,5 @@
 context("cdisc_data")
-library(tern)
+library(utils.nest)
 
 test_that("Basic example - without code and check", {
   x <- 1
@@ -147,44 +147,12 @@ test_that("Error - not named arguments", {
   )
 })
 
-test_that("Error - no keys attribute", {
-  x <- 1
-  expect_error(
-    cdisc_data(x, code = NULL, check = FALSE),
-    "Cannot find 'keys' attribute"
-  )
 
+test_that("Different keys", {
   x <- 1
   keys(x) <- "test"
-  y <- 2
-  expect_error(
-    cdisc_data(x, arg1 = y, code = NULL, check = FALSE),
-    "Cannot find 'keys' attribute"
-  )
-
-  x <- 1
-  keys(x) <- "test"
-  z <- 3
-  expect_error(
-    cdisc_data(x, arg1 = z, code = "z <- 3", check = FALSE),
-    "Cannot find 'keys' attribute"
-  )
-})
-
-test_that("Error - keys do not match", {
-  x1 <- 1
-  keys(x1) <- "test1"
-
-  x2 <- 1
-  keys(x2) <- "test2"
-
-  code <- paste(
-    "x1 <- 1; keys(x1) <- 'test1';",
-    "x2 <- 1; keys(x2) <- 'test2';"
-  )
 
   expect_error(
-    cdisc_data(x1, arg1 = x2, code = code, check = FALSE),
-    "Cannot find match of .* keys"
+    cdisc_data(ASL = x, code = "x <- 1; keys(x) <- 'test2'", check = TRUE)
   )
 })
