@@ -28,7 +28,8 @@ Imports:
   readr,
   shinyjs,
   shinyWidgets,
-  tern
+  tern,
+  utils.nest
 RoxygenNote: 6.1.1
 Suggests:
   knitr,

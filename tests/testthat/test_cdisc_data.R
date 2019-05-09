@@ -1,5 +1,4 @@
 context("cdisc_data")
-library(utils.nest)
 
 test_that("Basic example - without code and check", {
   x <- 1
@@ -9,17 +8,9 @@ test_that("Basic example - without code and check", {
   expect_silent(cdisc_data(x, arg1 = x, arg2 = x, code = NULL, check = FALSE))
 })
 
-test_that("Basic example - with code without check", {
-  x <- 1
-  keys(x) <- "test"
-
-  expect_silent(cdisc_data(ASL = x, code = "x <- 1; attr(x, 'keys') <- 'test'", check = FALSE))
-  expect_silent(cdisc_data(ASL = x, arg1 = x, arg2 = x, code = "x <- 1; attr(x, 'keys') <- 'test'", check = FALSE))
-})
-
 test_that("Basic example - with code and check", {
   x <- 1
-  keys(x) <- "test"
+  attr(x, "test") <- "test"
 
   expect_silent(cdisc_data(ASL = x, code = "x <- 1; attr(x, 'keys') <- 'test'", check = TRUE))
   expect_silent(cdisc_data(ASL = x, arg1 = x, arg2 = x, code = "x <- 1; attr(x, 'keys') <- 'test'", check = TRUE))
@@ -144,15 +135,5 @@ test_that("Error - not named arguments", {
   expect_error(
     cdisc_data(y, y, code = "y <- 1", check = FALSE),
     "All arguments passed to '...' should be named"
-  )
-})
-
-
-test_that("Different keys", {
-  x <- 1
-  keys(x) <- "test"
-
-  expect_error(
-    cdisc_data(ASL = x, code = "x <- 1; keys(x) <- 'test2'", check = TRUE)
   )
 })
