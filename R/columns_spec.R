@@ -91,8 +91,8 @@ columns_spec <- function(choices, selected, multiple, fixed = TRUE, label = "Col
   # entry is an atomic vector of possibly several entries, needed for filter_spec currently)
   choices <- as.list(choices)
   selected <- as.list(selected)
-  stopifnot(is.list(choices) && length(choices) >= 1 && all_true(choices, is.atomic))
-  stopifnot(is.list(selected) && length(selected) >= 1 && all_true(selected, is.atomic))
+  stopifnot(is.list(choices) && length(choices) >= 1 && all(vapply(choices, is.atomic, TRUE)))
+  stopifnot(is.list(selected) && length(selected) >= 1 && all(vapply(selected, is.atomic, TRUE)))
   stopifnot(all(selected %in% choices)) # selected and choices must be a list to work correcty
   stopifnot(is.logical(multiple))
   stopifnot(is.logical(fixed))
