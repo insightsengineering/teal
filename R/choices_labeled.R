@@ -11,17 +11,16 @@
 #' @importFrom stats setNames
 #' @export
 #'
+#' @importFrom utils.nest var_labels
 #' @examples
 #' library(random.cdisc.data)
-#' library(tern)
+#'
 #' ADSL <- radsl(N=10, seed = 1)
 #' ADTTE <- radtte(ADSL, seed = 1)
-#' choices1 <- choices_labeled(names(ADSL), tern::var_labels(ADSL))
+#' choices1 <- choices_labeled(names(ADSL), utils.nest::var_labels(ADSL))
 #' choices2 <- choices_labeled(ADTTE$PARAMCD, ADTTE$PARAM)
 #' # if only a subset of variables are needed, use subset argument
-#' choices3 <- choices_labeled(names(ADSL),
-#'                             tern::var_labels(ADSL),
-#'                             subset = c("ARMCD", "ARM"))
+#' choices3 <- choices_labeled(names(ADSL), utils.nest::var_labels(ADSL), subset = c("ARMCD", "ARM"))
 #'\dontrun{
 #' library(shiny)
 #' shinyApp(

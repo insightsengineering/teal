@@ -3,7 +3,7 @@ library(teal) #nocode
 library( teal.devel ) #nolint
 library(random.cdisc.data) #nolint
 require(magrittr)
-library(tern)
+library(utils.nest)
 library(teal)
 set.seed(1)
 source("app_source1.R")
