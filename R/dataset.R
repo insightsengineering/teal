@@ -70,7 +70,7 @@ cdisc_data <- function(ASL, # nolint
   # eval code if argument does not exists, i.e. cdisc_data(ASL = 1, x, code = "x <- 2")
   for (i in seq_along(arg_values_call)) {
     if ((is.name(arg_values_call[[i]]) || is.call(arg_values_call[[i]])) &&
-        inherits(tryCatch(eval(arg_values_call[[i]]), error = function(e) e), "error") &&
+        inherits(tryCatch(eval(arg_values_call[[i]], envir = parent.frame()), error = function(e) e), "error") &&
         !is.null(code)) {
       eval(parse(text = code), envir = parent.frame())
       break
