@@ -40,6 +40,7 @@ VignetteBuilder: knitr
 Collate:
     'FilteredData.R'
     'choices_labeled.R'
+    'choices_selected.R'
     'columns_spec.R'
     'data_extract_spec.R'
     'dataset.R'
@@ -51,7 +52,6 @@ Collate:
     'logging.R'
     'module_add_filter_variable.R'
     'module_filter_items.R'
-    'selected_choices.R'
     'stop_shiny.R'
     'teal.R'
     'utils.R'
