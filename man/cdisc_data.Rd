@@ -27,15 +27,14 @@ This function checks if there were keys added to all data
   sets that shall be analyzed inside a teal app.
 }
 \examples{
-library(teal)
 library(random.cdisc.data)
 
-asl <-  suppressWarnings(radsl(N = 600, seed = 123))
-adte <- radtte(asl, event.descr = c("STUDYID", "USUBJID", "PARAMCD"), seed = 123)
+ASL <-  suppressWarnings(radsl(N = 600, seed = 123))
+ADTE <- radtte(ASL, event.descr = c("STUDYID", "USUBJID", "PARAMCD"), seed = 123)
 
 cdisc_data(
-  ASL = asl,
-  ADTE = adte,
-  code = 'asl <- radsl(N = 600, seed = 123)
-          adte <- radtte(asl, event.descr = c("STUDYID", "USUBJID", "PARAMCD"), seed = 123)')
+  ASL = ASL,
+  ADTE = ADTE,
+  code = 'ASL <- radsl(N = 600, seed = 123)
+          ADTE <- radtte(ASL, event.descr = c("STUDYID", "USUBJID", "PARAMCD"), seed = 123)')
 }
