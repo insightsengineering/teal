@@ -4,6 +4,17 @@ no_select_keyword <- "-- no selection --"
 #'
 #' @param choices vector of possible choices
 #' @param selected vector of pre-selected options, first element of \code{choices} if blank
+#' @param keep_order (\code{logical}) In case of \code{FALSE} the selected variables
+#'   will be on top of the drop-down field.
+#'
+#' @details
+#'
+#' Please note that the order of selected will always follow the order of choices. The \code{keep_order}
+#' argument is set to false which will run the following code inside:
+#'
+#' \code{choices <- c(selected, setdiff(choices, selected))}
+#'
+#' in case you want to keep your specific order of choices, set \code{keep_order} to \code{TRUE}.
 #'
 #' @export
 #'
@@ -14,7 +25,7 @@ no_select_keyword <- "-- no selection --"
 #'    selected = "X"
 #' )
 #'
-choices_selected <- function(choices, selected = choices[1]) {
+choices_selected <- function(choices, selected = choices[1], keep_order = FALSE) {
 
   stopifnot(is.atomic(choices))
 
@@ -24,6 +35,9 @@ choices_selected <- function(choices, selected = choices[1]) {
   if (length(setdiff(selected, choices)) > 0)
     choices <- c(setdiff(selected, choices), choices)
 
+  if (!keep_order) {
+    choices <- c(selected, setdiff(choices, selected))
+  }
 
   structure(
     list(

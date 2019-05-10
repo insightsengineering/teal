@@ -4,15 +4,26 @@
 \alias{choices_selected}
 \title{Choices function}
 \usage{
-choices_selected(choices, selected = choices[1])
+choices_selected(choices, selected = choices[1], keep_order = FALSE)
 }
 \arguments{
 \item{choices}{vector of possible choices}
 
 \item{selected}{vector of pre-selected options, first element of \code{choices} if blank}
+
+\item{keep_order}{(\code{logical}) In case of \code{FALSE} the selected variables
+will be on top of the drop-down field.}
 }
 \description{
 Choices function
+}
+\details{
+Please note that the order of selected will always follow the order of choices. The \code{keep_order}
+argument is set to false which will run the following code inside:
+
+\code{choices <- c(selected, setdiff(choices, selected))}
+
+in case you want to keep your specific order of choices, set \code{keep_order} to \code{TRUE}.
 }
 \examples{
 
