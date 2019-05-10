@@ -15,17 +15,16 @@
 #' @export
 #'
 #' @examples
-#' library(teal)
 #' library(random.cdisc.data)
 #'
-#' asl <-  suppressWarnings(radsl(N = 600, seed = 123))
-#' adte <- radtte(asl, event.descr = c("STUDYID", "USUBJID", "PARAMCD"), seed = 123)
+#' ASL <-  suppressWarnings(radsl(N = 600, seed = 123))
+#' ADTE <- radtte(ASL, event.descr = c("STUDYID", "USUBJID", "PARAMCD"), seed = 123)
 #'
 #' cdisc_data(
-#'   ASL = asl,
-#'   ADTE = adte,
-#'   code = 'asl <- radsl(N = 600, seed = 123)
-#'           adte <- radtte(asl, event.descr = c("STUDYID", "USUBJID", "PARAMCD"), seed = 123)')
+#'   ASL = ASL,
+#'   ADTE = ADTE,
+#'   code = 'ASL <- radsl(N = 600, seed = 123)
+#'           ADTE <- radtte(ASL, event.descr = c("STUDYID", "USUBJID", "PARAMCD"), seed = 123)')
 cdisc_data <- function(ASL, # nolint
                        ...,
                        code = NULL,
@@ -59,7 +58,6 @@ cdisc_data <- function(ASL, # nolint
     }
   ) %>%
     unname()
-
   for (i in seq_along(arg_values_call)) {
     if (is.call(arg_values_call[[i]]) && isTRUE(check) && !identical(code, "")) {
       msg <- "Automatic checking is not supported if arguments provided as calls."
@@ -90,6 +88,36 @@ cdisc_data <- function(ASL, # nolint
 
   if (any(arg_names == "")) {
     stop("All arguments passed to '...' should be named.")
+  }
+
+  # if user changes variable name via argument
+  if (any(arg_names != arg_values_char)) {
+    idx <- which(arg_names != arg_values_char)
+
+    msg <- sprintf(
+      "Data names should not be changed via argument\n%s",
+      paste(
+        paste0(arg_names[idx], " != ", arg_values_char[idx]),
+        collapse = "\n"
+      )
+    )
+
+    stop(msg)
+  }
+
+  # if data arguments aren't capitalized
+  if (any(arg_names != toupper(arg_names))) {
+    idx <- which(arg_names != toupper(arg_names))
+
+    msg <- sprintf(
+      "Data arguments should be capitalized. Please change\n%s",
+      paste(
+        paste0(arg_names[idx], " to ", toupper(arg_names)[idx]),
+        collapse = "\n"
+      )
+    )
+
+    stop(msg)
   }
 
   res <- setNames(arg_values, arg_names)
@@ -134,23 +162,6 @@ cdisc_data <- function(ASL, # nolint
       )
       stop(msg)
     }
-  }
-
-  # if user changes variable name via argument
-  if (any(arg_names != arg_values_char)) {
-    idx <- which(arg_names != arg_values_char)
-    code_attrs <- attributes(code)
-
-    code_from_args <- sprintf(
-      "\n# code from cdisc_data argument(s)\n\n%s",
-      paste(
-        paste0(arg_names[idx], " <- ", arg_values_char[idx]),
-        collapse = "\n"
-      )
-    )
-
-    code <- paste0(code, code_from_args)
-    attributes(code) <- code_attrs
   }
 
   if (code == "") {
