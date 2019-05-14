@@ -1,9 +1,8 @@
 # code>
 library(teal) #nocode
-library( teal.devel ) #nolint
+library(teal.devel) #nolint
 library(random.cdisc.data) #nolint
 require(magrittr)
-library(utils.nest)
 library(teal)
 set.seed(1)
 source("app_source1.R")
