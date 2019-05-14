@@ -18,6 +18,7 @@ Depends:
   R (>= 3.3),
   shiny
 Imports:
+  digest,
   dplyr,
   haven,
   htmltools,
@@ -34,6 +35,7 @@ Suggests:
   knitr,
   random.cdisc.data (>= 0.1.2.1),
   rmarkdown,
+  teal.modules.general,
   test.nest,
   testthat
 VignetteBuilder: knitr
