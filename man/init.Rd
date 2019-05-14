@@ -35,7 +35,6 @@ named list with server and ui function
 Creates the server and ui part for a teal shiny app
 }
 \examples{
-\dontrun{
 library(teal.modules.general)
 library(random.cdisc.data)
 
@@ -43,12 +42,7 @@ ASL <- radsl(seed = 1)
 ARS <- radrs(ASL, seed = 100)
 ATE <- radtte(ASL, seed = 1000)
 
-# for reproducibility
-attr(ASL, "source") <- "random.cdisc.data::radsl(seed = 1)"
-attr(ARS, "source") <- "random.cdisc.data::radrs(ASL, seed = 100)"
-attr(ATE, "source") <- "random.cdisc.data::radtte(ASL, seed = 1000)"
-
-app <- teal::init(
+app <- init(
   data = list(ASL = ASL, ARS = ARS, ATE = ATE),
   modules = root_modules(
     module(
@@ -62,25 +56,39 @@ app <- teal::init(
     modules(
       label = "analysis items",
       tm_table(
-         label = "demographic table",
-         dataname = "ASL",
-         xvar = choices_selected("SEX"),
-         yvar = choices_selected(c("RACE", "BMRKR2", "COUNTRY"), "RACE")
+        label = "demographic table",
+        dataname = "ASL",
+        xvar = list(data_extract_spec(
+          "ASL",
+          columns = columns_spec(
+            choices = "SEX",
+            selected = "SEX",
+            multiple = FALSE
+          )
+        )),
+        yvar = list(data_extract_spec(
+          "ASL",
+          columns = columns_spec(
+            choices = c("RACE", "BMRKR2", "COUNTRY"),
+            selected = "RACE",
+            multiple = FALSE
+          )
+        ))
       ),
       tm_scatterplot(
-         label = "scatterplot",
-         dataname = "ASL",
-         xvar = "AGE",
-         yvar = "BMRKR1",
-         color_by = "_none_",
-         color_by_choices = c("_none_", "STUDYID")
+        label = "scatterplot",
+        dataname = "ASL",
+        xvar = "AGE",
+        yvar = "BMRKR1",
+        color_by = "_none_",
+        color_by_choices = c("_none_", "STUDYID")
       ),
       # ad-hoc module
       module(
-         label = "survival curves",
-         server = function(input, output, session, datasets) {},
-         ui = function(id) div(p("Kaplan Meier Curve")),
-         filters = "ATE"
+        label = "survival curves",
+        server = function(input, output, session, datasets) {},
+        ui = function(id) div(p("Kaplan Meier Curve")),
+        filters = "ATE"
       )
     )
   ),
@@ -88,7 +96,7 @@ app <- teal::init(
   footer = tags$p("Copyright 2017")
 )
 
+\dontrun{
 shinyApp(app$ui, app$server)
-
 }
 }

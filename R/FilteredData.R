@@ -11,10 +11,11 @@
 #' 2 specify filer_info
 #' 3 apply filters
 #'
+#' @importFrom digest digest
 #' @importFrom haven read_sas
 #' @importFrom R6 R6Class
 #' @importFrom readr read_csv
-#' @importFrom tools file_ext file_path_sans_ext md5sum
+#' @importFrom tools file_ext file_path_sans_ext
 #'
 #' @examples
 #' \dontrun{
@@ -42,7 +43,6 @@ FilteredData <- R6::R6Class( # nolint
   public = list(
 
     initialize = function(datanames = c("ASL")) {
-
       for (dataname in datanames) {
         if (grepl("[[:space:]]", dataname))
           stop(paste0("invalid dataname '", dataname, "' datanames without spaces"))
@@ -67,11 +67,10 @@ FilteredData <- R6::R6Class( # nolint
     },
 
 
-
-
-    load_data = function(path, dataname=NULL, ...) {
-
-      if (is.null(path) || !file.exists(path)) stop(paste("invalid path:", path))
+    load_data = function(path, dataname = NULL, ...) {
+      if (is.null(path) || !file.exists(path)) {
+        stop(paste("invalid path:", path))
+      }
 
       logger_in()
       .log("load data:", path)
@@ -95,43 +94,46 @@ FilteredData <- R6::R6Class( # nolint
       )
 
       attr(df, "path") <- path
-      attr(df, "md5sum") <- tools::md5sum(path)
       attr(df, "last_modified") <- file.info(path)$mtime[1]
 
       .log("load data", dataname)
       logger_out()
 
       self$set_data(dataname, df)
-
     },
 
+
     set_data = function(dataname, data) {
-
+      attr(data, "md5sum") <- digest::digest(data, algo = "md5")
       private$datasets[[dataname]] <- data
-      private$update_filter_info(dataname)
 
+      private$update_filter_info(dataname)
       private$apply_filter(dataname)
 
       invisible(self)
     },
 
+
     set_data_attrs = function(data) {
       private$data_attrs <- attributes(data)
       invisible(self)
     },
+
+
     get_data_attrs = function() {
       private$data_attrs
-
     },
+
+
     get_data_attr = function(attr) {
       stopifnot(is.character(attr))
       stopifnot(length(attr) == 1)
 
       private$data_attrs[[attr]]
-
     },
 
-    list_data_info = function(dataname, filtered=FALSE, variables=NULL) {
+
+    list_data_info = function(dataname, filtered = FALSE, variables = NULL) {
 
       log2 <- function(...) {
         cat(paste(..., collapse = " ")); cat("\n")
@@ -209,12 +211,12 @@ FilteredData <- R6::R6Class( # nolint
       }
 
       # run if only asl data was reset
-      if (identical(dataname, "ASL")) private$apply_filter()
+      if (identical(dataname, "ASL")) {
+        private$apply_filter()
+      }
 
       invisible(self)
     },
-
-
 
 
     # dataname is valid and data is not null
@@ -223,15 +225,12 @@ FilteredData <- R6::R6Class( # nolint
     },
 
 
-
     has_variable = function(dataname, varname) {
       self$has_data(dataname) && (varname %in% names(self$get_data(dataname)))
     },
 
 
-
-    get_data = function(dataname, reactive=FALSE, filtered=FALSE) {
-
+    get_data = function(dataname, reactive = FALSE, filtered = FALSE) {
       private$error_if_not_valid(dataname)
 
       f <- if (reactive) {
@@ -248,8 +247,7 @@ FilteredData <- R6::R6Class( # nolint
     },
 
 
-
-    get_filter_info = function(dataname, varname=NULL) {
+    get_filter_info = function(dataname, varname = NULL) {
       private$error_if_not_valid(dataname, varname)
       if (is.null(varname)) {
         private$filter_info[[dataname]]
@@ -265,8 +263,8 @@ FilteredData <- R6::R6Class( # nolint
       private$filter_info[[dataname]][[varname]][["type"]]
     },
 
-    set_filter_state = function(dataname, varname=NULL, state) {
 
+    set_filter_state = function(dataname, varname = NULL, state) {
       # varname = NULL > for all variables
       # state = NULL erase filter state
       #
@@ -345,9 +343,7 @@ FilteredData <- R6::R6Class( # nolint
     },
 
 
-
     remove_filter = function(dataname, varname) {
-
       private$error_if_not_valid(dataname, varname)
 
       fs <- self$get_filter_state(dataname)
@@ -358,7 +354,6 @@ FilteredData <- R6::R6Class( # nolint
 
       invisible(self)
     },
-
 
 
     get_filter_state = function(dataname, varname=NULL, reactive=FALSE) {
@@ -376,8 +371,6 @@ FilteredData <- R6::R6Class( # nolint
         isolate(private$filter_state[[dataname]][[varname]])
       }
     },
-
-
 
 
     set_default_filter_state = function(dataname, varname, nchoices = 10) {
@@ -405,15 +398,12 @@ FilteredData <- R6::R6Class( # nolint
     },
 
 
-
     is_filter_variable = function(dataname, varname) {
       self$get_filter_type(dataname, varname) != "unknown"
     },
 
 
-
     get_filter_call = function(dataname, merge=TRUE, asl=TRUE) {
-
       private$error_if_not_valid(dataname)
 
       asl_filter_call <- private$get_subset_call("ASL", "ASL_FILTERED")
@@ -445,10 +435,14 @@ FilteredData <- R6::R6Class( # nolint
         }
       }
     },
+
+
     hold_filtering = function() {
       private$on_hold <- TRUE
       invisible(NULL)
     },
+
+
     continue_filtering = function() {
       private$on_hold <- FALSE
       private$apply_filter("ASL") # rerun all filtering
@@ -469,17 +463,18 @@ FilteredData <- R6::R6Class( # nolint
     on_hold = FALSE,
 
     error_if_not_valid = function(dataname, varname=NULL) {
+      if (!(dataname %in% self$datanames())) {
+        stop(paste("data", dataname, "is not available"))
+      }
 
-      if (!(dataname %in% self$datanames())) stop(paste("data", dataname, "is not available"))
-
-      if (!is.null(varname) && !(varname %in% names(self$get_data(dataname))))
+      if (!is.null(varname) && !(varname %in% names(self$get_data(dataname)))) {
         stop(paste("variable", varname, "is not in data", dataname))
+      }
 
       NULL
     },
 
     update_filter_info = function(dataname) {
-
       df <- self$get_data(dataname)
 
       fi <- Map(function(var, varname) {
@@ -519,21 +514,17 @@ FilteredData <- R6::R6Class( # nolint
       }, df, names(df))
 
       private$filter_info[[dataname]] <- setNames(fi, names(df))
-
     },
+
 
     validate = function() {
       # number of tests to check whether the FilteredData object is consistent
-
       msg <- NULL
       is_valid <- TRUE
-
-
-
     },
 
-    get_subset_call = function(dataname, out) {
 
+    get_subset_call = function(dataname, out) {
       fs <- isolate(private$filter_state[[dataname]])
 
       data_filter_call <- if (length(fs) == 0) {
@@ -583,9 +574,11 @@ FilteredData <- R6::R6Class( # nolint
 
     },
 
-    apply_filter = function(dataname=NULL) {
 
-      if (private$on_hold) return()
+    apply_filter = function(dataname=NULL) {
+      if (private$on_hold) {
+        return()
+      }
 
       .log("apply filter for", dataname)
 
@@ -606,7 +599,9 @@ FilteredData <- R6::R6Class( # nolint
         eval(self$get_filter_call("ASL", merge = FALSE, asl = FALSE), e)
 
         # re-run all filters
-        if (identical(dataname, "ASL")) dataname <- NULL
+        if (identical(dataname, "ASL")) {
+          dataname <- NULL
+        }
 
         if (is.null(dataname)) {
 
