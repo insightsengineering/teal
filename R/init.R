@@ -29,7 +29,6 @@
 #' @include modules.R
 #'
 #' @examples
-#' library(teal.modules.general)
 #' library(random.cdisc.data)
 #'
 #' ASL <- radsl(seed = 1)
@@ -45,44 +44,27 @@
 #'       ui = function(id) div(p("information about data source")),
 #'       filters = NULL
 #'     ),
-#'     tm_data_table(),
-#'     tm_variable_browser(),
+#'     module(
+#'       "ASL AGE histogram",
+#'       server = function(input, output, session, datasets) {
+#'         output$hist <- renderPlot(hist(datasets$get_data("ASL")$AGE))
+#'       },
+#'       ui = function(id) {ns <- NS(id); plotOutput(ns('hist'))},
+#'       filters = NULL
+#'     ),
 #'     modules(
-#'       label = "analysis items",
-#'       tm_table(
-#'         label = "demographic table",
-#'         dataname = "ASL",
-#'         xvar = list(data_extract_spec(
-#'           "ASL",
-#'           columns = columns_spec(
-#'             choices = "SEX",
-#'             selected = "SEX",
-#'             multiple = FALSE
-#'           )
-#'         )),
-#'         yvar = list(data_extract_spec(
-#'           "ASL",
-#'           columns = columns_spec(
-#'             choices = c("RACE", "BMRKR2", "COUNTRY"),
-#'             selected = "RACE",
-#'             multiple = FALSE
-#'           )
-#'         ))
-#'       ),
-#'       tm_scatterplot(
-#'         label = "scatterplot",
-#'         dataname = "ASL",
-#'         xvar = "AGE",
-#'         yvar = "BMRKR1",
-#'         color_by = "_none_",
-#'         color_by_choices = c("_none_", "STUDYID")
-#'       ),
-#'       # ad-hoc module
+#'       label = "Example datasets (tree module)",
 #'       module(
-#'         label = "survival curves",
-#'         server = function(input, output, session, datasets) {},
-#'         ui = function(id) div(p("Kaplan Meier Curve")),
-#'         filters = "ATE"
+#'         "iris",
+#'         server = function(input, output, session, datasets) {output$iris <- renderPlot(plot(iris))},
+#'         ui = function(id) {ns <- NS(id); plotOutput(ns('iris'))},
+#'         filters = NULL
+#'       ),
+#'       module(
+#'         "cars",
+#'         server = function(input, output, session, datasets) {output$cars <- renderPlot(plot(cars))},
+#'         ui = function(id) {ns <- NS(id); plotOutput(ns('cars'))},
+#'         filters = NULL
 #'       )
 #'     )
 #'   ),
