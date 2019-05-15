@@ -1,6 +1,6 @@
 context("cdisc_data")
 
-library(utils.nest)
+library(tern)
 ASL <- ARG1 <- ARG2 <- 1 #nolint
 ADTE <- 2 #nolint
 ARS <- 3 #nolint
