@@ -18,6 +18,7 @@ Depends:
   R (>= 3.3),
   shiny
 Imports:
+  digest,
   dplyr,
   haven,
   htmltools,

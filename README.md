@@ -18,17 +18,13 @@ modules](https://shiny.rstudio.com/articles/modules.html).
 	library(teal)
 	library(teal.modules.general)
 	library(random.cdisc.data)
-		
-	ASL <- radsl()
-	ARS <- radrs(ASL)
-	ATE <- radtte(ASL)
 	
-	attr(ASL, "source") <- "random.cdisc.data::radsl()"
-	attr(ARS, "source") <- "random.cdisc.data::radrs(ASL)"
-	attr(ATE, "source") <- "random.cdisc.data::radtte(ASL)"
+	ASL <- radsl(seed = 1)
+	ARS <- radrs(ASL, seed = 100)
+	ATE <- radtte(ASL, seed = 1000)
 	
-	app <- teal::init(
-	  data =  list(ASL = ASL, ARS = ARS, ATE = ATE),
+	app <- init(
+	  data = list(ASL = ASL, ARS = ARS, ATE = ATE),
 	  modules = root_modules(
 	    module(
 	      "data source",
@@ -36,29 +32,27 @@ modules](https://shiny.rstudio.com/articles/modules.html).
 	      ui = function(id) div(p("information about data source")),
 	      filters = NULL
 	    ),
-	    tm_data_table(),
-	    tm_variable_browser(),
+	    module(
+	      "ASL AGE histogram",
+	      server = function(input, output, session, datasets) {
+	        output$hist <- renderPlot(hist(datasets$get_data("ASL")$AGE))
+	      },
+	      ui = function(id) {ns <- NS(id); plotOutput(ns('hist'))},
+	      filters = NULL
+	    ),
 	    modules(
-	      label = "analysis items",
-	      tm_table(
-	        label = "demographic table",
-	        dataname = "ASL",
-	        xvar = choices_selected("SEX"),
-	        yvar = choices_selected(c("RACE", "AGEGR", "REGION"), "RACE")
-	      ),
-	      tm_scatterplot(
-	        label = "scatterplot",
-	        dataname = "ASL",
-	        xvar = "AGE",
-	        yvar = "BBMI",
-	        color_by = "_none_",
-	        color_by_choices = c("_none_", "STUDYID")
+	      label = "Example datasets (tree module)",
+	      module(
+	        "iris",
+	        server = function(input, output, session, datasets) {output$iris <- renderPlot(plot(iris))},
+	        ui = function(id) {ns <- NS(id); plotOutput(ns('iris'))},
+	        filters = NULL
 	      ),
 	      module(
-	        label = "survival curves",
-	        server = function(input, output, session, datasets) {},
-	        ui = function(id) div(p("Kaplan Meier Curve")),
-	        filters = "ATE"
+	        "cars",
+	        server = function(input, output, session, datasets) {output$cars <- renderPlot(plot(cars))},
+	        ui = function(id) {ns <- NS(id); plotOutput(ns('cars'))},
+	        filters = NULL
 	      )
 	    )
 	  ),

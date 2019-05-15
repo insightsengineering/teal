@@ -29,20 +29,13 @@
 #' @include modules.R
 #'
 #' @examples
-#' \dontrun{
-#' library(teal.modules.general)
 #' library(random.cdisc.data)
 #'
 #' ASL <- radsl(seed = 1)
 #' ARS <- radrs(ASL, seed = 100)
 #' ATE <- radtte(ASL, seed = 1000)
 #'
-#' # for reproducibility
-#' attr(ASL, "source") <- "random.cdisc.data::radsl(seed = 1)"
-#' attr(ARS, "source") <- "random.cdisc.data::radrs(ASL, seed = 100)"
-#' attr(ATE, "source") <- "random.cdisc.data::radtte(ASL, seed = 1000)"
-#'
-#' app <- teal::init(
+#' app <- init(
 #'   data = list(ASL = ASL, ARS = ARS, ATE = ATE),
 #'   modules = root_modules(
 #'     module(
@@ -51,30 +44,27 @@
 #'       ui = function(id) div(p("information about data source")),
 #'       filters = NULL
 #'     ),
-#'     tm_data_table(),
-#'     tm_variable_browser(),
+#'     module(
+#'       "ASL AGE histogram",
+#'       server = function(input, output, session, datasets) {
+#'         output$hist <- renderPlot(hist(datasets$get_data("ASL")$AGE))
+#'       },
+#'       ui = function(id) {ns <- NS(id); plotOutput(ns('hist'))},
+#'       filters = NULL
+#'     ),
 #'     modules(
-#'       label = "analysis items",
-#'       tm_table(
-#'          label = "demographic table",
-#'          dataname = "ASL",
-#'          xvar = choices_selected("SEX"),
-#'          yvar = choices_selected(c("RACE", "BMRKR2", "COUNTRY"), "RACE")
-#'       ),
-#'       tm_scatterplot(
-#'          label = "scatterplot",
-#'          dataname = "ASL",
-#'          xvar = "AGE",
-#'          yvar = "BMRKR1",
-#'          color_by = "_none_",
-#'          color_by_choices = c("_none_", "STUDYID")
-#'       ),
-#'       # ad-hoc module
+#'       label = "Example datasets (tree module)",
 #'       module(
-#'          label = "survival curves",
-#'          server = function(input, output, session, datasets) {},
-#'          ui = function(id) div(p("Kaplan Meier Curve")),
-#'          filters = "ATE"
+#'         "iris",
+#'         server = function(input, output, session, datasets) {output$iris <- renderPlot(plot(iris))},
+#'         ui = function(id) {ns <- NS(id); plotOutput(ns('iris'))},
+#'         filters = NULL
+#'       ),
+#'       module(
+#'         "cars",
+#'         server = function(input, output, session, datasets) {output$cars <- renderPlot(plot(cars))},
+#'         ui = function(id) {ns <- NS(id); plotOutput(ns('cars'))},
+#'         filters = NULL
 #'       )
 #'     )
 #'   ),
@@ -82,8 +72,8 @@
 #'   footer = tags$p("Copyright 2017")
 #' )
 #'
+#' \dontrun{
 #' shinyApp(app$ui, app$server)
-#'
 #' }
 init <- function(data,
                  modules,
