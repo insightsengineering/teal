@@ -1,6 +1,6 @@
 # code>
 library(teal) #nocode
-library(teal.devel) #nolint
+library( teal.devel ) #nolint
 library(random.cdisc.data) #nolint
 require(magrittr)
 library(teal)
@@ -14,7 +14,7 @@ source("app_source2.R")
 x <- teal::init(
   data = cdisc_data(
     ASL = ASL,
-    ADTE = adte,
+    ADTE = ADTE,
     code = get_code("app.R", exclude_comments = TRUE),
     check = TRUE
   ),
