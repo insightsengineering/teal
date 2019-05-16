@@ -11,7 +11,6 @@
 #' @importFrom stats setNames
 #' @export
 #'
-#' @importFrom tern var_labels
 #' @examples
 #' library(random.cdisc.data)
 #'
