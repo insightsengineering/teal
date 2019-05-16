@@ -158,7 +158,7 @@ cdisc_data <- function(ASL, # nolint
       msg <- paste0(
         "Cannot reproduce object(s) ",
         paste0(paste0("'", incorrect_obj_names, "'"), collapse = ", "),
-        " basing on code."
+        " based on code."
       )
       stop(msg)
     }
