@@ -26,6 +26,7 @@ reference:
     - modules
     - root_modules
   - title: Teal Filtering and Selecting
+    desc: Functions used to filter observations and select variables from dataset.
     contents:
     - add_no_selected_choices
     - choices_labeled
@@ -35,6 +36,7 @@ reference:
     - filter_spec
     - FilteredData
   - title: Reproducibility
+    desc: Functions allowing teal output reproducibility.
     contents:
     - cdisc_data
     - code_exclude
