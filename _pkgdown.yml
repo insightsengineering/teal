@@ -19,9 +19,6 @@ reference:
     contents:
     - init
     - .log
-    - log_app_usage
-    - logger_in
-    - logger_out
     - module
     - modules
     - root_modules
@@ -34,19 +31,15 @@ reference:
     - columns_spec
     - data_extract_spec
     - filter_spec
-    - FilteredData
+    - is.choices_selected
   - title: Reproducibility
     desc: Functions allowing teal output reproducibility.
     contents:
     - cdisc_data
-    - code_exclude
-    - enclosed_with
     - get_code
-    - get_code_single
-    - include_source_code
-    - read_lib_names
   - title: Helpers
     contents:
+    - log_app_usage
     - no_selected_as_NULL
     - split_by_sep
     - stop_shiny
