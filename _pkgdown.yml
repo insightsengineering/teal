@@ -18,29 +18,34 @@ reference:
     desc:  These are the main functions needed to build a teal app.
     contents:
     - init
+    - .log
+    - log_app_usage
+    - logger_in
+    - logger_out
     - module
     - modules
     - root_modules
+  - title: Teal Filtering and Selecting
+    contents:
+    - add_no_selected_choices
+    - choices_labeled
     - choices_selected
-  - title: Teal Modules
-    contents:
-    - tm_data_table
-    - tm_variable_browser
-    - tm_scatterplot
-    - tm_table
-  - title: Custom Widgets and Layout
-    contents:
-    - optionalSelectInput
-    - optionalSliderInput
-    - optionalSliderInputValMinMax
-    - standard_layout
+    - columns_spec
+    - data_extract_spec
+    - filter_spec
+    - FilteredData
   - title: Reproducibility
     contents:
-    - get_rcode_header
-    - get_filter_txt
-    - parse_code_chunks
-    - reindent
-    - show_r_code_modal
+    - cdisc_data
+    - code_exclude
+    - enclosed_with
+    - get_code
+    - get_code_single
+    - include_source_code
+    - read_lib_names
   - title: Helpers
     contents:
-    - as.global
+    - is.unique
+    - no_selected_as_NULL
+    - split_by_sep
+    - stop_shiny
