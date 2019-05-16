@@ -45,7 +45,6 @@ reference:
     - read_lib_names
   - title: Helpers
     contents:
-    - is.unique
     - no_selected_as_NULL
     - split_by_sep
     - stop_shiny
