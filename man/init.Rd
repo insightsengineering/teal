@@ -21,8 +21,16 @@ vector with datasets names that are passed on (filtered) to the server
 function\cr options \tab optional, other arguments passed on to the server
 function }}
 
-\item{filter}{filter settings. Nested named list, currently with \code{init}
-list element.}
+\item{filter}{(\code{list}) You can pre-define filters for
+  datasets inside this argument. Therefore you need to handover an
+  \code{init} list. Please provide a named list inside \code{init}
+  that contains the names of the datasets. E.g. for filtering
+  the dataset \code{ASL} use \code{list(init = list(ASL = ...))}.
+  For each datasets you need to provide a vector with column names that are
+  relevant for the item. You can specify an ASL filtering for the
+  columns \code{SEX} and \code{BAGE} by:
+
+  \code{filter = list(init = list(ASL = c("SEX", "BAGE")))}}
 
 \item{header}{object of class `shiny.tag` to be used as the header of the app}
 
@@ -74,6 +82,7 @@ app <- init(
       )
     )
   ),
+  filter = list(init = list(ASL = c("AGE"))),
   header = tags$h1("Sample App"),
   footer = tags$p("Copyright 2017")
 )
