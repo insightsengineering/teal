@@ -131,7 +131,7 @@ label_to_id <- function(label, prefix = NULL) {
   label <- gsub("^_|_$", "", gsub("[^[:alnum:]]", "_", label))
   if (!is.null(prefix)) {
     prefix <- gsub("^_|_$", "", gsub("[^[:alnum:]]", "_", prefix))
-    paste(prefix, label, sep = ".")
+    paste(prefix, label, sep = "_")
   } else {
     label
   }
