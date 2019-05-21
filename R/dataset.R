@@ -177,5 +177,5 @@ cdisc_data <- function(ASL, # nolint
   )
   res <- setNames(res, arg_names)
 
-  structure(res, code = code)
+  structure(res, code = code, class = "cdisc_data")
 }

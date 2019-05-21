@@ -104,7 +104,7 @@ FilteredData <- R6::R6Class( # nolint
 
 
     set_data = function(dataname, data) {
-      attr(data, "md5sum") <- digest::digest(data, algo = "md5")
+      attr(data, "md5sum") <- digest(data, algo = "md5")
       private$datasets[[dataname]] <- data
 
       private$update_filter_info(dataname)

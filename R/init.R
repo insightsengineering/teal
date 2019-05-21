@@ -44,7 +44,16 @@
 #' ATE <- radtte(ASL, seed = 1000)
 #'
 #' app <- init(
-#'   data = list(ASL = ASL, ARS = ARS, ATE = ATE),
+#'   data = cdisc_data(
+#'     ASL = ASL,
+#'     ARS = ARS,
+#'     ATE = ATE,
+#'     code = "
+#'       ASL <- radsl(seed = 1)
+#'       ARS <- radrs(ASL, seed = 100)
+#'       ATE <- radtte(ASL, seed = 1000)
+#'     "
+#'   ),
 #'   modules = root_modules(
 #'     module(
 #'       "data source",
@@ -94,6 +103,10 @@ init <- function(data,
     stop("teal currently only supports module nesting of depth two.")
   }
 
+  if (!is(data, "cdisc_data")) {
+    warning("Please use cdisc_data() instead of list() for 'data' argument. It will be depreciated soon.")
+  }
+
   # initialize FilteredData object
   datasets <- FilteredData$new(names(data))
   Map(function(x, name) {
@@ -113,7 +126,7 @@ init <- function(data,
   # ui function
   ui <- shinyUI(
       fluidPage(
-        shinyjs::useShinyjs(),
+        useShinyjs(),
         includeScript(system.file("js/clipboard.js", package = "teal")),
         includeScript(system.file("js/initClipboard.js", package = "teal")),
         tags$head(
