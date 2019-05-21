@@ -16,7 +16,7 @@
 #' @importFrom methods is
 #' @param dataname (\code{character}) The name of the \code{\link[teal]{teal}} dataset to
 #'   be extracted. This dataset has to be handed over to the \code{data} argument of the
-#'   \code{teal::}\code{\link[teal]{init}} function.
+#'   \code{\link[teal]{init}} function.
 #' @param filter (\code{filter_spec}-S3-class) Setup of the filtering of
 #'  key columns inside the dataset. This setup can be created using the \code{\link{filter_spec}}
 #'  function.

@@ -9,7 +9,7 @@ data_extract_spec(dataname, columns, filter = NULL)
 \arguments{
 \item{dataname}{(\code{character}) The name of the \code{\link[teal]{teal}} dataset to
 be extracted. This dataset has to be handed over to the \code{data} argument of the
-\code{teal::}\code{\link[teal]{init}} function.}
+\code{\link[teal]{init}} function.}
 
 \item{columns}{(\code{column_spec}-S3 class) Columns to be selected from the input dataset
 mentioned in \code{dataname.} The setup can be created using \code{\link{columns_spec}} function.}

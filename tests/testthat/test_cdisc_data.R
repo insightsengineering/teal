@@ -42,6 +42,7 @@ test_that("List values", {
   result <- cdisc_data(ASL)
 
   result_to_compare <- list(ASL = 1)
+  class(result_to_compare) <- "cdisc_data"
   keys(result_to_compare[["ASL"]]) <- "test1"
   attr(result_to_compare[["ASL"]], "dataname") <- "ASL"
   attr(result_to_compare, "code") <- "# !!! Preprocessing code is empty"
@@ -51,6 +52,7 @@ test_that("List values", {
   result <- cdisc_data(ASL, ADTE = ADTE, ARS = ARS)
 
   result_to_compare <- list(ASL = 1, ADTE = 2, ARS = 3)
+  class(result_to_compare) <- "cdisc_data"
   keys(result_to_compare[["ASL"]])  <- "test1"
   keys(result_to_compare[["ADTE"]]) <- "test2"
   keys(result_to_compare[["ARS"]]) <- "test3"
@@ -85,6 +87,7 @@ test_that("Arguments created by code", {
   expect_silent(result)
 
   result_to_compare <- list(ASL = 1)
+  class(result_to_compare) <- "cdisc_data"
   keys(result_to_compare[["ASL"]]) <- "test"
   attr(result_to_compare[["ASL"]], "dataname") <- "ASL"
   attr(result_to_compare, "code") <- "ASL <- 1; keys(ASL) <- 'test'"

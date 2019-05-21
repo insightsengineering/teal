@@ -50,7 +50,16 @@ ARS <- radrs(ASL, seed = 100)
 ATE <- radtte(ASL, seed = 1000)
 
 app <- init(
-  data = list(ASL = ASL, ARS = ARS, ATE = ATE),
+  data = cdisc_data(
+    ASL = ASL,
+    ARS = ARS,
+    ATE = ATE,
+    code = "
+      ASL <- radsl(seed = 1)
+      ARS <- radrs(ASL, seed = 100)
+      ATE <- radtte(ASL, seed = 1000)
+    "
+  ),
   modules = root_modules(
     module(
       "data source",
