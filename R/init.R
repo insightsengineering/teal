@@ -248,11 +248,11 @@ init <- function(data,
     ## now show or hide the filter panels based on active tab
     observe({
       # define reactivity dependence
-      main_tab <- input[["teal_modules.root"]]
+      main_tab <- input[["teal_modules_root"]]
       secondary_tabs <- sapply(id_modules, function(id) input[[id]],  USE.NAMES = TRUE)
 
       # figure out which is the active tab/module
-      main_tab_id <- label_to_id(main_tab, "teal_modules.root")
+      main_tab_id <- label_to_id(main_tab, "teal_modules_root")
 
       active_module_id <- if (main_tab_id %in% id_modules) {
         label_to_id(secondary_tabs[[main_tab_id]], main_tab_id)
