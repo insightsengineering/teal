@@ -4,14 +4,10 @@
 \alias{get_code_single}
 \title{Get code}
 \usage{
-get_code_single(file_path, exclude_comments, read_sources)
+get_code_single(file_path, read_sources)
 }
 \arguments{
 \item{file_path}{(\code{character}) path of the file to be parsed}
-
-\item{exclude_comments}{(\code{logical}) whether exclude commented-out lines of code. Lines to be excluded
-should be ended with \code{# nocode}. For multiple line exclusions one should enclose ignored block of code with
-\code{# nocode>} and \code{# <nocode}}
 
 \item{read_sources}{(\code{logical}) whether to replace \code{source("path")} with code lines from sourced file.
 If \code{read_sources = TRUE} changing working directory inside preprocessing is not allowed.}
