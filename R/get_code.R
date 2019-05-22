@@ -80,7 +80,7 @@ enclosed_with <- function(lines) {
   } else if (length(idx_stop) == 1) {
     idx_stop - 1
   } else {
-    stop("All lines from file included by get_code(). Please use #<code to stop preprocessing at indicated point.")
+    stop("All lines from file included by get_code(). Please use #<code to stop preprocessing at indicated point")
   }
 
   line_numbers <- seq(line_starts, line_stops)
