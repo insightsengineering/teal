@@ -4,14 +4,10 @@
 \alias{include_source_code}
 \title{Includes source in preprocessing code lines}
 \usage{
-include_source_code(lines, exclude_comments, dir)
+include_source_code(lines, dir)
 }
 \arguments{
 \item{lines}{(\code{character}) of preprocessing code.}
-
-\item{exclude_comments}{(\code{logical}) whether exclude commented-out lines of code. Lines to be excluded
-should be ended with \code{# nocode}. For multiple line exclusions one should enclose ignored block of code with
-\code{# nocode>} and \code{# <nocode}}
 
 \item{dir}{of the file where source is called from.}
 }

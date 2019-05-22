@@ -12,8 +12,7 @@ test_that("arguments properly specified", {
 })
 
 test_that("Reads code from starts_at to stops_at", {
-  code_lines1 <- get_code(files_path = file_path,
-                          exclude_comments = FALSE) %>%
+  code_lines1 <- get_code(files_path = file_path, exclude_comments = FALSE) %>%
     strsplit("\n") %>%
     .[[1]]
 

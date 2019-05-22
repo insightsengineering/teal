@@ -1,4 +1,4 @@
-# code>
+#code>
 library(teal) #nocode
 library( teal.devel ) #nolint
 library(random.cdisc.data) #nolint
@@ -9,7 +9,7 @@ source("app_source1.R")
 source("app_source2.R")
 "# this is not a comment" #this is a comment
 # "this is a comment"
-# <code
+#<code
 
 x <- teal::init(
   data = cdisc_data(

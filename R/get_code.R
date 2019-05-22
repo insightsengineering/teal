@@ -21,13 +21,11 @@ get_code <- function(files_path,
   stopifnot(is.logical(exclude_comments), length(exclude_comments) == 1)
   stopifnot(is.logical(read_sources), length(read_sources) == 1)
 
-  lines <- lapply(
-    files_path,
-    get_code_single,
-    exclude_comments = exclude_comments,
-    read_sources = read_sources
-  ) %>%
-    unlist
+  lines <- lapply(files_path, function(x)
+    get_code_single(x, read_sources = read_sources) %>%
+      enclosed_with() %>%
+      code_exclude(lines, exclude_comments = exclude_comments)
+  ) %>% unlist
 
 
   paste(lines, collapse = "\n")
@@ -41,21 +39,14 @@ get_code <- function(files_path,
 #' @importFrom magrittr %>%
 #'
 #' @return lines (\code{character}) of preprocessing code
-get_code_single <- function(file_path, exclude_comments, read_sources) {
+get_code_single <- function(file_path, read_sources) {
   stopifnot(is.character(file_path), length(file_path) == 1)
   stopifnot(file.exists(file_path))
   stopifnot(is.logical(read_sources), length(read_sources) == 1)
 
-  lines <- readLines(file_path) %>%
-            enclosed_with() %>%
-            code_exclude(exclude_comments = exclude_comments)
-
+  lines <- readLines(file_path)
   if (read_sources) {
-    lines <- include_source_code(
-      lines = lines,
-      exclude_comments = exclude_comments,
-      dir = dirname(file_path)
-    )
+    lines <- include_source_code(lines = lines, dir = dirname(file_path))
   }
 
   lines
@@ -69,6 +60,7 @@ get_code_single <- function(file_path, exclude_comments, read_sources) {
 enclosed_with <- function(lines) {
   stopifnot(is.character(lines), length(lines) >= 1)
 
+
   # set beginning of preprocessing
   idx_start <- grep("#\\s*code>", lines)
   line_starts <- if (length(idx_start) > 1) {
@@ -80,6 +72,7 @@ enclosed_with <- function(lines) {
     1L
   }
 
+  # set stop of preprocessing
   idx_stop <- grep("#\\s*<code", lines)
   line_stops <- if (length(idx_stop) > 1) {
     warning("More than one preproc stops found - using the last one.")
@@ -87,7 +80,7 @@ enclosed_with <- function(lines) {
   } else if (length(idx_stop) == 1) {
     idx_stop - 1
   } else {
-    length(lines)
+    stop("All lines from file included by get_code(). Please use #<code to stop preprocessing at indicated point")
   }
 
   line_numbers <- seq(line_starts, line_stops)
@@ -164,7 +157,7 @@ find_source_code <- function(lines) {
 #' @return lines of code with source text included
 #'
 #' @importFrom magrittr %>%
-include_source_code <- function(lines, exclude_comments, dir) {
+include_source_code <- function(lines, dir) {
   stopifnot(is.character(lines), length(lines) >= 1)
   stopifnot(dir.exists(dir))
 
@@ -191,9 +184,7 @@ include_source_code <- function(lines, exclude_comments, dir) {
   sources_path <- normalizePath(sources_path)
 
   sources_code <- lapply(sources_path, function(s) {
-    get_code_single(file_path = s,
-                    exclude_comments = exclude_comments,
-                    read_sources = TRUE)
+    get_code_single(file_path = s, read_sources = TRUE)
   })
 
   lines[idx] <- sources_code
