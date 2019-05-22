@@ -72,7 +72,7 @@ enclosed_with <- function(lines) {
   idx_stop <- grep("#\\s*<code", lines)
 
   if(length(idx_stop) == 0) {
-    stop("All lines from file included. Please use #<code to stop preprocessing at indicated point.")
+    stop("All lines from file included by get_code(). Please use #<code to stop preprocessing at indicated point.")
   }
 
   # set beginning of preprocessing
