@@ -68,9 +68,14 @@ get_code_single <- function(file_path, exclude_comments, read_sources) {
 #' @inheritParams get_code
 enclosed_with <- function(lines) {
   stopifnot(is.character(lines), length(lines) >= 1)
+  idx_start <- grep("#\\s*code>", lines)
+  idx_stop <- grep("#\\s*<code", lines)
+
+  if(length(idx_stop) == 0) {
+    stop("All lines from file included. Please use #<code to stop preprocessing at indicated point.")
+  }
 
   # set beginning of preprocessing
-  idx_start <- grep("#\\s*code>", lines)
   line_starts <- if (length(idx_start) > 1) {
     warning("More than one preproc start found - using the first one.")
     idx_start[1] + 1
@@ -80,7 +85,7 @@ enclosed_with <- function(lines) {
     1L
   }
 
-  idx_stop <- grep("#\\s*<code", lines)
+
   line_stops <- if (length(idx_stop) > 1) {
     warning("More than one preproc stops found - using the last one.")
     tail(idx_stop, 1) - 1
