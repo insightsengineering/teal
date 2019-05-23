@@ -4,7 +4,7 @@
 \alias{cdisc_data}
 \title{Data input for teal app}
 \usage{
-cdisc_data(ASL, ..., code = NULL, check = TRUE)
+cdisc_data(ASL, ..., code = NULL, check = FALSE)
 }
 \arguments{
 \item{ASL}{ASL dataset}

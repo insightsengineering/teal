@@ -28,7 +28,7 @@
 cdisc_data <- function(ASL, # nolint
                        ...,
                        code = NULL,
-                       check = TRUE) {
+                       check = FALSE) {
   stopifnot(is.null(code) || (is.character(code) && length(code) == 1))
   stopifnot(is.logical(check) && length(check) == 1)
 
@@ -122,7 +122,11 @@ cdisc_data <- function(ASL, # nolint
 
   res <- setNames(arg_values, arg_names)
 
-  if (check && !identical(code, "")) {
+  if (check) {
+    if (identical(code, "")) {
+      stop("Cannot check preprocessing code - code is empty.")
+    }
+
     new_env <- new.env(parent = parent.env(.GlobalEnv))
     tryCatch({
       eval(parse(text = code), new_env)

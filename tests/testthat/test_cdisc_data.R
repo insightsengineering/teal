@@ -19,14 +19,6 @@ test_that("Basic example - with code and check", {
                            check = TRUE))
 })
 
-test_that("Check is skipped if code is empty", {
-  keys(ASL) <- "test"
-
-  expect_silent(cdisc_data(ASL, check = TRUE))
-  expect_silent(cdisc_data(ASL, code = NULL, check = TRUE))
-  expect_silent(cdisc_data(ASL, code = "", check = TRUE))
-})
-
 test_that("Naming list elements", {
   keys(ASL) <- keys(ADTE) <- keys(ARS) <- "test"
 
