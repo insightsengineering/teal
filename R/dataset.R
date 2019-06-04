@@ -29,8 +29,8 @@ cdisc_data <- function(ASL, # nolint
                        ...,
                        code = NULL,
                        check = FALSE) {
-  stopifnot(is.null(code) || (is.character(code) && length(code) == 1))
-  stopifnot(is.logical(check) && length(check) == 1)
+  stopifnot(is.null(code) || is.character.single(code))
+  stopifnot(is.logical.single(check))
 
   if (is.null(code)) {
     code <- ""

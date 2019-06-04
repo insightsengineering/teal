@@ -18,8 +18,8 @@ get_code <- function(files_path,
                      exclude_comments = TRUE,
                      read_sources = TRUE) {
   stopifnot(is.character(files_path) && length(files_path) >= 1)
-  stopifnot(is.logical(exclude_comments), length(exclude_comments) == 1)
-  stopifnot(is.logical(read_sources), length(read_sources) == 1)
+  stopifnot(is.logical.single(exclude_comments))
+  stopifnot(is.logical.single(read_sources))
 
   lines <- lapply(files_path, function(x)
     get_code_single(x, read_sources = read_sources) %>%
@@ -36,13 +36,17 @@ get_code <- function(files_path,
 #' Get code from specified file.
 #' @param file_path (\code{character}) path of the file to be parsed
 #' @inheritParams get_code
-#' @importFrom magrittr %>%
 #'
 #' @return lines (\code{character}) of preprocessing code
+#'
+#' @importFrom magrittr %>%
 get_code_single <- function(file_path, read_sources) {
-  stopifnot(is.character(file_path), length(file_path) == 1)
-  stopifnot(file.exists(file_path))
-  stopifnot(is.logical(read_sources), length(read_sources) == 1)
+  stopifnot(is.character.single(file_path))
+  stop_if_not(list(
+    file.exists(file_path),
+    paste0("Reading preprocessing code from ", file_path, " file failed. Please double check if you saved your script.")
+  ))
+  stopifnot(is.logical.single(read_sources))
 
   lines <- readLines(file_path)
   if (read_sources) {
@@ -96,7 +100,7 @@ enclosed_with <- function(lines) {
 #' @inheritParams get_code_single
 code_exclude <- function(lines, exclude_comments, file_path) {
   stopifnot(is.character(lines), length(lines) >= 1)
-  stopifnot(is.logical(exclude_comments), length(exclude_comments) == 1)
+  stopifnot(is.logical.single(exclude_comments))
 
   nocode_single <- grep("^.+#[[:space:]]*nocode", lines)
   nocode_start  <- grep("[[:space:]]*#[[:space:]]*nocode[[:space:]]*>+", lines)

@@ -9,6 +9,7 @@
 #' @importFrom utils tail
 #' @importFrom dplyr mutate
 #' @import magrittr
+#' @import utils.nest
 #' @docType package
 #' @name teal
 NULL

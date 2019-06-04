@@ -3,9 +3,18 @@ ui_add_filter_variable <- function(id, dataname) {
 
   ns <- NS(id)
 
-  div(class = paste0("teal_filter_", dataname),
-      pickerInput(ns("variables"), label = dataname, choices = NULL, options = pickerOptions(liveSearch = TRUE)),
-      uiOutput(ns("warning"))
+  div(
+    class = paste0("teal_filter_", dataname),
+    pickerInput(
+      ns("variables"),
+      label = dataname,
+      choices = NULL,
+      options = pickerOptions(
+        liveSearch = TRUE,
+        noneSelectedText = "Select a variable"
+      )
+    ),
+    uiOutput(ns("warning"))
   )
 
 }
