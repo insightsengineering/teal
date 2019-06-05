@@ -373,20 +373,14 @@ FilteredData <- R6::R6Class( # nolint
     },
 
 
-    set_default_filter_state = function(dataname, varname, nchoices = 10) {
+    set_default_filter_state = function(dataname, varname) {
       private$error_if_not_valid(dataname, varname)
 
       fi <- self$get_filter_info(dataname, varname)
 
       state <- switch(
         fi$type,
-        choices = {
-          if (length(fi$choices) > nchoices) {
-            character(0)
-          } else {
-            fi$choices
-          }
-        },
+        choices = fi$choices,
         range = fi$range,
         logical = "TRUE or FALSE",
         stop("unknown type")
