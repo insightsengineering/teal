@@ -4,7 +4,7 @@
 \alias{include_source_code}
 \title{Includes source in preprocessing code lines}
 \usage{
-include_source_code(lines, dir)
+include_source_code(lines, dir = NULL)
 }
 \arguments{
 \item{lines}{(\code{character}) of preprocessing code.}
