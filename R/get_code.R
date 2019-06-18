@@ -46,7 +46,8 @@ get_code_single <- function(file_path, read_sources, if_url = grepl("^http[s]", 
   if (!if_url) {
     stop_if_not(list(
       file.exists(file_path),
-      paste0("Reading preprocessing code from ", file_path, " file failed. Please double check if you saved your script.")
+      paste0("Reading preprocessing code from ", file_path, " file failed. ",
+             "Please double check if you saved your script.")
     ))
   }
   stopifnot(is.logical.single(read_sources))
