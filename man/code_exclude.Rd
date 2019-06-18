@@ -13,7 +13,7 @@ code_exclude(lines, exclude_comments, file_path)
 should be ended with \code{# nocode}. For multiple line exclusions one should enclose ignored block of code with
 \code{# nocode>} and \code{# <nocode}}
 
-\item{file_path}{(\code{character}) path of the file to be parsed}
+\item{file_path}{(\code{character}) path or URL address of the file to be parsed}
 }
 \description{
 Excludes lines from code. It is possible to exclude one line ended by \code{# nocode}
