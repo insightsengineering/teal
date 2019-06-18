@@ -26,8 +26,8 @@ Please use the constructor function \link{data_extract_spec} to set it up.
 \section{Module Development}{
 
 \describe{
-From this function's output a \code{\link[teal.devel]{data_extract_input}} can
-be constructed. This input can be read by a \code{\link[teal.devel]{data_extract_module}} module.
+From this function's output a \code{teal.devel::data_extract_input} can
+be constructed. This input can be read by a \code{teal.devel::data_extract_module} module.
 }
 }
 
