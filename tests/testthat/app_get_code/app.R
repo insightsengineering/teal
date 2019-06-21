@@ -1,6 +1,5 @@
 #code>
 library(teal) #nocode
-library( teal.devel ) #nolint
 library(random.cdisc.data) #nolint
 require(magrittr)
 library(teal)
