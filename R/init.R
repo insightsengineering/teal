@@ -129,6 +129,7 @@ init <- function(data,
         useShinyjs(),
         includeScript(system.file("js/clipboard.js", package = "teal")),
         includeScript(system.file("js/initClipboard.js", package = "teal")),
+        includeCSS(system.file("css/custom.css", package = "teal")),
         tags$head(
           tags$script(
             # show/hide see https://groups.google.com/forum/#!topic/shiny-discuss/yxFuGgDOIuM
