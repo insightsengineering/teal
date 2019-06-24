@@ -11,17 +11,21 @@ navbar:
       href: https://github.roche.com/NEST/teal
 
 development:
-  mode: devel
+  mode: release
 
 reference:
   - title: Teal Core Functions
     desc:  These are the main functions needed to build a teal app.
     contents:
     - init
-    - .log
     - module
     - modules
     - root_modules
+  - title: Reproducibility
+    desc: Functions allowing teal output reproducibility.
+    contents:
+    - cdisc_data
+    - get_code
   - title: Teal Filtering and Selecting
     desc: Functions used to filter observations and select variables from dataset.
     contents:
@@ -32,11 +36,6 @@ reference:
     - data_extract_spec
     - filter_spec
     - is.choices_selected
-  - title: Reproducibility
-    desc: Functions allowing teal output reproducibility.
-    contents:
-    - cdisc_data
-    - get_code
   - title: Helpers
     contents:
     - log_app_usage

@@ -1,3 +1,11 @@
+# teal 0.6.1
+
+* add functions `cdisc_data` and `get_code` to deal with preprocessing and moving a step towards datastandard
+independent teal
+* moved `teal.utils` functions to `teal`: `log_app_usage`, `stop_shiny`
+* added `*_spec` functions
+* improvements on usage of `PickerInput` and `SelectInput`
+
 # teal 0.6.0
 
 * Removed deprecated functions `tab*`

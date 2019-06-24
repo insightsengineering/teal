@@ -1,11 +1,18 @@
 Package: teal
 Type: Package
 Title: Exploratory Web Apps for Analyzing Clinical Trials Data
-Date: 2019-02-16
-Version: 0.6.0.1000
+Date: 2019-06-24
+Version: 0.6.1
 Authors@R: c(
-  person("Adrian", "Waddell", email = "adrian.waddell@roche.com", role = c("aut", "cre")),
-  person("Tadeusz", "Lewandowski", email = "tadeusz.lewandowski@roche.com", role = "ctb")
+  person("NEST", email = "nestcicd@roche.com", role = c("aut", "cre")),
+  person("Adrian", "Waddell", email = "adrian.waddell@roche.com", role = "aut"),
+  person("Tadeusz", "Lewandowski", email = "tadeusz.lewandowski@roche.com", role = "ctb"),
+  person("Pawel", "Rucki", email = "pawel.rucki@contractors.roche.com", role = "aut"),
+  person("Dawid", "Kaledkowski", email = "dawid.kaledkowski@contractors.roche.com", role = "aut"),
+  person("Sebastian", "Wolf", email = "sebastian.wolf.sw1@roche.com", role = "aut"),
+  person("Maximilian", "Mordig", email = "maximilian_oliver.mordig@roche.com", role = "aut"),
+  person("Bartosz", "Baranowski", email = "bartosz.baranowski@roche.com", role = "aut"),
+  person("Roche", role = c("cph", "fnd"))
   )
 Description: teal is a shiny based interactive exploration framework for
     analyzing clinical trials data. teal currently provides a dynamic filtering
@@ -29,14 +36,14 @@ Imports:
   readr,
   shinyjs,
   shinyWidgets,
-  utils.nest
+  utils.nest (>= 0.1)
 RoxygenNote: 6.1.1
 Suggests:
   knitr,
-  random.cdisc.data (>= 0.1.2.1),
+  random.cdisc.data (>= 0.2.1),
   rmarkdown,
-  tern,
-  test.nest,
+  tern (>= 0.6.2),
+  test.nest (>= 0.1),
   testthat
 VignetteBuilder: knitr
 Collate:

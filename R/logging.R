@@ -5,7 +5,9 @@
 #' @export
 .log <- function(..., sep=" ", type="debug") {
 
-  if (!options()$teal_logging) return()
+  if (!isTRUE(getOption(x = "teal_logging"))) {
+    return()
+  }
 
   ## force the evaluation of arguments
   args <- unlist(Map(function(x) if (length(x) > 1) paste(x, collapse = ", ") else x, list(...)))
@@ -17,14 +19,18 @@
 
 logger_in <- function() {
 
-  if (!options()$teal_logging) return()
+  if (!isTRUE(getOption(x = "teal_logging"))) {
+    return()
+  }
 
   .log_depth <<- .log_depth + 1
 }
 
 logger_out <- function() {
 
-  if (!options()$teal_logging) return()
+  if (!isTRUE(getOption(x = "teal_logging"))) {
+    return()
+  }
 
   .log_depth <<- .log_depth - 1
 
