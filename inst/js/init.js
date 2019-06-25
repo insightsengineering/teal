@@ -5,3 +5,5 @@ clipboard.on('success', function(e) {
 clipboard.on('error', function(e) {
     console.log(e);
 });
+
+var myAccordion = new Accordion('.accordion-container');
