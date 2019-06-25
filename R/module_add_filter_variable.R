@@ -34,8 +34,18 @@ srv_add_filter_variable <- function(input, output, session, datasets, dataname, 
       setdiff(names(df), c(names(fs), omit_vars))
     }
 
+    choices <- c("", choices)
+
     .log("update add filter variables", dataname)
-    updatePickerInput(session, "variables", choices = c("", choices), selected = NULL)
+    updatePickerInput(
+      session,
+      "variables",
+      choices = choices,
+      selected = NULL,
+      choicesOpt = list(
+        subtext = unname(vapply(choices, function(x) if_null(attr(df[[x]], "label"), ""), character(1)))
+      )
+    )
   })
 
   warning_messages <- reactiveValues(varinfo = "", i = 0)

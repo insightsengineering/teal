@@ -476,11 +476,13 @@ FilteredData <- R6::R6Class( # nolint
           .log("all elements in", varname, "are NA")
           list(
             type = "unknown",
+            label = "",
             class = class(var)
           )
         } else if (is.factor(var) || is.character(var)) {
           list(
             type = "choices",
+            label = if_null(attr(var, "label"), ""),
             choices = if (is.factor(var)) {
                 levels(var)
               } else {
@@ -490,11 +492,13 @@ FilteredData <- R6::R6Class( # nolint
         } else if (is.numeric(var)) {
           list(
             type = "range",
+            label = if_null(attr(var, "label"), ""),
             range = range(var, na.rm = TRUE)
           )
         } else if (is.logical(var)) {
           list(
             type = "logical",
+            label = if_null(attr(var, "label"), ""),
             choices = c("TRUE", "FALSE", "TRUE or FALSE")
           )
         } else {
@@ -502,6 +506,7 @@ FilteredData <- R6::R6Class( # nolint
                class(var), "' which has currently no filter UI element", sep = "")
           list(
             type = "unknown",
+            label = "",
             class = class(var)
           )
         }

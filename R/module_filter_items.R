@@ -50,8 +50,13 @@ srv_filter_items <- function(input, output, session, datasets, dataname, contain
         id <- paste0("var_", label_to_id(var))
         id_rm <- paste0("rm_", label_to_id(var))
 
-        varlabel <- tagList(tags$span(paste0(dataname, ".", var)),
-                            actionLink(ns(id_rm), "remove", style = "font-weight:normal;"))
+        varlabel <- tagList(
+          tags$span(paste0(dataname, ".", var)),
+          tags$div(
+            tags$small(paste0("[", fi$label, "]"), style = "font-weight:normal"),
+            actionLink(ns(id_rm), "remove", style = "font-weight:normal; float:right;")
+          )
+        )
 
         el <- if (fi$type == "choices") {
           if (length(fi$choices) > 5) {
@@ -65,14 +70,16 @@ srv_filter_items <- function(input, output, session, datasets, dataname, contain
                 actionsBox = TRUE,
                 liveSearch = (length(fi$choices) > 20),
                 noneSelectedText = "Select a value"
-              )
+              ),
+              width = "100%"
             )
           } else {
             checkboxGroupInput(
               ns(id),
               varlabel,
               choices =  fi$choices,
-              selected = fs
+              selected = fs,
+              width = "100%"
             )
           }
         } else if (fi$type == "range") {
@@ -90,7 +97,8 @@ srv_filter_items <- function(input, output, session, datasets, dataname, contain
             varlabel,
             choices = fi$choices,
             selected = fs,
-            inline = TRUE
+            inline = TRUE,
+            width = "100%"
           )
         } else {
           tags$p(paste(var, "in data", dataname, "has unknown type:", fi$type))
