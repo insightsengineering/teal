@@ -127,9 +127,8 @@ init <- function(data,
   ui <- shinyUI(
       fluidPage(
         useShinyjs(),
-        includeScript(system.file("js/clipboard.js", package = "teal")),
-        includeScript(system.file("js/initClipboard.js", package = "teal")),
-        includeCSS(system.file("css/custom.css", package = "teal")),
+        include_css_files(package = "teal"),
+        include_js_files(package = "teal", except = "init.js"),
         tags$head(
           tags$script(
             # show/hide see https://groups.google.com/forum/#!topic/shiny-discuss/yxFuGgDOIuM
@@ -197,6 +196,8 @@ init <- function(data,
 
 
   server <- function(input, output, session) {
+
+    run_js_file(file = "init.js", package = "teal")
 
     show_filter_panel <- function(bool = TRUE) {
       session$sendCustomMessage(
