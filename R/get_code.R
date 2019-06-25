@@ -17,7 +17,7 @@
 get_code <- function(files_path,
                      exclude_comments = TRUE,
                      read_sources = TRUE) {
-  stopifnot(is.character(files_path) && length(files_path) >= 1)
+  stopifnot(is.character.vector(files_path))
   stopifnot(is.logical.single(exclude_comments))
   stopifnot(is.logical.single(read_sources))
 
@@ -34,23 +34,28 @@ get_code <- function(files_path,
 #' Get code
 #'
 #' Get code from specified file.
-#' @param file_path (\code{character}) path of the file to be parsed
+#' @param file_path (\code{character}) path or URL address of the file to be parsed
+#' @param if_url (\code{logical}) (optional) TRUE when URL address is provided
 #' @inheritParams get_code
 #'
 #' @return lines (\code{character}) of preprocessing code
 #'
 #' @importFrom magrittr %>%
-get_code_single <- function(file_path, read_sources) {
+get_code_single <- function(file_path, read_sources, if_url = grepl("^http[s]", file_path)) {
   stopifnot(is.character.single(file_path))
-  stop_if_not(list(
-    file.exists(file_path),
-    paste0("Reading preprocessing code from ", file_path, " file failed. Please double check if you saved your script.")
-  ))
+  if (!if_url) {
+    stop_if_not(list(
+      file.exists(file_path),
+      paste0("Reading preprocessing code from ", file_path, " file failed. ",
+             "Please double check if you saved your script.")
+    ))
+  }
   stopifnot(is.logical.single(read_sources))
+  stopifnot(is.logical.single(if_url))
 
   lines <- readLines(file_path)
   if (read_sources) {
-    lines <- include_source_code(lines = lines, dir = dirname(file_path))
+    lines <- include_source_code(lines = lines, dir = `if`(if_url, NULL, dirname(file_path)))
   }
 
   lines
@@ -62,8 +67,7 @@ get_code_single <- function(file_path, read_sources) {
 #' @param lines (\code{character}) of preprocessing code.
 #' @inheritParams get_code
 enclosed_with <- function(lines) {
-  stopifnot(is.character(lines), length(lines) >= 1)
-
+  stopifnot(is.character.vector(lines))
 
   # set beginning of preprocessing
   idx_start <- grep("#\\s*code>", lines)
@@ -99,7 +103,7 @@ enclosed_with <- function(lines) {
 #' @inheritParams get_code
 #' @inheritParams get_code_single
 code_exclude <- function(lines, exclude_comments, file_path) {
-  stopifnot(is.character(lines), length(lines) >= 1)
+  stopifnot(is.character.vector(lines))
   stopifnot(is.logical.single(exclude_comments))
 
   nocode_single <- grep("^.+#[[:space:]]*nocode", lines)
@@ -126,8 +130,6 @@ code_exclude <- function(lines, exclude_comments, file_path) {
     lines <- gsub("(^\\s*#.+$)|(#[^\'\"]*$)", "", x = lines, perl = TRUE)
   }
 
-  #
-
   lines
 }
 
@@ -136,10 +138,12 @@ code_exclude <- function(lines, exclude_comments, file_path) {
 #' Finds lines in preprocessing code where \code{source()} call is located
 #' @inheritParams enclosed_with
 find_source_code <- function(lines) {
-  stopifnot(is.character(lines), length(lines) >= 1)
-  idx <- grep("^[^#]*source\\([\'\"]([A-Za-z0-9_/.]+\\.R)[\"\']\\)+.*$", lines)
+  stopifnot(is.character.vector(lines))
+  idx <- grep("^[^#]*source\\([\'\"]([A-Za-z0-9_/.]).*\\.R[\'\"].*\\).*$", lines)
 
-  if (length(idx) == 0) return(idx)
+  if (length(idx) == 0) {
+    return(idx)
+  }
 
   if (any(grepl("source\\([^)]*chdir\\s*=\\s*T(RUE)*", x = lines[idx]))) {
     stop("Preprocessing doesn't handle source(chdir = TRUE)")
@@ -161,9 +165,9 @@ find_source_code <- function(lines) {
 #' @return lines of code with source text included
 #'
 #' @importFrom magrittr %>%
-include_source_code <- function(lines, dir) {
-  stopifnot(is.character(lines), length(lines) >= 1)
-  stopifnot(dir.exists(dir))
+include_source_code <- function(lines, dir = NULL) {
+  stopifnot(is.character.vector(lines))
+  stopifnot(is.null(dir) || dir.exists(dir))
 
 
   idx <- find_source_code(lines)
@@ -172,22 +176,36 @@ include_source_code <- function(lines, dir) {
     return(lines)
   }
 
-  sources_path <- gsub("source\\(.*[\"\']([A-Za-z0-9_/.]+)[\"\'].+$", "\\1", lines[idx])
+  sources_path <- vapply(
+    lines[idx],
+    function(x) {
+      res <- gsub("source\\(.*[\"\']([A-Za-z0-9_/.])", "\\1", strsplit(x, ",")[[1]][1])
+      res <- gsub("[\'\"]", "", res)
+      res <- gsub(")", "", res)
+      res
+    },
+    character(1)
+  ) %>%
+    unname()
 
   if (length(sources_path) != length(idx)) {
     stop("Couldn't detect R file name from source() call.")
   }
 
-  sources_path <- ifelse(grepl("^(/)|^([\\])|^([A-Za-z]:)", sources_path), sources_path, file.path(dir, sources_path))
-  if (!all(file.exists(sources_path))) {
-    msg <- paste0("File(s) provided in the source() calls don't exist: \n",
-                  paste(sources_path[!file.exists(sources_path)], collapse = "\n"))
-    stop(msg)
-  }
-
-  sources_path <- normalizePath(sources_path)
-
   sources_code <- lapply(sources_path, function(s) {
+    if (grepl("^http[s]", s)) {
+      # url detected - do nothing
+    } else {
+      s <- ifelse(grepl("^(/)|^([\\])|^([A-Za-z]:)", s), s, file.path(dir, s))
+      if (!all(file.exists(s))) {
+        msg <- paste0("File(s) provided in the source() calls don't exist: \n",
+                      paste(s[!file.exists(s)], collapse = "\n"))
+        stop(msg)
+      }
+
+      s <- normalizePath(s)
+    }
+
     get_code_single(file_path = s, read_sources = TRUE)
   })
 
