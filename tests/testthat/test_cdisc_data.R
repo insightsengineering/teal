@@ -5,6 +5,11 @@ ASL <- ARG1 <- ARG2 <- 1 #nolint
 ADTE <- 2 #nolint
 ARS <- 3 #nolint
 
+
+filename <- file.path(find.package("teal"), "preprocessing_empty_string.txt")
+preprocessing_empty_text <- readChar(filename, file.info(filename)$size)
+
+
 test_that("Basic example - without code and check", {
   expect_silent(cdisc_data(ASL, code = NULL, check = FALSE))
   expect_silent(cdisc_data(ASL, ARG1 = ARG1, ARG2 = ARG2, code = NULL, check = FALSE))
@@ -37,7 +42,7 @@ test_that("List values", {
   class(result_to_compare) <- "cdisc_data"
   keys(result_to_compare[["ASL"]]) <- "test1"
   attr(result_to_compare[["ASL"]], "dataname") <- "ASL"
-  attr(result_to_compare, "code") <- "# !!! Preprocessing code is empty"
+  attr(result_to_compare, "code") <- preprocessing_empty_text
 
   expect_identical(result, result_to_compare)
 
@@ -51,7 +56,7 @@ test_that("List values", {
   attr(result_to_compare[["ASL"]], "dataname")  <- "ASL"
   attr(result_to_compare[["ADTE"]], "dataname") <- "ADTE"
   attr(result_to_compare[["ARS"]], "dataname") <- "ARS"
-  attr(result_to_compare, "code") <- "# !!! Preprocessing code is empty"
+  attr(result_to_compare, "code") <- preprocessing_empty_text
 
   expect_identical(result, result_to_compare)
 })
@@ -61,15 +66,15 @@ test_that("Empty code", {
 
   # missing code
   result <- cdisc_data(ASL, check = FALSE)
-  expect_identical(attr(result, "code"), "# !!! Preprocessing code is empty")
+  expect_identical(attr(result, "code"), preprocessing_empty_text)
 
   # NULL code
   result <- cdisc_data(ASL, code = NULL, check = FALSE)
-  expect_identical(attr(result, "code"), "# !!! Preprocessing code is empty")
+  expect_identical(attr(result, "code"), preprocessing_empty_text)
 
   # empty code
   result <- cdisc_data(ASL, code = "", check = FALSE)
-  expect_identical(attr(result, "code"), "# !!! Preprocessing code is empty")
+  expect_identical(attr(result, "code"), preprocessing_empty_text)
 })
 
 
