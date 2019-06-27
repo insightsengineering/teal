@@ -58,7 +58,9 @@
 #'     module(
 #'       "ASL AGE histogram",
 #'       server = function(input, output, session, datasets) {
-#'         output$hist <- renderPlot(hist(datasets$get_data("ASL", filtered = TRUE, reactive = TRUE)$AGE))
+#'         output$hist <- renderPlot(
+#'            hist(datasets$get_data("ASL", filtered = TRUE, reactive = TRUE)$AGE)
+#'         )
 #'       },
 #'       ui = function(id) {ns <- NS(id); plotOutput(ns('hist'))},
 #'       filters = "ASL"
