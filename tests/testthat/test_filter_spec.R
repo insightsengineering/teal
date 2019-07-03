@@ -72,16 +72,24 @@ test_that("Multiple vars", {
                                               `val1.1 - val2.2` = "val1.1 - val2.2")))
 
   expect_silent(f4 <- filter_spec(vars = c("var1", "var2"),
+                                  choices = c(`val1.1 - val2.1` = "val1.1:val2.1",
+                                              `val1.1 - val2.2` = "val1.1:val2.2"),
+                                  sep = ":"))
+
+  expect_silent(f5 <- filter_spec(vars = c("var1", "var2"),
                                   choices = c(`combo1` = "val1.1 - val2.1",
                                               `combo2` = "val1.1 - val2.2")))
 
+
+
   expect_identical(f1, f2)
   expect_identical(f1, f3)
-  expect_true(all(names(f1$choices) != names(f4$choices)))
+  expect_identical(f1, f4)
+  expect_true(all(names(f1$choices) != names(f5$choices)))
 
   expect_identical(f1$vars, c("var1", "var2"))
   expect_identical(names(f1$choices), c("val1.1 - val2.1", "val1.1 - val2.2"))
-  expect_identical(names(f4$choices), c("combo1", "combo2"))
+  expect_identical(names(f5$choices), c("combo1", "combo2"))
   expect_identical(f1$selected, list(`val1.1 - val2.1` = c("val1.1", "val2.1")))
 
   # Multiple vars and multiple = TRUE
