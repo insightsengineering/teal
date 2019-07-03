@@ -57,6 +57,7 @@ test_that("Single choice", {
 test_that("Multiple choices", {
   choices <- c("c1", "c2", "c3")
   selected <- c("c1", "c2")
+  expect_error(columns_spec(choices = choices, selected = selected, multiple = FALSE), "multiple \\|\\| length")
 
   expect_silent(c1 <- columns_spec(choices = choices, selected = selected, multiple = TRUE))
   expect_silent(c2 <- columns_spec(choices = choices, selected = selected))
@@ -79,5 +80,8 @@ test_that("Multiple choices", {
 
   expect_identical(c3$choices, setNames(choices, vapply(choices, paste, collapse = " - ", character(1))))
   expect_identical(c3$selected, setNames(selected, vapply(selected, paste, collapse = " - ", character(1))))
+
+
+
 
 })
