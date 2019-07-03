@@ -35,7 +35,7 @@
 #'   \item{Selection with just one column allowed }{
 #'     \preformatted{
 #' columns = columns_spec(
-#'   choices = c("AVAL", "BMRKR1", "AGE”),
+#'   choices = c("AVAL", "BMRKR1", "AGE"),
 #'   selected = c("AVAL"),
 #'   multiple = FALSE,
 #'   fixed = FALSE,
@@ -52,7 +52,7 @@
 #'   \item{Selection with just multiple columns allowed }{
 #'     \preformatted{
 #' columns = columns_spec(
-#'   choices = c("AVAL", "BMRKR1", "AGE”),
+#'   choices = c("AVAL", "BMRKR1", "AGE"),
 #'   selected = c("AVAL", "BMRKR1"),
 #'   multiple = TRUE,
 #'   fixed = FALSE,
@@ -86,17 +86,21 @@
 #' @importFrom purrr map_lgl
 #' @importFrom stats setNames
 #' @export
-columns_spec <- function(choices, selected, multiple, fixed = TRUE, label = "Column(s)") {
+columns_spec <- function(choices,
+                         selected = choices[1],
+                         multiple = length(selected) > 1,
+                         fixed = TRUE,
+                         label = "Column(s)") {
   # when choices and selected is not a list, we convert it to a list (because each
   # entry is an atomic vector of possibly several entries, needed for filter_spec currently)
   choices <- as.list(choices)
   selected <- as.list(selected)
   stopifnot(is.list(choices) && length(choices) >= 1 && all(vapply(choices, is.atomic, TRUE)))
   stopifnot(is.list(selected) && length(selected) >= 1 && all(vapply(selected, is.atomic, TRUE)))
-  stopifnot(all(selected %in% choices)) # selected and choices must be a list to work correcty
-  stopifnot(is.logical(multiple))
-  stopifnot(is.logical(fixed))
-  stopifnot(is.character(label) && length(label) == 1)
+  stopifnot(all(selected %is_in% choices))
+  stopifnot(is.logical.single(multiple))
+  stopifnot(is.logical.single(fixed))
+  stopifnot(is.character.single(label))
   # check for correct lengths
   stopifnot(multiple || length(selected) == 1)
 
@@ -104,10 +108,10 @@ columns_spec <- function(choices, selected, multiple, fixed = TRUE, label = "Col
   stopifnot(all(map_lgl(choices, ~ length(.) == length(choices[[1]]))))
   # if names is NULL, shiny will put strange labels (with quotes etc.) in the selectInputs, so we set it to the values
   if (is.null(names(choices))) {
-    choices %<>% setNames(choices)
+    names(choices) <- vapply(choices, paste, collapse = " - ", character(1))
   }
   if (is.null(names(selected))) {
-    selected %<>% setNames(selected)
+    names(selected) <- vapply(selected, paste, collapse = " - ", character(1))
   }
   res <- list(choices = choices, selected = selected, multiple = multiple, fixed = fixed, label = label)
   class(res) <- "column_spec"
