@@ -4,8 +4,8 @@
 \alias{filter_spec}
 \title{filter spec}
 \usage{
-filter_spec(vars, choices, selected, multiple, label = "Filter",
-  sep = " - ")
+filter_spec(vars, choices, selected = choices[1],
+  multiple = length(selected) > 1, label = "Filter", sep = " - ")
 }
 \arguments{
 \item{vars}{(\code{character}) Character vector giving the columns to be filtered. These should be

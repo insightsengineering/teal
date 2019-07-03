@@ -4,8 +4,8 @@
 \alias{columns_spec}
 \title{Column selection input specification}
 \usage{
-columns_spec(choices, selected, multiple, fixed = TRUE,
-  label = "Column(s)")
+columns_spec(choices, selected = choices[1],
+  multiple = length(selected) > 1, fixed = TRUE, label = "Column(s)")
 }
 \arguments{
 \item{choices}{(\code{character}) Named character vector to define the choices
@@ -43,7 +43,7 @@ start by a data set containing the columns \code{"AGE"}, \code{"AVAL"} and \code
   \item{Selection with just one column allowed }{
     \preformatted{
 columns = columns_spec(
-  choices = c("AVAL", "BMRKR1", "AGE”),
+  choices = c("AVAL", "BMRKR1", "AGE"),
   selected = c("AVAL"),
   multiple = FALSE,
   fixed = FALSE,
@@ -60,7 +60,7 @@ columns = columns_spec(
   \item{Selection with just multiple columns allowed }{
     \preformatted{
 columns = columns_spec(
-  choices = c("AVAL", "BMRKR1", "AGE”),
+  choices = c("AVAL", "BMRKR1", "AGE"),
   selected = c("AVAL", "BMRKR1"),
   multiple = TRUE,
   fixed = FALSE,

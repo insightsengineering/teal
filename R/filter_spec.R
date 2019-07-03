@@ -118,17 +118,25 @@
 #' }
 #'
 #'
-#'
-filter_spec <- function(vars, choices, selected, multiple, label = "Filter", sep = " - ") {
+#' @importFrom utils.nest is.character.single is.logical.single
+filter_spec <- function(vars,
+                        choices,
+                        selected = choices[1],
+                        multiple = length(selected) > 1,
+                        label = "Filter",
+                        sep = " - ") {
   stopifnot(is.atomic(vars))
   stopifnot(is.atomic(choices))
   stopifnot(is.atomic(selected))
   stopifnot(all(is.character(vars)))
   stopifnot(all(is.character(choices)))
   stopifnot(all(is.character(selected)))
-  stopifnot(is.character(sep) && length(sep) == 1 && is.atomic(sep))
-  stopifnot(multiple || length(selected) == 1)
-  stopifnot(is.character(label) && length(label) == 1)
+  stopifnot(all(!duplicated(vars)))
+  stopifnot(all(!duplicated(choices)))
+  stopifnot(all(!duplicated(selected)))
+  stopifnot(is.character.single(sep))
+  stopifnot(is.logical.single(multiple))
+  stopifnot(is.character.single(label))
 
   choices <- split_by_sep(choices, sep)
   selected <- split_by_sep(selected, sep)
