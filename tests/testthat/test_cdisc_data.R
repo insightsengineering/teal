@@ -6,7 +6,7 @@ ADTE <- 2 #nolint
 ARS <- 3 #nolint
 
 
-filename <- file.path(find.package("teal"), "preprocessing_empty_string.txt")
+filename <- file.path(path.package("teal"), "preprocessing_empty_string.txt")
 preprocessing_empty_text <- readChar(filename, file.info(filename)$size)
 
 
