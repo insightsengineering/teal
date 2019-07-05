@@ -44,7 +44,9 @@ srv_filter_info <- function(input, output, session, datasets, dataname) {
     # this is at least the second dataset.
     on_filters <- lapply(
       datasets$datanames(),
-      function(dataname_int) !is.null(datasets$get_filter_state(dataname_int, reactive = TRUE))
+      function(dataname_int){
+        length(names(datasets$get_filter_state(dataname_int, reactive = TRUE))) >= 1
+      }
     ) %>%
       unlist()
 
