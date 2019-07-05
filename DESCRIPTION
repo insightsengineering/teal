@@ -54,6 +54,7 @@ Collate:
     'log_app_usage.R'
     'logging.R'
     'module_add_filter_variable.R'
+    'module_filter_info.R'
     'module_filter_items.R'
     'stop_shiny.R'
     'teal.R'
