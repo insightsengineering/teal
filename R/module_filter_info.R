@@ -12,17 +12,6 @@ ui_filter_info <- function(id, dataname, title = NULL) {
 srv_filter_info <- function(input, output, session, datasets, dataname) {
   uistate <- reactiveValues(filters_shown = character(0))
 
-  observeEvent(datasets$get_filter_state(dataname, reactive = TRUE), {
-    fs <- datasets$get_filter_state(dataname)
-    current <- uistate$filters_shown
-
-    .log("filter items observer updated for data", dataname)
-
-    if (!identical(names(fs), current)) {
-      uistate$filters_shown <- names(fs)
-    }
-  })
-
   info_tags <- function(dataname, datasets = NULL) {
     tagList(
       tags$b(paste(dataname, "dataset information:")),
@@ -34,7 +23,6 @@ srv_filter_info <- function(input, output, session, datasets, dataname) {
   }
 
   output$uifiltersinfo <- renderUI({
-    uistate$filters_shown
 
     .log("update uiFilters")
 
@@ -42,13 +30,12 @@ srv_filter_info <- function(input, output, session, datasets, dataname) {
 
     # Check if filters are already rendered by checking if the number of filtered datasets > 1 and
     # this is at least the second dataset.
-    on_filters <- lapply(
+    on_filters <- unlist(lapply(
       datasets$datanames(),
       function(dataname_int){
         length(names(datasets$get_filter_state(dataname_int, reactive = TRUE))) >= 1
       }
-    ) %>%
-      unlist()
+    ))
 
     already_rendered <- which(dataname == datasets$datanames()) > 1 && length(which(on_filters)) > 1
 
