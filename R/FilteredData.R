@@ -246,6 +246,23 @@ FilteredData <- R6::R6Class( # nolint
       }
     },
 
+    get_data_info = function(dataname, filtered = TRUE) {
+      if (filtered) {
+        lapply(names(private$filtered_datasets), function(ds_name) {
+          list(name = ds_name,
+            dim = dim(private$filtered_datasets[[ds_name]]),
+            summary = summary(private$filtered_datasets[[ds_name]])
+            )
+        })
+      } else {
+        lapply(names(private$datasets), function(ds_name) {
+          list(name = ds_name,
+            dim = dim(private$datasets[[ds_name]]),
+            summary = summary(private$datasets[[ds_name]])
+            )
+        })
+      }
+    },
 
     get_filter_info = function(dataname, varname = NULL) {
       private$error_if_not_valid(dataname, varname)
