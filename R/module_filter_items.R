@@ -3,8 +3,6 @@ ui_filter_items <- function(id, dataname, title = NULL) {
   ns <- NS(id)
 
   div(class = paste0("teal_filter_", dataname),
-
-      uiOutput(ns("datainfo")),
       uiOutput(ns("uifilters"))
   )
 
@@ -27,13 +25,6 @@ srv_filter_items <- function(input, output, session, datasets, dataname, contain
       uistate$filters_shown <- names(fs)
     }
 
-    output$datainfo <- renderUI({
-            els <- lapply(datasets$get_data_info(), function(x)
-            tagList(tags$b(paste(x$name, "dataset information:")),
-                tags$p(paste("# patients:", x$dim[1], "|", "# variables:", x$dim[2]))
-            ))
-            do.call(tagList, els)
-        })
   })
 
 
@@ -43,9 +34,9 @@ srv_filter_items <- function(input, output, session, datasets, dataname, contain
 
     .log("update uiFilters")
 
-    ns <- session$ns
-
     fs_data <- datasets$get_filter_state(dataname)
+
+    ns <- session$ns
 
     if (is.null(fs_data) || length(fs_data) == 0) {
       div()

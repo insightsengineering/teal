@@ -246,21 +246,18 @@ FilteredData <- R6::R6Class( # nolint
       }
     },
 
-    get_data_info = function(dataname, filtered = TRUE) {
-      if (filtered) {
-        lapply(names(private$filtered_datasets), function(ds_name) {
-          list(name = ds_name,
-            dim = dim(private$filtered_datasets[[ds_name]]),
-            summary = summary(private$filtered_datasets[[ds_name]])
-            )
-        })
+    get_data_info = function(dataname, filtered = TRUE, reactive = FALSE) {
+
+      f <- if (reactive) {
+        function(x) x
       } else {
-        lapply(names(private$datasets), function(ds_name) {
-          list(name = ds_name,
-            dim = dim(private$datasets[[ds_name]]),
-            summary = summary(private$datasets[[ds_name]])
-            )
-        })
+        function(x) isolate(x)
+      }
+
+      if (filtered) {
+        list(name = dataname, dim = dim(f(private$filtered_datasets[[dataname]])))
+      } else {
+        list(name = dataname, dim = dim(f(private$datasets[[dataname]])))
       }
     },
 
