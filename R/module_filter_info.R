@@ -1,4 +1,4 @@
-ui_filter_info <- function(id, dataname, title = NULL) {
+ui_filter_info <- function(id, dataname) {
   ns <- NS(id)
 
   div(
@@ -10,7 +10,6 @@ ui_filter_info <- function(id, dataname, title = NULL) {
 
 #' @import methods
 srv_filter_info <- function(input, output, session, datasets, dataname) {
-  uistate <- reactiveValues(filters_shown = character(0))
 
   info_tags <- function(dataname, datasets = NULL) {
     tagList(
@@ -26,8 +25,6 @@ srv_filter_info <- function(input, output, session, datasets, dataname) {
 
     .log("update uiFilters")
 
-    fs_data <- datasets$get_filter_state(dataname)
-
     # Check if filters are already rendered by checking if the number of filtered datasets > 1 and
     # this is at least the second dataset.
     on_filters <- unlist(lapply(
@@ -37,9 +34,11 @@ srv_filter_info <- function(input, output, session, datasets, dataname) {
       }
     ))
 
+    on_filters <- setNames(on_filters, datasets$datanames())
+
     already_rendered <- which(dataname == datasets$datanames()) > 1 && length(which(on_filters)) > 1
 
-    if (is.null(fs_data) || length(fs_data) == 0 || already_rendered) {
+    if (!on_filters[dataname] || already_rendered) {
       div()
     } else {
       els <- lapply(datasets$datanames(), function(dataname_int) info_tags(dataname_int, datasets = datasets))

@@ -1,4 +1,4 @@
-ui_filter_items <- function(id, dataname, title = NULL) {
+ui_filter_items <- function(id, dataname) {
 
   ns <- NS(id)
 

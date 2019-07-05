@@ -168,7 +168,7 @@ init <- function(data,
                                 ),
                                 tagList(
                                   lapply(datasets$datanames(), function(dataname) {
-                                    ui_filter_info(paste0("teal_filter_info_", dataname), dataname)
+                                    ui_filter_info(paste0("teal_filters_info_", dataname), dataname)
                                   })
                                 ),
                                 tagList(
@@ -221,7 +221,7 @@ init <- function(data,
       callModule(srv_filter_items, paste0("teal_filters_", dataname), datasets, dataname)
     })
     lapply(datasets$datanames(), function(dataname) {
-      callModule(srv_filter_info, paste0("teal_filter_info_", dataname), datasets, dataname)
+      callModule(srv_filter_info, paste0("teal_filters_info_", dataname), datasets, dataname)
     })
 
     asl_vars <- names(datasets$get_data("ASL"))
