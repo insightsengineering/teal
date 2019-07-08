@@ -3,7 +3,7 @@
 #' Modules collects a tree of \code{\link{module}} and \code{\link{modules}}
 #' objects. This is useful to define the navigation structure of a teal app.
 #'
-#' @import methods
+#' @importFrom methods is
 #'
 #' @param label label of modules collection
 #' @param ... \code{\link{module}} and \code{\link{modules}} object
@@ -89,7 +89,7 @@ module <- function(label, server, ui, filters, server_args=NULL, ui_args=NULL) {
 #'
 #' @return depth level for given module
 #'
-#' @import methods
+#' @importFrom methods is
 #'
 #' @examples
 #' m <- module("aaa", server = function(input, output, session, datasets){}, ui = NULL, filters = NULL)

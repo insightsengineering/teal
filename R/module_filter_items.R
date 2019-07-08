@@ -8,7 +8,6 @@ ui_filter_items <- function(id, dataname) {
 
 }
 
-#' @import methods
 #' @importFrom shinyWidgets pickerOptions
 srv_filter_items <- function(input, output, session, datasets, dataname, container = div) {
 

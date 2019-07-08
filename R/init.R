@@ -30,8 +30,9 @@
 #'
 #' @export
 #'
-#' @import methods shiny stats
+#' @import shiny stats
 #' @importFrom shinyjs useShinyjs
+#' @importFrom methods is
 #'
 #' @include FilteredData.R
 #' @include modules.R

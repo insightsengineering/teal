@@ -8,7 +8,6 @@ ui_filter_info <- function(id, dataname) {
   )
 }
 
-#' @import methods
 srv_filter_info <- function(input, output, session, datasets, dataname) {
 
   info_tags <- function(dataname, datasets = NULL) {
