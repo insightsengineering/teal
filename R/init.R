@@ -30,7 +30,6 @@
 #'
 #' @export
 #'
-#' @import shiny stats
 #' @importFrom shinyjs useShinyjs
 #' @importFrom methods is
 #'
