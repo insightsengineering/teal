@@ -1,4 +1,4 @@
-ui_filter_items <- function(id, dataname, title = NULL) {
+ui_filter_items <- function(id, dataname) {
 
   ns <- NS(id)
 
@@ -8,7 +8,6 @@ ui_filter_items <- function(id, dataname, title = NULL) {
 
 }
 
-#' @import methods
 #' @importFrom shinyWidgets pickerOptions
 srv_filter_items <- function(input, output, session, datasets, dataname, container = div) {
 
@@ -34,9 +33,9 @@ srv_filter_items <- function(input, output, session, datasets, dataname, contain
 
     .log("update uiFilters")
 
-    ns <- session$ns
-
     fs_data <- datasets$get_filter_state(dataname)
+
+    ns <- session$ns
 
     if (is.null(fs_data) || length(fs_data) == 0) {
       div()

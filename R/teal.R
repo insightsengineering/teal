@@ -10,6 +10,8 @@
 #' @importFrom dplyr mutate
 #' @import magrittr
 #' @import utils.nest
+#' @import shiny
+#' @import stats
 #' @docType package
 #' @name teal
 NULL

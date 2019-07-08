@@ -246,6 +246,20 @@ FilteredData <- R6::R6Class( # nolint
       }
     },
 
+    get_data_info = function(dataname, filtered = TRUE, reactive = FALSE) {
+
+      f <- if (reactive) {
+        function(x) x
+      } else {
+        function(x) isolate(x)
+      }
+
+      if (filtered) {
+        list(name = dataname, dim = dim(f(private$filtered_datasets[[dataname]])))
+      } else {
+        list(name = dataname, dim = dim(f(private$datasets[[dataname]])))
+      }
+    },
 
     get_filter_info = function(dataname, varname = NULL) {
       private$error_if_not_valid(dataname, varname)
