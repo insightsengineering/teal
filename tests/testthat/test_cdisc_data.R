@@ -5,10 +5,14 @@ ASL <- ARG1 <- ARG2 <- 1 #nolint
 ADTE <- 2 #nolint
 ARS <- 3 #nolint
 
+package_path <- path.package("teal")
+if ("inst" %in% list.dirs(package_path, full.names = F, recursive = F)) {
+  filename <- file.path(package_path, "inst", "preprocessing_empty_string.txt")
+} else {
+  filename <- file.path(package_path, "preprocessing_empty_string.txt")
+}
 
-filename <- file.path(path.package("teal"), "preprocessing_empty_string.txt")
 preprocessing_empty_text <- readChar(filename, file.info(filename)$size)
-
 
 test_that("Basic example - without code and check", {
   expect_silent(cdisc_data(ASL, code = NULL, check = FALSE))
