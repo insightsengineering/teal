@@ -131,7 +131,7 @@ label_to_id <- function(label, prefix = NULL) {
   label <- gsub("^_|_$", "", gsub("[^[:alnum:]]", "_", label))
   if (!is.null(prefix)) {
     prefix <- gsub("^_|_$", "", gsub("[^[:alnum:]]", "_", prefix))
-    paste(prefix, label, sep = ".")
+    paste(prefix, label, sep = "_")
   } else {
     label
   }
@@ -155,7 +155,7 @@ create_ui_teal_modules <- function(x, datasets, idprefix, is_root = FALSE) {
   .log("** UI id for modules is", id)
 
   tsp <- do.call(
-    shiny::tabsetPanel,
+    tabsetPanel,
     c(
       list(id = id, type = if (is_root) "pills" else "tabs"),
       as.vector(lapply(x$modules, create_ui, datasets = datasets, idprefix = id))
@@ -173,7 +173,7 @@ create_ui_teal_module <- function(x, datasets, idprefix, is_root = FALSE) {
 
   .log("UI id for module is", uiid)
 
-  shiny::tabPanel(x$label, tagList(div(style = "margin-top: 25px;"), do.call(x$ui, c(list(id = uiid), args))))
+  tabPanel(x$label, tagList(div(style = "margin-top: 25px;"), do.call(x$ui, c(list(id = uiid), args))))
 }
 
 
@@ -201,7 +201,7 @@ call_modules_teal_module <- function(x, datasets, idprefix) {
   .log("server tab_module  id:", id)
 
   do.call(
-    shiny::callModule,
+    callModule,
     c(
      list(module = x$server, id = id),
      datasets = datasets,

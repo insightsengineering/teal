@@ -2,8 +2,6 @@
 ^\.drone\.yml$
 ^.*\.Rproj$
 ^\.Rproj\.user$
-^man-roxygen/*
-^vignettes/*.html
-^docs$
 ^_pkgdown\.yml$
 ^Jenkinsfile$
+docs

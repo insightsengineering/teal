@@ -59,7 +59,7 @@ ui <- fluidPage(
     sidebarPanel("sidebar panel"),
     mainPanel(
       "main panel",
-      teal_instance$ui(id = "teal_1")  
+      teal_instance$ui(id = "teal_1")
     )
   )
 )
@@ -84,10 +84,10 @@ settings, etc...) so that an analysis state can be shared.
 # Improve Variable Browser
 
 Currently the `tm_variable_browser` is very basic. The univariate visualization
-of the data can be improved (and abtracted). For example, 
+of the data can be improved (and abtracted). For example,
 
  * Make a better summary of factor variables with many factor levels
- * Provide multiple selection for bivariate plots 
+ * Provide multiple selection for bivariate plots
 
 # Improve the Data Table View
 
@@ -95,7 +95,7 @@ The `tm_data_table` module could also need some more basic raw data interaction
 features. Right now we only allow for frequency counts of unique rows.
 
  * The dataset selection needs some `CSS` styling
- 
+
 # Split View
 
 Currently only one teal module can be shown at any given time (without manually
@@ -132,11 +132,11 @@ my_new_module <- Class(expands = "tm_scatterplot",
                          )
                        },
                        server = {
-                         s <- parent() 
+                         s <- parent()
                          # modify parent reactive expressions
                          output$plot <- reactive({
                            gg <- s$plot
-                           
+
                            gg + geom_smoot()
                          })
                        }
@@ -170,7 +170,6 @@ The important part here is that there is a clean distinction what teal does and
 what the teal module developer has to do. For example, for the following code:
 
 ```{r eval=FALSE}
-library(tern)
 library(survival)
 
 ## Attributes to the datasets that are passed to the init data argument

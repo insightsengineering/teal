@@ -21,26 +21,24 @@ reference:
     - module
     - modules
     - root_modules
-    - choices_selected
-  - title: Teal Modules
-    contents:
-    - tm_data_table
-    - tm_variable_browser
-    - tm_scatterplot
-    - tm_table
-  - title: Custom Widgets and Layout
-    contents:
-    - optionalSelectInput
-    - optionalSliderInput
-    - optionalSliderInputValMinMax
-    - standard_layout
   - title: Reproducibility
+    desc: Functions allowing teal output reproducibility.
     contents:
-    - get_rcode_header
-    - get_filter_txt
-    - parse_code_chunks
-    - reindent
-    - show_r_code_modal
+    - cdisc_data
+    - get_code
+  - title: Teal Filtering and Selecting
+    desc: Functions used to filter observations and select variables from dataset.
+    contents:
+    - add_no_selected_choices
+    - choices_labeled
+    - choices_selected
+    - columns_spec
+    - data_extract_spec
+    - filter_spec
+    - is.choices_selected
   - title: Helpers
     contents:
-    - as.global
+    - log_app_usage
+    - no_selected_as_NULL
+    - split_by_sep
+    - stop_shiny

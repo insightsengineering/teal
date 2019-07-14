@@ -9,6 +9,7 @@ ui_filter_items <- function(id, dataname, title = NULL) {
 }
 
 #' @import methods
+#' @importFrom shinyWidgets pickerOptions
 srv_filter_items <- function(input, output, session, datasets, dataname, container = div) {
 
   uistate <- reactiveValues(filters_shown = character(0))
@@ -54,22 +55,43 @@ srv_filter_items <- function(input, output, session, datasets, dataname, contain
 
         el <- if (fi$type == "choices") {
           if (length(fi$choices) > 5) {
-            selectInput(ns(id), varlabel,
-                        choices =  fi$choices,
-                        selected = fs,
-                        multiple = TRUE)
+            pickerInput(
+              ns(id),
+              varlabel,
+              choices =  fi$choices,
+              selected = fs,
+              multiple = TRUE,
+              options = pickerOptions(
+                actionsBox = TRUE,
+                liveSearch = (length(fi$choices) > 20),
+                noneSelectedText = "Select a value"
+              )
+            )
           } else {
-            checkboxGroupInput(ns(id), varlabel,
-                               choices =  fi$choices,
-                               selected = fs)
+            checkboxGroupInput(
+              ns(id),
+              varlabel,
+              choices =  fi$choices,
+              selected = fs
+            )
           }
         } else if (fi$type == "range") {
-          sliderInput(ns(id), varlabel,
-                      min = floor(fi$range[1] * 100) / 100, max = ceiling(fi$range[2] * 100) / 100,
-                      value = fs,
-                      width = "100%")
+          sliderInput(
+            ns(id),
+            varlabel,
+            min = floor(fi$range[1] * 100) / 100,
+            max = ceiling(fi$range[2] * 100) / 100,
+            value = fs,
+            width = "100%"
+          )
         } else if (fi$type == "logical") {
-          radioButtons(ns(id), varlabel, choices = fi$choices, selected = fs, inline = TRUE)
+          radioButtons(
+            ns(id),
+            varlabel,
+            choices = fi$choices,
+            selected = fs,
+            inline = TRUE
+          )
         } else {
           tags$p(paste(var, "in data", dataname, "has unknown type:", fi$type))
         }

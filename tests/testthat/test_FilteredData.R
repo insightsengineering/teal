@@ -1,5 +1,3 @@
-library(teal)
-library(testthat)
 library(random.cdisc.data)
 
 context("FilteredData")
@@ -21,8 +19,8 @@ x$set_data("AAE", ADAE)
 
 test_that(
   "load and set_datasets", {
-    expect_identical(x$get_data("ASL"), ADSL)
-    expect_identical(x$get_data("AAE"), ADAE)
+    expect_equal(x$get_data("ASL"), ADSL)
+    expect_equal(x$get_data("AAE"), ADAE)
 
     expect_identical(x$datanames(), c("ASL", "AAE"))
   }
@@ -48,7 +46,7 @@ test_that(
 
     x$set_default_filter_state("ASL", "SEX")
     expect_equal(names(x$get_filter_state("ASL")), c("AGE", "SEX"))
-    expect_identical(x$get_filter_state("ASL")$SEX, as.character(unique(ADSL$SEX)))
+    expect_identical(x$get_filter_state("ASL")$SEX, as.character(levels(ADSL$SEX)))
 
   }
 )
@@ -66,7 +64,7 @@ test_that(
 
     x$set_filter_state("ASL", state = list(AGE = c(38, 40), SEX = "F"))
 
-    expect_identical(
+    expect_equal(
       x$get_data("ASL", filtered = TRUE, reactive = FALSE),
       subset(ADSL, SEX == "F" & AGE >= 38 & AGE <= 40)
     )
@@ -78,7 +76,7 @@ test_that(
   "reset filter states", {
     x$set_filter_state("ASL", state = NULL)
 
-    expect_identical(
+    expect_equal(
       x$get_data("ASL", filtered = TRUE, reactive = FALSE),
       ADSL
     )

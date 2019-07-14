@@ -13,8 +13,16 @@
 #'   vector with datasets names that are passed on (filtered) to the server
 #'   function\cr options \tab optional, other arguments passed on to the server
 #'   function }
-#' @param filter filter settings. Nested named list, currently with \code{init}
-#'   list element.
+#' @param filter (\code{list}) You can pre-define filters for
+#'   datasets inside this argument. Therefore you need to handover an
+#'   \code{init} list. Please provide a named list inside \code{init}
+#'   that contains the names of the datasets. E.g. for filtering
+#'   the dataset \code{ASL} use \code{list(init = list(ASL = ...))}.
+#'   For each datasets you need to provide a vector with column names that are
+#'   relevant for the item. You can specify an ASL filtering for the
+#'   columns \code{SEX} and \code{BAGE} by:
+#'
+#'   \code{filter = list(init = list(ASL = c("SEX", "BAGE")))}
 #' @param header object of class `shiny.tag` to be used as the header of the app
 #' @param footer object of class `shiny.tag` to be used as the footer of the app
 #'
@@ -22,23 +30,24 @@
 #'
 #' @export
 #'
-#' @import shiny methods stats
+#' @import methods shiny stats
+#' @importFrom shinyjs useShinyjs
+#'
+#' @include FilteredData.R
+#' @include modules.R
 #'
 #' @examples
-#' \dontrun{
 #' library(random.cdisc.data)
 #'
 #' ASL <- radsl(seed = 1)
-#' ARS <- radrs(ASL, seed = 100)
-#' ATE <- radtte(ASL, seed = 1000)
 #'
-#' # for reproducibility
-#' attr(ASL, "source") <- "random.cdisc.data::radsl(seed = 1)"
-#' attr(ARS, "source") <- "random.cdisc.data::radrs(ASL, seed = 100)"
-#' attr(ATE, "source") <- "random.cdisc.data::radtte(ASL, seed = 1000)"
-#'
-#' app <- teal::init(
-#'   data = list(ASL = ASL, ARS = ARS, ATE = ATE),
+#' app <- init(
+#'   data = cdisc_data(
+#'     ASL = ASL,
+#'     code = "
+#'       ASL <- radsl(seed = 1)
+#'     "
+#'   ),
 #'   modules = root_modules(
 #'     module(
 #'       "data source",
@@ -46,40 +55,24 @@
 #'       ui = function(id) div(p("information about data source")),
 #'       filters = NULL
 #'     ),
-#'     tm_data_table(),
-#'     tm_variable_browser(),
-#'     modules(
-#'       label = "analysis items",
-#'       tm_table(
-#'          label = "demographic table",
-#'          dataname = "ASL",
-#'          xvar = "SEX",
-#'          yvar = "RACE",
-#'          yvar_choices = c("RACE", "BMRKR2", "COUNTRY")
-#'       ),
-#'       tm_scatterplot(
-#'          label = "scatterplot",
-#'          dataname = "ASL",
-#'          xvar = "AGE",
-#'          yvar = "BMRKR1",
-#'          color_by = "_none_",
-#'          color_by_choices = c("_none_", "STUDYID")
-#'       ),
-#'       # ad-hoc module
-#'       module(
-#'          label = "survival curves",
-#'          server = function(input, output, session, datasets) {},
-#'          ui = function(id) div(p("Kaplan Meier Curve")),
-#'          filters = "ATE"
-#'       )
+#'     module(
+#'       "ASL AGE histogram",
+#'       server = function(input, output, session, datasets) {
+#'         output$hist <- renderPlot(
+#'            hist(datasets$get_data("ASL", filtered = TRUE, reactive = TRUE)$AGE)
+#'         )
+#'       },
+#'       ui = function(id) {ns <- NS(id); plotOutput(ns('hist'))},
+#'       filters = "ASL"
 #'     )
 #'   ),
+#'   filter = list(init = list(ASL = c("AGE"))),
 #'   header = tags$h1("Sample App"),
 #'   footer = tags$p("Copyright 2017")
 #' )
 #'
+#' \dontrun{
 #' shinyApp(app$ui, app$server)
-#'
 #' }
 init <- function(data,
                  modules,
@@ -87,17 +80,22 @@ init <- function(data,
                  header = tags$p("title here"),
                  footer = tags$p("footer here")) {
 
-
   if (modules_depth(modules) > 2) {
     stop("teal currently only supports module nesting of depth two.")
   }
 
+  if (!is(data, "cdisc_data")) {
+    warning("Please use cdisc_data() instead of list() for 'data' argument. It will be depreciated soon.")
+  }
+
   # initialize FilteredData object
   datasets <- FilteredData$new(names(data))
-
   Map(function(x, name) {
     datasets$set_data(name, x)
   }, data, names(data))
+
+  # including attributes of data object
+  datasets$set_data_attrs(data)
 
   # set default init filters
   if (!is.null(filter) && !is.null(filter$init)) {
@@ -109,7 +107,7 @@ init <- function(data,
   # ui function
   ui <- shinyUI(
       fluidPage(
-        shinyjs::useShinyjs(),
+        useShinyjs(),
         includeScript(system.file("js/clipboard.js", package = "teal")),
         includeScript(system.file("js/initClipboard.js", package = "teal")),
         tags$head(
@@ -231,11 +229,11 @@ init <- function(data,
     ## now show or hide the filter panels based on active tab
     observe({
       # define reactivity dependence
-      main_tab <- input[["teal_modules.root"]]
+      main_tab <- input[["teal_modules_root"]]
       secondary_tabs <- sapply(id_modules, function(id) input[[id]],  USE.NAMES = TRUE)
 
       # figure out which is the active tab/module
-      main_tab_id <- label_to_id(main_tab, "teal_modules.root")
+      main_tab_id <- label_to_id(main_tab, "teal_modules_root")
 
       active_module_id <- if (main_tab_id %in% id_modules) {
         label_to_id(secondary_tabs[[main_tab_id]], main_tab_id)
@@ -249,7 +247,7 @@ init <- function(data,
       if (is.na(filters)) {
         session$sendCustomMessage(type = "tealShowHide", list(selector = "#teal_filter-panel", action = "hide"))
       } else {
-        as.global(session)
+
         session$sendCustomMessage(type = "tealShowHide", list(selector = "#teal_filter-panel", action = "show"))
 
         if ("all" %in% filters) {
