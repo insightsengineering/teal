@@ -169,7 +169,8 @@ cdisc_data <- function(ASL, # nolint
   }
 
   if (code == "") {
-    code <- "# !!! Preprocessing code is empty"
+    filename <- file.path(path.package("teal"), "preprocessing_empty_string.txt")
+    code <- readChar(filename, file.info(filename)$size)
   }
 
 

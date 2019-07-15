@@ -46,18 +46,12 @@ Creates the server and ui part for a teal shiny app
 library(random.cdisc.data)
 
 ASL <- radsl(seed = 1)
-ARS <- radrs(ASL, seed = 100)
-ATE <- radtte(ASL, seed = 1000)
 
 app <- init(
   data = cdisc_data(
     ASL = ASL,
-    ARS = ARS,
-    ATE = ATE,
     code = "
       ASL <- radsl(seed = 1)
-      ARS <- radrs(ASL, seed = 100)
-      ATE <- radtte(ASL, seed = 1000)
     "
   ),
   modules = root_modules(
@@ -70,25 +64,12 @@ app <- init(
     module(
       "ASL AGE histogram",
       server = function(input, output, session, datasets) {
-        output$hist <- renderPlot(hist(datasets$get_data("ASL")$AGE))
+        output$hist <- renderPlot(
+           hist(datasets$get_data("ASL", filtered = TRUE, reactive = TRUE)$AGE)
+        )
       },
       ui = function(id) {ns <- NS(id); plotOutput(ns('hist'))},
-      filters = NULL
-    ),
-    modules(
-      label = "Example datasets (tree module)",
-      module(
-        "iris",
-        server = function(input, output, session, datasets) {output$iris <- renderPlot(plot(iris))},
-        ui = function(id) {ns <- NS(id); plotOutput(ns('iris'))},
-        filters = NULL
-      ),
-      module(
-        "cars",
-        server = function(input, output, session, datasets) {output$cars <- renderPlot(plot(cars))},
-        ui = function(id) {ns <- NS(id); plotOutput(ns('cars'))},
-        filters = NULL
-      )
+      filters = "ASL"
     )
   ),
   filter = list(init = list(ASL = c("AGE"))),
