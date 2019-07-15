@@ -47,6 +47,8 @@ library(random.cdisc.data)
 
 ASL <- radsl(seed = 1)
 
+options(teal_logging = FALSE)
+
 app <- init(
   data = cdisc_data(
     ASL = ASL,
