@@ -1,6 +1,7 @@
 context("cdisc_data")
 
 library(tern)
+library(random.cdisc.data)
 ASL <- ARG1 <- ARG2 <- cadsl #nolint
 ADTE <- cadtte #nolint
 ARS <- cadrs #nolint
