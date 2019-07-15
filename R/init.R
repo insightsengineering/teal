@@ -30,8 +30,8 @@
 #'
 #' @export
 #'
-#' @import methods shiny stats
 #' @importFrom shinyjs useShinyjs
+#' @importFrom methods is
 #'
 #' @include FilteredData.R
 #' @include modules.R
@@ -108,8 +108,8 @@ init <- function(data,
   ui <- shinyUI(
       fluidPage(
         useShinyjs(),
-        includeScript(system.file("js/clipboard.js", package = "teal")),
-        includeScript(system.file("js/initClipboard.js", package = "teal")),
+        include_css_files(package = "teal"),
+        include_js_files(package = "teal", except = "init.js"),
         tags$head(
           tags$script(
             # show/hide see https://groups.google.com/forum/#!topic/shiny-discuss/yxFuGgDOIuM
@@ -149,6 +149,11 @@ init <- function(data,
                                 ),
                                 tagList(
                                   lapply(datasets$datanames(), function(dataname) {
+                                    ui_filter_info(paste0("teal_filters_info_", dataname), dataname)
+                                  })
+                                ),
+                                tagList(
+                                  lapply(datasets$datanames(), function(dataname) {
                                     ui_filter_items(paste0("teal_filters_", dataname), dataname)
                                   })
                                 )
@@ -178,6 +183,8 @@ init <- function(data,
 
   server <- function(input, output, session) {
 
+    run_js_file(file = "init.js", package = "teal")
+
     show_filter_panel <- function(bool = TRUE) {
       session$sendCustomMessage(
         type = "setDisplayCss",
@@ -193,6 +200,9 @@ init <- function(data,
     # -- filters
     lapply(datasets$datanames(), function(dataname) {
       callModule(srv_filter_items, paste0("teal_filters_", dataname), datasets, dataname)
+    })
+    lapply(datasets$datanames(), function(dataname) {
+      callModule(srv_filter_info, paste0("teal_filters_info_", dataname), datasets, dataname)
     })
 
     asl_vars <- names(datasets$get_data("ASL"))
