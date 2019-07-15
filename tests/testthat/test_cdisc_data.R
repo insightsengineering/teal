@@ -1,178 +1,169 @@
 context("cdisc_data")
 
 library(tern)
-ASL <- ARG1 <- ARG2 <- 1 #nolint
-ADTE <- 2 #nolint
-ARS <- 3 #nolint
-
-package_path <- path.package("teal")
-if ("inst" %in% list.dirs(package_path, full.names = F, recursive = F)) {
-  filename <- file.path(package_path, "inst", "preprocessing_empty_string.txt")
-} else {
-  filename <- file.path(package_path, "preprocessing_empty_string.txt")
-}
-
-preprocessing_empty_text <- readChar(filename, file.info(filename)$size)
+ASL <- ARG1 <- ARG2 <- cadsl #nolint
+ADTE <- cadtte #nolint
+ARS <- cadrs #nolint
 
 test_that("Basic example - without code and check", {
-  expect_silent(cdisc_data(ASL, code = NULL, check = FALSE))
-  expect_silent(cdisc_data(ASL, ARG1 = ARG1, ARG2 = ARG2, code = NULL, check = FALSE))
-})
+      expect_silent(cdisc_data(ASL, code = NULL, check = FALSE))
+      expect_silent(cdisc_data(ASL, ARG1 = ARG1, ARG2 = ARG2, code = NULL, check = FALSE))
+    })
 
 test_that("Basic example - with code and check", {
-  keys(ASL) <- keys(ARG1) <- keys(ARG2) <- "test"
+      keys(ASL) <- keys(ARG1) <- keys(ARG2) <- "test"
 
-  expect_silent(cdisc_data(ASL = ASL, code = "ASL <- 1; keys(ASL) <- 'test'", check = TRUE))
-  expect_silent(cdisc_data(ASL = ASL, ARG1 = ARG1, ARG2 = ARG2,
-                           code = "ASL <- ARG1 <- ARG2 <- 1; keys(ASL) <- keys(ARG1) <- keys(ARG2) <- 'test'",
-                           check = TRUE))
-})
+      expect_silent(cdisc_data(ASL = ASL, code = "ASL <- cadsl; keys(ASL) <- 'test'", check = TRUE))
+      expect_silent(cdisc_data(ASL = ASL, ARG1 = ARG1, ARG2 = ARG2,
+              code = "ASL <- ARG1 <- ARG2 <- cadsl; keys(ASL) <- keys(ARG1) <- keys(ARG2) <- 'test'",
+              check = TRUE))
+    })
 
 test_that("Naming list elements", {
-  keys(ASL) <- keys(ADTE) <- keys(ARS) <- "test"
+      keys(ASL) <- keys(ADTE) <- keys(ARS) <- "test"
 
-  expect_identical(names(cdisc_data(ASL)), "ASL")
-  expect_identical(names(cdisc_data(ASL = ASL, ADTE = ADTE, ARS = ARS)), c("ASL", "ADTE", "ARS"))
-})
+      expect_identical(names(cdisc_data(ASL)), "ASL")
+      expect_identical(names(cdisc_data(ASL = ASL, ADTE = ADTE, ARS = ARS)), c("ASL", "ADTE", "ARS"))
+    })
 
 test_that("List values", {
-  keys(ASL) <- "test1"
-  keys(ADTE) <- "test2"
-  keys(ARS) <- "test3"
+      keys(ASL) <- "test1"
+      keys(ADTE) <- "test2"
+      keys(ARS) <- "test3"
 
-  result <- cdisc_data(ASL)
+      result <- cdisc_data(ASL)
 
-  result_to_compare <- list(ASL = 1)
-  class(result_to_compare) <- "cdisc_data"
-  keys(result_to_compare[["ASL"]]) <- "test1"
-  attr(result_to_compare[["ASL"]], "dataname") <- "ASL"
-  attr(result_to_compare, "code") <- preprocessing_empty_text
+      result_to_compare <- list(ASL = cadsl)
+      class(result_to_compare) <- "cdisc_data"
+      keys(result_to_compare[["ASL"]]) <- "test1"
+      attr(result_to_compare[["ASL"]], "dataname") <- "ASL"
+      attr(result_to_compare, "code") <- "# !!! Preprocessing code is empty"
 
-  expect_identical(result, result_to_compare)
+      expect_identical(result, result_to_compare)
 
-  result <- cdisc_data(ASL, ADTE = ADTE, ARS = ARS)
+      result <- cdisc_data(ASL, ADTE = ADTE, ARS = ARS)
 
-  result_to_compare <- list(ASL = 1, ADTE = 2, ARS = 3)
-  class(result_to_compare) <- "cdisc_data"
-  keys(result_to_compare[["ASL"]])  <- "test1"
-  keys(result_to_compare[["ADTE"]]) <- "test2"
-  keys(result_to_compare[["ARS"]]) <- "test3"
-  attr(result_to_compare[["ASL"]], "dataname")  <- "ASL"
-  attr(result_to_compare[["ADTE"]], "dataname") <- "ADTE"
-  attr(result_to_compare[["ARS"]], "dataname") <- "ARS"
-  attr(result_to_compare, "code") <- preprocessing_empty_text
+      result_to_compare <- list(ASL = cadsl, ADTE = cadtte, ARS = cadrs)
+      class(result_to_compare) <- "cdisc_data"
+      keys(result_to_compare[["ASL"]])  <- "test1"
+      keys(result_to_compare[["ADTE"]]) <- "test2"
+      keys(result_to_compare[["ARS"]]) <- "test3"
+      attr(result_to_compare[["ASL"]], "dataname")  <- "ASL"
+      attr(result_to_compare[["ADTE"]], "dataname") <- "ADTE"
+      attr(result_to_compare[["ARS"]], "dataname") <- "ARS"
+      attr(result_to_compare, "code") <- "# !!! Preprocessing code is empty"
 
-  expect_identical(result, result_to_compare)
-})
+      expect_identical(result, result_to_compare)
+    })
 
 test_that("Empty code", {
-  keys(ASL) <- "test"
+      keys(ASL) <- "test"
 
-  # missing code
-  result <- cdisc_data(ASL, check = FALSE)
-  expect_identical(attr(result, "code"), preprocessing_empty_text)
+      # missing code
+      result <- cdisc_data(ASL, check = FALSE)
+      expect_identical(attr(result, "code"), "# !!! Preprocessing code is empty")
 
-  # NULL code
-  result <- cdisc_data(ASL, code = NULL, check = FALSE)
-  expect_identical(attr(result, "code"), preprocessing_empty_text)
+      # NULL code
+      result <- cdisc_data(ASL, code = NULL, check = FALSE)
+      expect_identical(attr(result, "code"), "# !!! Preprocessing code is empty")
 
-  # empty code
-  result <- cdisc_data(ASL, code = "", check = FALSE)
-  expect_identical(attr(result, "code"), preprocessing_empty_text)
-})
+      # empty code
+      result <- cdisc_data(ASL, code = "", check = FALSE)
+      expect_identical(attr(result, "code"), "# !!! Preprocessing code is empty")
+    })
 
 
 test_that("Arguments created by code", {
-  keys(ASL) <- "test"
-  result <- cdisc_data(ASL, code = "ASL <- 1; keys(ASL) <- 'test'", check = FALSE)
-  expect_silent(result)
+      keys(ASL) <- "test"
+      result <- cdisc_data(ASL, code = "ASL <- cadsl; keys(ASL) <- 'test'", check = FALSE)
+      expect_silent(result)
 
-  result_to_compare <- list(ASL = 1)
-  class(result_to_compare) <- "cdisc_data"
-  keys(result_to_compare[["ASL"]]) <- "test"
-  attr(result_to_compare[["ASL"]], "dataname") <- "ASL"
-  attr(result_to_compare, "code") <- "ASL <- 1; keys(ASL) <- 'test'"
+      result_to_compare <- list(ASL = cadsl)
+      class(result_to_compare) <- "cdisc_data"
+      keys(result_to_compare[["ASL"]]) <- "test"
+      attr(result_to_compare[["ASL"]], "dataname") <- "ASL"
+      attr(result_to_compare, "code") <- "ASL <- cadsl; keys(ASL) <- 'test'"
 
-  expect_identical(result, result_to_compare)
-})
+      expect_identical(result, result_to_compare)
+    })
 
 test_that("Error - objects differs", {
-  expect_error(
-    cdisc_data(ASL, code = "ASL <- 2", check = TRUE),
-    "Cannot reproduce object"
-  )
+      expect_error(
+          cdisc_data(ASL, code = "ASL <- 2", check = TRUE),
+          "Cannot reproduce object"
+      )
 
-  keys(ASL) <- "test"
-  expect_error(
-    cdisc_data(ASL, code = "ASL <- 1; keys(ASL) <- ''", check = TRUE),
-    "Cannot reproduce object"
-  )
-})
+      keys(ASL) <- "test"
+      expect_error(
+          cdisc_data(ASL, code = "ASL <- cadsl; keys(ASL) <- ''", check = TRUE),
+          "Cannot reproduce object"
+      )
+    })
 
 test_that("Error - ASL is missing", {
-  expect_error(cdisc_data(ARG1 = 1, code = NULL, check = FALSE), "ASL and code arguments are missing")
-  expect_error(cdisc_data(code = "x <- 2", check = FALSE), "ASL is missing and cannot be generated by code")
-})
+      expect_error(cdisc_data(ARG1 = 1, code = NULL, check = FALSE), "ASL and code arguments are missing")
+      expect_error(cdisc_data(code = "x <- 2", check = FALSE), "ASL is missing and cannot be generated by code")
+    })
 
 test_that("Error - checking is forbidden if any argument is call", {
-  expect_error(
-    cdisc_data(1 + 2, code = "test code", check = TRUE),
-    "Automatic checking is not supported if arguments provided as calls"
-  )
+      expect_error(
+          cdisc_data(1 + 2, code = "test code", check = TRUE),
+          "Automatic checking is not supported if arguments provided as calls"
+      )
 
-  keys(ASL) <- "test"
+      keys(ASL) <- "test"
 
-  expect_error(
-    cdisc_data(1 + 2, code = "test code", check = TRUE),
-    "Automatic checking is not supported if arguments provided as calls"
-  )
+      expect_error(
+          cdisc_data(1 + 2, code = "test code", check = TRUE),
+          "Automatic checking is not supported if arguments provided as calls"
+      )
 
 
-  expect_error(
-    cdisc_data(foo(1), code = "test code", check = TRUE),
-    "Automatic checking is not supported if arguments provided as calls"
-  )
-})
+      expect_error(
+          cdisc_data(foo(1), code = "test code", check = TRUE),
+          "Automatic checking is not supported if arguments provided as calls"
+      )
+    })
 
 test_that("Error - not named arguments", {
-  expect_error(
-    cdisc_data(ASL, ASL, code = NULL, check = FALSE),
-    "All arguments passed to '...' should be named"
-  )
-  expect_error(
-    cdisc_data(ADTE, ADTE, code = "ADTE <- 1", check = FALSE),
-    "All arguments passed to '...' should be named"
-  )
-})
+      expect_error(
+          cdisc_data(ASL, ASL, code = NULL, check = FALSE),
+          "All arguments passed to '...' should be named"
+      )
+      expect_error(
+          cdisc_data(ADTE, ADTE, code = "ADTE <- 1", check = FALSE),
+          "All arguments passed to '...' should be named"
+      )
+    })
 
 
 test_that("Error - data names can not be changed via arguments", {
-  asl <- 1
-  adte <- 2
-  expect_error(
-    cdisc_data(ASL = asl, code = NULL, check = FALSE),
-    "Data names should not be changed via argument\nASL != asl"
-  )
+      asl <- cadsl
+      adte <- cadtte
+      expect_error(
+          cdisc_data(ASL = asl, code = NULL, check = FALSE),
+          "Data names should not be changed via argument\nASL != asl"
+      )
 
-  expect_error(
-    cdisc_data(ASL = asl, ADTE = adte, code = NULL, check = FALSE),
-    "Data names should not be changed via argument\nASL != asl\nADTE != adte"
-  )
+      expect_error(
+          cdisc_data(ASL = asl, ADTE = adte, code = NULL, check = FALSE),
+          "Data names should not be changed via argument\nASL != asl\nADTE != adte"
+      )
 
-})
+    })
 
 test_that("Error - Data arguments should be capitalized.", {
-  ars <- 1
-  adte <- 1
+      ars <- cadrs
+      adte <- cadtte
 
-  expect_error(
-    cdisc_data(ASL = ASL, adte = adte, code = NULL, check = FALSE),
-    "Data arguments should be capitalized. Please change\nadte to ADTE"
-  )
+      expect_error(
+          cdisc_data(ASL = ASL, adte = adte, code = NULL, check = FALSE),
+          "Data arguments should be capitalized. Please change\nadte to ADTE"
+      )
 
-  expect_error(
-    cdisc_data(ASL = ASL, adte = adte, ars = ars, code = NULL, check = FALSE),
-    "Data arguments should be capitalized. Please change\nadte to ADTE\nars to ARS"
-  )
+      expect_error(
+          cdisc_data(ASL = ASL, adte = adte, ars = ars, code = NULL, check = FALSE),
+          "Data arguments should be capitalized. Please change\nadte to ADTE\nars to ARS"
+      )
 
-})
+    })
