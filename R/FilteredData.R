@@ -246,6 +246,20 @@ FilteredData <- R6::R6Class( # nolint
       }
     },
 
+    get_data_info = function(dataname, filtered = TRUE, reactive = FALSE) {
+
+      f <- if (reactive) {
+        function(x) x
+      } else {
+        function(x) isolate(x)
+      }
+
+      if (filtered) {
+        list(name = dataname, dim = dim(f(private$filtered_datasets[[dataname]])))
+      } else {
+        list(name = dataname, dim = dim(f(private$datasets[[dataname]])))
+      }
+    },
 
     get_filter_info = function(dataname, varname = NULL) {
       private$error_if_not_valid(dataname, varname)
@@ -476,11 +490,13 @@ FilteredData <- R6::R6Class( # nolint
           .log("all elements in", varname, "are NA")
           list(
             type = "unknown",
+            label = "",
             class = class(var)
           )
         } else if (is.factor(var) || is.character(var)) {
           list(
             type = "choices",
+            label = if_null(attr(var, "label"), ""),
             choices = if (is.factor(var)) {
                 levels(var)
               } else {
@@ -490,11 +506,13 @@ FilteredData <- R6::R6Class( # nolint
         } else if (is.numeric(var)) {
           list(
             type = "range",
+            label = if_null(attr(var, "label"), ""),
             range = range(var, na.rm = TRUE)
           )
         } else if (is.logical(var)) {
           list(
             type = "logical",
+            label = if_null(attr(var, "label"), ""),
             choices = c("TRUE", "FALSE", "TRUE or FALSE")
           )
         } else {
@@ -502,6 +520,7 @@ FilteredData <- R6::R6Class( # nolint
                class(var), "' which has currently no filter UI element", sep = "")
           list(
             type = "unknown",
+            label = "",
             class = class(var)
           )
         }
