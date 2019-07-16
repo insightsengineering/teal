@@ -47,7 +47,7 @@
 #'
 #' @details
 #'
-#' The \code{filter_spec} is used inside \code{\link[teal]{teal}} apps to allow filtering datasets
+#' The \code{filter_spec} is used inside \code{teal} apps to allow filtering datasets
 #' for their key variables. Imagine having an adverse events table. It has
 #' the columns \code{PARAMCD} and \code{CNSR}. \code{PARAMCD} contains the levels
 #' \code{"OS"}, \code{"PFS"}, \code{"EFS"}. \code{CNSR} contains the levels \code{"0"} and \code{"1"}.

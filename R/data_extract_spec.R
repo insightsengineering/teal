@@ -1,7 +1,7 @@
 #' Data Extract input for teal modules
 #'
 #' The Data Extract input can be used to filter and select columns from a data
-#' set. This function enables such an input in \code{\link[teal]{teal}}.
+#' set. This function enables such an input in teal.
 #' Please use the constructor function \link{data_extract_spec} to set it up.
 #'
 #' @export
@@ -14,7 +14,7 @@
 #' }
 #'
 #' @importFrom methods is
-#' @param dataname (\code{character}) The name of the \code{\link[teal]{teal}} dataset to
+#' @param dataname (\code{character}) The name of the \code{teal} dataset to
 #'   be extracted. This dataset has to be handed over to the \code{data} argument of the
 #'   \code{\link[teal]{init}} function.
 #' @param filter (\code{filter_spec}-S3-class) Setup of the filtering of

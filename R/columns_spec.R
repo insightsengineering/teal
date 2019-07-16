@@ -1,11 +1,11 @@
 #' Column selection input specification
 #'
-#' \code{columns_spec} is used inside \code{\link[teal]{teal}} to create a \code{\link[shiny]{selectInput}}
+#' \code{columns_spec} is used inside teal to create a \code{\link[shiny]{selectInput}}
 #' that will select columns from a dataset.
 #'
 #' @param choices (\code{character}) Named character vector to define the choices
-#' 	of a shiny \code{\link[shiny]{selectInput}}. These have to be columns in the
-#' 	dataset defined in the \link{data_extract_spec} where this is called.
+#'   of a shiny \code{\link[shiny]{selectInput}}. These have to be columns in the
+#'   dataset defined in the \link{data_extract_spec} where this is called.
 #'
 #' @param selected (\code{character}) (default value) Named character vector to define the selected
 #'  values of a shiny \code{\link[shiny]{selectInput}}. This can be just one column
