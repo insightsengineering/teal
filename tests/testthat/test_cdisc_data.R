@@ -1,5 +1,13 @@
 context("cdisc_data")
 
+package_path <- path.package("teal")
+if ("inst" %in% list.dirs(package_path, full.names = F, recursive = F)) {
+  filename <- file.path(package_path, "inst", "preprocessing_empty_string.txt")
+} else {
+  filename <- file.path(package_path, "preprocessing_empty_string.txt")
+}
+code_empty <- readChar(filename, file.info(filename)$size)
+
 library(tern)
 library(random.cdisc.data)
 ASL <- ARG1 <- ARG2 <- cadsl # nolint
@@ -44,7 +52,8 @@ test_that("List values", {
   class(result_to_compare) <- "cdisc_data"
   keys(result_to_compare[["ASL"]]) <- c("STUDYID", "USUBJID")
   attr(result_to_compare[["ASL"]], "dataname") <- "ASL"
-  attr(result_to_compare, "code") <- "# !!! Preprocessing code is empty"
+
+  attr(result_to_compare, "code") <- code_empty
 
   expect_identical(result, result_to_compare)
 
@@ -68,15 +77,15 @@ test_that("Empty code", {
 
   # missing code
   result <- cdisc_data(ASL, check = FALSE)
-  expect_identical(attr(result, "code"), "# !!! Preprocessing code is empty")
+  expect_identical(attr(result, "code"), code_empty)
 
   # NULL code
   result <- cdisc_data(ASL, code = NULL, check = FALSE)
-  expect_identical(attr(result, "code"), "# !!! Preprocessing code is empty")
+  expect_identical(attr(result, "code"), code_empty)
 
   # empty code
   result <- cdisc_data(ASL, code = "", check = FALSE)
-  expect_identical(attr(result, "code"), "# !!! Preprocessing code is empty")
+  expect_identical(attr(result, "code"), code_empty)
 })
 
 
