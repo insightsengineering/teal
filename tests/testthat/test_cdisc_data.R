@@ -67,7 +67,7 @@ test_that("List values", {
   attr(result_to_compare[["ASL"]], "dataname") <- "ASL"
   attr(result_to_compare[["ADTE"]], "dataname") <- "ADTE"
   attr(result_to_compare[["ADRS"]], "dataname") <- "ADRS"
-  attr(result_to_compare, "code") <- "# !!! Preprocessing code is empty"
+  attr(result_to_compare, "code") <- code_empty
 
   expect_identical(result, result_to_compare)
 })
@@ -168,7 +168,7 @@ test_that("Error - data names can not be changed via arguments", {
 })
 
 test_that("Error - Data arguments should be capitalized.", {
-  ADRS <- cadrs
+  ADRS <- cadrs # nolint
   adte <- cadtte
 
   expect_error(

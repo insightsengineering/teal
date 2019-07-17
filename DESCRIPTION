@@ -48,11 +48,11 @@ Suggests:
 VignetteBuilder: knitr
 Collate:
     'FilteredData.R'
+    'cdisc_data.R'
     'choices_labeled.R'
     'choices_selected.R'
     'columns_spec.R'
     'data_extract_spec.R'
-    'dataset.R'
     'filter_spec.R'
     'get_code.R'
     'include_css_js.R'
