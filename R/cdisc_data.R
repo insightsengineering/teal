@@ -32,7 +32,7 @@ cdisc_data <- function(ASL, # nolint
   stopifnot(is.character.vector(code))
   stopifnot(is.logical.single(check))
 
-  code <- paste0(code, collapse = ";\n")
+  code <- paste0(code, collapse = "\n")
 
   if (missing(ASL)) {
     if (identical(code, "")) {

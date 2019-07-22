@@ -26,10 +26,37 @@ test_that("Basic example - with code and check", {
   keys(ASL) <- keys(ARG1) <- keys(ARG2) <- c("STUDYID", "USUBJID")
 
   expect_silent(cdisc_data(ASL = ASL, code = "ASL <- cadsl; keys(ASL) <- c('STUDYID','USUBJID')", check = TRUE))
-  expect_silent(cdisc_data(ASL = ASL, code = c("ASL <- cadsl", "keys(ASL) <- c('STUDYID','USUBJID')"), check = TRUE))
   expect_silent(cdisc_data(
     ASL = ASL, ARG1 = ARG1, ARG2 = ARG2,
     code = "ASL <- ARG1 <- ARG2 <- cadsl; keys(ASL) <- keys(ARG1) <- keys(ARG2) <- c('STUDYID','USUBJID')",
+    check = TRUE
+  ))
+})
+
+test_that("Basic example - with vector code and check", {
+  expect_true(is.data.frame(ASL))
+  expect_true(is.data.frame(ARG1))
+  expect_true(is.data.frame(ARG2))
+  keys(ASL) <- keys(ARG1) <- keys(ARG2) <- c("STUDYID", "USUBJID")
+
+  expect_silent(cdisc_data(ASL = ASL, code = c("ASL <- cadsl", "keys(ASL) <- c('STUDYID','USUBJID')"), check = TRUE))
+  expect_silent(cdisc_data(
+    ASL = ASL, ARG1 = ARG1, ARG2 = ARG2,
+    code = c("ASL <- ARG1 <- ARG2 <- cadsl", "keys(ASL) <- keys(ARG1) <- keys(ARG2) <- c('STUDYID','USUBJID')"),
+    check = TRUE
+  ))
+})
+
+test_that("Basic example - with line break code and check", {
+  expect_true(is.data.frame(ASL))
+  expect_true(is.data.frame(ARG1))
+  expect_true(is.data.frame(ARG2))
+  keys(ASL) <- keys(ARG1) <- keys(ARG2) <- c("STUDYID", "USUBJID")
+
+  expect_silent(cdisc_data(ASL = ASL, code = "ASL <- cadsl\nkeys(ASL) <- c('STUDYID','USUBJID')", check = TRUE))
+  expect_silent(cdisc_data(
+    ASL = ASL, ARG1 = ARG1, ARG2 = ARG2,
+    code = "ASL <- ARG1 <- ARG2 <- cadsl\nkeys(ASL) <- keys(ARG1) <- keys(ARG2) <- c('STUDYID','USUBJID')",
     check = TRUE
   ))
 })
