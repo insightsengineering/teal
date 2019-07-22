@@ -3,7 +3,7 @@
 #' Function passes datasets to teal application with option to read preprocessing code and reproducibility checking.
 #' @param ASL ASL dataset
 #' @param ... other datasets
-#' @param code (\code{NULL} or \code{character}) preprocessing code.
+#' @param code (\code{character}) preprocessing code.
 #' @param check (\code{logical}) reproducibility check - whether evaluated preprocessing code gives the same objects
 #'   as provided in arguments. Check is run only if flag is true and preprocessing code is not empty.
 #'
@@ -27,14 +27,12 @@
 #'           ADTE <- radtte(ASL, event.descr = c("STUDYID", "USUBJID", "PARAMCD"), seed = 123)')
 cdisc_data <- function(ASL, # nolint
                        ...,
-                       code = NULL,
+                       code = "",
                        check = FALSE) {
-  stopifnot(is.null(code) || is.character.single(code))
+  stopifnot(is.character.vector(code))
   stopifnot(is.logical.single(check))
 
-  if (is.null(code)) {
-    code <- ""
-  }
+  code <- paste0(code, collapse = ";\n")
 
   if (missing(ASL)) {
     if (identical(code, "")) {
