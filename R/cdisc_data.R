@@ -169,7 +169,12 @@ cdisc_data <- function(ASL, # nolint
   }
 
   if (code == "") {
-    filename <- file.path(path.package("teal"), "preprocessing_empty_string.txt")
+    package_path <- path.package("teal")
+    if ("inst" %in% list.dirs(package_path, full.names = FALSE, recursive = FALSE)) {
+      filename <- file.path(package_path, "inst", "preprocessing_empty_string.txt")
+    } else {
+      filename <- file.path(package_path, "preprocessing_empty_string.txt")
+    }
     code <- readChar(filename, file.info(filename)$size)
   }
 

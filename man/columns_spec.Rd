@@ -32,7 +32,7 @@ A \code{column_spec}-S3 class object. It contains all input values.
 The function double checks the \code{choices} and \code{selected} inputs.
 }
 \description{
-\code{columns_spec} is used inside \code{\link[teal]{teal}} to create a \code{\link[shiny]{selectInput}}
+\code{columns_spec} is used inside teal to create a \code{\link[shiny]{selectInput}}
 that will select columns from a dataset.
 }
 \details{
