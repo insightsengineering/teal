@@ -4,14 +4,14 @@
 \alias{cdisc_data}
 \title{Data input for teal app}
 \usage{
-cdisc_data(ASL, ..., code = NULL, check = FALSE)
+cdisc_data(ASL, ..., code = "", check = FALSE)
 }
 \arguments{
 \item{ASL}{ASL dataset}
 
 \item{...}{other datasets}
 
-\item{code}{(\code{NULL} or \code{character}) preprocessing code.}
+\item{code}{(\code{character}) preprocessing code.}
 
 \item{check}{(\code{logical}) reproducibility check - whether evaluated preprocessing code gives the same objects
 as provided in arguments. Check is run only if flag is true and preprocessing code is not empty.}
