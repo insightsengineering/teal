@@ -1,5 +1,136 @@
 #' Data input for teal app
 #'
+#' Abstract function that creates dataset object with connected metadata.
+#' @param dataname name of dataset
+#' @param data data
+#' @param keys
+#' @param labels
+#'
+#' @return a dataset with connected metadata
+#'
+#' @export
+#'
+#' @examples
+#' library(random.cdisc.data)
+#'
+#' ASL <-  suppressWarnings(radsl(N = 600, seed = 123))
+#'
+#' dataset("ASL", ASL)
+#'
+
+#TODO: handle keys and labels
+dataset <- function(dataname, data, keys = NULL, labels = NULL) {
+  stopifnot(is.character(dataname))
+  stopifnot(!is.null(data))
+  stopifnot(is.null(keys) || is.character.single(keys))
+  stopifnot(is.null(labels) || is.character.single(labels))
+
+  structure(
+    list(
+      dataname = dataname,
+      data = data,
+      keys = keys,
+      labels = labels
+    ),
+    class = c("dataset")
+  )
+
+}
+
+#' Data input for teal app
+#'
+#' Function that creates CDISC dataset object
+#' @param dataname name of dataset
+#'
+#' @return keys
+#'
+#' @export
+#'
+#' @examples
+#' library(random.cdisc.data)
+#'
+#' ASL <-  suppressWarnings(radsl(N = 600, seed = 123))
+#'
+#' cdisc_dataset("ASL", ASL)
+#'
+
+#TODO: handle keys and labels
+get_cdisc_keys <- function(dataname) {
+  #rel <- read.yaml("")
+
+  # copy from excel file
+  keys <- list(
+    ADSL = list(
+      primary = c("USERID"),
+      foreign = NULL,
+      parent = NULL
+    )
+  )
+
+  # if (!(dataname %in% names(rel))) {
+  #   stop()
+  # } else {
+  #   cdisc_keys(foreign = rel[[dataname]]$foreign)
+  # }
+  keys
+}
+
+#' Data input for teal app
+#'
+#' Function that extract labels from CDISC dataset
+#' @param dataname name of dataset
+#' @param data data
+#'
+#' @return labels
+#'
+#' @export
+#'
+#' @examples
+#' library(random.cdisc.data)
+#'
+#' ASL <-  suppressWarnings(radsl(N = 600, seed = 123))
+#'
+#' cdisc_dataset("ASL", ASL)
+#'
+
+#TODO: handle keys and labels
+get_cdisc_labels <- function(dataname, data) {
+  NULL
+}
+
+
+#' Data input for teal app
+#'
+#' Function that creates CDISC dataset object
+#' @param dataname name of dataset
+#' @param data data
+#' @param keys
+#' @param labels
+#'
+#' @return a dataset with connected metadata
+#'
+#' @export
+#'
+#' @examples
+#' library(random.cdisc.data)
+#'
+#' ASL <-  suppressWarnings(radsl(N = 600, seed = 123))
+#'
+#' cdisc_dataset("ASL", ASL)
+#'
+
+#TODO: handle keys and labels
+cdisc_dataset <- function(dataname, data, keys = get_cdisc_keys(dataname), labels = get_cdisc_labels(data, dataname)){
+  x <- dataset(dataname, data, keys, labels)
+  class(x) <- c("cdisc_dataset", class(x))
+  x
+}
+
+
+###################################### OLD CODE HERE ###########################################
+
+#' Data input for teal app
+#'
 #' Function passes datasets to teal application with option to read preprocessing code and reproducibility checking.
 #' @param ASL ASL dataset
 #' @param ... other datasets
