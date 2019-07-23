@@ -84,7 +84,7 @@
 data_extract_spec <- function(dataname, columns, filter = NULL) {
   stopifnot(is.character(dataname), length(dataname) == 1)
   stopifnot(is(columns, "column_spec"), length(columns) >= 1)
-  stopifnot(is.null(filter) || (is(filter, "filter_spec") & length(filter) >= 1))
+  stopifnot(is.null(filter) || (is(filter, "filter_spec") & length(filter) >= 1) || is(filter[[1]], "filter_spec"))
 
   res <- list(dataname = dataname, columns = columns, filter = filter)
   class(res) <- "data_extract_spec"
