@@ -12,7 +12,9 @@ cdisc_dataset(dataname, data, keys = get_cdisc_keys(dataname),
 
 \item{data}{data}
 
-\item{labels}{}
+\item{keys}{list of keys}
+
+\item{labels}{list of labeles}
 }
 \value{
 a dataset with connected metadata
@@ -23,8 +25,8 @@ Function that creates CDISC dataset object
 \examples{
 library(random.cdisc.data)
 
-ASL <-  suppressWarnings(radsl(N = 600, seed = 123))
+ADSL <-  suppressWarnings(radsl(N = 600, seed = 123))
 
-cdisc_dataset("ASL", ASL)
+cdisc_dataset("ADSL", ADSL)
 
 }

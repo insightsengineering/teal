@@ -24,8 +24,8 @@ Abstract function that creates dataset object with connected metadata.
 \examples{
 library(random.cdisc.data)
 
-ASL <-  suppressWarnings(radsl(N = 600, seed = 123))
+ADSL <-  suppressWarnings(radsl(N = 600, seed = 123))
 
-dataset("ASL", ASL)
+dataset("ADSL", ADSL)
 
 }

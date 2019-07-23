@@ -13,9 +13,9 @@
 #' @examples
 #' library(random.cdisc.data)
 #'
-#' ASL <-  suppressWarnings(radsl(N = 600, seed = 123))
+#' ADSL <-  suppressWarnings(radsl(N = 600, seed = 123))
 #'
-#' dataset("ASL", ASL)
+#' dataset("ADSL", ADSL)
 #'
 
 dataset <- function(dataname, data, keys = NULL, labels = NULL) {
@@ -61,32 +61,32 @@ get_cdisc_keys <- function(dataname) {
     ADAE = list(
       primary = c("STUDYID", "USUBJID", "ASTDTM", "AETERM", "AESEQ"),
       foreign = c("STUDYID", "USUBJID"),
-      parent = "ASL"
+      parent = "ADSL"
     ),
     ADTTE = list(
       primary = c("STUDYID", "USUBJID", "PARAMCD"),
       foreign = c("STUDYID", "USUBJID"),
-      parent = "ASL"
+      parent = "ADSL"
     ),
     ADCM = list(
       primary = c("STUDYID", "USUBJID", "ASTDTM", "MHSEQ"),
       foreign = c("STUDYID", "USUBJID"),
-      parent = "ASL"
+      parent = "ADSL"
     ),
     ADLB = list(
       primary = c("STUDYID", "USUBJID", "PARAMCD", "BASETYPE", "AVISITN", "ATPTN", "DTYPE", "ADTM", "LBSEQ", "ASPID"),
       foreign = c("STUDYID", "USUBJID"),
-      parent = "ASL"
+      parent = "ADSL"
     ),
     ADRS = list(
       primary = c("STUDYID", "USUBJID", "PARAMCD", "AVISITN", "ADT", "RSSEQ"),
       foreign = c("STUDYID", "USUBJID"),
-      parent = "ASL"
+      parent = "ADSL"
     ),
     ADVS = list(
       primary = c("STUDYID", "USUBJID", "PARAMCD", "BASETYPE", "AVISITN", "ATPTN", "DTYPE", "ADTM", "VSSEQ", "ASPID"),
       foreign = c("STUDYID", "USUBJID"),
-      parent = "ASL"
+      parent = "ADSL"
     )
   )
 
@@ -106,14 +106,14 @@ get_cdisc_keys <- function(dataname) {
 #'
 #' @export
 #'
-#' @importFrom purrr map
+#' @importFrom purrr map_chr
 #'
 #' @examples
 #' library(random.cdisc.data)
 #'
-#' ASL <-  suppressWarnings(radsl(N = 600, seed = 123))
+#' ADSL <-  suppressWarnings(radsl(N = 600, seed = 123))
 #'
-#' get_cdisc_labels(ASL)
+#' get_cdisc_labels(ADSL)
 #'
 
 get_cdisc_labels <- function(data) {
@@ -130,8 +130,8 @@ get_cdisc_labels <- function(data) {
 #' Function that creates CDISC dataset object
 #' @param dataname name of dataset
 #' @param data data
-#' @param keys
-#' @param labels
+#' @param keys list of keys
+#' @param labels list of labeles
 #'
 #' @return a dataset with connected metadata
 #'
@@ -140,9 +140,9 @@ get_cdisc_labels <- function(data) {
 #' @examples
 #' library(random.cdisc.data)
 #'
-#' ASL <-  suppressWarnings(radsl(N = 600, seed = 123))
+#' ADSL <-  suppressWarnings(radsl(N = 600, seed = 123))
 #'
-#' cdisc_dataset("ASL", ASL)
+#' cdisc_dataset("ADSL", ADSL)
 #'
 
 cdisc_dataset <- function(dataname, data, keys = get_cdisc_keys(dataname), labels = get_cdisc_labels(data)){

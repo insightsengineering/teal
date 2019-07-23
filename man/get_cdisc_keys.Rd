@@ -17,6 +17,6 @@ Function that creates CDISC dataset object
 }
 \examples{
 
-get_cdisc_keys("ASL")
+get_cdisc_keys("ADSL")
 
 }

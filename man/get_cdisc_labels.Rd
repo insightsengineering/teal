@@ -18,8 +18,8 @@ Function that extract labels from CDISC dataset
 \examples{
 library(random.cdisc.data)
 
-ASL <-  suppressWarnings(radsl(N = 600, seed = 123))
+ADSL <-  suppressWarnings(radsl(N = 600, seed = 123))
 
-get_cdisc_labels(ASL)
+get_cdisc_labels(ADSL)
 
 }
