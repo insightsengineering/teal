@@ -18,19 +18,20 @@
 #' dataset("ADSL", ADSL)
 #'
 
-dataset <- function(dataname, data, keys = NULL, labels = NULL) {
+dataset <- function(dataname,
+                    data,
+                    keys = NULL,
+                    labels = NULL) {
   stopifnot(is.character(dataname))
   stopifnot(!is.null(data))
 
-  structure(
-    list(
-      dataname = dataname,
-      data = data,
-      keys = keys,
-      labels = labels
-    ),
-    class = c("dataset")
-  )
+  structure(list(
+    dataname = dataname,
+    data = data,
+    keys = keys,
+    labels = labels
+  ),
+  class = c("dataset"))
 
 }
 
@@ -74,7 +75,18 @@ get_cdisc_keys <- function(dataname) {
       parent = "ADSL"
     ),
     ADLB = list(
-      primary = c("STUDYID", "USUBJID", "PARAMCD", "BASETYPE", "AVISITN", "ATPTN", "DTYPE", "ADTM", "LBSEQ", "ASPID"),
+      primary = c(
+        "STUDYID",
+        "USUBJID",
+        "PARAMCD",
+        "BASETYPE",
+        "AVISITN",
+        "ATPTN",
+        "DTYPE",
+        "ADTM",
+        "LBSEQ",
+        "ASPID"
+      ),
       foreign = c("STUDYID", "USUBJID"),
       parent = "ADSL"
     ),
@@ -84,7 +96,18 @@ get_cdisc_keys <- function(dataname) {
       parent = "ADSL"
     ),
     ADVS = list(
-      primary = c("STUDYID", "USUBJID", "PARAMCD", "BASETYPE", "AVISITN", "ATPTN", "DTYPE", "ADTM", "VSSEQ", "ASPID"),
+      primary = c(
+        "STUDYID",
+        "USUBJID",
+        "PARAMCD",
+        "BASETYPE",
+        "AVISITN",
+        "ATPTN",
+        "DTYPE",
+        "ADTM",
+        "VSSEQ",
+        "ASPID"
+      ),
       foreign = c("STUDYID", "USUBJID"),
       parent = "ADSL"
     )
@@ -93,7 +116,7 @@ get_cdisc_keys <- function(dataname) {
   if (!(dataname %in% names(rel))) {
     stop(sprintf("There is no dataset called: %s", dataname))
   } else {
-     rel[[dataname]]
+    rel[[dataname]]
   }
 }
 
@@ -117,10 +140,17 @@ get_cdisc_keys <- function(dataname) {
 #'
 
 get_cdisc_labels <- function(data) {
-
-  cdisc_labels <- list("dataset_label" = attr(data, "label"),
-                       "column_names" = names(data),
-                       "column_labels" = map_chr(names(data), function(x) attr(data[[x]], "label")))
+  cdisc_labels <- list(
+    "dataset_label" = attr(data, "label"),
+    "column_names" = names(data),
+    "column_labels" = map_chr(names(data), function(x) {
+      if (is.null(attr(data[[x]], "label"))) {
+        "Undefined"
+      } else {
+        attr(data[[x]], "label")
+      }
+    })
+  )
   cdisc_labels
 }
 
@@ -145,11 +175,15 @@ get_cdisc_labels <- function(data) {
 #' cdisc_dataset("ADSL", ADSL)
 #'
 
-cdisc_dataset <- function(dataname, data, keys = get_cdisc_keys(dataname), labels = get_cdisc_labels(data)){
-  x <- dataset(dataname, data, keys, labels)
-  class(x) <- c("cdisc_dataset", class(x))
-  x
-}
+cdisc_dataset <-
+  function(dataname,
+           data,
+           keys = get_cdisc_keys(dataname),
+           labels = get_cdisc_labels(data)) {
+    x <- dataset(dataname, data, keys, labels)
+    class(x) <- c("cdisc_dataset", class(x))
+    x
+  }
 
 
 ###################################### OLD CODE HERE ###########################################
@@ -181,7 +215,8 @@ cdisc_dataset <- function(dataname, data, keys = get_cdisc_keys(dataname), label
 #'   ADTE = ADTE,
 #'   code = 'ASL <- radsl(N = 600, seed = 123)
 #'           ADTE <- radtte(ASL, event.descr = c("STUDYID", "USUBJID", "PARAMCD"), seed = 123)')
-cdisc_data <- function(ASL, # nolint
+cdisc_data <- function(ASL,
+                       # nolint
                        ...,
                        code = NULL,
                        check = FALSE) {
@@ -203,28 +238,31 @@ cdisc_data <- function(ASL, # nolint
     }
   }
 
-  arg_values_call <- append(
-    list("ASL" = substitute(ASL)),
-    as.list(substitute(list(...)))[-1]
-  )
-  arg_values_char <- sapply(
-    arg_values_call,
-    function(x) {
-      paste0(deparse(x), collapse = "\n")
-    }
-  ) %>%
+  arg_values_call <- append(list("ASL" = substitute(ASL)),
+                            as.list(substitute(list(...)))[-1])
+  arg_values_char <- sapply(arg_values_call,
+                            function(x) {
+                              paste0(deparse(x), collapse = "\n")
+                            }) %>%
     unname()
   for (i in seq_along(arg_values_call)) {
-    if (is.call(arg_values_call[[i]]) && isTRUE(check) && !identical(code, "")) {
-      msg <- "Automatic checking is not supported if arguments provided as calls."
+    if (is.call(arg_values_call[[i]]) &&
+        isTRUE(check) && !identical(code, "")) {
+      msg <-
+        "Automatic checking is not supported if arguments provided as calls."
       stop(msg)
     }
   }
 
   # eval code if argument does not exists, i.e. cdisc_data(ASL = 1, x, code = "x <- 2")
   for (i in seq_along(arg_values_call)) {
-    if ((is.name(arg_values_call[[i]]) || is.call(arg_values_call[[i]])) &&
-        inherits(tryCatch(eval(arg_values_call[[i]], envir = parent.frame()), error = function(e) e), "error") &&
+    if ((is.name(arg_values_call[[i]]) ||
+         is.call(arg_values_call[[i]])) &&
+        inherits(tryCatch(
+          eval(arg_values_call[[i]], envir = parent.frame()),
+          error = function(e)
+            e
+        ), "error") &&
         !is.null(code)) {
       eval(parse(text = code), envir = parent.frame())
       break
@@ -233,14 +271,12 @@ cdisc_data <- function(ASL, # nolint
 
   arg_values <- setNames(append(list(ASL), list(...)), NULL)
 
-  arg_names <- c(
-    "ASL",
-    if (is.null(names(list(...)))) {
-      rep("", length(arg_values) - 1)
-    } else {
-      names(list(...))
-    }
-  )
+  arg_names <- c("ASL",
+                 if (is.null(names(list(...)))) {
+                   rep("", length(arg_values) - 1)
+                 } else {
+                   names(list(...))
+                 })
 
   if (any(arg_names == "")) {
     stop("All arguments passed to '...' should be named.")
@@ -250,13 +286,9 @@ cdisc_data <- function(ASL, # nolint
   if (any(arg_names != arg_values_char)) {
     idx <- which(arg_names != arg_values_char)
 
-    msg <- sprintf(
-      "Data names should not be changed via argument\n%s",
-      paste(
-        paste0(arg_names[idx], " != ", arg_values_char[idx]),
-        collapse = "\n"
-      )
-    )
+    msg <- sprintf("Data names should not be changed via argument\n%s",
+                   paste(paste0(arg_names[idx], " != ", arg_values_char[idx]),
+                         collapse = "\n"))
 
     stop(msg)
   }
@@ -267,10 +299,10 @@ cdisc_data <- function(ASL, # nolint
 
     msg <- sprintf(
       "Data arguments should be capitalized. Please change\n%s",
-      paste(
-        paste0(arg_names[idx], " to ", toupper(arg_names)[idx]),
-        collapse = "\n"
-      )
+      paste(paste0(
+        arg_names[idx], " to ", toupper(arg_names)[idx]
+      ),
+      collapse = "\n")
     )
 
     stop(msg)
@@ -290,57 +322,60 @@ cdisc_data <- function(ASL, # nolint
       stop(paste0("Error in checking code: ", e$message))
     })
 
-    res_check <- vapply(
-      seq_along(res),
-      function(i, list, list_names, env, args_call, args_char) {
-        list_obj_name <- list_names[i]
-        env_obj_name <- if (is.name(args_call[[i]])) {
-          args_char[i]
-        } else {
-          list_names[i]
-        }
-        tryCatch({
-          identical(list[[list_obj_name]], get(env_obj_name, envir = env))
-        }, error = function(e) {
-          FALSE
-        })
-      },
-      logical(1),
-      list = res,
-      list_names = arg_names,
-      env = new_env,
-      args_call = arg_values_call,
-      args_char = arg_values_char
-    )
+    res_check <- vapply(seq_along(res),
+                        function(i,
+                                 list,
+                                 list_names,
+                                 env,
+                                 args_call,
+                                 args_char) {
+                          list_obj_name <- list_names[i]
+                          env_obj_name <- if (is.name(args_call[[i]])) {
+                            args_char[i]
+                          } else {
+                            list_names[i]
+                          }
+                          tryCatch({
+                            identical(list[[list_obj_name]], get(env_obj_name, envir = env))
+                          }, error = function(e) {
+                            FALSE
+                          })
+                        },
+                        logical(1),
+                        list = res,
+                        list_names = arg_names,
+                        env = new_env,
+                        args_call = arg_values_call,
+                        args_char = arg_values_char)
 
     if (any(!res_check)) {
       incorrect_obj_names <- arg_names[!res_check]
-      msg <- paste0(
-        "Cannot reproduce object(s) ",
-        paste0(paste0("'", incorrect_obj_names, "'"), collapse = ", "),
-        " based on code."
-      )
+      msg <- paste0("Cannot reproduce object(s) ",
+                    paste0(paste0("'", incorrect_obj_names, "'"), collapse = ", "),
+                    " based on code.")
       stop(msg)
     }
   }
 
   if (code == "") {
     package_path <- path.package("teal")
-    if ("inst" %in% list.dirs(package_path, full.names = FALSE, recursive = FALSE)) {
-      filename <- file.path(package_path, "inst", "preprocessing_empty_string.txt")
+    if ("inst" %in% list.dirs(package_path,
+                              full.names = FALSE,
+                              recursive = FALSE)) {
+      filename <-
+        file.path(package_path, "inst", "preprocessing_empty_string.txt")
     } else {
-      filename <- file.path(package_path, "preprocessing_empty_string.txt")
+      filename <-
+        file.path(package_path, "preprocessing_empty_string.txt")
     }
     code <- readChar(filename, file.info(filename)$size)
   }
 
 
-  res <- lapply(
-    seq_along(res),
-    function(i) {
-      structure(res[[i]], dataname = arg_names[[i]])
-    }
-  )
+  res <- lapply(seq_along(res),
+                function(i) {
+                  structure(res[[i]], dataname = arg_names[[i]])
+                })
   res <- setNames(res, arg_names)
 
   structure(res, code = code, class = "cdisc_data")
