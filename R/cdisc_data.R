@@ -3,8 +3,8 @@
 #' Abstract function that creates dataset object with connected metadata.
 #' @param dataname name of dataset
 #' @param data data
-#' @param keys
-#' @param labels
+#' @param keys list of keys
+#' @param labels list of labels
 #'
 #' @return a dataset with connected metadata
 #'
@@ -18,12 +18,9 @@
 #' dataset("ASL", ASL)
 #'
 
-#TODO: handle keys and labels
 dataset <- function(dataname, data, keys = NULL, labels = NULL) {
   stopifnot(is.character(dataname))
   stopifnot(!is.null(data))
-  stopifnot(is.null(keys) || is.character.single(keys))
-  stopifnot(is.null(labels) || is.character.single(labels))
 
   structure(
     list(
@@ -47,55 +44,84 @@ dataset <- function(dataname, data, keys = NULL, labels = NULL) {
 #' @export
 #'
 #' @examples
-#' library(random.cdisc.data)
 #'
-#' ASL <-  suppressWarnings(radsl(N = 600, seed = 123))
-#'
-#' cdisc_dataset("ASL", ASL)
+#' get_cdisc_keys("ADSL")
 #'
 
-#TODO: handle keys and labels
 get_cdisc_keys <- function(dataname) {
-  #rel <- read.yaml("")
+  stopifnot(is.character(dataname))
 
   # copy from excel file
-  keys <- list(
+  rel <- list(
     ADSL = list(
-      primary = c("USERID"),
+      primary = c("STUDYID", "USUBJID"),
       foreign = NULL,
       parent = NULL
+    ),
+    ADAE = list(
+      primary = c("STUDYID", "USUBJID", "ASTDTM", "AETERM", "AESEQ"),
+      foreign = c("STUDYID", "USUBJID"),
+      parent = "ASL"
+    ),
+    ADTTE = list(
+      primary = c("STUDYID", "USUBJID", "PARAMCD"),
+      foreign = c("STUDYID", "USUBJID"),
+      parent = "ASL"
+    ),
+    ADCM = list(
+      primary = c("STUDYID", "USUBJID", "ASTDTM", "MHSEQ"),
+      foreign = c("STUDYID", "USUBJID"),
+      parent = "ASL"
+    ),
+    ADLB = list(
+      primary = c("STUDYID", "USUBJID", "PARAMCD", "BASETYPE", "AVISITN", "ATPTN", "DTYPE", "ADTM", "LBSEQ", "ASPID"),
+      foreign = c("STUDYID", "USUBJID"),
+      parent = "ASL"
+    ),
+    ADRS = list(
+      primary = c("STUDYID", "USUBJID", "PARAMCD", "AVISITN", "ADT", "RSSEQ"),
+      foreign = c("STUDYID", "USUBJID"),
+      parent = "ASL"
+    ),
+    ADVS = list(
+      primary = c("STUDYID", "USUBJID", "PARAMCD", "BASETYPE", "AVISITN", "ATPTN", "DTYPE", "ADTM", "VSSEQ", "ASPID"),
+      foreign = c("STUDYID", "USUBJID"),
+      parent = "ASL"
     )
   )
 
-  # if (!(dataname %in% names(rel))) {
-  #   stop()
-  # } else {
-  #   cdisc_keys(foreign = rel[[dataname]]$foreign)
-  # }
-  keys
+  if (!(dataname %in% names(rel))) {
+    stop(sprintf("There is no dataset called: %s", dataname))
+  } else {
+     rel[[dataname]]
+  }
 }
 
 #' Data input for teal app
 #'
 #' Function that extract labels from CDISC dataset
-#' @param dataname name of dataset
 #' @param data data
 #'
 #' @return labels
 #'
 #' @export
 #'
+#' @importFrom purrr map
+#'
 #' @examples
 #' library(random.cdisc.data)
 #'
 #' ASL <-  suppressWarnings(radsl(N = 600, seed = 123))
 #'
-#' cdisc_dataset("ASL", ASL)
+#' get_cdisc_labels(ASL)
 #'
 
-#TODO: handle keys and labels
-get_cdisc_labels <- function(dataname, data) {
-  NULL
+get_cdisc_labels <- function(data) {
+
+  cdisc_labels <- list("dataset_label" = attr(data, "label"),
+                       "column_names" = names(data),
+                       "column_labels" = map_chr(names(data), function(x) attr(data[[x]], "label")))
+  cdisc_labels
 }
 
 
@@ -119,8 +145,7 @@ get_cdisc_labels <- function(dataname, data) {
 #' cdisc_dataset("ASL", ASL)
 #'
 
-#TODO: handle keys and labels
-cdisc_dataset <- function(dataname, data, keys = get_cdisc_keys(dataname), labels = get_cdisc_labels(data, dataname)){
+cdisc_dataset <- function(dataname, data, keys = get_cdisc_keys(dataname), labels = get_cdisc_labels(data)){
   x <- dataset(dataname, data, keys, labels)
   class(x) <- c("cdisc_dataset", class(x))
   x
