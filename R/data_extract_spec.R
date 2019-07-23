@@ -14,6 +14,7 @@
 #' }
 #'
 #' @importFrom methods is
+#' @importFrom utils.nest is.class.list
 #' @param dataname (\code{character}) The name of the \code{teal} dataset to
 #'   be extracted. This dataset has to be handed over to the \code{data} argument of the
 #'   \code{\link[teal]{init}} function.
