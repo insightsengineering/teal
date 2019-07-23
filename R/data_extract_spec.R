@@ -14,6 +14,7 @@
 #' }
 #'
 #' @importFrom methods is
+#' @importFrom utils.nest is.class.list
 #' @param dataname (\code{character}) The name of the \code{teal} dataset to
 #'   be extracted. This dataset has to be handed over to the \code{data} argument of the
 #'   \code{\link[teal]{init}} function.
@@ -84,7 +85,8 @@
 data_extract_spec <- function(dataname, columns, filter = NULL) {
   stopifnot(is.character(dataname), length(dataname) == 1)
   stopifnot(is(columns, "column_spec"), length(columns) >= 1)
-  stopifnot(is.null(filter) || (is(filter, "filter_spec") & length(filter) >= 1))
+  stopifnot(is.null(filter) || (is(filter, "filter_spec") & length(filter) >= 1) ||
+    is.class.list("filter_spec")(filter))
 
   res <- list(dataname = dataname, columns = columns, filter = filter)
   class(res) <- "data_extract_spec"
