@@ -22,8 +22,9 @@ dataset <- function(dataname,
                     data,
                     keys = NULL,
                     labels = NULL) {
-  stopifnot(is.character(dataname))
-  stopifnot(!is.null(data))
+  is.character.single(dataname)
+  is.null(keys) || (is.character.list(keys) && all(c("primary", "foreign", "parent") %in% names(keys)))
+  is.null(labels) || is.character.list(labels)
 
   if (any(!(union(keys$primary, keys$foreign) %in% names(data)))) {
     stop(sprintf("Dataset does not contain column(s) specified as keys"))
@@ -158,11 +159,10 @@ get_labels <- function(data) {
 #' cdisc_dataset("ADSL", ADSL)
 #'
 
-cdisc_dataset <-
-  function(dataname,
-           data,
-           keys = get_cdisc_keys(dataname),
-           labels = get_labels(data)) {
+cdisc_dataset <- function(dataname,
+                          data,
+                          keys = get_cdisc_keys(dataname),
+                          labels = get_labels(data)) {
     x <- dataset(dataname, data, keys, labels)
     class(x) <- c("cdisc_dataset", class(x))
     x
