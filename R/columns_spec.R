@@ -96,23 +96,33 @@ columns_spec <- function(choices,
   choices <- as.list(choices)
   selected <- as.list(selected)
   stopifnot(is.list(choices) && length(choices) >= 1 && all(vapply(choices, is.atomic, TRUE)))
-  stopifnot(is.list(selected) && length(selected) >= 1 && all(vapply(selected, is.atomic, TRUE)))
-  stopifnot(all(selected %is_in% choices))
-  stopifnot(is.logical.single(multiple))
-  stopifnot(is.logical.single(fixed))
-  stopifnot(is.character.single(label))
-  # check for correct lengths
-  stopifnot(multiple || length(selected) == 1)
 
-  stopifnot(all(map_lgl(selected, ~ length(.) == length(selected[[1]]))))
-  stopifnot(all(map_lgl(choices, ~ length(.) == length(choices[[1]]))))
   # if names is NULL, shiny will put strange labels (with quotes etc.) in the selectInputs, so we set it to the values
   if (is.null(names(choices))) {
     names(choices) <- vapply(choices, paste, collapse = " - ", character(1))
   }
-  if (is.null(names(selected))) {
-    names(selected) <- vapply(selected, paste, collapse = " - ", character(1))
+
+  # Deal with selected
+  if (!is.null(selected) && length(selected) > 0  && selected[[1]] != "__NONE__") {
+
+    stopifnot(is.list(selected) && length(selected) >= 1 && all(vapply(selected, is.atomic, TRUE)))
+    stopifnot(all(selected %is_in% choices))
+    stopifnot(multiple || length(selected) == 1)
+    stopifnot(all(map_lgl(selected, ~ length(.) == length(selected[[1]]))))
+    if (is.null(names(selected))) {
+      names(selected) <- vapply(selected, paste, collapse = " - ", character(1))
+    }
+  } else {
+    selected <- NULL
   }
+
+  stopifnot(is.logical.single(multiple))
+  stopifnot(is.logical.single(fixed))
+  stopifnot(is.character.single(label))
+
+  # check for correct lengths
+  stopifnot(all(map_lgl(choices, ~ length(.) == length(choices[[1]]))))
+
   res <- list(choices = choices, selected = selected, multiple = multiple, fixed = fixed, label = label)
   class(res) <- "column_spec"
   res
