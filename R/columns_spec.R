@@ -123,8 +123,8 @@ columns_spec <- function(choices,
   # check for correct lengths
   stopifnot(all(map_lgl(choices, ~ length(.) == length(choices[[1]]))))
 
-  if(length(choices) == 1 && !is.null(selected)) {
-    fixed = TRUE
+  if (length(choices) == 1 && !is.null(selected)) {
+    fixed <- TRUE
   }
 
   res <- list(choices = choices, selected = selected, multiple = multiple, fixed = fixed, label = label)
