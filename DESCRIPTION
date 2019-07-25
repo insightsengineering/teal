@@ -36,13 +36,13 @@ Imports:
   readr,
   shinyjs,
   shinyWidgets,
+  tern (>= 0.6.2),
   utils.nest (>= 0.1)
 RoxygenNote: 6.1.1
 Suggests:
   knitr,
   random.cdisc.data (>= 0.2.1),
   rmarkdown,
-  tern (>= 0.6.2),
   test.nest (>= 0.1),
   testthat
 VignetteBuilder: knitr
