@@ -49,7 +49,7 @@ test_that("Single choice", {
   expect_identical(c3$choices,  as.list(setNames(c("AVAL", "BMRKR1", "AGE"), c("AVAL", "BMRKR1", "AGE"))))
   expect_identical(c3$selected,  as.list(setNames("AVAL", "AVAL")))
   expect_false(c3$multiple)
-  expect_true(c3$fixed)
+  expect_false(c3$fixed)
   expect_identical(c3$label, "Column(s)")
 
 })
@@ -68,7 +68,7 @@ test_that("Multiple choices", {
   expect_identical(c1$selected, as.list(setNames(selected, selected)))
 
   expect_true(c1$multiple)
-  expect_true(c1$fixed)
+  expect_false(c1$fixed)
   expect_identical(c1$label, "Column(s)")
 
 

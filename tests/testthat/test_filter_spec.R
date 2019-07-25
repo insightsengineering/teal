@@ -35,7 +35,7 @@ test_that("Single choice", {
   expect_identical(f1$selected, as.list(setNames(choices[1], choices[1])))
 
   expect_false(f1$multiple)
-  expect_true(f1$fixed)
+  expect_false(f1$fixed)
   expect_identical(f1$label, "test")
 })
 
@@ -121,7 +121,7 @@ test_that("Multiple vars", {
                                       `val1.1 - val2.2` = c("val1.1", "val2.2")))
 
   expect_true(f1m$multiple)
-  expect_true(f1m$fixed)
+  expect_false(f1m$fixed)
   expect_identical(f1m$label, "Filter")
 
 
