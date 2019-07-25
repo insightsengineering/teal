@@ -97,7 +97,13 @@ columns_spec <- function(choices,
   selected <- as.list(selected)
   stopifnot(is.list(choices) && length(choices) >= 1 && all(vapply(choices, is.atomic, TRUE)))
 
-  if (!is.null(selected) && length(selected) > 0) {
+  # if names is NULL, shiny will put strange labels (with quotes etc.) in the selectInputs, so we set it to the values
+  if (is.null(names(choices))) {
+    names(choices) <- vapply(choices, paste, collapse = " - ", character(1))
+  }
+
+  # Deal with selected
+  if (!is.null(selected) && length(selected) > 0  && selected[[1]] != "__NONE__") {
 
     stopifnot(is.list(selected) && length(selected) >= 1 && all(vapply(selected, is.atomic, TRUE)))
     stopifnot(all(selected %is_in% choices))
@@ -107,7 +113,12 @@ columns_spec <- function(choices,
       names(selected) <- vapply(selected, paste, collapse = " - ", character(1))
     }
   } else {
-    selected <- "__NONE__"
+    if (!multiple) {
+      selected <- list(`- Nothing selected -` = "")
+      choices <- append( list(`- Nothing selected -` = ""), choices)
+    } else {
+      selected <- NULL
+    }
   }
 
   stopifnot(is.logical.single(multiple))
@@ -116,10 +127,6 @@ columns_spec <- function(choices,
 
   # check for correct lengths
   stopifnot(all(map_lgl(choices, ~ length(.) == length(choices[[1]]))))
-  # if names is NULL, shiny will put strange labels (with quotes etc.) in the selectInputs, so we set it to the values
-  if (is.null(names(choices))) {
-    names(choices) <- vapply(choices, paste, collapse = " - ", character(1))
-  }
 
   res <- list(choices = choices, selected = selected, multiple = multiple, fixed = fixed, label = label)
   class(res) <- "column_spec"

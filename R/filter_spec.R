@@ -127,20 +127,31 @@ filter_spec <- function(vars,
                         sep = " - ") {
   stopifnot(is.atomic(vars))
   stopifnot(is.atomic(choices))
-  stopifnot(is.atomic(selected))
   stopifnot(all(is.character(vars)))
   stopifnot(all(is.character(choices)))
-  stopifnot(all(is.character(selected)))
   stopifnot(all(!duplicated(vars)))
   stopifnot(all(!duplicated(choices)))
-  stopifnot(all(!duplicated(selected)))
   stopifnot(is.character.single(sep))
   stopifnot(is.logical.single(multiple))
   stopifnot(is.character.single(label))
 
   choices <- split_by_sep(choices, sep)
-  selected <- split_by_sep(selected, sep)
   stopifnot(all(vapply(choices, length, 0) == length(vars)))
+
+  if (!is.null(selected) && selected != "") {
+
+    stopifnot(is.atomic(selected))
+    stopifnot(all(!duplicated(selected)))
+    stopifnot(all(is.character(selected)))
+    selected <- split_by_sep(selected, sep)
+  } else {
+    if (!multiple) {
+      selected <- list(`- Nothing selected -` = "")
+      choices <- append( list(`- Nothing selected -` = ""), choices)
+    } else {
+      selected <- NULL
+    }
+  }
 
   res <- append(
       list(vars),
