@@ -89,7 +89,7 @@
 columns_spec <- function(choices,
                          selected = choices[1],
                          multiple = length(selected) > 1,
-                         fixed = TRUE,
+                         fixed = FALSE,
                          label = "Column(s)") {
   # when choices and selected is not a list, we convert it to a list (because each
   # entry is an atomic vector of possibly several entries, needed for filter_spec currently)
