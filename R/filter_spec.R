@@ -138,19 +138,14 @@ filter_spec <- function(vars,
   choices <- split_by_sep(choices, sep)
   stopifnot(all(vapply(choices, length, 0) == length(vars)))
 
-  if (!is.null(selected) && selected != "") {
+  if (!is.null(selected) && selected != "__NONE__") {
 
     stopifnot(is.atomic(selected))
     stopifnot(all(!duplicated(selected)))
     stopifnot(all(is.character(selected)))
     selected <- split_by_sep(selected, sep)
   } else {
-    if (!multiple) {
-      selected <- list(`- Nothing selected -` = "")
-      choices <- append( list(`- Nothing selected -` = ""), choices)
-    } else {
-      selected <- NULL
-    }
+    selected <- NULL
   }
 
   res <- append(

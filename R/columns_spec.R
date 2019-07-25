@@ -113,12 +113,7 @@ columns_spec <- function(choices,
       names(selected) <- vapply(selected, paste, collapse = " - ", character(1))
     }
   } else {
-    if (!multiple) {
-      selected <- list(`- Nothing selected -` = "")
-      choices <- append( list(`- Nothing selected -` = ""), choices)
-    } else {
-      selected <- NULL
-    }
+    selected <- NULL
   }
 
   stopifnot(is.logical.single(multiple))
