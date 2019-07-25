@@ -74,7 +74,7 @@ get_cdisc_keys <- function(dataname) {
       parent = "ADSL"
     ),
     ADCM = list(
-      primary = c("STUDYID", "USUBJID", "ASTDTM", "MHSEQ"),
+      primary = c("STUDYID", "USUBJID"),
       foreign = c("STUDYID", "USUBJID"),
       parent = "ADSL"
     ),
@@ -82,20 +82,13 @@ get_cdisc_keys <- function(dataname) {
       primary = c(
         "STUDYID",
         "USUBJID",
-        "PARAMCD",
-        "BASETYPE",
-        "AVISITN",
-        "ATPTN",
-        "DTYPE",
-        "ADTM",
-        "LBSEQ",
-        "ASPID"
+        "PARAMCD"
       ),
       foreign = c("STUDYID", "USUBJID"),
       parent = "ADSL"
     ),
     ADRS = list(
-      primary = c("STUDYID", "USUBJID", "PARAMCD", "AVISITN", "ADT", "RSSEQ"),
+      primary = c("STUDYID", "USUBJID", "PARAMCD"),
       foreign = c("STUDYID", "USUBJID"),
       parent = "ADSL"
     ),
@@ -103,14 +96,7 @@ get_cdisc_keys <- function(dataname) {
       primary = c(
         "STUDYID",
         "USUBJID",
-        "PARAMCD",
-        "BASETYPE",
-        "AVISITN",
-        "ATPTN",
-        "DTYPE",
-        "ADTM",
-        "VSSEQ",
-        "ASPID"
+        "PARAMCD"
       ),
       foreign = c("STUDYID", "USUBJID"),
       parent = "ADSL"
@@ -207,7 +193,7 @@ cdisc_dataset <-
 #'
 #' cdisc_data(
 #'   cdisc_dataset("ADSL", ADSL),
-#'   cdisc_dataset("ADTTE", ADTTE)),
+#'   cdisc_dataset("ADTTE", ADTTE),
 #'   code = 'ADSL <- radsl(N = 600, seed = 123)
 #'           ADTTE <- radtte(ADSL, event.descr = c("STUDYID", "USUBJID", "PARAMCD"), seed = 123)')
 cdisc_data <- function(ADSL, # nolint
@@ -230,6 +216,7 @@ cdisc_data <- function(ADSL, # nolint
     }
   }
 
+
   ADSL <- ADSL$data #nolint
 
   dlist <- lapply(list(...), function(x) {
@@ -241,7 +228,7 @@ cdisc_data <- function(ADSL, # nolint
 
   arg_values_call <- append(
     list("ADSL" = substitute(ADSL)),
-    as.list(substitute(dlist))[-1]
+    as.list(substitute(dlist))
   )
   arg_values_char <- sapply(
     arg_values_call,
@@ -250,12 +237,6 @@ cdisc_data <- function(ADSL, # nolint
     }
   ) %>%
     unname()
-  for (i in seq_along(arg_values_call)) {
-    if (is.call(arg_values_call[[i]]) && isTRUE(check) && !identical(code, "")) {
-      msg <- "Automatic checking is not supported if arguments provided as calls."
-      stop(msg)
-    }
-  }
 
   # eval code if argument does not exists, i.e. cdisc_data(ADSL = 1, x, code = "x <- 2")
   for (i in seq_along(arg_values_call)) {

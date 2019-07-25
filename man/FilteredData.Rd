@@ -16,7 +16,7 @@ This class encapsulates data import and filtering.
   Once a dataname was specified it won't be deleted at runtime to keep
   reactive relations intact. If a dataset is not needed anymore then you can
   set it to NULL with load_data.
-  Every data set is also filtered with ASL, hence ASL is given by default (NULL)
+  Every data set is also filtered with ADSL, hence ADSL is given by default (NULL)
 
 load_data
 1 load data

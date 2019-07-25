@@ -34,7 +34,7 @@ ADTTE <- radtte(ADSL, event.descr = c("STUDYID", "USUBJID", "PARAMCD"), seed = 1
 
 cdisc_data(
   cdisc_dataset("ADSL", ADSL),
-  cdisc_dataset("ADTTE", ADTTE)),
+  cdisc_dataset("ADTTE", ADTTE),
   code = 'ADSL <- radsl(N = 600, seed = 123)
           ADTTE <- radtte(ADSL, event.descr = c("STUDYID", "USUBJID", "PARAMCD"), seed = 123)')
 }
