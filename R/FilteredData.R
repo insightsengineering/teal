@@ -27,14 +27,14 @@
 #'
 #' x$datanames()
 #'
-#' x$list_data_info("ASL")
-#' x$get_filter_info("ASL")
+#' x$list_data_info("ADSL")
+#' x$get_filter_info("ADSL")
 #'
-#' df <- x$get_data("ASL")
+#' df <- x$get_data("ADSL")
 #'
-#' x$get_filter_info("ASL")[['USUBJID']]$type
+#' x$get_filter_info("ADSL")[['USUBJID']]$type
 #'
-#' x$set_filter("ASL", list(AGE=c(3,5), SEX=c('M', 'F')))
+#' x$set_filter("ADSL", list(AGE=c(3,5), SEX=c('M', 'F')))
 #' }
 FilteredData <- R6::R6Class( # nolint
   "FilteredData",
