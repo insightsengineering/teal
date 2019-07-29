@@ -58,7 +58,7 @@ get_cdisc_keys <- function(dataname) {
   stopifnot(is.character(dataname))
 
   # copy from excel file
-  rel <- list(
+  default_cdisc_keys <- list(
     ADSL = list(
       primary = c("STUDYID", "USUBJID"),
       foreign = NULL,
@@ -104,10 +104,10 @@ get_cdisc_keys <- function(dataname) {
     )
   )
 
-  if (!(dataname %in% names(rel))) {
+  if (!(dataname %in% names(default_cdisc_keys))) {
     stop(sprintf("There is no dataset called: %s", dataname))
   } else {
-    rel[[dataname]]
+    default_cdisc_keys[[dataname]]
   }
 }
 
