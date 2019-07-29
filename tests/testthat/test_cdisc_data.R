@@ -14,6 +14,12 @@ ADSL <- ARG1 <- ARG2 <- cadsl # nolint
 ADTTE <- cadtte # nolint
 ADRS <- cadrs # nolint
 
+test_that("Basic example cdisc dataset", {
+  expect_identical(ADSL, cdisc_dataset("ADSL", ADSL)$data)
+  expect_identical("ADSL", cdisc_dataset("ADSL", ADSL)$dataname)
+  expect_true(all(class(cdisc_dataset("ADSL", ADSL)) %in% list("cdisc_dataset", "dataset")))
+})
+
 test_that("Basic example - without code and check", {
   expect_silent(cdisc_data(cdisc_dataset("ADSL", ADSL), code = "", check = FALSE))
   expect_silent(cdisc_data(cdisc_dataset("ADSL", ADSL),
