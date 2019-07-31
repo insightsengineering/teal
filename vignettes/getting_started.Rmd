@@ -1,6 +1,7 @@
 ---
 title: "Getting Started with Teal"
 author: "Adrian Waddell"
+date: "2019-07-31"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{Getting Started with Teal}
