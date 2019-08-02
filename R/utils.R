@@ -37,7 +37,7 @@ check_module_names <- function(modules) {
   label <- unlist(switch(
       class(modules),
       teal_module = modules$label,
-      teal_modules = lapply(modules$modules, function(x){
+      teal_modules = lapply(modules$modules, function(x) {
         x$label
       }),
       stop("no default implementation for check_module_names")
