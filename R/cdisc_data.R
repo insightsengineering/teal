@@ -27,11 +27,18 @@ dataset <- function(dataname,
   stopifnot(is.data.frame(data))
   stopifnot(is.list(keys))
   stopifnot(all_true(keys, function(x) is.null(x) || is.character.vector(x)))
+  stopifnot(all(c("primary", "foreign", "parent") %in% names(keys)))
   stopifnot(is.list(labels))
   stopifnot(all_true(labels, function(x) is.null(x) || (is.character(x) || is.character.vector(x))))
+  stopifnot(all(c("dataset_label", "column_labels") %in% names(labels)))
+
 
   if (any(!(union(keys$primary, keys$foreign) %in% names(data)))) {
     stop(sprintf("Dataset does not contain column(s) specified as keys"))
+  }
+
+  if (any(!(names(labels$column_labels) %in% names(data)))) {
+    stop(sprintf("Dataset does not contain column(s) specified as labels"))
   }
 
   structure(list(
@@ -170,8 +177,6 @@ cdisc_dataset <- function(dataname,
                           data,
                           keys = get_cdisc_keys(dataname),
                           labels = get_labels(data)) {
-
-    stopifnot(all(c("primary", "foreign", "parent") %in% names(keys)))
 
     x <- dataset(dataname, data, keys, labels)
     class(x) <- c("cdisc_dataset", class(x))
