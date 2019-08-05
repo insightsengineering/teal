@@ -20,12 +20,15 @@
 
 dataset <- function(dataname,
                     data,
-                    keys = NULL,
-                    labels = NULL) {
+                    keys = list(primary = NULL, foreign = NULL, parent = NULL),
+                    labels = list(dataset_label = NULL, column_labels = NULL)) {
+
   stopifnot(is.character.single(dataname))
-  stopifnot(all_true(keys, function(x) is.null(x) || (is.character(x) && length(x) > 0)
-                     && all(c("primary", "foreign", "parent") %in% names(keys))))
-  stopifnot(all_true(labels, function(x) is.null(x) || (is.character(x) || is.character.list(x)) && length(x) > 0))
+  stopifnot(is.data.frame(data))
+  stopifnot(is.list(keys))
+  stopifnot(all_true(keys, function(x) is.null(x) || is.character.vector(x)))
+  stopifnot(is.list(labels))
+  stopifnot(all_true(labels, function(x) is.null(x) || (is.character(x) || is.character.vector(x))))
 
   if (any(!(union(keys$primary, keys$foreign) %in% names(data)))) {
     stop(sprintf("Dataset does not contain column(s) specified as keys"))
@@ -56,7 +59,7 @@ dataset <- function(dataname,
 #'
 
 get_cdisc_keys <- function(dataname) {
-  stopifnot(is.character(dataname))
+  stopifnot(is.character.single(dataname))
 
   # copy from excel file
   default_cdisc_keys <- list(
@@ -132,6 +135,9 @@ get_cdisc_keys <- function(dataname) {
 #'
 
 get_labels <- function(data) {
+
+  stopifnot(is.data.frame(data))
+
   cdisc_labels <- list(
     "dataset_label" = attr(data, "label"),
     "column_labels" = var_labels(data, fill = TRUE)
@@ -164,6 +170,9 @@ cdisc_dataset <- function(dataname,
                           data,
                           keys = get_cdisc_keys(dataname),
                           labels = get_labels(data)) {
+
+    stopifnot(all(c("primary", "foreign", "parent") %in% names(keys)))
+
     x <- dataset(dataname, data, keys, labels)
     class(x) <- c("cdisc_dataset", class(x))
     x
