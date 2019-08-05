@@ -90,6 +90,8 @@ init <- function(data,
     warning("Please use cdisc_data() instead of list() for 'data' argument. It will be depreciated soon.")
   }
 
+  check_module_names(modules)
+
   # initialize FilteredData object
   datasets <- FilteredData$new(names(data))
   Map(function(x, name) {
