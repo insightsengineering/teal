@@ -23,8 +23,9 @@ dataset <- function(dataname,
                     keys = NULL,
                     labels = NULL) {
   stopifnot(is.character.single(dataname))
-  stopifnot(is.null(keys) || (is.list(keys) && all(c("primary", "foreign", "parent") %in% names(keys))))
-  stopifnot(is.null(labels) || is.list(labels))
+  stopifnot(all_true(keys, function(x) is.null(x) || (is.character(x) && length(x) > 0)
+                     && all(c("primary", "foreign", "parent") %in% names(keys))))
+  stopifnot(all_true(labels, function(x) is.null(x) || (is.character(x) || is.character.list(x)) && length(x) > 0))
 
   if (any(!(union(keys$primary, keys$foreign) %in% names(data)))) {
     stop(sprintf("Dataset does not contain column(s) specified as keys"))
