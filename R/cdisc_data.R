@@ -31,15 +31,8 @@ dataset <- function(dataname,
   stopifnot(is.list(labels))
   stopifnot(all_true(labels, function(x) is.null(x) || (is.character(x) || is.character.vector(x))))
   stopifnot(all(c("dataset_label", "column_labels") %in% names(labels)))
-
-
-  if (any(!(union(keys$primary, keys$foreign) %in% names(data)))) {
-    stop(sprintf("Dataset does not contain column(s) specified as keys"))
-  }
-
-  if (any(!(names(labels$column_labels) %in% names(data)))) {
-    stop(sprintf("Dataset does not contain column(s) specified as labels"))
-  }
+  stopifnot(all(union(keys$primary, keys$foreign) %in% names(data)))
+  stopifnot(all(names(labels$column_labels) %in% names(data)))
 
   structure(list(
     dataname = dataname,
