@@ -23,6 +23,8 @@
 #'  function.
 #' @param columns (\code{column_spec}-S3 class) Columns to be selected from the input dataset
 #'  mentioned in \code{dataname.} The setup can be created using \code{\link{columns_spec}} function.
+#' @param reshape (\code{logical}) whether reshape long to wide. Note that it will be used only in case of long dataset
+#'  with multiple keys selected in filter part.
 #'
 #' @section Examples:
 #' \describe{
@@ -82,13 +84,14 @@
 #'}
 #'
 #' @references \link{columns_spec} \link{filter_spec}
-data_extract_spec <- function(dataname, columns, filter = NULL) {
-  stopifnot(is.character(dataname), length(dataname) == 1)
+data_extract_spec <- function(dataname, columns, filter = NULL, reshape = FALSE) {
+  stopifnot(is.character.single(dataname))
   stopifnot(is(columns, "column_spec"), length(columns) >= 1)
   stopifnot(is.null(filter) || (is(filter, "filter_spec") & length(filter) >= 1) ||
     is.class.list("filter_spec")(filter))
+  stopifnot(is.logical.single(reshape))
 
-  res <- list(dataname = dataname, columns = columns, filter = filter)
+  res <- list(dataname = dataname, columns = columns, filter = filter, reshape = reshape)
   class(res) <- "data_extract_spec"
 
   res
