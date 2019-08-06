@@ -4,7 +4,7 @@
 \alias{data_extract_spec}
 \title{Data Extract input for teal modules}
 \usage{
-data_extract_spec(dataname, columns, filter = NULL)
+data_extract_spec(dataname, columns, filter = NULL, reshape = FALSE)
 }
 \arguments{
 \item{dataname}{(\code{character}) The name of the \code{teal} dataset to
@@ -17,6 +17,9 @@ mentioned in \code{dataname.} The setup can be created using \code{\link{columns
 \item{filter}{(\code{filter_spec}-S3-class) Setup of the filtering of
 key columns inside the dataset. This setup can be created using the \code{\link{filter_spec}}
 function.}
+
+\item{reshape}{(\code{logical}) whether reshape long to wide. Note that it will be used only in case of long dataset
+with multiple keys selected in filter part.}
 }
 \description{
 The Data Extract input can be used to filter and select columns from a data
