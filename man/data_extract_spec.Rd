@@ -37,7 +37,7 @@ be constructed. This input can be read by a \code{teal.devel::data_extract_modul
 \enumerate{
   \item{Dataset with multiple filters and column selection}{
     \preformatted{
-adte_filters <- filter_spec(
+adtte_filters <- filter_spec(
 vars = c("PARAMCD", "CNSR"),
 sep = "-",
 choices = c("OS-1" = "OS-1", "OS-0" = "OS-0", "PFS-1" = "PFS-1"),
@@ -47,8 +47,8 @@ label = "Choose endpoint and Censor"
 )
 
 data_extract_spec(
-  dataname = "ADTE",
-  filter = adte_filters,
+  dataname = "ADTTE",
+  filter = adtte_filters,
   columns = columns_spec(
     choices = c("AVAL", "BMRKR1", "AGE"),
         selected = c("AVAL", "BMRKR1"),
@@ -72,7 +72,7 @@ data_extract_spec(
   \preformatted{
 
 data_extract_spec(
-  dataname = "ASL",
+  dataname = "ADSL",
   filter = NULL,
   columns = columns_spec(
     choices = c("AGE", "SEX", "USUBJID"),

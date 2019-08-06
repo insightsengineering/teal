@@ -1,8 +1,187 @@
 #' Data input for teal app
 #'
+#' Abstract function that creates dataset object with connected metadata.
+#' @param dataname name of dataset
+#' @param data data
+#' @param keys list of keys
+#' @param labels list of labels
+#'
+#' @return a dataset with connected metadata
+#'
+#' @export
+#'
+#' @examples
+#' library(random.cdisc.data)
+#'
+#' ADSL <-  suppressWarnings(radsl(N = 600, seed = 123))
+#'
+#' dataset("ADSL", ADSL)
+#'
+
+dataset <- function(dataname,
+                    data,
+                    keys = list(primary = NULL, foreign = NULL, parent = NULL),
+                    labels = list(dataset_label = NULL, column_labels = NULL)) {
+
+  stopifnot(is.character.single(dataname))
+  stopifnot(is.data.frame(data))
+  stopifnot(is.list(keys))
+  stopifnot(all_true(keys, function(x) is.null(x) || is.character.vector(x)))
+  stopifnot(all(c("primary", "foreign", "parent") %in% names(keys)))
+  stopifnot(is.list(labels))
+  stopifnot(all_true(labels, function(x) is.null(x) || (is.character(x) || is.character.vector(x))))
+  stopifnot(all(c("dataset_label", "column_labels") %in% names(labels)))
+  stopifnot(all(union(keys$primary, keys$foreign) %in% names(data)))
+  stopifnot(all(names(labels$column_labels) %in% names(data)))
+
+  structure(list(
+    dataname = dataname,
+    data = data,
+    keys = keys,
+    labels = labels
+  ),
+  class = c("dataset"))
+
+}
+
+#' Data input for teal app
+#'
+#' Function that creates CDISC dataset object
+#' @param dataname name of dataset
+#'
+#' @return keys
+#'
+#' @export
+#'
+#' @examples
+#'
+#' get_cdisc_keys("ADSL")
+#'
+
+get_cdisc_keys <- function(dataname) {
+  stopifnot(is.character.single(dataname))
+
+  # copy from excel file
+  default_cdisc_keys <- list(
+    ADSL = list(
+      primary = c("STUDYID", "USUBJID"),
+      foreign = NULL,
+      parent = NULL
+    ),
+    ADAE = list(
+      primary = c("STUDYID", "USUBJID"),
+      foreign = c("STUDYID", "USUBJID"),
+      parent = "ADSL"
+    ),
+    ADTTE = list(
+      primary = c("STUDYID", "USUBJID", "PARAMCD"),
+      foreign = c("STUDYID", "USUBJID"),
+      parent = "ADSL"
+    ),
+    ADCM = list(
+      primary = c("STUDYID", "USUBJID"),
+      foreign = c("STUDYID", "USUBJID"),
+      parent = "ADSL"
+    ),
+    ADLB = list(
+      primary = c(
+        "STUDYID",
+        "USUBJID",
+        "PARAMCD"
+      ),
+      foreign = c("STUDYID", "USUBJID"),
+      parent = "ADSL"
+    ),
+    ADRS = list(
+      primary = c("STUDYID", "USUBJID", "PARAMCD"),
+      foreign = c("STUDYID", "USUBJID"),
+      parent = "ADSL"
+    ),
+    ADVS = list(
+      primary = c(
+        "STUDYID",
+        "USUBJID",
+        "PARAMCD"
+      ),
+      foreign = c("STUDYID", "USUBJID"),
+      parent = "ADSL"
+    )
+  )
+
+  if (!(dataname %in% names(default_cdisc_keys))) {
+    stop(sprintf("There is no dataset called: %s", dataname))
+  } else {
+    default_cdisc_keys[[dataname]]
+  }
+}
+
+#' Data input for teal app
+#'
+#' Function that extract labels from CDISC dataset
+#' @param data data
+#'
+#' @return labels
+#'
+#' @export
+#'
+#' @importFrom tern var_labels
+#'
+#' @examples
+#' library(random.cdisc.data)
+#'
+#' ADSL <-  suppressWarnings(radsl(N = 600, seed = 123))
+#'
+#' get_labels(ADSL)
+#'
+
+get_labels <- function(data) {
+
+  stopifnot(is.data.frame(data))
+
+  cdisc_labels <- list(
+    "dataset_label" = attr(data, "label"),
+    "column_labels" = var_labels(data, fill = TRUE)
+  )
+  cdisc_labels
+}
+
+
+#' Data input for teal app
+#'
+#' Function that creates CDISC dataset object
+#' @param dataname name of dataset
+#' @param data data
+#' @param keys list of keys
+#' @param labels list of labeles
+#'
+#' @return a dataset with connected metadata
+#'
+#' @export
+#'
+#' @examples
+#' library(random.cdisc.data)
+#'
+#' ADSL <-  suppressWarnings(radsl(N = 600, seed = 123))
+#'
+#' cdisc_dataset("ADSL", ADSL)
+#'
+
+cdisc_dataset <- function(dataname,
+                          data,
+                          keys = get_cdisc_keys(dataname),
+                          labels = get_labels(data)) {
+
+    x <- dataset(dataname, data, keys, labels)
+    class(x) <- c("cdisc_dataset", class(x))
+    x
+  }
+
+
+#' Data input for teal app
+#'
 #' Function passes datasets to teal application with option to read preprocessing code and reproducibility checking.
-#' @param ASL ASL dataset
-#' @param ... other datasets
+#' @param ADSL ADSL dataset object
+#' @param ... other datasets objects
 #' @param code (\code{character}) preprocessing code.
 #' @param check (\code{logical}) reproducibility check - whether evaluated preprocessing code gives the same objects
 #'   as provided in arguments. Check is run only if flag is true and preprocessing code is not empty.
@@ -17,15 +196,15 @@
 #' @examples
 #' library(random.cdisc.data)
 #'
-#' ASL <-  suppressWarnings(radsl(N = 600, seed = 123))
-#' ADTE <- radtte(ASL, event.descr = c("STUDYID", "USUBJID", "PARAMCD"), seed = 123)
+#' ADSL <-  suppressWarnings(radsl(N = 600, seed = 123))
+#' ADTTE <- radtte(ADSL, event.descr = c("STUDYID", "USUBJID", "PARAMCD"), seed = 123)
 #'
 #' cdisc_data(
-#'   ASL = ASL,
-#'   ADTE = ADTE,
-#'   code = 'ASL <- radsl(N = 600, seed = 123)
-#'           ADTE <- radtte(ASL, event.descr = c("STUDYID", "USUBJID", "PARAMCD"), seed = 123)')
-cdisc_data <- function(ASL, # nolint
+#'   cdisc_dataset("ADSL", ADSL),
+#'   cdisc_dataset("ADTTE", ADTTE),
+#'   code = 'ADSL <- radsl(N = 600, seed = 123)
+#'           ADTTE <- radtte(ADSL, event.descr = c("STUDYID", "USUBJID", "PARAMCD"), seed = 123)')
+cdisc_data <- function(ADSL, # nolint
                        ...,
                        code = "",
                        check = FALSE) {
@@ -34,20 +213,30 @@ cdisc_data <- function(ASL, # nolint
 
   code <- paste0(code, collapse = "\n")
 
-  if (missing(ASL)) {
+  if (missing(ADSL)) {
     if (identical(code, "")) {
-      stop("ASL and code arguments are missing.")
+      stop("ADSL and code arguments are missing.")
     } else {
       eval(parse(text = code))
-      if (missing(ASL)) {
-        stop("ASL is missing and cannot be generated by code.")
+      if (missing(ADSL)) {
+        stop("ADSL is missing and cannot be generated by code.")
       }
     }
   }
 
+
+  ADSL <- ADSL$data #nolint
+
+  dlist <- lapply(list(...), function(x) {
+      x$data
+    })
+  names(dlist) <- lapply(list(...), function(x) {
+      x$dataname
+    })
+
   arg_values_call <- append(
-    list("ASL" = substitute(ASL)),
-    as.list(substitute(list(...)))[-1]
+    list("ADSL" = substitute(ADSL)),
+    as.list(substitute(dlist))
   )
   arg_values_char <- sapply(
     arg_values_call,
@@ -56,14 +245,8 @@ cdisc_data <- function(ASL, # nolint
     }
   ) %>%
     unname()
-  for (i in seq_along(arg_values_call)) {
-    if (is.call(arg_values_call[[i]]) && isTRUE(check) && !identical(code, "")) {
-      msg <- "Automatic checking is not supported if arguments provided as calls."
-      stop(msg)
-    }
-  }
 
-  # eval code if argument does not exists, i.e. cdisc_data(ASL = 1, x, code = "x <- 2")
+  # eval code if argument does not exists, i.e. cdisc_data(ADSL = 1, x, code = "x <- 2")
   for (i in seq_along(arg_values_call)) {
     if ((is.name(arg_values_call[[i]]) || is.call(arg_values_call[[i]])) &&
         inherits(tryCatch(eval(arg_values_call[[i]], envir = parent.frame()), error = function(e) e), "error") &&
@@ -73,50 +256,16 @@ cdisc_data <- function(ASL, # nolint
     }
   }
 
-  arg_values <- setNames(append(list(ASL), list(...)), NULL)
+  arg_values <- setNames(append(list(ADSL), dlist), NULL)
 
   arg_names <- c(
-    "ASL",
-    if (is.null(names(list(...)))) {
+    "ADSL",
+    if (is.null(names(dlist))) {
       rep("", length(arg_values) - 1)
     } else {
-      names(list(...))
+      names(dlist)
     }
   )
-
-  if (any(arg_names == "")) {
-    stop("All arguments passed to '...' should be named.")
-  }
-
-  # if user changes variable name via argument
-  if (any(arg_names != arg_values_char)) {
-    idx <- which(arg_names != arg_values_char)
-
-    msg <- sprintf(
-      "Data names should not be changed via argument\n%s",
-      paste(
-        paste0(arg_names[idx], " != ", arg_values_char[idx]),
-        collapse = "\n"
-      )
-    )
-
-    stop(msg)
-  }
-
-  # if data arguments aren't capitalized
-  if (any(arg_names != toupper(arg_names))) {
-    idx <- which(arg_names != toupper(arg_names))
-
-    msg <- sprintf(
-      "Data arguments should be capitalized. Please change\n%s",
-      paste(
-        paste0(arg_names[idx], " to ", toupper(arg_names)[idx]),
-        collapse = "\n"
-      )
-    )
-
-    stop(msg)
-  }
 
   res <- setNames(arg_values, arg_names)
 

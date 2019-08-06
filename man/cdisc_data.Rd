@@ -4,12 +4,12 @@
 \alias{cdisc_data}
 \title{Data input for teal app}
 \usage{
-cdisc_data(ASL, ..., code = "", check = FALSE)
+cdisc_data(ADSL, ..., code = "", check = FALSE)
 }
 \arguments{
-\item{ASL}{ASL dataset}
+\item{ADSL}{ADSL dataset object}
 
-\item{...}{other datasets}
+\item{...}{other datasets objects}
 
 \item{code}{(\code{character}) preprocessing code.}
 
@@ -29,12 +29,12 @@ This function checks if there were keys added to all data
 \examples{
 library(random.cdisc.data)
 
-ASL <-  suppressWarnings(radsl(N = 600, seed = 123))
-ADTE <- radtte(ASL, event.descr = c("STUDYID", "USUBJID", "PARAMCD"), seed = 123)
+ADSL <-  suppressWarnings(radsl(N = 600, seed = 123))
+ADTTE <- radtte(ADSL, event.descr = c("STUDYID", "USUBJID", "PARAMCD"), seed = 123)
 
 cdisc_data(
-  ASL = ASL,
-  ADTE = ADTE,
-  code = 'ASL <- radsl(N = 600, seed = 123)
-          ADTE <- radtte(ASL, event.descr = c("STUDYID", "USUBJID", "PARAMCD"), seed = 123)')
+  cdisc_dataset("ADSL", ADSL),
+  cdisc_dataset("ADTTE", ADTTE),
+  code = 'ADSL <- radsl(N = 600, seed = 123)
+          ADTTE <- radtte(ADSL, event.descr = c("STUDYID", "USUBJID", "PARAMCD"), seed = 123)')
 }

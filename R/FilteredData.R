@@ -4,7 +4,7 @@
 #'   Once a dataname was specified it won't be deleted at runtime to keep
 #'   reactive relations intact. If a dataset is not needed anymore then you can
 #'   set it to NULL with load_data.
-#'   Every data set is also filtered with ASL, hence ASL is given by default (NULL)
+#'   Every data set is also filtered with ADSL, hence ADSL is given by default (NULL)
 #'
 #' load_data
 #' 1 load data
@@ -27,14 +27,14 @@
 #'
 #' x$datanames()
 #'
-#' x$list_data_info("ASL")
-#' x$get_filter_info("ASL")
+#' x$list_data_info("ADSL")
+#' x$get_filter_info("ADSL")
 #'
-#' df <- x$get_data("ASL")
+#' df <- x$get_data("ADSL")
 #'
-#' x$get_filter_info("ASL")[['USUBJID']]$type
+#' x$get_filter_info("ADSL")[['USUBJID']]$type
 #'
-#' x$set_filter("ASL", list(AGE=c(3,5), SEX=c('M', 'F')))
+#' x$set_filter("ADSL", list(AGE=c(3,5), SEX=c('M', 'F')))
 #' }
 FilteredData <- R6::R6Class( # nolint
   "FilteredData",
@@ -42,7 +42,7 @@ FilteredData <- R6::R6Class( # nolint
   ## __Public Methods ====
   public = list(
 
-    initialize = function(datanames = c("ASL")) {
+    initialize = function(datanames = c("ADSL")) {
       for (dataname in datanames) {
         if (grepl("[[:space:]]", dataname))
           stop(paste0("invalid dataname '", dataname, "' datanames without spaces"))
@@ -210,8 +210,8 @@ FilteredData <- R6::R6Class( # nolint
         private$filter_info[[name]]             <- NULL
       }
 
-      # run if only asl data was reset
-      if (identical(dataname, "ASL")) {
+      # run if only adsl data was reset
+      if (identical(dataname, "ADSL")) {
         private$apply_filter()
       }
 
@@ -411,13 +411,13 @@ FilteredData <- R6::R6Class( # nolint
     },
 
 
-    get_filter_call = function(dataname, merge=TRUE, asl=TRUE) {
+    get_filter_call = function(dataname, merge=TRUE, adsl=TRUE) {
       private$error_if_not_valid(dataname)
 
-      asl_filter_call <- private$get_subset_call("ASL", "ASL_FILTERED")
+      adsl_filter_call <- private$get_subset_call("ADSL", "ADSL_FILTERED")
 
-      if (dataname == "ASL") {
-        asl_filter_call
+      if (dataname == "ADSL") {
+        adsl_filter_call
       } else {
 
         out <- paste0(dataname, "_FILTERED")
@@ -425,18 +425,18 @@ FilteredData <- R6::R6Class( # nolint
 
         filter_call <- private$get_subset_call(dataname, out_dat)
         merge_call <- call("<-", as.name(out),
-                           call("merge", x = call("[", as.name("ASL_FILTERED"), quote(expr =), c("USUBJID", "STUDYID")), # nolint
+                           call("merge", x = call("[", as.name("ADSL_FILTERED"), quote(expr =), c("USUBJID", "STUDYID")), # nolint
                                 y = as.name(out_dat),
                                 by = c("USUBJID", "STUDYID"),
                                 all.x = FALSE, all.y = FALSE))
 
-        calls <- list(asl_filter_call, filter_call, merge_call)
+        calls <- list(adsl_filter_call, filter_call, merge_call)
 
-        if (merge && asl) {
+        if (merge && adsl) {
           calls
-        } else if (merge && !asl) {
+        } else if (merge && !adsl) {
           calls[2:3]
-        } else if (!merge && asl) {
+        } else if (!merge && adsl) {
           calls[1:2]
         } else {
           calls[[2]]
@@ -453,7 +453,7 @@ FilteredData <- R6::R6Class( # nolint
 
     continue_filtering = function() {
       private$on_hold <- FALSE
-      private$apply_filter("ASL") # rerun all filtering
+      private$apply_filter("ADSL") # rerun all filtering
       invisible(NULL)
     }
   ),
@@ -595,7 +595,7 @@ FilteredData <- R6::R6Class( # nolint
 
       .log("apply filter for", dataname)
 
-      if (is.null(self$get_data("ASL", filtered = FALSE))) {
+      if (is.null(self$get_data("ADSL", filtered = FALSE))) {
 
         # set all filtered datasets to NULL
         for (name in self$datanames())
@@ -606,22 +606,22 @@ FilteredData <- R6::R6Class( # nolint
         # filter data directly in an empty environment
         e <- new.env(parent = globalenv())
 
-        # ASL
-        e$ASL <- self$get_data("ASL", filtered = FALSE) # nolint
+        # ADSL
+        e$ADSL <- self$get_data("ADSL", filtered = FALSE) # nolint
 
-        eval(self$get_filter_call("ASL", merge = FALSE, asl = FALSE), e)
+        eval(self$get_filter_call("ADSL", merge = FALSE, adsl = FALSE), e)
 
         # re-run all filters
-        if (identical(dataname, "ASL")) {
+        if (identical(dataname, "ADSL")) {
           dataname <- NULL
         }
 
         if (is.null(dataname)) {
 
-          # filter all except asl
-          dnnasl <- setdiff(self$datanames(), "ASL")
+          # filter all except adsl
+          dnnadsl <- setdiff(self$datanames(), "ADSL")
 
-          for (name in dnnasl) {
+          for (name in dnnadsl) {
 
             df <- self$get_data(name, filtered = FALSE)
 
@@ -629,15 +629,15 @@ FilteredData <- R6::R6Class( # nolint
               e[[paste0(name, "_FILTERED")]] <- NULL
             } else {
               e[[name]] <- self$get_data(name, reactive = FALSE, filtered = FALSE)
-              calls <- self$get_filter_call(name, merge = TRUE, asl = FALSE)
+              calls <- self$get_filter_call(name, merge = TRUE, adsl = FALSE)
               eval(calls[[1]], e)
               eval(calls[[2]], e)
             }
           }
 
           ## to not trigger multiple events
-          private$filtered_datasets[["ASL"]] <- e[["ASL_FILTERED"]]
-          for (name in dnnasl) {
+          private$filtered_datasets[["ADSL"]] <- e[["ADSL_FILTERED"]]
+          for (name in dnnadsl) {
             fdn <- paste0(name, "_FILTERED")
             private$filtered_datasets[[name]] <- e[[fdn]]
           }
@@ -652,7 +652,7 @@ FilteredData <- R6::R6Class( # nolint
             e[[FDN]] <- NULL
           } else {
             e[[dataname]] <- df
-            calls <- self$get_filter_call(dataname, merge = TRUE, asl = FALSE)
+            calls <- self$get_filter_call(dataname, merge = TRUE, adsl = FALSE)
             eval(calls[[1]], e)
             eval(calls[[2]], e)
           }

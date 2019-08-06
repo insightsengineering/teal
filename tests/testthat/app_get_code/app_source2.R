@@ -1,4 +1,4 @@
-adte_filters <- filter_spec(
+adtte_filters <- filter_spec(
   vars = c("PARAMCD"), # only key variables are allowed
   sep = " - ",
   choices = c("OS", "PFS", "EFS"),

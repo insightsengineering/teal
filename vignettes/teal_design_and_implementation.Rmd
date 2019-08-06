@@ -173,13 +173,13 @@ library(teal)
 library(magrittr)
 
 x <- teal::init(
-  data = list(ASL = iris %>% dplyr::mutate(USUBJID = 1:n(), STUDYID = "A")),
+  data = list(ADSL = iris %>% dplyr::mutate(USUBJID = 1:n(), STUDYID = "A")),
   modules = root_modules(
     module(
       label = "sample module",
       server = function(input, output, session, datasets) {
         output$scatterplot <- renderPlot({
-          iris <- datasets$get_data("ASL", filtered = TRUE, reactive = TRUE)
+          iris <- datasets$get_data("ADSL", filtered = TRUE, reactive = TRUE)
           with(iris, plot(Sepal.Length, Sepal.Width, col = Species))
         })
       },
@@ -187,7 +187,7 @@ x <- teal::init(
         ns <- NS(id)
         plotOutput(ns("scatterplot"))
       },
-      filters = 'ASL'
+      filters = 'ADSL'
     )
   )
 )
@@ -197,7 +197,7 @@ shinyApp(x$ui, x$server)
 Please run the above code by copy pasting it to the command line. The example
 shows how simple it is to create a module that has no dynamic encodings but
 still is interactive due to the possibility of filtering the data. The example
-also highlights a current issue where we require a dataset with the name `ASL`
+also highlights a current issue where we require a dataset with the name `ADSL`
 that has the variables `USUBJID` and `SUBJID`. We decribe the reason and the
 future refactoring needed to overcome this later in this document.
 
@@ -259,7 +259,7 @@ values of its variables.
 * if a variable `xi` is categorical then the filtering is based on a set:
 `xi in A` where `A` is a subset of the elements in `xi`.
 
-When filtering a dataset, say `ASL`, with `10` of its variables then the `10`
+When filtering a dataset, say `ADSL`, with `10` of its variables then the `10`
 subsetting conditions are combined with an logical AND (`&`). If a more
 complicated subsetting is needed then it is easiest to add a new variable to the
 anlysis dataset that contains the desired logic which then in turn can be
@@ -288,27 +288,27 @@ There is one particularly important dataset called `ASL` or `ADLS` that contains
 patient information (e.g. Unique Subject Identifier `USUBJID`, `ARM`, `SEX`,
 `Age`, randomization date, etc.) with one row per patient. Often this dataset is
 merged to all other `ADaM` datasets as its information is frequently used for
-most outputs (e.g. `ARM`). The key for merging `ASL` and any other analysis
+most outputs (e.g. `ARM`). The key for merging `ADSL` and any other analysis
 dataset is the `USUBJID` and `STUDYID` variable (if not specified otherwise).
 
 ### FilteredData Class for Clinical Trials Data
 
-Because of the central role of the `ASL` dataset and due to tight project
+Because of the central role of the `ADSL` dataset and due to tight project
 delivery timelines I have unfortunately implemented a filtering mechanism that
-always depends on `ASL` as illustrated here:
+always depends on `ADSL` as illustrated here:
 
 ```{r echo=FALSE, out.width='100%'}
 knitr::include_graphics('./images/design_cdisc_filtered_datasets.png')
 ```
 
-This fitering will now be explained step by step for two example datasets (`ASL`
+This fitering will now be explained step by step for two example datasets (`ADSL`
 and `ATE`):
 
 ```{r}
 # for reproducibility
 set.seed(1)
 
-ASL <- data.frame(
+ADSL <- data.frame(
   USUBJID = paste0("id-", 1:100),
   STUDYID = "studyA",
   AGE = abs(rnorm(100, sd = 20) + 40),
@@ -316,7 +316,7 @@ ASL <- data.frame(
   stringsAsFactors = FALSE
 )
 
-ATE <- data.frame(
+ADTTE <- data.frame(
   USUBJID = paste0("id-", 1:100),
   STUDYID = "studyA",
   AVAL = abs(rexp(100, rate = 1/20)),
@@ -333,9 +333,9 @@ The `datasets` object of class `FilteredData` that is passed an argument to the
 
 ```{r}
 options(teal_logging = FALSE)
-datasets <- teal:::FilteredData$new(datanames = c("ASL", "ATE"))
-datasets$set_data("ASL", ASL)
-datasets$set_data("ATE", ATE)
+datasets <- teal:::FilteredData$new(datanames = c("ADSL", "ADTTE"))
+datasets$set_data("ADSL", ADSL)
+datasets$set_data("ADTTE", ADTTE)
 ```
 
 Note that this code also runs outside of a teal instance. The public methods of
@@ -354,16 +354,16 @@ display the filter options for each variable:
 
 
 ```{r}
-datasets$list_data_info('ASL')
+datasets$list_data_info('ADSL')
 ```
 
 Now say we want to filter out all the patients except patients with `USUBJID`
 equal to `id-1`, `id-2`, `id-3`, or `id-4`:
 
 ```{r}
-datasets$set_filter_state("ASL", "USUBJID", state = paste0("id-", 1:4))
+datasets$set_filter_state("ADSL", "USUBJID", state = paste0("id-", 1:4))
 
-datasets$get_data("ASL", reactive = FALSE, filtered = TRUE)
+datasets$get_data("ADSL", reactive = FALSE, filtered = TRUE)
 ```
 
 Note that this `USUBJID` variable based filtering also filters the `ATE` data
@@ -371,15 +371,15 @@ Note that this `USUBJID` variable based filtering also filters the `ATE` data
 previous figure:
 
 ```{r}
-datasets$get_data("ATE", reactive = FALSE, filtered = TRUE)
+datasets$get_data("ADTTE", reactive = FALSE, filtered = TRUE)
 ```
 
-The two `get_data` method calls return the `ASL_FILTERED` and `ATE_FILTERED`
+The two `get_data` method calls return the `ADSL_FILTERED` and `ADTTE_FILTERED`
 data, respectively, as illustrated from the above figure. We can also get the
 `call` object that was used for the filtering:
 
 ```{r}
-datasets$get_filter_call("ATE", merge = TRUE, asl = TRUE)
+datasets$get_filter_call("ADTTE", merge = TRUE, adsl = TRUE)
 ```
 
 Note that when setting `reactive = TRUE` in the `datasets$get_data` method then
@@ -435,7 +435,7 @@ knitr::include_graphics('./images/design_FilteredData.png')
 
 The arrows that point downwards in the filtering related diagrams above indicate
 a propagation mechanism that happens to be inefficient. That is, when filtering
-with `ASL` variables then all the dependent datasets (that is currently every
+with `ADSL` variables then all the dependent datasets (that is currently every
 other dataset) gets updated regardless if there is any ouptut currently
 displayed that requires the information from a particular dataset. Hence we
 loose the lazy evaluation that is provided with shiny's reactivity framework. It

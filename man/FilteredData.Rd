@@ -16,7 +16,7 @@ This class encapsulates data import and filtering.
   Once a dataname was specified it won't be deleted at runtime to keep
   reactive relations intact. If a dataset is not needed anymore then you can
   set it to NULL with load_data.
-  Every data set is also filtered with ASL, hence ASL is given by default (NULL)
+  Every data set is also filtered with ADSL, hence ADSL is given by default (NULL)
 
 load_data
 1 load data
@@ -33,14 +33,14 @@ x$load_data(path)
 
 x$datanames()
 
-x$list_data_info("ASL")
-x$get_filter_info("ASL")
+x$list_data_info("ADSL")
+x$get_filter_info("ADSL")
 
-df <- x$get_data("ASL")
+df <- x$get_data("ADSL")
 
-x$get_filter_info("ASL")[['USUBJID']]$type
+x$get_filter_info("ADSL")[['USUBJID']]$type
 
-x$set_filter("ASL", list(AGE=c(3,5), SEX=c('M', 'F')))
+x$set_filter("ADSL", list(AGE=c(3,5), SEX=c('M', 'F')))
 }
 }
 \keyword{datasets}

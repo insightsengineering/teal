@@ -3,7 +3,7 @@
 #' Creates the server and ui part for a teal shiny app
 #'
 #' @param data named list with datasets. Dataset names are case sensitive. The
-#'   `ASL` data is mandatory.
+#'   `ADSL` data is mandatory.
 #' @param modules nested list with one list per module with the
 #'   following named list elements: \tabular{ll}{ name \tab string with name
 #'   shown in menu for the analysis item \cr server \tab required, shiny server
@@ -17,12 +17,12 @@
 #'   datasets inside this argument. Therefore you need to handover an
 #'   \code{init} list. Please provide a named list inside \code{init}
 #'   that contains the names of the datasets. E.g. for filtering
-#'   the dataset \code{ASL} use \code{list(init = list(ASL = ...))}.
+#'   the dataset \code{ADSL} use \code{list(init = list(ADSL = ...))}.
 #'   For each datasets you need to provide a vector with column names that are
-#'   relevant for the item. You can specify an ASL filtering for the
+#'   relevant for the item. You can specify an ADSL filtering for the
 #'   columns \code{SEX} and \code{BAGE} by:
 #'
-#'   \code{filter = list(init = list(ASL = c("SEX", "BAGE")))}
+#'   \code{filter = list(init = list(ADSL = c("SEX", "BAGE")))}
 #' @param header object of class `shiny.tag` to be used as the header of the app
 #' @param footer object of class `shiny.tag` to be used as the footer of the app
 #'
@@ -39,15 +39,15 @@
 #' @examples
 #' library(random.cdisc.data)
 #'
-#' ASL <- radsl(seed = 1)
+#' ADSL <- radsl(seed = 1)
 #'
 #' options(teal_logging = FALSE)
 #'
 #' app <- init(
 #'   data = cdisc_data(
-#'     ASL = ASL,
+#'     cdisc_dataset("ADSL", ADSL),
 #'     code = "
-#'       ASL <- radsl(seed = 1)
+#'       ADSL <- radsl(seed = 1)
 #'     "
 #'   ),
 #'   modules = root_modules(
@@ -58,17 +58,17 @@
 #'       filters = NULL
 #'     ),
 #'     module(
-#'       "ASL AGE histogram",
+#'       "ADSL AGE histogram",
 #'       server = function(input, output, session, datasets) {
 #'         output$hist <- renderPlot(
-#'            hist(datasets$get_data("ASL", filtered = TRUE, reactive = TRUE)$AGE)
+#'            hist(datasets$get_data("ADSL", filtered = TRUE, reactive = TRUE)$AGE)
 #'         )
 #'       },
 #'       ui = function(id) {ns <- NS(id); plotOutput(ns('hist'))},
-#'       filters = "ASL"
+#'       filters = "ADSL"
 #'     )
 #'   ),
-#'   filter = list(init = list(ASL = c("AGE"))),
+#'   filter = list(init = list(ADSL = c("AGE"))),
 #'   header = tags$h1("Sample App"),
 #'   footer = tags$p("Copyright 2017")
 #' )
@@ -209,10 +209,10 @@ init <- function(data,
       callModule(srv_filter_info, paste0("teal_filters_info_", dataname), datasets, dataname)
     })
 
-    asl_vars <- names(datasets$get_data("ASL"))
+    adsl_vars <- names(datasets$get_data("ADSL"))
     lapply(datasets$datanames(), function(dataname) {
       callModule(srv_add_filter_variable, paste0("teal_add_", dataname, "_filters"), datasets, dataname,
-                 omit_vars = if (dataname == "ASL") NULL else asl_vars)
+                 omit_vars = if (dataname == "ADSL") NULL else adsl_vars)
     })
 
     ## hide-show filters based on module filter property
@@ -274,7 +274,7 @@ init <- function(data,
             session$sendCustomMessage(
               type = "tealShowHide",
               list(selector = paste0(".teal_filter_", dataname),
-                   action = if (dataname == "ASL" || dataname %in% filters) "show" else "hide"
+                   action = if (dataname == "ADSL" || dataname %in% filters) "show" else "hide"
               )
             )
           },  datasets$datanames())

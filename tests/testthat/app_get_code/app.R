@@ -12,19 +12,19 @@ source("app_source2.R")
 
 x <- teal::init(
   data = cdisc_data(
-    ASL = ASL,
-    ADTE = ADTE,
+    ADSL = ADSL,
+    ADTTE = ADTTE,
     code = get_code("app.R", exclude_comments = TRUE),
     check = TRUE
   ),
   modules = root_modules(
       tm_made_up_lm(
       label = "Regression",
-      dataname = c("ASL", "ADTE"),
-      response = list(adte_extracted),
+      dataname = c("ADSL", "ADTTE"),
+      response = list(adtte_extracted),
       regressor = list(
-        asl_extracted,
-        adte_extracted1
+        adsl_extracted,
+        adtte_extracted1
       )
     )
   )
