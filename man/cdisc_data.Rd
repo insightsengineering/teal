@@ -4,17 +4,17 @@
 \alias{cdisc_data}
 \title{Data input for teal app}
 \usage{
-cdisc_data(ADSL, ..., code = "", check = FALSE)
+cdisc_data(..., code = "", check = FALSE)
 }
 \arguments{
-\item{ADSL}{ADSL dataset object}
-
 \item{...}{other datasets objects}
 
 \item{code}{(\code{character}) preprocessing code.}
 
 \item{check}{(\code{logical}) reproducibility check - whether evaluated preprocessing code gives the same objects
 as provided in arguments. Check is run only if flag is true and preprocessing code is not empty.}
+
+\item{ADSL}{ADSL dataset object}
 }
 \value{
 a list of the input data sets
