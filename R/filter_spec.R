@@ -150,7 +150,7 @@ filter_spec <- function(vars,
 
   res <- append(
       list(vars),
-      columns_spec(choices = choices, selected = selected, multiple, label = label)
+      select_spec(choices = choices, selected = selected, multiple, label = label)
   )
   names(res)[1] <- "vars"
   class(res) <- "filter_spec"

@@ -1,6 +1,6 @@
 #' Column selection input specification
 #'
-#' \code{columns_spec} is used inside teal to create a \code{\link[shiny]{selectInput}}
+#' \code{select_spec} is used inside teal to create a \code{\link[shiny]{selectInput}}
 #' that will select columns from a dataset.
 #'
 #' @param choices (\code{character}) Named character vector to define the choices
@@ -23,7 +23,7 @@
 #' @param label (\code{logical}) (optional) Define a label
 #' on top of this specific shiny \code{\link[shiny]{selectInput}}.
 #'
-#' @return A \code{column_spec}-S3 class object. It contains all input values.
+#' @return A \code{select_spec}-S3 class object. It contains all input values.
 #' The function double checks the \code{choices} and \code{selected} inputs.
 #'
 #' @details
@@ -34,7 +34,7 @@
 #' \enumerate{
 #'   \item{Selection with just one column allowed }{
 #'     \preformatted{
-#' columns = columns_spec(
+#' select = select_spec(
 #'   choices = c("AVAL", "BMRKR1", "AGE"),
 #'   selected = c("AVAL"),
 #'   multiple = FALSE,
@@ -43,15 +43,15 @@
 #' )
 #'     }
 #'     \if{html}{
-#'       \figure{columns_spec_1.png}{options: alt="Selection with just one column allowed"}
+#'       \figure{select_spec_1.png}{options: alt="Selection with just one column allowed"}
 #'     }
 #'     \if{html}{
-#'       \figure{columns_spec_11.png}{options: alt="Selection with just one column allowed"}
+#'       \figure{select_spec_11.png}{options: alt="Selection with just one column allowed"}
 #'     }
 #'   }
 #'   \item{Selection with just multiple columns allowed }{
 #'     \preformatted{
-#' columns = columns_spec(
+#' select = select_spec(
 #'   choices = c("AVAL", "BMRKR1", "AGE"),
 #'   selected = c("AVAL", "BMRKR1"),
 #'   multiple = TRUE,
@@ -60,15 +60,15 @@
 #' )
 #'     }
 #'     \if{html}{
-#'       \figure{columns_spec_2.png}{options: alt="Selection with just multiple columns allowed"}
+#'       \figure{select_spec_2.png}{options: alt="Selection with just multiple columns allowed"}
 #'     }
 #'     \if{html}{
-#'       \figure{columns_spec_21.png}{options: alt="Selection with just multiple columns allowed"}
+#'       \figure{select_spec_21.png}{options: alt="Selection with just multiple columns allowed"}
 #'     }
 #'   }
 #'   \item{Selection without user access }{
 #'     \preformatted{
-#' columns = columns_spec(
+#' select = select_spec(
 #'   choices = c("AVAL", "BMRKR1"),
 #'   selected = c("AVAL", "BMRKR1"),
 #'   multiple = TRUE,
@@ -77,7 +77,7 @@
 #' )
 #'     }
 #'     \if{html}{
-#'       \figure{columns_spec_3.png}{options: alt="Selection without user access"}
+#'       \figure{select_spec_3.png}{options: alt="Selection without user access"}
 #'     }
 #'   }
 #' }
@@ -86,7 +86,7 @@
 #' @importFrom purrr map_lgl
 #' @importFrom stats setNames
 #' @export
-columns_spec <- function(choices,
+select_spec <- function(choices,
                          selected = choices[1],
                          multiple = length(selected) > 1,
                          fixed = FALSE,
@@ -128,6 +128,6 @@ columns_spec <- function(choices,
   }
 
   res <- list(choices = choices, selected = selected, multiple = multiple, fixed = fixed, label = label)
-  class(res) <- "column_spec"
+  class(res) <- "select_spec"
   res
 }

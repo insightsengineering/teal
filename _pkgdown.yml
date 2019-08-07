@@ -32,7 +32,7 @@ reference:
     - add_no_selected_choices
     - choices_labeled
     - choices_selected
-    - columns_spec
+    - select_spec
     - data_extract_spec
     - filter_spec
     - is.choices_selected
