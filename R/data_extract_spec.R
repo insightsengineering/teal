@@ -21,8 +21,8 @@
 #' @param filter (\code{filter_spec}-S3-class) Setup of the filtering of
 #'  key columns inside the dataset. This setup can be created using the \code{\link{filter_spec}}
 #'  function.
-#' @param columns (\code{column_spec}-S3 class) Columns to be selected from the input dataset
-#'  mentioned in \code{dataname.} The setup can be created using \code{\link{columns_spec}} function.
+#' @param select (\code{select_spec}-S3 class) Columns to be selected from the input dataset
+#'  mentioned in \code{dataname.} The setup can be created using \code{\link{select_spec}} function.
 #' @param reshape (\code{logical}) whether reshape long to wide. Note that it will be used only in case of long dataset
 #'  with multiple keys selected in filter part.
 #'
@@ -43,7 +43,7 @@
 #' data_extract_spec(
 #'   dataname = "ADTTE",
 #'   filter = adtte_filters,
-#'   columns = columns_spec(
+#'   select = select_spec(
 #'     choices = c("AVAL", "BMRKR1", "AGE"),
 #'         selected = c("AVAL", "BMRKR1"),
 #'         multiple = TRUE,
@@ -68,7 +68,7 @@
 #' data_extract_spec(
 #'   dataname = "ADSL",
 #'   filter = NULL,
-#'   columns = columns_spec(
+#'   select = select_spec(
 #'     choices = c("AGE", "SEX", "USUBJID"),
 #'         selected = c("SEX"),
 #'         multiple = FALSE,
@@ -83,15 +83,15 @@
 #' }
 #'}
 #'
-#' @references \link{columns_spec} \link{filter_spec}
-data_extract_spec <- function(dataname, columns, filter = NULL, reshape = FALSE) {
+#' @references \link{select_spec} \link{filter_spec}
+data_extract_spec <- function(dataname, select, filter = NULL, reshape = FALSE) {
   stopifnot(is.character.single(dataname))
-  stopifnot(is(columns, "column_spec"), length(columns) >= 1)
+  stopifnot(is(select, "select_spec"), length(select) >= 1)
   stopifnot(is.null(filter) || (is(filter, "filter_spec") & length(filter) >= 1) ||
     is.class.list("filter_spec")(filter))
   stopifnot(is.logical.single(reshape))
 
-  res <- list(dataname = dataname, columns = columns, filter = filter, reshape = reshape)
+  res <- list(dataname = dataname, select = select, filter = filter, reshape = reshape)
   class(res) <- "data_extract_spec"
 
   res
