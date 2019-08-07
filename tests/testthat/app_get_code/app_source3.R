@@ -2,7 +2,7 @@
 adtte_extracted1 <- data_extract_spec(
   dataname = "ADTTE",
   filter = adtte_filters,
-  columns = columns_spec(
+  select = select_spec(
     choices = c("AVAL", "AVALU", "BMRKR1", "SITEID"),
     selected = c("AVAL"),
     multiple = TRUE,
@@ -14,7 +14,7 @@ adtte_extracted1 <- data_extract_spec(
 adtte_extracted <- data_extract_spec(
   dataname = "ADTTE",
   filter = adtte_filters,
-  columns = columns_spec(
+  select = select_spec(
     choices = c("AVAL", "BMRKR1"),
     selected = c("AVAL"),
     multiple = FALSE,
@@ -25,7 +25,7 @@ adtte_extracted <- data_extract_spec(
 
 adsl_extracted <- data_extract_spec(
   dataname = "ADSL",
-  columns = columns_spec(
+  select = select_spec(
     choices = c("SEX", "AGE"),
     selected = c("AGE"),
     multiple = TRUE,
