@@ -180,8 +180,7 @@ cdisc_dataset <- function(dataname,
 #' Data input for teal app
 #'
 #' Function passes datasets to teal application with option to read preprocessing code and reproducibility checking.
-#' @param ADSL ADSL dataset object
-#' @param ... other datasets objects
+#' @param ... datasets objects
 #' @param code (\code{character}) preprocessing code.
 #' @param check (\code{logical}) reproducibility check - whether evaluated preprocessing code gives the same objects
 #'   as provided in arguments. Check is run only if flag is true and preprocessing code is not empty.
@@ -196,14 +195,33 @@ cdisc_dataset <- function(dataname,
 #' @examples
 #' library(random.cdisc.data)
 #'
-#' ADSL <-  suppressWarnings(radsl(N = 600, seed = 123))
-#' ADTTE <- radtte(ADSL, event.descr = c("STUDYID", "USUBJID", "PARAMCD"), seed = 123)
+#' ADSL <-  radsl(N = 600, seed = 123)
+#' ADTTE <- radtte(ADSL, seed = 123)
 #'
+#' # basic example
 #' cdisc_data(
 #'   cdisc_dataset("ADSL", ADSL),
 #'   cdisc_dataset("ADTTE", ADTTE),
 #'   code = 'ADSL <- radsl(N = 600, seed = 123)
-#'           ADTTE <- radtte(ADSL, event.descr = c("STUDYID", "USUBJID", "PARAMCD"), seed = 123)')
+#'           ADTTE <- radtte(ADSL, seed = 123)')
+#'
+#' # Example with keys
+#' cdisc_data(
+#'   cdisc_dataset("ADSL", ADSL, keys = list(primary = c("STUDYID", "USUBJID"),
+#'                                           foreign = NULL,
+#'                                           parent = NULL
+#'                                      )
+#'   ),
+#'   cdisc_dataset("ADTTE", ADTTE, keys = list(primary = c("STUDYID", "USUBJID", "PARAMCD"),
+#'                                             foreign = c("STUDYID", "USUBJID"),
+#'                                             parent = "ADSL"
+#'                                        )
+#'   ),
+#'  code = "",
+#'  check = FALSE
+#'  )
+#'
+#'
 cdisc_data <- function(...,
                        code = "",
                        check = FALSE) {
@@ -211,62 +229,30 @@ cdisc_data <- function(...,
   stopifnot(is.logical.single(check))
 
   code <- paste0(code, collapse = "\n")
+  is_adsl <- FALSE
+
+  for (i in list(...)) {
+    if (!(any(class(i) == "dataset"))) {
+      stop("Please use dataset as an argument!")
+    }
+    if (i$dataname == "ADSL"){
+      is_adsl <- TRUE
+    }
+  }
+
+  if (!is_adsl) {
+    stop("ADSL argument is missing!")
+  }
+  datasets_data <- lapply(list(...), function(x) {
+    x$data
+  })
 
   datasets_names <- lapply(list(...), function(x) {
     x$dataname
   })
 
-  if (!("ADSL" %in% datasets_names)) {
-    stop("ADSL arguments is missing.")
-  }
+  datasets_data <- setNames(datasets_data, datasets_names)
 
-  for (i in list(...)) {
-    if (!(any(class(i) == "dataset"))) {
-      stop("Please use dataset as argument!")
-    }
-  }
-
-
-  res <- lapply(seq_along(list(...)),
-                function(i) {
-                  structure(list(...)[[i]])
-                })
-
-  res <- setNames(res, datasets_names)
-  # arg_values_call <- append(
-  #   list("ADSL" = substitute(ADSL)),
-  #   as.list(substitute(dlist))
-  # )
-  # arg_values_char <- sapply(
-  #   arg_values_call,
-  #   function(x) {
-  #     paste0(deparse(x), collapse = "\n")
-  #   }
-  # ) %>%
-  #   unname()
-
-  # eval code if argument does not exists, i.e. cdisc_data(ADSL = 1, x, code = "x <- 2")
-  # for (i in seq_along(arg_values_call)) {
-  #   if ((is.name(arg_values_call[[i]]) || is.call(arg_values_call[[i]])) &&
-  #       inherits(tryCatch(eval(arg_values_call[[i]], envir = parent.frame()), error = function(e) e), "error") &&
-  #       !is.null(code)) {
-  #     eval(parse(text = code), envir = parent.frame())
-  #     break
-  #   }
-  # }
-
-  # arg_values <- setNames(append(list(ADSL), dlist), NULL)
-  #
-  # arg_names <- c(
-  #   "ADSL",
-  #   if (is.null(names(dlist))) {
-  #     rep("", length(arg_values) - 1)
-  #   } else {
-  #     names(dlist)
-  #   }
-  # )
-
-  # res <- setNames(arg_values, arg_names)
 
   if (check) {
     if (identical(code, "")) {
@@ -281,14 +267,10 @@ cdisc_data <- function(...,
     })
 
     res_check <- vapply(
-      seq_along(res),
-      function(i, list, list_names, env, args_call, args_char) {
+      seq_along(datasets_data),
+      function(i, list, list_names, env) {
         list_obj_name <- list_names[i]
-        env_obj_name <- if (is.name(args_call[[i]])) {
-          args_char[i]
-        } else {
-          list_names[i]
-        }
+        env_obj_name <- list_names[i]
         tryCatch({
           identical(list[[list_obj_name]], get(env_obj_name, envir = env))
         }, error = function(e) {
@@ -296,15 +278,13 @@ cdisc_data <- function(...,
         })
       },
       logical(1),
-      list = res,
-      list_names = datasets_names,
-      env = new_env,
-      args_call = arg_values_call,
-      args_char = arg_values_char
+      list = datasets_data,
+      list_names = unlist(datasets_names),
+      env = new_env
     )
 
     if (any(!res_check)) {
-      incorrect_obj_names <- arg_names[!res_check]
+      incorrect_obj_names <- datasets_names[!res_check]
       msg <- paste0(
         "Cannot reproduce object(s) ",
         paste0(paste0("'", incorrect_obj_names, "'"), collapse = ", "),
@@ -323,6 +303,13 @@ cdisc_data <- function(...,
     }
     code <- readChar(filename, file.info(filename)$size)
   }
+
+  res <- lapply(seq_along(list(...)),
+                function(i) {
+                  structure(list(...)[[i]])
+                })
+
+  res <- setNames(res, datasets_names)
 
   structure(res, code = code, class = "cdisc_data")
 }

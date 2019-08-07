@@ -7,14 +7,12 @@
 cdisc_data(..., code = "", check = FALSE)
 }
 \arguments{
-\item{...}{other datasets objects}
+\item{...}{datasets objects}
 
 \item{code}{(\code{character}) preprocessing code.}
 
 \item{check}{(\code{logical}) reproducibility check - whether evaluated preprocessing code gives the same objects
 as provided in arguments. Check is run only if flag is true and preprocessing code is not empty.}
-
-\item{ADSL}{ADSL dataset object}
 }
 \value{
 a list of the input data sets
@@ -29,12 +27,31 @@ This function checks if there were keys added to all data
 \examples{
 library(random.cdisc.data)
 
-ADSL <-  suppressWarnings(radsl(N = 600, seed = 123))
-ADTTE <- radtte(ADSL, event.descr = c("STUDYID", "USUBJID", "PARAMCD"), seed = 123)
+ADSL <-  radsl(N = 600, seed = 123)
+ADTTE <- radtte(ADSL, seed = 123)
 
+# basic example
 cdisc_data(
   cdisc_dataset("ADSL", ADSL),
   cdisc_dataset("ADTTE", ADTTE),
   code = 'ADSL <- radsl(N = 600, seed = 123)
-          ADTTE <- radtte(ADSL, event.descr = c("STUDYID", "USUBJID", "PARAMCD"), seed = 123)')
+          ADTTE <- radtte(ADSL, seed = 123)')
+
+# Example with keys
+cdisc_data(
+  cdisc_dataset("ADSL", ADSL, keys = list(primary = c("STUDYID", "USUBJID"),
+                                          foreign = NULL,
+                                          parent = NULL
+                                     )
+  ),
+  cdisc_dataset("ADTTE", ADTTE, keys = list(primary = c("STUDYID", "USUBJID", "PARAMCD"),
+                                            foreign = c("STUDYID", "USUBJID"),
+                                            parent = "ADSL"
+                                       )
+  ),
+ code = "",
+ check = FALSE
+ )
+
+
 }

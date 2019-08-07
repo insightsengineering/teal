@@ -31,16 +31,15 @@ test_that("Basic example - with code and check", {
   expect_true(is.data.frame(ADSL))
   expect_true(is.data.frame(ARG1))
   expect_true(is.data.frame(ARG2))
-  keys(ADSL) <- keys(ARG1) <- keys(ARG2) <- c("STUDYID", "USUBJID")
 
   expect_silent(cdisc_data(cdisc_dataset("ADSL", ADSL),
-                           code = "ADSL <- cadsl; keys(ADSL) <- c('STUDYID','USUBJID')",
+                           code = "ADSL <- cadsl",
                            check = TRUE))
   expect_silent(cdisc_data(
     cdisc_dataset("ADSL", ADSL),
     dataset("ARG1", ARG1),
     dataset("ARG2", ARG2),
-    code = "ADSL <- ARG1 <- ARG2 <- cadsl; keys(ADSL) <- keys(ARG1) <- keys(ARG2) <- c('STUDYID','USUBJID')",
+    code = "ADSL <- ARG1 <- ARG2 <- cadsl;",
     check = TRUE
   ))
 })
@@ -49,16 +48,15 @@ test_that("Basic example - with vector code and check", {
   expect_true(is.data.frame(ADSL))
   expect_true(is.data.frame(ARG1))
   expect_true(is.data.frame(ARG2))
-  keys(ADSL) <- keys(ARG1) <- keys(ARG2) <- c("STUDYID", "USUBJID")
 
   expect_silent(cdisc_data(cdisc_dataset("ADSL", ADSL),
-                           code = c("ADSL <- cadsl; keys(ADSL) <- c('STUDYID','USUBJID')"),
+                           code = c("ADSL <- cadsl"),
                            check = TRUE))
   expect_silent(cdisc_data(
     cdisc_dataset("ADSL", ADSL),
     dataset("ARG1", ARG1),
     dataset("ARG2", ARG2),
-    code = c("ADSL <- ARG1 <- ARG2 <- cadsl; keys(ADSL) <- keys(ARG1) <- keys(ARG2) <- c('STUDYID','USUBJID')"),
+    code = c("ADSL <- ARG1 <- ARG2 <- cadsl"),
     check = TRUE
   ))
 })
@@ -67,23 +65,20 @@ test_that("Basic example - with line break code and check", {
   expect_true(is.data.frame(ADSL))
   expect_true(is.data.frame(ARG1))
   expect_true(is.data.frame(ARG2))
-  keys(ADSL) <- keys(ARG1) <- keys(ARG2) <- c("STUDYID", "USUBJID")
 
   expect_silent(cdisc_data(cdisc_dataset("ADSL", ADSL),
-                           code = "ADSL <- cadsl\nkeys(ADSL) <- c('STUDYID','USUBJID')",
+                           code = "ADSL <- cadsl",
                            check = TRUE))
   expect_silent(cdisc_data(
     cdisc_dataset("ADSL", ADSL),
     dataset("ARG1", ARG1),
     dataset("ARG2", ARG2),
-    code = "ADSL <- ARG1 <- ARG2 <- cadsl\nkeys(ADSL) <- keys(ARG1) <- keys(ARG2) <- c('STUDYID','USUBJID')",
+    code = "ADSL <- ARG1 <- ARG2 <- cadsl",
     check = TRUE
   ))
 })
 
 test_that("Naming list elements", {
-  keys(ADTTE) <- c("STUDYID", "USUBJID", "PARAMCD", "ARMCD")
-  keys(ADRS) <- c("STUDYID", "USUBJID", "PARAMCD", "AVISIT")
 
   expect_identical(names(cdisc_data(cdisc_dataset("ADSL", ADSL))), "ADSL")
   expect_identical(names(cdisc_data(cdisc_dataset("ADSL", ADSL),
@@ -93,17 +88,12 @@ test_that("Naming list elements", {
 })
 
 test_that("List values", {
-  keys(ADSL) <- c("STUDYID", "USUBJID")
-  keys(ADTTE) <- c("STUDYID", "USUBJID", "PARAMCD", "ARMCD")
-  keys(ADRS) <- c("STUDYID", "USUBJID", "PARAMCD", "AVISIT")
 
   result <- cdisc_data(cdisc_dataset("ADSL", ADSL))
 
-  result_to_compare <- list(ADSL = cadsl)
+  result_to_compare <- list(cdisc_dataset("ADSL", ADSL))
   class(result_to_compare) <- "cdisc_data"
-  keys(result_to_compare[["ADSL"]]) <- c("STUDYID", "USUBJID")
-  attr(result_to_compare[["ADSL"]], "dataname") <- "ADSL"
-
+  result_to_compare <- setNames(result_to_compare, c("ADSL"))
   attr(result_to_compare, "code") <- code_empty
 
   expect_identical(result, result_to_compare)
@@ -112,21 +102,17 @@ test_that("List values", {
                        cdisc_dataset("ADTTE", ADTTE),
                        cdisc_dataset("ADRS", ADRS))
 
-  result_to_compare <- list(ADSL = cadsl, ADTTE = cadtte, ADRS = cadrs)
+  result_to_compare <- list(cdisc_dataset("ADSL", ADSL),
+                            cdisc_dataset("ADTTE", ADTTE),
+                            cdisc_dataset("ADRS", ADRS))
   class(result_to_compare) <- "cdisc_data"
-  keys(result_to_compare[["ADSL"]]) <- c("STUDYID", "USUBJID")
-  keys(result_to_compare[["ADTTE"]]) <- c("STUDYID", "USUBJID", "PARAMCD", "ARMCD")
-  keys(result_to_compare[["ADRS"]]) <- c("STUDYID", "USUBJID", "PARAMCD", "AVISIT")
-  attr(result_to_compare[["ADSL"]], "dataname") <- "ADSL"
-  attr(result_to_compare[["ADTTE"]], "dataname") <- "ADTTE"
-  attr(result_to_compare[["ADRS"]], "dataname") <- "ADRS"
+  result_to_compare <- setNames(result_to_compare, c("ADSL", "ADTTE", "ADRS"))
   attr(result_to_compare, "code") <- code_empty
 
   expect_identical(result, result_to_compare)
 })
 
 test_that("Empty code", {
-  keys(ADSL) <- c("STUDYID", "USUBJID")
 
   # missing code
   result <- cdisc_data(cdisc_dataset("ADSL", ADSL), check = FALSE)
@@ -143,17 +129,15 @@ test_that("Empty code", {
 
 
 test_that("Arguments created by code", {
-  keys(ADSL) <- c("STUDYID", "USUBJID")
   result <- cdisc_data(cdisc_dataset("ADSL", ADSL),
-                       code = "ADSL <- cadsl; keys(ADSL) <- 'STUDYID'",
+                       code = "ADSL <- cadsl",
                        check = FALSE)
   expect_silent(result)
 
-  result_to_compare <- list(ADSL = cadsl)
+  result_to_compare <- list(cdisc_dataset("ADSL", ADSL))
   class(result_to_compare) <- "cdisc_data"
-  keys(result_to_compare[["ADSL"]]) <- c("STUDYID", "USUBJID")
-  attr(result_to_compare[["ADSL"]], "dataname") <- "ADSL"
-  attr(result_to_compare, "code") <- "ADSL <- cadsl; keys(ADSL) <- 'STUDYID'"
+  result_to_compare <- setNames(result_to_compare, c("ADSL"))
+  attr(result_to_compare, "code") <- "ADSL <- cadsl"
 
   expect_identical(result, result_to_compare)
 })
@@ -164,16 +148,15 @@ test_that("Error - objects differs", {
     "Cannot reproduce object"
   )
 
-  keys(ADSL) <- c("STUDYID", "USUBJID")
   expect_error(
     cdisc_data(cdisc_dataset("ADSL", ADSL),
-               code = "ADSL <- cadsl; keys(ADSL) <- c('USUBJID', 'STUDYID', 'AGE')",
+               code = "ADSL <- radsl(N=300);",
                check = TRUE),
     "Cannot reproduce object"
   )
 })
 
 test_that("Error - ADSL is missing", {
-  expect_error(cdisc_data(ARG1 = 1, code = "", check = FALSE), "ADSL and code arguments are missing")
-  expect_error(cdisc_data(code = "x <- 2", check = FALSE), "ADSL is missing and cannot be generated by code")
+  expect_error(cdisc_data(ARG1 = 1, code = "", check = FALSE), "Please use dataset as an argument!")
+  expect_error(cdisc_data(code = "x <- 2", check = FALSE), "ADSL argument is missing.")
 })
