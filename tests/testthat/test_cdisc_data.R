@@ -130,7 +130,8 @@ test_that("List values", {
   expect_identical(result, result_to_compare)
 
   result <- cdisc_data(cdisc_dataset("ADSL", ADSL),
-                       cdisc_dataset("ADTTE", ADTTE))
+                       cdisc_dataset("ADTTE", ADTTE, labels = list(dataset_label = NULL,
+                                                                   column_labels = NULL)))
 
   result_to_compare <- list(structure(list(
     dataname = "ADSL",
@@ -173,34 +174,10 @@ test_that("List values", {
       parent = "ADSL"
     ),
     labels = list(
-      dataset_label = "Time to Event Analysis Dataset",
-      column_labels = c(STUDYID = "Study Identifier",
-                        USUBJID = "Unique Subject Identifier",
-                        SUBJID = "Identifier for the Study",
-                        SITEID = "Study Site Identifier",
-                        AGE = "Age",
-                        SEX = "SEX",
-                        RACE = "RACE",
-                        COUNTRY = "COUNTRY",
-                        ARM = "ARM",
-                        ARMCD = "ARMCD",
-                        ACTARM = "ACTARM",
-                        ACTARMCD = "ACTARMCD",
-                        STRATA1 = "STRATA1",
-                        STRATA2 = "STRATA2",
-                        BMRKR1 = "Continous Level Biomarker 1",
-                        BMRKR2 = "BMRKR2",
-                        ITTFL = "Intent-To-Treat Population Flag",
-                        BEP01FL = "BEP01FL",
-                        PARAM = "Parameter",
-                        PARAMCD = "Parameter Code",
-                        AVAL = "Analysis Value",
-                        AVALU = "Analysis Value Unit",
-                        CNSR = "Censor",
-                        EVNTDESC = "Event or Censoring Description"
+      dataset_label = NULL,
+      column_labels = NULL
       )
-    )
-  ),
+    ),
   class = c("cdisc_dataset", "dataset")))
   class(result_to_compare) <- "cdisc_data"
   result_to_compare <- setNames(result_to_compare, c("ADSL", "ADTTE"))
