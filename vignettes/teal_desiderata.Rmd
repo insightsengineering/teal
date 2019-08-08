@@ -152,7 +152,7 @@ optionally accept reactive values as arguments), but I have not done it so far.
 
 # Code Reproducibility
 
-We have now three prposed ways to do get reprodicuble code:
+We have now three proposed ways to do get reprodicuble code:
 
 1. Doug's way with parsing all the involved code and turn reative endpoints to
 ordinary function call (still need to work on that pull-request). This is a
