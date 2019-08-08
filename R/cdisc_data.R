@@ -235,7 +235,7 @@ cdisc_data <- function(...,
 
   for (i in dlist) {
     if (!(any(is(i, "dataset")))) {
-      stop("Argument in not of class dataset, please use dataset function!")
+      stop("Argument in not of class dataset, please use cdisc_dataset function!")
     }
     if (i$dataname == "ADSL"){
       is_adsl <- TRUE
@@ -307,9 +307,9 @@ cdisc_data <- function(...,
     code <- readChar(filename, file.info(filename)$size)
   }
 
-  res <- lapply(seq_along(list(...)),
+  res <- lapply(seq_along(dlist),
                 function(i) {
-                  structure(list(...)[[i]])
+                  structure(dlist[[i]])
                 })
 
   res <- setNames(res, datasets_names)

@@ -67,13 +67,13 @@ test_that("Basic example - with line break code and check", {
   expect_true(is.data.frame(ARG2))
 
   expect_silent(cdisc_data(cdisc_dataset("ADSL", ADSL),
-                           code = "ADSL <- cadsl",
+                           code = "ADSL <- cadsl\n",
                            check = TRUE))
   expect_silent(cdisc_data(
     cdisc_dataset("ADSL", ADSL),
     dataset("ARG1", ARG1),
     dataset("ARG2", ARG2),
-    code = "ADSL <- ARG1 <- ARG2 <- cadsl",
+    code = "ADSL <- cadsl\n ARG1 <- cadsl\n ARG2 <- cadsl",
     check = TRUE
   ))
 })
@@ -91,7 +91,38 @@ test_that("List values", {
 
   result <- cdisc_data(cdisc_dataset("ADSL", ADSL))
 
-  result_to_compare <- list(cdisc_dataset("ADSL", ADSL))
+  result_to_compare <- list(structure(list(
+                                      dataname = "ADSL",
+                                      data = ADSL,
+                                      keys = list(
+                                        primary = c("STUDYID", "USUBJID"),
+                                        foreign = NULL,
+                                        parent = NULL
+                                      ),
+                                      labels = list(
+                                        dataset_label = "Subject Level Analysis Dataset",
+                                        column_labels = c(STUDYID = "Study Identifier",
+                                                          USUBJID = "Unique Subject Identifier",
+                                                          SUBJID = "Identifier for the Study",
+                                                          SITEID = "Study Site Identifier",
+                                                          AGE = "Age",
+                                                          SEX = "Sex",
+                                                          RACE = "Race",
+                                                          COUNTRY = "Country",
+                                                          ARM = "Description of Planned Arm",
+                                                          ARMCD = "Planned Arm Code",
+                                                          ACTARM = "Description of Actual Arm",
+                                                          ACTARMCD = "Actual Arm Code",
+                                                          STRATA1 = "Stratification Factor 1",
+                                                          STRATA2 = "Stratification Factor 2",
+                                                          BMRKR1 = "Continous Level Biomarker 1",
+                                                          BMRKR2 = "Categorical Level Biomarker 2",
+                                                          ITTFL = "Intent-To-Treat Population Flag",
+                                                          BEP01FL = "Biomarker Evaluable Population Flag"
+                                        )
+                                      )
+                                    ),
+                                    class = c("cdisc_dataset", "dataset")))
   class(result_to_compare) <- "cdisc_data"
   result_to_compare <- setNames(result_to_compare, c("ADSL"))
   attr(result_to_compare, "code") <- code_empty
@@ -99,14 +130,80 @@ test_that("List values", {
   expect_identical(result, result_to_compare)
 
   result <- cdisc_data(cdisc_dataset("ADSL", ADSL),
-                       cdisc_dataset("ADTTE", ADTTE),
-                       cdisc_dataset("ADRS", ADRS))
+                       cdisc_dataset("ADTTE", ADTTE))
 
-  result_to_compare <- list(cdisc_dataset("ADSL", ADSL),
-                            cdisc_dataset("ADTTE", ADTTE),
-                            cdisc_dataset("ADRS", ADRS))
+  result_to_compare <- list(structure(list(
+    dataname = "ADSL",
+    data = ADSL,
+    keys = list(
+      primary = c("STUDYID", "USUBJID"),
+      foreign = NULL,
+      parent = NULL
+    ),
+    labels = list(
+      dataset_label = "Subject Level Analysis Dataset",
+      column_labels = c(STUDYID = "Study Identifier",
+                        USUBJID = "Unique Subject Identifier",
+                        SUBJID = "Identifier for the Study",
+                        SITEID = "Study Site Identifier",
+                        AGE = "Age",
+                        SEX = "Sex",
+                        RACE = "Race",
+                        COUNTRY = "Country",
+                        ARM = "Description of Planned Arm",
+                        ARMCD = "Planned Arm Code",
+                        ACTARM = "Description of Actual Arm",
+                        ACTARMCD = "Actual Arm Code",
+                        STRATA1 = "Stratification Factor 1",
+                        STRATA2 = "Stratification Factor 2",
+                        BMRKR1 = "Continous Level Biomarker 1",
+                        BMRKR2 = "Categorical Level Biomarker 2",
+                        ITTFL = "Intent-To-Treat Population Flag",
+                        BEP01FL = "Biomarker Evaluable Population Flag"
+      )
+    )
+  ),
+  class = c("cdisc_dataset", "dataset")),
+  structure(list(
+    dataname = "ADTTE",
+    data = ADTTE,
+    keys = list(
+      primary = c("STUDYID", "USUBJID", "PARAMCD"),
+      foreign = c("STUDYID", "USUBJID"),
+      parent = "ADSL"
+    ),
+    labels = list(
+      dataset_label = "Time to Event Analysis Dataset",
+      column_labels = c(STUDYID = "Study Identifier",
+                        USUBJID = "Unique Subject Identifier",
+                        SUBJID = "Identifier for the Study",
+                        SITEID = "Study Site Identifier",
+                        AGE = "Age",
+                        SEX = "SEX",
+                        RACE = "RACE",
+                        COUNTRY = "COUNTRY",
+                        ARM = "ARM",
+                        ARMCD = "ARMCD",
+                        ACTARM = "ACTARM",
+                        ACTARMCD = "ACTARMCD",
+                        STRATA1 = "STRATA1",
+                        STRATA2 = "STRATA2",
+                        BMRKR1 = "Continous Level Biomarker 1",
+                        BMRKR2 = "BMRKR2",
+                        ITTFL = "Intent-To-Treat Population Flag",
+                        BEP01FL = "BEP01FL",
+                        PARAM = "Parameter",
+                        PARAMCD = "Parameter Code",
+                        AVAL = "Analysis Value",
+                        AVALU = "Analysis Value Unit",
+                        CNSR = "Censor",
+                        EVNTDESC = "Event or Censoring Description"
+      )
+    )
+  ),
+  class = c("cdisc_dataset", "dataset")))
   class(result_to_compare) <- "cdisc_data"
-  result_to_compare <- setNames(result_to_compare, c("ADSL", "ADTTE", "ADRS"))
+  result_to_compare <- setNames(result_to_compare, c("ADSL", "ADTTE"))
   attr(result_to_compare, "code") <- code_empty
 
   expect_identical(result, result_to_compare)
@@ -157,7 +254,10 @@ test_that("Error - objects differs", {
 })
 
 test_that("Error - ADSL is missing", {
-  expect_error(cdisc_data(ARG1 = 1, code = "", check = FALSE),
-               "Argument in not of class dataset, please use dataset function!")
   expect_error(cdisc_data(code = "x <- 2", check = FALSE), "ADSL argument is missing.")
+})
+
+test_that("Error - dataset is not of class cdisc_dataset", {
+  expect_error(cdisc_data(ARG1 = 1, code = "", check = FALSE),
+               "Argument in not of class dataset, please use cdisc_dataset function!")
 })
