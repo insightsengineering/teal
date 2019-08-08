@@ -231,10 +231,11 @@ cdisc_data <- function(...,
 
   code <- paste0(code, collapse = "\n")
   is_adsl <- FALSE
+  dlist <- list(...)
 
-  for (i in list(...)) {
-    if (!(any(class(i) == "dataset"))) {
-      stop("Please use dataset as an argument!")
+  for (i in dlist) {
+    if (!(any(is(i, "dataset")))) {
+      stop("Argument in not of class dataset, please use dataset function!")
     }
     if (i$dataname == "ADSL"){
       is_adsl <- TRUE
@@ -244,16 +245,16 @@ cdisc_data <- function(...,
   if (!is_adsl) {
     stop("ADSL argument is missing!")
   }
-  datasets_data <- lapply(list(...), function(x) {
-    x$data
-  })
-
-  datasets_names <- lapply(list(...), function(x) {
-    x$dataname
-  })
-
+  datasets_data <- lapply(dlist, `[[`, "data")
+  datasets_names <- lapply(dlist, `[[`, "dataname")
   datasets_data <- setNames(datasets_data, datasets_names)
 
+  arg_names <- lapply(
+    as.list(substitute(list(...)))[-1L],
+    function(i) {
+      deparse(as.list(match.call(eval(i[[1L]]), i))$data)
+    }
+  )
 
   if (check) {
     if (identical(code, "")) {
@@ -269,9 +270,9 @@ cdisc_data <- function(...,
 
     res_check <- vapply(
       seq_along(datasets_data),
-      function(i, list, list_names, env) {
+      function(i, list, list_names, arg_names, env) {
         list_obj_name <- list_names[i]
-        env_obj_name <- list_names[i]
+        env_obj_name <- arg_names[i]
         tryCatch({
           identical(list[[list_obj_name]], get(env_obj_name, envir = env))
         }, error = function(e) {
@@ -281,6 +282,7 @@ cdisc_data <- function(...,
       logical(1),
       list = datasets_data,
       list_names = unlist(datasets_names),
+      arg_names = unlist(arg_names),
       env = new_env
     )
 

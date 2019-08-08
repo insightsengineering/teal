@@ -157,6 +157,7 @@ test_that("Error - objects differs", {
 })
 
 test_that("Error - ADSL is missing", {
-  expect_error(cdisc_data(ARG1 = 1, code = "", check = FALSE), "Please use dataset as an argument!")
+  expect_error(cdisc_data(ARG1 = 1, code = "", check = FALSE),
+               "Argument in not of class dataset, please use dataset function!")
   expect_error(cdisc_data(code = "x <- 2", check = FALSE), "ADSL argument is missing.")
 })

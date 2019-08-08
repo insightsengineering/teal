@@ -39,19 +39,20 @@ cdisc_data(
 
 # Example with keys
 cdisc_data(
-  cdisc_dataset("ADSL", ADSL, keys = list(primary = c("STUDYID", "USUBJID"),
-                                          foreign = NULL,
-                                          parent = NULL
-                                     )
-  ),
-  cdisc_dataset("ADTTE", ADTTE, keys = list(primary = c("STUDYID", "USUBJID", "PARAMCD"),
-                                            foreign = c("STUDYID", "USUBJID"),
-                                            parent = "ADSL"
-                                       )
-  ),
- code = "",
- check = FALSE
- )
+  cdisc_dataset("ADSL", ADSL, keys = list(
+    primary = c("STUDYID", "USUBJID"),
+    foreign = NULL,
+    parent = NULL
+  )),
+  cdisc_dataset("ADTTE", ADTTE, keys = list(
+    primary = c("STUDYID", "USUBJID", "PARAMCD"),
+    foreign = c("STUDYID", "USUBJID"),
+    parent = "ADSL"
+  )),
+  code = "ADSL <- radsl(N = 600, seed = 123)
+          ADTTE <- radtte(ADSL, seed = 123)",
+  check = FALSE
+)
 
 
 }
