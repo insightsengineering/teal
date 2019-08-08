@@ -231,10 +231,35 @@ test_that("Error - objects differs", {
 })
 
 test_that("Error - ADSL is missing", {
-  expect_error(cdisc_data(code = "x <- 2", check = FALSE), "ADSL argument is missing.")
+  expect_error(cdisc_data(cdisc_dataset("ADTTE", ADTTE),
+                          code = "ADTTE <- cadtte",
+                          check = FALSE), "ADSL argument is missing.")
 })
 
 test_that("Error - dataset is not of class cdisc_dataset", {
   expect_error(cdisc_data(ARG1 = 1, code = "", check = FALSE),
                "Argument in not of class dataset, please use cdisc_dataset function!")
+})
+
+test_that("Error - foreign keys are not existing in parent's dataset", {
+  expect_error(cdisc_data(cdisc_dataset("ADSL", ADSL),
+                          cdisc_dataset("ADTTE", ADTTE,
+                                        keys = list(primary = NULL,
+                                                    foreign = c("CNSR"),
+                                                    parent = "ADSL"))
+                          ), "Specified foreign keys are not exisiting in parent dataset.")
+})
+
+test_that("Error - primary keys are not unique for the dataset", {
+  expect_error(cdisc_data(cdisc_dataset("ADSL", ADSL, keys = list(primary = c("SEX"),
+                                                                  foreign = NULL,
+                                                                  parent = NULL))
+                          ), "ADSL: Keys don't uniquely distinguish the rows,  i.e. some rows share the same keys")
+})
+
+test_that("Error - parent is defined without foreign key", {
+  expect_error(cdisc_data(cdisc_dataset("ADTTE", ADTTE, keys = list(primary = NULL,
+                                                                  foreign = NULL,
+                                                                  parent = "ADSL"))
+  ), "ADTTE: Please specify both foreign keys and a parent!")
 })

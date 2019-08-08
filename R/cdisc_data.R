@@ -38,7 +38,7 @@ dataset <- function(dataname,
     stop(dataname, ": Please specify both foreign keys and a parent!")
   }
 
-  if(!is.null(keys$primary) && !any(duplicated(data[, keys$primary]))) {
+  if (!is.null(keys$primary) && any(duplicated(data[, keys$primary]))) {
     stop(dataname, ": Keys don't uniquely distinguish the rows,  i.e. some rows share the same keys")
   }
 
@@ -103,7 +103,7 @@ get_cdisc_keys <- function(dataname) {
       parent = "ADSL"
     ),
     ADRS = list(
-      primary = c("STUDYID", "USUBJID", "PARAMCD"),
+      primary = c("STUDYID", "USUBJID", "PARAMCD", "AVISIT"),
       foreign = c("STUDYID", "USUBJID"),
       parent = "ADSL"
     ),
@@ -240,24 +240,29 @@ cdisc_data <- function(...,
   stopifnot(is.logical.single(check))
 
   code <- paste0(code, collapse = "\n")
-  is_adsl <- FALSE
   dlist <- list(...)
 
-  for (i in dlist) {
-    if (!(any(is(i, "dataset")))) {
-      stop("Argument in not of class dataset, please use cdisc_dataset function!")
-    }
-    if (i$dataname == "ADSL"){
-      is_adsl <- TRUE
-    }
+  if (!is.class.list("dataset")(dlist)) {
+    stop("Argument in not of class dataset, please use cdisc_dataset function!")
   }
 
-  if (!is_adsl) {
-    stop("ADSL argument is missing!")
-  }
-  datasets_data <- lapply(dlist, `[[`, "data")
   datasets_names <- lapply(dlist, `[[`, "dataname")
+  datasets_data <- lapply(dlist, `[[`, "data")
   datasets_data <- setNames(datasets_data, datasets_names)
+  datasets_keys <- lapply(dlist, `[[`, "keys")
+  datasets_keys <- setNames(datasets_keys, datasets_names)
+
+  if (!any(datasets_names == "ADSL")) {
+    stop("ADSL argument is missing.")
+  }
+
+  for (keys in datasets_keys) {
+    if (!is.null(keys$parent)){
+      if (any(!(keys$foreign %in% names(datasets_data[[keys$parent]])))){
+        stop("Specified foreign keys are not exisiting in parent dataset.")
+      }
+    }
+  }
 
   arg_names <- lapply(
     as.list(substitute(list(...)))[-1L],
