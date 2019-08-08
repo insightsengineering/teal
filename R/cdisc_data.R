@@ -34,6 +34,16 @@ dataset <- function(dataname,
   stopifnot(all(union(keys$primary, keys$foreign) %in% names(data)))
   stopifnot(all(names(labels$column_labels) %in% names(data)))
 
+  if (!is.null(keys$foreign) && is.null(keys$parent) || (is.null(keys$foreign) && !is.null(keys$parent))) {
+    stop(dataname, ": Please specify both foreign keys and a parent!")
+  }
+
+  if(!is.null(keys$primary) && !any(duplicated(data[, keys$primary]))) {
+    stop(dataname, ": Keys don't uniquely distinguish the rows,  i.e. some rows share the same keys")
+  }
+
+
+
   structure(list(
     dataname = dataname,
     data = data,
