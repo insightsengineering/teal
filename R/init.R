@@ -95,7 +95,7 @@ init <- function(data,
   # initialize FilteredData object
   datasets <- FilteredData$new(names(data))
   Map(function(x, name) {
-    datasets$set_data(name, x)
+    datasets$set_data(name, x$data)
   }, data, names(data))
 
   # including attributes of data object

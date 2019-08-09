@@ -2,7 +2,7 @@
 % Please edit documentation in R/cdisc_data.R
 \name{get_cdisc_keys}
 \alias{get_cdisc_keys}
-\title{Data input for teal app}
+\title{Function that creates keys object}
 \usage{
 get_cdisc_keys(dataname)
 }
@@ -13,7 +13,7 @@ get_cdisc_keys(dataname)
 keys
 }
 \description{
-Function that creates CDISC dataset object
+Function that creates keys object
 }
 \examples{
 

@@ -4,12 +4,10 @@
 \alias{cdisc_data}
 \title{Data input for teal app}
 \usage{
-cdisc_data(ADSL, ..., code = "", check = FALSE)
+cdisc_data(..., code = "", check = FALSE)
 }
 \arguments{
-\item{ADSL}{ADSL dataset object}
-
-\item{...}{other datasets objects}
+\item{...}{datasets objects}
 
 \item{code}{(\code{character}) preprocessing code.}
 
@@ -29,12 +27,32 @@ This function checks if there were keys added to all data
 \examples{
 library(random.cdisc.data)
 
-ADSL <-  suppressWarnings(radsl(N = 600, seed = 123))
-ADTTE <- radtte(ADSL, event.descr = c("STUDYID", "USUBJID", "PARAMCD"), seed = 123)
+ADSL <-  radsl(N = 600, seed = 123)
+ADTTE <- radtte(ADSL, seed = 123)
 
+# basic example
 cdisc_data(
   cdisc_dataset("ADSL", ADSL),
   cdisc_dataset("ADTTE", ADTTE),
   code = 'ADSL <- radsl(N = 600, seed = 123)
-          ADTTE <- radtte(ADSL, event.descr = c("STUDYID", "USUBJID", "PARAMCD"), seed = 123)')
+          ADTTE <- radtte(ADSL, seed = 123)')
+
+# Example with keys
+cdisc_data(
+  cdisc_dataset("ADSL", ADSL, keys = list(
+    primary = c("STUDYID", "USUBJID"),
+    foreign = NULL,
+    parent = NULL
+  )),
+  cdisc_dataset("ADTTE", ADTTE, keys = list(
+    primary = c("STUDYID", "USUBJID", "PARAMCD"),
+    foreign = c("STUDYID", "USUBJID"),
+    parent = "ADSL"
+  )),
+  code = "ADSL <- radsl(N = 600, seed = 123)
+          ADTTE <- radtte(ADSL, seed = 123)",
+  check = FALSE
+)
+
+
 }
