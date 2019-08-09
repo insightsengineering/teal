@@ -42,8 +42,6 @@ dataset <- function(dataname,
     stop(dataname, ": Keys don't uniquely distinguish the rows,  i.e. some rows share the same keys")
   }
 
-
-
   structure(list(
     dataname = dataname,
     data = data,
@@ -54,9 +52,32 @@ dataset <- function(dataname,
 
 }
 
-#' Data input for teal app
+#' Function that returns list of keys
 #'
-#' Function that creates CDISC dataset object
+#' @param primary vector of primary key values
+#' @param foreign vector of foreign key values
+#' @param parent string that indicates parent dataset
+#'
+#' @return list of keys
+#'
+#' @export
+#'
+#' @examples
+#'
+#' get_keys(primary = c("STUDYID"), foreign = c("USUBJID"), "ADSL")
+#'
+
+get_keys <- function(primary, foreign, parent) {
+
+  stopifnot(is.null(primary) || is.character.vector(primary))
+  stopifnot(is.null(foreign) || is.character.vector(foreign))
+  stopifnot(is.null(parent) || is.character.single(parent))
+
+  list(primary = primary, foreign = foreign, parent = parent)
+}
+
+#'
+#' Function that creates keys object
 #' @param dataname name of dataset
 #'
 #' @return keys
@@ -73,27 +94,27 @@ get_cdisc_keys <- function(dataname) {
 
   # copy from excel file
   default_cdisc_keys <- list(
-    ADSL = list(
+    ADSL = get_keys(
       primary = c("STUDYID", "USUBJID"),
       foreign = NULL,
       parent = NULL
     ),
-    ADAE = list(
+    ADAE = get_keys(
       primary = c("STUDYID", "USUBJID"),
       foreign = c("STUDYID", "USUBJID"),
       parent = "ADSL"
     ),
-    ADTTE = list(
+    ADTTE = get_keys(
       primary = c("STUDYID", "USUBJID", "PARAMCD"),
       foreign = c("STUDYID", "USUBJID"),
       parent = "ADSL"
     ),
-    ADCM = list(
+    ADCM = get_keys(
       primary = c("STUDYID", "USUBJID"),
       foreign = c("STUDYID", "USUBJID"),
       parent = "ADSL"
     ),
-    ADLB = list(
+    ADLB = get_keys(
       primary = c(
         "STUDYID",
         "USUBJID",
@@ -102,12 +123,12 @@ get_cdisc_keys <- function(dataname) {
       foreign = c("STUDYID", "USUBJID"),
       parent = "ADSL"
     ),
-    ADRS = list(
+    ADRS = get_keys(
       primary = c("STUDYID", "USUBJID", "PARAMCD", "AVISIT"),
       foreign = c("STUDYID", "USUBJID"),
       parent = "ADSL"
     ),
-    ADVS = list(
+    ADVS = get_keys(
       primary = c(
         "STUDYID",
         "USUBJID",
@@ -125,9 +146,8 @@ get_cdisc_keys <- function(dataname) {
   }
 }
 
-#' Data input for teal app
-#'
 #' Function that extract labels from CDISC dataset
+#'
 #' @param data data
 #'
 #' @return labels

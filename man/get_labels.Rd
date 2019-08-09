@@ -2,7 +2,7 @@
 % Please edit documentation in R/cdisc_data.R
 \name{get_labels}
 \alias{get_labels}
-\title{Data input for teal app}
+\title{Function that extract labels from CDISC dataset}
 \usage{
 get_labels(data)
 }
