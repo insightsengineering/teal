@@ -207,6 +207,26 @@ cdisc_dataset <- function(dataname,
   }
 
 
+#' Utility function to check if foreign keys are existing in parent dataset
+#'
+#' @param datasets_keys list of keys
+#' @param datasets_data dataframe object
+#'
+#' @return NULL
+#'
+
+check_foreign_keys <- function(datasets_keys, datasets_data) {
+  lapply(datasets_keys, function(keys) {
+    if (!is.null(keys$parent)) {
+      if (any(!(keys$foreign %in% names(datasets_data[[keys$parent]])))) {
+        stop("Specified foreign keys are not exisiting in parent dataset.")
+      }
+    }
+  })
+
+  invisible(NULL)
+}
+
 #' Data input for teal app
 #'
 #' Function passes datasets to teal application with option to read preprocessing code and reproducibility checking.
@@ -276,13 +296,7 @@ cdisc_data <- function(...,
     stop("ADSL argument is missing.")
   }
 
-  for (keys in datasets_keys) {
-    if (!is.null(keys$parent)){
-      if (any(!(keys$foreign %in% names(datasets_data[[keys$parent]])))){
-        stop("Specified foreign keys are not exisiting in parent dataset.")
-      }
-    }
-  }
+  check_foreign_keys(datasets_keys, datasets_data)
 
   arg_names <- lapply(
     as.list(substitute(list(...)))[-1L],

@@ -21,6 +21,6 @@ Function that returns list of keys
 }
 \examples{
 
-get_keys(primary = c("STUDYID"), foreign = c(USUBJID), "ADSL")
+get_keys(primary = c("STUDYID"), foreign = c("USUBJID"), "ADSL")
 
 }
