@@ -154,7 +154,7 @@ get_cdisc_keys <- function(dataname) {
 #'
 #' @export
 #'
-#' @importFrom tern var_labels
+#' @importFrom rtables var_labels
 #'
 #' @examples
 #' library(random.cdisc.data)

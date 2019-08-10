@@ -36,7 +36,7 @@ Imports:
   readr,
   shinyjs,
   shinyWidgets,
-  tern (>= 0.6.2),
+  rtables,
   utils.nest (>= 0.1)
 RoxygenNote: 6.1.1
 Suggests:
