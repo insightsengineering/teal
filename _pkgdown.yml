@@ -25,6 +25,7 @@ reference:
     desc: Functions allowing teal output reproducibility.
     contents:
     - cdisc_data
+    - cdisc_dataset
     - get_code
   - title: Teal Filtering and Selecting
     desc: Functions used to filter observations and select variables from dataset.
