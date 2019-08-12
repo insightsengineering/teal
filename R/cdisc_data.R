@@ -64,10 +64,10 @@ dataset <- function(dataname,
 #'
 #' @examples
 #'
-#' get_keys(primary = c("STUDYID"), foreign = c("USUBJID"), "ADSL")
+#' keys(primary = c("STUDYID"), foreign = c("USUBJID"), "ADSL")
 #'
 
-get_keys <- function(primary, foreign, parent) {
+keys <- function(primary, foreign, parent) {
 
   stopifnot(is.null(primary) || is.character.vector(primary))
   stopifnot(is.null(foreign) || is.character.vector(foreign))
@@ -94,27 +94,27 @@ get_cdisc_keys <- function(dataname) {
 
   # copy from excel file
   default_cdisc_keys <- list(
-    ADSL = get_keys(
+    ADSL = keys(
       primary = c("STUDYID", "USUBJID"),
       foreign = NULL,
       parent = NULL
     ),
-    ADAE = get_keys(
-      primary = c("STUDYID", "USUBJID"),
+    ADAE = keys(
+      primary = c("STUDYID", "USUBJID", "AESTDTM", "AETERM", "AESEQ"),
       foreign = c("STUDYID", "USUBJID"),
       parent = "ADSL"
     ),
-    ADTTE = get_keys(
+    ADTTE = keys(
       primary = c("STUDYID", "USUBJID", "PARAMCD"),
       foreign = c("STUDYID", "USUBJID"),
       parent = "ADSL"
     ),
-    ADCM = get_keys(
+    ADCM = keys(
       primary = c("STUDYID", "USUBJID"),
       foreign = c("STUDYID", "USUBJID"),
       parent = "ADSL"
     ),
-    ADLB = get_keys(
+    ADLB = keys(
       primary = c(
         "STUDYID",
         "USUBJID",
@@ -123,12 +123,12 @@ get_cdisc_keys <- function(dataname) {
       foreign = c("STUDYID", "USUBJID"),
       parent = "ADSL"
     ),
-    ADRS = get_keys(
+    ADRS = keys(
       primary = c("STUDYID", "USUBJID", "PARAMCD", "AVISIT"),
       foreign = c("STUDYID", "USUBJID"),
       parent = "ADSL"
     ),
-    ADVS = get_keys(
+    ADVS = keys(
       primary = c(
         "STUDYID",
         "USUBJID",
@@ -154,7 +154,7 @@ get_cdisc_keys <- function(dataname) {
 #'
 #' @export
 #'
-#' @importFrom tern var_labels
+#' @importFrom rtables var_labels
 #'
 #' @examples
 #' library(random.cdisc.data)
