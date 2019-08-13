@@ -118,7 +118,8 @@ get_cdisc_keys <- function(dataname) {
       primary = c(
         "STUDYID",
         "USUBJID",
-        "PARAMCD"
+        "PARAMCD",
+        "AVISIT"
       ),
       foreign = c("STUDYID", "USUBJID"),
       parent = "ADSL"
