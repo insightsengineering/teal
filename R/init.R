@@ -93,13 +93,15 @@ init <- function(data,
   check_module_names(modules)
 
   # initialize FilteredData object
-  datasets <- FilteredData$new(names(data))
-  Map(function(x, name) {
-    datasets$set_data(name, x$data)
-  }, data, names(data))
+  datasets <- FilteredData$new(vapply(data, `[[`, character(1), "dataname", USE.NAMES = FALSE))
+  for (idx in seq_along(data)) {
+    datasets$set_data(data[[idx]][["dataname"]], data[[idx]][["data"]])
+    datasets$set_data_attr(data[[idx]][["dataname"]], "keys", data[[idx]][["keys"]])
+    datasets$set_data_attr(data[[idx]][["dataname"]], "labels", data[[idx]][["labels"]])
+  }
 
   # including attributes of data object
-  datasets$set_data_attrs(data)
+  datasets$set_attrs(data)
 
   # set default init filters
   if (!is.null(filter) && !is.null(filter$init)) {
