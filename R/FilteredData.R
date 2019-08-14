@@ -43,14 +43,19 @@ FilteredData <- R6::R6Class( # nolint
   public = list(
 
     initialize = function(datanames = c("ADSL")) {
+      stopifnot(is.character.vector(datanames))
+
       for (dataname in datanames) {
-        if (grepl("[[:space:]]", dataname))
+        if (grepl("[[:space:]]", dataname)) {
           stop(paste0("invalid dataname '", dataname, "' datanames without spaces"))
+        }
       }
 
       private$init_datanames <- datanames
 
-      create_rv <- function()  do.call(reactiveValues, setNames(lapply(datanames, function(x)NULL), datanames))
+      create_rv <- function() {
+        do.call(reactiveValues, setNames(lapply(datanames, function(x)NULL), datanames))
+      }
 
       private$datasets          <- create_rv()
       private$filtered_datasets <- create_rv()
@@ -104,8 +109,11 @@ FilteredData <- R6::R6Class( # nolint
 
 
     set_data = function(dataname, data) {
-      attr(data, "md5sum") <- digest(data, algo = "md5")
+      stopifnot(is.character.single(dataname))
+      stopifnot(is.data.frame(data))
+
       private$datasets[[dataname]] <- data
+      self$set_data_attr(dataname, "md5sum", digest(data, algo = "md5"))
 
       private$update_filter_info(dataname)
       private$apply_filter(dataname)
@@ -114,26 +122,51 @@ FilteredData <- R6::R6Class( # nolint
     },
 
 
-    set_data_attrs = function(data) {
-      private$data_attrs <- attributes(data)
+    set_attrs = function(data) {
+      private$attr <- attributes(data)
       invisible(self)
     },
 
+    get_attrs = function() {
+      private$attr
+    },
 
-    get_data_attrs = function() {
-      private$data_attrs
+    get_attr = function(attr) {
+      stopifnot(is.character.single(attr))
+
+      private$attr[[attr]]
     },
 
 
-    get_data_attr = function(attr) {
-      stopifnot(is.character(attr))
-      stopifnot(length(attr) == 1)
+    set_data_attr = function(dataname, attr, value) {
+      stopifnot(is.character.single(dataname))
+      stopifnot(is.character.single(attr))
 
-      private$data_attrs[[attr]]
+      if (!dataname %in% names(private$data_attr)) {
+        private$data_attr[[dataname]] <- list()
+      }
+
+      private$data_attr[[dataname]][[attr]] <- value
+    },
+
+    get_data_attr = function(dataname, attr) {
+      stopifnot(is.character.single(dataname))
+      stopifnot(is.character.single(attr))
+
+      private$data_attr[[dataname]][[attr]]
+    },
+
+    get_data_attrs = function(dataname) {
+      stopifnot(is.character.single(dataname))
+
+      private$data_attr[[dataname]]
     },
 
 
     list_data_info = function(dataname, filtered = FALSE, variables = NULL) {
+      stopifnot(is.character.single(dataname))
+      stopifnot(is.logical.single(filtered))
+      stopifnot(is.null(variables) || is.character.vector(variables))
 
       log2 <- function(...) {
         cat(paste(..., collapse = " ")); cat("\n")
@@ -195,6 +228,7 @@ FilteredData <- R6::R6Class( # nolint
 
 
     reset_data = function(dataname = NULL) {
+      stopifnot(is.null(dataname) || is.character.single(dataname))
 
       datanames <- if (is.null(dataname)) {
         self$datanames() # delete all datasets
@@ -221,16 +255,25 @@ FilteredData <- R6::R6Class( # nolint
 
     # dataname is valid and data is not null
     has_data = function(dataname) {
+      stopifnot(is.character.single(dataname))
+
       dataname %in% self$datanames() && !is.null(self$get_data(dataname))
     },
 
 
     has_variable = function(dataname, varname) {
+      stopifnot(is.character.single(dataname))
+      stopifnot(is.character.single(varname))
+
       self$has_data(dataname) && (varname %in% names(self$get_data(dataname)))
     },
 
 
     get_data = function(dataname, reactive = FALSE, filtered = FALSE) {
+      stopifnot(is.character.single(dataname))
+      stopifnot(is.logical.single(reactive))
+      stopifnot(is.logical.single(filtered))
+
       private$error_if_not_valid(dataname)
 
       f <- if (reactive) {
@@ -247,6 +290,9 @@ FilteredData <- R6::R6Class( # nolint
     },
 
     get_data_info = function(dataname, filtered = TRUE, reactive = FALSE) {
+      stopifnot(is.character.single(dataname))
+      stopifnot(is.logical.single(reactive))
+      stopifnot(is.logical.single(filtered))
 
       f <- if (reactive) {
         function(x) x
@@ -262,6 +308,9 @@ FilteredData <- R6::R6Class( # nolint
     },
 
     get_filter_info = function(dataname, varname = NULL) {
+      stopifnot(is.character.single(dataname))
+      stopifnot(is.null(varname) || is.character.single(varname))
+
       private$error_if_not_valid(dataname, varname)
       if (is.null(varname)) {
         private$filter_info[[dataname]]
@@ -273,12 +322,18 @@ FilteredData <- R6::R6Class( # nolint
     # TODO add remove_filter method
 
     get_filter_type = function(dataname, varname) {
+      stopifnot(is.character.single(dataname))
+      stopifnot(is.character.single(varname))
+
       private$error_if_not_valid(dataname, varname)
       private$filter_info[[dataname]][[varname]][["type"]]
     },
 
 
     set_filter_state = function(dataname, varname = NULL, state) {
+      stopifnot(is.character.single(dataname))
+      stopifnot(is.null(varname) || is.character.single(varname))
+
       # varname = NULL > for all variables
       # state = NULL erase filter state
       #
@@ -286,11 +341,14 @@ FilteredData <- R6::R6Class( # nolint
 
       private$error_if_not_valid(dataname, varname)
 
-      if (is.null("state")) stop("use remove_filter and not set_filter_state if to remove a filter")
+      if (is.null("state")) {
+        stop("use remove_filter and not set_filter_state if to remove a filter")
+      }
 
       if (is.null(varname)) {
-        if (!(is.null(state) || is.list(state)))
+        if (!(is.null(state) || is.list(state))) {
           stop("filter state needs to be a list when specified for all variables")
+        }
 
         fs_names <- names(state)
         varnames <- names(self$get_data(dataname))
@@ -358,6 +416,9 @@ FilteredData <- R6::R6Class( # nolint
 
 
     remove_filter = function(dataname, varname) {
+      stopifnot(is.character.single(dataname))
+      stopifnot(is.character.single(varname))
+
       private$error_if_not_valid(dataname, varname)
 
       fs <- self$get_filter_state(dataname)
@@ -370,7 +431,11 @@ FilteredData <- R6::R6Class( # nolint
     },
 
 
-    get_filter_state = function(dataname, varname=NULL, reactive=FALSE) {
+    get_filter_state = function(dataname, varname = NULL, reactive = FALSE) {
+      stopifnot(is.character.single(dataname))
+      stopifnot(is.null(varname) || is.character.single(varname))
+      stopifnot(is.logical.single(reactive))
+
       private$error_if_not_valid(dataname, varname)
 
       if (is.null(varname)) {
@@ -388,6 +453,9 @@ FilteredData <- R6::R6Class( # nolint
 
 
     set_default_filter_state = function(dataname, varname) {
+      stopifnot(is.character.single(dataname))
+      stopifnot(is.character.single(varname))
+
       private$error_if_not_valid(dataname, varname)
 
       fi <- self$get_filter_info(dataname, varname)
@@ -407,11 +475,18 @@ FilteredData <- R6::R6Class( # nolint
 
 
     is_filter_variable = function(dataname, varname) {
+      stopifnot(is.character.single(dataname))
+      stopifnot(is.character.single(varname))
+
       self$get_filter_type(dataname, varname) != "unknown"
     },
 
 
-    get_filter_call = function(dataname, merge=TRUE, adsl=TRUE) {
+    get_filter_call = function(dataname, merge = TRUE, adsl = TRUE) {
+      stopifnot(is.character.single(dataname))
+      stopifnot(is.logical.single(merge))
+      stopifnot(is.logical.single(adsl))
+
       private$error_if_not_valid(dataname)
 
       adsl_filter_call <- private$get_subset_call("ADSL", "ADSL_FILTERED")
@@ -464,7 +539,8 @@ FilteredData <- R6::R6Class( # nolint
 
     init_datanames = NULL,
     datasets = NULL,
-    data_attrs = NULL,
+    attr = list(),
+    data_attr = list(),
     filtered_datasets = NULL,
     filter_state = NULL,
     filter_info = list(),
