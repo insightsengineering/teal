@@ -499,10 +499,14 @@ FilteredData <- R6::R6Class( # nolint
         out_dat <- paste0(dataname, "_FILTERED_ALONE")
 
         filter_call <- private$get_subset_call(dataname, out_dat)
+        keys <- self$get_data_attrs("ADSL")$keys$primary
+        if (is.null(keys)) {
+          keys <- c("USUBJID", "STUDYID")
+        }
         merge_call <- call("<-", as.name(out),
-                           call("merge", x = call("[", as.name("ADSL_FILTERED"), quote(expr =), c("USUBJID", "STUDYID")), # nolint
+                           call("merge", x = call("[", as.name("ADSL_FILTERED"), quote(expr =), keys), # nolint
                                 y = as.name(out_dat),
-                                by = c("USUBJID", "STUDYID"),
+                                by = keys,
                                 all.x = FALSE, all.y = FALSE))
 
         calls <- list(adsl_filter_call, filter_call, merge_call)
