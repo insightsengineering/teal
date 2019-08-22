@@ -88,6 +88,26 @@ init <- function(data,
 
   if (!is(data, "cdisc_data")) {
     warning("Please use cdisc_data() instead of list() for 'data' argument. It will be depreciated soon.")
+
+    data_names <- names(data)
+    stopifnot(length(data_names) == length(data))
+
+    data_substitute <- substitute(data)
+    data <- eval(as.call(append(
+        quote(cdisc_data),
+        lapply(
+            seq_along(data),
+            function(idx) {
+              call(
+                  "dataset",
+                  dataname = data_names[[idx]],
+                  data = data_substitute[[idx + 1]],
+                  keys = call("get_cdisc_keys", data_names[[idx]])
+              )
+            }
+        )
+    )))
+
   }
 
   check_module_names(modules)

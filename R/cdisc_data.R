@@ -299,14 +299,18 @@ cdisc_data <- function(...,
 
   check_foreign_keys(datasets_keys, datasets_data)
 
-  arg_names <- lapply(
-    as.list(substitute(list(...)))[-1L],
-    function(i) {
-      deparse(as.list(match.call(eval(i[[1L]]), i))$data)
-    }
-  )
-
   if (check) {
+    arg_names <- lapply(
+      as.list(substitute(list(...)))[-1L],
+      function(i) {
+        tryCatch(
+            deparse(as.list(match.call(eval(i[[1L]]), i))$data),
+            error = function(e){
+              i[["dataname"]]
+            })
+      }
+    )
+
     if (identical(code, "")) {
       stop("Cannot check preprocessing code - code is empty.")
     }
