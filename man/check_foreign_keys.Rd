@@ -4,12 +4,10 @@
 \alias{check_foreign_keys}
 \title{Utility function to check if foreign keys are existing in parent dataset}
 \usage{
-check_foreign_keys(datasets_keys, datasets_data)
+check_foreign_keys(datasets_keys)
 }
 \arguments{
 \item{datasets_keys}{list of keys}
-
-\item{datasets_data}{dataframe object}
 }
 \description{
 Utility function to check if foreign keys are existing in parent dataset

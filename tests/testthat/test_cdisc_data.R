@@ -23,8 +23,8 @@ test_that("Basic example cdisc dataset", {
 test_that("Basic example - without code and check", {
   expect_silent(cdisc_data(cdisc_dataset("ADSL", ADSL), code = "", check = FALSE))
   expect_silent(cdisc_data(cdisc_dataset("ADSL", ADSL),
-                           dataset("ARG1", ARG1),
-                           dataset("ARG2", ARG2), code = "", check = FALSE))
+                           dataset("ARG1", ARG1, keys = get_cdisc_keys("ADSL")),
+                           dataset("ARG2", ARG2, keys = get_cdisc_keys("ADSL")), code = "", check = FALSE))
 })
 
 test_that("Basic example - with code and check", {
@@ -37,8 +37,8 @@ test_that("Basic example - with code and check", {
                            check = TRUE))
   expect_silent(cdisc_data(
     cdisc_dataset("ADSL", ADSL),
-    dataset("ARG1", ARG1),
-    dataset("ARG2", ARG2),
+    dataset("ARG1", ARG1, keys = get_cdisc_keys("ADSL")),
+    dataset("ARG2", ARG2, keys = get_cdisc_keys("ADSL")),
     code = "ADSL <- ARG1 <- ARG2 <- cadsl;",
     check = TRUE
   ))
@@ -54,8 +54,8 @@ test_that("Basic example - with vector code and check", {
                            check = TRUE))
   expect_silent(cdisc_data(
     cdisc_dataset("ADSL", ADSL),
-    dataset("ARG1", ARG1),
-    dataset("ARG2", ARG2),
+    dataset("ARG1", ARG1, keys = get_cdisc_keys("ADSL")),
+    dataset("ARG2", ARG2, keys = get_cdisc_keys("ADSL")),
     code = c("ADSL <- ARG1 <- ARG2 <- cadsl"),
     check = TRUE
   ))
@@ -71,8 +71,8 @@ test_that("Basic example - with line break code and check", {
                            check = TRUE))
   expect_silent(cdisc_data(
     cdisc_dataset("ADSL", ADSL),
-    dataset("ARG1", ARG1),
-    dataset("ARG2", ARG2),
+    dataset("ARG1", ARG1, keys = get_cdisc_keys("ADSL")),
+    dataset("ARG2", ARG2, keys = get_cdisc_keys("ADSL")),
     code = "ADSL <- cadsl\n ARG1 <- cadsl\n ARG2 <- cadsl",
     check = TRUE
   ))
@@ -241,25 +241,114 @@ test_that("Error - dataset is not of class cdisc_dataset", {
                "Argument in not of class dataset, please use cdisc_dataset function!")
 })
 
-test_that("Error - foreign keys are not existing in parent's dataset", {
-  expect_error(cdisc_data(cdisc_dataset("ADSL", ADSL),
-                          cdisc_dataset("ADTTE", ADTTE,
-                                        keys = list(primary = NULL,
-                                                    foreign = c("CNSR"),
-                                                    parent = "ADSL"))
-                          ), "Specified foreign keys are not exisiting in parent dataset.")
+test_that("Empty keys for single and multiple datasets", {
+  expect_silent(cdisc_data(dataset("ADSL", ADSL)))
+
+  expect_silent(cdisc_data(dataset("ADSL", ADSL), dataset("ADTTE", ADTTE)))
 })
 
 test_that("Error - primary keys are not unique for the dataset", {
-  expect_error(cdisc_data(cdisc_dataset("ADSL", ADSL, keys = list(primary = c("SEX"),
-                                                                  foreign = NULL,
-                                                                  parent = NULL))
-                          ), "ADSL: Keys don't uniquely distinguish the rows,  i.e. some rows share the same keys")
+  expect_error(
+    cdisc_data(cdisc_dataset("ADSL", ADSL,
+                             keys = list(primary = c("SEX"),
+                                         foreign = NULL,
+                                         parent = NULL))),
+    "ADSL: Keys don't uniquely distinguish the rows,  i.e. some rows share the same keys")
 })
 
 test_that("Error - parent is defined without foreign key", {
-  expect_error(cdisc_data(cdisc_dataset("ADTTE", ADTTE, keys = list(primary = NULL,
+  expect_error(cdisc_data(cdisc_dataset("ADTTE", ADTTE, keys = list(primary = c("STUDYID", "USUBJID"),
                                                                   foreign = NULL,
                                                                   parent = "ADSL"))
   ), "ADTTE: Please specify both foreign keys and a parent!")
+
+  expect_error(
+    cdisc_data(cdisc_dataset("ADTTE", ADTTE,
+                             keys = list(primary = c("STUDYID", "USUBJID"),
+                                         foreign = c("STUDYID", "USUBJID"),
+                                         parent = NULL)
+    )), "ADTTE: Please specify both foreign keys and a parent!")
+
+})
+
+test_that("Warning - Different keys names but same length", {
+  ADTTE <- dplyr::rename(ADTTE, ADSL_STUDYID = STUDYID, ADSL_USUBJID = USUBJID) # nolint
+  expect_warning(
+    cdisc_data(
+      cdisc_dataset("ADSL", ADSL),
+      dataset("ADTTE", ADTTE,
+              keys = list(primary = c("ADSL_STUDYID", "ADSL_USUBJID", "PARAMCD"),
+                          foreign = c("ADSL_STUDYID", "ADSL_USUBJID"),
+                          parent = "ADSL"))
+    ),
+    "Following foreign keys are not identical to the primary keys"
+  )
+})
+
+test_that("Error - length of child keys > length of parent keys", {
+  expect_error(
+    cdisc_data(
+      cdisc_dataset("ADSL", ADSL),
+      dataset("ADTTE", ADTTE,
+              keys = list(primary = c("STUDYID", "USUBJID", "PARAMCD"),
+                          foreign = c("STUDYID", "USUBJID", "PARAMCD"),
+                          parent = "ADSL"))
+    ),
+    "Number of foreign keys can't be larger than"
+  )
+
+  ADTTE <- dplyr::rename(ADTTE, ADSL_STUDYID = STUDYID, ADSL_USUBJID = USUBJID) # nolint
+  expect_error(
+    cdisc_data(
+      cdisc_dataset("ADSL", ADSL),
+      dataset("ADTTE", ADTTE,
+              keys = list(primary = c("ADSL_STUDYID", "ADSL_USUBJID", "PARAMCD"),
+                          foreign = c("ADSL_STUDYID", "ADSL_USUBJID", "PARAMCD"),
+                          parent = "ADSL"))
+    ),
+    "Number of foreign keys can't be larger than"
+  )
+})
+
+test_that("Error - items dataset to wide (without parent)", {
+  COUNTRIES <- data.frame(COUNTRY = unique(ADSL$COUNTRY), VALUE = rnorm(length(unique(ADSL$COUNTRY)))) # nolint
+
+  expect_error(
+    cdisc_data(
+      cdisc_dataset("ADSL", ADSL),
+      dataset("COUNTRIES", COUNTRIES,
+              keys = list(primary = c("COUNTRY"),
+                          foreign = c("COUNTRY"),
+                          parent = "ADSL"))
+    ),
+    "Foreign keys are don't match all parent keys and both have different length"
+  )
+
+  expect_silent(
+    cdisc_data(
+      cdisc_dataset("ADSL", ADSL,
+                    keys = list(primary = c("STUDYID", "USUBJID", "COUNTRY"), foreign = NULL, parent = NULL)),
+      dataset("COUNTRIES", COUNTRIES,
+              keys = list(primary = c("COUNTRY"),
+                          foreign = c("COUNTRY"),
+                          parent = "ADSL"))
+    )
+  )
+
+})
+
+test_that("Error - Two root datasets with different keys", {
+  ADSL2 <- ADSL %>% dplyr::rename(ADSL_STUDYID = STUDYID) # nolint
+
+  expect_error(
+    cdisc_data(
+      cdisc_dataset("ADSL", ADSL),
+      dataset("ADSL2", ADSL2,
+              keys = list(primary = c("ADSL_STUDYID", "USUBJID"),
+                          foreign = NULL,
+                          parent = NULL)),
+      cdisc_dataset("ADTTE", ADTTE)
+    ),
+    "Root dataset keys doesn't match ADSL primary keys"
+  )
 })
