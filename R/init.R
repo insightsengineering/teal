@@ -55,7 +55,7 @@
 #'       "data source",
 #'       server = function(input, output, session, datasets) {},
 #'       ui = function(id) div(p("information about data source")),
-#'       filters = NULL
+#'       filters = 'all'
 #'     ),
 #'     module(
 #'       "ADSL AGE histogram",

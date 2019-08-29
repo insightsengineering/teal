@@ -18,7 +18,7 @@ depth level for given module
 check that modules has not more than depth 2
 }
 \examples{
-m <- module("aaa", server = function(input, output, session, datasets){}, ui = NULL, filters = NULL)
+m <- module("aaa", server = function(input, output, session, datasets){}, ui = function(id){}, filters = 'all')
 x <- modules(
   "d1",
   modules(
