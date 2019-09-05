@@ -92,36 +92,46 @@ test_that("List values", {
   result <- cdisc_data(cdisc_dataset("ADSL", ADSL))
 
   result_to_compare <- list(structure(list(
-                                      dataname = "ADSL",
-                                      data = ADSL,
-                                      keys = list(
-                                        primary = c("STUDYID", "USUBJID"),
-                                        foreign = NULL,
-                                        parent = NULL
-                                      ),
-                                      labels = list(
-                                        dataset_label = "Subject Level Analysis Dataset",
-                                        column_labels = c(STUDYID = "Study Identifier",
-                                                          USUBJID = "Unique Subject Identifier",
-                                                          SUBJID = "Identifier for the Study",
-                                                          SITEID = "Study Site Identifier",
-                                                          AGE = "Age",
-                                                          SEX = "Sex",
-                                                          RACE = "Race",
-                                                          COUNTRY = "Country",
-                                                          ARM = "Description of Planned Arm",
-                                                          ARMCD = "Planned Arm Code",
-                                                          ACTARM = "Description of Actual Arm",
-                                                          ACTARMCD = "Actual Arm Code",
-                                                          STRATA1 = "Stratification Factor 1",
-                                                          STRATA2 = "Stratification Factor 2",
-                                                          BMRKR1 = "Continous Level Biomarker 1",
-                                                          BMRKR2 = "Categorical Level Biomarker 2",
-                                                          ITTFL = "Intent-To-Treat Population Flag",
-                                                          BEP01FL = "Biomarker Evaluable Population Flag"
-                                        )
-                                      )
-                                    ),
+    dataname = "ADSL",
+    data = ADSL,
+    keys = list(
+      primary = c("STUDYID", "USUBJID"),
+      foreign = NULL,
+      parent = NULL
+    ),
+    labels = list(
+      dataset_label = "Subject Level Analysis Dataset",
+      column_labels = c(STUDYID = "Study Identifier",
+                        USUBJID = "Unique Subject Identifier",
+                        SUBJID = "Identifier for the Study",
+                        SITEID = "Study Site Identifier",
+                        AGE = "Age",
+                        SEX = "Sex",
+                        RACE = "Race",
+                        COUNTRY = "Country",
+                        ARM = "Description of Planned Arm",
+                        ARMCD = "Planned Arm Code",
+                        ACTARM = "Description of Actual Arm",
+                        ACTARMCD = "Actual Arm Code",
+                        STRATA1 = "Stratification Factor 1",
+                        STRATA2 = "Stratification Factor 2",
+                        BMRKR1 = "Continous Level Biomarker 1",
+                        BMRKR2 = "Categorical Level Biomarker 2",
+                        ITTFL = "Intent-To-Treat Population Flag",
+                        BEP01FL = "Biomarker Evaluable Population Flag",
+                        RANDDT = "Date of Randomization",
+                        TRTSDTM = "Datetime of First Exposure to Treatment",
+                        TRTEDTM = "Datetime of Last Exposure to Treatment",
+                        EOSSTT = "End of Study Status",
+                        EOSDT = "End of Study Date",
+                        EOSDY = "End of Study Relative Day",
+                        DCSREAS = "Reason for Discontinuation from Study",
+                        DTHDT = "Date of Death",
+                        LSTALVDT = "Date Last Known Alive",
+                        study_duration_secs = "NOT A STANDARD BUT NEEDED FOR RCD"
+      )
+    )
+  ),
                                     class = c("cdisc_dataset", "dataset")))
   class(result_to_compare) <- "cdisc_data"
   result_to_compare <- setNames(result_to_compare, c("ADSL"))
@@ -160,7 +170,17 @@ test_that("List values", {
                         BMRKR1 = "Continous Level Biomarker 1",
                         BMRKR2 = "Categorical Level Biomarker 2",
                         ITTFL = "Intent-To-Treat Population Flag",
-                        BEP01FL = "Biomarker Evaluable Population Flag"
+                        BEP01FL = "Biomarker Evaluable Population Flag",
+                        RANDDT = "Date of Randomization",
+                        TRTSDTM = "Datetime of First Exposure to Treatment",
+                        TRTEDTM = "Datetime of Last Exposure to Treatment",
+                        EOSSTT = "End of Study Status",
+                        EOSDT = "End of Study Date",
+                        EOSDY = "End of Study Relative Day",
+                        DCSREAS = "Reason for Discontinuation from Study",
+                        DTHDT = "Date of Death",
+                        LSTALVDT = "Date Last Known Alive",
+                        study_duration_secs = "NOT A STANDARD BUT NEEDED FOR RCD"
       )
     )
   ),

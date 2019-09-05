@@ -100,7 +100,12 @@ module <- function(label, server, ui, filters, server_args = NULL, ui_args = NUL
 #' @importFrom methods is
 #'
 #' @examples
-#' m <- module("aaa", server = function(input, output, session, datasets){}, ui = function(id){}, filters = 'all')
+#' m <- module(
+#'   "aaa",
+#'   server = function(input, output, session, datasets){},
+#'   ui = function(id){},
+#'   filters = 'all'
+#' )
 #' x <- modules(
 #'   "d1",
 #'   modules(
