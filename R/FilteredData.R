@@ -578,10 +578,10 @@ FilteredData <- R6::R6Class( # nolint
             type = "choices",
             label = if_null(attr(var, "label"), ""),
             choices = if (is.factor(var)) {
-                levels(var)
-              } else {
-                unique(as.character(var))
-              }
+              levels(var)
+            } else {
+              sort(unique(as.character(var)))
+            }
           )
         } else if (is.numeric(var)) {
           list(

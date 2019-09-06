@@ -67,7 +67,7 @@ srv_add_filter_variable <- function(input, output, session, datasets, dataname, 
         warning_messages$varinfo <- paste(
           "variable",
           paste(dataname, var, sep = "."),
-          "can currently not be used as a filter variable."
+          "can't be currently used as a filter variable."
         )
       }
       warning_messages$i <- warning_messages$i + 1
