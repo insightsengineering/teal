@@ -1,12 +1,17 @@
 # teal next release
 
+* Added `cdisc_dataset` (and more general `dataset`) functions to properly handle dataset keys while merging
+* Possibility to load custom `.css` and `.js` files
+* Renamed `columns_spec` to `select_spec`
+* Show number of observations on filter panel
+
 # teal 0.7.0
 
-* add functions `cdisc_data` and `get_code` to deal with preprocessing and moving a step towards datastandard
+* Added functions `cdisc_data` and `get_code` to deal with preprocessing and moving a step towards datastandard
 independent teal
-* moved `teal.utils` functions to `teal`: `log_app_usage`, `stop_shiny`
-* added `*_spec` functions
-* improvements on usage of `PickerInput` and `SelectInput`
+* Moved `teal.utils` functions to `teal`: `log_app_usage`, `stop_shiny`
+* Added `*_spec` functions
+* Improvements on usage of `PickerInput` and `SelectInput`
 
 # teal 0.6.0
 
@@ -17,8 +22,8 @@ independent teal
 
 # teal 0.0.5
 
-* add limit to data_table with scrolling, preventing overlap of ui elements
-* boolean filtering
+* Added limit to data_table with scrolling, preventing overlap of ui elements
+* Boolean filtering
 
 # teal 0.0.4
 
@@ -49,8 +54,8 @@ the example app should, however, clarify most the changes.
 
 # teal 0.0.2
 
- * new '01_getting_started' vignette
- * datanames in FilteredData are now case sensitive
+ * New '01_getting_started' vignette
+ * Datanames in FilteredData are now case sensitive
 
 # teal 0.0.1
 

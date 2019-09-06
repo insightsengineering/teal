@@ -116,9 +116,6 @@
 #'   }
 #'
 #' }
-#'
-#'
-#' @importFrom utils.nest is.character.single is.logical.single
 filter_spec <- function(vars,
                         choices,
                         selected = choices[1],
