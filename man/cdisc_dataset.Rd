@@ -22,6 +22,19 @@ a dataset with connected metadata
 \description{
 Function that creates CDISC dataset object
 }
+\details{
+List of implemented cdisc datasets:
+
+\itemize{
+  \item ADSL
+  \item ADTTE
+  \item ADAE
+  \item ADLB
+  \item ADCM
+  \item ADRS
+  \item ADVS
+}
+}
 \examples{
 library(random.cdisc.data)
 

@@ -180,6 +180,19 @@ get_labels <- function(data) {
 #' Data input for teal app
 #'
 #' Function that creates CDISC dataset object
+#'
+#' List of implemented cdisc datasets:
+#'
+#' \itemize{
+#'   \item ADSL
+#'   \item ADTTE
+#'   \item ADAE
+#'   \item ADLB
+#'   \item ADCM
+#'   \item ADRS
+#'   \item ADVS
+#' }
+#'
 #' @param dataname name of dataset
 #' @param data data
 #' @param keys list of keys
