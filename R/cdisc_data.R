@@ -100,7 +100,7 @@ get_cdisc_keys <- function(dataname) {
       parent = NULL
     ),
     ADAE = keys(
-      primary = c("STUDYID", "USUBJID", "AESTDTM", "AETERM", "AESEQ"),
+      primary = c("STUDYID", "USUBJID", "ASTDTM", "AETERM", "AESEQ"),
       foreign = c("STUDYID", "USUBJID"),
       parent = "ADSL"
     ),

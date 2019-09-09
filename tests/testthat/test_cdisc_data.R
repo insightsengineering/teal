@@ -206,6 +206,28 @@ test_that("List values", {
   expect_identical(result, result_to_compare)
 })
 
+test_that("Keys in cached datasets", {
+  expect_true(all(get_cdisc_keys("ADSL")$primary %in% names(random.cdisc.data::cadsl)))
+
+  expect_true(all(get_cdisc_keys("ADAE")$primary %in% names(random.cdisc.data::cadae)))
+  expect_true(all(get_cdisc_keys("ADAE")$foreign %in% names(random.cdisc.data::cadae)))
+
+  expect_true(all(get_cdisc_keys("ADTTE")$primary %in% names(random.cdisc.data::cadtte)))
+  expect_true(all(get_cdisc_keys("ADTTE")$foreign %in% names(random.cdisc.data::cadtte)))
+
+  expect_true(all(get_cdisc_keys("ADCM")$primary %in% names(random.cdisc.data::cadcm)))
+  expect_true(all(get_cdisc_keys("ADCM")$foreign %in% names(random.cdisc.data::cadcm)))
+
+  expect_true(all(get_cdisc_keys("ADLB")$primary %in% names(random.cdisc.data::cadlb)))
+  expect_true(all(get_cdisc_keys("ADLB")$foreign %in% names(random.cdisc.data::cadlb)))
+
+  expect_true(all(get_cdisc_keys("ADRS")$primary %in% names(random.cdisc.data::cadrs)))
+  expect_true(all(get_cdisc_keys("ADRS")$foreign %in% names(random.cdisc.data::cadrs)))
+
+  expect_true(all(get_cdisc_keys("ADVS")$primary %in% names(random.cdisc.data::cadvs)))
+  expect_true(all(get_cdisc_keys("ADVS")$foreign %in% names(random.cdisc.data::cadvs)))
+})
+
 test_that("Empty code", {
 
   # missing code
