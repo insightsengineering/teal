@@ -333,8 +333,6 @@ check_foreign_keys <- function(datasets_keys) {
 #'           ADTTE <- radtte(ADSL, seed = 123)",
 #'   check = FALSE
 #' )
-#'
-#'
 cdisc_data <- function(...,
                        code = "",
                        check = FALSE) {
@@ -357,6 +355,11 @@ cdisc_data <- function(...,
   if (!any(datasets_names == "ADSL")) {
     stop("ADSL argument is missing.")
   }
+  if (any(duplicated(datasets_names))) {
+    dups <- datasets_names[duplicated(datasets_names)]
+    msg <- paste0("Found duplicated dataset names: ", paste0(dups, collapse = ", "), ".")
+    stop(msg)
+  }
 
   check_foreign_keys(datasets_keys)
 
@@ -365,10 +368,11 @@ cdisc_data <- function(...,
       as.list(substitute(list(...)))[-1L],
       function(i) {
         tryCatch(
-            deparse(as.list(match.call(eval(i[[1L]]), i))$data),
-            error = function(e){
-              i[["dataname"]]
-            })
+          deparse(as.list(match.call(eval(i[[1L]]), i))$data),
+          error = function(e){
+            i[["dataname"]]
+          }
+        )
       }
     )
 
@@ -422,10 +426,11 @@ cdisc_data <- function(...,
     code <- readChar(filename, file.info(filename)$size)
   }
 
-  res <- lapply(seq_along(dlist),
-                function(i) {
-                  structure(dlist[[i]])
-                })
+  res <- lapply(
+    seq_along(dlist),
+    function(i) {
+      structure(dlist[[i]])
+    })
 
   res <- setNames(res, datasets_names)
 

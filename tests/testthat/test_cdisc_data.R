@@ -132,7 +132,7 @@ test_that("List values", {
       )
     )
   ),
-                                    class = c("cdisc_dataset", "dataset")))
+  class = c("cdisc_dataset", "dataset")))
   class(result_to_compare) <- "cdisc_data"
   result_to_compare <- setNames(result_to_compare, c("ADSL"))
   attr(result_to_compare, "code") <- code_empty
@@ -265,22 +265,35 @@ test_that("Error - objects differs", {
   )
 
   expect_error(
-    cdisc_data(cdisc_dataset("ADSL", ADSL),
-               code = "ADSL <- radsl(N=300);",
-               check = TRUE),
+    cdisc_data(cdisc_dataset("ADSL", ADSL), code = "ADSL <- radsl(N=300);", check = TRUE),
     "Cannot reproduce object"
   )
 })
 
 test_that("Error - ADSL is missing", {
-  expect_error(cdisc_data(cdisc_dataset("ADTTE", ADTTE),
-                          code = "ADTTE <- cadtte",
-                          check = FALSE), "ADSL argument is missing.")
+  expect_error(
+    cdisc_data(cdisc_dataset("ADTTE", ADTTE), code = "ADTTE <- cadtte", check = FALSE),
+    "ADSL argument is missing."
+  )
+})
+
+test_that("Error - duplicated names", {
+  expect_error(
+    cdisc_data(
+      cdisc_dataset("ADSL", ADSL),
+      cdisc_dataset("ADSL", ADSL),
+      code = "",
+      check = FALSE
+    ),
+    "Found duplicated dataset names"
+  )
 })
 
 test_that("Error - dataset is not of class cdisc_dataset", {
-  expect_error(cdisc_data(ARG1 = 1, code = "", check = FALSE),
-               "Argument in not of class dataset, please use cdisc_dataset function!")
+  expect_error(
+    cdisc_data(ARG1 = 1, code = "", check = FALSE),
+    "Argument in not of class dataset, please use cdisc_dataset function!"
+  )
 })
 
 test_that("Empty keys for single and multiple datasets", {
