@@ -53,6 +53,4 @@ cdisc_data(
           ADTTE <- radtte(ADSL, seed = 123)",
   check = FALSE
 )
-
-
 }
