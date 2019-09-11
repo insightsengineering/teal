@@ -4,6 +4,8 @@
 #' set. This function enables such an input in teal.
 #' Please use the constructor function \link{data_extract_spec} to set it up.
 #'
+#' Note that no checks based on columns can be done because the data is only referred to by name.
+#'
 #' @export
 #' @name data_extract_spec
 #'

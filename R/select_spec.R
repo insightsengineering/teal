@@ -97,6 +97,10 @@ select_spec <- function(choices,
   selected <- as.list(selected)
   stopifnot(is.list(choices) && length(choices) >= 1 && all(vapply(choices, is.atomic, TRUE)))
 
+  stopifnot(is.logical.single(multiple))
+  stopifnot(is.logical.single(fixed))
+  stopifnot(is.character.single(label))
+
   # if names is NULL, shiny will put strange labels (with quotes etc.) in the selectInputs, so we set it to the values
   if (is.null(names(choices))) {
     names(choices) <- vapply(choices, paste, collapse = " - ", character(1))
@@ -115,10 +119,6 @@ select_spec <- function(choices,
   } else {
     selected <- NULL
   }
-
-  stopifnot(is.logical.single(multiple))
-  stopifnot(is.logical.single(fixed))
-  stopifnot(is.character.single(label))
 
   # check for correct lengths
   stopifnot(all(map_lgl(choices, ~ length(.) == length(choices[[1]]))))

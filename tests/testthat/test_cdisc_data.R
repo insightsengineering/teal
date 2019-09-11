@@ -1,14 +1,8 @@
 context("cdisc_data")
 
-package_path <- path.package("teal")
-if ("inst" %in% list.dirs(package_path, full.names = F, recursive = F)) {
-  filename <- file.path(package_path, "inst", "preprocessing_empty_string.txt")
-} else {
-  filename <- file.path(package_path, "preprocessing_empty_string.txt")
-}
-code_empty <- readChar(filename, file.info(filename)$size)
+filename <- system.file("preprocessing_empty_string.txt", package = "teal")
+code_empty <- readChar(filename, file.info(filename)$size) # code for file
 
-library(tern)
 library(random.cdisc.data)
 ADSL <- ARG1 <- ARG2 <- cadsl # nolint
 ADTTE <- cadtte # nolint

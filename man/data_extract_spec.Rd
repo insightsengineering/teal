@@ -26,6 +26,9 @@ The Data Extract input can be used to filter and select columns from a data
 set. This function enables such an input in teal.
 Please use the constructor function \link{data_extract_spec} to set it up.
 }
+\details{
+Note that no checks based on columns can be done because the data is only referred to by name.
+}
 \section{Module Development}{
 
 \describe{
