@@ -39,12 +39,12 @@ cdisc_data(
 
 # Example with keys
 cdisc_data(
-  cdisc_dataset("ADSL", ADSL, keys = list(
+  cdisc_dataset("ADSL", ADSL, keys = keys(
     primary = c("STUDYID", "USUBJID"),
     foreign = NULL,
     parent = NULL
   )),
-  cdisc_dataset("ADTTE", ADTTE, keys = list(
+  cdisc_dataset("ADTTE", ADTTE, keys = keys(
     primary = c("STUDYID", "USUBJID", "PARAMCD"),
     foreign = c("STUDYID", "USUBJID"),
     parent = "ADSL"

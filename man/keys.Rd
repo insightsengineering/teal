@@ -22,5 +22,4 @@ Function that returns list of keys
 \examples{
 
 keys(primary = c("STUDYID"), foreign = c("USUBJID"), "ADSL")
-
 }

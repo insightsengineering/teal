@@ -16,8 +16,6 @@
 #' ADSL <-  suppressWarnings(radsl(N = 600, seed = 123))
 #'
 #' dataset("ADSL", ADSL)
-#'
-
 dataset <- function(dataname,
                     data,
                     keys = list(primary = NULL, foreign = NULL, parent = NULL),
@@ -65,8 +63,6 @@ dataset <- function(dataname,
 #' @examples
 #'
 #' keys(primary = c("STUDYID"), foreign = c("USUBJID"), "ADSL")
-#'
-
 keys <- function(primary, foreign, parent) {
 
   stopifnot(is.null(primary) || is.character.vector(primary))
@@ -87,8 +83,6 @@ keys <- function(primary, foreign, parent) {
 #' @examples
 #'
 #' get_cdisc_keys("ADSL")
-#'
-
 get_cdisc_keys <- function(dataname) {
   stopifnot(is.character.single(dataname))
 
@@ -163,8 +157,6 @@ get_cdisc_keys <- function(dataname) {
 #' ADSL <-  suppressWarnings(radsl(N = 600, seed = 123))
 #'
 #' get_labels(ADSL)
-#'
-
 get_labels <- function(data) {
 
   stopifnot(is.data.frame(data))
@@ -208,8 +200,6 @@ get_labels <- function(data) {
 #' ADSL <-  suppressWarnings(radsl(N = 600, seed = 123))
 #'
 #' cdisc_dataset("ADSL", ADSL)
-#'
-
 cdisc_dataset <- function(dataname,
                           data,
                           keys = get_cdisc_keys(dataname),
@@ -226,8 +216,6 @@ cdisc_dataset <- function(dataname,
 #' @param datasets_keys list of keys
 #'
 #' @return NULL
-#'
-
 check_foreign_keys <- function(datasets_keys) {
   lapply(datasets_keys, function(keys) {
     if (is.null(keys)) {
@@ -319,12 +307,12 @@ check_foreign_keys <- function(datasets_keys) {
 #'
 #' # Example with keys
 #' cdisc_data(
-#'   cdisc_dataset("ADSL", ADSL, keys = list(
+#'   cdisc_dataset("ADSL", ADSL, keys = keys(
 #'     primary = c("STUDYID", "USUBJID"),
 #'     foreign = NULL,
 #'     parent = NULL
 #'   )),
-#'   cdisc_dataset("ADTTE", ADTTE, keys = list(
+#'   cdisc_dataset("ADTTE", ADTTE, keys = keys(
 #'     primary = c("STUDYID", "USUBJID", "PARAMCD"),
 #'     foreign = c("STUDYID", "USUBJID"),
 #'     parent = "ADSL"

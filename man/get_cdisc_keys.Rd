@@ -18,5 +18,4 @@ Function that creates keys object
 \examples{
 
 get_cdisc_keys("ADSL")
-
 }

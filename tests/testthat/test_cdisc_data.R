@@ -90,7 +90,7 @@ test_that("List values", {
   result_to_compare <- list(structure(list(
     dataname = "ADSL",
     data = ADSL,
-    keys = list(
+    keys = keys(
       primary = c("STUDYID", "USUBJID"),
       foreign = NULL,
       parent = NULL
@@ -114,7 +114,7 @@ test_that("List values", {
   result_to_compare <- list(structure(list(
     dataname = "ADSL",
     data = ADSL,
-    keys = list(
+    keys = keys(
       primary = c("STUDYID", "USUBJID"),
       foreign = NULL,
       parent = NULL
@@ -128,7 +128,7 @@ test_that("List values", {
   structure(list(
     dataname = "ADTTE",
     data = ADTTE,
-    keys = list(
+    keys = keys(
       primary = c("STUDYID", "USUBJID", "PARAMCD"),
       foreign = c("STUDYID", "USUBJID"),
       parent = "ADSL"
@@ -245,21 +245,21 @@ test_that("Empty keys for single and multiple datasets", {
 test_that("Error - primary keys are not unique for the dataset", {
   expect_error(
     cdisc_data(cdisc_dataset("ADSL", ADSL,
-                             keys = list(primary = c("SEX"),
+                             keys = keys(primary = c("SEX"),
                                          foreign = NULL,
                                          parent = NULL))),
     "ADSL: Keys don't uniquely distinguish the rows,  i.e. some rows share the same keys")
 })
 
 test_that("Error - parent is defined without foreign key", {
-  expect_error(cdisc_data(cdisc_dataset("ADTTE", ADTTE, keys = list(primary = c("STUDYID", "USUBJID"),
+  expect_error(cdisc_data(cdisc_dataset("ADTTE", ADTTE, keys = keys(primary = c("STUDYID", "USUBJID"),
                                                                   foreign = NULL,
                                                                   parent = "ADSL"))
   ), "ADTTE: Please specify both foreign keys and a parent!")
 
   expect_error(
     cdisc_data(cdisc_dataset("ADTTE", ADTTE,
-                             keys = list(primary = c("STUDYID", "USUBJID"),
+                             keys = keys(primary = c("STUDYID", "USUBJID"),
                                          foreign = c("STUDYID", "USUBJID"),
                                          parent = NULL)
     )), "ADTTE: Please specify both foreign keys and a parent!")
@@ -272,7 +272,7 @@ test_that("Warning - Different keys names but same length", {
     cdisc_data(
       cdisc_dataset("ADSL", ADSL),
       dataset("ADTTE", ADTTE,
-              keys = list(primary = c("ADSL_STUDYID", "ADSL_USUBJID", "PARAMCD"),
+              keys = keys(primary = c("ADSL_STUDYID", "ADSL_USUBJID", "PARAMCD"),
                           foreign = c("ADSL_STUDYID", "ADSL_USUBJID"),
                           parent = "ADSL"))
     ),
@@ -285,7 +285,7 @@ test_that("Error - length of child keys > length of parent keys", {
     cdisc_data(
       cdisc_dataset("ADSL", ADSL),
       dataset("ADTTE", ADTTE,
-              keys = list(primary = c("STUDYID", "USUBJID", "PARAMCD"),
+              keys = keys(primary = c("STUDYID", "USUBJID", "PARAMCD"),
                           foreign = c("STUDYID", "USUBJID", "PARAMCD"),
                           parent = "ADSL"))
     ),
@@ -297,7 +297,7 @@ test_that("Error - length of child keys > length of parent keys", {
     cdisc_data(
       cdisc_dataset("ADSL", ADSL),
       dataset("ADTTE", ADTTE,
-              keys = list(primary = c("ADSL_STUDYID", "ADSL_USUBJID", "PARAMCD"),
+              keys = keys(primary = c("ADSL_STUDYID", "ADSL_USUBJID", "PARAMCD"),
                           foreign = c("ADSL_STUDYID", "ADSL_USUBJID", "PARAMCD"),
                           parent = "ADSL"))
     ),
@@ -312,7 +312,7 @@ test_that("Error - items dataset to wide (without parent)", {
     cdisc_data(
       cdisc_dataset("ADSL", ADSL),
       dataset("COUNTRIES", COUNTRIES,
-              keys = list(primary = c("COUNTRY"),
+              keys = keys(primary = c("COUNTRY"),
                           foreign = c("COUNTRY"),
                           parent = "ADSL"))
     ),
@@ -322,9 +322,9 @@ test_that("Error - items dataset to wide (without parent)", {
   expect_silent(
     cdisc_data(
       cdisc_dataset("ADSL", ADSL,
-                    keys = list(primary = c("STUDYID", "USUBJID", "COUNTRY"), foreign = NULL, parent = NULL)),
+                    keys = keys(primary = c("STUDYID", "USUBJID", "COUNTRY"), foreign = NULL, parent = NULL)),
       dataset("COUNTRIES", COUNTRIES,
-              keys = list(primary = c("COUNTRY"),
+              keys = keys(primary = c("COUNTRY"),
                           foreign = c("COUNTRY"),
                           parent = "ADSL"))
     )
@@ -339,7 +339,7 @@ test_that("Error - Two root datasets with different keys", {
     cdisc_data(
       cdisc_dataset("ADSL", ADSL),
       dataset("ADSL2", ADSL2,
-              keys = list(primary = c("ADSL_STUDYID", "USUBJID"),
+              keys = keys(primary = c("ADSL_STUDYID", "USUBJID"),
                           foreign = NULL,
                           parent = NULL)),
       cdisc_dataset("ADTTE", ADTTE)
