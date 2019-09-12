@@ -1,5 +1,7 @@
 # are elements unique
-is.unique <- function(x) length(x) == length(unique(x))
+is.unique <- function(x) { # nolint
+  length(x) == length(unique(x))
+}
 
 # also returns a list if only a single element
 #' Split by sepearator
