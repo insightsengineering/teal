@@ -94,18 +94,17 @@ init <- function(data,
 
     data_substitute <- substitute(data)
     data <- eval(as.call(append(
-        quote(cdisc_data),
-        lapply(
-            seq_along(data),
-            function(idx) {
-              call(
-                  "dataset",
-                  dataname = data_names[[idx]],
-                  data = data_substitute[[idx + 1]],
-                  keys = call("get_cdisc_keys", data_names[[idx]])
-              )
-            }
-        )
+      quote(cdisc_data),
+      lapply(
+        seq_along(data),
+        function(idx) {
+          call(
+            "cdisc_dataset",
+            dataname = data_names[[idx]],
+            data = data_substitute[[idx + 1]]
+          )
+        }
+      )
     )))
 
   }
