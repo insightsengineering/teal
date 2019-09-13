@@ -34,10 +34,11 @@ Imports:
   purrr,
   R6,
   readr,
+  rtables,
   shinyjs,
   shinyWidgets,
-  rtables,
-  utils.nest (>= 0.1)
+  utils.nest (>= 0.1),
+  yaml
 RoxygenNote: 6.1.1
 Suggests:
     knitr,
@@ -45,8 +46,7 @@ Suggests:
     rmarkdown,
     tern,
     test.nest (>= 0.1),
-    testthat (>= 2.1.0),
-    yaml
+    testthat (>= 2.1.0)
 VignetteBuilder: knitr
 Collate:
     'FilteredData.R'

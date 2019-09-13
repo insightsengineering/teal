@@ -80,6 +80,8 @@ keys <- function(primary, foreign, parent) {
 #'
 #' @export
 #'
+#' @importFrom yaml yaml.load_file
+#'
 #' @examples
 #'
 #' get_cdisc_keys("ADSL")
@@ -87,55 +89,11 @@ get_cdisc_keys <- function(dataname) {
   stopifnot(is.character.single(dataname))
 
   # copy from excel file
-  default_cdisc_keys <- list(
-    ADSL = keys(
-      primary = c("STUDYID", "USUBJID"),
-      foreign = NULL,
-      parent = NULL
-    ),
-    ADAE = keys(
-      primary = c("STUDYID", "USUBJID", "ASTDTM", "AETERM", "AESEQ"),
-      foreign = c("STUDYID", "USUBJID"),
-      parent = "ADSL"
-    ),
-    ADTTE = keys(
-      primary = c("STUDYID", "USUBJID", "PARAMCD"),
-      foreign = c("STUDYID", "USUBJID"),
-      parent = "ADSL"
-    ),
-    ADCM = keys(
-      primary = c("STUDYID", "USUBJID"),
-      foreign = c("STUDYID", "USUBJID"),
-      parent = "ADSL"
-    ),
-    ADLB = keys(
-      primary = c(
-        "STUDYID",
-        "USUBJID",
-        "PARAMCD",
-        "AVISIT"
-      ),
-      foreign = c("STUDYID", "USUBJID"),
-      parent = "ADSL"
-    ),
-    ADRS = keys(
-      primary = c("STUDYID", "USUBJID", "PARAMCD", "AVISIT"),
-      foreign = c("STUDYID", "USUBJID"),
-      parent = "ADSL"
-    ),
-    ADVS = keys(
-      primary = c(
-        "STUDYID",
-        "USUBJID",
-        "PARAMCD"
-      ),
-      foreign = c("STUDYID", "USUBJID"),
-      parent = "ADSL"
-    )
-  )
+  default_cdisc_keys <- yaml.load_file(system.file("cdisc_datasets/cdisc_datasets.yaml", package = "teal"))
 
   if (!(dataname %in% names(default_cdisc_keys))) {
-    stop(sprintf("There is no dataset called: %s", dataname))
+    stop(sprintf("There is no dataset called: %s \n  List of supported cdisc_datasets:\n   %s",
+                 dataname, paste(names(default_cdisc_keys), collapse = ", ")))
   } else {
     default_cdisc_keys[[dataname]]
   }
