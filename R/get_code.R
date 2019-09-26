@@ -25,7 +25,8 @@ get_code <- function(files_path,
     get_code_single(x, read_sources = read_sources) %>%
       enclosed_with() %>%
       code_exclude(lines, exclude_comments = exclude_comments)
-  ) %>% unlist
+  ) %>%
+  unlist
 
 
   paste(lines, collapse = "\n")

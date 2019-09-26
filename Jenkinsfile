@@ -1,5 +1,5 @@
 #!/usr/bin/env groovy
 
-@Library('nestautomation@master') _
+@Library('nestautomation') _
 
-rpackagePipeline() // Date: 1560850308
+rpackagePipeline()
