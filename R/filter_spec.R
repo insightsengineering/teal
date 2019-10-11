@@ -45,9 +45,17 @@
 #'   multiple = TRUE
 #' )
 #'
+#' filter_spec(
+#'   vars = c("PARAMCD"),
+#'   sep = " - ",
+#'   choices = c("CRP", "ALT"),
+#'   selected = c("CRP"),
+#'   multiple = TRUE
+#' )
+#'
 #' @details
 #'
-#' The \code{filter_spec} is used inside \code{\link[teal]{teal}} apps to allow filtering datasets
+#' The \code{filter_spec} is used inside \code{teal} apps to allow filtering datasets
 #' for their key variables. Imagine having an adverse events table. It has
 #' the columns \code{PARAMCD} and \code{CNSR}. \code{PARAMCD} contains the levels
 #' \code{"OS"}, \code{"PFS"}, \code{"EFS"}. \code{CNSR} contains the levels \code{"0"} and \code{"1"}.
@@ -116,37 +124,39 @@
 #'   }
 #'
 #' }
-#'
-#'
-#' @importFrom utils.nest is.character.single is.logical.single
 filter_spec <- function(vars,
                         choices,
                         selected = choices[1],
                         multiple = length(selected) > 1,
                         label = "Filter",
-                        sep = " - ") {
-  stopifnot(is.atomic(vars))
-  stopifnot(is.atomic(choices))
-  stopifnot(is.atomic(selected))
-  stopifnot(all(is.character(vars)))
-  stopifnot(all(is.character(choices)))
-  stopifnot(all(is.character(selected)))
+                        sep = if_null(attr(choices, "sep"), " - ")) {
+  stopifnot(is.character.vector(vars))
+  stopifnot(is.character.vector(choices))
   stopifnot(all(!duplicated(vars)))
   stopifnot(all(!duplicated(choices)))
-  stopifnot(all(!duplicated(selected)))
   stopifnot(is.character.single(sep))
   stopifnot(is.logical.single(multiple))
   stopifnot(is.character.single(label))
 
+  choices_attrs <- attributes(choices)
   choices <- split_by_sep(choices, sep)
-  selected <- split_by_sep(selected, sep)
-  stopifnot(all(vapply(choices, length, 0) == length(vars)))
+  stopifnot(all(vapply(choices, length, integer(1)) == length(vars)))
 
-  res <- append(
-      list(vars),
-      columns_spec(choices = choices, selected = selected, multiple, label = label)
+  if (!is.null(selected)) {
+    stopifnot(is.character.vector(selected))
+    stopifnot(all(!duplicated(selected)))
+    stopifnot(all(is.character(selected)))
+    selected <- split_by_sep(selected, sep)
+  } else {
+    selected <- NULL
+  }
+
+  attributes(choices) <- choices_attrs
+  res <- c(
+    list(vars = vars),
+    select_spec(choices = choices, selected = selected, multiple, label = label, sep = sep)
   )
-  names(res)[1] <- "vars"
   class(res) <- "filter_spec"
-  res
+
+  return(res)
 }

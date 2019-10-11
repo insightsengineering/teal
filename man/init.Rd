@@ -9,7 +9,7 @@ init(data, modules, filter = NULL, header = tags$p("title here"),
 }
 \arguments{
 \item{data}{named list with datasets. Dataset names are case sensitive. The
-`ASL` data is mandatory.}
+`ADSL` data is mandatory.}
 
 \item{modules}{nested list with one list per module with the
 following named list elements: \tabular{ll}{ name \tab string with name
@@ -25,12 +25,12 @@ function }}
   datasets inside this argument. Therefore you need to handover an
   \code{init} list. Please provide a named list inside \code{init}
   that contains the names of the datasets. E.g. for filtering
-  the dataset \code{ASL} use \code{list(init = list(ASL = ...))}.
+  the dataset \code{ADSL} use \code{list(init = list(ADSL = ...))}.
   For each datasets you need to provide a vector with column names that are
-  relevant for the item. You can specify an ASL filtering for the
+  relevant for the item. You can specify an ADSL filtering for the
   columns \code{SEX} and \code{BAGE} by:
 
-  \code{filter = list(init = list(ASL = c("SEX", "BAGE")))}}
+  \code{filter = list(init = list(ADSL = c("SEX", "BAGE")))}}
 
 \item{header}{object of class `shiny.tag` to be used as the header of the app}
 
@@ -45,34 +45,36 @@ Creates the server and ui part for a teal shiny app
 \examples{
 library(random.cdisc.data)
 
-ASL <- radsl(seed = 1)
+ADSL <- radsl(seed = 1)
+
+options(teal_logging = FALSE)
 
 app <- init(
   data = cdisc_data(
-    ASL = ASL,
+    cdisc_dataset("ADSL", ADSL),
     code = "
-      ASL <- radsl(seed = 1)
+      ADSL <- radsl(seed = 1)
     "
   ),
   modules = root_modules(
     module(
       "data source",
       server = function(input, output, session, datasets) {},
-      ui = function(id) div(p("information about data source")),
-      filters = NULL
+      ui = function(id, ...) div(p("information about data source")),
+      filters = 'all'
     ),
     module(
-      "ASL AGE histogram",
+      "ADSL AGE histogram",
       server = function(input, output, session, datasets) {
         output$hist <- renderPlot(
-           hist(datasets$get_data("ASL", filtered = TRUE, reactive = TRUE)$AGE)
+           hist(datasets$get_data("ADSL", filtered = TRUE, reactive = TRUE)$AGE)
         )
       },
-      ui = function(id) {ns <- NS(id); plotOutput(ns('hist'))},
-      filters = "ASL"
+      ui = function(id, ...) {ns <- NS(id); plotOutput(ns('hist'))},
+      filters = "ADSL"
     )
   ),
-  filter = list(init = list(ASL = c("AGE"))),
+  filter = list(init = list(ADSL = c("AGE"))),
   header = tags$h1("Sample App"),
   footer = tags$p("Copyright 2017")
 )

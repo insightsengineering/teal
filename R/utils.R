@@ -1,5 +1,7 @@
 # are elements unique
-is.unique <- function(x) length(x) == length(unique(x))
+is.unique <- function(x) { # nolint
+  length(x) == length(unique(x))
+}
 
 # also returns a list if only a single element
 #' Split by sepearator
@@ -31,4 +33,18 @@ split_by_sep <- function(x, sep) {
   vapply(x, function(x1) {
     any(vapply(y, function(y1) isTRUE(all.equal(y1, x1)), logical(1), USE.NAMES = FALSE))
   }, logical(1), USE.NAMES = FALSE)
+}
+
+check_module_names <- function(modules) {
+  label <- unlist(switch(
+      class(modules),
+      teal_module = modules$label,
+      teal_modules = lapply(modules$modules, function(x) {
+        x$label
+      }),
+      stop("no default implementation for check_module_names")
+  ))
+  if (any(duplicated(label))) {
+    stop("Please choose a unique labels for each teal module.")
+  }
 }

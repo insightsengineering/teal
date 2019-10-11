@@ -34,8 +34,22 @@ srv_add_filter_variable <- function(input, output, session, datasets, dataname, 
       setdiff(names(df), c(names(fs), omit_vars))
     }
 
+    choices_with_icons <- c("", add_variable_type_icons(columns = choices, data = df))
+    choices <- c("", choices)
+
     .log("update add filter variables", dataname)
-    updatePickerInput(session, "variables", choices = c("", choices), selected = NULL)
+    updatePickerInput(
+      session,
+      "variables",
+      choices = choices,
+      selected = NULL,
+      choicesOpt = list(
+        content = add_subtext(
+          content = choices_with_icons,
+          subtext = unname(vapply(choices, function(x) if_empty(attr(df[[x]], "label"), ""), character(1)))
+        )
+      )
+    )
   })
 
   warning_messages <- reactiveValues(varinfo = "", i = 0)
@@ -57,7 +71,7 @@ srv_add_filter_variable <- function(input, output, session, datasets, dataname, 
         warning_messages$varinfo <- paste(
           "variable",
           paste(dataname, var, sep = "."),
-          "can currently not be used as a filter variable."
+          "can't be currently used as a filter variable."
         )
       }
       warning_messages$i <- warning_messages$i + 1

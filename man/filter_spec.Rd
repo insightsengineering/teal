@@ -5,7 +5,8 @@
 \title{filter spec}
 \usage{
 filter_spec(vars, choices, selected = choices[1],
-  multiple = length(selected) > 1, label = "Filter", sep = " - ")
+  multiple = length(selected) > 1, label = "Filter",
+  sep = if_null(attr(choices, "sep"), " - "))
 }
 \arguments{
 \item{vars}{(\code{character}) Character vector giving the columns to be filtered. These should be
@@ -47,7 +48,7 @@ created from this specification.}
 It consists in choices and additionally the variable names for the choices
 }
 \details{
-The \code{filter_spec} is used inside \code{\link[teal]{teal}} apps to allow filtering datasets
+The \code{filter_spec} is used inside \code{teal} apps to allow filtering datasets
 for their key variables. Imagine having an adverse events table. It has
 the columns \code{PARAMCD} and \code{CNSR}. \code{PARAMCD} contains the levels
 \code{"OS"}, \code{"PFS"}, \code{"EFS"}. \code{CNSR} contains the levels \code{"0"} and \code{"1"}.
@@ -123,6 +124,14 @@ filter_spec(
   sep = " - ",
   choices = c("CRP - BASELINE", "CRP - SCREENING", "ALT - BASELINE"),
   selected = c("CRP - BASELINE"),
+  multiple = TRUE
+)
+
+filter_spec(
+  vars = c("PARAMCD"),
+  sep = " - ",
+  choices = c("CRP", "ALT"),
+  selected = c("CRP"),
   multiple = TRUE
 )
 

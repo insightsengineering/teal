@@ -3,7 +3,7 @@
 \name{choices_labeled}
 \alias{choices_labeled}
 \title{Set "<choice>: <label>" type of Names
-#' This is often useful for \code{\link[teal]{choices_selected}} as it marks up the dropdown boxes
+This is often useful for \code{\link[teal]{choices_selected}} as it marks up the dropdown boxes
 for \code{\link[shiny]{selectInput}}.}
 \usage{
 choices_labeled(choices, labels, subset = NULL)
@@ -21,7 +21,7 @@ a named character vector
 }
 \description{
 Set "<choice>: <label>" type of Names
-#' This is often useful for \code{\link[teal]{choices_selected}} as it marks up the dropdown boxes
+This is often useful for \code{\link[teal]{choices_selected}} as it marks up the dropdown boxes
 for \code{\link[shiny]{selectInput}}.
 }
 \details{
@@ -32,8 +32,8 @@ Duplicated elements from \code{choices} get removed.
 library(random.cdisc.data)
 library(tern)
 
-ADSL <- radsl(N=10, seed = 1)
-ADTTE <- radtte(ADSL, seed = 1)
+ADSL <- radsl(cached = TRUE)
+ADTTE <- radtte(cached = TRUE)
 choices1 <- choices_labeled(names(ADSL), var_labels(ADSL))
 choices2 <- choices_labeled(ADTTE$PARAMCD, ADTTE$PARAM)
 # if only a subset of variables are needed, use subset argument

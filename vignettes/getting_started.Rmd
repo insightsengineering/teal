@@ -1,7 +1,7 @@
 ---
 title: "Getting Started with Teal"
 author: "Adrian Waddell"
-date: "`r Sys.Date()`"
+date: "2019-07-31"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{Getting Started with Teal}
@@ -32,12 +32,12 @@ app][shiny_single_file_app].
 library(teal)
 library(random.cdisc.data)
 
-ASL <- radsl()
-ARS <- radrs(ASL)
-ATE <- radtte(ASL)
+ADSL <- radsl()
+ADRS <- radrs(ADSL)
+ADTTE <- radtte(ADSL)
 
 app <- teal::init(
-  data =  list(ASL = ASL, ARS = ARS, ATE = ATE),
+  data =  list(ADSL = ADSL, ADRS = ADRS, ADTTE = ADTTE),
   modules = root_modules(
     module(
       "data source",
@@ -51,14 +51,14 @@ app <- teal::init(
       label = "analysis items",
       tm_table(
         label = "demographic table",
-        dataname = "ASL",
+        dataname = "ADSL",
         xvar = "SEX",
         yvar = "RACE",
         yvar_choices = c("RACE", "AGEGR", "REGION")
       ),
       tm_scatterplot(
         label = "scatterplot",
-        dataname = "ASL",
+        dataname = "ADSL",
         xvar = "AGE",
         yvar = "BMRKR1",
         color_by = "_none_",
@@ -68,7 +68,7 @@ app <- teal::init(
         label = "survival curves",
         server = function(input, output, session, datasets) {},
         ui = function(id) div(p("Kaplan Meier Curve")),
-        filters = "ATE"
+        filters = "ADTTE"
       )
     )
   ),
@@ -127,8 +127,8 @@ And the following items can currently not be controlled:
 
 In the code listing above we specified the analysis data with a named list that 
 is passed to the `data` argument of `teal::init`. Because we filter every other 
-data set with the ASL filters (more on this below) you always need to specify 
-the `ASL` data with the `USUBJID` variable. Note that the dataset names are case
+data set with the ADSL filters (more on this below) you always need to specify 
+the `ADSL` data with the `USUBJID` variable. Note that the dataset names are case
 sensitive.
 
 
@@ -174,15 +174,15 @@ module(
   },
   server = function(input, output, session, datasets) {
     output$freq_table <- renderTable({
-      asl <- datasets$get_data("asl", reactive = TRUE, filtered=TRUE)
-      table(asl$SEX)
+      adsl <- datasets$get_data("adsl", reactive = TRUE, filtered=TRUE)
+      table(adsl$SEX)
     })
   }
 )
 ```
 
 This analysis item shows up as *Frequency Table* in the navbar and displays a 
-table of the `ASL.SEX` variable in the *Tab Contents* section of the app. The 
+table of the `ADSL.SEX` variable in the *Tab Contents* section of the app. The 
 `ui` function requires the `id` argument, as defined in [shiny 
 modules][shiny_modules] and the `server` function requires the three arguments 
 `input`, `output`, and `session`. The `dataset` argument is added to the 
@@ -201,28 +201,28 @@ interaction coherent.
 ## Filtering
 
 Currently we apply a specific filtering mechanism that is useful for clinical 
-trials data and that requires an `ASL` analysis dataset to be part of every 
+trials data and that requires an `ADSL` analysis dataset to be part of every 
 `teal` app. That is, the filter framework provides lets the user dynamically 
 specify which variables she/he wants to use for filtering (using ranges or 
 categories). Teal then creates the `subset` code for each filter condition and
 links them with an elementwise logical **AND**  operator (i.e. `&`). Further,
-all datasets other then `ASL` will also be filtered with the remaining subjects
-in `ASL` through the `ASL.USUBJID` and `ASL.STUDYID` variables. Hence, assume
+all datasets other then `ADSL` will also be filtered with the remaining subjects
+in `ADSL` through the `ADSL.USUBJID` and `ADSL.STUDYID` variables. Hence, assume
 you have the following three filters
 
- - `ASL.STUDYID %in% c('BP29392', 'WP29945')` 
- - `ASL.AGE > 15 & ASL.AGE < 35`
- - `ARS.ADY > 0 & ARS.ADY < 500`
+ - `ADSL.STUDYID %in% c('BP29392', 'WP29945')` 
+ - `ADSL.AGE > 15 & ADSL.AGE < 35`
+ - `ADRS.ADY > 0 & ADRS.ADY < 500`
 
 Then then `FiteredData` object will perform the following operations to obtain
-the filtered `ARS` object in one of your moduls:
+the filtered `ADRS` object in one of your moduls:
 
 ```{r, eval=FALSE}
-ASL_FILTERED <- subset(ASL, ASL.STUDYID %in% c('BP29392', 'WP29945') & ASL.AGE > 15 & ASL.AGE < 35)
-ARS_FILTERED_ALONE <- subset(ARS, ARS.ADY > 0 & ARS.ADY < 500)
+ADSL_FILTERED <- subset(ADSL, ADSL.STUDYID %in% c('BP29392', 'WP29945') & ADSL.AGE > 15 & ADSL.AGE < 35)
+ADRS_FILTERED_ALONE <- subset(ADRS, ADRS.ADY > 0 & ADRS.ADY < 500)
 
-ARS_FILTERED <- merge(x = ASL_FILTERED,
-                      y = ARS_FILTERED_ALONE, 
+ADRS_FILTERED <- merge(x = ADSL_FILTERED,
+                      y = ADRS_FILTERED_ALONE, 
                       by = c("USUBJID", "STUDYID"), all.x = FALSE, all.y = FALSE)
 ```
 

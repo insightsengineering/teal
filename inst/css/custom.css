@@ -1,0 +1,25 @@
+#teal_filter-panel > div.well div.form-group label { width: 100% }
+
+#teal_filter_active_vars p {margin-bottom: 0}
+
+a.remove {
+  font-weight: normal;
+  float: right;
+  border: 0;
+  background-color: whitesmoke;
+  color: black;
+  font-weight: 100;
+  font-size: 0.9em;
+  border-radius: 0.25em;
+  padding: 0;
+  padding-left: 4px;
+  padding-right: 4px;
+  border: 1px solid #ffffff00;
+  padding: 2px 4px;
+  margin-top: 0em;
+}
+
+a.remove:hover{
+  color: #337ab7;
+  border: 1px solid #337ab7;
+}

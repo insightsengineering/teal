@@ -1,8 +1,8 @@
 Package: teal
 Type: Package
 Title: Exploratory Web Apps for Analyzing Clinical Trials Data
-Date: 2019-06-24
-Version: 0.7.0
+Date: 2019-10-11
+Version: 0.8.0
 Authors@R: c(
   person("NEST", email = "nestcicd@roche.com", role = c("aut", "cre")),
   person("Adrian", "Waddell", email = "adrian.waddell@roche.com", role = "aut"),
@@ -34,34 +34,39 @@ Imports:
   purrr,
   R6,
   readr,
+  rtables (>= 0.1.3),
   shinyjs,
   shinyWidgets,
-  utils.nest (>= 0.1)
+  utils.nest (>= 0.2.0),
+  yaml
 RoxygenNote: 6.1.1
 Suggests:
-  knitr,
-  random.cdisc.data (>= 0.2.1),
-  rmarkdown,
-  tern (>= 0.6.2),
-  test.nest (>= 0.1),
-  testthat
+    knitr,
+    random.cdisc.data (>= 0.3.0),
+    rmarkdown,
+    tern (>= 0.6.3),
+    test.nest (>= 0.2.0),
+    testthat (>= 2.1.0)
 VignetteBuilder: knitr
 Collate:
-  'FilteredData.R'
-  'choices_labeled.R'
-  'choices_selected.R'
-  'columns_spec.R'
-  'data_extract_spec.R'
-  'dataset.R'
-  'filter_spec.R'
-  'get_code.R'
-  'modules.R'
-  'init.R'
-  'log_app_usage.R'
-  'logging.R'
-  'module_add_filter_variable.R'
-  'module_filter_items.R'
-  'stop_shiny.R'
-  'teal.R'
-  'utils.R'
-  'zzz.R'
+    'FilteredData.R'
+    'cdisc_data.R'
+    'choices_icons.R'
+    'choices_labeled.R'
+    'choices_selected.R'
+    'data_extract_spec.R'
+    'filter_spec.R'
+    'get_code.R'
+    'include_css_js.R'
+    'modules.R'
+    'init.R'
+    'log_app_usage.R'
+    'logging.R'
+    'module_add_filter_variable.R'
+    'module_filter_info.R'
+    'module_filter_items.R'
+    'select_spec.R'
+    'stop_shiny.R'
+    'teal.R'
+    'utils.R'
+    'zzz.R'

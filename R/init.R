@@ -3,7 +3,7 @@
 #' Creates the server and ui part for a teal shiny app
 #'
 #' @param data named list with datasets. Dataset names are case sensitive. The
-#'   `ASL` data is mandatory.
+#'   `ADSL` data is mandatory.
 #' @param modules nested list with one list per module with the
 #'   following named list elements: \tabular{ll}{ name \tab string with name
 #'   shown in menu for the analysis item \cr server \tab required, shiny server
@@ -17,12 +17,12 @@
 #'   datasets inside this argument. Therefore you need to handover an
 #'   \code{init} list. Please provide a named list inside \code{init}
 #'   that contains the names of the datasets. E.g. for filtering
-#'   the dataset \code{ASL} use \code{list(init = list(ASL = ...))}.
+#'   the dataset \code{ADSL} use \code{list(init = list(ADSL = ...))}.
 #'   For each datasets you need to provide a vector with column names that are
-#'   relevant for the item. You can specify an ASL filtering for the
+#'   relevant for the item. You can specify an ADSL filtering for the
 #'   columns \code{SEX} and \code{BAGE} by:
 #'
-#'   \code{filter = list(init = list(ASL = c("SEX", "BAGE")))}
+#'   \code{filter = list(init = list(ADSL = c("SEX", "BAGE")))}
 #' @param header object of class `shiny.tag` to be used as the header of the app
 #' @param footer object of class `shiny.tag` to be used as the footer of the app
 #'
@@ -30,8 +30,8 @@
 #'
 #' @export
 #'
-#' @import methods shiny stats
-#' @importFrom shinyjs useShinyjs
+#' @importFrom shinyjs useShinyjs hidden
+#' @importFrom methods is
 #'
 #' @include FilteredData.R
 #' @include modules.R
@@ -39,34 +39,36 @@
 #' @examples
 #' library(random.cdisc.data)
 #'
-#' ASL <- radsl(seed = 1)
+#' ADSL <- radsl(seed = 1)
+#'
+#' options(teal_logging = FALSE)
 #'
 #' app <- init(
 #'   data = cdisc_data(
-#'     ASL = ASL,
+#'     cdisc_dataset("ADSL", ADSL),
 #'     code = "
-#'       ASL <- radsl(seed = 1)
+#'       ADSL <- radsl(seed = 1)
 #'     "
 #'   ),
 #'   modules = root_modules(
 #'     module(
 #'       "data source",
 #'       server = function(input, output, session, datasets) {},
-#'       ui = function(id) div(p("information about data source")),
-#'       filters = NULL
+#'       ui = function(id, ...) div(p("information about data source")),
+#'       filters = 'all'
 #'     ),
 #'     module(
-#'       "ASL AGE histogram",
+#'       "ADSL AGE histogram",
 #'       server = function(input, output, session, datasets) {
 #'         output$hist <- renderPlot(
-#'            hist(datasets$get_data("ASL", filtered = TRUE, reactive = TRUE)$AGE)
+#'            hist(datasets$get_data("ADSL", filtered = TRUE, reactive = TRUE)$AGE)
 #'         )
 #'       },
-#'       ui = function(id) {ns <- NS(id); plotOutput(ns('hist'))},
-#'       filters = "ASL"
+#'       ui = function(id, ...) {ns <- NS(id); plotOutput(ns('hist'))},
+#'       filters = "ADSL"
 #'     )
 #'   ),
-#'   filter = list(init = list(ASL = c("AGE"))),
+#'   filter = list(init = list(ADSL = c("AGE"))),
 #'   header = tags$h1("Sample App"),
 #'   footer = tags$p("Copyright 2017")
 #' )
@@ -86,16 +88,39 @@ init <- function(data,
 
   if (!is(data, "cdisc_data")) {
     warning("Please use cdisc_data() instead of list() for 'data' argument. It will be depreciated soon.")
+
+    data_names <- names(data)
+    stopifnot(length(data_names) == length(data))
+
+    data_substitute <- substitute(data)
+    data <- eval(as.call(append(
+      quote(cdisc_data),
+      lapply(
+        seq_along(data),
+        function(idx) {
+          call(
+            "cdisc_dataset",
+            dataname = data_names[[idx]],
+            data = data_substitute[[idx + 1]]
+          )
+        }
+      )
+    )))
+
   }
 
+  check_module_names(modules)
+
   # initialize FilteredData object
-  datasets <- FilteredData$new(names(data))
-  Map(function(x, name) {
-    datasets$set_data(name, x)
-  }, data, names(data))
+  datasets <- FilteredData$new(vapply(data, `[[`, character(1), "dataname", USE.NAMES = FALSE))
+  for (idx in seq_along(data)) {
+    datasets$set_data(data[[idx]][["dataname"]], data[[idx]][["data"]])
+    datasets$set_data_attr(data[[idx]][["dataname"]], "keys", data[[idx]][["keys"]])
+    datasets$set_data_attr(data[[idx]][["dataname"]], "labels", data[[idx]][["labels"]])
+  }
 
   # including attributes of data object
-  datasets$set_data_attrs(data)
+  datasets$set_attrs(data)
 
   # set default init filters
   if (!is.null(filter) && !is.null(filter$init)) {
@@ -108,8 +133,9 @@ init <- function(data,
   ui <- shinyUI(
       fluidPage(
         useShinyjs(),
-        includeScript(system.file("js/clipboard.js", package = "teal")),
-        includeScript(system.file("js/initClipboard.js", package = "teal")),
+        include_css_files(package = "teal"),
+        include_js_files(package = "teal", except = "init.js"),
+        hidden(icon("cog")), # add hidden icon to load font-awesome css for icons
         tags$head(
           tags$script(
             # show/hide see https://groups.google.com/forum/#!topic/shiny-discuss/yxFuGgDOIuM
@@ -141,7 +167,7 @@ init <- function(data,
             fluidRow(
               column(9, tp$children[[2]]),
               column(3, div(id = "teal_filter-panel", class = "hide",
-                            div(class = "well",
+                            div(id = "teal_filter_active_vars", class = "well",
                                 tags$label(
                                   "Active Filter Variables",
                                   class = "text-primary",
@@ -149,11 +175,16 @@ init <- function(data,
                                 ),
                                 tagList(
                                   lapply(datasets$datanames(), function(dataname) {
+                                    ui_filter_info(paste0("teal_filters_info_", dataname), dataname)
+                                  })
+                                ),
+                                tagList(
+                                  lapply(datasets$datanames(), function(dataname) {
                                     ui_filter_items(paste0("teal_filters_", dataname), dataname)
                                   })
                                 )
                             ),
-                            div(class = "well",
+                            div(id = "teal_filter_add_vars", class = "well",
                                 tags$label(
                                   "Add Filter Variables",
                                   class = "text-primary",
@@ -178,6 +209,8 @@ init <- function(data,
 
   server <- function(input, output, session) {
 
+    run_js_file(file = "init.js", package = "teal")
+
     show_filter_panel <- function(bool = TRUE) {
       session$sendCustomMessage(
         type = "setDisplayCss",
@@ -194,11 +227,14 @@ init <- function(data,
     lapply(datasets$datanames(), function(dataname) {
       callModule(srv_filter_items, paste0("teal_filters_", dataname), datasets, dataname)
     })
+    lapply(datasets$datanames(), function(dataname) {
+      callModule(srv_filter_info, paste0("teal_filters_info_", dataname), datasets, dataname)
+    })
 
-    asl_vars <- names(datasets$get_data("ASL"))
+    adsl_vars <- names(datasets$get_data("ADSL"))
     lapply(datasets$datanames(), function(dataname) {
       callModule(srv_add_filter_variable, paste0("teal_add_", dataname, "_filters"), datasets, dataname,
-                 omit_vars = if (dataname == "ASL") NULL else asl_vars)
+                 omit_vars = if (dataname == "ADSL") NULL else adsl_vars)
     })
 
     ## hide-show filters based on module filter property
@@ -260,7 +296,7 @@ init <- function(data,
             session$sendCustomMessage(
               type = "tealShowHide",
               list(selector = paste0(".teal_filter_", dataname),
-                   action = if (dataname == "ASL" || dataname %in% filters) "show" else "hide"
+                   action = if (dataname == "ADSL" || dataname %in% filters) "show" else "hide"
               )
             )
           },  datasets$datanames())

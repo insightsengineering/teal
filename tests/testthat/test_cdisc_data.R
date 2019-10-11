@@ -1,174 +1,349 @@
 context("cdisc_data")
 
-library(tern)
-ASL <- ARG1 <- ARG2 <- 1 #nolint
-ADTE <- 2 #nolint
-ARS <- 3 #nolint
+filename <- system.file("preprocessing_empty_string.txt", package = "teal")
+code_empty <- readChar(filename, file.info(filename)$size) # code for file
 
+library(random.cdisc.data)
+ADSL <- ARG1 <- ARG2 <- cadsl # nolint
+ADTTE <- cadtte # nolint
+ADRS <- cadrs # nolint
 
-filename <- file.path(path.package("teal"), "preprocessing_empty_string.txt")
-preprocessing_empty_text <- readChar(filename, file.info(filename)$size)
-
+test_that("Basic example cdisc dataset", {
+  expect_identical(ADSL, cdisc_dataset("ADSL", ADSL)$data)
+  expect_identical("ADSL", cdisc_dataset("ADSL", ADSL)$dataname)
+  expect_true(all(class(cdisc_dataset("ADSL", ADSL)) %in% list("cdisc_dataset", "dataset")))
+})
 
 test_that("Basic example - without code and check", {
-  expect_silent(cdisc_data(ASL, code = NULL, check = FALSE))
-  expect_silent(cdisc_data(ASL, ARG1 = ARG1, ARG2 = ARG2, code = NULL, check = FALSE))
+  expect_silent(cdisc_data(cdisc_dataset("ADSL", ADSL), code = "", check = FALSE))
+  expect_silent(cdisc_data(cdisc_dataset("ADSL", ADSL),
+                           dataset("ARG1", ARG1, keys = get_cdisc_keys("ADSL")),
+                           dataset("ARG2", ARG2, keys = get_cdisc_keys("ADSL")), code = "", check = FALSE))
 })
 
 test_that("Basic example - with code and check", {
-  keys(ASL) <- keys(ARG1) <- keys(ARG2) <- "test"
+  expect_true(is.data.frame(ADSL))
+  expect_true(is.data.frame(ARG1))
+  expect_true(is.data.frame(ARG2))
 
-  expect_silent(cdisc_data(ASL = ASL, code = "ASL <- 1; keys(ASL) <- 'test'", check = TRUE))
-  expect_silent(cdisc_data(ASL = ASL, ARG1 = ARG1, ARG2 = ARG2,
-                           code = "ASL <- ARG1 <- ARG2 <- 1; keys(ASL) <- keys(ARG1) <- keys(ARG2) <- 'test'",
+  expect_silent(cdisc_data(cdisc_dataset("ADSL", ADSL),
+                           code = "ADSL <- cadsl",
                            check = TRUE))
+  expect_silent(cdisc_data(
+    cdisc_dataset("ADSL", ADSL),
+    dataset("ARG1", ARG1, keys = get_cdisc_keys("ADSL")),
+    dataset("ARG2", ARG2, keys = get_cdisc_keys("ADSL")),
+    code = "ADSL <- ARG1 <- ARG2 <- cadsl;",
+    check = TRUE
+  ))
+})
+
+test_that("Basic example - with vector code and check", {
+  expect_true(is.data.frame(ADSL))
+  expect_true(is.data.frame(ARG1))
+  expect_true(is.data.frame(ARG2))
+
+  expect_silent(cdisc_data(cdisc_dataset("ADSL", ADSL),
+                           code = c("ADSL <- cadsl"),
+                           check = TRUE))
+  expect_silent(cdisc_data(
+    cdisc_dataset("ADSL", ADSL),
+    dataset("ARG1", ARG1, keys = get_cdisc_keys("ADSL")),
+    dataset("ARG2", ARG2, keys = get_cdisc_keys("ADSL")),
+    code = c("ADSL <- ARG1 <- ARG2 <- cadsl"),
+    check = TRUE
+  ))
+})
+
+test_that("Basic example - with line break code and check", {
+  expect_true(is.data.frame(ADSL))
+  expect_true(is.data.frame(ARG1))
+  expect_true(is.data.frame(ARG2))
+
+  expect_silent(cdisc_data(cdisc_dataset("ADSL", ADSL),
+                           code = "ADSL <- cadsl\n",
+                           check = TRUE))
+  expect_silent(cdisc_data(
+    cdisc_dataset("ADSL", ADSL),
+    dataset("ARG1", ARG1, keys = get_cdisc_keys("ADSL")),
+    dataset("ARG2", ARG2, keys = get_cdisc_keys("ADSL")),
+    code = "ADSL <- cadsl\n ARG1 <- cadsl\n ARG2 <- cadsl",
+    check = TRUE
+  ))
 })
 
 test_that("Naming list elements", {
-  keys(ASL) <- keys(ADTE) <- keys(ARS) <- "test"
 
-  expect_identical(names(cdisc_data(ASL)), "ASL")
-  expect_identical(names(cdisc_data(ASL = ASL, ADTE = ADTE, ARS = ARS)), c("ASL", "ADTE", "ARS"))
+  expect_identical(names(cdisc_data(cdisc_dataset("ADSL", ADSL))), "ADSL")
+  expect_identical(names(cdisc_data(cdisc_dataset("ADSL", ADSL),
+                                    cdisc_dataset("ADTTE", ADTTE),
+                                    cdisc_dataset("ADRS", ADRS))),
+                   c("ADSL", "ADTTE", "ADRS"))
 })
 
 test_that("List values", {
-  keys(ASL) <- "test1"
-  keys(ADTE) <- "test2"
-  keys(ARS) <- "test3"
 
-  result <- cdisc_data(ASL)
+  result <- cdisc_data(cdisc_dataset("ADSL", ADSL))
 
-  result_to_compare <- list(ASL = 1)
+  adsl_yaml <- yaml::yaml.load_file(system.file("metadata/ADSL.yml", package = "random.cdisc.data"))
+
+  result_to_compare <- list(structure(list(
+    dataname = "ADSL",
+    data = ADSL,
+    keys = keys(
+      primary = c("STUDYID", "USUBJID"),
+      foreign = NULL,
+      parent = NULL
+    ),
+    labels = list(
+      dataset_label = adsl_yaml$domain$label,
+      column_labels = vapply(adsl_yaml$variables, `[[`, character(1), "label")
+    )
+  ),
+  class = c("cdisc_dataset", "dataset")))
   class(result_to_compare) <- "cdisc_data"
-  keys(result_to_compare[["ASL"]]) <- "test1"
-  attr(result_to_compare[["ASL"]], "dataname") <- "ASL"
-  attr(result_to_compare, "code") <- preprocessing_empty_text
+  result_to_compare <- setNames(result_to_compare, c("ADSL"))
+  attr(result_to_compare, "code") <- code_empty
 
   expect_identical(result, result_to_compare)
 
-  result <- cdisc_data(ASL, ADTE = ADTE, ARS = ARS)
+  result <- cdisc_data(cdisc_dataset("ADSL", ADSL),
+                       cdisc_dataset("ADTTE", ADTTE, labels = list(dataset_label = NULL,
+                                                                   column_labels = NULL)))
 
-  result_to_compare <- list(ASL = 1, ADTE = 2, ARS = 3)
+  result_to_compare <- list(structure(list(
+    dataname = "ADSL",
+    data = ADSL,
+    keys = keys(
+      primary = c("STUDYID", "USUBJID"),
+      foreign = NULL,
+      parent = NULL
+    ),
+    labels = list(
+      dataset_label = adsl_yaml$domain$label,
+      column_labels = vapply(adsl_yaml$variables, `[[`, character(1), "label")
+    )
+  ),
+  class = c("cdisc_dataset", "dataset")),
+  structure(list(
+    dataname = "ADTTE",
+    data = ADTTE,
+    keys = keys(
+      primary = c("STUDYID", "USUBJID", "PARAMCD"),
+      foreign = c("STUDYID", "USUBJID"),
+      parent = "ADSL"
+    ),
+    labels = list(
+      dataset_label = NULL,
+      column_labels = NULL
+    )
+  ),
+  class = c("cdisc_dataset", "dataset")))
   class(result_to_compare) <- "cdisc_data"
-  keys(result_to_compare[["ASL"]])  <- "test1"
-  keys(result_to_compare[["ADTE"]]) <- "test2"
-  keys(result_to_compare[["ARS"]]) <- "test3"
-  attr(result_to_compare[["ASL"]], "dataname")  <- "ASL"
-  attr(result_to_compare[["ADTE"]], "dataname") <- "ADTE"
-  attr(result_to_compare[["ARS"]], "dataname") <- "ARS"
-  attr(result_to_compare, "code") <- preprocessing_empty_text
+  result_to_compare <- setNames(result_to_compare, c("ADSL", "ADTTE"))
+  attr(result_to_compare, "code") <- code_empty
 
   expect_identical(result, result_to_compare)
 })
 
+test_that("Keys in cached datasets", {
+  expect_true(all(get_cdisc_keys("ADSL")$primary %in% names(random.cdisc.data::cadsl)))
+
+  expect_true(all(get_cdisc_keys("ADAE")$primary %in% names(random.cdisc.data::cadae)))
+  expect_true(all(get_cdisc_keys("ADAE")$foreign %in% names(random.cdisc.data::cadae)))
+
+  expect_true(all(get_cdisc_keys("ADTTE")$primary %in% names(random.cdisc.data::cadtte)))
+  expect_true(all(get_cdisc_keys("ADTTE")$foreign %in% names(random.cdisc.data::cadtte)))
+
+  expect_true(all(get_cdisc_keys("ADCM")$primary %in% names(random.cdisc.data::cadcm)))
+  expect_true(all(get_cdisc_keys("ADCM")$foreign %in% names(random.cdisc.data::cadcm)))
+
+  expect_true(all(get_cdisc_keys("ADLB")$primary %in% names(random.cdisc.data::cadlb)))
+  expect_true(all(get_cdisc_keys("ADLB")$foreign %in% names(random.cdisc.data::cadlb)))
+
+  expect_true(all(get_cdisc_keys("ADRS")$primary %in% names(random.cdisc.data::cadrs)))
+  expect_true(all(get_cdisc_keys("ADRS")$foreign %in% names(random.cdisc.data::cadrs)))
+
+  expect_true(all(get_cdisc_keys("ADVS")$primary %in% names(random.cdisc.data::cadvs)))
+  expect_true(all(get_cdisc_keys("ADVS")$foreign %in% names(random.cdisc.data::cadvs)))
+})
+
 test_that("Empty code", {
-  keys(ASL) <- "test"
 
   # missing code
-  result <- cdisc_data(ASL, check = FALSE)
-  expect_identical(attr(result, "code"), preprocessing_empty_text)
+  result <- cdisc_data(cdisc_dataset("ADSL", ADSL), check = FALSE)
+  expect_identical(attr(result, "code"), code_empty)
 
   # NULL code
-  result <- cdisc_data(ASL, code = NULL, check = FALSE)
-  expect_identical(attr(result, "code"), preprocessing_empty_text)
+  result <- cdisc_data(cdisc_dataset("ADSL", ADSL), code = "", check = FALSE)
+  expect_identical(attr(result, "code"), code_empty)
 
   # empty code
-  result <- cdisc_data(ASL, code = "", check = FALSE)
-  expect_identical(attr(result, "code"), preprocessing_empty_text)
+  result <- cdisc_data(cdisc_dataset("ADSL", ADSL), code = "", check = FALSE)
+  expect_identical(attr(result, "code"), code_empty)
 })
 
 
 test_that("Arguments created by code", {
-  keys(ASL) <- "test"
-  result <- cdisc_data(ASL, code = "ASL <- 1; keys(ASL) <- 'test'", check = FALSE)
+  result <- cdisc_data(cdisc_dataset("ADSL", ADSL),
+                       code = "ADSL <- cadsl",
+                       check = FALSE)
   expect_silent(result)
 
-  result_to_compare <- list(ASL = 1)
+  result_to_compare <- list(cdisc_dataset("ADSL", ADSL))
   class(result_to_compare) <- "cdisc_data"
-  keys(result_to_compare[["ASL"]]) <- "test"
-  attr(result_to_compare[["ASL"]], "dataname") <- "ASL"
-  attr(result_to_compare, "code") <- "ASL <- 1; keys(ASL) <- 'test'"
+  result_to_compare <- setNames(result_to_compare, c("ADSL"))
+  attr(result_to_compare, "code") <- "ADSL <- cadsl"
 
   expect_identical(result, result_to_compare)
 })
 
 test_that("Error - objects differs", {
   expect_error(
-    cdisc_data(ASL, code = "ASL <- 2", check = TRUE),
+    cdisc_data(cdisc_dataset("ADSL", ADSL), code = "ADSL <- 2", check = TRUE),
     "Cannot reproduce object"
   )
 
-  keys(ASL) <- "test"
   expect_error(
-    cdisc_data(ASL, code = "ASL <- 1; keys(ASL) <- ''", check = TRUE),
+    cdisc_data(cdisc_dataset("ADSL", ADSL), code = "ADSL <- radsl(N=300);", check = TRUE),
     "Cannot reproduce object"
   )
 })
 
-test_that("Error - ASL is missing", {
-  expect_error(cdisc_data(ARG1 = 1, code = NULL, check = FALSE), "ASL and code arguments are missing")
-  expect_error(cdisc_data(code = "x <- 2", check = FALSE), "ASL is missing and cannot be generated by code")
-})
-
-test_that("Error - checking is forbidden if any argument is call", {
+test_that("Error - ADSL is missing", {
   expect_error(
-    cdisc_data(1 + 2, code = "test code", check = TRUE),
-    "Automatic checking is not supported if arguments provided as calls"
-  )
-
-  keys(ASL) <- "test"
-
-  expect_error(
-    cdisc_data(1 + 2, code = "test code", check = TRUE),
-    "Automatic checking is not supported if arguments provided as calls"
-  )
-
-
-  expect_error(
-    cdisc_data(foo(1), code = "test code", check = TRUE),
-    "Automatic checking is not supported if arguments provided as calls"
+    cdisc_data(cdisc_dataset("ADTTE", ADTTE), code = "ADTTE <- cadtte", check = FALSE),
+    "ADSL argument is missing."
   )
 })
 
-test_that("Error - not named arguments", {
+test_that("Error - duplicated names", {
   expect_error(
-    cdisc_data(ASL, ASL, code = NULL, check = FALSE),
-    "All arguments passed to '...' should be named"
-  )
-  expect_error(
-    cdisc_data(ADTE, ADTE, code = "ADTE <- 1", check = FALSE),
-    "All arguments passed to '...' should be named"
+    cdisc_data(
+      cdisc_dataset("ADSL", ADSL),
+      cdisc_dataset("ADSL", ADSL),
+      code = "",
+      check = FALSE
+    ),
+    "Found duplicated dataset names"
   )
 })
 
-
-test_that("Error - data names can not be changed via arguments", {
-  asl <- 1
-  adte <- 2
+test_that("Error - dataset is not of class cdisc_dataset", {
   expect_error(
-    cdisc_data(ASL = asl, code = NULL, check = FALSE),
-    "Data names should not be changed via argument\nASL != asl"
+    cdisc_data(ARG1 = 1, code = "", check = FALSE),
+    "Argument in not of class dataset, please use cdisc_dataset function!"
+  )
+})
+
+test_that("Empty keys for single and multiple datasets", {
+  expect_silent(cdisc_data(dataset("ADSL", ADSL)))
+
+  expect_silent(cdisc_data(dataset("ADSL", ADSL), dataset("ADTTE", ADTTE)))
+})
+
+test_that("Error - primary keys are not unique for the dataset", {
+  expect_error(
+    cdisc_data(cdisc_dataset("ADSL", ADSL,
+                             keys = keys(primary = c("SEX"),
+                                         foreign = NULL,
+                                         parent = NULL))),
+    "ADSL: Keys don't uniquely distinguish the rows,  i.e. some rows share the same keys")
+})
+
+test_that("Error - parent is defined without foreign key", {
+  expect_error(cdisc_data(cdisc_dataset("ADTTE", ADTTE, keys = keys(primary = c("STUDYID", "USUBJID"),
+                                                                  foreign = NULL,
+                                                                  parent = "ADSL"))
+  ), "ADTTE: Please specify both foreign keys and a parent!")
+
+  expect_error(
+    cdisc_data(cdisc_dataset("ADTTE", ADTTE,
+                             keys = keys(primary = c("STUDYID", "USUBJID"),
+                                         foreign = c("STUDYID", "USUBJID"),
+                                         parent = NULL)
+    )), "ADTTE: Please specify both foreign keys and a parent!")
+
+})
+
+test_that("Warning - Different keys names but same length", {
+  ADTTE <- dplyr::rename(ADTTE, ADSL_STUDYID = STUDYID, ADSL_USUBJID = USUBJID) # nolint
+  expect_warning(
+    cdisc_data(
+      cdisc_dataset("ADSL", ADSL),
+      dataset("ADTTE", ADTTE,
+              keys = keys(primary = c("ADSL_STUDYID", "ADSL_USUBJID", "PARAMCD"),
+                          foreign = c("ADSL_STUDYID", "ADSL_USUBJID"),
+                          parent = "ADSL"))
+    ),
+    "Following foreign keys are not identical to the primary keys"
+  )
+})
+
+test_that("Error - length of child keys > length of parent keys", {
+  expect_error(
+    cdisc_data(
+      cdisc_dataset("ADSL", ADSL),
+      dataset("ADTTE", ADTTE,
+              keys = keys(primary = c("STUDYID", "USUBJID", "PARAMCD"),
+                          foreign = c("STUDYID", "USUBJID", "PARAMCD"),
+                          parent = "ADSL"))
+    ),
+    "Number of foreign keys can't be larger than"
   )
 
+  ADTTE <- dplyr::rename(ADTTE, ADSL_STUDYID = STUDYID, ADSL_USUBJID = USUBJID) # nolint
   expect_error(
-    cdisc_data(ASL = asl, ADTE = adte, code = NULL, check = FALSE),
-    "Data names should not be changed via argument\nASL != asl\nADTE != adte"
+    cdisc_data(
+      cdisc_dataset("ADSL", ADSL),
+      dataset("ADTTE", ADTTE,
+              keys = keys(primary = c("ADSL_STUDYID", "ADSL_USUBJID", "PARAMCD"),
+                          foreign = c("ADSL_STUDYID", "ADSL_USUBJID", "PARAMCD"),
+                          parent = "ADSL"))
+    ),
+    "Number of foreign keys can't be larger than"
+  )
+})
+
+test_that("Error - items dataset to wide (without parent)", {
+  COUNTRIES <- data.frame(COUNTRY = unique(ADSL$COUNTRY), VALUE = rnorm(length(unique(ADSL$COUNTRY)))) # nolint
+
+  expect_error(
+    cdisc_data(
+      cdisc_dataset("ADSL", ADSL),
+      dataset("COUNTRIES", COUNTRIES,
+              keys = keys(primary = c("COUNTRY"),
+                          foreign = c("COUNTRY"),
+                          parent = "ADSL"))
+    ),
+    "Foreign keys are don't match all parent keys and both have different length"
+  )
+
+  expect_silent(
+    cdisc_data(
+      cdisc_dataset("ADSL", ADSL,
+                    keys = keys(primary = c("STUDYID", "USUBJID", "COUNTRY"), foreign = NULL, parent = NULL)),
+      dataset("COUNTRIES", COUNTRIES,
+              keys = keys(primary = c("COUNTRY"),
+                          foreign = c("COUNTRY"),
+                          parent = "ADSL"))
+    )
   )
 
 })
 
-test_that("Error - Data arguments should be capitalized.", {
-  ars <- 1
-  adte <- 1
+test_that("Error - Two root datasets with different keys", {
+  ADSL2 <- ADSL %>% dplyr::rename(ADSL_STUDYID = STUDYID) # nolint
 
   expect_error(
-    cdisc_data(ASL = ASL, adte = adte, code = NULL, check = FALSE),
-    "Data arguments should be capitalized. Please change\nadte to ADTE"
+    cdisc_data(
+      cdisc_dataset("ADSL", ADSL),
+      dataset("ADSL2", ADSL2,
+              keys = keys(primary = c("ADSL_STUDYID", "USUBJID"),
+                          foreign = NULL,
+                          parent = NULL)),
+      cdisc_dataset("ADTTE", ADTTE)
+    ),
+    "Root dataset keys doesn't match ADSL primary keys"
   )
-
-  expect_error(
-    cdisc_data(ASL = ASL, adte = adte, ars = ars, code = NULL, check = FALSE),
-    "Data arguments should be capitalized. Please change\nadte to ADTE\nars to ARS"
-  )
-
 })

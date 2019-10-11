@@ -1,18 +1,17 @@
 #' Column selection input specification
 #'
-#' \code{columns_spec} is used inside \code{\link[teal]{teal}} to create a \code{\link[shiny]{selectInput}}
+#' \code{select_spec} is used inside teal to create a \code{\link[shiny]{selectInput}}
 #' that will select columns from a dataset.
 #'
 #' @param choices (\code{character}) Named character vector to define the choices
-#' 	of a shiny \code{\link[shiny]{selectInput}}. These have to be columns in the
-#' 	dataset defined in the \link{data_extract_spec} where this is called.
+#'   of a shiny \code{\link[shiny]{selectInput}}. These have to be columns in the
+#'   dataset defined in the \link{data_extract_spec} where this is called.
 #'
 #' @param selected (\code{character}) (default value) Named character vector to define the selected
 #'  values of a shiny \code{\link[shiny]{selectInput}}. This can be just one column
 #'  name or multiple column names.
 #'
 #' @param multiple (\code{logical}) Whether multiple values shall be allowed in the
-
 #'  shiny \code{\link[shiny]{selectInput}}.
 #'
 #' @param fixed (\code{logical}) (optional) \link{data_extract_spec} specific feature to
@@ -23,7 +22,9 @@
 #' @param label (\code{logical}) (optional) Define a label
 #' on top of this specific shiny \code{\link[shiny]{selectInput}}.
 #'
-#' @return A \code{column_spec}-S3 class object. It contains all input values.
+#' @param sep (\code{character}) Separator used in combination of multiple levels in choices.
+#'
+#' @return A \code{select_spec}-S3 class object. It contains all input values.
 #' The function double checks the \code{choices} and \code{selected} inputs.
 #'
 #' @details
@@ -34,7 +35,7 @@
 #' \enumerate{
 #'   \item{Selection with just one column allowed }{
 #'     \preformatted{
-#' columns = columns_spec(
+#' select = select_spec(
 #'   choices = c("AVAL", "BMRKR1", "AGE"),
 #'   selected = c("AVAL"),
 #'   multiple = FALSE,
@@ -43,15 +44,15 @@
 #' )
 #'     }
 #'     \if{html}{
-#'       \figure{columns_spec_1.png}{options: alt="Selection with just one column allowed"}
+#'       \figure{select_spec_1.png}{options: alt="Selection with just one column allowed"}
 #'     }
 #'     \if{html}{
-#'       \figure{columns_spec_11.png}{options: alt="Selection with just one column allowed"}
+#'       \figure{select_spec_11.png}{options: alt="Selection with just one column allowed"}
 #'     }
 #'   }
 #'   \item{Selection with just multiple columns allowed }{
 #'     \preformatted{
-#' columns = columns_spec(
+#' select = select_spec(
 #'   choices = c("AVAL", "BMRKR1", "AGE"),
 #'   selected = c("AVAL", "BMRKR1"),
 #'   multiple = TRUE,
@@ -60,15 +61,15 @@
 #' )
 #'     }
 #'     \if{html}{
-#'       \figure{columns_spec_2.png}{options: alt="Selection with just multiple columns allowed"}
+#'       \figure{select_spec_2.png}{options: alt="Selection with just multiple columns allowed"}
 #'     }
 #'     \if{html}{
-#'       \figure{columns_spec_21.png}{options: alt="Selection with just multiple columns allowed"}
+#'       \figure{select_spec_21.png}{options: alt="Selection with just multiple columns allowed"}
 #'     }
 #'   }
 #'   \item{Selection without user access }{
 #'     \preformatted{
-#' columns = columns_spec(
+#' select = select_spec(
 #'   choices = c("AVAL", "BMRKR1"),
 #'   selected = c("AVAL", "BMRKR1"),
 #'   multiple = TRUE,
@@ -77,7 +78,7 @@
 #' )
 #'     }
 #'     \if{html}{
-#'       \figure{columns_spec_3.png}{options: alt="Selection without user access"}
+#'       \figure{select_spec_3.png}{options: alt="Selection without user access"}
 #'     }
 #'   }
 #' }
@@ -86,34 +87,54 @@
 #' @importFrom purrr map_lgl
 #' @importFrom stats setNames
 #' @export
-columns_spec <- function(choices,
-                         selected = choices[1],
-                         multiple = length(selected) > 1,
-                         fixed = TRUE,
-                         label = "Column(s)") {
+select_spec <- function(choices,
+                        selected = choices[1],
+                        multiple = length(selected) > 1,
+                        fixed = FALSE,
+                        label = "Column(s)",
+                        sep = if_null(attr(choices, "sep"), " - ")) {
   # when choices and selected is not a list, we convert it to a list (because each
   # entry is an atomic vector of possibly several entries, needed for filter_spec currently)
+
+  choices_attrs <- attributes(choices)
   choices <- as.list(choices)
+  attributes(choices) <- choices_attrs
+
   selected <- as.list(selected)
+
   stopifnot(is.list(choices) && length(choices) >= 1 && all(vapply(choices, is.atomic, TRUE)))
-  stopifnot(is.list(selected) && length(selected) >= 1 && all(vapply(selected, is.atomic, TRUE)))
-  stopifnot(all(selected %is_in% choices))
+
   stopifnot(is.logical.single(multiple))
   stopifnot(is.logical.single(fixed))
   stopifnot(is.character.single(label))
-  # check for correct lengths
-  stopifnot(multiple || length(selected) == 1)
 
-  stopifnot(all(map_lgl(selected, ~ length(.) == length(selected[[1]]))))
-  stopifnot(all(map_lgl(choices, ~ length(.) == length(choices[[1]]))))
   # if names is NULL, shiny will put strange labels (with quotes etc.) in the selectInputs, so we set it to the values
   if (is.null(names(choices))) {
-    names(choices) <- vapply(choices, paste, collapse = " - ", character(1))
+    names(choices) <- vapply(choices, paste, collapse = sep, character(1))
   }
-  if (is.null(names(selected))) {
-    names(selected) <- vapply(selected, paste, collapse = " - ", character(1))
+
+  # Deal with selected
+  if (!is.null(selected) && length(selected) > 0) {
+    stopifnot(is.list(selected) && length(selected) >= 1 && all(vapply(selected, is.atomic, TRUE)))
+    stopifnot(all(selected %is_in% choices))
+    stopifnot(multiple || length(selected) == 1)
+    stopifnot(all(map_lgl(selected, ~ length(.) == length(selected[[1]]))))
+    if (is.null(names(selected))) {
+      names(selected) <- vapply(selected, paste, collapse = sep, character(1))
+    }
+  } else {
+    selected <- NULL
   }
-  res <- list(choices = choices, selected = selected, multiple = multiple, fixed = fixed, label = label)
-  class(res) <- "column_spec"
-  res
+
+  # check for correct lengths
+  stopifnot(all(map_lgl(choices, ~ length(.) == length(choices[[1]]))))
+
+  if (length(choices) == 1 && !is.null(selected)) {
+    fixed <- TRUE
+  }
+
+  res <- list(choices = choices, selected = selected, multiple = multiple, fixed = fixed, label = label, sep = sep)
+  class(res) <- "select_spec"
+
+  return(res)
 }

@@ -1,7 +1,7 @@
 ---
 title: "Teal Desiderata"
 author: "Adrian Waddell"
-date: "`r Sys.Date()`"
+date: "2019-07-31"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{Teal Desiderata}
@@ -15,7 +15,7 @@ This is a list of possible directions to continue the teal development.
 # Abstract FiteredData Class
 
 Currently `teal` implements a filtering model that is useful to for clinical
-trials data only as it requires an `ASL` dataset and that every dataset has the
+trials data only as it requires an `ADSL` dataset and that every dataset has the
 `USUBJID` and `STUDYID` variables. Please read the
 `10_teal_design_and_implementation` vignette for more details.
 
@@ -146,13 +146,13 @@ my_new_module <- Class(expands = "tm_scatterplot",
 # Module Interdependencies
 
 Currently all implemented teal modules are completely independent. However it
-would be nice to have global states, e.g. the `ASL` variable with the study arm
+would be nice to have global states, e.g. the `ADSL` variable with the study arm
 information. This probably won't require huge changes (modules need to
 optionally accept reactive values as arguments), but I have not done it so far.
 
 # Code Reproducibility
 
-We have now three prposed ways to do get reprodicuble code:
+We have now three proposed ways to do get reprodicuble code:
 
 1. Doug's way with parsing all the involved code and turn reative endpoints to
 ordinary function call (still need to work on that pull-request). This is a
@@ -173,16 +173,16 @@ what the teal module developer has to do. For example, for the following code:
 library(survival)
 
 ## Attributes to the datasets that are passed to the init data argument
-ASL <- read_bce('/opt/BIOSTAT/qa/i9999/libraries/asl.sas7bdat')
-ATE <- read_bce('/opt/BIOSTAT/qa/i9999/libraries/ate.sas7bdat')
+ADSL <- read_bce('/opt/BIOSTAT/qa/i9999/libraries/asl.sas7bdat')
+ADTTE <- read_bce('/opt/BIOSTAT/qa/i9999/libraries/ate.sas7bdat')
 
 ## Filter Panel
-ASL_f <- ASL %>% filter(SEX == 'F')
-ATE_filtered <- merge(ASL_f, ATE, by = c("USUBJID", "STUDYID"))
+ADSL_f <- ADSL %>% filter(SEX == 'F')
+ADTTE_filtered <- merge(ADSL_f, ADTTE, by = c("USUBJID", "STUDYID"))
 
 
 ## Teal Module Developer Resposibility (Encoding & Ouptput)
-ANL <- ATE_filtered %>%
+ANL <- ADTTE_filtered %>%
           filter(ITTFL == 'Y', PARAMCD == 'OS')
 
 p <- p_km(

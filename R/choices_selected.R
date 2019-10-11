@@ -53,7 +53,9 @@ choices_selected <- function(choices, selected = choices[1], keep_order = FALSE)
 #' @param x object to check
 #'
 #' @export
-is.choices_selected <- function(x) is(x, "choices_selected")
+is.choices_selected <- function(x) { # nolint
+  is(x, "choices_selected")
+}
 
 #' Add empty choice to choices selected
 #'

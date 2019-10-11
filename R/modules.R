@@ -3,7 +3,7 @@
 #' Modules collects a tree of \code{\link{module}} and \code{\link{modules}}
 #' objects. This is useful to define the navigation structure of a teal app.
 #'
-#' @import methods
+#' @importFrom methods is
 #'
 #' @param label label of modules collection
 #' @param ... \code{\link{module}} and \code{\link{modules}} object
@@ -61,9 +61,13 @@ root_modules <- function(...) {
 #'
 #' @export
 #'
-module <- function(label, server, ui, filters, server_args=NULL, ui_args=NULL) {
-
-  force(label); force(server); force(ui); force(filters)
+module <- function(label, server, ui, filters, server_args = NULL, ui_args = NULL) {
+  stopifnot(is.character.single(label))
+  stopifnot(is.function(server))
+  stopifnot(is.function(ui))
+  stopifnot(is.character.vector(filters))
+  stopifnot(is.null(server_args) || is.list(server_args))
+  stopifnot(is.null(ui_args) || is.list(ui_args))
 
   if (any(vapply(server_args, function(x)identical(x, "teal_datasets"), logical(1)))) {
     warning("teal_datasets is now deprecated, the datasets object gets atomatically passed to the server function")
@@ -71,7 +75,11 @@ module <- function(label, server, ui, filters, server_args=NULL, ui_args=NULL) {
   }
 
   if (!identical(names(formals(server))[1:4], c("input", "output", "session", "datasets"))) {
-    stop("teal modules need the arguments input, output, session, and datasets in that order in ther server function")
+    stop("teal modules need the arguments input, output, session, and datasets in that order in their server function")
+  }
+
+  if (!identical(names(formals(ui)[1]), "id")) {
+    stop("teal modules need 'id' argument as a first argument in their ui function")
   }
 
   structure(
@@ -89,10 +97,15 @@ module <- function(label, server, ui, filters, server_args=NULL, ui_args=NULL) {
 #'
 #' @return depth level for given module
 #'
-#' @import methods
+#' @importFrom methods is
 #'
 #' @examples
-#' m <- module("aaa", server = function(input, output, session, datasets){}, ui = NULL, filters = NULL)
+#' m <- module(
+#'   "aaa",
+#'   server = function(input, output, session, datasets) {},
+#'   ui = function(id) {},
+#'   filters = 'all'
+#' )
 #' x <- modules(
 #'   "d1",
 #'   modules(
@@ -173,7 +186,17 @@ create_ui_teal_module <- function(x, datasets, idprefix, is_root = FALSE) {
 
   .log("UI id for module is", uiid)
 
-  tabPanel(x$label, tagList(div(style = "margin-top: 25px;"), do.call(x$ui, c(list(id = uiid), args))))
+  # we pass the unfiltered datasets as they may be needed to create the UI
+  tabPanel(
+    x$label,
+    tagList(
+      div(style = "margin-top: 25px;"),
+      do.call(
+        x$ui,
+        c(list(id = uiid, datasets = datasets), args)
+      )
+    )
+  )
 }
 
 

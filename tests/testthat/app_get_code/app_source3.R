@@ -1,8 +1,8 @@
 # comment in source 3
-adte_extracted1 <- data_extract_spec(
-  dataname = "ADTE",
-  filter = adte_filters,
-  columns = columns_spec(
+adtte_extracted1 <- data_extract_spec(
+  dataname = "ADTTE",
+  filter = adtte_filters,
+  select = select_spec(
     choices = c("AVAL", "AVALU", "BMRKR1", "SITEID"),
     selected = c("AVAL"),
     multiple = TRUE,
@@ -11,10 +11,10 @@ adte_extracted1 <- data_extract_spec(
   )
 )
 
-adte_extracted <- data_extract_spec(
-  dataname = "ADTE",
-  filter = adte_filters,
-  columns = columns_spec(
+adtte_extracted <- data_extract_spec(
+  dataname = "ADTTE",
+  filter = adtte_filters,
+  select = select_spec(
     choices = c("AVAL", "BMRKR1"),
     selected = c("AVAL"),
     multiple = FALSE,
@@ -23,9 +23,9 @@ adte_extracted <- data_extract_spec(
   )
 )
 
-asl_extracted <- data_extract_spec(
-  dataname = "ASL",
-  columns = columns_spec(
+adsl_extracted <- data_extract_spec(
+  dataname = "ADSL",
+  select = select_spec(
     choices = c("SEX", "AGE"),
     selected = c("AGE"),
     multiple = TRUE,

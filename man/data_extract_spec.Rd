@@ -4,24 +4,30 @@
 \alias{data_extract_spec}
 \title{Data Extract input for teal modules}
 \usage{
-data_extract_spec(dataname, columns, filter = NULL)
+data_extract_spec(dataname, select, filter = NULL, reshape = FALSE)
 }
 \arguments{
-\item{dataname}{(\code{character}) The name of the \code{\link[teal]{teal}} dataset to
+\item{dataname}{(\code{character}) The name of the \code{teal} dataset to
 be extracted. This dataset has to be handed over to the \code{data} argument of the
 \code{\link[teal]{init}} function.}
 
-\item{columns}{(\code{column_spec}-S3 class) Columns to be selected from the input dataset
-mentioned in \code{dataname.} The setup can be created using \code{\link{columns_spec}} function.}
+\item{select}{(\code{select_spec}-S3 class) Columns to be selected from the input dataset
+mentioned in \code{dataname.} The setup can be created using \code{\link{select_spec}} function.}
 
 \item{filter}{(\code{filter_spec}-S3-class) Setup of the filtering of
 key columns inside the dataset. This setup can be created using the \code{\link{filter_spec}}
 function.}
+
+\item{reshape}{(\code{logical}) whether reshape long to wide. Note that it will be used only in case of long dataset
+with multiple keys selected in filter part.}
 }
 \description{
 The Data Extract input can be used to filter and select columns from a data
-set. This function enables such an input in \code{\link[teal]{teal}}.
+set. This function enables such an input in teal.
 Please use the constructor function \link{data_extract_spec} to set it up.
+}
+\details{
+Note that no checks based on columns can be done because the data is only referred to by name.
 }
 \section{Module Development}{
 
@@ -37,7 +43,7 @@ be constructed. This input can be read by a \code{teal.devel::data_extract_modul
 \enumerate{
   \item{Dataset with multiple filters and column selection}{
     \preformatted{
-adte_filters <- filter_spec(
+adtte_filters <- filter_spec(
 vars = c("PARAMCD", "CNSR"),
 sep = "-",
 choices = c("OS-1" = "OS-1", "OS-0" = "OS-0", "PFS-1" = "PFS-1"),
@@ -47,9 +53,9 @@ label = "Choose endpoint and Censor"
 )
 
 data_extract_spec(
-  dataname = "ADTE",
-  filter = adte_filters,
-  columns = columns_spec(
+  dataname = "ADTTE",
+  filter = adtte_filters,
+  select = select_spec(
     choices = c("AVAL", "BMRKR1", "AGE"),
         selected = c("AVAL", "BMRKR1"),
         multiple = TRUE,
@@ -72,9 +78,9 @@ data_extract_spec(
   \preformatted{
 
 data_extract_spec(
-  dataname = "ASL",
+  dataname = "ADSL",
   filter = NULL,
-  columns = columns_spec(
+  select = select_spec(
     choices = c("AGE", "SEX", "USUBJID"),
         selected = c("SEX"),
         multiple = FALSE,
@@ -91,5 +97,5 @@ data_extract_spec(
 }
 
 \references{
-\link{columns_spec} \link{filter_spec}
+\link{select_spec} \link{filter_spec}
 }
