@@ -5,7 +5,8 @@
 \title{Column selection input specification}
 \usage{
 select_spec(choices, selected = choices[1], multiple = length(selected)
-  > 1, fixed = FALSE, label = "Column(s)")
+  > 1, fixed = FALSE, label = "Column(s)",
+  sep = if_null(attr(choices, "sep"), " - "))
 }
 \arguments{
 \item{choices}{(\code{character}) Named character vector to define the choices
@@ -26,6 +27,8 @@ columns in the dataset that is defined by the developer of the app.}
 
 \item{label}{(\code{logical}) (optional) Define a label
 on top of this specific shiny \code{\link[shiny]{selectInput}}.}
+
+\item{sep}{(\code{character}) Separator used in combination of multiple levels in choices.}
 }
 \value{
 A \code{select_spec}-S3 class object. It contains all input values.

@@ -89,12 +89,13 @@
 data_extract_spec <- function(dataname, select, filter = NULL, reshape = FALSE) {
   stopifnot(is.character.single(dataname))
   stopifnot(is(select, "select_spec"), length(select) >= 1)
-  stopifnot(is.null(filter) || (is(filter, "filter_spec") & length(filter) >= 1) ||
-    is.class.list("filter_spec")(filter))
+  stopifnot(is.null(filter) ||
+              (is(filter, "filter_spec") & length(filter) >= 1) ||
+              is.class.list("filter_spec")(filter))
   stopifnot(is.logical.single(reshape))
 
   res <- list(dataname = dataname, select = select, filter = filter, reshape = reshape)
   class(res) <- "data_extract_spec"
 
-  res
+  return(res)
 }

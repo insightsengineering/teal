@@ -34,6 +34,7 @@ srv_add_filter_variable <- function(input, output, session, datasets, dataname, 
       setdiff(names(df), c(names(fs), omit_vars))
     }
 
+    choices_with_icons <- c("", add_variable_type_icons(columns = choices, data = df))
     choices <- c("", choices)
 
     .log("update add filter variables", dataname)
@@ -43,7 +44,10 @@ srv_add_filter_variable <- function(input, output, session, datasets, dataname, 
       choices = choices,
       selected = NULL,
       choicesOpt = list(
-        subtext = unname(vapply(choices, function(x) if_null(attr(df[[x]], "label"), ""), character(1)))
+        content = add_subtext(
+          content = choices_with_icons,
+          subtext = unname(vapply(choices, function(x) if_empty(attr(df[[x]], "label"), ""), character(1)))
+        )
       )
     )
   })

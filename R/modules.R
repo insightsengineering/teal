@@ -102,8 +102,8 @@ module <- function(label, server, ui, filters, server_args = NULL, ui_args = NUL
 #' @examples
 #' m <- module(
 #'   "aaa",
-#'   server = function(input, output, session, datasets){},
-#'   ui = function(id){},
+#'   server = function(input, output, session, datasets) {},
+#'   ui = function(id) {},
 #'   filters = 'all'
 #' )
 #' x <- modules(
@@ -186,7 +186,17 @@ create_ui_teal_module <- function(x, datasets, idprefix, is_root = FALSE) {
 
   .log("UI id for module is", uiid)
 
-  tabPanel(x$label, tagList(div(style = "margin-top: 25px;"), do.call(x$ui, c(list(id = uiid), args))))
+  # we pass the unfiltered datasets as they may be needed to create the UI
+  tabPanel(
+    x$label,
+    tagList(
+      div(style = "margin-top: 25px;"),
+      do.call(
+        x$ui,
+        c(list(id = uiid, datasets = datasets), args)
+      )
+    )
+  )
 }
 
 

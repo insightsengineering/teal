@@ -12,9 +12,26 @@ cdisc_dataset(dataname, data, keys = get_cdisc_keys(dataname),
 
 \item{data}{data}
 
-\item{keys}{list of keys}
+\item{keys}{list of keys -
 
-\item{labels}{list of labeles}
+Please note that the order of keys is important.
+
+Keys are not matched by name but by order. In case you want to perform:
+
+\code{SELECT ...}
+\code{  FROM ADSL}
+\code{LEFT JOIN ADTTE on ADTTE.STUDYID = ADSL.STUDYID and}
+\code{                                     ADTTE.SUBJECTUNIQUEID = ADSL.USUBJID}
+
+the keys need to be
+
+ADSL \code{primary: USUBJID, STUDYID}
+
+ADTTE \code{primary: PARAMCD, foreign: SUBJECTUNIQUEID, STUDYID, parent: ADSL}
+
+As you can see the names of foreign ADTTE are different to ADSL keys, but the order and length is equal.}
+
+\item{labels}{list of labels}
 }
 \value{
 a dataset with connected metadata

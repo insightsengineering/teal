@@ -12,6 +12,7 @@
 #' 3 apply filters
 #'
 #' @importFrom digest digest
+#' @importFrom dplyr n_groups group_by_
 #' @importFrom haven read_sas
 #' @importFrom R6 R6Class
 #' @importFrom readr read_csv
@@ -300,11 +301,20 @@ FilteredData <- R6::R6Class( # nolint
         function(x) isolate(x)
       }
 
-      if (filtered) {
-        list(name = dataname, dim = dim(f(private$filtered_datasets[[dataname]])))
+      data <- if (filtered) {
+        f(private$filtered_datasets[[dataname]])
       } else {
-        list(name = dataname, dim = dim(f(private$datasets[[dataname]])))
+        f(private$datasets[[dataname]])
       }
+
+      keys <- self$get_data_attr(dataname, "keys")
+      unique_patients_cols <- if_null(keys$foreign, keys$primary)
+
+      list(
+        name = dataname,
+        dim = dim(data),
+        patients = dplyr::n_groups(dplyr::group_by_(data, .dots = unique_patients_cols))
+      )
     },
 
     get_filter_info = function(dataname, varname = NULL) {
@@ -330,7 +340,7 @@ FilteredData <- R6::R6Class( # nolint
     },
 
 
-    set_filter_state = function(dataname, varname = NULL, state) {
+    set_filter_state = function(dataname, varname = NULL, state, initial = FALSE) {
       stopifnot(is.character.single(dataname))
       stopifnot(is.null(varname) || is.character.single(varname))
 
@@ -341,7 +351,7 @@ FilteredData <- R6::R6Class( # nolint
 
       private$error_if_not_valid(dataname, varname)
 
-      if (is.null("state")) {
+      if (is.null(state)) {
         stop("use remove_filter and not set_filter_state if to remove a filter")
       }
 
@@ -409,7 +419,9 @@ FilteredData <- R6::R6Class( # nolint
         private$filter_state[[dataname]] <- fs
       }
 
-      private$apply_filter(dataname)
+      if (!initial) {
+        private$apply_filter(dataname)
+      }
 
       invisible(self)
     },
@@ -422,10 +434,21 @@ FilteredData <- R6::R6Class( # nolint
       private$error_if_not_valid(dataname, varname)
 
       fs <- self$get_filter_state(dataname)
-      fs[[varname]] <- NULL
-      private$filter_state[[dataname]] <- fs
 
-      private$apply_filter(dataname)
+      ini_fs <- private$filter_info[[dataname]][[varname]][["init_state"]]
+
+      redo_filter <- is.character(all.equal(fs[[varname]], ini_fs))
+
+      fs[[varname]] <- NULL
+
+      self$set_filter_non_executed(dataname, varname, NULL)
+
+      private$filter_state[[dataname]] <- fs
+      private$filter_info[[dataname]][[varname]][["executed"]] <- NULL
+
+      if (redo_filter) {
+        private$apply_filter(dataname)
+      }
 
       invisible(self)
     },
@@ -468,11 +491,25 @@ FilteredData <- R6::R6Class( # nolint
         stop("unknown type")
       )
 
-      self$set_filter_state(dataname, varname, state)
+      self$set_filter_state(dataname, varname, state, initial = TRUE)
+
+      self$set_filter_non_executed(dataname, varname, state)
 
       invisible(self)
     },
 
+    set_filter_non_executed = function(dataname, varname, state) {
+      private$filter_info[[dataname]][[varname]][["executed"]] <- FALSE
+      private$filter_info[[dataname]][[varname]][["init_state"]] <- state
+    },
+
+    set_filter_executed = function(dataname, varname) {
+      private$filter_info[[dataname]][[varname]][["executed"]] <- TRUE
+    },
+
+    get_filter_execution = function(dataname, varname) {
+      return(private$filter_info[[dataname]][[varname]][["executed"]])
+    },
 
     is_filter_variable = function(dataname, varname) {
       stopifnot(is.character.single(dataname))
@@ -608,7 +645,6 @@ FilteredData <- R6::R6Class( # nolint
 
       private$filter_info[[dataname]] <- setNames(fi, names(df))
     },
-
 
     validate = function() {
       # number of tests to check whether the FilteredData object is consistent

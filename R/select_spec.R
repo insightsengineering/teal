@@ -12,7 +12,6 @@
 #'  name or multiple column names.
 #'
 #' @param multiple (\code{logical}) Whether multiple values shall be allowed in the
-
 #'  shiny \code{\link[shiny]{selectInput}}.
 #'
 #' @param fixed (\code{logical}) (optional) \link{data_extract_spec} specific feature to
@@ -22,6 +21,8 @@
 #'
 #' @param label (\code{logical}) (optional) Define a label
 #' on top of this specific shiny \code{\link[shiny]{selectInput}}.
+#'
+#' @param sep (\code{character}) Separator used in combination of multiple levels in choices.
 #'
 #' @return A \code{select_spec}-S3 class object. It contains all input values.
 #' The function double checks the \code{choices} and \code{selected} inputs.
@@ -87,14 +88,20 @@
 #' @importFrom stats setNames
 #' @export
 select_spec <- function(choices,
-                         selected = choices[1],
-                         multiple = length(selected) > 1,
-                         fixed = FALSE,
-                         label = "Column(s)") {
+                        selected = choices[1],
+                        multiple = length(selected) > 1,
+                        fixed = FALSE,
+                        label = "Column(s)",
+                        sep = if_null(attr(choices, "sep"), " - ")) {
   # when choices and selected is not a list, we convert it to a list (because each
   # entry is an atomic vector of possibly several entries, needed for filter_spec currently)
+
+  choices_attrs <- attributes(choices)
   choices <- as.list(choices)
+  attributes(choices) <- choices_attrs
+
   selected <- as.list(selected)
+
   stopifnot(is.list(choices) && length(choices) >= 1 && all(vapply(choices, is.atomic, TRUE)))
 
   stopifnot(is.logical.single(multiple))
@@ -103,18 +110,17 @@ select_spec <- function(choices,
 
   # if names is NULL, shiny will put strange labels (with quotes etc.) in the selectInputs, so we set it to the values
   if (is.null(names(choices))) {
-    names(choices) <- vapply(choices, paste, collapse = " - ", character(1))
+    names(choices) <- vapply(choices, paste, collapse = sep, character(1))
   }
 
   # Deal with selected
-  if (!is.null(selected) && length(selected) > 0  && selected[[1]] != "__NONE__") {
-
+  if (!is.null(selected) && length(selected) > 0) {
     stopifnot(is.list(selected) && length(selected) >= 1 && all(vapply(selected, is.atomic, TRUE)))
     stopifnot(all(selected %is_in% choices))
     stopifnot(multiple || length(selected) == 1)
     stopifnot(all(map_lgl(selected, ~ length(.) == length(selected[[1]]))))
     if (is.null(names(selected))) {
-      names(selected) <- vapply(selected, paste, collapse = " - ", character(1))
+      names(selected) <- vapply(selected, paste, collapse = sep, character(1))
     }
   } else {
     selected <- NULL
@@ -127,7 +133,8 @@ select_spec <- function(choices,
     fixed <- TRUE
   }
 
-  res <- list(choices = choices, selected = selected, multiple = multiple, fixed = fixed, label = label)
+  res <- list(choices = choices, selected = selected, multiple = multiple, fixed = fixed, label = label, sep = sep)
   class(res) <- "select_spec"
-  res
+
+  return(res)
 }

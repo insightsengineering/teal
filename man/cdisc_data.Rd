@@ -27,15 +27,15 @@ This function checks if there were keys added to all data
 \examples{
 library(random.cdisc.data)
 
-ADSL <-  radsl(N = 600, seed = 123)
-ADTTE <- radtte(ADSL, seed = 123)
+ADSL <- cadsl # or: radsl(N = 600, seed = 123)
+ADTTE <- cadtte # or: radtte(ADSL, seed = 123)
 
 # basic example
 cdisc_data(
   cdisc_dataset("ADSL", ADSL),
   cdisc_dataset("ADTTE", ADTTE),
-  code = 'ADSL <- radsl(N = 600, seed = 123)
-          ADTTE <- radtte(ADSL, seed = 123)')
+  code = 'ADSL <- cadsl
+          ADTTE <- cadtte')
 
 # Example with keys
 cdisc_data(

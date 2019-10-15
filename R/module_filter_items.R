@@ -50,11 +50,14 @@ srv_filter_items <- function(input, output, session, datasets, dataname, contain
         id_rm <- paste0("rm_", label_to_id(var))
 
         varlabel <- tagList(
-          tags$span(paste0(dataname, ".", var)),
-          tags$div(
-            tags$small(paste0("[", fi$label, "]"), style = "font-weight:normal"),
-            actionLink(ns(id_rm), "remove", style = "font-weight:normal; float:right;")
-          )
+          tags$span(paste0(dataname, ".", var),
+                    `if`(
+                      is.null(fi$label) || is.na(fi$label) || is.empty(fi$label) || fi$label == "",
+                      NULL,
+                      tags$small(fi$label, style = "font-weight:normal; margin-left:3px")
+                    )),
+          actionLink(ns(id_rm), "", icon("trash-alt", lib = "font-awesome"),
+                     class = "remove")
         )
 
         el <- if (fi$type == "choices") {
@@ -103,6 +106,8 @@ srv_filter_items <- function(input, output, session, datasets, dataname, contain
           tags$p(paste(var, "in data", dataname, "has unknown type:", fi$type))
         }
 
+        .log(paste0("Add filter view and listner with id: ", id))
+
         create_listener(id, id_rm, var)
 
         container(el)
@@ -123,21 +128,29 @@ srv_filter_items <- function(input, output, session, datasets, dataname, contain
 
     if (!(id %in% id_has_bindings)) {
       observe({
+
         value <- input[[id]]
 
         type <- datasets$get_filter_type(dataname, varname)
 
-        .log("Filter Observer: '", id, "', type '", type, "', with value: ",
-             if (is.null(value)) "NULL" else value, sep = "")
+        if (!datasets$get_filter_execution(dataname, varname) && is.null(value)) {
+          .log("Filter Observer: no value defined, yet.")
+        } else {
+          .log("Filter Observer: '", id, "', type '", type, "', with value: ",
+               if (is.null(value)) "NULL" else value, sep = "")
 
-        if (type == "range") {
-          if (length(value) == 2) {
-            datasets$set_filter_state(dataname, varname, value)
+          datasets$set_filter_executed(dataname, varname)
+
+          if (type == "range") {
+            if (length(value) == 2) {
+              datasets$set_filter_state(dataname, varname, value)
+            }
+          } else if (type == "choices") {
+            datasets$set_filter_state(dataname, varname, if (length(value) == 0) character(0) else value)
+          } else if (type == "logical") {
+            if (!is.null(value)) datasets$set_filter_state(dataname, varname, value)
           }
-        } else if (type == "choices") {
-          datasets$set_filter_state(dataname, varname, if (length(value) == 0) character(0) else value)
-        } else if (type == "logical") {
-          if (!is.null(value)) datasets$set_filter_state(dataname, varname, value)
+
         }
 
       })

@@ -7,26 +7,10 @@ test_that("Proper argument types", {
 
   expect_error(select_spec(choices = list(list(choices)), selected = selected))
   expect_error(select_spec(choices = choices, selected = list(list(selected))))
-  expect_message(
-    expect_error(select_spec(choices = choices, selected = selected, multiple = 1), "is.logical.single"),
-    "'1' (numeric)",
-    fixed = TRUE
-  )
-  expect_message(
-    expect_error(select_spec(choices = choices, selected = selected, multiple = c(TRUE, TRUE)), "is.logical.single"),
-    "'TRUE TRUE' (logical)",
-    fixed = TRUE
-  )
-  expect_message(
-    expect_error(select_spec(choices = choices, selected = selected, fixed = 1), "is.logical.single"),
-    "'1' (numeric)",
-    fixed = TRUE
-  )
-  expect_message(
-    expect_error(select_spec(choices = choices, selected = selected, label = factor("Hello")), "is.character.single"),
-    "'Hello",
-    fixed = TRUE
-  )
+  expect_error(select_spec(choices = choices, selected = selected, multiple = 1), "is.logical.single")
+  expect_error(select_spec(choices = choices, selected = selected, multiple = c(TRUE, TRUE)), "is.logical.single")
+  expect_error(select_spec(choices = choices, selected = selected, fixed = 1), "is.logical.single")
+  expect_error(select_spec(choices = choices, selected = selected, label = factor("Hello")), "is.character.single")
 
   # select among choices
   choices <- list(c("a", "b"), c("c", "d"))
@@ -81,7 +65,7 @@ test_that("Multiple choices", {
   expect_silent(c2 <- select_spec(choices = choices, selected = selected))
   expect_identical(c1, c2)
 
-  expect_identical(names(c1), c("choices", "selected", "multiple", "fixed", "label"))
+  expect_identical(names(c1), c("choices", "selected", "multiple", "fixed", "label", "sep"))
   expect_identical(c1$choices, as.list(setNames(choices, choices)))
   expect_identical(c1$selected, as.list(setNames(selected, selected)))
 

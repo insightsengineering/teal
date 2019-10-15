@@ -30,7 +30,7 @@
 #'
 #' @export
 #'
-#' @importFrom shinyjs useShinyjs
+#' @importFrom shinyjs useShinyjs hidden
 #' @importFrom methods is
 #'
 #' @include FilteredData.R
@@ -54,7 +54,7 @@
 #'     module(
 #'       "data source",
 #'       server = function(input, output, session, datasets) {},
-#'       ui = function(id) div(p("information about data source")),
+#'       ui = function(id, ...) div(p("information about data source")),
 #'       filters = 'all'
 #'     ),
 #'     module(
@@ -64,7 +64,7 @@
 #'            hist(datasets$get_data("ADSL", filtered = TRUE, reactive = TRUE)$AGE)
 #'         )
 #'       },
-#'       ui = function(id) {ns <- NS(id); plotOutput(ns('hist'))},
+#'       ui = function(id, ...) {ns <- NS(id); plotOutput(ns('hist'))},
 #'       filters = "ADSL"
 #'     )
 #'   ),
@@ -135,6 +135,7 @@ init <- function(data,
         useShinyjs(),
         include_css_files(package = "teal"),
         include_js_files(package = "teal", except = "init.js"),
+        hidden(icon("cog")), # add hidden icon to load font-awesome css for icons
         tags$head(
           tags$script(
             # show/hide see https://groups.google.com/forum/#!topic/shiny-discuss/yxFuGgDOIuM
@@ -166,7 +167,7 @@ init <- function(data,
             fluidRow(
               column(9, tp$children[[2]]),
               column(3, div(id = "teal_filter-panel", class = "hide",
-                            div(class = "well",
+                            div(id = "teal_filter_active_vars", class = "well",
                                 tags$label(
                                   "Active Filter Variables",
                                   class = "text-primary",
@@ -183,7 +184,7 @@ init <- function(data,
                                   })
                                 )
                             ),
-                            div(class = "well",
+                            div(id = "teal_filter_add_vars", class = "well",
                                 tags$label(
                                   "Add Filter Variables",
                                   class = "text-primary",

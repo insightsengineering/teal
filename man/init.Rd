@@ -60,7 +60,7 @@ app <- init(
     module(
       "data source",
       server = function(input, output, session, datasets) {},
-      ui = function(id) div(p("information about data source")),
+      ui = function(id, ...) div(p("information about data source")),
       filters = 'all'
     ),
     module(
@@ -70,7 +70,7 @@ app <- init(
            hist(datasets$get_data("ADSL", filtered = TRUE, reactive = TRUE)$AGE)
         )
       },
-      ui = function(id) {ns <- NS(id); plotOutput(ns('hist'))},
+      ui = function(id, ...) {ns <- NS(id); plotOutput(ns('hist'))},
       filters = "ADSL"
     )
   ),

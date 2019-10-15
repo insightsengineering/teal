@@ -20,8 +20,8 @@ check that modules has not more than depth 2
 \examples{
 m <- module(
   "aaa",
-  server = function(input, output, session, datasets){},
-  ui = function(id){},
+  server = function(input, output, session, datasets) {},
+  ui = function(id) {},
   filters = 'all'
 )
 x <- modules(

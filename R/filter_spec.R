@@ -45,6 +45,14 @@
 #'   multiple = TRUE
 #' )
 #'
+#' filter_spec(
+#'   vars = c("PARAMCD"),
+#'   sep = " - ",
+#'   choices = c("CRP", "ALT"),
+#'   selected = c("CRP"),
+#'   multiple = TRUE
+#' )
+#'
 #' @details
 #'
 #' The \code{filter_spec} is used inside \code{teal} apps to allow filtering datasets
@@ -121,23 +129,21 @@ filter_spec <- function(vars,
                         selected = choices[1],
                         multiple = length(selected) > 1,
                         label = "Filter",
-                        sep = " - ") {
-  stopifnot(is.atomic(vars))
-  stopifnot(is.atomic(choices))
-  stopifnot(all(is.character(vars)))
-  stopifnot(all(is.character(choices)))
+                        sep = if_null(attr(choices, "sep"), " - ")) {
+  stopifnot(is.character.vector(vars))
+  stopifnot(is.character.vector(choices))
   stopifnot(all(!duplicated(vars)))
   stopifnot(all(!duplicated(choices)))
   stopifnot(is.character.single(sep))
   stopifnot(is.logical.single(multiple))
   stopifnot(is.character.single(label))
 
+  choices_attrs <- attributes(choices)
   choices <- split_by_sep(choices, sep)
-  stopifnot(all(vapply(choices, length, 0) == length(vars)))
+  stopifnot(all(vapply(choices, length, integer(1)) == length(vars)))
 
-  if (!is.null(selected) && selected != "__NONE__") {
-
-    stopifnot(is.atomic(selected))
+  if (!is.null(selected)) {
+    stopifnot(is.character.vector(selected))
     stopifnot(all(!duplicated(selected)))
     stopifnot(all(is.character(selected)))
     selected <- split_by_sep(selected, sep)
@@ -145,11 +151,12 @@ filter_spec <- function(vars,
     selected <- NULL
   }
 
-  res <- append(
-      list(vars),
-      select_spec(choices = choices, selected = selected, multiple, label = label)
+  attributes(choices) <- choices_attrs
+  res <- c(
+    list(vars = vars),
+    select_spec(choices = choices, selected = selected, multiple, label = label, sep = sep)
   )
-  names(res)[1] <- "vars"
   class(res) <- "filter_spec"
-  res
+
+  return(res)
 }

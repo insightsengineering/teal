@@ -1,9 +1,10 @@
-# teal next release
+# teal 0.8.0
 
 * Added `cdisc_dataset` (and more general `dataset`) functions to properly handle dataset keys while merging
 * Possibility to load custom `.css` and `.js` files
 * Renamed `columns_spec` to `select_spec`
 * Show number of observations on filter panel
+* Add labelling functions `variable_choices` and `value_choices`
 
 # teal 0.7.0
 

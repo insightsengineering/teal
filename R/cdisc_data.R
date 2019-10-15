@@ -3,7 +3,25 @@
 #' Abstract function that creates dataset object with connected metadata.
 #' @param dataname name of dataset
 #' @param data data
-#' @param keys list of keys
+#' @param keys list of keys -
+#'
+#' Please note that the order of keys is important.
+#'
+#' Keys are not matched by name but by order. In case you want to perform:
+#'
+#' \code{SELECT ...}
+#' \code{  FROM ADSL}
+#' \code{LEFT JOIN ADTTE on ADTTE.STUDYID = ADSL.STUDYID and}
+#' \code{                                     ADTTE.SUBJECTUNIQUEID = ADSL.USUBJID}
+#'
+#' the keys need to be
+#'
+#' ADSL \code{primary: USUBJID, STUDYID}
+#'
+#' ADTTE \code{primary: PARAMCD, foreign: SUBJECTUNIQUEID, STUDYID, parent: ADSL}
+#'
+#' As you can see the names of foreign ADTTE are different to ADSL keys, but the order and length is equal.
+#'
 #' @param labels list of labels
 #'
 #' @return a dataset with connected metadata
@@ -20,7 +38,6 @@ dataset <- function(dataname,
                     data,
                     keys = list(primary = NULL, foreign = NULL, parent = NULL),
                     labels = list(dataset_label = NULL, column_labels = NULL)) {
-
   stopifnot(is.character.single(dataname))
   stopifnot(is.data.frame(data))
   stopifnot(is.list(keys))
@@ -40,14 +57,17 @@ dataset <- function(dataname,
     stop(dataname, ": Keys don't uniquely distinguish the rows,  i.e. some rows share the same keys")
   }
 
-  structure(list(
-    dataname = dataname,
-    data = data,
-    keys = keys,
-    labels = labels
-  ),
-  class = c("dataset"))
+  res <- structure(
+    list(
+      dataname = dataname,
+      data = data,
+      keys = keys,
+      labels = labels
+    ),
+    class = "dataset"
+  )
 
+  return(res)
 }
 
 #' Function that returns list of keys
@@ -64,12 +84,11 @@ dataset <- function(dataname,
 #'
 #' keys(primary = c("STUDYID"), foreign = c("USUBJID"), "ADSL")
 keys <- function(primary, foreign, parent) {
-
   stopifnot(is.null(primary) || is.character.vector(primary))
   stopifnot(is.null(foreign) || is.character.vector(foreign))
   stopifnot(is.null(parent) || is.character.single(parent))
 
-  list(primary = primary, foreign = foreign, parent = parent)
+  return(list(primary = primary, foreign = foreign, parent = parent))
 }
 
 #'
@@ -95,7 +114,7 @@ get_cdisc_keys <- function(dataname) {
     stop(sprintf("There is no dataset called: %s \n  List of supported cdisc_datasets:\n   %s",
                  dataname, paste(names(default_cdisc_keys), collapse = ", ")))
   } else {
-    default_cdisc_keys[[dataname]]
+    return(default_cdisc_keys[[dataname]])
   }
 }
 
@@ -116,16 +135,42 @@ get_cdisc_keys <- function(dataname) {
 #'
 #' get_labels(ADSL)
 get_labels <- function(data) {
-
   stopifnot(is.data.frame(data))
 
   cdisc_labels <- list(
     "dataset_label" = attr(data, "label"),
     "column_labels" = var_labels(data, fill = TRUE)
   )
-  cdisc_labels
+  return(cdisc_labels)
 }
 
+#' Function that extract column labels from CDISC dataset
+#'
+#' @param data (\code{data.frame}) Any CDISC data set
+#' @param columns (\code{character}) Column names to extract the labels
+#'   from
+#'
+#' @return labels of the columns
+#'
+#' @export
+#'
+#' @examples
+#' library(random.cdisc.data)
+#' ADSL <- radsl(cached = TRUE)
+#'
+#' get_variable_labels(ADSL)
+#' get_variable_labels(ADSL, c("AGE", "RACE", "BMRKR1"))
+#' get_variable_labels(ADSL, c("AGE", "RACE", "BMRKR1", "xyz"))
+get_variable_labels <- function(data, columns = NULL) {
+  stopifnot(is.data.frame(data))
+  stopifnot(is.null(columns) || is.character.vector(columns))
+
+  columns <- if_null(columns, colnames(data))
+  labels <- as.list(get_labels(data)$column_labels)
+  res <- vapply(columns, function(x) if_null(labels[[x]], ""), character(1))
+
+  return(res)
+}
 
 #' Data input for teal app
 #'
@@ -143,11 +188,7 @@ get_labels <- function(data) {
 #'   \item ADVS
 #' }
 #'
-#' @param dataname name of dataset
-#' @param data data
-#' @param keys list of keys
-#' @param labels list of labeles
-#'
+#' @inheritParams dataset
 #' @return a dataset with connected metadata
 #'
 #' @export
@@ -162,7 +203,6 @@ cdisc_dataset <- function(dataname,
                           data,
                           keys = get_cdisc_keys(dataname),
                           labels = get_labels(data)) {
-
     x <- dataset(dataname, data, keys, labels)
     class(x) <- c("cdisc_dataset", class(x))
     x
@@ -233,6 +273,8 @@ check_foreign_keys <- function(datasets_keys) {
              "\nroot keys: ", paste(keys$primary, collapse = ", "))
     }
   })
+
+  return(invisible(NULL))
 }
 
 #' Data input for teal app
@@ -253,15 +295,15 @@ check_foreign_keys <- function(datasets_keys) {
 #' @examples
 #' library(random.cdisc.data)
 #'
-#' ADSL <-  radsl(N = 600, seed = 123)
-#' ADTTE <- radtte(ADSL, seed = 123)
+#' ADSL <- cadsl # or: radsl(N = 600, seed = 123)
+#' ADTTE <- cadtte # or: radtte(ADSL, seed = 123)
 #'
 #' # basic example
 #' cdisc_data(
 #'   cdisc_dataset("ADSL", ADSL),
 #'   cdisc_dataset("ADTTE", ADTTE),
-#'   code = 'ADSL <- radsl(N = 600, seed = 123)
-#'           ADTTE <- radtte(ADSL, seed = 123)')
+#'   code = 'ADSL <- cadsl
+#'           ADTTE <- cadtte')
 #'
 #' # Example with keys
 #' cdisc_data(
@@ -315,7 +357,7 @@ cdisc_data <- function(...,
       function(i) {
         tryCatch(
           deparse(as.list(match.call(eval(i[[1L]]), i))$data),
-          error = function(e){
+          error = function(e) {
             i[["dataname"]]
           }
         )
@@ -380,5 +422,5 @@ cdisc_data <- function(...,
 
   res <- setNames(res, datasets_names)
 
-  structure(res, code = code, class = "cdisc_data")
+  return(structure(res, code = code, class = "cdisc_data"))
 }

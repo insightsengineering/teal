@@ -5,7 +5,8 @@
 \title{filter spec}
 \usage{
 filter_spec(vars, choices, selected = choices[1],
-  multiple = length(selected) > 1, label = "Filter", sep = " - ")
+  multiple = length(selected) > 1, label = "Filter",
+  sep = if_null(attr(choices, "sep"), " - "))
 }
 \arguments{
 \item{vars}{(\code{character}) Character vector giving the columns to be filtered. These should be
@@ -123,6 +124,14 @@ filter_spec(
   sep = " - ",
   choices = c("CRP - BASELINE", "CRP - SCREENING", "ALT - BASELINE"),
   selected = c("CRP - BASELINE"),
+  multiple = TRUE
+)
+
+filter_spec(
+  vars = c("PARAMCD"),
+  sep = " - ",
+  choices = c("CRP", "ALT"),
+  selected = c("CRP"),
   multiple = TRUE
 )
 

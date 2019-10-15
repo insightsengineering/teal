@@ -11,7 +11,6 @@ test_that("data_extract_spec argument checking", {
 
 test_that("data_extract_spec works with valid input", {
   # the dataset does not exist, so we just check if the combinations are accepted
-  # UI testing is done elsewhere #todo: where?
   # we add 1 to the var names to avoid confusion with their respective functions
 
   select_spec1 <- select_spec(

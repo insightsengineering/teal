@@ -74,7 +74,8 @@ test_that(
 
 test_that(
   "reset filter states", {
-    x$set_filter_state("ADSL", state = NULL)
+    x$remove_filter("ADSL", "AGE")
+    x$remove_filter("ADSL", "SEX")
 
     expect_equal(
       x$get_data("ADSL", filtered = TRUE, reactive = FALSE),
