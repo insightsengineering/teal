@@ -234,7 +234,7 @@ init <- function(data,
     adsl_vars <- names(datasets$get_data("ADSL"))
     lapply(datasets$datanames(), function(dataname) {
       callModule(srv_add_filter_variable, paste0("teal_add_", dataname, "_filters"), datasets, dataname,
-                 omit_vars = if (dataname == "ADSL") NULL else adsl_vars)
+                 omit_vars = if (dataname == "ADSL") character(0) else adsl_vars)
     })
 
     ## hide-show filters based on module filter property

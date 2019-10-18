@@ -23,4 +23,5 @@ ADRS <- radrs(cached = TRUE)
 
 variable_choices(ADRS)
 variable_choices(ADRS, subset = c("PARAM", "PARAMCD"))
+variable_choices(ADRS, subset = c("", "PARAM", "PARAMCD"))
 }

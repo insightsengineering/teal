@@ -8,7 +8,7 @@ ui_filter_items <- function(id, dataname) {
 
 }
 
-#' @importFrom shinyWidgets pickerOptions
+#' @importFrom shinyWidgets pickerInput pickerOptions
 srv_filter_items <- function(input, output, session, datasets, dataname, container = div) {
 
   uistate <- reactiveValues(filters_shown = character(0))

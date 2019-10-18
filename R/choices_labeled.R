@@ -54,9 +54,8 @@ choices_labeled <- function(choices, labels, subset = NULL) {
 
   stopifnot(is.null(subset) || is.vector(subset))
 
-  if (length(subset) > 0) {
+  if (!is.null(subset)) {
     stop_if_not(list(all(subset %in% choices), "all of subset variables must be in choices"))
-    #subset choices + labels based on variables in subset
     labels <- labels[choices %in% subset]
     choices <- choices[choices %in% subset]
   }
@@ -69,17 +68,20 @@ choices_labeled <- function(choices, labels, subset = NULL) {
   raw_labels <- labels
   combined_labels <- paste0(choices, ": ", labels)
 
-  if (length(subset) > 0) {
+  if (!is.null(subset)) {
     ord <- match(subset, choices)
     choices <- choices[ord]
     raw_labels <- raw_labels[ord]
     combined_labels <- combined_labels[ord]
   }
 
-  choices <- setNames(choices, combined_labels)
-
-  attr(choices, "raw_labels") <- raw_labels
-  attr(choices, "combined_labels") <- combined_labels
+  choices <- structure(
+    choices,
+    names = combined_labels,
+    raw_labels = raw_labels,
+    combined_labels = combined_labels,
+    class = c("choices_labeled", "character")
+  )
 
   return(choices)
 }
@@ -100,18 +102,42 @@ choices_labeled <- function(choices, labels, subset = NULL) {
 #'
 #' variable_choices(ADRS)
 #' variable_choices(ADRS, subset = c("PARAM", "PARAMCD"))
+#' variable_choices(ADRS, subset = c("", "PARAM", "PARAMCD"))
 variable_choices <- function(data, subset = NULL) {
   stopifnot(is.data.frame(data))
   if (is.null(subset)) {
     subset <- names(data)
   }
-  stopifnot(is.character.vector(subset))
-  stopifnot(all(subset %in% names(data)))
+  stopifnot(is.null(subset) || is.character.vector(subset, min_length = 0))
+  if (is.character.vector(subset)) {
+    stopifnot(all(subset %in% names(data) | subset == ""))
+  }
 
-  res <- choices_labeled(choices = names(data), labels = unname(get_variable_labels(data)), subset = subset)
+  if_empty_option <- isTRUE(any(subset == ""))
+  empty_option_idx <- integer(0)
+  if (if_empty_option) {
+    empty_option_idx <- which(subset == "")
+    subset <- subset[-empty_option_idx]
+  }
 
-  icons <- add_variable_type_icons(res, data, attr(res, "raw_labels"))
-  attr(res, "icons") <- icons
+  res <- choices_labeled(choices = names(data),
+                         labels = unname(get_variable_labels(data)),
+                         subset = subset)
+  attr(res, "types") <- variable_types(data = data, columns = subset)
+
+  if (if_empty_option) {
+    for (idx in empty_option_idx) {
+      # firstly copy and then modify attributes because it will be gone after first modification of res object
+      attr_list <- attributes(res)
+      for (attr_name in names(attr_list)) {
+        if (length(attr_list[[attr_name]]) == length(res)) {
+          attr_list[[attr_name]] <- append(attr_list[[attr_name]], "", idx - 1L)
+        }
+      }
+      res <- append(res, "", idx - 1L)
+      attributes(res) <- attr_list
+    }
+  }
 
   return(res)
 }
@@ -143,11 +169,91 @@ value_choices <- function(data, var_choices, var_label, subset = NULL, sep = " -
   stopifnot(is.character.vector(var_label))
   stopifnot(is.null(subset) || is.vector(subset))
 
+  choices <- apply(data[var_choices], 1, paste, collapse = sep)
+  labels <- apply(data[var_label], 1, paste, collapse = sep)
+  df <- unique(data.frame(choices, labels, stringsAsFactors = FALSE)) # unique combo of choices x labels
+
   res <- choices_labeled(
-    choices = apply(data[var_choices], 1, paste, collapse = sep),
-    labels = apply(data[var_label], 1, paste, collapse = sep),
+    choices = df$choices,
+    labels = df$labels,
     subset = subset
   )
   attr(res, "sep") <- sep
   return(res)
+}
+
+
+#' Get classes selected columns from dataset
+#'
+#' @param data (\code{data.frame}) data to determine variable types from
+#' @param columns (atomic vector of \code{character} or \code{NULL}) columnames chosen chosen from \code{data},
+#'   \code{NULL} for all data columns
+#'
+#' @return (atomic vector of \code{character}) classes of \code{columns} from provided \code{data}
+#'
+#' @examples
+#' teal:::variable_types(
+#'   data.frame(
+#'     x = 1:3, y = factor(c("a", "b", "a")), z = c("h1", "h2", "h3"),
+#'     stringsAsFactors = FALSE
+#'   ),
+#'  "x"
+#' )
+#'
+#' teal:::variable_types(
+#'   data.frame(x = 1:3, y = factor(c("a", "b", "a")), z = c("h1", "h2", "h3"),
+#'     stringsAsFactors = FALSE),
+#'   c("x", "z")
+#' )
+#' teal:::variable_types(data.frame(x = 1:3, y = factor(c("a", "b", "a")), z = c("h1", "h2", "h3"),
+#'     stringsAsFactors = FALSE))
+variable_types <- function(data, columns = NULL) {
+  stopifnot(is.data.frame(data),
+            is.null(columns) || is.character.vector(columns, min_length = 0))
+
+  res <- if (is.null(columns)) {
+    vapply(data, function(x) class(x)[[1]], character(1), USE.NAMES = FALSE)
+  } else if (is.character.vector(columns)) {
+    stopifnot(all(columns %in% names(data) | columns == ""))
+    vapply(columns, function(x) ifelse(x == "", "", class(data[[x]])[[1]]), character(1), USE.NAMES = FALSE)
+  } else {
+    character(0)
+  }
+
+  return(res)
+}
+
+
+
+
+#' Extract labels from choices basing on attributes and names
+#'
+#' @param choices (\code{list} or \code{vector}) select choices
+#'
+#' @return (\code{character}) vector with labels
+extract_choices_labels <- function(choices) {
+  res <- if (is(choices, "choices_labeled")) {
+    attr(choices, "raw_labels")
+  } else if (!is.null(names(choices)) && !setequal(names(choices), unlist(unname(choices)))) {
+    names(choices)
+  } else {
+    NULL
+  }
+
+  return(res)
+}
+
+
+#' Print choices_labeled object
+#' @inheritParams base::print
+#' @export
+print.choices_labeled <- function(x, ...) {
+  cat(
+    sprintf("number of choices: %s \n", length(x)),
+    names(x),
+    "",
+    sep = "\n"
+  )
+
+  return(invisible(x))
 }
