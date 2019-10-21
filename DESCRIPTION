@@ -2,7 +2,7 @@ Package: teal
 Type: Package
 Title: Exploratory Web Apps for Analyzing Clinical Trials Data
 Date: 2019-10-11
-Version: 0.8.0.9000
+Version: 0.8.1.9000
 Authors@R: c(
   person("NEST", email = "nestcicd@roche.com", role = c("aut", "cre")),
   person("Adrian", "Waddell", email = "adrian.waddell@roche.com", role = "aut"),
@@ -51,7 +51,6 @@ VignetteBuilder: knitr
 Collate:
     'FilteredData.R'
     'cdisc_data.R'
-    'choices_icons.R'
     'choices_labeled.R'
     'choices_selected.R'
     'data_extract_spec.R'
@@ -65,6 +64,7 @@ Collate:
     'module_add_filter_variable.R'
     'module_filter_info.R'
     'module_filter_items.R'
+    'optionalInput.R'
     'select_spec.R'
     'stop_shiny.R'
     'teal.R'

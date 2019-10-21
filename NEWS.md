@@ -1,3 +1,8 @@
+# teal 0.8.1
+
+* refactor `choices_labeled` and fix bug of not showing column name in data_extract_spec
+
+
 # teal 0.8.0
 
 * Added `cdisc_dataset` (and more general `dataset`) functions to properly handle dataset keys while merging

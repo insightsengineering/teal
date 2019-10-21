@@ -30,10 +30,13 @@ reference:
     - add_no_selected_choices
     - choices_labeled
     - choices_selected
-    - select_spec
     - data_extract_spec
     - filter_spec
+    - get_variable_labels
     - is.choices_selected
+    - select_spec
+    - value_choices
+    - variable_choices
   - title: Helpers
     contents:
     - log_app_usage

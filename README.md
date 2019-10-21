@@ -7,3 +7,4 @@ data viewers. `teal` shiny applications are built using standard [shiny
 modules](https://shiny.rstudio.com/articles/modules.html).
 
 Please read more about teal on our agile-R website at [go.roche.com/agile-R](http://go.roche.com/agile-R).
+ 

@@ -1,11 +1,11 @@
-#' @importFrom shinyWidgets pickerInput
+#' @importFrom shinyWidgets pickerOptions
 ui_add_filter_variable <- function(id, dataname) {
 
   ns <- NS(id)
 
   div(
     class = paste0("teal_filter_", dataname),
-    pickerInput(
+    optionalSelectInput(
       ns("variables"),
       label = dataname,
       choices = NULL,
@@ -19,36 +19,29 @@ ui_add_filter_variable <- function(id, dataname) {
 
 }
 
-#' @importFrom shinyWidgets updatePickerInput
 srv_add_filter_variable <- function(input, output, session, datasets, dataname, omit_vars = NULL) {
 
   observe({
     fs <- datasets$get_filter_state(dataname, reactive = TRUE)
     df <- datasets$get_data(dataname, filtered = FALSE, reactive = TRUE)
 
-    choices <- if (is.null(df)) {
+    vars <- if (is.null(df)) {
       NULL
     } else if (is.null(fs)) {
       setdiff(names(df), omit_vars)
     } else {
       setdiff(names(df), c(names(fs), omit_vars))
     }
+    vars <- if_not_empty(vars, c("", vars))
 
-    choices_with_icons <- c("", add_variable_type_icons(columns = choices, data = df))
-    choices <- c("", choices)
+    choices <- variable_choices(df, vars)
 
     .log("update add filter variables", dataname)
-    updatePickerInput(
+    updateOptionalSelectInput(
       session,
       "variables",
       choices = choices,
-      selected = NULL,
-      choicesOpt = list(
-        content = add_subtext(
-          content = choices_with_icons,
-          subtext = unname(vapply(choices, function(x) if_empty(attr(df[[x]], "label"), ""), character(1)))
-        )
-      )
+      selected = NULL
     )
   })
 
