@@ -104,9 +104,9 @@ select_spec <- function(choices,
 
   stopifnot(is.list(choices) && length(choices) >= 1 && all(vapply(choices, is.atomic, TRUE)))
 
-  stopifnot(is.logical.single(multiple))
-  stopifnot(is.logical.single(fixed))
-  stopifnot(is.character.single(label))
+  stopifnot(is_logical_single(multiple))
+  stopifnot(is_logical_single(fixed))
+  stopifnot(is_character_single(label))
 
   # if names is NULL, shiny will put strange labels (with quotes etc.) in the selectInputs, so we set it to the values
   if (is.null(names(choices))) {

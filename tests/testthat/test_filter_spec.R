@@ -6,9 +6,9 @@ choices_f <- as.factor(choices)
 choices_l <- as.list(choices)
 
 test_that("Proper argument types", {
-  expect_error(filter_spec(vars = list("var"), choices = choices), "is.character.vector")
-  expect_error(filter_spec(vars = "var", choices = choices_l), "is.character.vector")
-  expect_error(filter_spec(vars = "var", choices = choices, selected = list("val2")), "is.character.vector")
+  expect_error(filter_spec(vars = list("var"), choices = choices), "is_character_vector")
+  expect_error(filter_spec(vars = "var", choices = choices_l), "is_character_vector")
+  expect_error(filter_spec(vars = "var", choices = choices, selected = list("val2")), "is_character_vector")
   expect_error(filter_spec(vars = 1, choices = choices, selected = choices[1]), "is.character")
   expect_error(filter_spec(vars = "var", choices = 1:3, selected = 1), "is.character")
   expect_error(filter_spec(vars = factor("var"), choices = choices, selected = choices[1]), "is.character")
@@ -19,8 +19,8 @@ test_that("Proper argument types", {
   expect_error(filter_spec(vars = "var", choices = choices_d), "duplicated")
   expect_error(filter_spec(vars = "var", choices = choices, selected = c("val1", "val1")), "duplicated")
 
-  expect_error(filter_spec(vars = "var", choices = choices, label = c("test", "test2")), "is.character.single")
-  expect_error(filter_spec(vars = "var", choices = choices, sep = c("-", ",")), "is.character.single")
+  expect_error(filter_spec(vars = "var", choices = choices, label = c("test", "test2")), "is_character_single")
+  expect_error(filter_spec(vars = "var", choices = choices, sep = c("-", ",")), "is_character_single")
 })
 
 

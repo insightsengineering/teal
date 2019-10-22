@@ -62,10 +62,10 @@ root_modules <- function(...) {
 #' @export
 #'
 module <- function(label, server, ui, filters, server_args = NULL, ui_args = NULL) {
-  stopifnot(is.character.single(label))
+  stopifnot(is_character_single(label))
   stopifnot(is.function(server))
   stopifnot(is.function(ui))
-  stopifnot(is.character.vector(filters))
+  stopifnot(is_character_vector(filters))
   stopifnot(is.null(server_args) || is.list(server_args))
   stopifnot(is.null(ui_args) || is.list(ui_args))
 

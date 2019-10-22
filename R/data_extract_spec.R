@@ -87,12 +87,12 @@
 #'
 #' @references \link{select_spec} \link{filter_spec}
 data_extract_spec <- function(dataname, select, filter = NULL, reshape = FALSE) {
-  stopifnot(is.character.single(dataname))
+  stopifnot(is_character_single(dataname))
   stopifnot(is(select, "select_spec"), length(select) >= 1)
   stopifnot(is.null(filter) ||
               (is(filter, "filter_spec") & length(filter) >= 1) ||
-              is.class.list("filter_spec")(filter))
-  stopifnot(is.logical.single(reshape))
+              is_class_list("filter_spec")(filter))
+  stopifnot(is_logical_single(reshape))
 
   res <- list(dataname = dataname, select = select, filter = filter, reshape = reshape)
   class(res) <- "data_extract_spec"

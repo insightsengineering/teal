@@ -52,7 +52,7 @@ srv_filter_items <- function(input, output, session, datasets, dataname, contain
         varlabel <- tagList(
           tags$span(paste0(dataname, ".", var),
                     `if`(
-                      is.null(fi$label) || is.na(fi$label) || is.empty(fi$label) || fi$label == "",
+                      is.null(fi$label) || is.na(fi$label) || is_empty(fi$label) || fi$label == "",
                       NULL,
                       tags$small(fi$label, style = "font-weight:normal; margin-left:3px")
                     )),

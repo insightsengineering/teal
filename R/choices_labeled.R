@@ -43,12 +43,12 @@ choices_labeled <- function(choices, labels, subset = NULL) {
   if (is.factor(choices)) {
     choices <- as.character(choices)
   }
-  stopifnot(is.character.vector(choices))
+  stopifnot(is_character_vector(choices))
 
   if (is.factor(labels)) {
     labels <- as.character(labels)
   }
-  stopifnot(is.character.vector(labels))
+  stopifnot(is_character_vector(labels))
 
   stop_if_not(list(length(choices) == length(labels), "length of choices must be the same as labels"))
 
@@ -108,8 +108,8 @@ variable_choices <- function(data, subset = NULL) {
   if (is.null(subset)) {
     subset <- names(data)
   }
-  stopifnot(is.null(subset) || is.character.vector(subset, min_length = 0))
-  if (is.character.vector(subset)) {
+  stopifnot(is.null(subset) || is_character_vector(subset, min_length = 0))
+  if (is_character_vector(subset)) {
     stopifnot(all(subset %in% names(data) | subset == ""))
   }
 
@@ -165,8 +165,8 @@ variable_choices <- function(data, subset = NULL) {
 #' value_choices(cadrs, c("PARAMCD", "ARMCD"), c("PARAM", "ARM"), sep = " --- ")
 value_choices <- function(data, var_choices, var_label, subset = NULL, sep = " - ") {
   stopifnot(is.data.frame(data))
-  stopifnot(is.character.vector(var_choices))
-  stopifnot(is.character.vector(var_label))
+  stopifnot(is_character_vector(var_choices))
+  stopifnot(is_character_vector(var_label))
   stopifnot(is.null(subset) || is.vector(subset))
 
   choices <- apply(data[var_choices], 1, paste, collapse = sep)
@@ -209,11 +209,11 @@ value_choices <- function(data, var_choices, var_label, subset = NULL, sep = " -
 #'     stringsAsFactors = FALSE))
 variable_types <- function(data, columns = NULL) {
   stopifnot(is.data.frame(data),
-            is.null(columns) || is.character.vector(columns, min_length = 0))
+            is.null(columns) || is_character_vector(columns, min_length = 0))
 
   res <- if (is.null(columns)) {
     vapply(data, function(x) class(x)[[1]], character(1), USE.NAMES = FALSE)
-  } else if (is.character.vector(columns)) {
+  } else if (is_character_vector(columns)) {
     stopifnot(all(columns %in% names(data) | columns == ""))
     vapply(columns, function(x) ifelse(x == "", "", class(data[[x]])[[1]]), character(1), USE.NAMES = FALSE)
   } else {

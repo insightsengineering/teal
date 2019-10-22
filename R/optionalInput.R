@@ -56,11 +56,11 @@ optionalSelectInput <- function(inputId, # nolint
                                 multiple = FALSE,
                                 options = list(),
                                 label_help = NULL) {
-  stopifnot(is.character.single(inputId))
-  stopifnot(is.character.single(label) || inherits(label, "shiny.tag") || inherits(label, "shiny.tag.list"))
+  stopifnot(is_character_single(inputId))
+  stopifnot(is_character_single(label) || inherits(label, "shiny.tag") || inherits(label, "shiny.tag.list"))
   stopifnot(is.null(choices) || length(choices) >= 1)
   stopifnot(is.null(selected) || length(selected) == 0 || all(selected %in% choices))
-  stopifnot(is.logical.single(multiple))
+  stopifnot(is_logical_single(multiple))
   stopifnot(is.list(options))
 
   default_options <- list(
@@ -163,7 +163,7 @@ updateOptionalSelectInput <- function(session, # nolint
 #' teal:::variable_type_icons(c("integer", "numeric", "logical", "Date", "POSIXct", "POSIXlt",
 #' "factor", "character", "unknown", ""))
 variable_type_icons <- function(var_type) {
-  stopifnot(is.character.vector(var_type, min_length = 0))
+  stopifnot(is_character_vector(var_type, min_length = 0))
 
   class_to_icon <- list(
     numeric = "sort-numeric-up",
@@ -208,16 +208,16 @@ variable_type_icons <- function(var_type) {
 #'   var_type = c("factor", "numeric")
 #' )
 picker_options_content <- function(var_name, var_label, var_type) {
-  if (is.empty(var_name)) {
+  if (utils.nest::is_empty(var_name)) {
     return(character(0))
   }
-  if (is.empty(var_type) && is.empty(var_label)) {
+  if (utils.nest::is_empty(var_type) && utils.nest::is_empty(var_label)) {
     return(var_name)
   }
   stopifnot(
-    is.character.vector(var_name),
-    is.character.empty(var_type) || length(var_type) == length(var_name),
-    is.character.empty(var_label) || length(var_label) == length(var_name)
+    is_character_vector(var_name),
+    is_character_empty(var_type) || length(var_type) == length(var_name),
+    is_character_empty(var_label) || length(var_label) == length(var_name)
   )
 
   var_icon <- variable_type_icons(var_type)

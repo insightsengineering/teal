@@ -130,20 +130,20 @@ filter_spec <- function(vars,
                         multiple = length(selected) > 1,
                         label = "Filter",
                         sep = if_null(attr(choices, "sep"), " - ")) {
-  stopifnot(is.character.vector(vars))
-  stopifnot(is.character.vector(choices))
+  stopifnot(is_character_vector(vars))
+  stopifnot(is_character_vector(choices))
   stopifnot(all(!duplicated(vars)))
   stopifnot(all(!duplicated(choices)))
-  stopifnot(is.character.single(sep))
-  stopifnot(is.logical.single(multiple))
-  stopifnot(is.character.single(label))
+  stopifnot(is_character_single(sep))
+  stopifnot(is_logical_single(multiple))
+  stopifnot(is_character_single(label))
 
   choices_attrs <- attributes(choices)
   choices <- split_by_sep(choices, sep)
   stopifnot(all(vapply(choices, length, integer(1)) == length(vars)))
 
   if (!is.null(selected)) {
-    stopifnot(is.character.vector(selected))
+    stopifnot(is_character_vector(selected))
     stopifnot(all(!duplicated(selected)))
     stopifnot(all(is.character(selected)))
     selected <- split_by_sep(selected, sep)
