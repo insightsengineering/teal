@@ -80,7 +80,7 @@ shinyApp(app$ui, app$server)
 ```
 
 
-This will produce the following webapp (I switched to the data table tab):
+This will produce the following web app (I switched to the data table tab):
 
 <img src="images/simple_setup.png" alt="Simple Example Of Teal" style="width: 100%;"/>
 
@@ -102,7 +102,7 @@ specified to get to this application.
 
 ### General Layout
 
-The following mackup shows an abstraction of the elements that are created in
+The following mockup shows an abstraction of the elements that are created in
 each teal application:
 
 <img src="images/teal_containers.png" alt="Simple Example Of Teal" style="width: 100%;"/>
@@ -113,7 +113,7 @@ fluid-container. Web-app based on teal can control the following:
 
  - analysis data
  - header and footer content
- - the navbar menu items that define the tab content
+ - the `navbar` menu items that define the tab content
  - and the content in the "Tab Content" element by using [shiny
 modules](https://shiny.rstudio.com/articles/modules.html)
  - whether the filter panel is shown or not and what filters are shown
@@ -136,7 +136,7 @@ sensitive.
 
 The second argument of `teal::init` that we specified in the code listing above 
 is the `modules` arguments. Modules define the elements displayed with tabs in
-the *Navbar* and their corresponding content in the *Tabs Content* box. A
+the *`Navbar`* and their corresponding content in the *Tabs Content* box. A
 `modules` object can contain `module` and `modules` objects. For the app defined
 above this tree looks as follows:
 
@@ -153,15 +153,15 @@ in the `teal` package, see `?module` and `?modules`.
 
 ## Accessing the Analysis Data in Shiny Modules
 
-`teal` encaplulates all analysis datasets and provides the filtering facility. 
+`teal` encapsulates all analysis datasets and provides the filtering facility. 
 The filtered and unfiltered data is then made accessible via a `FilteredData` 
 object that we usually assign to a `datasets` variable. The `FilteredData` class
-is based on the [R6][R6] object system and we initally did not intend to expose 
+is based on the [R6][R6] object system and we initially did not intend to expose 
 that object to the `teal` package user. Hence there are some public methods to
 the `FilteredData` class that are not safe to use. It's best to only use the
 `get_data` method when writing [shiny modules][shiny_modules]. The `get_data`
 method returns either a reactive or a static version of the filtered or
-unfitered dataset of interest.
+unfiltered dataset of interest.
 
 Assume we create the following `module` with the shiny modules
 
@@ -181,7 +181,7 @@ module(
 )
 ```
 
-This analysis item shows up as *Frequency Table* in the navbar and displays a 
+This analysis item shows up as *Frequency Table* in the `navbar` and displays a 
 table of the `ADSL.SEX` variable in the *Tab Contents* section of the app. The 
 `ui` function requires the `id` argument, as defined in [shiny 
 modules][shiny_modules] and the `server` function requires the three arguments 
@@ -190,7 +190,7 @@ modules][shiny_modules] and the `server` function requires the three arguments
 specified in the `module` function. The `server_args` expects a named list 
 with additional arguments that should be passed to the server function. The list
 names (e.g. `datasets` in the above code) map to the argument names and the 
-content is usually mapped one-to-one with the expection of some keywords such as
+content is usually mapped one-to-one with the exception of some keywords such as
 `tead_datasets` which will be replaced by teal with the `FilteredData` object 
 mentioned above. Note that when you extract a dataset from the `FilteredData`
 object (here associated with the `datasets` variable) then you should always use
@@ -214,8 +214,8 @@ you have the following three filters
  - `ADSL.AGE > 15 & ADSL.AGE < 35`
  - `ADRS.ADY > 0 & ADRS.ADY < 500`
 
-Then then `FiteredData` object will perform the following operations to obtain
-the filtered `ADRS` object in one of your moduls:
+Then then `FilteredData` object will perform the following operations to obtain
+the filtered `ADRS` object in one of your modules:
 
 ```{r, eval=FALSE}
 ADSL_FILTERED <- subset(ADSL, ADSL.STUDYID %in% c('BP29392', 'WP29945') & ADSL.AGE > 15 & ADSL.AGE < 35)
@@ -232,7 +232,7 @@ ADRS_FILTERED <- merge(x = ADSL_FILTERED,
 ### Defining Custom Header and Footers
 
 The `teal::init` function also has the `header` and `footer` arguments that 
-expectes an object of class `shiny.tag` which can be created with the functions 
+expects an object of class `shiny.tag` which can be created with the functions 
 stored in the `tags` list (exported by shiny). So, a possible header could be
 defined as follows:
 

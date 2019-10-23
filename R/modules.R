@@ -51,10 +51,10 @@ root_modules <- function(...) {
 #' @param filters a vector with datanames that are relevant for the item. The
 #'   filter panel will automatically update the shown filters to include only
 #'   filters in the listed data sets. \code{NULL} will hide the filter panel,
-#'   and the keyowrd \code{'all'} will show the filters of all datasets.
+#'   and the keyword \code{'all'} will show the filters of all datasets.
 #' @param server_args is a named list with additional arguments passed on to the
 #'   server function. Note that the \code{FilteredDatasets} object gets
-#'   atomatically passed to the server function as arguments \code{datasets}.
+#'   automatically passed to the server function as arguments \code{datasets}.
 #' @param ui_args is a named list with additional arguments passed on to the
 #'   ui function. The argument \code{'teal_datasets'} will always be
 #'   replaced by the \code{FilteredData} object.
@@ -70,7 +70,7 @@ module <- function(label, server, ui, filters, server_args = NULL, ui_args = NUL
   stopifnot(is.null(ui_args) || is.list(ui_args))
 
   if (any(vapply(server_args, function(x)identical(x, "teal_datasets"), logical(1)))) {
-    warning("teal_datasets is now deprecated, the datasets object gets atomatically passed to the server function")
+    warning("teal_datasets is now deprecated, the datasets object gets automatically passed to the server function")
     server_args <- Filter(function(x) !identical(x, "teal_datasets"), server_args)
   }
 
@@ -93,7 +93,7 @@ module <- function(label, server, ui, filters, server_args = NULL, ui_args = NUL
 #' check that modules has not more than depth 2
 #'
 #' @param x \code{teal.modules} object
-#' @param depth optional, integer determinint current depth level
+#' @param depth optional, integer determining current depth level
 #'
 #' @return depth level for given module
 #'

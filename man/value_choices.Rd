@@ -11,7 +11,7 @@ value_choices(data, var_choices, var_label, subset = NULL, sep = " - ")
 
 \item{var_choices}{(\code{character}) vector with choices column names}
 
-\item{var_label}{(\code{character}) vector with labels collumn names}
+\item{var_label}{(\code{character}) vector with labels column names}
 
 \item{subset}{(\code{vector}) vector with values to subset}
 

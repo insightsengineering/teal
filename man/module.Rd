@@ -17,11 +17,11 @@ module(label, server, ui, filters, server_args = NULL, ui_args = NULL)
 \item{filters}{a vector with datanames that are relevant for the item. The
 filter panel will automatically update the shown filters to include only
 filters in the listed data sets. \code{NULL} will hide the filter panel,
-and the keyowrd \code{'all'} will show the filters of all datasets.}
+and the keyword \code{'all'} will show the filters of all datasets.}
 
 \item{server_args}{is a named list with additional arguments passed on to the
 server function. Note that the \code{FilteredDatasets} object gets
-atomatically passed to the server function as arguments \code{datasets}.}
+automatically passed to the server function as arguments \code{datasets}.}
 
 \item{ui_args}{is a named list with additional arguments passed on to the
 ui function. The argument \code{'teal_datasets'} will always be

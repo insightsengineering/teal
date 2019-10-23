@@ -12,7 +12,7 @@ vignette: >
 
 This is a list of possible directions to continue the teal development.
 
-# Abstract FiteredData Class
+# Abstract FilteredData Class
 
 Currently `teal` implements a filtering model that is useful to for clinical
 trials data only as it requires an `ADSL` dataset and that every dataset has the
@@ -28,12 +28,12 @@ knitr::include_graphics('./images/design_FilteredData.png')
 
 Note that this also requires to turn the filter panel (which is shown on the
 left hand side in teal app) into a shiny module that dispatches based on the
-concrete class inheriring from `FilteredData`.
+concrete class inheriting from `FilteredData`.
 
 
 # Modularize Teal
 
-Currently teal needs to be a toplevel shiny app, i.e.
+Currently teal needs to be a top-level shiny app, i.e.
 
 ```{r eval = FALSE}
 library(teal)
@@ -84,7 +84,7 @@ settings, etc...) so that an analysis state can be shared.
 # Improve Variable Browser
 
 Currently the `tm_variable_browser` is very basic. The univariate visualization
-of the data can be improved (and abtracted). For example,
+of the data can be improved (and abstracted). For example,
 
  * Make a better summary of factor variables with many factor levels
  * Provide multiple selection for bivariate plots
@@ -99,7 +99,7 @@ features. Right now we only allow for frequency counts of unique rows.
 # Split View
 
 Currently only one teal module can be shown at any given time (without manually
-chaning the `ui` object that is returned by `teal::init`). Since it is not
+changing the `ui` object that is returned by `teal::init`). Since it is not
 possible to start the same shiny app twice it would hence be nice to find a
 good solution to have two outputs side-by side (with their encoding panels).
 
@@ -117,7 +117,7 @@ stakeholder has analyzed (e.g. if a teal app is shared with affiliates).
 
 Right now it is not possible to extend an existing teal module without modifying
 that module (e.g. by adding arguments). For example for the `tm_scatterplot`
-molude one might be interested to add a regression line or a loess smother on
+module one might be interested to add a regression line or a loess smoother on
 top of the points. It would be great to design a teal module system that would
 allow something like this:
 
@@ -143,7 +143,7 @@ my_new_module <- Class(expands = "tm_scatterplot",
                        )
 ```
 
-# Module Interdependencies
+# Module Dependencies
 
 Currently all implemented teal modules are completely independent. However it
 would be nice to have global states, e.g. the `ADSL` variable with the study arm
@@ -152,11 +152,11 @@ optionally accept reactive values as arguments), but I have not done it so far.
 
 # Code Reproducibility
 
-We have now three proposed ways to do get reprodicuble code:
+We have now three proposed ways to do get reproducible code:
 
-1. Doug's way with parsing all the involved code and turn reative endpoints to
+1. Doug's way with parsing all the involved code and turn reactive endpoints to
 ordinary function call (still need to work on that pull-request). This is a
-general solution that does not require the module developper to do anything.
+general solution that does not require the module developer to do anything.
 
 1. Capturing analysis code and the substitute and stack the code manually to
 match the analysis. It would be nice to implement `nameExpression(name,
@@ -193,20 +193,20 @@ p <- p_km(
 
 Also note that the reproducible code should not depend on teal.
 
-# Filter Labels and Fiter States
+# Filter Labels and Filter States
 
 For clinical trials it is custom in Roche/Genetech to define labels that relate
 to certain subsets of the patients. It would be good to extend the filter panel
 (right hand side, not in the encoding panel) to facility filter labels, standard
-filter configuratrions and reset to standard filter configurations.
+filter configurations and reset to standard filter configurations.
 
 Note that a standard filter configuration is supported when initializing the
 teal app, however it's not possible to reset to that standard filter state.
 
 # Data Extraction Widget
 
-As clinical trials data is often in a vertical form is is often neccessary to do
-the following operartion in order to get to a particular measure for each
+As clinical trials data is often in a vertical form is is often necessary to do
+the following operation in order to get to a particular measure for each
 patient:
 
 ```{r eval=FALSE}
@@ -217,7 +217,7 @@ RAW_DATA %>%
 
 That is, the filtering is necessary to get to one value of interest per patient
 and the select is necessary to specify the column where the values are stored.
-It would be great to create an abtracted filter/select shiny module that provides an
+It would be great to create an abstracted filter/select shiny module that provides an
 intuitive user interface for this. I can extend on this problem if necessary.
 
 # More Standard General Teal Modules
@@ -227,10 +227,10 @@ Currently teal comes with the following standard modules:
 * variable browser
 * data table viewer
 * scatterplot
-* crosstable
+* cross-table
 * (I started the scatterplot matrix)
 
-It would be nice to extend the catalogue of very general modules. Specialized
-modules (kaplan meier plot, time to event analysis, etc.) live in other packages
+It would be nice to extend the catalog of very general modules. Specialized
+modules (Kaplan-Meier plot, time to event analysis, etc.) live in other packages
 such as `teal.modules.clinical`.
 

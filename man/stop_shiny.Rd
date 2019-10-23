@@ -3,7 +3,7 @@
 \name{stop_shiny}
 \alias{stop_shiny}
 \title{Stop app.R evaluation with a Jumbotron Shiny App
-This will start a seperate shiny app with a message}
+This will start a separate shiny app with a message}
 \usage{
 stop_shiny(title, body)
 }
@@ -14,7 +14,7 @@ stop_shiny(title, body)
 }
 \description{
 Stop app.R evaluation with a Jumbotron Shiny App
-This will start a seperate shiny app with a message
+This will start a separate shiny app with a message
 }
 \examples{
 \dontrun{

@@ -4,7 +4,7 @@ is.unique <- function(x) { # nolint
 }
 
 # also returns a list if only a single element
-#' Split by sepearator
+#' Split by separator
 #'
 #' @param x (\code{character}) Character (single)
 #' @param sep (\code{character}) Separator

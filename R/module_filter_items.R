@@ -119,7 +119,7 @@ srv_filter_items <- function(input, output, session, datasets, dataname, contain
   })
 
 
-  ## fiter change listeners
+  ## filter change listeners
   id_has_bindings <- character(0) # store which variables already have listeners
 
   create_listener <- function(id, id_rm, varname) {

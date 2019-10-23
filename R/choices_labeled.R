@@ -146,7 +146,7 @@ variable_choices <- function(data, subset = NULL) {
 #'
 #' @param data (\code{data.frame}) data to extract labels from
 #' @param var_choices (\code{character}) vector with choices column names
-#' @param var_label (\code{character}) vector with labels collumn names
+#' @param var_label (\code{character}) vector with labels column names
 #' @param subset (\code{vector}) vector with values to subset
 #' @param sep (\code{character}) separator used in case of multiple column names
 #'
@@ -186,7 +186,7 @@ value_choices <- function(data, var_choices, var_label, subset = NULL, sep = " -
 #' Get classes selected columns from dataset
 #'
 #' @param data (\code{data.frame}) data to determine variable types from
-#' @param columns (atomic vector of \code{character} or \code{NULL}) columnames chosen chosen from \code{data},
+#' @param columns (atomic vector of \code{character} or \code{NULL}) column names chosen chosen from \code{data},
 #'   \code{NULL} for all data columns
 #'
 #' @return (atomic vector of \code{character}) classes of \code{columns} from provided \code{data}

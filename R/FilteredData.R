@@ -329,8 +329,6 @@ FilteredData <- R6::R6Class( # nolint
       }
     },
 
-    # TODO add remove_filter method
-
     get_filter_type = function(dataname, varname) {
       stopifnot(is_character_single(dataname))
       stopifnot(is_character_single(varname))
@@ -395,7 +393,6 @@ FilteredData <- R6::R6Class( # nolint
         private$filter_state[[dataname]] <- state
 
       } else {
-        ## TODO: copy paste from above, change eventually
 
         fii <- self$get_filter_info(dataname, varname)
         state_i <- state; var <- varname

@@ -2,7 +2,7 @@
 % Please edit documentation in R/utils.R
 \name{split_by_sep}
 \alias{split_by_sep}
-\title{Split by sepearator}
+\title{Split by separator}
 \usage{
 split_by_sep(x, sep)
 }
@@ -12,5 +12,5 @@ split_by_sep(x, sep)
 \item{sep}{(\code{character}) Separator}
 }
 \description{
-Split by sepearator
+Split by separator
 }

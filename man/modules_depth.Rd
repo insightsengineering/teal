@@ -9,7 +9,7 @@ modules_depth(x, depth = 0)
 \arguments{
 \item{x}{\code{teal.modules} object}
 
-\item{depth}{optional, integer determinint current depth level}
+\item{depth}{optional, integer determining current depth level}
 }
 \value{
 depth level for given module
