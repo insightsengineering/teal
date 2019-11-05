@@ -12,7 +12,8 @@ module(label, server, ui, filters, server_args = NULL, ui_args = NULL)
 \item{server}{shiny server module function, see
 \code{link[shiny]{callModule}}}
 
-\item{ui}{shiny ui module function, see \code{link[shiny]{callModule}}}
+\item{ui}{shiny ui module function (see \code{link[shiny]{callModule}})
+with additional teal-specific \code{datasets} argument}
 
 \item{filters}{a vector with datanames that are relevant for the item. The
 filter panel will automatically update the shown filters to include only

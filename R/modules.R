@@ -47,7 +47,8 @@ root_modules <- function(...) {
 #' @param label label shown in the navigation for the item
 #' @param server shiny server module function, see
 #'   \code{link[shiny]{callModule}}
-#' @param ui shiny ui module function, see \code{link[shiny]{callModule}}
+#' @param ui shiny ui module function (see \code{link[shiny]{callModule}})
+#'   with additional teal-specific \code{datasets} argument
 #' @param filters a vector with datanames that are relevant for the item. The
 #'   filter panel will automatically update the shown filters to include only
 #'   filters in the listed data sets. \code{NULL} will hide the filter panel,
@@ -69,7 +70,7 @@ module <- function(label, server, ui, filters, server_args = NULL, ui_args = NUL
   stopifnot(is.null(server_args) || is.list(server_args))
   stopifnot(is.null(ui_args) || is.list(ui_args))
 
-  if (any(vapply(server_args, function(x)identical(x, "teal_datasets"), logical(1)))) {
+  if (any(vapply(server_args, function(x) identical(x, "teal_datasets"), logical(1)))) {
     warning("teal_datasets is now deprecated, the datasets object gets automatically passed to the server function")
     server_args <- Filter(function(x) !identical(x, "teal_datasets"), server_args)
   }
@@ -80,6 +81,9 @@ module <- function(label, server, ui, filters, server_args = NULL, ui_args = NUL
 
   if (!identical(names(formals(ui)[1]), "id")) {
     stop("teal modules need 'id' argument as a first argument in their ui function")
+  }
+  if (!identical(names(formals(ui)[2]), "datasets") && !identical(names(formals(ui)[2]), "...")) {
+    stop("teal modules need 'datasets' or '...' argument as a second argument in their ui function")
   }
 
   structure(
@@ -103,7 +107,7 @@ module <- function(label, server, ui, filters, server_args = NULL, ui_args = NUL
 #' m <- module(
 #'   "aaa",
 #'   server = function(input, output, session, datasets) {},
-#'   ui = function(id) {},
+#'   ui = function(id, ...) {},
 #'   filters = 'all'
 #' )
 #' x <- modules(
@@ -118,6 +122,7 @@ module <- function(label, server, ui, filters, server_args = NULL, ui_args = NUL
 #'   ),
 #'   m
 #' )
+#' teal:::modules_depth(x)
 #'
 #' x <- modules(
 #'   "a",
@@ -126,7 +131,6 @@ module <- function(label, server, ui, filters, server_args = NULL, ui_args = NUL
 #'   ),
 #'   m
 #' )
-#'
 #' teal:::modules_depth(x)
 modules_depth <- function(x, depth = 0) {
   children_depth <- if (is(x, "teal_modules")) {

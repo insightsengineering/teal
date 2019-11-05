@@ -36,7 +36,11 @@
 #' ADRS <- radrs(cached = TRUE)
 #' optionalSelectInput(inputId = "xvar",
 #'                     label = "x variable",
-#'                     choices = choices_labeled(choices = letters, labels = LETTERS, subset = c("a", "b", "c")),
+#'                     choices = choices_labeled(
+#'                       choices = letters,
+#'                       labels = LETTERS,
+#'                       subset = c("a", "b", "c")
+#'                     ),
 #'                     selected = "a")
 #' optionalSelectInput(inputId = "xvar",
 #'                     label = "x variable",

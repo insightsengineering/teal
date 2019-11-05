@@ -10,7 +10,7 @@ optionalSelectInput(inputId, label, choices = NULL, selected = NULL,
 \arguments{
 \item{inputId}{The \code{input} slot that will be used to access the value.}
 
-\item{label}{Display a text in the center of the switch.}
+\item{label}{Display label for the control, or \code{NULL} for no label.}
 
 \item{choices}{character vector or \code{NULL}. If \code{choices} is
 \code{NULL} no \code{pickerInput} widget is displayed and \code{input[[inputId]]}
@@ -21,14 +21,14 @@ element will be displayed.
 If elements of the list are named then that name rather than the value
 is displayed to the user.}
 
-\item{selected}{The initially selected value (or multiple values if multiple = TRUE).
+\item{selected}{The initially selected value (or multiple values if \code{multiple = TRUE}).
 If not specified then defaults to the first value for single-select lists
  and no values for multiple select lists.}
 
 \item{multiple}{Is selection of multiple items allowed?}
 
 \item{options}{List of options, see \link{pickerOptions} for all available options.
-For limit the number of selections, see example below.}
+To limit the number of selection possible, see example below.}
 
 \item{label_help}{optional an object of class \code{shiny.tag}. E.g. an object
 returned by \code{\link[shiny]{helpText}}}
@@ -51,7 +51,11 @@ library(random.cdisc.data)
 ADRS <- radrs(cached = TRUE)
 optionalSelectInput(inputId = "xvar",
                     label = "x variable",
-                    choices = choices_labeled(choices = letters, labels = LETTERS, subset = c("a", "b", "c")),
+                    choices = choices_labeled(
+                      choices = letters,
+                      labels = LETTERS,
+                      subset = c("a", "b", "c")
+                    ),
                     selected = "a")
 optionalSelectInput(inputId = "xvar",
                     label = "x variable",

@@ -10,6 +10,7 @@ ADRS
 ADSL
 ADTTE
 ADVS
+analyse
 analysis
 anl
 BCE
@@ -45,6 +46,7 @@ Modularizing
 NEST
 npaszty
 PARAMCD
+pre
 rcode
 recurse
 reproducibility
@@ -66,5 +68,5 @@ ui
 UI
 USUBJID
 waddella
-analyse
-pre
+funder
+ggplot
