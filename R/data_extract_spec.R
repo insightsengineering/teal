@@ -94,6 +94,9 @@ data_extract_spec <- function(dataname, select, filter = NULL, reshape = FALSE) 
               is_class_list("filter_spec")(filter))
   stopifnot(is_logical_single(reshape))
 
+  if (is(filter, "filter_spec")) {
+    filter <- list(filter)
+  }
   res <- list(dataname = dataname, select = select, filter = filter, reshape = reshape)
   class(res) <- "data_extract_spec"
 
