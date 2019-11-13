@@ -163,6 +163,20 @@ FilteredData <- R6::R6Class( # nolint
       private$data_attr[[dataname]]
     },
 
+    get_data_labels = function(dataname, subset = NULL) {
+      stopifnot(is_character_single(dataname))
+      stopifnot(is.null(subset) || is_character_empty(subset) || is_character_vector(subset))
+
+      labels <- self$get_data_attr(dataname, "labels")[["column_labels"]]
+      if (!is.null(subset)) {
+        labels <- labels[subset]
+      }
+
+      labels <- labels[!is.na(labels)]
+
+      return(labels)
+    },
+
 
     list_data_info = function(dataname, filtered = FALSE, variables = NULL) {
       stopifnot(is_character_single(dataname))
