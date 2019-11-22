@@ -99,7 +99,7 @@ optionalSelectInput <- function(inputId, # nolint
   )
 
   if (!is.null(label_help)) {
-    ui[[3]] <- list(ui[[3]][[1]], div(class = "label-help", label_help), ui[[3]][[2]], ui[[3]][[3]])
+    ui[[3]] <- c(ui[[3]][[1]], div(class = "label-help", label_help), ui[[3]][-1])
   }
 
   if (is.null(choices)) {
