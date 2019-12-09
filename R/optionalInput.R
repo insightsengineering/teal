@@ -112,7 +112,11 @@ optionalSelectInput <- function(inputId, # nolint
 
       return(div(
         hidden(ui),
-        tags$span(id = paste0(inputId, "_textonly"), paste0(sub(":[[:space:]]+$", "", label), ":"), selected),
+        tags$span(id = paste0(inputId, "_textonly"),
+                  style = "font-weight:bold",
+                  paste0(sub(":[[:space:]]+$", "", label), ":")
+                  ),
+        tags$span(id = paste0(inputId, "_valueonly"), selected),
         label_help
       ))
 
