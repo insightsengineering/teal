@@ -66,7 +66,7 @@ module <- function(label, server, ui, filters, server_args = NULL, ui_args = NUL
   stopifnot(is_character_single(label))
   stopifnot(is.function(server))
   stopifnot(is.function(ui))
-  stopifnot(is_character_vector(filters))
+  stopifnot(is_character_vector(filters) || is.null(filters))
   stopifnot(is.null(server_args) || is.list(server_args))
   stopifnot(is.null(ui_args) || is.list(ui_args))
 

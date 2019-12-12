@@ -4,7 +4,7 @@ ui_add_filter_variable <- function(id, dataname) {
   ns <- NS(id)
 
   div(
-    class = paste0("teal_filter_", dataname),
+    id = paste0("teal_filter_", dataname),
     optionalSelectInput(
       ns("variables"),
       label = dataname,
