@@ -32,4 +32,7 @@ choices_selected(
    selected = "X"
 )
 
+library(random.cdisc.data)
+ADSL <- radsl(cached = TRUE)
+choices_selected(variable_choices(ADSL), "SEX")
 }

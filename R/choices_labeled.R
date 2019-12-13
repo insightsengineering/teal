@@ -11,8 +11,6 @@
 #'
 #' @return a named character vector
 #'
-#' @importFrom stats setNames
-#'
 #' @export
 #'
 #' @examples
@@ -158,11 +156,11 @@ variable_choices <- function(data, subset = NULL) {
 #' library(random.cdisc.data)
 #' ADRS <- radrs(cached = TRUE)
 #'
-#' value_choices(cadrs, "PARAMCD", "PARAM", subset = c("BESRSPI", "INVET"))
-#' value_choices(cadrs, c("PARAMCD", "ARMCD"), c("PARAM", "ARM"))
-#' value_choices(cadrs, c("PARAMCD", "ARMCD"), c("PARAM", "ARM"),
+#' value_choices(ADRS, "PARAMCD", "PARAM", subset = c("BESRSPI", "INVET"))
+#' value_choices(ADRS, c("PARAMCD", "ARMCD"), c("PARAM", "ARM"))
+#' value_choices(ADRS, c("PARAMCD", "ARMCD"), c("PARAM", "ARM"),
 #'   subset = c("BESRSPI - ARM A", "INVET - ARM A", "OVRINV - ARM A"))
-#' value_choices(cadrs, c("PARAMCD", "ARMCD"), c("PARAM", "ARM"), sep = " --- ")
+#' value_choices(ADRS, c("PARAMCD", "ARMCD"), c("PARAM", "ARM"), sep = " --- ")
 value_choices <- function(data, var_choices, var_label, subset = NULL, sep = " - ") {
   stopifnot(is.data.frame(data))
   stopifnot(is_character_vector(var_choices))
