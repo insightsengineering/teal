@@ -29,7 +29,7 @@
 #' optionalSelectInput(inputId = "xvar", label = "x variable", choices = LETTERS[1:5], selected = "A")
 #' optionalSelectInput(inputId = "xvar",
 #'                     label = "x variable",
-#'                     choices = c("A - value A" = "A", "B - value B" = "B", "C - value C" = "C"),
+#'                     choices = c("A - value A" = "A"),
 #'                     selected = "A")
 #'
 #' library(random.cdisc.data)
@@ -110,16 +110,17 @@ optionalSelectInput <- function(inputId, # nolint
 
     if (length(choices) == 1) {
 
+      label_single <- extract_choices_labels(choices)
+
       return(div(
         hidden(ui),
         tags$span(id = paste0(inputId, "_textonly"),
                   style = "font-weight:bold",
                   paste0(sub(":[[:space:]]+$", "", label), ":")
                   ),
-        tags$span(id = paste0(inputId, "_valueonly"), selected),
+        tags$span(id = paste0(inputId, "_valueonly"), if_null(label_single, selected)),
         label_help
       ))
-
     } else {
       return(ui)
     }

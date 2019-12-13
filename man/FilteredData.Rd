@@ -4,7 +4,7 @@
 \name{FilteredData}
 \alias{FilteredData}
 \title{Class to encapsulate filtered data sets}
-\format{An object of class \code{R6ClassGenerator} of length 25.}
+\format{An object of class \code{R6ClassGenerator} of length 24.}
 \usage{
 FilteredData
 }

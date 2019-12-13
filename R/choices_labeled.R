@@ -221,27 +221,6 @@ variable_types <- function(data, columns = NULL) {
   return(res)
 }
 
-
-
-
-#' Extract labels from choices basing on attributes and names
-#'
-#' @param choices (\code{list} or \code{vector}) select choices
-#'
-#' @return (\code{character}) vector with labels
-extract_choices_labels <- function(choices) {
-  res <- if (is(choices, "choices_labeled")) {
-    attr(choices, "raw_labels")
-  } else if (!is.null(names(choices)) && !setequal(names(choices), unlist(unname(choices)))) {
-    names(choices)
-  } else {
-    NULL
-  }
-
-  return(res)
-}
-
-
 #' Print choices_labeled object
 #' @inheritParams base::print
 #' @export
