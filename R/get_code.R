@@ -17,9 +17,9 @@
 get_code <- function(files_path,
                      exclude_comments = TRUE,
                      read_sources = TRUE) {
-  stopifnot(is.character.vector(files_path))
-  stopifnot(is.logical.single(exclude_comments))
-  stopifnot(is.logical.single(read_sources))
+  stopifnot(is_character_vector(files_path))
+  stopifnot(is_logical_single(exclude_comments))
+  stopifnot(is_logical_single(read_sources))
 
   lines <- lapply(files_path, function(x)
     get_code_single(x, read_sources = read_sources) %>%
@@ -43,7 +43,7 @@ get_code <- function(files_path,
 #'
 #' @importFrom magrittr %>%
 get_code_single <- function(file_path, read_sources, if_url = grepl("^http[s]", file_path)) {
-  stopifnot(is.character.single(file_path))
+  stopifnot(is_character_single(file_path))
   if (!if_url) {
     stop_if_not(list(
       file.exists(file_path),
@@ -51,8 +51,8 @@ get_code_single <- function(file_path, read_sources, if_url = grepl("^http[s]", 
              "Please double check if you saved your script.")
     ))
   }
-  stopifnot(is.logical.single(read_sources))
-  stopifnot(is.logical.single(if_url))
+  stopifnot(is_logical_single(read_sources))
+  stopifnot(is_logical_single(if_url))
 
   lines <- readLines(file_path)
   if (read_sources) {
@@ -68,7 +68,7 @@ get_code_single <- function(file_path, read_sources, if_url = grepl("^http[s]", 
 #' @param lines (\code{character}) of preprocessing code.
 #' @inheritParams get_code
 enclosed_with <- function(lines) {
-  stopifnot(is.character.vector(lines))
+  stopifnot(is_character_vector(lines))
 
   # set beginning of preprocessing
   idx_start <- grep("#\\s*code>", lines)
@@ -104,8 +104,8 @@ enclosed_with <- function(lines) {
 #' @inheritParams get_code
 #' @inheritParams get_code_single
 code_exclude <- function(lines, exclude_comments, file_path) {
-  stopifnot(is.character.vector(lines))
-  stopifnot(is.logical.single(exclude_comments))
+  stopifnot(is_character_vector(lines))
+  stopifnot(is_logical_single(exclude_comments))
 
   nocode_single <- grep("^.+#[[:space:]]*nocode", lines)
   nocode_start  <- grep("[[:space:]]*#[[:space:]]*nocode[[:space:]]*>+", lines)
@@ -139,7 +139,7 @@ code_exclude <- function(lines, exclude_comments, file_path) {
 #' Finds lines in preprocessing code where \code{source()} call is located
 #' @inheritParams enclosed_with
 find_source_code <- function(lines) {
-  stopifnot(is.character.vector(lines))
+  stopifnot(is_character_vector(lines))
   idx <- grep("^[^#]*source\\([\'\"]([A-Za-z0-9_/.]).*\\.R[\'\"].*\\).*$", lines)
 
   if (length(idx) == 0) {
@@ -167,7 +167,7 @@ find_source_code <- function(lines) {
 #'
 #' @importFrom magrittr %>%
 include_source_code <- function(lines, dir = NULL) {
-  stopifnot(is.character.vector(lines))
+  stopifnot(is_character_vector(lines))
   stopifnot(is.null(dir) || dir.exists(dir))
 
 

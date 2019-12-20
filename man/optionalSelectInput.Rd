@@ -44,14 +44,18 @@ optionalSelectInput(inputId = "xvar", label = "x variable", choices = "A", selec
 optionalSelectInput(inputId = "xvar", label = "x variable", choices = LETTERS[1:5], selected = "A")
 optionalSelectInput(inputId = "xvar",
                     label = "x variable",
-                    choices = c("A - value A" = "A", "B - value B" = "B", "C - value C" = "C"),
+                    choices = c("A - value A" = "A"),
                     selected = "A")
 
 library(random.cdisc.data)
 ADRS <- radrs(cached = TRUE)
 optionalSelectInput(inputId = "xvar",
                     label = "x variable",
-                    choices = choices_labeled(choices = letters, labels = LETTERS, subset = c("a", "b", "c")),
+                    choices = choices_labeled(
+                      choices = letters,
+                      labels = LETTERS,
+                      subset = c("a", "b", "c")
+                    ),
                     selected = "a")
 optionalSelectInput(inputId = "xvar",
                     label = "x variable",

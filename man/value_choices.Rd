@@ -11,7 +11,7 @@ value_choices(data, var_choices, var_label, subset = NULL, sep = " - ")
 
 \item{var_choices}{(\code{character}) vector with choices column names}
 
-\item{var_label}{(\code{character}) vector with labels collumn names}
+\item{var_label}{(\code{character}) vector with labels column names}
 
 \item{subset}{(\code{vector}) vector with values to subset}
 
@@ -27,9 +27,9 @@ Wrapper on \code{\link{choices_labeled}} to label variable values basing on othe
 library(random.cdisc.data)
 ADRS <- radrs(cached = TRUE)
 
-value_choices(cadrs, "PARAMCD", "PARAM", subset = c("BESRSPI", "INVET"))
-value_choices(cadrs, c("PARAMCD", "ARMCD"), c("PARAM", "ARM"))
-value_choices(cadrs, c("PARAMCD", "ARMCD"), c("PARAM", "ARM"),
+value_choices(ADRS, "PARAMCD", "PARAM", subset = c("BESRSPI", "INVET"))
+value_choices(ADRS, c("PARAMCD", "ARMCD"), c("PARAM", "ARM"))
+value_choices(ADRS, c("PARAMCD", "ARMCD"), c("PARAM", "ARM"),
   subset = c("BESRSPI - ARM A", "INVET - ARM A", "OVRINV - ARM A"))
-value_choices(cadrs, c("PARAMCD", "ARMCD"), c("PARAM", "ARM"), sep = " --- ")
+value_choices(ADRS, c("PARAMCD", "ARMCD"), c("PARAM", "ARM"), sep = " --- ")
 }

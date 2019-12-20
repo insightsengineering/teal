@@ -20,23 +20,21 @@ key variables of the data set to be filtered.}
   watch out that the filter values have to follow the order of the \code{vars} input. In the following
   example we will show how to filter two columns:
 
-   \code{vars = c("PARAMCD","AVISITN")} and \code{choices = c("CRP - BASELINE", "ALT - BASELINE")}
+   \code{vars = c("PARAMCD","AVISIT")} and \code{choices = c("CRP - BASELINE", "ALT - BASELINE")}
  will lead to a filtering of
- \code{(PARAMCD == "CRP" & AVISITN == "BASELINE") | (PARAMCD == "ALT" & AVISITN == "BASELINE")}.
+ \code{(PARAMCD == "CRP" & AVISIT == "BASELINE") | (PARAMCD == "ALT" & AVISIT == "BASELINE")}.
 
  The \code{sep} input has to be \code{" - "} in this case.}
 
 \item{selected}{(\code{character}) Named character vector to define the selected
 values of a shiny \code{\link[shiny]{selectInput}} (default values). This value will
-be displayed inside the shiny app upon start.
-Please check the \code{choices} description for further
-details}
+be displayed inside the shiny app upon start.}
 
 \item{multiple}{(\code{logical}) Whether multiple values shall be allowed in the
 shiny \code{\link[shiny]{selectInput}}.}
 
-\item{label}{(\code{character}) Label on top of the shiny \code{\link[shiny]{selectInput}}
-created from this specification.}
+\item{label}{(\code{logical}) (optional) Define a label
+on top of this specific shiny \code{\link[shiny]{selectInput}}.}
 
 \item{sep}{(\code{character}) A separator string to split the \code{choices} or
 \code{selected} inputs into the values of the different columns}

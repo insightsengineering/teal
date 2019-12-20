@@ -54,13 +54,31 @@ test_that("data_extract_spec works with valid input", {
     selected = "PFS",
     multiple = FALSE
   )
+
+  filter_spec2 <- filter_spec(
+    label = "Select parameter:",
+    vars = "AVISIT",
+    choices = c("BASELINE", "SCREENIG"),
+    selected = "BASELINE",
+    multiple = FALSE
+  )
+
   data_extract_spec1 <- expect_silent(data_extract_spec(
     dataname = "ADTTE",
     select = select_spec1,
     filter = filter_spec1
   ))
   expect_identical(data_extract_spec1$select, select_spec1)
-  expect_identical(data_extract_spec1$filter, filter_spec1)
+  expect_identical(data_extract_spec1$filter, list(filter_spec1))
+
+  data_extract_spec2 <- expect_silent(data_extract_spec(
+    dataname = "ADTTE",
+    select = select_spec1,
+    filter = list(filter_spec1, filter_spec2)
+  ))
+
+  expect_identical(data_extract_spec2$select, select_spec1)
+  expect_identical(data_extract_spec2$filter, list(filter_spec1, filter_spec2))
 
   # with reshape (only makes sense when filter is there)
   filter_spec1 <- filter_spec(
@@ -77,7 +95,7 @@ test_that("data_extract_spec works with valid input", {
     reshape = TRUE
   ))
   expect_identical(data_extract_spec1$select, select_spec1)
-  expect_identical(data_extract_spec1$filter, filter_spec1)
+  expect_identical(data_extract_spec1$filter, list(filter_spec1))
   expect_identical(data_extract_spec1$reshape, TRUE)
 
 })

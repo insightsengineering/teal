@@ -11,8 +11,6 @@
 #'
 #' @return a named character vector
 #'
-#' @importFrom stats setNames
-#'
 #' @export
 #'
 #' @examples
@@ -43,12 +41,12 @@ choices_labeled <- function(choices, labels, subset = NULL) {
   if (is.factor(choices)) {
     choices <- as.character(choices)
   }
-  stopifnot(is.character.vector(choices))
+  stopifnot(is_character_vector(choices))
 
   if (is.factor(labels)) {
     labels <- as.character(labels)
   }
-  stopifnot(is.character.vector(labels))
+  stopifnot(is_character_vector(labels))
 
   stop_if_not(list(length(choices) == length(labels), "length of choices must be the same as labels"))
 
@@ -108,8 +106,8 @@ variable_choices <- function(data, subset = NULL) {
   if (is.null(subset)) {
     subset <- names(data)
   }
-  stopifnot(is.null(subset) || is.character.vector(subset, min_length = 0))
-  if (is.character.vector(subset)) {
+  stopifnot(is.null(subset) || is_character_vector(subset, min_length = 0))
+  if (is_character_vector(subset)) {
     stopifnot(all(subset %in% names(data) | subset == ""))
   }
 
@@ -146,7 +144,7 @@ variable_choices <- function(data, subset = NULL) {
 #'
 #' @param data (\code{data.frame}) data to extract labels from
 #' @param var_choices (\code{character}) vector with choices column names
-#' @param var_label (\code{character}) vector with labels collumn names
+#' @param var_label (\code{character}) vector with labels column names
 #' @param subset (\code{vector}) vector with values to subset
 #' @param sep (\code{character}) separator used in case of multiple column names
 #'
@@ -158,15 +156,15 @@ variable_choices <- function(data, subset = NULL) {
 #' library(random.cdisc.data)
 #' ADRS <- radrs(cached = TRUE)
 #'
-#' value_choices(cadrs, "PARAMCD", "PARAM", subset = c("BESRSPI", "INVET"))
-#' value_choices(cadrs, c("PARAMCD", "ARMCD"), c("PARAM", "ARM"))
-#' value_choices(cadrs, c("PARAMCD", "ARMCD"), c("PARAM", "ARM"),
+#' value_choices(ADRS, "PARAMCD", "PARAM", subset = c("BESRSPI", "INVET"))
+#' value_choices(ADRS, c("PARAMCD", "ARMCD"), c("PARAM", "ARM"))
+#' value_choices(ADRS, c("PARAMCD", "ARMCD"), c("PARAM", "ARM"),
 #'   subset = c("BESRSPI - ARM A", "INVET - ARM A", "OVRINV - ARM A"))
-#' value_choices(cadrs, c("PARAMCD", "ARMCD"), c("PARAM", "ARM"), sep = " --- ")
+#' value_choices(ADRS, c("PARAMCD", "ARMCD"), c("PARAM", "ARM"), sep = " --- ")
 value_choices <- function(data, var_choices, var_label, subset = NULL, sep = " - ") {
   stopifnot(is.data.frame(data))
-  stopifnot(is.character.vector(var_choices))
-  stopifnot(is.character.vector(var_label))
+  stopifnot(is_character_vector(var_choices))
+  stopifnot(is_character_vector(var_label))
   stopifnot(is.null(subset) || is.vector(subset))
 
   choices <- apply(data[var_choices], 1, paste, collapse = sep)
@@ -186,7 +184,7 @@ value_choices <- function(data, var_choices, var_label, subset = NULL, sep = " -
 #' Get classes selected columns from dataset
 #'
 #' @param data (\code{data.frame}) data to determine variable types from
-#' @param columns (atomic vector of \code{character} or \code{NULL}) columnames chosen chosen from \code{data},
+#' @param columns (atomic vector of \code{character} or \code{NULL}) column names chosen chosen from \code{data},
 #'   \code{NULL} for all data columns
 #'
 #' @return (atomic vector of \code{character}) classes of \code{columns} from provided \code{data}
@@ -209,11 +207,11 @@ value_choices <- function(data, var_choices, var_label, subset = NULL, sep = " -
 #'     stringsAsFactors = FALSE))
 variable_types <- function(data, columns = NULL) {
   stopifnot(is.data.frame(data),
-            is.null(columns) || is.character.vector(columns, min_length = 0))
+            is.null(columns) || is_character_vector(columns, min_length = 0))
 
   res <- if (is.null(columns)) {
     vapply(data, function(x) class(x)[[1]], character(1), USE.NAMES = FALSE)
-  } else if (is.character.vector(columns)) {
+  } else if (is_character_vector(columns)) {
     stopifnot(all(columns %in% names(data) | columns == ""))
     vapply(columns, function(x) ifelse(x == "", "", class(data[[x]])[[1]]), character(1), USE.NAMES = FALSE)
   } else {
@@ -222,27 +220,6 @@ variable_types <- function(data, columns = NULL) {
 
   return(res)
 }
-
-
-
-
-#' Extract labels from choices basing on attributes and names
-#'
-#' @param choices (\code{list} or \code{vector}) select choices
-#'
-#' @return (\code{character}) vector with labels
-extract_choices_labels <- function(choices) {
-  res <- if (is(choices, "choices_labeled")) {
-    attr(choices, "raw_labels")
-  } else if (!is.null(names(choices)) && !setequal(names(choices), unlist(unname(choices)))) {
-    names(choices)
-  } else {
-    NULL
-  }
-
-  return(res)
-}
-
 
 #' Print choices_labeled object
 #' @inheritParams base::print

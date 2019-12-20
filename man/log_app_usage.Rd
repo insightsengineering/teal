@@ -8,15 +8,15 @@ log_app_usage(ta, molecule, indication, anl_type, pkg_meta = c("Package",
   "Title", "Version", "RemoteRef"))
 }
 \arguments{
-\item{ta}{therapeutic area name. required argument. e.g. "I2ON".}
+\item{ta}{therapeutic area name. required argument. e.g. \code{"I2ON"}.}
 
-\item{molecule}{molecule name. required argument. e.g. "Lucentis".}
+\item{molecule}{molecule name. required argument. e.g. \code{"Lucentis"}.}
 
-\item{indication}{indication. required argument. e.g. "AMD".}
+\item{indication}{indication. required argument. e.g. \code{"AMD"}.}
 
-\item{anl_type}{analysis type. required argument. e.g. "Interim Analysis".}
+\item{anl_type}{analysis type. required argument. e.g. \code{"Interim Analysis"}.}
 
-\item{pkg_meta}{package metadata fields. default values: c("Package", "Title", "Version", "RemoteRef").}
+\item{pkg_meta}{package metadata fields. default values: \code{c("Package", "Title", "Version", "RemoteRef")}.}
 }
 \description{
 Analysis of Teal application utilization is a key component towards ongoing enhancements

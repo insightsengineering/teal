@@ -45,7 +45,7 @@ Creates the server and ui part for a teal shiny app
 \examples{
 library(random.cdisc.data)
 
-ADSL <- radsl(seed = 1)
+ADSL <- radsl(cached = TRUE)
 
 options(teal_logging = FALSE)
 

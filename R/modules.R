@@ -47,14 +47,15 @@ root_modules <- function(...) {
 #' @param label label shown in the navigation for the item
 #' @param server shiny server module function, see
 #'   \code{link[shiny]{callModule}}
-#' @param ui shiny ui module function, see \code{link[shiny]{callModule}}
+#' @param ui shiny ui module function (see \code{link[shiny]{callModule}})
+#'   with additional teal-specific \code{datasets} argument
 #' @param filters a vector with datanames that are relevant for the item. The
 #'   filter panel will automatically update the shown filters to include only
 #'   filters in the listed data sets. \code{NULL} will hide the filter panel,
-#'   and the keyowrd \code{'all'} will show the filters of all datasets.
+#'   and the keyword \code{'all'} will show the filters of all datasets.
 #' @param server_args is a named list with additional arguments passed on to the
 #'   server function. Note that the \code{FilteredDatasets} object gets
-#'   atomatically passed to the server function as arguments \code{datasets}.
+#'   automatically passed to the server function as arguments \code{datasets}.
 #' @param ui_args is a named list with additional arguments passed on to the
 #'   ui function. The argument \code{'teal_datasets'} will always be
 #'   replaced by the \code{FilteredData} object.
@@ -62,15 +63,15 @@ root_modules <- function(...) {
 #' @export
 #'
 module <- function(label, server, ui, filters, server_args = NULL, ui_args = NULL) {
-  stopifnot(is.character.single(label))
+  stopifnot(is_character_single(label))
   stopifnot(is.function(server))
   stopifnot(is.function(ui))
-  stopifnot(is.character.vector(filters))
+  stopifnot(is_character_vector(filters) || is.null(filters))
   stopifnot(is.null(server_args) || is.list(server_args))
   stopifnot(is.null(ui_args) || is.list(ui_args))
 
-  if (any(vapply(server_args, function(x)identical(x, "teal_datasets"), logical(1)))) {
-    warning("teal_datasets is now deprecated, the datasets object gets atomatically passed to the server function")
+  if (any(vapply(server_args, function(x) identical(x, "teal_datasets"), logical(1)))) {
+    warning("teal_datasets is now deprecated, the datasets object gets automatically passed to the server function")
     server_args <- Filter(function(x) !identical(x, "teal_datasets"), server_args)
   }
 
@@ -80,6 +81,9 @@ module <- function(label, server, ui, filters, server_args = NULL, ui_args = NUL
 
   if (!identical(names(formals(ui)[1]), "id")) {
     stop("teal modules need 'id' argument as a first argument in their ui function")
+  }
+  if (!identical(names(formals(ui)[2]), "datasets") && !identical(names(formals(ui)[2]), "...")) {
+    stop("teal modules need 'datasets' or '...' argument as a second argument in their ui function")
   }
 
   structure(
@@ -93,7 +97,7 @@ module <- function(label, server, ui, filters, server_args = NULL, ui_args = NUL
 #' check that modules has not more than depth 2
 #'
 #' @param x \code{teal.modules} object
-#' @param depth optional, integer determinint current depth level
+#' @param depth optional, integer determining current depth level
 #'
 #' @return depth level for given module
 #'
@@ -103,7 +107,7 @@ module <- function(label, server, ui, filters, server_args = NULL, ui_args = NUL
 #' m <- module(
 #'   "aaa",
 #'   server = function(input, output, session, datasets) {},
-#'   ui = function(id) {},
+#'   ui = function(id, ...) {},
 #'   filters = 'all'
 #' )
 #' x <- modules(
@@ -118,6 +122,7 @@ module <- function(label, server, ui, filters, server_args = NULL, ui_args = NUL
 #'   ),
 #'   m
 #' )
+#' teal:::modules_depth(x)
 #'
 #' x <- modules(
 #'   "a",
@@ -126,7 +131,6 @@ module <- function(label, server, ui, filters, server_args = NULL, ui_args = NUL
 #'   ),
 #'   m
 #' )
-#'
 #' teal:::modules_depth(x)
 modules_depth <- function(x, depth = 0) {
   children_depth <- if (is(x, "teal_modules")) {

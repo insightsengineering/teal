@@ -30,7 +30,7 @@
 #'
 #' @export
 #'
-#' @importFrom shinyjs useShinyjs hidden
+#' @importFrom shinyjs useShinyjs hidden hide show
 #' @importFrom methods is
 #'
 #' @include FilteredData.R
@@ -39,7 +39,7 @@
 #' @examples
 #' library(random.cdisc.data)
 #'
-#' ADSL <- radsl(seed = 1)
+#' ADSL <- radsl(cached = TRUE)
 #'
 #' options(teal_logging = FALSE)
 #'
@@ -132,29 +132,10 @@ init <- function(data,
   # ui function
   ui <- shinyUI(
       fluidPage(
-        useShinyjs(),
+        shinyjs::useShinyjs(),
         include_css_files(package = "teal"),
         include_js_files(package = "teal", except = "init.js"),
-        hidden(icon("cog")), # add hidden icon to load font-awesome css for icons
-        tags$head(
-          tags$script(
-            # show/hide see https://groups.google.com/forum/#!topic/shiny-discuss/yxFuGgDOIuM
-            HTML("
-                  Shiny.addCustomMessageHandler('tealShowHide', function(message) {
-                        var els = $(message.selector);
-                        if (message.action == 'show') {
-                          els.trigger('show');
-                          els.removeClass('hide');
-                          els.trigger('shown');
-                        } else {
-                          els.trigger('hide');
-                          els.addClass('hide');
-                          els.trigger('hidden');
-                        }
-                  });"
-            )
-          )
-        ),
+        shinyjs::hidden(icon("cog")), # add hidden icon to load font-awesome css for icons
         tags$header(header),
         tags$hr(style = "margin: 7px 0;"),
         local({
@@ -165,38 +146,51 @@ init <- function(data,
             tp$children[[1]],
             tags$hr(style = "margin: 7px 0;"),
             fluidRow(
-              column(9, tp$children[[2]]),
-              column(3, div(id = "teal_filter-panel", class = "hide",
-                            div(id = "teal_filter_active_vars", class = "well",
-                                tags$label(
-                                  "Active Filter Variables",
-                                  class = "text-primary",
-                                  style = "margin-bottom: 15px;"
-                                ),
-                                tagList(
-                                  lapply(datasets$datanames(), function(dataname) {
-                                    ui_filter_info(paste0("teal_filters_info_", dataname), dataname)
-                                  })
-                                ),
-                                tagList(
-                                  lapply(datasets$datanames(), function(dataname) {
-                                    ui_filter_items(paste0("teal_filters_", dataname), dataname)
-                                  })
-                                )
-                            ),
-                            div(id = "teal_filter_add_vars", class = "well",
-                                tags$label(
-                                  "Add Filter Variables",
-                                  class = "text-primary",
-                                  style = "margin-bottom: 15px;"
-                                ),
-                                tagList(
-                                  lapply(datasets$datanames(), function(dataname) {
-                                    ui_add_filter_variable(paste0("teal_add_", dataname, "_filters"), dataname)
-                                  })
-                                )
-                            )
-              ))
+              column(
+                9,
+                tp$children[[2]]
+              ),
+              column(
+                3,
+                shinyjs::hidden(
+                  div(
+                    id = "teal_filter-panel",
+                    div(
+                      id = "teal_filter_active_vars",
+                      class = "well",
+                      tags$label(
+                        "Active Filter Variables",
+                        class = "text-primary",
+                        style = "margin-bottom: 15px;"
+                      ),
+                      tagList(
+                        lapply(datasets$datanames(), function(dataname) {
+                          ui_filter_info(paste0("teal_filters_info_", dataname), dataname)
+                        })
+                      ),
+                      tagList(
+                        lapply(datasets$datanames(), function(dataname) {
+                          ui_filter_items(paste0("teal_filters_", dataname), dataname)
+                        })
+                      )
+                    ),
+                    div(
+                      id = "teal_filter_add_vars",
+                      class = "well",
+                      tags$label(
+                        "Add Filter Variables",
+                        class = "text-primary",
+                        style = "margin-bottom: 15px;"
+                      ),
+                      tagList(
+                        lapply(datasets$datanames(), function(dataname) {
+                          ui_add_filter_variable(paste0("teal_add_", dataname, "_filters"), dataname)
+                        })
+                      )
+                    )
+                  )
+                )
+              )
             )
           )
           tp
@@ -210,15 +204,6 @@ init <- function(data,
   server <- function(input, output, session) {
 
     run_js_file(file = "init.js", package = "teal")
-
-    show_filter_panel <- function(bool = TRUE) {
-      session$sendCustomMessage(
-        type = "setDisplayCss",
-        list(selector = "#teal_filter_panel",
-             type = ifelse(bool, "block", "none")
-        )
-      )
-    }
 
     # evaluate the server functions
     call_modules(modules, datasets, idprefix = "teal_modules")
@@ -242,14 +227,17 @@ init <- function(data,
       id <- label_to_id(x$label, idprefix)
 
       if (is(x, "teal_module")) {
-        setNames(list(if (is.null(x$filters)) NA else x$filters), id)
+        setNames(list(x$filters), id)
       } else if (is(x, "teal_modules")) {
-        lapply(x$modules, recurse, idprefix = id)
+        unlist(
+          mapply(function(i) recurse(i, idprefix = id), x$modules, USE.NAMES = TRUE, SIMPLIFY = FALSE),
+          recursive = FALSE
+        )
       }
     }
 
     # named vector with ids and datasets
-    filters_tab_lookup <- unlist(recurse(modules, "teal_modules"))
+    filters_tab_lookup <- recurse(modules, "teal_modules")
 
     recurse_modules <- function(x, idprefix) {
       id <- label_to_id(x$label, idprefix)
@@ -266,7 +254,7 @@ init <- function(data,
     observe({
       # define reactivity dependence
       main_tab <- input[["teal_modules_root"]]
-      secondary_tabs <- sapply(id_modules, function(id) input[[id]],  USE.NAMES = TRUE)
+      secondary_tabs <- sapply(id_modules, function(id) input[[id]], USE.NAMES = TRUE)
 
       # figure out which is the active tab/module
       main_tab_id <- label_to_id(main_tab, "teal_modules_root")
@@ -278,28 +266,30 @@ init <- function(data,
       }
 
       filters <- filters_tab_lookup[[active_module_id]]
-      .log("Active filter for tab", active_module_id, "is", filters)
+      .log("Active filter for tab", active_module_id, "is", if_null(filters, "[empty]"))
 
-      if (is.na(filters)) {
-        session$sendCustomMessage(type = "tealShowHide", list(selector = "#teal_filter-panel", action = "hide"))
+      if (is.null(filters)) {
+        shinyjs::hide("teal_filter-panel")
       } else {
 
-        session$sendCustomMessage(type = "tealShowHide", list(selector = "#teal_filter-panel", action = "show"))
+        shinyjs::show("teal_filter-panel")
 
         if ("all" %in% filters) {
           lapply(datasets$datanames(), function(dataname) {
-            session$sendCustomMessage(type = "tealShowHide", list(selector = paste0(".teal_filter_", dataname),
-                                                                   action = "show"))
+            shinyjs::show(paste0("teal_filter_", dataname))
           })
         } else {
-          Map(function(dataname) {
-            session$sendCustomMessage(
-              type = "tealShowHide",
-              list(selector = paste0(".teal_filter_", dataname),
-                   action = if (dataname == "ADSL" || dataname %in% filters) "show" else "hide"
-              )
-            )
-          },  datasets$datanames())
+          lapply(
+            datasets$datanames(),
+            function(dataname) {
+              id <- paste0("teal_filter_", dataname)
+              if (dataname == "ADSL" || dataname %in% filters) {
+                shinyjs::show(id)
+              } else {
+                shinyjs::hide(id)
+              }
+            }
+          )
         }
       }
 

@@ -29,14 +29,18 @@
 #' optionalSelectInput(inputId = "xvar", label = "x variable", choices = LETTERS[1:5], selected = "A")
 #' optionalSelectInput(inputId = "xvar",
 #'                     label = "x variable",
-#'                     choices = c("A - value A" = "A", "B - value B" = "B", "C - value C" = "C"),
+#'                     choices = c("A - value A" = "A"),
 #'                     selected = "A")
 #'
 #' library(random.cdisc.data)
 #' ADRS <- radrs(cached = TRUE)
 #' optionalSelectInput(inputId = "xvar",
 #'                     label = "x variable",
-#'                     choices = choices_labeled(choices = letters, labels = LETTERS, subset = c("a", "b", "c")),
+#'                     choices = choices_labeled(
+#'                       choices = letters,
+#'                       labels = LETTERS,
+#'                       subset = c("a", "b", "c")
+#'                     ),
 #'                     selected = "a")
 #' optionalSelectInput(inputId = "xvar",
 #'                     label = "x variable",
@@ -56,11 +60,11 @@ optionalSelectInput <- function(inputId, # nolint
                                 multiple = FALSE,
                                 options = list(),
                                 label_help = NULL) {
-  stopifnot(is.character.single(inputId))
-  stopifnot(is.character.single(label) || inherits(label, "shiny.tag") || inherits(label, "shiny.tag.list"))
+  stopifnot(is_character_single(inputId))
+  stopifnot(is_character_single(label) || inherits(label, "shiny.tag") || inherits(label, "shiny.tag.list"))
   stopifnot(is.null(choices) || length(choices) >= 1)
   stopifnot(is.null(selected) || length(selected) == 0 || all(selected %in% choices))
-  stopifnot(is.logical.single(multiple))
+  stopifnot(is_logical_single(multiple))
   stopifnot(is.list(options))
 
   default_options <- list(
@@ -84,6 +88,8 @@ optionalSelectInput <- function(inputId, # nolint
   raw_choices <- extract_raw_choices(choices)
   raw_selected <- extract_raw_choices(selected)
 
+
+
   ui <- pickerInput(
     inputId = inputId,
     label = label,
@@ -95,7 +101,7 @@ optionalSelectInput <- function(inputId, # nolint
   )
 
   if (!is.null(label_help)) {
-    ui[[3]] <- list(ui[[3]][[1]], div(class = "label-help", label_help), ui[[3]][[2]], ui[[3]][[3]])
+    ui[[3]] <- append(ui[[3]], list(div(class = "label-help", label_help)), after = 1)
   }
 
   if (is.null(choices)) {
@@ -106,12 +112,17 @@ optionalSelectInput <- function(inputId, # nolint
 
     if (length(choices) == 1) {
 
+      label_single <- extract_choices_labels(choices)
+
       return(div(
         hidden(ui),
-        tags$span(id = paste0(inputId, "_textonly"), paste0(sub(":[[:space:]]+$", "", label), ":"), selected),
+        tags$span(id = paste0(inputId, "_textonly"),
+                  style = "font-weight:bold",
+                  paste0(sub(":[[:space:]]+$", "", label), ":")
+                  ),
+        tags$span(id = paste0(inputId, "_valueonly"), if_null(label_single, selected)),
         label_help
       ))
-
     } else {
       return(ui)
     }
@@ -163,7 +174,7 @@ updateOptionalSelectInput <- function(session, # nolint
 #' teal:::variable_type_icons(c("integer", "numeric", "logical", "Date", "POSIXct", "POSIXlt",
 #' "factor", "character", "unknown", ""))
 variable_type_icons <- function(var_type) {
-  stopifnot(is.character.vector(var_type, min_length = 0))
+  stopifnot(is_character_vector(var_type, min_length = 0))
 
   class_to_icon <- list(
     numeric = "sort-numeric-up",
@@ -208,16 +219,16 @@ variable_type_icons <- function(var_type) {
 #'   var_type = c("factor", "numeric")
 #' )
 picker_options_content <- function(var_name, var_label, var_type) {
-  if (is.empty(var_name)) {
+  if (utils.nest::is_empty(var_name)) {
     return(character(0))
   }
-  if (is.empty(var_type) && is.empty(var_label)) {
+  if (utils.nest::is_empty(var_type) && utils.nest::is_empty(var_label)) {
     return(var_name)
   }
   stopifnot(
-    is.character.vector(var_name),
-    is.character.empty(var_type) || length(var_type) == length(var_name),
-    is.character.empty(var_label) || length(var_label) == length(var_name)
+    is_character_vector(var_name),
+    is_character_empty(var_type) || length(var_type) == length(var_name),
+    is_character_empty(var_label) || length(var_label) == length(var_name)
   )
 
   var_icon <- variable_type_icons(var_type)

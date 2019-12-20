@@ -5,7 +5,7 @@
 #'
 #' @export
 include_css_files <- function(package = "teal", pattern = "*") {
-  stopifnot(is.character.single(package))
+  stopifnot(is_character_single(package))
 
   list_files <- list.files(file.path(system.file(package = package), "css"), pattern = pattern, full.names = TRUE)
 
@@ -23,8 +23,8 @@ include_css_files <- function(package = "teal", pattern = "*") {
 #'
 #' @export
 include_js_files <- function(package = "teal", pattern = "*", except = NULL) {
-  stopifnot(is.character.single(package))
-  stopifnot(is.null(except) || is.character.vector(except))
+  stopifnot(is_character_single(package))
+  stopifnot(is.null(except) || is_character_vector(except))
 
   list_files <- list.files(file.path(system.file(package = package), "js"), pattern = pattern, full.names = TRUE)
 
@@ -44,8 +44,8 @@ include_js_files <- function(package = "teal", pattern = "*", except = NULL) {
 #'
 #' @export
 run_js_file <- function(file, package = "teal") {
-  stopifnot(is.character.vector(file))
-  stopifnot(is.character.single(package))
+  stopifnot(is_character_vector(file))
+  stopifnot(is_character_single(package))
 
   for (i in file) {
     shinyjs::runjs(paste0(readLines(system.file("js", i, package = package)), collapse = "\n"))

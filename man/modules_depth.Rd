@@ -9,7 +9,7 @@ modules_depth(x, depth = 0)
 \arguments{
 \item{x}{\code{teal.modules} object}
 
-\item{depth}{optional, integer determinint current depth level}
+\item{depth}{optional, integer determining current depth level}
 }
 \value{
 depth level for given module
@@ -21,7 +21,7 @@ check that modules has not more than depth 2
 m <- module(
   "aaa",
   server = function(input, output, session, datasets) {},
-  ui = function(id) {},
+  ui = function(id, ...) {},
   filters = 'all'
 )
 x <- modules(
@@ -36,6 +36,7 @@ x <- modules(
   ),
   m
 )
+teal:::modules_depth(x)
 
 x <- modules(
   "a",
@@ -44,6 +45,5 @@ x <- modules(
   ),
   m
 )
-
 teal:::modules_depth(x)
 }

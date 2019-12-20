@@ -11,3 +11,4 @@ vignettes/*.R
 devel/*
 temp/*
 docs
+man/*

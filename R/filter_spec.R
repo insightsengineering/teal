@@ -16,23 +16,16 @@
 #'   watch out that the filter values have to follow the order of the \code{vars} input. In the following
 #'   example we will show how to filter two columns:
 #'
-#'    \code{vars = c("PARAMCD","AVISITN")} and \code{choices = c("CRP - BASELINE", "ALT - BASELINE")}
+#'    \code{vars = c("PARAMCD","AVISIT")} and \code{choices = c("CRP - BASELINE", "ALT - BASELINE")}
 #'  will lead to a filtering of
-#'  \code{(PARAMCD == "CRP" & AVISITN == "BASELINE") | (PARAMCD == "ALT" & AVISITN == "BASELINE")}.
+#'  \code{(PARAMCD == "CRP" & AVISIT == "BASELINE") | (PARAMCD == "ALT" & AVISIT == "BASELINE")}.
 #'
 #'  The \code{sep} input has to be \code{" - "} in this case.
-#'
 #' @param selected (\code{character}) Named character vector to define the selected
 #'  values of a shiny \code{\link[shiny]{selectInput}} (default values). This value will
 #'  be displayed inside the shiny app upon start.
-#'  Please check the \code{choices} description for further
-#'  details
 #'
-#' @param multiple (\code{logical}) Whether multiple values shall be allowed in the
-#'  shiny \code{\link[shiny]{selectInput}}.
-#'
-#' @param label (\code{character}) Label on top of the shiny \code{\link[shiny]{selectInput}}
-#'  created from this specification.
+#' @inheritParams select_spec
 #'
 #' @return \code{filter_spec}-S3-class object
 #'
@@ -130,32 +123,40 @@ filter_spec <- function(vars,
                         multiple = length(selected) > 1,
                         label = "Filter",
                         sep = if_null(attr(choices, "sep"), " - ")) {
-  stopifnot(is.character.vector(vars))
-  stopifnot(is.character.vector(choices))
+  stopifnot(is_character_vector(vars))
   stopifnot(all(!duplicated(vars)))
+  stopifnot(is_character_vector(choices))
   stopifnot(all(!duplicated(choices)))
-  stopifnot(is.character.single(sep))
-  stopifnot(is.logical.single(multiple))
-  stopifnot(is.character.single(label))
+  stopifnot(is_character_single(sep))
+  stopifnot(is_logical_single(multiple))
+  stopifnot(is_character_single(label))
 
   choices_attrs <- attributes(choices)
   choices <- split_by_sep(choices, sep)
+
   stopifnot(all(vapply(choices, length, integer(1)) == length(vars)))
 
+  attributes(choices) <- choices_attrs
+  names(choices) <- if_null(names(choices), vapply(choices, paste, collapse = sep, character(1)))
+
+
+
   if (!is.null(selected)) {
-    stopifnot(is.character.vector(selected))
+    stopifnot(multiple || length(selected) == 1)
+    stopifnot(is_character_vector(selected))
     stopifnot(all(!duplicated(selected)))
-    stopifnot(all(is.character(selected)))
     selected <- split_by_sep(selected, sep)
-  } else {
-    selected <- NULL
+    stopifnot(all(selected %is_in% choices))
+    names(selected) <- if_null(names(selected), vapply(selected, paste, collapse = sep, character(1)))
   }
 
-  attributes(choices) <- choices_attrs
-  res <- c(
-    list(vars = vars),
-    select_spec(choices = choices, selected = selected, multiple, label = label, sep = sep)
-  )
+
+  res <- list(vars = vars,
+              choices = choices,
+              selected = selected,
+              multiple = multiple,
+              label = label,
+              sep = sep)
   class(res) <- "filter_spec"
 
   return(res)

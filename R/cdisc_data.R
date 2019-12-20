@@ -38,13 +38,13 @@ dataset <- function(dataname,
                     data,
                     keys = list(primary = NULL, foreign = NULL, parent = NULL),
                     labels = list(dataset_label = NULL, column_labels = NULL)) {
-  stopifnot(is.character.single(dataname))
+  stopifnot(is_character_single(dataname))
   stopifnot(is.data.frame(data))
   stopifnot(is.list(keys))
-  stopifnot(all_true(keys, function(x) is.null(x) || is.character.vector(x)))
+  stopifnot(all_true(keys, function(x) is.null(x) || is_character_vector(x)))
   stopifnot(all(c("primary", "foreign", "parent") %in% names(keys)))
   stopifnot(is.list(labels))
-  stopifnot(all_true(labels, function(x) is.null(x) || (is.character(x) || is.character.vector(x))))
+  stopifnot(all_true(labels, function(x) is.null(x) || (is.character(x) || is_character_vector(x))))
   stopifnot(all(c("dataset_label", "column_labels") %in% names(labels)))
   stopifnot(all(union(keys$primary, keys$foreign) %in% names(data)))
   stopifnot(all(names(labels$column_labels) %in% names(data)))
@@ -84,9 +84,9 @@ dataset <- function(dataname,
 #'
 #' keys(primary = c("STUDYID"), foreign = c("USUBJID"), "ADSL")
 keys <- function(primary, foreign, parent) {
-  stopifnot(is.null(primary) || is.character.vector(primary))
-  stopifnot(is.null(foreign) || is.character.vector(foreign))
-  stopifnot(is.null(parent) || is.character.single(parent))
+  stopifnot(is.null(primary) || is_character_vector(primary))
+  stopifnot(is.null(foreign) || is_character_vector(foreign))
+  stopifnot(is.null(parent) || is_character_single(parent))
 
   return(list(primary = primary, foreign = foreign, parent = parent))
 }
@@ -105,7 +105,7 @@ keys <- function(primary, foreign, parent) {
 #'
 #' get_cdisc_keys("ADSL")
 get_cdisc_keys <- function(dataname) {
-  stopifnot(is.character.single(dataname))
+  stopifnot(is_character_single(dataname))
 
   # copy from excel file
   default_cdisc_keys <- yaml.load_file(system.file("cdisc_datasets/cdisc_datasets.yaml", package = "teal"))
@@ -163,7 +163,7 @@ get_labels <- function(data) {
 #' get_variable_labels(ADSL, c("AGE", "RACE", "BMRKR1", "xyz"))
 get_variable_labels <- function(data, columns = NULL) {
   stopifnot(is.data.frame(data))
-  stopifnot(is.null(columns) || is.character.vector(columns))
+  stopifnot(is.null(columns) || is_character_vector(columns))
 
   columns <- if_null(columns, colnames(data))
   labels <- as.list(get_labels(data)$column_labels)
@@ -324,13 +324,13 @@ check_foreign_keys <- function(datasets_keys) {
 cdisc_data <- function(...,
                        code = "",
                        check = FALSE) {
-  stopifnot(is.character.vector(code))
-  stopifnot(is.logical.single(check))
+  stopifnot(is_character_vector(code))
+  stopifnot(is_logical_single(check))
 
   code <- paste0(code, collapse = "\n")
   dlist <- list(...)
 
-  if (!is.class.list("dataset")(dlist)) {
+  if (!is_class_list("dataset")(dlist)) {
     stop("Argument in not of class dataset, please use cdisc_dataset function!")
   }
 

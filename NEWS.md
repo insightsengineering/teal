@@ -1,7 +1,12 @@
+# teal 0.8.2
+
+* Fixed several BUGS in `optionalSelectInput` and improved inputs look.
+* Added `get_data_labels` function to `FilteredData` class
+* Improved `sep` passing within `data_extract_spec`
+
 # teal 0.8.1
 
 * refactor `choices_labeled` and fix bug of not showing column name in data_extract_spec
-
 
 # teal 0.8.0
 
@@ -9,11 +14,11 @@
 * Possibility to load custom `.css` and `.js` files
 * Renamed `columns_spec` to `select_spec`
 * Show number of observations on filter panel
-* Add labelling functions `variable_choices` and `value_choices`
+* Add labeling functions `variable_choices` and `value_choices`
 
 # teal 0.7.0
 
-* Added functions `cdisc_data` and `get_code` to deal with preprocessing and moving a step towards datastandard
+* Added functions `cdisc_data` and `get_code` to deal with preprocessing and moving a step towards data standard
 independent teal
 * Moved `teal.utils` functions to `teal`: `log_app_usage`, `stop_shiny`
 * Added `*_spec` functions

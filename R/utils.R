@@ -4,7 +4,7 @@ is.unique <- function(x) { # nolint
 }
 
 # also returns a list if only a single element
-#' Split by sepearator
+#' Split by separator
 #'
 #' @param x (\code{character}) Character (single)
 #' @param sep (\code{character}) Separator
@@ -47,4 +47,21 @@ check_module_names <- function(modules) {
   if (any(duplicated(label))) {
     stop("Please choose a unique labels for each teal module.")
   }
+}
+
+#' Extract labels from choices basing on attributes and names
+#'
+#' @param choices (\code{list} or \code{vector}) select choices
+#'
+#' @return (\code{character}) vector with labels
+extract_choices_labels <- function(choices) {
+  res <- if (is(choices, "choices_labeled")) {
+    attr(choices, "raw_labels")
+  } else if (!is.null(names(choices)) && !setequal(names(choices), unlist(unname(choices)))) {
+    names(choices)
+  } else {
+    NULL
+  }
+
+  return(res)
 }

@@ -9,7 +9,7 @@ variable_types(data, columns = NULL)
 \arguments{
 \item{data}{(\code{data.frame}) data to determine variable types from}
 
-\item{columns}{(atomic vector of \code{character} or \code{NULL}) columnames chosen chosen from \code{data},
+\item{columns}{(atomic vector of \code{character} or \code{NULL}) column names chosen chosen from \code{data},
 \code{NULL} for all data columns}
 }
 \value{

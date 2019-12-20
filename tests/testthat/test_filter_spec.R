@@ -6,9 +6,9 @@ choices_f <- as.factor(choices)
 choices_l <- as.list(choices)
 
 test_that("Proper argument types", {
-  expect_error(filter_spec(vars = list("var"), choices = choices), "is.character.vector")
-  expect_error(filter_spec(vars = "var", choices = choices_l), "is.character.vector")
-  expect_error(filter_spec(vars = "var", choices = choices, selected = list("val2")), "is.character.vector")
+  expect_error(filter_spec(vars = list("var"), choices = choices), "is_character_vector")
+  expect_error(filter_spec(vars = "var", choices = choices_l), "is_character_vector")
+  expect_error(filter_spec(vars = "var", choices = choices, selected = list("val2")), "is_character_vector")
   expect_error(filter_spec(vars = 1, choices = choices, selected = choices[1]), "is.character")
   expect_error(filter_spec(vars = "var", choices = 1:3, selected = 1), "is.character")
   expect_error(filter_spec(vars = factor("var"), choices = choices, selected = choices[1]), "is.character")
@@ -19,10 +19,9 @@ test_that("Proper argument types", {
   expect_error(filter_spec(vars = "var", choices = choices_d), "duplicated")
   expect_error(filter_spec(vars = "var", choices = choices, selected = c("val1", "val1")), "duplicated")
 
-  expect_error(filter_spec(vars = "var", choices = choices, label = c("test", "test2")), "is.character.single")
-  expect_error(filter_spec(vars = "var", choices = choices, sep = c("-", ",")), "is.character.single")
+  expect_error(filter_spec(vars = "var", choices = choices, label = c("test", "test2")), "is_character_single")
+  expect_error(filter_spec(vars = "var", choices = choices, sep = c("-", ",")), "is_character_single")
 })
-
 
 test_that("Single choice", {
   expect_silent(f1 <- filter_spec(vars = "var1",
@@ -30,12 +29,11 @@ test_that("Single choice", {
                                   selected = choices[1],
                                   multiple = FALSE,
                                   label = "test"))
-  expect_identical(names(f1), c("vars", "choices", "selected", "multiple", "fixed", "label", "sep"))
+  expect_identical(names(f1), c("vars", "choices", "selected", "multiple", "label", "sep"))
   expect_identical(f1$choices, as.list(setNames(choices, choices)))
   expect_identical(f1$selected, as.list(setNames(choices[1], choices[1])))
 
   expect_false(f1$multiple)
-  expect_false(f1$fixed)
   expect_identical(f1$label, "test")
 })
 
@@ -106,8 +104,8 @@ test_that("Multiple vars", {
 
   expect_identical(f1m, f2m)
 
-  # correct obbject structure
-  expect_identical(names(f1m), c("vars", "choices", "selected", "multiple", "fixed", "label", "sep"))
+  # correct object structure
+  expect_identical(names(f1m), c("vars", "choices", "selected", "multiple", "label", "sep"))
   expect_identical(f1m$choices, list(`val1.1 - val2.1` = c("val1.1", "val2.1"),
                                      `val1.1 - val2.2` = c("val1.1", "val2.2"),
                                      `val1.1 - val2.3` = c("val1.1", "val2.3")))
@@ -115,6 +113,5 @@ test_that("Multiple vars", {
                                       `val1.1 - val2.2` = c("val1.1", "val2.2")))
 
   expect_true(f1m$multiple)
-  expect_false(f1m$fixed)
   expect_identical(f1m$label, "Filter")
 })
