@@ -4,8 +4,15 @@
 \alias{optionalSelectInput}
 \title{Hide, Show Label only or display a \code{pickerInput}}
 \usage{
-optionalSelectInput(inputId, label, choices = NULL, selected = NULL,
-  multiple = FALSE, options = list(), label_help = NULL)
+optionalSelectInput(
+  inputId,
+  label,
+  choices = NULL,
+  selected = NULL,
+  multiple = FALSE,
+  options = list(),
+  label_help = NULL
+)
 }
 \arguments{
 \item{inputId}{The \code{input} slot that will be used to access the value.}
@@ -27,7 +34,7 @@ If not specified then defaults to the first value for single-select lists
 
 \item{multiple}{Is selection of multiple items allowed?}
 
-\item{options}{List of options, see \link{pickerOptions} for all available options.
+\item{options}{List of options, see \link[shinyWidgets]{pickerOptions} for all available options.
 To limit the number of selection possible, see example below.}
 
 \item{label_help}{optional an object of class \code{shiny.tag}. E.g. an object

@@ -6,7 +6,7 @@ output: rmarkdown::html_vignette
 editor_options:
   chunk_output_type: console
 vignette: >
-  %\VignetteIndexEntry{Teal Desiderata}
+  %\VignetteIndexEntry{Teal Design and Implementation}
   %\VignetteEncoding{UTF-8}
   %\VignetteEngine{knitr::rmarkdown}
 ---

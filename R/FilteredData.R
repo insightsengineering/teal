@@ -1,3 +1,5 @@
+#' @name FilteredData
+#' @docType class
 #' @title Class to encapsulate filtered data sets
 #'
 #' @details This class encapsulates data import and filtering.
@@ -37,6 +39,8 @@
 #'
 #' x$set_filter("ADSL", list(AGE=c(3,5), SEX=c('M', 'F')))
 #' }
+NULL
+
 FilteredData <- R6::R6Class( # nolint
   "FilteredData",
   ## FilteredData ====
@@ -65,13 +69,11 @@ FilteredData <- R6::R6Class( # nolint
       invisible(self)
     },
 
-
     datanames = function() {
       dn <- isolate(.subset2(private$datasets, "impl")$names())
 
       c(intersect(private$init_datanames, dn), setdiff(dn, private$init_datanames))
     },
-
 
     load_data = function(path, dataname = NULL, ...) {
       if (is.null(path) || !file.exists(path)) {
@@ -108,7 +110,6 @@ FilteredData <- R6::R6Class( # nolint
       self$set_data(dataname, df)
     },
 
-
     set_data = function(dataname, data) {
       stopifnot(is_character_single(dataname))
       stopifnot(is.data.frame(data))
@@ -121,7 +122,6 @@ FilteredData <- R6::R6Class( # nolint
 
       invisible(self)
     },
-
 
     set_attrs = function(data) {
       private$attr <- attributes(data)
@@ -137,7 +137,6 @@ FilteredData <- R6::R6Class( # nolint
 
       private$attr[[attr]]
     },
-
 
     set_data_attr = function(dataname, attr, value) {
       stopifnot(is_character_single(dataname))
@@ -239,9 +238,6 @@ FilteredData <- R6::R6Class( # nolint
       log2("===========================")
     },
 
-
-
-
     reset_data = function(dataname = NULL) {
       stopifnot(is.null(dataname) || is_character_single(dataname))
 
@@ -267,7 +263,6 @@ FilteredData <- R6::R6Class( # nolint
       invisible(self)
     },
 
-
     # dataname is valid and data is not null
     has_data = function(dataname) {
       stopifnot(is_character_single(dataname))
@@ -275,14 +270,12 @@ FilteredData <- R6::R6Class( # nolint
       dataname %in% self$datanames() && !is.null(self$get_data(dataname))
     },
 
-
     has_variable = function(dataname, varname) {
       stopifnot(is_character_single(dataname))
       stopifnot(is_character_single(varname))
 
       self$has_data(dataname) && (varname %in% names(self$get_data(dataname)))
     },
-
 
     get_data = function(dataname, reactive = FALSE, filtered = FALSE) {
       stopifnot(is_character_single(dataname))
@@ -350,7 +343,6 @@ FilteredData <- R6::R6Class( # nolint
       private$error_if_not_valid(dataname, varname)
       private$filter_info[[dataname]][[varname]][["type"]]
     },
-
 
     set_filter_state = function(dataname, varname = NULL, state, initial = FALSE) {
       stopifnot(is_character_single(dataname))
@@ -437,7 +429,6 @@ FilteredData <- R6::R6Class( # nolint
       invisible(self)
     },
 
-
     remove_filter = function(dataname, varname) {
       stopifnot(is_character_single(dataname))
       stopifnot(is_character_single(varname))
@@ -464,7 +455,6 @@ FilteredData <- R6::R6Class( # nolint
       invisible(self)
     },
 
-
     get_filter_state = function(dataname, varname = NULL, reactive = FALSE) {
       stopifnot(is_character_single(dataname))
       stopifnot(is.null(varname) || is_character_single(varname))
@@ -484,7 +474,6 @@ FilteredData <- R6::R6Class( # nolint
         isolate(private$filter_state[[dataname]][[varname]])
       }
     },
-
 
     set_default_filter_state = function(dataname, varname) {
       stopifnot(is_character_single(dataname))
@@ -529,7 +518,6 @@ FilteredData <- R6::R6Class( # nolint
       self$get_filter_type(dataname, varname) != "unknown"
     },
 
-
     get_filter_call = function(dataname, merge = TRUE, adsl = TRUE) {
       stopifnot(is_character_single(dataname))
       stopifnot(is_logical_single(merge))
@@ -571,12 +559,10 @@ FilteredData <- R6::R6Class( # nolint
       }
     },
 
-
     hold_filtering = function() {
       private$on_hold <- TRUE
       invisible(NULL)
     },
-
 
     continue_filtering = function() {
       private$on_hold <- FALSE

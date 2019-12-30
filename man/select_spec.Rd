@@ -4,8 +4,13 @@
 \alias{select_spec}
 \title{Column selection input specification}
 \usage{
-select_spec(choices, selected = choices[1], multiple = length(selected)
-  > 1, fixed = FALSE, label = "Column(s)")
+select_spec(
+  choices,
+  selected = choices[1],
+  multiple = length(selected) > 1,
+  fixed = FALSE,
+  label = "Column(s)"
+)
 }
 \arguments{
 \item{choices}{(\code{character}) Named character vector to define the choices

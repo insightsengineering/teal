@@ -66,7 +66,6 @@ get_code_single <- function(file_path, read_sources, if_url = grepl("^http[s]", 
 #'
 #' Extracts lines from code which are enclosed within regexp starts_at and stops_at
 #' @param lines (\code{character}) of preprocessing code.
-#' @inheritParams get_code
 enclosed_with <- function(lines) {
   stopifnot(is_character_vector(lines))
 

@@ -4,8 +4,13 @@
 \alias{init}
 \title{Create the Server and Ui Function for the Shiny App}
 \usage{
-init(data, modules, filter = NULL, header = tags$p("title here"),
-  footer = tags$p("footer here"))
+init(
+  data,
+  modules,
+  filter = NULL,
+  header = tags$p("title here"),
+  footer = tags$p("footer here")
+)
 }
 \arguments{
 \item{data}{named list with datasets. Dataset names are case sensitive. The
