@@ -4,8 +4,12 @@
 \alias{cdisc_dataset}
 \title{Data input for teal app}
 \usage{
-cdisc_dataset(dataname, data, keys = get_cdisc_keys(dataname),
-  labels = get_labels(data))
+cdisc_dataset(
+  dataname,
+  data,
+  keys = get_cdisc_keys(dataname),
+  labels = get_labels(data)
+)
 }
 \arguments{
 \item{dataname}{name of dataset}

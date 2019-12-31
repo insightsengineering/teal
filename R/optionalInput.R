@@ -88,6 +88,8 @@ optionalSelectInput <- function(inputId, # nolint
   raw_choices <- extract_raw_choices(choices)
   raw_selected <- extract_raw_choices(selected)
 
+
+
   ui <- pickerInput(
     inputId = inputId,
     label = label,
@@ -99,7 +101,7 @@ optionalSelectInput <- function(inputId, # nolint
   )
 
   if (!is.null(label_help)) {
-    ui[[3]] <- c(ui[[3]][[1]], div(class = "label-help", label_help), ui[[3]][-1])
+    ui[[3]] <- append(ui[[3]], list(div(class = "label-help", label_help)), after = 1)
   }
 
   if (is.null(choices)) {

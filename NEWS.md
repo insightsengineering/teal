@@ -1,7 +1,14 @@
+# teal 0.8.2.9000
+
+# teal 0.8.2
+
+* Fixed several BUGS in `optionalSelectInput` and improved inputs look.
+* Added `get_data_labels` function to `FilteredData` class
+* Improved `sep` passing within `data_extract_spec`
+
 # teal 0.8.1
 
 * refactor `choices_labeled` and fix bug of not showing column name in data_extract_spec
-
 
 # teal 0.8.0
 
