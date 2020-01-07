@@ -23,10 +23,10 @@ ADCM:
   foreign: ["STUDYID", "USUBJID"]
   parent: "ADSL"
 
-#ADEX (not yet implemented in random.cdisc.data):
-#  primary: ["STUDYID", "USUBJID", "PARAMCD", "AVISIT"]
-#  foreign: ["STUDYID", "USUBJID"]
-#  parent: "ADSL"
+ADEX:
+  primary: ["STUDYID", "USUBJID", "PARCAT1", "PARAMCD", "AVISITN", "ASTDTM", "EXSEQ"]
+  foreign: ["STUDYID", "USUBJID"]
+  parent: "ADSL"
 
 ADLB:
   primary: ["STUDYID", "USUBJID", "PARAMCD", "AVISIT"]
