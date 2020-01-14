@@ -10,6 +10,7 @@ optionalSelectInput(
   choices = NULL,
   selected = NULL,
   multiple = FALSE,
+  sep = NULL,
   options = list(),
   label_help = NULL
 )
@@ -33,6 +34,9 @@ If not specified then defaults to the first value for single-select lists
  and no values for multiple select lists.}
 
 \item{multiple}{Is selection of multiple items allowed?}
+
+\item{sep}{(\code{character}) A separator string to split the \code{choices} or
+\code{selected} inputs into the values of the different columns}
 
 \item{options}{List of options, see \link[shinyWidgets]{pickerOptions} for all available options.
 To limit the number of selection possible, see example below.}

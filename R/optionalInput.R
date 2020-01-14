@@ -6,7 +6,6 @@
 #' input widgets that provide only a single choice.
 #'
 #' @inheritParams shinyWidgets::pickerInput
-#'
 #' @param choices character vector or \code{NULL}. If \code{choices} is
 #'   \code{NULL} no \code{pickerInput} widget is displayed and \code{input[[inputId]]}
 #'   will be \code{""}. If \code{choices} is of length 1 then a label and
@@ -15,6 +14,10 @@
 #'   element will be displayed.
 #'   If elements of the list are named then that name rather than the value
 #'   is displayed to the user.
+#'
+#' @param sep (\code{character}) A separator string to split the \code{choices} or
+#'   \code{selected} inputs into the values of the different columns
+#'
 #' @param label_help optional an object of class \code{shiny.tag}. E.g. an object
 #'   returned by \code{\link[shiny]{helpText}}
 #'
@@ -58,6 +61,7 @@ optionalSelectInput <- function(inputId, # nolint
                                 choices = NULL,
                                 selected = NULL,
                                 multiple = FALSE,
+                                sep = NULL,
                                 options = list(),
                                 label_help = NULL) {
   stopifnot(is_character_single(inputId))
@@ -65,6 +69,7 @@ optionalSelectInput <- function(inputId, # nolint
   stopifnot(is.null(choices) || length(choices) >= 1)
   stopifnot(is.null(selected) || length(selected) == 0 || all(selected %in% choices))
   stopifnot(is_logical_single(multiple))
+  stopifnot(is.null(sep) || is_character_single(sep))
   stopifnot(is.list(options))
 
   default_options <- list(
@@ -85,8 +90,8 @@ optionalSelectInput <- function(inputId, # nolint
     selected <- NULL
   }
 
-  raw_choices <- extract_raw_choices(choices)
-  raw_selected <- extract_raw_choices(selected)
+  raw_choices <- extract_raw_choices(choices, attr(choices, "sep"))
+  raw_selected <- extract_raw_choices(selected, attr(choices, "sep"))
 
 
 
@@ -255,7 +260,7 @@ picker_options_content <- function(var_name, var_label, var_type) {
 #' @return (\code{list}) to be passed as \code{choicesOpt} argument
 picker_options <- function(choices) {
   if (is(choices, "choices_labeled")) {
-    raw_choices <- extract_raw_choices(choices)
+    raw_choices <- extract_raw_choices(choices, sep = attr(choices, "sep"))
     return(
       list(
         content = picker_options_content(
@@ -273,8 +278,10 @@ picker_options <- function(choices) {
 #' Extract raw values from choices
 #'
 #' @param choices (\code{choices_labeled} or \code{list} or \code{character}) with choices
+#' @param sep (\code{character}) A separator string to split the \code{choices} or
+#'   \code{selected} inputs into the values of the different columns
 #' @return choices simplified
-extract_raw_choices <- function(choices) {
+extract_raw_choices <- function(choices, sep) {
   collapse_by_sep <- function(x, sep) {
     if (is.null(x)) {
       return(NULL)
@@ -283,8 +290,8 @@ extract_raw_choices <- function(choices) {
     vapply(x, function(elem) paste(elem, collapse = sep), character(1))
   }
 
-  res <- if (is.list(choices) && !is.null(attr(choices, "sep"))) {
-    collapse_by_sep(choices, attr(choices, "sep"))
+  res <- if (is.list(choices) && !is.null(sep)) {
+    collapse_by_sep(choices, sep)
   } else if (is(choices, "choices_labeled")) {
     unname(unlist(choices))
   } else {

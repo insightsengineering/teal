@@ -4,10 +4,13 @@
 \alias{extract_raw_choices}
 \title{Extract raw values from choices}
 \usage{
-extract_raw_choices(choices)
+extract_raw_choices(choices, sep)
 }
 \arguments{
 \item{choices}{(\code{choices_labeled} or \code{list} or \code{character}) with choices}
+
+\item{sep}{(\code{character}) A separator string to split the \code{choices} or
+\code{selected} inputs into the values of the different columns}
 }
 \value{
 choices simplified
