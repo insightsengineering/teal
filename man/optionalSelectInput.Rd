@@ -12,7 +12,8 @@ optionalSelectInput(
   multiple = FALSE,
   sep = NULL,
   options = list(),
-  label_help = NULL
+  label_help = NULL,
+  not_optional = FALSE
 )
 }
 \arguments{
@@ -43,6 +44,9 @@ To limit the number of selection possible, see example below.}
 
 \item{label_help}{optional an object of class \code{shiny.tag}. E.g. an object
 returned by \code{\link[shiny]{helpText}}}
+
+\item{not_optional}{(\code{logical}) always show a pickerInput, even if just
+one variable can be selected or unselected.}
 }
 \description{
 Hidden input widgets are useful to have the \code{input[[inputId]]} variable

@@ -20,6 +20,8 @@
 #'
 #' @param label_help optional an object of class \code{shiny.tag}. E.g. an object
 #'   returned by \code{\link[shiny]{helpText}}
+#' @param not_optional (\code{logical}) always show a pickerInput, even if just
+#'   one variable can be selected or unselected.
 #'
 #' @export
 #'
@@ -63,7 +65,8 @@ optionalSelectInput <- function(inputId, # nolint
                                 multiple = FALSE,
                                 sep = NULL,
                                 options = list(),
-                                label_help = NULL) {
+                                label_help = NULL,
+                                not_optional = FALSE) {
   stopifnot(is_character_single(inputId))
   stopifnot(is_character_single(label) || inherits(label, "shiny.tag") || inherits(label, "shiny.tag.list"))
   stopifnot(is.null(choices) || length(choices) >= 1)
@@ -115,7 +118,7 @@ optionalSelectInput <- function(inputId, # nolint
 
   } else {
 
-    if (length(choices) == 1) {
+    if (length(choices) == 1 && !not_optional) {
 
       label_single <- extract_choices_labels(choices)
 

@@ -58,7 +58,7 @@ test_that("Multiple choices", {
   expect_silent(c2 <- select_spec(choices = choices, selected = selected))
   expect_identical(c1, c2)
 
-  expect_identical(names(c1), c("choices", "selected", "multiple", "fixed", "label"))
+  expect_identical(names(c1), c("choices", "selected", "always_selected", "multiple", "fixed", "label"))
   expect_identical(c1$choices, setNames(choices, choices))
   expect_identical(c1$selected, setNames(selected, selected))
 

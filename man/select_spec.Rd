@@ -9,6 +9,7 @@ select_spec(
   selected = choices[1],
   multiple = length(selected) > 1,
   fixed = FALSE,
+  always_selected = NULL,
   label = "Column(s)"
 )
 }
@@ -28,6 +29,9 @@ shiny \code{\link[shiny]{selectInput}}.}
 hide the choices selected in case they are not needed. Setting fixed to \code{TRUE}
 will not allow the user to select columns. It will then lead to a selection of
 columns in the dataset that is defined by the developer of the app.}
+
+\item{always_selected}{(\code{character}) Additional column names from the data set that should
+always be selected}
 
 \item{label}{(\code{logical}) (optional) Define a label
 on top of this specific shiny \code{\link[shiny]{selectInput}}.}
