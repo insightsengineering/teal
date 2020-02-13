@@ -414,6 +414,17 @@ cdisc_data <- function(...,
     code <- readChar(filename, file.info(filename)$size)
   }
 
+  if (!check) {
+    package_path <- path.package("teal")
+    if ("inst" %in% list.dirs(package_path, full.names = FALSE, recursive = FALSE)) {
+      filename_check <- file.path(package_path, "inst", "check_false_string.txt")
+    } else {
+      filename_check <- file.path(package_path, "check_false_string.txt")
+    }
+    check_note <- readChar(filename_check, file.info(filename_check)$size)
+    code <- paste0(code, "\n\n", check_note, "\n")
+  }
+
   res <- lapply(
     seq_along(dlist),
     function(i) {
