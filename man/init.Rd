@@ -9,7 +9,8 @@ init(
   modules,
   filter = NULL,
   header = tags$p("title here"),
-  footer = tags$p("footer here")
+  footer = tags$p("footer here"),
+  start_screen = NULL
 )
 }
 \arguments{
@@ -40,6 +41,11 @@ function }}
 \item{header}{object of class `shiny.tag` to be used as the header of the app}
 
 \item{footer}{object of class `shiny.tag` to be used as the footer of the app}
+
+\item{start_screen}{(\code{shiny UI element}) that contains an
+\code{actionButton} with the \code{id} \code{start}. Anything else can
+be specified by the user. The element will be rendered before the
+start of the app.}
 }
 \value{
 named list with server and ui function
@@ -58,24 +64,27 @@ app <- init(
   data = cdisc_data(
     cdisc_dataset("ADSL", ADSL),
     code = "
-      ADSL <- radsl(seed = 1)
-    "
+    ADSL <- radsl(seed = 1)
+  "
   ),
   modules = root_modules(
     module(
       "data source",
       server = function(input, output, session, datasets) {},
       ui = function(id, ...) div(p("information about data source")),
-      filters = 'all'
+      filters = "all"
     ),
     module(
       "ADSL AGE histogram",
       server = function(input, output, session, datasets) {
         output$hist <- renderPlot(
-           hist(datasets$get_data("ADSL", filtered = TRUE, reactive = TRUE)$AGE)
+          hist(datasets$get_data("ADSL", filtered = TRUE, reactive = TRUE)$AGE)
         )
       },
-      ui = function(id, ...) {ns <- NS(id); plotOutput(ns('hist'))},
+      ui = function(id, ...) {
+        ns <- NS(id)
+        plotOutput(ns("hist"))
+      },
       filters = "ADSL"
     )
   ),
@@ -83,7 +92,6 @@ app <- init(
   header = tags$h1("Sample App"),
   footer = tags$p("Copyright 2017")
 )
-
 \dontrun{
 shinyApp(app$ui, app$server)
 }

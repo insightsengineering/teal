@@ -11,7 +11,7 @@ ui_filter_info <- function(id, dataname) {
 srv_filter_info <- function(input, output, session, datasets, dataname) {
 
   output$uifiltersinfo <- renderTable({
-    .log("update uiFilters")
+    .log("update uifiltersinfo")
 
     on_filters <- unlist(lapply(
       datasets$datanames(),

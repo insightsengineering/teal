@@ -25,7 +25,10 @@
 #'   \code{filter = list(init = list(ADSL = c("SEX", "BAGE")))}
 #' @param header object of class `shiny.tag` to be used as the header of the app
 #' @param footer object of class `shiny.tag` to be used as the footer of the app
-#'
+#' @param start_screen (\code{shiny UI element}) that contains an
+#'   \code{actionButton} with the \code{id} \code{start}. Anything else can
+#'   be specified by the user. The element will be rendered before the
+#'   start of the app.
 #' @return named list with server and ui function
 #'
 #' @export
@@ -47,24 +50,27 @@
 #'   data = cdisc_data(
 #'     cdisc_dataset("ADSL", ADSL),
 #'     code = "
-#'       ADSL <- radsl(seed = 1)
-#'     "
+#'     ADSL <- radsl(seed = 1)
+#'   "
 #'   ),
 #'   modules = root_modules(
 #'     module(
 #'       "data source",
 #'       server = function(input, output, session, datasets) {},
 #'       ui = function(id, ...) div(p("information about data source")),
-#'       filters = 'all'
+#'       filters = "all"
 #'     ),
 #'     module(
 #'       "ADSL AGE histogram",
 #'       server = function(input, output, session, datasets) {
 #'         output$hist <- renderPlot(
-#'            hist(datasets$get_data("ADSL", filtered = TRUE, reactive = TRUE)$AGE)
+#'           hist(datasets$get_data("ADSL", filtered = TRUE, reactive = TRUE)$AGE)
 #'         )
 #'       },
-#'       ui = function(id, ...) {ns <- NS(id); plotOutput(ns('hist'))},
+#'       ui = function(id, ...) {
+#'         ns <- NS(id)
+#'         plotOutput(ns("hist"))
+#'       },
 #'       filters = "ADSL"
 #'     )
 #'   ),
@@ -72,7 +78,6 @@
 #'   header = tags$h1("Sample App"),
 #'   footer = tags$p("Copyright 2017")
 #' )
-#'
 #' \dontrun{
 #' shinyApp(app$ui, app$server)
 #' }
@@ -80,147 +85,56 @@ init <- function(data,
                  modules,
                  filter = NULL,
                  header = tags$p("title here"),
-                 footer = tags$p("footer here")) {
-
+                 footer = tags$p("footer here"),
+                 start_screen = NULL
+                 ) {
   if (modules_depth(modules) > 2) {
     stop("teal currently only supports module nesting of depth two.")
   }
-
-  if (!is(data, "cdisc_data")) {
-    warning("Please use cdisc_data() instead of list() for 'data' argument. It will be depreciated soon.")
-
-    data_names <- names(data)
-    stopifnot(length(data_names) == length(data))
-
-    data_substitute <- substitute(data)
-    data <- eval(as.call(append(
-      quote(cdisc_data),
-      lapply(
-        seq_along(data),
-        function(idx) {
-          call(
-            "cdisc_dataset",
-            dataname = data_names[[idx]],
-            data = data_substitute[[idx + 1]]
-          )
-        }
-      )
-    )))
-
-  }
-
   check_module_names(modules)
 
-  # initialize FilteredData object
-  datasets <- FilteredData$new(vapply(data, `[[`, character(1), "dataname", USE.NAMES = FALSE))
-  for (idx in seq_along(data)) {
-    datasets$set_data(data[[idx]][["dataname"]], data[[idx]][["data"]])
-    datasets$set_data_attr(data[[idx]][["dataname"]], "keys", data[[idx]][["keys"]])
-    datasets$set_data_attr(data[[idx]][["dataname"]], "labels", data[[idx]][["labels"]])
+  stopifnot(inherits(header, "shiny.tag"))
+
+  stopifnot(inherits(footer, "shiny.tag"))
+
+  stopifnot(is.null(start_screen) || inherits(start_screen, "shiny.tag"))
+
+  skip_start <- is.null(start_screen)
+  if (!skip_start) {
+    start_screen_char <- as.character(start_screen)
+
+    if (!grepl("id=\"start\" type=\"button\"", start_screen_char)) {
+      stop("Thes 'start screen' needs to contain an 'actionButton' with the ID 'start'")
+    }
   }
 
-  # including attributes of data object
-  datasets$set_attrs(data)
+  datasets <- NULL
+  ui_internal <- start_screen
 
-  # set default init filters
-  if (!is.null(filter) && !is.null(filter$init)) {
-    Map(function(vars, dataset) {
-      lapply(vars, function(var) datasets$set_default_filter_state(dataset, var))
-    }, filter$init, names(filter$init))
+  if (skip_start) {
+    datasets <- init_datasets(data, filter)
+    ui_internal <- init_ui(datasets, modules)
   }
+
 
   # ui function
   ui <- shinyUI(
-      fluidPage(
-        shinyjs::useShinyjs(),
-        include_css_files(package = "teal"),
-        include_js_files(package = "teal", except = "init.js"),
-        shinyjs::hidden(icon("cog")), # add hidden icon to load font-awesome css for icons
-        tags$header(header),
-        tags$hr(style = "margin: 7px 0;"),
-        local({
-          tp <- create_ui(modules, datasets, idprefix = "teal_modules", is_root = TRUE)
-
-          # separate the nested tabs
-          tp$children <- list(
-            tp$children[[1]],
-            tags$hr(style = "margin: 7px 0;"),
-            fluidRow(
-              column(
-                9,
-                tp$children[[2]]
-              ),
-              column(
-                3,
-                shinyjs::hidden(
-                  div(
-                    id = "teal_filter-panel",
-                    div(
-                      id = "teal_filter_active_vars",
-                      class = "well",
-                      tags$label(
-                        "Active Filter Variables",
-                        class = "text-primary",
-                        style = "margin-bottom: 15px;"
-                      ),
-                      tagList(
-                        lapply(datasets$datanames(), function(dataname) {
-                          ui_filter_info(paste0("teal_filters_info_", dataname), dataname)
-                        })
-                      ),
-                      tagList(
-                        lapply(datasets$datanames(), function(dataname) {
-                          ui_filter_items(paste0("teal_filters_", dataname), dataname)
-                        })
-                      )
-                    ),
-                    div(
-                      id = "teal_filter_add_vars",
-                      class = "well",
-                      tags$label(
-                        "Add Filter Variables",
-                        class = "text-primary",
-                        style = "margin-bottom: 15px;"
-                      ),
-                      tagList(
-                        lapply(datasets$datanames(), function(dataname) {
-                          ui_add_filter_variable(paste0("teal_add_", dataname, "_filters"), dataname)
-                        })
-                      )
-                    )
-                  )
-                )
-              )
-            )
-          )
-          tp
-        }),
-        tags$hr(),
-        tags$footer(footer)
-      )
+    fluidPage(
+      shinyjs::useShinyjs(),
+      include_css_files(package = "teal"),
+      include_js_files(package = "teal", except = "init.js"),
+      shinyjs::hidden(icon("cog")), # add hidden icon to load font-awesome css for icons
+      tags$header(header),
+      tags$hr(style = "margin: 7px 0;"),
+      ui_internal,
+      tags$hr(),
+      tags$footer(footer)
+    )
   )
 
 
   server <- function(input, output, session) {
-
     run_js_file(file = "init.js", package = "teal")
-
-    # evaluate the server functions
-    call_modules(modules, datasets, idprefix = "teal_modules")
-
-    # -- filters
-    lapply(datasets$datanames(), function(dataname) {
-      callModule(srv_filter_items, paste0("teal_filters_", dataname), datasets, dataname)
-    })
-    lapply(datasets$datanames(), function(dataname) {
-      callModule(srv_filter_info, paste0("teal_filters_info_", dataname), datasets, dataname)
-    })
-
-    adsl_vars <- names(datasets$get_data("ADSL"))
-    lapply(datasets$datanames(), function(dataname) {
-      callModule(srv_add_filter_variable, paste0("teal_add_", dataname, "_filters"), datasets, dataname,
-                 omit_vars = if (dataname == "ADSL") character(0) else adsl_vars)
-    })
 
     ## hide-show filters based on module filter property
     recurse <- function(x, idprefix) {
@@ -235,7 +149,6 @@ init <- function(data,
         )
       }
     }
-
     # named vector with ids and datasets
     filters_tab_lookup <- recurse(modules, "teal_modules")
 
@@ -250,9 +163,11 @@ init <- function(data,
     }
     id_modules <- unlist(recurse_modules(modules, "teal_modules"))
 
-    ## now show or hide the filter panels based on active tab
-    observe({
+    datasets_react <- reactiveVal(datasets)
+
+    obs_filter_panel <- observe({
       # define reactivity dependence
+      datasets <- datasets_react()
       main_tab <- input[["teal_modules_root"]]
       secondary_tabs <- sapply(id_modules, function(id) input[[id]], USE.NAMES = TRUE)
 
@@ -271,7 +186,6 @@ init <- function(data,
       if (is.null(filters)) {
         shinyjs::hide("teal_filter-panel")
       } else {
-
         shinyjs::show("teal_filter-panel")
 
         if ("all" %in% filters) {
@@ -292,10 +206,65 @@ init <- function(data,
           )
         }
       }
+    }, suspended = TRUE)
 
-    })
+    call_filter_modules <- function(datasets) {
+      # -- filters Modules
+      for (dataname in datasets$datanames()) {
+        callModule(srv_filter_items, paste0("teal_filters_", dataname), datasets, dataname)
+      }
+      for (dataname in datasets$datanames()) {
+        callModule(srv_filter_info, paste0("teal_filters_info_", dataname), datasets, dataname)
+      }
 
+      adsl_vars <- names(datasets$get_data("ADSL"))
+      for (dataname in datasets$datanames()) {
+        callModule(srv_add_filter_variable, paste0("teal_add_", dataname, "_filters"), datasets, dataname,
+                   omit_vars = if (dataname == "ADSL") character(0) else adsl_vars
+        )
+      }
+    }
+
+    if (skip_start) {
+
+      call_modules(modules, datasets, idprefix = "teal_modules")
+      obs_filter_panel$resume()
+      call_filter_modules(isolate(datasets_react()))
+
+    } else {
+
+      # we need to run filter sub-modules after gui refreshes due to insertUI/removeUI
+      # we are about to update GUI elements which are not visible in the initial screen
+      # make use of invalidateLater to wait for a refresh and then proceed
+      filter_refresh <- reactiveVal(TRUE)
+      obs_filter_refresh <- observe({
+        refresh <- isolate(filter_refresh())
+        if (refresh) {
+          filter_refresh(FALSE)
+          invalidateLater(1) # reexecute this observe to fall in the else statement
+        } else {
+          obs_filter_panel$resume()
+          call_filter_modules(datasets_react())
+        }
+      }, suspended = TRUE)
+
+
+      ## now show or hide the filter panels based on active tab
+      observeEvent(input$start, {
+        datasets <- init_datasets(data, filter)
+        datasets_react(datasets)
+
+        insertUI(selector = "#start", where = "afterEnd", ui = init_ui(datasets, modules))
+        removeUI("#start")
+
+        # evaluate the server functions
+        call_modules(modules, datasets, idprefix = "teal_modules")
+
+        obs_filter_refresh$resume()
+      })
+
+    }
   }
 
-  list(server = server, ui = ui, datasets = datasets)
+  list(server = server, ui = ui)
 }
