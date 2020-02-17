@@ -163,11 +163,8 @@ init <- function(data,
     }
     id_modules <- unlist(recurse_modules(modules, "teal_modules"))
 
-    datasets_react <- reactiveVal(datasets)
-
     obs_filter_panel <- observe({
       # define reactivity dependence
-      datasets <- datasets_react()
       main_tab <- input[["teal_modules_root"]]
       secondary_tabs <- sapply(id_modules, function(id) input[[id]], USE.NAMES = TRUE)
 
@@ -229,7 +226,7 @@ init <- function(data,
 
       call_modules(modules, datasets, idprefix = "teal_modules")
       obs_filter_panel$resume()
-      call_filter_modules(isolate(datasets_react()))
+      call_filter_modules(datasets)
 
     } else {
 
@@ -244,7 +241,7 @@ init <- function(data,
           invalidateLater(1) # reexecute this observe to fall in the else statement
         } else {
           obs_filter_panel$resume()
-          call_filter_modules(datasets_react())
+          call_filter_modules(datasets)
         }
       }, suspended = TRUE)
 
@@ -252,7 +249,6 @@ init <- function(data,
       ## now show or hide the filter panels based on active tab
       observeEvent(input$start, {
         datasets <- init_datasets(data, filter)
-        datasets_react(datasets)
 
         insertUI(selector = "#start", where = "afterEnd", ui = init_ui(datasets, modules))
         removeUI("#start")
@@ -266,5 +262,5 @@ init <- function(data,
     }
   }
 
-  list(server = server, ui = ui)
+  list(server = server, ui = ui, datasets = datasets)
 }
