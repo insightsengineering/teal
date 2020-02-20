@@ -20,8 +20,8 @@
 #'
 #' @param label_help optional an object of class \code{shiny.tag}. E.g. an object
 #'   returned by \code{\link[shiny]{helpText}}
-#' @param not_optional (\code{logical}) always show a pickerInput, even if just
-#'   one variable can be selected or unselected.
+#'
+#' @param fixed (\code{logical}) (optional) whether to block user to select choices
 #'
 #' @export
 #'
@@ -66,7 +66,7 @@ optionalSelectInput <- function(inputId, # nolint
                                 sep = NULL,
                                 options = list(),
                                 label_help = NULL,
-                                not_optional = FALSE) {
+                                fixed = FALSE) {
   stopifnot(is_character_single(inputId))
   stopifnot(is_character_single(label) || inherits(label, "shiny.tag") || inherits(label, "shiny.tag.list"))
   stopifnot(is.null(choices) || length(choices) >= 1)
@@ -74,6 +74,8 @@ optionalSelectInput <- function(inputId, # nolint
   stopifnot(is_logical_single(multiple))
   stopifnot(is.null(sep) || is_character_single(sep))
   stopifnot(is.list(options))
+  stopifnot(is.null(label_help) || is(label_help, "shiny.tag"))
+  stopifnot(is_logical_single(fixed))
 
   default_options <- list(
     "actions-box" = multiple,
@@ -118,8 +120,7 @@ optionalSelectInput <- function(inputId, # nolint
 
   } else {
 
-    if (length(choices) == 1 && !not_optional) {
-
+    if (fixed) {
       label_single <- extract_choices_labels(choices)
 
       return(div(

@@ -4,7 +4,12 @@
 \alias{choices_selected}
 \title{Choices function}
 \usage{
-choices_selected(choices, selected = choices[1], keep_order = FALSE)
+choices_selected(
+  choices,
+  selected = choices[1],
+  keep_order = FALSE,
+  fixed = FALSE
+)
 }
 \arguments{
 \item{choices}{vector of possible choices}
@@ -13,6 +18,8 @@ choices_selected(choices, selected = choices[1], keep_order = FALSE)
 
 \item{keep_order}{(\code{logical}) In case of \code{FALSE} the selected variables
 will be on top of the drop-down field.}
+
+\item{fixed}{(\code{logical}) (optional) whether to block user to select choices}
 }
 \description{
 Choices function
