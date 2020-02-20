@@ -20,6 +20,10 @@ ui_add_filter_variable <- function(id, dataname) {
 }
 
 srv_add_filter_variable <- function(input, output, session, datasets, dataname, omit_vars = NULL) {
+  # have to force arguments
+  force(datasets)
+  force(dataname)
+  force(omit_vars)
 
   observe({
     fs <- datasets$get_filter_state(dataname, reactive = TRUE)

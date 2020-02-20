@@ -9,6 +9,9 @@ ui_filter_info <- function(id, dataname) {
 }
 
 srv_filter_info <- function(input, output, session, datasets, dataname) {
+  # have to force arguments
+  force(datasets)
+  force(dataname)
 
   output$uifiltersinfo <- renderTable({
     .log("update uifiltersinfo")
