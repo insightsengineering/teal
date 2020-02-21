@@ -9,12 +9,12 @@ init(
   modules,
   filter = NULL,
   header = tags$p("title here"),
-  footer = tags$p("footer here"),
-  start_screen = NULL
+  footer = tags$p("footer here")
 )
 }
 \arguments{
-\item{data}{named list with datasets. Dataset names are case sensitive. The
+\item{data}{(\code{cdisc_data} or \code{DataConnector})
+\code{cdisc_data}: named list with datasets. Dataset names are case sensitive. The
 `ADSL` data is mandatory.}
 
 \item{modules}{nested list with one list per module with the
@@ -41,11 +41,6 @@ function }}
 \item{header}{object of class `shiny.tag` to be used as the header of the app}
 
 \item{footer}{object of class `shiny.tag` to be used as the footer of the app}
-
-\item{start_screen}{(\code{shiny UI element}) that contains an
-\code{actionButton} with the \code{id} \code{start}. Anything else can
-be specified by the user. The element will be rendered before the
-start of the app.}
 }
 \value{
 named list with server and ui function

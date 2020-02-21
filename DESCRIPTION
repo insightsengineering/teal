@@ -50,6 +50,7 @@ Suggests:
     testthat (>= 2.1.0)
 VignetteBuilder: knitr
 Collate:
+    'DataConnector.R'
     'FilteredData.R'
     'cdisc_data.R'
     'choices_labeled.R'

@@ -17,10 +17,12 @@ BCE
 biomarker
 cdisc
 CDISC
+cloneable
 CMD
 covr
 CSR
 css
+DataConnector
 dataname
 datanames
 dropdown
@@ -51,6 +53,7 @@ PARAMCD
 pickerInput
 pre
 rcode
+reactiveVal
 recurse
 reproducibility
 roche

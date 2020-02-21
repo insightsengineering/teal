@@ -2,8 +2,10 @@
 #'
 #' Creates the server and ui part for a teal shiny app
 #'
-#' @param data named list with datasets. Dataset names are case sensitive. The
+#' @param data (\code{cdisc_data} or \code{DataConnector})
+#'   \code{cdisc_data}: named list with datasets. Dataset names are case sensitive. The
 #'   `ADSL` data is mandatory.
+#'
 #' @param modules nested list with one list per module with the
 #'   following named list elements: \tabular{ll}{ name \tab string with name
 #'   shown in menu for the analysis item \cr server \tab required, shiny server
@@ -25,10 +27,6 @@
 #'   \code{filter = list(init = list(ADSL = c("SEX", "BAGE")))}
 #' @param header object of class `shiny.tag` to be used as the header of the app
 #' @param footer object of class `shiny.tag` to be used as the footer of the app
-#' @param start_screen (\code{shiny UI element}) that contains an
-#'   \code{actionButton} with the \code{id} \code{start}. Anything else can
-#'   be specified by the user. The element will be rendered before the
-#'   start of the app.
 #' @return named list with server and ui function
 #'
 #' @export
@@ -85,8 +83,7 @@ init <- function(data,
                  modules,
                  filter = NULL,
                  header = tags$p("title here"),
-                 footer = tags$p("footer here"),
-                 start_screen = NULL
+                 footer = tags$p("footer here")
                  ) {
   if (modules_depth(modules) > 2) {
     stop("teal currently only supports module nesting of depth two.")
@@ -94,28 +91,21 @@ init <- function(data,
   check_module_names(modules)
 
   stopifnot(inherits(header, "shiny.tag"))
-
   stopifnot(inherits(footer, "shiny.tag"))
+  stopifnot(is(data, "cdisc_data") || is(data, "DataConnector"))
 
-  stopifnot(is.null(start_screen) || inherits(start_screen, "shiny.tag"))
+  skip_start_screen <- is(data, "cdisc_data")
 
-  skip_start <- is.null(start_screen)
-  if (!skip_start) {
-    start_screen_char <- as.character(start_screen)
+  datasets <- create_empty_datasets()
 
-    if (!grepl("id=\"start\" type=\"button\"", start_screen_char)) {
-      stop("Thes 'start screen' needs to contain an 'actionButton' with the ID 'start'")
-    }
-  }
-
-  datasets <- NULL
-  ui_internal <- start_screen
-
-  if (skip_start) {
-    datasets <- init_datasets(data, filter)
+  if (skip_start_screen) {
+    set_datasets_data(datasets, data)
+    set_datasets_filter(datasets, filter)
     ui_internal <- init_ui(datasets, modules)
+  } else {
+    ui_internal <- div(id = "StartApp", data$get_ui("startapp_module"))
+    message("App was initialized without data.")
   }
-
 
   # ui function
   ui <- shinyUI(
@@ -131,7 +121,6 @@ init <- function(data,
       tags$footer(footer)
     )
   )
-
 
   server <- function(input, output, session) {
     run_js_file(file = "init.js", package = "teal")
@@ -164,6 +153,7 @@ init <- function(data,
     id_modules <- unlist(recurse_modules(modules, "teal_modules"))
 
     obs_filter_panel <- observe({
+
       # define reactivity dependence
       main_tab <- input[["teal_modules_root"]]
       secondary_tabs <- sapply(id_modules, function(id) input[[id]], USE.NAMES = TRUE)
@@ -179,7 +169,6 @@ init <- function(data,
 
       filters <- filters_tab_lookup[[active_module_id]]
       .log("Active filter for tab", active_module_id, "is", if_null(filters, "[empty]"))
-
       if (is.null(filters)) {
         shinyjs::hide("teal_filter-panel")
       } else {
@@ -222,13 +211,16 @@ init <- function(data,
       }
     }
 
-    if (skip_start) {
+
+    if (skip_start_screen) {
 
       call_modules(modules, datasets, idprefix = "teal_modules")
       obs_filter_panel$resume()
       call_filter_modules(datasets)
 
     } else {
+      startapp_data <- callModule(data$get_server(), "startapp_module")
+      stop_if_not(list(is.reactive(startapp_data), "first app module has to return reactive object"))
 
       # we need to run filter sub-modules after gui refreshes due to insertUI/removeUI
       # we are about to update GUI elements which are not visible in the initial screen
@@ -247,17 +239,20 @@ init <- function(data,
 
 
       ## now show or hide the filter panels based on active tab
-      observeEvent(input$start, {
-        datasets <- init_datasets(data, filter)
+      observeEvent(startapp_data(), {
 
-        insertUI(selector = "#start", where = "afterEnd", ui = init_ui(datasets, modules))
-        removeUI("#start")
+        set_datasets_data(datasets, startapp_data())
+        set_datasets_filter(datasets, filter)
+
+        insertUI(selector = "#StartApp", where = "afterEnd", ui = init_ui(datasets, modules))
+        removeUI("#StartApp")
 
         # evaluate the server functions
         call_modules(modules, datasets, idprefix = "teal_modules")
 
         obs_filter_refresh$resume()
-      })
+
+      }, ignoreNULL = TRUE)
 
     }
   }
