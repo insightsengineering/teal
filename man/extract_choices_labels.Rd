@@ -4,10 +4,12 @@
 \alias{extract_choices_labels}
 \title{Extract labels from choices basing on attributes and names}
 \usage{
-extract_choices_labels(choices)
+extract_choices_labels(choices, values = NULL)
 }
 \arguments{
 \item{choices}{(\code{list} or \code{vector}) select choices}
+
+\item{values}{optional, choices subset for which labels should be extracted, \code{NULL} for all choices}
 }
 \value{
 (\code{character}) vector with labels

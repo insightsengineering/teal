@@ -74,7 +74,7 @@ optionalSelectInput <- function(inputId, # nolint
   stopifnot(is_logical_single(multiple))
   stopifnot(is.null(sep) || is_character_single(sep))
   stopifnot(is.list(options))
-  stopifnot(is.null(label_help) || is(label_help, "shiny.tag"))
+  stopifnot(is.null(label_help) || is_character_single(label_help) || is(label_help, "shiny.tag"))
   stopifnot(is_logical_single(fixed))
 
   default_options <- list(
@@ -121,7 +121,7 @@ optionalSelectInput <- function(inputId, # nolint
   } else {
 
     if (fixed) {
-      label_single <- extract_choices_labels(choices)
+      label_selected <- extract_choices_labels(choices, selected)
 
       return(div(
         hidden(ui),
@@ -129,7 +129,10 @@ optionalSelectInput <- function(inputId, # nolint
                   style = "font-weight:bold",
                   paste0(sub(":[[:space:]]+$", "", label), ":")
                   ),
-        tags$span(id = paste0(inputId, "_valueonly"), if_null(label_single, selected)),
+        tags$span(
+          id = paste0(inputId, "_valueonly"),
+          paste(if_null(label_selected, selected), collapse = ", ")
+        ),
         label_help
       ))
     } else {
