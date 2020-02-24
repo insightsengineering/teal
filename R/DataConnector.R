@@ -3,6 +3,7 @@
 #' that carries a shiny module that can return a \code{cdisc_data} object as
 #' a \code{reactiveVal}.
 #' @name DataConnector
+#'
 DataConnector <- R6::R6Class( #nolint
     "DataConnector",
     public = list(
@@ -91,11 +92,17 @@ data_connector <- function(ui, server) {
 #'   filter = NULL,#list(init = list(ADSL = c("AGE"))),
 #'   header = tags$h1("Sample App"),
 #'   footer = tags$p("Copyright 2017")
-#')
-#'\dontrun{
-#'  shinyApp(app$ui, app$server)
-#'}
+#' )
+#' \dontrun{
+#' shinyApp(app$ui, app$server)
+#' }
 rcd_connector <- function() {
+
+  if (!requireNamespace("random.cdisc.data", quietly = TRUE)) {
+    # otherwise need to move random.cdisc.data to Imports
+    stop("need random.cdisc.data package installed to use the rcd_connector function")
+  }
+
   data_connector(
     ui = function(id) {
       ns <- NS(id)

@@ -47,9 +47,7 @@
 #' app <- init(
 #'   data = cdisc_data(
 #'     cdisc_dataset("ADSL", ADSL),
-#'     code = "
-#'     ADSL <- radsl(seed = 1)
-#'   "
+#'     code = "ADSL <- radsl(seed = 1)"
 #'   ),
 #'   modules = root_modules(
 #'     module(
@@ -74,7 +72,7 @@
 #'   ),
 #'   filter = list(init = list(ADSL = c("AGE"))),
 #'   header = tags$h1("Sample App"),
-#'   footer = tags$p("Copyright 2017")
+#'   footer = tags$p("Copyright 2017 - 2020")
 #' )
 #' \dontrun{
 #' shinyApp(app$ui, app$server)
@@ -90,21 +88,26 @@ init <- function(data,
   }
   check_module_names(modules)
 
-  stopifnot(inherits(header, "shiny.tag"))
-  stopifnot(inherits(footer, "shiny.tag"))
-  stopifnot(is(data, "cdisc_data") || is(data, "DataConnector"))
+  stopifnot(
+    inherits(header, "shiny.tag"),
+    inherits(footer, "shiny.tag"),
+    is(data, "cdisc_data") || is(data, "DataConnector")
+  )
 
   skip_start_screen <- is(data, "cdisc_data")
 
   datasets <- create_empty_datasets()
 
-  if (skip_start_screen) {
+  startapp_id <- paste0("startapp_", paste0(sample(c(1:10), 10, replace = TRUE), collapse = ""))
+  startapp_selector <- paste0("#", startapp_id)
+
+  ui_internal <- if (skip_start_screen) {
     set_datasets_data(datasets, data)
     set_datasets_filter(datasets, filter)
-    ui_internal <- init_ui(datasets, modules)
+    init_ui(datasets, modules)
   } else {
-    ui_internal <- div(id = "StartApp", data$get_ui("startapp_module"))
-    message("App was initialized without data.")
+    message("App was initialized with delayed data loading.")
+    div(id = startapp_id, data$get_ui("startapp_module"))
   }
 
   # ui function
@@ -168,7 +171,7 @@ init <- function(data,
       }
 
       filters <- filters_tab_lookup[[active_module_id]]
-      .log("Active filter for tab", active_module_id, "is", if_null(filters, "[empty]"))
+      .log("Active filter for tab", active_module_id, "are", if_null(filters, "[empty]"))
       if (is.null(filters)) {
         shinyjs::hide("teal_filter-panel")
       } else {
@@ -214,43 +217,47 @@ init <- function(data,
 
     if (skip_start_screen) {
 
+      .log("init server - no start screen: initialize modules and filter panel")
       call_modules(modules, datasets, idprefix = "teal_modules")
       obs_filter_panel$resume()
       call_filter_modules(datasets)
 
     } else {
+
+      .log("init server - start screen: load screen")
       startapp_data <- callModule(data$get_server(), "startapp_module")
       stop_if_not(list(is.reactive(startapp_data), "first app module has to return reactive object"))
 
       # we need to run filter sub-modules after gui refreshes due to insertUI/removeUI
       # we are about to update GUI elements which are not visible in the initial screen
       # make use of invalidateLater to wait for a refresh and then proceed
-      filter_refresh <- reactiveVal(TRUE)
+      session$userData$has_initialized <- FALSE
       obs_filter_refresh <- observe({
-        refresh <- isolate(filter_refresh())
-        if (refresh) {
-          filter_refresh(FALSE)
+        if (!session$userData$has_initialized) {
+          session$userData$has_initialized <- TRUE
           invalidateLater(1) # reexecute this observe to fall in the else statement
         } else {
+          .log("init server - start screen: initialize filter panel")
           obs_filter_panel$resume()
           call_filter_modules(datasets)
         }
       }, suspended = TRUE)
 
-
       ## now show or hide the filter panels based on active tab
       observeEvent(startapp_data(), {
+        .log("init server - start screen: receive data from startup screen")
 
         set_datasets_data(datasets, startapp_data())
         set_datasets_filter(datasets, filter)
+        ui_teal_main <- init_ui(datasets, modules)
 
-        insertUI(selector = "#StartApp", where = "afterEnd", ui = init_ui(datasets, modules))
-        removeUI("#StartApp")
+        insertUI(selector = startapp_selector, where = "afterEnd", ui = ui_teal_main)
+        removeUI(startapp_selector)
 
         # evaluate the server functions
         call_modules(modules, datasets, idprefix = "teal_modules")
 
-        obs_filter_refresh$resume()
+        obs_filter_refresh$resume() # now update filter panel
 
       }, ignoreNULL = TRUE)
 
