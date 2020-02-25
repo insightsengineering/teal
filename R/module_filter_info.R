@@ -1,33 +1,30 @@
-ui_filter_info <- function(id, dataname) {
+ui_filter_info <- function(id) {
   ns <- NS(id)
 
   div(
-    class = paste0("teal_filter_", dataname),
     style = "overflow: overlay",
-    tableOutput(ns("uifiltersinfo"))
+    tableOutput(ns("table"))
   )
 }
 
-srv_filter_info <- function(input, output, session, datasets, dataname) {
+srv_filter_info <- function(input, output, session, datasets) {
   # have to force arguments
   force(datasets)
-  force(dataname)
 
-  output$uifiltersinfo <- renderTable({
+  output$table <- renderTable({
     .log("update uifiltersinfo")
 
-    on_filters <- unlist(lapply(
+    on_filters <- vapply(
       datasets$datanames(),
-      function(dataname_int) {
-        length(names(datasets$get_filter_state(dataname_int, reactive = TRUE))) >= 1
-      }
-    ))
+      function(dataname) {
+        length(names(datasets$get_filter_state(dataname, reactive = TRUE))) >= 1
+      },
+      logical(1)
+    )
 
-    on_filters <- setNames(on_filters, datasets$datanames())
+    already_rendered <- length(which(on_filters)) > 1
 
-    already_rendered <- which(dataname == datasets$datanames()) > 1 && length(which(on_filters)) > 1
-
-    if (!on_filters[dataname] || already_rendered) {
+    if (already_rendered) {
       NULL
     } else {
       observations <- vapply(

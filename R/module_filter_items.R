@@ -1,11 +1,7 @@
 ui_filter_items <- function(id, dataname) {
-
   ns <- NS(id)
 
-  div(class = paste0("teal_filter_", dataname),
-      uiOutput(ns("uifilters"))
-  )
-
+  uiOutput(ns("filters"))
 }
 
 #' @importFrom shinyWidgets pickerInput pickerOptions
@@ -30,7 +26,7 @@ srv_filter_items <- function(input, output, session, datasets, dataname, contain
   })
 
 
-  output$uifilters <- renderUI({
+  output$filters <- renderUI({
 
     uistate$filters_shown
 

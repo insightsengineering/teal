@@ -27,9 +27,7 @@ init_ui <- function(datasets, modules) {
             class = "well",
             tags$label("Active Filter Variables", class = "text-primary", style = "margin-bottom: 15px;"),
             tagList(
-              lapply(datasets$datanames(), function(dataname) {
-                ui_filter_info(paste0("teal_filters_info_", dataname), dataname)
-              })
+              ui_filter_info("teal_filters_info")
             ),
             tagList(
               lapply(datasets$datanames(), function(dataname) {

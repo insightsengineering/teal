@@ -179,13 +179,13 @@ init <- function(data,
 
         if ("all" %in% filters) {
           lapply(datasets$datanames(), function(dataname) {
-            shinyjs::show(paste0("teal_filter_", dataname))
+            shinyjs::show(paste0("teal_add_", dataname, "_filters"))
           })
         } else {
           lapply(
             datasets$datanames(),
             function(dataname) {
-              id <- paste0("teal_filter_", dataname)
+              id <- paste0("teal_add_", dataname, "_filters")
               if (dataname == "ADSL" || dataname %in% filters) {
                 shinyjs::show(id)
               } else {
@@ -199,11 +199,9 @@ init <- function(data,
 
     call_filter_modules <- function(datasets) {
       # -- filters Modules
+      callModule(srv_filter_info, "teal_filters_info", datasets)
       for (dataname in datasets$datanames()) {
         callModule(srv_filter_items, paste0("teal_filters_", dataname), datasets, dataname)
-      }
-      for (dataname in datasets$datanames()) {
-        callModule(srv_filter_info, paste0("teal_filters_info_", dataname), datasets, dataname)
       }
 
       adsl_vars <- names(datasets$get_data("ADSL"))
