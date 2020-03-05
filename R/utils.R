@@ -71,3 +71,21 @@ extract_choices_labels <- function(choices, values = NULL) {
 
   return(res)
 }
+
+
+#' Check if package can be loaded
+#'
+#' @param pckg \code{character} package name.
+#' @param msg \code{character} error message to display if package is not available.
+#'
+#' @return Error or invisible NULL.
+#'
+check_pckg_quietly <- function(pckg, msg) {
+  stopifnot(is_character_single(pckg), is_character_single(msg))
+
+  if (!requireNamespace(pckg, quietly = T)) {
+    stop(msg)
+  }
+
+  return(invisible(NULL))
+}

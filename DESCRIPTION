@@ -28,6 +28,7 @@ Depends:
 Imports:
   digest,
   dplyr,
+  getPass,
   haven,
   htmltools,
   magrittr,
@@ -44,13 +45,17 @@ RoxygenNote: 7.0.2
 Suggests:
     knitr,
     random.cdisc.data (>= 0.3.1),
+    rice (>= 1.0.3), 
     rmarkdown,
     tern (>= 0.6.4),
     test.nest (>= 0.2.1),
     testthat (>= 2.1.0)
 VignetteBuilder: knitr
 Collate:
+    'CallableFunction.R'
+    'DataConnection.R'
     'DataConnector.R'
+    'DatasetConnector.R'
     'FilteredData.R'
     'cdisc_data.R'
     'choices_labeled.R'

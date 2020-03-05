@@ -2,81 +2,365 @@
 #'
 #' that carries a shiny module that can return a \code{cdisc_data} object as
 #' a \code{reactiveVal}.
-#' @name DataConnector
 #'
+#' @name DataConnector
 DataConnector <- R6::R6Class( #nolint
-    "DataConnector",
-    public = list(
-        #' @description
-        #' Create a new \code{DataConnector} object
-        #'
-        #' @param ui (\code{function}) ui function of a shiny module
-        #' @param server (\code{function}) A shiny module server function
-        #'   that should return reactive value of type \code{cdisc_data}
-        #' @return new \code{DataConnector} object
-        initialize = function(ui, server) {
-          stopifnot(is(ui, "function"))
-          stopifnot(is(server, "function"))
-          stopifnot(names(formals(ui)) == "id")
-          stopifnot(all(c("input", "output", "session") %in% names(formals(server))))
+  # DataConnector public ----
+  "DataConnector",
+  public = list(
+    #' @description
+    #' Create a new \code{DataConnector} object
+    #'
+    #' @param connection (\code{DataConnection}) connection to data source
+    #' @param connectors (\code{list} of \code{DatasetConnector} elements) list with dataset connectors
+    #'
+    #' @return new \code{DataConnector} object
+    initialize = function() {
+      self$set_ui(
+        function(id) {
+          tags$span("empty page")
+        }
+      )
 
-          private$ui <- ui
-          private$server <- server
+      self$set_server_helper()
 
-        },
-        #' @description
-        #' return the \code{server} function of the DataConnector
-        get_server = function() {
-          private$server
-        },
-        #' @description
-        #' return the \code{ui} function of the DataConnector
-        #' @param id \code{character} shiny element id
-        get_ui = function(id) {
-          private$ui(id)
-        },
-        #' @description
-        #' Run simple application that uses its \code{ui} and \code{server} fields
-        #'
-        #' Useful for debugging
-        #'
-        #' @param data reactiveVal to allow data handling inside server function
-        #'
-        #' @return An object that represents the app
-        launch = function(data = reactiveVal(NULL)) {
-          shinyApp(
-              ui = fluidPage(private$ui(id = "main_app")),
-              server = function(input, output, session) {
-                callModule(private$server, id = "main_app", data)
+      invisible(self)
+    },
+    #' @description
+    #' Function to get \code{cdisc_data} object interactively, useful for debugging
+    #' @param refresh (\code{logical}) should the data be downloaded?
+    #' Defaults to FALSE, which returns last downloaded data.
+    #'
+    #' @return \code{cdisc_data} object
+    get_cdisc_data = function(refresh = FALSE) {
+      stopifnot(is_logical_single(refresh))
+      if (is.null(private$cdisc_data) || refresh) {
+        private$refresh_data()
+      }
+      return(private$cdisc_data)
+    },
+    #' Get connection to data source
+    #'
+    #' @return connector's connection
+    get_connection = function() {
+      return(private$connection)
+    },
+    #' Get connectors
+    #'
+    #' @return \code{list} with all connectors
+    get_connectors = function() {
+      return(private$connectors)
+    },
+    #' @description
+    #' Function to get data interactively, useful for debugging
+    #' @param refresh (\code{logical}) should the data be downloaded?
+    #' Defaults to FALSE, which returns last downloaded data.
+    #' @param con_args_fixed (\code{NULL} or named \code{list}) fixed argument to connection function
+    #' @param con_args_dynamic (\code{NULL} or named \code{list}) dynamic argument to connection function
+    #'   (not shown in generated code)
+    #' @param con_args_replacement (\code{NULL} or named \code{list}) replacement of dynamic argument of connection
+    #'   function
+    #' @param fun_args_fixed (\code{NULL} or named \code{list}) fixed argument to pull function
+    #' @param fun_args_dynamic (\code{NULL} or named \code{list}) dynamic argument to pull function
+    #'   (not shown in generated code)
+    #' @param fun_args_replacement (\code{NULL} or named \code{list}) replacement of dynamic argument of pull function
+    #'
+    #' @return List of datasets
+    get_data = function(refresh = FALSE,
+                        con_args_fixed = NULL,
+                        con_args_dynamic = NULL,
+                        con_args_replacement = NULL,
+                        fun_args_fixed = NULL,
+                        fun_args_dynamic = NULL,
+                        fun_args_replacement = NULL) {
+      stopifnot(is_logical_single(refresh))
+      if (is.null(private$data) || refresh) {
+        private$refresh_data(con_args_fixed = con_args_fixed,
+                             con_args_dynamic = con_args_dynamic,
+                             con_args_replacement = con_args_replacement,
+                             fun_args_fixed = fun_args_fixed,
+                             fun_args_dynamic = fun_args_dynamic,
+                             fun_args_replacement = fun_args_replacement)
+      }
+      return(private$data)
+    },
+    #' @description
+    #'
+    #' @return the \code{server} function of the DataConnector
+    get_server = function() {
+      return(private$server)
+    },
+    #' @description
+    #'
+    #' @param id \code{character} shiny element id
+    #'
+    #' @return the \code{ui} function of the DataConnector
+    get_ui = function(id) {
+      return(private$ui(id))
+    },
+    #' @description
+    #' Run simple application that uses its \code{ui} and \code{server} fields
+    #'
+    #' Useful for debugging
+    #'
+    #' @return An object that represents the app
+    launch = function() {
+      shinyApp(
+        ui = fluidPage(private$ui(id = "main_app")),
+        server = function(input, output, session) {
+          callModule(private$server, id = "main_app")
+        }
+      )
+    },
+    #' @description
+    #' Set preprocessing code
+    #'
+    #' @param code (\code{character}) preprocessing code
+    #'
+    #' @return nothing
+    set_code = function(code = character(0)) {
+      stopifnot(is.character(code))
+      private$code <- code
+      return(invisible(NULL))
+    },
+    #' @description
+    #' Set connector UI function
+    #'
+    #' @param ui (\code{function}) ui function of a shiny module
+    #'
+    #' @return nothing
+    set_ui = function(ui) {
+      stopifnot(is(ui, "function"))
+      stopifnot(names(formals(ui)) == "id")
+      private$ui <- ui
+      return(invisible(NULL))
+    },
+    #' @description
+    #' Set connector server function
+    #'
+    #' Please also consider using \code{set_server_helper} method
+    #'
+    #' @param server (\code{function}) A shiny module server function
+    #'   that should return reactive value of type \code{cdisc_data}
+    #'
+    #' @return nothing
+    set_server = function(server) {
+      stopifnot(is(server, "function"))
+      stopifnot(all(c("input", "output", "session") %in% names(formals(server))))
+      private$server <- server
+      return(invisible(NULL))
+    },
+    #' @description
+    #' Helper function to set connector server function
+    #'
+    #' @param submit_id (\code{character}) id of the submit button
+    #' @param check (\code{logical}) perform reproducibility check
+    #' @param con_args_fixed (\code{NULL} or named \code{list}) fixed argument to connection function
+    #' @param con_args_dynamic (\code{NULL} or named \code{list}) dynamic argument to connection function
+    #'   (not shown in generated code)
+    #' @param con_args_replacement (\code{NULL} or named \code{list}) replacement of dynamic argument of connection
+    #'   function
+    #' @param fun_args_fixed (\code{NULL} or named \code{list}) fixed argument to pull function
+    #' @param fun_args_dynamic (\code{NULL} or named \code{list}) dynamic argument to pull function
+    #'   (not shown in generated code)
+    #' @param fun_args_replacement (\code{NULL} or named \code{list}) replacement of dynamic argument of pull function
+    #'
+    #' @return nothing
+    set_server_helper = function(submit_id = "submit",
+                                 check = FALSE,
+                                 con_args_fixed = NULL,
+                                 con_args_dynamic = NULL,
+                                 con_args_replacement = NULL,
+                                 fun_args_fixed = NULL,
+                                 fun_args_dynamic = NULL,
+                                 fun_args_replacement = NULL) {
+      stopifnot(is_character_single(submit_id))
+      stopifnot(is.null(con_args_fixed) || is.list(con_args_fixed))
+      stopifnot(is.null(con_args_dynamic) || is.list(con_args_dynamic))
+      stopifnot(is.null(con_args_replacement) ||
+                  (is.list(con_args_replacement) && identical(names(con_args_dynamic), names(con_args_replacement))))
+      stopifnot(is.null(fun_args_fixed) || is.list(fun_args_fixed))
+      stopifnot(is.null(fun_args_dynamic) || is.list(fun_args_dynamic))
+      stopifnot(is.null(fun_args_replacement) ||
+                  (is.list(fun_args_replacement) && identical(names(fun_args_dynamic), names(fun_args_replacement))))
+
+      self$set_server(
+        function(input, output, session) {
+          rv <- reactiveVal(NULL)
+          observeEvent(input[[submit_id]], {
+            shinyjs::disable(submit_id)
+
+            progress <- Progress$new(session)
+            progress$set(0.1, message = "Setting up connection ...")
+
+            private$refresh_data(
+              input = input,
+              progress = progress,
+              con_args_fixed = con_args_fixed,
+              con_args_dynamic = con_args_dynamic,
+              con_args_replacement = con_args_replacement,
+              fun_args_fixed = fun_args_fixed,
+              fun_args_dynamic = fun_args_dynamic,
+              fun_args_replacement = fun_args_replacement
+            )
+            res <- self$get_cdisc_data()
+            rv(res)
+          })
+          return(rv)
+        }
+      )
+
+      return(invisible(NULL))
+    },
+    #' Set data connection
+    #'
+    #' @param connection (\code{DataConnection}) data connection
+    #'
+    #' @return nothing
+    set_connection = function(connection) {
+      stopifnot(is(connection, "DataConnection"))
+      private$connection <- connection
+      return(invisible(NULL))
+    },
+    #' Set dataset connectors
+    #'
+    #' @param connectors (\code{list} of \code{DatasetConnector} elements) data connectors
+    #'
+    #' @return nothing
+    set_connectors = function(connectors) {
+      stopifnot(is_class_list("DatasetConnector")(connectors))
+      private$connectors <- connectors
+      return(invisible(NULL))
+    }
+  ),
+  private = list(
+    # DataConnector private ----
+    server = NULL,
+    ui = NULL,
+    cdisc_data = NULL,
+    connection = NULL,
+    connectors = NULL,
+    code = character(0),
+    data = NULL,
+    refresh_data = function(code = private$code,
+                            check = FALSE,
+                            input = NULL,
+                            progress = NULL,
+                            con_args_fixed = NULL,
+                            con_args_dynamic = NULL,
+                            con_args_replacement = NULL,
+                            fun_args_fixed = NULL,
+                            fun_args_dynamic = NULL,
+                            fun_args_replacement = NULL) {
+      optional_eval <- function(x, envir = parent.frame(1L)) {
+        if (is.null(x)) {
+          return(x)
+        } else {
+          lapply(
+            x,
+            function(el) {
+              if (is.call(el)) {
+                eval(el, envir = envir)
+              } else {
+                el
               }
+            }
           )
         }
-    ),
-    private = list(
-        server = NULL,
-        ui = NULL
-    )
+      }
+      con_args_fixed <- optional_eval(con_args_fixed)
+      con_args_dynamic <- optional_eval(con_args_dynamic)
+      fun_args_fixed <- optional_eval(fun_args_fixed, parent.frame())
+      fun_args_dynamic <- optional_eval(fun_args_dynamic)
+
+      datanames <- vapply(private$connectors, function(x) x$get_dataname(), character(1))
+
+      private$connection$set_open_args(args = con_args_fixed)
+      private$connection$open(args = con_args_dynamic)
+
+      env_data <- new.env()
+      for (i in seq_along(private$connectors)) {
+        if_not_null(progress,
+                    progress$set(0.2 + 0.4 * (i - 1) / length(private$connectors), message = "Loading data ..."))
+        private$connectors[[i]]$set_pull_args(args = fun_args_fixed)
+        assign(
+          datanames[[i]],
+          private$connectors[[i]]$get_data(args = fun_args_dynamic),
+          envir = env_data
+        )
+      }
+
+      private$connection$close(silent = TRUE)
+
+      if (!is_character_empty(code)) {
+        eval(parse(text = code), env_data)
+      }
+
+      list_data <- lapply(
+        datanames,
+        function(x) {
+          get(x, env_data)
+        }
+      )
+      names(list_data) <- datanames
+      rm(env_data)
+
+      private$data <- list_data
+      rm(list_data)
+
+      args <- lapply(
+        seq_along(private$connectors),
+        function(i) {
+          cdisc_dataset(private$connectors[[i]]$get_dataname(),
+                        private$data[[i]],
+                        private$connectors[[i]]$get_keys(),
+                        private$connectors[[i]]$get_labels())
+        }
+      )
+
+      full_code <- c(
+        private$connection$get_open_call(deparse = TRUE, args = con_args_replacement),
+        vapply(private$connectors, function(x) x$get_call(deparse = TRUE, args = fun_args_replacement), character(1)),
+        private$connection$get_close_call(deparse = TRUE, silent = TRUE),
+        "\n",
+        code
+      )
+
+      if_not_null(progress, progress$set(0.7, message = "Preprocessing data ..."))
+
+      args <- append(args,
+                     list(code = paste(full_code, collapse = "\n"),
+                          check = check))
+      private$cdisc_data <- do.call(cdisc_data, args)
+
+      if_not_null(progress, progress$close())
+
+      if_not_null(progress, progress$set(1, message = "Loading complete!"))
+
+      return(invisible(NULL))
+    }
+  )
 )
 
-#' Function to create an object of class DataConnector
-#'
-#' @param ui (\code{function}) A shiny module UI function with the argument \code{ui}
-#' @param server (\code{function}) A shiny module SERVER function with the
-#'   arguments \code{input}, \code{output}, \code{session} and one additional
-#'   argument to handover data to the final teal app
-#'
-#' @return An object of class \code{DataConnector}
-data_connector <- function(ui, server) {
-  DataConnector$new(ui = ui, server = server)
-}
 
-#' Dummy random CDISC data connector
+# DataConnector wrappers ----
+#' Data connector for \code{random.cdisc.data}
+#'
+#' Build data connector for \code{random.cdisc.data} functions or datasets
 #'
 #' @export
 #'
+#' @param ... (\code{DatasetConnector}) dataset connectors created using \link{rcd_dataset}
+#' @param code optional, (\code{character}) preprocessing code
+#' @param check optional, (\code{logical}) whether perform reproducibility check
+#'
+#' @return An object of class \code{DataConnector}
+#'
 #' @examples
+#' \dontrun{
+#' x <- rcd_data(ADSL = rcd_dataset("ADSL", radsl), ADLB = rcd_dataset("ADLB", radlb))
 #' app <- init(
-#'   data = rcd_connector(),
+#'   data = x,
 #'   modules = root_modules(
 #'     module(
 #'       "ADSL AGE histogram",
@@ -89,34 +373,149 @@ data_connector <- function(ui, server) {
 #'       filters = "ADSL"
 #'     )
 #'   ),
-#'   filter = NULL,#list(init = list(ADSL = c("AGE"))),
-#'   header = tags$h1("Sample App"),
-#'   footer = tags$p("Copyright 2017")
+#'   filter = NULL,
+#'   header = tags$h1("Sample App")
 #' )
-#' \dontrun{
 #' shinyApp(app$ui, app$server)
 #' }
-rcd_connector <- function() {
+rcd_data <- function(..., code = character(0), check = TRUE) {
+  connectors <- list(...)
+  stopifnot(is_class_list("DatasetConnector")(connectors))
 
-  if (!requireNamespace("random.cdisc.data", quietly = TRUE)) {
-    # otherwise need to move random.cdisc.data to Imports
-    stop("need random.cdisc.data package installed to use the rcd_connector function")
-  }
+  con <- rcd_connection() # nolint
 
-  data_connector(
-    ui = function(id) {
+  x <- DataConnector$new()
+  x$set_connection(con)
+  x$set_connectors(connectors)
+  x$set_code(code)
+  x$set_ui(
+    function(id) {
       ns <- NS(id)
       tagList(
         numericInput(ns("seed"), "Choose seed", min = 1, max = 1000, value = 1),
-        actionButton(ns("submit"), "submit")
+        actionButton(ns("submit"), "Submit")
       )
-    },
-    server = function(input, output, session) {
-      rv <- reactiveVal(NULL)
-      observeEvent(input$submit, {
-        rv(cdisc_data(cdisc_dataset("ADSL", random.cdisc.data::radsl(seed = input$seed))))
-      })
-      return(rv)
     }
   )
+  x$set_server_helper(
+    submit_id = "submit",
+    check = TRUE,
+    fun_args_fixed = list(seed = quote(input$seed))
+  )
+
+  return(x)
+}
+
+#' Data connector for \code{RICE}
+#'
+#' Build data connector for \code{RICE} datasets
+#'
+#' @importFrom getPass getPass
+#'
+#' @export
+#'
+#' @param ... (\code{DatasetConnector}) dataset connectors created using \link{rice_dataset}
+#' @param additional_ui \code{shiny.tag} additional user interface to be visible over login panel
+#' @inheritParams rcd_data
+#'
+#' @return An object of class \code{DataConnector}
+#'
+#' @examples
+#' \dontrun{
+#' x <- rice_cdisc_data(
+#'   ADSL = rice_dataset("ADSL", "/path/to/ADSL"),
+#'   ADLB = rice_dataset("ADLB", "/path/to/ADLB")
+#' )
+#' app <- init(
+#'   data = x,
+#'   modules = root_modules(
+#'     module(
+#'       "ADSL AGE histogram",
+#'       server = function(input, output, session, datasets) {
+#'         output$hist <- renderPlot({
+#'           hist(datasets$get_data("ADSL", filtered = TRUE, reactive = TRUE)$AGE)
+#'         })
+#'       },
+#'       ui = function(id, ...) {ns <- NS(id); plotOutput(ns('hist'))},
+#'       filters = "ADSL"
+#'     )
+#'   ),
+#'   filter = NULL,
+#'   header = tags$h1("Sample App")
+#' )
+#' shinyApp(app$ui, app$server)
+#' }
+rice_cdisc_data <- function(..., code = character(0), additional_ui = NULL) {
+  connectors <- list(...)
+  stopifnot(is_class_list("DatasetConnector")(connectors))
+
+  con <- rice_connection() # nolint
+
+  x <- DataConnector$new()
+  x$set_connection(con)
+  x$set_connectors(connectors)
+  x$set_code(code)
+  x$set_ui(
+    function(id) {
+      ns <- NS(id)
+      shinyjs::useShinyjs()
+      fluidPage(
+        fluidRow(
+          column(
+            8,
+            offset = 2,
+            ui_connectors("rice", connectors),
+            br(),
+            additional_ui,
+            br(),
+            textInput(ns("login"), "Login"),
+            passwordInput(ns("pass"), "Password"),
+            actionButton(ns("submit"), "Submit")
+          )
+        )
+      )
+    }
+  )
+  x$set_server_helper(
+    submit_id = "submit",
+    check = FALSE,
+    con_args_fixed = list(username = quote(input$login)),
+    con_args_dynamic = list(password = quote(input$pass)),
+    con_args_replacement = list(password = quote(getPass::getPass()))
+  )
+
+  return(x)
+}
+
+
+#' Creates UI from \code{DatasetConnector} objects
+#'
+#' @param type \code{character} giving the type of connection.
+#' @param connectors \code{list} of \code{DatasetConnector} objects.
+#'
+#' @return \code{shiny.tag} UI describing the connectors
+#'
+ui_connectors <- function(type, connectors) {
+
+  stopifnot(is_character_single(type))
+  stopifnot(is_class_list("DatasetConnector")(connectors))
+
+  out <- div(
+    h1("TEAL - Access data on entimICE using", toupper(type)),
+    br(),
+    h5("Data access requested for:"),
+    fluidRow(
+      column(
+        11,
+        offset = 1,
+        lapply(seq_along(connectors), function(i) {
+          tags$li(paste0(connectors[[i]]$get_dataname(),
+                         ": ",
+                         connectors[[i]]$get_path()))
+        })
+      )
+    )
+  )
+
+  return(out)
 }

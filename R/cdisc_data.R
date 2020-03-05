@@ -405,23 +405,11 @@ cdisc_data <- function(...,
   }
 
   if (code == "") {
-    package_path <- path.package("teal")
-    if ("inst" %in% list.dirs(package_path, full.names = FALSE, recursive = FALSE)) {
-      filename <- file.path(package_path, "inst", "preprocessing_empty_string.txt")
-    } else {
-      filename <- file.path(package_path, "preprocessing_empty_string.txt")
-    }
-    code <- readChar(filename, file.info(filename)$size)
+    code <- get_preprocessing_empty_string() # nolint
   }
 
   if (!check) {
-    package_path <- path.package("teal")
-    if ("inst" %in% list.dirs(package_path, full.names = FALSE, recursive = FALSE)) {
-      filename_check <- file.path(package_path, "inst", "check_false_string.txt")
-    } else {
-      filename_check <- file.path(package_path, "check_false_string.txt")
-    }
-    check_note <- readChar(filename_check, file.info(filename_check)$size)
+    check_note <- get_check_note_string() # nolint
     code <- paste0(code, "\n\n", check_note, "\n")
   }
 
@@ -434,4 +422,25 @@ cdisc_data <- function(...,
   res <- setNames(res, datasets_names)
 
   return(structure(res, code = code, class = "cdisc_data"))
+}
+
+
+get_preprocessing_empty_string <- function() {
+  filename <- get_package_file("preprocessing_empty_string.txt") # nolint
+  readChar(filename, file.info(filename)$size)
+}
+
+
+get_check_note_string <- function() {
+  filename_check <- get_package_file("check_false_string.txt") # nolint
+  readChar(filename_check, file.info(filename_check)$size)
+}
+
+get_package_file <- function(file_name) {
+  package_path <- path.package("teal")
+  if ("inst" %in% list.dirs(package_path, full.names = FALSE, recursive = FALSE)) {
+    file.path(package_path, "inst", file_name)
+  } else {
+    file.path(package_path, file_name)
+  }
 }

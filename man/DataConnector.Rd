@@ -16,9 +16,19 @@ a \code{reactiveVal}.
 \subsection{Public methods}{
 \itemize{
 \item \href{#method-new}{\code{DataConnector$new()}}
+\item \href{#method-get_cdisc_data}{\code{DataConnector$get_cdisc_data()}}
+\item \href{#method-get_connection}{\code{DataConnector$get_connection()}}
+\item \href{#method-get_connectors}{\code{DataConnector$get_connectors()}}
+\item \href{#method-get_data}{\code{DataConnector$get_data()}}
 \item \href{#method-get_server}{\code{DataConnector$get_server()}}
 \item \href{#method-get_ui}{\code{DataConnector$get_ui()}}
 \item \href{#method-launch}{\code{DataConnector$launch()}}
+\item \href{#method-set_code}{\code{DataConnector$set_code()}}
+\item \href{#method-set_ui}{\code{DataConnector$set_ui()}}
+\item \href{#method-set_server}{\code{DataConnector$set_server()}}
+\item \href{#method-set_server_helper}{\code{DataConnector$set_server_helper()}}
+\item \href{#method-set_connection}{\code{DataConnector$set_connection()}}
+\item \href{#method-set_connectors}{\code{DataConnector$set_connectors()}}
 \item \href{#method-clone}{\code{DataConnector$clone()}}
 }
 }
@@ -27,16 +37,15 @@ a \code{reactiveVal}.
 \subsection{Method \code{new()}}{
 Create a new \code{DataConnector} object
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{DataConnector$new(ui, server)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{DataConnector$new()}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{ui}}{(\code{function}) ui function of a shiny module}
+\item{\code{connection}}{(\code{DataConnection}) connection to data source}
 
-\item{\code{server}}{(\code{function}) A shiny module server function
-that should return reactive value of type \code{cdisc_data}}
+\item{\code{connectors}}{(\code{list} of \code{DatasetConnector} elements) list with dataset connectors}
 }
 \if{html}{\out{</div>}}
 }
@@ -45,18 +54,108 @@ new \code{DataConnector} object
 }
 }
 \if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-get_cdisc_data"></a>}}
+\subsection{Method \code{get_cdisc_data()}}{
+Function to get \code{cdisc_data} object interactively, useful for debugging
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{DataConnector$get_cdisc_data(refresh = FALSE)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{refresh}}{(\code{logical}) should the data be downloaded?
+Defaults to FALSE, which returns last downloaded data.}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Returns}{
+\code{cdisc_data} object
+Get connection to data source
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-get_connection"></a>}}
+\subsection{Method \code{get_connection()}}{
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{DataConnector$get_connection()}\if{html}{\out{</div>}}
+}
+
+\subsection{Returns}{
+connector's connection
+Get connectors
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-get_connectors"></a>}}
+\subsection{Method \code{get_connectors()}}{
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{DataConnector$get_connectors()}\if{html}{\out{</div>}}
+}
+
+\subsection{Returns}{
+\code{list} with all connectors
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-get_data"></a>}}
+\subsection{Method \code{get_data()}}{
+Function to get data interactively, useful for debugging
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{DataConnector$get_data(
+  refresh = FALSE,
+  con_args_fixed = NULL,
+  con_args_dynamic = NULL,
+  con_args_replacement = NULL,
+  fun_args_fixed = NULL,
+  fun_args_dynamic = NULL,
+  fun_args_replacement = NULL
+)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{refresh}}{(\code{logical}) should the data be downloaded?
+Defaults to FALSE, which returns last downloaded data.}
+
+\item{\code{con_args_fixed}}{(\code{NULL} or named \code{list}) fixed argument to connection function}
+
+\item{\code{con_args_dynamic}}{(\code{NULL} or named \code{list}) dynamic argument to connection function
+(not shown in generated code)}
+
+\item{\code{con_args_replacement}}{(\code{NULL} or named \code{list}) replacement of dynamic argument of connection
+function}
+
+\item{\code{fun_args_fixed}}{(\code{NULL} or named \code{list}) fixed argument to pull function}
+
+\item{\code{fun_args_dynamic}}{(\code{NULL} or named \code{list}) dynamic argument to pull function
+(not shown in generated code)}
+
+\item{\code{fun_args_replacement}}{(\code{NULL} or named \code{list}) replacement of dynamic argument of pull function}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Returns}{
+List of datasets
+}
+}
+\if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-get_server"></a>}}
 \subsection{Method \code{get_server()}}{
-return the \code{server} function of the DataConnector
+
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{DataConnector$get_server()}\if{html}{\out{</div>}}
 }
 
+\subsection{Returns}{
+the \code{server} function of the DataConnector
+}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-get_ui"></a>}}
 \subsection{Method \code{get_ui()}}{
-return the \code{ui} function of the DataConnector
+
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{DataConnector$get_ui(id)}\if{html}{\out{</div>}}
 }
@@ -68,6 +167,9 @@ return the \code{ui} function of the DataConnector
 }
 \if{html}{\out{</div>}}
 }
+\subsection{Returns}{
+the \code{ui} function of the DataConnector
+}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-launch"></a>}}
@@ -76,18 +178,154 @@ Run simple application that uses its \code{ui} and \code{server} fields
 
 Useful for debugging
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{DataConnector$launch(data = reactiveVal(NULL))}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{DataConnector$launch()}\if{html}{\out{</div>}}
+}
+
+\subsection{Returns}{
+An object that represents the app
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-set_code"></a>}}
+\subsection{Method \code{set_code()}}{
+Set preprocessing code
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{DataConnector$set_code(code = character(0))}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{data}}{reactiveVal to allow data handling inside server function}
+\item{\code{code}}{(\code{character}) preprocessing code}
 }
 \if{html}{\out{</div>}}
 }
 \subsection{Returns}{
-An object that represents the app
+nothing
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-set_ui"></a>}}
+\subsection{Method \code{set_ui()}}{
+Set connector UI function
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{DataConnector$set_ui(ui)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{ui}}{(\code{function}) ui function of a shiny module}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Returns}{
+nothing
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-set_server"></a>}}
+\subsection{Method \code{set_server()}}{
+Set connector server function
+
+Please also consider using \code{set_server_helper} method
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{DataConnector$set_server(server)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{server}}{(\code{function}) A shiny module server function
+that should return reactive value of type \code{cdisc_data}}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Returns}{
+nothing
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-set_server_helper"></a>}}
+\subsection{Method \code{set_server_helper()}}{
+Helper function to set connector server function
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{DataConnector$set_server_helper(
+  submit_id = "submit",
+  check = FALSE,
+  con_args_fixed = NULL,
+  con_args_dynamic = NULL,
+  con_args_replacement = NULL,
+  fun_args_fixed = NULL,
+  fun_args_dynamic = NULL,
+  fun_args_replacement = NULL
+)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{submit_id}}{(\code{character}) id of the submit button}
+
+\item{\code{check}}{(\code{logical}) perform reproducibility check}
+
+\item{\code{con_args_fixed}}{(\code{NULL} or named \code{list}) fixed argument to connection function}
+
+\item{\code{con_args_dynamic}}{(\code{NULL} or named \code{list}) dynamic argument to connection function
+(not shown in generated code)}
+
+\item{\code{con_args_replacement}}{(\code{NULL} or named \code{list}) replacement of dynamic argument of connection
+function}
+
+\item{\code{fun_args_fixed}}{(\code{NULL} or named \code{list}) fixed argument to pull function}
+
+\item{\code{fun_args_dynamic}}{(\code{NULL} or named \code{list}) dynamic argument to pull function
+(not shown in generated code)}
+
+\item{\code{fun_args_replacement}}{(\code{NULL} or named \code{list}) replacement of dynamic argument of pull function}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Returns}{
+nothing
+Set data connection
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-set_connection"></a>}}
+\subsection{Method \code{set_connection()}}{
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{DataConnector$set_connection(connection)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{connection}}{(\code{DataConnection}) data connection}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Returns}{
+nothing
+Set dataset connectors
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-set_connectors"></a>}}
+\subsection{Method \code{set_connectors()}}{
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{DataConnector$set_connectors(connectors)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{connectors}}{(\code{list} of \code{DatasetConnector} elements) data connectors}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Returns}{
+nothing
 }
 }
 \if{html}{\out{<hr>}}

@@ -4,6 +4,7 @@ ui_add_filter_variable <- function(id, dataname) {
   ns <- NS(id)
 
   div(
+    id = ns(character(0)), # needed to properly show / hide filters
     optionalSelectInput(
       ns("variables"),
       label = dataname,

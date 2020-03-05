@@ -1,5 +1,10 @@
 # teal 0.8.2.9000
 
+* Enable `teal` app to initialize with custom page to be loaded first.
+* New classes (`DatasetConnector`, `DataConnector`) to connect to various data sources, including:  
+        * connector to `rice` API - `rice_cdisc_data` and `rice_dataset`  
+        * connector to `RDS` files - `rds_data` and `rds_dataset`  
+
 # teal 0.8.2
 
 * Fixed several BUGS in `optionalSelectInput` and improved inputs look.

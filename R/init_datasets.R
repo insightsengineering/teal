@@ -40,6 +40,8 @@ set_datasets_data <- function(datasets, data) {
     datasets$set_data_attr(data[[idx]][["dataname"]], "labels", data[[idx]][["labels"]])
   }
 
+  datasets$set_attrs(data)
+
   return(invisible(NULL))
 }
 

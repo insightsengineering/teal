@@ -58,9 +58,7 @@ options(teal_logging = FALSE)
 app <- init(
   data = cdisc_data(
     cdisc_dataset("ADSL", ADSL),
-    code = "
-    ADSL <- radsl(seed = 1)
-  "
+    code = "ADSL <- radsl(seed = 1)"
   ),
   modules = root_modules(
     module(
@@ -85,7 +83,7 @@ app <- init(
   ),
   filter = list(init = list(ADSL = c("AGE"))),
   header = tags$h1("Sample App"),
-  footer = tags$p("Copyright 2017")
+  footer = tags$p("Copyright 2017 - 2020")
 )
 \dontrun{
 shinyApp(app$ui, app$server)
