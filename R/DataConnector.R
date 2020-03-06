@@ -106,9 +106,16 @@ DataConnector <- R6::R6Class( #nolint
     #' @return An object that represents the app
     launch = function() {
       shinyApp(
-        ui = fluidPage(private$ui(id = "main_app")),
+        ui = fluidPage(private$ui(id = "main_app"),
+                       br(),
+                       uiOutput("result")),
         server = function(input, output, session) {
-          callModule(private$server, id = "main_app")
+          dat <- callModule(private$server, id = "main_app")
+          output$result <- renderUI({
+            if (is(dat(), "cdisc_data")) {
+              return(h3("Data successfully loaded!"))
+            }
+          })
         }
       )
     },
@@ -333,9 +340,9 @@ DataConnector <- R6::R6Class( #nolint
                           check = check))
       private$cdisc_data <- do.call(cdisc_data, args)
 
-      if_not_null(progress, progress$close())
-
       if_not_null(progress, progress$set(1, message = "Loading complete!"))
+
+      if_not_null(progress, progress$close())
 
       return(invisible(NULL))
     }
