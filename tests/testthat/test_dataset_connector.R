@@ -108,7 +108,7 @@ test_that("Setting class elements in wrong order", {
 
 
 test_that("rcd_dataset", {
-  x <- rcd_dataset(dataname = "ADSL", radsl)
+  x <- rcd_dataset(dataname = "ADSL", radsl, cached = TRUE, N = 400)
   expect_true(is(x, c("DatasetConnector", "R6")))
 
   expect_identical(
@@ -123,17 +123,17 @@ test_that("rcd_dataset", {
 
   expect_equal(
     x$get_call(),
-    "ADSL <- radsl(cached = TRUE, seed = 1)"
+    "ADSL <- radsl(cached = TRUE, N = 400)"
   )
 
   expect_identical(
     x$get_data(),
-    radsl(cached = TRUE, seed = 1)
+    radsl(cached = TRUE, seed = 1, N = 400)
   )
 
   expect_identical(
     x$get_labels(),
-    get_labels(radsl(cached = TRUE, seed = 1))
+    get_labels(radsl(cached = TRUE, seed = 1, N = 400))
   )
 })
 

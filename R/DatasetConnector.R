@@ -175,6 +175,8 @@ DatasetConnector <- R6::R6Class( #nolint
     set_pull_arg_value = function(name, value, silent = FALSE) {
       if_cond(private$check_pull_fun(silent = silent), return(), isFALSE)
       private$pull_fun$set_arg_value(name, value)
+      private$is_pulled <- FALSE
+      return(invisible(NULL))
     },
     #' @description
     #' Set connection function arguments with values
@@ -186,6 +188,8 @@ DatasetConnector <- R6::R6Class( #nolint
     set_pull_args = function(args, silent = FALSE) {
       if_cond(private$check_pull_fun(silent = silent), return(), isFALSE)
       private$pull_fun$set_args(args)
+      private$is_pulled <- FALSE
+      return(invisible(NULL))
     },
     #' @description
     #' Set the pulling function, which itself defines the connection through which the data gets pulled.
@@ -197,6 +201,7 @@ DatasetConnector <- R6::R6Class( #nolint
       stopifnot(is(fun, "CallableFunction"))
       stop_if_not(list(!is_character_empty(private$dataname), "Please set up dataname before function"))
       private$pull_fun <- fun
+      private$is_pulled <- FALSE
       return(invisible(NULL))
     }
   ),
@@ -234,25 +239,25 @@ DatasetConnector <- R6::R6Class( #nolint
 #' @export
 #'
 #' @param fun (\code{function}) connection function
-#' @param cached (\code{logical}) whether to use cached data
-#' @param seed (\code{numeric}) random seed if used non-cached data
+#' @param ... additional arguments passed to fun
 #' @inheritParams cdisc_dataset
 #'
 #' @return (\code{DatasetConnector}) type of object
 #'
 #' @examples
 #' library(random.cdisc.data)
-#' x <- rcd_dataset("ADSL", radsl)
+#' x <- rcd_dataset("ADSL", radsl, cached = TRUE)
 #' x$get_call()
 #' x$get_data()
-rcd_dataset <- function(dataname, fun, cached = TRUE, seed = 1) {
+rcd_dataset <- function(dataname, fun, ...) {
   stopifnot(is_character_single(dataname))
   stopifnot(is.function(fun))
-  stopifnot(is_logical_single(cached))
-  stopifnot(is_numeric_single(seed))
+
+  dot_args <- list(...)
+  stopifnot(is_fully_named_list(dot_args))
 
   x_fun <- CallableFunction$new(fun) # nolint
-  x_fun$set_args(list(cached = cached, seed = seed))
+  x_fun$set_args(dot_args)
 
   x <- DatasetConnector$new() # nolint
   x$set_dataname(dataname)

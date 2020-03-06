@@ -4,7 +4,7 @@
 \alias{rcd_dataset}
 \title{Set up connection to \code{random.cdisc.data}}
 \usage{
-rcd_dataset(dataname, fun, cached = TRUE, seed = 1)
+rcd_dataset(dataname, fun, ...)
 }
 \arguments{
 \item{dataname}{name of dataset}
@@ -23,7 +23,7 @@ Set up connection to \code{random.cdisc.data}
 }
 \examples{
 library(random.cdisc.data)
-x <- rcd_dataset("ADSL", radsl)
+x <- rcd_dataset("ADSL", radsl, cached = TRUE)
 x$get_call()
 x$get_data()
 }

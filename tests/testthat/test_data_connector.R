@@ -72,8 +72,8 @@ test_that("DataConnector with DataConnection", {
   code <- "ADSL$x <- 1"
   check <- TRUE
   connectors <- list(
-    rcd_dataset("ADSL", radsl),
-    rcd_dataset("ADLB", radlb)
+    rcd_dataset("ADSL", radsl, cached = TRUE),
+    rcd_dataset("ADLB", radlb, cached = TRUE)
   )
 
   x <- DataConnector$new()
@@ -110,8 +110,8 @@ test_that("DataConnector with DataConnection", {
   cdisc_code <- strsplit(attr(x$get_cdisc_data(), "code"), "\n")[[1]]
   expected_code <- c(
     "data.frame(x = 1:5, y = c(\"a\", \"b\", \"c\", \"d\", \"e\"))", # from connection open
-    "ADSL <- radsl(cached = TRUE, seed = 1)",
-    "ADLB <- radlb(cached = TRUE, seed = 1)",
+    "ADSL <- radsl(cached = TRUE)",
+    "ADLB <- radlb(cached = TRUE)",
     "data.frame(x = 1:2)", # from connection$close()
     "",
     "",
@@ -136,8 +136,8 @@ test_that("data connector with rcd connection", {
   code <- "ADSL$x <- 1"
   check <- TRUE
   connectors <- list(
-    rcd_dataset("ADSL", radsl),
-    rcd_dataset("ADLB", radlb)
+    rcd_dataset("ADSL", radsl, cached = TRUE),
+    rcd_dataset("ADLB", radlb, cached = TRUE)
   )
 
   x <- DataConnector$new()
@@ -174,8 +174,8 @@ test_that("data connector with rcd connection", {
   cdisc_code <- strsplit(attr(x$get_cdisc_data(), "code"), "\n")[[1]]
   expected_code <- c(
     "library(package = \"random.cdisc.data\")",
-    "ADSL <- radsl(cached = TRUE, seed = 1)",
-    "ADLB <- radlb(cached = TRUE, seed = 1)",
+    "ADSL <- radsl(cached = TRUE)",
+    "ADLB <- radlb(cached = TRUE)",
     "",
     "",
     "ADSL$x <- 1"
@@ -195,9 +195,9 @@ test_that("data connector with rcd connection", {
 
 
 test_that("rcd data", {
-  c1 <- rcd_dataset("ADSL", radsl)
-  c2 <- rcd_dataset("ADLB", radlb)
-  x <- rcd_data(c1, c2, code = "ADSL <- mutate(x = 1)", check = TRUE)
+  c1 <- rcd_dataset("ADSL", radsl, cached = TRUE)
+  c2 <- rcd_dataset("ADLB", radlb, cached = TRUE)
+  x <- rcd_cdisc_data(c1, c2, code = "ADSL <- mutate(x = 1)", check = TRUE)
 
   expect_true(is(x, c("DataConnector", "R6")))
   expect_true(is(x$get_server(), "function"))

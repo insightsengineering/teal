@@ -358,7 +358,10 @@ DataConnector <- R6::R6Class( #nolint
 #'
 #' @examples
 #' \dontrun{
-#' x <- rcd_data(ADSL = rcd_dataset("ADSL", radsl), ADLB = rcd_dataset("ADLB", radlb))
+#' x <- rcd_cdisc_data(
+#'   rcd_dataset("ADSL", radsl, cached = TRUE),
+#'   rcd_dataset("ADLB", radlb, cached = TRUE)
+#' )
 #' app <- init(
 #'   data = x,
 #'   modules = root_modules(
@@ -378,7 +381,7 @@ DataConnector <- R6::R6Class( #nolint
 #' )
 #' shinyApp(app$ui, app$server)
 #' }
-rcd_data <- function(..., code = character(0), check = TRUE) {
+rcd_cdisc_data <- function(..., code = character(0), check = TRUE) {
   connectors <- list(...)
   stopifnot(is_class_list("DatasetConnector")(connectors))
 
@@ -416,15 +419,15 @@ rcd_data <- function(..., code = character(0), check = TRUE) {
 #'
 #' @param ... (\code{DatasetConnector}) dataset connectors created using \link{rice_dataset}
 #' @param additional_ui \code{shiny.tag} additional user interface to be visible over login panel
-#' @inheritParams rcd_data
+#' @inheritParams rcd_cdisc_data
 #'
 #' @return An object of class \code{DataConnector}
 #'
 #' @examples
 #' \dontrun{
 #' x <- rice_cdisc_data(
-#'   ADSL = rice_dataset("ADSL", "/path/to/ADSL"),
-#'   ADLB = rice_dataset("ADLB", "/path/to/ADLB")
+#'   rice_dataset("ADSL", "/path/to/ADSL"),
+#'   rice_dataset("ADLB", "/path/to/ADLB")
 #' )
 #' app <- init(
 #'   data = x,
