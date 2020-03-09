@@ -56,6 +56,13 @@ test_that("test callable errors", {
     CallableFunction$new(),
     "is missing, with no default"
   )
+  expect_equal({
+    x <- CallableFunction$new(function(x = 1){
+          return(x)
+    })
+    x$run()},
+    1
+  )
 
   x_fun <- CallableFunction$new(mean)
 
@@ -68,9 +75,15 @@ test_that("test callable errors", {
     mean(y = 2, x = 1, na.rm = TRUE)
   )
 
-  #
   expect_error(
     CallableFunction$new(`+`)
+  )
+
+  expect_equal({
+    x <- CallableFunction$new(base::all.equal)
+    x$set_args(list(target = c("abc"), current = c("abc")))
+    x$run()},
+    TRUE
   )
 
 

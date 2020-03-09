@@ -62,6 +62,7 @@ CallableFunction <- R6::R6Class( #nolint
 
       if_not_null(args, self$set_args(args))
 
+
       res <- if (deparse) {
         paste0(deparse(private$call, width.cutoff = 80L), collapse = "\n")
       } else {
@@ -78,10 +79,14 @@ CallableFunction <- R6::R6Class( #nolint
     #' @description
     #' Refresh call with function name and saved arguments
     #'
+    #' @importFrom rlang parse_expr
     #' @return nothing
     refresh = function() {
       if (!is.null(private$fun_name) || !identical(private$fun_name, character(0))) {
-        private$call <- as.call(c(str2lang(private$fun_name), if_empty(private$args, NULL)))
+
+        # replaced str2lang found at:
+        # https://rlang.r-lib.org/reference/call2.html
+        private$call <- as.call(c(rlang::parse_expr(private$fun_name), if_empty(private$args, NULL)))
       }
     },
     #' @description

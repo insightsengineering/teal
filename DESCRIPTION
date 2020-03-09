@@ -36,6 +36,7 @@ Imports:
   purrr,
   R6,
   readr,
+  rlang,
   rtables (>= 0.1.4),
   shinyjs,
   shinyWidgets (>= 0.5.0),
@@ -45,7 +46,7 @@ RoxygenNote: 7.0.2
 Suggests:
     knitr,
     random.cdisc.data (>= 0.3.1),
-    rice (>= 1.0.3), 
+    rice (>= 1.0.3),
     rmarkdown,
     tern (>= 0.6.4),
     test.nest (>= 0.2.1),
