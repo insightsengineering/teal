@@ -16,7 +16,6 @@ Object that stores function name with it's arguments. Methods to get call and ru
 \itemize{
 \item \href{#method-new}{\code{CallableFunction$new()}}
 \item \href{#method-run}{\code{CallableFunction$run()}}
-\item \href{#method-get_callable_function}{\code{CallableFunction$get_callable_function()}}
 \item \href{#method-get_call}{\code{CallableFunction$get_call()}}
 \item \href{#method-refresh}{\code{CallableFunction$refresh()}}
 \item \href{#method-set_args}{\code{CallableFunction$set_args()}}
@@ -48,7 +47,7 @@ new \code{CallableFunction} object
 \subsection{Method \code{run()}}{
 Run function
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{CallableFunction$run(return = TRUE, args = NULL)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{CallableFunction$run(return = TRUE, args = NULL, try = FALSE)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
@@ -57,33 +56,13 @@ Run function
 \item{\code{return}}{(\code{logical}) whether to return an object}
 
 \item{\code{args}}{(\code{NULL} or named \code{list}) dynamic arguments to function}
+
+\item{\code{try}}{(\code{logical}) whether perform function evaluation inside \code{try} clause}
 }
 \if{html}{\out{</div>}}
 }
 \subsection{Returns}{
 nothing or output from function depending on \code{return} argument
-}
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-get_callable_function"></a>}}
-\subsection{Method \code{get_callable_function()}}{
-Finds original function name
-
-In recursive call when function is passed from environment to environment
-and name of the function is overwritten
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{CallableFunction$get_callable_function(callable)}\if{html}{\out{</div>}}
-}
-
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{callable}}{\code{function} function to be found}
-}
-\if{html}{\out{</div>}}
-}
-\subsection{Returns}{
-name \code{name} of the original function
 }
 }
 \if{html}{\out{<hr>}}

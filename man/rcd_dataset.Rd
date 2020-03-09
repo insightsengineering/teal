@@ -11,9 +11,7 @@ rcd_dataset(dataname, fun, ...)
 
 \item{fun}{(\code{function}) connection function}
 
-\item{cached}{(\code{logical}) whether to use cached data}
-
-\item{seed}{(\code{numeric}) random seed if used non-cached data}
+\item{...}{additional arguments passed to fun}
 }
 \value{
 (\code{DatasetConnector}) type of object

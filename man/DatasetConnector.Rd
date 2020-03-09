@@ -80,7 +80,7 @@ Open the connection.
 
 Note that if the connection is already opened then it does nothing.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{DataConnection$open(args = NULL, silent = FALSE)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{DataConnection$open(args = NULL, silent = FALSE, try = FALSE)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
@@ -89,11 +89,13 @@ Note that if the connection is already opened then it does nothing.
 \item{\code{args}}{(\code{NULL} or named \code{list}) additional arguments not set up previously}
 
 \item{\code{silent}}{(\code{logical}) whether convert all "missing function" errors to messages}
+
+\item{\code{try}}{(\code{logical}) whether perform function evaluation inside \code{try} clause}
 }
 \if{html}{\out{</div>}}
 }
 \subsection{Returns}{
-nothing
+if \code{try = TRUE} then \code{try-error} on error, \code{NULL} otherwise
 }
 }
 \if{html}{\out{<hr>}}
@@ -124,18 +126,20 @@ optionally deparsed \code{call} object
 \subsection{Method \code{close()}}{
 Close the connection.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{DataConnection$close(silent = FALSE)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{DataConnection$close(silent = FALSE, try = FALSE)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
 \item{\code{silent}}{(\code{logical}) whether convert all "missing function" errors to messages}
+
+\item{\code{try}}{(\code{logical}) whether perform function evaluation inside \code{try} clause}
 }
 \if{html}{\out{</div>}}
 }
 \subsection{Returns}{
-nothing
+if \code{try = TRUE} then \code{try-error} on error, \code{NULL} otherwise
 }
 }
 \if{html}{\out{<hr>}}
@@ -331,7 +335,7 @@ Get the data from connection
 
 Pull (if it is not already pulled) and return data
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{DatasetConnector$get_data(args = NULL, silent = FALSE)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{DatasetConnector$get_data(args = NULL, silent = FALSE, try = FALSE)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
@@ -340,11 +344,13 @@ Pull (if it is not already pulled) and return data
 \item{\code{args}}{(\code{NULL} or named \code{list}) additional dynamic arguments for pull function}
 
 \item{\code{silent}}{(\code{logical}) whether convert all "missing function" errors to messages}
+
+\item{\code{try}}{(\code{logical}) whether perform function evaluation inside \code{try} clause}
 }
 \if{html}{\out{</div>}}
 }
 \subsection{Returns}{
-object returned from connection function
+if \code{try = TRUE} then \code{try-error} on error, object returned from connection function
 }
 }
 \if{html}{\out{<hr>}}
@@ -402,7 +408,7 @@ Pull the data
 
 Force execution of connection function
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{DatasetConnector$pull(args = NULL, silent = FALSE)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{DatasetConnector$pull(args = NULL, silent = FALSE, try = FALSE)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
@@ -411,6 +417,8 @@ Force execution of connection function
 \item{\code{args}}{(\code{NULL} or named \code{list}) additional dynamic arguments for pull function}
 
 \item{\code{silent}}{(\code{logical}) whether convert all "missing function" errors to messages}
+
+\item{\code{try}}{(\code{logical}) whether perform function evaluation inside \code{try} clause}
 }
 \if{html}{\out{</div>}}
 }
@@ -541,7 +549,7 @@ nothing
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-set_pull_fun"></a>}}
 \subsection{Method \code{set_pull_fun()}}{
-Set connection pull function
+Set the pulling function, which itself defines the connection through which the data gets pulled.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{DatasetConnector$set_pull_fun(fun)}\if{html}{\out{</div>}}
 }

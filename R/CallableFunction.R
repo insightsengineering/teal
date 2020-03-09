@@ -24,13 +24,22 @@ CallableFunction <- R6::R6Class( #nolint
     #'
     #' @param return (\code{logical}) whether to return an object
     #' @param args (\code{NULL} or named \code{list}) dynamic arguments to function
+    #' @param try (\code{logical}) whether perform function evaluation inside \code{try} clause
     #'
     #' @return nothing or output from function depending on \code{return} argument
-    run = function(return = TRUE, args = NULL) {
+    run = function(return = TRUE, args = NULL, try = FALSE) {
       stopifnot(is_logical_single(return))
       stopifnot(is.null(args) || (is.list(args) && is_fully_named_list(args)))
+      stopifnot(is_logical_single(try))
 
-      res <- eval(self$get_call(deparse = FALSE, args = args))
+      res <- if (try) {
+        try(
+          eval(self$get_call(deparse = FALSE, args = args)),
+          silent = TRUE
+        )
+      } else {
+        eval(self$get_call(deparse = FALSE, args = args))
+      }
       if (return) {
         return(res)
       } else {

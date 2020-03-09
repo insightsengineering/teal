@@ -4,6 +4,9 @@
 #' a \code{reactiveVal}.
 #'
 #' @name DataConnector
+#'
+#' @importFrom shiny isRunning Progress
+#' @importFrom shinyjs disable enable
 DataConnector <- R6::R6Class( #nolint
   # DataConnector public ----
   "DataConnector",
@@ -30,12 +33,35 @@ DataConnector <- R6::R6Class( #nolint
     #' Function to get \code{cdisc_data} object interactively, useful for debugging
     #' @param refresh (\code{logical}) should the data be downloaded?
     #' Defaults to FALSE, which returns last downloaded data.
+    #' @param try (\code{logical}) whether perform function evaluation inside \code{try} clause
+    #' @param con_args_fixed (\code{NULL} or named \code{list}) fixed argument to connection function
+    #' @param con_args_dynamic (\code{NULL} or named \code{list}) dynamic argument to connection function
+    #'   (not shown in generated code)
+    #' @param con_args_replacement (\code{NULL} or named \code{list}) replacement of dynamic argument of connection
+    #'   function
+    #' @param fun_args_fixed (\code{NULL} or named \code{list}) fixed argument to pull function
+    #' @param fun_args_dynamic (\code{NULL} or named \code{list}) dynamic argument to pull function
+    #'   (not shown in generated code)
+    #' @param fun_args_replacement (\code{NULL} or named \code{list}) replacement of dynamic argument of pull function
     #'
     #' @return \code{cdisc_data} object
-    get_cdisc_data = function(refresh = FALSE) {
+    get_cdisc_data = function(refresh = FALSE,
+                              try = FALSE,
+                              con_args_fixed = NULL,
+                              con_args_dynamic = NULL,
+                              con_args_replacement = NULL,
+                              fun_args_fixed = NULL,
+                              fun_args_dynamic = NULL,
+                              fun_args_replacement = NULL) {
       stopifnot(is_logical_single(refresh))
       if (is.null(private$cdisc_data) || refresh) {
-        private$refresh_data()
+        private$refresh_data(try = try,
+                             con_args_fixed = con_args_fixed,
+                             con_args_dynamic = con_args_dynamic,
+                             con_args_replacement = con_args_replacement,
+                             fun_args_fixed = fun_args_fixed,
+                             fun_args_dynamic = fun_args_dynamic,
+                             fun_args_replacement = fun_args_replacement)
       }
       return(private$cdisc_data)
     },
@@ -55,6 +81,7 @@ DataConnector <- R6::R6Class( #nolint
     #' Function to get data interactively, useful for debugging
     #' @param refresh (\code{logical}) should the data be downloaded?
     #' Defaults to FALSE, which returns last downloaded data.
+    #' @param try (\code{logical}) whether perform function evaluation inside \code{try} clause
     #' @param con_args_fixed (\code{NULL} or named \code{list}) fixed argument to connection function
     #' @param con_args_dynamic (\code{NULL} or named \code{list}) dynamic argument to connection function
     #'   (not shown in generated code)
@@ -67,6 +94,7 @@ DataConnector <- R6::R6Class( #nolint
     #'
     #' @return List of datasets
     get_data = function(refresh = FALSE,
+                        try = FALSE,
                         con_args_fixed = NULL,
                         con_args_dynamic = NULL,
                         con_args_replacement = NULL,
@@ -75,7 +103,8 @@ DataConnector <- R6::R6Class( #nolint
                         fun_args_replacement = NULL) {
       stopifnot(is_logical_single(refresh))
       if (is.null(private$data) || refresh) {
-        private$refresh_data(con_args_fixed = con_args_fixed,
+        private$refresh_data(try = try,
+                             con_args_fixed = con_args_fixed,
                              con_args_dynamic = con_args_dynamic,
                              con_args_replacement = con_args_replacement,
                              fun_args_fixed = fun_args_fixed,
@@ -195,14 +224,11 @@ DataConnector <- R6::R6Class( #nolint
         function(input, output, session) {
           rv <- reactiveVal(NULL)
           observeEvent(input[[submit_id]], {
-            shinyjs::disable(submit_id)
-
-            progress <- Progress$new(session)
-            progress$set(0.1, message = "Setting up connection ...")
-
             private$refresh_data(
               input = input,
-              progress = progress,
+              submit_id = submit_id,
+              session = session,
+              try = TRUE,
               con_args_fixed = con_args_fixed,
               con_args_dynamic = con_args_dynamic,
               con_args_replacement = con_args_replacement,
@@ -210,7 +236,9 @@ DataConnector <- R6::R6Class( #nolint
               fun_args_dynamic = fun_args_dynamic,
               fun_args_replacement = fun_args_replacement
             )
+
             res <- self$get_cdisc_data()
+
             rv(res)
           })
           return(rv)
@@ -249,16 +277,50 @@ DataConnector <- R6::R6Class( #nolint
     connectors = NULL,
     code = character(0),
     data = NULL,
+    stop_on_error = function(x, submit_id = character(0), progress = NULL) {
+      if (is(x, "try-error")) {
+        private$connection$close(silent = TRUE)
+        if (shiny::isRunning()) {
+          showModal(
+            modalDialog(
+              tags$span("Error while evaluating following call:"),
+              tags$br(),
+              tags$code(deparse(attr(x, "condition")$call), "\n"),
+              tags$br(),
+              tags$span("Error message:"),
+              tags$br(),
+              tags$code(attr(x, "condition")$message)
+            )
+          )
+          progress$close()
+          shinyjs::enable(submit_id)
+          req(FALSE)
+        } else {
+          stop(x)
+        }
+      }
+    },
     refresh_data = function(code = private$code,
                             check = FALSE,
                             input = NULL,
-                            progress = NULL,
+                            submit_id = character(0),
+                            session = NULL,
+                            try = shiny::isRunning(),
                             con_args_fixed = NULL,
                             con_args_dynamic = NULL,
                             con_args_replacement = NULL,
                             fun_args_fixed = NULL,
                             fun_args_dynamic = NULL,
                             fun_args_replacement = NULL) {
+
+      `if`(shiny::isRunning(), shinyjs::disable(submit_id))
+
+      progress <- NULL
+      if (shiny::isRunning()) {
+        progress <- shiny::Progress$new(session)
+        progress$set(0.1, message = "Setting up connection ...")
+      }
+
       optional_eval <- function(x, envir = parent.frame(1L)) {
         if (is.null(x)) {
           return(x)
@@ -283,16 +345,21 @@ DataConnector <- R6::R6Class( #nolint
       datanames <- vapply(private$connectors, function(x) x$get_dataname(), character(1))
 
       private$connection$set_open_args(args = con_args_fixed)
-      private$connection$open(args = con_args_dynamic)
+      open_connection <- private$connection$open(args = con_args_dynamic, try = try)
+      private$stop_on_error(open_connection, submit_id, progress)
 
       env_data <- new.env()
       for (i in seq_along(private$connectors)) {
         if_not_null(progress,
                     progress$set(0.2 + 0.4 * (i - 1) / length(private$connectors), message = "Loading data ..."))
         private$connectors[[i]]$set_pull_args(args = fun_args_fixed)
+
+        data <- private$connectors[[i]]$get_data(args = fun_args_dynamic, try = try)
+        private$stop_on_error(data, submit_id, progress)
+
         assign(
           datanames[[i]],
-          private$connectors[[i]]$get_data(args = fun_args_dynamic),
+          data,
           envir = env_data
         )
       }

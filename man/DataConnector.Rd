@@ -58,7 +58,16 @@ new \code{DataConnector} object
 \subsection{Method \code{get_cdisc_data()}}{
 Function to get \code{cdisc_data} object interactively, useful for debugging
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{DataConnector$get_cdisc_data(refresh = FALSE)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{DataConnector$get_cdisc_data(
+  refresh = FALSE,
+  try = FALSE,
+  con_args_fixed = NULL,
+  con_args_dynamic = NULL,
+  con_args_replacement = NULL,
+  fun_args_fixed = NULL,
+  fun_args_dynamic = NULL,
+  fun_args_replacement = NULL
+)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
@@ -66,6 +75,23 @@ Function to get \code{cdisc_data} object interactively, useful for debugging
 \describe{
 \item{\code{refresh}}{(\code{logical}) should the data be downloaded?
 Defaults to FALSE, which returns last downloaded data.}
+
+\item{\code{try}}{(\code{logical}) whether perform function evaluation inside \code{try} clause}
+
+\item{\code{con_args_fixed}}{(\code{NULL} or named \code{list}) fixed argument to connection function}
+
+\item{\code{con_args_dynamic}}{(\code{NULL} or named \code{list}) dynamic argument to connection function
+(not shown in generated code)}
+
+\item{\code{con_args_replacement}}{(\code{NULL} or named \code{list}) replacement of dynamic argument of connection
+function}
+
+\item{\code{fun_args_fixed}}{(\code{NULL} or named \code{list}) fixed argument to pull function}
+
+\item{\code{fun_args_dynamic}}{(\code{NULL} or named \code{list}) dynamic argument to pull function
+(not shown in generated code)}
+
+\item{\code{fun_args_replacement}}{(\code{NULL} or named \code{list}) replacement of dynamic argument of pull function}
 }
 \if{html}{\out{</div>}}
 }
@@ -104,6 +130,7 @@ Function to get data interactively, useful for debugging
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{DataConnector$get_data(
   refresh = FALSE,
+  try = FALSE,
   con_args_fixed = NULL,
   con_args_dynamic = NULL,
   con_args_replacement = NULL,
@@ -118,6 +145,8 @@ Function to get data interactively, useful for debugging
 \describe{
 \item{\code{refresh}}{(\code{logical}) should the data be downloaded?
 Defaults to FALSE, which returns last downloaded data.}
+
+\item{\code{try}}{(\code{logical}) whether perform function evaluation inside \code{try} clause}
 
 \item{\code{con_args_fixed}}{(\code{NULL} or named \code{list}) fixed argument to connection function}
 

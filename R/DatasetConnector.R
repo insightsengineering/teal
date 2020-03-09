@@ -40,11 +40,16 @@ DatasetConnector <- R6::R6Class( #nolint
     #'
     #' @param args (\code{NULL} or named \code{list}) additional dynamic arguments for pull function
     #' @param silent (\code{logical}) whether convert all "missing function" errors to messages
+    #' @param try (\code{logical}) whether perform function evaluation inside \code{try} clause
     #'
-    #' @return object returned from connection function
-    get_data = function(args = NULL, silent = FALSE) {
+    #' @return if \code{try = TRUE} then \code{try-error} on error, object returned from connection function
+    get_data = function(args = NULL, silent = FALSE, try = FALSE) {
       if (!private$is_pulled) {
-        self$pull(args = args, silent = silent)
+        self$pull(args = args, silent = silent, try = try)
+      }
+
+      if (is(private$data, "try-error")) {
+        return(private$data)
       }
 
       # preserve old labels if given
@@ -104,12 +109,13 @@ DatasetConnector <- R6::R6Class( #nolint
     #'
     #' @param args (\code{NULL} or named \code{list}) additional dynamic arguments for pull function
     #' @param silent (\code{logical}) whether convert all "missing function" errors to messages
+    #' @param try (\code{logical}) whether perform function evaluation inside \code{try} clause
     #'
     #' @return nothing, in order to get the data please use \code{get_data} method
-    pull = function(args = NULL, silent = FALSE) {
+    pull = function(args = NULL, silent = FALSE, try = FALSE) {
       if_cond(private$check_pull_fun(silent = silent), return(), isFALSE)
-      private$data <- private$pull_fun$run(args = args)
-      private$is_pulled <- TRUE
+      private$data <- private$pull_fun$run(args = args, try = try)
+      private$is_pulled <- is(private$data, "try-error")
       return(invisible(NULL))
     },
     #' @description

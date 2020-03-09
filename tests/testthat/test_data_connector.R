@@ -15,13 +15,8 @@ test_that("data connection", {
   con$set_open_args(args = list(y = letters[1:5]))
 
   expect_identical(
-    con$.__enclos_env__$private$open_fun$.__enclos_env__$private$fun_name,
-    "data.frame"
-  )
-
-  expect_identical(
-    con$.__enclos_env__$private$open_fun$.__enclos_env__$private$args,
-    list(x = 1:5, y = letters[1:5])
+    as.list(con$get_open_call(deparse = FALSE)),
+    list(as.name("data.frame"), x = 1:5, y = letters[1:5])
   )
 
   expect_identical(
@@ -37,9 +32,10 @@ test_that("data connection", {
   # passing arguments to open doesn't overwrite args
   con$open(args = list(x = 1:5, y = LETTERS[1:5]))
   expect_identical(
-    con$.__enclos_env__$private$open_fun$.__enclos_env__$private$args,
-    list(x = 1:5, y = letters[1:5])
+    as.list(con$get_open_call(deparse = FALSE)),
+    list(as.name("data.frame"), x = 1:5, y = letters[1:5])
   )
+
 
   expect_identical(
     con$get_open_call(),
@@ -48,9 +44,8 @@ test_that("data connection", {
 
 
 
-  expect_identical(
-    con$close(silent = TRUE),
-    data.frame(x = 1:2)
+  expect_null(
+    con$close(silent = TRUE)
   )
 
 })

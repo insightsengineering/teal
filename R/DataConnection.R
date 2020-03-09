@@ -45,17 +45,22 @@ DataConnection <- R6::R6Class( #nolint
     #'
     #' @param args (\code{NULL} or named \code{list}) additional arguments not set up previously
     #' @param silent (\code{logical}) whether convert all "missing function" errors to messages
+    #' @param try (\code{logical}) whether perform function evaluation inside \code{try} clause
     #'
-    #' @return nothing
-    open = function(args = NULL, silent = FALSE) {
+    #' @return if \code{try = TRUE} then \code{try-error} on error, \code{NULL} otherwise
+    open = function(args = NULL, silent = FALSE, try = FALSE) {
       stopifnot(is.null(args) || (is.list(args) && is_fully_named_list(args)))
       if_cond(private$check_open_fun(silent = silent), return(), isFALSE)
       if (private$opened) {
         return(invisible(NULL))
       } else {
-        private$open_fun$run(args = args)
-        private$opened <- TRUE
-        return(invisible(NULL))
+        open_res <- private$open_fun$run(args = args, try = try)
+        if (is(open_res, "try-error")) {
+          return(open_res)
+        } else {
+          private$opened <- TRUE
+          return(invisible(NULL))
+        }
       }
     },
     #' @description
@@ -76,11 +81,20 @@ DataConnection <- R6::R6Class( #nolint
     #' Close the connection.
     #'
     #' @param silent (\code{logical}) whether convert all "missing function" errors to messages
+    #' @param try (\code{logical}) whether perform function evaluation inside \code{try} clause
     #'
-    #' @return nothing
-    close = function(silent = FALSE) {
+    #' @return if \code{try = TRUE} then \code{try-error} on error, \code{NULL} otherwise
+    close = function(silent = FALSE, try = FALSE) {
       if_cond(private$check_close_fun(silent = silent), return(), isFALSE)
-      private$close_fun$run()
+      if (private$opened) {
+        close_res <- private$close_fun$run(try = try)
+        if (is(close_res, "try-error")) {
+          return(close_res)
+        } else {
+          private$opened <- FALSE
+          return(invisible(NULL))
+        }
+      }
     },
     #' @description
     #' Get executed close connection call

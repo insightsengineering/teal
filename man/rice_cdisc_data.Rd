@@ -22,8 +22,8 @@ Build data connector for \code{RICE} datasets
 \examples{
 \dontrun{
 x <- rice_cdisc_data(
-  ADSL = rice_dataset("ADSL", "/path/to/ADSL"),
-  ADLB = rice_dataset("ADLB", "/path/to/ADLB")
+  rice_dataset("ADSL", "/path/to/ADSL"),
+  rice_dataset("ADLB", "/path/to/ADLB")
 )
 app <- init(
   data = x,
