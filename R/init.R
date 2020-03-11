@@ -110,6 +110,36 @@ init <- function(data,
     div(id = startapp_id, data$get_ui("startapp_module"))
   }
 
+  # show busy icon when shiny session is busy computing stuff
+  # based on https://stackoverflow.com/questions/17325521/r-shiny-display-loading-message-while-function-is-running/22475216#22475216 #nolint
+  shiny_busy_message_panel <- tagList(
+    tags$style(
+      type = "text/css",
+      "#shinybusymessage {
+          position: fixed;
+          bottom: 0px;
+          right: 0px;
+          width: 140px;
+          margin: 15px;
+          padding: 5px 0px 5px 10px;
+          text-align: left;
+          font-weight: bold;
+          font-size: 100%;
+          color: #ffffff;
+          background-color: #347ab7;
+          z-index: 105;
+      }"
+    ),
+    conditionalPanel(
+      condition = "($('html').hasClass('shiny-busy'))",
+      div(
+        icon("sync", "spin fa-spin"),
+        "Computing ...",
+        id = "shinybusymessage"
+      )
+    )
+  )
+
   # ui function
   ui <- shinyUI(
     fluidPage(
@@ -119,6 +149,7 @@ init <- function(data,
       shinyjs::hidden(icon("cog")), # add hidden icon to load font-awesome css for icons
       tags$header(header),
       tags$hr(style = "margin: 7px 0;"),
+      shiny_busy_message_panel,
       ui_internal,
       tags$hr(),
       tags$footer(footer)

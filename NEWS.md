@@ -4,6 +4,7 @@
 * New classes (`DatasetConnector`, `DataConnector`) to connect to various data sources, including:  
         * connector to `rice` API - `rice_cdisc_data` and `rice_dataset`  
         * connector to `RDS` files - `rds_data` and `rds_dataset`  
+* Message appears at bottom right of Shiny app when Shiny is busy to update the views.
 
 # teal 0.8.2
 
