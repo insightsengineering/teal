@@ -402,7 +402,7 @@ cdisc_data <- function(...,
     tryCatch({
       eval(parse(text = code), new_env)
     }, error = function(e) {
-      stop(paste0("Error in checking code: ", e$message))
+      error_dialog(e)
     })
 
     res_check <- vapply(

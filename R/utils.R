@@ -89,3 +89,32 @@ check_pckg_quietly <- function(pckg, msg) {
 
   return(invisible(NULL))
 }
+
+#' @importFrom shiny isRunning showModal modalDialog tags req
+error_dialog <- function(x) {
+  if (shiny::isRunning()) {
+    showModal(
+        modalDialog(
+            tags$span("Error while evaluating following call:"),
+            tags$br(),
+            tags$code(ifelse(
+              "condition" %in% class(x),
+              deparse(x$call),
+              deparse(attr(x, "condition")$call)
+            ), "\n"),
+            tags$br(),
+            tags$span("Error message:"),
+            tags$br(),
+            tags$code(
+              ifelse("condition" %in% class(x),
+                deparse(x$message),
+                deparse(attr(x, "condition")$message)
+              )
+            )
+        )
+    )
+    req(FALSE)
+  } else {
+    stop(x)
+  }
+}

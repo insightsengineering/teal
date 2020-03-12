@@ -222,8 +222,8 @@ rcd_dataset <- function(dataname, fun, ...) {
 
   x <- DatasetConnector$new() # nolint
   x$set_dataname(dataname)
-  x$set_keys(get_cdisc_keys(dataname))
   x$set_pull_fun(x_fun)
+  x$set_keys(get_cdisc_keys(dataname))
 
   return(x)
 }
@@ -232,27 +232,33 @@ rcd_dataset <- function(dataname, fun, ...) {
 #'
 #' @export
 #'
-#' @param file (\code{character}) file path
+#' @param file (\code{character}) path to \code{.rds} that contains
+#'   a single data.frame stored by \code{saveRDS}
 #' @inheritParams cdisc_dataset
 #'
 #' @return (\code{DatasetConnector}) type of object
 #'
+#' @importFrom tools file_ext
 #' @examples
 #' \dontrun{
-#' x <- rds_dataset("ADSL", "/path/to/file.rds")
+#' x <- rds_cdisc_dataset("ADSL", "/path/to/file.rds")
 #' x$get_call()
 #' x$get_data()
 #' }
-rds_dataset <- function(dataname, file) {
+rds_cdisc_dataset <- function(dataname, file, keys = get_cdisc_keys(dataname)) {
   stopifnot(is_character_single(dataname))
   stopifnot(is_character_single(file))
+  stopifnot(file.exists(file))
+  stopifnot(tolower(tools::file_ext(file)) == "rds")
 
   x_fun <- CallableFunction$new(readRDS) # nolint
   x <- DatasetConnector$new() # nolint
 
   x$set_dataname(dataname)
+  x$set_keys(keys)
   x$set_pull_fun(x_fun)
   x$set_pull_args(list(file = file))
+  x$set_path(file)
   return(x)
 }
 

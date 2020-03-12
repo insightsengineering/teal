@@ -109,13 +109,13 @@ test_that("rcd_dataset", {
   )
 })
 
-test_that("rds_dataset", {
-  x <- rds_dataset(dataname = "ADSL", file = "./data_connectors/table.rds")
+test_that("rds_cdisc_dataset", {
+  x <- rds_cdisc_dataset(dataname = "ADSL", file = "./data_connectors/table.RDS")
   expect_true(is(x, c("DatasetConnector", "R6")))
 
   expect_equal(
     x$get_call(),
-    "ADSL <- readRDS(file = \"./data_connectors/table.rds\")"
+    "ADSL <- readRDS(file = \"./data_connectors/table.RDS\")"
   )
 
 })
