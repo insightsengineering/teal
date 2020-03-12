@@ -22,8 +22,6 @@
 #'
 #' As you can see the names of foreign ADTTE are different to ADSL keys, but the order and length is equal.
 #'
-#' @param labels list of labels
-#'
 #' @return a dataset with connected metadata
 #'
 #' @export
@@ -36,18 +34,13 @@
 #' dataset("ADSL", ADSL)
 dataset <- function(dataname,
                     data,
-                    keys = list(primary = NULL, foreign = NULL, parent = NULL),
-                    labels = list(dataset_label = NULL, column_labels = NULL)) {
+                    keys = list(primary = NULL, foreign = NULL, parent = NULL)) {
   stopifnot(is_character_single(dataname))
   stopifnot(is.data.frame(data))
   stopifnot(is.list(keys))
   stopifnot(all_true(keys, function(x) is.null(x) || is_character_vector(x)))
   stopifnot(all(c("primary", "foreign", "parent") %in% names(keys)))
-  stopifnot(is.list(labels))
-  stopifnot(all_true(labels, function(x) is.null(x) || (is.character(x) || is_character_vector(x))))
-  stopifnot(all(c("dataset_label", "column_labels") %in% names(labels)))
   stopifnot(all(union(keys$primary, keys$foreign) %in% names(data)))
-  stopifnot(all(names(labels$column_labels) %in% names(data)))
 
   if (!is.null(keys$foreign) && is.null(keys$parent) || (is.null(keys$foreign) && !is.null(keys$parent))) {
     stop(dataname, ": Please specify both foreign keys and a parent!")
@@ -62,12 +55,50 @@ dataset <- function(dataname,
       dataname = dataname,
       data = data,
       keys = keys,
-      labels = labels
+      column_labels = var_labels(data),
+      dataset_label = data_label(data)
     ),
     class = "dataset"
   )
 
   return(res)
+}
+
+#' Get dataset label attribute
+#'
+#' @param data \code{data.frame} from which attribute is extracted
+#'
+#' @return (\code{character}) label or \code{NULL} if it's missing
+#'
+#' @export
+#'
+#' @examples
+#' library(random.cdisc.data)
+#' data_label(radsl(cached = TRUE))
+data_label <- function(data) {
+  attr(data, "label")
+}
+
+#' Set dataset label attribute
+#'
+#' @param x \code{data.frame} for which attribute is set
+#' @param value (\code{character}) label
+#'
+#' @return modified \code{x} object
+#'
+#' @export
+#'
+#' @examples
+#' library(random.cdisc.data)
+#' x <- radsl(cached = TRUE)
+#' data_label(x) <- "My custom label"
+#' data_label(x)
+`data_label<-` <- function(x, value) { # nolint
+  stopifnot(is.data.frame(x))
+  stopifnot(is_character_single(value))
+
+  attr(x, "label") <- value
+  x
 }
 
 #' Function that returns list of keys
@@ -138,7 +169,7 @@ get_labels <- function(data) {
   stopifnot(is.data.frame(data))
 
   cdisc_labels <- list(
-    "dataset_label" = attr(data, "label"),
+    "dataset_label" = data_label(data),
     "column_labels" = var_labels(data, fill = TRUE)
   )
   return(cdisc_labels)
@@ -201,9 +232,8 @@ get_variable_labels <- function(data, columns = NULL) {
 #' cdisc_dataset("ADSL", ADSL)
 cdisc_dataset <- function(dataname,
                           data,
-                          keys = get_cdisc_keys(dataname),
-                          labels = get_labels(data)) {
-    x <- dataset(dataname, data, keys, labels)
+                          keys = get_cdisc_keys(dataname)) {
+    x <- dataset(dataname, data, keys)
     class(x) <- c("cdisc_dataset", class(x))
     x
   }

@@ -280,12 +280,10 @@ The objects of this class are cloneable with this method.
 \item \href{#method-get_data}{\code{DatasetConnector$get_data()}}
 \item \href{#method-get_dataname}{\code{DatasetConnector$get_dataname()}}
 \item \href{#method-get_keys}{\code{DatasetConnector$get_keys()}}
-\item \href{#method-get_labels}{\code{DatasetConnector$get_labels()}}
 \item \href{#method-get_path}{\code{DatasetConnector$get_path()}}
 \item \href{#method-pull}{\code{DatasetConnector$pull()}}
 \item \href{#method-set_dataname}{\code{DatasetConnector$set_dataname()}}
 \item \href{#method-set_keys}{\code{DatasetConnector$set_keys()}}
-\item \href{#method-set_labels}{\code{DatasetConnector$set_labels()}}
 \item \href{#method-set_path}{\code{DatasetConnector$set_path()}}
 \item \href{#method-set_pull_arg_value}{\code{DatasetConnector$set_pull_arg_value()}}
 \item \href{#method-set_pull_args}{\code{DatasetConnector$set_pull_args()}}
@@ -378,18 +376,6 @@ Get keys of the dataset
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-get_labels"></a>}}
-\subsection{Method \code{get_labels()}}{
-Get labels of the dataset
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{DatasetConnector$get_labels()}\if{html}{\out{</div>}}
-}
-
-\subsection{Returns}{
-(\code{list}) of labels
-}
-}
-\if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-get_path"></a>}}
 \subsection{Method \code{get_path()}}{
 Get path of the dataset
@@ -457,25 +443,6 @@ Set dataset keys
 \if{html}{\out{<div class="arguments">}}
 \describe{
 \item{\code{keys}}{(\code{list}) of keys}
-}
-\if{html}{\out{</div>}}
-}
-\subsection{Returns}{
-nothing
-}
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-set_labels"></a>}}
-\subsection{Method \code{set_labels()}}{
-Set dataset labels
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{DatasetConnector$set_labels(labels)}\if{html}{\out{</div>}}
-}
-
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{labels}}{}
 }
 \if{html}{\out{</div>}}
 }

@@ -48,30 +48,6 @@ DatasetConnector <- R6::R6Class( #nolint
         self$pull(args = args, silent = silent, try = try)
       }
 
-      if (is(private$data, "try-error")) {
-        return(private$data)
-      }
-
-      # preserve old labels if given
-      current_l <- self$get_labels()
-      default_l <- get_labels(private$data)
-      new_l <- current_l
-
-      if (is.null(current_l$dataset_label)) {
-        new_l["dataset_label"] <- list(default_l$dataset_label)
-      }
-
-      if (is.null(current_l$column_labels)) {
-        new_l["column_labels"] <- list(default_l$column_labels)
-      } else {
-        # preserve old labels if given
-        new_l$column_labels <- default_l$column_labels
-        idx <- names(current_l$column_labels)[!is.na(current_l$column_labels) & !is.null(current_l$column_labels)]
-        new_l$column_labels[idx] <- current_l$column_labels[idx]
-      }
-
-      self$set_labels(new_l)
-
       return(private$data)
     },
     #' @description
@@ -87,13 +63,6 @@ DatasetConnector <- R6::R6Class( #nolint
     #' @return (\code{list}) of keys
     get_keys = function() {
       return(private$keys)
-    },
-    #' @description
-    #' Get labels of the dataset
-    #'
-    #' @return (\code{list}) of labels
-    get_labels = function() {
-      return(private$labels)
     },
     #' @description
     #' Get path of the dataset
@@ -144,19 +113,6 @@ DatasetConnector <- R6::R6Class( #nolint
       }
 
       private$keys <- keys
-      return(invisible(NULL))
-    },
-    #' @description
-    #' Set dataset labels
-    #'
-    #' @param labels
-    #'
-    #' @return nothing
-    set_labels = function(labels) {
-      stopifnot(is.list(labels))
-      stopifnot(all_true(labels, function(x) is.null(x) || (is.character(x) || is_character_vector(x))))
-      stopifnot(all(c("dataset_label", "column_labels") %in% names(labels)))
-      private$labels <- labels
       return(invisible(NULL))
     },
     #' @description
@@ -215,7 +171,6 @@ DatasetConnector <- R6::R6Class( #nolint
   private = list(
     path = character(0),
     keys = NULL,
-    labels = NULL,
     data = NULL,
     dataname = character(0),
     is_pulled = FALSE,
@@ -318,16 +273,12 @@ rds_dataset <- function(dataname, file) {
 #' }
 rice_dataset <- function(dataname,
                          path,
-                         keys = get_cdisc_keys(dataname),
-                         labels = list(dataset_label = NULL, column_labels = NULL)) {
+                         keys = get_cdisc_keys(dataname)) {
   stopifnot(is_character_single(dataname))
   stopifnot(is_character_single(path))
   stopifnot(is.list(keys))
   stopifnot(all_true(keys, function(x) is.null(x) || is_character_vector(x)))
   stopifnot(all(c("primary", "foreign", "parent") %in% names(keys)))
-  stopifnot(is.list(labels))
-  stopifnot(all_true(labels, function(x) is.null(x) || (is.character(x) || is_character_vector(x))))
-  stopifnot(all(c("dataset_label", "column_labels") %in% names(labels)))
 
   check_pckg_quietly("rice",
                      paste0("Connection to entimICE via rice was requested, but rice package is not available.",
@@ -338,7 +289,6 @@ rice_dataset <- function(dataname,
   x$set_dataname(dataname)
   x$set_path(path)
   x$set_keys(keys)
-  x$set_labels(labels)
 
   pull_fun <- CallableFunction$new(rice::rice_read) # nolint
   x$set_pull_fun(pull_fun)

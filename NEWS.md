@@ -5,6 +5,8 @@
         * connector to `rice` API - `rice_cdisc_data` and `rice_dataset`  
         * connector to `RDS` files - `rds_data` and `rds_dataset`  
 * Message appears at bottom right of Shiny app when Shiny is busy to update the views.
+* Remove `labels` argument of `cdisc_data` function. Labels now should be handled in preprocessing using 
+`var_relabel` function.
 
 # teal 0.8.2
 

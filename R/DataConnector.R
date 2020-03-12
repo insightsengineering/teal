@@ -387,8 +387,7 @@ DataConnector <- R6::R6Class( #nolint
         function(i) {
           cdisc_dataset(private$connectors[[i]]$get_dataname(),
                         private$data[[i]],
-                        private$connectors[[i]]$get_keys(),
-                        private$connectors[[i]]$get_labels())
+                        private$connectors[[i]]$get_keys())
         }
       )
 

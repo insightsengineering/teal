@@ -4,12 +4,7 @@
 \alias{rice_dataset}
 \title{Set up connection to local \code{RICE} dataset}
 \usage{
-rice_dataset(
-  dataname,
-  path,
-  keys = get_cdisc_keys(dataname),
-  labels = list(dataset_label = NULL, column_labels = NULL)
-)
+rice_dataset(dataname, path, keys = get_cdisc_keys(dataname))
 }
 \arguments{
 \item{dataname}{name of dataset}
@@ -34,8 +29,6 @@ ADSL \code{primary: USUBJID, STUDYID}
 ADTTE \code{primary: PARAMCD, foreign: SUBJECTUNIQUEID, STUDYID, parent: ADSL}
 
 As you can see the names of foreign ADTTE are different to ADSL keys, but the order and length is equal.}
-
-\item{labels}{list of labels}
 }
 \value{
 (\code{DatasetConnector}) type of object

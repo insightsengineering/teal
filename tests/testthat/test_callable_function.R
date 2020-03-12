@@ -57,7 +57,7 @@ test_that("test callable errors", {
     "is missing, with no default"
   )
   expect_equal({
-    x <- CallableFunction$new(function(x = 1){
+    x <- CallableFunction$new(function(x = 1) {
           return(x)
     })
     x$run()},

@@ -7,8 +7,7 @@
 dataset(
   dataname,
   data,
-  keys = list(primary = NULL, foreign = NULL, parent = NULL),
-  labels = list(dataset_label = NULL, column_labels = NULL)
+  keys = list(primary = NULL, foreign = NULL, parent = NULL)
 )
 }
 \arguments{
@@ -34,8 +33,6 @@ ADSL \code{primary: USUBJID, STUDYID}
 ADTTE \code{primary: PARAMCD, foreign: SUBJECTUNIQUEID, STUDYID, parent: ADSL}
 
 As you can see the names of foreign ADTTE are different to ADSL keys, but the order and length is equal.}
-
-\item{labels}{list of labels}
 }
 \value{
 a dataset with connected metadata

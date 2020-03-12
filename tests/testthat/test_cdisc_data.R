@@ -88,6 +88,7 @@ test_that("List values", {
   result <- cdisc_data(cdisc_dataset("ADSL", ADSL))
 
   adsl_yaml <- yaml::yaml.load_file(system.file("metadata/ADSL.yml", package = "random.cdisc.data"))
+  adtte_yaml <- yaml::yaml.load_file(system.file("metadata/ADTTE.yml", package = "random.cdisc.data"))
 
   result_to_compare <- list(structure(list(
     dataname = "ADSL",
@@ -97,10 +98,8 @@ test_that("List values", {
       foreign = NULL,
       parent = NULL
     ),
-    labels = list(
-      dataset_label = adsl_yaml$domain$label,
-      column_labels = vapply(adsl_yaml$variables, `[[`, character(1), "label")
-    )
+    column_labels = vapply(adsl_yaml$variables, `[[`, character(1), "label"),
+    dataset_label = adsl_yaml$domain$label
   ),
   class = c("cdisc_dataset", "dataset")))
   class(result_to_compare) <- "cdisc_data"
@@ -110,8 +109,7 @@ test_that("List values", {
   expect_identical(result, result_to_compare)
 
   result <- cdisc_data(cdisc_dataset("ADSL", ADSL),
-                       cdisc_dataset("ADTTE", ADTTE, labels = list(dataset_label = NULL,
-                                                                   column_labels = NULL)))
+                       cdisc_dataset("ADTTE", ADTTE))
 
   result_to_compare <- list(structure(list(
     dataname = "ADSL",
@@ -121,10 +119,8 @@ test_that("List values", {
       foreign = NULL,
       parent = NULL
     ),
-    labels = list(
-      dataset_label = adsl_yaml$domain$label,
-      column_labels = vapply(adsl_yaml$variables, `[[`, character(1), "label")
-    )
+    column_labels = vapply(adsl_yaml$variables, `[[`, character(1), "label"),
+    dataset_label = adsl_yaml$domain$label
   ),
   class = c("cdisc_dataset", "dataset")),
   structure(list(
@@ -135,10 +131,8 @@ test_that("List values", {
       foreign = c("STUDYID", "USUBJID"),
       parent = "ADSL"
     ),
-    labels = list(
-      dataset_label = NULL,
-      column_labels = NULL
-    )
+    column_labels = vapply(c(adsl_yaml$variables, adtte_yaml$variables), `[[`, character(1), "label"),
+    dataset_label = adtte_yaml$domain$label
   ),
   class = c("cdisc_dataset", "dataset")))
   class(result_to_compare) <- "cdisc_data"

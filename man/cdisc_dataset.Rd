@@ -4,12 +4,7 @@
 \alias{cdisc_dataset}
 \title{Data input for teal app}
 \usage{
-cdisc_dataset(
-  dataname,
-  data,
-  keys = get_cdisc_keys(dataname),
-  labels = get_labels(data)
-)
+cdisc_dataset(dataname, data, keys = get_cdisc_keys(dataname))
 }
 \arguments{
 \item{dataname}{name of dataset}
@@ -34,8 +29,6 @@ ADSL \code{primary: USUBJID, STUDYID}
 ADTTE \code{primary: PARAMCD, foreign: SUBJECTUNIQUEID, STUDYID, parent: ADSL}
 
 As you can see the names of foreign ADTTE are different to ADSL keys, but the order and length is equal.}
-
-\item{labels}{list of labels}
 }
 \value{
 a dataset with connected metadata

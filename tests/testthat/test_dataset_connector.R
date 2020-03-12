@@ -33,29 +33,6 @@ test_that("get call - pass function", {
   )
 
 
-  dc$set_labels(labels = list(
-    dataset_label = "ADSL",
-    column_labels = setNames("Length od the sepal", "Sepal.Length")
-  ))
-  expect_equal(
-    dc$get_labels(),
-    list(
-      dataset_label = "ADSL",
-      column_labels = setNames("Length od the sepal", "Sepal.Length")
-    )
-  )
-
-  expect_silent(df <- dc$get_data())
-  expect_equal(
-    dc$get_labels(),
-    list(
-      dataset_label = "ADSL",
-      column_labels = setNames(c("Length od the sepal", colnames(df[-1])),
-                               c("Sepal.Length", colnames(df[-1])))
-    )
-  )
-
-
   dc$set_pull_arg_value(name = "nrows", value = 2L)
   expect_identical(
     dc$get_call(),
@@ -129,11 +106,6 @@ test_that("rcd_dataset", {
   expect_identical(
     x$get_data(),
     radsl(cached = TRUE, seed = 1, N = 400)
-  )
-
-  expect_identical(
-    x$get_labels(),
-    get_labels(radsl(cached = TRUE, seed = 1, N = 400))
   )
 })
 
