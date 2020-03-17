@@ -438,7 +438,7 @@ cdisc_data <- function(...,
     code <- get_preprocessing_empty_string() # nolint
   }
 
-  if (!check) {
+  if (!check && !isTRUE(attr(check, "quiet"))) {
     check_note <- get_check_note_string() # nolint
     code <- paste0(code, "\n\n", check_note, "\n")
   }

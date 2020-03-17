@@ -160,6 +160,17 @@ DataConnector <- R6::R6Class( #nolint
       return(invisible(NULL))
     },
     #' @description
+    #' Set reproducibility check
+    #'
+    #' @param check (\code{logical}) whether to perform reproducibility check
+    #'
+    #' @return nothing
+    set_check = function(check = FALSE) {
+      stopifnot(is_logical_single(check))
+      private$check <- check
+      return(invisible(NULL))
+    },
+    #' @description
     #' Set connector UI function
     #'
     #' @param ui (\code{function}) ui function of a shiny module
@@ -190,7 +201,6 @@ DataConnector <- R6::R6Class( #nolint
     #' Helper function to set connector server function
     #'
     #' @param submit_id (\code{character}) id of the submit button
-    #' @param check (\code{logical}) perform reproducibility check
     #' @param con_args_fixed (\code{NULL} or named \code{list}) fixed argument to connection function
     #' @param con_args_dynamic (\code{NULL} or named \code{list}) dynamic argument to connection function
     #'   (not shown in generated code)
@@ -203,7 +213,6 @@ DataConnector <- R6::R6Class( #nolint
     #'
     #' @return nothing
     set_server_helper = function(submit_id = "submit",
-                                 check = FALSE,
                                  con_args_fixed = NULL,
                                  con_args_dynamic = NULL,
                                  con_args_replacement = NULL,
@@ -276,6 +285,7 @@ DataConnector <- R6::R6Class( #nolint
     connection = NULL,
     connectors = NULL,
     code = character(0),
+    check = FALSE,
     data = NULL,
     stop_on_error = function(x, submit_id = character(0), progress = NULL) {
       if (is(x, "try-error")) {
@@ -290,7 +300,6 @@ DataConnector <- R6::R6Class( #nolint
       }
     },
     refresh_data = function(code = private$code,
-                            check = FALSE,
                             input = NULL,
                             submit_id = character(0),
                             session = NULL,
@@ -404,7 +413,7 @@ DataConnector <- R6::R6Class( #nolint
 
       args <- append(args,
                      list(code = paste(full_code, collapse = "\n"),
-                          check = check))
+                          check = private$check))
       private$cdisc_data <- do.call(cdisc_data, args)
 
       if_not_null(progress, progress$set(1, message = "Loading complete!"))
@@ -432,6 +441,7 @@ DataConnector <- R6::R6Class( #nolint
 #'
 #' @examples
 #' \dontrun{
+#' library(random.cdisc.data)
 #' x <- rcd_cdisc_data(
 #'   rcd_dataset("ADSL", radsl, cached = TRUE),
 #'   rcd_dataset("ADLB", radlb, cached = TRUE)
@@ -465,6 +475,7 @@ rcd_cdisc_data <- function(..., code = character(0), check = TRUE) {
   x$set_connection(con)
   x$set_connectors(connectors)
   x$set_code(code)
+  x$set_check(check)
   x$set_ui(
     function(id) {
       ns <- NS(id)
@@ -476,7 +487,6 @@ rcd_cdisc_data <- function(..., code = character(0), check = TRUE) {
   )
   x$set_server_helper(
     submit_id = "submit",
-    check = TRUE,
     fun_args_fixed = list(seed = quote(input$seed))
   )
 
@@ -532,6 +542,7 @@ rice_cdisc_data <- function(..., code = character(0), additional_ui = NULL) {
   x$set_connection(con)
   x$set_connectors(connectors)
   x$set_code(code)
+  x$set_check(`attributes<-`(FALSE, list(quiet = TRUE)))
   x$set_ui(
     function(id) {
       ns <- NS(id)
@@ -555,7 +566,6 @@ rice_cdisc_data <- function(..., code = character(0), additional_ui = NULL) {
   )
   x$set_server_helper(
     submit_id = "submit",
-    check = FALSE,
     con_args_fixed = list(username = quote(input$login)),
     con_args_dynamic = list(password = quote(input$pass)),
     con_args_replacement = list(password = quote(getPass::getPass()))
@@ -606,6 +616,7 @@ rds_cdisc_data <- function(..., code = character(0), check = TRUE) {
   x <- DataConnector$new()
   x$set_connectors(connectors)
   x$set_code(code)
+  x$set_check(check)
   x$set_ui(
       function(id) {
         ns <- NS(id)
@@ -621,7 +632,6 @@ rds_cdisc_data <- function(..., code = character(0), check = TRUE) {
   )
   x$set_server_helper(
       submit_id = "start",
-      check = TRUE,
       fun_args_fixed = NULL
   )
 

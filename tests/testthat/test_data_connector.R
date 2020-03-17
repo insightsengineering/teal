@@ -92,7 +92,6 @@ test_that("DataConnector with DataConnection", {
   expect_silent(
     x$set_server_helper(
       submit_id = "submit",
-      check = check,
       fun_args_fixed = list(seed = quote(input$seed))
     )
   )
@@ -156,7 +155,6 @@ test_that("data connector with rcd connection", {
   expect_silent(
     x$set_server_helper(
       submit_id = "submit",
-      check = check,
       fun_args_fixed = list(seed = quote(input$seed))
     )
   )

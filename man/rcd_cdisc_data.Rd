@@ -21,6 +21,7 @@ Build data connector for \code{random.cdisc.data} functions or datasets
 }
 \examples{
 \dontrun{
+library(random.cdisc.data)
 x <- rcd_cdisc_data(
   rcd_dataset("ADSL", radsl, cached = TRUE),
   rcd_dataset("ADLB", radlb, cached = TRUE)

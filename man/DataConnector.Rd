@@ -24,6 +24,7 @@ a \code{reactiveVal}.
 \item \href{#method-get_ui}{\code{DataConnector$get_ui()}}
 \item \href{#method-launch}{\code{DataConnector$launch()}}
 \item \href{#method-set_code}{\code{DataConnector$set_code()}}
+\item \href{#method-set_check}{\code{DataConnector$set_check()}}
 \item \href{#method-set_ui}{\code{DataConnector$set_ui()}}
 \item \href{#method-set_server}{\code{DataConnector$set_server()}}
 \item \href{#method-set_server_helper}{\code{DataConnector$set_server_helper()}}
@@ -234,6 +235,25 @@ nothing
 }
 }
 \if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-set_check"></a>}}
+\subsection{Method \code{set_check()}}{
+Set reproducibility check
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{DataConnector$set_check(check = FALSE)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{check}}{(\code{logical}) whether to perform reproducibility check}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Returns}{
+nothing
+}
+}
+\if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-set_ui"></a>}}
 \subsection{Method \code{set_ui()}}{
 Set connector UI function
@@ -281,7 +301,6 @@ Helper function to set connector server function
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{DataConnector$set_server_helper(
   submit_id = "submit",
-  check = FALSE,
   con_args_fixed = NULL,
   con_args_dynamic = NULL,
   con_args_replacement = NULL,
@@ -295,8 +314,6 @@ Helper function to set connector server function
 \if{html}{\out{<div class="arguments">}}
 \describe{
 \item{\code{submit_id}}{(\code{character}) id of the submit button}
-
-\item{\code{check}}{(\code{logical}) perform reproducibility check}
 
 \item{\code{con_args_fixed}}{(\code{NULL} or named \code{list}) fixed argument to connection function}
 
