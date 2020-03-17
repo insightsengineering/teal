@@ -28,7 +28,7 @@ Depends:
 Imports:
   digest,
   dplyr,
-  getPass,
+  askpass,
   haven,
   htmltools,
   magrittr,

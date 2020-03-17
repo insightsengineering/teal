@@ -497,7 +497,7 @@ rcd_cdisc_data <- function(..., code = character(0), check = TRUE) {
 #'
 #' Build data connector for \code{RICE} datasets
 #'
-#' @importFrom getPass getPass
+#' @importFrom askpass askpass
 #'
 #' @export
 #'
@@ -568,7 +568,7 @@ rice_cdisc_data <- function(..., code = character(0), additional_ui = NULL) {
     submit_id = "submit",
     con_args_fixed = list(username = quote(input$login)),
     con_args_dynamic = list(password = quote(input$pass)),
-    con_args_replacement = list(password = quote(getPass::getPass()))
+    con_args_replacement = list(password = quote(askpass::askpass()))
   )
 
   return(x)
