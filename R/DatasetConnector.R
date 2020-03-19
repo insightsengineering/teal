@@ -1,6 +1,6 @@
 #' A \code{DatasetConnector} class of objects
 #'
-#' Objects of this class stores connection function to single dataset. Note that for some specific connection type
+#' Objects of this class store connection function to single dataset. Note that for some specific connection type
 #' (e.g. \code{RAICE} or \code{SAICE}), pre-requisite object of class \code{DataConnection} is required.
 #' Data can be pulled via \code{pull} method and returned via \code{get_data} method.
 #'

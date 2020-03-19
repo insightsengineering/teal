@@ -45,6 +45,7 @@ Imports:
 RoxygenNote: 7.0.2
 Suggests:
     knitr,
+    nomnoml,
     random.cdisc.data (>= 0.3.1),
     rice (>= 1.0.3),
     rmarkdown,

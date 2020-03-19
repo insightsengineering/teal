@@ -43,3 +43,14 @@ reference:
     - no_selected_as_NULL
     - split_by_sep
     - stop_shiny
+  - title: DataConnector
+    contents:
+    - rcd_dataset
+    - rcd_connection
+    - rcd_cdisc_data
+    - rds_dataset
+    - rds_connection
+    - rds_cdisc_data
+    - rice_dataset
+    - rice_connection
+    - rice_cdisc_data

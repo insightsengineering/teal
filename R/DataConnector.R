@@ -1,9 +1,15 @@
-#' A \code{DataConnector} is an R6 class
-#'
-#' that carries a shiny module that can return a \code{cdisc_data} object as
-#' a \code{reactiveVal}.
-#'
+#' @title A \code{DataConnector} is an R6 class
 #' @name DataConnector
+#' @description
+#' A \code{DataConnector} is an R6 class to manage connection with remote data source.
+#'
+#' @details
+#' A \code{DataConnector} is an R6 class that carrying a shiny module that can return a
+#' \code{cdisc_data} object as a \code{reactiveVal}. \code{DataConnector} manages connection
+#' accompanied by three other classes. Classes relation illustrated on diagram.
+#' \if{html}{\figure{connector.png}{options: width=800}}
+#' \if{latex}{\figure{connector.png}{options: width=0.5in}}
+#'
 #'
 #' @importFrom shiny isRunning Progress
 #' @importFrom shinyjs disable enable
