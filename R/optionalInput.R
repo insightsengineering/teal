@@ -81,11 +81,11 @@ optionalSelectInput <- function(inputId, # nolint
     "actions-box" = multiple,
     "none-selected-text" = "- Nothing selected -",
     "max-options" = ifelse(multiple, Inf, 1),
-    "show-subtext" = TRUE
+    "show-subtext" = TRUE,
+    "live-search" = ifelse(length(choices) > 10, TRUE, FALSE)
   )
-
   options <- if (!identical(options, list())) {
-    c(options, default_options)
+    c(options, default_options[setdiff(names(default_options), names(options))])
   } else {
     default_options
   }
