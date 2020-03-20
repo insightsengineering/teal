@@ -37,6 +37,9 @@ reference:
     - select_spec
     - value_choices
     - variable_choices
+  - title: Delayed data loading
+    contents:
+    - resolve_delayed
   - title: Helpers
     contents:
     - log_app_usage

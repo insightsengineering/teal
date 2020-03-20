@@ -76,6 +76,7 @@ Collate:
     'module_filter_info.R'
     'module_filter_items.R'
     'optionalInput.R'
+    'resolve_delayed.R'
     'select_spec.R'
     'stop_shiny.R'
     'teal.R'

@@ -3,9 +3,11 @@
 #' \code{select_spec} is used inside teal to create a \code{\link[shiny]{selectInput}}
 #' that will select columns from a dataset.
 #'
-#' @param choices (\code{character}) Named character vector to define the choices
+#' @param choices (\code{character}) or (\code{delayed_data}) object.
+#'   Named character vector to define the choices
 #'   of a shiny \code{\link[shiny]{selectInput}}. These have to be columns in the
 #'   dataset defined in the \link{data_extract_spec} where this is called.
+#'   \code{delayed_data} objects can be created via \code{variable_choices} or \code{value_choices}.
 #'
 #' @param selected (\code{character}) (default value) Named character vector to define the selected
 #'  values of a shiny \code{\link[shiny]{selectInput}}. This can be just one column
@@ -25,8 +27,9 @@
 #' @param label (\code{logical}) (optional) Define a label
 #' on top of this specific shiny \code{\link[shiny]{selectInput}}.
 #'
-#' @return A \code{select_spec}-S3 class object. It contains all input values.
-#' The function double checks the \code{choices} and \code{selected} inputs.
+#' @return A \code{select_spec}-S3 class object or \code{delayed_select_spec}-S3-class object.
+#' It contains all input values.
+#' If \code{select_spec}, then the function double checks the \code{choices} and \code{selected} inputs.
 #'
 #' @details
 #'
@@ -82,6 +85,17 @@
 #'       \figure{select_spec_3.png}{options: alt="Selection without user access"}
 #'     }
 #'   }
+#'   \item{Delayed version}{
+#'     \preformatted{
+#'       adsl_select <- select_spec(
+#'         label = "Select variable:",
+#'         choices = variable_choices("ADSL", c("BMRKR1", "BMRKR2")),
+#'         selected = "BMRKR1",
+#'         multiple = FALSE,
+#'         fixed = FALSE
+#'       )
+#'     }
+#'   }
 #' }
 #'
 #' @importFrom magrittr %<>%
@@ -95,7 +109,17 @@ select_spec <- function(choices,
                         always_selected = NULL,
                         label = "Column(s)") {
 
-  stopifnot(length(choices) >= 1 && is.atomic(choices))
+  stopifnot(length(choices) >= 1 && (is.atomic(choices) || is(choices, "delayed_data")))
+  if (is(choices, "delayed_data")) {
+    out <- structure(list(choices = choices,
+                          selected = selected,
+                          multiple = multiple,
+                          fixed = fixed,
+                          always_selected = always_selected,
+                          label = label),
+                     class = c("delayed_select_spec", "delayed_data", "select_spec"))
+    return(out)
+  }
   stopifnot(is_logical_single(multiple))
   stopifnot(is_logical_single(fixed))
   stopifnot(is.null(always_selected) ||

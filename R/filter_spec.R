@@ -4,11 +4,14 @@
 #'
 #' @export
 #'
-#' @param vars (\code{character}) Character vector giving the columns to be filtered. These should be
+#' @param vars (\code{character}) or (\code{delayed_data}) object.
+#'   Character vector giving the columns to be filtered. These should be
 #'   key variables of the data set to be filtered.
+#'   \code{delayed_data} objects can be created via \code{variable_choices} or \code{value_choices}.
 #' @param sep (\code{character}) A separator string to split the \code{choices} or
 #'   \code{selected} inputs into the values of the different columns
-#' @param choices (\code{character}) Named character vector to define the choices
+#' @param choices (\code{character}) or (\code{delayed_data}) object.
+#'   Named character vector to define the choices
 #'   of a shiny \code{\link[shiny]{selectInput}}. These choices will be used to filter the
 #'   dataset.
 #'
@@ -21,13 +24,16 @@
 #'  \code{(PARAMCD == "CRP" & AVISIT == "BASELINE") | (PARAMCD == "ALT" & AVISIT == "BASELINE")}.
 #'
 #'  The \code{sep} input has to be \code{" - "} in this case.
+#'
+#'  \code{delayed_data} objects can be created via \code{variable_choices} or \code{value_choices}.
+#'
 #' @param selected (\code{character}) Named character vector to define the selected
 #'  values of a shiny \code{\link[shiny]{selectInput}} (default values). This value will
 #'  be displayed inside the shiny app upon start.
 #'
 #' @inheritParams select_spec
 #'
-#' @return \code{filter_spec}-S3-class object
+#' @return \code{filter_spec}-S3-class object or \code{delayed_filter_spec}-S3-class object.
 #'
 #' @examples
 #' filter_spec(
@@ -115,17 +121,42 @@
 #'      \figure{filter_spec_31.png}{options: alt="Filtering two variables"}
 #'    }
 #'   }
+#'   \item{Delayed version}{
+#'     \preformatted{
+#'       adsl_filter <- filter_spec(
+#'         vars = variable_choices("ADSL", "SEX"),
+#'         sep = "-",
+#'         choices = value_choices("ADSL", "SEX", "SEX"),
+#'         selected = "F",
+#'         multiple = FALSE,
+#'         label = "Choose endpoint and Censor"
+#'       )
+#'     }
+#'   }
 #'
 #' }
+#'
 filter_spec <- function(vars,
                         choices,
                         selected = choices[1],
                         multiple = length(selected) > 1,
                         label = "Filter",
                         sep = if_null(attr(choices, "sep"), " - ")) {
-  stopifnot(is_character_vector(vars))
+
+  stopifnot(is_character_vector(vars) || is(vars, "delayed_data"))
+  stopifnot(is_character_vector(choices) || is(choices, "delayed_data"))
+  if (is(vars, "delayed_data") || is(choices, "delayed_data")) {
+    out <- structure(list(vars = vars,
+                          choices = choices,
+                          selected = selected,
+                          multiple = multiple,
+                          label = label,
+                          sep = sep),
+                     class = c("delayed_filter_spec", "delayed_data", "filter_spec"))
+    return(out)
+  }
+
   stopifnot(all(!duplicated(vars)))
-  stopifnot(is_character_vector(choices))
   stopifnot(all(!duplicated(choices)))
   stopifnot(is_character_single(sep))
   stopifnot(is_logical_single(multiple))
