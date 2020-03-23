@@ -131,7 +131,7 @@ init <- function(data,
       }"
     ),
     conditionalPanel(
-      condition = "($('html').hasClass('shiny-busy'))",
+      condition = "(($('html').hasClass('shiny-busy')) && (document.getElementById(\"shiny-notification-panel\") == null))", #nolint
       div(
         icon("sync", "spin fa-spin"),
         "Computing ...",
