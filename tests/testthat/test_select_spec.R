@@ -66,3 +66,34 @@ test_that("Multiple choices", {
   expect_false(c1$fixed)
   expect_identical(c1$label, "Column(s)")
 })
+
+test_that("resolve_delayed select_spec works", {
+  set.seed(1)
+  ADSL <- data.frame(USUBJID = letters[1:10], # nolint
+                     BMRKR1 = rnorm(10),
+                     BMRKR2 = sample(c("L", "M", "H"), 10, replace = T),
+                     stringsAsFactors = F)
+
+
+  normal <- select_spec(
+    choices = variable_choices(ADSL, c("BMRKR1", "BMRKR2")),
+    selected = "BMRKR1",
+    multiple = FALSE,
+    fixed = FALSE
+  )
+
+  delayed <- select_spec(
+    choices = variable_choices("ADSL", c("BMRKR1", "BMRKR2")),
+    selected = "BMRKR1",
+    multiple = FALSE,
+    fixed = FALSE
+  )
+
+  expect_equal(class(delayed), c("delayed_select_spec", "delayed_data", "select_spec"))
+
+  expect_equal(names(normal), names(delayed))
+
+  ds <- teal:::FilteredData$new()
+  ds$set_data("ADSL", ADSL)
+  expect_identical(normal, resolve_delayed(delayed, ds))
+})

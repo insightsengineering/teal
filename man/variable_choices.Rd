@@ -7,12 +7,14 @@
 variable_choices(data, subset = NULL)
 }
 \arguments{
-\item{data}{(\code{data.frame}) data to extract labels from}
+\item{data}{(\code{data.frame}) or (\code{character})
+If \code{data.frame}, then data to extract labels from.
+If \code{character}, then name of the dataset to extract data from once available.}
 
 \item{subset}{(\code{character}) vector of column names}
 }
 \value{
-named character vector with additional attributes
+named character vector with additional attributes or \code{delayed_data} object
 }
 \description{
 Wrapper on \code{\link{choices_labeled}} to label variables basing on existing labels in data
@@ -24,4 +26,7 @@ ADRS <- radrs(cached = TRUE)
 variable_choices(ADRS)
 variable_choices(ADRS, subset = c("PARAM", "PARAMCD"))
 variable_choices(ADRS, subset = c("", "PARAM", "PARAMCD"))
+
+# delayed version
+variable_choices("ADRS", subset = c("USUBJID", "STUDYID"))
 }

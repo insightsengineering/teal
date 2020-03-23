@@ -7,7 +7,9 @@
 value_choices(data, var_choices, var_label, subset = NULL, sep = " - ")
 }
 \arguments{
-\item{data}{(\code{data.frame}) data to extract labels from}
+\item{data}{(\code{data.frame}) or (\code{character})
+If \code{data.frame}, then data to extract labels from
+If \code{character}, then name of the dataset to extract data from once available.}
 
 \item{var_choices}{(\code{character}) vector with choices column names}
 
@@ -18,7 +20,7 @@ value_choices(data, var_choices, var_label, subset = NULL, sep = " - ")
 \item{sep}{(\code{character}) separator used in case of multiple column names}
 }
 \value{
-named character vector
+named character vector or \code{delayed_data} object
 }
 \description{
 Wrapper on \code{\link{choices_labeled}} to label variable values basing on other variable values
@@ -32,4 +34,7 @@ value_choices(ADRS, c("PARAMCD", "ARMCD"), c("PARAM", "ARM"))
 value_choices(ADRS, c("PARAMCD", "ARMCD"), c("PARAM", "ARM"),
   subset = c("BESRSPI - ARM A", "INVET - ARM A", "OVRINV - ARM A"))
 value_choices(ADRS, c("PARAMCD", "ARMCD"), c("PARAM", "ARM"), sep = " --- ")
+
+# delayed version
+value_choices("ADRS", c("PARAMCD", "ARMCD"), c("PARAM", "ARM"))
 }

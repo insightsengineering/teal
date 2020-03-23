@@ -103,29 +103,28 @@
 #' @importFrom stats setNames
 #' @export
 select_spec <- function(choices,
-                        selected = choices[1],
+                        selected = `if`(is(choices, "delayed_data"), NULL, choices[1]),
                         multiple = length(selected) > 1,
                         fixed = FALSE,
                         always_selected = NULL,
                         label = "Column(s)") {
 
   stopifnot(length(choices) >= 1 && (is.atomic(choices) || is(choices, "delayed_data")))
+  stopifnot(is_logical_single(multiple))
+  stopifnot(is_logical_single(fixed))
+  stopifnot(is.null(always_selected) || is_character_vector(always_selected, 1))
+  stopifnot(is_character_single(label))
+
   if (is(choices, "delayed_data")) {
     out <- structure(list(choices = choices,
                           selected = selected,
+                          always_selected = always_selected,
                           multiple = multiple,
                           fixed = fixed,
-                          always_selected = always_selected,
                           label = label),
                      class = c("delayed_select_spec", "delayed_data", "select_spec"))
     return(out)
   }
-  stopifnot(is_logical_single(multiple))
-  stopifnot(is_logical_single(fixed))
-  stopifnot(is.null(always_selected) ||
-    is_character_vector(always_selected, 1)
-  )
-  stopifnot(is_character_single(label))
 
   # if names is NULL, shiny will put strange labels (with quotes etc.) in the selectInputs, so we set it to the values
   if (is.null(names(choices))) {

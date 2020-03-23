@@ -138,13 +138,17 @@
 #'
 filter_spec <- function(vars,
                         choices,
-                        selected = choices[1],
+                        selected = `if`(is(choices, "delayed_data"), NULL, choices[1]),
                         multiple = length(selected) > 1,
                         label = "Filter",
                         sep = if_null(attr(choices, "sep"), " - ")) {
 
   stopifnot(is_character_vector(vars) || is(vars, "delayed_data"))
   stopifnot(is_character_vector(choices) || is(choices, "delayed_data"))
+  stopifnot(is_character_single(sep))
+  stopifnot(is_logical_single(multiple))
+  stopifnot(is_character_single(label))
+
   if (is(vars, "delayed_data") || is(choices, "delayed_data")) {
     out <- structure(list(vars = vars,
                           choices = choices,
@@ -158,9 +162,6 @@ filter_spec <- function(vars,
 
   stopifnot(all(!duplicated(vars)))
   stopifnot(all(!duplicated(choices)))
-  stopifnot(is_character_single(sep))
-  stopifnot(is_logical_single(multiple))
-  stopifnot(is_character_single(label))
 
   choices_attrs <- attributes(choices)
   choices <- split_by_sep(choices, sep)

@@ -14,10 +14,13 @@ filter_spec(
 )
 }
 \arguments{
-\item{vars}{(\code{character}) Character vector giving the columns to be filtered. These should be
-key variables of the data set to be filtered.}
+\item{vars}{(\code{character}) or (\code{delayed_data}) object.
+Character vector giving the columns to be filtered. These should be
+key variables of the data set to be filtered.
+\code{delayed_data} objects can be created via \code{variable_choices} or \code{value_choices}.}
 
-\item{choices}{(\code{character}) Named character vector to define the choices
+\item{choices}{(\code{character}) or (\code{delayed_data}) object.
+  Named character vector to define the choices
   of a shiny \code{\link[shiny]{selectInput}}. These choices will be used to filter the
   dataset.
 
@@ -29,7 +32,9 @@ key variables of the data set to be filtered.}
  will lead to a filtering of
  \code{(PARAMCD == "CRP" & AVISIT == "BASELINE") | (PARAMCD == "ALT" & AVISIT == "BASELINE")}.
 
- The \code{sep} input has to be \code{" - "} in this case.}
+ The \code{sep} input has to be \code{" - "} in this case.
+
+ \code{delayed_data} objects can be created via \code{variable_choices} or \code{value_choices}.}
 
 \item{selected}{(\code{character}) Named character vector to define the selected
 values of a shiny \code{\link[shiny]{selectInput}} (default values). This value will
@@ -45,7 +50,7 @@ on top of this specific shiny \code{\link[shiny]{selectInput}}.}
 \code{selected} inputs into the values of the different columns}
 }
 \value{
-\code{filter_spec}-S3-class object
+\code{filter_spec}-S3-class object or \code{delayed_filter_spec}-S3-class object.
 }
 \description{
 It consists in choices and additionally the variable names for the choices
@@ -117,6 +122,18 @@ the drop-down menu the app user will see:
    \if{html}{
      \figure{filter_spec_31.png}{options: alt="Filtering two variables"}
    }
+  }
+  \item{Delayed version}{
+    \preformatted{
+      adsl_filter <- filter_spec(
+        vars = variable_choices("ADSL", "SEX"),
+        sep = "-",
+        choices = value_choices("ADSL", "SEX", "SEX"),
+        selected = "F",
+        multiple = FALSE,
+        label = "Choose endpoint and Censor"
+      )
+    }
   }
 
 }

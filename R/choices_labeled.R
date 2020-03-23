@@ -107,16 +107,17 @@ choices_labeled <- function(choices, labels, subset = NULL) {
 #' # delayed version
 #' variable_choices("ADRS", subset = c("USUBJID", "STUDYID"))
 variable_choices <- function(data, subset = NULL) {
-  stopifnot(is.data.frame(data) | is_character_single(data))
+  stopifnot(is.data.frame(data) || is_character_single(data))
+  stopifnot(is.null(subset) || is_character_vector(subset, min_length = 0))
+
   if (is.character(data)) {
     out <- structure(list(data = data, subset = subset),
-                     class = c("delayed_variable_choices", "delayed_data", "choices_selected"))
+                     class = c("delayed_variable_choices", "delayed_data", "choices_labeled"))
     return(out)
   }
   if (is.null(subset)) {
     subset <- names(data)
   }
-  stopifnot(is.null(subset) || is_character_vector(subset, min_length = 0))
   if (is_character_vector(subset)) {
     stopifnot(all(subset %in% names(data) | subset == ""))
   }
@@ -177,19 +178,20 @@ variable_choices <- function(data, subset = NULL) {
 #' # delayed version
 #' value_choices("ADRS", c("PARAMCD", "ARMCD"), c("PARAM", "ARM"))
 value_choices <- function(data, var_choices, var_label, subset = NULL, sep = " - ") {
-  stopifnot(is.data.frame(data) | is_character_single(data))
+  stopifnot(is.data.frame(data) || is_character_single(data))
+  stopifnot(is_character_vector(var_choices))
+  stopifnot(is_character_vector(var_label))
+  stopifnot(is.null(subset) || is.vector(subset))
+
   if (is.character(data)) {
     out <- structure(list(data = data,
                           var_choices = var_choices,
                           var_label = var_label,
                           subset = subset,
                           sep = sep),
-                     class = c("delayed_value_choices", "delayed_data", "choices_selected"))
+                     class = c("delayed_value_choices", "delayed_data", "choices_labeled"))
     return(out)
   }
-  stopifnot(is_character_vector(var_choices))
-  stopifnot(is_character_vector(var_label))
-  stopifnot(is.null(subset) || is.vector(subset))
 
   choices <- apply(data[var_choices], 1, paste, collapse = sep)
   labels <- apply(data[var_label], 1, paste, collapse = sep)
