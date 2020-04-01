@@ -183,8 +183,7 @@ create_ui_teal_modules <- function(x, datasets, idprefix, is_root = FALSE) {
 }
 
 create_ui_teal_module <- function(x, datasets, idprefix, is_root = FALSE) {
-
-  args <- Map(function(arg) if (identical(arg, "teal_datasets")) datasets else arg, x$ui_args)
+  args <- resolve_teal_args(x$ui_args, datasets)
 
   uiid <- label_to_id(x$label, idprefix)
 
@@ -202,7 +201,6 @@ create_ui_teal_module <- function(x, datasets, idprefix, is_root = FALSE) {
     )
   )
 }
-
 
 call_modules <- function(x, datasets, idprefix) {
   switch(
@@ -226,6 +224,8 @@ call_modules_teal_module <- function(x, datasets, idprefix) {
   id <-  label_to_id(x$label, idprefix)
 
   .log("server tab_module  id:", id)
+
+  x <- resolve_teal_module(x, datasets)
 
   do.call(
     callModule,

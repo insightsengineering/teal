@@ -11,10 +11,12 @@ data_extract_spec(dataname, select, filter = NULL, reshape = FALSE)
 be extracted. This dataset has to be handed over to the \code{data} argument of the
 \code{\link[teal]{init}} function.}
 
-\item{select}{(\code{select_spec}-S3 class) Columns to be selected from the input dataset
+\item{select}{(\code{select_spec}-S3 class) or (\code{delayed_select_spec}-S3-class) object.
+Columns to be selected from the input dataset
 mentioned in \code{dataname.} The setup can be created using \code{\link{select_spec}} function.}
 
-\item{filter}{(\code{filter_spec}-S3-class) Setup of the filtering of
+\item{filter}{(\code{filter_spec}-S3-class) or (\code{delayed_filter_spec}-S3-class) object.
+Setup of the filtering of
 key columns inside the dataset. This setup can be created using the \code{\link{filter_spec}}
 function.}
 

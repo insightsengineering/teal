@@ -22,3 +22,7 @@ test_that("is in operator", {
   expect_true(all(list1 %is_in% list3))
 
 })
+
+test_that("check_pckg_quietly works", {
+  expect_error(check_pckg_quietly("my_random_package_1234567890", "my message"), regexp = "my message")
+})

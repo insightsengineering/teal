@@ -3,9 +3,11 @@
 #' \code{select_spec} is used inside teal to create a \code{\link[shiny]{selectInput}}
 #' that will select columns from a dataset.
 #'
-#' @param choices (\code{character}) Named character vector to define the choices
+#' @param choices (\code{character}) or (\code{delayed_data}) object.
+#'   Named character vector to define the choices
 #'   of a shiny \code{\link[shiny]{selectInput}}. These have to be columns in the
 #'   dataset defined in the \link{data_extract_spec} where this is called.
+#'   \code{delayed_data} objects can be created via \code{variable_choices} or \code{value_choices}.
 #'
 #' @param selected (\code{character}) (default value) Named character vector to define the selected
 #'  values of a shiny \code{\link[shiny]{selectInput}}. This can be just one column
@@ -19,11 +21,15 @@
 #'   will not allow the user to select columns. It will then lead to a selection of
 #'   columns in the dataset that is defined by the developer of the app.
 #'
+#' @param always_selected (\code{character}) Additional column names from the data set that should
+#'   always be selected
+#'
 #' @param label (\code{logical}) (optional) Define a label
 #' on top of this specific shiny \code{\link[shiny]{selectInput}}.
 #'
-#' @return A \code{select_spec}-S3 class object. It contains all input values.
-#' The function double checks the \code{choices} and \code{selected} inputs.
+#' @return A \code{select_spec}-S3 class object or \code{delayed_select_spec}-S3-class object.
+#' It contains all input values.
+#' If \code{select_spec}, then the function double checks the \code{choices} and \code{selected} inputs.
 #'
 #' @details
 #'
@@ -79,6 +85,17 @@
 #'       \figure{select_spec_3.png}{options: alt="Selection without user access"}
 #'     }
 #'   }
+#'   \item{Delayed version}{
+#'     \preformatted{
+#'       adsl_select <- select_spec(
+#'         label = "Select variable:",
+#'         choices = variable_choices("ADSL", c("BMRKR1", "BMRKR2")),
+#'         selected = "BMRKR1",
+#'         multiple = FALSE,
+#'         fixed = FALSE
+#'       )
+#'     }
+#'   }
 #' }
 #'
 #' @importFrom magrittr %<>%
@@ -86,15 +103,28 @@
 #' @importFrom stats setNames
 #' @export
 select_spec <- function(choices,
-                        selected = choices[1],
+                        selected = `if`(is(choices, "delayed_data"), NULL, choices[1]),
                         multiple = length(selected) > 1,
                         fixed = FALSE,
+                        always_selected = NULL,
                         label = "Column(s)") {
 
-  stopifnot(length(choices) >= 1 && is.atomic(choices))
+  stopifnot(length(choices) >= 1 && (is.atomic(choices) || is(choices, "delayed_data")))
   stopifnot(is_logical_single(multiple))
   stopifnot(is_logical_single(fixed))
+  stopifnot(is.null(always_selected) || is_character_vector(always_selected, 1))
   stopifnot(is_character_single(label))
+
+  if (is(choices, "delayed_data")) {
+    out <- structure(list(choices = choices,
+                          selected = selected,
+                          always_selected = always_selected,
+                          multiple = multiple,
+                          fixed = fixed,
+                          label = label),
+                     class = c("delayed_select_spec", "delayed_data", "select_spec"))
+    return(out)
+  }
 
   # if names is NULL, shiny will put strange labels (with quotes etc.) in the selectInputs, so we set it to the values
   if (is.null(names(choices))) {
@@ -111,7 +141,24 @@ select_spec <- function(choices,
     }
   }
 
-  res <- list(choices = choices, selected = selected, multiple = multiple, fixed = fixed, label = label)
+  if (fixed) {
+    stopifnot(is.null(always_selected))
+  }
+
+  if (length(intersect(choices, always_selected)) > 0) {
+    warning("You cannot allow the user to select 'always_selected' columns.
+      'choices' and 'always_selected' will be intersected")
+    test_c <- choices[which(!choices %in% always_selected)]
+    if (length(test_c) > 0) {
+      class(test_c) <- c("choices_labeled", "character")
+      choices <- test_c
+    } else {
+      choices <- NULL
+    }
+  }
+
+  res <- list(choices = choices, selected = selected, always_selected = always_selected, multiple = multiple,
+    fixed = fixed, label = label)
   class(res) <- "select_spec"
 
   return(res)

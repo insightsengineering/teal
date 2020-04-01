@@ -6,6 +6,7 @@ no_select_keyword <- "-- no selection --"
 #' @param selected vector of pre-selected options, first element of \code{choices} if blank
 #' @param keep_order (\code{logical}) In case of \code{FALSE} the selected variables
 #'   will be on top of the drop-down field.
+#' @param fixed (\code{logical}) (optional) whether to block user to select choices
 #'
 #' @details
 #'
@@ -28,7 +29,7 @@ no_select_keyword <- "-- no selection --"
 #' library(random.cdisc.data)
 #' ADSL <- radsl(cached = TRUE)
 #' choices_selected(variable_choices(ADSL), "SEX")
-choices_selected <- function(choices, selected = choices[1], keep_order = FALSE) {
+choices_selected <- function(choices, selected = choices[1], keep_order = FALSE, fixed = FALSE) {
 
   stopifnot(is.atomic(choices))
 
@@ -59,7 +60,8 @@ choices_selected <- function(choices, selected = choices[1], keep_order = FALSE)
   structure(
     list(
       choices = choices,
-      selected = selected
+      selected = selected,
+      fixed = fixed
     ),
     class = "choices_selected"
   )

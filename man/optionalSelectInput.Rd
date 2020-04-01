@@ -10,8 +10,10 @@ optionalSelectInput(
   choices = NULL,
   selected = NULL,
   multiple = FALSE,
+  sep = NULL,
   options = list(),
-  label_help = NULL
+  label_help = NULL,
+  fixed = FALSE
 )
 }
 \arguments{
@@ -34,11 +36,16 @@ If not specified then defaults to the first value for single-select lists
 
 \item{multiple}{Is selection of multiple items allowed?}
 
+\item{sep}{(\code{character}) A separator string to split the \code{choices} or
+\code{selected} inputs into the values of the different columns}
+
 \item{options}{List of options, see \link[shinyWidgets]{pickerOptions} for all available options.
 To limit the number of selection possible, see example below.}
 
 \item{label_help}{optional an object of class \code{shiny.tag}. E.g. an object
 returned by \code{\link[shiny]{helpText}}}
+
+\item{fixed}{(\code{logical}) (optional) whether to block user to select choices}
 }
 \description{
 Hidden input widgets are useful to have the \code{input[[inputId]]} variable

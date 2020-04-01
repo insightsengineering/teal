@@ -2,6 +2,8 @@ context("cdisc_data")
 
 filename <- system.file("preprocessing_empty_string.txt", package = "teal")
 code_empty <- readChar(filename, file.info(filename)$size) # code for file
+filename_check <- system.file("check_false_string.txt", package = "teal")
+code_check <- readChar(filename_check, file.info(filename_check)$size)
 
 library(random.cdisc.data)
 ADSL <- ARG1 <- ARG2 <- cadsl # nolint
@@ -86,6 +88,7 @@ test_that("List values", {
   result <- cdisc_data(cdisc_dataset("ADSL", ADSL))
 
   adsl_yaml <- yaml::yaml.load_file(system.file("metadata/ADSL.yml", package = "random.cdisc.data"))
+  adtte_yaml <- yaml::yaml.load_file(system.file("metadata/ADTTE.yml", package = "random.cdisc.data"))
 
   result_to_compare <- list(structure(list(
     dataname = "ADSL",
@@ -95,21 +98,18 @@ test_that("List values", {
       foreign = NULL,
       parent = NULL
     ),
-    labels = list(
-      dataset_label = adsl_yaml$domain$label,
-      column_labels = vapply(adsl_yaml$variables, `[[`, character(1), "label")
-    )
+    column_labels = vapply(adsl_yaml$variables, `[[`, character(1), "label"),
+    dataset_label = adsl_yaml$domain$label
   ),
   class = c("cdisc_dataset", "dataset")))
   class(result_to_compare) <- "cdisc_data"
   result_to_compare <- setNames(result_to_compare, c("ADSL"))
-  attr(result_to_compare, "code") <- code_empty
+  attr(result_to_compare, "code") <- paste0(code_empty, "\n\n", code_check, "\n")
 
   expect_identical(result, result_to_compare)
 
   result <- cdisc_data(cdisc_dataset("ADSL", ADSL),
-                       cdisc_dataset("ADTTE", ADTTE, labels = list(dataset_label = NULL,
-                                                                   column_labels = NULL)))
+                       cdisc_dataset("ADTTE", ADTTE))
 
   result_to_compare <- list(structure(list(
     dataname = "ADSL",
@@ -119,10 +119,8 @@ test_that("List values", {
       foreign = NULL,
       parent = NULL
     ),
-    labels = list(
-      dataset_label = adsl_yaml$domain$label,
-      column_labels = vapply(adsl_yaml$variables, `[[`, character(1), "label")
-    )
+    column_labels = vapply(adsl_yaml$variables, `[[`, character(1), "label"),
+    dataset_label = adsl_yaml$domain$label
   ),
   class = c("cdisc_dataset", "dataset")),
   structure(list(
@@ -133,15 +131,13 @@ test_that("List values", {
       foreign = c("STUDYID", "USUBJID"),
       parent = "ADSL"
     ),
-    labels = list(
-      dataset_label = NULL,
-      column_labels = NULL
-    )
+    column_labels = vapply(c(adsl_yaml$variables, adtte_yaml$variables), `[[`, character(1), "label"),
+    dataset_label = adtte_yaml$domain$label
   ),
   class = c("cdisc_dataset", "dataset")))
   class(result_to_compare) <- "cdisc_data"
   result_to_compare <- setNames(result_to_compare, c("ADSL", "ADTTE"))
-  attr(result_to_compare, "code") <- code_empty
+  attr(result_to_compare, "code") <- paste0(code_empty, "\n\n", code_check, "\n")
 
   expect_identical(result, result_to_compare)
 })
@@ -172,15 +168,15 @@ test_that("Empty code", {
 
   # missing code
   result <- cdisc_data(cdisc_dataset("ADSL", ADSL), check = FALSE)
-  expect_identical(attr(result, "code"), code_empty)
+  expect_identical(attr(result, "code"), paste0(code_empty, "\n\n", code_check, "\n"))
 
   # NULL code
   result <- cdisc_data(cdisc_dataset("ADSL", ADSL), code = "", check = FALSE)
-  expect_identical(attr(result, "code"), code_empty)
+  expect_identical(attr(result, "code"), paste0(code_empty, "\n\n", code_check, "\n"))
 
   # empty code
   result <- cdisc_data(cdisc_dataset("ADSL", ADSL), code = "", check = FALSE)
-  expect_identical(attr(result, "code"), code_empty)
+  expect_identical(attr(result, "code"), paste0(code_empty, "\n\n", code_check, "\n"))
 })
 
 
@@ -193,7 +189,7 @@ test_that("Arguments created by code", {
   result_to_compare <- list(cdisc_dataset("ADSL", ADSL))
   class(result_to_compare) <- "cdisc_data"
   result_to_compare <- setNames(result_to_compare, c("ADSL"))
-  attr(result_to_compare, "code") <- "ADSL <- cadsl"
+  attr(result_to_compare, "code") <- paste0("ADSL <- cadsl", "\n\n", code_check, "\n")
 
   expect_identical(result, result_to_compare)
 })

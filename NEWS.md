@@ -1,3 +1,13 @@
+# teal 0.8.3
+
+* Enable `teal` app to initialize with custom page to be loaded first.
+* New classes (`DatasetConnector`, `DataConnector`) to connect to various data sources, including:  
+        * connector to `rice` API - `rice_cdisc_data` and `rice_dataset`  
+        * connector to `RDS` files - `rds_data` and `rds_dataset`  
+* Message appears at bottom right of Shiny app when Shiny is busy to update the views.
+* Remove `labels` argument of `cdisc_data` function. Labels now should be handled in preprocessing using 
+`var_relabel` function.
+
 # teal 0.8.2
 
 * Fixed several BUGS in `optionalSelectInput` and improved inputs look.

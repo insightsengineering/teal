@@ -115,3 +115,35 @@ test_that("Multiple vars", {
   expect_true(f1m$multiple)
   expect_identical(f1m$label, "Filter")
 })
+
+test_that("delayed filter_spec works", {
+  set.seed(1)
+  ADSL <- data.frame(USUBJID = letters[1:10],  # nolint
+                     SEX = sample(c("F", "M", "U"), 10, replace = T),
+                     stringsAsFactors = F)
+
+
+  normal <- filter_spec(
+    vars = variable_choices(ADSL, "SEX"),
+    sep = "-",
+    choices = value_choices(ADSL, "SEX", "SEX"),
+    selected = "F",
+    multiple = FALSE
+  )
+
+  delayed <- filter_spec(
+    vars = variable_choices("ADSL", "SEX"),
+    sep = "-",
+    choices = value_choices("ADSL", "SEX", "SEX"),
+    selected = "F",
+    multiple = FALSE
+  )
+
+  expect_equal(class(delayed), c("delayed_filter_spec", "delayed_data", "filter_spec"))
+
+  expect_equal(names(normal), names(delayed))
+
+  ds <- teal:::FilteredData$new()
+  ds$set_data("ADSL", ADSL)
+  expect_identical(normal, resolve_delayed(delayed, ds))
+})

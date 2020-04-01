@@ -1,8 +1,8 @@
 Package: teal
 Type: Package
 Title: Exploratory Web Apps for Analyzing Clinical Trials Data
-Date: 2019-12-30
-Version: 0.8.2
+Date: 2020-03-31
+Version: 0.8.3
 Authors@R: c(
   person("NEST", email = "nestcicd@roche.com", role = c("aut", "cre")),
   person("Adrian", "Waddell", email = "adrian.waddell@roche.com", role = "aut"),
@@ -28,6 +28,7 @@ Depends:
 Imports:
   digest,
   dplyr,
+  askpass,
   haven,
   htmltools,
   magrittr,
@@ -35,21 +36,28 @@ Imports:
   purrr,
   R6,
   readr,
-  rtables (>= 0.1.4),
+  rlang,
+  rtables (>= 0.1.5),
   shinyjs,
   shinyWidgets (>= 0.5.0),
-  utils.nest (>= 0.2.1),
+  utils.nest (>= 0.2.2),
   yaml
 RoxygenNote: 7.0.2
 Suggests:
     knitr,
-    random.cdisc.data (>= 0.3.1),
+    nomnoml,
+    random.cdisc.data (>= 0.3.2),
+    rice (>= 1.0.3),
     rmarkdown,
-    tern (>= 0.6.4),
-    test.nest (>= 0.2.1),
+    tern (>= 0.6.5),
+    test.nest (>= 0.2.2),
     testthat (>= 2.1.0)
 VignetteBuilder: knitr
 Collate:
+    'CallableFunction.R'
+    'DataConnection.R'
+    'DataConnector.R'
+    'DatasetConnector.R'
     'FilteredData.R'
     'cdisc_data.R'
     'choices_labeled.R'
@@ -60,12 +68,15 @@ Collate:
     'include_css_js.R'
     'modules.R'
     'init.R'
+    'init_datasets.R'
+    'init_ui.R'
     'log_app_usage.R'
     'logging.R'
     'module_add_filter_variable.R'
     'module_filter_info.R'
     'module_filter_items.R'
     'optionalInput.R'
+    'resolve_delayed.R'
     'select_spec.R'
     'stop_shiny.R'
     'teal.R'

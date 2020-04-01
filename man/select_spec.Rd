@@ -6,16 +6,19 @@
 \usage{
 select_spec(
   choices,
-  selected = choices[1],
+  selected = if (is(choices, "delayed_data")) NULL else choices[1],
   multiple = length(selected) > 1,
   fixed = FALSE,
+  always_selected = NULL,
   label = "Column(s)"
 )
 }
 \arguments{
-\item{choices}{(\code{character}) Named character vector to define the choices
+\item{choices}{(\code{character}) or (\code{delayed_data}) object.
+Named character vector to define the choices
 of a shiny \code{\link[shiny]{selectInput}}. These have to be columns in the
-dataset defined in the \link{data_extract_spec} where this is called.}
+dataset defined in the \link{data_extract_spec} where this is called.
+\code{delayed_data} objects can be created via \code{variable_choices} or \code{value_choices}.}
 
 \item{selected}{(\code{character}) (default value) Named character vector to define the selected
 values of a shiny \code{\link[shiny]{selectInput}}. This can be just one column
@@ -29,12 +32,16 @@ hide the choices selected in case they are not needed. Setting fixed to \code{TR
 will not allow the user to select columns. It will then lead to a selection of
 columns in the dataset that is defined by the developer of the app.}
 
+\item{always_selected}{(\code{character}) Additional column names from the data set that should
+always be selected}
+
 \item{label}{(\code{logical}) (optional) Define a label
 on top of this specific shiny \code{\link[shiny]{selectInput}}.}
 }
 \value{
-A \code{select_spec}-S3 class object. It contains all input values.
-The function double checks the \code{choices} and \code{selected} inputs.
+A \code{select_spec}-S3 class object or \code{delayed_select_spec}-S3-class object.
+It contains all input values.
+If \code{select_spec}, then the function double checks the \code{choices} and \code{selected} inputs.
 }
 \description{
 \code{select_spec} is used inside teal to create a \code{\link[shiny]{selectInput}}
@@ -91,6 +98,17 @@ select = select_spec(
     }
     \if{html}{
       \figure{select_spec_3.png}{options: alt="Selection without user access"}
+    }
+  }
+  \item{Delayed version}{
+    \preformatted{
+      adsl_select <- select_spec(
+        label = "Select variable:",
+        choices = variable_choices("ADSL", c("BMRKR1", "BMRKR2")),
+        selected = "BMRKR1",
+        multiple = FALSE,
+        fixed = FALSE
+      )
     }
   }
 }

@@ -1,15 +1,14 @@
 ui_filter_items <- function(id, dataname) {
-
   ns <- NS(id)
 
-  div(class = paste0("teal_filter_", dataname),
-      uiOutput(ns("uifilters"))
-  )
-
+  uiOutput(ns("filters"))
 }
 
 #' @importFrom shinyWidgets pickerInput pickerOptions
 srv_filter_items <- function(input, output, session, datasets, dataname, container = div) {
+  # have to force arguments
+  force(datasets)
+  force(dataname)
 
   uistate <- reactiveValues(filters_shown = character(0))
 
@@ -27,7 +26,7 @@ srv_filter_items <- function(input, output, session, datasets, dataname, contain
   })
 
 
-  output$uifilters <- renderUI({
+  output$filters <- renderUI({
 
     uistate$filters_shown
 
@@ -132,6 +131,11 @@ srv_filter_items <- function(input, output, session, datasets, dataname, contain
         value <- input[[id]]
 
         type <- datasets$get_filter_type(dataname, varname)
+
+        execution <- datasets$get_filter_execution(dataname, varname)
+        if (is.null(execution)) {
+          datasets$set_filter_non_executed(dataname, varname, datasets$get_filter_state(dataname, varname))
+        }
 
         if (!datasets$get_filter_execution(dataname, varname) && is.null(value)) {
           .log("Filter Observer: no value defined, yet.")

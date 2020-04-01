@@ -52,9 +52,10 @@ check_module_names <- function(modules) {
 #' Extract labels from choices basing on attributes and names
 #'
 #' @param choices (\code{list} or \code{vector}) select choices
+#' @param values optional, choices subset for which labels should be extracted, \code{NULL} for all choices
 #'
 #' @return (\code{character}) vector with labels
-extract_choices_labels <- function(choices) {
+extract_choices_labels <- function(choices, values = NULL) {
   res <- if (is(choices, "choices_labeled")) {
     attr(choices, "raw_labels")
   } else if (!is.null(names(choices)) && !setequal(names(choices), unlist(unname(choices)))) {
@@ -63,5 +64,57 @@ extract_choices_labels <- function(choices) {
     NULL
   }
 
+  if (!is.null(values) && !is.null(res)) {
+    stopifnot(all(values %in% choices))
+    res <- res[vapply(values, function(val) which(val == choices), numeric(1))]
+  }
+
   return(res)
+}
+
+
+#' Check if package can be loaded
+#'
+#' @param pckg \code{character} package name.
+#' @param msg \code{character} error message to display if package is not available.
+#'
+#' @return Error or invisible NULL.
+#'
+check_pckg_quietly <- function(pckg, msg) {
+  stopifnot(is_character_single(pckg), is_character_single(msg))
+
+  if (!requireNamespace(pckg, quietly = T)) {
+    stop(msg)
+  }
+
+  return(invisible(NULL))
+}
+
+#' @importFrom shiny isRunning showModal modalDialog tags req
+error_dialog <- function(x) {
+  if (shiny::isRunning()) {
+    showModal(
+        modalDialog(
+            tags$span("Error while evaluating following call:"),
+            tags$br(),
+            tags$code(ifelse(
+              "condition" %in% class(x),
+              deparse(x$call),
+              deparse(attr(x, "condition")$call)
+            ), "\n"),
+            tags$br(),
+            tags$span("Error message:"),
+            tags$br(),
+            tags$code(
+              ifelse("condition" %in% class(x),
+                deparse(x$message),
+                deparse(attr(x, "condition")$message)
+              )
+            )
+        )
+    )
+    req(FALSE)
+  } else {
+    stop(x)
+  }
 }
