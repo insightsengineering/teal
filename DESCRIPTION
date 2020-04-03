@@ -51,7 +51,7 @@ Suggests:
     rmarkdown,
     tern (>= 0.6.5),
     test.nest (>= 0.2.2),
-    testthat (>= 2.1.0)
+    testthat (>= 2.0)
 VignetteBuilder: knitr
 Collate:
     'CallableFunction.R'
