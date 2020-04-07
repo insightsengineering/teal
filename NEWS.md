@@ -1,6 +1,6 @@
 # teal 0.8.3
 
-* Enable `teal` app to initialize with custom page to be loaded first.
+* Enable `teal` app to initialize without data. The data are then loaded from within the teal app.
 * New classes (`DatasetConnector`, `DataConnector`) to connect to various data sources, including:  
         * connector to `rice` API - `rice_cdisc_data` and `rice_dataset`  
         * connector to `RDS` files - `rds_data` and `rds_dataset`  
