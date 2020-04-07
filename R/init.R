@@ -88,6 +88,12 @@ init <- function(data,
   }
   check_module_names(modules)
 
+  if (is.character(header)) {
+    header <- tags$p(header)
+  }
+  if (is.character(footer)) {
+    footer <- tags$p(footer)
+  }
   stopifnot(
     inherits(header, "shiny.tag"),
     inherits(footer, "shiny.tag"),
