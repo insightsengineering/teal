@@ -38,9 +38,9 @@ function }}
 
   \code{filter = list(init = list(ADSL = c("SEX", "BAGE")))}}
 
-\item{header}{object of class `shiny.tag` to be used as the header of the app}
+\item{header}{(\code{character} or object of class `shiny.tag`) the header of the app}
 
-\item{footer}{object of class `shiny.tag` to be used as the footer of the app}
+\item{footer}{(\code{character} or object of class `shiny.tag`) the footer of the app}
 }
 \value{
 named list with server and ui function
