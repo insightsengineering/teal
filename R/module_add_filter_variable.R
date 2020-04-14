@@ -1,3 +1,12 @@
+#' UI to select among the column names of a dataset to add as a filter variable
+#'
+#' Once something is selected, it puts it to the top right panel, so you can adjust
+#' filtering for that variable. The selection is then undone, so other columns can
+#' be added for filtering.
+#'
+#' @param id module id
+#' @param dataname name of dataset whose columns should be filtered
+#'
 #' @importFrom shinyWidgets pickerOptions
 ui_add_filter_variable <- function(id, dataname) {
 
@@ -20,6 +29,7 @@ ui_add_filter_variable <- function(id, dataname) {
 }
 
 srv_add_filter_variable <- function(input, output, session, datasets, dataname, omit_vars = NULL) {
+  # todo: this force is bad style and not needed (conceptually bad)
   # have to force arguments
   force(datasets)
   force(dataname)
@@ -29,15 +39,9 @@ srv_add_filter_variable <- function(input, output, session, datasets, dataname, 
     fs <- datasets$get_filter_state(dataname, reactive = TRUE)
     df <- datasets$get_data(dataname, filtered = FALSE, reactive = TRUE)
 
-    vars <- if (is.null(df)) {
-      NULL
-    } else if (is.null(fs)) {
-      setdiff(names(df), omit_vars)
-    } else {
-      setdiff(names(df), c(names(fs), omit_vars))
-    }
+    # names(NULL) is NULL
+    vars <- setdiff(names(df), c(names(fs), omit_vars))
     vars <- if_not_empty(vars, c("", vars))
-
     choices <- variable_choices(df, vars)
 
     .log("update add filter variables", dataname)
@@ -49,6 +53,7 @@ srv_add_filter_variable <- function(input, output, session, datasets, dataname, 
     )
   })
 
+  # todo: what is i needed for
   warning_messages <- reactiveValues(varinfo = "", i = 0)
 
   observeEvent(input$variables, {

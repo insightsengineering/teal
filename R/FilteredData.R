@@ -73,6 +73,9 @@ FilteredData <- R6::R6Class( # nolint
       private$datasets          <- create_rv()
       private$filtered_datasets <- create_rv()
       private$filter_state      <- create_rv()
+      for (name in self$datanames()) {
+        private$data_attr[[dataname]] <- list()
+      }
 
       return(invisible(self))
     },
@@ -152,12 +155,9 @@ FilteredData <- R6::R6Class( # nolint
     set_data_attr = function(dataname, attr, value) {
       stopifnot(is_character_single(dataname))
       stopifnot(is_character_single(attr))
-      # todo: put this into initialize
-      if (!dataname %in% names(private$data_attr)) {
-        private$data_attr[[dataname]] <- list()
-      }
 
-      return(private$data_attr[[dataname]][[attr]] <- value)
+      private$data_attr[[dataname]][[attr]] <- value
+      return(private$data_attr[[dataname]][[attr]])
     },
 
     get_data_attr = function(dataname, attr) {
@@ -293,6 +293,7 @@ FilteredData <- R6::R6Class( # nolint
 
     # reactive: whether returned expression should be isolated or not
     # filtered: return filtered or full dataset
+    # todo: why reactive = FALSE by default? should be TRUE and as well everywhere else in this file
     get_data = function(dataname, reactive = FALSE, filtered = FALSE) {
       stopifnot(is_character_single(dataname))
       stopifnot(is_logical_single(reactive))
@@ -309,6 +310,7 @@ FilteredData <- R6::R6Class( # nolint
       }
     },
 
+    # get info about dataname, e.g. number of patients
     get_data_info = function(dataname, filtered = TRUE, reactive = FALSE) {
       stopifnot(is_character_single(dataname))
       stopifnot(is_logical_single(reactive))
@@ -362,7 +364,7 @@ FilteredData <- R6::R6Class( # nolint
     # varname != NULL and state is missing, set to default value
     # if varname is provided, only the state of this varname is set, otherwise the whole state is set (and non-provided columns are unset)
     # initial: whether to apply filter, not necessary when filter is empty anyways
-    set_filter_state = function(dataname, varname = NULL, state, apply_filter = FALSE) {
+    set_filter_state = function(dataname, varname = NULL, state, apply_filter = TRUE) {
       stopifnot(is_character_single(dataname))
       stopifnot(is.null(varname) || is_character_single(varname))
       private$error_if_not_valid(dataname, varname)
@@ -412,13 +414,13 @@ FilteredData <- R6::R6Class( # nolint
         # reset whole state
         private$filter_state[[dataname]] <- state
       } else {
-        stopifnot(length(state) == 1)
         # reset state for that varname only
-        if (is.null(private$filter_state[[dataname]])) {
-          # todo: private$filter_state[[dataname]] <- list() in initializer
-          private$filter_state[[dataname]] <- list()
-        }
-        private$filter_state[[dataname]][[varname]] <- state[[varname]]
+        stopifnot(length(state) == 1)
+        fs <- self$get_filter_state(dataname)
+        # todo: private$filter_state[[dataname]] <- list() in initializer
+        if (is.null(fs)) fs <- list()
+        fs[[varname]] <- state[[1]]
+        private$filter_state[[dataname]] <- fs
       }
 
       if (apply_filter) {
@@ -430,19 +432,23 @@ FilteredData <- R6::R6Class( # nolint
 
     # removes the filter for varname and resets the initial state (set during set_filter_state)
     remove_filter = function(dataname, varname) {
+      # todo1: add again
       stopifnot(is_character_single(dataname))
       stopifnot(is_character_single(varname))
       private$error_if_not_valid(dataname, varname)
 
       current_state <- self$get_filter_state(dataname) # state before removal
-      new_state <- private$filter_info[[dataname]][[varname]][["default_state"]]
+      var_new_state <- private$filter_info[[dataname]][[varname]][["default_state"]]
       # todo: stopifnot(!is.null(new_state)) # initial state should have been set when set_filter_state was called
 
       # all.equal returns TRUE if no difference, otherwise a character vector with changes
-      needs_apply_filter <- is.character(all.equal(current_state[[varname]], new_state))
+      # todo: make nicer: the old state is not actually
+      # the error is here because the old state is actually not correct, NA are not filtered out whereas they are with the filter
+      needs_apply_filter <- is.character(all.equal(current_state[[varname]], var_new_state))
 
       current_state[[varname]] <- NULL # remove filter for varname from list
 
+      # todo: understand the logic behind
       self$set_filter_non_executed(dataname, varname, NULL)
 
       private$filter_state[[dataname]] <- current_state
@@ -703,7 +709,7 @@ FilteredData <- R6::R6Class( # nolint
           # switch below cannot handle NULL
           if (is.null(type)) stop(paste("filter type for variable", name, "in", dataname, "not known"))
 
-          switch(
+          filter_call <- switch(
             type,
             choices = {
               if (length(state) == 1) {
@@ -723,13 +729,18 @@ FilteredData <- R6::R6Class( # nolint
             },
             stop(paste("filter type for variable", name, "in", dataname, "not known"))
           )
+          # allow NA as well, i.e. do not filter it out (todo: also provide an option for this)
+          # todo: add again: call("|", filter_call, call("is.na", as.name(name)))
         }, names(fs))
 
         # concatenate with "&" when several filters need to be applied to this dataset
         # when the list has a single element, reduce simply returns the element
-        condition <- Reduce(function(x, y) call("&", x, y), data_filter_call_items)
+        combined_filters <- Reduce(function(x, y) call("&", x, y), data_filter_call_items)
 
-        return(as.call(list(as.name("<-"), as.name(out), call("subset", as.name(dataname), condition))))
+        # do not use subset (this is a convenience function intended for use interactively, stated in the doc)
+        # as a result of subset and filter, NA is filtered out; this can be circumvented by explicitly
+        # adapting the filtering condition above to watch out for NAs and keep them
+        return(as.call(list(as.name("<-"), as.name(out), call("subset", as.name(dataname), combined_filters))))
       }
 
     },

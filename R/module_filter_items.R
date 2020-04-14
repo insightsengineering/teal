@@ -1,3 +1,10 @@
+#' Creates UI to show all filters that can be applied to the dataset
+#' I.e. all columns selected for filtering are shown.
+#'
+#' @param id module id
+#' @param dataname `logical` name of dataset that is filtered
+#' @md
+#'
 ui_filter_items <- function(id, dataname) {
   ns <- NS(id)
 
@@ -6,14 +13,15 @@ ui_filter_items <- function(id, dataname) {
 
 #' @importFrom shinyWidgets pickerInput pickerOptions
 srv_filter_items <- function(input, output, session, datasets, dataname, container = div) {
+  # todo: this force is bad style and not needed (conceptually bad)
   # have to force arguments
   force(datasets)
   force(dataname)
 
   uistate <- reactiveValues(filters_shown = character(0))
 
+  # updates reactiveValues uistate$filters_shown
   observeEvent(datasets$get_filter_state(dataname, reactive = TRUE), {
-
     fs <- datasets$get_filter_state(dataname)
     current <- uistate$filters_shown
 
@@ -25,9 +33,8 @@ srv_filter_items <- function(input, output, session, datasets, dataname, contain
 
   })
 
-
   output$filters <- renderUI({
-
+    # updates whenever filters_shown is updated
     uistate$filters_shown
 
     .log("update uiFilters")
@@ -40,6 +47,7 @@ srv_filter_items <- function(input, output, session, datasets, dataname, contain
       div()
     } else {
 
+      # todo: create Shiny module for each of these annd then call it in lapply
       els <- lapply(names(fs_data), function(var) {
 
         fi <- datasets$get_filter_info(dataname, var)
@@ -105,7 +113,7 @@ srv_filter_items <- function(input, output, session, datasets, dataname, contain
           tags$p(paste(var, "in data", dataname, "has unknown type:", fi$type))
         }
 
-        .log(paste0("Add filter view and listner with id: ", id))
+        .log(paste0("Add filter view and listener with id: ", id))
 
         create_listener(id, id_rm, var)
 
@@ -125,6 +133,7 @@ srv_filter_items <- function(input, output, session, datasets, dataname, contain
 
     force(varname)
 
+    # todo: else: show warning: variable already selected
     if (!(id %in% id_has_bindings)) {
       observe({
 
