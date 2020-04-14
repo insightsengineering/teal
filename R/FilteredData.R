@@ -360,66 +360,42 @@ FilteredData <- R6::R6Class( # nolint
     # state = NULL erase filter state -> use remove_filter
     #
     # varname != NULL and state is missing, set to default value
-    set_filter_state = function(dataname, varname = NULL, state, initial = FALSE) {
+    # if varname is provided, only the state of this varname is set, otherwise the whole state is set (and non-provided columns are unset)
+    # initial: whether to apply filter, not necessary when filter is empty anyways
+    set_filter_state = function(dataname, varname = NULL, state, apply_filter = FALSE) {
       stopifnot(is_character_single(dataname))
       stopifnot(is.null(varname) || is_character_single(varname))
       private$error_if_not_valid(dataname, varname)
-
-      browser()
-
       if (is.null(state)) {
         stop("use remove_filter and not set_filter_state to remove a filter")
       }
+      if (!is.null(varname)) {
+        state <- setNames(list(state), varname)
+        # we don't set varname to NULL so we can detect it below and only set the state of varname
+      }
+      stopifnot(is.list(state))
 
-      if (is.null(varname)) {
-        if (!(is.null(state) || is.list(state))) {
-          stop("filter state needs to be a list when specified for all variables")
-        }
+      # each item in the state list indicates what filter to apply to that column
+      state_names <- names(state)
 
-        fs_names <- names(state)
-        varnames <- names(self$get_data(dataname))
+      # check if all names of state are columns of the dataname
+      inexistent_columns <- which(!(state_names %in% names(self$get_data(dataname))))
+      if (length(inexistent_columns) > 0) {
+        stop(paste("variables", toString(state_names[inexistent_columns]),
+                   "are not available in data", dataname))
+      }
 
-        # check if variables exist
-        non_valid_vars_i <- which(!(fs_names %in% varnames))
-        if (length(non_valid_vars_i) > 0) {
-          stop(paste("variables", toString(fs_names[non_valid_vars_i]),
-                     "are not available in data", dataname))
-        }
+      # check if new filter states are valid (e.g. in correct range)
+      fi <- private$filter_info[[dataname]]
 
-        # check if filter state is possible
-        fi <- private$filter_info[[dataname]]
+      for (var in state_names) {
+        fii <- fi[[var]]
+        state_i <- state[[var]]
 
-        for (var in fs_names) {
-          fii <- fi[[var]]
-          state_i <- state[[var]]
-
-          switch(
-            fii$type,
-            choices = {
-              if (any(!(state_i %in% fii$choices)))
-                stop(paste("data", dataname, "variable", var, "not all valid choices"))
-            },
-            range = {
-              if (length(state_i) != 2)
-                stop(paste("data", dataname, "variable", var, "not of length 2"))
-            },
-            logical = NULL,
-            stop(paste("data", dataname, "variable", var, ": cannot filter this variable (type issue)"))
-          )
-        }
-
-        private$filter_state[[dataname]] <- state
-
-      } else {
-        # single varname given
-
-        fii <- self$get_filter_info(dataname, varname)
-        state_i <- state
-        var <- varname
         switch(
           fii$type,
           choices = {
-            if ((length(state_i) > 0) && any(!(state_i %in% fii$choices)))
+            if (any(!(state_i %in% fii$choices)))
               stop(paste("data", dataname, "variable", var, "not all valid choices"))
           },
           range = {
@@ -427,43 +403,50 @@ FilteredData <- R6::R6Class( # nolint
               stop(paste("data", dataname, "variable", var, "not of length 2"))
           },
           logical = NULL,
-          stop(paste("data", dataname, "variable", var, "has unknown type ", fii$type))
+          stop(paste("data", dataname, "variable", var, ": cannot filter this variable (type issue)"))
         )
-
-        fs <- if_null(self$get_filter_state(dataname), list())
-        fs[[varname]] <- state
-        private$filter_state[[dataname]] <- fs
       }
 
-      if (!initial) {
+      # set state after checking above
+      if (is.null(varname)) {
+        # reset whole state
+        private$filter_state[[dataname]] <- state
+      } else {
+        stopifnot(length(state) == 1)
+        # reset state for that varname only
+        if (is.null(private$filter_state[[dataname]])) {
+          # todo: private$filter_state[[dataname]] <- list() in initializer
+          private$filter_state[[dataname]] <- list()
+        }
+        private$filter_state[[dataname]][[varname]] <- state[[varname]]
+      }
+
+      if (apply_filter) {
         private$apply_filter(dataname)
       }
 
       return(invisible(self))
     },
 
-    # removes the filter and resets the default state corresponding to no state change at all
+    # removes the filter for varname and resets the initial state (set during set_filter_state)
     remove_filter = function(dataname, varname) {
       stopifnot(is_character_single(dataname))
       stopifnot(is_character_single(varname))
       private$error_if_not_valid(dataname, varname)
 
-      browser()
-
       current_state <- self$get_filter_state(dataname) # state before removal
-      new_state <- private$filter_info[[dataname]][[varname]][["init_state"]]
-      browser() # todo: check stopifnot
-      stopifnot(!is.null(new_state)) # initial state should have been set when set_filter_state was called
+      new_state <- private$filter_info[[dataname]][[varname]][["default_state"]]
+      # todo: stopifnot(!is.null(new_state)) # initial state should have been set when set_filter_state was called
 
       # all.equal returns TRUE if no difference, otherwise a character vector with changes
       needs_apply_filter <- is.character(all.equal(current_state[[varname]], new_state))
 
-      current_state[[varname]] <- NULL
+      current_state[[varname]] <- NULL # remove filter for varname from list
 
       self$set_filter_non_executed(dataname, varname, NULL)
 
       private$filter_state[[dataname]] <- current_state
-      private$filter_info[[dataname]][[varname]][["executed"]] <- NULL
+      private$filter_info[[dataname]][[varname]][["executed"]] <- NULL # todo: false?
 
       if (needs_apply_filter) {
         private$apply_filter(dataname)
@@ -495,7 +478,8 @@ FilteredData <- R6::R6Class( # nolint
     },
 
     # default filter state is as if no filtering were occurring, i.e. filtering for all
-    # todo: used where?
+    # called when adding a new filter in the UI
+    # does not execute the filter, this needs to be handled outside of this function
     set_default_filter_state = function(dataname, varname) {
       stopifnot(is_character_single(dataname))
       stopifnot(is_character_single(varname))
@@ -510,16 +494,19 @@ FilteredData <- R6::R6Class( # nolint
         stop("unknown filter type", fi$type)
       )
 
-      self$set_filter_state(dataname, varname, default_state, initial = TRUE)
+      # we don't need to apply the filter because it contains the full range,
+      # this simplifies the ShowRCode as well
+      self$set_filter_state(dataname, varname, default_state, apply_filter = FALSE)
       self$set_filter_non_executed(dataname, varname, default_state)
 
       return(invisible(self))
     },
 
     # todo: rename to set_filter_not_executed
+    # todo: rename state to default_state
     set_filter_non_executed = function(dataname, varname, state) {
       private$filter_info[[dataname]][[varname]][["executed"]] <- FALSE
-      private$filter_info[[dataname]][[varname]][["init_state"]] <- state
+      private$filter_info[[dataname]][[varname]][["default_state"]] <- state
       return(invisible(NULL))
     },
 
@@ -618,7 +605,7 @@ FilteredData <- R6::R6Class( # nolint
     data_attr = list(),  # list with one item per dataname containing attributes for dataname, todo: rename to data_attrs
     filtered_datasets = NULL,
     filter_state = NULL, # filter to apply to obtain filtered dataset from unfiltered one
-    filter_info = list(), # info about dataset and filter applied with fields: type, label, class, init_state, executed (filter applied already, when on_hold is on)
+    filter_info = list(), # info about dataset and filter applied with fields: type, label, class, default_state, executed (filter applied already, when on_hold is on)
     # whether filtering is currently performed or it is postponed, useful when several fields
     # are changed at once and it should not run for each of the steps, but just once at the end
     on_hold = FALSE, # rename to filter_hold or wait_with_filtering
@@ -639,7 +626,7 @@ FilteredData <- R6::R6Class( # nolint
     },
 
     # detect variable type (categorical, numeric range)
-    # does not set executed and init_state fields
+    # does not set executed and default_state fields
     # rename to update_dataname_type
     update_filter_info = function(dataname) {
       df <- self$get_data(dataname)
