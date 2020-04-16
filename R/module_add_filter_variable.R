@@ -36,8 +36,8 @@ srv_add_filter_variable <- function(input, output, session, datasets, dataname, 
   force(omit_vars)
 
   observe({
-    fs <- datasets$get_filter_state(dataname, reactive = TRUE)
-    df <- datasets$get_data(dataname, filtered = FALSE, reactive = TRUE)
+    fs <- datasets$get_filter_state(dataname)
+    df <- datasets$get_data(dataname, filtered = FALSE)
 
     # names(NULL) is NULL
     vars <- setdiff(names(df), c(names(fs), omit_vars))
@@ -67,6 +67,7 @@ srv_add_filter_variable <- function(input, output, session, datasets, dataname, 
 
     if (var %in% names(df)) {
       if (datasets$get_filter_type(dataname, var) != "unknown") {
+        # todo: rather than calling set_default_filter_state, call set_filter_state and get th default filter from thee add_filter_variable module
         datasets$set_default_filter_state(dataname, var)
         warning_messages$varinfo <- ""
       } else {

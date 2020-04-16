@@ -21,7 +21,7 @@ srv_filter_items <- function(input, output, session, datasets, dataname, contain
   uistate <- reactiveValues(filters_shown = character(0))
 
   # updates reactiveValues uistate$filters_shown
-  observeEvent(datasets$get_filter_state(dataname, reactive = TRUE), {
+  observeEvent(datasets$get_filter_state(dataname), {
     fs <- datasets$get_filter_state(dataname)
     current <- uistate$filters_shown
 
@@ -50,7 +50,7 @@ srv_filter_items <- function(input, output, session, datasets, dataname, contain
       # todo: create Shiny module for each of these annd then call it in lapply
       els <- lapply(names(fs_data), function(var) {
 
-        fi <- datasets$get_filter_info(dataname, var)
+        fi <- datasets$get_filter_chars(dataname, var)
         fs <- datasets$get_filter_state(dataname, var)
 
         id <- paste0("var_", label_to_id(var))
@@ -141,18 +141,18 @@ srv_filter_items <- function(input, output, session, datasets, dataname, contain
 
         type <- datasets$get_filter_type(dataname, varname)
 
-        execution <- datasets$get_filter_execution(dataname, varname)
-        if (is.null(execution)) {
-          datasets$set_filter_non_executed(dataname, varname, datasets$get_filter_state(dataname, varname))
-        }
-
-        if (!datasets$get_filter_execution(dataname, varname) && is.null(value)) {
-          .log("Filter Observer: no value defined, yet.")
-        } else {
-          .log("Filter Observer: '", id, "', type '", type, "', with value: ",
-               if (is.null(value)) "NULL" else value, sep = "")
-
-          datasets$set_filter_executed(dataname, varname)
+        # execution <- datasets$get_filter_execution(dataname, varname)
+        # if (is.null(execution)) {
+        #   datasets$set_filter_non_executed(dataname, varname, datasets$get_filter_state(dataname, varname))
+        # }
+        #
+        # if (!datasets$get_filter_execution(dataname, varname) && is.null(value)) {
+        #   .log("Filter Observer: no value defined, yet.")
+        # } else {
+        #   .log("Filter Observer: '", id, "', type '", type, "', with value: ",
+        #        if (is.null(value)) "NULL" else value, sep = "")
+        #
+        #   datasets$set_filter_executed(dataname, varname)
 
           if (type == "range") {
             if (length(value) == 2) {
@@ -164,16 +164,14 @@ srv_filter_items <- function(input, output, session, datasets, dataname, contain
             if (!is.null(value)) datasets$set_filter_state(dataname, varname, value)
           }
 
-        }
+        # }
 
       })
 
       observeEvent(input[[id_rm]], {
-
         .log("Remove Filter:", id)
 
         datasets$remove_filter(dataname, varname)
-
       })
 
       id_has_bindings <<- c(id_has_bindings, id)

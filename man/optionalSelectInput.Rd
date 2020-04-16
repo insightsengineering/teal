@@ -4,17 +4,9 @@
 \alias{optionalSelectInput}
 \title{Hide, Show Label only or display a \code{pickerInput}}
 \usage{
-optionalSelectInput(
-  inputId,
-  label,
-  choices = NULL,
-  selected = NULL,
-  multiple = FALSE,
-  sep = NULL,
-  options = list(),
-  label_help = NULL,
-  fixed = FALSE
-)
+optionalSelectInput(inputId, label, choices = NULL, selected = NULL,
+  multiple = FALSE, sep = NULL, options = list(),
+  label_help = NULL, fixed = FALSE)
 }
 \arguments{
 \item{inputId}{The \code{input} slot that will be used to access the value.}
@@ -39,7 +31,7 @@ If not specified then defaults to the first value for single-select lists
 \item{sep}{(\code{character}) A separator string to split the \code{choices} or
 \code{selected} inputs into the values of the different columns}
 
-\item{options}{List of options, see \link[shinyWidgets]{pickerOptions} for all available options.
+\item{options}{List of options, see \link{pickerOptions} for all available options.
 To limit the number of selection possible, see example below.}
 
 \item{label_help}{optional an object of class \code{shiny.tag}. E.g. an object

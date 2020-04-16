@@ -3,6 +3,7 @@
 \docType{package}
 \name{teal}
 \alias{teal}
+\alias{teal-package}
 \title{teal: Interactive Exploration of Clinical Trials Data}
 \description{
 The teal package provides a shiny based framework for creating an

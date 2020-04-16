@@ -35,7 +35,8 @@ set_datasets_data <- function(datasets, data) {
   }
 
   for (idx in seq_along(data)) {
-    datasets$set_data(data[[idx]][["dataname"]], data[[idx]][["data"]])
+    # for initializing, we don't need a reactive context as dependencies will be established later only
+    isolate(datasets$set_data(data[[idx]][["dataname"]], data[[idx]][["data"]]))
     datasets$set_data_attr(data[[idx]][["dataname"]], "keys", data[[idx]][["keys"]])
     datasets$set_data_attr(data[[idx]][["dataname"]], "column_labels", data[[idx]][["column_labels"]])
     datasets$set_data_attr(data[[idx]][["dataname"]], "data_label", data[[idx]][["data_label"]])

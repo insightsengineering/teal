@@ -8,19 +8,29 @@
 Class to encapsulate filtered data sets
 }
 \details{
-This class encapsulates data import and filtering.
-  Once a dataname was specified it won't be deleted at runtime to keep
-  reactive relations intact. If a dataset is not needed anymore then you can
-  set it to NULL with load_data.
-  Every data set is also filtered with ADSL, hence ADSL is given by default (NULL)
+The main purpose of this class is to provide a collection of reactive datasets,
+each of which can be filtered through manipulation of right panel of teal apps.
 
-load_data
-1 load data
-2 specify filer_info
-3 apply filters
+Other classes then take care of actually merging together the datasets.
+
+In the constructor, all available datanames are specified. These can then be set
+using the \code{set_data} method. A method to load from a file is also available.
+
+This class is ADSL-centric in the sense that ADSL is required to apply the filters.
+Every dataset, in addition to its own filter, is filtered to make sure that it only
+contains keys present in ADSL (defaulting to (USUBJID, STUDYID)).
+Once the ADSL dataset is set, the filters are applied.
+
+In order to set several datasets or change several filters at once without intermediate
+refiltering, the functions \code{hold_filtering} and \code{continue_filtering} can be used.
+
+By the design of the class, datanames must be provided in the beginning. They are not
+reactive and changing them despite of that will not trigger reactivity.
 }
 \examples{
 \dontrun{
+
+# todo: example with random.cdisc.data as well, not so many blank lines everywher in this file
 path <- "/opt/BIOSTAT/qa/cdt7876a/libraries/asl.sas7bdat"
 
 x <- FilteredData$new()
@@ -30,11 +40,11 @@ x$load_data(path)
 x$datanames()
 
 x$list_data_info("ADSL")
-x$get_filter_info("ADSL")
+x$get_filter_chars("ADSL")
 
 df <- x$get_data("ADSL")
 
-x$get_filter_info("ADSL")[['USUBJID']]$type
+x$get_filter_chars("ADSL")[['USUBJID']]$type
 
 x$set_filter("ADSL", list(AGE=c(3,5), SEX=c('M', 'F')))
 }

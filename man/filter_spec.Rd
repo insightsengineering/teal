@@ -4,14 +4,9 @@
 \alias{filter_spec}
 \title{filter spec}
 \usage{
-filter_spec(
-  vars,
-  choices,
-  selected = if (is(choices, "delayed_data")) NULL else choices[1],
-  multiple = length(selected) > 1,
-  label = "Filter",
-  sep = if_null(attr(choices, "sep"), " - ")
-)
+filter_spec(vars, choices, selected = if (is(choices, "delayed_data"))
+  NULL else choices[1], multiple = length(selected) > 1,
+  label = "Filter", sep = if_null(attr(choices, "sep"), " - "))
 }
 \arguments{
 \item{vars}{(\code{character}) or (\code{delayed_data}) object.
