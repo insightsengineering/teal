@@ -25,8 +25,8 @@
 #'   columns \code{SEX} and \code{BAGE} by:
 #'
 #'   \code{filter = list(init = list(ADSL = c("SEX", "BAGE")))}
-#' @param header object of class `shiny.tag` to be used as the header of the app
-#' @param footer object of class `shiny.tag` to be used as the footer of the app
+#' @param header (\code{character} or object of class `shiny.tag`) the header of the app
+#' @param footer (\code{character} or object of class `shiny.tag`) the footer of the app
 #' @return named list with server and ui function
 #'
 #' @export
@@ -88,6 +88,12 @@ init <- function(data,
   }
   check_module_names(modules)
 
+  if (is_character_single(header)) {
+    header <- tags$h1(header)
+  }
+  if (is_character_single(footer)) {
+    footer <- tags$p(footer)
+  }
   stopifnot(
     inherits(header, "shiny.tag"),
     inherits(footer, "shiny.tag"),

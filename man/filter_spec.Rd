@@ -7,7 +7,7 @@
 filter_spec(
   vars,
   choices,
-  selected = choices[1],
+  selected = if (is(choices, "delayed_data")) NULL else choices[1],
   multiple = length(selected) > 1,
   label = "Filter",
   sep = if_null(attr(choices, "sep"), " - ")

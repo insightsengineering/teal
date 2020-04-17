@@ -57,10 +57,8 @@ log_app_usage <- function(ta,
   # assign app usage data fields
   log_usage <- line_usage_log(ta, molecule, indication, anl_type) #nolint
 
-  # get packages installed with app
-  app_packages <- c("teal", "tern", "rtables", "teal.modules.clinical")
   # retrieve and assign package metadata
-  log_pkgs <- line_pkg_log(app_packages, fields = pkg_meta)  #nolint
+  log_pkgs <- line_pkg_log(fields = pkg_meta)  #nolint
 
   # save usage and package metadata to log file as single record per session
   cat(paste(log_usage, log_pkgs, sep = "|"), file = "./logs/utilization.log", append = TRUE)
@@ -90,9 +88,9 @@ line_usage_log <- function(...) {
   paste(Sys.info()["user"], Sys.time(), getwd(), ..., sep = "|")
 }
 
-#' package metadata to add to log file
+#' Package metadata to add to log file
 #'
-#' @param pkgs package names
+#' Metadata included in logs relates to loaded NEST packages
 #' @param fields package metadata to be retrieved
 #' @noRd
 #'
@@ -102,8 +100,13 @@ line_usage_log <- function(...) {
 #' teal.utils:::line_pkg_log(pkgs = c("rtables", "tern", "teal"),
 #' fields = c("Package", "Title", "Version", "RemoteRef"))
 #' }
-line_pkg_log <- function(pkgs, fields) {
-  pkg_desc <- lapply(pkgs, packageDescription, fields = fields)
+line_pkg_log <- function(fields) {
+  nest_packages <- c("test.nest", "utils.nest", "devtools.nest", "random.cdisc.data", "rtables",
+                     "tern", "teal", "teal.devel", "teal.modules.general", "teal.modules.clinical",
+                     "oosprey", "teal.osprey", "goshawk", "teal.goshawk", "tlgdown")
+  pkg_desc <- sessionInfo()$otherPkgs
+  pkg_desc <- lapply(pkg_desc, function(x) if (x$Package %in% nest_packages) x[fields] else NULL)
+  pkg_desc <- Filter(Negate(is.null), pkg_desc)
   pkg_desc_no_pipe <- lapply(pkg_desc, function(x) sub("|", "/", x, fixed = TRUE))
   pkg_desc_save <- lapply(pkg_desc_no_pipe, setNames, fields)
 

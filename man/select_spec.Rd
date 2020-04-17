@@ -6,7 +6,7 @@
 \usage{
 select_spec(
   choices,
-  selected = choices[1],
+  selected = if (is(choices, "delayed_data")) NULL else choices[1],
   multiple = length(selected) > 1,
   fixed = FALSE,
   always_selected = NULL,
