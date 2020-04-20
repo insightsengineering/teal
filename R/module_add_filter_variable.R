@@ -1,21 +1,26 @@
 #' UI to select among the column names of a dataset to add as a filter variable
 #'
-#' Once something is selected, it puts it to the top right panel, so you can adjust
-#' filtering for that variable. The selection is then undone, so other columns can
-#' be added for filtering.
+#' Once something is selected, it puts it to the top right panel (see `\link{module_filter_items}`),
+#' so you can adjust filtering for that variable. The selection is then undone and the choices
+#' is updated, so other variables can be added for filtering.
+#' When a variable cannot be selected for filtering, a warning is displayed.
 #'
+#' Whenever a new filter is added in the lower right panel, the `FilteredData` object
+#' is called to add the filter. Through reactivity, the upper panel then updates
+#' itself.
+#'
+#' @md
 #' @param id module id
 #' @param dataname name of dataset whose columns should be filtered
 #'
 #' @importFrom shinyWidgets pickerOptions
 ui_add_filter_variable <- function(id, dataname) {
-
   ns <- NS(id)
 
   div(
     id = ns(character(0)), # needed to properly show / hide filters
     optionalSelectInput(
-      ns("variables"),
+      ns("new_filter_var"),
       label = dataname,
       choices = NULL,
       options = pickerOptions(
@@ -25,72 +30,64 @@ ui_add_filter_variable <- function(id, dataname) {
     ),
     uiOutput(ns("warning"))
   )
-
 }
 
 srv_add_filter_variable <- function(input, output, session, datasets, dataname, omit_vars = NULL) {
-  # todo: this force is bad style and not needed (conceptually bad)
-  # have to force arguments
-  force(datasets)
-  force(dataname)
-  force(omit_vars)
-
-  observe({
-    fs <- datasets$get_filter_state(dataname)
-    df <- datasets$get_data(dataname, filtered = FALSE)
-
-    # names(NULL) is NULL
-    vars <- setdiff(names(df), c(names(fs), omit_vars))
-    vars <- if_not_empty(vars, c("", vars))
-    choices <- variable_choices(df, vars)
-
-    .log("update add filter variables", dataname)
-    updateOptionalSelectInput(
-      session,
-      "variables",
-      choices = choices,
-      selected = NULL
-    )
+  # currently active filter vars for this dataset
+  active_filter_vars <- reactive({
+    names(datasets$get_filter_state(dataname))
   })
+  # warning message to display if a filter variable cannot be displayed
+  warning_message <- reactiveVal(NULL)
 
-  # todo: what is i needed for
-  warning_messages <- reactiveValues(varinfo = "", i = 0)
-
-  observeEvent(input$variables, {
-
-    var <- input$variables
-    df <- datasets$get_data(dataname)
-
-    validate(need(var, "need valid variable"))
-
-    .log("add filter variable", var)
-
-    if (var %in% names(df)) {
-      if (datasets$get_filter_type(dataname, var) != "unknown") {
-        # todo: rather than calling set_default_filter_state, call set_filter_state and get th default filter from thee add_filter_variable module
-        datasets$set_default_filter_state(dataname, var)
-        warning_messages$varinfo <- ""
+  # observe input$new_filter_var: update the filter state of the datasets
+  # this will update active_filter_vars, which then triggers an update of the choices
+  observeEvent(input$new_filter_var, {
+    # if NULL, it was just reset (to select a new variable to filter); at startup, this is also called with NULL
+    var <- input$new_filter_var
+    if (!is.null(var)) {
+      if (datasets$can_be_filtered(dataname, var)) {
+        warning_message(NULL) # remove previously displayed warnings
+        .log("add filter variable", var)
+        datasets$restore_filter(dataname, varname = var)
+        datasets$validate_temp() # todo: remove
       } else {
-        warning_messages$varinfo <- paste(
+        warning_message <- paste(
           "variable",
           paste(dataname, var, sep = "."),
           "can't be currently used as a filter variable."
         )
       }
-      warning_messages$i <- warning_messages$i + 1
     }
   })
+  # remove selected option from choices and set again to unselected, so a new
+  # variable can be selected
+  # reacts both when data changed and when active_filter_vars is updated
+  observe({
+    .log("updating choices to add filter variables for", dataname)
+    choices <- setdiff(
+      names(datasets$get_data(dataname)),
+      c(active_filter_vars(), omit_vars)
+    )
 
+    updateOptionalSelectInput(
+      session,
+      "new_filter_var",
+      choices = choices,
+      selected = NULL # unselect option
+    )
+  })
+
+  # display warning message
   output$warning <- renderUI({
-    warning_messages$i
-    msg <- warning_messages$varinfo
+    msg <- warning_message()
 
-    if (is.null(msg)  || msg == "") {
+    if (is.null(msg) || msg == "") {
       div(style = "display: none;")
     } else {
       div(class = "text-warning", style = "margin-bottom: 15px;", msg)
     }
   })
 
-  NULL
+  return(NULL)
 }

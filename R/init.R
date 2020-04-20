@@ -241,10 +241,12 @@ init <- function(data,
         callModule(srv_filter_items, paste0("teal_filters_", dataname), datasets, dataname)
       }
 
-      adsl_vars <- names(datasets$get_data("ADSL"))
+      adsl_vars <- reactive(names(datasets$get_data("ADSL")))
       for (dataname in datasets$datanames()) {
-        callModule(srv_add_filter_variable, paste0("teal_add_", dataname, "_filters"), datasets, dataname,
-                   omit_vars = if (dataname == "ADSL") character(0) else adsl_vars
+        callModule(
+          srv_add_filter_variable, paste0("teal_add_", dataname, "_filters"),
+          datasets, dataname,
+          omit_vars = if (dataname == "ADSL") character(0) else adsl_vars()
         )
       }
     }

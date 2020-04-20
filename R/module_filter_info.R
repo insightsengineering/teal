@@ -1,3 +1,11 @@
+#' Creates the UI for the module showing counts for each dataset
+#' contrasting the filtered to the full unfiltered dataset
+#'
+#' Per dataset, it displays
+#' the number of rows/observations in each dataset,
+#' the number of unique subjects.
+#'
+#' @param id module id
 ui_filter_info <- function(id) {
   ns <- NS(id)
 
@@ -8,8 +16,6 @@ ui_filter_info <- function(id) {
 }
 
 srv_filter_info <- function(input, output, session, datasets) {
-  # have to force arguments
-  force(datasets)
 
   output$table <- renderTable({
     .log("update uifiltersinfo")
@@ -18,8 +24,8 @@ srv_filter_info <- function(input, output, session, datasets) {
       X = datasets$datanames(),
       FUN = function(dataname, datasets) {
         paste0(
-          datasets$get_data_info(dataname, filtered = TRUE, reactive = TRUE)$dim[1], "/",
-          datasets$get_data_info(dataname = dataname, filtered = FALSE, reactive = TRUE)$dim[1]
+          datasets$get_data_info(dataname, filtered = TRUE)$dim[1], "/",
+          datasets$get_data_info(dataname = dataname, filtered = FALSE)$dim[1]
         )
       },
       FUN.VALUE = character(1),
@@ -29,8 +35,8 @@ srv_filter_info <- function(input, output, session, datasets) {
       X = datasets$datanames(),
       FUN = function(dataname, datasets) {
         paste0(
-          datasets$get_data_info(dataname, filtered = TRUE, reactive = TRUE)$patients, "/",
-          datasets$get_data_info(dataname = dataname, filtered = FALSE, reactive = TRUE)$patients
+          datasets$get_data_info(dataname, filtered = TRUE)$patients, "/",
+          datasets$get_data_info(dataname = dataname, filtered = FALSE)$patients
         )
       },
       FUN.VALUE = character(1),

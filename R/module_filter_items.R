@@ -1,183 +1,166 @@
-#' Creates UI to show all filters that can be applied to the dataset
-#' I.e. all columns selected for filtering are shown.
+#' Creates UI to show currently selected filters that can be applied to
+#' the dataset, i.e. all columns selected for filtering are shown.
 #'
 #' @param id module id
-#' @param dataname `logical` name of dataset that is filtered
+#' @param dataname `character` name of dataset that is filtered
 #' @md
 #'
 ui_filter_items <- function(id, dataname) {
   ns <- NS(id)
-
   uiOutput(ns("filters"))
 }
 
 #' @importFrom shinyWidgets pickerInput pickerOptions
 srv_filter_items <- function(input, output, session, datasets, dataname, container = div) {
-  # todo: this force is bad style and not needed (conceptually bad)
-  # have to force arguments
-  force(datasets)
-  force(dataname)
+  # This whole function is complicated because the UI must be created dynamically.
+  # Any observers previously registered during dynamic creation must be deleted on the
+  # next dynamic registration of observers.
+  # When a UI element with an id is added and removed, its input element still stays there
+  # When it is readded, the input elements still are the old ones before it was removed,
+  # e.g. the button input starts at the number of clicks on it before it was removed.
 
-  uistate <- reactiveValues(filters_shown = character(0))
+  # UI for a single filter item for a filter variable ----
+  ui_single_filter_item <- function(id_prefix, filter_char, filter_state, prelabel) {
+    stopifnot(is_character_single(id_prefix))
+    stopifnot(is_character_single(prelabel))
 
-  # updates reactiveValues uistate$filters_shown
-  observeEvent(datasets$get_filter_state(dataname), {
-    fs <- datasets$get_filter_state(dataname)
-    current <- uistate$filters_shown
+    remove_filter_id <- paste0(id_prefix, "_remove_filter")
+    selection_id <- paste0(id_prefix, "_selection")
 
-    .log("filter items observer updated for data", dataname)
-
-    if (!identical(names(fs), current)) {
-      uistate$filters_shown <- names(fs)
-    }
-
-  })
-
-  output$filters <- renderUI({
-    # updates whenever filters_shown is updated
-    uistate$filters_shown
-
-    .log("update uiFilters")
-
-    fs_data <- datasets$get_filter_state(dataname)
-
-    ns <- session$ns
-
-    if (is.null(fs_data) || length(fs_data) == 0) {
-      div()
-    } else {
-
-      # todo: create Shiny module for each of these annd then call it in lapply
-      els <- lapply(names(fs_data), function(var) {
-
-        fi <- datasets$get_filter_chars(dataname, var)
-        fs <- datasets$get_filter_state(dataname, var)
-
-        id <- paste0("var_", label_to_id(var))
-        id_rm <- paste0("rm_", label_to_id(var))
-
-        varlabel <- tagList(
-          tags$span(paste0(dataname, ".", var),
-                    `if`(
-                      is.null(fi$label) || is.na(fi$label) || is_empty(fi$label) || fi$label == "",
-                      NULL,
-                      tags$small(fi$label, style = "font-weight:normal; margin-left:3px")
-                    )),
-          actionLink(ns(id_rm), "", icon("trash-alt", lib = "font-awesome"),
-                     class = "remove")
-        )
-
-        el <- if (fi$type == "choices") {
-          if (length(fi$choices) > 5) {
-            pickerInput(
-              ns(id),
-              varlabel,
-              choices =  fi$choices,
-              selected = fs,
-              multiple = TRUE,
-              options = pickerOptions(
-                actionsBox = TRUE,
-                liveSearch = (length(fi$choices) > 20),
-                noneSelectedText = "Select a value"
-              ),
-              width = "100%"
-            )
-          } else {
-            checkboxGroupInput(
-              ns(id),
-              varlabel,
-              choices =  fi$choices,
-              selected = fs,
-              width = "100%"
-            )
-          }
-        } else if (fi$type == "range") {
-          sliderInput(
-            ns(id),
-            varlabel,
-            min = floor(fi$range[1] * 100) / 100,
-            max = ceiling(fi$range[2] * 100) / 100,
-            value = fs,
-            width = "100%"
-          )
-        } else if (fi$type == "logical") {
-          radioButtons(
-            ns(id),
-            varlabel,
-            choices = fi$choices,
-            selected = fs,
-            inline = TRUE,
-            width = "100%"
-          )
-        } else {
-          tags$p(paste(var, "in data", dataname, "has unknown type:", fi$type))
+    # label before select input and button to remove filter
+    varlabel <- tagList(
+      tags$span(
+        prelabel,
+        # todo: remove most of these checks
+        if (!(is.null(filter_char$label) || is.na(filter_char$label) || is_empty(filter_char$label) || filter_char$label == "")) {
+          tags$small(filter_char$label, style = "font-weight:normal; margin-left:3px")
         }
+      ),
+      actionLink(
+        remove_filter_id, "", icon("trash-alt", lib = "font-awesome"),
+        class = "remove"
+      )
+    )
 
-        .log(paste0("Add filter view and listener with id: ", id))
-
-        create_listener(id, id_rm, var)
-
-        container(el)
-      })
-
-      do.call(tagList, els)
-    }
-
-  })
-
-
-  ## filter change listeners
-  id_has_bindings <- character(0) # store which variables already have listeners
-
-  create_listener <- function(id, id_rm, varname) {
-
-    force(varname)
-
-    # todo: else: show warning: variable already selected
-    if (!(id %in% id_has_bindings)) {
-      observe({
-
-        value <- input[[id]]
-
-        type <- datasets$get_filter_type(dataname, varname)
-
-        # execution <- datasets$get_filter_execution(dataname, varname)
-        # if (is.null(execution)) {
-        #   datasets$set_filter_non_executed(dataname, varname, datasets$get_filter_state(dataname, varname))
-        # }
-        #
-        # if (!datasets$get_filter_execution(dataname, varname) && is.null(value)) {
-        #   .log("Filter Observer: no value defined, yet.")
-        # } else {
-        #   .log("Filter Observer: '", id, "', type '", type, "', with value: ",
-        #        if (is.null(value)) "NULL" else value, sep = "")
-        #
-        #   datasets$set_filter_executed(dataname, varname)
-
-          if (type == "range") {
-            if (length(value) == 2) {
-              datasets$set_filter_state(dataname, varname, value)
-            }
-          } else if (type == "choices") {
-            datasets$set_filter_state(dataname, varname, if (length(value) == 0) character(0) else value)
-          } else if (type == "logical") {
-            if (!is.null(value)) datasets$set_filter_state(dataname, varname, value)
-          }
-
-        # }
-
-      })
-
-      observeEvent(input[[id_rm]], {
-        .log("Remove Filter:", id)
-
-        datasets$remove_filter(dataname, varname)
-      })
-
-      id_has_bindings <<- c(id_has_bindings, id)
+    if (filter_char$type == "choices") {
+      if (length(filter_char$choices) > 5) {
+        pickerInput(
+          selection_id,
+          varlabel,
+          choices =  filter_char$choices,
+          selected = filter_state,
+          multiple = TRUE,
+          options = pickerOptions(
+            actionsBox = TRUE,
+            liveSearch = (length(filter_char$choices) > 10),
+            noneSelectedText = "Select a value"
+          ),
+          width = "100%"
+        )
+      } else {
+        checkboxGroupInput(
+          selection_id,
+          varlabel,
+          choices =  filter_char$choices,
+          selected = filter_state,
+          width = "100%"
+        )
+      }
+    } else if (filter_char$type == "range") {
+      sliderInput(
+        selection_id,
+        varlabel,
+        min = floor(filter_char$range[1] * 100) / 100,
+        max = ceiling(filter_char$range[2] * 100) / 100,
+        value = filter_state,
+        width = "100%"
+      )
+    } else if (filter_char$type == "logical") {
+      radioButtons(
+        selection_id,
+        varlabel,
+        choices = filter_char$choices,
+        selected = filter_state,
+        width = "100%"
+      )
+    } else {
+      # fail gracefully although this should have been caught before already
+      tags$p(paste(varname, "in data", dataname, "has unknown type:", filter_char$type))
     }
   }
 
-  NULL
+  # we only trigger re-rendering of the UI when the vars in the filter state change,
+  # not when their state changes; otherwise, changing the filter for a var would trigger
+  # regeneration of the UI which results in delays
+  filtervarnames <- reactiveVal(NULL)
+  observe({
+    current_filtervarnames <- names(datasets$get_filter_state(dataname))
+    if (!identical(filtervarnames(), current_filtervarnames)) {
+      filtervarnames(current_filtervarnames)
+    }
+  })
 
+  # dynamic ui part ----
+  output$filters <- renderUI({
+    filtervarnames() # dependence when names of filter vars change
+
+    .log("generating ui filters for data", dataname)
+    filter_chars <- isolate(datasets$get_filter_chars(dataname))
+    var_states <- isolate(datasets$get_filter_state(dataname))
+
+    ns <- session$ns
+    return(do.call(container, unname(Map(
+      function(varname, filter_char, filter_state) ui_single_filter_item(
+        id_prefix = ns(varname), filter_char = filter_char, filter_state = filter_state,
+        prelabel = paste0(dataname, ".", varname)
+      ),
+      varname = names(filter_chars), # also used as id
+      filter_char = filter_chars,
+      filter_state = var_states
+    ))))
+  })
+
+  # dynamic server part for UI ----
+
+  # we need to keep a list of current observers so we can destroy them when the UI is regenerated dynamically
+  # must destroy the observer so that it does not keep deleting when the var is added again (which
+  # would then immediately be deleted again)
+  active_observers <- list()
+  observeEvent(filtervarnames(), {
+    .log("generating server part for filters for data", dataname)
+
+    lapply(active_observers, function(o) o$destroy())
+    active_observers <<- list()
+
+    lapply(filtervarnames(), function(varname) {
+      # change filter for variable
+      id_selection <- paste0(varname, "_selection")
+      o1 <- observeEvent(input[[id_selection]], {
+        state <- input[[id_selection]]
+        type <- datasets$get_filter_type(dataname, varname)
+        if (type == "choices") {
+          # unfortunately, NULL is also returned for a select when nothing is selected
+          # in a multiple checkbox, so we need to set it manually to character(0)
+          state <- if (is.null(state)) character(0) else state
+        }
+        if (is.null(state)) {
+          # NULL initially before UI is initialized
+          return()
+        }
+        .log("State:", state)
+        datasets$set_filter_state(dataname, varname, state)
+      }, ignoreNULL = FALSE) # we don't want to ignore NULL when nothing is selected
+
+      # remove variable
+      id_remove <- paste0(varname, "_remove_filter")
+      o2 <- observeEvent(input[[id_remove]], {
+        datasets$remove_filter(dataname, varname)
+      },
+      # the button is created dynamically afterwards, so this will trigger although the user has not clicked, see the doc
+      ignoreInit = TRUE)
+      active_observers <<- c(active_observers, list(o1, o2))
+    })
+  })
+
+  return(NULL)
 }
