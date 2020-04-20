@@ -26,12 +26,13 @@ srv_filter_items <- function(input, output, session, datasets, dataname, contain
 
     remove_filter_id <- paste0(id_prefix, "_remove_filter")
     selection_id <- paste0(id_prefix, "_selection")
+    keep_na_id <- paste0(id_prefix, "_keepNA")
 
     # label before select input and button to remove filter
     varlabel <- tagList(
       tags$span(
         prelabel,
-        # todo: remove most of these checks
+        # todo1: remove most of these checks
         if (!(is.null(filter_char$label) || is.na(filter_char$label) || is_empty(filter_char$label) || filter_char$label == "")) {
           tags$small(filter_char$label, style = "font-weight:normal; margin-left:3px")
         }
@@ -39,7 +40,10 @@ srv_filter_items <- function(input, output, session, datasets, dataname, contain
       actionLink(
         remove_filter_id, "", icon("trash-alt", lib = "font-awesome"),
         class = "remove"
-      )
+      ),
+      if (!is.null(filter_char$na_count) && filter_char$na_count > 0) {
+        checkboxInput(keep_na_id, paste0("Keep NA (", filter_char$na_count, ")"), value = filter_state$keep_na)
+      }
     )
 
     if (filter_char$type == "choices") {
@@ -48,7 +52,7 @@ srv_filter_items <- function(input, output, session, datasets, dataname, contain
           selection_id,
           varlabel,
           choices =  filter_char$choices,
-          selected = filter_state,
+          selected = filter_state$selection,
           multiple = TRUE,
           options = pickerOptions(
             actionsBox = TRUE,
@@ -62,7 +66,7 @@ srv_filter_items <- function(input, output, session, datasets, dataname, contain
           selection_id,
           varlabel,
           choices =  filter_char$choices,
-          selected = filter_state,
+          selected = filter_state$selection,
           width = "100%"
         )
       }
@@ -72,7 +76,7 @@ srv_filter_items <- function(input, output, session, datasets, dataname, contain
         varlabel,
         min = floor(filter_char$range[1] * 100) / 100,
         max = ceiling(filter_char$range[2] * 100) / 100,
-        value = filter_state,
+        value = filter_state$selection,
         width = "100%"
       )
     } else if (filter_char$type == "logical") {
@@ -80,7 +84,7 @@ srv_filter_items <- function(input, output, session, datasets, dataname, contain
         selection_id,
         varlabel,
         choices = filter_char$choices,
-        selected = filter_state,
+        selected = filter_state$selection,
         width = "100%"
       )
     } else {
@@ -135,29 +139,44 @@ srv_filter_items <- function(input, output, session, datasets, dataname, contain
     lapply(filtervarnames(), function(varname) {
       # change filter for variable
       id_selection <- paste0(varname, "_selection")
-      o1 <- observeEvent(input[[id_selection]], {
-        state <- input[[id_selection]]
-        type <- datasets$get_filter_type(dataname, varname)
-        if (type == "choices") {
-          # unfortunately, NULL is also returned for a select when nothing is selected
-          # in a multiple checkbox, so we need to set it manually to character(0)
-          state <- if (is.null(state)) character(0) else state
-        }
-        if (is.null(state)) {
-          # NULL initially before UI is initialized
-          return()
-        }
-        .log("State:", state)
-        datasets$set_filter_state(dataname, varname, state)
-      }, ignoreNULL = FALSE) # we don't want to ignore NULL when nothing is selected
+      id_keepna <- paste0(varname, "_keepNA")
+      o1 <- observeEvent(
+        {
+          input[[id_selection]]
+          input[[id_keepna]]
+        },
+        {
+          selection_state <- input[[id_selection]]
+          type <- datasets$get_filter_type(dataname, varname)
+          if (type == "choices") {
+            # unfortunately, NULL is also returned for a select when nothing is selected
+            # in a multiple checkbox, so we need to set it manually to character(0)
+            selection_state <- if (is.null(selection_state)) character(0) else selection_state
+          }
+          if (is.null(selection_state)) {
+            # NULL initially before UI is initialized, but we cannot ignore NULLs for
+            # selectInputs as they mean all unselected
+            return()
+          }
+          keep_na_state <- if_null(input[[id_keepna]], FALSE) # may be NULL when var contains no NA
+          state <- list(selection = selection_state, keep_na = keep_na_state)
+          .log("State:", state)
+          datasets$set_filter_state(dataname, varname, state)
+        },
+        ignoreNULL = FALSE, # ignoreNULL: we don't want to ignore NULL when nothing is selected,
+        ignoreInit = TRUE # ignoreInit: should not matter because we set the UI with the desired initial state
+      )
 
       # remove variable
       id_remove <- paste0(varname, "_remove_filter")
-      o2 <- observeEvent(input[[id_remove]], {
-        datasets$remove_filter(dataname, varname)
-      },
-      # the button is created dynamically afterwards, so this will trigger although the user has not clicked, see the doc
-      ignoreInit = TRUE)
+      o2 <- observeEvent(
+        input[[id_remove]],
+        {
+          datasets$remove_filter(dataname, varname)
+        },
+        # the button is created dynamically afterwards, so this will trigger although the user has not clicked, see the doc
+        ignoreInit = TRUE
+      )
       active_observers <<- c(active_observers, list(o1, o2))
     })
   })

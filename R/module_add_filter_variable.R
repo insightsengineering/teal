@@ -50,7 +50,7 @@ srv_add_filter_variable <- function(input, output, session, datasets, dataname, 
         warning_message(NULL) # remove previously displayed warnings
         .log("add filter variable", var)
         datasets$restore_filter(dataname, varname = var)
-        datasets$validate_temp() # todo: remove
+        datasets$validate_temp() # todo1: remove
       } else {
         warning_message <- paste(
           "variable",

@@ -1,4 +1,4 @@
-# todo: put into teal.devel because it relies on data_extract_input
+# todo1: put into teal.devel because it relies on data_extract_input
 #' #' Display data extract inputs in the left encoding panel
 #' #'
 #' #' Also has the ShowRCode button to see the code generated
@@ -13,7 +13,7 @@
 #' #'
 #' #' Not for end users, so do not export
 #' #'
-#' #' #todo: showR Code
+#' #' #sodo: showR Code, include in teal.devel
 #' dummy_module_with_dataextracts <- function(..., label = "Dummy module") {
 #'   data_extracts <- list(...)
 #'   # check names are unique and fully named
@@ -96,10 +96,20 @@ dummy_module <- function(label = "Dummy module") {
   module(
     label = label,
     server = function(input, output, session, datasets) {
-      # todo: showRCode
+      output$filter_calls <- renderText({
+        paste(lapply(
+          datasets$datanames(),
+          function(dataname) paste(datasets$get_filter_call(dataname, merge = TRUE, adsl = FALSE), sep = "\n")
+        ), sep = "\n\n")
+      })
     },
     ui = function(id, ...) {
-      h2("This is a dummy module.")
+      ns <- NS(id)
+      div(
+        h2("This is a dummy module."),
+        p("The following filter calls are generated:"),
+        verbatimTextOutput(ns("filter_calls"))
+      )
     },
     filters = "all"
   )
