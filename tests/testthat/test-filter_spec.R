@@ -123,7 +123,7 @@ test_that("delayed filter_spec works", {
                      stringsAsFactors = F)
 
 
-  normal <- filter_spec(
+  expected_spec <- filter_spec(
     vars = variable_choices(ADSL, "SEX"),
     sep = "-",
     choices = value_choices(ADSL, "SEX", "SEX"),
@@ -131,6 +131,7 @@ test_that("delayed filter_spec works", {
     multiple = FALSE
   )
 
+  # spec obtained using delayed approach
   delayed <- filter_spec(
     vars = variable_choices("ADSL", "SEX"),
     sep = "-",
@@ -141,9 +142,9 @@ test_that("delayed filter_spec works", {
 
   expect_equal(class(delayed), c("delayed_filter_spec", "delayed_data", "filter_spec"))
 
-  expect_equal(names(normal), names(delayed))
+  expect_equal(names(expected_spec), names(delayed))
 
   ds <- teal:::FilteredData$new()
-  ds$set_data("ADSL", ADSL)
-  expect_identical(normal, resolve_delayed(delayed, ds))
+  isolate(ds$set_data("ADSL", ADSL))
+  expect_identical(expected_spec, isolate(resolve_delayed(delayed, ds)))
 })

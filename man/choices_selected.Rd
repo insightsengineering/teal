@@ -4,8 +4,12 @@
 \alias{choices_selected}
 \title{Choices function}
 \usage{
-choices_selected(choices, selected = choices[1], keep_order = FALSE,
-  fixed = FALSE)
+choices_selected(
+  choices,
+  selected = choices[1],
+  keep_order = FALSE,
+  fixed = FALSE
+)
 }
 \arguments{
 \item{choices}{vector of possible choices}

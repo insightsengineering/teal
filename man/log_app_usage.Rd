@@ -4,8 +4,13 @@
 \alias{log_app_usage}
 \title{Teal Application Usage Logging.}
 \usage{
-log_app_usage(ta, molecule, indication, anl_type, pkg_meta = c("Package",
-  "Title", "Version", "RemoteRef"))
+log_app_usage(
+  ta,
+  molecule,
+  indication,
+  anl_type,
+  pkg_meta = c("Package", "Title", "Version", "RemoteRef")
+)
 }
 \arguments{
 \item{ta}{therapeutic area name. required argument. e.g. \code{"I2ON"}.}

@@ -4,9 +4,14 @@
 \alias{select_spec}
 \title{Column selection input specification}
 \usage{
-select_spec(choices, selected = if (is(choices, "delayed_data")) NULL
-  else choices[1], multiple = length(selected) > 1, fixed = FALSE,
-  always_selected = NULL, label = "Column(s)")
+select_spec(
+  choices,
+  selected = if (is(choices, "delayed_data")) NULL else choices[1],
+  multiple = length(selected) > 1,
+  fixed = FALSE,
+  always_selected = NULL,
+  label = "Column(s)"
+)
 }
 \arguments{
 \item{choices}{(\code{character}) or (\code{delayed_data}) object.

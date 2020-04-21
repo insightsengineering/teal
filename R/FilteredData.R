@@ -1,7 +1,21 @@
 # todo1:  rename to FilteredDatasets
 
+# todo1: not working
+#' This method exists solely to be able to inherit parameter documentation from it
+#' @md
+#' @param dataname `character` dataname to get data for, must be in the list
+#'   of allowed datanames, see `initialize` (and dataset must have
+#'   been set except for in `set_data`)
+#' @param varname `character` if non-NULL, a column in the dataset specified
+#'   by `dataname`
+#' @param filtered `logical` filtered or unfiltered dataset
+filtered_data_doc_helper <- function(dataname, varname, filtered) {
+  NULL
+}
+
 #' @name FilteredData
 #' @docType class
+#'
 #' @title Class to encapsulate filtered datasets
 #'
 #' @details
@@ -44,43 +58,62 @@
 #' path <- "/opt/BIOSTAT/qa/cdt7876a/libraries/asl.sas7bdat"
 #' x <- FilteredData$new()
 #' x$load_data(path, dataname = "ADSL")
-#' }
+#'
+#' # todo1: should be able to remove dontrun starting from here, but strict complains about
+#' # attempt to call non-function
+#' library(random.cdisc.data)
 #'
 #' ADSL <- radsl(cached = TRUE)
-#' x <- FilteredData$new(datanames = c("ADSL", "ADAE"))
+#' x <- teal:::FilteredData$new(datanames = c("ADSL", "ADAE"))
 #'
 #' isolate({
 #'   x$set_data("ADSL", ADSL)
 #' })
 #'
-#' x$datanames()
 #' isolate({
+#'   x$datanames()
 #'   x$list_data_info("ADSL")
 #'   x$get_filter_chars("ADSL")
 #'   df <- x$get_data("ADSL")
 #'   # df
 #'
 #'   x$get_filter_type("ADSL", "SEX")
-#'   x$set_filter_state("ADSL", varname = NULL, state = list(AGE = c(3, 5), SEX = c("M", "F")))
+#'   x$set_filter_state("ADSL", varname = NULL, state = list(
+#'     AGE = list(selection = c(3, 5), keep_na = FALSE),
+#'     SEX = list(selection = c("M", "F"), keep_na = FALSE)
+#'   ))
 #'   x$get_filter_type("ADSL", "SEX")
 #'   x$get_filter_chars("ADSL")[["SEX"]]$type
 #'
 #'   x$hold_filtering()
-#'   x$set_filter_state("ADSL", varname = NULL, list(AGE = c(3, 7)))
-#'   x$set_filter_state("ADSL", varname = "SEX", state = c("M", "F"))
+#'   x$set_filter_state("ADSL", varname = NULL, list(
+#'     AGE = list(selection = c(3, 7), keep_na = FALSE)
+#'   ))
+#'   x$set_filter_state(
+#'     "ADSL",
+#'     varname = "SEX",
+#'     state = list(selection = c("M", "F"), keep_na = FALSE)
+#'   )
 #'   x$continue_filtering()
 #'   x$get_filter_type("ADSL", "SEX")
 #'
 #'   x$get_filter_state("ADSL")
 #' })
+#' }
 FilteredData <- R6::R6Class( # nolint
   "FilteredData",
   ## FilteredData ====
   ## __Public Methods ====
   public = list(
 
-    # It is initialized with the allowed datanames. The actual datasets can afterwards
-    # be added using the set_data function.
+    #' @details
+    #' Initialized with the allowed datanames. The actual datasets can afterwards
+    #' be added using the set_data function.
+    #'
+    #' @md
+    #' @param datanames (vector of `character`) names of datasets that can
+    #'   be added to this class with `set_data`, cannot be changed
+    #'
     initialize = function(datanames = c("ADSL")) {
       stopifnot(is_character_vector(datanames))
       # this is assumed in many functions below which only filter once ADSL dataset has been set with set_data
@@ -109,17 +142,45 @@ FilteredData <- R6::R6Class( # nolint
       return(invisible(self))
     },
 
-    datanames = function() {
-      # it is safe to use isolate here because by the design of the class,
-      # the datanames cannot change
-      return(isolate(names(private$datasets)))
+    #' @details
+    #' Get (active) datanames
+    #'
+    #' If `include_unset` is set, it will return all possible datanames (as specified
+    #' in `\link{initialize}`). Otherwise, it will just return the datanames of already
+    #' set datasets using the method `\link{set_data}`.
+    #'
+    #' The former can never change and is therefore isolated. The latter case can change
+    #' as new datasets are added and is therefore reactive and needs to be isolated
+    #' if necessary.
+    #'
+    #' @md
+    #' @param include_unset `logical` whether to also return datasets that were
+    #'   not set yet, i.e. still NULL
+    datanames = function(include_unset = FALSE) {
+      stopifnot(is_logical_single(include_unset))
+      if (include_unset) {
+        # it is safe to use isolate here because by the design of the class,
+        # the datanames cannot change
+        return(isolate(names(private$datasets)))
+      } else {
+        # unset datasets are NULL
+        return(Filter(
+          function(dataname) !is.null(private$datasets[[dataname]]),
+          names(private$datasets)
+        ))
+      }
     },
 
     # load data ----
 
-    # load data as "dataname" from specified path and set
-    # attributes for path and mtime
-    # dataname is inferred from basename of path if not provided
+    #' @details
+    #' Load data from path into dataname
+    #'
+    #' @md
+    #' @param path `character` path to load dataset from
+    #' @param dataname dataname, if `NULL`, it is inferred from the basename of the path
+    #' @param ... additional parameters passed to `read_` functions
+    #'
     load_data = function(path, dataname = NULL, ...) {
       if (!file.exists(path)) {
         stop(paste("invalid path:", path))
@@ -137,10 +198,10 @@ FilteredData <- R6::R6Class( # nolint
 
       path <- normalizePath(path, mustWork = TRUE)
       df <- switch(tolower(file_ext(path)),
-                   sas7bdat = read_sas(path, ...),
-                   csv      = read_csv(path, ...),
-                   rds      = readRDS(path, ...),
-                   stop(paste("The format of", path, "is currently not supported."))
+        sas7bdat = read_sas(path, ...),
+        csv      = read_csv(path, ...),
+        rds      = readRDS(path, ...),
+        stop(paste("The format of", path, "is currently not supported."))
       )
 
       attr(df, "path") <- path
@@ -154,7 +215,10 @@ FilteredData <- R6::R6Class( # nolint
 
     # getters and setters for attributes ----
 
-    # filtered: return filtered or full dataset
+    #' @details
+    #' Get filtered or unfiltered dataset
+    #'
+    #' @inheritParams filtered_data_doc_helper
     get_data = function(dataname, filtered = FALSE) {
       private$check_data_varname(dataname)
       stopifnot(is_logical_single(filtered))
@@ -169,9 +233,15 @@ FilteredData <- R6::R6Class( # nolint
       }
     },
 
-    # add data into dataname slot together with md5 sum
+    #' @details
+    #' Add data
+    #'
+    #' Will also add the `md5` sum of the data
+    #'
+    #' @md
+    #' @param dataname `character` name  of the data
     set_data = function(dataname, data) {
-      stopifnot(is_character_single(dataname))
+      stopifnot(is_character_single(dataname), dataname %in% self$datanames(include_unset = TRUE))
       stopifnot(is.data.frame(data))
 
       self$reset_class_vars(dataname)
@@ -184,37 +254,59 @@ FilteredData <- R6::R6Class( # nolint
       return(invisible(self))
     },
 
-    # get info in the attributes field of self (not equivalent to attributes(self))
+    #' @details
+    #' Get attributes of `self` (in dedicated field)
+    #' (not equivalent to `attributes(self)`)
+    #'
+    #' @md
     get_attrs = function() {
       return(private$attrs)
     },
 
-    # set info in the attributes field of self (not equivalent to attributes(self))
-    # from the attributes in data
+    #' @details
+    #' Set attributes field of `self`
+    #' (not equivalent to `attributes(self)`)
+    #'
+    #' @md
     set_attrs = function(data) {
       private$attrs <- attributes(data)
       return(invisible(self))
     },
 
     # no corresponding set_ function
+    #' @details
+    #' Get attribute in the `attrs` field
+    #'
+    #' @md
+    #' @param attr attribute to get in the `attrs` field
     get_attr = function(attr) {
       stopifnot(is_character_single(attr))
       return(private$attrs[[attr]])
     },
 
-    # name of dataset (to display in the UI)
     # no corresponding set_ function
+    #' @details
+    #' Get name of dataset (to display in the UI)
     get_data_label = function(dataname) {
       stopifnot(is_character_single(dataname))
       return(self$get_data_attr(dataname, "data_label"))
     },
 
+    #' @details
+    #' Get data attribute for the dataset
+    #'
+    #' @param attr attribute to get from the data attributes of the dataset
     get_data_attr = function(dataname, attr) {
       stopifnot(is_character_single(dataname))
       stopifnot(is_character_single(attr))
       return(private$data_attrs[[dataname]][[attr]])
     },
 
+    #' @details
+    #' Set data attribute for the dataset
+    #'
+    #' @param attr attribute to get from the data attributes of the dataset
+    #' @param value value to set attribute to
     set_data_attr = function(dataname, attr, value) {
       stopifnot(is_character_single(dataname))
       stopifnot(is_character_single(attr))
@@ -224,20 +316,27 @@ FilteredData <- R6::R6Class( # nolint
     },
 
     # no corresponding set_ function
+    #' @details
+    #' Get data attributes for the dataset
     get_data_attrs = function(dataname) {
       stopifnot(is_character_single(dataname))
       return(private$data_attrs[[dataname]])
     },
 
-    # get non-NA labels of columns in data
     # no corresponding set_ function
-    get_column_labels = function(dataname, subset = NULL) {
+    #' @details
+    #' Get non-NA labels of columns in the data
+    #'
+    #' @md
+    #' @param columns (`character` vector) columns to get labels for;
+    #'   if `NULL`, for all columns
+    get_column_labels = function(dataname, columns = NULL) {
       stopifnot(is_character_single(dataname))
-      stopifnot(is.null(subset) || is_character_empty(subset) || is_character_vector(subset))
+      stopifnot(is.null(columns) || is_character_empty(columns) || is_character_vector(columns))
 
       labels <- self$get_data_attr(dataname, "column_labels")
-      if (!is.null(subset)) {
-        labels <- labels[subset]
+      if (!is.null(columns)) {
+        labels <- labels[columns]
       }
       labels <- labels[!is.na(labels)]
 
@@ -246,11 +345,15 @@ FilteredData <- R6::R6Class( # nolint
 
     # filtering state and characteristics, remove and continue filtering ----
 
-    # return variable information (categorical, numeric range etc) for dataname
-    # if varname  is specified, only returns it for the column varname in dataname
-    # this can be used to see how the variable must be filtered
-    # when varname is NULL, only returns characteristics for vars that are filtered (unless all_vars is TRUE)
-    # update_filter_chars is private because it should not be user set
+    #' @details
+    #' Return filter characteristics for a variable in a dataset
+    #' e.g. numeric range for a numerical variable, all levels for a
+    #' factor variable.
+    #' This can be used to see how the variable must be filtered
+    #'
+    #' @md
+    #' @param all_vars `logical` (only applies if `varname` is NULL)
+    #'   whether to include non-filtered variables
     get_filter_chars = function(dataname, varname = NULL, all_vars = FALSE) {
       private$check_data_varname(dataname, varname)
       stopifnot(is_logical_single(all_vars))
@@ -267,12 +370,18 @@ FilteredData <- R6::R6Class( # nolint
       }
     },
 
-    # similar to get_filter_chars, only return data type (numerical, categorical)
+    #' @details
+    #' See `get_filter_chars`, only returns filter type (numerical, categorical).
+    #'
+    #' @md
     get_filter_type = function(dataname, varname) {
       stopifnot(is_character_single(varname))
       return(self$get_filter_chars(dataname, varname)[["type"]])
     },
 
+    #' @details
+    #' Filter state for a dataset (or only a variable within it).
+    #'
     get_filter_state = function(dataname, varname = NULL) {
       private$check_data_varname(dataname, varname)
 
@@ -283,14 +392,21 @@ FilteredData <- R6::R6Class( # nolint
       }
     },
 
-    # if varname is non-NULL, only the state of this varname is set,
-    # otherwise the state is assumed to be a named list (by varname)
-    # for the new states to set for each var
-    # returns TRUE if state was reset or not (if it had same value as before)
+    #' @details
+    #' Set filter state
+    #'
+    #' The state is only updated and triggers reactive behavior when it actually
+    #' changes.
+    #'
+    #' @param state new state to set; when varname is NULL, state must be a named list
+    #' with the new filter state for each variable that should be affected.
+    #'
+    #' @return TRUE if the state was changed
     set_filter_state = function(dataname, varname, state) {
       private$check_data_varname(dataname, varname)
 
       # checking and adapting arguments
+      # todo1: do not allow varname = NULL
       if (!is.null(varname)) {
         state <- setNames(list(state), varname)
         # we don't set varname to NULL so we can detect it below and only set the state of varname
@@ -303,8 +419,10 @@ FilteredData <- R6::R6Class( # nolint
       # check if all names of state are columns of the dataname
       inexistent_columns <- which(!(state_names %in% names(self$get_data(dataname))))
       if (length(inexistent_columns) > 0) {
-        stop(paste("variables", toString(state_names[inexistent_columns]),
-                   "are not available in data", dataname))
+        stop(paste(
+          "variables", toString(state_names[inexistent_columns]),
+          "are not available in data", dataname
+        ))
       }
 
       for (name in state_names) {
@@ -335,31 +453,52 @@ FilteredData <- R6::R6Class( # nolint
       return(TRUE)
     },
 
-    # restores previous filter state (if filter was removed in between)
-    # if not present, takes the filter's default state (i.e. filter characteristics which in
-    # most cases do not filter, but may filter out NAs)
-    # if not isolated, will depend on previous_filter_state reactive value
+    #' @details
+    #' Get the default filter state (useful for initial UI state)
+    #' This is different to NULL state which means no filter applied.
+    #' Instead, this filter is a sensible default, e.g. filter out NAs.
+    #' for numerics, full range; for factors, all choices etc.
+    #'
+    get_default_filter_state = function(dataname, varname) {
+      stopifnot(is_character_single(varname))
+      private$check_data_varname(dataname, varname)
+
+      filter_char <- self$get_filter_chars(dataname, varname)
+      selection_state <- switch(
+        filter_char$type,
+        choices = filter_char$choices,
+        range = filter_char$range,
+        logical = "TRUE",
+        stop("unknown type")
+      )
+      return(list(selection = selection_state, keep_na = FALSE))
+    },
+
+    #' @details
+    #' Restores previous filter state (if the filter was removed in between)
+    #' if there is no previous filter, it takes the filter's default state
+    #'
+    #' if a previous filter state exists and the state is `s`` before calling
+    #' this function twice, then the state will be s again
+    #'
+    #' @md
+    #' @return TRUE if state was changed
     restore_filter = function(dataname, varname) {
       stopifnot(is_character_single(varname))
       private$check_data_varname(dataname, varname)
 
-      selection_state <- private$previous_filter_state[[dataname]][[varname]]
-      if (is.null(selection_state)) {
-        filter_char <- self$get_filter_chars(dataname, varname)
-        selection_state <- switch(
-          filter_char$type,
-          choices = filter_char$choices,
-          range = filter_char$range,
-          logical = "TRUE",
-          stop("unknown type")
-        )
+      state <- private$previous_filter_state[[dataname]][[varname]]
+      if (is.null(state)) {
+        state <- self$get_default_filter_state(dataname, varname)
       }
-      state <- list(selection = selection_state, keep_na = FALSE)
 
       return(self$set_filter_state(dataname, varname, state))
     },
 
-    # removes the filter for varname and resets the initial state (set during set_filter_state)
+    #' @details
+    #' Removes the filter for dataname (and varname)
+    #' If varname is not provided, resets it for the whole dataset.
+    #'
     remove_filter = function(dataname, varname) {
       # The following optimization *cannot* be implemented, but erroneously was in the past.
       # When a filter is removed, instead of trashing
@@ -370,7 +509,10 @@ FilteredData <- R6::R6Class( # nolint
       return(self$set_filter_state(dataname, varname, NULL))
     },
 
-    # whether the variable can be filtered (type not unknown)
+    #' @details
+    #' Check whether the variable can be filtered, i.e. not of unknown type
+    #'
+    #' @return whether the variable can be filtered (type not unknown)
     can_be_filtered = function(dataname, varname) {
       stopifnot(is_character_single(dataname))
       stopifnot(is_character_single(varname))
@@ -379,9 +521,16 @@ FilteredData <- R6::R6Class( # nolint
     },
 
     # this function needs to be public because it is used to generate R code
-    # returns call to filter dataset (taking out patients not in ADSL)
-    # merge: whether to include merge call that removes any keys from filtered data that are not also in filtered ADSL afterwards
-    # adsl: whether to include adsl filtering call before
+    #' @details
+    #' Get the call to filter the dataset according to the filter state
+    #'
+    #' Note: `merge()` function in returned call will fail if corresponding dataset is NULL.
+    #'
+    #' @param merge whether to include merge call that removes any keys from filtered data that
+    #'   are not also in filtered ADSL afterwards
+    #' @param adsl whether to include `ADSL` filtering call before
+    #'
+    #' @return call to filter dataset (taking out patients not in ADSL)
     get_filter_call = function(dataname, merge = TRUE, adsl = TRUE) {
       private$check_data_varname(dataname)
       stopifnot(is_logical_single(merge))
@@ -415,11 +564,13 @@ FilteredData <- R6::R6Class( # nolint
         # filter additionally to only have combinations of keys that are in ADSL_FILTERED
         merge_call <- call(
           "<-", as.name(filtered_joined_adsl),
-          call("merge",
-               x = call("[", as.name("ADSL_FILTERED"), quote(expr =), keys), # nolint
-               y = as.name(filtered_alone),
-               by = keys,
-               all.x = FALSE, all.y = FALSE)
+          call(
+            "merge",
+            x = call("[", as.name("ADSL_FILTERED"), quote(expr = ), keys), # nolint
+            y = as.name(filtered_alone),
+            by = keys,
+            all.x = FALSE, all.y = FALSE
+          )
         )
 
         calls <- list(adsl_filter_call, filter_call, merge_call)
@@ -436,13 +587,19 @@ FilteredData <- R6::R6Class( # nolint
       }
     },
 
-    # stop filtering until reactivated to make several changes and only filter in the end
+    #' @details
+    #' Pause the filtering until reactivated with `continue_filtering` to make several
+    #' changes to the filter state and avoid refilterings in between that are of no interest.
+    #'
     hold_filtering = function() {
       private$filter_on_hold <- TRUE
       return(invisible(NULL))
     },
 
-    # reactivate filtering which can result in several datasets being filtered
+    #' @details
+    #' Continue filtering after it was paused with `hold_filtering`
+    #' Can result in several datasets being filtered
+    #'
     continue_filtering = function() {
       private$filter_on_hold <- FALSE
       private$apply_filter() # rerun all filtering
@@ -451,9 +608,14 @@ FilteredData <- R6::R6Class( # nolint
 
     # info functions for end user ----
 
-    # shows filter characteristics of each variable for a given dataset
-    # will intersect variables with actual variables in dataname if non-NULL
-    # filtered_vars_only: whether to only include filtered_vars
+    #' @details
+    #' Shows filter characteristics of each variable for a given dataset
+    #' will intersect variables with actual variables in dataname if non-NULL
+    #'
+    #' @md
+    #' @param filtered_vars_only `logical` whether to only consider filtered
+    #'   vars or unfiltered as well
+    #' @param variables (`character` vector) variables to consider; if NULL, takes all
     list_data_info = function(dataname, filtered_vars_only = FALSE, variables = NULL) {
       private$check_data_varname(dataname)
       stopifnot(is_logical_single(filtered_vars_only))
@@ -461,7 +623,8 @@ FilteredData <- R6::R6Class( # nolint
 
       # log with newline
       log2 <- function(...) {
-        cat(paste(..., collapse = " ")); cat("\n")
+        cat(paste(..., collapse = " "))
+        cat("\n")
       }
 
       log2("====", dataname, "=======================")
@@ -503,7 +666,9 @@ FilteredData <- R6::R6Class( # nolint
       log2("===========================")
     },
 
-    # get info about dataname, e.g. number of patients
+    #' @details
+    #' Get info about dataname, e.g. number of patients
+    #'
     get_data_info = function(dataname, filtered = TRUE) {
       stopifnot(is_character_single(dataname))
       stopifnot(is_logical_single(filtered))
@@ -524,19 +689,27 @@ FilteredData <- R6::R6Class( # nolint
 
     # functions related to class attributes ----
 
-    # set class variables to default values, i.e. empty lists or NULL per dataname
-    # following attributes are not set: `attr`, `filter_on_hold`
-    # reactiveValues contents are set to NULL, but not reset entirely so the reactive
-    # dependencies are kept, in particular, the datanames are kept
+    #' @details
+    #' Reset class attributes
+    #'
+    #' Set class variables to default values, i.e. empty lists or `NULL` per dataname
+    #' The following attributes are not set: `attr`, `filter_on_hold`
+    #' The contents of the fields with `reactiveValues` are set to `NULL`, but the
+    #' `reactiveValues` itself it not set to a new `reactiveValues` to keep reactive
+    #' dependencies.
+    #'
+    #' If dataname is provided, only do it for this dataset. In  case of ADSL, will
+    #' reset all datasets.
     reset_class_vars = function(dataname = NULL) {
       if (!is.null(dataname)) {
-        private$check_data_varname(dataname)
+        # cannot use private$check_data_varname because data may not have been set
+        stopifnot(is_character_single(dataname))
       }
 
       # if dataset is ADSL, we need to reset filtered datasets
       # to simplify, here we simply reset the other datasets as well then
       datanames <- if (is.null(dataname) || (dataname == "ADSL")) {
-        self$datanames() # delete all datasets
+        self$datanames(include_unset = TRUE) # delete all datasets, include_unset to be safe
       } else {
         dataname
       }
@@ -559,10 +732,11 @@ FilteredData <- R6::R6Class( # nolint
     },
 
     # todo1: remove eventually
+    #' @details
+    #' Temporary access to private validation function
     validate_temp = function() {
       return(private$validate())
     }
-
   ), # end of public functions
 
   ## __Private Methods---------------------
@@ -573,7 +747,7 @@ FilteredData <- R6::R6Class( # nolint
     # the following attributes are (possibly reactive lists) per dataname
     datasets = NULL, # unfiltered datasets
     filtered_datasets = NULL, # filtered dataset after applying filter to unfiltered dataset
-    data_attrs = NULL,  # attributes per dataname
+    data_attrs = NULL, # attributes per dataname
     # filter to apply to obtain filtered dataset from unfiltered one, NULL (for a dataname) means
     # no filter applied: it does not mean that it does not show up as a filtering element,
     # NULL just means that filtering has no effect
@@ -592,9 +766,12 @@ FilteredData <- R6::R6Class( # nolint
     attrs = list(), # attributes of this class retrievable with get_attrs and set_attrs
 
     # check functions ----
-    # we implement these functions as checks rather than returning logicals so they can give informative error messages immediately
+    # we implement these functions as checks rather than returning logicals so they can
+    # give informative error messages immediately
 
-    # validate object to inspect if something is wrong
+    #' @details
+    #' Validate object to inspect if something is wrong
+    #'
     validate = function() {
       stopifnot(
         # check classes
@@ -621,7 +798,8 @@ FilteredData <- R6::R6Class( # nolint
       lapply(names(private$filter_state), function(dataname) {
         lapply(names(private$filter_state[[dataname]]), function(varname) {
           private$check_valid_filter_state(
-            dataname, varname = varname,
+            dataname,
+            varname = varname,
             var_state = private$filter_state[[dataname]][[varname]]
           )
         })
@@ -631,7 +809,8 @@ FilteredData <- R6::R6Class( # nolint
       lapply(names(private$previous_filter_state), function(dataname) {
         lapply(names(private$previous_filter_state[[dataname]]), function(varname) {
           private$check_valid_filter_state(
-            dataname, varname = varname,
+            dataname,
+            varname = varname,
             var_state = private$previous_filter_state[[dataname]][[varname]]
           )
         })
@@ -640,8 +819,9 @@ FilteredData <- R6::R6Class( # nolint
       return(invisible(NULL))
     },
 
-    # checks if dataname is in datanames (of this class) and
-    # (if provided) that varname is a valid column in data
+    #' @details
+    #' Checks if dataname is in datanames (of this class) and
+    #' (if provided) that varname is a valid column in data
     check_data_varname = function(dataname, varname = NULL) {
       stopifnot(is_character_single(dataname))
       stopifnot(is.null(varname) || is_character_single(varname))
@@ -656,7 +836,14 @@ FilteredData <- R6::R6Class( # nolint
       return(invisible(NULL))
     },
 
+    #' @details
+    #' Checks that the given filter state is valid for the specified
+    #' variable in the specified dataset.
+    #'
     check_valid_filter_state = function(dataname, varname, var_state) {
+      stopifnot(is_character_single(varname))
+      private$check_data_varname(dataname, varname)
+
       var_char <- self$get_filter_chars(dataname, varname) # filter characteristics for var, e.g. range
 
       if (is.null(var_state)) {
@@ -665,7 +852,6 @@ FilteredData <- R6::R6Class( # nolint
       }
 
       if (!is_logical_single(var_state$keep_na)) {
-        browser()
         stop(
           "data", dataname, "variable", varname, ":",
           "NA selection must be one of TRUE, FALSE, but is ", var_state$keep_na
@@ -685,11 +871,13 @@ FilteredData <- R6::R6Class( # nolint
         },
         range = {
           if ((length(selection_state) != 2) ||
-              (selection_state[1] > selection_state[2]) ||
-              ((selection_state[1] < var_char$range[1]) && (selection_state[2] > var_char$range[2]))
+            (selection_state[1] > selection_state[2]) ||
+            ((selection_state[1] < var_char$range[1]) && (selection_state[2] > var_char$range[2]))
           ) {
-            stop(paste("data", dataname, "variable", varname, "range (", toString(selection_state),
-                       ") not valid for full range (", toString(var_char$range), ")"))
+            stop(paste(
+              "data", dataname, "variable", varname, "range (", toString(selection_state),
+              ") not valid for full range (", toString(var_char$range), ")"
+            ))
           }
         },
         logical = {
@@ -708,8 +896,11 @@ FilteredData <- R6::R6Class( # nolint
       return(invisible(NULL))
     },
 
-    # helper function to detect variable type (categorical, numeric range)
-    # and accordingly set the filter characteristics
+    # is private because it should not be user set
+    #' @details
+    #' Detect variable type (categorical, numeric range)
+    #' and accordingly set the filter characteristics
+    #'
     update_filter_chars = function(dataname) {
       df <- self$get_data(dataname)
 
@@ -751,7 +942,8 @@ FilteredData <- R6::R6Class( # nolint
         } else {
           .log(
             "variable '", varname, "' is of class '",
-            class(var), "' which has currently no filter UI element", sep = ""
+            class(var), "' which has currently no filter UI element",
+            sep = ""
           )
           list(
             type = "unknown",
@@ -767,11 +959,19 @@ FilteredData <- R6::R6Class( # nolint
       return(private$filter_chars[[dataname]])
     },
 
-    # maybe remove out_dataname or default to NULL (no assignment)
-    # creates a call that assigns the operates on dataname to obtain the filtered dataset and
-    # assigns it to the variable named dataname_out
-    # as opposed to get_filter_call, this function does not filter for patient for patients in ADSL
+    # todo1: maybe remove out_dataname or default to NULL (no assignment)
+    #' @details
+    #' Creates a call that filters the dataset to obtain the filtered dataset and
+    #' assigns it to a new variable.
+    #' As opposed to `get_filter_call`, this function does not filter for patient for
+    #' patients in ADSL.
+    #'
+    #' @md
+    #' @param dataname_out `character` name of dataset to assign filtered dataset to
     get_filter_call_no_adsl = function(dataname, dataname_out) {
+      private$check_data_varname(dataname)
+      stopifnot(is_character_single(dataname_out))
+
       data_filter_call_items <- Map(
         function(filter_char, filter_state, varname) {
           stopifnot(!is.null(filter_state)) # filter_state only contains non-NULL values
@@ -803,7 +1003,10 @@ FilteredData <- R6::R6Class( # nolint
                 selection_state,
                 "TRUE" = as.name(varname),
                 "FALSE" = call("!", as.name(varname)),
-                stop("Unknown filter state", toString(selection_state), " for logical var ", varname, " in data", dataname)
+                stop(
+                  "Unknown filter state", toString(selection_state),
+                  " for logical var ", varname, " in data", dataname
+                )
               )
             },
             stop(paste("filter type for variable", varname, "in", dataname, "not known"))
@@ -842,16 +1045,21 @@ FilteredData <- R6::R6Class( # nolint
       }
     },
 
-    # apply filter (error if filter_on_hold is TRUE)
-    # i.e. set filtered data from unfiltered data
-    # when the data is set in the beginning and ADSL is not first, the filtered data is not set
-    # once ADSL is set, one must explicitly call this function again so that the filtered_datasets
-    # for all datasets will be set
-    # returns if filter was actually applied or delayed (if ADSL not yet provided)
-    # dataname = NULL means refilter all datasets (always happens for ADSL), otherwise means the dataset with name dataname changed, so optimized logic can be implemented
+    #' @details
+    #' Apply filter to set filtered dataset from unfiltered one
+    #'
+    #' Errors if filter_on_hold is TRUE
+    #' Due to the `ADSL`-centric approach, this method will not do anything before `ADSL`
+    #' is set. One must then explicitly call this function again so that the filtered_datasets
+    #' for all datasets will be set.
+    #'
+    #' If `dataname = NULL`, all datasets are refiltered.
+    #'
+    #' @return TRUE if filter was actually applied or delayed (if ADSL not yet provided)
     apply_filter = function(dataname = NULL) {
       if (private$filter_on_hold) {
-        stop("Cannot apply filter because filtering is on hold.")
+        # an error will be raised if the data is tried to be accessed while on hold with get_data
+        return(FALSE)
       }
 
       .log("apply filter for", dataname) # todo1: write something similar to withr: with_logging(code)
@@ -859,14 +1067,15 @@ FilteredData <- R6::R6Class( # nolint
       if (is.null(self$get_data("ADSL", filtered = FALSE))) {
         # ADSL was not yet provided with set_data, so we remove also filters for all datasets
         # todo1: why is this here? an error should be thrown that the filter cannot be applied
-        stopifnot(all(private$filtered_datasets, is.null)) # nothing should have been set by now or reset after ADSL was reset
+        # nothing should have been set by now or reset after ADSL was reset
+        stopifnot(all(private$filtered_datasets, is.null))
         stop("You must first set ADSL before setting any other datasets")
         return(FALSE)
       } else {
-
         datanames <- if (is.null(dataname) || identical(dataname, "ADSL")) {
           # re-run all filters
           # make ADSL first because the others depend on filtered ADSL
+          stopifnot("ADSL" %in% self$datanames())
           c("ADSL", setdiff(self$datanames(), "ADSL"))
         }
 

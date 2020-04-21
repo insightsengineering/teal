@@ -75,25 +75,25 @@ test_that("resolve_delayed select_spec works", {
                      stringsAsFactors = F)
 
 
-  normal <- select_spec(
+  expected_spec <- select_spec(
     choices = variable_choices(ADSL, c("BMRKR1", "BMRKR2")),
     selected = "BMRKR1",
     multiple = FALSE,
     fixed = FALSE
   )
 
-  delayed <- select_spec(
+  delayed_spec <- select_spec(
     choices = variable_choices("ADSL", c("BMRKR1", "BMRKR2")),
     selected = "BMRKR1",
     multiple = FALSE,
     fixed = FALSE
   )
 
-  expect_equal(class(delayed), c("delayed_select_spec", "delayed_data", "select_spec"))
+  expect_equal(class(delayed_spec), c("delayed_select_spec", "delayed_data", "select_spec"))
 
-  expect_equal(names(normal), names(delayed))
+  expect_equal(names(expected_spec), names(delayed_spec))
 
   ds <- teal:::FilteredData$new()
-  ds$set_data("ADSL", ADSL)
-  expect_identical(normal, resolve_delayed(delayed, ds))
+  isolate(ds$set_data("ADSL", ADSL))
+  expect_identical(expected_spec, isolate(resolve_delayed(delayed_spec, ds)))
 })

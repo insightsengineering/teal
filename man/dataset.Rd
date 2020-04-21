@@ -4,8 +4,11 @@
 \alias{dataset}
 \title{Data input for teal app}
 \usage{
-dataset(dataname, data, keys = list(primary = NULL, foreign = NULL,
-  parent = NULL))
+dataset(
+  dataname,
+  data,
+  keys = list(primary = NULL, foreign = NULL, parent = NULL)
+)
 }
 \arguments{
 \item{dataname}{name of dataset}

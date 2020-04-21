@@ -4,8 +4,7 @@
 \alias{get_code_single}
 \title{Get code}
 \usage{
-get_code_single(file_path, read_sources, if_url = grepl("^http[s]",
-  file_path))
+get_code_single(file_path, read_sources, if_url = grepl("^http[s]", file_path))
 }
 \arguments{
 \item{file_path}{(\code{character}) path or URL address of the file to be parsed}

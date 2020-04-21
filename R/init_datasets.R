@@ -47,13 +47,17 @@ set_datasets_data <- function(datasets, data) {
   return(invisible(NULL))
 }
 
-
+# todo1: rename
+# set initial filter to default state, i.e. such that the encoding panel is there when the panel is there
+# but no very restrictive filtering is applied (default filter may filter NA by default)
 set_datasets_filter <- function(datasets, filter) {
   stopifnot(is(datasets, "FilteredData"))
 
   if (!is.null(filter) && !is.null(filter$init)) {
     Map(function(vars, dataset) {
-      lapply(vars, function(var) datasets$set_default_filter_state(dataset, var))
+      lapply(vars, function(varname) datasets$set_filter_state(
+        dataset, varname, state = datasets$get_default_filter_state(dataset, varname)
+      ))
     }, filter$init, names(filter$init))
   }
 

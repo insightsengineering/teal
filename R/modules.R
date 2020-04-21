@@ -183,7 +183,7 @@ create_ui_teal_modules <- function(x, datasets, idprefix, is_root = FALSE) {
 }
 
 create_ui_teal_module <- function(x, datasets, idprefix, is_root = FALSE) {
-  args <- resolve_teal_args(x$ui_args, datasets)
+  args <- isolate(resolve_teal_args(x$ui_args, datasets))
 
   uiid <- label_to_id(x$label, idprefix)
 

@@ -139,13 +139,14 @@ test_that("delayed data_extract_spec works", {
     fixed = FALSE
   )
 
-  normal <- data_extract_spec(
+  expected_spec <- data_extract_spec(
     dataname = "ADSL",
     select = select_normal,
     filter = filter_normal
   )
 
-  delayed <- data_extract_spec(
+  # obtained via delayed approach
+  delayed_spec <- data_extract_spec(
     dataname = "ADSL",
     select = select_delayed,
     filter = filter_delayed
@@ -169,27 +170,29 @@ test_that("delayed data_extract_spec works", {
     filter = list(filter_delayed, filter_normal)
   )
 
-  expect_equal(class(delayed), c("delayed_data_extract_spec", "delayed_data", "data_extract_spec"))
+  expect_equal(class(delayed_spec), c("delayed_data_extract_spec", "delayed_data", "data_extract_spec"))
   expect_equal(class(mix1), c("delayed_data_extract_spec", "delayed_data", "data_extract_spec"))
   expect_equal(class(mix2), c("delayed_data_extract_spec", "delayed_data", "data_extract_spec"))
   expect_equal(class(mix3), c("delayed_data_extract_spec", "delayed_data", "data_extract_spec"))
 
-  expect_equal(names(normal), names(delayed))
-  expect_equal(names(normal), names(mix1))
-  expect_equal(names(normal), names(mix2))
-  expect_equal(names(normal), names(mix3))
+  expect_equal(names(expected_spec), names(delayed_spec))
+  expect_equal(names(expected_spec), names(mix1))
+  expect_equal(names(expected_spec), names(mix2))
+  expect_equal(names(expected_spec), names(mix3))
 
   ds <- teal:::FilteredData$new()
-  ds$set_data("ADSL", ADSL)
+  isolate({
+    ds$set_data("ADSL", ADSL)
+    expect_identical(expected_spec, resolve_delayed(delayed_spec, ds))
+    expect_identical(expected_spec, resolve_delayed(mix1, ds))
+    expect_identical(expected_spec, resolve_delayed(mix2, ds))
 
-  expect_identical(normal, resolve_delayed(delayed, ds))
-  expect_identical(normal, resolve_delayed(mix1, ds))
-  expect_identical(normal, resolve_delayed(mix2, ds))
+    mix3_res <- resolve_delayed(mix3, ds)
+  })
 
-  mix3_res <- resolve_delayed(mix3, ds)
-  expect_identical(normal$filter[[1]], mix3_res$filter[[1]])
-  expect_identical(normal$filter[[1]], mix3_res$filter[[2]])
+  expect_identical(expected_spec$filter[[1]], mix3_res$filter[[1]])
+  expect_identical(expected_spec$filter[[1]], mix3_res$filter[[2]])
   mix3_res$filter <- NULL
-  normal$filter <- NULL
-  expect_identical(normal, mix3_res)
+  expected_spec$filter <- NULL
+  expect_identical(expected_spec, mix3_res)
 })

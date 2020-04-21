@@ -33,7 +33,8 @@ srv_filter_items <- function(input, output, session, datasets, dataname, contain
       tags$span(
         prelabel,
         # todo1: remove most of these checks
-        if (!(is.null(filter_char$label) || is.na(filter_char$label) || is_empty(filter_char$label) || filter_char$label == "")) {
+        if (!(is.null(filter_char$label) || is.na(filter_char$label) ||
+              is_empty(filter_char$label) || filter_char$label == "")) {
           tags$small(filter_char$label, style = "font-weight:normal; margin-left:3px")
         }
       ),
@@ -51,7 +52,7 @@ srv_filter_items <- function(input, output, session, datasets, dataname, contain
         pickerInput(
           selection_id,
           varlabel,
-          choices =  filter_char$choices,
+          choices = filter_char$choices,
           selected = filter_state$selection,
           multiple = TRUE,
           options = pickerOptions(
@@ -89,7 +90,7 @@ srv_filter_items <- function(input, output, session, datasets, dataname, contain
       )
     } else {
       # fail gracefully although this should have been caught before already
-      tags$p(paste(varname, "in data", dataname, "has unknown type:", filter_char$type))
+      tags$p(paste("For varlabel in", varlabel, "in data", dataname, "has unknown type:", filter_char$type))
     }
   }
 
@@ -114,10 +115,12 @@ srv_filter_items <- function(input, output, session, datasets, dataname, contain
 
     ns <- session$ns
     return(do.call(container, unname(Map(
-      function(varname, filter_char, filter_state) ui_single_filter_item(
-        id_prefix = ns(varname), filter_char = filter_char, filter_state = filter_state,
-        prelabel = paste0(dataname, ".", varname)
-      ),
+      function(varname, filter_char, filter_state) {
+        ui_single_filter_item(
+          id_prefix = ns(varname), filter_char = filter_char, filter_state = filter_state,
+          prelabel = paste0(dataname, ".", varname)
+        )
+      },
       varname = names(filter_chars), # also used as id
       filter_char = filter_chars,
       filter_state = var_states
@@ -140,12 +143,10 @@ srv_filter_items <- function(input, output, session, datasets, dataname, contain
       # change filter for variable
       id_selection <- paste0(varname, "_selection")
       id_keepna <- paste0(varname, "_keepNA")
-      o1 <- observeEvent(
-        {
+      o1 <- observeEvent({
           input[[id_selection]]
           input[[id_keepna]]
-        },
-        {
+        }, {
           selection_state <- input[[id_selection]]
           type <- datasets$get_filter_type(dataname, varname)
           if (type == "choices") {
@@ -170,11 +171,11 @@ srv_filter_items <- function(input, output, session, datasets, dataname, contain
       # remove variable
       id_remove <- paste0(varname, "_remove_filter")
       o2 <- observeEvent(
-        input[[id_remove]],
-        {
+        input[[id_remove]], {
           datasets$remove_filter(dataname, varname)
         },
-        # the button is created dynamically afterwards, so this will trigger although the user has not clicked, see the doc
+        # the button is created dynamically afterwards, so this will trigger although
+        # the user has not clicked, see the doc
         ignoreInit = TRUE
       )
       active_observers <<- c(active_observers, list(o1, o2))

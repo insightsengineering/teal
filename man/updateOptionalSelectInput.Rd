@@ -4,8 +4,13 @@
 \alias{updateOptionalSelectInput}
 \title{Update \code{optionalSelectInput}}
 \usage{
-updateOptionalSelectInput(session, inputId, label = NULL,
-  selected = NULL, choices = NULL)
+updateOptionalSelectInput(
+  session,
+  inputId,
+  label = NULL,
+  selected = NULL,
+  choices = NULL
+)
 }
 \arguments{
 \item{session}{The session object passed to function given to shinyServer.}
