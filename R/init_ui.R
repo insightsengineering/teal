@@ -30,7 +30,8 @@ init_ui <- function(datasets, modules) {
               ui_filter_info("teal_filters_info")
             ),
             tagList(
-              lapply(datasets$datanames(), function(dataname) {
+              # include_unset because they may be added later with `set_data`
+              lapply(datasets$datanames(include_unset = TRUE), function(dataname) {
                 ui_filter_items(paste0("teal_filters_", dataname), dataname)
               })
             )
@@ -40,7 +41,8 @@ init_ui <- function(datasets, modules) {
             class = "well",
             tags$label("Add Filter Variables", class = "text-primary", style = "margin-bottom: 15px;"),
             tagList(
-              lapply(datasets$datanames(), function(dataname) {
+              # include_unset because they may be added later with `set_data`
+              lapply(datasets$datanames(include_unset = TRUE), function(dataname) {
                 ui_add_filter_variable(paste0("teal_add_", dataname, "_filters"), dataname)
               })
             )

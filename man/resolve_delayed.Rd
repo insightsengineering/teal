@@ -21,43 +21,45 @@ Resolve delayed inputs by evaluating the code within the provided datasets
 library(random.cdisc.data)
 
 x <- teal:::FilteredData$new()
-x$set_data("ADSL", radsl(cached = TRUE))
+isolate({
+  x$set_data("ADSL", radsl(cached = TRUE))
 
-# value_choices example
-v1 <- value_choices("ADSL", "SEX", "SEX")
-v1
-resolve_delayed(v1, x)
+  # value_choices example
+  v1 <- value_choices("ADSL", "SEX", "SEX")
+  v1
+  resolve_delayed(v1, x)
 
-# variable_choices example
-v2 <- variable_choices("ADSL", c("BMRKR1", "BMRKR2"))
-v2
-resolve_delayed(v2, x)
+  # variable_choices example
+  v2 <- variable_choices("ADSL", c("BMRKR1", "BMRKR2"))
+  v2
+  resolve_delayed(v2, x)
 
-# data_extract_spec example
-adsl_filter <- filter_spec(
-  vars = variable_choices("ADSL", "SEX"),
-  sep = "-",
-  choices = value_choices("ADSL", "SEX", "SEX"),
-  selected = "F",
-  multiple = FALSE,
-  label = "Choose endpoint and Censor"
-)
+  # data_extract_spec example
+  adsl_filter <- filter_spec(
+    vars = variable_choices("ADSL", "SEX"),
+    sep = "-",
+    choices = value_choices("ADSL", "SEX", "SEX"),
+    selected = "F",
+    multiple = FALSE,
+    label = "Choose endpoint and Censor"
+  )
 
-adsl_select <- select_spec(
-  label = "Select variable:",
-  choices = variable_choices("ADSL", c("BMRKR1", "BMRKR2")),
-  selected = "BMRKR1",
-  multiple = FALSE,
-  fixed = FALSE
-)
+  adsl_select <- select_spec(
+    label = "Select variable:",
+    choices = variable_choices("ADSL", c("BMRKR1", "BMRKR2")),
+    selected = "BMRKR1",
+    multiple = FALSE,
+    fixed = FALSE
+  )
 
-adsl_de <- data_extract_spec(
-  dataname = "ADSL",
-  select = adsl_select,
-  filter = adsl_filter
-)
+  adsl_de <- data_extract_spec(
+    dataname = "ADSL",
+    select = adsl_select,
+    filter = adsl_filter
+  )
 
-resolve_delayed(adsl_filter, x)
-resolve_delayed(adsl_select, x)
-resolve_delayed(adsl_de, x)
+  resolve_delayed(adsl_filter, x)
+  resolve_delayed(adsl_select, x)
+  resolve_delayed(adsl_de, x)
+})
 }

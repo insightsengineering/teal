@@ -55,9 +55,9 @@ set_datasets_filter <- function(datasets, filter) {
 
   if (!is.null(filter) && !is.null(filter$init)) {
     Map(function(vars, dataset) {
-      lapply(vars, function(varname) datasets$set_filter_state(
+      lapply(vars, function(varname) isolate(datasets$set_filter_state(
         dataset, varname, state = datasets$get_default_filter_state(dataset, varname)
-      ))
+      )))
     }, filter$init, names(filter$init))
   }
 
