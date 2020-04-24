@@ -822,11 +822,13 @@ FilteredData <- R6::R6Class( # nolint
     #' @details
     #' Checks if dataname is in datanames (of this class) and
     #' (if provided) that varname is a valid column in data
+    #'
+    #' If data for dataname was not set yet, the check will also fail.
     check_data_varname = function(dataname, varname = NULL) {
       stopifnot(is_character_single(dataname))
       stopifnot(is.null(varname) || is_character_single(varname))
 
-      if (!(dataname %in% self$datanames())) {
+      if (!(dataname %in% self$datanames())) { # data must be set already
         stop(paste("data", dataname, "is not available"))
       }
       if (!is.null(varname) && !(varname %in% names(self$get_data(dataname)))) {

@@ -215,12 +215,13 @@ init <- function(data,
         shinyjs::show("teal_filter-panel")
 
         if ("all" %in% filters) {
-          lapply(datasets$datanames(), function(dataname) {
+          lapply(datasets$datanames(include_unset = TRUE), function(dataname) {
             shinyjs::show(paste0("teal_add_", dataname, "_filters"))
           })
         } else {
+          # todo: the filters are just hidden from the UI, but still applied
           lapply(
-            datasets$datanames(),
+            datasets$datanames(include_unset = TRUE),
             function(dataname) {
               id <- paste0("teal_add_", dataname, "_filters")
               if (dataname == "ADSL" || dataname %in% filters) {
@@ -234,15 +235,17 @@ init <- function(data,
       }
     }, suspended = TRUE)
 
+    # todo: this whole function (`teal::init`) should be rewritten to make it reactive
+    # the thing below is not reactive on the datasets which can be modified through set_data
     call_filter_modules <- function(datasets) {
       # -- filters Modules
       callModule(srv_filter_info, "teal_filters_info", datasets)
-      for (dataname in datasets$datanames()) {
+      for (dataname in datasets$datanames(include_unset = TRUE)) {
         callModule(srv_filter_items, paste0("teal_filters_", dataname), datasets, dataname)
       }
 
       adsl_vars <- reactive(names(datasets$get_data("ADSL")))
-      for (dataname in datasets$datanames()) {
+      for (dataname in datasets$datanames(include_unset = TRUE)) {
         callModule(
           srv_add_filter_variable, paste0("teal_add_", dataname, "_filters"),
           datasets, dataname,
