@@ -131,8 +131,9 @@ FilteredData <- R6::R6Class( # nolint
       private$datasets <- create_rv()
       private$filtered_datasets <- create_rv()
       private$filter_state <- create_rv()
-      private$previous_filter_state <- create_rv()
       private$filter_chars <- create_rv()
+
+      private$previous_filter_state <- setNames(lapply(datanames, function(x) NULL), datanames)
 
       # set default values, i.e. empty lists or NULL
       # using isolate is safe here because the class is just getting initialized
@@ -446,7 +447,7 @@ FilteredData <- R6::R6Class( # nolint
         return(FALSE)
       }
 
-      private$previous_filter_state[[dataname]] <- isolate(private$filter_state[[dataname]])
+      private$previous_filter_state[[dataname]] <- private$filter_state[[dataname]]
       private$filter_state[[dataname]] <- new_state
       private$apply_filter(dataname)
 
@@ -755,6 +756,8 @@ FilteredData <- R6::R6Class( # nolint
     # for a given dataname, which means that the state is NULL
     filter_state = NULL,
     # previous filter state when you want to revert, e.g. when filter previously removed is added again
+    # explicitly not reactive, but kept in this class because it may need to be synced with filter_state,
+    # e.g. discarded when it becomes obsolete with hierarchical filtering
     previous_filter_state = NULL,
     # filter characteristics to create filter that has no effect (i.e. full range of variable),
     # useful for UI to show sensible ranges
@@ -779,7 +782,7 @@ FilteredData <- R6::R6Class( # nolint
         is.reactivevalues(private$filtered_datasets),
         is.list(private$data_attrs),
         is.reactivevalues(private$filter_state),
-        is.reactivevalues(private$previous_filter_state),
+        is.list(private$previous_filter_state),
         is.list(private$filter_chars),
         is_logical_single(private$filter_on_hold),
         is.list(private$attrs),
