@@ -12,12 +12,18 @@ ui_filter_items <- function(id, dataname) {
 
 #' @importFrom shinyWidgets pickerInput pickerOptions
 srv_filter_items <- function(input, output, session, datasets, dataname, container = div) {
-  # This whole function is complicated because the UI must be created dynamically.
+  # This whole function is complicated because the UI must be created dynamically from the
+  # selection of filters.
   # Any observers previously registered during dynamic creation must be deleted on the
   # next dynamic registration of observers.
   # When a UI element with an id is added and removed, its input element still stays there
   # When it is readded, the input elements still are the old ones before it was removed,
   # e.g. the button input starts at the number of clicks on it before it was removed.
+  # When the filter is changed from the UI, this sets the state in the FilteredData.
+  # This in turns triggers the UI regeneration which reflects the new state (and should
+  # leave the UI in the same state because nothing changed, unless the state does not capture
+  # the full UI state). This triggers the `set_filter_state` function again, but stops there
+  # because the underlying reactiveVal only triggers when its value changes (unlike reactive).
 
   # UI for a single filter item for a filter variable ----
   ui_single_filter_item <- function(id_prefix, filter_char, filter_state, prelabel) {
@@ -94,24 +100,11 @@ srv_filter_items <- function(input, output, session, datasets, dataname, contain
     }
   }
 
-  # we only trigger re-rendering of the UI when the vars in the filter state change,
-  # not when their state changes; otherwise, changing the filter for a var would trigger
-  # regeneration of the UI which results in delays
-  filtervarnames <- reactiveVal(NULL)
-  observe({
-    current_filtervarnames <- names(datasets$get_filter_state(dataname))
-    if (!identical(filtervarnames(), current_filtervarnames)) {
-      filtervarnames(current_filtervarnames)
-    }
-  })
-
   # dynamic ui part ----
   output$filters <- renderUI({
-    filtervarnames() # dependence when names of filter vars change
-
     .log("generating ui filters for data", dataname)
-    filter_chars <- isolate(datasets$get_filter_chars(dataname))
-    var_states <- isolate(datasets$get_filter_state(dataname))
+    filter_chars <- datasets$get_filter_chars(dataname)
+    var_states <- datasets$get_filter_state(dataname)
 
     ns <- session$ns
     return(do.call(container, unname(Map(
@@ -133,13 +126,14 @@ srv_filter_items <- function(input, output, session, datasets, dataname, contain
   # must destroy the observer so that it does not keep deleting when the var is added again (which
   # would then immediately be deleted again)
   active_observers <- list()
-  observeEvent(filtervarnames(), {
+  observe({
     .log("generating server part for filters for data", dataname)
 
     lapply(active_observers, function(o) o$destroy())
     active_observers <<- list()
 
-    lapply(filtervarnames(), function(varname) {
+    # over all filtered variables
+    lapply(names(datasets$get_filter_state(dataname)), function(varname) {
       # change filter for variable
       id_selection <- paste0(varname, "_selection")
       id_keepna <- paste0(varname, "_keepNA")
