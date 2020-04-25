@@ -36,8 +36,8 @@ filtered_data_doc_helper <- function(dataname, varname, filtered) {
 #' In order to set several datasets or change several filters at once without intermediate
 #' refiltering, the functions `hold_filtering` and `continue_filtering` can be used.
 #'
-#' By the design of the class, datanames must be provided in the beginning. They cannot
-#' be changed.
+#' By the design of the class (and `reactiveValues`), any dataname set through `set_data`
+#' cannot be removed because other code may already depend on it.
 #'
 #' General arguments are:
 #' 1. `filtered`: filtered dataset or not
