@@ -40,7 +40,8 @@ dummy_module <- function(label = "Dummy module") {
     server = function(input, output, session, datasets) {
       output$filter_calls <- renderText({
         paste(lapply(
-          datasets$datanames(),
+          #datasets$datanames(),
+          c("ADSL", "ADAE"), # todo: add above again
           function(dataname) paste(datasets$get_filter_call(dataname, merge = TRUE, adsl = FALSE), sep = "\n")
         ), sep = "\n\n")
       })

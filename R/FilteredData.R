@@ -128,8 +128,8 @@ FilteredData <- R6::R6Class( # nolint
       }
       # create reactiveValues for unfiltered and filtered dataset and filter state
       # each reactiveValues is a list with one entry per dataset name
-      private$datasets <- create_rv()
-      private$filtered_datasets <- create_rv()
+      private$datasets <- create_rv() # make it reactive so it triggers when dataset changed with set_data
+      private$filtered_datasets <- setNames(lapply(datanames, private$reactive_filtered_dataset), datanames)
       private$filter_state <- create_rv()
       private$filter_chars <- create_rv()
 
@@ -228,7 +228,10 @@ FilteredData <- R6::R6Class( # nolint
         if (private$filter_on_hold) {
           stop("You have to resume filtering first to get the filtered data.")
         }
-        private$filtered_datasets[[dataname]]
+        # we must be careful not to create a new reactive here
+        # by creating it outside and storing it in the list, we benefit from
+        # the reactive caching mechanism
+        private$filtered_datasets[[dataname]]()
       } else {
         private$datasets[[dataname]]
       }
@@ -250,7 +253,6 @@ FilteredData <- R6::R6Class( # nolint
       private$datasets[[dataname]] <- data
       self$set_data_attr(dataname, "md5sum", digest(data, algo = "md5"))
       private$update_filter_chars(dataname)
-      private$apply_filter(dataname)
 
       return(invisible(self))
     },
@@ -449,7 +451,6 @@ FilteredData <- R6::R6Class( # nolint
 
       private$previous_filter_state[[dataname]] <- private$filter_state[[dataname]]
       private$filter_state[[dataname]] <- new_state
-      private$apply_filter(dataname)
 
       return(TRUE)
     },
@@ -603,7 +604,6 @@ FilteredData <- R6::R6Class( # nolint
     #'
     continue_filtering = function() {
       private$filter_on_hold <- FALSE
-      private$apply_filter() # rerun all filtering
       return(invisible(NULL))
     },
 
@@ -720,7 +720,6 @@ FilteredData <- R6::R6Class( # nolint
       # will be replaced.
       for (name in datanames) {
         private$datasets[[name]] <- NULL
-        private$filtered_datasets[[name]] <- NULL
         # for each varname, there is a state and filter info
         # therefore, a list makes sure that the $ operator works
         private$filter_chars[[name]] <- list()
@@ -747,7 +746,7 @@ FilteredData <- R6::R6Class( # nolint
 
     # the following attributes are (possibly reactive lists) per dataname
     datasets = NULL, # unfiltered datasets
-    filtered_datasets = NULL, # filtered dataset after applying filter to unfiltered dataset
+    filtered_datasets = NULL, # stores reactive which return filtered dataset after applying filter to unfiltered dataset
     data_attrs = NULL, # attributes per dataname
     # filter to apply to obtain filtered dataset from unfiltered one, NULL (for a dataname) means
     # no filter applied: it does not mean that it does not show up as a filtering element,
@@ -779,7 +778,7 @@ FilteredData <- R6::R6Class( # nolint
       stopifnot(
         # check classes
         is.reactivevalues(private$datasets),
-        is.reactivevalues(private$filtered_datasets),
+        is.list(private$filtered_datasets),
         is.list(private$data_attrs),
         is.reactivevalues(private$filter_state),
         is.list(private$previous_filter_state),
@@ -1051,38 +1050,23 @@ FilteredData <- R6::R6Class( # nolint
     },
 
     #' @details
-    #' Apply filter to set filtered dataset from unfiltered one
-    #'
-    #' Errors if filter_on_hold is TRUE
-    #' Due to the `ADSL`-centric approach, this method will not do anything before `ADSL`
-    #' is set. One must then explicitly call this function again so that the filtered_datasets
-    #' for all datasets will be set.
-    #'
-    #' If `dataname = NULL`, all datasets are refiltered.
-    #'
-    #' @return TRUE if filter was actually applied or delayed (if ADSL not yet provided)
-    apply_filter = function(dataname = NULL) {
-      if (private$filter_on_hold) {
-        # an error will be raised if the data is tried to be accessed while on hold with get_data
-        return(FALSE)
-      }
-
-      .log("apply filter for", dataname) # todo1: write something similar to withr: with_logging(code)
-
-      if (is.null(self$get_data("ADSL", filtered = FALSE))) {
-        # ADSL was not yet provided with set_data, so we remove also filters for all datasets
-        # todo1: why is this here? an error should be thrown that the filter cannot be applied
-        # nothing should have been set by now or reset after ADSL was reset
-        stopifnot(all(private$filtered_datasets, is.null))
-        stop("You must first set ADSL before setting any other datasets")
-        return(FALSE)
-      } else {
-        datanames <- if (is.null(dataname) || identical(dataname, "ADSL")) {
-          # re-run all filters
-          # make ADSL first because the others depend on filtered ADSL
-          stopifnot("ADSL" %in% self$datanames())
-          c("ADSL", setdiff(self$datanames(), "ADSL"))
+    #' this returns a reactive that returns the filtered dataset
+    #' it refilters whenever the source datasets
+    #' change or the filter state
+    reactive_filtered_dataset = function(dataname) {
+      stopifnot(is_character_single(dataname))
+      reactive({
+        if (private$filter_on_hold) {
+          # todo1: should make on_hold reactive, we don't make on_hold reactive so that the filtered datasets are not invalidated
+          # todo1: is on_hold still needed, should only be called at beginning of the app when no reactive listeners are there yet?
+          # todo1: these functions currently don't work: hold_filtering, continue_filtering
+          stop("You have to resume filtering first")
         }
+        if (!dataname %in% isolate(self$datanames())) { # todo: isolate to avoid triggering due to set_data
+          stop("Cannot filter data ", dataname, " as it needs to be set first")
+        }
+
+        .log("Refiltering dataset ", dataname)
 
         # filter data directly in an empty environment to make sure no global variables or
         # other variables from this class are used
@@ -1090,23 +1074,21 @@ FilteredData <- R6::R6Class( # nolint
         # packages bind right before globalenv(), so we don't accidentally pick up other packages
         env <- new.env(parent.env(globalenv()))
 
-        for (name in datanames) {
-          # assign unfiltered datasets to env, evaluate filtered datasets
-          env[[name]] <- self$get_data(name, filtered = FALSE)
-          lapply(
-            self$get_filter_call(name, merge = TRUE, adsl = FALSE),
-            eval,
-            envir = env
-          )
+        # put dependencies of filter call into environment
+        if (dataname != "ADSL") {
+          # need to add ADSL_filtered as filter call for dataset depends on it
+          env[["ADSL_filtered"]] <- self$get_data("ADSL", filtered = TRUE)
         }
+        env[[dataname]] <- self$get_data(dataname, filtered = FALSE)
 
-        # assign from environment back to class
-        for (name in datanames) {
-          private$filtered_datasets[[name]] <- env[[paste0(name, "_FILTERED")]]
-        }
+        lapply(
+          self$get_filter_call(dataname, merge = TRUE, adsl = FALSE),
+          eval,
+          envir = env
+        )
 
-        return(TRUE)
-      }
+        return(env[[paste0(dataname, "_FILTERED")]])
+      })
     }
   )
 )
