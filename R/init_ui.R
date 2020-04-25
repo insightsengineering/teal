@@ -12,6 +12,10 @@ init_ui <- function(datasets, modules) {
 
   tp <- create_ui(modules, datasets, idprefix = "teal_modules", is_root = TRUE)
 
+  # use isolate because we assume that the number of datasets does not change over the course of the teal app
+  # otherwise need dynamic UI
+  datanames <- make_adsl_first(isolate(datasets$datanames()))
+
   # separate the nested tabs
   tp$children <- list(
     tp$children[[1]],
@@ -30,8 +34,7 @@ init_ui <- function(datasets, modules) {
               ui_filter_info("teal_filters_info")
             ),
             tagList(
-              # include_unset because they may be added later with `set_data`
-              lapply(datasets$datanames(include_unset = TRUE), function(dataname) {
+              lapply(datanames, function(dataname) {
                 ui_filter_items(paste0("teal_filters_", dataname), dataname)
               })
             )
@@ -41,8 +44,7 @@ init_ui <- function(datasets, modules) {
             class = "well",
             tags$label("Add Filter Variables", class = "text-primary", style = "margin-bottom: 15px;"),
             tagList(
-              # include_unset because they may be added later with `set_data`
-              lapply(datasets$datanames(include_unset = TRUE), function(dataname) {
+              lapply(datanames, function(dataname) {
                 ui_add_filter_variable(paste0("teal_add_", dataname, "_filters"), dataname)
               })
             )

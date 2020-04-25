@@ -4,10 +4,9 @@ context("FilteredData")
 
 options(teal_logging = FALSE)
 
-x <- teal:::FilteredData$new(datanames = c("ADSL", "ADAE"))
+x <- teal:::FilteredData$new()
 
 test_that("Initialization is correct", {
-  expect_setequal(x$datanames(include_unset = TRUE), c("ADSL", "ADAE"))
   isolate(expect_setequal(x$datanames(), character(0)))
 })
 

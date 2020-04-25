@@ -215,13 +215,13 @@ init <- function(data,
         shinyjs::show("teal_filter-panel")
 
         if ("all" %in% filters) {
-          lapply(datasets$datanames(include_unset = TRUE), function(dataname) {
+          lapply(datasets$datanames(), function(dataname) {
             shinyjs::show(paste0("teal_add_", dataname, "_filters"))
           })
         } else {
           # todo: the filters are just hidden from the UI, but still applied
           lapply(
-            datasets$datanames(include_unset = TRUE),
+            datasets$datanames(),
             function(dataname) {
               id <- paste0("teal_add_", dataname, "_filters")
               if (dataname == "ADSL" || dataname %in% filters) {
@@ -240,18 +240,24 @@ init <- function(data,
     call_filter_modules <- function(datasets) {
       # -- filters Modules
       callModule(srv_filter_info, "teal_filters_info", datasets)
-      for (dataname in datasets$datanames(include_unset = TRUE)) {
-        callModule(srv_filter_items, paste0("teal_filters_", dataname), datasets, dataname)
-      }
+      # use isolate because we assume that the number of datasets does not change over the course of the teal app
+      # otherwise need dynamic UI, should be dynamic as well
+      datanames <- make_adsl_first(isolate(datasets$datanames()))
+      # should not use for loop as variables are otherwise only bound by reference
+      lapply(
+        datanames,
+        function(dataname) callModule(srv_filter_items, paste0("teal_filters_", dataname), datasets, dataname)
+      )
 
       adsl_vars <- reactive(names(datasets$get_data("ADSL")))
-      for (dataname in datasets$datanames(include_unset = TRUE)) {
-        callModule(
+      lapply(
+        datanames,
+        function(dataname) callModule(
           srv_add_filter_variable, paste0("teal_add_", dataname, "_filters"),
           datasets, dataname,
           omit_vars = if (dataname == "ADSL") character(0) else adsl_vars()
         )
-      }
+      )
     }
 
 
