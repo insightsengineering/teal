@@ -26,7 +26,7 @@ srv_filter_items <- function(input, output, session, datasets, dataname, contain
   # because the underlying reactiveVal only triggers when its value changes (unlike reactive).
 
   # UI for a single filter item for a filter variable ----
-  ui_single_filter_item <- function(id_prefix, filter_char, filter_state, prelabel) {
+  ui_single_filter_item <- function(id_prefix, filter_info, filter_state, prelabel) {
     stopifnot(is_character_single(id_prefix))
     stopifnot(is_character_single(prelabel))
 
@@ -38,30 +38,30 @@ srv_filter_items <- function(input, output, session, datasets, dataname, contain
     varlabel <- tagList(
       tags$span(
         prelabel,
-        if (!is.null(filter_char$label) || (filter_char$label != "")) {
-          tags$small(filter_char$label, style = "font-weight:normal; margin-left:3px")
+        if (!is.null(filter_info$label) || (filter_info$label != "")) {
+          tags$small(filter_info$label, style = "font-weight:normal; margin-left:3px")
         }
       ),
       actionLink(
         remove_filter_id, "", icon("trash-alt", lib = "font-awesome"),
         class = "remove"
       ),
-      if (!is.null(filter_char$na_count) && filter_char$na_count > 0) {
-        checkboxInput(keep_na_id, paste0("Keep NA (", filter_char$na_count, ")"), value = filter_state$keep_na)
+      if (!is.null(filter_info$na_count) && filter_info$na_count > 0) {
+        checkboxInput(keep_na_id, paste0("Keep NA (", filter_info$na_count, ")"), value = filter_state$keep_na)
       }
     )
 
-    if (filter_char$type == "choices") {
-      if (length(filter_char$choices) > 5) {
+    if (filter_info$type == "choices") {
+      if (length(filter_info$choices) > 5) {
         pickerInput(
           selection_id,
           varlabel,
-          choices = filter_char$choices,
+          choices = filter_info$choices,
           selected = filter_state$selection,
           multiple = TRUE,
           options = pickerOptions(
             actionsBox = TRUE,
-            liveSearch = (length(filter_char$choices) > 10),
+            liveSearch = (length(filter_info$choices) > 10),
             noneSelectedText = "Select a value"
           ),
           width = "100%"
@@ -70,50 +70,50 @@ srv_filter_items <- function(input, output, session, datasets, dataname, contain
         checkboxGroupInput(
           selection_id,
           varlabel,
-          choices =  filter_char$choices,
+          choices =  filter_info$choices,
           selected = filter_state$selection,
           width = "100%"
         )
       }
-    } else if (filter_char$type == "range") {
+    } else if (filter_info$type == "range") {
       sliderInput(
         selection_id,
         varlabel,
-        min = floor(filter_char$range[1] * 100) / 100,
-        max = ceiling(filter_char$range[2] * 100) / 100,
+        min = floor(filter_info$range[1] * 100) / 100,
+        max = ceiling(filter_info$range[2] * 100) / 100,
         value = filter_state$selection,
         width = "100%"
       )
-    } else if (filter_char$type == "logical") {
+    } else if (filter_info$type == "logical") {
       radioButtons(
         selection_id,
         varlabel,
-        choices = filter_char$choices,
+        choices = filter_info$choices,
         selected = filter_state$selection,
         width = "100%"
       )
     } else {
       # fail gracefully although this should have been caught before already
-      tags$p(paste("For varlabel in", varlabel, "in data", dataname, "has unknown type:", filter_char$type))
+      tags$p(paste("For varlabel in", varlabel, "in data", dataname, "has unknown type:", filter_info$type))
     }
   }
 
   # dynamic ui part ----
   output$filters <- renderUI({
     .log("generating ui filters for data", dataname)
-    filter_chars <- datasets$get_filter_chars(dataname)
+    filter_infos <- datasets$get_filter_info(dataname)
     var_states <- datasets$get_filter_state(dataname)
 
     ns <- session$ns
     return(do.call(container, unname(Map(
-      function(varname, filter_char, filter_state) {
+      function(varname, filter_info, filter_state) {
         ui_single_filter_item(
-          id_prefix = ns(varname), filter_char = filter_char, filter_state = filter_state,
+          id_prefix = ns(varname), filter_info = filter_info, filter_state = filter_state,
           prelabel = paste0(dataname, ".", varname)
         )
       },
-      varname = names(filter_chars), # also used as id
-      filter_char = filter_chars,
+      varname = names(filter_infos), # also used as id
+      filter_info = filter_infos,
       filter_state = var_states
     ))))
   })

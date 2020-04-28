@@ -52,13 +52,6 @@ filtered_data_doc_helper <- function(dataname, varname, filtered) {
 #' @importFrom tools file_ext file_path_sans_ext
 #'
 #' @examples
-#' \dontrun{
-#' # if on BEE
-#' path <- "/opt/BIOSTAT/qa/cdt7876a/libraries/asl.sas7bdat"
-#' x <- FilteredData$new()
-#' x$load_data(path, dataname = "ADSL")
-#' }
-#'
 #' library(random.cdisc.data)
 #'
 #' ADSL <- radsl(cached = TRUE)
@@ -72,7 +65,7 @@ filtered_data_doc_helper <- function(dataname, varname, filtered) {
 #'
 #' x$datanames()
 #' x$list_data_info("ADSL")
-#' x$get_filter_chars("ADSL")
+#' x$get_filter_info("ADSL")
 #' df <- x$get_data("ADSL")
 #' # df
 #'
@@ -82,7 +75,7 @@ filtered_data_doc_helper <- function(dataname, varname, filtered) {
 #'   SEX = list(selection = c("M", "F"), keep_na = FALSE)
 #' ))
 #' x$get_filter_type("ADSL", "SEX")
-#' x$get_filter_chars("ADSL")[["SEX"]]$type
+#' x$get_filter_info("ADSL")[["SEX"]]$type
 #'
 #' x$hold_filtering()
 #' x$set_filter_state("ADSL", varname = NULL, list(
@@ -114,7 +107,7 @@ FilteredData <- R6::R6Class( # nolint
       private$datasets <- reactiveValues()
       private$filtered_datasets <- reactiveValues()
       private$filter_state <- reactiveValues()
-      private$filter_chars <- reactiveValues()
+      private$filter_infos <- reactiveValues()
 
       private$previous_filter_state <- list()
 
@@ -125,48 +118,6 @@ FilteredData <- R6::R6Class( # nolint
     #' Get datanames
     datanames = function() {
       return(names(private$datasets))
-    },
-
-    # load data ----
-
-    #' @details
-    #' Load data from path into dataname
-    #'
-    #' @md
-    #' @param path `character` path to load dataset from
-    #' @param dataname dataname, if `NULL`, it is inferred from the basename of the path
-    #' @param ... additional parameters passed to `read_` functions
-    #'
-    load_data = function(path, dataname = NULL, ...) {
-      if (!file.exists(path)) {
-        stop(paste("invalid path:", path))
-      }
-      dataname <- if (is.null(dataname)) {
-        file_path_sans_ext(basename(path))
-      } else {
-        dataname
-      }
-      # currently only allow datanames that were defined in initialize
-      private$check_data_varname(dataname)
-
-      logger_in()
-      .log("load data:", path)
-
-      path <- normalizePath(path, mustWork = TRUE)
-      df <- switch(tolower(file_ext(path)),
-        sas7bdat = read_sas(path, ...),
-        csv      = read_csv(path, ...),
-        rds      = readRDS(path, ...),
-        stop(paste("The format of", path, "is currently not supported."))
-      )
-
-      attr(df, "path") <- path
-      attr(df, "last_modified") <- file.info(path)$mtime[1]
-
-      .log("load data", dataname)
-      logger_out()
-
-      return(self$set_data(dataname, df))
     },
 
     # getters and setters for attributes ----
@@ -213,7 +164,7 @@ FilteredData <- R6::R6Class( # nolint
         # already exists, so we only modify the data
       } else {
         private$filtered_datasets[[dataname]] <- private$reactive_filtered_dataset(dataname)
-        private$filter_chars[[dataname]] <- private$reactive_filter_chars(dataname)
+        private$filter_infos[[dataname]] <- private$reactive_filter_infos(dataname)
         private$data_attrs[[dataname]] <- list()
       }
 
@@ -328,29 +279,29 @@ FilteredData <- R6::R6Class( # nolint
     #' @md
     #' @param all_vars `logical` (only applies if `varname` is NULL)
     #'   whether to include non-filtered variables
-    get_filter_chars = function(dataname, varname = NULL, all_vars = FALSE) {
+    get_filter_info = function(dataname, varname = NULL, all_vars = FALSE) {
       private$check_data_varname(dataname, varname)
       stopifnot(is_logical_single(all_vars))
 
       if (is.null(varname)) {
         # filter out variables that are not filtered
         if (all_vars) {
-          private$filter_chars[[dataname]]()
+          private$filter_infos[[dataname]]()
         } else {
-          private$filter_chars[[dataname]]()[names(private$filter_state[[dataname]])]
+          private$filter_infos[[dataname]]()[names(private$filter_state[[dataname]])]
         }
       } else {
-        private$filter_chars[[dataname]]()[[varname]]
+        private$filter_infos[[dataname]]()[[varname]]
       }
     },
 
     #' @details
-    #' See `get_filter_chars`, only returns filter type (numerical, categorical).
+    #' See `get_filter_info`, only returns filter type (numerical, categorical).
     #'
     #' @md
     get_filter_type = function(dataname, varname) {
       stopifnot(is_character_single(varname)) # check that varname is non-NULL
-      return(self$get_filter_chars(dataname, varname)[["type"]])
+      return(self$get_filter_info(dataname, varname)[["type"]])
     },
 
     #' @details
@@ -384,7 +335,6 @@ FilteredData <- R6::R6Class( # nolint
       private$check_data_varname(dataname, varname)
 
       # checking and adapting arguments
-      # todo1: do not allow varname = NULL
       if (!is.null(varname)) {
         state <- setNames(list(state), varname)
         # we don't set varname to NULL so we can detect it below and only set the state of varname
@@ -440,11 +390,11 @@ FilteredData <- R6::R6Class( # nolint
       stopifnot(is_character_single(varname))
       private$check_data_varname(dataname, varname)
 
-      filter_char <- self$get_filter_chars(dataname, varname)
+      filter_info <- self$get_filter_info(dataname, varname)
       selection_state <- switch(
-        filter_char$type,
-        choices = filter_char$choices,
-        range = filter_char$range,
+        filter_info$type,
+        choices = filter_info$choices,
+        range = filter_info$range,
         logical = "TRUE",
         stop("unknown type")
       )
@@ -584,10 +534,10 @@ FilteredData <- R6::R6Class( # nolint
           varnames <- intersect(varnames, variables)
         }
 
-        filter_chars <- self$get_filter_chars(dataname, all_vars = TRUE)
+        filter_infos <- self$get_filter_info(dataname, all_vars = TRUE)
         var_maxlength <- max(nchar(varnames))
         for (name in varnames) {
-          var_chars <- filter_chars[[name]]
+          var_chars <- filter_infos[[name]]
 
           info <- switch(
             var_chars$type,
@@ -660,7 +610,7 @@ FilteredData <- R6::R6Class( # nolint
     previous_filter_state = NULL,
     # filter characteristics to create filter that has no effect (i.e. full range of variable),
     # useful for UI to show sensible ranges
-    filter_chars = NULL,
+    filter_infos = NULL,
 
     attrs = list(), # attributes of this class retrievable with get_attrs and set_attrs
 
@@ -679,13 +629,13 @@ FilteredData <- R6::R6Class( # nolint
         is.list(private$data_attrs),
         is.reactivevalues(private$filter_state),
         is.list(private$previous_filter_state),
-        is.reactivevalues(private$filter_chars),
+        is.reactivevalues(private$filter_infos),
         is.list(private$attrs),
 
         # check names are the same
         setequal(names(private$datasets), names(private$data_attrs)),
         setequal(names(private$datasets), names(private$filtered_datasets)),
-        setequal(names(private$datasets), names(private$filter_chars)),
+        setequal(names(private$datasets), names(private$filter_infos)),
         setequal(names(private$datasets), names(private$data_attrs)),
         all_true(private$data_attrs, function(attrs) !is.null(attrs[["md5sum"]])),
         setequal(names(private$datasets), names(private$filter_state)),
@@ -747,7 +697,7 @@ FilteredData <- R6::R6Class( # nolint
       stopifnot(is_character_single(varname))
       private$check_data_varname(dataname, varname)
 
-      var_char <- self$get_filter_chars(dataname, varname) # filter characteristics for var, e.g. range
+      var_char <- self$get_filter_info(dataname, varname) # filter characteristics for var, e.g. range
 
       if (is.null(var_state)) {
         # when state is NULL, this means no filtering is applied
@@ -809,11 +759,11 @@ FilteredData <- R6::R6Class( # nolint
       private$check_data_varname(dataname)
 
       data_filter_call_items <- Map(
-        function(filter_char, filter_state, varname) {
+        function(filter_info, filter_state, varname) {
           stopifnot(!is.null(filter_state)) # filter_state only contains non-NULL values
 
           selection_state <- filter_state$selection
-          type <- filter_char$type
+          type <- filter_info$type
           if (is.null(type)) {
             # such a filter should never have been set
             stop(paste("filter type for variable", varname, "in", dataname, "not known"))
@@ -849,16 +799,16 @@ FilteredData <- R6::R6Class( # nolint
           )
           # allow NA as well, i.e. do not filter it out
           if (filter_state$keep_na && (
-            !is.null(filter_char$na_count) && (filter_char$na_count > 0)
+            !is.null(filter_info$na_count) && (filter_info$na_count > 0)
           )) {
             # only add is.na call if the var really has NA values
             filter_call <- call("|", filter_call, call("is.na", as.name(varname)))
           }
           return(filter_call)
         },
-        self$get_filter_chars(dataname),
+        self$get_filter_info(dataname),
         self$get_filter_state(dataname),
-        names(self$get_filter_chars(dataname))
+        names(self$get_filter_info(dataname))
       )
       data_filter_call_items <- Filter(function(x) !is.null(x), data_filter_call_items)
 
@@ -924,11 +874,11 @@ FilteredData <- R6::R6Class( # nolint
     #'
     #' Detect variable type (categorical, numeric range)
     #' and accordingly set the filter characteristics
-    reactive_filter_chars = function(dataname) {
+    reactive_filter_infos = function(dataname) {
       reactive({
         df <- self$get_data(dataname, filtered = FALSE)
 
-        filter_char <- Map(function(var, varname) {
+        filter_info <- Map(function(var, varname) {
           # add counts per variable as names for UI
           add_counts <- function(choices) {
             setNames(choices, paste0(choices, " (", as.vector(table(var)[choices]), ")"))
@@ -979,7 +929,7 @@ FilteredData <- R6::R6Class( # nolint
           return(res)
         }, df, names(df))
 
-        return(setNames(filter_char, names(df)))
+        return(setNames(filter_info, names(df)))
       })
     }
   )
