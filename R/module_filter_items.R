@@ -38,9 +38,7 @@ srv_filter_items <- function(input, output, session, datasets, dataname, contain
     varlabel <- tagList(
       tags$span(
         prelabel,
-        # todo1: remove most of these checks
-        if (!(is.null(filter_char$label) || is.na(filter_char$label) ||
-              is_empty(filter_char$label) || filter_char$label == "")) {
+        if (!is.null(filter_char$label) || (filter_char$label != "")) {
           tags$small(filter_char$label, style = "font-weight:normal; margin-left:3px")
         }
       ),

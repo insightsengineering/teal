@@ -139,6 +139,7 @@ get_cdisc_keys <- function(dataname) {
   stopifnot(is_character_single(dataname))
 
   # copy from excel file
+  browser()
   default_cdisc_keys <- yaml.load_file(system.file("cdisc_datasets/cdisc_datasets.yaml", package = "teal"))
 
   if (!(dataname %in% names(default_cdisc_keys))) {

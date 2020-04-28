@@ -40,8 +40,8 @@ dummy_module <- function(label = "Dummy module") {
     server = function(input, output, session, datasets) {
       output$filter_calls <- renderText({
         paste(lapply(
-          make_adsl_first(datasets$datanames()), # todo: add this again
-          #make_adsl_first(intersect(datasets$datanames(), c("ADSL", "ADAE"))),
+          #make_adsl_first(datasets$datanames()), # todo1: add this again
+          make_adsl_first(intersect(datasets$datanames(), c("ADSL", "ADAE"))),
           function(dataname) paste(datasets$get_filter_call(dataname, merge = TRUE, adsl = FALSE), collapse = "\n")
         ), collapse = "\n\n")
       })

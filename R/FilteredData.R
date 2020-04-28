@@ -1,6 +1,5 @@
-# todo1:  rename to FilteredDatasets
-
-# todo1: not working
+# Roxygen inheritParams is not working within R6 classes, so we cannot inherit from
+# this dummy method.
 #' This method exists solely to be able to inherit parameter documentation from it
 #' @md
 #' @param dataname `character` dataname to get data for, must be in the list
@@ -58,48 +57,46 @@ filtered_data_doc_helper <- function(dataname, varname, filtered) {
 #' path <- "/opt/BIOSTAT/qa/cdt7876a/libraries/asl.sas7bdat"
 #' x <- FilteredData$new()
 #' x$load_data(path, dataname = "ADSL")
+#' }
 #'
-#' # todo1: should be able to remove dontrun starting from here, but strict complains about
-#' # attempt to call non-function
 #' library(random.cdisc.data)
 #'
 #' ADSL <- radsl(cached = TRUE)
-#' x <- teal:::FilteredData$new(datanames = c("ADSL", "ADAE"))
+#' x <- teal:::FilteredData$new()
 #'
-#' isolate({
-#'   x$set_data("ADSL", ADSL)
-#' })
+#' # to evaluate without isolate(), i.e. provide a default isolate context
+#' options(shiny.suppressMissingContextError = TRUE)
+#' on.exit(options(shiny.suppressMissingContextError = FALSE), add = TRUE)
 #'
-#' isolate({
-#'   x$datanames()
-#'   x$list_data_info("ADSL")
-#'   x$get_filter_chars("ADSL")
-#'   df <- x$get_data("ADSL")
-#'   # df
+#' x$set_data("ADSL", ADSL)
 #'
-#'   x$get_filter_type("ADSL", "SEX")
-#'   x$set_filter_state("ADSL", varname = NULL, state = list(
-#'     AGE = list(selection = c(3, 5), keep_na = FALSE),
-#'     SEX = list(selection = c("M", "F"), keep_na = FALSE)
-#'   ))
-#'   x$get_filter_type("ADSL", "SEX")
-#'   x$get_filter_chars("ADSL")[["SEX"]]$type
+#' x$datanames()
+#' x$list_data_info("ADSL")
+#' x$get_filter_chars("ADSL")
+#' df <- x$get_data("ADSL")
+#' # df
 #'
-#'   x$hold_filtering()
-#'   x$set_filter_state("ADSL", varname = NULL, list(
-#'     AGE = list(selection = c(3, 7), keep_na = FALSE)
-#'   ))
-#'   x$set_filter_state(
-#'     "ADSL",
-#'     varname = "SEX",
-#'     state = list(selection = c("M", "F"), keep_na = FALSE)
-#'   )
-#'   x$continue_filtering()
-#'   x$get_filter_type("ADSL", "SEX")
+#' x$get_filter_type("ADSL", "SEX")
+#' x$set_filter_state("ADSL", varname = NULL, state = list(
+#'   AGE = list(selection = c(3, 5), keep_na = FALSE),
+#'   SEX = list(selection = c("M", "F"), keep_na = FALSE)
+#' ))
+#' x$get_filter_type("ADSL", "SEX")
+#' x$get_filter_chars("ADSL")[["SEX"]]$type
 #'
-#'   x$get_filter_state("ADSL")
-#' })
-#' }
+#' x$hold_filtering()
+#' x$set_filter_state("ADSL", varname = NULL, list(
+#'   AGE = list(selection = c(3, 7), keep_na = FALSE)
+#' ))
+#' x$set_filter_state(
+#'   "ADSL",
+#'   varname = "SEX",
+#'   state = list(selection = c("M", "F"), keep_na = FALSE)
+#' )
+#' x$continue_filtering()
+#' x$get_filter_type("ADSL", "SEX")
+#'
+#' x$get_filter_state("ADSL")
 FilteredData <- R6::R6Class( # nolint
   "FilteredData",
   ## FilteredData ====
@@ -111,9 +108,6 @@ FilteredData <- R6::R6Class( # nolint
     #' be added using the set_data function.
     #'
     #' @md
-    #' @param datanames (vector of `character`) names of datasets that can
-    #'   be added to this class with `set_data`, cannot be changed
-    #'
     initialize = function() {
       # create reactiveValues for unfiltered and filtered dataset and filter state
       # each reactiveValues is a list with one entry per dataset name
@@ -186,9 +180,6 @@ FilteredData <- R6::R6Class( # nolint
       stopifnot(is_logical_single(filtered))
 
       if (filtered) {
-        if (private$filter_on_hold) {
-          stop("You have to resume filtering first to get the filtered data.")
-        }
         # we must be careful not to create a new reactive here
         # by creating it outside and storing it in the list, we benefit from
         # the reactive caching mechanism
@@ -378,11 +369,15 @@ FilteredData <- R6::R6Class( # nolint
     #' @details
     #' Set filter state
     #'
+    #' # todo2: is the interface of this function good?
     #' The state is only updated and triggers reactive behavior when it actually
     #' changes.
+    #' When `varname` is non-NULL, only the state for that variable name is changed.
+    #' Otherwise, the state is entirely set to the new state.
     #'
     #' @param state new state to set; when varname is NULL, state must be a named list
-    #' with the new filter state for each variable that should be affected.
+    #' with the new filter state for each variable (states of omitted variables are
+    #' set to NULL, i.e. no filtering for these variables)
     #'
     #' @return TRUE if the state was changed
     set_filter_state = function(dataname, varname, state) {
@@ -506,41 +501,35 @@ FilteredData <- R6::R6Class( # nolint
     #' @details
     #' Get the call to filter the dataset according to the filter state
     #'
+    #' When the dataname is ADSL, it is simply the filtered ADSL.
+    #' Otherwise, it is the filtered dataset that only contains subjects which
+    #' are also in the filtered ADSL.
+    #'
     #' Note: `merge()` function in returned call will fail if corresponding dataset is NULL.
     #'
-    #' @param merge whether to include merge call that removes any keys from filtered data that
-    #'   are not also in filtered ADSL afterwards
-    #' @param adsl whether to include `ADSL` filtering call before
-    #'
     #' @return call to filter dataset (taking out patients not in ADSL)
-    get_filter_call = function(dataname, merge = TRUE, adsl = TRUE) {
+    get_filter_call = function(dataname) {
       private$check_data_varname(dataname)
-      stopifnot(is_logical_single(merge))
-      stopifnot(is_logical_single(adsl))
-      if (!merge) {
-        # todo1: remove once these warnings no longer appear
-        warning("Set merge to TRUE or add doc to this function why it is needed")
-      }
-      if (adsl) {
-        # todo1: remove once these warnings no longer appear
-        warning("Set adsl to FALSE or add doc to this function why it is needed")
-      }
 
-      adsl_filter_call <- private$get_filter_call_no_adsl("ADSL", "ADSL_FILTERED")
+      filtered_alone <- paste0(dataname, "_FILTERED_ALONE")
+      browser()
+      filter_call <- as.call(list(
+        as.name("<-"), as.name(filtered_alone),
+        private$get_pure_filter_call(dataname, filtered_alone)
+      ))
 
       if (dataname == "ADSL") {
-        list(adsl_filter_call)
+        return(list(filter_call))
       } else {
-        # ADSL has a special status in the sense that filtering in ADSL impacts filtering in the other datasets
+        # ADSL has a special status in the sense that filtering in ADSL impacts filtering of the other datasets
         # example: ADLB_FILTERED_ALONE is ADLB with filter applied
         # ADLB_FILTERED is ADLB_FILTERED_ALONE with only the (USUBJID, STUDYID) combinations appearing in ADSL_FILTERED
-        filtered_alone <- paste0(dataname, "_FILTERED_ALONE")
+        # todo2: instead of a merge call, it would be simpler to just check %in% USUBJID assuming a single studyid
         filtered_joined_adsl <- paste0(dataname, "_FILTERED") # filtered_alone with
 
-        filter_call <- private$get_filter_call_no_adsl(dataname, filtered_alone)
         keys <- self$get_data_attrs("ADSL")$keys$primary
         if (is.null(keys)) {
-          # todo1: should this ever happen because of backwards compatibility?
+          browser()
           keys <- c("USUBJID", "STUDYID")
         }
         # filter additionally to only have combinations of keys that are in ADSL_FILTERED
@@ -555,36 +544,8 @@ FilteredData <- R6::R6Class( # nolint
           )
         )
 
-        calls <- list(adsl_filter_call, filter_call, merge_call)
-
-        return(if (merge && adsl) {
-          calls
-        } else if (merge && !adsl) {
-          calls[2:3]
-        } else if (!merge && adsl) {
-          calls[1:2]
-        } else {
-          calls[[2]]
-        })
+        return(list(filter_call, merge_call))
       }
-    },
-
-    #' @details
-    #' Pause the filtering until reactivated with `continue_filtering` to make several
-    #' changes to the filter state and avoid refilterings in between that are of no interest.
-    #'
-    hold_filtering = function() {
-      private$filter_on_hold <- TRUE
-      return(invisible(NULL))
-    },
-
-    #' @details
-    #' Continue filtering after it was paused with `hold_filtering`
-    #' Can result in several datasets being filtered
-    #'
-    continue_filtering = function() {
-      private$filter_on_hold <- FALSE
-      return(invisible(NULL))
     },
 
     # info functions for end user ----
@@ -701,9 +662,6 @@ FilteredData <- R6::R6Class( # nolint
     # useful for UI to show sensible ranges
     filter_chars = NULL,
 
-    # whether filtering is currently performed or it is postponed, useful when several fields
-    # are changed at once and it should not run for each of the steps, but just once at the end
-    filter_on_hold = FALSE,
     attrs = list(), # attributes of this class retrievable with get_attrs and set_attrs
 
     # check functions ----
@@ -722,7 +680,6 @@ FilteredData <- R6::R6Class( # nolint
         is.reactivevalues(private$filter_state),
         is.list(private$previous_filter_state),
         is.reactivevalues(private$filter_chars),
-        is_logical_single(private$filter_on_hold),
         is.list(private$attrs),
 
         # check names are the same
@@ -842,18 +799,14 @@ FilteredData <- R6::R6Class( # nolint
       return(invisible(NULL))
     },
 
-    # todo1: maybe remove out_dataname or default to NULL (no assignment)
     #' @details
-    #' Creates a call that filters the dataset to obtain the filtered dataset and
-    #' assigns it to a new variable.
-    #' As opposed to `get_filter_call`, this function does not filter for patient for
-    #' patients in ADSL.
+    #' Creates a call that filters the dataset to obtain the filtered dataset.
+    #' `get_filter_call` calls this function to filter out patients that are not in
+    #' the filtered ADSL.
     #'
     #' @md
-    #' @param dataname_out `character` name of dataset to assign filtered dataset to
-    get_filter_call_no_adsl = function(dataname, dataname_out) {
+    get_pure_filter_call = function(dataname) {
       private$check_data_varname(dataname)
-      stopifnot(is_character_single(dataname_out))
 
       data_filter_call_items <- Map(
         function(filter_char, filter_state, varname) {
@@ -924,7 +877,7 @@ FilteredData <- R6::R6Class( # nolint
         # do not use subset (this is a convenience function intended for use interactively, stated in the doc)
         # as a result of subset and filter, NA is filtered out; this can be circumvented by explicitly
         # adapting the filtering condition above to watch out for NAs and keep them
-        return(as.call(list(as.name("<-"), as.name(dataname_out), call("subset", as.name(dataname), combined_filters))))
+        return(call("subset", as.name(dataname), combined_filters))
       }
     },
 
@@ -937,13 +890,7 @@ FilteredData <- R6::R6Class( # nolint
     reactive_filtered_dataset = function(dataname) {
       stopifnot(is_character_single(dataname))
       reactive({
-        if (private$filter_on_hold) {
-          # todo1: should make on_hold reactive, we don't make on_hold reactive so that the filtered datasets are not invalidated
-          # todo1: is on_hold still needed, should only be called at beginning of the app when no reactive listeners are there yet?
-          # todo1: these functions currently don't work: hold_filtering, continue_filtering
-          stop("You have to resume filtering first")
-        }
-        if (!dataname %in% isolate(self$datanames())) { # todo: isolate to avoid triggering due to set_data
+        if (!dataname %in% isolate(self$datanames())) { # todo2: isolate to avoid triggering due to set_data
           stop("Cannot filter data ", dataname, " as it needs to be set first")
         }
 
@@ -951,7 +898,7 @@ FilteredData <- R6::R6Class( # nolint
 
         # filter data directly in an empty environment to make sure no global variables or
         # other variables from this class are used
-        # todo1: why not use a chunks object for this from teal.devel (and put chunks code into teal?)
+        # todo2: why not use a chunks object for this from teal.devel (and put chunks code into teal?)
         # packages bind right before globalenv(), so we don't accidentally pick up other packages
         env <- new.env(parent.env(globalenv()))
 
@@ -991,7 +938,7 @@ FilteredData <- R6::R6Class( # nolint
             .log("all elements in", varname, "are NA")
             list(
               type = "unknown",
-              label = "", # todo1: really empty here?
+              label = if_null(attr(var, "label"), ""),
               class = class(var)
             )
           } else if (is.factor(var) || is.character(var)) {
@@ -1024,7 +971,7 @@ FilteredData <- R6::R6Class( # nolint
             )
             list(
               type = "unknown",
-              label = "", # todo1: really empty here?
+              label = if_null(attr(var, "label"), ""),
               class = class(var)
             )
           }

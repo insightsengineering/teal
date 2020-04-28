@@ -217,6 +217,7 @@ init <- function(data,
         if ("all" %in% filters) {
           lapply(datasets$datanames(), function(dataname) {
             shinyjs::show(paste0("teal_add_", dataname, "_filters"))
+            shinyjs::show(paste0("teal_filters_", dataname))
           })
         } else {
           # todo: the filters are just hidden from the UI, but still applied
@@ -226,8 +227,10 @@ init <- function(data,
               id <- paste0("teal_add_", dataname, "_filters")
               if (dataname == "ADSL" || dataname %in% filters) {
                 shinyjs::show(id)
+                shinyjs::show(paste0("teal_filters_", dataname))
               } else {
                 shinyjs::hide(id)
+                shinyjs::hide(paste0("teal_filters_", dataname))
               }
             }
           )
