@@ -164,7 +164,7 @@ srv_filter_items <- function(input, output, session, datasets, dataname, contain
       id_remove <- paste0(varname, "_remove_filter")
       o2 <- observeEvent(
         input[[id_remove]], {
-          datasets$remove_filter(dataname, varname)
+          datasets$set_filter_state(dataname, varname, state = NULL)
         },
         # the button is created dynamically afterwards, so this will trigger although
         # the user has not clicked, see the doc

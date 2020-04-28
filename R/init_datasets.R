@@ -36,13 +36,15 @@ set_datasets_data <- function(datasets, data) {
 
   for (idx in seq_along(data)) {
     # for initializing, we don't need a reactive context as dependencies will be established later only
-    isolate(datasets$set_data(data[[idx]][["dataname"]], data[[idx]][["data"]]))
-    datasets$set_data_attr(data[[idx]][["dataname"]], "keys", data[[idx]][["keys"]])
-    datasets$set_data_attr(data[[idx]][["dataname"]], "column_labels", data[[idx]][["column_labels"]])
-    datasets$set_data_attr(data[[idx]][["dataname"]], "data_label", data[[idx]][["data_label"]])
+    data_i <- data[[idx]][["data"]]
+    attr(data_i, "keys") <- data[[idx]][["keys"]]
+    attr(data_i, "column_labels") <- data[[idx]][["column_labels"]]
+    attr(data_i, "data_label") <- data[[idx]][["data_label"]]
+    isolate(datasets$set_data(data[[idx]][["dataname"]], data_i))
   }
 
-  datasets$set_attrs(data)
+  # set code to generate the unfiltered datasets
+  datasets$set_code(attr(data, "code"))
 
   return(invisible(NULL))
 }

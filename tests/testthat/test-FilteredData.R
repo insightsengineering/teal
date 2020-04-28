@@ -26,7 +26,7 @@ isolate({
 
   test_that("data info shows info", {
       expect_output(expect_true(
-        is.null(x$list_data_info("ADSL", variables = c("AGE", "SEX")))
+        is.null(x$print_data_info("ADSL", variables = c("AGE", "SEX")))
       ), "has filter type range")
   })
 
@@ -85,8 +85,8 @@ isolate({
       subset(ADSL, SEX == "F" & AGE >= 38 & AGE <= 40)
     )
 
-    x$remove_filter("ADSL", "AGE")
-    x$remove_filter("ADSL", "SEX")
+    x$set_filter_state("ADSL", "AGE", state = NULL)
+    x$set_filter_state("ADSL", "SEX", state = NULL)
     expect_equal(
       x$get_data("ADSL", filtered = TRUE),
       ADSL

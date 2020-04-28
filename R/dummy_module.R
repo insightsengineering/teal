@@ -42,7 +42,7 @@ dummy_module <- function(label = "Dummy module") {
         paste(lapply(
           #make_adsl_first(datasets$datanames()), # todo1: add this again
           make_adsl_first(intersect(datasets$datanames(), c("ADSL", "ADAE"))),
-          function(dataname) paste(datasets$get_filter_call(dataname, merge = TRUE, adsl = FALSE), collapse = "\n")
+          function(dataname) paste(datasets$get_filter_call(dataname), collapse = "\n")
         ), collapse = "\n\n")
       })
     },
