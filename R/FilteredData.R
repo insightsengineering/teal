@@ -214,14 +214,7 @@ FilteredData <- R6::R6Class( # nolint
       return(invisible(NULL))
     },
 
-    # no corresponding set_ function
-    #' @details
-    #' Get name of dataset (to display in the UI)
-    get_data_label = function(dataname) {
-      private$check_data_varname(dataname)
-      return(self$get_data_attr(dataname, "data_label"))
-    },
-
+    # todo2: remove these two functions as they are trivial?
     #' @details
     #' Get data attribute for the dataset
     #'
@@ -546,6 +539,7 @@ FilteredData <- R6::R6Class( # nolint
 
     #' @details
     #' Get info about dataname, e.g. number of patients
+    #' returned in a list
     #'
     get_data_info = function(dataname, filtered = TRUE) {
       stopifnot(is_character_single(dataname))
