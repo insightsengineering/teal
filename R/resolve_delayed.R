@@ -106,6 +106,7 @@ resolve_delayed.default <- function(x, datasets) {
              paste(class(x), collapse = ", ")))
 }
 
+# todo: rename this function
 #' @importFrom methods is
 resolve_teal_module <- function(x, datasets) {
   stopifnot(is(x, "teal_module"))
@@ -115,6 +116,8 @@ resolve_teal_module <- function(x, datasets) {
   return(x)
 }
 
+#' Handles teal arguments that are only available through delayed loading
+#'
 #' @importFrom methods is
 resolve_teal_args <- function(args, datasets) {
   Map(function(arg) {

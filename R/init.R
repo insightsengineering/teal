@@ -16,12 +16,12 @@
 #'   function\cr options \tab optional, other arguments passed on to the server
 #'   function }
 #' @param filter (\code{list}) You can pre-define filters for
-#'   datasets inside this argument. Therefore you need to handover an
-#'   \code{init} list. Please provide a named list inside \code{init}
-#'   that contains the names of the datasets. E.g. for filtering
-#'   the dataset \code{ADSL} use \code{list(init = list(ADSL = ...))}.
-#'   For each datasets you need to provide a vector with column names that are
-#'   relevant for the item. You can specify an ADSL filtering for the
+#'   datasets that show up when the app starts up with the default filtering
+#'   state.
+#'   For instance, for filtering the dataset \code{ADSL},
+#'   use \code{list(init = list(ADSL = ...))}.
+#'   For each dataset you specify, you need to provide a vector which is a subset of
+#'   the column names of the dataset. You can specify an ADSL filtering for the
 #'   columns \code{SEX} and \code{BAGE} by:
 #'
 #'   \code{filter = list(init = list(ADSL = c("SEX", "BAGE")))}
@@ -79,12 +79,13 @@
 #' }
 init <- function(data,
                  modules,
-                 filter = NULL,
+                 filter = list(init = list()), # todo2: remove outer list
                  header = tags$p("title here"),
                  footer = tags$p("footer here")
                  ) {
-  if (modules_depth(modules) > 2) {
-    stop("teal currently only supports module nesting of depth two.")
+  if (!modules_depth(modules) %in% c(1, 2)) {
+    # we don't support more nesting for clarity in the app
+    stop("teal currently only supports module nesting of depth one or two.")
   }
   check_module_names(modules)
 
@@ -102,15 +103,17 @@ init <- function(data,
 
   skip_start_screen <- is(data, "cdisc_data")
 
-  datasets <- create_empty_datasets()
+  datasets <- FilteredData$new()
 
-  startapp_id <- paste0("startapp_", paste0(sample(c(1:10), 10, replace = TRUE), collapse = ""))
+  # todo1: document why startapp_id is needed
+  startapp_id <- paste0("startapp_", paste0(sample(1:10, 10, replace = TRUE), collapse = ""))
   startapp_selector <- paste0("#", startapp_id)
 
-  ui_internal <- if (skip_start_screen) {
+  # define main UI that contains all functionality of Teal
+  main_ui <- if (skip_start_screen) {
     set_datasets_data(datasets, data)
-    set_datasets_filter(datasets, filter)
-    init_ui(datasets, modules)
+    set_datasets_default_filter(datasets, vars_per_dataset = filter$init)
+    teal_with_filters_ui(modules, datasets)
   } else {
     message("App was initialized with delayed data loading.")
     div(id = startapp_id, data$get_ui("startapp_module"))
@@ -156,43 +159,63 @@ init <- function(data,
       tags$header(header),
       tags$hr(style = "margin: 7px 0;"),
       shiny_busy_message_panel,
-      ui_internal,
+      main_ui,
       tags$hr(),
       tags$footer(footer)
     )
   )
 
+  # server function
   server <- function(input, output, session) {
-    run_js_file(file = "init.js", package = "teal")
+    # todo1: what is this javascript code doing
+    run_js_files(files = "init.js", package = "teal")
 
-    ## hide-show filters based on module filter property
-    recurse <- function(x, idprefix) {
-      id <- label_to_id(x$label, idprefix)
+    # the call to teal_with_filters_ui creates inputs that watch the tabs prefixed by teal_modules
+    # we observe them and react whenever a tab is clicked
+    # browser()
+    #
+    # tab_ids_per_module
 
-      if (is(x, "teal_module")) {
-        setNames(list(x$filters), id)
-      } else if (is(x, "teal_modules")) {
+    # returns a flattened (if nested modules) list of datasets needed for each module
+    # in addition, gives ids by appending id of module to prefix (also works with nested
+    # modules)
+    datasets_per_module <- function(modules, idprefix) {
+      id <- label_to_id(modules$label, idprefix)
+
+      if (is(modules, "teal_module")) {
+        setNames(list(modules$filters), id)
+      } else if (is(modules, "teal_modules")) {
         unlist(
-          mapply(function(i) recurse(i, idprefix = id), x$modules, USE.NAMES = TRUE, SIMPLIFY = FALSE),
+          Map(function(i) datasets_per_module(i, idprefix = id), modules$children),
           recursive = FALSE
         )
+      } else {
+        stop("Unknown class for x: ", class(modules))
       }
     }
-    # named vector with ids and datasets
-    filters_tab_lookup <- recurse(modules, "teal_modules")
 
-    recurse_modules <- function(x, idprefix) {
-      id <- label_to_id(x$label, idprefix)
+    # named vector with module ids and active datasets for that module
+    filters_tab_lookup <- datasets_per_module(modules, "teal_modules")
 
-      if (is(x, "teal_modules")) {
-        c(id, lapply(x$modules, recurse_modules, idprefix = id))
+    recurse_modules <- function(modules, idprefix) {
+      id <- label_to_id(modules$label, idprefix)
+
+      if (is(modules, "teal_modules")) {
+        c(id, lapply(modules$children, recurse_modules, idprefix = id))
       } else {
         NULL
       }
     }
     id_modules <- unlist(recurse_modules(modules, "teal_modules"))
 
+    #browser()
+    #
+    # # contains list of datanames to show for filter in currently selected tab
+    # active_dataname_filters <- reactiveVal()
+
     obs_filter_panel <- observe({
+
+      #browser()
 
       # define reactivity dependence
       main_tab <- input[["teal_modules_root"]]
@@ -208,13 +231,13 @@ init <- function(data,
       }
 
       filters <- filters_tab_lookup[[active_module_id]]
-      .log("Active filter for tab", active_module_id, "are", if_null(filters, "[empty]"))
+      .log("Active filters for tab", active_module_id, "are", if_null(filters, "[empty]"))
       if (is.null(filters)) {
         shinyjs::hide("teal_filter-panel")
       } else {
         shinyjs::show("teal_filter-panel")
 
-        if ("all" %in% filters) {
+        if (identical(filters, "all")) {
           lapply(datasets$datanames(), function(dataname) {
             shinyjs::show(paste0("teal_add_", dataname, "_filters"))
             shinyjs::show(paste0("teal_filters_", dataname))
@@ -263,15 +286,15 @@ init <- function(data,
       )
     }
 
-
     if (skip_start_screen) {
 
       .log("init server - no start screen: initialize modules and filter panel")
-      call_modules(modules, datasets, idprefix = "teal_modules")
+      call_teal_modules(modules, datasets, idprefix = "teal_modules")
       obs_filter_panel$resume()
       call_filter_modules(datasets)
 
     } else {
+      # todo: check this part
 
       .log("init server - start screen: load screen")
       startapp_data <- callModule(data$get_server(), "startapp_module")
@@ -297,14 +320,14 @@ init <- function(data,
         .log("init server - start screen: receive data from startup screen")
 
         set_datasets_data(datasets, startapp_data())
-        set_datasets_filter(datasets, filter)
-        ui_teal_main <- init_ui(datasets, modules)
+        set_datasets_default_filter(datasets, vars_per_dataset = filter$init)
+        ui_teal_main <- teal_with_filters_ui(modules, datasets)
 
         insertUI(selector = startapp_selector, where = "afterEnd", ui = ui_teal_main)
         removeUI(startapp_selector)
 
         # evaluate the server functions
-        call_modules(modules, datasets, idprefix = "teal_modules")
+        call_teal_modules(modules, datasets, idprefix = "teal_modules")
 
         obs_filter_refresh$resume() # now update filter panel
 
@@ -313,5 +336,5 @@ init <- function(data,
     }
   }
 
-  list(server = server, ui = ui, datasets = datasets)
+  return(list(server = server, ui = ui, datasets = datasets))
 }

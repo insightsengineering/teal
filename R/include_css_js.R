@@ -19,7 +19,7 @@ include_css_files <- function(package = "teal", pattern = "*") {
 #'
 #' @param package (\code{character}) package name
 #' @param pattern (\code{character}) pattern of files to be included
-#' @param except (\code{character}) vector of files to be excluded
+#' @param except (\code{character}) vector of files to be excluded, matched via grep
 #'
 #' @export
 include_js_files <- function(package = "teal", pattern = "*", except = NULL) {
@@ -29,8 +29,8 @@ include_js_files <- function(package = "teal", pattern = "*", except = NULL) {
   list_files <- list.files(file.path(system.file(package = package), "js"), pattern = pattern, full.names = TRUE)
 
   if (!is.null(except)) {
-    for (i in except) {
-      list_files <- grep(i, list_files, value = TRUE, invert = TRUE)
+    for (file in except) {
+      list_files <- grep(file, list_files, value = TRUE, invert = TRUE)
     }
   }
 
@@ -43,11 +43,12 @@ include_js_files <- function(package = "teal", pattern = "*", except = NULL) {
 #' @param package (\code{character}) package name
 #'
 #' @export
-run_js_file <- function(file, package = "teal") {
-  stopifnot(is_character_vector(file))
+run_js_files <- function(files, package = "teal") {
+  stopifnot(is_character_vector(files))
   stopifnot(is_character_single(package))
 
-  for (i in file) {
-    shinyjs::runjs(paste0(readLines(system.file("js", i, package = package)), collapse = "\n"))
+  for (file in files) {
+    # `readLines` throws an error if the file cannot be found
+    shinyjs::runjs(paste0(readLines(system.file("js", file, package = package)), collapse = "\n"))
   }
 }

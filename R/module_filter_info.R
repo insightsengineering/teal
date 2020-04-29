@@ -15,12 +15,13 @@ ui_filter_info <- function(id) {
   )
 }
 
-srv_filter_info <- function(input, output, session, datasets) {
+# datanames are datanames to show, may not be all available
+srv_filter_info <- function(input, output, session, datasets, datanames = NULL) {
 
   output$table <- renderTable({
     .log("update uifiltersinfo")
 
-    datanames <- make_adsl_first(datasets$datanames())
+    datanames <- c("ADSL", "ADAE") # todo: add again: make_adsl_first(if_null(datanames, datasets$datanames()))
 
     observations <- vapply(
       X = datanames,

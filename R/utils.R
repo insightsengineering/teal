@@ -35,17 +35,18 @@ split_by_sep <- function(x, sep) {
   }, logical(1), USE.NAMES = FALSE)
 }
 
+# todo1: how unique must they be, current implementation does not work when depth > 1 because not recursive
 check_module_names <- function(modules) {
-  label <- unlist(switch(
-      class(modules),
+  labels <- switch(
+      class(modules)[[1]],
       teal_module = modules$label,
-      teal_modules = lapply(modules$modules, function(x) {
+      teal_modules = unlist(lapply(modules$children, function(x) {
         x$label
-      }),
-      stop("no default implementation for check_module_names")
-  ))
-  if (any(duplicated(label))) {
-    stop("Please choose a unique labels for each teal module.")
+      })),
+      stop("no default implementation for check_module_names for class ", class(modules))
+  )
+  if (any(duplicated(labels))) {
+    stop("Please choose unique labels for each teal module. Currently, they are ", labels)
   }
 }
 
@@ -83,7 +84,7 @@ extract_choices_labels <- function(choices, values = NULL) {
 check_pckg_quietly <- function(pckg, msg) {
   stopifnot(is_character_single(pckg), is_character_single(msg))
 
-  if (!requireNamespace(pckg, quietly = T)) {
+  if (!requireNamespace(pckg, quietly = TRUE)) {
     stop(msg)
   }
 

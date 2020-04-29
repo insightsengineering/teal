@@ -13,29 +13,38 @@
 #' @return object of class \code{teal_modules}
 #'
 modules <- function(label, ...) {
+  stopifnot(is_character_single(label))
 
-  args <- list(...)
-
-  class_check <- vapply(args, function(x) is(x, "teal_module") || is(x, "teal_modules"), logical(1))
-
-  if (any(!class_check)) {
+  submodules <- list(...)
+  is_right_class <- vapply(submodules, function(x) is(x, "teal_module") || is(x, "teal_modules"), logical(1))
+  if (any(!is_right_class)) {
     stop(paste("modules: not all argument are of class teal_module or teal_modules. Index:",
-               paste(which(!class_check), collapse = ", ")))
+               paste(which(!is_right_class), collapse = ", ")))
   }
 
-  structure(list(label = label, modules = args), class = "teal_modules")
+  structure(
+    list(label = label, children = submodules),
+    class = "teal_modules"
+  )
 }
 
 
 #' Create the root modules container
 #'
-#' sets the label to root in \code{\link{modules}}
+#' This is the root of all modules. It can contain a list of mixed types of
+#' `teal_module` and `teal_modules`. At depth
+#' Sets the label to root in \code{\link{modules}}
 #'
 #' @inheritParams modules
 #'
 #' @export
 #'
 root_modules <- function(...) {
+  if (nargs() == 0) {
+    # we don't put this check at the modules level because we want to allow
+    # empty modules that only have a filtering panel
+    stop("You must provide at least one module.")
+  }
   modules(label = "root", ...)
 }
 
@@ -72,6 +81,7 @@ module <- function(label, server, ui, filters, server_args = NULL, ui_args = NUL
 
   if (any(vapply(server_args, function(x) identical(x, "teal_datasets"), logical(1)))) {
     warning("teal_datasets is now deprecated, the datasets object gets automatically passed to the server function")
+    # todo2: why would you pass the string teal_datasets, it should rather check the name of the argument?
     server_args <- Filter(function(x) !identical(x, "teal_datasets"), server_args)
   }
 
@@ -87,16 +97,22 @@ module <- function(label, server, ui, filters, server_args = NULL, ui_args = NUL
   }
 
   structure(
-    list(label = label, server = server, ui = ui, filters = filters,
-         server_args = server_args, ui_args = ui_args),
+    list(
+      label = label, server = server, ui = ui, filters = filters,
+      server_args = server_args, ui_args = ui_args
+    ),
     class = "teal_module"
   )
 }
 
 
-#' check that modules has not more than depth 2
+#' Get module depth
 #'
-#' @param x \code{teal.modules} object
+#' Depth starts at 0, so a single `teal.module` has depth 0.
+#' Nesting it increases overall depth by 1.
+#'
+#' @md
+#' @param modules `teal.module` or `teal.modules` object
 #' @param depth optional, integer determining current depth level
 #'
 #' @return depth level for given module
@@ -132,19 +148,19 @@ module <- function(label, server, ui, filters, server_args = NULL, ui_args = NUL
 #'   m
 #' )
 #' teal:::modules_depth(x)
-modules_depth <- function(x, depth = 0) {
-  children_depth <- if (is(x, "teal_modules")) {
-    vapply(x$modules, modules_depth, numeric(1), depth = depth + 1)
+modules_depth <- function(modules, depth = 0) {
+  if (is(modules, "teal_modules")) {
+    max(vapply(modules$children, modules_depth, numeric(1), depth = depth + 1))
   } else {
     depth
   }
-  max(children_depth)
 }
-
-
 
 # turns a label into a valid html id
 label_to_id <- function(label, prefix = NULL) {
+  stopifnot(is_character_single(label))
+  stopifnot(is_character_single(prefix) || is.null(prefix))
+
   label <- gsub("^_|_$", "", gsub("[^[:alnum:]]", "_", label))
   if (!is.null(prefix)) {
     prefix <- gsub("^_|_$", "", gsub("[^[:alnum:]]", "_", prefix))
@@ -156,98 +172,137 @@ label_to_id <- function(label, prefix = NULL) {
 
 
 # somehow unexported S3 methods do not work as expected
-create_ui <- function(x, datasets, idprefix, is_root = FALSE) {
-  switch(
-    class(x),
-    teal_module = create_ui_teal_module(x, datasets, idprefix, is_root),
-    teal_modules = create_ui_teal_modules(x, datasets, idprefix, is_root),
-    stop("no default implementation for create_ui")
-  )
-}
+# modules: teal_module or teal_modules
+# is_root: whether top element of modules should be at the root, i.e. in no tabSet
+# for teal_module: returns the ui
+# for teal_modules: returns a tabsetPanel with each tab corresponding to one of its submodules
+tab_nested_ui <- function(modules, datasets, idprefix, is_root = TRUE) {
+  stopifnot(is_character_single(idprefix))
+  stopifnot(is_logical_single(is_root))
 
-create_ui_teal_modules <- function(x, datasets, idprefix, is_root = FALSE) {
+  id <- label_to_id(modules$label, idprefix)
+  return(switch(
+    class(modules)[[1]],
+    teal_modules = {
+      .log("** UI id for modules is", id)
 
-  id <- label_to_id(x$label, idprefix)
-
-  .log("** UI id for modules is", id)
-
-  tsp <- do.call(
-    tabsetPanel,
-    c(
-      list(id = id, type = if (is_root) "pills" else "tabs"),
-      as.vector(lapply(x$modules, create_ui, datasets = datasets, idprefix = id))
-    )
-  )
-
-  if (is_root) tsp else tabPanel(x$label, tsp)
-}
-
-create_ui_teal_module <- function(x, datasets, idprefix, is_root = FALSE) {
-  args <- isolate(resolve_teal_args(x$ui_args, datasets))
-
-  uiid <- label_to_id(x$label, idprefix)
-
-  .log("UI id for module is", uiid)
-
-  # we pass the unfiltered datasets as they may be needed to create the UI
-  tabPanel(
-    x$label,
-    tagList(
-      div(style = "margin-top: 25px;"),
       do.call(
-        x$ui,
-        c(list(id = uiid, datasets = datasets), args)
+        tabsetPanel,
+        c(
+          # by giving an id, we can reactively respond to tab changes
+          list(id = id, type = if (is_root) "pills" else "tabs"),
+          as.vector(lapply( # as.vector to unname
+            modules$children,
+            function(submodule) {
+              tabPanel(
+                submodule$label,
+                tab_nested_ui(submodule, datasets = datasets, idprefix = id, is_root = FALSE)
+              )
+            }
+          ))
+        )
       )
-    )
-  )
+    },
+    teal_module = {
+      .log("UI id for module is", id)
+
+      args <- isolate(resolve_teal_args(modules$ui_args, datasets))
+      # we pass the unfiltered datasets as they may be needed to create the UI
+      tagList(
+        div(style = "margin-top: 25px;"),
+        do.call(
+          modules$ui,
+          c(list(id = id, datasets = datasets), args)
+        )
+      )
+    },
+    stop("no default implementation for tab_nested_ui for class ", class(modules))
+  ))
 }
 
-call_modules <- function(x, datasets, idprefix) {
+tab_nested_ui2 <- function(modules, datasets, idprefix, is_root = TRUE) {
+  id <- label_to_id(modules$label, idprefix)
+
   switch(
-    class(x),
-    teal_modules = call_modules_teal_modules(x, datasets, idprefix),
-    teal_module = call_modules_teal_module(x, datasets, idprefix),
-    stop("no default implementation for call_modules")
+    class(modules)[[1]],
+    teal_modules = {
+      .log("** UI id for modules is", id)
+
+      tsp <- do.call(
+        tabsetPanel,
+        c(
+          list(id = id, type = if (is_root) "pills" else "tabs"),
+          as.vector(lapply(modules$children, tab_nested_ui, datasets = datasets, idprefix = id, is_root = FALSE))
+        )
+      )
+
+      # top element is a single element, so should not be included into a tabsetPanel,
+      # so don't wrap it into tabPanel
+      if (is_root) tsp else tabPanel(modules$label, tsp)
+    },
+    teal_module = {
+      # returns a tabPanel to be included into a tabsetPanel
+      .log("UI id for module is", id)
+
+      args <- isolate(resolve_teal_args(modules$ui_args, datasets))
+
+      # we pass the unfiltered datasets as they may be needed to create the UI
+      tabPanel(
+        modules$label,
+        tagList(
+          div(style = "margin-top: 25px;"),
+          do.call(
+            modules$ui,
+            c(list(id = id, datasets = datasets), args)
+          )
+        )
+      )
+    },
+    stop("no default implementation for tab_nested_ui for class ", class(modules))
   )
 }
 
-call_modules_teal_modules <- function(x, datasets, idprefix) {
-  id <- label_to_id(x$label, idprefix)
+# recursively call callModule for (nested) teal modules
+call_teal_modules <- function(modules, datasets, idprefix) {
+  stopifnot(is_character_single(idprefix))
+  id <- label_to_id(modules$label, idprefix)
 
-  lapply(x$modules, call_modules, datasets = datasets, idprefix = id)
-
-  invisible(NULL)
-}
-
-call_modules_teal_module <- function(x, datasets, idprefix) {
-
-  id <-  label_to_id(x$label, idprefix)
-
-  .log("server tab_module  id:", id)
-
-  x <- resolve_teal_module(x, datasets)
-
-  do.call(
-    callModule,
-    c(
-     list(module = x$server, id = id),
-     datasets = datasets,
-     x$server_args
-    )
+  switch(
+    class(modules)[[1]],
+    teal_modules = {
+      lapply(modules$children, call_teal_modules, datasets = datasets, idprefix = id)
+    },
+    teal_module = {
+      .log("server tab_module  id:", id)
+      modules <- resolve_teal_module(modules, datasets)
+      do.call(
+        callModule,
+        c(
+          list(module = modules$server, id = id, datasets = datasets),
+          modules$server_args
+        )
+      )
+    },
+    stop("call_teal_modules does not support class ", class(modules))
   )
-
-  invisible(NULL)
+  return(invisible(NULL))
 }
 
-
+#' Returns single string
+#' first line: modules label
+#' consecutive lines list recursively each submodule
 #' @export
-toString.teal_modules <- function(x, ...) { # nolint
-   paste(unlist(lapply(x, function(xi) toString(xi, ...))), collapse = "\n")
+toString.teal_modules <- function(modules, indent = 0, ...) { # nolint
+  paste(c(
+    paste0(rep(" ", indent), "+ ", modules$label),
+    unlist(lapply(modules$children, toString, indent = indent + 1, ...))
+  ), collapse = "\n")
 }
 
+#' Returns a single string that displays module label with indent
 #' @export
-toString.teal_module <- function(x, indent = 0, ...) { # nolint
-  paste0(paste0(rep(" ", indent), collapse = ""), "+ ", x$label)
+toString.teal_module <- function(module, indent = 0, ...) { # nolint
+  paste0(paste(rep(" ", indent), collapse = ""), "+ ", module$label, collapse = "")
 }
 
 #' @export
@@ -258,8 +313,4 @@ print.teal_modules <- function(x, ...) {
 }
 
 #' @export
-print.teal_module <- function(x, ...) {
-  s <- toString(x)
-  cat(s)
-  invisible(s)
-}
+print.teal_module <- print.teal_modules

@@ -20,12 +20,6 @@ convert_to_cdisc_data <- function(data) {
   return(data)
 }
 
-
-create_empty_datasets <- function() {
-  return(FilteredData$new())
-}
-
-
 set_datasets_data <- function(datasets, data) {
   stopifnot(is(datasets, "FilteredData"))
 
@@ -52,16 +46,15 @@ set_datasets_data <- function(datasets, data) {
 # todo1: rename
 # set initial filter to default state, i.e. such that the encoding panel is there when the panel is there
 # but no very restrictive filtering is applied (default filter may filter NA by default)
-set_datasets_filter <- function(datasets, filter) {
+set_datasets_default_filter <- function(datasets, vars_per_dataset) {
   stopifnot(is(datasets, "FilteredData"))
+  stopifnot(is.list(vars_per_dataset))
 
-  if (!is.null(filter) && !is.null(filter$init)) {
-    Map(function(vars, dataset) {
-      lapply(vars, function(varname) isolate(datasets$set_filter_state(
-        dataset, varname, state = datasets$get_default_filter_state(dataset, varname)
-      )))
-    }, filter$init, names(filter$init))
-  }
+  Map(function(vars, dataset) {
+    lapply(vars, function(varname) isolate(datasets$set_filter_state(
+      dataset, varname, state = datasets$get_default_filter_state(dataset, varname)
+    )))
+  }, vars_per_dataset, names(vars_per_dataset))
 
   return(invisible(NULL))
 }
