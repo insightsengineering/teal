@@ -7,7 +7,10 @@
 #'
 ui_filter_items <- function(id, dataname) {
   ns <- NS(id)
-  uiOutput(ns("filters"))
+  div(
+    id = ns(character(0)), # needed to assign an id, so filter can be shown / hidden
+    uiOutput(ns("filters"))
+  )
 }
 
 #' @importFrom shinyWidgets pickerInput pickerOptions
@@ -79,6 +82,7 @@ srv_filter_items <- function(input, output, session, datasets, dataname, contain
       sliderInput(
         selection_id,
         varlabel,
+        # when rounding, we must make sure that we don't set the slider to an invalid state
         min = floor(filter_info$range[1] * 100) / 100,
         max = ceiling(filter_info$range[2] * 100) / 100,
         value = filter_state$selection,
@@ -145,6 +149,16 @@ srv_filter_items <- function(input, output, session, datasets, dataname, contain
             # unfortunately, NULL is also returned for a select when nothing is selected
             # in a multiple checkbox, so we need to set it manually to character(0)
             selection_state <- if (is.null(selection_state)) character(0) else selection_state
+          } else if (type == "range") {
+            # we must make sure to truncate the state because the slider range is similar to
+            # [round(min(range)), round(max(range))]. Therefore, it may be outside the range
+            if (!is.null(selection_state)) {
+              real_range <- datasets$get_filter_info(dataname, varname)$range
+              selection_state <- c(
+                max(selection_state[[1]], real_range[[1]]),
+                min(selection_state[[2]], real_range[[2]])
+              )
+            }
           }
           if (is.null(selection_state)) {
             # NULL initially before UI is initialized, but we cannot ignore NULLs for
@@ -174,5 +188,7 @@ srv_filter_items <- function(input, output, session, datasets, dataname, contain
     })
   })
 
-  return(NULL)
+  # returning observers so you can cancel them in a similar fashion as in this module when integrating this module
+  # into another dynamic module
+  return(active_observers)
 }

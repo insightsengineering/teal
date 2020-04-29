@@ -116,9 +116,9 @@ FilteredData <- R6::R6Class( # nolint
     },
 
     #' @details
-    #' Get datanames
+    #' Get datanames, ADSL appears first
     datanames = function() {
-      return(names(private$datasets))
+      return(make_adsl_first(names(private$datasets)))
     },
 
     # getters and setters for attributes ----
@@ -612,7 +612,8 @@ FilteredData <- R6::R6Class( # nolint
         # check names are the same
         setequal(names(private$datasets), names(private$filtered_datasets)),
         setequal(names(private$datasets), names(private$filter_infos)),
-        all_true(private$datasets, function(data) !is.null(attr(data, "md5sum"))),
+        # iterating over reactive values: should use reactiveValuesToList first
+        all_true(self$datanames(), function(dataname) !is.null(attr(private$datasets[[dataname]], "md5sum"))),
         setequal(names(private$datasets), names(private$filter_state)),
         setequal(names(private$datasets), names(private$previous_filter_state))
       )

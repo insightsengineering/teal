@@ -113,7 +113,7 @@ init <- function(data,
   main_ui <- if (skip_start_screen) {
     set_datasets_data(datasets, data)
     set_datasets_default_filter(datasets, vars_per_dataset = filter$init)
-    teal_with_filters_ui(modules, datasets)
+    modules_with_filters_ui(modules, datasets)
   } else {
     message("App was initialized with delayed data loading.")
     div(id = startapp_id, data$get_ui("startapp_module"))
@@ -170,131 +170,96 @@ init <- function(data,
     # todo1: what is this javascript code doing
     run_js_files(files = "init.js", package = "teal")
 
-    # the call to teal_with_filters_ui creates inputs that watch the tabs prefixed by teal_modules
-    # we observe them and react whenever a tab is clicked
-    # browser()
-    #
-    # tab_ids_per_module
+    # todo: remove
+    # options(shiny.suppressMissingContextError = TRUE)
+    # on.exit(options(shiny.suppressMissingContextError = FALSE), add = TRUE)
 
-    # returns a flattened (if nested modules) list of datasets needed for each module
-    # in addition, gives ids by appending id of module to prefix (also works with nested
-    # modules)
-    datasets_per_module <- function(modules, idprefix) {
+    figure_out_active_module <- function(modules, idprefix) {
       id <- label_to_id(modules$label, idprefix)
-
-      if (is(modules, "teal_module")) {
-        setNames(list(modules$filters), id)
-      } else if (is(modules, "teal_modules")) {
-        unlist(
-          Map(function(i) datasets_per_module(i, idprefix = id), modules$children),
-          recursive = FALSE
-        )
-      } else {
-        stop("Unknown class for x: ", class(modules))
-      }
+      return(switch(
+        class(modules)[[1]],
+        teal_modules = {
+          active_submodule_label <- input[[id]]
+          figure_out_active_module(modules$children[[active_submodule_label]], idprefix = id)
+        },
+        teal_module = {
+          modules
+        },
+        stop("unknown module class ", class(modules))
+      ))
     }
 
-    # named vector with module ids and active datasets for that module
-    filters_tab_lookup <- datasets_per_module(modules, "teal_modules")
-
-    recurse_modules <- function(modules, idprefix) {
-      id <- label_to_id(modules$label, idprefix)
-
-      if (is(modules, "teal_modules")) {
-        c(id, lapply(modules$children, recurse_modules, idprefix = id))
-      } else {
-        NULL
-      }
-    }
-    id_modules <- unlist(recurse_modules(modules, "teal_modules"))
-
-    #browser()
-    #
-    # # contains list of datanames to show for filter in currently selected tab
-    # active_dataname_filters <- reactiveVal()
-
-    obs_filter_panel <- observe({
-
-      #browser()
-
-      # define reactivity dependence
-      main_tab <- input[["teal_modules_root"]]
-      secondary_tabs <- sapply(id_modules, function(id) input[[id]], USE.NAMES = TRUE)
-
-      # figure out which is the active tab/module
-      main_tab_id <- label_to_id(main_tab, "teal_modules_root")
-
-      active_module_id <- if (main_tab_id %in% id_modules) {
-        label_to_id(secondary_tabs[[main_tab_id]], main_tab_id)
-      } else {
-        main_tab_id
-      }
-
-      filters <- filters_tab_lookup[[active_module_id]]
-      .log("Active filters for tab", active_module_id, "are", if_null(filters, "[empty]"))
-      if (is.null(filters)) {
-        shinyjs::hide("teal_filter-panel")
-      } else {
-        shinyjs::show("teal_filter-panel")
-
-        if (identical(filters, "all")) {
-          lapply(datasets$datanames(), function(dataname) {
-            shinyjs::show(paste0("teal_add_", dataname, "_filters"))
-            shinyjs::show(paste0("teal_filters_", dataname))
-          })
-        } else {
-          # todo: the filters are just hidden from the UI, but still applied
-          lapply(
-            datasets$datanames(),
-            function(dataname) {
-              id <- paste0("teal_add_", dataname, "_filters")
-              if (dataname == "ADSL" || dataname %in% filters) {
-                shinyjs::show(id)
-                shinyjs::show(paste0("teal_filters_", dataname))
-              } else {
-                shinyjs::hide(id)
-                shinyjs::hide(paste0("teal_filters_", dataname))
-              }
-            }
-          )
-        }
-      }
-    }, suspended = TRUE)
-
-    # todo: this whole function (`teal::init`) should be rewritten to make it reactive
-    # the thing below is not reactive on the datasets which can be modified through set_data
+    # the call to modules_with_filters_ui creates inputs that watch the tabs prefixed by teal_modules
+    # we observe them and react whenever a tab is clicked by:
+    # - displaying only the relevant datasets in the right hand filter in the
+    # sections: filter info, filtering vars per dataname and add filter var per dataname
     call_filter_modules <- function(datasets) {
-      # -- filters Modules
-      callModule(srv_filter_info, "teal_filters_info", datasets)
+      active_datanames <- reactive_on_changes(reactive({
+        active_datanames <- figure_out_active_module(modules, idprefix = "teal_modules")$filter
+        if (identical(active_datanames, "all")) {
+          active_datanames <- datasets$datanames()
+        }
+        # always add ADSL because the other datasets are filtered based on ADSL
+        active_datanames <- union("ADSL", active_datanames)
+        return(make_adsl_first(active_datanames))
+      }))$value
+      # when the set of active datasets changes, we update the right filter panel
+      callModule(srv_filter_info, "teal_filters_info", datasets, datanames = reactive(active_datanames()))
+
+      # rather than regenerating the UI dynamically for the dataset filtering,
+      # we instead choose to hide/show the elements
+      # the filters are just hidden from the UI, but still applied
       # use isolate because we assume that the number of datasets does not change over the course of the teal app
-      # otherwise need dynamic UI, should be dynamic as well
+      # then hide/show relevant UI parts, see below
       datanames <- make_adsl_first(isolate(datasets$datanames()))
-      # should not use for loop as variables are otherwise only bound by reference
+      # should not use for loop as variables are otherwise only bound by reference and last dataname would be used
       lapply(
         datanames,
         function(dataname) callModule(srv_filter_items, paste0("teal_filters_", dataname), datasets, dataname)
       )
 
-      adsl_vars <- reactive(names(datasets$get_data("ADSL")))
       lapply(
         datanames,
         function(dataname) callModule(
-          srv_add_filter_variable, paste0("teal_add_", dataname, "_filters"),
+          srv_add_filter_variable, paste0("teal_add_", dataname, "_filter"),
           datasets, dataname,
-          omit_vars = if (dataname == "ADSL") character(0) else adsl_vars()
+          omit_vars = reactive(if (dataname == "ADSL") character(0) else names(datasets$get_data("ADSL")))
         )
       )
+
+      observeEvent(active_datanames(), {
+        if (is.null(active_datanames())) {
+          shinyjs::hide("teal_filter-panel")
+        } else {
+          shinyjs::show("teal_filter-panel")
+
+          lapply(
+            datasets$datanames(),
+            function(dataname) {
+              id_add_filter <- paste0("teal_add_", dataname, "_filter")
+              id_filter_dataname <- paste0("teal_filters_", dataname)
+              if (dataname %in% active_datanames()) {
+                shinyjs::show(id_add_filter)
+                shinyjs::show(id_filter_dataname)
+              } else {
+                shinyjs::hide(id_add_filter)
+                shinyjs::hide(id_filter_dataname)
+              }
+            }
+          )
+        }
+      })
     }
 
     if (skip_start_screen) {
 
       .log("init server - no start screen: initialize modules and filter panel")
       call_teal_modules(modules, datasets, idprefix = "teal_modules")
-      obs_filter_panel$resume()
       call_filter_modules(datasets)
 
     } else {
       # todo: check this part
+      stop("Currently not working")
 
       .log("init server - start screen: load screen")
       startapp_data <- callModule(data$get_server(), "startapp_module")
@@ -321,7 +286,7 @@ init <- function(data,
 
         set_datasets_data(datasets, startapp_data())
         set_datasets_default_filter(datasets, vars_per_dataset = filter$init)
-        ui_teal_main <- teal_with_filters_ui(modules, datasets)
+        ui_teal_main <- modules_with_filters_ui(modules, datasets)
 
         insertUI(selector = startapp_selector, where = "afterEnd", ui = ui_teal_main)
         removeUI(startapp_selector)
@@ -337,4 +302,18 @@ init <- function(data,
   }
 
   return(list(server = server, ui = ui, datasets = datasets))
+}
+
+# only react when the value of the expression changes and not each time
+# the expression triggers (without always changing its value)
+# we return the observer so you can cancel it when your module is dynamic
+# expr must be a function, e.g. can be reactive
+reactive_on_changes <- function(expr) {
+  stopifnot(is.function(expr))
+
+  rv <- reactiveVal()
+  obs <- observe({
+    rv(expr()) # only triggers rv on value updates
+  })
+  return(list(value = rv, observer = obs))
 }

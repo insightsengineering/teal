@@ -22,6 +22,12 @@ modules <- function(label, ...) {
                paste(which(!is_right_class), collapse = ", ")))
   }
 
+  # name them so we can more easily access the children
+  # beware however that the label of the submodules should not be changed as it must be kept synced
+  submodules <- setNames(
+    submodules,
+    lapply(submodules, function(submodule) submodule$label)
+  )
   structure(
     list(label = label, children = submodules),
     class = "teal_modules"
@@ -191,11 +197,11 @@ tab_nested_ui <- function(modules, datasets, idprefix, is_root = TRUE) {
         c(
           # by giving an id, we can reactively respond to tab changes
           list(id = id, type = if (is_root) "pills" else "tabs"),
-          as.vector(lapply( # as.vector to unname
+          unname(lapply(
             modules$children,
             function(submodule) {
               tabPanel(
-                submodule$label,
+                title = submodule$label, # also acts as value of input$tabsetId that this tabPanel is embedded in
                 tab_nested_ui(submodule, datasets = datasets, idprefix = id, is_root = FALSE)
               )
             }
@@ -220,6 +226,7 @@ tab_nested_ui <- function(modules, datasets, idprefix, is_root = TRUE) {
   ))
 }
 
+# todo: remove
 tab_nested_ui2 <- function(modules, datasets, idprefix, is_root = TRUE) {
   id <- label_to_id(modules$label, idprefix)
 

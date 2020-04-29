@@ -18,7 +18,7 @@ ui_add_filter_variable <- function(id, dataname) {
   ns <- NS(id)
 
   div(
-    id = ns(character(0)), # needed to properly show / hide filters
+    id = ns(character(0)), # needed to assign an id, so filter can be shown / hidden
     optionalSelectInput(
       ns("new_filter_var"),
       label = dataname,
@@ -32,7 +32,7 @@ ui_add_filter_variable <- function(id, dataname) {
   )
 }
 
-srv_add_filter_variable <- function(input, output, session, datasets, dataname, omit_vars = NULL) {
+srv_add_filter_variable <- function(input, output, session, datasets, dataname, omit_vars) {
   # currently active filter vars for this dataset
   active_filter_vars <- reactive({
     names(datasets$get_filter_state(dataname))
@@ -67,7 +67,7 @@ srv_add_filter_variable <- function(input, output, session, datasets, dataname, 
     .log("updating choices to add filter variables for", dataname)
     choices <- setdiff(
       names(datasets$get_data(dataname)),
-      c(active_filter_vars(), omit_vars)
+      c(active_filter_vars(), omit_vars())
     )
 
     updateOptionalSelectInput(

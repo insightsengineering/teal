@@ -1,3 +1,5 @@
+# This file contains mostly debugging modules
+
 #' Dummy module to test right encoding panel
 #'
 #' The `Show R Code` functionality is not available here because
@@ -9,6 +11,8 @@
 #'
 #' @md
 #' @param label `character` label of module
+#' @param active_datanames (`character` vector) active datasets that this module
+#'   depends on
 #'
 #' Not for end users, so do not export.
 #'
@@ -34,14 +38,19 @@
 #' )
 #' shinyApp(app$ui, app$server)
 #' }
-dummy_module <- function(label = "Dummy module") {
+dummy_module <- function(label = "Dummy module", active_datanames = "all") {
+  stopifnot(is_character_single(label))
+  stopifnot(identical(active_datanames, "all") || is_character_vector(active_datanames))
+
   module(
     label = label,
     server = function(input, output, session, datasets) {
       output$filter_calls <- renderText({
+        if (identical(active_datanames, "all")) {
+          active_datanames <- datasets$datanames()
+        }
         paste(lapply(
-          #make_adsl_first(datasets$datanames()), # todo1: add this again
-          make_adsl_first(intersect(datasets$datanames(), c("ADSL", "ADAE"))),
+          make_adsl_first(active_datanames),
           function(dataname) paste(datasets$get_filter_call(dataname), collapse = "\n")
         ), collapse = "\n\n")
       })
@@ -54,6 +63,8 @@ dummy_module <- function(label = "Dummy module") {
         verbatimTextOutput(ns("filter_calls"))
       )
     },
-    filters = c("ADSL", "ADAE") #"all"
+    filters = active_datanames
   )
 }
+
+

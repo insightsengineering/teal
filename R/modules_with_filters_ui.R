@@ -4,7 +4,14 @@
 #' to the nested modules.
 #' This function adds the right filter and info panel for each main tab.
 #'
-#' It uses the prefix "teal_modules" for the ids of the tabs.
+#' It uses the prefix "teal_modules" for the ids of the tabs. These can then be obtained
+#' recursively by using the function `label_to_id`.
+#'
+#' For each dataname, it also adds the id `paste0("teal_add_", dataname, "_filter")` which allows
+#' to add a filter variable for that dataname.
+#' All the filters for the dataname are regrouped within a module with id
+#' `paste0("teal_filters_", dataname)`.
+#'
 #'
 #' @inheritParams init
 #' @param datasets \link{FilteredData} object where all datasets
@@ -14,12 +21,12 @@
 #'   place holders for the teal modules
 #'
 #' @import shiny
-teal_with_filters_ui <- function(modules, datasets) {
+modules_with_filters_ui <- function(modules, datasets) {
 
   # use isolate because we assume that the number of datasets does not change over the course of the teal app
   # otherwise need dynamic UI
-  datanames <- make_adsl_first(isolate(datasets$datanames()))
-  filter_and_info_ui <- shinyjs::hidden(div(
+  datanames <- isolate(datasets$datanames())
+  filter_and_info_ui <- div(
     id = "teal_filter-panel", # id not used elsewhere
     div(
       id = "teal_filter_active_vars", # id not used elsewhere
@@ -41,11 +48,11 @@ teal_with_filters_ui <- function(modules, datasets) {
       tags$label("Add Filter Variables", class = "text-primary", style = "margin-bottom: 15px;"),
       tagList(
         lapply(datanames, function(dataname) {
-          ui_add_filter_variable(paste0("teal_add_", dataname, "_filters"), dataname)
+          ui_add_filter_variable(paste0("teal_add_", dataname, "_filter"), dataname)
         })
       )
     )
-  ))
+  )
 
   stopifnot(is(modules, "teal_modules")) # otherwise we will get the UI and not a tabsetPanel
   teal_ui <- tab_nested_ui(modules, datasets, idprefix = "teal_modules", is_root = TRUE)
