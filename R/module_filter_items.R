@@ -167,7 +167,7 @@ srv_filter_items <- function(input, output, session, datasets, dataname, contain
           }
           keep_na_state <- if_null(input[[id_keepna]], FALSE) # input field may not exist if var contains no NA
           state <- list(selection = selection_state, keep_na = keep_na_state)
-          .log("State:", state)
+          .log("State:", state$selection[1:min(length(state$selection), 8)]) # truncate the output
           datasets$set_filter_state(dataname, varname, state)
         },
         ignoreNULL = FALSE, # ignoreNULL: we don't want to ignore NULL when nothing is selected,

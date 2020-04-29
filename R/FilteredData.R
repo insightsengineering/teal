@@ -318,6 +318,9 @@ FilteredData <- R6::R6Class( # nolint
     #' When `varname` is non-NULL, only the state for that variable name is changed.
     #' Otherwise, the state is entirely set to the new state.
     #'
+    #' To remove all filters for a dataset, you can pass in `varname = NULL, state = list()`.
+    #' To remove a filter variable for a dataset, pass in `varname, state = NULL`.
+    #'
     #' @param state new state to set; when varname is NULL, state must be a named list
     #' with the new filter state for each variable (states of omitted variables are
     #' set to NULL, i.e. no filtering for these variables)
@@ -422,6 +425,8 @@ FilteredData <- R6::R6Class( # nolint
       stopifnot(is_character_single(dataname))
       stopifnot(is_character_single(varname))
 
+      # todo2: do we want to implement some additional logic that a categorical variable cannot be filtered
+      # if it has more than e.g. 1000 levels as the UI will otherwise get stuck
       return(self$get_filter_type(dataname, varname) != "unknown")
     },
 

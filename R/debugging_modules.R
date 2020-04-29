@@ -1,4 +1,4 @@
-# This file contains mostly debugging modules
+# This file contains modules useful for debugging and developing teal.
 
 #' Dummy module to test right encoding panel
 #'
@@ -46,9 +46,7 @@ dummy_module <- function(label = "Dummy module", active_datanames = "all") {
     label = label,
     server = function(input, output, session, datasets) {
       output$filter_calls <- renderText({
-        if (identical(active_datanames, "all")) {
-          active_datanames <- datasets$datanames()
-        }
+        active_datanames <- handle_active_datanames(datasets, active_datanames)
         paste(lapply(
           make_adsl_first(active_datanames),
           function(dataname) paste(datasets$get_filter_call(dataname), collapse = "\n")
@@ -67,4 +65,46 @@ dummy_module <- function(label = "Dummy module", active_datanames = "all") {
   )
 }
 
+reset_filters_module <- function(label = "Reset filters", active_datanames = "all") {
+  stopifnot(is_character_single(label))
+  stopifnot(identical(active_datanames, "all") || is_character_vector(active_datanames))
 
+  module(
+    label = label,
+    server = function(input, output, session, datasets) {
+      # reactive, processed version of datanames
+      active_datanames_r <- reactive(handle_active_datanames(datasets, active_datanames))
+      observeEvent(active_datanames_r(), {
+        updateCheckboxGroupInput(
+          session, "datasets_to_reset",
+          choices = active_datanames_r(), selected = active_datanames_r()
+        )
+      })
+
+      observeEvent(input$reset, {
+        lapply(
+          input$datasets_to_reset,
+          function(dataname) datasets$set_filter_state(dataname, varname = NULL, state = list())
+        )
+      })
+    },
+    ui = function(id, ...) {
+      ns <- NS(id)
+      div(
+        h2("Reset filters"),
+        checkboxGroupInput(ns("datasets_to_reset"), "Datasets to reset:"),
+        actionButton(ns("reset"), "Reset")
+      )
+    },
+    filters = active_datanames
+  )
+}
+
+# when active_datanames is "all", sets them to all datanames
+# otherwise, it makes sure that it is a subset of the available datanames
+handle_active_datanames <- function(datasets, active_datanames) {
+  if (identical(active_datanames, "all")) {
+    active_datanames <- datasets$datanames()
+  }
+  return(intersect(datasets$datanames(), active_datanames))
+}

@@ -63,7 +63,7 @@ Collate:
     'choices_labeled.R'
     'choices_selected.R'
     'data_extract_spec.R'
-    'dummy_module.R'
+    'debugging_modules.R'
     'filter_spec.R'
     'get_code.R'
     'include_css_js.R'

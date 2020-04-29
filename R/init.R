@@ -87,7 +87,6 @@ init <- function(data,
     # we don't support more nesting for clarity in the app
     stop("teal currently only supports module nesting of depth one or two.")
   }
-  check_module_names(modules)
 
   if (is_character_single(header)) {
     header <- tags$h1(header)

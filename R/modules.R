@@ -22,11 +22,16 @@ modules <- function(label, ...) {
                paste(which(!is_right_class), collapse = ", ")))
   }
 
+  labels <- lapply(submodules, function(submodule) submodule$label)
+  if (any(duplicated(labels))) {
+    stop("Please choose unique labels for each tab. Currently, they are ", toString(labels))
+  }
+
   # name them so we can more easily access the children
   # beware however that the label of the submodules should not be changed as it must be kept synced
   submodules <- setNames(
     submodules,
-    lapply(submodules, function(submodule) submodule$label)
+    labels
   )
   structure(
     list(label = label, children = submodules),
