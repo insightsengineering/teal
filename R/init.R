@@ -149,7 +149,8 @@ init <- function(data,
   )
 
   # ui function
-  ui <- shinyUI(
+  # must be a function of request for bookmarking
+  ui <- function(request) shinyUI(
     fluidPage(
       shinyjs::useShinyjs(),
       include_css_files(package = "teal"),
@@ -217,6 +218,11 @@ init <- function(data,
         function(dataname) callModule(srv_filter_items, paste0("teal_filters_", dataname), datasets, dataname)
       )
 
+      setBookmarkExclude(names = c(
+        lapply(datanames, function(dataname) paste0("teal_filters_", dataname)),
+        lapply(datanames, function(dataname) paste0("teal_add_", dataname, "_filter"))
+      ))
+
       lapply(
         datanames,
         function(dataname) callModule(
@@ -250,6 +256,21 @@ init <- function(data,
       })
     }
 
+    # only inputs are stored and Shiny app is restored based on inputs
+    # we need to add FilteredData to the state so we restore it as well
+    # to test bookmarking, include the bookmarking module, click on the bookmark
+    # button and then get the link. Keep the Shiny app running and open the
+    # obtained link in another browser tab.
+    # todo: lifecycle policy for bookmarked apps: when is the state deleted?
+    onBookmark(function(state) {
+      # store entire R6 class with reactive values in it
+      state$values$datasets <- datasets
+    })
+    onRestore(function(state) {
+      datasets$restore_from(state$values$datasets)
+    })
+
+    # todo: refactor this part
     if (skip_start_screen) {
 
       .log("init server - no start screen: initialize modules and filter panel")

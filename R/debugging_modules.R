@@ -1,5 +1,6 @@
 # This file contains modules useful for debugging and developing teal.
 
+# todo: rename dummy_module to filter_calls_module
 #' Dummy module to test right encoding panel
 #'
 #' The `Show R Code` functionality is not available here because
@@ -65,6 +66,45 @@ dummy_module <- function(label = "Dummy module", active_datanames = "all") {
   )
 }
 
+bookmark_module <- function(label = "Bookmark module") {
+  stopifnot(is_character_single(label))
+
+  module(
+    label = label,
+    server = function(input, output, session, datasets) {
+      # needs to be stored on server because datasets are too big to be URL-encoded
+      # done in server for now
+      #stopifnot(identical(getShinyOption("bookmarkStore"), "server"))
+
+      observeEvent(input$bookmark, {
+        validate(need(
+          identical(getShinyOption("bookmarkStore"), "server"),
+          paste0(
+            "Shiny bookmarking option must be enabled, it currently is: '",
+            getShinyOption("bookmarkStore"), "'"
+          )
+        ))
+        session$doBookmark()
+      })
+    },
+    ui = function(id, ...) {
+      ns <- NS(id)
+      div(
+        h2("Bookmark"),
+        bookmarkButton(id = ns("bookmark"))
+      )
+    },
+    # we show all filters so the user sees in which state the datasets will be bookmarked
+    filters = "all"
+  )
+}
+
+#' Reset filters for the specified datasets
+#'
+#' The module presents a group of checkboxes to select the datasets for which to reset
+#' all filters.
+#' todo: ideally, this button should also be on the right filtering panel with
+#' similar trash icon as for single variable right now
 reset_filters_module <- function(label = "Reset filters", active_datanames = "all") {
   stopifnot(is_character_single(label))
   stopifnot(identical(active_datanames, "all") || is_character_vector(active_datanames))
