@@ -60,7 +60,7 @@ srv_filter_items <- function(input, output, session, datasets, dataname, contain
           selection_id,
           varlabel,
           choices = filter_info$choices,
-          selected = filter_state$selection,
+          selected = filter_state$choices,
           multiple = TRUE,
           options = pickerOptions(
             actionsBox = TRUE,
@@ -74,7 +74,7 @@ srv_filter_items <- function(input, output, session, datasets, dataname, contain
           selection_id,
           varlabel,
           choices =  filter_info$choices,
-          selected = filter_state$selection,
+          selected = filter_state$choices,
           width = "100%"
         )
       }
@@ -85,7 +85,7 @@ srv_filter_items <- function(input, output, session, datasets, dataname, contain
         # when rounding, we must make sure that we don't set the slider to an invalid state
         min = floor(filter_info$range[1] * 100) / 100,
         max = ceiling(filter_info$range[2] * 100) / 100,
-        value = filter_state$selection,
+        value = filter_state$range,
         width = "100%"
       )
     } else if (filter_info$type == "logical") {
@@ -93,7 +93,7 @@ srv_filter_items <- function(input, output, session, datasets, dataname, contain
         selection_id,
         varlabel,
         choices = filter_info$choices,
-        selected = filter_state$selection,
+        selected = filter_state$status,
         width = "100%"
       )
     } else {
@@ -145,29 +145,31 @@ srv_filter_items <- function(input, output, session, datasets, dataname, contain
         }, {
           selection_state <- input[[id_selection]]
           type <- datasets$get_filter_type(dataname, varname)
-          if (type == "choices") {
+          state <- if (type == "choices") {
             # unfortunately, NULL is also returned for a select when nothing is selected
             # in a multiple checkbox, so we need to set it manually to character(0)
-            selection_state <- if (is.null(selection_state)) character(0) else selection_state
+            list(
+              choices = if (is.null(selection_state)) character(0) else selection_state
+            )
           } else if (type == "range") {
             # we must make sure to truncate the state because the slider range is similar to
             # [round(min(range)), round(max(range))]. Therefore, it may be outside the range
-            if (!is.null(selection_state)) {
-              real_range <- datasets$get_filter_info(dataname, varname)$range
-              selection_state <- c(
+            stopifnot(is_numeric_vector(selection_state), length(selection_state) == 2)
+            real_range <- datasets$get_filter_info(dataname, varname)$range
+            list(
+              range = c(
                 max(selection_state[[1]], real_range[[1]]),
                 min(selection_state[[2]], real_range[[2]])
               )
-            }
-          }
-          if (is.null(selection_state)) {
-            # NULL initially before UI is initialized, but we cannot ignore NULLs for
-            # selectInputs as they mean all unselected
-            return()
+            )
+          } else if (type == "logical") {
+            list(status = selection_state)
+          } else {
+            stop("Unknown filter type ", type, " for var ", varname)
           }
           keep_na_state <- if_null(input[[id_keepna]], FALSE) # input field may not exist if var contains no NA
-          state <- list(selection = selection_state, keep_na = keep_na_state)
-          .log("State:", state$selection[1:min(length(state$selection), 8)]) # truncate the output
+          state <- c(state, list(keep_na = keep_na_state))
+          .log("State for ", varname, ":", filter_state_to_str(type, state)) # truncate the output
           datasets$set_filter_state(dataname, varname, state)
         },
         ignoreNULL = FALSE, # ignoreNULL: we don't want to ignore NULL when nothing is selected,

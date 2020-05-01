@@ -66,7 +66,7 @@ srv_add_filter_variable <- function(input, output, session, datasets, dataname, 
   observe({
     .log("updating choices to add filter variables for", dataname)
     choices <- setdiff(
-      names(datasets$get_data(dataname)),
+      names(datasets$get_data(dataname, filtered = FALSE)),
       c(active_filter_vars(), omit_vars())
     )
 

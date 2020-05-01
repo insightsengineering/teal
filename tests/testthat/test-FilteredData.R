@@ -18,8 +18,8 @@ isolate({
   x$set_data("ADAE", ADAE)
 
   test_that("load and set_datasets", {
-      expect_equal(x$get_data("ADSL"), ADSL)
-      expect_equal(x$get_data("ADAE"), ADAE)
+      expect_equal(x$get_data("ADSL", filtered = FALSE), ADSL)
+      expect_equal(x$get_data("ADAE", filtered = FALSE), ADAE)
 
       expect_setequal(x$datanames(), c("ADSL", "ADAE"))
   })

@@ -5,3 +5,4 @@
 ^_pkgdown\.yml$
 ^Jenkinsfile$
 docs
+scratch

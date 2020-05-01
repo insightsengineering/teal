@@ -66,7 +66,7 @@ filtered_data_doc_helper <- function(dataname, varname, filtered) {
 #' x$datanames()
 #' x$print_data_info("ADSL")
 #' x$get_filter_info("ADSL")
-#' df <- x$get_data("ADSL")
+#' df <- x$get_data("ADSL", filtered = FALSE)
 #' # df
 #'
 #' x$get_filter_type("ADSL", "SEX")
@@ -127,6 +127,7 @@ FilteredData <- R6::R6Class( # nolint
     #' Get filtered or unfiltered dataset
     #'
     #' @inheritParams filtered_data_doc_helper
+    # todo2: remove default argument for filtered
     get_data = function(dataname, filtered = FALSE) {
       private$check_data_varname(dataname)
       stopifnot(is_logical_single(filtered))
@@ -340,7 +341,7 @@ FilteredData <- R6::R6Class( # nolint
       state_names <- names(state)
 
       # check if all names of state are columns of the dataname
-      inexistent_columns <- which(!(state_names %in% names(self$get_data(dataname))))
+      inexistent_columns <- which(!(state_names %in% names(self$get_data(dataname, filtered = FALSE))))
       if (length(inexistent_columns) > 0) {
         stop(paste(
           "variables", toString(state_names[inexistent_columns]),
@@ -386,14 +387,14 @@ FilteredData <- R6::R6Class( # nolint
       private$check_data_varname(dataname, varname)
 
       filter_info <- self$get_filter_info(dataname, varname)
-      selection_state <- switch(
+      state <- switch(
         filter_info$type,
-        choices = filter_info$choices,
-        range = filter_info$range,
-        logical = "TRUE",
+        choices = list(choices = filter_info$choices),
+        range = list(range = filter_info$range),
+        logical = list(status = "TRUE"),
         stop("unknown type")
       )
-      return(list(selection = selection_state, keep_na = FALSE))
+      return(c(state, list(keep_na = FALSE)))
     },
 
     #' @details
@@ -465,7 +466,7 @@ FilteredData <- R6::R6Class( # nolint
         filtered_joined_adsl <- paste0(dataname, "_FILTERED") # filtered_alone with
 
         keys <- self$get_data_attr("ADSL", "keys")$primary
-        stopifnot(!is.null(keys))
+        stopifnot(!is.null(keys)) #non-NULL because dataset is not ADSL
         # filter additionally to only have combinations of keys that are in ADSL_FILTERED
         merge_call <- call(
           "<-", as.name(filtered_joined_adsl),
@@ -492,20 +493,21 @@ FilteredData <- R6::R6Class( # nolint
     #' @param filtered_vars_only `logical` whether to only consider filtered
     #'   vars or unfiltered as well
     #' @param variables (`character` vector) variables to consider; if NULL, takes all
-    print_data_info = function(dataname, filtered_vars_only = FALSE, variables = NULL) {
+    print_filter_info = function(dataname, filtered_vars_only = FALSE, variables = NULL) {
       private$check_data_varname(dataname)
       stopifnot(is_logical_single(filtered_vars_only))
       stopifnot(is.null(variables) || is_character_vector(variables))
 
       # log with newline
       log2 <- function(...) {
-        cat(paste(..., collapse = " "))
+        cat(paste(...))
         cat("\n")
       }
 
       log2("====", dataname, "=======================")
 
-      df <- self$get_data(dataname)
+
+      df <- self$get_data(dataname, filtered = FALSE)
       if (is.null(df)) {
         log2("Data", dataname, "data is NULL") # not yet set with set_data
       } else {
@@ -519,46 +521,41 @@ FilteredData <- R6::R6Class( # nolint
         }
 
         filter_infos <- self$get_filter_info(dataname, all_vars = TRUE)
-        var_maxlength <- max(nchar(varnames))
-        for (name in varnames) {
-          var_chars <- filter_infos[[name]]
+        var_maxlength <- max(c(0, nchar(varnames)))
+        for (varname in varnames) {
+          var_info <- filter_infos[[varname]]
+          var_state <- self$get_filter_state(dataname, varname)
 
-          info <- switch(
-            var_chars$type,
-            range = paste(var_chars$range, collapse = " - "),
-            choices = {
-              if (length(var_chars$choices) > 5) {
-                paste0(toString(var_chars$choices[1:5]), ", ...")
-              } else {
-                toString(var_chars$choices)
-              }
-            },
-            logical = toString(var_chars$choices),
-            "" # no special info when filter type is unknown
-          )
-          log2(sprintf(paste0("%-", var_maxlength, "s has filter type %-10s: %s"), name, var_chars$type, info))
+          # right alignment: %10s, left alignment: %-10s
+          txt <- sprintf(paste0("%-", var_maxlength, "s has filter type %-10s: "), varname, var_info$type)
+          log2(paste0(txt, filter_state_to_str(var_info$type, var_info)))
+          log2(paste0(sprintf(paste0("%", nchar(txt), "s"), "\\--> selected: "), filter_state_to_str(var_info$type, var_state)))
+        }
+        if (length(varnames) == 0) {
+          log2("There are no ", if (filtered_vars_only) "filtered", "variables for dataset ", dataname)
         }
       }
       log2("===========================")
     },
 
     #' @details
-    #' Get info about dataname, e.g. number of patients
-    #' returned in a list
+    #' Get info about dataname, e.g. dimensions and
+    #' number of patients (in long datasets different from ADSL,
+    #' a patient can occur in zero or more rows)
+    #' @return a list with names `dim, patients`
     #'
-    get_data_info = function(dataname, filtered = TRUE) {
+    get_data_info = function(dataname, filtered) {
       stopifnot(is_character_single(dataname))
       stopifnot(is_logical_single(filtered))
 
       data <- self$get_data(dataname, filtered = filtered)
 
       keys <- self$get_data_attr(dataname, "keys")
-      unique_patient_colnames <- if_null(keys$foreign, keys$primary)
       # foreign is NULL if ADSL, otherwise foreign refers to primary keys of ADSL
+      unique_patient_colnames <- if_null(keys$foreign, keys$primary)
       stopifnot(!is.null(unique_patient_colnames))
 
       list(
-        name = dataname,
         dim = dim(data),
         patients = nrow(dplyr::distinct(data[unique_patient_colnames]))
       )
@@ -655,6 +652,7 @@ FilteredData <- R6::R6Class( # nolint
     #' Validate object to inspect if something is wrong
     #'
     validate = function() {
+      tryCatch({
       stopifnot(
         # check classes
         is.reactivevalues(private$datasets),
@@ -694,6 +692,8 @@ FilteredData <- R6::R6Class( # nolint
         })
       })
 
+      }, error = function(e) { browser(); stop(e)})
+
       return(invisible(NULL))
     },
 
@@ -711,7 +711,7 @@ FilteredData <- R6::R6Class( # nolint
         if (!(dataname %in% self$datanames())) { # data must be set already
           stop(paste("data", dataname, "is not available"))
         }
-        if (!is.null(varname) && !(varname %in% names(self$get_data(dataname)))) {
+        if (!is.null(varname) && !(varname %in% names(self$get_data(dataname, filtered = FALSE)))) {
           stop(paste("variable", varname, "is not in data", dataname))
         }
       })
@@ -727,7 +727,7 @@ FilteredData <- R6::R6Class( # nolint
       stopifnot(is_character_single(varname))
       private$check_data_varname(dataname, varname)
 
-      var_char <- self$get_filter_info(dataname, varname) # filter characteristics for var, e.g. range
+      var_info <- self$get_filter_info(dataname, varname) # filter characteristics for var, e.g. range
 
       if (is.null(var_state)) {
         # when state is NULL, this means no filtering is applied
@@ -741,40 +741,42 @@ FilteredData <- R6::R6Class( # nolint
         )
       }
 
-      selection_state <- var_state$selection
       switch(
-        var_char$type,
+        var_info$type,
         choices = {
-          if (any(!(selection_state %in% var_char$choices))) {
+          selection_state <- var_state$choices
+          if (any(!(selection_state %in% var_info$choices))) {
             stop(paste(
               "data", dataname, "variable", varname, ":", "choices (", toString(selection_state),
-              ") not all in valid choices (", toString(var_char$choices), ")"
+              ") not all in valid choices (", toString(var_info$choices), ")"
             ))
           }
         },
         range = {
+          selection_state <- var_state$range
           if ((length(selection_state) != 2) ||
             (selection_state[1] > selection_state[2]) ||
-            ((selection_state[1] < var_char$range[1]) && (selection_state[2] > var_char$range[2]))
+            ((selection_state[1] < var_info$range[1]) && (selection_state[2] > var_info$range[2]))
           ) {
             stop(paste(
               "data", dataname, "variable", varname, "range (", toString(selection_state),
-              ") not valid for full range (", toString(var_char$range), ")"
+              ") not valid for full range (", toString(var_info$range), ")"
             ))
           }
         },
         logical = {
+          selection_state <- var_state$status
           # the conceptual difference to type 'choices' is that it allows exactly one value rather than a subset
           stopifnot(length(selection_state) == 1)
 
-          if (!(selection_state %in% var_char$choices)) {
+          if (!(selection_state %in% var_info$choices)) {
             stop(paste(
               "data", dataname, "variable", varname, "choices (", toString(selection_state),
-              ") not in valid choices (", toString(var_char$choices), ")"
+              ") not in valid choices (", toString(var_info$choices), ")"
             ))
           }
         },
-        stop(paste("Unknown filter type", var_char$type, "for data", dataname, "and variable", varname))
+        stop(paste("Unknown filter type", var_info$type, "for data", dataname, "and variable", varname))
       )
       return(invisible(NULL))
     },
@@ -792,7 +794,6 @@ FilteredData <- R6::R6Class( # nolint
         function(filter_info, filter_state, varname) {
           stopifnot(!is.null(filter_state)) # filter_state only contains non-NULL values
 
-          selection_state <- filter_state$selection
           type <- filter_info$type
           if (is.null(type)) {
             # such a filter should never have been set
@@ -802,19 +803,23 @@ FilteredData <- R6::R6Class( # nolint
           filter_call <- switch(
             type,
             choices = {
+              selection_state <- filter_state$choices
               if (length(selection_state) == 1) {
                 call("==", as.name(varname), selection_state)
               } else {
                 call("%in%", as.name(varname), selection_state)
               }
             },
-            range = call(
-              "&",
-              call(">=", as.name(varname), selection_state[1]),
-              call("<=", as.name(varname), selection_state[2])
-            ),
+            range = {
+              selection_state <- filter_state$range
+              call(
+                "&",
+                call(">=", as.name(varname), selection_state[1]),
+                call("<=", as.name(varname), selection_state[2])
+              )
+            },
             logical = {
-              stopifnot(length(selection_state) == 1)
+              selection_state <- filter_state$status
               switch(
                 selection_state,
                 "TRUE" = as.name(varname),
@@ -964,3 +969,39 @@ FilteredData <- R6::R6Class( # nolint
     }
   )
 )
+
+#' Print the state in a nice format
+#'
+#' The `keep_na` is not printed.
+#' @md
+#' @param var_type `character` variable type
+#' @param var_state `list` with elements corresponding to variable
+#'   type; can be filter state or filter info
+filter_state_to_str <- function(var_type, state, add_na = FALSE) {
+  stopifnot(is_logical_single(add_na))
+
+  txt <- switch(
+    var_type,
+    range = paste(state$range, collapse = " - "),
+    choices = {
+      if (length(state$choices) > 5) {
+        paste0(toString(state$choices[1:5]), ", ...")
+      } else {
+        toString(state$choices)
+      }
+    },
+    logical = toString(state),
+    "" # no special info when filter type is unknown
+  )
+  if (add_na) {
+    txt <- if (!is.null(state$keep_na)) {
+      # filter state
+      paste0(txt, "; keep_na: ", toString(state$keep_na))
+    } else {
+      # filter info
+      stopifnot(!is.null(state$na_count))
+      paste0(txt, "; na_count: ", toString(state$na_count))
+    }
+  }
+  return(txt)
+}

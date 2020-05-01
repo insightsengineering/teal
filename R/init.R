@@ -60,7 +60,7 @@
 #'       "ADSL AGE histogram",
 #'       server = function(input, output, session, datasets) {
 #'         output$hist <- renderPlot(
-#'           hist(datasets$get_data("ADSL", filtered = TRUE, reactive = TRUE)$AGE)
+#'           hist(datasets$get_data("ADSL", filtered = TRUE)$AGE)
 #'         )
 #'       },
 #'       ui = function(id, ...) {
@@ -228,7 +228,7 @@ init <- function(data,
         function(dataname) callModule(
           srv_add_filter_variable, paste0("teal_add_", dataname, "_filter"),
           datasets, dataname,
-          omit_vars = reactive(if (dataname == "ADSL") character(0) else names(datasets$get_data("ADSL")))
+          omit_vars = reactive(if (dataname == "ADSL") character(0) else names(datasets$get_data("ADSL", filtered = FALSE)))
         )
       )
 
@@ -264,10 +264,14 @@ init <- function(data,
     # todo: lifecycle policy for bookmarked apps: when is the state deleted?
     onBookmark(function(state) {
       # store entire R6 class with reactive values in it
+      # todo: remove datasets unfiltered data so no data can be accessed illegally
       state$values$datasets <- datasets
     })
     onRestore(function(state) {
       datasets$restore_from(state$values$datasets)
+      datasets$get_filter_state("ADSL")
+      datasets$print_filter_info("ADSL", filtered_vars_only = TRUE)
+      browser()
     })
 
     # todo: refactor this part
