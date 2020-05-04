@@ -102,7 +102,8 @@ init <- function(data,
 
   skip_start_screen <- is(data, "cdisc_data")
 
-  datasets <- FilteredData$new()
+  # these are used to setup UI like data_extract to get info about data to display, the server will use one dataset per session
+  ui_datasets <- FilteredData$new()
 
   # todo1: document why startapp_id is needed
   startapp_id <- paste0("startapp_", paste0(sample(1:10, 10, replace = TRUE), collapse = ""))
@@ -110,9 +111,9 @@ init <- function(data,
 
   # define main UI that contains all functionality of Teal
   main_ui <- if (skip_start_screen) {
-    set_datasets_data(datasets, data)
-    set_datasets_default_filter(datasets, vars_per_dataset = filter$init)
-    modules_with_filters_ui(modules, datasets)
+    isolate(set_datasets_data(ui_datasets, data))
+    #set_datasets_default_filter(ui_datasets, vars_per_dataset = filter$init)
+    modules_with_filters_ui(modules, ui_datasets)
   } else {
     message("App was initialized with delayed data loading.")
     div(id = startapp_id, data$get_ui("startapp_module"))
@@ -167,33 +168,44 @@ init <- function(data,
 
   # server function
   server <- function(input, output, session) {
+    # we reconstruct a new dataset for each session
+    # otherwise, tabs are not independent across users
+    datasets <- FilteredData$new()
+    isolate({
+      set_datasets_data(datasets, data)
+      set_datasets_default_filter(datasets, vars_per_dataset = filter$init)
+      # we set filters from ui_datasets in case it has been modified, i.e. filters were set
+      # as the teal::init function returns ui_datasets, filters may have been set on it before
+      # the app is actually run; therefore, we copy them to the object here
+      datasets$set_filters_from(ui_datasets)
+    })
+
     # todo1: what is this javascript code doing
     run_js_files(files = "init.js", package = "teal")
-
-    # todo: remove
-    # options(shiny.suppressMissingContextError = TRUE)
-    # on.exit(options(shiny.suppressMissingContextError = FALSE), add = TRUE)
-
-    figure_out_active_module <- function(modules, idprefix) {
-      id <- label_to_id(modules$label, idprefix)
-      return(switch(
-        class(modules)[[1]],
-        teal_modules = {
-          active_submodule_label <- input[[id]]
-          figure_out_active_module(modules$children[[active_submodule_label]], idprefix = id)
-        },
-        teal_module = {
-          modules
-        },
-        stop("unknown module class ", class(modules))
-      ))
-    }
 
     # the call to modules_with_filters_ui creates inputs that watch the tabs prefixed by teal_modules
     # we observe them and react whenever a tab is clicked by:
     # - displaying only the relevant datasets in the right hand filter in the
     # sections: filter info, filtering vars per dataname and add filter var per dataname
     call_filter_modules <- function(datasets) {
+      # recursively goes down tabs to figure out the active module
+      figure_out_active_module <- function(modules, idprefix) {
+        id <- label_to_id(modules$label, idprefix)
+        return(switch(
+          class(modules)[[1]],
+          teal_modules = {
+            # id is the id of the tabset, the corresponding input element states which tab is selected
+            active_submodule_label <- input[[id]]
+            figure_out_active_module(modules$children[[active_submodule_label]], idprefix = id)
+          },
+          teal_module = {
+            stopifnot(is.null(input[[id]])) # id should not exist
+            modules
+          },
+          stop("unknown module class ", class(modules))
+        ))
+      }
+
       active_datanames <- reactive_on_changes(reactive({
         active_datanames <- figure_out_active_module(modules, idprefix = "teal_modules")$filter
         if (identical(active_datanames, "all")) {
@@ -203,25 +215,15 @@ init <- function(data,
         active_datanames <- union("ADSL", active_datanames)
         return(make_adsl_first(active_datanames))
       }))$value
-      # when the set of active datasets changes, we update the right filter panel
       callModule(srv_filter_info, "teal_filters_info", datasets, datanames = reactive(active_datanames()))
 
-      # rather than regenerating the UI dynamically for the dataset filtering,
-      # we instead choose to hide/show the elements
-      # the filters are just hidden from the UI, but still applied
       # use isolate because we assume that the number of datasets does not change over the course of the teal app
-      # then hide/show relevant UI parts, see below
       datanames <- make_adsl_first(isolate(datasets$datanames()))
-      # should not use for loop as variables are otherwise only bound by reference and last dataname would be used
+      # should not use for-loop as variables are otherwise only bound by reference and last dataname would be used
       lapply(
         datanames,
         function(dataname) callModule(srv_filter_items, paste0("teal_filters_", dataname), datasets, dataname)
       )
-
-      setBookmarkExclude(names = c(
-        lapply(datanames, function(dataname) paste0("teal_filters_", dataname)),
-        lapply(datanames, function(dataname) paste0("teal_add_", dataname, "_filter"))
-      ))
 
       lapply(
         datanames,
@@ -232,6 +234,9 @@ init <- function(data,
         )
       )
 
+      # rather than regenerating the UI dynamically for the dataset filtering,
+      # we instead choose to hide/show the elements
+      # the filters are just hidden from the UI, but still applied
       observeEvent(active_datanames(), {
         if (is.null(active_datanames())) {
           shinyjs::hide("teal_filter-panel")
@@ -254,24 +259,37 @@ init <- function(data,
           )
         }
       })
+
+      # these will be regenerated
+      setBookmarkExclude(names = c(
+        lapply(datanames, function(dataname) paste0("teal_filters_", dataname)),
+        lapply(datanames, function(dataname) paste0("teal_add_", dataname, "_filter"))
+      ))
     }
 
     # only inputs are stored and Shiny app is restored based on inputs
     # we need to add FilteredData to the state so we restore it as well
-    # to test bookmarking, include the bookmarking module, click on the bookmark
+    # to test bookmarking, include the `bookmark_module`, click on the bookmark
     # button and then get the link. Keep the Shiny app running and open the
     # obtained link in another browser tab.
-    # todo: lifecycle policy for bookmarked apps: when is the state deleted?
+    # todo2: lifecycle policy for bookmarked apps: when is the state deleted?
     onBookmark(function(state) {
       # store entire R6 class with reactive values in it
-      # todo: remove datasets unfiltered data so no data can be accessed illegally
+      # todo2: remove datasets unfiltered data so no data can be accessed illegally
       state$values$datasets <- datasets
     })
     onRestore(function(state) {
-      datasets$restore_from(state$values$datasets)
+      # We do not restore the unfiltered datasets themselves because
+      # they should have been loaded into this object. This avoids us having
+      # to deal with data access issues.
+
+      saved_datasets <- state$values$datasets
+      datasets$set_filters_from(saved_datasets)
+      datasets$check_equal_to(saved_datasets)
+
+      # todo: remove
       datasets$get_filter_state("ADSL")
-      datasets$print_filter_info("ADSL", filtered_vars_only = TRUE)
-      browser()
+      datasets$print_filter_info("ADSL", filtered_vars_only = TRUE) # todo: message sink as stdout is not displayed
     })
 
     # todo: refactor this part
@@ -325,7 +343,7 @@ init <- function(data,
     }
   }
 
-  return(list(server = server, ui = ui, datasets = datasets))
+  return(list(server = server, ui = ui, ui_datasets = ui_datasets))
 }
 
 # only react when the value of the expression changes and not each time

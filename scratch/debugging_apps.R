@@ -33,11 +33,12 @@ ADAE <- radae(cached = TRUE)
 ADLB <- radlb(cached = TRUE)
 "),
   modules = root_modules(
-    teal:::dummy_module()
+    #teal:::dummy_module()
+    teal:::bookmark_module()
   ),
   header = "Simple teal app",
   footer = tags$p(class = "text-muted", "Source: agile-R website")
-); isolate(app$datasets$set_filter_state("ADSL", "SEX", list(choices = "M", keep_na = TRUE))); shinyApp(app$ui, app$server)
+); isolate(app$ui_datasets$set_filter_state("ADSL", "SEX", list(choices = "M", keep_na = TRUE))); shinyApp(app$ui, app$server)
 # withr::with_options(list(warn = 2), shinyApp(app$ui, app$server))
 # options(warn = 2); shinyApp(app$ui, app$server)
 # options(warn = 0)
@@ -74,7 +75,7 @@ ADLB <- radlb(cached = TRUE)
   # ),
   header = "Simple teal app",
   footer = tags$p(class = "text-muted", "Source: agile-R website")
-); isolate(app$datasets$set_filter_state("ADSL", "SEX", list(choices = "M", keep_na = TRUE))); shinyApp(app$ui, app$server, enableBookmarking = "server")
+); isolate(app$ui_datasets$set_filter_state("ADSL", "SEX", list(choices = "M", keep_na = TRUE))); shinyApp(app$ui, app$server, enableBookmarking = "server")
 
 state$values$datasets$get_filter_state("ADSL")
 # todo: how to restore app while developing from URL

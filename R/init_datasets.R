@@ -34,7 +34,7 @@ set_datasets_data <- function(datasets, data) {
     attr(data_i, "keys") <- data[[idx]][["keys"]]
     attr(data_i, "column_labels") <- data[[idx]][["column_labels"]]
     attr(data_i, "data_label") <- data[[idx]][["data_label"]]
-    isolate(datasets$set_data(data[[idx]][["dataname"]], data_i))
+    datasets$set_data(data[[idx]][["dataname"]], data_i)
   }
 
   # set code to generate the unfiltered datasets
@@ -51,9 +51,9 @@ set_datasets_default_filter <- function(datasets, vars_per_dataset) {
   stopifnot(is.list(vars_per_dataset))
 
   Map(function(vars, dataset) {
-    lapply(vars, function(varname) isolate(datasets$set_filter_state(
+    lapply(vars, function(varname) datasets$set_filter_state(
       dataset, varname, state = datasets$get_default_filter_state(dataset, varname)
-    )))
+    ))
   }, vars_per_dataset, names(vars_per_dataset))
 
   return(invisible(NULL))

@@ -95,7 +95,7 @@ FilteredData <- R6::R6Class( # nolint
   ## FilteredData ====
   ## __Public Methods ====
   public = list(
-
+    id = NULL,# todo: remove
     #' @details
     #' Initialized with the allowed datanames. The actual datasets can afterwards
     #' be added using the set_data function.
@@ -108,6 +108,8 @@ FilteredData <- R6::R6Class( # nolint
       private$filtered_datasets <- reactiveValues()
       private$filter_state <- reactiveValues()
       private$filter_infos <- reactiveValues()
+
+      self$id <- uuid::UUIDgenerate()
 
       # we explicitly don't make it reactive
       private$previous_filter_state <- list()
@@ -174,6 +176,7 @@ FilteredData <- R6::R6Class( # nolint
       }
 
       # due to the data update, the old filter may no longer be valid, so we unset it
+
       private$filter_state[[dataname]] <- list()
       private$previous_filter_state[[dataname]] <- list()
 
@@ -370,6 +373,7 @@ FilteredData <- R6::R6Class( # nolint
         return(FALSE)
       }
 
+
       private$previous_filter_state[[dataname]] <- private$filter_state[[dataname]]
       private$filter_state[[dataname]] <- new_state
 
@@ -561,28 +565,34 @@ FilteredData <- R6::R6Class( # nolint
       )
     },
 
-    #' Restore from another object of this class
+    # Functions useful for restoring from another dataset ----
+
+    #' Check whether two datasets are equal
     #'
-    #' This is useful for bookmarking and is used to restore the filter state.
+    #' This is useful when an app is restored to make sure the user
+    #' is seeing the same thing.
     #'
-    #' We do not restore the unfiltered datasets themselves because
-    #' they should have been loaded into this object. This avoids us having
-    #' to deal with data access issues.
+    #' It will check identical datanames, filter states and optionally
+    #' identical data.
     #'
-    #' We also check that the other fields are the same.
-    #'
+    #' @md
+    #' @param other_datasets `FilteredData` will compare calling object to this object
+    #'   to detect any differences
     #' @param check_data_identical `logical` whether to check that unfiltered
     #'   data is really identical; when data is randomly generated, this may be
     #'   harsh, but ensures that both people really examine the same data;
     #'   otherwise, set it to FALSE.
     #'
-    restore_from = function(other_datasets, check_data_identical = TRUE) {
+    check_equal_to = function(other_datasets, check_data_identical = TRUE) {
       stopifnot(is(other_datasets, "FilteredData"))
       stopifnot(is_logical_single(check_data_identical))
 
-      # we do not restore the unfiltered datasets to avoid illegal data access issues
-      # yet, we check for identical datasets (or at least datanames)
+      # R6 is stupid unlike other OOO approaches, we cannot access private attributes of objects
+      # of a class within the functions of an object of the same class
+      # therefore, we use getters and setters
+
       stopifnot(setequal(self$datanames(), other_datasets$datanames()))
+
       if (check_data_identical) {
         datasets_equal <- vapply(self$datanames(), function(dataname) {
           identical(
@@ -594,20 +604,35 @@ FilteredData <- R6::R6Class( # nolint
           stop("The following datasets are not identical: ", toString(names(datasets_equal)))
         }
       }
-      # R6 is stupid unlike other OOO approaches, we cannot access private attributes of objects
-      # of a class within the functions of an object of the same class
-      stopifnot(identical(self$get_code(), other_datasets$get_code()))
 
-      # do not restore any reactive endpoints as they are restored automatically
+      filters_equal <- vapply(self$datanames(), function(dataname) {
+        identical(
+          self$get_filter_state(dataname),
+          other_datasets$get_filter_state(dataname)
+        )
+      }, logical(1))
+      if (!all(filters_equal)) {
+        stop("The following datasets are not identical: ", toString(names(filters_equal)))
+      }
+
+      stopifnot(identical(self$get_code(), other_datasets$get_code()))
+    },
+
+    #' Set filter from another object of class `FilteredData`
+    #'
+    #' This is useful for bookmarking and is used to restore the filter state.
+    #' @md
+    set_filters_from = function(other_datasets) {
+      stopifnot(is(other_datasets, "FilteredData"))
+
+      # We do not restore any reactive endpoints as they are restored automatically
       # through the reactivity chain
+
       # we have to be careful with reactiveValues to restore each item and not simply
       # reference the old reactive value, i.e. loop over it
       lapply(self$datanames(), function(dataname) {
-        private$filter_state[[dataname]] <- private$filter_state[[dataname]]
+        self$set_filter_state(dataname, varname = NULL, state = other_datasets$get_filter_state(dataname))
       })
-
-      # we also restore the previous filter state, not strictly needed
-      private$previous_filter_state <- other_datasets$previous_filter_state
     },
 
     # functions related to class attributes ----
@@ -692,7 +717,7 @@ FilteredData <- R6::R6Class( # nolint
         })
       })
 
-      }, error = function(e) { browser(); stop(e)})
+      }, error = function(e) { ; stop(e)})
 
       return(invisible(NULL))
     },
