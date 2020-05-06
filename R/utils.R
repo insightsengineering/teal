@@ -186,3 +186,27 @@ set_labels_df <- function(df, labels) {
   return(df)
 }
 
+# todo2: put into utils.nest
+#' Create a call using a namespaced function
+#'
+#' The arguments in ... need to be quoted because they will be evaluated otherwise
+#'
+#' @examples
+#' print_call_and_eval <- function(x) { eval(print(x)) }
+#'
+#' # mtcars$cyl evaluated
+#' call_with_colon("dplyr::filter", as.name("mtcars"), mtcars$cyl == 6) %>% print_call_and_eval()
+#' # mtcars$cyl argument not evaluated immediately (in call expression)
+#' call_with_colon("dplyr::filter", as.name("mtcars"), rlang::expr(cyl == 6)) %>% print_call_and_eval()
+#'
+#' # does not work because argument is evaluated and the
+#' # non-dplyr filter does not look inside mtcars
+#' call("filter", as.name("mtcars"), rlang::expr(cyl == 6)) %>% print_call_and_eval()
+#' # works, but non-dplyr filter is taken
+#' call("filter", as.name("mtcars"), mtcars$cyl == 6) %>% print_call_and_eval()
+call_with_colon <- function(name, ...) {
+  as.call(c(
+    parse(text = name)[[1]],
+    list(...)
+  ))
+}

@@ -1,6 +1,5 @@
 # This file contains modules useful for debugging and developing teal.
 
-# todo: rename dummy_module to filter_calls_module
 #' Dummy module to test right encoding panel
 #'
 #' The `Show R Code` functionality is not available here because
@@ -33,13 +32,13 @@
 #'     code = "ADSL <- radsl(cached = TRUE)"
 #'   ),
 #'   modules = root_modules(
-#'     teal:::dummy_module()
+#'     teal:::filter_calls_module()
 #'   ),
 #'   header = "Simple teal app"
 #' )
 #' shinyApp(app$ui, app$server)
 #' }
-dummy_module <- function(label = "Dummy module", active_datanames = "all") {
+filter_calls_module <- function(label = "Dummy module", active_datanames = "all") {
   stopifnot(is_character_single(label))
   stopifnot(identical(active_datanames, "all") || is_character_vector(active_datanames))
 
@@ -66,6 +65,15 @@ dummy_module <- function(label = "Dummy module", active_datanames = "all") {
   )
 }
 
+#' Bookmarking module
+#'
+#' Presents a button that bookmarks the current state.
+#' Note that Shiny does not bookmark uploaded files except when
+#' `enableBookmarking` is set to `server`.
+#' The module also prints a nice error message if bookmarking is not enabled.
+#'
+#' @md
+#' @inheritParams filter_calls_module
 bookmark_module <- function(label = "Bookmark module") {
   stopifnot(is_character_single(label))
 
@@ -98,6 +106,39 @@ bookmark_module <- function(label = "Bookmark module") {
       )
     },
     # we show all filters so the user sees in which state the datasets will be bookmarked
+    filters = "all"
+  )
+}
+
+#' Module that calls `browser()` on button click
+#'
+#' The module presents a button that will call `browser()`.
+#' This is useful as breakpoints or global variables can be set in this way.
+#' When you are developing another module and find a function not working
+#' as expected, without restarting the app, you can call `debug(your_fcn)` and
+#' then resume execution. On the next invocation of the function, it will
+#' debug it.
+#'
+#' @md
+#' @inheritParams filter_calls_module
+debug_browser_module <- function(label = "Debug with browser()") {
+  stopifnot(is_character_single(label))
+
+  module(
+    label = label,
+    server = function(input, output, session, datasets) {
+      observeEvent(input$call_browser, {
+        browser()
+      })
+    },
+    ui = function(id, ...) {
+      ns <- NS(id)
+      div(
+        h2("Debugging"),
+        p("Once in the console, you can type `debug(your_fcn)` and resume execution. This will then debug the function the next time it is called. For example, `debugonce(session$doBookmark)`. You can also access the datasets."), #nolintr
+        actionButton(ns("call_browser"), "Call browser()")
+      )
+    },
     filters = "all"
   )
 }

@@ -112,7 +112,7 @@ init <- function(data,
   # define main UI that contains all functionality of Teal
   main_ui <- if (skip_start_screen) {
     isolate(set_datasets_data(ui_datasets, data))
-    #set_datasets_default_filter(ui_datasets, vars_per_dataset = filter$init)
+    #set_datasets_default_filter(ui_datasets, vars_per_dataset = filter$init) # todo: has less priority than restored state
     modules_with_filters_ui(modules, ui_datasets)
   } else {
     message("App was initialized with delayed data loading.")
@@ -168,18 +168,6 @@ init <- function(data,
 
   # server function
   server <- function(input, output, session) {
-    # we reconstruct a new dataset for each session
-    # otherwise, tabs are not independent across users
-    datasets <- FilteredData$new()
-    isolate({
-      set_datasets_data(datasets, data)
-      set_datasets_default_filter(datasets, vars_per_dataset = filter$init)
-      # we set filters from ui_datasets in case it has been modified, i.e. filters were set
-      # as the teal::init function returns ui_datasets, filters may have been set on it before
-      # the app is actually run; therefore, we copy them to the object here
-      datasets$set_filters_from(ui_datasets)
-    })
-
     # todo1: what is this javascript code doing
     run_js_files(files = "init.js", package = "teal")
 
@@ -196,6 +184,7 @@ init <- function(data,
           teal_modules = {
             # id is the id of the tabset, the corresponding input element states which tab is selected
             active_submodule_label <- input[[id]]
+            stopifnot(!is.null(active_submodule_label))
             figure_out_active_module(modules$children[[active_submodule_label]], idprefix = id)
           },
           teal_module = {
@@ -207,6 +196,9 @@ init <- function(data,
       }
 
       active_datanames <- reactive_on_changes(reactive({
+        # inputs may be NULL when UI hasn't loaded yet, but this expression still triggered
+        req(!is.null(input[[label_to_id(modules$label, idprefix = "teal_modules")]]))
+
         active_datanames <- figure_out_active_module(modules, idprefix = "teal_modules")$filter
         if (identical(active_datanames, "all")) {
           active_datanames <- datasets$datanames()
@@ -215,24 +207,31 @@ init <- function(data,
         active_datanames <- union("ADSL", active_datanames)
         return(make_adsl_first(active_datanames))
       }))$value
+
       callModule(srv_filter_info, "teal_filters_info", datasets, datanames = reactive(active_datanames()))
 
       # use isolate because we assume that the number of datasets does not change over the course of the teal app
-      datanames <- make_adsl_first(isolate(datasets$datanames()))
+      isol_datanames <- make_adsl_first(isolate(datasets$datanames()))
       # should not use for-loop as variables are otherwise only bound by reference and last dataname would be used
       lapply(
-        datanames,
+        isol_datanames,
         function(dataname) callModule(srv_filter_items, paste0("teal_filters_", dataname), datasets, dataname)
       )
 
       lapply(
-        datanames,
+        isol_datanames,
         function(dataname) callModule(
           srv_add_filter_variable, paste0("teal_add_", dataname, "_filter"),
           datasets, dataname,
           omit_vars = reactive(if (dataname == "ADSL") character(0) else names(datasets$get_data("ADSL", filtered = FALSE)))
         )
       )
+
+      # these will be regenerated dynamically
+      setBookmarkExclude(names = c(
+        lapply(isol_datanames, function(dataname) paste0("teal_filters_", dataname)),
+        lapply(isol_datanames, function(dataname) paste0("teal_add_", dataname, "_filter"))
+      ))
 
       # rather than regenerating the UI dynamically for the dataset filtering,
       # we instead choose to hide/show the elements
@@ -259,12 +258,6 @@ init <- function(data,
           )
         }
       })
-
-      # these will be regenerated
-      setBookmarkExclude(names = c(
-        lapply(datanames, function(dataname) paste0("teal_filters_", dataname)),
-        lapply(datanames, function(dataname) paste0("teal_add_", dataname, "_filter"))
-      ))
     }
 
     # The Shiny bookmarking functionality by default only stores inputs.
@@ -288,8 +281,20 @@ init <- function(data,
       datasets$set_from_bookmark_state(saved_datasets_state)
     })
 
-    # todo: refactor this part
+    # we reconstruct a new dataset for each session
+    # otherwise, tabs are not independent across users
+    datasets <- FilteredData$new()
+
     if (skip_start_screen) {
+      isolate({
+        set_datasets_data(datasets, data)
+        set_datasets_default_filter(datasets, vars_per_dataset = filter$init)
+        # we set filters from ui_datasets in case it has been modified, i.e. filters were set
+        # as the teal::init function returns ui_datasets, filters may have been set on it before
+        # the app is actually run; therefore, we copy them to the object here
+        # overwrites any init filters
+        datasets$set_filters_from(ui_datasets)
+      })
 
       .log("init server - no start screen: initialize modules and filter panel")
       call_teal_modules(modules, datasets, idprefix = "teal_modules")
@@ -297,44 +302,68 @@ init <- function(data,
 
     } else {
       # todo: check this part
-      stop("Currently not working")
 
       .log("init server - start screen: load screen")
       startapp_data <- callModule(data$get_server(), "startapp_module")
       stop_if_not(list(is.reactive(startapp_data), "first app module has to return reactive object"))
+      startapp_data <- reactiveVal(cdisc_data_global) # todo: for faster testing
 
-      # we need to run filter sub-modules after gui refreshes due to insertUI/removeUI
-      # we are about to update GUI elements which are not visible in the initial screen
-      # make use of invalidateLater to wait for a refresh and then proceed
-      session$userData$has_initialized <- FALSE
-      obs_filter_refresh <- observe({
-        if (!session$userData$has_initialized) {
-          session$userData$has_initialized <- TRUE
-          invalidateLater(1) # reexecute this observe to fall in the else statement
-        } else {
-          .log("init server - start screen: initialize filter panel")
-          obs_filter_panel$resume()
-          call_filter_modules(datasets)
-        }
-      }, suspended = TRUE)
+      # ignoreNULL to not trigger at the beginning and just handle it once because data should usually not change afterwards
+      observeEvent(startapp_data(), ignoreNULL = TRUE, once = TRUE, {
+        data <- startapp_data()
+        isolate({
+          set_datasets_data(datasets, data)
+          set_datasets_default_filter(datasets, vars_per_dataset = filter$init)
+          # we set filters from ui_datasets in case it has been modified, i.e. filters were set
+          # as the teal::init function returns ui_datasets, filters may have been set on it before
+          # the app is actually run; therefore, we copy them to the object here
+          # overwrites any init filters
+          #datasets$set_filters_from(ui_datasets), not availabe in this case
+        })
 
-      ## now show or hide the filter panels based on active tab
-      observeEvent(startapp_data(), {
-        .log("init server - start screen: receive data from startup screen")
+        .log("init server - no start screen: initialize modules and filter panel")
+        call_teal_modules(modules, datasets, idprefix = "teal_modules")
+        call_filter_modules(datasets)
+        #todo: remove copy paste
 
-        set_datasets_data(datasets, startapp_data())
-        set_datasets_default_filter(datasets, vars_per_dataset = filter$init)
         ui_teal_main <- modules_with_filters_ui(modules, datasets)
-
         insertUI(selector = startapp_selector, where = "afterEnd", ui = ui_teal_main)
         removeUI(startapp_selector)
+      })
 
-        # evaluate the server functions
-        call_teal_modules(modules, datasets, idprefix = "teal_modules")
 
-        obs_filter_refresh$resume() # now update filter panel
-
-      }, ignoreNULL = TRUE)
+      # # we need to run filter sub-modules after gui refreshes due to insertUI/removeUI
+      # # we are about to update GUI elements which are not visible in the initial screen
+      # # make use of invalidateLater to wait for a refresh and then proceed
+      # session$userData$has_initialized <- FALSE
+      # obs_filter_refresh <- observe({
+      #   if (!session$userData$has_initialized) {
+      #     session$userData$has_initialized <- TRUE
+      #     invalidateLater(1) # reexecute this observe to fall in the else statement
+      #   } else {
+      #     .log("init server - start screen: initialize filter panel")
+      #     obs_filter_panel$resume()
+      #     call_filter_modules(datasets)
+      #   }
+      # }, suspended = TRUE)
+      #
+      # ## now show or hide the filter panels based on active tab
+      # observeEvent(startapp_data(), {
+      #   .log("init server - start screen: receive data from startup screen")
+      #
+      #   set_datasets_data(datasets, startapp_data())
+      #   set_datasets_default_filter(datasets, vars_per_dataset = filter$init)
+      #   ui_teal_main <- modules_with_filters_ui(modules, datasets)
+      #
+      #   insertUI(selector = startapp_selector, where = "afterEnd", ui = ui_teal_main)
+      #   removeUI(startapp_selector)
+      #
+      #   # evaluate the server functions
+      #   call_teal_modules(modules, datasets, idprefix = "teal_modules")
+      #
+      #   obs_filter_refresh$resume() # now update filter panel
+      #
+      # }, ignoreNULL = TRUE)
 
     }
   }

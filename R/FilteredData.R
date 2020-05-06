@@ -902,10 +902,9 @@ FilteredData <- R6::R6Class( # nolint
         }
         combined_filters <- Reduce(function(x, y) call("&", x, y), data_filter_call_items)
 
-        # do not use subset (this is a convenience function intended for use interactively, stated in the doc)
-        # as a result of subset and filter, NA is filtered out; this can be circumvented by explicitly
-        # adapting the filtering condition above to watch out for NAs and keep them
-        return(call("subset", as.name(dataname), combined_filters))
+        # subset is meant for interactive use, so we use filter
+        # todo: this only works with dplyr::filter, but call does not accept it
+        return(call_with_colon("dplyr::filter", as.name(dataname), combined_filters))
       }
     },
 

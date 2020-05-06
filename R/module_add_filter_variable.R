@@ -52,24 +52,31 @@ srv_add_filter_variable <- function(input, output, session, datasets, dataname, 
         datasets$restore_filter(dataname, varname = var)
         datasets$validate_temp() # todo1: remove
       } else {
-        warning_message <- paste(
+        warning_message(paste(
           "variable",
           paste(dataname, var, sep = "."),
           "can't be currently used as a filter variable."
-        )
+        ))
       }
     }
   })
+
   # remove selected option from choices and set again to unselected, so a new
   # variable can be selected
   # reacts both when data changed and when active_filter_vars is updated
   observe({
+    # we add this dependency here so that the choices update once the UI is set up (which triggers an event)
+    # even though the new_filter_var is set to NULL, this only happens once all observers were executed,
+    # so the above that adds it to the filtered variables still has its non-NULL value
+    input$new_filter_var
+
     .log("updating choices to add filter variables for", dataname)
     choices <- setdiff(
       names(datasets$get_data(dataname, filtered = FALSE)),
       c(active_filter_vars(), omit_vars())
     )
 
+    # todo2: filter out choices that cannot be filtered or show warning message instead as right now?
     updateOptionalSelectInput(
       session,
       "new_filter_var",

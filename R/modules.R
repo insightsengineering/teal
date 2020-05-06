@@ -168,14 +168,14 @@ modules_depth <- function(modules, depth = 0) {
 }
 
 # turns a label into a valid html id
-label_to_id <- function(label, prefix = NULL) {
+label_to_id <- function(label, idprefix = NULL) {
   stopifnot(is_character_single(label))
-  stopifnot(is_character_single(prefix) || is.null(prefix))
+  stopifnot(is_character_single(idprefix) || is.null(idprefix))
 
   label <- gsub("^_|_$", "", gsub("[^[:alnum:]]", "_", label))
-  if (!is.null(prefix)) {
-    prefix <- gsub("^_|_$", "", gsub("[^[:alnum:]]", "_", prefix))
-    paste(prefix, label, sep = "_")
+  if (!is.null(idprefix)) {
+    idprefix <- gsub("^_|_$", "", gsub("[^[:alnum:]]", "_", idprefix))
+    paste(idprefix, label, sep = "_")
   } else {
     label
   }

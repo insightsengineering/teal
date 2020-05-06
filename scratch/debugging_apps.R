@@ -33,7 +33,7 @@ ADAE <- radae(cached = TRUE)
 ADLB <- radlb(cached = TRUE)
 "),
   modules = root_modules(
-    #teal:::dummy_module()
+    #teal:::filter_calls_module()
     teal:::bookmark_module()
   ),
   header = "Simple teal app",
@@ -62,16 +62,16 @@ ADSL <- radsl(cached = TRUE)
 ADAE <- radae(cached = TRUE)
 ADLB <- radlb(cached = TRUE)
 "),
-  # modules = teal:::dummy_module("D1"),
+  # modules = teal:::filter_calls_module("D1"),
   modules = root_modules(
     teal:::bookmark_module("B1"),
-    # modules(label = "A1", teal:::dummy_module("D1.1", active_datanames = c("ADSL", "ADAE")), teal:::dummy_module("D1.2")),
+    # modules(label = "A1", teal:::filter_calls_module("D1.1", active_datanames = c("ADSL", "ADAE")), teal:::filter_calls_module("D1.2")),
     # modules(label = "Reset", teal:::reset_filters_module("R1", active_datanames = c("ADSL", "ADLB"))),
-    # modules(label = "A2", teal:::dummy_module("D2", active_datanames = c("ADSL"))),
-    teal:::dummy_module("D3", active_datanames = c("ADAE"))
+    # modules(label = "A2", teal:::filter_calls_module("D2", active_datanames = c("ADSL"))),
+    teal:::filter_calls_module("D3", active_datanames = c("ADAE"))
   ),
   # modules = root_modules(
-  #   teal:::dummy_module("D1")
+  #   teal:::filter_calls_module("D1")
   # ),
   header = "Simple teal app",
   footer = tags$p(class = "text-muted", "Source: agile-R website")
@@ -85,19 +85,19 @@ state$values$datasets$get_filter_state("ADSL")
 
 
 devtools::load_all();
-toString(teal:::dummy_module("D3"), indent = 2)
+toString(teal:::filter_calls_module("D3"), indent = 2)
 debugonce(toString.teal_modules)
-modules(label = "A1", teal:::dummy_module("D1.1"), teal:::dummy_module("D1.2"))
+modules(label = "A1", teal:::filter_calls_module("D1.1"), teal:::filter_calls_module("D1.2"))
 
-modules(label = "A2", teal:::dummy_module("D2"))
+modules(label = "A2", teal:::filter_calls_module("D2"))
 root_modules(
-  modules(label = "A1", teal:::dummy_module("D1.1"), teal:::dummy_module("D1.2")),
-  modules(label = "A2", teal:::dummy_module("D2")),
-  teal:::dummy_module("D3")
+  modules(label = "A1", teal:::filter_calls_module("D1.1"), teal:::filter_calls_module("D1.2")),
+  modules(label = "A2", teal:::filter_calls_module("D2")),
+  teal:::filter_calls_module("D3")
 )
 
 debugonce(toString.teal_modules)
-toString(modules(label = "A1", teal:::dummy_module("D1.1"), teal:::dummy_module("D1.2")))
+toString(modules(label = "A1", teal:::filter_calls_module("D1.1"), teal:::filter_calls_module("D1.2")))
 
 
 
