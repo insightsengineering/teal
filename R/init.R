@@ -112,15 +112,20 @@ init <- function(data,
   ui_datasets <- FilteredData$new()
 
   # todo1: document why startapp_id is needed
-  startapp_id <- paste0("startapp_", paste0(sample(1:10, 10, replace = TRUE), collapse = ""))
+  startapp_id <- paste0("startapp_screen_", paste0(sample(1:10, 10, replace = TRUE), collapse = ""))
   startapp_selector <- paste0("#", startapp_id)
 
   skip_start_screen <- is(data, "cdisc_data")
-  # define main UI that contains all functionality of Teal
+  # Startup screen for delayed loading
+  # We use delayed loading in all cases, even when the data does not need to be fetched.
+  # This has the benefit that when filtering the data takes a lot of time initially, the
+  # Shiny app does not time out.
   main_ui <- if (skip_start_screen) {
-    isolate(set_datasets_data(ui_datasets, data))
-    #set_datasets_default_filter(ui_datasets, vars_per_dataset = initial_filter_states) # todo: has less priority than restored state
-    modules_with_filters_ui(modules, ui_datasets)
+    div(id = startapp_id, div(
+      h1("Hello, the teal app is starting up."),
+      p("Here is a joke in the meantime:"),
+      tags$b(get_random_joke())
+    ))
   } else {
     message("App was initialized with delayed data loading.")
     div(id = startapp_id, data$get_ui("startapp_module"))
@@ -280,53 +285,49 @@ init <- function(data,
       # reactivity to recompute the filtered datasets, which is not needed.
       state$values$datasets_state <- datasets$get_bookmark_state()
     })
+    saved_datasets_state <- NULL # set when restored because data must already be populated
     onRestore(function(state) {
       # The saved datasets mainly contains the filter states as the data
       # was set to NULL before storing. The data should have been set again
       # by the user, so we just need to set the filters.
-      saved_datasets_state <- state$values$datasets_state
-      datasets$set_from_bookmark_state(saved_datasets_state)
+      saved_datasets_state <<- state$values$datasets_state
     })
 
     # we reconstruct a new dataset for each session
     # otherwise, tabs are not independent across users
     datasets <- FilteredData$new()
-
+    # raw_data contains cdisc_data(), i.e. list of unfiltered data frames
     if (skip_start_screen) {
+      raw_data <- reactiveVal(data) # will trigger by setting it
+    } else {
+      .log("fetching the data through delayed loading - showing start screen")
+      raw_data <- callModule(data$get_server(), "startapp_module")
+      stop_if_not(list(is.reactive(raw_data), "first app module has to return reactive object"))
+      #raw_data <- reactive(cdisc_data_global) # todo: remove; for faster testing
+    }
+
+    # ignoreNULL to not trigger at the beginning and just handle it once because data should usually not change afterwards
+    observeEvent(raw_data(), ignoreNULL = TRUE, once = TRUE, {
+      data <- raw_data()
       isolate({
         set_datasets_data(datasets, data)
         set_datasets_filters(datasets, initial_filter_states)
+        if (!is.null(saved_datasets_state)) {
+          # actual thing to restore
+          # cannot call this directly in onRestore because data was not set at that time
+          datasets$set_from_bookmark_state(saved_datasets_state)
+        }
       })
 
       .log("init server - no start screen: initialize modules and filter panel")
       call_teal_modules(modules, datasets, idprefix = "teal_modules")
       call_filter_modules(datasets)
+      #todo: remove copy paste
 
-    } else {
-      .log("init server - start screen: load screen")
-      startapp_data <- callModule(data$get_server(), "startapp_module")
-      stop_if_not(list(is.reactive(startapp_data), "first app module has to return reactive object"))
-      startapp_data <- reactiveVal(cdisc_data_global) # todo: for faster testing
-
-      # ignoreNULL to not trigger at the beginning and just handle it once because data should usually not change afterwards
-      observeEvent(startapp_data(), ignoreNULL = TRUE, once = TRUE, {
-        data <- startapp_data()
-        isolate({
-          set_datasets_data(datasets, data)
-          set_datasets_filters(datasets, initial_filter_states)
-        })
-
-        .log("init server - no start screen: initialize modules and filter panel")
-        call_teal_modules(modules, datasets, idprefix = "teal_modules")
-        call_filter_modules(datasets)
-        #todo: remove copy paste
-
-        ui_teal_main <- modules_with_filters_ui(modules, datasets)
-        insertUI(selector = startapp_selector, where = "afterEnd", ui = ui_teal_main)
-        removeUI(startapp_selector)
-      })
-
-    }
+      ui_teal_main <- modules_with_filters_ui(modules, datasets)
+      insertUI(selector = startapp_selector, where = "afterEnd", ui = ui_teal_main)
+      removeUI(startapp_selector)
+    })
   }
 
   return(list(server = server, ui = ui))

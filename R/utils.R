@@ -210,3 +210,15 @@ call_with_colon <- function(name, ...) {
     list(...)
   ))
 }
+
+# Get a random joke to display while the app is starting up
+get_random_joke <- function() {
+  # downloaded from https://raw.githubusercontent.com/Daronspence/One-Liners/master/jokes.txt
+  file_contents <- readLines(system.file("jokes.txt", package = "teal"))
+  # jokes are separated by one empty line each, a joke can be over several lines
+  # todo: above not yet implemented, currently not for multiline jokes
+  file_contents <- file_contents[file_contents != ""]
+  return(sample(file_contents, 1))
+}
+
+
