@@ -38,7 +38,7 @@ ADLB <- radlb(cached = TRUE)
   ),
   header = "Simple teal app",
   footer = tags$p(class = "text-muted", "Source: agile-R website")
-); isolate(app$ui_datasets$set_filter_state("ADSL", "SEX", list(choices = "M", keep_na = TRUE))); shinyApp(app$ui, app$server, enableBookmarking = "server")
+); isolate(app$ui_datasets$set_filter_state("ADSL", "SEX", list(choices = "M", keep_na = TRUE))); shinyApp(app$ui, app$server, enableBookmarking = "url")
 # withr::with_options(list(warn = 2), shinyApp(app$ui, app$server))
 # options(warn = 2); shinyApp(app$ui, app$server)
 # options(warn = 0)

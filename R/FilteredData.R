@@ -568,59 +568,6 @@ FilteredData <- R6::R6Class( # nolint
 
     # Functions useful for restoring from another dataset ----
 
-    #' #todo: remove this and other related ones
-    #' #' Check whether two datasets are equal
-    #' #'
-    #' #' This is useful when an app is restored to make sure the user
-    #' #' is seeing the same thing.
-    #' #'
-    #' #' It will check identical datanames, filter states and optionally
-    #' #' identical data.
-    #' #' We do not check the previous filter state to be identical.
-    #' #'
-    #' #' @md
-    #' #' @param other_datasets `FilteredData` will compare calling object to this object
-    #' #'   to detect any differences
-    #' #' @param check_data_identical `logical` whether to check that unfiltered
-    #' #'   data is identical based on md5 sum; when data is randomly generated, this may be
-    #' #'   harsh, but ensures that both people really examine the same data;
-    #' #'   otherwise, set it to FALSE.
-    #' #'
-    #' check_equal_to = function(other_datasets, check_data_identical = TRUE) {
-    #'   stopifnot(is(other_datasets, "FilteredData"))
-    #'   stopifnot(is_logical_single(check_data_identical))
-    #'
-    #'   # R6 is stupid unlike other OOO approaches, we cannot access private attributes of objects
-    #'   # of a class within the functions of an object of the same class
-    #'   # therefore, we use getters and setters
-    #'
-    #'   stopifnot(setequal(self$datanames(), other_datasets$datanames()))
-    #'
-    #'   if (check_data_identical) {
-    #'     datasets_equal <- vapply(self$datanames(), function(dataname) {
-    #'       identical(
-    #'         self$get_data_attr(dataname, "md5sum"),
-    #'         other_datasets$get_data_attr(dataname, "md5sum")
-    #'       )
-    #'     }, logical(1))
-    #'     if (!all(datasets_equal)) {
-    #'       stop("The following datasets are not identical: ", toString(names(datasets_equal)))
-    #'     }
-    #'   }
-    #'
-    #'   filters_equal <- vapply(self$datanames(), function(dataname) {
-    #'     identical(
-    #'       self$get_filter_state(dataname),
-    #'       other_datasets$get_filter_state(dataname)
-    #'     )
-    #'   }, logical(1))
-    #'   if (!all(filters_equal)) {
-    #'     stop("The following datasets are not identical: ", toString(names(filters_equal)))
-    #'   }
-    #'
-    #'   stopifnot(identical(self$get_code(), other_datasets$get_code()))
-    #' },
-
     #' Set filter from another object of class `FilteredData`
     #'
     #' This is useful for bookmarking and is used to restore the filter state.
@@ -643,31 +590,6 @@ FilteredData <- R6::R6Class( # nolint
 
       return(invisible(NULL))
     },
-    #'
-    #' #' Copy the FilteredData states without copying the data
-    #' #'
-    #' #' This is useful for sensitive data that should not be stored on
-    #' #' the server. On bookmarking, you can call this function to get
-    #' #' a new `FilteredData` with the same filter state, but without the
-    #' #' data. On restoring, you have to create a new `FilteredData`, set
-    #' #' the data on it and you can then call `set_filters_from` to set
-    #' #' the filter state. Afterwards, you can check both `FilteredData`
-    #' #' are identical by calling `check_equal_to`.
-    #' #'
-    #' #' @md
-    #' copy_without_data = function() {
-    #'   new_datasets <- FilteredData$new()
-    #'   lapply(self$datanames(), function(dataname) {
-    #'     df <- data.frame()
-    #'     attr(df, "keys") <- "NotSet"
-    #'     new_datasets$set_data(dataname, df)
-    #'   })
-    #'   browser()
-    #'   new_datasets$set_code(self$get_code())
-    #'   new_datasets$set_filters_from(self)
-    #'   # we do not set previous_filter_state
-    #'   return(new_datasets)
-    #' },
 
     #' Returns the state to be bookmarked
     #'
