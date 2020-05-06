@@ -15,16 +15,23 @@
 #'   vector with datasets names that are passed on (filtered) to the server
 #'   function\cr options \tab optional, other arguments passed on to the server
 #'   function }
-#' @param filter (\code{list}) You can pre-define filters for
-#'   datasets that show up when the app starts up with the default filtering
-#'   state.
-#'   For instance, for filtering the dataset \code{ADSL},
-#'   use \code{list(init = list(ADSL = ...))}.
-#'   For each dataset you specify, you need to provide a vector which is a subset of
-#'   the column names of the dataset. You can specify an ADSL filtering for the
-#'   columns \code{SEX} and \code{BAGE} by:
-#'
-#'   \code{filter = list(init = list(ADSL = c("SEX", "BAGE")))}
+#' @param initial_filter_states (\code{list}) You can define filters that show when
+#'   the app starts.
+#'   Pass in a named list to overwrite filters, e.g.
+#'   \code{list(ADSL = list(SEX = NULL))}
+#'   to have the SEX filter appear with nothing selected (i.e. 0 patients)
+#'   \code{list(ADSL = list(SEX = list(choices = "M", keep_na = TRUE)))}
+#'   to keep patients that are male or have unknown SEX.
+#'   \code{list(ADSL = list(SEX = "default"))}
+#'   to have the default filter that appears also when you select to add this
+#'   filtering variable in the running app.
+#'   A general example is:
+#'   \code{list(
+#'   ADSL = list(AGE = "default", SEX = list(choices = "M", keep_na = TRUE)),
+#'   ADAE = list(AETOXGR = "default")
+#'   )}
+#'   Note that if the app is restored from a bookmarked state, the filters
+#'   are overwritten.
 #' @param header (\code{character} or object of class `shiny.tag`) the header of the app
 #' @param footer (\code{character} or object of class `shiny.tag`) the footer of the app
 #' @return named list with server and ui function
@@ -70,7 +77,7 @@
 #'       filters = "ADSL"
 #'     )
 #'   ),
-#'   filter = list(init = list(ADSL = c("AGE"))),
+#'   filter = list(ADSL = c("AGE")),
 #'   header = tags$h1("Sample App"),
 #'   footer = tags$p("Copyright 2017 - 2020")
 #' )
@@ -79,7 +86,7 @@
 #' }
 init <- function(data,
                  modules,
-                 filter = list(init = list()), # todo2: remove outer list
+                 initial_filter_states = list(),
                  header = tags$p("title here"),
                  footer = tags$p("footer here")
                  ) {
@@ -99,8 +106,7 @@ init <- function(data,
     inherits(footer, "shiny.tag"),
     is(data, "cdisc_data") || is(data, "DataConnector")
   )
-
-  skip_start_screen <- is(data, "cdisc_data")
+  stopifnot(all(names(initial_filter_states) %in% names(data))) # todo: test for DataConnector
 
   # these are used to setup UI like data_extract to get info about data to display, the server will use one dataset per session
   ui_datasets <- FilteredData$new()
@@ -109,10 +115,11 @@ init <- function(data,
   startapp_id <- paste0("startapp_", paste0(sample(1:10, 10, replace = TRUE), collapse = ""))
   startapp_selector <- paste0("#", startapp_id)
 
+  skip_start_screen <- is(data, "cdisc_data")
   # define main UI that contains all functionality of Teal
   main_ui <- if (skip_start_screen) {
     isolate(set_datasets_data(ui_datasets, data))
-    #set_datasets_default_filter(ui_datasets, vars_per_dataset = filter$init) # todo: has less priority than restored state
+    #set_datasets_default_filter(ui_datasets, vars_per_dataset = initial_filter_states) # todo: has less priority than restored state
     modules_with_filters_ui(modules, ui_datasets)
   } else {
     message("App was initialized with delayed data loading.")
@@ -288,12 +295,7 @@ init <- function(data,
     if (skip_start_screen) {
       isolate({
         set_datasets_data(datasets, data)
-        set_datasets_default_filter(datasets, vars_per_dataset = filter$init)
-        # we set filters from ui_datasets in case it has been modified, i.e. filters were set
-        # as the teal::init function returns ui_datasets, filters may have been set on it before
-        # the app is actually run; therefore, we copy them to the object here
-        # overwrites any init filters
-        datasets$set_filters_from(ui_datasets)
+        set_datasets_filters(datasets, initial_filter_states)
       })
 
       .log("init server - no start screen: initialize modules and filter panel")
@@ -301,8 +303,6 @@ init <- function(data,
       call_filter_modules(datasets)
 
     } else {
-      # todo: check this part
-
       .log("init server - start screen: load screen")
       startapp_data <- callModule(data$get_server(), "startapp_module")
       stop_if_not(list(is.reactive(startapp_data), "first app module has to return reactive object"))
@@ -313,12 +313,7 @@ init <- function(data,
         data <- startapp_data()
         isolate({
           set_datasets_data(datasets, data)
-          set_datasets_default_filter(datasets, vars_per_dataset = filter$init)
-          # we set filters from ui_datasets in case it has been modified, i.e. filters were set
-          # as the teal::init function returns ui_datasets, filters may have been set on it before
-          # the app is actually run; therefore, we copy them to the object here
-          # overwrites any init filters
-          #datasets$set_filters_from(ui_datasets), not availabe in this case
+          set_datasets_filters(datasets, initial_filter_states)
         })
 
         .log("init server - no start screen: initialize modules and filter panel")
@@ -331,44 +326,10 @@ init <- function(data,
         removeUI(startapp_selector)
       })
 
-
-      # # we need to run filter sub-modules after gui refreshes due to insertUI/removeUI
-      # # we are about to update GUI elements which are not visible in the initial screen
-      # # make use of invalidateLater to wait for a refresh and then proceed
-      # session$userData$has_initialized <- FALSE
-      # obs_filter_refresh <- observe({
-      #   if (!session$userData$has_initialized) {
-      #     session$userData$has_initialized <- TRUE
-      #     invalidateLater(1) # reexecute this observe to fall in the else statement
-      #   } else {
-      #     .log("init server - start screen: initialize filter panel")
-      #     obs_filter_panel$resume()
-      #     call_filter_modules(datasets)
-      #   }
-      # }, suspended = TRUE)
-      #
-      # ## now show or hide the filter panels based on active tab
-      # observeEvent(startapp_data(), {
-      #   .log("init server - start screen: receive data from startup screen")
-      #
-      #   set_datasets_data(datasets, startapp_data())
-      #   set_datasets_default_filter(datasets, vars_per_dataset = filter$init)
-      #   ui_teal_main <- modules_with_filters_ui(modules, datasets)
-      #
-      #   insertUI(selector = startapp_selector, where = "afterEnd", ui = ui_teal_main)
-      #   removeUI(startapp_selector)
-      #
-      #   # evaluate the server functions
-      #   call_teal_modules(modules, datasets, idprefix = "teal_modules")
-      #
-      #   obs_filter_refresh$resume() # now update filter panel
-      #
-      # }, ignoreNULL = TRUE)
-
     }
   }
 
-  return(list(server = server, ui = ui, ui_datasets = ui_datasets))
+  return(list(server = server, ui = ui))
 }
 
 # only react when the value of the expression changes and not each time

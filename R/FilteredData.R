@@ -568,29 +568,6 @@ FilteredData <- R6::R6Class( # nolint
 
     # Functions useful for restoring from another dataset ----
 
-    #' Set filter from another object of class `FilteredData`
-    #'
-    #' This is useful for bookmarking and is used to restore the filter state.
-    #' We do not restore any other reactive endpoints as they are restored automatically
-    #' through the reactivity chain.
-    #'
-    #' Note that the datasets must already have the datasets set.
-    #' @md
-    set_filters_from = function(other_datasets) {
-      stopifnot(
-        is(other_datasets, "FilteredData"),
-        setequal(self$datanames(), other_datasets$datanames())
-      )
-
-      # we have to be careful with reactiveValues to restore each item and not simply
-      # reference the old reactive value, i.e. loop over it
-      lapply(self$datanames(), function(dataname) {
-        self$set_filter_state(dataname, varname = NULL, state = other_datasets$get_filter_state(dataname))
-      })
-
-      return(invisible(NULL))
-    },
-
     #' Returns the state to be bookmarked
     #'
     #'
