@@ -4,7 +4,8 @@
 #' @param choices a character vector
 #' @param labels vector containing labels to be applied to \code{choices}
 #' @param subset a character vector that is a subset of \code{choices}. This is useful if
-#' only a few variables need to be named. If this argument is used, the returned vector will#' match it's order.
+#'   only a few variables need to be named. If this argument is used, the returned vector will
+#'   match its order.
 #'
 #' @details If either \code{choices} or \code{labels} are factors, they are coerced to character.
 #' Duplicated elements from \code{choices} get removed.
@@ -110,7 +111,7 @@ variable_choices <- function(data, subset = NULL) {
   stopifnot(is.data.frame(data) || is_character_single(data))
   stopifnot(is.null(subset) || is_character_vector(subset, min_length = 0))
 
-  if (is.character(data)) {
+  if (is_character_single(data)) {
     out <- structure(list(data = data, subset = subset),
                      class = c("delayed_variable_choices", "delayed_data", "choices_labeled"))
     return(out)
@@ -122,10 +123,12 @@ variable_choices <- function(data, subset = NULL) {
     stopifnot(all(subset %in% names(data) | subset == ""))
   }
 
-  if_empty_option <- isTRUE(any(subset == ""))
+  # todo2: refactor, there can only be at most one empty option
+  has_empty_option <- isTRUE(any(subset == ""))
   empty_option_idx <- integer(0)
-  if (if_empty_option) {
+  if (has_empty_option) {
     empty_option_idx <- which(subset == "")
+    stopifnot(length(empty_option_idx) == 1)
     subset <- subset[-empty_option_idx]
   }
 
@@ -134,9 +137,9 @@ variable_choices <- function(data, subset = NULL) {
                          subset = subset)
   attr(res, "types") <- variable_types(data = data, columns = subset)
 
-  if (if_empty_option) {
+  if (has_empty_option) {
     for (idx in empty_option_idx) {
-      # firstly copy and then modify attributes because it will be gone after first modification of res object
+      # first copy and then modify attributes because it will be gone after first modification of res object
       attr_list <- attributes(res)
       for (attr_name in names(attr_list)) {
         if (length(attr_list[[attr_name]]) == length(res)) {
@@ -177,10 +180,14 @@ variable_choices <- function(data, subset = NULL) {
 #'
 #' # delayed version
 #' value_choices("ADRS", c("PARAMCD", "ARMCD"), c("PARAM", "ARM"))
+# todo2: rename var_choices -> choice_cols, var_label -> label_cols, subset -> choice_subset
 value_choices <- function(data, var_choices, var_label, subset = NULL, sep = " - ") {
   stopifnot(is.data.frame(data) || is_character_single(data))
-  stopifnot(is_character_vector(var_choices))
-  stopifnot(is_character_vector(var_label))
+  stopifnot(
+    is_character_vector(var_choices),
+    is_character_vector(var_label),
+    length(var_choices) == length(var_label)
+  )
   stopifnot(is.null(subset) || is.vector(subset))
 
   if (is.character(data)) {

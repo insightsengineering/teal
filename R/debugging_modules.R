@@ -77,14 +77,17 @@ bookmark_module <- function(label = "Bookmark module") {
       #stopifnot(identical(getShinyOption("bookmarkStore"), "server"))
 
       observeEvent(input$bookmark, {
-        validate(need(
-          identical(getShinyOption("bookmarkStore"), "server"),
-          paste0(
-            "Shiny bookmarking option must be enabled, it currently is: '",
-            getShinyOption("bookmarkStore"), "'"
-          )
-        ))
-        session$doBookmark()
+        if (!isTRUE(getShinyOption("bookmarkStore") %in% c("url", "server"))) { # isTRUE because may be NULL
+          showModal(modalDialog(
+            title = "Bookmarking not enabled",
+            paste0(
+              "Shiny bookmarking option must be enabled, its value currently is: '",
+              getShinyOption("bookmarkStore"), "'."
+            )
+          ))
+        } else {
+          session$doBookmark()
+        }
       })
     },
     ui = function(id, ...) {

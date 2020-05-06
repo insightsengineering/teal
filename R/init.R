@@ -267,29 +267,25 @@ init <- function(data,
       ))
     }
 
-    # only inputs are stored and Shiny app is restored based on inputs
-    # we need to add FilteredData to the state so we restore it as well
-    # to test bookmarking, include the `bookmark_module`, click on the bookmark
+    # The Shiny bookmarking functionality by default only stores inputs.
+    # We need to add FilteredData to the state so we restore it as well.
+    # To test bookmarking, include the `bookmark_module`, click on the bookmark
     # button and then get the link. Keep the Shiny app running and open the
     # obtained link in another browser tab.
-    # todo2: lifecycle policy for bookmarked apps: when is the state deleted?
+    # todo2: lifecycle policy for bookmarked apps when bookmarking on the server: when is the state deleted?
     onBookmark(function(state) {
-      # store entire R6 class with reactive values in it
-      # todo2: remove datasets unfiltered data so no data can be accessed illegally
-      state$values$datasets <- datasets
+      # this function is isolated  by Shiny
+      # We store the entire R6 class with reactive values in it, but set the data to NULL.
+      # Note that we cannnot directly do this on datasets as this would trigger
+      # reactivity to recompute the filtered datasets, which is not needed.
+      state$values$datasets_state <- datasets$get_bookmark_state()
     })
     onRestore(function(state) {
-      # We do not restore the unfiltered datasets themselves because
-      # they should have been loaded into this object. This avoids us having
-      # to deal with data access issues.
-
-      saved_datasets <- state$values$datasets
-      datasets$set_filters_from(saved_datasets)
-      datasets$check_equal_to(saved_datasets)
-
-      # todo: remove
-      datasets$get_filter_state("ADSL")
-      datasets$print_filter_info("ADSL", filtered_vars_only = TRUE) # todo: message sink as stdout is not displayed
+      # The saved datasets mainly contains the filter states as the data
+      # was set to NULL before storing. The data should have been set again
+      # by the user, so we just need to set the filters.
+      saved_datasets_state <- state$values$datasets_state
+      datasets$set_from_bookmark_state(saved_datasets_state)
     })
 
     # todo: refactor this part

@@ -184,7 +184,7 @@ FilteredData <- R6::R6Class( # nolint
       attr(data, "md5sum") <- digest(data, algo = "md5")
       private$datasets[[dataname]] <- data
 
-      return(invisible(self))
+      return(invisible(NULL))
     },
 
     # no corresponding set_ function
@@ -241,7 +241,8 @@ FilteredData <- R6::R6Class( # nolint
       private$check_data_varname(dataname)
       stopifnot(is_character_single(attr))
 
-      return(attr(private$datasets[[dataname]], attr) <- value)
+      attr(private$datasets[[dataname]], attr) <- value
+      return(invisible(NULL))
     },
 
     # no corresponding set_ function
@@ -567,72 +568,167 @@ FilteredData <- R6::R6Class( # nolint
 
     # Functions useful for restoring from another dataset ----
 
-    #' Check whether two datasets are equal
+    #' #todo: remove this and other related ones
+    #' #' Check whether two datasets are equal
+    #' #'
+    #' #' This is useful when an app is restored to make sure the user
+    #' #' is seeing the same thing.
+    #' #'
+    #' #' It will check identical datanames, filter states and optionally
+    #' #' identical data.
+    #' #' We do not check the previous filter state to be identical.
+    #' #'
+    #' #' @md
+    #' #' @param other_datasets `FilteredData` will compare calling object to this object
+    #' #'   to detect any differences
+    #' #' @param check_data_identical `logical` whether to check that unfiltered
+    #' #'   data is identical based on md5 sum; when data is randomly generated, this may be
+    #' #'   harsh, but ensures that both people really examine the same data;
+    #' #'   otherwise, set it to FALSE.
+    #' #'
+    #' check_equal_to = function(other_datasets, check_data_identical = TRUE) {
+    #'   stopifnot(is(other_datasets, "FilteredData"))
+    #'   stopifnot(is_logical_single(check_data_identical))
     #'
-    #' This is useful when an app is restored to make sure the user
-    #' is seeing the same thing.
+    #'   # R6 is stupid unlike other OOO approaches, we cannot access private attributes of objects
+    #'   # of a class within the functions of an object of the same class
+    #'   # therefore, we use getters and setters
     #'
-    #' It will check identical datanames, filter states and optionally
-    #' identical data.
+    #'   stopifnot(setequal(self$datanames(), other_datasets$datanames()))
     #'
-    #' @md
-    #' @param other_datasets `FilteredData` will compare calling object to this object
-    #'   to detect any differences
-    #' @param check_data_identical `logical` whether to check that unfiltered
-    #'   data is really identical; when data is randomly generated, this may be
-    #'   harsh, but ensures that both people really examine the same data;
-    #'   otherwise, set it to FALSE.
+    #'   if (check_data_identical) {
+    #'     datasets_equal <- vapply(self$datanames(), function(dataname) {
+    #'       identical(
+    #'         self$get_data_attr(dataname, "md5sum"),
+    #'         other_datasets$get_data_attr(dataname, "md5sum")
+    #'       )
+    #'     }, logical(1))
+    #'     if (!all(datasets_equal)) {
+    #'       stop("The following datasets are not identical: ", toString(names(datasets_equal)))
+    #'     }
+    #'   }
     #'
-    check_equal_to = function(other_datasets, check_data_identical = TRUE) {
-      stopifnot(is(other_datasets, "FilteredData"))
-      stopifnot(is_logical_single(check_data_identical))
-
-      # R6 is stupid unlike other OOO approaches, we cannot access private attributes of objects
-      # of a class within the functions of an object of the same class
-      # therefore, we use getters and setters
-
-      stopifnot(setequal(self$datanames(), other_datasets$datanames()))
-
-      if (check_data_identical) {
-        datasets_equal <- vapply(self$datanames(), function(dataname) {
-          identical(
-            self$get_data(dataname, filtered = FALSE),
-            other_datasets$get_data(dataname, filtered = FALSE)
-          )
-        }, logical(1))
-        if (!all(datasets_equal)) {
-          stop("The following datasets are not identical: ", toString(names(datasets_equal)))
-        }
-      }
-
-      filters_equal <- vapply(self$datanames(), function(dataname) {
-        identical(
-          self$get_filter_state(dataname),
-          other_datasets$get_filter_state(dataname)
-        )
-      }, logical(1))
-      if (!all(filters_equal)) {
-        stop("The following datasets are not identical: ", toString(names(filters_equal)))
-      }
-
-      stopifnot(identical(self$get_code(), other_datasets$get_code()))
-    },
+    #'   filters_equal <- vapply(self$datanames(), function(dataname) {
+    #'     identical(
+    #'       self$get_filter_state(dataname),
+    #'       other_datasets$get_filter_state(dataname)
+    #'     )
+    #'   }, logical(1))
+    #'   if (!all(filters_equal)) {
+    #'     stop("The following datasets are not identical: ", toString(names(filters_equal)))
+    #'   }
+    #'
+    #'   stopifnot(identical(self$get_code(), other_datasets$get_code()))
+    #' },
 
     #' Set filter from another object of class `FilteredData`
     #'
     #' This is useful for bookmarking and is used to restore the filter state.
+    #' We do not restore any other reactive endpoints as they are restored automatically
+    #' through the reactivity chain.
+    #'
+    #' Note that the datasets must already have the datasets set.
     #' @md
     set_filters_from = function(other_datasets) {
-      stopifnot(is(other_datasets, "FilteredData"))
-
-      # We do not restore any reactive endpoints as they are restored automatically
-      # through the reactivity chain
+      stopifnot(
+        is(other_datasets, "FilteredData"),
+        setequal(self$datanames(), other_datasets$datanames())
+      )
 
       # we have to be careful with reactiveValues to restore each item and not simply
       # reference the old reactive value, i.e. loop over it
       lapply(self$datanames(), function(dataname) {
         self$set_filter_state(dataname, varname = NULL, state = other_datasets$get_filter_state(dataname))
       })
+
+      return(invisible(NULL))
+    },
+    #'
+    #' #' Copy the FilteredData states without copying the data
+    #' #'
+    #' #' This is useful for sensitive data that should not be stored on
+    #' #' the server. On bookmarking, you can call this function to get
+    #' #' a new `FilteredData` with the same filter state, but without the
+    #' #' data. On restoring, you have to create a new `FilteredData`, set
+    #' #' the data on it and you can then call `set_filters_from` to set
+    #' #' the filter state. Afterwards, you can check both `FilteredData`
+    #' #' are identical by calling `check_equal_to`.
+    #' #'
+    #' #' @md
+    #' copy_without_data = function() {
+    #'   new_datasets <- FilteredData$new()
+    #'   lapply(self$datanames(), function(dataname) {
+    #'     df <- data.frame()
+    #'     attr(df, "keys") <- "NotSet"
+    #'     new_datasets$set_data(dataname, df)
+    #'   })
+    #'   browser()
+    #'   new_datasets$set_code(self$get_code())
+    #'   new_datasets$set_filters_from(self)
+    #'   # we do not set previous_filter_state
+    #'   return(new_datasets)
+    #' },
+
+    #' Returns the state to be bookmarked
+    #'
+    #'
+    #' md5 sums of `datasets`, `filter_states` and `code` are bookmarked,
+    #' `previous_filter_state` is not bookmarked.
+    #'
+    #' @md
+    #' @return named list
+    get_bookmark_state = function() {
+      # We cannot simply create a new `FilteredData` with the datasets set to NULL
+      # (to protect the data from unauthorized access). Therefore, we return a list
+      # which is independent from this class. It is also better to store a list
+      # rather than a class because this allows bookmarking of type `url` and
+      # not just `server`
+      # we could isolate, but this does not matter? todo: really even if filter modified afterwards?
+      return(list(
+        data_md5sums = vapply(self$datanames(), self$get_data_attr, character(1), "md5sum"),
+        filter_states = reactiveValuesToList(private$filter_state),
+        code = self$get_code()
+      ))
+    },
+
+    #' Set this object from a bookmarked state
+    #'
+    #' Only sets the filter state, does not set the data, the previous filter state
+    #' and the code.
+    #' Also checks the code is identical if provided in the `state`.
+    #'
+    #' @md
+    #' @param state `list` containing fields `data_md5sums`, `filter_states`
+    #'   and `code`.
+    #' @param check_data_md5sums `logical` whether to check that md5sums agree
+    #'   for the data; may not make sense with randomly generated data per session
+    #'
+    set_from_bookmark_state = function(state, check_data_md5sums = TRUE) {
+      stopifnot(
+        is.list(state),
+        is_logical_single(check_data_md5sums)
+      )
+
+      stopifnot(setequal(names(state$data_md5sums), self$datanames()))
+      stopifnot(setequal(names(state$filter_states), self$datanames()))
+      if (check_data_md5sums) {
+        datasets_equal <- vapply(self$datanames(), self$get_data_attr, character(1), "md5sum") == state$data_md5sums
+        if (!all(datasets_equal)) {
+          stop("The following datasets are not identical: ", toString(names(datasets_equal)))
+        }
+      }
+      if (!is.null(state$code)) {
+        stopifnot(identical(self$get_code(), state$code))
+      }
+
+      # we have to be careful with reactiveValues to restore each item and not simply
+      # reference the old reactive value, i.e. loop over it
+      lapply(self$datanames(), function(dataname) {
+        self$set_filter_state(dataname, varname = NULL, state = state$filter_states[[dataname]])
+      })
+      # other reactive endpoint don't need to be set because they are computing through reactivity
+
+      return(invisible(NULL))
     },
 
     # functions related to class attributes ----
