@@ -215,10 +215,17 @@ call_with_colon <- function(name, ...) {
 get_random_joke <- function() {
   # downloaded from https://raw.githubusercontent.com/Daronspence/One-Liners/master/jokes.txt
   file_contents <- readLines(system.file("jokes.txt", package = "teal"))
-  # jokes are separated by one empty line each, a joke can be over several lines
-  # todo: above not yet implemented, currently not for multiline jokes
-  file_contents <- file_contents[file_contents != ""]
-  return(sample(file_contents, 1))
+
+  # jokes are separated by empty lines (possibly several) each, a joke can be over several lines
+  file_contents <- c("", file_contents, "") # add sentinel values
+  # a joke must start after an empty line and end before an empty line
+  start_positions <- head(which(file_contents == "") + 1, -1) # all except for last element
+  end_positions <- (which(file_contents == "") - 1)[-1] # all except for first
+  valid_indices <- which(start_positions <= end_positions) # filter when there are several empty lines in a row
+
+  # sample joke
+  joke_idx <- sample(valid_indices, 1)
+  return(paste(file_contents[ start_positions[[joke_idx]]:end_positions[[joke_idx]] ], collapse = "\n"))
 }
 
 
