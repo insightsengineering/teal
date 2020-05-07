@@ -28,80 +28,6 @@ srv_filter_items <- function(input, output, session, datasets, dataname, contain
   # the full UI state). This triggers the `set_filter_state` function again, but stops there
   # because the underlying reactiveVal only triggers when its value changes (unlike reactive).
 
-  # UI for a single filter item for a filter variable ----
-  ui_single_filter_item <- function(id_prefix, filter_info, filter_state, prelabel) {
-    stopifnot(is_character_single(id_prefix))
-    stopifnot(is_character_single(prelabel))
-
-    remove_filter_id <- paste0(id_prefix, "_remove_filter")
-    selection_id <- paste0(id_prefix, "_selection")
-    keep_na_id <- paste0(id_prefix, "_keepNA")
-
-    # label before select input and button to remove filter
-    varlabel <- tagList(
-      tags$span(
-        prelabel,
-        if (!is.null(filter_info$label) || (filter_info$label != "")) {
-          tags$small(filter_info$label, style = "font-weight:normal; margin-left:3px")
-        }
-      ),
-      actionLink(
-        remove_filter_id, "", icon("trash-alt", lib = "font-awesome"),
-        class = "remove"
-      ),
-      if (!is.null(filter_info$na_count) && filter_info$na_count > 0) {
-        checkboxInput(keep_na_id, paste0("Keep NA (", filter_info$na_count, ")"), value = filter_state$keep_na)
-      }
-    )
-
-    if (filter_info$type == "choices") {
-      if (length(filter_info$choices) > 5) {
-        pickerInput(
-          selection_id,
-          varlabel,
-          choices = filter_info$choices,
-          selected = filter_state$choices,
-          multiple = TRUE,
-          options = pickerOptions(
-            actionsBox = TRUE,
-            liveSearch = (length(filter_info$choices) > 10),
-            noneSelectedText = "Select a value"
-          ),
-          width = "100%"
-        )
-      } else {
-        checkboxGroupInput(
-          selection_id,
-          varlabel,
-          choices =  filter_info$choices,
-          selected = filter_state$choices,
-          width = "100%"
-        )
-      }
-    } else if (filter_info$type == "range") {
-      sliderInput(
-        selection_id,
-        varlabel,
-        # when rounding, we must make sure that we don't set the slider to an invalid state
-        min = floor(filter_info$range[1] * 100) / 100,
-        max = ceiling(filter_info$range[2] * 100) / 100,
-        value = filter_state$range,
-        width = "100%"
-      )
-    } else if (filter_info$type == "logical") {
-      radioButtons(
-        selection_id,
-        varlabel,
-        choices = filter_info$choices,
-        selected = filter_state$status,
-        width = "100%"
-      )
-    } else {
-      # fail gracefully although this should have been caught before already
-      tags$p(paste("For varlabel in", varlabel, "in data", dataname, "has unknown type:", filter_info$type))
-    }
-  }
-
   # dynamic ui part ----
   output$filters <- renderUI({
     .log("generating ui filters for data", dataname)
@@ -112,7 +38,7 @@ srv_filter_items <- function(input, output, session, datasets, dataname, contain
     return(do.call(container, unname(Map(
       function(varname, filter_info, filter_state) {
         ui_single_filter_item(
-          id_prefix = ns(varname), filter_info = filter_info, filter_state = filter_state,
+          id = ns(paste0("filter_", varname)), filter_info = filter_info, filter_state = filter_state,
           prelabel = paste0(dataname, ".", varname)
         )
       },
@@ -136,57 +62,10 @@ srv_filter_items <- function(input, output, session, datasets, dataname, contain
 
     # over all filtered variables
     lapply(names(datasets$get_filter_state(dataname)), function(varname) {
-      # change filter for variable
-      id_selection <- paste0(varname, "_selection")
-      id_keepna <- paste0(varname, "_keepNA")
-      o1 <- observeEvent({
-          input[[id_selection]]
-          input[[id_keepna]]
-        }, {
-          selection_state <- input[[id_selection]]
-          type <- datasets$get_filter_type(dataname, varname)
-          state <- if (type == "choices") {
-            # unfortunately, NULL is also returned for a select when nothing is selected
-            # in a multiple checkbox, so we need to set it manually to character(0)
-            list(
-              choices = if (is.null(selection_state)) character(0) else selection_state
-            )
-          } else if (type == "range") {
-            # we must make sure to truncate the state because the slider range is similar to
-            # [round(min(range)), round(max(range))]. Therefore, it may be outside the range
-            stopifnot(is_numeric_vector(selection_state), length(selection_state) == 2)
-            real_range <- datasets$get_filter_info(dataname, varname)$range
-            list(
-              range = c(
-                max(selection_state[[1]], real_range[[1]]),
-                min(selection_state[[2]], real_range[[2]])
-              )
-            )
-          } else if (type == "logical") {
-            list(status = selection_state)
-          } else {
-            stop("Unknown filter type ", type, " for var ", varname)
-          }
-          keep_na_state <- if_null(input[[id_keepna]], FALSE) # input field may not exist if var contains no NA
-          state <- c(state, list(keep_na = keep_na_state))
-          .log("State for ", varname, ":", filter_state_to_str(type, state)) # truncate the output
-          datasets$set_filter_state(dataname, varname, state)
-        },
-        ignoreNULL = FALSE, # ignoreNULL: we don't want to ignore NULL when nothing is selected,
-        ignoreInit = TRUE # ignoreInit: should not matter because we set the UI with the desired initial state
+      active_observers <<- c(
+        active_observers,
+        callModule(srv_single_filter_item, paste0("filter_", varname), datasets, dataname, varname)
       )
-
-      # remove variable
-      id_remove <- paste0(varname, "_remove_filter")
-      o2 <- observeEvent(
-        input[[id_remove]], {
-          datasets$set_filter_state(dataname, varname, state = NULL)
-        },
-        # the button is created dynamically afterwards, so this will trigger although
-        # the user has not clicked, see the doc
-        ignoreInit = TRUE
-      )
-      active_observers <<- c(active_observers, list(o1, o2))
     })
   })
 
