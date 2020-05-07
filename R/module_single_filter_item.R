@@ -142,10 +142,9 @@ srv_single_filter_item <- function(input, output, session, datasets, dataname, v
       filter_info <- datasets$get_filter_info(dataname, varname)
       if ((length(filter_info$choices) <= 5) || (var_type == "logical")) {
         # Proportional
-        # todo: replace by real data
-        nb_vars <- length(datasets$get_filter_info(dataname, varname)$choices)
-        fake_data <- data.frame(x = letters[1:nb_vars], y = sample(1:10 / 10, nb_vars, replace = TRUE)) # in [0,1] range for plot
-        ggplot(fake_data) +
+        data <- filter_info$histogram_data
+        data$y <- rev(data$y / sum(data$y)) # we have to reverse because the histogram is turned by 90 degrees
+        ggplot(data) +
           # sort factor so that it reflects checkbox order
           aes_string(x = "x", y = "y") +
           geom_col(width = 0.95,
@@ -162,9 +161,8 @@ srv_single_filter_item <- function(input, output, session, datasets, dataname, v
     shiny::renderPlot(
       bg = "transparent",
       height = 25, {
-        density <- stats::density(mtcars$cyl, na.rm = TRUE)
-        fake_data <- data.frame(x = density$x, y = density$y)
-        ggplot2::ggplot(fake_data) +
+        filter_info <- datasets$get_filter_info(dataname, varname)
+        ggplot2::ggplot(filter_info$histogram_data) +
           ggplot2::aes_string(x = "x", y = "y") +
           ggplot2::geom_area(
             fill = grDevices::rgb(66 / 255, 139 / 255, 202 / 255),

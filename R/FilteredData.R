@@ -934,11 +934,6 @@ FilteredData <- R6::R6Class( # nolint
         df <- self$get_data(dataname, filtered = FALSE)
 
         filter_info <- Map(function(var, varname) {
-          # add counts per variable as names for UI
-          add_counts <- function(choices) {
-            setNames(choices, paste0(choices, " (", as.vector(table(var)[choices]), ")"))
-          }
-
           res <- if (all(is.na(var))) {
             .log("all elements in", varname, "are NA")
             list(
@@ -947,26 +942,44 @@ FilteredData <- R6::R6Class( # nolint
               class = class(var)
             )
           } else if (is.factor(var) || is.character(var)) {
+            if (!is(var, "factor")) {
+              var <- factor(var, levels = sort(unique(as.character(var))))
+              add_counts <- FALSE
+            } else {
+              add_counts <- TRUE
+            }
+            var <- droplevels(var)
+
+            choices <- levels(var)
+            if (add_counts) {
+              names(choices) <- paste0(choices, " (", tabulate(var), ")")
+            }
+            histogram_data <- data.frame(x = levels(var), y = tabulate(var))
+
             list(
               type = "choices",
               label = if_null(attr(var, "label"), ""),
-              choices = add_counts(if (is.factor(var)) {
-                levels(var)
-              } else {
-                sort(unique(as.character(var)))
-              })
+              choices = choices,
+              histogram_data = histogram_data
             )
           } else if (is.numeric(var)) {
+            density <- stats::density(var, na.rm = TRUE)
             list(
               type = "range",
               label = if_null(attr(var, "label"), ""),
-              range = range(var, na.rm = TRUE)
+              range = range(var, na.rm = TRUE),
+              histogram_data = data.frame(x = density$x, y = density$y)
             )
           } else if (is.logical(var)) {
+            var <- factor(var, levels = c("TRUE", "FALSE"))
+            choices <- levels(var)
+            names(choices) <- paste0(choices, " (", tabulate(var), ")")
+            histogram_data <- data.frame(x = levels(var), y = tabulate(var))
             list(
               type = "logical",
               label = if_null(attr(var, "label"), ""),
-              choices = add_counts(c("TRUE", "FALSE"))
+              choices = choices,
+              histogram_data = histogram_data
             )
           } else {
             .log(

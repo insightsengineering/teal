@@ -39,7 +39,7 @@ ADLB <- radlb(cached = TRUE)
     teal:::bookmark_module(),
     teal:::debug_browser_module()
   ),
-  initial_filter_states = list(ADSL = list(SEX = list(choices = "M", keep_na = TRUE))),
+  initial_filter_states = list(ADSL = list(SEX = list(choices = "M", keep_na = TRUE), AGE = "default")),
   header = "Simple teal app",
   footer = tags$p(class = "text-muted", "Source: agile-R website")
 ); shinyApp(app$ui, app$server, enableBookmarking = "url")
