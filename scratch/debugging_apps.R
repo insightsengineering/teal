@@ -36,7 +36,8 @@ ADLB <- radlb(cached = TRUE)
 "),
   modules = root_modules(
     #teal:::filter_calls_module()
-    teal:::bookmark_module()
+    teal:::bookmark_module(),
+    teal:::debug_browser_module()
   ),
   initial_filter_states = list(ADSL = list(SEX = list(choices = "M", keep_na = TRUE))),
   header = "Simple teal app",

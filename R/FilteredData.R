@@ -584,7 +584,8 @@ FilteredData <- R6::R6Class( # nolint
       # not just `server`
       # we could isolate, but this does not matter? todo: really even if filter modified afterwards?
       return(list(
-        data_md5sums = vapply(self$datanames(), self$get_data_attr, character(1), "md5sum"),
+        # must be a list and not atomic vector, otherwise jsonlite::toJSON gives a warning
+        data_md5sums = lapply(self$datanames(), self$get_data_attr, "md5sum"),
         filter_states = reactiveValuesToList(private$filter_state),
         code = self$get_code()
       ))

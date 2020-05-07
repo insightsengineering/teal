@@ -97,6 +97,8 @@ bookmark_module <- function(label = "Bookmark module") {
           session$doBookmark()
         }
       })
+
+      setBookmarkExclude("bookmark") # we do not want the window to open when it is restored
     },
     ui = function(id, ...) {
       ns <- NS(id)
