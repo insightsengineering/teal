@@ -1,3 +1,4 @@
+#todo: document
 # UI for a single filter item for a filter variable ----
 ui_single_filter_item <- function(id, filter_info, filter_state, prelabel) {
   ns <- NS(id)
@@ -7,28 +8,33 @@ ui_single_filter_item <- function(id, filter_info, filter_state, prelabel) {
   selection_id <- ns("selection")
   keep_na_id <- ns("keepNA")
 
-  # label before select input and button to remove filter
-  varlabel <- tagList(
-    tags$span(
-      prelabel,
-      if (!is.null(filter_info$label) || (filter_info$label != "")) {
-        tags$small(filter_info$label, style = "font-weight:normal; margin-left:3px")
-      }
-    ),
-    actionLink(
-      remove_filter_id, "", icon("trash-alt", lib = "font-awesome"),
-      class = "remove"
-    ),
-    if (!is.null(filter_info$na_count) && filter_info$na_count > 0) {
-      checkboxInput(keep_na_id, paste0("Keep NA (", filter_info$na_count, ")"), value = filter_state$keep_na)
-    }
-  )
-
-  if (filter_info$type == "choices") {
-    if (length(filter_info$choices) > 5) {
+  # we set label to NULL everywhere, so we can set the label column ourselves
+  select_input <- if (filter_info$type == "choices") {
+    if (length(filter_info$choices) <= 5) {
+      div(
+        style = "position: relative;",
+        div(
+          style = "
+        position: absolute;
+        top: -2px; right: 16px; bottom: -2px; left: 16px;
+        animation:
+          0.75s ease-out 0s 1 shinyDataFilterEnlargeX,
+          0.5s ease-in  0s 1 shinyDataFilterFadeIn;
+        transform-origin: left;",
+          plotOutput(ns("plot"), height = "100%")
+        ),
+        checkboxGroupInput(
+          selection_id,
+          label = NULL,
+          choices =  filter_info$choices,
+          selected = filter_state$choices,
+          width = "100%"
+        )
+      )
+    } else {
       pickerInput(
         selection_id,
-        varlabel,
+        label = NULL,
         choices = filter_info$choices,
         selected = filter_state$choices,
         multiple = TRUE,
@@ -39,46 +45,141 @@ ui_single_filter_item <- function(id, filter_info, filter_state, prelabel) {
         ),
         width = "100%"
       )
-    } else {
-      checkboxGroupInput(
-        selection_id,
-        varlabel,
-        choices =  filter_info$choices,
-        selected = filter_state$choices,
-        width = "100%"
-      )
     }
   } else if (filter_info$type == "range") {
-    sliderInput(
-      selection_id,
-      varlabel,
-      # when rounding, we must make sure that we don't set the slider to an invalid state
-      min = floor(filter_info$range[1] * 100) / 100,
-      max = ceiling(filter_info$range[2] * 100) / 100,
-      value = filter_state$range,
-      width = "100%"
+    div(
+      div(
+        style = "
+          margin: 0px 11px -25px 11px;
+          height: 25px;
+          animation:
+            0.75s ease-out 0s 1 shinyDataFilterEnlargeY,
+            0.5s ease-in  0s 1 shinyDataFilterFadeIn;
+          transform-origin: bottom;",
+        shiny::plotOutput(ns("plot"), height = "100%")),
+      sliderInput(
+        selection_id,
+        label = NULL,
+        # when rounding, we must make sure that we don't set the slider to an invalid state
+        min = floor(filter_info$range[1] * 100) / 100,
+        max = ceiling(filter_info$range[2] * 100) / 100,
+        value = filter_state$range,
+        width = "100%"
+      )
     )
   } else if (filter_info$type == "logical") {
-    radioButtons(
-      selection_id,
-      varlabel,
-      choices = filter_info$choices,
-      selected = filter_state$status,
-      width = "100%"
+    div(
+      style = "position: relative;",
+      # same overlay as for choices with no more than 5 elements
+      div(
+        style = "
+        position: absolute;
+        top: -2px; right: 16px; bottom: -2px; left: 16px;
+        animation:
+          0.75s ease-out 0s 1 shinyDataFilterEnlargeX,
+          0.5s ease-in  0s 1 shinyDataFilterFadeIn;
+        transform-origin: left;",
+        plotOutput(ns("plot"), height = "100%")
+      ),
+      radioButtons(
+        selection_id,
+        label = NULL,
+        choices = filter_info$choices,
+        selected = filter_state$status,
+        width = "100%"
+      )
     )
   } else {
     # fail gracefully although this should have been caught before already
-    tags$p(paste("For varlabel in", varlabel, "in data", dataname, "has unknown type:", filter_info$type))
+    tags$p(paste("Variable with label", varlabel, "in data", dataname, "has unknown type:", filter_info$type))
   }
+
+  # label before select input and button to remove filter
+  return(div(
+    fluidRow(
+      #height = "40px",
+      column(1, shiny::icon("grip-vertical", class = "sortableJS-handle")), #todo
+      column(1, tags$span(
+        prelabel,
+        if (!is.null(filter_info$label) || (filter_info$label != "")) {
+          tags$small(filter_info$label, style = "font-weight:normal; margin-left:3px")
+        }
+      )),
+      if (!is.null(filter_info$na_count) && filter_info$na_count > 0) {
+        make_inline <- function(x) {
+          x$name <- "span"
+          x$attribs$class <- "form-group shiny-input-container-inline"
+          stopifnot(length(x$children) == 1)
+          x$children[[1]]$name <- "span"
+          return(x)
+        } # todo: not working
+        column(2, make_inline(checkboxInput(keep_na_id, paste0("Keep NA (", filter_info$na_count, ")"), value = filter_state$keep_na)))
+      },
+      column(4, actionLink(
+        remove_filter_id, "", icon("trash-alt", lib = "font-awesome"),
+        class = "remove"
+      ))
+    ),
+    fluidRow(select_input)
+  ))
 }
 
 
+# todo: give other arguments, only those really needed, possibly transformed, e.g. only for varname
 srv_single_filter_item <- function(input, output, session, datasets, dataname, varname) {
   stopifnot(
     is(datasets, "FilteredData"),
     is_character_single(dataname),
     is_character_single(varname)
   )
+
+  # define plot that might overlay along with filtering (e.g. histogram)
+
+  # we have to make this outside the if because plot options may be different per variable type
+  var_type <- isolate(datasets$get_filter_type(dataname, varname))
+  output$plot <- if ((var_type == "choices") || (var_type == "logical")) {
+    renderPlot(bg = "transparent", {
+      filter_info <- datasets$get_filter_info(dataname, varname)
+      if ((length(filter_info$choices) <= 5) || (var_type == "logical")) {
+        # Proportional
+        # todo: replace by real data
+        nb_vars <- length(datasets$get_filter_info(dataname, varname)$choices)
+        fake_data <- data.frame(x = letters[1:nb_vars], y = sample(1:10 / 10, nb_vars, replace = TRUE)) # in [0,1] range for plot
+        ggplot(fake_data) +
+          # sort factor so that it reflects checkbox order
+          aes_string(x = "x", y = "y") +
+          geom_col(width = 0.95,
+                            fill = grDevices::rgb(66 / 255, 139 / 255, 202 / 255),
+                            color = NA,
+                            alpha = 0.2) +
+          coord_flip() +
+          theme_void() +
+          scale_x_discrete(expand = c(0, 0)) +
+          scale_y_continuous(expand = c(0, 0), limits = c(0, 1)) # todo: adapt limits
+      }
+    })
+  } else if (var_type == "range") {
+    shiny::renderPlot(
+      bg = "transparent",
+      height = 25, {
+        density <- stats::density(mtcars$cyl, na.rm = TRUE)
+        fake_data <- data.frame(x = density$x, y = density$y)
+        ggplot2::ggplot(fake_data) +
+          ggplot2::aes_string(x = "x", y = "y") +
+          ggplot2::geom_area(
+            fill = grDevices::rgb(66 / 255, 139 / 255, 202 / 255),
+            color = NA,
+            alpha = 0.2) +
+          ggplot2::theme_void() +
+          ggplot2::scale_y_continuous(expand = c(0, 0)) +
+          ggplot2::scale_x_continuous(expand = c(0, 0))
+      })
+  } else {
+    # no plot generated
+  }
+
+
+  # define observers for buttons ----
 
   id_selection <- "selection"
   id_keepna <- "keepNA"

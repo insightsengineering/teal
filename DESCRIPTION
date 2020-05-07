@@ -24,6 +24,7 @@ Encoding: UTF-8
 LazyData: true
 Depends:
   R (>= 3.3),
+  ggplot2,
   shiny
 Imports:
   digest,
