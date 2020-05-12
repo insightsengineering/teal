@@ -24,7 +24,7 @@
 #' x$open(args = list(x = 1:5, y = letters[1:5])) # able to call opening function with arguments
 #'
 #' x$get_open_call() # check reroducible R code
-#' # get data from connection via DataConnector$get_data()
+#' # get data from connection via DataConnector$get_dataset()
 #'
 #' x$close() # call closing function
 #' }

@@ -2,7 +2,7 @@
 #'
 #' Objects of this class store connection function to single dataset. Note that for some specific connection type
 #' (e.g. \code{RAICE} or \code{SAICE}), pre-requisite object of class \code{DataConnection} is required.
-#' Data can be pulled via \code{pull} method and returned via \code{get_data} method.
+#' Data can be pulled via \code{pull} method and returned via \code{get_dataset} method.
 #'
 #' @name DatasetConnector
 DatasetConnector <- R6::R6Class( #nolint
@@ -43,12 +43,12 @@ DatasetConnector <- R6::R6Class( #nolint
     #' @param try (\code{logical}) whether perform function evaluation inside \code{try} clause
     #'
     #' @return if \code{try = TRUE} then \code{try-error} on error, object returned from connection function
-    get_data = function(args = NULL, silent = FALSE, try = FALSE) {
+    get_dataset = function(args = NULL, silent = FALSE, try = FALSE) {
       if (!private$is_pulled) {
         self$pull(args = args, silent = silent, try = try)
       }
 
-      return(private$data)
+      return(private$dataset)
     },
     #' @description
     #' Get connection dataname
@@ -80,11 +80,11 @@ DatasetConnector <- R6::R6Class( #nolint
     #' @param silent (\code{logical}) whether convert all "missing function" errors to messages
     #' @param try (\code{logical}) whether perform function evaluation inside \code{try} clause
     #'
-    #' @return nothing, in order to get the data please use \code{get_data} method
+    #' @return nothing, in order to get the data please use \code{get_dataset} method
     pull = function(args = NULL, silent = FALSE, try = FALSE) {
       if_cond(private$check_pull_fun(silent = silent), return(), isFALSE)
-      private$data <- private$pull_fun$run(args = args, try = try)
-      private$is_pulled <- is(private$data, "try-error")
+      private$dataset <- private$pull_fun$run(args = args, try = try)
+      private$is_pulled <- is(private$dataset, "try-error")
       return(invisible(NULL))
     },
     #' @description
@@ -171,7 +171,7 @@ DatasetConnector <- R6::R6Class( #nolint
   private = list(
     path = character(0),
     keys = NULL,
-    data = NULL,
+    dataset = NULL,
     dataname = character(0),
     is_pulled = FALSE,
     pull_fun = NULL, # CallableFunction
@@ -207,10 +207,10 @@ DatasetConnector <- R6::R6Class( #nolint
 #'
 #' @examples
 #' library(random.cdisc.data)
-#' x <- rcd_dataset("ADSL", radsl, cached = TRUE)
+#' x <- rcd_dataset_connector("ADSL", radsl, cached = TRUE)
 #' x$get_call()
-#' x$get_data()
-rcd_dataset <- function(dataname, fun, ...) {
+#' x$get_dataset()
+rcd_dataset_connector <- function(dataname, fun, ...) {
   stopifnot(is_character_single(dataname))
   stopifnot(is.function(fun))
 
@@ -241,11 +241,11 @@ rcd_dataset <- function(dataname, fun, ...) {
 #' @importFrom tools file_ext
 #' @examples
 #' \dontrun{
-#' x <- rds_cdisc_dataset("ADSL", "/path/to/file.rds")
+#' x <- rds_dataset_connector("ADSL", "/path/to/file.rds")
 #' x$get_call()
-#' x$get_data()
+#' x$get_dataset()
 #' }
-rds_cdisc_dataset <- function(dataname, file, keys = get_cdisc_keys(dataname)) {
+rds_dataset_connector <- function(dataname, file, keys = get_cdisc_keys(dataname)) {
   stopifnot(is_character_single(dataname))
   stopifnot(is_character_single(file))
   stopifnot(file.exists(file))
@@ -272,12 +272,12 @@ rds_cdisc_dataset <- function(dataname, file, keys = get_cdisc_keys(dataname)) {
 #' @return (\code{DatasetConnector}) type of object
 #'
 #' @examples
-#' x <- rice_dataset("ADSL", "/path/to/ADSL")
+#' x <- rice_dataset_connector("ADSL", "/path/to/ADSL")
 #' x$get_call()
 #' \dontrun{
-#' x$get_data()
+#' x$get_dataset()
 #' }
-rice_dataset <- function(dataname,
+rice_dataset_connector <- function(dataname,
                          path,
                          keys = get_cdisc_keys(dataname)) {
   stopifnot(is_character_single(dataname))

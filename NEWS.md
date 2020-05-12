@@ -5,8 +5,8 @@
 
 * Enable `teal` app to initialize without data. The data are then loaded from within the teal app.
 * New classes (`DatasetConnector`, `DataConnector`) to connect to various data sources, including:  
-        * connector to `rice` API - `rice_cdisc_data` and `rice_dataset`  
-        * connector to `RDS` files - `rds_data` and `rds_dataset`  
+        * connector to `rice` API - `rice_cdisc_data` and `rice_dataset_connector`  
+        * connector to `RDS` files - `rds_data` and `rds_dataset_connector`  
 * Message appears at bottom right of Shiny app when Shiny is busy to update the views.
 * Remove `labels` argument of `cdisc_data` function. Labels should now already be present in the data passed to the  `cdisc_data` function. This can be achieved using the `var_relabel` function.
 

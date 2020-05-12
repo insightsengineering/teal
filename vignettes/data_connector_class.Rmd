@@ -39,8 +39,8 @@ is similar to previously introduced in `cdisc_data()`:
 ```{r}
 library(teal)
 data <- rice_cdisc_data(
-  rice_dataset(dataname = "ADSL", path = "/path/to/ADSL"),
-  rice_dataset(dataname = "ADLB", path = "/path/to/ADLB")
+  rice_dataset_connector(dataname = "ADSL", path = "/path/to/ADSL"),
+  rice_dataset_connector(dataname = "ADLB", path = "/path/to/ADLB")
 )
 ```
 
@@ -56,7 +56,7 @@ app <- init(
       "ADSL AGE histogram",
       server = function(input, output, session, datasets) {
         output$hist <- renderPlot({
-          hist(datasets$get_data("ADSL", filtered = TRUE, reactive = TRUE)$AGE)
+          hist(datasets$get_dataset("ADSL", filtered = TRUE, reactive = TRUE)$AGE)
         })
       },
       ui = function(id, ...) {ns <- NS(id); plotOutput(ns('hist'))},
@@ -82,8 +82,8 @@ from `DataConnector`.
 
 ```{r}
 data_with_code <- rice_cdisc_data(
-  rice_dataset(dataname = "ADSL", path = "/path/to/ADSL"),
-  rice_dataset(dataname = "ADLB", path = "/path/to/ADLB"),
+  rice_dataset_connector(dataname = "ADSL", path = "/path/to/ADSL"),
+  rice_dataset_connector(dataname = "ADLB", path = "/path/to/ADLB"),
   code = "ADSL <- ADSL %>% mutate(new_variable = 1)
           ADLB <- ADLB %>% mutate(new_variable = 1)"
 )
@@ -192,7 +192,7 @@ foo <- foo_dataset("ADSL", fun)
 foo$get_call()
 
 # execute function - get data
-foo$get_data()
+foo$get_dataset()
 ```
 
 #### 3. `DataConnection`
@@ -215,14 +215,14 @@ x$set_close_fun(close_fun)
 
 This class spins previously described elements and creates shiny application to obtain additional
 arguments. 
-Once again `DatasetConnector`(s) and `DatasetConnection` are created using `rcd_dataset` and 
+Once again `DatasetConnector`(s) and `DatasetConnection` are created using `rcd_dataset_connector` and 
 `rcd_connection` respectively.
 
 ```{r}
 library(random.cdisc.data)
 connectors <- list(
-  rcd_dataset("ADSL", radsl, cached = TRUE),
-  rcd_dataset("ADLB", radlb, cached = TRUE)
+  rcd_dataset_connector("ADSL", radsl, cached = TRUE),
+  rcd_dataset_connector("ADLB", radlb, cached = TRUE)
 )
 con <- teal:::rcd_connection()
 
@@ -295,7 +295,7 @@ To confirm that shiny input has been saved, one can check reproducible code to s
 
   [DatasetConnector||
      + get_call()
-     + get_data()
+     + get_dataset()
      + get_dataname()
      + set/get_dataname(dataname)
      + set/get_pull_fun(CallableFunction fun)

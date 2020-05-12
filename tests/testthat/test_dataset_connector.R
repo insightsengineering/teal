@@ -21,7 +21,7 @@ test_that("get call - pass function", {
     "ADSL <- read.table(file = \"./data_connectors/table.csv\", nrows = 1L, header = TRUE)"
   )
   expect_identical(
-    dc$get_data(),
+    dc$get_dataset(),
     read.table(file = "./data_connectors/table.csv", nrows = 1L, header = TRUE)
   )
 
@@ -84,8 +84,8 @@ test_that("Setting class elements in wrong order", {
 })
 
 
-test_that("rcd_dataset", {
-  x <- rcd_dataset(dataname = "ADSL", radsl, cached = TRUE, N = 400)
+test_that("rcd_dataset_connector", {
+  x <- rcd_dataset_connector(dataname = "ADSL", radsl, cached = TRUE, N = 400)
   expect_true(is(x, c("DatasetConnector", "R6")))
 
   expect_identical(
@@ -104,13 +104,13 @@ test_that("rcd_dataset", {
   )
 
   expect_identical(
-    x$get_data(),
+    x$get_dataset(),
     radsl(cached = TRUE, seed = 1, N = 400)
   )
 })
 
-test_that("rds_cdisc_dataset", {
-  x <- rds_cdisc_dataset(dataname = "ADSL", file = "./data_connectors/table.RDS")
+test_that("rds_dataset_connector", {
+  x <- rds_dataset_connector(dataname = "ADSL", file = "./data_connectors/table.RDS")
   expect_true(is(x, c("DatasetConnector", "R6")))
 
   expect_equal(
@@ -122,8 +122,8 @@ test_that("rds_cdisc_dataset", {
 
 test_that("rice_dataset", {
   x <- rice_cdisc_data(
-    ADSL = rice_dataset("ADSL", "/path/to/ADSL"),
-    ADLB = rice_dataset("ADLB", "/path/to/ADLB"),
+    ADSL = rice_dataset_connector("ADSL", "/path/to/ADSL"),
+    ADLB = rice_dataset_connector("ADLB", "/path/to/ADLB"),
     code = "ADSL$x <- 1"
   )
 

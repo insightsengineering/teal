@@ -99,7 +99,7 @@ DataConnector <- R6::R6Class( #nolint
     #' @param fun_args_replacement (\code{NULL} or named \code{list}) replacement of dynamic argument of pull function
     #'
     #' @return List of datasets
-    get_data = function(refresh = FALSE,
+    get_dataset = function(refresh = FALSE,
                         try = FALSE,
                         con_args_fixed = NULL,
                         con_args_dynamic = NULL,
@@ -108,7 +108,7 @@ DataConnector <- R6::R6Class( #nolint
                         fun_args_dynamic = NULL,
                         fun_args_replacement = NULL) {
       stopifnot(is_logical_single(refresh))
-      if (is.null(private$data) || refresh) {
+      if (is.null(private$dataset) || refresh) {
         private$refresh_data(try = try,
                              con_args_fixed = con_args_fixed,
                              con_args_dynamic = con_args_dynamic,
@@ -117,7 +117,7 @@ DataConnector <- R6::R6Class( #nolint
                              fun_args_dynamic = fun_args_dynamic,
                              fun_args_replacement = fun_args_replacement)
       }
-      return(private$data)
+      return(private$dataset)
     },
     #' @description
     #'
@@ -292,7 +292,7 @@ DataConnector <- R6::R6Class( #nolint
     connectors = NULL,
     code = character(0),
     check = FALSE,
-    data = NULL,
+    dataset = NULL,
     stop_on_error = function(x, submit_id = character(0), progress = NULL) {
       if (is(x, "try-error")) {
         private$connection$close(silent = TRUE)
@@ -363,7 +363,7 @@ DataConnector <- R6::R6Class( #nolint
         private$connectors[[i]]$set_pull_args(args = fun_args_fixed)
 
         data <- private$stop_on_error(
-          private$connectors[[i]]$get_data(args = fun_args_dynamic, try = try),
+          private$connectors[[i]]$get_dataset(args = fun_args_dynamic, try = try),
           submit_id, progress
         )
 
@@ -389,7 +389,7 @@ DataConnector <- R6::R6Class( #nolint
       names(list_data) <- datanames
       rm(env_data)
 
-      private$data <- list_data
+      private$dataset <- list_data
       rm(list_data)
 
       args <- lapply(
@@ -398,7 +398,7 @@ DataConnector <- R6::R6Class( #nolint
           private$stop_on_error(
             try(cdisc_dataset(
                   dataname = private$connectors[[i]]$get_dataname(),
-                  data = private$data[[i]],
+                  data = private$dataset[[i]],
                   keys = private$connectors[[i]]$get_keys()
             )),
             submit_id = submit_id,
@@ -439,7 +439,7 @@ DataConnector <- R6::R6Class( #nolint
 #'
 #' @export
 #'
-#' @param ... (\code{DatasetConnector}) dataset connectors created using \link{rcd_dataset}
+#' @param ... (\code{DatasetConnector}) dataset connectors created using \link{rcd_dataset_connector}
 #' @param code optional, (\code{character}) preprocessing code
 #' @param check optional, (\code{logical}) whether perform reproducibility check
 #'
@@ -449,8 +449,8 @@ DataConnector <- R6::R6Class( #nolint
 #' \dontrun{
 #' library(random.cdisc.data)
 #' x <- rcd_cdisc_data(
-#'   rcd_dataset("ADSL", radsl, cached = TRUE),
-#'   rcd_dataset("ADLB", radlb, cached = TRUE)
+#'   rcd_dataset_connector("ADSL", radsl, cached = TRUE),
+#'   rcd_dataset_connector("ADLB", radlb, cached = TRUE)
 #' )
 #' app <- init(
 #'   data = x,
@@ -459,7 +459,7 @@ DataConnector <- R6::R6Class( #nolint
 #'       "ADSL AGE histogram",
 #'       server = function(input, output, session, datasets) {
 #'         output$hist <- renderPlot(
-#'           hist(datasets$get_data("ADSL", filtered = TRUE, reactive = TRUE)$AGE)
+#'           hist(datasets$get_dataset("ADSL", filtered = TRUE, reactive = TRUE)$AGE)
 #'         )
 #'       },
 #'       ui = function(id, ...) {ns <- NS(id); plotOutput(ns('hist'))},
@@ -507,7 +507,7 @@ rcd_cdisc_data <- function(..., code = character(0), check = TRUE) {
 #'
 #' @export
 #'
-#' @param ... (\code{DatasetConnector}) dataset connectors created using \link{rice_dataset}
+#' @param ... (\code{DatasetConnector}) dataset connectors created using \link{rice_dataset_connector}
 #' @param additional_ui \code{shiny.tag} additional user interface to be visible over login panel
 #' @inheritParams rcd_cdisc_data
 #'
@@ -516,8 +516,8 @@ rcd_cdisc_data <- function(..., code = character(0), check = TRUE) {
 #' @examples
 #' \dontrun{
 #' x <- rice_cdisc_data(
-#'   rice_dataset("ADSL", "/path/to/ADSL"),
-#'   rice_dataset("ADLB", "/path/to/ADLB")
+#'   rice_dataset_connector("ADSL", "/path/to/ADSL"),
+#'   rice_dataset_connector("ADLB", "/path/to/ADLB")
 #' )
 #' app <- init(
 #'   data = x,
@@ -526,7 +526,7 @@ rcd_cdisc_data <- function(..., code = character(0), check = TRUE) {
 #'       "ADSL AGE histogram",
 #'       server = function(input, output, session, datasets) {
 #'         output$hist <- renderPlot({
-#'           hist(datasets$get_data("ADSL", filtered = TRUE, reactive = TRUE)$AGE)
+#'           hist(datasets$get_dataset("ADSL", filtered = TRUE, reactive = TRUE)$AGE)
 #'         })
 #'       },
 #'       ui = function(id, ...) {ns <- NS(id); plotOutput(ns('hist'))},
@@ -586,7 +586,7 @@ rice_cdisc_data <- function(..., code = character(0), additional_ui = NULL) {
 #'
 #' @export
 #'
-#' @param ... (\code{DatasetConnector}) dataset connectors created using \link{rds_cdisc_dataset}
+#' @param ... (\code{DatasetConnector}) dataset connectors created using \link{rds_dataset_connector}
 #' @param code optional, (\code{character}) preprocessing code
 #' @param check optional, (\code{logical}) whether perform reproducibility check
 #'
@@ -594,7 +594,7 @@ rice_cdisc_data <- function(..., code = character(0), additional_ui = NULL) {
 #'
 #' @examples
 #' \dontrun{
-#' x <- rds_cdisc_dataset("ADSL", "/path/to/file.rds")
+#' x <- rds_dataset_connector("ADSL", "/path/to/file.rds")
 #' app <- init(
 #'   data = rds_cdisc_data(x, check = TRUE),
 #'   modules = root_modules(
@@ -602,7 +602,7 @@ rice_cdisc_data <- function(..., code = character(0), additional_ui = NULL) {
 #'       "ADSL AGE histogram",
 #'       server = function(input, output, session, datasets) {
 #'         output$hist <- renderPlot(
-#'           hist(datasets$get_data("ADSL", filtered = TRUE, reactive = TRUE)$AGE)
+#'           hist(datasets$get_dataset("ADSL", filtered = TRUE, reactive = TRUE)$AGE)
 #'         )
 #'       },
 #'       ui = function(id, ...) {ns <- NS(id); plotOutput(ns('hist'))},

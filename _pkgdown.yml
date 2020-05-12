@@ -48,12 +48,12 @@ reference:
     - stop_shiny
   - title: DataConnector
     contents:
-    - rcd_dataset
+    - rcd_dataset_connector
     - rcd_connection
     - rcd_cdisc_data
-    - rds_dataset
+    - rds_dataset_connector
     - rds_connection
     - rds_cdisc_data
-    - rice_dataset
+    - rice_dataset_connector
     - rice_connection
     - rice_cdisc_data

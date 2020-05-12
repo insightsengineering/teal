@@ -67,8 +67,8 @@ test_that("DataConnector with DataConnection", {
   code <- "ADSL$x <- 1"
   check <- TRUE
   connectors <- list(
-    rcd_dataset("ADSL", radsl, cached = TRUE),
-    rcd_dataset("ADLB", radlb, cached = TRUE)
+    rcd_dataset_connector("ADSL", radsl, cached = TRUE),
+    rcd_dataset_connector("ADLB", radlb, cached = TRUE)
   )
 
   x <- DataConnector$new()
@@ -114,12 +114,12 @@ test_that("DataConnector with DataConnection", {
   expect_identical(cdisc_code[1:7], expected_code)
   expect_equal(
     x$get_cdisc_data()$ADSL$data,
-    dplyr::mutate(connectors[[1]]$get_data(), x = 1)
+    dplyr::mutate(connectors[[1]]$get_dataset(), x = 1)
   )
 
   expect_identical(
     x$get_cdisc_data()$ADLB$data,
-    connectors[[2]]$get_data()
+    connectors[[2]]$get_dataset()
   )
 })
 
@@ -130,8 +130,8 @@ test_that("data connector with rcd connection", {
   code <- "ADSL$x <- 1"
   check <- TRUE
   connectors <- list(
-    rcd_dataset("ADSL", radsl, cached = TRUE),
-    rcd_dataset("ADLB", radlb, cached = TRUE)
+    rcd_dataset_connector("ADSL", radsl, cached = TRUE),
+    rcd_dataset_connector("ADLB", radlb, cached = TRUE)
   )
 
   x <- DataConnector$new()
@@ -176,20 +176,20 @@ test_that("data connector with rcd connection", {
   expect_identical(cdisc_code[1:6], expected_code)
   expect_equal(
     x$get_cdisc_data()$ADSL$data,
-    dplyr::mutate(connectors[[1]]$get_data(), x = 1)
+    dplyr::mutate(connectors[[1]]$get_dataset(), x = 1)
   )
 
   expect_identical(
     x$get_cdisc_data()$ADLB$data,
-    connectors[[2]]$get_data()
+    connectors[[2]]$get_dataset()
   )
 
 })
 
 
 test_that("rcd data", {
-  c1 <- rcd_dataset("ADSL", radsl, cached = TRUE)
-  c2 <- rcd_dataset("ADLB", radlb, cached = TRUE)
+  c1 <- rcd_dataset_connector("ADSL", radsl, cached = TRUE)
+  c2 <- rcd_dataset_connector("ADLB", radlb, cached = TRUE)
   x <- rcd_cdisc_data(c1, c2, code = "ADSL <- mutate(x = 1)", check = TRUE)
 
   expect_true(is(x, c("DataConnector", "R6")))
@@ -198,8 +198,8 @@ test_that("rcd data", {
 })
 
 test_that("rice data", {
-  c1 <- rice_dataset(dataname = "ADSL", path = "/path/to/ADSL")
-  c2 <- rice_dataset(dataname = "ADLB", path = "/path/to/ADLB")
+  c1 <- rice_dataset_connector(dataname = "ADSL", path = "/path/to/ADSL")
+  c2 <- rice_dataset_connector(dataname = "ADLB", path = "/path/to/ADLB")
   x <- rice_cdisc_data(c1, c2, code = "ADSL <- mutate(x = 1)")
 
   expect_true(is(x, c("DataConnector", "R6")))
