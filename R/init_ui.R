@@ -9,9 +9,7 @@
 #'
 #' @import shiny
 init_ui <- function(datasets, modules) {
-
   tp <- create_ui(modules, datasets, idprefix = "teal_modules", is_root = TRUE)
-
   # separate the nested tabs
   tp$children <- list(
     tp$children[[1]],

@@ -282,18 +282,24 @@ init <- function(data,
       observeEvent(startapp_data(), {
         .log("init server - start screen: receive data from startup screen")
 
+        progress <- shiny::Progress$new(session)
+        progress$set(0.1, message = "Setting up ui: set data ...")
         set_datasets_data(datasets, startapp_data())
+        progress$set(0.3, message = "Setting up ui: set filters ...")
         set_datasets_filter(datasets, filter)
         ui_teal_main <- init_ui(datasets, modules)
-
+        progress$set(0.7, message = "Setting up ui: set ui ...")
         insertUI(selector = startapp_selector, where = "afterEnd", ui = ui_teal_main)
+
         removeUI(startapp_selector)
 
         # evaluate the server functions
         call_modules(modules, datasets, idprefix = "teal_modules")
 
         obs_filter_refresh$resume() # now update filter panel
-
+        progress$set(1, message = "Setting up ui: done!")
+        Sys.sleep(0.5) #just for the progess bar to be shown
+        progress$close()
       }, ignoreNULL = TRUE)
 
     }
