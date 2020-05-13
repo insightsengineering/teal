@@ -13,7 +13,7 @@ ADRS <- cadrs # nolint
 test_that("Basic example cdisc dataset", {
   expect_identical(ADSL, cdisc_dataset("ADSL", ADSL)$data)
   expect_identical("ADSL", cdisc_dataset("ADSL", ADSL)$dataname)
-  expect_true(all(class(cdisc_dataset("ADSL", ADSL)) %in% list("cdisc_dataset", "dataset")))
+  expect_true(any(class(cdisc_dataset("ADSL", ADSL)) == c("RelationalDataset")))
 })
 
 test_that("Basic example - without code and check", {
@@ -90,56 +90,51 @@ test_that("List values", {
   adsl_yaml <- yaml::yaml.load_file(system.file("metadata/ADSL.yml", package = "random.cdisc.data"))
   adtte_yaml <- yaml::yaml.load_file(system.file("metadata/ADTTE.yml", package = "random.cdisc.data"))
 
-  result_to_compare <- list(structure(list(
-    dataname = "ADSL",
-    data = ADSL,
+  result_to_compare <- structure(
+    list(ADSL = RelationalDataset$new(
+    name = "ADSL",
+    x = ADSL,
     keys = keys(
       primary = c("STUDYID", "USUBJID"),
       foreign = NULL,
       parent = NULL
     ),
-    column_labels = vapply(adsl_yaml$variables, `[[`, character(1), "label"),
-    dataset_label = adsl_yaml$domain$label
-  ),
-  class = c("cdisc_dataset", "dataset")))
-  class(result_to_compare) <- "cdisc_data"
-  result_to_compare <- setNames(result_to_compare, c("ADSL"))
-  attr(result_to_compare, "code") <- paste0(code_empty, "\n\n", code_check, "\n")
+    label = adsl_yaml$domain$label
+  )),
+  code = paste0(code_empty, "\n\n", code_check, "\n"),
+  class = "cdisc_data")
 
-  expect_identical(result, result_to_compare)
+  expect_equal(result, result_to_compare)
 
   result <- cdisc_data(cdisc_dataset("ADSL", ADSL),
                        cdisc_dataset("ADTTE", ADTTE))
 
-  result_to_compare <- list(structure(list(
-    dataname = "ADSL",
-    data = ADSL,
+  result_to_compare <- list(
+    ADSL = RelationalDataset$new(
+    name = "ADSL",
+    x = ADSL,
     keys = keys(
       primary = c("STUDYID", "USUBJID"),
       foreign = NULL,
       parent = NULL
     ),
-    column_labels = vapply(adsl_yaml$variables, `[[`, character(1), "label"),
-    dataset_label = adsl_yaml$domain$label
+    label = adsl_yaml$domain$label
   ),
-  class = c("cdisc_dataset", "dataset")),
-  structure(list(
-    dataname = "ADTTE",
-    data = ADTTE,
+  ADTTE = RelationalDataset$new(
+    name = "ADTTE",
+    x = ADTTE,
     keys = keys(
       primary = c("STUDYID", "USUBJID", "PARAMCD"),
       foreign = c("STUDYID", "USUBJID"),
       parent = "ADSL"
     ),
-    column_labels = vapply(c(adsl_yaml$variables, adtte_yaml$variables), `[[`, character(1), "label"),
-    dataset_label = adtte_yaml$domain$label
-  ),
-  class = c("cdisc_dataset", "dataset")))
+    label = adtte_yaml$domain$label
+  ))
+
   class(result_to_compare) <- "cdisc_data"
-  result_to_compare <- setNames(result_to_compare, c("ADSL", "ADTTE"))
   attr(result_to_compare, "code") <- paste0(code_empty, "\n\n", code_check, "\n")
 
-  expect_identical(result, result_to_compare)
+  expect_equal(result, result_to_compare)
 })
 
 test_that("Keys in cached datasets", {
@@ -191,7 +186,7 @@ test_that("Arguments created by code", {
   result_to_compare <- setNames(result_to_compare, c("ADSL"))
   attr(result_to_compare, "code") <- paste0("ADSL <- cadsl", "\n\n", code_check, "\n")
 
-  expect_identical(result, result_to_compare)
+  expect_equal(result, result_to_compare)
 })
 
 test_that("Error - objects differs", {
@@ -319,7 +314,8 @@ test_that("Error - items dataset to wide (without parent)", {
     cdisc_data(
       cdisc_dataset("ADSL", ADSL,
                     keys = keys(primary = c("STUDYID", "USUBJID", "COUNTRY"), foreign = NULL, parent = NULL)),
-      dataset("COUNTRIES", COUNTRIES,
+      dataset(dataname = "COUNTRIES",
+              data = COUNTRIES,
               keys = keys(primary = c("COUNTRY"),
                           foreign = c("COUNTRY"),
                           parent = "ADSL"))

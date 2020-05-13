@@ -7,7 +7,7 @@
 rice_cdisc_data(..., code = character(0), additional_ui = NULL)
 }
 \arguments{
-\item{...}{(\code{DatasetConnector}) dataset connectors created using \link{rice_dataset}}
+\item{...}{(\code{DatasetConnector}) dataset connectors created using \link{rice_dataset_connector}}
 
 \item{code}{optional, (\code{character}) preprocessing code}
 
@@ -22,8 +22,8 @@ Build data connector for \code{RICE} datasets
 \examples{
 \dontrun{
 x <- rice_cdisc_data(
-  rice_dataset("ADSL", "/path/to/ADSL"),
-  rice_dataset("ADLB", "/path/to/ADLB")
+  rice_dataset_connector("ADSL", "/path/to/ADSL"),
+  rice_dataset_connector("ADLB", "/path/to/ADLB")
 )
 app <- init(
   data = x,
@@ -32,7 +32,7 @@ app <- init(
       "ADSL AGE histogram",
       server = function(input, output, session, datasets) {
         output$hist <- renderPlot({
-          hist(datasets$get_data("ADSL", filtered = TRUE, reactive = TRUE)$AGE)
+          hist(datasets$get_dataset("ADSL", filtered = TRUE, reactive = TRUE)$AGE)
         })
       },
       ui = function(id, ...) {ns <- NS(id); plotOutput(ns('hist'))},

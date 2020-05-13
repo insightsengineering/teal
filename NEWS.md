@@ -1,5 +1,6 @@
 # teal 0.8.3.9000
 
+* cdisc_dataset and dataset now return R6 class objects (RelationalDataset)
 
 # teal 0.8.3
 

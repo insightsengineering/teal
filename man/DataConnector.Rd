@@ -20,7 +20,7 @@ accompanied by three other classes. Classes relation illustrated on diagram.
 \item \href{#method-get_cdisc_data}{\code{DataConnector$get_cdisc_data()}}
 \item \href{#method-get_connection}{\code{DataConnector$get_connection()}}
 \item \href{#method-get_connectors}{\code{DataConnector$get_connectors()}}
-\item \href{#method-get_data}{\code{DataConnector$get_data()}}
+\item \href{#method-get_dataset}{\code{DataConnector$get_dataset()}}
 \item \href{#method-get_server}{\code{DataConnector$get_server()}}
 \item \href{#method-get_ui}{\code{DataConnector$get_ui()}}
 \item \href{#method-launch}{\code{DataConnector$launch()}}
@@ -126,11 +126,11 @@ Get connectors
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-get_data"></a>}}
-\subsection{Method \code{get_data()}}{
+\if{html}{\out{<a id="method-get_dataset"></a>}}
+\subsection{Method \code{get_dataset()}}{
 Function to get data interactively, useful for debugging
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{DataConnector$get_data(
+\if{html}{\out{<div class="r">}}\preformatted{DataConnector$get_dataset(
   refresh = FALSE,
   try = FALSE,
   con_args_fixed = NULL,

@@ -19,7 +19,7 @@ It can be DB or server (\code{RICE} or \code{SAICE}) connection.
 
 Objects of this class store connection function to single dataset. Note that for some specific connection type
 (e.g. \code{RAICE} or \code{SAICE}), pre-requisite object of class \code{DataConnection} is required.
-Data can be pulled via \code{pull} method and returned via \code{get_data} method.
+Data can be pulled via \code{pull} method and returned via \code{get_dataset} method.
 }
 \examples{
 \dontrun{
@@ -40,7 +40,7 @@ x$open() # call opening function
 x$open(args = list(x = 1:5, y = letters[1:5])) # able to call opening function with arguments
 
 x$get_open_call() # check reroducible R code
-# get data from connection via DataConnector$get_data()
+# get data from connection via DataConnector$get_dataset()
 
 x$close() # call closing function
 }
@@ -277,7 +277,7 @@ The objects of this class are cloneable with this method.
 \itemize{
 \item \href{#method-new}{\code{DatasetConnector$new()}}
 \item \href{#method-get_call}{\code{DatasetConnector$get_call()}}
-\item \href{#method-get_data}{\code{DatasetConnector$get_data()}}
+\item \href{#method-get_dataset}{\code{DatasetConnector$get_dataset()}}
 \item \href{#method-get_dataname}{\code{DatasetConnector$get_dataname()}}
 \item \href{#method-get_keys}{\code{DatasetConnector$get_keys()}}
 \item \href{#method-get_path}{\code{DatasetConnector$get_path()}}
@@ -327,13 +327,13 @@ optionally deparsed \code{call} object
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-get_data"></a>}}
-\subsection{Method \code{get_data()}}{
+\if{html}{\out{<a id="method-get_dataset"></a>}}
+\subsection{Method \code{get_dataset()}}{
 Get the data from connection
 
 Pull (if it is not already pulled) and return data
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{DatasetConnector$get_data(args = NULL, silent = FALSE, try = FALSE)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{DatasetConnector$get_dataset(args = NULL, silent = FALSE, try = FALSE)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
@@ -409,7 +409,7 @@ Force execution of connection function
 \if{html}{\out{</div>}}
 }
 \subsection{Returns}{
-nothing, in order to get the data please use \code{get_data} method
+nothing, in order to get the data please use \code{get_dataset} method
 }
 }
 \if{html}{\out{<hr>}}

@@ -7,7 +7,7 @@
 rds_cdisc_data(..., code = character(0), check = TRUE)
 }
 \arguments{
-\item{...}{(\code{DatasetConnector}) dataset connectors created using \link{rds_cdisc_dataset}}
+\item{...}{(\code{DatasetConnector}) dataset connectors created using \link{rds_dataset_connector}}
 
 \item{code}{optional, (\code{character}) preprocessing code}
 
@@ -21,7 +21,7 @@ Build data connector for RDS file connections
 }
 \examples{
 \dontrun{
-x <- rds_cdisc_dataset("ADSL", "/path/to/file.rds")
+x <- rds_dataset_connector("ADSL", "/path/to/file.rds")
 app <- init(
   data = rds_cdisc_data(x, check = TRUE),
   modules = root_modules(
@@ -29,7 +29,7 @@ app <- init(
       "ADSL AGE histogram",
       server = function(input, output, session, datasets) {
         output$hist <- renderPlot(
-          hist(datasets$get_data("ADSL", filtered = TRUE, reactive = TRUE)$AGE)
+          hist(datasets$get_dataset("ADSL", filtered = TRUE, reactive = TRUE)$AGE)
         )
       },
       ui = function(id, ...) {ns <- NS(id); plotOutput(ns('hist'))},

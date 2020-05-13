@@ -50,15 +50,11 @@ dataset <- function(dataname,
     stop(dataname, ": Keys don't uniquely distinguish the rows,  i.e. some rows share the same keys")
   }
 
-  res <- structure(
-    list(
-      dataname = dataname,
-      data = data,
-      keys = keys,
-      column_labels = var_labels(data),
-      dataset_label = data_label(data)
-    ),
-    class = "dataset"
+  res <- RelationalDataset$new(
+    x = data,
+    name = dataname,
+    keys = keys,
+    label = data_label(data)
   )
 
   return(res)
@@ -233,10 +229,9 @@ get_variable_labels <- function(data, columns = NULL) {
 cdisc_dataset <- function(dataname,
                           data,
                           keys = get_cdisc_keys(dataname)) {
-    x <- dataset(dataname, data, keys)
-    class(x) <- c("cdisc_dataset", class(x))
-    x
-  }
+    dataset(dataname, data, keys)
+
+}
 
 
 #' Utility function to check if foreign keys are existing in parent dataset
@@ -360,7 +355,7 @@ cdisc_data <- function(...,
   code <- paste0(code, collapse = "\n")
   dlist <- list(...)
 
-  if (!is_class_list("dataset")(dlist)) {
+  if (!is_class_list("RelationalDataset")(dlist)) {
     stop("Argument in not of class dataset, please use cdisc_dataset function!")
   }
 
