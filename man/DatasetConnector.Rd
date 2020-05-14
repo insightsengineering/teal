@@ -442,7 +442,7 @@ Set dataset keys
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{keys}}{(\code{list}) of keys}
+\item{\code{keys}}{(\code{keys}) object}
 }
 \if{html}{\out{</div>}}
 }

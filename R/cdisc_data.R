@@ -3,7 +3,7 @@
 #' Abstract function that creates dataset object with connected metadata.
 #' @param dataname name of dataset
 #' @param data data
-#' @param keys list of keys -
+#' @param keys (\code{keys}) object -
 #'
 #' Please note that the order of keys is important.
 #'
@@ -24,6 +24,8 @@
 #'
 #' @return a dataset with connected metadata
 #'
+#' @importFrom methods is
+#'
 #' @export
 #'
 #' @examples
@@ -34,12 +36,10 @@
 #' dataset("ADSL", ADSL)
 dataset <- function(dataname,
                     data,
-                    keys = list(primary = NULL, foreign = NULL, parent = NULL)) {
+                    keys = teal::keys(primary = NULL, foreign = NULL, parent = NULL)) {
   stopifnot(is_character_single(dataname))
   stopifnot(is.data.frame(data))
-  stopifnot(is.list(keys))
-  stopifnot(all_true(keys, function(x) is.null(x) || is_character_vector(x)))
-  stopifnot(all(c("primary", "foreign", "parent") %in% names(keys)))
+  stopifnot(is(keys, "keys"))
   stopifnot(all(union(keys$primary, keys$foreign) %in% names(data)))
 
   if (!is.null(keys$foreign) && is.null(keys$parent) || (is.null(keys$foreign) && !is.null(keys$parent))) {
@@ -97,13 +97,13 @@ data_label <- function(data) {
   x
 }
 
-#' Function that returns list of keys
+#' Function that returns a keys object
 #'
 #' @param primary vector of primary key values
 #' @param foreign vector of foreign key values
 #' @param parent string that indicates parent dataset
 #'
-#' @return list of keys
+#' @return keys
 #'
 #' @export
 #'
@@ -115,7 +115,10 @@ keys <- function(primary, foreign, parent) {
   stopifnot(is.null(foreign) || is_character_vector(foreign))
   stopifnot(is.null(parent) || is_character_single(parent))
 
-  return(list(primary = primary, foreign = foreign, parent = parent))
+  out <- list(primary = primary, foreign = foreign, parent = parent)
+  class(out) <- "keys"
+
+  return(out)
 }
 
 #'
@@ -141,7 +144,9 @@ get_cdisc_keys <- function(dataname) {
     stop(sprintf("There is no dataset called: %s \n  List of supported cdisc_datasets:\n   %s",
                  dataname, paste(names(default_cdisc_keys), collapse = ", ")))
   } else {
-    return(default_cdisc_keys[[dataname]])
+    cdisc_keys <- default_cdisc_keys[[dataname]]
+
+    return(keys(cdisc_keys$primary, cdisc_keys$foreign, cdisc_keys$parent))
   }
 }
 

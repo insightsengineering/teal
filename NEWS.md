@@ -1,7 +1,8 @@
 # teal 0.8.3.9000
 
-* cdisc_dataset and dataset now return R6 class objects (RelationalDataset)
 * progress bar for ui creation in delayed loading module
+* cdisc_dataset and dataset now return R6 class objects (RelationalDataset)
+* Change output of `keys` function to `keys` object. Updated checks in `DatasetConnector` and `dataset`.
 
 # teal 0.8.3
 
