@@ -100,13 +100,13 @@ DatasetConnector <- R6::R6Class( #nolint
     #' @description
     #' Set dataset keys
     #'
-    #' @param keys (\code{list}) of keys
+    #' @param keys (\code{keys}) object
     #'
     #' @return nothing
+    #'
+    #' @importFrom methods is
     set_keys = function(keys) {
-      stopifnot(is.list(keys))
-      stopifnot(all_true(keys, function(x) is.null(x) || is_character_vector(x)))
-      stopifnot(all(c("primary", "foreign", "parent") %in% names(keys)))
+      stopifnot(is(keys, "keys"))
 
       if (!is.null(keys$foreign) && is.null(keys$parent) || (is.null(keys$foreign) && !is.null(keys$parent))) {
         stop(dataname, ": Please specify both foreign keys and a parent!")

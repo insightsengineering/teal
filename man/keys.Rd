@@ -2,7 +2,7 @@
 % Please edit documentation in R/cdisc_data.R
 \name{keys}
 \alias{keys}
-\title{Function that returns list of keys}
+\title{Function that returns a keys object}
 \usage{
 keys(primary, foreign, parent)
 }
@@ -14,10 +14,10 @@ keys(primary, foreign, parent)
 \item{parent}{string that indicates parent dataset}
 }
 \value{
-list of keys
+keys
 }
 \description{
-Function that returns list of keys
+Function that returns a keys object
 }
 \examples{
 

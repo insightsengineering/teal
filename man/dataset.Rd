@@ -7,7 +7,7 @@
 dataset(
   dataname,
   data,
-  keys = list(primary = NULL, foreign = NULL, parent = NULL)
+  keys = teal::keys(primary = NULL, foreign = NULL, parent = NULL)
 )
 }
 \arguments{
@@ -15,7 +15,7 @@ dataset(
 
 \item{data}{data}
 
-\item{keys}{list of keys -
+\item{keys}{(\code{keys}) object -
 
 Please note that the order of keys is important.
 
