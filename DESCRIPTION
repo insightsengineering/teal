@@ -61,6 +61,7 @@ Collate:
     'FilteredData.R'
     'NamedDataset.R'
     'RawDataset.R'
+    'RawDatasetConnector.R'
     'RelationalDataset.R'
     'cdisc_data.R'
     'choices_labeled.R'

@@ -33,7 +33,7 @@ RawDataset <- R6::R6Class( # nolint
     #' Derive the raw data frame inside this object
     #' @return
     #' \code{data.frame} or \code{rtable}
-    get_raw_data = function(){
+    get_raw_data = function() {
       private$.raw_data
     },
     #' @description

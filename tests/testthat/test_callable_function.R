@@ -9,6 +9,7 @@ test_that("Test callable", {
     "mean(x = c(1, 2, NA), na.rm = TRUE)"
   )
 
+  # get_call doesn't change args persistently
   expect_false(
     identical(
       x_fun$get_call(),
@@ -16,12 +17,14 @@ test_that("Test callable", {
     )
   )
 
+  # args are still as in the beginning
   expect_identical(
     x_fun$run(),
     mean(c(1.0, 2.0, NA_real_), na.rm = TRUE)
   )
 
-  args <- list(x = c(1.0, 2.0, NA_real_), na.rm = FALSE)
+  # run doesn't change args persistently
+  args <- list(na.rm = FALSE)
   expect_false(
     identical(
       x_fun$run(),
@@ -36,10 +39,31 @@ test_that("Test callable", {
     )
   )
 
+  # args can be changed persistently by set_arg_value()
   x_fun$set_arg_value(name = "na.rm", value = FALSE)
   expect_identical(
     x_fun$get_call(),
     "mean(x = c(1, 2, NA), na.rm = FALSE)"
+  )
+
+  # args can be changed/added persistently by set_args()
+  x_fun$set_args(list(na.rm = TRUE, trim = 0.3))
+
+  expect_identical(
+    x_fun$get_call(),
+    "mean(x = c(1, 2, NA), na.rm = TRUE, trim = 0.3)"
+  )
+
+
+  # try
+  expect_identical(
+    x_fun$run(try = TRUE),
+    x_fun$run(try = FALSE)
+  )
+
+  expect_identical(
+    x_fun$run(return = FALSE),
+    NULL
   )
 })
 
@@ -116,4 +140,6 @@ test_that("find callable function name", {
     fun(mean),
     "mean"
   )
+
+
 })

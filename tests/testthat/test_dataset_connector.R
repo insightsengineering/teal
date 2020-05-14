@@ -2,6 +2,119 @@ context("Dataset Connector")
 library(testthat)
 library(random.cdisc.data)
 
+# Test RawDatasetConnector ---
+test_that("initialize", {
+  fun <- CallableFunction$new(data.frame)
+  fun$set_args(list(n = 5, seed = 1))
+
+  x <- RawDatasetConnector$new(pull_fun = fun)
+
+  expect_identical(
+    x$get_call(deparse = TRUE),
+    "NULL"
+  )
+
+  expect_identical(
+    x$get_call(deparse = FALSE),
+    NULL
+  )
+
+  expect_error(
+    x$dataset,
+    "dataset has not been pulled yet"
+  )
+
+  expect_error(
+    x$get_dataset(),
+    "dataset has not been pulled yet"
+  )
+
+  expect_error(
+    x$get_raw_data(),
+    "dataset has not been pulled yet"
+  )
+
+
+  expect_silent(x$pull())
+
+  expect_true(
+    is(x$dataset, "RawDataset")
+  )
+
+  expect_true(
+    is(x$pull_fun, "CallableFunction")
+  )
+
+  expect_identical(
+    x$dataset$get_raw_data(),
+    data.frame(n = 5, seed = 1)
+  )
+
+  expect_identical(
+    x$get_raw_data(),
+    data.frame(n = 5, seed = 1)
+  )
+
+  # arguments used in pull doesn't change code - only data
+  expect_silent(
+    x$pull(args = list(n = 50, seed = 1))
+  )
+
+  expect_identical(
+    x$dataset$raw_data,
+    data.frame(n = 50, seed = 1)
+  )
+
+  expect_identical(
+    x$get_call(deparse = TRUE),
+    "data.frame(n = 5, seed = 1)"
+  )
+
+
+  # arguments used in pull doesn't change code - only data
+  expect_silent(x$pull(args = list(n = 100)))
+
+  expect_identical(
+    x$dataset$raw_data,
+    data.frame(n = 100, seed = 1)
+  )
+
+  expect_identical(
+    x$get_call(deparse = TRUE),
+    "data.frame(seed = 1, n = 5)"
+  )
+
+
+  expect_error(
+    RawDatasetConnector$new(paste),
+    "is not TRUE"
+  )
+
+
+  fun2 <- CallableFunction$new(paste)
+  x2 <- RawDatasetConnector$new(pull_fun = fun2)
+
+  expect_error(
+    x2$pull(),
+    "is.data.frame"
+  )
+
+  expect_error(
+    expect_identical(
+      x2$dataset,
+      NULL
+    ),
+    "dataset has not been pulled yet"
+  )
+
+
+  expect_identical(
+    x2$get_call(deparse = FALSE),
+    NULL
+  )
+
+})
+
 # Test DatasetConnector -----
 test_that("get call - pass function", {
   dc <- DatasetConnector$new()

@@ -58,10 +58,8 @@ CallableFunction <- R6::R6Class( #nolint
       stopifnot(is_logical_single(deparse))
       stopifnot(is.null(args) || (is.list(args) && is_fully_named_list(args)))
 
-      old_args <- as.list(private$args)
-
+      old_args <- private$args
       if_not_null(args, self$set_args(args))
-
 
       res <- if (deparse) {
         paste0(deparse(private$call, width.cutoff = 80L), collapse = "\n")
@@ -69,10 +67,12 @@ CallableFunction <- R6::R6Class( #nolint
         private$call
       }
 
-      for (arg_name in names(args)) {
-        self$set_arg_value(arg_name, NULL)
+      # set args back to default
+      if (!is.null(args)) {
+        lapply(names(args), self$set_arg_value, NULL)
+        self$set_args(old_args)
       }
-      self$set_args(old_args)
+
 
       return(res)
     },
@@ -100,6 +100,7 @@ CallableFunction <- R6::R6Class( #nolint
         return(invisible(NULL))
       }
       stopifnot(is.list(args) && is_fully_named_list(args))
+
       for (idx in seq_along(args)) {
         self$set_arg_value(names(args)[[idx]], args[[idx]])
       }
@@ -115,9 +116,6 @@ CallableFunction <- R6::R6Class( #nolint
     #' @return nothing
     set_arg_value = function(name, value) {
       stopifnot(is_character_single(name))
-      if (is.null(private$args)) {
-        private$args <- list()
-      }
       private$args[[name]] <- value
       self$refresh()
       return(invisible(NULL))
