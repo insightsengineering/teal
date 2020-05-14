@@ -1,17 +1,83 @@
-#todo: document
+# label of checkbox to keep / remove NAs
+get_keep_na_label <- function(na_count) paste0("Keep NA (", na_count, ")")
+
 #' UI for a single filter item for a filter variable
 #'
+#' We pass in the initial state to avoid filtering twice that otherwise comes
+#' with the `updateInput` functions.
 #'
+#' @md
+#' @param filter_info `filter_info` returned by datasets class
+#' @param filter_state `filter_state` returned by datasets class
+#' @param prelabel `character` label to append before computed label of input
+#'
+#' @examples
+#' library(random.cdisc.data)
+#'
+#' ADSL <- radsl(cached = TRUE)
+#' attr(ADSL, "keys") <- get_cdisc_keys("ADSL")
+#'
+#' datasets <- teal:::FilteredData$new()
+#' isolate({
+#'   datasets$set_data("ADSL", ADSL)
+#'   datasets$set_filter_state("ADSL", varname = NULL, list(
+#'     AGE = list(range = c(33, 44), keep_na = FALSE)
+#'   ))
+#' })
+#'
+#' shinyApp(ui = function() {
+#'   ui_single_filter_item(
+#'     "var_SEX", datasets$get_filter_info("ADSL", "AGE"),
+#'     datasets$get_filter_state("ADSL", "AGE"), prelabel = "ADSL.AGE"
+#'   )
+#' }, server = function(input, output, session) {
+#'   callModule(srv_single_filter_item, "var_SEX", datasets, "ADSL", "AGE")
+#' }) %>% invisible() # invisible so it does not run
+#'
+#'
+#' # more complicated example that updates the dataset state from the server state to the browser
+#' # overwriting anything from the user
+#' library(random.cdisc.data)
+#'
+#' ADSL <- radsl(cached = TRUE)
+#' attr(ADSL, "keys") <- get_cdisc_keys("ADSL")
+#'
+#' datasets <- teal:::FilteredData$new()
+#' isolate({
+#'   datasets$set_data("ADSL", ADSL)
+#'   datasets$set_filter_state("ADSL", varname = NULL, list(
+#'     AGE = list(range = c(33, 44), keep_na = FALSE)
+#'   ))
+#' })
+#'
+#' shinyApp(ui = function() {
+#'   div(
+#'     ui_single_filter_item(
+#'       "var_SEX", datasets$get_filter_info("ADSL", "AGE"),
+#'       datasets$get_filter_state("ADSL", "AGE"), prelabel = "ADSL.AGE"
+#'     ),
+#'     actionButton("reset_min", "Regenerate slider value")
+#'   )
+#' }, server = function(input, output, session) {
+#'   update_ui_trigger <- callModule(srv_single_filter_item, "var_SEX", datasets, "ADSL", "AGE")$update_ui_trigger
+#'   observeEvent(input$reset_min, {
+#'     new_state <- list(range = sort(sample(30:70, 2)), keep_na = sample(c(TRUE, FALSE), 1))
+#'     print(paste0("Setting new state ", toString(new_state)))
+#'     datasets$set_filter_state("ADSL", "AGE", new_state)
+#'     update_ui_trigger()
+#'   }, ignoreInit = TRUE)
+#' }) %>% invisible() # invisible so it does not run
 ui_single_filter_item <- function(id, filter_info, filter_state, prelabel) {
   ns <- NS(id)
   stopifnot(is_character_single(prelabel))
 
-  remove_filter_id <- ns("remove_filter")
-  selection_id <- ns("selection")
-  keep_na_id <- ns("keepNA")
+  id_remove_filter <- ns("remove_filter")
+  id_selection <- ns("selection")
+  id_keep_na <- ns("keepNA")
 
   # we set label to NULL everywhere, so we can set the label column ourselves
   select_input <- if (filter_info$type == "choices") {
+    # this if should ideally be implemented in Javascript to also work when choices are updates from the server side
     if (length(filter_info$choices) <= 5) {
       div(
         style = "position: relative;",
@@ -26,7 +92,7 @@ ui_single_filter_item <- function(id, filter_info, filter_state, prelabel) {
           plotOutput(ns("plot"), height = "100%")
         ),
         checkboxGroupInput(
-          selection_id,
+          id_selection,
           label = NULL,
           choices =  filter_info$choices,
           selected = filter_state$choices,
@@ -35,7 +101,7 @@ ui_single_filter_item <- function(id, filter_info, filter_state, prelabel) {
       )
     } else {
       pickerInput(
-        selection_id,
+        id_selection,
         label = NULL,
         choices = filter_info$choices,
         selected = filter_state$choices,
@@ -60,7 +126,7 @@ ui_single_filter_item <- function(id, filter_info, filter_state, prelabel) {
           transform-origin: bottom;",
         shiny::plotOutput(ns("plot"), height = "100%")),
       sliderInput(
-        selection_id,
+        id_selection,
         label = NULL,
         # when rounding, we must make sure that we don't set the slider to an invalid state
         min = floor(filter_info$range[1] * 100) / 100,
@@ -84,7 +150,7 @@ ui_single_filter_item <- function(id, filter_info, filter_state, prelabel) {
         plotOutput(ns("plot"), height = "100%")
       ),
       radioButtons(
-        selection_id,
+        id_selection,
         label = NULL,
         choices = filter_info$choices,
         selected = filter_state$status,
@@ -115,10 +181,10 @@ ui_single_filter_item <- function(id, filter_info, filter_state, prelabel) {
           x$children[[1]]$name <- "span"
           return(x)
         } # todo: not working
-        column(2, make_inline(checkboxInput(keep_na_id, paste0("Keep NA (", filter_info$na_count, ")"), value = filter_state$keep_na)))
+        column(2, make_inline(checkboxInput(id_keep_na, get_keep_na_label(filter_info$na_count), value = filter_state$keep_na)))
       },
       column(4, actionLink(
-        remove_filter_id, "", icon("trash-alt", lib = "font-awesome"),
+        id_remove_filter, "", icon("trash-alt", lib = "font-awesome"),
         class = "remove"
       ))
     ),
@@ -135,7 +201,7 @@ srv_single_filter_item <- function(input, output, session, datasets, dataname, v
     is_character_single(varname)
   )
 
-  # define plot that might overlay along with filtering (e.g. histogram)
+  # compute plot that might overlay along with filtering (e.g. histogram) ----
 
   # we have to make this outside the if because plot options may be different per variable type
   var_type <- isolate(datasets$get_filter_type(dataname, varname))
@@ -178,14 +244,14 @@ srv_single_filter_item <- function(input, output, session, datasets, dataname, v
     # no plot generated
   }
 
-
-  # define observers for buttons ----
-
+  # define observers ----
   id_selection <- "selection"
-  id_keepna <- "keepNA"
+  id_keep_na <- "keepNA"
+
+  # observers for Browser UI state -> FilteredData filter_state ----
   o1 <- observeEvent({
     input[[id_selection]]
-    input[[id_keepna]]
+    input[[id_keep_na]]
   }, {
     selection_state <- input[[id_selection]]
     type <- datasets$get_filter_type(dataname, varname)
@@ -211,7 +277,7 @@ srv_single_filter_item <- function(input, output, session, datasets, dataname, v
     } else {
       stop("Unknown filter type ", type, " for var ", varname)
     }
-    keep_na_state <- if_null(input[[id_keepna]], FALSE) # input field may not exist if var contains no NA
+    keep_na_state <- if_null(input[[id_keep_na]], FALSE) # input field may not exist if var contains no NA
     state <- c(state, list(keep_na = keep_na_state))
     .log("State for ", varname, ":", filter_state_to_str(type, state)) # truncate the output
     datasets$set_filter_state(dataname, varname, state)
@@ -231,5 +297,43 @@ srv_single_filter_item <- function(input, output, session, datasets, dataname, v
     ignoreInit = TRUE
   )
 
-  return(list(o1, o2)) # so we can cancel them
+  # observers for FilteredData filter_state -> Browser UI state ----
+  # to avoid bad user experience, e.g. when the user clicks a button, the server is calculating and
+  # the user clicks again in the meantime, calling `updateInput` would destroy the user selection, so
+  # we only update when it is explicitly requested by calling a reactive returned by this module:
+  # `update_ui_trigger`
+  update_ui_val <- reactiveVal(0)
+  update_ui_trigger <- function() update_ui_val(update_ui_val() + 1)
+  o3 <- observeEvent(update_ui_val(), {
+    req(update_ui_val() > 0) # ignore init
+
+    # does not react to changes of type and choices because the type of UI element is already rendered
+    # this would require Javascript, similar to use `radioGroup` instead of `selectInput` for less than
+    # five items
+    filter_info <- datasets$get_filter_info(dataname, varname)
+    filter_state <- datasets$get_filter_state(dataname, varname)
+    type <- filter_info$type
+    if (type == "choices") {
+      if (length(filter_info$choices) <= 5) {
+        updateCheckboxGroupInput(session, id_selection, choices = filter_info$choices, selected = filter_state$choices)
+      } else {
+        updateSelectInput(session, id_selection, choices = filter_info$choices, selected = filter_state$choices)
+      }
+    } else if (type == "range") {
+      updateSliderInput(
+        session, id_selection, min = filter_info$range[[1]],
+        max = filter_info$range[[2]], value = filter_state$range
+      )
+    } else if (type == "logical") {
+      updateRadioButtons(session, id_selection, choices = filter_info$status, selected = filter_state$status)
+    } else {
+      stop("Unknown filter type ", type, " for var ", varname)
+    }
+
+    updateCheckboxInput(
+      session, id_keep_na, label = get_keep_na_label(filter_state$na_count), value = filter_state$keep_na
+    )
+  })
+
+  return(list(observers = list(o1, o2), update_ui_trigger = update_ui_trigger)) # so we can cancel them
 }

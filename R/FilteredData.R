@@ -55,41 +55,46 @@ filtered_data_doc_helper <- function(dataname, varname, filtered) {
 #' library(random.cdisc.data)
 #'
 #' ADSL <- radsl(cached = TRUE)
-#' x <- teal:::FilteredData$new()
+#' attr(ADSL, "keys") <- get_cdisc_keys("ADSL")
+#' datasets <- teal:::FilteredData$new()
 #'
 #' # to evaluate without isolate(), i.e. provide a default isolate context
 #' options(shiny.suppressMissingContextError = TRUE)
 #' on.exit(options(shiny.suppressMissingContextError = FALSE), add = TRUE)
 #'
-#' x$set_data("ADSL", ADSL)
+#' datasets$set_data("ADSL", ADSL)
 #'
-#' x$datanames()
-#' x$print_data_info("ADSL")
-#' x$get_filter_info("ADSL")
-#' df <- x$get_data("ADSL", filtered = FALSE)
+#' datasets$datanames()
+#' datasets$get_data_info("ADSL", filtered = FALSE)
+#' # filters dataset to obtain information
+#' datasets$get_data_info("ADSL", filtered = TRUE)
+#' datasets$get_filter_info("ADSL")
+#' df <- datasets$get_data("ADSL", filtered = FALSE)
 #' # df
 #'
-#' x$get_filter_type("ADSL", "SEX")
-#' x$set_filter_state("ADSL", varname = NULL, state = list(
-#'   AGE = list(selection = c(3, 5), keep_na = FALSE),
-#'   SEX = list(selection = c("M", "F"), keep_na = FALSE)
+#' datasets$get_filter_type("ADSL", "SEX")
+#' datasets$set_filter_state("ADSL", varname = NULL, state = list(
+#'   AGE = list(range = c(33, 44), keep_na = FALSE),
+#'   SEX = list(choices = c("M", "F"), keep_na = FALSE)
 #' ))
-#' x$get_filter_type("ADSL", "SEX")
-#' x$get_filter_info("ADSL")[["SEX"]]$type
+#' datasets$get_filter_type("ADSL", "SEX")
+#' datasets$get_filter_info("ADSL")[["SEX"]]$type
 #'
-#' x$hold_filtering()
-#' x$set_filter_state("ADSL", varname = NULL, list(
-#'   AGE = list(selection = c(3, 7), keep_na = FALSE)
+#' # will fail because of invalid range
+#' # datasets$set_filter_state("ADSL", varname = NULL, list(
+#' #   AGE = list(range = c(3, 7), keep_na = FALSE)
+#' # ))
+#' datasets$set_filter_state("ADSL", varname = NULL, list(
+#'   AGE = list(range = c(33, 44), keep_na = FALSE)
 #' ))
-#' x$set_filter_state(
+#' datasets$set_filter_state(
 #'   "ADSL",
 #'   varname = "SEX",
-#'   state = list(selection = c("M", "F"), keep_na = FALSE)
+#'   state = list(choices = c("M", "F"), keep_na = FALSE)
 #' )
-#' x$continue_filtering()
-#' x$get_filter_type("ADSL", "SEX")
+#' datasets$get_filter_type("ADSL", "SEX")
 #'
-#' x$get_filter_state("ADSL")
+#' datasets$get_filter_state("ADSL")
 FilteredData <- R6::R6Class( # nolint
   "FilteredData",
   ## FilteredData ====
@@ -774,7 +779,7 @@ FilteredData <- R6::R6Class( # nolint
           selection_state <- var_state$range
           if ((length(selection_state) != 2) ||
             (selection_state[1] > selection_state[2]) ||
-            ((selection_state[1] < var_info$range[1]) && (selection_state[2] > var_info$range[2]))
+            ((selection_state[1] < var_info$range[1]) || (selection_state[2] > var_info$range[2]))
           ) {
             stop(paste(
               "data", dataname, "variable", varname, "range (", toString(selection_state),

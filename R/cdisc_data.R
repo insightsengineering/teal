@@ -139,7 +139,7 @@ get_cdisc_keys <- function(dataname) {
   stopifnot(is_character_single(dataname))
 
   # copy from excel file
-  filename <- system.file("cdisc_datasets/cdisc_datasets.yaml", package = "teal")
+  filename <- system.file(file.path("cdisc_datasets", "cdisc_datasets.yaml"), package = "teal")
   stopifnot(file.exists(filename))
   default_cdisc_keys <- yaml.load_file(filename)
 
