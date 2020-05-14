@@ -1,5 +1,7 @@
 #todo: document
-# UI for a single filter item for a filter variable ----
+#' UI for a single filter item for a filter variable
+#'
+#'
 ui_single_filter_item <- function(id, filter_info, filter_state, prelabel) {
   ns <- NS(id)
   stopifnot(is_character_single(prelabel))

@@ -3,9 +3,8 @@
 # Teal Internally Used Logger functions
 
 #' @export
-.log <- function(..., sep=" ", type="debug") {
-
-  if (!isTRUE(getOption(x = "teal_logging"))) {
+.log <- function(..., sep = " ", type = "debug") {
+  if (!isTRUE(getOption("teal_logging"))) {
     return()
   }
 

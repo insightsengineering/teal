@@ -95,7 +95,6 @@ FilteredData <- R6::R6Class( # nolint
   ## FilteredData ====
   ## __Public Methods ====
   public = list(
-    id = NULL,# todo: remove
     #' @details
     #' Initialized with the allowed datanames. The actual datasets can afterwards
     #' be added using the set_data function.
@@ -108,8 +107,6 @@ FilteredData <- R6::R6Class( # nolint
       private$filtered_datasets <- reactiveValues()
       private$filter_state <- reactiveValues()
       private$filter_infos <- reactiveValues()
-
-      self$id <- uuid::UUIDgenerate()
 
       # we explicitly don't make it reactive
       private$previous_filter_state <- list()
