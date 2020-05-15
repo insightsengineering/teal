@@ -1,75 +1,76 @@
+# todo: provide example
+
 #' Creates UI to show currently selected filters that can be applied to
 #' the dataset, i.e. all columns selected for filtering are shown.
 #'
 #' @param id module id
-#' @param dataname `character` name of dataset that is filtered
 #' @md
 #'
-ui_filter_items <- function(id, dataname) {
+ui_filter_items <- function(id) {
   ns <- NS(id)
+  # todo: put id into top class in init_ui
   div(
-    id = ns(character(0)), # needed to assign an id, so filter can be shown / hidden
-    uiOutput(ns("filters"))
+    id = ns(character(0)) # needed to assign an id, so filter can be shown / hidden
   )
 }
 
 #' @importFrom shinyWidgets pickerInput pickerOptions
-srv_filter_items <- function(input, output, session, datasets, dataname, container = div) {
-  # This whole function is complicated because the UI must be created dynamically from the
-  # selection of filters.
-  # Any observers previously registered during dynamic creation must be deleted on the
-  # next dynamic registration of observers.
-  # When a UI element with an id is added and removed, its input element still stays there
-  # When it is readded, the input elements still are the old ones before it was removed,
-  # e.g. the button input starts at the number of clicks on it before it was removed.
-  # When the filter is changed from the UI, this sets the state in the FilteredData.
-  # This in turns triggers the UI regeneration which reflects the new state (and should
-  # leave the UI in the same state because nothing changed, unless the state does not capture
-  # the full UI state). This triggers the `set_filter_state` function again, but stops there
-  # because the underlying reactiveVal only triggers when its value changes (unlike reactive).
+srv_filter_items <- function(input, output, session, datasets, dataname) {
+  # todo (for Max): insert discussion about dynamic UI from chat with Adrian
 
-  # dynamic ui part ----
-  output$filters <- renderUI({
-    .log("generating ui filters for data", dataname)
-    filter_infos <- datasets$get_filter_info(dataname)
-    var_states <- datasets$get_filter_state(dataname)
+  # We here choose to create a UI that listens to channges in the filter variables and
+  # calls `insertUI` for any variables that were added to filter and `removeUI` for variables
+  # that should no longer be filtered.
+  # When we insert a UI with an associated server function, we must delete the observers
+  # registered in the server function when we remove it again as they will otherwise keep
+  # listening. This becomes problematic when the UI is added again. Not only will the observers
+  # execute twice, but also will the input elements not be reset, e.g. a previously clicked button
+  # will keep its value (equal to the number of clicks).
 
-    ns <- session$ns
-    return(do.call(container, unname(Map(
-      function(varname, filter_info, filter_state) {
-        ui_single_filter_item(
-          id = ns(paste0("filter_", varname)), filter_info = filter_info, filter_state = filter_state,
+  # currently shown variable filters in the order they were added to the UI along
+  # with the observers that need to be destroyed to properly remove this element
+  shown_vars_observers <- NULL
+  filtered_vars <- reactive(names(datasets$get_filter_state(dataname))) # variables to filter according to datasets state
+  filter_id_for_var <- function(varname) paste0("filter_", varname)
+
+  observeEvent(filtered_vars(), {
+    # this block has an effect whenever the shown variable filters differ from the datasets state
+    .log("regenerating ui filters for data", dataname)
+
+    # add variables not shown currently
+    lapply(setdiff(filtered_vars(), names(shown_vars_observers)), function(varname) {
+      filter_id <- session$ns(filter_id_for_var(varname))
+      insertUI(
+        selector = paste0("#", session$ns(character(0))),
+        where = "beforeEnd",
+        # add span to be removable
+        ui = span(id = filter_id, ui_single_filter_item(
+          id = filter_id,
+          filter_info = datasets$get_filter_info(dataname, varname),
+          filter_state = datasets$get_filter_state(dataname, varname),
           prelabel = paste0(dataname, ".", varname)
+        ))
+        #immediate = TRUE # todo: check
+      )
+      shown_vars_observers <<- c(
+        shown_vars_observers,
+        setNames(
+          list(callModule(srv_single_filter_item, filter_id_for_var(varname), datasets, dataname, varname)$observers),
+          varname
         )
-      },
-      varname = names(filter_infos), # also used as id
-      filter_info = filter_infos,
-      filter_state = var_states
-    ))))
-  })
-
-  # dynamic server part for UI ----
-
-  # we need to keep a list of current observers so we can destroy them when the UI is regenerated dynamically
-  # must destroy the observer so that it does not keep deleting when the var is added again (which
-  # would then immediately be deleted again)
-  active_observers <- list()
-  observe({
-    .log("generating server part for filters for data", dataname)
-
-    lapply(active_observers, function(o) o$destroy())
-    active_observers <<- list()
-
-    # over all filtered variables
-    lapply(names(datasets$get_filter_state(dataname)), function(varname) {
-      active_observers <<- c(
-        active_observers,
-        callModule(srv_single_filter_item, paste0("filter_", varname), datasets, dataname, varname)
       )
     })
+    # remove variables that should not be shown anymore
+    lapply(setdiff(names(shown_vars_observers), filtered_vars()), function(varname) {
+      removeUI(selector = paste0("#", session$ns(filter_id_for_var(varname))))
+      lapply(shown_vars_observers[[varname]], function(obs) obs$destroy())
+      shown_vars_observers[[varname]] <<- NULL
+    })
+
+    stopifnot(setequal(filtered_vars(), names(shown_vars_observers)))
   })
 
-  # returning observers so you can cancel them in a similar fashion as in this module when integrating this module
+  # return observers so you can cancel them in a similar fashion as in this module when integrating this module
   # into another dynamic module
-  return(active_observers)
+  return(shown_vars_observers)
 }

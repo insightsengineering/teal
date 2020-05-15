@@ -285,6 +285,7 @@ FilteredData <- R6::R6Class( # nolint
       if (is.null(varname)) {
         # filter out variables that are not filtered
         if (all_vars) {
+          # todo: only ever return filterable variables
           private$filter_infos[[dataname]]()
         } else {
           private$filter_infos[[dataname]]()[names(private$filter_state[[dataname]])]
@@ -539,7 +540,7 @@ FilteredData <- R6::R6Class( # nolint
           log2(paste0(sprintf(paste0("%", nchar(txt), "s"), "\\--> selected: "), filter_state_to_str(var_info$type, var_state)))
         }
         if (length(varnames) == 0) {
-          log2("There are no ", if (filtered_vars_only) "filtered", "variables for dataset ", dataname)
+          log2("There are no", if (filtered_vars_only) "filtered", "variables for dataset", dataname)
         }
       }
       log2("===========================")
@@ -587,7 +588,10 @@ FilteredData <- R6::R6Class( # nolint
       # we could isolate, but this does not matter? todo: really even if filter modified afterwards?
       return(list(
         # must be a list and not atomic vector, otherwise jsonlite::toJSON gives a warning
-        data_md5sums = lapply(self$datanames(), self$get_data_attr, "md5sum"),
+        data_md5sums = setNames(
+          lapply(self$datanames(), self$get_data_attr, "md5sum"),
+          self$datanames()
+        ),
         filter_states = reactiveValuesToList(private$filter_state),
         code = self$get_code()
       ))
@@ -598,6 +602,10 @@ FilteredData <- R6::R6Class( # nolint
     #' Only sets the filter state, does not set the data, the previous filter state
     #' and the code.
     #' Also checks the code is identical if provided in the `state`.
+    #'
+    #' Since this function is used from the end-user part, its error messages
+    #' are more verbose. We don't call the Shiny modals from here because this
+    #' class may be used outside of a Shiny app.
     #'
     #' @md
     #' @param state `list` containing fields `data_md5sums`, `filter_states`
@@ -611,8 +619,26 @@ FilteredData <- R6::R6Class( # nolint
         is_logical_single(check_data_md5sums)
       )
 
-      stopifnot(setequal(names(state$data_md5sums), self$datanames()))
-      stopifnot(setequal(names(state$filter_states), self$datanames()))
+      # stops with verbose error message
+      stop_setequal <- function(x, y, pre_msg = "") {
+        if (!setequal(x, y)) {
+          stop(paste0(paste(
+            pre_msg,
+            toString(x), # todo2: use dput?
+            "is not equal to",
+            toString(y),
+            sep = "\n"
+          )))
+        }
+      }
+      stop_setequal(
+        names(state$data_md5sums), self$datanames(),
+        pre_msg = "The names of the stored md5 sums and the datanames don't agree:"
+      )
+      stop_setequal(
+        names(state$filter_states), self$datanames(),
+        pre_msg = "The names of the stored filters and the datanames don't agree:"
+      )
       if (check_data_md5sums) {
         datasets_equal <- vapply(self$datanames(), self$get_data_attr, character(1), "md5sum") == state$data_md5sums
         if (!all(datasets_equal)) {
@@ -620,7 +646,11 @@ FilteredData <- R6::R6Class( # nolint
         }
       }
       if (!is.null(state$code)) {
-        stopifnot(identical(self$get_code(), state$code))
+        # todo: rename code to preprocessing_code
+        stop_setequal(
+          self$get_code(), state$code,
+          pre_msg = "The preprocessing codes don't agree:"
+        )
       }
 
       # we have to be careful with reactiveValues to restore each item and not simply
@@ -961,7 +991,7 @@ FilteredData <- R6::R6Class( # nolint
             list(
               type = "choices",
               label = if_null(attr(var, "label"), ""),
-              choices = choices,
+              choices = as.list(choices), # convert named vector to named list as Shiny `toJSON` otherwise complains
               histogram_data = histogram_data
             )
           } else if (is.numeric(var)) {
@@ -980,7 +1010,7 @@ FilteredData <- R6::R6Class( # nolint
             list(
               type = "logical",
               label = if_null(attr(var, "label"), ""),
-              choices = choices,
+              choices = as.list(choices), # convert named vector to named list as Shiny `toJSON` otherwise complains
               histogram_data = histogram_data
             )
           } else {

@@ -38,7 +38,7 @@ modules_with_filters_ui <- function(modules, datasets) {
       ),
       tagList(
         lapply(datanames, function(dataname) {
-          ui_filter_items(paste0("teal_filters_", dataname), dataname)
+          ui_filter_items(paste0("teal_filters_", dataname))
         })
       )
     ),

@@ -165,10 +165,7 @@ init <- function(data,
   # must be a function of request for bookmarking
   ui <- function(request) shinyUI(
     fluidPage(
-      shinyjs::useShinyjs(),
-      include_css_files(package = "teal"),
-      include_js_files(package = "teal", except = "init.js"),
-      shinyjs::hidden(icon("cog")), # add hidden icon to load font-awesome css for icons
+      include_teal_css_js(),
       tags$header(header),
       tags$hr(style = "margin: 7px 0;"),
       shiny_busy_message_panel,
@@ -315,7 +312,23 @@ init <- function(data,
         if (!is.null(saved_datasets_state)) {
           # actual thing to restore
           # cannot call this directly in onRestore because data was not set at that time
-          datasets$set_from_bookmark_state(saved_datasets_state)
+          tryCatch(
+            datasets$set_from_bookmark_state(saved_datasets_state),
+            error = function(cnd) {
+              showModal(modalDialog(
+                div(
+                  p("Could not restore the session: "),
+                  tags$pre(id = "error_msg", cnd$message),
+                ),
+                title = "Error restoring the bookmarked state",
+                footer = tagList(
+                  actionButton("copy_code", "Copy to Clipboard", `data-clipboard-target` = "#error_msg"),
+                  modalButton("Dismiss")
+                ),
+                size = "l", easyClose = TRUE
+              ))
+            }
+          )
         }
       })
 
@@ -345,4 +358,26 @@ reactive_on_changes <- function(expr) {
     rv(expr()) # only triggers rv on value updates
   })
   return(list(value = rv, observer = obs))
+}
+
+#' Code to include teal CSS and JS files
+#'
+#' This is useful when you want to use the same Javascript and CSS files that are
+#' used with the teal application.
+#' This is also useful for running standalone modules in teal with the correct
+#' styles.
+#'
+#' @examples
+#' shiny_ui <- tagList(
+#'   include_teal_css_js(),
+#'   p("Hello")
+#' )
+#' @export
+include_teal_css_js <- function() {
+  tagList(
+    shinyjs::useShinyjs(),
+    include_css_files(package = "teal"),
+    include_js_files(package = "teal", except = "init.js"),
+    shinyjs::hidden(icon("cog")), # add hidden icon to load font-awesome css for icons
+  )
 }

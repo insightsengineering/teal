@@ -26,17 +26,20 @@ get_keep_na_label <- function(na_count) paste0("Keep NA (", na_count, ")")
 #' })
 #'
 #' shinyApp(ui = function() {
-#'   ui_single_filter_item(
-#'     "var_SEX", datasets$get_filter_info("ADSL", "AGE"),
-#'     datasets$get_filter_state("ADSL", "AGE"), prelabel = "ADSL.AGE"
+#'   tagList(
+#'     include_teal_css_js(),
+#'     ui_single_filter_item(
+#'       "var_AGE", datasets$get_filter_info("ADSL", "AGE"),
+#'       datasets$get_filter_state("ADSL", "AGE"), prelabel = "ADSL.AGE"
+#'     )
 #'   )
 #' }, server = function(input, output, session) {
-#'   callModule(srv_single_filter_item, "var_SEX", datasets, "ADSL", "AGE")
+#'   callModule(srv_single_filter_item, "var_AGE", datasets, "ADSL", "AGE")
 #' }) %>% invisible() # invisible so it does not run
 #'
 #'
-#' # more complicated example that updates the dataset state from the server state to the browser
-#' # overwriting anything from the user
+#' # more complicated example which updates the dataset state from the server
+#' # state to the browser overwriting anything done from the user in the meantime
 #' library(random.cdisc.data)
 #'
 #' ADSL <- radsl(cached = TRUE)
@@ -50,20 +53,36 @@ get_keep_na_label <- function(na_count) paste0("Keep NA (", na_count, ")")
 #'   ))
 #' })
 #'
+#' # note that the remove button does not do anything because the UI is not
+#' # dynamically updating with the filter state for this single module
+#' # This logic is implemented in `module_filter_items`.
+#' # todo: there is a bug with ITTFL where there is a single choice and it
+#' # is converted to a character vector instead of staying a named list
+#' filter_var <- "AGE"
 #' shinyApp(ui = function() {
+#'   # we use isolate because the app is initialized with these values
+#'   # and they are dynamically changed by the server afterwards
 #'   div(
-#'     ui_single_filter_item(
-#'       "var_SEX", datasets$get_filter_info("ADSL", "AGE"),
-#'       datasets$get_filter_state("ADSL", "AGE"), prelabel = "ADSL.AGE"
-#'     ),
+#'     include_teal_css_js(),
+#'     isolate(ui_single_filter_item(
+#'       "var_filter", datasets$get_filter_info("ADSL", filter_var),
+#'       datasets$get_filter_state("ADSL", filter_var), prelabel = paste0("ADSL.", filter_var)
+#'     )),
 #'     actionButton("reset_min", "Regenerate slider value")
 #'   )
 #' }, server = function(input, output, session) {
-#'   update_ui_trigger <- callModule(srv_single_filter_item, "var_SEX", datasets, "ADSL", "AGE")$update_ui_trigger
+#'   update_ui_trigger <- callModule(
+#'     srv_single_filter_item, "var_filter", datasets, "ADSL", filter_var
+#'   )$update_ui_trigger
 #'   observeEvent(input$reset_min, {
-#'     new_state <- list(range = sort(sample(30:70, 2)), keep_na = sample(c(TRUE, FALSE), 1))
-#'     print(paste0("Setting new state ", toString(new_state)))
-#'     datasets$set_filter_state("ADSL", "AGE", new_state)
+#'     # wait to show that changes by the user while this is running are discarded
+#'     Sys.sleep(2)
+#'     # for this to work, filter_var should be a numeric range variable
+#'     new_state <- list(
+#'       range = sort(sample(30:70, 2)), keep_na = sample(c(TRUE, FALSE), 1)
+#'     )
+#'     print(paste0("Setting new random state ", toString(new_state)))
+#'     datasets$set_filter_state("ADSL", filter_var, new_state)
 #'     update_ui_trigger()
 #'   }, ignoreInit = TRUE)
 #' }) %>% invisible() # invisible so it does not run
@@ -82,13 +101,7 @@ ui_single_filter_item <- function(id, filter_info, filter_state, prelabel) {
       div(
         style = "position: relative;",
         div(
-          style = "
-        position: absolute;
-        top: -2px; right: 16px; bottom: -2px; left: 16px;
-        animation:
-          0.75s ease-out 0s 1 shinyDataFilterEnlargeX,
-          0.5s ease-in  0s 1 shinyDataFilterFadeIn;
-        transform-origin: left;",
+          class = "filterPlotOverlayBoxes",
           plotOutput(ns("plot"), height = "100%")
         ),
         checkboxGroupInput(
@@ -117,14 +130,9 @@ ui_single_filter_item <- function(id, filter_info, filter_state, prelabel) {
   } else if (filter_info$type == "range") {
     div(
       div(
-        style = "
-          margin: 0px 11px -25px 11px;
-          height: 25px;
-          animation:
-            0.75s ease-out 0s 1 shinyDataFilterEnlargeY,
-            0.5s ease-in  0s 1 shinyDataFilterFadeIn;
-          transform-origin: bottom;",
-        shiny::plotOutput(ns("plot"), height = "100%")),
+        class = "filterPlotOverlayRange",
+        shiny::plotOutput(ns("plot"), height = "100%")
+      ),
       sliderInput(
         id_selection,
         label = NULL,
@@ -137,16 +145,11 @@ ui_single_filter_item <- function(id, filter_info, filter_state, prelabel) {
     )
   } else if (filter_info$type == "logical") {
     div(
+      # todo: put style code into css file
       style = "position: relative;",
       # same overlay as for choices with no more than 5 elements
       div(
-        style = "
-        position: absolute;
-        top: -2px; right: 16px; bottom: -2px; left: 16px;
-        animation:
-          0.75s ease-out 0s 1 shinyDataFilterEnlargeX,
-          0.5s ease-in  0s 1 shinyDataFilterFadeIn;
-        transform-origin: left;",
+        class = "filterPlotOverlayBoxes",
         plotOutput(ns("plot"), height = "100%")
       ),
       radioButtons(
@@ -159,29 +162,25 @@ ui_single_filter_item <- function(id, filter_info, filter_state, prelabel) {
     )
   } else {
     # fail gracefully although this should have been caught before already
-    tags$p(paste("Variable with label", varlabel, "in data", dataname, "has unknown type:", filter_info$type))
+    tags$p(paste("Variable with id", id, "has unknown type:", filter_info$type))
   }
 
+  na_is_displayed <- !is.null(filter_info$na_count) && (filter_info$na_count > 0)
   # label before select input and button to remove filter
-  return(div(
+  return(fluidPage(
     fluidRow(
-      #height = "40px",
-      column(1, shiny::icon("grip-vertical", class = "sortableJS-handle")), #todo
-      column(1, tags$span(
+      #column(1, shiny::icon("grip-vertical", class = "sortableJS-handle")), #todo
+      column(if (na_is_displayed) 4 else 8, tags$span(
         prelabel,
         if (!is.null(filter_info$label) || (filter_info$label != "")) {
           tags$small(filter_info$label, style = "font-weight:normal; margin-left:3px")
         }
       )),
-      if (!is.null(filter_info$na_count) && filter_info$na_count > 0) {
-        make_inline <- function(x) {
-          x$name <- "span"
-          x$attribs$class <- "form-group shiny-input-container-inline"
-          stopifnot(length(x$children) == 1)
-          x$children[[1]]$name <- "span"
-          return(x)
-        } # todo: not working
-        column(2, make_inline(checkboxInput(id_keep_na, get_keep_na_label(filter_info$na_count), value = filter_state$keep_na)))
+      if (na_is_displayed) {
+        column(4, div(
+          class = "nopadding", # removes padding around checkbox
+          checkboxInput(id_keep_na, get_keep_na_label(filter_info$na_count), value = filter_state$keep_na)
+        ))
       },
       column(4, actionLink(
         id_remove_filter, "", icon("trash-alt", lib = "font-awesome"),
@@ -222,7 +221,7 @@ srv_single_filter_item <- function(input, output, session, datasets, dataname, v
           coord_flip() +
           theme_void() +
           scale_x_discrete(expand = c(0, 0)) +
-          scale_y_continuous(expand = c(0, 0), limits = c(0, 1)) # todo: adapt limits
+          scale_y_continuous(expand = c(0, 0), limits = c(0, 1))
       }
     })
   } else if (var_type == "range") {
@@ -247,6 +246,7 @@ srv_single_filter_item <- function(input, output, session, datasets, dataname, v
   # define observers ----
   id_selection <- "selection"
   id_keep_na <- "keepNA"
+  id_remove_filter <- "remove_filter"
 
   # observers for Browser UI state -> FilteredData filter_state ----
   o1 <- observeEvent({
@@ -287,9 +287,8 @@ srv_single_filter_item <- function(input, output, session, datasets, dataname, v
   )
 
   # remove variable
-  id_remove <- "remove_filter"
   o2 <- observeEvent(
-    input[[id_remove]], {
+    input[[id_remove_filter]], {
       datasets$set_filter_state(dataname, varname, state = NULL)
     },
     # the button is created dynamically afterwards, so this will trigger although
@@ -335,5 +334,5 @@ srv_single_filter_item <- function(input, output, session, datasets, dataname, v
     )
   })
 
-  return(list(observers = list(o1, o2), update_ui_trigger = update_ui_trigger)) # so we can cancel them
+  return(list(observers = list(o1, o2, o3), update_ui_trigger = update_ui_trigger)) # so we can cancel them
 }

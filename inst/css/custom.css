@@ -23,3 +23,27 @@ a.remove:hover{
   color: #337ab7;
   border: 1px solid #337ab7;
 }
+
+/* removes padding across input elements like checkboxInput */
+/* warning: Don't use adjoining classes */
+.nopadding .form-group.shiny-input-container > div {
+  margin: 0;
+}
+
+.filterPlotOverlayBoxes {
+  position: absolute;
+  top: -2px; right: 16px; bottom: -2px; left: 16px;
+  animation:
+    0.75s ease-out 0s 1 shinyDataFilterEnlargeX,
+    0.5s ease-in 0s 1 shinyDataFilterFadeIn;
+  transform-origin: left;
+}
+
+.filterPlotOverlayRange {
+  margin: 10px 11px -25px 11px;
+  height: 25px;
+  animation:
+    0.75s ease-out 0s 1 shinyDataFilterEnlargeY,
+    0.5s ease-in  0s 1 shinyDataFilterFadeIn;
+  transform-origin: bottom;
+}
