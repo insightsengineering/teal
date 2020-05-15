@@ -237,3 +237,26 @@ read_lib_names <- function(lines) {
 
   lib_names
 }
+
+#' Read .R file into character
+#'
+#' Comments will be excluded
+#'
+#' @param file (\code{character}) File to be parsed into code
+#'
+#' @return character vector withe the code
+#'
+#' @export
+#' @examples
+#' file_example <- tempfile()
+#' writeLines(c("x <- 2", "#second line comment", "x <- x + 2"), file_example)
+#'
+#' read_script(file_example)
+#'
+read_script <- function(file) {
+  stopifnot(is_character_single(file))
+  stopifnot(file.exists(file))
+  get_code_single(file, read_sources = TRUE) %>%
+    code_exclude(exclude_comments = TRUE) %>%
+    paste(sep = "\n", collapse = "\n")
+}

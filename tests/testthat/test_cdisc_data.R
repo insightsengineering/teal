@@ -92,7 +92,7 @@ test_that("List values", {
 
   result_to_compare <- structure(
     list(ADSL = RelationalDataset$new(
-    name = "ADSL",
+    dataname = "ADSL",
     x = ADSL,
     keys = keys(
       primary = c("STUDYID", "USUBJID"),
@@ -111,7 +111,7 @@ test_that("List values", {
 
   result_to_compare <- list(
     ADSL = RelationalDataset$new(
-    name = "ADSL",
+    dataname = "ADSL",
     x = ADSL,
     keys = keys(
       primary = c("STUDYID", "USUBJID"),
@@ -121,7 +121,7 @@ test_that("List values", {
     label = adsl_yaml$domain$label
   ),
   ADTTE = RelationalDataset$new(
-    name = "ADTTE",
+    dataname = "ADTTE",
     x = ADTTE,
     keys = keys(
       primary = c("STUDYID", "USUBJID", "PARAMCD"),

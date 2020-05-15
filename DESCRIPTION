@@ -79,6 +79,7 @@ Collate:
     'module_add_filter_variable.R'
     'module_filter_info.R'
     'module_filter_items.R'
+    'mutate_dataset.R'
     'optionalInput.R'
     'resolve_delayed.R'
     'select_spec.R'

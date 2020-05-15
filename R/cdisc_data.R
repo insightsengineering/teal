@@ -52,7 +52,7 @@ dataset <- function(dataname,
 
   res <- RelationalDataset$new(
     x = data,
-    name = dataname,
+    dataname = dataname,
     keys = keys,
     label = data_label(data)
   )

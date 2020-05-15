@@ -26,7 +26,7 @@ RawDataset <- R6::R6Class( # nolint
       private$.rownames <- rownames(x)
       private$.col_labels <- rtables::var_labels(x)
       row_labels <- c() # not yet defined in rtables
-
+      return(invisible(self))
     },
     #' @name get_raw_data
     #' @description
@@ -62,6 +62,11 @@ RawDataset <- R6::R6Class( # nolint
     #' Derive the column labels
     get_column_labels = function() {
       private$.col_labels
+    },
+    #' @description
+    #' Derive the row names
+    get_rownames = function() {
+      private$.rownames
     },
     #' @description
     #' Derive the row labels
@@ -146,7 +151,49 @@ RawDataset <- R6::R6Class( # nolint
   )
 )
 
+#' Constructor for \link{RawDataset} object
+#'
+#' @param x (\code{data.frame} or \code{rtable}) object
+#'
+#' @export
+#' @examples
+#' library(random.cdisc.data)
+#' ADSL <- radsl(cached = TRUE)
+#' ADSL_dataset <- raw_dataset(x = ADSL)
+#'
+#' ADSL_dataset$get_raw_data()
+#'
+#' ADSL_dataset$colnames
+#'
 raw_dataset <- function(x) {
   stopifnot(is.data.frame(x))
   RawDataset$new(x)
+}
+
+#' Get pure data frame from any Dataset object
+#'
+#' @param dataset (\code{\link{RawDataset}}, \code{\link{NamedDataset}}, \code{\link{RelationalDataset}}) object
+#'
+#' @return \code{data.frame} stored inside the R6 Dataset object
+#' @importFrom methods is
+#' @export
+#' @examples
+#'
+#' library(random.cdisc.data)
+#' ADSL <- radsl(cached = TRUE)
+#' ADSL_raw <- raw_dataset(x = ADSL)
+#' get_raw_data(ADSL_raw)
+#'
+#' ADSL_named <- named_dataset(dataname = "ADSL", x = ADSL)
+#' get_raw_data(ADSL_named)
+#'
+#' ADSL_relational <- as_relational(ADSL_raw,
+#'   dataname = "ADSL",
+#'   keys = keys(primary = c("USUBJID", "STUDYID"), foreign = NULL, parent = NULL)
+#' )
+#' get_raw_data(ADSL_relational)
+get_raw_data <- function(dataset) {
+  stopifnot(is(dataset, "RawDataset"))
+
+  return(dataset$get_raw_data())
 }

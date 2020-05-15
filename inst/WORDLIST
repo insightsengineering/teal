@@ -54,6 +54,7 @@ npaszty
 PARAMCD
 pickerInput
 pre
+RawDataset
 rcode
 reactiveVal
 recurse

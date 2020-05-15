@@ -10,13 +10,13 @@
 #' @examples
 #' named_data <- NamedDataset$new(
 #'   x = data.frame(x = c(2, 2), y = c("a", "b"), stringsAsFactors = FALSE),
-#'   name = "XY",
+#'   dataname = "XY",
 #'   code = "XY <- data.frame(x = c(2, 2),
 #'     y = c('a', 'b'), stringsAsFactors = FALSE)"
 #' )
 #' named_data$ncol
 #' named_data$get_code()
-#' named_data$get_name()
+#' named_data$get_dataname()
 #'
 #' @export
 NamedDataset <- R6::R6Class( # nolint
@@ -26,32 +26,33 @@ NamedDataset <- R6::R6Class( # nolint
   ## __Public Methods ====
   public = list(
     #' @param x (\code{data.frame})
-    #' @param name (\code{character}) A given name for the dataset
+    #' @param dataname (\code{character}) A given name for the dataset
     #'   it may not contain spaces
     #' @param code (\code{character}) A character string defining the code
     #'   needed to produce the data set in \code{x}
     #' @param label (\code{character}) Label to describe the dataset
     #' @import utils.nest
-    initialize = function(x, name, code = character(0), label = character(0)) {
+    initialize = function(x, dataname, code = character(0), label = character(0)) {
       # Run RawDataset initialization
       super$initialize(x)
 
-      self$set_name(name)
+      self$set_dataname(dataname)
       self$set_code(code)
       self$set_label(label)
+      return(invisible(self))
     },
     #' @description
     #' Derive the \code{name} which was former called \code{dataname}
-    get_name = function() {
-      private$.name
+    get_dataname = function() {
+      private$.dataname
     },
     #' @description
     #' Set the name for the dataset
-    #' @param name (\code{character}) the new name
-    set_name = function(name) {
-      stopifnot(!grepl("\\s", name))
-      stopifnot(utils.nest::is_character_single(name))
-      private$.name <- name
+    #' @param dataname (\code{character}) the new name
+    set_dataname = function(dataname) {
+      stopifnot(!grepl("\\s", dataname))
+      stopifnot(utils.nest::is_character_single(dataname))
+      private$.dataname <- dataname
       invisible(NULL)
     },
     #' @description
@@ -91,7 +92,7 @@ NamedDataset <- R6::R6Class( # nolint
   ),
   ## __Private Methods ====
   private = list(
-    .name = character(0),
+    .dataname = character(0),
     .code = NULL,
     .label = character(0)
   ),
@@ -102,7 +103,38 @@ NamedDataset <- R6::R6Class( # nolint
     },
     #' @field dataname for backwards compatibility
     dataname = function() {
-      private$.name
+      private$.dataname
     }
   )
 )
+
+#' Constructor for \link{NamedDataset} class
+#'
+#' @param dataname (\code{character}) A given name for the dataset
+#'   it may not contain spaces
+#' @param x (\code{data.frame})
+#' @param code (\code{character}) A character string defining the code
+#'   needed to produce the data set in \code{x}
+#' @param label (\code{character}) Label to describe the dataset
+#'
+#' @return \link{NamedDataset} object
+#' @export
+#' @examples
+#' library(random.cdisc.data)
+#' ADSL <- radsl(cached = TRUE)
+#' ADSL_dataset <- named_dataset(dataname = "ADSL", x = ADSL)
+#'
+#' ADSL_dataset$get_dataname()
+#'
+#' ADSL_dataset <- named_dataset(dataname = "ADSL",
+#'   x = ADSL,
+#'   label = "AdAM subject-level dataset",
+#'   code = "ADSL <- radsl(cached = TRUE)"
+#' )
+#'
+#' ADSL_dataset$get_dataset_label()
+#' ADSL_dataset$get_code()
+#'
+named_dataset <- function(dataname, x, code = character(0), label = character(0)) {
+  NamedDataset$new(x, dataname, code, label)
+}

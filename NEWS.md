@@ -1,9 +1,11 @@
 # teal 0.8.3.9000
 
 * progress bar for ui creation in delayed loading module
-* cdisc_dataset and dataset now return R6 class objects (RelationalDataset)
-* progress bar for ui creation in delayed loading module
+* `cdisc_dataset` and `dataset` now return R6 class objects (RelationalDataset)
+* `get_raw_data` can be used to derive raw data from R6 objects e.g. (RelationalDataset)
+* `mutate_dataset` allows to change the data inside R6 objects via `code` argument or an R script
 * new `RawDatasetConnector` to execute `CallableFunction` and obtain `RawDataset`
+
 * Change output of `keys` function to `keys` object. Updated checks in `DatasetConnector` and `dataset`.
 
 # teal 0.8.3
