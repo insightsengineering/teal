@@ -8,9 +8,10 @@
 #'
 ui_filter_items <- function(id) {
   ns <- NS(id)
-  # todo: put id into top class in init_ui
   div(
-    id = ns(character(0)) # needed to assign an id, so filter can be shown / hidden
+    # needed to insert and remove UI according to the filter variables
+    # also is used to show/hide all filters for the dataset
+    id = ns(character(0))
   )
 }
 

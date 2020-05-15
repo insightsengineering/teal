@@ -86,7 +86,7 @@ ADLB <- radlb(cached = TRUE)
   #initial_filter_states = list(ADSL = list(AGE = "default", SEX = list(choices = "M", keep_na = TRUE)), ADAE = list(AETOXGR = "default")),
   header = "Simple teal app",
   footer = tags$p(class = "text-muted", "Source: agile-R website")
-); shinyApp(app$ui, app$server, enableBookmarking = "server")
+); shinyApp(app$ui, app$server, enableBookmarking = "url")
 # old: isolate(app$ui_datasets$set_filter_state("ADSL", "SEX", list(choices = "M", keep_na = TRUE)));
 
 
