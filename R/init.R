@@ -242,6 +242,16 @@ init <- function(data,
         lapply(isol_datanames, function(dataname) paste0("teal_add_", dataname, "_filter"))
       ))
 
+      # todo
+      # # the right filtering panel
+      # filter_panel_srv <- function(input, output, session, datasets, active_datanames) {
+      #   stopifnot(
+      #     is(datasets, "FilteredData"),
+      #     is.function(active_datanames)
+      #   )
+      #
+      # }
+
       # rather than regenerating the UI dynamically for the dataset filtering,
       # we instead choose to hide/show the elements
       # the filters are just hidden from the UI, but still applied
@@ -269,6 +279,23 @@ init <- function(data,
       })
     }
 
+    # Get data through delayed loading ----
+
+    # we construct a new dataset for each session
+    # otherwise, tabs are not independent across users
+    datasets <- FilteredData$new()
+    # raw_data contains cdisc_data(), i.e. list of unfiltered data frames
+    if (skip_start_screen) {
+      raw_data <- reactiveVal(data) # will trigger by setting it
+    } else {
+      .log("fetching the data through delayed loading - showing start screen")
+      raw_data <- callModule(data$get_server(), "startapp_module")
+      stop_if_not(list(is.reactive(raw_data), "first app module has to return reactive object"))
+      #raw_data <- reactive(cdisc_data_global) # todo: remove; for faster testing
+    }
+
+    # Shiny bookmarking ----
+
     # The Shiny bookmarking functionality by default only stores inputs.
     # We need to add FilteredData to the state so we restore it as well.
     # To test bookmarking, include the `bookmark_module`, click on the bookmark
@@ -290,52 +317,50 @@ init <- function(data,
       saved_datasets_state <<- state$values$datasets_state
     })
 
-    # we reconstruct a new dataset for each session
-    # otherwise, tabs are not independent across users
-    datasets <- FilteredData$new()
-    # raw_data contains cdisc_data(), i.e. list of unfiltered data frames
-    if (skip_start_screen) {
-      raw_data <- reactiveVal(data) # will trigger by setting it
-    } else {
-      .log("fetching the data through delayed loading - showing start screen")
-      raw_data <- callModule(data$get_server(), "startapp_module")
-      stop_if_not(list(is.reactive(raw_data), "first app module has to return reactive object"))
-      #raw_data <- reactive(cdisc_data_global) # todo: remove; for faster testing
-    }
+    # Replace splash/welcome screen once data is loaded ----
 
-    # ignoreNULL to not trigger at the beginning and just handle it once because data should usually not change afterwards
+    # ignoreNULL to not trigger at the beginning and just handle it once because data
+    # obtained through delayed loading should usually not change afterwards
+    # overwrite filter state if restored from bookmarked state
     observeEvent(raw_data(), ignoreNULL = TRUE, once = TRUE, {
+      .log("data loaded successfully")
       data <- raw_data()
-      isolate({
-        set_datasets_data(datasets, data)
-        set_datasets_filters(datasets, initial_filter_states)
-        if (!is.null(saved_datasets_state)) {
-          # actual thing to restore
-          # cannot call this directly in onRestore because data was not set at that time
-          tryCatch(
-            datasets$set_from_bookmark_state(saved_datasets_state),
-            error = function(cnd) {
-              showModal(modalDialog(
-                div(
-                  p("Could not restore the session: "),
-                  tags$pre(id = "error_msg", cnd$message),
-                ),
-                title = "Error restoring the bookmarked state",
-                footer = tagList(
-                  actionButton("copy_code", "Copy to Clipboard", `data-clipboard-target` = "#error_msg"),
-                  modalButton("Dismiss")
-                ),
-                size = "l", easyClose = TRUE
-              ))
-            }
-          )
-        }
-      })
 
-      .log("init server - no start screen: initialize modules and filter panel")
+      set_datasets_data(datasets, data)
+      set_datasets_filters(datasets, initial_filter_states)
+
+      if (!is.null(saved_datasets_state)) {
+        # actual thing to restore
+        # cannot call this directly in onRestore because the data is not set at that time
+        # for example, the data may only be loaded once a password is provided
+        # however, onRestore only runs in the first flush and not in the flush when the
+        # password was finally provided
+        .log("restoring filter state from bookmarked state")
+        tryCatch(
+          datasets$set_from_bookmark_state(saved_datasets_state),
+          error = function(cnd) {
+            showModal(modalDialog(
+              div(
+                p("Could not restore the session: "),
+                tags$pre(id = "error_msg", cnd$message),
+              ),
+              title = "Error restoring the bookmarked state",
+              footer = tagList(
+                actionButton("copy_code", "Copy to Clipboard", `data-clipboard-target` = "#error_msg"),
+                modalButton("Dismiss")
+              ),
+              size = "l", easyClose = TRUE
+            ))
+          }
+        )
+      }
+
+      # call server functions for teal modules and filter panel
+      .log("initialize modules and filter panel")
       call_teal_modules(modules, datasets, idprefix = "teal_modules")
+      # must make sure that this is only executed once as modules assume their observers are only
+      # registered once (calling server functions twice would trigger observers twice each time)
       call_filter_modules(datasets)
-      #todo: remove copy paste
 
       ui_teal_main <- modules_with_filters_ui(modules, datasets)
       insertUI(selector = startapp_selector, where = "afterEnd", ui = ui_teal_main)
