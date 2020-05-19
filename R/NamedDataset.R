@@ -8,7 +8,7 @@
 #' \code{new} method
 #'
 #' @examples
-#' named_data <- NamedDataset$new(
+#' named_data <- teal:::NamedDataset$new(
 #'   x = data.frame(x = c(2, 2), y = c("a", "b"), stringsAsFactors = FALSE),
 #'   dataname = "XY",
 #'   code = "XY <- data.frame(x = c(2, 2),
@@ -17,14 +17,14 @@
 #' named_data$ncol
 #' named_data$get_code()
 #' named_data$get_dataname()
-#'
-#' @export
 NamedDataset <- R6::R6Class( # nolint
   "NamedDataset",
   inherit = RawDataset,
   ## NamedDataset ====
   ## __Public Methods ====
   public = list(
+    #' @description
+    #' initialize a \code{NamedDataset} class object
     #' @param x (\code{data.frame})
     #' @param dataname (\code{character}) A given name for the dataset
     #'   it may not contain spaces
@@ -50,8 +50,8 @@ NamedDataset <- R6::R6Class( # nolint
     #' Set the name for the dataset
     #' @param dataname (\code{character}) the new name
     set_dataname = function(dataname) {
-      stopifnot(!grepl("\\s", dataname))
       stopifnot(utils.nest::is_character_single(dataname))
+      stopifnot(!grepl("\\s", dataname))
       private$.dataname <- dataname
       invisible(NULL)
     },
@@ -72,17 +72,44 @@ NamedDataset <- R6::R6Class( # nolint
       invisible(NULL)
     },
     #' @description
-    #' Derive the code stored inside the object
-    get_code = function() {
-      private$.code
+    #' Get code to get data
+    #'
+    #' @param deparse (\code{logical}) whether return deparsed form of a call
+    #'
+    #' @return optionally deparsed \code{call} object
+    get_code = function(deparse = TRUE) {
+      stopifnot(is_logical_single(deparse))
+      code <- if (deparse) {
+        paste(
+          vapply(
+            private$.code,
+            function(x) {
+              paste(
+                deparse(x, width.cutoff = 80L),
+                collapse = "\n"
+              )
+            },
+            FUN.VALUE = character(1)
+          ),
+          collapse = "\n"
+        )
+
+      } else {
+        private$.code
+      }
+      return(code)
     },
     #' @description
     #' Set the code for the dataset
     #' @param code (\code{character}) the new code
     set_code = function(code) {
       stopifnot(is_character_vector(code, min_length = 0, max_length = 1))
-      private$.code <- code
-      invisible(NULL)
+
+      if (length(code) > 0) {
+        private$.code <- as.list(as.call(parse(text = code)))
+      }
+
+      invisible(TRUE)
     },
     #' @description
     #' Derive the dataset_label

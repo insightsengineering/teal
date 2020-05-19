@@ -4,7 +4,6 @@
 #' stored inside this object. Some attributes like colnames,
 #' dimension or column names for a specific type will
 #' be automatically derived.
-#' @export
 RawDataset <- R6::R6Class( # nolint
   "RawDataset",
   ## RawDataset ====
@@ -155,7 +154,6 @@ RawDataset <- R6::R6Class( # nolint
 #'
 #' @param x (\code{data.frame} or \code{rtable}) object
 #'
-#' @export
 #' @examples
 #' library(random.cdisc.data)
 #' ADSL <- radsl(cached = TRUE)
@@ -165,6 +163,7 @@ RawDataset <- R6::R6Class( # nolint
 #'
 #' ADSL_dataset$colnames
 #'
+#' @export
 raw_dataset <- function(x) {
   stopifnot(is.data.frame(x))
   RawDataset$new(x)
@@ -176,7 +175,6 @@ raw_dataset <- function(x) {
 #'
 #' @return \code{data.frame} stored inside the R6 Dataset object
 #' @importFrom methods is
-#' @export
 #' @examples
 #'
 #' library(random.cdisc.data)
@@ -192,6 +190,7 @@ raw_dataset <- function(x) {
 #'   keys = keys(primary = c("USUBJID", "STUDYID"), foreign = NULL, parent = NULL)
 #' )
 #' get_raw_data(ADSL_relational)
+#' @export
 get_raw_data <- function(dataset) {
   stopifnot(is(dataset, "RawDataset"))
 

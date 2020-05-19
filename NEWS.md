@@ -4,7 +4,9 @@
 * `cdisc_dataset` and `dataset` now return R6 class objects (RelationalDataset)
 * `get_raw_data` can be used to derive raw data from R6 objects e.g. (RelationalDataset)
 * `mutate_dataset` allows to change the data inside R6 objects via `code` argument or an R script
-* new `RawDatasetConnector` to execute `CallableFunction` and obtain `RawDataset`
+* new `RawDatasetConnector` and `RelationalDatasetConnector` to execute get data from remote connections.
+* new wrapper functions to manipulate `DatasetConnector` and `Dataset` such as `get_dataset`, 
+`load_dataset`, `as_relational`.
 
 * Change output of `keys` function to `keys` object. Updated checks in `DatasetConnector` and `dataset`.
 

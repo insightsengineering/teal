@@ -1,7 +1,7 @@
 context("CallableFunction")
 
 test_that("Test callable", {
-  x_fun <- CallableFunction$new(mean)
+  x_fun <- callable_function(mean)
   x_fun$set_args(list(x = c(1.0, 2.0, NA_real_), na.rm = TRUE))
 
   expect_identical(
@@ -72,23 +72,23 @@ test_that("test callable errors", {
   x <- 1
 
   expect_error(
-    CallableFunction$new(x),
+    callable_function(x),
     "is.function"
   )
 
   expect_error(
-    CallableFunction$new(),
+    callable_function(),
     "is missing, with no default"
   )
   expect_equal({
-    x <- CallableFunction$new(function(x = 1) {
+    x <- callable_function(function(x = 1) {
           return(x)
     })
     x$run()},
     1
   )
 
-  x_fun <- CallableFunction$new(mean)
+  x_fun <- callable_function(mean)
 
   # mean accepts extra arguments
   expect_silent(
@@ -100,18 +100,18 @@ test_that("test callable errors", {
   )
 
   expect_error(
-    CallableFunction$new(`+`)
+    callable_function(`+`)
   )
 
   expect_equal({
-    x <- CallableFunction$new(base::all.equal)
+    x <- callable_function(base::all.equal)
     x$set_args(list(target = c("abc"), current = c("abc")))
     x$run()},
     TRUE
   )
 
 
-  x_fun <- CallableFunction$new(abs)
+  x_fun <- callable_function(abs)
   expect_silent(
     x_fun$set_args(list(y = 2, x = 1, na.rm = TRUE))
   )
@@ -132,7 +132,7 @@ test_that("find callable function name", {
   }
 
   fun2 <- function(callable) {
-    x_fun <- CallableFunction$new(callable)
+    x_fun <- callable_function(callable)
     x_fun$.__enclos_env__$private$fun_name
   }
 

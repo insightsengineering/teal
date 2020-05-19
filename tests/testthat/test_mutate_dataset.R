@@ -10,24 +10,27 @@ test_that("mutate_dataset", {
   })
 
   expect_error({
-    mutate_dataset(dataset = test_ds, code = "a")
-  }, "is")
+    mutate_dataset(x = test_ds, code = "a")
+  }, "no applicable method for")
 
   expect_silent({
-    test_ds <- NamedDataset$new(x, dataname = "x",
-                                code = "data.frame(x = c(1, 1), y = c('a', 'a'), stringsAsFactors = TRUE)")
+    test_ds <- NamedDataset$new(
+      x,
+      dataname = "x",
+      code = "data.frame(x = c(1, 1), y = c('a', 'a'), stringsAsFactors = TRUE)"
+    )
   })
 
   expect_error({
-    mutate_dataset(dataset = test_ds)
-  }, "is_character_vector")
+    mutate_dataset(x = test_ds)
+  }, "is_character_single(code) || is_character_single(script) is not TRUE")
 
   expect_error({
-    mutate_dataset(dataset = test_ds, code = TRUE)
+    mutate_dataset(x = test_ds, code = TRUE)
   }, "character")
 
   expect_error({
-    mutate_dataset(dataset = test_ds, code = "y <- test")
+    mutate_dataset(x = test_ds, code = "y <- test")
   }, "use the dataname")
 
   expect_silent({
@@ -42,16 +45,18 @@ test_that("mutate_dataset", {
   )
 
   expect_error({
-    test_ds_mut <- test_ds %>% mutate_dataset("x <- 3")
+    test_ds %>% mutate_dataset("x <- 3")
   }, "data.frame")
 
   expect_error({
-    test_ds_mut <- test_ds %>% mutate_dataset(c("x <- 3", "som"))
-  }, "max_length")
+    test_ds %>% mutate_dataset(c("x <- 3", "som"))
+  }, "is_character_single")
 
   expect_silent({
-    test_ds <- RelationalDataset$new(x, dataname = "x",
-                                     keys = keys(primary = "x", foreign = NULL, parent = NULL)
+    test_ds <- RelationalDataset$new(
+      x,
+      dataname = "x",
+      keys = keys(primary = "x", foreign = NULL, parent = NULL)
     )
   })
   expect_error({
@@ -59,13 +64,16 @@ test_that("mutate_dataset", {
   })
 
   expect_silent({
-    test_ds <- RelationalDataset$new(x, dataname = "testds", code = "testds <- whatever",
-                                     keys = keys(primary = "x", foreign = NULL, parent = NULL)
+    test_ds <- RelationalDataset$new(
+      x,
+      dataname = "testds",
+      code = "testds <- whatever",
+      keys = keys(primary = "x", foreign = NULL, parent = NULL)
     )
   })
 
   expect_silent({
-    test_ds_mut <- test_ds %>% mutate_dataset("testds$z <- c('one', 'two')")
+    test_ds_mut <- mutate_dataset(test_ds, code = "testds$z <- c('one', 'two')")
   })
 
   expect_equal(
@@ -88,7 +96,7 @@ test_that("mutate_dataset", {
 
   expect_equal(
     test_ds_mut$get_code(),
-    "testds <- whatever\n\nmut_fun <- function(x){\n  x$z <- 1\n  return(x)\n}\ntestds <- mut_fun(testds)"
+    "testds <- whatever\nmut_fun <- function(x) {\n    x$z <- 1\n    return(x)\n}\ntestds <- mut_fun(testds)"
   )
 
   expect_true(is(test_ds_mut, "RelationalDataset"))
@@ -106,7 +114,7 @@ test_that("mutate_dataset", {
 
   expect_equal(
     test_ds_mut$get_code(),
-    "testds <- whatever\n\nmut_fun <- function(x){\n  x$z <- 1\n  return(x)\n}\ntestds <- mut_fun(testds)"
+    "testds <- whatever\nmut_fun <- function(x) {\n    x$z <- 1\n    return(x)\n}\ntestds <- mut_fun(testds)"
   )
 
   expect_true(is(test_ds_mut, "RelationalDataset"))

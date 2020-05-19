@@ -14,7 +14,7 @@
 #' that are in any relation to this.
 #'
 #' @examples
-#' rel_data <- RelationalDataset$new(
+#' rel_data <- teal:::RelationalDataset$new(
 #'   x = data.frame(x = c(1, 2), y = c("a", "b"), stringsAsFactors = FALSE),
 #'   keys = keys(primary = "y", foreign = NULL, parent = NULL),
 #'   dataname = "XY",
@@ -27,14 +27,14 @@
 #' rel_data$get_dataname()
 #' rel_data$get_keys()
 #' rel_data$set_keys(keys(primary = "x", foreign = NULL, parent = NULL))
-#'
-#' @export
 RelationalDataset <- R6::R6Class( # nolint
   "RelationalDataset",
   inherit = NamedDataset,
   ## RelationalDataset ====
   ## __Public Methods ====
   public = list(
+    #' @description
+    #' initialize a \code{RelationalDataset} class object
     #' @param x (\code{data.frame})
     #' @param dataname (\code{character}) A given name for the dataset
     #'   it may not contain spaces
@@ -75,51 +75,3 @@ RelationalDataset <- R6::R6Class( # nolint
     }
   )
 )
-
-#' Make a \link{RawDataset} a \link{RelationalDataset}
-#'
-#' @param dataset (\link{RawDataset}) object
-#' @param dataname (\link{RawDataset}) name (\code{character}) A given name for the dataset
-#'   it may not contain spaces
-#' @param keys (\code{keys}) object of S3 class keys containing
-#'   foreign, primary keys and parent information
-#' @param code (\code{character}) A character string defining the code
-#'   needed to produce the data set in \code{x}
-#' @param label (\code{character}) Label to describe the dataset
-#' @return \link{RelationalDataset} object
-#'
-#' @export
-#' @importFrom methods is
-#' @examples
-#' library(random.cdisc.data)
-#' ADSL <- radsl(cached = TRUE)
-#' ADSL_raw <- raw_dataset(x = ADSL)
-#'
-#' ADSL_relational <- as_relational(ADSL_raw,
-#'   dataname = "ADSL",
-#'   keys = keys(primary = c("USUBJID", "STUDYID"), foreign = NULL, parent = NULL)
-#' )
-#' get_raw_data(ADSL_relational)
-#' ADSL_relational$keys
-as_relational <- function(dataset, dataname, keys, code = character(0), label = character(0)) {
-  stopifnot(is(dataset, "RawDataset"))
-
-  if (is(dataset, "NamedDataset")) {
-    warning("Only raw_data of 'dataset' will be used. All other fields get lost by using 'as_relational'.")
-  }
-
-  return(RelationalDataset$new(x = dataset$get_raw_data(), dataname = dataname,
-                        keys = keys, code = code, label = label))
-}
-
-#' @rdname as_relational
-#'
-#' @details
-#' \code{as_cdisc_relational} will derive the keys by the \code{dataname} and therefore
-#'   does not need the \code{keys} argument to be specified
-#'
-#' @export
-as_cdisc_relational <- function(dataset, dataname, code = character(0), label = character(0)) {
-  as_relational(dataset = dataset, dataname = dataname,
-                keys = get_cdisc_keys(dataname), code = code, label = label)
-}

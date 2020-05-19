@@ -7,10 +7,10 @@
 #'
 #' @examples
 #' \dontrun{
-#' open_fun <- CallableFunction$new(data.frame)  # define opening function
+#' open_fun <- callable_function(data.frame)  # define opening function
 #' open_fun$set_args(list(x = 1:5))   # define fixed arguments to opening function
 #'
-#' close_fun <- CallableFunction$new(print) # define closing function
+#' close_fun <- callable_function(print) # define closing function
 #' close_fun$set_args(list(x = "Hi there"))  # define fixed arguments to closing function
 #'
 #' x <- DataConnection$new() # define connection
@@ -216,7 +216,7 @@ rcd_connection <- function() {
 
   check_pckg_quietly("random.cdisc.data", "random.cdisc.data package not available.") # nolint
 
-  fun <- CallableFunction$new(library) # nolint
+  fun <- callable_function(library) # nolint
   fun$set_args(list(package = "random.cdisc.data"))
 
   x <- DataConnection$new() # nolint
@@ -235,9 +235,9 @@ rice_connection <- function() {
                      paste0("Connection to entimICE via rice was requested, but rice package is not available.",
                             "Please install it from https://github.roche.com/Rpackages/rice."))
 
-  open_fun <- CallableFunction$new(rice::rice_session_open) # nolint
+  open_fun <- callable_function(rice::rice_session_open) # nolint
 
-  close_fun <- CallableFunction$new(rice::rice_session_close) # nolint
+  close_fun <- callable_function(rice::rice_session_close) # nolint
   close_fun$set_args(list(message = FALSE))
 
   x <- DataConnection$new() # nolint

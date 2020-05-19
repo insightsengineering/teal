@@ -148,10 +148,12 @@ test_that("NamedDataset basics", {
   )
 
   expect_silent({
-    test_ds <- NamedDataset$new(x, dataname = "testds",
-                                code = "test_ds <- data.frame(x = c(1, 1), y = c('a', 'a'), stringsAsFactors = TRUE)",
-                                label = "Testing Dataset"
-                                )
+    test_ds <- NamedDataset$new(
+      x,
+      dataname = "testds",
+      code = "test_ds <- data.frame(x = c(1, 1), y = c('a', 'a'), stringsAsFactors = TRUE)",
+      label = "Testing Dataset"
+    )
   })
 
   expect_equal(
@@ -170,8 +172,27 @@ test_that("NamedDataset basics", {
   )
 
   expect_equal(
-    test_ds$get_code(),
-    "test_ds <- data.frame(x = c(1, 1), y = c('a', 'a'), stringsAsFactors = TRUE)"
+    test_ds$get_code(deparse = TRUE),
+    "test_ds <- data.frame(x = c(1, 1), y = c(\"a\", \"a\"), stringsAsFactors = TRUE)"
+  )
+
+  expect_equal(
+    test_ds$get_code(deparse = FALSE),
+    as.list(
+      as.call(
+        parse(
+          text = "test_ds <- data.frame(x = c(1, 1), y = c(\"a\", \"a\"), stringsAsFactors = TRUE)"
+        )
+      )
+    )
+  )
+
+  expect_true(
+    is.list(test_ds$get_code(deparse = FALSE))
+  )
+
+  expect_true(
+    all(vapply(test_ds$get_code(deparse = FALSE), is.call, logical(1)))
   )
 
   expect_equal(
@@ -224,7 +245,7 @@ test_that("as_relational function", {
   expect_error({
     as_relational(list(data = "a"))
     },
-    "RawDataset"
+    "no applicable method for"
   )
 
   expect_equal(
@@ -236,7 +257,7 @@ test_that("as_relational function", {
       label = character(0)
     ),
     as_relational(
-      dataset = test_ds,
+      x = test_ds,
       dataname = "abc",
       keys = keys(primary = "x", foreign = NULL, parent = NULL),
       code = "xx",

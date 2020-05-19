@@ -19,24 +19,19 @@ RawDatasetConnector <- R6::R6Class( #nolint
     #'
     #' @return new \code{RawDatasetConnector} object
     initialize = function(pull_fun) {
-      stopifnot(is(pull_fun, "CallableFunction"))
-      private$.pull_fun <- pull_fun
+      private$set_pull_fun(pull_fun)
       return(invisible(self))
     },
 
     #' @description
-    #' Get executed call
+    #' Get code to get data
     #'
     #' @param deparse (\code{logical}) whether return deparsed form of a call
     #'
     #' @return optionally deparsed \code{call} object
-    get_call = function(deparse = TRUE) {
+    get_code = function(deparse = TRUE) {
       stopifnot(is_logical_single(deparse))
-      if (deparse) {
-        return(paste0(deparse(private$.code, width.cutoff = 80L), collapse = "\n"))
-      } else {
-        return(private$.code)
-      }
+      private$get_pull_code(deparse)
     },
 
     #' @description
@@ -46,6 +41,7 @@ RawDatasetConnector <- R6::R6Class( #nolint
     get_dataset = function() {
       return(self$dataset)
     },
+
     #' @description
     #' Get raw data from dataset
     #'
@@ -71,24 +67,31 @@ RawDatasetConnector <- R6::R6Class( #nolint
     pull = function(args = NULL, try = FALSE) {
       data <- private$.pull_fun$run(args = args, try = try)
       private$.dataset <- RawDataset$new(data)
-      private$.code <- private$.pull_fun$get_call(deparse = FALSE)
-      return(invisible(NULL))
+      return(invisible(self))
     }
   ),
   # RawDatasetConnector private -----
   private = list(
     .dataset = NULL, # RawDataset
-    .code = NULL, # call
-    .pull_fun = NULL # CallableFunction
+    .pull_fun = NULL, # CallableFunction
+
+    get_pull_code = function(deparse) {
+      return(private$.pull_fun$get_call(deparse))
+    },
+
+    set_pull_fun = function(pull_fun) {
+      stopifnot(is(pull_fun, "CallableFunction"))
+      private$.pull_fun <- pull_fun
+      return(invisible(NULL))
+    }
   ),
   # RawDatasetConnector active -----
   active = list(
     #' @field dataset (read-only) object of class \code{RawDataset}.
     dataset = function() {
-      if (!is.null(private$.dataset)) {
-        private$.dataset
-      } else {
-        stop("dataset has not been pulled yet\n - please pull first.", call. = FALSE)
+      if (is.null(private$.dataset)) {
+        stop("dataset has not been pulled yet\n - please use `load_dataset()` first.",
+             call. = FALSE)
       }
 
       return(private$.dataset)
@@ -99,3 +102,20 @@ RawDatasetConnector <- R6::R6Class( #nolint
     }
   )
 )
+
+#' Create \code{RawDatasetConnector} object
+#'
+#' Create \link{RawDatasetConnector} object to execute specific call to fetch data
+#' @param pull_fun (\code{CallableFunction})\cr
+#'   function with necessary arguments set to fetch data from connection.
+#' @examples
+#' ds <- raw_dataset_connector(pull_fun = callable_function(data.frame))
+#' ds$pull_fun$set_args(list(x = 1:5, y = letters[1:5]))
+#' ds$pull()
+#' ds$get_raw_data()
+#' ds$get_code()
+#' @return \code{RawDatasetConnector} object
+#' @export
+raw_dataset_connector <- function(pull_fun) {
+  RawDatasetConnector$new(pull_fun = pull_fun)
+}

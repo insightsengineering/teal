@@ -1,4 +1,4 @@
-mut_fun <- function(x){
+mut_fun <- function(x) {
   x$z <- 1
   return(x)
 }

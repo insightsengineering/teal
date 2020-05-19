@@ -3,10 +3,10 @@ library(random.cdisc.data)
 
 
 test_that("data connection", {
-  open_fun <- CallableFunction$new(data.frame)
+  open_fun <- callable_function(data.frame)
   open_fun$set_args(list(x = 1:5))
 
-  close_fun <- CallableFunction$new(data.frame)
+  close_fun <- callable_function(data.frame)
   close_fun$set_args(list(x = 1:2))
 
   con <- DataConnection$new()
@@ -51,10 +51,10 @@ test_that("data connection", {
 })
 
 test_that("DataConnector with DataConnection", {
-  open_fun <- CallableFunction$new(data.frame)
+  open_fun <- callable_function(data.frame)
   open_fun$set_args(list(x = 1:5))
 
-  close_fun <- CallableFunction$new(data.frame)
+  close_fun <- callable_function(data.frame)
   close_fun$set_args(list(x = 1:2))
 
   con <- DataConnection$new()

@@ -1,19 +1,26 @@
 #' Mutate dataset by code
 #'
-#' @param dataset (\code{NamedDataset}) object
-#' @param code (\code{character}) Code to mutate the dataset. Must contain the
-#'  \code{dataset$dataname}
-#' @param script (\code{character}) file that contains R Code that can
-#'   be read using \link{read_script}. Preferred before \code{code} argument
+#' @param x (\code{NamedDataset})\cr
+#'   object
+#' @param code (\code{character})\cr
+#'   Code to mutate the dataset. Must contain the \code{dataset$dataname}
+#' @param script (\code{character})\cr
+#'   file that contains R Code that can be read using \link{read_script}.
+#'   Preferred before \code{code} argument
 #'
-#' @importFrom methods is
+#' @rdname mutate_dataset
 #' @export
+mutate_dataset <- function(x, code = character(0), script = character(0)) {
+  stopifnot(is_character_single(code) || is_character_single(script))
+  UseMethod("mutate_dataset")
+}
+
+#' @rdname mutate_dataset
 #' @examples
 #' library(random.cdisc.data)
 #' library(magrittr)
 #'
 #' ADSL <- radsl(cached = TRUE)
-#'
 #'
 #' ADSL_dataset <- named_dataset(dataname = "ADSL",
 #'   x = ADSL,
@@ -46,39 +53,50 @@
 #'
 #' ADSL_mutated$get_raw_data()$new_variable[1]
 #'
-mutate_dataset <- function(dataset, code = character(0), script = character(0)) {
-  stopifnot(is(dataset, "NamedDataset"))
-
-  if (is_character_single(script)) {
-    code <- read_script(file = script)
-  }
-  stopifnot(is_character_vector(code, min_length = 1, max_length = 1))
-  if (!any(grepl(dataset$get_dataname(), code))) {
-    stop("You did not use the dataname inside the code. It does not mutate the dataset")
+#' @importFrom methods is
+#' @export
+mutate_dataset.NamedDataset <- function(x, code = character(0), script = character(0)) { #nolint
+  code <- code_from_script(code, script) # nolint
+  if (!any(grepl(x$get_dataname(), code))) {
+    stop("You did not use the dataname inside the code. It does not mutate the 'x'")
   }
 
-  execution_environment <- new.env()
-  assign(envir = execution_environment, x = dataset$get_dataname(), value = dataset$get_raw_data())
+  execution_environment <- execute_script_code(x, code) # nolint
 
-  eval(parse(text = code), envir = execution_environment)
+  NamedDataset$new(
+    x = execution_environment[[x$get_dataname()]],
+    dataname = x$get_dataname(),
+    code =  paste0(x$get_code(), "\n\n", code),
+    label = x$get_dataset_label()
+  )
+}
 
-  if (!is.data.frame(execution_environment[[dataset$get_dataname()]])) {
-    stop("Mutations need to lead to a data.frame again.")
+#' @rdname mutate_dataset
+#' @export
+mutate_dataset.RelationalDataset <- function(x, code = character(0), script = character(0)) { #nolint
+  code <- code_from_script(code, script) # nolint
+  if (!any(grepl(x$get_dataname(), code))) {
+    stop("You did not use the dataname inside the code. It does not mutate the 'x'")
   }
-  if (is(dataset, "RelationalDataset")) {
-    RelationalDataset$new(
-      x = execution_environment[[dataset$get_dataname()]],
-      dataname = dataset$get_dataname(),
-      code = paste0(dataset$get_code(), "\n\n", code),
-      label = dataset$get_dataset_label(),
-      keys = dataset$get_keys()
-    )
-  } else {
-    NamedDataset$new(
-      x = execution_environment[[dataset$get_dataname()]],
-      dataname = dataset$get_dataname(),
-      code =  paste0(dataset$get_code(), "\n\n", code),
-      label = dataset$get_dataset_label()
-    )
+
+  execution_environment <- execute_script_code(x, code) # nolint
+
+  RelationalDataset$new(
+    x = execution_environment[[x$get_dataname()]],
+    dataname = x$get_dataname(),
+    code = paste0(x$get_code(), "\n\n", code),
+    label = x$get_dataset_label(),
+    keys = x$get_keys()
+  )
+}
+
+#' @rdname mutate_dataset
+#' @export
+mutate_dataset.RelationalDatasetConnector <- function(x, code = character(0), script = character(0)) { #nolint
+  code <- code_from_script(code, script) # nolint
+  if (!any(grepl(x$get_dataname(), code))) {
+    stop("You did not use the dataname inside the code. It does not mutate the 'x'")
   }
+
+  x$mutate_dataset(code = code, script = script)
 }
