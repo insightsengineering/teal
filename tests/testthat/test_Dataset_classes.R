@@ -175,6 +175,10 @@ test_that("NamedDataset basics", {
     test_ds$get_code(deparse = TRUE),
     "test_ds <- data.frame(x = c(1, 1), y = c(\"a\", \"a\"), stringsAsFactors = TRUE)"
   )
+  expect_equal(
+    get_code(test_ds, deparse = TRUE),
+    "test_ds <- data.frame(x = c(1, 1), y = c(\"a\", \"a\"), stringsAsFactors = TRUE)"
+  )
 
   expect_equal(
     test_ds$get_code(deparse = FALSE),
@@ -185,6 +189,10 @@ test_that("NamedDataset basics", {
         )
       )
     )
+  )
+  expect_equal(
+    test_ds$get_code(deparse = FALSE),
+    get_code(test_ds, deparse = FALSE)
   )
 
   expect_true(

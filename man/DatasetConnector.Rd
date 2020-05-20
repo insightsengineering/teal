@@ -23,10 +23,10 @@ Data can be pulled via \code{pull} method and returned via \code{get_dataset} me
 }
 \examples{
 \dontrun{
-open_fun <- CallableFunction$new(data.frame)  # define opening function
+open_fun <- callable_function(data.frame)  # define opening function
 open_fun$set_args(list(x = 1:5))   # define fixed arguments to opening function
 
-close_fun <- CallableFunction$new(print) # define closing function
+close_fun <- callable_function(print) # define closing function
 close_fun$set_args(list(x = "Hi there"))  # define fixed arguments to closing function
 
 x <- DataConnection$new() # define connection

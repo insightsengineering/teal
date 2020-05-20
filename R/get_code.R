@@ -1,36 +1,90 @@
 #' Get code
 #'
-#' Reads code from specified files, including code from source. Method reads code without
+#' Reads code from specified files or an R6 object.
+#'
+#' \itemize{
+#'   \item{if reading from R6: }{get the R code stored inside the object.}
+#'   \item{if reading from files: }{
+#'     Includes code from source if reading from files. Method reads code without
+#'   }
+#' }
 #' \code{library()} or \code{require()} calls. Function created for teal app, but can be used with any file.
-#' @param files_path (\code{character}) (optional) vector of files path to be read for preprocessing. Code from
-#' multiple files is joined together.
+#'
+#' @param x (\code{object}) of class\link{RawDatasetConnector} or \link{NamedDataset}. If of
+#'   class \code{character} will be treated as file to read.
 #' @param exclude_comments (\code{logical}) whether exclude commented-out lines of code. Lines to be excluded
 #' should be ended with \code{# nocode}. For multiple line exclusions one should enclose ignored block of code with
 #' \code{# nocode>} and \code{# <nocode}
 #' @param read_sources (\code{logical}) whether to replace \code{source("path")} with code lines from sourced file.
 #' If \code{read_sources = TRUE} changing working directory inside preprocessing is not allowed.
-#'
+#' @param deparse (\code{logical}) whether return deparsed form of a call
+#' @param files_path (\code{character}) (optional) vector of files path to be read for preprocessing. Code from
+#' multiple files is joined together.
+#' @param ... not used, only for support of S3
+#' @export
 #' @return (\code{character}) code of import and preparation of data for teal application.
-#'
+get_code <- function(x, ...) {
+  UseMethod("get_code")
+}
+
+
+# Getting code from R6 ====
+
+#' @export
+#' @rdname get_code
+get_code.RawDatasetConnector <- function(x, deparse = TRUE, ...) {
+  x$get_code(deparse = deparse)
+}
+
+#' @export
+#' @rdname get_code
+get_code.NamedDataset <- function(x, deparse = TRUE, ...) {
+  x$get_code(deparse = deparse)
+}
+
+# Getting code from files ====
+
+#' @rdname get_code
 #' @export
 #' @importFrom magrittr %>%
-get_code <- function(files_path,
+get_code.default <- function(x,
                      exclude_comments = TRUE,
-                     read_sources = TRUE) {
-  stopifnot(is_character_vector(files_path))
+                     read_sources = TRUE, deparse = FALSE, files_path = NULL, ...) {
+  if (!is.null(files_path)) {
+    x <- files_path
+  }
+
+  stopifnot(is_character_vector(x))
   stopifnot(is_logical_single(exclude_comments))
   stopifnot(is_logical_single(read_sources))
 
-  lines <- lapply(files_path, function(x)
-    get_code_single(x, read_sources = read_sources) %>%
+  lines <- lapply(x, function(file_path)
+    get_code_single(file_path, read_sources = read_sources) %>%
       enclosed_with() %>%
       code_exclude(lines, exclude_comments = exclude_comments)
   ) %>%
   unlist
 
-
-  paste(lines, collapse = "\n")
+  if (deparse) {
+    return(paste(
+      vapply(
+        lines,
+        function(x) {
+          paste(
+            deparse(x, width.cutoff = 80L),
+            collapse = "\n"
+          )
+        },
+        FUN.VALUE = character(1)
+      ),
+      collapse = "\n"
+    ))
+  } else {
+    return(paste(lines, collapse = "\n"))
+  }
 }
+
+# * Sub functions for getting code from files ====
 
 #' Get code
 #'

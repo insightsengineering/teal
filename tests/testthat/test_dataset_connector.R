@@ -15,8 +15,18 @@ test_that("RawDatasetConnector", {
   )
 
   expect_identical(
+    x$get_code(deparse = TRUE),
+    get_code(x, deparse = TRUE)
+  )
+
+  expect_identical(
     x$get_code(deparse = FALSE),
     as.call(parse(text = "data.frame(n = 5, seed = 1, cached = TRUE)"))[[1]]
+  )
+
+  expect_identical(
+    x$get_code(deparse = FALSE),
+    get_code(x, deparse = FALSE)
   )
 
   expect_true(
