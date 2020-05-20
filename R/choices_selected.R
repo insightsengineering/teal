@@ -17,7 +17,10 @@ no_select_keyword <- "-- no selection --"
 #'
 #' in case you want to keep your specific order of choices, set \code{keep_order} to \code{TRUE}.
 #'
+#' @return Object of class \code{choices_selected} and of type list.
+#'
 #' @export
+#' @importFrom methods is
 #'
 #' @examples
 #'
@@ -29,9 +32,25 @@ no_select_keyword <- "-- no selection --"
 #' library(random.cdisc.data)
 #' ADSL <- radsl(cached = TRUE)
 #' choices_selected(variable_choices(ADSL), "SEX")
-choices_selected <- function(choices, selected = choices[1], keep_order = FALSE, fixed = FALSE) {
+choices_selected <- function(choices, selected = if (is(choices, "delayed_data")) NULL else choices[1],
+                             keep_order = FALSE, fixed = FALSE) {
 
-  stopifnot(is.atomic(choices))
+  stopifnot(is.atomic(choices) || is(choices, "delayed_data"))
+  stopifnot(is.atomic(selected) || is(selected, "delayed_data"))
+
+  if (is(choices, "delayed_data") || is(selected, "delayed_data")) {
+
+    if (is(selected, "delayed_data") && !is(choices, "delayed_data")) {
+      stop("If 'selected' is of class 'delayed_data', so must be 'choices'.")
+    }
+
+    out <- structure(list(choices = choices,
+                          selected = selected,
+                          keep_order = keep_order,
+                          fixed = fixed),
+                     class = c("delayed_choices_selected", "delayed_data", "choices_selected"))
+    return(out)
+  }
 
   if (!is.null(choices) && no_select_keyword %in% choices) {
     stop(paste(no_select_keyword, "is not a valid choice as it is used as a keyword"))

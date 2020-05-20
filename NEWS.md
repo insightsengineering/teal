@@ -9,6 +9,7 @@
 `load_dataset`, `as_relational`.
 
 * Change output of `keys` function to `keys` object. Updated checks in `DatasetConnector` and `dataset`.
+* delayed version of choices_selected
 
 # teal 0.8.3
 

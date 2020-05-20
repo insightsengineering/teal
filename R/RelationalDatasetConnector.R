@@ -345,6 +345,14 @@ rds_dataset_connector <- function(dataname, file, keys = get_cdisc_keys(dataname
 #' \dontrun{
 #' x$get_dataset()
 #' }
+#'
+#' # specifying custom keys
+#' x <- rice_dataset_connector("ADSL",
+#'                             "/path/to/ADSL",
+#'                             keys = keys(primary = c("STUDYID", "USUBJID"),
+#'                                         foreign = NULL,
+#'                                         parent = NULL))
+#' x$get_keys()
 rice_dataset_connector <- function(dataname,
                                    path,
                                    keys = get_cdisc_keys(dataname)) {
