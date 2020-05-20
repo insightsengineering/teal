@@ -72,6 +72,7 @@ Collate:
     'filter_spec.R'
     'get_code.R'
     'get_dataset.R'
+    'get_raw_data.R'
     'include_css_js.R'
     'modules.R'
     'init.R'

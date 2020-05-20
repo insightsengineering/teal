@@ -44,6 +44,13 @@ test_that("mutate_dataset", {
                stringsAsFactors = FALSE)
   )
 
+  expect_equal(
+    get_raw_data(test_ds_mut),
+    data.frame(x = c(1, 1), y = c("a", "a"),
+               z = c("one", "two"),
+               stringsAsFactors = FALSE)
+  )
+
   expect_error({
     test_ds %>% mutate_dataset("x <- 3")
   }, "data.frame")

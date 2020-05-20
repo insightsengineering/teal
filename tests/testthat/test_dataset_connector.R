@@ -48,6 +48,10 @@ test_that("RawDatasetConnector", {
     "dataset has not been pulled yet"
   )
 
+  expect_error(
+    get_raw_data(x),
+    "dataset has not been pulled yet"
+  )
 
   expect_silent(x$pull())
 
@@ -61,6 +65,11 @@ test_that("RawDatasetConnector", {
 
   expect_identical(
     x$dataset$get_raw_data(),
+    data.frame(n = 5, seed = 1, cached = TRUE)
+  )
+
+  expect_identical(
+    get_raw_data(x),
     data.frame(n = 5, seed = 1, cached = TRUE)
   )
 

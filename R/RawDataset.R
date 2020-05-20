@@ -168,31 +168,3 @@ raw_dataset <- function(x) {
   stopifnot(is.data.frame(x))
   RawDataset$new(x)
 }
-
-#' Get pure data frame from any Dataset object
-#'
-#' @param dataset (\code{\link{RawDataset}}, \code{\link{NamedDataset}}, \code{\link{RelationalDataset}}) object
-#'
-#' @return \code{data.frame} stored inside the R6 Dataset object
-#' @importFrom methods is
-#' @examples
-#'
-#' library(random.cdisc.data)
-#' ADSL <- radsl(cached = TRUE)
-#' ADSL_raw <- raw_dataset(x = ADSL)
-#' get_raw_data(ADSL_raw)
-#'
-#' ADSL_named <- named_dataset(dataname = "ADSL", x = ADSL)
-#' get_raw_data(ADSL_named)
-#'
-#' ADSL_relational <- as_relational(ADSL_raw,
-#'   dataname = "ADSL",
-#'   keys = keys(primary = c("USUBJID", "STUDYID"), foreign = NULL, parent = NULL)
-#' )
-#' get_raw_data(ADSL_relational)
-#' @export
-get_raw_data <- function(dataset) {
-  stopifnot(is(dataset, "RawDataset"))
-
-  return(dataset$get_raw_data())
-}
