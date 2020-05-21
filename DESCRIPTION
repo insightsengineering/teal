@@ -13,6 +13,8 @@ Authors@R: c(
   person("Maximilian", "Mordig", email = "maximilian_oliver.mordig@roche.com", role = "aut"),
   person("Bartosz", "Baranowski", email = "bartosz.baranowski@roche.com", role = "aut"),
   person("Ondrej", "Slama", email = "ondrej.slama@roche.com", role = "aut"),
+  person("Nikolas", "Burkoff", email = "nikolas.burkoff@roche.com", role = "aut"),
+  person("Maciej", "Nasinski", email = "maciej.nasinski@contractors.roche.com", role = "aut"),
   person("Roche", role = c("cph", "fnd"))
   )
 Description: teal is a shiny based interactive exploration framework for
@@ -42,7 +44,7 @@ Imports:
   shinyWidgets (>= 0.5.0),
   utils.nest (>= 0.2.2),
   yaml
-RoxygenNote: 7.0.2
+RoxygenNote: 7.1.0
 Suggests:
     knitr,
     nomnoml,
@@ -71,7 +73,9 @@ Collate:
     'data_extract_spec.R'
     'filter_spec.R'
     'get_code.R'
+    'get_dataname.R'
     'get_dataset.R'
+    'get_label.R'
     'get_raw_data.R'
     'include_css_js.R'
     'modules.R'

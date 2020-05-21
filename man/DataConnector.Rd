@@ -36,6 +36,7 @@ accompanied by three other classes. Classes relation illustrated on diagram.
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-new"></a>}}
+\if{latex}{\out{\hypertarget{method-new}{}}}
 \subsection{Method \code{new()}}{
 Create a new \code{DataConnector} object
 \subsection{Usage}{
@@ -57,6 +58,7 @@ new \code{DataConnector} object
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-get_cdisc_data"></a>}}
+\if{latex}{\out{\hypertarget{method-get_cdisc_data}{}}}
 \subsection{Method \code{get_cdisc_data()}}{
 Function to get \code{cdisc_data} object interactively, useful for debugging
 \subsection{Usage}{
@@ -104,6 +106,7 @@ Get connection to data source
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-get_connection"></a>}}
+\if{latex}{\out{\hypertarget{method-get_connection}{}}}
 \subsection{Method \code{get_connection()}}{
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{DataConnector$get_connection()}\if{html}{\out{</div>}}
@@ -116,6 +119,7 @@ Get connectors
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-get_connectors"></a>}}
+\if{latex}{\out{\hypertarget{method-get_connectors}{}}}
 \subsection{Method \code{get_connectors()}}{
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{DataConnector$get_connectors()}\if{html}{\out{</div>}}
@@ -127,6 +131,7 @@ Get connectors
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-get_dataset"></a>}}
+\if{latex}{\out{\hypertarget{method-get_dataset}{}}}
 \subsection{Method \code{get_dataset()}}{
 Function to get data interactively, useful for debugging
 \subsection{Usage}{
@@ -173,6 +178,7 @@ List of datasets
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-get_server"></a>}}
+\if{latex}{\out{\hypertarget{method-get_server}{}}}
 \subsection{Method \code{get_server()}}{
 
 \subsection{Usage}{
@@ -185,6 +191,7 @@ the \code{server} function of the DataConnector
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-get_ui"></a>}}
+\if{latex}{\out{\hypertarget{method-get_ui}{}}}
 \subsection{Method \code{get_ui()}}{
 
 \subsection{Usage}{
@@ -204,6 +211,7 @@ the \code{ui} function of the DataConnector
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-launch"></a>}}
+\if{latex}{\out{\hypertarget{method-launch}{}}}
 \subsection{Method \code{launch()}}{
 Run simple application that uses its \code{ui} and \code{server} fields
 
@@ -218,6 +226,7 @@ An object that represents the app
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-set_code"></a>}}
+\if{latex}{\out{\hypertarget{method-set_code}{}}}
 \subsection{Method \code{set_code()}}{
 Set preprocessing code
 \subsection{Usage}{
@@ -237,6 +246,7 @@ nothing
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-set_check"></a>}}
+\if{latex}{\out{\hypertarget{method-set_check}{}}}
 \subsection{Method \code{set_check()}}{
 Set reproducibility check
 \subsection{Usage}{
@@ -256,6 +266,7 @@ nothing
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-set_ui"></a>}}
+\if{latex}{\out{\hypertarget{method-set_ui}{}}}
 \subsection{Method \code{set_ui()}}{
 Set connector UI function
 \subsection{Usage}{
@@ -275,6 +286,7 @@ nothing
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-set_server"></a>}}
+\if{latex}{\out{\hypertarget{method-set_server}{}}}
 \subsection{Method \code{set_server()}}{
 Set connector server function
 
@@ -297,6 +309,7 @@ nothing
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-set_server_helper"></a>}}
+\if{latex}{\out{\hypertarget{method-set_server_helper}{}}}
 \subsection{Method \code{set_server_helper()}}{
 Helper function to set connector server function
 \subsection{Usage}{
@@ -340,6 +353,7 @@ Set data connection
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-set_connection"></a>}}
+\if{latex}{\out{\hypertarget{method-set_connection}{}}}
 \subsection{Method \code{set_connection()}}{
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{DataConnector$set_connection(connection)}\if{html}{\out{</div>}}
@@ -359,6 +373,7 @@ Set dataset connectors
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-set_connectors"></a>}}
+\if{latex}{\out{\hypertarget{method-set_connectors}{}}}
 \subsection{Method \code{set_connectors()}}{
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{DataConnector$set_connectors(connectors)}\if{html}{\out{</div>}}
@@ -377,6 +392,7 @@ nothing
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-clone"></a>}}
+\if{latex}{\out{\hypertarget{method-clone}{}}}
 \subsection{Method \code{clone()}}{
 The objects of this class are cloneable with this method.
 \subsection{Usage}{

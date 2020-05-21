@@ -63,6 +63,7 @@ x$close() # call closing function
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-init"></a>}}
+\if{latex}{\out{\hypertarget{method-init}{}}}
 \subsection{Method \code{init()}}{
 Create a new \code{DataConnection} object
 \subsection{Usage}{
@@ -75,6 +76,7 @@ new \code{DataConnection} object
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-open"></a>}}
+\if{latex}{\out{\hypertarget{method-open}{}}}
 \subsection{Method \code{open()}}{
 Open the connection.
 
@@ -100,6 +102,7 @@ if \code{try = TRUE} then \code{try-error} on error, \code{NULL} otherwise
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-get_open_call"></a>}}
+\if{latex}{\out{\hypertarget{method-get_open_call}{}}}
 \subsection{Method \code{get_open_call()}}{
 Get executed open connection call
 \subsection{Usage}{
@@ -123,6 +126,7 @@ optionally deparsed \code{call} object
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-close"></a>}}
+\if{latex}{\out{\hypertarget{method-close}{}}}
 \subsection{Method \code{close()}}{
 Close the connection.
 \subsection{Usage}{
@@ -144,6 +148,7 @@ if \code{try = TRUE} then \code{try-error} on error, \code{NULL} otherwise
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-get_close_call"></a>}}
+\if{latex}{\out{\hypertarget{method-get_close_call}{}}}
 \subsection{Method \code{get_close_call()}}{
 Get executed close connection call
 \subsection{Usage}{
@@ -165,6 +170,7 @@ optionally deparsed \code{call} object
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-set_open_fun"></a>}}
+\if{latex}{\out{\hypertarget{method-set_open_fun}{}}}
 \subsection{Method \code{set_open_fun()}}{
 Set open connection function
 \subsection{Usage}{
@@ -184,6 +190,7 @@ nothing
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-set_open_args"></a>}}
+\if{latex}{\out{\hypertarget{method-set_open_args}{}}}
 \subsection{Method \code{set_open_args()}}{
 Set open connection function argument
 \subsection{Usage}{
@@ -205,6 +212,7 @@ nothing
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-set_close_fun"></a>}}
+\if{latex}{\out{\hypertarget{method-set_close_fun}{}}}
 \subsection{Method \code{set_close_fun()}}{
 Set close connection function
 \subsection{Usage}{
@@ -224,6 +232,7 @@ nothing
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-set_close_args"></a>}}
+\if{latex}{\out{\hypertarget{method-set_close_args}{}}}
 \subsection{Method \code{set_close_args()}}{
 Set close connection function argument
 \subsection{Usage}{
@@ -245,6 +254,7 @@ nothing
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-refresh_calls"></a>}}
+\if{latex}{\out{\hypertarget{method-refresh_calls}{}}}
 \subsection{Method \code{refresh_calls()}}{
 Refresh both open and close calls
 \subsection{Usage}{
@@ -257,6 +267,7 @@ nothing
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-clone"></a>}}
+\if{latex}{\out{\hypertarget{method-clone}{}}}
 \subsection{Method \code{clone()}}{
 The objects of this class are cloneable with this method.
 \subsection{Usage}{
@@ -293,6 +304,7 @@ The objects of this class are cloneable with this method.
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-new"></a>}}
+\if{latex}{\out{\hypertarget{method-new}{}}}
 \subsection{Method \code{new()}}{
 Create a new \code{DatasetConnector} object
 \subsection{Usage}{
@@ -305,6 +317,7 @@ new \code{DatasetConnector} object
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-get_call"></a>}}
+\if{latex}{\out{\hypertarget{method-get_call}{}}}
 \subsection{Method \code{get_call()}}{
 Get executed call
 \subsection{Usage}{
@@ -328,6 +341,7 @@ optionally deparsed \code{call} object
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-get_dataset"></a>}}
+\if{latex}{\out{\hypertarget{method-get_dataset}{}}}
 \subsection{Method \code{get_dataset()}}{
 Get the data from connection
 
@@ -353,6 +367,7 @@ if \code{try = TRUE} then \code{try-error} on error, object returned from connec
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-get_dataname"></a>}}
+\if{latex}{\out{\hypertarget{method-get_dataname}{}}}
 \subsection{Method \code{get_dataname()}}{
 Get connection dataname
 \subsection{Usage}{
@@ -365,6 +380,7 @@ Get connection dataname
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-get_keys"></a>}}
+\if{latex}{\out{\hypertarget{method-get_keys}{}}}
 \subsection{Method \code{get_keys()}}{
 Get keys of the dataset
 \subsection{Usage}{
@@ -377,6 +393,7 @@ Get keys of the dataset
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-get_path"></a>}}
+\if{latex}{\out{\hypertarget{method-get_path}{}}}
 \subsection{Method \code{get_path()}}{
 Get path of the dataset
 \subsection{Usage}{
@@ -389,6 +406,7 @@ Get path of the dataset
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-pull"></a>}}
+\if{latex}{\out{\hypertarget{method-pull}{}}}
 \subsection{Method \code{pull()}}{
 Pull the data
 
@@ -414,6 +432,7 @@ nothing, in order to get the data please use \code{get_dataset} method
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-set_dataname"></a>}}
+\if{latex}{\out{\hypertarget{method-set_dataname}{}}}
 \subsection{Method \code{set_dataname()}}{
 Set dataname
 \subsection{Usage}{
@@ -433,6 +452,7 @@ nothing
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-set_keys"></a>}}
+\if{latex}{\out{\hypertarget{method-set_keys}{}}}
 \subsection{Method \code{set_keys()}}{
 Set dataset keys
 \subsection{Usage}{
@@ -452,6 +472,7 @@ nothing
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-set_path"></a>}}
+\if{latex}{\out{\hypertarget{method-set_path}{}}}
 \subsection{Method \code{set_path()}}{
 Set connection path
 \subsection{Usage}{
@@ -471,6 +492,7 @@ nothing
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-set_pull_arg_value"></a>}}
+\if{latex}{\out{\hypertarget{method-set_pull_arg_value}{}}}
 \subsection{Method \code{set_pull_arg_value()}}{
 Set connection function single argument with value
 \subsection{Usage}{
@@ -494,6 +516,7 @@ nothing
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-set_pull_args"></a>}}
+\if{latex}{\out{\hypertarget{method-set_pull_args}{}}}
 \subsection{Method \code{set_pull_args()}}{
 Set connection function arguments with values
 \subsection{Usage}{
@@ -515,6 +538,7 @@ nothing
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-set_pull_fun"></a>}}
+\if{latex}{\out{\hypertarget{method-set_pull_fun}{}}}
 \subsection{Method \code{set_pull_fun()}}{
 Set the pulling function, which itself defines the connection through which the data gets pulled.
 \subsection{Usage}{
@@ -533,6 +557,7 @@ Set the pulling function, which itself defines the connection through which the 
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-clone"></a>}}
+\if{latex}{\out{\hypertarget{method-clone}{}}}
 \subsection{Method \code{clone()}}{
 The objects of this class are cloneable with this method.
 \subsection{Usage}{

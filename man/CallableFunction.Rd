@@ -25,6 +25,7 @@ Object that stores function name with it's arguments. Methods to get call and ru
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-new"></a>}}
+\if{latex}{\out{\hypertarget{method-new}{}}}
 \subsection{Method \code{new()}}{
 Create a new \code{CallableFunction} object
 \subsection{Usage}{
@@ -44,6 +45,7 @@ new \code{CallableFunction} object
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-run"></a>}}
+\if{latex}{\out{\hypertarget{method-run}{}}}
 \subsection{Method \code{run()}}{
 Run function
 \subsection{Usage}{
@@ -67,6 +69,7 @@ nothing or output from function depending on \code{return} argument
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-get_call"></a>}}
+\if{latex}{\out{\hypertarget{method-get_call}{}}}
 \subsection{Method \code{get_call()}}{
 Get function call with substituted arguments in \code{args}.
 These arguments will not be stored in the object.
@@ -89,6 +92,7 @@ These arguments will not be stored in the object.
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-refresh"></a>}}
+\if{latex}{\out{\hypertarget{method-refresh}{}}}
 \subsection{Method \code{refresh()}}{
 Refresh call with function name and saved arguments
 \subsection{Usage}{
@@ -101,6 +105,7 @@ nothing
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-set_args"></a>}}
+\if{latex}{\out{\hypertarget{method-set_args}{}}}
 \subsection{Method \code{set_args()}}{
 Set up function arguments
 \subsection{Usage}{
@@ -120,6 +125,7 @@ nothing
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-set_arg_value"></a>}}
+\if{latex}{\out{\hypertarget{method-set_arg_value}{}}}
 \subsection{Method \code{set_arg_value()}}{
 Set up single function argument with value
 \subsection{Usage}{
@@ -141,6 +147,7 @@ nothing
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-clone"></a>}}
+\if{latex}{\out{\hypertarget{method-clone}{}}}
 \subsection{Method \code{clone()}}{
 The objects of this class are cloneable with this method.
 \subsection{Usage}{
