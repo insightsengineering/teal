@@ -15,7 +15,7 @@ get_dataset <- function(x) {
 #' @examples
 #' library(random.cdisc.data)
 #' fun <- callable_function(radsl)
-#' fun$set_args(list(N = 5, seed = 1, cached = TRUE))
+#' set_args(fun, list(N = 5, seed = 1, cached = TRUE))
 #' x <- raw_dataset_connector(fun)
 #'
 #' load_dataset(x)

@@ -24,6 +24,16 @@ RawDatasetConnector <- R6::R6Class( #nolint
     },
 
     #' @description
+    #' Set arguments to the pulling function
+    #'
+    #' @param args (\code{NULL} or named \code{list}) dynamic arguments to function
+    #'
+    #' @return nothing
+    set_args = function(args) {
+      private$.pull_fun$set_args(args)
+    },
+
+    #' @description
     #' Get code to get data
     #'
     #' @param deparse (\code{logical}) whether return deparsed form of a call
@@ -110,7 +120,7 @@ RawDatasetConnector <- R6::R6Class( #nolint
 #'   function with necessary arguments set to fetch data from connection.
 #' @examples
 #' ds <- raw_dataset_connector(pull_fun = callable_function(data.frame))
-#' ds$pull_fun$set_args(list(x = 1:5, y = letters[1:5]))
+#' set_args(ds, list(x = 1:5, y = letters[1:5]))
 #' ds$pull()
 #' ds$get_raw_data()
 #' ds$get_code()

@@ -88,6 +88,7 @@ Collate:
     'optionalInput.R'
     'resolve_delayed.R'
     'select_spec.R'
+    'set_args.R'
     'stop_shiny.R'
     'teal.R'
     'utils.R'
