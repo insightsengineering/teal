@@ -108,8 +108,8 @@ init <- function(data,
   )
   stopifnot(all(names(initial_filter_states) %in% names(data)))
 
-  # todo1: document why startapp_id is needed
-  startapp_id <- paste0("startapp_screen_", paste0(sample(1:10, 10, replace = TRUE), collapse = ""))
+  # once data is loaded, we will remove this element and add the real teal UI instead
+  startapp_id <- "startapp_screen"
   startapp_selector <- paste0("#", startapp_id)
 
   skip_start_screen <- is(data, "cdisc_data")
@@ -321,26 +321,4 @@ reactive_on_changes <- function(expr) {
     rv(expr()) # only triggers rv on value updates
   })
   return(list(value = rv, observer = obs))
-}
-
-#' Code to include teal CSS and JS files
-#'
-#' This is useful when you want to use the same Javascript and CSS files that are
-#' used with the teal application.
-#' This is also useful for running standalone modules in teal with the correct
-#' styles.
-#'
-#' @examples
-#' shiny_ui <- tagList(
-#'   include_teal_css_js(),
-#'   p("Hello")
-#' )
-#' @export
-include_teal_css_js <- function() {
-  tagList(
-    shinyjs::useShinyjs(),
-    include_css_files(package = "teal"),
-    include_js_files(package = "teal", except = "init.js"),
-    shinyjs::hidden(icon("cog")), # add hidden icon to load font-awesome css for icons
-  )
 }

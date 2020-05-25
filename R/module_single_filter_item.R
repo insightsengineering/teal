@@ -170,7 +170,6 @@ ui_single_filter_item <- function(id, filter_info, filter_state, prelabel) {
   # label before select input and button to remove filter
   return(fluidPage(
     fluidRow(
-      column(1, shiny::icon("grip-vertical", class = "sortableJS-handle")), #todo
       column(if (na_is_displayed) 4 else 8, tags$span(
         prelabel,
         if (!is.null(filter_info$label) || (filter_info$label != "")) {

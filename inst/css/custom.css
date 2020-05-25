@@ -47,3 +47,13 @@ a.remove:hover{
     0.5s ease-in  0s 1 shinyDataFilterFadeIn;
   transform-origin: bottom;
 }
+
+/*
+for handles to move filter variables around in the right hand panel
+currently not used, instead one can click anywhere in the element to move it
+*/
+.sortableJS-handle {
+  opacity: 0.1;
+  cursor: move;
+  cursor: -webkit-grabbing;
+}

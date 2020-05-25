@@ -1,5 +1,5 @@
 #' Creates UI to show currently selected filters that can be applied to
-#' the dataset, i.e. all columns selected for filtering are shown.
+#' a single dataset, i.e. all columns selected for filtering are shown.
 #'
 #' @param id module id
 #' @md
@@ -39,15 +39,19 @@
 ui_filter_items <- function(id, dataname) {
   ns <- NS(id)
   div(
-    # id needed to insert and remove UI to filter single variable as needed
-    # it is currently also used by the above module to entirely hide this panel
-    id = ns("filters"),
+    id = ns("whole_ui"), # to hide it entirely
     fluidRow(
       column(8, dataname),
       column(4, actionLink(
         ns("remove_filters"), "", icon("trash-alt", lib = "font-awesome"),
         class = "remove"
       ))
+    ),
+    div(
+      # id needed to insert and remove UI to filter single variable as needed
+      # it is currently also used by the above module to entirely hide this panel
+      id = ns("filters"),
+      class = "listWithHandle list-group" # to make every element in here draggable
     )
   )
 }
@@ -109,12 +113,16 @@ srv_filter_items <- function(input, output, session, datasets, dataname) {
         selector = paste0("#", session$ns("filters")),
         where = "beforeEnd",
         # add span with id to be removable
-        ui = span(id = filter_id, ui_single_filter_item(
+        ui = span(
           id = filter_id,
-          filter_info = datasets$get_filter_info(dataname, varname),
-          filter_state = datasets$get_filter_state(dataname, varname),
-          prelabel = paste0(dataname, ".", varname)
-        ))
+          class = "list-group-item", # to make it draggable
+          ui_single_filter_item(
+            id = filter_id,
+            filter_info = datasets$get_filter_info(dataname, varname),
+            filter_state = datasets$get_filter_state(dataname, varname),
+            prelabel = paste0(dataname, ".", varname)
+          )
+        )
       )
       shown_vars_observers <<- c(
         shown_vars_observers,
@@ -130,6 +138,12 @@ srv_filter_items <- function(input, output, session, datasets, dataname) {
       lapply(shown_vars_observers[[varname]], function(obs) obs$destroy())
       shown_vars_observers[[varname]] <<- NULL
     })
+
+    if (length(filtered_vars()) == 0) {
+      shinyjs::hide("whole_ui") # hide whole element if no filters
+    } else {
+      shinyjs::show("whole_ui")
+    }
 
     stopifnot(setequal(filtered_vars(), names(shown_vars_observers)))
   })

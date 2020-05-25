@@ -36,6 +36,7 @@ include_js_files <- function(package = "teal", pattern = "*", except = NULL) {
     }
   }
 
+  # optionally put into `shiny::singleton`
   lapply(js_files, includeScript)
 }
 
@@ -43,6 +44,8 @@ include_js_files <- function(package = "teal", pattern = "*", except = NULL) {
 #'
 #' This is triggered from the server to execute on the client
 #' rather than triggered directly on the client.
+#' Unlike `include_js_files` which includes Javascript functions,
+#' the `run_js` actually executes Javascript functions.
 #'
 #' @param file (\code{character}) vector of file names
 #' @param package (\code{character}) package name
@@ -56,4 +59,29 @@ run_js_files <- function(files, package = "teal") {
     # throws an error if file not found
     shinyjs::runjs(paste0(readLines(system.file("js", file, package = package, mustWork = TRUE)), collapse = "\n"))
   }
+}
+
+#' Code to include teal CSS and JS files
+#'
+#' This is useful when you want to use the same Javascript and CSS files that are
+#' used with the teal application.
+#' This is also useful for running standalone modules in teal with the correct
+#' styles.
+#' Also initializes `shinyjs` so you can use it.
+#'
+#' @return HTML code to include
+#' @examples
+#' shiny_ui <- tagList(
+#'   include_teal_css_js(),
+#'   p("Hello")
+#' )
+#' @export
+include_teal_css_js <- function() {
+  tagList(
+    shinyjs::useShinyjs(),
+    include_css_files(package = "teal"),
+    # init.js is executed from the server
+    include_js_files(package = "teal", except = "init.js"),
+    shinyjs::hidden(icon("cog")), # add hidden icon to load font-awesome css for icons
+  )
 }
