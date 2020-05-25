@@ -2,12 +2,12 @@
 % Please edit documentation in R/modules.R
 \name{modules_depth}
 \alias{modules_depth}
-\title{check that modules has not more than depth 2}
+\title{Get module depth}
 \usage{
-modules_depth(x, depth = 0)
+modules_depth(modules, depth = 0)
 }
 \arguments{
-\item{x}{\code{teal.modules} object}
+\item{modules}{\code{teal.module} or \code{teal.modules} object}
 
 \item{depth}{optional, integer determining current depth level}
 }
@@ -15,7 +15,8 @@ modules_depth(x, depth = 0)
 depth level for given module
 }
 \description{
-check that modules has not more than depth 2
+Depth starts at 0, so a single \code{teal.module} has depth 0.
+Nesting it increases overall depth by 1.
 }
 \examples{
 m <- module(

@@ -32,7 +32,7 @@ app <- init(
       "ADSL AGE histogram",
       server = function(input, output, session, datasets) {
         output$hist <- renderPlot({
-          hist(datasets$get_data("ADSL", filtered = TRUE, reactive = TRUE)$AGE)
+          hist(datasets$get_data("ADSL", filtered = TRUE)$AGE)
         })
       },
       ui = function(id, ...) {ns <- NS(id); plotOutput(ns('hist'))},

@@ -7,7 +7,7 @@
 init(
   data,
   modules,
-  filter = NULL,
+  initial_filter_states = list(),
   header = tags$p("title here"),
   footer = tags$p("footer here")
 )
@@ -27,16 +27,23 @@ vector with datasets names that are passed on (filtered) to the server
 function\cr options \tab optional, other arguments passed on to the server
 function }}
 
-\item{filter}{(\code{list}) You can pre-define filters for
-  datasets inside this argument. Therefore you need to handover an
-  \code{init} list. Please provide a named list inside \code{init}
-  that contains the names of the datasets. E.g. for filtering
-  the dataset \code{ADSL} use \code{list(init = list(ADSL = ...))}.
-  For each datasets you need to provide a vector with column names that are
-  relevant for the item. You can specify an ADSL filtering for the
-  columns \code{SEX} and \code{BAGE} by:
-
-  \code{filter = list(init = list(ADSL = c("SEX", "BAGE")))}}
+\item{initial_filter_states}{(\code{list}) You can define filters that show when
+the app starts.
+Pass in a named list to overwrite filters, e.g.
+\code{list(ADSL = list(SEX = NULL))}
+to have the SEX filter appear with nothing selected (i.e. 0 patients)
+\code{list(ADSL = list(SEX = list(choices = "M", keep_na = TRUE)))}
+to keep patients that are male or have unknown SEX.
+\code{list(ADSL = list(SEX = "default"))}
+to have the default filter that appears also when you select to add this
+filtering variable in the running app.
+A general example is:
+\code{list(
+ADSL = list(AGE = "default", SEX = list(choices = "M", keep_na = TRUE)),
+ADAE = list(AETOXGR = "default")
+)}
+Note that if the app is restored from a bookmarked state, the filters
+are overwritten.}
 
 \item{header}{(\code{character} or object of class `shiny.tag`) the header of the app}
 
@@ -71,7 +78,7 @@ app <- init(
       "ADSL AGE histogram",
       server = function(input, output, session, datasets) {
         output$hist <- renderPlot(
-          hist(datasets$get_data("ADSL", filtered = TRUE, reactive = TRUE)$AGE)
+          hist(datasets$get_data("ADSL", filtered = TRUE)$AGE)
         )
       },
       ui = function(id, ...) {
@@ -81,7 +88,7 @@ app <- init(
       filters = "ADSL"
     )
   ),
-  filter = list(init = list(ADSL = c("AGE"))),
+  filter = list(ADSL = c("AGE")),
   header = tags$h1("Sample App"),
   footer = tags$p("Copyright 2017 - 2020")
 )

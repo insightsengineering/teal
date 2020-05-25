@@ -27,8 +27,8 @@ Once the \code{ADSL} dataset is set, the filters are applied.
 In order to set several datasets or change several filters at once without intermediate
 refiltering, the functions \code{hold_filtering} and \code{continue_filtering} can be used.
 
-By the design of the class, datanames must be provided in the beginning. They cannot
-be changed.
+By the design of the class (and \code{reactiveValues}), any dataname set through \code{set_data}
+cannot be removed because other code may already depend on it.
 
 General arguments are:
 \enumerate{
@@ -38,84 +38,74 @@ General arguments are:
 }
 }
 \examples{
-\dontrun{
-# if on BEE
-path <- "/opt/BIOSTAT/qa/cdt7876a/libraries/asl.sas7bdat"
-x <- FilteredData$new()
-x$load_data(path, dataname = "ADSL")
-
-# todo1: should be able to remove dontrun starting from here, but strict complains about
-# attempt to call non-function
 library(random.cdisc.data)
 
 ADSL <- radsl(cached = TRUE)
-x <- teal:::FilteredData$new(datanames = c("ADSL", "ADAE"))
+attr(ADSL, "keys") <- get_cdisc_keys("ADSL")
+datasets <- teal:::FilteredData$new()
 
-isolate({
-  x$set_data("ADSL", ADSL)
-})
+# to evaluate without isolate(), i.e. provide a default isolate context
+options(shiny.suppressMissingContextError = TRUE)
+on.exit(options(shiny.suppressMissingContextError = FALSE), add = TRUE)
 
-isolate({
-  x$datanames()
-  x$list_data_info("ADSL")
-  x$get_filter_chars("ADSL")
-  df <- x$get_data("ADSL")
-  # df
+datasets$set_data("ADSL", ADSL)
 
-  x$get_filter_type("ADSL", "SEX")
-  x$set_filter_state("ADSL", varname = NULL, state = list(
-    AGE = list(selection = c(3, 5), keep_na = FALSE),
-    SEX = list(selection = c("M", "F"), keep_na = FALSE)
-  ))
-  x$get_filter_type("ADSL", "SEX")
-  x$get_filter_chars("ADSL")[["SEX"]]$type
+datasets$datanames()
+datasets$get_data_info("ADSL", filtered = FALSE)
+# filters dataset to obtain information
+datasets$get_data_info("ADSL", filtered = TRUE)
+datasets$get_filter_info("ADSL")
+df <- datasets$get_data("ADSL", filtered = FALSE)
+# df
 
-  x$hold_filtering()
-  x$set_filter_state("ADSL", varname = NULL, list(
-    AGE = list(selection = c(3, 7), keep_na = FALSE)
-  ))
-  x$set_filter_state(
-    "ADSL",
-    varname = "SEX",
-    state = list(selection = c("M", "F"), keep_na = FALSE)
-  )
-  x$continue_filtering()
-  x$get_filter_type("ADSL", "SEX")
+datasets$get_filter_type("ADSL", "SEX")
+datasets$set_filter_state("ADSL", varname = NULL, state = list(
+  AGE = list(range = c(33, 44), keep_na = FALSE),
+  SEX = list(choices = c("M", "F"), keep_na = FALSE)
+))
+datasets$get_filter_type("ADSL", "SEX")
+datasets$get_filter_info("ADSL")[["SEX"]]$type
 
-  x$get_filter_state("ADSL")
-})
-}
+# will fail because of invalid range
+# datasets$set_filter_state("ADSL", varname = NULL, list(
+#   AGE = list(range = c(3, 7), keep_na = FALSE)
+# ))
+datasets$set_filter_state("ADSL", varname = NULL, list(
+  AGE = list(range = c(33, 44), keep_na = FALSE)
+))
+datasets$set_filter_state(
+  "ADSL",
+  varname = "SEX",
+  state = list(choices = c("M", "F"), keep_na = FALSE)
+)
+datasets$get_filter_type("ADSL", "SEX")
+
+datasets$get_filter_state("ADSL")
 }
 \section{Methods}{
 \subsection{Public methods}{
 \itemize{
 \item \href{#method-new}{\code{FilteredData$new()}}
 \item \href{#method-datanames}{\code{FilteredData$datanames()}}
-\item \href{#method-load_data}{\code{FilteredData$load_data()}}
 \item \href{#method-get_data}{\code{FilteredData$get_data()}}
 \item \href{#method-set_data}{\code{FilteredData$set_data()}}
-\item \href{#method-get_attrs}{\code{FilteredData$get_attrs()}}
-\item \href{#method-set_attrs}{\code{FilteredData$set_attrs()}}
-\item \href{#method-get_attr}{\code{FilteredData$get_attr()}}
-\item \href{#method-get_data_label}{\code{FilteredData$get_data_label()}}
+\item \href{#method-get_preproc_code}{\code{FilteredData$get_preproc_code()}}
+\item \href{#method-set_preproc_code}{\code{FilteredData$set_preproc_code()}}
 \item \href{#method-get_data_attr}{\code{FilteredData$get_data_attr()}}
 \item \href{#method-set_data_attr}{\code{FilteredData$set_data_attr()}}
-\item \href{#method-get_data_attrs}{\code{FilteredData$get_data_attrs()}}
 \item \href{#method-get_column_labels}{\code{FilteredData$get_column_labels()}}
-\item \href{#method-get_filter_chars}{\code{FilteredData$get_filter_chars()}}
+\item \href{#method-get_filter_info}{\code{FilteredData$get_filter_info()}}
 \item \href{#method-get_filter_type}{\code{FilteredData$get_filter_type()}}
 \item \href{#method-get_filter_state}{\code{FilteredData$get_filter_state()}}
 \item \href{#method-set_filter_state}{\code{FilteredData$set_filter_state()}}
 \item \href{#method-get_default_filter_state}{\code{FilteredData$get_default_filter_state()}}
 \item \href{#method-restore_filter}{\code{FilteredData$restore_filter()}}
-\item \href{#method-remove_filter}{\code{FilteredData$remove_filter()}}
 \item \href{#method-can_be_filtered}{\code{FilteredData$can_be_filtered()}}
 \item \href{#method-get_filter_call}{\code{FilteredData$get_filter_call()}}
-\item \href{#method-hold_filtering}{\code{FilteredData$hold_filtering()}}
-\item \href{#method-continue_filtering}{\code{FilteredData$continue_filtering()}}
-\item \href{#method-list_data_info}{\code{FilteredData$list_data_info()}}
+\item \href{#method-print_filter_info}{\code{FilteredData$print_filter_info()}}
 \item \href{#method-get_data_info}{\code{FilteredData$get_data_info()}}
-\item \href{#method-reset_class_vars}{\code{FilteredData$reset_class_vars()}}
+\item \href{#method-get_bookmark_state}{\code{FilteredData$get_bookmark_state()}}
+\item \href{#method-set_from_bookmark_state}{\code{FilteredData$set_from_bookmark_state()}}
 \item \href{#method-validate_temp}{\code{FilteredData$validate_temp()}}
 \item \href{#method-clone}{\code{FilteredData$clone()}}
 }
@@ -124,17 +114,9 @@ isolate({
 \if{html}{\out{<a id="method-new"></a>}}
 \subsection{Method \code{new()}}{
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{FilteredData$new(datanames = c("ADSL"))}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{FilteredData$new()}\if{html}{\out{</div>}}
 }
 
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{datanames}}{(vector of \code{character}) names of datasets that can
-be added to this class with \code{set_data}, cannot be changed}
-}
-\if{html}{\out{</div>}}
-}
 \subsection{Details}{
 Initialized with the allowed datanames. The actual datasets can afterwards
 be added using the set_data function.
@@ -145,52 +127,16 @@ be added using the set_data function.
 \if{html}{\out{<a id="method-datanames"></a>}}
 \subsection{Method \code{datanames()}}{
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{FilteredData$datanames(include_unset = FALSE)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{FilteredData$datanames()}\if{html}{\out{</div>}}
 }
 
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{include_unset}}{\code{logical} whether to also return datasets that were
-not set yet, i.e. still NULL}
-}
-\if{html}{\out{</div>}}
-}
 \subsection{Details}{
-Get (active) datanames
-
-If \code{include_unset} is set, it will return all possible datanames (as specified
-in \verb{\link{initialize}}). Otherwise, it will just return the datanames of already
-set datasets using the method \verb{\link{set_data}}.
-
-The former can never change and is therefore isolated. The latter case can change
-as new datasets are added and is therefore reactive and needs to be isolated
-if necessary.
+Get datanames, ADSL appears first
 }
 
+\subsection{Returns}{
+\code{character} vector of datanames
 }
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-load_data"></a>}}
-\subsection{Method \code{load_data()}}{
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{FilteredData$load_data(path, dataname = NULL, ...)}\if{html}{\out{</div>}}
-}
-
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{path}}{\code{character} path to load dataset from}
-
-\item{\code{dataname}}{dataname, if \code{NULL}, it is inferred from the basename of the path}
-
-\item{\code{...}}{additional parameters passed to \code{read_} functions}
-}
-\if{html}{\out{</div>}}
-}
-\subsection{Details}{
-Load data from path into dataname
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-get_data"></a>}}
@@ -199,6 +145,15 @@ Load data from path into dataname
 \if{html}{\out{<div class="r">}}\preformatted{FilteredData$get_data(dataname, filtered = FALSE)}\if{html}{\out{</div>}}
 }
 
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{dataname}}{\code{character} name of the dataset}
+
+\item{\code{filtered}}{\code{logical} whether to return filtered or unfiltered dataset}
+}
+\if{html}{\out{</div>}}
+}
 \subsection{Details}{
 Get filtered or unfiltered dataset
 }
@@ -214,71 +169,59 @@ Get filtered or unfiltered dataset
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{dataname}}{\code{character} name  of the data}
+\item{\code{dataname}}{\code{character} name of the dataset, without spaces}
+
+\item{\code{data}}{\code{data.frame} data that corresponds to \code{dataname}}
 }
 \if{html}{\out{</div>}}
 }
 \subsection{Details}{
 Add data
 
-Will also add the \code{md5} sum of the data
+Will also add the \code{md5} sum of the data.
+
+Note: due to the nature of reactiveValues(), once a dataname
+is added, it cannot be removed anymore because some code may depend
+on it. You can try to achieve this by setting the data to NULL
+and the observers must then know that NULL means that the dataset
+was removed.
+
+Any attributes attached to data are kept in the unfiltered data.
 }
 
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-get_attrs"></a>}}
-\subsection{Method \code{get_attrs()}}{
+\if{html}{\out{<a id="method-get_preproc_code"></a>}}
+\subsection{Method \code{get_preproc_code()}}{
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{FilteredData$get_attrs()}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{FilteredData$get_preproc_code()}\if{html}{\out{</div>}}
 }
 
 \subsection{Details}{
-Get attributes of \code{self} (in dedicated field)
-(not equivalent to \code{attributes(self)})
+Get the R preprocessing code string that generates the unfiltered datasets
 }
 
+\subsection{Returns}{
+\code{character} deparsed code
+}
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-set_attrs"></a>}}
-\subsection{Method \code{set_attrs()}}{
+\if{html}{\out{<a id="method-set_preproc_code"></a>}}
+\subsection{Method \code{set_preproc_code()}}{
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{FilteredData$set_attrs(data)}\if{html}{\out{</div>}}
-}
-
-\subsection{Details}{
-Set attributes field of \code{self}
-(not equivalent to \code{attributes(self)})
-}
-
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-get_attr"></a>}}
-\subsection{Method \code{get_attr()}}{
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{FilteredData$get_attr(attr)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{FilteredData$set_preproc_code(preproc_code)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{attr}}{attribute to get in the \code{attrs} field}
+\item{\code{preproc_code}}{\code{character} preprocessing code that can be parsed to generate the
+unfiltered datasets}
 }
 \if{html}{\out{</div>}}
 }
 \subsection{Details}{
-Get attribute in the \code{attrs} field
-}
-
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-get_data_label"></a>}}
-\subsection{Method \code{get_data_label()}}{
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{FilteredData$get_data_label(dataname)}\if{html}{\out{</div>}}
-}
-
-\subsection{Details}{
-Get name of dataset (to display in the UI)
+Set the R preprocessing code to generate the unfiltered datasets
 }
 
 }
@@ -292,12 +235,17 @@ Get name of dataset (to display in the UI)
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
+\item{\code{dataname}}{\code{character} name of the dataset}
+
 \item{\code{attr}}{attribute to get from the data attributes of the dataset}
 }
 \if{html}{\out{</div>}}
 }
 \subsection{Details}{
 Get data attribute for the dataset
+
+sets and gets the data attribute on unfiltered data as it is never modified
+as attributes
 }
 
 }
@@ -311,6 +259,8 @@ Get data attribute for the dataset
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
+\item{\code{dataname}}{\code{character} name of the dataset}
+
 \item{\code{attr}}{attribute to get from the data attributes of the dataset}
 
 \item{\code{value}}{value to set attribute to}
@@ -319,18 +269,6 @@ Get data attribute for the dataset
 }
 \subsection{Details}{
 Set data attribute for the dataset
-}
-
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-get_data_attrs"></a>}}
-\subsection{Method \code{get_data_attrs()}}{
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{FilteredData$get_data_attrs(dataname)}\if{html}{\out{</div>}}
-}
-
-\subsection{Details}{
-Get data attributes for the dataset
 }
 
 }
@@ -344,6 +282,8 @@ Get data attributes for the dataset
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
+\item{\code{dataname}}{\code{character} name of the dataset}
+
 \item{\code{columns}}{(\code{character} vector) columns to get labels for;
 if \code{NULL}, for all columns}
 }
@@ -355,15 +295,20 @@ Get non-NA labels of columns in the data
 
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-get_filter_chars"></a>}}
-\subsection{Method \code{get_filter_chars()}}{
+\if{html}{\out{<a id="method-get_filter_info"></a>}}
+\subsection{Method \code{get_filter_info()}}{
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{FilteredData$get_filter_chars(dataname, varname = NULL, all_vars = FALSE)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{FilteredData$get_filter_info(dataname, varname = NULL, all_vars = FALSE)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
+\item{\code{dataname}}{\code{character} name of the dataset}
+
+\item{\code{varname}}{\code{character} column within the dataset,
+if \code{NULL}, return all (filtered) variables}
+
 \item{\code{all_vars}}{\code{logical} (only applies if \code{varname} is NULL)
 whether to include non-filtered variables}
 }
@@ -384,10 +329,23 @@ This can be used to see how the variable must be filtered
 \if{html}{\out{<div class="r">}}\preformatted{FilteredData$get_filter_type(dataname, varname)}\if{html}{\out{</div>}}
 }
 
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{dataname}}{\code{character} name of the dataset}
+
+\item{\code{varname}}{\code{character} column within the dataset,
+must be provided}
+}
+\if{html}{\out{</div>}}
+}
 \subsection{Details}{
-See \code{get_filter_chars}, only returns filter type (numerical, categorical).
+See \code{get_filter_info}, only returns filter type (numerical, categorical).
 }
 
+\subsection{Returns}{
+\code{character} filter type
+}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-get_filter_state"></a>}}
@@ -396,10 +354,23 @@ See \code{get_filter_chars}, only returns filter type (numerical, categorical).
 \if{html}{\out{<div class="r">}}\preformatted{FilteredData$get_filter_state(dataname, varname = NULL)}\if{html}{\out{</div>}}
 }
 
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{dataname}}{\code{character} name of the dataset}
+
+\item{\code{varname}}{\code{character} column within the dataset;
+if \code{NULL}, return all variables}
+}
+\if{html}{\out{</div>}}
+}
 \subsection{Details}{
 Filter state for a dataset (or only a variable within it).
 }
 
+\subsection{Returns}{
+\verb{filter state or list of these}
+}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-set_filter_state"></a>}}
@@ -411,8 +382,14 @@ Filter state for a dataset (or only a variable within it).
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{state}}{new state to set; when varname is NULL, state must be a named list
-with the new filter state for each variable that should be affected.}
+\item{\code{dataname}}{\code{character} name of the dataset}
+
+\item{\code{varname}}{\code{character} column within the dataset;}
+
+\item{\code{state}}{new state to set; when \code{varname} is \code{NULL}, \code{state} must be
+a named list with the new filter state for each variable (attention:
+states of omitted variables are set to NULL, i.e. no filtering for
+these variables)}
 }
 \if{html}{\out{</div>}}
 }
@@ -421,10 +398,15 @@ Set filter state
 
 The state is only updated and triggers reactive behavior when it actually
 changes.
+When \code{varname} is non-\code{NULL}, only the state for that variable name is changed.
+Otherwise, the state is entirely set to the new state.
+
+To remove all filters for a dataset, you can pass in \verb{varname = NULL, state = list()}.
+To remove a filter variable for a dataset, pass in \verb{varname, state = NULL}.
 }
 
 \subsection{Returns}{
-TRUE if the state was changed
+\code{logical} if the state was changed
 }
 }
 \if{html}{\out{<hr>}}
@@ -434,6 +416,16 @@ TRUE if the state was changed
 \if{html}{\out{<div class="r">}}\preformatted{FilteredData$get_default_filter_state(dataname, varname)}\if{html}{\out{</div>}}
 }
 
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{dataname}}{\code{character} name of the dataset}
+
+\item{\code{varname}}{\code{character} column within the dataset;
+must be provided}
+}
+\if{html}{\out{</div>}}
+}
 \subsection{Details}{
 Get the default filter state (useful for initial UI state)
 This is different to NULL state which means no filter applied.
@@ -449,30 +441,28 @@ for numerics, full range; for factors, all choices etc.
 \if{html}{\out{<div class="r">}}\preformatted{FilteredData$restore_filter(dataname, varname)}\if{html}{\out{</div>}}
 }
 
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{dataname}}{\code{character} name of the dataset}
+
+\item{\code{varname}}{\code{character} column within the dataset;
+must be provided}
+}
+\if{html}{\out{</div>}}
+}
 \subsection{Details}{
 Restores previous filter state (if the filter was removed in between)
-if there is no previous filter, it takes the filter's default state
 
-if a previous filter state exists and the state is `s`` before calling
-this function twice, then the state will be s again
+If there is no previous filter, it takes the filter's default state.
+
+If a previous filter state exists and the state is \code{s} before calling
+this function twice, then the state will be \code{s} again.
 }
 
 \subsection{Returns}{
 TRUE if state was changed
 }
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-remove_filter"></a>}}
-\subsection{Method \code{remove_filter()}}{
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{FilteredData$remove_filter(dataname, varname)}\if{html}{\out{</div>}}
-}
-
-\subsection{Details}{
-Removes the filter for dataname (and varname)
-If varname is not provided, resets it for the whole dataset.
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-can_be_filtered"></a>}}
@@ -481,6 +471,16 @@ If varname is not provided, resets it for the whole dataset.
 \if{html}{\out{<div class="r">}}\preformatted{FilteredData$can_be_filtered(dataname, varname)}\if{html}{\out{</div>}}
 }
 
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{dataname}}{\code{character} name of the dataset}
+
+\item{\code{varname}}{\code{character} column within the dataset;
+must be provided}
+}
+\if{html}{\out{</div>}}
+}
 \subsection{Details}{
 Check whether the variable can be filtered, i.e. not of unknown type
 }
@@ -493,23 +493,27 @@ whether the variable can be filtered (type not unknown)
 \if{html}{\out{<a id="method-get_filter_call"></a>}}
 \subsection{Method \code{get_filter_call()}}{
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{FilteredData$get_filter_call(dataname, merge = TRUE, adsl = TRUE)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{FilteredData$get_filter_call(dataname)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{merge}}{whether to include merge call that removes any keys from filtered data that
-are not also in filtered ADSL afterwards}
-
-\item{\code{adsl}}{whether to include \code{ADSL} filtering call before}
+\item{\code{dataname}}{\code{character} name of the dataset}
 }
 \if{html}{\out{</div>}}
 }
 \subsection{Details}{
 Get the call to filter the dataset according to the filter state
 
-Note: \code{merge()} function in returned call will fail if corresponding dataset is NULL.
+This can be used for the \verb{Show R Code} generation.
+
+When the dataname is ADSL, it is simply the filtered ADSL.
+Otherwise, it is the filtered dataset that only contains subjects which
+are also in the filtered ADSL.
+
+Note: The \code{merge()} function in returned call will fail if the
+corresponding dataset is NULL.
 }
 
 \subsection{Returns}{
@@ -517,36 +521,10 @@ call to filter dataset (taking out patients not in ADSL)
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-hold_filtering"></a>}}
-\subsection{Method \code{hold_filtering()}}{
+\if{html}{\out{<a id="method-print_filter_info"></a>}}
+\subsection{Method \code{print_filter_info()}}{
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{FilteredData$hold_filtering()}\if{html}{\out{</div>}}
-}
-
-\subsection{Details}{
-Pause the filtering until reactivated with \code{continue_filtering} to make several
-changes to the filter state and avoid refilterings in between that are of no interest.
-}
-
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-continue_filtering"></a>}}
-\subsection{Method \code{continue_filtering()}}{
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{FilteredData$continue_filtering()}\if{html}{\out{</div>}}
-}
-
-\subsection{Details}{
-Continue filtering after it was paused with \code{hold_filtering}
-Can result in several datasets being filtered
-}
-
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-list_data_info"></a>}}
-\subsection{Method \code{list_data_info()}}{
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{FilteredData$list_data_info(
+\if{html}{\out{<div class="r">}}\preformatted{FilteredData$print_filter_info(
   dataname,
   filtered_vars_only = FALSE,
   variables = NULL
@@ -556,6 +534,8 @@ Can result in several datasets being filtered
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
+\item{\code{dataname}}{\code{character} name of the dataset}
+
 \item{\code{filtered_vars_only}}{\code{logical} whether to only consider filtered
 vars or unfiltered as well}
 
@@ -564,43 +544,83 @@ vars or unfiltered as well}
 \if{html}{\out{</div>}}
 }
 \subsection{Details}{
-Shows filter characteristics of each variable for a given dataset
-will intersect variables with actual variables in dataname if non-NULL
+Prints filter characteristics of each variable for a given dataset to the
+console.
 }
 
+\subsection{Returns}{
+\code{NULL}, only prints
+}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-get_data_info"></a>}}
 \subsection{Method \code{get_data_info()}}{
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{FilteredData$get_data_info(dataname, filtered = TRUE)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{FilteredData$get_data_info(dataname, filtered)}\if{html}{\out{</div>}}
 }
 
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{dataname}}{\code{character} name of the dataset}
+
+\item{\code{filtered}}{\code{logical} whether to obtain this info for the
+filtered dataset}
+}
+\if{html}{\out{</div>}}
+}
 \subsection{Details}{
-Get info about dataname, e.g. number of patients
+Get info about dataname, e.g. dimensions and
+number of patients (in long datasets different from ADSL,
+a patient can occur in zero or more rows)
 }
 
+\subsection{Returns}{
+a list with names \verb{dim, patients}
+Returns the state to be bookmarked
+
+md5 sums of \code{datasets}, \code{filter_states} and \code{preproc_code} are bookmarked,
+\code{previous_filter_state} is not bookmarked.
+}
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-reset_class_vars"></a>}}
-\subsection{Method \code{reset_class_vars()}}{
+\if{html}{\out{<a id="method-get_bookmark_state"></a>}}
+\subsection{Method \code{get_bookmark_state()}}{
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{FilteredData$reset_class_vars(dataname = NULL)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{FilteredData$get_bookmark_state()}\if{html}{\out{</div>}}
 }
 
-\subsection{Details}{
-Reset class attributes
+\subsection{Returns}{
+named list
+Set this object from a bookmarked state
 
-Set class variables to default values, i.e. empty lists or \code{NULL} per dataname
-The following attributes are not set: \code{attr}, \code{filter_on_hold}
-The contents of the fields with \code{reactiveValues} are set to \code{NULL}, but the
-\code{reactiveValues} itself it not set to a new \code{reactiveValues} to keep reactive
-dependencies.
+Only sets the filter state, does not set the data, the previous filter state
+and the preprocessing code.
+Also checks the preprocessing code is identical if provided in the \code{state}.
 
-If dataname is provided, only do it for this dataset. In  case of ADSL, will
-reset all datasets.
+Since this function is used from the end-user part, its error messages
+are more verbose. We don't call the Shiny modals from here because this
+class may be used outside of a Shiny app.
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-set_from_bookmark_state"></a>}}
+\subsection{Method \code{set_from_bookmark_state()}}{
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{FilteredData$set_from_bookmark_state(state, check_data_md5sums = TRUE)}\if{html}{\out{</div>}}
 }
 
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{state}}{\code{list} containing fields \code{data_md5sums}, \code{filter_states}
+and \code{preproc_code}.}
+
+\item{\code{check_data_md5sums}}{\code{logical} whether to check that md5sums agree
+for the data; may not make sense with randomly generated data per session}
+}
+\if{html}{\out{</div>}}
+}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-validate_temp"></a>}}

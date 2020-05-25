@@ -11,7 +11,7 @@ include_js_files(package = "teal", pattern = "*", except = NULL)
 
 \item{pattern}{(\code{character}) pattern of files to be included}
 
-\item{except}{(\code{character}) vector of files to be excluded}
+\item{except}{(\code{character}) vector of files to be excluded, matched via grep}
 }
 \description{
 Include \code{JS} files from \code{/inst/js/} package directory to application header

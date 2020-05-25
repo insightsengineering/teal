@@ -14,7 +14,8 @@ choices_labeled(choices, labels, subset = NULL)
 \item{labels}{vector containing labels to be applied to \code{choices}}
 
 \item{subset}{a character vector that is a subset of \code{choices}. This is useful if
-only a few variables need to be named. If this argument is used, the returned vector will#' match it's order.}
+only a few variables need to be named. If this argument is used, the returned vector will
+match its order.}
 }
 \value{
 a named character vector

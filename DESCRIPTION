@@ -76,6 +76,7 @@ Collate:
     'module_add_filter_variable.R'
     'module_filter_info.R'
     'module_filter_items.R'
+    'module_filtering_panel.R'
     'module_single_filter_item.R'
     'modules_with_filters_ui.R'
     'optionalInput.R'

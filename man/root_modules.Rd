@@ -10,5 +10,7 @@ root_modules(...)
 \item{...}{\code{\link{module}} and \code{\link{modules}} object}
 }
 \description{
-sets the label to root in \code{\link{modules}}
+This is the root of all modules. It can contain a list of mixed types of
+`teal_module` and `teal_modules`. At depth
+Sets the label to root in \code{\link{modules}}
 }
