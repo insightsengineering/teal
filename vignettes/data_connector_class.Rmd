@@ -36,7 +36,7 @@ is similar to previously introduced in `cdisc_data()`:
 1. `<service>_cdisc_data()` alternative to `cdisc_data()` defining list of datasets and code to check.
 2. `<service>_dataset()` alternative to `cdisc_dataset()` with additional service-specific arguments. 
 
-```{r}
+```{r eval=FALSE}
 library(teal)
 data <- rice_cdisc_data(
   rice_dataset_connector(dataname = "ADSL", path = "/path/to/ADSL"),
@@ -80,10 +80,10 @@ the same as in `cdisc_data()`. `code` should refer to datanames defined by `Data
 You don't have to pass importing step as a `code` - it will be automatically extracted 
 from `DataConnector`.
 
-```{r}
+```{r eval=FALSE}
 data_with_code <- rice_cdisc_data(
-  rice_dataset_connector(dataname = "ADSL", path = "/path/to/ADSL"),
-  rice_dataset_connector(dataname = "ADLB", path = "/path/to/ADLB"),
+  rice_cdisc_dataset_connector(dataname = "ADSL", path = "/path/to/ADSL"),
+  rice_cdisc_dataset_connector(dataname = "ADLB", path = "/path/to/ADLB"),
   code = "ADSL <- ADSL %>% mutate(new_variable = 1)
           ADLB <- ADLB %>% mutate(new_variable = 1)"
 )
@@ -157,6 +157,7 @@ reproduce function call. In example below object of class `CallableFunction` is 
 `data.frame` function with provided arguments. 
 
 ```{r}
+library(teal)
 fun <- callable_function(data.frame)
 fun$set_args(list(x = 1:5, y = letters[1:5]))
 
@@ -179,20 +180,24 @@ understand how to create another wrapper.
 
 ```{r}
 foo_dataset <- function(dataname, fun) {
-  dc <- teal:::DatasetConnector$new()
-
-  dc$set_dataname(dataname)
-  dc$set_pull_fun(fun)
+  dc <- teal:::RelationalDatasetConnector$new(
+    pull_fun = fun,
+    dataname = dataname,
+    keys = get_cdisc_keys(dataname) 
+  )
   return(dc)
 }
 
 foo <- foo_dataset("ADSL", fun) 
 
 # get reproducible code
-foo$get_call()
+get_code(foo)
+
+# fetch data
+load_dataset(foo)
 
 # execute function - get data
-foo$get_dataset()
+get_raw_data(foo)
 ```
 
 #### 3. `DataConnection`
@@ -221,8 +226,8 @@ Once again `DatasetConnector`(s) and `DatasetConnection` are created using `rcd_
 ```{r}
 library(random.cdisc.data)
 connectors <- list(
-  rcd_dataset_connector("ADSL", radsl, cached = TRUE),
-  rcd_dataset_connector("ADLB", radlb, cached = TRUE)
+  rcd_cdisc_dataset_connector("ADSL", radsl, cached = TRUE),
+  rcd_cdisc_dataset_connector("ADLB", radlb, cached = TRUE)
 )
 con <- teal:::rcd_connection()
 
@@ -247,7 +252,7 @@ confirmed inputs by listening ui element linked by `submit_id = "submit"`. After
 inputs are saved in class object.
 One can use helper method `x$launch` which opens shiny application where one can choose `seed` for 
 random data. 
-```{r}
+```{r eval=FALSE}
 x <- teal:::DataConnector$new()
 
 x$set_connection(con)
@@ -264,18 +269,13 @@ x$set_server_helper(
 x$launch()
 ```
 
-```{r}
+```{r eval=FALSE}
 cdisc_data <- x$get_cdisc_data()
 cat(attr(cdisc_data, "code"))
 ```
 
 To confirm that shiny input has been saved, one can check reproducible code to see that 
 `seed` matches app user choice.
-
-```{r}
-
-```
-
 
 
 #### UML diagram

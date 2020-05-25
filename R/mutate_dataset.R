@@ -98,5 +98,5 @@ mutate_dataset.RelationalDatasetConnector <- function(x, code = character(0), sc
     stop("You did not use the dataname inside the code. It does not mutate the 'x'")
   }
 
-  x$mutate_dataset(code = code, script = script)
+  x$mutate_dataset(code = code)
 }

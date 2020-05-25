@@ -40,8 +40,8 @@ DataConnector <- R6::R6Class( #nolint
     #' @param refresh (\code{logical}) should the data be downloaded?
     #' Defaults to FALSE, which returns last downloaded data.
     #' @param try (\code{logical}) whether perform function evaluation inside \code{try} clause
-    #' @param con_args_fixed (\code{NULL} or named \code{list}) fixed argument to connection function
-    #' @param con_args_dynamic (\code{NULL} or named \code{list}) dynamic argument to connection function
+    #' @param con_args_fixed (\code{NULL} or named \code{list}) fixed arguments to connection function
+    #' @param con_args_dynamic (\code{NULL} or named \code{list}) dynamic arguments to connection function
     #'   (not shown in generated code)
     #' @param con_args_replacement (\code{NULL} or named \code{list}) replacement of dynamic argument of connection
     #'   function
@@ -88,9 +88,9 @@ DataConnector <- R6::R6Class( #nolint
     #' @param refresh (\code{logical}) should the data be downloaded?
     #' Defaults to FALSE, which returns last downloaded data.
     #' @param try (\code{logical}) whether perform function evaluation inside \code{try} clause
-    #' @param con_args_fixed (\code{NULL} or named \code{list}) fixed argument to connection function
-    #' @param con_args_dynamic (\code{NULL} or named \code{list}) dynamic argument to connection function
-    #'   (not shown in generated code)
+    #' @param con_args_fixed (\code{NULL} or named \code{list}) fixed arguments to the connection function
+    #' @param con_args_dynamic (\code{NULL} or named \code{list}) dynamic arguments to the connection
+    #'   function (not shown in generated code), e.g. passwords
     #' @param con_args_replacement (\code{NULL} or named \code{list}) replacement of dynamic argument of connection
     #'   function
     #' @param fun_args_fixed (\code{NULL} or named \code{list}) fixed argument to pull function
@@ -278,7 +278,7 @@ DataConnector <- R6::R6Class( #nolint
     #'
     #' @return nothing
     set_connectors = function(connectors) {
-      stopifnot(is_class_list("DatasetConnector")(connectors))
+      stopifnot(is_class_list("RelationalDatasetConnector")(connectors))
       private$connectors <- connectors
       return(invisible(NULL))
     }
@@ -317,10 +317,10 @@ DataConnector <- R6::R6Class( #nolint
                             fun_args_dynamic = NULL,
                             fun_args_replacement = NULL) {
 
-      `if`(shiny::isRunning(), shinyjs::disable(submit_id))
-
       progress <- NULL
       if (shiny::isRunning()) {
+        shinyjs::disable(submit_id)
+
         progress <- shiny::Progress$new(session)
         progress$set(0.1, message = "Setting up connection ...")
       }
@@ -346,7 +346,7 @@ DataConnector <- R6::R6Class( #nolint
       fun_args_fixed <- optional_eval(fun_args_fixed, parent.frame())
       fun_args_dynamic <- optional_eval(fun_args_dynamic)
 
-      datanames <- vapply(private$connectors, function(x) x$get_dataname(), character(1))
+      datanames <- vapply(private$connectors, get_dataname, character(1))
 
       if (!is.null(private$connection)) {
         private$connection$set_open_args(args = con_args_fixed)
@@ -359,11 +359,19 @@ DataConnector <- R6::R6Class( #nolint
       env_data <- new.env()
       for (i in seq_along(private$connectors)) {
         if_not_null(progress,
-                    progress$set(0.2 + 0.4 * (i - 1) / length(private$connectors), message = "Loading data ..."))
-        private$connectors[[i]]$set_pull_args(args = fun_args_fixed)
+                    progress$set(0.2 + 0.4 * (i - 1) / length(private$connectors),
+                                 message = "Loading data ..."))
+        set_args(x = private$connectors[[i]],
+                 args = fun_args_fixed)
 
         data <- private$stop_on_error(
-          private$connectors[[i]]$get_dataset(args = fun_args_dynamic, try = try),
+          get_raw_data(
+            load_dataset(
+              private$connectors[[i]],
+              args = fun_args_dynamic,
+              try = try
+            )
+          ),
           submit_id, progress
         )
 
@@ -399,7 +407,7 @@ DataConnector <- R6::R6Class( #nolint
         function(i) {
           private$stop_on_error(
             try(cdisc_dataset(
-                  dataname = private$connectors[[i]]$get_dataname(),
+                  dataname = get_dataname(private$connectors[[i]]),
                   data = private$dataset[[i]],
                   keys = private$connectors[[i]]$get_keys()
             )),
@@ -411,7 +419,7 @@ DataConnector <- R6::R6Class( #nolint
 
       full_code <- c(
         if_not_null(private$connection, private$connection$get_open_call(deparse = TRUE, args = con_args_replacement)),
-        vapply(private$connectors, function(x) x$get_call(deparse = TRUE, args = fun_args_replacement), character(1)),
+        vapply(private$connectors, get_code, deparse = TRUE, args = fun_args_replacement, FUN.VALUE = character(1)),
         if_not_null(private$connection, private$connection$get_close_call(deparse = TRUE, silent = TRUE)),
         "\n",
         code
@@ -474,7 +482,7 @@ DataConnector <- R6::R6Class( #nolint
 #' }
 rcd_cdisc_data <- function(..., code = character(0), check = TRUE) {
   connectors <- list(...)
-  stopifnot(is_class_list("DatasetConnector")(connectors))
+  stopifnot(is_class_list("RelationalDatasetConnector")(connectors))
 
   con <- rcd_connection() # nolint
 
@@ -541,7 +549,7 @@ rcd_cdisc_data <- function(..., code = character(0), check = TRUE) {
 #' }
 rice_cdisc_data <- function(..., code = character(0), additional_ui = NULL) {
   connectors <- list(...)
-  stopifnot(is_class_list("DatasetConnector")(connectors))
+  stopifnot(is_class_list("RelationalDatasetConnector")(connectors))
 
   con <- rice_connection() # nolint
 
@@ -595,7 +603,7 @@ rice_cdisc_data <- function(..., code = character(0), additional_ui = NULL) {
 #'
 #' @examples
 #' \dontrun{
-#' x <- rds_dataset_connector("ADSL", "/path/to/file.rds")
+#' x <- rds_cdisc_dataset_connector("ADSL", "/path/to/file.rds")
 #' app <- init(
 #'   data = rds_cdisc_data(x, check = TRUE),
 #'   modules = root_modules(
@@ -617,7 +625,7 @@ rice_cdisc_data <- function(..., code = character(0), additional_ui = NULL) {
 #' }
 rds_cdisc_data <- function(..., code = character(0), check = TRUE) {
   connectors <- list(...)
-  stopifnot(is_class_list("DatasetConnector")(connectors))
+  stopifnot(is_class_list("RelationalDatasetConnector")(connectors))
 
 
   x <- DataConnector$new()
@@ -631,7 +639,15 @@ rds_cdisc_data <- function(..., code = character(0), check = TRUE) {
             h2("Loaded datasets:"),
             do.call(
               tagList,
-              lapply(x$get_connectors(), function(con) tags$p(paste(con$get_dataname(), ":", con$get_path())))
+              lapply(x$get_connectors(), function(con) {
+                tags$p(
+                  paste(
+                    con$get_dataname(),
+                    ":",
+                    con$pull_fun$args$file
+                  )
+                )
+              })
             ),
             actionButton(ns("start"), "Start")
         )
@@ -655,7 +671,7 @@ rds_cdisc_data <- function(..., code = character(0), check = TRUE) {
 ui_connectors <- function(type, connectors) {
 
   stopifnot(is_character_single(type))
-  stopifnot(is_class_list("DatasetConnector")(connectors))
+  stopifnot(is_class_list("RelationalDatasetConnector")(connectors))
 
   out <- div(
     h1("TEAL - Access data on entimICE using", toupper(type)),
@@ -668,7 +684,7 @@ ui_connectors <- function(type, connectors) {
         lapply(seq_along(connectors), function(i) {
           tags$li(paste0(connectors[[i]]$get_dataname(),
                          ": ",
-                         connectors[[i]]$get_path()))
+                         connectors[[i]]$args$node))
         })
       )
     )

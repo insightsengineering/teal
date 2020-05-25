@@ -1,17 +1,23 @@
 #' Convert a \code{Raw<...>} to a \code{Relational<...>}
 #'
 #' @param x (\code{RawDataset} or \code{RawDatasetConnector}) object
+#'
 #' @param dataname (\code{character})\cr
 #'   A given name for the dataset it may not contain spaces
+#'
 #' @param keys (\code{keys})\cr
 #'   object of S3 class keys containing foreign, primary keys and parent information
+#'
 #' @param code (\code{character})\cr
 #'   A character string defining the code needed to produce the data set in \code{x}
+#'
 #' @param script (\code{character})\cr
 #'   file that contains R Code that can be read using \link{read_script}.
 #'   Preferred before \code{code} argument
+#'
 #' @param label (\code{character})\cr
 #'   Label to describe the dataset
+#'
 #' @return \code{RelationalDataset} or \code{RelationalDatasetConnector} object
 #'
 #' @rdname as_relational
@@ -98,8 +104,8 @@ as_relational.RawDatasetConnector <- function(x,  #nolint
                                               script = character(0),
                                               label = character(0)) {
   code <- code_from_script(code, script) # nolint
-
-  ds <- tryCatch(x$dataset, error = function(e) NULL)
+  ds <- tryCatch(expr = get_dataset(x),
+                 error = function(e) NULL)
   if (!is.null(ds)) {
     warning(
       "Pulled 'dataset' from 'x' will not be passed to RelationalDatasetConnector.
@@ -108,7 +114,7 @@ as_relational.RawDatasetConnector <- function(x,  #nolint
   }
   return(
     relational_dataset_connector(
-      pull_fun = x$pull_fun,
+      pull_fun = x$get_pull_fun(),
       dataname = dataname,
       keys = keys,
       code = code,

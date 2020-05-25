@@ -1,7 +1,7 @@
 #' A \code{DataConnection} class of objects
 #'
-#' Objects of this class store connection to data source.
-#' It can be DB or server (\code{RICE} or \code{SAICE}) connection.
+#' Objects of this class store the connection to a data source.
+#' It can be a database or server (\code{RICE} or \code{SAICE}) connection.
 #'
 #' @name DatasetConnector
 #'

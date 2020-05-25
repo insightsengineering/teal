@@ -44,7 +44,7 @@ Imports:
   shinyWidgets (>= 0.5.0),
   utils.nest (>= 0.2.2),
   yaml
-RoxygenNote: 7.1.0
+RoxygenNote: 7.0.2
 Suggests:
     knitr,
     nomnoml,
@@ -60,6 +60,7 @@ Collate:
     'DataConnection.R'
     'DataConnector.R'
     'DatasetConnector.R'
+    'DatasetConnector_constructors.R'
     'FilteredData.R'
     'NamedDataset.R'
     'RawDataset.R'

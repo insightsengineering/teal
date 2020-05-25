@@ -55,7 +55,7 @@ test_that("DataConnector with DataConnection", {
   open_fun$set_args(list(x = 1:5))
 
   close_fun <- callable_function(data.frame)
-  close_fun$set_args(list(x = 1:2))
+  set_args(x = close_fun, list(x = 1:2))
 
   con <- DataConnection$new()
   con$set_open_fun(open_fun)
@@ -67,8 +67,8 @@ test_that("DataConnector with DataConnection", {
   code <- "ADSL$x <- 1"
   check <- TRUE
   connectors <- list(
-    rcd_dataset_connector("ADSL", radsl, cached = TRUE),
-    rcd_dataset_connector("ADLB", radlb, cached = TRUE)
+    rcd_cdisc_dataset_connector("ADSL", radsl, cached = TRUE),
+    rcd_cdisc_dataset_connector("ADLB", radlb, cached = TRUE)
   )
 
   x <- DataConnector$new()
@@ -114,12 +114,12 @@ test_that("DataConnector with DataConnection", {
   expect_identical(cdisc_code[1:7], expected_code)
   expect_equal(
     x$get_cdisc_data()$ADSL$data,
-    dplyr::mutate(connectors[[1]]$get_dataset(), x = 1)
+    dplyr::mutate(connectors[[1]]$get_raw_data(), x = 1)
   )
 
   expect_identical(
     x$get_cdisc_data()$ADLB$data,
-    connectors[[2]]$get_dataset()
+    connectors[[2]]$get_raw_data()
   )
 })
 
@@ -130,8 +130,8 @@ test_that("data connector with rcd connection", {
   code <- "ADSL$x <- 1"
   check <- TRUE
   connectors <- list(
-    rcd_dataset_connector("ADSL", radsl, cached = TRUE),
-    rcd_dataset_connector("ADLB", radlb, cached = TRUE)
+    rcd_cdisc_dataset_connector("ADSL", radsl, cached = TRUE),
+    rcd_cdisc_dataset_connector("ADLB", radlb, cached = TRUE)
   )
 
   x <- DataConnector$new()
@@ -176,20 +176,20 @@ test_that("data connector with rcd connection", {
   expect_identical(cdisc_code[1:6], expected_code)
   expect_equal(
     x$get_cdisc_data()$ADSL$data,
-    dplyr::mutate(connectors[[1]]$get_dataset(), x = 1)
+    dplyr::mutate(connectors[[1]]$get_raw_data(), x = 1)
   )
 
   expect_identical(
     x$get_cdisc_data()$ADLB$data,
-    connectors[[2]]$get_dataset()
+    connectors[[2]]$get_raw_data()
   )
 
 })
 
 
 test_that("rcd data", {
-  c1 <- rcd_dataset_connector("ADSL", radsl, cached = TRUE)
-  c2 <- rcd_dataset_connector("ADLB", radlb, cached = TRUE)
+  c1 <- rcd_cdisc_dataset_connector("ADSL", radsl, cached = TRUE)
+  c2 <- rcd_cdisc_dataset_connector("ADLB", radlb, cached = TRUE)
   x <- rcd_cdisc_data(c1, c2, code = "ADSL <- mutate(x = 1)", check = TRUE)
 
   expect_true(is(x, c("DataConnector", "R6")))
@@ -198,8 +198,8 @@ test_that("rcd data", {
 })
 
 test_that("rice data", {
-  c1 <- rice_dataset_connector(dataname = "ADSL", path = "/path/to/ADSL")
-  c2 <- rice_dataset_connector(dataname = "ADLB", path = "/path/to/ADLB")
+  c1 <- rice_cdisc_dataset_connector(dataname = "ADSL", path = "/path/to/ADSL")
+  c2 <- rice_cdisc_dataset_connector(dataname = "ADLB", path = "/path/to/ADLB")
   x <- rice_cdisc_data(c1, c2, code = "ADSL <- mutate(x = 1)")
 
   expect_true(is(x, c("DataConnector", "R6")))

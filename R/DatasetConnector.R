@@ -1,5 +1,7 @@
 #' A \code{DatasetConnector} class of objects
 #'
+#' Deprecation note: will be removed by start of June 2020
+#'
 #' Objects of this class store connection function to single dataset. Note that for some specific connection type
 #' (e.g. \code{RAICE} or \code{SAICE}), pre-requisite object of class \code{DataConnection} is required.
 #' Data can be pulled via \code{pull} method and returned via \code{get_dataset} method.
@@ -45,7 +47,7 @@ DatasetConnector <- R6::R6Class( #nolint
     #' @return if \code{try = TRUE} then \code{try-error} on error, object returned from connection function
     get_dataset = function(args = NULL, silent = FALSE, try = FALSE) {
       if (!private$is_pulled) {
-        self$pull(args = args, silent = silent, try = try)
+        self$pull_dataset(args = args, silent = silent, try = try)
       }
 
       return(private$dataset)

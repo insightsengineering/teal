@@ -94,7 +94,7 @@ RawDataset <- R6::R6Class( # nolint
       return_cols <- private$.colnames[which(vapply(lapply(private$.raw_data, class),
                                                     `%in%`,
                                                     logical(1), table = class_type)
-                                             )]
+      )]
 
       if (!include_factors) {
         factor_columns <- private$.colnames[which(lapply(private$.raw_data, class) == "factor")]

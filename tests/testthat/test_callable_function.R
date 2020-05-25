@@ -9,6 +9,13 @@ test_that("Test callable", {
     "mean(x = c(1, 2, NA), na.rm = TRUE)"
   )
 
+  expect_identical(
+    x_fun$args,
+    list(
+      x = c(1.0, 2.0, NA_real_),
+      na.rm = TRUE)
+  )
+
   # get_call doesn't change args persistently
   expect_false(
     identical(
@@ -18,6 +25,13 @@ test_that("Test callable", {
   )
 
   # args are still as in the beginning
+  expect_identical(
+    x_fun$args,
+    list(
+      x = c(1.0, 2.0, NA_real_),
+      na.rm = TRUE)
+  )
+
   expect_identical(
     x_fun$run(),
     mean(c(1.0, 2.0, NA_real_), na.rm = TRUE)
@@ -133,7 +147,7 @@ test_that("find callable function name", {
 
   fun2 <- function(callable) {
     x_fun <- callable_function(callable)
-    x_fun$.__enclos_env__$private$fun_name
+    x_fun$.__enclos_env__$private$.fun_name
   }
 
   expect_identical(

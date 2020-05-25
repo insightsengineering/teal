@@ -1,10 +1,11 @@
 #' A \code{RelationalDatasetConnector} class of objects
 #'
-#' Objects of this class store connection function to single dataset. Note that for some specific
-#' connection type (e.g. \code{RAICE} or \code{SAICE}), pre-requisite object of class
-#' \code{DataConnection} is required. Data can be pulled via \code{pull} method and accessed directly
-#' by \code{dataset} active binding. Pulled data is of class \link{RelationalDataset} and it can be
-#' accessed
+#' Objects of this class store the connection function to fetch a single dataset.
+#' Note that for some specific connection types (e.g. \code{RICE} or \code{SAICE}),
+#' an object of class \code{DataConnection} must be provided.
+#' Data can be pulled via the \code{pull} method and accessed directly
+#' through the \code{dataset} active binding.
+#' Pulled data inherits from the class \link{RelationalDataset}.
 #'
 #' @name RelationalDatasetConnector
 RelationalDatasetConnector <- R6::R6Class( #nolint
@@ -15,15 +16,15 @@ RelationalDatasetConnector <- R6::R6Class( #nolint
 
     #' @description
     #' Create a new \code{RelationalDatasetConnector} object. Set the pulling function
-    #' \link{CallableFunction} to load \code{data.frame}. \code{dataname} will be used as name
+    #' load the data. \code{dataname} will be used as name
     #' of object to be assigned.
     #'
     #' @param pull_fun (\code{CallableFunction})\cr
-    #'  function to load the data.
+    #'  function to load the data, must return a \code{data.frame}.
     #' @param dataname (\code{character})\cr
-    #'  A given name for the dataset it may not contain spaces
+    #'  A given name for the dataset, it may not contain spaces
     #' @param keys (\code{keys})\cr
-    #'  object of S3 class keys containing foreign, primary keys and parent information
+    #'  object of S3 class \code{keys} containing foreign, primary keys and parent information
     #' @param code (\code{character})\cr
     #'  A character string defining the code needed to produce the data set in \code{x}
     #' @param label (\code{character})\cr
@@ -32,13 +33,12 @@ RelationalDatasetConnector <- R6::R6Class( #nolint
     #' @return new \code{RawDatasetConnector} object
     initialize = function(pull_fun, dataname, keys, code = character(0), label = character(0)) {
       super$initialize(pull_fun = pull_fun)
-      # instead of following do private$.dataset %>% as_relational
       private$set_dataname(dataname)
       private$set_keys(keys)
-      private$set_code(code)
+      private$set_mutate_code(code)
       self$set_label(label)
 
-      return(self)
+      return(invisible(self))
     },
 
     #' @description
@@ -46,7 +46,7 @@ RelationalDatasetConnector <- R6::R6Class( #nolint
     #'
     #' @return dataname of the dataset
     get_dataname = function() {
-      return(private$.dataname)
+      return(private$dataname)
     },
 
     #' @description
@@ -54,7 +54,7 @@ RelationalDatasetConnector <- R6::R6Class( #nolint
     #'
     #' @return \code{keys} object
     get_keys = function() {
-      return(private$.keys)
+      return(private$keys)
     },
 
     #' @description
@@ -62,19 +62,23 @@ RelationalDatasetConnector <- R6::R6Class( #nolint
     #'
     #' @return \code{character}
     get_label = function() {
-      return(private$.label)
+      return(private$label)
     },
 
     #' @description
     #' Get code to get data
     #'
-    #' @param deparse (\code{logical}) whether return deparsed form of a call
+    #' @param deparse (\code{logical})\cr
+    #'  whether to return the deparsed form of a call
+    #'
+    #' @param args (\code{NULL} or named \code{list})\cr
+    #'  dynamic arguments to function which loads data
     #'
     #' @return optionally deparsed \code{call} object
-    get_code = function(deparse = TRUE) {
+    get_code = function(deparse = TRUE, args = NULL) {
       stopifnot(is_logical_single(deparse))
 
-      pull_code <- private$get_pull_code(deparse)
+      pull_code <- private$get_pull_code(deparse, args)
       mutate_code <- private$get_mutate_code(deparse)
 
       code <- if (deparse) {
@@ -100,16 +104,13 @@ RelationalDatasetConnector <- R6::R6Class( #nolint
     #' @description
     #' Mutate dataset by code
     #'
+    #' Either code or script must be provided, but not both.
+    #'
     #' @param code (\code{character}) Code to mutate the dataset. Must contain the
     #'  \code{dataset$dataname}
-    #' @param script (\code{character}) file that contains R Code that can
-    #'   be read using \link{read_script}. Preferred before \code{code} argument
-    mutate_dataset = function(code = character(0), script = character(0)) {
-      code <- code_from_script(code, script)
-      if (!is.null(private$.dataset)) {
-        private$.dataset <- mutate_dataset(private$.dataset, code = code)
-      }
-      private$set_code(code)
+    mutate_dataset = function(code) {
+      private$dataset <- mutate_dataset(private$dataset, code = code)
+      private$set_mutate_code(code)
 
       return(invisible(self))
     },
@@ -118,7 +119,7 @@ RelationalDatasetConnector <- R6::R6Class( #nolint
     #' @description
     #' Pull the data
     #'
-    #' Read or create data using \code{pull_fun} specified in the constructor.
+    #' Read or create the data using \code{pull_fun} specified in the constructor.
     #'
     #' @param args (\code{NULL} or named \code{list})\cr
     #' additional dynamic arguments for pull function. \code{args} can be omitted if \code{pull_fun}
@@ -129,10 +130,10 @@ RelationalDatasetConnector <- R6::R6Class( #nolint
     #' @param try (\code{logical}) whether perform function evaluation inside \code{try} clause
     #'
     #' @return nothing, in order to get the data please use \code{get_data} method
-    pull = function(args = NULL, try = FALSE) {
-      data <- private$.pull_fun$run(args = args, try = try)
+    pull_dataset = function(args = NULL, try = FALSE) {
+      data <- private$pull_fun$run(args = args, try = try)
 
-      private$.dataset <- RelationalDataset$new(
+      private$dataset <- RelationalDataset$new(
         x = data,
         dataname = self$get_dataname(),
         code = private$get_pull_code(deparse = TRUE),
@@ -141,13 +142,13 @@ RelationalDatasetConnector <- R6::R6Class( #nolint
       )
 
       if (length(private$get_mutate_code()) > 0) {
-        private$.dataset <- mutate_dataset(
-          private$.dataset,
-          code = private$get_mutate_code()
+        private$dataset <- mutate_dataset(
+          private$dataset,
+          code = private$get_mutate_code(deparse = TRUE)
         )
       }
 
-      return(invisible(NULL))
+      return(invisible(self))
     },
     #' @description
     #' Set label of the \code{dataset} object
@@ -156,226 +157,79 @@ RelationalDatasetConnector <- R6::R6Class( #nolint
     #'  Label to describe the dataset
     set_label = function(label) {
       stopifnot(utils.nest::is_character_vector(label, 0, 1))
-      private$.label <- label
-      return(invisible(TRUE))
+      private$label <- label
+      return(invisible(NULL))
     }
   ),
 
   # RelationalDatasetConnector private ----
   private = list(
-    .dataname = character(0),
-    .keys = NULL,
-    .label = character(0),
-    .mutate_code = NULL,
+    dataname = character(0),
+    keys = NULL,
+    label = character(0),
+    mutate_code = NULL,
 
-    get_pull_code = function(deparse = TRUE) {
+    # assigns the pull code call to the dataname
+    get_pull_code = function(deparse = TRUE, args = NULL) {
       code <- if (deparse) {
         sprintf("%s <- %s",
-                private$.dataname,
-                super$get_pull_code(deparse))
+                private$dataname,
+                super$get_pull_code(deparse, args))
       } else {
         substitute(
           a <- b,
-          list(a = as.name(private$.dataname),
-               b = super$get_pull_code(deparse))
+          list(a = as.name(private$dataname),
+               b = super$get_pull_code(deparse, args))
         )
       }
 
       return(code)
     },
 
+    # formats the code if necessary
     get_mutate_code = function(deparse = TRUE) {
 
       code <- if (deparse) {
-        if (length(private$.mutate_code) > 0) {
+        if (length(private$mutate_code) > 0) {
           paste0(
             vapply(
-              private$.mutate_code,
+              private$mutate_code,
               FUN = deparse,
-              FUN.VALUE = character(1),
-              width.cutoff = 80L
+              FUN.VALUE = character(1)
             ),
             collapse = "\n"
           )
         } else {
           character(0)
         }
-
       } else {
-        private$.mutate_code
+        private$mutate_code
       }
 
       return(code)
     },
 
-    set_code = function(code) {
+    set_mutate_code = function(code) {
       stopifnot(utils.nest::is_character_vector(code, 0, 1))
       if (length(code) > 0) {
-        private$.mutate_code <- as.list(as.call(parse(text = code)))
+        private$mutate_code <- as.list(as.call(parse(text = code)))
+      } else {
+        private$mutate_code <- NULL
       }
 
-      return(invisible(TRUE))
+      return(invisible(NULL))
     },
 
     set_dataname = function(dataname) {
       stopifnot(utils.nest::is_character_single(dataname))
-      private$.dataname <- dataname
-      return(invisible(TRUE))
+      private$dataname <- dataname
+      return(invisible(NULL))
     },
 
     set_keys = function(keys) {
       stopifnot(is(keys, "keys"))
-      private$.keys <- keys
-      return(invisible(TRUE))
+      private$keys <- keys
+      return(invisible(NULL))
     }
   )
 )
-
-# DatasetConnector wrappers ----
-
-#' Create a new \code{RelationalDatasetConnector} object. Set the pulling function
-#' \link{CallableFunction} to load \code{data.frame}. \code{dataname} will be used as name
-#' of object to be assigned.
-#'
-#' @param pull_fun (\code{CallableFunction})\cr
-#'  function to load the data.
-#' @param dataname (\code{character})\cr
-#'  A given name for the dataset it may not contain spaces
-#' @param keys (\code{keys})\cr
-#'  object of S3 class keys containing foreign, primary keys and parent information
-#' @param code (\code{character})\cr
-#'  A character string defining the code needed to produce the data set in \code{x}
-#' @param label (\code{character})\cr
-#'  Label to describe the dataset
-#'
-#' @return new \code{RawDatasetConnector} object
-#' @export
-relational_dataset_connector <- function(pull_fun,
-                                         dataname,
-                                         keys,
-                                         code = character(0),
-                                         label = character(0)) {
-  RelationalDatasetConnector$new(pull_fun = pull_fun,
-                                 dataname = dataname,
-                                 keys = keys,
-                                 code = code,
-                                 label = label)
-}
-
-
-#' Set up connection to \code{random.cdisc.data}
-#'
-#' @export
-#'
-#' @param fun (\code{function}) connection function
-#' @param ... additional arguments passed to fun
-#' @inheritParams cdisc_dataset
-#'
-#' @return (\code{DatasetConnector}) type of object
-#'
-#' @examples
-#' library(random.cdisc.data)
-#' x <- rcd_dataset_connector("ADSL", radsl, cached = TRUE)
-#' x$get_call()
-#' x$get_dataset()
-rcd_dataset_connector <- function(dataname, fun, ...) {
-  stopifnot(is_character_single(dataname))
-  stopifnot(is.function(fun))
-
-  dot_args <- list(...)
-  stopifnot(is_fully_named_list(dot_args))
-
-  x_fun <- callable_function(fun) # nolint
-  x_fun$set_args(dot_args)
-
-  x <- DatasetConnector$new() # nolint
-  x$set_dataname(dataname)
-  x$set_pull_fun(x_fun)
-  x$set_keys(get_cdisc_keys(dataname))
-
-  return(x)
-}
-
-#' Set up connection to local \code{rds} file
-#'
-#' @export
-#'
-#' @param file (\code{character}) path to \code{.rds} that contains
-#'   a single data.frame stored by \code{saveRDS}
-#' @inheritParams cdisc_dataset
-#'
-#' @return (\code{DatasetConnector}) type of object
-#'
-#' @importFrom tools file_ext
-#' @examples
-#' \dontrun{
-#' x <- rds_dataset_connector("ADSL", "/path/to/file.rds")
-#' x$get_call()
-#' x$get_dataset()
-#' }
-rds_dataset_connector <- function(dataname, file, keys = get_cdisc_keys(dataname)) {
-  stopifnot(is_character_single(dataname))
-  stopifnot(is_character_single(file))
-  stopifnot(file.exists(file))
-  stopifnot(tolower(tools::file_ext(file)) == "rds")
-
-  x_fun <- callable_function(readRDS) # nolint
-  x <- DatasetConnector$new() # nolint
-
-  x$set_dataname(dataname)
-  x$set_keys(keys)
-  x$set_pull_fun(x_fun)
-  x$set_pull_args(list(file = file))
-  x$set_path(file)
-  return(x)
-}
-
-#' Set up connection to local \code{RICE} dataset
-#'
-#' @export
-#'
-#' @param path (\code{character}) file path
-#' @inheritParams cdisc_dataset
-#'
-#' @return (\code{DatasetConnector}) type of object
-#'
-#' @examples
-#' x <- rice_dataset_connector("ADSL", "/path/to/ADSL")
-#' x$get_call()
-#' \dontrun{
-#' x$get_dataset()
-#' }
-#'
-#' # specifying custom keys
-#' x <- rice_dataset_connector("ADSL",
-#'                             "/path/to/ADSL",
-#'                             keys = keys(primary = c("STUDYID", "USUBJID"),
-#'                                         foreign = NULL,
-#'                                         parent = NULL))
-#' x$get_keys()
-rice_dataset_connector <- function(dataname,
-                                   path,
-                                   keys = get_cdisc_keys(dataname)) {
-  stopifnot(is_character_single(dataname))
-  stopifnot(is_character_single(path))
-  stopifnot(is(keys, "keys"))
-  stopifnot(all_true(keys, function(x) is.null(x) || is_character_vector(x)))
-  stopifnot(all(c("primary", "foreign", "parent") %in% names(keys)))
-
-  check_pckg_quietly("rice",
-                     paste0("Connection to entimICE via rice was requested, but rice package is not available.",
-                            "Please install it from https://github.roche.com/Rpackages/rice."))
-
-  x <- DatasetConnector$new() # nolint
-
-  x$set_dataname(dataname)
-  x$set_path(path)
-  x$set_keys(keys)
-
-  pull_fun <- callable_function(rice::rice_read) # nolint
-  x$set_pull_fun(pull_fun)
-
-  x$set_pull_args(list(node = path, prolong = TRUE, quiet = TRUE))
-
-  return(x)
-}
