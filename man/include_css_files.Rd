@@ -11,6 +11,9 @@ include_css_files(package = "teal", pattern = "*")
 
 \item{pattern}{(\code{character}) pattern of files to be included}
 }
+\value{
+HTML code that includes css files
+}
 \description{
 Include \code{CSS} files from \code{/inst/css/} package directory to application header
 }

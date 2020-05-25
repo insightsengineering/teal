@@ -30,7 +30,7 @@ refiltering, the functions \code{hold_filtering} and \code{continue_filtering} c
 By the design of the class (and \code{reactiveValues}), any dataname set through \code{set_data}
 cannot be removed because other code may already depend on it.
 
-General arguments are:
+Common arguments are:
 \enumerate{
 \item \code{filtered}: filtered dataset or not
 \item \code{dataname}: one of the datasets
@@ -106,7 +106,6 @@ datasets$get_filter_state("ADSL")
 \item \href{#method-get_data_info}{\code{FilteredData$get_data_info()}}
 \item \href{#method-get_bookmark_state}{\code{FilteredData$get_bookmark_state()}}
 \item \href{#method-set_from_bookmark_state}{\code{FilteredData$set_from_bookmark_state()}}
-\item \href{#method-validate_temp}{\code{FilteredData$validate_temp()}}
 \item \href{#method-clone}{\code{FilteredData$clone()}}
 }
 }
@@ -387,9 +386,8 @@ Filter state for a dataset (or only a variable within it).
 \item{\code{varname}}{\code{character} column within the dataset;}
 
 \item{\code{state}}{new state to set; when \code{varname} is \code{NULL}, \code{state} must be
-a named list with the new filter state for each variable (attention:
-states of omitted variables are set to NULL, i.e. no filtering for
-these variables)}
+a named list with the new filter state for each variable (variables
+that are not included are unaffected)}
 }
 \if{html}{\out{</div>}}
 }
@@ -621,18 +619,6 @@ for the data; may not make sense with randomly generated data per session}
 }
 \if{html}{\out{</div>}}
 }
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-validate_temp"></a>}}
-\subsection{Method \code{validate_temp()}}{
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{FilteredData$validate_temp()}\if{html}{\out{</div>}}
-}
-
-\subsection{Details}{
-Temporary access to private validation function
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-clone"></a>}}

@@ -4,91 +4,93 @@ context("FilteredData")
 
 options(teal_logging = FALSE)
 
-x <- teal:::FilteredData$new()
+ds <- teal:::FilteredData$new()
 
 test_that("Initialization is correct", {
-  isolate(expect_setequal(x$datanames(), character(0)))
+  isolate(expect_setequal(ds$datanames(), character(0)))
 })
 
 ADSL <- radsl(cached = TRUE) #nolintr
+attr(ADSL, "keys") <- get_cdisc_keys("ADSL")
 ADAE <- radae(cached = TRUE) #nolintr
+attr(ADAE, "keys") <- get_cdisc_keys("ADAE")
 
 isolate({
-  x$set_data("ADSL", ADSL)
-  x$set_data("ADAE", ADAE)
+  ds$set_data("ADSL", ADSL)
+  ds$set_data("ADAE", ADAE)
 
   test_that("load and set_datasets", {
-      expect_equal(x$get_data("ADSL", filtered = FALSE), ADSL)
-      expect_equal(x$get_data("ADAE", filtered = FALSE), ADAE)
+      expect_equal(ds$get_data("ADSL", filtered = FALSE), ADSL)
+      expect_equal(ds$get_data("ADAE", filtered = FALSE), ADAE)
 
-      expect_setequal(x$datanames(), c("ADSL", "ADAE"))
+      expect_setequal(ds$datanames(), c("ADSL", "ADAE"))
   })
 
   test_that("data info shows info", {
       expect_output(expect_true(
-        is.null(x$print_data_info("ADSL", variables = c("AGE", "SEX")))
+        is.null(ds$print_filter_info("ADSL", variables = c("AGE", "SEX")))
       ), "has filter type range")
   })
 
   test_that("set filter state works", {
     # since no filter was set before, will just take the default filter
-    x$restore_filter("ADSL", "AGE")
+    ds$restore_filter("ADSL", "AGE")
 
-    expect_equal(names(x$get_filter_state("ADSL")), "AGE")
-    expect_identical(x$get_filter_state("ADSL")$AGE, list(selection = range(ADSL$AGE), keep_na = FALSE))
+    expect_equal(names(ds$get_filter_state("ADSL")), "AGE")
+    expect_identical(ds$get_filter_state("ADSL")$AGE, list(range = range(ADSL$AGE), keep_na = FALSE))
 
     expect_error(
       # real range is (20, 69)
-      x$set_filter_state("ADSL", "AGE", list(selection = c(-10, 110), keep_na = TRUE)),
+      ds$set_filter_state("ADSL", "AGE", list(range = c(-10, 110), keep_na = TRUE)),
       "full range"
     )
 
-    expect_true(x$set_filter_state("ADSL", "AGE", list(selection = c(31, 50), keep_na = TRUE)))
-    expect_true(x$set_filter_state("ADSL", "AGE", list(selection = c(30, 50), keep_na = TRUE)))
-    expect_identical(x$get_filter_state("ADSL")$AGE, list(selection = c(30, 50), keep_na = TRUE))
-    expect_false(x$set_filter_state("ADSL", "AGE", list(selection = c(30, 50), keep_na = TRUE)))
-    expect_identical(x$get_filter_state("ADSL")$AGE, list(selection = c(30, 50), keep_na = TRUE))
+    expect_true(ds$set_filter_state("ADSL", "AGE", list(range = c(31, 50), keep_na = TRUE)))
+    expect_true(ds$set_filter_state("ADSL", "AGE", list(range = c(30, 50), keep_na = TRUE)))
+    expect_identical(ds$get_filter_state("ADSL")$AGE, list(range = c(30, 50), keep_na = TRUE))
+    expect_false(ds$set_filter_state("ADSL", "AGE", list(range = c(30, 50), keep_na = TRUE)))
+    expect_identical(ds$get_filter_state("ADSL")$AGE, list(range = c(30, 50), keep_na = TRUE))
 
-    expect_true(x$restore_filter("ADSL", "AGE"))
-    expect_identical(x$get_filter_state("ADSL")$AGE, list(selection = c(31, 50), keep_na = TRUE))
-    expect_true(x$restore_filter("ADSL", "AGE"))
-    expect_identical(x$get_filter_state("ADSL")$AGE, list(selection = c(30, 50), keep_na = TRUE))
+    expect_true(ds$restore_filter("ADSL", "AGE"))
+    expect_identical(ds$get_filter_state("ADSL")$AGE, list(range = c(31, 50), keep_na = TRUE))
+    expect_true(ds$restore_filter("ADSL", "AGE"))
+    expect_identical(ds$get_filter_state("ADSL")$AGE, list(range = c(30, 50), keep_na = TRUE))
 
-    expect_true(x$restore_filter("ADSL", "SEX"))
-    expect_setequal(names(x$get_filter_state("ADSL")), c("AGE", "SEX"))
-    # also counts are added after numberrs
+    expect_true(ds$restore_filter("ADSL", "SEX"))
+    expect_setequal(names(ds$get_filter_state("ADSL")), c("AGE", "SEX"))
+    # also counts are added after numbers
     expect_identical(
-      x$get_filter_state("ADSL")$SEX$selection,
-      setNames(
+      ds$get_filter_state("ADSL")$SEX$choices,
+      as.list(setNames(
         as.character(levels(ADSL$SEX)),
         paste0(names(table(ADSL$SEX)), " (", as.vector(table(ADSL$SEX)), ")")
-      )
+      ))
     )
 
-    x$set_filter_state(
+    ds$set_filter_state(
       "ADSL", varname = NULL,
-      state = list(AGE = list(selection = range(ADSL$AGE) + c(+1, -1), keep_na = TRUE))
+      state = list(AGE = list(range = range(ADSL$AGE) + c(+1, -1), keep_na = TRUE))
     )
     expect_equal(
-      x$get_filter_state("ADSL")$AGE,
-      list(selection = range(ADSL$AGE) + c(+1, -1), keep_na = TRUE)
+      ds$get_filter_state("ADSL")$AGE,
+      list(range = range(ADSL$AGE) + c(+1, -1), keep_na = TRUE)
     )
   })
 
   test_that("check filtering", {
-    x$set_filter_state("ADSL", varname = NULL, state = list(
-      AGE = list(selection = c(38, 40), keep_na = TRUE),
-      SEX = list(selection = "F", keep_na = TRUE)
+    ds$set_filter_state("ADSL", varname = NULL, state = list(
+      AGE = list(range = c(38, 40), keep_na = TRUE),
+      SEX = list(choices = "F", keep_na = TRUE)
     ))
     expect_equal(
-      x$get_data("ADSL", filtered = TRUE),
-      subset(ADSL, SEX == "F" & AGE >= 38 & AGE <= 40)
+      ds$get_data("ADSL", filtered = TRUE),
+      dplyr::filter(ADSL, SEX == "F" & AGE >= 38 & AGE <= 40)
     )
 
-    x$set_filter_state("ADSL", "AGE", state = NULL)
-    x$set_filter_state("ADSL", "SEX", state = NULL)
+    ds$set_filter_state("ADSL", "AGE", state = NULL)
+    ds$set_filter_state("ADSL", "SEX", state = NULL)
     expect_equal(
-      x$get_data("ADSL", filtered = TRUE),
+      ds$get_data("ADSL", filtered = TRUE),
       ADSL
     )
   })

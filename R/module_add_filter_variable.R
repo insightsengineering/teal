@@ -46,7 +46,7 @@ srv_add_filter_variable <- function(input, output, session, datasets, dataname, 
       stopifnot(datasets$can_be_filtered(dataname, var_to_add))
       .log("add filter variable", var_to_add)
       datasets$restore_filter(dataname, varname = var_to_add)
-      datasets$.__enclos_env__$private$validate() # todo1: remove or keep in checking mode?
+      datasets$.__enclos_env__$private$validate() # sodo3: remove or keep in checking mode?
     }
   })
 

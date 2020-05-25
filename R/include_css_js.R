@@ -3,7 +3,7 @@
 #' @param package (\code{character}) package name
 #' @param pattern (\code{character}) pattern of files to be included
 #'
-#' @rturn HTML code that includes css files
+#' @return HTML code that includes css files
 #'
 #' @export
 include_css_files <- function(package = "teal", pattern = "*") {

@@ -332,11 +332,13 @@ FilteredData <- R6::R6Class( # nolint
     #' @param dataname `character` name of the dataset
     #' @param varname `character` column within the dataset;
     #' @param state new state to set; when `varname` is `NULL`, `state` must be
-    #'   a named list with the new filter state for each variable
+    #'   a named list with the new filter state for each variable (variables
+    #'   that are not included are unaffected)
     #'
     #' @return `logical` if the state was changed
     set_filter_state = function(dataname, varname, state) {
-      # todo: make varname required
+      # sodo3: make varname required and only allow setting one variable at a time as the same can currently
+      # be achieved with `lapply`
       private$check_data_varname(dataname, varname)
 
       # checking and adapting arguments

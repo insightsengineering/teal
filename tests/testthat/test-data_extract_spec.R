@@ -1,3 +1,5 @@
+# sodo3: either this file should not go here or it is a clear indication that data_extract_spec belongs to this package
+# rather than teal.devel
 test_that("data_extract_spec argument checking", {
   expect_error(
     data_extract_spec("toyDataset", select = NULL),
@@ -108,6 +110,7 @@ test_that("delayed data_extract_spec works", {
                      BMRKR1 = rnorm(10),
                      BMRKR2 = sample(c("L", "M", "H"), 10, replace = T),
                      stringsAsFactors = F)
+  attr(ADSL, "keys") <- get_cdisc_keys("ADSL")
 
   filter_normal <- filter_spec(
     vars = variable_choices(ADSL, "SEX"),

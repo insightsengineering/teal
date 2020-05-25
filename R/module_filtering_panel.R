@@ -4,6 +4,41 @@
 #' @param id module id
 #' @param datanames datanames to create empty UIs for (which will be populated
 #'   in the server)
+#'
+#' @examples
+#' # Example with ADSL and ADAE dataset
+#' library(random.cdisc.data)
+#'
+#' ADSL <- radsl(cached = TRUE)
+#' attr(ADSL, "keys") <- get_cdisc_keys("ADSL")
+#' ADAE <- radlb(cached = TRUE)
+#' attr(ADAE, "keys") <- get_cdisc_keys("ADAE")
+#'
+#' datasets <- teal:::FilteredData$new()
+#' isolate({
+#'   datasets$set_data("ADSL", ADSL)
+#'   datasets$set_filter_state("ADSL", varname = NULL, list(
+#'     AGE = list(range = c(33, 44), keep_na = FALSE),
+#'     SEX = list(choices = "M", keep_na = TRUE)
+#'   ))
+#'   datasets$set_data("ADAE", ADAE)
+#'   datasets$set_filter_state("ADAE", varname = NULL, list(
+#'     CHG = list(range = c(20, 35), keep_na = FALSE)
+#'   ))
+#' })
+#'
+#' shinyApp(ui = function() {
+#'   tagList(
+#'     include_teal_css_js(),
+#'     filter_panel_ui("filter_panel", c("ADSL", "ADAE"))
+#'   )
+#' }, server = function(input, output, session) {
+#'   shinyjs::showLog()
+#'   callModule(
+#'     filter_panel_srv, "filter_panel", datasets,
+#'     active_datanames = reactive(c("ADSL", "ADAE"))
+#'   )
+#' }) %>% invisible() # invisible so it does not run
 filter_panel_ui <- function(id, datanames) {
   ns <- NS(id)
   div(

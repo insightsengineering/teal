@@ -119,9 +119,9 @@ test_that("Multiple vars", {
 test_that("delayed filter_spec works", {
   set.seed(1)
   ADSL <- data.frame(USUBJID = letters[1:10],  # nolint
-                     SEX = sample(c("F", "M", "U"), 10, replace = T),
-                     stringsAsFactors = F)
-
+                     SEX = sample(c("F", "M", "U"), 10, replace = TRUE),
+                     stringsAsFactors = FALSE)
+  attr(ADSL, "keys") <- get_cdisc_keys("ADSL")
 
   expected_spec <- filter_spec(
     vars = variable_choices(ADSL, "SEX"),
