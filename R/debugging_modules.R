@@ -149,8 +149,6 @@ debug_browser_module <- function(label = "Debug with browser()") {
 #'
 #' The module presents a group of checkboxes to select the datasets for which to reset
 #' all filters.
-#' todo: ideally, this button should also be on the right filtering panel with
-#' similar trash icon as for single variable right now
 reset_filters_module <- function(label = "Reset filters", active_datanames = "all") {
   stopifnot(is_character_single(label))
   stopifnot(identical(active_datanames, "all") || is_character_vector(active_datanames))

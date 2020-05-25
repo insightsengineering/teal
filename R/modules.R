@@ -87,12 +87,12 @@ module <- function(label, server, ui, filters, server_args = NULL, ui_args = NUL
   stopifnot(is.function(server))
   stopifnot(is.function(ui))
   stopifnot(is_character_vector(filters) || is.null(filters))
-  stopifnot(is.null(server_args) || is.list(server_args))
+  stopifnot(is.null(server_args) || is.list(server_args)) # sodo3: fully named list?
   stopifnot(is.null(ui_args) || is.list(ui_args))
 
   if (any(vapply(server_args, function(x) identical(x, "teal_datasets"), logical(1)))) {
     warning("teal_datasets is now deprecated, the datasets object gets automatically passed to the server function")
-    # todo2: why would you pass the string teal_datasets, it should rather check the name of the argument?
+    # sodo3: why would you pass the string teal_datasets, it should rather check the name of the argument?
     server_args <- Filter(function(x) !identical(x, "teal_datasets"), server_args)
   }
 
@@ -100,10 +100,10 @@ module <- function(label, server, ui, filters, server_args = NULL, ui_args = NUL
     stop("teal modules need the arguments input, output, session, and datasets in that order in their server function")
   }
 
-  if (!identical(names(formals(ui)[1]), "id")) {
+  if (!identical(names(formals(ui))[[1]], "id")) {
     stop("teal modules need 'id' argument as a first argument in their ui function")
   }
-  if (!identical(names(formals(ui)[2]), "datasets") && !identical(names(formals(ui)[2]), "...")) {
+  if (!identical(names(formals(ui))[[2]], "datasets") && !identical(names(formals(ui))[[2]], "...")) {
     stop("teal modules need 'datasets' or '...' argument as a second argument in their ui function")
   }
 
@@ -229,49 +229,6 @@ tab_nested_ui <- function(modules, datasets, idprefix, is_root = TRUE) {
     },
     stop("no default implementation for tab_nested_ui for class ", class(modules))
   ))
-}
-
-# todo: remove
-tab_nested_ui2 <- function(modules, datasets, idprefix, is_root = TRUE) {
-  id <- label_to_id(modules$label, idprefix)
-
-  switch(
-    class(modules)[[1]],
-    teal_modules = {
-      .log("** UI id for modules is", id)
-
-      tsp <- do.call(
-        tabsetPanel,
-        c(
-          list(id = id, type = if (is_root) "pills" else "tabs"),
-          as.vector(lapply(modules$children, tab_nested_ui, datasets = datasets, idprefix = id, is_root = FALSE))
-        )
-      )
-
-      # top element is a single element, so should not be included into a tabsetPanel,
-      # so don't wrap it into tabPanel
-      if (is_root) tsp else tabPanel(modules$label, tsp)
-    },
-    teal_module = {
-      # returns a tabPanel to be included into a tabsetPanel
-      .log("UI id for module is", id)
-
-      args <- isolate(resolve_teal_args(modules$ui_args, datasets))
-
-      # we pass the unfiltered datasets as they may be needed to create the UI
-      tabPanel(
-        modules$label,
-        tagList(
-          div(style = "margin-top: 25px;"),
-          do.call(
-            modules$ui,
-            c(list(id = id, datasets = datasets), args)
-          )
-        )
-      )
-    },
-    stop("no default implementation for tab_nested_ui for class ", class(modules))
-  )
 }
 
 # recursively call callModule for (nested) teal modules

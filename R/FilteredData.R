@@ -120,7 +120,7 @@ FilteredData <- R6::R6Class( # nolint
     #'
     #' @param dataname `character` name of the dataset
     #' @param filtered `logical` whether to return filtered or unfiltered dataset
-    # todo2: remove default argument for filtered
+    # sodo3: remove default argument for filtered, already fixed in teal, but maybe not downstream
     get_data = function(dataname, filtered = FALSE) {
       private$check_data_varname(dataname)
       stopifnot(is_logical_single(filtered))
@@ -195,12 +195,12 @@ FilteredData <- R6::R6Class( # nolint
     #'   unfiltered datasets
     set_preproc_code = function(preproc_code) {
       stopifnot(is_character_single(preproc_code))
-      # todo2: check here that the preproc_code faithfully reproduces the datasets
+      # sodo3: check here that the preproc_code faithfully reproduces the datasets
       private$preproc_code <- preproc_code
       return(invisible(NULL))
     },
 
-    # todo2: remove these two functions as they are trivial?
+    # sodo3: keep `get_data_attr` and `set_data_attr`
     #' @details
     #' Get data attribute for the dataset
     #'
@@ -276,7 +276,7 @@ FilteredData <- R6::R6Class( # nolint
       if (is.null(varname)) {
         # filter out variables that are not filtered
         if (all_vars) {
-          # todo: only ever return filterable variables
+          # sodo3: only ever return filterable variables
           private$filter_infos[[dataname]]()
         } else {
           private$filter_infos[[dataname]]()[names(private$filter_state[[dataname]])]
@@ -317,7 +317,6 @@ FilteredData <- R6::R6Class( # nolint
       }
     },
 
-    # todo2: is the interface of this function good?
     #' @details
     #' Set filter state
     #'
@@ -333,12 +332,11 @@ FilteredData <- R6::R6Class( # nolint
     #' @param dataname `character` name of the dataset
     #' @param varname `character` column within the dataset;
     #' @param state new state to set; when `varname` is `NULL`, `state` must be
-    #'   a named list with the new filter state for each variable (attention:
-    #'   states of omitted variables are set to NULL, i.e. no filtering for
-    #'   these variables)
+    #'   a named list with the new filter state for each variable
     #'
     #' @return `logical` if the state was changed
     set_filter_state = function(dataname, varname, state) {
+      # todo: make varname required
       private$check_data_varname(dataname, varname)
 
       # checking and adapting arguments
@@ -450,7 +448,7 @@ FilteredData <- R6::R6Class( # nolint
       stopifnot(is_character_single(dataname))
       stopifnot(is_character_single(varname))
 
-      # todo2: do we want to implement some additional logic that a categorical variable cannot be filtered
+      # sodo3: do we want to implement some additional logic that a categorical variable cannot be filtered
       # if it has more than e.g. 1000 levels as the UI will otherwise get stuck
       return(self$get_filter_type(dataname, varname) != "unknown")
     },
@@ -490,7 +488,7 @@ FilteredData <- R6::R6Class( # nolint
         # ADSL has a special status in the sense that filtering in ADSL impacts filtering of the other datasets
         # example: ADLB_FILTERED_ALONE is ADLB with filter applied
         # ADLB_FILTERED is ADLB_FILTERED_ALONE with only the (USUBJID, STUDYID) combinations appearing in ADSL_FILTERED
-        # todo2: instead of a merge call, it would be simpler to just check %in% USUBJID assuming a single studyid
+        # sodo3: instead of a merge call, it would be simpler to just check %in% USUBJID assuming a single studyid
         filtered_joined_adsl <- paste0(dataname, "_FILTERED") # filtered_alone with
 
         keys <- self$get_data_attr("ADSL", "keys")$primary
@@ -609,10 +607,9 @@ FilteredData <- R6::R6Class( # nolint
     get_bookmark_state = function() {
       # We cannot simply create a new `FilteredData` with the datasets set to NULL
       # (to protect the data from unauthorized access). Therefore, we return a list
-      # which is independent from this class. It is also better to store a list
+      # which is independent of this class. It is also better to store a list
       # rather than a class because this allows bookmarking of type `url` and
       # not just `server`
-      # we could isolate, but this does not matter? todo: really even if filter modified afterwards?
       return(list(
         # must be a list and not atomic vector, otherwise jsonlite::toJSON gives a warning
         data_md5sums = setNames(
@@ -650,7 +647,7 @@ FilteredData <- R6::R6Class( # nolint
         if (!setequal(x, y)) {
           stop(paste0(paste(
             pre_msg,
-            toString(x), # todo2: use dput?
+            toString(x),
             "is not equal to",
             toString(y),
             sep = "\n"
@@ -686,15 +683,6 @@ FilteredData <- R6::R6Class( # nolint
       # other reactive endpoint don't need to be set because they are computing through reactivity
 
       return(invisible(NULL))
-    },
-
-    # functions related to class attributes ----
-
-    # todo1: remove eventually
-    #' @details
-    #' Temporary access to private validation function
-    validate_temp = function() {
-      return(private$validate())
     }
   ), # end of public functions
 
@@ -954,7 +942,6 @@ FilteredData <- R6::R6Class( # nolint
         combined_filters <- Reduce(function(x, y) call("&", x, y), data_filter_call_items)
 
         # subset is meant for interactive use, so we use filter
-        # todo: this only works with dplyr::filter, but call does not accept it
         return(call_with_colon("dplyr::filter", as.name(dataname), combined_filters))
       }
     },
@@ -970,16 +957,19 @@ FilteredData <- R6::R6Class( # nolint
     reactive_filtered_dataset = function(dataname) {
       stopifnot(is_character_single(dataname))
       reactive({
-        if (!dataname %in% isolate(self$datanames())) { # todo2: isolate to avoid triggering due to set_data
+        # use isolate to avoid triggering due to adding a dataset via `set_data`
+        if (!dataname %in% isolate(self$datanames())) {
           stop("Cannot filter data ", dataname, " as it needs to be set first")
         }
 
         .log("################################################# Refiltering dataset ", dataname)
 
+        # sodo3: why not use a chunks object for this from teal.devel (and put chunks code into teal?)
         # filter data directly in an empty environment to make sure no global variables or
         # other variables from this class are used
-        # todo2: why not use a chunks object for this from teal.devel (and put chunks code into teal?)
-        # packages bind right before globalenv(), so we don't accidentally pick up other packages
+        # this assumes that no other packages are attached in the call, as this modifies the
+        # parent of the `globalenv`
+        # we prefer to take a parent of the `globalenv` to avoid picking up user-defined global variables
         env <- new.env(parent.env(globalenv()))
 
         # put dependencies of filter call into environment

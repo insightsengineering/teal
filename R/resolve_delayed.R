@@ -106,7 +106,6 @@ resolve_delayed.default <- function(x, datasets) {
              paste(class(x), collapse = ", ")))
 }
 
-# todo: rename this function
 #' @importFrom methods is
 resolve_teal_module <- function(x, datasets) {
   stopifnot(is(x, "teal_module"))

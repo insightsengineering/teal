@@ -1,8 +1,8 @@
 context("cdisc_data")
 
-filename <- system.file("preprocessing_empty_string.txt", package = "teal")
+filename <- system.file("preprocessing_empty_string.txt", package = "teal", mustWork = TRUE)
 code_empty <- readChar(filename, file.info(filename)$size) # code for file
-filename_check <- system.file("check_false_string.txt", package = "teal")
+filename_check <- system.file("check_false_string.txt", package = "teal", mustWork = TRUE)
 code_check <- readChar(filename_check, file.info(filename_check)$size)
 
 library(random.cdisc.data)
@@ -87,8 +87,8 @@ test_that("List values", {
 
   result <- cdisc_data(cdisc_dataset("ADSL", ADSL))
 
-  adsl_yaml <- yaml::yaml.load_file(system.file("metadata/ADSL.yml", package = "random.cdisc.data"))
-  adtte_yaml <- yaml::yaml.load_file(system.file("metadata/ADTTE.yml", package = "random.cdisc.data"))
+  adsl_yaml <- yaml::yaml.load_file(system.file("metadata/ADSL.yml", package = "random.cdisc.data", mustWork = TRUE))
+  adtte_yaml <- yaml::yaml.load_file(system.file("metadata/ADTTE.yml", package = "random.cdisc.data", mustWork = TRUE))
 
   result_to_compare <- list(structure(list(
     dataname = "ADSL",

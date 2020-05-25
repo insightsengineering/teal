@@ -106,10 +106,7 @@ init <- function(data,
     inherits(footer, "shiny.tag"),
     is(data, "cdisc_data") || is(data, "DataConnector")
   )
-  stopifnot(all(names(initial_filter_states) %in% names(data))) # todo: test for DataConnector
-
-  # these are used to setup UI like data_extract to get info about data to display, the server will use one dataset per session
-  ui_datasets <- FilteredData$new()
+  stopifnot(all(names(initial_filter_states) %in% names(data)))
 
   # todo1: document why startapp_id is needed
   startapp_id <- paste0("startapp_screen_", paste0(sample(1:10, 10, replace = TRUE), collapse = ""))
@@ -177,8 +174,8 @@ init <- function(data,
 
   # server function
   server <- function(input, output, session) {
-    # todo1: what is this javascript code doing
-    run_js_files(files = "init.js", package = "teal")
+    # Javascript code to make the clipboard accessible
+    run_js_files(files = "init.js")
 
     # the call to modules_with_filters_ui creates inputs that watch the tabs prefixed by teal_modules
     # we observe them and react whenever a tab is clicked by:
@@ -232,7 +229,8 @@ init <- function(data,
       .log("fetching the data through delayed loading - showing start screen")
       raw_data <- callModule(data$get_server(), "startapp_module")
       stop_if_not(list(is.reactive(raw_data), "first app module has to return reactive object"))
-      #raw_data <- reactive(cdisc_data_global) # todo: remove; for faster testing
+      # trick for faster testing to avoid waiting on module specific to delayed data
+      # raw_data <- reactive(cdisc_data_global) # nolintr
     }
 
     # Shiny bookmarking ----
@@ -242,7 +240,6 @@ init <- function(data,
     # To test bookmarking, include the `bookmark_module`, click on the bookmark
     # button and then get the link. Keep the Shiny app running and open the
     # obtained link in another browser tab.
-    # todo2: lifecycle policy for bookmarked apps when bookmarking on the server: when is the state deleted?
     onBookmark(function(state) {
       # this function is isolated  by Shiny
       # We store the entire R6 class with reactive values in it, but set the data to NULL.

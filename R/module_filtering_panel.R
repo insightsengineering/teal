@@ -1,4 +1,9 @@
 #' Module for the right filtering panel in the teal app
+#' with a filter info panel and a filter variable panel
+#'
+#' @param id module id
+#' @param datanames datanames to create empty UIs for (which will be populated
+#'   in the server)
 filter_panel_ui <- function(id, datanames) {
   ns <- NS(id)
   div(
@@ -13,7 +18,7 @@ filter_panel_ui <- function(id, datanames) {
       ),
       tagList(
         lapply(datanames, function(dataname) {
-          ui_filter_items(ns(paste0("teal_filters_", dataname)))
+          ui_filter_items(ns(paste0("teal_filters_", dataname)), dataname)
         })
       )
     ),
@@ -25,7 +30,8 @@ filter_panel_ui <- function(id, datanames) {
         lapply(datanames, function(dataname) {
           ui_add_filter_variable(ns(paste0("teal_add_", dataname, "_filter")), dataname)
         })
-      )
+      ),
+      p("Note that variables that cannot be filtered are excluded.")
     )
   )
 }

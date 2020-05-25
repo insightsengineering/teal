@@ -123,7 +123,7 @@ variable_choices <- function(data, subset = NULL) {
     stopifnot(all(subset %in% names(data) | subset == ""))
   }
 
-  # todo2: refactor, there can only be at most one empty option
+  # sodo3: refactor, there can only be at most one empty option
   has_empty_option <- isTRUE(any(subset == ""))
   empty_option_idx <- integer(0)
   if (has_empty_option) {
@@ -180,7 +180,7 @@ variable_choices <- function(data, subset = NULL) {
 #'
 #' # delayed version
 #' value_choices("ADRS", c("PARAMCD", "ARMCD"), c("PARAM", "ARM"))
-# todo2: rename var_choices -> choice_cols, var_label -> label_cols, subset -> choice_subset
+# sodo3: rename var_choices -> choice_cols, var_label -> label_cols, subset -> choice_subset
 value_choices <- function(data, var_choices, var_label, subset = NULL, sep = " - ") {
   stopifnot(is.data.frame(data) || is_character_single(data))
   stopifnot(

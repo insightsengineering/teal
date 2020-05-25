@@ -23,7 +23,7 @@ ADLB <- radlb(cached = TRUE)
 
 # debugging example ----
 
-# todo: error: check for code argument below is not performed
+# sodo3: error: check for code argument below is not performed
 #FilteredData$debug("set_filter_chars");
 devtools::load_all("/home/bceuser/mordigm/scratch/teal"); app <- init(
   data = cdisc_data(
@@ -31,7 +31,6 @@ devtools::load_all("/home/bceuser/mordigm/scratch/teal"); app <- init(
     cdisc_dataset(dataname = "ADAE", data = ADAE),
     cdisc_dataset(dataname = "ADLB", data = ADLB),
     code = "
-    # todo: there is an error, data is not checked to agree with current data
 ADSL <- radsl(cached = TRUE)
 ADAE <- radae(cached = TRUE)
 ADLB <- radlb(cached = TRUE)
@@ -64,7 +63,6 @@ devtools::load_all("/home/bceuser/mordigm/scratch/teal"); app <- init(
     cdisc_dataset(dataname = "ADAE", data = ADAE),
     cdisc_dataset(dataname = "ADLB", data = ADLB),
     code = "
-    # todo: there is an error, data is not checked to agree with current data
 ADSL <- radsl(cached = TRUE)
 ADAE <- radae(cached = TRUE)
 ADLB <- radlb(cached = TRUE)
@@ -97,13 +95,11 @@ cdisc_data_global <- cdisc_data(
   cdisc_dataset(dataname = "ADAE", data = ADAE),
   cdisc_dataset(dataname = "ADLB", data = ADLB),
   code = "
-    # todo: there is an error, data is not checked to agree with current data
 ADSL <- radsl(cached = TRUE)
 ADAE <- radae(cached = TRUE)
 ADLB <- radlb(cached = TRUE)
 ")
-# ignores seed, todo
-radsl_fast <- function(...) radsl(cached = TRUE) # todo: error: function not found, i.e. evaluated in wrong environment?
+radsl_fast <- function(...) radsl(cached = TRUE) # sodo3: error: function not found, i.e. evaluated in wrong environment?
 devtools::load_all("../teal"); app <- init(
   data = rcd_cdisc_data(
     rcd_dataset("ADSL", radsl, cached = FALSE),

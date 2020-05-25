@@ -28,10 +28,12 @@ get_keep_na_label <- function(na_count) paste0("Keep NA (", na_count, ")")
 #' shinyApp(ui = function() {
 #'   tagList(
 #'     include_teal_css_js(),
-#'     ui_single_filter_item(
-#'       "var_AGE", datasets$get_filter_info("ADSL", "AGE"),
-#'       datasets$get_filter_state("ADSL", "AGE"), prelabel = "ADSL.AGE"
-#'     )
+#'     isolate(ui_single_filter_item(
+#'       "var_AGE",
+#'       datasets$get_filter_info("ADSL", "AGE"),
+#'       datasets$get_filter_state("ADSL", "AGE"),
+#'       prelabel = "ADSL.AGE"
+#'     ))
 #'   )
 #' }, server = function(input, output, session) {
 #'   callModule(srv_single_filter_item, "var_AGE", datasets, "ADSL", "AGE")
@@ -56,7 +58,7 @@ get_keep_na_label <- function(na_count) paste0("Keep NA (", na_count, ")")
 #' # note that the remove button does not do anything because the UI is not
 #' # dynamically updating with the filter state for this single module
 #' # This logic is implemented in `module_filter_items`.
-#' # todo: there is a bug with ITTFL where there is a single choice and it
+#' # sodo3: there is a bug with ITTFL where there is a single choice and it
 #' # is converted to a character vector instead of staying a named list
 #' filter_var <- "AGE"
 #' shinyApp(ui = function() {
@@ -145,7 +147,6 @@ ui_single_filter_item <- function(id, filter_info, filter_state, prelabel) {
     )
   } else if (filter_info$type == "logical") {
     div(
-      # todo: put style code into css file
       style = "position: relative;",
       # same overlay as for choices with no more than 5 elements
       div(
@@ -169,7 +170,7 @@ ui_single_filter_item <- function(id, filter_info, filter_state, prelabel) {
   # label before select input and button to remove filter
   return(fluidPage(
     fluidRow(
-      #column(1, shiny::icon("grip-vertical", class = "sortableJS-handle")), #todo
+      column(1, shiny::icon("grip-vertical", class = "sortableJS-handle")), #todo
       column(if (na_is_displayed) 4 else 8, tags$span(
         prelabel,
         if (!is.null(filter_info$label) || (filter_info$label != "")) {
@@ -191,8 +192,6 @@ ui_single_filter_item <- function(id, filter_info, filter_state, prelabel) {
   ))
 }
 
-
-# todo: give other arguments, only those really needed, possibly transformed, e.g. only for varname
 srv_single_filter_item <- function(input, output, session, datasets, dataname, varname) {
   stopifnot(
     is(datasets, "FilteredData"),
@@ -215,9 +214,10 @@ srv_single_filter_item <- function(input, output, session, datasets, dataname, v
           # sort factor so that it reflects checkbox order
           aes_string(x = "x", y = "y") +
           geom_col(width = 0.95,
-                            fill = grDevices::rgb(66 / 255, 139 / 255, 202 / 255),
-                            color = NA,
-                            alpha = 0.2) +
+                   fill = grDevices::rgb(66 / 255, 139 / 255, 202 / 255),
+                   color = NA,
+                   alpha = 0.2
+          ) +
           coord_flip() +
           theme_void() +
           scale_x_discrete(expand = c(0, 0)) +

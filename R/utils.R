@@ -186,7 +186,7 @@ set_labels_df <- function(df, labels) {
   return(df)
 }
 
-# todo2: put into utils.nest
+# sodo3: put into utils.nest
 #' Create a call using a namespaced function
 #'
 #' The arguments in ... need to be quoted because they will be evaluated otherwise
@@ -214,7 +214,7 @@ call_with_colon <- function(name, ...) {
 # Get a random joke to display while the app is starting up
 get_random_joke <- function() {
   # downloaded from https://raw.githubusercontent.com/Daronspence/One-Liners/master/jokes.txt
-  file_contents <- readLines(system.file("jokes.txt", package = "teal"))
+  file_contents <- readLines(system.file("jokes.txt", package = "teal", mustWork = TRUE))
 
   # jokes are separated by empty lines (possibly several) each, a joke can be over several lines
   file_contents <- c("", file_contents, "") # add sentinel values

@@ -28,7 +28,6 @@ ui_add_filter_variable <- function(id, dataname) {
         noneSelectedText = "Select a variable"
       )
     ),
-    uiOutput(ns("warning"))
   )
 }
 
@@ -37,27 +36,17 @@ srv_add_filter_variable <- function(input, output, session, datasets, dataname, 
   active_filter_vars <- reactive({
     names(datasets$get_filter_state(dataname))
   })
-  # warning message to display if a filter variable cannot be displayed
-  warning_message <- reactiveVal(NULL)
 
   # observe input$new_filter_var: update the filter state of the datasets
   # this will update active_filter_vars, which then triggers an update of the choices
   observeEvent(input$new_filter_var, {
     # if NULL, it was just reset (to select a new variable to filter); at startup, this is also called with NULL
-    var <- input$new_filter_var
-    if (!is.null(var)) {
-      if (datasets$can_be_filtered(dataname, var)) {
-        warning_message(NULL) # remove previously displayed warnings
-        .log("add filter variable", var)
-        datasets$restore_filter(dataname, varname = var)
-        datasets$validate_temp() # todo1: remove
-      } else {
-        warning_message(paste(
-          "variable",
-          paste(dataname, var, sep = "."),
-          "can't be currently used as a filter variable."
-        ))
-      }
+    var_to_add <- input$new_filter_var
+    if (!is.null(var_to_add)) {
+      stopifnot(datasets$can_be_filtered(dataname, var_to_add))
+      .log("add filter variable", var_to_add)
+      datasets$restore_filter(dataname, varname = var_to_add)
+      datasets$.__enclos_env__$private$validate() # todo1: remove or keep in checking mode?
     }
   })
 
@@ -75,25 +64,15 @@ srv_add_filter_variable <- function(input, output, session, datasets, dataname, 
       names(datasets$get_data(dataname, filtered = FALSE)),
       c(active_filter_vars(), omit_vars())
     )
-
-    # todo2: filter out choices that cannot be filtered or show warning message instead as right now?
+    choices <- choices[
+      vapply(choices, function(varname) datasets$can_be_filtered(dataname, varname = varname), logical(1))
+    ]
     updateOptionalSelectInput(
       session,
       "new_filter_var",
       choices = choices,
       selected = NULL # unselect option
     )
-  })
-
-  # display warning message
-  output$warning <- renderUI({
-    msg <- warning_message()
-
-    if (is.null(msg) || msg == "") {
-      div(style = "display: none;")
-    } else {
-      div(class = "text-warning", style = "margin-bottom: 15px;", msg)
-    }
   })
 
   return(NULL)
