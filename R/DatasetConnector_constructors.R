@@ -31,12 +31,23 @@ relational_dataset_connector <- function(pull_fun,
                                          code = character(0),
                                          label = character(0),
                                          ...) {
+  stopifnot(is(pull_fun, "CallableFunction"))
+  stopifnot(is_character_single(dataname))
+  stopifnot(is(keys, "keys"))
+  stopifnot(is_character_empty(code) || is_character_vector(code))
+  stopifnot(is_character_empty(label) || is_character_vector(label))
+
   pull_fun$set_args(list(...))
-  RelationalDatasetConnector$new(pull_fun = pull_fun,
-                                 dataname = dataname,
-                                 keys = keys,
-                                 code = code,
-                                 label = label)
+
+  x <- RelationalDatasetConnector$new(
+    pull_fun = pull_fun,
+    dataname = dataname,
+    keys = keys,
+    code = code,
+    label = label
+  )
+
+  return(x)
 }
 
 #' @description
@@ -61,7 +72,6 @@ relational_dataset_connector <- function(pull_fun,
 #' get_dataset(x)
 #' x$get_raw_data()
 #'
-#'
 #' @rdname relational_dataset_connector
 #' @export
 rcd_dataset_connector <- function(dataname,
@@ -71,7 +81,6 @@ rcd_dataset_connector <- function(dataname,
                                   script = character(0),
                                   label = character(0),
                                   ...) {
-  stopifnot(is_character_single(dataname))
   stopifnot(is.function(fun))
 
   dot_args <- list(...)
@@ -95,7 +104,6 @@ rcd_dataset_connector <- function(dataname,
 #' @description
 #' \code{rds_dataset_connector} - Create a \code{RelationalDatasetConnector} from \code{RDS} file.
 #'
-#'
 #' @param file (\code{character})\cr
 #'   path to (\code{.rds} or \code{.R}) that contains \code{data.frame} object or
 #'   code to \code{source}
@@ -109,8 +117,8 @@ rcd_dataset_connector <- function(dataname,
 #'   file = "path/to/file.RDS",
 #'   keys = get_cdisc_keys("ADSL")
 #' )
+#' x$get_code()
 #' }
-#'
 #'
 #' @rdname relational_dataset_connector
 #' @export
@@ -121,12 +129,16 @@ rds_dataset_connector <- function(dataname,
                                   script = character(0),
                                   label = character(0),
                                   ...) {
+  dot_args <- list(...)
+  stopifnot(is_fully_named_list(dot_args))
 
-  x_fun <- callable_function(readRDS) # nolint
+  stopifnot(is_character_single(file))
   if (!file.exists(file)) {
     stop("File ", file, " does not exist.", call. = FALSE)
   }
-  args <- append(list(file = file), list(...))
+
+  x_fun <- callable_function(readRDS) # nolint
+  args <- append(list(file = file), dot_args)
   x_fun$set_args(args)
 
   x <- relational_dataset_connector(
@@ -143,8 +155,6 @@ rds_dataset_connector <- function(dataname,
 #' @description
 #' \code{rds_dataset_connector} - Create a \code{RelationalDatasetConnector} from \code{RDS} file.
 #'
-#'
-#'
 #' @inheritParams as_relational
 #'
 #' @examples
@@ -154,20 +164,27 @@ rds_dataset_connector <- function(dataname,
 #'   file = "path/to/script.R",
 #'   keys = get_cdisc_keys("ADSL")
 #' )
+#' x$get_code()
 #' }
 #'
 #' @rdname relational_dataset_connector
 #' @export
 script_dataset_connector <- function(dataname,
-                                  file,
-                                  keys,
-                                  code = character(0),
-                                  script = character(0),
-                                  label = character(0),
-                                  ...) {
+                                     file,
+                                     keys,
+                                     code = character(0),
+                                     script = character(0),
+                                     label = character(0),
+                                     ...) {
+  dot_args <- list(...)
+  stopifnot(is_fully_named_list(dot_args))
 
+  stopifnot(is_character_single(file))
+  if (!file.exists(file)) {
+    stop("File ", file, " does not exist.", call. = FALSE)
+  }
 
-  x_fun <- callable_function(source_value) # nolint
+  x_fun <- callable_function(source) # nolint
   args <- append(list(file = file), list(...))
   x_fun$set_args(args)
 
@@ -199,11 +216,10 @@ script_dataset_connector <- function(dataname,
 #' )
 #' x$get_code()
 #' \dontrun{
-#'   load_dataset(x)
-#'   get_dataset(x)
-#'   x$get_raw_data()
+#' load_dataset(x)
+#' get_dataset(x)
+#' x$get_raw_data()
 #' }
-#'
 #'
 #' @rdname relational_dataset_connector
 #' @export
@@ -214,6 +230,10 @@ rice_dataset_connector <- function(dataname,
                                    script = character(0),
                                    label = character(0),
                                    ...) {
+  dot_args <- list(...)
+  stopifnot(is_fully_named_list(dot_args))
+  stopifnot(is_character_single(path))
+
   check_pckg_quietly(
     "rice",
     paste0("Connection to entimICE via rice was requested, but rice package is not available.",
@@ -230,8 +250,6 @@ rice_dataset_connector <- function(dataname,
     code = code_from_script(code, script),
     label = label
   )
-
-
 
   return(x)
 }
@@ -258,7 +276,8 @@ rds_cdisc_dataset_connector <- function(dataname,
     file = file,
     keys = get_cdisc_keys(dataname),
     code = code_from_script(code, script),
-    label = label
+    label = label,
+    ...
   )
 
   return(x)
@@ -315,7 +334,8 @@ rice_cdisc_dataset_connector <- function(dataname,
     path = path,
     keys = get_cdisc_keys(dataname),
     code = code_from_script(code, script),
-    label = label
+    label = label,
+    ...
   )
 
   return(x)
@@ -339,22 +359,14 @@ script_cdisc_dataset_connector <- function(dataname, #nolint
                                            label = character(0),
                                            ...) {
 
-  x_fun <- callable_function(source) # nolint
-  args <- append(list(file = file), list(...))
-  x_fun$set_args(args)
-
-  x <- relational_dataset_connector(
+  x <- script_dataset_connector(
     dataname = dataname,
-    pull_fun = x_fun,
-    keys = keys,
+    file = file,
+    keys = get_cdisc_keys(dataname),
     code = code_from_script(code, script),
-    label = label
+    label = label,
+    ...
   )
 
   return(x)
-}
-
-
-source_value <- function(...) {
-  source(...)$value
 }
