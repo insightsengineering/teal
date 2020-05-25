@@ -38,7 +38,7 @@ NamedDataset <- R6::R6Class( # nolint
 
       self$set_dataname(dataname)
       self$set_code(code)
-      self$set_label(label)
+      self$set_dataset_label(label)
       return(invisible(self))
     },
     #' @description
@@ -57,13 +57,13 @@ NamedDataset <- R6::R6Class( # nolint
     },
     #' @description
     #' Derive the \code{label} which was former called \code{datalabel}
-    get_label = function() {
+    get_dataset_label = function() {
       private$.label
     },
     #' @description
     #' Set the label for the dataset
     #' @param label (\code{character}) the new label
-    set_label = function(label) {
+    set_dataset_label = function(label) {
       if (is.null(label)) {
         label <- character(0)
       }
@@ -110,11 +110,6 @@ NamedDataset <- R6::R6Class( # nolint
       }
 
       invisible(TRUE)
-    },
-    #' @description
-    #' Derive the dataset_label
-    get_dataset_label = function() {
-      private$.label
     }
   ),
   ## __Private Methods ====
@@ -123,11 +118,8 @@ NamedDataset <- R6::R6Class( # nolint
     .code = NULL,
     .label = character(0)
   ),
+  ## __Active Methods ====
   active = list(
-    #' @field dataset_label for backwards compatibility
-    dataset_label = function() {
-      private$.label
-    },
     #' @field dataname for backwards compatibility
     dataname = function() {
       private$.dataname

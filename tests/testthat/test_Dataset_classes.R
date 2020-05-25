@@ -163,17 +163,12 @@ test_that("NamedDataset basics", {
 
   expect_equal(
     "Testing Dataset",
-    test_ds$dataset_label
-  )
-
-  expect_equal(
-    "Testing Dataset",
     test_ds$get_dataset_label()
   )
 
   expect_equal(
     "Testing Dataset",
-    test_ds$get_label()
+    test_ds$get_dataset_label()
   )
 
   expect_equal(

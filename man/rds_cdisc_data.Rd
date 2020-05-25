@@ -21,7 +21,7 @@ Build data connector for RDS file connections
 }
 \examples{
 \dontrun{
-x <- rds_dataset_connector("ADSL", "/path/to/file.rds")
+x <- rds_cdisc_dataset_connector("ADSL", "/path/to/file.rds")
 app <- init(
   data = rds_cdisc_data(x, check = TRUE),
   modules = root_modules(

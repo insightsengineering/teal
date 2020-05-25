@@ -76,7 +76,7 @@ Collate:
     'get_code.R'
     'get_dataname.R'
     'get_dataset.R'
-    'get_label.R'
+    'get_dataset_label.R'
     'get_raw_data.R'
     'include_css_js.R'
     'modules.R'

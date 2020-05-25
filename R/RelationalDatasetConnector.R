@@ -36,7 +36,7 @@ RelationalDatasetConnector <- R6::R6Class( #nolint
       private$set_dataname(dataname)
       private$set_keys(keys)
       private$set_mutate_code(code)
-      self$set_label(label)
+      self$set_dataset_label(label)
 
       return(invisible(self))
     },
@@ -61,10 +61,19 @@ RelationalDatasetConnector <- R6::R6Class( #nolint
     #' Get label of dataset
     #'
     #' @return \code{character}
-    get_label = function() {
-      return(private$label)
+    get_dataset_label = function() {
+      return(private$dataset_label)
     },
-
+    #' @description
+    #' Set label of the \code{dataset} object
+    #'
+    #' @param label (\code{character})\cr
+    #'  Label to describe the dataset
+    set_dataset_label = function(label) {
+      stopifnot(utils.nest::is_character_vector(label, 0, 1))
+      private$dataset_label <- label
+      return(invisible(NULL))
+    },
     #' @description
     #' Get code to get data
     #'
@@ -138,7 +147,7 @@ RelationalDatasetConnector <- R6::R6Class( #nolint
         dataname = self$get_dataname(),
         code = private$get_pull_code(deparse = TRUE),
         keys = self$get_keys(),
-        label = self$get_label()
+        label = self$get_dataset_label()
       )
 
       if (length(private$get_mutate_code()) > 0) {
@@ -149,16 +158,6 @@ RelationalDatasetConnector <- R6::R6Class( #nolint
       }
 
       return(invisible(self))
-    },
-    #' @description
-    #' Set label of the \code{dataset} object
-    #'
-    #' @param label (\code{character})\cr
-    #'  Label to describe the dataset
-    set_label = function(label) {
-      stopifnot(utils.nest::is_character_vector(label, 0, 1))
-      private$label <- label
-      return(invisible(NULL))
     }
   ),
 
@@ -166,7 +165,7 @@ RelationalDatasetConnector <- R6::R6Class( #nolint
   private = list(
     dataname = character(0),
     keys = NULL,
-    label = character(0),
+    dataset_label = character(0),
     mutate_code = NULL,
 
     # assigns the pull code call to the dataname
