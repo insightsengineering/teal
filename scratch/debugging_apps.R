@@ -11,7 +11,7 @@ library(random.cdisc.data)
 
 options(shiny.fullstacktrace = TRUE)
 options(teal_logging = TRUE) # to log to console
-#options("shiny.launch.browser" = TRUE)
+options("shiny.launch.browser" = TRUE)
 #options("shiny.launch.browser" = function(url) invisible(.Call("rs_shinyviewer", url, getwd(), 2)))
 
 ADSL <- radsl(cached = TRUE)

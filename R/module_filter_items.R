@@ -42,6 +42,7 @@ ui_filter_items <- function(id, dataname) {
   ns <- NS(id)
   div(
     id = ns("whole_ui"), # to hide it entirely
+    onchange = "hideIffEmpty(this)", #sodo3: not working right now
     fluidRow(
       column(8, dataname),
       column(4, actionLink(
@@ -53,7 +54,9 @@ ui_filter_items <- function(id, dataname) {
       # id needed to insert and remove UI to filter single variable as needed
       # it is currently also used by the above module to entirely hide this panel
       id = ns("filters"),
-      class = "listWithHandle list-group" # to make every element in here draggable
+      class = "listWithHandle list-group", # to make every element in here draggable
+      # sodo3: onload does not work, only on change
+      onchange = "convertToDraggable(this)"
     )
   )
 }
@@ -105,51 +108,49 @@ srv_filter_items <- function(input, output, session, datasets, dataname) {
   filtered_vars <- reactive(names(datasets$get_filter_state(dataname)))
   filter_id_for_var <- function(varname) paste0("filter_", varname)
 
-  observeEvent(filtered_vars(), {
-    # this block has an effect whenever the shown variable filters differ from the datasets state
-    .log("regenerating ui filters for data", dataname)
+  observeEvent(filtered_vars(),
+    {
+      # this block has an effect whenever the shown variable filters differ from the datasets state
+      .log("regenerating ui filters for data", dataname)
 
-    # add variables not shown currently
-    lapply(setdiff(filtered_vars(), names(shown_vars_observers)), function(varname) {
-      filter_id <- session$ns(filter_id_for_var(varname))
-      insertUI(
-        selector = paste0("#", session$ns("filters")),
-        where = "beforeEnd",
-        # add span with id to be removable
-        ui = span(
-          id = filter_id,
-          class = "list-group-item", # to make it draggable
-          ui_single_filter_item(
+      # add variables not shown currently
+      lapply(setdiff(filtered_vars(), names(shown_vars_observers)), function(varname) {
+        filter_id <- session$ns(filter_id_for_var(varname))
+        insertUI(
+          selector = paste0("#", session$ns("filters")),
+          where = "beforeEnd",
+          # add span with id to be removable
+          ui = span(
             id = filter_id,
-            filter_info = datasets$get_filter_info(dataname, varname),
-            filter_state = datasets$get_filter_state(dataname, varname),
-            prelabel = paste0(dataname, ".", varname)
+            class = "list-group-item", # to make it draggable
+            ui_single_filter_item(
+              id = filter_id,
+              filter_info = datasets$get_filter_info(dataname, varname),
+              filter_state = datasets$get_filter_state(dataname, varname),
+              prelabel = varname
+            )
           )
         )
-      )
-      shown_vars_observers <<- c(
-        shown_vars_observers,
-        setNames(
-          list(callModule(srv_single_filter_item, filter_id_for_var(varname), datasets, dataname, varname)$observers),
-          varname
+        shown_vars_observers <<- c(
+          shown_vars_observers,
+          setNames(
+            list(callModule(srv_single_filter_item, filter_id_for_var(varname), datasets, dataname, varname)$observers),
+            varname
+          )
         )
-      )
-    })
-    # remove variables that should not be shown anymore
-    lapply(setdiff(names(shown_vars_observers), filtered_vars()), function(varname) {
-      removeUI(selector = paste0("#", session$ns(filter_id_for_var(varname))))
-      lapply(shown_vars_observers[[varname]], function(obs) obs$destroy())
-      shown_vars_observers[[varname]] <<- NULL
-    })
+      })
+      # remove variables that should not be shown anymore
+      lapply(setdiff(names(shown_vars_observers), filtered_vars()), function(varname) {
+        removeUI(selector = paste0("#", session$ns(filter_id_for_var(varname))))
+        lapply(shown_vars_observers[[varname]], function(obs) obs$destroy())
+        shown_vars_observers[[varname]] <<- NULL
+      })
 
-    if (length(filtered_vars()) == 0) {
-      shinyjs::hide("whole_ui") # hide whole element if no filters
-    } else {
-      shinyjs::show("whole_ui")
-    }
-
-    stopifnot(setequal(filtered_vars(), names(shown_vars_observers)))
-  })
+      stopifnot(setequal(filtered_vars(), names(shown_vars_observers)))
+    },
+    # we also want to find out when there are no filtered variables to hide the UI
+    ignoreNULL = FALSE
+  )
 
   observeEvent(input$remove_filters, {
     .log("removing all filters for data", dataname)

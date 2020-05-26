@@ -88,8 +88,7 @@ init <- function(data,
                  modules,
                  initial_filter_states = list(),
                  header = tags$p("title here"),
-                 footer = tags$p("footer here")
-                 ) {
+                 footer = tags$p("footer here")) {
   if (!modules_depth(modules) %in% c(1, 2)) {
     # we don't support more nesting for clarity in the app
     stop("teal currently only supports module nesting of depth one or two.")
@@ -149,7 +148,7 @@ init <- function(data,
       }"
     ),
     conditionalPanel(
-      condition = "(($('html').hasClass('shiny-busy')) && (document.getElementById(\"shiny-notification-panel\") == null))", #nolint
+      condition = "(($('html').hasClass('shiny-busy')) && (document.getElementById(\"shiny-notification-panel\") == null))", # nolint
       div(
         icon("sync", "spin fa-spin"),
         "Computing ...",
@@ -160,20 +159,25 @@ init <- function(data,
 
   # ui function
   # must be a function of request for bookmarking
-  ui <- function(request) shinyUI(
-    fluidPage(
-      include_teal_css_js(),
-      tags$header(header),
-      tags$hr(style = "margin: 7px 0;"),
-      shiny_busy_message_panel,
-      main_ui,
-      tags$hr(),
-      tags$footer(footer)
+  ui <- function(request) {
+    shinyUI(
+      fluidPage(
+        include_teal_css_js(),
+        tags$header(header),
+        tags$hr(style = "margin: 7px 0;"),
+        shiny_busy_message_panel,
+        main_ui,
+        tags$hr(),
+        tags$footer(footer)
+      )
     )
-  )
+  }
 
   # server function
   server <- function(input, output, session) {
+
+    shinyjs::showLog() # to show logs, sodo3: add option for this
+
     # Javascript code to make the clipboard accessible
     run_js_files(files = "init.js")
 
@@ -278,23 +282,26 @@ init <- function(data,
         # however, onRestore only runs in the first flush and not in the flush when the
         # password was finally provided
         .log("restoring filter state from bookmarked state")
-        tryCatch({
-          progress$set(0.5, message = "Restoring from bookmarked state")
-          datasets$set_from_bookmark_state(saved_datasets_state)
-        }, error = function(cnd) {
-          showModal(modalDialog(
-            div(
-              p("Could not restore the session: "),
-              tags$pre(id = "error_msg", cnd$message),
-            ),
-            title = "Error restoring the bookmarked state",
-            footer = tagList(
-              actionButton("copy_code", "Copy to Clipboard", `data-clipboard-target` = "#error_msg"),
-              modalButton("Dismiss")
-            ),
-            size = "l", easyClose = TRUE
-          ))
-        })
+        tryCatch(
+          {
+            progress$set(0.5, message = "Restoring from bookmarked state")
+            datasets$set_from_bookmark_state(saved_datasets_state)
+          },
+          error = function(cnd) {
+            showModal(modalDialog(
+              div(
+                p("Could not restore the session: "),
+                tags$pre(id = "error_msg", cnd$message),
+              ),
+              title = "Error restoring the bookmarked state",
+              footer = tagList(
+                actionButton("copy_code", "Copy to Clipboard", `data-clipboard-target` = "#error_msg"),
+                modalButton("Dismiss")
+              ),
+              size = "l", easyClose = TRUE
+            ))
+          }
+        )
       }
 
       # call server functions for teal modules and filter panel
