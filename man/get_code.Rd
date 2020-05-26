@@ -2,13 +2,33 @@
 % Please edit documentation in R/get_code.R
 \name{get_code}
 \alias{get_code}
+\alias{get_code.RawDatasetConnector}
+\alias{get_code.NamedDataset}
+\alias{get_code.default}
 \title{Get code}
 \usage{
-get_code(files_path, exclude_comments = TRUE, read_sources = TRUE)
+get_code(x, ...)
+
+\method{get_code}{RawDatasetConnector}(x, deparse = TRUE, ...)
+
+\method{get_code}{NamedDataset}(x, deparse = TRUE, ...)
+
+\method{get_code}{default}(
+  x,
+  exclude_comments = TRUE,
+  read_sources = TRUE,
+  deparse = FALSE,
+  files_path = NULL,
+  ...
+)
 }
 \arguments{
-\item{files_path}{(\code{character}) (optional) vector of files path to be read for preprocessing. Code from
-multiple files is joined together.}
+\item{x}{(\code{object}) of class\link{RawDatasetConnector} or \link{NamedDataset}. If of
+class \code{character} will be treated as file to read.}
+
+\item{...}{not used, only for support of S3}
+
+\item{deparse}{(\code{logical}) whether return deparsed form of a call}
 
 \item{exclude_comments}{(\code{logical}) whether exclude commented-out lines of code. Lines to be excluded
 should be ended with \code{# nocode}. For multiple line exclusions one should enclose ignored block of code with
@@ -16,11 +36,22 @@ should be ended with \code{# nocode}. For multiple line exclusions one should en
 
 \item{read_sources}{(\code{logical}) whether to replace \code{source("path")} with code lines from sourced file.
 If \code{read_sources = TRUE} changing working directory inside preprocessing is not allowed.}
+
+\item{files_path}{(\code{character}) (optional) vector of files path to be read for preprocessing. Code from
+multiple files is joined together.}
 }
 \value{
 (\code{character}) code of import and preparation of data for teal application.
 }
 \description{
-Reads code from specified files, including code from source. Method reads code without
+Reads code from specified files or an R6 object.
+}
+\details{
+\itemize{
+  \item{if reading from R6: }{get the R code stored inside the object.}
+  \item{if reading from files: }{
+    Includes code from source if reading from files. Method reads code without
+  }
+}
 \code{library()} or \code{require()} calls. Function created for teal app, but can be used with any file.
 }

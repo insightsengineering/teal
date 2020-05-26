@@ -15,7 +15,7 @@ CallableFunction <- R6::R6Class( #nolint
     initialize = function(fun) {
       stopifnot(is.function(fun))
 
-      private$fun_name <- deparse(private$get_callable_function(fun))
+      private$.fun_name <- deparse(private$get_callable_function(fun))
       self$refresh()
       invisible(self)
     },
@@ -58,21 +58,21 @@ CallableFunction <- R6::R6Class( #nolint
       stopifnot(is_logical_single(deparse))
       stopifnot(is.null(args) || (is.list(args) && is_fully_named_list(args)))
 
-      old_args <- as.list(private$args)
-
+      old_args <- private$.args
       if_not_null(args, self$set_args(args))
 
-
       res <- if (deparse) {
-        paste0(deparse(private$call, width.cutoff = 80L), collapse = "\n")
+        paste0(deparse(private$.call, width.cutoff = 80L), collapse = "\n")
       } else {
-        private$call
+        private$.call
       }
 
-      for (arg_name in names(args)) {
-        self$set_arg_value(arg_name, NULL)
+      # set args back to default
+      if (!is.null(args)) {
+        lapply(names(args), self$set_arg_value, NULL)
+        self$set_args(old_args)
       }
-      self$set_args(old_args)
+
 
       return(res)
     },
@@ -82,11 +82,12 @@ CallableFunction <- R6::R6Class( #nolint
     #' @importFrom rlang parse_expr
     #' @return nothing
     refresh = function() {
-      if (!is.null(private$fun_name) || !identical(private$fun_name, character(0))) {
+      if (!is.null(private$.fun_name) || !identical(private$.fun_name, character(0))) {
 
         # replaced str2lang found at:
         # https://rlang.r-lib.org/reference/call2.html
-        private$call <- as.call(c(rlang::parse_expr(private$fun_name), if_empty(private$args, NULL)))
+        private$.call <- as.call(c(rlang::parse_expr(private$.fun_name),
+                                  if_empty(private$.args, NULL)))
       }
     },
     #' @description
@@ -100,6 +101,7 @@ CallableFunction <- R6::R6Class( #nolint
         return(invisible(NULL))
       }
       stopifnot(is.list(args) && is_fully_named_list(args))
+
       for (idx in seq_along(args)) {
         self$set_arg_value(names(args)[[idx]], args[[idx]])
       }
@@ -115,18 +117,15 @@ CallableFunction <- R6::R6Class( #nolint
     #' @return nothing
     set_arg_value = function(name, value) {
       stopifnot(is_character_single(name))
-      if (is.null(private$args)) {
-        private$args <- list()
-      }
-      private$args[[name]] <- value
+      private$.args[[name]] <- value
       self$refresh()
       return(invisible(NULL))
     }
   ),
   private = list(
-    fun_name = character(0),
-    args = list(), # named list with argument names and values
-    call = NULL, # a call object
+    .fun_name = character(0),
+    .args = list(), # named list with argument names and values
+    .call = NULL, # a call object
     # @description
     # Finds original function name
     #
@@ -139,15 +138,36 @@ CallableFunction <- R6::R6Class( #nolint
     #
     get_callable_function = function(callable) {
       stopifnot(is.function(callable))
-
       fr <- rev(sys.frames())
       callable <- substitute(callable, fr[[1]])
 
       for (i in seq_along(fr)[-1]) {
         callable <- eval(bquote(substitute(.(callable), fr[[i]])))
       }
-
       return(callable)
+    }
+  ),
+  active = list(
+    #' @field args (read-only) \code{list} of arguments.
+    args = function() {
+      return(private$.args)
     }
   )
 )
+
+#' Create \code{CallableFunction} object
+#'
+#' Create \link{CallableFunction} object to execute specific function and get reproducible
+#' call.
+#' @param fun (\code{function})\cr
+#'   any R function
+#' @return \code{CallableFunction} object
+#' @examples
+#' cf <- callable_function(fun = mean)
+#' cf$set_args(list(x = 1:10, na.rm = FALSE))
+#' cf$run()
+#' cf$get_call()
+#' @export
+callable_function <- function(fun) {
+  CallableFunction$new(fun)
+}

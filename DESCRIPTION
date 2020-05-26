@@ -13,6 +13,8 @@ Authors@R: c(
   person("Maximilian", "Mordig", email = "maximilian_oliver.mordig@roche.com", role = "aut"),
   person("Bartosz", "Baranowski", email = "bartosz.baranowski@roche.com", role = "aut"),
   person("Ondrej", "Slama", email = "ondrej.slama@roche.com", role = "aut"),
+  person("Nikolas", "Burkoff", email = "nikolas.burkoff@roche.com", role = "aut"),
+  person("Maciej", "Nasinski", email = "maciej.nasinski@contractors.roche.com", role = "aut"),
   person("Roche", role = c("cph", "fnd"))
   )
 Description: teal is a shiny based interactive exploration framework for
@@ -54,12 +56,19 @@ Suggests:
     test.nest (>= 0.2.2),
     testthat (>= 2.0)
 VignetteBuilder: knitr
-Collate:
+Collate: 
     'CallableFunction.R'
     'DataConnection.R'
     'DataConnector.R'
     'DatasetConnector.R'
+    'DatasetConnector_constructors.R'
     'FilteredData.R'
+    'NamedDataset.R'
+    'RawDataset.R'
+    'RawDatasetConnector.R'
+    'RelationalDataset.R'
+    'RelationalDatasetConnector.R'
+    'as_relational.R'
     'cdisc_data.R'
     'choices_labeled.R'
     'choices_selected.R'
@@ -67,10 +76,15 @@ Collate:
     'debugging_modules.R'
     'filter_spec.R'
     'get_code.R'
+    'get_dataname.R'
+    'get_dataset.R'
+    'get_dataset_label.R'
+    'get_raw_data.R'
     'include_css_js.R'
     'modules.R'
     'init.R'
     'init_datasets.R'
+    'load_data.R'
     'log_app_usage.R'
     'logging.R'
     'module_add_filter_variable.R'
@@ -79,9 +93,11 @@ Collate:
     'module_filter_panel.R'
     'module_single_filter_item.R'
     'modules_with_filters_ui.R'
+    'mutate_dataset.R'
     'optionalInput.R'
     'resolve_delayed.R'
     'select_spec.R'
+    'set_args.R'
     'stop_shiny.R'
     'teal.R'
     'utils.R'

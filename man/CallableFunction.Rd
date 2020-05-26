@@ -11,6 +11,13 @@ A \code{CallableFunction} class of objects
 \details{
 Object that stores function name with it's arguments. Methods to get call and run it.
 }
+\section{Active bindings}{
+\if{html}{\out{<div class="r6-active-bindings">}}
+\describe{
+\item{\code{args}}{(read-only) \code{list} of arguments.}
+}
+\if{html}{\out{</div>}}
+}
 \section{Methods}{
 \subsection{Public methods}{
 \itemize{

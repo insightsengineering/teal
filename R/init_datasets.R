@@ -29,10 +29,9 @@ set_datasets_data <- function(datasets, data) {
   }
 
   for (idx in seq_along(data)) {
-    # for initializing, we don't need a reactive context as dependencies will be established later only
-    data_i <- data[[idx]][["data"]]
+    data_i <- data[[idx]][["raw_data"]]
     attr(data_i, "keys") <- data[[idx]][["keys"]]
-    attr(data_i, "column_labels") <- data[[idx]][["column_labels"]]
+    attr(data_i, "column_labels") <- data[[idx]]$get_column_labels()
     attr(data_i, "data_label") <- data[[idx]][["data_label"]]
     datasets$set_data(data[[idx]][["dataname"]], data_i)
   }

@@ -21,7 +21,7 @@ It comes with three accompanying classes that are shown in the following diagram
 \item \href{#method-get_cdisc_data}{\code{DataConnector$get_cdisc_data()}}
 \item \href{#method-get_connection}{\code{DataConnector$get_connection()}}
 \item \href{#method-get_connectors}{\code{DataConnector$get_connectors()}}
-\item \href{#method-get_data}{\code{DataConnector$get_data()}}
+\item \href{#method-get_dataset}{\code{DataConnector$get_dataset()}}
 \item \href{#method-get_server}{\code{DataConnector$get_server()}}
 \item \href{#method-get_ui}{\code{DataConnector$get_ui()}}
 \item \href{#method-launch}{\code{DataConnector$launch()}}
@@ -81,9 +81,9 @@ Defaults to FALSE, which returns last downloaded data.}
 
 \item{\code{try}}{(\code{logical}) whether perform function evaluation inside \code{try} clause}
 
-\item{\code{con_args_fixed}}{(\code{NULL} or named \code{list}) fixed argument to connection function}
+\item{\code{con_args_fixed}}{(\code{NULL} or named \code{list}) fixed arguments to connection function}
 
-\item{\code{con_args_dynamic}}{(\code{NULL} or named \code{list}) dynamic argument to connection function
+\item{\code{con_args_dynamic}}{(\code{NULL} or named \code{list}) dynamic arguments to connection function
 (not shown in generated code)}
 
 \item{\code{con_args_replacement}}{(\code{NULL} or named \code{list}) replacement of dynamic argument of connection
@@ -127,11 +127,11 @@ Get connectors
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-get_data"></a>}}
-\subsection{Method \code{get_data()}}{
+\if{html}{\out{<a id="method-get_dataset"></a>}}
+\subsection{Method \code{get_dataset()}}{
 Function to get data interactively, useful for debugging
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{DataConnector$get_data(
+\if{html}{\out{<div class="r">}}\preformatted{DataConnector$get_dataset(
   refresh = FALSE,
   try = FALSE,
   con_args_fixed = NULL,
@@ -151,10 +151,10 @@ Defaults to FALSE, which returns last downloaded data.}
 
 \item{\code{try}}{(\code{logical}) whether perform function evaluation inside \code{try} clause}
 
-\item{\code{con_args_fixed}}{(\code{NULL} or named \code{list}) fixed argument to connection function}
+\item{\code{con_args_fixed}}{(\code{NULL} or named \code{list}) fixed arguments to the connection function}
 
-\item{\code{con_args_dynamic}}{(\code{NULL} or named \code{list}) dynamic argument to connection function
-(not shown in generated code)}
+\item{\code{con_args_dynamic}}{(\code{NULL} or named \code{list}) dynamic arguments to the connection
+function (not shown in generated code), e.g. passwords}
 
 \item{\code{con_args_replacement}}{(\code{NULL} or named \code{list}) replacement of dynamic argument of connection
 function}

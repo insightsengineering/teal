@@ -11,7 +11,7 @@ cdisc_dataset(dataname, data, keys = get_cdisc_keys(dataname))
 
 \item{data}{data}
 
-\item{keys}{list of keys -
+\item{keys}{(\code{keys}) object -
 
 Please note that the order of keys is important.
 

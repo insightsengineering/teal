@@ -1,8 +1,10 @@
 #' A \code{DatasetConnector} class of objects
 #'
+#' Deprecation note: will be removed by start of June 2020
+#'
 #' Objects of this class store connection function to single dataset. Note that for some specific connection type
 #' (e.g. \code{RAICE} or \code{SAICE}), pre-requisite object of class \code{DataConnection} is required.
-#' Data can be pulled via \code{pull} method and returned via \code{get_data} method.
+#' Data can be pulled via \code{pull} method and returned via \code{get_dataset} method.
 #'
 #' @name DatasetConnector
 DatasetConnector <- R6::R6Class( #nolint
@@ -43,12 +45,12 @@ DatasetConnector <- R6::R6Class( #nolint
     #' @param try (\code{logical}) whether perform function evaluation inside \code{try} clause
     #'
     #' @return if \code{try = TRUE} then \code{try-error} on error, object returned from connection function
-    get_data = function(args = NULL, silent = FALSE, try = FALSE) {
+    get_dataset = function(args = NULL, silent = FALSE, try = FALSE) {
       if (!private$is_pulled) {
-        self$pull(args = args, silent = silent, try = try)
+        self$pull_dataset(args = args, silent = silent, try = try)
       }
 
-      return(private$data)
+      return(private$dataset)
     },
     #' @description
     #' Get connection dataname
@@ -80,11 +82,11 @@ DatasetConnector <- R6::R6Class( #nolint
     #' @param silent (\code{logical}) whether convert all "missing function" errors to messages
     #' @param try (\code{logical}) whether perform function evaluation inside \code{try} clause
     #'
-    #' @return nothing, in order to get the data please use \code{get_data} method
+    #' @return nothing, in order to get the data please use \code{get_dataset} method
     pull = function(args = NULL, silent = FALSE, try = FALSE) {
       if_cond(private$check_pull_fun(silent = silent), return(), isFALSE)
-      private$data <- private$pull_fun$run(args = args, try = try)
-      private$is_pulled <- is(private$data, "try-error")
+      private$dataset <- private$pull_fun$run(args = args, try = try)
+      private$is_pulled <- is(private$dataset, "try-error")
       return(invisible(NULL))
     },
     #' @description
@@ -100,13 +102,13 @@ DatasetConnector <- R6::R6Class( #nolint
     #' @description
     #' Set dataset keys
     #'
-    #' @param keys (\code{list}) of keys
+    #' @param keys (\code{keys}) object
     #'
     #' @return nothing
+    #'
+    #' @importFrom methods is
     set_keys = function(keys) {
-      stopifnot(is.list(keys))
-      stopifnot(all_true(keys, function(x) is.null(x) || is_character_vector(x)))
-      stopifnot(all(c("primary", "foreign", "parent") %in% names(keys)))
+      stopifnot(is(keys, "keys"))
 
       if (!is.null(keys$foreign) && is.null(keys$parent) || (is.null(keys$foreign) && !is.null(keys$parent))) {
         stop(dataname, ": Please specify both foreign keys and a parent!")
@@ -171,7 +173,7 @@ DatasetConnector <- R6::R6Class( #nolint
   private = list(
     path = character(0),
     keys = NULL,
-    data = NULL,
+    dataset = NULL,
     dataname = character(0),
     is_pulled = FALSE,
     pull_fun = NULL, # CallableFunction
@@ -192,114 +194,3 @@ DatasetConnector <- R6::R6Class( #nolint
     }
   )
 )
-
-# DatasetConnector wrappers ----
-
-#' Set up connection to \code{random.cdisc.data}
-#'
-#' @export
-#'
-#' @param fun (\code{function}) connection function
-#' @param ... additional arguments passed to fun
-#' @inheritParams cdisc_dataset
-#'
-#' @return (\code{DatasetConnector}) type of object
-#'
-#' @examples
-#' library(random.cdisc.data)
-#' x <- rcd_dataset("ADSL", radsl, cached = TRUE)
-#' x$get_call()
-#' x$get_data()
-rcd_dataset <- function(dataname, fun, ...) {
-  stopifnot(is_character_single(dataname))
-  stopifnot(is.function(fun))
-
-  dot_args <- list(...)
-  stopifnot(is_fully_named_list(dot_args))
-
-  x_fun <- CallableFunction$new(fun) # nolint
-  x_fun$set_args(dot_args)
-
-  x <- DatasetConnector$new() # nolint
-  x$set_dataname(dataname)
-  x$set_pull_fun(x_fun)
-  x$set_keys(get_cdisc_keys(dataname))
-
-  return(x)
-}
-
-#' Set up connection to local \code{rds} file
-#'
-#' @export
-#'
-#' @param file (\code{character}) path to \code{.rds} that contains
-#'   a single data.frame stored by \code{saveRDS}
-#' @inheritParams cdisc_dataset
-#'
-#' @return (\code{DatasetConnector}) type of object
-#'
-#' @importFrom tools file_ext
-#' @examples
-#' \dontrun{
-#' x <- rds_cdisc_dataset("ADSL", "/path/to/file.rds")
-#' x$get_call()
-#' x$get_data()
-#' }
-rds_cdisc_dataset <- function(dataname, file, keys = get_cdisc_keys(dataname)) {
-  stopifnot(is_character_single(dataname))
-  stopifnot(is_character_single(file))
-  stopifnot(file.exists(file))
-  stopifnot(tolower(tools::file_ext(file)) == "rds")
-
-  x_fun <- CallableFunction$new(readRDS) # nolint
-  x <- DatasetConnector$new() # nolint
-
-  x$set_dataname(dataname)
-  x$set_keys(keys)
-  x$set_pull_fun(x_fun)
-  x$set_pull_args(list(file = file))
-  x$set_path(file)
-  return(x)
-}
-
-#' Set up connection to local \code{RICE} dataset
-#'
-#' @export
-#'
-#' @param path (\code{character}) file path
-#' @inheritParams cdisc_dataset
-#'
-#' @return (\code{DatasetConnector}) type of object
-#'
-#' @examples
-#' x <- rice_dataset("ADSL", "/path/to/ADSL")
-#' x$get_call()
-#' \dontrun{
-#' x$get_data()
-#' }
-rice_dataset <- function(dataname,
-                         path,
-                         keys = get_cdisc_keys(dataname)) {
-  stopifnot(is_character_single(dataname))
-  stopifnot(is_character_single(path))
-  stopifnot(is.list(keys))
-  stopifnot(all_true(keys, function(x) is.null(x) || is_character_vector(x)))
-  stopifnot(all(c("primary", "foreign", "parent") %in% names(keys)))
-
-  check_pckg_quietly("rice",
-                     paste0("Connection to entimICE via rice was requested, but rice package is not available.",
-                            "Please install it from https://github.roche.com/Rpackages/rice."))
-
-  x <- DatasetConnector$new() # nolint
-
-  x$set_dataname(dataname)
-  x$set_path(path)
-  x$set_keys(keys)
-
-  pull_fun <- CallableFunction$new(rice::rice_read) # nolint
-  x$set_pull_fun(pull_fun)
-
-  x$set_pull_args(list(node = path, prolong = TRUE, quiet = TRUE))
-
-  return(x)
-}

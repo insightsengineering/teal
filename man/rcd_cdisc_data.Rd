@@ -7,7 +7,7 @@
 rcd_cdisc_data(..., code = character(0), check = TRUE)
 }
 \arguments{
-\item{...}{(\code{DatasetConnector}) dataset connectors created using \link{rcd_dataset}}
+\item{...}{(\code{DatasetConnector}) dataset connectors created using \link{rcd_dataset_connector}}
 
 \item{code}{optional, (\code{character}) preprocessing code}
 
@@ -23,8 +23,8 @@ Build data connector for \code{random.cdisc.data} functions or datasets
 \dontrun{
 library(random.cdisc.data)
 x <- rcd_cdisc_data(
-  rcd_dataset("ADSL", radsl, cached = TRUE),
-  rcd_dataset("ADLB", radlb, cached = TRUE)
+  rcd_dataset_connector("ADSL", radsl, cached = TRUE),
+  rcd_dataset_connector("ADLB", radlb, cached = TRUE)
 )
 app <- init(
   data = x,

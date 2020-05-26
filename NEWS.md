@@ -1,9 +1,22 @@
+# teal 0.8.3.9000
+
+* progress bar for ui creation in delayed loading module
+* `cdisc_dataset` and `dataset` now return R6 class objects (RelationalDataset)
+* `get_raw_data` can be used to derive raw data from R6 objects e.g. (RelationalDataset)
+* `mutate_dataset` allows to change the data inside R6 objects via `code` argument or an R script
+* new `RawDatasetConnector` and `RelationalDatasetConnector` to execute get data from remote connections.
+* new wrapper functions to manipulate `DatasetConnector` and `Dataset` such as `get_dataset`, 
+`load_dataset`, `as_relational`.
+
+* Change output of `keys` function to `keys` object. Updated checks in `DatasetConnector` and `dataset`.
+* delayed version of choices_selected
+
 # teal 0.8.3
 
 * Enable `teal` app to initialize without data. The data are then loaded from within the teal app.
 * New classes (`DatasetConnector`, `DataConnector`) to connect to various data sources, including:  
-        * connector to `rice` API - `rice_cdisc_data` and `rice_dataset`  
-        * connector to `RDS` files - `rds_data` and `rds_dataset`  
+        * connector to `rice` API - `rice_cdisc_data` and `rice_dataset_connector`  
+        * connector to `RDS` files - `rds_data` and `rds_dataset_connector`  
 * Message appears at bottom right of Shiny app when Shiny is busy to update the views.
 * Remove `labels` argument of `cdisc_data` function. Labels should now already be present in the data passed to the  `cdisc_data` function. This can be achieved using the `var_relabel` function.
 

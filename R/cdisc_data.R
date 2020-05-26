@@ -3,7 +3,7 @@
 #' Abstract function that creates dataset object with connected metadata.
 #' @param dataname name of dataset
 #' @param data data
-#' @param keys list of keys -
+#' @param keys (\code{keys}) object -
 #'
 #' Please note that the order of keys is important.
 #'
@@ -24,6 +24,8 @@
 #'
 #' @return a dataset with connected metadata
 #'
+#' @importFrom methods is
+#'
 #' @export
 #'
 #' @examples
@@ -34,12 +36,10 @@
 #' dataset("ADSL", ADSL)
 dataset <- function(dataname,
                     data,
-                    keys = list(primary = NULL, foreign = NULL, parent = NULL)) {
+                    keys = teal::keys(primary = NULL, foreign = NULL, parent = NULL)) {
   stopifnot(is_character_single(dataname))
   stopifnot(is.data.frame(data))
-  stopifnot(is.list(keys))
-  stopifnot(all_true(keys, function(x) is.null(x) || is_character_vector(x)))
-  stopifnot(all(c("primary", "foreign", "parent") %in% names(keys)))
+  stopifnot(is(keys, "keys"))
   stopifnot(all(union(keys$primary, keys$foreign) %in% names(data)))
 
   if (!is.null(keys$foreign) && is.null(keys$parent) || (is.null(keys$foreign) && !is.null(keys$parent))) {
@@ -50,15 +50,11 @@ dataset <- function(dataname,
     stop(dataname, ": Keys don't uniquely distinguish the rows,  i.e. some rows share the same keys")
   }
 
-  res <- structure(
-    list(
-      dataname = dataname,
-      data = data,
-      keys = keys,
-      column_labels = var_labels(data),
-      dataset_label = data_label(data)
-    ),
-    class = "dataset"
+  res <- RelationalDataset$new(
+    x = data,
+    dataname = dataname,
+    keys = keys,
+    label = data_label(data)
   )
 
   return(res)
@@ -101,13 +97,13 @@ data_label <- function(data) {
   x
 }
 
-#' Function that returns list of keys
+#' Function that returns a keys object
 #'
 #' @param primary vector of primary key values
 #' @param foreign vector of foreign key values
 #' @param parent string that indicates parent dataset
 #'
-#' @return list of keys
+#' @return keys
 #'
 #' @export
 #'
@@ -119,7 +115,10 @@ keys <- function(primary, foreign, parent) {
   stopifnot(is.null(foreign) || is_character_vector(foreign))
   stopifnot(is.null(parent) || is_character_single(parent))
 
-  return(list(primary = primary, foreign = foreign, parent = parent))
+  out <- list(primary = primary, foreign = foreign, parent = parent)
+  class(out) <- "keys"
+
+  return(out)
 }
 
 #' Function that returns the default keys for a `CDISC` dataset by name
@@ -148,7 +147,9 @@ get_cdisc_keys <- function(dataname) {
     stop(sprintf("There is no dataset called: %s \n  List of supported cdisc_datasets:\n   %s",
                  dataname, paste(names(default_cdisc_keys), collapse = ", ")))
   } else {
-    return(default_cdisc_keys[[dataname]])
+    cdisc_keys <- default_cdisc_keys[[dataname]]
+
+    return(keys(cdisc_keys$primary, cdisc_keys$foreign, cdisc_keys$parent))
   }
 }
 
@@ -236,10 +237,9 @@ get_variable_labels <- function(data, columns = NULL) {
 cdisc_dataset <- function(dataname,
                           data,
                           keys = get_cdisc_keys(dataname)) {
-    x <- dataset(dataname, data, keys)
-    class(x) <- c("cdisc_dataset", class(x))
-    x
-  }
+    dataset(dataname, data, keys)
+
+}
 
 
 #' Utility function to check if foreign keys are existing in parent dataset
@@ -363,7 +363,7 @@ cdisc_data <- function(...,
   code <- paste0(code, collapse = "\n")
   dlist <- list(...)
 
-  if (!is_class_list("dataset")(dlist)) {
+  if (!is_class_list("RelationalDataset")(dlist)) {
     stop("Argument in not of class dataset, please use cdisc_dataset function!")
   }
 

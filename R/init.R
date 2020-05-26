@@ -264,7 +264,11 @@ init <- function(data,
       .log("data loaded successfully")
       data <- raw_data()
 
+      progress <- shiny::Progress$new(session)
+      on.exit(progress$close())
+      progress$set(0.1, message = "Setting data")
       set_datasets_data(datasets, data)
+      progress$set(0.3, message = "Setting filters")
       set_datasets_filters(datasets, initial_filter_states)
 
       if (!is.null(saved_datasets_state)) {
@@ -274,23 +278,23 @@ init <- function(data,
         # however, onRestore only runs in the first flush and not in the flush when the
         # password was finally provided
         .log("restoring filter state from bookmarked state")
-        tryCatch(
-          datasets$set_from_bookmark_state(saved_datasets_state),
-          error = function(cnd) {
-            showModal(modalDialog(
-              div(
-                p("Could not restore the session: "),
-                tags$pre(id = "error_msg", cnd$message),
-              ),
-              title = "Error restoring the bookmarked state",
-              footer = tagList(
-                actionButton("copy_code", "Copy to Clipboard", `data-clipboard-target` = "#error_msg"),
-                modalButton("Dismiss")
-              ),
-              size = "l", easyClose = TRUE
-            ))
-          }
-        )
+        tryCatch({
+          progress$set(0.5, message = "Restoring from bookmarked state")
+          datasets$set_from_bookmark_state(saved_datasets_state)
+        }, error = function(cnd) {
+          showModal(modalDialog(
+            div(
+              p("Could not restore the session: "),
+              tags$pre(id = "error_msg", cnd$message),
+            ),
+            title = "Error restoring the bookmarked state",
+            footer = tagList(
+              actionButton("copy_code", "Copy to Clipboard", `data-clipboard-target` = "#error_msg"),
+              modalButton("Dismiss")
+            ),
+            size = "l", easyClose = TRUE
+          ))
+        })
       }
 
       # call server functions for teal modules and filter panel
@@ -301,8 +305,11 @@ init <- function(data,
       call_filter_modules(datasets)
 
       ui_teal_main <- modules_with_filters_ui(modules, datasets)
+      progress$set(0.7, message = "Replacing UI with main UI")
       insertUI(selector = startapp_selector, where = "afterEnd", ui = ui_teal_main)
       removeUI(startapp_selector)
+
+      showNotification("App fully started up")
     })
   }
 

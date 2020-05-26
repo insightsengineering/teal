@@ -78,6 +78,16 @@ resolve_delayed.delayed_value_choices <- function(x, datasets) { # nolint
 }
 
 #' @export
+#' @importFrom methods is
+resolve_delayed.delayed_choices_selected <- function(x, datasets) { # nolint
+  x$choices <- resolve_delayed(x$choices, datasets = datasets)
+  if (!is.null(x$selected)) {
+    x$selected <- `if`(is(x$selected, "delayed_data"), resolve_delayed(x$selected, datasets = datasets), x$selected)
+  }
+  return(do.call("choices_selected", x))
+}
+
+#' @export
 resolve_delayed.delayed_select_spec <- function(x, datasets) { # nolint
   x$choices <- resolve_delayed(x$choices, datasets = datasets)
   return(do.call("select_spec", x))
@@ -158,6 +168,14 @@ print.delayed_variable_choices <- function(x, indent = 0L, ...) {
 #' @export
 print.delayed_value_choices <- function(x, indent = 0L, ...) {
   cat(indent_msg(indent, paste("value_choices with delayed data: ", x$data)))
+  cat("\n")
+  print_delayed_list(x, indent)
+  return(invisible(NULL))
+}
+
+#' @export
+print.delayed_choices_selected <- function(x, indent = 0L, ...) {
+  cat(indent_msg(indent, paste("choices_selected with delayed data: ", x$choices$data)))
   cat("\n")
   print_delayed_list(x, indent)
   return(invisible(NULL))
