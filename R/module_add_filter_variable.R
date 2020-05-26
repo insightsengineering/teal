@@ -1,4 +1,4 @@
-# todo: add example
+# sodo3: add example
 
 #' UI to select among the column names of a dataset to add as a filter variable
 #'

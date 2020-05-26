@@ -105,7 +105,7 @@ error_dialog <- function(x) {
   }
 }
 
-# todo: test this function
+# sodo3: test this function or put into another package?
 #' Restore labels from a list of `data.frames`
 #'
 #' This is useful to restore labels after `dplyr` transformations where labels
@@ -176,14 +176,24 @@ restore_labels <- function(x, from, x_label_precedence = TRUE) {
 }
 
 # get non-NULL labels for single df
+# see `set_labels_df`
 get_labels_df <- function(df) {
   unlist(Filter(Negate(is.null), lapply(df, function(col) attr(col, "label"))))
 }
-# df1 <- set_labels_df(
-#   data.frame(a = 1, b = 2, c = 3, d = 4),
-#   c(a = "l1", b = "l2", c = "l3")
-# )
-# get_labels_df(df1)
+
+#' Set labels of a data.frame
+#'
+#' @param df `data.frame`
+#' @param labels named `character vector` of labels,
+#'   must all be column names present in `df`
+#' @md
+#' @return `data.frame` with labels set
+#' @examples
+#' df1 <- set_labels_df(
+#'   data.frame(a = 1, b = 2, c = 3, d = 4),
+#'   c(a = "l1", b = "l2", c = "l3")
+#' )
+#' get_labels_df(df1)
 set_labels_df <- function(df, labels) {
   stopifnot(is.data.frame(df))
   stopifnot(is_character_vector(labels, min_length = 0))
@@ -235,7 +245,12 @@ get_random_joke <- function() {
 
   # sample joke
   joke_idx <- sample(valid_indices, 1)
-  return(paste(file_contents[ start_positions[[joke_idx]]:end_positions[[joke_idx]] ], collapse = "\n"))
+  return(paste(
+    file_contents[
+      start_positions[[joke_idx]]:end_positions[[joke_idx]]
+    ],
+    collapse = "\n"
+  ))
 }
 
 # sodo3: move into utils.nest

@@ -80,12 +80,9 @@ bookmark_module <- function(label = "Bookmark module") {
   module(
     label = label,
     server = function(input, output, session, datasets) {
-      # needs to be stored on server because datasets are too big to be URL-encoded
-      # done in server for now
-      #stopifnot(identical(getShinyOption("bookmarkStore"), "server"))
-
       observeEvent(input$bookmark, {
-        if (!isTRUE(getShinyOption("bookmarkStore") %in% c("url", "server"))) { # isTRUE because may be NULL
+        if (!isTRUE(getShinyOption("bookmarkStore") %in% c("url", "server"))) {
+          # isTRUE because may be NULL
           showModal(modalDialog(
             title = "Bookmarking not enabled",
             paste0(
@@ -130,7 +127,7 @@ debug_browser_module <- function(label = "Debug with browser()") {
     label = label,
     server = function(input, output, session, datasets) {
       observeEvent(input$call_browser, {
-        # browser(), this escapes the regexp that checks for browser as it is needed here as part of the module
+        # `browser()`, this escapes the regexp that checks for browser as it is needed here as part of the module
         do.call(browser, list())
       })
     },

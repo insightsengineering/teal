@@ -182,7 +182,6 @@ label_to_id <- function(label, idprefix = NULL) {
 }
 
 
-# somehow unexported S3 methods do not work as expected
 # modules: teal_module or teal_modules
 # is_root: whether top element of modules should be at the root, i.e. in no tabSet
 # for teal_module: returns the ui
@@ -257,9 +256,14 @@ call_teal_modules <- function(modules, datasets, idprefix) {
   return(invisible(NULL))
 }
 
+# Note that for functions to be dispatched with S3, they need to be exported. This will
+# not actually export the function with the class specifier, but only make it available
+# for S3 method dispatch, see
+# https://stackoverflow.com/questions/18512528/how-to-export-s3-method-so-it-is-available-in-namespace
+
 #' Convert `teal_modules` to a string
 #'
-#' The irst line prints the `modules` label.
+#' The first line prints the `modules` label.
 #' The consecutive lines recursively list each submodule.
 #'
 #' @md
@@ -268,6 +272,7 @@ call_teal_modules <- function(modules, datasets, idprefix) {
 #'   each submodule is indented one level more
 #' @param ... additional parameters to pass to recursive calls of `toString`
 #' @return `single character` with lines separated by `\n`
+#' @export
 toString.teal_modules <- function(modules, indent = 0, ...) { # nolint
   paste(c(
     paste0(rep(" ", indent), "+ ", modules$label),
@@ -279,15 +284,16 @@ toString.teal_modules <- function(modules, indent = 0, ...) { # nolint
 #' @param module `teal_module`
 #' @inheritParams toString.teal_modules
 #' @param ... ignored
+#' @export
 toString.teal_module <- function(module, indent = 0, ...) { # nolint
   paste0(paste(rep(" ", indent), collapse = ""), "+ ", module$label, collapse = "")
 }
 
-# todo: check unexported still works
 #' Print `teal_modules`
 #' @md
 #' @param x `teal_modules`
 #' @param ... parameters passed to `toString`
+#' @export
 print.teal_modules <- function(x, ...) {
   s <- toString(x, ...)
   cat(s)

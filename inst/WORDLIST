@@ -69,6 +69,7 @@ shinyServer
 songy
 SREPs
 STUDYID
+submodule
 swimlane
 teal
 testthat

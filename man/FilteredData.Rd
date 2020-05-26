@@ -53,7 +53,6 @@ execute_example <- function() {
   options(shiny.suppressMissingContextError = TRUE)
   on.exit(options(shiny.suppressMissingContextError = FALSE), add = TRUE)
 
-  cat(getOption("shiny.suppressMissingContextError"), file = "/home/bceuser/mordigm/scratch/teal/dummy.txt")
   datasets$set_data("ADSL", ADSL)
 
   datasets$datanames()
@@ -622,7 +621,7 @@ class may be used outside of a Shiny app.
 \item{\code{state}}{\code{list} containing fields \code{data_md5sums}, \code{filter_states}
 and \code{preproc_code}.}
 
-\item{\code{check_data_md5sums}}{\code{logical} whether to check that md5sums agree
+\item{\code{check_data_md5sums}}{\code{logical} whether to check that \code{md5sums} agree
 for the data; may not make sense with randomly generated data per session}
 }
 \if{html}{\out{</div>}}

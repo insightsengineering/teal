@@ -49,7 +49,6 @@ filter_panel_ui <- function(id, datanames) {
       class = "well",
       tags$label("Active Filter Variables", class = "text-primary", style = "margin-bottom: 15px;"),
       tagList(
-        #tags$p("Filters info currently not shown")
         ui_filter_info(ns("teal_filters_info"))
       ),
       tagList(
@@ -99,7 +98,7 @@ filter_panel_srv <- function(input, output, session, datasets, active_datanames)
   )
 
   # we keep anything that may be selected to add (happens when the variable is not available for filtering)
-  #lapply(isol_datanames, function(dataname) paste0("teal_add_", dataname, "_filter"))
+  # lapply(isol_datanames, function(dataname) paste0("teal_add_", dataname, "_filter")) #nolintr
   setBookmarkExclude(names = c(
     # these will be regenerated dynamically
     lapply(isol_datanames, function(dataname) paste0("teal_filters_", dataname))

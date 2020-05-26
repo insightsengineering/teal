@@ -100,7 +100,8 @@ srv_filter_items <- function(input, output, session, datasets, dataname) {
   # named list of variables that are shown with each item containing the associated observers
   # that must be destroyed once the UI is removed
   shown_vars_observers <- NULL
-  filtered_vars <- reactive(names(datasets$get_filter_state(dataname))) # variables to filter according to datasets state
+  # variables to filter according to datasets state
+  filtered_vars <- reactive(names(datasets$get_filter_state(dataname)))
   filter_id_for_var <- function(varname) paste0("filter_", varname)
 
   observeEvent(filtered_vars(), {

@@ -53,7 +53,6 @@
 #'   options(shiny.suppressMissingContextError = TRUE)
 #'   on.exit(options(shiny.suppressMissingContextError = FALSE), add = TRUE)
 #'
-#'   cat(getOption("shiny.suppressMissingContextError"), file = "/home/bceuser/mordigm/scratch/teal/dummy.txt")
 #'   datasets$set_data("ADSL", ADSL)
 #'
 #'   datasets$datanames()
@@ -180,7 +179,7 @@ FilteredData <- R6::R6Class( # nolint
       private$filter_state[[dataname]] <- list()
       private$previous_filter_state[[dataname]] <- list()
 
-      # save md5sum for reproducibility
+      # save `md5sum` for reproducibility
       attr(data, "md5sum") <- digest(data, algo = "md5")
       private$datasets[[dataname]] <- data
 
@@ -567,7 +566,10 @@ FilteredData <- R6::R6Class( # nolint
           # right alignment: %10s, left alignment: %-10s
           txt <- sprintf(paste0("%-", var_maxlength, "s has filter type %-10s: "), varname, var_info$type)
           log2(paste0(txt, filter_state_to_str(var_info$type, var_info)))
-          log2(paste0(sprintf(paste0("%", nchar(txt), "s"), "\\--> selected: "), filter_state_to_str(var_info$type, var_state)))
+          log2(paste0(
+            sprintf(paste0("%", nchar(txt), "s"), "\\--> selected: "),
+            filter_state_to_str(var_info$type, var_state)
+          ))
         }
         if (length(varnames) == 0) {
           log2("There are no", if (filtered_vars_only) "filtered", "variables for dataset", dataname)
@@ -644,7 +646,7 @@ FilteredData <- R6::R6Class( # nolint
     #' @md
     #' @param state `list` containing fields `data_md5sums`, `filter_states`
     #'   and `preproc_code`.
-    #' @param check_data_md5sums `logical` whether to check that md5sums agree
+    #' @param check_data_md5sums `logical` whether to check that `md5sums` agree
     #'   for the data; may not make sense with randomly generated data per session
     set_from_bookmark_state = function(state, check_data_md5sums = TRUE) {
       stopifnot(
@@ -702,8 +704,10 @@ FilteredData <- R6::R6Class( # nolint
     # private attributes ----
 
     # the following attributes are (possibly reactive lists) per dataname
-    datasets = NULL, # unfiltered datasets, attributes per dataname are possible like `keys`, `data_label` etc.
-    filtered_datasets = NULL, # stores reactive which return filtered dataset after applying filter to unfiltered dataset
+    # unfiltered datasets, attributes per dataname are possible like `keys`, `data_label` etc.
+    datasets = NULL,
+    # stores reactive which return filtered dataset after applying filter to unfiltered dataset
+    filtered_datasets = NULL,
     # filter to apply to obtain filtered dataset from unfiltered one, NULL (for a dataname) means
     # no filter applied: it does not mean that it does not show up as a filtering element,
     # NULL just means that filtering has no effect
@@ -728,7 +732,6 @@ FilteredData <- R6::R6Class( # nolint
     # Validate object to inspect if something is wrong
     #
     validate = function() {
-      tryCatch({
       stopifnot(
         # check classes
         is.reactivevalues(private$datasets),
@@ -767,8 +770,6 @@ FilteredData <- R6::R6Class( # nolint
         })
       })
 
-      }, error = function(e) { ; stop(e)})
-
       return(invisible(NULL))
     },
 
@@ -788,7 +789,8 @@ FilteredData <- R6::R6Class( # nolint
 
       isolate({
         # we isolate everything because we don't want to trigger again when datanames change
-        if (!(dataname %in% self$datanames())) { # data must be set already
+        if (!(dataname %in% self$datanames())) {
+          # data must be set already
           stop(paste("data", dataname, "is not available"))
         }
         if (!is.null(varname) && !(varname %in% names(self$get_data(dataname, filtered = FALSE)))) {
