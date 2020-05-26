@@ -2,7 +2,7 @@
 % Please edit documentation in R/DataConnection.R
 \name{rice_connection}
 \alias{rice_connection}
-\title{Open connection to \code{random.cdisc.data}}
+\title{Open connection to \code{rice}}
 \usage{
 rice_connection()
 }
@@ -10,5 +10,5 @@ rice_connection()
 \code{DataConnection} type of object
 }
 \description{
-Open connection to \code{random.cdisc.data}
+Open connection to \code{rice}
 }

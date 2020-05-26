@@ -25,13 +25,14 @@ Data can be pulled via \code{pull} method and returned via \code{get_dataset} me
 }
 \examples{
 \dontrun{
-open_fun <- callable_function(data.frame)  # define opening function
-open_fun$set_args(list(x = 1:5))   # define fixed arguments to opening function
+open_fun <- callable_function(data.frame) # define opening function
+open_fun$set_args(list(x = 1:5)) # define fixed arguments to opening function
 
 close_fun <- callable_function(print) # define closing function
-close_fun$set_args(list(x = "Hi there"))  # define fixed arguments to closing function
+close_fun$set_args(list(x = "Hi there")) # define fixed arguments to closing function
 
 x <- DataConnection$new() # define connection
+x$set_ping_fun(ping_fun) # able to set an optional ping function - eg. rice::rice_session_active
 x$set_open_fun(open_fun) # define opening function
 x$set_close_fun(close_fun) # define closing function
 
@@ -60,6 +61,8 @@ x$close() # call closing function
 \item \href{#method-set_close_fun}{\code{DataConnection$set_close_fun()}}
 \item \href{#method-set_close_args}{\code{DataConnection$set_close_args()}}
 \item \href{#method-refresh_calls}{\code{DataConnection$refresh_calls()}}
+\item \href{#method-ping}{\code{DataConnection$ping()}}
+\item \href{#method-set_ping_fun}{\code{DataConnection$set_ping_fun()}}
 \item \href{#method-clone}{\code{DataConnection$clone()}}
 }
 }
@@ -253,6 +256,37 @@ Refresh both open and close calls
 \if{html}{\out{<div class="r">}}\preformatted{DataConnection$refresh_calls()}\if{html}{\out{</div>}}
 }
 
+\subsection{Returns}{
+nothing
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-ping"></a>}}
+\subsection{Method \code{ping()}}{
+ping the connection.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{DataConnection$ping()}\if{html}{\out{</div>}}
+}
+
+\subsection{Returns}{
+logical
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-set_ping_fun"></a>}}
+\subsection{Method \code{set_ping_fun()}}{
+Set a ping function
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{DataConnection$set_ping_fun(fun)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{fun}}{(\code{CallableFunction}) function to ping connection}
+}
+\if{html}{\out{</div>}}
+}
 \subsection{Returns}{
 nothing
 }

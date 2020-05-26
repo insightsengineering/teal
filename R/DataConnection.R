@@ -7,13 +7,14 @@
 #'
 #' @examples
 #' \dontrun{
-#' open_fun <- callable_function(data.frame)  # define opening function
-#' open_fun$set_args(list(x = 1:5))   # define fixed arguments to opening function
+#' open_fun <- callable_function(data.frame) # define opening function
+#' open_fun$set_args(list(x = 1:5)) # define fixed arguments to opening function
 #'
 #' close_fun <- callable_function(print) # define closing function
-#' close_fun$set_args(list(x = "Hi there"))  # define fixed arguments to closing function
+#' close_fun$set_args(list(x = "Hi there")) # define fixed arguments to closing function
 #'
 #' x <- DataConnection$new() # define connection
+#' x$set_ping_fun(ping_fun) # able to set an optional ping function - eg. rice::rice_session_active
 #' x$set_open_fun(open_fun) # define opening function
 #' x$set_close_fun(close_fun) # define closing function
 #'
@@ -28,7 +29,7 @@
 #'
 #' x$close() # call closing function
 #' }
-DataConnection <- R6::R6Class( #nolint
+DataConnection <- R6::R6Class( # nolint
   # DataConnection public ----
   "DataConnection",
   public = list(
@@ -51,7 +52,7 @@ DataConnection <- R6::R6Class( #nolint
     open = function(args = NULL, silent = FALSE, try = FALSE) {
       stopifnot(is.null(args) || (is.list(args) && is_fully_named_list(args)))
       if_cond(private$check_open_fun(silent = silent), return(), isFALSE)
-      if (private$opened) {
+      if (isTRUE(self$ping())) {
         return(invisible(NULL))
       } else {
         open_res <- private$open_fun$run(args = args, try = try)
@@ -86,7 +87,7 @@ DataConnection <- R6::R6Class( #nolint
     #' @return if \code{try = TRUE} then \code{try-error} on error, \code{NULL} otherwise
     close = function(silent = FALSE, try = FALSE) {
       if_cond(private$check_close_fun(silent = silent), return(), isFALSE)
-      if (private$opened) {
+      if (isTRUE(self$ping())) {
         close_res <- private$close_fun$run(try = try)
         if (is(close_res, "try-error")) {
           return(close_res)
@@ -167,11 +168,39 @@ DataConnection <- R6::R6Class( #nolint
       if (!is.null(private$close_fun)) {
         private$close_fun$refresh()
       }
+      if (!is.null(private$ping_fun)) {
+        private$ping_fun$refresh()
+      }
+    },
+    #' @description
+    #' ping the connection.
+    #'
+    #' @return logical
+    ping = function() {
+      if (!is.null(private$ping_fun)) {
+        ping_res <- private$ping_fun$run()
+        return(isTRUE(ping_res))
+      } else {
+        return(invisible(NULL))
+      }
+    },
+    #' @description
+    #' Set a ping function
+    #'
+    #' @param fun (\code{CallableFunction}) function to ping connection
+    #'
+    #' @return nothing
+    set_ping_fun = function(fun) {
+      stopifnot(is(fun, "CallableFunction"))
+      private$ping_fun <- fun
+      self$refresh_calls()
+      return(invisible(NULL))
     }
   ),
   # DataConnection private ----
   private = list(
     open_fun = NULL, # ArgFun
+    ping_fun = NULL,
     check_open_fun = function(silent = FALSE) {
       stopifnot(is_logical_single(silent))
 
@@ -213,7 +242,6 @@ DataConnection <- R6::R6Class( #nolint
 #'
 #' @return \code{DataConnection} type of object
 rcd_connection <- function() {
-
   check_pckg_quietly("random.cdisc.data", "random.cdisc.data package not available.") # nolint
 
   fun <- callable_function(library) # nolint
@@ -226,23 +254,34 @@ rcd_connection <- function() {
 }
 
 
-#' Open connection to \code{random.cdisc.data}
+#' Open connection to \code{rice}
 #'
 #' @return \code{DataConnection} type of object
 rice_connection <- function() {
+  check_pckg_quietly(
+    "rice",
+    paste0(
+      "Connection to entimICE via rice was requested, but rice package is not available.",
+      "Please install it from https://github.roche.com/Rpackages/rice."
+    )
+  )
 
-  check_pckg_quietly("rice",
-                     paste0("Connection to entimICE via rice was requested, but rice package is not available.",
-                            "Please install it from https://github.roche.com/Rpackages/rice."))
+  ping_fun <- callable_function(rice::rice_session_active) # nolint
 
   open_fun <- callable_function(rice::rice_session_open) # nolint
 
   close_fun <- callable_function(rice::rice_session_close) # nolint
   close_fun$set_args(list(message = FALSE))
 
+
   x <- DataConnection$new() # nolint
+
+  x$set_ping_fun(ping_fun)
+
   x$set_open_fun(open_fun)
+
   x$set_close_fun(close_fun)
+
 
   return(x)
 }
