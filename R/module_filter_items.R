@@ -108,8 +108,8 @@ srv_filter_items <- function(input, output, session, datasets, dataname) {
   filtered_vars <- reactive(names(datasets$get_filter_state(dataname)))
   filter_id_for_var <- function(varname) paste0("filter_", varname)
 
-  observeEvent(filtered_vars(),
-    {
+  observeEvent(
+    filtered_vars(), {
       # this block has an effect whenever the shown variable filters differ from the datasets state
       .log("regenerating ui filters for data", dataname)
 

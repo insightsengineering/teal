@@ -282,8 +282,7 @@ init <- function(data,
         # however, onRestore only runs in the first flush and not in the flush when the
         # password was finally provided
         .log("restoring filter state from bookmarked state")
-        tryCatch(
-          {
+        tryCatch({
             progress$set(0.5, message = "Restoring from bookmarked state")
             datasets$set_from_bookmark_state(saved_datasets_state)
           },
