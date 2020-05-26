@@ -73,7 +73,7 @@ test_that("resolve_delayed select_spec works", {
                      BMRKR1 = rnorm(10),
                      BMRKR2 = sample(c("L", "M", "H"), 10, replace = T),
                      stringsAsFactors = F)
-
+  attr(ADSL, "keys") <- get_cdisc_keys("ADSL")
 
   expected_spec <- select_spec(
     choices = variable_choices(ADSL, c("BMRKR1", "BMRKR2")),

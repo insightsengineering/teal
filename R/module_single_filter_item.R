@@ -13,6 +13,7 @@ get_keep_na_label <- function(na_count) paste0("Keep NA (", na_count, ")")
 #'
 #' @examples
 #' library(random.cdisc.data)
+#' library(dplyr)
 #'
 #' ADSL <- radsl(cached = TRUE)
 #' attr(ADSL, "keys") <- get_cdisc_keys("ADSL")

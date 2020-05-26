@@ -40,15 +40,16 @@ include_js_files <- function(package = "teal", pattern = "*", except = NULL) {
   lapply(js_files, includeScript)
 }
 
-#' Run \code{JS} file from \code{/inst/js/} package directory
+#' Run `JS` file from `/inst/js/` package directory
 #'
 #' This is triggered from the server to execute on the client
 #' rather than triggered directly on the client.
 #' Unlike `include_js_files` which includes Javascript functions,
 #' the `run_js` actually executes Javascript functions.
 #'
-#' @param file (\code{character}) vector of file names
-#' @param package (\code{character}) package name
+#' @md
+#' @param file (`character`) vector of file names
+#' @param package (`character`) package name
 #'
 #' @export
 run_js_files <- function(files, package = "teal") {
@@ -61,7 +62,7 @@ run_js_files <- function(files, package = "teal") {
   }
 }
 
-#' Code to include teal CSS and JS files
+#' Code to include teal CSS and Javascript files
 #'
 #' This is useful when you want to use the same Javascript and CSS files that are
 #' used with the teal application.
@@ -69,6 +70,7 @@ run_js_files <- function(files, package = "teal") {
 #' styles.
 #' Also initializes `shinyjs` so you can use it.
 #'
+#' @md
 #' @return HTML code to include
 #' @examples
 #' shiny_ui <- tagList(

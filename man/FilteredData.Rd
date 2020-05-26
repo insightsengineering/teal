@@ -40,47 +40,55 @@ Common arguments are:
 \examples{
 library(random.cdisc.data)
 
-ADSL <- radsl(cached = TRUE)
-attr(ADSL, "keys") <- get_cdisc_keys("ADSL")
-datasets <- teal:::FilteredData$new()
+# for `on.exit` to work with examples which are executed line-by-line
+# note: you can still execute every line in the function line-by-line
+# without calling the function as a whole, beware that the exit handler
+# is not called in this case
+execute_example <- function() {
+  ADSL <- radsl(cached = TRUE)
+  attr(ADSL, "keys") <- get_cdisc_keys("ADSL")
+  datasets <- teal:::FilteredData$new()
 
-# to evaluate without isolate(), i.e. provide a default isolate context
-options(shiny.suppressMissingContextError = TRUE)
-on.exit(options(shiny.suppressMissingContextError = FALSE), add = TRUE)
+  # to evaluate without isolate(), i.e. provide a default isolate context
+  options(shiny.suppressMissingContextError = TRUE)
+  on.exit(options(shiny.suppressMissingContextError = FALSE), add = TRUE)
 
-datasets$set_data("ADSL", ADSL)
+  cat(getOption("shiny.suppressMissingContextError"), file = "/home/bceuser/mordigm/scratch/teal/dummy.txt")
+  datasets$set_data("ADSL", ADSL)
 
-datasets$datanames()
-datasets$get_data_info("ADSL", filtered = FALSE)
-# filters dataset to obtain information
-datasets$get_data_info("ADSL", filtered = TRUE)
-datasets$get_filter_info("ADSL")
-df <- datasets$get_data("ADSL", filtered = FALSE)
-# df
+  datasets$datanames()
+  datasets$get_data_info("ADSL", filtered = FALSE)
+  # filters dataset to obtain information
+  datasets$get_data_info("ADSL", filtered = TRUE)
+  datasets$get_filter_info("ADSL")
+  df <- datasets$get_data("ADSL", filtered = FALSE)
+  # df
 
-datasets$get_filter_type("ADSL", "SEX")
-datasets$set_filter_state("ADSL", varname = NULL, state = list(
-  AGE = list(range = c(33, 44), keep_na = FALSE),
-  SEX = list(choices = c("M", "F"), keep_na = FALSE)
-))
-datasets$get_filter_type("ADSL", "SEX")
-datasets$get_filter_info("ADSL")[["SEX"]]$type
+  datasets$get_filter_type("ADSL", "SEX")
+  datasets$set_filter_state("ADSL", varname = NULL, state = list(
+    AGE = list(range = c(33, 44), keep_na = FALSE),
+    SEX = list(choices = c("M", "F"), keep_na = FALSE)
+  ))
+  datasets$get_filter_type("ADSL", "SEX")
+  datasets$get_filter_info("ADSL")[["SEX"]]$type
 
-# will fail because of invalid range
-# datasets$set_filter_state("ADSL", varname = NULL, list(
-#   AGE = list(range = c(3, 7), keep_na = FALSE)
-# ))
-datasets$set_filter_state("ADSL", varname = NULL, list(
-  AGE = list(range = c(33, 44), keep_na = FALSE)
-))
-datasets$set_filter_state(
-  "ADSL",
-  varname = "SEX",
-  state = list(choices = c("M", "F"), keep_na = FALSE)
-)
-datasets$get_filter_type("ADSL", "SEX")
+  # will fail because of invalid range
+  # datasets$set_filter_state("ADSL", varname = NULL, list(
+  #   AGE = list(range = c(3, 7), keep_na = FALSE)
+  # ))
+  datasets$set_filter_state("ADSL", varname = NULL, list(
+    AGE = list(range = c(33, 44), keep_na = FALSE)
+  ))
+  datasets$set_filter_state(
+    "ADSL",
+    varname = "SEX",
+    state = list(choices = c("M", "F"), keep_na = FALSE)
+  )
+  datasets$get_filter_type("ADSL", "SEX")
 
-datasets$get_filter_state("ADSL")
+  datasets$get_filter_state("ADSL")
+}
+execute_example()
 }
 \section{Methods}{
 \subsection{Public methods}{
@@ -179,7 +187,7 @@ Add data
 
 Will also add the \code{md5} sum of the data.
 
-Note: due to the nature of reactiveValues(), once a dataname
+Note: due to the nature of \code{reactiveValues()}, once a dataname
 is added, it cannot be removed anymore because some code may depend
 on it. You can try to achieve this by setting the data to NULL
 and the observers must then know that NULL means that the dataset
@@ -577,7 +585,7 @@ a patient can occur in zero or more rows)
 a list with names \verb{dim, patients}
 Returns the state to be bookmarked
 
-md5 sums of \code{datasets}, \code{filter_states} and \code{preproc_code} are bookmarked,
+\code{md5} sums of \code{datasets}, \code{filter_states} and \code{preproc_code} are bookmarked,
 \code{previous_filter_state} is not bookmarked.
 }
 }

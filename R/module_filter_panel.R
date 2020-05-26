@@ -8,6 +8,7 @@
 #' @examples
 #' # Example with ADSL and ADAE dataset
 #' library(random.cdisc.data)
+#' library(dplyr)
 #'
 #' ADSL <- radsl(cached = TRUE)
 #' attr(ADSL, "keys") <- get_cdisc_keys("ADSL")

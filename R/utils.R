@@ -105,22 +105,25 @@ error_dialog <- function(x) {
   }
 }
 
-
-#' Restore labels from a list of data.frames
+# todo: test this function
+#' Restore labels from a list of `data.frames`
 #'
-#' This is useful to restore labels after dplyr transformations where labels
+#' This is useful to restore labels after `dplyr` transformations where labels
 #' are typically lost.
-#' This also works well with merged datasets.
-#' In case of columns of the same name in `from`, the label from the
-#' first data.frame in the `from` list is used.
+#' This also works well with merged datasets to restore labels from its
+#' constituent datasets.
+#' In case of columns with the same name in `from`, the label from the
+#' first `data.frame` in the `from` list is used.
 #'
 #' @md
-#' @param x `data.frame `
-#' @param from list of data.frames
-#' @param x_label_precedence `logical` whether labels from x take precedence
+#' @param x `data.frame` that needs labels
+#' @param from `list of data.frames` to take labels from
+#' @param x_label_precedence `logical` whether labels from `x` take precedence
 #'   when there are also labels for a given column in the `from` list
 #'
 #' @examples
+#' set_labels_df <- teal:::set_labels_df
+#' get_labels_df <- teal:::get_labels_df
 #' df0 <- set_labels_df(
 #'   data.frame(a = 1, b = 2, c = 3, d = 4, i = 8, x = 24),
 #'   c(c = "l3_orig", i = "l9_orig")
@@ -141,8 +144,14 @@ error_dialog <- function(x) {
 #'   c(a = "l111", c = "l333", d = "l444")
 #' )
 #' get_labels_df(df3)
-#' all(get_labels_df(restore_labels(df0, list(df1, df2, df3))) == c(a = "l1", b = "l2", c = "l3_orig", d = "l444", i = "l9_orig"))
-#' all(get_labels_df(restore_labels(df0, list(df1, df2, df3), x_label_precedence = FALSE)) == c(a = "l1", b = "l2", c = "l3", d = "l444", i = "l9_orig"))
+#' stopifnot(all(
+#'   get_labels_df(teal:::restore_labels(df0, list(df1, df2, df3))) ==
+#'     c(a = "l1", b = "l2", c = "l3_orig", d = "l444", i = "l9_orig")
+#' ))
+#' stopifnot(all(
+#'   get_labels_df(teal:::restore_labels(df0, list(df1, df2, df3), x_label_precedence = FALSE)) ==
+#'     c(a = "l1", b = "l2", c = "l3", d = "l444", i = "l9_orig")
+#' ))
 restore_labels <- function(x, from, x_label_precedence = TRUE) {
   stopifnot(
     is.data.frame(x),
@@ -192,16 +201,17 @@ set_labels_df <- function(df, labels) {
 #' The arguments in ... need to be quoted because they will be evaluated otherwise
 #'
 #' @examples
+#' `%>%` <- magrittr::`%>%`
 #' print_call_and_eval <- function(x) { eval(print(x)) }
 #'
 #' # mtcars$cyl evaluated
-#' call_with_colon("dplyr::filter", as.name("mtcars"), mtcars$cyl == 6) %>% print_call_and_eval()
+#' teal:::call_with_colon("dplyr::filter", as.name("mtcars"), mtcars$cyl == 6) %>% print_call_and_eval()
 #' # mtcars$cyl argument not evaluated immediately (in call expression)
-#' call_with_colon("dplyr::filter", as.name("mtcars"), rlang::expr(cyl == 6)) %>% print_call_and_eval()
+#' teal:::call_with_colon("dplyr::filter", as.name("mtcars"), rlang::expr(cyl == 6)) %>% print_call_and_eval()
 #'
 #' # does not work because argument is evaluated and the
 #' # non-dplyr filter does not look inside mtcars
-#' call("filter", as.name("mtcars"), rlang::expr(cyl == 6)) %>% print_call_and_eval()
+#' call("filter", as.name("mtcars"), rlang::expr(.data$cyl == 6)) %>% print_call_and_eval()
 #' # works, but non-dplyr filter is taken
 #' call("filter", as.name("mtcars"), mtcars$cyl == 6) %>% print_call_and_eval()
 call_with_colon <- function(name, ...) {
@@ -228,4 +238,25 @@ get_random_joke <- function() {
   return(paste(file_contents[ start_positions[[joke_idx]]:end_positions[[joke_idx]] ], collapse = "\n"))
 }
 
-
+# sodo3: move into utils.nest
+#' See a function's code in a temporary file
+#' This is more handy when you want to search for variables in the code a function
+#' rather than doing so in the console.
+#'
+#' Debugging function
+#'
+#' The file is created in the temporary directory of the R session and
+#' will be deleted once the R session exits.
+#'
+#' @param f function or object that is printed and whose output is shown in the file
+#' @examples
+#' \dontrun{
+#' teal:::see_in_file(factor)
+#' }
+see_in_file <- function(f) {
+  # will be deleted at end of session
+  filename <- tempfile(pattern = paste0(deparse(substitute(f)), "_"), fileext = ".R")
+  cat(paste(capture.output(f), collapse = "\n"), file = filename)
+  file.edit(filename)
+  return(invisible(NULL))
+}

@@ -1,3 +1,5 @@
+# todo: add example
+
 #' UI to select among the column names of a dataset to add as a filter variable
 #'
 #' Once something is selected, it puts it to the top right panel (see `\link{module_filter_items}`),

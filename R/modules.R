@@ -131,8 +131,8 @@ module <- function(label, server, ui, filters, server_args = NULL, ui_args = NUL
 #' @importFrom methods is
 #'
 #' @examples
-#' m <- module(
-#'   "aaa",
+#' create_mod <- function(module_name) module(
+#'   module_name,
 #'   server = function(input, output, session, datasets) {},
 #'   ui = function(id, ...) {},
 #'   filters = 'all'
@@ -143,22 +143,22 @@ module <- function(label, server, ui, filters, server_args = NULL, ui_args = NUL
 #'     "d2",
 #'     modules(
 #'       "d3",
-#'       m, m, m
+#'       create_mod("aaa1"), create_mod("aaa2"), create_mod("aaa3")
 #'     ),
-#'     m
+#'     create_mod("bbb")
 #'   ),
-#'   m
+#'   create_mod("ccc")
 #' )
-#' teal:::modules_depth(x)
+#' stopifnot(teal:::modules_depth(x) == 3)
 #'
 #' x <- modules(
 #'   "a",
 #'   modules(
-#'     "b", m
+#'     "b1", create_mod("c")
 #'   ),
-#'   m
+#'   create_mod("b2")
 #' )
-#' teal:::modules_depth(x)
+#' stopifnot(teal:::modules_depth(x) == 2)
 modules_depth <- function(modules, depth = 0) {
   if (is(modules, "teal_modules")) {
     max(vapply(modules$children, modules_depth, numeric(1), depth = depth + 1))
@@ -231,7 +231,7 @@ tab_nested_ui <- function(modules, datasets, idprefix, is_root = TRUE) {
   ))
 }
 
-# recursively call callModule for (nested) teal modules
+# recursively call `callModule` for (nested) teal modules
 call_teal_modules <- function(modules, datasets, idprefix) {
   stopifnot(is_character_single(idprefix))
   id <- label_to_id(modules$label, idprefix)
@@ -257,10 +257,17 @@ call_teal_modules <- function(modules, datasets, idprefix) {
   return(invisible(NULL))
 }
 
-#' Returns single string
-#' first line: modules label
-#' consecutive lines list recursively each submodule
-#' @export
+#' Convert `teal_modules` to a string
+#'
+#' The irst line prints the `modules` label.
+#' The consecutive lines recursively list each submodule.
+#'
+#' @md
+#' @param modules `teal_modules` to print
+#' @param indent `integer` indent level;
+#'   each submodule is indented one level more
+#' @param ... additional parameters to pass to recursive calls of `toString`
+#' @return `single character` with lines separated by `\n`
 toString.teal_modules <- function(modules, indent = 0, ...) { # nolint
   paste(c(
     paste0(rep(" ", indent), "+ ", modules$label),
@@ -268,18 +275,23 @@ toString.teal_modules <- function(modules, indent = 0, ...) { # nolint
   ), collapse = "\n")
 }
 
-#' Returns a single string that displays module label with indent
-#' @export
+#' Convert `teal_module` to a string
+#' @param module `teal_module`
+#' @inheritParams toString.teal_modules
+#' @param ... ignored
 toString.teal_module <- function(module, indent = 0, ...) { # nolint
   paste0(paste(rep(" ", indent), collapse = ""), "+ ", module$label, collapse = "")
 }
 
-#' @export
+# todo: check unexported still works
+#' Print `teal_modules`
+#' @md
+#' @param x `teal_modules`
+#' @param ... parameters passed to `toString`
 print.teal_modules <- function(x, ...) {
-  s <- toString(x)
+  s <- toString(x, ...)
   cat(s)
-  invisible(s)
+  return(invisible(s))
 }
 
-#' @export
 print.teal_module <- print.teal_modules

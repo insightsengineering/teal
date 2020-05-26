@@ -40,47 +40,55 @@
 #' @examples
 #' library(random.cdisc.data)
 #'
-#' ADSL <- radsl(cached = TRUE)
-#' attr(ADSL, "keys") <- get_cdisc_keys("ADSL")
-#' datasets <- teal:::FilteredData$new()
+#' # for `on.exit` to work with examples which are executed line-by-line
+#' # note: you can still execute every line in the function line-by-line
+#' # without calling the function as a whole, beware that the exit handler
+#' # is not called in this case
+#' execute_example <- function() {
+#'   ADSL <- radsl(cached = TRUE)
+#'   attr(ADSL, "keys") <- get_cdisc_keys("ADSL")
+#'   datasets <- teal:::FilteredData$new()
 #'
-#' # to evaluate without isolate(), i.e. provide a default isolate context
-#' options(shiny.suppressMissingContextError = TRUE)
-#' on.exit(options(shiny.suppressMissingContextError = FALSE), add = TRUE)
+#'   # to evaluate without isolate(), i.e. provide a default isolate context
+#'   options(shiny.suppressMissingContextError = TRUE)
+#'   on.exit(options(shiny.suppressMissingContextError = FALSE), add = TRUE)
 #'
-#' datasets$set_data("ADSL", ADSL)
+#'   cat(getOption("shiny.suppressMissingContextError"), file = "/home/bceuser/mordigm/scratch/teal/dummy.txt")
+#'   datasets$set_data("ADSL", ADSL)
 #'
-#' datasets$datanames()
-#' datasets$get_data_info("ADSL", filtered = FALSE)
-#' # filters dataset to obtain information
-#' datasets$get_data_info("ADSL", filtered = TRUE)
-#' datasets$get_filter_info("ADSL")
-#' df <- datasets$get_data("ADSL", filtered = FALSE)
-#' # df
+#'   datasets$datanames()
+#'   datasets$get_data_info("ADSL", filtered = FALSE)
+#'   # filters dataset to obtain information
+#'   datasets$get_data_info("ADSL", filtered = TRUE)
+#'   datasets$get_filter_info("ADSL")
+#'   df <- datasets$get_data("ADSL", filtered = FALSE)
+#'   # df
 #'
-#' datasets$get_filter_type("ADSL", "SEX")
-#' datasets$set_filter_state("ADSL", varname = NULL, state = list(
-#'   AGE = list(range = c(33, 44), keep_na = FALSE),
-#'   SEX = list(choices = c("M", "F"), keep_na = FALSE)
-#' ))
-#' datasets$get_filter_type("ADSL", "SEX")
-#' datasets$get_filter_info("ADSL")[["SEX"]]$type
+#'   datasets$get_filter_type("ADSL", "SEX")
+#'   datasets$set_filter_state("ADSL", varname = NULL, state = list(
+#'     AGE = list(range = c(33, 44), keep_na = FALSE),
+#'     SEX = list(choices = c("M", "F"), keep_na = FALSE)
+#'   ))
+#'   datasets$get_filter_type("ADSL", "SEX")
+#'   datasets$get_filter_info("ADSL")[["SEX"]]$type
 #'
-#' # will fail because of invalid range
-#' # datasets$set_filter_state("ADSL", varname = NULL, list(
-#' #   AGE = list(range = c(3, 7), keep_na = FALSE)
-#' # ))
-#' datasets$set_filter_state("ADSL", varname = NULL, list(
-#'   AGE = list(range = c(33, 44), keep_na = FALSE)
-#' ))
-#' datasets$set_filter_state(
-#'   "ADSL",
-#'   varname = "SEX",
-#'   state = list(choices = c("M", "F"), keep_na = FALSE)
-#' )
-#' datasets$get_filter_type("ADSL", "SEX")
+#'   # will fail because of invalid range
+#'   # datasets$set_filter_state("ADSL", varname = NULL, list(
+#'   #   AGE = list(range = c(3, 7), keep_na = FALSE)
+#'   # ))
+#'   datasets$set_filter_state("ADSL", varname = NULL, list(
+#'     AGE = list(range = c(33, 44), keep_na = FALSE)
+#'   ))
+#'   datasets$set_filter_state(
+#'     "ADSL",
+#'     varname = "SEX",
+#'     state = list(choices = c("M", "F"), keep_na = FALSE)
+#'   )
+#'   datasets$get_filter_type("ADSL", "SEX")
 #'
-#' datasets$get_filter_state("ADSL")
+#'   datasets$get_filter_state("ADSL")
+#' }
+#' execute_example()
 FilteredData <- R6::R6Class( # nolint
   "FilteredData",
   ## FilteredData ====
@@ -92,8 +100,8 @@ FilteredData <- R6::R6Class( # nolint
     #'
     #' @md
     initialize = function() {
-      # create reactiveValues for unfiltered and filtered dataset and filter state
-      # each reactiveValues is a list with one entry per dataset name
+      # create `reactiveValues` for unfiltered and filtered dataset and filter state
+      # each `reactiveValues` is a list with one entry per dataset name
       private$datasets <- reactiveValues()
       private$filtered_datasets <- reactiveValues()
       private$filter_state <- reactiveValues()
@@ -140,7 +148,7 @@ FilteredData <- R6::R6Class( # nolint
     #'
     #' Will also add the `md5` sum of the data.
     #'
-    #' Note: due to the nature of reactiveValues(), once a dataname
+    #' Note: due to the nature of `reactiveValues()`, once a dataname
     #' is added, it cannot be removed anymore because some code may depend
     #' on it. You can try to achieve this by setting the data to NULL
     #' and the observers must then know that NULL means that the dataset
@@ -601,7 +609,7 @@ FilteredData <- R6::R6Class( # nolint
     #' Returns the state to be bookmarked
     #'
     #'
-    #' md5 sums of `datasets`, `filter_states` and `preproc_code` are bookmarked,
+    #' `md5` sums of `datasets`, `filter_states` and `preproc_code` are bookmarked,
     #' `previous_filter_state` is not bookmarked.
     #'
     #' @md
@@ -677,7 +685,7 @@ FilteredData <- R6::R6Class( # nolint
         )
       }
 
-      # we have to be careful with reactiveValues to restore each item and not simply
+      # we have to be careful with `reactiveValues` to restore each item and not simply
       # reference the old reactive value, i.e. loop over it
       lapply(self$datanames(), function(dataname) {
         self$set_filter_state(dataname, varname = NULL, state = state$filter_states[[dataname]])
@@ -732,7 +740,6 @@ FilteredData <- R6::R6Class( # nolint
         # check names are the same
         setequal(names(private$datasets), names(private$filtered_datasets)),
         setequal(names(private$datasets), names(private$filter_infos)),
-        # iterating over reactive values: should use reactiveValuesToList first
         all_true(self$datanames(), function(dataname) !is.null(attr(private$datasets[[dataname]], "md5sum"))),
         setequal(names(private$datasets), names(private$filter_state)),
         setequal(names(private$datasets), names(private$previous_filter_state))

@@ -77,7 +77,7 @@
 #'       filters = "ADSL"
 #'     )
 #'   ),
-#'   filter = list(ADSL = c("AGE")),
+#'   initial_filter_states = list(ADSL = list(AGE = "default")),
 #'   header = tags$h1("Sample App"),
 #'   footer = tags$p("Copyright 2017 - 2020")
 #' )

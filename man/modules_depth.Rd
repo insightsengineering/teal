@@ -19,8 +19,8 @@ Depth starts at 0, so a single \code{teal.module} has depth 0.
 Nesting it increases overall depth by 1.
 }
 \examples{
-m <- module(
-  "aaa",
+create_mod <- function(module_name) module(
+  module_name,
   server = function(input, output, session, datasets) {},
   ui = function(id, ...) {},
   filters = 'all'
@@ -31,20 +31,20 @@ x <- modules(
     "d2",
     modules(
       "d3",
-      m, m, m
+      create_mod("aaa1"), create_mod("aaa2"), create_mod("aaa3")
     ),
-    m
+    create_mod("bbb")
   ),
-  m
+  create_mod("ccc")
 )
-teal:::modules_depth(x)
+stopifnot(teal:::modules_depth(x) == 3)
 
 x <- modules(
   "a",
   modules(
-    "b", m
+    "b1", create_mod("c")
   ),
-  m
+  create_mod("b2")
 )
-teal:::modules_depth(x)
+stopifnot(teal:::modules_depth(x) == 2)
 }

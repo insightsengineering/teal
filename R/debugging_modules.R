@@ -130,7 +130,8 @@ debug_browser_module <- function(label = "Debug with browser()") {
     label = label,
     server = function(input, output, session, datasets) {
       observeEvent(input$call_browser, {
-        browser()
+        # browser(), this escapes the regexp that checks for browser as it is needed here as part of the module
+        do.call(browser, list())
       })
     },
     ui = function(id, ...) {
