@@ -189,11 +189,11 @@ get_labels_df <- function(df) {
 #' @md
 #' @return `data.frame` with labels set
 #' @examples
-#' df1 <- set_labels_df(
+#' df1 <- teal:::set_labels_df(
 #'   data.frame(a = 1, b = 2, c = 3, d = 4),
 #'   c(a = "l1", b = "l2", c = "l3")
 #' )
-#' get_labels_df(df1)
+#' teal:::get_labels_df(df1)
 set_labels_df <- function(df, labels) {
   stopifnot(is.data.frame(df))
   stopifnot(is_character_vector(labels, min_length = 0))
@@ -210,20 +210,26 @@ set_labels_df <- function(df, labels) {
 #'
 #' The arguments in ... need to be quoted because they will be evaluated otherwise
 #'
+#' @md
+#' @param name `character` function name, possibly using namespace colon `::`
+#' @param ... arguments to pass to function with name `name`
 #' @examples
 #' `%>%` <- magrittr::`%>%`
 #' print_call_and_eval <- function(x) { eval(print(x)) }
 #'
 #' # mtcars$cyl evaluated
-#' teal:::call_with_colon("dplyr::filter", as.name("mtcars"), mtcars$cyl == 6) %>% print_call_and_eval()
+#' teal:::call_with_colon("dplyr::filter", as.name("mtcars"), mtcars$cyl == 6) %>%
+#'   print_call_and_eval()
 #' # mtcars$cyl argument not evaluated immediately (in call expression)
-#' teal:::call_with_colon("dplyr::filter", as.name("mtcars"), rlang::expr(cyl == 6)) %>% print_call_and_eval()
+#' teal:::call_with_colon("dplyr::filter", as.name("mtcars"), rlang::expr(cyl == 6)) %>%
+#'   print_call_and_eval()
 #'
 #' # does not work because argument is evaluated and the
 #' # non-dplyr filter does not look inside mtcars
-#' call("filter", as.name("mtcars"), rlang::expr(.data$cyl == 6)) %>% print_call_and_eval()
+#' # cannot eval becausee it does not pass checks because of non-standard evaluation
+#' call("filter", as.name("mtcars"), rlang::expr(cyl == 6))
 #' # works, but non-dplyr filter is taken
-#' call("filter", as.name("mtcars"), mtcars$cyl == 6) %>% print_call_and_eval()
+#' call("filter", as.name("mtcars"), mtcars$cyl == 6)
 call_with_colon <- function(name, ...) {
   as.call(c(
     parse(text = name)[[1]],
@@ -268,6 +274,7 @@ get_random_joke <- function() {
 #' \dontrun{
 #' teal:::see_in_file(factor)
 #' }
+#' @importFrom utils file.edit
 see_in_file <- function(f) {
   # will be deleted at end of session
   filename <- tempfile(pattern = paste0(deparse(substitute(f)), "_"), fileext = ".R")

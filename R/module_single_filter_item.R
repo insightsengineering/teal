@@ -7,6 +7,7 @@ get_keep_na_label <- function(na_count) paste0("Keep NA (", na_count, ")")
 #' with the `updateInput` functions.
 #'
 #' @md
+#' @param id module id
 #' @param filter_info `filter_info` returned by datasets class
 #' @param filter_state `filter_state` returned by datasets class
 #' @param prelabel `character` label to append before computed label of input
@@ -210,18 +211,19 @@ srv_single_filter_item <- function(input, output, session, datasets, dataname, v
         # Proportional
         data <- filter_info$histogram_data
         data$y <- rev(data$y / sum(data$y)) # we have to reverse because the histogram is turned by 90 degrees
-        ggplot(data) +
+        ggplot2::ggplot(data) +
           # sort factor so that it reflects checkbox order
-          aes_string(x = "x", y = "y") +
-          geom_col(width = 0.95,
-                   fill = grDevices::rgb(66 / 255, 139 / 255, 202 / 255),
-                   color = NA,
-                   alpha = 0.2
+          ggplot2::aes_string(x = "x", y = "y") +
+          ggplot2::geom_col(
+            width = 0.95,
+            fill = grDevices::rgb(66 / 255, 139 / 255, 202 / 255),
+            color = NA,
+            alpha = 0.2
           ) +
-          coord_flip() +
-          theme_void() +
-          scale_x_discrete(expand = c(0, 0)) +
-          scale_y_continuous(expand = c(0, 0), limits = c(0, 1))
+          ggplot2::coord_flip() +
+          ggplot2::theme_void() +
+          ggplot2::scale_x_discrete(expand = c(0, 0)) +
+          ggplot2::scale_y_continuous(expand = c(0, 0), limits = c(0, 1))
       }
     })
   } else if (var_type == "range") {

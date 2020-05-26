@@ -267,26 +267,27 @@ call_teal_modules <- function(modules, datasets, idprefix) {
 #' The consecutive lines recursively list each submodule.
 #'
 #' @md
-#' @param modules `teal_modules` to print
+#' @param x `teal_modules` to print
 #' @param indent `integer` indent level;
 #'   each submodule is indented one level more
 #' @param ... additional parameters to pass to recursive calls of `toString`
 #' @return `single character` with lines separated by `\n`
 #' @export
-toString.teal_modules <- function(modules, indent = 0, ...) { # nolint
+toString.teal_modules <- function(x, indent = 0, ...) { # nolint
+  # argument must be `x` to be consistent with base method
   paste(c(
-    paste0(rep(" ", indent), "+ ", modules$label),
-    unlist(lapply(modules$children, toString, indent = indent + 1, ...))
+    paste0(rep(" ", indent), "+ ", x$label),
+    unlist(lapply(x$children, toString, indent = indent + 1, ...))
   ), collapse = "\n")
 }
 
 #' Convert `teal_module` to a string
-#' @param module `teal_module`
+#' @param x `teal_module`
 #' @inheritParams toString.teal_modules
 #' @param ... ignored
 #' @export
-toString.teal_module <- function(module, indent = 0, ...) { # nolint
-  paste0(paste(rep(" ", indent), collapse = ""), "+ ", module$label, collapse = "")
+toString.teal_module <- function(x, indent = 0, ...) { # nolint
+  paste0(paste(rep(" ", indent), collapse = ""), "+ ", x$label, collapse = "")
 }
 
 #' Print `teal_modules`

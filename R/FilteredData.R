@@ -1086,8 +1086,9 @@ FilteredData <- R6::R6Class( # nolint
 #' The `keep_na` is not printed.
 #' @md
 #' @param var_type `character` variable type
-#' @param var_state `list` with elements corresponding to variable
+#' @param state `list` with elements corresponding to variable
 #'   type; can be filter state or filter info
+#' @param add_na `logical` whether to display information about NA
 filter_state_to_str <- function(var_type, state, add_na = FALSE) {
   stopifnot(is_logical_single(add_na))
 

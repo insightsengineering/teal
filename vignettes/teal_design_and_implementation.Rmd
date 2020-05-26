@@ -172,26 +172,27 @@ A simple example for a completely custom `teal` module is the following
 library(teal)
 library(magrittr)
 
-x <- teal::init(
-  data = list(ADSL = iris %>% dplyr::mutate(USUBJID = 1:n(), STUDYID = "A")),
+app <- teal::init(
+  # sodo3: outdated, but should definitely be executed, only the app should not be run
+  data = list(ADSL = iris %>% dplyr::mutate(USUBJID = 1:dplyr::n(), STUDYID = "A")),
   modules = root_modules(
     module(
       label = "sample module",
       server = function(input, output, session, datasets) {
         output$scatterplot <- renderPlot({
-          iris <- datasets$get_data("ADSL", filtered = TRUE, reactive = TRUE)
+          iris <- datasets$get_data("ADSL", filtered = TRUE)
           with(iris, plot(Sepal.Length, Sepal.Width, col = Species))
         })
       },
-      ui = function(id) {
+      ui = function(id, datasets) {
         ns <- NS(id)
         plotOutput(ns("scatterplot"))
       },
-      filters = 'ADSL'
+      filters = "ADSL"
     )
   )
 )
-shinyApp(x$ui, x$server)
+shinyApp(app$ui, app$server)
 ```
 
 Please run the above code by copy pasting it to the command line. The example
@@ -333,8 +334,15 @@ The `datasets` object of class `FilteredData` that is passed an argument to the
 
 ```{r}
 options(teal_logging = FALSE)
-datasets <- teal:::FilteredData$new(datanames = c("ADSL", "ADTTE"))
+datasets <- teal:::FilteredData$new()
+
+# the `datasets` object contains reactives
+# we activate this option, so we don't need to wrap all reactives in isolate calls
+options(shiny.suppressMissingContextError = TRUE)
+
+attr(ADSL, "keys") <- teal::get_cdisc_keys("ADSL")
 datasets$set_data("ADSL", ADSL)
+attr(ADTTE, "keys") <- teal::get_cdisc_keys("ADTTE")
 datasets$set_data("ADTTE", ADTTE)
 ```
 
@@ -354,16 +362,18 @@ display the filter options for each variable:
 
 
 ```{r}
-datasets$list_data_info('ADSL')
+datasets$print_filter_info("ADSL")
+# for all variables
+# datasets$print_filter_info("ADSL", filtered_vars_only = FALSE)
 ```
 
 Now say we want to filter out all the patients except patients with `USUBJID`
 equal to `id-1`, `id-2`, `id-3`, or `id-4`:
 
 ```{r}
-datasets$set_filter_state("ADSL", "USUBJID", state = paste0("id-", 1:4))
+datasets$set_filter_state("ADSL", "USUBJID", state = list(choices = paste0("id-", 1:4), keep_na = FALSE))
 
-datasets$get_data("ADSL", reactive = FALSE, filtered = TRUE)
+datasets$get_data("ADSL", filtered = TRUE)
 ```
 
 Note that this `USUBJID` variable based filtering also filters the `ATE` data
@@ -371,7 +381,7 @@ Note that this `USUBJID` variable based filtering also filters the `ATE` data
 previous figure:
 
 ```{r}
-datasets$get_data("ADTTE", reactive = FALSE, filtered = TRUE)
+datasets$get_data("ADTTE", filtered = TRUE)
 ```
 
 The two `get_data` method calls return the `ADSL_FILTERED` and `ADTTE_FILTERED`
@@ -379,7 +389,7 @@ data, respectively, as illustrated from the above figure. We can also get the
 `call` object that was used for the filtering:
 
 ```{r}
-datasets$get_filter_call("ADTTE", merge = TRUE, adsl = TRUE)
+datasets$get_filter_call("ADTTE")
 ```
 
 Note that when setting `reactive = TRUE` in the `datasets$get_data` method then

@@ -2,20 +2,19 @@
 % Please edit documentation in R/cdisc_data.R
 \name{get_cdisc_keys}
 \alias{get_cdisc_keys}
-\title{Function that creates keys object}
+\title{Function that returns the default keys for a \code{CDISC} dataset by name}
 \usage{
 get_cdisc_keys(dataname)
 }
 \arguments{
-\item{dataname}{name of dataset}
+\item{dataname}{name of the \code{CDISC} dataset}
 }
 \value{
 keys
 }
 \description{
-Function that creates keys object
+Function that returns the default keys for a \code{CDISC} dataset by name
 }
 \examples{
-
 get_cdisc_keys("ADSL")
 }

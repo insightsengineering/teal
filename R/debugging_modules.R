@@ -11,8 +11,8 @@
 #'
 #' @md
 #' @param label `character` label of module
-#' @param active_datanames (`character` vector) active datasets that this module
-#'   depends on
+#' @param active_datanames `character vector` datanames shown in filter panel;
+#'   can be `"all"` to mean all available datasets
 #'
 #' Not for end users, so do not export.
 #'
@@ -143,10 +143,16 @@ debug_browser_module <- function(label = "Debug with browser()") {
   )
 }
 
+# sodo3: export all these modules
 #' Reset filters for the specified datasets
 #'
 #' The module presents a group of checkboxes to select the datasets for which to reset
 #' all filters.
+#'
+#' @md
+#' @param label `character` module label
+#' @param active_datanames `character vector` datanames shown in filter panel;
+#'   can be `"all"` to mean all available datasets
 reset_filters_module <- function(label = "Reset filters", active_datanames = "all") {
   stopifnot(is_character_single(label))
   stopifnot(identical(active_datanames, "all") || is_character_vector(active_datanames))

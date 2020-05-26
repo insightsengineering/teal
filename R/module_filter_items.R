@@ -2,6 +2,7 @@
 #' a single dataset, i.e. all columns selected for filtering are shown.
 #'
 #' @param id module id
+#' @param dataname `character` dataname
 #' @md
 #'
 #' @examples

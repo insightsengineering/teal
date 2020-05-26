@@ -100,6 +100,7 @@ line_usage_log <- function(...) {
 #' teal.utils:::line_pkg_log(pkgs = c("rtables", "tern", "teal"),
 #' fields = c("Package", "Title", "Version", "RemoteRef"))
 #' }
+#' @importFrom utils sessionInfo
 line_pkg_log <- function(fields) {
   nest_packages <- c("test.nest", "utils.nest", "devtools.nest", "random.cdisc.data", "rtables",
                      "tern", "teal", "teal.devel", "teal.modules.general", "teal.modules.clinical",

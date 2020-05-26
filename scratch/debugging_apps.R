@@ -1,3 +1,5 @@
+# sodo3: where to add these debugging apps
+
 #source("https://raw.github.roche.com/NEST/nest_on_bee/master/bee_nest_utils.R")
 #bee_use_nest(release = "UAT_2020_04_09")
 

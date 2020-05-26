@@ -122,9 +122,10 @@ keys <- function(primary, foreign, parent) {
   return(list(primary = primary, foreign = foreign, parent = parent))
 }
 
+#' Function that returns the default keys for a `CDISC` dataset by name
 #'
-#' Function that creates keys object
-#' @param dataname name of dataset
+#' @md
+#' @param dataname name of the `CDISC` dataset
 #'
 #' @return keys
 #'
@@ -132,8 +133,8 @@ keys <- function(primary, foreign, parent) {
 #'
 #' @importFrom yaml yaml.load_file
 #'
+#' @export
 #' @examples
-#'
 #' get_cdisc_keys("ADSL")
 get_cdisc_keys <- function(dataname) {
   stopifnot(is_character_single(dataname))

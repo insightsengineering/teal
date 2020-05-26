@@ -48,7 +48,7 @@ include_js_files <- function(package = "teal", pattern = "*", except = NULL) {
 #' the `run_js` actually executes Javascript functions.
 #'
 #' @md
-#' @param file (`character`) vector of file names
+#' @param files (`character`) vector of filenames
 #' @param package (`character`) package name
 #'
 #' @export

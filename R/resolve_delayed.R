@@ -124,6 +124,9 @@ resolve_teal_module <- function(x, datasets) {
 
 #' Handles teal arguments that are only available through delayed loading
 #'
+#' @md
+#' @param args `list` arguments to evaluate by passing them the datasets
+#' @param datasets `datasets` datasets used to set `args`
 #' @importFrom methods is
 resolve_teal_args <- function(args, datasets) {
   Map(function(arg) {
