@@ -298,7 +298,7 @@ DataConnector <- R6::R6Class( #nolint
         private$connection$close(silent = TRUE)
         if (shiny::isRunning()) {
           shinyjs::enable(submit_id)
-          progress$close()
+          if_not_null(progress, progress$close())
         }
         error_dialog(x)
       } else {
@@ -376,6 +376,8 @@ DataConnector <- R6::R6Class( #nolint
 
       if_not_null(private$connection, private$connection$close(silent = TRUE))
 
+      if_not_null(progress, progress$set(0.7, message = "Preprocessing data ..."))
+
       if (!is_character_empty(code)) {
         eval(parse(text = code), env_data)
       }
@@ -415,8 +417,6 @@ DataConnector <- R6::R6Class( #nolint
         code
       )
 
-      if_not_null(progress, progress$set(0.7, message = "Preprocessing data ..."))
-
       args <- append(args,
                      list(code = paste(full_code, collapse = "\n"),
                           check = private$check))
@@ -424,6 +424,7 @@ DataConnector <- R6::R6Class( #nolint
 
       if_not_null(progress, progress$set(1, message = "Loading complete!"))
 
+      Sys.sleep(0.5) #just for the progess bar to be shown
       if_not_null(progress, progress$close())
 
       return(invisible(NULL))

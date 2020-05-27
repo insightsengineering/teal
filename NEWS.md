@@ -1,5 +1,7 @@
 # teal 0.8.3.9000
 
+* cdisc_dataset and dataset now return R6 class objects (RelationalDataset)
+* progress bar for ui creation in delayed loading module
 
 # teal 0.8.3
 
