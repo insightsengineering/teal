@@ -6,7 +6,7 @@
 \usage{
 choices_selected(
   choices,
-  selected = choices[1],
+  selected = if (is(choices, "delayed_data")) NULL else choices[1],
   keep_order = FALSE,
   fixed = FALSE
 )
@@ -20,6 +20,9 @@ choices_selected(
 will be on top of the drop-down field.}
 
 \item{fixed}{(\code{logical}) (optional) whether to block user to select choices}
+}
+\value{
+Object of class \code{choices_selected} and of type list.
 }
 \description{
 Choices function
