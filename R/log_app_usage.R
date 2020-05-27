@@ -94,7 +94,7 @@ line_usage_log <- function(...) {
 #' @param fields package metadata to be retrieved
 #' @noRd
 #'
-#' @importFrom utils capture.output
+#' @importFrom utils capture.output sessionInfo
 #' @examples
 #' \dontrun{
 #' teal.utils:::line_pkg_log(pkgs = c("rtables", "tern", "teal"),
