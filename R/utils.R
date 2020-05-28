@@ -213,6 +213,8 @@ set_labels_df <- function(df, labels) {
 #' @md
 #' @param name `character` function name, possibly using namespace colon `::`
 #' @param ... arguments to pass to function with name `name`
+#' @param unlist_args `list` extra arguments passed in a single list,
+#'   avoids the use of `do.call` with this function
 #' @examples
 #' `%>%` <- magrittr::`%>%`
 #' print_call_and_eval <- function(x) { eval(print(x)) }
@@ -230,10 +232,21 @@ set_labels_df <- function(df, labels) {
 #' call("filter", as.name("mtcars"), rlang::expr(cyl == 6))
 #' # works, but non-dplyr filter is taken
 #' call("filter", as.name("mtcars"), mtcars$cyl == 6)
-call_with_colon <- function(name, ...) {
+#'
+#' nb_args <- function(...) nargs()
+#' call_with_colon("nb_args", arg1 = 1, unlist_args = list(arg2 = 2, args3 = 3)) %>%
+#'   print_call_and_eval()
+#' # duplicate arguments
+#' call_with_colon("nb_args", arg1 = 1, unlist_args = list(arg2 = 2, args2 = 2)) %>%
+#'   print_call_and_eval()
+call_with_colon <- function(name, ..., unlist_args = list()) {
+  stopifnot(
+    is_character_single(name),
+    is.list(unlist_args)
+  )
   as.call(c(
     parse(text = name)[[1]],
-    list(...)
+    c(list(...), unlist_args)
   ))
 }
 

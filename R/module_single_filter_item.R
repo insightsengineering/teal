@@ -168,28 +168,24 @@ ui_single_filter_item <- function(id, filter_info, filter_state, prelabel) {
     tags$p(paste("Variable with id", id, "has unknown type:", filter_info$type))
   }
 
-  na_is_displayed <- !is.null(filter_info$na_count) && (filter_info$na_count > 0)
   # label before select input and button to remove filter
   return(fluidPage(
     fluidRow(
-      column(if (na_is_displayed) 4 else 8, tags$span(
+      column(8, tags$span(
         prelabel,
         if (!is.null(filter_info$label) || (filter_info$label != "")) {
           tags$small(filter_info$label, style = "font-weight:normal; margin-left:3px")
         }
       )),
-      if (na_is_displayed) {
-        column(4, div(
-          class = "nopadding", # removes padding around checkbox
-          checkboxInput(id_keep_na, get_keep_na_label(filter_info$na_count), value = filter_state$keep_na)
-        ))
-      },
       column(4, actionLink(
         id_remove_filter, "", icon("trash-alt", lib = "font-awesome"),
         class = "remove"
       ))
     ),
-    fluidRow(select_input)
+    fluidRow(select_input),
+    fluidRow(
+      checkboxInput(id_keep_na, get_keep_na_label(filter_info$na_count), value = filter_state$keep_na)
+    )
   ))
 }
 

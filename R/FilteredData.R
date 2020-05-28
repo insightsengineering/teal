@@ -926,10 +926,8 @@ FilteredData <- R6::R6Class( # nolint
             stop(paste("filter type for variable", varname, "in", dataname, "not known"))
           )
           # allow NA as well, i.e. do not filter it out
-          if (filter_state$keep_na && (
-            !is.null(filter_info$na_count) && (filter_info$na_count > 0)
-          )) {
-            # only add is.na call if the var really has NA values
+          if (filter_state$keep_na) {
+            # we add `is.na` independent of whether the variable has na values or not
             filter_call <- call("|", filter_call, call("is.na", as.name(varname)))
           }
           return(filter_call)
@@ -944,16 +942,8 @@ FilteredData <- R6::R6Class( # nolint
         # no filtering applied to the dataset
         return(as.name(dataname))
       } else {
-        # concatenate with "&" when several filters need to be applied to this dataset
-        # when the list has a single element, reduce simply returns the element
-        # extra parentheses () must be put around x and y if more than one elem
-        if (length(data_filter_call_items) > 1) {
-          data_filter_call_items <- lapply(data_filter_call_items, function(item) call("(", item))
-        }
-        combined_filters <- Reduce(function(x, y) call("&", x, y), data_filter_call_items)
-
         # subset is meant for interactive use, so we use filter
-        return(call_with_colon("dplyr::filter", as.name(dataname), combined_filters))
+        return(call_with_colon("dplyr::filter", as.name(dataname), unlist_args = unname(data_filter_call_items)))
       }
     },
 

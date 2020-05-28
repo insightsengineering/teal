@@ -43,9 +43,11 @@
 filter_panel_ui <- function(id, datanames) {
   ns <- NS(id)
   div(
-    id = "teal_filter-panel", # id not used elsewhere
+    # we provide these ids although we may not use them so that users
+    # can customize the CSS behavior
+    id = ns("teal_filter_panel"), # used for hiding / showing
     div(
-      id = "teal_filter_active_vars", # id not used elsewhere
+      id = ns("teal_filter_active_vars"), # id not used elsewhere
       class = "well",
       tags$label("Active Filter Variables", class = "text-primary", style = "margin-bottom: 15px;"),
       tagList(
@@ -53,17 +55,21 @@ filter_panel_ui <- function(id, datanames) {
       ),
       tagList(
         lapply(datanames, function(dataname) {
-          ui_filter_items(ns(paste0("teal_filters_", dataname)), dataname)
+          id <- ns(paste0("teal_filters_", dataname))
+          # add span with same id to show / hide
+          return(span(id = id, ui_filter_items(id, dataname)))
         })
       )
     ),
     div(
-      id = "teal_filter_add_vars", # id not used elsewhere
+      id = ns("teal_filter_add_vars"), # id not used elsewhere
       class = "well",
       tags$label("Add Filter Variables", class = "text-primary", style = "margin-bottom: 15px;"),
       tagList(
         lapply(datanames, function(dataname) {
-          ui_add_filter_variable(ns(paste0("teal_add_", dataname, "_filter")), dataname)
+          id <- ns(paste0("teal_add_", dataname, "_filter"))
+          # add span with same id to show / hide
+          return(span(id = id, ui_add_filter_variable(id, dataname)))
         })
       ),
       p("Note that variables that cannot be filtered are excluded.")
@@ -108,10 +114,10 @@ filter_panel_srv <- function(input, output, session, datasets, active_datanames)
   # we instead choose to hide/show the elements
   # the filters are just hidden from the UI, but still applied
   observeEvent(active_datanames(), {
-    if (is.null(active_datanames())) {
-      shinyjs::hide("teal_filter-panel")
+    if (length(active_datanames()) == 0) {
+      shinyjs::hide("teal_filter_panel")
     } else {
-      shinyjs::show("teal_filter-panel")
+      shinyjs::show("teal_filter_panel")
 
       lapply(
         datasets$datanames(),

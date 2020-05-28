@@ -26,8 +26,8 @@ ADLB <- radlb(cached = TRUE)
 # debugging example ----
 
 # sodo3: error: check for code argument below is not performed
-#FilteredData$debug("set_filter_chars");
-devtools::load_all("/home/bceuser/mordigm/scratch/teal"); app <- init(
+# main debugging app ----
+devtools::load_all("../teal"); app <- init(
   data = cdisc_data(
     cdisc_dataset(dataname = "ADSL", data = ADSL),
     cdisc_dataset(dataname = "ADAE", data = ADAE),
@@ -50,16 +50,34 @@ ADLB <- radlb(cached = TRUE)
 # options(warn = 2); shinyApp(app$ui, app$server)
 # options(warn = 0)
 
-debugonce(datasets$print_filter_info)
 
-
-# need to call this after devtools::load_all() and before creating object of this class
-FilteredData$debug("set_filter_state")
+# test that dataset is not filtered when it is not needed in the selected tab ----
+devtools::load_all("../teal"); app <- init(
+  data = cdisc_data(
+    cdisc_dataset(dataname = "ADSL", data = ADSL),
+    cdisc_dataset(dataname = "ADAE", data = ADAE),
+    cdisc_dataset(dataname = "ADLB", data = ADLB),
+    code = "
+ADSL <- radsl(cached = TRUE)
+ADAE <- radae(cached = TRUE)
+ADLB <- radlb(cached = TRUE)
+"),
+  modules = root_modules(
+    teal:::filter_calls_module("ADAE", active_datanames = c("ADAE")),
+    teal:::filter_calls_module("ADSL", active_datanames = c("ADSL")),
+    teal:::filter_calls_module("ADLB", active_datanames = c("ADLB")),
+    teal:::bookmark_module(),
+    teal:::debug_browser_module()
+  ),
+  initial_filter_states = list(ADSL = list(SEX = list(choices = "M", keep_na = TRUE), AGE = "default")),
+  header = "Simple teal app",
+  footer = tags$p(class = "text-muted", "Source: agile-R website")
+); shinyApp(app$ui, app$server, enableBookmarking = "url")
 
 # many modules example ----
 
 # test nested teal modules
-devtools::load_all("/home/bceuser/mordigm/scratch/teal"); app <- init(
+devtools::load_all("../teal"); app <- init(
   data = cdisc_data(
     cdisc_dataset(dataname = "ADSL", data = ADSL),
     cdisc_dataset(dataname = "ADAE", data = ADAE),
@@ -118,24 +136,6 @@ devtools::load_all("../teal"); app <- init(
 ); shinyApp(app$ui, app$server, enableBookmarking = "url")
 
 
-
-
-devtools::load_all();
-toString(teal:::filter_calls_module("D3"), indent = 2)
-debugonce(toString.teal_modules)
-modules(label = "A1", teal:::filter_calls_module("D1.1"), teal:::filter_calls_module("D1.2"))
-
-modules(label = "A2", teal:::filter_calls_module("D2"))
-root_modules(
-  modules(label = "A1", teal:::filter_calls_module("D1.1"), teal:::filter_calls_module("D1.2")),
-  modules(label = "A2", teal:::filter_calls_module("D2")),
-  teal:::filter_calls_module("D3")
-)
-
-debugonce(toString.teal_modules)
-toString(modules(label = "A1", teal:::filter_calls_module("D1.1"), teal:::filter_calls_module("D1.2")))
-
-
-
-shiny:::hasCurrentRestoreContext
-shiny:::ShinySession$public_methods$doBookmark
+# Debugging ----
+# need to call this after devtools::load_all() and before creating object of this class
+FilteredData$debug("set_filter_state")
