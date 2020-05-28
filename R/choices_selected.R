@@ -32,6 +32,45 @@ no_select_keyword <- "-- no selection --"
 #' library(random.cdisc.data)
 #' ADSL <- radsl(cached = TRUE)
 #' choices_selected(variable_choices(ADSL), "SEX")
+#'
+#' # How to select nothing
+#' # use an empty character
+#' choices_selected(
+#'    choices = c("", "A", "B", "C"),
+#'    selected = ""
+#' )
+#'
+#' # How to allow the user to select nothing
+#' # use an empty character
+#' choices_selected(
+#'    choices = c("A", "", "B", "C"),
+#'    selected = "A"
+#' )
+#'
+#'
+#' # How to make Nothing the Xth choice
+#' # just use keep_order
+#' choices_selected(
+#'    choices = c("A", "", "B", "C"),
+#'    selected = "A",
+#'    keep_order = TRUE
+#' )
+#'
+#'
+#' # How to give labels to selections
+#' # by adding names - choices will be replaced by "name" in UI, not in code
+#' choices_selected(
+#'    choices = c("name for A" = "A", "Name for nothing" = "", "name for b" = "B", "name for C" = "C"),
+#'    selected = "A"
+#' )
+#'
+#' # by using choices_labeled
+#' # labels will be shown behind the choice
+#' choices_selected(
+#'    choices = choices_labeled(c("A", "", "B", "C"), c("name for A", "nothing", "name for B", "name for C")),
+#'    selected = "A"
+#' )
+#'
 choices_selected <- function(choices, selected = if (is(choices, "delayed_data")) NULL else choices[1],
                              keep_order = FALSE, fixed = FALSE) {
 
@@ -39,6 +78,7 @@ choices_selected <- function(choices, selected = if (is(choices, "delayed_data")
   stopifnot(is.atomic(selected) || is(selected, "delayed_data"))
 
   if (is(choices, "delayed_data") || is(selected, "delayed_data")) {
+
 
     if (is(selected, "delayed_data") && !is(choices, "delayed_data")) {
       stop("If 'selected' is of class 'delayed_data', so must be 'choices'.")
