@@ -7,9 +7,9 @@
 * new `RawDatasetConnector` and `RelationalDatasetConnector` to execute get data from remote connections.
 * new wrapper functions to manipulate `DatasetConnector` and `Dataset` such as `get_dataset`, 
 `load_dataset`, `as_relational`.
-
 * Change output of `keys` function to `keys` object. Updated checks in `DatasetConnector` and `dataset`.
 * delayed version of choices_selected
+* Fix an error in `choices_selected` when `selected` is not in `choices`
 
 # teal 0.8.3
 

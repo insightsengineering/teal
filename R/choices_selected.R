@@ -37,6 +37,8 @@ choices_selected <- function(choices, selected = if (is(choices, "delayed_data")
 
   stopifnot(is.atomic(choices) || is(choices, "delayed_data"))
   stopifnot(is.atomic(selected) || is(selected, "delayed_data"))
+  stopifnot(is_logical_single(keep_order))
+  stopifnot(is_logical_single(fixed))
 
   if (is(choices, "delayed_data") || is(selected, "delayed_data")) {
 
@@ -65,7 +67,14 @@ choices_selected <- function(choices, selected = if (is(choices, "delayed_data")
   if (length(selected_to_add_idx) > 0) {
     selected_to_add <- vector_keep(selected, selected_to_add_idx)
 
-    choices <- vector_append(choices, selected_to_add)
+    choices <- if (is(choices, "choices_labeled") && !is(selected_to_add, "choices_labeled")) {
+      # if choices is of choices_labeled class then create new choices_labeled object
+      choices_labeled(c(selected_to_add, choices), c(selected_to_add, attr(choices, "raw_labels")))
+    } else {
+      # else append to vector with keeping all existing attributes
+      vector_append(choices, selected_to_add)
+    }
+
   }
 
 
@@ -153,8 +162,14 @@ vector_append <- function(vec1, vec2, idx = seq_along(vec2)) {
     return(res)
   }
 
-  vec_attrs <- vec1_attrs <- attributes(vec1)
-  vec2_attrs <- attributes(vec2)
+  attributes_wo_class <- function(x) {
+    res <- attributes(x)
+    res[grepl("class", names(res))] <- NULL
+    return(res)
+  }
+
+  vec_attrs <- vec1_attrs <- attributes_wo_class(vec1)
+  vec2_attrs <- attributes_wo_class(vec2)
 
   for (vec_attrs_idx in seq_along(vec_attrs)) {
     if (length(vec_attrs[[vec_attrs_idx]]) == length(vec1)) {
