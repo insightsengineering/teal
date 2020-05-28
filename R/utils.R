@@ -234,10 +234,10 @@ set_labels_df <- function(df, labels) {
 #' call("filter", as.name("mtcars"), mtcars$cyl == 6)
 #'
 #' nb_args <- function(...) nargs()
-#' call_with_colon("nb_args", arg1 = 1, unlist_args = list(arg2 = 2, args3 = 3)) %>%
+#' teal:::call_with_colon("nb_args", arg1 = 1, unlist_args = list(arg2 = 2, args3 = 3)) %>%
 #'   print_call_and_eval()
 #' # duplicate arguments
-#' call_with_colon("nb_args", arg1 = 1, unlist_args = list(arg2 = 2, args2 = 2)) %>%
+#' teal:::call_with_colon("nb_args", arg1 = 1, unlist_args = list(arg2 = 2, args2 = 2)) %>%
 #'   print_call_and_eval()
 call_with_colon <- function(name, ..., unlist_args = list()) {
   stopifnot(
