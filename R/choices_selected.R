@@ -32,15 +32,54 @@ no_select_keyword <- "-- no selection --"
 #' library(random.cdisc.data)
 #' ADSL <- radsl(cached = TRUE)
 #' choices_selected(variable_choices(ADSL), "SEX")
+#'
+#' # How to select nothing
+#' # use an empty character
+#' choices_selected(
+#'    choices = c("", "A", "B", "C"),
+#'    selected = ""
+#' )
+#'
+#' # How to allow the user to select nothing
+#' # use an empty character
+#' choices_selected(
+#'    choices = c("A", "", "B", "C"),
+#'    selected = "A"
+#' )
+#'
+#'
+#' # How to make Nothing the Xth choice
+#' # just use keep_order
+#' choices_selected(
+#'    choices = c("A", "", "B", "C"),
+#'    selected = "A",
+#'    keep_order = TRUE
+#' )
+#'
+#'
+#' # How to give labels to selections
+#' # by adding names - choices will be replaced by "name" in UI, not in code
+#' choices_selected(
+#'    choices = c("name for A" = "A", "Name for nothing" = "", "name for b" = "B", "name for C" = "C"),
+#'    selected = "A"
+#' )
+#'
+#' # by using choices_labeled
+#' # labels will be shown behind the choice
+#' choices_selected(
+#'    choices = choices_labeled(c("A", "", "B", "C"),
+#'                              c("name for A", "nothing", "name for B", "name for C")),
+#'    selected = "A"
+#' )
+#'
 choices_selected <- function(choices, selected = if (is(choices, "delayed_data")) NULL else choices[1],
                              keep_order = FALSE, fixed = FALSE) {
 
   stopifnot(is.atomic(choices) || is(choices, "delayed_data"))
   stopifnot(is.atomic(selected) || is(selected, "delayed_data"))
-  stopifnot(is_logical_single(keep_order))
-  stopifnot(is_logical_single(fixed))
 
   if (is(choices, "delayed_data") || is(selected, "delayed_data")) {
+
 
     if (is(selected, "delayed_data") && !is(choices, "delayed_data")) {
       stop("If 'selected' is of class 'delayed_data', so must be 'choices'.")
@@ -67,14 +106,7 @@ choices_selected <- function(choices, selected = if (is(choices, "delayed_data")
   if (length(selected_to_add_idx) > 0) {
     selected_to_add <- vector_keep(selected, selected_to_add_idx)
 
-    choices <- if (is(choices, "choices_labeled") && !is(selected_to_add, "choices_labeled")) {
-      # if choices is of choices_labeled class then create new choices_labeled object
-      choices_labeled(c(selected_to_add, choices), c(selected_to_add, attr(choices, "raw_labels")))
-    } else {
-      # else append to vector with keeping all existing attributes
-      vector_append(choices, selected_to_add)
-    }
-
+    choices <- vector_append(choices, selected_to_add)
   }
 
 
@@ -162,14 +194,8 @@ vector_append <- function(vec1, vec2, idx = seq_along(vec2)) {
     return(res)
   }
 
-  attributes_wo_class <- function(x) {
-    res <- attributes(x)
-    res[grepl("class", names(res))] <- NULL
-    return(res)
-  }
-
-  vec_attrs <- vec1_attrs <- attributes_wo_class(vec1)
-  vec2_attrs <- attributes_wo_class(vec2)
+  vec_attrs <- vec1_attrs <- attributes(vec1)
+  vec2_attrs <- attributes(vec2)
 
   for (vec_attrs_idx in seq_along(vec_attrs)) {
     if (length(vec_attrs[[vec_attrs_idx]]) == length(vec1)) {
