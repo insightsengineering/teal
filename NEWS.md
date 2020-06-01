@@ -3,6 +3,7 @@
 * progress bar for ui creation in delayed loading module
 * Change output of `keys` function to `keys` object. 
 * delayed version of choices_selected
+* Fix an error in `choices_selected` when `selected` is not in `choices`
 
 # teal 0.8.3
 
