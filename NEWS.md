@@ -1,4 +1,4 @@
-# teal 0.8.3.9000
+# teal 0.8.4
 
 * progress bar for ui creation in delayed loading module
 * Change output of `keys` function to `keys` object. 
