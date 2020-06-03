@@ -5,7 +5,7 @@
 #'
 #' @details
 #' The main purpose of this class is to provide a collection of reactive datasets,
-#' each of which can be filtered through the right panel of teal apps.
+#' each of which can be filtered through the right filter panel of teal apps.
 #' For each dataset, `get_filter_call` returns the call to filter the dataset according
 #' to the UI user selection.
 #' Other classes then take care of actually merging together the datasets.

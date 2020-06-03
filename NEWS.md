@@ -11,6 +11,12 @@
 * delayed version of choices_selected
 * Fix an error in `choices_selected` when `selected` is not in `choices`
 
+## FilteredData refactored (for developers)
+
+* removed argument `isolate` form `datasets$get_data()`
+
+
+
 # teal 0.8.3
 
 * Enable `teal` app to initialize without data. The data are then loaded from within the teal app.
