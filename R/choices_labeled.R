@@ -91,6 +91,7 @@ choices_labeled <- function(choices, labels, subset = NULL) {
 #' If \code{data.frame}, then data to extract labels from.
 #' If \code{character}, then name of the dataset to extract data from once available.
 #' @param subset (\code{character}) vector of column names
+#' @inheritParams rtables::var_labels
 #'
 #' @return named character vector with additional attributes or \code{delayed_data} object
 #'
@@ -106,9 +107,10 @@ choices_labeled <- function(choices, labels, subset = NULL) {
 #'
 #' # delayed version
 #' variable_choices("ADRS", subset = c("USUBJID", "STUDYID"))
-variable_choices <- function(data, subset = NULL) {
+variable_choices <- function(data, subset = NULL, fill = FALSE) {
   stopifnot(is.data.frame(data) || is_character_single(data))
   stopifnot(is.null(subset) || is_character_vector(subset, min_length = 0))
+  stopifnot(is_logical_single(fill))
 
   if (is.character(data)) {
     out <- structure(list(data = data, subset = subset),
@@ -129,8 +131,12 @@ variable_choices <- function(data, subset = NULL) {
     subset <- subset[-empty_option_idx]
   }
 
-  res <- choices_labeled(choices = names(data),
-                         labels = unname(get_variable_labels(data)),
+  choices <- names(data)
+  labels <- unname(get_variable_labels(data, fill = fill))
+  labels[is.na(labels)] <- ""
+
+  res <- choices_labeled(choices = choices,
+                         labels = labels,
                          subset = subset)
   attr(res, "types") <- variable_types(data = data, columns = subset)
 

@@ -4,7 +4,7 @@
 \alias{variable_choices}
 \title{Wrapper on \code{\link{choices_labeled}} to label variables basing on existing labels in data}
 \usage{
-variable_choices(data, subset = NULL)
+variable_choices(data, subset = NULL, fill = FALSE)
 }
 \arguments{
 \item{data}{(\code{data.frame}) or (\code{character})
@@ -12,6 +12,9 @@ If \code{data.frame}, then data to extract labels from.
 If \code{character}, then name of the dataset to extract data from once available.}
 
 \item{subset}{(\code{character}) vector of column names}
+
+\item{fill}{boolean in case the \code{label} attribute does not exist if
+\code{TRUE} the variable names is returned, otherwise \code{NA}}
 }
 \value{
 named character vector with additional attributes or \code{delayed_data} object

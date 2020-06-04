@@ -4,6 +4,7 @@
 * Change output of `keys` function to `keys` object. 
 * delayed version of choices_selected
 * Fix an error in `choices_selected` when `selected` is not in `choices`
+* Fix `pickerInput` not to display column name as label if it's missing 
 
 # teal 0.8.3
 

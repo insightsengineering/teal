@@ -4,13 +4,16 @@
 \alias{get_variable_labels}
 \title{Function that extract column labels from CDISC dataset}
 \usage{
-get_variable_labels(data, columns = NULL)
+get_variable_labels(data, columns = NULL, fill = TRUE)
 }
 \arguments{
-\item{data}{(\code{data.frame}) Any CDISC data set}
+\item{data}{(\code{data.frame}) any CDISC data set}
 
-\item{columns}{(\code{character}) Column names to extract the labels
-from}
+\item{columns}{optional, (\code{character}) column names to extract the labels from. If (\code{NULL}) then all
+columns are being used.}
+
+\item{fill}{boolean in case the \code{label} attribute does not exist if
+\code{TRUE} the variable names is returned, otherwise \code{NA}}
 }
 \value{
 labels of the columns
@@ -25,4 +28,8 @@ ADSL <- radsl(cached = TRUE)
 get_variable_labels(ADSL)
 get_variable_labels(ADSL, c("AGE", "RACE", "BMRKR1"))
 get_variable_labels(ADSL, c("AGE", "RACE", "BMRKR1", "xyz"))
+
+ADSL$NEW_COL <- 1
+get_variable_labels(ADSL, c("AGE", "RACE", "BMRKR1", "NEW_COL"))
+get_variable_labels(ADSL, c("AGE", "RACE", "BMRKR1", "NEW_COL"), fill = FALSE)
 }
