@@ -12,7 +12,7 @@ rds_cdisc_dataset(dataname, file, keys = get_cdisc_keys(dataname))
 \item{file}{(\code{character}) path to \code{.rds} that contains
 a single data.frame stored by \code{saveRDS}}
 
-\item{keys}{list of keys -
+\item{keys}{(\code{keys}) object -
 
 Please note that the order of keys is important.
 

@@ -11,7 +11,7 @@ rice_dataset(dataname, path, keys = get_cdisc_keys(dataname))
 
 \item{path}{(\code{character}) file path}
 
-\item{keys}{list of keys -
+\item{keys}{(\code{keys}) object -
 
 Please note that the order of keys is important.
 
