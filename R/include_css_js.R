@@ -20,8 +20,8 @@ include_css_files <- function(package = "teal", pattern = "*") {
 #' Include \code{JS} files from \code{/inst/js/} package directory to application header
 #'
 #' @param package (\code{character}) package name
-#' @param pattern (\code{character}) pattern of files to be included
-#' @param except (\code{character}) vector of files to be excluded, matched via grep
+#' @param pattern (\code{character}) pattern of files to be included passed to \code{system.file}
+#' @param except (\code{character}) vector of basename filenames to be excluded
 #'
 #' @export
 include_js_files <- function(package = "teal", pattern = "*", except = NULL) {
@@ -30,14 +30,8 @@ include_js_files <- function(package = "teal", pattern = "*", except = NULL) {
 
   js_files <- list.files(system.file("js", package = package, mustWork = TRUE), pattern = pattern, full.names = TRUE)
 
-  if (!is.null(except)) {
-    for (file in except) {
-      js_files <- grep(file, js_files, value = TRUE, invert = TRUE)
-    }
-  }
-
   # optionally put into `shiny::singleton`
-  lapply(js_files, includeScript)
+  lapply(js_files[!(basename(js_files) %in% except)], includeScript)
 }
 
 #' Run `JS` file from `/inst/js/` package directory
