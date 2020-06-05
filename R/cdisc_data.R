@@ -129,6 +129,7 @@ keys <- function(primary, foreign, parent) {
 #' @return keys
 #'
 #' @importFrom yaml yaml.load_file
+#' @importFrom utils.nest get_package_file
 #' @export
 #'
 #' @examples
@@ -137,9 +138,7 @@ get_cdisc_keys <- function(dataname) {
   stopifnot(is_character_single(dataname))
 
   # copy from excel file
-  default_cdisc_keys <- yaml.load_file(
-    system.file(file.path("cdisc_datasets", "cdisc_datasets.yaml"), package = "teal", mustWork = TRUE)
-  )
+  default_cdisc_keys <- yaml.load_file(get_package_file("teal", "cdisc_datasets/cdisc_datasets.yaml"))
 
   if (!(dataname %in% names(default_cdisc_keys))) {
     stop(sprintf("There is no dataset called: %s \n  List of supported cdisc_datasets:\n   %s",
@@ -457,21 +456,12 @@ cdisc_data <- function(...,
 
 
 get_preprocessing_empty_string <- function() {
-  filename <- get_package_file("preprocessing_empty_string.txt") # nolint
+  filename <- get_package_file("teal", "preprocessing_empty_string.txt") # nolint
   readChar(filename, file.info(filename)$size)
 }
 
 
 get_check_note_string <- function() {
-  filename_check <- get_package_file("check_false_string.txt") # nolint
+  filename_check <- get_package_file("teal", "check_false_string.txt") # nolint
   readChar(filename_check, file.info(filename_check)$size)
-}
-
-get_package_file <- function(file_name) {
-  package_path <- path.package("teal")
-  if ("inst" %in% list.dirs(package_path, full.names = FALSE, recursive = FALSE)) {
-    file.path(package_path, "inst", file_name)
-  } else {
-    file.path(package_path, file_name)
-  }
 }
