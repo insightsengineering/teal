@@ -128,11 +128,9 @@ keys <- function(primary, foreign, parent) {
 #'
 #' @return keys
 #'
-#' @export
-#'
 #' @importFrom yaml yaml.load_file
-#'
 #' @export
+#'
 #' @examples
 #' get_cdisc_keys("ADSL")
 get_cdisc_keys <- function(dataname) {
