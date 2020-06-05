@@ -57,3 +57,10 @@ reference:
     - rice_dataset_connector
     - rice_connection
     - rice_cdisc_data
+  - title: Unexported Functions for Developers
+    desc: These functions are useful for teal developers
+    contents:
+      - filter_calls_module
+      - bookmark_module
+      - debug_browser_module
+
