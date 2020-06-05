@@ -53,7 +53,10 @@
 #'   options(shiny.suppressMissingContextError = TRUE)
 #'   on.exit(options(shiny.suppressMissingContextError = FALSE), add = TRUE)
 #'
+#'   datasets
+#'
 #'   datasets$set_data("ADSL", ADSL)
+#'   datasets
 #'
 #'   datasets$datanames()
 #'   datasets$get_data_info("ADSL", filtered = FALSE)
@@ -68,6 +71,7 @@
 #'     AGE = list(range = c(33, 44), keep_na = FALSE),
 #'     SEX = list(choices = c("M", "F"), keep_na = FALSE)
 #'   ))
+#'   datasets
 #'   datasets$get_filter_type("ADSL", "SEX")
 #'   datasets$get_filter_info("ADSL")[["SEX"]]$type
 #'
@@ -519,6 +523,41 @@ FilteredData <- R6::R6Class( # nolint
     },
 
     # info functions for end user ----
+
+    #' @details
+    #' print method
+    print = function(...) {
+
+      private$update_all_filtered_data() # to get all logging messages before the print message
+
+      cat(class(self), "object", "\n")
+
+      datanames <- self$datanames()
+      if (length(datanames) == 0) {
+        cat("- Contains currently no Datasets.", "\n")
+      } else {
+        cat("- Contains Datasets:", "\n")
+        cat("     dataname (dim. unfiltered) (dim. filtered)", "\n")
+        lapply(datanames, function(name) {
+          cat("   -", name,
+              paste0("(",paste(dim(self$get_data(name, filtered = FALSE)), collapse = " x "), ")"),
+              paste0("(",paste(dim(self$get_data(name, filtered = TRUE)), collapse = " x "), ")"), "\n"
+          )
+          fs <- self$get_filter_info(name)
+          if (length(fs) > 0) {
+            cat("      - active filter variables:", paste(names(fs), collapse = ", "), "\n")
+          }
+        })
+      }
+
+      cat("- Introspect this objet (x) with the following methods:", "\n")
+      cat("   - cat(format(x))", "\n")
+      if (length(datanames) > 0) {
+        cat('   - x$print_filter_info("ADSL")', "\n")
+        cat('   - x$get_data_info("ADSL", filtered = FALSE)', "\n")
+      }
+      return(invisible(NULL))
+    },
 
     #' @details
     #' Prints filter characteristics of each variable for a given dataset to the
@@ -990,6 +1029,17 @@ FilteredData <- R6::R6Class( # nolint
 
         return(env[[paste0(dataname, "_FILTERED")]])
       })
+    },
+
+    # @details
+    # Update all the filtered datasets.
+    #
+    # Datasets do not get calculated if there is no absorbing observer requiring
+    # the dataset (lazy feature of reactivity).
+    # This function ensures that all the filtered datasets are updated
+    update_all_filtered_data = function() {
+      lapply(self$datanames(), function(x) self$get_data(x, filtered = TRUE))
+      return(invisible(self))
     },
 
     # @details
