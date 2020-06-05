@@ -15,7 +15,7 @@
 
 * Removed argument `isolate` form `datasets$get_data()`
 * Missing data `NA` is now explicitly addressed in the filter panel.
-  * `NA`s are exlcuded by default.
+  * `NA`s are excluded by default.
 
 
 # teal 0.8.3
