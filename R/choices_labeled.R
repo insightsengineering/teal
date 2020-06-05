@@ -116,39 +116,29 @@ variable_choices <- function(data, subset = NULL) {
                      class = c("delayed_variable_choices", "delayed_data", "choices_labeled"))
     return(out)
   }
+
   if (is.null(subset)) {
     subset <- names(data)
   }
-  if (is_character_vector(subset)) {
-    stopifnot(all(subset %in% names(data) | subset == ""))
+  stopifnot(is_character_vector(subset))
+  stopifnot(all(subset %in% c("", names(data))))
+
+  if (any(duplicated(subset))) {
+    warning("removed duplicated entries in subset:", paste(subset[duplicated(subset)], collapse = ", "))
+    subset <- unique(subset)
   }
 
-  # sodo3: refactor, there can only be at most one empty option
-  has_empty_option <- isTRUE(any(subset == ""))
-  empty_option_idx <- integer(0)
-  if (has_empty_option) {
-    empty_option_idx <- which(subset == "")
-    stopifnot(length(empty_option_idx) == 1)
-    subset <- subset[-empty_option_idx]
-  }
+  res <- if ("" %in% subset) {
+    tmp <- choices_labeled(choices = c("", names(data)),
+                    labels = c("", unname(get_variable_labels(data))),
+                    subset = subset)
 
-  res <- choices_labeled(choices = names(data),
-                         labels = unname(get_variable_labels(data)),
-                         subset = subset)
-  attr(res, "types") <- variable_types(data = data, columns = subset)
-
-  if (has_empty_option) {
-    for (idx in empty_option_idx) {
-      # first copy and then modify attributes because it will be gone after first modification of res object
-      attr_list <- attributes(res)
-      for (attr_name in names(attr_list)) {
-        if (length(attr_list[[attr_name]]) == length(res)) {
-          attr_list[[attr_name]] <- append(attr_list[[attr_name]], "", idx - 1L)
-        }
-      }
-      res <- append(res, "", idx - 1L)
-      attributes(res) <- attr_list
-    }
+    attr(tmp, "types") <- c("", variable_types(data = data, columns = subset))
+    tmp
+  } else {
+    choices_labeled(choices = names(data),
+                    labels = unname(get_variable_labels(data)),
+                    subset = subset)
   }
 
   return(res)
