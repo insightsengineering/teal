@@ -480,20 +480,20 @@ FilteredData <- R6::R6Class( # nolint
     get_filter_call = function(dataname) {
       private$check_data_varname(dataname)
 
-      filtered_alone <- if (dataname == "ADSL") {
-        # for ADSL, there is no merging step involved, so no `FILTERED_ALONE`
-        paste0(dataname, "_FILTERED")
-      } else {
-        paste0(dataname, "_FILTERED_ALONE")
-      }
-      filter_call <- as.call(list(
-        as.name("<-"), as.name(filtered_alone),
-        private$get_pure_filter_call(dataname)
-      ))
-
       if (dataname == "ADSL") {
+        filter_call <- as.call(list(
+          as.name("<-"), as.name("ADSL_FILTERED"),
+          private$get_pure_filter_call("ADSL")
+        ))
         return(list(filter_call))
       } else {
+
+        filtered_alone <- paste0(dataname, "_FILTERED_ALONE")
+        filter_call <- as.call(list(
+          as.name("<-"), as.name(filtered_alone),
+          private$get_pure_filter_call(dataname)
+        ))
+
         # ADSL has a special status in the sense that filtering in ADSL impacts filtering of the other datasets
         # example: ADLB_FILTERED_ALONE is ADLB with filter applied
         # ADLB_FILTERED is ADLB_FILTERED_ALONE with only the (USUBJID, STUDYID) combinations appearing in ADSL_FILTERED
