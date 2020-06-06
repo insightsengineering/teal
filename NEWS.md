@@ -13,7 +13,8 @@
 
 ## FilteredData refactored (for developers)
 
-* Removed argument `isolate` form `datasets$get_data()`
+* Renamed `get_dataset` method to `get_data()`.
+* Removed argument `isolate` form `get_data()` method.
 * Missing data `NA` is now explicitly addressed in the filter panel.
   * `NA`s are excluded by default.
 
