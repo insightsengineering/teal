@@ -540,8 +540,8 @@ FilteredData <- R6::R6Class( # nolint
         cat("     dataname (dim. unfiltered) (dim. filtered)", "\n")
         lapply(datanames, function(name) {
           cat("   -", name,
-              paste0("(",paste(dim(self$get_data(name, filtered = FALSE)), collapse = " x "), ")"),
-              paste0("(",paste(dim(self$get_data(name, filtered = TRUE)), collapse = " x "), ")"), "\n"
+              paste0("(", paste(dim(self$get_data(name, filtered = FALSE)), collapse = " x "), ")"),
+              paste0("(", paste(dim(self$get_data(name, filtered = TRUE)), collapse = " x "), ")"), "\n"
           )
           fs <- self$get_filter_info(name)
           if (length(fs) > 0) {
