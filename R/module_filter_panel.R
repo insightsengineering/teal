@@ -87,7 +87,7 @@ filter_panel_srv <- function(input, output, session, datasets, active_datanames)
 
   # use isolate because we assume that the number of datasets does not change over the course of the teal app
   # alternatively, one can proceed as in modules_filter_items to dynamically insert, remove UIs
-  isol_datanames <- make_adsl_first(isolate(datasets$datanames()))
+  isol_datanames <- list_adsl_first(isolate(datasets$datanames()))
   # should not use for-loop as variables are otherwise only bound by reference and last dataname would be used
   lapply(
     isol_datanames,

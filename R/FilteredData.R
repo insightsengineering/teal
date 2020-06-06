@@ -121,7 +121,7 @@ FilteredData <- R6::R6Class( # nolint
     #' @md
     #' @return `character` vector of datanames
     datanames = function() {
-      return(make_adsl_first(names(private$datasets)))
+      return(list_adsl_first(names(private$datasets)))
     },
 
     # getters and setters for attributes ----

@@ -11,10 +11,7 @@ include_css_files <- function(package = "teal", pattern = "*") {
 
   css_files <- list.files(system.file("css", package = package, mustWork = TRUE), pattern = pattern, full.names = TRUE)
 
-  lapply(
-    css_files,
-    includeCSS
-  )
+  lapply(css_files, includeCSS)
 }
 
 #' Include \code{JS} files from \code{/inst/js/} package directory to application header

@@ -90,7 +90,8 @@ init <- function(data,
                  header = tags$p("title here"),
                  footer = tags$p("footer here")) {
   if (!modules_depth(modules) %in% c(1, 2)) {
-    # we don't support more nesting for clarity in the app
+    # although there is no technical limitation on the depth in the current
+    # implementation, we don't allow deeper nesting for clarity of the apps
     stop("teal currently only supports module nesting of depth one or two.")
   }
 
@@ -118,9 +119,7 @@ init <- function(data,
   # Shiny app does not time out.
   main_ui <- if (skip_start_screen) {
     div(id = startapp_id, div(
-      h1("Hello, the teal app is starting up."),
-      p("Here is a joke in the meantime:"),
-      tags$b(get_random_joke())
+      h1("The teal app is starting up.")
     ))
   } else {
     message("App was initialized with delayed data loading.")
@@ -176,7 +175,9 @@ init <- function(data,
   # server function
   server <- function(input, output, session) {
 
-    shinyjs::showLog() # to show logs, sodo3: add option for this
+    if (getOption("teal_show_js_log", default = FALSE)) {
+      shinyjs::showLog() # to show javascipt console logs in R console
+    }
 
     # Javascript code to make the clipboard accessible
     run_js_files(files = "init.js")
@@ -215,7 +216,7 @@ init <- function(data,
         }
         # always add ADSL because the other datasets are filtered based on ADSL
         active_datanames <- union("ADSL", active_datanames)
-        return(make_adsl_first(active_datanames))
+        return(list_adsl_first(active_datanames))
       }))$value
 
       callModule(filter_panel_srv, "filter_panel", datasets, active_datanames)

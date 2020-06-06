@@ -1,6 +1,7 @@
 .onLoad <- function(libname = find.package("teal"), pkgname = "teal") { # nolint
   if (is.null(options()$teal_logging)) {
     options(teal_logging = TRUE)
+    options(teal_show_js_log = FALSE)
   }
 }
 

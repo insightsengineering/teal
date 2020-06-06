@@ -105,75 +105,6 @@ error_dialog <- function(x) {
   }
 }
 
-# sodo3: test this function or put into another package?
-#' Restore labels from a list of `data.frames`
-#'
-#' This is useful to restore labels after `dplyr` transformations where labels
-#' are typically lost.
-#' This also works well with merged datasets to restore labels from its
-#' constituent datasets.
-#' In case of columns with the same name in `from`, the label from the
-#' first `data.frame` in the `from` list is used.
-#'
-#' @md
-#' @param x `data.frame` that needs labels
-#' @param from `list of data.frames` to take labels from
-#' @param x_label_precedence `logical` whether labels from `x` take precedence
-#'   when there are also labels for a given column in the `from` list
-#'
-#' @examples
-#' set_labels_df <- teal:::set_labels_df
-#' get_labels_df <- teal:::get_labels_df
-#' df0 <- set_labels_df(
-#'   data.frame(a = 1, b = 2, c = 3, d = 4, i = 8, x = 24),
-#'   c(c = "l3_orig", i = "l9_orig")
-#' )
-#' get_labels_df(df0)
-#' df1 <- set_labels_df(
-#'   data.frame(a = 1, b = 2, c = 3, d = 4),
-#'   c(a = "l1", b = "l2", c = "l3")
-#' )
-#' get_labels_df(df1)
-#' df2 <- set_labels_df(
-#'   data.frame(a = 11, d = 44, e = 55),
-#'   c(a = "l11")
-#' )
-#' get_labels_df(df2)
-#' df3 <- set_labels_df(
-#'   data.frame(a = 111, c = 333, d = 444, e = 555),
-#'   c(a = "l111", c = "l333", d = "l444")
-#' )
-#' get_labels_df(df3)
-#' stopifnot(all(
-#'   get_labels_df(teal:::restore_labels(df0, list(df1, df2, df3))) ==
-#'     c(a = "l1", b = "l2", c = "l3_orig", d = "l444", i = "l9_orig")
-#' ))
-#' stopifnot(all(
-#'   get_labels_df(teal:::restore_labels(df0, list(df1, df2, df3), x_label_precedence = FALSE)) ==
-#'     c(a = "l1", b = "l2", c = "l3", d = "l444", i = "l9_orig")
-#' ))
-restore_labels <- function(x, from, x_label_precedence = TRUE) {
-  stopifnot(
-    is.data.frame(x),
-    is.list(from),
-    all_true(from, is.data.frame),
-    is_logical_single(x_label_precedence)
-  )
-  # named list of labels with labels from first items in from list taking precedence
-  labels_from <- Reduce(
-    function(cur_labels, new_labels) {
-      # add only new labels
-      c(cur_labels, new_labels[!names(new_labels) %in% names(cur_labels)])
-    },
-    lapply(from, get_labels_df)
-  )
-
-  labels_from <- labels_from[names(labels_from) %in% colnames(x)]
-  if (x_label_precedence) {
-    labels_from <- labels_from[!names(labels_from) %in% names(get_labels_df(x))]
-  }
-  return(set_labels_df(x, labels_from))
-}
 
 # get non-NULL labels for single df
 # see `set_labels_df`
@@ -250,28 +181,6 @@ call_with_colon <- function(name, ..., unlist_args = list()) {
   ))
 }
 
-# Get a random joke to display while the app is starting up
-get_random_joke <- function() {
-  # downloaded from https://raw.githubusercontent.com/Daronspence/One-Liners/master/jokes.txt
-  file_contents <- readLines(system.file("jokes.txt", package = "teal", mustWork = TRUE))
-
-  # jokes are separated by empty lines (possibly several) each, a joke can be over several lines
-  file_contents <- c("", file_contents, "") # add sentinel values
-  # a joke must start after an empty line and end before an empty line
-  start_positions <- head(which(file_contents == "") + 1, -1) # all except for last element
-  end_positions <- (which(file_contents == "") - 1)[-1] # all except for first
-  valid_indices <- which(start_positions <= end_positions) # filter when there are several empty lines in a row
-
-  # sample joke
-  joke_idx <- sample(valid_indices, 1)
-  return(paste(
-    file_contents[
-      start_positions[[joke_idx]]:end_positions[[joke_idx]]
-    ],
-    collapse = "\n"
-  ))
-}
-
 # sodo3: move into utils.nest
 #' See a function's code in a temporary file
 #' This is more handy when you want to search for variables in the code a function
@@ -295,3 +204,24 @@ see_in_file <- function(f) {
   file.edit(filename)
   return(invisible(NULL))
 }
+
+#' Move ADSL to the first index in a vector
+#'
+#' This is useful in the UI as ADSL should always appear first in
+#' any vector of the dataset names.
+#' If it does not contain ADSL, the vector is returned unmodified.
+#'
+#' @md
+#' @param datanames (`character` vector) datanames
+#'
+#' @examples
+#' list_adsl_first(c("A", "B", "ADSL", "C"))
+#' list_adsl_first(c("A", "B", "C"))
+list_adsl_first <- function(datanames) {
+  if ("ADSL" %in% datanames) {
+    # make ADSL first
+    datanames <- c("ADSL", setdiff(datanames, "ADSL"))
+  }
+  return(datanames)
+}
+

@@ -11,8 +11,11 @@
 * delayed version of choices_selected
 * Fix an error in `choices_selected` when `selected` is not in `choices`
 
+* Agument `filter` in the `init` function was removed and the new argument `initial_filter_states` was added
+
 ## FilteredData refactored (for developers)
 
+* `FilteredData` is now fully reactive. Now filtered data is lazy evaluated as per need. This futher opens the door to bookmarking `teal` apps (bookmarking currently works, but we will replease the feature in a future release).
 * Renamed `get_dataset` method to `get_data()`.
 * Removed argument `isolate` form `get_data()` method.
 * Missing data `NA` is now explicitly addressed in the filter panel.

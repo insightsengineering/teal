@@ -171,10 +171,10 @@ A simple example for a completely custom `teal` module is the following
 ```{r, eval = FALSE}
 library(teal)
 library(magrittr)
-
+library(dplyr)
+ 
 app <- teal::init(
-  # sodo3: outdated, but should definitely be executed, only the app should not be run
-  data = list(ADSL = iris %>% dplyr::mutate(USUBJID = 1:dplyr::n(), STUDYID = "A")),
+  data = cdisc_data(cdisc_dataset("ADSL", data = iris %>% mutate(USUBJID = 1:dplyr::n(), STUDYID = "A"))),
   modules = root_modules(
     module(
       label = "sample module",
@@ -192,7 +192,7 @@ app <- teal::init(
     )
   )
 )
-shinyApp(app$ui, app$server)
+# shinyApp(app$ui, app$server)
 ```
 
 Please run the above code by copy pasting it to the command line. The example
