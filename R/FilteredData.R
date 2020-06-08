@@ -170,11 +170,13 @@ FilteredData <- R6::R6Class( # nolint
       private$filter_states[[dataname]] <- list()
       private$previous_filter_states[[dataname]] <- list()
 
+      is_new_dataname <- !dataname %in% self$datanames()
+
       # save `md5sum` for reproducibility
       attr(data, "md5sum") <- digest(data, algo = "md5")
       private$datasets[[dataname]] <- data
 
-      if (!dataname %in% self$datanames()) {
+      if (is_new_dataname) {
         # new dataname
         # We only want to set the reactive when a new dataname is added.
         # Otherwise, we don't want to update the reactive as we would otherwise

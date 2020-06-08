@@ -112,12 +112,12 @@ init <- function(data,
   startapp_id <- "startapp_screen"
   startapp_selector <- paste0("#", startapp_id)
 
-  skip_start_screen <- is(data, "cdisc_data")
+  is_not_delayed_data <- !is(data, "cdisc_data")
   # Startup screen for delayed loading
   # We use delayed loading in all cases, even when the data does not need to be fetched.
   # This has the benefit that when filtering the data takes a lot of time initially, the
   # Shiny app does not time out.
-  main_ui <- if (skip_start_screen) {
+  main_ui <- if (is_not_delayed_data) {
     div(id = startapp_id, div(
       h1("The teal app is starting up.")
     ))
@@ -210,7 +210,7 @@ init <- function(data,
     # otherwise, tabs are not independent across users
     datasets <- FilteredData$new()
     # raw_data contains cdisc_data(), i.e. list of unfiltered data frames
-    if (skip_start_screen) {
+    if (is_not_delayed_data) {
       raw_data <- reactiveVal(data) # will trigger by setting it
     } else {
       .log("fetching the data through delayed loading - showing start screen")

@@ -50,10 +50,9 @@ run_js_files <- function(files, package = "teal") {
   stopifnot(is_character_vector(files))
   stopifnot(is_character_single(package))
 
-  for (file in files) {
-    # throws an error if file not found
+  lapply(files, function(file) {
     shinyjs::runjs(paste0(readLines(system.file("js", file, package = package, mustWork = TRUE)), collapse = "\n"))
-  }
+  })
   return(invisible(NULL))
 }
 
