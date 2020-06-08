@@ -64,5 +64,7 @@ reference:
       - bookmark_module
       - debug_browser_module
       - filter_panel_ui
+      - ui_filter_items
+
 
 

@@ -48,10 +48,10 @@ ui_filter_items <- function(id, dataname) {
     id = ns("whole_ui"), # to hide it entirely
     onchange = "hideIffEmpty(this)", #sodo3: not working right now
     fluidRow(
-      column(8, dataname),
+      column(8, tags$span(dataname, class = "filter_panel_dataname")),
       column(4, actionLink(
         ns("remove_filters"), "", icon("trash-alt", lib = "font-awesome"),
-        class = "remove"
+        class = "remove pull-right"
       ))
     ),
     div(

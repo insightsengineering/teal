@@ -1,3 +1,8 @@
+.no-left-right-padding {
+   padding-left: 0 !important;
+   padding-right: 0 !important;
+}
+
 #teal_filter_panel > div.well div.form-group label { width: 100% }
 
 #teal_filter_active_vars p {margin-bottom: 0}
@@ -67,3 +72,19 @@ currently not used, instead one can click anywhere in the element to move it
   cursor: move;
   cursor: -webkit-grabbing;
 }
+
+
+.filter_panel_dataname {
+  font-weight: bold;
+}
+
+.filter_panel_varname {
+  font-weight: bold;
+}
+
+.filter_panel_varlabel {
+  font-size: small;
+  font-weight: normal;
+  margin-left: 3px;
+}
+
