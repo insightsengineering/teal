@@ -18,7 +18,7 @@
 #'
 #' ADSL \code{primary: USUBJID, STUDYID}
 #'
-#' ADTTE \code{primary: PARAMCD, foreign: SUBJECTUNIQUEID, STUDYID, parent: ADSL}
+#' ADTTE \code{primary: PARAMCD, foreign: SUBJECT, UNIQUEID, STUDYID, parent: ADSL}
 #'
 #' As you can see the names of foreign ADTTE are different to ADSL keys, but the order and length is equal.
 #'
@@ -29,11 +29,7 @@
 #' @export
 #'
 #' @examples
-#' library(random.cdisc.data)
-#'
-#' ADSL <-  suppressWarnings(radsl(N = 600, seed = 123))
-#'
-#' dataset("ADSL", ADSL)
+#' dataset("iris", iris)
 dataset <- function(dataname,
                     data,
                     keys = teal::keys(primary = NULL, foreign = NULL, parent = NULL)) {
@@ -228,7 +224,7 @@ get_variable_labels <- function(data, columns = NULL) {
 #' @examples
 #' library(random.cdisc.data)
 #'
-#' ADSL <-  suppressWarnings(radsl(N = 600, seed = 123))
+#' ADSL <- radsl(cached = TRUE)
 #'
 #' cdisc_dataset("ADSL", ADSL)
 cdisc_dataset <- function(dataname,
