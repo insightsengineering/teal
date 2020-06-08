@@ -65,6 +65,7 @@ reference:
       - debug_browser_module
       - filter_panel_ui
       - ui_filter_items
+      - ui_single_filter_item
 
 
 

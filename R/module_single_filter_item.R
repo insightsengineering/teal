@@ -1,5 +1,7 @@
 # label of checkbox to keep / remove NAs
-get_keep_na_label <- function(na_count) paste0("Keep NA (", na_count, ")")
+get_keep_na_label <- function(na_count) {
+  paste0("Keep NA (", na_count, ")")
+}
 
 #' UI for a single filter item for a filter variable
 #'
@@ -206,6 +208,7 @@ srv_single_filter_item <- function(input, output, session, datasets, dataname, v
 
   # we have to make this outside the if because plot options may be different per variable type
   var_type <- isolate(datasets$get_filter_type(dataname, varname))
+
   output$plot <- if ((var_type == "choices") || (var_type == "logical")) {
     renderPlot(bg = "transparent", {
       filter_info <- datasets$get_filter_info(dataname, varname)
@@ -292,8 +295,7 @@ srv_single_filter_item <- function(input, output, session, datasets, dataname, v
   )
 
   # remove variable
-  o2 <- observeEvent(
-    input[[id_remove_filter]], {
+  o2 <- observeEvent(input[[id_remove_filter]], {
       datasets$set_filter_state(dataname, varname, state = NULL)
     },
     # the button is created dynamically afterwards, so this will trigger although
