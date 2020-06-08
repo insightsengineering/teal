@@ -56,13 +56,17 @@ filter_panel_ui <- function(id, datanames) {
     # we provide these ids although we may not use them so that users
     # can customize the CSS behavior
     id = ns("teal_filter_panel"), # used for hiding / showing
+
+    div(
+      id = ns("teal_filter_overview"),
+      class = "well",
+      ui_filtered_data_overview(ns("teal_filters_info")),
+    ),
+
     div(
       id = ns("teal_filter_active_vars"), # id not used, provided for end-user if he wants to customize CSS
       class = "well",
       tags$label("Active Filter Variables", class = "text-primary", style = "margin-bottom: 15px;"),
-      tagList(
-        ui_filtered_data_overview(ns("teal_filters_info"))
-      ),
       tagList(
         lapply(datanames, function(dataname) {
           id <- ns(paste0("teal_filters_", dataname))
@@ -71,6 +75,7 @@ filter_panel_ui <- function(id, datanames) {
         })
       )
     ),
+
     div(
       id = ns("teal_filter_add_vars"), # id not used, provided for end-user if he wants to customize CSS
       class = "well",
@@ -85,6 +90,7 @@ filter_panel_ui <- function(id, datanames) {
       helpText("Note that teal does not support filering on all variable types.",
                "Hence variables that cannot be filtered are excluded.")
     )
+
   )
 }
 
@@ -92,7 +98,8 @@ filter_panel_ui <- function(id, datanames) {
 #'
 #' @noRd
 #'
-#' @param active_datanames reactiveVal object with datanames that should be shown on the filter panel
+#' @param active_datanames object returned by \code{\url[shiny]{reactive}}
+#'   object with datanames that should be shown on the filter panel
 #'
 #'
 filter_panel_srv <- function(input, output, session, datasets, active_datanames) {
@@ -153,6 +160,6 @@ filter_panel_srv <- function(input, output, session, datasets, active_datanames)
         }
       )
     }
-  })
+  }, ignoreNULL = FALSE)
 
 }
