@@ -2,7 +2,7 @@
 % Please edit documentation in R/include_css_js.R
 \name{include_css_files}
 \alias{include_css_files}
-\title{Include \code{CSS} files from \code{/inst/css/} package directory to application header}
+\title{Include \code{CSS} files from \verb{/inst/css/} package directory to application header}
 \usage{
 include_css_files(package = "teal", pattern = "*")
 }
@@ -12,8 +12,8 @@ include_css_files(package = "teal", pattern = "*")
 \item{pattern}{(\code{character}) pattern of files to be included}
 }
 \value{
-HTML code that includes css files
+HTML code that includes \code{CSS} files
 }
 \description{
-Include \code{CSS} files from \code{/inst/css/} package directory to application header
+Include \code{CSS} files from \verb{/inst/css/} package directory to application header
 }

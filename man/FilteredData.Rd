@@ -11,24 +11,32 @@ Class to encapsulate filtered datasets
 }
 \details{
 The main purpose of this class is to provide a collection of reactive datasets,
-each of which can be filtered through the right panel of teal apps.
+each of which can be filtered through the right filter panel of teal apps.
 For each dataset, \code{get_filter_call} returns the call to filter the dataset according
 to the UI user selection.
-Other classes then take care of actually merging together the datasets.
-
-In the constructor, all available datanames are specified. These can then be set
-using the \code{set_data} method. A method to load from a file is also available.
+Other classes then take care of actually merging together all the datasets.
 
 This class is \code{ADSL}-centric in the sense that \code{ADSL} is required to apply the filters.
 Every dataset, in addition to its own filter, is filtered to make sure that it only
 contains keys present in \code{ADSL} (defaulting to \verb{(USUBJID, STUDYID)}).
 Once the \code{ADSL} dataset is set, the filters are applied.
 
-In order to set several datasets or change several filters at once without intermediate
-refiltering, the functions \code{hold_filtering} and \code{continue_filtering} can be used.
+The datasets are filtered lazily, i.e. only when needed (in the Shiny app).
 
 By the design of the class (and \code{reactiveValues}), any dataname set through \code{set_data}
-cannot be removed because other code may already depend on it.
+cannot be removed because other code may already depend on it. As a workaround, the
+underlying data can be set to \code{NULL}.
+
+The class currently supports variables of the following types within datasets:
+\itemize{
+\item \code{choices}: variable of type \code{factor}, e.g. \code{ADSL$COUNTRY}
+zero or more options can be selected, when the variable is a factor
+\item \code{logical}: variable of type \code{logical}, e.g. \code{ADSL$TRT_FLAG}
+exactly one option must be selected, \code{TRUE} or \code{FALSE}
+\item \code{ranges}: variable of type \code{numeric}, e.g. \code{ADSL$AGE}
+numerical range, a range within this range can be selected
+Other variables cannot be filtered for.
+}
 
 Common arguments are:
 \enumerate{
@@ -53,7 +61,10 @@ execute_example <- function() {
   options(shiny.suppressMissingContextError = TRUE)
   on.exit(options(shiny.suppressMissingContextError = FALSE), add = TRUE)
 
+  datasets
+
   datasets$set_data("ADSL", ADSL)
+  datasets
 
   datasets$datanames()
   datasets$get_data_info("ADSL", filtered = FALSE)
@@ -68,6 +79,7 @@ execute_example <- function() {
     AGE = list(range = c(33, 44), keep_na = FALSE),
     SEX = list(choices = c("M", "F"), keep_na = FALSE)
   ))
+  datasets
   datasets$get_filter_type("ADSL", "SEX")
   datasets$get_filter_info("ADSL")[["SEX"]]$type
 
@@ -92,7 +104,6 @@ execute_example()
 \section{Methods}{
 \subsection{Public methods}{
 \itemize{
-\item \href{#method-new}{\code{FilteredData$new()}}
 \item \href{#method-datanames}{\code{FilteredData$datanames()}}
 \item \href{#method-get_data}{\code{FilteredData$get_data()}}
 \item \href{#method-set_data}{\code{FilteredData$set_data()}}
@@ -100,34 +111,22 @@ execute_example()
 \item \href{#method-set_preproc_code}{\code{FilteredData$set_preproc_code()}}
 \item \href{#method-get_data_attr}{\code{FilteredData$get_data_attr()}}
 \item \href{#method-set_data_attr}{\code{FilteredData$set_data_attr()}}
-\item \href{#method-get_column_labels}{\code{FilteredData$get_column_labels()}}
+\item \href{#method-get_variable_labels}{\code{FilteredData$get_variable_labels()}}
 \item \href{#method-get_filter_info}{\code{FilteredData$get_filter_info()}}
 \item \href{#method-get_filter_type}{\code{FilteredData$get_filter_type()}}
 \item \href{#method-get_filter_state}{\code{FilteredData$get_filter_state()}}
 \item \href{#method-set_filter_state}{\code{FilteredData$set_filter_state()}}
 \item \href{#method-get_default_filter_state}{\code{FilteredData$get_default_filter_state()}}
 \item \href{#method-restore_filter}{\code{FilteredData$restore_filter()}}
-\item \href{#method-can_be_filtered}{\code{FilteredData$can_be_filtered()}}
+\item \href{#method-is_filterable}{\code{FilteredData$is_filterable()}}
 \item \href{#method-get_filter_call}{\code{FilteredData$get_filter_call()}}
+\item \href{#method-print}{\code{FilteredData$print()}}
 \item \href{#method-print_filter_info}{\code{FilteredData$print_filter_info()}}
 \item \href{#method-get_data_info}{\code{FilteredData$get_data_info()}}
 \item \href{#method-get_bookmark_state}{\code{FilteredData$get_bookmark_state()}}
-\item \href{#method-set_from_bookmark_state}{\code{FilteredData$set_from_bookmark_state()}}
+\item \href{#method-restore_state_from_bookmark}{\code{FilteredData$restore_state_from_bookmark()}}
 \item \href{#method-clone}{\code{FilteredData$clone()}}
 }
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-new"></a>}}
-\subsection{Method \code{new()}}{
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{FilteredData$new()}\if{html}{\out{</div>}}
-}
-
-\subsection{Details}{
-Initialized with the allowed datanames. The actual datasets can afterwards
-be added using the set_data function.
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-datanames"></a>}}
@@ -148,7 +147,7 @@ Get datanames, ADSL appears first
 \if{html}{\out{<a id="method-get_data"></a>}}
 \subsection{Method \code{get_data()}}{
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{FilteredData$get_data(dataname, filtered = FALSE)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{FilteredData$get_data(dataname, filtered)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
@@ -195,6 +194,9 @@ was removed.
 Any attributes attached to data are kept in the unfiltered data.
 }
 
+\subsection{Returns}{
+\code{self} object of this class
+}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-get_preproc_code"></a>}}
@@ -279,10 +281,10 @@ Set data attribute for the dataset
 
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-get_column_labels"></a>}}
-\subsection{Method \code{get_column_labels()}}{
+\if{html}{\out{<a id="method-get_variable_labels"></a>}}
+\subsection{Method \code{get_variable_labels()}}{
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{FilteredData$get_column_labels(dataname, columns = NULL)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{FilteredData$get_variable_labels(dataname, variables = NULL)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
@@ -290,13 +292,15 @@ Set data attribute for the dataset
 \describe{
 \item{\code{dataname}}{\code{character} name of the dataset}
 
-\item{\code{columns}}{(\code{character} vector) columns to get labels for;
-if \code{NULL}, for all columns}
+\item{\code{variables}}{(\code{character} vector) variables to get labels for;
+if \code{NULL}, for all variables}
 }
 \if{html}{\out{</div>}}
 }
 \subsection{Details}{
-Get non-NA labels of columns in the data
+Get non-NA labels of variables in the data
+
+Variables may be columns.
 }
 
 }
@@ -304,7 +308,11 @@ Get non-NA labels of columns in the data
 \if{html}{\out{<a id="method-get_filter_info"></a>}}
 \subsection{Method \code{get_filter_info()}}{
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{FilteredData$get_filter_info(dataname, varname = NULL, all_vars = FALSE)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{FilteredData$get_filter_info(
+  dataname,
+  varname = NULL,
+  all_filterable_vars = FALSE
+)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
@@ -315,16 +323,18 @@ Get non-NA labels of columns in the data
 \item{\code{varname}}{\code{character} column within the dataset,
 if \code{NULL}, return all (filtered) variables}
 
-\item{\code{all_vars}}{\code{logical} (only applies if \code{varname} is NULL)
-whether to include non-filtered variables}
+\item{\code{all_filterable_vars}}{\code{logical} (only applies if \code{varname} is NULL)
+whether to include non-filtered variables; only filterable variables
+are included}
 }
 \if{html}{\out{</div>}}
 }
 \subsection{Details}{
 Return filter characteristics for a variable in a dataset
-e.g. numeric range for a numerical variable, all levels for a
-factor variable.
-This can be used to see how the variable must be filtered
+e.g. \code{range} for a \code{numeric} variable, \code{choices} for a
+\code{factor} variable, \code{logical} for a \code{logical} variable.
+
+This can be used to see how the variable must be filtered.
 }
 
 }
@@ -346,7 +356,7 @@ must be provided}
 \if{html}{\out{</div>}}
 }
 \subsection{Details}{
-See \code{get_filter_info}, only returns filter type (numerical, categorical).
+See \code{get_filter_info}, only returns filter type (\code{choices}, \code{range}, \code{logical}).
 }
 
 \subsection{Returns}{
@@ -470,10 +480,10 @@ TRUE if state was changed
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-can_be_filtered"></a>}}
-\subsection{Method \code{can_be_filtered()}}{
+\if{html}{\out{<a id="method-is_filterable"></a>}}
+\subsection{Method \code{is_filterable()}}{
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{FilteredData$can_be_filtered(dataname, varname)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{FilteredData$is_filterable(dataname, varname)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
@@ -517,13 +527,32 @@ When the dataname is ADSL, it is simply the filtered ADSL.
 Otherwise, it is the filtered dataset that only contains subjects which
 are also in the filtered ADSL.
 
-Note: The \code{merge()} function in returned call will fail if the
+Note: The \code{dplyr::inner_join()} function in returned call will fail if the
 corresponding dataset is NULL.
 }
 
 \subsection{Returns}{
 call to filter dataset (taking out patients not in ADSL)
 }
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-print"></a>}}
+\subsection{Method \code{print()}}{
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{FilteredData$print(...)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{...}}{unused arguments}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Details}{
+Print method
+}
+
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-print_filter_info"></a>}}
@@ -609,10 +638,10 @@ class may be used outside of a Shiny app.
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-set_from_bookmark_state"></a>}}
-\subsection{Method \code{set_from_bookmark_state()}}{
+\if{html}{\out{<a id="method-restore_state_from_bookmark"></a>}}
+\subsection{Method \code{restore_state_from_bookmark()}}{
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{FilteredData$set_from_bookmark_state(state, check_data_md5sums = TRUE)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{FilteredData$restore_state_from_bookmark(state, check_data_md5sums = TRUE)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{

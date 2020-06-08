@@ -1,4 +1,6 @@
 # This file contains modules useful for debugging and developing teal.
+# We do not export the functions in this file, but show them in pkgdown. They are for
+# developers only and can be accessed via `:::`.
 
 #' Dummy module to test right encoding panel
 #'
@@ -13,8 +15,6 @@
 #' @param label `character` label of module
 #' @param active_datanames `character vector` datanames shown in filter panel;
 #'   can be `"all"` to mean all available datasets
-#'
-#' Not for end users, so do not export.
 #'
 #' @examples
 #' library(random.cdisc.data)
@@ -143,7 +143,6 @@ debug_browser_module <- function(label = "Debug with browser()") {
   )
 }
 
-# sodo3: export all these modules
 #' Reset filters for the specified datasets
 #'
 #' The module presents a group of checkboxes to select the datasets for which to reset

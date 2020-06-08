@@ -55,7 +55,7 @@ filter_panel_ui <- function(id, datanames) {
     # can customize the CSS behavior
     id = ns("teal_filter_panel"), # used for hiding / showing
     div(
-      id = ns("teal_filter_active_vars"), # id not used elsewhere
+      id = ns("teal_filter_active_vars"), # id not used, provided for end-user if he wants to customize CSS
       class = "well",
       tags$label("Active Filter Variables", class = "text-primary", style = "margin-bottom: 15px;"),
       tagList(
@@ -70,7 +70,7 @@ filter_panel_ui <- function(id, datanames) {
       )
     ),
     div(
-      id = ns("teal_filter_add_vars"), # id not used elsewhere
+      id = ns("teal_filter_add_vars"), # id not used, provided for end-user if he wants to customize CSS
       class = "well",
       tags$label("Add Filter Variables", class = "text-primary", style = "margin-bottom: 15px;"),
       tagList(

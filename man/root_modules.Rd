@@ -11,6 +11,6 @@ root_modules(...)
 }
 \description{
 This is the root of all modules. It can contain a list of mixed types of
-`teal_module` and `teal_modules`. At depth
-Sets the label to root in \code{\link{modules}}
+`teal_module` and `teal_modules`.
+Sets the label to root in \code{\link{modules}}.
 }

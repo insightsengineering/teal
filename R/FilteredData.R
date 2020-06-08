@@ -103,26 +103,12 @@ FilteredData <- R6::R6Class( # nolint
   ## FilteredData ====
   ## __Public Methods ====
   public = list(
-    #' @details
-    #' Initialized with the allowed datanames. The actual datasets can afterwards
-    #' be added using the set_data function.
-    #'
-    #' @md
     initialize = function() {
-      # create `reactiveValues` for unfiltered and filtered dataset, filter states and infos
-      # see attribute documentation in private section
-      # each `reactiveValues` is a list with one entry per dataset name
-      private$datasets <- reactiveValues() # unfiltered datasets
-      private$filtered_datasets <- reactiveValues()
-      private$filter_state <- reactiveValues()
-      private$filter_infos <- reactiveValues()
-
-      # we explicitly don't make it reactive
-      private$previous_filter_state <- list()
-
-      return(invisible(self))
+      # we have to create the `reactiveValues` here because they are R6 objects with reference
+      # semantics and would otherwise be shared across classes
+      private$datasets <- reactiveValues()
+      private$filter_states <- reactiveValues()
     },
-
     #' @details
     #' Get datanames, ADSL appears first
     #' @md
@@ -170,6 +156,7 @@ FilteredData <- R6::R6Class( # nolint
     #' @md
     #' @param dataname `character` name of the dataset, without spaces
     #' @param data `data.frame` data that corresponds to `dataname`
+    #' @return `self` object of this class
     set_data = function(dataname, data) {
       stopifnot(is_character_single(dataname))
       if (grepl("[[:space:]]", dataname)) {
@@ -179,15 +166,7 @@ FilteredData <- R6::R6Class( # nolint
       # column_labels and data_label may be NULL, so attributes will not be present
       stopifnot("keys" %in% names(attributes(data)))
 
-      if (dataname %in% self$datanames()) {
-        # already exists, so we only modify the data
-      } else {
-        private$filtered_datasets[[dataname]] <- private$reactive_filtered_dataset(dataname)
-        private$filter_infos[[dataname]] <- private$reactive_filter_infos(dataname)
-      }
-
       # due to the data update, the old filter may no longer be valid, so we unset it
-
       private$filter_state[[dataname]] <- list()
       private$previous_filter_state[[dataname]] <- list()
 
@@ -195,7 +174,17 @@ FilteredData <- R6::R6Class( # nolint
       attr(data, "md5sum") <- digest(data, algo = "md5")
       private$datasets[[dataname]] <- data
 
-      return(invisible(NULL))
+      if (!dataname %in% self$datanames()) {
+        # new dataname
+        # We only want to set the reactive when a new dataname is added.
+        # Otherwise, we don't want to update the reactive as we would otherwise
+        # lose all observers listening the old reactive.
+        # The below functions check that the dataname already exists, so we already set it above.
+        private$filter_infos[[dataname]] <- private$reactive_filter_infos(dataname)
+        private$filtered_datasets[[dataname]] <- private$reactive_filtered_dataset(dataname)
+      }
+
+      return(invisible(self))
     },
 
     #' @details
@@ -296,16 +285,18 @@ FilteredData <- R6::R6Class( # nolint
         is.null(varname) || !all_filterable_vars
       )
 
+      infos <- private$filter_infos[[dataname]]()
       return(if (is.null(varname)) {
         # filter out variables that are not filtered
         if (all_filterable_vars) {
-          infos <- private$filter_infos[[dataname]]()
+          # all filterable variables
           infos[vapply(infos, function(var_info) var_info$type != "unknown", logical(1))]
         } else {
-          private$filter_infos[[dataname]]()[names(private$filter_state[[dataname]])]
+          # only filtered variables, a subset of filterable variables
+          infos[names(private$filter_state[[dataname]])]
         }
       } else {
-        private$filter_infos[[dataname]]()[[varname]]
+        infos[[varname]]
       })
     },
 
@@ -536,7 +527,13 @@ FilteredData <- R6::R6Class( # nolint
     # info functions for end user ----
 
     #' @details
-    #' print method
+    #' Print method
+    #'
+    #' To obtain the default printing of R6 objects with method listing,
+    #' use `cat(format(x))`.
+    #'
+    #' @md
+    #' @param ... unused arguments
     print = function(...) {
 
       # to filter all datasets before the print message as they are only lazily evaluated
@@ -562,11 +559,11 @@ FilteredData <- R6::R6Class( # nolint
         })
       }
 
-      cat("- Introspect this objet (x) with the following methods:", "\n")
+      cat("- Introspect this object (x) with the following methods:", "\n")
       cat("   - cat(format(x))", "\n")
       if (length(datanames) > 0) {
-        cat('   - x$print_filter_info("ADSL")', "\n")
-        cat('   - x$get_data_info("ADSL", filtered = FALSE)', "\n")
+        cat('   - x$print_filter_info("ADSL")', "\n") #nolintr
+        cat('   - x$get_data_info("ADSL", filtered = FALSE)', "\n") #nolintr
       }
       return(invisible(NULL))
     },
@@ -754,8 +751,10 @@ FilteredData <- R6::R6Class( # nolint
 
     # private attributes ----
 
-    # The following attributes are lists per dataname, possibly reactive.
-    # datasets: unfiltered datasets, `reactiveValues` object with the raw / unfiltered datasets
+    # reactiveValues attributes (reactive sources)
+    # `reactiveValues` with one entry per dataname
+
+    # unfiltered / raw datasets
     # e.g. for two datasets `ADSL` and `ADAE` we would have
     # nolintr start
     # datasets <- reactiveValues(
@@ -764,25 +763,41 @@ FilteredData <- R6::R6Class( # nolint
     # )
     # nolintr end
     # the `data.frames` may have attributes like keys
-    datasets = NULL,
-    # non-reactive list of reactives which return filtered dataset after applying filter to unfiltered dataset
-    # they must not be recreated each time they are called to allow caching
-    filtered_datasets = NULL,
-    # filter state to apply to obtain filtered dataset from unfiltered one
+    datasets = NULL, # reactiveValues(),
+    # filter state to apply to obtain the filtered dataset from the unfiltered one
     # `NULL` (for a dataname) means no filter applied, it does not mean that it does not show up
     # as a filtering item in the UI, `NULL` just means that filtering has no effect
-    # therefore, the following lists may not contain all variables for a given dataname,
+    # therefore, it may not contain all variables for a given dataname,
     # which means that the state is `NULL`
-    filter_state = NULL,
-    # previous filter state when you want to revert, e.g. when filter previously removed is added again
-    # explicitly not reactive, but kept in this class because it may need to be synced with filter_state,
-    # e.g. discarded when it becomes obsolete with hierarchical filtering
-    previous_filter_state = NULL,
-    # filter characteristics to create filter that has no effect (i.e. full range of variable),
-    # useful for UI to show sensible ranges and initial state
-    filter_infos = NULL,
+    filter_state = NULL, # reactiveValues(),
 
-    preproc_code = NULL, # preprocessing code used to generate the unfiltered datasets as a string
+    # reactive attributes (conductors)
+    # non-reactive list of `reactives``
+    # These are computed from other reactive inputs like the above
+    # The rule is: Always store unevaluated reactive expressions, never store evaluated
+    # expressions. Evaluated reactive expressions are no longer reactive.
+    # We must be careful not to evaluate it in the wrong context. Suppose that
+    # `set_data` adds the data into a reactive slot. When we simultaneously register the
+    # reactive expression to obtain the filtered dataset, we should not evaluate it because
+    # we do not want to re-evaluate the context of `set_data` each time the filter state changes.
+    # Instead, we want to re-evaluate the context of `get_data` which actually depends on the
+    # data.
+    # For caching, we must also make sure that we don't recreate identical reactive expressions.
+    # Instead, we create them once the data is set in `set_data`.
+
+    # list of reactive expressions to obtain filtered datasets
+    filtered_datasets = list(),
+    # list of filter characteristics to create filter that has no effect (i.e. full range of variable),
+    # useful for UI to show sensible ranges and initial state
+    filter_infos = list(),
+
+    # non-reactive attributes
+
+    # previous filter state when you want to revert, e.g. when filter previously removed is added again
+    # we currently don't want reactivity for it, it is enough for `filter_state`
+    previous_filter_state = list(),
+    # preprocessing code used to generate the unfiltered datasets as a string
+    preproc_code = NULL,
 
     # check functions ----
     # we implement these functions as checks rather than returning logicals so they can
@@ -790,7 +805,8 @@ FilteredData <- R6::R6Class( # nolint
 
     # @details
     # Validate object to inspect if something is wrong
-    #
+    # The call to this function should be isolated to avoid a reactive dependency.
+    # Getting the names of a reactivevalues also needs a reactive context.
     validate = function() {
       .log("## validating FilteredData object consistency")
 
@@ -798,7 +814,7 @@ FilteredData <- R6::R6Class( # nolint
         # check classes
         is.reactivevalues(private$datasets),
         # no `reactiveValues`, but a list of `reactiveVal`
-        is.list(private$filtered_datasets),
+        is.reactivevalues(private$filtered_datasets),
         is.reactivevalues(private$filter_state),
         is.list(private$previous_filter_state),
         is.reactivevalues(private$filter_infos),
@@ -879,7 +895,7 @@ FilteredData <- R6::R6Class( # nolint
     #   must be provided
     # @param varstate `list` variable state
     check_valid_filter_state = function(dataname, varname, var_state) {
-      stopifnot(is_character_single(varname))
+      stopifnot(is_character_single(varname)) # must be non-NULL
       private$check_data_varname_exists(dataname, varname)
 
       var_info <- self$get_filter_info(dataname, varname) # filter characteristics for var, e.g. range
@@ -1012,28 +1028,26 @@ FilteredData <- R6::R6Class( # nolint
 
     # generate reactive expressions for reactive attributes that depend on data ----
 
+    # Reactive to compute the filtered dataset
     # @details
-    # This returns a reactive that returns the filtered dataset
-    # it refilters whenever the source datasets
-    # change or the filter state
+    # This returns a reactive that computes the filtered dataset.
+    # Through reactivity, it is only lazily evaluated and also re-evaluates
+    # whenever the unfiltered datasets it depends on change.
     #
+    # @md
     # @param dataname `character` name of the dataset
+    # @return `reactive` expression for the provided `dataname` that returns
+    #   the filtered dataset when evaluated
     reactive_filtered_dataset = function(dataname) {
-      stopifnot(is_character_single(dataname))
-      reactive({
-        # use isolate to avoid triggering due to adding a dataset via `set_data`
-        if (!dataname %in% isolate(self$datanames())) {
-          stop("Cannot filter data ", dataname, " as it needs to be set first")
-        }
+      private$check_data_varname_exists(dataname)
 
+      reactive({
         .log("################################################# Refiltering dataset ", dataname)
 
-        # sodo3: why not use a chunks object for this from teal.devel (and put chunks code into teal?)
-        # filter data directly in an empty environment to make sure no global variables or
-        # other variables from this class are used
-        # this assumes that no other packages are attached in the call, as this modifies the
-        # parent of the `globalenv`
-        # we prefer to take a parent of the `globalenv` to avoid picking up user-defined global variables
+        # We could use a chunks object here, but don't do so for simplicity as we don't need its capabilities.
+        # We take the parent of the global env, i.e. the last attached package, to avoid picking up
+        # any variables defined in the global environment. This is okay as it takes whatever is the current
+        # `globalenv` when this reactive is evaluated, i.e. when the relevant packages are already loaded.
         env <- new.env(parent.env(globalenv()))
 
         # put dependencies of filter call into environment
@@ -1044,6 +1058,7 @@ FilteredData <- R6::R6Class( # nolint
         env[[dataname]] <- self$get_data(dataname, filtered = FALSE)
 
         lapply(
+          # 1 call for ADSL to apply filter, 2 calls for non-ADSL to additionally filter out rows not in ADSL
           self$get_filter_call(dataname),
           eval,
           envir = env
@@ -1066,14 +1081,27 @@ FilteredData <- R6::R6Class( # nolint
       return(invisible(self))
     },
 
+    # Reactive to compute the filter infos
     # @details
-    # Sets filter infos
+    # Reactive to compute the filter infos for a `dataname`
     #
-    # Detect variable type (categorical, numeric range)
-    # and accordingly set the filter characteristics
+    # For each variable in the dataset, it computes the filter info.
+    # This filter info depends on the variable type (`numeric`, `factor`, `logical`)
+    # and returns the least restrictive filter state, i.e.
+    # - `factor or character`: `type: "choices", choices: , histogram_data: `
+    # - `numeric`: `type: "range", range: , histogram_data: `
+    # - `logical`: `type: "logical", choices: , histogram_data: `
+    # - default (or all `NA` entries): `type: unknown, class: `, cannot be filtered
+    # Each variable's filter info is a list with entries `type`, `labels` and others
+    # that depend on the variable type as outlined above.
     #
+    # @md
     # @param dataname `character` name of the dataset
+    #
+    # @return reactive that returns a list of variable infos, one entry per variable
     reactive_filter_infos = function(dataname) {
+      private$check_data_varname_exists(dataname)
+
       reactive({
         df <- self$get_data(dataname, filtered = FALSE)
 
@@ -1153,8 +1181,9 @@ FilteredData <- R6::R6Class( # nolint
 #' @md
 #' @param var_type `character` variable type
 #' @param state `list` with elements corresponding to variable
-#'   type; can be filter state or filter info
-#' @param add_na `logical` whether to display information about NA
+#'   type; can be `filter_state` or `filter_info`
+#' @param add_na `logical` whether to display information about NA,
+#'   either `keep_na` (for `filter_state`) or `na_count` (for `filter_info`)
 filter_state_to_str <- function(var_type, state, add_na = FALSE) {
   stopifnot(is_logical_single(add_na))
 

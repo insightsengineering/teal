@@ -2,17 +2,20 @@
 % Please edit documentation in R/include_css_js.R
 \name{include_js_files}
 \alias{include_js_files}
-\title{Include \code{JS} files from \code{/inst/js/} package directory to application header}
+\title{Include \code{JS} files from \verb{/inst/js/} package directory to application header}
 \usage{
 include_js_files(package = "teal", pattern = "*", except = NULL)
 }
 \arguments{
 \item{package}{(\code{character}) package name}
 
-\item{pattern}{(\code{character}) pattern of files to be included}
+\item{pattern}{(\code{character}) pattern of files to be included, passed to \code{system.file}}
 
-\item{except}{(\code{character}) vector of files to be excluded, matched via grep}
+\item{except}{(\code{character}) vector of basename filenames to be excluded}
+}
+\value{
+HTML code that includes \code{JS} files
 }
 \description{
-Include \code{JS} files from \code{/inst/js/} package directory to application header
+Include \code{JS} files from \verb{/inst/js/} package directory to application header
 }

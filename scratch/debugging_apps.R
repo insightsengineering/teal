@@ -13,6 +13,8 @@ options(shiny.fullstacktrace = TRUE)
 options(teal_logging = TRUE) # to log to console
 options("shiny.launch.browser" = TRUE)
 #options("shiny.launch.browser" = function(url) invisible(.Call("rs_shinyviewer", url, getwd(), 2)))
+#?getShinyOption()
+#options("shiny.suppressMissingContextError" = FALSE)
 
 ADSL <- radsl(cached = TRUE)
 ADSL$logical_test <- sample(c(TRUE, FALSE, NA), size = nrow(ADSL), replace = TRUE)

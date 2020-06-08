@@ -30,7 +30,7 @@ the keys need to be
 
 ADSL \code{primary: USUBJID, STUDYID}
 
-ADTTE \code{primary: PARAMCD, foreign: SUBJECTUNIQUEID, STUDYID, parent: ADSL}
+ADTTE \code{primary: PARAMCD, foreign: SUBJECT, UNIQUEID, STUDYID, parent: ADSL}
 
 As you can see the names of foreign ADTTE are different to ADSL keys, but the order and length is equal.}
 }
@@ -41,9 +41,5 @@ a dataset with connected metadata
 Abstract function that creates dataset object with connected metadata.
 }
 \examples{
-library(random.cdisc.data)
-
-ADSL <-  suppressWarnings(radsl(N = 600, seed = 123))
-
-dataset("ADSL", ADSL)
+dataset("iris", iris)
 }
