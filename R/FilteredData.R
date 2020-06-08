@@ -818,10 +818,10 @@ FilteredData <- R6::R6Class( # nolint
         # check classes
         is.reactivevalues(private$datasets),
         # no `reactiveValues`, but a list of `reactiveVal`
-        is.reactivevalues(private$filtered_datasets),
+        all(vapply(private$filtered_datasets, is.reactive, logical(1))),
         is.reactivevalues(private$filter_states),
         is.list(private$previous_filter_states),
-        is.reactivevalues(private$filter_infos),
+        is.list(private$filter_infos),
 
         # check names are the same
         setequal(names(private$datasets), names(private$filtered_datasets)),
