@@ -112,7 +112,7 @@ init <- function(data,
   startapp_id <- "startapp_screen"
   startapp_selector <- paste0("#", startapp_id)
 
-  is_not_delayed_data <- !is(data, "cdisc_data")
+  is_not_delayed_data <- !is(data, "delayed_data")
   # Startup screen for delayed loading
   # We use delayed loading in all cases, even when the data does not need to be fetched.
   # This has the benefit that when filtering the data takes a lot of time initially, the
