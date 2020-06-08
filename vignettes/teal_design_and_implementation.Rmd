@@ -333,6 +333,7 @@ The `datasets` object of class `FilteredData` that is passed an argument to the
 `server` function is created by `teal` as follows:
 
 ```{r}
+library(teal)
 options(teal_logging = FALSE)
 datasets <- teal:::FilteredData$new()
 
@@ -341,9 +342,13 @@ datasets <- teal:::FilteredData$new()
 options(shiny.suppressMissingContextError = TRUE)
 
 attr(ADSL, "keys") <- teal::get_cdisc_keys("ADSL")
-datasets$set_data("ADSL", ADSL)
 attr(ADTTE, "keys") <- teal::get_cdisc_keys("ADTTE")
-datasets$set_data("ADTTE", ADTTE)
+
+isolate({
+  datasets$set_data("ADSL", ADSL)
+  datasets$set_data("ADTTE", ADTTE)
+})
+shiny:::flushReact()
 ```
 
 Note that this code also runs outside of a teal instance. The public methods of
@@ -372,6 +377,7 @@ equal to `id-1`, `id-2`, `id-3`, or `id-4`:
 
 ```{r}
 datasets$set_filter_state("ADSL", "USUBJID", state = list(choices = paste0("id-", 1:4), keep_na = FALSE))
+shiny:::flushReact()
 
 datasets$get_data("ADSL", filtered = TRUE)
 ```
