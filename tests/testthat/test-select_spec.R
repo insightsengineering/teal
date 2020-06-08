@@ -71,7 +71,7 @@ test_that("resolve_delayed select_spec works", {
   set.seed(1)
   ADSL <- data.frame(USUBJID = letters[1:10], # nolint
                      BMRKR1 = rnorm(10),
-                     BMRKR2 = sample(c("L", "M", "H"), 10, replace = T),
+                     BMRKR2 = sample(c("L", "M", "H"), 10, replace = TRUE),
                      stringsAsFactors = FALSE)
   attr(ADSL, "keys") <- get_cdisc_keys("ADSL")
 

@@ -176,7 +176,7 @@ init <- function(data,
   server <- function(input, output, session) {
 
     if (getOption("teal_show_js_log", default = FALSE)) {
-      shinyjs::showLog() # to show javascipt console logs in R console
+      shinyjs::showLog() # to show Javascript console logs in the R console
     }
 
     # Javascript code to make the clipboard accessible

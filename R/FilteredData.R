@@ -528,7 +528,8 @@ FilteredData <- R6::R6Class( # nolint
     #' print method
     print = function(...) {
 
-      private$update_all_filtered_data() # to get all logging messages before the print message
+      # to filter all datasets before the print message as they are only lazily evaluated
+      private$update_all_filtered_data()
 
       cat(class(self), "object", "\n")
 
@@ -1037,6 +1038,8 @@ FilteredData <- R6::R6Class( # nolint
     # Datasets do not get calculated if there is no absorbing observer requiring
     # the dataset (lazy feature of reactivity).
     # This function ensures that all the filtered datasets are updated
+    # @md
+    # @return `self`
     update_all_filtered_data = function() {
       lapply(self$datanames(), function(x) self$get_data(x, filtered = TRUE))
       return(invisible(self))

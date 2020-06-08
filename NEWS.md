@@ -11,15 +11,19 @@
 * delayed version of choices_selected
 * Fix an error in `choices_selected` when `selected` is not in `choices`
 
-* Agument `filter` in the `init` function was removed and the new argument `initial_filter_states` was added
+* Argument `filter` in the `init` function was removed and the new argument `initial_filter_states` was added. You can no longer modify the `app$datasets`, but must instead use this argument. 
 
 ## FilteredData refactored (for developers)
 
-* `FilteredData` is now fully reactive. Now filtered data is lazy evaluated as per need. This futher opens the door to bookmarking `teal` apps (bookmarking currently works, but we will replease the feature in a future release).
+* `FilteredData` is now fully reactive. Now filtered data is lazy evaluated as per need. This futher opens the door to bookmarking `teal` apps (bookmarking currently works for the right filtering panel, but we will make this feature more sophisticated in a future release, each module must be reviewed and adapted if it contains `reactiveValues`).
 * Renamed `get_dataset` method to `get_data()`.
-* Removed argument `isolate` form `get_data()` method.
+* Removed argument `isolate` form `get_data()` method and similar methods. You must `isolate` it yourself as needed. If you want to temporarily deactivate Shiny errors due to missing errors, you can set `options(shiny.suppressMissingContextError = TRUE)`.
 * Missing data `NA` is now explicitly addressed in the filter panel.
-  * `NA`s are excluded by default.
+  * `NA`s are excluded by default and a checkbox to include them was added.
+* Statistics of the data are visually depicted in terms of histograms or bar charts overlayed onto the Shiny input elements.
+
+sodo3: in other packages
+- get_package_file: write as `system.file(..., mustWork = TRUE)`
 
 
 # teal 0.8.3

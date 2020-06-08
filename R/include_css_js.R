@@ -1,9 +1,10 @@
-#' Include \code{CSS} files from \code{/inst/css/} package directory to application header
+#' Include `CSS` files from `/inst/css/` package directory to application header
 #'
-#' @param package (\code{character}) package name
-#' @param pattern (\code{character}) pattern of files to be included
+#' @md
+#' @param package (`character`) package name
+#' @param pattern (`character`) pattern of files to be included
 #'
-#' @return HTML code that includes css files
+#' @return HTML code that includes `CSS` files
 #'
 #' @export
 include_css_files <- function(package = "teal", pattern = "*") {
@@ -11,15 +12,17 @@ include_css_files <- function(package = "teal", pattern = "*") {
 
   css_files <- list.files(system.file("css", package = package, mustWork = TRUE), pattern = pattern, full.names = TRUE)
 
-  lapply(css_files, includeCSS)
+  return(lapply(css_files, includeCSS))
 }
 
-#' Include \code{JS} files from \code{/inst/js/} package directory to application header
+#' Include `JS` files from `/inst/js/` package directory to application header
 #'
-#' @param package (\code{character}) package name
-#' @param pattern (\code{character}) pattern of files to be included passed to \code{system.file}
-#' @param except (\code{character}) vector of basename filenames to be excluded
+#' @md
+#' @param package (`character`) package name
+#' @param pattern (`character`) pattern of files to be included, passed to `system.file`
+#' @param except (`character`) vector of basename filenames to be excluded
 #'
+#' @return HTML code that includes `JS` files
 #' @export
 include_js_files <- function(package = "teal", pattern = "*", except = NULL) {
   stopifnot(is_character_single(package))
@@ -28,7 +31,7 @@ include_js_files <- function(package = "teal", pattern = "*", except = NULL) {
   js_files <- list.files(system.file("js", package = package, mustWork = TRUE), pattern = pattern, full.names = TRUE)
 
   # optionally put into `shiny::singleton`
-  lapply(js_files[!(basename(js_files) %in% except)], includeScript)
+  return(lapply(js_files[!(basename(js_files) %in% except)], includeScript))
 }
 
 #' Run `JS` file from `/inst/js/` package directory
@@ -51,6 +54,7 @@ run_js_files <- function(files, package = "teal") {
     # throws an error if file not found
     shinyjs::runjs(paste0(readLines(system.file("js", file, package = package, mustWork = TRUE)), collapse = "\n"))
   }
+  return(invisible(NULL))
 }
 
 #' Code to include teal CSS and Javascript files
