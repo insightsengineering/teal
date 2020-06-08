@@ -25,7 +25,10 @@ srv_filtered_data_overview <- function(input, output, session, datasets, datanam
   output$table <- renderTable({
     .log("update uifiltersinfo")
 
-    datanames <- handle_active_datanames(if_null(datanames(), datasets$datanames()))
+    datanames <- handle_active_datanames(
+      datasets,
+      if_null(datanames(), datasets$datanames())
+    )
 
     observations <- vapply(
       X = datanames,

@@ -55,7 +55,7 @@ filter_panel_ui <- function(id, datanames) {
       class = "well",
       tags$label("Active Filter Variables", class = "text-primary", style = "margin-bottom: 15px;"),
       tagList(
-        ui_filter_info(ns("teal_filters_info"))
+        ui_filtered_data_overview(ns("teal_filters_info"))
       ),
       tagList(
         lapply(datanames, function(dataname) {
@@ -87,7 +87,7 @@ filter_panel_srv <- function(input, output, session, datasets, active_datanames)
     is.function(active_datanames)
   )
 
-  callModule(srv_filter_info, "teal_filters_info", datasets, datanames = reactive(active_datanames()))
+  callModule(srv_filtered_data_overview, "teal_filters_info", datasets, datanames = reactive(active_datanames()))
 
   # use isolate because we assume that the number of datasets does not change over the course of the teal app
   # alternatively, one can proceed as in modules_filter_items to dynamically insert, remove UIs

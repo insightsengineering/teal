@@ -267,7 +267,7 @@ init <- function(data,
         .log("restoring filter state from bookmarked state")
         tryCatch({
             progress$set(0.5, message = "Restoring from bookmarked state")
-            datasets$set_from_bookmark_state(saved_datasets_state)
+            datasets$restore_state_from_bookmark(saved_datasets_state)
           },
           error = function(cnd) {
             showModal(modalDialog(

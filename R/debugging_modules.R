@@ -48,7 +48,7 @@ filter_calls_module <- function(label = "Dummy module", active_datanames = "all"
       output$filter_calls <- renderText({
         active_datanames <- handle_active_datanames(datasets, active_datanames)
         paste(lapply(
-          make_adsl_first(active_datanames),
+          list_adsl_first(active_datanames),
           function(dataname) paste(datasets$get_filter_call(dataname), collapse = "\n")
         ), collapse = "\n\n")
       })

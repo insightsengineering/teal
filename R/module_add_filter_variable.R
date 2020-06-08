@@ -41,7 +41,7 @@ srv_add_filter_variable <- function(input, output, session, datasets, dataname, 
   stopifnot(
     is(datasets, "FilteredData"),
     is_character_single(dataname),
-    is_character_vector(omit_vars)
+    is.function(omit_vars)
   )
 
   # currently active filter vars for this dataset
@@ -55,7 +55,7 @@ srv_add_filter_variable <- function(input, output, session, datasets, dataname, 
     # if NULL, it was just reset (to select a new variable to filter); at startup, this is also called with NULL
     var_to_add <- input$new_filter_var
     if (!is.null(var_to_add)) {
-      stopifnot(datasets$can_be_filtered(dataname, var_to_add))
+      stopifnot(datasets$is_filterable(dataname, var_to_add))
       .log("add filter variable", var_to_add)
       datasets$restore_filter(dataname, varname = var_to_add)
       datasets$.__enclos_env__$private$validate() # sodo3: remove or keep in checking mode?
@@ -77,7 +77,7 @@ srv_add_filter_variable <- function(input, output, session, datasets, dataname, 
       c(active_filter_vars(), omit_vars())
     )
     choices <- choices[
-      vapply(choices, function(varname) datasets$can_be_filtered(dataname, varname = varname), logical(1))
+      vapply(choices, function(varname) datasets$is_filterable(dataname, varname = varname), logical(1))
     ]
     updateOptionalSelectInput(
       session,
