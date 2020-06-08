@@ -6,7 +6,7 @@
 #' the number of unique subjects.
 #'
 #' @param id module id
-ui_filter_info <- function(id) {
+ui_filtered_data_overview <- function(id) {
   ns <- NS(id)
 
   div(
@@ -16,13 +16,16 @@ ui_filter_info <- function(id) {
 }
 
 # datanames are datanames to show among those that are available
-srv_filter_info <- function(input, output, session, datasets, datanames) {
-  stopifnot(is.function(datanames))
+srv_filtered_data_overview <- function(input, output, session, datasets, datanames) {
+  stopifnot(
+    is(datasets, "FilteredData"),
+    is.function(datanames)
+  )
 
   output$table <- renderTable({
     .log("update uifiltersinfo")
 
-    datanames <- if_null(datanames(), datasets$datanames())
+    datanames <- handle_active_datanames(if_null(datanames(), datasets$datanames()))
 
     observations <- vapply(
       X = datanames,

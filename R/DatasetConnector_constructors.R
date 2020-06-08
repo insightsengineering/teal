@@ -234,7 +234,7 @@ rice_dataset_connector <- function(dataname,
   stopifnot(is_fully_named_list(dot_args))
   stopifnot(is_character_single(path))
 
-  check_pckg_quietly(
+  check_pkg_quietly(
     "rice",
     paste0("Connection to entimICE via rice was requested, but rice package is not available.",
            "Please install it from https://github.roche.com/Rpackages/rice."))

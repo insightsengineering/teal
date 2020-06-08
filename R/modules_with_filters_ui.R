@@ -22,11 +22,16 @@
 #'
 #' @import shiny
 modules_with_filters_ui <- function(modules, datasets) {
+  stopifnot(
+    is(modules, "teal_modules"),
+    is(datasets, "FilteredData")
+  )
+
   # use isolate because we assume that the number of datasets does not change over the course of the teal app
   # otherwise need dynamic UI
   filter_and_info_ui <- filter_panel_ui("filter_panel", datanames = isolate(datasets$datanames()))
 
-  stopifnot(is(modules, "teal_modules")) # otherwise we will get the UI and not a tabsetPanel
+  # modules must be teal_modules, not teal_module; otherwise we will get the UI and not a tabsetPanel of UIs
   teal_ui <- tab_nested_ui(modules, datasets, idprefix = "teal_modules", is_root = TRUE)
 
   stopifnot(length(teal_ui$children) == 2)

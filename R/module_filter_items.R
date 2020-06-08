@@ -39,6 +39,10 @@
 #'   callModule(srv_filter_items, "filter_ADAE", datasets, "ADAE")
 #' }) %>% invisible() # invisible so it does not run
 ui_filter_items <- function(id, dataname) {
+  stopifnot(
+    is_character_single(dataname)
+  )
+
   ns <- NS(id)
   div(
     id = ns("whole_ui"), # to hide it entirely
@@ -63,6 +67,11 @@ ui_filter_items <- function(id, dataname) {
 
 #' @importFrom shinyWidgets pickerInput pickerOptions
 srv_filter_items <- function(input, output, session, datasets, dataname) {
+  stopifnot(
+    is(datasets, "FilteredData"),
+    is_character_single(dataname)
+  )
+
   # Shiny does not implement the Model View Controller interface. The input elements in Shiny
   # are simultaneously controllers and views. Furthermore, when the model (input value) first
   # starts to exist, it is not removed when the UI is removed, instead it must be set manually
@@ -148,7 +157,7 @@ srv_filter_items <- function(input, output, session, datasets, dataname) {
 
       stopifnot(setequal(filtered_vars(), names(shown_vars_observers)))
     },
-    # we also want to find out when there are no filtered variables to hide the UI
+    # we also need to find out when there are no filtered variables to hide / show the UI
     ignoreNULL = FALSE
   )
 

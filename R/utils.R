@@ -66,7 +66,7 @@ extract_choices_labels <- function(choices, values = NULL) {
 #'
 #' @return Error or invisible NULL.
 #'
-check_pckg_quietly <- function(pckg, msg) {
+check_pkg_quietly <- function(pckg, msg) {
   stopifnot(is_character_single(pckg), is_character_single(msg))
 
   if (!requireNamespace(pckg, quietly = TRUE)) {
@@ -225,3 +225,17 @@ list_adsl_first <- function(datanames) {
   return(datanames)
 }
 
+#' When active_datanames is "all", sets them to all datanames
+#' otherwise, it makes sure that it is a subset of the available datanames
+#'
+#' @md
+#' @param datasets `FilteredData` object
+#' @param datanames `character vector` datanames to pick
+#'
+#' @return intersection of `datasets$datanames()` and `datanames`
+handle_active_datanames <- function(datasets, datanames) {
+  if (identical(datanames, "all")) {
+    datanames <- datasets$datanames()
+  }
+  return(intersect(datasets$datanames(), datanames))
+}

@@ -46,7 +46,7 @@ set_datasets_filters <- function(datasets, filters) {
   stopifnot(is(datasets, "FilteredData"))
   stopifnot(is.list(filters))
 
-  Map(function(dataname, filters_for_dataname) {
+  return(Map(function(dataname, filters_for_dataname) {
     # replace "default" string by actual default filter state for that variable
     filters_for_dataname <- Map(function(varname, var_filter_state) {
       if (identical(var_filter_state, "default")) {
@@ -56,5 +56,5 @@ set_datasets_filters <- function(datasets, filters) {
       }
     }, names(filters_for_dataname), filters_for_dataname)
     datasets$set_filter_state(dataname, varname = NULL, state = filters_for_dataname)
-  }, names(filters), filters)
+  }, names(filters), filters))
 }

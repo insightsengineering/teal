@@ -41,6 +41,10 @@
 #'   )
 #' }) %>% invisible() # invisible so it does not run
 filter_panel_ui <- function(id, datanames) {
+  stopifnot(
+    is_character_vector(datanames)
+  )
+
   ns <- NS(id)
   div(
     # we provide these ids although we may not use them so that users
@@ -112,7 +116,7 @@ filter_panel_srv <- function(input, output, session, datasets, active_datanames)
 
   # rather than regenerating the UI dynamically for the dataset filtering,
   # we instead choose to hide/show the elements
-  # the filters are just hidden from the UI, but still applied
+  # the filters for this dataset are just hidden from the UI, but still applied
   observeEvent(active_datanames(), {
     if (length(active_datanames()) == 0) {
       shinyjs::hide("teal_filter_panel")

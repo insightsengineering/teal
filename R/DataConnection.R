@@ -242,7 +242,7 @@ DataConnection <- R6::R6Class( # nolint
 #'
 #' @return \code{DataConnection} type of object
 rcd_connection <- function() {
-  check_pckg_quietly("random.cdisc.data", "random.cdisc.data package not available.") # nolint
+  check_pkg_quietly("random.cdisc.data", "random.cdisc.data package not available.") # nolint
 
   fun <- callable_function(library) # nolint
   fun$set_args(list(package = "random.cdisc.data"))
@@ -258,7 +258,7 @@ rcd_connection <- function() {
 #'
 #' @return \code{DataConnection} type of object
 rice_connection <- function() {
-  check_pckg_quietly(
+  check_pkg_quietly(
     "rice",
     paste0(
       "Connection to entimICE via rice was requested, but rice package is not available.",

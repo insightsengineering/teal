@@ -18,8 +18,10 @@ modules <- function(label, ...) {
   submodules <- list(...)
   is_right_class <- vapply(submodules, function(x) is(x, "teal_module") || is(x, "teal_modules"), logical(1))
   if (any(!is_right_class)) {
-    stop(paste("modules: not all argument are of class teal_module or teal_modules. Index:",
-               paste(which(!is_right_class), collapse = ", ")))
+    stop(paste(
+      "modules: not all argument are of class teal_module or teal_modules. Indices:",
+      toString(which(!is_right_class))
+    ))
   }
 
   labels <- lapply(submodules, function(submodule) submodule$label)
@@ -43,8 +45,8 @@ modules <- function(label, ...) {
 #' Create the root modules container
 #'
 #' This is the root of all modules. It can contain a list of mixed types of
-#' `teal_module` and `teal_modules`. At depth
-#' Sets the label to root in \code{\link{modules}}
+#' `teal_module` and `teal_modules`.
+#' Sets the label to root in \code{\link{modules}}.
 #'
 #' @inheritParams modules
 #'

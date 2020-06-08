@@ -128,31 +128,13 @@ init <- function(data,
 
   # show busy icon when shiny session is busy computing stuff
   # based on https://stackoverflow.com/questions/17325521/r-shiny-display-loading-message-while-function-is-running/22475216#22475216 #nolint
-  shiny_busy_message_panel <- tagList(
-    tags$style(
-      type = "text/css",
-      "#shinybusymessage {
-          position: fixed;
-          bottom: 0px;
-          right: 0px;
-          width: 140px;
-          margin: 15px;
-          padding: 5px 0px 5px 10px;
-          text-align: left;
-          font-weight: bold;
-          font-size: 100%;
-          color: #ffffff;
-          background-color: #347ab7;
-          z-index: 105;
-      }"
-    ),
-    conditionalPanel(
-      condition = "(($('html').hasClass('shiny-busy')) && (document.getElementById(\"shiny-notification-panel\") == null))", # nolint
-      div(
-        icon("sync", "spin fa-spin"),
-        "Computing ...",
-        id = "shinybusymessage"
-      )
+  shiny_busy_message_panel <- conditionalPanel(
+    condition = "(($('html').hasClass('shiny-busy')) && (document.getElementById('shiny-notification-panel') == null))", # nolint
+    div(
+      icon("sync", "spin fa-spin"),
+      "Computing ...",
+      # CSS defined in `custom.css`
+      id = "shinybusymessage"
     )
   )
 
@@ -233,7 +215,7 @@ init <- function(data,
     } else {
       .log("fetching the data through delayed loading - showing start screen")
       raw_data <- callModule(data$get_server(), "startapp_module")
-      stop_if_not(list(is.reactive(raw_data), "first app module has to return reactive object"))
+      stop_if_not(list(is.reactive(raw_data), "The delayed loading module has to return a reactive object."))
       # trick for faster testing to avoid waiting on module specific to delayed data
       # raw_data <- reactive(cdisc_data_global) # nolintr
     }

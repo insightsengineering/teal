@@ -187,12 +187,3 @@ reset_filters_module <- function(label = "Reset filters", active_datanames = "al
     filters = active_datanames
   )
 }
-
-# when active_datanames is "all", sets them to all datanames
-# otherwise, it makes sure that it is a subset of the available datanames
-handle_active_datanames <- function(datasets, active_datanames) {
-  if (identical(active_datanames, "all")) {
-    active_datanames <- datasets$datanames()
-  }
-  return(intersect(datasets$datanames(), active_datanames))
-}

@@ -24,6 +24,22 @@ a.remove:hover{
   border: 1px solid #337ab7;
 }
 
+/* display waiting box at bottom right corner when Shiny is computing */
+#shinybusymessage {
+    position: fixed;
+    bottom: 0px;
+    right: 0px;
+    width: 140px;
+    margin: 15px;
+    padding: 5px 0px 5px 10px;
+    text-align: left;
+    font-weight: bold;
+    font-size: 100%;
+    color: #ffffff;
+    background-color: #347ab7;
+    z-index: 105;
+}
+
 .filterPlotOverlayBoxes {
   position: absolute;
   top: -2px; right: 16px; bottom: -2px; left: 16px;

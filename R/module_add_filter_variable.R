@@ -17,6 +17,10 @@
 #'
 #' @importFrom shinyWidgets pickerOptions
 ui_add_filter_variable <- function(id, dataname) {
+  stopifnot(
+    is_character_single(dataname)
+  )
+
   ns <- NS(id)
 
   div(
@@ -34,6 +38,12 @@ ui_add_filter_variable <- function(id, dataname) {
 }
 
 srv_add_filter_variable <- function(input, output, session, datasets, dataname, omit_vars) {
+  stopifnot(
+    is(datasets, "FilteredData"),
+    is_character_single(dataname),
+    is_character_vector(omit_vars)
+  )
+
   # currently active filter vars for this dataset
   active_filter_vars <- reactive({
     names(datasets$get_filter_state(dataname))
@@ -57,8 +67,8 @@ srv_add_filter_variable <- function(input, output, session, datasets, dataname, 
   # reacts both when data changed and when active_filter_vars is updated
   observe({
     # we add this dependency here so that the choices update once the UI is set up (which triggers an event)
-    # even though the new_filter_var is set to NULL, this only happens once all observers were executed,
-    # so the above that adds it to the filtered variables still has its non-NULL value
+    # even though the new_filter_var is set to NULL with `updateOptionalSelectInput`, this only happens once all
+    # observers were executed, so the above that adds it to the filtered variables still has its non-NULL value
     input$new_filter_var
 
     .log("updating choices to add filter variables for", dataname)

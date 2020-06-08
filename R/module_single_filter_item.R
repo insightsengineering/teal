@@ -91,6 +91,12 @@ get_keep_na_label <- function(na_count) paste0("Keep NA (", na_count, ")")
 #'   }, ignoreInit = TRUE)
 #' }) %>% invisible() # invisible so it does not run
 ui_single_filter_item <- function(id, filter_info, filter_state, prelabel) {
+  stopifnot(
+    is.list(filter_info),
+    is.list(filter_state),
+    is_character_single(prelabel)
+  )
+
   ns <- NS(id)
   stopifnot(is_character_single(prelabel))
 
@@ -239,6 +245,7 @@ srv_single_filter_item <- function(input, output, session, datasets, dataname, v
       })
   } else {
     # no plot generated
+    NULL
   }
 
   # define observers ----
