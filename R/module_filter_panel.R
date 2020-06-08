@@ -14,6 +14,8 @@
 #' attr(ADSL, "keys") <- get_cdisc_keys("ADSL")
 #' ADAE <- radlb(cached = TRUE)
 #' attr(ADAE, "keys") <- get_cdisc_keys("ADAE")
+#' ADRS <- radrs(cached = TRUE)
+#' attr(ADRS, "keys") <- get_cdisc_keys("ADRS")
 #'
 #' datasets <- teal:::FilteredData$new()
 #' isolate({
@@ -26,18 +28,20 @@
 #'   datasets$set_filter_state("ADAE", varname = NULL, list(
 #'     CHG = list(range = c(20, 35), keep_na = FALSE)
 #'   ))
+#'   datasets$set_data("ADRS", ADRS)
 #' })
 #'
 #' shinyApp(ui = function() {
 #'   tagList(
 #'     include_teal_css_js(),
-#'     teal:::filter_panel_ui("filter_panel", c("ADSL", "ADAE"))
+#'     selectInput("datanames", "Display for datasets:", c("ADSL", "ADAE", "ADRS"), c("ADSL", "ADAE", "ADRS"), multiple = TRUE),
+#'     teal:::filter_panel_ui("filter_panel", c("ADSL", "ADAE", "ADRS"))
 #'   )
 #' }, server = function(input, output, session) {
 #'   shinyjs::showLog()
 #'   callModule(
 #'     teal:::filter_panel_srv, "filter_panel", datasets,
-#'     active_datanames = reactive(c("ADSL", "ADAE"))
+#'     active_datanames = reactive(input$datanames)
 #'   )
 #' }) %>% invisible() # invisible so it does not run
 filter_panel_ui <- function(id, datanames) {

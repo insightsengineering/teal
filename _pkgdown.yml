@@ -63,4 +63,6 @@ reference:
       - filter_calls_module
       - bookmark_module
       - debug_browser_module
+      - filter_panel_ui
+
 
