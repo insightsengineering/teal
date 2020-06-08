@@ -167,8 +167,8 @@ FilteredData <- R6::R6Class( # nolint
       stopifnot("keys" %in% names(attributes(data)))
 
       # due to the data update, the old filter may no longer be valid, so we unset it
-      private$filter_state[[dataname]] <- list()
-      private$previous_filter_state[[dataname]] <- list()
+      private$filter_states[[dataname]] <- list()
+      private$previous_filter_states[[dataname]] <- list()
 
       # save `md5sum` for reproducibility
       attr(data, "md5sum") <- digest(data, algo = "md5")
@@ -293,7 +293,7 @@ FilteredData <- R6::R6Class( # nolint
           infos[vapply(infos, function(var_info) var_info$type != "unknown", logical(1))]
         } else {
           # only filtered variables, a subset of filterable variables
-          infos[names(private$filter_state[[dataname]])]
+          infos[names(private$filter_states[[dataname]])]
         }
       } else {
         infos[[varname]]
@@ -325,9 +325,9 @@ FilteredData <- R6::R6Class( # nolint
       private$check_data_varname_exists(dataname, varname)
 
       if (is.null(varname)) {
-        private$filter_state[[dataname]]
+        private$filter_states[[dataname]]
       } else {
-        return(private$filter_state[[dataname]][[varname]])
+        return(private$filter_states[[dataname]][[varname]])
       }
     },
 
@@ -391,13 +391,13 @@ FilteredData <- R6::R6Class( # nolint
       # for this to work reliably, the previous state must really capture all info
       # i.e. NA filtering or not
       # all.equal returns TRUE if all equal, otherwise character vector of differences
-      if (isTRUE(all.equal(private$filter_state[[dataname]], new_state))) {
+      if (isTRUE(all.equal(private$filter_states[[dataname]], new_state))) {
         return(FALSE)
       }
 
 
-      private$previous_filter_state[[dataname]] <- private$filter_state[[dataname]]
-      private$filter_state[[dataname]] <- new_state
+      private$previous_filter_states[[dataname]] <- private$filter_states[[dataname]]
+      private$filter_states[[dataname]] <- new_state
 
       return(TRUE)
     },
@@ -444,7 +444,7 @@ FilteredData <- R6::R6Class( # nolint
       stopifnot(is_character_single(varname))
       private$check_data_varname_exists(dataname, varname)
 
-      state <- private$previous_filter_state[[dataname]][[varname]]
+      state <- private$previous_filter_states[[dataname]][[varname]]
       if (is.null(state)) {
         state <- self$get_default_filter_state(dataname, varname)
       }
@@ -660,7 +660,7 @@ FilteredData <- R6::R6Class( # nolint
     #'
     #'
     #' `md5` sums of `datasets`, `filter_states` and `preproc_code` are bookmarked,
-    #' `previous_filter_state` is not bookmarked.
+    #' `previous_filter_states` is not bookmarked.
     #'
     #' @md
     #' @return named list
@@ -676,7 +676,7 @@ FilteredData <- R6::R6Class( # nolint
           lapply(self$datanames(), self$get_data_attr, "md5sum"),
           self$datanames()
         ),
-        filter_states = reactiveValuesToList(private$filter_state),
+        filter_states = reactiveValuesToList(private$filter_states),
         preproc_code = self$get_preproc_code()
       ))
     },
@@ -769,7 +769,7 @@ FilteredData <- R6::R6Class( # nolint
     # as a filtering item in the UI, `NULL` just means that filtering has no effect
     # therefore, it may not contain all variables for a given dataname,
     # which means that the state is `NULL`
-    filter_state = NULL, # reactiveValues(),
+    filter_states = NULL, # reactiveValues(),
 
     # reactive attributes (conductors)
     # non-reactive list of `reactives``
@@ -794,8 +794,8 @@ FilteredData <- R6::R6Class( # nolint
     # non-reactive attributes
 
     # previous filter state when you want to revert, e.g. when filter previously removed is added again
-    # we currently don't want reactivity for it, it is enough for `filter_state`
-    previous_filter_state = list(),
+    # we currently don't want reactivity for it, it is enough for `filter_states`
+    previous_filter_states = list(),
     # preprocessing code used to generate the unfiltered datasets as a string
     preproc_code = NULL,
 
@@ -815,36 +815,36 @@ FilteredData <- R6::R6Class( # nolint
         is.reactivevalues(private$datasets),
         # no `reactiveValues`, but a list of `reactiveVal`
         is.reactivevalues(private$filtered_datasets),
-        is.reactivevalues(private$filter_state),
-        is.list(private$previous_filter_state),
+        is.reactivevalues(private$filter_states),
+        is.list(private$previous_filter_states),
         is.reactivevalues(private$filter_infos),
 
         # check names are the same
         setequal(names(private$datasets), names(private$filtered_datasets)),
         setequal(names(private$datasets), names(private$filter_infos)),
         all_true(self$datanames(), function(dataname) !is.null(attr(private$datasets[[dataname]], "md5sum"))),
-        setequal(names(private$datasets), names(private$filter_state)),
-        setequal(names(private$datasets), names(private$previous_filter_state))
+        setequal(names(private$datasets), names(private$filter_states)),
+        setequal(names(private$datasets), names(private$previous_filter_states))
       )
 
-      # check filter_state
-      lapply(names(private$filter_state), function(dataname) {
-        lapply(names(private$filter_state[[dataname]]), function(varname) {
+      # check filter_states
+      lapply(names(private$filter_states), function(dataname) {
+        lapply(names(private$filter_states[[dataname]]), function(varname) {
           private$check_valid_filter_state(
             dataname,
             varname = varname,
-            var_state = private$filter_state[[dataname]][[varname]]
+            var_state = private$filter_states[[dataname]][[varname]]
           )
         })
       })
 
-      # check previous_filter_state
-      lapply(names(private$previous_filter_state), function(dataname) {
-        lapply(names(private$previous_filter_state[[dataname]]), function(varname) {
+      # check previous_filter_states
+      lapply(names(private$previous_filter_states), function(dataname) {
+        lapply(names(private$previous_filter_states[[dataname]]), function(varname) {
           private$check_valid_filter_state(
             dataname,
             varname = varname,
-            var_state = private$previous_filter_state[[dataname]][[varname]]
+            var_state = private$previous_filter_states[[dataname]][[varname]]
           )
         })
       })
