@@ -103,6 +103,8 @@ FilteredData <- R6::R6Class( # nolint
   ## FilteredData ====
   ## __Public Methods ====
   public = list(
+    #' @details
+    #' initialize a FilteredData object
     initialize = function() {
       # we have to create the `reactiveValues` here because they are R6 objects with reference
       # semantics and would otherwise be shared across classes

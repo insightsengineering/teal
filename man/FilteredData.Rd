@@ -104,6 +104,7 @@ execute_example()
 \section{Methods}{
 \subsection{Public methods}{
 \itemize{
+\item \href{#method-new}{\code{FilteredData$new()}}
 \item \href{#method-datanames}{\code{FilteredData$datanames()}}
 \item \href{#method-get_data}{\code{FilteredData$get_data()}}
 \item \href{#method-set_data}{\code{FilteredData$set_data()}}
@@ -127,6 +128,18 @@ execute_example()
 \item \href{#method-restore_state_from_bookmark}{\code{FilteredData$restore_state_from_bookmark()}}
 \item \href{#method-clone}{\code{FilteredData$clone()}}
 }
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-new"></a>}}
+\subsection{Method \code{new()}}{
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{FilteredData$new()}\if{html}{\out{</div>}}
+}
+
+\subsection{Details}{
+initialize a FilteredData object
+}
+
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-datanames"></a>}}
@@ -551,6 +564,9 @@ call to filter dataset (taking out patients not in ADSL)
 }
 \subsection{Details}{
 Print method
+
+To obtain the default printing of R6 objects with method listing,
+use \code{cat(format(x))}.
 }
 
 }
@@ -614,7 +630,7 @@ a list with names \verb{dim, patients}
 Returns the state to be bookmarked
 
 \code{md5} sums of \code{datasets}, \code{filter_states} and \code{preproc_code} are bookmarked,
-\code{previous_filter_state} is not bookmarked.
+\code{previous_filter_states} is not bookmarked.
 }
 }
 \if{html}{\out{<hr>}}

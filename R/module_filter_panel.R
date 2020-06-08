@@ -34,7 +34,9 @@
 #' shinyApp(ui = function() {
 #'   tagList(
 #'     include_teal_css_js(),
-#'     selectInput("datanames", "Display for datasets:", c("ADSL", "ADAE", "ADRS"), c("ADSL", "ADAE", "ADRS"), multiple = TRUE),
+#'     selectInput("datanames", "Display for datasets:",
+#'        choices = c("ADSL", "ADAE", "ADRS"),
+#'        selected = c("ADSL", "ADAE", "ADRS"), multiple = TRUE),
 #'     teal:::filter_panel_ui("filter_panel", c("ADSL", "ADAE", "ADRS"))
 #'   )
 #' }, server = function(input, output, session) {
