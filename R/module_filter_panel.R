@@ -31,12 +31,12 @@
 #' shinyApp(ui = function() {
 #'   tagList(
 #'     include_teal_css_js(),
-#'     filter_panel_ui("filter_panel", c("ADSL", "ADAE"))
+#'     teal:::filter_panel_ui("filter_panel", c("ADSL", "ADAE"))
 #'   )
 #' }, server = function(input, output, session) {
 #'   shinyjs::showLog()
 #'   callModule(
-#'     filter_panel_srv, "filter_panel", datasets,
+#'     teal:::filter_panel_srv, "filter_panel", datasets,
 #'     active_datanames = reactive(c("ADSL", "ADAE"))
 #'   )
 #' }) %>% invisible() # invisible so it does not run
@@ -76,11 +76,19 @@ filter_panel_ui <- function(id, datanames) {
           return(span(id = id, ui_add_filter_variable(id, dataname)))
         })
       ),
-      p("Note that variables that cannot be filtered are excluded.")
+      helpText("Note that teal does not support filering on all variable types.",
+               "Hence variables that cannot be filtered are excluded.")
     )
   )
 }
 
+#' Server function for filter panel
+#'
+#' @noRd
+#'
+#' @param active_datanames reactiveVal object with datanames that should be shown on the filter panel
+#'
+#'
 filter_panel_srv <- function(input, output, session, datasets, active_datanames) {
   stopifnot(
     is(datasets, "FilteredData"),
