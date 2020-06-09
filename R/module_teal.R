@@ -49,7 +49,7 @@ ui_teal <- function(id, splash_ui, header = tags$p("Title here"), footer = tags$
   ns <- NS(id)
   # Once the data is loaded, we will remove this element and add the real teal UI instead
   splash_ui <- div(
-    id = ns("main_ui"), # id so we can remove the splash screen once ready
+    id = ns("main_ui_container"), # id so we can remove the splash screen once ready
     splash_ui
   )
 
@@ -241,17 +241,19 @@ srv_teal <- function(input, output, session, modules, raw_data, initial_filter_s
 
     # call server functions for teal modules and filter panel
     .log("initialize modules and filter panel")
-    call_teal_modules(modules, datasets, idprefix = "teal_modules")
     # must make sure that this is only executed once as modules assume their observers are only
     # registered once (calling server functions twice would trigger observers twice each time)
-    call_filter_modules(datasets)
+    #call_teal_modules(modules, datasets, idprefix = "teal_modules") # todo: remove
+    #call_filter_modules(datasets) # todo: remove
 
-    ui_teal_main <- ui_modules_with_filters(modules, datasets)
+    ui_teal_main <- ui_modules_with_filters("main_ui", modules = modules, datasets = datasets)
+    callModule(srv_modules_with_filters, "main_ui", modules = modules, datasets = datasets)
+
     progress$set(0.7, message = "Replacing UI with main UI")
-    # main_ui contains splash screen first and we remove it and replace it by the real UI
-    removeUI(paste0("#", session$ns("main_ui"), " :first-child"))
-    cat("############# Id is: ", paste0("#", session$ns("main_ui"), " :first-child"))
-    insertUI(selector = paste0("#", session$ns("main_ui")), where = "beforeEnd", ui = ui_teal_main)
+    # main_ui_container contains splash screen first and we remove it and replace it by the real UI
+    removeUI(paste0("#", session$ns("main_ui_container"), " :first-child"))
+    cat("############# Id is: ", paste0("#", session$ns("main_ui_container"), " :first-child"))
+    insertUI(selector = paste0("#", session$ns("main_ui_container")), where = "beforeEnd", ui = ui_teal_main)
 
     showNotification("Data loaded - App fully started up")
   })

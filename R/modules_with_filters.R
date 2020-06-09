@@ -17,18 +17,20 @@
 #'
 #' @import shiny
 #  todo: put ui first and write server function
-ui_modules_with_filters <- function(modules, datasets) {
+ui_modules_with_filters <- function(id, modules, datasets) {
   stopifnot(
     is(modules, "teal_modules"),
     is(datasets, "FilteredData")
   )
+
+  ns <- NS(id)
 
   # use isolate because we assume that the number of datasets does not change over the course of the teal app
   # this will just create placeholders which are shown only if non-empty
   filter_and_info_ui <- ui_filter_panel("filter_panel", datanames = isolate(datasets$datanames()))
 
   # modules must be teal_modules, not teal_module; otherwise we will get the UI and not a tabsetPanel of UIs
-  teal_ui <- ui_tab_nested(modules, datasets, idprefix = "teal_modules", is_root = TRUE)
+  teal_ui <- ui_tab_nested("modules_ui", modules, datasets)
 
   stopifnot(length(teal_ui$children) == 2)
   # teal_ui$children[[1]] contains links to tabs
@@ -42,4 +44,27 @@ ui_modules_with_filters <- function(modules, datasets) {
     )
   )
   return(teal_ui)
+}
+
+# returns active_datanames
+srv_modules_with_filters <- function(input, output, session, modules, datasets) {
+  active_module <- callModule(srv_tab_nested, "modules_ui", modules, datasets)
+
+  active_datanames <- reactive({
+    #  todo: put into other module
+    # todo: make reactiveEvent
+
+
+    active_datanames <- active_module()$filter
+    if (identical(active_datanames, "all")) {
+      active_datanames <- datasets$datanames()
+    }
+    # always add ADSL because the other datasets are filtered based on ADSL
+    active_datanames <- union("ADSL", active_datanames)
+    return(list_adsl_first(active_datanames))
+  })
+
+  callModule(srv_filter_panel, "filter_panel", datasets, reactive(active_datanames()))
+
+  return(active_datanames)
 }

@@ -22,10 +22,10 @@ Nesting it increases overall depth by 1.
 create_mod <- function(module_name) module(
   module_name,
   server = function(input, output, session, datasets) {},
-  ui = function(id, ...) {},
+  ui = function(id, ...) { tags$p(id) },
   filters = 'all'
 )
-x <- modules(
+mods <- modules(
   "d1",
   modules(
     "d2",
@@ -37,14 +37,14 @@ x <- modules(
   ),
   create_mod("ccc")
 )
-stopifnot(teal:::modules_depth(x) == 3)
+stopifnot(teal:::modules_depth(mods) == 3)
 
-x <- modules(
+mods <- modules(
   "a",
   modules(
     "b1", create_mod("c")
   ),
   create_mod("b2")
 )
-stopifnot(teal:::modules_depth(x) == 2)
+stopifnot(teal:::modules_depth(mods) == 2)
 }

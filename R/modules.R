@@ -140,10 +140,10 @@ module <- function(label, server, ui, filters, server_args = NULL, ui_args = NUL
 #' create_mod <- function(module_name) module(
 #'   module_name,
 #'   server = function(input, output, session, datasets) {},
-#'   ui = function(id, ...) {},
+#'   ui = function(id, ...) { tags$p(id) },
 #'   filters = 'all'
 #' )
-#' x <- modules(
+#' mods <- modules(
 #'   "d1",
 #'   modules(
 #'     "d2",
@@ -155,16 +155,16 @@ module <- function(label, server, ui, filters, server_args = NULL, ui_args = NUL
 #'   ),
 #'   create_mod("ccc")
 #' )
-#' stopifnot(teal:::modules_depth(x) == 3)
+#' stopifnot(teal:::modules_depth(mods) == 3)
 #'
-#' x <- modules(
+#' mods <- modules(
 #'   "a",
 #'   modules(
 #'     "b1", create_mod("c")
 #'   ),
 #'   create_mod("b2")
 #' )
-#' stopifnot(teal:::modules_depth(x) == 2)
+#' stopifnot(teal:::modules_depth(mods) == 2)
 modules_depth <- function(modules, depth = 0) {
   if (is(modules, "teal_modules")) {
     max(vapply(modules$children, modules_depth, numeric(1), depth = depth + 1))

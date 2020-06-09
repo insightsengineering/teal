@@ -2,14 +2,14 @@
 % Please edit documentation in R/init.R
 \name{init}
 \alias{init}
-\title{Create the Server and Ui Function for the Shiny App}
+\title{Create the Server and UI Function For the Shiny App}
 \usage{
 init(
   data,
   modules,
   initial_filter_states = list(),
-  header = tags$p("title here"),
-  footer = tags$p("footer here")
+  header = tags$p("Title here"),
+  footer = tags$p("Footer here")
 )
 }
 \arguments{
@@ -53,7 +53,7 @@ are overwritten.}
 named list with server and ui function
 }
 \description{
-Creates the server and ui part for a teal shiny app
+Creates the server and UI part of a Shiny app
 }
 \examples{
 library(random.cdisc.data)

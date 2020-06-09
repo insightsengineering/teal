@@ -1222,3 +1222,17 @@ filter_state_to_str <- function(var_type, state, add_na = FALSE) {
   }
   return(txt)
 }
+
+
+# Returns a dummy `datasets` object with ADSL data, useful in the examples
+get_dummy_datasets <- function() {
+  # todo: require package
+  ADSL <- random.cdisc.data::radsl(cached = TRUE)
+  attr(ADSL, "keys") <- get_cdisc_keys("ADSL")
+  datasets <- FilteredData$new()
+
+  isolate({
+    datasets$set_data("ADSL", ADSL)
+  })
+  return(datasets)
+}
