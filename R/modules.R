@@ -165,6 +165,7 @@ modules_depth <- function(modules, depth = 0) {
   if (is(modules, "teal_modules")) {
     max(vapply(modules$children, modules_depth, numeric(1), depth = depth + 1))
   } else {
+    stopifnot(is(modules, "teal_module"))
     depth
   }
 }
