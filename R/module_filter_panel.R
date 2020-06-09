@@ -1,5 +1,8 @@
-#' Module for the right filtering panel in the teal app
-#' with a filter info panel and a filter variable panel
+#' Module for the right filter panel in the teal app
+#' with a filter overview panel and a filter variable panel.
+#'
+#' This panel contains info about the number of observations left in
+#' the (active) datasets and allows to filter the datasets.
 #'
 #' @param id module id
 #' @param datanames datanames to create empty UIs for (which will be populated
@@ -97,8 +100,8 @@ ui_filter_panel <- function(id, datanames) {
 #' @noRd
 #'
 #' @md
-#' @param active_datanames object returned by `\url[shiny]{reactive}`
-#'   object with datanames that should be shown on the filter panel
+#' @param active_datanames `reactive` returning datanames that
+#'   should be shown on the filter panel
 #'
 srv_filter_panel <- function(input, output, session, datasets, active_datanames) {
   stopifnot(

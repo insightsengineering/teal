@@ -24,7 +24,6 @@ ui_add_filter_variable <- function(id, dataname) {
   ns <- NS(id)
 
   div(
-    id = ns(character(0)), # needed to assign an id, so filter can be shown / hidden
     optionalSelectInput(
       ns("new_filter_var"),
       label = dataname,

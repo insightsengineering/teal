@@ -128,6 +128,7 @@ init <- function(data,
       }
 
       # callModule not needed here as it has no parents
+      # todo: make a module
       srv_teal(
         input, output, session,
         modules = modules, raw_data = raw_data, initial_filter_states = initial_filter_states
@@ -142,6 +143,7 @@ init <- function(data,
 # we return the observer so you can cancel it when your module is dynamic
 # expr must be a function, e.g. can be reactive
 # sodo3: into utils.nest?
+# todo: document more
 reactive_on_changes <- function(expr) {
   stopifnot(is.function(expr))
 

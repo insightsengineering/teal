@@ -1,3 +1,7 @@
+# Functions to create objects of class `teal_module` and `teal_modules` and
+# related functions like depth, `toString` and `print`.
+
+
 #' Create a collection of \code{module} and \code{modules} object
 #'
 #' Modules collects a tree of \code{\link{module}} and \code{\link{modules}}
@@ -170,95 +174,6 @@ modules_depth <- function(modules, depth = 0) {
   }
 }
 
-# turns a label into a valid html id
-label_to_id <- function(label, idprefix = NULL) {
-  stopifnot(is_character_single(label))
-  stopifnot(is_character_single(idprefix) || is.null(idprefix))
-
-  label <- gsub("^_|_$", "", gsub("[^[:alnum:]]", "_", label))
-  if (!is.null(idprefix)) {
-    idprefix <- gsub("^_|_$", "", gsub("[^[:alnum:]]", "_", idprefix))
-    paste(idprefix, label, sep = "_")
-  } else {
-    label
-  }
-}
-
-
-# modules: teal_module or teal_modules
-# is_root: whether top element of modules should be at the root, i.e. in no tabSet
-# for teal_module: returns the ui
-# for teal_modules: returns a tabsetPanel with each tab corresponding to one of its submodules
-# todo: move this into the file with the srv function
-tab_nested_ui <- function(modules, datasets, idprefix, is_root = TRUE) {
-  stopifnot(is_character_single(idprefix))
-  stopifnot(is_logical_single(is_root))
-
-  id <- label_to_id(modules$label, idprefix)
-  return(switch(
-    class(modules)[[1]],
-    teal_modules = {
-      .log("** UI id for modules is", id)
-
-      do.call(
-        tabsetPanel,
-        c(
-          # by giving an id, we can reactively respond to tab changes
-          list(id = id, type = if (is_root) "pills" else "tabs"),
-          unname(lapply(
-            modules$children,
-            function(submodule) {
-              tabPanel(
-                title = submodule$label, # also acts as value of input$tabsetId that this tabPanel is embedded in
-                tab_nested_ui(submodule, datasets = datasets, idprefix = id, is_root = FALSE)
-              )
-            }
-          ))
-        )
-      )
-    },
-    teal_module = {
-      .log("UI id for module is", id)
-
-      args <- isolate(resolve_teal_args(modules$ui_args, datasets))
-      # we pass the unfiltered datasets as they may be needed to create the UI
-      tagList(
-        div(style = "margin-top: 25px;"),
-        do.call(
-          modules$ui,
-          c(list(id = id, datasets = datasets), args)
-        )
-      )
-    },
-    stop("no default implementation for tab_nested_ui for class ", class(modules))
-  ))
-}
-
-# recursively call `callModule` for (nested) teal modules
-call_teal_modules <- function(modules, datasets, idprefix) {
-  stopifnot(is_character_single(idprefix))
-  id <- label_to_id(modules$label, idprefix)
-
-  switch(
-    class(modules)[[1]],
-    teal_modules = {
-      lapply(modules$children, call_teal_modules, datasets = datasets, idprefix = id)
-    },
-    teal_module = {
-      .log("server tab_module  id:", id)
-      modules <- resolve_teal_module(modules, datasets)
-      do.call(
-        callModule,
-        c(
-          list(module = modules$server, id = id, datasets = datasets),
-          modules$server_args
-        )
-      )
-    },
-    stop("call_teal_modules does not support class ", class(modules))
-  )
-  return(invisible(NULL))
-}
 
 # Note that for functions to be dispatched with S3, they need to be exported. This will
 # not actually export the function with the class specifier, but only make it available

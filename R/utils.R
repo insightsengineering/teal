@@ -239,3 +239,39 @@ handle_active_datanames <- function(datasets, datanames) {
   }
   return(intersect(datasets$datanames(), datanames))
 }
+
+#' Turn a label into a valid html id
+#'
+#' From both `label` and `prefix`, remove one trailing and
+#' one leading "_", then convert all non-alphanumeric characters
+#' to "_".
+#'
+#' @md
+#' @param label
+#' @param idprefix `character or NULL` to prepend to label;
+#'   `NULL` for no prefix
+#'
+#' @return valid HTML label with invalid characters removed
+#' @examples
+#' label_to_id("var", idprefix = "prefix")
+#' label_to_id("var")
+#' label_to_id("__var___", idprefix = "prefix")
+#' label_to_id("__var___", idprefix = "_prefix__")
+label_to_id <- function(label, idprefix = NULL) {
+  stopifnot(is_character_single(label))
+  stopifnot(is_character_single(idprefix) || is.null(idprefix))
+
+  replace_remove_invalid <- function(x) {
+    # remove one leading or trailing "_"
+    # then replace all non alpha-numeric characters by "_"
+    # sodo3: explain why?
+    gsub("^_|_$", "", gsub("[^[:alnum:]]", "_", x))
+  }
+  label <- replace_remove_invalid(label)
+  if (!is.null(idprefix)) {
+    idprefix <- replace_remove_invalid(idprefix)
+    paste(idprefix, label, sep = "_")
+  } else {
+    label
+  }
+}

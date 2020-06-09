@@ -124,7 +124,7 @@ srv_teal <- function(input, output, session, modules, raw_data, initial_filter_s
 
   # figure out active tab and deduce active_datanames to hide / show filters ----
 
-  # the call to modules_with_filters_ui creates inputs that watch the tabs prefixed by teal_modules
+  # the call to ui_modules_with_filters creates inputs that watch the tabs prefixed by teal_modules
   # we observe them and react whenever a tab is clicked by:
   # - displaying only the relevant datasets in the right hand filter in the
   # sections: filter info, filtering vars per dataname and add filter var per dataname
@@ -246,7 +246,7 @@ srv_teal <- function(input, output, session, modules, raw_data, initial_filter_s
     # registered once (calling server functions twice would trigger observers twice each time)
     call_filter_modules(datasets)
 
-    ui_teal_main <- modules_with_filters_ui(modules, datasets)
+    ui_teal_main <- ui_modules_with_filters(modules, datasets)
     progress$set(0.7, message = "Replacing UI with main UI")
     # main_ui contains splash screen first and we remove it and replace it by the real UI
     removeUI(paste0("#", session$ns("main_ui"), " :first-child"))
