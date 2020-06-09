@@ -1,6 +1,21 @@
 #' Creates UI to show currently selected filters that can be applied to
 #' a single dataset, i.e. all columns selected for filtering are shown.
 #'
+#' It reacts to changes in the filter variable names as provided by
+#' the `datasets` class. To filter a new variable, it is added to the
+#' filter state in the `datasets` class. This then triggers this module
+#' to insert a corresponding UI based on the filter state and filter info.
+#' Once the variable is removed, it is removed from the UI as well.
+#'
+#' Note: Any changes to the filter state and filter info while this element is
+#' visible in the UI are not reflected in the UI. To achieve this, you have to
+#' remove the element from the filtered states in `datasets` and then add it
+#' again. While doing this, it is good practice to make the UI element for this
+#' variable invisible (e.g. with `shinyjs::hide`) as otherwise there will be two
+#' triggerings of the input reactives of the servers, first the one corresponding
+#' to user changes to the inputs while the UI was updated, then the correct new
+#' input values (as sent with the new UI).
+#'
 #' @param id module id
 #' @param dataname `character` dataname
 #' @md
@@ -75,7 +90,7 @@ srv_filter_items <- function(input, output, session, datasets, dataname) {
   # Shiny does not implement the Model View Controller interface. The input elements in Shiny
   # are simultaneously controllers and views. Furthermore, when the model (input value) first
   # starts to exist, it is not removed when the UI is removed, instead it must be set manually
-  # to NULL (if it is even possible).
+  # to NULL (possible through Javascript).
   # When Shiny renders an input element, e.g. created with `selectInput()`, you have to provide
   # initial values even if an element with the same id already exists on the page. This then updates
   # the model and triggers on the server.
@@ -89,7 +104,7 @@ srv_filter_items <- function(input, output, session, datasets, dataname) {
   #    input, the server updates the UI, receives the new client input and computes. At the same time,
   #    however, the client sends the outdated values that it just received from the server to the
   #    server again and the cycle completes indefinitely (if latency does not come to the rescue after
-  #    many iterations). At any time, the server and the client have unsynced models, the server is
+  #    many iterations). At any time, the server and the client have outsynced models, the server is
   #    behind.
   #    A way to avoid this is to add timestamps to the input ids to effectively discard user inputs
   #    in the meantime.
@@ -100,15 +115,15 @@ srv_filter_items <- function(input, output, session, datasets, dataname) {
   #    `insertUI` and `removeUI` should be used.
   # We prefer the 2nd option and implement it here.
 
-  # We here choose to create a UI that listens to changes in the filter variables and
+  # We here choose to create a UI that listens to changes in the names of the filter variables and
   # calls `insertUI` for any variables that were added to filter and `removeUI` for variables
-  # that should no longer be filtered. For this, we keep a list of the currently shown filters.
+  # that should no longer be filtered. For this, we keep a list of the currently shown filters in the UI.
   #
   # When we insert a UI with an associated server function, we must delete the observers
   # registered in the server function when we remove it again as they will otherwise keep
-  # listening. This becomes problematic when the UI is added again. Not only will the observers
+  # listening. This also becomes problematic when the UI is added again. Not only will the observers
   # execute twice, but also will the input elements not be reset, e.g. a previously clicked button
-  # will keep its value (equal to the number of clicks).
+  # will keep its value (equal to the number of clicks) as buttons don't reset their counts (it seems).
 
   # named list of variables that are shown with each item containing the associated observers
   # that must be destroyed once the UI is removed
@@ -143,7 +158,9 @@ srv_filter_items <- function(input, output, session, datasets, dataname) {
         shown_vars_observers <<- c(
           shown_vars_observers,
           setNames(
-            list(callModule(srv_single_filter_item, filter_id_for_var(varname), datasets, dataname, varname)$observers),
+            list(
+              callModule(srv_single_filter_item, filter_id_for_var(varname), datasets, dataname, varname)$observers
+            ),
             varname
           )
         )

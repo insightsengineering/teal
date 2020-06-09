@@ -197,6 +197,11 @@ ui_single_filter_item <- function(id, filter_info, filter_state, prelabel) {
   ))
 }
 
+# Server function to display the filter for a single variable
+# returns a `list(observers, update_ui_trigger)`. The observers
+# must be canceled when the module is removed, the update_ui_trigger
+# can be used to update the input elements which is not done automatically
+# to avoid infinite cycles, see also `module_filter_items.R`.
 srv_single_filter_item <- function(input, output, session, datasets, dataname, varname) {
   stopifnot(
     is(datasets, "FilteredData"),

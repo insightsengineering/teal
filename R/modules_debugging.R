@@ -1,4 +1,4 @@
-# This file contains modules useful for debugging and developing teal.
+# This file contains Shiny modules useful for debugging and developing teal.
 # We do not export the functions in this file, but show them in pkgdown. They are for
 # developers only and can be accessed via `:::`.
 
@@ -159,21 +159,27 @@ reset_filters_module <- function(label = "Reset filters", active_datanames = "al
   module(
     label = label,
     server = function(input, output, session, datasets) {
-      # reactive, processed version of datanames
-      active_datanames_r <- reactive(handle_active_datanames(datasets, active_datanames))
-      observeEvent(active_datanames_r(), {
-        updateCheckboxGroupInput(
-          session, "datasets_to_reset",
-          choices = active_datanames_r(), selected = active_datanames_r()
-        )
-      })
-
       observeEvent(input$reset, {
+        # This works as expected because the filter panel on the right listens
+        # for changes in the variable names for each dataname. (However, it does
+        # not react to changes in the `filter_state` or `filter_info` of the variables.)
         lapply(
           input$datasets_to_reset,
           function(dataname) datasets$set_filter_state(dataname, varname = NULL, state = list())
         )
       })
+
+      # reactive, handles "all" datanames
+      active_datanames_r <- reactive(handle_active_datanames(datasets, active_datanames))
+      # The UI may not be ready yet, i.e. updating "datasets_to_reset" won't have any effect.
+      # Therefore, we ignore the first reactive cycle. The UI is ready at the next reactive cycle.
+      active_datanames_r_next_cycle <- trigger_next_cycle(active_datanames_r)
+      observeEvent(active_datanames_r_next_cycle(), {
+        updateCheckboxGroupInput(
+          session, "datasets_to_reset",
+          choices = active_datanames_r(), selected = active_datanames_r()
+        )
+      }, ignoreNULL = FALSE)
     },
     ui = function(id, ...) {
       ns <- NS(id)
@@ -185,4 +191,39 @@ reset_filters_module <- function(label = "Reset filters", active_datanames = "al
     },
     filters = active_datanames
   )
+}
+
+#' Activates the reactive expression at the next reactive flush of Shiny,
+#' This is useful when the UI does not exist yet and we want to wait for it
+#' Note that this triggers the first time due to the timer and from then on due to
+#' the expression being evaluated.
+#'
+#' Note: Usage of this function should be avoided as it is a workaround.
+#'
+#' ```
+#' # This ensures that the input is evaluated in the second reactive flash
+#' # (and possibly later as well)
+#' get_name <- reactiveVal("hello")
+#' get_name_ui_exists <- trigger_next_cycle(get_name)
+#' observeEvent(
+#'   get_name_ui_exists(),
+#'   updateInput(session, "initially_inexistent_input", value = get_name_ui_exists())
+#' )
+#' ```
+#'
+#' @md
+#' @param expr `function or reactive`
+#' @return `reactive`
+# sodo3: do you like this code? I don't.
+trigger_next_cycle <- function(expr) {
+  stopifnot(is.function(expr))
+  trigger_now <- FALSE
+  reactive({
+    if (!trigger_now) {
+      trigger_now <<- TRUE
+      invalidateLater(1) # will retrigger this and then go into else
+    } else {
+      expr()
+    }
+  })
 }

@@ -188,6 +188,7 @@ label_to_id <- function(label, idprefix = NULL) {
 # is_root: whether top element of modules should be at the root, i.e. in no tabSet
 # for teal_module: returns the ui
 # for teal_modules: returns a tabsetPanel with each tab corresponding to one of its submodules
+# todo: move this into the file with the srv function
 tab_nested_ui <- function(modules, datasets, idprefix, is_root = TRUE) {
   stopifnot(is_character_single(idprefix))
   stopifnot(is_logical_single(is_root))

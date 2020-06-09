@@ -40,11 +40,15 @@ ADAE <- radae(cached = TRUE)
 ADLB <- radlb(cached = TRUE)
 "),
   modules = root_modules(
-    teal:::filter_calls_module(),
-    teal:::bookmark_module(),
-    teal:::debug_browser_module()
+    teal:::reset_filters_module("Reset", active_datanames = c("ADSL", "ADLB"))
+    #teal:::filter_calls_module(),
+    #teal:::bookmark_module(),
+    #teal:::debug_browser_module()
   ),
-  initial_filter_states = list(ADSL = list(SEX = list(choices = "M", keep_na = TRUE), AGE = "default")),
+  initial_filter_states = list(
+    ADSL = list(SEX = list(choices = "M", keep_na = TRUE), AGE = "default"),
+    ADLB = list(ASEQ = "default")
+  ),
   header = "Simple teal app",
   footer = tags$p(class = "text-muted", "Source: agile-R website")
 ); shinyApp(app$ui, app$server, enableBookmarking = "url")
