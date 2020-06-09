@@ -15,3 +15,7 @@ We would like to thank everyone who made `teal` a better analysis environment. S
 
  * Doug Kelkhoff for his contributions to the filter panel.
  
+
+# Notes for Developers
+## Conventions
+Shiny modules are implemented in files `<module>.R` with UI function `ui_<module>` and server function `srv_<module>`.

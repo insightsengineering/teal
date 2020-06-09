@@ -137,7 +137,7 @@ execute_example()
 }
 
 \subsection{Details}{
-initialize a FilteredData object
+Initialize a FilteredData object
 }
 
 }

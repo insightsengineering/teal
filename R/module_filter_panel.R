@@ -37,34 +37,32 @@
 #'     selectInput("datanames", "Display for datasets:",
 #'        choices = c("ADSL", "ADAE", "ADRS"),
 #'        selected = c("ADSL", "ADAE", "ADRS"), multiple = TRUE),
-#'     teal:::filter_panel_ui("filter_panel", c("ADSL", "ADAE", "ADRS"))
+#'     teal:::ui_filter_panel("filter_panel", c("ADSL", "ADAE", "ADRS"))
 #'   )
 #' }, server = function(input, output, session) {
 #'   shinyjs::showLog()
 #'   callModule(
-#'     teal:::filter_panel_srv, "filter_panel", datasets,
+#'     teal:::srv_filter_panel, "filter_panel", datasets,
 #'     active_datanames = reactive(input$datanames)
 #'   )
 #' }) %>% invisible() # invisible so it does not run
-filter_panel_ui <- function(id, datanames) {
+ui_filter_panel <- function(id, datanames) {
   stopifnot(
     is_character_vector(datanames)
   )
 
   ns <- NS(id)
   div(
-    # we provide these ids although we may not use them so that users
-    # can customize the CSS behavior
-    id = ns("teal_filter_panel"), # used for hiding / showing
+    id = ns("teal_filter_panel_whole"), # used for hiding / showing
 
     div(
-      id = ns("teal_filter_overview"),
+      id = ns("teal_filters_overview"), # not used, can be used to customize CSS behavior
       class = "well",
       ui_filtered_data_overview(ns("teal_filters_info")),
     ),
 
     div(
-      id = ns("teal_filter_active_vars"), # id not used, provided for end-user if he wants to customize CSS
+      id = ns("teal_filter_active_vars"), # not used, can be used to customize CSS behavior
       class = "well",
       tags$label("Active Filter Variables", class = "text-primary", style = "margin-bottom: 15px;"),
       tagList(
@@ -77,7 +75,7 @@ filter_panel_ui <- function(id, datanames) {
     ),
 
     div(
-      id = ns("teal_filter_add_vars"), # id not used, provided for end-user if he wants to customize CSS
+      id = ns("teal_filter_add_vars"), # not used, can be used to customize CSS behavior
       class = "well",
       tags$label("Add Filter Variables", class = "text-primary", style = "margin-bottom: 15px;"),
       tagList(
@@ -98,11 +96,11 @@ filter_panel_ui <- function(id, datanames) {
 #'
 #' @noRd
 #'
-#' @param active_datanames object returned by \code{\url[shiny]{reactive}}
+#' @md
+#' @param active_datanames object returned by `\url[shiny]{reactive}`
 #'   object with datanames that should be shown on the filter panel
 #'
-#'
-filter_panel_srv <- function(input, output, session, datasets, active_datanames) {
+srv_filter_panel <- function(input, output, session, datasets, active_datanames) {
   stopifnot(
     is(datasets, "FilteredData"),
     is.function(active_datanames)
@@ -140,10 +138,12 @@ filter_panel_srv <- function(input, output, session, datasets, active_datanames)
   # the filters for this dataset are just hidden from the UI, but still applied
   observeEvent(active_datanames(), {
     if (length(active_datanames()) == 0) {
-      shinyjs::hide("teal_filter_panel")
+      # hide whole module UI
+      shinyjs::hide("teal_filter_panel_whole")
     } else {
-      shinyjs::show("teal_filter_panel")
+      shinyjs::show("teal_filter_panel_whole")
 
+      # selectively hide / show to only show `active_datanames` out of all datanames
       lapply(
         datasets$datanames(),
         function(dataname) {

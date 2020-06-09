@@ -345,6 +345,7 @@ attr(ADSL, "keys") <- teal::get_cdisc_keys("ADSL")
 attr(ADTTE, "keys") <- teal::get_cdisc_keys("ADTTE")
 
 isolate({
+  # todo: remove isolate
   datasets$set_data("ADSL", ADSL)
   datasets$set_data("ADTTE", ADTTE)
 })

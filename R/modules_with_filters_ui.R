@@ -21,6 +21,7 @@
 #'   place holders for the teal modules
 #'
 #' @import shiny
+#  todo: put ui first and write server function
 modules_with_filters_ui <- function(modules, datasets) {
   stopifnot(
     is(modules, "teal_modules"),
@@ -29,7 +30,7 @@ modules_with_filters_ui <- function(modules, datasets) {
 
   # use isolate because we assume that the number of datasets does not change over the course of the teal app
   # otherwise need dynamic UI
-  filter_and_info_ui <- filter_panel_ui("filter_panel", datanames = isolate(datasets$datanames()))
+  filter_and_info_ui <- ui_filter_panel("filter_panel", datanames = isolate(datasets$datanames()))
 
   # modules must be teal_modules, not teal_module; otherwise we will get the UI and not a tabsetPanel of UIs
   teal_ui <- tab_nested_ui(modules, datasets, idprefix = "teal_modules", is_root = TRUE)

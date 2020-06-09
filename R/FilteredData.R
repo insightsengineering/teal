@@ -104,7 +104,7 @@ FilteredData <- R6::R6Class( # nolint
   ## __Public Methods ====
   public = list(
     #' @details
-    #' initialize a FilteredData object
+    #' Initialize a FilteredData object
     initialize = function() {
       # we have to create the `reactiveValues` here because they are R6 objects with reference
       # semantics and would otherwise be shared across classes
@@ -814,24 +814,30 @@ FilteredData <- R6::R6Class( # nolint
     validate = function() {
       .log("## validating FilteredData object consistency")
 
+      has_same_names <- function(x, y) setequal(names(x), names(y))
       stopifnot(
         # check classes
         is.reactivevalues(private$datasets),
+        is.reactivevalues(private$filter_states),
         # no `reactiveValues`, but a list of `reactiveVal`
         all(vapply(private$filtered_datasets, is.reactive, logical(1))),
-        is.reactivevalues(private$filter_states),
+        all(vapply(private$filter_infos, is.reactive, logical(1))),
+        # non-reactive list of previous filter states
         is.list(private$previous_filter_states),
-        is.list(private$filter_infos),
 
         # check names are the same
-        setequal(names(private$datasets), names(private$filtered_datasets)),
-        setequal(names(private$datasets), names(private$filter_infos)),
+        has_same_names(private$datasets, private$filter_states),
+        has_same_names(private$datasets, private$filter_states),
+        has_same_names(private$datasets, private$filtered_datasets),
+        has_same_names(private$datasets, private$filter_infos),
+        has_same_names(private$datasets, private$previous_filter_states),
+
+        # check attributes are there: md5sum, keys
         all_true(self$datanames(), function(dataname) !is.null(attr(private$datasets[[dataname]], "md5sum"))),
-        setequal(names(private$datasets), names(private$filter_states)),
-        setequal(names(private$datasets), names(private$previous_filter_states))
+        all_true(self$datanames(), function(dataname) !is.null(attr(private$datasets[[dataname]], "keys")))
       )
 
-      # check filter_states
+      # check `filter_states` are all valid
       lapply(names(private$filter_states), function(dataname) {
         lapply(names(private$filter_states[[dataname]]), function(varname) {
           private$check_valid_filter_state(
@@ -842,7 +848,7 @@ FilteredData <- R6::R6Class( # nolint
         })
       })
 
-      # check previous_filter_states
+      # check `previous_filter_states` are all valid
       lapply(names(private$previous_filter_states), function(dataname) {
         lapply(names(private$previous_filter_states[[dataname]]), function(varname) {
           private$check_valid_filter_state(

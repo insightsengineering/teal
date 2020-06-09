@@ -112,7 +112,7 @@ init <- function(data,
   startapp_id <- "startapp_screen"
   startapp_selector <- paste0("#", startapp_id)
 
-  is_not_delayed_data <- !is(data, "delayed_data")
+  is_not_delayed_data <- !is(data, "delayed_data") # `cdisc_data` or `delayed_data`
   # Startup screen for delayed loading
   # We use delayed loading in all cases, even when the data does not need to be fetched.
   # This has the benefit that when filtering the data takes a lot of time initially, the
@@ -201,7 +201,7 @@ init <- function(data,
         return(list_adsl_first(active_datanames))
       }))$value
 
-      callModule(filter_panel_srv, "filter_panel", datasets, active_datanames)
+      callModule(srv_filter_panel, "filter_panel", datasets, active_datanames)
     }
 
     # Get data through delayed loading ----
