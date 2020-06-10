@@ -12,6 +12,8 @@
 * Fix an error in `choices_selected` when `selected` is not in `choices`
 
 * Argument `filter` in the `init` function was removed and the new argument `initial_filter_states` was added. You can no longer modify the `app$datasets`, but must instead use this argument. 
+* New modules were created to create a module of nested teal modules, then another one that adds the right filter pane to each tab. The
+  `teal::init` function stays unchanged.
 
 ## FilteredData refactored (for developers)
 

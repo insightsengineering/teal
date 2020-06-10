@@ -48,10 +48,14 @@ modules <- function(label, ...) {
 
 #' Create the root modules container
 #'
-#' This is the root of all modules. It can contain a list of mixed types of
-#' `teal_module` and `teal_modules`.
-#' Sets the label to root in \code{\link{modules}}.
+#' To be used with `\link{init}` in the `modules` argument.
 #'
+#' The function `\link{modules}` can also be used. The purpose of this
+#' function is to not confuse the end-user as the label of the top-module
+#' will not be displayed as a tab name (because the root is only one element
+#' which has multiple children).
+#'
+#' @md
 #' @inheritParams modules
 #'
 #' @export

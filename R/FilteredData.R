@@ -108,7 +108,7 @@ FilteredData <- R6::R6Class( # nolint
     initialize = function() {
       # we have to create the `reactiveValues` here because they are R6 objects with reference
       # semantics and would otherwise be shared across classes
-      private$datasets <- reactiveValues()
+      private$unfiltered_datasets <- reactiveValues()
       private$filter_states <- reactiveValues()
     },
     #' @details
@@ -116,7 +116,7 @@ FilteredData <- R6::R6Class( # nolint
     #' @md
     #' @return `character` vector of datanames
     datanames = function() {
-      return(list_adsl_first(names(private$datasets)))
+      return(list_adsl_first(names(private$unfiltered_datasets)))
     },
 
     # getters and setters for attributes ----
@@ -138,7 +138,7 @@ FilteredData <- R6::R6Class( # nolint
         # the reactive caching mechanism and lazy evaluation.
         private$filtered_datasets[[dataname]]()
       } else {
-        private$datasets[[dataname]]
+        private$unfiltered_datasets[[dataname]]
       }
     },
 
@@ -161,9 +161,7 @@ FilteredData <- R6::R6Class( # nolint
     #' @return `self` object of this class
     set_data = function(dataname, data) {
       stopifnot(is_character_single(dataname))
-      if (grepl("[[:space:]]", dataname)) {
-        stop(paste0("dataname '", dataname, "' must not contain spaces.", collapse = "\n"))
-      }
+      check_variable_name_okay(dataname) # to include it nicely in the Show R Code
       stopifnot(is.data.frame(data))
       # column_labels and data_label may be NULL, so attributes will not be present
       stopifnot("keys" %in% names(attributes(data)))
@@ -176,7 +174,7 @@ FilteredData <- R6::R6Class( # nolint
 
       # save `md5sum` for reproducibility
       attr(data, "md5sum") <- digest(data, algo = "md5")
-      private$datasets[[dataname]] <- data
+      private$unfiltered_datasets[[dataname]] <- data
 
       if (is_new_dataname) {
         # new dataname
@@ -205,11 +203,12 @@ FilteredData <- R6::R6Class( # nolint
     #' @md
     #' @param preproc_code `character` preprocessing code that can be parsed to generate the
     #'   unfiltered datasets
+    #' @return `self`
     set_preproc_code = function(preproc_code) {
       stopifnot(is_character_single(preproc_code))
       # sodo3: check here that the preproc_code faithfully reproduces the datasets
       private$preproc_code <- preproc_code
-      return(invisible(NULL))
+      return(invisible(self))
     },
 
     # sodo3: keep `get_data_attr` and `set_data_attr`
@@ -225,7 +224,7 @@ FilteredData <- R6::R6Class( # nolint
     get_data_attr = function(dataname, attr) {
       private$check_data_varname_exists(dataname)
       stopifnot(is_character_single(attr))
-      return(attr(private$datasets[[dataname]], attr))
+      return(attr(private$unfiltered_datasets[[dataname]], attr))
     },
 
     #' @details
@@ -235,12 +234,13 @@ FilteredData <- R6::R6Class( # nolint
     #' @param dataname `character` name of the dataset
     #' @param attr attribute to get from the data attributes of the dataset
     #' @param value value to set attribute to
+    #' @return `self`
     set_data_attr = function(dataname, attr, value) {
       private$check_data_varname_exists(dataname)
       stopifnot(is_character_single(attr))
 
-      attr(private$datasets[[dataname]], attr) <- value
-      return(invisible(NULL))
+      attr(private$unfiltered_datasets[[dataname]], attr) <- value
+      return(invisible(self))
     },
 
     # no corresponding set_ function
@@ -767,7 +767,7 @@ FilteredData <- R6::R6Class( # nolint
     # )
     # nolintr end
     # the `data.frames` may have attributes like keys
-    datasets = NULL, # reactiveValues(),
+    unfiltered_datasets = NULL, # reactiveValues(),
     # filter state to apply to obtain the filtered dataset from the unfiltered one
     # `NULL` (for a dataname) means no filter applied, it does not mean that it does not show up
     # as a filtering item in the UI, `NULL` just means that filtering has no effect
@@ -817,7 +817,7 @@ FilteredData <- R6::R6Class( # nolint
       has_same_names <- function(x, y) setequal(names(x), names(y))
       stopifnot(
         # check classes
-        is.reactivevalues(private$datasets),
+        is.reactivevalues(private$unfiltered_datasets),
         is.reactivevalues(private$filter_states),
         # no `reactiveValues`, but a list of `reactiveVal`
         all(vapply(private$filtered_datasets, is.reactive, logical(1))),
@@ -826,15 +826,15 @@ FilteredData <- R6::R6Class( # nolint
         is.list(private$previous_filter_states),
 
         # check names are the same
-        has_same_names(private$datasets, private$filter_states),
-        has_same_names(private$datasets, private$filter_states),
-        has_same_names(private$datasets, private$filtered_datasets),
-        has_same_names(private$datasets, private$filter_infos),
-        has_same_names(private$datasets, private$previous_filter_states),
+        has_same_names(private$unfiltered_datasets, private$filter_states),
+        has_same_names(private$unfiltered_datasets, private$filter_states),
+        has_same_names(private$unfiltered_datasets, private$filtered_datasets),
+        has_same_names(private$unfiltered_datasets, private$filter_infos),
+        has_same_names(private$unfiltered_datasets, private$previous_filter_states),
 
         # check attributes are there: md5sum, keys
-        all_true(self$datanames(), function(dataname) !is.null(attr(private$datasets[[dataname]], "md5sum"))),
-        all_true(self$datanames(), function(dataname) !is.null(attr(private$datasets[[dataname]], "keys")))
+        all_true(self$datanames(), function(dataname) !is.null(attr(private$unfiltered_datasets[[dataname]], "md5sum"))),
+        all_true(self$datanames(), function(dataname) !is.null(attr(private$unfiltered_datasets[[dataname]], "keys")))
       )
 
       # check `filter_states` are all valid
@@ -936,8 +936,8 @@ FilteredData <- R6::R6Class( # nolint
         range = {
           selection_state <- var_state$range
           if ((length(selection_state) != 2) ||
-            (selection_state[1] > selection_state[2]) ||
-            ((selection_state[1] < var_info$range[1]) || (selection_state[2] > var_info$range[2]))
+            (selection_state[[1]] > selection_state[[2]]) ||
+            ((selection_state[[1]] < var_info$range[[1]]) || (selection_state[[2]] > var_info$range[[2]]))
           ) {
             stop(paste(
               "data", dataname, "variable", varname, "range (", toString(selection_state),

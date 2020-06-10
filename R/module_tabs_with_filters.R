@@ -38,6 +38,7 @@
 #' ) %>% invisible() # to not run
 ui_tabs_with_filters <- function(id, modules, datasets) {
   stopifnot(
+    # `teal_module` not supported because we insert the filters into the UI below
     is(modules, "teal_modules"),
     is(datasets, "FilteredData")
   )

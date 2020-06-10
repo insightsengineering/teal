@@ -140,6 +140,13 @@ ui_single_filter_item <- function(id, filter_info, filter_state, prelabel) {
       )
     }
   } else if (filter_info$type == "range") {
+    # this needs to be made more general for ranges like `[0.000023, 0.000059]` to not be rounded to `[0, 0]`
+    # round to two decimal places
+    # we round to a slightly larger interval, when we set `datasets`, we truncate it to the valid range
+    # using round may result in an interval that is too small (with negative numbers)
+    min <- floor(filter_info$range[[1]] * 100) / 100
+    max <- ceiling(filter_info$range[[2]] * 100) / 100
+    step <- ceiling((filter_info$range[[2]] - filter_info$range[[1]]) * 100) / 100
     div(
       div(
         class = "filterPlotOverlayRange",
@@ -148,9 +155,10 @@ ui_single_filter_item <- function(id, filter_info, filter_state, prelabel) {
       sliderInput(
         id_selection,
         label = NULL,
-        # when rounding, we must make sure that we don't set the slider to an invalid state
-        min = floor(filter_info$range[1] * 100) / 100,
-        max = ceiling(filter_info$range[2] * 100) / 100,
+        min = min,
+        max = max,
+        step = step,
+        # round argument does not work as expected
         value = filter_state$range,
         width = "100%"
       )

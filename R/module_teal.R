@@ -36,13 +36,13 @@
 #' raw_data <- reactive(get_dummy_cdisc_data())
 #' shinyApp(
 #'   ui = function() {
-#'     tagList(
-#'       textOutput("info"),
-#'       ui_teal("dummy")
-#'     )
+#'     ui_teal("dummy")
 #'   },
 #'   server = function(input, output, session) {
-#'     active_module <- callModule(srv_teal, "dummy", modules = mods, raw_data = raw_data, initial_filter_states = get_dummy_filter_states())
+#'     active_module <- callModule(
+#'       srv_teal, "dummy", modules = mods, raw_data = raw_data,
+#'       initial_filter_states = get_dummy_filter_states()
+#'     )
 #'   }
 #' )
 ui_teal <- function(id, splash_ui = tags$h2("Starting the Teal App"), header = tags$p(""), footer = tags$p("")) {

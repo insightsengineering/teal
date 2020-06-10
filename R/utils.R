@@ -279,3 +279,38 @@ label_to_id <- function(label, idprefix = NULL) {
     label
   }
 }
+
+#' Whether the variable name is good to use within Show R Code
+#'
+#' Spaces are problematic because the variables must be escaped
+#' with backticks.
+#' Also, they should not start with a number as R may silently make
+#' it valid by changing it.
+#' Therefore, we only allow alphanumeric characters.
+#' The first character of the `name` must be an alphabetic character
+#' and can be followed by alphanumeric characters.
+#'
+#' @md
+#' @param name `character, single or vector` name to check
+#'
+#' check_variable_name_okay("aas2df")
+#' check_variable_name_okay("ADSL")
+#' check_variable_name_okay("ADSLmodified")
+#' check_variable_name_okay("a1")
+#' # the following fail
+#' \dontrun{
+#' check_variable_name_okay("1a")
+#' check_variable_name_okay("ADSL.modified")
+#' check_variable_name_okay("ADSL_modified")
+#' check_variable_name_okay("a1...")
+#' }
+check_variable_name_okay <- function(name) {
+  stopifnot(is_character_single(name) || is_character_vector(name))
+  if (!grepl("^[[:alpha:]][[:alnum:]]*$", name)) {
+    stop(paste0(
+      "name '", name,
+      "' must only contain alphanumeric characters and first character must be an alphabetic character"
+    ))
+  }
+  return(invisible(NULL))
+}
