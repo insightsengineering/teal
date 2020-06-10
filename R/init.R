@@ -1,39 +1,46 @@
+# todo: doc
 #' Create the Server and UI Function For the Shiny App
 #'
-#' Creates the server and UI part of a Shiny app
+#' End-users: This is the most important function for you to start a
+#' teal app that is composed out of teal modules.
 #'
-#' @param data (\code{cdisc_data} or \code{DataConnector})
-#'   \code{cdisc_data}: named list with datasets. Dataset names are case sensitive. The
+#' **Notes for developers**:
+#' This is a wrapper function around the `module_teal.R` functions.
+#' It handles both delayed and non-delayed data and provides a default
+#' splash screen for the latter.
+#'
+#' @md
+#' @param data (`cdisc_data` or `DataConnector`)
+#'   `cdisc_data`: named list with datasets. Dataset names are case sensitive. The
 #'   `ADSL` data is mandatory.
-#'
 #' @param modules nested list with one list per module with the
 #'   following named list elements: \tabular{ll}{ name \tab string with name
 #'   shown in menu for the analysis item \cr server \tab required, shiny server
-#'   module function, see \code{\link[shiny]{callModule}} for more
+#'   module function, see `\link[shiny]{callModule}` for more
 #'   information\cr ui \tab required, shiny ui module function, see
-#'   \code{\link[shiny]{callModule}} for more information\cr data \tab required,
+#'   `\link[shiny]{callModule}` for more information\cr data \tab required,
 #'   vector with datasets names that are passed on (filtered) to the server
 #'   function\cr options \tab optional, other arguments passed on to the server
 #'   function }
-#' @param initial_filter_states (\code{list}) You can define filters that show when
+#' @param initial_filter_states (`list`) You can define filters that show when
 #'   the app starts.
 #'   Pass in a named list to overwrite filters, e.g.
-#'   \code{list(ADSL = list(SEX = NULL))}
+#'   `list(ADSL = list(SEX = NULL))`
 #'   to have the SEX filter appear with nothing selected (i.e. 0 patients)
-#'   \code{list(ADSL = list(SEX = list(choices = "M", keep_na = TRUE)))}
+#'   `list(ADSL = list(SEX = list(choices = "M", keep_na = TRUE)))`
 #'   to keep patients that are male or have unknown SEX.
-#'   \code{list(ADSL = list(SEX = "default"))}
+#'   `list(ADSL = list(SEX = "default"))`
 #'   to have the default filter that appears also when you select to add this
 #'   filtering variable in the running app.
 #'   A general example is:
-#'   \code{list(
+#'   `list(
 #'   ADSL = list(AGE = "default", SEX = list(choices = "M", keep_na = TRUE)),
 #'   ADAE = list(AETOXGR = "default")
-#'   )}
+#'   )`
 #'   Note that if the app is restored from a bookmarked state, the filters
 #'   are overwritten.
-#' @param header (\code{character} or object of class `shiny.tag`) the header of the app
-#' @param footer (\code{character} or object of class `shiny.tag`) the footer of the app
+#' @param header (`character` or object of class `shiny.tag`) the header of the app
+#' @param footer (`character` or object of class `shiny.tag`) the footer of the app
 #' @return named list with server and ui function
 #'
 #' @export
@@ -87,8 +94,8 @@
 init <- function(data,
                  modules,
                  initial_filter_states = list(),
-                 header = tags$p("Title here"),
-                 footer = tags$p("Footer here")) {
+                 header = tags$p("Add Title Here"),
+                 footer = tags$p("Add Footer Here")) {
 
   # currently not a Shiny module, but top-level app (module at top-level which cannot have any parents)
   # todo: make a module out of this as well
@@ -97,6 +104,9 @@ init <- function(data,
     is(data, "cdisc_data") || is(data, "DataConnector"),
     all(names(initial_filter_states) %in% names(data))
   )
+
+  id <- character(0)
+  ns <- NS(id) # root app
 
   is_not_delayed_data <- !is(data, "delayed_data") # `cdisc_data` or `delayed_data`
   # Startup splash screen for delayed loading
@@ -110,9 +120,11 @@ init <- function(data,
     data$get_ui("startapp_module")
   }
 
+  # rather than using callModule and creating a submodule of this module, we directly modify
+  # the ui and server, this can be achieved by passing it the same id as this module, i.e.
+  # `ns(character(0))` and calling the server function directly rather than through `callModule`
   return(list(
-    # character(0) will make it a top-level module # todo: test
-    ui = ui_teal(id = character(0), splash_ui = splash_ui, header = header, footer = footer),
+    ui = ui_teal(id = ns(character(0)), splash_ui = splash_ui, header = header, footer = footer),
     server = function(input, output, session) {
       # raw_data contains cdisc_data(), i.e. list of unfiltered data frames
       # reactive to get data through delayed loading
@@ -127,8 +139,6 @@ init <- function(data,
         # raw_data <- reactive(cdisc_data_global) # nolintr
       }
 
-      # callModule not needed here as it has no parents
-      # todo: make a module
       srv_teal(
         input, output, session,
         modules = modules, raw_data = raw_data, initial_filter_states = initial_filter_states
@@ -137,19 +147,28 @@ init <- function(data,
   ))
 }
 
-
-# only react when the value of the expression changes and not each time
-# the expression triggers (without always changing its value)
-# we return the observer so you can cancel it when your module is dynamic
-# expr must be a function, e.g. can be reactive
-# sodo3: into utils.nest?
-# todo: document more
-reactive_on_changes <- function(expr) {
-  stopifnot(is.function(expr))
-
-  rv <- reactiveVal()
-  obs <- observe({
-    rv(expr()) # only triggers rv on value updates
-  })
-  return(list(value = rv, observer = obs))
+# todo: example
+#' Make a UI function bookmarkable
+#'
+#' To be bookmarkable, the Shiny UI function must have an
+#' argument `request`. This function ensures this.
+#'
+#' @md
+#' @param ui `function or shiny.tag` Shiny UI; either a
+#'   `shiny.tag` or a function with no argument or
+#'   one argument (`request`)
+#' @return `function` Shiny UI function with one argument `request`
+make_bookmarkable <- function(ui) {
+  # we use the same logic as in `shiny:::uiHttpHandler`
+  if (is.function(ui)) {
+    if (length(formals(ui)) > 0) {
+      stopifnot(length(formals(ui)) == 1)
+      ui
+    } else {
+      function(request) ui()
+    }
+  } else {
+    stopifnot(inherits(ui, "shiny.tag"))
+    function(request) ui
+  }
 }

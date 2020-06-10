@@ -8,21 +8,21 @@ init(
   data,
   modules,
   initial_filter_states = list(),
-  header = tags$p("Title here"),
-  footer = tags$p("Footer here")
+  header = tags$p("Add Title Here"),
+  footer = tags$p("Add Footer Here")
 )
 }
 \arguments{
 \item{data}{(\code{cdisc_data} or \code{DataConnector})
 \code{cdisc_data}: named list with datasets. Dataset names are case sensitive. The
-`ADSL` data is mandatory.}
+\code{ADSL} data is mandatory.}
 
 \item{modules}{nested list with one list per module with the
 following named list elements: \tabular{ll}{ name \tab string with name
 shown in menu for the analysis item \cr server \tab required, shiny server
-module function, see \code{\link[shiny]{callModule}} for more
+module function, see \verb{\link[shiny]\{callModule\}} for more
 information\cr ui \tab required, shiny ui module function, see
-\code{\link[shiny]{callModule}} for more information\cr data \tab required,
+\verb{\link[shiny]\{callModule\}} for more information\cr data \tab required,
 vector with datasets names that are passed on (filtered) to the server
 function\cr options \tab optional, other arguments passed on to the server
 function }}
@@ -38,22 +38,26 @@ to keep patients that are male or have unknown SEX.
 to have the default filter that appears also when you select to add this
 filtering variable in the running app.
 A general example is:
-\code{list(
-ADSL = list(AGE = "default", SEX = list(choices = "M", keep_na = TRUE)),
-ADAE = list(AETOXGR = "default")
-)}
+\code{list( ADSL = list(AGE = "default", SEX = list(choices = "M", keep_na = TRUE)), ADAE = list(AETOXGR = "default") )}
 Note that if the app is restored from a bookmarked state, the filters
 are overwritten.}
 
-\item{header}{(\code{character} or object of class `shiny.tag`) the header of the app}
+\item{header}{(\code{character} or object of class \code{shiny.tag}) the header of the app}
 
-\item{footer}{(\code{character} or object of class `shiny.tag`) the footer of the app}
+\item{footer}{(\code{character} or object of class \code{shiny.tag}) the footer of the app}
 }
 \value{
 named list with server and ui function
 }
 \description{
-Creates the server and UI part of a Shiny app
+End-users: This is the most important function for you to start a
+teal app that is composed out of teal modules.
+}
+\details{
+\strong{Notes for developers}:
+This is a wrapper function around the \code{module_teal.R} functions.
+It handles both delayed and non-delayed data and provides a default
+splash screen for the latter.
 }
 \examples{
 library(random.cdisc.data)

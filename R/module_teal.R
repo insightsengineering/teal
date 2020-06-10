@@ -1,8 +1,5 @@
 # This module is the main teal module that puts everything together.
 
-
-# todo: document these functions
-#todo: move into other file
 #' Teal app UI
 #'
 #' This is the main teal UI that puts everything together.
@@ -33,7 +30,22 @@
 #' @param footer `shiny.tag or character` footer to display below the app
 #'
 #' @return `HTML` for Shiny module UI
-ui_teal <- function(id, splash_ui, header = tags$p("Title here"), footer = tags$p("Title here")) {
+#'
+#' @examples
+#' mods <- get_dummy_modules()
+#' raw_data <- reactive(get_dummy_cdisc_data())
+#' shinyApp(
+#'   ui = function() {
+#'     tagList(
+#'       textOutput("info"),
+#'       ui_teal("dummy")
+#'     )
+#'   },
+#'   server = function(input, output, session) {
+#'     active_module <- callModule(srv_teal, "dummy", modules = mods, raw_data = raw_data, initial_filter_states = get_dummy_filter_states())
+#'   }
+#' )
+ui_teal <- function(id, splash_ui = tags$h2("Starting the Teal App"), header = tags$p(""), footer = tags$p("")) {
   if (is_character_single(header)) {
     header <- tags$h1(header)
   }
@@ -65,20 +77,17 @@ ui_teal <- function(id, splash_ui, header = tags$p("Title here"), footer = tags$
     )
   )
 
-  # must be a function of request for bookmarking
-  return(function(request) {
-    shinyUI(
-      fluidPage(
-        include_teal_css_js(),
-        tags$header(header),
-        tags$hr(style = "margin: 7px 0;"),
-        shiny_busy_message_panel,
-        splash_ui,
-        tags$hr(),
-        tags$footer(footer)
-      )
+  return(shinyUI(
+    fluidPage(
+      include_teal_css_js(),
+      tags$header(header),
+      tags$hr(style = "margin: 7px 0;"),
+      shiny_busy_message_panel,
+      splash_ui,
+      tags$hr(),
+      tags$footer(footer)
     )
-  })
+  ))
 }
 
 #' Server function corresponding to teal
@@ -105,13 +114,19 @@ ui_teal <- function(id, splash_ui, header = tags$p("Title here"), footer = tags$
 #' @param initial_filter_states `list`, only used if not restored from
 #'   bookmarked state
 #'
+#' @return `reactive` which returns the currently active module
+#'
+#' @examples
+#' # todo: argument order
 #' # todo: examples
+#'
 srv_teal <- function(input, output, session, modules, raw_data, initial_filter_states) {
-  if (!modules_depth(modules) %in% c(1, 2)) {
-    # although there is no technical limitation on the depth in the current
-    # implementation, we don't allow deeper nesting for clarity of the apps
-    stop("teal currently only supports module nesting of depth one or two.")
-  }
+  # todo: add again
+  # if (!modules_depth(modules) %in% c(1, 2)) {
+  #   # although there is no technical limitation on the depth in the current
+  #   # implementation, we don't allow deeper nesting for clarity of the apps
+  #   stop("teal currently only supports module nesting of depth one or two.")
+  # }
   stopifnot(is.reactive(raw_data))
 
   # Javascript code ----
@@ -120,50 +135,6 @@ srv_teal <- function(input, output, session, modules, raw_data, initial_filter_s
     shinyjs::showLog() # to show Javascript console logs in the R console
   }
   run_js_files(files = "init.js") # Javascript code to make the clipboard accessible
-
-
-  # figure out active tab and deduce active_datanames to hide / show filters ----
-
-  # the call to ui_modules_with_filters creates inputs that watch the tabs prefixed by teal_modules
-  # we observe them and react whenever a tab is clicked by:
-  # - displaying only the relevant datasets in the right hand filter in the
-  # sections: filter info, filtering vars per dataname and add filter var per dataname
-  call_filter_modules <- function(datasets) {
-    # recursively goes down tabs to figure out the active module
-    figure_out_active_module <- function(modules, idprefix) {
-      id <- label_to_id(modules$label, idprefix)
-      return(switch(
-        class(modules)[[1]],
-        teal_modules = {
-          # id is the id of the tabset, the corresponding input element states which tab is selected
-          active_submodule_label <- input[[id]]
-          stopifnot(!is.null(active_submodule_label))
-          figure_out_active_module(modules$children[[active_submodule_label]], idprefix = id)
-        },
-        teal_module = {
-          stopifnot(is.null(input[[id]])) # id should not exist
-          modules
-        },
-        stop("unknown module class ", class(modules))
-      ))
-    }
-
-    active_datanames <- reactive_on_changes(reactive({
-      # inputs may be NULL when UI hasn't loaded yet, but this expression still triggered
-      req(!is.null(input[[label_to_id(modules$label, idprefix = "teal_modules")]]))
-
-      active_datanames <- figure_out_active_module(modules, idprefix = "teal_modules")$filter
-      if (identical(active_datanames, "all")) {
-        active_datanames <- datasets$datanames()
-      }
-      # always add ADSL because the other datasets are filtered based on ADSL
-      active_datanames <- union("ADSL", active_datanames)
-      return(list_adsl_first(active_datanames))
-    }))$value
-
-    callModule(srv_filter_panel, "filter_panel", datasets, active_datanames)
-  }
-
 
   # Datasets to store filter states and filtered datasets per session
   # Each tab for each user is an independent session and the tabs should be independent
@@ -224,11 +195,14 @@ srv_teal <- function(input, output, session, modules, raw_data, initial_filter_s
         showModal(modalDialog(
           div(
             p("Could not restore the session: "),
-            tags$pre(id = "error_msg", cnd$message),
+            tags$pre(id = session$ns("error_msg"), cnd$message),
           ),
           title = "Error restoring the bookmarked state",
           footer = tagList(
-            actionButton("copy_code", "Copy to Clipboard", `data-clipboard-target` = "#error_msg"),
+            actionButton(
+              "copy_code", "Copy to Clipboard",
+              `data-clipboard-target` = paste0("#", session$ns("error_msg"))
+            ),
             modalButton("Dismiss")
           ),
           size = "l", easyClose = TRUE
@@ -239,22 +213,23 @@ srv_teal <- function(input, output, session, modules, raw_data, initial_filter_s
       set_datasets_filters(datasets, initial_filter_states)
     }
 
-    # call server functions for teal modules and filter panel
+    # replace splash screen by teal UI
     .log("initialize modules and filter panel")
-    # must make sure that this is only executed once as modules assume their observers are only
-    # registered once (calling server functions twice would trigger observers twice each time)
-    #call_teal_modules(modules, datasets, idprefix = "teal_modules") # todo: remove
-    #call_filter_modules(datasets) # todo: remove
 
-    ui_teal_main <- ui_modules_with_filters("main_ui", modules = modules, datasets = datasets)
-    callModule(srv_modules_with_filters, "main_ui", modules = modules, datasets = datasets)
-
-    progress$set(0.7, message = "Replacing UI with main UI")
+    progress$set(0.7, message = "Replacing splash UI with main UI")
     # main_ui_container contains splash screen first and we remove it and replace it by the real UI
     removeUI(paste0("#", session$ns("main_ui_container"), " :first-child"))
-    cat("############# Id is: ", paste0("#", session$ns("main_ui_container"), " :first-child"))
-    insertUI(selector = paste0("#", session$ns("main_ui_container")), where = "beforeEnd", ui = ui_teal_main)
+    insertUI(
+      selector = paste0("#", session$ns("main_ui_container")),
+      where = "beforeEnd",
+      ui = ui_tabs_with_filters(session$ns("main_ui"), modules = modules, datasets = datasets)
+    )
+    # must make sure that this is only executed once as modules assume their observers are only
+    # registered once (calling server functions twice would trigger observers twice each time)
+    active_module <- callModule(srv_tabs_with_filters, "main_ui", modules = modules, datasets = datasets)
 
     showNotification("Data loaded - App fully started up")
+
+    return(active_module)
   })
 }

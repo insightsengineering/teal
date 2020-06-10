@@ -1,56 +1,45 @@
 # Nesting teal modules in a tab UI
 
+#' Create a UI of nested tabs of `teal_modules`
+#'
+#' Each `teal_modules` is translated to a `tabsetPanel` and each
+#' of its children is put into one tab. The UI of a `teal_module`
+#' is obtained by calling the `ui` function on it.
+#'
 #' @md
 #' @param id module id
 #' @param modules `teal_module` or `teal_modules`,
 #'   each `teal_module` should have been constructed via `\link{module}`
 #'   which performs the checks, i.e. `module$ui` must be a function
 #'   with the right arguments
-#' @param datasets `FilteredData`
+#' @param datasets `FilteredData` to resolve the teal arguments in an
+#'   isolated context (with respect to reactivity)
 #'
 #' @return depending on class of `modules`:
 #'   - `teal_module`: instantiated UI of the module
 #'   - `teal_modules`: `tabsetPanel` with each tab corresponding to recursively
 #'     calling this function on it
-#'
-#' create_mod <- function(module_name) module(
-#'   module_name,
-#'   server = function(input, output, session, datasets) {},
-#'   ui = function(id, ...) { tags$p(id) },
-#'   filters = 'all'
-#' )
-#' mods <- modules(
-#'   "d1",
-#'   modules(
-#'     "d2",
-#'     modules(
-#'       "d3",
-#'       create_mod("aaa1"), create_mod("aaa2"), create_mod("aaa3")
-#'     ),
-#'     create_mod("bbb")
-#'   ),
-#'   create_mod("ccc")
-#' )
-#' mods
+#' @examples
+#' mods <- get_dummy_modules()
 #' datasets <- get_dummy_datasets()
 #' shinyApp(
 #'   ui = function() {
 #'     tagList(
 #'       include_teal_css_js(),
+#'       textOutput("info"),
 #'       fluidPage( # needed for nice tabs
-#'         ui_tab_nested("dummy", modules = mods, datasets = datasets)
-#'       ),
-#'       textOutput("info")
+#'         ui_nested_tabs("dummy", modules = mods, datasets = datasets)
+#'       )
 #'     )
 #'   },
 #'   server = function(input, output, session) {
-#'     active_module <- callModule(srv_tab_nested, "dummy", modules = mods, datasets = datasets)
+#'     active_module <- callModule(srv_nested_tabs, "dummy", modules = mods, datasets = datasets)
 #'     output$info <- renderText({
-#'       paste0("The currently active module is ", active_module()$label)
+#'       paste0("The currently active tab name is ", active_module()$label)
 #'     })
 #'   }
 #' ) %>% invisible() # to not run
-ui_tab_nested <- function(id, modules, datasets) {
+ui_nested_tabs <- function(id, modules, datasets) {
   stopifnot(
     # `modules` class tested below
     is(datasets, "FilteredData")
@@ -106,16 +95,21 @@ ui_tab_nested <- function(id, modules, datasets) {
           )
         )
       },
-      stop("no default implementation for ui_tab_nested for class ", class(modules), " id_prefix ", idprefix)
+      stop("unknown class ", class(modules), ", id_prefix ", idprefix)
     ))
   }
   return(create_ui(modules, idprefix = NULL))
   #todo: idprefix -> id_prefix, parent_id
 }
 
-# todo: doc
+# todo: inherit doc
+#' Server function that returns currently active module
+#'
+#' @md
+#' @param modules todo
+#' @param datasets todo
 #' @return `reactive` which returns the active module that corresponds to the selected tab
-srv_tab_nested <- function(input, output, session, modules, datasets) {
+srv_nested_tabs <- function(input, output, session, modules, datasets) {
   # modules checked below through recursion
   stopifnot(
     is(datasets, "FilteredData")
@@ -149,10 +143,10 @@ srv_tab_nested <- function(input, output, session, modules, datasets) {
 
   # figure out currently active module -> `active_datanames` ----
 
-  # the call to ui_modules_with_filters creates inputs that watch the tabs prefixed by teal_modules
+  # the call to `ui_tabs_with_filters` creates inputs that watch the tabs prefixed by `teal_modules`
   # we observe them and react whenever a tab is clicked by:
   # - displaying only the relevant datasets in the right hand filter in the
-  # sections: filter info, filtering vars per dataname and add filter var per dataname
+  # sections: filter info, filtering vars per dataname and add filter variable per dataname
   # recursively goes down tabs to figure out the active module
   figure_out_active_module <- function(modules, idprefix) {
     id <- label_to_id(modules$label, idprefix)

@@ -240,14 +240,18 @@ handle_active_datanames <- function(datasets, datanames) {
   return(intersect(datasets$datanames(), datanames))
 }
 
-#' Turn a label into a valid html id
+#' Turn a label into a valid html id, prefix a string
 #'
 #' From both `label` and `prefix`, remove one trailing and
 #' one leading "_", then convert all non-alphanumeric characters
 #' to "_".
+#' This can be used to create a hierarchy within a Shiny module namespace
+#' itself, e.g. create nested tabs whose ids all live in one namespace,
+#' but where a child tab's name is prefixed with the parent tab's name.
+#' See `\link{ui_nested_tabs}`.
 #'
 #' @md
-#' @param label
+#' @param label label of module
 #' @param idprefix `character or NULL` to prepend to label;
 #'   `NULL` for no prefix
 #'

@@ -1,7 +1,7 @@
 #' Add right filter panel into each main tab of the teal_modules UI.
 #' # todo: does this work with depth > 2?
 #'
-#' The `ui_tab_nested` function returns a nested tabbed UI corresponding
+#' The `ui_nested_tabs` function returns a nested tabbed UI corresponding
 #' to the nested modules.
 #' This function adds the right filter panel to each main tab.
 #'
@@ -16,8 +16,27 @@
 #'   place holders for the teal modules
 #'
 #' @import shiny
-#  todo: put ui first and write server function
-ui_modules_with_filters <- function(id, modules, datasets) {
+#' @examples
+#' mods <- get_dummy_modules()
+#' datasets <- get_dummy_datasets()
+#' shinyApp(
+#'   ui = function() {
+#'     tagList(
+#'       include_teal_css_js(),
+#'       textOutput("info"),
+#'       fluidPage( # needed for nice tabs
+#'         ui_tabs_with_filters("dummy", modules = mods, datasets = datasets)
+#'       )
+#'     )
+#'   },
+#'   server = function(input, output, session) {
+#'     active_module <- callModule(srv_tabs_with_filters, "dummy", modules = mods, datasets = datasets)
+#'     output$info <- renderText({
+#'       paste0("The currently active tab name is ", active_module()$label)
+#'     })
+#'   }
+#' ) %>% invisible() # to not run
+ui_tabs_with_filters <- function(id, modules, datasets) {
   stopifnot(
     is(modules, "teal_modules"),
     is(datasets, "FilteredData")
@@ -27,10 +46,10 @@ ui_modules_with_filters <- function(id, modules, datasets) {
 
   # use isolate because we assume that the number of datasets does not change over the course of the teal app
   # this will just create placeholders which are shown only if non-empty
-  filter_and_info_ui <- ui_filter_panel("filter_panel", datanames = isolate(datasets$datanames()))
+  filter_and_info_ui <- ui_filter_panel(ns("filter_panel"), datanames = isolate(datasets$datanames()))
 
   # modules must be teal_modules, not teal_module; otherwise we will get the UI and not a tabsetPanel of UIs
-  teal_ui <- ui_tab_nested("modules_ui", modules, datasets)
+  teal_ui <- ui_nested_tabs(ns("modules_ui"), modules = modules, datasets)
 
   stopifnot(length(teal_ui$children) == 2)
   # teal_ui$children[[1]] contains links to tabs
@@ -46,9 +65,9 @@ ui_modules_with_filters <- function(id, modules, datasets) {
   return(teal_ui)
 }
 
-# returns active_datanames
-srv_modules_with_filters <- function(input, output, session, modules, datasets) {
-  active_module <- callModule(srv_tab_nested, "modules_ui", modules, datasets)
+# returns active_module
+srv_tabs_with_filters <- function(input, output, session, modules, datasets) {
+  active_module <- callModule(srv_nested_tabs, "modules_ui", modules, datasets)
 
   active_datanames <- reactive({
     #  todo: put into other module
@@ -66,5 +85,5 @@ srv_modules_with_filters <- function(input, output, session, modules, datasets) 
 
   callModule(srv_filter_panel, "filter_panel", datasets, reactive(active_datanames()))
 
-  return(active_datanames)
+  return(active_module)
 }
