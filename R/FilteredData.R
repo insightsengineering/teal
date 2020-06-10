@@ -15,7 +15,7 @@
 #' contains keys present in `ADSL` (defaulting to `(USUBJID, STUDYID)`).
 #' Once the `ADSL` dataset is set, the filters are applied.
 #'
-#' The datasets are filtered lazily, i.e. only when needed (in the Shiny app).
+#' The datasets are filtered lazily, i.e. only when requested / needed in the Shiny app.
 #'
 #' By the design of the class (and `reactiveValues`), any dataname set through `set_data`
 #' cannot be removed because other code may already depend on it. As a workaround, the
@@ -161,7 +161,8 @@ FilteredData <- R6::R6Class( # nolint
     #' @return `self` object of this class
     set_data = function(dataname, data) {
       stopifnot(is_character_single(dataname))
-      check_variable_name_okay(dataname) # to include it nicely in the Show R Code
+      # to include it nicely in the Show R Code; the UI also uses datanames in ids, so no whitespaces allowed
+      check_variable_name_okay(dataname)
       stopifnot(is.data.frame(data))
       # column_labels and data_label may be NULL, so attributes will not be present
       stopifnot("keys" %in% names(attributes(data)))
@@ -541,7 +542,7 @@ FilteredData <- R6::R6Class( # nolint
     print = function(...) {
 
       # to filter all datasets before the print message as they are only lazily evaluated
-      private$update_all_filtered_data()
+      lapply(self$datanames(), function(x) self$get_data(x, filtered = TRUE))
 
       cat(class(self), "object", "\n")
 
@@ -609,7 +610,7 @@ FilteredData <- R6::R6Class( # nolint
           varnames <- intersect(varnames, variables)
         }
 
-        filter_infos <- self$get_filter_info(dataname, all_vars = TRUE)
+        filter_infos <- self$get_filter_info(dataname, all_filterable_vars = TRUE)
         var_maxlength <- max(c(0, nchar(varnames)))
         for (varname in varnames) {
           var_info <- filter_infos[[varname]]
@@ -1076,19 +1077,6 @@ FilteredData <- R6::R6Class( # nolint
 
         return(env[[paste0(dataname, "_FILTERED")]])
       })
-    },
-
-    # @details
-    # Update all the filtered datasets.
-    #
-    # Datasets do not get calculated if there is no absorbing observer requiring
-    # the dataset (lazy feature of reactivity).
-    # This function ensures that all the filtered datasets are updated
-    # @md
-    # @return `self`
-    update_all_filtered_data = function() {
-      lapply(self$datanames(), function(x) self$get_data(x, filtered = TRUE))
-      return(invisible(self))
     },
 
     # Reactive to compute the filter infos

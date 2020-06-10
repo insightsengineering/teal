@@ -3,7 +3,7 @@
 
 #' Get dummy filter states to apply initially
 #'
-#' This can be used for the argument `initial_filter_states` in
+#' This can be used for the argument `filter_states` in
 #' `\link{srv_teal}`.
 #' @md
 #' @return dummy filter states

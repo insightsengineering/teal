@@ -1,5 +1,3 @@
-# sodo3: either this file should not go here or it is a clear indication that data_extract_spec belongs to this package
-# rather than teal.devel
 test_that("data_extract_spec argument checking", {
   expect_error(
     data_extract_spec("toyDataset", select = NULL),

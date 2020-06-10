@@ -41,7 +41,7 @@
 #'   server = function(input, output, session) {
 #'     active_module <- callModule(
 #'       srv_teal, "dummy", modules = mods, raw_data = raw_data,
-#'       initial_filter_states = get_dummy_filter_states()
+#'       filter_states = get_dummy_filter_states()
 #'     )
 #'   }
 #' )
@@ -111,7 +111,7 @@ ui_teal <- function(id, splash_ui = tags$h2("Starting the Teal App"), header = t
 #'   tab-nested for `teal_modules`
 #' @param raw_data `reactive` to fetch the data, only evaluated once,
 #'   `NULL` value is ignored
-#' @param initial_filter_states `list`, only used if not restored from
+#' @param filter_states `list`, only used if not restored from
 #'   bookmarked state
 #'
 #' @return `reactive` which returns the currently active module
@@ -120,7 +120,7 @@ ui_teal <- function(id, splash_ui = tags$h2("Starting the Teal App"), header = t
 #' # todo: argument order
 #' # todo: examples
 #'
-srv_teal <- function(input, output, session, modules, raw_data, initial_filter_states) {
+srv_teal <- function(input, output, session, modules, raw_data, filter_states) {
   # todo: add again
   # if (!modules_depth(modules) %in% c(1, 2)) {
   #   # although there is no technical limitation on the depth in the current
@@ -169,7 +169,7 @@ srv_teal <- function(input, output, session, modules, raw_data, initial_filter_s
   # just handle it once because data obtained through delayed loading should
   # usually not change afterwards
   # todo: remove once = TRUE and adapt insert / remove UI, also need to delete old observers
-  # if restored from bookmarked state, `initial_filter_states` is ignored
+  # if restored from bookmarked state, `filter_states` is ignored
   observeEvent(raw_data(), ignoreNULL = TRUE, once = TRUE, {
     .log("data loaded successfully")
     data <- raw_data()
@@ -186,7 +186,7 @@ srv_teal <- function(input, output, session, modules, raw_data, initial_filter_s
       # for example, the data may only be loaded once a password is provided
       # however, onRestore only runs in the first flush and not in the flush when the
       # password was finally provided
-      .log("restoring filter state from bookmarked state - initial_filter_states is ignored")
+      .log("restoring filter state from bookmarked state - filter_states is ignored")
       tryCatch({
         progress$set(0.5, message = "Restoring from bookmarked state")
         datasets$restore_state_from_bookmark(saved_datasets_state)
@@ -210,7 +210,7 @@ srv_teal <- function(input, output, session, modules, raw_data, initial_filter_s
       }
       )
     } else {
-      set_datasets_filters(datasets, initial_filter_states)
+      set_datasets_filters(datasets, filter_states)
     }
 
     # replace splash screen by teal UI

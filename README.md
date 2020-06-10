@@ -77,3 +77,5 @@ temp_install_dir <- tempfile(); dir.create(temp_install_dir)
 # restore old path once done
 .libPaths(.libPaths()[-1]); .libPaths()
 ```
+
+Add a summary at the top of each file to describe what it does.

@@ -29,7 +29,8 @@ ADLB <- radlb(cached = TRUE)
 
 # sodo3: error: check for code argument below is not performed
 # main debugging app ----
-devtools::load_all("../teal"); app <- init(
+devtools::load_all("../teal");
+app <- init(
   data = cdisc_data(
     cdisc_dataset(dataname = "ADSL", data = ADSL),
     cdisc_dataset(dataname = "ADAE", data = ADAE),
@@ -40,12 +41,16 @@ ADAE <- radae(cached = TRUE)
 ADLB <- radlb(cached = TRUE)
 "),
   modules = root_modules(
+    predefined_filters_module(filters = list(
+      ADSL = list(SEX = list(choices = "M", keep_na = TRUE), AGE = "default"),
+      ADLB = list(ASEQ = "default")
+    )),
     teal:::reset_filters_module("Reset", active_datanames = c("ADSL", "ADLB"))
     #teal:::filter_calls_module(),
     #teal:::bookmark_module(),
     #teal:::debug_browser_module()
   ),
-  initial_filter_states = list(
+  filter_states = list(
     ADSL = list(SEX = list(choices = "M", keep_na = TRUE), AGE = "default"),
     ADLB = list(ASEQ = "default")
   ),
@@ -75,7 +80,7 @@ ADLB <- radlb(cached = TRUE)
     teal:::bookmark_module(),
     teal:::debug_browser_module()
   ),
-  initial_filter_states = list(ADSL = list(SEX = list(choices = "M", keep_na = TRUE), AGE = "default")),
+  filter_states = list(ADSL = list(SEX = list(choices = "M", keep_na = TRUE), AGE = "default")),
   header = "Simple teal app",
   footer = tags$p(class = "text-muted", "Source: agile-R website")
 ); shinyApp(app$ui, app$server, enableBookmarking = "url")
@@ -104,10 +109,10 @@ ADLB <- radlb(cached = TRUE)
   # modules = root_modules(
   #   teal:::filter_calls_module("D1")
   # ),
-  #initial_filter_states = list(ADSL = list(SEX = NULL)),
-  #initial_filter_states = list(ADSL = list(SEX = list(choices = "M", keep_na = TRUE))),
-  #initial_filter_states = list(ADSL = list(AGE = "default", SEX = list(choices = "M", keep_na = TRUE))),
-  #initial_filter_states = list(ADSL = list(AGE = "default", SEX = list(choices = "M", keep_na = TRUE)), ADAE = list(AETOXGR = "default")),
+  #filter_states = list(ADSL = list(SEX = NULL)),
+  #filter_states = list(ADSL = list(SEX = list(choices = "M", keep_na = TRUE))),
+  #filter_states = list(ADSL = list(AGE = "default", SEX = list(choices = "M", keep_na = TRUE))),
+  #filter_states = list(ADSL = list(AGE = "default", SEX = list(choices = "M", keep_na = TRUE)), ADAE = list(AETOXGR = "default")),
   header = "Simple teal app",
   footer = tags$p(class = "text-muted", "Source: agile-R website")
 ); shinyApp(app$ui, app$server, enableBookmarking = "url")

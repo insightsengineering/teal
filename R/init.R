@@ -28,7 +28,7 @@
 #'   \cr options \tab optional, other arguments passed on to the server
 #'   function
 #'   }
-#' @param initial_filter_states (`list`) You can define filters that show when
+#' @param filter_states (`list`) You can define filters that show when
 #'   the app starts.
 #'   Pass in a named list to overwrite filters, e.g.
 #'   `list(ADSL = list(SEX = NULL))`
@@ -92,7 +92,7 @@
 #'       filters = "ADSL"
 #'     )
 #'   ),
-#'   initial_filter_states = list(ADSL = list(AGE = "default")),
+#'   filter_states = list(ADSL = list(AGE = "default")),
 #'   header = tags$h1("Sample App"),
 #'   footer = tags$p("Copyright 2017 - 2020")
 #' )
@@ -101,7 +101,7 @@
 #' }
 init <- function(data,
                  modules,
-                 initial_filter_states = list(),
+                 filter_states = list(),
                  header = tags$p("Add Title Here"),
                  footer = tags$p("Add Footer Here"),
                  id = character(0)) {
@@ -111,7 +111,7 @@ init <- function(data,
   stopifnot(
     is(data, "cdisc_data") || is(data, "DataConnector"),
     is(modules, "teal_modules"),
-    all(names(initial_filter_states) %in% names(data)),
+    all(names(filter_states) %in% names(data)),
     is_character_single(id) || is_character_empty(id)
   )
 
@@ -150,7 +150,7 @@ init <- function(data,
 
       srv_teal(
         input, output, session,
-        modules = modules, raw_data = raw_data, initial_filter_states = initial_filter_states
+        modules = modules, raw_data = raw_data, filter_states = filter_states
       )
     }
   ))

@@ -84,7 +84,7 @@ srv_tabs_with_filters <- function(input, output, session, modules, datasets) {
     return(list_adsl_first(active_datanames))
   })
 
-  callModule(srv_filter_panel, "filter_panel", datasets, reactive(active_datanames()))
+  callModule(srv_filter_panel, "filter_panel", datasets, active_datanames)
 
   return(active_module)
 }

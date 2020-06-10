@@ -1,5 +1,3 @@
-# sodo3: add example
-
 #' UI to select among the column names of a dataset to add as a filter variable
 #'
 #' Once something is selected, it puts it to the top right panel (see `\link{module_filter_items}`),
@@ -16,6 +14,52 @@
 #' @param dataname name of dataset whose columns should be filtered
 #'
 #' @importFrom shinyWidgets pickerOptions
+#'
+#' @examples
+#' library(random.cdisc.data)
+#' library(dplyr)
+#'
+#' ADSL <- radsl(cached = TRUE)
+#' attr(ADSL, "keys") <- get_cdisc_keys("ADSL")
+#' ADAE <- radlb(cached = TRUE)
+#' attr(ADAE, "keys") <- get_cdisc_keys("ADAE")
+#'
+#' datasets <- teal:::FilteredData$new()
+#' # these filters will no longer be available for selection
+#' isolate({
+#'   datasets$set_data("ADSL", ADSL)
+#'   datasets$set_filter_state("ADSL", varname = NULL, list(
+#'     AGE = list(range = c(33, 44), keep_na = FALSE),
+#'     SEX = list(choices = "M", keep_na = TRUE)
+#'   ))
+#'   datasets$set_data("ADAE", ADAE)
+#'   datasets$set_filter_state("ADAE", varname = NULL, list(
+#'     CHG = list(range = c(20, 35), keep_na = FALSE)
+#'   ))
+#' })
+#'
+#' shinyApp(ui = function() {
+#'   fluidPage(
+#'     include_teal_css_js(),
+#'     ui_add_filter_variable("filter_ADSL", "ADSL"),
+#'     ui_add_filter_variable("filter_ADAE", "ADAE"),
+#'     p("The following variables are filtered:"),
+#'     verbatimTextOutput("info")
+#'   )
+#' }, server = function(input, output, session) {
+#'   callModule(srv_add_filter_variable, "filter_ADSL", datasets, "ADSL")
+#'   callModule(
+#'     srv_add_filter_variable, "filter_ADAE", datasets, "ADAE",
+#'     omit_vars = reactive(colnames(datasets$get_data("ADSL", filtered = FALSE)))
+#'   )
+#'   output$info <- renderText({
+#'     paste0(
+#'       datasets$datanames(), ": ",
+#'       lapply(datasets$datanames(), function(dataname) toString(names(datasets$get_filter_state(dataname)))),
+#'       collapse = "\n"
+#'     )
+#'   })
+#' }) %>% invisible() # invisible so it does not run
 ui_add_filter_variable <- function(id, dataname) {
   stopifnot(
     is_character_single(dataname)
@@ -36,7 +80,7 @@ ui_add_filter_variable <- function(id, dataname) {
   )
 }
 
-srv_add_filter_variable <- function(input, output, session, datasets, dataname, omit_vars) {
+srv_add_filter_variable <- function(input, output, session, datasets, dataname, omit_vars = function() c()) {
   stopifnot(
     is(datasets, "FilteredData"),
     is_character_single(dataname),
