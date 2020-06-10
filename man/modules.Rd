@@ -9,12 +9,12 @@ modules(label, ...)
 \arguments{
 \item{label}{label of modules collection}
 
-\item{...}{\code{\link{module}} and \code{\link{modules}} object}
+\item{...}{\verb{\link{module}} and \verb{\link{modules}} object}
 }
 \value{
 object of class \code{teal_modules}
 }
 \description{
-Modules collects a tree of \code{\link{module}} and \code{\link{modules}}
+Modules collects a tree of \verb{\link{module}} and \verb{\link{modules}}
 objects. This is useful to define the navigation structure of a teal app.
 }

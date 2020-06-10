@@ -52,3 +52,28 @@ parent_ui <- function(id) {
 }
 parent_ui("PatrickMcCarty")
 ```
+
+Use the roxygen2 marker `@md` to include code-style ticks with backticks. This makes it easier to read. For example:
+```
+#' My function
+#' 
+#' A special `variable` we refer to.
+#' We link to another function `\link{another_fcn}`
+#' 
+#' @md
+#' @param arg1 `character` person's name
+my_fcn <- function(arg1) {
+  arg1
+}
+```
+Note that `\link{another_fcn}` links don't work in the development version. For this, you need to install the package.
+
+To temporarily install the package, the following code is useful:
+```
+.libPaths()
+temp_install_dir <- tempfile(); dir.create(temp_install_dir)
+.libPaths(c(temp_install_dir, .libPaths())); .libPaths()
+?init # look at doc
+# restore old path once done
+.libPaths(.libPaths()[-1]); .libPaths()
+```

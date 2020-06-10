@@ -579,6 +579,64 @@ encoding ui/logic, etc...?
 This could be achieved by a reactive value that is passed as an argument to the
 modules.
 
+# Embed teal into other applications
+Here is an example of an app with two independent teal applications side-by-side. The same idea can be used to embed it into other Shiny modules.
+We use the `id` argument of the `init` function for this.
+
+```{r, eval = FALSE}
+library(random.cdisc.data)
+
+ADSL <- radsl(cached = TRUE)
+
+options(teal_logging = FALSE)
+
+# Code to have two teal apps side-by-side or embed it in a larger application
+create_teal_app <- function(id, title) {
+  init(
+    data = cdisc_data(
+      cdisc_dataset("ADSL", ADSL),
+      code = "ADSL <- radsl(seed = 1)"
+    ),
+    modules = root_modules(
+      module(
+        "data source",
+        server = function(input, output, session, datasets) {},
+        ui = function(id, ...) div(p("information about data source")),
+        filters = "all"
+      ),
+      module(
+        "ADSL AGE histogram",
+        server = function(input, output, session, datasets) {
+          output$hist <- renderPlot(
+            hist(datasets$get_data("ADSL", filtered = TRUE)$AGE)
+          )
+        },
+        ui = function(id, ...) {
+          ns <- NS(id)
+          plotOutput(ns("hist"))
+        },
+        filters = "ADSL"
+      )
+    ),
+    initial_filter_states = list(ADSL = list(AGE = "default")),
+    header = tags$h1(title),
+    footer = tags$p("Copyright 2017 - 2020"),
+    id = id # added id here
+  )
+}
+app1 <- create_teal_app("app1", "Sample App1")
+app2 <- create_teal_app("app2", "Sample App2")
+shinyApp(ui = fluidPage(
+  fluidRow(
+    column(6, app1$ui),
+    column(6, app2$ui)
+  )
+), server = function(input, output, session) {
+  callModule(app1$server, "app1")
+  callModule(app2$server, "app2")
+})
+```
+
 
 [shiny_modules]: https://shiny.rstudio.com/articles/modules.html
 [shiny_reactivity]: https://shiny.rstudio.com/articles/reactivity-overview.html

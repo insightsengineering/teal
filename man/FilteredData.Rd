@@ -245,6 +245,9 @@ unfiltered datasets}
 Set the R preprocessing code to generate the unfiltered datasets
 }
 
+\subsection{Returns}{
+\code{self}
+}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-get_data_attr"></a>}}
@@ -292,6 +295,9 @@ as attributes
 Set data attribute for the dataset
 }
 
+\subsection{Returns}{
+\code{self}
+}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-get_variable_labels"></a>}}

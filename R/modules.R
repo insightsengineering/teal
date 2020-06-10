@@ -2,15 +2,16 @@
 # related functions like depth, `toString` and `print`.
 
 
-#' Create a collection of \code{module} and \code{modules} object
+#' Create a collection of `module` and `modules` object
 #'
-#' Modules collects a tree of \code{\link{module}} and \code{\link{modules}}
+#' Modules collects a tree of `\link{module}` and `\link{modules}`
 #' objects. This is useful to define the navigation structure of a teal app.
 #'
 #' @importFrom methods is
 #'
+#' @md
 #' @param label label of modules collection
-#' @param ... \code{\link{module}} and \code{\link{modules}} object
+#' @param ... `\link{module}` and `\link{modules}` object
 #'
 #' @export
 #'

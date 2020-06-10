@@ -1,4 +1,6 @@
-# todo: doc
+# This is the main function from teal to be used by the end-users.
+
+
 #' Create the Server and UI Function For the Shiny App
 #'
 #' End-users: This is the most important function for you to start a
@@ -11,17 +13,21 @@
 #'
 #' @md
 #' @param data (`cdisc_data` or `DataConnector`)
-#'   `cdisc_data`: named list with datasets. Dataset names are case sensitive. The
+#'   For `cdisc_data`: named list with datasets. Dataset names are case sensitive. The
 #'   `ADSL` data is mandatory.
 #' @param modules nested list with one list per module with the
-#'   following named list elements: \tabular{ll}{ name \tab string with name
-#'   shown in menu for the analysis item \cr server \tab required, shiny server
-#'   module function, see `\link[shiny]{callModule}` for more
-#'   information\cr ui \tab required, shiny ui module function, see
-#'   `\link[shiny]{callModule}` for more information\cr data \tab required,
-#'   vector with datasets names that are passed on (filtered) to the server
-#'   function\cr options \tab optional, other arguments passed on to the server
-#'   function }
+#'   following named list elements:
+#'   \tabular{ll}{
+#'   \cr name \tab string with name shown in menu for the analysis item
+#'   \cr server \tab required, shiny server module function, see
+#'   `\link[shiny]{callModule}` for more information
+#'   \cr ui \tab required, shiny ui module function, see
+#'   `\link[shiny]{callModule}` for more information
+#'   \cr data \tab required, vector with datasets names that are passed
+#'   on (filtered) to the server function
+#'   \cr options \tab optional, other arguments passed on to the server
+#'   function
+#'   }
 #' @param initial_filter_states (`list`) You can define filters that show when
 #'   the app starts.
 #'   Pass in a named list to overwrite filters, e.g.
@@ -39,8 +45,10 @@
 #'   )`
 #'   Note that if the app is restored from a bookmarked state, the filters
 #'   are overwritten.
-#' @param header (`character` or object of class `shiny.tag`) the header of the app
-#' @param footer (`character` or object of class `shiny.tag`) the footer of the app
+#' @param header (`character` or `shiny.tag`) the header of the app
+#' @param footer (`character` or `shiny.tag`) the footer of the app
+#' @param id `character` Shiny module id, set it if you want to add this into
+#'   another Shiny module
 #' @return named list with server and ui function
 #'
 #' @export
@@ -95,18 +103,19 @@ init <- function(data,
                  modules,
                  initial_filter_states = list(),
                  header = tags$p("Add Title Here"),
-                 footer = tags$p("Add Footer Here")) {
+                 footer = tags$p("Add Footer Here"),
+                 id = character(0)) {
 
   # currently not a Shiny module, but top-level app (module at top-level which cannot have any parents)
   # todo: make a module out of this as well
-  stopifnot(is(data, "cdisc_data") || is(data, "DataConnector"))
   stopifnot(
     is(data, "cdisc_data") || is(data, "DataConnector"),
-    all(names(initial_filter_states) %in% names(data))
+    is(modules, "teal_modules"),
+    all(names(initial_filter_states) %in% names(data)),
+    is_character_single(id) || is_character_empty(id)
   )
 
-  id <- character(0)
-  ns <- NS(id) # root app
+  ns <- NS(id)
 
   is_not_delayed_data <- !is(data, "delayed_data") # `cdisc_data` or `delayed_data`
   # Startup splash screen for delayed loading
@@ -117,7 +126,7 @@ init <- function(data,
     h1("The teal app is starting up.")
   } else {
     message("App was initialized with delayed data loading.")
-    data$get_ui("startapp_module")
+    data$get_ui(ns("startapp_module"))
   }
 
   # rather than using callModule and creating a submodule of this module, we directly modify

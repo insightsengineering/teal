@@ -293,6 +293,7 @@ label_to_id <- function(label, idprefix = NULL) {
 #' @md
 #' @param name `character, single or vector` name to check
 #'
+#' @examples
 #' check_variable_name_okay("aas2df")
 #' check_variable_name_okay("ADSL")
 #' check_variable_name_okay("ADSLmodified")

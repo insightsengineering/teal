@@ -9,23 +9,28 @@ init(
   modules,
   initial_filter_states = list(),
   header = tags$p("Add Title Here"),
-  footer = tags$p("Add Footer Here")
+  footer = tags$p("Add Footer Here"),
+  id = character(0)
 )
 }
 \arguments{
 \item{data}{(\code{cdisc_data} or \code{DataConnector})
-\code{cdisc_data}: named list with datasets. Dataset names are case sensitive. The
+For \code{cdisc_data}: named list with datasets. Dataset names are case sensitive. The
 \code{ADSL} data is mandatory.}
 
 \item{modules}{nested list with one list per module with the
-following named list elements: \tabular{ll}{ name \tab string with name
-shown in menu for the analysis item \cr server \tab required, shiny server
-module function, see \verb{\link[shiny]\{callModule\}} for more
-information\cr ui \tab required, shiny ui module function, see
-\verb{\link[shiny]\{callModule\}} for more information\cr data \tab required,
-vector with datasets names that are passed on (filtered) to the server
-function\cr options \tab optional, other arguments passed on to the server
-function }}
+following named list elements:
+\tabular{ll}{
+\cr name \tab string with name shown in menu for the analysis item
+\cr server \tab required, shiny server module function, see
+\verb{\link[shiny]\{callModule\}} for more information
+\cr ui \tab required, shiny ui module function, see
+\verb{\link[shiny]\{callModule\}} for more information
+\cr data \tab required, vector with datasets names that are passed
+on (filtered) to the server function
+\cr options \tab optional, other arguments passed on to the server
+function
+}}
 
 \item{initial_filter_states}{(\code{list}) You can define filters that show when
 the app starts.
@@ -42,9 +47,12 @@ A general example is:
 Note that if the app is restored from a bookmarked state, the filters
 are overwritten.}
 
-\item{header}{(\code{character} or object of class \code{shiny.tag}) the header of the app}
+\item{header}{(\code{character} or \code{shiny.tag}) the header of the app}
 
-\item{footer}{(\code{character} or object of class \code{shiny.tag}) the footer of the app}
+\item{footer}{(\code{character} or \code{shiny.tag}) the footer of the app}
+
+\item{id}{\code{character} Shiny module id, set it if you want to add this into
+another Shiny module}
 }
 \value{
 named list with server and ui function

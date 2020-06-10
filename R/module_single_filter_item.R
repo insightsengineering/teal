@@ -146,7 +146,7 @@ ui_single_filter_item <- function(id, filter_info, filter_state, prelabel) {
     # using round may result in an interval that is too small (with negative numbers)
     min <- floor(filter_info$range[[1]] * 100) / 100
     max <- ceiling(filter_info$range[[2]] * 100) / 100
-    step <- ceiling((filter_info$range[[2]] - filter_info$range[[1]]) * 100) / 100
+    step <- ceiling(filter_info$range[[2]] - filter_info$range[[1]]) / 100
     div(
       div(
         class = "filterPlotOverlayRange",
