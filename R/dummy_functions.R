@@ -43,6 +43,7 @@ ADLB <- radlb(cached = TRUE)
 
 #' Get a dummy `datasets` object with `ADSL` data, useful in the examples
 #'
+#' Returns a new `R6` object on each invocation, not a singleton.
 #' @md
 #' @return `FilteredData` with `ADSL` set
 get_dummy_datasets <- function() {

@@ -16,9 +16,9 @@
 #' to user changes to the inputs while the UI was updated, then the correct new
 #' input values (as sent with the new UI).
 #'
-#' @param id module id
-#' @param dataname `character` dataname
 #' @md
+#' @param id module id
+#' @param dataname `character` dataname to show filters for
 #'
 #' @examples
 #' # Example with ADSL and ADAE dataset
@@ -80,6 +80,18 @@ ui_filter_items <- function(id, dataname) {
   )
 }
 
+#' Server function to display filters for a dataset
+#'
+#' @md
+#' @inheritParams srv_shiny_module_arguments
+#' @inheritParams ui_filter_items
+#' @return `reactive` returning a named list, names being the shown variables
+#'   and values being the observers for the modules associated to that variable
+#'   (by calling a Shiny submodule for each variable). This is useful for dynamic
+#'   UI generation, so observers can be properly canceled. Note that currently, not
+#'   all observers defined in this module are returned (the observer to remove all
+#'   filters at once is not returned)
+#'
 #' @importFrom shinyWidgets pickerInput pickerOptions
 srv_filter_items <- function(input, output, session, datasets, dataname) {
   stopifnot(

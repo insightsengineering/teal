@@ -1,16 +1,18 @@
-#' Add right filter panel into each main tab of the teal_modules UI.
+# Module that adds the filter panel as a shared module on the right of each of the
+# top-level modules, shared across all modules
+
+#' Add right filter panel into each of the top-level `teal_modules` UIs.
 #' # todo: does this work with depth > 2?
 #'
-#' The `ui_nested_tabs` function returns a nested tabbed UI corresponding
+#' The `\link{ui_nested_tabs}` function returns a nested tabbed UI corresponding
 #' to the nested modules.
 #' This function adds the right filter panel to each main tab.
 #'
-#' It uses the prefix "teal_modules" for the ids of the tabs. These can then be obtained
-#' recursively by using the function `label_to_id`.
+#' The right filter panel's filter choices affect the `datasets` object. Therefore,
+#' all modules using the same `datasets` share the same filters.
 #'
 #' @inheritParams init
-#' @param datasets \link{FilteredData} object where all datasets
-#'   to be used inside the teal app are in
+#' @inheritParams srv_shiny_module_arguments
 #'
 #' @return A \code{tagList} of The main menu, place holders for filters and
 #'   place holders for the teal modules
@@ -36,6 +38,40 @@
 #'     })
 #'   }
 #' ) %>% invisible() # to not run
+#'
+#'
+#' # An example with two filter panels in two apps side-by-side
+#' mods <- get_dummy_modules()
+#' datasets1 <- get_dummy_datasets()
+#' datasets2 <- get_dummy_datasets()
+#' shinyApp(
+#'   ui = function() {
+#'     tagList(
+#'       include_teal_css_js(),
+#'       textOutput("info"),
+#'       fluidPage( # needed for nice tabs
+#'         fluidRow(
+#'           column(6, ui_tabs_with_filters("app1", modules = mods, datasets = datasets1)),
+#'           column(6, ui_tabs_with_filters("app2", modules = mods, datasets = datasets2))
+#'         )
+#'       )
+#'     )
+#'   },
+#'   server = function(input, output, session) {
+#'     active_module1 <- callModule(
+#'       srv_tabs_with_filters, "app1", modules = mods, datasets = datasets1
+#'     )
+#'     active_module2 <- callModule(
+#'       srv_tabs_with_filters, "app2", modules = mods, datasets = datasets2
+#'     )
+#'     output$info <- renderText({
+#'       paste0(
+#'         "The currently active tab names are: ",
+#'         active_module1()$label, ", ", active_module1()$label
+#'       )
+#'     })
+#'   }
+#' )  %>% invisible() # to not run
 ui_tabs_with_filters <- function(id, modules, datasets) {
   stopifnot(
     # `teal_module` not supported because we insert the filters into the UI below
@@ -66,7 +102,11 @@ ui_tabs_with_filters <- function(id, modules, datasets) {
   return(teal_ui)
 }
 
-# returns active_module
+#' Server function
+#'
+#' @md
+#' @inheritParams srv_shiny_module_arguments
+#' @return `reactive` currently selected active_module
 srv_tabs_with_filters <- function(input, output, session, modules, datasets) {
   active_module <- callModule(srv_nested_tabs, "modules_ui", modules, datasets)
 

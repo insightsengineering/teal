@@ -97,11 +97,11 @@ ui_filter_panel <- function(id, datanames) {
 
 #' Server function for filter panel
 #'
-#' @noRd
-#'
 #' @md
+#' @inheritParams srv_shiny_module_arguments
 #' @param active_datanames `reactive` returning datanames that
-#'   should be shown on the filter panel
+#'   should be shown on the filter panel, must be a subset of the
+#'   `datanames` argument provided to the UI function
 #'
 srv_filter_panel <- function(input, output, session, datasets, active_datanames) {
   stopifnot(

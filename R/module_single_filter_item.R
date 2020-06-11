@@ -1,9 +1,12 @@
+# Module to change the filter for a single variable
+#
+
 # label of checkbox to keep / remove NAs
 get_keep_na_label <- function(na_count) {
   paste0("Keep NA (", na_count, ")")
 }
 
-#' UI for a single filter item for a filter variable
+#' UI to filter a single filter variable
 #'
 #' We pass in the initial state to avoid filtering twice that otherwise comes
 #' with the `updateInput` functions.
@@ -205,11 +208,19 @@ ui_single_filter_item <- function(id, filter_info, filter_state, prelabel) {
   ))
 }
 
-# Server function to display the filter for a single variable
-# returns a `list(observers, update_ui_trigger)`. The observers
-# must be canceled when the module is removed, the update_ui_trigger
-# can be used to update the input elements which is not done automatically
-# to avoid infinite cycles, see also `module_filter_items.R`.
+#' Server function to filter for a single variable
+#'
+#' Regarding the return value: The `observers` are returned so they can be canceled
+#' when the module is removed, the `update_ui_trigger` can be used to update the input
+#' elements (analogous to `shiny::updateInput` functions) which is not done automatically
+#' to avoid infinite cycles, see also `module_filter_items.R` for a discussion.
+#'
+#' @md
+#' @inheritParams srv_shiny_module_arguments
+#' @param dataname `character` dataname
+#' @param varname `character` variable within `dataname` to filter
+#'
+#' @return `reactive` which returns `list(observers, update_ui_trigger)`.
 srv_single_filter_item <- function(input, output, session, datasets, dataname, varname) {
   stopifnot(
     is(datasets, "FilteredData"),

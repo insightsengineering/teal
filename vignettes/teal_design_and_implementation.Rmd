@@ -192,7 +192,8 @@ app <- teal::init(
     )
   )
 )
-# shinyApp(app$ui, app$server)
+bookmarkableShinyApp(app$ui, app$server)
+# or, without bookmarking: shinyApp(app$ui(), app$server)
 ```
 
 Please run the above code by copy pasting it to the command line. The example
@@ -591,7 +592,7 @@ ADSL <- radsl(cached = TRUE)
 options(teal_logging = FALSE)
 
 # Code to have two teal apps side-by-side or embed it in a larger application
-create_teal_app <- function(id, title) {
+create_teal_app <- function(title) {
   init(
     data = cdisc_data(
       cdisc_dataset("ADSL", ADSL),
@@ -618,18 +619,17 @@ create_teal_app <- function(id, title) {
         filters = "ADSL"
       )
     ),
-    initial_filter_states = list(ADSL = list(AGE = "default")),
+    filter_states = list(ADSL = list(AGE = "default")),
     header = tags$h1(title),
-    footer = tags$p("Copyright 2017 - 2020"),
-    id = id # added id here
+    footer = tags$p("Copyright 2017 - 2020")
   )
 }
-app1 <- create_teal_app("app1", "Sample App1")
-app2 <- create_teal_app("app2", "Sample App2")
-shinyApp(ui = fluidPage(
+app1 <- create_teal_app("Sample App1")
+app2 <- create_teal_app("Sample App2")
+bookmarkableShinyApp(ui = fluidPage(
   fluidRow(
-    column(6, app1$ui),
-    column(6, app2$ui)
+    column(6, app1$ui("app1")),
+    column(6, app2$ui("app2"))
   )
 ), server = function(input, output, session) {
   callModule(app1$server, "app1")

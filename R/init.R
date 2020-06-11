@@ -43,12 +43,9 @@
 #'   ADSL = list(AGE = "default", SEX = list(choices = "M", keep_na = TRUE)),
 #'   ADAE = list(AETOXGR = "default")
 #'   )`
-#'   Note that if the app is restored from a bookmarked state, the filters
-#'   are overwritten.
+#'   Ignored if the app is restored from a bookmarked state.
 #' @param header (`character` or `shiny.tag`) the header of the app
 #' @param footer (`character` or `shiny.tag`) the footer of the app
-#' @param id `character` Shiny module id, set it if you want to add this into
-#'   another Shiny module
 #' @return named list with server and ui function
 #'
 #' @export
@@ -97,43 +94,47 @@
 #'   footer = tags$p("Copyright 2017 - 2020")
 #' )
 #' \dontrun{
-#' shinyApp(app$ui, app$server)
+#' # todo: this needs to be done in other places as well
+#' shinyApp(app$ui(), app$server)
+#' # or: to also work with bookmarking
+#' bookmarkableShinyApp(app$ui, app$server)
 #' }
+#'
+#' # See the vignette for an example how to embed this app as a module
+#' # into a larger application
 init <- function(data,
                  modules,
                  filter_states = list(),
                  header = tags$p("Add Title Here"),
-                 footer = tags$p("Add Footer Here"),
-                 id = character(0)) {
-
-  # currently not a Shiny module, but top-level app (module at top-level which cannot have any parents)
-  # todo: make a module out of this as well
+                 footer = tags$p("Add Footer Here")) {
   stopifnot(
     is(data, "cdisc_data") || is(data, "DataConnector"),
     is(modules, "teal_modules"),
-    all(names(filter_states) %in% names(data)),
-    is_character_single(id) || is_character_empty(id)
+    all(names(filter_states) %in% names(data))
   )
 
-  ns <- NS(id)
-
   is_not_delayed_data <- !is(data, "delayed_data") # `cdisc_data` or `delayed_data`
-  # Startup splash screen for delayed loading
-  # We use delayed loading in all cases, even when the data does not need to be fetched.
-  # This has the benefit that when filtering the data takes a lot of time initially, the
-  # Shiny app does not time out.
-  splash_ui <- if (is_not_delayed_data) {
-    h1("The teal app is starting up.")
-  } else {
-    message("App was initialized with delayed data loading.")
-    data$get_ui(ns("startapp_module"))
-  }
 
   # rather than using callModule and creating a submodule of this module, we directly modify
   # the ui and server, this can be achieved by passing it the same id as this module, i.e.
   # `ns(character(0))` and calling the server function directly rather than through `callModule`
   return(list(
-    ui = ui_teal(id = ns(character(0)), splash_ui = splash_ui, header = header, footer = footer),
+    ui = function(id = character(0)) {
+      ns <- NS(id)
+
+      # Startup splash screen for delayed loading
+      # We use delayed loading in all cases, even when the data does not need to be fetched.
+      # This has the benefit that when filtering the data takes a lot of time initially, the
+      # Shiny app does not time out.
+      splash_ui <- if (is_not_delayed_data) {
+        h1("The teal app is starting up.")
+      } else {
+        message("App was initialized with delayed data loading.")
+        data$get_ui(ns("startapp_module"))
+      }
+
+      ui_teal(id = ns("teal"), splash_ui = splash_ui, header = header, footer = footer)
+    },
     server = function(input, output, session) {
       # raw_data contains cdisc_data(), i.e. list of unfiltered data frames
       # reactive to get data through delayed loading
@@ -147,37 +148,57 @@ init <- function(data,
         # trick for faster testing to avoid waiting on module specific to delayed data
         # raw_data <- reactive(cdisc_data_global) # nolintr
       }
-
-      srv_teal(
-        input, output, session,
-        modules = modules, raw_data = raw_data, filter_states = filter_states
-      )
+      return(callModule(srv_teal, "teal", modules = modules, raw_data = raw_data, filter_states = filter_states))
     }
   ))
 }
 
-# todo: example
+
 #' Make a UI function bookmarkable
+#'
+#' This is a customization of `shinyApp`.
 #'
 #' To be bookmarkable, the Shiny UI function must have an
 #' argument `request`. This function ensures this.
+#'
+#' When `ui` is a function, it passes the following to `shinyApp`
+#' #' ```
+#' app <- teal::init(....)
+#' ui <- app$ui
+#' ui_new <- function(request) {
+#'   ui() # or just `ui` when ui is a `shiny.tag`
+#' }
+#' ```
+#'
+#' If no bookmarking is needed, then you can also call
+#' `shinyApp(ui = app$ui(), server = app$server)`. The reason you cannot
+#' call `shinyApp(ui = app$ui, server = app$server)` without parentheses is
+#' that `app$ui` has an `id` argument with a default value which makes it
+#' possible to be added into modules. `shinyApp` takes this to be the request
+#' argument which is needed for bookmarking. This avoids it.
+#'
+#' We guarantee that anything that can be run with `shinyApp` can be replaced
+#' by a call to this function without any changes.
 #'
 #' @md
 #' @param ui `function or shiny.tag` Shiny UI; either a
 #'   `shiny.tag` or a function with no argument or
 #'   one argument (`request`)
-#' @return `function` Shiny UI function with one argument `request`
-make_bookmarkable <- function(ui) {
-  # we use the same logic as in `shiny:::uiHttpHandler`
-  if (is.function(ui)) {
-    if (length(formals(ui)) > 0) {
-      stopifnot(length(formals(ui)) == 1)
-      ui
+#' @param server `function` Shiny server function
+#' @param ... additional arguments to `shinyApp`
+#' @return `shinyApp` value
+#' @export
+bookmarkableShinyApp <- function(ui, server, ...) {
+  # ui must be a function of request to be bookmarkable
+  ui_new <- function(request) {
+    # we use similar logic to `shiny:::uiHttpHandler`
+    if (is.function(ui)) {
+      # evaluating ui with default arguments
+      ui()
     } else {
-      function(request) ui()
+      stopifnot(inherits(ui, "shiny.tag"))
+      ui
     }
-  } else {
-    stopifnot(inherits(ui, "shiny.tag"))
-    function(request) ui
   }
+  return(shinyApp(ui = ui_new, server = server, ...))
 }

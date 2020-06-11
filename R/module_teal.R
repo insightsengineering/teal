@@ -92,8 +92,9 @@ ui_teal <- function(id, splash_ui = tags$h2("Starting the Teal App"), header = t
 
 #' Server function corresponding to teal
 #'
-#' It evaluates the `raw_data` (delayed data mechanism).
-#' Once it is ready and non-NULL, the splash screen is replaced by the
+#' It evaluates the `raw_data` (delayed data mechanism) and creates the
+#' `datasets` object that is shared across modules.
+#' Once it is ready and non-`NULL`, the splash screen is replaced by the
 #' main teal UI that depends on the data.
 #' The currently active tab is tracked and the right filter panel
 #' updates the displayed datasets to filter for according to the active datanames
@@ -104,21 +105,13 @@ ui_teal <- function(id, splash_ui = tags$h2("Starting the Teal App"), header = t
 #' For more doc, see `\link{ui_teal}`.
 #'
 #' @md
-#' @param input `Shiny input object`
-#' @param output `Shiny output object`
-#' @param session `Shiny session object`
-#' @param modules `teal_module or teal_modules` modules to display,
-#'   tab-nested for `teal_modules`
-#' @param raw_data `reactive` to fetch the data, only evaluated once,
+#' @inheritParams srv_shiny_module_arguments
+#' @param raw_data `reactive` which returns the data, only evaluated once,
 #'   `NULL` value is ignored
-#' @param filter_states `list`, only used if not restored from
-#'   bookmarked state
+#' @inheritParams init
 #'
 #' @return `reactive` which returns the currently active module
-#'
-#' @examples
 #' # todo: argument order
-#' # todo: examples
 #'
 srv_teal <- function(input, output, session, modules, raw_data, filter_states) {
   # todo: add again

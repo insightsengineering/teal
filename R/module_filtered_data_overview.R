@@ -1,3 +1,5 @@
+# Module to compare the number of patients in the unfiltered and filtered dataset.
+
 #' Creates the UI for the module showing counts for each dataset
 #' contrasting the filtered to the full unfiltered dataset
 #'
@@ -15,8 +17,14 @@ ui_filtered_data_overview <- function(id) {
   )
 }
 
-# datanames are datanames to show among those that are available
-srv_filtered_data_overview <- function(input, output, session, datasets, datanames) {
+#' Server function to display the number of patients in the filtered and unfiltered
+#' data
+#'
+#' @md
+#' @inheritParams srv_shiny_module_arguments
+#' @param datanames `function / reactive returning a character vector` datanames
+#'   to show information for; if `NULL` or `"all"`, takes all datanames
+srv_filtered_data_overview <- function(input, output, session, datasets, datanames = function() NULL) {
   stopifnot(
     is(datasets, "FilteredData"),
     is.function(datanames)
@@ -58,4 +66,6 @@ srv_filtered_data_overview <- function(input, output, session, datasets, datanam
       Subjects = subjects
     )
   }, width = "100%")
+
+  return(invisible(NULL))
 }

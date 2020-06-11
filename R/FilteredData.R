@@ -37,11 +37,6 @@
 #'
 #' @md
 #' @importFrom digest digest
-#' @importFrom dplyr n_groups group_by_
-#' @importFrom haven read_sas
-#' @importFrom R6 R6Class
-#' @importFrom readr read_csv
-#' @importFrom tools file_ext file_path_sans_ext
 #'
 #' @examples
 #' library(random.cdisc.data)
@@ -256,7 +251,7 @@ FilteredData <- R6::R6Class( # nolint
     #'   if `NULL`, for all variables
     get_variable_labels = function(dataname, variables = NULL) {
       private$check_data_varname_exists(dataname)
-      stopifnot(is.null(variables) || is_character_empty(variables) || is_character_vector(variables))
+      stopifnot(is.null(variables) || is_character_vector(variables, min_length = 0L))
 
       labels <- self$get_data_attr(dataname, "column_labels")
       if (!is.null(variables)) {
@@ -332,7 +327,7 @@ FilteredData <- R6::R6Class( # nolint
       if (is.null(varname)) {
         private$filter_states[[dataname]]
       } else {
-        return(private$filter_states[[dataname]][[varname]])
+        private$filter_states[[dataname]][[varname]]
       }
     },
 
@@ -520,8 +515,7 @@ FilteredData <- R6::R6Class( # nolint
             "dplyr::inner_join", # better than merge since we use `dplyr` everywhere
             x = call("[", as.name("ADSL_FILTERED"), quote(expr = ), keys), # nolint
             y = as.name(filtered_alone),
-            by = keys,
-            all.x = FALSE, all.y = FALSE
+            by = keys
           )
         )
 
@@ -923,16 +917,12 @@ FilteredData <- R6::R6Class( # nolint
         )
       }
 
+      pre_msg <- paste0("data", dataname, "variable", varname, ": ")
       switch(
         var_info$type,
         choices = {
           selection_state <- var_state$choices
-          if (any(!(selection_state %in% var_info$choices))) {
-            stop(paste(
-              "data", dataname, "variable", varname, ":", "choices (", toString(selection_state),
-              ") not all in valid choices (", toString(var_info$choices), ")"
-            ))
-          }
+          check_in_subset(selection_state, var_info$choices, pre_msg = pre_msg)
         },
         range = {
           selection_state <- var_state$range
@@ -940,8 +930,8 @@ FilteredData <- R6::R6Class( # nolint
             (selection_state[[1]] > selection_state[[2]]) ||
             ((selection_state[[1]] < var_info$range[[1]]) || (selection_state[[2]] > var_info$range[[2]]))
           ) {
-            stop(paste(
-              "data", dataname, "variable", varname, "range (", toString(selection_state),
+            stop(paste0(
+              pre_msg, " range (", toString(selection_state),
               ") not valid for full range (", toString(var_info$range), ")"
             ))
           }
@@ -950,13 +940,7 @@ FilteredData <- R6::R6Class( # nolint
           selection_state <- var_state$status
           # the conceptual difference to type 'choices' is that it allows exactly one value rather than a subset
           stopifnot(length(selection_state) == 1)
-
-          if (!(selection_state %in% var_info$choices)) {
-            stop(paste(
-              "data", dataname, "variable", varname, "choices (", toString(selection_state),
-              ") not in valid choices (", toString(var_info$choices), ")"
-            ))
-          }
+          check_in_subset(selection_state, var_info$choices, pre_msg = pre_msg)
         },
         stop(paste("Unknown filter type", var_info$type, "for data", dataname, "and variable", varname))
       )
@@ -970,6 +954,7 @@ FilteredData <- R6::R6Class( # nolint
     #
     # @md
     # @param dataname `character` name of the dataset
+    # @return call to obtain the filtered dataset from the unfiltered one
     get_pure_filter_call = function(dataname) {
       private$check_data_varname_exists(dataname)
 
@@ -1133,7 +1118,7 @@ FilteredData <- R6::R6Class( # nolint
               histogram_data = histogram_data
             )
           } else if (is.numeric(var)) {
-            density <- stats::density(var, na.rm = TRUE)
+            density <- stats::density(var, na.rm = TRUE, n = 100) # 100 bins only
             list(
               type = "range",
               label = if_null(attr(var, "label"), ""),

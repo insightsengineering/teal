@@ -1,13 +1,15 @@
+# Module to add a variable for filtering
+
+
 #' UI to select among the column names of a dataset to add as a filter variable
 #'
-#' Once something is selected, it puts it to the top right panel (see `\link{module_filter_items}`),
-#' so you can adjust filtering for that variable. The selection is then undone and the choices
-#' is updated, so other variables can be added for filtering.
-#' When a variable cannot be selected for filtering, a warning is displayed.
-#'
-#' Whenever a new filter is added in the lower right panel, the `FilteredData` object
-#' is called to add the filter. Through reactivity, the upper panel then updates
-#' itself.
+#' Once something is selected, it sets the `filter_state` (from inexisting) to `NULL`
+#' for that variable in the `datasets` object. This essentially makes it available
+#' for filtering.
+#' Indeed, the top right panel (see `\link{module_filter_items}`) picks this up,
+#' so you can adjust the filtering for that variable. The selection is then undone and
+#' the choices are updated, so other variables can be added for filtering.
+#' Variables that cannot be filtered are not available in the selection.
 #'
 #' @md
 #' @param id module id
@@ -80,6 +82,18 @@ ui_add_filter_variable <- function(id, dataname) {
   )
 }
 
+#' Server function to add a filter variable to `datasets`
+#'
+#' For the return value, note that the currently selected input will be
+#' reset in the UI for the user to select another variable.
+#' So, it will be `NULL` again in the next reactive flush.
+#'
+#' @md
+#' @inheritParams srv_shiny_module_arguments
+#' @inheritParams ui_add_filter_variable
+#' @param omit_vars `function / reactive returning a character vector` variables that are
+#'   not available for filtering
+#' @return `reactive` which returns the currently selected filter variable
 srv_add_filter_variable <- function(input, output, session, datasets, dataname, omit_vars = function() c()) {
   stopifnot(
     is(datasets, "FilteredData"),
@@ -130,5 +144,5 @@ srv_add_filter_variable <- function(input, output, session, datasets, dataname, 
     )
   })
 
-  return(NULL)
+  return(reactive(input$new_filter_var))
 }

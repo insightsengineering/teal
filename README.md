@@ -79,3 +79,27 @@ temp_install_dir <- tempfile(); dir.create(temp_install_dir)
 ```
 
 Add a summary at the top of each file to describe what it does.
+
+Shiny modules should return `reactives` along with the observers they create. An example is here:
+```
+srv_child <- function(input, output, session) {
+  o <- observeEvent(...)
+  return(list(
+    values = reactive(input$name),
+    observers = list(o)
+  ))
+}
+srv_parent <- function(input, output, session) {
+  output <- callModule(srv_child, "child")
+  o <- observeEvent(...)
+  return(list(
+    values = output$values,
+    observers = c(output$observers, list(o))
+  ))
+}
+```
+This makes dynamic UI creation possible. If you want to remove a module added with `insertUI`,  you can do so by calling `o$destroy()` on each of its observers, see the function `srv_filter_items` for an example.
+
+The difference between `datanames` and `active_datanames` is that the latter is a subset of the former.
+
+Note: Whenever you return input objects, it seems that you explicitly need to wrap them inside `reactive(..)`, e.g. `reactive(input$name)`.

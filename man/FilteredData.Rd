@@ -21,7 +21,7 @@ Every dataset, in addition to its own filter, is filtered to make sure that it o
 contains keys present in \code{ADSL} (defaulting to \verb{(USUBJID, STUDYID)}).
 Once the \code{ADSL} dataset is set, the filters are applied.
 
-The datasets are filtered lazily, i.e. only when needed (in the Shiny app).
+The datasets are filtered lazily, i.e. only when requested / needed in the Shiny app.
 
 By the design of the class (and \code{reactiveValues}), any dataname set through \code{set_data}
 cannot be removed because other code may already depend on it. As a workaround, the

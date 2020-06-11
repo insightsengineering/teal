@@ -7,10 +7,9 @@
 init(
   data,
   modules,
-  initial_filter_states = list(),
+  filter_states = list(),
   header = tags$p("Add Title Here"),
-  footer = tags$p("Add Footer Here"),
-  id = character(0)
+  footer = tags$p("Add Footer Here")
 )
 }
 \arguments{
@@ -32,7 +31,7 @@ on (filtered) to the server function
 function
 }}
 
-\item{initial_filter_states}{(\code{list}) You can define filters that show when
+\item{filter_states}{(\code{list}) You can define filters that show when
 the app starts.
 Pass in a named list to overwrite filters, e.g.
 \code{list(ADSL = list(SEX = NULL))}
@@ -44,15 +43,11 @@ to have the default filter that appears also when you select to add this
 filtering variable in the running app.
 A general example is:
 \code{list( ADSL = list(AGE = "default", SEX = list(choices = "M", keep_na = TRUE)), ADAE = list(AETOXGR = "default") )}
-Note that if the app is restored from a bookmarked state, the filters
-are overwritten.}
+Ignored if the app is restored from a bookmarked state.}
 
 \item{header}{(\code{character} or \code{shiny.tag}) the header of the app}
 
 \item{footer}{(\code{character} or \code{shiny.tag}) the footer of the app}
-
-\item{id}{\code{character} Shiny module id, set it if you want to add this into
-another Shiny module}
 }
 \value{
 named list with server and ui function
@@ -100,11 +95,17 @@ app <- init(
       filters = "ADSL"
     )
   ),
-  initial_filter_states = list(ADSL = list(AGE = "default")),
+  filter_states = list(ADSL = list(AGE = "default")),
   header = tags$h1("Sample App"),
   footer = tags$p("Copyright 2017 - 2020")
 )
 \dontrun{
-shinyApp(app$ui, app$server)
+# todo: this needs to be done in other places as well
+shinyApp(app$ui(), app$server)
+# or: to also work with bookmarking
+bookmarkableShinyApp(app$ui, app$server)
 }
+
+# See the vignette for an example how to embed this app as a module
+# into a larger application
 }

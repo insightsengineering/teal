@@ -252,18 +252,18 @@ handle_active_datanames <- function(datasets, datanames) {
 #'
 #' @md
 #' @param label label of module
-#' @param idprefix `character or NULL` to prepend to label;
+#' @param prefix `character or NULL` to prepend to label;
 #'   `NULL` for no prefix
 #'
 #' @return valid HTML label with invalid characters removed
 #' @examples
-#' label_to_id("var", idprefix = "prefix")
+#' label_to_id("var", prefix = "prefix")
 #' label_to_id("var")
-#' label_to_id("__var___", idprefix = "prefix")
-#' label_to_id("__var___", idprefix = "_prefix__")
-label_to_id <- function(label, idprefix = NULL) {
+#' label_to_id("__var___", prefix = "prefix")
+#' label_to_id("__var___", prefix = "_prefix__")
+label_to_id <- function(label, prefix = NULL) {
   stopifnot(is_character_single(label))
-  stopifnot(is_character_single(idprefix) || is.null(idprefix))
+  stopifnot(is_character_single(prefix) || is.null(prefix))
 
   replace_remove_invalid <- function(x) {
     # remove one leading or trailing "_"
@@ -272,9 +272,9 @@ label_to_id <- function(label, idprefix = NULL) {
     gsub("^_|_$", "", gsub("[^[:alnum:]]", "_", x))
   }
   label <- replace_remove_invalid(label)
-  if (!is.null(idprefix)) {
-    idprefix <- replace_remove_invalid(idprefix)
-    paste(idprefix, label, sep = "_")
+  if (!is.null(prefix)) {
+    prefix <- replace_remove_invalid(prefix)
+    paste(prefix, label, sep = "_")
   } else {
     label
   }
@@ -314,4 +314,47 @@ check_variable_name_okay <- function(name) {
     ))
   }
   return(invisible(NULL))
+}
+
+#' Check that one set is a subset of another
+#'
+#' Raises an error message if not and says which elements are not in
+#' the allowed `choices`.
+#'
+#' @md
+#' @param subset `collection-like` should be a subset of `choices`
+#' @param choices `collection-like` superset
+#' @param pre_msg `character` message to print before
+#'
+#' @examples
+#' check_in_subset(c("a", "b"), c("a", "b", "c"))
+#' \dontrun{
+#' check_in_subset(c("a", "b"), c("b", "c"), pre_msg = "Error: ")
+#' # truncated because too long
+#' check_in_subset("a", LETTERS, pre_msg = "Error: ")
+#' }
+check_in_subset <- function(subset, choices, pre_msg = "") {
+  stopifnot(is_character_single(pre_msg))
+  if (any(!(subset %in% choices))) {
+    stop(paste0(
+      pre_msg,
+      "(", toString(subset[!(subset %in% choices)], width = 30), ")",
+      " not in valid choices ",
+      "(", toString(choices, width = 30), ")"
+    ))
+  }
+  return(invisible(NULL))
+}
+
+#' Function to inherit Shiny module arguments that must always be present
+#'
+#' @md
+#' @param input `Shiny input object`
+#' @param output `Shiny output object`
+#' @param session `Shiny session object`
+#' @param modules `teal_module` or `teal_modules` object, the latter
+#'   can be used for nested tabs, see `\link{ui_nested_tabs}`
+#' @param datasets `FilteredData` object to store filter state and filtered
+#'   datasets, shared across modules
+srv_shiny_module_arguments <- function(input, output, session, datasets, modules) {
 }

@@ -134,7 +134,7 @@ module <- function(label, server, ui, filters, server_args = NULL, ui_args = NUL
 #' Nesting it increases overall depth by 1.
 #'
 #' @md
-#' @param modules `teal.module` or `teal.modules` object
+#' @inheritParams srv_shiny_module_arguments
 #' @param depth optional, integer determining current depth level
 #'
 #' @return depth level for given module
