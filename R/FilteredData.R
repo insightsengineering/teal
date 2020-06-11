@@ -412,6 +412,7 @@ FilteredData <- R6::R6Class( # nolint
     #' @param dataname `character` name of the dataset
     #' @param varname `character` column within the dataset;
     #'   must be provided
+    #' @return default filter state for this variable
     get_default_filter_state = function(dataname, varname) {
       stopifnot(is_character_single(varname))
       private$check_data_varname_exists(dataname, varname)
@@ -419,8 +420,10 @@ FilteredData <- R6::R6Class( # nolint
       filter_info <- self$get_filter_info(dataname, varname)
       state <- switch(
         filter_info$type,
-        choices = list(choices = filter_info$choices),
-        range = list(range = filter_info$range),
+        # the list might a named list of choices so Shiny displays it nicely in the UI
+        # here, we unname it because we want the internal state
+        choices = list(choices = unname(filter_info$choices)),
+        range = list(range = unname(filter_info$range)),
         logical = list(status = "TRUE"),
         stop("unknown type")
       )

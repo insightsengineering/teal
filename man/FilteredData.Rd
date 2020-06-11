@@ -467,6 +467,9 @@ Instead, this filter is a sensible default, e.g. filter out NAs.
 for numerics, full range; for factors, all choices etc.
 }
 
+\subsection{Returns}{
+default filter state for this variable
+}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-restore_filter"></a>}}
