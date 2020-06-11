@@ -2,7 +2,6 @@
 # top-level modules, shared across all modules
 
 #' Add right filter panel into each of the top-level `teal_modules` UIs.
-#' # todo: does this work with depth > 2?
 #'
 #' The `\link{ui_nested_tabs}` function returns a nested tabbed UI corresponding
 #' to the nested modules.
@@ -10,6 +9,9 @@
 #'
 #' The right filter panel's filter choices affect the `datasets` object. Therefore,
 #' all modules using the same `datasets` share the same filters.
+#'
+#' This works with nested modules of depth greater than 2, though the filter
+#' panel is inserted at the right of the modules at depth 1 and not at the leaves.
 #'
 #' @inheritParams init
 #' @inheritParams srv_shiny_module_arguments
@@ -32,7 +34,7 @@
 #'     )
 #'   },
 #'   server = function(input, output, session) {
-#'     active_module <- callModule(srv_tabs_with_filters, "dummy", modules = mods, datasets = datasets)
+#'     active_module <- callModule(srv_tabs_with_filters, "dummy", datasets = datasets, modules = mods)
 #'     output$info <- renderText({
 #'       paste0("The currently active tab name is ", active_module()$label)
 #'     })
@@ -59,10 +61,10 @@
 #'   },
 #'   server = function(input, output, session) {
 #'     active_module1 <- callModule(
-#'       srv_tabs_with_filters, "app1", modules = mods, datasets = datasets1
+#'       srv_tabs_with_filters, "app1", datasets = datasets1, modules = mods
 #'     )
 #'     active_module2 <- callModule(
-#'       srv_tabs_with_filters, "app2", modules = mods, datasets = datasets2
+#'       srv_tabs_with_filters, "app2", datasets = datasets2, modules = mods
 #'     )
 #'     output$info <- renderText({
 #'       paste0(
@@ -107,14 +109,10 @@ ui_tabs_with_filters <- function(id, modules, datasets) {
 #' @md
 #' @inheritParams srv_shiny_module_arguments
 #' @return `reactive` currently selected active_module
-srv_tabs_with_filters <- function(input, output, session, modules, datasets) {
-  active_module <- callModule(srv_nested_tabs, "modules_ui", modules, datasets)
+srv_tabs_with_filters <- function(input, output, session, datasets, modules) {
+  active_module <- callModule(srv_nested_tabs, "modules_ui", datasets = datasets, modules = modules)
 
   active_datanames <- reactive({
-    #  todo: put into other module
-    # todo: make reactiveEvent
-
-
     active_datanames <- active_module()$filter
     if (identical(active_datanames, "all")) {
       active_datanames <- datasets$datanames()

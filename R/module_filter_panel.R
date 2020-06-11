@@ -103,11 +103,18 @@ ui_filter_panel <- function(id, datanames) {
 #'   should be shown on the filter panel, must be a subset of the
 #'   `datanames` argument provided to the UI function
 #'
-srv_filter_panel <- function(input, output, session, datasets, active_datanames) {
+srv_filter_panel <- function(input, output, session, datasets, active_datanames = function() "all") {
   stopifnot(
     is(datasets, "FilteredData"),
     is.function(active_datanames)
   )
+
+  # as the reactive is only evaluated later, we cannot reassign to the same as the constructed reactive
+  # depends on the old value
+  unhandled_active_datanames <- active_datanames
+  active_datanames <- reactive({
+    handle_active_datanames(datasets, unhandled_active_datanames())
+  })
 
   callModule(srv_filtered_data_overview, "teal_filters_info", datasets, datanames = active_datanames)
 

@@ -1,5 +1,5 @@
 # These functions return dummy values to work with the examples
-# todo: should these functions be exported
+# todo1: should these functions be exported
 
 #' Get dummy filter states to apply initially
 #'
@@ -22,10 +22,12 @@ get_dummy_filter_states <- function() {
 #' @md
 #' @return `cdisc_data`
 get_dummy_cdisc_data <- function() {
-  library(random.cdisc.data) # needed for cached data
-  ADSL <- random.cdisc.data::radsl(cached = TRUE)
-  ADAE <- random.cdisc.data::radae(cached = TRUE)
-  ADLB <- random.cdisc.data::radlb(cached = TRUE)
+  withr::with_package("random.cdisc.data", code = {
+    # need to attach package, otherwise cached data not available, todo1: not good, fix in rcd
+    ADSL <- random.cdisc.data::radsl(cached = TRUE)
+    ADAE <- random.cdisc.data::radae(cached = TRUE)
+    ADLB <- random.cdisc.data::radlb(cached = TRUE)
+  })
 
   ADSL$logical_test <- sample(c(TRUE, FALSE, NA), size = nrow(ADSL), replace = TRUE)
   ADSL$SEX[1:150] <- NA
@@ -47,9 +49,10 @@ ADLB <- radlb(cached = TRUE)
 #' @md
 #' @return `FilteredData` with `ADSL` set
 get_dummy_datasets <- function() {
-  # todo: require package
-  library(random.cdisc.data) # otherwise cached data not available, todo: why?
-  ADSL <- random.cdisc.data::radsl(cached = TRUE)
+  withr::with_package("random.cdisc.data", code = {
+    # need to attach package, otherwise cached data not available, todo1: not good, fix in rcd
+    ADSL <- random.cdisc.data::radsl(cached = TRUE)
+  })
   attr(ADSL, "keys") <- get_cdisc_keys("ADSL")
   datasets <- FilteredData$new()
 

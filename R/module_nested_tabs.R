@@ -30,7 +30,7 @@
 #'     )
 #'   },
 #'   server = function(input, output, session) {
-#'     active_module <- callModule(srv_nested_tabs, "dummy", modules = mods, datasets = datasets)
+#'     active_module <- callModule(srv_nested_tabs, "dummy", datasets = datasets, modules = mods)
 #'     output$info <- renderText({
 #'       paste0("The currently active tab name is ", active_module()$label)
 #'     })
@@ -98,13 +98,12 @@ ui_nested_tabs <- function(id, modules, datasets) {
   return(create_ui(modules, id_parent = NULL))
 }
 
-# todo: inherit doc
 #' Server function that returns currently active module
 #'
 #' @md
 #' @inheritParams srv_shiny_module_arguments
 #' @return `reactive` which returns the active module that corresponds to the selected tab
-srv_nested_tabs <- function(input, output, session, modules, datasets) {
+srv_nested_tabs <- function(input, output, session, datasets, modules) {
   # modules checked below through recursion
   stopifnot(
     is(datasets, "FilteredData")

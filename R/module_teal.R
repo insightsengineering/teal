@@ -23,9 +23,8 @@
 #' @md
 #' @param id module id
 #' @param splash_ui `shiny.tag` UI to display initially,
-#'   can be a splash screen or a Shiny module UI. For the latter, the corresponding
-#'   `callModule` must be called to read the values from the splash module UI,
-#'   probably to provide the value to `raw_data` in the server. #todo
+#'   can be a splash screen or a Shiny module UI. For the latter, see
+#'   `\link{init}` about how to call the corresponding server function.
 #' @param header `shiny.tag or character` header to display above the app
 #' @param footer `shiny.tag or character` footer to display below the app
 #'
@@ -111,15 +110,7 @@ ui_teal <- function(id, splash_ui = tags$h2("Starting the Teal App"), header = t
 #' @inheritParams init
 #'
 #' @return `reactive` which returns the currently active module
-#' # todo: argument order
-#'
 srv_teal <- function(input, output, session, modules, raw_data, filter_states) {
-  # todo: add again
-  # if (!modules_depth(modules) %in% c(1, 2)) {
-  #   # although there is no technical limitation on the depth in the current
-  #   # implementation, we don't allow deeper nesting for clarity of the apps
-  #   stop("teal currently only supports module nesting of depth one or two.")
-  # }
   stopifnot(is.reactive(raw_data))
 
   # Javascript code ----
@@ -161,7 +152,6 @@ srv_teal <- function(input, output, session, modules, raw_data, filter_states) {
   # ignoreNULL to not trigger at the beginning when data is NULL
   # just handle it once because data obtained through delayed loading should
   # usually not change afterwards
-  # todo: remove once = TRUE and adapt insert / remove UI, also need to delete old observers
   # if restored from bookmarked state, `filter_states` is ignored
   observeEvent(raw_data(), ignoreNULL = TRUE, once = TRUE, {
     .log("data loaded successfully")
@@ -219,7 +209,8 @@ srv_teal <- function(input, output, session, modules, raw_data, filter_states) {
     )
     # must make sure that this is only executed once as modules assume their observers are only
     # registered once (calling server functions twice would trigger observers twice each time)
-    active_module <- callModule(srv_tabs_with_filters, "main_ui", modules = modules, datasets = datasets)
+    # `once = TRUE` ensures this
+    active_module <- callModule(srv_tabs_with_filters, "main_ui", datasets = datasets, modules = modules)
 
     showNotification("Data loaded - App fully started up")
 

@@ -23,8 +23,8 @@ ui_filtered_data_overview <- function(id) {
 #' @md
 #' @inheritParams srv_shiny_module_arguments
 #' @param datanames `function / reactive returning a character vector` datanames
-#'   to show information for; if `NULL` or `"all"`, takes all datanames
-srv_filtered_data_overview <- function(input, output, session, datasets, datanames = function() NULL) {
+#'   to show information for; if `"all"`, takes all datanames, if `NULL`
+srv_filtered_data_overview <- function(input, output, session, datasets, datanames = function() "all") {
   stopifnot(
     is(datasets, "FilteredData"),
     is.function(datanames)
@@ -33,10 +33,7 @@ srv_filtered_data_overview <- function(input, output, session, datasets, datanam
   output$table <- renderTable({
     .log("update uifiltersinfo")
 
-    datanames <- handle_active_datanames(
-      datasets,
-      if_null(datanames(), datasets$datanames())
-    )
+    datanames <- handle_active_datanames(datasets, datanames())
 
     observations <- vapply(
       X = datanames,

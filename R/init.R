@@ -94,7 +94,7 @@
 #'   footer = tags$p("Copyright 2017 - 2020")
 #' )
 #' \dontrun{
-#' # todo: this needs to be done in other places as well
+#' # todo1: this needs to be done in other places as well
 #' shinyApp(app$ui(), app$server)
 #' # or: to also work with bookmarking
 #' bookmarkableShinyApp(app$ui, app$server)

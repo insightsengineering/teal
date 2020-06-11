@@ -103,3 +103,5 @@ This makes dynamic UI creation possible. If you want to remove a module added wi
 The difference between `datanames` and `active_datanames` is that the latter is a subset of the former.
 
 Note: Whenever you return input objects, it seems that you explicitly need to wrap them inside `reactive(..)`, e.g. `reactive(input$name)`.
+
+Modules should respect the argument order: `function(input, output, session, datasets, ...)`, where `...` can also include further named arguments.

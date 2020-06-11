@@ -31,8 +31,7 @@ include_js_files <- function(package = "teal", pattern = "*", except = NULL) {
   js_files <- list.files(system.file("js", package = package, mustWork = TRUE), pattern = pattern, full.names = TRUE)
   js_files <- js_files[!(basename(js_files) %in% except)]
 
-  # todo: optionally put into `shiny::singleton`
-  return(lapply(js_files, includeScript))
+  return(singleton(lapply(js_files, includeScript)))
 }
 
 #' Run `JS` file from `/inst/js/` package directory
