@@ -136,7 +136,7 @@ set_labels_df <- function(df, labels) {
   return(df)
 }
 
-# sodo3: put into utils.nest
+# todo1: put into utils.nest
 #' Create a call using a namespaced function
 #'
 #' The arguments in ... need to be quoted because they will be evaluated otherwise
@@ -181,7 +181,7 @@ call_with_colon <- function(name, ..., unlist_args = list()) {
   ))
 }
 
-# sodo3: move into utils.nest
+# todo1: move into utils.nest
 #' See a function's code in a temporary file
 #' This is more handy when you want to search for variables in the code a function
 #' rather than doing so in the console.
@@ -268,7 +268,7 @@ label_to_id <- function(label, prefix = NULL) {
   replace_remove_invalid <- function(x) {
     # remove one leading or trailing "_"
     # then replace all non alpha-numeric characters by "_"
-    # sodo3: explain why?
+    # todo1: explain why?
     gsub("^_|_$", "", gsub("[^[:alnum:]]", "_", x))
   }
   label <- replace_remove_invalid(label)

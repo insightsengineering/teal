@@ -212,7 +212,7 @@ reset_filters_module <- function(label = "Reset filters", active_datanames = "al
 #' @md
 #' @param expr `function or reactive`
 #' @return `reactive`
-# sodo3: do you like this code? I don't.
+# sodo1: do you like this code? I don't.
 trigger_next_cycle <- function(expr) {
   stopifnot(is.function(expr))
   trigger_now <- FALSE

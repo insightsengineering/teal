@@ -98,12 +98,12 @@ module <- function(label, server, ui, filters, server_args = NULL, ui_args = NUL
   stopifnot(is.function(server))
   stopifnot(is.function(ui))
   stopifnot(is_character_vector(filters) || is.null(filters))
-  stopifnot(is.null(server_args) || is.list(server_args)) # sodo3: fully named list?
+  stopifnot(is.null(server_args) || is.list(server_args)) # todo1: fully named list?
   stopifnot(is.null(ui_args) || is.list(ui_args))
 
   if (any(vapply(server_args, function(x) identical(x, "teal_datasets"), logical(1)))) {
     warning("teal_datasets is now deprecated, the datasets object gets automatically passed to the server function")
-    # sodo3: why would you pass the string teal_datasets, it should rather check the name of the argument?
+    # todo1: why would you pass the string teal_datasets, it should rather check the name of the argument?
     server_args <- Filter(function(x) !identical(x, "teal_datasets"), server_args)
   }
 

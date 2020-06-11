@@ -1,4 +1,4 @@
-# sodo3: where to add these debugging apps
+# todo1: where to add these debugging apps
 
 #source("https://raw.github.roche.com/NEST/nest_on_bee/master/bee_nest_utils.R")
 #bee_use_nest(release = "UAT_2020_04_09")
@@ -27,7 +27,7 @@ ADLB <- radlb(cached = TRUE)
 
 # debugging example ----
 
-# sodo3: error: check for code argument below is not performed
+# todo1: error: check for code argument below is not performed
 # main debugging app ----
 devtools::load_all("../teal");
 app <- init(
@@ -130,7 +130,7 @@ ADSL <- radsl(cached = TRUE)
 ADAE <- radae(cached = TRUE)
 ADLB <- radlb(cached = TRUE)
 ")
-radsl_fast <- function(...) radsl(cached = TRUE) # sodo3: error: function not found, i.e. evaluated in wrong environment?
+radsl_fast <- function(...) radsl(cached = TRUE) # todo1: error: function not found, i.e. evaluated in wrong environment?
 devtools::load_all("../teal"); app <- init(
   data = rcd_cdisc_data(
     rcd_dataset("ADSL", radsl, cached = FALSE),

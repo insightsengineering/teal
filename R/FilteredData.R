@@ -202,12 +202,12 @@ FilteredData <- R6::R6Class( # nolint
     #' @return `self`
     set_preproc_code = function(preproc_code) {
       stopifnot(is_character_single(preproc_code))
-      # sodo3: check here that the preproc_code faithfully reproduces the datasets
+      # todo1: check here that the preproc_code faithfully reproduces the datasets
       private$preproc_code <- preproc_code
       return(invisible(self))
     },
 
-    # sodo3: keep `get_data_attr` and `set_data_attr`
+    # todo1: keep `get_data_attr` and `set_data_attr`
     #' @details
     #' Get data attribute for the dataset
     #'
@@ -220,7 +220,7 @@ FilteredData <- R6::R6Class( # nolint
     get_data_attr = function(dataname, attr) {
       private$check_data_varname_exists(dataname)
       stopifnot(is_character_single(attr))
-      return(attr(private$unfiltered_datasets[[dataname]], attr))
+      return(attr(self$get_data(dataname, filtered = FALSE), attr))
     },
 
     #' @details
@@ -235,7 +235,7 @@ FilteredData <- R6::R6Class( # nolint
       private$check_data_varname_exists(dataname)
       stopifnot(is_character_single(attr))
 
-      attr(private$unfiltered_datasets[[dataname]], attr) <- value
+      attr(self$get_data(dataname, filtered = FALSE), attr) <- value
       return(invisible(self))
     },
 
@@ -293,7 +293,7 @@ FilteredData <- R6::R6Class( # nolint
           infos[vapply(infos, function(var_info) var_info$type != "unknown", logical(1))]
         } else {
           # only filtered variables, a subset of filterable variables
-          infos[names(private$filter_states[[dataname]])]
+          infos[names(self$get_filter_state(dataname))]
         }
       } else {
         infos[[varname]]
@@ -351,8 +351,9 @@ FilteredData <- R6::R6Class( # nolint
     #'
     #' @return `logical` if the state was changed
     set_filter_state = function(dataname, varname, state) {
-      # sodo3: make varname required and only allow setting one variable at a time as the same can currently
+      # todo1: make varname required and only allow setting one variable at a time as the same can currently
       # be achieved with `lapply`
+      # todo1: add argument `reset_omitted` to also reset variables not provided in state when it is a list
       private$check_data_varname_exists(dataname, varname)
 
       # checking and adapting arguments
@@ -394,7 +395,6 @@ FilteredData <- R6::R6Class( # nolint
       if (isTRUE(all.equal(private$filter_states[[dataname]], new_state))) {
         return(FALSE)
       }
-
 
       private$previous_filter_states[[dataname]] <- private$filter_states[[dataname]]
       private$filter_states[[dataname]] <- new_state
@@ -464,7 +464,7 @@ FilteredData <- R6::R6Class( # nolint
       stopifnot(is_character_single(dataname))
       stopifnot(is_character_single(varname))
 
-      # sodo3: do we want to implement some additional logic that a categorical variable cannot be filtered
+      # todo1: do we want to implement some additional logic that a categorical variable cannot be filtered
       # if it has more than e.g. 1000 levels as the UI will otherwise get stuck
       return(self$get_filter_type(dataname, varname) != "unknown")
     },
@@ -808,6 +808,9 @@ FilteredData <- R6::R6Class( # nolint
     # Getting the names of a reactivevalues also needs a reactive context.
     validate = function() {
       .log("## validating FilteredData object consistency")
+
+      # Note: Here, we directly refer to the private attributes because the goal of this
+      # function is to check the underlying attributes and the get / set functions might be corrupted
 
       has_same_names <- function(x, y) setequal(names(x), names(y))
       stopifnot(

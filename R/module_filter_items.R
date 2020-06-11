@@ -61,7 +61,7 @@ ui_filter_items <- function(id, dataname) {
   ns <- NS(id)
   div(
     id = ns("whole_ui"), # to hide it entirely
-    onchange = "hideIffEmpty(this)", #sodo3: not working right now
+    onchange = "hideIffEmpty(this)", #todo1: not working right now
     fluidRow(
       column(8, tags$span(dataname, class = "filter_panel_dataname")),
       column(4, actionLink(
@@ -74,7 +74,7 @@ ui_filter_items <- function(id, dataname) {
       # it is currently also used by the above module to entirely hide this panel
       id = ns("filters"),
       class = "listWithHandle list-group", # to make every element in here draggable
-      # sodo3: onload does not work, only on change
+      # todo1: onload does not work, only on change
       onchange = "convertToDraggable(this)"
     )
   )

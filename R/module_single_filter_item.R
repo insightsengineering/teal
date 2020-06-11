@@ -65,7 +65,7 @@ get_keep_na_label <- function(na_count) {
 #' # note that the remove button does not do anything because the UI is not
 #' # dynamically updating with the filter state for this single module
 #' # This logic is implemented in `module_filter_items`.
-#' # sodo3: there is a bug with ITTFL where there is a single choice and it
+#' # todo1: there is a bug with ITTFL where there is a single choice and it
 #' # is converted to a character vector instead of staying a named list
 #' filter_var <- "AGE"
 #' shinyApp(ui = function() {
