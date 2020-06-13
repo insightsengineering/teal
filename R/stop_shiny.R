@@ -14,7 +14,7 @@
 #' tags$footer("Please contact", tags$a(href = "mailto:john@doe.com", "John Doe"))))
 #' }
 stop_shiny <- function(title, body) {
-  if (!is(body, "shiny.tag")) {
+  if (!is_html_like(body)) {
     body <- tags$p(body)
   }
   shinyApp(

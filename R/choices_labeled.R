@@ -124,7 +124,7 @@ variable_choices <- function(data, subset = NULL) {
   stopifnot(all(subset %in% c("", names(data))))
 
   if (any(duplicated(subset))) {
-    warning("removed duplicated entries in subset:", paste(subset[duplicated(subset)], collapse = ", "))
+    warning("removed duplicated entries in subset:", paste(unique(subset[duplicated(subset)]), collapse = ", "))
     subset <- unique(subset)
   }
 

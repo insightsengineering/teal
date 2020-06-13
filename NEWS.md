@@ -19,6 +19,7 @@
 
 * `FilteredData` is now fully reactive. Now filtered data is lazy evaluated as per need. This futher opens the door to bookmarking `teal` apps (bookmarking currently works for the right filtering panel, but we will make this feature more sophisticated in a future release, each module must be reviewed and adapted if it contains `reactiveValues`).
 * Renamed `get_dataset` method to `get_data()`.
+* Renamed `get_filter_call` method to `get_filter_expr` and returns an expression rather than a list.
 * Removed argument `isolate` form `get_data()` method and similar methods. You must `isolate` it yourself as needed. If you want to temporarily deactivate Shiny errors due to missing errors, you can set `options(shiny.suppressMissingContextError = TRUE)`.
 * Missing data `NA` is now explicitly addressed in the filter panel: `NA`s are excluded by default and a checkbox to include them was added.
 * Statistics of the data are visually depicted in terms of histograms or bar charts overlayed onto the Shiny input elements.

@@ -68,13 +68,13 @@ optionalSelectInput <- function(inputId, # nolint
                                 label_help = NULL,
                                 fixed = FALSE) {
   stopifnot(is_character_single(inputId))
-  stopifnot(is_character_single(label) || inherits(label, "shiny.tag") || inherits(label, "shiny.tag.list"))
+  stopifnot(is_character_single(label) || is_html_like(label))
   stopifnot(is.null(choices) || length(choices) >= 1)
   stopifnot(is.null(selected) || length(selected) == 0 || all(selected %in% choices))
   stopifnot(is_logical_single(multiple))
   stopifnot(is.null(sep) || is_character_single(sep))
   stopifnot(is.list(options))
-  stopifnot(is.null(label_help) || is_character_single(label_help) || is(label_help, "shiny.tag"))
+  stopifnot(is.null(label_help) || is_character_single(label_help) || is_html_like(label_help))
   stopifnot(is_logical_single(fixed))
 
   default_options <- list(

@@ -9,7 +9,7 @@
   toset <- !(names(teal_default_options) %in% names(op))
   if (any(toset)) options(teal_default_options[toset])
 
-  invisible()
+  return(invisible())
 }
 
 .onAttach <- function(libname, pkgname) { # nolint

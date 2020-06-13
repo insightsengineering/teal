@@ -1,4 +1,7 @@
-# This is the main function from teal to be used by the end-users.
+# This is the main function from teal to be used by the end-users. Although it delegates
+# directly to `module_teal_with_splash.R`, we keep it in a separate file because its doc is quite large
+# and it is very end-user oriented. It may also perform more argument checking with more informative
+# error messages.
 
 
 #' Create the Server and UI Function For the Shiny App
@@ -46,6 +49,10 @@
 #'   Ignored if the app is restored from a bookmarked state.
 #' @param header (`character` or `shiny.tag`) the header of the app
 #' @param footer (`character` or `shiny.tag`) the footer of the app
+#' @param id (`character`) module id to embed it, if provided,
+#' the server function must be called with `callModule`;
+#' See the vignette for an example. However, `\link{ui_teal_with_splash}`
+#' is then preferred to this function.
 #' @return named list with server and ui function
 #'
 #' @export
@@ -94,8 +101,7 @@
 #'   footer = tags$p("Copyright 2017 - 2020")
 #' )
 #' \dontrun{
-#' # todo1: this needs to be done in other places as well
-#' shinyApp(app$ui(), app$server)
+#' shinyApp(app$ui, app$server)
 #' # or: to also work with bookmarking
 #' bookmarkableShinyApp(app$ui, app$server)
 #' }
@@ -106,53 +112,28 @@ init <- function(data,
                  modules,
                  filter_states = list(),
                  header = tags$p("Add Title Here"),
-                 footer = tags$p("Add Footer Here")) {
+                 footer = tags$p("Add Footer Here"),
+                 id = character(0)) {
   stopifnot(
-    is(data, "cdisc_data") || is(data, "DataConnector"),
     is(modules, "teal_modules"),
+    is_fully_named_list(filter_states),
     all(names(filter_states) %in% names(data))
   )
 
-  is_not_delayed_data <- is(data, "cdisc_data") # `cdisc_data` or `DataConnector`
-
-  # rather than using callModule and creating a submodule of this module, we directly modify
-  # the ui and server, this can be achieved by passing it the same id as this module, i.e.
-  # `ns(character(0))` and calling the server function directly rather than through `callModule`
-  ui <- function(id = character(0)) {
-    ns <- NS(id)
-
-    # Startup splash screen for delayed loading
-    # We use delayed loading in all cases, even when the data does not need to be fetched.
-    # This has the benefit that when filtering the data takes a lot of time initially, the
-    # Shiny app does not time out.
-    splash_ui <- if (is_not_delayed_data) {
-      h1("The teal app is starting up.")
-    } else {
-      message("App was initialized with delayed data loading.")
-      data$get_ui(ns("startapp_module"))
+  # Note regarding case `id = character(0)`:
+  # rather than using `callModule` and creating a submodule of this module, we directly modify
+  # the `ui` and `server` with `id = character(0)` and calling the server function directly
+  # rather than through `callModule`
+  return(list(
+    ui = ui_teal_with_splash(id = id, data = data, header = header, footer = footer),
+    server = function(input, output, session) {
+      srv_teal_with_splash(
+        input, output, session,
+        data = data, modules = modules, filter_states = filter_states
+      )
     }
-
-    ui_teal(id = ns("teal"), splash_ui = splash_ui, header = header, footer = footer)
-  }
-  srv <- function(input, output, session) {
-    # raw_data contains cdisc_data(), i.e. list of unfiltered data frames
-    # reactive to get data through delayed loading
-    # we must leave it inside the server because of callModule which needs to pick up the right session
-    if (is_not_delayed_data) {
-      raw_data <- reactiveVal(data) # will trigger by setting it
-    } else {
-      .log("fetching the data through delayed loading - showing start screen")
-      raw_data <- callModule(data$get_server(), "startapp_module")
-      # for faster testing without fetching the data through delayed loading screen, but still testing the logic,
-      # replace above line by this one
-      # raw_data <- reactive(cdisc_data_global) # nolintr
-      stop_if_not(list(is.reactive(raw_data), "The delayed loading module has to return a reactive object."))
-    }
-    return(callModule(srv_teal, "teal", modules = modules, raw_data = raw_data, filter_states = filter_states))
-  }
-  return(list(ui = ui, server = srv))
+  ))
 }
-
 
 #' Make a UI function bookmarkable
 #'
@@ -196,7 +177,7 @@ bookmarkableShinyApp <- function(ui, server, ...) {
       # evaluating ui with default arguments
       ui()
     } else {
-      stopifnot(inherits(ui, "shiny.tag"))
+      stopifnot(is_html_like(ui))
       ui
     }
   }

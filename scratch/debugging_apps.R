@@ -84,6 +84,28 @@ ADLB <- radlb(cached = TRUE)
   footer = tags$p(class = "text-muted", "Source: agile-R website")
 ); bookmarkableShinyApp(app$ui, app$server, enableBookmarking = "url")
 
+# test delayed data
+library(random.cdisc.data)
+
+# todo1: partly taken from agile-R, should be documented as well
+# # not working yet, need to merge in other people's work on teal first regarding delayed loading rcd_dataset
+app <- init(
+  data = rcd_cdisc_data(
+    rcd_dataset("ADSL", radsl, cached = FALSE),
+    code = "ADSL$SEX <- as.factor(ADSL$SEX)"
+  ),
+  modules = root_modules(
+    teal:::filter_calls_module("ADAE", active_datanames = c("ADAE")),
+    teal:::filter_calls_module("ADSL", active_datanames = c("ADSL")),
+    teal:::filter_calls_module("ADLB", active_datanames = c("ADLB")),
+    teal:::bookmark_module(),
+    teal:::debug_browser_module()
+  ),
+  filter_states = list(ADSL = list(SEX = list(choices = "M", keep_na = TRUE), AGE = "default")),
+  header = "Simple teal app",
+  footer = tags$p(class = "text-muted", "Source: agile-R website")
+); bookmarkableShinyApp(app$ui, app$server, enableBookmarking = "url")
+
 # many modules example ----
 
 # test nested teal modules

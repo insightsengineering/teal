@@ -392,3 +392,16 @@ check_setequal <- function(x, y, pre_msg = "") {
   }
   return(invisible(NULL))
 }
+
+#' Whether the element is a Shiny HTML element
+#'
+#' The classes returned by `shiny::tag`, `shiny::tagList`, `shiny::HTML`
+#' are one of `"shiny.tag", "shiny.tag.list", "html"`. This checks if the element
+#' has any of these classes.
+#'
+#' @md
+#' @param x any object
+#' @return `logical` whether the element is Shiny HTML like
+is_html_like <- function(x) {
+  inherits(x, c("shiny.tag", "shiny.tag.list", "html")) # logical or
+}

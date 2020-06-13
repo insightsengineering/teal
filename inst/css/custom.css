@@ -20,7 +20,7 @@ a.remove {
   padding-left: 4px;
   padding-right: 4px;
   border: 1px solid #ffffff00;
-  padding: 2px 4px; /* todo: duplicate properties */
+  padding: 2px 4px; /* todo1: duplicate properties? which has priority */
   margin-top: 0;
 }
 

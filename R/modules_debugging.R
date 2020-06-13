@@ -49,7 +49,7 @@ filter_calls_module <- function(label = "Dummy module", active_datanames = "all"
         active_datanames <- handle_active_datanames(datasets, active_datanames)
         paste(lapply(
           list_adsl_first(active_datanames),
-          function(dataname) paste(datasets$get_filter_call(dataname), collapse = "\n")
+          function(dataname) datasets$get_filter_expr(dataname)
         ), collapse = "\n\n")
       })
     },

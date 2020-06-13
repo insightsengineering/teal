@@ -29,7 +29,7 @@ include_js_files <- function(package = "teal", pattern = "*", except = NULL) {
   stopifnot(is.null(except) || is_character_vector(except))
 
   js_files <- list.files(system.file("js", package = package, mustWork = TRUE), pattern = pattern, full.names = TRUE)
-  js_files <- js_files[!(basename(js_files) %in% except)]
+  js_files <- js_files[!(basename(js_files) %in% except)] # no-op if except is NULL
 
   return(singleton(lapply(js_files, includeScript)))
 }

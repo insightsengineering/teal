@@ -17,8 +17,8 @@
 #'   - `teal_modules`: `tabsetPanel` with each tab corresponding to recursively
 #'     calling this function on it
 #' @examples
-#' mods <- get_dummy_modules()
-#' datasets <- get_dummy_datasets()
+#' mods <- teal:::get_dummy_modules()
+#' datasets <- teal:::get_dummy_datasets()
 #' shinyApp(
 #'   ui = function() {
 #'     tagList(
@@ -35,7 +35,7 @@
 #'       paste0("The currently active tab name is ", active_module()$label)
 #'     })
 #'   }
-#' ) %>% invisible() # to not run
+#' ) %>% invisible() # invisible so it does not run
 ui_nested_tabs <- function(id, modules, datasets) {
   stopifnot(
     # `modules` class tested below

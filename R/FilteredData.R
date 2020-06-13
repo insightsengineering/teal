@@ -6,7 +6,7 @@
 #' @details
 #' The main purpose of this class is to provide a collection of reactive datasets,
 #' each of which can be filtered through the right filter panel of teal apps.
-#' For each dataset, `get_filter_call` returns the call to filter the dataset according
+#' For each dataset, `get_filter_expr` returns the call to filter the dataset according
 #' to the UI user selection.
 #' Other classes then take care of actually merging together all the datasets.
 #'
@@ -41,19 +41,16 @@
 #' @examples
 #' library(random.cdisc.data)
 #'
-#' # for `on.exit` to work with examples which are executed line-by-line
-#' # note: you can still execute every line in the function line-by-line
-#' # without calling the function as a whole, beware that the exit handler
-#' # is not called in this case
-#' execute_example <- function() {
-#'   ADSL <- radsl(cached = TRUE)
-#'   attr(ADSL, "keys") <- get_cdisc_keys("ADSL")
-#'   datasets <- teal:::FilteredData$new()
+#' ADSL <- radsl(cached = TRUE)
+#' attr(ADSL, "keys") <- get_cdisc_keys("ADSL")
+#' datasets <- teal:::FilteredData$new()
 #'
-#'   # to evaluate without isolate(), i.e. provide a default isolate context
-#'   options(shiny.suppressMissingContextError = TRUE)
-#'   on.exit(options(shiny.suppressMissingContextError = FALSE), add = TRUE)
+#' # to avoid using isolate(), you can provide a default isolate context by calling
+#' # options(shiny.suppressMissingContextError = TRUE) #nolintr
+#' # don't forget to deactivate this option at the end
+#' # options(shiny.suppressMissingContextError = FALSE) #nolintr
 #'
+#' isolate({
 #'   datasets
 #'
 #'   datasets$set_data("ADSL", ADSL)
@@ -91,8 +88,9 @@
 #'   datasets$get_filter_type("ADSL", "SEX")
 #'
 #'   datasets$get_filter_state("ADSL")
-#' }
-#' execute_example()
+#'
+#'   datasets$print_filter_info("ADSL")
+#' })
 FilteredData <- R6::R6Class( # nolint
   "FilteredData",
   ## FilteredData ====
@@ -177,6 +175,7 @@ FilteredData <- R6::R6Class( # nolint
       )
 
       # todo: fix other issues found by automation
+      # todo: please remove scratch folder once done
 
       private$unfiltered_datasets[[dataname]] <- data
 
@@ -306,20 +305,20 @@ FilteredData <- R6::R6Class( # nolint
     #' @param dataname `character` name of the dataset
     #' @param varname `character` column within the dataset,
     #'   if `NULL`, return all (filtered) variables
-    #' @param all_filterable_vars `logical` (only applies if `varname` is NULL)
-    #'   whether to include non-filtered variables; only filterable variables
-    #'   are included
-    get_filter_info = function(dataname, varname = NULL, all_filterable_vars = FALSE) {
+    #' @param all_vars `logical` (only applies if `varname` is NULL)
+    #'   whether to include non-filtered variables; attention: only
+    #'   filterable variables are included
+    get_filter_info = function(dataname, varname = NULL, all_vars = FALSE) {
       private$check_data_varname_exists(dataname, varname)
       stopifnot(
-        is_logical_single(all_filterable_vars),
-        is.null(varname) || !all_filterable_vars
+        is_logical_single(all_vars),
+        is.null(varname) || !all_vars
       )
 
       infos <- private$filter_infos[[dataname]]()
       return(if (is.null(varname)) {
         # filter out variables that are not filtered
-        if (all_filterable_vars) {
+        if (all_vars) {
           # all filterable variables
           infos[vapply(infos, function(var_info) var_info$type != "unknown", logical(1))]
         } else {
@@ -505,17 +504,21 @@ FilteredData <- R6::R6Class( # nolint
     #'
     #' This can be used for the `Show R Code` generation.
     #'
-    #' When the dataname is ADSL, it is simply the filtered ADSL.
+    #' When the dataname is `ADSL`, it is simply the filtered `ADSL`.
     #' Otherwise, it is the filtered dataset that only contains subjects which
-    #' are also in the filtered ADSL.
+    #' are also in the filtered `ADSL`.
     #'
     #' Note: The `dplyr::inner_join()` function in returned call will fail if the
     #' corresponding dataset is NULL.
     #'
+    #' For the return type, note that `rlang::is_expression` returns `TRUE` on the
+    #' return type, both for base R expressions and calls (single expression,
+    #' capturing a function call).
+    #'
     #' @md
     #' @param dataname `character` name of the dataset
-    #' @return call to filter dataset (taking out patients not in ADSL)
-    get_filter_call = function(dataname) {
+    #' @return `expression` to filter dataset (taking out patients not in `ADSL`)
+    get_filter_expr = function(dataname) {
       private$check_data_varname_exists(dataname)
 
       if (dataname == "ADSL") {
@@ -523,7 +526,7 @@ FilteredData <- R6::R6Class( # nolint
           as.name("<-"), as.name("ADSL_FILTERED"),
           private$get_pure_filter_call("ADSL")
         ))
-        return(list(filter_call))
+        return(filter_call) # call which is also an expression
       } else {
 
         filtered_alone <- paste0(dataname, "_FILTERED_ALONE")
@@ -550,7 +553,11 @@ FilteredData <- R6::R6Class( # nolint
           )
         )
 
-        return(list(filter_call, merge_call))
+        # combine expressions into one
+        return(bquote({
+          .(filter_call)
+          .(merge_call)
+        }))
       }
     },
 
@@ -635,10 +642,9 @@ FilteredData <- R6::R6Class( # nolint
           varnames <- intersect(varnames, variables)
         }
 
-        filter_infos <- self$get_filter_info(dataname, all_filterable_vars = TRUE)
         var_maxlength <- max(c(0, nchar(varnames)))
         for (varname in varnames) {
-          var_info <- filter_infos[[varname]]
+          var_info <- self$get_filter_info(dataname, varname = varname)
           var_state <- self$get_filter_state(dataname, varname)
 
           # right alignment: %10s, left alignment: %-10s
@@ -847,14 +853,14 @@ FilteredData <- R6::R6Class( # nolint
 
         # check names are the same
         has_same_names(private$unfiltered_datasets, private$filter_states),
-        has_same_names(private$unfiltered_datasets, private$filter_states),
         has_same_names(private$unfiltered_datasets, private$filtered_datasets),
         has_same_names(private$unfiltered_datasets, private$filter_infos),
         has_same_names(private$unfiltered_datasets, private$previous_filter_states),
+        has_same_names(private$unfiltered_datasets, private$data_attrs),
 
         # check attributes are there: md5sum, keys
-        all_true(self$datanames(), function(dataname) !is.null(attr(private$unfiltered_datasets[[dataname]], "md5sum"))),
-        all_true(self$datanames(), function(dataname) !is.null(attr(private$unfiltered_datasets[[dataname]], "keys")))
+        all_true(self$datanames(), function(dataname) !is.null(private$data_attrs[[dataname]][["md5sum"]])),
+        all_true(self$datanames(), function(dataname) !is.null(private$data_attrs[[dataname]][["keys"]]))
       )
 
       # check `filter_states` are all valid
@@ -974,12 +980,12 @@ FilteredData <- R6::R6Class( # nolint
 
     # @details
     # Creates a call that filters the dataset to obtain the filtered dataset.
-    # `get_filter_call` calls this function to filter out patients that are not in
+    # `get_filter_expr` calls this function to filter out patients that are not in
     # the filtered ADSL.
     #
     # @md
     # @param dataname `character` name of the dataset
-    # @return call to obtain the filtered dataset from the unfiltered one
+    # @return `call` to obtain the filtered dataset from the unfiltered one
     get_pure_filter_call = function(dataname) {
       private$check_data_varname_exists(dataname)
 
@@ -1078,12 +1084,9 @@ FilteredData <- R6::R6Class( # nolint
         }
         env[[dataname]] <- self$get_data(dataname, filtered = FALSE)
 
-        lapply(
-          # 1 call for ADSL to apply filter, 2 calls for non-ADSL to additionally filter out rows not in ADSL
-          self$get_filter_call(dataname),
-          eval,
-          envir = env
-        )
+        # expression consists of 1 call for ADSL to apply filter, 2 calls for non-ADSL to
+        # additionally filter out rows not in ADSL
+        eval(self$get_filter_expr(dataname), envir = env)
 
         return(env[[paste0(dataname, "_FILTERED")]])
       })
@@ -1193,7 +1196,10 @@ FilteredData <- R6::R6Class( # nolint
 #' @param add_na `logical` whether to display information about NA,
 #'   either `keep_na` (for `filter_state`) or `na_count` (for `filter_info`)
 filter_state_to_str <- function(var_type, state, add_na = FALSE) {
-  stopifnot(is_logical_single(add_na))
+  stopifnot(
+    is_character_single(var_type),
+    is_logical_single(add_na)
+  )
 
   txt <- switch(
     var_type,

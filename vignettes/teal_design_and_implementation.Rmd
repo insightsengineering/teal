@@ -192,8 +192,7 @@ app <- teal::init(
     )
   )
 )
-bookmarkableShinyApp(app$ui, app$server)
-# or, without bookmarking: shinyApp(app$ui(), app$server)
+shinyApp(app$ui, app$server)
 ```
 
 Please run the above code by copy pasting it to the command line. The example
@@ -345,12 +344,9 @@ options(shiny.suppressMissingContextError = TRUE)
 attr(ADSL, "keys") <- teal::get_cdisc_keys("ADSL")
 attr(ADTTE, "keys") <- teal::get_cdisc_keys("ADTTE")
 
-isolate({
-  # todo: remove isolate
-  datasets$set_data("ADSL", ADSL)
-  datasets$set_data("ADTTE", ADTTE)
-})
-shiny:::flushReact()
+datasets$set_data("ADSL", ADSL)
+datasets$set_data("ADTTE", ADTTE)
+shiny:::flushReact() # force evaluation outside of Shiny apps
 ```
 
 Note that this code also runs outside of a teal instance. The public methods of
@@ -592,7 +588,7 @@ ADSL <- radsl(cached = TRUE)
 options(teal_logging = FALSE)
 
 # Code to have two teal apps side-by-side or embed it in a larger application
-create_teal_app <- function(title) {
+create_teal_app <- function(title, id) {
   init(
     data = cdisc_data(
       cdisc_dataset("ADSL", ADSL),
@@ -621,20 +617,36 @@ create_teal_app <- function(title) {
     ),
     filter_states = list(ADSL = list(AGE = "default")),
     header = tags$h1(title),
-    footer = tags$p("Copyright 2017 - 2020")
+    footer = tags$p("Copyright 2017 - 2020"),
+    id = id
   )
 }
-app1 <- create_teal_app("Sample App1")
-app2 <- create_teal_app("Sample App2")
-bookmarkableShinyApp(ui = fluidPage(
+app1 <- create_teal_app("Sample App1", id = "app1")
+app2 <- create_teal_app("Sample App2", id = "app2")
+shinyApp(ui = fluidPage(
   fluidRow(
-    column(6, app1$ui("app1")),
-    column(6, app2$ui("app2"))
+    column(6, app1$ui),
+    column(6, app2$ui)
   )
 ), server = function(input, output, session) {
   callModule(app1$server, "app1")
   callModule(app2$server, "app2")
 })
+
+# However, we recommend to use `ui_teal_with_splash` and `srv_teal_with_splash` if you would
+# want to use the teal app in the same way as Shiny modules with `callModule`, `ARGS` needs to
+# be filled in:
+# app1 <- create_teal_app("Sample App1")
+# app2 <- create_teal_app("Sample App2")
+# shinyApp(ui = fluidPage(
+#   fluidRow(
+#     column(6, ui_teal_with_splash("app1", ARGS)),
+#     column(6, ui_teal_with_splash("app2", ARGS))
+#   )
+# ), server = function(input, output, session) {
+#   callModule(srv_teal_with_splash, "app1", ARGS)
+#   callModule(srv_teal_with_splash, "app2", ARGS)
+# })
 ```
 
 

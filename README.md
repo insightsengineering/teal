@@ -105,3 +105,5 @@ The difference between `datanames` and `active_datanames` is that the latter is 
 Note: Whenever you return input objects, it seems that you explicitly need to wrap them inside `reactive(..)`, e.g. `reactive(input$name)`.
 
 Modules should respect the argument order: `function(input, output, session, datasets, ...)`, where `...` can also include further named arguments.
+
+The idiom `shinyApp(ui, server) %>% invisible()` is used with internal Shiny modules that are not exported. Printing a `shinyApp` causes it to call `runApp` so this avoids running the app, but still checking that the ui function and server are valid. Since `teal::init` returns an `app` object and is used by end users, we don't use this trick there.

@@ -1,5 +1,5 @@
-# These functions return dummy values to work with the examples
-# todo1: should these functions be exported
+# These functions return dummy values to provide good values for the examples of other non-exported functions.
+# They should not be exported.
 
 #' Get dummy filter states to apply initially
 #'

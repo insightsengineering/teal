@@ -31,8 +31,8 @@
 #' @return `HTML` for Shiny module UI
 #'
 #' @examples
-#' mods <- get_dummy_modules()
-#' raw_data <- reactive(get_dummy_cdisc_data())
+#' mods <- teal:::get_dummy_modules()
+#' raw_data <- reactive(teal:::get_dummy_cdisc_data())
 #' shinyApp(
 #'   ui = function() {
 #'     ui_teal("dummy")
@@ -40,7 +40,7 @@
 #'   server = function(input, output, session) {
 #'     active_module <- callModule(
 #'       srv_teal, "dummy", modules = mods, raw_data = raw_data,
-#'       filter_states = get_dummy_filter_states()
+#'       filter_states = teal:::get_dummy_filter_states()
 #'     )
 #'   }
 #' )
@@ -52,9 +52,9 @@ ui_teal <- function(id, splash_ui = tags$h2("Starting the Teal App"), header = t
     footer <- tags$p(footer)
   }
   stopifnot(
-    inherits(splash_ui, "shiny.tag"),
-    inherits(header, "shiny.tag"),
-    inherits(footer, "shiny.tag")
+    is_html_like(splash_ui),
+    is_html_like(header),
+    is_html_like(footer)
   )
 
   ns <- NS(id)
@@ -110,7 +110,7 @@ ui_teal <- function(id, splash_ui = tags$h2("Starting the Teal App"), header = t
 #' @inheritParams init
 #'
 #' @return `reactive` which returns the currently active module
-srv_teal <- function(input, output, session, modules, raw_data, filter_states) {
+srv_teal <- function(input, output, session, modules, raw_data, filter_states = list()) {
   stopifnot(is.reactive(raw_data))
 
   # Javascript code ----

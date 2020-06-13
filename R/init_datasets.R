@@ -30,10 +30,14 @@ set_datasets_data <- function(datasets, data) {
 
   for (idx in seq_along(data)) {
     data_i <- data[[idx]][["raw_data"]]
-    attr(data_i, "keys") <- data[[idx]][["keys"]]
+    dataname <- data[[idx]][["dataname"]]
+    keys <- data[[idx]][["keys"]]
+    keys <- if_null(keys, get_cdisc_keys(dataname))
+
+    attr(data_i, "keys") <- keys
     attr(data_i, "column_labels") <- data[[idx]]$get_column_labels()
     attr(data_i, "data_label") <- data[[idx]][["data_label"]]
-    datasets$set_data(data[[idx]][["dataname"]], data_i)
+    datasets$set_data(dataname, data_i)
   }
 
   # set code to generate the unfiltered datasets
@@ -45,7 +49,7 @@ set_datasets_data <- function(datasets, data) {
 set_datasets_filters <- function(datasets, filter_states) {
   stopifnot(
     is(datasets, "FilteredData"),
-    is.list(filter_states),
+    is_fully_named_list(filter_states),
     all(names(filter_states) %in% datasets$datanames())
   )
 
