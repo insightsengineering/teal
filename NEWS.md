@@ -12,8 +12,7 @@
 * Fix an error in `choices_selected` when `selected` is not in `choices`
 
 * Argument `filter` in the `init` function was removed and the new argument `filter_states` was added. You can no longer modify the `app$datasets`, but must instead use this argument. 
-* New modules were created to create a module of nested teal modules, then another one that adds the right filter pane to each tab. The
-  `teal::init` function stays unchanged.
+* New modules were created to create a module of nested teal modules, then another one that adds the right filter pane to each tab. The `teal::init` function stays unchanged.
 * The `teal::init` function now returns a `UI` function with an optional `id` argument. This allows it to be embedded into other applications. Split view as two applications side-by-side is one such example.
 
 ## FilteredData refactored (for developers)
@@ -24,7 +23,7 @@
 * Missing data `NA` is now explicitly addressed in the filter panel: `NA`s are excluded by default and a checkbox to include them was added.
 * Statistics of the data are visually depicted in terms of histograms or bar charts overlayed onto the Shiny input elements.
 
-sodo3: in other packages
+todo1: in other packages
 - get_package_file: write as `system.file(..., mustWork = TRUE)`
 
 

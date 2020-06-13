@@ -395,7 +395,7 @@ See \code{get_filter_info}, only returns filter type (\code{choices}, \code{rang
 \item{\code{dataname}}{\code{character} name of the dataset}
 
 \item{\code{varname}}{\code{character} column within the dataset;
-if \code{NULL}, return all variables}
+if \code{NULL}, return all variables in a list}
 }
 \if{html}{\out{</div>}}
 }
@@ -404,7 +404,7 @@ Filter state for a dataset (or only a variable within it).
 }
 
 \subsection{Returns}{
-\verb{filter state or list of these}
+\verb{character vector} filter state or list of these
 }
 }
 \if{html}{\out{<hr>}}
@@ -468,7 +468,7 @@ for numerics, full range; for factors, all choices etc.
 }
 
 \subsection{Returns}{
-default filter state for this variable
+\verb{character vector} default filter state for this variable
 }
 }
 \if{html}{\out{<hr>}}

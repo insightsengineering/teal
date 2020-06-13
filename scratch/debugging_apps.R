@@ -51,7 +51,7 @@ ADLB <- radlb(cached = TRUE)
   ),
   filter_states = list(
     ADSL = list(SEX = list(choices = "M", keep_na = TRUE), AGE = "default"),
-    ADLB = list(ASEQ = "default")
+    ADLB = list(ASEQ = list(range = c(5.6, 20), keep_na = FALSE))
   ),
   header = "Simple teal app",
   footer = tags$p(class = "text-muted", "Source: agile-R website")

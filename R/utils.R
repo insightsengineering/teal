@@ -280,6 +280,23 @@ label_to_id <- function(label, prefix = NULL) {
   }
 }
 
+#' Function to inherit Shiny module arguments that must always be present
+#'
+#' @md
+#' @param input `Shiny input object`
+#' @param output `Shiny output object`
+#' @param session `Shiny session object`
+#' @param modules `teal_module` or `teal_modules` object, the latter
+#'   can be used for nested tabs, see `\link{ui_nested_tabs}`
+#' @param datasets `FilteredData` object to store filter state and filtered
+#'   datasets, shared across modules
+srv_shiny_module_arguments <- function(input, output, session, datasets, modules) {
+}
+
+
+
+# Check functions that error with informative error messages ----
+
 #' Whether the variable name is good to use within Show R Code
 #'
 #' Spaces are problematic because the variables must be escaped
@@ -335,6 +352,10 @@ check_variable_name_okay <- function(name) {
 #' }
 check_in_subset <- function(subset, choices, pre_msg = "") {
   stopifnot(is_character_single(pre_msg))
+
+  subset <- unique(subset)
+  choices <- unique(choices)
+
   if (any(!(subset %in% choices))) {
     stop(paste0(
       pre_msg,
@@ -346,15 +367,28 @@ check_in_subset <- function(subset, choices, pre_msg = "") {
   return(invisible(NULL))
 }
 
-#' Function to inherit Shiny module arguments that must always be present
+#' Check that two sets are equal and informative error message otherwise
 #'
 #' @md
-#' @param input `Shiny input object`
-#' @param output `Shiny output object`
-#' @param session `Shiny session object`
-#' @param modules `teal_module` or `teal_modules` object, the latter
-#'   can be used for nested tabs, see `\link{ui_nested_tabs}`
-#' @param datasets `FilteredData` object to store filter state and filtered
-#'   datasets, shared across modules
-srv_shiny_module_arguments <- function(input, output, session, datasets, modules) {
+#' @param x object to be compared to other
+#' @param y object to be compared to other
+#' @param pre_msg `character` to be displayed before error message
+#' @examples
+#' check_setequal(1:3, 1:3)
+#' check_setequal(c(1, 1, 3), c(1, 3, 3))
+#' try(check_setequal(c(1, 2, 3), c(1, 3, 3), pre_msg = "Not equal: "))
+#' try(check_setequal(c(1, 2, 3), c("a", "b"), pre_msg = "Not equal: "))
+check_setequal <- function(x, y, pre_msg = "") {
+  stopifnot(is_character_single(pre_msg))
+  x <- unique(x)
+  y <- unique(y)
+  if (!setequal(x, y)) {
+    stop(paste0(
+      pre_msg,
+      "(", toString(x, width = 100), ")",
+      " is not equal to ",
+      "(", toString(y, width = 100), ")"
+    ))
+  }
+  return(invisible(NULL))
 }

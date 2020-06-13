@@ -113,44 +113,44 @@ init <- function(data,
     all(names(filter_states) %in% names(data))
   )
 
-  is_not_delayed_data <- !is(data, "delayed_data") # `cdisc_data` or `delayed_data`
+  is_not_delayed_data <- is(data, "cdisc_data") # `cdisc_data` or `DataConnector`
 
   # rather than using callModule and creating a submodule of this module, we directly modify
   # the ui and server, this can be achieved by passing it the same id as this module, i.e.
   # `ns(character(0))` and calling the server function directly rather than through `callModule`
-  return(list(
-    ui = function(id = character(0)) {
-      ns <- NS(id)
+  ui <- function(id = character(0)) {
+    ns <- NS(id)
 
-      # Startup splash screen for delayed loading
-      # We use delayed loading in all cases, even when the data does not need to be fetched.
-      # This has the benefit that when filtering the data takes a lot of time initially, the
-      # Shiny app does not time out.
-      splash_ui <- if (is_not_delayed_data) {
-        h1("The teal app is starting up.")
-      } else {
-        message("App was initialized with delayed data loading.")
-        data$get_ui(ns("startapp_module"))
-      }
-
-      ui_teal(id = ns("teal"), splash_ui = splash_ui, header = header, footer = footer)
-    },
-    server = function(input, output, session) {
-      # raw_data contains cdisc_data(), i.e. list of unfiltered data frames
-      # reactive to get data through delayed loading
-      # we must leave it inside the server because of callModule which needs to pick up the right session
-      if (is_not_delayed_data) {
-        raw_data <- reactiveVal(data) # will trigger by setting it
-      } else {
-        .log("fetching the data through delayed loading - showing start screen")
-        raw_data <- callModule(data$get_server(), "startapp_module")
-        stop_if_not(list(is.reactive(raw_data), "The delayed loading module has to return a reactive object."))
-        # trick for faster testing to avoid waiting on module specific to delayed data
-        # raw_data <- reactive(cdisc_data_global) # nolintr
-      }
-      return(callModule(srv_teal, "teal", modules = modules, raw_data = raw_data, filter_states = filter_states))
+    # Startup splash screen for delayed loading
+    # We use delayed loading in all cases, even when the data does not need to be fetched.
+    # This has the benefit that when filtering the data takes a lot of time initially, the
+    # Shiny app does not time out.
+    splash_ui <- if (is_not_delayed_data) {
+      h1("The teal app is starting up.")
+    } else {
+      message("App was initialized with delayed data loading.")
+      data$get_ui(ns("startapp_module"))
     }
-  ))
+
+    ui_teal(id = ns("teal"), splash_ui = splash_ui, header = header, footer = footer)
+  }
+  srv <- function(input, output, session) {
+    # raw_data contains cdisc_data(), i.e. list of unfiltered data frames
+    # reactive to get data through delayed loading
+    # we must leave it inside the server because of callModule which needs to pick up the right session
+    if (is_not_delayed_data) {
+      raw_data <- reactiveVal(data) # will trigger by setting it
+    } else {
+      .log("fetching the data through delayed loading - showing start screen")
+      raw_data <- callModule(data$get_server(), "startapp_module")
+      # for faster testing without fetching the data through delayed loading screen, but still testing the logic,
+      # replace above line by this one
+      # raw_data <- reactive(cdisc_data_global) # nolintr
+      stop_if_not(list(is.reactive(raw_data), "The delayed loading module has to return a reactive object."))
+    }
+    return(callModule(srv_teal, "teal", modules = modules, raw_data = raw_data, filter_states = filter_states))
+  }
+  return(list(ui = ui, server = srv))
 }
 
 

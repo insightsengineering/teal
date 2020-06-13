@@ -159,7 +159,7 @@ FilteredData <- R6::R6Class( # nolint
       # to include it nicely in the Show R Code; the UI also uses datanames in ids, so no whitespaces allowed
       check_variable_name_okay(dataname)
       stopifnot(is.data.frame(data))
-      # column_labels and data_label may be NULL, so attributes will not be present
+      # column_labels and labels may be NULL, so attributes will not be present
       stopifnot("keys" %in% names(attributes(data)))
 
       # due to the data update, the old filter may no longer be valid, so we unset it
@@ -168,8 +168,16 @@ FilteredData <- R6::R6Class( # nolint
 
       is_new_dataname <- !dataname %in% self$datanames()
 
-      # save `md5sum` for reproducibility
-      attr(data, "md5sum") <- digest(data, algo = "md5")
+      private$data_attrs[[dataname]] <- c(
+        list(
+          # save `md5sum` for reproducibility, this should probably be added in `cdisc_data` already
+          md5sum = digest(data, algo = "md5")
+        ),
+        attributes(data)[c("keys", "data_label", "column_labels")]
+      )
+
+      # todo: fix other issues found by automation
+
       private$unfiltered_datasets[[dataname]] <- data
 
       if (is_new_dataname) {
@@ -207,7 +215,6 @@ FilteredData <- R6::R6Class( # nolint
       return(invisible(self))
     },
 
-    # todo1: keep `get_data_attr` and `set_data_attr`
     #' @details
     #' Get data attribute for the dataset
     #'
@@ -216,13 +223,15 @@ FilteredData <- R6::R6Class( # nolint
     #'
     #' @md
     #' @param dataname `character` name of the dataset
-    #' @param attr attribute to get from the data attributes of the dataset
+    #' @param attr `character` attribute to get from the data attributes of the dataset
+    #' @return value of attribute, may be NULL if it does not exist
     get_data_attr = function(dataname, attr) {
       private$check_data_varname_exists(dataname)
       stopifnot(is_character_single(attr))
-      return(attr(self$get_data(dataname, filtered = FALSE), attr))
+      return(private$data_attrs[[dataname]][[attr]])
     },
 
+    # todo1: I would remove `set_data_attr`
     #' @details
     #' Set data attribute for the dataset
     #'
@@ -230,16 +239,19 @@ FilteredData <- R6::R6Class( # nolint
     #' @param dataname `character` name of the dataset
     #' @param attr attribute to get from the data attributes of the dataset
     #' @param value value to set attribute to
-    #' @return `self`
+    #' @return `self` for chaining
     set_data_attr = function(dataname, attr, value) {
       private$check_data_varname_exists(dataname)
       stopifnot(is_character_single(attr))
 
-      attr(self$get_data(dataname, filtered = FALSE), attr) <- value
+      private$data_attrs[[dataname]][[attr]] <- value
       return(invisible(self))
     },
 
-    # no corresponding set_ function
+    # Convenience functions to get data attributes ----
+    # todo1: I would say only `get_keys` belongs to this class, `get_variable_labels` and `get_datalabel` should go
+    # to `cdisc_data` and related classes
+
     #' @details
     #' Get non-NA labels of variables in the data
     #'
@@ -260,6 +272,25 @@ FilteredData <- R6::R6Class( # nolint
       labels <- labels[!is.na(labels)]
 
       return(labels)
+    },
+
+    #' Get keys for the dataset
+    #' @md
+    #' @param dataname `character` name of the dataset
+    #' @return `character` keys of dataset
+    get_keys = function(dataname) {
+      return(self$get_data_attr(dataname, "keys"))
+    },
+
+    #' Get datalabel for the dataset
+    #'
+    #' Useful to display in `Show R Code`.
+    #'
+    #' @md
+    #' @param dataname `character` name of the dataset
+    #' @return `character` keys of dataset
+    get_datalabel = function(dataname) {
+      return(self$get_data_attr(dataname, "data_label"))
     },
 
     # filtering state and characteristics, remove and continue filtering ----
@@ -319,8 +350,8 @@ FilteredData <- R6::R6Class( # nolint
     #' @md
     #' @param dataname `character` name of the dataset
     #' @param varname `character` column within the dataset;
-    #'   if `NULL`, return all variables
-    #' @return `filter state or list of these`
+    #'   if `NULL`, return all variables in a list
+    #' @return `character vector` filter state or list of these
     get_filter_state = function(dataname, varname = NULL) {
       private$check_data_varname_exists(dataname, varname)
 
@@ -367,13 +398,10 @@ FilteredData <- R6::R6Class( # nolint
       state_names <- names(state)
 
       # check if all names of state are columns of the dataname
-      inexistent_columns <- which(!(state_names %in% colnames(self$get_data(dataname, filtered = FALSE))))
-      if (length(inexistent_columns) > 0) {
-        stop(paste(
-          "variables", toString(state_names[inexistent_columns]),
-          "are not available in data", dataname
-        ))
-      }
+      check_in_subset(
+        state_names, colnames(self$get_data(dataname, filtered = FALSE)),
+        pre_msg = paste0("data ", dataname, ", variable ", varname, ": ")
+      )
 
       for (name in state_names) {
         private$check_valid_filter_state(dataname, name, var_state = state[[name]])
@@ -412,7 +440,7 @@ FilteredData <- R6::R6Class( # nolint
     #' @param dataname `character` name of the dataset
     #' @param varname `character` column within the dataset;
     #'   must be provided
-    #' @return default filter state for this variable
+    #' @return `character vector` default filter state for this variable
     get_default_filter_state = function(dataname, varname) {
       stopifnot(is_character_single(varname))
       private$check_data_varname_exists(dataname, varname)
@@ -421,9 +449,9 @@ FilteredData <- R6::R6Class( # nolint
       state <- switch(
         filter_info$type,
         # the list might a named list of choices so Shiny displays it nicely in the UI
-        # here, we unname it because we want the internal state
-        choices = list(choices = unname(filter_info$choices)),
-        range = list(range = unname(filter_info$range)),
+        # here, we unname it and convert it to a vector because we want the internal state
+        choices = list(choices = unlist(unname(filter_info$choices))),
+        range = list(range = unlist(unname(filter_info$range))),
         logical = list(status = "TRUE"),
         stop("unknown type")
       )
@@ -704,23 +732,11 @@ FilteredData <- R6::R6Class( # nolint
         is_logical_single(check_data_md5sums)
       )
 
-      # stops with verbose error message
-      stop_setequal <- function(x, y, pre_msg = "") {
-        if (!setequal(x, y)) {
-          stop(paste0(paste(
-            pre_msg,
-            toString(x),
-            "is not equal to",
-            toString(y),
-            sep = "\n"
-          )))
-        }
-      }
-      stop_setequal(
+      check_setequal(
         names(state$data_md5sums), self$datanames(),
         pre_msg = "The names of the stored md5 sums and the datanames don't agree:"
       )
-      stop_setequal(
+      check_setequal(
         names(state$filter_states), self$datanames(),
         pre_msg = "The names of the stored filters and the datanames don't agree:"
       )
@@ -731,8 +747,9 @@ FilteredData <- R6::R6Class( # nolint
         }
       }
       if (!is.null(state$preproc_code)) {
-        stop_setequal(
-          self$get_preproc_code(), state$preproc_code,
+        # check they are actually equal (compare two lists with one element each)
+        check_setequal(
+          list(self$get_preproc_code()), list(state$preproc_code),
           pre_msg = "The preprocessing codes don't agree:"
         )
       }
@@ -800,6 +817,8 @@ FilteredData <- R6::R6Class( # nolint
     previous_filter_states = list(),
     # preprocessing code used to generate the unfiltered datasets as a string
     preproc_code = NULL,
+    # for each dataname: contains keys and optionally data_label, column_labels
+    data_attrs = list(),
 
     # check functions ----
     # we implement these functions as checks rather than returning logicals so they can
@@ -923,7 +942,7 @@ FilteredData <- R6::R6Class( # nolint
         )
       }
 
-      pre_msg <- paste0("data", dataname, "variable", varname, ": ")
+      pre_msg <- paste0("data ", dataname, ", variable ", varname, ": ")
       switch(
         var_info$type,
         choices = {

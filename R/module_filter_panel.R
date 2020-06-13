@@ -49,6 +49,10 @@
 #'     active_datanames = reactive(input$datanames)
 #'   )
 #' }) %>% invisible() # invisible so it does not run
+#' \dontrun{
+#' #todo
+#' shinyApp()
+#' }
 ui_filter_panel <- function(id, datanames) {
   stopifnot(
     is_character_vector(datanames)
