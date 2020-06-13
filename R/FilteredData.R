@@ -749,7 +749,10 @@ FilteredData <- R6::R6Class( # nolint
       if (check_data_md5sums) {
         datasets_equal <- vapply(self$datanames(), self$get_data_attr, character(1), "md5sum") == state$data_md5sums
         if (!all(datasets_equal)) {
-          stop("The following datasets are not identical and probably have changed since bookmarking: ", toString(names(datasets_equal)))
+          stop(
+            "The following datasets are not identical and probably have changed since bookmarking: ",
+            toString(names(datasets_equal))
+          )
         }
       }
       if (!is.null(state$preproc_code)) {

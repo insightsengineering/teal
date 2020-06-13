@@ -9,11 +9,11 @@ modules](https://shiny.rstudio.com/articles/modules.html).
 Please read more about teal on our agile-R website at [go.roche.com/agile-R](http://go.roche.com/agile-R).
  
 
-# Acknowledgements
+# Acknowledgement
 
 We would like to thank everyone who made `teal` a better analysis environment. Special thanks go to:
 
- * Doug Kelkhoff for his contributions to the filter panel.
+ * `Doug Kelkhoff` for his contributions to the styling of the filter panel, see https://github.roche.com/kelkhofd/shinyDataFilter.
  
 
 # Notes for Developers
@@ -53,7 +53,7 @@ parent_ui <- function(id) {
 parent_ui("PatrickMcCarty")
 ```
 
-Use the roxygen2 marker `@md` to include code-style ticks with backticks. This makes it easier to read. For example:
+Use the `roxygen2` marker `@md` to include code-style ticks with backticks. This makes it easier to read. For example:
 ```
 #' My function
 #' 

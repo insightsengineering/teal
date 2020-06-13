@@ -183,3 +183,7 @@ bookmarkableShinyApp <- function(ui, server, ...) {
   }
   return(shinyApp(ui = ui_new, server = server, ...))
 }
+
+
+# todo1: in other packages
+# - function `get_package_file` is wrong: write as `system.file(..., mustWork = TRUE)`

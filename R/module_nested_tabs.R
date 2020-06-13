@@ -48,8 +48,8 @@ ui_nested_tabs <- function(id, modules, datasets) {
   # within the `ns`, the tabset panel forms another hierarchy, parent ids within
   # the `ns` are prefixed to the children labels to obtain their ids
   # each module within the `ns` is the label plus the id of its parent (id_parent)
-  #' is_root whether top element of modules should be at the root,
-  #'   i.e. in no `tabSet`, ignored if `teal_module`
+  # is_root: whether top element of modules should be at the root,
+  # i.e. in no `tabSet`, ignored if `teal_module`
   create_ui <- function(modules, id_parent, is_root = TRUE) {
     stopifnot(
       is_character_single(id_parent) || is.null(id_parent),
@@ -168,4 +168,3 @@ srv_nested_tabs <- function(input, output, session, datasets, modules) {
   })
   return(active_module)
 }
-

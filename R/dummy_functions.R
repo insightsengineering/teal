@@ -24,9 +24,9 @@ get_dummy_filter_states <- function() {
 get_dummy_cdisc_data <- function() {
   withr::with_package("random.cdisc.data", code = {
     # need to attach package, otherwise cached data not available, todo1: not good, fix in rcd
-    ADSL <- random.cdisc.data::radsl(cached = TRUE)
-    ADAE <- random.cdisc.data::radae(cached = TRUE)
-    ADLB <- random.cdisc.data::radlb(cached = TRUE)
+    ADSL <- random.cdisc.data::radsl(cached = TRUE) #nolintr
+    ADAE <- random.cdisc.data::radae(cached = TRUE) #nolintr
+    ADLB <- random.cdisc.data::radlb(cached = TRUE) #nolintr
   })
 
   ADSL$logical_test <- sample(c(TRUE, FALSE, NA), size = nrow(ADSL), replace = TRUE)
@@ -51,7 +51,7 @@ ADLB <- radlb(cached = TRUE)
 get_dummy_datasets <- function() {
   withr::with_package("random.cdisc.data", code = {
     # need to attach package, otherwise cached data not available, todo1: not good, fix in rcd
-    ADSL <- random.cdisc.data::radsl(cached = TRUE)
+    ADSL <- random.cdisc.data::radsl(cached = TRUE) #nolintr
   })
   attr(ADSL, "keys") <- get_cdisc_keys("ADSL")
   datasets <- FilteredData$new()
@@ -72,9 +72,13 @@ get_dummy_datasets <- function() {
 get_dummy_modules <- function() {
   create_mod <- function(module_name) module(
     module_name,
-    server = function(input, output, session, datasets) {},
-    ui = function(id, ...) { tags$p(paste0("id: ", id)) },
-    filters = 'all'
+    server = function(input, output, session, datasets) {
+
+    },
+    ui = function(id, ...) {
+      tags$p(paste0("id: ", id))
+    },
+    filters = "all"
   )
   mods <- modules(
     "d1",

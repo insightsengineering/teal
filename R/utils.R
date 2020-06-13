@@ -215,6 +215,7 @@ see_in_file <- function(f) {
 #' @param datanames (`character` vector) datanames
 #'
 #' @examples
+#' list_adsl_first <- teal:::list_adsl_first
 #' list_adsl_first(c("A", "B", "ADSL", "C"))
 #' list_adsl_first(c("A", "B", "C"))
 list_adsl_first <- function(datanames) {
@@ -257,6 +258,7 @@ handle_active_datanames <- function(datasets, datanames) {
 #'
 #' @return valid HTML label with invalid characters removed
 #' @examples
+#' label_to_id <- teal:::label_to_id
 #' label_to_id("var", prefix = "prefix")
 #' label_to_id("var")
 #' label_to_id("__var___", prefix = "prefix")
@@ -311,6 +313,7 @@ srv_shiny_module_arguments <- function(input, output, session, datasets, modules
 #' @param name `character, single or vector` name to check
 #'
 #' @examples
+#' check_variable_name_okay <- teal:::check_variable_name_okay
 #' check_variable_name_okay("aas2df")
 #' check_variable_name_okay("ADSL")
 #' check_variable_name_okay("ADSLmodified")

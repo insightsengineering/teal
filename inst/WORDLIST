@@ -15,6 +15,7 @@ analysis
 anl
 BCE
 biomarker
+bookmarkable
 cdisc
 CDISC
 centric
@@ -61,6 +62,7 @@ pre
 RawDataset
 RawDatasetConnector
 rcode
+reactives
 reactiveVal
 recurse
 refiltering
@@ -76,11 +78,13 @@ SREPs
 STUDYID
 submodule
 swimlane
+tabsetted
 teal
 testthat
 TLG
 TLGs
 tm
+triggerings
 ui
 UI
 UML
