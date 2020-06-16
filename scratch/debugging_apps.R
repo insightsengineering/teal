@@ -40,9 +40,9 @@ ADAE <- radae(cached = TRUE)
 ADLB <- radlb(cached = TRUE)
 "),
   modules = root_modules(
-    # predefined_filters_module(filters = list(
-    #   ADSL = list(SEX = list(choices = "M", keep_na = TRUE), AGE = "default"),
-    #   ADLB = list(ASEQ = "default")
+    # predefined_filters_module(filters = list( # todo: create this module
+    #   ADSL = list(SEX = list(choices = "M", keep_na = TRUE), AGE = default_filter_state()),
+    #   ADLB = list(ASEQ = default_filter_state())
     # )),
     teal:::reset_filters_module("Reset", active_datanames = c("ADSL", "ADLB")),
     teal:::filter_calls_module(),
@@ -50,7 +50,7 @@ ADLB <- radlb(cached = TRUE)
     teal:::debug_browser_module()
   ),
   filter_states = list(
-    ADSL = list(SEX = list(choices = "M", keep_na = TRUE), AGE = "default"),
+    ADSL = list(SEX = list(choices = "M", keep_na = TRUE), AGE = default_filter_state()),
     ADLB = list(ASEQ = list(range = c(5.6, 20), keep_na = FALSE))
   ),
   header = "Simple teal app",
@@ -79,7 +79,18 @@ ADLB <- radlb(cached = TRUE)
     teal:::bookmark_module(),
     teal:::debug_browser_module()
   ),
-  filter_states = list(ADSL = list(SEX = list(choices = "M", keep_na = TRUE), AGE = "default")),
+  filter_states = list(ADSL = list(
+    SEX = list(choices = "M", keep_na = TRUE),
+    COUNTRY = c("USA", NA),
+    AGE = default_filter_state()
+  )),
+  # filter_states = list(ADSL = list(
+  #   SEX = list(choices = c("M", "F")),
+  #   SEX = list(choices = c("M", "F"), keep_na = TRUE),
+  #   SEX = c("M", "F"),
+  #   SEX = c("M", "F", NA),
+  #   SEX = default_filter_state()
+  # )),
   header = "Simple teal app",
   footer = tags$p(class = "text-muted", "Source: agile-R website")
 ); bookmarkableShinyApp(app$ui, app$server, enableBookmarking = "url")
@@ -101,7 +112,7 @@ app <- init(
     teal:::bookmark_module(),
     teal:::debug_browser_module()
   ),
-  filter_states = list(ADSL = list(SEX = list(choices = "M", keep_na = TRUE), AGE = "default")),
+  filter_states = list(ADSL = list(SEX = list(choices = "M", keep_na = TRUE), AGE = default_filter_state())),
   header = "Simple teal app",
   footer = tags$p(class = "text-muted", "Source: agile-R website")
 ); bookmarkableShinyApp(app$ui, app$server, enableBookmarking = "url")
@@ -132,8 +143,8 @@ ADLB <- radlb(cached = TRUE)
   # ),
   #filter_states = list(ADSL = list(SEX = NULL)),
   #filter_states = list(ADSL = list(SEX = list(choices = "M", keep_na = TRUE))),
-  #filter_states = list(ADSL = list(AGE = "default", SEX = list(choices = "M", keep_na = TRUE))),
-  #filter_states = list(ADSL = list(AGE = "default", SEX = list(choices = "M", keep_na = TRUE)), ADAE = list(AETOXGR = "default")),
+  #filter_states = list(ADSL = list(AGE = default_filter_state(), SEX = list(choices = "M", keep_na = TRUE))),
+  #filter_states = list(ADSL = list(AGE = default_filter_state(), SEX = list(choices = "M", keep_na = TRUE)), ADAE = list(AETOXGR = default_filter_state())),
   header = "Simple teal app",
   footer = tags$p(class = "text-muted", "Source: agile-R website")
 ); bookmarkableShinyApp(app$ui, app$server, enableBookmarking = "url")

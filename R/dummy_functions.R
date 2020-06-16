@@ -9,8 +9,8 @@
 #' @return dummy filter states
 get_dummy_filter_states <- function() {
   return(list(
-    ADSL = list(SEX = list(choices = "M", keep_na = TRUE), AGE = "default"),
-    ADLB = list(ASEQ = "default")
+    ADSL = list(SEX = list(choices = "M", keep_na = TRUE), AGE = default_filter_state()),
+    ADLB = list(ASEQ = default_filter_state())
   ))
 }
 

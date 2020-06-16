@@ -34,7 +34,7 @@
 #'   datasets$set_data("ADRS", ADRS)
 #' })
 #'
-#' shinyApp(ui = function() {
+#' app <- shinyApp(ui = function() {
 #'   tagList(
 #'     include_teal_css_js(),
 #'     selectInput("datanames", "Display for datasets:",
@@ -48,7 +48,10 @@
 #'     teal:::srv_filter_panel, "filter_panel", datasets,
 #'     active_datanames = reactive(input$datanames)
 #'   )
-#' }) %>% invisible() # invisible so it does not run
+#' })
+#' \dontrun{
+#' runApp(app)
+#' }
 ui_filter_panel <- function(id, datanames) {
   stopifnot(
     is_character_vector(datanames)

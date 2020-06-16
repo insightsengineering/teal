@@ -132,5 +132,12 @@ res <- list(
   filter_states = reactiveValuesToList(private$filter_states),
   preproc_code = self$get_preproc_code()
 )
-return(res)
+res # put it to not be invisible
+# or (slightly discouraged)
+#return(res)
 ```
+
+Note that for functions to be dispatched with S3, they need to be exported. This will
+not actually export the function with the class specifier, but only make it available
+for S3 method dispatch, see
+https://stackoverflow.com/questions/18512528/how-to-export-s3-method-so-it-is-available-in-namespace

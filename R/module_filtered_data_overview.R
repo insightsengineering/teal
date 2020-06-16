@@ -8,6 +8,7 @@
 #' the number of unique subjects.
 #'
 #' @param id module id
+#' # todo: example
 ui_filtered_data_overview <- function(id) {
   ns <- NS(id)
 

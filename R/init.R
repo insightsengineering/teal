@@ -33,18 +33,28 @@
 #'   }
 #' @param filter_states (`list`) You can define filters that show when
 #'   the app starts.
-#'   Pass in a named list to overwrite filters, e.g.
-#'   `list(ADSL = list(SEX = NULL))`
-#'   to have the SEX filter appear with nothing selected (i.e. 0 patients)
-#'   `list(ADSL = list(SEX = list(choices = "M", keep_na = TRUE)))`
-#'   to keep patients that are male or have unknown SEX.
-#'   `list(ADSL = list(SEX = "default"))`
-#'   to have the default filter that appears also when you select to add this
-#'   filtering variable in the running app.
+#'   The general pattern is:
+#'   `list(ADSL = list(SEX = ..., AGE = ...), ADAE = ...)`.
+#'   An example is:
+#'   `list(ADSL = list(SEX = c("M", "F")))`.
+#'   More generally, the filters for the variable, e.g. `SEX` can be
+#'   specified as follows:
+#'   `list(SEX = list(choices = c("M", "F")))`,
+#'   `list(SEX = list(choices = c("M", "F"), keep_na = TRUE))`,
+#'   or equivalently with:
+#'   `list(SEX = c("M", "F"))`,
+#'   `list(SEX = c("M", "F", NA))`,
+#'   or for the default filter state (not very restrictive):
+#'   `list(SEX = default_filter_state())`
+#'
+#'   Instead of `choices` above, use the following names:
+#'   - `numerical`: `range`
+#'   - `factor`: `choices`
+#'   - `logical`: `logical`
 #'   A general example is:
 #'   `list(
-#'   ADSL = list(AGE = "default", SEX = list(choices = "M", keep_na = TRUE)),
-#'   ADAE = list(AETOXGR = "default")
+#'   ADSL = list(AGE = default_filter_state(), SEX = c("M", NA)),
+#'   ADAE = list(AETOXGR = default_filter_state())
 #'   )`
 #'   Ignored if the app is restored from a bookmarked state.
 #' @param header (`character` or `shiny.tag`) the header of the app
@@ -96,7 +106,7 @@
 #'       filters = "ADSL"
 #'     )
 #'   ),
-#'   filter_states = list(ADSL = list(AGE = "default")),
+#'   filter_states = list(ADSL = list(AGE = default_filter_state())),
 #'   header = tags$h1("Sample App"),
 #'   footer = tags$p("Copyright 2017 - 2020")
 #' )

@@ -179,12 +179,6 @@ modules_depth <- function(modules, depth = 0) {
   }
 }
 
-
-# Note that for functions to be dispatched with S3, they need to be exported. This will
-# not actually export the function with the class specifier, but only make it available
-# for S3 method dispatch, see
-# https://stackoverflow.com/questions/18512528/how-to-export-s3-method-so-it-is-available-in-namespace
-
 #' Convert `teal_modules` to a string
 #'
 #' The first line prints the `modules` label.

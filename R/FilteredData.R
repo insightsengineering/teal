@@ -402,6 +402,33 @@ FilteredData <- R6::R6Class( # nolint
         pre_msg = paste0("data ", dataname, ", variable ", varname, ": ")
       )
 
+      state <- Map(function(var_state, varname) {
+        # convert default_filter_state to actual state, replace NA in vector by keep_na option
+        # example:
+        # nolintr start
+        # var_state = list(choices = c("M", "F"))
+        # var_state = list(choices = c("M", "F"), keep_na = TRUE)
+        # var_state = c("M", "F")
+        # var_state = c("M", "F", NA)
+        # var_state = default_filter_state()
+        # nolintr end
+        if (is_default_filter_state(var_state)) {
+          var_state <- self$get_default_filter_state(dataname, varname)
+        } else {
+          if (is.null(names(var_state))) {
+            # then, we assume that var_state is a simple list
+            var_state <- setNames(
+              # is.na is vectorized
+              list(Filter(Negate(is.na), var_state), any(is.na(var_state))),
+              c(self$get_filter_type(dataname, varname), "keep_na")
+            )
+          }
+        }
+        # if `keep_na` is not provided, default to `FALSE`
+        var_state$keep_na <- if_null(var_state$keep_na, FALSE)
+        var_state
+      }, state, names(state))
+
       for (name in state_names) {
         private$check_valid_filter_state(dataname, name, var_state = state[[name]])
       }
@@ -429,6 +456,7 @@ FilteredData <- R6::R6Class( # nolint
       return(TRUE)
     },
 
+    # todo: private
     #' @details
     #' Get the default filter state (useful for initial UI state)
     #' This is different to NULL state which means no filter applied.
@@ -1189,6 +1217,30 @@ FilteredData <- R6::R6Class( # nolint
     }
   )
 )
+
+#' Refer to the default filter state
+#'
+#' You can use it to refer to the variable's default filter state,
+#' which will be set when `FilteredData::set_data` is called.
+#' It can be used together with `teal::init`.
+#'
+#' This is a simple wrapper around an S3 class.
+#'
+#' @md
+#' @export
+#' @examples
+#' default_filter_state() # test printing
+default_filter_state <- function() {
+  structure(list(), class = "default_filter_state")
+}
+
+is_default_filter_state <- function(x) is(x, "default_filter_state")
+
+#' @export
+print.default_filter_state <- function(x) {
+  cat("This will pick the default filter state for the variable.\n")
+}
+
 
 #' Print the state in a nice format
 #'
