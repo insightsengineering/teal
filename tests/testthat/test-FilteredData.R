@@ -34,7 +34,10 @@ isolate({
 
   test_that("set filter state works", {
     # since no filter was set before, will just take the default filter
-    ds$restore_filter("ADSL", "AGE")
+    set_default_filter <- function(dataname, varname) {
+      ds$set_filter_state(dataname, varname, state = self$get_default_filter_state(dataname, varname))
+    }
+    expect_true(set_default_filter("ADSL", "AGE"))
 
     expect_equal(names(ds$get_filter_state("ADSL")), "AGE")
     expect_identical(ds$get_filter_state("ADSL")$AGE, list(range = range(ADSL$AGE), keep_na = FALSE))
@@ -51,20 +54,14 @@ isolate({
     expect_false(ds$set_filter_state("ADSL", "AGE", list(range = c(30, 50), keep_na = TRUE)))
     expect_identical(ds$get_filter_state("ADSL")$AGE, list(range = c(30, 50), keep_na = TRUE))
 
-    expect_true(ds$restore_filter("ADSL", "AGE"))
-    expect_identical(ds$get_filter_state("ADSL")$AGE, list(range = c(31, 50), keep_na = TRUE))
-    expect_true(ds$restore_filter("ADSL", "AGE"))
-    expect_identical(ds$get_filter_state("ADSL")$AGE, list(range = c(30, 50), keep_na = TRUE))
+    expect_true(set_default_filter("ADSL", "AGE"))
+    expect_true(set_default_filter("ADSL", "SEX"))
 
-    expect_true(ds$restore_filter("ADSL", "SEX"))
     expect_setequal(names(ds$get_filter_state("ADSL")), c("AGE", "SEX"))
     # also counts are added after numbers
     expect_identical(
       ds$get_filter_state("ADSL")$SEX$choices,
-      as.list(setNames(
-        as.character(levels(ADSL$SEX)),
-        paste0(names(table(ADSL$SEX)), " (", as.vector(table(ADSL$SEX)), ")")
-      ))
+      as.character(levels(ADSL$SEX))
     )
 
     ds$set_filter_state(

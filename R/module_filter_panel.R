@@ -90,9 +90,7 @@ ui_filter_panel <- function(id, datanames) {
           # add span with same id to show / hide
           return(span(id = id, ui_add_filter_variable(id, dataname)))
         })
-      ),
-      helpText("Note that teal does not support filtering on all variable types.",
-               "Hence variables that cannot be filtered are excluded.")
+      )
     )
 
   )

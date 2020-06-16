@@ -40,7 +40,7 @@
 #'   ))
 #' })
 #'
-#' shinyApp(ui = function() {
+#' app <- shinyApp(ui = function() {
 #'   fluidPage(
 #'     include_teal_css_js(),
 #'     ui_add_filter_variable("filter_ADSL", "ADSL"),
@@ -61,11 +61,12 @@
 #'       collapse = "\n"
 #'     )
 #'   })
-#' }) %>% invisible() # invisible so it does not run
+#' })
+#' \dontrun{
+#' runApp(app)
+#' }
 ui_add_filter_variable <- function(id, dataname) {
-  stopifnot(
-    is_character_single(dataname)
-  )
+  stopifnot(is_character_single(dataname))
 
   ns <- NS(id)
 
@@ -101,9 +102,7 @@ srv_add_filter_variable <- function(input, output, session, datasets, dataname, 
   )
 
   # currently active filter vars for this dataset
-  active_filter_vars <- reactive({
-    names(datasets$get_filter_state(dataname))
-  })
+  active_filter_vars <- reactive(get_filter_vars(datasets, dataname = dataname))
 
   # observe input$var_to_add: update the filter state of the datasets
   # this will update active_filter_vars, which then triggers an update of the choices
@@ -113,7 +112,9 @@ srv_add_filter_variable <- function(input, output, session, datasets, dataname, 
     if (!is.null(var_to_add)) {
       stopifnot(datasets$is_filterable(dataname, var_to_add))
       .log("add filter variable", var_to_add)
-      datasets$restore_filter(dataname, varname = var_to_add)
+      self$set_filter_state(
+        dataname, varname = var_to_add, state = self$get_default_filter_state(dataname, varname = var_to_add)
+      )
     }
   })
 

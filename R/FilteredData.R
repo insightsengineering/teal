@@ -162,7 +162,6 @@ FilteredData <- R6::R6Class( # nolint
 
       # due to the data update, the old filter may no longer be valid, so we unset it
       private$filter_states[[dataname]] <- list()
-      private$previous_filter_states[[dataname]] <- list()
 
       is_new_dataname <- !dataname %in% self$datanames()
 
@@ -400,8 +399,11 @@ FilteredData <- R6::R6Class( # nolint
         pre_msg = paste0("data ", dataname, ", variable ", varname, ": ")
       )
 
+      # convert default_filter_state to actual state, replace NA in vector by keep_na option
       state <- Map(function(var_state, varname) {
-        # convert default_filter_state to actual state, replace NA in vector by keep_na option
+        if (is.null(var_state)) {
+          return(NULL)
+        }
         # example:
         # nolintr start
         # var_state = list(choices = c("M", "F"))
@@ -448,7 +450,6 @@ FilteredData <- R6::R6Class( # nolint
         return(FALSE)
       }
 
-      private$previous_filter_states[[dataname]] <- private$filter_states[[dataname]]
       private$filter_states[[dataname]] <- new_state
 
       return(TRUE)
@@ -481,31 +482,6 @@ FilteredData <- R6::R6Class( # nolint
         stop("unknown type")
       )
       return(c(state, list(keep_na = FALSE)))
-    },
-
-    #' @details
-    #' Restores previous filter state (if the filter was removed in between)
-    #'
-    #' If there is no previous filter, it takes the filter's default state.
-    #'
-    #' If a previous filter state exists and the state is `s` before calling
-    #' this function twice, then the state will be `s` again.
-    #'
-    #' @md
-    #' @param dataname `character` name of the dataset
-    #' @param varname `character` column within the dataset;
-    #'   must be provided
-    #' @return TRUE if state was changed
-    restore_filter = function(dataname, varname) {
-      stopifnot(is_character_single(varname))
-      private$check_data_varname_exists(dataname, varname)
-
-      state <- private$previous_filter_states[[dataname]][[varname]]
-      if (is.null(state)) {
-        state <- self$get_default_filter_state(dataname, varname)
-      }
-
-      return(self$set_filter_state(dataname, varname, state))
     },
 
     #' @details
@@ -1239,6 +1215,19 @@ print.default_filter_state <- function(x) {
   cat("This will pick the default filter state for the variable.\n")
 }
 
+#' Get filter variable names that are currently active
+#'
+#' Only works in a reactive context.
+#'
+#' @md
+#' @param datasets `FilteredData`
+#' @param dataname `character` dataname to get filter variables for
+#'
+#' @return `character` vector of active filter variables
+get_filter_vars <- function(datasets, dataname) {
+  stopifnot(is(datasets, "FilteredData"))
+  names(datasets$get_filter_state(dataname))
+}
 
 #' Print the state in a nice format
 #'

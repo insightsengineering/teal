@@ -19,7 +19,7 @@
 #' @examples
 #' mods <- teal:::get_dummy_modules()
 #' datasets <- teal:::get_dummy_datasets()
-#' shinyApp(
+#' app <- shinyApp(
 #'   ui = function() {
 #'     tagList(
 #'       include_teal_css_js(),
@@ -35,7 +35,10 @@
 #'       paste0("The currently active tab name is ", active_module()$label)
 #'     })
 #'   }
-#' ) %>% invisible() # invisible so it does not run
+#' )
+#' \dontrun{
+#' runApp(app)
+#' }
 ui_nested_tabs <- function(id, modules, datasets) {
   stopifnot(
     # `modules` class tested below

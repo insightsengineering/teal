@@ -43,7 +43,7 @@
 #'   ))
 #' })
 #'
-#' shinyApp(ui = function() {
+#' app <- shinyApp(ui = function() {
 #'   tagList(
 #'     include_teal_css_js(),
 #'     ui_filter_items("filter_ADSL", "ADSL"),
@@ -52,7 +52,10 @@
 #' }, server = function(input, output, session) {
 #'   callModule(srv_filter_items, "filter_ADSL", datasets, "ADSL")
 #'   callModule(srv_filter_items, "filter_ADAE", datasets, "ADAE")
-#' }) %>% invisible() # invisible so it does not run
+#' })
+#' \dontrun{
+#' runApp(app)
+#' }
 ui_filter_items <- function(id, dataname) {
   stopifnot(
     is_character_single(dataname)
@@ -138,7 +141,7 @@ srv_filter_items <- function(input, output, session, datasets, dataname) {
   # that must be destroyed once the UI is removed
   shown_vars_observers <- NULL
   # variables to filter according to datasets state
-  filtered_vars <- reactive(names(datasets$get_filter_state(dataname)))
+  filtered_vars <- reactive(get_filter_vars(datasets, dataname = dataname))
   filter_id_for_var <- function(varname) paste0("filter_", varname)
 
   observeEvent(
@@ -191,7 +194,7 @@ srv_filter_items <- function(input, output, session, datasets, dataname) {
 
   observeEvent(input$remove_filters, {
     .log("removing all filters for data", dataname)
-    lapply(names(datasets$get_filter_state(dataname)), function(varname) {
+    lapply(get_filter_vars(datasets, dataname = dataname), function(varname) {
       datasets$set_filter_state(dataname, varname = varname, state = NULL)
     })
   })

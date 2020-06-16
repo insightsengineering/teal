@@ -71,7 +71,6 @@ run_js_files <- function(files, package = "teal") {
 #'   include_teal_css_js(),
 #'   p("Hello")
 #' )
-#' @export
 include_teal_css_js <- function() {
   tagList(
     shinyjs::useShinyjs(),

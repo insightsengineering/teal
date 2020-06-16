@@ -23,7 +23,7 @@
 #' @examples
 #' mods <- teal:::get_dummy_modules()
 #' datasets <- teal:::get_dummy_datasets()
-#' shinyApp(
+#' app <- shinyApp(
 #'   ui = function() {
 #'     tagList(
 #'       include_teal_css_js(),
@@ -39,14 +39,17 @@
 #'       paste0("The currently active tab name is ", active_module()$label)
 #'     })
 #'   }
-#' ) %>% invisible() # invisible so it does not run
+#' )
+#' \dontrun{
+#' runApp(app)
+#' }
 #'
 #'
 #' # An example with two filter panels in two apps side-by-side
 #' mods <- teal:::get_dummy_modules()
 #' datasets1 <- teal:::get_dummy_datasets()
 #' datasets2 <- teal:::get_dummy_datasets()
-#' shinyApp(
+#' app <- shinyApp(
 #'   ui = function() {
 #'     tagList(
 #'       include_teal_css_js(),
@@ -73,7 +76,10 @@
 #'       )
 #'     })
 #'   }
-#' ) %>% invisible() # invisible so it does not run
+#' )
+#' \dontrun{
+#' runApp(app)
+#' }
 ui_tabs_with_filters <- function(id, modules, datasets) {
   stopifnot(
     # `teal_module` not supported because we insert the filters into the UI below

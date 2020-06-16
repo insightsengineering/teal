@@ -170,7 +170,6 @@ variable_choices <- function(data, subset = NULL) {
 #'
 #' # delayed version
 #' value_choices("ADRS", c("PARAMCD", "ARMCD"), c("PARAM", "ARM"))
-# todo1: rename var_choices -> choice_cols, var_label -> label_cols, subset -> choice_subset
 value_choices <- function(data, var_choices, var_label, subset = NULL, sep = " - ") {
   stopifnot(is.data.frame(data) || is_character_single(data))
   stopifnot(
