@@ -152,7 +152,8 @@ get_cdisc_keys <- function(dataname) {
 
 #' Function that extract labels from CDISC dataset
 #'
-#' @param data data
+#' @param data (\code{data.frame}) table to extract the labels from
+#' @inheritParams rtables::var_labels
 #'
 #' @return labels
 #'
@@ -166,21 +167,23 @@ get_cdisc_keys <- function(dataname) {
 #' ADSL <-  suppressWarnings(radsl(N = 600, seed = 123))
 #'
 #' get_labels(ADSL)
-get_labels <- function(data) {
+get_labels <- function(data, fill = TRUE) {
   stopifnot(is.data.frame(data))
+  stopifnot(is_logical_single(fill))
 
   cdisc_labels <- list(
     "dataset_label" = data_label(data),
-    "column_labels" = var_labels(data, fill = TRUE)
+    "column_labels" = var_labels(data, fill = fill)
   )
   return(cdisc_labels)
 }
 
 #' Function that extract column labels from CDISC dataset
 #'
-#' @param data (\code{data.frame}) Any CDISC data set
-#' @param columns (\code{character}) Column names to extract the labels
-#'   from
+#' @param data (\code{data.frame}) any CDISC data set
+#' @param columns optional, (\code{character}) column names to extract the labels from. If (\code{NULL}) then all
+#'   columns are being used.
+#' @inheritParams rtables::var_labels
 #'
 #' @return labels of the columns
 #'
@@ -193,13 +196,19 @@ get_labels <- function(data) {
 #' get_variable_labels(ADSL)
 #' get_variable_labels(ADSL, c("AGE", "RACE", "BMRKR1"))
 #' get_variable_labels(ADSL, c("AGE", "RACE", "BMRKR1", "xyz"))
-get_variable_labels <- function(data, columns = NULL) {
+#'
+#' ADSL$NEW_COL <- 1
+#' get_variable_labels(ADSL, c("AGE", "RACE", "BMRKR1", "NEW_COL"))
+#' get_variable_labels(ADSL, c("AGE", "RACE", "BMRKR1", "NEW_COL"), fill = FALSE)
+get_variable_labels <- function(data, columns = NULL, fill = TRUE) {
   stopifnot(is.data.frame(data))
   stopifnot(is.null(columns) || is_character_vector(columns))
+  stopifnot(is_logical_single(fill))
 
   columns <- if_null(columns, colnames(data))
-  labels <- as.list(get_labels(data)$column_labels)
-  res <- vapply(columns, function(x) if_null(labels[[x]], ""), character(1))
+  labels <- as.list(get_labels(data, fill = fill)$column_labels)
+  # convert NULL into NA_character for not-existing column
+  res <- vapply(columns, function(x) if_null(labels[[x]], NA_character_), character(1))
 
   return(res)
 }

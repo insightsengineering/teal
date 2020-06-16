@@ -7,24 +7,24 @@
 module(label, server, ui, filters, server_args = NULL, ui_args = NULL)
 }
 \arguments{
-\item{label}{label shown in the navigation for the item}
+\item{label}{(\code{character}) Label shown in the navigation item for the module.}
 
-\item{server}{shiny server module function, see
-\code{link[shiny]{callModule}}}
+\item{server}{(\code{function}) Shiny server module function, see
+\code{\link[shiny]{callModule}}.}
 
-\item{ui}{shiny ui module function (see \code{link[shiny]{callModule}})
-with additional teal-specific \code{datasets} argument}
+\item{ui}{(\code{function}) Shiny ui module function (see \code{\link[shiny]{callModule}})
+with additional teal-specific \code{datasets} argument.}
 
-\item{filters}{a vector with datanames that are relevant for the item. The
+\item{filters}{(\code{character}) A vector with datanames that are relevant for the item. The
 filter panel will automatically update the shown filters to include only
 filters in the listed data sets. \code{NULL} will hide the filter panel,
 and the keyword \code{'all'} will show the filters of all datasets.}
 
-\item{server_args}{is a named list with additional arguments passed on to the
+\item{server_args}{(\code{list}) Named list with additional arguments passed on to the
 server function. Note that the \code{FilteredDatasets} object gets
 automatically passed to the server function as arguments \code{datasets}.}
 
-\item{ui_args}{is a named list with additional arguments passed on to the
+\item{ui_args}{(\code{list}) Named list with additional arguments passed on to the
 ui function. The argument \code{'teal_datasets'} will always be
 replaced by the \code{FilteredData} object.}
 }

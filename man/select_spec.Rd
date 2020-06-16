@@ -10,7 +10,7 @@ select_spec(
   multiple = length(selected) > 1,
   fixed = FALSE,
   always_selected = NULL,
-  label = "Column(s)"
+  label = ifelse(multiple, "Columns", "Column")
 )
 }
 \arguments{
@@ -20,14 +20,14 @@ of a shiny \code{\link[shiny]{selectInput}}. These have to be columns in the
 dataset defined in the \link{data_extract_spec} where this is called.
 \code{delayed_data} objects can be created via \code{variable_choices} or \code{value_choices}.}
 
-\item{selected}{(\code{character}) (default value) Named character vector to define the selected
-values of a shiny \code{\link[shiny]{selectInput}}. This can be just one column
-name or multiple column names.}
+\item{selected}{optional (\code{character} or \code{NULL}).
+Named character vector to define the selected values of a shiny \code{\link[shiny]{selectInput}}.
+Defaults to the first value of \code{choices} or \code{NULL} for delayed data loading.}
 
 \item{multiple}{(\code{logical}) Whether multiple values shall be allowed in the
 shiny \code{\link[shiny]{selectInput}}.}
 
-\item{fixed}{(\code{logical}) (optional) \link{data_extract_spec} specific feature to
+\item{fixed}{optional (\code{logical}). \link{data_extract_spec} specific feature to
 hide the choices selected in case they are not needed. Setting fixed to \code{TRUE}
 will not allow the user to select columns. It will then lead to a selection of
 columns in the dataset that is defined by the developer of the app.}
@@ -35,7 +35,7 @@ columns in the dataset that is defined by the developer of the app.}
 \item{always_selected}{(\code{character}) Additional column names from the data set that should
 always be selected}
 
-\item{label}{(\code{logical}) (optional) Define a label
+\item{label}{optional (\code{logical}). Define a label
 on top of this specific shiny \code{\link[shiny]{selectInput}}.}
 }
 \value{
