@@ -112,21 +112,16 @@ srv_add_filter_variable <- function(input, output, session, datasets, dataname, 
     if (!is.null(var_to_add)) {
       stopifnot(datasets$is_filterable(dataname, var_to_add))
       .log("add filter variable", var_to_add)
-      self$set_filter_state(
-        dataname, varname = var_to_add, state = self$get_default_filter_state(dataname, varname = var_to_add)
+      datasets$set_filter_state(
+        dataname, varname = var_to_add, state = datasets$get_default_filter_state(dataname, varname = var_to_add)
       )
     }
   })
 
   # remove selected option from choices and set again to unselected, so a new
   # variable can be selected
-  # reacts both when data changed and when active_filter_vars is updated
-  observe({
-    # we add this dependency here so that the choices update once the UI is set up (which triggers an event)
-    # even though the var_to_add is set to NULL with `updateOptionalSelectInput`, this only happens once all
-    # observers were executed, so the above that adds it to the filtered variables still has its non-NULL value
-    input$var_to_add
-
+  # does not react when `active_filter_vars()` updates
+  observeEvent(input$var_to_add, ignoreNULL = FALSE, {
     .log("updating choices to add filter variables for", dataname)
     choices <- setdiff(
       names(datasets$get_data(dataname, filtered = FALSE)),
@@ -135,6 +130,8 @@ srv_add_filter_variable <- function(input, output, session, datasets, dataname, 
     choices <- choices[
       vapply(choices, function(varname) datasets$is_filterable(dataname, varname = varname), logical(1))
     ]
+    # `updateOptionalSelectInput`, this only happens once the reactive flush terminates when all observers were
+    # executed, so the above that adds it to the filtered variables still has its non-NULL value
     updateOptionalSelectInput(
       session,
       "var_to_add",
