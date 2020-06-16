@@ -111,7 +111,6 @@ ui_single_filter_item <- function(id, filter_info, filter_state, prelabel) {
 
   # we set label to NULL everywhere, so we can set the label column ourselves
   select_input <- if (filter_info$type == "choices") {
-    # this if should ideally be implemented in Javascript to also work when choices are updates from the server side
     if (length(filter_info$choices) <= 5) {
       div(
         style = "position: relative;",
@@ -146,22 +145,20 @@ ui_single_filter_item <- function(id, filter_info, filter_state, prelabel) {
     # this needs to be made more general for ranges like `[0.000023, 0.000059]` to not be rounded to `[0, 0]`
     # round to two decimal places
     # we round to a slightly larger interval, when we set `datasets`, we truncate it to the valid range
-    # using round may result in an interval that is too small (with negative numbers)
+    # using `round()` may result in an interval that is too small (with negative numbers)
     min <- floor(filter_info$range[[1]] * 100) / 100
     max <- ceiling(filter_info$range[[2]] * 100) / 100
-    step <- ceiling(filter_info$range[[2]] - filter_info$range[[1]]) / 100
     div(
       div(
         class = "filterPlotOverlayRange",
-        shiny::plotOutput(ns("plot"), height = "100%")
+        plotOutput(ns("plot"), height = "100%")
       ),
       sliderInput(
         id_selection,
         label = NULL,
         min = min,
         max = max,
-        step = step,
-        # round argument does not work as expected
+        # Note: round argument does not work as expected
         value = filter_state$range,
         width = "100%"
       )
@@ -188,7 +185,7 @@ ui_single_filter_item <- function(id, filter_info, filter_state, prelabel) {
   }
 
   # label before select input and button to remove filter
-  return(fluidPage(
+  res <- fluidPage(
     fluidRow(
       column(8, class = "no-left-right-padding", tags$span(
         tags$span(prelabel, class = "filter_panel_varname"),
@@ -205,14 +202,15 @@ ui_single_filter_item <- function(id, filter_info, filter_state, prelabel) {
     fluidRow(
       checkboxInput(id_keep_na, get_keep_na_label(filter_info$na_count), value = filter_state$keep_na)
     )
-  ))
+  )
+  return(res)
 }
 
 #' Server function to filter for a single variable
 #'
 #' Regarding the return value: The `observers` are returned so they can be canceled
 #' when the module is removed, the `update_ui_trigger` can be used to update the input
-#' elements (analogous to `shiny::updateInput` functions) which is not done automatically
+#' elements (analogous to the `shiny::updateInput` functions) which is not done automatically
 #' to avoid infinite cycles, see also `module_filter_items.R` for a discussion.
 #'
 #' @md
@@ -233,7 +231,7 @@ srv_single_filter_item <- function(input, output, session, datasets, dataname, v
   # we have to make this outside the if because plot options may be different per variable type
   var_type <- isolate(datasets$get_filter_type(dataname, varname))
 
-  output$plot <- if ((var_type == "choices") || (var_type == "logical")) {
+  output$plot <- if (var_type == "choices" || var_type == "logical") {
     renderPlot(bg = "transparent", {
       filter_info <- datasets$get_filter_info(dataname, varname)
       if ((length(filter_info$choices) <= 5) || (var_type == "logical")) {
@@ -256,7 +254,7 @@ srv_single_filter_item <- function(input, output, session, datasets, dataname, v
       }
     })
   } else if (var_type == "range") {
-    shiny::renderPlot(
+    renderPlot(
       bg = "transparent",
       height = 25, {
         filter_info <- datasets$get_filter_info(dataname, varname)

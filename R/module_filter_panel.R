@@ -88,7 +88,7 @@ ui_filter_panel <- function(id, datanames) {
           return(span(id = id, ui_add_filter_variable(id, dataname)))
         })
       ),
-      helpText("Note that teal does not support filering on all variable types.",
+      helpText("Note that teal does not support filtering on all variable types.",
                "Hence variables that cannot be filtered are excluded.")
     )
 

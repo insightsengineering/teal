@@ -61,7 +61,6 @@ ui_filter_items <- function(id, dataname) {
   ns <- NS(id)
   div(
     id = ns("whole_ui"), # to hide it entirely
-    onchange = "hideIffEmpty(this)", #todo1: not working right now
     fluidRow(
       column(8, tags$span(dataname, class = "filter_panel_dataname")),
       column(4, actionLink(
@@ -73,9 +72,7 @@ ui_filter_items <- function(id, dataname) {
       # id needed to insert and remove UI to filter single variable as needed
       # it is currently also used by the above module to entirely hide this panel
       id = ns("filters"),
-      class = "listWithHandle list-group", # to make every element in here draggable
-      # todo1: onload does not work, only on change
-      onchange = "convertToDraggable(this)"
+      class = "listWithHandle list-group" # to make every element in here draggable
     )
   )
 }
@@ -150,7 +147,8 @@ srv_filter_items <- function(input, output, session, datasets, dataname) {
       .log("regenerating ui filters for data", dataname)
 
       # add variables not shown currently
-      lapply(setdiff(filtered_vars(), names(shown_vars_observers)), function(varname) {
+      added_varnames <- setdiff(filtered_vars(), names(shown_vars_observers))
+      lapply(added_varnames, function(varname) {
         filter_id <- session$ns(filter_id_for_var(varname))
         insertUI(
           selector = paste0("#", session$ns("filters")),
@@ -178,7 +176,8 @@ srv_filter_items <- function(input, output, session, datasets, dataname) {
         )
       })
       # remove variables that should not be shown anymore
-      lapply(setdiff(names(shown_vars_observers), filtered_vars()), function(varname) {
+      removed_varnames <- setdiff(names(shown_vars_observers), filtered_vars())
+      lapply(removed_varnames, function(varname) {
         removeUI(selector = paste0("#", session$ns(filter_id_for_var(varname))))
         lapply(shown_vars_observers[[varname]], function(obs) obs$destroy())
         shown_vars_observers[[varname]] <<- NULL

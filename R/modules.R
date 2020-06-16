@@ -29,7 +29,7 @@ modules <- function(label, ...) {
     ))
   }
 
-  labels <- lapply(submodules, function(submodule) submodule$label)
+  labels <- vapply(submodules, function(submodule) submodule$label, character(1))
   if (any(duplicated(labels))) {
     stop("Please choose unique labels for each tab. Currently, they are ", toString(labels))
   }

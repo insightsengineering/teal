@@ -9,7 +9,8 @@ init(
   modules,
   filter_states = list(),
   header = tags$p("Add Title Here"),
-  footer = tags$p("Add Footer Here")
+  footer = tags$p("Add Footer Here"),
+  id = character(0)
 )
 }
 \arguments{
@@ -48,6 +49,11 @@ Ignored if the app is restored from a bookmarked state.}
 \item{header}{(\code{character} or \code{shiny.tag}) the header of the app}
 
 \item{footer}{(\code{character} or \code{shiny.tag}) the footer of the app}
+
+\item{id}{(\code{character}) module id to embed it, if provided,
+the server function must be called with \code{callModule};
+See the vignette for an example. However, \verb{\link{ui_teal_with_splash}}
+is then preferred to this function.}
 }
 \value{
 named list with server and ui function
@@ -100,8 +106,7 @@ app <- init(
   footer = tags$p("Copyright 2017 - 2020")
 )
 \dontrun{
-# todo1: this needs to be done in other places as well
-shinyApp(app$ui(), app$server)
+shinyApp(app$ui, app$server)
 # or: to also work with bookmarking
 bookmarkableShinyApp(app$ui, app$server)
 }

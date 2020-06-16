@@ -706,7 +706,7 @@ FilteredData <- R6::R6Class( # nolint
       # which is independent of this class. It is also better to store a list
       # rather than a class because this allows bookmarking of type `url` and
       # not just `server`
-      return(list(
+      res <- list(
         # must be a list and not atomic vector, otherwise jsonlite::toJSON gives a warning
         data_md5sums = setNames(
           lapply(self$datanames(), self$get_data_attr, "md5sum"),
@@ -714,7 +714,8 @@ FilteredData <- R6::R6Class( # nolint
         ),
         filter_states = reactiveValuesToList(private$filter_states),
         preproc_code = self$get_preproc_code()
-      ))
+      )
+      return(res)
     },
 
     #' Set this object from a bookmarked state

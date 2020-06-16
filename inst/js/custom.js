@@ -4,6 +4,7 @@
 
 // unlike Doug, we don't create a Shiny input binding because we want to handle this entirely in the browser and not on the server
 // wait for init, otherwise, the elements are not there yet
+// Note: these functions don't work yet and a good place where to add them must be found (which event to register with?)
 function convertToDraggable(el) {
   console.log('Converting element to draggable');
   Sortable.create(el, {

@@ -95,6 +95,7 @@ Collate:
     'module_single_filter_item.R'
     'module_tabs_with_filters.R'
     'module_teal.R'
+    'module_teal_with_splash.R'
     'modules_debugging.R'
     'mutate_dataset.R'
     'optionalInput.R'

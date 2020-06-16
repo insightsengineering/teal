@@ -14,11 +14,7 @@
 #' ds <- teal:::FilteredData$new()
 #' ADSL <- radsl(cached = TRUE)
 #' attr(ADSL, "keys") <- get_cdisc_keys("ADSL")
-#' execute_example <- function() {
-#'   # to evaluate without isolate(), i.e. provide a default isolate context
-#'   options(shiny.suppressMissingContextError = TRUE)
-#'   on.exit(options(shiny.suppressMissingContextError = FALSE), add = TRUE)
-#'
+#' isolate({
 #'   ds$set_data("ADSL", ADSL)
 #'
 #'   # value_choices example
@@ -58,8 +54,7 @@
 #'   resolve_delayed(adsl_filter, ds)
 #'   resolve_delayed(adsl_select, ds)
 #'   resolve_delayed(adsl_de, ds)
-#' }
-#' execute_example()
+#' })
 resolve_delayed <- function(x, datasets) {
   stopifnot(is(datasets, "FilteredData"))
   UseMethod("resolve_delayed")

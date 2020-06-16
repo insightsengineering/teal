@@ -107,3 +107,30 @@ Note: Whenever you return input objects, it seems that you explicitly need to wr
 Modules should respect the argument order: `function(input, output, session, datasets, ...)`, where `...` can also include further named arguments.
 
 The idiom `shinyApp(ui, server) %>% invisible()` is used with internal Shiny modules that are not exported. Printing a `shinyApp` causes it to call `runApp` so this avoids running the app, but still checking that the ui function and server are valid. Since `teal::init` returns an `app` object and is used by end users, we don't use this trick there.
+
+
+Refactor
+```
+return(list(
+  # must be a list and not atomic vector, otherwise jsonlite::toJSON gives a warning
+  data_md5sums = setNames(
+    lapply(self$datanames(), self$get_data_attr, "md5sum"),
+    self$datanames()
+  ),
+  filter_states = reactiveValuesToList(private$filter_states),
+  preproc_code = self$get_preproc_code()
+))
+```
+into the more easily debuggable form
+```
+res <- list(
+  # must be a list and not atomic vector, otherwise jsonlite::toJSON gives a warning
+  data_md5sums = setNames(
+    lapply(self$datanames(), self$get_data_attr, "md5sum"),
+    self$datanames()
+  ),
+  filter_states = reactiveValuesToList(private$filter_states),
+  preproc_code = self$get_preproc_code()
+)
+return(res)
+```

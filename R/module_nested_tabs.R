@@ -142,7 +142,7 @@ srv_nested_tabs <- function(input, output, session, datasets, modules) {
   # - displaying only the relevant datasets in the right hand filter in the
   # sections: filter info, filtering vars per dataname and add filter variable per dataname
   # recursively goes down tabs to figure out the active module
-  figure_out_active_module <- function(modules, id_parent) {
+  get_active_module <- function(modules, id_parent) {
     id <- label_to_id(modules$label, id_parent)
     return(switch(
       class(modules)[[1]],
@@ -150,7 +150,7 @@ srv_nested_tabs <- function(input, output, session, datasets, modules) {
         # id is the id of the tabset, the corresponding input element states which tab is selected
         active_submodule_label <- input[[id]]
         stopifnot(!is.null(active_submodule_label))
-        figure_out_active_module(modules$children[[active_submodule_label]], id_parent = id)
+        get_active_module(modules$children[[active_submodule_label]], id_parent = id)
       },
       teal_module = {
         stopifnot(is.null(input[[id]])) # id should not exist
@@ -164,7 +164,7 @@ srv_nested_tabs <- function(input, output, session, datasets, modules) {
     # inputs may be NULL when UI hasn't loaded yet, but this expression still is evaluated
     req(!is.null(input[[label_to_id(modules$label)]]))
 
-    figure_out_active_module(modules, id_parent = NULL)
+    get_active_module(modules, id_parent = NULL)
   })
   return(active_module)
 }

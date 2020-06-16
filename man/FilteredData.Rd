@@ -12,7 +12,7 @@ Class to encapsulate filtered datasets
 \details{
 The main purpose of this class is to provide a collection of reactive datasets,
 each of which can be filtered through the right filter panel of teal apps.
-For each dataset, \code{get_filter_call} returns the call to filter the dataset according
+For each dataset, \code{get_filter_expr} returns the call to filter the dataset according
 to the UI user selection.
 Other classes then take care of actually merging together all the datasets.
 
@@ -48,19 +48,16 @@ Common arguments are:
 \examples{
 library(random.cdisc.data)
 
-# for `on.exit` to work with examples which are executed line-by-line
-# note: you can still execute every line in the function line-by-line
-# without calling the function as a whole, beware that the exit handler
-# is not called in this case
-execute_example <- function() {
-  ADSL <- radsl(cached = TRUE)
-  attr(ADSL, "keys") <- get_cdisc_keys("ADSL")
-  datasets <- teal:::FilteredData$new()
+ADSL <- radsl(cached = TRUE)
+attr(ADSL, "keys") <- get_cdisc_keys("ADSL")
+datasets <- teal:::FilteredData$new()
 
-  # to evaluate without isolate(), i.e. provide a default isolate context
-  options(shiny.suppressMissingContextError = TRUE)
-  on.exit(options(shiny.suppressMissingContextError = FALSE), add = TRUE)
+# to avoid using isolate(), you can provide a default isolate context by calling
+# options(shiny.suppressMissingContextError = TRUE) #nolintr
+# don't forget to deactivate this option at the end
+# options(shiny.suppressMissingContextError = FALSE) #nolintr
 
+isolate({
   datasets
 
   datasets$set_data("ADSL", ADSL)
@@ -98,8 +95,9 @@ execute_example <- function() {
   datasets$get_filter_type("ADSL", "SEX")
 
   datasets$get_filter_state("ADSL")
-}
-execute_example()
+
+  datasets$print_filter_info("ADSL")
+})
 }
 \section{Methods}{
 \subsection{Public methods}{
@@ -113,6 +111,8 @@ execute_example()
 \item \href{#method-get_data_attr}{\code{FilteredData$get_data_attr()}}
 \item \href{#method-set_data_attr}{\code{FilteredData$set_data_attr()}}
 \item \href{#method-get_variable_labels}{\code{FilteredData$get_variable_labels()}}
+\item \href{#method-get_keys}{\code{FilteredData$get_keys()}}
+\item \href{#method-get_datalabel}{\code{FilteredData$get_datalabel()}}
 \item \href{#method-get_filter_info}{\code{FilteredData$get_filter_info()}}
 \item \href{#method-get_filter_type}{\code{FilteredData$get_filter_type()}}
 \item \href{#method-get_filter_state}{\code{FilteredData$get_filter_state()}}
@@ -120,7 +120,7 @@ execute_example()
 \item \href{#method-get_default_filter_state}{\code{FilteredData$get_default_filter_state()}}
 \item \href{#method-restore_filter}{\code{FilteredData$restore_filter()}}
 \item \href{#method-is_filterable}{\code{FilteredData$is_filterable()}}
-\item \href{#method-get_filter_call}{\code{FilteredData$get_filter_call()}}
+\item \href{#method-get_filter_expr}{\code{FilteredData$get_filter_expr()}}
 \item \href{#method-print}{\code{FilteredData$print()}}
 \item \href{#method-print_filter_info}{\code{FilteredData$print_filter_info()}}
 \item \href{#method-get_data_info}{\code{FilteredData$get_data_info()}}
@@ -261,7 +261,7 @@ Set the R preprocessing code to generate the unfiltered datasets
 \describe{
 \item{\code{dataname}}{\code{character} name of the dataset}
 
-\item{\code{attr}}{attribute to get from the data attributes of the dataset}
+\item{\code{attr}}{\code{character} attribute to get from the data attributes of the dataset}
 }
 \if{html}{\out{</div>}}
 }
@@ -272,6 +272,9 @@ sets and gets the data attribute on unfiltered data as it is never modified
 as attributes
 }
 
+\subsection{Returns}{
+value of attribute, may be NULL if it does not exist
+}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-set_data_attr"></a>}}
@@ -296,7 +299,7 @@ Set data attribute for the dataset
 }
 
 \subsection{Returns}{
-\code{self}
+\code{self} for chaining
 }
 }
 \if{html}{\out{<hr>}}
@@ -312,7 +315,8 @@ Set data attribute for the dataset
 \item{\code{dataname}}{\code{character} name of the dataset}
 
 \item{\code{variables}}{(\code{character} vector) variables to get labels for;
-if \code{NULL}, for all variables}
+if \code{NULL}, for all variables
+Get keys for the dataset}
 }
 \if{html}{\out{</div>}}
 }
@@ -324,14 +328,49 @@ Variables may be columns.
 
 }
 \if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-get_keys"></a>}}
+\subsection{Method \code{get_keys()}}{
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{FilteredData$get_keys(dataname)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{dataname}}{\code{character} name of the dataset}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Returns}{
+\code{character} keys of dataset
+Get datalabel for the dataset
+
+Useful to display in \verb{Show R Code}.
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-get_datalabel"></a>}}
+\subsection{Method \code{get_datalabel()}}{
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{FilteredData$get_datalabel(dataname)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{dataname}}{\code{character} name of the dataset}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Returns}{
+\code{character} keys of dataset
+}
+}
+\if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-get_filter_info"></a>}}
 \subsection{Method \code{get_filter_info()}}{
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{FilteredData$get_filter_info(
-  dataname,
-  varname = NULL,
-  all_filterable_vars = FALSE
-)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{FilteredData$get_filter_info(dataname, varname = NULL, all_vars = FALSE)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
@@ -342,9 +381,9 @@ Variables may be columns.
 \item{\code{varname}}{\code{character} column within the dataset,
 if \code{NULL}, return all (filtered) variables}
 
-\item{\code{all_filterable_vars}}{\code{logical} (only applies if \code{varname} is NULL)
-whether to include non-filtered variables; only filterable variables
-are included}
+\item{\code{all_vars}}{\code{logical} (only applies if \code{varname} is NULL)
+whether to include non-filtered variables; attention: only
+filterable variables are included}
 }
 \if{html}{\out{</div>}}
 }
@@ -527,10 +566,10 @@ whether the variable can be filtered (type not unknown)
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-get_filter_call"></a>}}
-\subsection{Method \code{get_filter_call()}}{
+\if{html}{\out{<a id="method-get_filter_expr"></a>}}
+\subsection{Method \code{get_filter_expr()}}{
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{FilteredData$get_filter_call(dataname)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{FilteredData$get_filter_expr(dataname)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
@@ -545,16 +584,20 @@ Get the call to filter the dataset according to the filter state
 
 This can be used for the \verb{Show R Code} generation.
 
-When the dataname is ADSL, it is simply the filtered ADSL.
+When the dataname is \code{ADSL}, it is simply the filtered \code{ADSL}.
 Otherwise, it is the filtered dataset that only contains subjects which
-are also in the filtered ADSL.
+are also in the filtered \code{ADSL}.
 
 Note: The \code{dplyr::inner_join()} function in returned call will fail if the
 corresponding dataset is NULL.
+
+For the return type, note that \code{rlang::is_expression} returns \code{TRUE} on the
+return type, both for base R expressions and calls (single expression,
+capturing a function call).
 }
 
 \subsection{Returns}{
-call to filter dataset (taking out patients not in ADSL)
+\code{expression} to filter dataset (taking out patients not in \code{ADSL})
 }
 }
 \if{html}{\out{<hr>}}
