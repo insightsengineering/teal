@@ -134,7 +134,7 @@ init <- function(data,
   # rather than using `callModule` and creating a submodule of this module, we directly modify
   # the `ui` and `server` with `id = character(0)` and calling the server function directly
   # rather than through `callModule`
-  return(list(
+  res <- list(
     ui = ui_teal_with_splash(id = id, data = data, header = header, footer = footer),
     server = function(input, output, session) {
       srv_teal_with_splash(
@@ -142,7 +142,8 @@ init <- function(data,
         data = data, modules = modules, filter_states = filter_states
       )
     }
-  ))
+  )
+  return(res)
 }
 
 #' Make a UI function bookmarkable

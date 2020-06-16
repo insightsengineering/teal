@@ -155,7 +155,7 @@ FilteredData <- R6::R6Class( # nolint
     set_data = function(dataname, data) {
       stopifnot(is_character_single(dataname))
       # to include it nicely in the Show R Code; the UI also uses datanames in ids, so no whitespaces allowed
-      check_variable_name_okay(dataname)
+      check_simple_name(dataname)
       stopifnot(is.data.frame(data))
       # column_labels and labels may be NULL, so attributes will not be present
       stopifnot("keys" %in% names(attributes(data)))
@@ -166,13 +166,11 @@ FilteredData <- R6::R6Class( # nolint
 
       is_new_dataname <- !dataname %in% self$datanames()
 
-      private$data_attrs[[dataname]] <- c(
-        list(
-          # save `md5sum` for reproducibility, this should probably be added in `cdisc_data` already
-          md5sum = digest(data, algo = "md5")
-        ),
-        attributes(data)[c("keys", "data_label", "column_labels")]
-      )
+      data_attrs <- attributes(data)
+      # save `md5sum` for reproducibility, this should probably be added in `cdisc_data` already
+      data_attrs$md5sum <- digest(data, algo = "md5")
+      # note: there is also a class attribute, but we don't filter it out
+      private$data_attrs[[dataname]] <- data_attrs
 
       # todo: fix other issues found by automation
       # todo: please remove scratch folder once done

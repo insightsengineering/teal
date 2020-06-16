@@ -76,7 +76,7 @@ ui_teal <- function(id, splash_ui = tags$h2("Starting the Teal App"), header = t
     )
   )
 
-  return(shinyUI(
+  res <- shinyUI(
     fluidPage(
       include_teal_css_js(),
       tags$header(header),
@@ -86,7 +86,8 @@ ui_teal <- function(id, splash_ui = tags$h2("Starting the Teal App"), header = t
       tags$hr(),
       tags$footer(footer)
     )
-  ))
+  )
+  return(res)
 }
 
 #' Server function corresponding to teal

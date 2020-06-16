@@ -299,6 +299,7 @@ srv_shiny_module_arguments <- function(input, output, session, datasets, modules
 
 # Check functions that error with informative error messages ----
 
+# todo: move to utils.nest
 #' Whether the variable name is good to use within Show R Code
 #'
 #' Spaces are problematic because the variables must be escaped
@@ -313,19 +314,19 @@ srv_shiny_module_arguments <- function(input, output, session, datasets, modules
 #' @param name `character, single or vector` name to check
 #'
 #' @examples
-#' check_variable_name_okay <- teal:::check_variable_name_okay
-#' check_variable_name_okay("aas2df")
-#' check_variable_name_okay("ADSL")
-#' check_variable_name_okay("ADSLmodified")
-#' check_variable_name_okay("a1")
+#' check_simple_name <- teal:::check_simple_name
+#' check_simple_name("aas2df")
+#' check_simple_name("ADSL")
+#' check_simple_name("ADSLmodified")
+#' check_simple_name("a1")
 #' # the following fail
 #' \dontrun{
-#' check_variable_name_okay("1a")
-#' check_variable_name_okay("ADSL.modified")
-#' check_variable_name_okay("ADSL_modified")
-#' check_variable_name_okay("a1...")
+#' check_simple_name("1a")
+#' check_simple_name("ADSL.modified")
+#' check_simple_name("ADSL_modified")
+#' check_simple_name("a1...")
 #' }
-check_variable_name_okay <- function(name) {
+check_simple_name <- function(name) {
   stopifnot(is_character_single(name) || is_character_vector(name))
   if (!grepl("^[[:alpha:]][[:alnum:]]*$", name)) {
     stop(paste0(

@@ -34,17 +34,29 @@ function
 
 \item{filter_states}{(\code{list}) You can define filters that show when
 the app starts.
-Pass in a named list to overwrite filters, e.g.
-\code{list(ADSL = list(SEX = NULL))}
-to have the SEX filter appear with nothing selected (i.e. 0 patients)
-\code{list(ADSL = list(SEX = list(choices = "M", keep_na = TRUE)))}
-to keep patients that are male or have unknown SEX.
-\code{list(ADSL = list(SEX = "default"))}
-to have the default filter that appears also when you select to add this
-filtering variable in the running app.
+The general pattern is:
+\code{list(ADSL = list(SEX = ..., AGE = ...), ADAE = ...)}.
+An example is:
+\code{list(ADSL = list(SEX = c("M", "F")))}.
+More generally, the filters for the variable, e.g. \code{SEX} can be
+specified as follows:
+\code{list(SEX = list(choices = c("M", "F")))},
+\code{list(SEX = list(choices = c("M", "F"), keep_na = TRUE))},
+or equivalently with:
+\code{list(SEX = c("M", "F"))},
+\code{list(SEX = c("M", "F", NA))},
+or for the default filter state (not very restrictive):
+\code{list(SEX = default_filter_state())}
+
+Instead of \code{choices} above, use the following names:
+\itemize{
+\item \code{numerical}: \code{range}
+\item \code{factor}: \code{choices}
+\item \code{logical}: \code{logical}
 A general example is:
-\code{list( ADSL = list(AGE = "default", SEX = list(choices = "M", keep_na = TRUE)), ADAE = list(AETOXGR = "default") )}
-Ignored if the app is restored from a bookmarked state.}
+\code{list(   ADSL = list(AGE = default_filter_state(), SEX = c("M", NA)),   ADAE = list(AETOXGR = default_filter_state())   )}
+Ignored if the app is restored from a bookmarked state.
+}}
 
 \item{header}{(\code{character} or \code{shiny.tag}) the header of the app}
 
@@ -101,7 +113,7 @@ app <- init(
       filters = "ADSL"
     )
   ),
-  filter_states = list(ADSL = list(AGE = "default")),
+  filter_states = list(ADSL = list(AGE = default_filter_state())),
   header = tags$h1("Sample App"),
   footer = tags$p("Copyright 2017 - 2020")
 )

@@ -57,7 +57,7 @@ ui_nested_tabs <- function(id, modules, datasets) {
     )
 
     id <- label_to_id(modules$label, id_parent)
-    return(switch(
+    res <- switch(
       class(modules)[[1]],
       teal_modules = {
         .log("** UI id for modules is", ns(id))
@@ -93,7 +93,8 @@ ui_nested_tabs <- function(id, modules, datasets) {
         )
       },
       stop("unknown class ", class(modules), ", id_parent ", id_parent)
-    ))
+    )
+    return(res)
   }
   return(create_ui(modules, id_parent = NULL))
 }
@@ -144,7 +145,7 @@ srv_nested_tabs <- function(input, output, session, datasets, modules) {
   # recursively goes down tabs to figure out the active module
   get_active_module <- function(modules, id_parent) {
     id <- label_to_id(modules$label, id_parent)
-    return(switch(
+    res <- switch(
       class(modules)[[1]],
       teal_modules = {
         # id is the id of the tabset, the corresponding input element states which tab is selected
@@ -157,7 +158,8 @@ srv_nested_tabs <- function(input, output, session, datasets, modules) {
         modules
       },
       stop("unknown module class ", class(modules))
-    ))
+    )
+    return(res)
   }
 
   active_module <- reactive({

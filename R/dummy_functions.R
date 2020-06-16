@@ -8,10 +8,11 @@
 #' @md
 #' @return dummy filter states
 get_dummy_filter_states <- function() {
-  return(list(
+  res <- list(
     ADSL = list(SEX = list(choices = "M", keep_na = TRUE), AGE = default_filter_state()),
     ADLB = list(ASEQ = default_filter_state())
-  ))
+  )
+  return(res)
 }
 
 #' Get dummy CDISC data
@@ -32,7 +33,7 @@ get_dummy_cdisc_data <- function() {
   ADSL$logical_test <- sample(c(TRUE, FALSE, NA), size = nrow(ADSL), replace = TRUE)
   ADSL$SEX[1:150] <- NA
 
-  return(cdisc_data(
+  res <- cdisc_data(
     cdisc_dataset(dataname = "ADSL", data = ADSL),
     cdisc_dataset(dataname = "ADAE", data = ADAE),
     cdisc_dataset(dataname = "ADLB", data = ADLB),
@@ -40,7 +41,8 @@ get_dummy_cdisc_data <- function() {
 ADSL <- radsl(cached = TRUE)
 ADAE <- radae(cached = TRUE)
 ADLB <- radlb(cached = TRUE)
-"))
+")
+  return(res)
 }
 
 #' Get a dummy `datasets` object with `ADSL` data, useful in the examples

@@ -1,5 +1,7 @@
 # Module to change the filter for a single variable
-#
+
+.threshold_slider_vs_checkboxgroup <- 5
+
 
 # label of checkbox to keep / remove NAs
 get_keep_na_label <- function(na_count) {
@@ -111,7 +113,7 @@ ui_single_filter_item <- function(id, filter_info, filter_state, prelabel) {
 
   # we set label to NULL everywhere, so we can set the label column ourselves
   select_input <- if (filter_info$type == "choices") {
-    if (length(filter_info$choices) <= 5) {
+    if (length(filter_info$choices) <= .threshold_slider_vs_checkboxgroup) {
       div(
         style = "position: relative;",
         div(
@@ -166,7 +168,7 @@ ui_single_filter_item <- function(id, filter_info, filter_state, prelabel) {
   } else if (filter_info$type == "logical") {
     div(
       style = "position: relative;",
-      # same overlay as for choices with no more than 5 elements
+      # same overlay as for choices with no more than (default: 5) elements
       div(
         class = "filterPlotOverlayBoxes",
         plotOutput(ns("plot"), height = "100%")
@@ -219,6 +221,10 @@ ui_single_filter_item <- function(id, filter_info, filter_state, prelabel) {
 #' @param varname `character` variable within `dataname` to filter
 #'
 #' @return `reactive` which returns `list(observers, update_ui_trigger)`.
+#'
+#' @importFrom grDevices rgb
+#' @importFrom ggplot2 ggplot aes_string geom_area theme_void scale_y_continuous scale_x_continuous geom_col
+#' @importFrom ggplot2 coord_flip scale_x_discrete
 srv_single_filter_item <- function(input, output, session, datasets, dataname, varname) {
   stopifnot(
     is(datasets, "FilteredData"),
@@ -234,23 +240,23 @@ srv_single_filter_item <- function(input, output, session, datasets, dataname, v
   output$plot <- if (var_type == "choices" || var_type == "logical") {
     renderPlot(bg = "transparent", {
       filter_info <- datasets$get_filter_info(dataname, varname)
-      if ((length(filter_info$choices) <= 5) || (var_type == "logical")) {
+      if ((length(filter_info$choices) <= .threshold_slider_vs_checkboxgroup) || (var_type == "logical")) {
         # Proportional
         data <- filter_info$histogram_data
         data$y <- rev(data$y / sum(data$y)) # we have to reverse because the histogram is turned by 90 degrees
-        ggplot2::ggplot(data) +
+        ggplot(data) +
           # sort factor so that it reflects checkbox order
-          ggplot2::aes_string(x = "x", y = "y") +
-          ggplot2::geom_col(
+          aes_string(x = "x", y = "y") +
+          geom_col(
             width = 0.95,
-            fill = grDevices::rgb(66 / 255, 139 / 255, 202 / 255),
+            fill = rgb(66 / 255, 139 / 255, 202 / 255),
             color = NA,
             alpha = 0.2
           ) +
-          ggplot2::coord_flip() +
-          ggplot2::theme_void() +
-          ggplot2::scale_x_discrete(expand = c(0, 0)) +
-          ggplot2::scale_y_continuous(expand = c(0, 0), limits = c(0, 1))
+          coord_flip() +
+          theme_void() +
+          scale_x_discrete(expand = c(0, 0)) +
+          scale_y_continuous(expand = c(0, 0), limits = c(0, 1))
       }
     })
   } else if (var_type == "range") {
@@ -258,15 +264,15 @@ srv_single_filter_item <- function(input, output, session, datasets, dataname, v
       bg = "transparent",
       height = 25, {
         filter_info <- datasets$get_filter_info(dataname, varname)
-        ggplot2::ggplot(filter_info$histogram_data) +
-          ggplot2::aes_string(x = "x", y = "y") +
-          ggplot2::geom_area(
-            fill = grDevices::rgb(66 / 255, 139 / 255, 202 / 255),
+        ggplot(filter_info$histogram_data) +
+          aes_string(x = "x", y = "y") +
+          geom_area(
+            fill = rgb(66 / 255, 139 / 255, 202 / 255),
             color = NA,
             alpha = 0.2) +
-          ggplot2::theme_void() +
-          ggplot2::scale_y_continuous(expand = c(0, 0)) +
-          ggplot2::scale_x_continuous(expand = c(0, 0))
+          theme_void() +
+          scale_y_continuous(expand = c(0, 0)) +
+          scale_x_continuous(expand = c(0, 0))
       })
   } else {
     # no plot generated
@@ -342,7 +348,7 @@ srv_single_filter_item <- function(input, output, session, datasets, dataname, v
     filter_state <- datasets$get_filter_state(dataname, varname)
     type <- filter_info$type
     if (type == "choices") {
-      if (length(filter_info$choices) <= 5) {
+      if (length(filter_info$choices) <= .threshold_slider_vs_checkboxgroup) {
         updateCheckboxGroupInput(session, id_selection, choices = filter_info$choices, selected = filter_state$choices)
       } else {
         updateSelectInput(session, id_selection, choices = filter_info$choices, selected = filter_state$choices)

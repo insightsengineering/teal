@@ -65,5 +65,7 @@ srv_teal_with_splash <- function(input, output, session, data, modules, filter_s
     raw_data <- callModule(data$get_server(), "startapp_module")
     stop_if_not(list(is.reactive(raw_data), "The delayed loading module has to return a reactive object."))
   }
-  return(callModule(srv_teal, "teal", modules = modules, raw_data = raw_data, filter_states = filter_states))
+
+  res <- callModule(srv_teal, "teal", modules = modules, raw_data = raw_data, filter_states = filter_states)
+  return(res)
 }
