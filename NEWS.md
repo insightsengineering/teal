@@ -1,6 +1,8 @@
 
 # teal 0.8.4.9000
 
+* issues with no comments:
+
 * progress bar for ui creation in delayed loading module
 * `cdisc_dataset` and `dataset` now return R6 class objects (RelationalDataset)
 * `get_raw_data` can be used to derive raw data from R6 objects e.g. (RelationalDataset)
