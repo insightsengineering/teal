@@ -4,10 +4,13 @@
 \alias{get_labels}
 \title{Function that extract labels from CDISC dataset}
 \usage{
-get_labels(data)
+get_labels(data, fill = TRUE)
 }
 \arguments{
-\item{data}{data}
+\item{data}{(\code{data.frame}) table to extract the labels from}
+
+\item{fill}{boolean in case the \code{label} attribute does not exist if
+\code{TRUE} the variable names is returned, otherwise \code{NA}}
 }
 \value{
 labels

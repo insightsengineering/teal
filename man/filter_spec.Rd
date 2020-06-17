@@ -43,7 +43,7 @@ be displayed inside the shiny app upon start.}
 \item{multiple}{(\code{logical}) Whether multiple values shall be allowed in the
 shiny \code{\link[shiny]{selectInput}}.}
 
-\item{label}{(\code{logical}) (optional) Define a label
+\item{label}{optional (\code{logical}). Define a label
 on top of this specific shiny \code{\link[shiny]{selectInput}}.}
 
 \item{sep}{(\code{character}) A separator string to split the \code{choices} or

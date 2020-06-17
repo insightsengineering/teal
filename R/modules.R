@@ -75,19 +75,19 @@ root_modules <- function(...) {
 #'
 #' Tab items allows you to add a shiny module to the teal app
 #'
-#' @param label label shown in the navigation for the item
-#' @param server shiny server module function, see
-#'   \code{link[shiny]{callModule}}
-#' @param ui shiny ui module function (see \code{link[shiny]{callModule}})
-#'   with additional teal-specific \code{datasets} argument
-#' @param filters a vector with datanames that are relevant for the item. The
+#' @param label (\code{character}) Label shown in the navigation item for the module.
+#' @param server (\code{function}) Shiny server module function, see
+#'   \code{\link[shiny]{callModule}}.
+#' @param ui (\code{function}) Shiny ui module function (see \code{\link[shiny]{callModule}})
+#'   with additional teal-specific \code{datasets} argument.
+#' @param filters (\code{character}) A vector with datanames that are relevant for the item. The
 #'   filter panel will automatically update the shown filters to include only
 #'   filters in the listed data sets. \code{NULL} will hide the filter panel,
 #'   and the keyword \code{'all'} will show the filters of all datasets.
-#' @param server_args is a named list with additional arguments passed on to the
+#' @param server_args (\code{list}) Named list with additional arguments passed on to the
 #'   server function. Note that the \code{FilteredDatasets} object gets
 #'   automatically passed to the server function as arguments \code{datasets}.
-#' @param ui_args is a named list with additional arguments passed on to the
+#' @param ui_args (\code{list}) Named list with additional arguments passed on to the
 #'   ui function. The argument \code{'teal_datasets'} will always be
 #'   replaced by the \code{FilteredData} object.
 #'
