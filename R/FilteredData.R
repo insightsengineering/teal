@@ -119,7 +119,7 @@ FilteredData <- R6::R6Class( # nolint
     #'
     #' @param dataname `character` name of the dataset
     #' @param filtered `logical` whether to return filtered or unfiltered dataset
-    get_data = function(dataname, filtered) {
+    get_data = function(dataname, filtered = TRUE) {
       private$check_data_varname_exists(dataname)
       stopifnot(is_logical_single(filtered))
 
@@ -171,9 +171,6 @@ FilteredData <- R6::R6Class( # nolint
       # note: there is also a class attribute, but we don't filter it out
       private$data_attrs[[dataname]] <- data_attrs
 
-      # todo: fix other issues found by automation
-      # todo: please remove scratch folder once done
-
       private$unfiltered_datasets[[dataname]] <- data
 
       if (is_new_dataname) {
@@ -206,7 +203,6 @@ FilteredData <- R6::R6Class( # nolint
     #' @return `self`
     set_preproc_code = function(preproc_code) {
       stopifnot(is_character_single(preproc_code))
-      # todo1: check here that the preproc_code faithfully reproduces the datasets
       private$preproc_code <- preproc_code
       return(invisible(self))
     },
@@ -227,7 +223,6 @@ FilteredData <- R6::R6Class( # nolint
       return(private$data_attrs[[dataname]][[attr]])
     },
 
-    # todo1: I would remove `set_data_attr`
     #' @details
     #' Set data attribute for the dataset
     #'
@@ -245,8 +240,6 @@ FilteredData <- R6::R6Class( # nolint
     },
 
     # Convenience functions to get data attributes ----
-    # todo1: I would say only `get_keys` belongs to this class, `get_variable_labels` and `get_datalabel` should go
-    # to `cdisc_data` and related classes
 
     #' @details
     #' Get non-NA labels of variables in the data
@@ -289,7 +282,7 @@ FilteredData <- R6::R6Class( # nolint
       return(self$get_data_attr(dataname, "data_label"))
     },
 
-    # filtering state and characteristics, remove and continue filtering ----
+    # Filter state, default filter and generated filter expression ----
 
     #' @details
     #' Return filter characteristics for a variable in a dataset
@@ -378,9 +371,6 @@ FilteredData <- R6::R6Class( # nolint
     #'
     #' @return `logical` if the state was changed
     set_filter_state = function(dataname, varname, state) {
-      # todo1: make varname required and only allow setting one variable at a time as the same can currently
-      # be achieved with `lapply`
-      # todo1: add argument `reset_omitted` to also reset variables not provided in state when it is a list
       private$check_data_varname_exists(dataname, varname)
 
       # checking and adapting arguments
@@ -455,7 +445,6 @@ FilteredData <- R6::R6Class( # nolint
       return(TRUE)
     },
 
-    # todo: private
     #' @details
     #' Get the default filter state (useful for initial UI state)
     #' This is different to NULL state which means no filter applied.
@@ -496,8 +485,6 @@ FilteredData <- R6::R6Class( # nolint
       stopifnot(is_character_single(dataname))
       stopifnot(is_character_single(varname))
 
-      # todo1: do we want to implement some additional logic that a categorical variable cannot be filtered
-      # if it has more than e.g. 1000 levels as the UI will otherwise get stuck
       return(self$get_filter_type(dataname, varname) != "unknown")
     },
 

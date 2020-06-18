@@ -141,3 +141,5 @@ Note that for functions to be dispatched with S3, they need to be exported. This
 not actually export the function with the class specifier, but only make it available
 for S3 method dispatch, see
 https://stackoverflow.com/questions/18512528/how-to-export-s3-method-so-it-is-available-in-namespace
+
+While working on a PR, you can add a `scratch` directory to keep scripts to test the code that were not integrated into vignettes or examples yet. Before the PR is merged, remove this directory again. To avoid forgetting this, add a `todo` comment in the code. The `scratch` folder is also in `.Rbuildignore`.

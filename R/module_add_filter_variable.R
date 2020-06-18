@@ -42,7 +42,7 @@
 #'
 #' app <- shinyApp(ui = function() {
 #'   fluidPage(
-#'     include_teal_css_js(),
+#'     teal:::include_teal_css_js(),
 #'     ui_add_filter_variable("filter_ADSL", "ADSL"),
 #'     ui_add_filter_variable("filter_ADAE", "ADAE"),
 #'     p("The following variables are filtered:"),

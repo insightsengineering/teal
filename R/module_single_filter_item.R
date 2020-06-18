@@ -36,7 +36,7 @@ get_keep_na_label <- function(na_count) {
 #'
 #' app <- shinyApp(ui = function() {
 #'   tagList(
-#'     include_teal_css_js(),
+#'     teal:::include_teal_css_js(),
 #'     isolate(ui_single_filter_item(
 #'       "var_AGE",
 #'       datasets$get_filter_info("ADSL", "AGE"),
@@ -52,8 +52,6 @@ get_keep_na_label <- function(na_count) {
 #' runApp(app)
 #' }
 #'
-#' # todo1: there is a bug with ITTFL where there is a single choice and it
-#' # is converted to a character vector instead of staying a named list
 ui_single_filter_item <- function(id, filter_info, filter_state, prelabel) {
   stopifnot(
     is.list(filter_info),

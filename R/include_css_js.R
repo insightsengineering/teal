@@ -68,7 +68,7 @@ run_js_files <- function(files, package = "teal") {
 #' @return HTML code to include
 #' @examples
 #' shiny_ui <- tagList(
-#'   include_teal_css_js(),
+#'   teal:::include_teal_css_js(),
 #'   p("Hello")
 #' )
 include_teal_css_js <- function() {

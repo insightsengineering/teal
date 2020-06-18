@@ -24,7 +24,6 @@ get_dummy_filter_states <- function() {
 #' @return `cdisc_data`
 get_dummy_cdisc_data <- function() {
   withr::with_package("random.cdisc.data", code = {
-    # need to attach package, otherwise cached data not available, todo1: not good, fix in rcd
     ADSL <- random.cdisc.data::radsl(cached = TRUE) #nolintr
     ADAE <- random.cdisc.data::radae(cached = TRUE) #nolintr
     ADLB <- random.cdisc.data::radlb(cached = TRUE) #nolintr
@@ -52,7 +51,6 @@ ADLB <- radlb(cached = TRUE)
 #' @return `FilteredData` with `ADSL` set
 get_dummy_datasets <- function() {
   withr::with_package("random.cdisc.data", code = {
-    # need to attach package, otherwise cached data not available, todo1: not good, fix in rcd
     ADSL <- random.cdisc.data::radsl(cached = TRUE) #nolintr
   })
   attr(ADSL, "keys") <- get_cdisc_keys("ADSL")

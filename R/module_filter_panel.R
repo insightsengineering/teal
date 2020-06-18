@@ -9,7 +9,7 @@
 #'   in the server)
 #'
 #' @examples
-#' # Example with ADSL and ADAE dataset
+#' # Example with ADSL, ADAE and ADRS dataset
 #' library(random.cdisc.data)
 #' library(dplyr)
 #'
@@ -36,14 +36,13 @@
 #'
 #' app <- shinyApp(ui = function() {
 #'   tagList(
-#'     include_teal_css_js(),
+#'     teal:::include_teal_css_js(),
 #'     selectInput("datanames", "Display for datasets:",
 #'        choices = c("ADSL", "ADAE", "ADRS"),
 #'        selected = c("ADSL", "ADAE", "ADRS"), multiple = TRUE),
 #'     teal:::ui_filter_panel("filter_panel", c("ADSL", "ADAE", "ADRS"))
 #'   )
 #' }, server = function(input, output, session) {
-#'   shinyjs::showLog()
 #'   callModule(
 #'     teal:::srv_filter_panel, "filter_panel", datasets,
 #'     active_datanames = reactive(input$datanames)

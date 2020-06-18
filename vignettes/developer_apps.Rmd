@@ -1,0 +1,269 @@
+---
+title: "Developer Apps"
+author: "Maximilian Mordig"
+date: "18/06/2020"
+output: rmarkdown::html_vignette
+editor_options:
+  chunk_output_type: console
+vignette: >
+  %\VignetteIndexEntry{Developer Apps}
+  %\VignetteEncoding{UTF-8}
+  %\VignetteEngine{knitr::rmarkdown}
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+This vignette provides apps for the developer to check that the functionality still works. It uses debugging modules and
+these should not be deleted. Eventually, Shiny tests for these modules should be developed.
+
+We load the libraries and set relevant options. Be careful to load the development version of `teal` when developing.
+
+```{r loadLibraries}
+library(random.cdisc.data)
+
+# execute the vignette as if it were executed interactively
+# when you run KnitR from RStudio, it does not run the vignette interactively
+EXECUTE_LIKE_INTERACTIVE <- interactive()
+EXECUTE_LIKE_INTERACTIVE <- TRUE # todo: remove
+
+# load the development version of teal if you have not installed it
+LOAD_DEV_TEAL <- EXECUTE_LIKE_INTERACTIVE
+if (LOAD_DEV_TEAL) {
+  devtools::load_all()
+} else {
+  cat("Loading non-dev version.\n")
+  library(teal)
+}
+
+
+# Don't remove these options, the developer may activate them as needed
+options(shiny.fullstacktrace = TRUE) # to show a detailed stack trace, see `?getShinyOption()`
+options(teal_logging = TRUE) # to log to console
+options("shiny.launch.browser" = TRUE) # to open a new window
+# to open in RStudio Viewer pane
+# options("shiny.launch.browser" = function(url) invisible(.Call("rs_shinyviewer", url, getwd(), 2)))
+# to evaluate reactives without taking dependencies, implicitly wraps them into an `isolate` context
+# options("shiny.suppressMissingContextError" = FALSE)
+
+# to make it easy for the developer to toggle it on
+EXECUTE_APPS <- EXECUTE_LIKE_INTERACTIVE
+safeBookmarkableShinyApp <- function(..., execute_app = EXECUTE_APPS) {
+  if (execute_app) {
+    bookmarkableShinyApp(...)
+  } else {
+    cat("Not executing Shiny app.\n")
+  }
+}
+```
+
+```{r createDatasets}
+# Create the dataset with some NA values and a logical value
+ADSL <- radsl(cached = TRUE)
+ADSL$logical_test <- sample(c(TRUE, FALSE, NA), size = nrow(ADSL), replace = TRUE)
+ADSL$SEX[1:150] <- NA
+
+ADAE <- radae(cached = TRUE)
+ADLB <- radlb(cached = TRUE)
+```
+
+# Apps
+
+Don't forget to reload the app when you change code. The fastest is
+```
+devtools::load_all("../teal")
+```
+or the keyboard shortcut `^ + Shift + L` on a Mac.
+
+We use `safeBookmarkableShinyApp` instead of `shinyApp` to allow bookmarking. It wraps the UI function into a function with one
+argument for the request object. We further wrap it to only execute it when the option is enabled.
+
+You can execute these apps in any order.
+
+## Main Debugging App
+
+This is the main debugging app to check that the functionality still works after code changes:
+```{r mainDebugApp}
+app <- init(
+  data = cdisc_data(
+    cdisc_dataset(dataname = "ADSL", data = ADSL),
+    cdisc_dataset(dataname = "ADAE", data = ADAE),
+    cdisc_dataset(dataname = "ADLB", data = ADLB),
+    code = "
+ADSL <- radsl(cached = TRUE)
+ADAE <- radae(cached = TRUE)
+ADLB <- radlb(cached = TRUE)
+"),
+  modules = root_modules(
+    teal:::filter_calls_module(),
+    teal:::bookmark_module(),
+    teal:::debug_browser_module(),
+    teal:::reset_filters_module("Reset", active_datanames = c("ADSL", "ADLB"))
+  ),
+  filter_states = list(
+    ADSL = list(SEX = list(choices = "M", keep_na = TRUE), AGE = default_filter_state()),
+    ADLB = list(ASEQ = list(range = c(5.6, 20), keep_na = FALSE))
+  ),
+  header = "Simple teal app",
+  footer = tags$p(class = "text-muted", "Source: agile-R website")
+); safeBookmarkableShinyApp(app$ui, app$server, enableBookmarking = "url")
+```
+
+## Lazy Filtering of Datasets
+
+The datasets are lazily filtered meaning that when they are not needed for the current tab (as specified with `active_datanames`), they will simply not be refiltered. You can check this by modifying the filters of `ADSL` in a tab without `ADAE`. Then, the console should print that `ADSL` is refiltered, but not `ADAE`. Other datasets the tab depends on like `ADLB` will be refiltered.
+
+```{r lazyFilteringApp}
+app <- init(
+  data = cdisc_data(
+    cdisc_dataset(dataname = "ADSL", data = ADSL),
+    cdisc_dataset(dataname = "ADAE", data = ADAE),
+    cdisc_dataset(dataname = "ADLB", data = ADLB),
+    code = "
+ADSL <- radsl(cached = TRUE)
+ADAE <- radae(cached = TRUE)
+ADLB <- radlb(cached = TRUE)
+"),
+  modules = root_modules(
+    teal:::filter_calls_module("ADAE", active_datanames = c("ADAE")),
+    teal:::filter_calls_module("ADSL", active_datanames = c("ADSL")),
+    teal:::filter_calls_module("ADLB", active_datanames = c("ADLB")),
+    teal:::bookmark_module(),
+    teal:::debug_browser_module()
+  ),
+  filter_states = list(ADSL = list(
+    SEX = list(choices = "M", keep_na = TRUE),
+    COUNTRY = c("USA", NA),
+    AGE = default_filter_state()
+  )),
+  header = "Simple teal app",
+  footer = tags$p(class = "text-muted", "Source: agile-R website")
+); safeBookmarkableShinyApp(app$ui, app$server, enableBookmarking = "url")
+```
+
+## App with Delayed Data
+
+This app tests that the app works with delayed data that is not available initially and loaded after the splash screen is submitted. Then, the splash UI is replaced by the main teal UI.
+
+```{r delayedDataApp}
+app <- init(
+  data = rcd_cdisc_data(
+    rcd_cdisc_dataset_connector("ADSL", radsl, cached = TRUE),
+    rcd_cdisc_dataset_connector("ADLB", radlb, cached = TRUE)
+  ),
+  modules = root_modules(
+    teal:::filter_calls_module("ADAE", active_datanames = c("ADAE")),
+    teal:::filter_calls_module("ADSL", active_datanames = c("ADSL")),
+    teal:::filter_calls_module("ADLB", active_datanames = c("ADLB")),
+    teal:::bookmark_module(),
+    teal:::debug_browser_module()
+  ),
+  filter_states = list(ADSL = list(SEX = list(choices = "M", keep_na = TRUE), AGE = default_filter_state())),
+  header = "Simple teal app",
+  footer = tags$p(class = "text-muted", "Source: agile-R website")
+); safeBookmarkableShinyApp(app$ui, app$server, enableBookmarking = "url")
+```
+
+## Nested Modules
+
+This app shows nested modules and how the filters apply to them. Check the tab hierarchy `A1 -> B1.3`.
+```{r nestedModulesApp}
+app <- init(
+  data = cdisc_data(
+    cdisc_dataset(dataname = "ADSL", data = ADSL),
+    cdisc_dataset(dataname = "ADAE", data = ADAE),
+    cdisc_dataset(dataname = "ADLB", data = ADLB),
+    code = "
+ADSL <- radsl(cached = TRUE)
+ADAE <- radae(cached = TRUE)
+ADLB <- radlb(cached = TRUE)
+"),
+  modules = root_modules(
+    modules(
+      label = "A1", 
+      teal:::filter_calls_module("B1.1", active_datanames = c("ADSL", "ADAE")), 
+      teal:::filter_calls_module("B1.2"),
+      modules(
+        label = "B1.3", 
+        teal:::filter_calls_module("C1.1", active_datanames = c("ADSL", "ADAE")), 
+        teal:::filter_calls_module("C1.2")
+      )
+    ),
+    modules(label = "A2", teal:::filter_calls_module("D2", active_datanames = c("ADSL")))
+  ),
+  filter_states = list(ADSL = list(
+    SEX = list(choices = "M", keep_na = TRUE),
+    COUNTRY = c("USA", NA),
+    AGE = default_filter_state()
+  )),
+  header = "Simple teal app",
+  footer = tags$p(class = "text-muted", "Source: agile-R website")
+); safeBookmarkableShinyApp(app$ui, app$server, enableBookmarking = "url")
+```
+
+## Different Ways to Specify the Initial Filter States
+
+We show different ways of how to specify the initial filter states.
+To show this, we generate fake data. We implicitly also check that the code works without the usual key `STUDYID`.
+
+```{r initialFilterStatesApp}
+fake_data <- data.frame(
+  USUBJID = 1:8,
+  SEX1 = c("F", "F", "F", "M", "M", "M", "F", "M"),
+  SEX2 = c("F", "F", "F", "M", "M", "M", "F", "M"),
+  SEX3 = c("F", "F", "F", "M", "M", "M", "F", "M"),
+  SEX4 = c("F", "F", "F", "M", "M", "M", "F", "M"),
+  SEX5 = c("F", "F", "F", "M", "M", "M", "F", "M")
+)
+
+data <- cdisc_data(
+  cdisc_dataset(
+    # FilteredData requires `ADSL` dataname
+    dataname = "ADSL",
+    data = fake_data,
+    keys = teal:::keys(primary = c("USUBJID"), foreign = NULL, parent = NULL)
+  )
+)
+
+app <- init(
+  data = data,
+  modules = root_modules(
+    teal:::filter_calls_module()
+  ),
+  filter_states = list(ADSL = list(
+    SEX1 = list(choices = c("M", "F")),
+    SEX2 = list(choices = c("M", "F"), keep_na = TRUE),
+    SEX3 = c("M", "F"),
+    SEX4 = c("M", "F", NA),
+    SEX5 = default_filter_state()
+  )),
+  header = "Simple teal app",
+  footer = tags$p(class = "text-muted", "Source: agile-R website")
+); safeBookmarkableShinyApp(app$ui, app$server, enableBookmarking = "url")
+```
+
+## Dataset Not Provided But Still Referred To
+
+This app shows what happens when a dataset, `ADAE`, is not provided, but still appears in the `active_datanames`. A warning is displayed to the console.
+
+```{r nonProvidedDataset}
+app <- init(
+  data = cdisc_data(
+    cdisc_dataset(dataname = "ADSL", data = ADSL),
+    cdisc_dataset(dataname = "ADLB", data = ADLB),
+    code = "
+ADSL <- radsl(cached = TRUE)
+ADLB <- radlb(cached = TRUE)
+"),
+  modules = root_modules(
+    teal:::filter_calls_module("ADAE", active_datanames = c("ADAE")),
+    teal:::filter_calls_module("ADSL", active_datanames = c("ADSL")),
+    teal:::debug_browser_module()
+  ),
+  header = "Simple teal app",
+  footer = tags$p(class = "text-muted", "Source: agile-R website")
+); safeBookmarkableShinyApp(app$ui, app$server, enableBookmarking = "url")
+```
+
+# todo: check out height of chunks

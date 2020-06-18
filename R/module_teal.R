@@ -60,8 +60,11 @@ ui_teal <- function(id, splash_ui = tags$h2("Starting the Teal App"), header = t
   ns <- NS(id)
   # Once the data is loaded, we will remove this element and add the real teal UI instead
   splash_ui <- div(
-    id = ns("main_ui_container"), # id so we can remove the splash screen once ready
-    splash_ui
+    # id so we can remove the splash screen once ready, which is the first child of this container
+    id = ns("main_ui_container"),
+    # we put it into a div, so it can easily be removed as a whole, also when it is a tagList (and not
+    # just the first item of the tagList)
+    div(splash_ui)
   )
 
   # show busy icon when shiny session is busy computing stuff
@@ -206,7 +209,9 @@ srv_teal <- function(input, output, session, modules, raw_data, filter_states = 
     insertUI(
       selector = paste0("#", session$ns("main_ui_container")),
       where = "beforeEnd",
-      ui = ui_tabs_with_filters(session$ns("main_ui"), modules = modules, datasets = datasets)
+      # we put it into a div, so it can easily be removed as a whole, also when it is a tagList (and not
+      # just the first item of the tagList)
+      ui = div(ui_tabs_with_filters(session$ns("main_ui"), modules = modules, datasets = datasets))
     )
     # must make sure that this is only executed once as modules assume their observers are only
     # registered once (calling server functions twice would trigger observers twice each time)

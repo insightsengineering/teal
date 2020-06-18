@@ -76,9 +76,8 @@ teal app that is composed out of teal modules.
 }
 \details{
 \strong{Notes for developers}:
-This is a wrapper function around the \code{module_teal.R} functions.
-It handles both delayed and non-delayed data and provides a default
-splash screen for the latter.
+This is a wrapper function around the \code{module_teal.R} functions. Unless you are
+an end-user, don't use this function, but instead this module.
 }
 \examples{
 library(random.cdisc.data)

@@ -26,7 +26,7 @@
 #' app <- shinyApp(
 #'   ui = function() {
 #'     tagList(
-#'       include_teal_css_js(),
+#'       teal:::include_teal_css_js(),
 #'       textOutput("info"),
 #'       fluidPage( # needed for nice tabs
 #'         ui_tabs_with_filters("dummy", modules = mods, datasets = datasets)
@@ -52,7 +52,7 @@
 #' app <- shinyApp(
 #'   ui = function() {
 #'     tagList(
-#'       include_teal_css_js(),
+#'       teal:::include_teal_css_js(),
 #'       textOutput("info"),
 #'       fluidPage( # needed for nice tabs
 #'         fluidRow(

@@ -22,7 +22,7 @@
 #' app <- shinyApp(
 #'   ui = function() {
 #'     tagList(
-#'       include_teal_css_js(),
+#'       teal:::include_teal_css_js(),
 #'       textOutput("info"),
 #'       fluidPage( # needed for nice tabs
 #'         ui_nested_tabs("dummy", modules = mods, datasets = datasets)

@@ -8,7 +8,21 @@
 #' the number of unique subjects.
 #'
 #' @param id module id
-#' # todo: example
+#' @examples
+#' datasets <- get_dummy_datasets()
+#' app <- shinyApp(ui = function() {
+#'   tagList(
+#'     teal:::include_teal_css_js(),
+#'     teal:::ui_filtered_data_overview("filter_panel")
+#'   )
+#' }, server = function(input, output, session) {
+#'   callModule(
+#'     teal:::srv_filtered_data_overview, "filter_panel", datasets
+#'   )
+#' })
+#' \dontrun{
+#'   runApp(app)
+#' }
 ui_filtered_data_overview <- function(id) {
   ns <- NS(id)
 

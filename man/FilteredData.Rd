@@ -118,7 +118,6 @@ isolate({
 \item \href{#method-get_filter_state}{\code{FilteredData$get_filter_state()}}
 \item \href{#method-set_filter_state}{\code{FilteredData$set_filter_state()}}
 \item \href{#method-get_default_filter_state}{\code{FilteredData$get_default_filter_state()}}
-\item \href{#method-restore_filter}{\code{FilteredData$restore_filter()}}
 \item \href{#method-is_filterable}{\code{FilteredData$is_filterable()}}
 \item \href{#method-get_filter_expr}{\code{FilteredData$get_filter_expr()}}
 \item \href{#method-print}{\code{FilteredData$print()}}
@@ -160,7 +159,7 @@ Get datanames, ADSL appears first
 \if{html}{\out{<a id="method-get_data"></a>}}
 \subsection{Method \code{get_data()}}{
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{FilteredData$get_data(dataname, filtered)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{FilteredData$get_data(dataname, filtered = TRUE)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
@@ -508,36 +507,6 @@ for numerics, full range; for factors, all choices etc.
 
 \subsection{Returns}{
 \verb{character vector} default filter state for this variable
-}
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-restore_filter"></a>}}
-\subsection{Method \code{restore_filter()}}{
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{FilteredData$restore_filter(dataname, varname)}\if{html}{\out{</div>}}
-}
-
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{dataname}}{\code{character} name of the dataset}
-
-\item{\code{varname}}{\code{character} column within the dataset;
-must be provided}
-}
-\if{html}{\out{</div>}}
-}
-\subsection{Details}{
-Restores previous filter state (if the filter was removed in between)
-
-If there is no previous filter, it takes the filter's default state.
-
-If a previous filter state exists and the state is \code{s} before calling
-this function twice, then the state will be \code{s} again.
-}
-
-\subsection{Returns}{
-TRUE if state was changed
 }
 }
 \if{html}{\out{<hr>}}

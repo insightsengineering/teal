@@ -136,7 +136,6 @@ set_labels_df <- function(df, labels) {
   return(df)
 }
 
-# todo1: put into utils.nest
 #' Create a call using a namespaced function
 #'
 #' The arguments in ... need to be quoted because they will be evaluated otherwise
@@ -181,7 +180,6 @@ call_with_colon <- function(name, ..., unlist_args = list()) {
   ))
 }
 
-# todo1: move into utils.nest
 #' See a function's code in a temporary file
 #' This is more handy when you want to search for variables in the code a function
 #' rather than doing so in the console.
@@ -238,6 +236,13 @@ handle_active_datanames <- function(datasets, datanames) {
   if (identical(datanames, "all")) {
     datanames <- datasets$datanames()
   }
+  # convert error to warning
+  tryCatch(
+    check_in_subset(datanames, datasets$datanames(), "Some datasets are not available: "),
+    error = function(e) {
+      message(e$message)
+    }
+  )
   return(intersect(datasets$datanames(), datanames))
 }
 
@@ -270,7 +275,7 @@ label_to_id <- function(label, prefix = NULL) {
   replace_remove_invalid <- function(x) {
     # remove one leading or trailing "_"
     # then replace all non alpha-numeric characters by "_"
-    # todo1: explain why?
+    # explain why?
     gsub("^_|_$", "", gsub("[^[:alnum:]]", "_", x))
   }
   label <- replace_remove_invalid(label)
@@ -299,7 +304,6 @@ srv_shiny_module_arguments <- function(input, output, session, datasets, modules
 
 # Check functions that error with informative error messages ----
 
-# todo: move to utils.nest
 #' Whether the variable name is good to use within Show R Code
 #'
 #' Spaces are problematic because the variables must be escaped

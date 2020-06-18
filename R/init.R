@@ -10,9 +10,8 @@
 #' teal app that is composed out of teal modules.
 #'
 #' **Notes for developers**:
-#' This is a wrapper function around the `module_teal.R` functions.
-#' It handles both delayed and non-delayed data and provides a default
-#' splash screen for the latter.
+#' This is a wrapper function around the `module_teal.R` functions. Unless you are
+#' an end-user, don't use this function, but instead this module.
 #'
 #' @md
 #' @param data (`cdisc_data` or `DataConnector`)
@@ -124,10 +123,21 @@ init <- function(data,
                  header = tags$p("Add Title Here"),
                  footer = tags$p("Add Footer Here"),
                  id = character(0)) {
+  # this should best be implemented in the classes themselves
+  get_datanames <- function(data) {
+    if (is(data, "cdisc_data")) {
+      names(data)
+    } else if (is(data, "DataConnector")) {
+      vapply(data$get_connectors(), function(conn) conn$get_dataname(), character(1))
+    } else {
+      stop("Unknown class for data: ", class(data))
+    }
+  }
+
   stopifnot(
     is(modules, "teal_modules"),
     is_fully_named_list(filter_states),
-    all(names(filter_states) %in% names(data))
+    all(names(filter_states) %in% get_datanames(data))
   )
 
   # Note regarding case `id = character(0)`:
@@ -195,6 +205,3 @@ bookmarkableShinyApp <- function(ui, server, ...) {
   return(shinyApp(ui = ui_new, server = server, ...))
 }
 
-
-# todo1: in other packages
-# - function `get_package_file` is wrong: write as `system.file(..., mustWork = TRUE)`

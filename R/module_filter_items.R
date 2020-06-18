@@ -45,7 +45,7 @@
 #'
 #' app <- shinyApp(ui = function() {
 #'   tagList(
-#'     include_teal_css_js(),
+#'     teal:::include_teal_css_js(),
 #'     ui_filter_items("filter_ADSL", "ADSL"),
 #'     ui_filter_items("filter_ADAE", "ADAE")
 #'   )
