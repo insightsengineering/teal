@@ -3,7 +3,7 @@
 
 #' UI to select among the column names of a dataset to add as a filter variable
 #'
-#' Once something is selected, it sets the `filter_state` (from inexisting) to `NULL`
+#' Once something is selected, it sets the `filter_state` (from inexistent) to `NULL`
 #' for that variable in the `datasets` object. This essentially makes it available
 #' for filtering.
 #' Indeed, the top right panel (see `\link{module_filter_items}`) picks this up,

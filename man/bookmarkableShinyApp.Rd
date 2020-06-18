@@ -2,7 +2,7 @@
 % Please edit documentation in R/init.R
 \name{bookmarkableShinyApp}
 \alias{bookmarkableShinyApp}
-\title{Make a UI function bookmarkable}
+\title{Make a Shiny UI function bookmarkable}
 \usage{
 bookmarkableShinyApp(ui, server, ...)
 }
@@ -25,21 +25,24 @@ This is a customization of \code{shinyApp}.
 To be bookmarkable, the Shiny UI function must have an
 argument \code{request}. This function ensures this.
 
-When \code{ui} is a function, it passes the following to \code{shinyApp}
-#' ```
-app <- teal::init(....)
+When \code{ui} is a function, it passes the following to \code{shinyApp}\preformatted{app <- teal::init(....)
 ui <- app$ui
-ui_new <- function(request) {
-ui() # or just \code{ui} when ui is a `shiny.tag`
-}\preformatted{
-If no bookmarking is needed, then you can also call
-`shinyApp(ui = app$ui(), server = app$server)`. The reason you cannot
-call `shinyApp(ui = app$ui, server = app$server)` without parentheses is
-that `app$ui` has an `id` argument with a default value which makes it
-possible to be added into modules. `shinyApp` takes this to be the request
+ui_new <- function(request) \{
+  ui() # or just `ui` when ui is already evaluated, e.g. `shiny.tag`
+\}
+}
+
+If no bookmarking is needed for teal apps, then you can also call
+\code{shinyApp(ui = app$ui, server = app$server)}, where \code{app} is returned
+by \code{init()}.
+
+**For Developers: **
+The reason you cannot
+call \code{shinyApp(ui = app$ui, server = app$server)} without parentheses is
+that \code{app$ui} has an \code{id} argument with a default value which makes it
+possible to be added into modules. \code{shinyApp} thinks that this is the request
 argument which is needed for bookmarking. This avoids it.
 
-We guarantee that anything that can be run with `shinyApp` can be replaced
+We guarantee that anything that can be run with \code{shinyApp} can be replaced
 by a call to this function without any changes.
-}
 }

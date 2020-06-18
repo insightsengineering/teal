@@ -16,7 +16,7 @@ the number of rows/observations in each dataset,
 the number of unique subjects.
 }
 \examples{
-datasets <- get_dummy_datasets()
+datasets <- teal:::get_dummy_datasets()
 app <- shinyApp(ui = function() {
   tagList(
     teal:::include_teal_css_js(),
@@ -28,6 +28,6 @@ app <- shinyApp(ui = function() {
   )
 })
 \dontrun{
-  runApp(app)
+runApp(app)
 }
 }

@@ -271,7 +271,7 @@ FilteredData <- R6::R6Class( # nolint
       return(self$get_data_attr(dataname, "keys"))
     },
 
-    #' Get datalabel for the dataset
+    #' Get data label for the dataset
     #'
     #' Useful to display in `Show R Code`.
     #'
@@ -395,13 +395,13 @@ FilteredData <- R6::R6Class( # nolint
           return(NULL)
         }
         # example:
-        # nolintr start
+        # nolint start
         # var_state = list(choices = c("M", "F"))
         # var_state = list(choices = c("M", "F"), keep_na = TRUE)
         # var_state = c("M", "F")
         # var_state = c("M", "F", NA)
         # var_state = default_filter_state()
-        # nolintr end
+        # nolint end
         if (is_default_filter_state(var_state)) {
           var_state <- self$get_default_filter_state(dataname, varname)
         } else {

@@ -27,6 +27,7 @@ css
 DataConnector
 dataname
 datanames
+debuggable
 deprecated
 dropdown
 FilteredData
@@ -36,6 +37,7 @@ Genetech
 ggplot
 github
 https
+inexistent
 inputId
 javascript
 jumbotron
@@ -65,6 +67,7 @@ rcode
 reactives
 reactiveVal
 recurse
+refiltered
 refiltering
 RelationalDataset
 reproducibility

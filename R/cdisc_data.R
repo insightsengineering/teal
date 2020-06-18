@@ -134,7 +134,7 @@ get_cdisc_keys <- function(dataname) {
   stopifnot(is_character_single(dataname))
 
   # copy from excel file
-  default_cdisc_keys <- yaml.load_file(get_package_file("teal", "cdisc_datasets/cdisc_datasets.yaml"))
+  default_cdisc_keys <- yaml.load_file(get_package_file("teal", "cdisc_datasets/cdisc_datasets.yaml")) #nolintr
 
   if (!(dataname %in% names(default_cdisc_keys))) {
     stop(sprintf("There is no dataset called: %s \n  List of supported cdisc_datasets:\n   %s",

@@ -17,6 +17,7 @@ check_setequal(x, y, pre_msg = "")
 Check that two sets are equal and informative error message otherwise
 }
 \examples{
+check_setequal <- teal:::check_setequal
 check_setequal(1:3, 1:3)
 check_setequal(c(1, 1, 3), c(1, 3, 3))
 try(check_setequal(c(1, 2, 3), c(1, 3, 3), pre_msg = "Not equal: "))

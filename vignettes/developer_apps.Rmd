@@ -26,7 +26,7 @@ library(random.cdisc.data)
 # execute the vignette as if it were executed interactively
 # when you run KnitR from RStudio, it does not run the vignette interactively
 EXECUTE_LIKE_INTERACTIVE <- interactive()
-EXECUTE_LIKE_INTERACTIVE <- TRUE # todo: remove
+# EXECUTE_LIKE_INTERACTIVE <- TRUE # only for developing, automation should not run apps
 
 # load the development version of teal if you have not installed it
 LOAD_DEV_TEAL <- EXECUTE_LIKE_INTERACTIVE
@@ -265,5 +265,3 @@ ADLB <- radlb(cached = TRUE)
   footer = tags$p(class = "text-muted", "Source: agile-R website")
 ); safeBookmarkableShinyApp(app$ui, app$server, enableBookmarking = "url")
 ```
-
-# todo: check out height of chunks

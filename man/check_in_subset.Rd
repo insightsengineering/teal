@@ -18,6 +18,7 @@ Raises an error message if not and says which elements are not in
 the allowed \code{choices}.
 }
 \examples{
+check_in_subset <- teal:::check_in_subset
 check_in_subset(c("a", "b"), c("a", "b", "c"))
 \dontrun{
 check_in_subset(c("a", "b"), c("b", "c"), pre_msg = "Error: ")

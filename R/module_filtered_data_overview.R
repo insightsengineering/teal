@@ -9,7 +9,7 @@
 #'
 #' @param id module id
 #' @examples
-#' datasets <- get_dummy_datasets()
+#' datasets <- teal:::get_dummy_datasets()
 #' app <- shinyApp(ui = function() {
 #'   tagList(
 #'     teal:::include_teal_css_js(),
@@ -21,7 +21,7 @@
 #'   )
 #' })
 #' \dontrun{
-#'   runApp(app)
+#' runApp(app)
 #' }
 ui_filtered_data_overview <- function(id) {
   ns <- NS(id)

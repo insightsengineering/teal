@@ -342,7 +342,7 @@ Variables may be columns.
 }
 \subsection{Returns}{
 \code{character} keys of dataset
-Get datalabel for the dataset
+Get data label for the dataset
 
 Useful to display in \verb{Show R Code}.
 }

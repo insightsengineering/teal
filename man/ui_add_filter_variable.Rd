@@ -12,7 +12,7 @@ ui_add_filter_variable(id, dataname)
 \item{dataname}{name of dataset whose columns should be filtered}
 }
 \description{
-Once something is selected, it sets the \code{filter_state} (from inexisting) to \code{NULL}
+Once something is selected, it sets the \code{filter_state} (from inexistent) to \code{NULL}
 for that variable in the \code{datasets} object. This essentially makes it available
 for filtering.
 Indeed, the top right panel (see \verb{\link{module_filter_items}}) picks this up,

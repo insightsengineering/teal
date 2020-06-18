@@ -156,7 +156,7 @@ init <- function(data,
   return(res)
 }
 
-#' Make a UI function bookmarkable
+#' Make a Shiny UI function bookmarkable
 #'
 #' This is a customization of `shinyApp`.
 #'
@@ -164,19 +164,23 @@ init <- function(data,
 #' argument `request`. This function ensures this.
 #'
 #' When `ui` is a function, it passes the following to `shinyApp`
-#' #' ```
+#' ```
 #' app <- teal::init(....)
 #' ui <- app$ui
 #' ui_new <- function(request) {
-#'   ui() # or just `ui` when ui is a `shiny.tag`
+#'   ui() # or just `ui` when ui is already evaluated, e.g. `shiny.tag`
 #' }
 #' ```
 #'
-#' If no bookmarking is needed, then you can also call
-#' `shinyApp(ui = app$ui(), server = app$server)`. The reason you cannot
+#' If no bookmarking is needed for teal apps, then you can also call
+#' `shinyApp(ui = app$ui, server = app$server)`, where `app` is returned
+#' by `init()`.
+#'
+#' **For Developers: **
+#' The reason you cannot
 #' call `shinyApp(ui = app$ui, server = app$server)` without parentheses is
 #' that `app$ui` has an `id` argument with a default value which makes it
-#' possible to be added into modules. `shinyApp` takes this to be the request
+#' possible to be added into modules. `shinyApp` thinks that this is the request
 #' argument which is needed for bookmarking. This avoids it.
 #'
 #' We guarantee that anything that can be run with `shinyApp` can be replaced
@@ -190,7 +194,7 @@ init <- function(data,
 #' @param ... additional arguments to `shinyApp`
 #' @return `shinyApp` value
 #' @export
-bookmarkableShinyApp <- function(ui, server, ...) {
+bookmarkableShinyApp <- function(ui, server, ...) { #nolintr
   # ui must be a function of request to be bookmarkable
   ui_new <- function(request) {
     # we use similar logic to `shiny:::uiHttpHandler`
@@ -204,4 +208,3 @@ bookmarkableShinyApp <- function(ui, server, ...) {
   }
   return(shinyApp(ui = ui_new, server = server, ...))
 }
-

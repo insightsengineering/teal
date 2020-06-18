@@ -352,6 +352,7 @@ check_simple_name <- function(name) {
 #' @param pre_msg `character` message to print before
 #'
 #' @examples
+#' check_in_subset <- teal:::check_in_subset
 #' check_in_subset(c("a", "b"), c("a", "b", "c"))
 #' \dontrun{
 #' check_in_subset(c("a", "b"), c("b", "c"), pre_msg = "Error: ")
@@ -382,6 +383,7 @@ check_in_subset <- function(subset, choices, pre_msg = "") {
 #' @param y object to be compared to other
 #' @param pre_msg `character` to be displayed before error message
 #' @examples
+#' check_setequal <- teal:::check_setequal
 #' check_setequal(1:3, 1:3)
 #' check_setequal(c(1, 1, 3), c(1, 3, 3))
 #' try(check_setequal(c(1, 2, 3), c(1, 3, 3), pre_msg = "Not equal: "))

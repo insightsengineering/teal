@@ -9,7 +9,7 @@ modules](https://shiny.rstudio.com/articles/modules.html).
 Please read more about teal on our agile-R website at [go.roche.com/agile-R](http://go.roche.com/agile-R).
  
 
-# Acknowledgement
+# Acknowledgment
 
 We would like to thank everyone who made `teal` a better analysis environment. Special thanks go to:
 

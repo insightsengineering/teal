@@ -1,6 +1,6 @@
 # Module to change the filter for a single variable
 
-.threshold_slider_vs_checkboxgroup <- 5
+.threshold_slider_vs_checkboxgroup <- 5 #nolintr
 
 
 # label of checkbox to keep / remove NAs
