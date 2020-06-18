@@ -41,12 +41,14 @@ app <- shinyApp(
       teal:::include_teal_css_js(),
       textOutput("info"),
       fluidPage( # needed for nice tabs
-        ui_nested_tabs("dummy", modules = mods, datasets = datasets)
+        teal:::ui_nested_tabs("dummy", modules = mods, datasets = datasets)
       )
     )
   },
   server = function(input, output, session) {
-    active_module <- callModule(srv_nested_tabs, "dummy", datasets = datasets, modules = mods)
+    active_module <- callModule(
+      teal:::srv_nested_tabs, "dummy", datasets = datasets, modules = mods
+    )
     output$info <- renderText({
       paste0("The currently active tab name is ", active_module()$label)
     })

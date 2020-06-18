@@ -1198,7 +1198,7 @@ default_filter_state <- function() {
 is_default_filter_state <- function(x) is(x, "default_filter_state")
 
 #' @export
-print.default_filter_state <- function(x) {
+print.default_filter_state <- function(x, ...) {
   cat("This will pick the default filter state for the variable.\n")
 }
 

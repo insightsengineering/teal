@@ -46,21 +46,24 @@ isolate({
 app <- shinyApp(ui = function() {
   fluidPage(
     teal:::include_teal_css_js(),
-    ui_add_filter_variable("filter_ADSL", "ADSL"),
-    ui_add_filter_variable("filter_ADAE", "ADAE"),
+    teal:::ui_add_filter_variable("filter_ADSL", "ADSL"),
+    teal:::ui_add_filter_variable("filter_ADAE", "ADAE"),
     p("The following variables are filtered:"),
     verbatimTextOutput("info")
   )
 }, server = function(input, output, session) {
-  callModule(srv_add_filter_variable, "filter_ADSL", datasets, "ADSL")
+  callModule(teal:::srv_add_filter_variable, "filter_ADSL", datasets, "ADSL")
   callModule(
-    srv_add_filter_variable, "filter_ADAE", datasets, "ADAE",
+    teal:::srv_add_filter_variable, "filter_ADAE", datasets, "ADAE",
     omit_vars = reactive(colnames(datasets$get_data("ADSL", filtered = FALSE)))
   )
   output$info <- renderText({
     paste0(
       datasets$datanames(), ": ",
-      lapply(datasets$datanames(), function(dataname) toString(names(datasets$get_filter_state(dataname)))),
+      lapply(
+        datasets$datanames(),
+        function(dataname) toString(names(datasets$get_filter_state(dataname)))
+       ),
       collapse = "\n"
     )
   })

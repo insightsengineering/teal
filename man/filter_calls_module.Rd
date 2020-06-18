@@ -18,7 +18,7 @@ it is only defined in \code{teal.devel}.
 }
 \details{
 Please do not remove, this is useful for debugging teal without
-dependencies and simplifies \code{devtools::load_all} which otherwise fails
+dependencies and simplifies \verb{\link[devtools]\{load_all\}} which otherwise fails
 and avoids session restarts!
 }
 \examples{

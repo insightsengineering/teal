@@ -37,7 +37,7 @@ isolate({
 app <- shinyApp(ui = function() {
   tagList(
     teal:::include_teal_css_js(),
-    isolate(ui_single_filter_item(
+    isolate(teal:::ui_single_filter_item(
       "var_AGE",
       datasets$get_filter_info("ADSL", "AGE"),
       datasets$get_filter_state("ADSL", "AGE"),
@@ -45,7 +45,7 @@ app <- shinyApp(ui = function() {
     ))
   )
 }, server = function(input, output, session) {
-  callModule(srv_single_filter_item, "var_AGE", datasets, "ADSL", "AGE")
+  callModule(teal:::srv_single_filter_item, "var_AGE", datasets, "ADSL", "AGE")
 })
 
 \dontrun{

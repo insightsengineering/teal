@@ -393,7 +393,7 @@ data, respectively, as illustrated from the above figure. We can also get the
 `call` object that was used for the filtering:
 
 ```{r}
-datasets$get_filter_call("ADTTE")
+datasets$get_filter_expr("ADTTE")
 ```
 
 Note that when setting `reactive = TRUE` in the `datasets$get_data` method then

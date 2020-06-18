@@ -31,7 +31,8 @@ EXECUTE_LIKE_INTERACTIVE <- interactive()
 # load the development version of teal if you have not installed it
 LOAD_DEV_TEAL <- EXECUTE_LIKE_INTERACTIVE
 if (LOAD_DEV_TEAL) {
-  devtools::load_all()
+  stop("Uncomment this line")
+  # devtools::load_all() # commented to not depend on devtools
 } else {
   cat("Loading non-dev version.\n")
   library(teal)

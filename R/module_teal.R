@@ -33,17 +33,20 @@
 #' @examples
 #' mods <- teal:::get_dummy_modules()
 #' raw_data <- reactive(teal:::get_dummy_cdisc_data())
-#' shinyApp(
+#' app <- shinyApp(
 #'   ui = function() {
-#'     ui_teal("dummy")
+#'     teal:::ui_teal("dummy")
 #'   },
 #'   server = function(input, output, session) {
 #'     active_module <- callModule(
-#'       srv_teal, "dummy", modules = mods, raw_data = raw_data,
+#'       teal:::srv_teal, "dummy", modules = mods, raw_data = raw_data,
 #'       filter_states = teal:::get_dummy_filter_states()
 #'     )
 #'   }
 #' )
+#' \dontrun{
+#' runApp(app)
+#' }
 ui_teal <- function(id, splash_ui = tags$h2("Starting the Teal App"), header = tags$p(""), footer = tags$p("")) {
   if (is_character_single(header)) {
     header <- tags$h1(header)

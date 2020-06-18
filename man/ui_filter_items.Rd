@@ -55,12 +55,12 @@ isolate({
 app <- shinyApp(ui = function() {
   tagList(
     teal:::include_teal_css_js(),
-    ui_filter_items("filter_ADSL", "ADSL"),
-    ui_filter_items("filter_ADAE", "ADAE")
+    teal:::ui_filter_items("filter_ADSL", "ADSL"),
+    teal:::ui_filter_items("filter_ADAE", "ADAE")
   )
 }, server = function(input, output, session) {
-  callModule(srv_filter_items, "filter_ADSL", datasets, "ADSL")
-  callModule(srv_filter_items, "filter_ADAE", datasets, "ADAE")
+  callModule(teal:::srv_filter_items, "filter_ADSL", datasets, "ADSL")
+  callModule(teal:::srv_filter_items, "filter_ADAE", datasets, "ADAE")
 })
 \dontrun{
 runApp(app)
