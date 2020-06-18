@@ -118,8 +118,11 @@ RelationalDatasetConnector <- R6::R6Class( #nolint
     #' @param code (\code{character}) Code to mutate the dataset. Must contain the
     #'  \code{dataset$dataname}
     mutate_dataset = function(code) {
-      private$dataset <- mutate_dataset(private$dataset, code = code)
-      private$set_mutate_code(code)
+      if (!is.null(private$dataset)) {
+        private$dataset <- mutate_dataset(private$dataset, code = code)
+      } else {
+        private$set_mutate_code(code)
+      }
 
       return(invisible(self))
     },

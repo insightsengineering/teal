@@ -75,3 +75,33 @@ RelationalDataset <- R6::R6Class( # nolint
     }
   )
 )
+
+#' Create \code{RelationalDataset} object
+#'
+#' Create \code{RelationalDataset} object
+#' @param x (\code{data.frame})
+#' @param dataname (\code{character}) A given name for the dataset
+#'   it may not contain spaces
+#' @param keys (\code{keys}) object of S3 class keys containing
+#'   foreign, primary keys and parent information
+#' @param code (\code{character}) A character string defining the code
+#'   needed to produce the data set in \code{x}
+#' @param label (\code{character}) Label to describe the dataset
+#' @return object of class \code{RelaionalDataset}
+#' @examples
+#' library(random.cdisc.data)
+#' relational_dataset(
+#'   x = radsl(cached = TRUE),
+#'   dataname = "ADSL",
+#'   keys = get_cdisc_keys("ADSL"),
+#'   code = "ADSL <- radsl(cached = TRUE)",
+#'   label = "ADSL dataset"
+#' )
+#' @export
+relational_dataset <- function(x, dataname, keys, code, label) {
+  RelationalDataset$new(x = x,
+                        dataname = dataname,
+                        keys = keys,
+                        code = code,
+                        label = label)
+}

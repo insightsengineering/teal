@@ -36,11 +36,11 @@ is similar to previously introduced in `cdisc_data()`:
 1. `<service>_cdisc_data()` alternative to `cdisc_data()` defining list of datasets and code to check.
 2. `<service>_dataset()` alternative to `cdisc_dataset()` with additional service-specific arguments. 
 
-```{r eval=FALSE}
+```{r}
 library(teal)
 data <- rice_cdisc_data(
-  rice_dataset_connector(dataname = "ADSL", path = "/path/to/ADSL"),
-  rice_dataset_connector(dataname = "ADLB", path = "/path/to/ADLB")
+  rice_cdisc_dataset_connector(dataname = "ADSL", path = "/path/to/ADSL"),
+  rice_cdisc_dataset_connector(dataname = "ADLB", path = "/path/to/ADLB")
 )
 ```
 
@@ -80,7 +80,7 @@ the same as in `cdisc_data()`. `code` should refer to datanames defined by `Data
 You don't have to pass importing step as a `code` - it will be automatically extracted 
 from `DataConnector`.
 
-```{r eval=FALSE}
+```{r}
 data_with_code <- rice_cdisc_data(
   rice_cdisc_dataset_connector(dataname = "ADSL", path = "/path/to/ADSL"),
   rice_cdisc_dataset_connector(dataname = "ADLB", path = "/path/to/ADLB"),
@@ -157,7 +157,6 @@ reproduce function call. In example below object of class `CallableFunction` is 
 `data.frame` function with provided arguments. 
 
 ```{r}
-library(teal)
 fun <- callable_function(data.frame)
 fun$set_args(list(x = 1:5, y = letters[1:5]))
 
@@ -166,7 +165,6 @@ cat(fun$get_call())
 
 # execte function with passed arguments
 fun$run()
-
 ```
 
 #### 2. `DatasetConnector`
@@ -180,7 +178,7 @@ understand how to create another wrapper.
 
 ```{r}
 foo_dataset <- function(dataname, fun) {
-  dc <- teal:::RelationalDatasetConnector$new(
+  dc <- relational_dataset_connector(
     pull_fun = fun,
     dataname = dataname,
     keys = get_cdisc_keys(dataname) 
@@ -252,7 +250,7 @@ confirmed inputs by listening ui element linked by `submit_id = "submit"`. After
 inputs are saved in class object.
 One can use helper method `x$launch` which opens shiny application where one can choose `seed` for 
 random data. 
-```{r eval=FALSE}
+```{r}
 x <- teal:::DataConnector$new()
 
 x$set_connection(con)

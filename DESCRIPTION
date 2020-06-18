@@ -62,7 +62,6 @@ Collate:
     'CallableFunction.R'
     'DataConnection.R'
     'DataConnector.R'
-    'DatasetConnector.R'
     'DatasetConnector_constructors.R'
     'FilteredData.R'
     'NamedDataset.R'
