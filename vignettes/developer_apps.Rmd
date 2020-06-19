@@ -31,8 +31,8 @@ EXECUTE_LIKE_INTERACTIVE <- interactive()
 # load the development version of teal if you have not installed it
 LOAD_DEV_TEAL <- EXECUTE_LIKE_INTERACTIVE
 if (LOAD_DEV_TEAL) {
-  stop("Uncomment this line")
-  # devtools::load_all() # commented to not depend on devtools
+  #devtools::load_all() # obfuscated call to avoid dependence on devtools required by R CMD CHECK
+  do.call(`::`, list(quote(devtools), quote(load_all)))()
 } else {
   cat("Loading non-dev version.\n")
   library(teal)
@@ -260,6 +260,27 @@ ADLB <- radlb(cached = TRUE)
   modules = root_modules(
     teal:::filter_calls_module("ADAE", active_datanames = c("ADAE")),
     teal:::filter_calls_module("ADSL", active_datanames = c("ADSL")),
+    teal:::debug_browser_module()
+  ),
+  header = "Simple teal app",
+  footer = tags$p(class = "text-muted", "Source: agile-R website")
+); safeBookmarkableShinyApp(app$ui, app$server, enableBookmarking = "url")
+```
+
+## Raw App with Hardly Anything
+
+This app purely tests the modules, it only has one tab and two datasets. It can be used to check that all labels are preserved and shown in the UI.
+
+```{r rawApp}
+app <- init(
+  data = cdisc_data(
+    cdisc_dataset(dataname = "ADSL", data = ADSL),
+    cdisc_dataset(dataname = "ADLB", data = ADLB),
+    code = "
+ADSL <- radsl(cached = TRUE)
+ADLB <- radlb(cached = TRUE)
+"),
+  modules = root_modules(
     teal:::debug_browser_module()
   ),
   header = "Simple teal app",

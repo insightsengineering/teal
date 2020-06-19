@@ -133,6 +133,14 @@ srv_add_filter_variable <- function(input, output, session, datasets, dataname, 
     choices <- choices[
       vapply(choices, function(varname) datasets$is_filterable(dataname, varname = varname), logical(1))
     ]
+    # we add variable labels to be nicely displayed with the variable short name
+    choice_labels <- datasets$get_variable_labels(dataname)
+    choice_labels[is.na(choice_labels)] <- ""
+    choices <- choices_labeled(
+      choices,
+      unname(choice_labels[choices])
+    )
+
     # `updateOptionalSelectInput`, this only happens once the reactive flush terminates when all observers were
     # executed, so the above that adds it to the filtered variables still has its non-NULL value
     updateOptionalSelectInput(

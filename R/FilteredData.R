@@ -242,7 +242,7 @@ FilteredData <- R6::R6Class( # nolint
     # Convenience functions to get data attributes ----
 
     #' @details
-    #' Get non-NA labels of variables in the data
+    #' Get labels of variables in the data
     #'
     #' Variables may be columns.
     #'
@@ -258,7 +258,6 @@ FilteredData <- R6::R6Class( # nolint
       if (!is.null(variables)) {
         labels <- labels[variables]
       }
-      labels <- labels[!is.na(labels)]
 
       return(labels)
     },
