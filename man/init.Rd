@@ -7,6 +7,7 @@
 init(
   data,
   modules,
+  title = NULL,
   filter_states = list(),
   header = tags$p("Add Title Here"),
   footer = tags$p("Add Footer Here"),
@@ -31,6 +32,8 @@ on (filtered) to the server function
 \cr options \tab optional, other arguments passed on to the server
 function
 }}
+
+\item{title}{(character) The browser window title (defaults to the host URL of the page).}
 
 \item{filter_states}{(\code{list}) You can define filters that show when
 the app starts.
@@ -112,6 +115,7 @@ app <- init(
       filters = "ADSL"
     )
   ),
+  title = "App title",
   filter_states = list(ADSL = list(AGE = default_filter_state())),
   header = tags$h1("Sample App"),
   footer = tags$p("Copyright 2017 - 2020")

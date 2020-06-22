@@ -7,6 +7,7 @@
 ui_teal(
   id,
   splash_ui = tags$h2("Starting the Teal App"),
+  title = NULL,
   header = tags$p(""),
   footer = tags$p("")
 )
@@ -17,6 +18,8 @@ ui_teal(
 \item{splash_ui}{\code{shiny.tag} UI to display initially,
 can be a splash screen or a Shiny module UI. For the latter, see
 \verb{\link{init}} about how to call the corresponding server function.}
+
+\item{title}{(character) The browser window title (defaults to the host URL of the page)}
 
 \item{header}{\verb{shiny.tag or character} header to display above the app}
 

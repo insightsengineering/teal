@@ -25,6 +25,7 @@
 #' @param splash_ui `shiny.tag` UI to display initially,
 #'   can be a splash screen or a Shiny module UI. For the latter, see
 #'   `\link{init}` about how to call the corresponding server function.
+#' @param title (`character`) The browser window title (defaults to the host URL of the page)
 #' @param header `shiny.tag or character` header to display above the app
 #' @param footer `shiny.tag or character` footer to display below the app
 #'
@@ -47,7 +48,11 @@
 #' \dontrun{
 #' runApp(app)
 #' }
-ui_teal <- function(id, splash_ui = tags$h2("Starting the Teal App"), header = tags$p(""), footer = tags$p("")) {
+ui_teal <- function(id,
+                    splash_ui = tags$h2("Starting the Teal App"),
+                    title = NULL,
+                    header = tags$p(""),
+                    footer = tags$p("")) {
   if (is_character_single(header)) {
     header <- tags$h1(header)
   }
@@ -84,6 +89,7 @@ ui_teal <- function(id, splash_ui = tags$h2("Starting the Teal App"), header = t
 
   res <- shinyUI(
     fluidPage(
+      title = title,
       include_teal_css_js(),
       tags$header(header),
       tags$hr(style = "margin: 7px 0;"),

@@ -17,6 +17,7 @@
 * Argument `filter` in the `init` function was removed and the new argument `filter_states` was added. You can no longer modify the `app$datasets`, but must instead use this argument. 
 * New modules were created to create a module of nested teal modules, then another one that adds the right filter pane to each tab. The `teal::init` function stays unchanged.
 * The `teal::init` function now returns a `UI` function with an optional `id` argument. This allows it to be embedded into other applications. Split view as two applications side-by-side is one such example.
+* The `teal::init` function has a title parameter to pass-through to the UI function.
 
 ## FilteredData refactored (for developers)
 

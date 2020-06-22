@@ -615,7 +615,7 @@ create_teal_app <- function(title, id) {
         filters = "ADSL"
       )
     ),
-    filter_states = list(ADSL = list(AGE = "default")),
+    filter_states = list(ADSL = list(AGE = default_filter_state())),
     header = tags$h1(title),
     footer = tags$p("Copyright 2017 - 2020"),
     id = id

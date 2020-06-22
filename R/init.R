@@ -30,6 +30,7 @@
 #'   \cr options \tab optional, other arguments passed on to the server
 #'   function
 #'   }
+#' @param title (`character`) The browser window title (defaults to the host URL of the page).
 #' @param filter_states (`list`) You can define filters that show when
 #'   the app starts.
 #'   The general pattern is:
@@ -105,6 +106,7 @@
 #'       filters = "ADSL"
 #'     )
 #'   ),
+#'   title = "App title",
 #'   filter_states = list(ADSL = list(AGE = default_filter_state())),
 #'   header = tags$h1("Sample App"),
 #'   footer = tags$p("Copyright 2017 - 2020")
@@ -119,6 +121,7 @@
 #' # into a larger application
 init <- function(data,
                  modules,
+                 title = NULL,
                  filter_states = list(),
                  header = tags$p("Add Title Here"),
                  footer = tags$p("Add Footer Here"),
@@ -145,7 +148,7 @@ init <- function(data,
   # the `ui` and `server` with `id = character(0)` and calling the server function directly
   # rather than through `callModule`
   res <- list(
-    ui = ui_teal_with_splash(id = id, data = data, header = header, footer = footer),
+    ui = ui_teal_with_splash(id = id, data = data, title = title, header = header, footer = footer),
     server = function(input, output, session) {
       srv_teal_with_splash(
         input, output, session,

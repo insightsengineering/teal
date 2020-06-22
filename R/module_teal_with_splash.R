@@ -17,7 +17,7 @@
 #' @param data `cdisc_data or DataConnector` object to obtain the data
 #' @inheritParams ui_teal
 #' @export
-ui_teal_with_splash <- function(id, data, header = tags$p("Add Title Here"), footer = tags$p("Add Footer Here")) {
+ui_teal_with_splash <- function(id, data, title = NULL, header = tags$p("Add Title Here"), footer = tags$p("Add Footer Here")) { #nolint
   stopifnot(is(data, "cdisc_data") || is(data, "DataConnector"))
   is_not_delayed_data <- is(data, "cdisc_data") # `cdisc_data` or `DataConnector`
 
@@ -34,7 +34,7 @@ ui_teal_with_splash <- function(id, data, header = tags$p("Add Title Here"), foo
     data$get_ui(ns("startapp_module"))
   }
 
-  ui_teal(id = ns("teal"), splash_ui = splash_ui, header = header, footer = footer)
+  ui_teal(id = ns("teal"), splash_ui = splash_ui, title = title, header = header, footer = footer)
 }
 
 #' Server function that loads the data through reactive loading and then delegates
