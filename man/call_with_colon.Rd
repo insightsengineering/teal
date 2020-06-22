@@ -7,7 +7,8 @@
 call_with_colon(name, ..., unlist_args = list())
 }
 \arguments{
-\item{name}{\code{character} function name, possibly using namespace colon \code{::}}
+\item{name}{\code{character} function name, possibly using namespace colon \code{::}, also
+works with \code{:::} (sometimes needed, but strongly discouraged)}
 
 \item{...}{arguments to pass to function with name \code{name}}
 

@@ -1,34 +1,34 @@
 #' Include `CSS` files from `/inst/css/` package directory to application header
 #'
+#' `system.file` should not be used to access files in other packages, it does
+#' not work with `devtools`. Therefore, we redefine this method in each package
+#' as needed. Thus, we do not export this method
 #' @md
-#' @param package (`character`) package name
 #' @param pattern (`character`) pattern of files to be included
 #'
 #' @return HTML code that includes `CSS` files
-#'
-#' @export
-include_css_files <- function(package = "teal", pattern = "*") {
-  stopifnot(is_character_single(package))
-
-  css_files <- list.files(system.file("css", package = package, mustWork = TRUE), pattern = pattern, full.names = TRUE)
-
+include_css_files <- function(pattern = "*") {
+  css_files <- list.files(
+    system.file("css", package = "teal", mustWork = TRUE), pattern = pattern, full.names = TRUE
+  )
   return(singleton(lapply(css_files, includeCSS)))
 }
 
 #' Include `JS` files from `/inst/js/` package directory to application header
 #'
+#' `system.file` should not be used to access files in other packages, it does
+#' not work with `devtools`. Therefore, we redefine this method in each package
+#' as needed. Thus, we do not export this method
+#'
 #' @md
-#' @param package (`character`) package name
 #' @param pattern (`character`) pattern of files to be included, passed to `system.file`
 #' @param except (`character`) vector of basename filenames to be excluded
 #'
 #' @return HTML code that includes `JS` files
-#' @export
-include_js_files <- function(package = "teal", pattern = "*", except = NULL) {
-  stopifnot(is_character_single(package))
+include_js_files <- function(pattern = "*", except = NULL) {
   stopifnot(is.null(except) || is_character_vector(except))
 
-  js_files <- list.files(system.file("js", package = package, mustWork = TRUE), pattern = pattern, full.names = TRUE)
+  js_files <- list.files(system.file("js", package = "teal", mustWork = TRUE), pattern = pattern, full.names = TRUE)
   js_files <- js_files[!(basename(js_files) %in% except)] # no-op if except is NULL
 
   return(singleton(lapply(js_files, includeScript)))
@@ -41,17 +41,17 @@ include_js_files <- function(package = "teal", pattern = "*", except = NULL) {
 #' Unlike `include_js_files` which includes Javascript functions,
 #' the `run_js` actually executes Javascript functions.
 #'
+#' `system.file` should not be used to access files in other packages, it does
+#' not work with `devtools`. Therefore, we redefine this method in each package
+#' as needed. Thus, we do not export this method
+#'
 #' @md
 #' @param files (`character`) vector of filenames
-#' @param package (`character`) package name
-#'
-#' @export
-run_js_files <- function(files, package = "teal") {
+run_js_files <- function(files) {
   stopifnot(is_character_vector(files))
-  stopifnot(is_character_single(package))
 
   lapply(files, function(file) {
-    shinyjs::runjs(paste0(readLines(system.file("js", file, package = package, mustWork = TRUE)), collapse = "\n"))
+    shinyjs::runjs(paste0(readLines(system.file("js", file, package = "teal", mustWork = TRUE)), collapse = "\n"))
   })
   return(invisible(NULL))
 }
@@ -74,9 +74,9 @@ run_js_files <- function(files, package = "teal") {
 include_teal_css_js <- function() {
   tagList(
     shinyjs::useShinyjs(),
-    include_css_files(package = "teal"),
+    include_css_files(),
     # init.js is executed from the server
-    include_js_files(package = "teal", except = "init.js"),
+    include_js_files(except = "init.js"),
     shinyjs::hidden(icon("cog")), # add hidden icon to load font-awesome css for icons
   )
 }

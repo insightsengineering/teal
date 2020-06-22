@@ -141,7 +141,8 @@ set_labels_df <- function(df, labels) {
 #' The arguments in ... need to be quoted because they will be evaluated otherwise
 #'
 #' @md
-#' @param name `character` function name, possibly using namespace colon `::`
+#' @param name `character` function name, possibly using namespace colon `::`, also
+#'   works with `:::` (sometimes needed, but strongly discouraged)
 #' @param ... arguments to pass to function with name `name`
 #' @param unlist_args `list` extra arguments passed in a single list,
 #'   avoids the use of `do.call` with this function

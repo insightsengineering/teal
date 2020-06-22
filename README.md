@@ -148,3 +148,15 @@ for S3 method dispatch, see
 https://stackoverflow.com/questions/18512528/how-to-export-s3-method-so-it-is-available-in-namespace
 
 While working on a PR, you can add a `scratch` directory to keep scripts to test the code that were not integrated into vignettes or examples yet. Before the PR is merged, remove this directory again. To avoid forgetting this, add a `todo` comment in the code. The `scratch` folder is also in `.Rbuildignore`.
+
+
+### `system.file`
+We recommend against exporting functions that use `system.file` to access files in other packages as this breaks encapsulation and leads to issues with `devtools` as explained below.
+`base::system.file` is only overwritten by `pkgload:::shim_system.file` if the package is loaded by
+`devtools::load_all()`. This is done to access files transparently, independent of whether a package was loaded
+using `library(pkg)` or `devtools::load(pkg)`. The `inst` folder is in different locations for each of these cases.
+If a package uses `system.file` without being loaded via `devtools`, it will fail when it tries to locate something
+in another package that is loaded with `devtools` because it still uses `base::system.file`. The solution is to
+explicitly use `pkgload:::system.file` whenever providing a function that relies on `system.file` from another
+package. Or not do it at all.
+We don't directly overwrite `system.file`, this may have unexpected behavior.

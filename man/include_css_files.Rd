@@ -4,16 +4,16 @@
 \alias{include_css_files}
 \title{Include \code{CSS} files from \verb{/inst/css/} package directory to application header}
 \usage{
-include_css_files(package = "teal", pattern = "*")
+include_css_files(pattern = "*")
 }
 \arguments{
-\item{package}{(\code{character}) package name}
-
 \item{pattern}{(\code{character}) pattern of files to be included}
 }
 \value{
 HTML code that includes \code{CSS} files
 }
 \description{
-Include \code{CSS} files from \verb{/inst/css/} package directory to application header
+\code{system.file} should not be used to access files in other packages, it does
+not work with \code{devtools}. Therefore, we redefine this method in each package
+as needed. Thus, we do not export this method
 }

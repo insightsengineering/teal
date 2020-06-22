@@ -4,11 +4,9 @@
 \alias{include_js_files}
 \title{Include \code{JS} files from \verb{/inst/js/} package directory to application header}
 \usage{
-include_js_files(package = "teal", pattern = "*", except = NULL)
+include_js_files(pattern = "*", except = NULL)
 }
 \arguments{
-\item{package}{(\code{character}) package name}
-
 \item{pattern}{(\code{character}) pattern of files to be included, passed to \code{system.file}}
 
 \item{except}{(\code{character}) vector of basename filenames to be excluded}
@@ -17,5 +15,7 @@ include_js_files(package = "teal", pattern = "*", except = NULL)
 HTML code that includes \code{JS} files
 }
 \description{
-Include \code{JS} files from \verb{/inst/js/} package directory to application header
+\code{system.file} should not be used to access files in other packages, it does
+not work with \code{devtools}. Therefore, we redefine this method in each package
+as needed. Thus, we do not export this method
 }

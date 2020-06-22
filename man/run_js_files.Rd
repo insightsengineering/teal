@@ -4,7 +4,7 @@
 \alias{run_js_files}
 \title{Run \code{JS} file from \verb{/inst/js/} package directory}
 \usage{
-run_js_files(files, package = "teal")
+run_js_files(files)
 }
 \arguments{
 \item{files}{(\code{character}) vector of filenames}
@@ -16,4 +16,9 @@ This is triggered from the server to execute on the client
 rather than triggered directly on the client.
 Unlike \code{include_js_files} which includes Javascript functions,
 the \code{run_js} actually executes Javascript functions.
+}
+\details{
+\code{system.file} should not be used to access files in other packages, it does
+not work with \code{devtools}. Therefore, we redefine this method in each package
+as needed. Thus, we do not export this method
 }

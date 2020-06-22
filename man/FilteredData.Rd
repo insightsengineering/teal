@@ -320,7 +320,7 @@ Get keys for the dataset}
 \if{html}{\out{</div>}}
 }
 \subsection{Details}{
-Get non-NA labels of variables in the data
+Get labels of variables in the data
 
 Variables may be columns.
 }
