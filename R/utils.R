@@ -24,7 +24,7 @@ split_by_sep <- function(x, sep) {
 #' @param y \code{list} to be matched against.
 #' @return \code{logical} vector length of \code{x} denoting if element was found in second list.
 #' @export
-`%is_in%`  <- function(x, y) {
+`%is_in%` <- function(x, y) {
   if (!is.list(x) & is.list(y)) {
     x <- list(x)
   } else if (!is.list(y) & is.list(x)) {
@@ -80,24 +80,24 @@ check_pkg_quietly <- function(pckg, msg) {
 error_dialog <- function(x) {
   if (shiny::isRunning()) {
     showModal(
-        modalDialog(
-            tags$span("Error while evaluating following call:"),
-            tags$br(),
-            tags$code(ifelse(
-              "condition" %in% class(x),
-              deparse(x$call),
-              deparse(attr(x, "condition")$call)
-            ), "\n"),
-            tags$br(),
-            tags$span("Error message:"),
-            tags$br(),
-            tags$code(
-              ifelse("condition" %in% class(x),
-                deparse(x$message),
-                deparse(attr(x, "condition")$message)
-              )
-            )
+      modalDialog(
+        tags$span("Error while evaluating following call:"),
+        tags$br(),
+        tags$code(ifelse(
+          "condition" %in% class(x),
+          deparse(x$call),
+          deparse(attr(x, "condition")$call)
+        ), "\n"),
+        tags$br(),
+        tags$span("Error message:"),
+        tags$br(),
+        tags$code(
+          ifelse("condition" %in% class(x),
+            deparse(x$message),
+            deparse(attr(x, "condition")$message)
+          )
         )
+      )
     )
     req(FALSE)
   } else {
@@ -148,7 +148,9 @@ set_labels_df <- function(df, labels) {
 #'   avoids the use of `do.call` with this function
 #' @examples
 #' `%>%` <- magrittr::`%>%`
-#' print_call_and_eval <- function(x) { eval(print(x)) }
+#' print_call_and_eval <- function(x) {
+#'   eval(print(x))
+#' }
 #'
 #' # mtcars$cyl evaluated
 #' teal:::call_with_colon("dplyr::filter", as.name("mtcars"), mtcars$cyl == 6) %>%
@@ -415,4 +417,40 @@ check_setequal <- function(x, y, pre_msg = "") {
 #' @return `logical` whether the element is Shiny HTML like
 is_html_like <- function(x) {
   inherits(x, c("shiny.tag", "shiny.tag.list", "html")) # logical or
+}
+
+#' \code{source_value} - causes \code{R} to accept its input from the named \code{.R} file.
+#' In spite of \code{source} it is returning a last returned object in the \code{.R} file as it is.
+#'
+#' @param ... all parameters provided to \code{source}.
+#' Check the base package \code{source} function for parameters description.
+#'
+#' @name source_value
+#'
+#' @@seealso \code{\link{source}}
+#'
+#' @return a last returned object in \code{.R} file.
+#'
+#' @rdname source_value
+#'
+#' @examples
+#' \dontrun{
+#' file_example <- tempfile(fileext = ".R")
+#' writeLines(
+#'   text = c(
+#'     "library(random.cdisc.data)
+#'     ADSL <- radsl(cache = TRUE)
+#'     ADSL"
+#'   ),
+#'   con = file_example
+#' )
+#' # return a data.frame
+#' source_value(file_example)
+#' # return invisibly a list
+#' source(file_example)
+#' }
+#' @export
+source_value <- function(...) {
+  res <- source(...)
+  res$value
 }

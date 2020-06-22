@@ -127,14 +127,13 @@ file that contains R Code that can be read using \link{read_script}.
 Preferred before \code{code} argument}
 
 \item{file}{(\code{character})\cr
-path to (\code{.rds} or \code{.R}) that contains \code{data.frame} object or
-code to \code{source}}
+path to code for \code{source}}
 
 \item{path}{(\code{character})\cr
 path to the file}
 }
 \value{
-new \code{RawDatasetConnector} object
+new \code{RelationalDatasetConnector} object
 }
 \description{
 Create \code{RelationalDatasetConnector} from \link{callable_function}.
@@ -143,7 +142,7 @@ Create \code{RelationalDatasetConnector} from \link{callable_function}.
 
 \code{rds_dataset_connector} - Create a \code{RelationalDatasetConnector} from \code{RDS} file.
 
-\code{rds_dataset_connector} - Create a \code{RelationalDatasetConnector} from \code{RDS} file.
+\code{script_dataset_connector} - Create a \code{RelationalDatasetConnector} from \code{.R} file.
 
 \code{rice_dataset_connector} -
 Create a \code{RelationalDatasetConnector} from \code{RICE} dataset.

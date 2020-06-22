@@ -134,7 +134,6 @@ test_that("RawDatasetConnector", {
     x2$get_code(deparse = FALSE),
     as.call(parse(text = "paste()"))[[1]]
   )
-
 })
 
 # Test RelationalDatasetConnector ------
@@ -226,6 +225,52 @@ test_that("RelationalDatasetConnector", {
     x2$get_keys(),
     get_dataset(x2)$get_keys()
   )
+
+
+
+  fun <- callable_function(data.frame)
+  fun$set_args(list(id = 1:3, marker = c(100, 1, 10), alive = TRUE))
+  fun$set_args(list(new_feature = c(3, 4, 1)))
+
+  expect_silent(
+    x3 <- relational_dataset_connector(
+      pull_fun = fun,
+      dataname = "ADSL",
+      keys = get_cdisc_keys("ADSL")
+    )
+  )
+
+  expect_identical(
+    get_code(x3),
+    "ADSL <- data.frame(id = 1:3, marker = c(100, 1, 10), alive = TRUE, new_feature = c(3, 4, \n1))"
+  )
+
+  expect_silent(
+    m <- mutate_dataset(x3, "ADSL$newest <- 'xxx'")
+  )
+
+  expect_error(
+    m <- mutate_dataset(x3, "ADAM$newest <- 'xxx'"),
+    "You did not use the dataname inside the code. It does not mutate the 'x'"
+  )
+
+  expect_silent(load_dataset(m))
+
+  expect_silent(
+    m <- mutate_dataset(x3, "ADSL$newest2 <- 'best'")
+  )
+
+  expect_true(
+    is(get_dataset(m), "RelationalDataset")
+  )
+
+  expect_identical(
+    get_raw_data(m),
+    data.frame(
+      id = 1:3, marker = c(100, 1, 10), alive = TRUE, new_feature = c(3, 4, 1),
+      newest = "xxx", newest2 = "best", stringsAsFactors = FALSE
+    )
+  )
 })
 
 # Test conversions
@@ -259,8 +304,10 @@ test_that("conversions", {
   )
 
   expect_silent(load_dataset(x))
-  expect_identical(get_raw_data(x1),
-                   x$get_dataset()$get_raw_data())
+  expect_identical(
+    get_raw_data(x1),
+    x$get_dataset()$get_raw_data()
+  )
 
 
   expect_warning(
@@ -322,8 +369,10 @@ test_that("as_relational", {
 
 test_that("rcd_dataset_connector", {
   x <- rcd_cdisc_dataset_connector(dataname = "ADSL", radsl, cached = TRUE, N = 400)
-  x2 <- rcd_dataset_connector(dataname = "ADSL", radsl, cached = TRUE, N = 400,
-                              keys = get_cdisc_keys("ADSL"))
+  x2 <- rcd_dataset_connector(
+    dataname = "ADSL", radsl, cached = TRUE, N = 400,
+    keys = get_cdisc_keys("ADSL")
+  )
   expect_equal(x, x2)
   expect_true(is(x, c("DatasetConnector", "R6")))
 
@@ -354,8 +403,13 @@ test_that("rcd_dataset_connector", {
 
 test_that("rds_dataset_connector", {
   x <- rds_cdisc_dataset_connector(dataname = "ADSL", file = "./data_connectors/table.rds")
-  x2 <- rds_dataset_connector(dataname = "ADSL", file = "./data_connectors/table.rds",
-                             keys = get_cdisc_keys("ADSL"))
+  x2 <- rds_dataset_connector(
+    dataname = "ADSL", file = "./data_connectors/table.rds",
+    keys = get_cdisc_keys("ADSL")
+  )
+
+  expect_error(rds_cdisc_dataset_connector(dataname = "ADSL", file = "./data_connectors/table_notexists.rds"))
+
   expect_equal(x, x2)
   expect_true(is(x, c("DatasetConnector", "R6")))
 
@@ -363,7 +417,62 @@ test_that("rds_dataset_connector", {
     x$get_code(),
     "ADSL <- readRDS(file = \"./data_connectors/table.rds\")"
   )
+})
 
+test_that("script_dataset_connector", {
+  file_example <- tempfile(fileext = ".R")
+  writeLines(
+    text = c(
+      "
+    library(random.cdisc.data)
+    ADSL <- radsl(cache = TRUE)
+    ADSL"
+    ),
+    con = file_example
+  )
+
+  x <- script_dataset_connector(
+    dataname = "ADSL",
+    file = file_example,
+    keys = get_cdisc_keys("ADSL")
+  )
+
+  wrong_file <- "notexists.R"
+  expect_error(script_dataset_connector(
+    dataname = "ADSL",
+    file = wrong_file,
+    keys = get_cdisc_keys("ADSL")
+  ), sprintf("File %s does not exist.", wrong_file))
+
+  expect_silent(load_dataset(x))
+
+  expect_true(is(get_dataset(x), c("RelationalDataset", "R6")))
+
+  expect_true(is(get_raw_data(x), c("data.frame")))
+})
+
+test_that("script_cdisc_dataset_connector", {
+  file_example <- tempfile(fileext = ".R")
+  writeLines(
+    text = c(
+      "
+    library(random.cdisc.data)
+    ADSL <- radsl(cache = TRUE)
+    ADSL"
+    ),
+    con = file_example
+  )
+
+  x <- script_cdisc_dataset_connector(
+    dataname = "ADSL",
+    file = file_example
+  )
+
+  expect_silent(load_dataset(x))
+
+  expect_true(is(get_dataset(x), c("RelationalDataset", "R6")))
+
+  expect_true(is(get_raw_data(x), c("data.frame")))
 })
 
 test_that("rice_dataset", {

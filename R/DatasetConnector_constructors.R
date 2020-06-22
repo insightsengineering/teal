@@ -22,7 +22,7 @@
 #' @param ... (optional)\cr
 #'   additional arguments passed to function loading data.
 #'
-#' @return new \code{RawDatasetConnector} object
+#' @return new \code{RelationalDatasetConnector} object
 #' @rdname relational_dataset_connector
 #' @export
 relational_dataset_connector <- function(pull_fun,
@@ -152,8 +152,12 @@ rds_dataset_connector <- function(dataname,
   return(x)
 }
 
+
 #' @description
-#' \code{rds_dataset_connector} - Create a \code{RelationalDatasetConnector} from \code{RDS} file.
+#' \code{script_dataset_connector} - Create a \code{RelationalDatasetConnector} from \code{.R} file.
+#'
+#' @param file (\code{character})\cr
+#'   path to code for \code{source}
 #'
 #' @inheritParams as_relational
 #'
@@ -184,7 +188,7 @@ script_dataset_connector <- function(dataname,
     stop("File ", file, " does not exist.", call. = FALSE)
   }
 
-  x_fun <- callable_function(source) # nolint
+  x_fun <- callable_function(source_value) # nolint
   args <- append(list(file = file), list(...))
   x_fun$set_args(args)
 
