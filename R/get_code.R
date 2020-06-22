@@ -42,6 +42,19 @@ get_code.NamedDataset <- function(x, deparse = TRUE, ...) {
   x$get_code(deparse = deparse)
 }
 
+
+#' @export
+#' @rdname get_code
+get_code.cdisc_data <- function(x, deparse = FALSE, ...) {
+  if (deparse) {
+    paste0(deparse(attr(x, "code"), width.cutoff = 80L), collapse = "\n")
+  } else {
+    attr(x, "code")
+  }
+}
+
+
+
 # Getting code from files ====
 
 #' @rdname get_code

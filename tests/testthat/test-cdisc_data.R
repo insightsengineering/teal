@@ -163,15 +163,15 @@ test_that("Empty code", {
 
   # missing code
   result <- cdisc_data(cdisc_dataset("ADSL", ADSL), check = FALSE)
-  expect_identical(attr(result, "code"), paste0(code_empty, "\n\n", code_check, "\n"))
+  expect_identical(get_code(result), paste0(code_empty, "\n\n", code_check, "\n"))
 
   # NULL code
   result <- cdisc_data(cdisc_dataset("ADSL", ADSL), code = "", check = FALSE)
-  expect_identical(attr(result, "code"), paste0(code_empty, "\n\n", code_check, "\n"))
+  expect_identical(get_code(result), paste0(code_empty, "\n\n", code_check, "\n"))
 
   # empty code
   result <- cdisc_data(cdisc_dataset("ADSL", ADSL), code = "", check = FALSE)
-  expect_identical(attr(result, "code"), paste0(code_empty, "\n\n", code_check, "\n"))
+  expect_identical(get_code(result), paste0(code_empty, "\n\n", code_check, "\n"))
 })
 
 

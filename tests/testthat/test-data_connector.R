@@ -101,7 +101,7 @@ test_that("DataConnector with DataConnection", {
   expect_true(is(x$get_ui(id = ""), c("shiny.tag.list", "list")))
   expect_true(is(x$get_cdisc_data(), "cdisc_data"))
 
-  cdisc_code <- strsplit(attr(x$get_cdisc_data(), "code"), "\n")[[1]]
+  cdisc_code <- strsplit(get_code(x$get_cdisc_data()), "\n")[[1]]
   expected_code <- c(
     "data.frame(x = 1:5, y = c(\"a\", \"b\", \"c\", \"d\", \"e\"))", # from connection open
     "ADSL <- radsl(cached = TRUE)",
@@ -164,7 +164,7 @@ test_that("data connector with rcd connection", {
   expect_true(is(x$get_ui(id = ""), c("shiny.tag.list", "list")))
   expect_true(is(x$get_cdisc_data(), "cdisc_data"))
 
-  cdisc_code <- strsplit(attr(x$get_cdisc_data(), "code"), "\n")[[1]]
+  cdisc_code <- strsplit(get_code(x$get_cdisc_data()), "\n")[[1]]
   expected_code <- c(
     "library(package = \"random.cdisc.data\")",
     "ADSL <- radsl(cached = TRUE)",

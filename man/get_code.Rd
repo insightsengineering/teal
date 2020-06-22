@@ -4,6 +4,7 @@
 \alias{get_code}
 \alias{get_code.RawDatasetConnector}
 \alias{get_code.NamedDataset}
+\alias{get_code.cdisc_data}
 \alias{get_code.default}
 \title{Get code}
 \usage{
@@ -12,6 +13,8 @@ get_code(x, ...)
 \method{get_code}{RawDatasetConnector}(x, deparse = TRUE, ...)
 
 \method{get_code}{NamedDataset}(x, deparse = TRUE, ...)
+
+\method{get_code}{cdisc_data}(x, deparse = FALSE, ...)
 
 \method{get_code}{default}(
   x,

@@ -41,7 +41,7 @@ set_datasets_data <- function(datasets, data) {
   }
 
   # set code to generate the unfiltered datasets
-  datasets$set_preproc_code(attr(data, "code"))
+  datasets$set_preproc_code(get_code(data))
 
   return(invisible(NULL))
 }

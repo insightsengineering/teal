@@ -269,7 +269,7 @@ x$launch()
 
 ```{r eval=FALSE}
 cdisc_data <- x$get_cdisc_data()
-cat(attr(cdisc_data, "code"))
+cat(get_code(cdisc_data))
 ```
 
 To confirm that shiny input has been saved, one can check reproducible code to see that 
