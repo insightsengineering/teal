@@ -19,7 +19,7 @@ ui_teal(
 can be a splash screen or a Shiny module UI. For the latter, see
 \verb{\link{init}} about how to call the corresponding server function.}
 
-\item{title}{(character) The browser window title (defaults to the host URL of the page)}
+\item{title}{(\code{character}) The browser window title (defaults to the host URL of the page)}
 
 \item{header}{\verb{shiny.tag or character} header to display above the app}
 

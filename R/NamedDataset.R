@@ -17,6 +17,7 @@
 #' named_data$ncol
 #' named_data$get_code()
 #' named_data$get_dataname()
+#' @importFrom R6 R6Class
 NamedDataset <- R6::R6Class( # nolint
   "NamedDataset",
   inherit = RawDataset,

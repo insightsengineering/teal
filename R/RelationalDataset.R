@@ -27,6 +27,7 @@
 #' rel_data$get_dataname()
 #' rel_data$get_keys()
 #' rel_data$set_keys(keys(primary = "x", foreign = NULL, parent = NULL))
+#' @importFrom R6 R6Class
 RelationalDataset <- R6::R6Class( # nolint
   "RelationalDataset",
   inherit = NamedDataset,

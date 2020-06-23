@@ -239,7 +239,7 @@ get_variable_labels <- function(data, columns = NULL, fill = TRUE) {
 cdisc_dataset <- function(dataname,
                           data,
                           keys = get_cdisc_keys(dataname)) {
-    dataset(dataname, data, keys)
+  dataset(dataname, data, keys)
 
 }
 
@@ -268,18 +268,18 @@ check_foreign_keys <- function(datasets_keys) {
       if (identical(child_keys, parent_keys)) {
         # do nothing
 
-      # one to many OK - eg. STUDIES to ADSL on STUDYID
+        # one to many OK - eg. STUDIES to ADSL on STUDYID
       } else if (length(child_keys) < length(parent_keys) && all(child_keys %in% parent_keys)) {
         # do nothing
 
-      # one to one OK - allow to merge on different names eg. USUBJID = ADSL_USUBJID, STUDYID = ADSL_STUDYID
+        # one to one OK - allow to merge on different names eg. USUBJID = ADSL_USUBJID, STUDYID = ADSL_STUDYID
       } else if (length(child_keys) == length(parent_keys) && any(child_keys != parent_keys)) {
         warning(
           "Following foreign keys are not identical to the primary keys in parent dataset:\n",
           paste(paste("  ", child_keys, "!=", parent_keys)[child_keys != parent_keys], collapse = "\n")
         )
 
-      # many to one ERROR - more keys in child than in parent
+        # many to one ERROR - more keys in child than in parent
       } else if (length(child_keys) > length(parent_keys)) {
         stop(
           "Number of foreign keys can't be larger than number of primary keys in parent dataset",
@@ -289,7 +289,7 @@ check_foreign_keys <- function(datasets_keys) {
           " to the parent primary keys or remove from child foreign keys"
         )
 
-      # one to many ERROR - can't be joined if keys doesn't match (eg. STUDIES to ADSL on s.ID = a.STUDYID)
+        # one to many ERROR - can't be joined if keys doesn't match (eg. STUDIES to ADSL on s.ID = a.STUDYID)
       } else if (length(child_keys) < length(parent_keys) && !all(child_keys %in% parent_keys)) {
         stop(
           "Foreign keys are don't match all parent keys and both have different length",
@@ -300,7 +300,7 @@ check_foreign_keys <- function(datasets_keys) {
         )
       }
 
-    # root dataset parent mean  - keys must match ADSL keys
+      # root dataset parent mean  - keys must match ADSL keys
     } else {
       if (!identical(keys$primary, datasets_keys[["ADSL"]]$primary))
         stop("Root dataset keys doesn't match ADSL primary keys
@@ -366,8 +366,15 @@ cdisc_data <- function(...,
   dlist <- list(...)
 
   if (!is_class_list("RelationalDataset")(dlist)) {
-    stop("Argument in not of class dataset, please use cdisc_dataset function!")
+    stop("Argument in not of class RelationalDataset, please use cdisc_dataset function!")
   }
+
+  code <- paste(
+    vapply(dlist, get_code, character(1)),
+    code,
+    sep = "\n",
+    collapse = "\n"
+  )
 
   datasets_names <- lapply(dlist, `[[`, "dataname")
   datasets_data <- lapply(dlist, `[[`, "data")
@@ -399,7 +406,7 @@ cdisc_data <- function(...,
       }
     )
 
-    if (identical(code, "")) {
+    if (identical(code, "\n")) {
       stop("Cannot check preprocessing code - code is empty.")
     }
 
@@ -439,7 +446,7 @@ cdisc_data <- function(...,
     }
   }
 
-  if (code == "") {
+  if (identical(code, "\n")) {
     code <- get_preprocessing_empty_string() # nolint
   }
 

@@ -17,10 +17,13 @@
 #' @param data `cdisc_data or DataConnector` object to obtain the data
 #' @inheritParams ui_teal
 #' @export
-ui_teal_with_splash <- function(id, data, title = NULL, header = tags$p("Add Title Here"), footer = tags$p("Add Footer Here")) { #nolint
-  stopifnot(is(data, "cdisc_data") || is(data, "DataConnector"))
+ui_teal_with_splash <- function(id,
+                                data,
+                                title,
+                                header = tags$p("Add Title Here"),
+                                footer = tags$p("Add Footer Here")) {
+  stopifnot(is(data, "cdisc_data") || is(data, "DelayedRelationalData"))
   is_not_delayed_data <- is(data, "cdisc_data") # `cdisc_data` or `DataConnector`
-
   ns <- NS(id)
 
   # Startup splash screen for delayed loading
@@ -49,8 +52,9 @@ ui_teal_with_splash <- function(id, data, title = NULL, header = tags$p("Add Tit
 #' @return `reactive`, return value of `\link{srv_teal}`
 #' @export
 srv_teal_with_splash <- function(input, output, session, data, modules, filter_states = list()) {
+  print(class(data))
   stopifnot(
-    is(data, "cdisc_data") || is(data, "DataConnector")
+    is(data, "cdisc_data") || is(data, "DelayedRelationalData")
   )
 
   is_not_delayed_data <- is(data, "cdisc_data") # `cdisc_data` or `DataConnector`

@@ -25,7 +25,7 @@ Pulled data inherits from the class \link{RelationalDataset}.
 \item \href{#method-get_dataset}{\code{RawDatasetConnector$get_dataset()}}
 \item \href{#method-get_pull_fun}{\code{RawDatasetConnector$get_pull_fun()}}
 \item \href{#method-get_raw_data}{\code{RawDatasetConnector$get_raw_data()}}
-\item \href{#method-pull_dataset}{\code{RawDatasetConnector$pull_dataset()}}
+\item \href{#method-pull}{\code{RawDatasetConnector$pull()}}
 \item \href{#method-clone}{\code{RawDatasetConnector$clone()}}
 }
 }
@@ -130,13 +130,13 @@ data (data.frame)
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-pull_dataset"></a>}}
-\subsection{Method \code{pull_dataset()}}{
+\if{html}{\out{<a id="method-pull"></a>}}
+\subsection{Method \code{pull()}}{
 Pull the data
 
 Read or create data using \code{pull_fun} specified in the constructor.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{RawDatasetConnector$pull_dataset(args = NULL, try = FALSE)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{RawDatasetConnector$pull(args = NULL, try = FALSE)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{

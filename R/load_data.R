@@ -32,6 +32,6 @@ load_dataset <- function(x, args, try) {
 #' }
 #' @export
 load_dataset.RawDatasetConnector <- function(x, args = NULL, try = FALSE) { # nolint
-  x$pull_dataset(args = args, try = try)
+  x$pull(args = args, try = try)
   return(invisible(x))
 }

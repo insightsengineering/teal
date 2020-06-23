@@ -147,11 +147,11 @@ ADLB <- radlb(cached = TRUE)
 
 This app tests that the app works with delayed data that is not available initially and loaded after the splash screen is submitted. Then, the splash UI is replaced by the main teal UI.
 
-```{r delayedDataApp}
+```{r delayedDataApp, eval=FALSE}
 app <- init(
   data = rcd_cdisc_data(
-    rcd_cdisc_dataset_connector("ADSL", radsl, cached = TRUE),
-    rcd_cdisc_dataset_connector("ADLB", radlb, cached = TRUE)
+    rcd_cdisc_dataset_connector(dataname = "ADSL", radsl, cached = TRUE),
+    rcd_cdisc_dataset_connector(dataname = "ADLB", radlb, cached = TRUE)
   ),
   modules = root_modules(
     teal:::filter_calls_module("ADAE", active_datanames = c("ADAE")),

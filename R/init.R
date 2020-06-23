@@ -130,8 +130,8 @@ init <- function(data,
   get_datanames <- function(data) {
     if (is(data, "cdisc_data")) {
       names(data)
-    } else if (is(data, "DataConnector")) {
-      vapply(data$get_connectors(), function(conn) conn$get_dataname(), character(1))
+    } else if (is(data, "DelayedRelationalData")) {
+      data$get_datanames()
     } else {
       stop("Unknown class for data: ", class(data))
     }

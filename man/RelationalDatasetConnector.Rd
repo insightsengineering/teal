@@ -29,7 +29,7 @@ Pulled data inherits from the class \link{RelationalDataset}.
 \item \href{#method-set_dataset_label}{\code{RelationalDatasetConnector$set_dataset_label()}}
 \item \href{#method-get_code}{\code{RelationalDatasetConnector$get_code()}}
 \item \href{#method-mutate_dataset}{\code{RelationalDatasetConnector$mutate_dataset()}}
-\item \href{#method-pull_dataset}{\code{RelationalDatasetConnector$pull_dataset()}}
+\item \href{#method-pull}{\code{RelationalDatasetConnector$pull()}}
 \item \href{#method-clone}{\code{RelationalDatasetConnector$clone()}}
 }
 }
@@ -179,13 +179,13 @@ Either code or script must be provided, but not both.
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-pull_dataset"></a>}}
-\subsection{Method \code{pull_dataset()}}{
+\if{html}{\out{<a id="method-pull"></a>}}
+\subsection{Method \code{pull()}}{
 Pull the data
 
 Read or create the data using \code{pull_fun} specified in the constructor.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{RelationalDatasetConnector$pull_dataset(args = NULL, try = FALSE)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{RelationalDatasetConnector$pull(args = NULL, try = FALSE)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{

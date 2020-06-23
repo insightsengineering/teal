@@ -52,7 +52,7 @@ test_that("RawDatasetConnector", {
     "dataset has not been pulled yet"
   )
 
-  expect_silent(x$pull_dataset())
+  expect_silent(x$pull())
 
   expect_true(
     is(get_dataset(x), "RawDataset")
@@ -79,7 +79,7 @@ test_that("RawDatasetConnector", {
 
   # arguments used in pull doesn't change code - only data
   expect_silent(
-    x$pull_dataset(args = list(n = 50, seed = 1, cached = TRUE))
+    x$pull(args = list(n = 50, seed = 1, cached = TRUE))
   )
 
   expect_identical(
@@ -93,8 +93,8 @@ test_that("RawDatasetConnector", {
   )
 
 
-  # arguments used in pull_dataset doesn't change code - only data
-  expect_silent(x$pull_dataset(args = list(n = 100)))
+  # arguments used in pull doesn't change code - only data
+  expect_silent(x$pull(args = list(n = 100)))
 
   expect_identical(
     get_raw_data(x),
@@ -117,7 +117,7 @@ test_that("RawDatasetConnector", {
   x2 <- raw_dataset_connector(pull_fun = fun2)
 
   expect_error(
-    x2$pull_dataset(),
+    x2$pull(),
     "is.data.frame"
   )
 
@@ -190,7 +190,7 @@ test_that("RelationalDatasetConnector", {
   )
 
 
-  expect_silent(x1$pull_dataset())
+  expect_silent(x1$pull())
 
   expect_true(
     is(x1$get_dataset(), "RelationalDataset")
@@ -220,7 +220,7 @@ test_that("RelationalDatasetConnector", {
     get_cdisc_keys("ADSL")
   )
 
-  expect_silent(x2$pull_dataset())
+  expect_silent(x2$pull())
   expect_identical(
     x2$get_keys(),
     get_dataset(x2)$get_keys()
@@ -477,9 +477,8 @@ test_that("script_cdisc_dataset_connector", {
 
 test_that("rice_dataset", {
   x <- rice_cdisc_data(
-    ADSL = rice_dataset_connector("ADSL", "/path/to/ADSL", keys = get_cdisc_keys("ADSL")),
-    ADLB = rice_cdisc_dataset_connector("ADLB", "/path/to/ADLB"),
-    code = "ADSL$x <- 1"
+    rice_dataset_connector("ADSL", "/path/to/ADSL", keys = get_cdisc_keys("ADSL")),
+    rice_cdisc_dataset_connector("ADLB", "/path/to/ADLB")
   )
 
   expect_equal(
@@ -497,8 +496,9 @@ test_that("rice_dataset", {
   )
 
 
+  x <- mutate_dataset(rice_cdisc_dataset_connector("ADLB", "/path/to/ADLB"), code = "ADLB$x <- 1")
   expect_equal(
-    x$.__enclos_env__$private$code,
-    "ADSL$x <- 1"
+    get_code(x),
+    "ADLB <- rice::rice_read(node = \"/path/to/ADLB\", prolong = TRUE, quiet = TRUE)\nADLB$x <- 1"
   )
 })

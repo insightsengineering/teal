@@ -20,7 +20,9 @@ The arguments in ... need to be quoted because they will be evaluated otherwise
 }
 \examples{
 `\%>\%` <- magrittr::`\%>\%`
-print_call_and_eval <- function(x) { eval(print(x)) }
+print_call_and_eval <- function(x) {
+  eval(print(x))
+}
 
 # mtcars$cyl evaluated
 teal:::call_with_colon("dplyr::filter", as.name("mtcars"), mtcars$cyl == 6) \%>\%

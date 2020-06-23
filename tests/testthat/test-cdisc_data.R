@@ -90,8 +90,7 @@ test_that("List values", {
   adsl_yaml <- yaml::yaml.load_file(system.file("metadata/ADSL.yml", package = "random.cdisc.data", mustWork = TRUE))
   adtte_yaml <- yaml::yaml.load_file(system.file("metadata/ADTTE.yml", package = "random.cdisc.data", mustWork = TRUE))
 
-  result_to_compare <- structure(
-    list(ADSL = RelationalDataset$new(
+  dataset <- list(ADSL = RelationalDataset$new(
     dataname = "ADSL",
     x = ADSL,
     keys = keys(
@@ -100,39 +99,38 @@ test_that("List values", {
       parent = NULL
     ),
     label = adsl_yaml$domain$label
-  )),
-  code = paste0(code_empty, "\n\n", code_check, "\n"),
-  class = "cdisc_data")
+  ))
+
+  result_to_compare <- do.call("cdisc_data", dataset)
 
   expect_equal(result, result_to_compare)
 
   result <- cdisc_data(cdisc_dataset("ADSL", ADSL),
                        cdisc_dataset("ADTTE", ADTTE))
 
-  result_to_compare <- list(
+  datasets <- list(
     ADSL = RelationalDataset$new(
-    dataname = "ADSL",
-    x = ADSL,
-    keys = keys(
-      primary = c("STUDYID", "USUBJID"),
-      foreign = NULL,
-      parent = NULL
+      dataname = "ADSL",
+      x = ADSL,
+      keys = keys(
+        primary = c("STUDYID", "USUBJID"),
+        foreign = NULL,
+        parent = NULL
+      ),
+      label = adsl_yaml$domain$label
     ),
-    label = adsl_yaml$domain$label
-  ),
-  ADTTE = RelationalDataset$new(
-    dataname = "ADTTE",
-    x = ADTTE,
-    keys = keys(
-      primary = c("STUDYID", "USUBJID", "PARAMCD"),
-      foreign = c("STUDYID", "USUBJID"),
-      parent = "ADSL"
-    ),
-    label = adtte_yaml$domain$label
-  ))
+    ADTTE = RelationalDataset$new(
+      dataname = "ADTTE",
+      x = ADTTE,
+      keys = keys(
+        primary = c("STUDYID", "USUBJID", "PARAMCD"),
+        foreign = c("STUDYID", "USUBJID"),
+        parent = "ADSL"
+      ),
+      label = adtte_yaml$domain$label
+    ))
 
-  class(result_to_compare) <- "cdisc_data"
-  attr(result_to_compare, "code") <- paste0(code_empty, "\n\n", code_check, "\n")
+  result_to_compare <- do.call("cdisc_data", datasets)
 
   expect_equal(result, result_to_compare)
 })
@@ -184,7 +182,7 @@ test_that("Arguments created by code", {
   result_to_compare <- list(cdisc_dataset("ADSL", ADSL))
   class(result_to_compare) <- "cdisc_data"
   result_to_compare <- setNames(result_to_compare, c("ADSL"))
-  attr(result_to_compare, "code") <- paste0("ADSL <- cadsl", "\n\n", code_check, "\n")
+  attr(result_to_compare, "code") <- paste0("\nADSL <- cadsl", "\n\n", code_check, "\n")
 
   expect_equal(result, result_to_compare)
 })
@@ -196,7 +194,7 @@ test_that("Error - objects differs", {
   )
 
   expect_error(
-    cdisc_data(cdisc_dataset("ADSL", ADSL), code = "ADSL <- radsl(N=300);", check = TRUE),
+    cdisc_data(cdisc_dataset("ADSL", ADSL), code = "ADSL <- radsl(N = 10);", check = TRUE),
     "Cannot reproduce object"
   )
 })
@@ -223,7 +221,7 @@ test_that("Error - duplicated names", {
 test_that("Error - dataset is not of class cdisc_dataset", {
   expect_error(
     cdisc_data(ARG1 = 1, code = "", check = FALSE),
-    "Argument in not of class dataset, please use cdisc_dataset function!"
+    "Argument in not of class RelationalDataset, please use cdisc_dataset function!"
   )
 })
 
@@ -244,8 +242,8 @@ test_that("Error - primary keys are not unique for the dataset", {
 
 test_that("Error - parent is defined without foreign key", {
   expect_error(cdisc_data(cdisc_dataset("ADTTE", ADTTE, keys = keys(primary = c("STUDYID", "USUBJID"),
-                                                                  foreign = NULL,
-                                                                  parent = "ADSL"))
+                                                                    foreign = NULL,
+                                                                    parent = "ADSL"))
   ), "ADTTE: Please specify both foreign keys and a parent!")
 
   expect_error(

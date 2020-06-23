@@ -33,7 +33,7 @@ on (filtered) to the server function
 function
 }}
 
-\item{title}{(character) The browser window title (defaults to the host URL of the page).}
+\item{title}{(\code{character}) The browser window title (defaults to the host URL of the page).}
 
 \item{filter_states}{(\code{list}) You can define filters that show when
 the app starts.

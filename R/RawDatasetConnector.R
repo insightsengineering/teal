@@ -93,8 +93,12 @@ RawDatasetConnector <- R6::R6Class( #nolint
     #' @param try (\code{logical}) whether perform function evaluation inside \code{try} clause
     #'
     #' @return nothing, in order to get the data please use \code{get_data} method
-    pull_dataset = function(args = NULL, try = FALSE) {
-      data <- private$pull_fun$run(args = args, try = try)
+    pull = function(args = NULL, try = FALSE) {
+      if (is.null(args)) {
+        data <- private$pull_fun$run(try = try)
+      } else {
+        data <- private$pull_fun$run(args = args, try = try)
+      }
       private$dataset <- RawDataset$new(data)
       return(invisible(self))
     }
@@ -124,7 +128,7 @@ RawDatasetConnector <- R6::R6Class( #nolint
 #' @examples
 #' ds <- raw_dataset_connector(pull_fun = callable_function(data.frame))
 #' set_args(ds, list(x = 1:5, y = letters[1:5]))
-#' ds$pull_dataset()
+#' ds$pull()
 #' ds$get_raw_data()
 #' ds$get_code()
 #' @return \code{RawDatasetConnector} object

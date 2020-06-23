@@ -7,7 +7,7 @@
 ui_teal_with_splash(
   id,
   data,
-  title = NULL,
+  title,
   header = tags$p("Add Title Here"),
   footer = tags$p("Add Footer Here")
 )
@@ -17,7 +17,7 @@ ui_teal_with_splash(
 
 \item{data}{\verb{cdisc_data or DataConnector} object to obtain the data}
 
-\item{title}{(character) The browser window title (defaults to the host URL of the page)}
+\item{title}{(\code{character}) The browser window title (defaults to the host URL of the page)}
 
 \item{header}{\verb{shiny.tag or character} header to display above the app}
 

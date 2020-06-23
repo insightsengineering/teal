@@ -63,7 +63,6 @@ app <- init(
       filters = "ADSL"
     )
   ),
-  filter = NULL,
   header = tags$h1("Sample App")
 )
 
@@ -83,9 +82,7 @@ from `DataConnector`.
 ```{r}
 data_with_code <- rice_cdisc_data(
   rice_cdisc_dataset_connector(dataname = "ADSL", path = "/path/to/ADSL"),
-  rice_cdisc_dataset_connector(dataname = "ADLB", path = "/path/to/ADLB"),
-  code = "ADSL <- ADSL %>% mutate(new_variable = 1)
-          ADLB <- ADLB %>% mutate(new_variable = 1)"
+  rice_cdisc_dataset_connector(dataname = "ADLB", path = "/path/to/ADLB")
 )
 ```
 
@@ -102,8 +99,11 @@ converted to `cdisc_data` object and passed to shiny app alongside with specifie
 
 [<frame>App Setup|
    
-  [DataConnector|
-     + DatasetConnector(dataname, keys, labels)..*
+  [RelationalDataApp|
+     + RelationalDataset(dataname, keys, labels)..*
+     + RelationalDatasetConnector(dataname, keys, labels)..*
+     + RelationalData(dataname, keys, labels)..*
+     + RelationalDataConnector(dataname, keys, labels)..*
      + code]
  [<frame>teal::init()]
  [ui]
@@ -251,11 +251,10 @@ inputs are saved in class object.
 One can use helper method `x$launch` which opens shiny application where one can choose `seed` for 
 random data. 
 ```{r}
-x <- teal:::DataConnector$new()
+x <- teal:::RelationalDataConnector$new()
 
 x$set_connection(con)
 x$set_connectors(connectors)
-x$set_code(code = "ADSL$x <- 1")
 x$set_ui(ui)
 x$set_server_helper(
   submit_id = "submit",
@@ -269,7 +268,8 @@ x$launch()
 
 ```{r eval=FALSE}
 cdisc_data <- x$get_cdisc_data()
-cat(get_code(cdisc_data))
+get_code(x)
+
 ```
 
 To confirm that shiny input has been saved, one can check reproducible code to see that 
@@ -291,7 +291,7 @@ To confirm that shiny input has been saved, one can check reproducible code to s
      - list args 
      - character call]
 
-  [DatasetConnector||
+  [RelationalDatasetConnector||
      + get_call()
      + get_dataset()
      + get_dataname()
@@ -307,7 +307,7 @@ To confirm that shiny input has been saved, one can check reproducible code to s
      - CallableFunction pull_fun
      ]
   
-  [DataConnection||
+  [RelationalDataConnection||
     + set_open_fun(CallableFunction)
     + set_open_args(args)
     + set_close_fun(CallableFunction)
@@ -316,7 +316,7 @@ To confirm that shiny input has been saved, one can check reproducible code to s
     - CallableFunction close_fun
   ]
         
-  [DataConnector||
+  [RelationalDataConnector||
     + launch()
     + get_cdisc_data()
     + get/set_ui(ui)
@@ -327,17 +327,65 @@ To confirm that shiny input has been saved, one can check reproducible code to s
     - server
     - ui
     - cdisc_data
-    - DataConnection connection 0..1
-    - DatasetConnectors connectors 1..
+    - RelationalDataConnection connection 0..1
+    - RelationalDatasetConnectors connectors 1..
     - character code
     - logical check
     - list data
   ]
 
 
-  [CallableFunction] -> [DatasetConnector]
-  [CallableFunction] -> [DataConnection]
+  [RelationalDataset||
+     + get_call()
+     + get_dataset()
+     + get_dataname()
+     + set/get_dataname(dataname)
+     + set/get_pull_fun(CallableFunction fun)
+     + set/get_pull_fun_args(args)
+     + set/get_pull_arg_value(name, value)|
+     - list data
+     - character dataname
+     - list keys
+     - character labels
+     - character path
+     - CallableFunction pull_fun
+     ]
+  
+  [RelationalData||
+    + launch()
+    + get_cdisc_data()
+    + get/set_ui(ui)
+    + get/set_server(server)
+    + get/set_connection(DataConnection)
+    + get/set_connectors(DatasetConnector)
+    + get/set_code(code)|
+    - server
+    - ui
+    - cdisc_data
+    - RelationalDataConnection connection 0..1
+    - RelationalDatasetConnectors connectors 1..
+    - character code
+    - logical check
+    - list data
+  ]
 
-  [DataConnection] -> [DataConnector]
-  [DatasetConnector] -> [DataConnector]
+
+  [RelationalDataApp||
+      gathers datasets, uis and servers and wraps them together]
+
+  [CallableFunction] -> [RelationalDatasetConnector]
+  [CallableFunction] -> [RelationalDataConnection]
+
+  [RelationalDataConnection] -> [RelationalDataConnector]
+  [RelationalDatasetConnector] -> [RelationalDataConnector]
+
+
+
+  [RelationalDataset] -> [RelationalData]
+
+
+
+  [RelationalDataConnector] ..* -> [RelationalDataApp]
+  [RelationalData] ..* -> [RelationalDataApp]
+
 ```

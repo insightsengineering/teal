@@ -142,8 +142,12 @@ RelationalDatasetConnector <- R6::R6Class( #nolint
     #' @param try (\code{logical}) whether perform function evaluation inside \code{try} clause
     #'
     #' @return nothing, in order to get the data please use \code{get_data} method
-    pull_dataset = function(args = NULL, try = FALSE) {
-      data <- private$pull_fun$run(args = args, try = try)
+    pull = function(args = NULL, try = FALSE) {
+      if (is.null(args)) {
+        data <- private$pull_fun$run(try = try)
+      } else {
+        data <- private$pull_fun$run(args = args, try = try)
+      }
 
       private$dataset <- RelationalDataset$new(
         x = data,

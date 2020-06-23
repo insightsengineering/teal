@@ -2,7 +2,7 @@
 % Please edit documentation in R/utils.R
 \name{source_value}
 \alias{source_value}
-\title{\code{source_value} - causes R to accept its input from the named \code{.R} file.
+\title{\code{source_value} - causes \code{R} to accept its input from the named \code{.R} file.
 In spite of \code{source} it is returning a last returned object in the \code{.R} file as it is.}
 \usage{
 source_value(...)
@@ -15,13 +15,13 @@ Check the base package \code{source} function for parameters description.}
 a last returned object in \code{.R} file.
 }
 \description{
-\code{source_value} - causes R to accept its input from the named \code{.R} file.
+\code{source_value} - causes \code{R} to accept its input from the named \code{.R} file.
 In spite of \code{source} it is returning a last returned object in the \code{.R} file as it is.
 }
 \examples{
 \dontrun{
- file_example <- tempfile(fileext = ".R")
- writeLines(
+file_example <- tempfile(fileext = ".R")
+writeLines(
   text = c(
     "library(random.cdisc.data)
     ADSL <- radsl(cache = TRUE)
@@ -29,13 +29,9 @@ In spite of \code{source} it is returning a last returned object in the \code{.R
   ),
   con = file_example
 )
-
 # return a data.frame
 source_value(file_example)
-
 # return invisibly a list
 source(file_example)
-
 }
-
 }

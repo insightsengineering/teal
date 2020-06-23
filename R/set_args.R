@@ -19,6 +19,7 @@ set_args <- function(x, args) {
 #' set_args(fun, list(N = 5, seed = 1, cached = TRUE))
 set_args.CallableFunction <- function(x, args) {
   x$set_args(args)
+  return(invisible(x))
 }
 
 #' @rdname set_args
@@ -28,4 +29,5 @@ set_args.CallableFunction <- function(x, args) {
 #' set_args(ds, list(x = 1:5, y = letters[1:5]))
 set_args.RawDatasetConnector <- function(x, args) {
   x$set_args(args)
+  return(invisible(x))
 }

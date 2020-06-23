@@ -8,8 +8,6 @@ run_js_files(files)
 }
 \arguments{
 \item{files}{(\code{character}) vector of filenames}
-
-\item{package}{(\code{character}) package name}
 }
 \description{
 This is triggered from the server to execute on the client
