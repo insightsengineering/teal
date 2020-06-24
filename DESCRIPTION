@@ -105,5 +105,6 @@ Collate:
     'set_args.R'
     'stop_shiny.R'
     'teal.R'
+    'teal_data.R'
     'utils.R'
     'zzz.R'
