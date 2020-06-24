@@ -1,9 +1,14 @@
 #' Data input for teal app
 #'
 #' Abstract function that creates dataset object with connected metadata.
-#' @param dataname name of dataset
-#' @param data data
-#' @param keys (\code{keys}) object -
+#' @param dataname (\code{character} value)\cr
+#'   name of dataset.
+#' @param data (\code{data.frame})
+#'   data must contain fields defined in keys.
+#' @param keys (\code{keys})\cr
+#'   see \code{\link{keys}}
+#' @param code (\code{character} value)\cr
+#'   code to reproduce \code{data}
 #'
 #' Please note that the order of keys is important.
 #'
@@ -32,11 +37,13 @@
 #' dataset("iris", iris)
 dataset <- function(dataname,
                     data,
-                    keys = teal::keys(primary = NULL, foreign = NULL, parent = NULL)) {
+                    keys = teal::keys(primary = NULL, foreign = NULL, parent = NULL),
+                    code = character(0)) {
   stopifnot(is_character_single(dataname))
   stopifnot(is.data.frame(data))
   stopifnot(is(keys, "keys"))
   stopifnot(all(union(keys$primary, keys$foreign) %in% names(data)))
+  stopifnot(is_character_vector(code, min_length = 0, max_length = 1))
 
   if (!is.null(keys$foreign) && is.null(keys$parent) || (is.null(keys$foreign) && !is.null(keys$parent))) {
     stop(dataname, ": Please specify both foreign keys and a parent!")
@@ -50,7 +57,8 @@ dataset <- function(dataname,
     x = data,
     dataname = dataname,
     keys = keys,
-    label = data_label(data)
+    label = data_label(data),
+    code = code
   )
 
   return(res)
@@ -238,8 +246,9 @@ get_variable_labels <- function(data, columns = NULL, fill = TRUE) {
 #' cdisc_dataset("ADSL", ADSL)
 cdisc_dataset <- function(dataname,
                           data,
-                          keys = get_cdisc_keys(dataname)) {
-  dataset(dataname, data, keys)
+                          keys = get_cdisc_keys(dataname),
+                          code = character(0)) {
+  dataset(dataname, data, keys, code)
 
 }
 
@@ -370,10 +379,9 @@ cdisc_data <- function(...,
   }
 
   code <- paste(
-    vapply(dlist, get_code, character(1)),
+    paste(vapply(dlist, get_code, character(1)), collapse = "\n"),
     code,
-    sep = "\n",
-    collapse = "\n"
+    sep = "\n"
   )
 
   datasets_names <- lapply(dlist, `[[`, "dataname")

@@ -4,14 +4,25 @@
 \alias{cdisc_dataset}
 \title{Data input for teal app}
 \usage{
-cdisc_dataset(dataname, data, keys = get_cdisc_keys(dataname))
+cdisc_dataset(
+  dataname,
+  data,
+  keys = get_cdisc_keys(dataname),
+  code = character(0)
+)
 }
 \arguments{
-\item{dataname}{name of dataset}
+\item{dataname}{(\code{character} value)\cr
+name of dataset.}
 
-\item{data}{data}
+\item{data}{(\code{data.frame})
+data must contain fields defined in keys.}
 
-\item{keys}{(\code{keys}) object -
+\item{keys}{(\code{keys})\cr
+see \code{\link{keys}}}
+
+\item{code}{(\code{character} value)\cr
+  code to reproduce \code{data}
 
 Please note that the order of keys is important.
 

@@ -7,15 +7,22 @@
 dataset(
   dataname,
   data,
-  keys = teal::keys(primary = NULL, foreign = NULL, parent = NULL)
+  keys = teal::keys(primary = NULL, foreign = NULL, parent = NULL),
+  code = character(0)
 )
 }
 \arguments{
-\item{dataname}{name of dataset}
+\item{dataname}{(\code{character} value)\cr
+name of dataset.}
 
-\item{data}{data}
+\item{data}{(\code{data.frame})
+data must contain fields defined in keys.}
 
-\item{keys}{(\code{keys}) object -
+\item{keys}{(\code{keys})\cr
+see \code{\link{keys}}}
+
+\item{code}{(\code{character} value)\cr
+  code to reproduce \code{data}
 
 Please note that the order of keys is important.
 

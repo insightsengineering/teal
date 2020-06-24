@@ -35,3 +35,6 @@ source_value(file_example)
 source(file_example)
 }
 }
+\seealso{
+\code{\link{source}}
+}

@@ -427,7 +427,7 @@ is_html_like <- function(x) {
 #'
 #' @name source_value
 #'
-#' @@seealso \code{\link{source}}
+#' @seealso \code{\link{source}}
 #'
 #' @return a last returned object in \code{.R} file.
 #'
