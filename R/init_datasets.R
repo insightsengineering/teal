@@ -1,21 +1,25 @@
 convert_to_cdisc_data <- function(data) {
-  stopifnot(is_class_list("data.frame")(data))
-  data_names <- names(data)
-  stopifnot(length(data_names) == length(data))
+  if (is_class_list("data.frame")(data)) {
 
-  data_substitute <- substitute(data)
-  data <- eval(as.call(append(
-    quote(cdisc_data), lapply(
-      seq_along(data),
-      function(idx) {
-        call(
-          "cdisc_dataset",
-          dataname = data_names[[idx]],
-          data = data_substitute[[idx + 1]]
-        )
-      }
-    )
-  )))
+    data_names <- names(data)
+    stopifnot(length(data_names) == length(data))
+
+    data_substitute <- substitute(data)
+    data <- eval(as.call(append(
+      quote(cdisc_data), lapply(
+        seq_along(data),
+        function(idx) {
+          call(
+            "cdisc_dataset",
+            dataname = data_names[[idx]],
+            data = data_substitute[[idx + 1]]
+          )
+        }
+      )
+    )))
+  } else {
+    return(do.call(RelationalData$new, data)$get_cdisc_data())
+  }
 
   return(data)
 }
@@ -24,7 +28,7 @@ set_datasets_data <- function(datasets, data) {
   stopifnot(is(datasets, "FilteredData"))
 
   if (!is(data, "cdisc_data")) {
-    warning("Please use cdisc_data() instead of list() for 'data' argument. It will be depreciated soon.")
+    warning("Please use teal_data() as a wrapper for 'data' argument. 'list' will be depreciated soon.")
     data <- convert_to_cdisc_data(data)
   }
 

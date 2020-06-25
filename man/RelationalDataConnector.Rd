@@ -42,6 +42,7 @@ tc$get_datasets()
 \itemize{
 \item \href{#method-new}{\code{RelationalDataConnector$new()}}
 \item \href{#method-get_datasets}{\code{RelationalDataConnector$get_datasets()}}
+\item \href{#method-get_datanames}{\code{RelationalDataConnector$get_datanames()}}
 \item \href{#method-get_connection}{\code{RelationalDataConnector$get_connection()}}
 \item \href{#method-get_connectors}{\code{RelationalDataConnector$get_connectors()}}
 \item \href{#method-get_server}{\code{RelationalDataConnector$get_server()}}
@@ -125,8 +126,17 @@ function}
 }
 \subsection{Returns}{
 list of \code{RelationalDataset} objects
-Get connection to data source
 }
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-get_datanames"></a>}}
+\subsection{Method \code{get_datanames()}}{
+Return the \code{datanames} of all connectors
+Get connection to data source
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{RelationalDataConnector$get_datanames()}\if{html}{\out{</div>}}
+}
+
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-get_connection"></a>}}

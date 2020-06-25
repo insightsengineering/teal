@@ -67,6 +67,7 @@ Collate:
     'RawDatasetConnector.R'
     'RelationalData.R'
     'RelationalDataConnector.R'
+    'RelationalDataConnector_wrappers.R'
     'RelationalDataset.R'
     'RelationalDatasetConnector.R'
     'as_relational.R'

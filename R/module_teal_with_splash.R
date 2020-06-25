@@ -22,7 +22,7 @@ ui_teal_with_splash <- function(id,
                                 title,
                                 header = tags$p("Add Title Here"),
                                 footer = tags$p("Add Footer Here")) {
-  stopifnot(is(data, "cdisc_data") || is(data, "DelayedRelationalData"))
+  stopifnot(is(data, "cdisc_data") || is(data, "DelayedRelationalData") || is(data, "RelationalDataConnector"))
   is_not_delayed_data <- is(data, "cdisc_data") # `cdisc_data` or `DataConnector`
   ns <- NS(id)
 
@@ -54,7 +54,7 @@ ui_teal_with_splash <- function(id,
 srv_teal_with_splash <- function(input, output, session, data, modules, filter_states = list()) {
   print(class(data))
   stopifnot(
-    is(data, "cdisc_data") || is(data, "DelayedRelationalData")
+    is(data, "cdisc_data") || is(data, "DelayedRelationalData")  || is(data, "RelationalDataConnector")
   )
 
   is_not_delayed_data <- is(data, "cdisc_data") # `cdisc_data` or `DataConnector`
