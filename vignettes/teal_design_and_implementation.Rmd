@@ -374,7 +374,9 @@ Now say we want to filter out all the patients except patients with `USUBJID`
 equal to `id-1`, `id-2`, `id-3`, or `id-4`:
 
 ```{r}
-datasets$set_filter_state("ADSL", "USUBJID", state = list(choices = paste0("id-", 1:4), keep_na = FALSE))
+datasets$set_filter_state("ADSL", state = list(USUBJID = list(choices = paste0("id-", 1:4), keep_na = FALSE)))
+# or
+teal:::set_single_filter_state(datasets, "ADSL", "USUBJID", list(choices = paste0("id-", 1:4), keep_na = FALSE))
 shiny:::flushReact()
 
 datasets$get_data("ADSL", filtered = TRUE)

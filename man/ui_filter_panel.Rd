@@ -32,12 +32,12 @@ attr(ADRS, "keys") <- get_cdisc_keys("ADRS")
 datasets <- teal:::FilteredData$new()
 isolate({
   datasets$set_data("ADSL", ADSL)
-  datasets$set_filter_state("ADSL", varname = NULL, list(
+  datasets$set_filter_state("ADSL", list(
     AGE = list(range = c(33, 44), keep_na = FALSE),
     SEX = list(choices = "M", keep_na = TRUE)
   ))
   datasets$set_data("ADAE", ADAE)
-  datasets$set_filter_state("ADAE", varname = NULL, list(
+  datasets$set_filter_state("ADAE", list(
     CHG = list(range = c(20, 35), keep_na = FALSE)
   ))
   datasets$set_data("ADRS", ADRS)

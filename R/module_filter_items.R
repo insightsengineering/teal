@@ -33,12 +33,12 @@
 #' datasets <- teal:::FilteredData$new()
 #' isolate({
 #'   datasets$set_data("ADSL", ADSL)
-#'   datasets$set_filter_state("ADSL", varname = NULL, list(
+#'   datasets$set_filter_state("ADSL", list(
 #'     AGE = list(range = c(33, 44), keep_na = FALSE),
 #'     SEX = list(choices = "M", keep_na = TRUE)
 #'   ))
 #'   datasets$set_data("ADAE", ADAE)
-#'   datasets$set_filter_state("ADAE", varname = NULL, list(
+#'   datasets$set_filter_state("ADAE", list(
 #'     CHG = list(range = c(20, 35), keep_na = FALSE)
 #'   ))
 #' })
@@ -195,7 +195,7 @@ srv_filter_items <- function(input, output, session, datasets, dataname) {
   observeEvent(input$remove_filters, {
     .log("removing all filters for data", dataname)
     lapply(get_filter_vars(datasets, dataname = dataname), function(varname) {
-      datasets$set_filter_state(dataname, varname = varname, state = NULL)
+      set_single_filter_state(datasets, dataname = dataname, varname = varname, state = NULL)
     })
   })
 

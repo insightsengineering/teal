@@ -10,10 +10,18 @@ debug_browser_module(label = "Browser Debug Module")
 \item{label}{\code{character} label of module}
 }
 \description{
-The module presents a button that will call \code{browser()}.
+The module presents a button that will call \code{browser()} and also set the
+option \code{"teal_debug"} so that code may behave differently with more verbose
+statements when you are in the debug console. This option is only set while
+you stay in the debugger.
+}
+\details{
 This is useful as breakpoints or global variables can be set in this way.
 When you are developing another module and find a function not working
 as expected, without restarting the app, you can call \code{debug(your_fcn)} and
 then resume execution. On the next invocation of the function, it will
 debug it.
+
+Currently not supported, but a good idea is to provide an argument that contains
+code that is executed before \code{browser()} is called.
 }

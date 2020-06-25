@@ -58,7 +58,6 @@ x$close() # call closing function
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-init"></a>}}
-\if{latex}{\out{\hypertarget{method-init}{}}}
 \subsection{Method \code{init()}}{
 Create a new \code{DataConnection} object
 \subsection{Usage}{
@@ -71,7 +70,6 @@ new \code{DataConnection} object
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-open"></a>}}
-\if{latex}{\out{\hypertarget{method-open}{}}}
 \subsection{Method \code{open()}}{
 Open the connection.
 
@@ -97,7 +95,6 @@ if \code{try = TRUE} then \code{try-error} on error, \code{NULL} otherwise
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-get_open_call"></a>}}
-\if{latex}{\out{\hypertarget{method-get_open_call}{}}}
 \subsection{Method \code{get_open_call()}}{
 Get executed open connection call
 \subsection{Usage}{
@@ -121,7 +118,6 @@ optionally deparsed \code{call} object
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-close"></a>}}
-\if{latex}{\out{\hypertarget{method-close}{}}}
 \subsection{Method \code{close()}}{
 Close the connection.
 \subsection{Usage}{
@@ -143,7 +139,6 @@ if \code{try = TRUE} then \code{try-error} on error, \code{NULL} otherwise
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-get_close_call"></a>}}
-\if{latex}{\out{\hypertarget{method-get_close_call}{}}}
 \subsection{Method \code{get_close_call()}}{
 Get executed close connection call
 \subsection{Usage}{
@@ -165,7 +160,6 @@ optionally deparsed \code{call} object
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-set_open_fun"></a>}}
-\if{latex}{\out{\hypertarget{method-set_open_fun}{}}}
 \subsection{Method \code{set_open_fun()}}{
 Set open connection function
 \subsection{Usage}{
@@ -185,7 +179,6 @@ nothing
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-set_open_args"></a>}}
-\if{latex}{\out{\hypertarget{method-set_open_args}{}}}
 \subsection{Method \code{set_open_args()}}{
 Set open connection function argument
 \subsection{Usage}{
@@ -207,7 +200,6 @@ nothing
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-set_close_fun"></a>}}
-\if{latex}{\out{\hypertarget{method-set_close_fun}{}}}
 \subsection{Method \code{set_close_fun()}}{
 Set close connection function
 \subsection{Usage}{
@@ -227,7 +219,6 @@ nothing
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-set_close_args"></a>}}
-\if{latex}{\out{\hypertarget{method-set_close_args}{}}}
 \subsection{Method \code{set_close_args()}}{
 Set close connection function argument
 \subsection{Usage}{
@@ -249,7 +240,6 @@ nothing
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-refresh_calls"></a>}}
-\if{latex}{\out{\hypertarget{method-refresh_calls}{}}}
 \subsection{Method \code{refresh_calls()}}{
 Refresh both open and close calls
 \subsection{Usage}{
@@ -262,7 +252,6 @@ nothing
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-ping"></a>}}
-\if{latex}{\out{\hypertarget{method-ping}{}}}
 \subsection{Method \code{ping()}}{
 ping the connection.
 \subsection{Usage}{
@@ -275,7 +264,6 @@ logical
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-set_ping_fun"></a>}}
-\if{latex}{\out{\hypertarget{method-set_ping_fun}{}}}
 \subsection{Method \code{set_ping_fun()}}{
 Set a ping function
 \subsection{Usage}{
@@ -295,7 +283,6 @@ nothing
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-clone"></a>}}
-\if{latex}{\out{\hypertarget{method-clone}{}}}
 \subsection{Method \code{clone()}}{
 The objects of this class are cloneable with this method.
 \subsection{Usage}{

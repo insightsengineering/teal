@@ -149,6 +149,11 @@ https://stackoverflow.com/questions/18512528/how-to-export-s3-method-so-it-is-av
 
 While working on a PR, you can add a `scratch` directory to keep scripts to test the code that were not integrated into vignettes or examples yet. Before the PR is merged, remove this directory again. To avoid forgetting this, add a `todo` comment in the code. The `scratch` folder is also in `.Rbuildignore`.
 
+For `FilteredData`, when you work on a new module that directly changes it, you can check internal consistency in your
+reactive expressions through code like:
+```
+datasets$.__enclos_env__$private$validate() #todo: remove before merging (COPY THIS ENTIRELY WITH THE COMMENT, SO CI FAILS IF IN CODE)
+```
 
 ### `system.file`
 We recommend against exporting functions that use `system.file` to access files in other packages as this breaks encapsulation and leads to issues with `devtools` as explained below.
@@ -158,5 +163,5 @@ using `library(pkg)` or `devtools::load(pkg)`. The `inst` folder is in different
 If a package uses `system.file` without being loaded via `devtools`, it will fail when it tries to locate something
 in another package that is loaded with `devtools` because it still uses `base::system.file`. The solution is to
 explicitly use `pkgload:::system.file` whenever providing a function that relies on `system.file` from another
-package. Or not do it at all.
+package. Or not do it at all (this is the current approach we take with `include_css_files`).
 We don't directly overwrite `system.file`, this may have unexpected behavior.

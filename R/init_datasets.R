@@ -58,7 +58,7 @@ set_datasets_filters <- function(datasets, filter_states) {
   )
 
   Map(function(dataname, filters_for_dataname) {
-    datasets$set_filter_state(dataname, varname = NULL, state = filters_for_dataname)
+    datasets$set_filter_state(dataname, state = filters_for_dataname)
   }, names(filter_states), filter_states)
   return(invisible(NULL))
 }

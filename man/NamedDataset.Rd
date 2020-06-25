@@ -61,7 +61,6 @@ named_data$get_dataname()
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-new"></a>}}
-\if{latex}{\out{\hypertarget{method-new}{}}}
 \subsection{Method \code{new()}}{
 initialize a \code{NamedDataset} class object
 \subsection{Usage}{
@@ -86,7 +85,6 @@ needed to produce the data set in \code{x}}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-get_dataname"></a>}}
-\if{latex}{\out{\hypertarget{method-get_dataname}{}}}
 \subsection{Method \code{get_dataname()}}{
 Derive the \code{name} which was former called \code{dataname}
 \subsection{Usage}{
@@ -96,7 +94,6 @@ Derive the \code{name} which was former called \code{dataname}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-set_dataname"></a>}}
-\if{latex}{\out{\hypertarget{method-set_dataname}{}}}
 \subsection{Method \code{set_dataname()}}{
 Set the name for the dataset
 \subsection{Usage}{
@@ -113,7 +110,6 @@ Set the name for the dataset
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-get_dataset_label"></a>}}
-\if{latex}{\out{\hypertarget{method-get_dataset_label}{}}}
 \subsection{Method \code{get_dataset_label()}}{
 Derive the \code{label} which was former called \code{datalabel}
 \subsection{Usage}{
@@ -123,7 +119,6 @@ Derive the \code{label} which was former called \code{datalabel}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-set_dataset_label"></a>}}
-\if{latex}{\out{\hypertarget{method-set_dataset_label}{}}}
 \subsection{Method \code{set_dataset_label()}}{
 Set the label for the dataset
 \subsection{Usage}{
@@ -140,7 +135,6 @@ Set the label for the dataset
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-get_code"></a>}}
-\if{latex}{\out{\hypertarget{method-get_code}{}}}
 \subsection{Method \code{get_code()}}{
 Get code to get data
 \subsection{Usage}{
@@ -160,7 +154,6 @@ optionally deparsed \code{call} object
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-set_code"></a>}}
-\if{latex}{\out{\hypertarget{method-set_code}{}}}
 \subsection{Method \code{set_code()}}{
 Set the code for the dataset
 \subsection{Usage}{
@@ -177,7 +170,6 @@ Set the code for the dataset
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-clone"></a>}}
-\if{latex}{\out{\hypertarget{method-clone}{}}}
 \subsection{Method \code{clone()}}{
 The objects of this class are cloneable with this method.
 \subsection{Usage}{

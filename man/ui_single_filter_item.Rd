@@ -29,7 +29,7 @@ attr(ADSL, "keys") <- get_cdisc_keys("ADSL")
 datasets <- teal:::FilteredData$new()
 isolate({
   datasets$set_data("ADSL", ADSL)
-  datasets$set_filter_state("ADSL", varname = NULL, list(
+  datasets$set_filter_state("ADSL", list(
     AGE = list(range = c(33, 44), keep_na = FALSE)
   ))
 })

@@ -220,7 +220,10 @@ srv_teal <- function(input, output, session, modules, raw_data, filter_states = 
       where = "beforeEnd",
       # we put it into a div, so it can easily be removed as a whole, also when it is a tagList (and not
       # just the first item of the tagList)
-      ui = div(ui_tabs_with_filters(session$ns("main_ui"), modules = modules, datasets = datasets))
+      ui = div(ui_tabs_with_filters(session$ns("main_ui"), modules = modules, datasets = datasets)),
+      # needed so that the UI inputs are available and can be immediately updated, otherwise, updating may not
+      # have any effect as they are ignored when not present, see note in `module_add_filter_variable.R`
+      immediate = TRUE
     )
     # must make sure that this is only executed once as modules assume their observers are only
     # registered once (calling server functions twice would trigger observers twice each time)

@@ -42,10 +42,12 @@ if (LOAD_DEV_TEAL) {
 # Don't remove these options, the developer may activate them as needed
 options(shiny.fullstacktrace = TRUE) # to show a detailed stack trace, see `?getShinyOption()`
 options(teal_logging = TRUE) # to log to console
-options("shiny.launch.browser" = TRUE) # to open a new window
-# to open in RStudio Viewer pane
+# where to open app (new window or within RStudio)
+# options("shiny.launch.browser" = TRUE) # to open a new window
+# to open in RStudio Viewer pane, only available in RStudio, so it won't go through `CI` if enabled
 # options("shiny.launch.browser" = function(url) invisible(.Call("rs_shinyviewer", url, getwd(), 2)))
-# to evaluate reactives without taking dependencies, implicitly wraps them into an `isolate` context
+
+# to evaluate reactives without taking dependencies, implicitly wrap them into an `isolate` context
 # options("shiny.suppressMissingContextError" = FALSE)
 
 # to make it easy for the developer to toggle it on
@@ -266,6 +268,47 @@ ADLB <- radlb(cached = TRUE)
   footer = tags$p(class = "text-muted", "Source: agile-R website")
 ); safeBookmarkableShinyApp(app$ui, app$server, enableBookmarking = "url")
 ```
+
+
+## Apply several filters at once
+
+This app checks that several filters can be applied at once. The logic is non-trivial. For instance, one can define a safety filter.
+
+```{r predefinedFiltersApp}
+# dummy filter to show how several filters can be applied at once, not sensible
+safety_filter <- list(
+  ADSL = list(SEX = list(choices = "M", keep_na = TRUE), AGE = default_filter_state()),
+  ADLB = list(ASEQ = default_filter_state())
+)
+app <- init(
+  data = cdisc_data(
+    cdisc_dataset(dataname = "ADSL", data = ADSL),
+    cdisc_dataset(dataname = "ADAE", data = ADAE),
+    cdisc_dataset(dataname = "ADLB", data = ADLB),
+    code = "
+ADSL <- radsl(cached = TRUE)
+ADAE <- radae(cached = TRUE)
+ADLB <- radlb(cached = TRUE)
+"),
+  modules = root_modules(
+    teal:::predefined_filters_module(filter_states = safety_filter),
+    teal:::filter_calls_module()
+  ),
+  filter_states = list(
+    ADSL = list(
+      SEX = list(choices = "M", keep_na = TRUE),
+      COUNTRY = c("USA", NA),
+      AGE = default_filter_state()
+    ),
+    ADAE = list(
+      AEHLT = default_filter_state()
+    )
+  ),
+  header = "Simple teal app",
+  footer = tags$p(class = "text-muted", "Source: agile-R website")
+); safeBookmarkableShinyApp(app$ui, app$server, enableBookmarking = "url")
+```
+
 
 ## Raw App with Hardly Anything
 

@@ -30,12 +30,12 @@
 #' # these filters will no longer be available for selection
 #' isolate({
 #'   datasets$set_data("ADSL", ADSL)
-#'   datasets$set_filter_state("ADSL", varname = NULL, list(
+#'   datasets$set_filter_state("ADSL", list(
 #'     AGE = list(range = c(33, 44), keep_na = FALSE),
 #'     SEX = list(choices = "M", keep_na = TRUE)
 #'   ))
 #'   datasets$set_data("ADAE", ADAE)
-#'   datasets$set_filter_state("ADAE", varname = NULL, list(
+#'   datasets$set_filter_state("ADAE", list(
 #'     CHG = list(range = c(20, 35), keep_na = FALSE)
 #'   ))
 #' })
@@ -107,32 +107,15 @@ srv_add_filter_variable <- function(input, output, session, datasets, dataname, 
   # currently active filter vars for this dataset
   active_filter_vars <- reactive(get_filter_vars(datasets, dataname = dataname))
 
-  # observe input$var_to_add: update the filter state of the datasets
-  # this will update active_filter_vars, which then triggers an update of the choices
-  observeEvent(input$var_to_add, {
-    # if NULL, it was just reset (to select a new variable to filter); at startup, this is also called with NULL
-    var_to_add <- input$var_to_add
-    if (!is.null(var_to_add)) {
-      stopifnot(datasets$is_filterable(dataname, var_to_add))
-      .log("add filter variable", var_to_add)
-      datasets$set_filter_state(
-        dataname, varname = var_to_add, state = datasets$get_default_filter_state(dataname, varname = var_to_add)
-      )
-    }
-  })
-
-  # remove selected option from choices and set again to unselected, so a new
-  # variable can be selected
-  # does not react when `active_filter_vars()` updates
-  observeEvent(input$var_to_add, ignoreNULL = FALSE, {
-    .log("updating choices to add filter variables for", dataname)
+  # available choices to display
+  avail_choices <- reactive({
     choices <- setdiff(
       names(datasets$get_data(dataname, filtered = FALSE)),
       c(active_filter_vars(), omit_vars())
     )
     choices <- choices[
       vapply(choices, function(varname) datasets$is_filterable(dataname, varname = varname), logical(1))
-    ]
+      ]
     # we add variable labels to be nicely displayed with the variable short name
     choice_labels <- datasets$get_variable_labels(dataname)
     choice_labels[is.na(choice_labels)] <- ""
@@ -140,16 +123,46 @@ srv_add_filter_variable <- function(input, output, session, datasets, dataname, 
       choices,
       unname(choice_labels[choices])
     )
+    choices
+  })
 
-    # `updateOptionalSelectInput`, this only happens once the reactive flush terminates when all observers were
-    # executed, so the above that adds it to the filtered variables still has its non-NULL value
+  # observe input$var_to_add: update the filter state of the datasets
+  # this will update active_filter_vars, which then triggers an update of the choices
+  observeEvent(input$var_to_add, ignoreNULL = FALSE, {
+    # if NULL, it was just reset (to select a new variable to filter); at startup, this is also called with NULL
+    var_to_add <- input$var_to_add
+    if (!is.null(var_to_add)) {
+      stopifnot(datasets$is_filterable(dataname, var_to_add))
+      .log("add filter variable", var_to_add)
+      set_single_filter_state(datasets, dataname = dataname, varname = var_to_add, state = default_filter_state())
+
+      # reset selected to empty, `updateOptionalSelectInput` only happens once the reactive flush terminates
+      # when all observers were executed
+      updateOptionalSelectInput(
+        session,
+        "var_to_add",
+        selected = character(0) # unselect option (not `NULL`!)
+      )
+    }
+  })
+
+  # update choices if a variable was removed from filtering (i.e. is available again)
+  observeEvent({
+    # initially when `avail_choices()` is first evaluated, the input "var_to_add" does not exist,
+    # so the update below won't have any effect because the element does not exist
+    # so we have to trigger again once the input "var_to_add" exists
+    # current fix: use `immediate = TRUE` when inserting UI dynamically in `module_teal.R`
+    # DO NOT REMOVE THIS COMMENT AS IT MAY REOCCUR
+    # input$var_to_add
+    avail_choices()
+  }, {
+    .log("updating choices to add filter variables for", dataname)
     updateOptionalSelectInput(
       session,
       "var_to_add",
-      choices = choices,
-      selected = NULL # unselect option
+      choices = avail_choices()
     )
-  })
+  }, ignoreNULL = FALSE)
 
   return(invisible(NULL))
 }

@@ -27,7 +27,7 @@ ADSL <- radsl(cached = TRUE)
 # by testing with NA values, we will see whether the filtering really works when
 # we add and remove filters
 ADSL$SEX[1:150] <- NA
-\dontrun{
+
 app <- init(
   data = cdisc_data(
     cdisc_dataset(
@@ -41,6 +41,7 @@ app <- init(
   ),
   header = "Simple teal app"
 )
+\dontrun{
 shinyApp(app$ui, app$server)
 }
 }

@@ -33,9 +33,11 @@ isolate({
   })
 
   test_that("set filter state works", {
+    # `set_single_filter_state` is a convenient wrapper around it
+
     # since no filter was set before, will just take the default filter
     set_default_filter <- function(dataname, varname) {
-      ds$set_filter_state(dataname, varname, state = ds$get_default_filter_state(dataname, varname))
+      set_single_filter_state(ds, dataname = dataname, varname = varname, state = default_filter_state())
     }
     expect_true(set_default_filter("ADSL", "AGE"))
 
@@ -44,14 +46,14 @@ isolate({
 
     expect_error(
       # real range is (20, 69)
-      ds$set_filter_state("ADSL", "AGE", list(range = c(-10, 110), keep_na = TRUE)),
+      set_single_filter_state(ds, "ADSL", "AGE", list(range = c(-10, 110), keep_na = TRUE)),
       "full range"
     )
 
-    expect_true(ds$set_filter_state("ADSL", "AGE", list(range = c(31, 50), keep_na = TRUE)))
-    expect_true(ds$set_filter_state("ADSL", "AGE", list(range = c(30, 50), keep_na = TRUE)))
+    expect_true(set_single_filter_state(ds, "ADSL", "AGE", list(range = c(31, 50), keep_na = TRUE)))
+    expect_true(set_single_filter_state(ds, "ADSL", "AGE", list(range = c(30, 50), keep_na = TRUE)))
     expect_identical(ds$get_filter_state("ADSL")$AGE, list(range = c(30, 50), keep_na = TRUE))
-    expect_false(ds$set_filter_state("ADSL", "AGE", list(range = c(30, 50), keep_na = TRUE)))
+    expect_false(set_single_filter_state(ds, "ADSL", "AGE", list(range = c(30, 50), keep_na = TRUE)))
     expect_identical(ds$get_filter_state("ADSL")$AGE, list(range = c(30, 50), keep_na = TRUE))
 
     expect_true(set_default_filter("ADSL", "AGE"))
@@ -65,7 +67,7 @@ isolate({
     )
 
     ds$set_filter_state(
-      "ADSL", varname = NULL,
+      "ADSL",
       state = list(AGE = list(range = range(ADSL$AGE) + c(+1, -1), keep_na = TRUE))
     )
     expect_equal(
@@ -75,7 +77,7 @@ isolate({
   })
 
   test_that("check filtering", {
-    ds$set_filter_state("ADSL", varname = NULL, state = list(
+    ds$set_filter_state("ADSL", state = list(
       AGE = list(range = c(38, 40), keep_na = TRUE),
       SEX = list(choices = "F", keep_na = TRUE)
     ))
@@ -84,8 +86,8 @@ isolate({
       dplyr::filter(ADSL, SEX == "F" & AGE >= 38 & AGE <= 40)
     )
 
-    ds$set_filter_state("ADSL", "AGE", state = NULL)
-    ds$set_filter_state("ADSL", "SEX", state = NULL)
+    set_single_filter_state(ds, "ADSL", "AGE", state = NULL)
+    set_single_filter_state(ds, "ADSL", "SEX", state = NULL)
     expect_equal(
       ds$get_data("ADSL", filtered = TRUE),
       ADSL

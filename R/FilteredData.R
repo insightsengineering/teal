@@ -65,7 +65,7 @@
 #'   # df
 #'
 #'   datasets$get_filter_type("ADSL", "SEX")
-#'   datasets$set_filter_state("ADSL", varname = NULL, state = list(
+#'   datasets$set_filter_state("ADSL", state = list(
 #'     AGE = list(range = c(33, 44), keep_na = FALSE),
 #'     SEX = list(choices = c("M", "F"), keep_na = FALSE)
 #'   ))
@@ -74,16 +74,23 @@
 #'   datasets$get_filter_info("ADSL")[["SEX"]]$type
 #'
 #'   # will fail because of invalid range
-#'   # datasets$set_filter_state("ADSL", varname = NULL, list(
+#'   # datasets$set_filter_state("ADSL", list(
 #'   #   AGE = list(range = c(3, 7), keep_na = FALSE)
 #'   # ))
-#'   datasets$set_filter_state("ADSL", varname = NULL, list(
+#'   datasets$set_filter_state("ADSL", list(
 #'     AGE = list(range = c(33, 44), keep_na = FALSE)
 #'   ))
+#'   # wrapper functions
+#'   teal:::set_single_filter_state(datasets, "ADSL", "AGE", c(35, 42))
+#'   teal:::set_single_filter_state(
+#'     datasets, "ADSL", "AGE",
+#'     state = list(range = c(33, 44), keep_na = FALSE)
+#'   )
 #'   datasets$set_filter_state(
 #'     "ADSL",
-#'     varname = "SEX",
-#'     state = list(choices = c("M", "F"), keep_na = FALSE)
+#'     state = list(
+#'       SEX = list(choices = c("M", "F"), keep_na = FALSE)
+#'     )
 #'   )
 #'   datasets$get_filter_type("ADSL", "SEX")
 #'
@@ -351,86 +358,63 @@ FilteredData <- R6::R6Class( # nolint
     },
 
     #' @details
-    #' Set filter state
+    #' Set the filter state for a dataname
     #'
     #' The state is only updated and triggers reactive behavior when it actually
     #' changes.
-    #' When `varname` is non-`NULL`, only the state for that variable name is changed.
-    #' Otherwise, the state is entirely set to the new state.
     #'
-    #' To remove all filters for a dataset, you can pass in `varname = NULL, state = list()`.
-    #' To remove a filter variable for a dataset, pass in `varname, state = NULL`.
+    #' To set a state for a single variable, you can write:
+    #' `set_filter_state(dataname, setNames(list(single_state), varname))`
+    #' or use the wrapper function `set_single_filter_state`.
+    #' To remove a filter for a variable, pass in `NULL`, e.g.
+    #' `state = list(SEX = NULL, ..)`.
+    #' To remove all filters for a dataset, call
+    #' `set_filter_state(dataname, state = list(), remove_omitted = FALSE)`.
     #'
     #' @md
-    #' @param dataname `character` name of the dataset
-    #' @param varname `character` column within the dataset;
-    #' @param state new state to set; when `varname` is `NULL`, `state` must be
-    #'   a named list with the new filter state for each variable (variables
-    #'   that are not included are unaffected)
+    #' @param dataname `character` name of the dataset to set filter state for
+    #' @param state `named list` of new state to set; for each `varname`,
+    #'   `state[[varname]]` is the new state to set for `varname`
+    #' @param remove_omitted `logical` whether to remove the filters for the
+    #'   variables that are not present in the named list `state`
     #'
-    #' @return `logical` if the state was changed
-    set_filter_state = function(dataname, varname, state) {
-      private$check_data_varname_exists(dataname, varname)
-
-      # checking and adapting arguments
-      if (!is.null(varname)) {
-        state <- setNames(list(state), varname)
-        # we don't set varname to NULL so we can detect it below and only set the state of varname
+    #' @return `logical` if the state for the `dataname` was changed
+    set_filter_state = function(dataname, state, remove_omitted = FALSE) {
+      private$check_data_varname_exists(dataname)
+      if (is.null(state)) {
+        state <- list()
       }
-      stopifnot(is.list(state))
-
-      # each item in the state list indicates what filter to apply to that column
-      state_names <- names(state)
-
+      stopifnot(
+        is_fully_named_list(state),
+        is_logical_single(remove_omitted)
+      )
       # check if all names of state are columns of the dataname
+      varnames <- names(state)
       check_in_subset(
-        state_names, colnames(self$get_data(dataname, filtered = FALSE)),
-        pre_msg = paste0("data ", dataname, ", variable ", varname, ": ")
+        varnames, colnames(self$get_data(dataname, filtered = FALSE)),
+        pre_msg = paste0("data ", dataname, ": ")
       )
 
-      # convert default_filter_state to actual state, replace NA in vector by keep_na option
-      state <- Map(function(var_state, varname) {
-        if (is.null(var_state)) {
-          return(NULL)
-        }
-        # example:
-        # nolint start
-        # var_state = list(choices = c("M", "F"))
-        # var_state = list(choices = c("M", "F"), keep_na = TRUE)
-        # var_state = c("M", "F")
-        # var_state = c("M", "F", NA)
-        # var_state = default_filter_state()
-        # nolint end
-        if (is_default_filter_state(var_state)) {
-          var_state <- self$get_default_filter_state(dataname, varname)
-        } else {
-          if (is.null(names(var_state))) {
-            # then, we assume that var_state is a simple list
-            var_state <- setNames(
-              # is.na is vectorized
-              list(Filter(Negate(is.na), var_state), any(is.na(var_state))),
-              c(self$get_filter_type(dataname, varname), "keep_na")
-            )
-          }
-        }
-        # if `keep_na` is not provided, default to `FALSE`
-        var_state$keep_na <- if_null(var_state$keep_na, FALSE)
-        var_state
-      }, state, names(state))
+      state <- Map(function(varname, var_state) {
+        private$external_to_internal_state(dataname, varname, var_state)
+      }, varname = names(state), var_state = state)
 
-      for (name in state_names) {
-        private$check_valid_filter_state(dataname, name, var_state = state[[name]])
+      for (varname in names(state)) {
+        private$check_valid_filter_state(dataname, varname, var_state = state[[varname]])
       }
 
-      # get new full state
-      if (is.null(varname)) {
-        new_state <- state
+      new_state <- if (remove_omitted) {
+        # these will be effectively removed as the entire state for the dataname is set to this new one
+        state
       } else {
-        # reset state for that varname only
-        stopifnot(length(state) == 1)
-        new_state <- self$get_filter_state(dataname)
-        new_state[[varname]] <- state[[1]]
+        tmp_state <- self$get_filter_state(dataname)
+        # overwrite those entries that  were provided
+        tmp_state[names(state)] <- state
+        tmp_state
       }
+      # filter out `NULL` entries as `NULL` means to not filter the state and the rest
+      # of the code assumes `NULL` elements are not present in the list (simply removed)
+      new_state <- Filter(Negate(is.null), new_state)
 
       # for this to work reliably, the previous state must really capture all info
       # i.e. NA filtering or not
@@ -683,9 +667,7 @@ FilteredData <- R6::R6Class( # nolint
     #' Returns the state to be bookmarked
     #'
     #'
-    #' `md5` sums of `datasets`, `filter_states` and `preproc_code` are bookmarked,
-    #' `previous_filter_states` is not bookmarked.
-    #'
+    #' `md5` sums of `datasets`, `filter_states` and `preproc_code` are bookmarked.
     #' @md
     #' @return named list
     get_bookmark_state = function() {
@@ -708,7 +690,7 @@ FilteredData <- R6::R6Class( # nolint
 
     #' Set this object from a bookmarked state
     #'
-    #' Only sets the filter state, does not set the data, the previous filter state
+    #' Only sets the filter state, does not set the data
     #' and the preprocessing code.
     #' Also checks the preprocessing code is identical if provided in the `state`.
     #'
@@ -755,7 +737,7 @@ FilteredData <- R6::R6Class( # nolint
       # we have to be careful with `reactiveValues` to restore each item and not simply
       # reference the old reactive value, i.e. loop over it
       lapply(self$datanames(), function(dataname) {
-        self$set_filter_state(dataname, varname = NULL, state = state$filter_states[[dataname]])
+        self$set_filter_state(dataname, state = state$filter_states[[dataname]], remove_omitted = TRUE)
       })
       # other reactive endpoint don't need to be set because they are computing through reactivity
 
@@ -780,13 +762,11 @@ FilteredData <- R6::R6Class( # nolint
     # )
     # nolintr end
     # the `data.frames` may have attributes like keys
-    unfiltered_datasets = NULL, # reactiveValues(),
+    unfiltered_datasets = NULL, # reactiveValues(), # but R6, so defined in `initialize`
     # filter state to apply to obtain the filtered dataset from the unfiltered one
-    # `NULL` (for a dataname) means no filter applied, it does not mean that it does not show up
-    # as a filtering item in the UI, `NULL` just means that filtering has no effect
-    # therefore, it may not contain all variables for a given dataname,
-    # which means that the state is `NULL`
-    filter_states = NULL, # reactiveValues(),
+    # filter out `NULL` entries as `NULL` means to not filter the state and the rest
+    # of the code assumes `NULL` elements are not present in the list (simply removed)
+    filter_states = NULL, # reactiveValues(), # but R6, so defined in `initialize`
 
     # reactive attributes (conductors)
     # non-reactive list of `reactives``
@@ -810,9 +790,6 @@ FilteredData <- R6::R6Class( # nolint
 
     # non-reactive attributes
 
-    # previous filter state when you want to revert, e.g. when filter previously removed is added again
-    # we currently don't want reactivity for it, it is enough for `filter_states`
-    previous_filter_states = list(),
     # preprocessing code used to generate the unfiltered datasets as a string
     preproc_code = NULL,
     # for each dataname: contains keys and optionally data_label, column_labels
@@ -840,14 +817,11 @@ FilteredData <- R6::R6Class( # nolint
         # no `reactiveValues`, but a list of `reactiveVal`
         all(vapply(private$filtered_datasets, is.reactive, logical(1))),
         all(vapply(private$filter_infos, is.reactive, logical(1))),
-        # non-reactive list of previous filter states
-        is.list(private$previous_filter_states),
 
         # check names are the same
         has_same_names(private$unfiltered_datasets, private$filter_states),
         has_same_names(private$unfiltered_datasets, private$filtered_datasets),
         has_same_names(private$unfiltered_datasets, private$filter_infos),
-        has_same_names(private$unfiltered_datasets, private$previous_filter_states),
         has_same_names(private$unfiltered_datasets, private$data_attrs),
 
         # check attributes are there: md5sum, keys
@@ -857,22 +831,14 @@ FilteredData <- R6::R6Class( # nolint
 
       # check `filter_states` are all valid
       lapply(names(private$filter_states), function(dataname) {
+        stopifnot(is.list(private$filter_states)) # non-NULL, possibly empty list
         lapply(names(private$filter_states[[dataname]]), function(varname) {
+          var_state <- private$filter_states[[dataname]][[varname]]
+          stopifnot(!is.null(var_state)) # should not be NULL, see doc of this attribute
           private$check_valid_filter_state(
             dataname,
             varname = varname,
-            var_state = private$filter_states[[dataname]][[varname]]
-          )
-        })
-      })
-
-      # check `previous_filter_states` are all valid
-      lapply(names(private$previous_filter_states), function(dataname) {
-        lapply(names(private$previous_filter_states[[dataname]]), function(varname) {
-          private$check_valid_filter_state(
-            dataname,
-            varname = varname,
-            var_state = private$previous_filter_states[[dataname]][[varname]]
+            var_state = var_state
           )
         })
       })
@@ -929,7 +895,9 @@ FilteredData <- R6::R6Class( # nolint
       var_info <- self$get_filter_info(dataname, varname) # filter characteristics for var, e.g. range
 
       if (is.null(var_state)) {
-        # when state is NULL, this means no filtering is applied
+        # when state is `NULL`, this means no filtering is applied
+        # although it cannot be `NULL` internally (it must simply be removed from the list instead
+        # of being `NULL`), we filter out `NULL`s only once we set the state
         return()
       }
 
@@ -1174,9 +1142,63 @@ FilteredData <- R6::R6Class( # nolint
 
         return(setNames(filter_info, names(df)))
       })
+    },
+    # external to internal filter state representation ----
+    # Convert the external to an internal filter state
+    #
+    # It also converts `default_filter_state` to the actual state,
+    # replaces `NA` in the vector by the `keep_na` option.
+    #
+    # If the input is a list and does not already have names, `keep_NA` is set
+    # to whether the list contains `NA` or not and the choices are set
+    # by removing all NA elements.
+    #
+    # This is done to simplify the filter specification for the end-user
+    # in `init()`.
+    #
+    # @md
+    # @param dataname `character` name of the dataset
+    # @param varname `character` column within the dataset,
+    #   must be provided
+    # @param var_state `list` state of single variable
+    # @return internal filter state: `list(spec = .., keep_na = ..)`,
+    #   where `spec` can be `choices` or similar
+    # @examples
+    # nolint start
+    # var_state = list(choices = c("M", "F"))
+    # var_state = list(choices = c("M", "F"), keep_na = TRUE)
+    # var_state = c("M", "F")
+    # var_state = c("M", "F", NA)
+    # var_state = default_filter_state()
+    # var_state = NULL # no filter applied
+    # # all these return slight variations of: list(choices = c("M", "F"), keep_na = TRUE)
+    # nolint end
+    external_to_internal_state = function(dataname, varname, var_state) {
+      private$check_data_varname_exists(dataname, varname)
+
+      if (is.null(var_state)) {
+        return(NULL)
+      }
+      if (is_default_filter_state(var_state)) {
+        var_state <- self$get_default_filter_state(dataname, varname)
+      } else {
+        if (is.null(names(var_state))) {
+          # then, we assume that var_state is a simple list
+          var_state <- setNames(
+            # is.na is vectorized
+            list(Filter(Negate(is.na), var_state), any(is.na(var_state))),
+            c(self$get_filter_type(dataname, varname), "keep_na")
+          )
+        }
+      }
+      # if `keep_na` is not provided, default to `FALSE`
+      var_state$keep_na <- if_null(var_state$keep_na, FALSE)
+      var_state
     }
   )
 )
+
+# default filter state ----
 
 #' Refer to the default filter state
 #'
@@ -1201,6 +1223,8 @@ print.default_filter_state <- function(x, ...) {
   cat("This will pick the default filter state for the variable.\n")
 }
 
+# Wrapper functions for `FilteredData` class ----
+
 #' Get filter variable names that are currently active
 #'
 #' Only works in a reactive context.
@@ -1213,6 +1237,20 @@ print.default_filter_state <- function(x, ...) {
 get_filter_vars <- function(datasets, dataname) {
   stopifnot(is(datasets, "FilteredData"))
   names(datasets$get_filter_state(dataname))
+}
+
+#' Set the filter state for a single variable
+#'
+#' See `FilteredData$set_filter_state`.
+#'
+#' @param datasets `FilteredData`
+#' @param dataname `character` dataname
+#' @param varname `character` variable name
+#' @param state `list` new state for the variable, can be
+#'   `default_filter_state()`
+set_single_filter_state <- function(datasets, dataname, varname, state) {
+  stopifnot(is_character_single(varname))
+  datasets$set_filter_state(dataname, state = setNames(list(state), varname))
 }
 
 #' Print the state in a nice format

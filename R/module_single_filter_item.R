@@ -29,7 +29,7 @@ get_keep_na_label <- function(na_count) {
 #' datasets <- teal:::FilteredData$new()
 #' isolate({
 #'   datasets$set_data("ADSL", ADSL)
-#'   datasets$set_filter_state("ADSL", varname = NULL, list(
+#'   datasets$set_filter_state("ADSL", list(
 #'     AGE = list(range = c(33, 44), keep_na = FALSE)
 #'   ))
 #' })
@@ -261,18 +261,18 @@ srv_single_filter_item <- function(input, output, session, datasets, dataname, v
     } else {
       stop("Unknown filter type ", type, " for var ", varname)
     }
-    keep_na_state <- if_null(input[[id_keep_na]], FALSE) # input field may not exist if var contains no NA
+    keep_na_state <- if_null(input[[id_keep_na]], FALSE) # input field may not exist if variable contains no `NA`
     state <- c(state, list(keep_na = keep_na_state))
-    .log("State for ", varname, ":", filter_state_to_str(type, state)) # truncate the output
-    datasets$set_filter_state(dataname, varname, state)
+    .log("State for ", varname, ":", filter_state_to_str(type, state)) # truncates the output if too much
+    set_single_filter_state(datasets, dataname = dataname, varname = varname, state = state)
   },
-  ignoreNULL = FALSE, # ignoreNULL: we don't want to ignore NULL when nothing is selected,
+  ignoreNULL = FALSE, # ignoreNULL: we don't want to ignore NULL when nothing is selected in the `selectInput`,
   ignoreInit = TRUE # ignoreInit: should not matter because we set the UI with the desired initial state
   )
 
   # remove variable
   o2 <- observeEvent(input[[id_remove_filter]], {
-      datasets$set_filter_state(dataname, varname, state = NULL)
+      set_single_filter_state(datasets, dataname = dataname, varname = varname, state = NULL)
     },
     # the button is created dynamically afterwards, so this will trigger although
     # the user has not clicked, see the doc
