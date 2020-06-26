@@ -374,7 +374,7 @@ check_in_subset <- function(subset, choices, pre_msg = "") {
       "(", toString(subset[!(subset %in% choices)], width = 30), ")",
       " not in valid choices ",
       "(", toString(choices, width = 30), ")"
-    ))
+    ), call. = FALSE)
   }
   return(invisible(NULL))
 }
@@ -401,7 +401,7 @@ check_setequal <- function(x, y, pre_msg = "") {
       "(", toString(x, width = 100), ")",
       " is not equal to ",
       "(", toString(y, width = 100), ")"
-    ))
+    ), call. = FALSE)
   }
   return(invisible(NULL))
 }

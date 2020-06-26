@@ -119,13 +119,7 @@ srv_tabs_with_filters <- function(input, output, session, datasets, modules) {
   active_module <- callModule(srv_nested_tabs, "modules_ui", datasets = datasets, modules = modules)
 
   active_datanames <- reactive({
-    active_datanames <- active_module()$filter
-    if (identical(active_datanames, "all")) {
-      active_datanames <- datasets$datanames()
-    }
-    # always add ADSL because the other datasets are filtered based on ADSL
-    active_datanames <- union("ADSL", active_datanames)
-    return(list_adsl_first(active_datanames))
+    handle_active_datanames(datasets, datanames = active_module()$filter)
   })
 
   callModule(srv_filter_panel, "filter_panel", datasets, active_datanames)

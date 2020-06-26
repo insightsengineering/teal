@@ -118,12 +118,16 @@ srv_add_filter_variable <- function(input, output, session, datasets, dataname, 
       ]
     # we add variable labels to be nicely displayed with the variable short name
     choice_labels <- datasets$get_variable_labels(dataname)
-    choice_labels[is.na(choice_labels)] <- ""
-    choices <- choices_labeled(
-      choices,
-      unname(choice_labels[choices])
-    )
-    choices
+    if (!is.null(choice_labels)) {
+      # `NA` not supported by `choices_labeled`
+      choice_labels[is.na(choice_labels)] <- ""
+      choices <- choices_labeled(
+        choices,
+        unname(choice_labels[choices])
+      )
+    }
+
+    return(choices)
   })
 
   # observe input$var_to_add: update the filter state of the datasets

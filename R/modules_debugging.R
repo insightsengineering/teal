@@ -58,8 +58,7 @@ filter_calls_module <- function(label = "Filter Calls Module", active_datanames 
     ui = function(id, ...) {
       ns <- NS(id)
       div(
-        h2("This is a dummy module."),
-        p("The following filter calls are generated:"),
+        h2("The following filter calls are generated:"),
         verbatimTextOutput(ns("filter_calls"))
       )
     },

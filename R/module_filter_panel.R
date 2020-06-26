@@ -5,8 +5,8 @@
 #' the (active) datasets and allows to filter the datasets.
 #'
 #' @param id module id
-#' @param datanames datanames to create empty UIs for (which will be populated
-#'   in the server)
+#' @param datanames `character` datanames to create empty UIs for (which
+#'   will be populated in the server)
 #'
 #' @examples
 #' # Example with ADSL, ADAE and ADRS dataset
@@ -99,21 +99,28 @@ ui_filter_panel <- function(id, datanames) {
 #'
 #' @md
 #' @inheritParams srv_shiny_module_arguments
-#' @param active_datanames `reactive` returning datanames that
-#'   should be shown on the filter panel, must be a subset of the
-#'   `datanames` argument provided to the UI function
+#' @param active_datanames `function / reactive` returning datanames that
+#'   should be shown on the filter panel, `ADSL` is always added;
+#'   must be a subset of the `datanames` argument provided to `ui_filter_panel`;
+#'   if the function returns `NULL` (as opposed to `character(0)`), it will hide the
+#'   filter panel
 #'
 srv_filter_panel <- function(input, output, session, datasets, active_datanames = function() "all") {
+  unhandled_active_datanames <- active_datanames # assign to new var to overwrite old var, see below
   stopifnot(
     is(datasets, "FilteredData"),
-    is.function(active_datanames)
+    is.function(unhandled_active_datanames)
   )
 
   # as the reactive is only evaluated later, we cannot reassign to the same as the constructed reactive
   # depends on the old value
-  unhandled_active_datanames <- active_datanames
+  # `unhandled_active_datanames` may or may not contain `ADSL`
   active_datanames <- reactive({
-    handle_active_datanames(datasets, unhandled_active_datanames())
+    # always add ADSL because the other datasets are filtered based on ADSL
+    # we still distinguish it from `unhandled_active_datanames` to hide this entire module
+    # when it returns `NULL` (as opposed to `character(0)`)
+    datanames <- union("ADSL", unhandled_active_datanames())
+    return(list_adsl_first(datanames))
   })
 
   callModule(srv_filtered_data_overview, "teal_filters_info", datasets, datanames = active_datanames)
@@ -146,9 +153,11 @@ srv_filter_panel <- function(input, output, session, datasets, active_datanames 
   # rather than regenerating the UI dynamically for the dataset filtering,
   # we instead choose to hide/show the elements
   # the filters for this dataset are just hidden from the UI, but still applied
-  observeEvent(active_datanames(), {
-    if (length(active_datanames()) == 0) {
-      # hide whole module UI
+  # optimization: we set `priority = 1` to execute it before the other
+  # observers (default priority 0), so that they are not computed if they are hidden anyways
+  observeEvent(active_datanames(), priority = 1, {
+    if (length(active_datanames()) == 0 || is.null(unhandled_active_datanames())) {
+      # hide whole module UI when no datasets or when `unhandled_active_datanames` is `NULL`
       shinyjs::hide("teal_filter_panel_whole")
     } else {
       shinyjs::show("teal_filter_panel_whole")

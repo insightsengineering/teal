@@ -124,6 +124,9 @@ FilteredData <- R6::R6Class( # nolint
     #' @details
     #' Get filtered or unfiltered dataset
     #'
+    #' For `filtered = FALSE`, the original data set with
+    #' `set_data` is returned including all attributes.
+    #'
     #' @param dataname `character` name of the dataset
     #' @param filtered `logical` whether to return filtered or unfiltered dataset
     get_data = function(dataname, filtered = TRUE) {
@@ -153,7 +156,9 @@ FilteredData <- R6::R6Class( # nolint
     #' and the observers must then know that NULL means that the dataset
     #' was removed.
     #'
-    #' Any attributes attached to data are kept in the unfiltered data.
+    #' Any attributes attached to the data are kept in the unfiltered data.
+    #' If the attribute `column_labels` is present, it is checked that it is
+    #' either `NULL` or contains labels for all variables.
     #'
     #' @md
     #' @param dataname `character` name of the dataset, without spaces
@@ -166,6 +171,18 @@ FilteredData <- R6::R6Class( # nolint
       stopifnot(is.data.frame(data))
       # column_labels and labels may be NULL, so attributes will not be present
       stopifnot("keys" %in% names(attributes(data)))
+      if (!is.null(attributes(data)[["column_labels"]])) {
+        # either no labels are provided or labels for all variables,
+        # necessary for `get_variable_labels`
+        check_setequal(
+          names(attributes(data)[["column_labels"]]), colnames(data),
+          pre_msg = paste0(
+            "Labels provided do not correspond to variables in data ", dataname,
+            ". Either don't provide labels at all (`NULL`) or provide labels for all variables",
+            " (empty string '' if you don't know the label): "
+          )
+        )
+      }
 
       # due to the data update, the old filter may no longer be valid, so we unset it
       private$filter_states[[dataname]] <- list()
@@ -251,18 +268,30 @@ FilteredData <- R6::R6Class( # nolint
     #' @details
     #' Get labels of variables in the data
     #'
-    #' Variables may be columns.
+    #' Variables are the column names of the data.
+    #' Either, all labels must have been provided for all variables
+    #' in `set_data` or `NULL`.
     #'
     #' @md
     #' @param dataname `character` name of the dataset
     #' @param variables (`character` vector) variables to get labels for;
-    #'   if `NULL`, for all variables
+    #'   if `NULL`, for all variables in data
+    #' @return `character or NULL` variable labels, `NULL` if `column_labels`
+    #'   attribute does not exist for the data
     get_variable_labels = function(dataname, variables = NULL) {
       private$check_data_varname_exists(dataname)
       stopifnot(is.null(variables) || is_character_vector(variables, min_length = 0L))
 
       labels <- self$get_data_attr(dataname, "column_labels")
+      if (is.null(labels)) {
+        return(NULL)
+      }
+
       if (!is.null(variables)) {
+        check_in_subset(
+          variables, colnames(self$get_data(dataname, filtered = FALSE)),
+          pre_msg = paste0("Variables do not exist in data ", dataname, ": ")
+        ) # otherwise, NA values will be added (also as names)
         labels <- labels[variables]
       }
 
@@ -602,34 +631,30 @@ FilteredData <- R6::R6Class( # nolint
 
 
       df <- self$get_data(dataname, filtered = FALSE)
-      if (is.null(df)) {
-        log2("Data", dataname, "data is NULL") # not yet set with set_data
+      varnames <- if (filtered_vars_only) {
+        names(self$get_filter_state(dataname))
       } else {
-        varnames <- if (filtered_vars_only) {
-          names(self$get_filter_state(dataname))
-        } else {
-          names(df)
-        }
-        if (!is.null(variables)) {
-          varnames <- intersect(varnames, variables)
-        }
+        names(df)
+      }
+      if (!is.null(variables)) {
+        varnames <- intersect(varnames, variables)
+      }
 
-        var_maxlength <- max(c(0, nchar(varnames)))
-        for (varname in varnames) {
-          var_info <- self$get_filter_info(dataname, varname = varname)
-          var_state <- self$get_filter_state(dataname, varname)
+      var_maxlength <- max(c(0, nchar(varnames)))
+      for (varname in varnames) {
+        var_info <- self$get_filter_info(dataname, varname = varname)
+        var_state <- self$get_filter_state(dataname, varname)
 
-          # right alignment: %10s, left alignment: %-10s
-          txt <- sprintf(paste0("%-", var_maxlength, "s has filter type %-10s: "), varname, var_info$type)
-          log2(paste0(txt, filter_state_to_str(var_info$type, var_info)))
-          log2(paste0(
-            sprintf(paste0("%", nchar(txt), "s"), "\\--> selected: "),
-            filter_state_to_str(var_info$type, var_state)
-          ))
-        }
-        if (length(varnames) == 0) {
-          log2("There are no", if (filtered_vars_only) "filtered", "variables for dataset", dataname)
-        }
+        # right alignment: %10s, left alignment: %-10s
+        txt <- sprintf(paste0("%-", var_maxlength, "s has filter type %-10s: "), varname, var_info$type)
+        log2(paste0(txt, filter_state_to_str(var_info$type, var_info)))
+        log2(paste0(
+          sprintf(paste0("%", nchar(txt), "s"), "\\--> selected: "),
+          filter_state_to_str(var_info$type, var_state)
+        ))
+      }
+      if (length(varnames) == 0) {
+        log2("There are no", if (filtered_vars_only) "filtered", "variables for dataset", dataname)
       }
       log2("===========================")
       return(invisible(NULL))

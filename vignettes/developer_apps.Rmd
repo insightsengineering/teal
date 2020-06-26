@@ -310,6 +310,39 @@ ADLB <- radlb(cached = TRUE)
 ```
 
 
+
+## Module with Hidden Filter
+
+This app tests that the right filter panel can be hidden.
+
+```{r hiddenFilterApp}
+module_hidden_filters <- teal:::module(
+  label = "Hidden Filters",
+  server = function(input, output, session, datasets) {
+  },
+  ui = function(id, ...) {
+    p("There should be no right filter panel.")
+  },
+  filters = NULL # hide filter panel
+)
+app <- init(
+  data = cdisc_data(
+    cdisc_dataset(dataname = "ADSL", data = ADSL),
+    cdisc_dataset(dataname = "ADLB", data = ADLB),
+    code = "
+ADSL <- radsl(cached = TRUE)
+ADLB <- radlb(cached = TRUE)
+"),
+  modules = root_modules(
+    module_hidden_filters,
+    teal:::filter_calls_module()
+  ),
+  header = "Simple teal app",
+  footer = tags$p(class = "text-muted", "Source: agile-R website")
+); safeBookmarkableShinyApp(app$ui, app$server, enableBookmarking = "url")
+```
+
+
 ## Raw App with Hardly Anything
 
 This app purely tests the modules, it only has one tab and two datasets. It can be used to check that all labels are preserved and shown in the UI.
