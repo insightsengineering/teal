@@ -17,8 +17,10 @@ with additional teal-specific \code{datasets} argument.}
 
 \item{filters}{(\code{character}) A vector with datanames that are relevant for the item. The
 filter panel will automatically update the shown filters to include only
-filters in the listed data sets. \code{NULL} will hide the filter panel,
-and the keyword \code{'all'} will show the filters of all datasets.}
+filters in the listed datasets. \code{NULL} will hide the filter panel,
+and the keyword \code{'all'} will show the filters of all datasets. The
+argument can be thought of as \code{'active_datanames'} and may be renamed
+in future versions of teal.}
 
 \item{server_args}{(\code{list}) Named list with additional arguments passed on to the
 server function. Note that the \code{FilteredDatasets} object gets

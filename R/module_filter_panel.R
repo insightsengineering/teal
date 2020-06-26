@@ -102,8 +102,8 @@ ui_filter_panel <- function(id, datanames) {
 #' @param active_datanames `function / reactive` returning datanames that
 #'   should be shown on the filter panel, `ADSL` is always added;
 #'   must be a subset of the `datanames` argument provided to `ui_filter_panel`;
-#'   if the function returns `NULL` (as opposed to `character(0)`), it will hide the
-#'   filter panel
+#'   if the function returns `NULL` (as opposed to `character(0)`), the filter
+#'   panel will be hidden
 #'
 srv_filter_panel <- function(input, output, session, datasets, active_datanames = function() "all") {
   unhandled_active_datanames <- active_datanames # assign to new var to overwrite old var, see below

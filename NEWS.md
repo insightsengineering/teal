@@ -1,39 +1,35 @@
 
 # teal 0.8.4.9000
 
-* issues with no comments:
-
-* progress bar for ui creation in delayed loading module
 * `cdisc_dataset` and `dataset` now return R6 class objects (RelationalDataset)
 * `get_raw_data` can be used to derive raw data from R6 objects e.g. (RelationalDataset)
 * `mutate_dataset` allows to change the data inside R6 objects via `code` argument or an R script
 * new `RawDatasetConnector` and `RelationalDatasetConnector` to execute get data from remote connections.
-* new wrapper functions to manipulate `DatasetConnector` and `Dataset` such as `get_dataset`, 
-`load_dataset`, `as_relational`.
-* Change output of `keys` function to `keys` object. Updated checks in `DatasetConnector` and `dataset`.
-* delayed version of choices_selected
-* Fix an error in `choices_selected` when `selected` is not in `choices`
+* new wrapper functions to manipulate `DatasetConnector` and `Dataset` such as `get_dataset`, `load_dataset`, `as_relational`.
 
 * Argument `filter` in the `init` function was removed and the new argument `filter_states` was added. You can no longer modify the `app$datasets`, but must instead use this argument. 
 * New modules were created to create a module of nested teal modules, then another one that adds the right filter pane to each tab. The `teal::init` function stays unchanged.
-* The `teal::init` function now returns a `UI` function with an optional `id` argument. This allows it to be embedded into other applications. Split view as two applications side-by-side is one such example.
-* The `teal::init` function has a title parameter to pass-through to the UI function.
-
-## FilteredData refactored (for developers)
-
-* `FilteredData` is now fully reactive. Now filtered data is lazy evaluated as per need. This further opens the door to bookmarking `teal` apps (bookmarking currently works for the right filtering panel, but we will make this feature more sophisticated in a future release, each module must be reviewed and adapted if it contains `reactiveValues`).
-* Renamed `get_dataset` method to `get_data()`.
-* Renamed `get_filter_call` method to `get_filter_expr` and returns an expression rather than a list.
-* Removed argument `isolate` form `get_data()` method and similar methods. You must `isolate` it yourself as needed. If you want to temporarily deactivate Shiny errors due to missing errors, you can set `options(shiny.suppressMissingContextError = TRUE)`.
+* The `teal::init` function now returns a `UI` function with an optional `id` argument. This allows to embed it into other applications. A split view of two teal applications side-by-side is one such example and shown in a vignette. `teal::init` was turned into a wrapper function around `module_teal_with_splash.R` and developers that want to embed teal as a Shiny module should directly work with these functions (`ui_teal_with_splash` and `srv_teal_with_splash`) instead of `teal::init`.
+* The `teal::init` function now has a title parameter to set the title of the browser window.	
 * Missing data `NA` is now explicitly addressed in the filter panel: `NA`s are excluded by default and a checkbox to include them was added.
 * Statistics of the data are visually depicted in terms of histograms or bar charts overlayed onto the Shiny input elements.
+* Added buttons to remove all filters applied to a dataset.
+* Restored the functionality to hide the filter panel for a module when it was constructed with `filter = NULL`.
+
+## Refactor of FilteredData (for developers)
+
+* `FilteredData` is now fully reactive. Now filtered data is lazy evaluated as per need. This further opens the door to bookmarking `teal` apps (bookmarking currently works for the right filtering panel, but we will make this feature more sophisticated in a future release, each module must be reviewed and adapted if it contains `reactiveValues`).
+* Renamed `get_dataset()` method to `get_data()`.
+* Renamed `get_filter_call()` method to `get_filter_expr()`; returns an expression rather than a list.
+* Removed argument `isolate` from `get_data()` method and similar methods. You must `isolate` it yourself as needed. If you want to temporarily deactivate Shiny errors due to missing errors, you can set `options(shiny.suppressMissingContextError = TRUE)`. In general, avoid `isolate` as this breaks reactivity.
+* We added a development module to add several filters at once, e.g. safety filters. This is to be evaluated before it is converted into a proper module and made available to end-users.
 
 
 # teal 0.8.4
 
 * Progress bar for ui creation in delayed loading module.
 * Change output of `keys` function to `keys` object.
-* Delayed version of choices_selected.
+* Delayed version of `choices_selected`.
 * Fix an error in `choices_selected` when `selected` is not in `choices`.
 * Fix `pickerInput` not to display column name as label if it's missing.
 

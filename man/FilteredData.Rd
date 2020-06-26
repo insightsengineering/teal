@@ -180,6 +180,9 @@ Get datanames, ADSL appears first
 }
 \subsection{Details}{
 Get filtered or unfiltered dataset
+
+For \code{filtered = FALSE}, the original data set with
+\code{set_data} is returned including all attributes.
 }
 
 }
@@ -210,7 +213,9 @@ on it. You can try to achieve this by setting the data to NULL
 and the observers must then know that NULL means that the dataset
 was removed.
 
-Any attributes attached to data are kept in the unfiltered data.
+Any attributes attached to the data are kept in the unfiltered data.
+If the attribute \code{column_labels} is present, it is checked that it is
+either \code{NULL} or contains labels for all variables.
 }
 
 \subsection{Returns}{
@@ -321,17 +326,23 @@ Set data attribute for the dataset
 \item{\code{dataname}}{\code{character} name of the dataset}
 
 \item{\code{variables}}{(\code{character} vector) variables to get labels for;
-if \code{NULL}, for all variables
-Get keys for the dataset}
+if \code{NULL}, for all variables in data}
 }
 \if{html}{\out{</div>}}
 }
 \subsection{Details}{
 Get labels of variables in the data
 
-Variables may be columns.
+Variables are the column names of the data.
+Either, all labels must have been provided for all variables
+in \code{set_data} or \code{NULL}.
 }
 
+\subsection{Returns}{
+\verb{character or NULL} variable labels, \code{NULL} if \code{column_labels}
+attribute does not exist for the data
+Get keys for the dataset
+}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-get_keys"></a>}}

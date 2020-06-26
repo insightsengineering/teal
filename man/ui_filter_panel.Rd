@@ -10,8 +10,8 @@ ui_filter_panel(id, datanames)
 \arguments{
 \item{id}{module id}
 
-\item{datanames}{datanames to create empty UIs for (which will be populated
-in the server)}
+\item{datanames}{`character` datanames to create empty UIs for (which
+will be populated in the server)}
 }
 \description{
 This panel contains info about the number of observations left in

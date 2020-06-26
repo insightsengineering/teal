@@ -22,9 +22,11 @@ srv_filter_panel(
 \item{datasets}{\code{FilteredData} object to store filter state and filtered
 datasets, shared across modules}
 
-\item{active_datanames}{\code{reactive} returning datanames that
-should be shown on the filter panel, must be a subset of the
-\code{datanames} argument provided to the UI function}
+\item{active_datanames}{\verb{function / reactive} returning datanames that
+should be shown on the filter panel, \code{ADSL} is always added;
+must be a subset of the \code{datanames} argument provided to \code{ui_filter_panel};
+if the function returns \code{NULL} (as opposed to \code{character(0)}), the filter
+panel will be hidden}
 }
 \description{
 Server function for filter panel

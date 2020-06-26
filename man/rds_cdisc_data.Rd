@@ -34,7 +34,6 @@ app <- init(
       filters = "ADSL"
     )
   ),
-  filter = NULL,
   header = tags$h1("Sample App")
 )
 shinyApp(app$ui, app$server)
