@@ -44,3 +44,16 @@ get_dataname.NamedDataset <- function(x) {
     return(x$get_dataname())
 
 }
+
+#' @rdname get_dataname
+#' @export
+#' @examples
+#' library(random.cdisc.data)
+#' ADSL <- radsl(cached = TRUE)
+#' ADSL_dataset <- named_dataset(dataname = "ADSL", x = ADSL)
+#' get_dataname(ADSL_dataset)
+get_dataname.NamedDataset <- function(x) {
+
+    return(x$get_dataname())
+
+}

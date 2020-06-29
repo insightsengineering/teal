@@ -12,6 +12,8 @@ get_dataname(x)
 \method{get_dataname}{RelationalDatasetConnector}(x)
 
 \method{get_dataname}{NamedDataset}(x)
+
+\method{get_dataname}{NamedDataset}(x)
 }
 \arguments{
 \item{x}{(\code{RelationalDatasetConnector} or \code{NamedDataset}) R6 object}
@@ -35,6 +37,10 @@ x <- relational_dataset_connector(
  keys = get_cdisc_keys("ADSL")
 )
 get_dataname(x)
+library(random.cdisc.data)
+ADSL <- radsl(cached = TRUE)
+ADSL_dataset <- named_dataset(dataname = "ADSL", x = ADSL)
+get_dataname(ADSL_dataset)
 library(random.cdisc.data)
 ADSL <- radsl(cached = TRUE)
 ADSL_dataset <- named_dataset(dataname = "ADSL", x = ADSL)

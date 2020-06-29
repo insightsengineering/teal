@@ -75,7 +75,7 @@ test_that("RelationalDataConnector with DataConnection", {
   expect_true(is(x, "RelationalDataConnector"))
 
   expect_silent(x$set_connection(con))
-  expect_silent(x$set_connectors(list(rcd1, rcd2)))
+  expect_silent(x$set_dataset_connectors(list(rcd1, rcd2)))
   expect_silent(
     x$set_ui(
       function(id) {

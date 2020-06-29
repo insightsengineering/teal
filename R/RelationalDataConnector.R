@@ -11,7 +11,7 @@
 #' x3 <- rcd_cdisc_dataset_connector("ADRS", radrs, cached = TRUE)
 #'
 #' tc <- teal:::RelationalDataConnector$new()
-#' tc$set_connectors(list(x, x2, x3))
+#' tc$set_dataset_connectors(list(x, x2, x3))
 #' tc$set_ui(
 #' function(id) {
 #'   ns <- NS(id)
@@ -36,6 +36,7 @@
 #' @importFrom R6 R6Class
 RelationalDataConnector <- R6::R6Class( #nolint
   classname = "RelationalDataConnector",
+  inherit = RelationalData,
   # ..public ------
   public = list(
     #' @description
@@ -56,66 +57,39 @@ RelationalDataConnector <- R6::R6Class( #nolint
 
       invisible(self)
     },
-
     #' @description
-    #' Function to get \code{RelationalDataset} objects interactively, useful for debugging
-    #' @param refresh (\code{logical}) should the data be downloaded?
-    #' Defaults to FALSE, which returns last downloaded data.
-    #' @param try (\code{logical}) whether perform function evaluation inside \code{try} clause
-    #' @param con_args_fixed (\code{NULL} or named \code{list}) fixed arguments to connection function
-    #' @param con_args_dynamic (\code{NULL} or named \code{list}) dynamic arguments to connection function
-    #'   (not shown in generated code)
-    #' @param con_args_replacement (\code{NULL} or named \code{list}) replacement of dynamic argument of connection
-    #'   function
-    #' @param fun_args_fixed (\code{NULL} or named \code{list}) fixed argument to pull function
-    #' @param fun_args_dynamic (\code{NULL} or named \code{list}) dynamic argument to pull function
-    #'   (not shown in generated code)
-    #' @param fun_args_replacement (\code{NULL} or named \code{list}) replacement of dynamic argument of pull function
+    #' Get names of the datasets.
     #'
-    #' @return list of \code{RelationalDataset} objects
-    get_datasets = function(refresh = FALSE,
-                            try = FALSE,
-                            con_args_fixed = NULL,
-                            con_args_dynamic = NULL,
-                            con_args_replacement = NULL,
-                            fun_args_fixed = NULL,
-                            fun_args_dynamic = NULL,
-                            fun_args_replacement = NULL) {
-      stopifnot(is_logical_single(refresh))
-      if (is.null(private$datasets) || refresh) {
-        private$refresh_data(
-          try = try,
-          con_args_fixed = con_args_fixed,
-          con_args_dynamic = con_args_dynamic,
-          con_args_replacement = con_args_replacement,
-          fun_args_fixed = fun_args_fixed,
-          fun_args_dynamic = fun_args_dynamic,
-          fun_args_replacement = fun_args_replacement
-        )
-      }
-      return(private$datasets)
-    },
-    #' @description
-    #'
-    #' Return the \code{datanames} of all connectors
+    #' @return \code{character} vector with names of all datasets.
     get_datanames = function() {
-      `if`(
-        length(private$connectors) > 0,
-        vapply(private$connectors, function(c) c$get_dataname(), character(1)),
-        NULL
+      c(
+        vapply(private$datasets, get_dataname, character(1)),
+        vapply(private$dataset_connectors, get_dataname, character(1))
       )
     },
+    #' @description
+    #'
+    #' Derive the code for all datasets
+    #' @return \code{list} of \code{character} containing code
+    get_code = function() {
+      c(
+        vapply(private$datasets, get_code, character(1)),
+        vapply(private$dataset_connectors, function(c) c$get_code(), character(1))
+      )
+    },
+    #' @description
     #' Get connection to data source
     #'
     #' @return connector's connection
     get_connection = function() {
       return(private$connection)
     },
+    #' @description
     #' Get connectors
     #'
     #' @return \code{list} with all connectors
-    get_connectors = function() {
-      return(private$connectors)
+    get_dataset_connectors = function() {
+      return(private$dataset_connectors)
     },
     #' @description
     #'
@@ -155,6 +129,11 @@ RelationalDataConnector <- R6::R6Class( #nolint
     #'
     #' @return An object that represents the app
     launch = function() {
+      # load RelationDatasetConnector objects
+      if (is.null(private$dataset_connectors) && !is.null(private$datasets)) {
+        stop("the data is already loaded")
+        }
+
       shinyApp(
         ui = fluidPage(private$ui(id = "main_app"),
                        br(),
@@ -297,12 +276,13 @@ RelationalDataConnector <- R6::R6Class( #nolint
     },
     #' Set dataset connectors
     #'
-    #' @param connectors (\code{list} of \code{DatasetConnector} elements) data connectors
+    #' @param connectors (\code{list} of \code{RelationalDatasetConnector} elements) data connectors
     #'
     #' @return nothing
-    set_connectors = function(connectors) {
+    set_dataset_connectors = function(connectors) {
       stopifnot(is_class_list("RelationalDatasetConnector")(connectors))
-      private$connectors <- connectors
+      names(connectors) <- vapply(connectors, get_dataname, character(1))
+      private$dataset_connectors <- connectors
       return(invisible(NULL))
     }
   ),
@@ -313,7 +293,7 @@ RelationalDataConnector <- R6::R6Class( #nolint
     server_info = NULL,
     ui = NULL,
     connection = NULL,
-    connectors = NULL,
+    dataset_connectors = NULL,
     check = FALSE,
     datasets = NULL,
     # ....methods ----
@@ -353,7 +333,6 @@ RelationalDataConnector <- R6::R6Class( #nolint
                             fun_args_fixed = NULL,
                             fun_args_dynamic = NULL,
                             fun_args_replacement = NULL) {
-
       progress <- NULL
       if (shiny::isRunning()) {
         shinyjs::disable(submit_id)
@@ -384,7 +363,7 @@ RelationalDataConnector <- R6::R6Class( #nolint
       fun_args_fixed <- optional_eval(fun_args_fixed, parent.frame())
       fun_args_dynamic <- optional_eval(fun_args_dynamic)
 
-      datanames <- vapply(private$connectors, get_dataname, character(1))
+      datanames <- vapply(private$dataset_connectors, get_dataname, character(1))
 
       if (!is.null(private$connection)) {
         private$connection$set_open_args(args = con_args_fixed)
@@ -393,44 +372,36 @@ RelationalDataConnector <- R6::R6Class( #nolint
           submit_id, progress
         )
       }
-
-      env_data <- new.env()
-      for (i in seq_along(private$connectors)) {
+      datasets <- vector("list", length(private$dataset_connectors))
+      names(datasets) <- names(private$dataset_connectors)
+      for (i in seq_along(private$dataset_connectors)) {
         if_not_null(progress,
-                    progress$set(0.2 + 0.4 * (i - 1) / length(private$connectors),
+                    progress$set(0.2 + 0.4 * (i - 1) / length(private$dataset_connectors),
                                  message = "Loading data ..."))
-        set_args(x = private$connectors[[i]],
+        set_args(x = private$dataset_connectors[[i]],
                  args = fun_args_fixed)
 
         dataset <- private$stop_on_error(
           get_dataset(
             load_dataset(
-              private$connectors[[i]],
+              private$dataset_connectors[[i]],
               args = fun_args_dynamic,
               try = try
             )
           ),
           submit_id, progress
         )
-
-        assign(
-          datanames[[i]],
-          dataset,
-          envir = env_data
-        )
+        datasets[[i]] <- dataset
       }
+
+      private$dataset_connectors <- NULL
 
       if_not_null(private$connection, private$connection$close(silent = TRUE))
 
       if_not_null(progress, progress$set(0.7, message = "Setting relational datasets ..."))
 
-      private$datasets <- lapply(
-        datanames,
-        function(x) {
-          get(x, env_data)
-        }
-      )
-      rm(env_data)
+      private$datasets <- datasets
+      rm(datasets)
 
       private$append_connection_code(con_args_replacement, fun_args_replacement)
 

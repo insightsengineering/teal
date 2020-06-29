@@ -248,8 +248,7 @@ cdisc_dataset <- function(dataname,
                           data,
                           keys = get_cdisc_keys(dataname),
                           code = character(0)) {
-  dataset(dataname, data, keys, code)
-
+  dataset(dataname = dataname, data = data, keys = keys, code = code) #nolint
 }
 
 

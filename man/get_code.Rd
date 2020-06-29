@@ -5,6 +5,9 @@
 \alias{get_code.RawDatasetConnector}
 \alias{get_code.NamedDataset}
 \alias{get_code.cdisc_data}
+\alias{get_code.RelationalData}
+\alias{get_code.RelationalDataConnector}
+\alias{get_code.DelayedRelationalData}
 \alias{get_code.default}
 \title{Get code}
 \usage{
@@ -14,7 +17,13 @@ get_code(x, ...)
 
 \method{get_code}{NamedDataset}(x, deparse = TRUE, ...)
 
-\method{get_code}{cdisc_data}(x, deparse = FALSE, ...)
+\method{get_code}{cdisc_data}(x, dataname = NULL, deparse = FALSE, ...)
+
+\method{get_code}{RelationalData}(x, dataname = NULL, deparse = TRUE, ...)
+
+\method{get_code}{RelationalDataConnector}(x, dataname = NULL, deparse = TRUE, ...)
+
+\method{get_code}{DelayedRelationalData}(x, dataname = NULL, deparse = TRUE, ...)
 
 \method{get_code}{default}(
   x,
@@ -32,6 +41,8 @@ class \code{character} will be treated as file to read.}
 \item{...}{not used, only for support of S3}
 
 \item{deparse}{(\code{logical}) whether return deparsed form of a call}
+
+\item{dataname}{(\code{character}) Name of dataset to return code for.}
 
 \item{exclude_comments}{(\code{logical}) whether exclude commented-out lines of code. Lines to be excluded
 should be ended with \code{# nocode}. For multiple line exclusions one should enclose ignored block of code with
@@ -57,4 +68,124 @@ Reads code from specified files or an R6 object.
   }
 }
 \code{library()} or \code{require()} calls. Function created for teal app, but can be used with any file.
+}
+\examples{
+library(random.cdisc.data)
+
+ADSL <- cadsl # or: radsl(N = 600, seed = 123)
+ADTTE <- cadtte # or: radtte(ADSL, seed = 123)
+
+# Example with keys
+cd = cdisc_data(
+  cdisc_dataset("ADSL", ADSL, keys = keys(
+    primary = c("STUDYID", "USUBJID"),
+    foreign = NULL,
+    parent = NULL
+  )),
+  cdisc_dataset("ADTTE", ADTTE, keys = keys(
+    primary = c("STUDYID", "USUBJID", "PARAMCD"),
+    foreign = c("STUDYID", "USUBJID"),
+    parent = "ADSL"),
+    code =  "ADTTE <- radtte(ADSL, seed = 123)"
+  ),
+  code = "ADSL <- radsl(N = 600, seed = 123)",
+  check = FALSE
+)
+
+get_code(cd)
+
+get_code(cd, "ADTTE")
+
+get_code(cd, "ADSL")
+x <- teal:::RelationalDataset$new(
+  x = data.frame(x = c(1, 2), y = c("a", "b"), stringsAsFactors = FALSE),
+  keys = keys(primary = "y", foreign = NULL, parent = NULL),
+  dataname = "XY",
+  code = "XY <- data.frame(x = c(1, 2), y = c('aa', 'bb'),
+                           stringsAsFactors = FALSE)"
+)
+
+x2 <- teal:::RelationalDataset$new(
+  x = data.frame(x = c(1, 2), y = c("a", "b"), stringsAsFactors = FALSE),
+  keys = keys(primary = "y", foreign = NULL, parent = NULL),
+  dataname = "XYZ",
+  code = "XYZ <- data.frame(x = c(1, 2), y = c('aa', 'bb'),
+                           stringsAsFactors = FALSE)"
+)
+
+rd <- teal:::RelationalData$new(x, x2)
+
+
+get_code(rd)
+
+# return a warning
+\dontrun{
+# throw error
+get_code(rd, "WrongName")
+
+load_datasets(rd)
+}
+
+# return a code
+get_code(rd, "XY")
+get_code(rd, "XYZ")
+library(random.cdisc.data)
+rcd <- rcd_cdisc_data(rcd_cdisc_dataset_connector("ADSL", radsl, cached = TRUE),
+                      rcd_cdisc_dataset_connector("ADLB", radlb, cached = TRUE),
+                      rcd_cdisc_dataset_connector("ADRS", radrs, cached = TRUE))
+
+# return invisibly NULL
+get_code(rcd, "WrongName")
+
+# return a code
+get_code(rcd)
+get_code(rcd, "ADSL")
+get_code(rcd, "ADLB")
+
+\dontrun{
+load_datasets(rcd)
+get_code(rcd)
+get_code(rcd, "ADSL")
+get_code(tc, "ADLB")
+}
+library(random.cdisc.data)
+x <- rcd_cdisc_data( # RelationalDataConnector
+  rcd_cdisc_dataset_connector("ADSL", radsl, cached = TRUE),
+  rcd_cdisc_dataset_connector("ADLB", radlb, cached = TRUE)
+)
+x2 <- rcd_cdisc_data( # RelationalDataConnector
+  rcd_cdisc_dataset_connector("ADRS", radrs, cached = TRUE)
+)
+
+x3 <- rcd_cdisc_dataset_connector("ADTTE", radtte, cached = TRUE)
+
+x4 <- teal:::RelationalDataset$new(
+  x = data.frame(x = c(1, 2), y = c("a", "b"), stringsAsFactors = FALSE),
+  keys = get_cdisc_keys("ADAE"),
+  dataname = "ADAE",
+  code = "ADAE <- data.frame(x = c(1, 2), y = c('aa', 'bb'),
+                           stringsAsFactors = FALSE)"
+)
+
+tc <- teal_data(x, x2, x3, x4)
+
+# return invisibly NULL
+get_code(tc, "WrongName")
+# return code for all sets
+get_code(tc)
+
+# return a code - be aware of the lack of `library(random.cdisc.data)`
+get_code(tc, "ADSL")
+get_code(tc, "ADLB")
+get_code(tc, "ADTTE")
+get_code(tc, "ADAE")
+
+\dontrun{
+load_datasets(tc)
+
+get_code(tc, "ADSL")
+get_code(tc, "ADLB")
+get_code(tc, "ADTTE")
+get_code(tc, "ADAE")
+}
 }

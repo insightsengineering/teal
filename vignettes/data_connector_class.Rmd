@@ -254,7 +254,7 @@ random data.
 x <- teal:::RelationalDataConnector$new()
 
 x$set_connection(con)
-x$set_connectors(connectors)
+x$set_dataset_connectors(connectors)
 x$set_ui(ui)
 x$set_server_helper(
   submit_id = "submit",

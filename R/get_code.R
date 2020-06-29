@@ -20,6 +20,7 @@
 #' @param deparse (\code{logical}) whether return deparsed form of a call
 #' @param files_path (\code{character}) (optional) vector of files path to be read for preprocessing. Code from
 #' multiple files is joined together.
+#' @param dataname (\code{character}) Name of dataset to return code for.
 #' @param ... not used, only for support of S3
 #' @export
 #' @return (\code{character}) code of import and preparation of data for teal application.
@@ -45,15 +46,190 @@ get_code.NamedDataset <- function(x, deparse = TRUE, ...) {
 
 #' @export
 #' @rdname get_code
-get_code.cdisc_data <- function(x, deparse = FALSE, ...) {
-  if (deparse) {
-    paste0(deparse(attr(x, "code"), width.cutoff = 80L), collapse = "\n")
+#' @examples
+#' library(random.cdisc.data)
+#'
+#' ADSL <- cadsl # or: radsl(N = 600, seed = 123)
+#' ADTTE <- cadtte # or: radtte(ADSL, seed = 123)
+#'
+#' # Example with keys
+#' cd = cdisc_data(
+#'   cdisc_dataset("ADSL", ADSL, keys = keys(
+#'     primary = c("STUDYID", "USUBJID"),
+#'     foreign = NULL,
+#'     parent = NULL
+#'   )),
+#'   cdisc_dataset("ADTTE", ADTTE, keys = keys(
+#'     primary = c("STUDYID", "USUBJID", "PARAMCD"),
+#'     foreign = c("STUDYID", "USUBJID"),
+#'     parent = "ADSL"),
+#'     code =  "ADTTE <- radtte(ADSL, seed = 123)"
+#'   ),
+#'   code = "ADSL <- radsl(N = 600, seed = 123)",
+#'   check = FALSE
+#' )
+#'
+#' get_code(cd)
+#'
+#' get_code(cd, "ADTTE")
+#'
+#' get_code(cd, "ADSL")
+get_code.cdisc_data <- function(x, dataname = NULL, deparse = FALSE, ...) {
+
+  datasets_names  <- names(x)
+
+  if (is.null(dataname)) {
+    if (deparse) {
+      paste0(deparse(attr(x, "code"), width.cutoff = 80L), collapse = "\n")
+      } else {
+        attr(x, "code")
+        }
+    } else if (dataname %in% datasets_names) {
+      x[[dataname]]$get_code()
+      } else {
+        return(invisible(NULL))
+      }
+  }
+
+
+#' @rdname get_code
+#' @export
+#' @examples
+#' x <- teal:::RelationalDataset$new(
+#'   x = data.frame(x = c(1, 2), y = c("a", "b"), stringsAsFactors = FALSE),
+#'   keys = keys(primary = "y", foreign = NULL, parent = NULL),
+#'   dataname = "XY",
+#'   code = "XY <- data.frame(x = c(1, 2), y = c('aa', 'bb'),
+#'                            stringsAsFactors = FALSE)"
+#' )
+#'
+#' x2 <- teal:::RelationalDataset$new(
+#'   x = data.frame(x = c(1, 2), y = c("a", "b"), stringsAsFactors = FALSE),
+#'   keys = keys(primary = "y", foreign = NULL, parent = NULL),
+#'   dataname = "XYZ",
+#'   code = "XYZ <- data.frame(x = c(1, 2), y = c('aa', 'bb'),
+#'                            stringsAsFactors = FALSE)"
+#' )
+#'
+#' rd <- teal:::RelationalData$new(x, x2)
+#'
+#'
+#' get_code(rd)
+#'
+#' # return a warning
+#' \dontrun{
+#' # throw error
+#' get_code(rd, "WrongName")
+#'
+#' load_datasets(rd)
+#' }
+#'
+#' # return a code
+#' get_code(rd, "XY")
+#' get_code(rd, "XYZ")
+get_code.RelationalData <- function(x, dataname = NULL, deparse = TRUE, ...) { # nolint
+
+  if (!is.null(dataname)) {
+    if (!(dataname %in% x$get_datanames())) {
+      stop("The dataname provided does not exist")
+    }
+    x$get_code()[[dataname]]
+
   } else {
-    attr(x, "code")
+    x$get_code()
+    }
+  }
+
+#' @rdname get_code
+#' @export
+#' @examples
+#' library(random.cdisc.data)
+#' rcd <- rcd_cdisc_data(rcd_cdisc_dataset_connector("ADSL", radsl, cached = TRUE),
+#'                       rcd_cdisc_dataset_connector("ADLB", radlb, cached = TRUE),
+#'                       rcd_cdisc_dataset_connector("ADRS", radrs, cached = TRUE))
+#'
+#' # return invisibly NULL
+#' get_code(rcd, "WrongName")
+#'
+#' # return a code
+#' get_code(rcd)
+#' get_code(rcd, "ADSL")
+#' get_code(rcd, "ADLB")
+#'
+#'\dontrun{
+#' load_datasets(rcd)
+#' get_code(rcd)
+#' get_code(rcd, "ADSL")
+#' get_code(tc, "ADLB")
+#' }
+get_code.RelationalDataConnector <- function(x, dataname = NULL, deparse = TRUE, ...) { # nolint
+  names_all <- x$get_datanames()
+  code_all <- x$get_code()
+
+  if (!is.null(dataname) && dataname %in% names_all) {
+    code_all[[dataname]]
+    } else if (!is.null(dataname) && !(dataname %in% names_all)) {
+    return(invisible(NULL))
+    } else {
+    code_all
   }
 }
 
+#' @rdname get_code
+#' @export
+#' @examples
+#' library(random.cdisc.data)
+#' x <- rcd_cdisc_data( # RelationalDataConnector
+#'   rcd_cdisc_dataset_connector("ADSL", radsl, cached = TRUE),
+#'   rcd_cdisc_dataset_connector("ADLB", radlb, cached = TRUE)
+#' )
+#' x2 <- rcd_cdisc_data( # RelationalDataConnector
+#'   rcd_cdisc_dataset_connector("ADRS", radrs, cached = TRUE)
+#' )
+#'
+#' x3 <- rcd_cdisc_dataset_connector("ADTTE", radtte, cached = TRUE)
+#'
+#' x4 <- teal:::RelationalDataset$new(
+#'   x = data.frame(x = c(1, 2), y = c("a", "b"), stringsAsFactors = FALSE),
+#'   keys = get_cdisc_keys("ADAE"),
+#'   dataname = "ADAE",
+#'   code = "ADAE <- data.frame(x = c(1, 2), y = c('aa', 'bb'),
+#'                            stringsAsFactors = FALSE)"
+#' )
+#'
+#' tc <- teal_data(x, x2, x3, x4)
+#'
+#' # return invisibly NULL
+#' get_code(tc, "WrongName")
+#' # return code for all sets
+#' get_code(tc)
+#'
+#' # return a code - be aware of the lack of `library(random.cdisc.data)`
+#' get_code(tc, "ADSL")
+#' get_code(tc, "ADLB")
+#' get_code(tc, "ADTTE")
+#' get_code(tc, "ADAE")
+#'
+#'\dontrun{
+#' load_datasets(tc)
+#'
+#' get_code(tc, "ADSL")
+#' get_code(tc, "ADLB")
+#' get_code(tc, "ADTTE")
+#' get_code(tc, "ADAE")
+#' }
+get_code.DelayedRelationalData <- function(x, dataname = NULL, deparse = TRUE, ...) { # nolint
 
+  code_all <- x$get_code()
+  names_all <- x$get_datanames()
+  if (!is.null(dataname) &&  dataname %in% names_all) {
+    code_all[[dataname]]
+    } else if (!is.null(dataname) && !(dataname %in% names_all)) {
+    return(invisible(NULL))
+    } else {
+    code_all
+  }
+}
 
 # Getting code from files ====
 
@@ -61,8 +237,8 @@ get_code.cdisc_data <- function(x, deparse = FALSE, ...) {
 #' @export
 #' @importFrom magrittr %>%
 get_code.default <- function(x,
-                     exclude_comments = TRUE,
-                     read_sources = TRUE, deparse = FALSE, files_path = NULL, ...) {
+                             exclude_comments = TRUE,
+                             read_sources = TRUE, deparse = FALSE, files_path = NULL, ...) {
   if (!is.null(files_path)) {
     x <- files_path
   }
@@ -71,12 +247,12 @@ get_code.default <- function(x,
   stopifnot(is_logical_single(exclude_comments))
   stopifnot(is_logical_single(read_sources))
 
-  lines <- lapply(x, function(file_path)
+  lines <- lapply(x, function(file_path) {
     get_code_single(file_path, read_sources = read_sources) %>%
       enclosed_with() %>%
       code_exclude(lines, exclude_comments = exclude_comments)
-  ) %>%
-  unlist
+  }) %>%
+    unlist()
 
   if (deparse) {
     return(paste(
@@ -114,8 +290,10 @@ get_code_single <- function(file_path, read_sources, if_url = grepl("^http[s]", 
   if (!if_url) {
     stop_if_not(list(
       file.exists(file_path),
-      paste0("Reading preprocessing code from ", file_path, " file failed. ",
-             "Please double check if you saved your script.")
+      paste0(
+        "Reading preprocessing code from ", file_path, " file failed. ",
+        "Please double check if you saved your script."
+      )
     ))
   }
   stopifnot(is_logical_single(read_sources))
@@ -174,11 +352,11 @@ code_exclude <- function(lines, exclude_comments, file_path) {
   stopifnot(is_logical_single(exclude_comments))
 
   nocode_single <- grep("^.+#[[:space:]]*nocode", lines)
-  nocode_start  <- grep("[[:space:]]*#[[:space:]]*nocode[[:space:]]*>+", lines)
-  nocode_stop   <- grep("[[:space:]]*#[[:space:]]*<+[[:space:]]*nocode[[:space:]]*", lines)
+  nocode_start <- grep("[[:space:]]*#[[:space:]]*nocode[[:space:]]*>+", lines)
+  nocode_stop <- grep("[[:space:]]*#[[:space:]]*<+[[:space:]]*nocode[[:space:]]*", lines)
 
   if (length(nocode_start) != length(nocode_stop)) {
-    stop(paste("Unequal number of no-code starts and stops in ", file_path)) #nolint
+    stop(paste("Unequal number of no-code starts and stops in ", file_path)) # nolint
   }
 
   nocode_multi <- NULL
@@ -265,8 +443,10 @@ include_source_code <- function(lines, dir = NULL) {
     } else {
       s <- ifelse(grepl("^(/)|^([\\])|^([A-Za-z]:)", s), s, file.path(dir, s))
       if (!all(file.exists(s))) {
-        msg <- paste0("File(s) provided in the source() calls don't exist: \n",
-                      paste(s[!file.exists(s)], collapse = "\n"))
+        msg <- paste0(
+          "File(s) provided in the source() calls don't exist: \n",
+          paste(s[!file.exists(s)], collapse = "\n")
+        )
         stop(msg)
       }
 
@@ -300,7 +480,8 @@ read_lib_names <- function(lines) {
   lib_names <- gsub("[\"\'\\)\\(]",
                     "",
                     regmatches(lib_calls, gregexpr("\\(.*?\\)", lib_calls)),
-                    perl = TRUE)
+                    perl = TRUE
+                    )
 
   lib_names
 }
@@ -319,7 +500,6 @@ read_lib_names <- function(lines) {
 #' writeLines(c("x <- 2", "#second line comment", "x <- x + 2"), file_example)
 #'
 #' read_script(file_example)
-#'
 read_script <- function(file) {
   stopifnot(is_character_single(file))
   stopifnot(file.exists(file))

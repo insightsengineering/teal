@@ -45,7 +45,7 @@ rcd_cdisc_data <- function(..., check = TRUE) {
 
   x <- RelationalDataConnector$new()
   x$set_connection(con)
-  x$set_connectors(connectors)
+  x$set_dataset_connectors(connectors)
   x$set_check(check)
   x$set_ui(
     function(id) {
@@ -114,7 +114,7 @@ rice_cdisc_data <- function(..., additional_ui = NULL) {
 
   x <- RelationalDataConnector$new()
   x$set_connection(con)
-  x$set_connectors(connectors)
+  x$set_dataset_connectors(connectors)
   x$set_check(`attributes<-`(FALSE, list(quiet = TRUE)))
   x$set_ui(
     function(id) {
@@ -191,7 +191,7 @@ rds_cdisc_data <- function(...,  check = TRUE) {
 
 
   x <- RelationalDataConnector$new()
-  x$set_connectors(connectors)
+  x$set_dataset_connectors(connectors)
   x$set_check(check)
   x$set_ui(
     function(id) {
@@ -200,7 +200,7 @@ rds_cdisc_data <- function(...,  check = TRUE) {
         h4("RDS files to laod:"),
         do.call(
           tagList,
-          lapply(x$get_connectors(), function(con) {
+          lapply(x$get_dataset_connectors(), function(con) {
             tags$p(
               paste(
                 con$get_dataname(),
@@ -210,16 +210,16 @@ rds_cdisc_data <- function(...,  check = TRUE) {
             )
           })
         ),
-        actionButton(ns("start"), "Start")
+        actionButton(ns("submit"), "Start")
       )
     }
   )
   x$set_server_helper(
-    submit_id = "start",
+    submit_id = "submit",
     fun_args_fixed = NULL
   )
   x$set_server_info(
-    submit_id = "start",
+    submit_id = "submit",
     fun_args_fixed = NULL
   )
 

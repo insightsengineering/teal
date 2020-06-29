@@ -20,5 +20,4 @@ file_example <- tempfile()
 writeLines(c("x <- 2", "#second line comment", "x <- x + 2"), file_example)
 
 read_script(file_example)
-
 }

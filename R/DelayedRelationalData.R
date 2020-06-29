@@ -38,7 +38,6 @@ DelayedRelationalData <- R6::R6Class( #nolint
         stop("All data elements should be RelationalData(set) or RelationalData(set)Connection")
       }
 
-
       # sort elements by class name
       connectors <- sapply(
         delayed_classes,
@@ -53,14 +52,30 @@ DelayedRelationalData <- R6::R6Class( #nolint
         USE.NAMES = TRUE,
         simplify = FALSE
       )
-
-
       private$data_connectors <- connectors$RelationalDataConnector
+
       private$datasets <- connectors$RelationalDataset
+      names(private$datasets) <- vapply(connectors$RelationalDataset,
+                                        get_dataname,
+                                        character(1))
+
       private$dataset_connectors <- connectors$RelationalDatasetConnector
+      names(private$dataset_connectors) <- vapply(connectors$RelationalDatasetConnector,
+                                                  get_dataname,
+                                                  character(1))
+
+      names_all <- c(names(private$datasets),
+                     names(private$dataset_connectors),
+                     names(private$data_connectors))
+
+      if (any(duplicated(names_all))) {
+        stop("Please do not include duplicated names.")
+      }
 
       # Retrieve the IDs of the submit buttons
       # from all the connectors handed over
+      # id of buttons is data_connector_<dataname>
+      # (or <dataname_dataname> if multiple)
       if (length(private$data_connectors) > 0) {
         private$ui_submit_ids <- lapply(
           private$data_connectors,
@@ -68,8 +83,8 @@ DelayedRelationalData <- R6::R6Class( #nolint
             paste0(
               "data_connector_",
               paste0(
-                vapply(dc$get_connectors(), function(c) c$get_dataname(), character(1)),
-                collapse = ""
+                vapply(dc$get_dataset_connectors(), get_dataname, character(1)),
+                collapse = "_"
               ),
               "-",
               dc$get_submit_id()
@@ -85,14 +100,31 @@ DelayedRelationalData <- R6::R6Class( #nolint
     #' @description
     #'
     #' Derive the names of all datasets
+    #' @return \code{character} vector with names
     get_datanames = function() {
       c(
         vapply(private$datasets, get_dataname, character(1)),
-        vapply(private$dataset_connectors, function(c) c$get_dataname(), character(1)),
+        vapply(private$dataset_connectors, get_dataname, character(1)),
         `if`(
           length(private$data_connectors) > 0,
           unlist(lapply(private$data_connectors, function(x)
-            vapply(x$get_connectors(), function(c) c$get_dataname(), character(1)))),
+            vapply(x$get_dataset_connectors(), get_dataname, character(1)))),
+          NULL
+        )
+      )
+    },
+    #' @description
+    #'
+    #' Derive the code for all datasets
+    #' @return \code{list} of \code{character} containing code
+    get_code = function() {
+      c(
+        vapply(private$datasets, get_code, character(1)),
+        vapply(private$dataset_connectors, get_code, character(1)),
+        `if`(
+          length(private$data_connectors) > 0,
+          unlist(lapply(private$data_connectors, function(x)
+            vapply(x$get_dataset_connectors(), get_code, character(1)))),
           NULL
         )
       )
@@ -109,6 +141,18 @@ DelayedRelationalData <- R6::R6Class( #nolint
       } else {
         private$ui(id)
       }
+    },
+    #' Get dataset connectors.
+    #'
+    #' @return \code{list} with all \code{RelationalDatasetConnector} objects.
+    get_dataset_connectors = function() {
+      return(private$dataset_connectors)
+    },
+    #' Get data connectors.
+    #'
+    #' @return \code{list} with all \code{RelationalDataConnector} objects.
+    get_data_connectors = function() {
+      return(private$data_connectors)
     },
     #' @description
     #'
@@ -192,8 +236,8 @@ DelayedRelationalData <- R6::R6Class( #nolint
       # by appending a new dataset
       if (is.list(datasets)) {
         stopifnot(length(intersect(
-          vapply(datasets, function(ds) ds$get_dataname(), character(1)),
-          vapply(self$get_datasets(), function(ds) ds$get_dataname(), character(1))
+          vapply(datasets, get_dataname, character(1)),
+          vapply(self$get_datasets(), get_dataname, character(1))
         )) == 0)
       } else {
         stopifnot(!datasets$get_dataname() %in% self$get_datanames())
@@ -227,6 +271,7 @@ DelayedRelationalData <- R6::R6Class( #nolint
     set_ui = function() {
       private$ui <- function(id) {
         ns <- NS(id)
+        # hide "submit" buttons in favour of one "submit_all"
         tagList(
           tags$head(
             tags$style(
@@ -239,11 +284,11 @@ DelayedRelationalData <- R6::R6Class( #nolint
             args = lapply(
               private$data_connectors,
               function(x) {
-                datanames <- vapply(x$get_connectors(), function(xx) xx$get_dataname(), character(1))
+                datanames <- vapply(x$get_dataset_connectors(), get_dataname, character(1))
                 div(
                   h3(paste(c("Inputs for:", datanames), collapse = " ")),
                   x$get_ui(
-                    ns(paste0("data_connector_", paste0(datanames, collapse = "")))
+                    ns(paste0("data_connector_", paste0(datanames, collapse = "_")))
                   )
                 )
 
@@ -259,20 +304,22 @@ DelayedRelationalData <- R6::R6Class( #nolint
       private$server <- function(input, output, session) {
         private$append_dataset_connectors()
 
+        # each RelationalDataConnector modules is called here
         data_connector_modules <- lapply(
           private$data_connectors,
           function(dc) {
             id <- paste0(
               "data_connector_",
               paste0(
-                vapply(dc$get_connectors(), function(c) c$get_dataname(), character(1)),
-                collapse = ""
+                vapply(dc$get_dataset_connectors(), get_dataname, character(1)),
+                collapse = "_"
               )
             )
             callModule(dc$get_server(), id, return_cdisc_data = FALSE)
           }
         )
 
+        # teal::init uses reactive(cdisc_data)
         res <- reactive({
           datasets <- unlist(lapply(data_connector_modules, function(x) x()))
           if (all(vapply(datasets, is, logical(1), "RelationalDataset")) &&
@@ -291,6 +338,7 @@ DelayedRelationalData <- R6::R6Class( #nolint
           }
         })
 
+        # click hidden 'submit' buttons when clicking 'submit_all'
         observeEvent(input$submit, {
           sapply(
             private$ui_submit_ids,

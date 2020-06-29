@@ -1,0 +1,52 @@
+#' Get a dataset(s) object.
+#'
+#' @param x (\code{object}) of class\link{RawDatasetConnector} or \link{NamedDataset}. If of
+#'   class \code{character} will be treated as file to read.
+#' @export
+#' @rdname get_datasets
+#' @return \code{list} or \code{RelationalDataset} objects
+get_datasets <- function(x) {
+  UseMethod("get_datasets")
+}
+
+#' @rdname get_datasets
+#' @export
+#' @examples
+#'
+#' # RelationalData --------
+#' library(random.cdisc.data)
+#' adsl <- cdisc_dataset(dataname = "ADSL", # RelationalDataset
+#'                       data = radsl(cached = TRUE),
+#'                       code = "library(random.cdisc.data)\nADSL <- radsl(cached = TRUE)")
+#'
+#' adtte <- cdisc_dataset(dataname = "ADTTE", # RelationalDataset
+#'                        data = radtte(cached = TRUE),
+#'                        code = "library(random.cdisc.data)\nADTTE <- radtte(cached = TRUE)")
+#'
+#' rd <- teal_data(adsl, adtte)
+#' get_datasets(rd)
+#'
+#' # RelationalDataConnector --------
+#' rdc <- rcd_cdisc_data(
+#'   rcd_cdisc_dataset_connector("ADSL", radsl, cached = TRUE),
+#'   rcd_cdisc_dataset_connector("ADTTE", radtte, cached = TRUE)
+#' )
+#'
+#' get_datasets(rdc)
+#'
+#'\dontrun{
+#' load_datasets(rdc)
+#' get_datasets(rdc)
+#'}
+#'
+#' # DelayedRelationalData --------
+#' drc <- teal_data(adsl, adtte, rdc)
+#'
+#' get_datasets(drc)
+get_datasets.RelationalData <- function(x) {
+  res <- x$get_datasets()
+  if (is_empty(res)) {
+    return(invisible(NULL))
+  }
+  res
+}

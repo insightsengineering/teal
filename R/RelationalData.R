@@ -15,8 +15,8 @@
 #' x2 <- teal:::RelationalDataset$new(
 #'   x = data.frame(x = c(1, 2), y = c("a", "b"), stringsAsFactors = FALSE),
 #'   keys = keys(primary = "y", foreign = NULL, parent = NULL),
-#'   dataname = "XY",
-#'   code = "XY <- data.frame(x = c(1, 2), y = c('aa', 'bb'),
+#'   dataname = "XYZ",
+#'   code = "XYZ <- data.frame(x = c(1, 2), y = c('aa', 'bb'),
 #'                            stringsAsFactors = FALSE)"
 #' )
 #'
@@ -41,7 +41,7 @@ RelationalData <- R6::R6Class( #nolint
         stop("All data elements should be RelationalDataset")
       }
 
-      # sort elements by class name
+      names(datasets) <- vapply(datasets, get_dataname, character(1))
       private$datasets <- datasets
 
       return(invisible(self))
@@ -58,14 +58,31 @@ RelationalData <- R6::R6Class( #nolint
     #'
     #' @return \code{character} vector with names of all datasets.
     get_datanames = function() {
-      vapply(private$datasets, get_dataname.RelationalData, character(1))
+      vapply(private$datasets, get_dataname, character(1))
+    },
+    #' @description
+    #'
+    #' Get code for all datasets.
+    #'
+    #' @return (\code{character}) vector of code to generate datasets.
+    get_code = function() {
+      vapply(private$datasets, get_code, character(1))
     },
     #' @description
     #' Get \code{RelationalDataset} objects.
+    #' @param dataname (\code{character} value)\cr
+    #'   name of dataset to be returned. If \code{NULL}, all datasets are returned.
     #'
-    #' @return list of \code{RelationalDataset}.
-    get_datasets = function() {
-      private$datasets
+    #' @return \code{RelationalDataset} for single \code{dataname} or
+    #'   \code{list} of \code{RelationalDataset} if \code{dataname = NULL}.
+    get_datasets = function(dataname = NULL) {
+      stopifnot(is.null(dataname) || is_character_single(dataname))
+
+      if (is.null(dataname)) {
+        private$datasets
+      } else {
+        private$datasets[[dataname]]
+      }
     }
   ),
   # ..private ------

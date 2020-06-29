@@ -5,20 +5,30 @@
 \alias{RawDataset}
 \alias{get_raw_data.RawDataset}
 \alias{get_raw_data.RawDatasetConnector}
+\alias{get_raw_data.RelationalData}
+\alias{get_raw_data.cdisc_data}
 \title{R6 Class representing a raw data set}
 \usage{
-get_raw_data(x)
+get_raw_data(x, dataname = NULL)
 
-\method{get_raw_data}{RawDataset}(x)
+\method{get_raw_data}{RawDataset}(x, dataname = NULL)
 
-\method{get_raw_data}{RawDatasetConnector}(x)
+\method{get_raw_data}{RawDatasetConnector}(x, dataname = NULL)
+
+\method{get_raw_data}{RelationalData}(x, dataname = NULL)
+
+\method{get_raw_data}{cdisc_data}(x, dataname = NULL)
 }
 \arguments{
-\item{x}{(\link{RawDataset} or \link{RawDatasetConnector}) object}
+\item{x}{(\code{RawDataset, RawDatasetConnector, RelationalData, cdisc_data})\cr object}
+
+\item{dataname}{(\code{character} value)\cr
+Name of dataset to return raw data for.}
 }
 \value{
-\code{data.frame} with the raw data inserted into the
-  R6 objects
+\code{data.frame} with the raw data inserted into the R6 objects. In case of
+\code{RelationalData} or \code{cdisc_data} \code{list} of \code{data.frame} can be returned
+if user doesn't specify \code{dataname} (\code{get_raw_data} from all datasets).
 }
 \description{
 Any \code{data.frame} or \code{rtable} object can be
@@ -28,6 +38,7 @@ be automatically derived.
 }
 \examples{
 
+# RawDatasets
 library(random.cdisc.data)
 ADSL <- radsl(cached = TRUE)
 ADSL_raw <- raw_dataset(x = ADSL)
@@ -41,6 +52,77 @@ ADSL_relational <- as_relational(ADSL_raw,
   keys = keys(primary = c("USUBJID", "STUDYID"), foreign = NULL, parent = NULL)
 )
 get_raw_data(ADSL_relational)
+
+# RawDatasetConnector ---------
+library(random.cdisc.data)
+dc <- rcd_cdisc_dataset_connector(dataname = "ADSL", fun = radsl, cached = TRUE)
+load_dataset(dc)
+get_raw_data(dc)
+
+# RelationalData ----------------
+library(random.cdisc.data)
+adsl <- cdisc_dataset(dataname = "ADSL", # RelationalDataset
+                      data = radsl(cached = TRUE),
+                      code = "library(random.cdisc.data)\nADSL <- radsl(cached = TRUE)")
+
+adtte <- cdisc_dataset(dataname = "ADTTE", # RelationalDataset
+                       data = radtte(cached = TRUE),
+                       code = "library(random.cdisc.data)\nADTTE <- radtte(cached = TRUE)")
+
+rd <- teal:::RelationalData$new(adsl, adtte)
+get_raw_data(rd)
+
+# RelationalDataConnector --------
+rdc <- rcd_cdisc_data(
+  rcd_cdisc_dataset_connector("ADSL", radsl, cached = TRUE),
+  rcd_cdisc_dataset_connector("ADTTE", radtte, cached = TRUE)
+)
+
+get_raw_data(rdc)
+
+\dontrun{
+load_datasets(rdc)
+get_raw_data(rdc)
+}
+
+# DelayedRelationalData --------
+rdc2 <- rcd_cdisc_data(
+  rcd_cdisc_dataset_connector("ADRS", radrs, cached = TRUE),
+  rcd_cdisc_dataset_connector("ADLB", radlb, cached = TRUE)
+)
+
+drc <- teal_data(adsl, adtte, rdc2)
+
+get_raw_data(drc)
+\dontrun{
+load_datasets(drc)
+get_raw_data(drc)
+}
+
+# cdisc_data ----------------
+library(random.cdisc.data)
+
+ADSL <- radsl(cached = TRUE)
+ADTTE <- radtte(cached = TRUE)
+
+# Example with keys
+cd = cdisc_data(
+  cdisc_dataset("ADSL", ADSL, keys = keys(
+    primary = c("STUDYID", "USUBJID"),
+    foreign = NULL,
+    parent = NULL
+  )),
+  cdisc_dataset("ADTTE", ADTTE, keys = keys(
+    primary = c("STUDYID", "USUBJID", "PARAMCD"),
+    foreign = c("STUDYID", "USUBJID"),
+    parent = "ADSL"),
+    code =  "ADTTE <- radtte(ADSL, seed = 123)"
+  ),
+  code = "ADSL <- radsl(N = 600, seed = 123)",
+  check = FALSE
+)
+
+get_raw_data(cd, "ADSL")
 }
 \section{Active bindings}{
 \if{html}{\out{<div class="r6-active-bindings">}}
@@ -85,6 +167,7 @@ will be deprecated in future}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-new"></a>}}
+\if{latex}{\out{\hypertarget{method-new}{}}}
 \subsection{Method \code{new()}}{
 initialize a \code{RawDataset} class object
 \subsection{Usage}{
@@ -101,6 +184,7 @@ initialize a \code{RawDataset} class object
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-get_raw_data"></a>}}
+\if{latex}{\out{\hypertarget{method-get_raw_data}{}}}
 \subsection{Method \code{get_raw_data()}}{
 Derive the raw data frame inside this object
 \subsection{Usage}{
@@ -113,6 +197,7 @@ Derive the raw data frame inside this object
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-get_numeric_colnames"></a>}}
+\if{latex}{\out{\hypertarget{method-get_numeric_colnames}{}}}
 \subsection{Method \code{get_numeric_colnames()}}{
 Derive the names of all \code{numeric} columns
 \subsection{Usage}{
@@ -130,6 +215,7 @@ factor variables}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-get_character_colnames"></a>}}
+\if{latex}{\out{\hypertarget{method-get_character_colnames}{}}}
 \subsection{Method \code{get_character_colnames()}}{
 Derive the names of all \code{character} columns
 \subsection{Usage}{
@@ -139,6 +225,7 @@ Derive the names of all \code{character} columns
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-get_factor_colnames"></a>}}
+\if{latex}{\out{\hypertarget{method-get_factor_colnames}{}}}
 \subsection{Method \code{get_factor_colnames()}}{
 Derive the names of all \code{factor} columns
 \subsection{Usage}{
@@ -148,6 +235,7 @@ Derive the names of all \code{factor} columns
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-get_colnames"></a>}}
+\if{latex}{\out{\hypertarget{method-get_colnames}{}}}
 \subsection{Method \code{get_colnames()}}{
 Derive the column names
 \subsection{Usage}{
@@ -157,6 +245,7 @@ Derive the column names
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-get_column_labels"></a>}}
+\if{latex}{\out{\hypertarget{method-get_column_labels}{}}}
 \subsection{Method \code{get_column_labels()}}{
 Derive the column labels
 \subsection{Usage}{
@@ -166,6 +255,7 @@ Derive the column labels
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-get_rownames"></a>}}
+\if{latex}{\out{\hypertarget{method-get_rownames}{}}}
 \subsection{Method \code{get_rownames()}}{
 Derive the row names
 \subsection{Usage}{
@@ -175,6 +265,7 @@ Derive the row names
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-get_row_labels"></a>}}
+\if{latex}{\out{\hypertarget{method-get_row_labels}{}}}
 \subsection{Method \code{get_row_labels()}}{
 Derive the row labels
 \subsection{Usage}{
@@ -184,6 +275,7 @@ Derive the row labels
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-clone"></a>}}
+\if{latex}{\out{\hypertarget{method-clone}{}}}
 \subsection{Method \code{clone()}}{
 The objects of this class are cloneable with this method.
 \subsection{Usage}{

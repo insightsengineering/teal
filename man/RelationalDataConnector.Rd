@@ -14,7 +14,7 @@ x2 <- rcd_cdisc_dataset_connector("ADLB", radlb, cached = TRUE)
 x3 <- rcd_cdisc_dataset_connector("ADRS", radrs, cached = TRUE)
 
 tc <- teal:::RelationalDataConnector$new()
-tc$set_connectors(list(x, x2, x3))
+tc$set_dataset_connectors(list(x, x2, x3))
 tc$set_ui(
 function(id) {
   ns <- NS(id)
@@ -37,14 +37,17 @@ tc$launch()
 tc$get_datasets()
 }
 }
+\section{Super class}{
+\code{\link[teal:RelationalData]{teal::RelationalData}} -> \code{RelationalDataConnector}
+}
 \section{Methods}{
 \subsection{Public methods}{
 \itemize{
 \item \href{#method-new}{\code{RelationalDataConnector$new()}}
-\item \href{#method-get_datasets}{\code{RelationalDataConnector$get_datasets()}}
 \item \href{#method-get_datanames}{\code{RelationalDataConnector$get_datanames()}}
+\item \href{#method-get_code}{\code{RelationalDataConnector$get_code()}}
 \item \href{#method-get_connection}{\code{RelationalDataConnector$get_connection()}}
-\item \href{#method-get_connectors}{\code{RelationalDataConnector$get_connectors()}}
+\item \href{#method-get_dataset_connectors}{\code{RelationalDataConnector$get_dataset_connectors()}}
 \item \href{#method-get_server}{\code{RelationalDataConnector$get_server()}}
 \item \href{#method-get_submit_id}{\code{RelationalDataConnector$get_submit_id()}}
 \item \href{#method-get_ui}{\code{RelationalDataConnector$get_ui()}}
@@ -55,12 +58,21 @@ tc$get_datasets()
 \item \href{#method-set_server_helper}{\code{RelationalDataConnector$set_server_helper()}}
 \item \href{#method-set_server_info}{\code{RelationalDataConnector$set_server_info()}}
 \item \href{#method-set_connection}{\code{RelationalDataConnector$set_connection()}}
-\item \href{#method-set_connectors}{\code{RelationalDataConnector$set_connectors()}}
+\item \href{#method-set_dataset_connectors}{\code{RelationalDataConnector$set_dataset_connectors()}}
 \item \href{#method-clone}{\code{RelationalDataConnector$clone()}}
 }
 }
+\if{html}{
+\out{<details open ><summary>Inherited methods</summary>}
+\itemize{
+\item \out{<span class="pkg-link" data-pkg="teal" data-topic="RelationalData" data-id="get_cdisc_data">}\href{../../teal/html/RelationalData.html#method-get_cdisc_data}{\code{teal::RelationalData$get_cdisc_data()}}\out{</span>}
+\item \out{<span class="pkg-link" data-pkg="teal" data-topic="RelationalData" data-id="get_datasets">}\href{../../teal/html/RelationalData.html#method-get_datasets}{\code{teal::RelationalData$get_datasets()}}\out{</span>}
+}
+\out{</details>}
+}
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-new"></a>}}
+\if{latex}{\out{\hypertarget{method-new}{}}}
 \subsection{Method \code{new()}}{
 Create a new \code{RelationalDataConnector} object
 \subsection{Usage}{
@@ -81,78 +93,51 @@ new \code{DataConnector} object
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-get_datasets"></a>}}
-\subsection{Method \code{get_datasets()}}{
-Function to get \code{RelationalDataset} objects interactively, useful for debugging
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{RelationalDataConnector$get_datasets(
-  refresh = FALSE,
-  try = FALSE,
-  con_args_fixed = NULL,
-  con_args_dynamic = NULL,
-  con_args_replacement = NULL,
-  fun_args_fixed = NULL,
-  fun_args_dynamic = NULL,
-  fun_args_replacement = NULL
-)}\if{html}{\out{</div>}}
-}
-
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{refresh}}{(\code{logical}) should the data be downloaded?
-Defaults to FALSE, which returns last downloaded data.}
-
-\item{\code{try}}{(\code{logical}) whether perform function evaluation inside \code{try} clause}
-
-\item{\code{con_args_fixed}}{(\code{NULL} or named \code{list}) fixed arguments to connection function}
-
-\item{\code{con_args_dynamic}}{(\code{NULL} or named \code{list}) dynamic arguments to connection function
-(not shown in generated code)}
-
-\item{\code{con_args_replacement}}{(\code{NULL} or named \code{list}) replacement of dynamic argument of connection
-function}
-
-\item{\code{fun_args_fixed}}{(\code{NULL} or named \code{list}) fixed argument to pull function}
-
-\item{\code{fun_args_dynamic}}{(\code{NULL} or named \code{list}) dynamic argument to pull function
-(not shown in generated code)}
-
-\item{\code{fun_args_replacement}}{(\code{NULL} or named \code{list}) replacement of dynamic argument of pull function}
-}
-\if{html}{\out{</div>}}
-}
-\subsection{Returns}{
-list of \code{RelationalDataset} objects
-}
-}
-\if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-get_datanames"></a>}}
+\if{latex}{\out{\hypertarget{method-get_datanames}{}}}
 \subsection{Method \code{get_datanames()}}{
-Return the \code{datanames} of all connectors
-Get connection to data source
+Get names of the datasets.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{RelationalDataConnector$get_datanames()}\if{html}{\out{</div>}}
 }
 
+\subsection{Returns}{
+\code{character} vector with names of all datasets.
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-get_code"></a>}}
+\if{latex}{\out{\hypertarget{method-get_code}{}}}
+\subsection{Method \code{get_code()}}{
+Derive the code for all datasets
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{RelationalDataConnector$get_code()}\if{html}{\out{</div>}}
+}
+
+\subsection{Returns}{
+\code{list} of \code{character} containing code
+}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-get_connection"></a>}}
+\if{latex}{\out{\hypertarget{method-get_connection}{}}}
 \subsection{Method \code{get_connection()}}{
+Get connection to data source
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{RelationalDataConnector$get_connection()}\if{html}{\out{</div>}}
 }
 
 \subsection{Returns}{
 connector's connection
-Get connectors
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-get_connectors"></a>}}
-\subsection{Method \code{get_connectors()}}{
+\if{html}{\out{<a id="method-get_dataset_connectors"></a>}}
+\if{latex}{\out{\hypertarget{method-get_dataset_connectors}{}}}
+\subsection{Method \code{get_dataset_connectors()}}{
+Get connectors
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{RelationalDataConnector$get_connectors()}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{RelationalDataConnector$get_dataset_connectors()}\if{html}{\out{</div>}}
 }
 
 \subsection{Returns}{
@@ -161,6 +146,7 @@ Get connectors
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-get_server"></a>}}
+\if{latex}{\out{\hypertarget{method-get_server}{}}}
 \subsection{Method \code{get_server()}}{
 
 \subsection{Usage}{
@@ -173,6 +159,7 @@ the \code{server} function of the \code{RelationalDataConnector}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-get_submit_id"></a>}}
+\if{latex}{\out{\hypertarget{method-get_submit_id}{}}}
 \subsection{Method \code{get_submit_id()}}{
 Derive the ID of the button that triggers the
 \code{DataConnection} to be pulled
@@ -187,6 +174,7 @@ A character string of the \code{id} of the
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-get_ui"></a>}}
+\if{latex}{\out{\hypertarget{method-get_ui}{}}}
 \subsection{Method \code{get_ui()}}{
 
 \subsection{Usage}{
@@ -206,6 +194,7 @@ the \code{ui} function of the \code{RelationalDataConnector}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-launch"></a>}}
+\if{latex}{\out{\hypertarget{method-launch}{}}}
 \subsection{Method \code{launch()}}{
 Run simple application that uses its \code{ui} and \code{server} fields to pull data from
 connection.
@@ -221,6 +210,7 @@ An object that represents the app
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-set_check"></a>}}
+\if{latex}{\out{\hypertarget{method-set_check}{}}}
 \subsection{Method \code{set_check()}}{
 Set reproducibility check
 \subsection{Usage}{
@@ -240,6 +230,7 @@ nothing
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-set_ui"></a>}}
+\if{latex}{\out{\hypertarget{method-set_ui}{}}}
 \subsection{Method \code{set_ui()}}{
 Set connector UI function
 \subsection{Usage}{
@@ -259,6 +250,7 @@ nothing
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-set_server"></a>}}
+\if{latex}{\out{\hypertarget{method-set_server}{}}}
 \subsection{Method \code{set_server()}}{
 Set connector server function
 
@@ -281,6 +273,7 @@ nothing
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-set_server_helper"></a>}}
+\if{latex}{\out{\hypertarget{method-set_server_helper}{}}}
 \subsection{Method \code{set_server_helper()}}{
 Helper function to set connector server function
 \subsection{Usage}{
@@ -323,6 +316,7 @@ nothing
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-set_server_info"></a>}}
+\if{latex}{\out{\hypertarget{method-set_server_info}{}}}
 \subsection{Method \code{set_server_info()}}{
 Store the call of \code{set_server}
 \subsection{Usage}{
@@ -341,6 +335,7 @@ Set data connection}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-set_connection"></a>}}
+\if{latex}{\out{\hypertarget{method-set_connection}{}}}
 \subsection{Method \code{set_connection()}}{
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{RelationalDataConnector$set_connection(connection)}\if{html}{\out{</div>}}
@@ -359,16 +354,17 @@ Set dataset connectors
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-set_connectors"></a>}}
-\subsection{Method \code{set_connectors()}}{
+\if{html}{\out{<a id="method-set_dataset_connectors"></a>}}
+\if{latex}{\out{\hypertarget{method-set_dataset_connectors}{}}}
+\subsection{Method \code{set_dataset_connectors()}}{
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{RelationalDataConnector$set_connectors(connectors)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{RelationalDataConnector$set_dataset_connectors(connectors)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{connectors}}{(\code{list} of \code{DatasetConnector} elements) data connectors}
+\item{\code{connectors}}{(\code{list} of \code{RelationalDatasetConnector} elements) data connectors}
 }
 \if{html}{\out{</div>}}
 }
@@ -378,6 +374,7 @@ nothing
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-clone"></a>}}
+\if{latex}{\out{\hypertarget{method-clone}{}}}
 \subsection{Method \code{clone()}}{
 The objects of this class are cloneable with this method.
 \subsection{Usage}{
