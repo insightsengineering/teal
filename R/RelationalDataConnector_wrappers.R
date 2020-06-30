@@ -6,6 +6,19 @@
 #' @export
 #'
 #' @param ... (\code{DatasetConnector}) dataset connectors created using \link{rcd_dataset_connector}
+#'   In case \code{cached = FALSE}, please watch the order and call \code{ADSL} generation first.
+#' @param check optional, (\code{logical}) whether perform reproducibility check
+#'
+#' @details
+#'
+#' This data connector can load data from \code{random.cdisc.data}. datasets can be loaded
+#' from a seed or cached. In case datasets should be loaded from cached the
+#' \link{rcd_cdisc_dataset_connector} needs to be used with the cached argument set
+#' to \code{TRUE} for all datasets.
+#'
+#' In case non-cached datasets should be used, please watch the order of datasets. Most
+#' of the datasets from \code{random.cdisc.data} need \code{ADSL} to be produced first. So
+#' please create the \code{ADSL} dataset first.
 #' @param check optional, (\code{logical}) whether perform reproducibility check
 #'
 #' @return An object of class \code{RelationalDataConnector}
@@ -47,23 +60,70 @@ rcd_cdisc_data <- function(..., check = TRUE) {
   x$set_connection(con)
   x$set_dataset_connectors(connectors)
   x$set_check(check)
+
+  call_args <- unlist(lapply(
+    connectors,
+    function(c) {
+      c$get_pull_args()
+    }
+  ))
+  # Derive information on whether all
+  # datasets should be loaded from cache
+  all_cached <- FALSE
+  if (length(call_args) >= length(connectors)) {
+    all_cached_val <- unlist(call_args)[which(names(unlist(call_args)) == "cached")]
+    if (length(all_cached_val) == length(connectors)) {
+      all_cached <- all(all_cached_val)
+    }
+  }
+
+  # Only create a reactive UI in case, non-cached datasets are
+  # used inside the app.
   x$set_ui(
     function(id) {
       ns <- NS(id)
-      tagList(
-        numericInput(ns("seed"), "Choose seed", min = 1, max = 1000, value = 1),
-        actionButton(ns("submit"), "Submit")
-      )
+      if (all_cached) {
+        tags$p("Loading data from cache")
+      } else {
+        tagList(
+          numericInput(ns("seed"), "Choose seed", min = 1, max = 1000, value = 1),
+          actionButton(ns("submit"), "Submit")
+        )
+      }
     }
   )
-  x$set_server_helper(
-    submit_id = "submit",
-    fun_args_fixed = list(seed = quote(input$seed))
-  )
-  x$set_server_info(
-    submit_id = "submit",
-    fun_args_fixed = list(seed = quote(input$seed))
-  )
+  # Set the server to return datasets from calls in case
+  # all datasets are cached.
+  if (all_cached) {
+    x$set_server(
+      function(input, output, session, return_cdisc_data = TRUE) {
+        lapply(x$get_dataset_connectors(), function(c) c$pull())
+
+        all_data <- lapply(
+          x$get_dataset_connectors(),
+          function(c) c$get_dataset()
+        )
+        if (return_cdisc_data) {
+          return(reactive(do.call(what = "cdisc_data", all_data)))
+        } else {
+          return(reactive(all_data))
+        }
+      }
+    )
+  } else {
+    # Set a reactive server
+    # that handsover ADSL after production to
+    # all other calls.
+    x$set_server_helper(
+      submit_id = "submit",
+      fun_args_fixed = list(seed = quote(input$seed))
+    )
+    x$set_server_info(
+      submit_id = "submit",
+      fun_args_fixed = list(seed = quote(input$seed))
+    )
+  }
+
 
   return(x)
 }
@@ -83,9 +143,10 @@ rcd_cdisc_data <- function(..., check = TRUE) {
 #' @return An object of class \code{DataConnector}
 #'
 #' @examples
+#' \dontrun{
 #' x <- rice_cdisc_data(
-#'   rice_cdisc_dataset_connector("ADSL", "/path/to/ADSL"),
-#'   rice_cdisc_dataset_connector("ADLB", "/path/to/ADLB")
+#'   rice_dataset_connector("ADSL", "/path/to/ADSL"),
+#'   rice_dataset_connector("ADLB", "/path/to/ADLB")
 #' )
 #' app <- init(
 #'   data = x,
@@ -103,7 +164,6 @@ rcd_cdisc_data <- function(..., check = TRUE) {
 #'   ),
 #'   header = tags$h1("Sample App")
 #' )
-#' \dontrun{
 #' shinyApp(app$ui, app$server)
 #' }
 rice_cdisc_data <- function(..., additional_ui = NULL) {

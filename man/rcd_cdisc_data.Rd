@@ -7,7 +7,8 @@
 rcd_cdisc_data(..., check = TRUE)
 }
 \arguments{
-\item{...}{(\code{DatasetConnector}) dataset connectors created using \link{rcd_dataset_connector}}
+\item{...}{(\code{DatasetConnector}) dataset connectors created using \link{rcd_dataset_connector}
+In case \code{cached = FALSE}, please watch the order and call \code{ADSL} generation first.}
 
 \item{check}{optional, (\code{logical}) whether perform reproducibility check}
 }
@@ -16,6 +17,16 @@ An object of class \code{RelationalDataConnector}
 }
 \description{
 Build data connector for \code{random.cdisc.data} functions or datasets
+}
+\details{
+This data connector can load data from \code{random.cdisc.data}. datasets can be loaded
+from a seed or cached. In case datasets should be loaded from cached the
+\link{rcd_cdisc_dataset_connector} needs to be used with the cached argument set
+to \code{TRUE} for all datasets.
+
+In case non-cached datasets should be used, please watch the order of datasets. Most
+of the datasets from \code{random.cdisc.data} need \code{ADSL} to be produced first. So
+please create the \code{ADSL} dataset first.
 }
 \examples{
 library(random.cdisc.data)

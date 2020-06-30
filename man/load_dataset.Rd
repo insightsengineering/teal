@@ -3,11 +3,14 @@
 \name{load_dataset}
 \alias{load_dataset}
 \alias{load_dataset.RawDatasetConnector}
+\alias{load_dataset.RelationalDatasetConnector}
 \title{Load data from connection}
 \usage{
-load_dataset(x, args, try)
+load_dataset(x, args, try, additional_args_list)
 
-\method{load_dataset}{RawDatasetConnector}(x, args = NULL, try = FALSE)
+\method{load_dataset}{RawDatasetConnector}(x, args = NULL, try = FALSE, additional_args_list = list())
+
+\method{load_dataset}{RelationalDatasetConnector}(x, args = NULL, try = FALSE, additional_args_list = list())
 }
 \arguments{
 \item{x}{(\code{RawDatasetConnector} or \code{RelationalDatasetConnection})}
@@ -16,6 +19,10 @@ load_dataset(x, args, try)
 additional dynamic arguments passed to function which loads the data.}
 
 \item{try}{(\code{logical}) whether perform function evaluation inside \code{try} clause}
+
+\item{additional_args_list}{(\code{list}) arguments that get used just if needed to call
+the pull function. This list can contain objects that are arguments of the pull functions,
+but also more objects that will be removed before the call.}
 }
 \value{
 \code{x} with loaded \code{dataset} object
@@ -26,8 +33,16 @@ Load data from connection. Function used on \link{RawDatasetConnector} and
 }
 \examples{
 
+\dontrun{
+x2 <- as_relational(x, dataname = "ADSL", keys = get_cdisc_keys("ADSL"))
+load_dataset(x2)
+}
 # RawDatasetConnector ---------
 library(random.cdisc.data)
 dc <- rcd_cdisc_dataset_connector(dataname = "ADSL", fun = radsl, cached = TRUE)
 load_dataset(dc)
+ADSL <- dc$get_dataset()$data
+
+dc <- rcd_cdisc_dataset_connector(dataname = "ADRS", fun = radrs, cached = FALSE)
+load_dataset(dc, additional_args_list = list(ADSL = ADSL))
 }

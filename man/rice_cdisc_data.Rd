@@ -18,9 +18,10 @@ An object of class \code{DataConnector}
 Build data connector for \code{RICE} datasets
 }
 \examples{
+\dontrun{
 x <- rice_cdisc_data(
-  rice_cdisc_dataset_connector("ADSL", "/path/to/ADSL"),
-  rice_cdisc_dataset_connector("ADLB", "/path/to/ADLB")
+  rice_dataset_connector("ADSL", "/path/to/ADSL"),
+  rice_dataset_connector("ADLB", "/path/to/ADLB")
 )
 app <- init(
   data = x,
@@ -38,7 +39,6 @@ app <- init(
   ),
   header = tags$h1("Sample App")
 )
-\dontrun{
 shinyApp(app$ui, app$server)
 }
 }

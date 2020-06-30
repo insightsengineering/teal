@@ -57,7 +57,6 @@ RelationalDataConnector <- R6::R6Class( #nolint
 
       invisible(self)
     },
-    #' @description
     #' Get names of the datasets.
     #'
     #' @return \code{character} vector with names of all datasets.
@@ -66,6 +65,7 @@ RelationalDataConnector <- R6::R6Class( #nolint
         vapply(private$datasets, get_dataname, character(1)),
         vapply(private$dataset_connectors, get_dataname, character(1))
       )
+
     },
     #' @description
     #'
@@ -372,26 +372,32 @@ RelationalDataConnector <- R6::R6Class( #nolint
           submit_id, progress
         )
       }
-      datasets <- vector("list", length(private$dataset_connectors))
-      names(datasets) <- names(private$dataset_connectors)
+
+      datasets <- list()
+      datanames <- self$get_datanames()
       for (i in seq_along(private$dataset_connectors)) {
         if_not_null(progress,
                     progress$set(0.2 + 0.4 * (i - 1) / length(private$dataset_connectors),
-                                 message = "Loading data ..."))
-        set_args(x = private$dataset_connectors[[i]],
-                 args = fun_args_fixed)
+                                 message = paste0("Loading data '",
+                                                  private$dataset_connectors[[i]]$get_dataname(), "' ...")))
+
+        set_args(
+          x = private$dataset_connectors[[i]],
+          args = fun_args_fixed
+        )
 
         dataset <- private$stop_on_error(
           get_dataset(
             load_dataset(
               private$dataset_connectors[[i]],
               args = fun_args_dynamic,
-              try = try
+              try = try,
+              additional_args_list = lapply(datanames, function(x) datasets[[x]]$data)
             )
           ),
           submit_id, progress
         )
-        datasets[[i]] <- dataset
+        datasets[[datanames[i]]] <- dataset
       }
 
       private$dataset_connectors <- NULL

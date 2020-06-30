@@ -140,9 +140,21 @@ RelationalDatasetConnector <- R6::R6Class( #nolint
     #' \code{x$pull_fun$get_code()}. \code{args} specified in pull are used temporary to get data but
     #' not saved in code.
     #' @param try (\code{logical}) whether perform function evaluation inside \code{try} clause
+    #' @param additional_args_list (\code{list}) arguments that get used just if needed to call
+    #'   the pull function. This list can contain objects that are arguments of the pull functions,
+    #'   but also more objects that will be removed before the call.
     #'
     #' @return nothing, in order to get the data please use \code{get_data} method
-    pull = function(args = NULL, try = FALSE) {
+    pull = function(args = NULL, try = FALSE, additional_args_list = list()) {
+
+      additional_args <- intersect(names(additional_args_list), private$pull_fun$get_possible_args())
+      if (length(additional_args) > 0) {
+        args <- c(
+          args,
+          sapply(additional_args, function(x) additional_args_list[[x]], USE.NAMES = TRUE, simplify = FALSE)
+        )
+        private$additional_args <- additional_args
+      }
       if (is.null(args)) {
         data <- private$pull_fun$run(try = try)
       } else {
@@ -165,6 +177,12 @@ RelationalDatasetConnector <- R6::R6Class( #nolint
       }
 
       return(invisible(self))
+    },
+    #' @description
+    #'
+    #' Derive the arguments this connector will pull with
+    get_pull_args = function() {
+      private$pull_fun$get_args()
     }
   ),
 
@@ -174,9 +192,18 @@ RelationalDatasetConnector <- R6::R6Class( #nolint
     keys = NULL,
     dataset_label = character(0),
     mutate_code = NULL,
-
+    additional_args = character(0),
     # assigns the pull code call to the dataname
     get_pull_code = function(deparse = TRUE, args = NULL) {
+
+      # For addtional arguments, add them as call by reference object
+      # in case private$additional_args is "ADSL" we add pull_fun(..., ADSL = ADSL)
+      if (length(private$additional_args) > 0) {
+        args <- c(
+          args,
+          sapply(private$additional_args, as.name, USE.NAMES = TRUE, simplify = FALSE)
+        )
+      }
       code <- if (deparse) {
         sprintf("%s <- %s",
                 private$dataname,

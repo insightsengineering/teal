@@ -30,6 +30,7 @@ Pulled data inherits from the class \link{RelationalDataset}.
 \item \href{#method-get_code}{\code{RelationalDatasetConnector$get_code()}}
 \item \href{#method-mutate_dataset}{\code{RelationalDatasetConnector$mutate_dataset()}}
 \item \href{#method-pull}{\code{RelationalDatasetConnector$pull()}}
+\item \href{#method-get_pull_args}{\code{RelationalDatasetConnector$get_pull_args()}}
 \item \href{#method-clone}{\code{RelationalDatasetConnector$clone()}}
 }
 }
@@ -45,7 +46,6 @@ Pulled data inherits from the class \link{RelationalDataset}.
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-new"></a>}}
-\if{latex}{\out{\hypertarget{method-new}{}}}
 \subsection{Method \code{new()}}{
 Create a new \code{RelationalDatasetConnector} object. Set the pulling function
 load the data. \code{dataname} will be used as name
@@ -86,7 +86,6 @@ new \code{RawDatasetConnector} object
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-get_dataname"></a>}}
-\if{latex}{\out{\hypertarget{method-get_dataname}{}}}
 \subsection{Method \code{get_dataname()}}{
 Get dataname of dataset
 \subsection{Usage}{
@@ -99,7 +98,6 @@ dataname of the dataset
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-get_keys"></a>}}
-\if{latex}{\out{\hypertarget{method-get_keys}{}}}
 \subsection{Method \code{get_keys()}}{
 Get keys of dataset
 \subsection{Usage}{
@@ -112,7 +110,6 @@ Get keys of dataset
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-get_dataset_label"></a>}}
-\if{latex}{\out{\hypertarget{method-get_dataset_label}{}}}
 \subsection{Method \code{get_dataset_label()}}{
 Get label of dataset
 \subsection{Usage}{
@@ -125,7 +122,6 @@ Get label of dataset
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-set_dataset_label"></a>}}
-\if{latex}{\out{\hypertarget{method-set_dataset_label}{}}}
 \subsection{Method \code{set_dataset_label()}}{
 Set label of the \code{dataset} object
 \subsection{Usage}{
@@ -143,7 +139,6 @@ Label to describe the dataset}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-get_code"></a>}}
-\if{latex}{\out{\hypertarget{method-get_code}{}}}
 \subsection{Method \code{get_code()}}{
 Get code to get data
 \subsection{Usage}{
@@ -167,7 +162,6 @@ optionally deparsed \code{call} object
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-mutate_dataset"></a>}}
-\if{latex}{\out{\hypertarget{method-mutate_dataset}{}}}
 \subsection{Method \code{mutate_dataset()}}{
 Mutate dataset by code
 
@@ -187,13 +181,16 @@ Either code or script must be provided, but not both.
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-pull"></a>}}
-\if{latex}{\out{\hypertarget{method-pull}{}}}
 \subsection{Method \code{pull()}}{
 Pull the data
 
 Read or create the data using \code{pull_fun} specified in the constructor.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{RelationalDatasetConnector$pull(args = NULL, try = FALSE)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{RelationalDatasetConnector$pull(
+  args = NULL,
+  try = FALSE,
+  additional_args_list = list()
+)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
@@ -207,6 +204,10 @@ to execute \code{pull_fun} directly by \code{x$pull_fun$run()} or to get code us
 not saved in code.}
 
 \item{\code{try}}{(\code{logical}) whether perform function evaluation inside \code{try} clause}
+
+\item{\code{additional_args_list}}{(\code{list}) arguments that get used just if needed to call
+the pull function. This list can contain objects that are arguments of the pull functions,
+but also more objects that will be removed before the call.}
 }
 \if{html}{\out{</div>}}
 }
@@ -215,8 +216,16 @@ nothing, in order to get the data please use \code{get_data} method
 }
 }
 \if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-get_pull_args"></a>}}
+\subsection{Method \code{get_pull_args()}}{
+Derive the arguments this connector will pull with
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{RelationalDatasetConnector$get_pull_args()}\if{html}{\out{</div>}}
+}
+
+}
+\if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-clone"></a>}}
-\if{latex}{\out{\hypertarget{method-clone}{}}}
 \subsection{Method \code{clone()}}{
 The objects of this class are cloneable with this method.
 \subsection{Usage}{

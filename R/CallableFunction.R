@@ -26,6 +26,8 @@ CallableFunction <- R6::R6Class( #nolint
     #' @param args (\code{NULL} or named \code{list}) dynamic arguments to function
     #' @param try (\code{logical}) whether perform function evaluation inside \code{try} clause
     #'
+    #' @importFrom withr with_environment
+    #'
     #' @return nothing or output from function depending on \code{return} argument
     run = function(return = TRUE, args = NULL, try = FALSE) {
       stopifnot(is_logical_single(return))
@@ -109,6 +111,13 @@ CallableFunction <- R6::R6Class( #nolint
       return(invisible(NULL))
     },
     #' @description
+    #' get the arguments a function gets called with
+    #'
+    #' @return arguments the function gets called with
+    get_args = function() {
+      private$.args
+    },
+    #' @description
     #' Set up single function argument with value
     #'
     #' @param name (\code{character}) argument name
@@ -120,6 +129,13 @@ CallableFunction <- R6::R6Class( #nolint
       private$.args[[name]] <- value
       self$refresh()
       return(invisible(NULL))
+    },
+    #' @description
+    #' Get the arguments this call can run with
+    #'
+    #' @return character vector with the names of the arguments
+    get_possible_args = function() {
+      names(formals(private$.fun_name))
     }
   ),
   private = list(

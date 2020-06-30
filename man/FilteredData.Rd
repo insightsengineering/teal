@@ -137,7 +137,6 @@ isolate({
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-new"></a>}}
-\if{latex}{\out{\hypertarget{method-new}{}}}
 \subsection{Method \code{new()}}{
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{FilteredData$new()}\if{html}{\out{</div>}}
@@ -150,7 +149,6 @@ Initialize a FilteredData object
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-datanames"></a>}}
-\if{latex}{\out{\hypertarget{method-datanames}{}}}
 \subsection{Method \code{datanames()}}{
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{FilteredData$datanames()}\if{html}{\out{</div>}}
@@ -166,7 +164,6 @@ Get datanames, ADSL appears first
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-get_data"></a>}}
-\if{latex}{\out{\hypertarget{method-get_data}{}}}
 \subsection{Method \code{get_data()}}{
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{FilteredData$get_data(dataname, filtered = TRUE)}\if{html}{\out{</div>}}
@@ -191,7 +188,6 @@ For \code{filtered = FALSE}, the original data set with
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-set_data"></a>}}
-\if{latex}{\out{\hypertarget{method-set_data}{}}}
 \subsection{Method \code{set_data()}}{
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{FilteredData$set_data(dataname, data)}\if{html}{\out{</div>}}
@@ -228,7 +224,6 @@ either \code{NULL} or contains labels for all variables.
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-get_preproc_code"></a>}}
-\if{latex}{\out{\hypertarget{method-get_preproc_code}{}}}
 \subsection{Method \code{get_preproc_code()}}{
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{FilteredData$get_preproc_code()}\if{html}{\out{</div>}}
@@ -244,7 +239,6 @@ Get the R preprocessing code string that generates the unfiltered datasets
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-set_preproc_code"></a>}}
-\if{latex}{\out{\hypertarget{method-set_preproc_code}{}}}
 \subsection{Method \code{set_preproc_code()}}{
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{FilteredData$set_preproc_code(preproc_code)}\if{html}{\out{</div>}}
@@ -268,7 +262,6 @@ Set the R preprocessing code to generate the unfiltered datasets
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-get_data_attr"></a>}}
-\if{latex}{\out{\hypertarget{method-get_data_attr}{}}}
 \subsection{Method \code{get_data_attr()}}{
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{FilteredData$get_data_attr(dataname, attr)}\if{html}{\out{</div>}}
@@ -296,7 +289,6 @@ value of attribute, may be NULL if it does not exist
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-set_data_attr"></a>}}
-\if{latex}{\out{\hypertarget{method-set_data_attr}{}}}
 \subsection{Method \code{set_data_attr()}}{
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{FilteredData$set_data_attr(dataname, attr, value)}\if{html}{\out{</div>}}
@@ -323,7 +315,6 @@ Set data attribute for the dataset
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-get_variable_labels"></a>}}
-\if{latex}{\out{\hypertarget{method-get_variable_labels}{}}}
 \subsection{Method \code{get_variable_labels()}}{
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{FilteredData$get_variable_labels(dataname, variables = NULL)}\if{html}{\out{</div>}}
@@ -355,7 +346,6 @@ Get keys for the dataset
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-get_keys"></a>}}
-\if{latex}{\out{\hypertarget{method-get_keys}{}}}
 \subsection{Method \code{get_keys()}}{
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{FilteredData$get_keys(dataname)}\if{html}{\out{</div>}}
@@ -377,7 +367,6 @@ Useful to display in \verb{Show R Code}.
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-get_datalabel"></a>}}
-\if{latex}{\out{\hypertarget{method-get_datalabel}{}}}
 \subsection{Method \code{get_datalabel()}}{
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{FilteredData$get_datalabel(dataname)}\if{html}{\out{</div>}}
@@ -396,7 +385,6 @@ Useful to display in \verb{Show R Code}.
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-get_filter_info"></a>}}
-\if{latex}{\out{\hypertarget{method-get_filter_info}{}}}
 \subsection{Method \code{get_filter_info()}}{
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{FilteredData$get_filter_info(dataname, varname = NULL, all_vars = FALSE)}\if{html}{\out{</div>}}
@@ -427,7 +415,6 @@ This can be used to see how the variable must be filtered.
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-get_filter_type"></a>}}
-\if{latex}{\out{\hypertarget{method-get_filter_type}{}}}
 \subsection{Method \code{get_filter_type()}}{
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{FilteredData$get_filter_type(dataname, varname)}\if{html}{\out{</div>}}
@@ -453,7 +440,6 @@ See \code{get_filter_info}, only returns filter type (\code{choices}, \code{rang
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-get_filter_state"></a>}}
-\if{latex}{\out{\hypertarget{method-get_filter_state}{}}}
 \subsection{Method \code{get_filter_state()}}{
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{FilteredData$get_filter_state(dataname, varname = NULL)}\if{html}{\out{</div>}}
@@ -479,7 +465,6 @@ Filter state for a dataset (or only a variable within it).
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-set_filter_state"></a>}}
-\if{latex}{\out{\hypertarget{method-set_filter_state}{}}}
 \subsection{Method \code{set_filter_state()}}{
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{FilteredData$set_filter_state(dataname, state, remove_omitted = FALSE)}\if{html}{\out{</div>}}
@@ -519,7 +504,6 @@ To remove all filters for a dataset, call
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-get_default_filter_state"></a>}}
-\if{latex}{\out{\hypertarget{method-get_default_filter_state}{}}}
 \subsection{Method \code{get_default_filter_state()}}{
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{FilteredData$get_default_filter_state(dataname, varname)}\if{html}{\out{</div>}}
@@ -548,7 +532,6 @@ for numerics, full range; for factors, all choices etc.
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-is_filterable"></a>}}
-\if{latex}{\out{\hypertarget{method-is_filterable}{}}}
 \subsection{Method \code{is_filterable()}}{
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{FilteredData$is_filterable(dataname, varname)}\if{html}{\out{</div>}}
@@ -574,7 +557,6 @@ whether the variable can be filtered (type not unknown)
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-get_filter_expr"></a>}}
-\if{latex}{\out{\hypertarget{method-get_filter_expr}{}}}
 \subsection{Method \code{get_filter_expr()}}{
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{FilteredData$get_filter_expr(dataname)}\if{html}{\out{</div>}}
@@ -610,7 +592,6 @@ capturing a function call).
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-print"></a>}}
-\if{latex}{\out{\hypertarget{method-print}{}}}
 \subsection{Method \code{print()}}{
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{FilteredData$print(...)}\if{html}{\out{</div>}}
@@ -633,7 +614,6 @@ use \code{cat(format(x))}.
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-print_filter_info"></a>}}
-\if{latex}{\out{\hypertarget{method-print_filter_info}{}}}
 \subsection{Method \code{print_filter_info()}}{
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{FilteredData$print_filter_info(
@@ -666,7 +646,6 @@ console.
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-get_data_info"></a>}}
-\if{latex}{\out{\hypertarget{method-get_data_info}{}}}
 \subsection{Method \code{get_data_info()}}{
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{FilteredData$get_data_info(dataname, filtered)}\if{html}{\out{</div>}}
@@ -697,7 +676,6 @@ Returns the state to be bookmarked
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-get_bookmark_state"></a>}}
-\if{latex}{\out{\hypertarget{method-get_bookmark_state}{}}}
 \subsection{Method \code{get_bookmark_state()}}{
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{FilteredData$get_bookmark_state()}\if{html}{\out{</div>}}
@@ -718,7 +696,6 @@ class may be used outside of a Shiny app.
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-restore_state_from_bookmark"></a>}}
-\if{latex}{\out{\hypertarget{method-restore_state_from_bookmark}{}}}
 \subsection{Method \code{restore_state_from_bookmark()}}{
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{FilteredData$restore_state_from_bookmark(state, check_data_md5sums = TRUE)}\if{html}{\out{</div>}}
@@ -738,7 +715,6 @@ for the data; may not make sense with randomly generated data per session}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-clone"></a>}}
-\if{latex}{\out{\hypertarget{method-clone}{}}}
 \subsection{Method \code{clone()}}{
 The objects of this class are cloneable with this method.
 \subsection{Usage}{
