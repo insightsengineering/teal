@@ -480,6 +480,7 @@ FilteredData <- R6::R6Class( # nolint
         choices = list(choices = unlist(unname(filter_info$choices))),
         range = list(range = unlist(unname(filter_info$range))),
         logical = list(status = "TRUE"),
+        integer_flag = list(choices = unlist(unname(filter_info$choices))),
         stop("unknown type")
       )
       return(c(state, list(keep_na = FALSE)))
@@ -958,6 +959,10 @@ FilteredData <- R6::R6Class( # nolint
           stopifnot(length(selection_state) == 1)
           check_in_subset(selection_state, var_info$choices, pre_msg = pre_msg)
         },
+        integer_flag = {
+          selection_state <- var_state$choices
+          check_in_subset(selection_state, var_info$choices, pre_msg = pre_msg)
+        },
         stop(paste("Unknown filter type", var_info$type, "for data", dataname, "and variable", varname))
       )
       return(invisible(NULL))
@@ -1013,6 +1018,14 @@ FilteredData <- R6::R6Class( # nolint
                   " for logical var ", varname, " in data", dataname
                 )
               )
+            },
+            integer_flag = {
+              selection_state <- filter_state$choices
+              if (length(selection_state) == 1) {
+                call("==", as.name(varname), as.integer(selection_state))
+              } else {
+                call("%in%", as.name(varname), as.integer(selection_state))
+              }
             },
             stop(paste("filter type for variable", varname, "in", dataname, "not known"))
           )
@@ -1130,6 +1143,18 @@ FilteredData <- R6::R6Class( # nolint
               choices = as.list(choices), # convert named vector to named list as Shiny `toJSON` otherwise complains
               histogram_data = histogram_data
             )
+          } else if  (is.integer(var) && length(unique(var[!is.na(var)])) < .threshold_slider_vs_checkboxgroup) {
+            count_table <- table(var)
+            choices <- names(count_table)
+            names(choices) <- paste0(names(count_table), " (", as.vector(count_table), ")")
+
+            list(
+              type = "integer_flag",
+              label = if_null(attr(var, "label"), ""),
+              choices = as.list(choices),
+              histogram_data = data.frame(x = names(count_table), y = as.vector(count_table))
+            )
+
           } else if (is.numeric(var)) {
             density <- stats::density(var, na.rm = TRUE, n = 100) # 100 bins only
             list(
