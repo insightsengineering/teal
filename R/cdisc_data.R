@@ -485,3 +485,83 @@ get_check_note_string <- function() {
   filename_check <- get_package_file("teal", "check_false_string.txt") # nolint
   readChar(filename_check, file.info(filename_check)$size)
 }
+
+#' Load \code{cdisc_data} object from a file
+#'
+#' @param x A (\code{connection}) or a (\code{character}) string giving the pathname
+#'   of the file or URL to read from. "" indicates the connection \code{stdin}.
+#'
+#' @return \code{cdisc_data} object if file returns a \code{cdisc_data}
+#'   object.
+#' @export
+#'
+#' @examples
+#' file_example <- tempfile(fileext = ".R")
+#' writeLines(
+#'   text = c(
+#'     "library(random.cdisc.data)
+#'
+#'      ADSL <- radsl(cached = TRUE)
+#'      ADTTE <- radtte(ADSL, cached = TRUE)
+#'
+#'      cdisc_data(
+#'           cdisc_dataset(\"ADSL\", ADSL), cdisc_dataset(\"ADTTE\", ADTTE),
+#'           code = \"ADSL <- radsl(cached = TRUE)
+#'                   ADTTE <- radtte(ADSL, cached = TRUE)\",
+#'           check = FALSE
+#'      )"
+#'   ),
+#'   con = file_example
+#' )
+#'
+#' cdisc_data_file(file_example)
+#'
+#' @importFrom methods is
+cdisc_data_file <- function(x) {
+
+  code <- readLines(x)
+  object <- eval(parse(text = code))
+
+  if (is(object, "cdisc_data")) {
+    return(object)
+  } else {
+    stop("The object returned from the file is not a cdisc_data object.")
+  }
+}
+
+#' Load \code{RelationalDataset} object from a file
+#'
+#' @param x A (\code{connection}) or a (\code{character}) string giving the pathname
+#'   of the file or URL to read from. "" indicates the connection \code{stdin}.
+#'
+#' @return \code{RelationalDataset} object if file returns a \code{RelationalDataset}
+#'   object.
+#' @export
+#'
+#' @examples
+#' file_example <- tempfile(fileext = ".R")
+#' writeLines(
+#'   text = c(
+#'     "library(random.cdisc.data)
+#'
+#'      cdisc_dataset(dataname = \"ADSL\", # RelationalDataset
+#'                    data = radsl(cached = TRUE),
+#'                    code = \"library(random.cdisc.data)\nADSL <- radsl(cached = TRUE)\")"
+#'   ),
+#'   con = file_example
+#' )
+#'
+#' cdisc_dataset_file(file_example)
+#'
+#' @importFrom methods is
+cdisc_dataset_file <- function(x) {
+
+  code <- readLines(x)
+  object <- eval(parse(text = code))
+
+  if (is(object, "RelationalDataset")) {
+    return(object)
+  } else {
+    stop("The object returned from the file is not a RelationalDataset object.")
+  }
+}

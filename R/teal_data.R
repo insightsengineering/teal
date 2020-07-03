@@ -66,3 +66,55 @@ teal_data <- function(...) {
 
   return(teal_data)
 }
+
+
+all_relational_dataset <- function(x) {
+  all(
+    vapply(x, FUN = is, FUN.VALUE = logical(1), class2 = "RelationalDataset")
+  )
+}
+
+#' Load \code{RelationalData} object from a file
+#'
+#' @param x A (\code{connection}) or a (\code{character}) string giving the pathname
+#'   of the file or URL to read from. "" indicates the connection \code{stdin}.
+#'
+#' @return \code{RelationalData} object if file returns a \code{RelationalData}
+#'   object.
+#' @export
+#'
+#' @examples
+#' file_example <- tempfile(fileext = ".R")
+#' writeLines(
+#'   text = c(
+#'     "library(teal)
+#'      library(random.cdisc.data)
+#'      library(dplyr)
+#'
+#'      adsl <- cdisc_dataset(dataname = \"ADSL\", # RelationalDataset
+#'                            data = radsl(cached = TRUE),
+#'                            code = \"library(random.cdisc.data)\nADSL <- radsl(cached = TRUE)\")
+#'
+#'      adtte <- cdisc_dataset(dataname = \"ADTTE\", # RelationalDataset
+#'                             data = radtte(cached = TRUE),
+#'                             code = \"library(random.cdisc.data)\nADTTE <- radtte(cached = TRUE)\")
+#'
+#'      teal_data(adsl, adtte)"
+#'   ),
+#'   con = file_example
+#' )
+#'
+#' teal_data_file(file_example)
+#'
+#' @importFrom methods is
+teal_data_file <- function(x) {
+
+  code <- readLines(x)
+  object <- eval(parse(text = code))
+
+  if (is(object, "RelationalData")) {
+    return(object)
+  } else {
+    stop("The object returned from the file is not a RelationalData object.")
+  }
+}
