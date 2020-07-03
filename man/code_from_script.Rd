@@ -4,7 +4,7 @@
 \alias{code_from_script}
 \title{Get code from script}
 \usage{
-code_from_script(code, script)
+code_from_script(code, script, dataname = NULL)
 }
 \arguments{
 \item{code}{(\code{character})\cr
@@ -13,6 +13,9 @@ A character string defining the code needed to produce the data set in \code{x}}
 \item{script}{(\code{character})\cr
 file that contains R Code that can be read using \link{read_script}.
 Preferred before \code{code} argument}
+
+\item{dataname}{(\code{character})\cr
+A given name for the dataset it may not contain spaces}
 }
 \value{
 code (\code{character})

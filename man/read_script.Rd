@@ -4,10 +4,12 @@
 \alias{read_script}
 \title{Read .R file into character}
 \usage{
-read_script(file)
+read_script(file, dataname = NULL)
 }
 \arguments{
 \item{file}{(\code{character}) File to be parsed into code}
+
+\item{dataname}{(\code{character}) dataset name to subset code from chunks}
 }
 \value{
 character vector withe the code

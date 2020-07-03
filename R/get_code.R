@@ -9,6 +9,16 @@
 #'   }
 #' }
 #' \code{library()} or \code{require()} calls. Function created for teal app, but can be used with any file.
+#' Get code from certain files and for specific datasets
+#'
+#' Reads code from specified files and specific code chunks.
+#'
+#' Code chunks are described with:
+#'
+#' \itemize{
+#'   \item{to open chunk }{\code{#code>} or \code{#code ADSL>} or \code{#code ADSL ADTTE>}}
+#'   \item{to close chunk }{\code{#<code} or \code{#<ADSL code} or \code{#<ADSL ADTTE code}}
+#' }
 #'
 #' @param x (\code{object}) of class\link{RawDatasetConnector} or \link{NamedDataset}. If of
 #'   class \code{character} will be treated as file to read.
@@ -53,17 +63,19 @@ get_code.NamedDataset <- function(x, deparse = TRUE, ...) {
 #' ADTTE <- cadtte # or: radtte(ADSL, seed = 123)
 #'
 #' # Example with keys
-#' cd = cdisc_data(
+#' cd <- cdisc_data(
 #'   cdisc_dataset("ADSL", ADSL, keys = keys(
 #'     primary = c("STUDYID", "USUBJID"),
 #'     foreign = NULL,
 #'     parent = NULL
 #'   )),
-#'   cdisc_dataset("ADTTE", ADTTE, keys = keys(
-#'     primary = c("STUDYID", "USUBJID", "PARAMCD"),
-#'     foreign = c("STUDYID", "USUBJID"),
-#'     parent = "ADSL"),
-#'     code =  "ADTTE <- radtte(ADSL, seed = 123)"
+#'   cdisc_dataset("ADTTE", ADTTE,
+#'     keys = keys(
+#'       primary = c("STUDYID", "USUBJID", "PARAMCD"),
+#'       foreign = c("STUDYID", "USUBJID"),
+#'       parent = "ADSL"
+#'     ),
+#'     code = "ADTTE <- radtte(ADSL, seed = 123)"
 #'   ),
 #'   code = "ADSL <- radsl(N = 600, seed = 123)",
 #'   check = FALSE
@@ -75,21 +87,20 @@ get_code.NamedDataset <- function(x, deparse = TRUE, ...) {
 #'
 #' get_code(cd, "ADSL")
 get_code.cdisc_data <- function(x, dataname = NULL, deparse = FALSE, ...) {
-
-  datasets_names  <- names(x)
+  datasets_names <- names(x)
 
   if (is.null(dataname)) {
     if (deparse) {
       paste0(deparse(attr(x, "code"), width.cutoff = 80L), collapse = "\n")
-      } else {
-        attr(x, "code")
-        }
-    } else if (dataname %in% datasets_names) {
-      x[[dataname]]$get_code()
-      } else {
-        return(invisible(NULL))
-      }
+    } else {
+      attr(x, "code")
+    }
+  } else if (dataname %in% datasets_names) {
+    x[[dataname]]$get_code()
+  } else {
+    return(invisible(NULL))
   }
+}
 
 
 #' @rdname get_code
@@ -134,19 +145,20 @@ get_code.RelationalData <- function(x, dataname = NULL, deparse = TRUE, ...) { #
       stop("The dataname provided does not exist")
     }
     x$get_code()[[dataname]]
-
   } else {
     x$get_code()
-    }
   }
+}
 
 #' @rdname get_code
 #' @export
 #' @examples
 #' library(random.cdisc.data)
-#' rcd <- rcd_cdisc_data(rcd_cdisc_dataset_connector("ADSL", radsl, cached = TRUE),
-#'                       rcd_cdisc_dataset_connector("ADLB", radlb, cached = TRUE),
-#'                       rcd_cdisc_dataset_connector("ADRS", radrs, cached = TRUE))
+#' rcd <- rcd_cdisc_data(
+#'   rcd_cdisc_dataset_connector("ADSL", radsl, cached = TRUE),
+#'   rcd_cdisc_dataset_connector("ADLB", radlb, cached = TRUE),
+#'   rcd_cdisc_dataset_connector("ADRS", radrs, cached = TRUE)
+#' )
 #'
 #' # return invisibly NULL
 #' get_code(rcd, "WrongName")
@@ -155,8 +167,7 @@ get_code.RelationalData <- function(x, dataname = NULL, deparse = TRUE, ...) { #
 #' get_code(rcd)
 #' get_code(rcd, "ADSL")
 #' get_code(rcd, "ADLB")
-#'
-#'\dontrun{
+#' \dontrun{
 #' load_datasets(rcd)
 #' get_code(rcd)
 #' get_code(rcd, "ADSL")
@@ -168,9 +179,9 @@ get_code.RelationalDataConnector <- function(x, dataname = NULL, deparse = TRUE,
 
   if (!is.null(dataname) && dataname %in% names_all) {
     code_all[[dataname]]
-    } else if (!is.null(dataname) && !(dataname %in% names_all)) {
+  } else if (!is.null(dataname) && !(dataname %in% names_all)) {
     return(invisible(NULL))
-    } else {
+  } else {
     code_all
   }
 }
@@ -209,8 +220,7 @@ get_code.RelationalDataConnector <- function(x, dataname = NULL, deparse = TRUE,
 #' get_code(tc, "ADLB")
 #' get_code(tc, "ADTTE")
 #' get_code(tc, "ADAE")
-#'
-#'\dontrun{
+#' \dontrun{
 #' load_datasets(tc)
 #'
 #' get_code(tc, "ADSL")
@@ -222,11 +232,11 @@ get_code.DelayedRelationalData <- function(x, dataname = NULL, deparse = TRUE, .
 
   code_all <- x$get_code()
   names_all <- x$get_datanames()
-  if (!is.null(dataname) &&  dataname %in% names_all) {
+  if (!is.null(dataname) && dataname %in% names_all) {
     code_all[[dataname]]
-    } else if (!is.null(dataname) && !(dataname %in% names_all)) {
+  } else if (!is.null(dataname) && !(dataname %in% names_all)) {
     return(invisible(NULL))
-    } else {
+  } else {
     code_all
   }
 }
@@ -238,7 +248,11 @@ get_code.DelayedRelationalData <- function(x, dataname = NULL, deparse = TRUE, .
 #' @importFrom magrittr %>%
 get_code.default <- function(x,
                              exclude_comments = TRUE,
-                             read_sources = TRUE, deparse = FALSE, files_path = NULL, ...) {
+                             read_sources = TRUE,
+                             deparse = FALSE,
+                             files_path = NULL,
+                             dataname = NULL,
+                             ...) {
   if (!is.null(files_path)) {
     x <- files_path
   }
@@ -247,12 +261,21 @@ get_code.default <- function(x,
   stopifnot(is_logical_single(exclude_comments))
   stopifnot(is_logical_single(read_sources))
 
-  lines <- lapply(x, function(file_path) {
-    get_code_single(file_path, read_sources = read_sources) %>%
-      enclosed_with() %>%
-      code_exclude(lines, exclude_comments = exclude_comments)
-  }) %>%
-    unlist()
+  if (!hasArg(dataname)) {
+    l_lines <- lapply(x, function(file_path) {
+      get_code_single(file_path, read_sources = read_sources) %>%
+        enclosed_with() %>%
+        code_exclude(lines, exclude_comments = exclude_comments)
+    })
+  } else {
+    l_lines <- lapply(x, function(file_path) {
+      get_code_single(file_path, read_sources = read_sources) %>%
+        enclosed_with_dataname(dataname = dataname) %>%
+        code_exclude(lines, exclude_comments = exclude_comments)
+    })
+  }
+
+  lines <- l_lines %>% unlist()
 
   if (deparse) {
     return(paste(
@@ -272,6 +295,8 @@ get_code.default <- function(x,
     return(paste(lines, collapse = "\n"))
   }
 }
+
+
 
 # * Sub functions for getting code from files ====
 
@@ -339,6 +364,63 @@ enclosed_with <- function(lines) {
   line_numbers <- seq(line_starts, line_stops)
 
   lines[line_numbers]
+}
+
+#' Get code enclosed within
+#'
+#' Extracts lines from code which are enclosed within regexp starts_at and stops_at
+#' @param lines (\code{character}) of preprocessing code.
+#' @param dataname (\code{character}) metadata for returned lines
+#' @return  (\code{list}) list of lines and their numbers from certain chunks of code at the specific file.
+enclosed_with_dataname <- function(lines, dataname = NULL) {
+  stopifnot(is_character_vector(lines))
+  dataname <- if_blank(dataname, "")
+  dataname <- trimws(dataname)
+
+  any_chunk <- any(grepl("#\\s*<?\\s*code", lines))
+
+
+  if (any_chunk) {
+    any_start <- any(grepl(sprintf("#\\s*code[\\sa-zA-Z_]*%s[\\sa-zA-Z_]*>", dataname), lines, perl = TRUE))
+    any_stop <- any(grepl(sprintf("#\\s*<[\\sa-zA-Z_]*%s[\\sa-zA-Z_]*(?<![a-zA-Z])code", dataname), lines, perl = TRUE))
+
+    if (!(any_start && any_stop)) {
+      stop(sprintf("File doesn't contain code marked for this %1$s.\n
+                   Please use # code %1$s> to indicate which lines should be extracted.", dataname))
+    }
+  }
+
+  # set beginning of preprocessing
+  idx_start <- grep(sprintf("#\\s*code(?:[\\sa-zA-Z_]*%s[\\sa-zA-Z_]*|[\\s]*)>", dataname), lines, perl = TRUE)
+  line_starts <- if (length(idx_start) >= 1) {
+    idx_start + 1
+  } else {
+    1L
+  }
+
+  # set stop of preprocessing
+  idx_stop <- grep(sprintf("#\\s*<(?:[\\sa-zA-Z_]*%s[\\sa-zA-Z_]*|[\\s]*)(?<![a-zA-Z])code", dataname),
+                   lines, perl = TRUE)
+  line_stops <- if (length(idx_stop) >= 1) {
+    idx_stop - 1
+  } else {
+    length(lines)
+  }
+
+  if (length(line_starts) != length(line_stops) || any(line_starts > line_stops)) {
+    stop("Number of #code> has to be the same as #<code")
+  }
+
+
+  ll <- data.frame(line_starts, line_stops)
+
+  line_numbers <- apply(ll, 1, function(x) seq(x[1], x[2]))
+
+  lines_taken <- as.integer(unlist(line_numbers))
+
+  res_lines <- lines[lines_taken]
+
+  return(res_lines)
 }
 
 #' Exclude from code
@@ -478,10 +560,10 @@ read_lib_names <- function(lines) {
     return(character())
   }
   lib_names <- gsub("[\"\'\\)\\(]",
-                    "",
-                    regmatches(lib_calls, gregexpr("\\(.*?\\)", lib_calls)),
-                    perl = TRUE
-                    )
+    "",
+    regmatches(lib_calls, gregexpr("\\(.*?\\)", lib_calls)),
+    perl = TRUE
+  )
 
   lib_names
 }
@@ -491,7 +573,7 @@ read_lib_names <- function(lines) {
 #' Comments will be excluded
 #'
 #' @param file (\code{character}) File to be parsed into code
-#'
+#' @param dataname (\code{character}) dataset name to subset code from chunks
 #' @return character vector withe the code
 #'
 #' @export
@@ -500,10 +582,11 @@ read_lib_names <- function(lines) {
 #' writeLines(c("x <- 2", "#second line comment", "x <- x + 2"), file_example)
 #'
 #' read_script(file_example)
-read_script <- function(file) {
+read_script <- function(file, dataname = NULL) {
   stopifnot(is_character_single(file))
   stopifnot(file.exists(file))
   get_code_single(file, read_sources = TRUE) %>%
+    enclosed_with_dataname(dataname = dataname) %>%
     code_exclude(exclude_comments = TRUE) %>%
     paste(sep = "\n", collapse = "\n")
 }

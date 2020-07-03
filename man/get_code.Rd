@@ -31,6 +31,7 @@ get_code(x, ...)
   read_sources = TRUE,
   deparse = FALSE,
   files_path = NULL,
+  dataname = NULL,
   ...
 )
 }
@@ -68,6 +69,16 @@ Reads code from specified files or an R6 object.
   }
 }
 \code{library()} or \code{require()} calls. Function created for teal app, but can be used with any file.
+Get code from certain files and for specific datasets
+
+Reads code from specified files and specific code chunks.
+
+Code chunks are described with:
+
+\itemize{
+  \item{to open chunk }{\code{#code>} or \code{#code ADSL>} or \code{#code ADSL ADTTE>}}
+  \item{to close chunk }{\code{#<code} or \code{#<ADSL code} or \code{#<ADSL ADTTE code}}
+}
 }
 \examples{
 library(random.cdisc.data)
@@ -76,17 +87,19 @@ ADSL <- cadsl # or: radsl(N = 600, seed = 123)
 ADTTE <- cadtte # or: radtte(ADSL, seed = 123)
 
 # Example with keys
-cd = cdisc_data(
+cd <- cdisc_data(
   cdisc_dataset("ADSL", ADSL, keys = keys(
     primary = c("STUDYID", "USUBJID"),
     foreign = NULL,
     parent = NULL
   )),
-  cdisc_dataset("ADTTE", ADTTE, keys = keys(
-    primary = c("STUDYID", "USUBJID", "PARAMCD"),
-    foreign = c("STUDYID", "USUBJID"),
-    parent = "ADSL"),
-    code =  "ADTTE <- radtte(ADSL, seed = 123)"
+  cdisc_dataset("ADTTE", ADTTE,
+    keys = keys(
+      primary = c("STUDYID", "USUBJID", "PARAMCD"),
+      foreign = c("STUDYID", "USUBJID"),
+      parent = "ADSL"
+    ),
+    code = "ADTTE <- radtte(ADSL, seed = 123)"
   ),
   code = "ADSL <- radsl(N = 600, seed = 123)",
   check = FALSE
@@ -130,9 +143,11 @@ load_datasets(rd)
 get_code(rd, "XY")
 get_code(rd, "XYZ")
 library(random.cdisc.data)
-rcd <- rcd_cdisc_data(rcd_cdisc_dataset_connector("ADSL", radsl, cached = TRUE),
-                      rcd_cdisc_dataset_connector("ADLB", radlb, cached = TRUE),
-                      rcd_cdisc_dataset_connector("ADRS", radrs, cached = TRUE))
+rcd <- rcd_cdisc_data(
+  rcd_cdisc_dataset_connector("ADSL", radsl, cached = TRUE),
+  rcd_cdisc_dataset_connector("ADLB", radlb, cached = TRUE),
+  rcd_cdisc_dataset_connector("ADRS", radrs, cached = TRUE)
+)
 
 # return invisibly NULL
 get_code(rcd, "WrongName")
@@ -141,7 +156,6 @@ get_code(rcd, "WrongName")
 get_code(rcd)
 get_code(rcd, "ADSL")
 get_code(rcd, "ADLB")
-
 \dontrun{
 load_datasets(rcd)
 get_code(rcd)
@@ -179,7 +193,6 @@ get_code(tc, "ADSL")
 get_code(tc, "ADLB")
 get_code(tc, "ADTTE")
 get_code(tc, "ADAE")
-
 \dontrun{
 load_datasets(tc)
 

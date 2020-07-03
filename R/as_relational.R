@@ -51,16 +51,16 @@ as_relational.RawDataset <- function(x,
                                      keys,
                                      code = character(0),
                                      script = character(0),
-                                     label = character(0)) { #nolint
-  code <- code_from_script(code, script) # nolint
+                                     label = character(0)) { # nolint
+  code <- code_from_script(code, script, dataname = dataname) # nolint
 
   return(
     RelationalDataset$new(
-        x = x$get_raw_data(),
-        dataname = dataname,
-        keys = keys,
-        code = code,
-        label = label
+      x = x$get_raw_data(),
+      dataname = dataname,
+      keys = keys,
+      code = code,
+      label = label
     )
   )
 }
@@ -72,9 +72,9 @@ as_relational.NamedDataset <- function(x,
                                        keys,
                                        code = character(0),
                                        script = character(0),
-                                       label = character(0)) { #nolint
+                                       label = character(0)) { # nolint
   warning("Only raw_data of 'x' will be used. All other fields get lost by using 'as_relational'.")
-  code <- code_from_script(code, script) # nolint
+  code <- code_from_script(code, script, dataname = dataname) # nolint
 
   return(
     RelationalDataset$new(
@@ -97,15 +97,17 @@ as_relational.NamedDataset <- function(x,
 #' x2 <- as_relational(x, dataname = "ADSL", keys = get_cdisc_keys("ADSL"))
 #' @importFrom utils.nest is_character_empty
 #' @export
-as_relational.RawDatasetConnector <- function(x,  #nolint
+as_relational.RawDatasetConnector <- function(x, # nolint
                                               dataname,
                                               keys,
                                               code = character(0),
                                               script = character(0),
                                               label = character(0)) {
-  code <- code_from_script(code, script) # nolint
-  ds <- tryCatch(expr = get_dataset(x),
-                 error = function(e) NULL)
+  code <- code_from_script(code, script, dataname = dataname) # nolint
+  ds <- tryCatch(
+    expr = get_dataset(x),
+    error = function(e) NULL
+  )
   if (!is.null(ds)) {
     warning(
       "Pulled 'dataset' from 'x' will not be passed to RelationalDatasetConnector.
@@ -136,7 +138,7 @@ as_cdisc_relational <- function(x,
                                 code = character(0),
                                 script = character(0),
                                 label = character(0)) {
-  code <- code_from_script(code, script) # nolint
+  code <- code_from_script(code, script, dataname = dataname) # nolint
 
   return(
     as_relational(
@@ -155,7 +157,7 @@ as_cdisc_relational <- function(x,
 #' to return non-empty one to pass it further to constructors.
 #' @inheritParams as_relational
 #' @return code (\code{character})
-code_from_script <- function(code, script) {
+code_from_script <- function(code, script, dataname = NULL) {
   stopifnot(is_character_vector(code, min_length = 0, max_length = 1))
   stopifnot(is_character_vector(script, min_length = 0, max_length = 1))
   if (length(code) == 0 && length(script) == 0) {
@@ -168,7 +170,7 @@ code_from_script <- function(code, script) {
   }
 
   if (is_character_single(script)) {
-    code <- read_script(file = script) # nolint
+    code <- read_script(file = script, dataname = dataname) # nolint
   }
 
   return(code)

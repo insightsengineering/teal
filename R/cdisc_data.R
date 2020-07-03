@@ -353,8 +353,9 @@ check_foreign_keys <- function(datasets_keys) {
 #'   cdisc_dataset("ADSL", ADSL, keys = keys(
 #'     primary = c("STUDYID", "USUBJID"),
 #'     foreign = NULL,
-#'     parent = NULL
-#'   )),
+#'     parent = NULL),
+#'     code = "ADSL <- radsl(N = 600, seed = 1234)"
+#'   ),
 #'   cdisc_dataset("ADTTE", ADTTE, keys = keys(
 #'     primary = c("STUDYID", "USUBJID", "PARAMCD"),
 #'     foreign = c("STUDYID", "USUBJID"),
