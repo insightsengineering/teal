@@ -107,8 +107,7 @@ DelayedRelationalData <- R6::R6Class( #nolint
         vapply(private$dataset_connectors, get_dataname, character(1)),
         `if`(
           length(private$data_connectors) > 0,
-          unlist(lapply(private$data_connectors, function(x)
-            vapply(x$get_dataset_connectors(), get_dataname, character(1)))),
+          unlist(lapply(private$data_connectors, function(x) x$get_datanames())),
           NULL
         )
       )
@@ -123,8 +122,7 @@ DelayedRelationalData <- R6::R6Class( #nolint
         vapply(private$dataset_connectors, get_code, character(1)),
         `if`(
           length(private$data_connectors) > 0,
-          unlist(lapply(private$data_connectors, function(x)
-            vapply(x$get_dataset_connectors(), get_code, character(1)))),
+          unlist(lapply(private$data_connectors, function(x) x$get_code())),
           NULL
         )
       )
@@ -191,10 +189,6 @@ DelayedRelationalData <- R6::R6Class( #nolint
     #'
     #' This piece is mainly used for debugging.
     launch = function() {
-
-      # load RelationDatasetConnector objects
-      private$append_dataset_connectors()
-
       # load RelationDataConnector with shiny app
       if (length(private$data_connectors) > 0) {
         shinyApp(
@@ -220,7 +214,6 @@ DelayedRelationalData <- R6::R6Class( #nolint
   # ..private ------
   private = list(
     # .... fields: ------
-    # .... ... ------
     data_connectors = NULL,
     dataset_connectors = NULL,
     ui = NULL,
@@ -255,7 +248,7 @@ DelayedRelationalData <- R6::R6Class( #nolint
     },
     append_dataset_connectors = function() {
       # load RelationDatasetConnector objects
-      if (length(private$dataset_connectors)) {
+      if (length(private$dataset_connectors) > 0) {
         # save datasets in object
         private$append_datasets(
           datasets = lapply(private$dataset_connectors, function(x) {

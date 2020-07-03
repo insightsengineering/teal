@@ -418,39 +418,3 @@ check_setequal <- function(x, y, pre_msg = "") {
 is_html_like <- function(x) {
   inherits(x, c("shiny.tag", "shiny.tag.list", "html")) # logical or
 }
-
-#' \code{source_value} - causes \code{R} to accept its input from the named \code{.R} file.
-#' In spite of \code{source} it is returning a last returned object in the \code{.R} file as it is.
-#'
-#' @param ... all parameters provided to \code{source}.
-#' Check the base package \code{source} function for parameters description.
-#'
-#' @name source_value
-#'
-#' @seealso \code{\link{source}}
-#'
-#' @return a last returned object in \code{.R} file.
-#'
-#' @rdname source_value
-#'
-#' @examples
-#' \dontrun{
-#' file_example <- tempfile(fileext = ".R")
-#' writeLines(
-#'   text = c(
-#'     "library(random.cdisc.data)
-#'     ADSL <- radsl(cache = TRUE)
-#'     ADSL"
-#'   ),
-#'   con = file_example
-#' )
-#' # return a data.frame
-#' source_value(file_example)
-#' # return invisibly a list
-#' source(file_example)
-#' }
-#' @export
-source_value <- function(...) {
-  res <- source(...)
-  res$value
-}

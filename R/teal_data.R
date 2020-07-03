@@ -1,8 +1,15 @@
 #' Teal data
 #'
 #' Universal function to pass data to teal application
-#' @param ... (\code{RelationalData, RelationalDataConnector,
-#' RelationalDataset or RelationalDatasetConnector})\cr
+#'
+#' @export
+#'
+#' @param ... (\code{RelationalData}, \code{RelationalDataConnector}, \code{RelationalDataset} or
+#'   \code{RelationalDatasetConnector}) elements to include into teal data object
+#'
+#' @return \code{RelationalData} if all of the elements are of  \code{RelationalDataset} class, else
+#'   \code{DelayedRelationalData}
+#'
 #' @examples
 #' # RelationalData
 #' library(random.cdisc.data)
@@ -40,31 +47,22 @@
 #' delayed_data$launch()
 #' delayed_data$get_cdisc_data()
 #' }
-#' @return cdisc_data
-#' @export
 teal_data <- function(...) {
   datasets <- list(...)
-  delayed_classes <- c("RelationalDataConnector", "RelationalDataset", "RelationalDatasetConnector")
+  possible_classes <- c("RelationalDataConnector", "RelationalDataset", "RelationalDatasetConnector")
 
   d <- list(...)
 
-  is_teal_data <- is_any_class_list(datasets, delayed_classes)
+  is_teal_data <- is_any_class_list(datasets, possible_classes)
   if (!all(is_teal_data)) {
-    stop("All arguments should be RelationalData(set) or RelationalData(set)Connector")
+    stop("All arguments should be of RelationalData(set) or RelationalData(set)Connector class")
   }
 
-  if (all_relational_dataset(d)) {
-    teal_data <- RelationalData$new(...)
+  teal_data <- if (all(vapply(d, FUN = is, FUN.VALUE = logical(1), class2 = "RelationalDataset"))) {
+    RelationalData$new(...)
   } else {
-    teal_data <- DelayedRelationalData$new(...)
+    DelayedRelationalData$new(...)
   }
 
   return(teal_data)
-}
-
-
-all_relational_dataset <- function(x) {
-  all(
-    vapply(x, FUN = is, FUN.VALUE = logical(1), class2 = "RelationalDataset")
-  )
 }

@@ -1,7 +1,7 @@
-#' Get a dataset(s) object.
+#' Get a \code{\link{RelationalDataset}} objects.
 #'
-#' @param x (\code{object}) of class\link{RawDatasetConnector} or \link{NamedDataset}. If of
-#'   class \code{character} will be treated as file to read.
+#' @param x (\code{\link{RelationalData}})\cr
+#'  object containing datasets.
 #' @export
 #' @rdname get_datasets
 #' @return \code{list} or \code{RelationalDataset} objects

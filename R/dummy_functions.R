@@ -24,9 +24,9 @@ get_dummy_filter_states <- function() {
 #' @return `cdisc_data`
 get_dummy_cdisc_data <- function() {
   withr::with_package("random.cdisc.data", code = {
-    ADSL <- random.cdisc.data::radsl(cached = TRUE) #nolintr
-    ADAE <- random.cdisc.data::radae(cached = TRUE) #nolintr
-    ADLB <- random.cdisc.data::radlb(cached = TRUE) #nolintr
+    ADSL <- random.cdisc.data::radsl(cached = TRUE) #nolint
+    ADAE <- random.cdisc.data::radae(cached = TRUE) #nolint
+    ADLB <- random.cdisc.data::radlb(cached = TRUE) #nolint
   })
 
   ADSL$logical_test <- sample(c(TRUE, FALSE, NA), size = nrow(ADSL), replace = TRUE)
@@ -51,7 +51,7 @@ ADLB <- radlb(cached = TRUE)
 #' @return `FilteredData` with `ADSL` set
 get_dummy_datasets <- function() {
   withr::with_package("random.cdisc.data", code = {
-    ADSL <- random.cdisc.data::radsl(cached = TRUE) #nolintr
+    ADSL <- random.cdisc.data::radsl(cached = TRUE) #nolint
   })
   attr(ADSL, "keys") <- get_cdisc_keys("ADSL")
   datasets <- FilteredData$new()

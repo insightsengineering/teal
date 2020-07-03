@@ -45,7 +45,7 @@ Imports:
   utils.nest (>= 0.2.4),
   withr,
   yaml
-RoxygenNote: 7.0.2
+RoxygenNote: 7.1.0
 Suggests:
     knitr,
     nomnoml,
@@ -59,7 +59,6 @@ VignetteBuilder: knitr
 Collate: 
     'CallableFunction.R'
     'DataConnection.R'
-    'DatasetConnector_constructors.R'
     'DelayedRelationalData.R'
     'FilteredData.R'
     'NamedDataset.R'
@@ -67,9 +66,10 @@ Collate:
     'RawDatasetConnector.R'
     'RelationalData.R'
     'RelationalDataConnector.R'
-    'RelationalDataConnector_wrappers.R'
+    'RelationalDataConnector_constructors.R'
     'RelationalDataset.R'
     'RelationalDatasetConnector.R'
+    'RelationalDatasetConnector_constructors.R'
     'as_relational.R'
     'cdisc_data.R'
     'choices_labeled.R'

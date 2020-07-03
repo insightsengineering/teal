@@ -10,7 +10,7 @@ test_that("Test callable", {
   )
 
   expect_identical(
-    x_fun$args,
+    x_fun$get_args(),
     list(
       x = c(1.0, 2.0, NA_real_),
       na.rm = TRUE)
@@ -26,7 +26,7 @@ test_that("Test callable", {
 
   # args are still as in the beginning
   expect_identical(
-    x_fun$args,
+    x_fun$get_args(),
     list(
       x = c(1.0, 2.0, NA_real_),
       na.rm = TRUE)
@@ -79,8 +79,11 @@ test_that("Test callable", {
     x_fun$run(return = FALSE),
     NULL
   )
-})
 
+  # cleaning args
+  x_fun$set_args(args = NULL)
+  expect_null(x_fun$get_args())
+})
 
 test_that("test callable errors", {
   x <- 1
@@ -94,15 +97,9 @@ test_that("test callable errors", {
     callable_function(),
     "is missing, with no default"
   )
-  expect_equal({
-    x <- callable_function(function(x = 1) {
-          return(x)
-    })
-    x$run()},
-    1
-  )
 
-  x_fun <- callable_function(mean)
+
+  expect_silent(x_fun <- callable_function(mean))
 
   # mean accepts extra arguments
   expect_silent(
@@ -147,13 +144,11 @@ test_that("find callable function name", {
 
   fun2 <- function(callable) {
     x_fun <- callable_function(callable)
-    x_fun$.__enclos_env__$private$.fun_name
+    x_fun$.__enclos_env__$private$fun_name
   }
 
   expect_identical(
     fun(mean),
     "mean"
   )
-
-
 })

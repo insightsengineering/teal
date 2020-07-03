@@ -3,21 +3,21 @@
 \name{get_datasets}
 \alias{get_datasets}
 \alias{get_datasets.RelationalData}
-\title{Get a dataset(s) object.}
+\title{Get a \code{\link{RelationalDataset}} objects.}
 \usage{
 get_datasets(x)
 
 \method{get_datasets}{RelationalData}(x)
 }
 \arguments{
-\item{x}{(\code{object}) of class\link{RawDatasetConnector} or \link{NamedDataset}. If of
-class \code{character} will be treated as file to read.}
+\item{x}{(\code{\link{RelationalData}})\cr
+object containing datasets.}
 }
 \value{
 \code{list} or \code{RelationalDataset} objects
 }
 \description{
-Get a dataset(s) object.
+Get a \code{\link{RelationalDataset}} objects.
 }
 \examples{
 

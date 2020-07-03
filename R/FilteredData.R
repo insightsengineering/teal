@@ -46,9 +46,9 @@
 #' datasets <- teal:::FilteredData$new()
 #'
 #' # to avoid using isolate(), you can provide a default isolate context by calling
-#' # options(shiny.suppressMissingContextError = TRUE) #nolintr
+#' # options(shiny.suppressMissingContextError = TRUE) #nolint
 #' # don't forget to deactivate this option at the end
-#' # options(shiny.suppressMissingContextError = FALSE) #nolintr
+#' # options(shiny.suppressMissingContextError = FALSE) #nolint
 #'
 #' isolate({
 #'   datasets
@@ -601,8 +601,8 @@ FilteredData <- R6::R6Class( # nolint
       cat("- Introspect this object (x) with the following methods:", "\n")
       cat("   - cat(format(x))", "\n")
       if (length(datanames) > 0) {
-        cat('   - x$print_filter_info("ADSL")', "\n") #nolintr
-        cat('   - x$get_data_info("ADSL", filtered = FALSE)', "\n") #nolintr
+        cat('   - x$print_filter_info("ADSL")', "\n") #nolint
+        cat('   - x$get_data_info("ADSL", filtered = FALSE)', "\n") #nolint
       }
       return(invisible(NULL))
     },
@@ -781,12 +781,12 @@ FilteredData <- R6::R6Class( # nolint
 
     # unfiltered / raw datasets
     # e.g. for two datasets `ADSL` and `ADAE` we would have
-    # nolintr start
+    # nolint start
     # datasets <- reactiveValues(
     #   ADSL = <object that inherits from data.frame>,
     #   ADAE =  <object that inherits from data.frame>
     # )
-    # nolintr end
+    # nolint end
     # the `data.frames` may have attributes like keys
     unfiltered_datasets = NULL, # reactiveValues(), # but R6, so defined in `initialize`
     # filter state to apply to obtain the filtered dataset from the unfiltered one

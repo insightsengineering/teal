@@ -4,6 +4,9 @@
 #' Class manages \code{RelationalDatasetConnector} to specify additional dynamic arguments and to
 #' open/close connection.
 #'
+#' @importFrom R6 R6Class
+#' @importFrom shinyjs disable enable
+#'
 #' @examples
 #' library(random.cdisc.data)
 #' x <- rcd_cdisc_dataset_connector("ADSL", radsl, cached = TRUE)
@@ -33,7 +36,6 @@
 #' tc$launch()
 #' tc$get_datasets()
 #' }
-#' @importFrom R6 R6Class
 RelationalDataConnector <- R6::R6Class( #nolint
   classname = "RelationalDataConnector",
   inherit = RelationalData,
@@ -74,7 +76,7 @@ RelationalDataConnector <- R6::R6Class( #nolint
     get_code = function() {
       c(
         vapply(private$datasets, get_code, character(1)),
-        vapply(private$dataset_connectors, function(c) c$get_code(), character(1))
+        vapply(private$dataset_connectors, get_code, character(1))
       )
     },
     #' @description
@@ -106,12 +108,7 @@ RelationalDataConnector <- R6::R6Class( #nolint
     #' A character string of the \code{id} of the
     #' \code{actionButton}.
     get_submit_id = function() {
-      id <- private$server_info$submit_id
-      if (!is.null(id)) {
-        return(id)
-      } else {
-        return(character(0))
-      }
+      return(if_null(private$server_info$submit_id, character(0)))
     },
     #' @description
     #'
@@ -130,9 +127,12 @@ RelationalDataConnector <- R6::R6Class( #nolint
     #' @return An object that represents the app
     launch = function() {
       # load RelationDatasetConnector objects
-      if (is.null(private$dataset_connectors) && !is.null(private$datasets)) {
-        stop("the data is already loaded")
-        }
+      if (is.null(private$dataset_connectors)) {
+        stop("the data has no dataset connectors yet")
+      }
+      if (all(vapply(private$dataset_connectors, function(el) el$is_pulled(), logical(1L)))) {
+        stop("all the datasets has been already pulled")
+      }
 
       shinyApp(
         ui = fluidPage(private$ui(id = "main_app"),
@@ -263,6 +263,7 @@ RelationalDataConnector <- R6::R6Class( #nolint
     #'
     set_server_info = function(...) {
       private$server_info <- list(...)
+      return(invisible(NULL))
     },
     #' Set data connection
     #'
@@ -281,7 +282,14 @@ RelationalDataConnector <- R6::R6Class( #nolint
     #' @return nothing
     set_dataset_connectors = function(connectors) {
       stopifnot(is_class_list("RelationalDatasetConnector")(connectors))
-      names(connectors) <- vapply(connectors, get_dataname, character(1))
+      connector_names <- vapply(connectors, get_dataname, character(1))
+      if (any(duplicated(connector_names))) {
+        stop("Connector names should be unique")
+      }
+      if (any(connector_names %in% self$get_datanames())) {
+        stop("Some datanames already exists")
+      }
+      names(connectors) <- connector_names
       private$dataset_connectors <- connectors
       return(invisible(NULL))
     }
@@ -343,7 +351,7 @@ RelationalDataConnector <- R6::R6Class( #nolint
 
       optional_eval <- function(x, envir = parent.frame(1L)) {
         if (is.null(x)) {
-          return(x)
+          return(NULL)
         } else {
           lapply(
             x,
@@ -381,18 +389,16 @@ RelationalDataConnector <- R6::R6Class( #nolint
                                  message = paste0("Loading data '",
                                                   private$dataset_connectors[[i]]$get_dataname(), "' ...")))
 
-        set_args(
-          x = private$dataset_connectors[[i]],
-          args = fun_args_fixed
-        )
+        if (!is_empty(fun_args_fixed)) {
+          set_args(x = private$dataset_connectors[[i]], args = fun_args_fixed)
+        }
 
         dataset <- private$stop_on_error(
           get_dataset(
             load_dataset(
               private$dataset_connectors[[i]],
               args = fun_args_dynamic,
-              try = try,
-              additional_args_list = lapply(datanames, function(x) datasets[[x]]$data)
+              try = try
             )
           ),
           submit_id, progress
@@ -403,7 +409,6 @@ RelationalDataConnector <- R6::R6Class( #nolint
       private$dataset_connectors <- NULL
 
       if_not_null(private$connection, private$connection$close(silent = TRUE))
-
       if_not_null(progress, progress$set(0.7, message = "Setting relational datasets ..."))
 
       private$datasets <- datasets

@@ -8,14 +8,11 @@
 #'   additional dynamic arguments passed to function which loads the data.
 #'
 #' @param try (\code{logical}) whether perform function evaluation inside \code{try} clause
-#' @param additional_args_list (\code{list}) arguments that get used just if needed to call
-#'   the pull function. This list can contain objects that are arguments of the pull functions,
-#'   but also more objects that will be removed before the call.
 #'
 #' @return \code{x} with loaded \code{dataset} object
 #' @export
 #' @rdname load_dataset
-load_dataset <- function(x, args, try, additional_args_list) {
+load_dataset <- function(x, args, try) {
   UseMethod("load_dataset")
 }
 
@@ -23,28 +20,25 @@ load_dataset <- function(x, args, try, additional_args_list) {
 #' @examples
 #'
 #' @export
-load_dataset.RawDatasetConnector <- function(x, args = NULL, try = FALSE, additional_args_list = list()) { # nolint
+load_dataset.RawDatasetConnector <- function(x, args = NULL, try = FALSE) { # nolint
   x$pull(args = args, try = try)
   return(invisible(x))
 }
 
 #' @rdname load_dataset
 #' @examples
-#' \dontrun{
-#' x2 <- as_relational(x, dataname = "ADSL", keys = get_cdisc_keys("ADSL"))
-#' load_dataset(x2)
-#' }
-#' # RawDatasetConnector ---------
-#' library(random.cdisc.data)
-#' dc <- rcd_cdisc_dataset_connector(dataname = "ADSL", fun = radsl, cached = TRUE)
-#' load_dataset(dc)
-#' ADSL <- dc$get_dataset()$data
 #'
-#' dc <- rcd_cdisc_dataset_connector(dataname = "ADRS", fun = radrs, cached = FALSE)
-#' load_dataset(dc, additional_args_list = list(ADSL = ADSL))
+#' # RelationalDatasetConnector ---------
+#' library(random.cdisc.data)
+#' adsl <- rcd_cdisc_dataset_connector(dataname = "ADSL", fun = radsl, cached = TRUE)
+#' load_dataset(adsl)
+#' get_dataset(adsl)
+#'
+#' adrs <- rcd_cdisc_dataset_connector(dataname = "ADRS", fun = radrs, ADSL = adsl)
+#' load_dataset(adrs)
 #' @export
-load_dataset.RelationalDatasetConnector <- function(x, args = NULL, try = FALSE, additional_args_list = list()) { # nolint
-  x$pull(args = args, try = try, additional_args_list = additional_args_list)
+load_dataset.RelationalDatasetConnector <- function(x, args = NULL, try = FALSE) { # nolint
+  x$pull(args = args, try = try)
   return(invisible(x))
 }
 
@@ -88,10 +82,10 @@ load_datasets.RelationalData <- function(x) {
 #'
 #' # RelationalDataConnector --------
 #' library(random.cdisc.data)
-#' rdc <- rcd_cdisc_data(
-#'   rcd_cdisc_dataset_connector("ADSL", radsl, cached = TRUE),
-#'   rcd_cdisc_dataset_connector("ADTTE", radtte, cached = TRUE)
-#' )
+#' adsl <- rcd_cdisc_dataset_connector(dataname = "ADSL", fun = radsl, cached = TRUE)
+#' adrs <- rcd_cdisc_dataset_connector(dataname = "ADRS", fun = radrs, ADSL = adsl)
+#'
+#' rdc <- rcd_cdisc_data(adsl, adrs)
 #'
 #' \dontrun{
 #' load_datasets(rdc)
@@ -110,15 +104,14 @@ load_datasets.RelationalDataConnector <- function(x) { # nolint
 #'
 #' # DelayedRelationalData --------
 #' library(random.cdisc.data)
-#' x <- rcd_cdisc_data( # RelationalDataConnector
-#'   rcd_cdisc_dataset_connector("ADSL", radsl, cached = TRUE),
-#'   rcd_cdisc_dataset_connector("ADLB", radlb, cached = TRUE)
-#' )
-#' x2 <- rcd_cdisc_data( # RelationalDataConnector
-#'   rcd_cdisc_dataset_connector("ADRS", radrs, cached = TRUE)
-#' )
+#' adsl <- rcd_cdisc_dataset_connector(dataname = "ADSL", fun = radsl, cached = TRUE)
+#' adlb <- rcd_cdisc_dataset_connector(dataname = "ADLB", fun = radlb, cached = TRUE)
+#' adrs <- rcd_cdisc_dataset_connector("ADRS", radrs, ADSL = adsl)
 #'
-#' tc <- teal_data(x, x2)
+#' tc <- teal_data(
+#'   rcd_cdisc_data(adsl, adlb),
+#'   rcd_cdisc_data(adrs)
+#' )
 #'
 #' \dontrun{
 #' load_datasets(tc)

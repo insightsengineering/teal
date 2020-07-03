@@ -1,11 +1,10 @@
-# delayed relational data wrappers ----
-#' Data connector for \code{random.cdisc.data}
+#' \code{RelationalDataConnector} connector for \code{random.cdisc.data}
 #'
 #' Build data connector for \code{random.cdisc.data} functions or datasets
 #'
 #' @export
 #'
-#' @param ... (\code{DatasetConnector}) dataset connectors created using \link{rcd_dataset_connector}
+#' @param ... (\code{RelationalDatasetConnector}) dataset connectors created using \link{rcd_dataset_connector}
 #'   In case \code{cached = FALSE}, please watch the order and call \code{ADSL} generation first.
 #' @param check optional, (\code{logical}) whether perform reproducibility check
 #'
@@ -54,7 +53,7 @@ rcd_cdisc_data <- function(..., check = TRUE) {
   connectors <- list(...)
   stopifnot(is_class_list("RelationalDatasetConnector")(connectors))
 
-  con <- rcd_connection() # nolint
+  con <- rcd_connection()
 
   x <- RelationalDataConnector$new()
   x$set_connection(con)
@@ -137,16 +136,18 @@ rcd_cdisc_data <- function(..., check = TRUE) {
 #'
 #' @export
 #'
-#' @param ... (\code{DatasetConnector}) dataset connectors created using \link{rice_dataset_connector}
-#' @param additional_ui \code{shiny.tag} additional user interface to be visible over login panel
+#' @param ... (\code{RelationalDatasetConnector} objects)\cr
+#'  dataset connectors created using \link{rice_dataset_connector}
+#' @param additional_ui (\code{shiny.tag})\cr
+#'  additional user interface to be visible over login panel
 #'
-#' @return An object of class \code{DataConnector}
+#' @return An object of class \code{RelatonalDataConnector}
 #'
 #' @examples
-#' \dontrun{
+#'
 #' x <- rice_cdisc_data(
-#'   rice_dataset_connector("ADSL", "/path/to/ADSL"),
-#'   rice_dataset_connector("ADLB", "/path/to/ADLB")
+#'   rice_cdisc_dataset_connector("ADSL", "/path/to/ADSL"),
+#'   rice_cdisc_dataset_connector("ADLB", "/path/to/ADLB")
 #' )
 #' app <- init(
 #'   data = x,
@@ -164,18 +165,20 @@ rcd_cdisc_data <- function(..., check = TRUE) {
 #'   ),
 #'   header = tags$h1("Sample App")
 #' )
+#' \dontrun{
 #' shinyApp(app$ui, app$server)
 #' }
 rice_cdisc_data <- function(..., additional_ui = NULL) {
   connectors <- list(...)
   stopifnot(is_class_list("RelationalDatasetConnector")(connectors))
 
-  con <- rice_connection() # nolint
+  con <- rice_connection()
 
   x <- RelationalDataConnector$new()
   x$set_connection(con)
   x$set_dataset_connectors(connectors)
   x$set_check(`attributes<-`(FALSE, list(quiet = TRUE)))
+
   x$set_ui(
     function(id) {
       ns <- NS(id)
@@ -265,7 +268,7 @@ rds_cdisc_data <- function(...,  check = TRUE) {
               paste(
                 con$get_dataname(),
                 ":",
-                con$get_pull_fun()$args$file
+                con$get_pull_fun()$get_args()$file
               )
             )
           })
@@ -292,9 +295,7 @@ rds_cdisc_data <- function(...,  check = TRUE) {
 #' @param connectors \code{list} of \code{DatasetConnector} objects.
 #'
 #' @return \code{shiny.tag} UI describing the connectors
-#'
 ui_connectors <- function(type, connectors) {
-
   stopifnot(is_character_single(type))
   stopifnot(is_class_list("RelationalDatasetConnector")(connectors))
 

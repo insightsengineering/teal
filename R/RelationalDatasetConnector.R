@@ -13,7 +13,6 @@ RelationalDatasetConnector <- R6::R6Class( #nolint
   classname = "RelationalDatasetConnector",
   inherit = RawDatasetConnector,
   public = list(
-
     #' @description
     #' Create a new \code{RelationalDatasetConnector} object. Set the pulling function
     #' load the data. \code{dataname} will be used as name
@@ -29,10 +28,14 @@ RelationalDatasetConnector <- R6::R6Class( #nolint
     #'  A character string defining the code needed to produce the data set in \code{x}
     #' @param label (\code{character})\cr
     #'  Label to describe the dataset
+    #' @param vars (list)\cr
+    #'   In case when this object code depends on the \code{raw_data} from the other
+    #'   \code{RelationalDataset}, \code{RelationalDatasetConnector} object(s) or other constant value,
+    #'   this/these object(s) should be included
     #'
     #' @return new \code{RawDatasetConnector} object
-    initialize = function(pull_fun, dataname, keys, code = character(0), label = character(0)) {
-      super$initialize(pull_fun = pull_fun)
+    initialize = function(pull_fun, dataname, keys, code = character(0), label = character(0), vars = list()) {
+      super$initialize(pull_fun = pull_fun, vars = vars)
       private$set_dataname(dataname)
       private$set_keys(keys)
       private$set_mutate_code(code)
@@ -80,32 +83,21 @@ RelationalDatasetConnector <- R6::R6Class( #nolint
     #' @param deparse (\code{logical})\cr
     #'  whether to return the deparsed form of a call
     #'
-    #' @param args (\code{NULL} or named \code{list})\cr
+    #' @param args (empty or named \code{list})\cr
     #'  dynamic arguments to function which loads data
     #'
     #' @return optionally deparsed \code{call} object
     get_code = function(deparse = TRUE, args = NULL) {
       stopifnot(is_logical_single(deparse))
 
-      pull_code <- private$get_pull_code(deparse, args)
-      mutate_code <- private$get_mutate_code(deparse)
+      pull_vars_code <- private$get_pull_vars_code(deparse = deparse)
+      pull_code <- private$get_pull_code(deparse = deparse, args = args)
+      mutate_code <- private$get_mutate_code(deparse = deparse)
 
-      code <- if (deparse) {
-        if (length(mutate_code) == 0) {
-          pull_code
-        } else {
-          sprintf(
-            "%s\n%s",
-            pull_code,
-            mutate_code
-          )
-        }
+      code <- c(pull_vars_code, pull_code, mutate_code)
 
-      } else {
-        append(
-          pull_code,
-          mutate_code
-        )
+      if (isTRUE(deparse)) {
+        code <- paste0(code, collapse = "\n")
       }
 
       return(code)
@@ -134,32 +126,17 @@ RelationalDatasetConnector <- R6::R6Class( #nolint
     #' Read or create the data using \code{pull_fun} specified in the constructor.
     #'
     #' @param args (\code{NULL} or named \code{list})\cr
-    #' additional dynamic arguments for pull function. \code{args} can be omitted if \code{pull_fun}
-    #' from constructor already contains all necessary arguments to pull data. One can try
-    #' to execute \code{pull_fun} directly by \code{x$pull_fun$run()} or to get code using
-    #' \code{x$pull_fun$get_code()}. \code{args} specified in pull are used temporary to get data but
-    #' not saved in code.
-    #' @param try (\code{logical}) whether perform function evaluation inside \code{try} clause
-    #' @param additional_args_list (\code{list}) arguments that get used just if needed to call
-    #'   the pull function. This list can contain objects that are arguments of the pull functions,
-    #'   but also more objects that will be removed before the call.
+    #'  additional dynamic arguments for pull function. \code{args} can be omitted if \code{pull_fun}
+    #'  from constructor already contains all necessary arguments to pull data. One can try
+    #'  to execute \code{pull_fun} directly by \code{x$pull_fun$run()} or to get code using
+    #'  \code{x$pull_fun$get_code()}. \code{args} specified in pull are used temporary to get data but
+    #'  not saved in code.
+    #' @param try (\code{logical} value)\cr
+    #'  whether perform function evaluation inside \code{try} clause
     #'
     #' @return nothing, in order to get the data please use \code{get_data} method
-    pull = function(args = NULL, try = FALSE, additional_args_list = list()) {
-
-      additional_args <- intersect(names(additional_args_list), private$pull_fun$get_possible_args())
-      if (length(additional_args) > 0) {
-        args <- c(
-          args,
-          sapply(additional_args, function(x) additional_args_list[[x]], USE.NAMES = TRUE, simplify = FALSE)
-        )
-        private$additional_args <- additional_args
-      }
-      if (is.null(args)) {
-        data <- private$pull_fun$run(try = try)
-      } else {
-        data <- private$pull_fun$run(args = args, try = try)
-      }
+    pull = function(args = NULL, try = FALSE) {
+      data <- private$pull_internal(args = args, try = try)
 
       private$dataset <- RelationalDataset$new(
         x = data,
@@ -169,7 +146,7 @@ RelationalDatasetConnector <- R6::R6Class( #nolint
         label = self$get_dataset_label()
       )
 
-      if (length(private$get_mutate_code()) > 0) {
+      if (!is_empty(private$get_mutate_code())) {
         private$dataset <- mutate_dataset(
           private$dataset,
           code = private$get_mutate_code(deparse = TRUE)
@@ -192,22 +169,12 @@ RelationalDatasetConnector <- R6::R6Class( #nolint
     keys = NULL,
     dataset_label = character(0),
     mutate_code = NULL,
-    additional_args = character(0),
     # assigns the pull code call to the dataname
     get_pull_code = function(deparse = TRUE, args = NULL) {
-
-      # For addtional arguments, add them as call by reference object
-      # in case private$additional_args is "ADSL" we add pull_fun(..., ADSL = ADSL)
-      if (length(private$additional_args) > 0) {
-        args <- c(
-          args,
-          sapply(private$additional_args, as.name, USE.NAMES = TRUE, simplify = FALSE)
-        )
-      }
       code <- if (deparse) {
         sprintf("%s <- %s",
                 private$dataname,
-                super$get_pull_code(deparse, args))
+                super$get_pull_code(deparse = deparse, args = args))
       } else {
         substitute(
           a <- b,

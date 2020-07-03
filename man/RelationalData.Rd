@@ -38,6 +38,7 @@ rd <- teal:::RelationalData$new(x, x2)
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-new"></a>}}
+\if{latex}{\out{\hypertarget{method-new}{}}}
 \subsection{Method \code{new()}}{
 Create a new \code{RelationalData} object from multiple
 \code{RelationalDataset} objects.
@@ -59,6 +60,7 @@ new \code{RelationalData} object
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-get_cdisc_data"></a>}}
+\if{latex}{\out{\hypertarget{method-get_cdisc_data}{}}}
 \subsection{Method \code{get_cdisc_data()}}{
 Get \code{cdisc_data} object from multiple \code{RelationalDataset} objects.
 \subsection{Usage}{
@@ -71,6 +73,7 @@ Get \code{cdisc_data} object from multiple \code{RelationalDataset} objects.
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-get_datanames"></a>}}
+\if{latex}{\out{\hypertarget{method-get_datanames}{}}}
 \subsection{Method \code{get_datanames()}}{
 Get names of the datasets.
 \subsection{Usage}{
@@ -83,6 +86,7 @@ Get names of the datasets.
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-get_code"></a>}}
+\if{latex}{\out{\hypertarget{method-get_code}{}}}
 \subsection{Method \code{get_code()}}{
 Get code for all datasets.
 \subsection{Usage}{
@@ -95,6 +99,7 @@ Get code for all datasets.
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-get_datasets"></a>}}
+\if{latex}{\out{\hypertarget{method-get_datasets}{}}}
 \subsection{Method \code{get_datasets()}}{
 Get \code{RelationalDataset} objects.
 \subsection{Usage}{
@@ -116,6 +121,7 @@ name of dataset to be returned. If \code{NULL}, all datasets are returned.}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-clone"></a>}}
+\if{latex}{\out{\hypertarget{method-clone}{}}}
 \subsection{Method \code{clone()}}{
 The objects of this class are cloneable with this method.
 \subsection{Usage}{

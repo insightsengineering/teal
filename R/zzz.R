@@ -1,4 +1,4 @@
-.onLoad <- function(libname, pkgname) { #nolintr
+.onLoad <- function(libname, pkgname) { #nolint
   # adapted from https://github.com/r-lib/devtools/blob/master/R/zzz.R
   teal_default_options <- list(
     teal_logging = TRUE,

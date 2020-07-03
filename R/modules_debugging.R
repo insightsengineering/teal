@@ -137,7 +137,7 @@ debug_browser_module <- function(label = "Browser Debug Module") {
       observeEvent(input$call_browser, {
         # we also set a global option `teal_debug` so that the code can insert debug statements that trigger when in
         # this mode (but should be used for development purposes only):
-        # `if (isTRUE(getOption("teal_debug"))) { debug_code }` #nolintr
+        # `if (isTRUE(getOption("teal_debug"))) { debug_code }` #nolint
         withr::with_options(list(teal_debug = TRUE), {
           # `browser()`, this escapes the regexp that checks for browser as it is needed here as part of the module
           do.call(browser, list())
@@ -148,7 +148,7 @@ debug_browser_module <- function(label = "Browser Debug Module") {
       ns <- NS(id)
       div(
         h2("Debugging"),
-        p("Once in the console, you can type `debug(your_fcn)` and resume execution. This will then debug the function the next time it is called. For example, `debugonce(session$doBookmark)`. You can also access the datasets."), #nolintr
+        p("Once in the console, you can type `debug(your_fcn)` and resume execution. This will then debug the function the next time it is called. For example, `debugonce(session$doBookmark)`. You can also access the datasets."), #nolint
         actionButton(ns("call_browser"), "Call browser()")
       )
     },

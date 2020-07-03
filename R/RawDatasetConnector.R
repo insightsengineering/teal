@@ -18,11 +18,17 @@ RawDatasetConnector <- R6::R6Class( #nolint
     #' from a function or creating it on the fly.
     #'
     #' @param pull_fun (\code{CallableFunction})\cr
-    #' function to pull the data.
+    #'  function to pull the data.
+    #' @param vars (list)\cr
+    #'   In case when this object code depends on the \code{raw_data} from the other
+    #'   \code{RelationalDataset}, \code{RelationalDatasetConnector} object(s) or other constant value,
+    #'   this/these object(s) should be included
     #'
     #' @return new \code{RawDatasetConnector} object
-    initialize = function(pull_fun) {
+    initialize = function(pull_fun, vars = list()) {
       private$set_pull_fun(pull_fun)
+      private$set_pull_vars(vars)
+
       return(invisible(self))
     },
 
@@ -46,7 +52,18 @@ RawDatasetConnector <- R6::R6Class( #nolint
     #'
     #' @return optionally deparsed \code{call} object
     get_code = function(deparse = TRUE) {
-      private$get_pull_code(deparse)
+      stopifnot(is_logical_single(deparse))
+
+      pull_vars_code <- private$get_pull_vars_code(deparse = deparse)
+      pull_code <- private$get_pull_code(deparse)
+
+      code <- c(pull_vars_code, pull_code)
+
+      if (isTRUE(deparse)) {
+        code <- paste0(code, collapse = "\n")
+      }
+
+      return(code)
     },
 
     #' @description
@@ -54,7 +71,7 @@ RawDatasetConnector <- R6::R6Class( #nolint
     #'
     #' @return dataset (\code{<...>Dataset})
     get_dataset = function() {
-      if (is.null(private$dataset)) {
+      if (!self$is_pulled()) {
         stop("dataset has not been pulled yet\n - please use `load_dataset()` first.",
              call. = FALSE)
       }
@@ -75,7 +92,6 @@ RawDatasetConnector <- R6::R6Class( #nolint
     #' @return data (data.frame)
     get_raw_data = function() {
       dataset <- self$get_dataset()
-
       return(dataset$get_raw_data())
     },
 
@@ -85,37 +101,88 @@ RawDatasetConnector <- R6::R6Class( #nolint
     #' Read or create data using \code{pull_fun} specified in the constructor.
     #'
     #' @param args (\code{NULL} or named \code{list})\cr
-    #' additional dynamic arguments for pull function. \code{args} can be omitted if \code{pull_fun}
-    #' from constructor already contains all necessary arguments to pull data. One can try
-    #' to execute \code{pull_fun} directly by \code{x$pull_fun$run()} or to get code using
-    #' \code{x$pull_fun$get_code()}. \code{args} specified in pull are used temporary to get data but
-    #' not saved in code.
-    #' @param try (\code{logical}) whether perform function evaluation inside \code{try} clause
+    #'  additional dynamic arguments for pull function. \code{args} can be omitted if \code{pull_fun}
+    #'  from constructor already contains all necessary arguments to pull data. One can try
+    #'  to execute \code{pull_fun} directly by \code{x$pull_fun$run()} or to get code using
+    #'  \code{x$pull_fun$get_code()}. \code{args} specified in pull are used temporary to get data but
+    #'  not saved in code.
+    #' @param try (\code{logical} value)\cr
+    #'  whether perform function evaluation inside \code{try} clause
     #'
     #' @return nothing, in order to get the data please use \code{get_data} method
     pull = function(args = NULL, try = FALSE) {
-      if (is.null(args)) {
-        data <- private$pull_fun$run(try = try)
-      } else {
-        data <- private$pull_fun$run(args = args, try = try)
-      }
+      data <- private$pull_internal(args = args, try = try)
+
       private$dataset <- RawDataset$new(data)
       return(invisible(self))
+    },
+    #' @description
+    #' Check if connector has been already pulled
+    #'
+    #' @return \code{TRUE} if connector has been already pulled, else \code{FALSE}
+    is_pulled = function() {
+      isFALSE(is.null(private$dataset))
     }
   ),
   # RawDatasetConnector private -----
   private = list(
     dataset = NULL, # RawDataset
     pull_fun = NULL, # CallableFunction
-
+    pull_vars = list(), # list
     get_pull_code = function(deparse, args = NULL) {
       return(private$pull_fun$get_call(deparse, args))
     },
-
+    get_pull_vars_code = function(deparse = TRUE) {
+      if (!is_empty(private$pull_vars)) {
+        lapply(
+          seq_along(private$pull_vars),
+          function(var_idx) {
+            var_name <- names(private$pull_vars)[[var_idx]]
+            var_value <- private$pull_vars[[var_idx]]
+            if (is(var_value, "RawDatasetConnector") || is(var_value, "NamedDataset")) {
+              get_code(var_value, deparse = deparse)
+            } else {
+              res <- call("<-", as.name(var_name), var_value)
+              if (deparse) {
+                deparse(res)
+              }
+            }
+          }
+        )
+      } else {
+        character(0)
+      }
+    },
     set_pull_fun = function(pull_fun) {
       stopifnot(is(pull_fun, "CallableFunction"))
       private$pull_fun <- pull_fun
       return(invisible(NULL))
+    },
+    set_pull_vars = function(pull_vars) {
+      stopifnot(is_fully_named_list(pull_vars))
+      private$pull_vars <- pull_vars
+      return(invisible(NULL))
+    },
+    pull_internal = function(args = NULL, try = FALSE) {
+      # include objects CallableFunction environment
+      if (!is_empty(private$pull_vars)) {
+        for (var_idx in seq_along(private$pull_vars)) {
+          var_name <- names(private$pull_vars)[[var_idx]]
+          var_value <- private$pull_vars[[var_idx]]
+
+          private$pull_fun$assign_to_env(
+            x = var_name,
+            value = if (is(var_value, "RawDatasetConnector") || is(var_value, "RawDataset")) {
+              get_raw_data(var_value)
+            } else {
+              var_value
+            }
+          )
+        }
+      }
+
+      # eval CallableFunction with dynamic args
+      private$pull_fun$run(args = args, try = try)
     }
   )
 )

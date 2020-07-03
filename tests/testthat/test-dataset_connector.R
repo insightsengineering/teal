@@ -21,7 +21,7 @@ test_that("RawDatasetConnector", {
 
   expect_identical(
     x$get_code(deparse = FALSE),
-    as.call(parse(text = "data.frame(n = 5, seed = 1, cached = TRUE)"))[[1]]
+    as.list(as.call(parse(text = "data.frame(n = 5, seed = 1, cached = TRUE)")))
   )
 
   expect_identical(
@@ -30,7 +30,7 @@ test_that("RawDatasetConnector", {
   )
 
   expect_true(
-    is.call(x$get_code(deparse = FALSE))
+    is.call(x$get_code(deparse = FALSE)[[1]])
   )
 
   expect_error(
@@ -132,7 +132,7 @@ test_that("RawDatasetConnector", {
 
   expect_identical(
     x2$get_code(deparse = FALSE),
-    as.call(parse(text = "paste()"))[[1]]
+    list(as.call(parse(text = "paste")))
   )
 })
 
@@ -377,7 +377,7 @@ test_that("rcd_dataset_connector", {
   expect_true(is(x, c("DatasetConnector", "R6")))
 
   expect_identical(
-    x$.__enclos_env__$private$pull_fun$.__enclos_env__$private$.fun_name,
+    x$.__enclos_env__$private$pull_fun$.__enclos_env__$private$fun_name,
     "radsl"
   )
 

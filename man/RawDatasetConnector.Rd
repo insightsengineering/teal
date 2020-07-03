@@ -26,17 +26,19 @@ Pulled data inherits from the class \link{RelationalDataset}.
 \item \href{#method-get_pull_fun}{\code{RawDatasetConnector$get_pull_fun()}}
 \item \href{#method-get_raw_data}{\code{RawDatasetConnector$get_raw_data()}}
 \item \href{#method-pull}{\code{RawDatasetConnector$pull()}}
+\item \href{#method-is_pulled}{\code{RawDatasetConnector$is_pulled()}}
 \item \href{#method-clone}{\code{RawDatasetConnector$clone()}}
 }
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-new"></a>}}
+\if{latex}{\out{\hypertarget{method-new}{}}}
 \subsection{Method \code{new()}}{
 Create a new \code{RawDatasetConnector} object. Set the pulling function
 \link{CallableFunction} which returns a \code{data.frame}, e.g. by reading
 from a function or creating it on the fly.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{RawDatasetConnector$new(pull_fun)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{RawDatasetConnector$new(pull_fun, vars = list())}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
@@ -44,6 +46,11 @@ from a function or creating it on the fly.
 \describe{
 \item{\code{pull_fun}}{(\code{CallableFunction})\cr
 function to pull the data.}
+
+\item{\code{vars}}{(list)\cr
+In case when this object code depends on the \code{raw_data} from the other
+\code{RelationalDataset}, \code{RelationalDatasetConnector} object(s) or other constant value,
+this/these object(s) should be included}
 }
 \if{html}{\out{</div>}}
 }
@@ -53,6 +60,7 @@ new \code{RawDatasetConnector} object
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-set_args"></a>}}
+\if{latex}{\out{\hypertarget{method-set_args}{}}}
 \subsection{Method \code{set_args()}}{
 Set arguments to the pulling function
 \subsection{Usage}{
@@ -72,6 +80,7 @@ nothing
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-get_code"></a>}}
+\if{latex}{\out{\hypertarget{method-get_code}{}}}
 \subsection{Method \code{get_code()}}{
 Get code to get data
 \subsection{Usage}{
@@ -95,6 +104,7 @@ optionally deparsed \code{call} object
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-get_dataset"></a>}}
+\if{latex}{\out{\hypertarget{method-get_dataset}{}}}
 \subsection{Method \code{get_dataset()}}{
 Get dataset
 \subsection{Usage}{
@@ -107,6 +117,7 @@ dataset (\code{<...>Dataset})
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-get_pull_fun"></a>}}
+\if{latex}{\out{\hypertarget{method-get_pull_fun}{}}}
 \subsection{Method \code{get_pull_fun()}}{
 Get pull function
 \subsection{Usage}{
@@ -119,6 +130,7 @@ dataset (\code{CallableFunction})
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-get_raw_data"></a>}}
+\if{latex}{\out{\hypertarget{method-get_raw_data}{}}}
 \subsection{Method \code{get_raw_data()}}{
 Get raw data from dataset
 \subsection{Usage}{
@@ -131,6 +143,7 @@ data (data.frame)
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-pull"></a>}}
+\if{latex}{\out{\hypertarget{method-pull}{}}}
 \subsection{Method \code{pull()}}{
 Pull the data
 
@@ -149,7 +162,8 @@ to execute \code{pull_fun} directly by \code{x$pull_fun$run()} or to get code us
 \code{x$pull_fun$get_code()}. \code{args} specified in pull are used temporary to get data but
 not saved in code.}
 
-\item{\code{try}}{(\code{logical}) whether perform function evaluation inside \code{try} clause}
+\item{\code{try}}{(\code{logical} value)\cr
+whether perform function evaluation inside \code{try} clause}
 }
 \if{html}{\out{</div>}}
 }
@@ -158,7 +172,21 @@ nothing, in order to get the data please use \code{get_data} method
 }
 }
 \if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-is_pulled"></a>}}
+\if{latex}{\out{\hypertarget{method-is_pulled}{}}}
+\subsection{Method \code{is_pulled()}}{
+Check if connector has been already pulled
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{RawDatasetConnector$is_pulled()}\if{html}{\out{</div>}}
+}
+
+\subsection{Returns}{
+\code{TRUE} if connector has been already pulled, else \code{FALSE}
+}
+}
+\if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-clone"></a>}}
+\if{latex}{\out{\hypertarget{method-clone}{}}}
 \subsection{Method \code{clone()}}{
 The objects of this class are cloneable with this method.
 \subsection{Usage}{

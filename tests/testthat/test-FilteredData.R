@@ -10,9 +10,9 @@ test_that("Initialization is correct", {
   isolate(expect_setequal(ds$datanames(), character(0)))
 })
 
-ADSL <- radsl(cached = TRUE) #nolintr
+ADSL <- radsl(cached = TRUE) #nolint
 attr(ADSL, "keys") <- get_cdisc_keys("ADSL")
-ADAE <- radae(cached = TRUE) #nolintr
+ADAE <- radae(cached = TRUE) #nolint
 attr(ADAE, "keys") <- get_cdisc_keys("ADAE")
 
 isolate({

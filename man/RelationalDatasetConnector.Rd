@@ -40,12 +40,14 @@ Pulled data inherits from the class \link{RelationalDataset}.
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="RawDatasetConnector" data-id="get_dataset">}\href{../../teal/html/RawDatasetConnector.html#method-get_dataset}{\code{teal::RawDatasetConnector$get_dataset()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="RawDatasetConnector" data-id="get_pull_fun">}\href{../../teal/html/RawDatasetConnector.html#method-get_pull_fun}{\code{teal::RawDatasetConnector$get_pull_fun()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="RawDatasetConnector" data-id="get_raw_data">}\href{../../teal/html/RawDatasetConnector.html#method-get_raw_data}{\code{teal::RawDatasetConnector$get_raw_data()}}\out{</span>}
+\item \out{<span class="pkg-link" data-pkg="teal" data-topic="RawDatasetConnector" data-id="is_pulled">}\href{../../teal/html/RawDatasetConnector.html#method-is_pulled}{\code{teal::RawDatasetConnector$is_pulled()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="RawDatasetConnector" data-id="set_args">}\href{../../teal/html/RawDatasetConnector.html#method-set_args}{\code{teal::RawDatasetConnector$set_args()}}\out{</span>}
 }
 \out{</details>}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-new"></a>}}
+\if{latex}{\out{\hypertarget{method-new}{}}}
 \subsection{Method \code{new()}}{
 Create a new \code{RelationalDatasetConnector} object. Set the pulling function
 load the data. \code{dataname} will be used as name
@@ -56,7 +58,8 @@ of object to be assigned.
   dataname,
   keys,
   code = character(0),
-  label = character(0)
+  label = character(0),
+  vars = list()
 )}\if{html}{\out{</div>}}
 }
 
@@ -77,6 +80,11 @@ A character string defining the code needed to produce the data set in \code{x}}
 
 \item{\code{label}}{(\code{character})\cr
 Label to describe the dataset}
+
+\item{\code{vars}}{(list)\cr
+In case when this object code depends on the \code{raw_data} from the other
+\code{RelationalDataset}, \code{RelationalDatasetConnector} object(s) or other constant value,
+this/these object(s) should be included}
 }
 \if{html}{\out{</div>}}
 }
@@ -86,6 +94,7 @@ new \code{RawDatasetConnector} object
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-get_dataname"></a>}}
+\if{latex}{\out{\hypertarget{method-get_dataname}{}}}
 \subsection{Method \code{get_dataname()}}{
 Get dataname of dataset
 \subsection{Usage}{
@@ -98,6 +107,7 @@ dataname of the dataset
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-get_keys"></a>}}
+\if{latex}{\out{\hypertarget{method-get_keys}{}}}
 \subsection{Method \code{get_keys()}}{
 Get keys of dataset
 \subsection{Usage}{
@@ -110,6 +120,7 @@ Get keys of dataset
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-get_dataset_label"></a>}}
+\if{latex}{\out{\hypertarget{method-get_dataset_label}{}}}
 \subsection{Method \code{get_dataset_label()}}{
 Get label of dataset
 \subsection{Usage}{
@@ -122,6 +133,7 @@ Get label of dataset
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-set_dataset_label"></a>}}
+\if{latex}{\out{\hypertarget{method-set_dataset_label}{}}}
 \subsection{Method \code{set_dataset_label()}}{
 Set label of the \code{dataset} object
 \subsection{Usage}{
@@ -139,6 +151,7 @@ Label to describe the dataset}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-get_code"></a>}}
+\if{latex}{\out{\hypertarget{method-get_code}{}}}
 \subsection{Method \code{get_code()}}{
 Get code to get data
 \subsection{Usage}{
@@ -151,7 +164,7 @@ Get code to get data
 \item{\code{deparse}}{(\code{logical})\cr
 whether to return the deparsed form of a call}
 
-\item{\code{args}}{(\code{NULL} or named \code{list})\cr
+\item{\code{args}}{(empty or named \code{list})\cr
 dynamic arguments to function which loads data}
 }
 \if{html}{\out{</div>}}
@@ -162,6 +175,7 @@ optionally deparsed \code{call} object
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-mutate_dataset"></a>}}
+\if{latex}{\out{\hypertarget{method-mutate_dataset}{}}}
 \subsection{Method \code{mutate_dataset()}}{
 Mutate dataset by code
 
@@ -181,16 +195,13 @@ Either code or script must be provided, but not both.
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-pull"></a>}}
+\if{latex}{\out{\hypertarget{method-pull}{}}}
 \subsection{Method \code{pull()}}{
 Pull the data
 
 Read or create the data using \code{pull_fun} specified in the constructor.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{RelationalDatasetConnector$pull(
-  args = NULL,
-  try = FALSE,
-  additional_args_list = list()
-)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{RelationalDatasetConnector$pull(args = NULL, try = FALSE)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
@@ -203,11 +214,8 @@ to execute \code{pull_fun} directly by \code{x$pull_fun$run()} or to get code us
 \code{x$pull_fun$get_code()}. \code{args} specified in pull are used temporary to get data but
 not saved in code.}
 
-\item{\code{try}}{(\code{logical}) whether perform function evaluation inside \code{try} clause}
-
-\item{\code{additional_args_list}}{(\code{list}) arguments that get used just if needed to call
-the pull function. This list can contain objects that are arguments of the pull functions,
-but also more objects that will be removed before the call.}
+\item{\code{try}}{(\code{logical} value)\cr
+whether perform function evaluation inside \code{try} clause}
 }
 \if{html}{\out{</div>}}
 }
@@ -217,6 +225,7 @@ nothing, in order to get the data please use \code{get_data} method
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-get_pull_args"></a>}}
+\if{latex}{\out{\hypertarget{method-get_pull_args}{}}}
 \subsection{Method \code{get_pull_args()}}{
 Derive the arguments this connector will pull with
 \subsection{Usage}{
@@ -226,6 +235,7 @@ Derive the arguments this connector will pull with
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-clone"></a>}}
+\if{latex}{\out{\hypertarget{method-clone}{}}}
 \subsection{Method \code{clone()}}{
 The objects of this class are cloneable with this method.
 \subsection{Usage}{

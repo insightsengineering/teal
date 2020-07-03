@@ -144,7 +144,7 @@ srv_filter_panel <- function(input, output, session, datasets, active_datanames 
   )
 
   # we keep anything that may be selected to add (happens when the variable is not available for filtering)
-  # lapply(isol_datanames, function(dataname) paste0("teal_add_", dataname, "_filter")) #nolintr
+  # lapply(isol_datanames, function(dataname) paste0("teal_add_", dataname, "_filter")) #nolint
   setBookmarkExclude(names = c(
     # these will be regenerated dynamically
     lapply(isol_datanames, function(dataname) paste0("teal_filters_", dataname))

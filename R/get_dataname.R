@@ -8,9 +8,7 @@
 #' @rdname get_dataname
 #' @export
 get_dataname <- function(x) {
-
   UseMethod("get_dataname")
-
 }
 
 #' @rdname get_dataname
@@ -27,9 +25,7 @@ get_dataname <- function(x) {
 #' )
 #' get_dataname(x)
 get_dataname.RelationalDatasetConnector <- function(x) { # nolint
-
     return(x$get_dataname())
-
 }
 
 #' @rdname get_dataname
@@ -40,9 +36,7 @@ get_dataname.RelationalDatasetConnector <- function(x) { # nolint
 #' ADSL_dataset <- named_dataset(dataname = "ADSL", x = ADSL)
 #' get_dataname(ADSL_dataset)
 get_dataname.NamedDataset <- function(x) {
-
     return(x$get_dataname())
-
 }
 
 #' @rdname get_dataname
@@ -53,7 +47,5 @@ get_dataname.NamedDataset <- function(x) {
 #' ADSL_dataset <- named_dataset(dataname = "ADSL", x = ADSL)
 #' get_dataname(ADSL_dataset)
 get_dataname.NamedDataset <- function(x) {
-
     return(x$get_dataname())
-
 }

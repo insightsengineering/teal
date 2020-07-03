@@ -46,10 +46,10 @@ load_datasets(rd)
 
 # RelationalDataConnector --------
 library(random.cdisc.data)
-rdc <- rcd_cdisc_data(
-  rcd_cdisc_dataset_connector("ADSL", radsl, cached = TRUE),
-  rcd_cdisc_dataset_connector("ADTTE", radtte, cached = TRUE)
-)
+adsl <- rcd_cdisc_dataset_connector(dataname = "ADSL", fun = radsl, cached = TRUE)
+adrs <- rcd_cdisc_dataset_connector(dataname = "ADRS", fun = radrs, ADSL = adsl)
+
+rdc <- rcd_cdisc_data(adsl, adrs)
 
 \dontrun{
 load_datasets(rdc)
@@ -57,15 +57,14 @@ load_datasets(rdc)
 
 # DelayedRelationalData --------
 library(random.cdisc.data)
-x <- rcd_cdisc_data( # RelationalDataConnector
-  rcd_cdisc_dataset_connector("ADSL", radsl, cached = TRUE),
-  rcd_cdisc_dataset_connector("ADLB", radlb, cached = TRUE)
-)
-x2 <- rcd_cdisc_data( # RelationalDataConnector
-  rcd_cdisc_dataset_connector("ADRS", radrs, cached = TRUE)
-)
+adsl <- rcd_cdisc_dataset_connector(dataname = "ADSL", fun = radsl, cached = TRUE)
+adlb <- rcd_cdisc_dataset_connector(dataname = "ADLB", fun = radlb, cached = TRUE)
+adrs <- rcd_cdisc_dataset_connector("ADRS", radrs, ADSL = adsl)
 
-tc <- teal_data(x, x2)
+tc <- teal_data(
+  rcd_cdisc_data(adsl, adlb),
+  rcd_cdisc_data(adrs)
+)
 
 \dontrun{
 load_datasets(tc)

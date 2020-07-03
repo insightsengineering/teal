@@ -102,7 +102,7 @@ get_raw_data.RawDatasetConnector <- function(x, dataname = NULL) { #nolint
 get_raw_data.RelationalData <- function(x, dataname = NULL) { # nolint
   datasets_names <- x$get_datanames()
 
-  if (!is.null(dataname) && (dataname %in% datasets_names)) {
+  if (!is.null(dataname) && dataname %in% datasets_names) {
     get_raw_data(
       get_dataset(x, dataname = dataname)
     )
@@ -146,7 +146,7 @@ get_raw_data.RelationalData <- function(x, dataname = NULL) { # nolint
 #' get_raw_data(cd, "ADSL")
 get_raw_data.cdisc_data <- function(x, dataname = NULL) {
   datasets_names <- names(x)
-  if (!is.null(dataname) && (dataname %in% datasets_names)) {
+  if (!is.null(dataname) && dataname %in% datasets_names) {
     get_raw_data(x[[dataname]])
   } else if (!is.null(dataname) && !(dataname %in% datasets_names)) {
     stop("The dataname supplied does not exist.")

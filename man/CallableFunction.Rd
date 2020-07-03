@@ -11,39 +11,38 @@ A \code{CallableFunction} class of objects
 \details{
 Object that stores function name with it's arguments. Methods to get call and run it.
 }
-\section{Active bindings}{
-\if{html}{\out{<div class="r6-active-bindings">}}
-\describe{
-\item{\code{args}}{(read-only) \code{list} of arguments.}
-}
-\if{html}{\out{</div>}}
-}
 \section{Methods}{
 \subsection{Public methods}{
 \itemize{
 \item \href{#method-new}{\code{CallableFunction$new()}}
-\item \href{#method-run}{\code{CallableFunction$run()}}
+\item \href{#method-assign_to_env}{\code{CallableFunction$assign_to_env()}}
+\item \href{#method-get_args}{\code{CallableFunction$get_args()}}
 \item \href{#method-get_call}{\code{CallableFunction$get_call()}}
+\item \href{#method-get_possible_args}{\code{CallableFunction$get_possible_args()}}
+\item \href{#method-run}{\code{CallableFunction$run()}}
 \item \href{#method-refresh}{\code{CallableFunction$refresh()}}
 \item \href{#method-set_args}{\code{CallableFunction$set_args()}}
-\item \href{#method-get_args}{\code{CallableFunction$get_args()}}
 \item \href{#method-set_arg_value}{\code{CallableFunction$set_arg_value()}}
-\item \href{#method-get_possible_args}{\code{CallableFunction$get_possible_args()}}
 \item \href{#method-clone}{\code{CallableFunction$clone()}}
 }
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-new"></a>}}
+\if{latex}{\out{\hypertarget{method-new}{}}}
 \subsection{Method \code{new()}}{
 Create a new \code{CallableFunction} object
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{CallableFunction$new(fun)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{CallableFunction$new(fun, env = new.env())}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{fun}}{(\code{function}) function to set up}
+\item{\code{fun}}{(\code{function})\cr
+function to be evaluated in class. Function should be named}
+
+\item{\code{env}}{(\code{environment})\cr
+environment where function will be evaluated}
 }
 \if{html}{\out{</div>}}
 }
@@ -52,30 +51,45 @@ new \code{CallableFunction} object
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-run"></a>}}
-\subsection{Method \code{run()}}{
-Run function
+\if{html}{\out{<a id="method-assign_to_env"></a>}}
+\if{latex}{\out{\hypertarget{method-assign_to_env}{}}}
+\subsection{Method \code{assign_to_env()}}{
+Assigns \code{x <- value} object to \code{env}
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{CallableFunction$run(return = TRUE, args = NULL, try = FALSE)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{CallableFunction$assign_to_env(x, value)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{return}}{(\code{logical}) whether to return an object}
+\item{\code{x}}{(\code{character} value)\cr
+name of the variable in class environment}
 
-\item{\code{args}}{(\code{NULL} or named \code{list}) dynamic arguments to function}
-
-\item{\code{try}}{(\code{logical}) whether perform function evaluation inside \code{try} clause}
+\item{\code{value}}{(\code{data.frame})\cr
+object to be assigned to \code{x}}
 }
 \if{html}{\out{</div>}}
 }
 \subsection{Returns}{
-nothing or output from function depending on \code{return} argument
+arguments the function gets called with
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-get_args"></a>}}
+\if{latex}{\out{\hypertarget{method-get_args}{}}}
+\subsection{Method \code{get_args()}}{
+get the arguments a function gets called with
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{CallableFunction$get_args()}\if{html}{\out{</div>}}
+}
+
+\subsection{Returns}{
+arguments the function gets called with
 }
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-get_call"></a>}}
+\if{latex}{\out{\hypertarget{method-get_call}{}}}
 \subsection{Method \code{get_call()}}{
 Get function call with substituted arguments in \code{args}.
 These arguments will not be stored in the object.
@@ -86,9 +100,11 @@ These arguments will not be stored in the object.
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{deparse}}{(\code{logical}) whether to return a deparsed version of call}
+\item{\code{deparse}}{(\code{logical} value)\cr
+whether to return a deparsed version of call}
 
-\item{\code{args}}{(\code{NULL} or named \code{list}) dynamic arguments to function}
+\item{\code{args}}{(\code{NULL} or named \code{list})\cr
+dynamic arguments to function}
 }
 \if{html}{\out{</div>}}
 }
@@ -97,7 +113,49 @@ These arguments will not be stored in the object.
 }
 }
 \if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-get_possible_args"></a>}}
+\if{latex}{\out{\hypertarget{method-get_possible_args}{}}}
+\subsection{Method \code{get_possible_args()}}{
+Get the arguments this call can run with
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{CallableFunction$get_possible_args()}\if{html}{\out{</div>}}
+}
+
+\subsection{Returns}{
+character vector with the names of the arguments
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-run"></a>}}
+\if{latex}{\out{\hypertarget{method-run}{}}}
+\subsection{Method \code{run()}}{
+Run function
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{CallableFunction$run(return = TRUE, args = NULL, try = FALSE)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{return}}{(\code{logical} value)\cr
+whether to return an object}
+
+\item{\code{args}}{(\code{NULL} or named \code{list})\cr
+dynamic arguments passed to function. Dynamic arguments are executed in this call and are not
+saved which means that \code{self$get_call()} won't include them later.}
+
+\item{\code{try}}{(\code{logical} value)\cr
+whether perform function evaluation inside \code{try} clause}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Returns}{
+nothing or output from function depending on \code{return} argument
+}
+}
+\if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-refresh"></a>}}
+\if{latex}{\out{\hypertarget{method-refresh}{}}}
 \subsection{Method \code{refresh()}}{
 Refresh call with function name and saved arguments
 \subsection{Usage}{
@@ -110,6 +168,7 @@ nothing
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-set_args"></a>}}
+\if{latex}{\out{\hypertarget{method-set_args}{}}}
 \subsection{Method \code{set_args()}}{
 Set up function arguments
 \subsection{Usage}{
@@ -119,7 +178,10 @@ Set up function arguments
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{args}}{(\code{NULL} or named \code{list}) dynamic arguments to function}
+\item{\code{args}}{(\code{NULL} or named \code{list})\cr
+function arguments to be stored persistently in the object. Setting \code{args} doesn't
+remove other \code{args}, only create new of modify previous of the same name.
+To clean arguments specify \code{args = NULL}.}
 }
 \if{html}{\out{</div>}}
 }
@@ -128,19 +190,8 @@ nothing
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-get_args"></a>}}
-\subsection{Method \code{get_args()}}{
-get the arguments a function gets called with
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{CallableFunction$get_args()}\if{html}{\out{</div>}}
-}
-
-\subsection{Returns}{
-arguments the function gets called with
-}
-}
-\if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-set_arg_value"></a>}}
+\if{latex}{\out{\hypertarget{method-set_arg_value}{}}}
 \subsection{Method \code{set_arg_value()}}{
 Set up single function argument with value
 \subsection{Usage}{
@@ -161,19 +212,8 @@ nothing
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-get_possible_args"></a>}}
-\subsection{Method \code{get_possible_args()}}{
-Get the arguments this call can run with
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{CallableFunction$get_possible_args()}\if{html}{\out{</div>}}
-}
-
-\subsection{Returns}{
-character vector with the names of the arguments
-}
-}
-\if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-clone"></a>}}
+\if{latex}{\out{\hypertarget{method-clone}{}}}
 \subsection{Method \code{clone()}}{
 The objects of this class are cloneable with this method.
 \subsection{Usage}{

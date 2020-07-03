@@ -51,7 +51,7 @@ NamedDataset <- R6::R6Class( # nolint
     #' Set the name for the dataset
     #' @param dataname (\code{character}) the new name
     set_dataname = function(dataname) {
-      stopifnot(utils.nest::is_character_single(dataname))
+      stopifnot(is_character_single(dataname))
       stopifnot(!grepl("\\s", dataname))
       private$.dataname <- dataname
       invisible(NULL)
@@ -86,7 +86,7 @@ NamedDataset <- R6::R6Class( # nolint
             private$.code,
             function(x) {
               paste(
-                deparse(x, width.cutoff = 80L),
+                deparse(x, width.cutoff = 500L),
                 collapse = "\n"
               )
             },

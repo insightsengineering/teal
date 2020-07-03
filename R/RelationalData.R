@@ -3,6 +3,8 @@
 #' @description
 #' Class combines multiple \code{RelationalDataset} objects.
 #'
+#' @importFrom R6 R6Class
+#'
 #' @examples
 #' x <- teal:::RelationalDataset$new(
 #'   x = data.frame(x = c(1, 2), y = c("a", "b"), stringsAsFactors = FALSE),
@@ -21,7 +23,6 @@
 #' )
 #'
 #' rd <- teal:::RelationalData$new(x, x2)
-#' @importFrom R6 R6Class
 RelationalData <- R6::R6Class( #nolint
   classname = "RelationalData",
   public = list(
@@ -41,7 +42,12 @@ RelationalData <- R6::R6Class( #nolint
         stop("All data elements should be RelationalDataset")
       }
 
-      names(datasets) <- vapply(datasets, get_dataname, character(1))
+      dataset_names <- vapply(datasets, get_dataname, character(1))
+      if (any(duplicated(dataset_names))) {
+        stop("Dataset names should be unique")
+      }
+
+      names(datasets) <- dataset_names
       private$datasets <- datasets
 
       return(invisible(self))
@@ -51,7 +57,11 @@ RelationalData <- R6::R6Class( #nolint
     #'
     #' @return \code{cdisc_data} object.
     get_cdisc_data = function() {
-      do.call("cdisc_data", private$datasets)
+      if (is.null(private$cdisc_code)) {
+        do.call("cdisc_data", private$datasets)
+      } else {
+        do.call("cdisc_data", c(private$datasets, code = private$cdisc_code))
+      }
     },
     #' @description
     #' Get names of the datasets.

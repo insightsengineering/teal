@@ -7,11 +7,12 @@
 teal_data(...)
 }
 \arguments{
-\item{...}{(\code{RelationalData, RelationalDataConnector,
-RelationalDataset or RelationalDatasetConnector})\cr}
+\item{...}{(\code{RelationalData}, \code{RelationalDataConnector}, \code{RelationalDataset} or
+\code{RelationalDatasetConnector}) elements to include into teal data object}
 }
 \value{
-cdisc_data
+\code{RelationalData} if all of the elements are of  \code{RelationalDataset} class, else
+  \code{DelayedRelationalData}
 }
 \description{
 Universal function to pass data to teal application

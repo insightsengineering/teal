@@ -19,32 +19,35 @@
 #' @param label (\code{character})\cr
 #'  Label to describe the dataset
 #'
-#' @param ... (optional)\cr
-#'   additional arguments passed to function loading data.
+#' @param vars (list)\cr
+#'   In case when this object code depends on the \code{raw_data} from the other
+#'   \code{RelationalDataset}, \code{RelationalDatasetConnector} object(s) or other constant value,
+#'   this/these object(s) should be included
 #'
 #' @return new \code{RelationalDatasetConnector} object
+#'
 #' @rdname relational_dataset_connector
+#'
 #' @export
 relational_dataset_connector <- function(pull_fun,
                                          dataname,
                                          keys,
                                          code = character(0),
                                          label = character(0),
-                                         ...) {
+                                         vars = list()) {
   stopifnot(is(pull_fun, "CallableFunction"))
   stopifnot(is_character_single(dataname))
   stopifnot(is(keys, "keys"))
   stopifnot(is_character_empty(code) || is_character_vector(code))
   stopifnot(is_character_empty(label) || is_character_vector(label))
 
-  pull_fun$set_args(list(...))
-
   x <- RelationalDatasetConnector$new(
     pull_fun = pull_fun,
     dataname = dataname,
     keys = keys,
     code = code,
-    label = label
+    label = label,
+    vars = vars
   )
 
   return(x)
@@ -57,7 +60,14 @@ relational_dataset_connector <- function(pull_fun,
 #'   any R function which generates \code{data.frame}, especially functions from
 #'   \code{random.cdisc.data} like \code{\link[random.cdisc.data]{radsl}}
 #'
+#' @param ... (\code{optional})\cr
+#'   additional arguments applied to pull function
+#'
 #' @inheritParams as_relational
+#'
+#' @rdname relational_dataset_connector
+#'
+#' @export
 #'
 #' @examples
 #' library(random.cdisc.data)
@@ -71,9 +81,6 @@ relational_dataset_connector <- function(pull_fun,
 #' load_dataset(x)
 #' get_dataset(x)
 #' x$get_raw_data()
-#'
-#' @rdname relational_dataset_connector
-#' @export
 rcd_dataset_connector <- function(dataname,
                                   fun,
                                   keys,
@@ -87,14 +94,28 @@ rcd_dataset_connector <- function(dataname,
   stopifnot(is_fully_named_list(dot_args))
 
   x_fun <- callable_function(fun) # nolint
-  x_fun$set_args(dot_args)
+
+  adsl <- if ("ADSL" %in% names(dot_args)) {
+    # ADSL argument to be included in radxxx
+    x_fun$set_args(
+      c(
+        list(ADSL = as.name("ADSL")),
+        dot_args[!names(dot_args) %in% "ADSL"]
+      )
+    )
+    dot_args["ADSL"]
+  } else {
+    x_fun$set_args(dot_args)
+    list()
+  }
 
   x <- relational_dataset_connector(
     pull_fun = x_fun,
     dataname = dataname,
     keys = keys,
     code = code_from_script(code, script),
-    label = label
+    label = label,
+    vars = adsl
   )
 
   return(x)
@@ -108,7 +129,14 @@ rcd_dataset_connector <- function(dataname,
 #'   path to (\code{.rds} or \code{.R}) that contains \code{data.frame} object or
 #'   code to \code{source}
 #'
+#' @param ... (\code{optional})\cr
+#'   additional arguments applied to pull function
+#'
 #' @inheritParams as_relational
+#'
+#' @rdname relational_dataset_connector
+#'
+#' @export
 #'
 #' @examples
 #' \dontrun{
@@ -119,9 +147,6 @@ rcd_dataset_connector <- function(dataname,
 #' )
 #' x$get_code()
 #' }
-#'
-#' @rdname relational_dataset_connector
-#' @export
 rds_dataset_connector <- function(dataname,
                                   file,
                                   keys,
@@ -138,7 +163,7 @@ rds_dataset_connector <- function(dataname,
   }
 
   x_fun <- callable_function(readRDS) # nolint
-  args <- append(list(file = file), dot_args)
+  args <- c(list(file = file), dot_args)
   x_fun$set_args(args)
 
   x <- relational_dataset_connector(
@@ -159,7 +184,14 @@ rds_dataset_connector <- function(dataname,
 #' @param file (\code{character})\cr
 #'   path to code for \code{source}
 #'
+#' @param ... (\code{optional})\cr
+#'   additional arguments applied to pull function
+#'
 #' @inheritParams as_relational
+#'
+#' @rdname relational_dataset_connector
+#'
+#' @export
 #'
 #' @examples
 #' \dontrun{
@@ -170,9 +202,6 @@ rds_dataset_connector <- function(dataname,
 #' )
 #' x$get_code()
 #' }
-#'
-#' @rdname relational_dataset_connector
-#' @export
 script_dataset_connector <- function(dataname,
                                      file,
                                      keys,
@@ -180,24 +209,24 @@ script_dataset_connector <- function(dataname,
                                      script = character(0),
                                      label = character(0),
                                      ...) {
-  dot_args <- list(...)
-  stopifnot(is_fully_named_list(dot_args))
+  vars <- list(...)
+  stopifnot(is_fully_named_list(vars))
 
   stopifnot(is_character_single(file))
   if (!file.exists(file)) {
     stop("File ", file, " does not exist.", call. = FALSE)
   }
 
-  x_fun <- callable_function(source_value) # nolint
-  args <- append(list(file = file), list(...))
-  x_fun$set_args(args)
+  x_fun <- callable_function(source) # nolint
+  x_fun$set_args(list(file = file, local = TRUE))
 
   x <- relational_dataset_connector(
     dataname = dataname,
     pull_fun = x_fun,
     keys = keys,
     code = code_from_script(code, script),
-    label = label
+    label = label,
+    vars = vars
   )
 
   return(x)
@@ -210,7 +239,14 @@ script_dataset_connector <- function(dataname,
 #' @param path (\code{character})\cr
 #'   path to the file
 #'
+#' @param ... (\code{optional})\cr
+#'   additional arguments applied to pull function
+#'
 #' @inheritParams as_relational
+#'
+#' @rdname relational_dataset_connector
+#'
+#' @export
 #'
 #' @examples
 #' x <- rice_dataset_connector(
@@ -224,9 +260,6 @@ script_dataset_connector <- function(dataname,
 #' get_dataset(x)
 #' x$get_raw_data()
 #' }
-#'
-#' @rdname relational_dataset_connector
-#' @export
 rice_dataset_connector <- function(dataname,
                                    path,
                                    keys,
@@ -267,6 +300,7 @@ rice_dataset_connector <- function(dataname,
 #' @inheritParams rds_dataset_connector
 #'
 #' @rdname relational_dataset_connector
+#'
 #' @export
 rds_cdisc_dataset_connector <- function(dataname,
                                         file,
@@ -296,6 +330,7 @@ rds_cdisc_dataset_connector <- function(dataname,
 #' @inheritParams rcd_dataset_connector
 #'
 #' @rdname relational_dataset_connector
+#'
 #' @export
 rcd_cdisc_dataset_connector <- function(dataname,
                                         fun,
@@ -326,6 +361,7 @@ rcd_cdisc_dataset_connector <- function(dataname,
 #' @inheritParams rice_dataset_connector
 #'
 #' @rdname relational_dataset_connector
+#'
 #' @export
 rice_cdisc_dataset_connector <- function(dataname,
                                          path,
@@ -354,8 +390,9 @@ rice_cdisc_dataset_connector <- function(dataname,
 #' @inheritParams script_cdisc_dataset_connector
 #'
 #' @rdname relational_dataset_connector
+#'
 #' @export
-script_cdisc_dataset_connector <- function(dataname, #nolint
+script_cdisc_dataset_connector <- function(dataname,
                                            file,
                                            keys,
                                            code = character(0),
