@@ -156,6 +156,13 @@ RelationalDatasetConnector <- R6::R6Class( #nolint
       return(invisible(self))
     },
     #' @description
+    #' Check if dataset has already been pulled.
+    #'
+    #' @return \code{TRUE} if connector has been already pulled, else \code{FALSE}
+    is_pulled = function() {
+      isFALSE(is.null(private$dataset))
+    },
+    #' @description
     #'
     #' Derive the arguments this connector will pull with
     get_pull_args = function() {

@@ -36,7 +36,7 @@ get_code(x, ...)
 )
 }
 \arguments{
-\item{x}{(\code{object}) of class\link{RawDatasetConnector} or \link{NamedDataset}. If of
+\item{x}{(\code{object}) of class \link{RawDatasetConnector} or \link{NamedDataset}. If of
 class \code{character} will be treated as file to read.}
 
 \item{...}{not used, only for support of S3}

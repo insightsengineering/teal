@@ -59,6 +59,7 @@ tc$get_datasets()
 \item \href{#method-set_server_info}{\code{RelationalDataConnector$set_server_info()}}
 \item \href{#method-set_connection}{\code{RelationalDataConnector$set_connection()}}
 \item \href{#method-set_dataset_connectors}{\code{RelationalDataConnector$set_dataset_connectors()}}
+\item \href{#method-is_pulled}{\code{RelationalDataConnector$is_pulled()}}
 \item \href{#method-clone}{\code{RelationalDataConnector$clone()}}
 }
 }
@@ -370,6 +371,18 @@ Set dataset connectors
 }
 \subsection{Returns}{
 nothing
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-is_pulled"></a>}}
+\subsection{Method \code{is_pulled()}}{
+Check if dataset has already been pulled.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{RelationalDataConnector$is_pulled()}\if{html}{\out{</div>}}
+}
+
+\subsection{Returns}{
+\code{TRUE} if connector has been already pulled, else \code{FALSE}.
 }
 }
 \if{html}{\out{<hr>}}

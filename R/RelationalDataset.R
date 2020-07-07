@@ -62,6 +62,13 @@ RelationalDataset <- R6::R6Class( # nolint
       stopifnot(is(keys, "keys"))
       private$.keys <- keys
       invisible(NULL)
+    },
+    #' @description
+    #' Check if dataset has already been pulled.
+    #'
+    #' @return \code{TRUE} if dataset has been already pulled, else \code{FALSE}
+    is_pulled = function() {
+      return(TRUE)
     }
   ),
   ## __Public Methods ====

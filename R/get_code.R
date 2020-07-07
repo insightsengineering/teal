@@ -20,7 +20,7 @@
 #'   \item{to close chunk }{\code{#<code} or \code{#<ADSL code} or \code{#<ADSL ADTTE code}}
 #' }
 #'
-#' @param x (\code{object}) of class\link{RawDatasetConnector} or \link{NamedDataset}. If of
+#' @param x (\code{object}) of class \link{RawDatasetConnector} or \link{NamedDataset}. If of
 #'   class \code{character} will be treated as file to read.
 #' @param exclude_comments (\code{logical}) whether exclude commented-out lines of code. Lines to be excluded
 #' should be ended with \code{# nocode}. For multiple line exclusions one should enclose ignored block of code with

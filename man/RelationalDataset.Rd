@@ -48,6 +48,7 @@ rel_data$set_keys(keys(primary = "x", foreign = NULL, parent = NULL))
 \item \href{#method-new}{\code{RelationalDataset$new()}}
 \item \href{#method-get_keys}{\code{RelationalDataset$get_keys()}}
 \item \href{#method-set_keys}{\code{RelationalDataset$set_keys()}}
+\item \href{#method-is_pulled}{\code{RelationalDataset$is_pulled()}}
 \item \href{#method-clone}{\code{RelationalDataset$clone()}}
 }
 }
@@ -130,6 +131,18 @@ Set new keys
 \item{\code{keys}}{(\code{keys}) Set the keys}
 }
 \if{html}{\out{</div>}}
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-is_pulled"></a>}}
+\subsection{Method \code{is_pulled()}}{
+Check if dataset has already been pulled.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{RelationalDataset$is_pulled()}\if{html}{\out{</div>}}
+}
+
+\subsection{Returns}{
+\code{TRUE} if dataset has been already pulled, else \code{FALSE}
 }
 }
 \if{html}{\out{<hr>}}

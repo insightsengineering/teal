@@ -117,7 +117,7 @@ RawDatasetConnector <- R6::R6Class( #nolint
       return(invisible(self))
     },
     #' @description
-    #' Check if connector has been already pulled
+    #' Check if dataset has already been pulled.
     #'
     #' @return \code{TRUE} if connector has been already pulled, else \code{FALSE}
     is_pulled = function() {

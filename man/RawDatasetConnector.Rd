@@ -175,7 +175,7 @@ nothing, in order to get the data please use \code{get_data} method
 \if{html}{\out{<a id="method-is_pulled"></a>}}
 \if{latex}{\out{\hypertarget{method-is_pulled}{}}}
 \subsection{Method \code{is_pulled()}}{
-Check if connector has been already pulled
+Check if dataset has already been pulled.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{RawDatasetConnector$is_pulled()}\if{html}{\out{</div>}}
 }

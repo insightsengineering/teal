@@ -30,6 +30,7 @@ Pulled data inherits from the class \link{RelationalDataset}.
 \item \href{#method-get_code}{\code{RelationalDatasetConnector$get_code()}}
 \item \href{#method-mutate_dataset}{\code{RelationalDatasetConnector$mutate_dataset()}}
 \item \href{#method-pull}{\code{RelationalDatasetConnector$pull()}}
+\item \href{#method-is_pulled}{\code{RelationalDatasetConnector$is_pulled()}}
 \item \href{#method-get_pull_args}{\code{RelationalDatasetConnector$get_pull_args()}}
 \item \href{#method-clone}{\code{RelationalDatasetConnector$clone()}}
 }
@@ -40,7 +41,6 @@ Pulled data inherits from the class \link{RelationalDataset}.
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="RawDatasetConnector" data-id="get_dataset">}\href{../../teal/html/RawDatasetConnector.html#method-get_dataset}{\code{teal::RawDatasetConnector$get_dataset()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="RawDatasetConnector" data-id="get_pull_fun">}\href{../../teal/html/RawDatasetConnector.html#method-get_pull_fun}{\code{teal::RawDatasetConnector$get_pull_fun()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="RawDatasetConnector" data-id="get_raw_data">}\href{../../teal/html/RawDatasetConnector.html#method-get_raw_data}{\code{teal::RawDatasetConnector$get_raw_data()}}\out{</span>}
-\item \out{<span class="pkg-link" data-pkg="teal" data-topic="RawDatasetConnector" data-id="is_pulled">}\href{../../teal/html/RawDatasetConnector.html#method-is_pulled}{\code{teal::RawDatasetConnector$is_pulled()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="RawDatasetConnector" data-id="set_args">}\href{../../teal/html/RawDatasetConnector.html#method-set_args}{\code{teal::RawDatasetConnector$set_args()}}\out{</span>}
 }
 \out{</details>}
@@ -221,6 +221,18 @@ whether perform function evaluation inside \code{try} clause}
 }
 \subsection{Returns}{
 nothing, in order to get the data please use \code{get_data} method
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-is_pulled"></a>}}
+\subsection{Method \code{is_pulled()}}{
+Check if dataset has already been pulled.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{RelationalDatasetConnector$is_pulled()}\if{html}{\out{</div>}}
+}
+
+\subsection{Returns}{
+\code{TRUE} if connector has been already pulled, else \code{FALSE}
 }
 }
 \if{html}{\out{<hr>}}
