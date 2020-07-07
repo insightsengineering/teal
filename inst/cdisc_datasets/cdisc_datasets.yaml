@@ -8,6 +8,11 @@ ADAE:
   foreign: ["STUDYID", "USUBJID"]
   parent: "ADSL"
 
+ADEG:
+  primary: ["STUDYID", "USUBJID", "PARAMCD", "AVISIT"]
+  foreign: ["STUDYID", "USUBJID"]
+  parent: "ADSL"
+
 ADTTE:
   primary: ["STUDYID", "USUBJID", "PARAMCD"]
   foreign: ["STUDYID", "USUBJID"]
