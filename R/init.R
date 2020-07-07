@@ -216,6 +216,7 @@ init <- function(data,
 
         if ("all" %in% filters) {
           lapply(datasets$datanames(), function(dataname) {
+            shinyjs::show(paste0("teal_filters_", dataname, "-filters"))
             shinyjs::show(paste0("teal_add_", dataname, "_filters"))
           })
         } else {
