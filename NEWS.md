@@ -1,3 +1,7 @@
+# teal 0.8.5
+
+* UI bug fix to hide filter elements for not used datasets.
+
 # teal 0.8.4
 
 * Progress bar for ui creation in delayed loading module.

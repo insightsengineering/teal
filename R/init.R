@@ -222,11 +222,14 @@ init <- function(data,
           lapply(
             datasets$datanames(),
             function(dataname) {
-              id <- paste0("teal_add_", dataname, "_filters")
+              id_filters <- paste0("teal_filters_", dataname, "-filters")
+              id_add <- paste0("teal_add_", dataname, "_filters")
               if (dataname == "ADSL" || dataname %in% filters) {
-                shinyjs::show(id)
+                shinyjs::show(id_filters)
+                shinyjs::show(id_add)
               } else {
-                shinyjs::hide(id)
+                shinyjs::hide(id_filters)
+                shinyjs::hide(id_add)
               }
             }
           )
