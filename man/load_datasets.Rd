@@ -4,7 +4,7 @@
 \alias{load_datasets}
 \alias{load_datasets.RelationalData}
 \alias{load_datasets.RelationalDataConnector}
-\alias{load_datasets.DelayedRelationalData}
+\alias{load_datasets.RelationalDataList}
 \title{Load datasets}
 \usage{
 load_datasets(x)
@@ -13,7 +13,7 @@ load_datasets(x)
 
 \method{load_datasets}{RelationalDataConnector}(x)
 
-\method{load_datasets}{DelayedRelationalData}(x)
+\method{load_datasets}{RelationalDataList}(x)
 }
 \arguments{
 \item{x}{(\code{object}) of class\link{RawDatasetConnector} or \link{NamedDataset}. If of
@@ -55,7 +55,7 @@ rdc <- rcd_cdisc_data(adsl, adrs)
 load_datasets(rdc)
 }
 
-# DelayedRelationalData --------
+# RelationalDataList --------
 library(random.cdisc.data)
 adsl <- rcd_cdisc_dataset_connector(dataname = "ADSL", fun = radsl, cached = TRUE)
 adlb <- rcd_cdisc_dataset_connector(dataname = "ADLB", fun = radlb, cached = TRUE)

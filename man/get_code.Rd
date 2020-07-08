@@ -7,7 +7,7 @@
 \alias{get_code.cdisc_data}
 \alias{get_code.RelationalData}
 \alias{get_code.RelationalDataConnector}
-\alias{get_code.DelayedRelationalData}
+\alias{get_code.RelationalDataList}
 \alias{get_code.default}
 \title{Get code}
 \usage{
@@ -23,7 +23,7 @@ get_code(x, ...)
 
 \method{get_code}{RelationalDataConnector}(x, dataname = NULL, deparse = TRUE, ...)
 
-\method{get_code}{DelayedRelationalData}(x, dataname = NULL, deparse = TRUE, ...)
+\method{get_code}{RelationalDataList}(x, dataname = NULL, deparse = TRUE, ...)
 
 \method{get_code}{default}(
   x,

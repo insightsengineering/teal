@@ -47,7 +47,6 @@ Pulled data inherits from the class \link{RelationalDataset}.
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-new"></a>}}
-\if{latex}{\out{\hypertarget{method-new}{}}}
 \subsection{Method \code{new()}}{
 Create a new \code{RelationalDatasetConnector} object. Set the pulling function
 load the data. \code{dataname} will be used as name
@@ -94,7 +93,6 @@ new \code{RawDatasetConnector} object
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-get_dataname"></a>}}
-\if{latex}{\out{\hypertarget{method-get_dataname}{}}}
 \subsection{Method \code{get_dataname()}}{
 Get dataname of dataset
 \subsection{Usage}{
@@ -107,7 +105,6 @@ dataname of the dataset
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-get_keys"></a>}}
-\if{latex}{\out{\hypertarget{method-get_keys}{}}}
 \subsection{Method \code{get_keys()}}{
 Get keys of dataset
 \subsection{Usage}{
@@ -120,7 +117,6 @@ Get keys of dataset
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-get_dataset_label"></a>}}
-\if{latex}{\out{\hypertarget{method-get_dataset_label}{}}}
 \subsection{Method \code{get_dataset_label()}}{
 Get label of dataset
 \subsection{Usage}{
@@ -133,7 +129,6 @@ Get label of dataset
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-set_dataset_label"></a>}}
-\if{latex}{\out{\hypertarget{method-set_dataset_label}{}}}
 \subsection{Method \code{set_dataset_label()}}{
 Set label of the \code{dataset} object
 \subsection{Usage}{
@@ -151,7 +146,6 @@ Label to describe the dataset}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-get_code"></a>}}
-\if{latex}{\out{\hypertarget{method-get_code}{}}}
 \subsection{Method \code{get_code()}}{
 Get code to get data
 \subsection{Usage}{
@@ -175,7 +169,6 @@ optionally deparsed \code{call} object
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-mutate_dataset"></a>}}
-\if{latex}{\out{\hypertarget{method-mutate_dataset}{}}}
 \subsection{Method \code{mutate_dataset()}}{
 Mutate dataset by code
 
@@ -195,7 +188,6 @@ Either code or script must be provided, but not both.
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-pull"></a>}}
-\if{latex}{\out{\hypertarget{method-pull}{}}}
 \subsection{Method \code{pull()}}{
 Pull the data
 
@@ -237,7 +229,6 @@ Check if dataset has already been pulled.
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-get_pull_args"></a>}}
-\if{latex}{\out{\hypertarget{method-get_pull_args}{}}}
 \subsection{Method \code{get_pull_args()}}{
 Derive the arguments this connector will pull with
 \subsection{Usage}{
@@ -247,7 +238,6 @@ Derive the arguments this connector will pull with
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-clone"></a>}}
-\if{latex}{\out{\hypertarget{method-clone}{}}}
 \subsection{Method \code{clone()}}{
 The objects of this class are cloneable with this method.
 \subsection{Usage}{

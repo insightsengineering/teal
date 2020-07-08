@@ -74,7 +74,6 @@ rel_data$set_keys(keys(primary = "x", foreign = NULL, parent = NULL))
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-new"></a>}}
-\if{latex}{\out{\hypertarget{method-new}{}}}
 \subsection{Method \code{new()}}{
 initialize a \code{RelationalDataset} class object
 \subsection{Usage}{
@@ -108,7 +107,6 @@ needed to produce the data set in \code{x}}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-get_keys"></a>}}
-\if{latex}{\out{\hypertarget{method-get_keys}{}}}
 \subsection{Method \code{get_keys()}}{
 Derive the keys
 \subsection{Usage}{
@@ -118,7 +116,6 @@ Derive the keys
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-set_keys"></a>}}
-\if{latex}{\out{\hypertarget{method-set_keys}{}}}
 \subsection{Method \code{set_keys()}}{
 Set new keys
 \subsection{Usage}{
@@ -147,7 +144,6 @@ Check if dataset has already been pulled.
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-clone"></a>}}
-\if{latex}{\out{\hypertarget{method-clone}{}}}
 \subsection{Method \code{clone()}}{
 The objects of this class are cloneable with this method.
 \subsection{Usage}{

@@ -1,4 +1,4 @@
-# DelayedRelationalData ------
+# RelationalDataList ------
 #' @title Manage multiple \code{RelationalDataConnector} and \code{RelationalDatasetConnector}
 #' @description
 #' Class manages  \code{RelationalDataConnector} and \code{RelationalDatasetConnector} objects
@@ -15,14 +15,14 @@
 #'   rcd_cdisc_dataset_connector("ADRS", radrs, cached = TRUE)
 #' )
 #'
-#' tc <- teal:::DelayedRelationalData$new(x, x2)
+#' tc <- teal:::RelationalDataList$new(x, x2)
 #' \dontrun{
 #' tc$launch()
 #' tc$get_cdisc_data()
 #' }
 #' @importFrom R6 R6Class
-DelayedRelationalData <- R6::R6Class( #nolint
-  classname = "DelayedRelationalData",
+RelationalDataList <- R6::R6Class( #nolint
+  classname = "RelationalDataList",
   inherit = RelationalData,
   # ..public ------
   public = list(

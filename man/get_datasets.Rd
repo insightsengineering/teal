@@ -47,7 +47,7 @@ load_datasets(rdc)
 get_datasets(rdc)
 }
 
-# DelayedRelationalData --------
+# RelationalDataList --------
 drc <- teal_data(adsl, adtte, rdc)
 
 get_datasets(drc)

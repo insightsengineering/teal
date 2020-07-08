@@ -102,7 +102,7 @@ load_datasets.RelationalDataConnector <- function(x) { # nolint
 #' @export
 #' @examples
 #'
-#' # DelayedRelationalData --------
+#' # RelationalDataList --------
 #' library(random.cdisc.data)
 #' adsl <- rcd_cdisc_dataset_connector(dataname = "ADSL", fun = radsl, cached = TRUE)
 #' adlb <- rcd_cdisc_dataset_connector(dataname = "ADLB", fun = radlb, cached = TRUE)
@@ -116,7 +116,7 @@ load_datasets.RelationalDataConnector <- function(x) { # nolint
 #' \dontrun{
 #' load_datasets(tc)
 #' }
-load_datasets.DelayedRelationalData <- function(x) { # nolint
+load_datasets.RelationalDataList <- function(x) { # nolint
   if (interactive()) {
     x$get_server()
   } else {

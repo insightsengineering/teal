@@ -39,7 +39,7 @@ get_datasets <- function(x) {
 #' get_datasets(rdc)
 #'}
 #'
-#' # DelayedRelationalData --------
+#' # RelationalDataList --------
 #' drc <- teal_data(adsl, adtte, rdc)
 #'
 #' get_datasets(drc)

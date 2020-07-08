@@ -228,7 +228,7 @@ get_code.RelationalDataConnector <- function(x, dataname = NULL, deparse = TRUE,
 #' get_code(tc, "ADTTE")
 #' get_code(tc, "ADAE")
 #' }
-get_code.DelayedRelationalData <- function(x, dataname = NULL, deparse = TRUE, ...) { # nolint
+get_code.RelationalDataList <- function(x, dataname = NULL, deparse = TRUE, ...) { # nolint
 
   code_all <- x$get_code()
   names_all <- x$get_datanames()

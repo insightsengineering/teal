@@ -12,7 +12,7 @@ teal_data(...)
 }
 \value{
 \code{RelationalData} if all of the elements are of  \code{RelationalDataset} class, else
-  \code{DelayedRelationalData}
+  \code{RelationalDataList}
 }
 \description{
 Universal function to pass data to teal application

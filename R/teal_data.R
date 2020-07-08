@@ -8,7 +8,7 @@
 #'   \code{RelationalDatasetConnector}) elements to include into teal data object
 #'
 #' @return \code{RelationalData} if all of the elements are of  \code{RelationalDataset} class, else
-#'   \code{DelayedRelationalData}
+#'   \code{RelationalDataList}
 #'
 #' @examples
 #' # RelationalData
@@ -61,7 +61,7 @@ teal_data <- function(...) {
   teal_data <- if (all(vapply(d, FUN = is, FUN.VALUE = logical(1), class2 = "RelationalDataset"))) {
     RelationalData$new(...)
   } else {
-    DelayedRelationalData$new(...)
+    RelationalDataList$new(...)
   }
 
   return(teal_data)
