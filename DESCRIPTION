@@ -59,6 +59,7 @@ VignetteBuilder: knitr
 Collate: 
     'CallableFunction.R'
     'DataConnection.R'
+    'DatasetConnector_constructors.R'
     'DelayedRelationalData.R'
     'FilteredData.R'
     'NamedDataset.R'
