@@ -42,7 +42,7 @@
 #'   rcd_cdisc_dataset_connector("ADRS", radrs, cached = TRUE)
 #' )
 #'
-#' delayed_data <- teal_data(x1, x2, x3, x4)
+#' delayed_data <- teal_data(x3, x2, x4)
 #' \dontrun{
 #' delayed_data$launch()
 #' delayed_data$get_cdisc_data()

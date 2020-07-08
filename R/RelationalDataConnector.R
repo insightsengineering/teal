@@ -140,14 +140,8 @@ RelationalDataConnector <- R6::R6Class( #nolint
                        uiOutput("result")),
         server = function(input, output, session) {
           session$onSessionEnded(stopApp)
-
-          dat <- callModule(private$server, id = "main_app")
-          output$result <- renderUI({
-            if (length(dat()) > 0 &&
-                all(vapply(dat(), is, logical(1), "RelationalDataset")) &&
-                !any(vapply(dat(), is.null, logical(1)))) {
-              return(h3("Data successfully loaded!"))
-            }
+          observeEvent(input[[submit_id]], {
+            dat <- callModule(private$server, id = "main_app")
           })
         }
       )
@@ -212,7 +206,7 @@ RelationalDataConnector <- R6::R6Class( #nolint
                                  fun_args_fixed = NULL,
                                  fun_args_dynamic = NULL,
                                  fun_args_replacement = NULL
-                                 ) {
+    ) {
       stopifnot(is_character_single(submit_id))
       stopifnot(is.null(con_args_fixed) || is.list(con_args_fixed))
       stopifnot(is.null(con_args_dynamic) || is.list(con_args_dynamic))
@@ -223,33 +217,27 @@ RelationalDataConnector <- R6::R6Class( #nolint
       stopifnot(is.null(fun_args_replacement) ||
                   (is.list(fun_args_replacement) && identical(names(fun_args_dynamic), names(fun_args_replacement))))
 
+
+      private$con_args_fixed <- con_args_fixed
+      private$con_args_dynamic <- con_args_dynamic
+      private$con_args_replacement <- con_args_replacement
+      private$fun_args_fixed <- fun_args_fixed
+      private$fun_args_dynamic <- fun_args_dynamic
+      private$fun_args_replacement <- fun_args_replacement
+
       self$set_server(
         function(input, output, session, return_cdisc_data = TRUE) {
-          rv <- reactiveVal(NULL)
-          observeEvent(input[[submit_id]], {
-            private$refresh_data(
-              input = input,
-              submit_id = submit_id,
-              session = session,
-              try = TRUE,
-              con_args_fixed = con_args_fixed,
-              con_args_dynamic = con_args_dynamic,
-              con_args_replacement = con_args_replacement,
-              fun_args_fixed = fun_args_fixed,
-              fun_args_dynamic = fun_args_dynamic,
-              fun_args_replacement = fun_args_replacement
-            )
 
-            if (return_cdisc_data) {
-              res <- private$datasets
-              do.call(what = "cdisc_data", res)
-            } else {
-              res <- private$datasets
-            }
+          # will be replaced by call module of each dataset
+          private$pull(try = TRUE)
 
-            rv(res)
-          })
-          return(rv)
+          res <- if (return_cdisc_data) {
+            self$get_cdisc_data()
+          } else {
+            private$datasets
+          }
+
+          return(res)
         }
       )
 
@@ -315,6 +303,15 @@ RelationalDataConnector <- R6::R6Class( #nolint
     dataset_connectors = NULL,
     check = FALSE,
     datasets = NULL,
+    # args helper
+    con_args_fixed = NULL,
+    con_args_dynamic = NULL,
+    con_args_replacement = NULL,
+    fun_args_fixed = NULL,
+    fun_args_dynamic = NULL,
+    fun_args_replacement = NULL,
+
+
     # ....methods ----
 
     # adds open/close connection code at beginning/end of the dataset code
@@ -322,44 +319,24 @@ RelationalDataConnector <- R6::R6Class( #nolint
       lapply(
         private$datasets,
         function(ds) {
-          private$stop_on_error(
-            try(
-              ds$set_code(code = paste(
-                c(
-                  if_not_null(private$connection,
-                              private$connection$get_open_call(deparse = TRUE, args = con_args_replacement)),
-                  get_code(ds, deparse = TRUE, args = fun_args_replacement, FUN.VALUE = character(1)),
-                  if_not_null(private$connection,
-                              private$connection$get_close_call(deparse = TRUE, silent = TRUE))
-                ),
-                collapse = "\n"
-              ))
-            ),
-            submit_id = submit_id,
-            progress = progress
+
+          try(
+            ds$set_code(code = paste(
+              c(
+                if_not_null(private$connection,
+                            private$connection$get_open_call(deparse = TRUE, args = con_args_replacement)),
+                get_code(ds, deparse = TRUE, args = fun_args_replacement, FUN.VALUE = character(1)),
+                if_not_null(private$connection,
+                            private$connection$get_close_call(deparse = TRUE, silent = TRUE))
+              ),
+              collapse = "\n"
+            ))
           )
         }
       )
 
     },
-    refresh_data = function(input = NULL,
-                            submit_id = character(0),
-                            session = NULL,
-                            try = shiny::isRunning(),
-                            con_args_fixed = NULL,
-                            con_args_dynamic = NULL,
-                            con_args_replacement = NULL,
-                            fun_args_fixed = NULL,
-                            fun_args_dynamic = NULL,
-                            fun_args_replacement = NULL) {
-      progress <- NULL
-      if (shiny::isRunning()) {
-        shinyjs::disable(submit_id)
-
-        progress <- shiny::Progress$new(session)
-        progress$set(0.1, message = "Setting up connection ...")
-      }
-
+    pull = function(try = shiny::isRunning()) {
       optional_eval <- function(x, envir = parent.frame(1L)) {
         if (is.null(x)) {
           return(NULL)
@@ -377,42 +354,31 @@ RelationalDataConnector <- R6::R6Class( #nolint
         }
       }
 
-      con_args_fixed <- optional_eval(con_args_fixed)
-      con_args_dynamic <- optional_eval(con_args_dynamic)
-      fun_args_fixed <- optional_eval(fun_args_fixed, parent.frame())
-      fun_args_dynamic <- optional_eval(fun_args_dynamic)
+      con_args_fixed <- optional_eval(private$con_args_fixed)
+      con_args_dynamic <- optional_eval(private$con_args_dynamic)
+      fun_args_fixed <- optional_eval(private$fun_args_fixed, parent.frame())
+      fun_args_dynamic <- optional_eval(private$fun_args_dynamic)
 
       datanames <- vapply(private$dataset_connectors, get_dataname, character(1))
 
       if (!is.null(private$connection)) {
         private$connection$set_open_args(args = con_args_fixed)
-        private$stop_on_error(
-          private$connection$open(args = con_args_dynamic, try = try),
-          submit_id, progress
-        )
+        private$connection$open(args = con_args_dynamic, try = try)
       }
 
       datasets <- list()
       datanames <- self$get_datanames()
       for (i in seq_along(private$dataset_connectors)) {
-        if_not_null(progress,
-                    progress$set(0.2 + 0.4 * (i - 1) / length(private$dataset_connectors),
-                                 message = paste0("Loading data '",
-                                                  private$dataset_connectors[[i]]$get_dataname(), "' ...")))
-
         if (!is_empty(fun_args_fixed)) {
           set_args(x = private$dataset_connectors[[i]], args = fun_args_fixed)
         }
 
-        dataset <- private$stop_on_error(
-          get_dataset(
-            load_dataset(
-              private$dataset_connectors[[i]],
-              args = fun_args_dynamic,
-              try = try
-            )
-          ),
-          submit_id, progress
+        dataset <- get_dataset(
+          load_dataset(
+            private$dataset_connectors[[i]],
+            args = fun_args_dynamic,
+            try = try
+          )
         )
         datasets[[datanames[i]]] <- dataset
       }
@@ -420,17 +386,12 @@ RelationalDataConnector <- R6::R6Class( #nolint
       private$dataset_connectors <- NULL
 
       if_not_null(private$connection, private$connection$close(silent = TRUE))
-      if_not_null(progress, progress$set(0.7, message = "Setting relational datasets ..."))
 
       private$datasets <- datasets
       rm(datasets)
 
-      private$append_connection_code(con_args_replacement, fun_args_replacement)
-
-      if_not_null(progress, progress$set(1, message = "Loading complete!"))
-
-      Sys.sleep(0.5) #just for the progess bar to be shown
-      if_not_null(progress, progress$close())
+      private$append_connection_code(private$con_args_replacement,
+                                     private$fun_args_replacement)
 
       return(invisible(NULL))
     },

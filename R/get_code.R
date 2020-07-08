@@ -245,6 +245,7 @@ get_code.RelationalDataList <- function(x, dataname = NULL, deparse = TRUE, ...)
 
 #' @rdname get_code
 #' @export
+#' @importFrom methods hasArg
 #' @importFrom magrittr %>%
 get_code.default <- function(x,
                              exclude_comments = TRUE,

@@ -2,12 +2,16 @@
 % Please edit documentation in R/get_dataname.R
 \name{get_dataname}
 \alias{get_dataname}
+\alias{get_dataname.RelationalDataConnector}
 \alias{get_dataname.RelationalDatasetConnector}
 \alias{get_dataname.NamedDataset}
-\title{S3 method for getting a dataname of
-(\code{RelationalDatasetConnector } or \code{NamedDataset}) R6 object}
+\title{S3 method for getting a dataname(s) of
+(\code{RelationalDataConnector}, (\code{RelationalDatasetConnector} or
+\code{NamedDataset}) R6 object}
 \usage{
 get_dataname(x)
+
+\method{get_dataname}{RelationalDataConnector}(x)
 
 \method{get_dataname}{RelationalDatasetConnector}(x)
 
@@ -16,15 +20,17 @@ get_dataname(x)
 \method{get_dataname}{NamedDataset}(x)
 }
 \arguments{
-\item{x}{(\code{RelationalDatasetConnector} or \code{NamedDataset}) R6 object}
+\item{x}{(\code{RelationalDataConnector}, (\code{RelationalDatasetConnector} or
+\code{NamedDataset}) R6 object}
 }
 \value{
-dataname (\code{character}) A given name for the dataset
+dataname (\code{character}) A given name for the dataset(s)
   it may not contain spaces
 }
 \description{
-S3 method for getting a dataname of
-(\code{RelationalDatasetConnector } or \code{NamedDataset}) R6 object
+S3 method for getting a dataname(s) of
+(\code{RelationalDataConnector}, (\code{RelationalDatasetConnector} or
+\code{NamedDataset}) R6 object
 }
 \examples{
 library(random.cdisc.data)

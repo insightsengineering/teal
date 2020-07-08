@@ -30,67 +30,37 @@ RelationalDataList <- R6::R6Class( #nolint
     #'  \code{RelationalDatasetConnector}) object
     #'
     initialize = function(...) {
-      connectors <- list(...)
+      dot_args <- list(...)
       delayed_classes <- c("RelationalDataConnector", "RelationalDataset", "RelationalDatasetConnector")
 
-      is_teal_data <- is_any_class_list(connectors, delayed_classes)
+      is_teal_data <- is_any_class_list(dot_args, delayed_classes)
       if (!all(is_teal_data)) {
         stop("All data elements should be RelationalData(set) or RelationalData(set)Connection")
       }
 
-      # sort elements by class name
-      connectors <- sapply(
-        delayed_classes,
-        function(class_name) {
-          Filter(
-            function(x) {
-              is(object = x, class2 = class_name)
-            },
-            connectors
-          )
-        },
-        USE.NAMES = TRUE,
-        simplify = FALSE
-      )
-      private$data_connectors <- connectors$RelationalDataConnector
-
-      private$datasets <- connectors$RelationalDataset
-      names(private$datasets) <- vapply(connectors$RelationalDataset,
-                                        get_dataname,
-                                        character(1))
-
-      private$dataset_connectors <- connectors$RelationalDatasetConnector
-      names(private$dataset_connectors) <- vapply(connectors$RelationalDatasetConnector,
-                                                  get_dataname,
-                                                  character(1))
-
-      names_all <- c(names(private$datasets),
-                     names(private$dataset_connectors),
-                     names(private$data_connectors))
-
-      if (any(duplicated(names_all))) {
+      datanames <- unlist(lapply(dot_args, get_dataname))
+      if (any(duplicated(datanames))) {
         stop("Please do not include duplicated names.")
       }
 
-      # Retrieve the IDs of the submit buttons
-      # from all the connectors handed over
-      # id of buttons is data_connector_<dataname>
-      # (or <dataname_dataname> if multiple)
-      if (length(private$data_connectors) > 0) {
-        private$ui_submit_ids <- lapply(
-          private$data_connectors,
-          function(dc) {
-            paste0(
-              "data_connector_",
-              paste0(
-                vapply(dc$get_dataset_connectors(), get_dataname, character(1)),
-                collapse = "_"
-              ),
-              "-",
-              dc$get_submit_id()
-            )
-          }
+      dot_args <- lapply(c(TRUE, FALSE), function(condition) {
+        Filter(
+          function(x) {
+            is(object = x, class2 = "RelationalDataset") == condition
+          },
+          dot_args
         )
+      })
+
+      private$datasets <- dot_args[[1]]
+      names(private$datasets) <- vapply(private$datasets, get_dataname, character(1))
+
+      private$connectors <- dot_args[[2]]
+
+
+
+
+      if (length(self$get_data_connectors()) > 0) {
         private$set_ui()
         private$set_server()
       }
@@ -104,28 +74,20 @@ RelationalDataList <- R6::R6Class( #nolint
     get_datanames = function() {
       c(
         vapply(private$datasets, get_dataname, character(1)),
-        vapply(private$dataset_connectors, get_dataname, character(1)),
-        `if`(
-          length(private$data_connectors) > 0,
-          unlist(lapply(private$data_connectors, function(x) x$get_datanames())),
-          NULL
-        )
+        unlist(lapply(private$connectors, get_dataname))
       )
     },
     #' @description
     #'
     #' Derive the code for all datasets
-    #' @return \code{list} of \code{character} containing code
+    #' @return \code{vector} of \code{character} containing code
     get_code = function() {
-      c(
+      code <- c(
         vapply(private$datasets, get_code, character(1)),
-        vapply(private$dataset_connectors, get_code, character(1)),
-        `if`(
-          length(private$data_connectors) > 0,
-          unlist(lapply(private$data_connectors, function(x) x$get_code())),
-          NULL
-        )
+        unlist(lapply(private$connectors, get_code))
       )
+      names(code) <- self$get_datanames()
+      code
     },
     #' @description
     #'
@@ -144,13 +106,21 @@ RelationalDataList <- R6::R6Class( #nolint
     #'
     #' @return \code{list} with all \code{RelationalDatasetConnector} objects.
     get_dataset_connectors = function() {
-      return(private$dataset_connectors)
+      return(Filter(
+        function(x) {
+          is(object = x, class2 = "RelationalDatasetConnector")
+        },
+        private$connectors))
     },
     #' Get data connectors.
     #'
     #' @return \code{list} with all \code{RelationalDataConnector} objects.
     get_data_connectors = function() {
-      return(private$data_connectors)
+      return(Filter(
+        function(x) {
+          is(object = x, class2 = "RelationalDataConnector")
+        },
+        private$connectors))
     },
     #' @description
     #'
@@ -189,8 +159,13 @@ RelationalDataList <- R6::R6Class( #nolint
     #'
     #' This piece is mainly used for debugging.
     launch = function() {
-      # load RelationDataConnector with shiny app
-      if (length(private$data_connectors) > 0) {
+      # if no data connectors can append any dataset connectors
+      # and not load an app
+      if (length(self$get_data_connectors()) == 0) {
+        private$append_dataset_connectors()
+      } else {
+        # otherwise load RelationDataConnector and
+        # RelationalDatasetConnector with shiny app
         shinyApp(
           ui = fluidPage(private$ui(id = "main_app"),
                          br(),
@@ -200,11 +175,11 @@ RelationalDataList <- R6::R6Class( #nolint
             session$onSessionEnded(stopApp)
 
             dat <- callModule(private$server, id = "main_app")
-              output$result <- renderUI({
-                if (is(dat(), "cdisc_data")) {
-                  private$data_connectors <- NULL
-                  return(h3("Data successfully loaded!"))
-                }
+            output$result <- renderUI({
+              if (is(dat(), "cdisc_data")) {
+                private$connectors <- NULL
+                return(h3("Data successfully loaded!"))
+              }
             })
           }
         )
@@ -214,14 +189,12 @@ RelationalDataList <- R6::R6Class( #nolint
   # ..private ------
   private = list(
     # .... fields: ------
-    data_connectors = NULL,
-    dataset_connectors = NULL,
+    connectors = NULL,
     ui = NULL,
-    ui_submit_ids = NULL,
     # .... methods: ------
     server = NULL,
-    append_datasets = function(datasets, from = NULL) {
-      stopifnot(is_character_single(from) || is.null(from))
+    append_datasets = function(datasets, remove_connectors = TRUE) {
+      stopifnot(is_logical_single(remove_connectors))
       stopifnot(is(datasets, "RelationalDataset") ||
                   (is.list(datasets) && all(vapply(datasets, is, logical(1), "RelationalDataset"))))
 
@@ -238,26 +211,26 @@ RelationalDataList <- R6::R6Class( #nolint
       # save datasets in object
       private$datasets <- c(private$datasets, datasets)
 
-      if (!is.null(from)) {
+      if (remove_connectors) {
         # To not duplicate data, remove the connectors
         # at the origin
-        private[[from]] <- NULL
+        private$connectors <- NULL
       }
 
       invisible(NULL)
     },
     append_dataset_connectors = function() {
-      # load RelationDatasetConnector objects
-      if (length(private$dataset_connectors) > 0) {
+      # append datasets only if all connectors are DatasetConnectors
+      stopifnot(length(self$get_data_connectors()) == 0)
+      if (length(private$connectors) > 0) {
         # save datasets in object
         private$append_datasets(
-          datasets = lapply(private$dataset_connectors, function(x) {
+          datasets = lapply(private$connectors, function(x) {
             if (!is.null(x)) {
               load_dataset(x)
               return(get_dataset(x))
             }
-          }),
-          from = "dataset_connectors"
+          })
         )
       }
     },
@@ -265,19 +238,32 @@ RelationalDataList <- R6::R6Class( #nolint
       private$ui <- function(id) {
         ns <- NS(id)
         # hide "submit" buttons in favour of one "submit_all"
+        submit_ids <- lapply(
+          self$get_data_connectors(),
+          function(dc) {
+            sprintf("data_connector_%s-%s",
+                    paste0(
+                      dc$get_datanames(),
+                      collapse = "_"
+                    ),
+                    dc$get_submit_id())
+          }
+        )
+
+
         tagList(
           tags$head(
             tags$style(
-              paste0(paste0("#", ns(private$ui_submit_ids), " {display:none}"), collapse = "\n")
+              paste0(paste0("#", ns(submit_ids), " {display:none}"), collapse = "\n")
             )
           ),
 
           do.call(
             what = "tagList",
             args = lapply(
-              private$data_connectors,
+              self$get_data_connectors(),
               function(x) {
-                datanames <- vapply(x$get_dataset_connectors(), get_dataname, character(1))
+                datanames <- x$get_datanames()
                 div(
                   h3(paste(c("Inputs for:", datanames), collapse = " ")),
                   x$get_ui(
@@ -295,54 +281,45 @@ RelationalDataList <- R6::R6Class( #nolint
     },
     set_server = function() {
       private$server <- function(input, output, session) {
-        private$append_dataset_connectors()
-
-        # each RelationalDataConnector modules is called here
-        data_connector_modules <- lapply(
-          private$data_connectors,
-          function(dc) {
-            id <- paste0(
-              "data_connector_",
-              paste0(
-                vapply(dc$get_dataset_connectors(), get_dataname, character(1)),
-                collapse = "_"
-              )
-            )
-            callModule(dc$get_server(), id, return_cdisc_data = FALSE)
-          }
-        )
-
-        # teal::init uses reactive(cdisc_data)
-        res <- reactive({
-          datasets <- unlist(lapply(data_connector_modules, function(x) x()))
-          if (all(vapply(datasets, is, logical(1), "RelationalDataset")) &&
-              length(datasets) > 0 &&
-              !any(vapply(datasets, is.null, logical(1)))) {
-
-            # save datasets in object
-            private$append_datasets(
-              datasets = datasets,
-              from = "data_connectors"
-            )
-
-            self$get_cdisc_data()
-          } else {
-            NULL
-          }
-        })
-
-        # click hidden 'submit' buttons when clicking 'submit_all'
+        res <- reactiveVal(NULL)
         observeEvent(input$submit, {
-          sapply(
-            private$ui_submit_ids,
-            function(id)  {
-              shinyjs::click(id)
+
+          # load data from all connectors
+          lapply(
+            private$connectors,
+            function(dc) {
+              if (is(dc, class2 = "RelationalDataConnector")) {
+                id <- paste0(
+                  "data_connector_",
+                  paste0(
+                    vapply(dc$get_dataset_connectors(), get_dataname, character(1)),
+                    collapse = "_"
+                  )
+                )
+                callModule(dc$get_server(), id, return_cdisc_data = FALSE)
+              } else {
+                load_dataset(dc)
+              }
             }
           )
+
+          # pull out datasets from connectors
+          datasets <- unlist(lapply(private$connectors, function(dc) {
+            if (is(dc, "RelationalDataConnector")) {
+              get_datasets(dc)
+            } else {
+              get_dataset(dc)
+            }
+          })
+          )
+          names(datasets) <- vapply(datasets, get_dataname, character(1))
+
+          # move datasets from connectors to private$datasets
+          private$append_datasets(datasets = datasets)
+
+          res(self$get_cdisc_data())
         })
-
         return(res)
-
       }
     }
   )

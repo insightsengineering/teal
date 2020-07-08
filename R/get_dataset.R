@@ -38,9 +38,9 @@ get_dataset.RawDatasetConnector <- function(x, dataname = NULL) { # nolint
 #'                       data = radsl(cached = TRUE),
 #'                       code = "library(random.cdisc.data)\nADSL <- radsl(cached = TRUE)")
 #'
-#' adtte <- cdisc_dataset(dataname = "ADTTE", # RelationalDataset
-#'                        data = radtte(cached = TRUE),
-#'                        code = "library(random.cdisc.data)\nADTTE <- radtte(cached = TRUE)")
+#' adae <- cdisc_dataset(dataname = "ADAE", # RelationalDataset
+#'                        data = radae(cached = TRUE),
+#'                        code = "library(random.cdisc.data)\nADTTE <- radae(cached = TRUE)")
 #'
 #' rd <- teal:::RelationalData$new(adsl, adtte)
 #' get_dataset(rd, "ADSL")
@@ -59,7 +59,7 @@ get_dataset.RawDatasetConnector <- function(x, dataname = NULL) { # nolint
 #'}
 #'
 #' # RelationalDataList --------
-#' drc <- teal_data(adsl, adtte, rdc)
+#' drc <- teal_data(rdc, adae)
 #'
 #' get_dataset(drc, "ADSL")
 get_dataset.RelationalData <- function(x, dataname = NULL) { # nolint

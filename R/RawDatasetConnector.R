@@ -174,8 +174,18 @@ RawDatasetConnector <- R6::R6Class( #nolint
             x = var_name,
             value = if (is(var_value, "RawDatasetConnector") || is(var_value, "RawDataset")) {
               get_raw_data(var_value)
-            } else {
+            } else if (is(var_value, "data.frame")) {
               var_value
+            } else {
+              stop(
+                sprintf(
+                  "'%1$s' is of class '%2$s'.
+                   '%1$s' should be 'RawDatasetConnector', 'RawDataset' or 'data.frame'",
+                  var_name,
+                  paste(class(var_value), collapse = "/")
+                ),
+                call. = FALSE
+              )
             }
           )
         }
