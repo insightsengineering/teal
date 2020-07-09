@@ -1,5 +1,4 @@
-
-# teal 0.8.4.9000
+# teal 0.8.5.9000
 
 * `cdisc_dataset` and `dataset` now return R6 class objects (RelationalDataset)
 * `get_raw_data` can be used to derive raw data from R6 objects e.g. (RelationalDataset)
@@ -24,6 +23,10 @@
 * Removed argument `isolate` from `get_data()` method and similar methods. You must `isolate` it yourself as needed. If you want to temporarily deactivate Shiny errors due to missing errors, you can set `options(shiny.suppressMissingContextError = TRUE)`. In general, avoid `isolate` as this breaks reactivity.
 * We added a development module to add several filters at once, e.g. safety filters. This is to be evaluated before it is converted into a proper module and made available to end-users.
 
+
+# teal 0.8.5
+
+* UI bug fix to hide filter elements for not used datasets.
 
 # teal 0.8.4
 
