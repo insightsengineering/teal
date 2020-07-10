@@ -51,7 +51,7 @@ get_dataset.RawDatasetConnector <- function(x, dataname = NULL) { # nolint
 #'   rcd_cdisc_dataset_connector("ADTTE", radtte, cached = TRUE)
 #' )
 #'
-#' get_dataset(rdc, "ADSL")
+#' get_dataset(rdc, dataname = "ADSL")
 #'
 #'\dontrun{
 #' load_datasets(rdc)
@@ -67,7 +67,7 @@ get_dataset.RelationalData <- function(x, dataname = NULL) { # nolint
     stop("To get singe dataset from 'RelationalData' one must specify the name of the dataset.
          To get all datasets please use get_datasets()")
   }
-  x$get_datasets(dataname = dataname)
+  x$get_dataset(dataname = dataname)
 }
 
 #' @rdname get_dataset

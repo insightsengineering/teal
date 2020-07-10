@@ -223,12 +223,10 @@ Once again `DatasetConnector`(s) and `DatasetConnection` are created using `rcd_
 
 ```{r}
 library(random.cdisc.data)
-connectors <- list(
-  rcd_cdisc_dataset_connector("ADSL", radsl, cached = TRUE),
-  rcd_cdisc_dataset_connector("ADLB", radlb, cached = TRUE)
-)
+adsl <- rcd_cdisc_dataset_connector("ADSL", radsl)
+adlb <- rcd_cdisc_dataset_connector("ADLB", radlb, ADSL = radsl)
+connectors <- list(adsl, adlb)
 con <- teal:::rcd_connection()
-
 ```
 
 In code chunk below `shiny` `ui` element is created which is going to be displayed on the first app 
@@ -239,7 +237,7 @@ ui <- function(id) {
   ns <- NS(id)
   tagList(
     numericInput(ns("seed"), "Choose seed", min = 1, max = 1000, value = 1),
-    actionButton(ns("submit"), "Submit")
+    sliderInput(ns("N"), "Choose number of observations", min = 1, max = 400, value = 10)
   )
 }
 ```
@@ -251,15 +249,19 @@ inputs are saved in class object.
 One can use helper method `x$launch` which opens shiny application where one can choose `seed` for 
 random data. 
 ```{r}
-x <- teal:::RelationalDataConnector$new()
+x <- teal:::RelationalDataConnector$new(connection = con, connectors = connectors)
 
-x$set_connection(con)
-x$set_dataset_connectors(connectors)
 x$set_ui(ui)
-x$set_server_helper(
-  submit_id = "submit",
-  fun_args_fixed = list(seed = quote(input$seed))
-)
+x$set_server(function(input, output, session, connectors, connection) {
+  lapply(connectors, function(connector) {
+    if (get_dataname(connector) == "ADSL") {
+      set_args(connector, args = list(seed = input$seed, N = input$N))
+    } else {
+      set_args(connector, args = list(seed = input$seed))
+    }
+    connector$pull(try = TRUE)
+  })
+})
 ```
 
 ```{r eval=FALSE}

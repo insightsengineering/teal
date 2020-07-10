@@ -406,7 +406,7 @@ cdisc_data <- function(...,
       as.list(substitute(list(...)))[-1L],
       function(i) {
         tryCatch(
-          deparse(as.list(match.call(eval(i[[1L]]), i))$data),
+          deparse(as.list(match.call(eval(i[[1L]]), i))$data, width.cutoff = 500L),
           error = function(e) {
             i[["dataname"]]
           }

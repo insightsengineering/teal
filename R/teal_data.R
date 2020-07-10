@@ -32,7 +32,7 @@
 #' data <- teal_data(x1, x2)
 #' data$get_cdisc_data()
 #'
-#' # DelayedDataConnector
+#' # RelationalDataList
 #' x3 <- rcd_cdisc_data( # RelationalDataConnector
 #'   rcd_cdisc_dataset_connector("ADSL", radsl, cached = TRUE),
 #'   rcd_cdisc_dataset_connector("ADLB", radlb, cached = TRUE)
@@ -42,10 +42,10 @@
 #'   rcd_cdisc_dataset_connector("ADRS", radrs, cached = TRUE)
 #' )
 #'
-#' delayed_data <- teal_data(x3, x2, x4)
+#' data_list <- teal_data(x3, x2, x4)
 #' \dontrun{
-#' delayed_data$launch()
-#' delayed_data$get_cdisc_data()
+#' data_list$launch()
+#' data_list$get_cdisc_data()
 #' }
 teal_data <- function(...) {
   datasets <- list(...)

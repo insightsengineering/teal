@@ -242,7 +242,7 @@ test_that("RelationalDatasetConnector", {
 
   expect_identical(
     get_code(x3),
-    "ADSL <- data.frame(id = 1:3, marker = c(100, 1, 10), alive = TRUE, new_feature = c(3, 4, \n1))"
+    "ADSL <- data.frame(id = 1:3, marker = c(100, 1, 10), alive = TRUE, new_feature = c(3, 4, 1))"
   )
 
   expect_silent(

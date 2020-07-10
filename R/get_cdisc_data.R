@@ -84,7 +84,7 @@ get_cdisc_data.RelationalDataConnector <- function(x) { # nolint
 #' load_datasets(drc)
 #' get_cdisc_data(drc)
 #' }
-get_cdisc_data.DelayedDataConnector <- function(x) { # nolint
+get_cdisc_data.RelationalDataList <- function(x) { # nolint
   datasets <- get_datasets(x)
   if (!is.null(datasets)) {
     do.call("cdisc_data", datasets)

@@ -32,6 +32,7 @@ Pulled data inherits from the class \link{RelationalDataset}.
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-new"></a>}}
+\if{latex}{\out{\hypertarget{method-new}{}}}
 \subsection{Method \code{new()}}{
 Create a new \code{RawDatasetConnector} object. Set the pulling function
 \link{CallableFunction} which returns a \code{data.frame}, e.g. by reading
@@ -59,6 +60,7 @@ new \code{RawDatasetConnector} object
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-set_args"></a>}}
+\if{latex}{\out{\hypertarget{method-set_args}{}}}
 \subsection{Method \code{set_args()}}{
 Set arguments to the pulling function
 \subsection{Usage}{
@@ -78,6 +80,7 @@ nothing
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-get_code"></a>}}
+\if{latex}{\out{\hypertarget{method-get_code}{}}}
 \subsection{Method \code{get_code()}}{
 Get code to get data
 \subsection{Usage}{
@@ -101,6 +104,7 @@ optionally deparsed \code{call} object
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-get_dataset"></a>}}
+\if{latex}{\out{\hypertarget{method-get_dataset}{}}}
 \subsection{Method \code{get_dataset()}}{
 Get dataset
 \subsection{Usage}{
@@ -113,6 +117,7 @@ dataset (\code{<...>Dataset})
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-get_pull_fun"></a>}}
+\if{latex}{\out{\hypertarget{method-get_pull_fun}{}}}
 \subsection{Method \code{get_pull_fun()}}{
 Get pull function
 \subsection{Usage}{
@@ -125,6 +130,7 @@ dataset (\code{CallableFunction})
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-get_raw_data"></a>}}
+\if{latex}{\out{\hypertarget{method-get_raw_data}{}}}
 \subsection{Method \code{get_raw_data()}}{
 Get raw data from dataset
 \subsection{Usage}{
@@ -137,6 +143,7 @@ data (data.frame)
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-pull"></a>}}
+\if{latex}{\out{\hypertarget{method-pull}{}}}
 \subsection{Method \code{pull()}}{
 Pull the data
 
@@ -166,6 +173,7 @@ nothing, in order to get the data please use \code{get_data} method
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-is_pulled"></a>}}
+\if{latex}{\out{\hypertarget{method-is_pulled}{}}}
 \subsection{Method \code{is_pulled()}}{
 Check if dataset has already been pulled.
 \subsection{Usage}{
@@ -178,6 +186,7 @@ Check if dataset has already been pulled.
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-clone"></a>}}
+\if{latex}{\out{\hypertarget{method-clone}{}}}
 \subsection{Method \code{clone()}}{
 The objects of this class are cloneable with this method.
 \subsection{Usage}{

@@ -9,29 +9,31 @@ open/close connection.
 }
 \examples{
 library(random.cdisc.data)
-x <- rcd_cdisc_dataset_connector("ADSL", radsl, cached = TRUE)
-x2 <- rcd_cdisc_dataset_connector("ADLB", radlb, cached = TRUE)
-x3 <- rcd_cdisc_dataset_connector("ADRS", radrs, cached = TRUE)
+adsl <- rcd_cdisc_dataset_connector("ADSL", radsl)
+adlb <- rcd_cdisc_dataset_connector("ADLB", radlb, ADSL = adsl)
+con <- teal:::rcd_connection()
 
-tc <- teal:::RelationalDataConnector$new()
-tc$set_dataset_connectors(list(x, x2, x3))
-tc$set_ui(
-function(id) {
+ui <- function(id) {
   ns <- NS(id)
   tagList(
     numericInput(ns("seed"), "Choose seed", min = 1, max = 1000, value = 1),
-    actionButton(ns("submit"), "Submit")
+    sliderInput(ns("N"), "Choose number of observations", min = 1, max = 400, value = 10)
   )
 }
-)
-tc$set_server_helper(
-  submit_id = "submit",
-  fun_args_fixed = list(seed = quote(input$seed))
-)
-tc$set_server_info(
-  submit_id = "submit",
-  fun_args_fixed = list(seed = quote(input$seed))
-)
+
+x <- teal:::RelationalDataConnector$new(connection = con, connectors = list(adsl, adlb))
+
+x$set_ui(ui)
+x$set_server(function(input, output, session, connectors, connection) {
+  lapply(connectors, function(connector) {
+    if (get_dataname(connector) == "ADSL") {
+      set_args(connector, args = list(seed = input$seed, N = input$N))
+    } else {
+      set_args(connector, args = list(seed = input$seed))
+    }
+    connector$pull(try = TRUE)
+  })
+})
 \dontrun{
 tc$launch()
 tc$get_datasets()
@@ -45,20 +47,19 @@ tc$get_datasets()
 \itemize{
 \item \href{#method-new}{\code{RelationalDataConnector$new()}}
 \item \href{#method-get_datanames}{\code{RelationalDataConnector$get_datanames()}}
+\item \href{#method-get_datasets}{\code{RelationalDataConnector$get_datasets()}}
+\item \href{#method-get_dataset}{\code{RelationalDataConnector$get_dataset()}}
+\item \href{#method-get_dataset_connectors}{\code{RelationalDataConnector$get_dataset_connectors()}}
 \item \href{#method-get_code}{\code{RelationalDataConnector$get_code()}}
 \item \href{#method-get_connection}{\code{RelationalDataConnector$get_connection()}}
-\item \href{#method-get_dataset_connectors}{\code{RelationalDataConnector$get_dataset_connectors()}}
 \item \href{#method-get_server}{\code{RelationalDataConnector$get_server()}}
-\item \href{#method-get_submit_id}{\code{RelationalDataConnector$get_submit_id()}}
 \item \href{#method-get_ui}{\code{RelationalDataConnector$get_ui()}}
 \item \href{#method-launch}{\code{RelationalDataConnector$launch()}}
+\item \href{#method-pull}{\code{RelationalDataConnector$pull()}}
+\item \href{#method-set_args}{\code{RelationalDataConnector$set_args()}}
 \item \href{#method-set_check}{\code{RelationalDataConnector$set_check()}}
 \item \href{#method-set_ui}{\code{RelationalDataConnector$set_ui()}}
 \item \href{#method-set_server}{\code{RelationalDataConnector$set_server()}}
-\item \href{#method-set_server_helper}{\code{RelationalDataConnector$set_server_helper()}}
-\item \href{#method-set_server_info}{\code{RelationalDataConnector$set_server_info()}}
-\item \href{#method-set_connection}{\code{RelationalDataConnector$set_connection()}}
-\item \href{#method-set_dataset_connectors}{\code{RelationalDataConnector$set_dataset_connectors()}}
 \item \href{#method-is_pulled}{\code{RelationalDataConnector$is_pulled()}}
 \item \href{#method-clone}{\code{RelationalDataConnector$clone()}}
 }
@@ -67,16 +68,16 @@ tc$get_datasets()
 \out{<details open ><summary>Inherited methods</summary>}
 \itemize{
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="RelationalData" data-id="get_cdisc_data">}\href{../../teal/html/RelationalData.html#method-get_cdisc_data}{\code{teal::RelationalData$get_cdisc_data()}}\out{</span>}
-\item \out{<span class="pkg-link" data-pkg="teal" data-topic="RelationalData" data-id="get_datasets">}\href{../../teal/html/RelationalData.html#method-get_datasets}{\code{teal::RelationalData$get_datasets()}}\out{</span>}
 }
 \out{</details>}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-new"></a>}}
+\if{latex}{\out{\hypertarget{method-new}{}}}
 \subsection{Method \code{new()}}{
 Create a new \code{RelationalDataConnector} object
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{RelationalDataConnector$new()}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{RelationalDataConnector$new(connection, connectors)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
@@ -95,6 +96,7 @@ Get names of the datasets.
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-get_datanames"></a>}}
+\if{latex}{\out{\hypertarget{method-get_datanames}{}}}
 \subsection{Method \code{get_datanames()}}{
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{RelationalDataConnector$get_datanames()}\if{html}{\out{</div>}}
@@ -102,10 +104,58 @@ Get names of the datasets.
 
 \subsection{Returns}{
 \code{character} vector with names of all datasets.
+Get pulled \code{RelationalDataset} objects
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-get_datasets"></a>}}
+\if{latex}{\out{\hypertarget{method-get_datasets}{}}}
+\subsection{Method \code{get_datasets()}}{
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{RelationalDataConnector$get_datasets()}\if{html}{\out{</div>}}
+}
+
+\subsection{Returns}{
+\code{list} \code{RelationalDataset(s)} named by dataname.
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-get_dataset"></a>}}
+\if{latex}{\out{\hypertarget{method-get_dataset}{}}}
+\subsection{Method \code{get_dataset()}}{
+Get \code{RelationalDataset} object.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{RelationalDataConnector$get_dataset(dataname)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{dataname}}{(\code{character} value)\cr
+name of dataset to be returned. If \code{NULL}, all datasets are returned.}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Returns}{
+\code{RelationalDataset}.
+Get \code{RelationalDatasetConnector} objects
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-get_dataset_connectors"></a>}}
+\if{latex}{\out{\hypertarget{method-get_dataset_connectors}{}}}
+\subsection{Method \code{get_dataset_connectors()}}{
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{RelationalDataConnector$get_dataset_connectors()}\if{html}{\out{</div>}}
+}
+
+\subsection{Returns}{
+\code{list} \code{RelationalDatasetConnector(s)} named by dataname.
 }
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-get_code"></a>}}
+\if{latex}{\out{\hypertarget{method-get_code}{}}}
 \subsection{Method \code{get_code()}}{
 Derive the code for all datasets
 \subsection{Usage}{
@@ -118,6 +168,7 @@ Derive the code for all datasets
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-get_connection"></a>}}
+\if{latex}{\out{\hypertarget{method-get_connection}{}}}
 \subsection{Method \code{get_connection()}}{
 Get connection to data source
 \subsection{Usage}{
@@ -129,19 +180,8 @@ connector's connection
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-get_dataset_connectors"></a>}}
-\subsection{Method \code{get_dataset_connectors()}}{
-Get connectors
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{RelationalDataConnector$get_dataset_connectors()}\if{html}{\out{</div>}}
-}
-
-\subsection{Returns}{
-\code{list} with all connectors
-}
-}
-\if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-get_server"></a>}}
+\if{latex}{\out{\hypertarget{method-get_server}{}}}
 \subsection{Method \code{get_server()}}{
 
 \subsection{Usage}{
@@ -153,21 +193,8 @@ the \code{server} function of the \code{RelationalDataConnector}
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-get_submit_id"></a>}}
-\subsection{Method \code{get_submit_id()}}{
-Derive the ID of the button that triggers the
-\code{DataConnection} to be pulled
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{RelationalDataConnector$get_submit_id()}\if{html}{\out{</div>}}
-}
-
-\subsection{Returns}{
-A character string of the \code{id} of the
-\code{actionButton}.
-}
-}
-\if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-get_ui"></a>}}
+\if{latex}{\out{\hypertarget{method-get_ui}{}}}
 \subsection{Method \code{get_ui()}}{
 
 \subsection{Usage}{
@@ -187,6 +214,7 @@ the \code{ui} function of the \code{RelationalDataConnector}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-launch"></a>}}
+\if{latex}{\out{\hypertarget{method-launch}{}}}
 \subsection{Method \code{launch()}}{
 Run simple application that uses its \code{ui} and \code{server} fields to pull data from
 connection.
@@ -201,7 +229,68 @@ An object that represents the app
 }
 }
 \if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-pull"></a>}}
+\if{latex}{\out{\hypertarget{method-pull}{}}}
+\subsection{Method \code{pull()}}{
+Load data from each \code{RelationalDatasetConnector}
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{RelationalDataConnector$pull(con_args = NULL, args = NULL, try = TRUE)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{con_args}}{(\code{NULL} or named \code{list})\cr
+ additional dynamic arguments for connection function. \code{args} will be passed to each
+\code{RelationalDatasetConnector} object to evaluate \code{CallableFunction} assigned to
+this dataset. If \code{args} is null than default set of arguments will be used, otherwise
+call will be executed on these arguments only (arguments set before will be ignored).
+\code{pull} function doesn't update reproducible call, it's just evaluate function.}
+
+\item{\code{args}}{(\code{NULL} or named \code{list})\cr
+additional dynamic arguments to pull dataset. \code{args} will be passed to each
+\code{RelationalDatasetConnector} object to evaluate \code{CallableFunction} assigned to
+this dataset. If \code{args} is null than default set of arguments will be used, otherwise
+call will be executed on these arguments only (arguments set before will be ignored).
+\code{pull} function doesn't update reproducible call, it's just evaluate function.}
+
+\item{\code{try}}{(\code{logical} value)\cr
+whether perform function evaluation inside \code{try} clause}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Returns}{
+nothing, in order to get the data please use \code{get_data} method
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-set_args"></a>}}
+\if{latex}{\out{\hypertarget{method-set_args}{}}}
+\subsection{Method \code{set_args()}}{
+Set arguments to connection and connectors. Using \code{set_args} will save these
+arguments in reproducible code unlike using \code{pull} function.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{RelationalDataConnector$set_args(con_args = NULL, args = NULL)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{con_args}}{(named \code{list})\cr
+arguments values for opening connection.}
+
+\item{\code{args}}{(named \code{list})\cr
+arguments values for function to pull data.}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Returns}{
+nothing
+}
+}
+\if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-set_check"></a>}}
+\if{latex}{\out{\hypertarget{method-set_check}{}}}
 \subsection{Method \code{set_check()}}{
 Set reproducibility check
 \subsection{Usage}{
@@ -221,16 +310,19 @@ nothing
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-set_ui"></a>}}
+\if{latex}{\out{\hypertarget{method-set_ui}{}}}
 \subsection{Method \code{set_ui()}}{
 Set connector UI function
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{RelationalDataConnector$set_ui(ui)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{RelationalDataConnector$set_ui(data_input)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{ui}}{(\code{function}) ui function of a shiny module}
+\item{\code{data_input}}{(\code{function})\cr
+shiny module as function. Inputs specified in this \code{ui} are passed to server module
+defined by \code{set_server} method.}
 }
 \if{html}{\out{</div>}}
 }
@@ -240,116 +332,22 @@ nothing
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-set_server"></a>}}
+\if{latex}{\out{\hypertarget{method-set_server}{}}}
 \subsection{Method \code{set_server()}}{
 Set connector server function
 
-Please also consider using \code{set_server_helper} method
+This function will be called after submit button will be hit. There is no possibility to
+specify some dynamic \code{ui} as \code{server} function is executed after hitting submit
+button.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{RelationalDataConnector$set_server(server)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{RelationalDataConnector$set_server(data_module)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{server}}{(\code{function}) A shiny module server function
-that should return reactive value of type \code{cdisc_data}}
-}
-\if{html}{\out{</div>}}
-}
-\subsection{Returns}{
-nothing
-}
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-set_server_helper"></a>}}
-\subsection{Method \code{set_server_helper()}}{
-Helper function to set connector server function
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{RelationalDataConnector$set_server_helper(
-  submit_id = "submit",
-  con_args_fixed = NULL,
-  con_args_dynamic = NULL,
-  con_args_replacement = NULL,
-  fun_args_fixed = NULL,
-  fun_args_dynamic = NULL,
-  fun_args_replacement = NULL
-)}\if{html}{\out{</div>}}
-}
-
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{submit_id}}{(\code{character}) id of the submit button}
-
-\item{\code{con_args_fixed}}{(\code{NULL} or named \code{list}) fixed argument to connection function}
-
-\item{\code{con_args_dynamic}}{(\code{NULL} or named \code{list}) dynamic argument to connection function
-(not shown in generated code)}
-
-\item{\code{con_args_replacement}}{(\code{NULL} or named \code{list}) replacement of dynamic argument of connection
-function}
-
-\item{\code{fun_args_fixed}}{(\code{NULL} or named \code{list}) fixed argument to pull function}
-
-\item{\code{fun_args_dynamic}}{(\code{NULL} or named \code{list}) dynamic argument to pull function
-(not shown in generated code)}
-
-\item{\code{fun_args_replacement}}{(\code{NULL} or named \code{list}) replacement of dynamic argument of pull function}
-}
-\if{html}{\out{</div>}}
-}
-\subsection{Returns}{
-nothing
-}
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-set_server_info"></a>}}
-\subsection{Method \code{set_server_info()}}{
-Store the call of \code{set_server}
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{RelationalDataConnector$set_server_info(...)}\if{html}{\out{</div>}}
-}
-
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{...}}{All arguments used inside set_server
-
-Set data connection}
-}
-\if{html}{\out{</div>}}
-}
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-set_connection"></a>}}
-\subsection{Method \code{set_connection()}}{
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{RelationalDataConnector$set_connection(connection)}\if{html}{\out{</div>}}
-}
-
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{connection}}{(\code{DataConnection}) data connection}
-}
-\if{html}{\out{</div>}}
-}
-\subsection{Returns}{
-nothing
-Set dataset connectors
-}
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-set_dataset_connectors"></a>}}
-\subsection{Method \code{set_dataset_connectors()}}{
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{RelationalDataConnector$set_dataset_connectors(connectors)}\if{html}{\out{</div>}}
-}
-
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{connectors}}{(\code{list} of \code{RelationalDatasetConnector} elements) data connectors}
+\item{\code{data_module}}{(\code{function})\cr
+A shiny module server function that should load data from all connectors}
 }
 \if{html}{\out{</div>}}
 }
@@ -359,6 +357,7 @@ nothing
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-is_pulled"></a>}}
+\if{latex}{\out{\hypertarget{method-is_pulled}{}}}
 \subsection{Method \code{is_pulled()}}{
 Check if dataset has already been pulled.
 \subsection{Usage}{
@@ -371,6 +370,7 @@ Check if dataset has already been pulled.
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-clone"></a>}}
+\if{latex}{\out{\hypertarget{method-clone}{}}}
 \subsection{Method \code{clone()}}{
 The objects of this class are cloneable with this method.
 \subsection{Usage}{

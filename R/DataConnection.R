@@ -269,17 +269,15 @@ rice_connection <- function() {
   ping_fun <- callable_function(rice::rice_session_active) # nolint
 
   open_fun <- callable_function(rice::rice_session_open) # nolint
+  open_fun$set_args(list(password = as.call(parse(text = "askpass::askpass"))))
 
   close_fun <- callable_function(rice::rice_session_close) # nolint
   close_fun$set_args(list(message = FALSE))
 
-
   x <- DataConnection$new() # nolint
 
   x$set_ping_fun(ping_fun)
-
   x$set_open_fun(open_fun)
-
   x$set_close_fun(close_fun)
 
 

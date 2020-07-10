@@ -18,7 +18,7 @@ CallableFunction <- R6::R6Class( #nolint
     initialize = function(fun, env = new.env()) {
       stopifnot(is.function(fun))
       fun_name <- private$get_callable_function(fun)
-      private$fun_name <- deparse(fun_name)
+      private$fun_name <- deparse(fun_name, width.cutoff = 500L)
       private$env <- env
       self$refresh()
       invisible(self)
@@ -61,7 +61,7 @@ CallableFunction <- R6::R6Class( #nolint
       if_not_empty(args, self$set_args(args))
 
       res <- if (deparse) {
-        paste0(deparse(private$call, width.cutoff = 80L), collapse = "\n")
+        paste0(deparse(private$call, width.cutoff = 500L), collapse = "\n")
       } else {
         private$call
       }

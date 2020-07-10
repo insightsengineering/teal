@@ -2,7 +2,7 @@
 % Please edit documentation in R/get_cdisc_data.R, R/get_dataset.R
 \name{get_cdisc_data.RelationalDataConnector}
 \alias{get_cdisc_data.RelationalDataConnector}
-\alias{get_cdisc_data.DelayedDataConnector}
+\alias{get_cdisc_data.RelationalDataList}
 \alias{get_dataset}
 \alias{get_dataset.RawDatasetConnector}
 \alias{get_dataset.RelationalData}
@@ -11,7 +11,7 @@
 \usage{
 \method{get_cdisc_data}{RelationalDataConnector}(x)
 
-\method{get_cdisc_data}{DelayedDataConnector}(x)
+\method{get_cdisc_data}{RelationalDataList}(x)
 
 get_dataset(x, dataname)
 
@@ -97,7 +97,7 @@ rdc <- rcd_cdisc_data(
   rcd_cdisc_dataset_connector("ADTTE", radtte, cached = TRUE)
 )
 
-get_dataset(rdc, "ADSL")
+get_dataset(rdc, dataname = "ADSL")
 
 \dontrun{
 load_datasets(rdc)

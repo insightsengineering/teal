@@ -91,7 +91,7 @@ get_code.cdisc_data <- function(x, dataname = NULL, deparse = FALSE, ...) {
 
   if (is.null(dataname)) {
     if (deparse) {
-      paste0(deparse(attr(x, "code"), width.cutoff = 80L), collapse = "\n")
+      paste0(deparse(attr(x, "code"), width.cutoff = 500L), collapse = "\n")
     } else {
       attr(x, "code")
     }
@@ -284,7 +284,7 @@ get_code.default <- function(x,
         lines,
         function(x) {
           paste(
-            deparse(x, width.cutoff = 80L),
+            deparse(x, width.cutoff = 500L),
             collapse = "\n"
           )
         },

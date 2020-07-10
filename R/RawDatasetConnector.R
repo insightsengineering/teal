@@ -112,7 +112,6 @@ RawDatasetConnector <- R6::R6Class( #nolint
     #' @return nothing, in order to get the data please use \code{get_data} method
     pull = function(args = NULL, try = FALSE) {
       data <- private$pull_internal(args = args, try = try)
-
       private$dataset <- RawDataset$new(data)
       return(invisible(self))
     },
@@ -144,7 +143,7 @@ RawDatasetConnector <- R6::R6Class( #nolint
             } else {
               res <- call("<-", as.name(var_name), var_value)
               if (deparse) {
-                deparse(res)
+                deparse(res, width.cutoff = 500L)
               }
             }
           }

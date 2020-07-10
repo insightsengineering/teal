@@ -52,77 +52,29 @@
 rcd_cdisc_data <- function(..., check = TRUE) {
   connectors <- list(...)
   stopifnot(is_class_list("RelationalDatasetConnector")(connectors))
-
   con <- rcd_connection()
 
-  x <- RelationalDataConnector$new()
-  x$set_connection(con)
-  x$set_dataset_connectors(connectors)
+  x <- RelationalDataConnector$new(connection = con, connectors = connectors)
   x$set_check(check)
 
-  call_args <- unlist(lapply(
-    connectors,
-    function(c) {
-      c$get_pull_args()
-    }
-  ))
-  # Derive information on whether all
-  # datasets should be loaded from cache
-  all_cached <- FALSE
-  if (length(call_args) >= length(connectors)) {
-    all_cached_val <- unlist(call_args)[which(names(unlist(call_args)) == "cached")]
-    if (length(all_cached_val) == length(connectors)) {
-      all_cached <- all(all_cached_val)
-    }
-  }
-
-  # Only create a reactive UI in case, non-cached datasets are
-  # used inside the app.
   x$set_ui(
     function(id) {
       ns <- NS(id)
-      if (all_cached) {
-        tags$p("Loading data from cache")
-      } else {
-        tagList(
-          numericInput(ns("seed"), "Choose seed", min = 1, max = 1000, value = 1),
-          actionButton(ns("submit"), "Submit")
-        )
-      }
+      tagList(
+        numericInput(ns("seed"), "Choose seed", min = 1, max = 1000, value = 1)
+      )
     }
   )
-  # Set the server to return datasets from calls in case
-  # all datasets are cached.
-  if (all_cached) {
-    x$set_server(
-      function(input, output, session, return_cdisc_data = TRUE) {
-        lapply(x$get_dataset_connectors(), function(c) c$pull())
 
-        all_data <- lapply(
-          x$get_dataset_connectors(),
-          function(c) c$get_dataset()
-        )
-        if (return_cdisc_data) {
-          return(reactive(do.call(what = "cdisc_data", all_data)))
-        } else {
-          return(reactive(all_data))
-        }
-      }
-    )
-  } else {
-    # Set a reactive server
-    # that handsover ADSL after production to
-    # all other calls.
-    x$set_server_helper(
-      submit_id = "submit",
-      fun_args_fixed = list(seed = quote(input$seed))
-    )
-    x$set_server_info(
-      submit_id = "submit",
-      fun_args_fixed = list(seed = quote(input$seed))
-    )
-  }
-
+  x$set_server(
+    function(input, output, session, connection, connectors) {
+      lapply(connectors, function(connector) {
+        # set_args before to return them in the code (fixed args)
+        set_args(connector, args = list(seed = input$seed))
+        load_dataset(connector)
+      })
+    }
+  )
 
   return(x)
 }
@@ -174,147 +126,59 @@ rice_cdisc_data <- function(..., additional_ui = NULL) {
 
   con <- rice_connection()
 
-  x <- RelationalDataConnector$new()
-  x$set_connection(con)
-  x$set_dataset_connectors(connectors)
+  x <- RelationalDataConnector$new(connection = con, connectors = connectors)
   x$set_check(`attributes<-`(FALSE, list(quiet = TRUE)))
 
   x$set_ui(
     function(id) {
       ns <- NS(id)
-      shinyjs::useShinyjs()
-      fluidPage(
-        fluidRow(
-          column(
-            8,
-            offset = 2,
-            ui_connectors("rice", connectors),
-            br(),
-            additional_ui,
-            br(),
-            textInput(ns("login"), "Login"),
-            passwordInput(ns("pass"), "Password"),
-            actionButton(ns("submit"), "Submit")
-          )
-        )
-      )
-    }
-  )
-  x$set_server_helper(
-    submit_id = "submit",
-    con_args_fixed = list(username = quote(input$login)),
-    con_args_dynamic = list(password = quote(input$pass)),
-    con_args_replacement = list(password = quote(askpass::askpass()))
-  )
-  x$set_server_info(
-    submit_id = "submit",
-    con_args_fixed = list(username = quote(input$login)),
-    con_args_dynamic = list(password = quote(input$pass)),
-    con_args_replacement = list(password = quote(askpass::askpass()))
-  )
-
-  return(x)
-}
-
-#' Data connector for \code{.rds} files
-#'
-#' Build data connector for RDS file connections
-#'
-#' @export
-#'
-#' @param ... (\code{DatasetConnector}) dataset connectors created using \link{rds_dataset_connector}
-#' @param check optional, (\code{logical}) whether perform reproducibility check
-#'
-#' @return An object of class \code{DataConnector}
-#'
-#' @examples
-#' \dontrun{
-#' x <- rds_cdisc_dataset_connector("ADSL", "/path/to/file.rds")
-#' app <- init(
-#'   data = rds_cdisc_data(x, check = TRUE),
-#'   modules = root_modules(
-#'     module(
-#'       "ADSL AGE histogram",
-#'       server = function(input, output, session, datasets) {
-#'         output$hist <- renderPlot(
-#'           hist(datasets$get_data("ADSL", filtered = TRUE)$AGE)
-#'         )
-#'       },
-#'       ui = function(id, ...) {ns <- NS(id); plotOutput(ns('hist'))},
-#'       filters = "ADSL"
-#'     )
-#'   ),
-#'   header = tags$h1("Sample App")
-#' )
-#' shinyApp(app$ui, app$server)
-#' }
-rds_cdisc_data <- function(...,  check = TRUE) {
-  connectors <- list(...)
-  stopifnot(is_class_list("RelationalDatasetConnector")(connectors))
-
-
-  x <- RelationalDataConnector$new()
-  x$set_dataset_connectors(connectors)
-  x$set_check(check)
-  x$set_ui(
-    function(id) {
-      ns <- NS(id)
-      tagList(
-        h4("RDS files to laod:"),
-        do.call(
-          tagList,
-          lapply(x$get_dataset_connectors(), function(con) {
-            tags$p(
-              paste(
-                con$get_dataname(),
-                ":",
-                con$get_pull_fun()$get_args()$file
-              )
+      div(
+        div(
+          h1("TEAL - Access data on entimICE using RICE"),
+          br(),
+          h5("Data access requested for:"),
+          fluidRow(
+            column(
+              11,
+              offset = 1,
+              lapply(seq_along(connectors), function(i) {
+                tags$li(paste0(connectors[[i]]$get_dataname(),
+                               ": ",
+                               connectors[[i]]$args$node))
+              })
             )
-          })
+          )
         ),
-        actionButton(ns("submit"), "Start")
+        br(),
+        additional_ui,
+        br(),
+        textInput(ns("username"), "Username"),
+        passwordInput(ns("pass"), "Password")
       )
     }
   )
-  x$set_server_helper(
-    submit_id = "submit",
-    fun_args_fixed = NULL
-  )
-  x$set_server_info(
-    submit_id = "submit",
-    fun_args_fixed = NULL
-  )
 
+  x$set_server(
+    function(input, output, session, connectors, connection) {
+      # opens connection
+      if (!is.null(connection)) {
+        open_out <- connection$open(
+          args = list(username = input$username, password = input$pass),
+          try = TRUE
+        )
+        if (is(open_out, "try-error")) {
+          output$result <- renderUI(p(open_out))
+        }
+
+      }
+
+      # rice::rice_read doesn't need arguments from data-level
+      lapply(connectors, function(dataset) load_dataset(dataset, try = TRUE))
+
+      if (!is.null(connection)) {
+        connection$close(try = TRUE)
+      }
+    }
+  )
   return(x)
-}
-
-#' Creates UI from \code{DatasetConnector} objects
-#'
-#' @param type \code{character} giving the type of connection.
-#' @param connectors \code{list} of \code{DatasetConnector} objects.
-#'
-#' @return \code{shiny.tag} UI describing the connectors
-ui_connectors <- function(type, connectors) {
-  stopifnot(is_character_single(type))
-  stopifnot(is_class_list("RelationalDatasetConnector")(connectors))
-
-  out <- div(
-    h1("TEAL - Access data on entimICE using", toupper(type)),
-    br(),
-    h5("Data access requested for:"),
-    fluidRow(
-      column(
-        11,
-        offset = 1,
-        lapply(seq_along(connectors), function(i) {
-          tags$li(paste0(connectors[[i]]$get_dataname(),
-                         ": ",
-                         connectors[[i]]$args$node))
-        })
-      )
-    )
-  )
-
-  return(out)
 }

@@ -85,8 +85,8 @@ error_dialog <- function(x) {
         tags$br(),
         tags$code(ifelse(
           "condition" %in% class(x),
-          deparse(x$call),
-          deparse(attr(x, "condition")$call)
+          deparse(x$call, width.cutoff = 500L),
+          deparse(attr(x, "condition")$call, width.cutoff = 500L)
         ), "\n"),
         tags$br(),
         tags$span("Error message:"),
@@ -94,7 +94,7 @@ error_dialog <- function(x) {
         tags$code(
           ifelse("condition" %in% class(x),
             deparse(x$message),
-            deparse(attr(x, "condition")$message)
+            deparse(attr(x, "condition")$message, width.cutoff = 500L)
           )
         )
       )
@@ -200,7 +200,8 @@ call_with_colon <- function(name, ..., unlist_args = list()) {
 #' @importFrom utils file.edit
 see_in_file <- function(f) {
   # will be deleted at end of session
-  filename <- tempfile(pattern = paste0(deparse(substitute(f)), "_"), fileext = ".R")
+  filename <- tempfile(pattern = paste0(deparse(substitute(f), width.cutoff = 500L), "_"),
+                       fileext = ".R")
   cat(paste(capture.output(f), collapse = "\n"), file = filename)
   file.edit(filename)
   return(invisible(NULL))

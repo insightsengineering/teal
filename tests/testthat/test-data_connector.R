@@ -70,33 +70,29 @@ test_that("RelationalDataConnector with DataConnection", {
   rcd1 <- rcd_cdisc_dataset_connector("ADSL", radsl, cached = TRUE)
   rcd2 <- rcd_cdisc_dataset_connector("ADLB", radlb, cached = TRUE)
 
-
-  x <- RelationalDataConnector$new()
+  x <- RelationalDataConnector$new(connection = con, connectors = list(rcd1, rcd2))
   expect_true(is(x, "RelationalDataConnector"))
 
-  expect_silent(x$set_connection(con))
-  expect_silent(x$set_dataset_connectors(list(rcd1, rcd2)))
-  expect_silent(
-    x$set_ui(
-      function(id) {
-        ns <- NS(id)
-        tagList(
-          numericInput(ns("seed"), "Choose seed", min = 1, max = 1000, value = 1),
-          actionButton(ns("submit"), "Submit")
-        )
+  x$set_ui(function(id) {
+    ns <- NS(id)
+    tagList(
+      numericInput(ns("seed"), "Choose seed", min = 1, max = 1000, value = 1),
+      sliderInput(ns("N"), "Choose number of observations", min = 1, max = 400, value = 10)
+    )
+  })
+  x$set_server(function(input, output, session, connectors, connection) {
+    lapply(connectors, function(connector) {
+      if (get_dataname(connector) == "ADSL") {
+        set_args(connector, args = list(seed = input$seed, N = input$N))
+      } else {
+        set_args(connector, args = list(seed = input$seed))
       }
-    )
-  )
-
-  expect_silent(
-    x$set_server_helper(
-      submit_id = "submit",
-      fun_args_fixed = list(seed = quote(input$seed))
-    )
-  )
+      connector$pull(try = TRUE)
+    })
+  })
 
   expect_true(is(x, c("RelationalDataConnector", "R6")))
 
   expect_true(is(x$get_server(), "function"))
-  expect_true(is(x$get_ui(id = ""), c("shiny.tag.list", "list")))
+  expect_true(is(x$get_ui(id = ""), c("shiny.tag")))
 })

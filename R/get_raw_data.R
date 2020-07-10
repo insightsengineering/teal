@@ -79,8 +79,6 @@ get_raw_data.RawDatasetConnector <- function(x, dataname = NULL) { #nolint
 #'   rcd_cdisc_dataset_connector("ADTTE", radtte, cached = TRUE)
 #' )
 #'
-#' get_raw_data(rdc)
-#'
 #'\dontrun{
 #' load_datasets(rdc)
 #' get_raw_data(rdc)
@@ -95,10 +93,6 @@ get_raw_data.RawDatasetConnector <- function(x, dataname = NULL) { #nolint
 #' drc <- teal_data(adsl, adtte, rdc2)
 #'
 #' get_raw_data(drc)
-#'\dontrun{
-#' load_datasets(drc)
-#' get_raw_data(drc)
-#'}
 get_raw_data.RelationalData <- function(x, dataname = NULL) { # nolint
   datasets_names <- x$get_datanames()
 

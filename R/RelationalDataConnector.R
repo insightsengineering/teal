@@ -9,29 +9,31 @@
 #'
 #' @examples
 #' library(random.cdisc.data)
-#' x <- rcd_cdisc_dataset_connector("ADSL", radsl, cached = TRUE)
-#' x2 <- rcd_cdisc_dataset_connector("ADLB", radlb, cached = TRUE)
-#' x3 <- rcd_cdisc_dataset_connector("ADRS", radrs, cached = TRUE)
+#' adsl <- rcd_cdisc_dataset_connector("ADSL", radsl)
+#' adlb <- rcd_cdisc_dataset_connector("ADLB", radlb, ADSL = adsl)
+#' con <- teal:::rcd_connection()
 #'
-#' tc <- teal:::RelationalDataConnector$new()
-#' tc$set_dataset_connectors(list(x, x2, x3))
-#' tc$set_ui(
-#' function(id) {
+#' ui <- function(id) {
 #'   ns <- NS(id)
 #'   tagList(
 #'     numericInput(ns("seed"), "Choose seed", min = 1, max = 1000, value = 1),
-#'     actionButton(ns("submit"), "Submit")
+#'     sliderInput(ns("N"), "Choose number of observations", min = 1, max = 400, value = 10)
 #'   )
 #' }
-#' )
-#' tc$set_server_helper(
-#'   submit_id = "submit",
-#'   fun_args_fixed = list(seed = quote(input$seed))
-#' )
-#' tc$set_server_info(
-#'   submit_id = "submit",
-#'   fun_args_fixed = list(seed = quote(input$seed))
-#' )
+#'
+#' x <- teal:::RelationalDataConnector$new(connection = con, connectors = list(adsl, adlb))
+#'
+#' x$set_ui(ui)
+#' x$set_server(function(input, output, session, connectors, connection) {
+#'   lapply(connectors, function(connector) {
+#'     if (get_dataname(connector) == "ADSL") {
+#'       set_args(connector, args = list(seed = input$seed, N = input$N))
+#'     } else {
+#'       set_args(connector, args = list(seed = input$seed))
+#'     }
+#'     connector$pull(try = TRUE)
+#'   })
+#' })
 #' \dontrun{
 #' tc$launch()
 #' tc$get_datasets()
@@ -48,14 +50,11 @@ RelationalDataConnector <- R6::R6Class( #nolint
     #' @param connectors (\code{list} of \code{DatasetConnector} elements) list with dataset connectors
     #'
     #' @return new \code{DataConnector} object
-    initialize = function() {
-      self$set_ui(
-        function(id) {
-          tags$span("empty page")
-        }
-      )
-
-      self$set_server_helper()
+    initialize = function(connection, connectors) {
+      if (!missing(connection)) {
+        private$set_connection(connection)
+      }
+      private$set_dataset_connectors(connectors)
 
       invisible(self)
     },
@@ -63,21 +62,36 @@ RelationalDataConnector <- R6::R6Class( #nolint
     #'
     #' @return \code{character} vector with names of all datasets.
     get_datanames = function() {
-      c(
-        vapply(private$datasets, get_dataname, character(1)),
-        vapply(private$dataset_connectors, get_dataname, character(1))
-      )
-
+      vapply(private$datasets, get_dataname, character(1))
+    },
+    #' Get pulled \code{RelationalDataset} objects
+    #'
+    #' @return \code{list} \code{RelationalDataset(s)} named by dataname.
+    get_datasets = function() {
+      sapply(private$datasets, get_dataset, USE.NAMES = TRUE, simplify = FALSE)
+    },
+    #' @description
+    #' Get \code{RelationalDataset} object.
+    #' @param dataname (\code{character} value)\cr
+    #'   name of dataset to be returned. If \code{NULL}, all datasets are returned.
+    #'
+    #' @return \code{RelationalDataset}.
+    get_dataset = function(dataname) {
+      stopifnot(is_character_single(dataname))
+      get_dataname(private$datasets[[dataname]])
+    },
+    #' Get \code{RelationalDatasetConnector} objects
+    #'
+    #' @return \code{list} \code{RelationalDatasetConnector(s)} named by dataname.
+    get_dataset_connectors = function() {
+      private$datasets
     },
     #' @description
     #'
     #' Derive the code for all datasets
     #' @return \code{list} of \code{character} containing code
     get_code = function() {
-      c(
-        vapply(private$datasets, get_code, character(1)),
-        vapply(private$dataset_connectors, get_code, character(1))
-      )
+      vapply(private$datasets, get_code, character(1))
     },
     #' @description
     #' Get connection to data source
@@ -87,28 +101,10 @@ RelationalDataConnector <- R6::R6Class( #nolint
       return(private$connection)
     },
     #' @description
-    #' Get connectors
-    #'
-    #' @return \code{list} with all connectors
-    get_dataset_connectors = function() {
-      return(private$dataset_connectors)
-    },
-    #' @description
     #'
     #' @return the \code{server} function of the \code{RelationalDataConnector}
     get_server = function() {
       return(private$server)
-    },
-    #' @description
-    #'
-    #' Derive the ID of the button that triggers the
-    #' \code{DataConnection} to be pulled
-    #'
-    #' @return
-    #' A character string of the \code{id} of the
-    #' \code{actionButton}.
-    get_submit_id = function() {
-      return(if_null(private$server_info$submit_id, character(0)))
     },
     #' @description
     #'
@@ -127,24 +123,98 @@ RelationalDataConnector <- R6::R6Class( #nolint
     #' @return An object that represents the app
     launch = function() {
       # load RelationDatasetConnector objects
-      if (is.null(private$dataset_connectors)) {
+      if (is.null(private$datasets)) {
         stop("the data has no dataset connectors yet")
       }
-      if (all(vapply(private$dataset_connectors, function(el) el$is_pulled(), logical(1L)))) {
+      if (all(vapply(private$datasets, function(el) el$is_pulled(), logical(1L)))) {
         stop("all the datasets has been already pulled")
       }
 
       shinyApp(
-        ui = fluidPage(private$ui(id = "main_app"),
-                       br(),
-                       uiOutput("result")),
+        ui = fluidPage(
+          useShinyjs(),
+          fluidRow(
+            column(
+              width = 8,
+              offset = 2,
+              tags$div(
+                private$ui(id = "data_connector"),
+                actionButton("submit", "Submit")
+              )
+            )
+          )
+        ),
         server = function(input, output, session) {
           session$onSessionEnded(stopApp)
-          observeEvent(input[[submit_id]], {
-            dat <- callModule(private$server, id = "main_app")
+          observeEvent(input$submit, {
+            dat <- callModule(private$server,
+                              id = "data_connector",
+                              connection = private$connection,
+                              connectors = private$datasets)
+
+
           })
         }
       )
+    },
+    #' @description
+    #' Load data from each \code{RelationalDatasetConnector}
+    #'
+    #' @param con_args (\code{NULL} or named \code{list})\cr
+    #'   additional dynamic arguments for connection function. \code{args} will be passed to each
+    #'  \code{RelationalDatasetConnector} object to evaluate \code{CallableFunction} assigned to
+    #'  this dataset. If \code{args} is null than default set of arguments will be used, otherwise
+    #'  call will be executed on these arguments only (arguments set before will be ignored).
+    #'  \code{pull} function doesn't update reproducible call, it's just evaluate function.
+    #'
+    #' @param args (\code{NULL} or named \code{list})\cr
+    #'  additional dynamic arguments to pull dataset. \code{args} will be passed to each
+    #'  \code{RelationalDatasetConnector} object to evaluate \code{CallableFunction} assigned to
+    #'  this dataset. If \code{args} is null than default set of arguments will be used, otherwise
+    #'  call will be executed on these arguments only (arguments set before will be ignored).
+    #'  \code{pull} function doesn't update reproducible call, it's just evaluate function.
+    #'
+    #' @param try (\code{logical} value)\cr
+    #'  whether perform function evaluation inside \code{try} clause
+    #'
+    #' @return nothing, in order to get the data please use \code{get_data} method
+    pull = function(con_args = NULL, args = NULL, try = TRUE) {
+      # open connection
+      if (!is.null(private$connection)) {
+        private$connection$open(args = con_args, try = try)
+      }
+
+      # load datasets
+      for (dataset in private$datasets) {
+        load_dataset(dataset, args = args)
+      }
+
+      # close connection
+      if_not_null(private$connection, private$connection$close(silent = TRUE))
+
+      return(invisible(NULL))
+    },
+    #' @description
+    #' Set arguments to connection and connectors. Using \code{set_args} will save these
+    #' arguments in reproducible code unlike using \code{pull} function.
+    #'
+    #' @param con_args (named \code{list})\cr
+    #'   arguments values for opening connection.
+    #'
+    #' @param args (named \code{list})\cr
+    #'   arguments values for function to pull data.
+    #'
+    #' @return nothing
+    set_args = function(con_args = NULL, args = NULL) {
+      # set connection args
+      if_not_null(con_args, private$connection$set_open_args(args = con_args))
+
+      # set CallableFunction args for each DatasetConnector
+      for (dataset in private$datasets) {
+        if_not_null(args, set_args(dataset, args = args))
+      }
+
+      return(invisible(NULL))
     },
     #' @description
     #' Set reproducibility check
@@ -160,125 +230,59 @@ RelationalDataConnector <- R6::R6Class( #nolint
     #' @description
     #' Set connector UI function
     #'
-    #' @param ui (\code{function}) ui function of a shiny module
+    #' @param data_input (\code{function})\cr
+    #'  shiny module as function. Inputs specified in this \code{ui} are passed to server module
+    #'  defined by \code{set_server} method.
     #'
     #' @return nothing
-    set_ui = function(ui) {
-      stopifnot(is(ui, "function"))
-      stopifnot(names(formals(ui)) == "id")
-      private$ui <- ui
+    set_ui = function(data_input) {
+      stopifnot(is(data_input, "function"))
+      stopifnot(names(formals(data_input)) == "id")
+
+
+      private$ui <- function(id) {
+        ns <- NS(id)
+        tags$div(
+          h3(paste(c("Inputs for:", self$get_datanames()), collapse = " ")),
+          tags$div(
+            id = ns("data_input"),
+            data_input(id = ns("data_input")),
+            uiOutput(ns("module_output"))
+          )
+        )
+      }
+
       return(invisible(NULL))
     },
     #' @description
     #' Set connector server function
     #'
-    #' Please also consider using \code{set_server_helper} method
+    #' This function will be called after submit button will be hit. There is no possibility to
+    #' specify some dynamic \code{ui} as \code{server} function is executed after hitting submit
+    #' button.
     #'
-    #' @param server (\code{function}) A shiny module server function
-    #'   that should return reactive value of type \code{cdisc_data}
-    #'
-    #' @return nothing
-    set_server = function(server) {
-      stopifnot(is(server, "function"))
-      stopifnot(all(c("input", "output", "session") %in% names(formals(server))))
-      private$server <- server
-      return(invisible(NULL))
-    },
-    #' @description
-    #' Helper function to set connector server function
-    #'
-    #' @param submit_id (\code{character}) id of the submit button
-    #' @param con_args_fixed (\code{NULL} or named \code{list}) fixed argument to connection function
-    #' @param con_args_dynamic (\code{NULL} or named \code{list}) dynamic argument to connection function
-    #'   (not shown in generated code)
-    #' @param con_args_replacement (\code{NULL} or named \code{list}) replacement of dynamic argument of connection
-    #'   function
-    #' @param fun_args_fixed (\code{NULL} or named \code{list}) fixed argument to pull function
-    #' @param fun_args_dynamic (\code{NULL} or named \code{list}) dynamic argument to pull function
-    #'   (not shown in generated code)
-    #' @param fun_args_replacement (\code{NULL} or named \code{list}) replacement of dynamic argument of pull function
+    #' @param data_module (\code{function})\cr
+    #'  A shiny module server function that should load data from all connectors
     #'
     #' @return nothing
-    set_server_helper = function(submit_id = "submit",
-                                 con_args_fixed = NULL,
-                                 con_args_dynamic = NULL,
-                                 con_args_replacement = NULL,
-                                 fun_args_fixed = NULL,
-                                 fun_args_dynamic = NULL,
-                                 fun_args_replacement = NULL
-    ) {
-      stopifnot(is_character_single(submit_id))
-      stopifnot(is.null(con_args_fixed) || is.list(con_args_fixed))
-      stopifnot(is.null(con_args_dynamic) || is.list(con_args_dynamic))
-      stopifnot(is.null(con_args_replacement) ||
-                  (is.list(con_args_replacement) && identical(names(con_args_dynamic), names(con_args_replacement))))
-      stopifnot(is.null(fun_args_fixed) || is.list(fun_args_fixed))
-      stopifnot(is.null(fun_args_dynamic) || is.list(fun_args_dynamic))
-      stopifnot(is.null(fun_args_replacement) ||
-                  (is.list(fun_args_replacement) && identical(names(fun_args_dynamic), names(fun_args_replacement))))
+    set_server = function(data_module) {
+      stopifnot(is(data_module, "function"))
+      stopifnot(all(c("input", "output", "session") %in% names(formals(data_module))))
 
+      private$server <- function(input, output, session, connection, connectors) {
+        pull_out <- callModule(data_module,
+                                id = "data_input",
+                                connection = connection,
+                                connectors = connectors)
 
-      private$con_args_fixed <- con_args_fixed
-      private$con_args_dynamic <- con_args_dynamic
-      private$con_args_replacement <- con_args_replacement
-      private$fun_args_fixed <- fun_args_fixed
-      private$fun_args_dynamic <- fun_args_dynamic
-      private$fun_args_replacement <- fun_args_replacement
-
-      self$set_server(
-        function(input, output, session, return_cdisc_data = TRUE) {
-
-          # will be replaced by call module of each dataset
-          private$pull(try = TRUE)
-
-          res <- if (return_cdisc_data) {
-            self$get_cdisc_data()
-          } else {
-            private$datasets
-          }
-
-          return(res)
+        if (all(vapply(connectors, is_pulled, logical(1)))) {
+          private$append_connection_code()
         }
-      )
 
-      return(invisible(NULL))
-    },
-    #' @description
-    #'
-    #' Store the call of \code{set_server}
-    #'
-    #' @param ... All arguments used inside set_server
-    #'
-    set_server_info = function(...) {
-      private$server_info <- list(...)
-      return(invisible(NULL))
-    },
-    #' Set data connection
-    #'
-    #' @param connection (\code{DataConnection}) data connection
-    #'
-    #' @return nothing
-    set_connection = function(connection) {
-      stopifnot(is(connection, "DataConnection"))
-      private$connection <- connection
-      return(invisible(NULL))
-    },
-    #' Set dataset connectors
-    #'
-    #' @param connectors (\code{list} of \code{RelationalDatasetConnector} elements) data connectors
-    #'
-    #' @return nothing
-    set_dataset_connectors = function(connectors) {
-      stopifnot(is_class_list("RelationalDatasetConnector")(connectors))
-      connector_names <- vapply(connectors, get_dataname, character(1))
-      if (any(duplicated(connector_names))) {
-        stop("Connector names should be unique")
+
+        return(NULL)
       }
-      if (any(connector_names %in% self$get_datanames())) {
-        stop("Some datanames already exists")
-      }
-      names(connectors) <- connector_names
-      private$dataset_connectors <- connectors
+
       return(invisible(NULL))
     },
     #' @description
@@ -296,36 +300,25 @@ RelationalDataConnector <- R6::R6Class( #nolint
   # ..private ------
   private = list(
     # ....fields ----
+    datasets = NULL,
     server = NULL,
-    server_info = NULL,
     ui = NULL,
     connection = NULL,
-    dataset_connectors = NULL,
     check = FALSE,
-    datasets = NULL,
-    # args helper
-    con_args_fixed = NULL,
-    con_args_dynamic = NULL,
-    con_args_replacement = NULL,
-    fun_args_fixed = NULL,
-    fun_args_dynamic = NULL,
-    fun_args_replacement = NULL,
-
-
     # ....methods ----
 
     # adds open/close connection code at beginning/end of the dataset code
-    append_connection_code = function(con_args_replacement, fun_args_replacement) {
+    append_connection_code = function() {
       lapply(
         private$datasets,
-        function(ds) {
-
+        function(connector) {
+          dataset <- get_dataset(connector)
           try(
-            ds$set_code(code = paste(
+            dataset$set_code(code = paste(
               c(
                 if_not_null(private$connection,
-                            private$connection$get_open_call(deparse = TRUE, args = con_args_replacement)),
-                get_code(ds, deparse = TRUE, args = fun_args_replacement, FUN.VALUE = character(1)),
+                            private$connection$get_open_call(deparse = TRUE)),
+                get_code(dataset, deparse = TRUE, FUN.VALUE = character(1)),
                 if_not_null(private$connection,
                             private$connection$get_close_call(deparse = TRUE, silent = TRUE))
               ),
@@ -336,63 +329,32 @@ RelationalDataConnector <- R6::R6Class( #nolint
       )
 
     },
-    pull = function(try = shiny::isRunning()) {
-      optional_eval <- function(x, envir = parent.frame(1L)) {
-        if (is.null(x)) {
-          return(NULL)
-        } else {
-          lapply(
-            x,
-            function(el) {
-              if (is.call(el)) {
-                eval(el, envir = envir)
-              } else {
-                el
-              }
-            }
-          )
-        }
+    # Set data connection
+    #
+    # @param connection (\code{DataConnection}) data connection
+    #
+    # @return nothing
+    set_connection = function(connection) {
+      stopifnot(is(connection, "DataConnection"))
+      private$connection <- connection
+      return(invisible(NULL))
+    },
+    #\ Set dataset connectors
+    #
+    # @param connectors (\code{list} of \code{RelationalDatasetConnector} elements) data connectors
+    #
+    # @return nothing
+    set_dataset_connectors = function(connectors) {
+      stopifnot(is_class_list("RelationalDatasetConnector")(connectors))
+      connector_names <- vapply(connectors, get_dataname, character(1))
+      if (any(duplicated(connector_names))) {
+        stop("Connector names should be unique")
       }
-
-      con_args_fixed <- optional_eval(private$con_args_fixed)
-      con_args_dynamic <- optional_eval(private$con_args_dynamic)
-      fun_args_fixed <- optional_eval(private$fun_args_fixed, parent.frame())
-      fun_args_dynamic <- optional_eval(private$fun_args_dynamic)
-
-      datanames <- vapply(private$dataset_connectors, get_dataname, character(1))
-
-      if (!is.null(private$connection)) {
-        private$connection$set_open_args(args = con_args_fixed)
-        private$connection$open(args = con_args_dynamic, try = try)
+      if (any(connector_names %in% self$get_datanames())) {
+        stop("Some datanames already exists")
       }
-
-      datasets <- list()
-      datanames <- self$get_datanames()
-      for (i in seq_along(private$dataset_connectors)) {
-        if (!is_empty(fun_args_fixed)) {
-          set_args(x = private$dataset_connectors[[i]], args = fun_args_fixed)
-        }
-
-        dataset <- get_dataset(
-          load_dataset(
-            private$dataset_connectors[[i]],
-            args = fun_args_dynamic,
-            try = try
-          )
-        )
-        datasets[[datanames[i]]] <- dataset
-      }
-
-      private$dataset_connectors <- NULL
-
-      if_not_null(private$connection, private$connection$close(silent = TRUE))
-
-      private$datasets <- datasets
-      rm(datasets)
-
-      private$append_connection_code(private$con_args_replacement,
-                                     private$fun_args_replacement)
-
+      names(connectors) <- connector_names
+      private$datasets <- connectors
       return(invisible(NULL))
     },
     stop_on_error = function(x, submit_id = character(0), progress = NULL) {

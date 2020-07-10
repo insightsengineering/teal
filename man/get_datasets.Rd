@@ -40,8 +40,6 @@ rdc <- rcd_cdisc_data(
   rcd_cdisc_dataset_connector("ADTTE", radtte, cached = TRUE)
 )
 
-get_datasets(rdc)
-
 \dontrun{
 load_datasets(rdc)
 get_datasets(rdc)

@@ -79,20 +79,21 @@ RelationalData <- R6::R6Class( #nolint
       vapply(private$datasets, get_code, character(1))
     },
     #' @description
-    #' Get \code{RelationalDataset} objects.
+    #' Get \code{RelationalDataset} object.
     #' @param dataname (\code{character} value)\cr
     #'   name of dataset to be returned. If \code{NULL}, all datasets are returned.
     #'
-    #' @return \code{RelationalDataset} for single \code{dataname} or
-    #'   \code{list} of \code{RelationalDataset} if \code{dataname = NULL}.
-    get_datasets = function(dataname = NULL) {
+    #' @return \code{RelationalDataset}.
+    get_dataset = function(dataname = NULL) {
       stopifnot(is.null(dataname) || is_character_single(dataname))
-
-      if (is.null(dataname)) {
-        private$datasets
-      } else {
-        private$datasets[[dataname]]
-      }
+      private$datasets[[dataname]]
+    },
+    #' @description
+    #' Get \code{list} of \code{RelationalDataset} objects.
+    #'
+    #' @return \code{list} of \code{RelationalDataset}.
+    get_datasets = function() {
+      private$datasets
     }
   ),
   # ..private ------
