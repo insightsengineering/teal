@@ -1,8 +1,3 @@
-# are elements unique
-is.unique <- function(x) { # nolint
-  length(x) == length(unique(x))
-}
-
 # also returns a list if only a single element
 #' Split by separator
 #'
@@ -106,107 +101,6 @@ error_dialog <- function(x) {
 }
 
 
-# get non-NULL labels for single df
-# see `set_labels_df`
-get_labels_df <- function(df) {
-  unlist(Filter(Negate(is.null), lapply(df, function(col) attr(col, "label"))))
-}
-
-#' Set labels of a data.frame
-#'
-#' @param df `data.frame`
-#' @param labels named `character vector` of labels,
-#'   must all be column names present in `df`
-#' @md
-#' @return `data.frame` with labels set
-#' @examples
-#' df1 <- teal:::set_labels_df(
-#'   data.frame(a = 1, b = 2, c = 3, d = 4),
-#'   c(a = "l1", b = "l2", c = "l3")
-#' )
-#' teal:::get_labels_df(df1)
-set_labels_df <- function(df, labels) {
-  stopifnot(is.data.frame(df))
-  stopifnot(is_character_vector(labels, min_length = 0))
-  stopifnot(is_fully_named_list(as.list(labels)), all(names(labels) %in% colnames(df)))
-  for (i in seq_along(labels)) {
-    col <- names(labels)[[i]]
-    attr(df[[col]], "label") <- labels[[i]]
-  }
-  return(df)
-}
-
-#' Create a call using a namespaced function
-#'
-#' The arguments in ... need to be quoted because they will be evaluated otherwise
-#'
-#' @md
-#' @param name `character` function name, possibly using namespace colon `::`, also
-#'   works with `:::` (sometimes needed, but strongly discouraged)
-#' @param ... arguments to pass to function with name `name`
-#' @param unlist_args `list` extra arguments passed in a single list,
-#'   avoids the use of `do.call` with this function
-#' @examples
-#' `%>%` <- magrittr::`%>%`
-#' print_call_and_eval <- function(x) {
-#'   eval(print(x))
-#' }
-#'
-#' # mtcars$cyl evaluated
-#' teal:::call_with_colon("dplyr::filter", as.name("mtcars"), mtcars$cyl == 6) %>%
-#'   print_call_and_eval()
-#' # mtcars$cyl argument not evaluated immediately (in call expression)
-#' teal:::call_with_colon("dplyr::filter", as.name("mtcars"), rlang::expr(cyl == 6)) %>%
-#'   print_call_and_eval()
-#'
-#' # does not work because argument is evaluated and the
-#' # non-dplyr filter does not look inside mtcars
-#' # cannot eval becausee it does not pass checks because of non-standard evaluation
-#' call("filter", as.name("mtcars"), rlang::expr(cyl == 6))
-#' # works, but non-dplyr filter is taken
-#' call("filter", as.name("mtcars"), mtcars$cyl == 6)
-#'
-#' nb_args <- function(...) nargs()
-#' teal:::call_with_colon("nb_args", arg1 = 1, unlist_args = list(arg2 = 2, args3 = 3)) %>%
-#'   print_call_and_eval()
-#' # duplicate arguments
-#' teal:::call_with_colon("nb_args", arg1 = 1, unlist_args = list(arg2 = 2, args2 = 2)) %>%
-#'   print_call_and_eval()
-call_with_colon <- function(name, ..., unlist_args = list()) {
-  stopifnot(
-    is_character_single(name),
-    is.list(unlist_args)
-  )
-  as.call(c(
-    parse(text = name)[[1]],
-    c(list(...), unlist_args)
-  ))
-}
-
-#' See a function's code in a temporary file
-#' This is more handy when you want to search for variables in the code a function
-#' rather than doing so in the console.
-#'
-#' Debugging function
-#'
-#' The file is created in the temporary directory of the R session and
-#' will be deleted once the R session exits.
-#'
-#' @param f function or object that is printed and whose output is shown in the file
-#' @examples
-#' \dontrun{
-#' teal:::see_in_file(factor)
-#' }
-#' @importFrom utils file.edit
-see_in_file <- function(f) {
-  # will be deleted at end of session
-  filename <- tempfile(pattern = paste0(deparse(substitute(f), width.cutoff = 500L), "_"),
-                       fileext = ".R")
-  cat(paste(capture.output(f), collapse = "\n"), file = filename)
-  file.edit(filename)
-  return(invisible(NULL))
-}
-
 #' Move ADSL to the first index in a vector
 #'
 #' This is useful in the UI as ADSL should always appear first in
@@ -305,46 +199,6 @@ srv_shiny_module_arguments <- function(input, output, session, datasets, modules
 }
 
 
-
-# Check functions that error with informative error messages ----
-
-#' Whether the variable name is good to use within Show R Code
-#'
-#' Spaces are problematic because the variables must be escaped
-#' with backticks.
-#' Also, they should not start with a number as R may silently make
-#' it valid by changing it.
-#' Therefore, we only allow alphanumeric characters.
-#' The first character of the `name` must be an alphabetic character
-#' and can be followed by alphanumeric characters.
-#'
-#' @md
-#' @param name `character, single or vector` name to check
-#'
-#' @examples
-#' check_simple_name <- teal:::check_simple_name
-#' check_simple_name("aas2df")
-#' check_simple_name("ADSL")
-#' check_simple_name("ADSLmodified")
-#' check_simple_name("a1")
-#' # the following fail
-#' \dontrun{
-#' check_simple_name("1a")
-#' check_simple_name("ADSL.modified")
-#' check_simple_name("ADSL_modified")
-#' check_simple_name("a1...")
-#' }
-check_simple_name <- function(name) {
-  stopifnot(is_character_single(name) || is_character_vector(name))
-  if (!grepl("^[[:alpha:]][[:alnum:]]*$", name)) {
-    stop(paste0(
-      "name '", name,
-      "' must only contain alphanumeric characters and first character must be an alphabetic character"
-    ))
-  }
-  return(invisible(NULL))
-}
-
 #' Check that one set is a subset of another
 #'
 #' Raises an error message if not and says which elements are not in
@@ -405,17 +259,4 @@ check_setequal <- function(x, y, pre_msg = "") {
     ), call. = FALSE)
   }
   return(invisible(NULL))
-}
-
-#' Whether the element is a Shiny HTML element
-#'
-#' The classes returned by `shiny::tag`, `shiny::tagList`, `shiny::HTML`
-#' are one of `"shiny.tag", "shiny.tag.list", "html"`. This checks if the element
-#' has any of these classes.
-#'
-#' @md
-#' @param x any object
-#' @return `logical` whether the element is Shiny HTML like
-is_html_like <- function(x) {
-  inherits(x, c("shiny.tag", "shiny.tag.list", "html")) # logical or
 }

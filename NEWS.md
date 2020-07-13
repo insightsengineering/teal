@@ -14,6 +14,7 @@
 * Statistics of the data are visually depicted in terms of histograms or bar charts overlayed onto the Shiny input elements.
 * Added buttons to remove all filters applied to a dataset.
 * Restored the functionality to hide the filter panel for a module when it was constructed with `filter = NULL`.
+* Moved helper functions into `utils.nest` and removed unused functions `set_labels_df` and `get_labels_df`.  
 
 ## Refactor of FilteredData (for developers)
 
