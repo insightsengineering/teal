@@ -1,5 +1,32 @@
 context("CallableFunction")
 
+test_that("Test inputs", {
+  x_fun <- callable_function("mean")
+  x_fun$set_args(list(x = c(1.0, 2.0, NA_real_), na.rm = TRUE))
+
+  expect_identical(
+    x_fun$get_call(),
+    "mean(x = c(1, 2, NA), na.rm = TRUE)"
+  )
+
+  y <- str2lang("mean")
+  y_fun <- callable_function(y)
+  y_fun$set_args(list(x = c(1.0, 2.0, NA_real_), na.rm = TRUE))
+
+  expect_identical(
+    y_fun$get_call(),
+    "mean(x = c(1, 2, NA), na.rm = TRUE)"
+  )
+
+  z_fun <- callable_function(base::mean)
+  z_fun$set_args(list(x = c(1.0, 2.0, NA_real_), na.rm = TRUE))
+
+  expect_identical(
+    z_fun$get_call(),
+    "base::mean(x = c(1, 2, NA), na.rm = TRUE)"
+  )
+})
+
 test_that("Test callable", {
   x_fun <- callable_function(mean)
   x_fun$set_args(list(x = c(1.0, 2.0, NA_real_), na.rm = TRUE))
@@ -90,6 +117,16 @@ test_that("test callable errors", {
 
   expect_error(
     callable_function(x),
+    "is.function"
+  )
+
+  expect_error(
+    callable_function(garbageIn),
+    "is.function"
+  )
+
+  expect_error(
+    callable_function("garbageIn"),
     "is.function"
   )
 

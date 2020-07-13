@@ -233,6 +233,63 @@ script_dataset_connector <- function(dataname,
 }
 
 #' @description
+#' \code{code_dataset_connector} - Create a \code{RelationalDatasetConnector}
+#'   from a string.
+#'
+#' @inheritParams as_relational
+#' @param mutate_code (\code{character})\cr
+#'   Vector with additional code that can be supplied to mutate the dataset.
+#'
+#' @rdname relational_dataset_connector
+#'
+#' @note Do not include assignment in \code{code} argument. \code{code} string
+#'   should be a single function call which returns an object. Use \code{mutate_code}
+#'   to make additional transformations.
+#'
+#' @export
+#'
+#' @examples
+#' x <- code_dataset_connector(
+#'   dataname = "ADSL",
+#'   keys = get_cdisc_keys("ADSL"),
+#'   code = "radsl(cached = TRUE)"
+#' )
+#'
+#' x$get_code()
+#'
+#' mutate_dataset(x, code = "ADSL$new_variable <- 1")
+#' x$get_code()
+code_dataset_connector <- function(dataname,
+                                   code,
+                                   keys,
+                                   mutate_code = character(0),
+                                   label = character(0),
+                                   ...) {
+  vars <- list(...)
+
+  stopifnot(is_fully_named_list(vars))
+  stopifnot(is_character_single(code))
+  stopifnot(is_character_vector(mutate_code, min_length = 0L, max_length = 1L))
+
+  cl <- as.list(str2lang(code))
+  fn <- cl[[1]]
+
+  x_fun <- callable_function(fn)
+  x_fun$set_args(cl[-1])
+
+  x <- relational_dataset_connector(
+    dataname = dataname,
+    pull_fun = x_fun,
+    keys = keys,
+    code = mutate_code,
+    label = label,
+    vars = vars
+  )
+
+  return(x)
+}
+
+#' @description
 #' \code{rice_dataset_connector} -
 #' Create a \code{RelationalDatasetConnector} from \code{RICE} dataset.
 #'
@@ -387,14 +444,13 @@ rice_cdisc_dataset_connector <- function(dataname,
 #' Create a \code{RelationalDatasetConnector} from \code{script} file with keys assigned
 #' automatically by \code{dataname}.
 #'
-#' @inheritParams script_cdisc_dataset_connector
+#' @inheritParams script_dataset_connector
 #'
 #' @rdname relational_dataset_connector
 #'
 #' @export
 script_cdisc_dataset_connector <- function(dataname,
                                            file,
-                                           keys,
                                            code = character(0),
                                            script = character(0),
                                            label = character(0),
@@ -405,6 +461,34 @@ script_cdisc_dataset_connector <- function(dataname,
     file = file,
     keys = get_cdisc_keys(dataname),
     code = code_from_script(code, script),
+    label = label,
+    ...
+  )
+
+  return(x)
+}
+
+#' @description
+#' \code{code_cdisc_dataset_connector} -
+#' Create a \code{RelationalDatasetConnector} from \code{code} string with keys assigned
+#' automatically by \code{dataname}.
+#'
+#' @inheritParams code_dataset_connector
+#'
+#' @rdname relational_dataset_connector
+#'
+#' @export
+code_cdisc_dataset_connector <- function(dataname,
+                                         code = character(0),
+                                         mutate_code = character(0),
+                                         label = character(0),
+                                         ...) {
+
+  x <- code_dataset_connector(
+    dataname = dataname,
+    code = code,
+    keys = get_cdisc_keys(dataname),
+    mutate_code = mutate_code,
     label = label,
     ...
   )

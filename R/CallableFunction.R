@@ -16,7 +16,6 @@ CallableFunction <- R6::R6Class( #nolint
     #'
     #' @return new \code{CallableFunction} object
     initialize = function(fun, env = new.env()) {
-      stopifnot(is.function(fun))
       fun_name <- private$get_callable_function(fun)
       private$fun_name <- deparse(fun_name, width.cutoff = 500L)
       private$env <- env
@@ -200,12 +199,27 @@ CallableFunction <- R6::R6Class( #nolint
     # @return name \code{name} of the original function
     #
     get_callable_function = function(callable) {
-      stopifnot(is.function(callable))
       fr <- rev(sys.frames())
       callable <- substitute(callable, fr[[1]])
 
+      # search for function object by name sequentially
+      # over the entire call stack
+      fn <- tryCatch(get(as.character(callable), envir = fr[[1]]),
+                     error = function(e) NULL)
+
       for (i in seq_along(fr)[-1]) {
         callable <- eval(bquote(substitute(.(callable), fr[[i]])))
+
+        fn <- tryCatch(get(as.character(callable), envir = fr[[1]]),
+                       error = function(e) NULL)
+      }
+
+      # if a function is not found, stop initialization
+      stopifnot(is.function(fn))
+
+      # as.call requires a symbol or a function
+      if (is.character(callable)) {
+        callable <- str2lang(callable)
       }
       return(callable)
     }

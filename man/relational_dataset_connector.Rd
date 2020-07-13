@@ -11,6 +11,8 @@
 \alias{rcd_cdisc_dataset_connector}
 \alias{rice_cdisc_dataset_connector}
 \alias{script_cdisc_dataset_connector}
+\alias{code_dataset_connector}
+\alias{code_cdisc_dataset_connector}
 \title{Create a new \code{RelationalDatasetConnector} object}
 \usage{
 relational_dataset_connector(
@@ -92,7 +94,6 @@ rice_cdisc_dataset_connector(
 script_cdisc_dataset_connector(
   dataname,
   file,
-  keys,
   code = character(0),
   script = character(0),
   label = character(0),
@@ -138,6 +139,15 @@ script_dataset_connector(
   ...
 )
 
+code_dataset_connector(
+  dataname,
+  code,
+  keys,
+  mutate_code = character(0),
+  label = character(0),
+  ...
+)
+
 rice_dataset_connector(
   dataname,
   path,
@@ -178,9 +188,16 @@ rice_cdisc_dataset_connector(
 script_cdisc_dataset_connector(
   dataname,
   file,
-  keys,
   code = character(0),
   script = character(0),
+  label = character(0),
+  ...
+)
+
+code_cdisc_dataset_connector(
+  dataname,
+  code = character(0),
+  mutate_code = character(0),
   label = character(0),
   ...
 )
@@ -223,6 +240,9 @@ path to code for \code{source}}
 
 \item{path}{(\code{character})\cr
 path to the file}
+
+\item{mutate_code}{(\code{character})\cr
+Vector with additional code that can be supplied to mutate the dataset.}
 }
 \value{
 new \code{RelationalDatasetConnector} object
@@ -265,6 +285,9 @@ Create \code{RelationalDatasetConnector} from \link{callable_function}.
 
 \code{script_dataset_connector} - Create a \code{RelationalDatasetConnector} from \code{.R} file.
 
+\code{code_dataset_connector} - Create a \code{RelationalDatasetConnector}
+  from a string.
+
 \code{rice_dataset_connector} -
 Create a \code{RelationalDatasetConnector} from \code{RICE} dataset.
 
@@ -283,6 +306,15 @@ automatically by \code{dataname}.
 \code{script_cdisc_dataset_connector} -
 Create a \code{RelationalDatasetConnector} from \code{script} file with keys assigned
 automatically by \code{dataname}.
+
+\code{code_cdisc_dataset_connector} -
+Create a \code{RelationalDatasetConnector} from \code{code} string with keys assigned
+automatically by \code{dataname}.
+}
+\note{
+Do not include assignment in \code{code} argument. \code{code} string
+  should be a single function call which returns an object. Use \code{mutate_code}
+  to make additional transformations.
 }
 \examples{
 library(random.cdisc.data)
@@ -354,6 +386,16 @@ x <- script_dataset_connector(
 )
 x$get_code()
 }
+x <- code_dataset_connector(
+  dataname = "ADSL",
+  keys = get_cdisc_keys("ADSL"),
+  code = "radsl(cached = TRUE)"
+)
+
+x$get_code()
+
+mutate_dataset(x, code = "ADSL$new_variable <- 1")
+x$get_code()
 x <- rice_dataset_connector(
   dataname = "ADSL",
   path = "/path/to/file.sas7bdat",
