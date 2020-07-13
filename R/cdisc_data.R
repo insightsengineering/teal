@@ -64,6 +64,133 @@ dataset <- function(dataname,
   return(res)
 }
 
+#' Load \code{RelationalDataset} object from a file
+#'
+#' Please note that the script has to end with a call creating desired object. The error will be raised otherwise.
+#'
+#' @param x (\code{character}) string giving the pathname of the file to read from.
+#' @param code (\code{character}) reproducible code to re-create object
+#'
+#' @return \code{RelationalDataset} object
+#'
+#' @export
+#'
+#' @examples
+#' # simple example
+#' file_example <- tempfile(fileext = ".R")
+#' writeLines(
+#'   text = c(
+#'     "library(teal)
+#'      library(random.cdisc.data)
+#'
+#'      dataset(dataname = \"ADSL\",
+#'              data = radsl(cached = TRUE),
+#'              keys = get_cdisc_keys(\"ADSL\"),
+#'              code = \"library(random.cdisc.data)\nADSL <- radsl(cached = TRUE)\")"
+#'   ),
+#'   con = file_example
+#' )
+#' x <- dataset_file(file_example, code = character(0))
+#' get_code(x)
+#'
+#' # custom code
+#' file_example <- tempfile(fileext = ".R")
+#' writeLines(
+#'   text = c(
+#'     "library(teal)
+#'
+#'      # code>
+#'      library(random.cdisc.data)
+#'      adsl <- radsl(cached = TRUE)
+#'      adsl$a1 <- 1
+#'      adsl$a2 <- 2
+#'
+#'      # <code
+#'      dataset(dataname = \"ADSL\", data = adsl, keys = get_cdisc_keys(\"ADSL\"))"
+#'   ),
+#'   con = file_example
+#' )
+#' x <- dataset_file(file_example)
+#' get_code(x)
+dataset_file <- function(x, code = get_code(x)) {
+  relational_dataset_file(x = x, code = code)
+}
+
+
+#' Data input for teal app
+#'
+#' Function that creates CDISC dataset object
+#'
+#' @inheritParams dataset
+#' @return a dataset with connected metadata
+#'
+#' @export
+#'
+#' @examples
+#' library(random.cdisc.data)
+#'
+#' ADSL <- radsl(cached = TRUE)
+#'
+#' cdisc_dataset("ADSL", ADSL)
+cdisc_dataset <- function(dataname,
+                          data,
+                          keys = get_cdisc_keys(dataname),
+                          code = character(0)) {
+  dataset(dataname = dataname, data = data, keys = keys, code = code) #nolint
+}
+
+#' Load \code{CDISC} \code{RelationalDataset} object from a file
+#'
+#' Please note that the script has to end with a call creating desired object. The error will be raised otherwise.
+#'
+#' @param x (\code{character}) string giving the pathname of the file to read from.
+#' @param code (\code{character}) reproducible code to re-create object
+#'
+#' @return \code{RelationalDataset} object
+#'
+#' @export
+#'
+#' @examples
+#' # simple example
+#' file_example <- tempfile(fileext = ".R")
+#' writeLines(
+#'   text = c(
+#'     "library(teal)
+#'      library(random.cdisc.data)
+#'
+#'      cdisc_dataset(dataname = \"ADSL\",
+#'                    data = radsl(cached = TRUE),
+#'                    code = \"library(random.cdisc.data)\nADSL <- radsl(cached = TRUE)\")"
+#'   ),
+#'   con = file_example
+#' )
+#' x <- cdisc_dataset_file(file_example, code = character(0))
+#' get_code(x)
+#'
+#' # custom code
+#' file_example <- tempfile(fileext = ".R")
+#' writeLines(
+#'   text = c(
+#'     "library(teal)
+#'
+#'      # code>
+#'      library(random.cdisc.data)
+#'      adsl <- radsl(cached = TRUE)
+#'      adsl$a1 <- 1
+#'      adsl$a2 <- 2
+#'
+#'      # <code
+#'      cdisc_dataset(dataname = \"ADSL\", data = adsl)"
+#'   ),
+#'   con = file_example
+#' )
+#' x <- cdisc_dataset_file(file_example)
+#' get_code(x)
+cdisc_dataset_file <- function(x, code = get_code(x)) {
+  relational_dataset_file(x = x, code = code)
+}
+
+
 #' Get dataset label attribute
 #'
 #' @param data \code{data.frame} from which attribute is extracted
@@ -217,40 +344,6 @@ get_variable_labels <- function(data, columns = NULL, fill = TRUE) {
   return(res)
 }
 
-#' Data input for teal app
-#'
-#' Function that creates CDISC dataset object
-#'
-#' List of implemented cdisc datasets:
-#'
-#' \itemize{
-#'   \item ADSL
-#'   \item ADTTE
-#'   \item ADAE
-#'   \item ADLB
-#'   \item ADCM
-#'   \item ADRS
-#'   \item ADVS
-#' }
-#'
-#' @inheritParams dataset
-#' @return a dataset with connected metadata
-#'
-#' @export
-#'
-#' @examples
-#' library(random.cdisc.data)
-#'
-#' ADSL <- radsl(cached = TRUE)
-#'
-#' cdisc_dataset("ADSL", ADSL)
-cdisc_dataset <- function(dataname,
-                          data,
-                          keys = get_cdisc_keys(dataname),
-                          code = character(0)) {
-  dataset(dataname = dataname, data = data, keys = keys, code = code) #nolint
-}
-
 
 #' Utility function to check if foreign keys are existing in parent dataset
 #'
@@ -338,8 +431,8 @@ check_foreign_keys <- function(datasets_keys) {
 #' @examples
 #' library(random.cdisc.data)
 #'
-#' ADSL <- cadsl # or: radsl(N = 600, seed = 123)
-#' ADTTE <- cadtte # or: radtte(ADSL, seed = 123)
+#' ADSL <- radsl(cached = TRUE)
+#' ADTTE <- radtte(cached = TRUE)
 #'
 #' # basic example
 #' cdisc_data(
@@ -519,49 +612,12 @@ get_check_note_string <- function() {
 #' @importFrom methods is
 cdisc_data_file <- function(x) {
 
-  code <- readLines(x)
+  code <- paste0(readLines(x), collapse = "\n")
   object <- eval(parse(text = code))
 
   if (is(object, "cdisc_data")) {
     return(object)
   } else {
     stop("The object returned from the file is not a cdisc_data object.")
-  }
-}
-
-#' Load \code{RelationalDataset} object from a file
-#'
-#' @param x A (\code{connection}) or a (\code{character}) string giving the pathname
-#'   of the file or URL to read from. "" indicates the connection \code{stdin}.
-#'
-#' @return \code{RelationalDataset} object if file returns a \code{RelationalDataset}
-#'   object.
-#' @export
-#'
-#' @examples
-#' file_example <- tempfile(fileext = ".R")
-#' writeLines(
-#'   text = c(
-#'     "library(random.cdisc.data)
-#'
-#'      cdisc_dataset(dataname = \"ADSL\", # RelationalDataset
-#'                    data = radsl(cached = TRUE),
-#'                    code = \"library(random.cdisc.data)\nADSL <- radsl(cached = TRUE)\")"
-#'   ),
-#'   con = file_example
-#' )
-#'
-#' cdisc_dataset_file(file_example)
-#'
-#' @importFrom methods is
-cdisc_dataset_file <- function(x) {
-
-  code <- readLines(x)
-  object <- eval(parse(text = code))
-
-  if (is(object, "RelationalDataset")) {
-    return(object)
-  } else {
-    stop("The object returned from the file is not a RelationalDataset object.")
   }
 }

@@ -175,7 +175,7 @@ Mutate dataset by code
 
 Either code or script must be provided, but not both.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{RelationalDatasetConnector$mutate_dataset(code)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{RelationalDatasetConnector$mutate_dataset(code, vars)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
@@ -183,6 +183,11 @@ Either code or script must be provided, but not both.
 \describe{
 \item{\code{code}}{(\code{character}) Code to mutate the dataset. Must contain the
 \code{dataset$dataname}}
+
+\item{\code{vars}}{(list)\cr
+In case when this object code depends on the \code{raw_data} from the other
+\code{RelationalDataset}, \code{RelationalDatasetConnector} object(s) or other constant value,
+this/these object(s) should be included}
 }
 \if{html}{\out{</div>}}
 }

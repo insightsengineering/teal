@@ -33,7 +33,7 @@ get_raw_data <- function(x, dataname = NULL) {
 #'   keys = keys(primary = c("USUBJID", "STUDYID"), foreign = NULL, parent = NULL)
 #' )
 #' get_raw_data(ADSL_relational)
-get_raw_data.RawDataset <- function(x, dataname = NULL) { #nolint
+get_raw_data.RawDataset <- function(x, dataname = NULL) {
   if (!is.null(dataname)) {
     warning("'dataname' argument ignored - RawDataset can contain only one dataset.")
   }
@@ -49,7 +49,7 @@ get_raw_data.RawDataset <- function(x, dataname = NULL) { #nolint
 #' dc <- rcd_cdisc_dataset_connector(dataname = "ADSL", fun = radsl, cached = TRUE)
 #' load_dataset(dc)
 #' get_raw_data(dc)
-get_raw_data.RawDatasetConnector <- function(x, dataname = NULL) { #nolint
+get_raw_data.RawDatasetConnector <- function(x, dataname = NULL) { # nolint
   if (!is.null(dataname)) {
     warning("'dataname' argument ignored - RawDatasetConnector can contain only one dataset.")
   }
@@ -93,7 +93,7 @@ get_raw_data.RawDatasetConnector <- function(x, dataname = NULL) { #nolint
 #' drc <- teal_data(adsl, adtte, rdc2)
 #'
 #' get_raw_data(drc)
-get_raw_data.RelationalData <- function(x, dataname = NULL) { # nolint
+get_raw_data.RelationalData <- function(x, dataname = NULL) {
   datasets_names <- x$get_datanames()
 
   if (!is.null(dataname) && dataname %in% datasets_names) {

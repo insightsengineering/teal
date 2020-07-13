@@ -53,6 +53,51 @@ relational_dataset_connector <- function(pull_fun,
   return(x)
 }
 
+#' Load \code{RelationalDatasetConnector} object from a file
+#'
+#' Please note that the script has to end with a call creating desired object. The error will be raised otherwise.
+#'
+#' @param x (\code{character}) string giving the pathname of the file to read from.
+#' @param code (\code{character}) reproducible code to re-create object
+#'
+#' @return \code{RelationalDatasetConnector} object
+#'
+#' @importFrom methods is
+#'
+#' @rdname relational_dataset_connector
+#'
+#' @export
+#'
+#' @examples
+#' # simple example
+#' file_example <- tempfile(fileext = ".R")
+#' writeLines(
+#'   text = c(
+#'     "library(teal)
+#'      library(random.cdisc.data)
+#'
+#'      pull_fun <- callable_function(radsl)
+#'      pull_fun$set_args(list(cached = TRUE))
+#'      relational_dataset_connector(pull_fun, \"ADSL\", get_cdisc_keys(\"ADSL\"))"
+#'   ),
+#'   con = file_example
+#' )
+#' x <- relational_dataset_connector_file(file_example)
+#' get_code(x)
+relational_dataset_connector_file <- function(x) { # nolint
+  stopifnot(is_character_single(x))
+  stopifnot(file.exists(x))
+
+  lines <- paste0(readLines(x), collapse = "\n")
+  object <- eval(parse(text = lines))
+
+  if (is(object, "RelationalDatasetConnector")) {
+    return(object)
+  } else {
+    stop("The object returned from the file is not RelationalDatasetConnector object.")
+  }
+}
+
 #' @description
 #' \code{rcd_dataset_connector} - Create a \code{RelationalDatasetConnector} from any R function.
 #'

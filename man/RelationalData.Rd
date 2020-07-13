@@ -7,20 +7,22 @@
 Class combines multiple \code{RelationalDataset} objects.
 }
 \examples{
-x <- teal:::RelationalDataset$new(
+x <- relational_dataset(
   x = data.frame(x = c(1, 2), y = c("a", "b"), stringsAsFactors = FALSE),
   keys = keys(primary = "y", foreign = NULL, parent = NULL),
   dataname = "XY",
-  code = "XY <- data.frame(x = c(1, 2), y = c('aa', 'bb'),
-                           stringsAsFactors = FALSE)"
+  code = "XY <- data.frame(x = c(1, 2), y = c('a', 'b'),
+                           stringsAsFactors = FALSE)",
+  label = character(0)
 )
 
-x2 <- teal:::RelationalDataset$new(
+x2 <- relational_dataset(
   x = data.frame(x = c(1, 2), y = c("a", "b"), stringsAsFactors = FALSE),
   keys = keys(primary = "y", foreign = NULL, parent = NULL),
   dataname = "XYZ",
-  code = "XYZ <- data.frame(x = c(1, 2), y = c('aa', 'bb'),
-                           stringsAsFactors = FALSE)"
+  code = "XYZ <- data.frame(x = c(1, 2), y = c('a', 'b'),
+                           stringsAsFactors = FALSE)",
+  label = character(0)
 )
 
 rd <- teal:::RelationalData$new(x, x2)
@@ -29,13 +31,14 @@ rd <- teal:::RelationalData$new(x, x2)
 \subsection{Public methods}{
 \itemize{
 \item \href{#method-new}{\code{RelationalData$new()}}
+\item \href{#method-check}{\code{RelationalData$check()}}
 \item \href{#method-get_cdisc_data}{\code{RelationalData$get_cdisc_data()}}
 \item \href{#method-get_datanames}{\code{RelationalData$get_datanames()}}
 \item \href{#method-get_code}{\code{RelationalData$get_code()}}
+\item \href{#method-set_code}{\code{RelationalData$set_code()}}
 \item \href{#method-get_dataset}{\code{RelationalData$get_dataset()}}
 \item \href{#method-get_datasets}{\code{RelationalData$get_datasets()}}
 \item \href{#method-is_pulled}{\code{RelationalData$is_pulled()}}
-\item \href{#method-check}{\code{RelationalData$check()}}
 \item \href{#method-clone}{\code{RelationalData$clone()}}
 }
 }
@@ -58,6 +61,19 @@ at least one object.}
 }
 \subsection{Returns}{
 new \code{RelationalData} object
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-check"></a>}}
+\subsection{Method \code{check()}}{
+Check if the object raw data is reproducible from the \code{get_code()} code.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{RelationalData$check()}\if{html}{\out{</div>}}
+}
+
+\subsection{Returns}{
+\code{TRUE} if all the datasets generated from evaluating the
+  \code{get_code()} code are identical to the raw data, else \code{FALSE}.
 }
 }
 \if{html}{\out{<hr>}}
@@ -89,11 +105,39 @@ Get names of the datasets.
 \subsection{Method \code{get_code()}}{
 Get code for all datasets.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{RelationalData$get_code()}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{RelationalData$get_code(dataname = NULL, deparse = TRUE)}\if{html}{\out{</div>}}
 }
 
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{dataname}}{(\code{character}) dataname or \code{NULL} for all datasets}
+
+\item{\code{deparse}}{(\code{logical}) whether to return the deparsed form of a call}
+}
+\if{html}{\out{</div>}}
+}
 \subsection{Returns}{
 (\code{character}) vector of code to generate datasets.
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-set_code"></a>}}
+\subsection{Method \code{set_code()}}{
+Set reproducible code
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{RelationalData$set_code(code)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{code}}{(\code{character}) reproducible code}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Returns}{
+nothing
 }
 }
 \if{html}{\out{<hr>}}
@@ -138,20 +182,6 @@ Check if dataset has already been pulled.
 
 \subsection{Returns}{
 \code{TRUE} if dataset has been already pulled, else \code{FALSE}
-}
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-check"></a>}}
-\subsection{Method \code{check()}}{
-Check if the  object raw data is reproducible from the
-  \code{get_code()} code.
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{RelationalData$check()}\if{html}{\out{</div>}}
-}
-
-\subsection{Returns}{
-\code{TRUE} if the dataset generated from evaluating the
-  \code{get_code()} code is identical to the raw data, else \code{FALSE}.
 }
 }
 \if{html}{\out{<hr>}}

@@ -4,32 +4,32 @@
 \alias{teal_data_file}
 \title{Load \code{RelationalData} object from a file}
 \usage{
-teal_data_file(x)
+teal_data_file(x, code = get_code(x))
 }
 \arguments{
-\item{x}{A (\code{connection}) or a (\code{character}) string giving the pathname
-of the file or URL to read from. "" indicates the connection \code{stdin}.}
+\item{x}{(\code{character}) string giving the pathname of the file to read from.}
+
+\item{code}{(\code{character}) reproducible code to re-create object}
 }
 \value{
-\code{RelationalData} object if file returns a \code{RelationalData}
-  object.
+\code{RelationalData} object
 }
 \description{
-Load \code{RelationalData} object from a file
+Please note that the script has to end with a call creating desired object. The error will be raised otherwise.
 }
 \examples{
+# simple example
 file_example <- tempfile(fileext = ".R")
 writeLines(
   text = c(
     "library(teal)
      library(random.cdisc.data)
-     library(dplyr)
 
-     adsl <- cdisc_dataset(dataname = \"ADSL\", # RelationalDataset
+     adsl <- cdisc_dataset(dataname = \"ADSL\",
                            data = radsl(cached = TRUE),
                            code = \"library(random.cdisc.data)\nADSL <- radsl(cached = TRUE)\")
 
-     adtte <- cdisc_dataset(dataname = \"ADTTE\", # RelationalDataset
+     adtte <- cdisc_dataset(dataname = \"ADTTE\",
                             data = radtte(cached = TRUE),
                             code = \"library(random.cdisc.data)\nADTTE <- radtte(cached = TRUE)\")
 
@@ -37,7 +37,31 @@ writeLines(
   ),
   con = file_example
 )
+x <- teal_data_file(file_example, code = character(0))
+get_code(x)
 
-teal_data_file(file_example)
+# exaample with custom datasets
+file_example <- tempfile(fileext = ".R")
+writeLines(
+  text = c(
+    "library(teal)
+    library(random.cdisc.data)
 
+    # code>
+    ADSL <- radsl(cached = TRUE)
+    ADTTE <- radtte(cached = TRUE)
+
+    ADSL$n <- nrow(ADTTE)
+    ADTTE$n <- nrow(ADSL)
+    # <code
+
+    ADSL <- cdisc_dataset(dataname = \"ADSL\", data = ADSL)
+    ADTTE <- cdisc_dataset(dataname = \"ADTTE\", data = ADTTE)
+
+    teal_data(ADSL, ADTTE)"
+  ),
+  con = file_example
+)
+x <- teal_data_file(file_example)
+get_code(x)
 }

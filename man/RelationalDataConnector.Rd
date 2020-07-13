@@ -52,6 +52,7 @@ tc$get_datasets()
 \item \href{#method-get_dataset_connectors}{\code{RelationalDataConnector$get_dataset_connectors()}}
 \item \href{#method-get_code}{\code{RelationalDataConnector$get_code()}}
 \item \href{#method-get_connection}{\code{RelationalDataConnector$get_connection()}}
+\item \href{#method-get_all_datasets}{\code{RelationalDataConnector$get_all_datasets()}}
 \item \href{#method-get_server}{\code{RelationalDataConnector$get_server()}}
 \item \href{#method-get_ui}{\code{RelationalDataConnector$get_ui()}}
 \item \href{#method-launch}{\code{RelationalDataConnector$launch()}}
@@ -69,6 +70,7 @@ tc$get_datasets()
 \itemize{
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="RelationalData" data-id="check">}\href{../../teal/html/RelationalData.html#method-check}{\code{teal::RelationalData$check()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="RelationalData" data-id="get_cdisc_data">}\href{../../teal/html/RelationalData.html#method-get_cdisc_data}{\code{teal::RelationalData$get_cdisc_data()}}\out{</span>}
+\item \out{<span class="pkg-link" data-pkg="teal" data-topic="RelationalData" data-id="set_code">}\href{../../teal/html/RelationalData.html#method-set_code}{\code{teal::RelationalData$set_code()}}\out{</span>}
 }
 \out{</details>}
 }
@@ -154,9 +156,18 @@ Get \code{RelationalDatasetConnector} objects
 \subsection{Method \code{get_code()}}{
 Derive the code for all datasets
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{RelationalDataConnector$get_code()}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{RelationalDataConnector$get_code(dataname = NULL, deparse = TRUE)}\if{html}{\out{</div>}}
 }
 
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{dataname}}{(\code{character}) dataname or \code{NULL} for all datasets}
+
+\item{\code{deparse}}{(\code{logical}) whether to return the deparsed form of a call}
+}
+\if{html}{\out{</div>}}
+}
 \subsection{Returns}{
 \code{list} of \code{character} containing code
 }
@@ -171,6 +182,30 @@ Get connection to data source
 
 \subsection{Returns}{
 connector's connection
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-get_all_datasets"></a>}}
+\subsection{Method \code{get_all_datasets()}}{
+
+
+
+Get all datasets and all dataset connectors
+
+  name of dataset connector to be returned. If \code{NULL}, all connectors are returned.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{RelationalDataConnector$get_all_datasets(dataname = NULL)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{dataname}}{(\code{character} value)\cr}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Returns}{
+\code{list} with all datasets and all connectors
 }
 }
 \if{html}{\out{<hr>}}

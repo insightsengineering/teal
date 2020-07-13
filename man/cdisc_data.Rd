@@ -27,8 +27,8 @@ This function checks if there were keys added to all data
 \examples{
 library(random.cdisc.data)
 
-ADSL <- cadsl # or: radsl(N = 600, seed = 123)
-ADTTE <- cadtte # or: radtte(ADSL, seed = 123)
+ADSL <- radsl(cached = TRUE)
+ADTTE <- radtte(cached = TRUE)
 
 # basic example
 cdisc_data(

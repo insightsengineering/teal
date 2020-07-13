@@ -51,8 +51,8 @@ as_relational.RawDataset <- function(x,
                                      keys,
                                      code = character(0),
                                      script = character(0),
-                                     label = character(0)) { # nolint
-  code <- code_from_script(code, script, dataname = dataname) # nolint
+                                     label = character(0)) {
+  code <- code_from_script(code, script, dataname = dataname)
 
   return(
     RelationalDataset$new(
@@ -72,9 +72,9 @@ as_relational.NamedDataset <- function(x,
                                        keys,
                                        code = character(0),
                                        script = character(0),
-                                       label = character(0)) { # nolint
+                                       label = character(0)) {
   warning("Only raw_data of 'x' will be used. All other fields get lost by using 'as_relational'.")
-  code <- code_from_script(code, script, dataname = dataname) # nolint
+  code <- code_from_script(code, script, dataname = dataname)
 
   return(
     RelationalDataset$new(
@@ -103,7 +103,7 @@ as_relational.RawDatasetConnector <- function(x, # nolint
                                               code = character(0),
                                               script = character(0),
                                               label = character(0)) {
-  code <- code_from_script(code, script, dataname = dataname) # nolint
+  code <- code_from_script(code, script, dataname = dataname)
   ds <- tryCatch(
     expr = get_dataset(x),
     error = function(e) NULL
@@ -138,7 +138,7 @@ as_cdisc_relational <- function(x,
                                 code = character(0),
                                 script = character(0),
                                 label = character(0)) {
-  code <- code_from_script(code, script, dataname = dataname) # nolint
+  code <- code_from_script(code, script, dataname = dataname)
 
   return(
     as_relational(
@@ -170,7 +170,7 @@ code_from_script <- function(code, script, dataname = NULL) {
   }
 
   if (is_character_single(script)) {
-    code <- read_script(file = script, dataname = dataname) # nolint
+    code <- read_script(file = script, dataname = dataname)
   }
 
   return(code)
@@ -180,13 +180,23 @@ code_from_script <- function(code, script, dataname = NULL) {
 #'
 #' Evaluate script code to modify data
 #' @inheritParams as_relational
+#' @param vars (named \code{list}) additional pre-requisite vars to execute code
 #' @return (\code{environment}) which stores modified \code{x}
-execute_script_code <- function(x, code) {
-  stopifnot(is_character_vector(code, min_length = 0, max_length = 1))
+execute_script_code <- function(x, code, vars = list()) {
   stopifnot(is(x, "NamedDataset"))
+  stopifnot(is_character_vector(code, min_length = 0, max_length = 1))
+  stopifnot(is_fully_named_list(vars))
 
   execution_environment <- new.env()
   assign(envir = execution_environment, x = x$get_dataname(), value = x$get_raw_data())
+  for (vars_idx in seq_along(vars)) {
+    var_name <- names(vars)[[vars_idx]]
+    var_value <- vars[[vars_idx]]
+    if (is(var_value, "RawDatasetConnector") || is(var_value, "RawDataset")) {
+      var_value <- get_raw_data(var_value)
+    }
+    assign(envir = execution_environment, x = var_name, value = var_value)
+  }
 
   eval(parse(text = code), envir = execution_environment)
 

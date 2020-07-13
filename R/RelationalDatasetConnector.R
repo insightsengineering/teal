@@ -109,11 +109,16 @@ RelationalDatasetConnector <- R6::R6Class( #nolint
     #'
     #' @param code (\code{character}) Code to mutate the dataset. Must contain the
     #'  \code{dataset$dataname}
-    mutate_dataset = function(code) {
+    #' @param vars (list)\cr
+    #'   In case when this object code depends on the \code{raw_data} from the other
+    #'   \code{RelationalDataset}, \code{RelationalDatasetConnector} object(s) or other constant value,
+    #'   this/these object(s) should be included
+    mutate_dataset = function(code, vars) {
       if (!is.null(private$dataset)) {
-        private$dataset <- mutate_dataset(private$dataset, code = code)
+        private$dataset <- mutate_dataset(private$dataset, code = code, vars = vars)
       } else {
         private$set_mutate_code(code)
+        private$set_mutate_vars(vars)
       }
 
       return(invisible(self))
@@ -149,7 +154,8 @@ RelationalDatasetConnector <- R6::R6Class( #nolint
       if (!is_empty(private$get_mutate_code())) {
         private$dataset <- mutate_dataset(
           private$dataset,
-          code = private$get_mutate_code(deparse = TRUE)
+          code = private$get_mutate_code(deparse = TRUE),
+          vars = private$mutate_vars
         )
       }
 
@@ -206,7 +212,8 @@ RelationalDatasetConnector <- R6::R6Class( #nolint
     dataname = character(0),
     keys = NULL,
     dataset_label = character(0),
-    mutate_code = NULL,
+    mutate_code = NULL, # list of calls
+    mutate_vars = list(), # named list with vars used to mutate object
     # assigns the pull code call to the dataname
     get_pull_code = function(deparse = TRUE, args = NULL) {
       code <- if (deparse) {
@@ -249,10 +256,19 @@ RelationalDatasetConnector <- R6::R6Class( #nolint
 
     set_mutate_code = function(code) {
       stopifnot(utils.nest::is_character_vector(code, 0, 1))
-      if (length(code) > 0) {
-        private$mutate_code <- as.list(as.call(parse(text = code)))
-      } else {
-        private$mutate_code <- NULL
+
+      if (length(code) > 0 && code != "") {
+        private$mutate_code <- c(private$mutate_code, as.list(as.call(parse(text = code))))
+      }
+
+      return(invisible(NULL))
+    },
+
+    set_mutate_vars = function(vars) {
+      stopifnot(is_fully_named_list(vars))
+
+      if (length(vars) > 0) {
+        private$mutate_vars <- c(private$mutate_vars, vars)
       }
 
       return(invisible(NULL))

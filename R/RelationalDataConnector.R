@@ -89,9 +89,23 @@ RelationalDataConnector <- R6::R6Class( #nolint
     #' @description
     #'
     #' Derive the code for all datasets
+    #' @param dataname (\code{character}) dataname or \code{NULL} for all datasets
+    #' @param deparse (\code{logical}) whether to return the deparsed form of a call
     #' @return \code{list} of \code{character} containing code
-    get_code = function() {
-      vapply(private$datasets, get_code, character(1))
+    get_code = function(dataname = NULL, deparse = TRUE) {
+      stopifnot(is_logical_single(deparse))
+
+      datasets_code <- private$get_code_datasets(dataname = dataname, deparse = deparse)
+      connectors_code <- private$get_code_connectors(dataname = dataname, deparse = deparse)
+      mutate_code <- private$get_mutate_code(deparse = deparse)
+
+      all_code <- c(datasets_code, connectors_code, mutate_code)
+
+      if (isTRUE(deparse)) {
+        all_code <- paste0(all_code, collapse = "\n")
+      }
+
+      return(all_code)
     },
     #' @description
     #' Get connection to data source
@@ -99,6 +113,24 @@ RelationalDataConnector <- R6::R6Class( #nolint
     #' @return connector's connection
     get_connection = function() {
       return(private$connection)
+    },
+    #' @description
+    #'
+    #' @description
+    #' Get all datasets and all dataset connectors
+    #'
+    #'   name of dataset connector to be returned. If \code{NULL}, all connectors are returned.
+    #' @param dataname (\code{character} value)\cr
+    #'
+    #' @return \code{list} with all datasets and all connectors
+    get_all_datasets = function(dataname = NULL) {
+      stopifnot(is.null(dataname) || is_character_single(dataname))
+
+      if (is.null(dataname)) {
+        c(private$datasets, private$dataset_connectors)
+      } else {
+        if_null(private$datasets[[dataname]], private$dataset_connectors[[dataname]])
+      }
     },
     #' @description
     #'
@@ -306,6 +338,22 @@ RelationalDataConnector <- R6::R6Class( #nolint
     connection = NULL,
     check = FALSE,
     # ....methods ----
+
+    get_code_connectors = function(dataname = NULL, deparse = TRUE) {
+      if (is.null(private$dataset_connectors)) {
+        NULL
+      } else if (!is.null(dataname) && is.null(private$dataset_connectors[[dataname]])) {
+        NULL
+      } else if (is.null(private$code) && !is.null(dataname)) {
+        get_code(private$dataset_connectors[[dataname]], deparse = deparse)
+      } else {
+        if (isTRUE(deparse)) {
+          vapply(private$dataset_connectors, get_code, character(1), deparse = TRUE)
+        } else {
+          unname(unlist(lapply(private$dataset_connectors, get_code, deparse = FALSE)))
+        }
+      }
+    },
 
     # adds open/close connection code at beginning/end of the dataset code
     append_connection_code = function() {

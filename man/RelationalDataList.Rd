@@ -31,12 +31,15 @@ tc$get_cdisc_data()
 \subsection{Public methods}{
 \itemize{
 \item \href{#method-new}{\code{RelationalDataList$new()}}
+\item \href{#method-check}{\code{RelationalDataList$check()}}
 \item \href{#method-get_datanames}{\code{RelationalDataList$get_datanames()}}
 \item \href{#method-get_code}{\code{RelationalDataList$get_code()}}
 \item \href{#method-get_ui}{\code{RelationalDataList$get_ui()}}
 \item \href{#method-get_dataset_connectors}{\code{RelationalDataList$get_dataset_connectors()}}
 \item \href{#method-get_data_connectors}{\code{RelationalDataList$get_data_connectors()}}
+\item \href{#method-get_all_datasets}{\code{RelationalDataList$get_all_datasets()}}
 \item \href{#method-get_server}{\code{RelationalDataList$get_server()}}
+\item \href{#method-is_pulled}{\code{RelationalDataList$is_pulled()}}
 \item \href{#method-launch}{\code{RelationalDataList$launch()}}
 \item \href{#method-clone}{\code{RelationalDataList$clone()}}
 }
@@ -44,11 +47,10 @@ tc$get_cdisc_data()
 \if{html}{
 \out{<details open ><summary>Inherited methods</summary>}
 \itemize{
-\item \out{<span class="pkg-link" data-pkg="teal" data-topic="RelationalData" data-id="check">}\href{../../teal/html/RelationalData.html#method-check}{\code{teal::RelationalData$check()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="RelationalData" data-id="get_cdisc_data">}\href{../../teal/html/RelationalData.html#method-get_cdisc_data}{\code{teal::RelationalData$get_cdisc_data()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="RelationalData" data-id="get_dataset">}\href{../../teal/html/RelationalData.html#method-get_dataset}{\code{teal::RelationalData$get_dataset()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="RelationalData" data-id="get_datasets">}\href{../../teal/html/RelationalData.html#method-get_datasets}{\code{teal::RelationalData$get_datasets()}}\out{</span>}
-\item \out{<span class="pkg-link" data-pkg="teal" data-topic="RelationalData" data-id="is_pulled">}\href{../../teal/html/RelationalData.html#method-is_pulled}{\code{teal::RelationalData$is_pulled()}}\out{</span>}
+\item \out{<span class="pkg-link" data-pkg="teal" data-topic="RelationalData" data-id="set_code">}\href{../../teal/html/RelationalData.html#method-set_code}{\code{teal::RelationalData$set_code()}}\out{</span>}
 }
 \out{</details>}
 }
@@ -69,6 +71,19 @@ tc$get_cdisc_data()
 }
 }
 \if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-check"></a>}}
+\subsection{Method \code{check()}}{
+Check if the all datasets and connectors raw data is reproducible from the \code{get_code()} code.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{RelationalDataList$check()}\if{html}{\out{</div>}}
+}
+
+\subsection{Returns}{
+\code{TRUE} if all the items generated from evaluating the
+  \code{get_code()} code are identical to the raw data, else \code{FALSE}.
+}
+}
+\if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-get_datanames"></a>}}
 \subsection{Method \code{get_datanames()}}{
 Derive the names of all datasets
@@ -85,9 +100,18 @@ Derive the names of all datasets
 \subsection{Method \code{get_code()}}{
 Derive the code for all datasets
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{RelationalDataList$get_code()}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{RelationalDataList$get_code(dataname = NULL, deparse = TRUE)}\if{html}{\out{</div>}}
 }
 
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{dataname}}{(\code{character}) dataname or \code{NULL} for all datasets}
+
+\item{\code{deparse}}{(\code{logical}) whether to return the deparsed form of a call}
+}
+\if{html}{\out{</div>}}
+}
 \subsection{Returns}{
 \code{vector} of \code{character} containing code
 }
@@ -134,6 +158,26 @@ Get data connectors.
 }
 }
 \if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-get_all_datasets"></a>}}
+\subsection{Method \code{get_all_datasets()}}{
+Get all datasets and all dataset connectors
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{RelationalDataList$get_all_datasets(dataname = NULL)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{dataname}}{(\code{character} value)\cr
+name of dataset connector to be returned. If \code{NULL}, all connectors are returned.}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Returns}{
+\code{list} with all datasets and all connectors
+}
+}
+\if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-get_server"></a>}}
 \subsection{Method \code{get_server()}}{
 Get a shiny-module server to render the necessary app to
@@ -142,6 +186,18 @@ derive \code{RelationalDataConnector} object's data
 \if{html}{\out{<div class="r">}}\preformatted{RelationalDataList$get_server()}\if{html}{\out{</div>}}
 }
 
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-is_pulled"></a>}}
+\subsection{Method \code{is_pulled()}}{
+Check if all datasets and connectors have already been pulled.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{RelationalDataList$is_pulled()}\if{html}{\out{</div>}}
+}
+
+\subsection{Returns}{
+\code{TRUE} if all items have been already pulled, else \code{FALSE}
+}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-launch"></a>}}

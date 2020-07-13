@@ -83,25 +83,27 @@ Code chunks are described with:
 \examples{
 library(random.cdisc.data)
 
-ADSL <- cadsl # or: radsl(N = 600, seed = 123)
-ADTTE <- cadtte # or: radtte(ADSL, seed = 123)
+ADSL <- radsl(cached = TRUE)
+ADTTE <- radtte(cached = TRUE)
 
 # Example with keys
 cd <- cdisc_data(
-  cdisc_dataset("ADSL", ADSL, keys = keys(
-    primary = c("STUDYID", "USUBJID"),
-    foreign = NULL,
-    parent = NULL
-  )),
+  cdisc_dataset("ADSL", ADSL,
+    keys = keys(
+      primary = c("STUDYID", "USUBJID"),
+      foreign = NULL,
+      parent = NULL
+    ),
+    code = "ADSL <- radsl(cached = TRUE)"
+  ),
   cdisc_dataset("ADTTE", ADTTE,
     keys = keys(
       primary = c("STUDYID", "USUBJID", "PARAMCD"),
       foreign = c("STUDYID", "USUBJID"),
       parent = "ADSL"
     ),
-    code = "ADTTE <- radtte(ADSL, seed = 123)"
+    code = "ADTTE <- radtte(cached = TRUE)"
   ),
-  code = "ADSL <- radsl(N = 600, seed = 123)",
   check = FALSE
 )
 
@@ -110,60 +112,43 @@ get_code(cd)
 get_code(cd, "ADTTE")
 
 get_code(cd, "ADSL")
-x <- teal:::RelationalDataset$new(
+x1 <- relational_dataset(
   x = data.frame(x = c(1, 2), y = c("a", "b"), stringsAsFactors = FALSE),
   keys = keys(primary = "y", foreign = NULL, parent = NULL),
   dataname = "XY",
-  code = "XY <- data.frame(x = c(1, 2), y = c('aa', 'bb'),
-                           stringsAsFactors = FALSE)"
+  code = "XY <- data.frame(x = c(1, 2), y = c('aa', 'bb'), stringsAsFactors = FALSE)",
+  label = character(0)
 )
 
-x2 <- teal:::RelationalDataset$new(
+x2 <- relational_dataset(
   x = data.frame(x = c(1, 2), y = c("a", "b"), stringsAsFactors = FALSE),
   keys = keys(primary = "y", foreign = NULL, parent = NULL),
   dataname = "XYZ",
-  code = "XYZ <- data.frame(x = c(1, 2), y = c('aa', 'bb'),
-                           stringsAsFactors = FALSE)"
+  code = "XYZ <- data.frame(x = c(1, 2), y = c('aa', 'bb'), stringsAsFactors = FALSE)",
+  label = character(0)
 )
 
-rd <- teal:::RelationalData$new(x, x2)
+rd <- teal_data(x1, x2)
 
 
 get_code(rd)
-
-# return a warning
-\dontrun{
-# throw error
-get_code(rd, "WrongName")
-
-load_datasets(rd)
-}
-
-# return a code
 get_code(rd, "XY")
 get_code(rd, "XYZ")
 library(random.cdisc.data)
+
 rcd <- rcd_cdisc_data(
   rcd_cdisc_dataset_connector("ADSL", radsl, cached = TRUE),
   rcd_cdisc_dataset_connector("ADLB", radlb, cached = TRUE),
   rcd_cdisc_dataset_connector("ADRS", radrs, cached = TRUE)
 )
 
-# return invisibly NULL
-get_code(rcd, "WrongName")
-
 # return a code
 get_code(rcd)
 get_code(rcd, "ADSL")
 get_code(rcd, "ADLB")
-\dontrun{
-load_datasets(rcd)
-get_code(rcd)
-get_code(rcd, "ADSL")
-get_code(tc, "ADLB")
-}
+get_code(rcd, "ADRS")
 library(random.cdisc.data)
-x <- rcd_cdisc_data( # RelationalDataConnector
+x1 <- rcd_cdisc_data( # RelationalDataConnector
   rcd_cdisc_dataset_connector("ADSL", radsl, cached = TRUE),
   rcd_cdisc_dataset_connector("ADLB", radlb, cached = TRUE)
 )
@@ -173,32 +158,24 @@ x2 <- rcd_cdisc_data( # RelationalDataConnector
 
 x3 <- rcd_cdisc_dataset_connector("ADTTE", radtte, cached = TRUE)
 
-x4 <- teal:::RelationalDataset$new(
+x4 <- relational_dataset(
   x = data.frame(x = c(1, 2), y = c("a", "b"), stringsAsFactors = FALSE),
   keys = get_cdisc_keys("ADAE"),
   dataname = "ADAE",
   code = "ADAE <- data.frame(x = c(1, 2), y = c('aa', 'bb'),
-                           stringsAsFactors = FALSE)"
+                           stringsAsFactors = FALSE)",
+  label = character(0)
 )
 
-tc <- teal_data(x, x2, x3, x4)
+tc <- teal_data(x1, x2, x3, x4)
 
-# return invisibly NULL
-get_code(tc, "WrongName")
 # return code for all sets
 get_code(tc)
 
 # return a code - be aware of the lack of `library(random.cdisc.data)`
 get_code(tc, "ADSL")
 get_code(tc, "ADLB")
+get_code(tc, "ADRS")
 get_code(tc, "ADTTE")
 get_code(tc, "ADAE")
-\dontrun{
-load_datasets(tc)
-
-get_code(tc, "ADSL")
-get_code(tc, "ADLB")
-get_code(tc, "ADTTE")
-get_code(tc, "ADAE")
-}
 }

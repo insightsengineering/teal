@@ -59,25 +59,27 @@ get_code.NamedDataset <- function(x, deparse = TRUE, ...) {
 #' @examples
 #' library(random.cdisc.data)
 #'
-#' ADSL <- cadsl # or: radsl(N = 600, seed = 123)
-#' ADTTE <- cadtte # or: radtte(ADSL, seed = 123)
+#' ADSL <- radsl(cached = TRUE)
+#' ADTTE <- radtte(cached = TRUE)
 #'
 #' # Example with keys
 #' cd <- cdisc_data(
-#'   cdisc_dataset("ADSL", ADSL, keys = keys(
-#'     primary = c("STUDYID", "USUBJID"),
-#'     foreign = NULL,
-#'     parent = NULL
-#'   )),
+#'   cdisc_dataset("ADSL", ADSL,
+#'     keys = keys(
+#'       primary = c("STUDYID", "USUBJID"),
+#'       foreign = NULL,
+#'       parent = NULL
+#'     ),
+#'     code = "ADSL <- radsl(cached = TRUE)"
+#'   ),
 #'   cdisc_dataset("ADTTE", ADTTE,
 #'     keys = keys(
 #'       primary = c("STUDYID", "USUBJID", "PARAMCD"),
 #'       foreign = c("STUDYID", "USUBJID"),
 #'       parent = "ADSL"
 #'     ),
-#'     code = "ADTTE <- radtte(ADSL, seed = 123)"
+#'     code = "ADTTE <- radtte(cached = TRUE)"
 #'   ),
-#'   code = "ADSL <- radsl(N = 600, seed = 123)",
 #'   check = FALSE
 #' )
 #'
@@ -106,45 +108,34 @@ get_code.cdisc_data <- function(x, dataname = NULL, deparse = FALSE, ...) {
 #' @rdname get_code
 #' @export
 #' @examples
-#' x <- teal:::RelationalDataset$new(
+#' x1 <- relational_dataset(
 #'   x = data.frame(x = c(1, 2), y = c("a", "b"), stringsAsFactors = FALSE),
 #'   keys = keys(primary = "y", foreign = NULL, parent = NULL),
 #'   dataname = "XY",
-#'   code = "XY <- data.frame(x = c(1, 2), y = c('aa', 'bb'),
-#'                            stringsAsFactors = FALSE)"
+#'   code = "XY <- data.frame(x = c(1, 2), y = c('aa', 'bb'), stringsAsFactors = FALSE)",
+#'   label = character(0)
 #' )
 #'
-#' x2 <- teal:::RelationalDataset$new(
+#' x2 <- relational_dataset(
 #'   x = data.frame(x = c(1, 2), y = c("a", "b"), stringsAsFactors = FALSE),
 #'   keys = keys(primary = "y", foreign = NULL, parent = NULL),
 #'   dataname = "XYZ",
-#'   code = "XYZ <- data.frame(x = c(1, 2), y = c('aa', 'bb'),
-#'                            stringsAsFactors = FALSE)"
+#'   code = "XYZ <- data.frame(x = c(1, 2), y = c('aa', 'bb'), stringsAsFactors = FALSE)",
+#'   label = character(0)
 #' )
 #'
-#' rd <- teal:::RelationalData$new(x, x2)
+#' rd <- teal_data(x1, x2)
 #'
 #'
 #' get_code(rd)
-#'
-#' # return a warning
-#' \dontrun{
-#' # throw error
-#' get_code(rd, "WrongName")
-#'
-#' load_datasets(rd)
-#' }
-#'
-#' # return a code
 #' get_code(rd, "XY")
 #' get_code(rd, "XYZ")
 get_code.RelationalData <- function(x, dataname = NULL, deparse = TRUE, ...) { # nolint
-
   if (!is.null(dataname)) {
     if (!(dataname %in% x$get_datanames())) {
       stop("The dataname provided does not exist")
     }
-    x$get_code()[[dataname]]
+    x$get_code(dataname = dataname)
   } else {
     x$get_code()
   }
@@ -154,35 +145,30 @@ get_code.RelationalData <- function(x, dataname = NULL, deparse = TRUE, ...) { #
 #' @export
 #' @examples
 #' library(random.cdisc.data)
+#'
 #' rcd <- rcd_cdisc_data(
 #'   rcd_cdisc_dataset_connector("ADSL", radsl, cached = TRUE),
 #'   rcd_cdisc_dataset_connector("ADLB", radlb, cached = TRUE),
 #'   rcd_cdisc_dataset_connector("ADRS", radrs, cached = TRUE)
 #' )
 #'
-#' # return invisibly NULL
-#' get_code(rcd, "WrongName")
-#'
 #' # return a code
 #' get_code(rcd)
 #' get_code(rcd, "ADSL")
 #' get_code(rcd, "ADLB")
-#' \dontrun{
-#' load_datasets(rcd)
-#' get_code(rcd)
-#' get_code(rcd, "ADSL")
-#' get_code(tc, "ADLB")
-#' }
+#' get_code(rcd, "ADRS")
 get_code.RelationalDataConnector <- function(x, dataname = NULL, deparse = TRUE, ...) { # nolint
   names_all <- x$get_datanames()
-  code_all <- x$get_code()
 
-  if (!is.null(dataname) && dataname %in% names_all) {
-    code_all[[dataname]]
+  if (!is.null(dataname)) {
+    if (!(dataname %in% x$get_datanames())) {
+      stop("The dataname provided does not exist")
+    }
+    x$get_code(dataname = dataname)
   } else if (!is.null(dataname) && !(dataname %in% names_all)) {
     return(invisible(NULL))
   } else {
-    code_all
+    x$get_code()
   }
 }
 
@@ -190,7 +176,7 @@ get_code.RelationalDataConnector <- function(x, dataname = NULL, deparse = TRUE,
 #' @export
 #' @examples
 #' library(random.cdisc.data)
-#' x <- rcd_cdisc_data( # RelationalDataConnector
+#' x1 <- rcd_cdisc_data( # RelationalDataConnector
 #'   rcd_cdisc_dataset_connector("ADSL", radsl, cached = TRUE),
 #'   rcd_cdisc_dataset_connector("ADLB", radlb, cached = TRUE)
 #' )
@@ -200,44 +186,34 @@ get_code.RelationalDataConnector <- function(x, dataname = NULL, deparse = TRUE,
 #'
 #' x3 <- rcd_cdisc_dataset_connector("ADTTE", radtte, cached = TRUE)
 #'
-#' x4 <- teal:::RelationalDataset$new(
+#' x4 <- relational_dataset(
 #'   x = data.frame(x = c(1, 2), y = c("a", "b"), stringsAsFactors = FALSE),
 #'   keys = get_cdisc_keys("ADAE"),
 #'   dataname = "ADAE",
 #'   code = "ADAE <- data.frame(x = c(1, 2), y = c('aa', 'bb'),
-#'                            stringsAsFactors = FALSE)"
+#'                            stringsAsFactors = FALSE)",
+#'   label = character(0)
 #' )
 #'
-#' tc <- teal_data(x, x2, x3, x4)
+#' tc <- teal_data(x1, x2, x3, x4)
 #'
-#' # return invisibly NULL
-#' get_code(tc, "WrongName")
 #' # return code for all sets
 #' get_code(tc)
 #'
 #' # return a code - be aware of the lack of `library(random.cdisc.data)`
 #' get_code(tc, "ADSL")
 #' get_code(tc, "ADLB")
+#' get_code(tc, "ADRS")
 #' get_code(tc, "ADTTE")
 #' get_code(tc, "ADAE")
-#' \dontrun{
-#' load_datasets(tc)
-#'
-#' get_code(tc, "ADSL")
-#' get_code(tc, "ADLB")
-#' get_code(tc, "ADTTE")
-#' get_code(tc, "ADAE")
-#' }
 get_code.RelationalDataList <- function(x, dataname = NULL, deparse = TRUE, ...) { # nolint
-
-  code_all <- x$get_code()
-  names_all <- x$get_datanames()
-  if (!is.null(dataname) && dataname %in% names_all) {
-    code_all[[dataname]]
-  } else if (!is.null(dataname) && !(dataname %in% names_all)) {
-    return(invisible(NULL))
+  if (!is.null(dataname)) {
+    if (!(dataname %in% x$get_datanames())) {
+      stop("The dataname provided does not exist")
+    }
+    x$get_code(dataname = dataname)
   } else {
-    code_all
+    x$get_code()
   }
 }
 
@@ -359,7 +335,8 @@ enclosed_with <- function(lines) {
   } else if (length(idx_stop) == 1) {
     idx_stop - 1
   } else {
-    stop("All lines from file included by get_code(). Please use #<code to stop preprocessing at indicated point")
+    warning("All lines from file included by get_code(). Please use #<code to stop preprocessing at indicated point")
+    length(lines)
   }
 
   line_numbers <- seq(line_starts, line_stops)

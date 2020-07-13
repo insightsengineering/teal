@@ -7,6 +7,8 @@
 #' @param ... (\code{RelationalData}, \code{RelationalDataConnector}, \code{RelationalDataset} or
 #'   \code{RelationalDatasetConnector}) elements to include into teal data object
 #'
+#' @param code (\code{character}) reproducible code
+#'
 #' @return \code{RelationalData} if all of the elements are of  \code{RelationalDataset} class, else
 #'   \code{RelationalDataList}
 #'
@@ -47,22 +49,22 @@
 #' data_list$launch()
 #' data_list$get_cdisc_data()
 #' }
-teal_data <- function(...) {
+teal_data <- function(..., code = character(0)) {
   datasets <- list(...)
   possible_classes <- c("RelationalDataConnector", "RelationalDataset", "RelationalDatasetConnector")
-
-  d <- list(...)
 
   is_teal_data <- is_any_class_list(datasets, possible_classes)
   if (!all(is_teal_data)) {
     stop("All arguments should be of RelationalData(set) or RelationalData(set)Connector class")
   }
 
-  teal_data <- if (all(vapply(d, FUN = is, FUN.VALUE = logical(1), class2 = "RelationalDataset"))) {
+  teal_data <- if (all(vapply(datasets, FUN = is, FUN.VALUE = logical(1), class2 = "RelationalDataset"))) {
     RelationalData$new(...)
   } else {
     RelationalDataList$new(...)
   }
+
+  teal_data$set_code(code = code)
 
   return(teal_data)
 }
@@ -76,26 +78,30 @@ all_relational_dataset <- function(x) {
 
 #' Load \code{RelationalData} object from a file
 #'
-#' @param x A (\code{connection}) or a (\code{character}) string giving the pathname
-#'   of the file or URL to read from. "" indicates the connection \code{stdin}.
+#' Please note that the script has to end with a call creating desired object. The error will be raised otherwise.
 #'
-#' @return \code{RelationalData} object if file returns a \code{RelationalData}
-#'   object.
+#' @param x (\code{character}) string giving the pathname of the file to read from.
+#' @param code (\code{character}) reproducible code to re-create object
+#'
+#' @return \code{RelationalData} object
+#'
+#' @importFrom methods is
+#'
 #' @export
 #'
 #' @examples
+#' # simple example
 #' file_example <- tempfile(fileext = ".R")
 #' writeLines(
 #'   text = c(
 #'     "library(teal)
 #'      library(random.cdisc.data)
-#'      library(dplyr)
 #'
-#'      adsl <- cdisc_dataset(dataname = \"ADSL\", # RelationalDataset
+#'      adsl <- cdisc_dataset(dataname = \"ADSL\",
 #'                            data = radsl(cached = TRUE),
 #'                            code = \"library(random.cdisc.data)\nADSL <- radsl(cached = TRUE)\")
 #'
-#'      adtte <- cdisc_dataset(dataname = \"ADTTE\", # RelationalDataset
+#'      adtte <- cdisc_dataset(dataname = \"ADTTE\",
 #'                             data = radtte(cached = TRUE),
 #'                             code = \"library(random.cdisc.data)\nADTTE <- radtte(cached = TRUE)\")
 #'
@@ -103,18 +109,44 @@ all_relational_dataset <- function(x) {
 #'   ),
 #'   con = file_example
 #' )
+#' x <- teal_data_file(file_example, code = character(0))
+#' get_code(x)
 #'
-#' teal_data_file(file_example)
+#' # exaample with custom datasets
+#' file_example <- tempfile(fileext = ".R")
+#' writeLines(
+#'   text = c(
+#'     "library(teal)
+#'     library(random.cdisc.data)
 #'
-#' @importFrom methods is
-teal_data_file <- function(x) {
+#'     # code>
+#'     ADSL <- radsl(cached = TRUE)
+#'     ADTTE <- radtte(cached = TRUE)
+#'
+#'     ADSL$n <- nrow(ADTTE)
+#'     ADTTE$n <- nrow(ADSL)
+#'     # <code
+#'
+#'     ADSL <- cdisc_dataset(dataname = \"ADSL\", data = ADSL)
+#'     ADTTE <- cdisc_dataset(dataname = \"ADTTE\", data = ADTTE)
+#'
+#'     teal_data(ADSL, ADTTE)"
+#'   ),
+#'   con = file_example
+#' )
+#' x <- teal_data_file(file_example)
+#' get_code(x)
+teal_data_file <- function(x, code = get_code(x)) {
+  stopifnot(is_character_single(x))
+  stopifnot(file.exists(x))
 
-  code <- readLines(x)
-  object <- eval(parse(text = code))
+  lines <- paste0(readLines(x), collapse = "\n")
+  object <- eval(parse(text = lines))
 
   if (is(object, "RelationalData")) {
+    object$set_code(code)
     return(object)
   } else {
-    stop("The object returned from the file is not a RelationalData object.")
+    stop("The object returned from the file is not RelationalData object.")
   }
 }

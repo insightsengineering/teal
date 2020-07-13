@@ -80,6 +80,7 @@ NamedDataset <- R6::R6Class( # nolint
     #' @return optionally deparsed \code{call} object
     get_code = function(deparse = TRUE) {
       stopifnot(is_logical_single(deparse))
+
       code <- if (deparse) {
         paste(
           vapply(
@@ -106,15 +107,14 @@ NamedDataset <- R6::R6Class( # nolint
     set_code = function(code) {
       stopifnot(is_character_vector(code, min_length = 0, max_length = 1))
 
-      if (length(code) > 0) {
+      if (length(code) > 0 && code != "") {
         private$.code <- as.list(as.call(parse(text = code)))
       }
 
       invisible(TRUE)
     },
     #' @description
-    #'   Check to determine if the raw data is reproducible from the
-    #'   \code{get_code()} code.
+    #'   Check to determine if the raw data is reproducible from the \code{get_code()} code.
     #' @return
     #'   \code{TRUE} if the dataset generated from evaluating the
     #'   \code{get_code()} code is identical to the raw data, else \code{FALSE}.
@@ -145,7 +145,7 @@ NamedDataset <- R6::R6Class( # nolint
   ## __Private Methods ====
   private = list(
     .dataname = character(0),
-    .code = NULL,
+    .code = NULL, # list of calls
     .label = character(0)
   ),
   ## __Active Methods ====

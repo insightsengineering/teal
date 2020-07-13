@@ -68,6 +68,24 @@ RelationalDataList <- R6::R6Class( #nolint
       return(invisible(self))
     },
     #' @description
+    #'   Check if the all datasets and connectors raw data is reproducible from the \code{get_code()} code.
+    #' @return
+    #'   \code{TRUE} if all the items generated from evaluating the
+    #'   \code{get_code()} code are identical to the raw data, else \code{FALSE}.
+    check = function() {
+      if (!self$is_pulled()) {
+        stop("Cannot check the raw data until it is pulled.")
+      }
+
+      if (is.null(private$code)) {
+        all(vapply(private$datasets, function(x) x$check(), logical(1))) &&
+          all(vapply(private$connectors, function(x) x$check(), logical(1)))
+      } else {
+        all(vapply(private$datasets, function(x) super$check_dataset_all_code(x), logical(1))) &&
+          all(vapply(private$connectors, function(x) super$check_dataset_all_code(x), logical(1)))
+      }
+    },
+    #' @description
     #'
     #' Derive the names of all datasets
     #' @return \code{character} vector with names
@@ -78,16 +96,24 @@ RelationalDataList <- R6::R6Class( #nolint
       )
     },
     #' @description
-    #'
     #' Derive the code for all datasets
+    #' @param dataname (\code{character}) dataname or \code{NULL} for all datasets
+    #' @param deparse (\code{logical}) whether to return the deparsed form of a call
     #' @return \code{vector} of \code{character} containing code
-    get_code = function() {
-      code <- c(
-        vapply(private$datasets, get_code, character(1)),
-        unlist(lapply(private$connectors, get_code))
-      )
-      names(code) <- self$get_datanames()
-      code
+    get_code = function(dataname = NULL, deparse = TRUE) {
+      stopifnot(is_logical_single(deparse))
+
+      datasets_code <- private$get_code_datasets(dataname = dataname, deparse = deparse)
+      connectors_code <- private$get_code_connectors(dataname = dataname, deparse = deparse)
+      mutate_code <- private$get_mutate_code(deparse = deparse)
+
+      all_code <- c(datasets_code, connectors_code, mutate_code)
+
+      if (isTRUE(deparse)) {
+        all_code <- paste0(all_code, collapse = "\n")
+      }
+
+      return(all_code)
     },
     #' @description
     #'
@@ -123,6 +149,40 @@ RelationalDataList <- R6::R6Class( #nolint
         private$connectors))
     },
     #' @description
+    #' Get all datasets and all dataset connectors
+    #'
+    #' @param dataname (\code{character} value)\cr
+    #'   name of dataset connector to be returned. If \code{NULL}, all connectors are returned.
+    #'
+    #' @return \code{list} with all datasets and all connectors
+    get_all_datasets = function(dataname = NULL) {
+      stopifnot(is.null(dataname) || is_character_single(dataname))
+
+      all_datasets <- c(
+        private$datasets,
+        unlist(lapply(
+          private$connectors,
+          function(x) {
+            if (is(x, "RelationalDatasetConnector")) {
+              x
+            } else if (is(x, "RelationalDataConnector")) {
+              x$get_all_datasets()
+            }
+          }
+        ))
+      )
+
+      all_datanames <- vapply(all_datasets, get_dataname, character(1))
+      names(all_datasets) <- all_datanames
+
+      if (is.null(dataname)) {
+        all_datasets
+      } else {
+        all_datasets[[dataname]]
+      }
+    },
+
+    #' @description
     #'
     #' Get a shiny-module server to render the necessary app to
     #' derive \code{RelationalDataConnector} object's data
@@ -136,6 +196,14 @@ RelationalDataList <- R6::R6Class( #nolint
       } else {
         private$server
       }
+    },
+    #' @description
+    #' Check if all datasets and connectors have already been pulled.
+    #'
+    #' @return \code{TRUE} if all items have been already pulled, else \code{FALSE}
+    is_pulled = function() {
+      all(vapply(private$datasets, is_pulled, logical(1))) &&
+        all(vapply(private$connectors, is_pulled, logical(1)))
     },
     #' @description
     #'
@@ -178,6 +246,19 @@ RelationalDataList <- R6::R6Class( #nolint
     ui = NULL,
     # .... methods: ------
     server = NULL,
+    get_code_connectors = function(dataname = NULL, deparse = TRUE) {
+      if (is.null(private$connectors)) {
+        NULL
+      } else if (!is.null(dataname) && is.null(private$code)) {
+        get_code(self$get_all_datasets(dataname))
+      } else {
+        if (isTRUE(deparse)) {
+          vapply(private$connectors, get_code, character(1), deparse = TRUE)
+        } else {
+          unname(unlist(lapply(private$connectors, get_code, deparse = FALSE)))
+        }
+      }
+    },
     append_datasets = function(datasets, remove_connectors = TRUE) {
       stopifnot(is_logical_single(remove_connectors))
       stopifnot(is(datasets, "RelationalDataset") ||

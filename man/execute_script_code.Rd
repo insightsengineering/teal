@@ -4,13 +4,15 @@
 \alias{execute_script_code}
 \title{Evaluate script code to modify data}
 \usage{
-execute_script_code(x, code)
+execute_script_code(x, code, vars = list())
 }
 \arguments{
 \item{x}{(\code{RawDataset} or \code{RawDatasetConnector}) object}
 
 \item{code}{(\code{character})\cr
 A character string defining the code needed to produce the data set in \code{x}}
+
+\item{vars}{(named \code{list}) additional pre-requisite vars to execute code}
 }
 \value{
 (\code{environment}) which stores modified \code{x}

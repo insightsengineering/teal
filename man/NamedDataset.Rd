@@ -172,8 +172,7 @@ Set the code for the dataset
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-check"></a>}}
 \subsection{Method \code{check()}}{
-Check to determine if the raw data is reproducible from the
-  \code{get_code()} code.
+Check to determine if the raw data is reproducible from the \code{get_code()} code.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{NamedDataset$check()}\if{html}{\out{</div>}}
 }

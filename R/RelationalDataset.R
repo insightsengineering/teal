@@ -86,7 +86,6 @@ RelationalDataset <- R6::R6Class( # nolint
 
 #' Create \code{RelationalDataset} object
 #'
-#' Create \code{RelationalDataset} object
 #' @param x (\code{data.frame})
 #' @param dataname (\code{character}) A given name for the dataset
 #'   it may not contain spaces
@@ -95,7 +94,11 @@ RelationalDataset <- R6::R6Class( # nolint
 #' @param code (\code{character}) A character string defining the code
 #'   needed to produce the data set in \code{x}
 #' @param label (\code{character}) Label to describe the dataset
+#'
 #' @return object of class \code{RelaionalDataset}
+#'
+#' @export
+#'
 #' @examples
 #' library(random.cdisc.data)
 #' relational_dataset(
@@ -105,11 +108,74 @@ RelationalDataset <- R6::R6Class( # nolint
 #'   code = "ADSL <- radsl(cached = TRUE)",
 #'   label = "ADSL dataset"
 #' )
-#' @export
 relational_dataset <- function(x, dataname, keys, code, label) {
   RelationalDataset$new(x = x,
                         dataname = dataname,
                         keys = keys,
                         code = code,
                         label = label)
+}
+
+#' Load \code{RelationalDataset} object from a file
+#'
+#' Please note that the script has to end with a call creating desired object. The error will be raised otherwise.
+#'
+#' @param x (\code{character}) string giving the pathname of the file to read from.
+#' @param code (\code{character}) reproducible code to re-create object
+#'
+#' @return \code{RelationalDataset} object
+#'
+#' @importFrom methods is
+#'
+#' @export
+#'
+#' @examples
+#' # simple example
+#' file_example <- tempfile(fileext = ".R")
+#' writeLines(
+#'   text = c(
+#'     "library(teal)
+#'      library(random.cdisc.data)
+#'
+#'      cdisc_dataset(dataname = \"ADSL\",
+#'                    data = radsl(cached = TRUE),
+#'                    code = \"library(random.cdisc.data)\nADSL <- radsl(cached = TRUE)\")"
+#'   ),
+#'   con = file_example
+#' )
+#' x <- relational_dataset_file(file_example, code = character(0))
+#' get_code(x)
+#'
+#' # custom code
+#' file_example <- tempfile(fileext = ".R")
+#' writeLines(
+#'   text = c(
+#'     "library(teal)
+#'
+#'      # code>
+#'      library(random.cdisc.data)
+#'      ADSL <- radsl(cached = TRUE)
+#'      ADSL$a1 <- 1
+#'      ADSL$a2 <- 2
+#'
+#'      # <code
+#'      cdisc_dataset(dataname = \"ADSL\", data = ADSL)"
+#'   ),
+#'   con = file_example
+#' )
+#' x <- relational_dataset_file(file_example)
+#' get_code(x)
+relational_dataset_file <- function(x, code = get_code(x)) {
+  stopifnot(is_character_single(x))
+  stopifnot(file.exists(x))
+
+  lines <- paste0(readLines(x), collapse = "\n")
+  object <- eval(parse(text = lines))
+
+  if (is(object, "RelationalDataset")) {
+    object$set_code(code)
+    return(object)
+  } else {
+    stop("The object returned from the file is not RelationalDataset object.")
+  }
 }

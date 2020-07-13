@@ -4,11 +4,13 @@
 \alias{teal_data}
 \title{Teal data}
 \usage{
-teal_data(...)
+teal_data(..., code = character(0))
 }
 \arguments{
 \item{...}{(\code{RelationalData}, \code{RelationalDataConnector}, \code{RelationalDataset} or
 \code{RelationalDatasetConnector}) elements to include into teal data object}
+
+\item{code}{(\code{character}) reproducible code}
 }
 \value{
 \code{RelationalData} if all of the elements are of  \code{RelationalDataset} class, else
