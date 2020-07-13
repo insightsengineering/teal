@@ -63,6 +63,7 @@ rel_data$set_keys(keys(primary = "x", foreign = NULL, parent = NULL))
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="RawDataset" data-id="get_raw_data">}\href{../../teal/html/RawDataset.html#method-get_raw_data}{\code{teal::RawDataset$get_raw_data()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="RawDataset" data-id="get_row_labels">}\href{../../teal/html/RawDataset.html#method-get_row_labels}{\code{teal::RawDataset$get_row_labels()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="RawDataset" data-id="get_rownames">}\href{../../teal/html/RawDataset.html#method-get_rownames}{\code{teal::RawDataset$get_rownames()}}\out{</span>}
+\item \out{<span class="pkg-link" data-pkg="teal" data-topic="NamedDataset" data-id="check">}\href{../../teal/html/NamedDataset.html#method-check}{\code{teal::NamedDataset$check()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="NamedDataset" data-id="get_code">}\href{../../teal/html/NamedDataset.html#method-get_code}{\code{teal::NamedDataset$get_code()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="NamedDataset" data-id="get_dataname">}\href{../../teal/html/NamedDataset.html#method-get_dataname}{\code{teal::NamedDataset$get_dataname()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="NamedDataset" data-id="get_dataset_label">}\href{../../teal/html/NamedDataset.html#method-get_dataset_label}{\code{teal::NamedDataset$get_dataset_label()}}\out{</span>}

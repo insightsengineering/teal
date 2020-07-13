@@ -42,6 +42,7 @@ named_data$get_dataname()
 \item \href{#method-set_dataset_label}{\code{NamedDataset$set_dataset_label()}}
 \item \href{#method-get_code}{\code{NamedDataset$get_code()}}
 \item \href{#method-set_code}{\code{NamedDataset$set_code()}}
+\item \href{#method-check}{\code{NamedDataset$check()}}
 \item \href{#method-clone}{\code{NamedDataset$clone()}}
 }
 }
@@ -173,6 +174,20 @@ Set the code for the dataset
 \item{\code{code}}{(\code{character}) the new code}
 }
 \if{html}{\out{</div>}}
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-check"></a>}}
+\subsection{Method \code{check()}}{
+Check to determine if the raw data is reproducible from the
+  \code{get_code()} code.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{NamedDataset$check()}\if{html}{\out{</div>}}
+}
+
+\subsection{Returns}{
+\code{TRUE} if the dataset generated from evaluating the
+  \code{get_code()} code is identical to the raw data, else \code{FALSE}.
 }
 }
 \if{html}{\out{<hr>}}

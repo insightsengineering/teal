@@ -32,6 +32,7 @@ Pulled data inherits from the class \link{RelationalDataset}.
 \item \href{#method-pull}{\code{RelationalDatasetConnector$pull()}}
 \item \href{#method-is_pulled}{\code{RelationalDatasetConnector$is_pulled()}}
 \item \href{#method-get_pull_args}{\code{RelationalDatasetConnector$get_pull_args()}}
+\item \href{#method-check}{\code{RelationalDatasetConnector$check()}}
 \item \href{#method-clone}{\code{RelationalDatasetConnector$clone()}}
 }
 }
@@ -245,6 +246,20 @@ Derive the arguments this connector will pull with
 \if{html}{\out{<div class="r">}}\preformatted{RelationalDatasetConnector$get_pull_args()}\if{html}{\out{</div>}}
 }
 
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-check"></a>}}
+\subsection{Method \code{check()}}{
+Check to determine if the raw data is reproducible from the
+  \code{get_code()} code.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{RelationalDatasetConnector$check()}\if{html}{\out{</div>}}
+}
+
+\subsection{Returns}{
+\code{TRUE} if the dataset generated from evaluating the
+  \code{get_code()} code is identical to the raw data, else \code{FALSE}.
+}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-clone"></a>}}

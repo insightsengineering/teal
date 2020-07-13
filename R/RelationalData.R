@@ -94,6 +94,26 @@ RelationalData <- R6::R6Class( #nolint
     #' @return \code{list} of \code{RelationalDataset}.
     get_datasets = function() {
       private$datasets
+    },
+    #' @description
+    #' Check if dataset has already been pulled.
+    #'
+    #' @return \code{TRUE} if dataset has been already pulled, else \code{FALSE}
+    is_pulled = function() {
+      all(vapply(private$datasets, is_pulled, logical(1)))
+    },
+    #' @description
+    #'   Check if the  object raw data is reproducible from the
+    #'   \code{get_code()} code.
+    #' @return
+    #'   \code{TRUE} if the dataset generated from evaluating the
+    #'   \code{get_code()} code is identical to the raw data, else \code{FALSE}.
+    check = function() {
+      if (!self$is_pulled()) {
+        stop("Cannot check the raw data until it is pulled.")
+      } else {
+        all(vapply(private$datasets, function(x) x$check(), logical(1)))
+      }
     }
   ),
   # ..private ------

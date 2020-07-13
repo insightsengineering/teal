@@ -34,6 +34,8 @@ rd <- teal:::RelationalData$new(x, x2)
 \item \href{#method-get_code}{\code{RelationalData$get_code()}}
 \item \href{#method-get_dataset}{\code{RelationalData$get_dataset()}}
 \item \href{#method-get_datasets}{\code{RelationalData$get_datasets()}}
+\item \href{#method-is_pulled}{\code{RelationalData$is_pulled()}}
+\item \href{#method-check}{\code{RelationalData$check()}}
 \item \href{#method-clone}{\code{RelationalData$clone()}}
 }
 }
@@ -130,6 +132,32 @@ Get \code{list} of \code{RelationalDataset} objects.
 
 \subsection{Returns}{
 \code{list} of \code{RelationalDataset}.
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-is_pulled"></a>}}
+\subsection{Method \code{is_pulled()}}{
+Check if dataset has already been pulled.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{RelationalData$is_pulled()}\if{html}{\out{</div>}}
+}
+
+\subsection{Returns}{
+\code{TRUE} if dataset has been already pulled, else \code{FALSE}
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-check"></a>}}
+\subsection{Method \code{check()}}{
+Check if the  object raw data is reproducible from the
+  \code{get_code()} code.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{RelationalData$check()}\if{html}{\out{</div>}}
+}
+
+\subsection{Returns}{
+\code{TRUE} if the dataset generated from evaluating the
+  \code{get_code()} code is identical to the raw data, else \code{FALSE}.
 }
 }
 \if{html}{\out{<hr>}}

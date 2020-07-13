@@ -167,6 +167,37 @@ RelationalDatasetConnector <- R6::R6Class( #nolint
     #' Derive the arguments this connector will pull with
     get_pull_args = function() {
       private$pull_fun$get_args()
+    },
+    #' @description
+    #'   Check to determine if the raw data is reproducible from the
+    #'   \code{get_code()} code.
+    #' @return
+    #'   \code{TRUE} if the dataset generated from evaluating the
+    #'   \code{get_code()} code is identical to the raw data, else \code{FALSE}.
+    check = function() {
+
+      if (!is_character_single(self$get_code()) || !grepl("\\w+", self$get_code())) {
+        stop("Cannot check preprocessing code - code is empty.")
+      } else if (!self$is_pulled()) {
+        stop("Cannot check the raw data until it is pulled.")
+      }
+
+      code <- self$get_code()
+
+      new_env <- new.env(parent = parent.env(.GlobalEnv))
+      tryCatch({
+        eval(parse(text = code), new_env)
+      }, error = function(e) {
+        error_dialog(e)
+      })
+
+      res_check <- tryCatch({
+        identical(super$get_raw_data(), get(self$get_dataname(), envir = new_env))
+      }, error = function(e) {
+        FALSE
+      })
+
+      return(res_check)
     }
   ),
 
