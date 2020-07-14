@@ -209,9 +209,7 @@ open_fun <- callable_function(rice::rice_session_open)
 close_fun <- callable_function(rice::rice_session_close)
 close_fun$set_args(list(message = FALSE))
 
-x <- teal:::DataConnection$new() # nolint
-x$set_open_fun(open_fun)
-x$set_close_fun(close_fun)
+x <- teal:::DataConnection$new(open_fun = open_fun, close_fun = close_fun) # nolint
 ```
 
 #### 4. `DataConnector`
@@ -224,7 +222,7 @@ Once again `DatasetConnector`(s) and `DatasetConnection` are created using `rcd_
 ```{r}
 library(random.cdisc.data)
 adsl <- rcd_cdisc_dataset_connector("ADSL", radsl)
-adlb <- rcd_cdisc_dataset_connector("ADLB", radlb, ADSL = radsl)
+adlb <- rcd_cdisc_dataset_connector("ADLB", radlb, ADSL = adsl)
 connectors <- list(adsl, adlb)
 con <- teal:::rcd_connection()
 ```
@@ -271,7 +269,6 @@ x$launch()
 ```{r eval=FALSE}
 cdisc_data <- x$get_cdisc_data()
 get_code(x)
-
 ```
 
 To confirm that shiny input has been saved, one can check reproducible code to see that 

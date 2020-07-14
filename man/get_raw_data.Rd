@@ -161,6 +161,7 @@ will be deprecated in future}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-new"></a>}}
+\if{latex}{\out{\hypertarget{method-new}{}}}
 \subsection{Method \code{new()}}{
 initialize a \code{RawDataset} class object
 \subsection{Usage}{
@@ -177,6 +178,7 @@ initialize a \code{RawDataset} class object
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-get_raw_data"></a>}}
+\if{latex}{\out{\hypertarget{method-get_raw_data}{}}}
 \subsection{Method \code{get_raw_data()}}{
 Derive the raw data frame inside this object
 \subsection{Usage}{
@@ -189,6 +191,7 @@ Derive the raw data frame inside this object
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-get_numeric_colnames"></a>}}
+\if{latex}{\out{\hypertarget{method-get_numeric_colnames}{}}}
 \subsection{Method \code{get_numeric_colnames()}}{
 Derive the names of all \code{numeric} columns
 \subsection{Usage}{
@@ -206,6 +209,7 @@ factor variables}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-get_character_colnames"></a>}}
+\if{latex}{\out{\hypertarget{method-get_character_colnames}{}}}
 \subsection{Method \code{get_character_colnames()}}{
 Derive the names of all \code{character} columns
 \subsection{Usage}{
@@ -215,6 +219,7 @@ Derive the names of all \code{character} columns
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-get_factor_colnames"></a>}}
+\if{latex}{\out{\hypertarget{method-get_factor_colnames}{}}}
 \subsection{Method \code{get_factor_colnames()}}{
 Derive the names of all \code{factor} columns
 \subsection{Usage}{
@@ -224,6 +229,7 @@ Derive the names of all \code{factor} columns
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-get_colnames"></a>}}
+\if{latex}{\out{\hypertarget{method-get_colnames}{}}}
 \subsection{Method \code{get_colnames()}}{
 Derive the column names
 \subsection{Usage}{
@@ -233,6 +239,7 @@ Derive the column names
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-get_column_labels"></a>}}
+\if{latex}{\out{\hypertarget{method-get_column_labels}{}}}
 \subsection{Method \code{get_column_labels()}}{
 Derive the column labels
 \subsection{Usage}{
@@ -242,6 +249,7 @@ Derive the column labels
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-get_rownames"></a>}}
+\if{latex}{\out{\hypertarget{method-get_rownames}{}}}
 \subsection{Method \code{get_rownames()}}{
 Derive the row names
 \subsection{Usage}{
@@ -251,6 +259,7 @@ Derive the row names
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-get_row_labels"></a>}}
+\if{latex}{\out{\hypertarget{method-get_row_labels}{}}}
 \subsection{Method \code{get_row_labels()}}{
 Derive the row labels
 \subsection{Usage}{
@@ -260,6 +269,7 @@ Derive the row labels
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-clone"></a>}}
+\if{latex}{\out{\hypertarget{method-clone}{}}}
 \subsection{Method \code{clone()}}{
 The objects of this class are cloneable with this method.
 \subsection{Usage}{

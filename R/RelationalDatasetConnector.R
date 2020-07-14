@@ -139,10 +139,13 @@ RelationalDatasetConnector <- R6::R6Class( #nolint
     #' @param try (\code{logical} value)\cr
     #'  whether perform function evaluation inside \code{try} clause
     #'
-    #' @return nothing, in order to get the data please use \code{get_data} method
+    #' @return \code{NULL} if successful or \code{try-error} if not.
     pull = function(args = NULL, try = FALSE) {
       data <- private$pull_internal(args = args, try = try)
 
+      if (try && is(data, "try-error")) {
+        return(data)
+      }
       private$dataset <- RelationalDataset$new(
         x = data,
         dataname = self$get_dataname(),

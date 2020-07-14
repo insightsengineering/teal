@@ -37,17 +37,22 @@ Pulled data inherits from the class \link{RelationalDataset}.
 }
 }
 \if{html}{
-\out{<details open ><summary>Inherited methods</summary>}
+\out{<details ><summary>Inherited methods</summary>}
 \itemize{
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="RawDatasetConnector" data-id="get_dataset">}\href{../../teal/html/RawDatasetConnector.html#method-get_dataset}{\code{teal::RawDatasetConnector$get_dataset()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="RawDatasetConnector" data-id="get_pull_fun">}\href{../../teal/html/RawDatasetConnector.html#method-get_pull_fun}{\code{teal::RawDatasetConnector$get_pull_fun()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="RawDatasetConnector" data-id="get_raw_data">}\href{../../teal/html/RawDatasetConnector.html#method-get_raw_data}{\code{teal::RawDatasetConnector$get_raw_data()}}\out{</span>}
+\item \out{<span class="pkg-link" data-pkg="teal" data-topic="RawDatasetConnector" data-id="get_server">}\href{../../teal/html/RawDatasetConnector.html#method-get_server}{\code{teal::RawDatasetConnector$get_server()}}\out{</span>}
+\item \out{<span class="pkg-link" data-pkg="teal" data-topic="RawDatasetConnector" data-id="get_ui">}\href{../../teal/html/RawDatasetConnector.html#method-get_ui}{\code{teal::RawDatasetConnector$get_ui()}}\out{</span>}
+\item \out{<span class="pkg-link" data-pkg="teal" data-topic="RawDatasetConnector" data-id="launch">}\href{../../teal/html/RawDatasetConnector.html#method-launch}{\code{teal::RawDatasetConnector$launch()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="RawDatasetConnector" data-id="set_args">}\href{../../teal/html/RawDatasetConnector.html#method-set_args}{\code{teal::RawDatasetConnector$set_args()}}\out{</span>}
+\item \out{<span class="pkg-link" data-pkg="teal" data-topic="RawDatasetConnector" data-id="set_ui_input">}\href{../../teal/html/RawDatasetConnector.html#method-set_ui_input}{\code{teal::RawDatasetConnector$set_ui_input()}}\out{</span>}
 }
 \out{</details>}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-new"></a>}}
+\if{latex}{\out{\hypertarget{method-new}{}}}
 \subsection{Method \code{new()}}{
 Create a new \code{RelationalDatasetConnector} object. Set the pulling function
 load the data. \code{dataname} will be used as name
@@ -94,6 +99,7 @@ new \code{RawDatasetConnector} object
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-get_dataname"></a>}}
+\if{latex}{\out{\hypertarget{method-get_dataname}{}}}
 \subsection{Method \code{get_dataname()}}{
 Get dataname of dataset
 \subsection{Usage}{
@@ -106,6 +112,7 @@ dataname of the dataset
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-get_keys"></a>}}
+\if{latex}{\out{\hypertarget{method-get_keys}{}}}
 \subsection{Method \code{get_keys()}}{
 Get keys of dataset
 \subsection{Usage}{
@@ -118,6 +125,7 @@ Get keys of dataset
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-get_dataset_label"></a>}}
+\if{latex}{\out{\hypertarget{method-get_dataset_label}{}}}
 \subsection{Method \code{get_dataset_label()}}{
 Get label of dataset
 \subsection{Usage}{
@@ -130,6 +138,7 @@ Get label of dataset
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-set_dataset_label"></a>}}
+\if{latex}{\out{\hypertarget{method-set_dataset_label}{}}}
 \subsection{Method \code{set_dataset_label()}}{
 Set label of the \code{dataset} object
 \subsection{Usage}{
@@ -147,6 +156,7 @@ Label to describe the dataset}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-get_code"></a>}}
+\if{latex}{\out{\hypertarget{method-get_code}{}}}
 \subsection{Method \code{get_code()}}{
 Get code to get data
 \subsection{Usage}{
@@ -170,6 +180,7 @@ optionally deparsed \code{call} object
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-mutate_dataset"></a>}}
+\if{latex}{\out{\hypertarget{method-mutate_dataset}{}}}
 \subsection{Method \code{mutate_dataset()}}{
 Mutate dataset by code
 
@@ -194,6 +205,7 @@ this/these object(s) should be included}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-pull"></a>}}
+\if{latex}{\out{\hypertarget{method-pull}{}}}
 \subsection{Method \code{pull()}}{
 Pull the data
 
@@ -223,6 +235,7 @@ nothing, in order to get the data please use \code{get_data} method
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-is_pulled"></a>}}
+\if{latex}{\out{\hypertarget{method-is_pulled}{}}}
 \subsection{Method \code{is_pulled()}}{
 Check if dataset has already been pulled.
 \subsection{Usage}{
@@ -235,6 +248,7 @@ Check if dataset has already been pulled.
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-get_pull_args"></a>}}
+\if{latex}{\out{\hypertarget{method-get_pull_args}{}}}
 \subsection{Method \code{get_pull_args()}}{
 Derive the arguments this connector will pull with
 \subsection{Usage}{
@@ -244,6 +258,7 @@ Derive the arguments this connector will pull with
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-check"></a>}}
+\if{latex}{\out{\hypertarget{method-check}{}}}
 \subsection{Method \code{check()}}{
 Check to determine if the raw data is reproducible from the
   \code{get_code()} code.
@@ -258,6 +273,7 @@ Check to determine if the raw data is reproducible from the
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-clone"></a>}}
+\if{latex}{\out{\hypertarget{method-clone}{}}}
 \subsection{Method \code{clone()}}{
 The objects of this class are cloneable with this method.
 \subsection{Usage}{

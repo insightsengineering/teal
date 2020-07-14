@@ -1,7 +1,6 @@
 context("Data Connector")
 library(random.cdisc.data)
 
-
 test_that("data connection", {
   open_fun <- callable_function(data.frame)
   open_fun$set_args(list(x = 1:5))
@@ -9,9 +8,7 @@ test_that("data connection", {
   close_fun <- callable_function(data.frame)
   close_fun$set_args(list(x = 1:2))
 
-  con <- DataConnection$new()
-  con$set_open_fun(open_fun)
-  con$set_close_fun(close_fun)
+  con <- DataConnection$new(open_fun = open_fun, close_fun = close_fun)
   con$set_open_args(args = list(y = letters[1:5]))
 
   expect_identical(
@@ -57,9 +54,7 @@ test_that("RelationalDataConnector with DataConnection", {
   close_fun <- callable_function(data.frame)
   set_args(x = close_fun, list(x = 1:2))
 
-  con <- DataConnection$new()
-  con$set_open_fun(open_fun)
-  con$set_close_fun(close_fun)
+  con <- DataConnection$new(open_fun = open_fun, close_fun = close_fun)
   con$set_open_args(args = list(y = letters[1:5]))
   con$open()
 

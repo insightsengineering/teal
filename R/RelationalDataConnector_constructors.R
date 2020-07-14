@@ -52,26 +52,52 @@
 rcd_cdisc_data <- function(..., check = TRUE) {
   connectors <- list(...)
   stopifnot(is_class_list("RelationalDatasetConnector")(connectors))
-  con <- rcd_connection()
+  connection <- rcd_connection()
 
-  x <- RelationalDataConnector$new(connection = con, connectors = connectors)
+  x <- RelationalDataConnector$new(connection = connection, connectors = connectors)
   x$set_check(check)
 
   x$set_ui(
     function(id) {
       ns <- NS(id)
       tagList(
-        numericInput(ns("seed"), "Choose seed", min = 1, max = 1000, value = 1)
+        connection$get_open_ui(ns("open_connection")),
+        numericInput(ns("seed"), "Choose seed", min = 1, max = 1000, value = 1),
+        do.call(
+          what = "tagList",
+          args = lapply(
+            connectors,
+            function(connector) {
+              div(
+                connector$get_ui(
+                  id = ns(connector$get_dataname())
+                ),
+                br()
+              )
+            }
+          )
+        )
       )
     }
   )
 
   x$set_server(
     function(input, output, session, connection, connectors) {
+      # opens connection
+      if (!is.null(connection$get_open_server())) {
+        callModule(connection$get_open_server(),
+                   id = "open_connection",
+                   connection = connection)
+      }
+
       lapply(connectors, function(connector) {
         # set_args before to return them in the code (fixed args)
         set_args(connector, args = list(seed = input$seed))
-        load_dataset(connector)
+
+        # pull each dataset
+        callModule(connector$get_server(),
+                   id = connector$get_dataname())
+
       })
     }
   )
@@ -124,9 +150,9 @@ rice_cdisc_data <- function(..., additional_ui = NULL) {
   connectors <- list(...)
   stopifnot(is_class_list("RelationalDatasetConnector")(connectors))
 
-  con <- rice_connection()
+  connection <- rice_connection()
 
-  x <- RelationalDataConnector$new(connection = con, connectors = connectors)
+  x <- RelationalDataConnector$new(connection = connection, connectors = connectors)
   x$set_check(`attributes<-`(FALSE, list(quiet = TRUE)))
 
   x$set_ui(
@@ -152,8 +178,7 @@ rice_cdisc_data <- function(..., additional_ui = NULL) {
         br(),
         additional_ui,
         br(),
-        textInput(ns("username"), "Username"),
-        passwordInput(ns("pass"), "Password")
+        connection$get_open_ui(ns("open_connection"))
       )
     }
   )
@@ -161,22 +186,25 @@ rice_cdisc_data <- function(..., additional_ui = NULL) {
   x$set_server(
     function(input, output, session, connectors, connection) {
       # opens connection
-      if (!is.null(connection)) {
-        open_out <- connection$open(
-          args = list(username = input$username, password = input$pass),
-          try = TRUE
-        )
-        if (is(open_out, "try-error")) {
-          output$result <- renderUI(p(open_out))
-        }
-
+      if (!is.null(connection$get_open_server())) {
+        callModule(connection$get_open_server(),
+                   id = "open_connection",
+                   connection = connection)
       }
 
       # rice::rice_read doesn't need arguments from data-level
-      lapply(connectors, function(dataset) load_dataset(dataset, try = TRUE))
+      if (connection$is_opened()) {
+        # call connectors$pull
+        lapply(connectors, function(connector) {
+          callModule(connector$get_server(),
+                     id = connector$get_dataname())
+        })
 
-      if (!is.null(connection)) {
-        connection$close(try = TRUE)
+        if (!is.null(connection$get_close_server())) {
+          callModule(connection$get_close_server(),
+                     id = "close_connection",
+                     connection = connection)
+        }
       }
     }
   )

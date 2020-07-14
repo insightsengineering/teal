@@ -220,20 +220,20 @@ RelationalDataList <- R6::R6Class( #nolint
         # otherwise load RelationDataConnector and
         # RelationalDatasetConnector with shiny app
         shinyApp(
-          ui = fluidPage(private$ui(id = "main_app"),
-                         br(),
-                         useShinyjs(),
-                         uiOutput("result")),
+          ui = fluidPage(
+            fluidRow(
+              column(
+                width = 8,
+                offset = 2,
+                private$ui(id = "main_app"),
+                useShinyjs(),
+                br()
+              )
+            )
+          ),
           server = function(input, output, session) {
             session$onSessionEnded(stopApp)
-
             dat <- callModule(private$server, id = "main_app")
-            output$result <- renderUI({
-              if (is(dat(), "cdisc_data")) {
-                private$connectors <- NULL
-                return(h3("All data successfully loaded!"))
-              }
-            })
           }
         )
       }
@@ -310,20 +310,29 @@ RelationalDataList <- R6::R6Class( #nolint
             width = 8,
             offset = 2,
             tagList(
-              do.call(
-                what = "tagList",
-                args = lapply(
-                  self$get_data_connectors(),
-                  function(x) {
-                    div(
-                      x$get_ui(
-                        id = ns(paste0("data_connector_", paste0(x$get_datanames(), collapse = "_")))
-                      ),
-                      br()
-                    )
+              lapply(
+                self$get_data_connectors(),
+                function(x) {
+                  div(
+                    x$get_ui(
+                      id = ns(paste0(x$get_datanames(), collapse = "_"))
+                    ),
+                    br()
+                  )
 
-                  }
-                )
+                }
+              ),
+              lapply(
+                self$get_dataset_connectors(),
+                function(x) {
+                  div(
+                    x$get_ui(
+                      id = ns(x$get_dataname())
+                    ),
+                    br()
+                  )
+
+                }
               ),
               actionButton(inputId = ns("submit"), label = "submit all")
             )
@@ -340,21 +349,14 @@ RelationalDataList <- R6::R6Class( #nolint
             private$connectors,
             function(dc) {
               if (is(dc, class2 = "RelationalDataConnector")) {
-                id <- paste0(
-                  "data_connector_",
-                  paste0(
-                    dc$get_datanames(),
-                    collapse = "_"
-                  )
-                )
-
                 callModule(dc$get_server(),
-                           id = id,
+                           id = paste0(dc$get_datanames(), collapse = "_"),
                            connection = dc$get_connection(),
                            connectors = dc$get_dataset_connectors())
 
-              } else {
-                load_dataset(dc)
+              } else if (is(dc, class2 = "RelationalDatasetConnector")) {
+                callModule(dc$get_server(),
+                           id = dc$get_dataname())
               }
             }
           )
@@ -372,8 +374,8 @@ RelationalDataList <- R6::R6Class( #nolint
 
           # move datasets from connectors to private$datasets
           private$append_datasets(datasets = datasets)
-
           shinyjs::hide("submit")
+
           res(self$get_cdisc_data())
         })
         return(res)

@@ -29,6 +29,9 @@ RawDatasetConnector <- R6::R6Class( #nolint
       private$set_pull_fun(pull_fun)
       private$set_pull_vars(vars)
 
+      private$set_ui()
+      private$set_server()
+
       return(invisible(self))
     },
 
@@ -109,9 +112,12 @@ RawDatasetConnector <- R6::R6Class( #nolint
     #' @param try (\code{logical} value)\cr
     #'  whether perform function evaluation inside \code{try} clause
     #'
-    #' @return nothing, in order to get the data please use \code{get_data} method
+    #' @return \code{NULL} if successful or \code{try-error} if not.
     pull = function(args = NULL, try = FALSE) {
       data <- private$pull_internal(args = args, try = try)
+      if (try && is(data, "try-error")) {
+        return(data)
+      }
       private$dataset <- RawDataset$new(data)
       return(invisible(self))
     },
@@ -121,6 +127,79 @@ RawDatasetConnector <- R6::R6Class( #nolint
     #' @return \code{TRUE} if connector has been already pulled, else \code{FALSE}
     is_pulled = function() {
       isFALSE(is.null(private$dataset))
+    },
+    #' @description Sets the shiny UI according to the given inputs.
+    #' It creates a checkboxInput for logical type, numericInput for numeric type,
+    #' and textInput for character type. No other types are allowed.
+    #' Inputs provide only scalar (length of 1) variables.
+    #' @param inputs (\code{list}) Named list with specification of what inputs
+    #' should be provided in the UI.
+    #' Elements of the list should be one of \code{c("logical", "numeric", "character")}
+    #' with length 1.
+    #' Names of the list elements will become the labels of the respective UI widgets.
+    #' Nested lists are not allowed.
+    #' @return Invisible self for chaining.
+    #' @examples
+    #' ds <- raw_dataset_connector(pull_fun = callable_function(data.frame))
+    #' ds$set_ui_input(list(z = "character", w = "character", xx = "numeric"))
+    #' \dontrun{
+    #' ds$launch()
+    #' }
+    set_ui_input = function(inputs = NULL) {
+      stopifnot(is.null(inputs) || is.list(inputs))
+      if (!is.null(inputs)) {
+        stopifnot(is_fully_named_list(inputs))
+        stopifnot(all(vapply(inputs, length, integer(1)) == 1)) # do not allow nested lists
+        stopifnot(all(unique(unlist(inputs)) %in% c("logical", "numeric", "character")))
+      }
+      private$ui_input <- inputs
+      private$set_ui(inputs)
+      private$set_server()
+      return(invisible(self))
+    },
+    #' @description Get shiny ui function
+    #' @param id (\code{character}) namespace id
+    #' @return shiny UI in given namespace id
+    get_ui = function(id) {
+      stopifnot(is_character_single(id))
+      return(if_not_null(private$ui, private$ui(id)))
+    },
+    #' @description Get shiny server function
+    #' @return shiny server function
+    get_server = function() {
+      return(private$server)
+    },
+    #' @description Launches a shiny app.
+    #' @return Shiny app
+    #' @examples
+    #' ds <- raw_dataset_connector(pull_fun = callable_function(data.frame))
+    #' ds$set_ui_input(list(z = "character", w = "character", xx = "numeric"))
+    #' \dontrun{
+    #' ds$launch()
+    #' }
+    launch = function() {
+      if (is.null(private$server)) {
+        stop("No arguments set yet. Please use set_ui_input method first.")
+      }
+      shinyApp(
+        ui = fluidPage(
+          private$ui(id = "main_app"),
+          br(),
+          actionButton("pull", "Get data"),
+          br(),
+          tableOutput("result")
+        ),
+        server = function(input, output, session) {
+          session$onSessionEnded(stopApp)
+          observeEvent(input$pull, {
+            callModule(private$server, id = "main_app")
+          })
+          if (self$is_pulled()) {
+            output$result <- renderTable(head(self$get_raw_data()))
+          }
+
+        }
+      )
     }
   ),
   # RawDatasetConnector private -----
@@ -128,6 +207,9 @@ RawDatasetConnector <- R6::R6Class( #nolint
     dataset = NULL, # RawDataset
     pull_fun = NULL, # CallableFunction
     pull_vars = list(), # list
+    ui_input = NULL, # NULL or list
+    ui = NULL, # NULL or shiny.tag.list
+    server = NULL, # NULL or shiny server function
     get_pull_code = function(deparse, args = NULL) {
       return(private$pull_fun$get_call(deparse, args))
     },
@@ -192,9 +274,59 @@ RawDatasetConnector <- R6::R6Class( #nolint
 
       # eval CallableFunction with dynamic args
       private$pull_fun$run(args = args, try = try)
+    },
+    set_ui = function(args = NULL) {
+      private$ui <- function(id) {
+        ns <- NS(id)
+        tags$div(
+          tags$div(
+            id = ns("inputs"),
+            if_not_null(args, h4(sprintf("Inputs for %s only:", self$get_dataname()))),
+            lapply(seq_along(args),
+                   function(i) match_ui(ns = ns, type = args[[i]], label = names(args[i]))
+            )
+          )
+        )
+
+      }
+      return(invisible(NULL))
+    },
+    set_server = function() {
+      private$server <- function(input, output, session, data_args = NULL) {
+        # set args to save them - args set will be returned in the call
+        dataset_args <- if_not_null(private$ui_input,
+                                    reactiveValuesToList(input)[names(private$ui_input)])
+        if (!is_empty(dataset_args)) {
+          self$set_args(args = dataset_args)
+        }
+
+        # print error if any
+        out <- self$pull(args = data_args, try = TRUE)
+        if (is(out, "try-error")) {
+          stop(out)
+        }
+
+        return(invisible(NULL))
+      }
+      return(invisible(NULL))
     }
   )
 )
+
+# function to create UI with given ns function and label according to the type of variable
+match_ui <- function(ns, type, label) {
+  if (type == "logical") {
+    out <- checkboxInput(ns(label), label)
+  } else if (type == "numeric") {
+    out <- numericInput(ns(label), label, value = 0)
+  } else if (type == "character") {
+    out <- textInput(ns(label), label, value = "Insert text")
+  } else {
+    stop(paste("Unknown type", type))
+  }
+  return(out)
+}
+
 
 #' Create \code{RawDatasetConnector} object
 #'

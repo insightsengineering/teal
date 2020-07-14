@@ -139,6 +139,7 @@ RelationalDataConnector <- R6::R6Class( #nolint
       return(private$server)
     },
     #' @description
+    #' Get Shiny module with inputs for all \code{RelationalDatasetConnector} objects
     #'
     #' @param id \code{character} shiny element id
     #'
@@ -179,7 +180,7 @@ RelationalDataConnector <- R6::R6Class( #nolint
         server = function(input, output, session) {
           session$onSessionEnded(stopApp)
           observeEvent(input$submit, {
-            dat <- callModule(private$server,
+            dat <- callModule(self$get_server(),
                               id = "data_connector",
                               connection = private$connection,
                               connectors = private$datasets)
@@ -269,8 +270,7 @@ RelationalDataConnector <- R6::R6Class( #nolint
     #' @return nothing
     set_ui = function(data_input) {
       stopifnot(is(data_input, "function"))
-      stopifnot(names(formals(data_input)) == "id")
-
+      stopifnot(identical(names(formals(data_input)), "id"))
 
       private$ui <- function(id) {
         ns <- NS(id)
@@ -278,8 +278,7 @@ RelationalDataConnector <- R6::R6Class( #nolint
           h3(paste(c("Inputs for:", self$get_datanames()), collapse = " ")),
           tags$div(
             id = ns("data_input"),
-            data_input(id = ns("data_input")),
-            uiOutput(ns("module_output"))
+            data_input(id = ns("data_input"))
           )
         )
       }
@@ -302,17 +301,16 @@ RelationalDataConnector <- R6::R6Class( #nolint
       stopifnot(all(c("input", "output", "session") %in% names(formals(data_module))))
 
       private$server <- function(input, output, session, connection, connectors) {
-        pull_out <- callModule(data_module,
-                                id = "data_input",
-                                connection = connection,
-                                connectors = connectors)
+        callModule(data_module,
+                   id = "data_input",
+                   connection = connection,
+                   connectors = connectors)
 
         if (all(vapply(connectors, is_pulled, logical(1)))) {
           private$append_connection_code()
         }
 
-
-        return(NULL)
+        return(invisible(NULL))
       }
 
       return(invisible(NULL))
