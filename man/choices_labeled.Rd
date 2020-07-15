@@ -6,7 +6,7 @@
 This is often useful for \code{\link[teal]{choices_selected}} as it marks up the dropdown boxes
 for \code{\link[shiny]{selectInput}}.}
 \usage{
-choices_labeled(choices, labels, subset = NULL)
+choices_labeled(choices, labels, subset = NULL, types = NULL)
 }
 \arguments{
 \item{choices}{a character vector}
@@ -16,6 +16,9 @@ choices_labeled(choices, labels, subset = NULL)
 \item{subset}{a character vector that is a subset of \code{choices}. This is useful if
 only a few variables need to be named. If this argument is used, the returned vector will
 match its order.}
+
+\item{types}{vector containing the types of the columns to be used for applying the appropriate
+icons to the \code{\link[teal]{choices_selected}} drop down box}
 }
 \value{
 a named character vector

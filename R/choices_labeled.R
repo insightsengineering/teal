@@ -6,7 +6,8 @@
 #' @param subset a character vector that is a subset of \code{choices}. This is useful if
 #'   only a few variables need to be named. If this argument is used, the returned vector will
 #'   match its order.
-#'
+#' @param types vector containing the types of the columns to be used for applying the appropriate
+#'   icons to the \code{\link[teal]{choices_selected}} drop down box
 #' @details If either \code{choices} or \code{labels} are factors, they are coerced to character.
 #' Duplicated elements from \code{choices} get removed.
 #'
@@ -38,7 +39,7 @@
 #'   server = function(input, output) {}
 #' )
 #'}
-choices_labeled <- function(choices, labels, subset = NULL) {
+choices_labeled <- function(choices, labels, subset = NULL, types = NULL) {
   if (is.factor(choices)) {
     choices <- as.character(choices)
   }
@@ -52,16 +53,23 @@ choices_labeled <- function(choices, labels, subset = NULL) {
   stop_if_not(list(length(choices) == length(labels), "length of choices must be the same as labels"))
 
   stopifnot(is.null(subset) || is.vector(subset))
+  stopifnot(is.null(types) || is.vector(types))
+
+  if (is.vector(types)) {
+    stopifnot(length(choices) == length(types))
+  }
 
   if (!is.null(subset)) {
     stop_if_not(list(all(subset %in% choices), "all of subset variables must be in choices"))
     labels <- labels[choices %in% subset]
+    types <- types[choices %in% subset]
     choices <- choices[choices %in% subset]
   }
 
   is_dupl <- duplicated(choices)
   choices <- choices[!is_dupl]
   labels <- labels[!is_dupl]
+  types <- types[!is_dupl]
 
   labels[is.na(labels)] <- "Label Missing"
   raw_labels <- labels
@@ -72,6 +80,7 @@ choices_labeled <- function(choices, labels, subset = NULL) {
     choices <- choices[ord]
     raw_labels <- raw_labels[ord]
     combined_labels <- combined_labels[ord]
+    types <- types[ord]
   }
 
   choices <- structure(
@@ -79,7 +88,8 @@ choices_labeled <- function(choices, labels, subset = NULL) {
     names = combined_labels,
     raw_labels = raw_labels,
     combined_labels = combined_labels,
-    class = c("choices_labeled", "character")
+    class = c("choices_labeled", "character"),
+    types = types
   )
 
   return(choices)
@@ -131,16 +141,16 @@ variable_choices <- function(data, subset = NULL, fill = FALSE) {
   }
 
   res <- if ("" %in% subset) {
-    tmp <- choices_labeled(choices = c("", names(data)),
-                    labels = c("", unname(get_variable_labels(data))),
-                    subset = subset)
-
-    attr(tmp, "types") <- c("", variable_types(data = data, columns = subset))
-    tmp
-  } else {
+    choices_labeled(choices = c("", names(data)),
+                           labels = c("", unname(get_variable_labels(data))),
+                           subset = subset,
+                           types = c("", variable_types(data = data)))
+  }
+  else {
     choices_labeled(choices = names(data),
-                    labels = unname(get_variable_labels(data)),
-                    subset = subset)
+                           labels = unname(get_variable_labels(data)),
+                           subset = subset,
+                           types = variable_types(data = data))
   }
 
   return(res)
