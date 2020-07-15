@@ -70,7 +70,7 @@ optionalSelectInput <- function(inputId, # nolint
   stopifnot(is_character_single(inputId))
   stopifnot(is_character_single(label) || is_html_like(label))
   stopifnot(is.null(choices) || length(choices) >= 1)
-  stopifnot(is.null(selected) || length(selected) == 0 || all(selected %in% choices))
+  stopifnot(is.null(selected) || length(selected) == 0 || all(selected %in% unlist(choices)))
   stopifnot(is_logical_single(multiple))
   stopifnot(is.null(sep) || is_character_single(sep))
   stopifnot(is.list(options))
@@ -95,8 +95,8 @@ optionalSelectInput <- function(inputId, # nolint
     selected <- NULL
   }
 
-  raw_choices <- extract_raw_choices(choices, attr(choices, "sep"))
-  raw_selected <- extract_raw_choices(selected, attr(choices, "sep"))
+  raw_choices <- lapply(choices, extract_raw_choices, attr(choices, "sep"))
+  raw_selected <- lapply(selected, extract_raw_choices, attr(choices, "sep"))
 
 
 
@@ -157,8 +157,8 @@ updateOptionalSelectInput <- function(session, # nolint
                                       selected = NULL,
                                       choices = NULL) {
 
-  raw_choices <- extract_raw_choices(choices)
-  raw_selected <- extract_raw_choices(selected)
+  raw_choices <- lapply(choices, extract_raw_choices, attr(choices, "sep"))
+  raw_selected <- lapply(selected, extract_raw_choices, attr(choices, "sep"))
 
   updatePickerInput(
     session = session,
@@ -277,6 +277,15 @@ picker_options <- function(choices) {
         )
       )
     )
+  } else if (all(vapply(choices, is, logical(1), "choices_labeled"))) {
+    choices <- unlist(unname(choices))
+    return(
+      list(content = picker_options_content(
+        var_name  = choices,
+        var_label = extract_choices_labels(choices),
+        var_type  = if_null(attr(choices, "types"), character(0))
+      ))
+    )
   } else {
     return(NULL)
   }
@@ -332,7 +341,7 @@ optionalSliderInput <- function(inputId, label, min, max, value, ...) { # nolint
     max <- value + 1
     TRUE
   } else if (min > value || max < value) {
-    stop("arguments inconsisten: min <= value <= max expected")
+    stop("arguments inconsistent: min <= value <= max expected")
   } else {
     FALSE
   }
