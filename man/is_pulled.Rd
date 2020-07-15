@@ -4,7 +4,6 @@
 \alias{is_pulled}
 \alias{is_pulled.RawDatasetConnector}
 \alias{is_pulled.RelationalDataset}
-\alias{is_pulled.RelationalDatasetConnector}
 \alias{is_pulled.RelationalDataConnector}
 \title{Is pulled}
 \usage{
@@ -14,7 +13,7 @@ is_pulled(x)
 
 \method{is_pulled}{RelationalDataset}(x)
 
-\method{is_pulled}{RelationalDatasetConnector}(x)
+\method{is_pulled}{RawDatasetConnector}(x)
 
 \method{is_pulled}{RelationalDataConnector}(x)
 }

@@ -137,7 +137,7 @@ Label to describe the dataset}
 
 \item{vars}{(list)\cr
 In case when this object code depends on the \code{raw_data} from the other
-\code{RelationalDataset}, \code{RelationalDatasetConnector} object(s) or other constant value,
+\code{NamedDataset}, \code{NamedDatasetConnector} object(s) or other constant value,
 this/these object(s) should be included}
 
 \item{x}{(\code{character}) string giving the pathname of the file to read from.}

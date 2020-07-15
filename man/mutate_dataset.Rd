@@ -4,7 +4,7 @@
 \alias{mutate_dataset}
 \alias{mutate_dataset.NamedDataset}
 \alias{mutate_dataset.RelationalDataset}
-\alias{mutate_dataset.RelationalDatasetConnector}
+\alias{mutate_dataset.NamedDatasetConnector}
 \title{Mutate dataset by code}
 \usage{
 mutate_dataset(x, code = character(0), script = character(0), vars = list())
@@ -13,7 +13,7 @@ mutate_dataset(x, code = character(0), script = character(0), vars = list())
 
 \method{mutate_dataset}{RelationalDataset}(x, code = character(0), script = character(0), vars = list())
 
-\method{mutate_dataset}{RelationalDatasetConnector}(x, code = character(0), script = character(0), vars = list())
+\method{mutate_dataset}{NamedDatasetConnector}(x, code = character(0), script = character(0), vars = list())
 }
 \arguments{
 \item{x}{(\code{NamedDataset})\cr

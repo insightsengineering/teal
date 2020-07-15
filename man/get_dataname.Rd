@@ -3,7 +3,7 @@
 \name{get_dataname}
 \alias{get_dataname}
 \alias{get_dataname.RelationalDataConnector}
-\alias{get_dataname.RelationalDatasetConnector}
+\alias{get_dataname.NamedDatasetConnector}
 \alias{get_dataname.NamedDataset}
 \title{S3 method for getting a dataname(s) of
 (\code{RelationalDataConnector}, (\code{RelationalDatasetConnector} or
@@ -13,9 +13,7 @@ get_dataname(x)
 
 \method{get_dataname}{RelationalDataConnector}(x)
 
-\method{get_dataname}{RelationalDatasetConnector}(x)
-
-\method{get_dataname}{NamedDataset}(x)
+\method{get_dataname}{NamedDatasetConnector}(x)
 
 \method{get_dataname}{NamedDataset}(x)
 }
@@ -43,10 +41,6 @@ x <- relational_dataset_connector(
  keys = get_cdisc_keys("ADSL")
 )
 get_dataname(x)
-library(random.cdisc.data)
-ADSL <- radsl(cached = TRUE)
-ADSL_dataset <- named_dataset(dataname = "ADSL", x = ADSL)
-get_dataname(ADSL_dataset)
 library(random.cdisc.data)
 ADSL <- radsl(cached = TRUE)
 ADSL_dataset <- named_dataset(dataname = "ADSL", x = ADSL)

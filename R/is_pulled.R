@@ -56,7 +56,7 @@ is_pulled.RelationalDataset <- function(x) {
 #'
 #' load_dataset(adsl)
 #' is_pulled(adsl)
-is_pulled.RelationalDatasetConnector <- function(x) { # nolint
+is_pulled.RawDatasetConnector <- function(x) { # nolint
   return(x$is_pulled())
 }
 

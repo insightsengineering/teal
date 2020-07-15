@@ -97,8 +97,8 @@ mutate_dataset.RelationalDataset <- function(x, code = character(0), script = ch
 
 #' @rdname mutate_dataset
 #' @export
-mutate_dataset.RelationalDatasetConnector <- function(x, code = character(0), script = character(0), vars = list()) { #nolint
-  code <- code_from_script(code, script) # nolint
+mutate_dataset.NamedDatasetConnector <- function(x, code = character(0), script = character(0), vars = list()) { #nolint
+  code <- code_from_script(code, script)
   if (!any(grepl(x$get_dataname(), code))) {
     stop("You did not use the dataname inside the code. It does not mutate the 'x'")
   }

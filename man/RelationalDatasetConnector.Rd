@@ -16,23 +16,15 @@ Data can be pulled via the \code{pull} method and accessed directly
 through the \code{dataset} active binding.
 Pulled data inherits from the class \link{RelationalDataset}.
 }
-\section{Super class}{
-\code{\link[teal:RawDatasetConnector]{teal::RawDatasetConnector}} -> \code{RelationalDatasetConnector}
+\section{Super classes}{
+\code{\link[teal:RawDatasetConnector]{teal::RawDatasetConnector}} -> \code{\link[teal:NamedDatasetConnector]{teal::NamedDatasetConnector}} -> \code{RelationalDatasetConnector}
 }
 \section{Methods}{
 \subsection{Public methods}{
 \itemize{
 \item \href{#method-new}{\code{RelationalDatasetConnector$new()}}
-\item \href{#method-get_dataname}{\code{RelationalDatasetConnector$get_dataname()}}
 \item \href{#method-get_keys}{\code{RelationalDatasetConnector$get_keys()}}
-\item \href{#method-get_dataset_label}{\code{RelationalDatasetConnector$get_dataset_label()}}
-\item \href{#method-set_dataset_label}{\code{RelationalDatasetConnector$set_dataset_label()}}
-\item \href{#method-get_code}{\code{RelationalDatasetConnector$get_code()}}
-\item \href{#method-mutate_dataset}{\code{RelationalDatasetConnector$mutate_dataset()}}
 \item \href{#method-pull}{\code{RelationalDatasetConnector$pull()}}
-\item \href{#method-is_pulled}{\code{RelationalDatasetConnector$is_pulled()}}
-\item \href{#method-get_pull_args}{\code{RelationalDatasetConnector$get_pull_args()}}
-\item \href{#method-check}{\code{RelationalDatasetConnector$check()}}
 \item \href{#method-clone}{\code{RelationalDatasetConnector$clone()}}
 }
 }
@@ -44,9 +36,17 @@ Pulled data inherits from the class \link{RelationalDataset}.
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="RawDatasetConnector" data-id="get_raw_data">}\href{../../teal/html/RawDatasetConnector.html#method-get_raw_data}{\code{teal::RawDatasetConnector$get_raw_data()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="RawDatasetConnector" data-id="get_server">}\href{../../teal/html/RawDatasetConnector.html#method-get_server}{\code{teal::RawDatasetConnector$get_server()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="RawDatasetConnector" data-id="get_ui">}\href{../../teal/html/RawDatasetConnector.html#method-get_ui}{\code{teal::RawDatasetConnector$get_ui()}}\out{</span>}
+\item \out{<span class="pkg-link" data-pkg="teal" data-topic="RawDatasetConnector" data-id="is_pulled">}\href{../../teal/html/RawDatasetConnector.html#method-is_pulled}{\code{teal::RawDatasetConnector$is_pulled()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="RawDatasetConnector" data-id="launch">}\href{../../teal/html/RawDatasetConnector.html#method-launch}{\code{teal::RawDatasetConnector$launch()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="RawDatasetConnector" data-id="set_args">}\href{../../teal/html/RawDatasetConnector.html#method-set_args}{\code{teal::RawDatasetConnector$set_args()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="RawDatasetConnector" data-id="set_ui_input">}\href{../../teal/html/RawDatasetConnector.html#method-set_ui_input}{\code{teal::RawDatasetConnector$set_ui_input()}}\out{</span>}
+\item \out{<span class="pkg-link" data-pkg="teal" data-topic="NamedDatasetConnector" data-id="check">}\href{../../teal/html/NamedDatasetConnector.html#method-check}{\code{teal::NamedDatasetConnector$check()}}\out{</span>}
+\item \out{<span class="pkg-link" data-pkg="teal" data-topic="NamedDatasetConnector" data-id="get_code">}\href{../../teal/html/NamedDatasetConnector.html#method-get_code}{\code{teal::NamedDatasetConnector$get_code()}}\out{</span>}
+\item \out{<span class="pkg-link" data-pkg="teal" data-topic="NamedDatasetConnector" data-id="get_dataname">}\href{../../teal/html/NamedDatasetConnector.html#method-get_dataname}{\code{teal::NamedDatasetConnector$get_dataname()}}\out{</span>}
+\item \out{<span class="pkg-link" data-pkg="teal" data-topic="NamedDatasetConnector" data-id="get_dataset_label">}\href{../../teal/html/NamedDatasetConnector.html#method-get_dataset_label}{\code{teal::NamedDatasetConnector$get_dataset_label()}}\out{</span>}
+\item \out{<span class="pkg-link" data-pkg="teal" data-topic="NamedDatasetConnector" data-id="get_pull_args">}\href{../../teal/html/NamedDatasetConnector.html#method-get_pull_args}{\code{teal::NamedDatasetConnector$get_pull_args()}}\out{</span>}
+\item \out{<span class="pkg-link" data-pkg="teal" data-topic="NamedDatasetConnector" data-id="mutate_dataset">}\href{../../teal/html/NamedDatasetConnector.html#method-mutate_dataset}{\code{teal::NamedDatasetConnector$mutate_dataset()}}\out{</span>}
+\item \out{<span class="pkg-link" data-pkg="teal" data-topic="NamedDatasetConnector" data-id="set_dataset_label">}\href{../../teal/html/NamedDatasetConnector.html#method-set_dataset_label}{\code{teal::NamedDatasetConnector$set_dataset_label()}}\out{</span>}
 }
 \out{</details>}
 }
@@ -94,20 +94,7 @@ this/these object(s) should be included}
 \if{html}{\out{</div>}}
 }
 \subsection{Returns}{
-new \code{RawDatasetConnector} object
-}
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-get_dataname"></a>}}
-\if{latex}{\out{\hypertarget{method-get_dataname}{}}}
-\subsection{Method \code{get_dataname()}}{
-Get dataname of dataset
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{RelationalDatasetConnector$get_dataname()}\if{html}{\out{</div>}}
-}
-
-\subsection{Returns}{
-dataname of the dataset
+new \code{RelationalDatasetConnector} object
 }
 }
 \if{html}{\out{<hr>}}
@@ -121,86 +108,6 @@ Get keys of dataset
 
 \subsection{Returns}{
 \code{keys} object
-}
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-get_dataset_label"></a>}}
-\if{latex}{\out{\hypertarget{method-get_dataset_label}{}}}
-\subsection{Method \code{get_dataset_label()}}{
-Get label of dataset
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{RelationalDatasetConnector$get_dataset_label()}\if{html}{\out{</div>}}
-}
-
-\subsection{Returns}{
-\code{character}
-}
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-set_dataset_label"></a>}}
-\if{latex}{\out{\hypertarget{method-set_dataset_label}{}}}
-\subsection{Method \code{set_dataset_label()}}{
-Set label of the \code{dataset} object
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{RelationalDatasetConnector$set_dataset_label(label)}\if{html}{\out{</div>}}
-}
-
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{label}}{(\code{character})\cr
-Label to describe the dataset}
-}
-\if{html}{\out{</div>}}
-}
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-get_code"></a>}}
-\if{latex}{\out{\hypertarget{method-get_code}{}}}
-\subsection{Method \code{get_code()}}{
-Get code to get data
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{RelationalDatasetConnector$get_code(deparse = TRUE, args = NULL)}\if{html}{\out{</div>}}
-}
-
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{deparse}}{(\code{logical})\cr
-whether to return the deparsed form of a call}
-
-\item{\code{args}}{(empty or named \code{list})\cr
-dynamic arguments to function which loads data}
-}
-\if{html}{\out{</div>}}
-}
-\subsection{Returns}{
-optionally deparsed \code{call} object
-}
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-mutate_dataset"></a>}}
-\if{latex}{\out{\hypertarget{method-mutate_dataset}{}}}
-\subsection{Method \code{mutate_dataset()}}{
-Mutate dataset by code
-
-Either code or script must be provided, but not both.
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{RelationalDatasetConnector$mutate_dataset(code, vars)}\if{html}{\out{</div>}}
-}
-
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{code}}{(\code{character}) Code to mutate the dataset. Must contain the
-\code{dataset$dataname}}
-
-\item{\code{vars}}{(list)\cr
-In case when this object code depends on the \code{raw_data} from the other
-\code{RelationalDataset}, \code{RelationalDatasetConnector} object(s) or other constant value,
-this/these object(s) should be included}
-}
-\if{html}{\out{</div>}}
 }
 }
 \if{html}{\out{<hr>}}
@@ -230,45 +137,7 @@ whether perform function evaluation inside \code{try} clause}
 \if{html}{\out{</div>}}
 }
 \subsection{Returns}{
-nothing, in order to get the data please use \code{get_data} method
-}
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-is_pulled"></a>}}
-\if{latex}{\out{\hypertarget{method-is_pulled}{}}}
-\subsection{Method \code{is_pulled()}}{
-Check if dataset has already been pulled.
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{RelationalDatasetConnector$is_pulled()}\if{html}{\out{</div>}}
-}
-
-\subsection{Returns}{
-\code{TRUE} if connector has been already pulled, else \code{FALSE}
-}
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-get_pull_args"></a>}}
-\if{latex}{\out{\hypertarget{method-get_pull_args}{}}}
-\subsection{Method \code{get_pull_args()}}{
-Derive the arguments this connector will pull with
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{RelationalDatasetConnector$get_pull_args()}\if{html}{\out{</div>}}
-}
-
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-check"></a>}}
-\if{latex}{\out{\hypertarget{method-check}{}}}
-\subsection{Method \code{check()}}{
-Check to determine if the raw data is reproducible from the
-  \code{get_code()} code.
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{RelationalDatasetConnector$check()}\if{html}{\out{</div>}}
-}
-
-\subsection{Returns}{
-\code{TRUE} if the dataset generated from evaluating the
-  \code{get_code()} code is identical to the raw data, else \code{FALSE}.
+\code{NULL} if successful or \code{try-error} if not.
 }
 }
 \if{html}{\out{<hr>}}

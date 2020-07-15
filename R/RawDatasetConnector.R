@@ -327,6 +327,7 @@ match_ui <- function(ns, type, label) {
   return(out)
 }
 
+# RawDatasetConnector constructors -----
 
 #' Create \code{RawDatasetConnector} object
 #'
@@ -342,5 +343,7 @@ match_ui <- function(ns, type, label) {
 #' @return \code{RawDatasetConnector} object
 #' @export
 raw_dataset_connector <- function(pull_fun) {
+  stopifnot(is(pull_fun, "CallableFunction"))
+
   RawDatasetConnector$new(pull_fun = pull_fun)
 }

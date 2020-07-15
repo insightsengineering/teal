@@ -194,7 +194,7 @@ whether perform function evaluation inside \code{try} clause}
 \if{html}{\out{</div>}}
 }
 \subsection{Returns}{
-nothing, in order to get the data please use \code{get_data} method
+\code{NULL} if successful or \code{try-error} if not.
 }
 }
 \if{html}{\out{<hr>}}

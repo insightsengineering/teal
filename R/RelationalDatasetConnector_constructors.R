@@ -3,26 +3,9 @@
 #' @description
 #'  Create \code{RelationalDatasetConnector} from \link{callable_function}.
 #'
-#' @param pull_fun (\code{CallableFunction})\cr
-#'  Set the pulling function \link{CallableFunction} to load \code{data.frame}.
-#'  \code{dataname} will be used as name of object to be assigned.
-#'
-#' @param dataname (\code{character})\cr
-#'  A given name for the dataset it may not contain spaces
-#'
+#' @inheritParams named_dataset_connector
 #' @param keys (\code{keys})\cr
 #'  object of S3 class keys containing foreign, primary keys and parent information
-#'
-#' @param code (\code{character})\cr
-#'  A character string defining the code needed to produce the data set in \code{x}
-#'
-#' @param label (\code{character})\cr
-#'  Label to describe the dataset
-#'
-#' @param vars (list)\cr
-#'   In case when this object code depends on the \code{raw_data} from the other
-#'   \code{RelationalDataset}, \code{RelationalDatasetConnector} object(s) or other constant value,
-#'   this/these object(s) should be included
 #'
 #' @return new \code{RelationalDatasetConnector} object
 #'

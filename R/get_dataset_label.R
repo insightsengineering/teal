@@ -19,13 +19,19 @@ get_dataset_label <- function(x) {
 #' fun <- callable_function(data.frame)
 #' fun$set_args(list(n = 5, seed = 1, cached = TRUE))
 #'
-#' x <- relational_dataset_connector(
+#' x <- named_dataset_connector(
+#'  pull_fun = fun,
+#'  dataname = "ADSL"
+#' )
+#' get_dataset_label(x)
+#'
+#' x1 <- relational_dataset_connector(
 #'  pull_fun = fun,
 #'  dataname = "ADSL",
 #'  keys = get_cdisc_keys("ADSL")
 #' )
-#' get_dataset_label(x)
-get_dataset_label.RelationalDatasetConnector <- function(x) { # nolint
+#' get_dataset_label(x1)
+get_dataset_label.NamedDatasetConnector <- function(x) { # nolint
 
     return(x$get_dataset_label())
 

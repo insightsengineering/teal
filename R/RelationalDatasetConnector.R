@@ -11,7 +11,7 @@
 RelationalDatasetConnector <- R6::R6Class( #nolint
   # RelationalDatasetConnector public ----
   classname = "RelationalDatasetConnector",
-  inherit = RawDatasetConnector,
+  inherit = NamedDatasetConnector,
   public = list(
     #' @description
     #' Create a new \code{RelationalDatasetConnector} object. Set the pulling function
@@ -33,23 +33,12 @@ RelationalDatasetConnector <- R6::R6Class( #nolint
     #'   \code{RelationalDataset}, \code{RelationalDatasetConnector} object(s) or other constant value,
     #'   this/these object(s) should be included
     #'
-    #' @return new \code{RawDatasetConnector} object
+    #' @return new \code{RelationalDatasetConnector} object
     initialize = function(pull_fun, dataname, keys, code = character(0), label = character(0), vars = list()) {
-      super$initialize(pull_fun = pull_fun, vars = vars)
-      private$set_dataname(dataname)
+      super$initialize(pull_fun = pull_fun, dataname = dataname, code = code, label = label, vars = vars)
       private$set_keys(keys)
-      private$set_mutate_code(code)
-      self$set_dataset_label(label)
 
       return(invisible(self))
-    },
-
-    #' @description
-    #' Get dataname of dataset
-    #'
-    #' @return dataname of the dataset
-    get_dataname = function() {
-      return(private$dataname)
     },
 
     #' @description
@@ -59,72 +48,6 @@ RelationalDatasetConnector <- R6::R6Class( #nolint
     get_keys = function() {
       return(private$keys)
     },
-
-    #' @description
-    #' Get label of dataset
-    #'
-    #' @return \code{character}
-    get_dataset_label = function() {
-      return(private$dataset_label)
-    },
-    #' @description
-    #' Set label of the \code{dataset} object
-    #'
-    #' @param label (\code{character})\cr
-    #'  Label to describe the dataset
-    set_dataset_label = function(label) {
-      stopifnot(utils.nest::is_character_vector(label, 0, 1))
-      private$dataset_label <- label
-      return(invisible(NULL))
-    },
-    #' @description
-    #' Get code to get data
-    #'
-    #' @param deparse (\code{logical})\cr
-    #'  whether to return the deparsed form of a call
-    #'
-    #' @param args (empty or named \code{list})\cr
-    #'  dynamic arguments to function which loads data
-    #'
-    #' @return optionally deparsed \code{call} object
-    get_code = function(deparse = TRUE, args = NULL) {
-      stopifnot(is_logical_single(deparse))
-
-      pull_vars_code <- private$get_pull_vars_code(deparse = deparse)
-      pull_code <- private$get_pull_code(deparse = deparse, args = args)
-      mutate_code <- private$get_mutate_code(deparse = deparse)
-
-      code <- c(pull_vars_code, pull_code, mutate_code)
-
-      if (isTRUE(deparse)) {
-        code <- paste0(code, collapse = "\n")
-      }
-
-      return(code)
-    },
-    #' @description
-    #' Mutate dataset by code
-    #'
-    #' Either code or script must be provided, but not both.
-    #'
-    #' @param code (\code{character}) Code to mutate the dataset. Must contain the
-    #'  \code{dataset$dataname}
-    #' @param vars (list)\cr
-    #'   In case when this object code depends on the \code{raw_data} from the other
-    #'   \code{RelationalDataset}, \code{RelationalDatasetConnector} object(s) or other constant value,
-    #'   this/these object(s) should be included
-    mutate_dataset = function(code, vars) {
-      if (!is.null(private$dataset)) {
-        private$dataset <- mutate_dataset(private$dataset, code = code, vars = vars)
-      } else {
-        private$set_mutate_code(code)
-        private$set_mutate_vars(vars)
-      }
-
-      return(invisible(self))
-    },
-
-
     #' @description
     #' Pull the data
     #'
@@ -163,125 +86,12 @@ RelationalDatasetConnector <- R6::R6Class( #nolint
       }
 
       return(invisible(self))
-    },
-    #' @description
-    #' Check if dataset has already been pulled.
-    #'
-    #' @return \code{TRUE} if connector has been already pulled, else \code{FALSE}
-    is_pulled = function() {
-      isFALSE(is.null(private$dataset))
-    },
-    #' @description
-    #'
-    #' Derive the arguments this connector will pull with
-    get_pull_args = function() {
-      private$pull_fun$get_args()
-    },
-    #' @description
-    #'   Check to determine if the raw data is reproducible from the
-    #'   \code{get_code()} code.
-    #' @return
-    #'   \code{TRUE} if the dataset generated from evaluating the
-    #'   \code{get_code()} code is identical to the raw data, else \code{FALSE}.
-    check = function() {
-
-      if (!is_character_single(self$get_code()) || !grepl("\\w+", self$get_code())) {
-        stop("Cannot check preprocessing code - code is empty.")
-      } else if (!self$is_pulled()) {
-        stop("Cannot check the raw data until it is pulled.")
-      }
-
-      code <- self$get_code()
-
-      new_env <- new.env(parent = parent.env(.GlobalEnv))
-      tryCatch({
-        eval(parse(text = code), new_env)
-      }, error = function(e) {
-        error_dialog(e)
-      })
-
-      res_check <- tryCatch({
-        identical(super$get_raw_data(), get(self$get_dataname(), envir = new_env))
-      }, error = function(e) {
-        FALSE
-      })
-
-      return(res_check)
     }
   ),
 
   # RelationalDatasetConnector private ----
   private = list(
-    dataname = character(0),
     keys = NULL,
-    dataset_label = character(0),
-    mutate_code = NULL, # list of calls
-    mutate_vars = list(), # named list with vars used to mutate object
-    # assigns the pull code call to the dataname
-    get_pull_code = function(deparse = TRUE, args = NULL) {
-      code <- if (deparse) {
-        sprintf("%s <- %s",
-                private$dataname,
-                super$get_pull_code(deparse = deparse, args = args))
-      } else {
-        substitute(
-          a <- b,
-          list(a = as.name(private$dataname),
-               b = super$get_pull_code(deparse, args))
-        )
-      }
-
-      return(code)
-    },
-
-    # formats the code if necessary
-    get_mutate_code = function(deparse = TRUE) {
-
-      code <- if (deparse) {
-        if (length(private$mutate_code) > 0) {
-          paste0(
-            vapply(
-              private$mutate_code,
-              FUN = deparse,
-              FUN.VALUE = character(1)
-            ),
-            collapse = "\n"
-          )
-        } else {
-          character(0)
-        }
-      } else {
-        private$mutate_code
-      }
-
-      return(code)
-    },
-
-    set_mutate_code = function(code) {
-      stopifnot(utils.nest::is_character_vector(code, 0, 1))
-
-      if (length(code) > 0 && code != "") {
-        private$mutate_code <- c(private$mutate_code, as.list(as.call(parse(text = code))))
-      }
-
-      return(invisible(NULL))
-    },
-
-    set_mutate_vars = function(vars) {
-      stopifnot(is_fully_named_list(vars))
-
-      if (length(vars) > 0) {
-        private$mutate_vars <- c(private$mutate_vars, vars)
-      }
-
-      return(invisible(NULL))
-    },
-
-    set_dataname = function(dataname) {
-      stopifnot(utils.nest::is_character_single(dataname))
-      private$dataname <- dataname
-      return(invisible(NULL))
-    },
 
     set_keys = function(keys) {
       stopifnot(is(keys, "keys"))

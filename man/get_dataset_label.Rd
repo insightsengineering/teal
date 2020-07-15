@@ -2,14 +2,14 @@
 % Please edit documentation in R/get_dataset_label.R
 \name{get_dataset_label}
 \alias{get_dataset_label}
-\alias{get_dataset_label.RelationalDatasetConnector}
+\alias{get_dataset_label.NamedDatasetConnector}
 \alias{get_dataset_label.NamedDataset}
 \title{S3 method for getting a label of
 (\code{RelationalDatasetConnector }or \code{NamedDataset}) R6 object}
 \usage{
 get_dataset_label(x)
 
-\method{get_dataset_label}{RelationalDatasetConnector}(x)
+\method{get_dataset_label}{NamedDatasetConnector}(x)
 
 \method{get_dataset_label}{NamedDataset}(x)
 }
@@ -28,12 +28,18 @@ library(random.cdisc.data)
 fun <- callable_function(data.frame)
 fun$set_args(list(n = 5, seed = 1, cached = TRUE))
 
-x <- relational_dataset_connector(
+x <- named_dataset_connector(
+ pull_fun = fun,
+ dataname = "ADSL"
+)
+get_dataset_label(x)
+
+x1 <- relational_dataset_connector(
  pull_fun = fun,
  dataname = "ADSL",
  keys = get_cdisc_keys("ADSL")
 )
-get_dataset_label(x)
+get_dataset_label(x1)
 library(random.cdisc.data)
 ADSL <- radsl(cached = TRUE)
 ADSL_dataset <- named_dataset(dataname = "ADSL", x = ADSL)

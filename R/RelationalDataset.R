@@ -71,7 +71,7 @@ RelationalDataset <- R6::R6Class( # nolint
       return(TRUE)
     }
   ),
-  ## __Public Methods ====
+  ## __Private Fields ====
   private = list(
     .keys = NULL
   ),

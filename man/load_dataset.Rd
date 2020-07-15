@@ -3,14 +3,11 @@
 \name{load_dataset}
 \alias{load_dataset}
 \alias{load_dataset.RawDatasetConnector}
-\alias{load_dataset.RelationalDatasetConnector}
 \title{Load data from connection}
 \usage{
 load_dataset(x, args, try)
 
 \method{load_dataset}{RawDatasetConnector}(x, args = NULL, try = FALSE)
-
-\method{load_dataset}{RelationalDatasetConnector}(x, args = NULL, try = FALSE)
 }
 \arguments{
 \item{x}{(\code{RawDatasetConnector} or \code{RelationalDatasetConnection})}
@@ -28,14 +25,11 @@ Load data from connection. Function used on \link{RawDatasetConnector} and
 \link{RelationalDatasetConnector} to obtain data from connection.
 }
 \examples{
-
-
-# RelationalDatasetConnector ---------
 library(random.cdisc.data)
-adsl <- rcd_cdisc_dataset_connector(dataname = "ADSL", fun = radsl, cached = TRUE)
+adsl <- rcd_cdisc_dataset_connector("ADSL", fun = radsl, cached = TRUE)
 load_dataset(adsl)
 get_dataset(adsl)
 
-adrs <- rcd_cdisc_dataset_connector(dataname = "ADRS", fun = radrs, ADSL = adsl)
+adrs <- rcd_cdisc_dataset_connector("ADRS", fun = radrs, ADSL = adsl)
 load_dataset(adrs)
 }

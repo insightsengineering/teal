@@ -18,26 +18,15 @@ load_dataset <- function(x, args, try) {
 
 #' @rdname load_dataset
 #' @examples
-#'
-#' @export
-load_dataset.RawDatasetConnector <- function(x, args = NULL, try = FALSE) { # nolint
-  x$pull(args = args, try = try)
-  return(invisible(x))
-}
-
-#' @rdname load_dataset
-#' @examples
-#'
-#' # RelationalDatasetConnector ---------
 #' library(random.cdisc.data)
-#' adsl <- rcd_cdisc_dataset_connector(dataname = "ADSL", fun = radsl, cached = TRUE)
+#' adsl <- rcd_cdisc_dataset_connector("ADSL", fun = radsl, cached = TRUE)
 #' load_dataset(adsl)
 #' get_dataset(adsl)
 #'
-#' adrs <- rcd_cdisc_dataset_connector(dataname = "ADRS", fun = radrs, ADSL = adsl)
+#' adrs <- rcd_cdisc_dataset_connector("ADRS", fun = radrs, ADSL = adsl)
 #' load_dataset(adrs)
 #' @export
-load_dataset.RelationalDatasetConnector <- function(x, args = NULL, try = FALSE) { # nolint
+load_dataset.RawDatasetConnector <- function(x, args = NULL, try = FALSE) { # nolint
   x$pull(args = args, try = try)
   return(invisible(x))
 }
