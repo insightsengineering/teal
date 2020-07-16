@@ -141,7 +141,7 @@ RawDatasetConnector <- R6::R6Class( #nolint
     #' @return Invisible self for chaining.
     #' @examples
     #' ds <- raw_dataset_connector(pull_fun = callable_function(data.frame))
-    #' ds$set_ui_input(list(z = "character", w = "character", xx = "numeric"))
+    #' ds$set_ui_input(list(z = "character", w = "character", xx = 2))
     #' \dontrun{
     #' ds$launch()
     #' }
@@ -150,7 +150,7 @@ RawDatasetConnector <- R6::R6Class( #nolint
       if (!is.null(inputs)) {
         stopifnot(is_fully_named_list(inputs))
         stopifnot(all(vapply(inputs, length, integer(1)) == 1)) # do not allow nested lists
-        stopifnot(all(unique(unlist(inputs)) %in% c("logical", "numeric", "character")))
+        stopifnot(all(vapply(inputs, mode, character(1)) %in% c("logical", "numeric", "character")))
       }
       private$ui_input <- inputs
       private$set_ui(inputs)
@@ -173,7 +173,7 @@ RawDatasetConnector <- R6::R6Class( #nolint
     #' @return Shiny app
     #' @examples
     #' ds <- raw_dataset_connector(pull_fun = callable_function(data.frame))
-    #' ds$set_ui_input(list(z = "character", w = "character", xx = "numeric"))
+    #' ds$set_ui_input(list(z = "character 1", w = "character 2", xx = 2L))
     #' \dontrun{
     #' ds$launch()
     #' }
@@ -194,10 +194,11 @@ RawDatasetConnector <- R6::R6Class( #nolint
           session$onSessionEnded(stopApp)
           observeEvent(input$pull, {
             callModule(private$server, id = "main_app")
+            if (self$is_pulled()) {
+              output$result <- renderTable(head(self$get_raw_data()))
+            }
           })
-          if (self$is_pulled()) {
-            output$result <- renderTable(head(self$get_raw_data()))
-          }
+
 
         }
       )
@@ -282,9 +283,9 @@ RawDatasetConnector <- R6::R6Class( #nolint
         tags$div(
           tags$div(
             id = ns("inputs"),
-            if_not_null(args, h4(sprintf("Inputs for %s only:", self$get_dataname()))),
+            if_not_null(args, h4("Dataset inputs")),
             lapply(seq_along(args),
-                   function(i) match_ui(ns = ns, type = args[[i]], label = names(args[i]))
+                   function(i) match_ui(ns = ns, value = args[[i]], label = names(args[i]))
             )
           )
         )
@@ -318,13 +319,15 @@ RawDatasetConnector <- R6::R6Class( #nolint
 )
 
 # function to create UI with given ns function and label according to the type of variable
-match_ui <- function(ns, type, label) {
+match_ui <- function(ns, value, label) {
+  type <- mode(value)
+
   if (type == "logical") {
-    out <- checkboxInput(ns(label), label)
+    out <- checkboxInput(ns(label), label, value)
   } else if (type == "numeric") {
-    out <- numericInput(ns(label), label, value = 0)
+    out <- numericInput(ns(label), label, value)
   } else if (type == "character") {
-    out <- textInput(ns(label), label, value = "Insert text")
+    out <- textInput(ns(label), label, value)
   } else {
     stop(paste("Unknown type", type))
   }

@@ -37,7 +37,7 @@ NamedDatasetConnector <- R6::R6Class( #nolint
       private$set_dataname(dataname)
       private$set_mutate_code(code)
       self$set_dataset_label(label)
-      private$set_server()
+
       return(invisible(self))
     },
 
@@ -262,7 +262,22 @@ NamedDatasetConnector <- R6::R6Class( #nolint
       private$dataname <- dataname
       return(invisible(NULL))
     },
+    set_ui = function(args = NULL) {
+      private$ui <- function(id) {
+        ns <- NS(id)
+        tags$div(
+          tags$div(
+            id = ns("inputs"),
+            if_not_null(args, h4(sprintf("Inputs for %s only:", self$get_dataname()))),
+            lapply(seq_along(args),
+                   function(i) match_ui(ns = ns, value = args[[i]], label = names(args[i]))
+            )
+          )
+        )
 
+      }
+      return(invisible(NULL))
+    },
     set_server = function() {
       #set_server function in super class does not have a dataname so override that
       #function here
