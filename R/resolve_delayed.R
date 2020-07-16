@@ -1,3 +1,5 @@
+# resolve function and methods ------------
+
 #' Resolve delayed inputs by evaluating the code within the provided datasets
 #'
 #' @param x Object of class \code{delayed_data} to resolve.
@@ -63,27 +65,38 @@ resolve_delayed <- function(x, datasets) {
 #' @export
 resolve_delayed.delayed_variable_choices <- function(x, datasets) { # nolint
   x$data <- datasets$get_data(x$data)
+  if (is(x$subset, "function")) {
+    x$subset <- resolve_delayed_expr(x$subset, ds = x$data, is_value_choices = FALSE)
+  }
   return(do.call("variable_choices", x))
 }
 
 #' @export
 resolve_delayed.delayed_value_choices <- function(x, datasets) { # nolint
   x$data <- datasets$get_data(x$data)
+  if (is.function(x$subset)) {
+    x$subset <- resolve_delayed_expr(x$subset, ds = x$data, is_value_choices = TRUE)
+  }
   return(do.call("value_choices", x))
 }
 
 #' @export
 #' @importFrom methods is
 resolve_delayed.delayed_choices_selected <- function(x, datasets) { # nolint
-  x$choices <- resolve_delayed(x$choices, datasets = datasets)
   if (!is.null(x$selected)) {
-    x$selected <- `if`(is(x$selected, "delayed_data"), resolve_delayed(x$selected, datasets = datasets), x$selected)
+    x$selected <- if (is(x$selected, "delayed_data")) {
+      resolve_delayed(x$selected, datasets = datasets)
+    } else {
+      x$selected
+    }
   }
+  x$choices <- resolve_delayed(x$choices, datasets = datasets)
   return(do.call("choices_selected", x))
 }
 
 #' @export
 resolve_delayed.delayed_select_spec <- function(x, datasets) { # nolint
+  x$selected <- `if`(is(x$selected, "delayed_data"), resolve_delayed(x$selected, datasets = datasets), x$selected)
   x$choices <- resolve_delayed(x$choices, datasets = datasets)
   return(do.call("select_spec", x))
 }
@@ -91,6 +104,7 @@ resolve_delayed.delayed_select_spec <- function(x, datasets) { # nolint
 #' @export
 #' @importFrom methods is
 resolve_delayed.delayed_filter_spec <- function(x, datasets) { # nolint
+  x$selected <- `if`(is(x$selected, "delayed_data"), resolve_delayed(x$selected, datasets = datasets), x$selected)
   x$choices <- `if`(is(x$choices, "delayed_data"), resolve_delayed(x$choices, datasets = datasets), x$choices)
   x$vars <- `if`(is(x$vars, "delayed_data"), resolve_delayed(x$vars, datasets = datasets), x$vars)
   return(do.call("filter_spec", x))
@@ -150,7 +164,57 @@ resolve_teal_args <- function(args, datasets) {
 }
 
 
-# print methods
+#' Resolve expression after delayed data are loaded
+#'
+#' @param x \code{function} Function that is applied on dataset.
+#' It must take only a single argument "data" and return character vector with columns / values.
+#' @param ds \code{data.frame} Dataset on which the function is applied to.
+#' @param is_value_choices \code{logical} Determines which check of the returned value will be applied.
+#'
+#' @return Character vector - result of calling function \code{x} on dataset \code{ds}.
+#'
+#' @examples
+#' \dontrun{
+#' # get only possible factor variables from mtcars dataset
+#' resolve_delayed_expr(
+#'   function(data) {
+#'     idx <- vapply(data, function(x) is.numeric(x) && length(unique(x)) <= 6, logical(1))
+#'     colnames(data)[idx]
+#'   },
+#'   ds = mtcars,
+#'   is_value_choices = FALSE
+#' )
+#' }
+resolve_delayed_expr <- function(x, ds, is_value_choices) {
+  stopifnot(
+    is.function(x),
+    is_fully_named_list(formals(x)),
+    length(formals(x)) == 1,
+    names(formals(x))[1] == "data"
+  )
+
+  # evaluate function
+  res <- do.call("x", list(data = ds))
+
+  # check returned value
+  if (is_value_choices) {
+    if (!is.atomic(res) || anyDuplicated(res)) {
+      stop(paste("Function", deparse(quote(x)), "must return a vector",
+                 "giving unique values from the respective columns of the dataset."))
+    }
+  } else {
+    if (!is.character(res) || length(res) > ncol(ds) || anyDuplicated(res)) {
+      stop(paste("Function", deparse(quote(x)), "must return a character vector",
+                 "giving unique names of the available columns of the dataset."))
+    }
+  }
+
+  return(res)
+}
+
+
+
+# print methods --------
 
 #' @export
 print.delayed_variable_choices <- function(x, indent = 0L, ...) {

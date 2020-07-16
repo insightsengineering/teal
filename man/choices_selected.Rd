@@ -12,9 +12,10 @@ choices_selected(
 )
 }
 \arguments{
-\item{choices}{vector of possible choices}
+\item{choices}{vector of possible choices or \code{delayed_data} object}
 
-\item{selected}{vector of pre-selected options, first element of \code{choices} if blank}
+\item{selected}{vector of pre-selected options or \code{delayed_data} object.
+If vector, then first element of \code{choices} if blank}
 
 \item{keep_order}{(\code{logical}) In case of \code{FALSE} the selected variables
 will be on top of the drop-down field.}
@@ -84,5 +85,12 @@ choices_selected(
                              c("name for A", "nothing", "name for B", "name for C")),
    selected = "A"
 )
+
+# functional form (subsetting for factor variables only) of choices_selected
+# with delayed data loading
+choices_selected(variable_choices("ADSL", subset = function(data) {
+  idx <- vapply(data, is.factor, logical(1))
+  return(names(data)[idx])
+}))
 
 }

@@ -101,7 +101,11 @@ choices_labeled <- function(choices, labels, subset = NULL, types = NULL) {
 #' @param data (\code{data.frame}) or (\code{character})
 #' If \code{data.frame}, then data to extract labels from.
 #' If \code{character}, then name of the dataset to extract data from once available.
-#' @param subset (\code{character}) vector of column names
+#' @param subset (\code{character} or \code{function})
+#' If \code{character}, then a vector of column names.
+#' If \code{function}, then this function is used to determine the possible columns (e.g. all factor columns).
+#' In this case, the function must take only single argument "data" and return a character vector.
+#' See examples for more details.
 #' @inheritParams rtables::var_labels
 #'
 #' @return named character vector with additional attributes or \code{delayed_data} object
@@ -118,9 +122,15 @@ choices_labeled <- function(choices, labels, subset = NULL, types = NULL) {
 #'
 #' # delayed version
 #' variable_choices("ADRS", subset = c("USUBJID", "STUDYID"))
+#'
+#' # functional subset (with delayed data) - return only factor variables
+#' variable_choices("ADRS", subset = function(data) {
+#'   idx <- vapply(data, is.factor, logical(1))
+#'   return(names(data)[idx])
+#' })
 variable_choices <- function(data, subset = NULL, fill = FALSE) {
   stopifnot(is.data.frame(data) || is_character_single(data))
-  stopifnot(is.null(subset) || is_character_vector(subset, min_length = 0))
+  stopifnot(is.null(subset) || is_character_vector(subset, min_length = 0) || is.function(subset))
   stopifnot(is_logical_single(fill))
 
   if (is_character_single(data)) {
@@ -131,7 +141,10 @@ variable_choices <- function(data, subset = NULL, fill = FALSE) {
 
   if (is.null(subset)) {
     subset <- names(data)
+  } else if (is.function(subset)) {
+    subset <- resolve_delayed_expr(subset, ds = data, is_value_choices = FALSE)
   }
+
   stopifnot(is_character_vector(subset))
   stopifnot(all(subset %in% c("", names(data))))
 
@@ -163,7 +176,11 @@ variable_choices <- function(data, subset = NULL, fill = FALSE) {
 #' If \code{character}, then name of the dataset to extract data from once available.
 #' @param var_choices (\code{character}) vector with choices column names
 #' @param var_label (\code{character}) vector with labels column names
-#' @param subset (\code{vector}) vector with values to subset
+#' @param subset (\code{character} or \code{function})
+#' If \code{character}, vector with values to subset.
+#' If \code{function}, then this function is used to determine the possible columns (e.g. all factor columns).
+#' In this case, the function must take only single argument "data" and return a character vector.
+#' See examples for more details.
 #' @param sep (\code{character}) separator used in case of multiple column names
 #'
 #' @return named character vector or \code{delayed_data} object
@@ -182,6 +199,11 @@ variable_choices <- function(data, subset = NULL, fill = FALSE) {
 #'
 #' # delayed version
 #' value_choices("ADRS", c("PARAMCD", "ARMCD"), c("PARAM", "ARM"))
+#'
+#' # functional subset
+#' value_choices(ADRS, "PARAMCD", "PARAM", subset = function(data) {
+#'   return(levels(data$PARAMCD)[1:2])
+#' })
 value_choices <- function(data, var_choices, var_label, subset = NULL, sep = " - ") {
   stopifnot(is.data.frame(data) || is_character_single(data))
   stopifnot(
@@ -189,7 +211,7 @@ value_choices <- function(data, var_choices, var_label, subset = NULL, sep = " -
     is_character_vector(var_label),
     length(var_choices) == length(var_label)
   )
-  stopifnot(is.null(subset) || is.vector(subset))
+  stopifnot(is.null(subset) || is.vector(subset) || is.function(subset))
 
   if (is.character(data)) {
     out <- structure(list(data = data,
@@ -204,6 +226,10 @@ value_choices <- function(data, var_choices, var_label, subset = NULL, sep = " -
   choices <- apply(data[var_choices], 1, paste, collapse = sep)
   labels <- apply(data[var_label], 1, paste, collapse = sep)
   df <- unique(data.frame(choices, labels, stringsAsFactors = FALSE)) # unique combo of choices x labels
+
+  if (is.function(subset)) {
+    subset <- resolve_delayed_expr(subset, ds = data, is_value_choices = TRUE)
+  }
 
   res <- choices_labeled(
     choices = df$choices,

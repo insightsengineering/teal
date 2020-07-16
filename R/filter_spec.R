@@ -27,7 +27,7 @@
 #'
 #'  \code{delayed_data} objects can be created via \code{variable_choices} or \code{value_choices}.
 #'
-#' @param selected (\code{character}) Named character vector to define the selected
+#' @param selected (\code{character} or \code{delayed_data} object) Named character vector to define the selected
 #'  values of a shiny \code{\link[shiny]{selectInput}} (default values). This value will
 #'  be displayed inside the shiny app upon start.
 #'
@@ -136,6 +136,18 @@
 #'
 #' }
 #'
+#' @examples
+#' filter_spec(
+#'   vars = variable_choices("ADSL", "ARMCD"),
+#'   choices = value_choices("ADSL", var_choices = "ARMCD", var_label = "ARM",
+#'   subset = function(data) {
+#'     levels(data$ARMCD)[1:2]
+#'   }),
+#'   selected = value_choices("ADSL", var_choices = "ARMCD", var_label = "ARM",
+#'   subset = function(data) {
+#'     levels(data$ARMCD)[1]
+#'   })
+#' )
 filter_spec <- function(vars,
                         choices,
                         selected = `if`(is(choices, "delayed_data"), NULL, choices[1]),
@@ -145,9 +157,14 @@ filter_spec <- function(vars,
 
   stopifnot(is_character_vector(vars) || is(vars, "delayed_data"))
   stopifnot(is_character_vector(choices) || is(choices, "delayed_data"))
+  stopifnot(is.null(selected) || is_character_vector(selected) || is(selected, "delayed_data"))
   stopifnot(is_character_single(sep))
   stopifnot(is_logical_single(multiple))
   stopifnot(is_character_single(label))
+
+  if (is(selected, "delayed_data") && !is(choices, "delayed_data")) {
+    stop("If 'selected' is of class 'delayed_data', so must be 'choices'.")
+  }
 
   if (is(vars, "delayed_data") || is(choices, "delayed_data")) {
     out <- structure(list(vars = vars,

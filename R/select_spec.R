@@ -9,7 +9,7 @@
 #'   dataset defined in the \link{data_extract_spec} where this is called.
 #'   \code{delayed_data} objects can be created via \code{variable_choices} or \code{value_choices}.
 #'
-#' @param selected optional (\code{character} or \code{NULL}).
+#' @param selected optional (\code{character} or \code{NULL} or \code{delayed_data} object).
 #' Named character vector to define the selected values of a shiny \code{\link[shiny]{selectInput}}.
 #' Defaults to the first value of \code{choices} or \code{NULL} for delayed data loading.
 #'
@@ -103,6 +103,21 @@
 #' @importFrom purrr map_lgl
 #' @importFrom stats setNames
 #' @export
+#'
+#' @examples
+#' # functional form (subsetting for factor variables only) of select_spec with delayed data loading
+#' select_spec(
+#'   choices = variable_choices("ADSL", subset = function(data) {
+#'     idx <- vapply(data, is.factor, logical(1))
+#'     return(names(data)[idx])
+#'   }),
+#'   # setting first factor variable as default
+#'   selected = variable_choices("ADSL", subset = function(data) {
+#'     idx <- vapply(data, is.factor, logical(1))
+#'     return(names(data)[idx][1])
+#'   }),
+#'   multiple = TRUE
+#' )
 select_spec <- function(choices,
                         selected = `if`(is(choices, "delayed_data"), NULL, choices[1]),
                         multiple = length(selected) > 1,
@@ -111,10 +126,15 @@ select_spec <- function(choices,
                         label = ifelse(multiple, "Columns", "Column")) {
 
   stopifnot(length(choices) >= 1 && (is.atomic(choices) || is(choices, "delayed_data")))
+  stopifnot(is.null(selected) || is.atomic(selected) || is(selected, "delayed_data"))
   stopifnot(is_logical_single(multiple))
   stopifnot(is_logical_single(fixed))
   stopifnot(is.null(always_selected) || is_character_vector(always_selected, 1))
   stopifnot(is_character_single(label))
+
+  if (is(selected, "delayed_data") && !is(choices, "delayed_data")) {
+    stop("If 'selected' is of class 'delayed_data', so must be 'choices'.")
+  }
 
   if (is(choices, "delayed_data")) {
     out <- structure(list(choices = choices,

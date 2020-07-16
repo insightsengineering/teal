@@ -36,7 +36,7 @@ key variables of the data set to be filtered.
 
  \code{delayed_data} objects can be created via \code{variable_choices} or \code{value_choices}.}
 
-\item{selected}{(\code{character}) Named character vector to define the selected
+\item{selected}{(\code{character} or \code{delayed_data} object) Named character vector to define the selected
 values of a shiny \code{\link[shiny]{selectInput}} (default values). This value will
 be displayed inside the shiny app upon start.}
 
@@ -155,4 +155,15 @@ filter_spec(
   multiple = TRUE
 )
 
+filter_spec(
+  vars = variable_choices("ADSL", "ARMCD"),
+  choices = value_choices("ADSL", var_choices = "ARMCD", var_label = "ARM",
+  subset = function(data) {
+    levels(data$ARMCD)[1:2]
+  }),
+  selected = value_choices("ADSL", var_choices = "ARMCD", var_label = "ARM",
+  subset = function(data) {
+    levels(data$ARMCD)[1]
+  })
+)
 }

@@ -2,8 +2,9 @@ no_select_keyword <- "-- no selection --"
 
 #' Choices function
 #'
-#' @param choices vector of possible choices
-#' @param selected vector of pre-selected options, first element of \code{choices} if blank
+#' @param choices vector of possible choices or \code{delayed_data} object
+#' @param selected vector of pre-selected options or \code{delayed_data} object.
+#' If vector, then first element of \code{choices} if blank
 #' @param keep_order (\code{logical}) In case of \code{FALSE} the selected variables
 #'   will be on top of the drop-down field.
 #' @param fixed (\code{logical}) (optional) whether to block user to select choices
@@ -72,6 +73,13 @@ no_select_keyword <- "-- no selection --"
 #'    selected = "A"
 #' )
 #'
+#' # functional form (subsetting for factor variables only) of choices_selected
+#' # with delayed data loading
+#' choices_selected(variable_choices("ADSL", subset = function(data) {
+#'   idx <- vapply(data, is.factor, logical(1))
+#'   return(names(data)[idx])
+#' }))
+#'
 choices_selected <- function(choices, selected = if (is(choices, "delayed_data")) NULL else choices[1],
                              keep_order = FALSE, fixed = FALSE) {
 
@@ -80,13 +88,11 @@ choices_selected <- function(choices, selected = if (is(choices, "delayed_data")
   stopifnot(is_logical_single(keep_order))
   stopifnot(is_logical_single(fixed))
 
-  if (is(choices, "delayed_data") || is(selected, "delayed_data")) {
+  if (is(selected, "delayed_data") && !is(choices, "delayed_data")) {
+    stop("If 'selected' is of class 'delayed_data', so must be 'choices'.")
+  }
 
-
-    if (is(selected, "delayed_data") && !is(choices, "delayed_data")) {
-      stop("If 'selected' is of class 'delayed_data', so must be 'choices'.")
-    }
-
+  if (is(choices, "delayed_data")) {
     out <- structure(list(choices = choices,
                           selected = selected,
                           keep_order = keep_order,

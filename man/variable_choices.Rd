@@ -11,7 +11,11 @@ variable_choices(data, subset = NULL, fill = FALSE)
 If \code{data.frame}, then data to extract labels from.
 If \code{character}, then name of the dataset to extract data from once available.}
 
-\item{subset}{(\code{character}) vector of column names}
+\item{subset}{(\code{character} or \code{function})
+If \code{character}, then a vector of column names.
+If \code{function}, then this function is used to determine the possible columns (e.g. all factor columns).
+In this case, the function must take only single argument "data" and return a character vector.
+See examples for more details.}
 
 \item{fill}{boolean in case the \code{label} attribute does not exist if
 \code{TRUE} the variable names is returned, otherwise \code{NA}}
@@ -32,4 +36,10 @@ variable_choices(ADRS, subset = c("", "PARAM", "PARAMCD"))
 
 # delayed version
 variable_choices("ADRS", subset = c("USUBJID", "STUDYID"))
+
+# functional subset (with delayed data) - return only factor variables
+variable_choices("ADRS", subset = function(data) {
+  idx <- vapply(data, is.factor, logical(1))
+  return(names(data)[idx])
+})
 }

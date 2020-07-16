@@ -20,7 +20,7 @@ of a shiny \code{\link[shiny]{selectInput}}. These have to be columns in the
 dataset defined in the \link{data_extract_spec} where this is called.
 \code{delayed_data} objects can be created via \code{variable_choices} or \code{value_choices}.}
 
-\item{selected}{optional (\code{character} or \code{NULL}).
+\item{selected}{optional (\code{character} or \code{NULL} or \code{delayed_data} object).
 Named character vector to define the selected values of a shiny \code{\link[shiny]{selectInput}}.
 Defaults to the first value of \code{choices} or \code{NULL} for delayed data loading.}
 
@@ -112,4 +112,19 @@ select = select_spec(
     }
   }
 }
+}
+\examples{
+# functional form (subsetting for factor variables only) of select_spec with delayed data loading
+select_spec(
+  choices = variable_choices("ADSL", subset = function(data) {
+    idx <- vapply(data, is.factor, logical(1))
+    return(names(data)[idx])
+  }),
+  # setting first factor variable as default
+  selected = variable_choices("ADSL", subset = function(data) {
+    idx <- vapply(data, is.factor, logical(1))
+    return(names(data)[idx][1])
+  }),
+  multiple = TRUE
+)
 }

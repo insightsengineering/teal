@@ -15,7 +15,11 @@ If \code{character}, then name of the dataset to extract data from once availabl
 
 \item{var_label}{(\code{character}) vector with labels column names}
 
-\item{subset}{(\code{vector}) vector with values to subset}
+\item{subset}{(\code{character} or \code{function})
+If \code{character}, vector with values to subset.
+If \code{function}, then this function is used to determine the possible columns (e.g. all factor columns).
+In this case, the function must take only single argument "data" and return a character vector.
+See examples for more details.}
 
 \item{sep}{(\code{character}) separator used in case of multiple column names}
 }
@@ -37,4 +41,9 @@ value_choices(ADRS, c("PARAMCD", "ARMCD"), c("PARAM", "ARM"), sep = " --- ")
 
 # delayed version
 value_choices("ADRS", c("PARAMCD", "ARMCD"), c("PARAM", "ARM"))
+
+# functional subset
+value_choices(ADRS, "PARAMCD", "PARAM", subset = function(data) {
+  return(levels(data$PARAMCD)[1:2])
+})
 }
