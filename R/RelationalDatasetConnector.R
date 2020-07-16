@@ -37,7 +37,6 @@ RelationalDatasetConnector <- R6::R6Class( #nolint
     initialize = function(pull_fun, dataname, keys, code = character(0), label = character(0), vars = list()) {
       super$initialize(pull_fun = pull_fun, dataname = dataname, code = code, label = label, vars = vars)
       private$set_keys(keys)
-
       return(invisible(self))
     },
 

@@ -52,7 +52,6 @@ ui_teal_with_splash <- function(id,
 #' @return `reactive`, return value of `\link{srv_teal}`
 #' @export
 srv_teal_with_splash <- function(input, output, session, data, modules, filter_states = list()) {
-  print(class(data))
   stopifnot(
     is(data, "cdisc_data") || is(data, "RelationalDataList")  || is(data, "RelationalDataConnector")
   )

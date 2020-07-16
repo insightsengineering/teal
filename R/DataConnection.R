@@ -261,7 +261,10 @@ DataConnection <- R6::R6Class( # nolint
       stopifnot(names(formals(open_module)) %in% c("input", "output", "session", "connection"))
 
       private$open_server <- function(input, output, session, connection) {
-        callModule(open_module, id = "open_conn", connection = connection)
+        withProgress(message = "Opening connection", value = 1, {
+          callModule(open_module, id = "open_conn", connection = connection)
+        })
+
       }
 
       return(invisible(NULL))
@@ -282,7 +285,9 @@ DataConnection <- R6::R6Class( # nolint
       stopifnot(names(formals(close_module)) %in% c("input", "output", "session", "connection"))
 
       private$close_server <- function(input, output, session, connection) {
-        callModule(close_module, id = "close_conn", connection = connection)
+        withProgress(message = "Closing connection", value = 1, {
+          callModule(close_module, id = "close_conn", connection = connection)
+        })
       }
       return(invisible(NULL))
     }
@@ -427,8 +432,7 @@ rice_connection <- function() {
       ns <- NS(id)
       div(
         textInput(ns("username"), "Username"),
-        passwordInput(ns("password"), "Password"),
-        uiOutput(ns("open_response"))
+        passwordInput(ns("password"), "Password")
       )
     }
   )
@@ -438,9 +442,11 @@ rice_connection <- function() {
       res <- connection$open(args = list(username = input$username,
                                          password = input$password),
                              try = TRUE)
-      output$open_response <- renderUI({
-        validate(need(!is(res, "try-error"), label = res))
-        return(NULL)
+      observeEvent(res, {
+        if (is(res, "try-error")) {
+          shinyjs::alert(paste("Error opening connection\nError message:", res))
+          stop(res)
+        }
       })
     }
   )
@@ -448,17 +454,18 @@ rice_connection <- function() {
   # close connection
   x$set_close_ui(
     function(id) {
-      ns <- NS(id)
-      div(uiOutput(ns("close_response")))
+      NULL
     }
   )
 
   x$set_close_server(
     function(input, output, session, connection) {
       res <- connection$close(try = TRUE)
-      output$close_response <- renderUI({
-        validate(need(!is(res, "try-error"), label = res))
-        return(NULL)
+      observeEvent(res, {
+        if (is(res, "try-error")) {
+          shinyjs::alert(paste("Error closing connection\nError message:", res))
+          stop(res)
+        }
       })
     }
   )

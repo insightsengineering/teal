@@ -184,6 +184,7 @@ RawDatasetConnector <- R6::R6Class( #nolint
       shinyApp(
         ui = fluidPage(
           private$ui(id = "main_app"),
+          shinyjs::useShinyjs(),
           br(),
           actionButton("pull", "Get data"),
           br(),
@@ -293,19 +294,22 @@ RawDatasetConnector <- R6::R6Class( #nolint
     },
     set_server = function() {
       private$server <- function(input, output, session, data_args = NULL) {
-        # set args to save them - args set will be returned in the call
-        dataset_args <- if_not_null(private$ui_input,
-                                    reactiveValuesToList(input)[names(private$ui_input)])
-        if (!is_empty(dataset_args)) {
-          self$set_args(args = dataset_args)
-        }
 
-        # print error if any
-        out <- self$pull(args = data_args, try = TRUE)
-        if (is(out, "try-error")) {
-          stop(out)
-        }
+        withProgress(value = 1, message = "Pulling dataset", {
+          # set args to save them - args set will be returned in the call
+          dataset_args <- if_not_null(private$ui_input,
+                                     reactiveValuesToList(input)[names(private$ui_input)])
+          if (!is_empty(dataset_args)) {
+            self$set_args(args = dataset_args)
+          }
 
+          # print error if any
+          out <- self$pull(args = data_args, try = TRUE)
+          if (is(out, "try-error")) {
+            shinyjs::alert(paste("Error pulling dataset\nError message: ", out))
+            stop(out)
+          }
+        })
         return(invisible(NULL))
       }
       return(invisible(NULL))

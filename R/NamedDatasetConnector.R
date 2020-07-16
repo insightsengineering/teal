@@ -37,7 +37,7 @@ NamedDatasetConnector <- R6::R6Class( #nolint
       private$set_dataname(dataname)
       private$set_mutate_code(code)
       self$set_dataset_label(label)
-
+      private$set_server()
       return(invisible(self))
     },
 
@@ -260,6 +260,33 @@ NamedDatasetConnector <- R6::R6Class( #nolint
     set_dataname = function(dataname) {
       stopifnot(utils.nest::is_character_single(dataname))
       private$dataname <- dataname
+      return(invisible(NULL))
+    },
+
+    set_server = function() {
+      #set_server function in super class does not have a dataname so override that
+      #function here
+      private$server <- function(input, output, session, data_args = NULL) {
+        withProgress(value = 1, message = paste("Pulling", self$get_dataname()), {
+          # set args to save them - args set will be returned in the call
+          dataset_args <- if_not_null(private$ui_input,
+                                      reactiveValuesToList(input)[names(private$ui_input)])
+          if (!is_empty(dataset_args)) {
+            self$set_args(args = dataset_args)
+          }
+
+          # print error if any
+
+          out <- self$pull(args = data_args, try = TRUE)
+          observeEvent(out, {
+            if (is(out, "try-error")) {
+              shinyjs::alert(sprintf("Error pulling %s:\nError message:%s", self$get_dataname(), out))
+              stop(out)
+            }
+          })
+        })
+        return(invisible(NULL))
+      }
       return(invisible(NULL))
     }
   )
