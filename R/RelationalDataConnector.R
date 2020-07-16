@@ -114,24 +114,7 @@ RelationalDataConnector <- R6::R6Class( #nolint
     get_connection = function() {
       return(private$connection)
     },
-    #' @description
-    #'
-    #' @description
-    #' Get all datasets and all dataset connectors
-    #'
-    #'   name of dataset connector to be returned. If \code{NULL}, all connectors are returned.
-    #' @param dataname (\code{character} value)\cr
-    #'
-    #' @return \code{list} with all datasets and all connectors
-    get_all_datasets = function(dataname = NULL) {
-      stopifnot(is.null(dataname) || is_character_single(dataname))
 
-      if (is.null(dataname)) {
-        c(private$datasets, private$dataset_connectors)
-      } else {
-        if_null(private$datasets[[dataname]], private$dataset_connectors[[dataname]])
-      }
-    },
     #' @description
     #'
     #' @return the \code{server} function of the \code{RelationalDataConnector}

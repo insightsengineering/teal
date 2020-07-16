@@ -42,6 +42,20 @@ RelationalDatasetConnector <- R6::R6Class( #nolint
     },
 
     #' @description
+    #' Get dataname of dataset
+    #'
+    #' @return dataname of the dataset
+    get_dataname = function() {
+      return(private$dataname)
+    },
+    #' @description
+    #' Get dataname of dataset
+    #'
+    #' @return dataname of the dataset
+    get_datanames = function() {
+      return(private$dataname)
+    },
+    #' @description
     #' Get keys of dataset
     #'
     #' @return \code{keys} object

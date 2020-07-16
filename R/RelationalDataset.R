@@ -56,6 +56,11 @@ RelationalDataset <- R6::R6Class( # nolint
       private$.keys
     },
     #' @description
+    #' Derive the dataname
+    get_datanames = function() {
+      private$.dataname
+    },
+    #' @description
     #' Set new keys
     #' @param keys (\code{keys}) Set the keys
     set_keys = function(keys) {

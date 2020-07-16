@@ -14,14 +14,46 @@
 #' x2 <- rcd_cdisc_data( # RelationalDataConnector
 #'   rcd_cdisc_dataset_connector("ADRS", radrs, cached = TRUE)
 #' )
+#' x3 <- cdisc_dataset(
+#'   dataname = "ADAE", # RelationalDataset
+#'   data = radae(cached = TRUE),
+#'   code = "library(random.cdisc.data)\nADAE <- radae(cached = TRUE)"
+#' )
 #'
-#' tc <- teal:::RelationalDataList$new(x, x2)
+#' x4 <- rcd_cdisc_dataset_connector("ADTTE", radtte, cached = TRUE)
+#' tc <- teal:::RelationalDataList$new(x, x2, x3, x4)
+#' tc$get_datanames()
+#' tc$get_datasets()
+#' tc$get_dataset("ADAE")
+#' tc$get_all_datasets()
+#' tc$get_code()
+#' tc$get_code("ADAE")
 #' \dontrun{
 #' tc$launch()
 #' tc$get_cdisc_data()
+#' tc$get_datasets()
+#' tc$get_dataset("ADAE")
+#' tc$check()
+#' }
+#'
+#' library(random.cdisc.data)
+#' x <- cdisc_dataset(
+#'   dataname = "ADSL", # RelationalDataset
+#'   data = radsl(cached = TRUE),
+#'   code = "library(random.cdisc.data)\nADSL <- radsl(cached = TRUE)"
+#' )
+#'
+#' x2 <- rcd_cdisc_dataset_connector("ADTTE", radtte, cached = TRUE)
+#' tc <- teal:::RelationalDataList$new(x, x2)
+#' tc$get_datasets()
+#' tc$get_cdisc_data()
+#' \dontrun{
+#' tc$launch()
+#' tc$get_cdisc_data()
+#' tc$get_datasets()
 #' }
 #' @importFrom R6 R6Class
-RelationalDataList <- R6::R6Class( #nolint
+RelationalDataList <- R6::R6Class( # nolint
   classname = "RelationalDataList",
   inherit = RelationalData,
   # ..public ------
@@ -43,24 +75,9 @@ RelationalDataList <- R6::R6Class( #nolint
         stop("Please do not include duplicated names.")
       }
 
-      dot_args <- lapply(c(TRUE, FALSE), function(condition) {
-        Filter(
-          function(x) {
-            is(object = x, class2 = "RelationalDataset") == condition
-          },
-          dot_args
-        )
-      })
+      private$datasets <- dot_args
 
-      private$datasets <- dot_args[[1]]
-      names(private$datasets) <- vapply(private$datasets, get_dataname, character(1))
-
-      private$connectors <- dot_args[[2]]
-
-
-
-
-      if (length(self$get_data_connectors()) > 0) {
+      if (length(self$get_connectors()) > 0) {
         private$set_ui()
         private$set_server()
       }
@@ -68,32 +85,15 @@ RelationalDataList <- R6::R6Class( #nolint
       return(invisible(self))
     },
     #' @description
-    #'   Check if the all datasets and connectors raw data is reproducible from the \code{get_code()} code.
-    #' @return
-    #'   \code{TRUE} if all the items generated from evaluating the
-    #'   \code{get_code()} code are identical to the raw data, else \code{FALSE}.
-    check = function() {
-      if (!self$is_pulled()) {
-        stop("Cannot check the raw data until it is pulled.")
-      }
-
-      if (is.null(private$code)) {
-        all(vapply(private$datasets, function(x) x$check(), logical(1))) &&
-          all(vapply(private$connectors, function(x) x$check(), logical(1)))
-      } else {
-        all(vapply(private$datasets, function(x) super$check_dataset_all_code(x), logical(1))) &&
-          all(vapply(private$connectors, function(x) super$check_dataset_all_code(x), logical(1)))
-      }
-    },
-    #' @description
     #'
     #' Derive the names of all datasets
     #' @return \code{character} vector with names
     get_datanames = function() {
-      c(
-        vapply(private$datasets, get_dataname, character(1)),
-        unlist(lapply(private$connectors, get_dataname))
+      datasets_names <- lapply(
+        private$datasets, get_dataname
       )
+
+      return(unlist(datasets_names))
     },
     #' @description
     #' Derive the code for all datasets
@@ -104,10 +104,8 @@ RelationalDataList <- R6::R6Class( #nolint
       stopifnot(is_logical_single(deparse))
 
       datasets_code <- private$get_code_datasets(dataname = dataname, deparse = deparse)
-      connectors_code <- private$get_code_connectors(dataname = dataname, deparse = deparse)
       mutate_code <- private$get_mutate_code(deparse = deparse)
-
-      all_code <- c(datasets_code, connectors_code, mutate_code)
+      all_code <- c(datasets_code, mutate_code)
 
       if (isTRUE(deparse)) {
         all_code <- paste0(all_code, collapse = "\n")
@@ -136,7 +134,8 @@ RelationalDataList <- R6::R6Class( #nolint
         function(x) {
           is(object = x, class2 = "RelationalDatasetConnector")
         },
-        private$connectors))
+        private$datasets
+      ))
     },
     #' Get data connectors.
     #'
@@ -146,42 +145,80 @@ RelationalDataList <- R6::R6Class( #nolint
         function(x) {
           is(object = x, class2 = "RelationalDataConnector")
         },
-        private$connectors))
+        private$datasets
+      ))
     },
+    #' Get data connectors.
+    #'
+    #' @return \code{list} with all \code{RelationalDataConnector} objects.
+    get_connectors = function() {
+      return(Filter(
+        function(x) {
+          is(object = x, class2 = "RelationalDatasetConnector") || is(object = x, class2 = "RelationalDataConnector")
+        },
+        private$datasets
+      ))
+    },
+    #' @description
+    #' Get \code{RelationalDataset} object.
+    #' @param dataname (\code{character} value)\cr
+    #'   name of dataset to be returned. If \code{NULL}, all datasets are returned.
+    #'
+    #' @return \code{RelationalDataset}.
+    get_dataset = function(dataname = NULL) {
+      stopifnot(is.null(dataname) || is_character_single(dataname))
+      self$get_datasets()[[dataname]]
+    },
+    #' @description
+    #' Get \code{list} of \code{RelationalDataset} objects.
+    #' @return \code{list} of \code{RelationalDataset}.
+    get_datasets = function() {
+      datasets <- unlist(lapply(private$datasets, function(x) if (x$is_pulled()) get_datasets(x) else NULL))
+      res <- Filter(Negate(is.null), datasets)
+      names(res) <- vapply(res, get_dataname, character(1))
+      return(res)
+    },
+    #' @description
+    #' Get \code{cdisc_data} object from multiple \code{RelationalDataset} objects.
+    #'
+    #' @return \code{cdisc_data} object.
+    get_cdisc_data = function() {
+      if (is.null(private$cdisc_code)) {
+        do.call("cdisc_data", self$get_datasets())
+      } else {
+        do.call("cdisc_data", c(self$get_datasets(), code = private$cdisc_code))
+      }
+    },
+    #' @description
+    #'
     #' @description
     #' Get all datasets and all dataset connectors
     #'
-    #' @param dataname (\code{character} value)\cr
     #'   name of dataset connector to be returned. If \code{NULL}, all connectors are returned.
+    #' @param dataname (\code{character} value)\cr
     #'
     #' @return \code{list} with all datasets and all connectors
     get_all_datasets = function(dataname = NULL) {
       stopifnot(is.null(dataname) || is_character_single(dataname))
-
-      all_datasets <- c(
-        private$datasets,
-        unlist(lapply(
-          private$connectors,
-          function(x) {
-            if (is(x, "RelationalDatasetConnector")) {
-              x
-            } else if (is(x, "RelationalDataConnector")) {
-              x$get_all_datasets()
-            }
-          }
-        ))
-      )
-
-      all_datanames <- vapply(all_datasets, get_dataname, character(1))
-      names(all_datasets) <- all_datanames
-
+      get_sets <- function(x) {
+        if (is(object = x, class2 = "RelationalDataConnector")) {
+          x$get_dataset_connectors()
+        }
+        else if (is(object = x, class2 = "RelationalData")) {
+          get_datasets(x)
+        } else {
+          x
+        }
+      }
+      sets_list <- lapply(private$datasets, get_sets)
+      sets <- unlist(sets_list)
+      names(sets) <- vapply(sets, get_dataname, character(1))
       if (is.null(dataname)) {
-        all_datasets
+        return(sets)
       } else {
-        all_datasets[[dataname]]
+        sets[[dataname]]
       }
     },
-
     #' @description
     #'
     #' Get a shiny-module server to render the necessary app to
@@ -190,20 +227,11 @@ RelationalDataList <- R6::R6Class( #nolint
     get_server = function() {
       if (is.null(private$server)) {
         return(function(input, output, session) {
-          private$append_dataset_connectors()
           reactive(self$get_cdisc_data())
         })
       } else {
         private$server
       }
-    },
-    #' @description
-    #' Check if all datasets and connectors have already been pulled.
-    #'
-    #' @return \code{TRUE} if all items have been already pulled, else \code{FALSE}
-    is_pulled = function() {
-      all(vapply(private$datasets, is_pulled, logical(1))) &&
-        all(vapply(private$connectors, is_pulled, logical(1)))
     },
     #' @description
     #'
@@ -214,90 +242,48 @@ RelationalDataList <- R6::R6Class( #nolint
     launch = function() {
       # if no data connectors can append any dataset connectors
       # and not load an app
-      if (length(self$get_data_connectors()) == 0) {
-        private$append_dataset_connectors()
-      } else {
-        # otherwise load RelationDataConnector and
-        # RelationalDatasetConnector with shiny app
-        shinyApp(
-          ui = fluidPage(
-            fluidRow(
-              column(
-                width = 8,
-                offset = 2,
-                private$ui(id = "main_app"),
-                useShinyjs(),
-                br()
-              )
+
+      # otherwise load RelationDataConnector and
+      # RelationalDatasetConnector with shiny app
+      shinyApp(
+        ui = fluidPage(
+          fluidRow(
+            column(
+              width = 8,
+              offset = 2,
+              private$ui(id = "main_app"),
+              useShinyjs(),
+              br()
             )
-          ),
-          server = function(input, output, session) {
-            session$onSessionEnded(stopApp)
-            dat <- callModule(private$server, id = "main_app")
-          }
-        )
-      }
+          )
+        ),
+        server = function(input, output, session) {
+          session$onSessionEnded(stopApp)
+          dat <- callModule(private$server, id = "main_app")
+        }
+      )
     }
   ),
   # ..private ------
   private = list(
     # .... fields: ------
-    connectors = NULL,
     ui = NULL,
     # .... methods: ------
     server = NULL,
-    get_code_connectors = function(dataname = NULL, deparse = TRUE) {
-      if (is.null(private$connectors)) {
+    get_code_datasets = function(dataname = NULL, deparse = TRUE) {
+      sets <- self$get_all_datasets()
+      if (is.null(sets)) {
         NULL
-      } else if (!is.null(dataname) && is.null(private$code)) {
-        get_code(self$get_all_datasets(dataname))
+      } else if (!is.null(dataname) && is.null(sets[[dataname]])) {
+        NULL
+      } else if (is.null(private$code) && !is.null(dataname)) {
+        get_code(sets[[dataname]], deparse = deparse)
       } else {
         if (isTRUE(deparse)) {
-          vapply(private$connectors, get_code, character(1), deparse = TRUE)
+          vapply(sets, get_code, character(1), deparse = TRUE)
         } else {
-          unname(unlist(lapply(private$connectors, get_code, deparse = FALSE)))
+          unname(unlist(lapply(sets, get_code, deparse = FALSE)))
         }
-      }
-    },
-    append_datasets = function(datasets, remove_connectors = TRUE) {
-      stopifnot(is_logical_single(remove_connectors))
-      stopifnot(is(datasets, "RelationalDataset") ||
-                  (is.list(datasets) && all(vapply(datasets, is, logical(1), "RelationalDataset"))))
-
-      # Make sure there is not duplicated dataname added
-      # by appending a new dataset
-      if (is.list(datasets)) {
-        stopifnot(length(intersect(
-          vapply(datasets, get_dataname, character(1)),
-          vapply(self$get_datasets(), get_dataname, character(1))
-        )) == 0)
-      } else {
-        stopifnot(!datasets$get_dataname() %in% self$get_datanames())
-      }
-      # save datasets in object
-      private$datasets <- c(private$datasets, datasets)
-
-      if (remove_connectors) {
-        # To not duplicate data, remove the connectors
-        # at the origin
-        private$connectors <- NULL
-      }
-
-      invisible(NULL)
-    },
-    append_dataset_connectors = function() {
-      # append datasets only if all connectors are DatasetConnectors
-      stopifnot(length(self$get_data_connectors()) == 0)
-      if (length(private$connectors) > 0) {
-        # save datasets in object
-        private$append_datasets(
-          datasets = lapply(private$connectors, function(x) {
-            if (!is.null(x)) {
-              load_dataset(x)
-              return(get_dataset(x))
-            }
-          })
-        )
       }
     },
     set_ui = function() {
@@ -319,7 +305,6 @@ RelationalDataList <- R6::R6Class( #nolint
                     ),
                     br()
                   )
-
                 }
               ),
               lapply(
@@ -331,7 +316,6 @@ RelationalDataList <- R6::R6Class( #nolint
                     ),
                     br()
                   )
-
                 }
               ),
               actionButton(inputId = ns("submit"), label = "submit all")
@@ -343,37 +327,27 @@ RelationalDataList <- R6::R6Class( #nolint
     set_server = function() {
       private$server <- function(input, output, session) {
         res <- reactiveVal(NULL)
+
         observeEvent(input$submit, {
+
           # load data from all connectors
           lapply(
-            private$connectors,
+            self$get_connectors(),
             function(dc) {
               if (is(dc, class2 = "RelationalDataConnector")) {
                 callModule(dc$get_server(),
-                           id = paste0(dc$get_datanames(), collapse = "_"),
-                           connection = dc$get_connection(),
-                           connectors = dc$get_dataset_connectors())
-
+                  id = paste0(dc$get_datanames(), collapse = "_"),
+                  connection = dc$get_connection(),
+                  connectors = dc$get_dataset_connectors()
+                )
               } else if (is(dc, class2 = "RelationalDatasetConnector")) {
                 callModule(dc$get_server(),
-                           id = dc$get_dataname())
+                  id = dc$get_dataname()
+                )
               }
             }
           )
 
-          # pull out datasets from connectors
-          datasets <- unlist(lapply(private$connectors, function(dc) {
-            if (is(dc, "RelationalDataConnector")) {
-              get_datasets(dc)
-            } else {
-              get_dataset(dc)
-            }
-          })
-          )
-          names(datasets) <- vapply(datasets, get_dataname, character(1))
-
-          # move datasets from connectors to private$datasets
-          private$append_datasets(datasets = datasets)
           shinyjs::hide("submit")
 
           res(self$get_cdisc_data())

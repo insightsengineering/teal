@@ -48,3 +48,38 @@ get_datasets.RelationalData <- function(x) {
   }
   res
 }
+
+#' @rdname get_datasets
+#' @export
+#' @examples
+#'
+#' # RelationalData --------
+#' library(random.cdisc.data)
+#' rdc <- rcd_cdisc_dataset_connector("ADSL", radsl, cached = TRUE)
+#'
+#'\dontrun{
+#' load_datasets(rdc)
+#' get_datasets(rdc)
+#'}
+get_datasets.RawDatasetConnector <- function(x) { # nolint
+  res <- x$get_dataset()
+  if (is_empty(res)) {
+    return(invisible(NULL))
+  }
+  res
+}
+
+#' @rdname get_datasets
+#' @export
+#' @examples
+#'
+#' # RelationalData --------
+#' library(random.cdisc.data)
+#' adsl <- cdisc_dataset(dataname = "ADSL", # RelationalDataset
+#'                       data = radsl(cached = TRUE),
+#'                       code = "library(random.cdisc.data)\nADSL <- radsl(cached = TRUE)")
+#'
+#' get_datasets(adsl)
+get_datasets.RawDataset <- function(x) {
+  x
+}

@@ -47,6 +47,7 @@ rel_data$set_keys(keys(primary = "x", foreign = NULL, parent = NULL))
 \itemize{
 \item \href{#method-new}{\code{RelationalDataset$new()}}
 \item \href{#method-get_keys}{\code{RelationalDataset$get_keys()}}
+\item \href{#method-get_datanames}{\code{RelationalDataset$get_datanames()}}
 \item \href{#method-set_keys}{\code{RelationalDataset$set_keys()}}
 \item \href{#method-is_pulled}{\code{RelationalDataset$is_pulled()}}
 \item \href{#method-clone}{\code{RelationalDataset$clone()}}
@@ -112,6 +113,16 @@ needed to produce the data set in \code{x}}
 Derive the keys
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{RelationalDataset$get_keys()}\if{html}{\out{</div>}}
+}
+
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-get_datanames"></a>}}
+\if{latex}{\out{\hypertarget{method-get_datanames}{}}}
+\subsection{Method \code{get_datanames()}}{
+Derive the dataname
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{RelationalDataset$get_datanames()}\if{html}{\out{</div>}}
 }
 
 }

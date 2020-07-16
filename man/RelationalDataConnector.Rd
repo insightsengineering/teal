@@ -52,7 +52,6 @@ tc$get_datasets()
 \item \href{#method-get_dataset_connectors}{\code{RelationalDataConnector$get_dataset_connectors()}}
 \item \href{#method-get_code}{\code{RelationalDataConnector$get_code()}}
 \item \href{#method-get_connection}{\code{RelationalDataConnector$get_connection()}}
-\item \href{#method-get_all_datasets}{\code{RelationalDataConnector$get_all_datasets()}}
 \item \href{#method-get_server}{\code{RelationalDataConnector$get_server()}}
 \item \href{#method-get_ui}{\code{RelationalDataConnector$get_ui()}}
 \item \href{#method-launch}{\code{RelationalDataConnector$launch()}}
@@ -69,6 +68,7 @@ tc$get_datasets()
 \out{<details open ><summary>Inherited methods</summary>}
 \itemize{
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="RelationalData" data-id="check">}\href{../../teal/html/RelationalData.html#method-check}{\code{teal::RelationalData$check()}}\out{</span>}
+\item \out{<span class="pkg-link" data-pkg="teal" data-topic="RelationalData" data-id="get_all_datasets">}\href{../../teal/html/RelationalData.html#method-get_all_datasets}{\code{teal::RelationalData$get_all_datasets()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="RelationalData" data-id="get_cdisc_data">}\href{../../teal/html/RelationalData.html#method-get_cdisc_data}{\code{teal::RelationalData$get_cdisc_data()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="RelationalData" data-id="set_code">}\href{../../teal/html/RelationalData.html#method-set_code}{\code{teal::RelationalData$set_code()}}\out{</span>}
 }

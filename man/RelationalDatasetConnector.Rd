@@ -23,6 +23,8 @@ Pulled data inherits from the class \link{RelationalDataset}.
 \subsection{Public methods}{
 \itemize{
 \item \href{#method-new}{\code{RelationalDatasetConnector$new()}}
+\item \href{#method-get_dataname}{\code{RelationalDatasetConnector$get_dataname()}}
+\item \href{#method-get_datanames}{\code{RelationalDatasetConnector$get_datanames()}}
 \item \href{#method-get_keys}{\code{RelationalDatasetConnector$get_keys()}}
 \item \href{#method-pull}{\code{RelationalDatasetConnector$pull()}}
 \item \href{#method-clone}{\code{RelationalDatasetConnector$clone()}}
@@ -97,6 +99,19 @@ new \code{RelationalDatasetConnector} object
 }
 }
 \if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-get_datanames"></a>}}
+\if{latex}{\out{\hypertarget{method-get_datanames}{}}}
+\subsection{Method \code{get_datanames()}}{
+Get dataname of dataset
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{RelationalDatasetConnector$get_datanames()}\if{html}{\out{</div>}}
+}
+
+\subsection{Returns}{
+dataname of the dataset
+}
+}
+\if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-get_keys"></a>}}
 \subsection{Method \code{get_keys()}}{
 Get keys of dataset
@@ -135,6 +150,44 @@ whether perform function evaluation inside \code{try} clause}
 }
 \subsection{Returns}{
 \code{NULL} if successful or \code{try-error} if not.
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-is_pulled"></a>}}
+\if{latex}{\out{\hypertarget{method-is_pulled}{}}}
+\subsection{Method \code{is_pulled()}}{
+Check if dataset has already been pulled.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{RelationalDatasetConnector$is_pulled()}\if{html}{\out{</div>}}
+}
+
+\subsection{Returns}{
+\code{TRUE} if connector has been already pulled, else \code{FALSE}
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-get_pull_args"></a>}}
+\if{latex}{\out{\hypertarget{method-get_pull_args}{}}}
+\subsection{Method \code{get_pull_args()}}{
+Derive the arguments this connector will pull with
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{RelationalDatasetConnector$get_pull_args()}\if{html}{\out{</div>}}
+}
+
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-check"></a>}}
+\if{latex}{\out{\hypertarget{method-check}{}}}
+\subsection{Method \code{check()}}{
+Check to determine if the raw data is reproducible from the
+  \code{get_code()} code.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{RelationalDatasetConnector$check()}\if{html}{\out{</div>}}
+}
+
+\subsection{Returns}{
+\code{TRUE} if the dataset generated from evaluating the
+  \code{get_code()} code is identical to the raw data, else \code{FALSE}.
 }
 }
 \if{html}{\out{<hr>}}

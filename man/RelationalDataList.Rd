@@ -17,11 +17,43 @@ x <- rcd_cdisc_data( # RelationalDataConnector
 x2 <- rcd_cdisc_data( # RelationalDataConnector
   rcd_cdisc_dataset_connector("ADRS", radrs, cached = TRUE)
 )
+x3 <- cdisc_dataset(
+  dataname = "ADAE", # RelationalDataset
+  data = radae(cached = TRUE),
+  code = "library(random.cdisc.data)\nADAE <- radae(cached = TRUE)"
+)
 
-tc <- teal:::RelationalDataList$new(x, x2)
+x4 <- rcd_cdisc_dataset_connector("ADTTE", radtte, cached = TRUE)
+tc <- teal:::RelationalDataList$new(x, x2, x3, x4)
+tc$get_datanames()
+tc$get_datasets()
+tc$get_dataset("ADAE")
+tc$get_all_datasets()
+tc$get_code()
+tc$get_code("ADAE")
 \dontrun{
 tc$launch()
 tc$get_cdisc_data()
+tc$get_datasets()
+tc$get_dataset("ADAE")
+tc$check()
+}
+
+library(random.cdisc.data)
+x <- cdisc_dataset(
+  dataname = "ADSL", # RelationalDataset
+  data = radsl(cached = TRUE),
+  code = "library(random.cdisc.data)\nADSL <- radsl(cached = TRUE)"
+)
+
+x2 <- rcd_cdisc_dataset_connector("ADTTE", radtte, cached = TRUE)
+tc <- teal:::RelationalDataList$new(x, x2)
+tc$get_datasets()
+tc$get_cdisc_data()
+\dontrun{
+tc$launch()
+tc$get_cdisc_data()
+tc$get_datasets()
 }
 }
 \section{Super class}{
@@ -31,15 +63,17 @@ tc$get_cdisc_data()
 \subsection{Public methods}{
 \itemize{
 \item \href{#method-new}{\code{RelationalDataList$new()}}
-\item \href{#method-check}{\code{RelationalDataList$check()}}
 \item \href{#method-get_datanames}{\code{RelationalDataList$get_datanames()}}
 \item \href{#method-get_code}{\code{RelationalDataList$get_code()}}
 \item \href{#method-get_ui}{\code{RelationalDataList$get_ui()}}
 \item \href{#method-get_dataset_connectors}{\code{RelationalDataList$get_dataset_connectors()}}
 \item \href{#method-get_data_connectors}{\code{RelationalDataList$get_data_connectors()}}
+\item \href{#method-get_connectors}{\code{RelationalDataList$get_connectors()}}
+\item \href{#method-get_dataset}{\code{RelationalDataList$get_dataset()}}
+\item \href{#method-get_datasets}{\code{RelationalDataList$get_datasets()}}
+\item \href{#method-get_cdisc_data}{\code{RelationalDataList$get_cdisc_data()}}
 \item \href{#method-get_all_datasets}{\code{RelationalDataList$get_all_datasets()}}
 \item \href{#method-get_server}{\code{RelationalDataList$get_server()}}
-\item \href{#method-is_pulled}{\code{RelationalDataList$is_pulled()}}
 \item \href{#method-launch}{\code{RelationalDataList$launch()}}
 \item \href{#method-clone}{\code{RelationalDataList$clone()}}
 }
@@ -47,9 +81,8 @@ tc$get_cdisc_data()
 \if{html}{
 \out{<details open ><summary>Inherited methods</summary>}
 \itemize{
-\item \out{<span class="pkg-link" data-pkg="teal" data-topic="RelationalData" data-id="get_cdisc_data">}\href{../../teal/html/RelationalData.html#method-get_cdisc_data}{\code{teal::RelationalData$get_cdisc_data()}}\out{</span>}
-\item \out{<span class="pkg-link" data-pkg="teal" data-topic="RelationalData" data-id="get_dataset">}\href{../../teal/html/RelationalData.html#method-get_dataset}{\code{teal::RelationalData$get_dataset()}}\out{</span>}
-\item \out{<span class="pkg-link" data-pkg="teal" data-topic="RelationalData" data-id="get_datasets">}\href{../../teal/html/RelationalData.html#method-get_datasets}{\code{teal::RelationalData$get_datasets()}}\out{</span>}
+\item \out{<span class="pkg-link" data-pkg="teal" data-topic="RelationalData" data-id="check">}\href{../../teal/html/RelationalData.html#method-check}{\code{teal::RelationalData$check()}}\out{</span>}
+\item \out{<span class="pkg-link" data-pkg="teal" data-topic="RelationalData" data-id="is_pulled">}\href{../../teal/html/RelationalData.html#method-is_pulled}{\code{teal::RelationalData$is_pulled()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="RelationalData" data-id="set_code">}\href{../../teal/html/RelationalData.html#method-set_code}{\code{teal::RelationalData$set_code()}}\out{</span>}
 }
 \out{</details>}
@@ -155,12 +188,77 @@ Get data connectors.
 
 \subsection{Returns}{
 \code{list} with all \code{RelationalDataConnector} objects.
+Get data connectors.
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-get_connectors"></a>}}
+\if{latex}{\out{\hypertarget{method-get_connectors}{}}}
+\subsection{Method \code{get_connectors()}}{
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{RelationalDataList$get_connectors()}\if{html}{\out{</div>}}
+}
+
+\subsection{Returns}{
+\code{list} with all \code{RelationalDataConnector} objects.
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-get_dataset"></a>}}
+\if{latex}{\out{\hypertarget{method-get_dataset}{}}}
+\subsection{Method \code{get_dataset()}}{
+Get \code{RelationalDataset} object.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{RelationalDataList$get_dataset(dataname = NULL)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{dataname}}{(\code{character} value)\cr
+name of dataset to be returned. If \code{NULL}, all datasets are returned.}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Returns}{
+\code{RelationalDataset}.
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-get_datasets"></a>}}
+\if{latex}{\out{\hypertarget{method-get_datasets}{}}}
+\subsection{Method \code{get_datasets()}}{
+Get \code{list} of \code{RelationalDataset} objects.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{RelationalDataList$get_datasets()}\if{html}{\out{</div>}}
+}
+
+\subsection{Returns}{
+\code{list} of \code{RelationalDataset}.
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-get_cdisc_data"></a>}}
+\if{latex}{\out{\hypertarget{method-get_cdisc_data}{}}}
+\subsection{Method \code{get_cdisc_data()}}{
+Get \code{cdisc_data} object from multiple \code{RelationalDataset} objects.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{RelationalDataList$get_cdisc_data()}\if{html}{\out{</div>}}
+}
+
+\subsection{Returns}{
+\code{cdisc_data} object.
 }
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-get_all_datasets"></a>}}
 \subsection{Method \code{get_all_datasets()}}{
+
+
+
 Get all datasets and all dataset connectors
+
+  name of dataset connector to be returned. If \code{NULL}, all connectors are returned.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{RelationalDataList$get_all_datasets(dataname = NULL)}\if{html}{\out{</div>}}
 }
@@ -168,8 +266,7 @@ Get all datasets and all dataset connectors
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{dataname}}{(\code{character} value)\cr
-name of dataset connector to be returned. If \code{NULL}, all connectors are returned.}
+\item{\code{dataname}}{(\code{character} value)\cr}
 }
 \if{html}{\out{</div>}}
 }

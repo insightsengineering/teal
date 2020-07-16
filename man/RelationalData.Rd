@@ -32,6 +32,7 @@ rd <- teal:::RelationalData$new(x, x2)
 \itemize{
 \item \href{#method-new}{\code{RelationalData$new()}}
 \item \href{#method-check}{\code{RelationalData$check()}}
+\item \href{#method-get_all_datasets}{\code{RelationalData$get_all_datasets()}}
 \item \href{#method-get_cdisc_data}{\code{RelationalData$get_cdisc_data()}}
 \item \href{#method-get_datanames}{\code{RelationalData$get_datanames()}}
 \item \href{#method-get_code}{\code{RelationalData$get_code()}}
@@ -74,6 +75,31 @@ Check if the object raw data is reproducible from the \code{get_code()} code.
 \subsection{Returns}{
 \code{TRUE} if all the datasets generated from evaluating the
   \code{get_code()} code are identical to the raw data, else \code{FALSE}.
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-get_all_datasets"></a>}}
+\if{latex}{\out{\hypertarget{method-get_all_datasets}{}}}
+\subsection{Method \code{get_all_datasets()}}{
+
+
+
+Get all datasets and all dataset connectors
+
+  name of dataset connector to be returned. If \code{NULL}, all connectors are returned.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{RelationalData$get_all_datasets(dataname = NULL)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{dataname}}{(\code{character} value)\cr}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Returns}{
+\code{list} with all datasets and all connectors
 }
 }
 \if{html}{\out{<hr>}}

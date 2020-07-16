@@ -3,11 +3,17 @@
 \name{get_datasets}
 \alias{get_datasets}
 \alias{get_datasets.RelationalData}
+\alias{get_datasets.RawDatasetConnector}
+\alias{get_datasets.RawDataset}
 \title{Get a \code{\link{RelationalDataset}} objects.}
 \usage{
 get_datasets(x)
 
 \method{get_datasets}{RelationalData}(x)
+
+\method{get_datasets}{RawDatasetConnector}(x)
+
+\method{get_datasets}{RawDataset}(x)
 }
 \arguments{
 \item{x}{(\code{\link{RelationalData}})\cr
@@ -49,4 +55,21 @@ get_datasets(rdc)
 drc <- teal_data(rdc, adae)
 
 get_datasets(drc)
+
+# RelationalData --------
+library(random.cdisc.data)
+rdc <- rcd_cdisc_dataset_connector("ADSL", radsl, cached = TRUE)
+
+\dontrun{
+load_datasets(rdc)
+get_datasets(rdc)
+}
+
+# RelationalData --------
+library(random.cdisc.data)
+adsl <- cdisc_dataset(dataname = "ADSL", # RelationalDataset
+                      data = radsl(cached = TRUE),
+                      code = "library(random.cdisc.data)\nADSL <- radsl(cached = TRUE)")
+
+get_datasets(adsl)
 }
