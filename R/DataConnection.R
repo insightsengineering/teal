@@ -314,7 +314,6 @@ DataConnection <- R6::R6Class( # nolint
       if (is.null(private$open_fun)) {
         msg <- "Open connection function not set"
         if (silent) {
-          message(msg)
           return(FALSE)
         } else {
           stop(msg)
@@ -329,7 +328,6 @@ DataConnection <- R6::R6Class( # nolint
       if (is.null(private$close_fun)) {
         msg <- "Close connection function not set"
         if (silent) {
-          message(msg)
           return(FALSE)
         } else {
           stop(msg)
