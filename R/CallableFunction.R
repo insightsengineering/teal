@@ -149,7 +149,7 @@ CallableFunction <- R6::R6Class( #nolint
     #'  remove other \code{args}, only create new of modify previous of the same name.
     #'  To clean arguments specify \code{args = NULL}.
     #'
-    #' @return nothing
+    #' @return self
     set_args = function(args) {
       # remove args if empty
       if (is_empty(args)) {
@@ -163,7 +163,7 @@ CallableFunction <- R6::R6Class( #nolint
         self$set_arg_value(name = names(args)[[idx]],
                            value = args[[idx]])
       }
-      return(invisible(NULL))
+      return(invisible(self))
     },
     #' @description
     #' Set up single function argument with value
@@ -171,7 +171,7 @@ CallableFunction <- R6::R6Class( #nolint
     #' @param name (\code{character}) argument name
     #' @param value argument value
     #'
-    #' @return nothing
+    #' @return self
     set_arg_value = function(name, value) {
       stopifnot(is_character_single(name))
       if (is_empty(private$args)) {
@@ -180,7 +180,7 @@ CallableFunction <- R6::R6Class( #nolint
       private$args[[name]] <- value
 
       self$refresh()
-      return(invisible(NULL))
+      return(invisible(self))
     }
   ),
   private = list(

@@ -62,7 +62,7 @@ NamedDatasetConnector <- R6::R6Class( #nolint
     #' @param label (\code{character})\cr
     #'  Label to describe the dataset
     set_dataset_label = function(label) {
-      stopifnot(utils.nest::is_character_vector(label, 0, 1))
+      stopifnot(is_character_vector(label, 0, 1))
       private$dataset_label <- label
       return(invisible(NULL))
     },
@@ -102,13 +102,12 @@ NamedDatasetConnector <- R6::R6Class( #nolint
     #'   In case when this object code depends on the \code{raw_data} from the other
     #'   \code{RelationalDataset}, \code{RelationalDatasetConnector} object(s) or other constant value,
     #'   this/these object(s) should be included
-    mutate_dataset = function(code, vars) {
+    mutate_dataset = function(code, vars = list()) {
       if (!is.null(private$dataset)) {
         private$dataset <- mutate_dataset(private$dataset, code = code, vars = vars)
-      } else {
-        private$set_mutate_code(code)
-        private$set_mutate_vars(vars)
       }
+      private$set_mutate_code(code)
+      private$set_mutate_vars(vars)
 
       return(invisible(self))
     },
@@ -238,7 +237,7 @@ NamedDatasetConnector <- R6::R6Class( #nolint
     },
 
     set_mutate_code = function(code) {
-      stopifnot(utils.nest::is_character_vector(code, 0, 1))
+      stopifnot(is_character_vector(code, 0, 1))
 
       if (length(code) > 0 && code != "") {
         private$mutate_code <- c(private$mutate_code, as.list(as.call(parse(text = code))))

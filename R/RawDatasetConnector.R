@@ -228,6 +228,8 @@ RawDatasetConnector <- R6::R6Class( #nolint
               res <- call("<-", as.name(var_name), var_value)
               if (deparse) {
                 deparse(res, width.cutoff = 500L)
+              } else {
+                res
               }
             }
           }

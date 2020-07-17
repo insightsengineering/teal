@@ -31,7 +31,7 @@
 #'
 #' # add the data to a proper teal app
 #' app <- init(
-#'   data = x,
+#'   data = teal_data(x),
 #'   modules = root_modules(
 #'     module(
 #'       "ADSL AGE histogram",
@@ -128,7 +128,7 @@ rcd_cdisc_data <- function(..., check = TRUE) {
 #'   rice_cdisc_dataset_connector("ADLB", "/path/to/ADLB")
 #' )
 #' app <- init(
-#'   data = x,
+#'   data = teal_data(x),
 #'   modules = root_modules(
 #'     module(
 #'       "ADSL AGE histogram",

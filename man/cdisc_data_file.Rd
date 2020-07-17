@@ -23,6 +23,7 @@ writeLines(
   text = c(
     "library(random.cdisc.data)
 
+     # code>
      ADSL <- radsl(cached = TRUE)
      ADTTE <- radtte(ADSL, cached = TRUE)
 
@@ -31,7 +32,8 @@ writeLines(
           code = \"ADSL <- radsl(cached = TRUE)
                   ADTTE <- radtte(ADSL, cached = TRUE)\",
           check = FALSE
-     )"
+     )
+     # <code"
   ),
   con = file_example
 )

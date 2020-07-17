@@ -71,7 +71,7 @@ mutate_dataset.NamedDataset <- function(x, code = character(0), script = charact
   NamedDataset$new(
     x = execution_environment[[x$get_dataname()]],
     dataname = x$get_dataname(),
-    code =  paste0(x$get_code(), "\n\n", code),
+    code = paste0(c(x$get_code(), get_code_vars(vars), code), collapse = "\n"),
     label = x$get_dataset_label()
   )
 }
@@ -89,7 +89,7 @@ mutate_dataset.RelationalDataset <- function(x, code = character(0), script = ch
   RelationalDataset$new(
     x = execution_environment[[x$get_dataname()]],
     dataname = x$get_dataname(),
-    code = paste0(x$get_code(), "\n\n", code),
+    code = paste0(c(x$get_code(), get_code_vars(vars), code), collapse = "\n"),
     label = x$get_dataset_label(),
     keys = x$get_keys()
   )
@@ -127,6 +127,6 @@ mutate_data <- function(x, code = character(0), script = character(0), vars = li
 mutate_data.RelationalData <- function(x, code = character(0), script = character(0), vars = list()) { #nolint
   code <- code_from_script(code, script) # nolint
 
-  x$set_code(code = code)
+  x$set_code(code = paste0(c(get_code_vars(vars), code), collapse = "\n"))
   return(x)
 }

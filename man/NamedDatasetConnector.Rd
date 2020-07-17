@@ -168,7 +168,7 @@ Mutate dataset by code
 
 Either code or script must be provided, but not both.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{NamedDatasetConnector$mutate_dataset(code, vars)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{NamedDatasetConnector$mutate_dataset(code, vars = list())}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{

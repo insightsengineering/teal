@@ -157,8 +157,6 @@ FilteredData <- R6::R6Class( # nolint
     #' was removed.
     #'
     #' Any attributes attached to the data are kept in the unfiltered data.
-    #' If the attribute `column_labels` is present, it is checked that it is
-    #' either `NULL` or contains labels for all variables.
     #'
     #' @md
     #' @param dataname `character` name of the dataset, without spaces
@@ -169,33 +167,14 @@ FilteredData <- R6::R6Class( # nolint
       # to include it nicely in the Show R Code; the UI also uses datanames in ids, so no whitespaces allowed
       check_simple_name(dataname)
       stopifnot(is.data.frame(data))
-      # column_labels and labels may be NULL, so attributes will not be present
-      stopifnot("keys" %in% names(attributes(data)))
-      if (!is.null(attributes(data)[["column_labels"]])) {
-        # either no labels are provided or labels for all variables,
-        # necessary for `get_variable_labels`
-        check_setequal(
-          names(attributes(data)[["column_labels"]]), colnames(data),
-          pre_msg = paste0(
-            "Labels provided do not correspond to variables in data ", dataname,
-            ". Either don't provide labels at all (`NULL`) or provide labels for all variables",
-            " (empty string '' if you don't know the label): "
-          )
-        )
-      }
-
-      # due to the data update, the old filter may no longer be valid, so we unset it
-      private$filter_states[[dataname]] <- list()
 
       is_new_dataname <- !dataname %in% self$datanames()
 
-      data_attrs <- attributes(data)
-      # save `md5sum` for reproducibility, this should probably be added in `cdisc_data` already
-      data_attrs$md5sum <- digest(data, algo = "md5")
-      # note: there is also a class attribute, but we don't filter it out
-      private$data_attrs[[dataname]] <- data_attrs
-
       private$unfiltered_datasets[[dataname]] <- data
+
+
+      # due to the data update, the old filter may no longer be valid, so we unset it
+      private$filter_states[[dataname]] <- list()
 
       if (is_new_dataname) {
         # new dataname
@@ -207,27 +186,56 @@ FilteredData <- R6::R6Class( # nolint
         private$filtered_datasets[[dataname]] <- private$reactive_filtered_dataset(dataname)
       }
 
+
+      data_attrs <- attributes(data)
+      # save `md5sum` for reproducibility, this should probably be added in `cdisc_data` already
+      data_attrs$md5sum <- digest(data, algo = "md5")
+      # note: there is also a class attribute, but we don't filter it out
+      for (idx in seq_along(data_attrs)) {
+        self$set_data_attr(dataname, names(data_attrs)[[idx]], data_attrs[[idx]])
+      }
+
       return(invisible(self))
     },
 
     #' @details
     #' Get the R preprocessing code string that generates the unfiltered datasets
     #' @md
+    #' @param dataname `character` name(s) of dataset(s)
     #' @return `character` deparsed code
-    get_preproc_code = function() {
-      return(private$preproc_code)
+    get_code = function(dataname = self$datanames()) {
+      if (is_character_empty(private$code_all)) {
+        return(paste0(private$code[dataname], collapse = "\n"))
+      } else {
+        return(paste0(c(private$code, private$code_all), collapse = "\n"))
+      }
     },
 
     #' @details
-    #' Set the R preprocessing code to generate the unfiltered datasets
+    #' Set the R preprocessing code for single dataset
     #'
     #' @md
-    #' @param preproc_code `character` preprocessing code that can be parsed to generate the
+    #' @param dataname `character` name of dataset
+    #' @param code `character` preprocessing code that can be parsed to generate the
     #'   unfiltered datasets
     #' @return `self`
-    set_preproc_code = function(preproc_code) {
-      stopifnot(is_character_single(preproc_code))
-      private$preproc_code <- preproc_code
+    set_code = function(dataname, code) {
+      stopifnot(is_character_single(dataname))
+      stopifnot(is_character_single(code))
+      private$code[[dataname]] <- code
+      return(invisible(self))
+    },
+
+    #' @details
+    #' Set the R preprocessing code for all datasets combined
+    #'
+    #' @md
+    #' @param code `character` preprocessing code that can be parsed to generate the
+    #'   unfiltered datasets
+    #' @return `self`
+    set_code_all = function(code) {
+      stopifnot(is_character_single(code))
+      private$code_all <- code
       return(invisible(self))
     },
 
@@ -709,7 +717,7 @@ FilteredData <- R6::R6Class( # nolint
           self$datanames()
         ),
         filter_states = reactiveValuesToList(private$filter_states),
-        preproc_code = self$get_preproc_code()
+        code = self$get_code()
       )
       return(res)
     },
@@ -752,10 +760,10 @@ FilteredData <- R6::R6Class( # nolint
           )
         }
       }
-      if (!is.null(state$preproc_code)) {
+      if (!is.null(state$code)) {
         # check they are actually equal (compare two lists with one element each)
         check_setequal(
-          list(self$get_preproc_code()), list(state$preproc_code),
+          list(self$get_code()), list(state$code),
           pre_msg = "The preprocessing codes don't agree:"
         )
       }
@@ -817,7 +825,11 @@ FilteredData <- R6::R6Class( # nolint
     # non-reactive attributes
 
     # preprocessing code used to generate the unfiltered datasets as a string
-    preproc_code = NULL,
+    # for each datasets separately
+    code = list(),
+    # for all datasets combined
+    code_all = character(0),
+
     # for each dataname: contains keys and optionally data_label, column_labels
     data_attrs = list(),
 

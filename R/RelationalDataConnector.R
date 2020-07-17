@@ -95,11 +95,11 @@ RelationalDataConnector <- R6::R6Class( #nolint
     get_code = function(dataname = NULL, deparse = TRUE) {
       stopifnot(is_logical_single(deparse))
 
+      connection_code <- if_not_null(private$connection, private$connection$get_open_call(deparse = deparse))
       datasets_code <- private$get_code_datasets(dataname = dataname, deparse = deparse)
-      connectors_code <- private$get_code_connectors(dataname = dataname, deparse = deparse)
       mutate_code <- private$get_mutate_code(deparse = deparse)
 
-      all_code <- c(datasets_code, connectors_code, mutate_code)
+      all_code <- c(connection_code, datasets_code, mutate_code)
 
       if (isTRUE(deparse)) {
         all_code <- paste0(all_code, collapse = "\n")
@@ -319,22 +319,6 @@ RelationalDataConnector <- R6::R6Class( #nolint
     connection = NULL,
     check = FALSE,
     # ....methods ----
-
-    get_code_connectors = function(dataname = NULL, deparse = TRUE) {
-      if (is.null(private$dataset_connectors)) {
-        NULL
-      } else if (!is.null(dataname) && is.null(private$dataset_connectors[[dataname]])) {
-        NULL
-      } else if (is.null(private$code) && !is.null(dataname)) {
-        get_code(private$dataset_connectors[[dataname]], deparse = deparse)
-      } else {
-        if (isTRUE(deparse)) {
-          vapply(private$dataset_connectors, get_code, character(1), deparse = TRUE)
-        } else {
-          unname(unlist(lapply(private$dataset_connectors, get_code, deparse = FALSE)))
-        }
-      }
-    },
 
     # adds open/close connection code at beginning/end of the dataset code
     append_connection_code = function() {

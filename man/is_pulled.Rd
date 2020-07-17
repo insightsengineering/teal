@@ -5,6 +5,7 @@
 \alias{is_pulled.RawDatasetConnector}
 \alias{is_pulled.RelationalDataset}
 \alias{is_pulled.RelationalDataConnector}
+\alias{is_pulled.RelationalData}
 \title{Is pulled}
 \usage{
 is_pulled(x)
@@ -16,6 +17,8 @@ is_pulled(x)
 \method{is_pulled}{RawDatasetConnector}(x)
 
 \method{is_pulled}{RelationalDataConnector}(x)
+
+\method{is_pulled}{RelationalData}(x)
 }
 \arguments{
 \item{x}{(\code{object}) of class \link{RawDatasetConnector}, \link{RelationalDataset},

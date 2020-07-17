@@ -80,3 +80,9 @@ is_pulled.RawDatasetConnector <- function(x) { # nolint
 is_pulled.RelationalDataConnector <- function(x) { # nolint
   return(x$is_pulled())
 }
+
+#' @rdname is_pulled
+#' @export
+is_pulled.RelationalData <- function(x) { # nolint
+  return(x$is_pulled())
+}

@@ -2,6 +2,7 @@
 % Please edit documentation in R/get_dataname.R
 \name{get_dataname}
 \alias{get_dataname}
+\alias{get_dataname.RelationalData}
 \alias{get_dataname.RelationalDataConnector}
 \alias{get_dataname.NamedDatasetConnector}
 \alias{get_dataname.NamedDataset}
@@ -10,6 +11,8 @@
 \code{NamedDataset}) R6 object}
 \usage{
 get_dataname(x)
+
+\method{get_dataname}{RelationalData}(x)
 
 \method{get_dataname}{RelationalDataConnector}(x)
 
@@ -29,20 +32,4 @@ dataname (\code{character}) A given name for the dataset(s)
 S3 method for getting a dataname(s) of
 (\code{RelationalDataConnector}, (\code{RelationalDatasetConnector} or
 \code{NamedDataset}) R6 object
-}
-\examples{
-library(random.cdisc.data)
-fun <- callable_function(data.frame)
-fun$set_args(list(n = 5, seed = 1, cached = TRUE))
-
-x <- relational_dataset_connector(
- pull_fun = fun,
- dataname = "ADSL",
- keys = get_cdisc_keys("ADSL")
-)
-get_dataname(x)
-library(random.cdisc.data)
-ADSL <- radsl(cached = TRUE)
-ADSL_dataset <- named_dataset(dataname = "ADSL", x = ADSL)
-get_dataname(ADSL_dataset)
 }

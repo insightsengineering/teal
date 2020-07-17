@@ -9,8 +9,7 @@
 #'
 #' @param code (\code{character}) reproducible code
 #'
-#' @return \code{RelationalData} if all of the elements are of  \code{RelationalDataset} class, else
-#'   \code{RelationalDataList}
+#' @return \code{RelationalDataList}
 #'
 #' @examples
 #' # RelationalData
@@ -32,7 +31,7 @@
 #' )
 #'
 #' data <- teal_data(x1, x2)
-#' data$get_cdisc_data()
+#' get_raw_data(data)
 #'
 #' # RelationalDataList
 #' x3 <- rcd_cdisc_data( # RelationalDataConnector
@@ -47,34 +46,26 @@
 #' data_list <- teal_data(x3, x2, x4)
 #' \dontrun{
 #' data_list$launch()
-#' data_list$get_cdisc_data()
+#' get_raw_data(data_list)
 #' }
 teal_data <- function(..., code = character(0)) {
   datasets <- list(...)
-  possible_classes <- c("RelationalDataConnector", "RelationalDataset", "RelationalDatasetConnector")
+  possible_classes <- c("RelationalData", "RelationalDataConnector", "RelationalDataset", "RelationalDatasetConnector")
 
   is_teal_data <- is_any_class_list(datasets, possible_classes)
   if (!all(is_teal_data)) {
     stop("All arguments should be of RelationalData(set) or RelationalData(set)Connector class")
   }
 
-  teal_data <- if (all(vapply(datasets, FUN = is, FUN.VALUE = logical(1), class2 = "RelationalDataset"))) {
-    RelationalData$new(...)
-  } else {
-    RelationalDataList$new(...)
-  }
+  stopifnot(is_character_vector(code, min_length = 0, max_length = 1))
+
+  teal_data <- RelationalDataList$new(...)
 
   teal_data$set_code(code = code)
 
   return(teal_data)
 }
 
-
-all_relational_dataset <- function(x) {
-  all(
-    vapply(x, FUN = is, FUN.VALUE = logical(1), class2 = "RelationalDataset")
-  )
-}
 
 #' Load \code{RelationalData} object from a file
 #'
@@ -143,10 +134,10 @@ teal_data_file <- function(x, code = get_code(x)) {
   lines <- paste0(readLines(x), collapse = "\n")
   object <- eval(parse(text = lines))
 
-  if (is(object, "RelationalData")) {
+  if (is(object, "RelationalDataList")) {
     object$set_code(code)
     return(object)
   } else {
-    stop("The object returned from the file is not RelationalData object.")
+    stop("The object returned from the file is not RelationalDataList object.")
   }
 }

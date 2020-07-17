@@ -69,7 +69,6 @@ tc$get_datasets()
 \itemize{
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="RelationalData" data-id="check">}\href{../../teal/html/RelationalData.html#method-check}{\code{teal::RelationalData$check()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="RelationalData" data-id="get_all_datasets">}\href{../../teal/html/RelationalData.html#method-get_all_datasets}{\code{teal::RelationalData$get_all_datasets()}}\out{</span>}
-\item \out{<span class="pkg-link" data-pkg="teal" data-topic="RelationalData" data-id="get_cdisc_data">}\href{../../teal/html/RelationalData.html#method-get_cdisc_data}{\code{teal::RelationalData$get_cdisc_data()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="RelationalData" data-id="set_code">}\href{../../teal/html/RelationalData.html#method-set_code}{\code{teal::RelationalData$set_code()}}\out{</span>}
 }
 \out{</details>}

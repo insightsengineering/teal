@@ -113,8 +113,9 @@ isolate({
 \item \href{#method-datanames}{\code{FilteredData$datanames()}}
 \item \href{#method-get_data}{\code{FilteredData$get_data()}}
 \item \href{#method-set_data}{\code{FilteredData$set_data()}}
-\item \href{#method-get_preproc_code}{\code{FilteredData$get_preproc_code()}}
-\item \href{#method-set_preproc_code}{\code{FilteredData$set_preproc_code()}}
+\item \href{#method-get_code}{\code{FilteredData$get_code()}}
+\item \href{#method-set_code}{\code{FilteredData$set_code()}}
+\item \href{#method-set_code_all}{\code{FilteredData$set_code_all()}}
 \item \href{#method-get_data_attr}{\code{FilteredData$get_data_attr()}}
 \item \href{#method-set_data_attr}{\code{FilteredData$set_data_attr()}}
 \item \href{#method-get_variable_labels}{\code{FilteredData$get_variable_labels()}}
@@ -218,8 +219,6 @@ and the observers must then know that NULL means that the dataset
 was removed.
 
 Any attributes attached to the data are kept in the unfiltered data.
-If the attribute \code{column_labels} is present, it is checked that it is
-either \code{NULL} or contains labels for all variables.
 }
 
 \subsection{Returns}{
@@ -227,13 +226,20 @@ either \code{NULL} or contains labels for all variables.
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-get_preproc_code"></a>}}
-\if{latex}{\out{\hypertarget{method-get_preproc_code}{}}}
-\subsection{Method \code{get_preproc_code()}}{
+\if{html}{\out{<a id="method-get_code"></a>}}
+\if{latex}{\out{\hypertarget{method-get_code}{}}}
+\subsection{Method \code{get_code()}}{
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{FilteredData$get_preproc_code()}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{FilteredData$get_code(dataname = self$datanames())}\if{html}{\out{</div>}}
 }
 
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{dataname}}{\code{character} name(s) of dataset(s)}
+}
+\if{html}{\out{</div>}}
+}
 \subsection{Details}{
 Get the R preprocessing code string that generates the unfiltered datasets
 }
@@ -243,23 +249,49 @@ Get the R preprocessing code string that generates the unfiltered datasets
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-set_preproc_code"></a>}}
-\if{latex}{\out{\hypertarget{method-set_preproc_code}{}}}
-\subsection{Method \code{set_preproc_code()}}{
+\if{html}{\out{<a id="method-set_code"></a>}}
+\if{latex}{\out{\hypertarget{method-set_code}{}}}
+\subsection{Method \code{set_code()}}{
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{FilteredData$set_preproc_code(preproc_code)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{FilteredData$set_code(dataname, code)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{preproc_code}}{\code{character} preprocessing code that can be parsed to generate the
+\item{\code{dataname}}{\code{character} name of dataset}
+
+\item{\code{code}}{\code{character} preprocessing code that can be parsed to generate the
 unfiltered datasets}
 }
 \if{html}{\out{</div>}}
 }
 \subsection{Details}{
-Set the R preprocessing code to generate the unfiltered datasets
+Set the R preprocessing code for single dataset
+}
+
+\subsection{Returns}{
+\code{self}
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-set_code_all"></a>}}
+\if{latex}{\out{\hypertarget{method-set_code_all}{}}}
+\subsection{Method \code{set_code_all()}}{
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{FilteredData$set_code_all(code)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{code}}{\code{character} preprocessing code that can be parsed to generate the
+unfiltered datasets}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Details}{
+Set the R preprocessing code for all datasets combined
 }
 
 \subsection{Returns}{

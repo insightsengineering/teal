@@ -52,8 +52,7 @@ tc$get_datasets()
 tc$get_cdisc_data()
 \dontrun{
 tc$launch()
-tc$get_cdisc_data()
-tc$get_datasets()
+get_raw_data(tc)
 }
 }
 \section{Super class}{

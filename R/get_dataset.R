@@ -42,7 +42,7 @@ get_dataset.RawDatasetConnector <- function(x, dataname = NULL) { # nolint
 #'                        data = radae(cached = TRUE),
 #'                        code = "library(random.cdisc.data)\nADTTE <- radae(cached = TRUE)")
 #'
-#' rd <- teal:::RelationalData$new(adsl, adtte)
+#' rd <- teal:::RelationalData$new(adsl, adae)
 #' get_dataset(rd, "ADSL")
 #'
 #' # RelationalDataConnector --------

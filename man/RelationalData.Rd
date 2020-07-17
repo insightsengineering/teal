@@ -33,7 +33,6 @@ rd <- teal:::RelationalData$new(x, x2)
 \item \href{#method-new}{\code{RelationalData$new()}}
 \item \href{#method-check}{\code{RelationalData$check()}}
 \item \href{#method-get_all_datasets}{\code{RelationalData$get_all_datasets()}}
-\item \href{#method-get_cdisc_data}{\code{RelationalData$get_cdisc_data()}}
 \item \href{#method-get_datanames}{\code{RelationalData$get_datanames()}}
 \item \href{#method-get_code}{\code{RelationalData$get_code()}}
 \item \href{#method-set_code}{\code{RelationalData$set_code()}}
@@ -83,9 +82,6 @@ Check if the object raw data is reproducible from the \code{get_code()} code.
 \if{html}{\out{<a id="method-get_all_datasets"></a>}}
 \if{latex}{\out{\hypertarget{method-get_all_datasets}{}}}
 \subsection{Method \code{get_all_datasets()}}{
-
-
-
 Get all datasets and all dataset connectors
 
   name of dataset connector to be returned. If \code{NULL}, all connectors are returned.
@@ -102,19 +98,6 @@ Get all datasets and all dataset connectors
 }
 \subsection{Returns}{
 \code{list} with all datasets and all connectors
-}
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-get_cdisc_data"></a>}}
-\if{latex}{\out{\hypertarget{method-get_cdisc_data}{}}}
-\subsection{Method \code{get_cdisc_data()}}{
-Get \code{cdisc_data} object from multiple \code{RelationalDataset} objects.
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{RelationalData$get_cdisc_data()}\if{html}{\out{</div>}}
-}
-
-\subsection{Returns}{
-\code{cdisc_data} object.
 }
 }
 \if{html}{\out{<hr>}}

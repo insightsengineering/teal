@@ -52,11 +52,9 @@ ui_teal_with_splash <- function(id,
 #' @return `reactive`, return value of `\link{srv_teal}`
 #' @export
 srv_teal_with_splash <- function(input, output, session, data, modules, filter_states = list()) {
-  stopifnot(
-    is(data, "cdisc_data") || is(data, "RelationalDataList")  || is(data, "RelationalDataConnector")
-  )
+  stopifnot(is(data, "RelationalDataList"))
 
-  is_not_delayed_data <- is(data, "cdisc_data") # `cdisc_data` or `DataConnector`
+  is_not_delayed_data <- is_pulled(data)
 
   # raw_data contains cdisc_data(), i.e. list of unfiltered data frames
   # reactive to get data through delayed loading

@@ -26,7 +26,7 @@ x <- rice_cdisc_data(
   rice_cdisc_dataset_connector("ADLB", "/path/to/ADLB")
 )
 app <- init(
-  data = x,
+  data = teal_data(x),
   modules = root_modules(
     module(
       "ADSL AGE histogram",

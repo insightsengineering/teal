@@ -49,8 +49,7 @@
 #' tc$get_cdisc_data()
 #' \dontrun{
 #' tc$launch()
-#' tc$get_cdisc_data()
-#' tc$get_datasets()
+#' get_raw_data(tc)
 #' }
 #' @importFrom R6 R6Class
 RelationalDataList <- R6::R6Class( # nolint
@@ -63,16 +62,17 @@ RelationalDataList <- R6::R6Class( # nolint
     #'
     initialize = function(...) {
       dot_args <- list(...)
-      delayed_classes <- c("RelationalDataConnector", "RelationalDataset", "RelationalDatasetConnector")
+      possible_classes <- c("RelationalData", "RelationalDataConnector",
+                            "RelationalDataset", "RelationalDatasetConnector")
 
-      is_teal_data <- is_any_class_list(dot_args, delayed_classes)
+      is_teal_data <- is_any_class_list(dot_args, possible_classes)
       if (!all(is_teal_data)) {
         stop("All data elements should be RelationalData(set) or RelationalData(set)Connection")
       }
 
       datanames <- unlist(lapply(dot_args, get_dataname))
       if (any(duplicated(datanames))) {
-        stop("Please do not include duplicated names.")
+        stop("Found duplicated dataset names.")
       }
 
       private$datasets <- dot_args
@@ -130,23 +130,26 @@ RelationalDataList <- R6::R6Class( # nolint
     #'
     #' @return \code{list} with all \code{RelationalDatasetConnector} objects.
     get_dataset_connectors = function() {
-      return(Filter(
+      res <- Filter(
         function(x) {
           is(object = x, class2 = "RelationalDatasetConnector")
         },
         private$datasets
-      ))
+      )
+      names(res) <- vapply(res, get_dataname, character(1))
+      return(res)
     },
     #' Get data connectors.
     #'
     #' @return \code{list} with all \code{RelationalDataConnector} objects.
     get_data_connectors = function() {
-      return(Filter(
+      res <- Filter(
         function(x) {
           is(object = x, class2 = "RelationalDataConnector")
         },
         private$datasets
-      ))
+      )
+      return(res)
     },
     #' Get data connectors.
     #'
@@ -203,8 +206,7 @@ RelationalDataList <- R6::R6Class( # nolint
       get_sets <- function(x) {
         if (is(object = x, class2 = "RelationalDataConnector")) {
           x$get_dataset_connectors()
-        }
-        else if (is(object = x, class2 = "RelationalData")) {
+        } else if (is(object = x, class2 = "RelationalData")) {
           get_datasets(x)
         } else {
           x
@@ -227,7 +229,7 @@ RelationalDataList <- R6::R6Class( # nolint
     get_server = function() {
       if (is.null(private$server)) {
         return(function(input, output, session) {
-          reactive(self$get_cdisc_data())
+          reactive(self)
         })
       } else {
         private$server
@@ -271,18 +273,32 @@ RelationalDataList <- R6::R6Class( # nolint
     # .... methods: ------
     server = NULL,
     get_code_datasets = function(dataname = NULL, deparse = TRUE) {
-      sets <- self$get_all_datasets()
-      if (is.null(sets)) {
-        NULL
-      } else if (!is.null(dataname) && is.null(sets[[dataname]])) {
-        NULL
+      if (is.null(private$datasets)) {
+        if (isTRUE(deparse)) {
+          character(0)
+        } else {
+          NULL
+        }
+      } else if (!is.null(dataname) && !(dataname %in% self$get_datanames())) {
+        if (isTRUE(deparse)) {
+          character(0)
+        } else {
+          NULL
+        }
       } else if (is.null(private$code) && !is.null(dataname)) {
-        get_code(sets[[dataname]], deparse = deparse)
+        for (i in private$datasets) {
+          if (dataname %in% get_dataname(i)) {
+            return(if_cond(get_code(i, dataname = dataname, deparse = deparse), character(0), is_empty_string))
+          }
+        }
       } else {
         if (isTRUE(deparse)) {
-          vapply(sets, get_code, character(1), deparse = TRUE)
+          Filter(
+            Negate(is_empty_string),
+            vapply(private$datasets, get_code, character(1), deparse = TRUE)
+          )
         } else {
-          unname(unlist(lapply(sets, get_code, deparse = FALSE)))
+          unname(unlist(lapply(private$datasets, get_code, deparse = FALSE)))
         }
       }
     },
@@ -326,7 +342,7 @@ RelationalDataList <- R6::R6Class( # nolint
     },
     set_server = function() {
       private$server <- function(input, output, session) {
-        res <- reactiveVal(NULL)
+        rv <- reactiveVal(NULL)
 
         observeEvent(input$submit, {
 
@@ -350,9 +366,9 @@ RelationalDataList <- R6::R6Class( # nolint
 
           shinyjs::hide("submit")
 
-          res(self$get_cdisc_data())
+          rv(self)
         })
-        return(res)
+        return(rv)
       }
     }
   )

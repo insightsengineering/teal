@@ -107,7 +107,7 @@ NamedDataset <- R6::R6Class( # nolint
     set_code = function(code) {
       stopifnot(is_character_vector(code, min_length = 0, max_length = 1))
 
-      if (length(code) > 0 && code != "") {
+      if (length(code) > 0 && !is_empty_string(code)) {
         private$.code <- as.list(as.call(parse(text = code)))
       }
 

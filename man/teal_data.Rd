@@ -13,8 +13,7 @@ teal_data(..., code = character(0))
 \item{code}{(\code{character}) reproducible code}
 }
 \value{
-\code{RelationalData} if all of the elements are of  \code{RelationalDataset} class, else
-  \code{RelationalDataList}
+\code{RelationalDataList}
 }
 \description{
 Universal function to pass data to teal application
@@ -39,7 +38,7 @@ x2 <- relational_dataset(
 )
 
 data <- teal_data(x1, x2)
-data$get_cdisc_data()
+get_raw_data(data)
 
 # RelationalDataList
 x3 <- rcd_cdisc_data( # RelationalDataConnector
@@ -54,6 +53,6 @@ x4 <- rcd_cdisc_data( # RelationalDataConnector
 data_list <- teal_data(x3, x2, x4)
 \dontrun{
 data_list$launch()
-data_list$get_cdisc_data()
+get_raw_data(data_list)
 }
 }

@@ -461,110 +461,33 @@ check_foreign_keys <- function(datasets_keys) {
 cdisc_data <- function(...,
                        code = "",
                        check = FALSE) {
-  stopifnot(is_character_vector(code))
   stopifnot(is_logical_single(check))
 
-  code <- paste0(code, collapse = "\n")
-  dlist <- list(...)
+  x <- teal_data(..., code = code)
 
-  if (!is_class_list("RelationalDataset")(dlist)) {
-    stop("Argument in not of class RelationalDataset, please use cdisc_dataset function!")
-  }
-
-  code <- paste(
-    paste(vapply(dlist, get_code, character(1)), collapse = "\n"),
-    code,
-    sep = "\n"
-  )
-
-  datasets_names <- lapply(dlist, `[[`, "dataname")
-  datasets_data <- lapply(dlist, `[[`, "data")
-  datasets_data <- setNames(datasets_data, datasets_names)
-  datasets_keys <- lapply(dlist, `[[`, "keys")
-  datasets_keys <- setNames(datasets_keys, datasets_names)
-
+  datasets_names <- x$get_datanames()
   if (!any(datasets_names == "ADSL")) {
     stop("ADSL argument is missing.")
   }
+
   if (any(duplicated(datasets_names))) {
     dups <- datasets_names[duplicated(datasets_names)]
     msg <- paste0("Found duplicated dataset names: ", paste0(dups, collapse = ", "), ".")
     stop(msg)
   }
 
+  datasets_keys <- lapply(x$get_all_datasets(), function(x) x$get_keys())
   check_foreign_keys(datasets_keys)
 
   if (check) {
-    arg_names <- lapply(
-      as.list(substitute(list(...)))[-1L],
-      function(i) {
-        tryCatch(
-          deparse(as.list(match.call(eval(i[[1L]]), i))$data, width.cutoff = 500L),
-          error = function(e) {
-            i[["dataname"]]
-          }
-        )
-      }
-    )
-
-    if (identical(code, "\n")) {
-      stop("Cannot check preprocessing code - code is empty.")
+    if (isFALSE(x$check())) {
+      stop("Reproducibility check failed.")
     }
-
-    new_env <- new.env(parent = parent.env(.GlobalEnv))
-    tryCatch({
-      eval(parse(text = code), new_env)
-    }, error = function(e) {
-      error_dialog(e)
-    })
-
-    res_check <- vapply(
-      seq_along(datasets_data),
-      function(i, list, list_names, arg_names, env) {
-        list_obj_name <- list_names[i]
-        env_obj_name <- arg_names[i]
-        tryCatch({
-          identical(list[[list_obj_name]], get(env_obj_name, envir = env))
-        }, error = function(e) {
-          FALSE
-        })
-      },
-      logical(1),
-      list = datasets_data,
-      list_names = unlist(datasets_names),
-      arg_names = unlist(arg_names),
-      env = new_env
-    )
-
-    if (any(!res_check)) {
-      incorrect_obj_names <- datasets_names[!res_check]
-      msg <- paste0(
-        "Cannot reproduce object(s) ",
-        paste0(paste0("'", incorrect_obj_names, "'"), collapse = ", "),
-        " based on code."
-      )
-      stop(msg)
-    }
+  } else if (!check && !isTRUE(attr(check, "quiet"))) {
+    mutate_data(x, get_check_note_string())
   }
 
-  if (identical(code, "\n")) {
-    code <- get_preprocessing_empty_string() # nolint
-  }
-
-  if (!check && !isTRUE(attr(check, "quiet"))) {
-    check_note <- get_check_note_string() # nolint
-    code <- paste0(code, "\n\n", check_note, "\n")
-  }
-
-  res <- lapply(
-    seq_along(dlist),
-    function(i) {
-      structure(dlist[[i]])
-    })
-
-  res <- setNames(res, datasets_names)
-
-  return(structure(res, code = code, class = "cdisc_data"))
+  return(x)
 }
 
 
@@ -594,6 +517,7 @@ get_check_note_string <- function() {
 #'   text = c(
 #'     "library(random.cdisc.data)
 #'
+#'      # code>
 #'      ADSL <- radsl(cached = TRUE)
 #'      ADTTE <- radtte(ADSL, cached = TRUE)
 #'
@@ -602,7 +526,8 @@ get_check_note_string <- function() {
 #'           code = \"ADSL <- radsl(cached = TRUE)
 #'                   ADTTE <- radtte(ADSL, cached = TRUE)\",
 #'           check = FALSE
-#'      )"
+#'      )
+#'      # <code"
 #'   ),
 #'   con = file_example
 #' )
@@ -611,13 +536,5 @@ get_check_note_string <- function() {
 #'
 #' @importFrom methods is
 cdisc_data_file <- function(x) {
-
-  code <- paste0(readLines(x), collapse = "\n")
-  object <- eval(parse(text = code))
-
-  if (is(object, "cdisc_data")) {
-    return(object)
-  } else {
-    stop("The object returned from the file is not a cdisc_data object.")
-  }
+  teal_data_file(x)
 }

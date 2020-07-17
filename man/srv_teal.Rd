@@ -16,7 +16,7 @@ srv_teal(input, output, session, modules, raw_data, filter_states = list())
 \item{modules}{\code{teal_module} or \code{teal_modules} object, the latter
 can be used for nested tabs, see \verb{\link{ui_nested_tabs}}}
 
-\item{raw_data}{\code{reactive} which returns the data, only evaluated once,
+\item{raw_data}{\code{reactive} which returns the \code{RelationalDataList}, only evaluated once,
 \code{NULL} value is ignored}
 
 \item{filter_states}{(\code{list}) You can define filters that show when

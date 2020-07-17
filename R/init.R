@@ -30,7 +30,7 @@
 #'   \cr options \tab optional, other arguments passed on to the server
 #'   function
 #'   }
-#' @param title (`character`) The browser window title (defaults to the host URL of the page).
+#' @param title (`NULL` or `character`) The browser window title (defaults to the host URL of the page).
 #' @param filter_states (`list`) You can define filters that show when
 #'   the app starts.
 #'   The general pattern is:
@@ -126,21 +126,13 @@ init <- function(data,
                  header = tags$p("Add Title Here"),
                  footer = tags$p("Add Footer Here"),
                  id = character(0)) {
-  # this should best be implemented in the classes themselves
-  get_datanames <- function(data) {
-    if (is(data, "cdisc_data")) {
-      names(data)
-    } else if (is(data, "RelationalDataList") || is(data, "RelationalDataConnector")) {
-      data$get_datanames()
-    } else {
-      stop("Unknown class for data: ", class(data))
-    }
-  }
-
   stopifnot(
+    is(data, "RelationalDataList"),
     is(modules, "teal_modules"),
+    is.null(title) || is_character_single(title),
     is_fully_named_list(filter_states),
-    all(names(filter_states) %in% get_datanames(data))
+    all(names(filter_states) %in% get_dataname(data)),
+    is_character_vector(id, min_length = 0, max_length = 1)
   )
 
   # Note regarding case `id = character(0)`:

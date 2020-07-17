@@ -72,8 +72,6 @@ RelationalData <- R6::R6Class( #nolint
       }
     },
     #' @description
-    #'
-    #' @description
     #' Get all datasets and all dataset connectors
     #'
     #'   name of dataset connector to be returned. If \code{NULL}, all connectors are returned.
@@ -86,17 +84,6 @@ RelationalData <- R6::R6Class( #nolint
         private$datasets
       } else {
         private$datasets[[dataname]]
-      }
-    },
-    #' @description
-    #' Get \code{cdisc_data} object from multiple \code{RelationalDataset} objects.
-    #'
-    #' @return \code{cdisc_data} object.
-    get_cdisc_data = function() {
-      if (is.null(private$cdisc_code)) {
-        do.call("cdisc_data", private$datasets)
-      } else {
-        do.call("cdisc_data", c(private$datasets, code = private$cdisc_code))
       }
     },
     #' @description
@@ -132,8 +119,9 @@ RelationalData <- R6::R6Class( #nolint
     set_code = function(code) {
       stopifnot(is_character_vector(code, min_length = 0, max_length = 1))
 
-      if (length(code) > 0 && code != "") {
-        private$mutate_code <- c(private$mutate_code, as.list(as.call(parse(text = code))))
+      if (length(code) > 0 && !is_empty_string(code)) {
+        private$code <- c(private$code,
+                          `if`(is_empty(parse(text = code)), code, as.list(as.call(parse(text = code)))))
       }
 
       invisible(NULL)
@@ -193,39 +181,59 @@ RelationalData <- R6::R6Class( #nolint
   private = list(
     # .... fields: ------
     datasets = NULL,
-    mutate_code = NULL, # list of calls
+    code = NULL, # list of calls
     # .... fields: ------
     get_mutate_code = function(deparse = TRUE) {
-      if (is.null(private$mutate_code)) {
-        NULL
+      if (is.null(private$code)) {
+        if (isTRUE(deparse)) {
+          character(0)
+        } else {
+          NULL
+        }
       } else if (isTRUE(deparse)) {
         paste(
           vapply(
-            private$mutate_code,
+            private$code,
             function(x) {
-              paste(
-                deparse(x, width.cutoff = 500L),
-                collapse = "\n"
-              )
+              if (is.character(x)) {
+                x
+              } else {
+                paste(
+                  deparse(x, width.cutoff = 500L),
+                  collapse = "\n"
+                )
+              }
             },
-            FUN.VALUE = character(1)
+            FUN.VALUE = character(1),
+            USE.NAMES = FALSE
           ),
           collapse = "\n"
         )
       } else {
-        private$mutate_code
+        private$code
       }
     },
     get_code_datasets = function(dataname = NULL, deparse = TRUE) {
       if (is.null(private$datasets)) {
-        NULL
-      } else if (!is.null(dataname) && is.null(private$datasets[[dataname]])) {
-        NULL
+        if (isTRUE(deparse)) {
+          character(0)
+        } else {
+          NULL
+        }
+      } else if (!is.null(dataname) && !(dataname %in% self$get_datanames())) {
+        if (isTRUE(deparse)) {
+          character(0)
+        } else {
+          NULL
+        }
       } else if (is.null(private$code) && !is.null(dataname)) {
-        get_code(private$datasets[[dataname]], deparse = deparse)
+        if_cond(get_code(private$datasets[[dataname]], deparse = deparse), character(0), is_empty_string)
       } else {
         if (isTRUE(deparse)) {
-          vapply(private$datasets, get_code, character(1), deparse = TRUE)
+          Filter(
+            Negate(is_empty_string),
+            vapply(private$datasets, get_code, character(1), deparse = TRUE, USE.NAMES = FALSE)
+          )
         } else {
           unname(unlist(lapply(private$datasets, get_code, deparse = FALSE)))
         }

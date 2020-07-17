@@ -78,7 +78,6 @@ Collate:
     'data_extract_spec.R'
     'dummy_functions.R'
     'filter_spec.R'
-    'get_cdisc_data.R'
     'get_code.R'
     'get_dataname.R'
     'get_dataset.R'

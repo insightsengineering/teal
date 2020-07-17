@@ -186,7 +186,7 @@ To clean arguments specify \code{args = NULL}.}
 \if{html}{\out{</div>}}
 }
 \subsection{Returns}{
-nothing
+self
 }
 }
 \if{html}{\out{<hr>}}
@@ -208,7 +208,7 @@ Set up single function argument with value
 \if{html}{\out{</div>}}
 }
 \subsection{Returns}{
-nothing
+self
 }
 }
 \if{html}{\out{<hr>}}

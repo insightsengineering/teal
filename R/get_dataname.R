@@ -15,6 +15,12 @@ get_dataname <- function(x) {
 
 #' @rdname get_dataname
 #' @export
+get_dataname.RelationalData <- function(x) { # nolint
+  return(x$get_datanames())
+}
+
+#' @rdname get_dataname
+#' @export
 get_dataname.RelationalDataConnector <- function(x) { # nolint
   return(x$get_datanames())
 }
@@ -22,28 +28,13 @@ get_dataname.RelationalDataConnector <- function(x) { # nolint
 
 #' @rdname get_dataname
 #' @export
-#' @examples
-#' library(random.cdisc.data)
-#' fun <- callable_function(data.frame)
-#' fun$set_args(list(n = 5, seed = 1, cached = TRUE))
-#'
-#' x <- relational_dataset_connector(
-#'  pull_fun = fun,
-#'  dataname = "ADSL",
-#'  keys = get_cdisc_keys("ADSL")
-#' )
-#' get_dataname(x)
 get_dataname.NamedDatasetConnector <- function(x) { # nolint
   return(x$get_dataname())
 }
 
+
 #' @rdname get_dataname
 #' @export
-#' @examples
-#' library(random.cdisc.data)
-#' ADSL <- radsl(cached = TRUE)
-#' ADSL_dataset <- named_dataset(dataname = "ADSL", x = ADSL)
-#' get_dataname(ADSL_dataset)
-get_dataname.NamedDataset <- function(x) {
+get_dataname.NamedDataset <- function(x) { # nolint
   return(x$get_dataname())
 }

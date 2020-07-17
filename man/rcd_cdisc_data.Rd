@@ -37,7 +37,7 @@ x <- rcd_cdisc_data(
 
 # add the data to a proper teal app
 app <- init(
-  data = x,
+  data = teal_data(x),
   modules = root_modules(
     module(
       "ADSL AGE histogram",

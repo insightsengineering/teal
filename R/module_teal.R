@@ -118,7 +118,7 @@ ui_teal <- function(id,
 #'
 #' @md
 #' @inheritParams srv_shiny_module_arguments
-#' @param raw_data `reactive` which returns the data, only evaluated once,
+#' @param raw_data `reactive` which returns the `RelationalDataList`, only evaluated once,
 #'   `NULL` value is ignored
 #' @inheritParams init
 #'
@@ -168,12 +168,11 @@ srv_teal <- function(input, output, session, modules, raw_data, filter_states = 
   # if restored from bookmarked state, `filter_states` is ignored
   observeEvent(raw_data(), ignoreNULL = TRUE, once = TRUE, {
     .log("data loaded successfully")
-    data <- raw_data()
 
     progress <- shiny::Progress$new(session)
     on.exit(progress$close())
     progress$set(0.1, message = "Setting data")
-    set_datasets_data(datasets, data)
+    set_datasets_data(datasets, raw_data())
     progress$set(0.3, message = "Setting filters")
 
     if (!is.null(saved_datasets_state)) {

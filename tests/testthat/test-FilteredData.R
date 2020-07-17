@@ -137,31 +137,16 @@ isolate({
 
     ## check with no labels (NULL)
     attr(data, "column_labels") <- NULL
-    ds$set_data("ADSL", data)
+    ds$set_data("ADSL2", data)
     expect_equal(
-      ds$get_variable_labels("ADSL"),
+      ds$get_variable_labels("ADSL2"),
       NULL
     )
     # only some variables
     expect_equal(
-      ds$get_variable_labels("ADSL", variables = c("AGE", "SEX")),
+      ds$get_variable_labels("ADSL2", variables = c("AGE", "SEX")),
       NULL
     )
-
-    ## test failure scenarios
-    # check with some labels
-    attr(data, "column_labels") <- var_labels(ADSL)[c("AGE", "SEX")]
-    expect_error(
-      ds$set_data("ADSL", data),
-      "not equal to", fixed = TRUE
-    )
-    # check with some labels, including NA
-    attr(data, "column_labels") <- c(var_labels(ADSL)[c("AGE", "SEX")], list(COUNTRY = NA))
-    expect_error(
-      ds$set_data("ADSL", data),
-      "not equal to", fixed = TRUE
-    )
-
   })
 
 })

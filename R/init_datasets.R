@@ -1,51 +1,19 @@
-convert_to_cdisc_data <- function(data) {
-  if (is_class_list("data.frame")(data)) {
-
-    data_names <- names(data)
-    stopifnot(length(data_names) == length(data))
-
-    data_substitute <- substitute(data)
-    data <- eval(as.call(append(
-      quote(cdisc_data), lapply(
-        seq_along(data),
-        function(idx) {
-          call(
-            "cdisc_dataset",
-            dataname = data_names[[idx]],
-            data = data_substitute[[idx + 1]]
-          )
-        }
-      )
-    )))
-  } else {
-    return(do.call(RelationalData$new, data)$get_cdisc_data())
-  }
-
-  return(data)
-}
-
 set_datasets_data <- function(datasets, data) {
   stopifnot(is(datasets, "FilteredData"))
+  stopifnot(is(data, "RelationalDataList"))
 
-  if (!is(data, "cdisc_data")) {
-    warning("Please use teal_data() as a wrapper for 'data' argument. 'list' will be depreciated soon.")
-    data <- convert_to_cdisc_data(data)
+  for (dataname in data$get_datanames()) {
+    datasets$set_data(dataname, get_raw_data(data, dataname))
+    datasets$set_code(dataname, get_code(data, dataname, deparse = TRUE))
+
+    dataset <- get_dataset(data, dataname)
+    datasets$set_data_attr(dataname, "keys", dataset$get_keys())
+    datasets$set_data_attr(dataname, "column_labels", dataset$get_column_labels())
+    datasets$set_data_attr(dataname, "data_label", dataset$get_dataset_label())
   }
 
-  for (idx in seq_along(data)) {
-    data_i <- data[[idx]]$get_raw_data()
-    dataname <- data[[idx]]$get_dataname()
-    keys <- data[[idx]]$get_keys()
-    keys <- if_null(keys, get_cdisc_keys(dataname))
-
-    attr(data_i, "keys") <- keys
-    attr(data_i, "column_labels") <- data[[idx]]$get_column_labels()
-    attr(data_i, "data_label") <- data[[idx]]$get_dataset_label()
-    datasets$set_data(dataname, data_i)
-  }
-
-  # set code to generate the unfiltered datasets
-  datasets$set_preproc_code(get_code(data))
+  code_all <- data$.__enclos_env__$private$get_mutate_code(deparse = TRUE)
+  if_not_empty(code_all, datasets$set_code_all(code_all))
 
   return(invisible(NULL))
 }

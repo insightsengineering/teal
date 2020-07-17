@@ -76,10 +76,10 @@ test_that("Basic example - with line break code and check", {
 
 test_that("Naming list elements", {
 
-  expect_identical(names(cdisc_data(cdisc_dataset("ADSL", ADSL))), "ADSL")
-  expect_identical(names(cdisc_data(cdisc_dataset("ADSL", ADSL),
-                                    cdisc_dataset("ADTTE", ADTTE),
-                                    cdisc_dataset("ADRS", ADRS))),
+  expect_identical(names(get_datasets(cdisc_data(cdisc_dataset("ADSL", ADSL)))), "ADSL")
+  expect_identical(names(get_datasets(cdisc_data(cdisc_dataset("ADSL", ADSL),
+                                                 cdisc_dataset("ADTTE", ADTTE),
+                                                 cdisc_dataset("ADRS", ADRS)))),
                    c("ADSL", "ADTTE", "ADRS"))
 })
 
@@ -90,7 +90,7 @@ test_that("List values", {
   adsl_yaml <- yaml::yaml.load_file(system.file("metadata/ADSL.yml", package = "random.cdisc.data", mustWork = TRUE))
   adtte_yaml <- yaml::yaml.load_file(system.file("metadata/ADTTE.yml", package = "random.cdisc.data", mustWork = TRUE))
 
-  dataset <- list(ADSL = RelationalDataset$new(
+  datasets <- list(RelationalDataset$new(
     dataname = "ADSL",
     x = ADSL,
     keys = keys(
@@ -101,7 +101,7 @@ test_that("List values", {
     label = adsl_yaml$domain$label
   ))
 
-  result_to_compare <- do.call("cdisc_data", dataset)
+  result_to_compare <- do.call("cdisc_data", datasets)
 
   expect_equal(result, result_to_compare)
 
@@ -109,7 +109,7 @@ test_that("List values", {
                        cdisc_dataset("ADTTE", ADTTE))
 
   datasets <- list(
-    ADSL = RelationalDataset$new(
+    RelationalDataset$new(
       dataname = "ADSL",
       x = ADSL,
       keys = keys(
@@ -119,7 +119,7 @@ test_that("List values", {
       ),
       label = adsl_yaml$domain$label
     ),
-    ADTTE = RelationalDataset$new(
+    RelationalDataset$new(
       dataname = "ADTTE",
       x = ADTTE,
       keys = keys(
@@ -161,41 +161,26 @@ test_that("Empty code", {
 
   # missing code
   result <- cdisc_data(cdisc_dataset("ADSL", ADSL), check = FALSE)
-  expect_identical(get_code(result), paste0(code_empty, "\n\n", code_check, "\n"))
-
-  # NULL code
-  result <- cdisc_data(cdisc_dataset("ADSL", ADSL), code = "", check = FALSE)
-  expect_identical(get_code(result), paste0(code_empty, "\n\n", code_check, "\n"))
+  expect_identical(get_code(result), code_check)
 
   # empty code
   result <- cdisc_data(cdisc_dataset("ADSL", ADSL), code = "", check = FALSE)
-  expect_identical(get_code(result), paste0(code_empty, "\n\n", code_check, "\n"))
+  expect_identical(get_code(result), code_check)
+
+  # NULL code
+  expect_error(cdisc_data(cdisc_dataset("ADSL", ADSL), code = NULL, check = FALSE), "code")
 })
 
-
-test_that("Arguments created by code", {
-  result <- cdisc_data(cdisc_dataset("ADSL", ADSL),
-                       code = "ADSL <- cadsl",
-                       check = FALSE)
-  expect_silent(result)
-
-  result_to_compare <- list(cdisc_dataset("ADSL", ADSL))
-  class(result_to_compare) <- "cdisc_data"
-  result_to_compare <- setNames(result_to_compare, c("ADSL"))
-  attr(result_to_compare, "code") <- paste0("\nADSL <- cadsl", "\n\n", code_check, "\n")
-
-  expect_equal(result, result_to_compare)
-})
 
 test_that("Error - objects differs", {
   expect_error(
     cdisc_data(cdisc_dataset("ADSL", ADSL), code = "ADSL <- 2", check = TRUE),
-    "Cannot reproduce object"
+    "Reproducibility check failed."
   )
 
   expect_error(
     cdisc_data(cdisc_dataset("ADSL", ADSL), code = "ADSL <- radsl(N = 10);", check = TRUE),
-    "Cannot reproduce object"
+    "Reproducibility check failed."
   )
 })
 
@@ -214,14 +199,15 @@ test_that("Error - duplicated names", {
       code = "",
       check = FALSE
     ),
-    "Found duplicated dataset names"
+    "Found duplicated dataset names."
   )
 })
 
-test_that("Error - dataset is not of class cdisc_dataset", {
+test_that("Error - dataset is not of correct class", {
   expect_error(
     cdisc_data(ARG1 = 1, code = "", check = FALSE),
-    "Argument in not of class RelationalDataset, please use cdisc_dataset function!"
+    "All arguments should be of RelationalData(set) or RelationalData(set)Connector class",
+    fixed = TRUE
   )
 })
 

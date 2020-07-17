@@ -135,9 +135,9 @@ get_code.RelationalData <- function(x, dataname = NULL, deparse = TRUE, ...) { #
     if (!(dataname %in% x$get_datanames())) {
       stop("The dataname provided does not exist")
     }
-    x$get_code(dataname = dataname)
+    x$get_code(dataname = dataname, deparse = deparse)
   } else {
-    x$get_code()
+    x$get_code(deparse = deparse)
   }
 }
 
@@ -164,11 +164,11 @@ get_code.RelationalDataConnector <- function(x, dataname = NULL, deparse = TRUE,
     if (!(dataname %in% x$get_datanames())) {
       stop("The dataname provided does not exist")
     }
-    x$get_code(dataname = dataname)
+    x$get_code(dataname = dataname, deparse = deparse)
   } else if (!is.null(dataname) && !(dataname %in% names_all)) {
     return(invisible(NULL))
   } else {
-    x$get_code()
+    x$get_code(deparse = deparse)
   }
 }
 
@@ -211,10 +211,32 @@ get_code.RelationalDataList <- function(x, dataname = NULL, deparse = TRUE, ...)
     if (!(dataname %in% x$get_datanames())) {
       stop("The dataname provided does not exist")
     }
-    x$get_code(dataname = dataname)
+    x$get_code(dataname = dataname, deparse = deparse)
   } else {
-    x$get_code()
+    x$get_code(deparse = deparse)
   }
+}
+
+get_code_vars <- function(vars = list()) {
+  res <- paste0(
+    Filter(
+      Negate(is_empty_string),
+      vapply(
+        seq_along(vars),
+        function(idx) {
+          if (is(vars[[idx]], "NamedDataset") || is(vars[[idx]], "RelationalDatasetConnector")) {
+            vars[[idx]]$get_code(deparse = TRUE)
+          } else {
+            paste0(deparse(call("<-", as.name(names(vars)[[idx]]), vars[[idx]]), width.cutoff = 500), collapse = "")
+          }
+        },
+        character(1)
+      )
+    ),
+    collapse = "\n"
+  )
+
+  if_cond(res, character(0), is_empty_string)
 }
 
 # Getting code from files ====
