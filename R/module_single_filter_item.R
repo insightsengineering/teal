@@ -109,8 +109,8 @@ ui_single_filter_item <- function(id, filter_info, filter_state, prelabel) {
         label = NULL,
         # `round()` may round to a slightly smaller interval (with negative numbers), so
         # we avoid this and then truncate it when we read the input in the server function
-        min = floor(filter_info$range[[1]] * 100) / 100,
-        max = ceiling(filter_info$range[[2]] * 100) / 100,
+        min = filter_info$range[[1]],
+        max = filter_info$range[[2]],
         value = filter_state$range,
         width = "100%"
       )
