@@ -1,4 +1,4 @@
-# RelationalData ------
+## RelationalData ====
 #' @title \code{RelationalData} class
 #' @description
 #' Class combines multiple \code{RelationalDataset} objects.
@@ -27,7 +27,7 @@
 #' rd <- teal:::RelationalData$new(x, x2)
 RelationalData <- R6::R6Class( #nolint
   classname = "RelationalData",
-  # ..public ------
+  ## __Public Methods ====
   public = list(
     #' @description
     #' Create a new \code{RelationalData} object from multiple
@@ -115,7 +115,7 @@ RelationalData <- R6::R6Class( #nolint
     #' @description
     #' Set reproducible code
     #' @param code (\code{character}) reproducible code
-    #' @return nothing
+    #' @return self invisibly for chaining
     set_code = function(code) {
       stopifnot(is_character_vector(code, min_length = 0, max_length = 1))
 
@@ -124,7 +124,7 @@ RelationalData <- R6::R6Class( #nolint
                           `if`(is_empty(parse(text = code)), code, as.list(as.call(parse(text = code)))))
       }
 
-      invisible(NULL)
+      return(invisible(self))
     },
     #' @description
     #' Get \code{RelationalDataset} object.
@@ -177,12 +177,13 @@ RelationalData <- R6::R6Class( #nolint
       all(vapply(private$datasets, is_pulled, logical(1)))
     }
   ),
-  # ..private ------
+
+  ## __Private Fields ====
   private = list(
-    # .... fields: ------
     datasets = NULL,
     code = NULL, # list of calls
-    # .... fields: ------
+
+    ## __Private Methods ====
     get_mutate_code = function(deparse = TRUE) {
       if (is.null(private$code)) {
         if (isTRUE(deparse)) {

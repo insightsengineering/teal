@@ -19,7 +19,7 @@ get_raw_data <- function(x, dataname = NULL) {
 #' @rdname get_raw_data
 #' @examples
 #'
-#' # RawDatasets
+#' # RawDataset ---------
 #' library(random.cdisc.data)
 #' ADSL <- radsl(cached = TRUE)
 #' ADSL_raw <- raw_dataset(x = ADSL)

@@ -15,13 +15,13 @@ is_pulled <- function(x) {
 #'
 #' @examples
 #' # RawDatasetConnector --------
-#' library(random.cdisc.data)
-#' dc <- rcd_cdisc_dataset_connector(dataname = "ADSL", fun = radsl)
+#' ds <- raw_dataset_connector(pull_fun = callable_function(data.frame))
+#' set_args(ds, list(x = 1:5, y = letters[1:5]))
 #'
-#' is_pulled(dc)
+#' is_pulled(ds)
 #'
-#' load_dataset(dc)
-#' is_pulled(dc)
+#' load_dataset(ds)
+#' is_pulled(ds)
 is_pulled.RawDatasetConnector <- function(x) {
   return(x$is_pulled())
 }
@@ -39,24 +39,7 @@ is_pulled.RawDatasetConnector <- function(x) {
 #' )
 #'
 #' is_pulled(rel_data)
-is_pulled.RelationalDataset <- function(x) {
-  return(x$is_pulled())
-}
-
-#' @rdname is_pulled
-#' @export
-#'
-#' @examples
-#'
-#' # RelationalDatasetConnector ---------
-#' library(random.cdisc.data)
-#' adsl <- rcd_cdisc_dataset_connector(dataname = "ADSL", fun = radsl, cached = TRUE)
-#'
-#' is_pulled(adsl)
-#'
-#' load_dataset(adsl)
-#' is_pulled(adsl)
-is_pulled.RawDatasetConnector <- function(x) { # nolint
+is_pulled.RawDataset <- function(x) {
   return(x$is_pulled())
 }
 

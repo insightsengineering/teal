@@ -47,9 +47,7 @@ rel_data$set_keys(keys(primary = "x", foreign = NULL, parent = NULL))
 \itemize{
 \item \href{#method-new}{\code{RelationalDataset$new()}}
 \item \href{#method-get_keys}{\code{RelationalDataset$get_keys()}}
-\item \href{#method-get_datanames}{\code{RelationalDataset$get_datanames()}}
 \item \href{#method-set_keys}{\code{RelationalDataset$set_keys()}}
-\item \href{#method-is_pulled}{\code{RelationalDataset$is_pulled()}}
 \item \href{#method-clone}{\code{RelationalDataset$clone()}}
 }
 }
@@ -64,9 +62,11 @@ rel_data$set_keys(keys(primary = "x", foreign = NULL, parent = NULL))
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="RawDataset" data-id="get_raw_data">}\href{../../teal/html/RawDataset.html#method-get_raw_data}{\code{teal::RawDataset$get_raw_data()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="RawDataset" data-id="get_row_labels">}\href{../../teal/html/RawDataset.html#method-get_row_labels}{\code{teal::RawDataset$get_row_labels()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="RawDataset" data-id="get_rownames">}\href{../../teal/html/RawDataset.html#method-get_rownames}{\code{teal::RawDataset$get_rownames()}}\out{</span>}
+\item \out{<span class="pkg-link" data-pkg="teal" data-topic="RawDataset" data-id="is_pulled">}\href{../../teal/html/RawDataset.html#method-is_pulled}{\code{teal::RawDataset$is_pulled()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="NamedDataset" data-id="check">}\href{../../teal/html/NamedDataset.html#method-check}{\code{teal::NamedDataset$check()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="NamedDataset" data-id="get_code">}\href{../../teal/html/NamedDataset.html#method-get_code}{\code{teal::NamedDataset$get_code()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="NamedDataset" data-id="get_dataname">}\href{../../teal/html/NamedDataset.html#method-get_dataname}{\code{teal::NamedDataset$get_dataname()}}\out{</span>}
+\item \out{<span class="pkg-link" data-pkg="teal" data-topic="NamedDataset" data-id="get_datanames">}\href{../../teal/html/NamedDataset.html#method-get_datanames}{\code{teal::NamedDataset$get_datanames()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="NamedDataset" data-id="get_dataset_label">}\href{../../teal/html/NamedDataset.html#method-get_dataset_label}{\code{teal::NamedDataset$get_dataset_label()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="NamedDataset" data-id="set_code">}\href{../../teal/html/NamedDataset.html#method-set_code}{\code{teal::NamedDataset$set_code()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="NamedDataset" data-id="set_dataname">}\href{../../teal/html/NamedDataset.html#method-set_dataname}{\code{teal::NamedDataset$set_dataname()}}\out{</span>}
@@ -76,7 +76,6 @@ rel_data$set_keys(keys(primary = "x", foreign = NULL, parent = NULL))
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-new"></a>}}
-\if{latex}{\out{\hypertarget{method-new}{}}}
 \subsection{Method \code{new()}}{
 initialize a \code{RelationalDataset} class object
 \subsection{Usage}{
@@ -110,7 +109,6 @@ needed to produce the data set in \code{x}}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-get_keys"></a>}}
-\if{latex}{\out{\hypertarget{method-get_keys}{}}}
 \subsection{Method \code{get_keys()}}{
 Derive the keys
 \subsection{Usage}{
@@ -119,18 +117,7 @@ Derive the keys
 
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-get_datanames"></a>}}
-\if{latex}{\out{\hypertarget{method-get_datanames}{}}}
-\subsection{Method \code{get_datanames()}}{
-Derive the dataname
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{RelationalDataset$get_datanames()}\if{html}{\out{</div>}}
-}
-
-}
-\if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-set_keys"></a>}}
-\if{latex}{\out{\hypertarget{method-set_keys}{}}}
 \subsection{Method \code{set_keys()}}{
 Set new keys
 \subsection{Usage}{
@@ -146,21 +133,7 @@ Set new keys
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-is_pulled"></a>}}
-\if{latex}{\out{\hypertarget{method-is_pulled}{}}}
-\subsection{Method \code{is_pulled()}}{
-Check if dataset has already been pulled.
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{RelationalDataset$is_pulled()}\if{html}{\out{</div>}}
-}
-
-\subsection{Returns}{
-\code{TRUE} if dataset has been already pulled, else \code{FALSE}
-}
-}
-\if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-clone"></a>}}
-\if{latex}{\out{\hypertarget{method-clone}{}}}
 \subsection{Method \code{clone()}}{
 The objects of this class are cloneable with this method.
 \subsection{Usage}{

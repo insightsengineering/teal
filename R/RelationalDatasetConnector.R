@@ -1,3 +1,4 @@
+## RelationalDatasetConnector ====
 #' A \code{RelationalDatasetConnector} class of objects
 #'
 #' Objects of this class store the connection function to fetch a single dataset.
@@ -7,9 +8,10 @@
 #' through the \code{dataset} active binding.
 #' Pulled data inherits from the class \link{RelationalDataset}.
 #'
-#' @name RelationalDatasetConnector
+#' @importFrom R6 R6Class
 RelationalDatasetConnector <- R6::R6Class( #nolint
-  # RelationalDatasetConnector public ----
+
+  ## __Public Methods ====
   classname = "RelationalDatasetConnector",
   inherit = NamedDatasetConnector,
   public = list(
@@ -40,20 +42,6 @@ RelationalDatasetConnector <- R6::R6Class( #nolint
       return(invisible(self))
     },
 
-    #' @description
-    #' Get dataname of dataset
-    #'
-    #' @return dataname of the dataset
-    get_dataname = function() {
-      return(private$dataname)
-    },
-    #' @description
-    #' Get dataname of dataset
-    #'
-    #' @return dataname of the dataset
-    get_datanames = function() {
-      return(private$dataname)
-    },
     #' @description
     #' Get keys of dataset
     #'
@@ -102,14 +90,15 @@ RelationalDatasetConnector <- R6::R6Class( #nolint
     }
   ),
 
-  # RelationalDatasetConnector private ----
+  ## __Private Fields ====
   private = list(
     keys = NULL,
 
+    ## __Private Methods ====
     set_keys = function(keys) {
       stopifnot(is(keys, "keys"))
       private$keys <- keys
-      return(invisible(NULL))
+      return(invisible(self))
     }
   )
 )

@@ -3,7 +3,7 @@
 \name{is_pulled}
 \alias{is_pulled}
 \alias{is_pulled.RawDatasetConnector}
-\alias{is_pulled.RelationalDataset}
+\alias{is_pulled.RawDataset}
 \alias{is_pulled.RelationalDataConnector}
 \alias{is_pulled.RelationalData}
 \title{Is pulled}
@@ -12,9 +12,7 @@ is_pulled(x)
 
 \method{is_pulled}{RawDatasetConnector}(x)
 
-\method{is_pulled}{RelationalDataset}(x)
-
-\method{is_pulled}{RawDatasetConnector}(x)
+\method{is_pulled}{RawDataset}(x)
 
 \method{is_pulled}{RelationalDataConnector}(x)
 
@@ -32,13 +30,13 @@ S3 method to determine if dataset is pulled (loaded).
 }
 \examples{
 # RawDatasetConnector --------
-library(random.cdisc.data)
-dc <- rcd_cdisc_dataset_connector(dataname = "ADSL", fun = radsl)
+ds <- raw_dataset_connector(pull_fun = callable_function(data.frame))
+set_args(ds, list(x = 1:5, y = letters[1:5]))
 
-is_pulled(dc)
+is_pulled(ds)
 
-load_dataset(dc)
-is_pulled(dc)
+load_dataset(ds)
+is_pulled(ds)
 rel_data <- teal:::RelationalDataset$new(
   x = data.frame(x = c(1, 2), y = c("a", "b"), stringsAsFactors = FALSE),
   keys = keys(primary = "y", foreign = NULL, parent = NULL),
@@ -48,15 +46,6 @@ rel_data <- teal:::RelationalDataset$new(
 )
 
 is_pulled(rel_data)
-
-# RelationalDatasetConnector ---------
-library(random.cdisc.data)
-adsl <- rcd_cdisc_dataset_connector(dataname = "ADSL", fun = radsl, cached = TRUE)
-
-is_pulled(adsl)
-
-load_dataset(adsl)
-is_pulled(adsl)
 
 # RelationalDataConnector --------
 library(random.cdisc.data)

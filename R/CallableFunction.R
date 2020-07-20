@@ -1,10 +1,13 @@
+## CallableFunction ====
 #' A \code{CallableFunction} class of objects
 #'
 #' Object that stores function name with it's arguments. Methods to get call and run it.
 #'
-#' @name CallableFunction
+#' @importFrom R6 R6Class
 CallableFunction <- R6::R6Class( #nolint
   "CallableFunction",
+
+  ## __Public Methods ====
   public = list(
     #' @description
     #' Create a new \code{CallableFunction} object
@@ -183,11 +186,15 @@ CallableFunction <- R6::R6Class( #nolint
       return(invisible(self))
     }
   ),
+
+  ## __Private Fields ====
   private = list(
     fun_name = character(0),
     args = NULL, # named list with argument names and values
     call = NULL, # a call object
     env = NULL, # environment where function is called
+
+    ## __Private Methods ====
     # @description
     # Finds original function name
     #
@@ -217,7 +224,6 @@ CallableFunction <- R6::R6Class( #nolint
       # if a function is not found, stop initialization
       stopifnot(is.function(fn))
 
-      # as.call requires a symbol or a function
       if (is.character(callable)) {
         callable <- str2lang(callable)
       }
@@ -226,12 +232,14 @@ CallableFunction <- R6::R6Class( #nolint
   )
 )
 
+## Constructors ====
+
 #' Create \code{CallableFunction} object
 #'
 #' Create \link{CallableFunction} object to execute specific function and get reproducible
 #' call.
 #' @param fun (\code{function})\cr
-#'   any R function
+#'   any R function, directly by name or \code{character} string.
 #' @return \code{CallableFunction} object
 #' @examples
 #' cf <- callable_function(fun = mean)

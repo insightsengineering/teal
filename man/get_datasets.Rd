@@ -27,7 +27,7 @@ Get a \code{\link{RelationalDataset}} objects.
 }
 \examples{
 
-# RelationalData --------
+# RelationalDataList --------
 library(random.cdisc.data)
 adsl <- cdisc_dataset(dataname = "ADSL", # RelationalDataset
                       data = radsl(cached = TRUE),
@@ -56,7 +56,7 @@ drc <- teal_data(rdc, adae)
 
 get_datasets(drc)
 
-# RelationalData --------
+# RelationalDatasetConnector --------
 library(random.cdisc.data)
 rdc <- rcd_cdisc_dataset_connector("ADSL", radsl, cached = TRUE)
 
@@ -65,7 +65,7 @@ load_datasets(rdc)
 get_datasets(rdc)
 }
 
-# RelationalData --------
+# RelationalDataset --------
 library(random.cdisc.data)
 adsl <- cdisc_dataset(dataname = "ADSL", # RelationalDataset
                       data = radsl(cached = TRUE),

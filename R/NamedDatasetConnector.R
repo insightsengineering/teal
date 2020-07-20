@@ -1,3 +1,4 @@
+## NamedDatasetConnector ====
 #' A \code{NamedDatasetConnector} class of objects
 #'
 #' Objects of this class store the connection function to fetch a single dataset.
@@ -7,9 +8,10 @@
 #' through the \code{dataset} active binding.
 #' Pulled data inherits from the class \link{NamedDataset}.
 #'
-#' @name NamedDatasetConnector
+#' @importFrom R6 R6Class
 NamedDatasetConnector <- R6::R6Class( #nolint
-  # NamedDatasetConnector public ----
+
+  ## __Public Methods ====
   classname = "NamedDatasetConnector",
   inherit = RawDatasetConnector,
   public = list(
@@ -48,7 +50,13 @@ NamedDatasetConnector <- R6::R6Class( #nolint
     get_dataname = function() {
       return(private$dataname)
     },
-
+    #' @description
+    #' Get dataname of dataset
+    #'
+    #' @return dataname of the dataset
+    get_datanames = function() {
+      return(private$dataname)
+    },
     #' @description
     #' Get label of dataset
     #'
@@ -61,10 +69,11 @@ NamedDatasetConnector <- R6::R6Class( #nolint
     #'
     #' @param label (\code{character})\cr
     #'  Label to describe the dataset
+    #' @return self invisibly for chaining
     set_dataset_label = function(label) {
       stopifnot(is_character_vector(label, 0, 1))
       private$dataset_label <- label
-      return(invisible(NULL))
+      return(invisible(self))
     },
     #' @description
     #' Get code to get data
@@ -190,13 +199,15 @@ NamedDatasetConnector <- R6::R6Class( #nolint
     }
   ),
 
-  # NamedDatasetConnector private ----
+  ## __Private Fields ====
   private = list(
     dataname = character(0),
     dataset_label = character(0),
     mutate_code = NULL, # list of calls
     mutate_vars = list(), # named list with vars used to mutate object
     # assigns the pull code call to the dataname
+
+    ## __Private Methods ====
     get_pull_code = function(deparse = TRUE, args = NULL) {
       code <- if (deparse) {
         sprintf("%s <- %s",
@@ -243,7 +254,7 @@ NamedDatasetConnector <- R6::R6Class( #nolint
         private$mutate_code <- c(private$mutate_code, as.list(as.call(parse(text = code))))
       }
 
-      return(invisible(NULL))
+      return(invisible(self))
     },
 
     set_mutate_vars = function(vars) {
@@ -253,13 +264,13 @@ NamedDatasetConnector <- R6::R6Class( #nolint
         private$mutate_vars <- c(private$mutate_vars, vars)
       }
 
-      return(invisible(NULL))
+      return(invisible(self))
     },
 
     set_dataname = function(dataname) {
       stopifnot(utils.nest::is_character_single(dataname))
       private$dataname <- dataname
-      return(invisible(NULL))
+      return(invisible(self))
     },
     set_ui = function(args = NULL) {
       private$ui <- function(id) {
@@ -275,7 +286,7 @@ NamedDatasetConnector <- R6::R6Class( #nolint
         )
 
       }
-      return(invisible(NULL))
+      return(invisible(self))
     },
     set_server = function() {
       #set_server function in super class does not have a dataname so override that
@@ -301,21 +312,19 @@ NamedDatasetConnector <- R6::R6Class( #nolint
         })
         return(invisible(NULL))
       }
-      return(invisible(NULL))
+      return(invisible(self))
     }
   )
 )
 
-# NamedDatasetConnector constructors ----
+## Constructors ====
 
 #' Create a new \code{NamedDatasetConnector} object
 #'
 #' @description
 #'  Create \code{NamedDatasetConnector} from \link{callable_function}.
 #'
-#' @param pull_fun (\code{CallableFunction})\cr
-#'  Set the pulling function \link{CallableFunction} to load \code{data.frame}.
-#'  \code{dataname} will be used as name of object to be assigned.
+#' @inheritParams raw_dataset_connector
 #' @param dataname (\code{character})\cr
 #'  A given name for the dataset it may not contain spaces
 #' @param code (\code{character})\cr

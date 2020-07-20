@@ -4,7 +4,6 @@
 #' @param x (\code{RelationalDatasetConnector} or \code{NamedDataset}) R6 object
 #'
 #' @return label (\code{character}) Label to describe the dataset
-#' @name get_dataset_label
 #' @export
 get_dataset_label <- function(x) {
 
@@ -33,7 +32,7 @@ get_dataset_label <- function(x) {
 #' get_dataset_label(x1)
 get_dataset_label.NamedDatasetConnector <- function(x) { # nolint
 
-    return(x$get_dataset_label())
+  return(x$get_dataset_label())
 
 }
 
@@ -46,6 +45,6 @@ get_dataset_label.NamedDatasetConnector <- function(x) { # nolint
 #' get_dataset_label(ADSL_dataset)
 get_dataset_label.NamedDataset <- function(x) {
 
-    return(x$get_dataset_label())
+  return(x$get_dataset_label())
 
 }

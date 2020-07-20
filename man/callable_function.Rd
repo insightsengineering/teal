@@ -8,7 +8,7 @@ callable_function(fun)
 }
 \arguments{
 \item{fun}{(\code{function})\cr
-any R function}
+any R function, directly by name or \code{character} string.}
 }
 \value{
 \code{CallableFunction} object

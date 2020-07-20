@@ -121,8 +121,7 @@ code_cdisc_dataset_connector(
 }
 \arguments{
 \item{pull_fun}{(\code{CallableFunction})\cr
-Set the pulling function \link{CallableFunction} to load \code{data.frame}.
-\code{dataname} will be used as name of object to be assigned.}
+function with necessary arguments set to fetch data from connection.}
 
 \item{dataname}{(\code{character})\cr
 A given name for the dataset it may not contain spaces}

@@ -57,6 +57,7 @@ get_code.NamedDataset <- function(x, deparse = TRUE, ...) {
 #' @export
 #' @rdname get_code
 #' @examples
+#' # cdisc_data ---------
 #' library(random.cdisc.data)
 #'
 #' ADSL <- radsl(cached = TRUE)
@@ -108,6 +109,7 @@ get_code.cdisc_data <- function(x, dataname = NULL, deparse = FALSE, ...) {
 #' @rdname get_code
 #' @export
 #' @examples
+#' # RelationalData ---------
 #' x1 <- relational_dataset(
 #'   x = data.frame(x = c(1, 2), y = c("a", "b"), stringsAsFactors = FALSE),
 #'   keys = keys(primary = "y", foreign = NULL, parent = NULL),
@@ -144,6 +146,7 @@ get_code.RelationalData <- function(x, dataname = NULL, deparse = TRUE, ...) { #
 #' @rdname get_code
 #' @export
 #' @examples
+#' # RelationalDataConnector ---------
 #' library(random.cdisc.data)
 #'
 #' rcd <- rcd_cdisc_data(
@@ -175,6 +178,7 @@ get_code.RelationalDataConnector <- function(x, dataname = NULL, deparse = TRUE,
 #' @rdname get_code
 #' @export
 #' @examples
+#' # RelationalDataList ---------
 #' library(random.cdisc.data)
 #' x1 <- rcd_cdisc_data( # RelationalDataConnector
 #'   rcd_cdisc_dataset_connector("ADSL", radsl, cached = TRUE),
@@ -369,7 +373,7 @@ enclosed_with <- function(lines) {
 #' Get code enclosed within
 #'
 #' Extracts lines from code which are enclosed within regexp starts_at and stops_at
-#' @param lines (\code{character}) of preprocessing code.
+#' @inheritParams enclosed_with
 #' @param dataname (\code{character}) metadata for returned lines
 #' @return  (\code{list}) list of lines and their numbers from certain chunks of code at the specific file.
 enclosed_with_dataname <- function(lines, dataname = NULL) {
@@ -486,8 +490,7 @@ find_source_code <- function(lines) {
 #' Includes source in preprocessing code lines
 #'
 #' Includes source in preprocessing code lines
-#' @inheritParams get_code
-#' @inheritParams code_exclude
+#' @inheritParams enclosed_with
 #' @param dir of the file where source is called from.
 #' @return lines of code with source text included
 #'

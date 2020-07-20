@@ -1,12 +1,15 @@
+## RawDataset ====
 #' @title  R6 Class representing a raw data set
 #' @description
 #' Any \code{data.frame} or \code{rtable} object can be
 #' stored inside this object. Some attributes like colnames,
 #' dimension or column names for a specific type will
 #' be automatically derived.
+#'
+#' @importFrom R6 R6Class
 RawDataset <- R6::R6Class( # nolint
   "RawDataset",
-  ## RawDataset ====
+
   ## __Public Methods ====
   public = list(
     #' @importFrom rtables var_labels
@@ -27,7 +30,6 @@ RawDataset <- R6::R6Class( # nolint
       row_labels <- c() # not yet defined in rtables
       return(invisible(self))
     },
-    #' @name get_raw_data
     #' @description
     #' Derive the raw data frame inside this object
     #' @return
@@ -71,10 +73,17 @@ RawDataset <- R6::R6Class( # nolint
     #' Derive the row labels
     get_row_labels = function() {
       private$.row_labels
+    },
+    #' @description
+    #' Check if dataset has already been pulled.
+    #'
+    #' @return \code{TRUE} if dataset has been already pulled, else \code{FALSE}
+    is_pulled = function() {
+      return(TRUE)
     }
 
   ),
-  ## __Private Methods ====
+  ## __Private Fields ====
   private = list(
     .ncol = 0L,
     .nrow = 0L,
@@ -84,6 +93,8 @@ RawDataset <- R6::R6Class( # nolint
     .colnames = character(),
     .col_labels = character(),
     .row_labels = character(),
+
+    ## __Private Methods ====
     #' @import utils.nest
     get_class_colnames = function(class_type = "character", include_factors = FALSE) {
       stopifnot(utils.nest::is_character_single(class_type))
@@ -149,6 +160,8 @@ RawDataset <- R6::R6Class( # nolint
     }
   )
 )
+
+## Constructors ====
 
 #' Constructor for \link{RawDataset} object
 #'

@@ -1,3 +1,4 @@
+## NamedDataset ====
 #' @title  R6 Class representing a dataset including code
 #' @description
 #' Any \code{data.frame} or \code{rtable} object can be
@@ -21,7 +22,7 @@
 NamedDataset <- R6::R6Class( # nolint
   "NamedDataset",
   inherit = RawDataset,
-  ## NamedDataset ====
+
   ## __Public Methods ====
   public = list(
     #' @description
@@ -50,11 +51,17 @@ NamedDataset <- R6::R6Class( # nolint
     #' @description
     #' Set the name for the dataset
     #' @param dataname (\code{character}) the new name
+    #' @return self invisibly for chaining
     set_dataname = function(dataname) {
       stopifnot(is_character_single(dataname))
       stopifnot(!grepl("\\s", dataname))
       private$.dataname <- dataname
-      invisible(NULL)
+      return(invisible(self))
+    },
+    #' @description
+    #' Derive the dataname
+    get_datanames = function() {
+      private$.dataname
     },
     #' @description
     #' Derive the \code{label} which was former called \code{datalabel}
@@ -64,13 +71,14 @@ NamedDataset <- R6::R6Class( # nolint
     #' @description
     #' Set the label for the dataset
     #' @param label (\code{character}) the new label
+    #' @return self invisibly for chaining
     set_dataset_label = function(label) {
       if (is.null(label)) {
         label <- character(0)
       }
       stopifnot(is_character_vector(label, min_length = 0, max_length = 1))
       private$.label <- label
-      invisible(NULL)
+      return(invisible(self))
     },
     #' @description
     #' Get code to get data
@@ -142,7 +150,7 @@ NamedDataset <- R6::R6Class( # nolint
       return(res_check)
     }
   ),
-  ## __Private Methods ====
+  ## __Private Fields ====
   private = list(
     .dataname = character(0),
     .code = NULL, # list of calls
@@ -157,11 +165,13 @@ NamedDataset <- R6::R6Class( # nolint
   )
 )
 
+## Constructors ====
+
 #' Constructor for \link{NamedDataset} class
 #'
+#' @inheritParams raw_dataset
 #' @param dataname (\code{character}) A given name for the dataset
 #'   it may not contain spaces
-#' @param x (\code{data.frame})
 #' @param code (\code{character}) A character string defining the code
 #'   needed to produce the data set in \code{x}
 #' @param label (\code{character}) Label to describe the dataset

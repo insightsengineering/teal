@@ -11,7 +11,6 @@
 #'
 #' @return \code{x} with loaded \code{dataset} object
 #' @export
-#' @rdname load_dataset
 load_dataset <- function(x, args, try) {
   UseMethod("load_dataset")
 }
@@ -35,7 +34,6 @@ load_dataset.RawDatasetConnector <- function(x, args = NULL, try = FALSE) { # no
 #' @param x (\code{object}) of class\link{RawDatasetConnector} or \link{NamedDataset}. If of
 #'   class \code{character} will be treated as file to read.
 #' @export
-#' @rdname load_datasets
 #' @return object of the same class as \code{x}
 load_datasets <- function(x) {
   UseMethod("load_datasets")

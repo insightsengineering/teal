@@ -38,6 +38,7 @@ named_data$get_dataname()
 \item \href{#method-new}{\code{NamedDataset$new()}}
 \item \href{#method-get_dataname}{\code{NamedDataset$get_dataname()}}
 \item \href{#method-set_dataname}{\code{NamedDataset$set_dataname()}}
+\item \href{#method-get_datanames}{\code{NamedDataset$get_datanames()}}
 \item \href{#method-get_dataset_label}{\code{NamedDataset$get_dataset_label()}}
 \item \href{#method-set_dataset_label}{\code{NamedDataset$set_dataset_label()}}
 \item \href{#method-get_code}{\code{NamedDataset$get_code()}}
@@ -57,12 +58,12 @@ named_data$get_dataname()
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="RawDataset" data-id="get_raw_data">}\href{../../teal/html/RawDataset.html#method-get_raw_data}{\code{teal::RawDataset$get_raw_data()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="RawDataset" data-id="get_row_labels">}\href{../../teal/html/RawDataset.html#method-get_row_labels}{\code{teal::RawDataset$get_row_labels()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="RawDataset" data-id="get_rownames">}\href{../../teal/html/RawDataset.html#method-get_rownames}{\code{teal::RawDataset$get_rownames()}}\out{</span>}
+\item \out{<span class="pkg-link" data-pkg="teal" data-topic="RawDataset" data-id="is_pulled">}\href{../../teal/html/RawDataset.html#method-is_pulled}{\code{teal::RawDataset$is_pulled()}}\out{</span>}
 }
 \out{</details>}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-new"></a>}}
-\if{latex}{\out{\hypertarget{method-new}{}}}
 \subsection{Method \code{new()}}{
 initialize a \code{NamedDataset} class object
 \subsection{Usage}{
@@ -87,7 +88,6 @@ needed to produce the data set in \code{x}}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-get_dataname"></a>}}
-\if{latex}{\out{\hypertarget{method-get_dataname}{}}}
 \subsection{Method \code{get_dataname()}}{
 Derive the \code{name} which was former called \code{dataname}
 \subsection{Usage}{
@@ -97,7 +97,6 @@ Derive the \code{name} which was former called \code{dataname}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-set_dataname"></a>}}
-\if{latex}{\out{\hypertarget{method-set_dataname}{}}}
 \subsection{Method \code{set_dataname()}}{
 Set the name for the dataset
 \subsection{Usage}{
@@ -113,8 +112,16 @@ Set the name for the dataset
 }
 }
 \if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-get_datanames"></a>}}
+\subsection{Method \code{get_datanames()}}{
+Derive the dataname
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{NamedDataset$get_datanames()}\if{html}{\out{</div>}}
+}
+
+}
+\if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-get_dataset_label"></a>}}
-\if{latex}{\out{\hypertarget{method-get_dataset_label}{}}}
 \subsection{Method \code{get_dataset_label()}}{
 Derive the \code{label} which was former called \code{datalabel}
 \subsection{Usage}{
@@ -124,7 +131,6 @@ Derive the \code{label} which was former called \code{datalabel}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-set_dataset_label"></a>}}
-\if{latex}{\out{\hypertarget{method-set_dataset_label}{}}}
 \subsection{Method \code{set_dataset_label()}}{
 Set the label for the dataset
 \subsection{Usage}{
@@ -141,7 +147,6 @@ Set the label for the dataset
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-get_code"></a>}}
-\if{latex}{\out{\hypertarget{method-get_code}{}}}
 \subsection{Method \code{get_code()}}{
 Get code to get data
 \subsection{Usage}{
@@ -161,7 +166,6 @@ optionally deparsed \code{call} object
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-set_code"></a>}}
-\if{latex}{\out{\hypertarget{method-set_code}{}}}
 \subsection{Method \code{set_code()}}{
 Set the code for the dataset
 \subsection{Usage}{
@@ -178,7 +182,6 @@ Set the code for the dataset
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-check"></a>}}
-\if{latex}{\out{\hypertarget{method-check}{}}}
 \subsection{Method \code{check()}}{
 Check to determine if the raw data is reproducible from the \code{get_code()} code.
 \subsection{Usage}{
@@ -192,7 +195,6 @@ Check to determine if the raw data is reproducible from the \code{get_code()} co
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-clone"></a>}}
-\if{latex}{\out{\hypertarget{method-clone}{}}}
 \subsection{Method \code{clone()}}{
 The objects of this class are cloneable with this method.
 \subsection{Usage}{

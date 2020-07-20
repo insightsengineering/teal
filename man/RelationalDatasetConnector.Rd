@@ -23,8 +23,6 @@ Pulled data inherits from the class \link{RelationalDataset}.
 \subsection{Public methods}{
 \itemize{
 \item \href{#method-new}{\code{RelationalDatasetConnector$new()}}
-\item \href{#method-get_dataname}{\code{RelationalDatasetConnector$get_dataname()}}
-\item \href{#method-get_datanames}{\code{RelationalDatasetConnector$get_datanames()}}
 \item \href{#method-get_keys}{\code{RelationalDatasetConnector$get_keys()}}
 \item \href{#method-pull}{\code{RelationalDatasetConnector$pull()}}
 \item \href{#method-clone}{\code{RelationalDatasetConnector$clone()}}
@@ -44,6 +42,8 @@ Pulled data inherits from the class \link{RelationalDataset}.
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="RawDatasetConnector" data-id="set_ui_input">}\href{../../teal/html/RawDatasetConnector.html#method-set_ui_input}{\code{teal::RawDatasetConnector$set_ui_input()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="NamedDatasetConnector" data-id="check">}\href{../../teal/html/NamedDatasetConnector.html#method-check}{\code{teal::NamedDatasetConnector$check()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="NamedDatasetConnector" data-id="get_code">}\href{../../teal/html/NamedDatasetConnector.html#method-get_code}{\code{teal::NamedDatasetConnector$get_code()}}\out{</span>}
+\item \out{<span class="pkg-link" data-pkg="teal" data-topic="NamedDatasetConnector" data-id="get_dataname">}\href{../../teal/html/NamedDatasetConnector.html#method-get_dataname}{\code{teal::NamedDatasetConnector$get_dataname()}}\out{</span>}
+\item \out{<span class="pkg-link" data-pkg="teal" data-topic="NamedDatasetConnector" data-id="get_datanames">}\href{../../teal/html/NamedDatasetConnector.html#method-get_datanames}{\code{teal::NamedDatasetConnector$get_datanames()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="NamedDatasetConnector" data-id="get_dataset_label">}\href{../../teal/html/NamedDatasetConnector.html#method-get_dataset_label}{\code{teal::NamedDatasetConnector$get_dataset_label()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="NamedDatasetConnector" data-id="get_pull_args">}\href{../../teal/html/NamedDatasetConnector.html#method-get_pull_args}{\code{teal::NamedDatasetConnector$get_pull_args()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="NamedDatasetConnector" data-id="mutate_dataset">}\href{../../teal/html/NamedDatasetConnector.html#method-mutate_dataset}{\code{teal::NamedDatasetConnector$mutate_dataset()}}\out{</span>}
@@ -53,7 +53,6 @@ Pulled data inherits from the class \link{RelationalDataset}.
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-new"></a>}}
-\if{latex}{\out{\hypertarget{method-new}{}}}
 \subsection{Method \code{new()}}{
 Create a new \code{RelationalDatasetConnector} object. Set the pulling function
 load the data. \code{dataname} will be used as name
@@ -99,34 +98,7 @@ new \code{RelationalDatasetConnector} object
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-get_dataname"></a>}}
-\if{latex}{\out{\hypertarget{method-get_dataname}{}}}
-\subsection{Method \code{get_dataname()}}{
-Get dataname of dataset
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{RelationalDatasetConnector$get_dataname()}\if{html}{\out{</div>}}
-}
-
-\subsection{Returns}{
-dataname of the dataset
-}
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-get_datanames"></a>}}
-\if{latex}{\out{\hypertarget{method-get_datanames}{}}}
-\subsection{Method \code{get_datanames()}}{
-Get dataname of dataset
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{RelationalDatasetConnector$get_datanames()}\if{html}{\out{</div>}}
-}
-
-\subsection{Returns}{
-dataname of the dataset
-}
-}
-\if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-get_keys"></a>}}
-\if{latex}{\out{\hypertarget{method-get_keys}{}}}
 \subsection{Method \code{get_keys()}}{
 Get keys of dataset
 \subsection{Usage}{
@@ -139,7 +111,6 @@ Get keys of dataset
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-pull"></a>}}
-\if{latex}{\out{\hypertarget{method-pull}{}}}
 \subsection{Method \code{pull()}}{
 Pull the data
 
@@ -169,7 +140,6 @@ whether perform function evaluation inside \code{try} clause}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-clone"></a>}}
-\if{latex}{\out{\hypertarget{method-clone}{}}}
 \subsection{Method \code{clone()}}{
 The objects of this class are cloneable with this method.
 \subsection{Usage}{

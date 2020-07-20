@@ -1,4 +1,4 @@
-# RelationalDataList ------
+## RelationalDataList ====
 #' @title Manage multiple \code{RelationalDataConnector} and \code{RelationalDatasetConnector}
 #' @description
 #' Class manages  \code{RelationalDataConnector} and \code{RelationalDatasetConnector} objects
@@ -55,7 +55,7 @@
 RelationalDataList <- R6::R6Class( # nolint
   classname = "RelationalDataList",
   inherit = RelationalData,
-  # ..public ------
+  ## __Public Methods ====
   public = list(
     #' @param ... (\code{RelationalDataConnector}, \code{RelationalDataset},
     #'  \code{RelationalDatasetConnector}) object
@@ -266,12 +266,13 @@ RelationalDataList <- R6::R6Class( # nolint
       )
     }
   ),
-  # ..private ------
+
+  ## __Private Fields ====
   private = list(
-    # .... fields: ------
     ui = NULL,
-    # .... methods: ------
     server = NULL,
+
+    ## __Private Methods ====
     get_code_datasets = function(dataname = NULL, deparse = TRUE) {
       if (is.null(private$datasets)) {
         if (isTRUE(deparse)) {
@@ -374,7 +375,7 @@ RelationalDataList <- R6::R6Class( # nolint
   )
 )
 
-
+## Functions ====
 is_any_class_list <- function(x, class) {
   vapply(
     x,

@@ -7,7 +7,7 @@
 relational_dataset(x, dataname, keys, code, label)
 }
 \arguments{
-\item{x}{(\code{data.frame})}
+\item{x}{(\code{data.frame} or \code{rtable}) object}
 
 \item{dataname}{(\code{character}) A given name for the dataset
 it may not contain spaces}

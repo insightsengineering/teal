@@ -10,7 +10,7 @@ named_dataset(dataname, x, code = character(0), label = character(0))
 \item{dataname}{(\code{character}) A given name for the dataset
 it may not contain spaces}
 
-\item{x}{(\code{data.frame})}
+\item{x}{(\code{data.frame} or \code{rtable}) object}
 
 \item{code}{(\code{character}) A character string defining the code
 needed to produce the data set in \code{x}}

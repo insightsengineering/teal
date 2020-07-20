@@ -81,6 +81,7 @@ Code chunks are described with:
 }
 }
 \examples{
+# cdisc_data ---------
 library(random.cdisc.data)
 
 ADSL <- radsl(cached = TRUE)
@@ -112,6 +113,7 @@ get_code(cd)
 get_code(cd, "ADTTE")
 
 get_code(cd, "ADSL")
+# RelationalData ---------
 x1 <- relational_dataset(
   x = data.frame(x = c(1, 2), y = c("a", "b"), stringsAsFactors = FALSE),
   keys = keys(primary = "y", foreign = NULL, parent = NULL),
@@ -134,6 +136,7 @@ rd <- teal_data(x1, x2)
 get_code(rd)
 get_code(rd, "XY")
 get_code(rd, "XYZ")
+# RelationalDataConnector ---------
 library(random.cdisc.data)
 
 rcd <- rcd_cdisc_data(
@@ -147,6 +150,7 @@ get_code(rcd)
 get_code(rcd, "ADSL")
 get_code(rcd, "ADLB")
 get_code(rcd, "ADRS")
+# RelationalDataList ---------
 library(random.cdisc.data)
 x1 <- rcd_cdisc_data( # RelationalDataConnector
   rcd_cdisc_dataset_connector("ADSL", radsl, cached = TRUE),

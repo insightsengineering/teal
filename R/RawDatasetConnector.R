@@ -1,3 +1,4 @@
+## RawDatasetConnector ====
 #' A \code{RawDatasetConnector} class of objects
 #'
 #' Objects of this class store the connection function to fetch a single dataset.
@@ -7,9 +8,10 @@
 #' through the \code{dataset} active binding.
 #' Pulled data inherits from the class \link{RelationalDataset}.
 #'
-#' @name RawDatasetConnector
+#' @importFrom R6 R6Class
 RawDatasetConnector <- R6::R6Class( #nolint
-  # RawDatasetConnector public ----
+
+  ## __Public Methods ====
   classname = "RawDatasetConnector",
   public = list(
     #' @description
@@ -40,9 +42,10 @@ RawDatasetConnector <- R6::R6Class( #nolint
     #'
     #' @param args (\code{NULL} or named \code{list}) dynamic arguments to function
     #'
-    #' @return nothing
+    #' @return self invisibly for chaining
     set_args = function(args) {
       private$pull_fun$set_args(args)
+      return(invisible(self))
     },
 
     #' @description
@@ -204,7 +207,7 @@ RawDatasetConnector <- R6::R6Class( #nolint
       )
     }
   ),
-  # RawDatasetConnector private -----
+  ## __Private Fields ====
   private = list(
     dataset = NULL, # RawDataset
     pull_fun = NULL, # CallableFunction
@@ -212,6 +215,8 @@ RawDatasetConnector <- R6::R6Class( #nolint
     ui_input = NULL, # NULL or list
     ui = NULL, # NULL or shiny.tag.list
     server = NULL, # NULL or shiny server function
+
+    ## __Private Methods ====
     get_pull_code = function(deparse, args = NULL) {
       return(private$pull_fun$get_call(deparse, args))
     },
@@ -241,12 +246,12 @@ RawDatasetConnector <- R6::R6Class( #nolint
     set_pull_fun = function(pull_fun) {
       stopifnot(is(pull_fun, "CallableFunction"))
       private$pull_fun <- pull_fun
-      return(invisible(NULL))
+      return(invisible(self))
     },
     set_pull_vars = function(pull_vars) {
       stopifnot(is_fully_named_list(pull_vars))
       private$pull_vars <- pull_vars
-      return(invisible(NULL))
+      return(invisible(self))
     },
     pull_internal = function(args = NULL, try = FALSE) {
       # include objects CallableFunction environment
@@ -293,7 +298,7 @@ RawDatasetConnector <- R6::R6Class( #nolint
         )
 
       }
-      return(invisible(NULL))
+      return(invisible(self))
     },
     set_server = function() {
       private$server <- function(input, output, session, data_args = NULL) {
@@ -315,12 +320,14 @@ RawDatasetConnector <- R6::R6Class( #nolint
         })
         return(invisible(NULL))
       }
-      return(invisible(NULL))
+      return(invisible(self))
     }
   )
 )
 
-# function to create UI with given ns function and label according to the type of variable
+## Functions ====
+
+# create UI with given ns function and label according to the type of variable
 match_ui <- function(ns, value, label) {
   type <- mode(value)
 
@@ -336,7 +343,7 @@ match_ui <- function(ns, value, label) {
   return(out)
 }
 
-# RawDatasetConnector constructors -----
+## Constructors ====
 
 #' Create \code{RawDatasetConnector} object
 #'

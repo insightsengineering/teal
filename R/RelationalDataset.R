@@ -1,3 +1,4 @@
+## RelationalDataset ====
 #' @title R6 Class representing a dataset including keys
 #' @description
 #' Any \code{data.frame} or \code{rtable} object can be
@@ -31,7 +32,7 @@
 RelationalDataset <- R6::R6Class( # nolint
   "RelationalDataset",
   inherit = NamedDataset,
-  ## RelationalDataset ====
+
   ## __Public Methods ====
   public = list(
     #' @description
@@ -56,24 +57,13 @@ RelationalDataset <- R6::R6Class( # nolint
       private$.keys
     },
     #' @description
-    #' Derive the dataname
-    get_datanames = function() {
-      private$.dataname
-    },
-    #' @description
     #' Set new keys
     #' @param keys (\code{keys}) Set the keys
+    #' @return self invisibly for chaining.
     set_keys = function(keys) {
       stopifnot(is(keys, "keys"))
       private$.keys <- keys
-      invisible(NULL)
-    },
-    #' @description
-    #' Check if dataset has already been pulled.
-    #'
-    #' @return \code{TRUE} if dataset has been already pulled, else \code{FALSE}
-    is_pulled = function() {
-      return(TRUE)
+      return(invisible(self))
     }
   ),
   ## __Private Fields ====
@@ -89,16 +79,13 @@ RelationalDataset <- R6::R6Class( # nolint
   )
 )
 
+## Constructors ====
+
 #' Create \code{RelationalDataset} object
 #'
-#' @param x (\code{data.frame})
-#' @param dataname (\code{character}) A given name for the dataset
-#'   it may not contain spaces
+#' @inheritParams named_dataset
 #' @param keys (\code{keys}) object of S3 class keys containing
 #'   foreign, primary keys and parent information
-#' @param code (\code{character}) A character string defining the code
-#'   needed to produce the data set in \code{x}
-#' @param label (\code{character}) Label to describe the dataset
 #'
 #' @return object of class \code{RelaionalDataset}
 #'
