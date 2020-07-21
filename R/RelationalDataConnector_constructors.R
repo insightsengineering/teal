@@ -170,7 +170,7 @@ rice_cdisc_data <- function(..., additional_ui = NULL) {
               lapply(seq_along(connectors), function(i) {
                 tags$li(paste0(connectors[[i]]$get_dataname(),
                                ": ",
-                               connectors[[i]]$args$node))
+                               connectors[[i]]$get_pull_args()$node))
               })
             )
           )
