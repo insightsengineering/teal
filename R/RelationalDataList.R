@@ -70,6 +70,13 @@ RelationalDataList <- R6::R6Class( # nolint
         stop("All data elements should be RelationalData(set) or RelationalData(set)Connection")
       }
 
+      #Cannot allow RelationalDataList to be inside dot_args
+      #previous check does not capture this as RelationalDataList inherits
+      #from RelationalData
+      if (any(is_any_class_list(dot_args, "RelationalDataList"))) {
+        stop("Data elements cannot be RelationalDataList")
+      }
+
       datanames <- unlist(lapply(dot_args, get_dataname))
       if (any(duplicated(datanames))) {
         stop("Found duplicated dataset names.")
