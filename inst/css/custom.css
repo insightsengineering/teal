@@ -63,6 +63,11 @@ a.remove:hover{
   transform-origin: bottom;
 }
 
+/* to set the alignment of pickerInput dropdowns */
+.dropdown-menu.open {
+  width: 100%;
+}
+
 /*
 for handles to move filter variables around in the right hand panel
 currently not used, instead one can click anywhere in the element to move it
