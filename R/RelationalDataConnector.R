@@ -139,11 +139,8 @@ RelationalDataConnector <- R6::R6Class( #nolint
     #' @return An object that represents the app
     launch = function() {
       # load RelationDatasetConnector objects
-      if (is.null(private$datasets)) {
-        stop("the data has no dataset connectors yet")
-      }
-      if (all(vapply(private$datasets, function(el) el$is_pulled(), logical(1L)))) {
-        stop("all the datasets has been already pulled")
+      if (self$is_pulled()) {
+        stop("all the datasets have already been pulled")
       }
 
       shinyApp(
@@ -154,19 +151,41 @@ RelationalDataConnector <- R6::R6Class( #nolint
               width = 8,
               offset = 2,
               tags$div(
+                id = "data_inputs",
                 private$ui(id = "data_connector"),
                 actionButton("submit", "Submit")
+              ),
+              shinyjs::hidden(
+                tags$div(
+                  id = "data_loaded",
+                  div(
+                    h3("Data successfully loaded."),
+                    p("You can close this window and get back to R console.")
+                  )
+                )
               )
+
             )
           )
         ),
         server = function(input, output, session) {
           session$onSessionEnded(stopApp)
           observeEvent(input$submit, {
-            dat <- callModule(self$get_server(),
-                              id = "data_connector",
-                              connection = private$connection,
-                              connectors = private$datasets)
+            rv <- reactiveVal(NULL)
+            rv(
+              callModule(self$get_server(),
+                         id = "data_connector",
+                         connection = private$connection,
+                         connectors = private$datasets)
+            )
+
+            observeEvent(rv(), {
+              if (self$is_pulled()) {
+                removeUI(sprintf("#%s", session$ns("data_inputs")))
+                shinyjs::show("data_loaded")
+                stopApp()
+              }
+            })
 
 
           })
@@ -278,22 +297,23 @@ RelationalDataConnector <- R6::R6Class( #nolint
     #' @param data_module (\code{function})\cr
     #'  A shiny module server function that should load data from all connectors
     #'
-    #' @return nothing
+    #' @return \code{NULL} or \code{self} if data is loaded.
     set_server = function(data_module) {
       stopifnot(is(data_module, "function"))
       stopifnot(all(c("input", "output", "session") %in% names(formals(data_module))))
 
       private$server <- function(input, output, session, connection, connectors) {
+        rv <- reactiveVal(NULL)
         callModule(data_module,
                    id = "data_input",
                    connection = connection,
                    connectors = connectors)
 
-        if (all(vapply(connectors, is_pulled, logical(1)))) {
-          private$append_connection_code()
+        if (self$is_pulled()) {
+          return(rv(TRUE))
+        } else {
+          return(rv(FALSE))
         }
-
-        return(invisible(NULL))
       }
 
       return(invisible(NULL))

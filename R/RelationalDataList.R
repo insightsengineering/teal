@@ -263,6 +263,15 @@ RelationalDataList <- R6::R6Class( # nolint
               width = 8,
               offset = 2,
               private$ui(id = "main_app"),
+              shinyjs::hidden(
+                tags$div(
+                  id = "data_loaded",
+                  div(
+                    h3("Data successfully loaded."),
+                    p("You can close this window and get back to R console.")
+                  )
+                )
+              ),
               useShinyjs(),
               br()
             )
@@ -271,6 +280,13 @@ RelationalDataList <- R6::R6Class( # nolint
         server = function(input, output, session) {
           session$onSessionEnded(stopApp)
           dat <- callModule(private$server, id = "main_app")
+
+          observeEvent(dat(), {
+            if (self$is_pulled()) {
+              shinyjs::show("data_loaded")
+              stopApp()
+            }
+          })
         }
       )
     }
@@ -318,42 +334,43 @@ RelationalDataList <- R6::R6Class( # nolint
 
         # connectors ui(s) + submit button
         fluidPage(
-          column(
-            width = 8,
-            offset = 2,
-            tagList(
-              lapply(
-                self$get_data_connectors(),
-                function(x) {
-                  div(
-                    x$get_ui(
-                      id = ns(paste0(x$get_datanames(), collapse = "_"))
-                    ),
-                    br()
-                  )
-                }
-              ),
-              lapply(
-                self$get_dataset_connectors(),
-                function(x) {
-                  div(
-                    x$get_ui(
-                      id = ns(x$get_dataname())
-                    ),
-                    br()
-                  )
-                }
-              ),
-              actionButton(inputId = ns("submit"), label = "submit all")
+            column(
+              id = ns("delayed_data"),
+              width = 8,
+              offset = 2,
+              tagList(
+                lapply(
+                  self$get_data_connectors(),
+                  function(x) {
+                    div(
+                      x$get_ui(
+                        id = ns(paste0(x$get_datanames(), collapse = "_"))
+                      ),
+                      br()
+                    )
+                  }
+                ),
+                lapply(
+                  self$get_dataset_connectors(),
+                  function(x) {
+                    div(
+                      x$get_ui(
+                        id = ns(x$get_dataname())
+                      ),
+                      br()
+                    )
+                  }
+                ),
+                actionButton(inputId = ns("submit"), label = "submit all")
             )
           )
+
         )
       }
     },
     set_server = function() {
       private$server <- function(input, output, session) {
         rv <- reactiveVal(NULL)
-
         observeEvent(input$submit, {
 
           # load data from all connectors
@@ -373,9 +390,7 @@ RelationalDataList <- R6::R6Class( # nolint
               }
             }
           )
-
-          shinyjs::hide("submit")
-
+          removeUI(sprintf("#%s", session$ns("delayed_data")))
           rv(self)
         })
         return(rv)

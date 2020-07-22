@@ -363,7 +363,7 @@ A shiny module server function that should load data from all connectors}
 \if{html}{\out{</div>}}
 }
 \subsection{Returns}{
-nothing
+\code{NULL} or \code{self} if data is loaded.
 }
 }
 \if{html}{\out{<hr>}}
