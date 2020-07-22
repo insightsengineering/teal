@@ -17,6 +17,7 @@ RawDataset <- R6::R6Class( # nolint
     #' @description
     #' initialize a \code{RawDataset} class object
     #' @param x (\code{data.frame}) object
+    #' @return \code{RawDataset} object
     initialize = function(x) {
       stopifnot(is.data.frame(x))
 
@@ -41,36 +42,43 @@ RawDataset <- R6::R6Class( # nolint
     #' Derive the names of all \code{numeric} columns
     #' @param include_factors \code{logical} Whether to include
     #'   factor variables
+    #' @return \code{character} vector.
     get_numeric_colnames = function(include_factors = FALSE) {
       private$get_class_colnames("numeric", include_factors = FALSE)
     },
     #' @description
     #' Derive the names of all \code{character} columns
+    #' @return \code{character} vector.
     get_character_colnames = function() {
       private$get_class_colnames("character", include_factors = FALSE)
     },
     #' @description
     #' Derive the names of all \code{factor} columns
+    #' @return \code{character} vector.
     get_factor_colnames = function() {
       private$get_class_colnames("factor")
     },
     #' @description
     #' Derive the column names
+    #' @return \code{character} vector.
     get_colnames = function() {
       private$.colnames
     },
     #' @description
     #' Derive the column labels
+    #' @return \code{character} vector.
     get_column_labels = function() {
       private$.col_labels
     },
     #' @description
     #' Derive the row names
+    #' @return \code{character} vector.
     get_rownames = function() {
       private$.rownames
     },
     #' @description
     #' Derive the row labels
+    #' @return \code{character} vector.
     get_row_labels = function() {
       private$.row_labels
     },

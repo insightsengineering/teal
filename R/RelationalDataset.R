@@ -45,6 +45,8 @@ RelationalDataset <- R6::R6Class( # nolint
     #' @param code (\code{character}) A character string defining the code
     #'   needed to produce the data set in \code{x}
     #' @param label (\code{character}) Label to describe the dataset
+    #'
+    #' @return new \code{RelationalDataset}
     initialize = function(x, dataname, keys, code = character(0), label = character(0)) {
       super$initialize(x, dataname = dataname, code = code, label = label)
 
@@ -53,6 +55,7 @@ RelationalDataset <- R6::R6Class( # nolint
     },
     #' @description
     #' Derive the keys
+    #' @return \code{keys} object
     get_keys = function() {
       private$.keys
     },

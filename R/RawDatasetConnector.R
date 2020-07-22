@@ -75,7 +75,7 @@ RawDatasetConnector <- R6::R6Class( #nolint
     #' @description
     #' Get dataset
     #'
-    #' @return dataset (\code{<...>Dataset})
+    #' @return dataset (\code{RawDataset})
     get_dataset = function() {
       if (!self$is_pulled()) {
         stop("dataset has not been pulled yet\n - please use `load_dataset()` first.",
@@ -87,7 +87,7 @@ RawDatasetConnector <- R6::R6Class( #nolint
     #' @description
     #' Get pull function
     #'
-    #' @return dataset (\code{CallableFunction})
+    #' @return \code{CallableFunction}
     get_pull_fun = function() {
       return(private$pull_fun)
     },
@@ -115,7 +115,7 @@ RawDatasetConnector <- R6::R6Class( #nolint
     #' @param try (\code{logical} value)\cr
     #'  whether perform function evaluation inside \code{try} clause
     #'
-    #' @return \code{NULL} if successful or \code{try-error} if not.
+    #' @return \code{self} if successful or \code{try-error} if not.
     pull = function(args = NULL, try = FALSE) {
       data <- private$pull_internal(args = args, try = try)
       if (try && is(data, "try-error")) {

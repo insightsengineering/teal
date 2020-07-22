@@ -34,6 +34,7 @@ NamedDataset <- R6::R6Class( # nolint
     #'   needed to produce the data set in \code{x}
     #' @param label (\code{character}) Label to describe the dataset
     #' @import utils.nest
+    #' @return new \code{NamedDataset} object
     initialize = function(x, dataname, code = character(0), label = character(0)) {
       # Run RawDataset initialization
       super$initialize(x)
@@ -45,6 +46,7 @@ NamedDataset <- R6::R6Class( # nolint
     },
     #' @description
     #' Derive the \code{name} which was former called \code{dataname}
+    #' @return \code{character} name of the dataset
     get_dataname = function() {
       private$.dataname
     },
@@ -60,11 +62,13 @@ NamedDataset <- R6::R6Class( # nolint
     },
     #' @description
     #' Derive the dataname
+    #' @return \code{character} name of the dataset
     get_datanames = function() {
       private$.dataname
     },
     #' @description
     #' Derive the \code{label} which was former called \code{datalabel}
+    #' @return \code{character} label of the dataset
     get_dataset_label = function() {
       private$.label
     },
@@ -112,6 +116,7 @@ NamedDataset <- R6::R6Class( # nolint
     #' @description
     #' Set the code for the dataset
     #' @param code (\code{character}) the new code
+    #' @return self
     set_code = function(code) {
       stopifnot(is_character_vector(code, min_length = 0, max_length = 1))
 
@@ -119,7 +124,7 @@ NamedDataset <- R6::R6Class( # nolint
         private$.code <- as.list(as.call(parse(text = code)))
       }
 
-      invisible(TRUE)
+      invisible(invisible(self))
     },
     #' @description
     #'   Check to determine if the raw data is reproducible from the \code{get_code()} code.

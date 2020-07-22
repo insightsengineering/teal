@@ -88,6 +88,7 @@ get_raw_data(tc)
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-new"></a>}}
+\if{latex}{\out{\hypertarget{method-new}{}}}
 \subsection{Method \code{new()}}{
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{RelationalDataList$new(...)}\if{html}{\out{</div>}}
@@ -104,6 +105,7 @@ get_raw_data(tc)
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-get_datanames"></a>}}
+\if{latex}{\out{\hypertarget{method-get_datanames}{}}}
 \subsection{Method \code{get_datanames()}}{
 Derive the names of all datasets
 \subsection{Usage}{
@@ -116,6 +118,7 @@ Derive the names of all datasets
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-get_code"></a>}}
+\if{latex}{\out{\hypertarget{method-get_code}{}}}
 \subsection{Method \code{get_code()}}{
 Derive the code for all datasets
 \subsection{Usage}{
@@ -137,6 +140,7 @@ Derive the code for all datasets
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-get_ui"></a>}}
+\if{latex}{\out{\hypertarget{method-get_ui}{}}}
 \subsection{Method \code{get_ui()}}{
 Get a shiny-module UI to render the necessary app to
 derive \code{RelationalDataConnector} object's data
@@ -147,14 +151,18 @@ derive \code{RelationalDataConnector} object's data
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{id}}{(\code{character}) item ID for the shiny module
-Get dataset connectors.}
+\item{\code{id}}{(\code{character}) item ID for the shiny module}
 }
 \if{html}{\out{</div>}}
+}
+\subsection{Returns}{
+the \code{shiny} \code{ui} function
+Get dataset connectors.
 }
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-get_dataset_connectors"></a>}}
+\if{latex}{\out{\hypertarget{method-get_dataset_connectors}{}}}
 \subsection{Method \code{get_dataset_connectors()}}{
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{RelationalDataList$get_dataset_connectors()}\if{html}{\out{</div>}}
@@ -167,6 +175,7 @@ Get data connectors.
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-get_data_connectors"></a>}}
+\if{latex}{\out{\hypertarget{method-get_data_connectors}{}}}
 \subsection{Method \code{get_data_connectors()}}{
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{RelationalDataList$get_data_connectors()}\if{html}{\out{</div>}}
@@ -179,6 +188,7 @@ Get data connectors.
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-get_connectors"></a>}}
+\if{latex}{\out{\hypertarget{method-get_connectors}{}}}
 \subsection{Method \code{get_connectors()}}{
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{RelationalDataList$get_connectors()}\if{html}{\out{</div>}}
@@ -190,6 +200,7 @@ Get data connectors.
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-get_dataset"></a>}}
+\if{latex}{\out{\hypertarget{method-get_dataset}{}}}
 \subsection{Method \code{get_dataset()}}{
 Get \code{RelationalDataset} object.
 \subsection{Usage}{
@@ -210,6 +221,7 @@ name of dataset to be returned. If \code{NULL}, all datasets are returned.}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-get_datasets"></a>}}
+\if{latex}{\out{\hypertarget{method-get_datasets}{}}}
 \subsection{Method \code{get_datasets()}}{
 Get \code{list} of \code{RelationalDataset} objects.
 \subsection{Usage}{
@@ -222,6 +234,7 @@ Get \code{list} of \code{RelationalDataset} objects.
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-get_cdisc_data"></a>}}
+\if{latex}{\out{\hypertarget{method-get_cdisc_data}{}}}
 \subsection{Method \code{get_cdisc_data()}}{
 Get \code{cdisc_data} object from multiple \code{RelationalDataset} objects.
 \subsection{Usage}{
@@ -234,6 +247,7 @@ Get \code{cdisc_data} object from multiple \code{RelationalDataset} objects.
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-get_all_datasets"></a>}}
+\if{latex}{\out{\hypertarget{method-get_all_datasets}{}}}
 \subsection{Method \code{get_all_datasets()}}{
 
 
@@ -258,6 +272,7 @@ Get all datasets and all dataset connectors
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-get_server"></a>}}
+\if{latex}{\out{\hypertarget{method-get_server}{}}}
 \subsection{Method \code{get_server()}}{
 Get a shiny-module server to render the necessary app to
 derive \code{RelationalDataConnector} object's data
@@ -265,9 +280,13 @@ derive \code{RelationalDataConnector} object's data
 \if{html}{\out{<div class="r">}}\preformatted{RelationalDataList$get_server()}\if{html}{\out{</div>}}
 }
 
+\subsection{Returns}{
+\code{shiny} \code{server} module.
+}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-launch"></a>}}
+\if{latex}{\out{\hypertarget{method-launch}{}}}
 \subsection{Method \code{launch()}}{
 Launch an app that allows to run the user-interfaces of all
 \code{DataConnector} and \code{DatasetConnector} modules
@@ -280,6 +299,7 @@ This piece is mainly used for debugging.
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-clone"></a>}}
+\if{latex}{\out{\hypertarget{method-clone}{}}}
 \subsection{Method \code{clone()}}{
 The objects of this class are cloneable with this method.
 \subsection{Usage}{

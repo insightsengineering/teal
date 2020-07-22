@@ -111,6 +111,7 @@ NamedDatasetConnector <- R6::R6Class( #nolint
     #'   In case when this object code depends on the \code{raw_data} from the other
     #'   \code{RelationalDataset}, \code{RelationalDatasetConnector} object(s) or other constant value,
     #'   this/these object(s) should be included
+    #' @return self
     mutate_dataset = function(code, vars = list()) {
       if (!is.null(private$dataset)) {
         private$dataset <- mutate_dataset(private$dataset, code = code, vars = vars)
@@ -136,7 +137,7 @@ NamedDatasetConnector <- R6::R6Class( #nolint
     #' @param try (\code{logical} value)\cr
     #'  whether perform function evaluation inside \code{try} clause
     #'
-    #' @return \code{NULL} if successful or \code{try-error} if not.
+    #' @return \code{self} if successful or \code{try-error} if not.
     pull = function(args = NULL, try = FALSE) {
       data <- private$pull_internal(args = args, try = try)
 
@@ -163,6 +164,7 @@ NamedDatasetConnector <- R6::R6Class( #nolint
     #' @description
     #'
     #' Derive the arguments this connector will pull with
+    #' @return \code{list} of pull function fixed arguments
     get_pull_args = function() {
       private$pull_fun$get_args()
     },

@@ -75,6 +75,7 @@ tc$get_datasets()
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-new"></a>}}
+\if{latex}{\out{\hypertarget{method-new}{}}}
 \subsection{Method \code{new()}}{
 Create a new \code{RelationalDataConnector} object
 \subsection{Usage}{
@@ -86,17 +87,18 @@ Create a new \code{RelationalDataConnector} object
 \describe{
 \item{\code{connection}}{(\code{DataConnection}) connection to data source}
 
-\item{\code{connectors}}{(\code{list} of \code{DatasetConnector} elements) list with dataset connectors}
+\item{\code{connectors}}{(\code{list} of \code{RelationalDatasetConnector} elements) list with dataset connectors}
 }
 \if{html}{\out{</div>}}
 }
 \subsection{Returns}{
-new \code{DataConnector} object
+new \code{RelationalDataConnector} object
 Get names of the datasets.
 }
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-get_datanames"></a>}}
+\if{latex}{\out{\hypertarget{method-get_datanames}{}}}
 \subsection{Method \code{get_datanames()}}{
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{RelationalDataConnector$get_datanames()}\if{html}{\out{</div>}}
@@ -109,6 +111,7 @@ Get pulled \code{RelationalDataset} objects
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-get_datasets"></a>}}
+\if{latex}{\out{\hypertarget{method-get_datasets}{}}}
 \subsection{Method \code{get_datasets()}}{
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{RelationalDataConnector$get_datasets()}\if{html}{\out{</div>}}
@@ -120,6 +123,7 @@ Get pulled \code{RelationalDataset} objects
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-get_dataset"></a>}}
+\if{latex}{\out{\hypertarget{method-get_dataset}{}}}
 \subsection{Method \code{get_dataset()}}{
 Get \code{RelationalDataset} object.
 \subsection{Usage}{
@@ -141,6 +145,7 @@ Get \code{RelationalDatasetConnector} objects
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-get_dataset_connectors"></a>}}
+\if{latex}{\out{\hypertarget{method-get_dataset_connectors}{}}}
 \subsection{Method \code{get_dataset_connectors()}}{
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{RelationalDataConnector$get_dataset_connectors()}\if{html}{\out{</div>}}
@@ -152,6 +157,7 @@ Get \code{RelationalDatasetConnector} objects
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-get_code"></a>}}
+\if{latex}{\out{\hypertarget{method-get_code}{}}}
 \subsection{Method \code{get_code()}}{
 Derive the code for all datasets
 \subsection{Usage}{
@@ -173,6 +179,7 @@ Derive the code for all datasets
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-get_connection"></a>}}
+\if{latex}{\out{\hypertarget{method-get_connection}{}}}
 \subsection{Method \code{get_connection()}}{
 Get connection to data source
 \subsection{Usage}{
@@ -185,6 +192,7 @@ connector's connection
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-get_server"></a>}}
+\if{latex}{\out{\hypertarget{method-get_server}{}}}
 \subsection{Method \code{get_server()}}{
 
 \subsection{Usage}{
@@ -197,6 +205,7 @@ the \code{server} function of the \code{RelationalDataConnector}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-get_ui"></a>}}
+\if{latex}{\out{\hypertarget{method-get_ui}{}}}
 \subsection{Method \code{get_ui()}}{
 Get Shiny module with inputs for all \code{RelationalDatasetConnector} objects
 \subsection{Usage}{
@@ -216,6 +225,7 @@ the \code{ui} function of the \code{RelationalDataConnector}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-launch"></a>}}
+\if{latex}{\out{\hypertarget{method-launch}{}}}
 \subsection{Method \code{launch()}}{
 Run simple application that uses its \code{ui} and \code{server} fields to pull data from
 connection.
@@ -231,6 +241,7 @@ An object that represents the app
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-pull"></a>}}
+\if{latex}{\out{\hypertarget{method-pull}{}}}
 \subsection{Method \code{pull()}}{
 Load data from each \code{RelationalDatasetConnector}
 \subsection{Usage}{
@@ -265,6 +276,7 @@ nothing, in order to get the data please use \code{get_data} method
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-set_args"></a>}}
+\if{latex}{\out{\hypertarget{method-set_args}{}}}
 \subsection{Method \code{set_args()}}{
 Set arguments to connection and connectors. Using \code{set_args} will save these
 arguments in reproducible code unlike using \code{pull} function.
@@ -289,6 +301,7 @@ nothing
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-set_check"></a>}}
+\if{latex}{\out{\hypertarget{method-set_check}{}}}
 \subsection{Method \code{set_check()}}{
 Set reproducibility check
 \subsection{Usage}{
@@ -308,6 +321,7 @@ nothing
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-set_ui"></a>}}
+\if{latex}{\out{\hypertarget{method-set_ui}{}}}
 \subsection{Method \code{set_ui()}}{
 Set connector UI function
 \subsection{Usage}{
@@ -329,6 +343,7 @@ nothing
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-set_server"></a>}}
+\if{latex}{\out{\hypertarget{method-set_server}{}}}
 \subsection{Method \code{set_server()}}{
 Set connector server function
 
@@ -353,6 +368,7 @@ nothing
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-is_pulled"></a>}}
+\if{latex}{\out{\hypertarget{method-is_pulled}{}}}
 \subsection{Method \code{is_pulled()}}{
 Check if dataset has already been pulled.
 \subsection{Usage}{
@@ -365,6 +381,7 @@ Check if dataset has already been pulled.
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-clone"></a>}}
+\if{latex}{\out{\hypertarget{method-clone}{}}}
 \subsection{Method \code{clone()}}{
 The objects of this class are cloneable with this method.
 \subsection{Usage}{

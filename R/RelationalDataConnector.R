@@ -47,9 +47,9 @@ RelationalDataConnector <- R6::R6Class( #nolint
     #' Create a new \code{RelationalDataConnector} object
     #'
     #' @param connection (\code{DataConnection}) connection to data source
-    #' @param connectors (\code{list} of \code{DatasetConnector} elements) list with dataset connectors
+    #' @param connectors (\code{list} of \code{RelationalDatasetConnector} elements) list with dataset connectors
     #'
-    #' @return new \code{DataConnector} object
+    #' @return new \code{RelationalDataConnector} object
     initialize = function(connection, connectors) {
       if (!missing(connection)) {
         private$set_connection(connection)

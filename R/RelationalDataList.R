@@ -119,6 +119,7 @@ RelationalDataList <- R6::R6Class( # nolint
     #' derive \code{RelationalDataConnector} object's data
     #'
     #' @param id (\code{character}) item ID for the shiny module
+    #' @return the \code{shiny} \code{ui} function
     get_ui = function(id) {
       if (is.null(private$ui)) {
         div(id = id, "Data Loaded")
@@ -226,6 +227,7 @@ RelationalDataList <- R6::R6Class( # nolint
     #' Get a shiny-module server to render the necessary app to
     #' derive \code{RelationalDataConnector} object's data
     #'
+    #' @return \code{shiny} \code{server} module.
     get_server = function() {
       if (is.null(private$server)) {
         return(function(input, output, session) {
