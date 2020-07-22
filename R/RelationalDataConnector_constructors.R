@@ -62,7 +62,7 @@ rcd_cdisc_data <- function(..., check = TRUE) {
       ns <- NS(id)
       tagList(
         connection$get_open_ui(ns("open_connection")),
-        numericInput(ns("seed"), "Choose seed", min = 1, max = 1000, value = 1),
+        numericInput(ns("seed"), p("Choose", code("seed")), min = 1, max = 1000, value = 1),
         do.call(
           what = "tagList",
           args = lapply(
@@ -168,9 +168,9 @@ rice_cdisc_data <- function(..., additional_ui = NULL) {
               11,
               offset = 1,
               lapply(seq_along(connectors), function(i) {
-                tags$li(paste0(connectors[[i]]$get_dataname(),
+                tags$li(code(connectors[[i]]$get_dataname()),
                                ": ",
-                               connectors[[i]]$get_pull_args()$node))
+                               code(connectors[[i]]$get_pull_args()$node))
               })
             )
           )

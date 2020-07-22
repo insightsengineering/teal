@@ -280,7 +280,7 @@ NamedDatasetConnector <- R6::R6Class( #nolint
         tags$div(
           tags$div(
             id = ns("inputs"),
-            if_not_null(args, h4(sprintf("Inputs for %s only:", self$get_dataname()))),
+            if_not_null(args, h4("Dataset Connector for ", code(self$get_dataname()))),
             lapply(seq_along(args),
                    function(i) match_ui(ns = ns, value = args[[i]], label = names(args[i]))
             )

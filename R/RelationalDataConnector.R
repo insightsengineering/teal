@@ -258,7 +258,7 @@ RelationalDataConnector <- R6::R6Class( #nolint
       private$ui <- function(id) {
         ns <- NS(id)
         tags$div(
-          h3(paste(c("Inputs for:", self$get_datanames()), collapse = " ")),
+          h3("Data Connector for:", lapply(self$get_datanames(), code)),
           tags$div(
             id = ns("data_input"),
             data_input(id = ns("data_input"))

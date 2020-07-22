@@ -290,7 +290,7 @@ RawDatasetConnector <- R6::R6Class( #nolint
         tags$div(
           tags$div(
             id = ns("inputs"),
-            if_not_null(args, h4("Dataset inputs")),
+            if_not_null(args, h4("Dataset Connector:")),
             lapply(seq_along(args),
                    function(i) match_ui(ns = ns, value = args[[i]], label = names(args[i]))
             )
@@ -332,11 +332,11 @@ match_ui <- function(ns, value, label) {
   type <- mode(value)
 
   if (type == "logical") {
-    out <- checkboxInput(ns(label), label, value)
+    out <- checkboxInput(ns(label), code(label), value)
   } else if (type == "numeric") {
-    out <- numericInput(ns(label), label, value)
+    out <- numericInput(ns(label), code(label), value)
   } else if (type == "character") {
-    out <- textInput(ns(label), label, value)
+    out <- textInput(ns(label), code(label), value)
   } else {
     stop(paste("Unknown type", type))
   }
