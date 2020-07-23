@@ -4,7 +4,7 @@
 \alias{srv_teal}
 \title{Server function corresponding to teal}
 \usage{
-srv_teal(input, output, session, modules, raw_data, filter_states = list())
+srv_teal(input, output, session, modules, raw_data, filter = list())
 }
 \arguments{
 \item{input}{\verb{Shiny input object}}
@@ -19,7 +19,7 @@ can be used for nested tabs, see \verb{\link{ui_nested_tabs}}}
 \item{raw_data}{\code{reactive} which returns the \code{RelationalDataList}, only evaluated once,
 \code{NULL} value is ignored}
 
-\item{filter_states}{(\code{list}) You can define filters that show when
+\item{filter}{(\code{list}) You can define filters that show when
 the app starts.
 The general pattern is:
 \code{list(ADSL = list(SEX = ..., AGE = ...), ADAE = ...)}.
@@ -32,8 +32,8 @@ specified as follows:
 or equivalently with:
 \code{list(SEX = c("M", "F"))},
 \code{list(SEX = c("M", "F", NA))},
-or for the default filter state (not very restrictive):
-\code{list(SEX = default_filter_state())}
+or for the default filter (not very restrictive):
+\code{list(SEX = default_filter())}
 
 Instead of \code{choices} above, use the following names:
 \itemize{
@@ -41,7 +41,7 @@ Instead of \code{choices} above, use the following names:
 \item \code{factor}: \code{choices}
 \item \code{logical}: \code{logical}
 A general example is:
-\code{list(   ADSL = list(AGE = default_filter_state(), SEX = c("M", NA)),   ADAE = list(AETOXGR = default_filter_state())   )}
+\code{list(   ADSL = list(AGE = default_filter(), SEX = c("M", NA)),   ADAE = list(AETOXGR = default_filter())   )}
 Ignored if the app is restored from a bookmarked state.
 }}
 }

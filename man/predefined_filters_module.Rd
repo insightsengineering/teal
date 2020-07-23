@@ -4,12 +4,12 @@
 \alias{predefined_filters_module}
 \title{Add predefined filters with a button click}
 \usage{
-predefined_filters_module(label = "Apply filters", filter_states)
+predefined_filters_module(label = "Apply filters", filter)
 }
 \arguments{
 \item{label}{\code{character} label of module}
 
-\item{filter_states}{(\code{list}) You can define filters that show when
+\item{filter}{(\code{list}) You can define filters that show when
 the app starts.
 The general pattern is:
 \code{list(ADSL = list(SEX = ..., AGE = ...), ADAE = ...)}.
@@ -22,8 +22,8 @@ specified as follows:
 or equivalently with:
 \code{list(SEX = c("M", "F"))},
 \code{list(SEX = c("M", "F", NA))},
-or for the default filter state (not very restrictive):
-\code{list(SEX = default_filter_state())}
+or for the default filter (not very restrictive):
+\code{list(SEX = default_filter())}
 
 Instead of \code{choices} above, use the following names:
 \itemize{
@@ -31,7 +31,7 @@ Instead of \code{choices} above, use the following names:
 \item \code{factor}: \code{choices}
 \item \code{logical}: \code{logical}
 A general example is:
-\code{list(   ADSL = list(AGE = default_filter_state(), SEX = c("M", NA)),   ADAE = list(AETOXGR = default_filter_state())   )}
+\code{list(   ADSL = list(AGE = default_filter(), SEX = c("M", NA)),   ADAE = list(AETOXGR = default_filter())   )}
 Ignored if the app is restored from a bookmarked state.
 }}
 }
@@ -39,12 +39,12 @@ Ignored if the app is restored from a bookmarked state.
 For instance, one wants to add all filters at once for a safety analysis.
 }
 \details{
-After resetting to the predefined filters \code{filter_states}, the applied filters
-will match exactly the \code{filter_states}.
+After resetting to the predefined filters \code{filter}, the applied filters
+will match exactly the \code{filter}.
 There is a checkbox option to not reset those datanames that don't appear
-in \code{filter_states}.
+in \code{filter}.
 There is a checkbox option to not reset variables that are currently filtered
-(but they must still appear in the \code{filter_states}, otherwise they are removed).
+(but they must still appear in the \code{filter}, otherwise they are removed).
 
 \strong{Note:}
 The filters of all datasets are set, not just the active datanames

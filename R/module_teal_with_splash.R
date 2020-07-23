@@ -51,7 +51,7 @@ ui_teal_with_splash <- function(id,
 #' @inheritParams srv_teal
 #' @return `reactive`, return value of `\link{srv_teal}`
 #' @export
-srv_teal_with_splash <- function(input, output, session, data, modules, filter_states = list()) {
+srv_teal_with_splash <- function(input, output, session, data, modules, filter = list()) {
   stopifnot(is(data, "RelationalDataList"))
 
   is_not_delayed_data <- is_pulled(data)
@@ -67,6 +67,6 @@ srv_teal_with_splash <- function(input, output, session, data, modules, filter_s
     stop_if_not(list(is.reactive(raw_data), "The delayed loading module has to return a reactive object."))
   }
 
-  res <- callModule(srv_teal, "teal", modules = modules, raw_data = raw_data, filter_states = filter_states)
+  res <- callModule(srv_teal, "teal", modules = modules, raw_data = raw_data, filter = filter)
   return(res)
 }

@@ -5,14 +5,7 @@
 \title{Server function that loads the data through reactive loading and then delegates
 to \verb{\link{srv_teal}}.}
 \usage{
-srv_teal_with_splash(
-  input,
-  output,
-  session,
-  data,
-  modules,
-  filter_states = list()
-)
+srv_teal_with_splash(input, output, session, data, modules, filter = list())
 }
 \arguments{
 \item{input}{\verb{Shiny input object}}
@@ -26,7 +19,7 @@ srv_teal_with_splash(
 \item{modules}{\code{teal_module} or \code{teal_modules} object, the latter
 can be used for nested tabs, see \verb{\link{ui_nested_tabs}}}
 
-\item{filter_states}{(\code{list}) You can define filters that show when
+\item{filter}{(\code{list}) You can define filters that show when
 the app starts.
 The general pattern is:
 \code{list(ADSL = list(SEX = ..., AGE = ...), ADAE = ...)}.
@@ -39,8 +32,8 @@ specified as follows:
 or equivalently with:
 \code{list(SEX = c("M", "F"))},
 \code{list(SEX = c("M", "F", NA))},
-or for the default filter state (not very restrictive):
-\code{list(SEX = default_filter_state())}
+or for the default filter (not very restrictive):
+\code{list(SEX = default_filter())}
 
 Instead of \code{choices} above, use the following names:
 \itemize{
@@ -48,7 +41,7 @@ Instead of \code{choices} above, use the following names:
 \item \code{factor}: \code{choices}
 \item \code{logical}: \code{logical}
 A general example is:
-\code{list(   ADSL = list(AGE = default_filter_state(), SEX = c("M", NA)),   ADAE = list(AETOXGR = default_filter_state())   )}
+\code{list(   ADSL = list(AGE = default_filter(), SEX = c("M", NA)),   ADAE = list(AETOXGR = default_filter())   )}
 Ignored if the app is restored from a bookmarked state.
 }}
 }

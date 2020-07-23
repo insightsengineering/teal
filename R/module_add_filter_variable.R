@@ -147,7 +147,7 @@ srv_add_filter_variable <- function(input, output, session, datasets, dataname, 
         datasets = datasets,
         dataname = dataname,
         varname = var_to_add,
-        state = default_filter_state()
+        state = default_filter()
       )
 
       # reset selected to empty, `updateOptionalSelectInput` only happens once the reactive flush terminates

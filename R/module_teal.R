@@ -41,7 +41,7 @@
 #'   server = function(input, output, session) {
 #'     active_module <- callModule(
 #'       teal:::srv_teal, "dummy", modules = mods, raw_data = raw_data,
-#'       filter_states = teal:::get_dummy_filter_states()
+#'       filter = teal:::get_dummy_filter()
 #'     )
 #'   }
 #' )
@@ -123,7 +123,7 @@ ui_teal <- function(id,
 #' @inheritParams init
 #'
 #' @return `reactive` which returns the currently active module
-srv_teal <- function(input, output, session, modules, raw_data, filter_states = list()) {
+srv_teal <- function(input, output, session, modules, raw_data, filter = list()) {
   stopifnot(is.reactive(raw_data))
 
   # Javascript code ----
@@ -165,7 +165,7 @@ srv_teal <- function(input, output, session, modules, raw_data, filter_states = 
   # ignoreNULL to not trigger at the beginning when data is NULL
   # just handle it once because data obtained through delayed loading should
   # usually not change afterwards
-  # if restored from bookmarked state, `filter_states` is ignored
+  # if restored from bookmarked state, `filter` is ignored
   observeEvent(raw_data(), ignoreNULL = TRUE, once = TRUE, {
     .log("data loaded successfully")
 
@@ -181,7 +181,7 @@ srv_teal <- function(input, output, session, modules, raw_data, filter_states = 
       # for example, the data may only be loaded once a password is provided
       # however, onRestore only runs in the first flush and not in the flush when the
       # password was finally provided
-      .log("restoring filter state from bookmarked state - filter_states is ignored")
+      .log("restoring filter state from bookmarked state - filter is ignored")
       tryCatch({
         progress$set(0.5, message = "Restoring from bookmarked state")
         datasets$restore_state_from_bookmark(saved_datasets_state)
@@ -205,7 +205,7 @@ srv_teal <- function(input, output, session, modules, raw_data, filter_states = 
       }
       )
     } else {
-      set_datasets_filters(datasets, filter_states)
+      set_datasets_filters(datasets, filter)
     }
 
     # replace splash screen by teal UI

@@ -104,8 +104,8 @@ ADLB <- radlb(cached = TRUE)
     teal:::debug_browser_module(),
     teal:::reset_filters_module("Reset", active_datanames = c("ADSL", "ADLB"))
   ),
-  filter_states = list(
-    ADSL = list(SEX = list(choices = "M", keep_na = TRUE), AGE = default_filter_state()),
+  filter = list(
+    ADSL = list(SEX = list(choices = "M", keep_na = TRUE), AGE = default_filter()),
     ADLB = list(ASEQ = list(range = c(5.6, 20), keep_na = FALSE))
   ),
   header = "Simple teal app",
@@ -135,10 +135,10 @@ ADLB <- radlb(cached = TRUE)
     teal:::bookmark_module(),
     teal:::debug_browser_module()
   ),
-  filter_states = list(ADSL = list(
+  filter = list(ADSL = list(
     SEX = list(choices = "M", keep_na = TRUE),
     COUNTRY = c("USA", NA),
-    AGE = default_filter_state()
+    AGE = default_filter()
   )),
   header = "Simple teal app",
   footer = tags$p(class = "text-muted", "Source: agile-R website")
@@ -162,7 +162,7 @@ app <- init(
     teal:::bookmark_module(),
     teal:::debug_browser_module()
   ),
-  filter_states = list(ADSL = list(SEX = list(choices = "M", keep_na = TRUE), AGE = default_filter_state())),
+  filter = list(ADSL = list(SEX = list(choices = "M", keep_na = TRUE), AGE = default_filter())),
   header = "Simple teal app",
   footer = tags$p(class = "text-muted", "Source: agile-R website")
 ); safeBookmarkableShinyApp(app$ui, app$server, enableBookmarking = "url")
@@ -195,10 +195,10 @@ ADLB <- radlb(cached = TRUE)
     ),
     modules(label = "A2", teal:::filter_calls_module("D2", active_datanames = c("ADSL")))
   ),
-  filter_states = list(ADSL = list(
+  filter = list(ADSL = list(
     SEX = list(choices = "M", keep_na = TRUE),
     COUNTRY = c("USA", NA),
-    AGE = default_filter_state()
+    AGE = default_filter()
   )),
   header = "Simple teal app",
   footer = tags$p(class = "text-muted", "Source: agile-R website")
@@ -234,12 +234,12 @@ app <- init(
   modules = root_modules(
     teal:::filter_calls_module()
   ),
-  filter_states = list(ADSL = list(
+  filter = list(ADSL = list(
     SEX1 = list(choices = c("M", "F")),
     SEX2 = list(choices = c("M", "F"), keep_na = TRUE),
     SEX3 = c("M", "F"),
     SEX4 = c("M", "F", NA),
-    SEX5 = default_filter_state()
+    SEX5 = default_filter()
   )),
   header = "Simple teal app",
   footer = tags$p(class = "text-muted", "Source: agile-R website")
@@ -277,8 +277,8 @@ This app checks that several filters can be applied at once. The logic is non-tr
 ```{r predefinedFiltersApp}
 # dummy filter to show how several filters can be applied at once, not sensible
 safety_filter <- list(
-  ADSL = list(SEX = list(choices = "M", keep_na = TRUE), AGE = default_filter_state()),
-  ADLB = list(ASEQ = default_filter_state())
+  ADSL = list(SEX = list(choices = "M", keep_na = TRUE), AGE = default_filter()),
+  ADLB = list(ASEQ = default_filter())
 )
 app <- init(
   data = cdisc_data(
@@ -291,17 +291,17 @@ ADAE <- radae(cached = TRUE)
 ADLB <- radlb(cached = TRUE)
 "),
   modules = root_modules(
-    teal:::predefined_filters_module(filter_states = safety_filter),
+    teal:::predefined_filters_module(filter = safety_filter),
     teal:::filter_calls_module()
   ),
-  filter_states = list(
+  filter = list(
     ADSL = list(
       SEX = list(choices = "M", keep_na = TRUE),
       COUNTRY = c("USA", NA),
-      AGE = default_filter_state()
+      AGE = default_filter()
     ),
     ADAE = list(
-      AEHLT = default_filter_state()
+      AEHLT = default_filter()
     )
   ),
   header = "Simple teal app",

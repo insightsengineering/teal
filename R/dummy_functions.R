@@ -3,14 +3,14 @@
 
 #' Get dummy filter states to apply initially
 #'
-#' This can be used for the argument `filter_states` in
+#' This can be used for the argument `filter` in
 #' `\link{srv_teal}`.
 #' @md
 #' @return dummy filter states
-get_dummy_filter_states <- function() {
+get_dummy_filter <- function() {
   res <- list(
-    ADSL = list(SEX = list(choices = "M", keep_na = TRUE), AGE = default_filter_state()),
-    ADLB = list(ASEQ = default_filter_state())
+    ADSL = list(SEX = list(choices = "M", keep_na = TRUE), AGE = default_filter()),
+    ADLB = list(ASEQ = default_filter())
   )
   return(res)
 }

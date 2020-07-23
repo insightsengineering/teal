@@ -227,7 +227,6 @@ Any attributes attached to the data are kept in the unfiltered data.
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-get_code"></a>}}
-\if{latex}{\out{\hypertarget{method-get_code}{}}}
 \subsection{Method \code{get_code()}}{
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{FilteredData$get_code(dataname = self$datanames())}\if{html}{\out{</div>}}
@@ -250,7 +249,6 @@ Get the R preprocessing code string that generates the unfiltered datasets
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-set_code"></a>}}
-\if{latex}{\out{\hypertarget{method-set_code}{}}}
 \subsection{Method \code{set_code()}}{
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{FilteredData$set_code(dataname, code)}\if{html}{\out{</div>}}
@@ -276,7 +274,6 @@ Set the R preprocessing code for single dataset
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-set_code_all"></a>}}
-\if{latex}{\out{\hypertarget{method-set_code_all}{}}}
 \subsection{Method \code{set_code_all()}}{
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{FilteredData$set_code_all(code)}\if{html}{\out{</div>}}

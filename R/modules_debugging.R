@@ -248,12 +248,12 @@ trigger_after_first_cycle <- function(expr) {
 #'
 #' For instance, one wants to add all filters at once for a safety analysis.
 #'
-#' After resetting to the predefined filters `filter_states`, the applied filters
-#' will match exactly the `filter_states`.
+#' After resetting to the predefined filters `filter`, the applied filters
+#' will match exactly the `filter`.
 #' There is a checkbox option to not reset those datanames that don't appear
-#' in `filter_states`.
+#' in `filter`.
 #' There is a checkbox option to not reset variables that are currently filtered
-#' (but they must still appear in the `filter_states`, otherwise they are removed).
+#' (but they must still appear in the `filter`, otherwise they are removed).
 #'
 #' **Note:**
 #' The filters of all datasets are set, not just the active datanames
@@ -268,28 +268,28 @@ trigger_after_first_cycle <- function(expr) {
 #' @inheritParams filter_calls_module
 #' @inheritParams init
 #'
-predefined_filters_module <- function(label = "Apply filters", filter_states) {
+predefined_filters_module <- function(label = "Apply filters", filter) {
   stopifnot(
     is_character_single(label),
-    is_fully_named_list(filter_states)
+    is_fully_named_list(filter)
   )
   module(
     label = label,
     server = function(input, output, session, datasets) {
-      # Note: use `datasets$datanames()` instead of `names(filter_states())`
+      # Note: use `datasets$datanames()` instead of `names(filters())`
       datanames <- reactive(datasets$datanames())
 
       # overwrite it to filter to only those datasets that are provided
-      all_filter_states <- filter_states
-      filter_states <- function() {
+      all_filters <- filter
+      filters <- function() {
         # reactive
-        res <- all_filter_states[names(all_filter_states) %in% datanames()]
+        res <- all_filters[names(all_filters) %in% datanames()]
         if (input$include_nonspecified_datasets) {
           # set datasets that don't appear to NULL so below we also loop over the datasets that
           # are not specified in the dataset
           datanames_to_add <- setdiff(datanames(), names(res))
           res[datanames_to_add] <- replicate(length(datanames_to_add), list())
-        } # otherwise, all datasets that don't appear in the `filter_states` are not affected
+        } # otherwise, all datasets that don't appear in the `filter` are not affected
         return(res)
       }
 
@@ -297,7 +297,7 @@ predefined_filters_module <- function(label = "Apply filters", filter_states) {
         .log("Setting dataset filters")
         isolate(Map(function(dataname, filters) {
           datasets$set_filter_state(dataname, state = filters)
-        }, names(filter_states()), filter_states()))
+        }, names(filters()), filters()))
         invisible(NULL)
       }
       next_cycle_set_dataset_filters <- execute_in_next_cycle(set_dataset_filters)
@@ -309,7 +309,7 @@ predefined_filters_module <- function(label = "Apply filters", filter_states) {
         # and then readd all variables on the next cycle.
         if (input$overwrite_filtered_vars) {
           # We entirely remove all variables and add them in the next cycle
-          lapply(names(filter_states()), function(dataname) {
+          lapply(names(filters()), function(dataname) {
             datasets$set_filter_state(dataname, state = list(), remove_omitted = TRUE)
           })
           next_cycle_set_dataset_filters()
@@ -321,7 +321,7 @@ predefined_filters_module <- function(label = "Apply filters", filter_states) {
             vars_to_keep <- names(filters)[names(filters) %in% names(current_filters)]
             filters[vars_to_keep] <- current_filters[vars_to_keep]
             datasets$set_filter_state(dataname, state = filters)
-          }, names(filter_states()), filter_states())
+          }, names(filters()), filters())
         }
       })
 
@@ -334,7 +334,7 @@ predefined_filters_module <- function(label = "Apply filters", filter_states) {
           } else {
             setdiff(names(current_filters), names(filters))
           }
-        }, names(filter_states()), filter_states())
+        }, names(filters()), filters())
 
         # variables that will be added once the variables were removed
         added_vars <- Map(function(dataname, filters) {
@@ -344,7 +344,7 @@ predefined_filters_module <- function(label = "Apply filters", filter_states) {
             current_filters <- datasets$get_filter_state(dataname)
             setdiff(names(filters), names(current_filters))
           }
-        }, names(filter_states()), filter_states())
+        }, names(filters()), filters())
 
         # variables that will not be modified
         non_modified_vars <- Map(function(dataname, filters) {
@@ -354,14 +354,14 @@ predefined_filters_module <- function(label = "Apply filters", filter_states) {
             current_filters <- datasets$get_filter_state(dataname)
             names(current_filters)[names(current_filters) %in% names(filters)]
           }
-        }, names(filter_states()), filter_states())
+        }, names(filters()), filters())
 
         # Variables that will be present after applying it
-        filter_vars <- lapply(filter_states(), names)
+        filter_vars <- lapply(filters(), names)
 
         if (!input$include_nonspecified_datasets) {
-          # will not affect datasets that do not appear in `filter_states()`
-          extra_datanames <- setNames(nm = setdiff(datanames(), names(filter_states())))
+          # will not affect datasets that do not appear in `filters()`
+          extra_datanames <- setNames(nm = setdiff(datanames(), names(filter())))
           # extra vars that will not be modified because they are not included in the filter
           extra_vars <- lapply(extra_datanames, function(dataname) {
             names(datasets$get_filter_state(dataname))
@@ -386,7 +386,7 @@ predefined_filters_module <- function(label = "Apply filters", filter_states) {
           "The following variables will not be modified: \n",
           named_list_to_string(non_modified_vars),
           "\n---------------------------------\n",
-          "The following variables will be present after this operation (corresponding to filter_states): \n",
+          "The following variables will be present after this operation (corresponding to filter): \n",
           named_list_to_string(filter_vars)
         )
       })

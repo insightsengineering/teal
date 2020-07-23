@@ -58,7 +58,7 @@ app <- shinyApp(
   server = function(input, output, session) {
     active_module <- callModule(
       teal:::srv_teal, "dummy", modules = mods, raw_data = raw_data,
-      filter_states = teal:::get_dummy_filter_states()
+      filter = teal:::get_dummy_filter()
     )
   }
 )

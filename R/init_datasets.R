@@ -18,15 +18,15 @@ set_datasets_data <- function(datasets, data) {
   return(invisible(NULL))
 }
 
-set_datasets_filters <- function(datasets, filter_states) {
+set_datasets_filters <- function(datasets, filter) {
   stopifnot(
     is(datasets, "FilteredData"),
-    is_fully_named_list(filter_states),
-    all(names(filter_states) %in% datasets$datanames())
+    is_fully_named_list(filter),
+    all(names(filter) %in% datasets$datanames())
   )
 
   Map(function(dataname, filters_for_dataname) {
     datasets$set_filter_state(dataname, state = filters_for_dataname)
-  }, names(filter_states), filter_states)
+  }, names(filter), filter)
   return(invisible(NULL))
 }

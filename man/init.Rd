@@ -8,7 +8,7 @@ init(
   data,
   modules,
   title = NULL,
-  filter_states = list(),
+  filter = list(),
   header = tags$p("Add Title Here"),
   footer = tags$p("Add Footer Here"),
   id = character(0)
@@ -35,7 +35,7 @@ function
 
 \item{title}{(\code{NULL} or \code{character}) The browser window title (defaults to the host URL of the page).}
 
-\item{filter_states}{(\code{list}) You can define filters that show when
+\item{filter}{(\code{list}) You can define filters that show when
 the app starts.
 The general pattern is:
 \code{list(ADSL = list(SEX = ..., AGE = ...), ADAE = ...)}.
@@ -48,8 +48,8 @@ specified as follows:
 or equivalently with:
 \code{list(SEX = c("M", "F"))},
 \code{list(SEX = c("M", "F", NA))},
-or for the default filter state (not very restrictive):
-\code{list(SEX = default_filter_state())}
+or for the default filter (not very restrictive):
+\code{list(SEX = default_filter())}
 
 Instead of \code{choices} above, use the following names:
 \itemize{
@@ -57,7 +57,7 @@ Instead of \code{choices} above, use the following names:
 \item \code{factor}: \code{choices}
 \item \code{logical}: \code{logical}
 A general example is:
-\code{list(   ADSL = list(AGE = default_filter_state(), SEX = c("M", NA)),   ADAE = list(AETOXGR = default_filter_state())   )}
+\code{list(   ADSL = list(AGE = default_filter(), SEX = c("M", NA)),   ADAE = list(AETOXGR = default_filter())   )}
 Ignored if the app is restored from a bookmarked state.
 }}
 
@@ -116,7 +116,7 @@ app <- init(
     )
   ),
   title = "App title",
-  filter_states = list(ADSL = list(AGE = default_filter_state())),
+  filter = list(ADSL = list(AGE = default_filter())),
   header = tags$h1("Sample App"),
   footer = tags$p("Copyright 2017 - 2020")
 )

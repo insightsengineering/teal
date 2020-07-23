@@ -31,7 +31,7 @@
 #'   function
 #'   }
 #' @param title (`NULL` or `character`) The browser window title (defaults to the host URL of the page).
-#' @param filter_states (`list`) You can define filters that show when
+#' @param filter (`list`) You can define filters that show when
 #'   the app starts.
 #'   The general pattern is:
 #'   `list(ADSL = list(SEX = ..., AGE = ...), ADAE = ...)`.
@@ -44,8 +44,8 @@
 #'   or equivalently with:
 #'   `list(SEX = c("M", "F"))`,
 #'   `list(SEX = c("M", "F", NA))`,
-#'   or for the default filter state (not very restrictive):
-#'   `list(SEX = default_filter_state())`
+#'   or for the default filter (not very restrictive):
+#'   `list(SEX = default_filter())`
 #'
 #'   Instead of `choices` above, use the following names:
 #'   - `numerical`: `range`
@@ -53,8 +53,8 @@
 #'   - `logical`: `logical`
 #'   A general example is:
 #'   `list(
-#'   ADSL = list(AGE = default_filter_state(), SEX = c("M", NA)),
-#'   ADAE = list(AETOXGR = default_filter_state())
+#'   ADSL = list(AGE = default_filter(), SEX = c("M", NA)),
+#'   ADAE = list(AETOXGR = default_filter())
 #'   )`
 #'   Ignored if the app is restored from a bookmarked state.
 #' @param header (`character` or `shiny.tag`) the header of the app
@@ -107,7 +107,7 @@
 #'     )
 #'   ),
 #'   title = "App title",
-#'   filter_states = list(ADSL = list(AGE = default_filter_state())),
+#'   filter = list(ADSL = list(AGE = default_filter())),
 #'   header = tags$h1("Sample App"),
 #'   footer = tags$p("Copyright 2017 - 2020")
 #' )
@@ -122,7 +122,7 @@
 init <- function(data,
                  modules,
                  title = NULL,
-                 filter_states = list(),
+                 filter = list(),
                  header = tags$p("Add Title Here"),
                  footer = tags$p("Add Footer Here"),
                  id = character(0)) {
@@ -130,8 +130,8 @@ init <- function(data,
     is(data, "RelationalDataList"),
     is(modules, "teal_modules"),
     is.null(title) || is_character_single(title),
-    is_fully_named_list(filter_states),
-    all(names(filter_states) %in% get_dataname(data)),
+    is_fully_named_list(filter),
+    all(names(filter) %in% get_dataname(data)),
     is_character_vector(id, min_length = 0, max_length = 1)
   )
 
@@ -144,7 +144,7 @@ init <- function(data,
     server = function(input, output, session) {
       srv_teal_with_splash(
         input, output, session,
-        data = data, modules = modules, filter_states = filter_states
+        data = data, modules = modules, filter = filter
       )
     }
   )

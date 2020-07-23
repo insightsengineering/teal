@@ -14,7 +14,7 @@ set_single_filter_state(datasets, dataname, varname, state)
 \item{varname}{`character` variable name}
 
 \item{state}{`list` new state for the variable, can be
-`default_filter_state()`}
+`default_filter()`}
 }
 \description{
 See `FilteredData$set_filter_state`.

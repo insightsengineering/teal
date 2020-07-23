@@ -40,7 +40,7 @@ isolate({
     # since no filter was set before, will just take the default filter
     # returns `logical` whether state was actually changed
     set_default_filter <- function(dataname, varname) {
-      set_single_filter_state(ds, dataname = dataname, varname = varname, state = default_filter_state())
+      set_single_filter_state(ds, dataname = dataname, varname = varname, state = default_filter())
     }
     expect_true(set_default_filter("ADSL", "AGE"))
 

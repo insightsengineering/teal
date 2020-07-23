@@ -1208,7 +1208,7 @@ FilteredData <- R6::R6Class( # nolint
     # external to internal filter state representation ----
     # Convert the external to an internal filter state
     #
-    # It also converts `default_filter_state` to the actual state,
+    # It also converts `default_filter` to the actual state,
     # replaces `NA` in the vector by the `keep_na` option.
     #
     # If the input is a list and does not already have names, `keep_NA` is set
@@ -1231,7 +1231,7 @@ FilteredData <- R6::R6Class( # nolint
     # var_state = list(choices = c("M", "F"), keep_na = TRUE)
     # var_state = c("M", "F")
     # var_state = c("M", "F", NA)
-    # var_state = default_filter_state()
+    # var_state = default_filter()
     # var_state = NULL # no filter applied
     # # all these return slight variations of: list(choices = c("M", "F"), keep_na = TRUE)
     # nolint end
@@ -1241,7 +1241,7 @@ FilteredData <- R6::R6Class( # nolint
       if (is.null(var_state)) {
         return(NULL)
       }
-      if (is_default_filter_state(var_state)) {
+      if (is_default_filter(var_state)) {
         var_state <- self$get_default_filter_state(dataname, varname)
       } else {
         if (is.null(names(var_state))) {
@@ -1273,15 +1273,15 @@ FilteredData <- R6::R6Class( # nolint
 #' @md
 #' @export
 #' @examples
-#' default_filter_state() # test printing
-default_filter_state <- function() {
-  structure(list(), class = "default_filter_state")
+#' default_filter() # test printing
+default_filter <- function() {
+  structure(list(), class = "default_filter")
 }
 
-is_default_filter_state <- function(x) is(x, "default_filter_state")
+is_default_filter <- function(x) is(x, "default_filter")
 
 #' @export
-print.default_filter_state <- function(x, ...) {
+print.default_filter <- function(x, ...) {
   cat("This will pick the default filter state for the variable.\n")
 }
 
@@ -1309,7 +1309,7 @@ get_filter_vars <- function(datasets, dataname) {
 #' @param dataname `character` dataname
 #' @param varname `character` variable name
 #' @param state `list` new state for the variable, can be
-#'   `default_filter_state()`
+#'   `default_filter()`
 set_single_filter_state <- function(datasets, dataname, varname, state) {
   stopifnot(is_character_single(varname))
   datasets$set_filter_state(dataname, state = setNames(list(state), varname))
