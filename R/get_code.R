@@ -149,7 +149,7 @@ get_code.RelationalData <- function(x, dataname = NULL, deparse = TRUE, ...) { #
 #' # RelationalDataConnector ---------
 #' library(random.cdisc.data)
 #'
-#' rcd <- rcd_cdisc_data(
+#' rcd <- rcd_data(
 #'   rcd_cdisc_dataset_connector("ADSL", radsl, cached = TRUE),
 #'   rcd_cdisc_dataset_connector("ADLB", radlb, cached = TRUE),
 #'   rcd_cdisc_dataset_connector("ADRS", radrs, cached = TRUE)
@@ -180,11 +180,11 @@ get_code.RelationalDataConnector <- function(x, dataname = NULL, deparse = TRUE,
 #' @examples
 #' # RelationalDataList ---------
 #' library(random.cdisc.data)
-#' x1 <- rcd_cdisc_data( # RelationalDataConnector
+#' x1 <- rcd_data( # RelationalDataConnector
 #'   rcd_cdisc_dataset_connector("ADSL", radsl, cached = TRUE),
 #'   rcd_cdisc_dataset_connector("ADLB", radlb, cached = TRUE)
 #' )
-#' x2 <- rcd_cdisc_data( # RelationalDataConnector
+#' x2 <- rcd_data( # RelationalDataConnector
 #'   rcd_cdisc_dataset_connector("ADRS", radrs, cached = TRUE)
 #' )
 #'

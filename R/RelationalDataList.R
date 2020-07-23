@@ -7,11 +7,11 @@
 #'
 #' @examples
 #' library(random.cdisc.data)
-#' x <- rcd_cdisc_data( # RelationalDataConnector
+#' x <- rcd_data( # RelationalDataConnector
 #'   rcd_cdisc_dataset_connector("ADSL", radsl, cached = TRUE),
 #'   rcd_cdisc_dataset_connector("ADLB", radlb, cached = TRUE)
 #' )
-#' x2 <- rcd_cdisc_data( # RelationalDataConnector
+#' x2 <- rcd_data( # RelationalDataConnector
 #'   rcd_cdisc_dataset_connector("ADRS", radrs, cached = TRUE)
 #' )
 #' x3 <- cdisc_dataset(

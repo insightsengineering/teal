@@ -52,7 +52,7 @@ library(random.cdisc.data)
 adsl <- rcd_cdisc_dataset_connector(dataname = "ADSL", fun = radsl, cached = TRUE)
 adrs <- rcd_cdisc_dataset_connector(dataname = "ADRS", fun = radrs, ADSL = adsl)
 
-rdc <- rcd_cdisc_data(adsl, adrs)
+rdc <- rcd_data(adsl, adrs)
 
 is_pulled(rdc)
 \dontrun{

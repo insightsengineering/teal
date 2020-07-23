@@ -41,7 +41,7 @@ rd <- teal_data(adsl, adae)
 get_datasets(rd)
 
 # RelationalDataConnector --------
-rdc <- rcd_cdisc_data(
+rdc <- rcd_data(
   rcd_cdisc_dataset_connector("ADSL", radsl, cached = TRUE),
   rcd_cdisc_dataset_connector("ADTTE", radtte, cached = TRUE)
 )

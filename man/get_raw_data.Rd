@@ -69,7 +69,7 @@ rd <- teal:::RelationalData$new(adsl, adtte)
 get_raw_data(rd)
 
 # RelationalDataConnector --------
-rdc <- rcd_cdisc_data(
+rdc <- rcd_data(
   rcd_cdisc_dataset_connector("ADSL", radsl, cached = TRUE),
   rcd_cdisc_dataset_connector("ADTTE", radtte, cached = TRUE)
 )
@@ -80,7 +80,7 @@ get_raw_data(rdc)
 }
 
 # RelationalDataList --------
-rdc2 <- rcd_cdisc_data(
+rdc2 <- rcd_data(
   rcd_cdisc_dataset_connector("ADRS", radrs, cached = TRUE),
   rcd_cdisc_dataset_connector("ADLB", radlb, cached = TRUE)
 )

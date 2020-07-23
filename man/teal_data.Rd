@@ -41,12 +41,12 @@ data <- teal_data(x1, x2)
 get_raw_data(data)
 
 # RelationalDataList
-x3 <- rcd_cdisc_data( # RelationalDataConnector
+x3 <- rcd_data( # RelationalDataConnector
   rcd_cdisc_dataset_connector("ADSL", radsl, cached = TRUE),
   rcd_cdisc_dataset_connector("ADLB", radlb, cached = TRUE)
 )
 
-x4 <- rcd_cdisc_data( # RelationalDataConnector
+x4 <- rcd_data( # RelationalDataConnector
   rcd_cdisc_dataset_connector("ADRS", radrs, cached = TRUE)
 )
 

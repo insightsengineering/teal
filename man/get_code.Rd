@@ -139,7 +139,7 @@ get_code(rd, "XYZ")
 # RelationalDataConnector ---------
 library(random.cdisc.data)
 
-rcd <- rcd_cdisc_data(
+rcd <- rcd_data(
   rcd_cdisc_dataset_connector("ADSL", radsl, cached = TRUE),
   rcd_cdisc_dataset_connector("ADLB", radlb, cached = TRUE),
   rcd_cdisc_dataset_connector("ADRS", radrs, cached = TRUE)
@@ -152,11 +152,11 @@ get_code(rcd, "ADLB")
 get_code(rcd, "ADRS")
 # RelationalDataList ---------
 library(random.cdisc.data)
-x1 <- rcd_cdisc_data( # RelationalDataConnector
+x1 <- rcd_data( # RelationalDataConnector
   rcd_cdisc_dataset_connector("ADSL", radsl, cached = TRUE),
   rcd_cdisc_dataset_connector("ADLB", radlb, cached = TRUE)
 )
-x2 <- rcd_cdisc_data( # RelationalDataConnector
+x2 <- rcd_data( # RelationalDataConnector
   rcd_cdisc_dataset_connector("ADRS", radrs, cached = TRUE)
 )
 

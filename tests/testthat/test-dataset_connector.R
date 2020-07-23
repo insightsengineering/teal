@@ -476,7 +476,7 @@ test_that("script_cdisc_dataset_connector", {
 })
 
 test_that("rice_dataset", {
-  x <- rice_cdisc_data(
+  x <- rice_data(
     rice_dataset_connector("ADSL", "/path/to/ADSL", keys = get_cdisc_keys("ADSL")),
     rice_cdisc_dataset_connector("ADLB", "/path/to/ADLB")
   )

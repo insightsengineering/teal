@@ -38,7 +38,7 @@ test_that("Test RelationalDataConnector is_pulled", {
   adsl <- rcd_cdisc_dataset_connector(dataname = "ADSL", fun = radsl, cached = TRUE)
   adrs <- rcd_cdisc_dataset_connector(dataname = "ADRS", fun = radrs, ADSL = adsl)
 
-  rdc <- rcd_cdisc_data(adsl, adrs)
+  rdc <- rcd_data(adsl, adrs)
 
   expect_false(is_pulled(rdc))
 })

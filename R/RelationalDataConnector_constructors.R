@@ -24,7 +24,7 @@
 #'
 #' @examples
 #' library(random.cdisc.data)
-#' x <- rcd_cdisc_data(
+#' x <- rcd_data(
 #'   rcd_cdisc_dataset_connector("ADSL", radsl, cached = TRUE),
 #'   rcd_cdisc_dataset_connector("ADLB", radlb, cached = TRUE)
 #' )
@@ -49,7 +49,7 @@
 #' \dontrun{
 #' shinyApp(app$ui, app$server)
 #' }
-rcd_cdisc_data <- function(..., check = TRUE) {
+rcd_data <- function(..., check = TRUE) {
   connectors <- list(...)
   stopifnot(is_class_list("RelationalDatasetConnector")(connectors))
   connection <- rcd_connection()
@@ -123,7 +123,7 @@ rcd_cdisc_data <- function(..., check = TRUE) {
 #'
 #' @examples
 #'
-#' x <- rice_cdisc_data(
+#' x <- rice_data(
 #'   rice_cdisc_dataset_connector("ADSL", "/path/to/ADSL"),
 #'   rice_cdisc_dataset_connector("ADLB", "/path/to/ADLB")
 #' )
@@ -146,7 +146,7 @@ rcd_cdisc_data <- function(..., check = TRUE) {
 #' \dontrun{
 #' shinyApp(app$ui, app$server)
 #' }
-rice_cdisc_data <- function(..., additional_ui = NULL) {
+rice_data <- function(..., additional_ui = NULL) {
   connectors <- list(...)
   stopifnot(is_class_list("RelationalDatasetConnector")(connectors))
 

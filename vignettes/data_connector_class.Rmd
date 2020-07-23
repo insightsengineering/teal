@@ -38,7 +38,7 @@ is similar to previously introduced in `cdisc_data()`:
 
 ```{r}
 library(teal)
-data <- rice_cdisc_data(
+data <- rice_data(
   rice_cdisc_dataset_connector(dataname = "ADSL", path = "/path/to/ADSL"),
   rice_cdisc_dataset_connector(dataname = "ADLB", path = "/path/to/ADLB")
 )
@@ -80,7 +80,7 @@ You don't have to pass importing step as a `code` - it will be automatically ext
 from `DataConnector`.
 
 ```{r}
-data_with_code <- rice_cdisc_data(
+data_with_code <- rice_data(
   rice_cdisc_dataset_connector(dataname = "ADSL", path = "/path/to/ADSL"),
   rice_cdisc_dataset_connector(dataname = "ADLB", path = "/path/to/ADLB")
 )

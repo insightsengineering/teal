@@ -49,7 +49,7 @@ library(random.cdisc.data)
 adsl <- rcd_cdisc_dataset_connector(dataname = "ADSL", fun = radsl, cached = TRUE)
 adrs <- rcd_cdisc_dataset_connector(dataname = "ADRS", fun = radrs, ADSL = adsl)
 
-rdc <- rcd_cdisc_data(adsl, adrs)
+rdc <- rcd_data(adsl, adrs)
 
 \dontrun{
 load_datasets(rdc)
@@ -62,8 +62,8 @@ adlb <- rcd_cdisc_dataset_connector(dataname = "ADLB", fun = radlb, cached = TRU
 adrs <- rcd_cdisc_dataset_connector("ADRS", radrs, ADSL = adsl)
 
 tc <- teal_data(
-  rcd_cdisc_data(adsl, adlb),
-  rcd_cdisc_data(adrs)
+  rcd_data(adsl, adlb),
+  rcd_data(adrs)
 )
 
 \dontrun{
