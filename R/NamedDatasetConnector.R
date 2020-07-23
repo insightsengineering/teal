@@ -112,7 +112,7 @@ NamedDatasetConnector <- R6::R6Class( #nolint
     #'   \code{RelationalDataset}, \code{RelationalDatasetConnector} object(s) or other constant value,
     #'   this/these object(s) should be included
     #' @return self
-    mutate_dataset = function(code, vars = list()) {
+    mutate = function(code, vars = list()) {
       if (!is.null(private$dataset)) {
         private$dataset <- mutate_dataset(private$dataset, code = code, vars = vars)
       }

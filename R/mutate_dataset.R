@@ -103,7 +103,7 @@ mutate_dataset.NamedDatasetConnector <- function(x, code = character(0), script 
     stop("You did not use the dataname inside the code. It does not mutate the 'x'")
   }
 
-  x$mutate_dataset(code = code, vars = vars)
+  x$mutate(code = code, vars = vars)
 }
 
 
