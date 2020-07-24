@@ -70,7 +70,10 @@ optionalSelectInput <- function(inputId, # nolint
   stopifnot(is_character_single(inputId))
   stopifnot(is_character_single(label) || is_html_like(label))
   stopifnot(is.null(choices) || length(choices) >= 1)
-  stopifnot(is.null(selected) || length(selected) == 0 || all(selected %in% unlist(choices)))
+  stopifnot(is.null(selected) ||
+              length(selected) == 0 ||
+              all(selected %in% choices) ||
+              all(selected %in% unlist(choices, recursive = FALSE)))
   stopifnot(is_logical_single(multiple))
   stopifnot(is.null(sep) || is_character_single(sep))
   stopifnot(is.list(options))
