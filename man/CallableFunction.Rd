@@ -16,8 +16,10 @@ Object that stores function name with it's arguments. Methods to get call and ru
 \itemize{
 \item \href{#method-new}{\code{CallableFunction$new()}}
 \item \href{#method-assign_to_env}{\code{CallableFunction$assign_to_env()}}
+\item \href{#method-is_failed}{\code{CallableFunction$is_failed()}}
 \item \href{#method-get_args}{\code{CallableFunction$get_args()}}
 \item \href{#method-get_call}{\code{CallableFunction$get_call()}}
+\item \href{#method-get_error_message}{\code{CallableFunction$get_error_message()}}
 \item \href{#method-get_possible_args}{\code{CallableFunction$get_possible_args()}}
 \item \href{#method-run}{\code{CallableFunction$run()}}
 \item \href{#method-refresh}{\code{CallableFunction$refresh()}}
@@ -75,6 +77,19 @@ arguments the function gets called with
 }
 }
 \if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-is_failed"></a>}}
+\if{latex}{\out{\hypertarget{method-is_failed}{}}}
+\subsection{Method \code{is_failed()}}{
+Check if evaluation of the function has not failed.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{CallableFunction$is_failed()}\if{html}{\out{</div>}}
+}
+
+\subsection{Returns}{
+\code{TRUE} if evaluation of the function failed, else \code{FALSE}
+}
+}
+\if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-get_args"></a>}}
 \if{latex}{\out{\hypertarget{method-get_args}{}}}
 \subsection{Method \code{get_args()}}{
@@ -110,6 +125,20 @@ dynamic arguments to function}
 }
 \subsection{Returns}{
 \code{call} or \code{character} depending on \code{deparse} argument
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-get_error_message"></a>}}
+\if{latex}{\out{\hypertarget{method-get_error_message}{}}}
+\subsection{Method \code{get_error_message()}}{
+Get error message from last function execution
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{CallableFunction$get_error_message()}\if{html}{\out{</div>}}
+}
+
+\subsection{Returns}{
+\code{try-error} object with error message or \code{character(0)} if last
+ function evaluation was successful.
 }
 }
 \if{html}{\out{<hr>}}

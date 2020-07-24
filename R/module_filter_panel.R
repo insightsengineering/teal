@@ -105,6 +105,7 @@ ui_filter_panel <- function(id, datanames) {
 #'   if the function returns `NULL` (as opposed to `character(0)`), the filter
 #'   panel will be hidden
 #'
+#' @importFrom shinyjs hide show
 srv_filter_panel <- function(input, output, session, datasets, active_datanames = function() "all") {
   unhandled_active_datanames <- active_datanames # assign to new var to overwrite old var, see below
   stopifnot(

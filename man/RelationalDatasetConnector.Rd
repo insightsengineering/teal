@@ -31,11 +31,12 @@ Pulled data inherits from the class \link{RelationalDataset}.
 \if{html}{
 \out{<details ><summary>Inherited methods</summary>}
 \itemize{
-\item \out{<span class="pkg-link" data-pkg="teal" data-topic="RawDatasetConnector" data-id="get_dataset">}\href{../../teal/html/RawDatasetConnector.html#method-get_dataset}{\code{teal::RawDatasetConnector$get_dataset()}}\out{</span>}
+\item \out{<span class="pkg-link" data-pkg="teal" data-topic="RawDatasetConnector" data-id="get_error_message">}\href{../../teal/html/RawDatasetConnector.html#method-get_error_message}{\code{teal::RawDatasetConnector$get_error_message()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="RawDatasetConnector" data-id="get_pull_fun">}\href{../../teal/html/RawDatasetConnector.html#method-get_pull_fun}{\code{teal::RawDatasetConnector$get_pull_fun()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="RawDatasetConnector" data-id="get_raw_data">}\href{../../teal/html/RawDatasetConnector.html#method-get_raw_data}{\code{teal::RawDatasetConnector$get_raw_data()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="RawDatasetConnector" data-id="get_server">}\href{../../teal/html/RawDatasetConnector.html#method-get_server}{\code{teal::RawDatasetConnector$get_server()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="RawDatasetConnector" data-id="get_ui">}\href{../../teal/html/RawDatasetConnector.html#method-get_ui}{\code{teal::RawDatasetConnector$get_ui()}}\out{</span>}
+\item \out{<span class="pkg-link" data-pkg="teal" data-topic="RawDatasetConnector" data-id="is_failed">}\href{../../teal/html/RawDatasetConnector.html#method-is_failed}{\code{teal::RawDatasetConnector$is_failed()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="RawDatasetConnector" data-id="is_pulled">}\href{../../teal/html/RawDatasetConnector.html#method-is_pulled}{\code{teal::RawDatasetConnector$is_pulled()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="RawDatasetConnector" data-id="launch">}\href{../../teal/html/RawDatasetConnector.html#method-launch}{\code{teal::RawDatasetConnector$launch()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="RawDatasetConnector" data-id="set_args">}\href{../../teal/html/RawDatasetConnector.html#method-set_args}{\code{teal::RawDatasetConnector$set_args()}}\out{</span>}
@@ -44,6 +45,7 @@ Pulled data inherits from the class \link{RelationalDataset}.
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="NamedDatasetConnector" data-id="get_code">}\href{../../teal/html/NamedDatasetConnector.html#method-get_code}{\code{teal::NamedDatasetConnector$get_code()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="NamedDatasetConnector" data-id="get_dataname">}\href{../../teal/html/NamedDatasetConnector.html#method-get_dataname}{\code{teal::NamedDatasetConnector$get_dataname()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="NamedDatasetConnector" data-id="get_datanames">}\href{../../teal/html/NamedDatasetConnector.html#method-get_datanames}{\code{teal::NamedDatasetConnector$get_datanames()}}\out{</span>}
+\item \out{<span class="pkg-link" data-pkg="teal" data-topic="NamedDatasetConnector" data-id="get_dataset">}\href{../../teal/html/NamedDatasetConnector.html#method-get_dataset}{\code{teal::NamedDatasetConnector$get_dataset()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="NamedDatasetConnector" data-id="get_dataset_label">}\href{../../teal/html/NamedDatasetConnector.html#method-get_dataset_label}{\code{teal::NamedDatasetConnector$get_dataset_label()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="NamedDatasetConnector" data-id="get_pull_args">}\href{../../teal/html/NamedDatasetConnector.html#method-get_pull_args}{\code{teal::NamedDatasetConnector$get_pull_args()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="NamedDatasetConnector" data-id="mutate">}\href{../../teal/html/NamedDatasetConnector.html#method-mutate}{\code{teal::NamedDatasetConnector$mutate()}}\out{</span>}
@@ -135,7 +137,7 @@ whether perform function evaluation inside \code{try} clause}
 \if{html}{\out{</div>}}
 }
 \subsection{Returns}{
-\code{self} if successful or \code{try-error} if not.
+\code{self}
 }
 }
 \if{html}{\out{<hr>}}

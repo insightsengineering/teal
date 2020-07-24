@@ -9,6 +9,7 @@
 #' Pulled data inherits from the class \link{NamedDataset}.
 #'
 #' @importFrom R6 R6Class
+#' @importFrom shinyjs alert
 NamedDatasetConnector <- R6::R6Class( #nolint
 
   ## __Public Methods ====
@@ -42,13 +43,26 @@ NamedDatasetConnector <- R6::R6Class( #nolint
 
       return(invisible(self))
     },
-
     #' @description
     #' Get dataname of dataset
     #'
     #' @return dataname of the dataset
     get_dataname = function() {
       return(private$dataname)
+    },
+    #' @description
+    #' Get dataset
+    #'
+    #' @return dataset (\code{<...>Dataset})
+    get_dataset = function() {
+      if (!self$is_pulled()) {
+        stop(
+          sprintf("'%s' has not been pulled yet\n - please use `load_dataset()` first.",
+                  self$get_dataname()),
+          call. = FALSE
+        )
+      }
+      return(private$dataset)
     },
     #' @description
     #' Get dataname of dataset
@@ -137,26 +151,25 @@ NamedDatasetConnector <- R6::R6Class( #nolint
     #' @param try (\code{logical} value)\cr
     #'  whether perform function evaluation inside \code{try} clause
     #'
-    #' @return \code{self} if successful or \code{try-error} if not.
+    #' @return \code{self}
     pull = function(args = NULL, try = FALSE) {
       data <- private$pull_internal(args = args, try = try)
 
-      if (try && is(data, "try-error")) {
-        return(data)
-      }
-      private$dataset <- NamedDataset$new(
-        x = data,
-        dataname = self$get_dataname(),
-        code = private$get_pull_code(deparse = TRUE),
-        label = self$get_dataset_label()
-      )
-
-      if (!is_empty(private$get_mutate_code())) {
-        private$dataset <- mutate_dataset(
-          private$dataset,
-          code = private$get_mutate_code(deparse = TRUE),
-          vars = private$mutate_vars
+      if (!self$is_failed()) {
+        private$dataset <- NamedDataset$new(
+          x = data,
+          dataname = self$get_dataname(),
+          code = private$get_pull_code(deparse = TRUE),
+          label = self$get_dataset_label()
         )
+
+        if (!is_empty(private$get_mutate_code())) {
+          private$dataset <- mutate_dataset(
+            private$dataset,
+            code = private$get_mutate_code(deparse = TRUE),
+            vars = private$mutate_vars
+          )
+        }
       }
 
       return(invisible(self))
@@ -302,17 +315,19 @@ NamedDatasetConnector <- R6::R6Class( #nolint
             self$set_args(args = dataset_args)
           }
 
-          # print error if any
+          self$pull(args = data_args, try = TRUE)
 
-          out <- self$pull(args = data_args, try = TRUE)
-          observeEvent(out, {
-            if (is(out, "try-error")) {
-              shinyjs::alert(sprintf("Error pulling %s:\nError message:%s", self$get_dataname(), out))
-              stop(out)
-            }
-          })
+          # print error if any
+          # error doesn't break an app
+          if (self$is_failed()) {
+            shinyjs::alert(sprintf("Error pulling %s:\nError message:%s",
+                                   self$get_dataname(),
+                                   self$get_error_message()))
+          }
         })
-        return(invisible(NULL))
+
+        #
+        return(invisible(self))
       }
       return(invisible(self))
     }

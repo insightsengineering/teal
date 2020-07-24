@@ -169,6 +169,30 @@ test_that("test callable errors", {
   )
 })
 
+test_that("is failed", {
+  fun <- callable_function(sqrt)
+  expect_error(
+    fun$run(args = list(x = "")),
+    "non-numeric argument to mathematical function"
+  )
+  expect_s3_class(
+    fun$run(args = list(x = ""), try = TRUE),
+    "try-error"
+  )
+  expect_true(fun$is_failed())
+  expect_identical(
+    as.character(fun$get_error_message()),
+    "Error in sqrt(x = \"\") : non-numeric argument to mathematical function\n"
+  )
+
+  expect_silent(fun$run(args = list(x = 1.5)))
+  expect_false(fun$is_failed())
+  expect_identical(
+    fun$get_error_message(),
+    character(0)
+  )
+})
+
 test_that("find callable function name", {
 
   fun <- function(fun) {

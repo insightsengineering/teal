@@ -42,21 +42,26 @@ x$close() # call closing function
 \itemize{
 \item \href{#method-new}{\code{DataConnection$new()}}
 \item \href{#method-is_opened}{\code{DataConnection$is_opened()}}
+\item \href{#method-is_failed}{\code{DataConnection$is_failed()}}
 \item \href{#method-open}{\code{DataConnection$open()}}
-\item \href{#method-close}{\code{DataConnection$close()}}
-\item \href{#method-ping}{\code{DataConnection$ping()}}
 \item \href{#method-get_open_call}{\code{DataConnection$get_open_call()}}
-\item \href{#method-get_close_call}{\code{DataConnection$get_close_call()}}
+\item \href{#method-get_open_error_message}{\code{DataConnection$get_open_error_message()}}
 \item \href{#method-get_open_server}{\code{DataConnection$get_open_server()}}
-\item \href{#method-get_close_server}{\code{DataConnection$get_close_server()}}
 \item \href{#method-get_open_ui}{\code{DataConnection$get_open_ui()}}
-\item \href{#method-get_close_ui}{\code{DataConnection$get_close_ui()}}
+\item \href{#method-is_open_failed}{\code{DataConnection$is_open_failed()}}
 \item \href{#method-set_open_args}{\code{DataConnection$set_open_args()}}
-\item \href{#method-set_close_args}{\code{DataConnection$set_close_args()}}
-\item \href{#method-set_open_ui}{\code{DataConnection$set_open_ui()}}
-\item \href{#method-set_close_ui}{\code{DataConnection$set_close_ui()}}
 \item \href{#method-set_open_server}{\code{DataConnection$set_open_server()}}
+\item \href{#method-set_open_ui}{\code{DataConnection$set_open_ui()}}
+\item \href{#method-close}{\code{DataConnection$close()}}
+\item \href{#method-get_close_call}{\code{DataConnection$get_close_call()}}
+\item \href{#method-get_close_error_message}{\code{DataConnection$get_close_error_message()}}
+\item \href{#method-get_close_server}{\code{DataConnection$get_close_server()}}
+\item \href{#method-get_close_ui}{\code{DataConnection$get_close_ui()}}
+\item \href{#method-is_close_failed}{\code{DataConnection$is_close_failed()}}
+\item \href{#method-set_close_args}{\code{DataConnection$set_close_args()}}
+\item \href{#method-set_close_ui}{\code{DataConnection$set_close_ui()}}
 \item \href{#method-set_close_server}{\code{DataConnection$set_close_server()}}
+\item \href{#method-ping}{\code{DataConnection$ping()}}
 \item \href{#method-clone}{\code{DataConnection$clone()}}
 }
 }
@@ -100,6 +105,19 @@ If open connection has been successfully evaluated
 }
 }
 \if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-is_failed"></a>}}
+\if{latex}{\out{\hypertarget{method-is_failed}{}}}
+\subsection{Method \code{is_failed()}}{
+Check if connection has not failed.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{DataConnection$is_failed()}\if{html}{\out{</div>}}
+}
+
+\subsection{Returns}{
+\code{TRUE} if connection failed, else \code{FALSE}
+}
+}
+\if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-open"></a>}}
 \if{latex}{\out{\hypertarget{method-open}{}}}
 \subsection{Method \code{open()}}{
@@ -123,41 +141,6 @@ Note that if the connection is already opened then it does nothing.
 }
 \subsection{Returns}{
 if \code{try = TRUE} then \code{try-error} on error, \code{NULL} otherwise
-}
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-close"></a>}}
-\if{latex}{\out{\hypertarget{method-close}{}}}
-\subsection{Method \code{close()}}{
-Close the connection.
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{DataConnection$close(silent = FALSE, try = FALSE)}\if{html}{\out{</div>}}
-}
-
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{silent}}{(\code{logical}) whether convert all "missing function" errors to messages}
-
-\item{\code{try}}{(\code{logical}) whether perform function evaluation inside \code{try} clause}
-}
-\if{html}{\out{</div>}}
-}
-\subsection{Returns}{
-if \code{try = TRUE} then \code{try-error} on error, \code{NULL} otherwise
-}
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-ping"></a>}}
-\if{latex}{\out{\hypertarget{method-ping}{}}}
-\subsection{Method \code{ping()}}{
-ping the connection.
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{DataConnection$ping()}\if{html}{\out{</div>}}
-}
-
-\subsection{Returns}{
-logical
 }
 }
 \if{html}{\out{<hr>}}
@@ -185,25 +168,17 @@ optionally deparsed \code{call} object
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-get_close_call"></a>}}
-\if{latex}{\out{\hypertarget{method-get_close_call}{}}}
-\subsection{Method \code{get_close_call()}}{
-Get executed close connection call
+\if{html}{\out{<a id="method-get_open_error_message"></a>}}
+\if{latex}{\out{\hypertarget{method-get_open_error_message}{}}}
+\subsection{Method \code{get_open_error_message()}}{
+Get error message from last connection
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{DataConnection$get_close_call(deparse = TRUE, silent = FALSE)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{DataConnection$get_open_error_message()}\if{html}{\out{</div>}}
 }
 
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{deparse}}{(\code{logical}) whether return deparsed form of a call}
-
-\item{\code{silent}}{(\code{logical}) whether convert all "missing function" errors to messages}
-}
-\if{html}{\out{</div>}}
-}
 \subsection{Returns}{
-optionally deparsed \code{call} object
+\code{try-error} object with error message or \code{character(0)} if last
+ connection was successful.
 }
 }
 \if{html}{\out{<hr>}}
@@ -217,19 +192,6 @@ Get shiny server module to open connection.
 
 \subsection{Returns}{
 the \code{server} \code{function} to open connection.
-}
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-get_close_server"></a>}}
-\if{latex}{\out{\hypertarget{method-get_close_server}{}}}
-\subsection{Method \code{get_close_server()}}{
-Get shiny server module to close connection.
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{DataConnection$get_close_server()}\if{html}{\out{</div>}}
-}
-
-\subsection{Returns}{
-the \code{server} \code{function} to close connection.
 }
 }
 \if{html}{\out{<hr>}}
@@ -253,23 +215,16 @@ the \code{ui} function to set arguments to open connection function.
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-get_close_ui"></a>}}
-\if{latex}{\out{\hypertarget{method-get_close_ui}{}}}
-\subsection{Method \code{get_close_ui()}}{
-Get Shiny module with inputs to close connection
+\if{html}{\out{<a id="method-is_open_failed"></a>}}
+\if{latex}{\out{\hypertarget{method-is_open_failed}{}}}
+\subsection{Method \code{is_open_failed()}}{
+Check if open connection has not failed.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{DataConnection$get_close_ui(id)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{DataConnection$is_open_failed()}\if{html}{\out{</div>}}
 }
 
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{id}}{\code{character} shiny element id}
-}
-\if{html}{\out{</div>}}
-}
 \subsection{Returns}{
-the \code{ui} function to set arguments to close connection function.
+\code{TRUE} if open connection failed, else \code{FALSE}
 }
 }
 \if{html}{\out{<hr>}}
@@ -287,72 +242,6 @@ Set open connection function argument
 \item{\code{args}}{(\code{NULL} or named \code{list}) with values where list names are argument names}
 
 \item{\code{silent}}{(\code{logical}) whether convert all "missing function" errors to messages}
-}
-\if{html}{\out{</div>}}
-}
-\subsection{Returns}{
-nothing
-}
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-set_close_args"></a>}}
-\if{latex}{\out{\hypertarget{method-set_close_args}{}}}
-\subsection{Method \code{set_close_args()}}{
-Set close connection function argument
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{DataConnection$set_close_args(args, silent = FALSE)}\if{html}{\out{</div>}}
-}
-
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{args}}{(named \code{list}) with values where list names are argument names}
-
-\item{\code{silent}}{(\code{logical}) whether convert all "missing function" errors to messages}
-}
-\if{html}{\out{</div>}}
-}
-\subsection{Returns}{
-nothing
-}
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-set_open_ui"></a>}}
-\if{latex}{\out{\hypertarget{method-set_open_ui}{}}}
-\subsection{Method \code{set_open_ui()}}{
-Set open connection UI function
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{DataConnection$set_open_ui(open_module)}\if{html}{\out{</div>}}
-}
-
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{open_module}}{(\code{function})\cr
-shiny module as function. Inputs specified in this \code{ui} are passed to server module
-defined by \code{set_open_server} method.}
-}
-\if{html}{\out{</div>}}
-}
-\subsection{Returns}{
-nothing
-}
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-set_close_ui"></a>}}
-\if{latex}{\out{\hypertarget{method-set_close_ui}{}}}
-\subsection{Method \code{set_close_ui()}}{
-Set close connection UI function
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{DataConnection$set_close_ui(close_module)}\if{html}{\out{</div>}}
-}
-
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{close_module}}{(\code{function})\cr
-shiny module as function. Inputs specified in this \code{ui} are passed to server module
-defined by \code{set_close_server} method.}
 }
 \if{html}{\out{</div>}}
 }
@@ -386,6 +275,176 @@ nothing
 }
 }
 \if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-set_open_ui"></a>}}
+\if{latex}{\out{\hypertarget{method-set_open_ui}{}}}
+\subsection{Method \code{set_open_ui()}}{
+Set open connection UI function
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{DataConnection$set_open_ui(open_module)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{open_module}}{(\code{function})\cr
+shiny module as function. Inputs specified in this \code{ui} are passed to server module
+defined by \code{set_open_server} method.}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Returns}{
+nothing
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-close"></a>}}
+\if{latex}{\out{\hypertarget{method-close}{}}}
+\subsection{Method \code{close()}}{
+Close the connection.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{DataConnection$close(silent = FALSE, try = FALSE)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{silent}}{(\code{logical}) whether convert all "missing function" errors to messages}
+
+\item{\code{try}}{(\code{logical}) whether perform function evaluation inside \code{try} clause}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Returns}{
+if \code{try = TRUE} then \code{try-error} on error, \code{NULL} otherwise
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-get_close_call"></a>}}
+\if{latex}{\out{\hypertarget{method-get_close_call}{}}}
+\subsection{Method \code{get_close_call()}}{
+Get executed close connection call
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{DataConnection$get_close_call(deparse = TRUE, silent = FALSE)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{deparse}}{(\code{logical}) whether return deparsed form of a call}
+
+\item{\code{silent}}{(\code{logical}) whether convert all "missing function" errors to messages}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Returns}{
+optionally deparsed \code{call} object
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-get_close_error_message"></a>}}
+\if{latex}{\out{\hypertarget{method-get_close_error_message}{}}}
+\subsection{Method \code{get_close_error_message()}}{
+Get error message from last connection
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{DataConnection$get_close_error_message()}\if{html}{\out{</div>}}
+}
+
+\subsection{Returns}{
+\code{try-error} object with error message or \code{character(0)} if last
+ connection was successful.
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-get_close_server"></a>}}
+\if{latex}{\out{\hypertarget{method-get_close_server}{}}}
+\subsection{Method \code{get_close_server()}}{
+Get shiny server module to close connection.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{DataConnection$get_close_server()}\if{html}{\out{</div>}}
+}
+
+\subsection{Returns}{
+the \code{server} \code{function} to close connection.
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-get_close_ui"></a>}}
+\if{latex}{\out{\hypertarget{method-get_close_ui}{}}}
+\subsection{Method \code{get_close_ui()}}{
+Get Shiny module with inputs to close connection
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{DataConnection$get_close_ui(id)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{id}}{\code{character} shiny element id}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Returns}{
+the \code{ui} function to set arguments to close connection function.
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-is_close_failed"></a>}}
+\if{latex}{\out{\hypertarget{method-is_close_failed}{}}}
+\subsection{Method \code{is_close_failed()}}{
+Check if close connection has not failed.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{DataConnection$is_close_failed()}\if{html}{\out{</div>}}
+}
+
+\subsection{Returns}{
+\code{TRUE} if close connection failed, else \code{FALSE}
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-set_close_args"></a>}}
+\if{latex}{\out{\hypertarget{method-set_close_args}{}}}
+\subsection{Method \code{set_close_args()}}{
+Set close connection function argument
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{DataConnection$set_close_args(args, silent = FALSE)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{args}}{(named \code{list}) with values where list names are argument names}
+
+\item{\code{silent}}{(\code{logical}) whether convert all "missing function" errors to messages}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Returns}{
+nothing
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-set_close_ui"></a>}}
+\if{latex}{\out{\hypertarget{method-set_close_ui}{}}}
+\subsection{Method \code{set_close_ui()}}{
+Set close connection UI function
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{DataConnection$set_close_ui(close_module)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{close_module}}{(\code{function})\cr
+shiny module as function. Inputs specified in this \code{ui} are passed to server module
+defined by \code{set_close_server} method.}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Returns}{
+nothing
+}
+}
+\if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-set_close_server"></a>}}
 \if{latex}{\out{\hypertarget{method-set_close_server}{}}}
 \subsection{Method \code{set_close_server()}}{
@@ -408,6 +467,19 @@ A shiny module server function that should load data from all connectors}
 }
 \subsection{Returns}{
 nothing
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-ping"></a>}}
+\if{latex}{\out{\hypertarget{method-ping}{}}}
+\subsection{Method \code{ping()}}{
+ping the connection.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{DataConnection$ping()}\if{html}{\out{</div>}}
+}
+
+\subsection{Returns}{
+logical
 }
 }
 \if{html}{\out{<hr>}}

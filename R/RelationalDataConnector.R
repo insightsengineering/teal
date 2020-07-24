@@ -38,6 +38,8 @@
 #' tc$launch()
 #' tc$get_datasets()
 #' }
+#' @importFrom R6 R6Class
+#' @importFrom shinyjs enable
 RelationalDataConnector <- R6::R6Class( #nolint
   classname = "RelationalDataConnector",
   inherit = RelationalData,
@@ -114,7 +116,6 @@ RelationalDataConnector <- R6::R6Class( #nolint
     get_connection = function() {
       return(private$connection)
     },
-
     #' @description
     #'
     #' @return the \code{server} function of the \code{RelationalDataConnector}
@@ -130,6 +131,15 @@ RelationalDataConnector <- R6::R6Class( #nolint
     get_ui = function(id) {
       return(private$ui(id))
     },
+    #' @description
+    #' Check if pull or connection has not failed.
+    #'
+    #' @return \code{TRUE} if pull or connection failed, else \code{FALSE}
+    is_failed = function() {
+      private$connection$is_failed() ||
+        any(vapply(private$datasets, function(x) x$is_failed(), logical(1)))
+    },
+
     #' @description
     #' Run simple application that uses its \code{ui} and \code{server} fields to pull data from
     #' connection.

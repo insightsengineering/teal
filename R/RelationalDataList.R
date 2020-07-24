@@ -52,6 +52,7 @@
 #' get_raw_data(tc)
 #' }
 #' @importFrom R6 R6Class
+#' @importFrom shinyjs hide
 RelationalDataList <- R6::R6Class( # nolint
   classname = "RelationalDataList",
   inherit = RelationalData,
@@ -334,13 +335,14 @@ RelationalDataList <- R6::R6Class( # nolint
 
         # connectors ui(s) + submit button
         fluidPage(
+          shinyjs::hidden(
             column(
               id = ns("delayed_data"),
               width = 8,
               offset = 2,
               tagList(
                 lapply(
-                  self$get_data_connectors(),
+                  self$get_connectors(),
                   function(x) {
                     div(
                       x$get_ui(
@@ -350,48 +352,43 @@ RelationalDataList <- R6::R6Class( # nolint
                     )
                   }
                 ),
-                lapply(
-                  self$get_dataset_connectors(),
-                  function(x) {
-                    div(
-                      x$get_ui(
-                        id = ns(x$get_dataname())
-                      ),
-                      br()
-                    )
-                  }
-                ),
                 actionButton(inputId = ns("submit"), label = "submit all")
+              )
             )
           )
-
         )
       }
     },
     set_server = function() {
       private$server <- function(input, output, session) {
+        shinyjs::show("delayed_data")
         rv <- reactiveVal(NULL)
         observeEvent(input$submit, {
-
           # load data from all connectors
-          lapply(
-            self$get_connectors(),
-            function(dc) {
-              if (is(dc, class2 = "RelationalDataConnector")) {
-                callModule(dc$get_server(),
-                  id = paste0(dc$get_datanames(), collapse = "_"),
-                  connection = dc$get_connection(),
-                  connectors = dc$get_dataset_connectors()
-                )
-              } else if (is(dc, class2 = "RelationalDatasetConnector")) {
-                callModule(dc$get_server(),
-                  id = dc$get_dataname()
-                )
-              }
+          for (dc in self$get_connectors()) {
+
+            if (is(dc, class2 = "RelationalDataConnector")) {
+              callModule(dc$get_server(),
+                         id = paste0(dc$get_datanames(), collapse = "_"),
+                         connection = dc$get_connection(),
+                         connectors = dc$get_dataset_connectors()
+              )
+
+            } else if (is(dc, class2 = "RelationalDatasetConnector")) {
+              callModule(dc$get_server(),
+                         id = dc$get_dataname()
+              )
             }
-          )
-          removeUI(sprintf("#%s", session$ns("delayed_data")))
-          rv(self)
+            if (dc$is_failed()) {
+              break
+            }
+          }
+
+
+          if (self$is_pulled()) {
+            shinyjs::hide("delayed_data")
+            rv(self)
+          }
         })
         return(rv)
       }

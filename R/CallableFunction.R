@@ -39,6 +39,14 @@ CallableFunction <- R6::R6Class( #nolint
       return(invisible(self))
     },
     #' @description
+    #' Check if evaluation of the function has not failed.
+    #'
+    #' @return \code{TRUE} if evaluation of the function failed or \code{FALSE}
+    #'  if evaluation failed or function hasn't yet been called.
+    is_failed = function() {
+      return(private$failed)
+    },
+    #' @description
     #' get the arguments a function gets called with
     #'
     #' @return arguments the function gets called with
@@ -75,6 +83,14 @@ CallableFunction <- R6::R6Class( #nolint
       }
 
       return(res)
+    },
+    #' @description
+    #' Get error message from last function execution
+    #'
+    #' @return \code{try-error} object with error message or \code{character(0)} if last
+    #'  function evaluation was successful.
+    get_error_message = function() {
+      return(private$error_msg)
     },
     #' @description
     #' Get the arguments this call can run with
@@ -114,6 +130,8 @@ CallableFunction <- R6::R6Class( #nolint
       } else {
         eval(expr, envir = private$env)
       }
+
+      private$check_run_output(res)
 
       if (return) {
         return(res)
@@ -193,8 +211,21 @@ CallableFunction <- R6::R6Class( #nolint
     args = NULL, # named list with argument names and values
     call = NULL, # a call object
     env = NULL, # environment where function is called
-
+    failed = FALSE,
+    error_msg = character(0),
     ## __Private Methods ====
+    # check if the function was evaluated properly - if not keep error message
+    check_run_output = function(res) {
+      if (is(res, "try-error")) {
+        private$failed <- TRUE
+        private$error_msg <- res
+      } else {
+        private$failed <- FALSE
+        private$error_msg <- character(0)
+      }
+
+      return(NULL)
+    },
     # @description
     # Finds original function name
     #

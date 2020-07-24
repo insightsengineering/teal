@@ -9,6 +9,7 @@
 #' Pulled data inherits from the class \link{RelationalDataset}.
 #'
 #' @importFrom R6 R6Class
+#' @importFrom shinyjs alert
 RelationalDatasetConnector <- R6::R6Class( #nolint
 
   ## __Public Methods ====
@@ -63,27 +64,26 @@ RelationalDatasetConnector <- R6::R6Class( #nolint
     #' @param try (\code{logical} value)\cr
     #'  whether perform function evaluation inside \code{try} clause
     #'
-    #' @return \code{self} if successful or \code{try-error} if not.
+    #' @return \code{self}
     pull = function(args = NULL, try = FALSE) {
       data <- private$pull_internal(args = args, try = try)
 
-      if (try && is(data, "try-error")) {
-        return(data)
-      }
-      private$dataset <- RelationalDataset$new(
-        x = data,
-        dataname = self$get_dataname(),
-        code = private$get_pull_code(deparse = TRUE),
-        keys = self$get_keys(),
-        label = self$get_dataset_label()
-      )
-
-      if (!is_empty(private$get_mutate_code())) {
-        private$dataset <- mutate_dataset(
-          private$dataset,
-          code = private$get_mutate_code(deparse = TRUE),
-          vars = private$mutate_vars
+      if (!self$is_failed()) {
+        private$dataset <- RelationalDataset$new(
+          x = data,
+          dataname = self$get_dataname(),
+          code = private$get_pull_code(deparse = TRUE),
+          keys = self$get_keys(),
+          label = self$get_dataset_label()
         )
+
+        if (!is_empty(private$get_mutate_code())) {
+          private$dataset <- mutate_dataset(
+            private$dataset,
+            code = private$get_mutate_code(deparse = TRUE),
+            vars = private$mutate_vars
+          )
+        }
       }
 
       return(invisible(self))

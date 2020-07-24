@@ -176,17 +176,17 @@ test_that("RelationalDatasetConnector", {
 
   expect_error(
     x1$get_dataset(),
-    "dataset has not been pulled yet"
+    "'ADSL' has not been pulled yet"
   )
 
   expect_error(
     get_dataset(x1),
-    "dataset has not been pulled yet"
+    "'ADSL' has not been pulled yet"
   )
 
   expect_error(
     x1$get_raw_data(),
-    "dataset has not been pulled yet"
+    "'ADSL' has not been pulled yet"
   )
 
 
@@ -294,7 +294,7 @@ test_that("conversions", {
 
   expect_error(
     x1$get_dataset(),
-    "dataset has not been pulled yet"
+    "'ADSL' has not been pulled yet"
   )
 
   expect_silent(load_dataset(x1))
@@ -347,7 +347,7 @@ test_that("as_relational", {
 
   expect_error(
     get_dataset(x1),
-    "dataset has not been pulled yet"
+    "'ADSL' has not been pulled yet"
   )
 
   expect_silent(

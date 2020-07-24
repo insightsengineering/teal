@@ -90,15 +90,16 @@ rcd_data <- function(..., check = TRUE) {
                    connection = connection)
       }
 
-      lapply(connectors, function(connector) {
+      for (connector in connectors) {
         # set_args before to return them in the code (fixed args)
         set_args(connector, args = list(seed = input$seed))
 
         # pull each dataset
-        callModule(connector$get_server(),
-                   id = connector$get_dataname())
-
-      })
+        callModule(connector$get_server(), id = connector$get_dataname())
+        if (connector$is_failed()) {
+          break
+        }
+      }
     }
   )
 
@@ -195,10 +196,12 @@ rice_data <- function(..., additional_ui = NULL) {
       # rice::rice_read doesn't need arguments from data-level
       if (connection$is_opened()) {
         # call connectors$pull
-        lapply(connectors, function(connector) {
-          callModule(connector$get_server(),
-                     id = connector$get_dataname())
-        })
+        for (connector in connectors) {
+          callModule(connector$get_server(), id = connector$get_dataname())
+          if (connector$is_failed()) {
+            break
+          }
+        }
 
         if (!is.null(connection$get_close_server())) {
           callModule(connection$get_close_server(),

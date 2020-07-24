@@ -9,6 +9,7 @@
 #' Pulled data inherits from the class \link{RelationalDataset}.
 #'
 #' @importFrom R6 R6Class
+#' @importFrom shinyjs alert useShinyjs
 RawDatasetConnector <- R6::R6Class( #nolint
 
   ## __Public Methods ====
@@ -36,7 +37,6 @@ RawDatasetConnector <- R6::R6Class( #nolint
 
       return(invisible(self))
     },
-
     #' @description
     #' Set arguments to the pulling function
     #'
@@ -83,7 +83,14 @@ RawDatasetConnector <- R6::R6Class( #nolint
       }
       return(private$dataset)
     },
-
+    #' @description
+    #' Get error message from last pull
+    #'
+    #' @return \code{try-error} object with error message or \code{character(0)} if last
+    #'  pull was successful.
+    get_error_message = function() {
+      return(private$pull_fun$get_error_message())
+    },
     #' @description
     #' Get pull function
     #'
@@ -91,7 +98,6 @@ RawDatasetConnector <- R6::R6Class( #nolint
     get_pull_fun = function() {
       return(private$pull_fun)
     },
-
     #' @description
     #' Get raw data from dataset
     #'
@@ -100,7 +106,6 @@ RawDatasetConnector <- R6::R6Class( #nolint
       dataset <- self$get_dataset()
       return(dataset$get_raw_data())
     },
-
     #' @description
     #' Pull the data
     #'
@@ -118,11 +123,17 @@ RawDatasetConnector <- R6::R6Class( #nolint
     #' @return \code{self} if successful or \code{try-error} if not.
     pull = function(args = NULL, try = FALSE) {
       data <- private$pull_internal(args = args, try = try)
-      if (try && is(data, "try-error")) {
-        return(data)
+      if (!self$is_failed()) {
+        private$dataset <- RawDataset$new(data)
       }
-      private$dataset <- RawDataset$new(data)
       return(invisible(self))
+    },
+    #' @description
+    #' Check if pull has not failed.
+    #'
+    #' @return \code{TRUE} if pull failed, else \code{FALSE}
+    is_failed = function() {
+      return(private$pull_fun$is_failed())
     },
     #' @description
     #' Check if dataset has already been pulled.
@@ -284,6 +295,16 @@ RawDatasetConnector <- R6::R6Class( #nolint
       # eval CallableFunction with dynamic args
       private$pull_fun$run(args = args, try = try)
     },
+    set_failure = function(res) {
+      if (is(res, "try-error")) {
+        private$failed <- TRUE
+        private$failure_msg <- res
+      } else {
+        private$failed <- FALSE
+        private$failure_msg <- NULL
+      }
+      return(NULL)
+    },
     set_ui = function(args = NULL) {
       private$ui <- function(id) {
         ns <- NS(id)
@@ -313,12 +334,11 @@ RawDatasetConnector <- R6::R6Class( #nolint
 
           # print error if any
           out <- self$pull(args = data_args, try = TRUE)
-          if (is(out, "try-error")) {
-            shinyjs::alert(paste("Error pulling dataset\nError message: ", out))
-            stop(out)
+          if (self$is_failed()) {
+            shinyjs::alert(paste("Error pulling dataset\nError message: ", self$get_error_message()))
           }
         })
-        return(invisible(NULL))
+        return(invisible(self))
       }
       return(invisible(self))
     }

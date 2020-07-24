@@ -54,6 +54,7 @@ tc$get_datasets()
 \item \href{#method-get_connection}{\code{RelationalDataConnector$get_connection()}}
 \item \href{#method-get_server}{\code{RelationalDataConnector$get_server()}}
 \item \href{#method-get_ui}{\code{RelationalDataConnector$get_ui()}}
+\item \href{#method-is_failed}{\code{RelationalDataConnector$is_failed()}}
 \item \href{#method-launch}{\code{RelationalDataConnector$launch()}}
 \item \href{#method-pull}{\code{RelationalDataConnector$pull()}}
 \item \href{#method-set_args}{\code{RelationalDataConnector$set_args()}}
@@ -221,6 +222,19 @@ Get Shiny module with inputs for all \code{RelationalDatasetConnector} objects
 }
 \subsection{Returns}{
 the \code{ui} function of the \code{RelationalDataConnector}
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-is_failed"></a>}}
+\if{latex}{\out{\hypertarget{method-is_failed}{}}}
+\subsection{Method \code{is_failed()}}{
+Check if pull or connection has not failed.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{RelationalDataConnector$is_failed()}\if{html}{\out{</div>}}
+}
+
+\subsection{Returns}{
+\code{TRUE} if pull or connection failed, else \code{FALSE}
 }
 }
 \if{html}{\out{<hr>}}

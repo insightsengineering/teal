@@ -23,7 +23,7 @@ ui_teal_with_splash <- function(id,
                                 header = tags$p("Add Title Here"),
                                 footer = tags$p("Add Footer Here")) {
   stopifnot(is(data, "cdisc_data") || is(data, "RelationalDataList") || is(data, "RelationalDataConnector"))
-  is_not_delayed_data <- is(data, "cdisc_data") # `cdisc_data` or `DataConnector`
+  is_not_delayed_data <- is_pulled(data) # `RelationalDataConnector` or `RelationalData`
   ns <- NS(id)
 
   # Startup splash screen for delayed loading

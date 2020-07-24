@@ -29,6 +29,8 @@
 #'
 #' x$close() # call closing function
 #' }
+#' @importFrom R6 R6Class
+#' @importFrom shinyjs alert
 DataConnection <- R6::R6Class( # nolint
   # DataConnection public ----
   "DataConnection",
@@ -61,6 +63,14 @@ DataConnection <- R6::R6Class( # nolint
       return(private$opened)
     },
     #' @description
+    #' Check if connection has not failed.
+    #'
+    #' @return \code{TRUE} if connection failed, else \code{FALSE}
+    is_failed = function() {
+      self$is_open_failed() || self$is_close_failed()
+    },
+    # .. open connection -----
+    #' @description
     #' Open the connection.
     #'
     #' Note that if the connection is already opened then it does nothing.
@@ -77,45 +87,14 @@ DataConnection <- R6::R6Class( # nolint
         return(invisible(NULL))
       } else {
         open_res <- private$open_fun$run(args = args, try = try)
-        if (is(open_res, "try-error")) {
-          return(open_res)
-        } else {
+        if (!self$is_open_failed()) {
           private$opened <- TRUE
-          return(invisible(NULL))
         }
+
+        return(invisible(self))
       }
     },
-    #' @description
-    #' Close the connection.
-    #'
-    #' @param silent (\code{logical}) whether convert all "missing function" errors to messages
-    #' @param try (\code{logical}) whether perform function evaluation inside \code{try} clause
-    #'
-    #' @return if \code{try = TRUE} then \code{try-error} on error, \code{NULL} otherwise
-    close = function(silent = FALSE, try = FALSE) {
-      if_cond(private$check_close_fun(silent = silent), return(), isFALSE)
-      if (isTRUE(self$ping())) {
-        close_res <- private$close_fun$run(try = try)
-        if (is(close_res, "try-error")) {
-          return(close_res)
-        } else {
-          private$opened <- FALSE
-          return(invisible(NULL))
-        }
-      }
-    },
-    #' @description
-    #' ping the connection.
-    #'
-    #' @return logical
-    ping = function() {
-      if (!is.null(private$ping_fun)) {
-        ping_res <- private$ping_fun$run()
-        return(isTRUE(ping_res))
-      } else {
-        return(invisible(NULL))
-      }
-    },
+
     #' @description
     #' Get executed open connection call
     #'
@@ -131,16 +110,12 @@ DataConnection <- R6::R6Class( # nolint
       private$open_fun$get_call(deparse = deparse, args = args)
     },
     #' @description
-    #' Get executed close connection call
+    #' Get error message from last connection
     #'
-    #' @param deparse (\code{logical}) whether return deparsed form of a call
-    #' @param silent (\code{logical}) whether convert all "missing function" errors to messages
-    #'
-    #' @return optionally deparsed \code{call} object
-    get_close_call = function(deparse = TRUE, silent = FALSE) {
-      stopifnot(is_logical_single(deparse))
-      if_cond(private$check_close_fun(silent = silent), return(), isFALSE)
-      private$close_fun$get_call(deparse = deparse)
+    #' @return \code{try-error} object with error message or \code{character(0)} if last
+    #'  connection was successful.
+    get_open_error_message = function() {
+      return(private$open_fun$get_error_message())
     },
     #' @description
     #' Get shiny server module to open connection.
@@ -148,13 +123,6 @@ DataConnection <- R6::R6Class( # nolint
     #' @return the \code{server} \code{function} to open connection.
     get_open_server = function() {
       return(private$open_server)
-    },
-    #' @description
-    #' Get shiny server module to close connection.
-    #'
-    #' @return the \code{server} \code{function} to close connection.
-    get_close_server = function() {
-      return(private$close_server)
     },
     #' @description
     #' Get Shiny module with inputs to open connection
@@ -166,13 +134,15 @@ DataConnection <- R6::R6Class( # nolint
       return(private$open_ui(id))
     },
     #' @description
-    #' Get Shiny module with inputs to close connection
+    #' Check if open connection has not failed.
     #'
-    #' @param id \code{character} shiny element id
-    #'
-    #' @return the \code{ui} function to set arguments to close connection function.
-    get_close_ui = function(id) {
-      return(private$close_ui(id))
+    #' @return \code{TRUE} if open connection failed, else \code{FALSE}
+    is_open_failed = function() {
+      if (!is.null(private$open_fun)) {
+        private$open_fun$is_failed()
+      } else {
+        FALSE
+      }
     },
     #' @description
     #' Set open connection function argument
@@ -187,16 +157,27 @@ DataConnection <- R6::R6Class( # nolint
       private$open_fun$set_args(args)
     },
     #' @description
-    #' Set close connection function argument
+    #' Set open-connection server function
     #'
-    #' @param args (named \code{list}) with values where list names are argument names
-    #' @param silent (\code{logical}) whether convert all "missing function" errors to messages
+    #' This function will be called after submit button will be hit. There is no possibility to
+    #' specify some dynamic \code{ui} as \code{server} function is executed after hitting submit
+    #' button.
+    #'
+    #' @param open_module (\code{function})\cr
+    #'  A shiny module server function that should load data from all connectors
     #'
     #' @return nothing
-    set_close_args = function(args, silent = FALSE) {
-      stopifnot(is.null(args) || (is.list(args) && is_fully_named_list(args)))
-      if_cond(private$check_close_fun(silent = silent), return(), isFALSE)
-      private$close_fun$set_args(args)
+    set_open_server = function(open_module) {
+      stopifnot(is(open_module, "function"))
+      stopifnot(names(formals(open_module)) %in% c("input", "output", "session", "connection"))
+
+      private$open_server <- function(input, output, session, connection) {
+        withProgress(message = "Opening connection", value = 1, {
+          callModule(open_module, id = "open_conn", connection = connection)
+        })
+      }
+
+      return(invisible(NULL))
     },
     #' @description
     #' Set open connection UI function
@@ -222,6 +203,87 @@ DataConnection <- R6::R6Class( # nolint
 
       return(invisible(NULL))
     },
+    # .. close connection -------
+    #' @description
+    #' Close the connection.
+    #'
+    #' @param silent (\code{logical}) whether convert all "missing function" errors to messages
+    #' @param try (\code{logical}) whether perform function evaluation inside \code{try} clause
+    #'
+    #' @return if \code{try = TRUE} then \code{try-error} on error, \code{NULL} otherwise
+    close = function(silent = FALSE, try = FALSE) {
+      if_cond(private$check_close_fun(silent = silent), return(), isFALSE)
+      if (isTRUE(self$ping())) {
+        close_res <- private$close_fun$run(try = try)
+        if (is(close_res, "try-error")) {
+          return(close_res)
+        } else {
+          private$opened <- FALSE
+          return(invisible(NULL))
+        }
+      }
+    },
+    #' @description
+    #' Get executed close connection call
+    #'
+    #' @param deparse (\code{logical}) whether return deparsed form of a call
+    #' @param silent (\code{logical}) whether convert all "missing function" errors to messages
+    #'
+    #' @return optionally deparsed \code{call} object
+    get_close_call = function(deparse = TRUE, silent = FALSE) {
+      stopifnot(is_logical_single(deparse))
+      if_cond(private$check_close_fun(silent = silent), return(), isFALSE)
+      private$close_fun$get_call(deparse = deparse)
+    },
+    #' @description
+    #' Get error message from last connection
+    #'
+    #' @return \code{try-error} object with error message or \code{character(0)} if last
+    #'  connection was successful.
+    get_close_error_message = function() {
+      return(private$close_fun$get_error_message())
+    },
+    #' @description
+    #' Get shiny server module to close connection.
+    #'
+    #' @return the \code{server} \code{function} to close connection.
+    get_close_server = function() {
+      return(private$close_server)
+    },
+    #' @description
+    #' Get Shiny module with inputs to close connection
+    #'
+    #' @param id \code{character} shiny element id
+    #'
+    #' @return the \code{ui} function to set arguments to close connection function.
+    get_close_ui = function(id) {
+      return(private$close_ui(id))
+    },
+    #' @description
+    #' Check if close connection has not failed.
+    #'
+    #' @return \code{TRUE} if close connection failed, else \code{FALSE}
+    is_close_failed = function() {
+      if (!is.null(private$close_fun)) {
+        private$close_fun$is_failed()
+      } else {
+        FALSE
+      }
+    },
+
+    #' @description
+    #' Set close connection function argument
+    #'
+    #' @param args (named \code{list}) with values where list names are argument names
+    #' @param silent (\code{logical}) whether convert all "missing function" errors to messages
+    #'
+    #' @return nothing
+    set_close_args = function(args, silent = FALSE) {
+      stopifnot(is.null(args) || (is.list(args) && is_fully_named_list(args)))
+      if_cond(private$check_close_fun(silent = silent), return(), isFALSE)
+      private$close_fun$set_args(args)
+    },
+
     #' @description
     #' Set close connection UI function
     #'
@@ -245,30 +307,7 @@ DataConnection <- R6::R6Class( # nolint
       }
       return(invisible(NULL))
     },
-    #' @description
-    #' Set open-connection server function
-    #'
-    #' This function will be called after submit button will be hit. There is no possibility to
-    #' specify some dynamic \code{ui} as \code{server} function is executed after hitting submit
-    #' button.
-    #'
-    #' @param open_module (\code{function})\cr
-    #'  A shiny module server function that should load data from all connectors
-    #'
-    #' @return nothing
-    set_open_server = function(open_module) {
-      stopifnot(is(open_module, "function"))
-      stopifnot(names(formals(open_module)) %in% c("input", "output", "session", "connection"))
 
-      private$open_server <- function(input, output, session, connection) {
-        withProgress(message = "Opening connection", value = 1, {
-          callModule(open_module, id = "open_conn", connection = connection)
-        })
-
-      }
-
-      return(invisible(NULL))
-    },
     #' @description
     #' Set close-connection server function
     #'
@@ -290,6 +329,18 @@ DataConnection <- R6::R6Class( # nolint
         })
       }
       return(invisible(NULL))
+    },
+    #' @description
+    #' ping the connection.
+    #'
+    #' @return logical
+    ping = function() {
+      if (!is.null(private$ping_fun)) {
+        ping_res <- private$ping_fun$run()
+        return(isTRUE(ping_res))
+      } else {
+        return(invisible(NULL))
+      }
     }
   ),
   # DataConnection private ----
@@ -386,8 +437,7 @@ rcd_connection <- function() {
   x <- DataConnection$new(open_fun = fun)
   x$set_open_ui(
     function(id) {
-      ns <- NS(id)
-      div(uiOutput(ns("open_response")))
+      NULL
     }
   )
 
@@ -396,7 +446,6 @@ rcd_connection <- function() {
       NULL
     }
   )
-
   return(x)
 }
 
@@ -437,15 +486,15 @@ rice_connection <- function() {
 
   x$set_open_server(
     function(input, output, session, connection) {
-      res <- connection$open(args = list(username = input$username,
-                                         password = input$password),
-                             try = TRUE)
-      observeEvent(res, {
-        if (is(res, "try-error")) {
-          shinyjs::alert(paste("Error opening connection\nError message:", res))
-          stop(res)
-        }
-      })
+      connection$open(args = list(username = input$username,
+                                  password = input$password),
+                      try = TRUE)
+
+      if (connection$is_open_failed()) {
+        shinyjs::alert(
+          paste("Error opening connection\nError message:", connection$get_open_error_message())
+        )
+      }
     }
   )
 
@@ -458,13 +507,13 @@ rice_connection <- function() {
 
   x$set_close_server(
     function(input, output, session, connection) {
-      res <- connection$close(try = TRUE)
-      observeEvent(res, {
-        if (is(res, "try-error")) {
-          shinyjs::alert(paste("Error closing connection\nError message:", res))
-          stop(res)
-        }
-      })
+      connection$close(try = TRUE)
+
+      if (connection$is_close_failed()) {
+        shinyjs::alert(
+          paste("Error closing connection\nError message:", connection$get_close_error_message())
+        )
+      }
     }
   )
 

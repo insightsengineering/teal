@@ -45,9 +45,11 @@ ds$launch()
 \item \href{#method-set_args}{\code{RawDatasetConnector$set_args()}}
 \item \href{#method-get_code}{\code{RawDatasetConnector$get_code()}}
 \item \href{#method-get_dataset}{\code{RawDatasetConnector$get_dataset()}}
+\item \href{#method-get_error_message}{\code{RawDatasetConnector$get_error_message()}}
 \item \href{#method-get_pull_fun}{\code{RawDatasetConnector$get_pull_fun()}}
 \item \href{#method-get_raw_data}{\code{RawDatasetConnector$get_raw_data()}}
 \item \href{#method-pull}{\code{RawDatasetConnector$pull()}}
+\item \href{#method-is_failed}{\code{RawDatasetConnector$is_failed()}}
 \item \href{#method-is_pulled}{\code{RawDatasetConnector$is_pulled()}}
 \item \href{#method-set_ui_input}{\code{RawDatasetConnector$set_ui_input()}}
 \item \href{#method-get_ui}{\code{RawDatasetConnector$get_ui()}}
@@ -142,6 +144,20 @@ dataset (\code{RawDataset})
 }
 }
 \if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-get_error_message"></a>}}
+\if{latex}{\out{\hypertarget{method-get_error_message}{}}}
+\subsection{Method \code{get_error_message()}}{
+Get error message from last pull
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{RawDatasetConnector$get_error_message()}\if{html}{\out{</div>}}
+}
+
+\subsection{Returns}{
+\code{try-error} object with error message or \code{character(0)} if last
+ pull was successful.
+}
+}
+\if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-get_pull_fun"></a>}}
 \if{latex}{\out{\hypertarget{method-get_pull_fun}{}}}
 \subsection{Method \code{get_pull_fun()}}{
@@ -195,6 +211,19 @@ whether perform function evaluation inside \code{try} clause}
 }
 \subsection{Returns}{
 \code{self} if successful or \code{try-error} if not.
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-is_failed"></a>}}
+\if{latex}{\out{\hypertarget{method-is_failed}{}}}
+\subsection{Method \code{is_failed()}}{
+Check if pull has not failed.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{RawDatasetConnector$is_failed()}\if{html}{\out{</div>}}
+}
+
+\subsection{Returns}{
+\code{TRUE} if pull failed, else \code{FALSE}
 }
 }
 \if{html}{\out{<hr>}}
