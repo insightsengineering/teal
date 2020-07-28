@@ -18,8 +18,6 @@
 #' @param anl_type analysis type. required argument. e.g. \code{"Interim Analysis"}.
 #' @param pkg_meta package metadata fields. default values: \code{c("Package", "Title", "Version", "RemoteRef")}.
 #'
-#' @importFrom utils packageDescription
-#'
 #' @export
 #'
 #' @examples

@@ -65,9 +65,11 @@ rel_data$set_keys(keys(primary = "x", foreign = NULL, parent = NULL))
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="RawDataset" data-id="is_pulled">}\href{../../teal/html/RawDataset.html#method-is_pulled}{\code{teal::RawDataset$is_pulled()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="NamedDataset" data-id="check">}\href{../../teal/html/NamedDataset.html#method-check}{\code{teal::NamedDataset$check()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="NamedDataset" data-id="get_code">}\href{../../teal/html/NamedDataset.html#method-get_code}{\code{teal::NamedDataset$get_code()}}\out{</span>}
+\item \out{<span class="pkg-link" data-pkg="teal" data-topic="NamedDataset" data-id="get_code_class">}\href{../../teal/html/NamedDataset.html#method-get_code_class}{\code{teal::NamedDataset$get_code_class()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="NamedDataset" data-id="get_dataname">}\href{../../teal/html/NamedDataset.html#method-get_dataname}{\code{teal::NamedDataset$get_dataname()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="NamedDataset" data-id="get_datanames">}\href{../../teal/html/NamedDataset.html#method-get_datanames}{\code{teal::NamedDataset$get_datanames()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="NamedDataset" data-id="get_dataset_label">}\href{../../teal/html/NamedDataset.html#method-get_dataset_label}{\code{teal::NamedDataset$get_dataset_label()}}\out{</span>}
+\item \out{<span class="pkg-link" data-pkg="teal" data-topic="NamedDataset" data-id="mutate">}\href{../../teal/html/NamedDataset.html#method-mutate}{\code{teal::NamedDataset$mutate()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="NamedDataset" data-id="set_code">}\href{../../teal/html/NamedDataset.html#method-set_code}{\code{teal::NamedDataset$set_code()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="NamedDataset" data-id="set_dataname">}\href{../../teal/html/NamedDataset.html#method-set_dataname}{\code{teal::NamedDataset$set_dataname()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="NamedDataset" data-id="set_dataset_label">}\href{../../teal/html/NamedDataset.html#method-set_dataset_label}{\code{teal::NamedDataset$set_dataset_label()}}\out{</span>}
@@ -76,7 +78,6 @@ rel_data$set_keys(keys(primary = "x", foreign = NULL, parent = NULL))
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-new"></a>}}
-\if{latex}{\out{\hypertarget{method-new}{}}}
 \subsection{Method \code{new()}}{
 initialize a \code{RelationalDataset} class object
 \subsection{Usage}{
@@ -113,7 +114,6 @@ new \code{RelationalDataset}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-get_keys"></a>}}
-\if{latex}{\out{\hypertarget{method-get_keys}{}}}
 \subsection{Method \code{get_keys()}}{
 Derive the keys
 \subsection{Usage}{
@@ -126,7 +126,6 @@ Derive the keys
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-set_keys"></a>}}
-\if{latex}{\out{\hypertarget{method-set_keys}{}}}
 \subsection{Method \code{set_keys()}}{
 Set new keys
 \subsection{Usage}{
@@ -146,7 +145,6 @@ self invisibly for chaining.
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-clone"></a>}}
-\if{latex}{\out{\hypertarget{method-clone}{}}}
 \subsection{Method \code{clone()}}{
 The objects of this class are cloneable with this method.
 \subsection{Usage}{

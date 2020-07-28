@@ -15,27 +15,3 @@
   cat(paste(args, collapse = sep))
   cat("\n")
 }
-
-logger_in <- function() {
-
-  if (!isTRUE(getOption(x = "teal_logging"))) {
-    return()
-  }
-
-  .log_depth <<- .log_depth + 1
-}
-
-logger_out <- function() {
-
-  if (!isTRUE(getOption(x = "teal_logging"))) {
-    return()
-  }
-
-  .log_depth <<- .log_depth - 1
-
-  if (.log_depth < 0) {
-    .log_depth <<- 0
-    cat("logger depth is < 0 !!! \n")
-  }
-
-}

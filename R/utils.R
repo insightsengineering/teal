@@ -80,16 +80,16 @@ error_dialog <- function(x) {
         tags$br(),
         tags$code(ifelse(
           "condition" %in% class(x),
-          deparse(x$call, width.cutoff = 500L),
-          deparse(attr(x, "condition")$call, width.cutoff = 500L)
+          pdeparse(x$call),
+          pdeparse(attr(x, "condition")$call)
         ), "\n"),
         tags$br(),
         tags$span("Error message:"),
         tags$br(),
         tags$code(
           ifelse("condition" %in% class(x),
-            deparse(x$message),
-            deparse(attr(x, "condition")$message, width.cutoff = 500L)
+            pdeparse(x$message),
+            pdeparse(attr(x, "condition")$message)
           )
         )
       )
@@ -195,7 +195,7 @@ label_to_id <- function(label, prefix = NULL) {
 #'   can be used for nested tabs, see `\link{ui_nested_tabs}`
 #' @param datasets `FilteredData` object to store filter state and filtered
 #'   datasets, shared across modules
-srv_shiny_module_arguments <- function(input, output, session, datasets, modules) {
+srv_shiny_module_arguments <- function(input, output, session, datasets, modules) { # nousage # nolint
 }
 
 
@@ -259,4 +259,8 @@ check_setequal <- function(x, y, pre_msg = "") {
     ), call. = FALSE)
   }
   return(invisible(NULL))
+}
+
+pdeparse <- function(x, width.cutoff = 500L) { # nolint
+  paste0(deparse(x, width.cutoff = width.cutoff), collapse = "\n") # nolint
 }

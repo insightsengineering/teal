@@ -196,7 +196,7 @@ toString.teal_modules <- function(x, indent = 0, ...) { # nolint
   # argument must be `x` to be consistent with base method
   paste(c(
     paste0(rep(" ", indent), "+ ", x$label),
-    unlist(lapply(x$children, toString, indent = indent + 1, ...))
+    ulapply(x$children, toString, indent = indent + 1, ...)
   ), collapse = "\n")
 }
 

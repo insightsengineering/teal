@@ -54,58 +54,6 @@ get_code.NamedDataset <- function(x, deparse = TRUE, ...) {
 }
 
 
-#' @export
-#' @rdname get_code
-#' @examples
-#' # cdisc_data ---------
-#' library(random.cdisc.data)
-#'
-#' ADSL <- radsl(cached = TRUE)
-#' ADTTE <- radtte(cached = TRUE)
-#'
-#' # Example with keys
-#' cd <- cdisc_data(
-#'   cdisc_dataset("ADSL", ADSL,
-#'     keys = keys(
-#'       primary = c("STUDYID", "USUBJID"),
-#'       foreign = NULL,
-#'       parent = NULL
-#'     ),
-#'     code = "ADSL <- radsl(cached = TRUE)"
-#'   ),
-#'   cdisc_dataset("ADTTE", ADTTE,
-#'     keys = keys(
-#'       primary = c("STUDYID", "USUBJID", "PARAMCD"),
-#'       foreign = c("STUDYID", "USUBJID"),
-#'       parent = "ADSL"
-#'     ),
-#'     code = "ADTTE <- radtte(cached = TRUE)"
-#'   ),
-#'   check = FALSE
-#' )
-#'
-#' get_code(cd)
-#'
-#' get_code(cd, "ADTTE")
-#'
-#' get_code(cd, "ADSL")
-get_code.cdisc_data <- function(x, dataname = NULL, deparse = FALSE, ...) {
-  datasets_names <- names(x)
-
-  if (is.null(dataname)) {
-    if (deparse) {
-      paste0(deparse(attr(x, "code"), width.cutoff = 500L), collapse = "\n")
-    } else {
-      attr(x, "code")
-    }
-  } else if (dataname %in% datasets_names) {
-    x[[dataname]]$get_code()
-  } else {
-    return(invisible(NULL))
-  }
-}
-
-
 #' @rdname get_code
 #' @export
 #' @examples
@@ -132,115 +80,15 @@ get_code.cdisc_data <- function(x, dataname = NULL, deparse = FALSE, ...) {
 #' get_code(rd)
 #' get_code(rd, "XY")
 #' get_code(rd, "XYZ")
-get_code.RelationalData <- function(x, dataname = NULL, deparse = TRUE, ...) { # nolint
-  if (!is.null(dataname)) {
-    if (!(dataname %in% x$get_datanames())) {
+get_code.RelationalData <- function(x, dataname = character(0), deparse = TRUE, ...) { # nolint
+  if (!is_empty(dataname)) {
+    if (any(!(dataname %in% x$get_datanames()))) {
       stop("The dataname provided does not exist")
     }
     x$get_code(dataname = dataname, deparse = deparse)
   } else {
     x$get_code(deparse = deparse)
   }
-}
-
-#' @rdname get_code
-#' @export
-#' @examples
-#' # RelationalDataConnector ---------
-#' library(random.cdisc.data)
-#'
-#' rcd <- rcd_data(
-#'   rcd_cdisc_dataset_connector("ADSL", radsl, cached = TRUE),
-#'   rcd_cdisc_dataset_connector("ADLB", radlb, cached = TRUE),
-#'   rcd_cdisc_dataset_connector("ADRS", radrs, cached = TRUE)
-#' )
-#'
-#' # return a code
-#' get_code(rcd)
-#' get_code(rcd, "ADSL")
-#' get_code(rcd, "ADLB")
-#' get_code(rcd, "ADRS")
-get_code.RelationalDataConnector <- function(x, dataname = NULL, deparse = TRUE, ...) { # nolint
-  names_all <- x$get_datanames()
-
-  if (!is.null(dataname)) {
-    if (!(dataname %in% x$get_datanames())) {
-      stop("The dataname provided does not exist")
-    }
-    x$get_code(dataname = dataname, deparse = deparse)
-  } else if (!is.null(dataname) && !(dataname %in% names_all)) {
-    return(invisible(NULL))
-  } else {
-    x$get_code(deparse = deparse)
-  }
-}
-
-#' @rdname get_code
-#' @export
-#' @examples
-#' # RelationalDataList ---------
-#' library(random.cdisc.data)
-#' x1 <- rcd_data( # RelationalDataConnector
-#'   rcd_cdisc_dataset_connector("ADSL", radsl, cached = TRUE),
-#'   rcd_cdisc_dataset_connector("ADLB", radlb, cached = TRUE)
-#' )
-#' x2 <- rcd_data( # RelationalDataConnector
-#'   rcd_cdisc_dataset_connector("ADRS", radrs, cached = TRUE)
-#' )
-#'
-#' x3 <- rcd_cdisc_dataset_connector("ADTTE", radtte, cached = TRUE)
-#'
-#' x4 <- relational_dataset(
-#'   x = data.frame(x = c(1, 2), y = c("a", "b"), stringsAsFactors = FALSE),
-#'   keys = get_cdisc_keys("ADAE"),
-#'   dataname = "ADAE",
-#'   code = "ADAE <- data.frame(x = c(1, 2), y = c('aa', 'bb'),
-#'                            stringsAsFactors = FALSE)",
-#'   label = character(0)
-#' )
-#'
-#' tc <- teal_data(x1, x2, x3, x4)
-#'
-#' # return code for all sets
-#' get_code(tc)
-#'
-#' # return a code - be aware of the lack of `library(random.cdisc.data)`
-#' get_code(tc, "ADSL")
-#' get_code(tc, "ADLB")
-#' get_code(tc, "ADRS")
-#' get_code(tc, "ADTTE")
-#' get_code(tc, "ADAE")
-get_code.RelationalDataList <- function(x, dataname = NULL, deparse = TRUE, ...) { # nolint
-  if (!is.null(dataname)) {
-    if (!(dataname %in% x$get_datanames())) {
-      stop("The dataname provided does not exist")
-    }
-    x$get_code(dataname = dataname, deparse = deparse)
-  } else {
-    x$get_code(deparse = deparse)
-  }
-}
-
-get_code_vars <- function(vars = list()) {
-  res <- paste0(
-    Filter(
-      Negate(is_empty_string),
-      vapply(
-        seq_along(vars),
-        function(idx) {
-          if (is(vars[[idx]], "NamedDataset") || is(vars[[idx]], "RelationalDatasetConnector")) {
-            vars[[idx]]$get_code(deparse = TRUE)
-          } else {
-            paste0(deparse(call("<-", as.name(names(vars)[[idx]]), vars[[idx]]), width.cutoff = 500), collapse = "")
-          }
-        },
-        character(1)
-      )
-    ),
-    collapse = "\n"
-  )
-
-  if_cond(res, character(0), is_empty_string)
 }
 
 # Getting code from files ====
@@ -286,7 +134,7 @@ get_code.default <- function(x,
         lines,
         function(x) {
           paste(
-            deparse(x, width.cutoff = 500L),
+            pdeparse(x),
             collapse = "\n"
           )
         },
@@ -361,7 +209,6 @@ enclosed_with <- function(lines) {
   } else if (length(idx_stop) == 1) {
     idx_stop - 1
   } else {
-    warning("All lines from file included by get_code(). Please use #<code to stop preprocessing at indicated point")
     length(lines)
   }
 
@@ -545,30 +392,6 @@ include_source_code <- function(lines, dir = NULL) {
   lines <- unlist(lines)
 
   lines
-}
-
-#' Libraries names from preprocessing code
-#'
-#' Reads library names from preprocessing code
-#' @inheritParams enclosed_with
-#' @return libraries names loaded in preprocessing code
-read_lib_names <- function(lines) {
-  lib_calls <- unlist(
-    regmatches(
-      lines,
-      gregexpr("(?=(library|require)\\([\"\' ]{0,2}).*?(?<=\\))", lines, perl = TRUE)
-    )
-  )
-  if (length(lib_calls) == 0) {
-    return(character())
-  }
-  lib_names <- gsub("[\"\'\\)\\(]",
-    "",
-    regmatches(lib_calls, gregexpr("\\(.*?\\)", lib_calls)),
-    perl = TRUE
-  )
-
-  lib_names
 }
 
 #' Read .R file into character

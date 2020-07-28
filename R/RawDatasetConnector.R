@@ -60,16 +60,19 @@ RawDatasetConnector <- R6::R6Class( #nolint
     get_code = function(deparse = TRUE) {
       stopifnot(is_logical_single(deparse))
 
-      pull_vars_code <- private$get_pull_vars_code(deparse = deparse)
-      pull_code <- private$get_pull_code(deparse)
+      return(self$get_code_class()$get_code(deparse = deparse))
+    },
+    #' @description
+    #' Get internal \code{CodeClass} object
+    #'
+    #' @return \code{CodeClass}
+    get_code_class = function() {
+      pull_code_class <- private$get_pull_code_class()
 
-      code <- c(pull_vars_code, pull_code)
+      code_class <- CodeClass$new()
+      code_class$append(pull_code_class)
 
-      if (isTRUE(deparse)) {
-        code <- paste0(code, collapse = "\n")
-      }
-
-      return(code)
+      return(code_class)
     },
 
     #' @description
@@ -222,37 +225,17 @@ RawDatasetConnector <- R6::R6Class( #nolint
   private = list(
     dataset = NULL, # RawDataset
     pull_fun = NULL, # CallableFunction
-    pull_vars = list(), # list
+    pull_vars = list(), # named list
     ui_input = NULL, # NULL or list
     ui = NULL, # NULL or shiny.tag.list
     server = NULL, # NULL or shiny server function
 
     ## __Private Methods ====
-    get_pull_code = function(deparse, args = NULL) {
-      return(private$pull_fun$get_call(deparse, args))
-    },
-    get_pull_vars_code = function(deparse = TRUE) {
-      if (!is_empty(private$pull_vars)) {
-        lapply(
-          seq_along(private$pull_vars),
-          function(var_idx) {
-            var_name <- names(private$pull_vars)[[var_idx]]
-            var_value <- private$pull_vars[[var_idx]]
-            if (is(var_value, "RawDatasetConnector") || is(var_value, "NamedDataset")) {
-              get_code(var_value, deparse = deparse)
-            } else {
-              res <- call("<-", as.name(var_name), var_value)
-              if (deparse) {
-                deparse(res, width.cutoff = 500L)
-              } else {
-                res
-              }
-            }
-          }
-        )
-      } else {
-        character(0)
-      }
+    get_pull_code_class = function(args = NULL) {
+      res <- CodeClass$new()
+      res$append(list_to_code_class(private$pull_vars))
+      res$set_code(code = private$pull_fun$get_call(deparse = TRUE, args = args), deps = names(private$pull_vars))
+      return(res)
     },
     set_pull_fun = function(pull_fun) {
       stopifnot(is(pull_fun, "CallableFunction"))

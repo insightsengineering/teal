@@ -39,19 +39,16 @@ RelationalData <- R6::R6Class( #nolint
     #' @return new \code{RelationalData} object
     initialize = function(...) {
       datasets <- list(...)
-
-      is_teal_data <- is_any_class_list(datasets, "RelationalDataset")
-      if (!all(is_teal_data)) {
-        stop("All data elements should be RelationalDataset")
-      }
+      stopifnot(is_class_list("RelationalDataset")(datasets))
 
       dataset_names <- vapply(datasets, get_dataname, character(1))
-      if (any(duplicated(dataset_names))) {
-        stop("Dataset names should be unique")
-      }
-
       names(datasets) <- dataset_names
+
+      private$check_names(datasets)
+
       private$datasets <- datasets
+
+      private$code <- CodeClass$new()
 
       return(invisible(self))
     },
@@ -99,30 +96,43 @@ RelationalData <- R6::R6Class( #nolint
     #' @param deparse (\code{logical}) whether to return the deparsed form of a call
     #' @return (\code{character}) vector of code to generate datasets.
     get_code = function(dataname = NULL, deparse = TRUE) {
+      stopifnot(is.null(dataname) || is_character_vector(dataname))
       stopifnot(is_logical_single(deparse))
 
-      datasets_code <- private$get_code_datasets(dataname = dataname, deparse = deparse)
-      mutate_code <- private$get_mutate_code(deparse = deparse)
-
-      all_code <- c(datasets_code, mutate_code)
-
-      if (isTRUE(deparse)) {
-        all_code <- paste0(all_code, collapse = "\n")
-      }
-
-      return(all_code)
+      return(self$get_code_class()$get_code(dataname = dataname, deparse = deparse))
     },
     #' @description
-    #' Set reproducible code
-    #' @param code (\code{character}) reproducible code
-    #' @return self invisibly for chaining
-    set_code = function(code) {
-      stopifnot(is_character_vector(code, min_length = 0, max_length = 1))
+    #' Get internal \code{CodeClass} object
+    #'
+    #' @return \code{CodeClass}
+    get_code_class = function() {
+      all_code_class <- CodeClass$new()
 
-      if (length(code) > 0 && !is_empty_string(code)) {
-        private$code <- c(private$code,
-                          `if`(is_empty(parse(text = code)), code, as.list(as.call(parse(text = code)))))
-      }
+      datasets_code_class <- private$get_datasets_code_class()
+      all_code_class$append(datasets_code_class)
+
+      mutate_code_class <- private$get_mutate_code_class()
+      all_code_class$append(mutate_code_class)
+
+      return(all_code_class)
+    },
+
+    #' @description
+    #' Mutate data by code
+    #'
+    #' Either code or script must be provided, but not both.
+    #'
+    #' @param code (\code{character}) Code to mutate the dataset. Must contain the
+    #'  \code{dataset$dataname}
+    #' @param vars (list)\cr
+    #'   In case when this object code depends on the \code{raw_data} from the other
+    #'   \code{RelationalDataset}, \code{RelationalDatasetConnector} object(s) or other constant value,
+    #'   this/these object(s) should be included
+    #'
+    #' @return self invisibly for chaining
+    mutate = function(code, vars = list()) {
+      private$set_mutate_vars(vars)
+      private$set_mutate_code(code)
 
       return(invisible(self))
     },
@@ -151,9 +161,9 @@ RelationalData <- R6::R6Class( #nolint
         for (dataset in private$datasets) {
           assign(dataset$get_dataname(), get_raw_data(dataset), envir = new_env)
         }
-        for (code_chunk in private$code) {
-          eval(code_chunk, envir = new_env)
-        }
+
+        private$code$eval(envir = new_env)
+
         lapply(
           private$datasets,
           function(x) {
@@ -181,71 +191,61 @@ RelationalData <- R6::R6Class( #nolint
   ## __Private Fields ====
   private = list(
     datasets = NULL,
-    code = NULL, # list of calls
+    code = NULL, # CodeClass after initialization
+    mutate_vars = list(), # named list with vars used to mutate object
 
     ## __Private Methods ====
-    get_mutate_code = function(deparse = TRUE) {
-      if (is.null(private$code)) {
-        if (isTRUE(deparse)) {
-          character(0)
-        } else {
-          NULL
-        }
-      } else if (isTRUE(deparse)) {
-        paste(
-          vapply(
-            private$code,
-            function(x) {
-              if (is.character(x)) {
-                x
-              } else {
-                paste(
-                  deparse(x, width.cutoff = 500L),
-                  collapse = "\n"
-                )
-              }
-            },
-            FUN.VALUE = character(1),
-            USE.NAMES = FALSE
-          ),
-          collapse = "\n"
-        )
-      } else {
-        private$code
-      }
+    get_mutate_code_class = function() {
+      res <- CodeClass$new()
+      res$append(list_to_code_class(private$mutate_vars))
+      res$append(private$code)
+      return(res)
     },
-    get_code_datasets = function(dataname = NULL, deparse = TRUE) {
+    get_datasets_code_class = function() {
+      res <- CodeClass$new()
       if (is.null(private$datasets)) {
-        if (isTRUE(deparse)) {
-          character(0)
-        } else {
-          NULL
-        }
-      } else if (!is.null(dataname) && !(dataname %in% self$get_datanames())) {
-        if (isTRUE(deparse)) {
-          character(0)
-        } else {
-          NULL
-        }
-      } else if (is.null(private$code) && !is.null(dataname)) {
-        if_cond(get_code(private$datasets[[dataname]], deparse = deparse), character(0), is_empty_string)
-      } else {
-        if (isTRUE(deparse)) {
-          Filter(
-            Negate(is_empty_string),
-            vapply(private$datasets, get_code, character(1), deparse = TRUE, USE.NAMES = FALSE)
-          )
-        } else {
-          unname(unlist(lapply(private$datasets, get_code, deparse = FALSE)))
-        }
+        return(res)
       }
+      for (dataset in private$datasets) {
+        res$append(dataset$get_code_class())
+      }
+      return(res)
+    },
+    set_mutate_code = function(code) {
+      stopifnot(is_character_vector(code, 0, 1))
+
+      if (length(code) > 0 && code != "") {
+        private$code$set_code(code = code, dataname = self$get_datanames())
+      }
+
+      return(invisible(NULL))
+    },
+    set_mutate_vars = function(vars) {
+      stopifnot(is_fully_named_list(vars))
+
+      if (length(vars) > 0) {
+        private$mutate_vars <- c(private$mutate_vars, vars)
+      }
+
+      return(invisible(NULL))
+    },
+    check_names = function(x) {
+      x_names <- names(x)
+      if (any(vapply(x_names, is_empty_string, logical(1)))) {
+        stop("Cannot extract some dataset names")
+      }
+      if (any(duplicated(x_names))) {
+        stop("Datasets names should be unique")
+      }
+      if (any(x_names %in% self$get_datanames())) {
+        stop("Some datanames already exists")
+      }
+      return(invisible(NULL))
     },
     check_dataset_all_code = function(dataset) {
-      code <- self$get_code()
-
       new_env <- new.env(parent = parent.env(.GlobalEnv))
       tryCatch({
-        eval(parse(text = code), new_env)
+        private$code$eval(envir = new_env)
       }, error = function(e) {
         error_dialog(e)
       })

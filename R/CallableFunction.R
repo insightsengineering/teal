@@ -20,7 +20,7 @@ CallableFunction <- R6::R6Class( #nolint
     #' @return new \code{CallableFunction} object
     initialize = function(fun, env = new.env()) {
       fun_name <- private$get_callable_function(fun)
-      private$fun_name <- deparse(fun_name, width.cutoff = 500L)
+      private$fun_name <- pdeparse(fun_name)
       private$env <- env
       self$refresh()
       invisible(self)
@@ -71,7 +71,7 @@ CallableFunction <- R6::R6Class( #nolint
       if_not_empty(args, self$set_args(args))
 
       res <- if (deparse) {
-        paste0(deparse(private$call, width.cutoff = 500L), collapse = "\n")
+        pdeparse(private$call)
       } else {
         private$call
       }
@@ -156,7 +156,7 @@ CallableFunction <- R6::R6Class( #nolint
         # exception for source(...)$value
         if (private$fun_name == "source") {
           private$call <- rlang::parse_expr(
-            sprintf("%s$value", deparse(private$call, width.cutoff = 500L))
+            sprintf("%s$value", pdeparse(private$call))
           )
         }
 

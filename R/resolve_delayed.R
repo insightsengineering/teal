@@ -117,7 +117,7 @@ resolve_delayed.delayed_data_extract_spec <- function(x, datasets) { # nolint
 
   if (is(x$filter, "delayed_data")) {
     x$filter <- resolve_delayed(x$filter, datasets)
-  } else if (any(unlist(lapply(x$filter, class)) %in% "delayed_data")) {
+  } else if (any(ulapply(x$filter, class) %in% "delayed_data")) {
     idx <- vapply(x$filter, inherits, logical(1), what = "delayed_data")
     x$filter[idx] <- lapply(x$filter[idx], resolve_delayed, datasets = datasets)
   }
@@ -199,12 +199,12 @@ resolve_delayed_expr <- function(x, ds, is_value_choices) {
   # check returned value
   if (is_value_choices) {
     if (!is.atomic(res) || anyDuplicated(res)) {
-      stop(paste("Function", deparse(quote(x)), "must return a vector",
+      stop(paste("Function", pdeparse(quote(x)), "must return a vector",
                  "giving unique values from the respective columns of the dataset."))
     }
   } else {
     if (!is.character(res) || length(res) > ncol(ds) || anyDuplicated(res)) {
-      stop(paste("Function", deparse(quote(x)), "must return a character vector",
+      stop(paste("Function", pdeparse(quote(x)), "must return a character vector",
                  "giving unique names of the available columns of the dataset."))
     }
   }

@@ -40,7 +40,7 @@
 #' \dontrun{
 #' shinyApp(app$ui, app$server)
 #' }
-filter_calls_module <- function(label = "Filter Calls Module", active_datanames = "all") {
+filter_calls_module <- function(label = "Filter Calls Module", active_datanames = "all") { # nousage # nolint
   stopifnot(is_character_single(label))
   stopifnot(identical(active_datanames, "all") || is_character_vector(active_datanames))
 
@@ -75,7 +75,7 @@ filter_calls_module <- function(label = "Filter Calls Module", active_datanames 
 #'
 #' @md
 #' @inheritParams filter_calls_module
-bookmark_module <- function(label = "Bookmark Module") {
+bookmark_module <- function(label = "Bookmark Module") { # nousage # nolint
   stopifnot(is_character_single(label))
 
   module(
@@ -128,7 +128,7 @@ bookmark_module <- function(label = "Bookmark Module") {
 #'
 #' @md
 #' @inheritParams filter_calls_module
-debug_browser_module <- function(label = "Browser Debug Module") {
+debug_browser_module <- function(label = "Browser Debug Module") { # nousage # nolint
   stopifnot(is_character_single(label))
 
   module(
@@ -163,7 +163,7 @@ debug_browser_module <- function(label = "Browser Debug Module") {
 #'
 #' @md
 #' @inheritParams filter_calls_module
-reset_filters_module <- function(label = "Reset Filters Module", active_datanames = "all") {
+reset_filters_module <- function(label = "Reset Filters Module", active_datanames = "all") { # nousage # nolint
   stopifnot(is_character_single(label))
   stopifnot(identical(active_datanames, "all") || is_character_vector(active_datanames))
 
@@ -227,7 +227,7 @@ reset_filters_module <- function(label = "Reset Filters Module", active_dataname
 #' @param expr `function or reactive`
 #' @return `reactive`
 # sodo1: do you like this code? I don't.
-trigger_after_first_cycle <- function(expr) {
+trigger_after_first_cycle <- function(expr) { # nousage # nolint
   stopifnot(is.function(expr))
   trigger_now <- FALSE
   reactive({
@@ -457,7 +457,7 @@ predefined_filters_module <- function(label = "Apply filters", filter) {
 #' \dontrun{
 #' runApp(app)
 #' }
-execute_in_next_cycle <- function(f) {
+execute_in_next_cycle <- function(f) { # nousage # nolint
   stopifnot(is.function(f))
 
   # reactiveVal to trigger re-evaluation of the expression when its value changes

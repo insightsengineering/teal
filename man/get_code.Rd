@@ -4,10 +4,7 @@
 \alias{get_code}
 \alias{get_code.RawDatasetConnector}
 \alias{get_code.NamedDataset}
-\alias{get_code.cdisc_data}
 \alias{get_code.RelationalData}
-\alias{get_code.RelationalDataConnector}
-\alias{get_code.RelationalDataList}
 \alias{get_code.default}
 \title{Get code}
 \usage{
@@ -17,13 +14,7 @@ get_code(x, ...)
 
 \method{get_code}{NamedDataset}(x, deparse = TRUE, ...)
 
-\method{get_code}{cdisc_data}(x, dataname = NULL, deparse = FALSE, ...)
-
-\method{get_code}{RelationalData}(x, dataname = NULL, deparse = TRUE, ...)
-
-\method{get_code}{RelationalDataConnector}(x, dataname = NULL, deparse = TRUE, ...)
-
-\method{get_code}{RelationalDataList}(x, dataname = NULL, deparse = TRUE, ...)
+\method{get_code}{RelationalData}(x, dataname = character(0), deparse = TRUE, ...)
 
 \method{get_code}{default}(
   x,
@@ -81,38 +72,6 @@ Code chunks are described with:
 }
 }
 \examples{
-# cdisc_data ---------
-library(random.cdisc.data)
-
-ADSL <- radsl(cached = TRUE)
-ADTTE <- radtte(cached = TRUE)
-
-# Example with keys
-cd <- cdisc_data(
-  cdisc_dataset("ADSL", ADSL,
-    keys = keys(
-      primary = c("STUDYID", "USUBJID"),
-      foreign = NULL,
-      parent = NULL
-    ),
-    code = "ADSL <- radsl(cached = TRUE)"
-  ),
-  cdisc_dataset("ADTTE", ADTTE,
-    keys = keys(
-      primary = c("STUDYID", "USUBJID", "PARAMCD"),
-      foreign = c("STUDYID", "USUBJID"),
-      parent = "ADSL"
-    ),
-    code = "ADTTE <- radtte(cached = TRUE)"
-  ),
-  check = FALSE
-)
-
-get_code(cd)
-
-get_code(cd, "ADTTE")
-
-get_code(cd, "ADSL")
 # RelationalData ---------
 x1 <- relational_dataset(
   x = data.frame(x = c(1, 2), y = c("a", "b"), stringsAsFactors = FALSE),
@@ -136,50 +95,4 @@ rd <- teal_data(x1, x2)
 get_code(rd)
 get_code(rd, "XY")
 get_code(rd, "XYZ")
-# RelationalDataConnector ---------
-library(random.cdisc.data)
-
-rcd <- rcd_data(
-  rcd_cdisc_dataset_connector("ADSL", radsl, cached = TRUE),
-  rcd_cdisc_dataset_connector("ADLB", radlb, cached = TRUE),
-  rcd_cdisc_dataset_connector("ADRS", radrs, cached = TRUE)
-)
-
-# return a code
-get_code(rcd)
-get_code(rcd, "ADSL")
-get_code(rcd, "ADLB")
-get_code(rcd, "ADRS")
-# RelationalDataList ---------
-library(random.cdisc.data)
-x1 <- rcd_data( # RelationalDataConnector
-  rcd_cdisc_dataset_connector("ADSL", radsl, cached = TRUE),
-  rcd_cdisc_dataset_connector("ADLB", radlb, cached = TRUE)
-)
-x2 <- rcd_data( # RelationalDataConnector
-  rcd_cdisc_dataset_connector("ADRS", radrs, cached = TRUE)
-)
-
-x3 <- rcd_cdisc_dataset_connector("ADTTE", radtte, cached = TRUE)
-
-x4 <- relational_dataset(
-  x = data.frame(x = c(1, 2), y = c("a", "b"), stringsAsFactors = FALSE),
-  keys = get_cdisc_keys("ADAE"),
-  dataname = "ADAE",
-  code = "ADAE <- data.frame(x = c(1, 2), y = c('aa', 'bb'),
-                           stringsAsFactors = FALSE)",
-  label = character(0)
-)
-
-tc <- teal_data(x1, x2, x3, x4)
-
-# return code for all sets
-get_code(tc)
-
-# return a code - be aware of the lack of `library(random.cdisc.data)`
-get_code(tc, "ADSL")
-get_code(tc, "ADLB")
-get_code(tc, "ADRS")
-get_code(tc, "ADTTE")
-get_code(tc, "ADAE")
 }

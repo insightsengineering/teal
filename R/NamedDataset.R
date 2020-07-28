@@ -40,6 +40,7 @@ NamedDataset <- R6::R6Class( # nolint
       super$initialize(x)
 
       self$set_dataname(dataname)
+      private$code <- CodeClass$new()
       self$set_code(code)
       self$set_dataset_label(label)
       return(invisible(self))
@@ -70,7 +71,7 @@ NamedDataset <- R6::R6Class( # nolint
     #' Derive the \code{label} which was former called \code{datalabel}
     #' @return \code{character} label of the dataset
     get_dataset_label = function() {
-      private$.label
+      private$label
     },
     #' @description
     #' Set the label for the dataset
@@ -81,7 +82,7 @@ NamedDataset <- R6::R6Class( # nolint
         label <- character(0)
       }
       stopifnot(is_character_vector(label, min_length = 0, max_length = 1))
-      private$.label <- label
+      private$label <- label
       return(invisible(self))
     },
     #' @description
@@ -93,26 +94,16 @@ NamedDataset <- R6::R6Class( # nolint
     get_code = function(deparse = TRUE) {
       stopifnot(is_logical_single(deparse))
 
-      code <- if (deparse) {
-        paste(
-          vapply(
-            private$.code,
-            function(x) {
-              paste(
-                deparse(x, width.cutoff = 500L),
-                collapse = "\n"
-              )
-            },
-            FUN.VALUE = character(1)
-          ),
-          collapse = "\n"
-        )
-
-      } else {
-        private$.code
-      }
-      return(code)
+      return(self$get_code_class()$get_code(deparse = deparse))
     },
+    #' @description
+    #' Get internal \code{CodeClass} object
+    #'
+    #' @return \code{CodeClass}
+    get_code_class = function() {
+      return(private$code)
+    },
+
     #' @description
     #' Set the code for the dataset
     #' @param code (\code{character}) the new code
@@ -121,27 +112,48 @@ NamedDataset <- R6::R6Class( # nolint
       stopifnot(is_character_vector(code, min_length = 0, max_length = 1))
 
       if (length(code) > 0 && !is_empty_string(code)) {
-        private$.code <- as.list(as.call(parse(text = code)))
+        private$code$set_code(code, private$.dataname)
       }
 
       invisible(invisible(self))
     },
+
+    #' @description
+    #' Mutate dataset by code
+    #'
+    #' Either code or script must be provided, but not both.
+    #'
+    #' @param code (\code{character}) Code to mutate the dataset. Must contain the
+    #'  \code{dataset$dataname}
+    #' @param vars (list)\cr
+    #'   In case when this object code depends on the \code{raw_data} from the other
+    #'   \code{RelationalDataset}, \code{RelationalDatasetConnector} object(s) or other constant value,
+    #'   this/these object(s) should be included
+    #'
+    #' @return self invisibly for chaining
+    mutate = function(code, vars = list()) {
+      private$set_mutate_vars(vars)
+      private$set_mutate_code(code)
+      execution_environment <- execute_script_code(self, code, private$mutate_vars) # nolint
+      new_set <- execution_environment[[self$get_dataname()]]
+      super$initialize(new_set)
+
+      return(invisible(self))
+    },
+
     #' @description
     #'   Check to determine if the raw data is reproducible from the \code{get_code()} code.
     #' @return
     #'   \code{TRUE} if the dataset generated from evaluating the
     #'   \code{get_code()} code is identical to the raw data, else \code{FALSE}.
     check = function() {
-
       if (!is_character_single(self$get_code()) || !grepl("\\w+", self$get_code())) {
         stop("Cannot check preprocessing code - code is empty.")
       }
 
-      code <- self$get_code()
-
       new_env <- new.env(parent = parent.env(.GlobalEnv))
       tryCatch({
-        eval(parse(text = code), new_env)
+        private$code$eval(envir = new_env)
       }, error = function(e) {
         error_dialog(e)
       })
@@ -155,11 +167,31 @@ NamedDataset <- R6::R6Class( # nolint
       return(res_check)
     }
   ),
-  ## __Private Fields ====
   private = list(
+    ## __Private Fields ====
     .dataname = character(0),
-    .code = NULL, # list of calls
-    .label = character(0)
+    code = NULL, # CodeClass after initialization
+    mutate_vars = list(),
+    label = character(0),
+    ## __Private Methods ====
+    set_mutate_vars = function(vars) {
+      stopifnot(is_fully_named_list(vars))
+
+      if (length(vars) > 0) {
+        private$mutate_vars <- c(private$mutate_vars, vars)
+      }
+
+      return(invisible(NULL))
+    },
+    set_mutate_code = function(code) {
+      stopifnot(is_character_vector(code, 0, 1))
+
+      if (length(code) > 0 && code != "") {
+        private$code$set_code(code = code, dataname = self$get_datanames(), deps = names(private$mutate_vars))
+      }
+
+      return(invisible(NULL))
+    }
   ),
   ## __Active Methods ====
   active = list(

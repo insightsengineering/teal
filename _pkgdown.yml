@@ -53,10 +53,10 @@ reference:
     - rcd_cdisc_data
     - rds_dataset_connector
     - rds_connection
-    - rds_cdisc_data
+    - rds_data
     - rice_dataset_connector
     - rice_connection
-    - rice_cdisc_data
+    - rice_data
   - title: Unexported Functions for Developers
     desc: These functions are useful for teal developers
     contents:

@@ -61,7 +61,7 @@ teal_data <- function(..., code = character(0)) {
 
   teal_data <- RelationalDataList$new(...)
 
-  teal_data$set_code(code = code)
+  teal_data$mutate(code = code)
 
   return(teal_data)
 }
@@ -135,7 +135,7 @@ teal_data_file <- function(x, code = get_code(x)) {
   object <- eval(parse(text = lines))
 
   if (is(object, "RelationalDataList")) {
-    object$set_code(code)
+    object$mutate(code)
     return(object)
   } else {
     stop("The object returned from the file is not RelationalDataList object.")

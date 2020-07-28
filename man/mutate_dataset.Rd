@@ -3,15 +3,12 @@
 \name{mutate_dataset}
 \alias{mutate_dataset}
 \alias{mutate_dataset.NamedDataset}
-\alias{mutate_dataset.RelationalDataset}
 \alias{mutate_dataset.NamedDatasetConnector}
 \title{Mutate dataset by code}
 \usage{
 mutate_dataset(x, code = character(0), script = character(0), vars = list())
 
 \method{mutate_dataset}{NamedDataset}(x, code = character(0), script = character(0), vars = list())
-
-\method{mutate_dataset}{RelationalDataset}(x, code = character(0), script = character(0), vars = list())
 
 \method{mutate_dataset}{NamedDatasetConnector}(x, code = character(0), script = character(0), vars = list())
 }
@@ -40,7 +37,8 @@ library(magrittr)
 
 ADSL <- radsl(cached = TRUE)
 
-ADSL_dataset <- named_dataset(dataname = "ADSL",
+ADSL_dataset <- named_dataset(
+  dataname = "ADSL",
   x = ADSL,
   label = "AdAM subject-level dataset",
   code = "ADSL <- radsl(cached = TRUE)"

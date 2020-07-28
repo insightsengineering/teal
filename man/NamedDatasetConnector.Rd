@@ -29,6 +29,7 @@ Pulled data inherits from the class \link{NamedDataset}.
 \item \href{#method-get_dataset_label}{\code{NamedDatasetConnector$get_dataset_label()}}
 \item \href{#method-set_dataset_label}{\code{NamedDatasetConnector$set_dataset_label()}}
 \item \href{#method-get_code}{\code{NamedDatasetConnector$get_code()}}
+\item \href{#method-get_code_class}{\code{NamedDatasetConnector$get_code_class()}}
 \item \href{#method-mutate}{\code{NamedDatasetConnector$mutate()}}
 \item \href{#method-pull}{\code{NamedDatasetConnector$pull()}}
 \item \href{#method-get_pull_args}{\code{NamedDatasetConnector$get_pull_args()}}
@@ -108,7 +109,6 @@ dataname of the dataset
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-get_dataset"></a>}}
-\if{latex}{\out{\hypertarget{method-get_dataset}{}}}
 \subsection{Method \code{get_dataset()}}{
 Get dataset
 \subsection{Usage}{
@@ -168,22 +168,30 @@ self invisibly for chaining
 \subsection{Method \code{get_code()}}{
 Get code to get data
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{NamedDatasetConnector$get_code(deparse = TRUE, args = NULL)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{NamedDatasetConnector$get_code(deparse = TRUE)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{deparse}}{(\code{logical})\cr
-whether to return the deparsed form of a call}
-
-\item{\code{args}}{(empty or named \code{list})\cr
-dynamic arguments to function which loads data}
+\item{\code{deparse}}{(\code{logical}) whether return deparsed form of a call}
 }
 \if{html}{\out{</div>}}
 }
 \subsection{Returns}{
 optionally deparsed \code{call} object
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-get_code_class"></a>}}
+\subsection{Method \code{get_code_class()}}{
+Get internal \code{CodeClass} object
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{NamedDatasetConnector$get_code_class()}\if{html}{\out{</div>}}
+}
+
+\subsection{Returns}{
+\code{CodeClass}
 }
 }
 \if{html}{\out{<hr>}}

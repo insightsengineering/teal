@@ -23,14 +23,14 @@ ui_teal_with_splash <- function(id,
                                 header = tags$p("Add Title Here"),
                                 footer = tags$p("Add Footer Here")) {
   stopifnot(is(data, "cdisc_data") || is(data, "RelationalDataList") || is(data, "RelationalDataConnector"))
-  is_not_delayed_data <- is_pulled(data) # `RelationalDataConnector` or `RelationalData`
+  is_pulled_data <- is_pulled(data) # `RelationalDataConnector` or `RelationalData`
   ns <- NS(id)
 
   # Startup splash screen for delayed loading
   # We use delayed loading in all cases, even when the data does not need to be fetched.
   # This has the benefit that when filtering the data takes a lot of time initially, the
   # Shiny app does not time out.
-  splash_ui <- if (is_not_delayed_data) {
+  splash_ui <- if (is_pulled_data) {
     h1("The teal app is starting up.")
   } else {
     message("App was initialized with delayed data loading.")
@@ -54,12 +54,12 @@ ui_teal_with_splash <- function(id,
 srv_teal_with_splash <- function(input, output, session, data, modules, filter = list()) {
   stopifnot(is(data, "RelationalDataList"))
 
-  is_not_delayed_data <- is_pulled(data)
+  is_pulled_data <- is_pulled(data)
 
   # raw_data contains cdisc_data(), i.e. list of unfiltered data frames
   # reactive to get data through delayed loading
   # we must leave it inside the server because of callModule which needs to pick up the right session
-  if (is_not_delayed_data) {
+  if (is_pulled_data) {
     raw_data <- reactiveVal(data) # will trigger by setting it
   } else {
     .log("fetching the data through delayed loading - showing start screen")

@@ -72,15 +72,15 @@ RelationalDatasetConnector <- R6::R6Class( #nolint
         private$dataset <- RelationalDataset$new(
           x = data,
           dataname = self$get_dataname(),
-          code = private$get_pull_code(deparse = TRUE),
+          code = private$get_pull_code_class()$get_code(deparse = TRUE),
           keys = self$get_keys(),
           label = self$get_dataset_label()
         )
 
-        if (!is_empty(private$get_mutate_code())) {
+        if (!is_empty_string(private$get_mutate_code_class()$get_code())) {
           private$dataset <- mutate_dataset(
             private$dataset,
-            code = private$get_mutate_code(deparse = TRUE),
+            code = private$get_mutate_code_class()$get_code(deparse = TRUE),
             vars = private$mutate_vars
           )
         }

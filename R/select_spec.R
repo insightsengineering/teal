@@ -99,8 +99,6 @@
 #'   }
 #' }
 #'
-#' @importFrom magrittr %<>%
-#' @importFrom purrr map_lgl
 #' @importFrom stats setNames
 #' @export
 #'

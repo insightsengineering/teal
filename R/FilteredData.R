@@ -204,38 +204,19 @@ FilteredData <- R6::R6Class( # nolint
     #' @param dataname `character` name(s) of dataset(s)
     #' @return `character` deparsed code
     get_code = function(dataname = self$datanames()) {
-      if (is_character_empty(private$code_all)) {
-        return(paste0(private$code[dataname], collapse = "\n"))
-      } else {
-        return(paste0(c(private$code, private$code_all), collapse = "\n"))
-      }
+        return(paste0(private$code$get_code(dataname), collapse = "\n"))
     },
 
     #' @details
     #' Set the R preprocessing code for single dataset
     #'
     #' @md
-    #' @param dataname `character` name of dataset
-    #' @param code `character` preprocessing code that can be parsed to generate the
+    #' @param code `CodeClass` preprocessing code that can be parsed to generate the
     #'   unfiltered datasets
     #' @return `self`
-    set_code = function(dataname, code) {
-      stopifnot(is_character_single(dataname))
-      stopifnot(is_character_single(code))
-      private$code[[dataname]] <- code
-      return(invisible(self))
-    },
-
-    #' @details
-    #' Set the R preprocessing code for all datasets combined
-    #'
-    #' @md
-    #' @param code `character` preprocessing code that can be parsed to generate the
-    #'   unfiltered datasets
-    #' @return `self`
-    set_code_all = function(code) {
-      stopifnot(is_character_single(code))
-      private$code_all <- code
+    set_code = function(code) {
+      stopifnot(inherits(code, "CodeClass"))
+      private$code <- code
       return(invisible(self))
     },
 
@@ -825,10 +806,7 @@ FilteredData <- R6::R6Class( # nolint
     # non-reactive attributes
 
     # preprocessing code used to generate the unfiltered datasets as a string
-    # for each datasets separately
-    code = list(),
-    # for all datasets combined
-    code_all = character(0),
+    code = CodeClass$new(),
 
     # for each dataname: contains keys and optionally data_label, column_labels
     data_attrs = list(),

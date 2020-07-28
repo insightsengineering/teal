@@ -37,8 +37,12 @@ NamedDatasetConnector <- R6::R6Class( #nolint
     #' @return new \code{NamedDatasetConnector} object
     initialize = function(pull_fun, dataname, code = character(0), label = character(0), vars = list()) {
       super$initialize(pull_fun = pull_fun, vars = vars)
+
       private$set_dataname(dataname)
+
+      private$mutate_code <- CodeClass$new()
       private$set_mutate_code(code)
+
       self$set_dataset_label(label)
 
       return(invisible(self))
@@ -92,28 +96,30 @@ NamedDatasetConnector <- R6::R6Class( #nolint
     #' @description
     #' Get code to get data
     #'
-    #' @param deparse (\code{logical})\cr
-    #'  whether to return the deparsed form of a call
-    #'
-    #' @param args (empty or named \code{list})\cr
-    #'  dynamic arguments to function which loads data
+    #' @param deparse (\code{logical}) whether return deparsed form of a call
     #'
     #' @return optionally deparsed \code{call} object
-    get_code = function(deparse = TRUE, args = NULL) {
+    get_code = function(deparse = TRUE) {
       stopifnot(is_logical_single(deparse))
 
-      pull_vars_code <- private$get_pull_vars_code(deparse = deparse)
-      pull_code <- private$get_pull_code(deparse = deparse, args = args)
-      mutate_code <- private$get_mutate_code(deparse = deparse)
-
-      code <- c(pull_vars_code, pull_code, mutate_code)
-
-      if (isTRUE(deparse)) {
-        code <- paste0(code, collapse = "\n")
-      }
-
-      return(code)
+      return(self$get_code_class()$get_code(deparse = deparse))
     },
+    #' @description
+    #' Get internal \code{CodeClass} object
+    #'
+    #' @return \code{CodeClass}
+    get_code_class = function() {
+      code_class <- CodeClass$new()
+
+      pull_code_class <- private$get_pull_code_class()
+      code_class$append(pull_code_class)
+
+      mutate_code_class <- private$get_mutate_code_class()
+      code_class$append(mutate_code_class)
+
+      return(code_class)
+    },
+
     #' @description
     #' Mutate dataset by code
     #'
@@ -130,8 +136,8 @@ NamedDatasetConnector <- R6::R6Class( #nolint
       if (!is.null(private$dataset)) {
         private$dataset <- mutate_dataset(private$dataset, code = code, vars = vars)
       }
-      private$set_mutate_code(code)
       private$set_mutate_vars(vars)
+      private$set_mutate_code(code)
 
       return(invisible(self))
     },
@@ -159,14 +165,14 @@ NamedDatasetConnector <- R6::R6Class( #nolint
         private$dataset <- NamedDataset$new(
           x = data,
           dataname = self$get_dataname(),
-          code = private$get_pull_code(deparse = TRUE),
+          code = private$get_pull_code_class()$get_code(deparse = TRUE),
           label = self$get_dataset_label()
         )
 
-        if (!is_empty(private$get_mutate_code())) {
+        if (!is_empty(private$get_mutate_code_class()$get_code())) {
           private$dataset <- mutate_dataset(
             private$dataset,
-            code = private$get_mutate_code(deparse = TRUE),
+            code = private$get_mutate_code_class()$get_code(deparse = TRUE),
             vars = private$mutate_vars
           )
         }
@@ -195,11 +201,9 @@ NamedDatasetConnector <- R6::R6Class( #nolint
         stop("Cannot check the raw data until it is pulled.")
       }
 
-      code <- self$get_code()
-
       new_env <- new.env(parent = parent.env(.GlobalEnv))
       tryCatch({
-        eval(parse(text = code), new_env)
+        private$code$eval(envir = new_env)
       }, error = function(e) {
         error_dialog(e)
       })
@@ -214,59 +218,34 @@ NamedDatasetConnector <- R6::R6Class( #nolint
     }
   ),
 
-  ## __Private Fields ====
   private = list(
+    ## __Private Fields ====
     dataname = character(0),
     dataset_label = character(0),
-    mutate_code = NULL, # list of calls
+    mutate_code = NULL, # CodeClass after initialization
     mutate_vars = list(), # named list with vars used to mutate object
-    # assigns the pull code call to the dataname
-
     ## __Private Methods ====
-    get_pull_code = function(deparse = TRUE, args = NULL) {
-      code <- if (deparse) {
-        sprintf("%s <- %s",
-                private$dataname,
-                super$get_pull_code(deparse = deparse, args = args))
-      } else {
-        substitute(
-          a <- b,
-          list(a = as.name(private$dataname),
-               b = super$get_pull_code(deparse, args))
-        )
-      }
-
-      return(code)
+    get_pull_code_class = function(args = NULL) {
+      res <- CodeClass$new()
+      res$append(list_to_code_class(private$pull_vars))
+      code <- pdeparse(substitute(a <- b, list(a = as.name(private$dataname),
+                                               b = private$pull_fun$get_call(deparse = FALSE, args = args))))
+      res$set_code(code = code, dataname = private$dataname, deps = names(private$pull_vars))
+      return(res)
     },
 
-    # formats the code if necessary
-    get_mutate_code = function(deparse = TRUE) {
-
-      code <- if (deparse) {
-        if (length(private$mutate_code) > 0) {
-          paste0(
-            vapply(
-              private$mutate_code,
-              FUN = deparse,
-              FUN.VALUE = character(1)
-            ),
-            collapse = "\n"
-          )
-        } else {
-          character(0)
-        }
-      } else {
-        private$mutate_code
-      }
-
-      return(code)
+    get_mutate_code_class = function() {
+      res <- CodeClass$new()
+      res$append(list_to_code_class(private$mutate_vars))
+      res$append(private$mutate_code)
+      return(res)
     },
 
     set_mutate_code = function(code) {
       stopifnot(is_character_vector(code, 0, 1))
 
       if (length(code) > 0 && code != "") {
-        private$mutate_code <- c(private$mutate_code, as.list(as.call(parse(text = code))))
+        private$mutate_code$set_code(code = code, dataname = private$dataname, deps = names(private$mutate_vars))
       }
 
       return(invisible(self))

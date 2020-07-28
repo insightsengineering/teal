@@ -35,7 +35,8 @@ rd <- teal:::RelationalData$new(x, x2)
 \item \href{#method-get_all_datasets}{\code{RelationalData$get_all_datasets()}}
 \item \href{#method-get_datanames}{\code{RelationalData$get_datanames()}}
 \item \href{#method-get_code}{\code{RelationalData$get_code()}}
-\item \href{#method-set_code}{\code{RelationalData$set_code()}}
+\item \href{#method-get_code_class}{\code{RelationalData$get_code_class()}}
+\item \href{#method-mutate}{\code{RelationalData$mutate()}}
 \item \href{#method-get_dataset}{\code{RelationalData$get_dataset()}}
 \item \href{#method-get_datasets}{\code{RelationalData$get_datasets()}}
 \item \href{#method-is_pulled}{\code{RelationalData$is_pulled()}}
@@ -44,7 +45,6 @@ rd <- teal:::RelationalData$new(x, x2)
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-new"></a>}}
-\if{latex}{\out{\hypertarget{method-new}{}}}
 \subsection{Method \code{new()}}{
 Create a new \code{RelationalData} object from multiple
 \code{RelationalDataset} objects.
@@ -66,7 +66,6 @@ new \code{RelationalData} object
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-check"></a>}}
-\if{latex}{\out{\hypertarget{method-check}{}}}
 \subsection{Method \code{check()}}{
 Check if the object raw data is reproducible from the \code{get_code()} code.
 \subsection{Usage}{
@@ -80,7 +79,6 @@ Check if the object raw data is reproducible from the \code{get_code()} code.
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-get_all_datasets"></a>}}
-\if{latex}{\out{\hypertarget{method-get_all_datasets}{}}}
 \subsection{Method \code{get_all_datasets()}}{
 Get all datasets and all dataset connectors
 
@@ -102,7 +100,6 @@ Get all datasets and all dataset connectors
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-get_datanames"></a>}}
-\if{latex}{\out{\hypertarget{method-get_datanames}{}}}
 \subsection{Method \code{get_datanames()}}{
 Get names of the datasets.
 \subsection{Usage}{
@@ -115,7 +112,6 @@ Get names of the datasets.
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-get_code"></a>}}
-\if{latex}{\out{\hypertarget{method-get_code}{}}}
 \subsection{Method \code{get_code()}}{
 Get code for all datasets.
 \subsection{Usage}{
@@ -136,18 +132,37 @@ Get code for all datasets.
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-set_code"></a>}}
-\if{latex}{\out{\hypertarget{method-set_code}{}}}
-\subsection{Method \code{set_code()}}{
-Set reproducible code
+\if{html}{\out{<a id="method-get_code_class"></a>}}
+\subsection{Method \code{get_code_class()}}{
+Get internal \code{CodeClass} object
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{RelationalData$set_code(code)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{RelationalData$get_code_class()}\if{html}{\out{</div>}}
+}
+
+\subsection{Returns}{
+\code{CodeClass}
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-mutate"></a>}}
+\subsection{Method \code{mutate()}}{
+Mutate data by code
+
+Either code or script must be provided, but not both.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{RelationalData$mutate(code, vars = list())}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{code}}{(\code{character}) reproducible code}
+\item{\code{code}}{(\code{character}) Code to mutate the dataset. Must contain the
+\code{dataset$dataname}}
+
+\item{\code{vars}}{(list)\cr
+In case when this object code depends on the \code{raw_data} from the other
+\code{RelationalDataset}, \code{RelationalDatasetConnector} object(s) or other constant value,
+this/these object(s) should be included}
 }
 \if{html}{\out{</div>}}
 }
@@ -157,7 +172,6 @@ self invisibly for chaining
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-get_dataset"></a>}}
-\if{latex}{\out{\hypertarget{method-get_dataset}{}}}
 \subsection{Method \code{get_dataset()}}{
 Get \code{RelationalDataset} object.
 \subsection{Usage}{
@@ -178,7 +192,6 @@ name of dataset to be returned. If \code{NULL}, all datasets are returned.}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-get_datasets"></a>}}
-\if{latex}{\out{\hypertarget{method-get_datasets}{}}}
 \subsection{Method \code{get_datasets()}}{
 Get \code{list} of \code{RelationalDataset} objects.
 \subsection{Usage}{
@@ -191,7 +204,6 @@ Get \code{list} of \code{RelationalDataset} objects.
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-is_pulled"></a>}}
-\if{latex}{\out{\hypertarget{method-is_pulled}{}}}
 \subsection{Method \code{is_pulled()}}{
 Check if dataset has already been pulled.
 \subsection{Usage}{
@@ -204,7 +216,6 @@ Check if dataset has already been pulled.
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-clone"></a>}}
-\if{latex}{\out{\hypertarget{method-clone}{}}}
 \subsection{Method \code{clone()}}{
 The objects of this class are cloneable with this method.
 \subsection{Usage}{

@@ -30,7 +30,7 @@
 #' tc$get_code("ADAE")
 #' \dontrun{
 #' tc$launch()
-#' tc$get_cdisc_data()
+#' tc$get_raw_data()
 #' tc$get_datasets()
 #' tc$get_dataset("ADAE")
 #' tc$check()
@@ -46,7 +46,7 @@
 #' x2 <- rcd_cdisc_dataset_connector("ADTTE", radtte, cached = TRUE)
 #' tc <- teal:::RelationalDataList$new(x, x2)
 #' tc$get_datasets()
-#' tc$get_cdisc_data()
+#' get_raw_data(tc)
 #' \dontrun{
 #' tc$launch()
 #' get_raw_data(tc)
@@ -71,19 +71,21 @@ RelationalDataList <- R6::R6Class( # nolint
         stop("All data elements should be RelationalData(set) or RelationalData(set)Connection")
       }
 
-      #Cannot allow RelationalDataList to be inside dot_args
-      #previous check does not capture this as RelationalDataList inherits
-      #from RelationalData
+      # Cannot allow RelationalDataList to be inside dot_args
+      # previous check does not capture this as RelationalDataList inherits
+      # from RelationalData
       if (any(is_any_class_list(dot_args, "RelationalDataList"))) {
         stop("Data elements cannot be RelationalDataList")
       }
 
-      datanames <- unlist(lapply(dot_args, get_dataname))
+      datanames <- ulapply(dot_args, get_dataname)
       if (any(duplicated(datanames))) {
         stop("Found duplicated dataset names.")
       }
 
       private$datasets <- dot_args
+
+      private$code <- CodeClass$new()
 
       if (length(self$get_connectors()) > 0) {
         private$set_ui()
@@ -102,24 +104,6 @@ RelationalDataList <- R6::R6Class( # nolint
       )
 
       return(unlist(datasets_names))
-    },
-    #' @description
-    #' Derive the code for all datasets
-    #' @param dataname (\code{character}) dataname or \code{NULL} for all datasets
-    #' @param deparse (\code{logical}) whether to return the deparsed form of a call
-    #' @return \code{vector} of \code{character} containing code
-    get_code = function(dataname = NULL, deparse = TRUE) {
-      stopifnot(is_logical_single(deparse))
-
-      datasets_code <- private$get_code_datasets(dataname = dataname, deparse = deparse)
-      mutate_code <- private$get_mutate_code(deparse = deparse)
-      all_code <- c(datasets_code, mutate_code)
-
-      if (isTRUE(deparse)) {
-        all_code <- paste0(all_code, collapse = "\n")
-      }
-
-      return(all_code)
     },
     #' @description
     #'
@@ -185,21 +169,10 @@ RelationalDataList <- R6::R6Class( # nolint
     #' Get \code{list} of \code{RelationalDataset} objects.
     #' @return \code{list} of \code{RelationalDataset}.
     get_datasets = function() {
-      datasets <- unlist(lapply(private$datasets, function(x) if (x$is_pulled()) get_datasets(x) else NULL))
+      datasets <- ulapply(private$datasets, function(x) if (x$is_pulled()) get_datasets(x) else NULL)
       res <- Filter(Negate(is.null), datasets)
       names(res) <- vapply(res, get_dataname, character(1))
       return(res)
-    },
-    #' @description
-    #' Get \code{cdisc_data} object from multiple \code{RelationalDataset} objects.
-    #'
-    #' @return \code{cdisc_data} object.
-    get_cdisc_data = function() {
-      if (is.null(private$cdisc_code)) {
-        do.call("cdisc_data", self$get_datasets())
-      } else {
-        do.call("cdisc_data", c(self$get_datasets(), code = private$cdisc_code))
-      }
     },
     #' @description
     #'
@@ -299,36 +272,6 @@ RelationalDataList <- R6::R6Class( # nolint
     server = NULL,
 
     ## __Private Methods ====
-    get_code_datasets = function(dataname = NULL, deparse = TRUE) {
-      if (is.null(private$datasets)) {
-        if (isTRUE(deparse)) {
-          character(0)
-        } else {
-          NULL
-        }
-      } else if (!is.null(dataname) && !(dataname %in% self$get_datanames())) {
-        if (isTRUE(deparse)) {
-          character(0)
-        } else {
-          NULL
-        }
-      } else if (is.null(private$code) && !is.null(dataname)) {
-        for (i in private$datasets) {
-          if (dataname %in% get_dataname(i)) {
-            return(if_cond(get_code(i, dataname = dataname, deparse = deparse), character(0), is_empty_string))
-          }
-        }
-      } else {
-        if (isTRUE(deparse)) {
-          Filter(
-            Negate(is_empty_string),
-            vapply(private$datasets, get_code, character(1), deparse = TRUE)
-          )
-        } else {
-          unname(unlist(lapply(private$datasets, get_code, deparse = FALSE)))
-        }
-      }
-    },
     set_ui = function() {
       private$ui <- function(id) {
         ns <- NS(id)

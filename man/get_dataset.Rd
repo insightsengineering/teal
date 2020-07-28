@@ -54,11 +54,11 @@ rdc <- rcd_data(
   rcd_cdisc_dataset_connector("ADTTE", radtte, cached = TRUE)
 )
 
-get_dataset(rdc, dataname = "ADSL")
-
+get_dataset(rd, dataname = "ADSL")
 \dontrun{
 load_datasets(rdc)
-get_dataset(rdc, "ADSL")
+get_datasets(rdc)
+get_dataset(rdc, dataname = "ADSL")
 }
 
 # RelationalDataList --------

@@ -95,7 +95,7 @@ data_extract_spec <- function(dataname, select, filter = NULL, reshape = FALSE) 
               (is(filter, "filter_spec") & length(filter) >= 1) ||
               is_class_list("filter_spec")(filter) ||
               is(filter, "delayed_data") ||
-              all(unlist(lapply(filter, class)) %in% c("delayed_data", "delayed_filter_spec", "filter_spec")))
+              all(ulapply(filter, class) %in% c("delayed_data", "delayed_filter_spec", "filter_spec")))
   stopifnot(is_logical_single(reshape))
 
   if (is(select, "delayed_data") ||

@@ -491,7 +491,7 @@ cdisc_data <- function(...,
 }
 
 
-get_preprocessing_empty_string <- function() {
+get_preprocessing_empty_string <- function() { # nousage # nolint
   filename <- get_package_file("teal", "preprocessing_empty_string.txt") # nolint
   readChar(filename, file.info(filename)$size)
 }

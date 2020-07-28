@@ -33,7 +33,7 @@ tc$get_code()
 tc$get_code("ADAE")
 \dontrun{
 tc$launch()
-tc$get_cdisc_data()
+tc$get_raw_data()
 tc$get_datasets()
 tc$get_dataset("ADAE")
 tc$check()
@@ -49,7 +49,7 @@ x <- cdisc_dataset(
 x2 <- rcd_cdisc_dataset_connector("ADTTE", radtte, cached = TRUE)
 tc <- teal:::RelationalDataList$new(x, x2)
 tc$get_datasets()
-tc$get_cdisc_data()
+get_raw_data(tc)
 \dontrun{
 tc$launch()
 get_raw_data(tc)
@@ -63,14 +63,12 @@ get_raw_data(tc)
 \itemize{
 \item \href{#method-new}{\code{RelationalDataList$new()}}
 \item \href{#method-get_datanames}{\code{RelationalDataList$get_datanames()}}
-\item \href{#method-get_code}{\code{RelationalDataList$get_code()}}
 \item \href{#method-get_ui}{\code{RelationalDataList$get_ui()}}
 \item \href{#method-get_dataset_connectors}{\code{RelationalDataList$get_dataset_connectors()}}
 \item \href{#method-get_data_connectors}{\code{RelationalDataList$get_data_connectors()}}
 \item \href{#method-get_connectors}{\code{RelationalDataList$get_connectors()}}
 \item \href{#method-get_dataset}{\code{RelationalDataList$get_dataset()}}
 \item \href{#method-get_datasets}{\code{RelationalDataList$get_datasets()}}
-\item \href{#method-get_cdisc_data}{\code{RelationalDataList$get_cdisc_data()}}
 \item \href{#method-get_all_datasets}{\code{RelationalDataList$get_all_datasets()}}
 \item \href{#method-get_server}{\code{RelationalDataList$get_server()}}
 \item \href{#method-launch}{\code{RelationalDataList$launch()}}
@@ -81,8 +79,10 @@ get_raw_data(tc)
 \out{<details open ><summary>Inherited methods</summary>}
 \itemize{
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="RelationalData" data-id="check">}\href{../../teal/html/RelationalData.html#method-check}{\code{teal::RelationalData$check()}}\out{</span>}
+\item \out{<span class="pkg-link" data-pkg="teal" data-topic="RelationalData" data-id="get_code">}\href{../../teal/html/RelationalData.html#method-get_code}{\code{teal::RelationalData$get_code()}}\out{</span>}
+\item \out{<span class="pkg-link" data-pkg="teal" data-topic="RelationalData" data-id="get_code_class">}\href{../../teal/html/RelationalData.html#method-get_code_class}{\code{teal::RelationalData$get_code_class()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="RelationalData" data-id="is_pulled">}\href{../../teal/html/RelationalData.html#method-is_pulled}{\code{teal::RelationalData$is_pulled()}}\out{</span>}
-\item \out{<span class="pkg-link" data-pkg="teal" data-topic="RelationalData" data-id="set_code">}\href{../../teal/html/RelationalData.html#method-set_code}{\code{teal::RelationalData$set_code()}}\out{</span>}
+\item \out{<span class="pkg-link" data-pkg="teal" data-topic="RelationalData" data-id="mutate">}\href{../../teal/html/RelationalData.html#method-mutate}{\code{teal::RelationalData$mutate()}}\out{</span>}
 }
 \out{</details>}
 }
@@ -112,27 +112,6 @@ Derive the names of all datasets
 
 \subsection{Returns}{
 \code{character} vector with names
-}
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-get_code"></a>}}
-\subsection{Method \code{get_code()}}{
-Derive the code for all datasets
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{RelationalDataList$get_code(dataname = NULL, deparse = TRUE)}\if{html}{\out{</div>}}
-}
-
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{dataname}}{(\code{character}) dataname or \code{NULL} for all datasets}
-
-\item{\code{deparse}}{(\code{logical}) whether to return the deparsed form of a call}
-}
-\if{html}{\out{</div>}}
-}
-\subsection{Returns}{
-\code{vector} of \code{character} containing code
 }
 }
 \if{html}{\out{<hr>}}
@@ -221,18 +200,6 @@ Get \code{list} of \code{RelationalDataset} objects.
 
 \subsection{Returns}{
 \code{list} of \code{RelationalDataset}.
-}
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-get_cdisc_data"></a>}}
-\subsection{Method \code{get_cdisc_data()}}{
-Get \code{cdisc_data} object from multiple \code{RelationalDataset} objects.
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{RelationalDataList$get_cdisc_data()}\if{html}{\out{</div>}}
-}
-
-\subsection{Returns}{
-\code{cdisc_data} object.
 }
 }
 \if{html}{\out{<hr>}}

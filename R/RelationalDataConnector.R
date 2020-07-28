@@ -5,7 +5,7 @@
 #' open/close connection.
 #'
 #' @importFrom R6 R6Class
-#' @importFrom shinyjs disable enable
+#' @importFrom shinyjs enable
 #'
 #' @examples
 #' library(random.cdisc.data)
@@ -53,10 +53,21 @@ RelationalDataConnector <- R6::R6Class( #nolint
     #'
     #' @return new \code{RelationalDataConnector} object
     initialize = function(connection, connectors) {
+      stopifnot(is_class_list("RelationalDatasetConnector")(connectors))
+
       if (!missing(connection)) {
-        private$set_connection(connection)
+        stopifnot(is(connection, "DataConnection"))
+        private$connection <- connection
       }
-      private$set_dataset_connectors(connectors)
+
+      connectors_names <- vapply(connectors, get_dataname, character(1))
+      setNames(connectors, connectors_names)
+
+      private$check_names(connectors)
+
+      private$datasets <- connectors
+
+      private$code <- CodeClass$new()
 
       invisible(self)
     },
@@ -70,7 +81,30 @@ RelationalDataConnector <- R6::R6Class( #nolint
     #'
     #' @return \code{list} \code{RelationalDataset(s)} named by dataname.
     get_datasets = function() {
-      sapply(private$datasets, get_dataset, USE.NAMES = TRUE, simplify = FALSE)
+
+      if (is.null(private$code)) {
+        sapply(private$datasets, get_dataset, USE.NAMES = TRUE, simplify = FALSE)
+      } else {
+        # have to evaluate post-processing code (i.e. private$code) before returning dataset
+        new_env <- new.env()
+        for (dataset in private$datasets) {
+          assign(dataset$get_dataname(), get_raw_data(dataset), envir = new_env)
+        }
+        private$code$eval(envir = new_env)
+        lapply(
+          private$datasets,
+          function(x) {
+            x_name <- x$get_dataname()
+            relational_dataset(
+              dataname = x_name,
+              x = get(x_name, new_env),
+              keys = x$get_keys(),
+              code = x$get_code(),
+              label = x$get_dataset_label()
+            )
+          }
+        )
+      }
     },
     #' @description
     #' Get \code{RelationalDataset} object.
@@ -80,7 +114,8 @@ RelationalDataConnector <- R6::R6Class( #nolint
     #' @return \code{RelationalDataset}.
     get_dataset = function(dataname) {
       stopifnot(is_character_single(dataname))
-      get_dataname(private$datasets[[dataname]])
+      res <- Filter(function(x) get_dataname(x) == dataname, self$get_datasets())
+      return(res[[1]])
     },
     #' Get \code{RelationalDatasetConnector} objects
     #'
@@ -89,23 +124,20 @@ RelationalDataConnector <- R6::R6Class( #nolint
       private$datasets
     },
     #' @description
+    #' Get internal \code{CodeClass} object
     #'
-    #' Derive the code for all datasets
-    #' @param dataname (\code{character}) dataname or \code{NULL} for all datasets
-    #' @param deparse (\code{logical}) whether to return the deparsed form of a call
-    #' @return \code{list} of \code{character} containing code
-    get_code = function(dataname = NULL, deparse = TRUE) {
-      stopifnot(is_logical_single(deparse))
+    #' @return \code{CodeClass}
+    get_code_class = function() {
+      all_code <- CodeClass$new()
 
-      connection_code <- if_not_null(private$connection, private$connection$get_open_call(deparse = deparse))
-      datasets_code <- private$get_code_datasets(dataname = dataname, deparse = deparse)
-      mutate_code <- private$get_mutate_code(deparse = deparse)
+      connection_code <- if_not_null(private$connection, private$connection$get_open_call(deparse = TRUE))
+      all_code$set_code(connection_code)
 
-      all_code <- c(connection_code, datasets_code, mutate_code)
+      datasets_code_class <- private$get_datasets_code_class()
+      all_code$append(datasets_code_class)
 
-      if (isTRUE(deparse)) {
-        all_code <- paste0(all_code, collapse = "\n")
-      }
+      mutate_code_class <- private$get_mutate_code_class()
+      all_code$append(mutate_code_class)
 
       return(all_code)
     },
@@ -371,34 +403,6 @@ RelationalDataConnector <- R6::R6Class( #nolint
         }
       )
 
-    },
-    # Set data connection
-    #
-    # @param connection (\code{DataConnection}) data connection
-    #
-    # @return nothing
-    set_connection = function(connection) {
-      stopifnot(is(connection, "DataConnection"))
-      private$connection <- connection
-      return(invisible(NULL))
-    },
-    #\ Set dataset connectors
-    #
-    # @param connectors (\code{list} of \code{RelationalDatasetConnector} elements) data connectors
-    #
-    # @return nothing
-    set_dataset_connectors = function(connectors) {
-      stopifnot(is_class_list("RelationalDatasetConnector")(connectors))
-      connector_names <- vapply(connectors, get_dataname, character(1))
-      if (any(duplicated(connector_names))) {
-        stop("Connector names should be unique")
-      }
-      if (any(connector_names %in% self$get_datanames())) {
-        stop("Some datanames already exists")
-      }
-      names(connectors) <- connector_names
-      private$datasets <- connectors
-      return(invisible(NULL))
     },
     stop_on_error = function(x, submit_id = character(0), progress = NULL) {
       if (is(x, "try-error")) {

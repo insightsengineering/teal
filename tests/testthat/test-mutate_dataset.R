@@ -103,7 +103,7 @@ test_that("mutate_dataset", {
 
   expect_equal(
     test_ds_mut$get_code(),
-    "testds <- whatever\nmut_fun <- function(x) {\n    x$z <- 1\n    return(x)\n}\ntestds <- mut_fun(testds)"
+    "testds <- whatever\ntestds$z <- c(\"one\", \"two\")\nmut_fun <- function(x) {\n    x$z <- 1\n    return(x)\n}\ntestds <- mut_fun(testds)" # nolint
   )
 
   expect_true(is(test_ds_mut, "RelationalDataset"))
@@ -121,7 +121,7 @@ test_that("mutate_dataset", {
 
   expect_equal(
     test_ds_mut$get_code(),
-    "testds <- whatever\nmut_fun <- function(x) {\n    x$z <- 1\n    return(x)\n}\ntestds <- mut_fun(testds)"
+    "testds <- whatever\ntestds$z <- c(\"one\", \"two\")\nmut_fun <- function(x) {\n    x$z <- 1\n    return(x)\n}\ntestds <- mut_fun(testds)\nmut_fun <- function(x) {\n    x$z <- 1\n    return(x)\n}\ntestds <- mut_fun(testds)" # nolint
   )
 
   expect_true(is(test_ds_mut, "RelationalDataset"))
