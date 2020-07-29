@@ -53,6 +53,7 @@
 #' }
 #' @importFrom R6 R6Class
 #' @importFrom shinyjs hide
+#' @importFrom methods is
 RelationalDataList <- R6::R6Class( # nolint
   classname = "RelationalDataList",
   inherit = RelationalData,
@@ -129,7 +130,10 @@ RelationalDataList <- R6::R6Class( # nolint
         },
         private$datasets
       )
-      names(res) <- vapply(res, get_dataname, character(1))
+
+      if (!is.null(res)) {
+        names(res) <- vapply(res, get_dataname, character(1))
+      }
       return(res)
     },
     #' Get data connectors.
@@ -171,7 +175,10 @@ RelationalDataList <- R6::R6Class( # nolint
     get_datasets = function() {
       datasets <- ulapply(private$datasets, function(x) if (x$is_pulled()) get_datasets(x) else NULL)
       res <- Filter(Negate(is.null), datasets)
-      names(res) <- vapply(res, get_dataname, character(1))
+
+      if (!is.null(res)) {
+        names(res) <- vapply(res, get_dataname, character(1))
+      }
       return(res)
     },
     #' @description
@@ -285,22 +292,34 @@ RelationalDataList <- R6::R6Class( # nolint
               offset = 2,
               tagList(
                 lapply(
-                  self$get_connectors(),
+                  private$datasets,
                   function(x) {
                     div(
-                      x$get_ui(
-                        id = ns(paste0(x$get_datanames(), collapse = "_"))
-                      ),
+                      if (!is(x, c("RelationalDatasetConnector", "RelationalDataConnector"))) {
+                        div(
+                          h4("Data(set) for: ", lapply(x$get_datanames(), code)),
+                          p(icon("check"), "Loaded")
+                          )
+                        } else {
+                          if_null(
+                            x$get_ui(
+                              id = ns(paste0(x$get_datanames(), collapse = "_"))
+                              ),
+                            div(
+                              h4("Dataset Connector for: ", lapply(x$get_datanames(), code))
+                              )
+                            )
+                          },
                       br()
-                    )
-                  }
-                ),
+                      )
+                    }
+                  ),
                 actionButton(inputId = ns("submit"), label = "submit all")
+                )
               )
             )
-          )
         )
-      }
+        }
     },
     set_server = function() {
       private$server <- function(input, output, session) {

@@ -269,17 +269,20 @@ NamedDatasetConnector <- R6::R6Class( #nolint
     set_ui = function(args = NULL) {
       private$ui <- function(id) {
         ns <- NS(id)
-        tags$div(
+        if_not_null(
+          args,
           tags$div(
-            id = ns("inputs"),
-            if_not_null(args, h4("Dataset Connector for ", code(self$get_dataname()))),
-            lapply(seq_along(args),
-                   function(i) match_ui(ns = ns, value = args[[i]], label = names(args[i]))
+            tags$div(
+              id = ns("inputs"),
+              h4("Dataset Connector for ", code(self$get_dataname())),
+              lapply(
+                seq_along(args),
+                function(i) match_ui(ns = ns, value = args[[i]], label = names(args[i]))
+                )
+              )
             )
           )
-        )
-
-      }
+        }
       return(invisible(self))
     },
     set_server = function() {
