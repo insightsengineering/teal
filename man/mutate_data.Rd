@@ -11,19 +11,19 @@ mutate_data(x, code = character(0), script = character(0), vars = list())
 }
 \arguments{
 \item{x}{(\code{RelationalData})\cr
-object}
+object or a \code{RelationalDataList} or \code{RealtionalDataConnector}.}
 
 \item{code}{(\code{character})\cr
-Code to mutate the dataset. Must contain the \code{dataset$dataname}}
+Code to mutate the dataset. Must contain the \code{dataset$dataname}.}
 
 \item{script}{(\code{character})\cr
 file that contains R Code that can be read using \link{read_script}.
-Preferred before \code{code} argument}
+Preferred before \code{code} argument.}
 
 \item{vars}{(list)\cr
 In case when this object code depends on the \code{raw_data} from the other
 \code{RelationalDataset}, \code{RelationalDatasetConnector} object(s) or other constant value,
-this/these object(s) should be included}
+this/these object(s) should be included.}
 }
 \description{
 Mutate dataset by code

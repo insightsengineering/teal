@@ -14,7 +14,7 @@ srv_teal_with_splash(input, output, session, data, modules, filter = list())
 
 \item{session}{\verb{Shiny session object}}
 
-\item{data}{\verb{cdisc_data or DataConnector} object to obtain the data}
+\item{data}{\code{RealtionalDataList} R6 object and container for data}
 
 \item{modules}{\code{teal_module} or \code{teal_modules} object, the latter
 can be used for nested tabs, see \verb{\link{ui_nested_tabs}}}

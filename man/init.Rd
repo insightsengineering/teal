@@ -15,9 +15,7 @@ init(
 )
 }
 \arguments{
-\item{data}{(\code{cdisc_data} or \code{DataConnector})
-For \code{cdisc_data}: named list with datasets. Dataset names are case sensitive. The
-\code{ADSL} data is mandatory.}
+\item{data}{(\code{RelationalDataList}) R6 object where \code{cdisc_data} or \code{teal_data} returns such a one.}
 
 \item{modules}{nested list with one list per module with the
 following named list elements:

@@ -5,7 +5,6 @@ set_datasets_data <- function(datasets, data) {
   datasets$set_code(data$get_code_class())
 
   for (dataname in data$get_datanames()) {
-    #  get_raw_data force an evaluation of additional code so new variables (labels) could be provided
     raw_dataset <- get_raw_data(data, dataname)
     datasets$set_data(dataname, raw_dataset)
 

@@ -151,9 +151,11 @@ This app tests that the app works with delayed data that is not available initia
 
 ```{r delayedDataApp, eval=FALSE}
 app <- init(
-  data = rcd_data(
-    rcd_cdisc_dataset_connector(dataname = "ADSL", radsl, cached = TRUE),
-    rcd_cdisc_dataset_connector(dataname = "ADLB", radlb, cached = TRUE)
+  data = teal_data(
+    rcd_data(
+      rcd_cdisc_dataset_connector(dataname = "ADSL", radsl, cached = TRUE),
+      rcd_cdisc_dataset_connector(dataname = "ADLB", radlb, cached = TRUE)
+    )    
   ),
   modules = root_modules(
     teal:::filter_calls_module("ADAE", active_datanames = c("ADAE")),

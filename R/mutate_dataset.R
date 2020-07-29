@@ -1,16 +1,16 @@
 #' Mutate dataset by code
 #'
 #' @param x (\code{NamedDataset})\cr
-#'   object
+#'    object or \code{RealtionalDataset} which inherited from it.
 #' @param code (\code{character})\cr
-#'   Code to mutate the dataset. Must contain the \code{dataset$dataname}
+#'   Code to mutate the dataset. Must contain the \code{dataset$dataname}.
 #' @param script (\code{character})\cr
 #'   file that contains R Code that can be read using \link{read_script}.
-#'   Preferred before \code{code} argument
+#'   Preferred before \code{code} argument.
 #' @param vars (list)\cr
 #'   In case when this object code depends on the \code{raw_data} from the other
 #'   \code{RelationalDataset}, \code{RelationalDatasetConnector} object(s) or other constant value,
-#'   this/these object(s) should be included
+#'   this/these object(s) should be included.
 #'
 #' @rdname mutate_dataset
 #' @export
@@ -88,8 +88,8 @@ mutate_dataset.NamedDatasetConnector <- function(x, code = character(0), script 
 
 #' Mutate dataset by code
 #'
-#' @param x (\code{RelationalData})\cr
-#'   object
+#' @param x (\code{RelationalData}, \code{RelationalDataList} or \code{RealtionalDataConnector})\cr
+#'   object.
 #' @inheritParams mutate_dataset
 #'
 #' @rdname mutate_data

@@ -416,7 +416,8 @@ check_foreign_keys <- function(datasets_keys) {
 #' Data input for teal app
 #'
 #' Function passes datasets to teal application with option to read preprocessing code and reproducibility checking.
-#' @param ... datasets objects
+#' @param ... (\code{RelationalData}, \code{RelationalDataConnector}, \code{RelationalDataset} or
+#'   \code{RelationalDatasetConnector}) elements to include where `ADSL` data is mandatory.
 #' @param code (\code{character}) preprocessing code.
 #' @param check (\code{logical}) reproducibility check - whether evaluated preprocessing code gives the same objects
 #'   as provided in arguments. Check is run only if flag is true and preprocessing code is not empty.

@@ -7,7 +7,8 @@
 cdisc_data(..., code = "", check = FALSE)
 }
 \arguments{
-\item{...}{datasets objects}
+\item{...}{(\code{RelationalData}, \code{RelationalDataConnector}, \code{RelationalDataset} or
+\code{RelationalDatasetConnector}) elements to include where `ADSL` data is mandatory.}
 
 \item{code}{(\code{character}) preprocessing code.}
 

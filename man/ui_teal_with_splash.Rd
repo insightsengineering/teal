@@ -15,7 +15,7 @@ ui_teal_with_splash(
 \arguments{
 \item{id}{module id}
 
-\item{data}{\verb{cdisc_data or DataConnector} object to obtain the data}
+\item{data}{\code{RealtionalDataList} R6 object and container for data}
 
 \item{title}{(\code{character}) The browser window title (defaults to the host URL of the page)}
 
