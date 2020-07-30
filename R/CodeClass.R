@@ -50,7 +50,7 @@
 #' x$get_code("ADRS")
 #'
 #' # mutation simulation
-#' x$set_code("ADRS$x <- foo(ADSL$x)", c("ADRS", "ADSL"))
+#' x$set_code("ADRS$x <- foo(ADSL$x)", "ADRS", deps = "ADSL")
 #' x$get_code("ADRS")
 CodeClass <- R6::R6Class( # nolint
   "CodeClass",

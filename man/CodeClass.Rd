@@ -56,7 +56,7 @@ x$append(x3)
 x$get_code("ADRS")
 
 # mutation simulation
-x$set_code("ADRS$x <- foo(ADSL$x)", c("ADRS", "ADSL"))
+x$set_code("ADRS$x <- foo(ADSL$x)", "ADRS", deps = "ADSL")
 x$get_code("ADRS")
 }
 \section{Methods}{
