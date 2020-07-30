@@ -35,8 +35,8 @@
 #'   })
 #' })
 #' \dontrun{
-#' tc$launch()
-#' tc$get_datasets()
+#' x$launch()
+#' x$get_datasets()
 #' }
 #' @importFrom R6 R6Class
 #' @importFrom shinyjs enable
@@ -71,12 +71,6 @@ RelationalDataConnector <- R6::R6Class( #nolint
 
       invisible(self)
     },
-    #' Get names of the datasets.
-    #'
-    #' @return \code{character} vector with names of all datasets.
-    get_datanames = function() {
-      vapply(private$datasets, get_dataname, character(1))
-    },
     #' Get pulled \code{RelationalDataset} objects
     #'
     #' @return \code{list} \code{RelationalDataset(s)} named by dataname.
@@ -109,7 +103,7 @@ RelationalDataConnector <- R6::R6Class( #nolint
     #' @description
     #' Get \code{RelationalDataset} object.
     #' @param dataname (\code{character} value)\cr
-    #'   name of dataset to be returned. If \code{NULL}, all datasets are returned.
+    #'   name of dataset to be returned.
     #'
     #' @return \code{RelationalDataset}.
     get_dataset = function(dataname) {
@@ -272,39 +266,6 @@ RelationalDataConnector <- R6::R6Class( #nolint
       return(invisible(NULL))
     },
     #' @description
-    #' Set arguments to connection and connectors. Using \code{set_args} will save these
-    #' arguments in reproducible code unlike using \code{pull} function.
-    #'
-    #' @param con_args (named \code{list})\cr
-    #'   arguments values for opening connection.
-    #'
-    #' @param args (named \code{list})\cr
-    #'   arguments values for function to pull data.
-    #'
-    #' @return nothing
-    set_args = function(con_args = NULL, args = NULL) {
-      # set connection args
-      if_not_null(con_args, private$connection$set_open_args(args = con_args))
-
-      # set CallableFunction args for each DatasetConnector
-      for (dataset in private$datasets) {
-        if_not_null(args, set_args(dataset, args = args))
-      }
-
-      return(invisible(NULL))
-    },
-    #' @description
-    #' Set reproducibility check
-    #'
-    #' @param check (\code{logical}) whether to perform reproducibility check
-    #'
-    #' @return nothing
-    set_check = function(check = FALSE) {
-      stopifnot(is_logical_single(check))
-      private$check <- check
-      return(invisible(NULL))
-    },
-    #' @description
     #' Set connector UI function
     #'
     #' @param data_input (\code{function})\cr
@@ -379,7 +340,6 @@ RelationalDataConnector <- R6::R6Class( #nolint
     server = NULL,
     ui = NULL,
     connection = NULL,
-    check = FALSE,
     # ....methods ----
 
     # adds open/close connection code at beginning/end of the dataset code

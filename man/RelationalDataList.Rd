@@ -67,7 +67,6 @@ get_raw_data(tc)
 \item \href{#method-get_dataset_connectors}{\code{RelationalDataList$get_dataset_connectors()}}
 \item \href{#method-get_data_connectors}{\code{RelationalDataList$get_data_connectors()}}
 \item \href{#method-get_connectors}{\code{RelationalDataList$get_connectors()}}
-\item \href{#method-get_dataset}{\code{RelationalDataList$get_dataset()}}
 \item \href{#method-get_datasets}{\code{RelationalDataList$get_datasets()}}
 \item \href{#method-get_all_datasets}{\code{RelationalDataList$get_all_datasets()}}
 \item \href{#method-get_server}{\code{RelationalDataList$get_server()}}
@@ -76,13 +75,15 @@ get_raw_data(tc)
 }
 }
 \if{html}{
-\out{<details open ><summary>Inherited methods</summary>}
+\out{<details ><summary>Inherited methods</summary>}
 \itemize{
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="RelationalData" data-id="check">}\href{../../teal/html/RelationalData.html#method-check}{\code{teal::RelationalData$check()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="RelationalData" data-id="get_code">}\href{../../teal/html/RelationalData.html#method-get_code}{\code{teal::RelationalData$get_code()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="RelationalData" data-id="get_code_class">}\href{../../teal/html/RelationalData.html#method-get_code_class}{\code{teal::RelationalData$get_code_class()}}\out{</span>}
+\item \out{<span class="pkg-link" data-pkg="teal" data-topic="RelationalData" data-id="get_dataset">}\href{../../teal/html/RelationalData.html#method-get_dataset}{\code{teal::RelationalData$get_dataset()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="RelationalData" data-id="is_pulled">}\href{../../teal/html/RelationalData.html#method-is_pulled}{\code{teal::RelationalData$is_pulled()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="RelationalData" data-id="mutate">}\href{../../teal/html/RelationalData.html#method-mutate}{\code{teal::RelationalData$mutate()}}\out{</span>}
+\item \out{<span class="pkg-link" data-pkg="teal" data-topic="RelationalData" data-id="set_check">}\href{../../teal/html/RelationalData.html#method-set_check}{\code{teal::RelationalData$set_check()}}\out{</span>}
 }
 \out{</details>}
 }
@@ -168,26 +169,6 @@ Get data connectors.
 
 \subsection{Returns}{
 \code{list} with all \code{RelationalDataConnector} objects.
-}
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-get_dataset"></a>}}
-\subsection{Method \code{get_dataset()}}{
-Get \code{RelationalDataset} object.
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{RelationalDataList$get_dataset(dataname = NULL)}\if{html}{\out{</div>}}
-}
-
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{dataname}}{(\code{character} value)\cr
-name of dataset to be returned. If \code{NULL}, all datasets are returned.}
-}
-\if{html}{\out{</div>}}
-}
-\subsection{Returns}{
-\code{RelationalDataset}.
 }
 }
 \if{html}{\out{<hr>}}

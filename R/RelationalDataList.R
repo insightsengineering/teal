@@ -160,16 +160,6 @@ RelationalDataList <- R6::R6Class( # nolint
       ))
     },
     #' @description
-    #' Get \code{RelationalDataset} object.
-    #' @param dataname (\code{character} value)\cr
-    #'   name of dataset to be returned. If \code{NULL}, all datasets are returned.
-    #'
-    #' @return \code{RelationalDataset}.
-    get_dataset = function(dataname = NULL) {
-      stopifnot(is.null(dataname) || is_character_single(dataname))
-      self$get_datasets()[[dataname]]
-    },
-    #' @description
     #' Get \code{list} of \code{RelationalDataset} objects.
     #' @return \code{list} of \code{RelationalDataset}.
     get_datasets = function() {

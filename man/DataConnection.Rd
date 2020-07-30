@@ -31,7 +31,7 @@ x$open() # call opening function
 
 x$open(args = list(x = 1:5, y = letters[1:5])) # able to call opening function with arguments
 
-x$get_open_call() # check reroducible R code
+x$get_open_call() # check reproducible R code
 # get data from connection via DataConnector$get_dataset()
 
 x$close() # call closing function
@@ -61,7 +61,6 @@ x$close() # call closing function
 \item \href{#method-set_close_args}{\code{DataConnection$set_close_args()}}
 \item \href{#method-set_close_ui}{\code{DataConnection$set_close_ui()}}
 \item \href{#method-set_close_server}{\code{DataConnection$set_close_server()}}
-\item \href{#method-ping}{\code{DataConnection$ping()}}
 \item \href{#method-clone}{\code{DataConnection$clone()}}
 }
 }
@@ -260,7 +259,7 @@ A shiny module server function that should load data from all connectors}
 \if{html}{\out{</div>}}
 }
 \subsection{Returns}{
-nothing
+\code{self} invisibly for chaining.
 }
 }
 \if{html}{\out{<hr>}}
@@ -281,7 +280,7 @@ defined by \code{set_open_server} method.}
 \if{html}{\out{</div>}}
 }
 \subsection{Returns}{
-nothing
+\code{self} invisibly for chaining.
 }
 }
 \if{html}{\out{<hr>}}
@@ -421,7 +420,7 @@ defined by \code{set_close_server} method.}
 \if{html}{\out{</div>}}
 }
 \subsection{Returns}{
-nothing
+\code{self} invisibly for chaining.
 }
 }
 \if{html}{\out{<hr>}}
@@ -445,19 +444,7 @@ A shiny module server function that should load data from all connectors}
 \if{html}{\out{</div>}}
 }
 \subsection{Returns}{
-nothing
-}
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-ping"></a>}}
-\subsection{Method \code{ping()}}{
-ping the connection.
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{DataConnection$ping()}\if{html}{\out{</div>}}
-}
-
-\subsection{Returns}{
-logical
+\code{self} invisibly for chaining.
 }
 }
 \if{html}{\out{<hr>}}

@@ -35,8 +35,8 @@ x$set_server(function(input, output, session, connectors, connection) {
   })
 })
 \dontrun{
-tc$launch()
-tc$get_datasets()
+x$launch()
+x$get_datasets()
 }
 }
 \section{Super class}{
@@ -46,7 +46,6 @@ tc$get_datasets()
 \subsection{Public methods}{
 \itemize{
 \item \href{#method-new}{\code{RelationalDataConnector$new()}}
-\item \href{#method-get_datanames}{\code{RelationalDataConnector$get_datanames()}}
 \item \href{#method-get_datasets}{\code{RelationalDataConnector$get_datasets()}}
 \item \href{#method-get_dataset}{\code{RelationalDataConnector$get_dataset()}}
 \item \href{#method-get_dataset_connectors}{\code{RelationalDataConnector$get_dataset_connectors()}}
@@ -57,8 +56,6 @@ tc$get_datasets()
 \item \href{#method-is_failed}{\code{RelationalDataConnector$is_failed()}}
 \item \href{#method-launch}{\code{RelationalDataConnector$launch()}}
 \item \href{#method-pull}{\code{RelationalDataConnector$pull()}}
-\item \href{#method-set_args}{\code{RelationalDataConnector$set_args()}}
-\item \href{#method-set_check}{\code{RelationalDataConnector$set_check()}}
 \item \href{#method-set_ui}{\code{RelationalDataConnector$set_ui()}}
 \item \href{#method-set_server}{\code{RelationalDataConnector$set_server()}}
 \item \href{#method-is_pulled}{\code{RelationalDataConnector$is_pulled()}}
@@ -66,12 +63,14 @@ tc$get_datasets()
 }
 }
 \if{html}{
-\out{<details open ><summary>Inherited methods</summary>}
+\out{<details ><summary>Inherited methods</summary>}
 \itemize{
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="RelationalData" data-id="check">}\href{../../teal/html/RelationalData.html#method-check}{\code{teal::RelationalData$check()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="RelationalData" data-id="get_all_datasets">}\href{../../teal/html/RelationalData.html#method-get_all_datasets}{\code{teal::RelationalData$get_all_datasets()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="RelationalData" data-id="get_code">}\href{../../teal/html/RelationalData.html#method-get_code}{\code{teal::RelationalData$get_code()}}\out{</span>}
+\item \out{<span class="pkg-link" data-pkg="teal" data-topic="RelationalData" data-id="get_datanames">}\href{../../teal/html/RelationalData.html#method-get_datanames}{\code{teal::RelationalData$get_datanames()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="RelationalData" data-id="mutate">}\href{../../teal/html/RelationalData.html#method-mutate}{\code{teal::RelationalData$mutate()}}\out{</span>}
+\item \out{<span class="pkg-link" data-pkg="teal" data-topic="RelationalData" data-id="set_check">}\href{../../teal/html/RelationalData.html#method-set_check}{\code{teal::RelationalData$set_check()}}\out{</span>}
 }
 \out{</details>}
 }
@@ -94,18 +93,6 @@ Create a new \code{RelationalDataConnector} object
 }
 \subsection{Returns}{
 new \code{RelationalDataConnector} object
-Get names of the datasets.
-}
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-get_datanames"></a>}}
-\subsection{Method \code{get_datanames()}}{
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{RelationalDataConnector$get_datanames()}\if{html}{\out{</div>}}
-}
-
-\subsection{Returns}{
-\code{character} vector with names of all datasets.
 Get pulled \code{RelationalDataset} objects
 }
 }
@@ -132,7 +119,7 @@ Get \code{RelationalDataset} object.
 \if{html}{\out{<div class="arguments">}}
 \describe{
 \item{\code{dataname}}{(\code{character} value)\cr
-name of dataset to be returned. If \code{NULL}, all datasets are returned.}
+name of dataset to be returned.}
 }
 \if{html}{\out{</div>}}
 }
@@ -266,49 +253,6 @@ whether perform function evaluation inside \code{try} clause}
 }
 \subsection{Returns}{
 nothing, in order to get the data please use \code{get_data} method
-}
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-set_args"></a>}}
-\subsection{Method \code{set_args()}}{
-Set arguments to connection and connectors. Using \code{set_args} will save these
-arguments in reproducible code unlike using \code{pull} function.
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{RelationalDataConnector$set_args(con_args = NULL, args = NULL)}\if{html}{\out{</div>}}
-}
-
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{con_args}}{(named \code{list})\cr
-arguments values for opening connection.}
-
-\item{\code{args}}{(named \code{list})\cr
-arguments values for function to pull data.}
-}
-\if{html}{\out{</div>}}
-}
-\subsection{Returns}{
-nothing
-}
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-set_check"></a>}}
-\subsection{Method \code{set_check()}}{
-Set reproducibility check
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{RelationalDataConnector$set_check(check = FALSE)}\if{html}{\out{</div>}}
-}
-
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{check}}{(\code{logical}) whether to perform reproducibility check}
-}
-\if{html}{\out{</div>}}
-}
-\subsection{Returns}{
-nothing
 }
 }
 \if{html}{\out{<hr>}}

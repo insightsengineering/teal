@@ -144,7 +144,7 @@ RelationalData <- R6::R6Class( #nolint
     #'
     #' @return \code{RelationalDataset}.
     get_dataset = function(dataname = NULL) {
-      stopifnot(is.null(dataname) || is_character_single(dataname))
+      stopifnot(is_character_single(dataname))
       self$get_datasets()[[dataname]]
     },
     #' @description
@@ -185,6 +185,17 @@ RelationalData <- R6::R6Class( #nolint
     #' @return \code{TRUE} if dataset has been already pulled, else \code{FALSE}
     is_pulled = function() {
       all(vapply(private$datasets, is_pulled, logical(1)))
+    },
+    #' @description
+    #' Set reproducibility check
+    #'
+    #' @param check (\code{logical}) whether to perform reproducibility check
+    #'
+    #' @return \code{self} invisibly for chaining.
+    set_check = function(check = FALSE) {
+      stopifnot(is_logical_single(check))
+      private$.check <- check
+      return(invisible(self))
     }
   ),
 
@@ -193,6 +204,7 @@ RelationalData <- R6::R6Class( #nolint
     datasets = NULL,
     code = NULL, # CodeClass after initialization
     mutate_vars = list(), # named list with vars used to mutate object
+    .check = FALSE,
 
     ## __Private Methods ====
     get_mutate_code_class = function() {

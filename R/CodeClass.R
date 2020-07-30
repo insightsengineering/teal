@@ -1,3 +1,4 @@
+## CodeClass ====
 #' Code Class
 #'
 #' @importFrom digest sha1
@@ -62,20 +63,14 @@ CodeClass <- R6::R6Class( # nolint
     #' @return changed \code{CodeClass} object
     append = function(x) {
       stopifnot(is(x, "CodeClass"))
-      if (x$is_empty()) {
+      if (is_empty(x$code)) {
         return(invisible(self))
       } else {
-        for (code_i in x$.__enclos_env__$private$code) {
+        for (code_i in x$code) {
           private$set_code_single(code_i)
         }
         return(invisible(self))
       }
-    },
-    #' @description
-    #' check if class has code inside
-    #' @return (\code{logical})
-    is_empty = function() {
-      is_empty(private$code)
     },
     #' @description
     #' Set code in form of character
@@ -89,7 +84,7 @@ CodeClass <- R6::R6Class( # nolint
       stopifnot(is_character_vector(dataname, min_length = 0))
       stopifnot(!(dataname %in% deps))
 
-      code <- private$pretty_code_string(code)
+      code <- pretty_code_string(code)
 
       for (code_single in code) {
         private$set_code_single(code_single, dataname, deps)
@@ -123,34 +118,34 @@ CodeClass <- R6::R6Class( # nolint
      return(invisible(NULL))
     }
   ),
-  # ..public ------
+
   private = list(
     ## __Private Fields ====
-    code = list(),
+    .code = list(),
     deps = list(),
     ## __Private Methods ====
     set_code_single = function(code,
                                dataname = if_null(attr(code, "dataname"), character(0)),
                                deps = if_null(attr(code, "deps"), character(0)),
-                               id = if_null(attr(code, "id"), digest::sha1(c(private$code, code)))) {
-      if (!id %in% ulapply(private$code, "attr", "id")) {
+                               id = if_null(attr(code, "id"), digest::sha1(c(private$.code, code)))) {
+      if (!id %in% ulapply(private$.code, "attr", "id")) {
         attr(code, "dataname") <- dataname
         attr(code, "deps") <- deps
         attr(code, "id") <- id
 
-        private$code <- append(private$code, list(code))
+        private$.code <- append(private$.code, list(code))
       }
 
       return(invisible(NULL))
     },
     get_code_all = function(deparse) {
-      private$get_code_idx(idx = seq_along(private$code), deparse = deparse)
+      private$get_code_idx(idx = seq_along(private$.code), deparse = deparse)
     },
-    get_code_dataname_idx = function(dataname, max_idx = length(private$code)) {
+    get_code_dataname_idx = function(dataname, max_idx = length(private$.code)) {
       res <- integer(0)
 
       for (idx in rev(seq_len(max_idx))) {
-        code_entry <- private$code[[idx]]
+        code_entry <- private$.code[[idx]]
         if (any(dataname %in% attr(code_entry, "dataname"))) {
           res <- c(res, idx)
           other_names <- setdiff(attr(code_entry, "dataname"), dataname)
@@ -177,38 +172,27 @@ CodeClass <- R6::R6Class( # nolint
         return(Filter(
           Negate(is.null),
           unname(ulapply(
-            private$code[idx],
-            function(x) sapply(x, function(i) private$text_to_call(i), simplify = FALSE)
+            private$.code[idx],
+            function(x) sapply(x, function(i) text_to_call(i), simplify = FALSE)
           ))
         ))
       } else {
-        return(paste0(unlist(private$code[idx]), collapse = "\n"))
+        return(paste0(unlist(private$.code[idx]), collapse = "\n"))
       }
-    },
-    text_to_call = function(x) {
-      parsed <- parse(text = x)
-      if (is_empty(parsed)) {
-        return(NULL)
-      } else {
-        return(as.list(as.call(parsed))[[1]])
-      }
-    },
-    pretty_code_string = function(code_vector) {
-      # in order to remove bad formatting: text -> code -> text
-      ulapply(
-        code_vector,
-        function(code_single) {
-          if (is_empty(parse(text = code_single))) {
-            # if string code cannot be passed into expression (e.g. code comment) then pass on the string
-            code_single
-          } else {
-            vapply(as.list(as.call(parse(text = code_single))), pdeparse, character(1))
-          }
-        }
-      )
+    }
+  ),
+
+  ## __Active Fields ====
+  active = list(
+    #' @field code (\code{list}) Derive the code of the dataset.
+    code = function() {
+      private$.code
     }
   )
 )
+
+
+## Functions ====
 
 # Convert named list to \code{CodeClass} utilizing both \code{NamedDatasetConnector} and \code{NamedDataset}
 list_to_code_class <- function(x) {
@@ -229,4 +213,39 @@ list_to_code_class <- function(x) {
     }
   }
   return(res)
+}
+
+#' Create call from string
+#'
+#' @param x (\code{character}) string containing the code.
+#'
+#' @return (\code{call}) object.
+text_to_call <- function(x) {
+  parsed <- parse(text = x)
+  if (is_empty(parsed)) {
+    return(NULL)
+  } else {
+    return(as.list(as.call(parsed))[[1]])
+  }
+}
+
+#' Format a vector of code into a string
+#'
+#' @param code_vector (\code{character}) vector containing lines of
+#'   code to format into a string.
+#'
+#' @return (\code{character}) string containing the formatted code.
+pretty_code_string <- function(code_vector) {
+  # in order to remove bad formatting: text -> code -> text
+  ulapply(
+    code_vector,
+    function(code_single) {
+      if (is_empty(parse(text = code_single))) {
+        # if string code cannot be passed into expression (e.g. code comment) then pass on the string
+        code_single
+      } else {
+        vapply(as.list(as.call(parse(text = code_single))), pdeparse, character(1))
+      }
+    }
+  )
 }

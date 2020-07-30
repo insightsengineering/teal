@@ -20,9 +20,7 @@ Object that stores function name with it's arguments. Methods to get call and ru
 \item \href{#method-get_args}{\code{CallableFunction$get_args()}}
 \item \href{#method-get_call}{\code{CallableFunction$get_call()}}
 \item \href{#method-get_error_message}{\code{CallableFunction$get_error_message()}}
-\item \href{#method-get_possible_args}{\code{CallableFunction$get_possible_args()}}
 \item \href{#method-run}{\code{CallableFunction$run()}}
-\item \href{#method-refresh}{\code{CallableFunction$refresh()}}
 \item \href{#method-set_args}{\code{CallableFunction$set_args()}}
 \item \href{#method-set_arg_value}{\code{CallableFunction$set_arg_value()}}
 \item \href{#method-clone}{\code{CallableFunction$clone()}}
@@ -137,18 +135,6 @@ Get error message from last function execution
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-get_possible_args"></a>}}
-\subsection{Method \code{get_possible_args()}}{
-Get the arguments this call can run with
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{CallableFunction$get_possible_args()}\if{html}{\out{</div>}}
-}
-
-\subsection{Returns}{
-character vector with the names of the arguments
-}
-}
-\if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-run"></a>}}
 \subsection{Method \code{run()}}{
 Run function
@@ -173,18 +159,6 @@ whether perform function evaluation inside \code{try} clause}
 }
 \subsection{Returns}{
 nothing or output from function depending on \code{return} argument
-}
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-refresh"></a>}}
-\subsection{Method \code{refresh()}}{
-Refresh call with function name and saved arguments
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{CallableFunction$refresh()}\if{html}{\out{</div>}}
-}
-
-\subsection{Returns}{
-nothing
 }
 }
 \if{html}{\out{<hr>}}

@@ -13,9 +13,11 @@ ui_teal_with_splash(
 )
 }
 \arguments{
-\item{id}{module id}
+\item{id}{(\code{character} value)\cr
+module id}
 
-\item{data}{\code{RealtionalDataList} R6 object and container for data}
+\item{data}{(\code{RealtionalDataList})\cr
+object containing data}
 
 \item{title}{(\code{character}) The browser window title (defaults to the host URL of the page)}
 

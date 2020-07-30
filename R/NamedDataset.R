@@ -115,7 +115,7 @@ NamedDataset <- R6::R6Class( # nolint
         private$code$set_code(code, private$.dataname)
       }
 
-      invisible(invisible(self))
+      invisible(self)
     },
 
     #' @description

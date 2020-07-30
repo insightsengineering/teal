@@ -40,6 +40,7 @@ rd <- teal:::RelationalData$new(x, x2)
 \item \href{#method-get_dataset}{\code{RelationalData$get_dataset()}}
 \item \href{#method-get_datasets}{\code{RelationalData$get_datasets()}}
 \item \href{#method-is_pulled}{\code{RelationalData$is_pulled()}}
+\item \href{#method-set_check}{\code{RelationalData$set_check()}}
 \item \href{#method-clone}{\code{RelationalData$clone()}}
 }
 }
@@ -212,6 +213,25 @@ Check if dataset has already been pulled.
 
 \subsection{Returns}{
 \code{TRUE} if dataset has been already pulled, else \code{FALSE}
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-set_check"></a>}}
+\subsection{Method \code{set_check()}}{
+Set reproducibility check
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{RelationalData$set_check(check = FALSE)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{check}}{(\code{logical}) whether to perform reproducibility check}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Returns}{
+\code{self} invisibly for chaining.
 }
 }
 \if{html}{\out{<hr>}}

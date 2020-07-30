@@ -4,6 +4,7 @@
 #' Object that stores function name with it's arguments. Methods to get call and run it.
 #'
 #' @importFrom R6 R6Class
+#' @importFrom rlang parse_expr
 CallableFunction <- R6::R6Class( #nolint
   "CallableFunction",
 
@@ -22,7 +23,7 @@ CallableFunction <- R6::R6Class( #nolint
       fun_name <- private$get_callable_function(fun)
       private$fun_name <- pdeparse(fun_name)
       private$env <- env
-      self$refresh()
+      private$refresh()
       invisible(self)
     },
 
@@ -93,13 +94,6 @@ CallableFunction <- R6::R6Class( #nolint
       return(private$error_msg)
     },
     #' @description
-    #' Get the arguments this call can run with
-    #'
-    #' @return character vector with the names of the arguments
-    get_possible_args = function() {
-      names(formals(private$fun_name))
-    },
-    #' @description
     #' Run function
     #'
     #' @param return (\code{logical} value)\cr
@@ -140,29 +134,6 @@ CallableFunction <- R6::R6Class( #nolint
       }
     },
     #' @description
-    #' Refresh call with function name and saved arguments
-    #'
-    #' @importFrom rlang parse_expr
-    #' @return nothing
-    refresh = function() {
-      if (!is.null(private$fun_name) || !identical(private$fun_name, character(0))) {
-
-        # replaced str2lang found at:
-        # https://rlang.r-lib.org/reference/call2.html
-        private$call <- as.call(
-          c(rlang::parse_expr(private$fun_name), private$args)
-        )
-
-        # exception for source(...)$value
-        if (private$fun_name == "source") {
-          private$call <- rlang::parse_expr(
-            sprintf("%s$value", pdeparse(private$call))
-          )
-        }
-
-      }
-    },
-    #' @description
     #' Set up function arguments
     #'
     #' @param args (\code{NULL} or named \code{list})\cr
@@ -175,8 +146,8 @@ CallableFunction <- R6::R6Class( #nolint
       # remove args if empty
       if (is_empty(args)) {
         private$args <- NULL
-        self$refresh()
-        return(invisible(NULL))
+        private$refresh()
+        return(invisible(self))
       }
       stopifnot(is.list(args) && is_fully_named_list(args))
 
@@ -200,7 +171,7 @@ CallableFunction <- R6::R6Class( #nolint
       }
       private$args[[name]] <- value
 
-      self$refresh()
+      private$refresh()
       return(invisible(self))
     }
   ),
@@ -225,6 +196,28 @@ CallableFunction <- R6::R6Class( #nolint
       }
 
       return(NULL)
+    },
+    # @description
+    # Refresh call with function name and saved arguments
+    #
+    # @return nothing
+    refresh = function() {
+      if (!is.null(private$fun_name) || !identical(private$fun_name, character(0))) {
+
+        # replaced str2lang found at:
+        # https://rlang.r-lib.org/reference/call2.html
+        private$call <- as.call(
+          c(rlang::parse_expr(private$fun_name), private$args)
+        )
+
+        # exception for source(...)$value
+        if (private$fun_name == "source") {
+          private$call <- rlang::parse_expr(
+            sprintf("%s$value", pdeparse(private$call))
+          )
+        }
+
+      }
     },
     # @description
     # Finds original function name

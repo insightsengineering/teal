@@ -59,11 +59,17 @@ x$get_code("ADRS")
 x$set_code("ADRS$x <- foo(ADSL$x)", "ADRS", deps = "ADSL")
 x$get_code("ADRS")
 }
+\section{Active bindings}{
+\if{html}{\out{<div class="r6-active-bindings">}}
+\describe{
+\item{\code{code}}{(\code{list}) Derive the code of the dataset.}
+}
+\if{html}{\out{</div>}}
+}
 \section{Methods}{
 \subsection{Public methods}{
 \itemize{
 \item \href{#method-append}{\code{CodeClass$append()}}
-\item \href{#method-is_empty}{\code{CodeClass$is_empty()}}
 \item \href{#method-set_code}{\code{CodeClass$set_code()}}
 \item \href{#method-get_code}{\code{CodeClass$get_code()}}
 \item \href{#method-eval}{\code{CodeClass$eval()}}
@@ -87,18 +93,6 @@ Append \code{CodeClass} object to a given \code{CodeClass} object
 }
 \subsection{Returns}{
 changed \code{CodeClass} object
-}
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-is_empty"></a>}}
-\subsection{Method \code{is_empty()}}{
-check if class has code inside
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{CodeClass$is_empty()}\if{html}{\out{</div>}}
-}
-
-\subsection{Returns}{
-(\code{logical})
 }
 }
 \if{html}{\out{<hr>}}

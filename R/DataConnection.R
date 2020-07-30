@@ -83,7 +83,7 @@ DataConnection <- R6::R6Class( # nolint
     open = function(args = NULL, silent = FALSE, try = FALSE) {
       stopifnot(is.null(args) || (is.list(args) && is_fully_named_list(args)))
       if_cond(private$check_open_fun(silent = silent), return(), isFALSE)
-      if (isTRUE(self$ping())) {
+      if (isTRUE(private$ping())) {
         return(invisible(NULL))
       } else {
         open_res <- private$open_fun$run(args = args, try = try)
@@ -166,7 +166,7 @@ DataConnection <- R6::R6Class( # nolint
     #' @param open_module (\code{function})\cr
     #'  A shiny module server function that should load data from all connectors
     #'
-    #' @return nothing
+    #' @return \code{self} invisibly for chaining.
     set_open_server = function(open_module) {
       stopifnot(is(open_module, "function"))
       stopifnot(names(formals(open_module)) %in% c("input", "output", "session", "connection"))
@@ -177,7 +177,7 @@ DataConnection <- R6::R6Class( # nolint
         })
       }
 
-      return(invisible(NULL))
+      return(invisible(self))
     },
     #' @description
     #' Set open connection UI function
@@ -186,7 +186,7 @@ DataConnection <- R6::R6Class( # nolint
     #'  shiny module as function. Inputs specified in this \code{ui} are passed to server module
     #'  defined by \code{set_open_server} method.
     #'
-    #' @return nothing
+    #' @return \code{self} invisibly for chaining.
     set_open_ui = function(open_module) {
       stopifnot(is(open_module, "function"))
       stopifnot(identical(names(formals(open_module)), "id"))
@@ -201,7 +201,7 @@ DataConnection <- R6::R6Class( # nolint
         )
       }
 
-      return(invisible(NULL))
+      return(invisible(self))
     },
     # .. close connection -------
     #' @description
@@ -213,7 +213,7 @@ DataConnection <- R6::R6Class( # nolint
     #' @return if \code{try = TRUE} then \code{try-error} on error, \code{NULL} otherwise
     close = function(silent = FALSE, try = FALSE) {
       if_cond(private$check_close_fun(silent = silent), return(), isFALSE)
-      if (isTRUE(self$ping())) {
+      if (isTRUE(private$ping())) {
         close_res <- private$close_fun$run(try = try)
         if (is(close_res, "try-error")) {
           return(close_res)
@@ -291,7 +291,7 @@ DataConnection <- R6::R6Class( # nolint
     #'  shiny module as function. Inputs specified in this \code{ui} are passed to server module
     #'  defined by \code{set_close_server} method.
     #'
-    #' @return nothing
+    #' @return \code{self} invisibly for chaining.
     set_close_ui = function(close_module) {
       stopifnot(is(close_module, "function"))
       stopifnot(identical(names(formals(close_module)), "id"))
@@ -305,7 +305,7 @@ DataConnection <- R6::R6Class( # nolint
           )
         )
       }
-      return(invisible(NULL))
+      return(invisible(self))
     },
 
     #' @description
@@ -318,7 +318,7 @@ DataConnection <- R6::R6Class( # nolint
     #' @param close_module (\code{function})\cr
     #'  A shiny module server function that should load data from all connectors
     #'
-    #' @return nothing
+    #' @return \code{self} invisibly for chaining.
     set_close_server = function(close_module) {
       stopifnot(is(close_module, "function"))
       stopifnot(names(formals(close_module)) %in% c("input", "output", "session", "connection"))
@@ -328,19 +328,7 @@ DataConnection <- R6::R6Class( # nolint
           callModule(close_module, id = "close_conn", connection = connection)
         })
       }
-      return(invisible(NULL))
-    },
-    #' @description
-    #' ping the connection.
-    #'
-    #' @return logical
-    ping = function() {
-      if (!is.null(private$ping_fun)) {
-        ping_res <- private$ping_fun$run()
-        return(isTRUE(ping_res))
-      } else {
-        return(invisible(NULL))
-      }
+      return(invisible(self))
     }
   ),
   # DataConnection private ----
@@ -393,33 +381,45 @@ DataConnection <- R6::R6Class( # nolint
     #
     # @param fun (\code{CallableFunction}) function to close connection
     #
-    # @return nothing
+    # @return \code{self} invisibly for chaining.
     set_close_fun = function(fun) {
       stopifnot(is(fun, "CallableFunction"))
       private$close_fun <- fun
-      return(invisible(NULL))
+      return(invisible(self))
     },
     # @description
     # Set open connection function
     #
     # @param fun (\code{CallableFunction}) function to open connection
     #
-    # @return nothing
+    # @return \code{self} invisibly for chaining.
     set_open_fun = function(fun) {
       stopifnot(is(fun, "CallableFunction"))
       private$open_fun <- fun
-      return(invisible(NULL))
+      return(invisible(self))
     },
     # @description
     # Set a ping function
     #
     # @param fun (\code{CallableFunction}) function to ping connection
     #
-    # @return nothing
+    # @return \code{self} invisibly for chaining.
     set_ping_fun = function(fun) {
       stopifnot(is(fun, "CallableFunction"))
       private$ping_fun <- fun
-      return(invisible(NULL))
+      return(invisible(self))
+    },
+    # @description
+    # Ping the connection.
+    #
+    # @return logical
+    ping = function() {
+      if (!is.null(private$ping_fun)) {
+        ping_res <- private$ping_fun$run()
+        return(isTRUE(ping_res))
+      } else {
+        return(invisible(NULL))
+      }
     }
   )
 )

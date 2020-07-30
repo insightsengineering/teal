@@ -10,8 +10,8 @@ mutate_data(x, code = character(0), script = character(0), vars = list())
 \method{mutate_data}{RelationalData}(x, code = character(0), script = character(0), vars = list())
 }
 \arguments{
-\item{x}{(\code{RelationalData})\cr
-object or a \code{RelationalDataList} or \code{RealtionalDataConnector}.}
+\item{x}{(\code{RelationalData}, \code{RelationalDataList} or \code{RealtionalDataConnector})\cr
+object.}
 
 \item{code}{(\code{character})\cr
 Code to mutate the dataset. Must contain the \code{dataset$dataname}.}
