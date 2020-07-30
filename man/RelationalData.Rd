@@ -226,7 +226,7 @@ Set reproducibility check
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{check}}{(\code{logical}) whether to perform reproducibility check}
+\item{\code{check}}{(\code{logical}) whether to perform reproducibility check.}
 }
 \if{html}{\out{</div>}}
 }

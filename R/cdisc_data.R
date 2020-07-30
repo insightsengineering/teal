@@ -465,6 +465,7 @@ cdisc_data <- function(...,
   stopifnot(is_logical_single(check))
 
   x <- teal_data(..., code = code)
+  x$set_check(check)
 
   datasets_names <- x$get_datanames()
   if (!any(datasets_names == "ADSL")) {
@@ -480,11 +481,11 @@ cdisc_data <- function(...,
   datasets_keys <- lapply(x$get_all_datasets(), function(x) x$get_keys())
   check_foreign_keys(datasets_keys)
 
-  if (check) {
+  if (check && is_pulled(x)) {
     if (isFALSE(x$check())) {
       stop("Reproducibility check failed.")
     }
-  } else if (!check && !isTRUE(attr(check, "quiet"))) {
+  } else {
     mutate_data(x, get_check_note_string())
   }
 

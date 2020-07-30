@@ -189,7 +189,7 @@ RelationalData <- R6::R6Class( #nolint
     #' @description
     #' Set reproducibility check
     #'
-    #' @param check (\code{logical}) whether to perform reproducibility check
+    #' @param check (\code{logical}) whether to perform reproducibility check.
     #'
     #' @return \code{self} invisibly for chaining.
     set_check = function(check = FALSE) {
@@ -257,7 +257,7 @@ RelationalData <- R6::R6Class( #nolint
     check_dataset_all_code = function(dataset) {
       new_env <- new.env(parent = parent.env(.GlobalEnv))
       tryCatch({
-        private$code$eval(envir = new_env)
+        self$get_code_class()$eval(envir = new_env)
       }, error = function(e) {
         error_dialog(e)
       })

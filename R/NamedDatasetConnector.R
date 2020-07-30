@@ -203,7 +203,7 @@ NamedDatasetConnector <- R6::R6Class( #nolint
 
       new_env <- new.env(parent = parent.env(.GlobalEnv))
       tryCatch({
-        private$code$eval(envir = new_env)
+        private$get_code_class()$eval(envir = new_env)
       }, error = function(e) {
         error_dialog(e)
       })

@@ -176,7 +176,7 @@ RelationalDataConnector <- R6::R6Class( #nolint
     launch = function() {
       # load RelationDatasetConnector objects
       if (self$is_pulled()) {
-        stop("all the datasets have already been pulled")
+        stop("All the datasets have already been pulled.")
       }
 
       shinyApp(
@@ -219,6 +219,7 @@ RelationalDataConnector <- R6::R6Class( #nolint
               if (self$is_pulled()) {
                 removeUI(sprintf("#%s", session$ns("data_inputs")))
                 shinyjs::show("data_loaded")
+                `if`(private$.check && !self$check(), stop("Reproducibility check failed."))
                 stopApp()
               }
             })

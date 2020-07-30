@@ -224,6 +224,9 @@ RelationalDataList <- R6::R6Class( # nolint
     launch = function() {
       # if no data connectors can append any dataset connectors
       # and not load an app
+      if (self$is_pulled()) {
+        stop("All the datasets have already been pulled.")
+      }
 
       # otherwise load RelationDataConnector and
       # RelationalDatasetConnector with shiny app
@@ -255,6 +258,7 @@ RelationalDataList <- R6::R6Class( # nolint
           observeEvent(dat(), {
             if (self$is_pulled()) {
               shinyjs::show("data_loaded")
+              `if`(private$.check && !self$check(), stop("Reproducibility check failed."))
               stopApp()
             }
           })
