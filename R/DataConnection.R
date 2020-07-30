@@ -427,14 +427,26 @@ DataConnection <- R6::R6Class( # nolint
 # DataConnection wrappers ----
 #' Open connection to \code{random.cdisc.data}
 #'
-#' @return \code{DataConnection} type of object
-rcd_connection <- function() {
-  check_pkg_quietly("random.cdisc.data", "random.cdisc.data package not available.") # nolint
+#' @param open_args optional, named (\code{list}) of additional parameters for \code{library} open
+#'   function such as \code{quietly}. Please note that the \code{package} argument will be overwritten
+#'   with \code{random.cdisc.data}.
+#'
+#' @return \code{DataConnection} type of object.
+#'
+#' @export
+rcd_connection <- function(open_args = list()) {
 
-  fun <- callable_function(library) # nolint
-  fun$set_args(list(package = "random.cdisc.data"))
+  check_pkg_quietly("random.cdisc.data", "random.cdisc.data package not available.")
 
-  x <- DataConnection$new(open_fun = fun)
+  stopifnot(is_fully_named_list(open_args))
+  stopifnot(all(names(open_args) %in% names(formals(library))))
+
+  open_fun <- callable_function(library)
+
+  open_args$package <- "random.cdisc.data"
+  open_fun$set_args(open_args)
+
+  x <- DataConnection$new(open_fun = open_fun)
   x$set_open_ui(
     function(id) {
       NULL
@@ -452,8 +464,19 @@ rcd_connection <- function() {
 
 #' Open connection to \code{rice}
 #'
+#' @param open_args optional, named (\code{list}) of additional parameters for the connection's
+#'   \code{rice::rice_session_open}. Please note that the \code{password} argument will be
+#'   overwritten with \code{random.cdisc.data}.
+#' @param close_args optional, named (\code{list}) of additional parameters for the connection's
+#'   \code{rice::rice_session_close} close function. Please note that the \code{message} argument
+#'   will be overwritten with \code{FALSE}.
+#' @param ping_args optional, named (\code{list}) of additional parameters for the connection's
+#'   \code{rice::rice_session_active} ping function.
+#'
 #' @return \code{DataConnection} type of object
-rice_connection <- function() {
+#'
+#' @export
+rice_connection <- function(open_args = list(), close_args = list(), ping_args = list()) {
   check_pkg_quietly(
     "rice",
     paste0(
@@ -462,12 +485,24 @@ rice_connection <- function() {
     )
   )
 
-  ping_fun <- callable_function(rice::rice_session_active) # nolint
-  open_fun <- callable_function(rice::rice_session_open) # nolint
-  open_fun$set_args(list(password = as.call(parse(text = "askpass::askpass"))))
+  stopifnot(is_fully_named_list(open_args) &&
+              is_fully_named_list(close_args) &&
+              is_fully_named_list(ping_args))
 
-  close_fun <- callable_function(rice::rice_session_close) # nolint
-  close_fun$set_args(list(message = FALSE))
+  stopifnot(all(names(open_args) %in% names(formals(rice::rice_session_open))))
+  stopifnot(all(names(ping_args) %in% names(formals(rice::rice_session_active))))
+  stopifnot(all(names(close_args) %in% names(formals(rice::rice_session_close))))
+
+  ping_fun <- callable_function(rice::rice_session_active)
+  ping_fun$set_args(ping_args)
+
+  open_fun <- callable_function(rice::rice_session_open)
+  open_args$password <- as.call(parse(text = "askpass::askpass"))
+  open_fun$set_args(open_args)
+
+  close_fun <- callable_function(rice::rice_session_close)
+  close_args$message <- FALSE
+  close_fun$set_args(close_args)
 
   x <- DataConnection$new(open_fun = open_fun,
                           close_fun = close_fun,

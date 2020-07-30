@@ -4,10 +4,15 @@
 \alias{rcd_connection}
 \title{Open connection to \code{random.cdisc.data}}
 \usage{
-rcd_connection()
+rcd_connection(open_args = list())
+}
+\arguments{
+\item{open_args}{optional, named (\code{list}) of additional parameters for \code{library} open
+function such as \code{quietly}. Please note that the \code{package} argument will be overwritten
+with \code{random.cdisc.data}.}
 }
 \value{
-\code{DataConnection} type of object
+\code{DataConnection} type of object.
 }
 \description{
 Open connection to \code{random.cdisc.data}

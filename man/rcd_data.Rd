@@ -4,11 +4,13 @@
 \alias{rcd_data}
 \title{\code{RelationalDataConnector} connector for \code{random.cdisc.data}}
 \usage{
-rcd_data(..., check = TRUE)
+rcd_data(..., connection = rcd_connection(), check = TRUE)
 }
 \arguments{
 \item{...}{(\code{RelationalDatasetConnector}) dataset connectors created using \link{rcd_dataset_connector}
 In case \code{cached = FALSE}, please watch the order and call \code{ADSL} generation first.}
+
+\item{connection}{(\code{DataConnection}) object returned from \code{rcd_connection}.}
 
 \item{check}{optional, (\code{logical}) whether perform reproducibility check}
 }

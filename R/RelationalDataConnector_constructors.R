@@ -18,6 +18,8 @@
 #' In case non-cached datasets should be used, please watch the order of datasets. Most
 #' of the datasets from \code{random.cdisc.data} need \code{ADSL} to be produced first. So
 #' please create the \code{ADSL} dataset first.
+#'
+#' @param connection (\code{DataConnection}) object returned from \code{rcd_connection}.
 #' @param check optional, (\code{logical}) whether perform reproducibility check
 #'
 #' @return An object of class \code{RelationalDataConnector}
@@ -49,10 +51,11 @@
 #' \dontrun{
 #' shinyApp(app$ui, app$server)
 #' }
-rcd_data <- function(..., check = TRUE) {
+rcd_data <- function(..., connection = rcd_connection(), check = TRUE) {
   connectors <- list(...)
   stopifnot(is_class_list("RelationalDatasetConnector")(connectors))
-  connection <- rcd_connection()
+  stopifnot(inherits(connection, "DataConnection"))
+  stopifnot(is_logical_single(check))
 
   x <- RelationalDataConnector$new(connection = connection, connectors = connectors)
   x$set_check(check)
@@ -117,6 +120,7 @@ rcd_data <- function(..., check = TRUE) {
 #'
 #' @param ... (\code{RelationalDatasetConnector} objects)\cr
 #'  dataset connectors created using \link{rice_dataset_connector}
+#' @param connection (\code{DataConnection}) object returned from \code{rice_connection}.
 #' @param additional_ui (\code{shiny.tag})\cr
 #'  additional user interface to be visible over login panel
 #'
@@ -147,11 +151,10 @@ rcd_data <- function(..., check = TRUE) {
 #' \dontrun{
 #' shinyApp(app$ui, app$server)
 #' }
-rice_data <- function(..., additional_ui = NULL) {
+rice_data <- function(..., connection = rice_connection(), additional_ui = NULL) {
   connectors <- list(...)
   stopifnot(is_class_list("RelationalDatasetConnector")(connectors))
-
-  connection <- rice_connection()
+  stopifnot(inherits(connection, "DataConnection"))
 
   x <- RelationalDataConnector$new(connection = connection, connectors = connectors)
   x$set_check(`attributes<-`(FALSE, list(quiet = TRUE)))

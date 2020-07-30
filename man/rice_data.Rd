@@ -4,11 +4,13 @@
 \alias{rice_data}
 \title{Data connector for \code{RICE}}
 \usage{
-rice_data(..., additional_ui = NULL)
+rice_data(..., connection = rice_connection(), additional_ui = NULL)
 }
 \arguments{
 \item{...}{(\code{RelationalDatasetConnector} objects)\cr
 dataset connectors created using \link{rice_dataset_connector}}
+
+\item{connection}{(\code{DataConnection}) object returned from \code{rice_connection}.}
 
 \item{additional_ui}{(\code{shiny.tag})\cr
 additional user interface to be visible over login panel}
