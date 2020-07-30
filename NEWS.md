@@ -1,10 +1,15 @@
 # teal 0.8.5.9000
 
-* `cdisc_dataset` and `dataset` now return R6 class objects (RelationalDataset)
-* `get_raw_data` can be used to derive raw data from R6 objects e.g. (RelationalDataset)
-* `mutate_dataset` allows to change the data inside R6 objects via `code` argument or an R script
+* `cdisc_dataset` and `dataset` now return R6 class objects (`RelationalDataset`)
+* new `teal_data` function to include connectors into teal application.
+* `get_raw_data` can be used to derive raw data from R6 objects e.g. (`RelationalDataset`)
 * new `RawDatasetConnector` and `RelationalDatasetConnector` to execute get data from remote connections.
-* new wrapper functions to manipulate `DatasetConnector` and `Dataset` such as `get_dataset`, `load_dataset`, `as_relational`.
+* `mutate_dataset` allows to modify `raw_data` in dataset via `code` argument or an R script
+* `mutate_data` allows to change any dataset in `RelationalData` or `RelationalDataList` 
+* new wrapper functions to manipulate `DatasetConnector` and `Dataset` such as `get_dataset`, 
+`load_dataset`, `as_relational`.
+* `choices_labeled`, `filter_spec`, `select_spec`, `data_extract_spec`, `value_choices`, 
+`variable_choices` as S3 class applied on `data.frame` and also on delayed data.
 
 * You can no longer modify the `app$datasets`, but must instead use argument `filter` in the `init` function. 
 * New modules were created to create a module of nested teal modules, then another one that adds the right filter pane to each tab. The `teal::init` function stays unchanged.

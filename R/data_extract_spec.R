@@ -7,7 +7,7 @@
 #' Note that no checks based on columns can be done because the data is only referred to by name.
 #'
 #' @export
-#' @name data_extract_spec
+#' @rdname data_extract_spec
 #'
 #' @section Module Development:
 #' \describe{
@@ -90,25 +90,37 @@
 #' @references \link{select_spec} \link{filter_spec}
 data_extract_spec <- function(dataname, select, filter = NULL, reshape = FALSE) {
   stopifnot(is_character_single(dataname))
-  stopifnot(is(select, "select_spec") || is(select, "delayed_data"), length(select) >= 1)
+  stopifnot(is(select, "select_spec") || is(select, "delayed_select_spec"), length(select) >= 1)
   stopifnot(is.null(filter) ||
               (is(filter, "filter_spec") & length(filter) >= 1) ||
               is_class_list("filter_spec")(filter) ||
-              is(filter, "delayed_data") ||
-              all(ulapply(filter, class) %in% c("delayed_data", "delayed_filter_spec", "filter_spec")))
+              is(filter, "delayed_filter_spec") ||
+              is_class_list("delayed_filter_spec")(filter))
   stopifnot(is_logical_single(reshape))
 
-  if (is(select, "delayed_data") ||
-      is(filter, "delayed_data") ||
-      any(vapply(filter, is, logical(1), "delayed_data"))) {
-    out <- structure(list(dataname = dataname,
-                          select = select,
-                          filter = filter,
-                          reshape = reshape),
-                     class = c("delayed_data_extract_spec", "delayed_data", "data_extract_spec"))
-    return(out)
+  if (is(select, "delayed_select_spec") ||
+      is(filter, "delayed_filter_spec") ||
+      any(vapply(filter, is, logical(1), "delayed_filter_spec"))) {
+    data_extract_spec.delayed_data(dataname = dataname, select = select, filter = filter, reshape = reshape)
+  } else {
+    UseMethod("data_extract_spec")
   }
+}
 
+#' @export
+#' @rdname data_extract_spec
+data_extract_spec.delayed_data <- function(dataname, select, filter = NULL, reshape = FALSE) {
+  out <- structure(list(dataname = dataname,
+                        select = select,
+                        filter = filter,
+                        reshape = reshape),
+                   class = c("delayed_data_extract_spec", "delayed_data", "data_extract_spec"))
+  return(out)
+}
+
+#' @export
+#' @rdname data_extract_spec
+data_extract_spec.default <- function(dataname, select, filter = NULL, reshape = FALSE) {
   if (is(filter, "filter_spec")) {
     filter <- list(filter)
   }

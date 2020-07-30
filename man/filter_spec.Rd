@@ -2,12 +2,32 @@
 % Please edit documentation in R/filter_spec.R
 \name{filter_spec}
 \alias{filter_spec}
+\alias{filter_spec.delayed_data}
+\alias{filter_spec.default}
 \title{filter spec}
 \usage{
 filter_spec(
   vars,
   choices,
   selected = if (is(choices, "delayed_data")) NULL else choices[1],
+  multiple = length(selected) > 1,
+  label = "Filter",
+  sep = if_null(attr(choices, "sep"), " - ")
+)
+
+\method{filter_spec}{delayed_data}(
+  vars,
+  choices,
+  selected = NULL,
+  multiple = length(selected) > 1,
+  label = "Filter",
+  sep = if_null(attr(choices, "sep"), " - ")
+)
+
+\method{filter_spec}{default}(
+  vars,
+  choices,
+  selected = choices[1],
   multiple = length(selected) > 1,
   label = "Filter",
   sep = if_null(attr(choices, "sep"), " - ")

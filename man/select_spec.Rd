@@ -2,11 +2,31 @@
 % Please edit documentation in R/select_spec.R
 \name{select_spec}
 \alias{select_spec}
+\alias{select_spec.delayed_data}
+\alias{select_spec.default}
 \title{Column selection input specification}
 \usage{
 select_spec(
   choices,
   selected = if (is(choices, "delayed_data")) NULL else choices[1],
+  multiple = length(selected) > 1,
+  fixed = FALSE,
+  always_selected = NULL,
+  label = ifelse(multiple, "Columns", "Column")
+)
+
+\method{select_spec}{delayed_data}(
+  choices,
+  selected = NULL,
+  multiple = length(selected) > 1,
+  fixed = FALSE,
+  always_selected = NULL,
+  label = ifelse(multiple, "Columns", "Column")
+)
+
+\method{select_spec}{default}(
+  choices,
+  selected = choices[1],
   multiple = length(selected) > 1,
   fixed = FALSE,
   always_selected = NULL,

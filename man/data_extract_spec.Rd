@@ -2,9 +2,15 @@
 % Please edit documentation in R/data_extract_spec.R
 \name{data_extract_spec}
 \alias{data_extract_spec}
+\alias{data_extract_spec.delayed_data}
+\alias{data_extract_spec.default}
 \title{Data Extract input for teal modules}
 \usage{
 data_extract_spec(dataname, select, filter = NULL, reshape = FALSE)
+
+\method{data_extract_spec}{delayed_data}(dataname, select, filter = NULL, reshape = FALSE)
+
+\method{data_extract_spec}{default}(dataname, select, filter = NULL, reshape = FALSE)
 }
 \arguments{
 \item{dataname}{(\code{character}) The name of the \code{teal} dataset to

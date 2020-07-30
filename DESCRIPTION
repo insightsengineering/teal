@@ -36,7 +36,6 @@ Imports:
   htmltools,
   magrittr,
   methods,
-  purrr,
   R6,
   rlang,
   rtables (>= 0.1.6),

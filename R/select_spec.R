@@ -100,6 +100,9 @@
 #' }
 #'
 #' @importFrom stats setNames
+#'
+#' @rdname select_spec
+#'
 #' @export
 #'
 #' @examples
@@ -122,28 +125,47 @@ select_spec <- function(choices,
                         fixed = FALSE,
                         always_selected = NULL,
                         label = ifelse(multiple, "Columns", "Column")) {
-
-  stopifnot(length(choices) >= 1 && (is.atomic(choices) || is(choices, "delayed_data")))
-  stopifnot(is.null(selected) || is.atomic(selected) || is(selected, "delayed_data"))
   stopifnot(is_logical_single(multiple))
   stopifnot(is_logical_single(fixed))
   stopifnot(is.null(always_selected) || is_character_vector(always_selected, 1))
   stopifnot(is_character_single(label))
-
-  if (is(selected, "delayed_data") && !is(choices, "delayed_data")) {
-    stop("If 'selected' is of class 'delayed_data', so must be 'choices'.")
+  if (fixed) {
+    stopifnot(is.null(always_selected))
   }
 
-  if (is(choices, "delayed_data")) {
-    out <- structure(list(choices = choices,
-                          selected = selected,
-                          always_selected = always_selected,
-                          multiple = multiple,
-                          fixed = fixed,
-                          label = label),
-                     class = c("delayed_select_spec", "delayed_data", "select_spec"))
-    return(out)
-  }
+  UseMethod("select_spec")
+}
+
+#' @rdname select_spec
+#' @export
+select_spec.delayed_data <- function(choices,
+                                     selected = NULL,
+                                     multiple = length(selected) > 1,
+                                     fixed = FALSE,
+                                     always_selected = NULL,
+                                     label = ifelse(multiple, "Columns", "Column")) {
+  stopifnot(is.null(selected) || is.atomic(selected) || is(selected, "delayed_data"))
+
+  out <- structure(list(choices = choices,
+                        selected = selected,
+                        always_selected = always_selected,
+                        multiple = multiple,
+                        fixed = fixed,
+                        label = label),
+                   class = c("delayed_select_spec", "delayed_data", "select_spec"))
+
+  return(out)
+}
+
+#' @rdname select_spec
+#' @export
+select_spec.default <- function(choices,
+                                selected = choices[1],
+                                multiple = length(selected) > 1,
+                                fixed = FALSE,
+                                always_selected = NULL,
+                                label = ifelse(multiple, "Columns", "Column")) {
+  stopifnot(is.null(selected) || is.atomic(selected))
 
   # if names is NULL, shiny will put strange labels (with quotes etc.) in the selectInputs, so we set it to the values
   if (is.null(names(choices))) {
@@ -158,10 +180,6 @@ select_spec <- function(choices,
     if (is.null(names(selected))) {
       names(selected) <- as.character(selected)
     }
-  }
-
-  if (fixed) {
-    stopifnot(is.null(always_selected))
   }
 
   if (length(intersect(choices, always_selected)) > 0) {

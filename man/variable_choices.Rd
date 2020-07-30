@@ -2,9 +2,21 @@
 % Please edit documentation in R/choices_labeled.R
 \name{variable_choices}
 \alias{variable_choices}
+\alias{variable_choices.character}
+\alias{variable_choices.data.frame}
+\alias{variable_choices.RawDataset}
+\alias{variable_choices.NamedDatasetConnector}
 \title{Wrapper on \code{\link{choices_labeled}} to label variables basing on existing labels in data}
 \usage{
 variable_choices(data, subset = NULL, fill = FALSE)
+
+\method{variable_choices}{character}(data, subset = NULL, fill = FALSE)
+
+\method{variable_choices}{data.frame}(data, subset = NULL, fill = FALSE)
+
+\method{variable_choices}{RawDataset}(data, subset = NULL, fill = FALSE)
+
+\method{variable_choices}{NamedDatasetConnector}(data, subset = NULL, fill = FALSE)
 }
 \arguments{
 \item{data}{(\code{data.frame}) or (\code{character})

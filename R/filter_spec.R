@@ -35,6 +35,8 @@
 #'
 #' @return \code{filter_spec}-S3-class object or \code{delayed_filter_spec}-S3-class object.
 #'
+#' @rdname filter_spec
+#'
 #' @examples
 #' filter_spec(
 #'   vars = c("PARAMCD", "AVISIT"),
@@ -154,28 +156,53 @@ filter_spec <- function(vars,
                         multiple = length(selected) > 1,
                         label = "Filter",
                         sep = if_null(attr(choices, "sep"), " - ")) {
-
-  stopifnot(is_character_vector(vars) || is(vars, "delayed_data"))
-  stopifnot(is_character_vector(choices) || is(choices, "delayed_data"))
-  stopifnot(is.null(selected) || is_character_vector(selected) || is(selected, "delayed_data"))
-  stopifnot(is_character_single(sep))
   stopifnot(is_logical_single(multiple))
   stopifnot(is_character_single(label))
+  stopifnot(is_character_single(sep))
 
-  if (is(selected, "delayed_data") && !is(choices, "delayed_data")) {
-    stop("If 'selected' is of class 'delayed_data', so must be 'choices'.")
+  # class dispatch also on a choices arg
+  # filter_spec.delayed_data dispatch on two arguments - s3 can dispatch only on 1 argument
+  if (is(choices, "delayed_data") || is(selected, "delayed_data")) {
+    filter_spec.delayed_data(vars = vars, choices = choices, selected = selected,
+                             multiple = multiple, label = label, sep = sep)
+  } else {
+    UseMethod("filter_spec")
   }
+}
 
-  if (is(vars, "delayed_data") || is(choices, "delayed_data")) {
-    out <- structure(list(vars = vars,
-                          choices = choices,
-                          selected = selected,
-                          multiple = multiple,
-                          label = label,
-                          sep = sep),
-                     class = c("delayed_filter_spec", "delayed_data", "filter_spec"))
-    return(out)
-  }
+#' @rdname filter_spec
+#' @export
+filter_spec.delayed_data <- function(vars,
+                                     choices,
+                                     selected = NULL,
+                                     multiple = length(selected) > 1,
+                                     label = "Filter",
+                                     sep = if_null(attr(choices, "sep"), " - ")) {
+  stopifnot(is_character_vector(choices) || is(choices, "delayed_data"))
+  stopifnot(is.null(selected) || is_character_vector(selected) || is(selected, "delayed_data"))
+
+  out <- structure(list(vars = vars,
+                        choices = choices,
+                        selected = selected,
+                        multiple = multiple,
+                        label = label,
+                        sep = sep),
+                   class = c("delayed_filter_spec", "delayed_data", "filter_spec"))
+  return(out)
+}
+
+#' @rdname filter_spec
+#' @export
+filter_spec.default <- function(vars,
+                                choices,
+                                selected = choices[1],
+                                multiple = length(selected) > 1,
+                                label = "Filter",
+                                sep = if_null(attr(choices, "sep"), " - ")) {
+
+  stopifnot(is_character_vector(vars))
+  stopifnot(is_character_vector(choices))
+  stopifnot(is.null(selected) || is_character_vector(selected))
 
   stopifnot(all(!duplicated(vars)))
   stopifnot(all(!duplicated(choices)))
@@ -187,7 +214,6 @@ filter_spec <- function(vars,
 
   attributes(choices) <- choices_attrs
   names(choices) <- if_null(names(choices), vapply(choices, paste, collapse = sep, character(1)))
-
 
 
   if (!is.null(selected)) {

@@ -110,6 +110,8 @@ choices_labeled <- function(choices, labels, subset = NULL, types = NULL) {
 #'
 #' @return named character vector with additional attributes or \code{delayed_data} object
 #'
+#' @rdname variable_choices
+#'
 #' @export
 #'
 #' @examples
@@ -129,16 +131,23 @@ choices_labeled <- function(choices, labels, subset = NULL, types = NULL) {
 #'   return(names(data)[idx])
 #' })
 variable_choices <- function(data, subset = NULL, fill = FALSE) {
-  stopifnot(is.data.frame(data) || is_character_single(data))
   stopifnot(is.null(subset) || is_character_vector(subset, min_length = 0) || is.function(subset))
   stopifnot(is_logical_single(fill))
 
-  if (is_character_single(data)) {
-    out <- structure(list(data = data, subset = subset),
-                     class = c("delayed_variable_choices", "delayed_data", "choices_labeled"))
-    return(out)
-  }
+  UseMethod("variable_choices")
+}
 
+#' @rdname variable_choices
+#' @export
+variable_choices.character <- function(data, subset = NULL, fill = FALSE) {
+  out <- structure(list(data = data, subset = subset),
+                   class = c("delayed_variable_choices", "delayed_data", "choices_labeled"))
+  return(out)
+}
+
+#' @rdname variable_choices
+#' @export
+variable_choices.data.frame <- function(data, subset = NULL, fill = FALSE) { # nolint
   if (is.null(subset)) {
     subset <- names(data)
   } else if (is.function(subset)) {
@@ -149,25 +158,48 @@ variable_choices <- function(data, subset = NULL, fill = FALSE) {
   stopifnot(all(subset %in% c("", names(data))))
 
   if (any(duplicated(subset))) {
-    warning("removed duplicated entries in subset:", paste(unique(subset[duplicated(subset)]), collapse = ", "))
+    warning("removed duplicated entries in subset:",
+            paste(unique(subset[duplicated(subset)]), collapse = ", "))
     subset <- unique(subset)
   }
 
   res <- if ("" %in% subset) {
     choices_labeled(choices = c("", names(data)),
-                           labels = c("", unname(get_variable_labels(data))),
-                           subset = subset,
-                           types = c("", variable_types(data = data)))
-  }
-  else {
+                    labels = c("", unname(get_variable_labels(data))),
+                    subset = subset,
+                    types = c("", variable_types(data = data)))
+  } else {
     choices_labeled(choices = names(data),
-                           labels = unname(get_variable_labels(data)),
-                           subset = subset,
-                           types = variable_types(data = data))
+                    labels = unname(get_variable_labels(data)),
+                    subset = subset,
+                    types = variable_types(data = data))
   }
 
   return(res)
 }
+
+#' @rdname variable_choices
+#' @export
+variable_choices.RawDataset <- function(data, subset = NULL, fill = FALSE) {
+  variable_choices(data = get_raw_data(data),
+                   subset = subset,
+                   fill = fill)
+}
+
+#' @rdname variable_choices
+#' @export
+variable_choices.NamedDatasetConnector <- function(data, subset = NULL, fill = FALSE) { # nolint
+  if (is_pulled(data)) {
+    variable_choices(data = get_raw_data(data),
+                     subset = subset,
+                     fill = fill)
+  } else {
+    variable_choices(data = get_dataname(data),
+                     subset = subset,
+                     fill = fill)
+  }
+}
+
 
 #' Wrapper on \code{\link{choices_labeled}} to label variable values basing on other variable values
 #'
@@ -184,6 +216,8 @@ variable_choices <- function(data, subset = NULL, fill = FALSE) {
 #' @param sep (\code{character}) separator used in case of multiple column names
 #'
 #' @return named character vector or \code{delayed_data} object
+#'
+#' @rdname value_choices
 #'
 #' @export
 #'
@@ -205,24 +239,30 @@ variable_choices <- function(data, subset = NULL, fill = FALSE) {
 #'   return(levels(data$PARAMCD)[1:2])
 #' })
 value_choices <- function(data, var_choices, var_label, subset = NULL, sep = " - ") {
-  stopifnot(is.data.frame(data) || is_character_single(data))
   stopifnot(
     is_character_vector(var_choices),
     is_character_vector(var_label),
     length(var_choices) == length(var_label)
   )
   stopifnot(is.null(subset) || is.vector(subset) || is.function(subset))
+  UseMethod("value_choices")
+}
 
-  if (is.character(data)) {
-    out <- structure(list(data = data,
-                          var_choices = var_choices,
-                          var_label = var_label,
-                          subset = subset,
-                          sep = sep),
-                     class = c("delayed_value_choices", "delayed_data", "choices_labeled"))
-    return(out)
-  }
+#' @rdname value_choices
+#' @export
+value_choices.character <- function(data, var_choices, var_label, subset = NULL, sep = " - ") {
+  out <- structure(list(data = data,
+                        var_choices = var_choices,
+                        var_label = var_label,
+                        subset = subset,
+                        sep = sep),
+                   class = c("delayed_value_choices", "delayed_data", "choices_labeled"))
+  return(out)
+}
 
+#' @rdname value_choices
+#' @export
+value_choices.data.frame <- function(data, var_choices, var_label, subset = NULL, sep = " - ") { # nolint
   choices <- apply(data[var_choices], 1, paste, collapse = sep)
   labels <- apply(data[var_label], 1, paste, collapse = sep)
   df <- unique(data.frame(choices, labels, stringsAsFactors = FALSE)) # unique combo of choices x labels
@@ -238,6 +278,34 @@ value_choices <- function(data, var_choices, var_label, subset = NULL, sep = " -
   )
   attr(res, "sep") <- sep
   return(res)
+}
+
+#' @rdname value_choices
+#' @export
+value_choices.RawDataset <- function(data, var_choices, var_label, subset = NULL, sep = " - ") {
+  value_choices(data = get_raw_data(data),
+                var_choices = var_choices,
+                var_label = var_label,
+                subset = subset,
+                sep = sep)
+}
+
+#' @rdname value_choices
+#' @export
+value_choices.NamedDatasetConnector <- function(data, var_choices, var_label, subset = NULL, sep = " - ") { # nolint
+  if (is_pulled(data)) {
+    value_choices(data = get_raw_data(data),
+                  var_choices = var_choices,
+                  var_label = var_label,
+                  subset = subset,
+                  sep = sep)
+  } else {
+    value_choices(data = get_dataname(data),
+                  var_choices = var_choices,
+                  var_label = var_label,
+                  subset = subset,
+                  sep = sep)
+  }
 }
 
 
@@ -270,10 +338,21 @@ variable_types <- function(data, columns = NULL) {
             is.null(columns) || is_character_vector(columns, min_length = 0))
 
   res <- if (is.null(columns)) {
-    vapply(data, function(x) class(x)[[1]], character(1), USE.NAMES = FALSE)
+    vapply(
+      data,
+      function(x) class(x)[[1]],
+      character(1),
+      USE.NAMES = FALSE
+    )
   } else if (is_character_vector(columns)) {
     stopifnot(all(columns %in% names(data) | columns == ""))
-    vapply(columns, function(x) ifelse(x == "", "", class(data[[x]])[[1]]), character(1), USE.NAMES = FALSE)
+    vapply(
+      columns,
+      function(x) ifelse(x == "", "", class(data[[x]])[[1]]),
+      character(1),
+      USE.NAMES = FALSE
+    )
+
   } else {
     character(0)
   }
