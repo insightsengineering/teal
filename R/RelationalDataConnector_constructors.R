@@ -164,7 +164,7 @@ rice_data <- function(..., connection = rice_connection(), additional_ui = NULL)
       ns <- NS(id)
       div(
         div(
-          h1("TEAL - Access data on entimICE using RICE"),
+          h1("TEAL - Access data on entimICE using rice"),
           br(),
           h5("Data access requested for:"),
           fluidRow(

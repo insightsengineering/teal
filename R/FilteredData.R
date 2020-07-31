@@ -248,6 +248,10 @@ FilteredData <- R6::R6Class( # nolint
       private$check_data_varname_exists(dataname)
       stopifnot(is_character_single(attr))
 
+      if (is.null(private$data_attrs[[dataname]])) {
+        private$data_attrs[[dataname]] <- list()
+      }
+
       private$data_attrs[[dataname]][[attr]] <- value
       return(invisible(self))
     },
@@ -1146,7 +1150,12 @@ FilteredData <- R6::R6Class( # nolint
             )
 
           } else if (is.numeric(var)) {
-            density <- stats::density(var, na.rm = TRUE, n = 100) # 100 bins only
+            num_vals <- sum(!is.na(var))
+            density <- if (num_vals >= 2) {
+              stats::density(var, na.rm = TRUE, n = 100) # 100 bins only
+            } else {
+              density <- data.frame(x = NA_real_, y = NA_real_)
+            }
             list(
               type = "range",
               label = if_null(attr(var, "label"), ""),
