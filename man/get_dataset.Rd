@@ -62,7 +62,7 @@ get_dataset(rdc, dataname = "ADSL")
 }
 
 # RelationalDataList --------
-drc <- teal_data(rdc, adae)
+drc <- cdisc_data(rdc, adae)
 
 get_dataset(drc, "ADSL")
 

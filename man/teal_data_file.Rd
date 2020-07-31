@@ -33,7 +33,7 @@ writeLines(
                             data = radtte(cached = TRUE),
                             code = \"library(random.cdisc.data)\nADTTE <- radtte(cached = TRUE)\")
 
-     teal_data(adsl, adtte)"
+     cdisc_data(adsl, adtte)"
   ),
   con = file_example
 )
@@ -58,7 +58,7 @@ writeLines(
     ADSL <- cdisc_dataset(dataname = \"ADSL\", data = ADSL)
     ADTTE <- cdisc_dataset(dataname = \"ADTTE\", data = ADTTE)
 
-    teal_data(ADSL, ADTTE)"
+    cdisc_data(ADSL, ADTTE)"
   ),
   con = file_example
 )

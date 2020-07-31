@@ -37,7 +37,7 @@ x2 <- relational_dataset(
   label = "ADTTE dataset"
 )
 
-data <- teal_data(x1, x2)
+data <- cdisc_data(x1, x2)
 get_raw_data(data)
 
 # RelationalDataList
@@ -50,7 +50,7 @@ x4 <- rcd_data( # RelationalDataConnector
   rcd_cdisc_dataset_connector("ADRS", radrs, cached = TRUE)
 )
 
-data_list <- teal_data(x3, x2, x4)
+data_list <- cdisc_data(x3, x2, x4)
 \dontrun{
 data_list$launch()
 get_raw_data(data_list)

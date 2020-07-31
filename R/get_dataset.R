@@ -59,7 +59,7 @@ get_dataset.RawDatasetConnector <- function(x, dataname = NULL) { # nolint
 #'}
 #'
 #' # RelationalDataList --------
-#' drc <- teal_data(rdc, adae)
+#' drc <- cdisc_data(rdc, adae)
 #'
 #' get_dataset(drc, "ADSL")
 get_dataset.RelationalData <- function(x, dataname = NULL) { # nolint

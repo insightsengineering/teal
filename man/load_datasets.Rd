@@ -37,7 +37,7 @@ adtte <- cdisc_dataset(dataname = "ADTTE", # RelationalDataset
                        data = radtte(cached = TRUE),
                        code = "library(random.cdisc.data)\nADTTE <- radtte(cached = TRUE)")
 
-rd <- teal_data(adsl, adtte)
+rd <- cdisc_data(adsl, adtte)
 
 \dontrun{
 # return a warning
@@ -61,7 +61,7 @@ adsl <- rcd_cdisc_dataset_connector(dataname = "ADSL", fun = radsl, cached = TRU
 adlb <- rcd_cdisc_dataset_connector(dataname = "ADLB", fun = radlb, cached = TRUE)
 adrs <- rcd_cdisc_dataset_connector("ADRS", radrs, ADSL = adsl)
 
-tc <- teal_data(
+tc <- cdisc_data(
   rcd_data(adsl, adlb),
   rcd_data(adrs)
 )

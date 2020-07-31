@@ -30,7 +30,7 @@
 #'   label = "ADTTE dataset"
 #' )
 #'
-#' data <- teal_data(x1, x2)
+#' data <- cdisc_data(x1, x2)
 #' get_raw_data(data)
 #'
 #' # RelationalDataList
@@ -43,7 +43,7 @@
 #'   rcd_cdisc_dataset_connector("ADRS", radrs, cached = TRUE)
 #' )
 #'
-#' data_list <- teal_data(x3, x2, x4)
+#' data_list <- cdisc_data(x3, x2, x4)
 #' \dontrun{
 #' data_list$launch()
 #' get_raw_data(data_list)
@@ -96,7 +96,7 @@ teal_data <- function(..., code = character(0)) {
 #'                             data = radtte(cached = TRUE),
 #'                             code = \"library(random.cdisc.data)\nADTTE <- radtte(cached = TRUE)\")
 #'
-#'      teal_data(adsl, adtte)"
+#'      cdisc_data(adsl, adtte)"
 #'   ),
 #'   con = file_example
 #' )
@@ -121,7 +121,7 @@ teal_data <- function(..., code = character(0)) {
 #'     ADSL <- cdisc_dataset(dataname = \"ADSL\", data = ADSL)
 #'     ADTTE <- cdisc_dataset(dataname = \"ADTTE\", data = ADTTE)
 #'
-#'     teal_data(ADSL, ADTTE)"
+#'     cdisc_data(ADSL, ADTTE)"
 #'   ),
 #'   con = file_example
 #' )

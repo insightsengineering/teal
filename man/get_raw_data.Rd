@@ -85,7 +85,7 @@ rdc2 <- rcd_data(
   rcd_cdisc_dataset_connector("ADLB", radlb, cached = TRUE)
 )
 
-drc <- teal_data(adsl, adtte, rdc2)
+drc <- cdisc_data(adsl, adtte, rdc2)
 
 get_raw_data(drc)
 

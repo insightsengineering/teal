@@ -39,7 +39,7 @@ cdisc_data(
           ADTTE <- cadtte')
 
 # Example with keys
-x <- cdisc_data(
+cdisc_data(
   cdisc_dataset("ADSL", ADSL, keys = keys(
     primary = c("STUDYID", "USUBJID"),
     foreign = NULL,

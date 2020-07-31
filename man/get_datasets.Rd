@@ -37,7 +37,7 @@ adae <- cdisc_dataset(dataname = "ADAE", # RelationalDataset
                        data = radae(cached = TRUE),
                        code = "library(random.cdisc.data)\nADTTE <- radae(cached = TRUE)")
 
-rd <- teal_data(adsl, adae)
+rd <- cdisc_data(adsl, adae)
 get_datasets(rd)
 
 # RelationalDataConnector --------
@@ -52,7 +52,7 @@ get_datasets(rdc)
 }
 
 # RelationalDataList --------
-drc <- teal_data(rdc, adae)
+drc <- cdisc_data(rdc, adae)
 
 get_datasets(drc)
 

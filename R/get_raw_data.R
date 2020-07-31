@@ -90,7 +90,7 @@ get_raw_data.RawDatasetConnector <- function(x, dataname = NULL) { # nolint
 #'   rcd_cdisc_dataset_connector("ADLB", radlb, cached = TRUE)
 #' )
 #'
-#' drc <- teal_data(adsl, adtte, rdc2)
+#' drc <- cdisc_data(adsl, adtte, rdc2)
 #'
 #' get_raw_data(drc)
 get_raw_data.RelationalData <- function(x, dataname = NULL) {
