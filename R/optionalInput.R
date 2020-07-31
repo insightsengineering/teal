@@ -98,8 +98,8 @@ optionalSelectInput <- function(inputId, # nolint
     selected <- NULL
   }
 
-  raw_choices <- lapply(choices, extract_raw_choices, attr(choices, "sep"))
-  raw_selected <- lapply(selected, extract_raw_choices, attr(choices, "sep"))
+  raw_choices <- extract_raw_choices(choices, attr(choices, "sep"))
+  raw_selected <- extract_raw_choices(selected, attr(choices, "sep"))
 
 
 
@@ -160,8 +160,8 @@ updateOptionalSelectInput <- function(session, # nolint
                                       selected = NULL,
                                       choices = NULL) {
 
-  raw_choices <- lapply(choices, extract_raw_choices, attr(choices, "sep"))
-  raw_selected <- lapply(selected, extract_raw_choices, attr(choices, "sep"))
+  raw_choices <- extract_raw_choices(choices, attr(choices, "sep"))
+  raw_selected <- extract_raw_choices(selected, attr(choices, "sep"))
 
   updatePickerInput(
     session = session,
@@ -301,23 +301,13 @@ picker_options <- function(choices) {
 #'   \code{selected} inputs into the values of the different columns
 #' @return choices simplified
 extract_raw_choices <- function(choices, sep) {
-  collapse_by_sep <- function(x, sep) {
-    if (is.null(x)) {
-      return(NULL)
-    }
-    stopifnot(is.list(x))
-    vapply(x, function(elem) paste(elem, collapse = sep), character(1))
-  }
-
-  res <- if (is.list(choices) && !is.null(sep)) {
-    collapse_by_sep(choices, sep)
+ if (!is.null(sep)) {
+   vapply(choices, paste, collapse = sep, character(1))
   } else if (is(choices, "choices_labeled")) {
     unname(unlist(choices))
   } else {
-    unlist(choices)
+    choices
   }
-
-  return(res)
 }
 
 
