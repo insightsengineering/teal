@@ -1,4 +1,4 @@
-# teal 0.8.5.9000
+# teal 0.9.0
 
 * `cdisc_dataset` and `dataset` now return R6 class objects (`RelationalDataset`)
 * new `teal_data` function to include connectors into teal application.
