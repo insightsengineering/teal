@@ -108,6 +108,11 @@ RelationalDataConnector <- R6::R6Class( #nolint
     #' @return \code{RelationalDataset}.
     get_dataset = function(dataname) {
       stopifnot(is_character_single(dataname))
+
+      if (!(dataname %in% self$get_datanames())) {
+        stop(paste("dataset", dataname, "not found"))
+      }
+
       res <- Filter(function(x) get_dataname(x) == dataname, self$get_datasets())
       return(res[[1]])
     },

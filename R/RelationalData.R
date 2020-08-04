@@ -144,8 +144,16 @@ RelationalData <- R6::R6Class( #nolint
     #'
     #' @return \code{RelationalDataset}.
     get_dataset = function(dataname = NULL) {
-      stopifnot(is_character_single(dataname))
-      self$get_datasets()[[dataname]]
+      stopifnot(is.null(dataname) || is_character_single(dataname))
+
+      if (is_character_single(dataname)) {
+        if (!(dataname %in% self$get_datanames())) {
+          stop(paste("dataset", dataname, "not found"))
+        }
+        return(self$get_datasets()[[dataname]])
+      }
+
+      return(self$get_datasets())
     },
     #' @description
     #' Get \code{list} of \code{RelationalDataset} objects.
