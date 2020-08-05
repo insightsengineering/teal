@@ -1067,7 +1067,7 @@ FilteredData <- R6::R6Class( # nolint
         # We take the parent of the global env, i.e. the last attached package, to avoid picking up
         # any variables defined in the global environment. This is okay as it takes whatever is the current
         # `globalenv` when this reactive is evaluated, i.e. when the relevant packages are already loaded.
-        env <- new.env(parent.env(globalenv()))
+        env <- new.env(parent = parent.env(globalenv()))
 
         # put dependencies of filter call into environment
         if (dataname != "ADSL") {
@@ -1154,7 +1154,7 @@ FilteredData <- R6::R6Class( # nolint
             density <- if (num_vals >= 2) {
               stats::density(var, na.rm = TRUE, n = 100) # 100 bins only
             } else {
-              density <- data.frame(x = NA_real_, y = NA_real_)
+              data.frame(x = NA_real_, y = NA_real_)
             }
             list(
               type = "range",

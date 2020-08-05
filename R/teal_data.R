@@ -7,8 +7,6 @@
 #' @param ... (\code{RelationalData}, \code{RelationalDataConnector}, \code{RelationalDataset} or
 #'   \code{RelationalDatasetConnector}) elements to include into teal data object
 #'
-#' @param code (\code{character}) reproducible code
-#'
 #' @return \code{RelationalDataList}
 #'
 #' @examples
@@ -48,7 +46,7 @@
 #' data_list$launch()
 #' get_raw_data(data_list)
 #' }
-teal_data <- function(..., code = character(0)) {
+teal_data <- function(...) {
   datasets <- list(...)
   possible_classes <- c("RelationalData", "RelationalDataConnector", "RelationalDataset", "RelationalDatasetConnector")
 
@@ -57,11 +55,8 @@ teal_data <- function(..., code = character(0)) {
     stop("All arguments should be of RelationalData(set) or RelationalData(set)Connector class")
   }
 
-  stopifnot(is_character_vector(code, min_length = 0, max_length = 1))
-
   teal_data <- RelationalDataList$new(...)
 
-  teal_data$mutate(code = code)
 
   return(teal_data)
 }

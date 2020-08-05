@@ -23,38 +23,113 @@ test_that("Basic example - without code and check", {
                            dataset("ARG2", ARG2, keys = get_cdisc_keys("ADSL")), code = "", check = FALSE))
 })
 
-test_that("Basic example - with code and check", {
-  expect_true(is.data.frame(ADSL))
-  expect_true(is.data.frame(ARG1))
-  expect_true(is.data.frame(ARG2))
+test_that("Basic example - check overall code", {
+  expect_silent(
+    cdisc_data(
+      cdisc_dataset("ADSL", ADSL),
+      dataset("ARG1", ARG1, keys = get_cdisc_keys("ADSL")),
+      dataset("ARG2", ARG2, keys = get_cdisc_keys("ADSL")),
+      code = "ADSL <- ARG1 <- ARG2 <- cadsl;",
+      check = TRUE
+    )
+  )
 
-  expect_silent(cdisc_data(cdisc_dataset("ADSL", ADSL),
-                           code = "ADSL <- cadsl",
-                           check = TRUE))
-  expect_silent(cdisc_data(
-    cdisc_dataset("ADSL", ADSL),
-    dataset("ARG1", ARG1, keys = get_cdisc_keys("ADSL")),
-    dataset("ARG2", ARG2, keys = get_cdisc_keys("ADSL")),
-    code = "ADSL <- ARG1 <- ARG2 <- cadsl;",
-    check = TRUE
-  ))
+  expect_silent(
+    cdisc_data(
+      cdisc_dataset("ADSL", ADSL, code = "ADSL <- radsl(cached = TRUE)"),
+      dataset("ARG1", ARG1, keys = get_cdisc_keys("ADSL")),
+      dataset("ARG2", ARG2, keys = get_cdisc_keys("ADSL")),
+      code = "ARG1 <- ARG2 <- cadsl;",
+      check = TRUE
+    )
+  )
+
+  expect_error(
+    cdisc_data(
+      cdisc_dataset("ADSL", ADSL, code = "ADSL <- radsl(cached = TRUE)"),
+      dataset("ARG1", ARG1, keys = get_cdisc_keys("ADSL"), code = "ARG1 <- radsl(cached = TRUE)"),
+      dataset("ARG2", ARG2, keys = get_cdisc_keys("ADSL"), code = "ARG2 <- radsl(cached = TRUE)"),
+      code = "ARG1$x1 <- 1; ARG2x2 <- 2",
+      check = TRUE
+    ),
+    "code doesn't reproduce 'ARG1' correctly"
+  )
 })
 
-test_that("Basic example - with vector code and check", {
+test_that("Basic example - dataset depending on other dataset", {
   expect_true(is.data.frame(ADSL))
   expect_true(is.data.frame(ARG1))
   expect_true(is.data.frame(ARG2))
 
-  expect_silent(cdisc_data(cdisc_dataset("ADSL", ADSL),
-                           code = c("ADSL <- cadsl"),
-                           check = TRUE))
-  expect_silent(cdisc_data(
-    cdisc_dataset("ADSL", ADSL),
-    dataset("ARG1", ARG1, keys = get_cdisc_keys("ADSL")),
-    dataset("ARG2", ARG2, keys = get_cdisc_keys("ADSL")),
-    code = c("ADSL <- ARG1 <- ARG2 <- cadsl"),
-    check = TRUE
-  ))
+  expect_silent(
+    cdisc_data(
+      cdisc_dataset("ADSL", ADSL, code = "ADSL <- cadsl"),
+      check = TRUE
+    )
+  )
+  expect_silent(
+    cdisc_data(
+      cdisc_dataset("ADSL", ADSL, code = "ADSL <- cadsl"),
+      dataset("ARG1", ARG1, keys = get_cdisc_keys("ADSL"), code = "ARG1 <- cadsl"),
+      dataset("ARG2", ARG2, keys = get_cdisc_keys("ADSL"), code = "ARG2 <- cadsl"),
+      code = "ADSL <- ARG1 <- ARG2 <- cadsl;",
+      check = TRUE
+    )
+  )
+
+  arg2 <- dataset(dataname = "ARG2",
+                  data = ARG2,
+                  keys = get_cdisc_keys("ADSL"),
+                  code = "ARG2 <- cadsl")
+
+  arg1 <- dataset(dataname = "ARG1",
+                  data = ARG1,
+                  keys = get_cdisc_keys("ADSL"),
+                  code = "ARG1 <- ARG2",
+                  vars = list(ARG2 = arg2))
+
+  adsl <- cdisc_dataset(dataname = "ADSL",
+                        data = ADSL,
+                        code = "ADSL <- ARG2",
+                        vars = list(ARG2 = arg2))
+
+  expect_silent(
+    cd <- cdisc_data(arg2, arg1, adsl, check = TRUE)
+  )
+
+  expect_true(arg1$check())
+  expect_true(arg2$check())
+  expect_true(adsl$check())
+  expect_true(cd$check())
+})
+
+test_that("Basic example - failing dataset code", {
+  expect_silent(
+    dataset <- cdisc_dataset("ADSL", ADSL, code = "ADSL <- data.frame(a = 1, b = 2)")
+  )
+  expect_false(dataset$check())
+})
+
+test_that("Basic example - missing code for dataset", {
+  expect_true(is.data.frame(ADSL))
+  expect_true(is.data.frame(ARG1))
+  expect_true(is.data.frame(ARG2))
+
+  expect_silent(
+    cdisc_data(
+      cdisc_dataset("ADSL", ADSL),
+      code = c("ADSL <- cadsl"),
+      check = TRUE
+    )
+  )
+
+  expect_silent(
+    cdisc_data(
+      cdisc_dataset("ADSL", ADSL),
+      code = c("ADSL <- cadsl"),
+      check = FALSE
+    )
+  )
 })
 
 test_that("Basic example - with line break code and check", {
@@ -63,15 +138,8 @@ test_that("Basic example - with line break code and check", {
   expect_true(is.data.frame(ARG2))
 
   expect_silent(cdisc_data(cdisc_dataset("ADSL", ADSL),
-                           code = "ADSL <- cadsl\n",
-                           check = TRUE))
-  expect_silent(cdisc_data(
-    cdisc_dataset("ADSL", ADSL),
-    dataset("ARG1", ARG1, keys = get_cdisc_keys("ADSL")),
-    dataset("ARG2", ARG2, keys = get_cdisc_keys("ADSL")),
-    code = "ADSL <- cadsl\n ARG1 <- cadsl\n ARG2 <- cadsl",
-    check = TRUE
-  ))
+                           code = "ADSL <- cadsl\n ADSL$x1 <- 1",
+                           check = FALSE))
 })
 
 test_that("Naming list elements", {
@@ -168,23 +236,27 @@ test_that("Empty code", {
   expect_identical(get_code(result), code_check)
 
   # NULL code
-  expect_error(cdisc_data(cdisc_dataset("ADSL", ADSL), code = NULL, check = FALSE), "code")
+  expect_silent(cdisc_data(cdisc_dataset("ADSL", ADSL), code = NULL, check = FALSE))
 })
-
 
 test_that("Error - objects differs", {
   expect_error(
-    cdisc_data(cdisc_dataset("ADSL", ADSL), code = "ADSL <- 2", check = TRUE),
+    cdisc_data(cdisc_dataset("ADSL", ADSL, code = "ADSL <- 2"), check = TRUE),
+    "Code from ADSL need to return a data.frame"
+  )
+
+  expect_error(
+    cdisc_data(cdisc_dataset("ADSL", ADSL, code = "ADSL <- data.frame()"), check = TRUE),
     "Reproducibility check failed."
   )
 
   expect_error(
-    cdisc_data(cdisc_dataset("ADSL", ADSL), code = "ADSL <- radsl(N = 10);", check = TRUE),
+    cdisc_data(cdisc_dataset("ADSL", ADSL, code = "ADSL <- radsl(N = 10);"), check = TRUE),
     "Reproducibility check failed."
   )
 })
 
-test_that("Error - ADSL is missing", {
+test_that("Error - ADSL is missing in cdisc_data", {
   expect_error(
     cdisc_data(cdisc_dataset("ADTTE", ADTTE), code = "ADTTE <- cadtte", check = FALSE),
     "ADSL argument is missing."

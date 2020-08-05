@@ -28,10 +28,11 @@ Object that stores function name with it's arguments. Methods to get call and ru
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-new"></a>}}
+\if{latex}{\out{\hypertarget{method-new}{}}}
 \subsection{Method \code{new()}}{
 Create a new \code{CallableFunction} object
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{CallableFunction$new(fun, env = new.env())}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{CallableFunction$new(fun, env = new.env(parent = parent.env(globalenv())))}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
@@ -51,6 +52,7 @@ new \code{CallableFunction} object
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-assign_to_env"></a>}}
+\if{latex}{\out{\hypertarget{method-assign_to_env}{}}}
 \subsection{Method \code{assign_to_env()}}{
 Assigns \code{x <- value} object to \code{env}
 \subsection{Usage}{
@@ -74,6 +76,7 @@ arguments the function gets called with
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-is_failed"></a>}}
+\if{latex}{\out{\hypertarget{method-is_failed}{}}}
 \subsection{Method \code{is_failed()}}{
 Check if evaluation of the function has not failed.
 \subsection{Usage}{
@@ -87,6 +90,7 @@ Check if evaluation of the function has not failed.
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-get_args"></a>}}
+\if{latex}{\out{\hypertarget{method-get_args}{}}}
 \subsection{Method \code{get_args()}}{
 get the arguments a function gets called with
 \subsection{Usage}{
@@ -99,6 +103,7 @@ arguments the function gets called with
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-get_call"></a>}}
+\if{latex}{\out{\hypertarget{method-get_call}{}}}
 \subsection{Method \code{get_call()}}{
 Get function call with substituted arguments in \code{args}.
 These arguments will not be stored in the object.
@@ -123,6 +128,7 @@ dynamic arguments to function}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-get_error_message"></a>}}
+\if{latex}{\out{\hypertarget{method-get_error_message}{}}}
 \subsection{Method \code{get_error_message()}}{
 Get error message from last function execution
 \subsection{Usage}{
@@ -136,6 +142,7 @@ Get error message from last function execution
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-run"></a>}}
+\if{latex}{\out{\hypertarget{method-run}{}}}
 \subsection{Method \code{run()}}{
 Run function
 \subsection{Usage}{
@@ -163,6 +170,7 @@ nothing or output from function depending on \code{return} argument
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-set_args"></a>}}
+\if{latex}{\out{\hypertarget{method-set_args}{}}}
 \subsection{Method \code{set_args()}}{
 Set up function arguments
 \subsection{Usage}{
@@ -185,6 +193,7 @@ self
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-set_arg_value"></a>}}
+\if{latex}{\out{\hypertarget{method-set_arg_value}{}}}
 \subsection{Method \code{set_arg_value()}}{
 Set up single function argument with value
 \subsection{Usage}{
@@ -206,6 +215,7 @@ self
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-clone"></a>}}
+\if{latex}{\out{\hypertarget{method-clone}{}}}
 \subsection{Method \code{clone()}}{
 The objects of this class are cloneable with this method.
 \subsection{Usage}{

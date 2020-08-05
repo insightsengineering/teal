@@ -4,13 +4,11 @@
 \alias{teal_data}
 \title{Teal data}
 \usage{
-teal_data(..., code = character(0))
+teal_data(...)
 }
 \arguments{
 \item{...}{(\code{RelationalData}, \code{RelationalDataConnector}, \code{RelationalDataset} or
 \code{RelationalDatasetConnector}) elements to include into teal data object}
-
-\item{code}{(\code{character}) reproducible code}
 }
 \value{
 \code{RelationalDataList}

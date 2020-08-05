@@ -10,7 +10,7 @@ cdisc_data(..., code = "", check = FALSE)
 \item{...}{(\code{RelationalData}, \code{RelationalDataConnector}, \code{RelationalDataset} or
 \code{RelationalDatasetConnector}) elements to include where `ADSL` data is mandatory.}
 
-\item{code}{(\code{character}) preprocessing code.}
+\item{code}{(\code{character}) mutate code.}
 
 \item{check}{(\code{logical}) reproducibility check - whether evaluated preprocessing code gives the same objects
 as provided in arguments. Check is run only if flag is true and preprocessing code is not empty.}

@@ -43,8 +43,9 @@ named_data$get_dataname()
 \item \href{#method-set_dataset_label}{\code{NamedDataset$set_dataset_label()}}
 \item \href{#method-get_code}{\code{NamedDataset$get_code()}}
 \item \href{#method-get_code_class}{\code{NamedDataset$get_code_class()}}
-\item \href{#method-set_code}{\code{NamedDataset$set_code()}}
 \item \href{#method-mutate}{\code{NamedDataset$mutate()}}
+\item \href{#method-set_vars}{\code{NamedDataset$set_vars()}}
+\item \href{#method-set_code}{\code{NamedDataset$set_code()}}
 \item \href{#method-check}{\code{NamedDataset$check()}}
 \item \href{#method-clone}{\code{NamedDataset$clone()}}
 }
@@ -66,10 +67,17 @@ named_data$get_dataname()
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-new"></a>}}
+\if{latex}{\out{\hypertarget{method-new}{}}}
 \subsection{Method \code{new()}}{
 initialize a \code{NamedDataset} class object
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{NamedDataset$new(x, dataname, code = character(0), label = character(0))}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{NamedDataset$new(
+  x,
+  dataname,
+  code = character(0),
+  label = character(0),
+  vars = list()
+)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
@@ -84,6 +92,11 @@ it may not contain spaces}
 needed to produce the data set in \code{x}}
 
 \item{\code{label}}{(\code{character}) Label to describe the dataset}
+
+\item{\code{vars}}{(list)\cr
+In case when this object code depends on the \code{raw_data} from the other
+\code{NamedDataset}, \code{NamedDatasetConnector} object(s) or other constant value,
+this/these object(s) should be included}
 }
 \if{html}{\out{</div>}}
 }
@@ -93,6 +106,7 @@ new \code{NamedDataset} object
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-get_dataname"></a>}}
+\if{latex}{\out{\hypertarget{method-get_dataname}{}}}
 \subsection{Method \code{get_dataname()}}{
 Derive the \code{name} which was former called \code{dataname}
 \subsection{Usage}{
@@ -105,6 +119,7 @@ Derive the \code{name} which was former called \code{dataname}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-set_dataname"></a>}}
+\if{latex}{\out{\hypertarget{method-set_dataname}{}}}
 \subsection{Method \code{set_dataname()}}{
 Set the name for the dataset
 \subsection{Usage}{
@@ -124,6 +139,7 @@ self invisibly for chaining
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-get_datanames"></a>}}
+\if{latex}{\out{\hypertarget{method-get_datanames}{}}}
 \subsection{Method \code{get_datanames()}}{
 Derive the dataname
 \subsection{Usage}{
@@ -136,6 +152,7 @@ Derive the dataname
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-get_dataset_label"></a>}}
+\if{latex}{\out{\hypertarget{method-get_dataset_label}{}}}
 \subsection{Method \code{get_dataset_label()}}{
 Derive the \code{label} which was former called \code{datalabel}
 \subsection{Usage}{
@@ -148,6 +165,7 @@ Derive the \code{label} which was former called \code{datalabel}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-set_dataset_label"></a>}}
+\if{latex}{\out{\hypertarget{method-set_dataset_label}{}}}
 \subsection{Method \code{set_dataset_label()}}{
 Set the label for the dataset
 \subsection{Usage}{
@@ -167,6 +185,7 @@ self invisibly for chaining
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-get_code"></a>}}
+\if{latex}{\out{\hypertarget{method-get_code}{}}}
 \subsection{Method \code{get_code()}}{
 Get code to get data
 \subsection{Usage}{
@@ -186,6 +205,7 @@ optionally deparsed \code{call} object
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-get_code_class"></a>}}
+\if{latex}{\out{\hypertarget{method-get_code_class}{}}}
 \subsection{Method \code{get_code_class()}}{
 Get internal \code{CodeClass} object
 \subsection{Usage}{
@@ -197,26 +217,8 @@ Get internal \code{CodeClass} object
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-set_code"></a>}}
-\subsection{Method \code{set_code()}}{
-Set the code for the dataset
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{NamedDataset$set_code(code)}\if{html}{\out{</div>}}
-}
-
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{code}}{(\code{character}) the new code}
-}
-\if{html}{\out{</div>}}
-}
-\subsection{Returns}{
-self
-}
-}
-\if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-mutate"></a>}}
+\if{latex}{\out{\hypertarget{method-mutate}{}}}
 \subsection{Method \code{mutate()}}{
 Mutate dataset by code
 
@@ -243,7 +245,46 @@ self invisibly for chaining
 }
 }
 \if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-set_vars"></a>}}
+\if{latex}{\out{\hypertarget{method-set_vars}{}}}
+\subsection{Method \code{set_vars()}}{
+Adds variables which code depends on
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{NamedDataset$set_vars(vars)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{vars}}{(list)\cr
+  In case when this object code depends on the \code{raw_data} from the other
+  \code{RelationalDataset}, \code{RelationalDatasetConnector} object(s) or other constant value,
+  this/these object(s) should be included
+Sets reproducible code}
+}
+\if{html}{\out{</div>}}
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-set_code"></a>}}
+\if{latex}{\out{\hypertarget{method-set_code}{}}}
+\subsection{Method \code{set_code()}}{
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{NamedDataset$set_code(code)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{code}}{(\code{character}) Code to mutate the dataset. Must contain the
+\code{dataset$dataname}}
+}
+\if{html}{\out{</div>}}
+}
+}
+\if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-check"></a>}}
+\if{latex}{\out{\hypertarget{method-check}{}}}
 \subsection{Method \code{check()}}{
 Check to determine if the raw data is reproducible from the \code{get_code()} code.
 \subsection{Usage}{
@@ -257,6 +298,7 @@ Check to determine if the raw data is reproducible from the \code{get_code()} co
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-clone"></a>}}
+\if{latex}{\out{\hypertarget{method-clone}{}}}
 \subsection{Method \code{clone()}}{
 The objects of this class are cloneable with this method.
 \subsection{Usage}{

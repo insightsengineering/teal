@@ -128,5 +128,5 @@ test_that("mutate_dataset", {
 
   expect_error({
     test_ds_mut <- test_ds %>% mutate_dataset(code = "rm('testds')")
-  }, "Mutations")
+  }, "Code from testds need to return a data.frame")
 })

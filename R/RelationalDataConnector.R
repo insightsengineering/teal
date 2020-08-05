@@ -80,7 +80,7 @@ RelationalDataConnector <- R6::R6Class( #nolint
         sapply(private$datasets, get_dataset, USE.NAMES = TRUE, simplify = FALSE)
       } else {
         # have to evaluate post-processing code (i.e. private$code) before returning dataset
-        new_env <- new.env()
+        new_env <- new.env(parent = parent.env(globalenv()))
         for (dataset in private$datasets) {
           assign(dataset$get_dataname(), get_raw_data(dataset), envir = new_env)
         }

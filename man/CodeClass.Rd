@@ -78,6 +78,7 @@ x$get_code("ADRS")
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-append"></a>}}
+\if{latex}{\out{\hypertarget{method-append}{}}}
 \subsection{Method \code{append()}}{
 Append \code{CodeClass} object to a given \code{CodeClass} object
 \subsection{Usage}{
@@ -97,6 +98,7 @@ changed \code{CodeClass} object
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-set_code"></a>}}
+\if{latex}{\out{\hypertarget{method-set_code}{}}}
 \subsection{Method \code{set_code()}}{
 Set code in form of character
 \subsection{Usage}{
@@ -121,6 +123,7 @@ changed \code{CodeClass} object
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-get_code"></a>}}
+\if{latex}{\out{\hypertarget{method-get_code}{}}}
 \subsection{Method \code{get_code()}}{
 Get the code for a given data names
 \subsection{Usage}{
@@ -143,6 +146,7 @@ If \code{NULL} then get the code for all data names}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-eval"></a>}}
+\if{latex}{\out{\hypertarget{method-eval}{}}}
 \subsection{Method \code{eval()}}{
 Evaluates internal code within given environment
 \subsection{Usage}{
@@ -162,6 +166,7 @@ invisibly \code{NULL}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-clone"></a>}}
+\if{latex}{\out{\hypertarget{method-clone}{}}}
 \subsection{Method \code{clone()}}{
 The objects of this class are cloneable with this method.
 \subsection{Usage}{

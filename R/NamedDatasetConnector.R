@@ -191,30 +191,18 @@ NamedDatasetConnector <- R6::R6Class( #nolint
     #'   Check to determine if the raw data is reproducible from the
     #'   \code{get_code()} code.
     #' @return
-    #'   \code{TRUE} if the dataset generated from evaluating the
-    #'   \code{get_code()} code is identical to the raw data, else \code{FALSE}.
+    #'   \code{TRUE} always for all connectors to avoid evaluating the same code multiple times.
     check = function() {
+      if (!self$is_pulled()) {
+        stop(
+          sprintf(
+            "Cannot check the raw data of %s until it is pulled.",
+            self$get_dataname()
+          )
 
-      if (!is_character_single(self$get_code()) || !grepl("\\w+", self$get_code())) {
-        stop("Cannot check preprocessing code - code is empty.")
-      } else if (!super$is_pulled()) {
-        stop("Cannot check the raw data until it is pulled.")
+        )
       }
-
-      new_env <- new.env(parent = parent.env(.GlobalEnv))
-      tryCatch({
-        private$get_code_class()$eval(envir = new_env)
-      }, error = function(e) {
-        error_dialog(e)
-      })
-
-      res_check <- tryCatch({
-        identical(super$get_raw_data(), get(self$get_dataname(), envir = new_env))
-      }, error = function(e) {
-        FALSE
-      })
-
-      return(res_check)
+      return(TRUE)
     }
   ),
 
@@ -245,7 +233,9 @@ NamedDatasetConnector <- R6::R6Class( #nolint
       stopifnot(is_character_vector(code, 0, 1))
 
       if (length(code) > 0 && code != "") {
-        private$mutate_code$set_code(code = code, dataname = private$dataname, deps = names(private$mutate_vars))
+        private$mutate_code$set_code(code = code,
+                                     dataname = private$dataname,
+                                     deps = names(private$mutate_vars))
       }
 
       return(invisible(self))

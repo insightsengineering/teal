@@ -42,9 +42,8 @@ mutate_dataset <- function(x, code = character(0), script = character(0), vars =
 #' file_example <- tempfile(fileext = ".R")
 #' writeLines(
 #'   text = c(
-#'     "library(dplyr)",
 #'     "ADSL <- ADSL %>%
-#'       mutate(new_variable = new_variable * 2)"
+#'       dplyr::mutate(new_variable = new_variable * 2)"
 #'   ),
 #'   con = file_example
 #' )

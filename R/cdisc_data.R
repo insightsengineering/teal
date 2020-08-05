@@ -3,12 +3,23 @@
 #' Abstract function that creates dataset object with connected metadata.
 #' @param dataname (\code{character} value)\cr
 #'   name of dataset.
-#' @param data (\code{data.frame})
+#'
+#' @param data (\code{data.frame})\cr
 #'   data must contain fields defined in keys.
+#'
+#' @param label (\code{character})\cr
+#'   Label to describe the dataset
+#'
 #' @param keys (\code{keys})\cr
 #'   see \code{\link{keys}}
+#'
 #' @param code (\code{character} value)\cr
 #'   code to reproduce \code{data}
+#'
+#' @param vars (named \code{list})) \cr
+#'   In case when this object code depends on the \code{raw_data} from the other
+#'   \code{RelationalDataset} object(s) or other constant value,
+#'   this/these object(s) should be included as named element of the list.
 #'
 #' Please note that the order of keys is important.
 #'
@@ -37,13 +48,16 @@
 #' dataset("iris", iris)
 dataset <- function(dataname,
                     data,
+                    label = data_label(data),
                     keys = teal::keys(primary = NULL, foreign = NULL, parent = NULL),
-                    code = character(0)) {
+                    code = character(0),
+                    vars = list()) {
   stopifnot(is_character_single(dataname))
   stopifnot(is.data.frame(data))
   stopifnot(is(keys, "keys"))
   stopifnot(all(union(keys$primary, keys$foreign) %in% names(data)))
   stopifnot(is_character_vector(code, min_length = 0, max_length = 1))
+  stopifnot(identical(vars, list()) || is_fully_named_list(vars))
 
   if (!is.null(keys$foreign) && is.null(keys$parent) || (is.null(keys$foreign) && !is.null(keys$parent))) {
     stop(dataname, ": Please specify both foreign keys and a parent!")
@@ -57,8 +71,9 @@ dataset <- function(dataname,
     x = data,
     dataname = dataname,
     keys = keys,
-    label = data_label(data),
-    code = code
+    label = label,
+    code = code,
+    vars = vars
   )
 
   return(res)
@@ -135,8 +150,9 @@ dataset_file <- function(x, code = get_code(x)) {
 cdisc_dataset <- function(dataname,
                           data,
                           keys = get_cdisc_keys(dataname),
-                          code = character(0)) {
-  dataset(dataname = dataname, data = data, keys = keys, code = code) #nolint
+                          code = character(0),
+                          vars = list()) {
+  dataset(dataname = dataname, data = data, keys = keys, code = code, vars = vars)
 }
 
 #' Load \code{CDISC} \code{RelationalDataset} object from a file
@@ -418,7 +434,7 @@ check_foreign_keys <- function(datasets_keys) {
 #' Function passes datasets to teal application with option to read preprocessing code and reproducibility checking.
 #' @param ... (\code{RelationalData}, \code{RelationalDataConnector}, \code{RelationalDataset} or
 #'   \code{RelationalDatasetConnector}) elements to include where `ADSL` data is mandatory.
-#' @param code (\code{character}) preprocessing code.
+#' @param code (\code{character}) mutate code.
 #' @param check (\code{logical}) reproducibility check - whether evaluated preprocessing code gives the same objects
 #'   as provided in arguments. Check is run only if flag is true and preprocessing code is not empty.
 #'
@@ -464,7 +480,11 @@ cdisc_data <- function(...,
                        check = FALSE) {
   stopifnot(is_logical_single(check))
 
-  x <- teal_data(..., code = code)
+  x <- teal_data(...)
+  if (length(code) > 0 && code != "") {
+    mutate_data(x, code = code)
+  }
+
   x$set_check(check)
 
   datasets_names <- x$get_datanames()

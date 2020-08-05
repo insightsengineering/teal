@@ -38,17 +38,26 @@ RelationalDataset <- R6::R6Class( # nolint
     #' @description
     #' initialize a \code{RelationalDataset} class object
     #' @param x (\code{data.frame})
+    #'
     #' @param dataname (\code{character}) A given name for the dataset
     #'   it may not contain spaces
+    #'
     #' @param keys (\code{keys}) object of S3 class keys containing
     #'   foreign, primary keys and parent information
+    #'
     #' @param code (\code{character}) A character string defining the code
     #'   needed to produce the data set in \code{x}
+    #'
     #' @param label (\code{character}) Label to describe the dataset
     #'
+    #' @param vars (list)\cr
+    #'   In case when this object code depends on the \code{raw_data} from the other
+    #'   \code{NamedDataset}, \code{NamedDatasetConnector} object(s) or other constant value,
+    #'   this/these object(s) should be included
+    #'
     #' @return new \code{RelationalDataset}
-    initialize = function(x, dataname, keys, code = character(0), label = character(0)) {
-      super$initialize(x, dataname = dataname, code = code, label = label)
+    initialize = function(x, dataname, keys, code = character(0), label = character(0), vars = list()) {
+      super$initialize(x, dataname = dataname, code = code, label = label, vars = vars)
 
       self$set_keys(keys)
       return(invisible(self))
@@ -86,9 +95,11 @@ RelationalDataset <- R6::R6Class( # nolint
 
 #' Create \code{RelationalDataset} object
 #'
+#' Create \code{RelationalDataset} object
+#' @rdname relational_dataset
 #' @inheritParams named_dataset
-#' @param keys (\code{keys}) object of S3 class keys containing
-#'   foreign, primary keys and parent information
+#' @param keys (\code{keys})\cr
+#'   object of S3 class keys containing foreign, primary keys and parent information
 #'
 #' @return object of class \code{RelaionalDataset}
 #'

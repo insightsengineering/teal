@@ -73,11 +73,13 @@ rel_data$set_keys(keys(primary = "x", foreign = NULL, parent = NULL))
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="NamedDataset" data-id="set_code">}\href{../../teal/html/NamedDataset.html#method-set_code}{\code{teal::NamedDataset$set_code()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="NamedDataset" data-id="set_dataname">}\href{../../teal/html/NamedDataset.html#method-set_dataname}{\code{teal::NamedDataset$set_dataname()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="NamedDataset" data-id="set_dataset_label">}\href{../../teal/html/NamedDataset.html#method-set_dataset_label}{\code{teal::NamedDataset$set_dataset_label()}}\out{</span>}
+\item \out{<span class="pkg-link" data-pkg="teal" data-topic="NamedDataset" data-id="set_vars">}\href{../../teal/html/NamedDataset.html#method-set_vars}{\code{teal::NamedDataset$set_vars()}}\out{</span>}
 }
 \out{</details>}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-new"></a>}}
+\if{latex}{\out{\hypertarget{method-new}{}}}
 \subsection{Method \code{new()}}{
 initialize a \code{RelationalDataset} class object
 \subsection{Usage}{
@@ -86,7 +88,8 @@ initialize a \code{RelationalDataset} class object
   dataname,
   keys,
   code = character(0),
-  label = character(0)
+  label = character(0),
+  vars = list()
 )}\if{html}{\out{</div>}}
 }
 
@@ -105,6 +108,11 @@ foreign, primary keys and parent information}
 needed to produce the data set in \code{x}}
 
 \item{\code{label}}{(\code{character}) Label to describe the dataset}
+
+\item{\code{vars}}{(list)\cr
+In case when this object code depends on the \code{raw_data} from the other
+\code{NamedDataset}, \code{NamedDatasetConnector} object(s) or other constant value,
+this/these object(s) should be included}
 }
 \if{html}{\out{</div>}}
 }
@@ -114,6 +122,7 @@ new \code{RelationalDataset}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-get_keys"></a>}}
+\if{latex}{\out{\hypertarget{method-get_keys}{}}}
 \subsection{Method \code{get_keys()}}{
 Derive the keys
 \subsection{Usage}{
@@ -126,6 +135,7 @@ Derive the keys
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-set_keys"></a>}}
+\if{latex}{\out{\hypertarget{method-set_keys}{}}}
 \subsection{Method \code{set_keys()}}{
 Set new keys
 \subsection{Usage}{
@@ -145,6 +155,7 @@ self invisibly for chaining.
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-clone"></a>}}
+\if{latex}{\out{\hypertarget{method-clone}{}}}
 \subsection{Method \code{clone()}}{
 The objects of this class are cloneable with this method.
 \subsection{Usage}{

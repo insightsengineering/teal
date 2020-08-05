@@ -8,21 +8,27 @@ cdisc_dataset(
   dataname,
   data,
   keys = get_cdisc_keys(dataname),
-  code = character(0)
+  code = character(0),
+  vars = list()
 )
 }
 \arguments{
 \item{dataname}{(\code{character} value)\cr
 name of dataset.}
 
-\item{data}{(\code{data.frame})
+\item{data}{(\code{data.frame})\cr
 data must contain fields defined in keys.}
 
 \item{keys}{(\code{keys})\cr
 see \code{\link{keys}}}
 
 \item{code}{(\code{character} value)\cr
-  code to reproduce \code{data}
+code to reproduce \code{data}}
+
+\item{vars}{(named \code{list})) \cr
+  In case when this object code depends on the \code{raw_data} from the other
+  \code{RelationalDataset} object(s) or other constant value,
+  this/these object(s) should be included as named element of the list.
 
 Please note that the order of keys is important.
 

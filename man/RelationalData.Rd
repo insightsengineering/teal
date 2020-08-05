@@ -46,6 +46,7 @@ rd <- teal:::RelationalData$new(x, x2)
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-new"></a>}}
+\if{latex}{\out{\hypertarget{method-new}{}}}
 \subsection{Method \code{new()}}{
 Create a new \code{RelationalData} object from multiple
 \code{RelationalDataset} objects.
@@ -67,6 +68,7 @@ new \code{RelationalData} object
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-check"></a>}}
+\if{latex}{\out{\hypertarget{method-check}{}}}
 \subsection{Method \code{check()}}{
 Check if the object raw data is reproducible from the \code{get_code()} code.
 \subsection{Usage}{
@@ -80,6 +82,7 @@ Check if the object raw data is reproducible from the \code{get_code()} code.
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-get_all_datasets"></a>}}
+\if{latex}{\out{\hypertarget{method-get_all_datasets}{}}}
 \subsection{Method \code{get_all_datasets()}}{
 Get all datasets and all dataset connectors
 
@@ -101,6 +104,7 @@ Get all datasets and all dataset connectors
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-get_datanames"></a>}}
+\if{latex}{\out{\hypertarget{method-get_datanames}{}}}
 \subsection{Method \code{get_datanames()}}{
 Get names of the datasets.
 \subsection{Usage}{
@@ -113,6 +117,7 @@ Get names of the datasets.
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-get_code"></a>}}
+\if{latex}{\out{\hypertarget{method-get_code}{}}}
 \subsection{Method \code{get_code()}}{
 Get code for all datasets.
 \subsection{Usage}{
@@ -134,6 +139,7 @@ Get code for all datasets.
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-get_code_class"></a>}}
+\if{latex}{\out{\hypertarget{method-get_code_class}{}}}
 \subsection{Method \code{get_code_class()}}{
 Get internal \code{CodeClass} object
 \subsection{Usage}{
@@ -146,6 +152,7 @@ Get internal \code{CodeClass} object
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-mutate"></a>}}
+\if{latex}{\out{\hypertarget{method-mutate}{}}}
 \subsection{Method \code{mutate()}}{
 Mutate data by code
 
@@ -173,6 +180,7 @@ self invisibly for chaining
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-get_dataset"></a>}}
+\if{latex}{\out{\hypertarget{method-get_dataset}{}}}
 \subsection{Method \code{get_dataset()}}{
 Get \code{RelationalDataset} object.
 \subsection{Usage}{
@@ -193,6 +201,7 @@ name of dataset to be returned. If \code{NULL}, all datasets are returned.}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-get_datasets"></a>}}
+\if{latex}{\out{\hypertarget{method-get_datasets}{}}}
 \subsection{Method \code{get_datasets()}}{
 Get \code{list} of \code{RelationalDataset} objects.
 \subsection{Usage}{
@@ -205,6 +214,7 @@ Get \code{list} of \code{RelationalDataset} objects.
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-is_pulled"></a>}}
+\if{latex}{\out{\hypertarget{method-is_pulled}{}}}
 \subsection{Method \code{is_pulled()}}{
 Check if dataset has already been pulled.
 \subsection{Usage}{
@@ -217,6 +227,7 @@ Check if dataset has already been pulled.
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-set_check"></a>}}
+\if{latex}{\out{\hypertarget{method-set_check}{}}}
 \subsection{Method \code{set_check()}}{
 Set reproducibility check
 \subsection{Usage}{
@@ -236,6 +247,7 @@ Set reproducibility check
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-clone"></a>}}
+\if{latex}{\out{\hypertarget{method-clone}{}}}
 \subsection{Method \code{clone()}}{
 The objects of this class are cloneable with this method.
 \subsection{Usage}{

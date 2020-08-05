@@ -2,6 +2,7 @@
 #' Code Class
 #'
 #' @importFrom digest sha1
+#' @importFrom rlang with_options
 #'
 #' @examples
 #' cc <- teal:::CodeClass$new()
@@ -113,7 +114,22 @@ CodeClass <- R6::R6Class( # nolint
     #' @return invisibly \code{NULL}
     eval = function(envir = new.env(parent = parent.env(.GlobalEnv))) {
      for (x in self$get_code(deparse = FALSE)) {
-       base::eval(x, envir = envir)
+
+       out <- tryCatch(
+         base::eval(x, envir = envir),
+         error = function(e) e
+       )
+
+       if (is(out, "error")) {
+         error_msg <- sprintf("%s\n\nEvaluation of the code failed:\n %s",
+                              pdeparse(x),
+                              conditionMessage(out))
+
+         rlang::with_options(
+           stop(error_msg, call. = FALSE),
+           warning.length = max(min(8170, nchar(error_msg) + 30), 100)
+         )
+       }
      }
      return(invisible(NULL))
     }

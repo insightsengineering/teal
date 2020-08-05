@@ -175,34 +175,3 @@ code_from_script <- function(code, script, dataname = NULL) {
 
   return(code)
 }
-
-#' Evaluate script code to modify data
-#'
-#' Evaluate script code to modify data
-#' @inheritParams as_relational
-#' @param vars (named \code{list}) additional pre-requisite vars to execute code
-#' @return (\code{environment}) which stores modified \code{x}
-execute_script_code <- function(x, code, vars = list()) {
-  stopifnot(is(x, "NamedDataset"))
-  stopifnot(is_character_vector(code, min_length = 0, max_length = 1))
-  stopifnot(is_fully_named_list(vars))
-
-  execution_environment <- new.env()
-  assign(envir = execution_environment, x = x$get_dataname(), value = x$get_raw_data())
-  for (vars_idx in seq_along(vars)) {
-    var_name <- names(vars)[[vars_idx]]
-    var_value <- vars[[vars_idx]]
-    if (is(var_value, "RawDatasetConnector") || is(var_value, "RawDataset")) {
-      var_value <- get_raw_data(var_value)
-    }
-    assign(envir = execution_environment, x = var_name, value = var_value)
-  }
-
-  eval(parse(text = code), envir = execution_environment)
-
-  if (!is.data.frame(execution_environment[[x$get_dataname()]])) {
-    stop("Mutations need to lead to a data.frame again.")
-  }
-
-  return(execution_environment)
-}

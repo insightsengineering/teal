@@ -234,7 +234,10 @@ RawDatasetConnector <- R6::R6Class( #nolint
     get_pull_code_class = function(args = NULL) {
       res <- CodeClass$new()
       res$append(list_to_code_class(private$pull_vars))
-      res$set_code(code = private$pull_fun$get_call(deparse = TRUE, args = args), deps = names(private$pull_vars))
+      res$set_code(
+        code = private$pull_fun$get_call(deparse = TRUE, args = args),
+        deps = names(private$pull_vars)
+      )
       return(res)
     },
     set_pull_fun = function(pull_fun) {
@@ -355,7 +358,7 @@ match_ui <- function(ns, value, label) {
 #'   function with necessary arguments set to fetch data from connection.
 #' @examples
 #' ds <- raw_dataset_connector(pull_fun = callable_function(data.frame))
-#' set_args(ds, list(x = 1:5, y = letters[1:5]))
+#' set_args(ds, list(x = 1:5, y = letters[1:5], stringsAsFactors = FALSE))
 #' ds$pull()
 #' ds$get_raw_data()
 #' ds$get_code()

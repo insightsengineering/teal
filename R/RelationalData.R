@@ -4,6 +4,7 @@
 #' Class combines multiple \code{RelationalDataset} objects.
 #'
 #' @importFrom R6 R6Class
+#' @importFrom rlang with_options
 #'
 #' @examples
 #' x <- relational_dataset(
@@ -58,14 +59,11 @@ RelationalData <- R6::R6Class( #nolint
     #'   \code{TRUE} if all the datasets generated from evaluating the
     #'   \code{get_code()} code are identical to the raw data, else \code{FALSE}.
     check = function() {
-      if (!self$is_pulled()) {
-        stop("Cannot check the raw data until it is pulled.")
-      }
-
-      if (is.null(private$code)) {
-        all(vapply(private$datasets, function(x) x$check(), logical(1)))
+      # code can be put only to the mutate with empty code in datasets
+      if (!is_empty(private$code$code)) {
+        private$check_combined_code()
       } else {
-        all(vapply(private$datasets, function(x) private$check_dataset_all_code(x), logical(1)))
+        all(vapply(private$datasets, function(x) x$check(), logical(1)))
       }
     },
     #' @description
@@ -131,8 +129,8 @@ RelationalData <- R6::R6Class( #nolint
     #'
     #' @return self invisibly for chaining
     mutate = function(code, vars = list()) {
-      private$set_mutate_vars(vars)
-      private$set_mutate_code(code)
+      private$set_vars(vars)
+      private$set_code(code)
 
       return(invisible(self))
     },
@@ -165,7 +163,7 @@ RelationalData <- R6::R6Class( #nolint
         private$datasets
       } else {
         # have to evaluate post-processing code (i.e. private$code) before returning dataset
-        new_env <- new.env()
+        new_env <- new.env(parent = parent.env(globalenv()))
         for (dataset in private$datasets) {
           assign(dataset$get_dataname(), get_raw_data(dataset), envir = new_env)
         }
@@ -215,6 +213,35 @@ RelationalData <- R6::R6Class( #nolint
     .check = FALSE,
 
     ## __Private Methods ====
+    check_combined_code = function() {
+      execution_environment <- new.env(parent = parent.env(globalenv()))
+      eval(parse(text = self$get_code()), execution_environment)
+      lapply(
+        self$get_all_datasets(),
+        function(dataset) {
+
+          is_identical <- identical(
+            get_raw_data(dataset),
+            get(get_dataname(dataset), execution_environment)
+          )
+
+          if (!is_identical) {
+            out_msg <- sprintf(
+              "\n%s\n\n - code doesn't reproduce '%s' correctly",
+              self$get_code(),
+              get_dataname(dataset)
+            )
+
+            rlang::with_options(
+              .expr = stop(out_msg, call. = FALSE),
+              warning.length = max(min(8170, nchar(out_msg) + 30), 100)
+            )
+          }
+        }
+      )
+
+      return(TRUE)
+    },
     get_mutate_code_class = function() {
       res <- CodeClass$new()
       res$append(list_to_code_class(private$mutate_vars))
@@ -231,16 +258,17 @@ RelationalData <- R6::R6Class( #nolint
       }
       return(res)
     },
-    set_mutate_code = function(code) {
+    set_code = function(code) {
       stopifnot(is_character_vector(code, 0, 1))
 
       if (length(code) > 0 && code != "") {
-        private$code$set_code(code = code, dataname = self$get_datanames())
+        private$code$set_code(code = code,
+                              dataname = self$get_datanames())
       }
 
       return(invisible(NULL))
     },
-    set_mutate_vars = function(vars) {
+    set_vars = function(vars) {
       stopifnot(is_fully_named_list(vars))
 
       if (length(vars) > 0) {

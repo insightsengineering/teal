@@ -9,16 +9,17 @@ relational_dataset(x, dataname, keys, code, label)
 \arguments{
 \item{x}{(\code{data.frame} or \code{rtable}) object}
 
-\item{dataname}{(\code{character}) A given name for the dataset
-it may not contain spaces}
+\item{dataname}{(\code{character})\cr
+A given name for the dataset it may not contain spaces}
 
-\item{keys}{(\code{keys}) object of S3 class keys containing
-foreign, primary keys and parent information}
+\item{keys}{(\code{keys})\cr
+object of S3 class keys containing foreign, primary keys and parent information}
 
-\item{code}{(\code{character}) A character string defining the code
-needed to produce the data set in \code{x}}
+\item{code}{(\code{character})\cr
+A character string defining the code needed to produce the data set in \code{x}}
 
-\item{label}{(\code{character}) Label to describe the dataset}
+\item{label}{(\code{character})\cr
+Label to describe the dataset}
 }
 \value{
 object of class \code{RelaionalDataset}
