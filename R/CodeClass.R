@@ -149,7 +149,7 @@ CodeClass <- R6::R6Class( # nolint
         attr(code, "deps") <- deps
         attr(code, "id") <- id
 
-        private$.code <- append(private$.code, list(code))
+        private$.code <- base::append(private$.code, list(code))
       }
 
       return(invisible(NULL))
@@ -157,31 +157,33 @@ CodeClass <- R6::R6Class( # nolint
     get_code_all = function(deparse) {
       private$get_code_idx(idx = seq_along(private$.code), deparse = deparse)
     },
-    get_code_dataname_idx = function(dataname, max_idx = length(private$.code)) {
+    get_code_dataname = function(dataname, deparse) {
+      #the lines of code we need for the dataname
       res <- integer(0)
 
-      for (idx in rev(seq_len(max_idx))) {
+      # the set of datanames we want code for code for intially just dataname
+      datanames <- dataname
+
+      # loop backwards along code
+      for (idx in rev(seq_along(private$.code))) {
+
         code_entry <- private$.code[[idx]]
-        if (any(dataname %in% attr(code_entry, "dataname"))) {
-          res <- c(res, idx)
-          other_names <- setdiff(attr(code_entry, "dataname"), dataname)
-          for (other_name in other_names) {
-            res <- c(res, private$get_code_dataname_idx(other_name, idx - 1L))
-          }
-          deps <- setdiff(attr(code_entry, "deps"), dataname)
-          for (dep in deps) {
-            res <- c(res, private$get_code_dataname_idx(dep, idx - 1L))
-          }
-        } else if (is_empty(attr(code_entry, "dataname")) && !is_empty(res)) {
-          res <- c(res, idx)
+
+        # line of code is one we want if it is not empty and
+        # has any dataname attribute in the vector datanames - or is global code and
+        # already have some lines of code selected
+        if ((any(datanames %in% attr(code_entry, "dataname")) ||
+             (!is_empty(res) && is_empty(attr(code_entry, "dataname")))) &&
+            !is_empty(code_entry)) {
+
+          #append to index of code we want
+          res <- c(idx, res)
+
+          # and update datasets we want for preceding code with additional datanames and deps
+          datanames <- unique(c(datanames, attr(code_entry, "dataname"), attr(code_entry, "deps")))
         }
       }
-
-      return(sort(unique(res)))
-    },
-    get_code_dataname = function(dataname, deparse) {
-      idx <- private$get_code_dataname_idx(dataname)
-      private$get_code_idx(idx = idx, deparse = deparse)
+      private$get_code_idx(idx = res, deparse = deparse)
     },
     get_code_idx = function(idx, deparse) {
       if (isFALSE(deparse)) {
