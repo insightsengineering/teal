@@ -52,7 +52,7 @@ CallableFunction <- R6::R6Class( #nolint
     #'
     #' @return arguments the function gets called with
     get_args = function() {
-      private$args
+      return(private$args)
     },
     #' @description
     #' Get function call with substituted arguments in \code{args}.
@@ -166,6 +166,9 @@ CallableFunction <- R6::R6Class( #nolint
     #' @return self
     set_arg_value = function(name, value) {
       stopifnot(is_character_single(name))
+      arg_names <- names(formals(eval(str2lang(private$fun_name))))
+      stopifnot(name %in% arg_names || "..." %in% arg_names || is.null(arg_names))
+
       if (is_empty(private$args)) {
         private$args <- list()
       }
@@ -230,6 +233,10 @@ CallableFunction <- R6::R6Class( #nolint
     # @return name \code{name} of the original function
     #
     get_callable_function = function(callable) {
+      if (is.character(callable)) {
+        callable <- str2lang(callable)
+      }
+
       fr <- rev(sys.frames())
       callable <- substitute(callable, fr[[1]])
 
@@ -248,9 +255,6 @@ CallableFunction <- R6::R6Class( #nolint
       # if a function is not found, stop initialization
       stopifnot(is.function(fn))
 
-      if (is.character(callable)) {
-        callable <- str2lang(callable)
-      }
       return(callable)
     }
   )

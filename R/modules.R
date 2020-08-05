@@ -186,11 +186,11 @@ modules_depth <- function(modules, depth = 0) {
 #' The consecutive lines recursively list each submodule.
 #'
 #' @md
-#' @param x `teal_modules` to print
-#' @param indent `integer` indent level;
+#' @param x (`teal_modules`) to print
+#' @param indent (`integer`) indent level;
 #'   each submodule is indented one level more
-#' @param ... additional parameters to pass to recursive calls of `toString`
-#' @return `single character` with lines separated by `\n`
+#' @param ... (optional) additional parameters to pass to recursive calls of `toString`
+#' @return (`character` value)
 #' @export
 toString.teal_modules <- function(x, indent = 0, ...) { # nolint
   # argument must be `x` to be consistent with base method

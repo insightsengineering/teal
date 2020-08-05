@@ -122,7 +122,7 @@ test_that("test callable errors", {
 
   expect_error(
     callable_function(garbageIn),
-    "is.function"
+    "object .* not found"
   )
 
   expect_error(

@@ -9,7 +9,7 @@
 \arguments{
 \item{x}{`teal_module`}
 
-\item{indent}{\code{integer} indent level;
+\item{indent}{(\code{integer}) indent level;
 each submodule is indented one level more}
 
 \item{...}{ignored}

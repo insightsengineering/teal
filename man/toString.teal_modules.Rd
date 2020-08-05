@@ -7,15 +7,15 @@
 \method{toString}{teal_modules}(x, indent = 0, ...)
 }
 \arguments{
-\item{x}{\code{teal_modules} to print}
+\item{x}{(\code{teal_modules}) to print}
 
-\item{indent}{\code{integer} indent level;
+\item{indent}{(\code{integer}) indent level;
 each submodule is indented one level more}
 
-\item{...}{additional parameters to pass to recursive calls of \code{toString}}
+\item{...}{(optional) additional parameters to pass to recursive calls of \code{toString}}
 }
 \value{
-\verb{single character} with lines separated by \verb{\\n}
+(\code{character} value)
 }
 \description{
 The first line prints the \code{modules} label.

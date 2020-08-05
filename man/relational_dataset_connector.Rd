@@ -8,11 +8,13 @@
 \alias{script_dataset_connector}
 \alias{code_dataset_connector}
 \alias{rice_dataset_connector}
+\alias{teradata_dataset_connector}
 \alias{rds_cdisc_dataset_connector}
 \alias{rcd_cdisc_dataset_connector}
 \alias{rice_cdisc_dataset_connector}
 \alias{script_cdisc_dataset_connector}
 \alias{code_cdisc_dataset_connector}
+\alias{teradata_cdisc_dataset_connector}
 \title{Create a new \code{RelationalDatasetConnector} object}
 \usage{
 relational_dataset_connector(
@@ -75,6 +77,16 @@ rice_dataset_connector(
   ...
 )
 
+teradata_dataset_connector(
+  dataname,
+  table,
+  keys,
+  code = character(0),
+  script = character(0),
+  label = character(0),
+  ...
+)
+
 rds_cdisc_dataset_connector(
   dataname,
   file,
@@ -118,6 +130,15 @@ code_cdisc_dataset_connector(
   label = character(0),
   ...
 )
+
+teradata_cdisc_dataset_connector(
+  dataname,
+  table,
+  code = character(0),
+  script = character(0),
+  label = character(0),
+  ...
+)
 }
 \arguments{
 \item{pull_fun}{(\code{CallableFunction})\cr
@@ -129,7 +150,8 @@ A given name for the dataset it may not contain spaces}
 \item{keys}{(\code{keys})\cr
 object of S3 class keys containing foreign, primary keys and parent information}
 
-\item{code}{(\code{character}) reproducible code to re-create object}
+\item{code}{(\code{character})\cr
+A character string defining the code needed to produce the data set in \code{x}}
 
 \item{label}{(\code{character})\cr
 Label to describe the dataset}
@@ -160,6 +182,8 @@ Vector with additional code that can be supplied to mutate the dataset.}
 
 \item{path}{(\code{character})\cr
 path to the file}
+
+\item{table}{(\code{character}) table name}
 }
 \value{
 new \code{RelationalDatasetConnector} object
@@ -183,6 +207,9 @@ Please note that the script has to end with a call creating desired object. The 
 \code{rice_dataset_connector} -
 Create a \code{RelationalDatasetConnector} from \code{RICE} dataset.
 
+\code{teradata_dataset_connector} -
+Create a \code{RelationalDatasetConnector} from \code{TERADATA} dataset
+
 \code{rds_cdisc_dataset_connector} -
 Create a \code{RelationalDatasetConnector} from \code{RDS} file with keys automatically
 assigned by \code{dataname}
@@ -201,6 +228,10 @@ automatically by \code{dataname}.
 
 \code{code_cdisc_dataset_connector} -
 Create a \code{RelationalDatasetConnector} from \code{code} string with keys assigned
+automatically by \code{dataname}.
+
+\code{teradata_cdisc_dataset_connector} -
+Create a \code{RelationalDatasetConnector} from \code{TERADATA} dataset with keys assigned
 automatically by \code{dataname}.
 }
 \note{

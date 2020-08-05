@@ -44,6 +44,7 @@ x$close() # call closing function
 \item \href{#method-is_opened}{\code{DataConnection$is_opened()}}
 \item \href{#method-is_failed}{\code{DataConnection$is_failed()}}
 \item \href{#method-open}{\code{DataConnection$open()}}
+\item \href{#method-get_conn}{\code{DataConnection$get_conn()}}
 \item \href{#method-get_open_call}{\code{DataConnection$get_open_call()}}
 \item \href{#method-get_open_error_message}{\code{DataConnection$get_open_error_message()}}
 \item \href{#method-get_open_server}{\code{DataConnection$get_open_server()}}
@@ -66,11 +67,15 @@ x$close() # call closing function
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-new"></a>}}
-\if{latex}{\out{\hypertarget{method-new}{}}}
 \subsection{Method \code{new()}}{
 Create a new \code{DataConnection} object
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{DataConnection$new(open_fun = NULL, close_fun = NULL, ping_fun = NULL)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{DataConnection$new(
+  open_fun = NULL,
+  close_fun = NULL,
+  ping_fun = NULL,
+  if_conn_obj = FALSE
+)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
@@ -81,6 +86,9 @@ Create a new \code{DataConnection} object
 \item{\code{close_fun}}{(\code{CallableFunction}) function to close connection}
 
 \item{\code{ping_fun}}{(\code{CallableFunction}) function to ping connection}
+
+\item{\code{if_conn_obj}}{optional, (\code{logical}) whether to store \code{conn} object returned from opening
+connection}
 }
 \if{html}{\out{</div>}}
 }
@@ -90,7 +98,6 @@ new \code{DataConnection} object
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-is_opened"></a>}}
-\if{latex}{\out{\hypertarget{method-is_opened}{}}}
 \subsection{Method \code{is_opened()}}{
 If connection is opened
 
@@ -105,7 +112,6 @@ If open connection has been successfully evaluated
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-is_failed"></a>}}
-\if{latex}{\out{\hypertarget{method-is_failed}{}}}
 \subsection{Method \code{is_failed()}}{
 Check if connection has not failed.
 \subsection{Usage}{
@@ -118,7 +124,6 @@ Check if connection has not failed.
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-open"></a>}}
-\if{latex}{\out{\hypertarget{method-open}{}}}
 \subsection{Method \code{open()}}{
 Open the connection.
 
@@ -143,8 +148,16 @@ if \code{try = TRUE} then \code{try-error} on error, \code{NULL} otherwise
 }
 }
 \if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-get_conn"></a>}}
+\subsection{Method \code{get_conn()}}{
+Get internal connection object
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{DataConnection$get_conn()}\if{html}{\out{</div>}}
+}
+
+}
+\if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-get_open_call"></a>}}
-\if{latex}{\out{\hypertarget{method-get_open_call}{}}}
 \subsection{Method \code{get_open_call()}}{
 Get executed open connection call
 \subsection{Usage}{
@@ -168,7 +181,6 @@ optionally deparsed \code{call} object
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-get_open_error_message"></a>}}
-\if{latex}{\out{\hypertarget{method-get_open_error_message}{}}}
 \subsection{Method \code{get_open_error_message()}}{
 Get error message from last connection
 \subsection{Usage}{
@@ -182,7 +194,6 @@ Get error message from last connection
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-get_open_server"></a>}}
-\if{latex}{\out{\hypertarget{method-get_open_server}{}}}
 \subsection{Method \code{get_open_server()}}{
 Get shiny server module to open connection.
 \subsection{Usage}{
@@ -195,7 +206,6 @@ the \code{server} \code{function} to open connection.
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-get_open_ui"></a>}}
-\if{latex}{\out{\hypertarget{method-get_open_ui}{}}}
 \subsection{Method \code{get_open_ui()}}{
 Get Shiny module with inputs to open connection
 \subsection{Usage}{
@@ -215,7 +225,6 @@ the \code{ui} function to set arguments to open connection function.
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-is_open_failed"></a>}}
-\if{latex}{\out{\hypertarget{method-is_open_failed}{}}}
 \subsection{Method \code{is_open_failed()}}{
 Check if open connection has not failed.
 \subsection{Usage}{
@@ -228,7 +237,6 @@ Check if open connection has not failed.
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-set_open_args"></a>}}
-\if{latex}{\out{\hypertarget{method-set_open_args}{}}}
 \subsection{Method \code{set_open_args()}}{
 Set open connection function argument
 \subsection{Usage}{
@@ -250,7 +258,6 @@ nothing
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-set_open_server"></a>}}
-\if{latex}{\out{\hypertarget{method-set_open_server}{}}}
 \subsection{Method \code{set_open_server()}}{
 Set open-connection server function
 
@@ -275,7 +282,6 @@ A shiny module server function that should load data from all connectors}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-set_open_ui"></a>}}
-\if{latex}{\out{\hypertarget{method-set_open_ui}{}}}
 \subsection{Method \code{set_open_ui()}}{
 Set open connection UI function
 \subsection{Usage}{
@@ -297,7 +303,6 @@ defined by \code{set_open_server} method.}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-close"></a>}}
-\if{latex}{\out{\hypertarget{method-close}{}}}
 \subsection{Method \code{close()}}{
 Close the connection.
 \subsection{Usage}{
@@ -319,7 +324,6 @@ if \code{try = TRUE} then \code{try-error} on error, \code{NULL} otherwise
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-get_close_call"></a>}}
-\if{latex}{\out{\hypertarget{method-get_close_call}{}}}
 \subsection{Method \code{get_close_call()}}{
 Get executed close connection call
 \subsection{Usage}{
@@ -341,7 +345,6 @@ optionally deparsed \code{call} object
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-get_close_error_message"></a>}}
-\if{latex}{\out{\hypertarget{method-get_close_error_message}{}}}
 \subsection{Method \code{get_close_error_message()}}{
 Get error message from last connection
 \subsection{Usage}{
@@ -355,7 +358,6 @@ Get error message from last connection
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-get_close_server"></a>}}
-\if{latex}{\out{\hypertarget{method-get_close_server}{}}}
 \subsection{Method \code{get_close_server()}}{
 Get shiny server module to close connection.
 \subsection{Usage}{
@@ -368,7 +370,6 @@ the \code{server} \code{function} to close connection.
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-get_close_ui"></a>}}
-\if{latex}{\out{\hypertarget{method-get_close_ui}{}}}
 \subsection{Method \code{get_close_ui()}}{
 Get Shiny module with inputs to close connection
 \subsection{Usage}{
@@ -388,7 +389,6 @@ the \code{ui} function to set arguments to close connection function.
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-is_close_failed"></a>}}
-\if{latex}{\out{\hypertarget{method-is_close_failed}{}}}
 \subsection{Method \code{is_close_failed()}}{
 Check if close connection has not failed.
 \subsection{Usage}{
@@ -401,7 +401,6 @@ Check if close connection has not failed.
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-set_close_args"></a>}}
-\if{latex}{\out{\hypertarget{method-set_close_args}{}}}
 \subsection{Method \code{set_close_args()}}{
 Set close connection function argument
 \subsection{Usage}{
@@ -423,7 +422,6 @@ nothing
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-set_close_ui"></a>}}
-\if{latex}{\out{\hypertarget{method-set_close_ui}{}}}
 \subsection{Method \code{set_close_ui()}}{
 Set close connection UI function
 \subsection{Usage}{
@@ -445,7 +443,6 @@ defined by \code{set_close_server} method.}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-set_close_server"></a>}}
-\if{latex}{\out{\hypertarget{method-set_close_server}{}}}
 \subsection{Method \code{set_close_server()}}{
 Set close-connection server function
 
@@ -470,7 +467,6 @@ A shiny module server function that should load data from all connectors}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-clone"></a>}}
-\if{latex}{\out{\hypertarget{method-clone}{}}}
 \subsection{Method \code{clone()}}{
 The objects of this class are cloneable with this method.
 \subsection{Usage}{

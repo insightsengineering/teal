@@ -4,6 +4,8 @@
 #'  Create \code{RelationalDatasetConnector} from \link{callable_function}.
 #'
 #' @inheritParams named_dataset_connector
+#' @inheritParams code_from_script
+#'
 #' @param keys (\code{keys})\cr
 #'  object of S3 class keys containing foreign, primary keys and parent information
 #'
@@ -41,7 +43,6 @@ relational_dataset_connector <- function(pull_fun,
 #' Please note that the script has to end with a call creating desired object. The error will be raised otherwise.
 #'
 #' @param x (\code{character}) string giving the pathname of the file to read from.
-#' @param code (\code{character}) reproducible code to re-create object
 #'
 #' @return \code{RelationalDatasetConnector} object
 #'
@@ -91,7 +92,7 @@ relational_dataset_connector_file <- function(x) { # nolint
 #' @param ... (\code{optional})\cr
 #'   additional arguments applied to pull function
 #'
-#' @inheritParams as_relational
+#' @inheritParams relational_dataset_connector
 #'
 #' @rdname relational_dataset_connector
 #'
@@ -160,7 +161,7 @@ rcd_dataset_connector <- function(dataname,
 #' @param ... (\code{optional})\cr
 #'   additional arguments applied to pull function
 #'
-#' @inheritParams as_relational
+#' @inheritParams relational_dataset_connector
 #'
 #' @rdname relational_dataset_connector
 #'
@@ -215,7 +216,7 @@ rds_dataset_connector <- function(dataname,
 #' @param ... (\code{optional})\cr
 #'   additional arguments applied to pull function
 #'
-#' @inheritParams as_relational
+#' @inheritParams relational_dataset_connector
 #'
 #' @rdname relational_dataset_connector
 #'
@@ -264,7 +265,7 @@ script_dataset_connector <- function(dataname,
 #' \code{code_dataset_connector} - Create a \code{RelationalDatasetConnector}
 #'   from a string.
 #'
-#' @inheritParams as_relational
+#' @inheritParams relational_dataset_connector
 #' @param mutate_code (\code{character})\cr
 #'   Vector with additional code that can be supplied to mutate the dataset.
 #'
@@ -327,7 +328,7 @@ code_dataset_connector <- function(dataname,
 #' @param ... (\code{optional})\cr
 #'   additional arguments applied to pull function
 #'
-#' @inheritParams as_relational
+#' @inheritParams relational_dataset_connector
 #'
 #' @rdname relational_dataset_connector
 #'
@@ -361,8 +362,48 @@ rice_dataset_connector <- function(dataname,
     paste0("Connection to entimICE via rice was requested, but rice package is not available.",
            "Please install it from https://github.roche.com/Rpackages/rice."))
 
-  x_fun <- callable_function(rice::rice_read) # nolint
-  args <- append(list(node = path, prolong = TRUE, quiet = TRUE), list(...))
+  x_fun <- callable_function("rice::rice_read") # nolint
+  args <- append(list(node = path, prolong = TRUE, quiet = TRUE), dot_args)
+  x_fun$set_args(args)
+
+  x <- relational_dataset_connector(
+    dataname = dataname,
+    pull_fun = x_fun,
+    keys = keys,
+    code = code_from_script(code, script),
+    label = label
+  )
+
+  return(x)
+}
+
+#' @description
+#' \code{teradata_dataset_connector} -
+#' Create a \code{RelationalDatasetConnector} from \code{TERADATA} dataset
+#'
+#' @inheritParams relational_dataset_connector
+#' @param table (\code{character}) table name
+#'
+#' @rdname relational_dataset_connector
+#'
+#' @export
+teradata_dataset_connector <- function(dataname,
+                                       table,
+                                       keys,
+                                       code = character(0),
+                                       script = character(0),
+                                       label = character(0),
+                                       ...) {
+  dot_args <- list(...)
+  stopifnot(is_fully_named_list(dot_args))
+
+  check_pkg_quietly(
+    "DBI",
+    "Connection to Teradata tables was requested, but DBI package is not available."
+  )
+
+  x_fun <- callable_function("DBI::dbReadTable")
+  args <- append(list(conn = as.name("conn"), name = table), dot_args)
   x_fun$set_args(args)
 
   x <- relational_dataset_connector(
@@ -517,6 +558,35 @@ code_cdisc_dataset_connector <- function(dataname,
     code = code,
     keys = get_cdisc_keys(dataname),
     mutate_code = mutate_code,
+    label = label,
+    ...
+  )
+
+  return(x)
+}
+
+#' @description
+#' \code{teradata_cdisc_dataset_connector} -
+#' Create a \code{RelationalDatasetConnector} from \code{TERADATA} dataset with keys assigned
+#' automatically by \code{dataname}.
+#'
+#' @inheritParams teradata_dataset_connector
+#'
+#' @rdname relational_dataset_connector
+#'
+#' @export
+teradata_cdisc_dataset_connector <- function(dataname, # nolint
+                                             table,
+                                             code = character(0),
+                                             script = character(0),
+                                             label = character(0),
+                                             ...) {
+
+  x <- teradata_dataset_connector(
+    dataname = dataname,
+    table = table,
+    code = code_from_script(code, script),
+    keys = get_cdisc_keys(dataname),
     label = label,
     ...
   )

@@ -41,8 +41,11 @@ DataConnection <- R6::R6Class( # nolint
     #' @param open_fun (\code{CallableFunction}) function to open connection
     #' @param close_fun (\code{CallableFunction}) function to close connection
     #' @param ping_fun (\code{CallableFunction}) function to ping connection
+    #' @param if_conn_obj optional, (\code{logical}) whether to store \code{conn} object returned from opening
+    #'   connection
     #' @return new \code{DataConnection} object
-    initialize = function(open_fun = NULL, close_fun = NULL, ping_fun = NULL) {
+    initialize = function(open_fun = NULL, close_fun = NULL, ping_fun = NULL, if_conn_obj = FALSE) {
+      stopifnot(is_logical_single(if_conn_obj))
       if (!is.null(open_fun)) {
         private$set_open_fun(open_fun)
       }
@@ -50,8 +53,9 @@ DataConnection <- R6::R6Class( # nolint
         private$set_close_fun(close_fun)
       }
       if (!is.null(ping_fun)) {
-        private$set_close_fun(ping_fun)
+        private$set_ping_fun(ping_fun)
       }
+      private$if_conn_obj <- if_conn_obj
     },
     #' @description
     #' If connection is opened
@@ -83,18 +87,32 @@ DataConnection <- R6::R6Class( # nolint
     open = function(args = NULL, silent = FALSE, try = FALSE) {
       stopifnot(is.null(args) || (is.list(args) && is_fully_named_list(args)))
       if_cond(private$check_open_fun(silent = silent), return(), isFALSE)
-      if (isTRUE(private$ping())) {
+      if (isTRUE(private$opened) && isTRUE(private$ping())) {
         return(invisible(NULL))
       } else {
         open_res <- private$open_fun$run(args = args, try = try)
         if (!self$is_open_failed()) {
           private$opened <- TRUE
+          if (private$if_conn_obj && !is.null(open_res)) {
+            private$conn <- open_res
+
+            if_not_null(private$close_fun, private$close_fun$assign_to_env("conn", private$conn))
+            if_not_null(private$ping_fun, private$ping_fun$assign_to_env("conn", private$conn))
+          }
+        } else {
+          private$opened <- FALSE
+          private$conn <- NULL
         }
 
         return(invisible(self))
       }
     },
 
+    #' @description
+    #' Get internal connection object
+    get_conn = function() {
+      return(private$conn)
+    },
     #' @description
     #' Get executed open connection call
     #'
@@ -106,8 +124,19 @@ DataConnection <- R6::R6Class( # nolint
     get_open_call = function(deparse = TRUE, args = NULL, silent = FALSE) {
       stopifnot(is_logical_single(deparse))
       stopifnot(is.null(args) || (is.list(args) && is_fully_named_list(args)))
+
       if_cond(private$check_open_fun(silent = silent), return(), isFALSE)
-      private$open_fun$get_call(deparse = deparse, args = args)
+      open_call <- private$open_fun$get_call(deparse = FALSE, args = args)
+
+      if (private$if_conn_obj) {
+        open_call <- call("<-", as.name("conn"), open_call)
+      }
+
+      if (isTRUE(deparse)) {
+        return(pdeparse(open_call))
+      } else {
+        return(open_call)
+      }
     },
     #' @description
     #' Get error message from last connection
@@ -219,6 +248,7 @@ DataConnection <- R6::R6Class( # nolint
           return(close_res)
         } else {
           private$opened <- FALSE
+          private$conn <- NULL
           return(invisible(NULL))
         }
       }
@@ -337,6 +367,10 @@ DataConnection <- R6::R6Class( # nolint
     open_fun = NULL,
     close_fun = NULL,
     ping_fun = NULL,
+
+    # connection object
+    if_conn_obj = FALSE,
+    conn = NULL,
 
     # shiny elements
     open_ui = NULL,
@@ -466,7 +500,7 @@ rcd_connection <- function(open_args = list()) {
 #'
 #' @param open_args optional, named (\code{list}) of additional parameters for the connection's
 #'   \code{rice::rice_session_open}. Please note that the \code{password} argument will be
-#'   overwritten with \code{random.cdisc.data}.
+#'   overwritten with \code{askpass::askpass}.
 #' @param close_args optional, named (\code{list}) of additional parameters for the connection's
 #'   \code{rice::rice_session_close} close function. Please note that the \code{message} argument
 #'   will be overwritten with \code{FALSE}.
@@ -485,28 +519,24 @@ rice_connection <- function(open_args = list(), close_args = list(), ping_args =
     )
   )
 
-  stopifnot(is_fully_named_list(open_args) &&
-              is_fully_named_list(close_args) &&
-              is_fully_named_list(ping_args))
+  stopifnot(is_fully_named_list(open_args))
+  stopifnot(is_fully_named_list(close_args))
+  stopifnot(is_fully_named_list(ping_args))
 
-  stopifnot(all(names(open_args) %in% names(formals(rice::rice_session_open))))
-  stopifnot(all(names(ping_args) %in% names(formals(rice::rice_session_active))))
-  stopifnot(all(names(close_args) %in% names(formals(rice::rice_session_close))))
-
-  ping_fun <- callable_function(rice::rice_session_active)
+  ping_fun <- callable_function("rice::rice_session_active")
   ping_fun$set_args(ping_args)
 
-  open_fun <- callable_function(rice::rice_session_open)
+  open_fun <- callable_function("rice::rice_session_open")
   open_args$password <- as.call(parse(text = "askpass::askpass"))
   open_fun$set_args(open_args)
 
-  close_fun <- callable_function(rice::rice_session_close)
+  close_fun <- callable_function("rice::rice_session_close")
   close_args$message <- FALSE
   close_fun$set_args(close_args)
 
   x <- DataConnection$new(open_fun = open_fun,
                           close_fun = close_fun,
-                          ping_fun = ping_fun) # nolint
+                          ping_fun = ping_fun)
 
   # open connection
   x$set_open_ui(
@@ -523,6 +553,102 @@ rice_connection <- function(open_args = list(), close_args = list(), ping_args =
     function(input, output, session, connection) {
       connection$open(args = list(username = input$username,
                                   password = input$password),
+                      try = TRUE)
+
+      if (connection$is_open_failed()) {
+        shinyjs::alert(
+          paste("Error opening connection\nError message:", connection$get_open_error_message())
+        )
+      }
+    }
+  )
+
+  # close connection
+  x$set_close_ui(
+    function(id) {
+      NULL
+    }
+  )
+
+  x$set_close_server(
+    function(input, output, session, connection) {
+      connection$close(try = TRUE)
+
+      if (connection$is_close_failed()) {
+        shinyjs::alert(
+          paste("Error closing connection\nError message:", connection$get_close_error_message())
+        )
+      }
+    }
+  )
+
+  return(x)
+}
+
+
+
+
+#' Open connection to \code{Teradata}
+#'
+#' @param open_args optional, named (\code{list}) of additional parameters for the connection's
+#'   \code{rice::rice_session_open}. Please note that the \code{type} argument will be
+#'   overwritten with \code{ODBC}.
+#' @param close_args optional, named (\code{list}) of additional parameters for the connection's
+#'   \code{rice::rice_session_close} close function.
+#' @param ping_args optional, named (\code{list}) of additional parameters for the connection's
+#'   \code{rice::rice_session_active} ping function.
+#'
+#' @return \code{DataConnection} type of object
+#'
+#' @importFrom shinyjs alert
+#' @export
+teradata_connection <- function(open_args = list(), close_args = list(), ping_args = list()) {
+  check_pkg_quietly(
+    "RocheTeradata",
+    "Connection to Teradata was requested, but RocheTeradata package is not available."
+  )
+  check_pkg_quietly(
+    "DBI",
+    "Connection to Teradata was requested, but RocheTeradata package is not available."
+  )
+
+
+  stopifnot(is_fully_named_list(open_args))
+  stopifnot(is_fully_named_list(close_args))
+  stopifnot(is_fully_named_list(ping_args))
+
+  open_fun <- callable_function("RocheTeradata::connect_teradata")
+  open_args$type <- "ODBC"
+  open_fun$set_args(open_args)
+
+  close_fun <- callable_function("DBI::dbDisconnect")
+  close_args$conn <- as.name("conn")
+  close_fun$set_args(close_args)
+
+  ping_fun <- callable_function("DBI::dbIsValid")
+  ping_args$dbObj <- as.name("conn") # nolint
+  ping_fun$set_args(ping_args)
+
+  x <- DataConnection$new(open_fun = open_fun,
+                          close_fun = close_fun,
+                          ping_fun = ping_fun,
+                          if_conn_obj = TRUE)
+
+  # open connection
+  x$set_open_ui(
+    function(id) {
+      ns <- NS(id)
+      div(
+        textInput(ns("username"), "uid"),
+        passwordInput(ns("password"), "pwd")
+      )
+    }
+  )
+
+  x$set_open_server(
+    function(input, output, session, connection) {
+      connection$open(args = list(uid = input$username,
+                                  pwd = input$password),
                       try = TRUE)
 
       if (connection$is_open_failed()) {

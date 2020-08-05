@@ -34,14 +34,13 @@ Duplicated elements from \code{choices} get removed.
 }
 \examples{
 library(random.cdisc.data)
-library(tern)
 
 ADSL <- radsl(cached = TRUE)
 ADTTE <- radtte(cached = TRUE)
-choices1 <- choices_labeled(names(ADSL), var_labels(ADSL))
+choices1 <- choices_labeled(names(ADSL), rtables::var_labels(ADSL))
 choices2 <- choices_labeled(ADTTE$PARAMCD, ADTTE$PARAM)
 # if only a subset of variables are needed, use subset argument
-choices3 <- choices_labeled(names(ADSL), var_labels(ADSL), subset = c("ARMCD", "ARM"))
+choices3 <- choices_labeled(names(ADSL), rtables::var_labels(ADSL), subset = c("ARMCD", "ARM"))
 \dontrun{
 shinyApp(
   ui = fluidPage(selectInput("c1", label = "Choices from ADSL",

@@ -61,7 +61,6 @@ ds$launch()
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-new"></a>}}
-\if{latex}{\out{\hypertarget{method-new}{}}}
 \subsection{Method \code{new()}}{
 Create a new \code{RawDatasetConnector} object. Set the pulling function
 \link{CallableFunction} which returns a \code{data.frame}, e.g. by reading
@@ -89,7 +88,6 @@ new \code{RawDatasetConnector} object
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-set_args"></a>}}
-\if{latex}{\out{\hypertarget{method-set_args}{}}}
 \subsection{Method \code{set_args()}}{
 Set arguments to the pulling function
 \subsection{Usage}{
@@ -109,7 +107,6 @@ self invisibly for chaining
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-get_code"></a>}}
-\if{latex}{\out{\hypertarget{method-get_code}{}}}
 \subsection{Method \code{get_code()}}{
 Get code to get data
 \subsection{Usage}{
@@ -133,7 +130,6 @@ optionally deparsed \code{call} object
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-get_code_class"></a>}}
-\if{latex}{\out{\hypertarget{method-get_code_class}{}}}
 \subsection{Method \code{get_code_class()}}{
 Get internal \code{CodeClass} object
 \subsection{Usage}{
@@ -146,7 +142,6 @@ Get internal \code{CodeClass} object
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-get_dataset"></a>}}
-\if{latex}{\out{\hypertarget{method-get_dataset}{}}}
 \subsection{Method \code{get_dataset()}}{
 Get dataset
 \subsection{Usage}{
@@ -159,7 +154,6 @@ dataset (\code{RawDataset})
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-get_error_message"></a>}}
-\if{latex}{\out{\hypertarget{method-get_error_message}{}}}
 \subsection{Method \code{get_error_message()}}{
 Get error message from last pull
 \subsection{Usage}{
@@ -173,7 +167,6 @@ Get error message from last pull
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-get_pull_fun"></a>}}
-\if{latex}{\out{\hypertarget{method-get_pull_fun}{}}}
 \subsection{Method \code{get_pull_fun()}}{
 Get pull function
 \subsection{Usage}{
@@ -186,7 +179,6 @@ Get pull function
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-get_raw_data"></a>}}
-\if{latex}{\out{\hypertarget{method-get_raw_data}{}}}
 \subsection{Method \code{get_raw_data()}}{
 Get raw data from dataset
 \subsection{Usage}{
@@ -199,7 +191,6 @@ data (data.frame)
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-pull"></a>}}
-\if{latex}{\out{\hypertarget{method-pull}{}}}
 \subsection{Method \code{pull()}}{
 Pull the data
 
@@ -229,7 +220,6 @@ whether perform function evaluation inside \code{try} clause}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-is_failed"></a>}}
-\if{latex}{\out{\hypertarget{method-is_failed}{}}}
 \subsection{Method \code{is_failed()}}{
 Check if pull has not failed.
 \subsection{Usage}{
@@ -242,7 +232,6 @@ Check if pull has not failed.
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-is_pulled"></a>}}
-\if{latex}{\out{\hypertarget{method-is_pulled}{}}}
 \subsection{Method \code{is_pulled()}}{
 Check if dataset has already been pulled.
 \subsection{Usage}{
@@ -255,7 +244,6 @@ Check if dataset has already been pulled.
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-set_ui_input"></a>}}
-\if{latex}{\out{\hypertarget{method-set_ui_input}{}}}
 \subsection{Method \code{set_ui_input()}}{
 Sets the shiny UI according to the given inputs.
 It creates a checkboxInput for logical type, numericInput for numeric type,
@@ -295,7 +283,6 @@ ds$launch()
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-get_ui"></a>}}
-\if{latex}{\out{\hypertarget{method-get_ui}{}}}
 \subsection{Method \code{get_ui()}}{
 Get shiny ui function
 \subsection{Usage}{
@@ -315,7 +302,6 @@ shiny UI in given namespace id
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-get_server"></a>}}
-\if{latex}{\out{\hypertarget{method-get_server}{}}}
 \subsection{Method \code{get_server()}}{
 Get shiny server function
 \subsection{Usage}{
@@ -328,7 +314,6 @@ shiny server function
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-launch"></a>}}
-\if{latex}{\out{\hypertarget{method-launch}{}}}
 \subsection{Method \code{launch()}}{
 Launches a shiny app.
 \subsection{Usage}{
@@ -353,7 +338,6 @@ ds$launch()
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-clone"></a>}}
-\if{latex}{\out{\hypertarget{method-clone}{}}}
 \subsection{Method \code{clone()}}{
 The objects of this class are cloneable with this method.
 \subsection{Usage}{

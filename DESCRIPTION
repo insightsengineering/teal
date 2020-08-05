@@ -28,7 +28,6 @@ Depends:
   R (>= 3.3),
   shiny
 Imports:
-  askpass,
   digest,
   dplyr,
   ggplot2,
@@ -49,7 +48,6 @@ Suggests:
     knitr,
     nomnoml,
     random.cdisc.data (>= 0.3.4),
-    rice (>= 1.0.3),
     rmarkdown,
     tern (>= 0.6.7),
     test.nest (>= 0.2.3),

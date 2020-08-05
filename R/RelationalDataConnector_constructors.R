@@ -114,7 +114,6 @@ rcd_data <- function(..., connection = rcd_connection(), check = TRUE) {
 #'
 #' Build data connector for \code{RICE} datasets
 #'
-#' @importFrom askpass askpass
 #'
 #' @export
 #'
@@ -155,6 +154,7 @@ rice_data <- function(..., connection = rice_connection(), additional_ui = NULL)
   connectors <- list(...)
   stopifnot(is_class_list("RelationalDatasetConnector")(connectors))
   stopifnot(inherits(connection, "DataConnection"))
+  stopifnot(is.null(additional_ui) || is_html_like(additional_ui))
 
   x <- RelationalDataConnector$new(connection = connection, connectors = connectors)
   x$set_check(`attributes<-`(FALSE, list(quiet = TRUE)))
@@ -173,8 +173,8 @@ rice_data <- function(..., connection = rice_connection(), additional_ui = NULL)
               offset = 1,
               lapply(seq_along(connectors), function(i) {
                 tags$li(code(connectors[[i]]$get_dataname()),
-                               ": ",
-                               code(connectors[[i]]$get_pull_args()$node))
+                        ": ",
+                        code(connectors[[i]]$get_pull_args()$node))
               })
             )
           )
@@ -198,6 +198,115 @@ rice_data <- function(..., connection = rice_connection(), additional_ui = NULL)
 
       # rice::rice_read doesn't need arguments from data-level
       if (connection$is_opened()) {
+        # call connectors$pull
+        for (connector in connectors) {
+          callModule(connector$get_server(), id = connector$get_dataname())
+          if (connector$is_failed()) {
+            break
+          }
+        }
+
+        if (!is.null(connection$get_close_server())) {
+          callModule(connection$get_close_server(),
+                     id = "close_connection",
+                     connection = connection)
+        }
+      }
+    }
+  )
+  return(x)
+}
+
+
+
+#' \code{RelationalDataConnector} connector for \code{TERADATA}
+#'
+#' Build data connector for \code{TERADATA} functions or datasets
+#'
+#' @export
+#'
+#' @param ... (\code{RelationalDatasetConnector}) dataset connectors created using \link{teradata_dataset_connector}
+#' @param connection (\code{DataConnection}) object returned from \code{teradata_connection}.
+#'
+#' @return An object of class \code{RelationalDataConnector}
+#'
+#' @examples
+#' \dontrun{
+#' x <- teradata_data(
+#'   teradata_cdisc_dataset_connector("ADSL", "ADSL_table"),
+#'   teradata_cdisc_dataset_connector("ADAE", "ADAE_table"),
+#'   connection = teradata_connection(open_args = list(datalab = "my_custom_datalab"))
+#' )
+#'
+#' # add the data to a proper teal app
+#' app <- init(
+#'   data = teal_data(x),
+#'   modules = root_modules(
+#'     module(
+#'       "ADSL AGE histogram",
+#'       server = function(input, output, session, datasets) {
+#'         output$hist <- renderPlot(
+#'           hist(datasets$get_data("ADSL", filtered = TRUE)$AGE)
+#'         )
+#'       },
+#'       ui = function(id, ...) {ns <- NS(id); plotOutput(ns('hist'))},
+#'       filters = "ADSL"
+#'     )
+#'   ),
+#'   header = tags$h1("Sample App")
+#' )
+#' shinyApp(app$ui, app$server)
+#' }
+teradata_data <- function(..., connection = teradata_connection()) {
+  connectors <- list(...)
+  stopifnot(is_class_list("RelationalDatasetConnector")(connectors))
+
+  x <- RelationalDataConnector$new(connection = connection, connectors = connectors)
+  x$set_check(`attributes<-`(FALSE, list(quiet = TRUE)))
+
+  x$set_ui(
+    function(id) {
+      ns <- NS(id)
+      div(
+        div(
+          h1("TEAL - Access data on Teradata"),
+          br(),
+          h5("Data access requested for:"),
+          fluidRow(
+            column(
+              11,
+              offset = 1,
+              lapply(seq_along(connectors), function(i) {
+                tags$li(code(connectors[[i]]$get_dataname()),
+                        ": ",
+                        code(connectors[[i]]$get_pull_args()$name))
+              })
+            )
+          )
+        ),
+        br(),
+        connection$get_open_ui(ns("open_connection"))
+      )
+    }
+  )
+
+  x$set_server(
+    function(input, output, session, connectors, connection) {
+      # opens connection
+      if (!is.null(connection$get_open_server())) {
+        callModule(connection$get_open_server(),
+                   id = "open_connection",
+                   connection = connection)
+      }
+
+      if (connection$is_opened()) {
+        conn <- connection$get_conn()
+        if (!is.null(conn)) {
+          for (connector in connectors) {
+            connector$get_pull_fun()$assign_to_env("conn", conn)
+          }
+        }
+
         # call connectors$pull
         for (connector in connectors) {
           callModule(connector$get_server(), id = connector$get_dataname())
