@@ -8,6 +8,7 @@ cdisc_dataset(
   dataname,
   data,
   keys = get_cdisc_keys(dataname),
+  label = data_label(data),
   code = character(0),
   vars = list()
 )
@@ -21,6 +22,9 @@ data must contain fields defined in keys.}
 
 \item{keys}{(\code{keys})\cr
 see \code{\link{keys}}}
+
+\item{label}{(\code{character} value)\cr
+a dataset label}
 
 \item{code}{(\code{character} value)\cr
 code to reproduce \code{data}}

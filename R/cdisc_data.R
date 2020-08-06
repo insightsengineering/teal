@@ -12,7 +12,8 @@
 #'
 #' @param keys (\code{keys})\cr
 #'   see \code{\link{keys}}
-#'
+#' @param label (\code{character} value)\cr
+#'   a dataset label
 #' @param code (\code{character} value)\cr
 #'   code to reproduce \code{data}
 #'
@@ -48,8 +49,8 @@
 #' dataset("iris", iris)
 dataset <- function(dataname,
                     data,
-                    label = data_label(data),
                     keys = teal::keys(primary = NULL, foreign = NULL, parent = NULL),
+                    label = data_label(data),
                     code = character(0),
                     vars = list()) {
   stopifnot(is_character_single(dataname))
@@ -150,9 +151,10 @@ dataset_file <- function(x, code = get_code(x)) {
 cdisc_dataset <- function(dataname,
                           data,
                           keys = get_cdisc_keys(dataname),
+                          label = data_label(data),
                           code = character(0),
                           vars = list()) {
-  dataset(dataname = dataname, data = data, keys = keys, code = code, vars = vars)
+  dataset(dataname = dataname, data = data, keys = keys, label = label, code = code, vars = vars)
 }
 
 #' Load \code{CDISC} \code{RelationalDataset} object from a file

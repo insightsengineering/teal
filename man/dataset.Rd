@@ -7,8 +7,8 @@
 dataset(
   dataname,
   data,
-  label = data_label(data),
   keys = teal::keys(primary = NULL, foreign = NULL, parent = NULL),
+  label = data_label(data),
   code = character(0),
   vars = list()
 )
@@ -20,11 +20,11 @@ name of dataset.}
 \item{data}{(\code{data.frame})\cr
 data must contain fields defined in keys.}
 
-\item{label}{(\code{character})\cr
-Label to describe the dataset}
-
 \item{keys}{(\code{keys})\cr
 see \code{\link{keys}}}
+
+\item{label}{(\code{character} value)\cr
+a dataset label}
 
 \item{code}{(\code{character} value)\cr
 code to reproduce \code{data}}
