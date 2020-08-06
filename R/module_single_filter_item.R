@@ -67,7 +67,7 @@ ui_single_filter_item <- function(id, filter_info, filter_state, prelabel) {
   id_keep_na <- ns("keepNA")
 
   # we set label to NULL everywhere, so we can set the label column ourselves
-  select_input <- if (filter_info$type == "choices" || filter_info$type == "integer_flag") {
+  select_input <- if (filter_info$type == "choices") {
     if (length(filter_info$choices) <= .threshold_slider_vs_checkboxgroup) {
       div(
         style = "position: relative;",
@@ -185,7 +185,7 @@ srv_single_filter_item <- function(input, output, session, datasets, dataname, v
   # we have to make this outside the if because plot options may be different per variable type
   var_type <- isolate(datasets$get_filter_type(dataname, varname))
 
-  output$plot <- if (var_type == "choices" || var_type == "logical" || var_type == "integer_flag") {
+  output$plot <- if (var_type == "choices" || var_type == "logical") {
     renderPlot(bg = "transparent", {
       filter_info <- datasets$get_filter_info(dataname, varname)
       if ((length(filter_info$choices) <= .threshold_slider_vs_checkboxgroup) || (var_type == "logical")) {
@@ -239,7 +239,7 @@ srv_single_filter_item <- function(input, output, session, datasets, dataname, v
   }, {
     selection_state <- input[[id_selection]]
     type <- datasets$get_filter_type(dataname, varname)
-    state <- if (type == "choices" || type == "integer_flag") {
+    state <- if (type == "choices") {
       # unfortunately, NULL is also returned for a select when nothing is selected
       # in a multiple checkbox, so we need to set it manually to character(0)
       list(
