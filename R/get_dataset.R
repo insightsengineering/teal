@@ -24,7 +24,24 @@ get_dataset.RawDatasetConnector <- function(x, dataname = NULL) { # nolint
   if (!is.null(dataname)) {
     warning("'dataname' argument ignored - RawDatasetConnector can contain only one dataset.")
   }
-  x$get_dataset()
+  return(x$get_dataset())
+}
+
+#' @rdname get_dataset
+#' @export
+#' @examples
+#'
+#' # RawDataset --------
+#' library(random.cdisc.data)
+#' ADSL <- radsl(cached = TRUE)
+#' rd <- raw_dataset(ADSL)
+#'
+#' get_dataset(rd)
+get_dataset.RawDataset <- function(x, dataname = NULL) { # nolint
+  if (!is.null(dataname)) {
+    warning("'dataname' argument ignored - RawDataset can contain only one dataset.")
+  }
+  return(x)
 }
 
 #' @param dataname \code{character} a name of dataset to be retrieved
@@ -51,7 +68,7 @@ get_dataset.RawDatasetConnector <- function(x, dataname = NULL) { # nolint
 #'   rcd_cdisc_dataset_connector("ADTTE", radtte, cached = TRUE)
 #' )
 #'
-#' get_dataset(rd, dataname = "ADSL")
+#' get_dataset(rdc, dataname = "ADSL")
 #'\dontrun{
 #' load_datasets(rdc)
 #' get_datasets(rdc)
@@ -59,13 +76,13 @@ get_dataset.RawDatasetConnector <- function(x, dataname = NULL) { # nolint
 #'}
 #'
 #' # RelationalDataList --------
-#' drc <- cdisc_data(rdc, adae)
+#' rdl <- cdisc_data(rdc, adae)
 #'
-#' get_dataset(drc, "ADSL")
+#' get_dataset(rdl, "ADSL")
 get_dataset.RelationalData <- function(x, dataname = NULL) { # nolint
   if (is.null(dataname)) {
     stop("To get singe dataset from 'RelationalData' one must specify the name of the dataset.
          To get all datasets please use get_datasets()")
   }
-  x$get_dataset(dataname = dataname)
+  return(x$get_dataset(dataname = dataname))
 }

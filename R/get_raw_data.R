@@ -94,14 +94,24 @@ get_raw_data.RawDatasetConnector <- function(x, dataname = NULL) { # nolint
 #'
 #' get_raw_data(drc)
 get_raw_data.RelationalData <- function(x, dataname = NULL) {
-  datasets_names <- x$get_datanames()
 
-  if (!is.null(dataname) && dataname %in% datasets_names) {
-    get_raw_data(
-      get_dataset(x, dataname = dataname)
-    )
-  } else if (!is.null(dataname) && !(dataname %in% datasets_names)) {
-    stop("The dataname supplied does not exist.")
+  if (!is.null(dataname)) {
+    datasets_names <- x$get_datanames()
+    if (dataname %in% datasets_names) {
+      if (is_pulled(x$get_items(dataname))) {
+        get_raw_data(
+          get_dataset(x, dataname = dataname)
+        )
+      } else {
+        stop(
+          sprintf("'%s' has not been pulled yet\n - please use `load_dataset()` first.",
+                  dataname),
+          call. = FALSE
+        )
+      }
+    } else {
+      stop("The dataname supplied does not exist.")
+    }
   } else {
     lapply(
       get_datasets(x),

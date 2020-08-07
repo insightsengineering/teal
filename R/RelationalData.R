@@ -73,12 +73,16 @@ RelationalData <- R6::R6Class( #nolint
     #' @param dataname (\code{character} value)\cr
     #'
     #' @return \code{list} with all datasets and all connectors
-    get_all_datasets = function(dataname = NULL) {
+    get_items = function(dataname = NULL) {
       stopifnot(is.null(dataname) || is_character_single(dataname))
-      if (is.null(dataname)) {
-        private$datasets
+
+      if (is_character_single(dataname)) {
+        if (!(dataname %in% self$get_datanames())) {
+          stop(paste("dataset", dataname, "not found"))
+        }
+        return(private$datasets[[dataname]])
       } else {
-        private$datasets[[dataname]]
+        return(private$datasets)
       }
     },
     #' @description
@@ -149,29 +153,42 @@ RelationalData <- R6::R6Class( #nolint
           stop(paste("dataset", dataname, "not found"))
         }
         return(self$get_datasets()[[dataname]])
+      } else {
+        return(self$get_datasets())
       }
-
-      return(self$get_datasets())
     },
     #' @description
     #' Get \code{list} of \code{RelationalDataset} objects.
     #'
     #' @return \code{list} of \code{RelationalDataset}.
     get_datasets = function() {
-
-      if (is.null(private$code)) {
-        private$datasets
+      if (is_empty(private$code$get_code(deparse = FALSE))) {
+        res <- ulapply(
+          private$datasets,
+          function(x) {
+            if (is_pulled(x)) {
+              get_datasets(x)
+            } else {
+              NULL
+            }
+          }
+        )
+        return(if_not_null(res, setNames(res, vapply(res, get_dataname, character(1)))))
       } else {
+        if (!self$is_pulled()) {
+          stop("Data was mutated but not every dataset has been pulled. Please pull first in order to apply mutation.")
+        }
+
         # have to evaluate post-processing code (i.e. private$code) before returning dataset
         new_env <- new.env(parent = parent.env(globalenv()))
-        for (dataset in private$datasets) {
-          assign(dataset$get_dataname(), get_raw_data(dataset), envir = new_env)
+        for (dataset in self$get_items()) {
+          assign(get_dataname(dataset), get_raw_data(dataset), envir = new_env)
         }
 
         private$code$eval(envir = new_env)
 
-        lapply(
-          private$datasets,
+        res <- sapply(
+          self$get_items(),
           function(x) {
             x_name <- x$get_dataname()
             relational_dataset(
@@ -181,8 +198,12 @@ RelationalData <- R6::R6Class( #nolint
               code = x$get_code(),
               label = x$get_dataset_label()
             )
-          }
+          },
+          USE.NAMES = TRUE,
+          simplify = FALSE
         )
+
+        return(res)
       }
     },
     #' @description
@@ -215,9 +236,9 @@ RelationalData <- R6::R6Class( #nolint
     ## __Private Methods ====
     check_combined_code = function() {
       execution_environment <- new.env(parent = parent.env(globalenv()))
-      eval(parse(text = self$get_code()), execution_environment)
+      self$get_code_class()$eval(envir = execution_environment)
       lapply(
-        self$get_all_datasets(),
+        self$get_datasets(),
         function(dataset) {
 
           is_identical <- identical(

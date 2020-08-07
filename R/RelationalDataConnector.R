@@ -43,7 +43,7 @@
 RelationalDataConnector <- R6::R6Class( #nolint
   classname = "RelationalDataConnector",
   inherit = RelationalData,
-  # ..public ------
+  ## __Public Methods ====
   public = list(
     #' @description
     #' Create a new \code{RelationalDataConnector} object
@@ -70,57 +70,6 @@ RelationalDataConnector <- R6::R6Class( #nolint
       private$code <- CodeClass$new()
 
       invisible(self)
-    },
-    #' Get pulled \code{RelationalDataset} objects
-    #'
-    #' @return \code{list} \code{RelationalDataset(s)} named by dataname.
-    get_datasets = function() {
-
-      if (is.null(private$code)) {
-        sapply(private$datasets, get_dataset, USE.NAMES = TRUE, simplify = FALSE)
-      } else {
-        # have to evaluate post-processing code (i.e. private$code) before returning dataset
-        new_env <- new.env(parent = parent.env(globalenv()))
-        for (dataset in private$datasets) {
-          assign(dataset$get_dataname(), get_raw_data(dataset), envir = new_env)
-        }
-        private$code$eval(envir = new_env)
-        lapply(
-          private$datasets,
-          function(x) {
-            x_name <- x$get_dataname()
-            relational_dataset(
-              dataname = x_name,
-              x = get(x_name, new_env),
-              keys = x$get_keys(),
-              code = x$get_code(),
-              label = x$get_dataset_label()
-            )
-          }
-        )
-      }
-    },
-    #' @description
-    #' Get \code{RelationalDataset} object.
-    #' @param dataname (\code{character} value)\cr
-    #'   name of dataset to be returned.
-    #'
-    #' @return \code{RelationalDataset}.
-    get_dataset = function(dataname) {
-      stopifnot(is_character_single(dataname))
-
-      if (!(dataname %in% self$get_datanames())) {
-        stop(paste("dataset", dataname, "not found"))
-      }
-
-      res <- Filter(function(x) get_dataname(x) == dataname, self$get_datasets())
-      return(res[[1]])
-    },
-    #' Get \code{RelationalDatasetConnector} objects
-    #'
-    #' @return \code{list} \code{RelationalDatasetConnector(s)} named by dataname.
-    get_dataset_connectors = function() {
-      private$datasets
     },
     #' @description
     #' Get internal \code{CodeClass} object
@@ -346,14 +295,12 @@ RelationalDataConnector <- R6::R6Class( #nolint
       }
     }
   ),
-  # ..private ------
+  ## __Private Fields ====
   private = list(
-    # ....fields ----
-    datasets = NULL,
     server = NULL,
     ui = NULL,
     connection = NULL,
-    # ....methods ----
+    ## __Private Methods ====
 
     # adds open/close connection code at beginning/end of the dataset code
     append_connection_code = function() {

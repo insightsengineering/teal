@@ -482,16 +482,16 @@ test_that("rice_dataset", {
   )
 
   expect_equal(
-    x$get_dataset_connectors()[[1]],
+    x$get_items()[[1]],
     rice_dataset_connector("ADSL", "/path/to/ADSL", keys = get_cdisc_keys("ADSL"))
   )
   expect_equal(
-    x$get_dataset_connectors()[[2]],
+    x$get_items()[[2]],
     rice_cdisc_dataset_connector("ADLB", "/path/to/ADLB")
   )
 
   expect_identical(
-    x$get_dataset_connectors()[[1]]$get_code(),
+    x$get_items()[[1]]$get_code(),
     "ADSL <- rice::rice_read(node = \"/path/to/ADSL\", prolong = TRUE, quiet = TRUE)"
   )
 

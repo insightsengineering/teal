@@ -47,12 +47,12 @@ test_that("Basic example - check overall code", {
   expect_error(
     cdisc_data(
       cdisc_dataset("ADSL", ADSL, code = "ADSL <- radsl(cached = TRUE)"),
-      dataset("ARG1", ARG1, keys = get_cdisc_keys("ADSL"), code = "ARG1 <- radsl(cached = TRUE)"),
-      dataset("ARG2", ARG2, keys = get_cdisc_keys("ADSL"), code = "ARG2 <- radsl(cached = TRUE)"),
-      code = "ARG1$x1 <- 1; ARG2x2 <- 2",
+      dataset("ARG1", ADSL %>% dplyr::mutate(x1 = 1),
+              keys = get_cdisc_keys("ADSL"), code = "ARG1 <- radsl(cached = TRUE)"),
+      dataset("ARG2", ADSL, keys = get_cdisc_keys("ADSL"), code = "ARG2 <- radsl(cached = TRUE)"),
       check = TRUE
     ),
-    "code doesn't reproduce 'ARG1' correctly"
+    "Reproducibility check failed."
   )
 })
 

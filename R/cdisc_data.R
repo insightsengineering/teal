@@ -500,7 +500,7 @@ cdisc_data <- function(...,
     stop(msg)
   }
 
-  datasets_keys <- lapply(x$get_all_datasets(), function(x) x$get_keys())
+  datasets_keys <- lapply(x$get_items(), function(x) x$get_keys())
   check_foreign_keys(datasets_keys)
 
   if (check && is_pulled(x)) {

@@ -25,7 +25,7 @@
 #' tc$get_datanames()
 #' tc$get_datasets()
 #' tc$get_dataset("ADAE")
-#' tc$get_all_datasets()
+#' tc$get_items()
 #' tc$get_code()
 #' tc$get_code("ADAE")
 #' \dontrun{
@@ -100,11 +100,9 @@ RelationalDataList <- R6::R6Class( # nolint
     #' Derive the names of all datasets
     #' @return \code{character} vector with names
     get_datanames = function() {
-      datasets_names <- lapply(
-        private$datasets, get_dataname
-      )
+      datasets_names <- ulapply(private$datasets, get_dataname)
 
-      return(unlist(datasets_names))
+      return(datasets_names)
     },
     #' @description
     #'
@@ -120,34 +118,6 @@ RelationalDataList <- R6::R6Class( # nolint
         private$ui(id)
       }
     },
-    #' Get dataset connectors.
-    #'
-    #' @return \code{list} with all \code{RelationalDatasetConnector} objects.
-    get_dataset_connectors = function() {
-      res <- Filter(
-        function(x) {
-          is(object = x, class2 = "RelationalDatasetConnector")
-        },
-        private$datasets
-      )
-
-      if (!is.null(res)) {
-        names(res) <- vapply(res, get_dataname, character(1))
-      }
-      return(res)
-    },
-    #' Get data connectors.
-    #'
-    #' @return \code{list} with all \code{RelationalDataConnector} objects.
-    get_data_connectors = function() {
-      res <- Filter(
-        function(x) {
-          is(object = x, class2 = "RelationalDataConnector")
-        },
-        private$datasets
-      )
-      return(res)
-    },
     #' Get data connectors.
     #'
     #' @return \code{list} with all \code{RelationalDataConnector} objects.
@@ -160,18 +130,6 @@ RelationalDataList <- R6::R6Class( # nolint
       ))
     },
     #' @description
-    #' Get \code{list} of \code{RelationalDataset} objects.
-    #' @return \code{list} of \code{RelationalDataset}.
-    get_datasets = function() {
-      datasets <- ulapply(private$datasets, function(x) if (x$is_pulled()) get_datasets(x) else NULL)
-      res <- Filter(Negate(is.null), datasets)
-
-      if (!is.null(res)) {
-        names(res) <- vapply(res, get_dataname, character(1))
-      }
-      return(res)
-    },
-    #' @description
     #'
     #' @description
     #' Get all datasets and all dataset connectors
@@ -180,24 +138,27 @@ RelationalDataList <- R6::R6Class( # nolint
     #' @param dataname (\code{character} value)\cr
     #'
     #' @return \code{list} with all datasets and all connectors
-    get_all_datasets = function(dataname = NULL) {
+    get_items = function(dataname = NULL) {
       stopifnot(is.null(dataname) || is_character_single(dataname))
+
       get_sets <- function(x) {
-        if (is(object = x, class2 = "RelationalDataConnector")) {
-          x$get_dataset_connectors()
-        } else if (is(object = x, class2 = "RelationalData")) {
-          get_datasets(x)
+        if (is(object = x, class2 = "RelationalData")) {
+          x$get_items()
         } else {
           x
         }
       }
-      sets_list <- lapply(private$datasets, get_sets)
-      sets <- unlist(sets_list)
+
+      sets <- ulapply(private$datasets, get_sets)
       names(sets) <- vapply(sets, get_dataname, character(1))
-      if (is.null(dataname)) {
-        return(sets)
+
+      if (is_character_single(dataname)) {
+        if (!(dataname %in% self$get_datanames())) {
+          stop(paste("dataset", dataname, "not found"))
+        }
+        return(sets[[dataname]])
       } else {
-        sets[[dataname]]
+        return(sets)
       }
     },
     #' @description
@@ -327,7 +288,7 @@ RelationalDataList <- R6::R6Class( # nolint
               callModule(dc$get_server(),
                          id = paste0(dc$get_datanames(), collapse = "_"),
                          connection = dc$get_connection(),
-                         connectors = dc$get_dataset_connectors()
+                         connectors = dc$get_items()
               )
 
             } else if (is(dc, class2 = "RelationalDatasetConnector")) {

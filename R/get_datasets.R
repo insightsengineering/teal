@@ -53,7 +53,7 @@ get_datasets.RelationalData <- function(x) {
 #' @export
 #' @examples
 #'
-#' # RelationalDatasetConnector --------
+#' # RawDatasetConnector --------
 #' library(random.cdisc.data)
 #' rdc <- rcd_cdisc_dataset_connector("ADSL", radsl, cached = TRUE)
 #'
@@ -73,9 +73,9 @@ get_datasets.RawDatasetConnector <- function(x) { # nolint
 #' @export
 #' @examples
 #'
-#' # RelationalDataset --------
+#' # RawDataset --------
 #' library(random.cdisc.data)
-#' adsl <- cdisc_dataset(dataname = "ADSL", # RelationalDataset
+#' adsl <- cdisc_dataset(dataname = "ADSL",
 #'                       data = radsl(cached = TRUE),
 #'                       code = "library(random.cdisc.data)\nADSL <- radsl(cached = TRUE)")
 #'

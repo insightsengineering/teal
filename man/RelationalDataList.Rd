@@ -28,7 +28,7 @@ tc <- teal:::RelationalDataList$new(x, x2, x3, x4)
 tc$get_datanames()
 tc$get_datasets()
 tc$get_dataset("ADAE")
-tc$get_all_datasets()
+tc$get_items()
 tc$get_code()
 tc$get_code("ADAE")
 \dontrun{
@@ -64,11 +64,8 @@ get_raw_data(tc)
 \item \href{#method-new}{\code{RelationalDataList$new()}}
 \item \href{#method-get_datanames}{\code{RelationalDataList$get_datanames()}}
 \item \href{#method-get_ui}{\code{RelationalDataList$get_ui()}}
-\item \href{#method-get_dataset_connectors}{\code{RelationalDataList$get_dataset_connectors()}}
-\item \href{#method-get_data_connectors}{\code{RelationalDataList$get_data_connectors()}}
 \item \href{#method-get_connectors}{\code{RelationalDataList$get_connectors()}}
-\item \href{#method-get_datasets}{\code{RelationalDataList$get_datasets()}}
-\item \href{#method-get_all_datasets}{\code{RelationalDataList$get_all_datasets()}}
+\item \href{#method-get_items}{\code{RelationalDataList$get_items()}}
 \item \href{#method-get_server}{\code{RelationalDataList$get_server()}}
 \item \href{#method-launch}{\code{RelationalDataList$launch()}}
 \item \href{#method-clone}{\code{RelationalDataList$clone()}}
@@ -81,6 +78,7 @@ get_raw_data(tc)
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="RelationalData" data-id="get_code">}\href{../../teal/html/RelationalData.html#method-get_code}{\code{teal::RelationalData$get_code()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="RelationalData" data-id="get_code_class">}\href{../../teal/html/RelationalData.html#method-get_code_class}{\code{teal::RelationalData$get_code_class()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="RelationalData" data-id="get_dataset">}\href{../../teal/html/RelationalData.html#method-get_dataset}{\code{teal::RelationalData$get_dataset()}}\out{</span>}
+\item \out{<span class="pkg-link" data-pkg="teal" data-topic="RelationalData" data-id="get_datasets">}\href{../../teal/html/RelationalData.html#method-get_datasets}{\code{teal::RelationalData$get_datasets()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="RelationalData" data-id="is_pulled">}\href{../../teal/html/RelationalData.html#method-is_pulled}{\code{teal::RelationalData$is_pulled()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="RelationalData" data-id="mutate">}\href{../../teal/html/RelationalData.html#method-mutate}{\code{teal::RelationalData$mutate()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="RelationalData" data-id="set_check">}\href{../../teal/html/RelationalData.html#method-set_check}{\code{teal::RelationalData$set_check()}}\out{</span>}
@@ -133,30 +131,6 @@ derive \code{RelationalDataConnector} object's data
 }
 \subsection{Returns}{
 the \code{shiny} \code{ui} function
-Get dataset connectors.
-}
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-get_dataset_connectors"></a>}}
-\subsection{Method \code{get_dataset_connectors()}}{
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{RelationalDataList$get_dataset_connectors()}\if{html}{\out{</div>}}
-}
-
-\subsection{Returns}{
-\code{list} with all \code{RelationalDatasetConnector} objects.
-Get data connectors.
-}
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-get_data_connectors"></a>}}
-\subsection{Method \code{get_data_connectors()}}{
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{RelationalDataList$get_data_connectors()}\if{html}{\out{</div>}}
-}
-
-\subsection{Returns}{
-\code{list} with all \code{RelationalDataConnector} objects.
 Get data connectors.
 }
 }
@@ -172,20 +146,8 @@ Get data connectors.
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-get_datasets"></a>}}
-\subsection{Method \code{get_datasets()}}{
-Get \code{list} of \code{RelationalDataset} objects.
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{RelationalDataList$get_datasets()}\if{html}{\out{</div>}}
-}
-
-\subsection{Returns}{
-\code{list} of \code{RelationalDataset}.
-}
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-get_all_datasets"></a>}}
-\subsection{Method \code{get_all_datasets()}}{
+\if{html}{\out{<a id="method-get_items"></a>}}
+\subsection{Method \code{get_items()}}{
 
 
 
@@ -193,7 +155,7 @@ Get all datasets and all dataset connectors
 
   name of dataset connector to be returned. If \code{NULL}, all connectors are returned.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{RelationalDataList$get_all_datasets(dataname = NULL)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{RelationalDataList$get_items(dataname = NULL)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{

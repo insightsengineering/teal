@@ -56,7 +56,7 @@ drc <- cdisc_data(rdc, adae)
 
 get_datasets(drc)
 
-# RelationalDatasetConnector --------
+# RawDatasetConnector --------
 library(random.cdisc.data)
 rdc <- rcd_cdisc_dataset_connector("ADSL", radsl, cached = TRUE)
 
@@ -65,9 +65,9 @@ load_datasets(rdc)
 get_datasets(rdc)
 }
 
-# RelationalDataset --------
+# RawDataset --------
 library(random.cdisc.data)
-adsl <- cdisc_dataset(dataname = "ADSL", # RelationalDataset
+adsl <- cdisc_dataset(dataname = "ADSL",
                       data = radsl(cached = TRUE),
                       code = "library(random.cdisc.data)\nADSL <- radsl(cached = TRUE)")
 

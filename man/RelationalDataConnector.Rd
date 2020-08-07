@@ -46,9 +46,6 @@ x$get_datasets()
 \subsection{Public methods}{
 \itemize{
 \item \href{#method-new}{\code{RelationalDataConnector$new()}}
-\item \href{#method-get_datasets}{\code{RelationalDataConnector$get_datasets()}}
-\item \href{#method-get_dataset}{\code{RelationalDataConnector$get_dataset()}}
-\item \href{#method-get_dataset_connectors}{\code{RelationalDataConnector$get_dataset_connectors()}}
 \item \href{#method-get_code_class}{\code{RelationalDataConnector$get_code_class()}}
 \item \href{#method-get_connection}{\code{RelationalDataConnector$get_connection()}}
 \item \href{#method-get_server}{\code{RelationalDataConnector$get_server()}}
@@ -66,9 +63,11 @@ x$get_datasets()
 \out{<details ><summary>Inherited methods</summary>}
 \itemize{
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="RelationalData" data-id="check">}\href{../../teal/html/RelationalData.html#method-check}{\code{teal::RelationalData$check()}}\out{</span>}
-\item \out{<span class="pkg-link" data-pkg="teal" data-topic="RelationalData" data-id="get_all_datasets">}\href{../../teal/html/RelationalData.html#method-get_all_datasets}{\code{teal::RelationalData$get_all_datasets()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="RelationalData" data-id="get_code">}\href{../../teal/html/RelationalData.html#method-get_code}{\code{teal::RelationalData$get_code()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="RelationalData" data-id="get_datanames">}\href{../../teal/html/RelationalData.html#method-get_datanames}{\code{teal::RelationalData$get_datanames()}}\out{</span>}
+\item \out{<span class="pkg-link" data-pkg="teal" data-topic="RelationalData" data-id="get_dataset">}\href{../../teal/html/RelationalData.html#method-get_dataset}{\code{teal::RelationalData$get_dataset()}}\out{</span>}
+\item \out{<span class="pkg-link" data-pkg="teal" data-topic="RelationalData" data-id="get_datasets">}\href{../../teal/html/RelationalData.html#method-get_datasets}{\code{teal::RelationalData$get_datasets()}}\out{</span>}
+\item \out{<span class="pkg-link" data-pkg="teal" data-topic="RelationalData" data-id="get_items">}\href{../../teal/html/RelationalData.html#method-get_items}{\code{teal::RelationalData$get_items()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="RelationalData" data-id="mutate">}\href{../../teal/html/RelationalData.html#method-mutate}{\code{teal::RelationalData$mutate()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="RelationalData" data-id="set_check">}\href{../../teal/html/RelationalData.html#method-set_check}{\code{teal::RelationalData$set_check()}}\out{</span>}
 }
@@ -93,50 +92,6 @@ Create a new \code{RelationalDataConnector} object
 }
 \subsection{Returns}{
 new \code{RelationalDataConnector} object
-Get pulled \code{RelationalDataset} objects
-}
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-get_datasets"></a>}}
-\subsection{Method \code{get_datasets()}}{
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{RelationalDataConnector$get_datasets()}\if{html}{\out{</div>}}
-}
-
-\subsection{Returns}{
-\code{list} \code{RelationalDataset(s)} named by dataname.
-}
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-get_dataset"></a>}}
-\subsection{Method \code{get_dataset()}}{
-Get \code{RelationalDataset} object.
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{RelationalDataConnector$get_dataset(dataname)}\if{html}{\out{</div>}}
-}
-
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{dataname}}{(\code{character} value)\cr
-name of dataset to be returned.}
-}
-\if{html}{\out{</div>}}
-}
-\subsection{Returns}{
-\code{RelationalDataset}.
-Get \code{RelationalDatasetConnector} objects
-}
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-get_dataset_connectors"></a>}}
-\subsection{Method \code{get_dataset_connectors()}}{
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{RelationalDataConnector$get_dataset_connectors()}\if{html}{\out{</div>}}
-}
-
-\subsection{Returns}{
-\code{list} \code{RelationalDatasetConnector(s)} named by dataname.
 }
 }
 \if{html}{\out{<hr>}}

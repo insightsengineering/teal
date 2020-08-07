@@ -32,7 +32,7 @@ rd <- teal:::RelationalData$new(x, x2)
 \itemize{
 \item \href{#method-new}{\code{RelationalData$new()}}
 \item \href{#method-check}{\code{RelationalData$check()}}
-\item \href{#method-get_all_datasets}{\code{RelationalData$get_all_datasets()}}
+\item \href{#method-get_items}{\code{RelationalData$get_items()}}
 \item \href{#method-get_datanames}{\code{RelationalData$get_datanames()}}
 \item \href{#method-get_code}{\code{RelationalData$get_code()}}
 \item \href{#method-get_code_class}{\code{RelationalData$get_code_class()}}
@@ -79,13 +79,13 @@ Check if the object raw data is reproducible from the \code{get_code()} code.
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-get_all_datasets"></a>}}
-\subsection{Method \code{get_all_datasets()}}{
+\if{html}{\out{<a id="method-get_items"></a>}}
+\subsection{Method \code{get_items()}}{
 Get all datasets and all dataset connectors
 
   name of dataset connector to be returned. If \code{NULL}, all connectors are returned.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{RelationalData$get_all_datasets(dataname = NULL)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{RelationalData$get_items(dataname = NULL)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
