@@ -130,7 +130,7 @@ choices_labeled <- function(choices, labels, subset = NULL, types = NULL) {
 #'   return(names(data)[idx])
 #' })
 variable_choices <- function(data, subset = NULL, fill = FALSE) {
-  stopifnot(is.null(subset) || is_character_vector(subset, min_length = 0) || is.function(subset))
+  stopifnot(is.null(subset) || is_character_vector(subset, min_length = 1L) || is.function(subset))
   stopifnot(is_logical_single(fill))
 
   UseMethod("variable_choices")
@@ -153,7 +153,6 @@ variable_choices.data.frame <- function(data, subset = NULL, fill = FALSE) { # n
     subset <- resolve_delayed_expr(subset, ds = data, is_value_choices = FALSE)
   }
 
-  stopifnot(is_character_vector(subset))
   stopifnot(all(subset %in% c("", names(data))))
 
   if (any(duplicated(subset))) {

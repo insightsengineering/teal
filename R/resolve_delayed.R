@@ -199,13 +199,15 @@ resolve_delayed_expr <- function(x, ds, is_value_choices) {
   # check returned value
   if (is_value_choices) {
     if (!is.atomic(res) || anyDuplicated(res)) {
-      stop(paste("Function", pdeparse(quote(x)), "must return a vector",
-                 "giving unique values from the respective columns of the dataset."))
+      stop(paste("The following function must return a vector with unique values",
+                 "from the respective columns of the dataset.\n\n",
+                 pdeparse(bquote(.(x)))))
     }
   } else {
-    if (!is.character(res) || length(res) > ncol(ds) || anyDuplicated(res)) {
-      stop(paste("Function", pdeparse(quote(x)), "must return a character vector",
-                 "giving unique names of the available columns of the dataset."))
+    if (!is_character_vector(res) || length(res) > ncol(ds) || anyDuplicated(res)) {
+      stop(paste("The following function must return a character vector of at least length 1",
+                 "with unique names from the available columns of the dataset:\n\n",
+                 pdeparse(bquote(.(x)))))
     }
   }
 
