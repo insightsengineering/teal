@@ -33,7 +33,8 @@ ui_teal_with_splash <- function(id,
   # This has the benefit that when filtering the data takes a lot of time initially, the
   # Shiny app does not time out.
   splash_ui <- if (is_pulled_data) {
-    h1("The teal app is starting up.")
+    # blank ui if data is already pulled
+    div()
   } else {
     message("App was initialized with delayed data loading.")
     data$get_ui(ns("startapp_module"))

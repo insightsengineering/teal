@@ -308,7 +308,7 @@ RelationalDataList <- R6::R6Class( # nolint
                       )
                     }
                   ),
-                actionButton(inputId = ns("submit"), label = "submit all")
+                actionButton(inputId = ns("submit"), label = "Submit all")
                 )
               )
             )

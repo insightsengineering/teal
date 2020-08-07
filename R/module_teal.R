@@ -211,7 +211,7 @@ srv_teal <- function(input, output, session, modules, raw_data, filter = list())
     # replace splash screen by teal UI
     .log("initialize modules and filter panel")
 
-    progress$set(0.7, message = "Replacing splash UI with main UI")
+    progress$set(0.7, message = "Setting up main UI")
     # main_ui_container contains splash screen first and we remove it and replace it by the real UI
     removeUI(sprintf("#%s:first-child", session$ns("main_ui_container")))
     insertUI(
