@@ -25,16 +25,16 @@ test_that("resolve_delayed_expr works correctly", {
   # function assumptions check
   # 2a) returning character unique vector of length <= ncol(ds)
   expect_error(resolve_delayed_expr(function(data) 1, ds = ADSL, is_value_choices = FALSE),
-               regexp = "must return a character vector giving unique names")
+               regexp = "must return a character vector of at least length 1 with unique names")
   expect_error(resolve_delayed_expr(function(data) c("a", "a"), ds = ADSL, is_value_choices = FALSE),
-               regexp = "must return a character vector giving unique names")
+               regexp = "must return a character vector of at least length 1 with unique names")
   expect_error(resolve_delayed_expr(function(data) c("a", "b"), ds = ADSL[1], is_value_choices = FALSE),
-               regexp = "must return a character vector giving unique names")
+               regexp = "must return a character vector of at least length 1 with unique names")
 
   # function assumptions check
   # 2b) returning unique vector
   expect_error(resolve_delayed_expr(function(data) c(1, 1), ds = ADSL, is_value_choices = TRUE),
-               regexp = "must return a vector giving unique values")
+               regexp = "must return a vector with unique values from the respective columns of the dataset")
 
   # function return value check
   expect_equal(resolve_delayed_expr(function(data) c("a", "b"), ds = ADSL, is_value_choices = FALSE),
