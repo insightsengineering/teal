@@ -504,27 +504,15 @@ cdisc_data <- function(...,
   check_foreign_keys(datasets_keys)
 
   if (check && is_pulled(x)) {
-    if (isFALSE(x$check())) {
+    x$check()
+    if (isFALSE(x$get_check_result())) {
       stop("Reproducibility check failed.")
     }
-  } else {
-    mutate_data(x, get_check_note_string())
   }
 
   return(x)
 }
 
-
-get_preprocessing_empty_string <- function() { # nousage # nolint
-  filename <- get_package_file("teal", "preprocessing_empty_string.txt") # nolint
-  readChar(filename, file.info(filename)$size)
-}
-
-
-get_check_note_string <- function() {
-  filename_check <- get_package_file("teal", "check_false_string.txt") # nolint
-  readChar(filename_check, file.info(filename_check)$size)
-}
 
 #' Load \code{cdisc_data} object from a file
 #'

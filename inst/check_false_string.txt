@@ -1,5 +1,0 @@
-## NOTE: Reproducibility of data import and preprocessing was not
-## explicitly checked (argument "check = FALSE" is set).
-## The app developer has the choice to check the reproducibility
-## and might have omitted this step for some reason. Please reach
-## out to the app developer for details.

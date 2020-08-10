@@ -32,6 +32,7 @@ rd <- teal:::RelationalData$new(x, x2)
 \itemize{
 \item \href{#method-new}{\code{RelationalData$new()}}
 \item \href{#method-check}{\code{RelationalData$check()}}
+\item \href{#method-get_check_result}{\code{RelationalData$get_check_result()}}
 \item \href{#method-get_items}{\code{RelationalData$get_items()}}
 \item \href{#method-get_datanames}{\code{RelationalData$get_datanames()}}
 \item \href{#method-get_code}{\code{RelationalData$get_code()}}
@@ -76,6 +77,18 @@ Check if the object raw data is reproducible from the \code{get_code()} code.
 \subsection{Returns}{
 \code{TRUE} if all the datasets generated from evaluating the
   \code{get_code()} code are identical to the raw data, else \code{FALSE}.
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-get_check_result"></a>}}
+\subsection{Method \code{get_check_result()}}{
+Get result of reproducibility check
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{RelationalData$get_check_result()}\if{html}{\out{</div>}}
+}
+
+\subsection{Returns}{
+\code{NULL} if check has not been called yet, \code{TRUE} / \code{FALSE} otherwise
 }
 }
 \if{html}{\out{<hr>}}

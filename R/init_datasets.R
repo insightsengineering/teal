@@ -12,6 +12,7 @@ set_datasets_data <- function(datasets, data) {
     datasets$set_data_attr(dataname, "keys", dataset$get_keys())
     datasets$set_data_attr(dataname, "column_labels", dataset$get_column_labels())
     datasets$set_data_attr(dataname, "data_label", dataset$get_dataset_label())
+    datasets$set_data_attr(dataname, "check", data$get_check_result())
   }
 
   return(invisible(NULL))

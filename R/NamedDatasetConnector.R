@@ -169,7 +169,7 @@ NamedDatasetConnector <- R6::R6Class( #nolint
           label = self$get_dataset_label()
         )
 
-        if (!is_empty(private$get_mutate_code_class()$get_code())) {
+        if (!is_empty(private$get_mutate_code_class()$code)) {
           private$dataset <- mutate_dataset(
             private$dataset,
             code = private$get_mutate_code_class()$get_code(deparse = TRUE),

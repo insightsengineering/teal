@@ -63,6 +63,7 @@ x$get_datasets()
 \out{<details ><summary>Inherited methods</summary>}
 \itemize{
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="RelationalData" data-id="check">}\href{../../teal/html/RelationalData.html#method-check}{\code{teal::RelationalData$check()}}\out{</span>}
+\item \out{<span class="pkg-link" data-pkg="teal" data-topic="RelationalData" data-id="get_check_result">}\href{../../teal/html/RelationalData.html#method-get_check_result}{\code{teal::RelationalData$get_check_result()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="RelationalData" data-id="get_code">}\href{../../teal/html/RelationalData.html#method-get_code}{\code{teal::RelationalData$get_code()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="RelationalData" data-id="get_datanames">}\href{../../teal/html/RelationalData.html#method-get_datanames}{\code{teal::RelationalData$get_datanames()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="RelationalData" data-id="get_dataset">}\href{../../teal/html/RelationalData.html#method-get_dataset}{\code{teal::RelationalData$get_dataset()}}\out{</span>}

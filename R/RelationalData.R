@@ -60,11 +60,19 @@ RelationalData <- R6::R6Class( #nolint
     #'   \code{get_code()} code are identical to the raw data, else \code{FALSE}.
     check = function() {
       # code can be put only to the mutate with empty code in datasets
-      if (!is_empty(private$code$code)) {
+      res <- if (!is_empty(private$code$code)) {
         private$check_combined_code()
       } else {
         all(vapply(private$datasets, function(x) x$check(), logical(1)))
       }
+      private$check_result <- res
+      return(res)
+    },
+    #' @description
+    #' Get result of reproducibility check
+    #' @return \code{NULL} if check has not been called yet, \code{TRUE} / \code{FALSE} otherwise
+    get_check_result = function() {
+      private$check_result
     },
     #' @description
     #' Get all datasets and all dataset connectors
@@ -136,6 +144,8 @@ RelationalData <- R6::R6Class( #nolint
       private$set_vars(vars)
       private$set_code(code)
 
+      private$check_result <- NULL
+
       return(invisible(self))
     },
     #' @description
@@ -162,7 +172,7 @@ RelationalData <- R6::R6Class( #nolint
     #'
     #' @return \code{list} of \code{RelationalDataset}.
     get_datasets = function() {
-      if (is_empty(private$code$get_code(deparse = FALSE))) {
+      if (is_empty(private$code$code)) {
         res <- ulapply(
           private$datasets,
           function(x) {
@@ -232,6 +242,7 @@ RelationalData <- R6::R6Class( #nolint
     code = NULL, # CodeClass after initialization
     mutate_vars = list(), # named list with vars used to mutate object
     .check = FALSE,
+    check_result = NULL, # TRUE / FALSE after calling check()
 
     ## __Private Methods ====
     check_combined_code = function() {

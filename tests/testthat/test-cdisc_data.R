@@ -1,10 +1,5 @@
 context("cdisc_data")
 
-filename <- system.file("preprocessing_empty_string.txt", package = "teal", mustWork = TRUE)
-code_empty <- readChar(filename, file.info(filename)$size) # code for file
-filename_check <- system.file("check_false_string.txt", package = "teal", mustWork = TRUE)
-code_check <- readChar(filename_check, file.info(filename_check)$size)
-
 library(random.cdisc.data)
 ADSL <- ARG1 <- ARG2 <- cadsl # nolint
 ADTTE <- cadtte # nolint
@@ -229,11 +224,11 @@ test_that("Empty code", {
 
   # missing code
   result <- cdisc_data(cdisc_dataset("ADSL", ADSL), check = FALSE)
-  expect_identical(get_code(result), code_check)
+  expect_identical(get_code(result), "")
 
   # empty code
   result <- cdisc_data(cdisc_dataset("ADSL", ADSL), code = "", check = FALSE)
-  expect_identical(get_code(result), code_check)
+  expect_identical(get_code(result), "")
 
   # NULL code
   expect_silent(cdisc_data(cdisc_dataset("ADSL", ADSL), code = NULL, check = FALSE))
