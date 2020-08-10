@@ -261,7 +261,8 @@ RelationalDataList <- R6::R6Class( # nolint
                               id = ns(paste0(x$get_datanames(), collapse = "_"))
                               ),
                             div(
-                              h4("Dataset Connector for: ", lapply(x$get_datanames(), code))
+                              h4("Dataset Connector for: ", lapply(x$get_datanames(), code)),
+                              p(icon("check"), "Ready to Load")
                               )
                             )
                           },
