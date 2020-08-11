@@ -12,14 +12,14 @@ teradata_connection(
 }
 \arguments{
 \item{open_args}{optional, named (\code{list}) of additional parameters for the connection's
-\code{rice::rice_session_open}. Please note that the \code{type} argument will be
-overwritten with \code{ODBC}.}
+\code{\link[RocheTeradata]{connect_teradata}} open function. Please note that the \code{type}
+argument will be overwritten with \code{ODBC}.}
 
 \item{close_args}{optional, named (\code{list}) of additional parameters for the connection's
-\code{rice::rice_session_close} close function.}
+\code{\link[DBI]{dbDisconnect}} close function.}
 
 \item{ping_args}{optional, named (\code{list}) of additional parameters for the connection's
-\code{rice::rice_session_active} ping function.}
+\code{\link[DBI]{dbIsValid}} ping function.}
 }
 \value{
 \code{DataConnection} type of object

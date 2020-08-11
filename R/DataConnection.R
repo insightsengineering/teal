@@ -461,7 +461,7 @@ DataConnection <- R6::R6Class( # nolint
 # DataConnection wrappers ----
 #' Open connection to \code{random.cdisc.data}
 #'
-#' @param open_args optional, named (\code{list}) of additional parameters for \code{library} open
+#' @param open_args optional, named (\code{list}) of additional parameters for \code{\link{library}} open
 #'   function such as \code{quietly}. Please note that the \code{package} argument will be overwritten
 #'   with \code{random.cdisc.data}.
 #'
@@ -499,13 +499,13 @@ rcd_connection <- function(open_args = list()) {
 #' Open connection to \code{rice}
 #'
 #' @param open_args optional, named (\code{list}) of additional parameters for the connection's
-#'   \code{rice::rice_session_open}. Please note that the \code{password} argument will be
+#'   \code{\link[rice]{rice_session_open}} open function. Please note that the \code{password} argument will be
 #'   overwritten with \code{askpass::askpass}.
 #' @param close_args optional, named (\code{list}) of additional parameters for the connection's
-#'   \code{rice::rice_session_close} close function. Please note that the \code{message} argument
+#'   \code{\link[rice]{rice_session_close}} close function. Please note that the \code{message} argument
 #'   will be overwritten with \code{FALSE}.
 #' @param ping_args optional, named (\code{list}) of additional parameters for the connection's
-#'   \code{rice::rice_session_active} ping function.
+#'   \code{\link[rice]{rice_session_active}} ping function.
 #'
 #' @return \code{DataConnection} type of object
 #'
@@ -591,12 +591,12 @@ rice_connection <- function(open_args = list(), close_args = list(), ping_args =
 #' Open connection to \code{Teradata}
 #'
 #' @param open_args optional, named (\code{list}) of additional parameters for the connection's
-#'   \code{rice::rice_session_open}. Please note that the \code{type} argument will be
-#'   overwritten with \code{ODBC}.
+#'   \code{\link[RocheTeradata]{connect_teradata}} open function. Please note that the \code{type}
+#'   argument will be overwritten with \code{ODBC}.
 #' @param close_args optional, named (\code{list}) of additional parameters for the connection's
-#'   \code{rice::rice_session_close} close function.
+#'   \code{\link[DBI]{dbDisconnect}} close function.
 #' @param ping_args optional, named (\code{list}) of additional parameters for the connection's
-#'   \code{rice::rice_session_active} ping function.
+#'   \code{\link[DBI]{dbIsValid}} ping function.
 #'
 #' @return \code{DataConnection} type of object
 #'

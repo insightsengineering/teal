@@ -8,15 +8,15 @@ rice_connection(open_args = list(), close_args = list(), ping_args = list())
 }
 \arguments{
 \item{open_args}{optional, named (\code{list}) of additional parameters for the connection's
-\code{rice::rice_session_open}. Please note that the \code{password} argument will be
+\code{\link[rice]{rice_session_open}} open function. Please note that the \code{password} argument will be
 overwritten with \code{askpass::askpass}.}
 
 \item{close_args}{optional, named (\code{list}) of additional parameters for the connection's
-\code{rice::rice_session_close} close function. Please note that the \code{message} argument
+\code{\link[rice]{rice_session_close}} close function. Please note that the \code{message} argument
 will be overwritten with \code{FALSE}.}
 
 \item{ping_args}{optional, named (\code{list}) of additional parameters for the connection's
-\code{rice::rice_session_active} ping function.}
+\code{\link[rice]{rice_session_active}} ping function.}
 }
 \value{
 \code{DataConnection} type of object
