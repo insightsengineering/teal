@@ -17,6 +17,7 @@ load_dataset <- function(x, ...) {
 
 #' @rdname load_dataset
 #' @examples
+#'
 #' # RawDataset --------
 #' library(random.cdisc.data)
 #' ADSL <- radsl(cached = TRUE)
@@ -30,6 +31,7 @@ load_dataset.RawDataset <- function(x, ...) { # nolint
 
 #' @rdname load_dataset
 #' @examples
+#'
 #' # RawDatasetConnector --------
 #' library(random.cdisc.data)
 #' adsl <- rcd_cdisc_dataset_connector("ADSL", fun = radsl, cached = TRUE)
@@ -45,21 +47,28 @@ load_dataset.RawDatasetConnector <- function(x, args = NULL, try = FALSE, ...) {
 }
 
 #' Load datasets
-#' @param x (\code{object}) of class\link{RawDatasetConnector} or \link{NamedDataset}. If of
-#'   class \code{character} will be treated as file to read.
+#' @param x (\code{object} of class \code{\link{RelationalData}}, \code{\link{RawDataset}} or
+#'  \code{\link{RawDatasetConnector}})
 #' @param args (\code{NULL} or named \code{list})\cr
-#'   additional dynamic arguments passed to function which loads the data.
-#' @param try (\code{logical}) whether perform function evaluation inside \code{try} clause
-#' @param ... not used, only for support of S3
+#'   additional dynamic arguments passed to function which loads the data. Applicable only on
+#'   \code{\link{RawDatasetConnector}})
+#' @param try (\code{logical})\cr
+#'   whether perform function evaluation inside \code{try} clause. Applicable only on
+#'   \code{\link{RawDatasetConnector}})
+#' @param ... (not used)\cr
+#'  only for support of S3
 #'
 #' @export
-#' @return object of the same class as \code{x}
-load_datasets <- function(x, ...) {
+#' @return If executed in the interactive session shiny app is opened to load the data. If executed in
+#'  shiny application - it returns shiny server module.
+load_datasets <- function(x) {
   UseMethod("load_datasets")
 }
 
 #' @rdname load_datasets
 #' @examples
+#'
+#' # RawDataset ------
 #' library(random.cdisc.data)
 #' ADSL <- radsl(cached = TRUE)
 #' ADSL_dataset <- raw_dataset(x = ADSL)
@@ -72,6 +81,8 @@ load_datasets.RawDataset <- function(x, ...) { # nolint
 
 #' @rdname load_datasets
 #' @examples
+#'
+#' # RawDatasetConnector ------
 #' library(random.cdisc.data)
 #' adsl <- rcd_cdisc_dataset_connector("ADSL", fun = radsl, cached = TRUE)
 #' load_datasets(adsl)
