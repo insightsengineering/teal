@@ -2,15 +2,20 @@
 % Please edit documentation in R/load_data.R
 \name{load_dataset}
 \alias{load_dataset}
+\alias{load_dataset.RawDataset}
 \alias{load_dataset.RawDatasetConnector}
 \title{Load data from connection}
 \usage{
-load_dataset(x, args, try)
+load_dataset(x, ...)
 
-\method{load_dataset}{RawDatasetConnector}(x, args = NULL, try = FALSE)
+\method{load_dataset}{RawDataset}(x, ...)
+
+\method{load_dataset}{RawDatasetConnector}(x, args = NULL, try = FALSE, ...)
 }
 \arguments{
-\item{x}{(\code{RawDatasetConnector} or \code{RelationalDatasetConnection})}
+\item{x}{(\code{RawDatasetConnector} or \code{RawDataset})}
+
+\item{...}{not used, only for support of S3}
 
 \item{args}{(\code{NULL} or named \code{list})\cr
 additional dynamic arguments passed to function which loads the data.}
@@ -22,9 +27,16 @@ additional dynamic arguments passed to function which loads the data.}
 }
 \description{
 Load data from connection. Function used on \link{RawDatasetConnector} and
-\link{RelationalDatasetConnector} to obtain data from connection.
+\link{RawDataset} to obtain data from connection.
 }
 \examples{
+# RawDataset --------
+library(random.cdisc.data)
+ADSL <- radsl(cached = TRUE)
+ADSL_dataset <- raw_dataset(x = ADSL)
+
+load_dataset(ADSL_dataset)
+# RawDatasetConnector --------
 library(random.cdisc.data)
 adsl <- rcd_cdisc_dataset_connector("ADSL", fun = radsl, cached = TRUE)
 load_dataset(adsl)

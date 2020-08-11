@@ -162,7 +162,9 @@ RelationalData <- R6::R6Class( #nolint
         if (!(dataname %in% self$get_datanames())) {
           stop(paste("dataset", dataname, "not found"))
         }
-        return(self$get_datasets()[[dataname]])
+
+        res <- self$get_datasets()[[dataname]]
+        return(res)
       } else {
         return(self$get_datasets())
       }
@@ -172,6 +174,12 @@ RelationalData <- R6::R6Class( #nolint
     #'
     #' @return \code{list} of \code{RelationalDataset}.
     get_datasets = function() {
+
+      if (!self$is_pulled()) {
+        stop("Not all datasets have been pulled yet.\n",
+        "- Please use `load_datasets()` to retrieve complete results.")
+      }
+
       if (is_empty(private$code$code)) {
         res <- ulapply(
           private$datasets,

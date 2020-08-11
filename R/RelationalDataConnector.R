@@ -282,17 +282,6 @@ RelationalDataConnector <- R6::R6Class( #nolint
       }
 
       return(invisible(NULL))
-    },
-    #' @description
-    #' Check if dataset has already been pulled.
-    #'
-    #' @return \code{TRUE} if connector has been already pulled, else \code{FALSE}.
-    is_pulled = function() {
-      if (!is.null(private$datasets)) {
-        all(vapply(private$datasets, is_pulled, logical(1)))
-      } else {
-        return(FALSE)
-      }
     }
   ),
   ## __Private Fields ====

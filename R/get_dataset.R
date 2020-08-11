@@ -68,8 +68,8 @@ get_dataset.RawDataset <- function(x, dataname = NULL) { # nolint
 #'   rcd_cdisc_dataset_connector("ADTTE", radtte, cached = TRUE)
 #' )
 #'
-#' get_dataset(rdc, dataname = "ADSL")
 #'\dontrun{
+#' get_dataset(rdc, dataname = "ADSL")
 #' load_datasets(rdc)
 #' get_datasets(rdc)
 #' get_dataset(rdc, dataname = "ADSL")
@@ -78,7 +78,9 @@ get_dataset.RawDataset <- function(x, dataname = NULL) { # nolint
 #' # RelationalDataList --------
 #' rdl <- cdisc_data(rdc, adae)
 #'
+#'\dontrun{
 #' get_dataset(rdl, "ADSL")
+#' }
 get_dataset.RelationalData <- function(x, dataname = NULL) { # nolint
   if (is.null(dataname)) {
     stop("To get singe dataset from 'RelationalData' one must specify the name of the dataset.

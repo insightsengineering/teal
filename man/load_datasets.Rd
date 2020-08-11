@@ -2,22 +2,35 @@
 % Please edit documentation in R/load_data.R
 \name{load_datasets}
 \alias{load_datasets}
+\alias{load_datasets.RawDataset}
+\alias{load_datasets.RawDatasetConnector}
 \alias{load_datasets.RelationalData}
 \alias{load_datasets.RelationalDataConnector}
 \alias{load_datasets.RelationalDataList}
 \title{Load datasets}
 \usage{
-load_datasets(x)
+load_datasets(x, ...)
 
-\method{load_datasets}{RelationalData}(x)
+\method{load_datasets}{RawDataset}(x, ...)
 
-\method{load_datasets}{RelationalDataConnector}(x)
+\method{load_datasets}{RawDatasetConnector}(x, args = NULL, try = FALSE, ...)
 
-\method{load_datasets}{RelationalDataList}(x)
+\method{load_datasets}{RelationalData}(x, ...)
+
+\method{load_datasets}{RelationalDataConnector}(x, ...)
+
+\method{load_datasets}{RelationalDataList}(x, ...)
 }
 \arguments{
 \item{x}{(\code{object}) of class\link{RawDatasetConnector} or \link{NamedDataset}. If of
 class \code{character} will be treated as file to read.}
+
+\item{...}{not used, only for support of S3}
+
+\item{args}{(\code{NULL} or named \code{list})\cr
+additional dynamic arguments passed to function which loads the data.}
+
+\item{try}{(\code{logical}) whether perform function evaluation inside \code{try} clause}
 }
 \value{
 object of the same class as \code{x}
@@ -26,6 +39,18 @@ object of the same class as \code{x}
 Load datasets
 }
 \examples{
+library(random.cdisc.data)
+ADSL <- radsl(cached = TRUE)
+ADSL_dataset <- raw_dataset(x = ADSL)
+
+load_datasets(ADSL_dataset)
+library(random.cdisc.data)
+adsl <- rcd_cdisc_dataset_connector("ADSL", fun = radsl, cached = TRUE)
+load_datasets(adsl)
+get_dataset(adsl)
+
+adrs <- rcd_cdisc_dataset_connector("ADRS", fun = radrs, ADSL = adsl)
+load_datasets(adrs)
 
 # RelationalData ------
 library(random.cdisc.data)
@@ -37,7 +62,7 @@ adtte <- cdisc_dataset(dataname = "ADTTE", # RelationalDataset
                        data = radtte(cached = TRUE),
                        code = "library(random.cdisc.data)\nADTTE <- radtte(cached = TRUE)")
 
-rd <- cdisc_data(adsl, adtte)
+rd <- teal:::RelationalData$new(adsl, adtte)
 
 \dontrun{
 # return a warning

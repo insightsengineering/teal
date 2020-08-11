@@ -55,7 +55,6 @@ x$get_datasets()
 \item \href{#method-pull}{\code{RelationalDataConnector$pull()}}
 \item \href{#method-set_ui}{\code{RelationalDataConnector$set_ui()}}
 \item \href{#method-set_server}{\code{RelationalDataConnector$set_server()}}
-\item \href{#method-is_pulled}{\code{RelationalDataConnector$is_pulled()}}
 \item \href{#method-clone}{\code{RelationalDataConnector$clone()}}
 }
 }
@@ -69,6 +68,7 @@ x$get_datasets()
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="RelationalData" data-id="get_dataset">}\href{../../teal/html/RelationalData.html#method-get_dataset}{\code{teal::RelationalData$get_dataset()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="RelationalData" data-id="get_datasets">}\href{../../teal/html/RelationalData.html#method-get_datasets}{\code{teal::RelationalData$get_datasets()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="RelationalData" data-id="get_items">}\href{../../teal/html/RelationalData.html#method-get_items}{\code{teal::RelationalData$get_items()}}\out{</span>}
+\item \out{<span class="pkg-link" data-pkg="teal" data-topic="RelationalData" data-id="is_pulled">}\href{../../teal/html/RelationalData.html#method-is_pulled}{\code{teal::RelationalData$is_pulled()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="RelationalData" data-id="mutate">}\href{../../teal/html/RelationalData.html#method-mutate}{\code{teal::RelationalData$mutate()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="RelationalData" data-id="set_check">}\href{../../teal/html/RelationalData.html#method-set_check}{\code{teal::RelationalData$set_check()}}\out{</span>}
 }
@@ -254,18 +254,6 @@ A shiny module server function that should load data from all connectors}
 }
 \subsection{Returns}{
 \code{NULL} or \code{self} if data is loaded.
-}
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-is_pulled"></a>}}
-\subsection{Method \code{is_pulled()}}{
-Check if dataset has already been pulled.
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{RelationalDataConnector$is_pulled()}\if{html}{\out{</div>}}
-}
-
-\subsection{Returns}{
-\code{TRUE} if connector has been already pulled, else \code{FALSE}.
 }
 }
 \if{html}{\out{<hr>}}
