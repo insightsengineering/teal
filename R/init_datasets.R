@@ -4,11 +4,10 @@ set_datasets_data <- function(datasets, data) {
 
   datasets$set_code(data$get_code_class())
 
-  for (dataname in data$get_datanames()) {
-    raw_dataset <- get_raw_data(data, dataname)
+  for (dataset in data$get_datasets()) {
+    dataname <- get_dataname(dataset)
+    raw_dataset <- get_raw_data(dataset)
     datasets$set_data(dataname, raw_dataset)
-
-    dataset <- get_dataset(data, dataname)
     datasets$set_data_attr(dataname, "keys", dataset$get_keys())
     datasets$set_data_attr(dataname, "column_labels", dataset$get_column_labels())
     datasets$set_data_attr(dataname, "data_label", dataset$get_dataset_label())
