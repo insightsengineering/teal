@@ -4,7 +4,6 @@
 \alias{is_pulled}
 \alias{is_pulled.RawDatasetConnector}
 \alias{is_pulled.RawDataset}
-\alias{is_pulled.RelationalDataConnector}
 \alias{is_pulled.RelationalData}
 \title{Is pulled}
 \usage{
@@ -14,8 +13,6 @@ is_pulled(x)
 
 \method{is_pulled}{RawDataset}(x)
 
-\method{is_pulled}{RelationalDataConnector}(x)
-
 \method{is_pulled}{RelationalData}(x)
 }
 \arguments{
@@ -23,7 +20,7 @@ is_pulled(x)
 \link{RelationalDatasetConnector}, or \link{RelationalDataConnector}.}
 }
 \value{
-\code{TRUE} if connector has been already pulled, else \code{FALSE}.
+(\code{logical}) \code{TRUE} if connector has been already pulled, else \code{FALSE}.
 }
 \description{
 S3 method to determine if dataset is pulled (loaded).
@@ -46,6 +43,26 @@ rel_data <- teal:::RelationalDataset$new(
 )
 
 is_pulled(rel_data)
+# RelationalData --------
+library(random.cdisc.data)
+x1 <- relational_dataset(
+  x = radsl(cached = TRUE),
+  dataname = "ADSL",
+  keys = get_cdisc_keys("ADSL"),
+  code = "ADSL <- radsl(cached = TRUE)",
+  label = "ADTTE dataset"
+)
+
+x2 <- relational_dataset(
+  x = radtte(cached = TRUE),
+  dataname = "ADTTE",
+  keys = get_cdisc_keys("ADTTE"),
+  code = "ADTTE <- radtte(cached = TRUE)",
+  label = "ADTTE dataset"
+)
+
+rd <- teal_data(x1, x2)
+is_pulled(rd)
 
 # RelationalDataConnector --------
 library(random.cdisc.data)

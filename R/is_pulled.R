@@ -4,7 +4,7 @@
 #' @param x (\code{object}) of class \link{RawDatasetConnector}, \link{RelationalDataset},
 #'   \link{RelationalDatasetConnector}, or \link{RelationalDataConnector}.
 #'
-#' @return \code{TRUE} if connector has been already pulled, else \code{FALSE}.
+#' @return (\code{logical}) \code{TRUE} if connector has been already pulled, else \code{FALSE}.
 #' @export
 is_pulled <- function(x) {
   UseMethod("is_pulled")
@@ -47,6 +47,26 @@ is_pulled.RawDataset <- function(x) {
 #' @export
 #'
 #' @examples
+#' # RelationalData --------
+#' library(random.cdisc.data)
+#' x1 <- relational_dataset(
+#'   x = radsl(cached = TRUE),
+#'   dataname = "ADSL",
+#'   keys = get_cdisc_keys("ADSL"),
+#'   code = "ADSL <- radsl(cached = TRUE)",
+#'   label = "ADTTE dataset"
+#' )
+#'
+#' x2 <- relational_dataset(
+#'   x = radtte(cached = TRUE),
+#'   dataname = "ADTTE",
+#'   keys = get_cdisc_keys("ADTTE"),
+#'   code = "ADTTE <- radtte(cached = TRUE)",
+#'   label = "ADTTE dataset"
+#' )
+#'
+#' rd <- teal_data(x1, x2)
+#' is_pulled(rd)
 #'
 #' # RelationalDataConnector --------
 #' library(random.cdisc.data)
@@ -60,12 +80,6 @@ is_pulled.RawDataset <- function(x) {
 #' load_datasets(rdc)
 #' is_pulled(rdc)
 #' }
-is_pulled.RelationalDataConnector <- function(x) { # nolint
-  return(x$is_pulled())
-}
-
-#' @rdname is_pulled
-#' @export
 is_pulled.RelationalData <- function(x) { # nolint
   return(x$is_pulled())
 }
