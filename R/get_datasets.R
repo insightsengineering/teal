@@ -39,8 +39,9 @@ get_datasets <- function(x) {
 #'
 #' # RelationalDataList --------
 #' drc <- cdisc_data(rdc, adae)
-#'
+#' \dontrun{
 #' get_datasets(drc)
+#' }
 get_datasets.RelationalData <- function(x) {
   res <- x$get_datasets()
   if (is_empty(res)) {

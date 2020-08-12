@@ -22,28 +22,37 @@ load_datasets(x, ...)
 \method{load_datasets}{RelationalDataList}(x, ...)
 }
 \arguments{
-\item{x}{(\code{object}) of class\link{RawDatasetConnector} or \link{NamedDataset}. If of
-class \code{character} will be treated as file to read.}
+\item{x}{(\code{object} of class \code{\link{RelationalData}}, \code{\link{RawDataset}} or
+\code{\link{RawDatasetConnector}})}
 
-\item{...}{not used, only for support of S3}
+\item{...}{(not used)\cr
+only for support of S3}
 
 \item{args}{(\code{NULL} or named \code{list})\cr
-additional dynamic arguments passed to function which loads the data.}
+additional dynamic arguments passed to function which loads the data. Applicable only on
+\code{\link{RawDatasetConnector}})}
 
-\item{try}{(\code{logical}) whether perform function evaluation inside \code{try} clause}
+\item{try}{(\code{logical})\cr
+whether perform function evaluation inside \code{try} clause. Applicable only on
+\code{\link{RawDatasetConnector}})}
 }
 \value{
-object of the same class as \code{x}
+If executed in the interactive session shiny app is opened to load the data. If executed in
+ shiny application - it returns shiny server module.
 }
 \description{
 Load datasets
 }
 \examples{
+
+# RawDataset ------
 library(random.cdisc.data)
 ADSL <- radsl(cached = TRUE)
 ADSL_dataset <- raw_dataset(x = ADSL)
 
 load_datasets(ADSL_dataset)
+
+# RawDatasetConnector ------
 library(random.cdisc.data)
 adsl <- rcd_cdisc_dataset_connector("ADSL", fun = radsl, cached = TRUE)
 load_datasets(adsl)

@@ -591,7 +591,7 @@ rice_connection <- function(open_args = list(), close_args = list(), ping_args =
 #' Open connection to \code{Teradata}
 #'
 #' @param open_args optional, named (\code{list}) of additional parameters for the connection's
-#'   \code{\link[RocheTeradata]{connect_teradata}} open function. Please note that the \code{type}
+#'   \code{RocheTeradata::connect_teradata} open function. Please note that the \code{type}
 #'   argument will be overwritten with \code{ODBC}.
 #' @param close_args optional, named (\code{list}) of additional parameters for the connection's
 #'   \code{\link[DBI]{dbDisconnect}} close function.

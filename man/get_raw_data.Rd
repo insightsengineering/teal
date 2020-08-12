@@ -86,8 +86,9 @@ rdc2 <- rcd_data(
 )
 
 drc <- cdisc_data(adsl, adtte, rdc2)
-
+\dontrun{
 get_raw_data(drc)
+}
 
 # cdisc_data ----------------
 library(random.cdisc.data)
@@ -111,6 +112,7 @@ cd = cdisc_data(
   code = "ADSL <- radsl(N = 600, seed = 123)",
   check = FALSE
 )
-
+\dontrun{
 get_raw_data(cd, "ADSL")
+}
 }

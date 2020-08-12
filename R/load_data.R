@@ -61,7 +61,7 @@ load_dataset.RawDatasetConnector <- function(x, args = NULL, try = FALSE, ...) {
 #' @export
 #' @return If executed in the interactive session shiny app is opened to load the data. If executed in
 #'  shiny application - it returns shiny server module.
-load_datasets <- function(x) {
+load_datasets <- function(x, ...) {
   UseMethod("load_datasets")
 }
 

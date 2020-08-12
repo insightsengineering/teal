@@ -23,8 +23,10 @@
 #' x4 <- rcd_cdisc_dataset_connector("ADTTE", radtte, cached = TRUE)
 #' tc <- teal:::RelationalDataList$new(x, x2, x3, x4)
 #' tc$get_datanames()
+#' \dontrun{
 #' tc$get_datasets()
 #' tc$get_dataset("ADAE")
+#' }
 #' tc$get_items()
 #' tc$get_code()
 #' tc$get_code("ADAE")
@@ -45,9 +47,9 @@
 #'
 #' x2 <- rcd_cdisc_dataset_connector("ADTTE", radtte, cached = TRUE)
 #' tc <- teal:::RelationalDataList$new(x, x2)
+#' \dontrun{
 #' tc$get_datasets()
 #' get_raw_data(tc)
-#' \dontrun{
 #' tc$launch()
 #' get_raw_data(tc)
 #' }

@@ -53,8 +53,9 @@ get_datasets(rdc)
 
 # RelationalDataList --------
 drc <- cdisc_data(rdc, adae)
-
+\dontrun{
 get_datasets(drc)
+}
 
 # RawDatasetConnector --------
 library(random.cdisc.data)

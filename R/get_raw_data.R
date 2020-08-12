@@ -91,8 +91,9 @@ get_raw_data.RawDatasetConnector <- function(x, dataname = NULL) { # nolint
 #' )
 #'
 #' drc <- cdisc_data(adsl, adtte, rdc2)
-#'
+#' \dontrun{
 #' get_raw_data(drc)
+#' }
 get_raw_data.RelationalData <- function(x, dataname = NULL) {
 
   if (!is.null(dataname)) {
@@ -146,8 +147,9 @@ get_raw_data.RelationalData <- function(x, dataname = NULL) {
 #'   code = "ADSL <- radsl(N = 600, seed = 123)",
 #'   check = FALSE
 #' )
-#'
+#' \dontrun{
 #' get_raw_data(cd, "ADSL")
+#' }
 get_raw_data.cdisc_data <- function(x, dataname = NULL) {
   datasets_names <- names(x)
   if (!is.null(dataname) && dataname %in% datasets_names) {
