@@ -43,7 +43,7 @@ Imports:
   utils.nest (>= 0.2.4),
   withr,
   yaml
-RoxygenNote: 7.0.2
+RoxygenNote: 7.1.1
 Suggests:
     knitr,
     nomnoml,
