@@ -2,6 +2,8 @@
 #'
 #' @param x (\code{NamedDataset})\cr
 #'    object or \code{RealtionalDataset} which inherited from it.
+#' @param dataname (\code{character})\cr
+#'   Dataname to be mutated.
 #' @param code (\code{character})\cr
 #'   Code to mutate the dataset. Must contain the \code{dataset$dataname}.
 #' @param script (\code{character})\cr
@@ -11,12 +13,11 @@
 #'   In case when this object code depends on the \code{raw_data} from the other
 #'   \code{RelationalDataset}, \code{RelationalDatasetConnector} object(s) or other constant value,
 #'   this/these object(s) should be included.
+#' @param ... not used, only for support of S3
 #'
 #' @rdname mutate_dataset
 #' @export
-mutate_dataset <- function(x, code = character(0), script = character(0), vars = list()) {
-  stopifnot(is_character_single(code) || is_character_single(script))
-  stopifnot(is_fully_named_list(vars))
+mutate_dataset <- function(x, ...) {
   UseMethod("mutate_dataset")
 }
 
@@ -60,28 +61,35 @@ mutate_dataset <- function(x, code = character(0), script = character(0), vars =
 #'
 #' @importFrom methods is
 #' @export
-mutate_dataset.NamedDataset <- function(x, code = character(0), script = character(0), vars = list()) { #nolint
-  code <- code_from_script(code, script) # nolint
-  if (!any(grepl(x$get_dataname(), code))) {
-    stop("You did not use the dataname inside the code. It does not mutate the 'x'")
-  }
+mutate_dataset.NamedDataset <- function(x, code = character(0), script = character(0), vars = list(), ...) { #nolint
+  stopifnot(is_character_single(code) || is_character_single(script))
+  stopifnot(is_fully_named_list(vars))
 
+  code <- code_from_script(code, script)
   x$mutate(code = code, vars = vars)
-  return(x)
 }
 
 
 #' @rdname mutate_dataset
 #' @export
-mutate_dataset.NamedDatasetConnector <- function(x, code = character(0), script = character(0), vars = list()) { #nolint
-  code <- code_from_script(code, script)
-  if (!any(grepl(x$get_dataname(), code))) {
-    stop("You did not use the dataname inside the code. It does not mutate the 'x'")
-  }
+mutate_dataset.NamedDatasetConnector <- function(x, code = character(0), script = character(0), vars = list(), ...) { #nolint
+  stopifnot(is_character_single(code) || is_character_single(script))
+  stopifnot(is_fully_named_list(vars))
 
+  code <- code_from_script(code, script)
   x$mutate(code = code, vars = vars)
 }
 
+
+#' @rdname mutate_dataset
+#' @export
+mutate_dataset.RelationalData <- function(x, dataname, code = character(0), script = character(0), vars = list(), ...) { #nolint
+  stopifnot(is_character_single(code) || is_character_single(script))
+  stopifnot(is_fully_named_list(vars))
+
+  code <- code_from_script(code, script)
+  x$mutate_dataset(dataname = dataname, code = code, vars = vars)
+}
 
 
 

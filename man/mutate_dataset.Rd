@@ -4,17 +4,41 @@
 \alias{mutate_dataset}
 \alias{mutate_dataset.NamedDataset}
 \alias{mutate_dataset.NamedDatasetConnector}
+\alias{mutate_dataset.RelationalData}
 \title{Mutate dataset by code}
 \usage{
-mutate_dataset(x, code = character(0), script = character(0), vars = list())
+mutate_dataset(x, ...)
 
-\method{mutate_dataset}{NamedDataset}(x, code = character(0), script = character(0), vars = list())
+\method{mutate_dataset}{NamedDataset}(
+  x,
+  code = character(0),
+  script = character(0),
+  vars = list(),
+  ...
+)
 
-\method{mutate_dataset}{NamedDatasetConnector}(x, code = character(0), script = character(0), vars = list())
+\method{mutate_dataset}{NamedDatasetConnector}(
+  x,
+  code = character(0),
+  script = character(0),
+  vars = list(),
+  ...
+)
+
+\method{mutate_dataset}{RelationalData}(
+  x,
+  dataname,
+  code = character(0),
+  script = character(0),
+  vars = list(),
+  ...
+)
 }
 \arguments{
 \item{x}{(\code{NamedDataset})\cr
 object or \code{RealtionalDataset} which inherited from it.}
+
+\item{...}{not used, only for support of S3}
 
 \item{code}{(\code{character})\cr
 Code to mutate the dataset. Must contain the \code{dataset$dataname}.}
@@ -27,6 +51,9 @@ Preferred before \code{code} argument.}
 In case when this object code depends on the \code{raw_data} from the other
 \code{RelationalDataset}, \code{RelationalDatasetConnector} object(s) or other constant value,
 this/these object(s) should be included.}
+
+\item{dataname}{(\code{character})\cr
+Dataname to be mutated.}
 }
 \description{
 Mutate dataset by code

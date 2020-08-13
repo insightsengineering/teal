@@ -30,12 +30,14 @@ Load data from connection. Function used on \link{RawDatasetConnector} and
 \link{RawDataset} to obtain data from connection.
 }
 \examples{
+
 # RawDataset --------
 library(random.cdisc.data)
 ADSL <- radsl(cached = TRUE)
 ADSL_dataset <- raw_dataset(x = ADSL)
 
 load_dataset(ADSL_dataset)
+
 # RawDatasetConnector --------
 library(random.cdisc.data)
 adsl <- rcd_cdisc_dataset_connector("ADSL", fun = radsl, cached = TRUE)

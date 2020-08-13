@@ -249,11 +249,6 @@ test_that("RelationalDatasetConnector", {
     m <- mutate_dataset(x3, "ADSL$newest <- 'xxx'")
   )
 
-  expect_error(
-    m <- mutate_dataset(x3, "ADAM$newest <- 'xxx'"),
-    "You did not use the dataname inside the code. It does not mutate the 'x'"
-  )
-
   expect_silent(load_dataset(m))
 
   expect_silent(

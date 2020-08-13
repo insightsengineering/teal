@@ -70,6 +70,7 @@ x$get_datasets()
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="RelationalData" data-id="get_items">}\href{../../teal/html/RelationalData.html#method-get_items}{\code{teal::RelationalData$get_items()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="RelationalData" data-id="is_pulled">}\href{../../teal/html/RelationalData.html#method-is_pulled}{\code{teal::RelationalData$is_pulled()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="RelationalData" data-id="mutate">}\href{../../teal/html/RelationalData.html#method-mutate}{\code{teal::RelationalData$mutate()}}\out{</span>}
+\item \out{<span class="pkg-link" data-pkg="teal" data-topic="RelationalData" data-id="mutate_dataset">}\href{../../teal/html/RelationalData.html#method-mutate_dataset}{\code{teal::RelationalData$mutate_dataset()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="RelationalData" data-id="set_check">}\href{../../teal/html/RelationalData.html#method-set_check}{\code{teal::RelationalData$set_check()}}\out{</span>}
 }
 \out{</details>}

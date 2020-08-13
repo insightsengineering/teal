@@ -61,7 +61,7 @@ RelationalDataConnector <- R6::R6Class( #nolint
       }
 
       connectors_names <- vapply(connectors, get_dataname, character(1))
-      setNames(connectors, connectors_names)
+      connectors <- setNames(connectors, connectors_names)
 
       private$check_names(connectors)
 

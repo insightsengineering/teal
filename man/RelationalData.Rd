@@ -38,6 +38,7 @@ rd <- teal:::RelationalData$new(x, x2)
 \item \href{#method-get_code}{\code{RelationalData$get_code()}}
 \item \href{#method-get_code_class}{\code{RelationalData$get_code_class()}}
 \item \href{#method-mutate}{\code{RelationalData$mutate()}}
+\item \href{#method-mutate_dataset}{\code{RelationalData$mutate_dataset()}}
 \item \href{#method-get_dataset}{\code{RelationalData$get_dataset()}}
 \item \href{#method-get_datasets}{\code{RelationalData$get_datasets()}}
 \item \href{#method-is_pulled}{\code{RelationalData$is_pulled()}}
@@ -161,8 +162,6 @@ Get internal \code{CodeClass} object
 \if{html}{\out{<a id="method-mutate"></a>}}
 \subsection{Method \code{mutate()}}{
 Mutate data by code
-
-Either code or script must be provided, but not both.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{RelationalData$mutate(code, vars = list())}\if{html}{\out{</div>}}
 }
@@ -170,6 +169,33 @@ Either code or script must be provided, but not both.
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
+\item{\code{code}}{(\code{character}) Code to mutate the dataset. Must contain the
+\code{dataset$dataname}}
+
+\item{\code{vars}}{(list)\cr
+In case when this object code depends on the \code{raw_data} from the other
+\code{RelationalDataset}, \code{RelationalDatasetConnector} object(s) or other constant value,
+this/these object(s) should be included}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Returns}{
+self invisibly for chaining
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-mutate_dataset"></a>}}
+\subsection{Method \code{mutate_dataset()}}{
+Mutate dataset by code
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{RelationalData$mutate_dataset(dataname, code, vars = list())}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{dataname}}{(\code{character}) Dataname to be mutated}
+
 \item{\code{code}}{(\code{character}) Code to mutate the dataset. Must contain the
 \code{dataset$dataname}}
 

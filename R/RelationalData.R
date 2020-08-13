@@ -130,8 +130,6 @@ RelationalData <- R6::R6Class( #nolint
     #' @description
     #' Mutate data by code
     #'
-    #' Either code or script must be provided, but not both.
-    #'
     #' @param code (\code{character}) Code to mutate the dataset. Must contain the
     #'  \code{dataset$dataname}
     #' @param vars (list)\cr
@@ -142,7 +140,30 @@ RelationalData <- R6::R6Class( #nolint
     #' @return self invisibly for chaining
     mutate = function(code, vars = list()) {
       private$set_vars(vars)
-      private$set_code(code)
+      private$set_code(code, deps = if_empty(names(vars), names(private$mutate_vars)))
+
+      private$check_result <- NULL
+
+      return(invisible(self))
+    },
+    #' @description
+    #' Mutate dataset by code
+    #'
+    #' @param dataname (\code{character}) Dataname to be mutated
+    #' @param code (\code{character}) Code to mutate the dataset. Must contain the
+    #'  \code{dataset$dataname}
+    #' @param vars (list)\cr
+    #'   In case when this object code depends on the \code{raw_data} from the other
+    #'   \code{RelationalDataset}, \code{RelationalDatasetConnector} object(s) or other constant value,
+    #'   this/these object(s) should be included
+    #'
+    #' @return self invisibly for chaining
+    mutate_dataset = function(dataname, code, vars = list()) {
+      stopifnot(is_character_vector(dataname))
+      stopifnot(all(dataname %in% self$get_datanames()))
+
+      private$set_vars(vars)
+      private$set_code(code = code, dataname = dataname, deps = if_empty(names(vars), names(private$mutate_vars)))
 
       private$check_result <- NULL
 
@@ -201,6 +222,9 @@ RelationalData <- R6::R6Class( #nolint
         new_env <- new.env(parent = parent.env(globalenv()))
         for (dataset in self$get_items()) {
           assign(get_dataname(dataset), get_raw_data(dataset), envir = new_env)
+        }
+        for (var_idx in seq_along(private$mutate_vars)) {
+          assign(names(private$mutate_vars)[[var_idx]], private$mutate_vars[[var_idx]], envir = new_env)
         }
 
         private$code$eval(envir = new_env)
@@ -298,12 +322,11 @@ RelationalData <- R6::R6Class( #nolint
       }
       return(res)
     },
-    set_code = function(code) {
+    set_code = function(code, dataname = self$get_datanames(), deps = names(private_mutate_vars)) {
       stopifnot(is_character_vector(code, 0, 1))
 
       if (length(code) > 0 && code != "") {
-        private$code$set_code(code = code,
-                              dataname = self$get_datanames())
+        private$code$set_code(code = code, dataname = dataname, deps = deps)
       }
 
       return(invisible(NULL))
