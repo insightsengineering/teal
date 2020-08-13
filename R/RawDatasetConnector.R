@@ -279,7 +279,13 @@ RawDatasetConnector <- R6::R6Class( #nolint
       }
 
       # eval CallableFunction with dynamic args
-      private$pull_fun$run(args = args, try = try)
+      tryCatch({
+        private$pull_fun$run(args = args, try = try)
+        }, error = function(e) {
+          if (grepl("object 'conn' not found", e$message)) {
+            stop("This dataset connector requires connection object (conn) to be provided.")
+            }
+          })
     },
     set_failure = function(res) {
       if (is(res, "try-error")) {

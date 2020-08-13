@@ -31,7 +31,7 @@ test_that("mutate_dataset", {
 
   expect_error({
     mutate_dataset(x = test_ds, code = "y <- test")
-  }, "use the dataname")
+  }, "Evaluation of the code failed")
 
   expect_silent({
     test_ds_mut <- test_ds %>% mutate_dataset("x$z <- c('one', 'two')")

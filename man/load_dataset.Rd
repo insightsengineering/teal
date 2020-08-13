@@ -10,7 +10,7 @@ load_dataset(x, ...)
 
 \method{load_dataset}{RawDataset}(x, ...)
 
-\method{load_dataset}{RawDatasetConnector}(x, args = NULL, try = FALSE, ...)
+\method{load_dataset}{RawDatasetConnector}(x, args = NULL, try = FALSE, conn = NULL, ...)
 }
 \arguments{
 \item{x}{(\code{RawDatasetConnector} or \code{RawDataset})}
@@ -21,6 +21,8 @@ load_dataset(x, ...)
 additional dynamic arguments passed to function which loads the data.}
 
 \item{try}{(\code{logical}) whether perform function evaluation inside \code{try} clause}
+
+\item{conn}{Optional (\code{DataConnection}) object required to pull the data.}
 }
 \value{
 \code{x} with loaded \code{dataset} object

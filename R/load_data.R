@@ -7,6 +7,7 @@
 #' @param args (\code{NULL} or named \code{list})\cr
 #'   additional dynamic arguments passed to function which loads the data.
 #' @param try (\code{logical}) whether perform function evaluation inside \code{try} clause
+#' @param conn Optional (\code{DataConnection}) object required to pull the data.
 #' @param ... not used, only for support of S3
 #'
 #' @return \code{x} with loaded \code{dataset} object
@@ -41,8 +42,19 @@ load_dataset.RawDataset <- function(x, ...) { # nolint
 #' adrs <- rcd_cdisc_dataset_connector("ADRS", fun = radrs, ADSL = adsl)
 #' load_dataset(adrs)
 #' @export
-load_dataset.RawDatasetConnector <- function(x, args = NULL, try = FALSE, ...) { # nolint
+load_dataset.RawDatasetConnector <- function(x, args = NULL, try = FALSE, conn = NULL, ...) { # nolint
+
+  if (!is.null(conn)) {
+    stopifnot(inherits(conn, "DataConnection"))
+
+    conn$open()
+    conn_obj <- conn$get_conn()
+
+    x$get_pull_fun()$assign_to_env("conn", conn_obj)
+  }
+
   x$pull(args = args, try = try)
+
   return(invisible(x))
 }
 
