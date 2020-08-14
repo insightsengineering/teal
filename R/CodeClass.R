@@ -3,6 +3,7 @@
 #'
 #' @importFrom digest sha1
 #' @importFrom rlang with_options
+#' @importFrom R6 R6Class
 #'
 #' @examples
 #' cc <- teal:::CodeClass$new()

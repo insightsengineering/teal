@@ -12,7 +12,7 @@ read_script(file, dataname = NULL)
 \item{dataname}{(\code{character}) dataset name to subset code from chunks}
 }
 \value{
-character vector withe the code
+(\code{character}) vector with the code
 }
 \description{
 Comments will be excluded
@@ -22,4 +22,5 @@ file_example <- tempfile()
 writeLines(c("x <- 2", "#second line comment", "x <- x + 2"), file_example)
 
 read_script(file_example)
+
 }

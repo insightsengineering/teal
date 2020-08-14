@@ -71,7 +71,7 @@ RelationalDataset <- R6::R6Class( # nolint
     #' @description
     #' Set new keys
     #' @param keys (\code{keys}) Set the keys
-    #' @return self invisibly for chaining.
+    #' @return \code{self} invisibly for chaining.
     set_keys = function(keys) {
       stopifnot(is(keys, "keys"))
       private$.keys <- keys
@@ -95,8 +95,6 @@ RelationalDataset <- R6::R6Class( # nolint
 
 #' Create \code{RelationalDataset} object
 #'
-#' Create \code{RelationalDataset} object
-#' @rdname relational_dataset
 #' @inheritParams named_dataset
 #' @param keys (\code{keys})\cr
 #'   object of S3 class keys containing foreign, primary keys and parent information

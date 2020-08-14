@@ -2,9 +2,9 @@
 #'
 #' Get dataset from \code{DatasetConnector}
 #' @param x \code{RawDatasetConnector} or \code{RelationalDatasetConnector})
+#' @param dataname \code{character} a name of dataset to be retrieved
 #'
 #' @return (\code{RawDataset} or \code{RelationalDataset})
-#' @rdname get_dataset
 #' @export
 get_dataset <- function(x, dataname) {
   UseMethod("get_dataset")
@@ -44,7 +44,6 @@ get_dataset.RawDataset <- function(x, dataname = NULL) { # nolint
   return(x)
 }
 
-#' @param dataname \code{character} a name of dataset to be retrieved
 #' @rdname get_dataset
 #' @export
 #' @examples

@@ -11,8 +11,6 @@
 #'
 #' @return new \code{RelationalDatasetConnector} object
 #'
-#' @rdname relational_dataset_connector
-#'
 #' @export
 relational_dataset_connector <- function(pull_fun,
                                          dataname,
@@ -42,7 +40,7 @@ relational_dataset_connector <- function(pull_fun,
 #'
 #' Please note that the script has to end with a call creating desired object. The error will be raised otherwise.
 #'
-#' @param x (\code{character}) string giving the pathname of the file to read from.
+#' @inheritParams relational_dataset_file
 #'
 #' @return \code{RelationalDatasetConnector} object
 #'

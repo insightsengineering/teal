@@ -6,6 +6,7 @@
 #'
 #' @param ... (\code{RelationalDatasetConnector}) dataset connectors created using \link{rcd_dataset_connector}
 #'   In case \code{cached = FALSE}, please watch the order and call \code{ADSL} generation first.
+#' @param connection (\code{DataConnection}) object returned from \code{rcd_connection}.
 #' @param check optional, (\code{logical}) whether perform reproducibility check
 #'
 #' @details
@@ -18,9 +19,6 @@
 #' In case non-cached datasets should be used, please watch the order of datasets. Most
 #' of the datasets from \code{random.cdisc.data} need \code{ADSL} to be produced first. So
 #' please create the \code{ADSL} dataset first.
-#'
-#' @param connection (\code{DataConnection}) object returned from \code{rcd_connection}.
-#' @param check optional, (\code{logical}) whether perform reproducibility check
 #'
 #' @return An object of class \code{RelationalDataConnector}
 #'

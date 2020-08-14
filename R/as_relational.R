@@ -20,9 +20,7 @@
 #'
 #' @return \code{RelationalDataset} or \code{RelationalDatasetConnector} object
 #'
-#' @rdname as_relational
 #' @export
-#' @importFrom methods is
 as_relational <- function(x,
                           dataname,
                           keys,
@@ -95,7 +93,6 @@ as_relational.NamedDataset <- function(x,
 #' x <- raw_dataset_connector(fun)
 #'
 #' x2 <- as_relational(x, dataname = "ADSL", keys = get_cdisc_keys("ADSL"))
-#' @importFrom utils.nest is_character_empty
 #' @export
 as_relational.RawDatasetConnector <- function(x, # nolint
                                               dataname,

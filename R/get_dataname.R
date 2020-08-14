@@ -7,7 +7,6 @@
 #'
 #' @return dataname (\code{character}) A given name for the dataset(s)
 #'   it may not contain spaces
-#' @rdname get_dataname
 #' @export
 get_dataname <- function(x) {
   UseMethod("get_dataname")
@@ -18,13 +17,6 @@ get_dataname <- function(x) {
 get_dataname.RelationalData <- function(x) { # nolint
   return(x$get_datanames())
 }
-
-#' @rdname get_dataname
-#' @export
-get_dataname.RelationalDataConnector <- function(x) { # nolint
-  return(x$get_datanames())
-}
-
 
 #' @rdname get_dataname
 #' @export

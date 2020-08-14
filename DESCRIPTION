@@ -48,6 +48,7 @@ Suggests:
     knitr,
     nomnoml,
     random.cdisc.data (>= 0.3.4),
+    rice,
     rmarkdown,
     tern (>= 0.6.7),
     test.nest (>= 0.2.3),

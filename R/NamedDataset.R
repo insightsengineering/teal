@@ -57,7 +57,7 @@ NamedDataset <- R6::R6Class( # nolint
       return(invisible(self))
     },
     #' @description
-    #' Derive the \code{name} which was former called \code{dataname}
+    #' Derive the \code{name} which was formerly called \code{dataname}
     #' @return \code{character} name of the dataset
     get_dataname = function() {
       private$.dataname
@@ -65,7 +65,7 @@ NamedDataset <- R6::R6Class( # nolint
     #' @description
     #' Set the name for the dataset
     #' @param dataname (\code{character}) the new name
-    #' @return self invisibly for chaining
+    #' @return \code{self} invisibly for chaining
     set_dataname = function(dataname) {
       stopifnot(is_character_single(dataname))
       stopifnot(!grepl("\\s", dataname))
@@ -87,7 +87,7 @@ NamedDataset <- R6::R6Class( # nolint
     #' @description
     #' Set the label for the dataset
     #' @param label (\code{character}) the new label
-    #' @return self invisibly for chaining
+    #' @return \code{self} invisibly for chaining
     set_dataset_label = function(label) {
       if (is.null(label)) {
         label <- character(0)

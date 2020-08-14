@@ -3,7 +3,6 @@
 #' @param x (\code{\link{RelationalData}})\cr
 #'  object containing datasets.
 #' @export
-#' @rdname get_datasets
 #' @return \code{list} or \code{RelationalDataset} objects
 get_datasets <- function(x) {
   UseMethod("get_datasets")

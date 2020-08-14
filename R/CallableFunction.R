@@ -104,8 +104,6 @@ CallableFunction <- R6::R6Class( #nolint
     #' @param try (\code{logical} value)\cr
     #'  whether perform function evaluation inside \code{try} clause
     #'
-    #' @importFrom withr with_environment
-    #'
     #' @return nothing or output from function depending on \code{return} argument
     run = function(return = TRUE, args = NULL, try = FALSE) {
       stopifnot(is_logical_single(return))
@@ -141,7 +139,7 @@ CallableFunction <- R6::R6Class( #nolint
     #'  remove other \code{args}, only create new of modify previous of the same name.
     #'  To clean arguments specify \code{args = NULL}.
     #'
-    #' @return self
+    #' @return \code{self} invisibly for chaining.
     set_args = function(args) {
       # remove args if empty
       if (is_empty(args)) {
@@ -163,7 +161,7 @@ CallableFunction <- R6::R6Class( #nolint
     #' @param name (\code{character}) argument name
     #' @param value argument value
     #'
-    #' @return self
+    #' @return \code{self} invisibly for chaining.
     set_arg_value = function(name, value) {
       stopifnot(is_character_single(name))
       arg_names <- names(formals(eval(str2lang(private$fun_name))))

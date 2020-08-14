@@ -108,7 +108,7 @@ new \code{NamedDataset} object
 \if{html}{\out{<a id="method-get_dataname"></a>}}
 \if{latex}{\out{\hypertarget{method-get_dataname}{}}}
 \subsection{Method \code{get_dataname()}}{
-Derive the \code{name} which was former called \code{dataname}
+Derive the \code{name} which was formerly called \code{dataname}
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{NamedDataset$get_dataname()}\if{html}{\out{</div>}}
 }
@@ -134,7 +134,7 @@ Set the name for the dataset
 \if{html}{\out{</div>}}
 }
 \subsection{Returns}{
-self invisibly for chaining
+\code{self} invisibly for chaining
 }
 }
 \if{html}{\out{<hr>}}
@@ -180,7 +180,7 @@ Set the label for the dataset
 \if{html}{\out{</div>}}
 }
 \subsection{Returns}{
-self invisibly for chaining
+\code{self} invisibly for chaining
 }
 }
 \if{html}{\out{<hr>}}

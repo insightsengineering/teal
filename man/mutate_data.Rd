@@ -3,7 +3,7 @@
 \name{mutate_data}
 \alias{mutate_data}
 \alias{mutate_data.RelationalData}
-\title{Mutate dataset by code}
+\title{Mutate data by code}
 \usage{
 mutate_data(x, code = character(0), script = character(0), vars = list())
 
@@ -26,5 +26,5 @@ In case when this object code depends on the \code{raw_data} from the other
 this/these object(s) should be included.}
 }
 \description{
-Mutate dataset by code
+Mutate data by code
 }

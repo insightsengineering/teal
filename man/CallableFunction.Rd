@@ -188,7 +188,7 @@ To clean arguments specify \code{args = NULL}.}
 \if{html}{\out{</div>}}
 }
 \subsection{Returns}{
-self
+\code{self} invisibly for chaining.
 }
 }
 \if{html}{\out{<hr>}}
@@ -210,7 +210,7 @@ Set up single function argument with value
 \if{html}{\out{</div>}}
 }
 \subsection{Returns}{
-self
+\code{self} invisibly for chaining.
 }
 }
 \if{html}{\out{<hr>}}

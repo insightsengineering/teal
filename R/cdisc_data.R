@@ -161,8 +161,7 @@ cdisc_dataset <- function(dataname,
 #'
 #' Please note that the script has to end with a call creating desired object. The error will be raised otherwise.
 #'
-#' @param x (\code{character}) string giving the pathname of the file to read from.
-#' @param code (\code{character}) reproducible code to re-create object
+#' @inheritParams dataset_file
 #'
 #' @return \code{RelationalDataset} object
 #'
@@ -275,7 +274,7 @@ keys <- function(primary, foreign, parent) {
 #' @md
 #' @param dataname name of the `CDISC` dataset
 #'
-#' @return keys
+#' @return \code{keys} object
 #'
 #' @importFrom yaml yaml.load_file
 #' @importFrom utils.nest get_package_file

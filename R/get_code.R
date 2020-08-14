@@ -159,8 +159,6 @@ get_code.default <- function(x,
 #' @inheritParams get_code
 #'
 #' @return lines (\code{character}) of preprocessing code
-#'
-#' @importFrom magrittr %>%
 get_code_single <- function(file_path, read_sources, if_url = grepl("^http[s]", file_path)) {
   stopifnot(is_character_single(file_path))
   if (!if_url) {
@@ -187,6 +185,8 @@ get_code_single <- function(file_path, read_sources, if_url = grepl("^http[s]", 
 #'
 #' Extracts lines from code which are enclosed within regexp starts_at and stops_at
 #' @param lines (\code{character}) of preprocessing code.
+#' @return (\code{character}) subset of lines which start and end with preprocessing
+#'   start and stop tags.
 enclosed_with <- function(lines) {
   stopifnot(is_character_vector(lines))
 
@@ -336,7 +336,6 @@ find_source_code <- function(lines) {
 
 #' Includes source in preprocessing code lines
 #'
-#' Includes source in preprocessing code lines
 #' @inheritParams enclosed_with
 #' @param dir of the file where source is called from.
 #' @return lines of code with source text included
@@ -400,7 +399,7 @@ include_source_code <- function(lines, dir = NULL) {
 #'
 #' @param file (\code{character}) File to be parsed into code
 #' @param dataname (\code{character}) dataset name to subset code from chunks
-#' @return character vector withe the code
+#' @return (\code{character}) vector with the code
 #'
 #' @export
 #' @examples
@@ -408,6 +407,8 @@ include_source_code <- function(lines, dir = NULL) {
 #' writeLines(c("x <- 2", "#second line comment", "x <- x + 2"), file_example)
 #'
 #' read_script(file_example)
+#'
+#' @importFrom magrittr %>%
 read_script <- function(file, dataname = NULL) {
   stopifnot(is_character_single(file))
   stopifnot(file.exists(file))

@@ -150,7 +150,7 @@ Set new keys
 \if{html}{\out{</div>}}
 }
 \subsection{Returns}{
-self invisibly for chaining.
+\code{self} invisibly for chaining.
 }
 }
 \if{html}{\out{<hr>}}

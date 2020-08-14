@@ -9,7 +9,6 @@
 #' if user doesn't specify \code{dataname} (\code{get_raw_data} from all datasets).
 #'
 #' @export
-#' @name get_raw_data
 get_raw_data <- function(x, dataname = NULL) {
   stopifnot(is.null(dataname) || is_character_single(dataname))
   UseMethod("get_raw_data")
@@ -95,7 +94,6 @@ get_raw_data.RawDatasetConnector <- function(x, dataname = NULL) { # nolint
 #' get_raw_data(drc)
 #' }
 get_raw_data.RelationalData <- function(x, dataname = NULL) {
-
   if (!is.null(dataname)) {
     datasets_names <- x$get_datanames()
     if (dataname %in% datasets_names) {
@@ -118,45 +116,5 @@ get_raw_data.RelationalData <- function(x, dataname = NULL) {
       get_datasets(x),
       get_raw_data
     )
-  }
-}
-
-#' @rdname get_raw_data
-#' @export
-#' @examples
-#'
-#' # cdisc_data ----------------
-#' library(random.cdisc.data)
-#'
-#' ADSL <- radsl(cached = TRUE)
-#' ADTTE <- radtte(cached = TRUE)
-#'
-#' # Example with keys
-#' cd = cdisc_data(
-#'   cdisc_dataset("ADSL", ADSL, keys = keys(
-#'     primary = c("STUDYID", "USUBJID"),
-#'     foreign = NULL,
-#'     parent = NULL
-#'   )),
-#'   cdisc_dataset("ADTTE", ADTTE, keys = keys(
-#'     primary = c("STUDYID", "USUBJID", "PARAMCD"),
-#'     foreign = c("STUDYID", "USUBJID"),
-#'     parent = "ADSL"),
-#'     code =  "ADTTE <- radtte(ADSL, seed = 123)"
-#'   ),
-#'   code = "ADSL <- radsl(N = 600, seed = 123)",
-#'   check = FALSE
-#' )
-#' \dontrun{
-#' get_raw_data(cd, "ADSL")
-#' }
-get_raw_data.cdisc_data <- function(x, dataname = NULL) {
-  datasets_names <- names(x)
-  if (!is.null(dataname) && dataname %in% datasets_names) {
-    get_raw_data(x[[dataname]])
-  } else if (!is.null(dataname) && !(dataname %in% datasets_names)) {
-    stop("The dataname supplied does not exist.")
-  } else {
-    lapply(x, get_raw_data)
   }
 }

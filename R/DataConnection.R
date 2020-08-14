@@ -3,8 +3,6 @@
 #' Objects of this class store the connection to a data source.
 #' It can be a database or server (\code{RICE} or \code{SAICE}) connection.
 #'
-#' @name DataConnection
-#'
 #' @examples
 #' \dontrun{
 #' open_fun <- callable_function(data.frame) # define opening function
@@ -110,6 +108,7 @@ DataConnection <- R6::R6Class( # nolint
 
     #' @description
     #' Get internal connection object
+    #' @return \code{connection} object
     get_conn = function() {
       return(private$conn)
     },
@@ -179,11 +178,13 @@ DataConnection <- R6::R6Class( # nolint
     #' @param args (\code{NULL} or named \code{list}) with values where list names are argument names
     #' @param silent (\code{logical}) whether convert all "missing function" errors to messages
     #'
-    #' @return nothing
+    #' @return \code{self} invisibly for chaining.
     set_open_args = function(args, silent = FALSE) {
       stopifnot(is.null(args) || (is.list(args) && is_fully_named_list(args)))
       if_cond(private$check_open_fun(silent = silent), return(), isFALSE)
       private$open_fun$set_args(args)
+
+      return(invisible(self))
     },
     #' @description
     #' Set open-connection server function
@@ -307,11 +308,13 @@ DataConnection <- R6::R6Class( # nolint
     #' @param args (named \code{list}) with values where list names are argument names
     #' @param silent (\code{logical}) whether convert all "missing function" errors to messages
     #'
-    #' @return nothing
+    #' @return \code{self} invisibly for chaining.
     set_close_args = function(args, silent = FALSE) {
       stopifnot(is.null(args) || (is.list(args) && is_fully_named_list(args)))
       if_cond(private$check_close_fun(silent = silent), return(), isFALSE)
       private$close_fun$set_args(args)
+
+      return(invisible(self))
     },
 
     #' @description

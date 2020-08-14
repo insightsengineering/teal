@@ -15,7 +15,6 @@
 #'   this/these object(s) should be included.
 #' @param ... not used, only for support of S3
 #'
-#' @rdname mutate_dataset
 #' @export
 mutate_dataset <- function(x, ...) {
   UseMethod("mutate_dataset")
@@ -59,7 +58,6 @@ mutate_dataset <- function(x, ...) {
 #'
 #' ADSL_mutated$get_raw_data()$new_variable[1]
 #'
-#' @importFrom methods is
 #' @export
 mutate_dataset.NamedDataset <- function(x, code = character(0), script = character(0), vars = list(), ...) { #nolint
   stopifnot(is_character_single(code) || is_character_single(script))
@@ -93,13 +91,12 @@ mutate_dataset.RelationalData <- function(x, dataname, code = character(0), scri
 
 
 
-#' Mutate dataset by code
+#' Mutate data by code
 #'
 #' @param x (\code{RelationalData}, \code{RelationalDataList} or \code{RealtionalDataConnector})\cr
 #'   object.
 #' @inheritParams mutate_dataset
 #'
-#' @rdname mutate_data
 #' @export
 mutate_data <- function(x, code = character(0), script = character(0), vars = list()) {
   stopifnot(is_character_single(code) || is_character_single(script))

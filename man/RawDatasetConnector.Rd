@@ -104,7 +104,7 @@ Set arguments to the pulling function
 \if{html}{\out{</div>}}
 }
 \subsection{Returns}{
-self invisibly for chaining
+\code{self} invisibly for chaining
 }
 }
 \if{html}{\out{<hr>}}
@@ -121,9 +121,6 @@ Get code to get data
 \describe{
 \item{\code{deparse}}{(\code{logical})\cr
 whether return deparsed form of a call}
-
-\item{\code{args}}{(\code{NULL} or named \code{list})\cr
-dynamic arguments to function which loads data}
 }
 \if{html}{\out{</div>}}
 }
@@ -194,7 +191,7 @@ Get raw data from dataset
 }
 
 \subsection{Returns}{
-data (data.frame)
+\code{data.frame} data
 }
 }
 \if{html}{\out{<hr>}}
@@ -278,7 +275,7 @@ Nested lists are not allowed.}
 \if{html}{\out{</div>}}
 }
 \subsection{Returns}{
-Invisible self for chaining.
+\code{self} invisibly for chaining.
 }
 \subsection{Examples}{
 \if{html}{\out{<div class="r example copy">}}

@@ -3,7 +3,6 @@
 \name{get_dataname}
 \alias{get_dataname}
 \alias{get_dataname.RelationalData}
-\alias{get_dataname.RelationalDataConnector}
 \alias{get_dataname.NamedDatasetConnector}
 \alias{get_dataname.NamedDataset}
 \title{S3 method for getting a dataname(s) of
@@ -13,8 +12,6 @@
 get_dataname(x)
 
 \method{get_dataname}{RelationalData}(x)
-
-\method{get_dataname}{RelationalDataConnector}(x)
 
 \method{get_dataname}{NamedDatasetConnector}(x)
 

@@ -5,7 +5,6 @@
 \alias{get_raw_data.RawDataset}
 \alias{get_raw_data.RawDatasetConnector}
 \alias{get_raw_data.RelationalData}
-\alias{get_raw_data.cdisc_data}
 \title{Retrieve raw data}
 \usage{
 get_raw_data(x, dataname = NULL)
@@ -15,8 +14,6 @@ get_raw_data(x, dataname = NULL)
 \method{get_raw_data}{RawDatasetConnector}(x, dataname = NULL)
 
 \method{get_raw_data}{RelationalData}(x, dataname = NULL)
-
-\method{get_raw_data}{cdisc_data}(x, dataname = NULL)
 }
 \arguments{
 \item{x}{(\code{RawDataset, RawDatasetConnector, RelationalData, cdisc_data})\cr object}
@@ -88,31 +85,5 @@ rdc2 <- rcd_data(
 drc <- cdisc_data(adsl, adtte, rdc2)
 \dontrun{
 get_raw_data(drc)
-}
-
-# cdisc_data ----------------
-library(random.cdisc.data)
-
-ADSL <- radsl(cached = TRUE)
-ADTTE <- radtte(cached = TRUE)
-
-# Example with keys
-cd = cdisc_data(
-  cdisc_dataset("ADSL", ADSL, keys = keys(
-    primary = c("STUDYID", "USUBJID"),
-    foreign = NULL,
-    parent = NULL
-  )),
-  cdisc_dataset("ADTTE", ADTTE, keys = keys(
-    primary = c("STUDYID", "USUBJID", "PARAMCD"),
-    foreign = c("STUDYID", "USUBJID"),
-    parent = "ADSL"),
-    code =  "ADTTE <- radtte(ADSL, seed = 123)"
-  ),
-  code = "ADSL <- radsl(N = 600, seed = 123)",
-  check = FALSE
-)
-\dontrun{
-get_raw_data(cd, "ADSL")
 }
 }

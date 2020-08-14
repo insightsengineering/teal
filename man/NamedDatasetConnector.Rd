@@ -28,7 +28,6 @@ Pulled data inherits from the class \link{NamedDataset}.
 \item \href{#method-get_datanames}{\code{NamedDatasetConnector$get_datanames()}}
 \item \href{#method-get_dataset_label}{\code{NamedDatasetConnector$get_dataset_label()}}
 \item \href{#method-set_dataset_label}{\code{NamedDatasetConnector$set_dataset_label()}}
-\item \href{#method-get_code}{\code{NamedDatasetConnector$get_code()}}
 \item \href{#method-get_code_class}{\code{NamedDatasetConnector$get_code_class()}}
 \item \href{#method-mutate}{\code{NamedDatasetConnector$mutate()}}
 \item \href{#method-pull}{\code{NamedDatasetConnector$pull()}}
@@ -40,6 +39,7 @@ Pulled data inherits from the class \link{NamedDataset}.
 \if{html}{
 \out{<details ><summary>Inherited methods</summary>}
 \itemize{
+\item \out{<span class="pkg-link" data-pkg="teal" data-topic="RawDatasetConnector" data-id="get_code">}\href{../../teal/html/RawDatasetConnector.html#method-get_code}{\code{teal::RawDatasetConnector$get_code()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="RawDatasetConnector" data-id="get_error_message">}\href{../../teal/html/RawDatasetConnector.html#method-get_error_message}{\code{teal::RawDatasetConnector$get_error_message()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="RawDatasetConnector" data-id="get_pull_fun">}\href{../../teal/html/RawDatasetConnector.html#method-get_pull_fun}{\code{teal::RawDatasetConnector$get_pull_fun()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="RawDatasetConnector" data-id="get_raw_data">}\href{../../teal/html/RawDatasetConnector.html#method-get_raw_data}{\code{teal::RawDatasetConnector$get_raw_data()}}\out{</span>}
@@ -132,7 +132,7 @@ Get dataname of dataset
 }
 
 \subsection{Returns}{
-dataname of the dataset
+\code{character} dataname of the dataset
 }
 }
 \if{html}{\out{<hr>}}
@@ -145,7 +145,7 @@ Get label of dataset
 }
 
 \subsection{Returns}{
-\code{character}
+\code{character} dataset label
 }
 }
 \if{html}{\out{<hr>}}
@@ -166,27 +166,7 @@ Label to describe the dataset}
 \if{html}{\out{</div>}}
 }
 \subsection{Returns}{
-self invisibly for chaining
-}
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-get_code"></a>}}
-\if{latex}{\out{\hypertarget{method-get_code}{}}}
-\subsection{Method \code{get_code()}}{
-Get code to get data
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{NamedDatasetConnector$get_code(deparse = TRUE)}\if{html}{\out{</div>}}
-}
-
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{deparse}}{(\code{logical}) whether return deparsed form of a call}
-}
-\if{html}{\out{</div>}}
-}
-\subsection{Returns}{
-optionally deparsed \code{call} object
+\code{self} invisibly for chaining
 }
 }
 \if{html}{\out{<hr>}}
@@ -227,7 +207,7 @@ this/these object(s) should be included}
 \if{html}{\out{</div>}}
 }
 \subsection{Returns}{
-self
+\code{self} invisibly for chaining.
 }
 }
 \if{html}{\out{<hr>}}
@@ -257,7 +237,7 @@ whether perform function evaluation inside \code{try} clause}
 \if{html}{\out{</div>}}
 }
 \subsection{Returns}{
-\code{self}
+\code{self} invisibly for chaining.
 }
 }
 \if{html}{\out{<hr>}}

@@ -42,7 +42,7 @@ RawDatasetConnector <- R6::R6Class( #nolint
     #'
     #' @param args (\code{NULL} or named \code{list}) dynamic arguments to function
     #'
-    #' @return self invisibly for chaining
+    #' @return \code{self} invisibly for chaining
     set_args = function(args) {
       private$pull_fun$set_args(args)
       return(invisible(self))
@@ -53,8 +53,6 @@ RawDatasetConnector <- R6::R6Class( #nolint
     #'
     #' @param deparse (\code{logical})\cr
     #'  whether return deparsed form of a call
-    #' @param args (\code{NULL} or named \code{list})\cr
-    #'  dynamic arguments to function which loads data
     #'
     #' @return optionally deparsed \code{call} object
     get_code = function(deparse = TRUE) {
@@ -104,7 +102,7 @@ RawDatasetConnector <- R6::R6Class( #nolint
     #' @description
     #' Get raw data from dataset
     #'
-    #' @return data (data.frame)
+    #' @return \code{data.frame} data
     get_raw_data = function() {
       dataset <- self$get_dataset()
       return(dataset$get_raw_data())
@@ -155,7 +153,7 @@ RawDatasetConnector <- R6::R6Class( #nolint
     #' with length 1.
     #' Names of the list elements will become the labels of the respective UI widgets.
     #' Nested lists are not allowed.
-    #' @return Invisible self for chaining.
+    #' @return \code{self} invisibly for chaining.
     #' @examples
     #' ds <- raw_dataset_connector(pull_fun = callable_function(data.frame))
     #' ds$set_ui_input(list(z = "character", w = "character", xx = 2))

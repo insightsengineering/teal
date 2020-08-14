@@ -10,7 +10,7 @@ get_cdisc_keys(dataname)
 \item{dataname}{name of the \code{CDISC} dataset}
 }
 \value{
-keys
+\code{keys} object
 }
 \description{
 Function that returns the default keys for a \code{CDISC} dataset by name

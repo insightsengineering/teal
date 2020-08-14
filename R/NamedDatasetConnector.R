@@ -71,14 +71,14 @@ NamedDatasetConnector <- R6::R6Class( #nolint
     #' @description
     #' Get dataname of dataset
     #'
-    #' @return dataname of the dataset
+    #' @return \code{character} dataname of the dataset
     get_datanames = function() {
       return(private$dataname)
     },
     #' @description
     #' Get label of dataset
     #'
-    #' @return \code{character}
+    #' @return \code{character} dataset label
     get_dataset_label = function() {
       return(private$dataset_label)
     },
@@ -87,22 +87,11 @@ NamedDatasetConnector <- R6::R6Class( #nolint
     #'
     #' @param label (\code{character})\cr
     #'  Label to describe the dataset
-    #' @return self invisibly for chaining
+    #' @return \code{self} invisibly for chaining
     set_dataset_label = function(label) {
       stopifnot(is_character_vector(label, 0, 1))
       private$dataset_label <- label
       return(invisible(self))
-    },
-    #' @description
-    #' Get code to get data
-    #'
-    #' @param deparse (\code{logical}) whether return deparsed form of a call
-    #'
-    #' @return optionally deparsed \code{call} object
-    get_code = function(deparse = TRUE) {
-      stopifnot(is_logical_single(deparse))
-
-      return(self$get_code_class()$get_code(deparse = deparse))
     },
     #' @description
     #' Get internal \code{CodeClass} object
@@ -131,7 +120,7 @@ NamedDatasetConnector <- R6::R6Class( #nolint
     #'   In case when this object code depends on the \code{raw_data} from the other
     #'   \code{RelationalDataset}, \code{RelationalDatasetConnector} object(s) or other constant value,
     #'   this/these object(s) should be included
-    #' @return self
+    #' @return \code{self} invisibly for chaining.
     mutate = function(code, vars = list()) {
       if (!is.null(private$dataset)) {
         private$dataset <- mutate_dataset(private$dataset, code = code, vars = vars)
@@ -157,7 +146,7 @@ NamedDatasetConnector <- R6::R6Class( #nolint
     #' @param try (\code{logical} value)\cr
     #'  whether perform function evaluation inside \code{try} clause
     #'
-    #' @return \code{self}
+    #' @return \code{self} invisibly for chaining.
     pull = function(args = NULL, try = FALSE) {
       data <- private$pull_internal(args = args, try = try)
 
@@ -326,8 +315,6 @@ NamedDatasetConnector <- R6::R6Class( #nolint
 #'   this/these object(s) should be included
 #'
 #' @return new \code{NamedDatasetConnector} object
-#'
-#' @rdname named_dataset_connector
 #'
 #' @export
 named_dataset_connector <- function(pull_fun,

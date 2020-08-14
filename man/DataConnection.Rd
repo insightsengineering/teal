@@ -160,6 +160,9 @@ Get internal connection object
 \if{html}{\out{<div class="r">}}\preformatted{DataConnection$get_conn()}\if{html}{\out{</div>}}
 }
 
+\subsection{Returns}{
+\code{connection} object
+}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-get_open_call"></a>}}
@@ -264,7 +267,7 @@ Set open connection function argument
 \if{html}{\out{</div>}}
 }
 \subsection{Returns}{
-nothing
+\code{self} invisibly for chaining.
 }
 }
 \if{html}{\out{<hr>}}
@@ -437,7 +440,7 @@ Set close connection function argument
 \if{html}{\out{</div>}}
 }
 \subsection{Returns}{
-nothing
+\code{self} invisibly for chaining.
 }
 }
 \if{html}{\out{<hr>}}
