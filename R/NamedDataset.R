@@ -232,7 +232,7 @@ NamedDataset <- R6::R6Class( # nolint
 
       if (!is.data.frame(execution_environment[[self$get_dataname()]])) {
         out_msg <- sprintf(
-          "\n%s\n\n - Code from %s need to return a data.frame.",
+          "\n%s\n\n - Code from %s need to return a data.frame assigned to an object of dataset name.",
           self$get_code(),
           self$get_dataname()
         )

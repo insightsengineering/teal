@@ -435,7 +435,7 @@ check_foreign_keys <- function(datasets_keys) {
 #' Function passes datasets to teal application with option to read preprocessing code and reproducibility checking.
 #' @param ... (\code{RelationalData}, \code{RelationalDataConnector}, \code{RelationalDataset} or
 #'   \code{RelationalDatasetConnector}) elements to include where `ADSL` data is mandatory.
-#' @param code (\code{character}) mutate code.
+#' @param code (\code{character}) code to reproduce the datasets.
 #' @param check (\code{logical}) reproducibility check - whether evaluated preprocessing code gives the same objects
 #'   as provided in arguments. Check is run only if flag is true and preprocessing code is not empty.
 #'
@@ -456,8 +456,10 @@ check_foreign_keys <- function(datasets_keys) {
 #' cdisc_data(
 #'   cdisc_dataset("ADSL", ADSL),
 #'   cdisc_dataset("ADTTE", ADTTE),
-#'   code = 'ADSL <- cadsl
-#'           ADTTE <- cadtte')
+#'   code = 'ADSL <- radsl(cached = TRUE)
+#'           ADTTE <- radtte(cached = TRUE)',
+#'   check = TRUE
+#' )
 #'
 #' # Example with keys
 #' cdisc_data(
@@ -465,16 +467,15 @@ check_foreign_keys <- function(datasets_keys) {
 #'     primary = c("STUDYID", "USUBJID"),
 #'     foreign = NULL,
 #'     parent = NULL),
-#'     code = "ADSL <- radsl(N = 600, seed = 1234)"
 #'   ),
 #'   cdisc_dataset("ADTTE", ADTTE, keys = keys(
 #'     primary = c("STUDYID", "USUBJID", "PARAMCD"),
 #'     foreign = c("STUDYID", "USUBJID"),
 #'     parent = "ADSL"
 #'   )),
-#'   code = "ADSL <- radsl(N = 600, seed = 123)
-#'           ADTTE <- radtte(ADSL, seed = 123)",
-#'   check = FALSE
+#'   code = "ADSL <- radsl(cached = TRUE)
+#'           ADTTE <- radtte(cached = TRUE)",
+#'   check = TRUE
 #' )
 cdisc_data <- function(...,
                        code = "",
@@ -482,10 +483,9 @@ cdisc_data <- function(...,
   stopifnot(is_logical_single(check))
 
   x <- teal_data(...)
-  if (length(code) > 0 && code != "") {
-    mutate_data(x, code = code)
+  if (length(code) > 0 && !identical(code, "")) {
+    x$set_pull_code(code = code)
   }
-
   x$set_check(check)
 
   datasets_names <- x$get_datanames()

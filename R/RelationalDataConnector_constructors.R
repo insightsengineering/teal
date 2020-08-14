@@ -155,7 +155,7 @@ rice_data <- function(..., connection = rice_connection(), additional_ui = NULL)
   stopifnot(is.null(additional_ui) || is_html_like(additional_ui))
 
   x <- RelationalDataConnector$new(connection = connection, connectors = connectors)
-  x$set_check(`attributes<-`(FALSE, list(quiet = TRUE)))
+  x$set_check(FALSE)
 
   x$set_ui(
     function(id) {
@@ -260,7 +260,7 @@ teradata_data <- function(..., connection = teradata_connection()) {
   stopifnot(is_class_list("RelationalDatasetConnector")(connectors))
 
   x <- RelationalDataConnector$new(connection = connection, connectors = connectors)
-  x$set_check(`attributes<-`(FALSE, list(quiet = TRUE)))
+  x$set_check(FALSE)
 
   x$set_ui(
     function(id) {

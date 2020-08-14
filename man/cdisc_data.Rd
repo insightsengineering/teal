@@ -10,7 +10,7 @@ cdisc_data(..., code = "", check = FALSE)
 \item{...}{(\code{RelationalData}, \code{RelationalDataConnector}, \code{RelationalDataset} or
 \code{RelationalDatasetConnector}) elements to include where `ADSL` data is mandatory.}
 
-\item{code}{(\code{character}) mutate code.}
+\item{code}{(\code{character}) code to reproduce the datasets.}
 
 \item{check}{(\code{logical}) reproducibility check - whether evaluated preprocessing code gives the same objects
 as provided in arguments. Check is run only if flag is true and preprocessing code is not empty.}
@@ -35,8 +35,10 @@ ADTTE <- radtte(cached = TRUE)
 cdisc_data(
   cdisc_dataset("ADSL", ADSL),
   cdisc_dataset("ADTTE", ADTTE),
-  code = 'ADSL <- cadsl
-          ADTTE <- cadtte')
+  code = 'ADSL <- radsl(cached = TRUE)
+          ADTTE <- radtte(cached = TRUE)',
+  check = TRUE
+)
 
 # Example with keys
 cdisc_data(
@@ -44,15 +46,14 @@ cdisc_data(
     primary = c("STUDYID", "USUBJID"),
     foreign = NULL,
     parent = NULL),
-    code = "ADSL <- radsl(N = 600, seed = 1234)"
   ),
   cdisc_dataset("ADTTE", ADTTE, keys = keys(
     primary = c("STUDYID", "USUBJID", "PARAMCD"),
     foreign = c("STUDYID", "USUBJID"),
     parent = "ADSL"
   )),
-  code = "ADSL <- radsl(N = 600, seed = 123)
-          ADTTE <- radtte(ADSL, seed = 123)",
-  check = FALSE
+  code = "ADSL <- radsl(cached = TRUE)
+          ADTTE <- radtte(cached = TRUE)",
+  check = TRUE
 )
 }

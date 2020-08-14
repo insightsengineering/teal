@@ -35,7 +35,6 @@ tc$get_code()
 tc$get_code("ADAE")
 \dontrun{
 tc$launch()
-tc$get_raw_data()
 tc$get_datasets()
 tc$get_dataset("ADAE")
 tc$check()
@@ -86,6 +85,7 @@ get_raw_data(tc)
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="RelationalData" data-id="mutate">}\href{../../teal/html/RelationalData.html#method-mutate}{\code{teal::RelationalData$mutate()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="RelationalData" data-id="mutate_dataset">}\href{../../teal/html/RelationalData.html#method-mutate_dataset}{\code{teal::RelationalData$mutate_dataset()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="RelationalData" data-id="set_check">}\href{../../teal/html/RelationalData.html#method-set_check}{\code{teal::RelationalData$set_check()}}\out{</span>}
+\item \out{<span class="pkg-link" data-pkg="teal" data-topic="RelationalData" data-id="set_pull_code">}\href{../../teal/html/RelationalData.html#method-set_pull_code}{\code{teal::RelationalData$set_pull_code()}}\out{</span>}
 }
 \out{</details>}
 }

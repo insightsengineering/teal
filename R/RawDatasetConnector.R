@@ -313,7 +313,6 @@ RawDatasetConnector <- R6::R6Class( #nolint
     },
     set_server = function() {
       private$server <- function(input, output, session, data_args = NULL) {
-
         withProgress(value = 1, message = "Pulling dataset", {
           # set args to save them - args set will be returned in the call
           dataset_args <- if_not_null(private$ui_input,

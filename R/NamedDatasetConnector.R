@@ -188,10 +188,9 @@ NamedDatasetConnector <- R6::R6Class( #nolint
       if (!self$is_pulled()) {
         stop(
           sprintf(
-            "Cannot check the raw data of %s until it is pulled.",
+            "Cannot check the raw data of '%s' until it is pulled.",
             self$get_dataname()
           )
-
         )
       }
       return(TRUE)
@@ -237,7 +236,10 @@ NamedDatasetConnector <- R6::R6Class( #nolint
       stopifnot(is_fully_named_list(vars))
 
       if (length(vars) > 0) {
-        private$mutate_vars <- c(private$mutate_vars, vars)
+        private$mutate_vars <- c(
+          private$mutate_vars,
+          vars[!names(vars) %in% private$mutate_vars]
+        )
       }
 
       return(invisible(self))

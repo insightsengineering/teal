@@ -50,7 +50,7 @@ authorize access to rice API.
 
 ```{r eval=FALSE}
 app <- init(
-  data = data,
+  data = cdisc_data(data),
   modules = root_modules(
     module(
       "ADSL AGE histogram",
@@ -268,7 +268,6 @@ x$launch()
 ```
 
 ```{r eval=FALSE}
-cdisc_data <- x$get_cdisc_data()
 get_code(x)
 ```
 

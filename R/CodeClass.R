@@ -115,7 +115,6 @@ CodeClass <- R6::R6Class( # nolint
     #' @return invisibly \code{NULL}
     eval = function(envir = new.env(parent = parent.env(.GlobalEnv))) {
      for (x in self$get_code(deparse = FALSE)) {
-
        out <- tryCatch(
          base::eval(x, envir = envir),
          error = function(e) e
@@ -161,7 +160,6 @@ CodeClass <- R6::R6Class( # nolint
     get_code_dataname = function(dataname, deparse) {
       #the lines of code we need for the dataname
       res <- integer(0)
-
       # the set of datanames we want code for code for intially just dataname
       datanames <- dataname
 

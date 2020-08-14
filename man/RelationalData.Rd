@@ -33,16 +33,17 @@ rd <- teal:::RelationalData$new(x, x2)
 \item \href{#method-new}{\code{RelationalData$new()}}
 \item \href{#method-check}{\code{RelationalData$check()}}
 \item \href{#method-get_check_result}{\code{RelationalData$get_check_result()}}
-\item \href{#method-get_items}{\code{RelationalData$get_items()}}
-\item \href{#method-get_datanames}{\code{RelationalData$get_datanames()}}
 \item \href{#method-get_code}{\code{RelationalData$get_code()}}
 \item \href{#method-get_code_class}{\code{RelationalData$get_code_class()}}
-\item \href{#method-mutate}{\code{RelationalData$mutate()}}
-\item \href{#method-mutate_dataset}{\code{RelationalData$mutate_dataset()}}
+\item \href{#method-get_datanames}{\code{RelationalData$get_datanames()}}
 \item \href{#method-get_dataset}{\code{RelationalData$get_dataset()}}
 \item \href{#method-get_datasets}{\code{RelationalData$get_datasets()}}
+\item \href{#method-get_items}{\code{RelationalData$get_items()}}
 \item \href{#method-is_pulled}{\code{RelationalData$is_pulled()}}
+\item \href{#method-mutate}{\code{RelationalData$mutate()}}
+\item \href{#method-mutate_dataset}{\code{RelationalData$mutate_dataset()}}
 \item \href{#method-set_check}{\code{RelationalData$set_check()}}
+\item \href{#method-set_pull_code}{\code{RelationalData$set_pull_code()}}
 \item \href{#method-clone}{\code{RelationalData$clone()}}
 }
 }
@@ -78,7 +79,8 @@ Check if the object raw data is reproducible from the \code{get_code()} code.
 }
 
 \subsection{Returns}{
-\code{TRUE} if all the datasets generated from evaluating the
+\code{NULL} if check step has been disabled
+  \code{TRUE} if all the datasets generated from evaluating the
   \code{get_code()} code are identical to the raw data, else \code{FALSE}.
 }
 }
@@ -93,41 +95,6 @@ Get result of reproducibility check
 
 \subsection{Returns}{
 \code{NULL} if check has not been called yet, \code{TRUE} / \code{FALSE} otherwise
-}
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-get_items"></a>}}
-\if{latex}{\out{\hypertarget{method-get_items}{}}}
-\subsection{Method \code{get_items()}}{
-Get all datasets and all dataset connectors
-
-  name of dataset connector to be returned. If \code{NULL}, all connectors are returned.
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{RelationalData$get_items(dataname = NULL)}\if{html}{\out{</div>}}
-}
-
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{dataname}}{(\code{character} value)\cr}
-}
-\if{html}{\out{</div>}}
-}
-\subsection{Returns}{
-\code{list} with all datasets and all connectors
-}
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-get_datanames"></a>}}
-\if{latex}{\out{\hypertarget{method-get_datanames}{}}}
-\subsection{Method \code{get_datanames()}}{
-Get names of the datasets.
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{RelationalData$get_datanames()}\if{html}{\out{</div>}}
-}
-
-\subsection{Returns}{
-\code{character} vector with names of all datasets.
 }
 }
 \if{html}{\out{<hr>}}
@@ -158,11 +125,101 @@ Get code for all datasets.
 \subsection{Method \code{get_code_class()}}{
 Get internal \code{CodeClass} object
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{RelationalData$get_code_class()}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{RelationalData$get_code_class(only_pull = FALSE)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{only_pull}}{(\code{logical} value)\cr
+if \code{TRUE} only code to pull datasets will be returned without mutate code.}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Returns}{
+\code{CodeClass}
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-get_datanames"></a>}}
+\if{latex}{\out{\hypertarget{method-get_datanames}{}}}
+\subsection{Method \code{get_datanames()}}{
+Get names of the datasets.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{RelationalData$get_datanames()}\if{html}{\out{</div>}}
 }
 
 \subsection{Returns}{
-\code{CodeClass}
+\code{character} vector with names of all datasets.
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-get_dataset"></a>}}
+\if{latex}{\out{\hypertarget{method-get_dataset}{}}}
+\subsection{Method \code{get_dataset()}}{
+Get \code{RelationalDataset} object.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{RelationalData$get_dataset(dataname = NULL)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{dataname}}{(\code{character} value)\cr
+name of dataset to be returned. If \code{NULL}, all datasets are returned.}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Returns}{
+\code{RelationalDataset}.
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-get_datasets"></a>}}
+\if{latex}{\out{\hypertarget{method-get_datasets}{}}}
+\subsection{Method \code{get_datasets()}}{
+Get \code{list} of \code{RelationalDataset} objects.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{RelationalData$get_datasets()}\if{html}{\out{</div>}}
+}
+
+\subsection{Returns}{
+\code{list} of \code{RelationalDataset}.
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-get_items"></a>}}
+\if{latex}{\out{\hypertarget{method-get_items}{}}}
+\subsection{Method \code{get_items()}}{
+Get all datasets and all dataset connectors
+
+  name of dataset connector to be returned. If \code{NULL}, all connectors are returned.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{RelationalData$get_items(dataname = NULL)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{dataname}}{(\code{character} value)\cr}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Returns}{
+\code{list} with all datasets and all connectors
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-is_pulled"></a>}}
+\if{latex}{\out{\hypertarget{method-is_pulled}{}}}
+\subsection{Method \code{is_pulled()}}{
+Check if dataset has already been pulled.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{RelationalData$is_pulled()}\if{html}{\out{</div>}}
+}
+
+\subsection{Returns}{
+\code{TRUE} if dataset has been already pulled, else \code{FALSE}
 }
 }
 \if{html}{\out{<hr>}}
@@ -220,53 +277,6 @@ self invisibly for chaining
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-get_dataset"></a>}}
-\if{latex}{\out{\hypertarget{method-get_dataset}{}}}
-\subsection{Method \code{get_dataset()}}{
-Get \code{RelationalDataset} object.
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{RelationalData$get_dataset(dataname = NULL)}\if{html}{\out{</div>}}
-}
-
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{dataname}}{(\code{character} value)\cr
-name of dataset to be returned. If \code{NULL}, all datasets are returned.}
-}
-\if{html}{\out{</div>}}
-}
-\subsection{Returns}{
-\code{RelationalDataset}.
-}
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-get_datasets"></a>}}
-\if{latex}{\out{\hypertarget{method-get_datasets}{}}}
-\subsection{Method \code{get_datasets()}}{
-Get \code{list} of \code{RelationalDataset} objects.
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{RelationalData$get_datasets()}\if{html}{\out{</div>}}
-}
-
-\subsection{Returns}{
-\code{list} of \code{RelationalDataset}.
-}
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-is_pulled"></a>}}
-\if{latex}{\out{\hypertarget{method-is_pulled}{}}}
-\subsection{Method \code{is_pulled()}}{
-Check if dataset has already been pulled.
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{RelationalData$is_pulled()}\if{html}{\out{</div>}}
-}
-
-\subsection{Returns}{
-\code{TRUE} if dataset has been already pulled, else \code{FALSE}
-}
-}
-\if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-set_check"></a>}}
 \if{latex}{\out{\hypertarget{method-set_check}{}}}
 \subsection{Method \code{set_check()}}{
@@ -279,6 +289,28 @@ Set reproducibility check
 \if{html}{\out{<div class="arguments">}}
 \describe{
 \item{\code{check}}{(\code{logical}) whether to perform reproducibility check.}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Returns}{
+\code{self} invisibly for chaining.
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-set_pull_code"></a>}}
+\if{latex}{\out{\hypertarget{method-set_pull_code}{}}}
+\subsection{Method \code{set_pull_code()}}{
+Set pull code
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{RelationalData$set_pull_code(code)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{code}}{(\code{character} value)\cr
+code to reproduce \code{data} in \code{RawDataset} objects. Can't be set if any dataset
+has \code{code} set already.}
 }
 \if{html}{\out{</div>}}
 }

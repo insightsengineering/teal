@@ -32,7 +32,6 @@
 #' tc$get_code("ADAE")
 #' \dontrun{
 #' tc$launch()
-#' tc$get_raw_data()
 #' tc$get_datasets()
 #' tc$get_dataset("ADAE")
 #' tc$check()
@@ -88,7 +87,8 @@ RelationalDataList <- R6::R6Class( # nolint
 
       private$datasets <- dot_args
 
-      private$code <- CodeClass$new()
+      private$pull_code <- CodeClass$new()
+      private$mutate_code <- CodeClass$new()
 
       if (length(self$get_connectors()) > 0) {
         private$set_ui()
@@ -221,7 +221,6 @@ RelationalDataList <- R6::R6Class( # nolint
           observeEvent(dat(), {
             if (self$is_pulled()) {
               shinyjs::show("data_loaded")
-              `if`(private$.check && !self$check(), stop("Reproducibility check failed."))
               stopApp()
             }
           })
@@ -286,7 +285,6 @@ RelationalDataList <- R6::R6Class( # nolint
         observeEvent(input$submit, {
           # load data from all connectors
           for (dc in self$get_connectors()) {
-
             if (is(dc, class2 = "RelationalDataConnector")) {
               callModule(dc$get_server(),
                          id = paste0(dc$get_datanames(), collapse = "_"),
@@ -294,7 +292,7 @@ RelationalDataList <- R6::R6Class( # nolint
                          connectors = dc$get_items()
               )
 
-            } else if (is(dc, class2 = "RelationalDatasetConnector")) {
+            } else if (is(dc, class2 = "NamedDatasetConnector")) {
               callModule(dc$get_server(),
                          id = dc$get_dataname()
               )

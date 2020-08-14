@@ -67,7 +67,8 @@ RelationalDataConnector <- R6::R6Class( #nolint
 
       private$datasets <- connectors
 
-      private$code <- CodeClass$new()
+      private$pull_code <- CodeClass$new()
+      private$mutate_code <- CodeClass$new()
 
       invisible(self)
     },
@@ -173,11 +174,9 @@ RelationalDataConnector <- R6::R6Class( #nolint
               if (self$is_pulled()) {
                 removeUI(sprintf("#%s", session$ns("data_inputs")))
                 shinyjs::show("data_loaded")
-                `if`(private$.check && !self$check(), stop("Reproducibility check failed."))
                 stopApp()
               }
             })
-
 
           })
         }

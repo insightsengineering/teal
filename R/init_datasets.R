@@ -2,6 +2,13 @@ set_datasets_data <- function(datasets, data) {
   stopifnot(is(datasets, "FilteredData"))
   stopifnot(is(data, "RelationalDataList"))
 
+  # execute reproducibility check on just loaded data
+  # check will be executed according to data class configuration (it's possible to disable this step)
+  data$check()
+  if (isFALSE(data$get_check_result())) {
+    stop("Reproducibility error. Couldn't reproduce object(s) with a given code")
+  }
+
   datasets$set_code(data$get_code_class())
 
   for (dataset in data$get_datasets()) {
