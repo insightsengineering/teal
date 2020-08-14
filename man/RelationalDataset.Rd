@@ -35,13 +35,6 @@ rel_data$set_keys(keys(primary = "x", foreign = NULL, parent = NULL))
 \section{Super classes}{
 \code{\link[teal:RawDataset]{teal::RawDataset}} -> \code{\link[teal:NamedDataset]{teal::NamedDataset}} -> \code{RelationalDataset}
 }
-\section{Active bindings}{
-\if{html}{\out{<div class="r6-active-bindings">}}
-\describe{
-\item{\code{keys}}{(\code{keys}) Derive the keys of the dataset}
-}
-\if{html}{\out{</div>}}
-}
 \section{Methods}{
 \subsection{Public methods}{
 \itemize{
@@ -71,7 +64,6 @@ rel_data$set_keys(keys(primary = "x", foreign = NULL, parent = NULL))
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="NamedDataset" data-id="get_dataset_label">}\href{../../teal/html/NamedDataset.html#method-get_dataset_label}{\code{teal::NamedDataset$get_dataset_label()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="NamedDataset" data-id="mutate">}\href{../../teal/html/NamedDataset.html#method-mutate}{\code{teal::NamedDataset$mutate()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="NamedDataset" data-id="set_code">}\href{../../teal/html/NamedDataset.html#method-set_code}{\code{teal::NamedDataset$set_code()}}\out{</span>}
-\item \out{<span class="pkg-link" data-pkg="teal" data-topic="NamedDataset" data-id="set_dataname">}\href{../../teal/html/NamedDataset.html#method-set_dataname}{\code{teal::NamedDataset$set_dataname()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="NamedDataset" data-id="set_dataset_label">}\href{../../teal/html/NamedDataset.html#method-set_dataset_label}{\code{teal::NamedDataset$set_dataset_label()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="NamedDataset" data-id="set_vars">}\href{../../teal/html/NamedDataset.html#method-set_vars}{\code{teal::NamedDataset$set_vars()}}\out{</span>}
 }

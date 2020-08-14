@@ -25,19 +25,11 @@ named_data$get_dataname()
 \section{Super class}{
 \code{\link[teal:RawDataset]{teal::RawDataset}} -> \code{NamedDataset}
 }
-\section{Active bindings}{
-\if{html}{\out{<div class="r6-active-bindings">}}
-\describe{
-\item{\code{dataname}}{for backwards compatibility}
-}
-\if{html}{\out{</div>}}
-}
 \section{Methods}{
 \subsection{Public methods}{
 \itemize{
 \item \href{#method-new}{\code{NamedDataset$new()}}
 \item \href{#method-get_dataname}{\code{NamedDataset$get_dataname()}}
-\item \href{#method-set_dataname}{\code{NamedDataset$set_dataname()}}
 \item \href{#method-get_datanames}{\code{NamedDataset$get_datanames()}}
 \item \href{#method-get_dataset_label}{\code{NamedDataset$get_dataset_label()}}
 \item \href{#method-set_dataset_label}{\code{NamedDataset$set_dataset_label()}}
@@ -115,26 +107,6 @@ Derive the \code{name} which was formerly called \code{dataname}
 
 \subsection{Returns}{
 \code{character} name of the dataset
-}
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-set_dataname"></a>}}
-\if{latex}{\out{\hypertarget{method-set_dataname}{}}}
-\subsection{Method \code{set_dataname()}}{
-Set the name for the dataset
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{NamedDataset$set_dataname(dataname)}\if{html}{\out{</div>}}
-}
-
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{dataname}}{(\code{character}) the new name}
-}
-\if{html}{\out{</div>}}
-}
-\subsection{Returns}{
-\code{self} invisibly for chaining
 }
 }
 \if{html}{\out{<hr>}}
@@ -231,7 +203,7 @@ Either code or script must be provided, but not both.
 \if{html}{\out{<div class="arguments">}}
 \describe{
 \item{\code{code}}{(\code{character}) Code to mutate the dataset. Must contain the
-\code{dataset$dataname}}
+\code{dataname}}
 
 \item{\code{vars}}{(list)\cr
 In case when this object code depends on the \code{raw_data} from the other
@@ -277,7 +249,7 @@ Sets reproducible code}
 \if{html}{\out{<div class="arguments">}}
 \describe{
 \item{\code{code}}{(\code{character}) Code to mutate the dataset. Must contain the
-\code{dataset$dataname}}
+\code{dataname}}
 }
 \if{html}{\out{</div>}}
 }

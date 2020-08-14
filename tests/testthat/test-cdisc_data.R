@@ -7,7 +7,7 @@ ADRS <- cadrs # nolint
 
 test_that("Basic example cdisc dataset", {
   expect_identical(ADSL, cdisc_dataset("ADSL", ADSL)$data)
-  expect_identical("ADSL", cdisc_dataset("ADSL", ADSL)$dataname)
+  expect_identical("ADSL", cdisc_dataset("ADSL", ADSL)$get_dataname())
   expect_true(any(class(cdisc_dataset("ADSL", ADSL)) == c("RelationalDataset")))
 })
 

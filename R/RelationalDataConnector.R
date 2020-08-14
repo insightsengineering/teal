@@ -203,7 +203,7 @@ RelationalDataConnector <- R6::R6Class( #nolint
     #' @param try (\code{logical} value)\cr
     #'  whether perform function evaluation inside \code{try} clause
     #'
-    #' @return nothing, in order to get the data please use \code{get_data} method
+    #' @return \code{self} invisibly for chaining. In order to get the data please use \code{get_datasets} method.
     pull = function(con_args = NULL, args = NULL, try = TRUE) {
       # open connection
       if (!is.null(private$connection)) {
@@ -225,7 +225,7 @@ RelationalDataConnector <- R6::R6Class( #nolint
       # close connection
       if_not_null(private$connection, private$connection$close(silent = TRUE))
 
-      return(invisible(NULL))
+      return(invisible(self))
     },
     #' @description
     #' Set connector UI function

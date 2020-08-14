@@ -81,13 +81,6 @@ RelationalDataset <- R6::R6Class( # nolint
   ## __Private Fields ====
   private = list(
     .keys = NULL
-  ),
-  ## __Active Fields ====
-  active = list(
-    #' @field keys (\code{keys}) Derive the keys of the dataset
-    keys = function() {
-      private$.keys
-    }
   )
 )
 

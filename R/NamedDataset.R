@@ -49,7 +49,7 @@ NamedDataset <- R6::R6Class( # nolint
       # Run RawDataset initialization
       super$initialize(x)
 
-      self$set_dataname(dataname)
+      private$set_dataname(dataname)
       private$code <- CodeClass$new()
       self$set_vars(vars)
       self$set_code(code)
@@ -60,29 +60,19 @@ NamedDataset <- R6::R6Class( # nolint
     #' Derive the \code{name} which was formerly called \code{dataname}
     #' @return \code{character} name of the dataset
     get_dataname = function() {
-      private$.dataname
-    },
-    #' @description
-    #' Set the name for the dataset
-    #' @param dataname (\code{character}) the new name
-    #' @return \code{self} invisibly for chaining
-    set_dataname = function(dataname) {
-      stopifnot(is_character_single(dataname))
-      stopifnot(!grepl("\\s", dataname))
-      private$.dataname <- dataname
-      return(invisible(self))
+      private$dataname
     },
     #' @description
     #' Derive the dataname
     #' @return \code{character} name of the dataset
     get_datanames = function() {
-      private$.dataname
+      private$dataname
     },
     #' @description
     #' Derive the \code{label} which was former called \code{datalabel}
     #' @return \code{character} label of the dataset
     get_dataset_label = function() {
-      private$label
+      private$dataset_label
     },
     #' @description
     #' Set the label for the dataset
@@ -93,7 +83,7 @@ NamedDataset <- R6::R6Class( # nolint
         label <- character(0)
       }
       stopifnot(is_character_vector(label, min_length = 0, max_length = 1))
-      private$label <- label
+      private$dataset_label <- label
       return(invisible(self))
     },
     #' @description
@@ -126,7 +116,7 @@ NamedDataset <- R6::R6Class( # nolint
     #' Either code or script must be provided, but not both.
     #'
     #' @param code (\code{character}) Code to mutate the dataset. Must contain the
-    #'  \code{dataset$dataname}
+    #'  \code{dataname}
     #' @param vars (list)\cr
     #'   In case when this object code depends on the \code{raw_data} from the other
     #'   \code{RelationalDataset}, \code{RelationalDatasetConnector} object(s) or other constant value,
@@ -171,7 +161,7 @@ NamedDataset <- R6::R6Class( # nolint
     #'
     #'
     #' @param code (\code{character}) Code to mutate the dataset. Must contain the
-    #'  \code{dataset$dataname}
+    #'  \code{dataname}
     set_code = function(code) {
       stopifnot(is_character_vector(code, 0, 1))
 
@@ -213,10 +203,10 @@ NamedDataset <- R6::R6Class( # nolint
   ),
   private = list(
     ## __Private Fields ====
-    .dataname = character(0),
+    dataname = character(0),
     code = NULL, # CodeClass after initialization
     vars = list(),
-    label = character(0),
+    dataset_label = character(0),
     ## __Private Methods ====
     # Evaluate script code to modify data or to reproduce data
     #
@@ -253,13 +243,16 @@ NamedDataset <- R6::R6Class( # nolint
         )
       }
       return(execution_environment)
-    }
-  ),
-  ## __Active Methods ====
-  active = list(
-    #' @field dataname for backwards compatibility
-    dataname = function() {
-      private$.dataname
+    },
+    # @description
+    # Set the name for the dataset
+    # @param dataname (\code{character}) the new name
+    # @return self invisibly for chaining
+    set_dataname = function(dataname) {
+      stopifnot(is_character_single(dataname))
+      stopifnot(!grepl("\\s", dataname))
+      private$dataname <- dataname
+      return(invisible(self))
     }
   )
 )

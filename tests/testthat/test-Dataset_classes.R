@@ -204,7 +204,7 @@ test_that("NamedDataset basics", {
   )
 
   expect_equal(
-    test_ds$dataname,
+    test_ds$get_dataname(),
     "testds"
   )
 })
@@ -228,13 +228,13 @@ test_that("RelationalDataset basics", {
   })
 
   expect_equal(
-    test_ds$keys,
+    test_ds$get_keys(),
     keys(primary = "x", foreign = NULL, parent = NULL)
   )
 
   expect_silent(test_ds$set_keys(keys(primary = "y", foreign = NULL, parent = NULL)))
   expect_equal(
-    test_ds$keys,
+    test_ds$get_keys(),
     keys(primary = "y", foreign = NULL, parent = NULL)
   )
 })

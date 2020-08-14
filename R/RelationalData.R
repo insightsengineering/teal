@@ -329,7 +329,7 @@ RelationalData <- R6::R6Class( #nolint
         private$code$set_code(code = code, dataname = dataname, deps = deps)
       }
 
-      return(invisible(NULL))
+      return(invisible(self))
     },
     set_vars = function(vars) {
       stopifnot(is_fully_named_list(vars))
@@ -338,7 +338,7 @@ RelationalData <- R6::R6Class( #nolint
         private$mutate_vars <- c(private$mutate_vars, vars)
       }
 
-      return(invisible(NULL))
+      return(invisible(self))
     },
     check_names = function(x) {
       x_names <- names(x)
@@ -351,7 +351,7 @@ RelationalData <- R6::R6Class( #nolint
       if (any(x_names %in% self$get_datanames())) {
         stop("Some datanames already exists")
       }
-      return(invisible(NULL))
+      return(invisible(self))
     },
     check_dataset_all_code = function(dataset) {
       new_env <- new.env(parent = parent.env(.GlobalEnv))

@@ -89,7 +89,10 @@ NamedDatasetConnector <- R6::R6Class( #nolint
     #'  Label to describe the dataset
     #' @return \code{self} invisibly for chaining
     set_dataset_label = function(label) {
-      stopifnot(is_character_vector(label, 0, 1))
+      if (is.null(label)) {
+        label <- character(0)
+      }
+      stopifnot(is_character_vector(label, min_length = 0, max_length = 1))
       private$dataset_label <- label
       return(invisible(self))
     },
@@ -241,7 +244,8 @@ NamedDatasetConnector <- R6::R6Class( #nolint
     },
 
     set_dataname = function(dataname) {
-      stopifnot(utils.nest::is_character_single(dataname))
+      stopifnot(is_character_single(dataname))
+      stopifnot(!grepl("\\s", dataname))
       private$dataname <- dataname
       return(invisible(self))
     },
