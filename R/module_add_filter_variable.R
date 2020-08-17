@@ -116,13 +116,14 @@ srv_add_filter_variable <- function(input, output, session, datasets, dataname, 
     choices <- choices[
       vapply(choices, function(varname) datasets$is_filterable(dataname, varname = varname), logical(1))
       ]
+
     # we add variable labels to be nicely displayed with the variable short name
     # and get types so that icons can be displayed as well
     choice_labels <- datasets$get_variable_labels(dataname)
     choice_types <- variable_types(datasets$get_data(dataname, filtered = FALSE))
     names(choice_types) <- names(datasets$get_data(dataname, filtered = FALSE))
 
-    if (!is.null(choice_labels)) {
+    if (!is.null(choice_labels) && !is_empty(choices)) {
       # `NA` not supported by `choices_labeled`
       choice_labels[is.na(choice_labels)] <- ""
       choices <- choices_labeled(
