@@ -75,11 +75,13 @@ optionalSelectInput(inputId = "xvar",
                     label = "x variable",
                     choices = variable_choices(data = ADRS, subset = c("AGE", "SEX", "PARAMCD")),
                     selected = "PARAMCD")
+
+selected_value <- paste0(lapply(ADRS[1, c("PARAMCD", "AVISIT")], as.character), collapse = " - ")
 optionalSelectInput(inputId = "xvar",
                     label = "x variable",
                     choices = value_choices(data = ADRS,
                                             var_choices = c("PARAMCD", "AVISIT"),
                                             var_label = c("PARAM", "AVISIT")),
-                    selected = "BESRSPI - END OF INDUCTION")
+                    selected = selected_value)
 
 }
