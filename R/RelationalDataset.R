@@ -76,14 +76,12 @@ RelationalDataset <- R6::R6Class( # nolint
       stopifnot(is(keys, "keys"))
       stopifnot(all(keys$primary %in% self$get_colnames()))
       stopifnot(all(keys$foreign %in% self$get_colnames()))
-      stop_if_not(list(
-        `if`(
-          is.null(keys$primary),
-          TRUE,
-          anyDuplicated(self$get_raw_data()[, keys$primary, drop = FALSE]) == 0
-        ),
-        "Provided keys do not distinguish unique rows."
-      ))
+      if (!is.null(keys$primary)) {
+        stop_if_not(list(
+          anyDuplicated(self$get_raw_data()[, keys$primary, drop = FALSE]) == 0,
+          "Provided keys do not distinguish unique rows."
+        ))
+      }
 
       private$.keys <- keys
       return(invisible(self))
