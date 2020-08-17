@@ -181,7 +181,11 @@ foo_dataset <- function(dataname, fun) {
   dc <- relational_dataset_connector(
     pull_fun = fun,
     dataname = dataname,
-    keys = get_cdisc_keys(dataname) 
+    keys = keys(
+      primary = "x",
+      foreign = NULL,
+      parent = NULL
+    ) 
   )
   return(dc)
 }

@@ -3,7 +3,7 @@ context("mutate_dataset")
 
 test_that("mutate_dataset", {
 
-  x <- data.frame(x = c(1, 1), y = c("a", "a"), stringsAsFactors = FALSE)
+  x <- data.frame(x = c(1, 2), y = c("a", "b"), stringsAsFactors = FALSE)
 
   expect_silent({
     test_ds <- RawDataset$new(x)
@@ -17,7 +17,7 @@ test_that("mutate_dataset", {
     test_ds <- NamedDataset$new(
       x,
       dataname = "x",
-      code = "data.frame(x = c(1, 1), y = c('a', 'a'), stringsAsFactors = TRUE)"
+      code = "data.frame(x = c(1, 2), y = c('a', 'b'), stringsAsFactors = TRUE)"
     )
   })
 
@@ -39,14 +39,14 @@ test_that("mutate_dataset", {
 
   expect_equal(
     test_ds_mut$get_raw_data(),
-    data.frame(x = c(1, 1), y = c("a", "a"),
+    data.frame(x = c(1, 2), y = c("a", "b"),
                z = c("one", "two"),
                stringsAsFactors = FALSE)
   )
 
   expect_equal(
     get_raw_data(test_ds_mut),
-    data.frame(x = c(1, 1), y = c("a", "a"),
+    data.frame(x = c(1, 2), y = c("a", "b"),
                z = c("one", "two"),
                stringsAsFactors = FALSE)
   )
@@ -85,7 +85,7 @@ test_that("mutate_dataset", {
 
   expect_equal(
     test_ds_mut$get_raw_data(),
-    data.frame(x = c(1, 1), y = c("a", "a"),
+    data.frame(x = c(1, 2), y = c("a", "b"),
                z = c("one", "two"),
                stringsAsFactors = FALSE)
   )
@@ -96,7 +96,7 @@ test_that("mutate_dataset", {
 
   expect_equal(
     test_ds_mut$get_raw_data(),
-    data.frame(x = c(1, 1), y = c("a", "a"),
+    data.frame(x = c(1, 2), y = c("a", "b"),
                z = c(1, 1),
                stringsAsFactors = FALSE)
   )
@@ -114,7 +114,7 @@ test_that("mutate_dataset", {
 
   expect_equal(
     test_ds_mut$get_raw_data(),
-    data.frame(x = c(1, 1), y = c("a", "a"),
+    data.frame(x = c(1, 2), y = c("a", "b"),
                z = c(1, 1),
                stringsAsFactors = FALSE)
   )

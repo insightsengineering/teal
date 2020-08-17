@@ -138,8 +138,8 @@ test_that("RawDatasetConnector", {
 
 # Test RelationalDatasetConnector ------
 test_that("RelationalDatasetConnector", {
-  fun <- callable_function(data.frame)
-  fun$set_args(list(n = 5, seed = 1, cached = TRUE))
+  fun <- callable_function(radsl)
+  fun$set_args(list(N = 5, seed = 1, cached = TRUE))
 
   expect_error(
     relational_dataset_connector(pull_fun = fun),
@@ -165,13 +165,13 @@ test_that("RelationalDatasetConnector", {
 
   expect_identical(
     x1$get_code(deparse = TRUE),
-    "ADSL <- data.frame(n = 5, seed = 1, cached = TRUE)"
+    "ADSL <- radsl(N = 5, seed = 1, cached = TRUE)"
   )
 
 
   expect_identical(
     x1$get_code(deparse = FALSE),
-    as.list(as.call(parse(text = "ADSL <- data.frame(n = 5, seed = 1, cached = TRUE)")))
+    as.list(as.call(parse(text = "ADSL <- radsl(N = 5, seed = 1, cached = TRUE)")))
   )
 
   expect_error(
@@ -204,7 +204,7 @@ test_that("RelationalDatasetConnector", {
 
   expect_identical(
     get_raw_data(x1),
-    data.frame(n = 5, seed = 1, cached = TRUE)
+    radsl(N = 5, seed = 1, cached = TRUE)
   )
 
   expect_silent(
@@ -236,7 +236,7 @@ test_that("RelationalDatasetConnector", {
     x3 <- relational_dataset_connector(
       pull_fun = fun,
       dataname = "ADSL",
-      keys = get_cdisc_keys("ADSL")
+      keys = keys(primary = "id", foreign = NULL, parent = NULL)
     )
   )
 
@@ -270,8 +270,8 @@ test_that("RelationalDatasetConnector", {
 
 # Test conversions
 test_that("conversions", {
-  fun <- callable_function(data.frame)
-  fun$set_args(list(n = 5, seed = 1, cached = TRUE))
+  fun <- callable_function(radsl)
+  fun$set_args(list(N = 5, seed = 1, cached = TRUE))
 
   x <- raw_dataset_connector(pull_fun = fun)
 
@@ -320,8 +320,8 @@ test_that("conversions", {
 })
 
 test_that("as_relational", {
-  fun <- callable_function(data.frame)
-  fun$set_args(list(n = 5, seed = 1, cached = TRUE))
+  fun <- callable_function(radsl)
+  fun$set_args(list(N = 5, seed = 1, cached = TRUE))
 
   x <- raw_dataset_connector(pull_fun = fun)
 
@@ -337,7 +337,7 @@ test_that("as_relational", {
 
   expect_identical(
     x1$get_code(),
-    "ADSL <- data.frame(n = 5, seed = 1, cached = TRUE)\nADSL$test_col <- seq_len(nrow(ADSL))"
+    "ADSL <- radsl(N = 5, seed = 1, cached = TRUE)\nADSL$test_col <- seq_len(nrow(ADSL))"
   )
 
   expect_error(
@@ -353,12 +353,6 @@ test_that("as_relational", {
   expect_identical(
     as.call(parse(text = x1$get_code())),
     as.call(parse(text = get_dataset(x1)$get_code()))
-  )
-
-
-  expect_identical(
-    colnames(get_raw_data(x1)),
-    c("n", "seed", "cached", "test_col")
   )
 })
 

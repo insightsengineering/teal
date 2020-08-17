@@ -3,7 +3,7 @@ context("RawDataset")
 
 test_that("RawDataset basics", {
 
-  x <- data.frame(x = c(1, 1), y = c("a", "a"), stringsAsFactors = TRUE)
+  x <- data.frame(x = c(1, 2), y = c("a", "b"), stringsAsFactors = TRUE)
   rtables::var_labels(x) <- c("X", "Y")
 
   expect_error(
@@ -66,7 +66,7 @@ test_that("RawDataset basics", {
     c(2, 2)
   )
 
-  x <- data.frame(x = c(1, 1), y = c("a", "a"), stringsAsFactors = FALSE)
+  x <- data.frame(x = c(1, 2), y = c("a", "b"), stringsAsFactors = FALSE)
   rtables::var_labels(x) <- c("X", "Y")
   expect_silent({
     test_ds <- RawDataset$new(x)
@@ -120,7 +120,7 @@ context("NamedDataset")
 
 test_that("NamedDataset basics", {
 
-  x <- data.frame(x = c(1, 1), y = c("a", "a"), stringsAsFactors = TRUE)
+  x <- data.frame(x = c(1, 2), y = c("a", "b"), stringsAsFactors = TRUE)
   rtables::var_labels(x) <- c("X", "Y")
 
   expect_error(
@@ -151,7 +151,7 @@ test_that("NamedDataset basics", {
     test_ds <- NamedDataset$new(
       x,
       dataname = "testds",
-      code = "test_ds <- data.frame(x = c(1, 1), y = c('a', 'a'), stringsAsFactors = TRUE)",
+      code = "test_ds <- data.frame(x = c(1, 2), y = c('a', 'b'), stringsAsFactors = TRUE)",
       label = "Testing Dataset"
     )
   })
@@ -173,11 +173,11 @@ test_that("NamedDataset basics", {
 
   expect_equal(
     test_ds$get_code(deparse = TRUE),
-    "test_ds <- data.frame(x = c(1, 1), y = c(\"a\", \"a\"), stringsAsFactors = TRUE)"
+    "test_ds <- data.frame(x = c(1, 2), y = c(\"a\", \"b\"), stringsAsFactors = TRUE)"
   )
   expect_equal(
     get_code(test_ds, deparse = TRUE),
-    "test_ds <- data.frame(x = c(1, 1), y = c(\"a\", \"a\"), stringsAsFactors = TRUE)"
+    "test_ds <- data.frame(x = c(1, 2), y = c(\"a\", \"b\"), stringsAsFactors = TRUE)"
   )
 
   expect_equal(
@@ -185,7 +185,7 @@ test_that("NamedDataset basics", {
     as.list(
       as.call(
         parse(
-          text = "test_ds <- data.frame(x = c(1, 1), y = c(\"a\", \"a\"), stringsAsFactors = TRUE)"
+          text = "test_ds <- data.frame(x = c(1, 2), y = c(\"a\", \"b\"), stringsAsFactors = TRUE)"
         )
       )
     )
@@ -214,7 +214,7 @@ context("RelationalDataset")
 
 test_that("RelationalDataset basics", {
 
-  x <- data.frame(x = c(1, 1), y = c("a", "a"), stringsAsFactors = TRUE)
+  x <- data.frame(x = c(1, 2), y = c("a", "b"), stringsAsFactors = TRUE)
   rtables::var_labels(x) <- c("X", "Y")
 
   expect_error(
@@ -243,7 +243,7 @@ test_that("RelationalDataset basics", {
 context("as_relational")
 
 test_that("as_relational function", {
-  x <- data.frame(x = c(1, 1), y = c("a", "a"), stringsAsFactors = TRUE)
+  x <- data.frame(x = c(1, 2), y = c("a", "b"), stringsAsFactors = TRUE)
   rtables::var_labels(x) <- c("X", "Y")
 
   expect_silent({
