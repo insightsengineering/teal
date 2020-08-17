@@ -9,7 +9,6 @@
 #' Pulled data inherits from the class \link{RelationalDataset}.
 #'
 #' @importFrom R6 R6Class
-#' @importFrom shinyjs alert
 RelationalDatasetConnector <- R6::R6Class( #nolint
 
   ## __Public Methods ====

@@ -560,7 +560,10 @@ rice_connection <- function(open_args = list(), close_args = list(), ping_args =
 
       if (connection$is_open_failed()) {
         shinyjs::alert(
-          paste("Error opening connection\nError message:", connection$get_open_error_message())
+          paste(
+            "Error opening connection\nError message: ",
+            conditionMessage(attr(connection$get_open_error_message(), "condition"))
+          )
         )
       }
     }
@@ -579,7 +582,10 @@ rice_connection <- function(open_args = list(), close_args = list(), ping_args =
 
       if (connection$is_close_failed()) {
         shinyjs::alert(
-          paste("Error closing connection\nError message:", connection$get_close_error_message())
+          paste(
+            "Error closing connection\nError message: ",
+            conditionMessage(attr(connection$get_close_error_message(), "condition"))
+          )
         )
       }
     }
@@ -656,7 +662,10 @@ teradata_connection <- function(open_args = list(), close_args = list(), ping_ar
 
       if (connection$is_open_failed()) {
         shinyjs::alert(
-          paste("Error opening connection\nError message:", connection$get_open_error_message())
+          paste(
+            "Error opening connection\nError message: ",
+            conditionMessage(attr(connection$get_open_error_message(), "condition"))
+          )
         )
       }
     }
@@ -675,7 +684,10 @@ teradata_connection <- function(open_args = list(), close_args = list(), ping_ar
 
       if (connection$is_close_failed()) {
         shinyjs::alert(
-          paste("Error closing connection\nError message:", connection$get_close_error_message())
+          paste(
+            "Error closing connection\nError message: ",
+            conditionMessage(attr(connection$get_close_error_message(), "condition"))
+          )
         )
       }
     }

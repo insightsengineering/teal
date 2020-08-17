@@ -287,9 +287,13 @@ NamedDatasetConnector <- R6::R6Class( #nolint
           # print error if any
           # error doesn't break an app
           if (self$is_failed()) {
-            shinyjs::alert(sprintf("Error pulling %s:\nError message:%s",
-                                   self$get_dataname(),
-                                   self$get_error_message()))
+            shinyjs::alert(
+              sprintf(
+                "Error pulling %s:\nError message: %s",
+                self$get_dataname(),
+                conditionMessage(attr(self$get_error_message(), "condition"))
+              )
+            )
           }
         })
 

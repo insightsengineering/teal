@@ -324,7 +324,12 @@ RawDatasetConnector <- R6::R6Class( #nolint
           # print error if any
           out <- self$pull(args = data_args, try = TRUE)
           if (self$is_failed()) {
-            shinyjs::alert(paste("Error pulling dataset\nError message: ", self$get_error_message()))
+            shinyjs::alert(
+              paste(
+                "Error pulling dataset\nError message: ",
+                conditionMessage(attr(self$get_error_message(), "condition"))
+              )
+            )
           }
         })
         return(invisible(self))
