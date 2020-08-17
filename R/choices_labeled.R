@@ -24,20 +24,28 @@
 #' choices2 <- choices_labeled(ADTTE$PARAMCD, ADTTE$PARAM)
 #' # if only a subset of variables are needed, use subset argument
 #' choices3 <- choices_labeled(names(ADSL), rtables::var_labels(ADSL), subset = c("ARMCD", "ARM"))
-#'\dontrun{
+#' \dontrun{
 #' shinyApp(
-#'   ui = fluidPage(selectInput("c1", label = "Choices from ADSL",
-#'                              choices = choices1,
-#'                              selected = choices1[1]),
-#'                  selectInput("c2", label = "Choices from ADTTE",
-#'                              choices = choices2,
-#'                              selected = choices2[1]),
-#'                  selectInput("c3", label = "Arm choices from ADSL",
-#'                              choices = choices3,
-#'                              selected = choices3[1])),
+#'   ui = fluidPage(
+#'     selectInput("c1",
+#'       label = "Choices from ADSL",
+#'       choices = choices1,
+#'       selected = choices1[1]
+#'     ),
+#'     selectInput("c2",
+#'       label = "Choices from ADTTE",
+#'       choices = choices2,
+#'       selected = choices2[1]
+#'     ),
+#'     selectInput("c3",
+#'       label = "Arm choices from ADSL",
+#'       choices = choices3,
+#'       selected = choices3[1]
+#'     )
+#'   ),
 #'   server = function(input, output) {}
 #' )
-#'}
+#' }
 choices_labeled <- function(choices, labels, subset = NULL, types = NULL) {
   if (is.factor(choices)) {
     choices <- as.character(choices)
@@ -71,7 +79,11 @@ choices_labeled <- function(choices, labels, subset = NULL, types = NULL) {
   types <- types[!is_dupl]
   labels[is.na(labels)] <- "Label Missing"
   raw_labels <- labels
-  combined_labels <- if (!is_empty(choices)) {paste0(choices, ": ", labels)} else {character(0)}
+  combined_labels <- if (!is_empty(choices)) {
+    paste0(choices, ": ", labels)
+  } else {
+    character(0)
+  }
 
   if (!is.null(subset)) {
     ord <- match(subset, choices)
@@ -138,7 +150,8 @@ variable_choices <- function(data, subset = NULL, fill = FALSE) {
 #' @export
 variable_choices.character <- function(data, subset = NULL, fill = FALSE) {
   out <- structure(list(data = data, subset = subset),
-                   class = c("delayed_variable_choices", "delayed_data", "choices_labeled"))
+    class = c("delayed_variable_choices", "delayed_data", "choices_labeled")
+  )
   return(out)
 }
 
@@ -157,21 +170,27 @@ variable_choices.data.frame <- function(data, subset = NULL, fill = FALSE) { # n
   stopifnot(all(subset %in% c("", names(data))))
 
   if (any(duplicated(subset))) {
-    warning("removed duplicated entries in subset:",
-            paste(unique(subset[duplicated(subset)]), collapse = ", "))
+    warning(
+      "removed duplicated entries in subset:",
+      paste(unique(subset[duplicated(subset)]), collapse = ", ")
+    )
     subset <- unique(subset)
   }
 
   res <- if ("" %in% subset) {
-    choices_labeled(choices = c("", names(data)),
-                    labels = c("", unname(get_variable_labels(data))),
-                    subset = subset,
-                    types = c("", variable_types(data = data)))
+    choices_labeled(
+      choices = c("", names(data)),
+      labels = c("", unname(get_variable_labels(data))),
+      subset = subset,
+      types = c("", variable_types(data = data))
+    )
   } else {
-    choices_labeled(choices = names(data),
-                    labels = unname(get_variable_labels(data)),
-                    subset = subset,
-                    types = variable_types(data = data))
+    choices_labeled(
+      choices = names(data),
+      labels = unname(get_variable_labels(data)),
+      subset = subset,
+      types = variable_types(data = data)
+    )
   }
 
   return(res)
@@ -180,22 +199,28 @@ variable_choices.data.frame <- function(data, subset = NULL, fill = FALSE) { # n
 #' @rdname variable_choices
 #' @export
 variable_choices.RawDataset <- function(data, subset = NULL, fill = FALSE) {
-  variable_choices(data = get_raw_data(data),
-                   subset = subset,
-                   fill = fill)
+  variable_choices(
+    data = get_raw_data(data),
+    subset = subset,
+    fill = fill
+  )
 }
 
 #' @rdname variable_choices
 #' @export
 variable_choices.NamedDatasetConnector <- function(data, subset = NULL, fill = FALSE) { # nolint
   if (is_pulled(data)) {
-    variable_choices(data = get_raw_data(data),
-                     subset = subset,
-                     fill = fill)
+    variable_choices(
+      data = get_raw_data(data),
+      subset = subset,
+      fill = fill
+    )
   } else {
-    variable_choices(data = get_dataname(data),
-                     subset = subset,
-                     fill = fill)
+    variable_choices(
+      data = get_dataname(data),
+      subset = subset,
+      fill = fill
+    )
   }
 }
 
@@ -227,7 +252,8 @@ variable_choices.NamedDatasetConnector <- function(data, subset = NULL, fill = F
 #' value_choices(ADRS, "PARAMCD", "PARAM", subset = c("BESRSPI", "INVET"))
 #' value_choices(ADRS, c("PARAMCD", "ARMCD"), c("PARAM", "ARM"))
 #' value_choices(ADRS, c("PARAMCD", "ARMCD"), c("PARAM", "ARM"),
-#'   subset = c("BESRSPI - ARM A", "INVET - ARM A", "OVRINV - ARM A"))
+#'   subset = c("BESRSPI - ARM A", "INVET - ARM A", "OVRINV - ARM A")
+#' )
 #' value_choices(ADRS, c("PARAMCD", "ARMCD"), c("PARAM", "ARM"), sep = " --- ")
 #'
 #' # delayed version
@@ -250,12 +276,15 @@ value_choices <- function(data, var_choices, var_label, subset = NULL, sep = " -
 #' @rdname value_choices
 #' @export
 value_choices.character <- function(data, var_choices, var_label, subset = NULL, sep = " - ") {
-  out <- structure(list(data = data,
-                        var_choices = var_choices,
-                        var_label = var_label,
-                        subset = subset,
-                        sep = sep),
-                   class = c("delayed_value_choices", "delayed_data", "choices_labeled"))
+  out <- structure(list(
+    data = data,
+    var_choices = var_choices,
+    var_label = var_label,
+    subset = subset,
+    sep = sep
+  ),
+  class = c("delayed_value_choices", "delayed_data", "choices_labeled")
+  )
   return(out)
 }
 
@@ -282,28 +311,34 @@ value_choices.data.frame <- function(data, var_choices, var_label, subset = NULL
 #' @rdname value_choices
 #' @export
 value_choices.RawDataset <- function(data, var_choices, var_label, subset = NULL, sep = " - ") {
-  value_choices(data = get_raw_data(data),
-                var_choices = var_choices,
-                var_label = var_label,
-                subset = subset,
-                sep = sep)
+  value_choices(
+    data = get_raw_data(data),
+    var_choices = var_choices,
+    var_label = var_label,
+    subset = subset,
+    sep = sep
+  )
 }
 
 #' @rdname value_choices
 #' @export
 value_choices.NamedDatasetConnector <- function(data, var_choices, var_label, subset = NULL, sep = " - ") { # nolint
   if (is_pulled(data)) {
-    value_choices(data = get_raw_data(data),
-                  var_choices = var_choices,
-                  var_label = var_label,
-                  subset = subset,
-                  sep = sep)
+    value_choices(
+      data = get_raw_data(data),
+      var_choices = var_choices,
+      var_label = var_label,
+      subset = subset,
+      sep = sep
+    )
   } else {
-    value_choices(data = get_dataname(data),
-                  var_choices = var_choices,
-                  var_label = var_label,
-                  subset = subset,
-                  sep = sep)
+    value_choices(
+      data = get_dataname(data),
+      var_choices = var_choices,
+      var_label = var_label,
+      subset = subset,
+      sep = sep
+    )
   }
 }
 
@@ -322,19 +357,25 @@ value_choices.NamedDatasetConnector <- function(data, var_choices, var_label, su
 #'     x = 1:3, y = factor(c("a", "b", "a")), z = c("h1", "h2", "h3"),
 #'     stringsAsFactors = FALSE
 #'   ),
-#'  "x"
+#'   "x"
 #' )
 #'
 #' teal:::variable_types(
-#'   data.frame(x = 1:3, y = factor(c("a", "b", "a")), z = c("h1", "h2", "h3"),
-#'     stringsAsFactors = FALSE),
+#'   data.frame(
+#'     x = 1:3, y = factor(c("a", "b", "a")), z = c("h1", "h2", "h3"),
+#'     stringsAsFactors = FALSE
+#'   ),
 #'   c("x", "z")
 #' )
-#' teal:::variable_types(data.frame(x = 1:3, y = factor(c("a", "b", "a")), z = c("h1", "h2", "h3"),
-#'     stringsAsFactors = FALSE))
+#' teal:::variable_types(data.frame(
+#'   x = 1:3, y = factor(c("a", "b", "a")), z = c("h1", "h2", "h3"),
+#'   stringsAsFactors = FALSE
+#' ))
 variable_types <- function(data, columns = NULL) {
-  stopifnot(is.data.frame(data),
-            is.null(columns) || is_character_vector(columns, min_length = 0L))
+  stopifnot(
+    is.data.frame(data),
+    is.null(columns) || is_character_vector(columns, min_length = 0L)
+  )
 
   res <- if (is.null(columns)) {
     vapply(
@@ -351,7 +392,6 @@ variable_types <- function(data, columns = NULL) {
       character(1),
       USE.NAMES = FALSE
     )
-
   } else {
     character(0)
   }
