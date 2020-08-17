@@ -42,12 +42,12 @@ choices_labeled <- function(choices, labels, subset = NULL, types = NULL) {
   if (is.factor(choices)) {
     choices <- as.character(choices)
   }
-  stopifnot(is_character_vector(choices))
+  stopifnot(is_character_vector(choices, min_length = 0L))
 
   if (is.factor(labels)) {
     labels <- as.character(labels)
   }
-  stopifnot(is_character_vector(labels))
+  stopifnot(is_character_vector(labels, min_length = 0L))
 
   stop_if_not(list(length(choices) == length(labels), "length of choices must be the same as labels"))
 
@@ -69,10 +69,9 @@ choices_labeled <- function(choices, labels, subset = NULL, types = NULL) {
   choices <- choices[!is_dupl]
   labels <- labels[!is_dupl]
   types <- types[!is_dupl]
-
   labels[is.na(labels)] <- "Label Missing"
   raw_labels <- labels
-  combined_labels <- paste0(choices, ": ", labels)
+  combined_labels <- if (!is_empty(choices)) {paste0(choices, ": ", labels)} else {character(0)}
 
   if (!is.null(subset)) {
     ord <- match(subset, choices)
@@ -81,7 +80,6 @@ choices_labeled <- function(choices, labels, subset = NULL, types = NULL) {
     combined_labels <- combined_labels[ord]
     types <- types[ord]
   }
-
   choices <- structure(
     choices,
     names = combined_labels,
@@ -130,7 +128,7 @@ choices_labeled <- function(choices, labels, subset = NULL, types = NULL) {
 #'   return(names(data)[idx])
 #' })
 variable_choices <- function(data, subset = NULL, fill = FALSE) {
-  stopifnot(is.null(subset) || is_character_vector(subset, min_length = 1L) || is.function(subset))
+  stopifnot(is.null(subset) || is_character_vector(subset, min_length = 0L) || is.function(subset))
   stopifnot(is_logical_single(fill))
 
   UseMethod("variable_choices")
@@ -147,10 +145,13 @@ variable_choices.character <- function(data, subset = NULL, fill = FALSE) {
 #' @rdname variable_choices
 #' @export
 variable_choices.data.frame <- function(data, subset = NULL, fill = FALSE) { # nolint
-  if (is.null(subset)) {
-    subset <- names(data)
-  } else if (is.function(subset)) {
+
+  if (is.function(subset)) {
     subset <- resolve_delayed_expr(subset, ds = data, is_value_choices = FALSE)
+  }
+
+  if (is_empty(subset)) {
+    subset <- names(data)
   }
 
   stopifnot(all(subset %in% c("", names(data))))
@@ -238,8 +239,8 @@ variable_choices.NamedDatasetConnector <- function(data, subset = NULL, fill = F
 #' })
 value_choices <- function(data, var_choices, var_label, subset = NULL, sep = " - ") {
   stopifnot(
-    is_character_vector(var_choices),
-    is_character_vector(var_label),
+    is_character_vector(var_choices, min_length = 0L),
+    is_character_vector(var_label, min_length = 0L),
     length(var_choices) == length(var_label)
   )
   stopifnot(is.null(subset) || is.vector(subset) || is.function(subset))
@@ -333,7 +334,7 @@ value_choices.NamedDatasetConnector <- function(data, var_choices, var_label, su
 #'     stringsAsFactors = FALSE))
 variable_types <- function(data, columns = NULL) {
   stopifnot(is.data.frame(data),
-            is.null(columns) || is_character_vector(columns, min_length = 0))
+            is.null(columns) || is_character_vector(columns, min_length = 0L))
 
   res <- if (is.null(columns)) {
     vapply(
@@ -342,7 +343,7 @@ variable_types <- function(data, columns = NULL) {
       character(1),
       USE.NAMES = FALSE
     )
-  } else if (is_character_vector(columns)) {
+  } else if (is_character_vector(columns, min_length = 0L)) {
     stopifnot(all(columns %in% names(data) | columns == ""))
     vapply(
       columns,

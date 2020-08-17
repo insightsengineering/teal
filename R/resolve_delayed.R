@@ -204,9 +204,9 @@ resolve_delayed_expr <- function(x, ds, is_value_choices) {
                  pdeparse(bquote(.(x)))))
     }
   } else {
-    if (!is_character_vector(res) || length(res) > ncol(ds) || anyDuplicated(res)) {
-      stop(paste("The following function must return a character vector of at least length 1",
-                 "with unique names from the available columns of the dataset:\n\n",
+    if (!is_character_vector(res, min_length = 0L) || length(res) > ncol(ds) || anyDuplicated(res)) {
+      stop(paste("The following function must return a character vector with unique",
+                 "names from the available columns of the dataset:\n\n",
                  pdeparse(bquote(.(x)))))
     }
   }
