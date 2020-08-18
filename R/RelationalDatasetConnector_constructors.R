@@ -1,10 +1,81 @@
+#' Create \code{RawDatasetConnector} object
+#'
+#' Create \link{RawDatasetConnector} object to execute specific call to fetch data
+#' @param pull_fun (\code{CallableFunction})\cr
+#'   function with necessary arguments set to fetch data from connection.
+#' @examples
+#' ds <- raw_dataset_connector(pull_fun = callable_function(data.frame))
+#' set_args(ds, list(x = 1:5, y = letters[1:5], stringsAsFactors = FALSE))
+#' ds$pull()
+#' ds$get_raw_data()
+#' ds$get_code()
+#' @return \code{RawDatasetConnector} object
+#' @export
+raw_dataset_connector <- function(pull_fun) {
+  stopifnot(is(pull_fun, "CallableFunction"))
+
+  RawDatasetConnector$new(pull_fun = pull_fun)
+}
+
+#' Create a new \code{NamedDatasetConnector} object
+#'
+#' @description
+#'  Create \code{NamedDatasetConnector} from \link{callable_function}.
+#'
+#' @inheritParams raw_dataset_connector
+#' @param dataname (\code{character})\cr
+#'  A given name for the dataset it may not contain spaces
+#'
+#' @param code (\code{character})\cr
+#'  A character string defining code to modify \code{raw_data} from this dataset. To modify
+#'  current dataset code should contain at least one assignment to object defined in \code{dataname}
+#'  argument. For example if \code{dataname = ADSL} example code should contain
+#'  \code{ADSL <- <some R code>}. Can't be used simultaneously with \code{script}
+#'
+#' @param script (\code{character})\cr
+#'   Alternatively to \code{code} - location of the file containing modification code.
+#'   Can't be used simultaneously with \code{script}.
+#'
+#' @param label (\code{character})\cr
+#'  Label to describe the dataset.
+#'
+#' @param vars (list)\cr
+#'   In case when this object code depends on the \code{raw_data} from the other
+#'   \code{NamedDataset}, \code{NamedDatasetConnector} object(s) or other constant value,
+#'   this/these object(s) should be included.
+#'
+#' @return new \code{NamedDatasetConnector} object
+#'
+#' @export
+named_dataset_connector <- function(dataname,
+                                    pull_fun,
+                                    code = character(0),
+                                    script = character(0),
+                                    label = character(0),
+                                    vars = list()) {
+  stopifnot(is_character_single(dataname))
+  stopifnot(is(pull_fun, "CallableFunction"))
+  stopifnot(is_character_empty(code) || is_character_vector(code))
+  stopifnot(is_character_empty(label) || is_character_vector(label))
+
+  x <- NamedDatasetConnector$new(
+    dataname = dataname,
+    pull_fun = pull_fun,
+    code = code_from_script(code, script),
+    label = label,
+    vars = vars
+  )
+
+  return(x)
+}
+
+
 #' Create a new \code{RelationalDatasetConnector} object
 #'
 #' @description
 #'  Create \code{RelationalDatasetConnector} from \link{callable_function}.
 #'
 #' @inheritParams named_dataset_connector
-#' @inheritParams code_from_script
 #'
 #' @param keys (\code{keys})\cr
 #'  object of S3 class keys containing foreign, primary keys and parent information
@@ -16,6 +87,7 @@ relational_dataset_connector <- function(dataname,
                                          pull_fun,
                                          keys,
                                          code = character(0),
+                                         script = character(0),
                                          label = character(0),
                                          vars = list()) {
   stopifnot(is_character_single(dataname))
@@ -28,7 +100,7 @@ relational_dataset_connector <- function(dataname,
     dataname = dataname,
     pull_fun = pull_fun,
     keys = keys,
-    code = code,
+    code = code_from_script(code, script),
     label = label,
     vars = vars
   )
@@ -209,10 +281,11 @@ rds_dataset_connector <- function(dataname,
 #' \code{script_dataset_connector} - Create a \code{RelationalDatasetConnector} from \code{.R} file.
 #'
 #' @param file (\code{character})\cr
-#'   path to code for \code{source}
+#'   file location containing code to be evaluated in connector. Object obtained in the last
+#'   call from file will be returned to the connector - same as \code{source(file = file)$value}
 #'
 #' @param ... (\code{optional})\cr
-#'   additional arguments applied to pull function
+#'   additional arguments applied to \code{source} function.
 #'
 #' @inheritParams relational_dataset_connector
 #'
@@ -264,8 +337,9 @@ script_dataset_connector <- function(dataname,
 #'   from a string.
 #'
 #' @inheritParams relational_dataset_connector
-#' @param mutate_code (\code{character})\cr
-#'   Vector with additional code that can be supplied to mutate the dataset.
+#'
+#' @param pull_code (\code{character})\cr
+#'   function call with arguments to obtain dataset.
 #'
 #' @rdname relational_dataset_connector
 #'
@@ -276,10 +350,11 @@ script_dataset_connector <- function(dataname,
 #' @export
 #'
 #' @examples
+#' library(random.cdisc.data)
 #' x <- code_dataset_connector(
 #'   dataname = "ADSL",
 #'   keys = get_cdisc_keys("ADSL"),
-#'   code = "radsl(cached = TRUE)"
+#'   pull_code = "radsl(cached = TRUE)"
 #' )
 #'
 #' x$get_code()
@@ -287,18 +362,18 @@ script_dataset_connector <- function(dataname,
 #' mutate_dataset(x, code = "ADSL$new_variable <- 1")
 #' x$get_code()
 code_dataset_connector <- function(dataname,
-                                   code,
+                                   pull_code,
                                    keys,
-                                   mutate_code = character(0),
+                                   code = character(0),
                                    label = character(0),
                                    ...) {
   vars <- list(...)
 
   stopifnot(is_fully_named_list(vars))
-  stopifnot(is_character_single(code))
-  stopifnot(is_character_vector(mutate_code, min_length = 0L, max_length = 1L))
+  stopifnot(is_character_single(pull_code))
+  stopifnot(is_character_vector(code, min_length = 0L, max_length = 1L))
 
-  cl <- as.list(str2lang(code))
+  cl <- as.list(str2lang(pull_code))
   fn <- cl[[1]]
 
   x_fun <- callable_function(fn)
@@ -308,7 +383,7 @@ code_dataset_connector <- function(dataname,
     dataname = dataname,
     pull_fun = x_fun,
     keys = keys,
-    code = mutate_code,
+    code = code,
     label = label,
     vars = vars
   )
@@ -546,16 +621,16 @@ script_cdisc_dataset_connector <- function(dataname,
 #'
 #' @export
 code_cdisc_dataset_connector <- function(dataname,
+                                         pull_code = character(0),
                                          code = character(0),
-                                         mutate_code = character(0),
                                          label = character(0),
                                          ...) {
 
   x <- code_dataset_connector(
     dataname = dataname,
-    code = code,
+    pull_code = pull_code,
     keys = get_cdisc_keys(dataname),
-    mutate_code = mutate_code,
+    mutate_code = code,
     label = label,
     ...
   )

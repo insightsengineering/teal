@@ -356,24 +356,3 @@ match_ui <- function(ns, value, label) {
   }
   return(out)
 }
-
-## Constructors ====
-
-#' Create \code{RawDatasetConnector} object
-#'
-#' Create \link{RawDatasetConnector} object to execute specific call to fetch data
-#' @param pull_fun (\code{CallableFunction})\cr
-#'   function with necessary arguments set to fetch data from connection.
-#' @examples
-#' ds <- raw_dataset_connector(pull_fun = callable_function(data.frame))
-#' set_args(ds, list(x = 1:5, y = letters[1:5], stringsAsFactors = FALSE))
-#' ds$pull()
-#' ds$get_raw_data()
-#' ds$get_code()
-#' @return \code{RawDatasetConnector} object
-#' @export
-raw_dataset_connector <- function(pull_fun) {
-  stopifnot(is(pull_fun, "CallableFunction"))
-
-  RawDatasetConnector$new(pull_fun = pull_fun)
-}

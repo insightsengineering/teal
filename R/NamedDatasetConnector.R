@@ -22,17 +22,24 @@ NamedDatasetConnector <- R6::R6Class( #nolint
     #' of object to be assigned.
     #'
     #' @param dataname (\code{character})\cr
-    #'  A given name for the dataset, it may not contain spaces
+    #'  A given name for the dataset, it may not contain spaces.
+    #'
     #' @param pull_fun (\code{CallableFunction})\cr
     #'  function to load the data, must return a \code{data.frame}.
+    #'
     #' @param code (\code{character})\cr
-    #'  A character string defining the code needed to produce the data set in \code{x}
+    #'  A character string defining code to modify \code{raw_data} from this dataset. To modify
+    #'  current dataset code should contain at least one assignment to object defined in \code{dataname}
+    #'  argument. For example if \code{dataname = ADSL} example code should contain
+    #'  \code{ADSL <- <some modification code>}.
+    #'
     #' @param label (\code{character})\cr
-    #'  Label to describe the dataset
+    #'  Label to describe the dataset.
+    #'
     #' @param vars (list)\cr
     #'   In case when this object code depends on the \code{raw_data} from the other
     #'   \code{NamedDataset}, \code{NamedDatasetConnector} object(s) or other constant value,
-    #'   this/these object(s) should be included
+    #'   this/these object(s) should be included.
     #'
     #' @return new \code{NamedDatasetConnector} object
     initialize = function(dataname, pull_fun, code = character(0), label = character(0), vars = list()) {
@@ -304,46 +311,3 @@ NamedDatasetConnector <- R6::R6Class( #nolint
     }
   )
 )
-
-## Constructors ====
-
-#' Create a new \code{NamedDatasetConnector} object
-#'
-#' @description
-#'  Create \code{NamedDatasetConnector} from \link{callable_function}.
-#'
-#' @inheritParams raw_dataset_connector
-#' @param dataname (\code{character})\cr
-#'  A given name for the dataset it may not contain spaces
-#' @param code (\code{character})\cr
-#'  A character string defining the code needed to produce the data set in \code{x}
-#' @param label (\code{character})\cr
-#'  Label to describe the dataset
-#' @param vars (list)\cr
-#'   In case when this object code depends on the \code{raw_data} from the other
-#'   \code{NamedDataset}, \code{NamedDatasetConnector} object(s) or other constant value,
-#'   this/these object(s) should be included
-#'
-#' @return new \code{NamedDatasetConnector} object
-#'
-#' @export
-named_dataset_connector <- function(dataname,
-                                    pull_fun,
-                                    code = character(0),
-                                    label = character(0),
-                                    vars = list()) {
-  stopifnot(is_character_single(dataname))
-  stopifnot(is(pull_fun, "CallableFunction"))
-  stopifnot(is_character_empty(code) || is_character_vector(code))
-  stopifnot(is_character_empty(label) || is_character_vector(label))
-
-  x <- NamedDatasetConnector$new(
-    dataname = dataname,
-    pull_fun = pull_fun,
-    code = code,
-    label = label,
-    vars = vars
-  )
-
-  return(x)
-}

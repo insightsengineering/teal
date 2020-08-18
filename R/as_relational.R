@@ -1,23 +1,8 @@
 #' Convert a \code{Raw<...>} to a \code{Relational<...>}
 #'
-#' @param x (\code{RawDataset} or \code{RawDatasetConnector}) object
-#'
-#' @param dataname (\code{character})\cr
-#'   A given name for the dataset it may not contain spaces
-#'
-#' @param keys (\code{keys})\cr
-#'   object of S3 class keys containing foreign, primary keys and parent information
-#'
-#' @param code (\code{character})\cr
-#'   A character string defining the code needed to produce the data set in \code{x}
-#'
-#' @param script (\code{character})\cr
-#'   file that contains R Code that can be read using \link{read_script}.
-#'   Preferred before \code{code} argument
-#'
-#' @param label (\code{character})\cr
-#'   Label to describe the dataset
-#'
+#' Convert a \code{Raw<...>} to a \code{Relational<...>}
+#' @inheritParams relational_dataset_connector
+#' @param x (\code{RawDataset}, \code{NamedDataset}, \code{RawDatasetConnector})
 #' @return \code{RelationalDataset} or \code{RelationalDatasetConnector} object
 #'
 #' @export
@@ -153,7 +138,9 @@ as_cdisc_relational <- function(x,
 #'
 #' Get code from script. Switches between \code{code} and \code{script arguments}
 #' to return non-empty one to pass it further to constructors.
-#' @inheritParams as_relational
+#' @param code (\code{character} value)\cr
+#'   an R code to be evaluated.
+#' @inheritParams relational_dataset_connector
 #' @return code (\code{character})
 code_from_script <- function(code, script, dataname = NULL) {
   stopifnot(is_character_vector(code, min_length = 0, max_length = 1))

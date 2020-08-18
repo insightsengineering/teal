@@ -22,6 +22,7 @@ relational_dataset_connector(
   pull_fun,
   keys,
   code = character(0),
+  script = character(0),
   label = character(0),
   vars = list()
 )
@@ -60,9 +61,9 @@ script_dataset_connector(
 
 code_dataset_connector(
   dataname,
-  code,
+  pull_code,
   keys,
-  mutate_code = character(0),
+  code = character(0),
   label = character(0),
   ...
 )
@@ -125,8 +126,8 @@ script_cdisc_dataset_connector(
 
 code_cdisc_dataset_connector(
   dataname,
+  pull_code = character(0),
   code = character(0),
-  mutate_code = character(0),
   label = character(0),
   ...
 )
@@ -151,15 +152,22 @@ function with necessary arguments set to fetch data from connection.}
 object of S3 class keys containing foreign, primary keys and parent information}
 
 \item{code}{(\code{character})\cr
-A character string defining the code needed to produce the data set in \code{x}}
+A character string defining code to modify \code{raw_data} from this dataset. To modify
+current dataset code should contain at least one assignment to object defined in \code{dataname}
+argument. For example if \code{dataname = ADSL} example code should contain
+\code{ADSL <- <some R code>}. Can't be used simultaneously with \code{script}}
+
+\item{script}{(\code{character})\cr
+Alternatively to \code{code} - location of the file containing modification code.
+Can't be used simultaneously with \code{script}.}
 
 \item{label}{(\code{character})\cr
-Label to describe the dataset}
+Label to describe the dataset.}
 
 \item{vars}{(list)\cr
 In case when this object code depends on the \code{raw_data} from the other
 \code{NamedDataset}, \code{NamedDatasetConnector} object(s) or other constant value,
-this/these object(s) should be included}
+this/these object(s) should be included.}
 
 \item{path}{(\code{character})\cr
 path to the file}
@@ -168,18 +176,15 @@ path to the file}
 any R function which generates \code{data.frame}, especially functions from
 \code{random.cdisc.data} like \code{\link[random.cdisc.data]{radsl}}}
 
-\item{script}{(\code{character})\cr
-file that contains R Code that can be read using \link{read_script}.
-Preferred before \code{code} argument}
-
 \item{...}{(\code{optional})\cr
 additional arguments applied to pull function}
 
 \item{file}{(\code{character})\cr
-path to code for \code{source}}
+file location containing code to be evaluated in connector. Object obtained in the last
+call from file will be returned to the connector - same as \code{source(file = file)$value}}
 
-\item{mutate_code}{(\code{character})\cr
-Vector with additional code that can be supplied to mutate the dataset.}
+\item{pull_code}{(\code{character})\cr
+function call with arguments to obtain dataset.}
 
 \item{table}{(\code{character}) table name}
 }
@@ -280,10 +285,11 @@ x <- script_dataset_connector(
 )
 x$get_code()
 }
+library(random.cdisc.data)
 x <- code_dataset_connector(
   dataname = "ADSL",
   keys = get_cdisc_keys("ADSL"),
-  code = "radsl(cached = TRUE)"
+  pull_code = "radsl(cached = TRUE)"
 )
 
 x$get_code()

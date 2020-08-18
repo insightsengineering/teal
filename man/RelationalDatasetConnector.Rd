@@ -76,19 +76,22 @@ of object to be assigned.
 \if{html}{\out{<div class="arguments">}}
 \describe{
 \item{\code{dataname}}{(\code{character})\cr
-A given name for the dataset, it may not contain spaces}
+A given name for the dataset, it may not contain spaces.}
 
 \item{\code{pull_fun}}{(\code{CallableFunction})\cr
 function to load the data, must return a \code{data.frame}.}
 
 \item{\code{keys}}{(\code{keys})\cr
-object of S3 class \code{keys} containing foreign, primary keys and parent information}
+object of S3 class \code{keys} containing foreign, primary keys and parent information.}
 
 \item{\code{code}}{(\code{character})\cr
-A character string defining the code needed to produce the data set in \code{x}}
+A character string defining code to modify \code{raw_data} from this dataset. To modify
+current dataset code should contain at least one assignment to object defined in \code{dataname}
+argument. For example if \code{dataname = ADSL} example code should contain
+\code{ADSL <- <some R code>}.}
 
 \item{\code{label}}{(\code{character})\cr
-Label to describe the dataset}
+Label to describe the dataset.}
 
 \item{\code{vars}}{(list)\cr
 In case when this object code depends on the \code{raw_data} from the other

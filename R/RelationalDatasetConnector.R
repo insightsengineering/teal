@@ -21,15 +21,23 @@ RelationalDatasetConnector <- R6::R6Class( #nolint
     #' of object to be assigned.
     #'
     #' @param dataname (\code{character})\cr
-    #'  A given name for the dataset, it may not contain spaces
+    #'  A given name for the dataset, it may not contain spaces.
+    #'
     #' @param pull_fun (\code{CallableFunction})\cr
     #'  function to load the data, must return a \code{data.frame}.
+    #'
     #' @param keys (\code{keys})\cr
-    #'  object of S3 class \code{keys} containing foreign, primary keys and parent information
+    #'  object of S3 class \code{keys} containing foreign, primary keys and parent information.
+    #'
     #' @param code (\code{character})\cr
-    #'  A character string defining the code needed to produce the data set in \code{x}
+    #'  A character string defining code to modify \code{raw_data} from this dataset. To modify
+    #'  current dataset code should contain at least one assignment to object defined in \code{dataname}
+    #'  argument. For example if \code{dataname = ADSL} example code should contain
+    #'  \code{ADSL <- <some R code>}.
+    #'
     #' @param label (\code{character})\cr
-    #'  Label to describe the dataset
+    #'  Label to describe the dataset.
+    #'
     #' @param vars (list)\cr
     #'   In case when this object code depends on the \code{raw_data} from the other
     #'   \code{RelationalDataset}, \code{RelationalDatasetConnector} object(s) or other constant value,

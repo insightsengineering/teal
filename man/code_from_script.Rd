@@ -7,12 +7,12 @@
 code_from_script(code, script, dataname = NULL)
 }
 \arguments{
-\item{code}{(\code{character})\cr
-A character string defining the code needed to produce the data set in \code{x}}
+\item{code}{(\code{character} value)\cr
+an R code to be evaluated.}
 
 \item{script}{(\code{character})\cr
-file that contains R Code that can be read using \link{read_script}.
-Preferred before \code{code} argument}
+Alternatively to \code{code} - location of the file containing modification code.
+Can't be used simultaneously with \code{script}.}
 
 \item{dataname}{(\code{character})\cr
 A given name for the dataset it may not contain spaces}
