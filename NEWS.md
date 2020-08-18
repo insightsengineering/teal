@@ -1,13 +1,15 @@
 # teal 0.9.0
 
-* `cdisc_dataset` and `dataset` now return R6 class objects (`RelationalDataset`)
-* new `teal_data` function to include connectors into teal application.
-* `get_raw_data` can be used to derive raw data from R6 objects e.g. (`RelationalDataset`)
-* new `RawDatasetConnector` and `RelationalDatasetConnector` to execute get data from remote connections.
-* `mutate_dataset` allows to modify `raw_data` in dataset via `code` argument or an R script
-* `mutate_data` allows to change any dataset in `RelationalData` or `RelationalDataList` 
-* new wrapper functions to manipulate `DatasetConnector` and `Dataset` such as `get_dataset`, 
-`load_dataset`, `as_relational`.
+* `cdisc_dataset` and `dataset` now return R6 class objects (`RelationalDataset`).
+* A new `teal_data` function to include datasets and connectors into teal application.
+* `cdisc_data` function to include datasets and connectors into teal application where a `check` argument still could be used and other consistency tests are performed.
+* `get_raw_data` can be used to derive raw data from R6 objects e.g. (`RelationalDataset`).
+* `RawDatasetConnector`, `NamedDatasetConnector` and `RelationalDatasetConnector` to execute custom function call in order to get data from connection.
+* `CodeClass` to manage reproducibility of the data and relationships between datasets. Not directly exposed to the public interface.
+* `mutate_dataset` allows to modify dataset or connector via `code` argument or an R script.
+* `mutate_data` allows to change any dataset in `RelationalData`, `RelationalDataConnector` or `RelationalDataList`.
+* New wrapper functions to manipulate `RelationalDatasetConnector` and `RelationalDataset` such as `get_dataset`, `load_dataset`, `as_relational`.
+* New wrapper functions to manipulate `RelationalDataConnector`, `RelationalData` and `RelationalDataList` such as `get_datasets`, `load_datasets`.
 * `choices_labeled`, `filter_spec`, `select_spec`, `data_extract_spec`, `value_choices`, 
 `variable_choices` as S3 class applied on `data.frame` and also on delayed data.
 
@@ -18,13 +20,14 @@
 * Missing data `NA` is now explicitly addressed in the filter panel: `NA`s are excluded by default and a checkbox to include them was added.
 * Statistics of the data are visually depicted in terms of histograms or bar charts overlayed onto the Shiny input elements.
 * Added buttons to remove all filters applied to a dataset.
-* Restored the functionality to hide the filter panel for a module when it was constructed with `filter = NULL`.
+* Restored the functionality to hide the filter panel for a module when it was constructed with `filters = NULL`.
 * Moved helper functions into `utils.nest` and removed unused functions `set_labels_df` and `get_labels_df`. 
 * `optionalSelectInput` now allows for grouped choices.
 
 ## Refactor of FilteredData (for developers)
 
 * `FilteredData` is now fully reactive. Now filtered data is lazy evaluated as per need. This further opens the door to bookmarking `teal` apps (bookmarking currently works for the right filtering panel, but we will make this feature more sophisticated in a future release, each module must be reviewed and adapted if it contains `reactiveValues`).
+* Datasets and materialized connectors are provided to `FilteredData` by `set_datasets_data` function located in `init_datasets.R` file.
 * Renamed `get_dataset()` method to `get_data()`.
 * Renamed `get_filter_call()` method to `get_filter_expr()`; returns an expression rather than a list.
 * Removed argument `isolate` from `get_data()` method and similar methods. You must `isolate` it yourself as needed. If you want to temporarily deactivate Shiny errors due to missing errors, you can set `options(shiny.suppressMissingContextError = TRUE)`. In general, avoid `isolate` as this breaks reactivity.
