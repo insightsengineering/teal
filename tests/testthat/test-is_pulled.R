@@ -13,10 +13,10 @@ test_that("Test RawDatasetConnector is_pulled", {
 
 test_that("Test RelationalDataset is_pulled", {
 
-  rel_data <- teal:::RelationalDataset$new(
+  rel_data <- relational_dataset(
+    dataname = "XY",
     x = data.frame(x = c(1, 2), y = c("a", "b"), stringsAsFactors = FALSE),
     keys = keys(primary = "y", foreign = NULL, parent = NULL),
-    dataname = "XY",
     code = "XY <- data.frame(x = c(1, 2), y = c('aa', 'bb'),
                              stringsAsFactors = FALSE)"
   )

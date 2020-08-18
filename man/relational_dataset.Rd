@@ -4,13 +4,20 @@
 \alias{relational_dataset}
 \title{Create \code{RelationalDataset} object}
 \usage{
-relational_dataset(x, dataname, keys, code, label)
+relational_dataset(
+  dataname,
+  x,
+  keys,
+  code = character(0),
+  label = character(0),
+  vars = list()
+)
 }
 \arguments{
-\item{x}{(\code{data.frame} or \code{rtable}) object}
-
 \item{dataname}{(\code{character})\cr
 A given name for the dataset it may not contain spaces}
+
+\item{x}{(\code{data.frame} or \code{rtable}) object}
 
 \item{keys}{(\code{keys})\cr
 object of S3 class keys containing foreign, primary keys and parent information}
@@ -20,6 +27,11 @@ A character string defining the code needed to produce the data set in \code{x}}
 
 \item{label}{(\code{character})\cr
 Label to describe the dataset}
+
+\item{vars}{(named \code{list})) \cr
+In case when this object code depends on the \code{raw_data} from the other
+\code{RelationalDataset} object(s) or other constant value,
+this/these object(s) should be included as named element of the list.}
 }
 \value{
 object of class \code{RelaionalDataset}
@@ -30,8 +42,8 @@ Create \code{RelationalDataset} object
 \examples{
 library(random.cdisc.data)
 relational_dataset(
-  x = radsl(cached = TRUE),
   dataname = "ADSL",
+  x = radsl(cached = TRUE),
   keys = get_cdisc_keys("ADSL"),
   code = "ADSL <- radsl(cached = TRUE)",
   label = "ADSL dataset"

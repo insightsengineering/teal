@@ -43,15 +43,23 @@ choices2 <- choices_labeled(ADTTE$PARAMCD, ADTTE$PARAM)
 choices3 <- choices_labeled(names(ADSL), rtables::var_labels(ADSL), subset = c("ARMCD", "ARM"))
 \dontrun{
 shinyApp(
-  ui = fluidPage(selectInput("c1", label = "Choices from ADSL",
-                             choices = choices1,
-                             selected = choices1[1]),
-                 selectInput("c2", label = "Choices from ADTTE",
-                             choices = choices2,
-                             selected = choices2[1]),
-                 selectInput("c3", label = "Arm choices from ADSL",
-                             choices = choices3,
-                             selected = choices3[1])),
+  ui = fluidPage(
+    selectInput("c1",
+      label = "Choices from ADSL",
+      choices = choices1,
+      selected = choices1[1]
+    ),
+    selectInput("c2",
+      label = "Choices from ADTTE",
+      choices = choices2,
+      selected = choices2[1]
+    ),
+    selectInput("c3",
+      label = "Arm choices from ADSL",
+      choices = choices3,
+      selected = choices3[1]
+    )
+  ),
   server = function(input, output) {}
 )
 }

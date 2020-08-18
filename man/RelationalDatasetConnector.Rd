@@ -63,8 +63,8 @@ load the data. \code{dataname} will be used as name
 of object to be assigned.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{RelationalDatasetConnector$new(
-  pull_fun,
   dataname,
+  pull_fun,
   keys,
   code = character(0),
   label = character(0),
@@ -75,11 +75,11 @@ of object to be assigned.
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{pull_fun}}{(\code{CallableFunction})\cr
-function to load the data, must return a \code{data.frame}.}
-
 \item{\code{dataname}}{(\code{character})\cr
 A given name for the dataset, it may not contain spaces}
+
+\item{\code{pull_fun}}{(\code{CallableFunction})\cr
+function to load the data, must return a \code{data.frame}.}
 
 \item{\code{keys}}{(\code{keys})\cr
 object of S3 class \code{keys} containing foreign, primary keys and parent information}

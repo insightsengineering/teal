@@ -66,7 +66,7 @@ teal_data <- function(...) {
 #'
 #' Please note that the script has to end with a call creating desired object. The error will be raised otherwise.
 #'
-#' @param x (\code{character}) string giving the pathname of the file to read from.
+#' @param path (\code{character}) string giving the pathname of the file to read from.
 #' @param code (\code{character}) reproducible code to re-create object
 #'
 #' @return \code{RelationalData} object
@@ -122,11 +122,11 @@ teal_data <- function(...) {
 #' )
 #' x <- teal_data_file(file_example)
 #' get_code(x)
-teal_data_file <- function(x, code = get_code(x)) {
-  stopifnot(is_character_single(x))
-  stopifnot(file.exists(x))
+teal_data_file <- function(path, code = get_code(path)) {
+  stopifnot(is_character_single(path))
+  stopifnot(file.exists(path))
 
-  lines <- paste0(readLines(x), collapse = "\n")
+  lines <- paste0(readLines(path), collapse = "\n")
   object <- eval(parse(text = lines))
 
   if (is(object, "RelationalDataList")) {

@@ -24,14 +24,18 @@ teal:::variable_types(
     x = 1:3, y = factor(c("a", "b", "a")), z = c("h1", "h2", "h3"),
     stringsAsFactors = FALSE
   ),
- "x"
+  "x"
 )
 
 teal:::variable_types(
-  data.frame(x = 1:3, y = factor(c("a", "b", "a")), z = c("h1", "h2", "h3"),
-    stringsAsFactors = FALSE),
+  data.frame(
+    x = 1:3, y = factor(c("a", "b", "a")), z = c("h1", "h2", "h3"),
+    stringsAsFactors = FALSE
+  ),
   c("x", "z")
 )
-teal:::variable_types(data.frame(x = 1:3, y = factor(c("a", "b", "a")), z = c("h1", "h2", "h3"),
-    stringsAsFactors = FALSE))
+teal:::variable_types(data.frame(
+  x = 1:3, y = factor(c("a", "b", "a")), z = c("h1", "h2", "h3"),
+  stringsAsFactors = FALSE
+))
 }

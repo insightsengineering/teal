@@ -79,7 +79,8 @@ library(random.cdisc.data)
 ADSL <- radsl(cached = TRUE)
 ADSL_raw <- raw_dataset(x = ADSL)
 
-ADSL_relational <- as_relational(ADSL_raw,
+ADSL_relational <- as_relational(
+  ADSL_raw,
   dataname = "ADSL",
   keys = keys(primary = c("USUBJID", "STUDYID"), foreign = NULL, parent = NULL)
 )

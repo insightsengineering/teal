@@ -15,10 +15,10 @@
 #' that are in any relation to this.
 #'
 #' @examples
-#' rel_data <- teal:::RelationalDataset$new(
+#' rel_data <- relational_dataset(
+#'   dataname = "XY",
 #'   x = data.frame(x = c(1, 2), y = c("a", "b"), stringsAsFactors = FALSE),
 #'   keys = keys(primary = "y", foreign = NULL, parent = NULL),
-#'   dataname = "XY",
 #'   code = "XY <- data.frame(x = c(1, 2), y = c('aa', 'bb'),
 #'                            stringsAsFactors = FALSE)"
 #' )
@@ -37,10 +37,10 @@ RelationalDataset <- R6::R6Class( # nolint
   public = list(
     #' @description
     #' initialize a \code{RelationalDataset} class object
-    #' @param x (\code{data.frame})
-    #'
     #' @param dataname (\code{character}) A given name for the dataset
     #'   it may not contain spaces
+    #'
+    #' @param x (\code{data.frame})
     #'
     #' @param keys (\code{keys}) object of S3 class keys containing
     #'   foreign, primary keys and parent information
@@ -56,8 +56,8 @@ RelationalDataset <- R6::R6Class( # nolint
     #'   this/these object(s) should be included
     #'
     #' @return new \code{RelationalDataset}
-    initialize = function(x, dataname, keys, code = character(0), label = character(0), vars = list()) {
-      super$initialize(x, dataname = dataname, code = code, label = label, vars = vars)
+    initialize = function(dataname, x, keys, code = character(0), label = character(0), vars = list()) {
+      super$initialize(dataname = dataname, x = x, code = code, label = label, vars = vars)
 
       self$set_keys(keys)
       return(invisible(self))
@@ -108,25 +108,33 @@ RelationalDataset <- R6::R6Class( # nolint
 #' @examples
 #' library(random.cdisc.data)
 #' relational_dataset(
-#'   x = radsl(cached = TRUE),
 #'   dataname = "ADSL",
+#'   x = radsl(cached = TRUE),
 #'   keys = get_cdisc_keys("ADSL"),
 #'   code = "ADSL <- radsl(cached = TRUE)",
 #'   label = "ADSL dataset"
 #' )
-relational_dataset <- function(x, dataname, keys, code, label) {
-  RelationalDataset$new(x = x,
-                        dataname = dataname,
-                        keys = keys,
-                        code = code,
-                        label = label)
+relational_dataset <- function(dataname,
+                               x,
+                               keys,
+                               code = character(0),
+                               label = character(0),
+                               vars = list()) {
+  RelationalDataset$new(
+    dataname = dataname,
+    x = x,
+    keys = keys,
+    code = code,
+    label = label,
+    vars = vars
+  )
 }
 
 #' Load \code{RelationalDataset} object from a file
 #'
 #' Please note that the script has to end with a call creating desired object. The error will be raised otherwise.
 #'
-#' @param x (\code{character}) string giving the pathname of the file to read from.
+#' @param path (\code{character}) string giving the pathname of the file to read from.
 #' @param code (\code{character}) reproducible code to re-create object
 #'
 #' @return \code{RelationalDataset} object
@@ -171,11 +179,11 @@ relational_dataset <- function(x, dataname, keys, code, label) {
 #' )
 #' x <- relational_dataset_file(file_example)
 #' get_code(x)
-relational_dataset_file <- function(x, code = get_code(x)) {
-  stopifnot(is_character_single(x))
-  stopifnot(file.exists(x))
+relational_dataset_file <- function(path, code = get_code(path)) {
+  stopifnot(is_character_single(path))
+  stopifnot(file.exists(path))
 
-  lines <- paste0(readLines(x), collapse = "\n")
+  lines <- paste0(readLines(path), collapse = "\n")
   object <- eval(parse(text = lines))
 
   if (is(object, "RelationalDataset")) {

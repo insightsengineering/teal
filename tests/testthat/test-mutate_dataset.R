@@ -6,7 +6,7 @@ test_that("mutate_dataset", {
   x <- data.frame(x = c(1, 2), y = c("a", "b"), stringsAsFactors = FALSE)
 
   expect_silent({
-    test_ds <- RawDataset$new(x)
+    test_ds <- raw_dataset(x)
   })
 
   expect_error({
@@ -14,9 +14,9 @@ test_that("mutate_dataset", {
   }, "no applicable method for")
 
   expect_silent({
-    test_ds <- NamedDataset$new(
-      x,
+    test_ds <- named_dataset(
       dataname = "x",
+      x = x,
       code = "data.frame(x = c(1, 2), y = c('a', 'b'), stringsAsFactors = TRUE)"
     )
   })
@@ -60,9 +60,9 @@ test_that("mutate_dataset", {
   }, "is_character_single")
 
   expect_silent({
-    test_ds <- RelationalDataset$new(
-      x,
+    test_ds <- relational_dataset(
       dataname = "x",
+      x = x,
       keys = keys(primary = "x", foreign = NULL, parent = NULL)
     )
   })
@@ -71,9 +71,9 @@ test_that("mutate_dataset", {
   })
 
   expect_silent({
-    test_ds <- RelationalDataset$new(
-      x,
+    test_ds <- relational_dataset(
       dataname = "testds",
+      x = x,
       code = "testds <- whatever",
       keys = keys(primary = "x", foreign = NULL, parent = NULL)
     )

@@ -68,9 +68,9 @@ dataset <- function(dataname,
     stop(dataname, ": Keys don't uniquely distinguish the rows,  i.e. some rows share the same keys")
   }
 
-  res <- RelationalDataset$new(
-    x = data,
+  res <- relational_dataset(
     dataname = dataname,
+    x = data,
     keys = keys,
     label = label,
     code = code,
@@ -84,7 +84,7 @@ dataset <- function(dataname,
 #'
 #' Please note that the script has to end with a call creating desired object. The error will be raised otherwise.
 #'
-#' @param x (\code{character}) string giving the pathname of the file to read from.
+#' @param path (\code{character}) string giving the pathname of the file to read from.
 #' @param code (\code{character}) reproducible code to re-create object
 #'
 #' @return \code{RelationalDataset} object
@@ -128,8 +128,8 @@ dataset <- function(dataname,
 #' )
 #' x <- dataset_file(file_example)
 #' get_code(x)
-dataset_file <- function(x, code = get_code(x)) {
-  relational_dataset_file(x = x, code = code)
+dataset_file <- function(path, code = get_code(path)) {
+  relational_dataset_file(path = path, code = code)
 }
 
 
@@ -203,8 +203,8 @@ cdisc_dataset <- function(dataname,
 #' )
 #' x <- cdisc_dataset_file(file_example)
 #' get_code(x)
-cdisc_dataset_file <- function(x, code = get_code(x)) {
-  relational_dataset_file(x = x, code = code)
+cdisc_dataset_file <- function(path, code = get_code(path)) {
+  relational_dataset_file(path = path, code = code)
 }
 
 
@@ -515,7 +515,7 @@ cdisc_data <- function(...,
 
 #' Load \code{cdisc_data} object from a file
 #'
-#' @param x A (\code{connection}) or a (\code{character}) string giving the pathname
+#' @param path A (\code{connection}) or a (\code{character}) string giving the pathname
 #'   of the file or URL to read from. "" indicates the connection \code{stdin}.
 #'
 #' @return \code{cdisc_data} object if file returns a \code{cdisc_data}
@@ -546,6 +546,6 @@ cdisc_data <- function(...,
 #' cdisc_data_file(file_example)
 #'
 #' @importFrom methods is
-cdisc_data_file <- function(x) {
-  teal_data_file(x)
+cdisc_data_file <- function(path) {
+  teal_data_file(path)
 }

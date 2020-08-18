@@ -9,15 +9,15 @@
 #' \code{new} method
 #'
 #' @examples
-#' named_data <- teal:::NamedDataset$new(
-#'   x = data.frame(x = c(2, 2), y = c("a", "b"), stringsAsFactors = FALSE),
+#' x <- named_dataset(
 #'   dataname = "XY",
+#'   x = data.frame(x = c(2, 2), y = c("a", "b"), stringsAsFactors = FALSE),
 #'   code = "XY <- data.frame(x = c(2, 2),
 #'     y = c('a', 'b'), stringsAsFactors = FALSE)"
 #' )
-#' named_data$ncol
-#' named_data$get_code()
-#' named_data$get_dataname()
+#' x$ncol
+#' x$get_code()
+#' x$get_dataname()
 #' @importFrom R6 R6Class
 #' @importFrom rlang with_options
 NamedDataset <- R6::R6Class( # nolint
@@ -28,10 +28,10 @@ NamedDataset <- R6::R6Class( # nolint
   public = list(
     #' @description
     #' initialize a \code{NamedDataset} class object
-    #' @param x (\code{data.frame})
-    #'
     #' @param dataname (\code{character}) A given name for the dataset
     #'   it may not contain spaces
+    #'
+    #' @param x (\code{data.frame})
     #'
     #' @param code (\code{character}) A character string defining the code
     #'   needed to produce the data set in \code{x}
@@ -45,7 +45,7 @@ NamedDataset <- R6::R6Class( # nolint
     #'
     #' @import utils.nest
     #' @return new \code{NamedDataset} object
-    initialize = function(x, dataname, code = character(0), label = character(0), vars = list()) {
+    initialize = function(dataname, x, code = character(0), label = character(0), vars = list()) {
       # Run RawDataset initialization
       super$initialize(x)
 
@@ -285,7 +285,8 @@ NamedDataset <- R6::R6Class( # nolint
 #'
 #' ADSL_dataset$get_dataname()
 #'
-#' ADSL_dataset <- named_dataset(dataname = "ADSL",
+#' ADSL_dataset <- named_dataset(
+#'   dataname = "ADSL",
 #'   x = ADSL,
 #'   label = "AdAM subject-level dataset",
 #'   code = "ADSL <- radsl(cached = TRUE)"
@@ -294,6 +295,16 @@ NamedDataset <- R6::R6Class( # nolint
 #' ADSL_dataset$get_dataset_label()
 #' ADSL_dataset$get_code()
 #'
-named_dataset <- function(dataname, x, code = character(0), label = character(0), vars = list()) {
-  NamedDataset$new(x, dataname, code, label, vars = vars)
+named_dataset <- function(dataname,
+                          x,
+                          code = character(0),
+                          label = character(0),
+                          vars = list()) {
+  NamedDataset$new(
+    dataname = dataname,
+    x = x,
+    code = code,
+    label = label,
+    vars = vars
+  )
 }

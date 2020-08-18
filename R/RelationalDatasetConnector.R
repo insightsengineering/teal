@@ -20,10 +20,10 @@ RelationalDatasetConnector <- R6::R6Class( #nolint
     #' load the data. \code{dataname} will be used as name
     #' of object to be assigned.
     #'
-    #' @param pull_fun (\code{CallableFunction})\cr
-    #'  function to load the data, must return a \code{data.frame}.
     #' @param dataname (\code{character})\cr
     #'  A given name for the dataset, it may not contain spaces
+    #' @param pull_fun (\code{CallableFunction})\cr
+    #'  function to load the data, must return a \code{data.frame}.
     #' @param keys (\code{keys})\cr
     #'  object of S3 class \code{keys} containing foreign, primary keys and parent information
     #' @param code (\code{character})\cr
@@ -36,8 +36,8 @@ RelationalDatasetConnector <- R6::R6Class( #nolint
     #'   this/these object(s) should be included
     #'
     #' @return new \code{RelationalDatasetConnector} object
-    initialize = function(pull_fun, dataname, keys, code = character(0), label = character(0), vars = list()) {
-      super$initialize(pull_fun = pull_fun, dataname = dataname, code = code, label = label, vars = vars)
+    initialize = function(dataname, pull_fun, keys, code = character(0), label = character(0), vars = list()) {
+      super$initialize(dataname = dataname, pull_fun = pull_fun, code = code, label = label, vars = vars)
       private$set_keys(keys)
       return(invisible(self))
     },
@@ -68,9 +68,9 @@ RelationalDatasetConnector <- R6::R6Class( #nolint
       data <- private$pull_internal(args = args, try = try)
 
       if (!self$is_failed()) {
-        private$dataset <- RelationalDataset$new(
-          x = data,
+        private$dataset <- relational_dataset(
           dataname = self$get_dataname(),
+          x = data,
           code = private$get_pull_code_class()$get_code(deparse = TRUE),
           keys = self$get_keys(),
           label = self$get_dataset_label()
@@ -78,7 +78,7 @@ RelationalDatasetConnector <- R6::R6Class( #nolint
 
         if (!is_empty_string(private$get_mutate_code_class()$get_code())) {
           private$dataset <- mutate_dataset(
-            private$dataset,
+            x = self$get_dataset(),
             code = private$get_mutate_code_class()$get_code(deparse = TRUE),
             vars = private$mutate_vars
           )

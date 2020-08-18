@@ -4,10 +4,10 @@
 \alias{dataset_file}
 \title{Load \code{RelationalDataset} object from a file}
 \usage{
-dataset_file(x, code = get_code(x))
+dataset_file(path, code = get_code(path))
 }
 \arguments{
-\item{x}{(\code{character}) string giving the pathname of the file to read from.}
+\item{path}{(\code{character}) string giving the pathname of the file to read from.}
 
 \item{code}{(\code{character}) reproducible code to re-create object}
 }

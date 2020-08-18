@@ -5,19 +5,19 @@
 \title{Create a new \code{NamedDatasetConnector} object}
 \usage{
 named_dataset_connector(
-  pull_fun,
   dataname,
+  pull_fun,
   code = character(0),
   label = character(0),
   vars = list()
 )
 }
 \arguments{
-\item{pull_fun}{(\code{CallableFunction})\cr
-function with necessary arguments set to fetch data from connection.}
-
 \item{dataname}{(\code{character})\cr
 A given name for the dataset it may not contain spaces}
+
+\item{pull_fun}{(\code{CallableFunction})\cr
+function with necessary arguments set to fetch data from connection.}
 
 \item{code}{(\code{character})\cr
 A character string defining the code needed to produce the data set in \code{x}}

@@ -132,15 +132,15 @@ test_that("NamedDataset basics", {
   )
 
   expect_silent(
-    NamedDataset$new(x = x, dataname = "abc")
+    NamedDataset$new(dataname = "abc", x = x)
   )
 
   expect_silent(
-    NamedDataset$new(x = x, dataname = "abc", label = NULL)
+    NamedDataset$new(dataname = "abc", x = x, label = NULL)
   )
   expect_equal(
-    NamedDataset$new(x = x, dataname = "abc", label = NULL),
-    named_dataset(x = x, dataname = "abc", label = NULL)
+    NamedDataset$new(dataname = "abc", x = x, label = NULL),
+    named_dataset(dataname = "abc", x = x, label = NULL)
   )
 
   expect_error(
@@ -149,8 +149,8 @@ test_that("NamedDataset basics", {
 
   expect_silent({
     test_ds <- NamedDataset$new(
-      x,
       dataname = "testds",
+      x = x,
       code = "test_ds <- data.frame(x = c(1, 2), y = c('a', 'b'), stringsAsFactors = TRUE)",
       label = "Testing Dataset"
     )
@@ -218,12 +218,14 @@ test_that("RelationalDataset basics", {
   rtables::var_labels(x) <- c("X", "Y")
 
   expect_error(
-    RelationalDataset$new(x = x, dataname = "abc")
+    RelationalDataset$new(dataname = "abc", x = x)
   )
 
   expect_silent({
-    test_ds <- RelationalDataset$new(x, dataname = "testds",
-                                keys = keys(primary = "x", foreign = NULL, parent = NULL)
+    test_ds <- RelationalDataset$new(
+      dataname = "testds",
+      x = x,
+      keys = keys(primary = "x", foreign = NULL, parent = NULL)
     )
   })
 
@@ -258,8 +260,8 @@ test_that("as_relational function", {
 
   expect_equal(
     RelationalDataset$new(
-      x = x,
       dataname = "abc",
+      x = x,
       keys = keys(primary = "x", foreign = NULL, parent = NULL),
       code = "xx",
       label = character(0)

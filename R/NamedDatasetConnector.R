@@ -21,10 +21,10 @@ NamedDatasetConnector <- R6::R6Class( #nolint
     #' load the data. \code{dataname} will be used as name
     #' of object to be assigned.
     #'
-    #' @param pull_fun (\code{CallableFunction})\cr
-    #'  function to load the data, must return a \code{data.frame}.
     #' @param dataname (\code{character})\cr
     #'  A given name for the dataset, it may not contain spaces
+    #' @param pull_fun (\code{CallableFunction})\cr
+    #'  function to load the data, must return a \code{data.frame}.
     #' @param code (\code{character})\cr
     #'  A character string defining the code needed to produce the data set in \code{x}
     #' @param label (\code{character})\cr
@@ -35,7 +35,7 @@ NamedDatasetConnector <- R6::R6Class( #nolint
     #'   this/these object(s) should be included
     #'
     #' @return new \code{NamedDatasetConnector} object
-    initialize = function(pull_fun, dataname, code = character(0), label = character(0), vars = list()) {
+    initialize = function(dataname, pull_fun, code = character(0), label = character(0), vars = list()) {
       super$initialize(pull_fun = pull_fun, vars = vars)
 
       private$set_dataname(dataname)
@@ -154,16 +154,16 @@ NamedDatasetConnector <- R6::R6Class( #nolint
       data <- private$pull_internal(args = args, try = try)
 
       if (!self$is_failed()) {
-        private$dataset <- NamedDataset$new(
-          x = data,
+        private$dataset <- named_dataset(
           dataname = self$get_dataname(),
+          x = data,
           code = private$get_pull_code_class()$get_code(deparse = TRUE),
           label = self$get_dataset_label()
         )
 
         if (!is_empty(private$get_mutate_code_class()$code)) {
           private$dataset <- mutate_dataset(
-            private$dataset,
+            x = self$get_dataset(),
             code = private$get_mutate_code_class()$get_code(deparse = TRUE),
             vars = private$mutate_vars
           )
@@ -327,19 +327,19 @@ NamedDatasetConnector <- R6::R6Class( #nolint
 #' @return new \code{NamedDatasetConnector} object
 #'
 #' @export
-named_dataset_connector <- function(pull_fun,
-                                    dataname,
+named_dataset_connector <- function(dataname,
+                                    pull_fun,
                                     code = character(0),
                                     label = character(0),
                                     vars = list()) {
-  stopifnot(is(pull_fun, "CallableFunction"))
   stopifnot(is_character_single(dataname))
+  stopifnot(is(pull_fun, "CallableFunction"))
   stopifnot(is_character_empty(code) || is_character_vector(code))
   stopifnot(is_character_empty(label) || is_character_vector(label))
 
   x <- NamedDatasetConnector$new(
-    pull_fun = pull_fun,
     dataname = dataname,
+    pull_fun = pull_fun,
     code = code,
     label = label,
     vars = vars

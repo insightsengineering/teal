@@ -4,10 +4,10 @@
 \alias{cdisc_data_file}
 \title{Load \code{cdisc_data} object from a file}
 \usage{
-cdisc_data_file(x)
+cdisc_data_file(path)
 }
 \arguments{
-\item{x}{A (\code{connection}) or a (\code{character}) string giving the pathname
+\item{path}{A (\code{connection}) or a (\code{character}) string giving the pathname
 of the file or URL to read from. "" indicates the connection \code{stdin}.}
 }
 \value{

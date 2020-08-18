@@ -35,8 +35,8 @@ x <- named_dataset_connector(
 get_dataset_label(x)
 
 x1 <- relational_dataset_connector(
- pull_fun = fun,
  dataname = "ADSL",
+ pull_fun = fun,
  keys = get_cdisc_keys("ADSL")
 )
 get_dataset_label(x1)

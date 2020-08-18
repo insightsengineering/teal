@@ -125,7 +125,7 @@ RawDatasetConnector <- R6::R6Class( #nolint
     pull = function(args = NULL, try = FALSE) {
       data <- private$pull_internal(args = args, try = try)
       if (!self$is_failed()) {
-        private$dataset <- RawDataset$new(data)
+        private$dataset <- raw_dataset(data)
       }
       return(invisible(self))
     },

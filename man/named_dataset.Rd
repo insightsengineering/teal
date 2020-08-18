@@ -42,7 +42,8 @@ ADSL_dataset <- named_dataset(dataname = "ADSL", x = ADSL)
 
 ADSL_dataset$get_dataname()
 
-ADSL_dataset <- named_dataset(dataname = "ADSL",
+ADSL_dataset <- named_dataset(
+  dataname = "ADSL",
   x = ADSL,
   label = "AdAM subject-level dataset",
   code = "ADSL <- radsl(cached = TRUE)"

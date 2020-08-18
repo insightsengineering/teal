@@ -48,7 +48,8 @@ ADRS <- radrs(cached = TRUE)
 value_choices(ADRS, "PARAMCD", "PARAM", subset = c("BESRSPI", "INVET"))
 value_choices(ADRS, c("PARAMCD", "ARMCD"), c("PARAM", "ARM"))
 value_choices(ADRS, c("PARAMCD", "ARMCD"), c("PARAM", "ARM"),
-  subset = c("BESRSPI - ARM A", "INVET - ARM A", "OVRINV - ARM A"))
+  subset = c("BESRSPI - ARM A", "INVET - ARM A", "OVRINV - ARM A")
+)
 value_choices(ADRS, c("PARAMCD", "ARMCD"), c("PARAM", "ARM"), sep = " --- ")
 
 # delayed version

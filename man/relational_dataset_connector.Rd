@@ -18,15 +18,15 @@
 \title{Create a new \code{RelationalDatasetConnector} object}
 \usage{
 relational_dataset_connector(
-  pull_fun,
   dataname,
+  pull_fun,
   keys,
   code = character(0),
   label = character(0),
   vars = list()
 )
 
-relational_dataset_connector_file(x)
+relational_dataset_connector_file(path)
 
 rcd_dataset_connector(
   dataname,
@@ -141,11 +141,11 @@ teradata_cdisc_dataset_connector(
 )
 }
 \arguments{
-\item{pull_fun}{(\code{CallableFunction})\cr
-function with necessary arguments set to fetch data from connection.}
-
 \item{dataname}{(\code{character})\cr
 A given name for the dataset it may not contain spaces}
+
+\item{pull_fun}{(\code{CallableFunction})\cr
+function with necessary arguments set to fetch data from connection.}
 
 \item{keys}{(\code{keys})\cr
 object of S3 class keys containing foreign, primary keys and parent information}
@@ -161,7 +161,8 @@ In case when this object code depends on the \code{raw_data} from the other
 \code{NamedDataset}, \code{NamedDatasetConnector} object(s) or other constant value,
 this/these object(s) should be included}
 
-\item{x}{(\code{character}) string giving the pathname of the file to read from.}
+\item{path}{(\code{character})\cr
+path to the file}
 
 \item{fun}{(\code{function})\cr
 any R function which generates \code{data.frame}, especially functions from
@@ -179,9 +180,6 @@ path to code for \code{source}}
 
 \item{mutate_code}{(\code{character})\cr
 Vector with additional code that can be supplied to mutate the dataset.}
-
-\item{path}{(\code{character})\cr
-path to the file}
 
 \item{table}{(\code{character}) table name}
 }
@@ -249,7 +247,7 @@ writeLines(
 
      pull_fun <- callable_function(radsl)
      pull_fun$set_args(list(cached = TRUE))
-     relational_dataset_connector(pull_fun, \"ADSL\", get_cdisc_keys(\"ADSL\"))"
+     relational_dataset_connector(\"ADSL\", pull_fun, get_cdisc_keys(\"ADSL\"))"
   ),
   con = file_example
 )

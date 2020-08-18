@@ -18,10 +18,10 @@ this dataset to be merged with other datasets
 that are in any relation to this.
 }
 \examples{
-rel_data <- teal:::RelationalDataset$new(
+rel_data <- relational_dataset(
+  dataname = "XY",
   x = data.frame(x = c(1, 2), y = c("a", "b"), stringsAsFactors = FALSE),
   keys = keys(primary = "y", foreign = NULL, parent = NULL),
-  dataname = "XY",
   code = "XY <- data.frame(x = c(1, 2), y = c('aa', 'bb'),
                            stringsAsFactors = FALSE)"
 )
@@ -76,8 +76,8 @@ rel_data$set_keys(keys(primary = "x", foreign = NULL, parent = NULL))
 initialize a \code{RelationalDataset} class object
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{RelationalDataset$new(
-  x,
   dataname,
+  x,
   keys,
   code = character(0),
   label = character(0),
@@ -88,10 +88,10 @@ initialize a \code{RelationalDataset} class object
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{x}}{(\code{data.frame})}
-
 \item{\code{dataname}}{(\code{character}) A given name for the dataset
 it may not contain spaces}
+
+\item{\code{x}}{(\code{data.frame})}
 
 \item{\code{keys}}{(\code{keys}) object of S3 class keys containing
 foreign, primary keys and parent information}

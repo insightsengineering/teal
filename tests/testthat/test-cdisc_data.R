@@ -606,7 +606,7 @@ test_that("List values", {
   adsl_yaml <- yaml::yaml.load_file(system.file("metadata/ADSL.yml", package = "random.cdisc.data", mustWork = TRUE))
   adtte_yaml <- yaml::yaml.load_file(system.file("metadata/ADTTE.yml", package = "random.cdisc.data", mustWork = TRUE))
 
-  datasets <- list(RelationalDataset$new(
+  datasets <- list(relational_dataset(
     dataname = "ADSL",
     x = ADSL,
     keys = keys(
@@ -625,7 +625,7 @@ test_that("List values", {
                        cdisc_dataset("ADTTE", ADTTE))
 
   datasets <- list(
-    RelationalDataset$new(
+    relational_dataset(
       dataname = "ADSL",
       x = ADSL,
       keys = keys(
@@ -635,7 +635,7 @@ test_that("List values", {
       ),
       label = adsl_yaml$domain$label
     ),
-    RelationalDataset$new(
+    relational_dataset(
       dataname = "ADTTE",
       x = ADTTE,
       keys = keys(

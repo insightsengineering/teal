@@ -20,6 +20,8 @@ CallableFunction <- R6::R6Class( #nolint
     #'
     #' @return new \code{CallableFunction} object
     initialize = function(fun, env = new.env(parent = parent.env(globalenv()))) {
+      stopifnot(is.environment(env))
+
       fun_name <- private$get_callable_function(fun)
       private$fun_name <- pdeparse(fun_name)
       private$env <- env

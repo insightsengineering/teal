@@ -148,16 +148,16 @@ test_that("RelationalDatasetConnector", {
 
   expect_error(
     relational_dataset_connector(
-      pull_fun = fun,
-      dataname = "ADSL"
+      dataname = "ADSL",
+      pull_fun = fun
     ),
     "keys"
   )
 
   expect_silent(
     x1 <- relational_dataset_connector(
-      pull_fun = fun,
       dataname = "ADSL",
+      pull_fun = fun,
       keys = get_cdisc_keys("ADSL")
     )
   )
@@ -209,8 +209,8 @@ test_that("RelationalDatasetConnector", {
 
   expect_silent(
     x2 <- relational_dataset_connector(
-      pull_fun = fun,
       dataname = "ADSL",
+      pull_fun = fun,
       keys = get_cdisc_keys("ADSL")
     )
   )
@@ -234,8 +234,8 @@ test_that("RelationalDatasetConnector", {
 
   expect_silent(
     x3 <- relational_dataset_connector(
-      pull_fun = fun,
       dataname = "ADSL",
+      pull_fun = fun,
       keys = keys(primary = "id", foreign = NULL, parent = NULL)
     )
   )
@@ -277,8 +277,8 @@ test_that("conversions", {
 
   expect_silent(
     x1 <- as_relational(
-      x,
       dataname = "ADSL",
+      x = x,
       keys = get_cdisc_keys("ADSL")
     )
   )
@@ -307,8 +307,8 @@ test_that("conversions", {
 
   expect_warning(
     x2 <- as_relational(
-      x,
       dataname = "ADSL",
+      x = x,
       keys = get_cdisc_keys("ADSL")
     ),
     "Avoid pulling before conversion"
@@ -327,8 +327,8 @@ test_that("as_relational", {
 
   expect_silent(
     x1 <- as_relational(
-      x,
       dataname = "ADSL",
+      x = x,
       code = "ADSL$test_col <- seq_len(nrow(ADSL))",
       keys = get_cdisc_keys("ADSL")
     )
@@ -357,9 +357,17 @@ test_that("as_relational", {
 })
 
 test_that("rcd_dataset_connector", {
-  x <- rcd_cdisc_dataset_connector(dataname = "ADSL", radsl, cached = TRUE, N = 400)
+  x <- rcd_cdisc_dataset_connector(
+    dataname = "ADSL",
+    radsl,
+    cached = TRUE,
+    N = 400
+  )
   x2 <- rcd_dataset_connector(
-    dataname = "ADSL", radsl, cached = TRUE, N = 400,
+    dataname = "ADSL",
+    radsl,
+    cached = TRUE,
+    N = 400,
     keys = get_cdisc_keys("ADSL")
   )
   expect_equal(x, x2)
@@ -391,13 +399,19 @@ test_that("rcd_dataset_connector", {
 })
 
 test_that("rds_dataset_connector", {
-  x <- rds_cdisc_dataset_connector(dataname = "ADSL", file = "./data_connectors/table.rds")
+  x <- rds_cdisc_dataset_connector(
+    dataname = "ADSL",
+    file = "./data_connectors/table.rds"
+  )
   x2 <- rds_dataset_connector(
-    dataname = "ADSL", file = "./data_connectors/table.rds",
+    dataname = "ADSL",
+    file = "./data_connectors/table.rds",
     keys = get_cdisc_keys("ADSL")
   )
 
-  expect_error(rds_cdisc_dataset_connector(dataname = "ADSL", file = "./data_connectors/table_notexists.rds"))
+  expect_error(
+    rds_cdisc_dataset_connector(dataname = "ADSL", file = "./data_connectors/table_notexists.rds")
+  )
 
   expect_equal(x, x2)
   expect_true(is(x, c("DatasetConnector", "R6")))
@@ -427,11 +441,14 @@ test_that("script_dataset_connector", {
   )
 
   wrong_file <- "notexists.R"
-  expect_error(script_dataset_connector(
-    dataname = "ADSL",
-    file = wrong_file,
-    keys = get_cdisc_keys("ADSL")
-  ), sprintf("File %s does not exist.", wrong_file))
+  expect_error(
+    script_dataset_connector(
+      dataname = "ADSL",
+      file = wrong_file,
+      keys = get_cdisc_keys("ADSL")
+    ),
+    sprintf("File %s does not exist.", wrong_file)
+  )
 
   expect_silent(load_dataset(x))
 

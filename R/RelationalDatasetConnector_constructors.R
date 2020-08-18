@@ -12,21 +12,21 @@
 #' @return new \code{RelationalDatasetConnector} object
 #'
 #' @export
-relational_dataset_connector <- function(pull_fun,
-                                         dataname,
+relational_dataset_connector <- function(dataname,
+                                         pull_fun,
                                          keys,
                                          code = character(0),
                                          label = character(0),
                                          vars = list()) {
-  stopifnot(is(pull_fun, "CallableFunction"))
   stopifnot(is_character_single(dataname))
+  stopifnot(is(pull_fun, "CallableFunction"))
   stopifnot(is(keys, "keys"))
   stopifnot(is_character_empty(code) || is_character_vector(code))
   stopifnot(is_character_empty(label) || is_character_vector(label))
 
   x <- RelationalDatasetConnector$new(
-    pull_fun = pull_fun,
     dataname = dataname,
+    pull_fun = pull_fun,
     keys = keys,
     code = code,
     label = label,
@@ -60,17 +60,17 @@ relational_dataset_connector <- function(pull_fun,
 #'
 #'      pull_fun <- callable_function(radsl)
 #'      pull_fun$set_args(list(cached = TRUE))
-#'      relational_dataset_connector(pull_fun, \"ADSL\", get_cdisc_keys(\"ADSL\"))"
+#'      relational_dataset_connector(\"ADSL\", pull_fun, get_cdisc_keys(\"ADSL\"))"
 #'   ),
 #'   con = file_example
 #' )
 #' x <- relational_dataset_connector_file(file_example)
 #' get_code(x)
-relational_dataset_connector_file <- function(x) { # nolint
-  stopifnot(is_character_single(x))
-  stopifnot(file.exists(x))
+relational_dataset_connector_file <- function(path) { # nolint
+  stopifnot(is_character_single(path))
+  stopifnot(file.exists(path))
 
-  lines <- paste0(readLines(x), collapse = "\n")
+  lines <- paste0(readLines(path), collapse = "\n")
   object <- eval(parse(text = lines))
 
   if (is(object, "RelationalDatasetConnector")) {
@@ -137,8 +137,8 @@ rcd_dataset_connector <- function(dataname,
   }
 
   x <- relational_dataset_connector(
-    pull_fun = x_fun,
     dataname = dataname,
+    pull_fun = x_fun,
     keys = keys,
     code = code_from_script(code, script),
     label = label,

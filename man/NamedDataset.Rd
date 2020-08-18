@@ -12,15 +12,15 @@ by handing over a \code{label} argument to the
 \code{new} method
 }
 \examples{
-named_data <- teal:::NamedDataset$new(
-  x = data.frame(x = c(2, 2), y = c("a", "b"), stringsAsFactors = FALSE),
+x <- named_dataset(
   dataname = "XY",
+  x = data.frame(x = c(2, 2), y = c("a", "b"), stringsAsFactors = FALSE),
   code = "XY <- data.frame(x = c(2, 2),
     y = c('a', 'b'), stringsAsFactors = FALSE)"
 )
-named_data$ncol
-named_data$get_code()
-named_data$get_dataname()
+x$ncol
+x$get_code()
+x$get_dataname()
 }
 \section{Super class}{
 \code{\link[teal:RawDataset]{teal::RawDataset}} -> \code{NamedDataset}
@@ -64,8 +64,8 @@ named_data$get_dataname()
 initialize a \code{NamedDataset} class object
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{NamedDataset$new(
-  x,
   dataname,
+  x,
   code = character(0),
   label = character(0),
   vars = list()
@@ -75,10 +75,10 @@ initialize a \code{NamedDataset} class object
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{x}}{(\code{data.frame})}
-
 \item{\code{dataname}}{(\code{character}) A given name for the dataset
 it may not contain spaces}
+
+\item{\code{x}}{(\code{data.frame})}
 
 \item{\code{code}}{(\code{character}) A character string defining the code
 needed to produce the data set in \code{x}}

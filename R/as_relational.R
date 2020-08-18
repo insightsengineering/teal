@@ -37,7 +37,8 @@ as_relational <- function(x,
 #' ADSL <- radsl(cached = TRUE)
 #' ADSL_raw <- raw_dataset(x = ADSL)
 #'
-#' ADSL_relational <- as_relational(ADSL_raw,
+#' ADSL_relational <- as_relational(
+#'   ADSL_raw,
 #'   dataname = "ADSL",
 #'   keys = keys(primary = c("USUBJID", "STUDYID"), foreign = NULL, parent = NULL)
 #' )
@@ -53,8 +54,8 @@ as_relational.RawDataset <- function(x,
   code <- code_from_script(code, script, dataname = dataname)
 
   return(
-    RelationalDataset$new(
-      x = x$get_raw_data(),
+    relational_dataset(
+      x = get_raw_data(x),
       dataname = dataname,
       keys = keys,
       code = code,
@@ -75,9 +76,9 @@ as_relational.NamedDataset <- function(x,
   code <- code_from_script(code, script, dataname = dataname)
 
   return(
-    RelationalDataset$new(
-      x = x$get_raw_data(),
+    relational_dataset(
       dataname = dataname,
+      x = get_raw_data(x),
       keys = keys,
       code = code,
       label = label
@@ -113,8 +114,8 @@ as_relational.RawDatasetConnector <- function(x, # nolint
   }
   return(
     relational_dataset_connector(
-      pull_fun = x$get_pull_fun(),
       dataname = dataname,
+      pull_fun = x$get_pull_fun(),
       keys = keys,
       code = code,
       label = label
