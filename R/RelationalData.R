@@ -68,7 +68,15 @@ RelationalData <- R6::R6Class( #nolint
         if (!is_empty(private$pull_code$code)) {
           private$check_combined_code()
         } else {
-          all(vapply(private$datasets, function(x) x$check(), logical(1)))
+          all(vapply(
+            private$datasets,
+            function(x) {
+              check_res <- x$check()
+              # NULL is still ok
+              is.null(check_res) || isTRUE(check_res)
+            },
+            logical(1)
+          ))
         }
       }
       private$check_result <- res
