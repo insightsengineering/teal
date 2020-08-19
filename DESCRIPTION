@@ -37,21 +37,21 @@ Imports:
   methods,
   R6,
   rlang,
-  rtables (>= 0.1.6),
+  rtables (>= 0.1.7),
   shinyjs,
   shinyWidgets (>= 0.5.0),
-  utils.nest (>= 0.2.4),
+  utils.nest (>= 0.2.5),
   withr,
   yaml
 RoxygenNote: 7.1.1
 Suggests:
     knitr,
     nomnoml,
-    random.cdisc.data (>= 0.3.4),
+    random.cdisc.data (>= 0.3.5),
     rice,
     rmarkdown,
-    tern (>= 0.6.7),
-    test.nest (>= 0.2.3),
+    tern (>= 0.6.8),
+    test.nest (>= 0.2.4),
     testthat (>= 2.0)
 VignetteBuilder: knitr
 Collate: 
