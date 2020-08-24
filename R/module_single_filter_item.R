@@ -192,6 +192,7 @@ srv_single_filter_item <- function(input, output, session, datasets, dataname, v
         # Proportional
         data <- filter_info$histogram_data
         data$y <- rev(data$y / sum(data$y)) # we have to reverse because the histogram is turned by 90 degrees
+        data$x <- seq_len(nrow(data)) # to prevent ggplot reordering columns using the characters in x column
         ggplot(data) +
           # sort factor so that it reflects checkbox order
           aes_string(x = "x", y = "y") +
