@@ -281,9 +281,12 @@ RawDatasetConnector <- R6::R6Class( #nolint
         private$pull_fun$run(args = args, try = try)
         }, error = function(e) {
           if (grepl("object 'conn' not found", e$message)) {
-            stop("This dataset connector requires connection object (conn) to be provided.")
-            }
-          })
+            output_message <- "This dataset connector requires connection object (conn) to be provided."
+          } else {
+            output_message <- e$message
+          }
+          stop(output_message)
+        })
     },
     set_failure = function(res) {
       if (is(res, "try-error")) {
