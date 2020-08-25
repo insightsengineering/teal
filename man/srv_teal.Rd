@@ -20,7 +20,8 @@ can be used for nested tabs, see \verb{\link{ui_nested_tabs}}}
 \code{NULL} value is ignored}
 
 \item{filter}{(\code{list}) You can define filters that show when
-the app starts.
+the app starts. Variables inherited from ADSL have to be specified only for ADSL dataset.
+Thus variable like RACE have to be specified for ADSL datasets even when other sets contain it too.
 The general pattern is:
 \code{list(ADSL = list(SEX = ..., AGE = ...), ADAE = ...)}.
 An example is:

@@ -30,7 +30,8 @@
 #'   }
 #' @param title (`NULL` or `character`) The browser window title (defaults to the host URL of the page).
 #' @param filter (`list`) You can define filters that show when
-#'   the app starts.
+#'   the app starts. Variables inherited from ADSL have to be specified only for ADSL dataset.
+#'   Thus variable like RACE have to be specified for ADSL datasets even when other sets contain it too.
 #'   The general pattern is:
 #'   `list(ADSL = list(SEX = ..., AGE = ...), ADAE = ...)`.
 #'   An example is:

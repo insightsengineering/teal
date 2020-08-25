@@ -10,7 +10,8 @@ predefined_filters_module(label = "Apply filters", filter)
 \item{label}{\code{character} label of module}
 
 \item{filter}{(\code{list}) You can define filters that show when
-the app starts.
+the app starts. Variables inherited from ADSL have to be specified only for ADSL dataset.
+Thus variable like RACE have to be specified for ADSL datasets even when other sets contain it too.
 The general pattern is:
 \code{list(ADSL = list(SEX = ..., AGE = ...), ADAE = ...)}.
 An example is:

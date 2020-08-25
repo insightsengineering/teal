@@ -412,8 +412,13 @@ FilteredData <- R6::R6Class( # nolint
       )
       # check if all names of state are columns of the dataname
       varnames <- names(state)
+
+      adsl_colnames <- colnames(self$get_data("ADSL", filtered = FALSE))
+
+      current_colnames <- colnames(self$get_data(dataname, filtered = FALSE))
+
       check_in_subset(
-        varnames, colnames(self$get_data(dataname, filtered = FALSE)),
+        varnames, if (dataname == "ADSL") current_colnames else setdiff(current_colnames, adsl_colnames),
         pre_msg = paste0("data ", dataname, ": ")
       )
 
