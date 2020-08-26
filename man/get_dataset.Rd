@@ -30,7 +30,10 @@ Get dataset from \code{DatasetConnector}
 
 # RawDatasetConnector --------
 library(random.cdisc.data)
-dc <- rcd_cdisc_dataset_connector(dataname = "ADSL", fun = radsl)
+ADSL <- radsl(cached = TRUE)
+
+dc <- rcd_cdisc_dataset_connector(dataname = "ADAE", fun = radae,
+                                  ADSL = ADSL, max_n_aes = 2L)
 
 load_dataset(dc)
 get_dataset(dc)

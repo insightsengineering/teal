@@ -312,7 +312,7 @@ get_cdisc_keys <- function(dataname) {
 #' @examples
 #' library(random.cdisc.data)
 #'
-#' ADSL <-  suppressWarnings(radsl(N = 600, seed = 123))
+#' ADSL <-  radsl(cached = TRUE)
 #'
 #' get_labels(ADSL)
 get_labels <- function(data, fill = TRUE) {

@@ -58,8 +58,8 @@ adsl <- rcd_cdisc_dataset_connector("ADSL", fun = radsl, cached = TRUE)
 load_datasets(adsl)
 get_dataset(adsl)
 
-adrs <- rcd_cdisc_dataset_connector("ADRS", fun = radrs, ADSL = adsl)
-load_datasets(adrs)
+adae <- rcd_cdisc_dataset_connector("ADAE", fun = radae, ADSL = adsl, max_n_aes = 2L)
+load_datasets(adae)
 
 # RelationalData ------
 library(random.cdisc.data)

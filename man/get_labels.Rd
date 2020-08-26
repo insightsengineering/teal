@@ -21,7 +21,7 @@ Function that extract labels from CDISC dataset
 \examples{
 library(random.cdisc.data)
 
-ADSL <-  suppressWarnings(radsl(N = 600, seed = 123))
+ADSL <-  radsl(cached = TRUE)
 
 get_labels(ADSL)
 }

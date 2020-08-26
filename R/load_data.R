@@ -39,8 +39,8 @@ load_dataset.RawDataset <- function(x, ...) { # nolint
 #' load_dataset(adsl)
 #' get_dataset(adsl)
 #'
-#' adrs <- rcd_cdisc_dataset_connector("ADRS", fun = radrs, ADSL = adsl)
-#' load_dataset(adrs)
+#' adae <- rcd_cdisc_dataset_connector("ADAE", fun = radae, ADSL = adsl, max_n_aes = 2L)
+#' load_dataset(adae)
 #' @export
 load_dataset.RawDatasetConnector <- function(x, args = NULL, try = FALSE, conn = NULL, ...) { # nolint
 
@@ -100,8 +100,8 @@ load_datasets.RawDataset <- function(x, ...) { # nolint
 #' load_datasets(adsl)
 #' get_dataset(adsl)
 #'
-#' adrs <- rcd_cdisc_dataset_connector("ADRS", fun = radrs, ADSL = adsl)
-#' load_datasets(adrs)
+#' adae <- rcd_cdisc_dataset_connector("ADAE", fun = radae, ADSL = adsl, max_n_aes = 2L)
+#' load_datasets(adae)
 #' @export
 load_datasets.RawDatasetConnector <- function(x, args = NULL, try = FALSE, ...) { # nolint
   x$pull(args = args, try = try)
