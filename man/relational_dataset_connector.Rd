@@ -9,12 +9,14 @@
 \alias{code_dataset_connector}
 \alias{rice_dataset_connector}
 \alias{teradata_dataset_connector}
+\alias{csv_dataset_connector}
 \alias{rds_cdisc_dataset_connector}
 \alias{rcd_cdisc_dataset_connector}
 \alias{rice_cdisc_dataset_connector}
 \alias{script_cdisc_dataset_connector}
 \alias{code_cdisc_dataset_connector}
 \alias{teradata_cdisc_dataset_connector}
+\alias{csv_cdisc_dataset_connector}
 \title{Create a new \code{RelationalDatasetConnector} object}
 \usage{
 relational_dataset_connector(
@@ -88,6 +90,16 @@ teradata_dataset_connector(
   ...
 )
 
+csv_dataset_connector(
+  dataname,
+  file,
+  keys,
+  code = character(0),
+  script = character(0),
+  label = character(0),
+  ...
+)
+
 rds_cdisc_dataset_connector(
   dataname,
   file,
@@ -140,6 +152,15 @@ teradata_cdisc_dataset_connector(
   label = character(0),
   ...
 )
+
+csv_cdisc_dataset_connector(
+  dataname,
+  file,
+  code = character(0),
+  script = character(0),
+  label = character(0),
+  ...
+)
 }
 \arguments{
 \item{dataname}{(\code{character})\cr
@@ -177,11 +198,11 @@ any R function which generates \code{data.frame}, especially functions from
 \code{random.cdisc.data} like \code{\link[random.cdisc.data]{radsl}}}
 
 \item{...}{(\code{optional})\cr
-additional arguments applied to pull function}
+additional arguments applied to pull function (\code{readr::read_delim}) by default
+\code{delim = ","}.}
 
 \item{file}{(\code{character})\cr
-file location containing code to be evaluated in connector. Object obtained in the last
-call from file will be returned to the connector - same as \code{source(file = file)$value}}
+path to (\code{.csv}) (or general delimited) file that contains \code{data.frame} object}
 
 \item{pull_code}{(\code{character})\cr
 function call with arguments to obtain dataset.}
@@ -213,6 +234,9 @@ Create a \code{RelationalDatasetConnector} from \code{RICE} dataset.
 \code{teradata_dataset_connector} -
 Create a \code{RelationalDatasetConnector} from \code{TERADATA} dataset
 
+\code{csv_dataset_connector} - Create a \code{RelationalDatasetConnector} from \code{csv} (or
+general delimited file).
+
 \code{rds_cdisc_dataset_connector} -
 Create a \code{RelationalDatasetConnector} from \code{RDS} file with keys automatically
 assigned by \code{dataname}
@@ -236,6 +260,10 @@ automatically by \code{dataname}.
 \code{teradata_cdisc_dataset_connector} -
 Create a \code{RelationalDatasetConnector} from \code{TERADATA} dataset with keys assigned
 automatically by \code{dataname}.
+
+\code{csv_cdisc_dataset_connector} -
+Create a \code{RelationalDatasetConnector} from \code{csv} (or general delimited) file
+with keys assigned automatically by \code{dataname}.
 }
 \note{
 Do not include assignment in \code{code} argument. \code{code} string
@@ -306,5 +334,15 @@ x$get_code()
 load_dataset(x)
 get_dataset(x)
 x$get_raw_data()
+}
+\dontrun{
+x <- csv_dataset_connector(
+  dataname = "ADSL",
+  file = "path/to/file.csv",
+  keys = get_cdisc_keys("ADSL"),
+  delim = ",",
+  col_types = quote(readr::cols(AGE = "i"))
+)
+x$get_code()
 }
 }

@@ -422,6 +422,40 @@ test_that("rds_dataset_connector", {
   )
 })
 
+test_that("csv_dataset_connector", {
+
+  # check error if csv file doesn't exist
+  expect_error(
+    csv_dataset_connector("ADSL", file = "not_exists.csv", keys = get_cdisc_keys("ADSL"))
+  )
+
+  # create csv file
+  ADSL <- radsl(cached = TRUE) # nolint
+  temp_file <- tempfile()
+  on.exit(unlink(tempfile()))
+  write.csv(ADSL, file = temp_file, row.names = FALSE)
+
+  # check can pull data and get code
+  x <- csv_dataset_connector("ADSL", file = temp_file, keys = get_cdisc_keys("ADSL"))
+  x$pull()
+  expect_equal(get_code(x), paste0("ADSL <- readr::read_delim(file = \"", temp_file, "\", delim = \",\")"))
+  data <- get_raw_data(x)
+  expect_true(is.data.frame(data))
+  expect_equal(nrow(data), nrow(ADSL))
+  expect_equal(ncol(data), ncol(ADSL))
+
+
+  # next check can pass arguments to read_delim (e.g. delim)
+  write.table(ADSL, file = temp_file, row.names = FALSE, sep = "|")
+  x <- csv_cdisc_dataset_connector("ADSL", file = temp_file, delim = "|")
+  x$pull()
+  expect_equal(get_code(x), paste0("ADSL <- readr::read_delim(file = \"", temp_file, "\", delim = \"|\")"))
+  data <- get_raw_data(x)
+  expect_true(is.data.frame(data))
+  expect_equal(nrow(data), nrow(ADSL))
+  expect_equal(ncol(data), ncol(ADSL))
+})
+
 test_that("script_dataset_connector", {
   file_example <- tempfile(fileext = ".R")
   writeLines(

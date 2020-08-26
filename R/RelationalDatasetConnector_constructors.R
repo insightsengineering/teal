@@ -490,6 +490,73 @@ teradata_dataset_connector <- function(dataname,
   return(x)
 }
 
+#' @description
+#' \code{csv_dataset_connector} - Create a \code{RelationalDatasetConnector} from \code{csv} (or
+#' general delimited file).
+#' @param file (\code{character})\cr
+#'   path to (\code{.csv}) (or general delimited) file that contains \code{data.frame} object
+#'
+#' @param ... (\code{optional})\cr
+#'   additional arguments applied to pull function (\code{readr::read_delim}) by default
+#'   \code{delim = ","}.
+#'
+#' @inheritParams relational_dataset_connector
+#'
+#' @rdname relational_dataset_connector
+#' @export
+#'
+#' @examples
+#' \dontrun{
+#' x <- csv_dataset_connector(
+#'   dataname = "ADSL",
+#'   file = "path/to/file.csv",
+#'   keys = get_cdisc_keys("ADSL"),
+#'   delim = ",",
+#'   col_types = quote(readr::cols(AGE = "i"))
+#' )
+#' x$get_code()
+#' }
+csv_dataset_connector <- function(dataname,
+                                  file,
+                                  keys,
+                                  code = character(0),
+                                  script = character(0),
+                                  label = character(0),
+                                  ...) {
+  dot_args <- list(...)
+  stopifnot(is_fully_named_list(dot_args))
+
+  check_pkg_quietly(
+    "readr",
+    "library readr is required to use csv connectors please install it."
+  )
+
+  # add default delim as ","
+  if (!"delim" %in% names(dot_args)) {
+    dot_args$delim <- ","
+  }
+
+  stopifnot(is_character_single(file))
+  if (!file.exists(file)) {
+    stop("File ", file, " does not exist.", call. = FALSE)
+  }
+
+  x_fun <- callable_function(readr::read_delim) # using read_delim as preserves dates (read.csv does not)
+  args <- c(list(file = file), dot_args)
+  x_fun$set_args(args)
+
+  x <- relational_dataset_connector(
+    dataname = dataname,
+    pull_fun = x_fun,
+    keys = keys,
+    code = code_from_script(code, script),
+    label = label
+  )
+
+  return(x)
+}
+
+
 
 #' @description
 #' \code{rds_cdisc_dataset_connector} -
@@ -658,6 +725,35 @@ teradata_cdisc_dataset_connector <- function(dataname, # nolint
   x <- teradata_dataset_connector(
     dataname = dataname,
     table = table,
+    code = code_from_script(code, script),
+    keys = get_cdisc_keys(dataname),
+    label = label,
+    ...
+  )
+
+  return(x)
+}
+
+#' @description
+#' \code{csv_cdisc_dataset_connector} -
+#' Create a \code{RelationalDatasetConnector} from \code{csv} (or general delimited) file
+#' with keys assigned automatically by \code{dataname}.
+#'
+#' @inheritParams csv_dataset_connector
+#'
+#' @rdname relational_dataset_connector
+#'
+#' @export
+csv_cdisc_dataset_connector <- function(dataname,
+                                        file,
+                                        code = character(0),
+                                        script = character(0),
+                                        label = character(0),
+                                        ...) {
+
+  x <- csv_dataset_connector(
+    dataname = dataname,
+    file = file,
     code = code_from_script(code, script),
     keys = get_cdisc_keys(dataname),
     label = label,

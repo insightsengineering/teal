@@ -1,5 +1,6 @@
 # teal 0.9.0.9000
 
+* Added new function `csv_dataset_connector` and `csv_cdisc_dataset_connector`.
 * issues with no news: 
 
 # teal 0.9.0
