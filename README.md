@@ -7,7 +7,19 @@ data viewers. `teal` shiny applications are built using standard [shiny
 modules](https://shiny.rstudio.com/articles/modules.html).
 
 Please read more about teal on our agile-R website at [go.roche.com/agile-R](http://go.roche.com/agile-R).
- 
+
+# Installation
+
+Please refer to the quick start section in agile-R [here](https://pages.github.roche.com/NEST/docs/hugo/NEST/agile-R/master/quick_start/install-nest-environment/)
+
+The latest version of `teal` can be installed locally with:
+```
+devtools::install_github(
+  repo = "NEST/teal",
+  host = "https://github.roche.com/api/v3",
+  upgrade_dependencies = FALSE
+)
+```
 
 # Acknowledgment
 
