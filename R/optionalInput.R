@@ -61,7 +61,7 @@
 #'                     selected = selected_value)
 #'
 optionalSelectInput <- function(inputId, # nolint
-                                label,
+                                label = NULL,
                                 choices = NULL,
                                 selected = NULL,
                                 multiple = FALSE,
@@ -70,7 +70,7 @@ optionalSelectInput <- function(inputId, # nolint
                                 label_help = NULL,
                                 fixed = FALSE) {
   stopifnot(is_character_single(inputId))
-  stopifnot(is_character_single(label) || is_html_like(label))
+  stopifnot(is.null(label) || is_character_single(label) || is_html_like(label))
   stopifnot(is.null(choices) || length(choices) >= 1)
   stopifnot(is.null(selected) ||
               length(selected) == 0 ||
@@ -81,6 +81,7 @@ optionalSelectInput <- function(inputId, # nolint
   stopifnot(is.list(options))
   stopifnot(is.null(label_help) || is_character_single(label_help) || is_html_like(label_help))
   stopifnot(is_logical_single(fixed))
+
 
   default_options <- list(
     "actions-box" = multiple,
@@ -330,7 +331,6 @@ extract_raw_choices <- function(choices, sep) {
 #' @examples
 #' optionalSliderInput("a", "b", 0, 1, 0.2)
 optionalSliderInput <- function(inputId, label, min, max, value, ...) { # nolint
-
   hide <- if (is.na(min) || is.na(max)) {
     min <- value - 1
     max <- value + 1

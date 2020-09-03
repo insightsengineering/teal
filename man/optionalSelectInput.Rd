@@ -6,7 +6,7 @@
 \usage{
 optionalSelectInput(
   inputId,
-  label,
+  label = NULL,
   choices = NULL,
   selected = NULL,
   multiple = FALSE,

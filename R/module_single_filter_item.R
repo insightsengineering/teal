@@ -8,6 +8,11 @@ get_keep_na_label <- function(na_count) {
   paste0("Keep NA (", na_count, ")")
 }
 
+# label of checkbox to keep / remove NAs
+get_keep_inf_label <- function(inf_count) {
+  paste0("Keep Inf (", inf_count, ")")
+}
+
 #' UI to filter a single filter variable
 #'
 #' We pass in the initial state to avoid filtering twice that otherwise comes
@@ -65,6 +70,7 @@ ui_single_filter_item <- function(id, filter_info, filter_state, prelabel) {
   id_remove_filter <- ns("remove_filter")
   id_selection <- ns("selection")
   id_keep_na <- ns("keepNA")
+  id_keep_inf <- ns("keepInf")
 
   # we set label to NULL everywhere, so we can set the label column ourselves
   select_input <- if (filter_info$type == "choices") {
@@ -84,8 +90,8 @@ ui_single_filter_item <- function(id, filter_info, filter_state, prelabel) {
         )
       )
     } else {
-      pickerInput(
-        id_selection,
+      optionalSelectInput(
+        inputId = id_selection,
         label = NULL,
         choices = filter_info$choices,
         selected = filter_state$choices,
@@ -94,8 +100,7 @@ ui_single_filter_item <- function(id, filter_info, filter_state, prelabel) {
           actionsBox = TRUE,
           liveSearch = (length(filter_info$choices) > 10),
           noneSelectedText = "Select a value"
-        ),
-        width = "100%"
+        )
       )
     }
   } else if (filter_info$type == "range") {
@@ -104,8 +109,8 @@ ui_single_filter_item <- function(id, filter_info, filter_state, prelabel) {
         class = "filterPlotOverlayRange",
         plotOutput(ns("plot"), height = "100%")
       ),
-      sliderInput(
-        id_selection,
+      optionalSliderInput(
+        inputId = id_selection,
         label = NULL,
         # `round()` may round to a slightly smaller interval (with negative numbers), so
         # we avoid this and then truncate it when we read the input in the server function
@@ -113,7 +118,14 @@ ui_single_filter_item <- function(id, filter_info, filter_state, prelabel) {
         max = filter_info$range[[2]],
         value = filter_state$range,
         width = "100%"
-      )
+      ),
+      if (filter_info$inf_count > 0) {
+        checkboxInput(id_keep_inf,
+                      get_keep_inf_label(filter_info$inf_count),
+                      value = filter_state$keep_inf)
+      } else {
+        NULL
+      }
     )
   } else if (filter_info$type == "logical") {
     div(
@@ -151,9 +163,13 @@ ui_single_filter_item <- function(id, filter_info, filter_state, prelabel) {
       ))
     ),
     fluidRow(select_input),
-    fluidRow(
-      checkboxInput(id_keep_na, get_keep_na_label(filter_info$na_count), value = filter_state$keep_na)
-    )
+    if (filter_info$na_count > 0) {
+      fluidRow(
+        checkboxInput(id_keep_na, get_keep_na_label(filter_info$na_count), value = filter_state$keep_na)
+      )
+    } else {
+      NULL
+    }
   )
   return(res)
 }
@@ -231,15 +247,18 @@ srv_single_filter_item <- function(input, output, session, datasets, dataname, v
   # define observers ----
   id_selection <- "selection"
   id_keep_na <- "keepNA"
+  id_keep_inf <- "keepInf"
   id_remove_filter <- "remove_filter"
 
   # observers for Browser UI state -> FilteredData filter_state ----
   o1 <- observeEvent({
     input[[id_selection]]
+    input[[id_keep_inf]]
     input[[id_keep_na]]
   }, {
     selection_state <- input[[id_selection]]
     type <- datasets$get_filter_type(dataname, varname)
+
     state <- if (type == "choices") {
       # unfortunately, NULL is also returned for a select when nothing is selected
       # in a multiple checkbox, so we need to set it manually to character(0)
@@ -262,10 +281,17 @@ srv_single_filter_item <- function(input, output, session, datasets, dataname, v
     } else {
       stop("Unknown filter type ", type, " for var ", varname)
     }
+
     keep_na_state <- if_null(input[[id_keep_na]], FALSE) # input field may not exist if variable contains no `NA`
-    state <- c(state, list(keep_na = keep_na_state))
+    keep_inf_state <- if_null(input[[id_keep_inf]], FALSE)
+
+    state <- c(state, list(keep_na = keep_na_state, keep_inf = keep_inf_state))
     .log("State for ", varname, ":", filter_state_to_str(type, state)) # truncates the output if too much
-    set_single_filter_state(datasets, dataname = dataname, varname = varname, state = state)
+
+    set_single_filter_state(datasets,
+                            dataname = dataname,
+                            varname = varname,
+                            state = state)
   },
   ignoreNULL = FALSE, # ignoreNULL: we don't want to ignore NULL when nothing is selected in the `selectInput`,
   ignoreInit = TRUE # ignoreInit: should not matter because we set the UI with the desired initial state

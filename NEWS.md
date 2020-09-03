@@ -1,6 +1,8 @@
 # teal 0.9.0.9000
 
 * Added new function `csv_dataset_connector` and `csv_cdisc_dataset_connector`.
+* Include `Keep Inf` checkbox for numerical filter items. `Keep NA` and `Keep Inf` checkbox doesn't 
+appear if there are no missing or infinite values.
 * issues with no news: 
 
 # teal 0.9.0

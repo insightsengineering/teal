@@ -403,6 +403,7 @@ FilteredData <- R6::R6Class( # nolint
     #' @return `logical` if the state for the `dataname` was changed
     set_filter_state = function(dataname, state, remove_omitted = FALSE) {
       private$check_data_varname_exists(dataname)
+
       if (is.null(state)) {
         state <- list()
       }
@@ -422,21 +423,29 @@ FilteredData <- R6::R6Class( # nolint
         pre_msg = paste0("data ", dataname, ": ")
       )
 
-      state <- Map(function(varname, var_state) {
-        private$external_to_internal_state(dataname, varname, var_state)
-      }, varname = names(state), var_state = state)
+      internal_state <- Map(
+        f = function(varname, var_state) {
+          private$external_to_internal_state(dataname, varname, var_state)
+        },
+        varname = names(state),
+        var_state = state
+      )
 
-      for (varname in names(state)) {
-        private$check_valid_filter_state(dataname, varname, var_state = state[[varname]])
+      for (varname in names(internal_state)) {
+        private$check_valid_filter_state(
+          dataname = dataname,
+          varname = varname,
+          var_state = internal_state[[varname]]
+        )
       }
 
       new_state <- if (remove_omitted) {
         # these will be effectively removed as the entire state for the dataname is set to this new one
-        state
+        internal_state
       } else {
         tmp_state <- self$get_filter_state(dataname)
         # overwrite those entries that  were provided
-        tmp_state[names(state)] <- state
+        tmp_state[names(internal_state)] <- internal_state
         tmp_state
       }
       # filter out `NULL` entries as `NULL` means to not filter the state and the rest
@@ -480,7 +489,7 @@ FilteredData <- R6::R6Class( # nolint
         logical = list(status = "TRUE"),
         stop("unknown type")
       )
-      return(c(state, list(keep_na = FALSE)))
+      return(c(state, list(keep_na = FALSE, keep_inf = FALSE)))
     },
 
     #' @details
@@ -527,7 +536,6 @@ FilteredData <- R6::R6Class( # nolint
         ))
         return(filter_call) # call which is also an expression
       } else {
-
         filtered_alone <- paste0(dataname, "_FILTERED_ALONE")
         filter_call <- as.call(list(
           as.name("<-"), as.name(filtered_alone),
@@ -932,6 +940,14 @@ FilteredData <- R6::R6Class( # nolint
         )
       }
 
+      if (!is_logical_single(var_state$keep_inf)) {
+        stop(
+          "data", dataname, "variable", varname, ":",
+          "Inf selection must be one of TRUE, FALSE, but is ", var_state$keep_Inf
+        )
+      }
+
+
       pre_msg <- paste0("data ", dataname, ", variable ", varname, ": ")
       switch(
         var_info$type,
@@ -976,7 +992,6 @@ FilteredData <- R6::R6Class( # nolint
       data_filter_call_items <- Map(
         function(filter_info, filter_state, varname) {
           stopifnot(!is.null(filter_state)) # filter_state only contains non-NULL values
-
           type <- filter_info$type
           if (is.null(type)) {
             # such a filter should never have been set
@@ -1015,17 +1030,25 @@ FilteredData <- R6::R6Class( # nolint
             },
             stop(paste("filter type for variable", varname, "in", dataname, "not known"))
           )
-          # allow NA as well, i.e. do not filter it out
-          if (filter_state$keep_na) {
-            # we add `is.na` independent of whether the variable has na values or not
-            filter_call <- call("|", filter_call, call("is.na", as.name(varname)))
+
+          if (type == "range" && isTRUE(filter_state$keep_inf)) {
+            filter_call <- call("|", call("is.infinite", as.name(varname)), filter_call)
           }
+
+          # allow NA as well, i.e. do not filter it out
+          if (isTRUE(filter_state$keep_na)) {
+            # we add `is.na` independent of whether the variable has na values or not
+            # dplyr's filter allows for: c(NA, "F", "M") == "F" - which normally throws NA, T, F
+            filter_call <- call("|", call("is.na", as.name(varname)), filter_call)
+          }
+
           return(filter_call)
         },
         self$get_filter_info(dataname),
         self$get_filter_state(dataname),
         names(self$get_filter_info(dataname))
       )
+
       data_filter_call_items <- Filter(function(x) !is.null(x), data_filter_call_items)
 
       if (length(data_filter_call_items) == 0) {
@@ -1134,7 +1157,7 @@ FilteredData <- R6::R6Class( # nolint
               histogram_data = histogram_data
             )
           } else if (is.numeric(var)) {
-            num_vals <- sum(!is.na(var))
+            num_vals <- sum(is.finite(var))
             density <- if (num_vals >= 2) {
               stats::density(var, na.rm = TRUE, n = 100) # 100 bins only
             } else {
@@ -1143,8 +1166,9 @@ FilteredData <- R6::R6Class( # nolint
             list(
               type = "range",
               label = if_null(attr(var, "label"), ""),
-              range = range(var, na.rm = TRUE),
-              histogram_data = data.frame(x = density$x, y = density$y)
+              range = range(var, finite = TRUE),
+              histogram_data = data.frame(x = density$x, y = density$y),
+              inf_count = sum(is.infinite(var))
             )
           } else if (is.logical(var)) {
             var <- factor(var, levels = c("TRUE", "FALSE"))
@@ -1194,8 +1218,8 @@ FilteredData <- R6::R6Class( # nolint
     # @param varname `character` column within the dataset,
     #   must be provided
     # @param var_state `list` state of single variable
-    # @return internal filter state: `list(spec = .., keep_na = ..)`,
-    #   where `spec` can be `choices` or similar
+    # @return internal filter state: `list(spec = .., keep_na = .., keep_inf = ..)`,
+    #   where `spec` can be `choices`, `range` or similar
     # @examples
     # nolint start
     # var_state = list(choices = c("M", "F"))
@@ -1212,20 +1236,30 @@ FilteredData <- R6::R6Class( # nolint
       if (is.null(var_state)) {
         return(NULL)
       }
+
       if (is_default_filter(var_state)) {
         var_state <- self$get_default_filter_state(dataname, varname)
-      } else {
-        if (is.null(names(var_state))) {
-          # then, we assume that var_state is a simple list
-          var_state <- setNames(
-            # is.na is vectorized
-            list(Filter(Negate(is.na), var_state), any(is.na(var_state))),
-            c(self$get_filter_type(dataname, varname), "keep_na")
-          )
-        }
+      } else if (is.null(names(var_state))) {
+        # then, we assume that var_state is a unnamed vector
+        # need to assume choice type (choice, range, ...), keep_na and keep_inf
+        var_state <- setNames(
+          # is.na is vectorized
+          object = list(
+            Filter(
+              function(x) {
+                all(!is.na(x))
+              },
+              var_state
+            ),
+            any(is.na(var_state)),
+            any(is.infinite(var_state))
+          ),
+          nm = c(self$get_filter_type(dataname, varname), "keep_na", "keep_inf")
+        )
       }
-      # if `keep_na` is not provided, default to `FALSE`
+      # if `keep_na/inf` is not provided, default to `FALSE`
       var_state$keep_na <- if_null(var_state$keep_na, FALSE)
+      var_state$keep_inf <- if_null(var_state$keep_inf, FALSE)
       var_state
     }
   )
