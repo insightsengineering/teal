@@ -1,218 +1,132 @@
 ## RelationalData ====
-#' @title \code{RelationalData} class
+#' @title Manage multiple \code{RelationalDataConnector}, \code{RelationalDatasetConnector}
+#' and \code{RelationalDataset} objects.
 #' @description
-#' Class combines multiple \code{RelationalDataset} objects.
-#'
-#' @importFrom R6 R6Class
-#' @importFrom rlang with_options
+#' Class manages \code{RelationalDataConnector}, \code{RelationalDatasetConnector} and
+#' \code{RelationalDataset} objects and aggregate them in one application.
+#' Class also decides whether to launch app before initialize teal application.
 #'
 #' @examples
-#' x <- relational_dataset(
-#'   x = data.frame(x = c(1, 2), y = c("a", "b"), stringsAsFactors = FALSE),
-#'   keys = keys(primary = "y", foreign = NULL, parent = NULL),
-#'   dataname = "XY",
-#'   code = "XY <- data.frame(x = c(1, 2), y = c('a', 'b'),
-#'                            stringsAsFactors = FALSE)",
-#'   label = character(0)
+#' library(random.cdisc.data)
+#' x <- rcd_data( # RelationalDataConnector
+#'   rcd_cdisc_dataset_connector("ADSL", radsl, cached = TRUE),
+#'   rcd_cdisc_dataset_connector("ADLB", radlb, cached = TRUE)
+#' )
+#' x2 <- rcd_data( # RelationalDataConnector
+#'   rcd_cdisc_dataset_connector("ADRS", radrs, cached = TRUE)
+#' )
+#' x3 <- cdisc_dataset(
+#'   dataname = "ADAE", # RelationalDataset
+#'   data = radae(cached = TRUE),
+#'   code = "library(random.cdisc.data)\nADAE <- radae(cached = TRUE)"
 #' )
 #'
-#' x2 <- relational_dataset(
-#'   x = data.frame(x = c(1, 2), y = c("a", "b"), stringsAsFactors = FALSE),
-#'   keys = keys(primary = "y", foreign = NULL, parent = NULL),
-#'   dataname = "XYZ",
-#'   code = "XYZ <- data.frame(x = c(1, 2), y = c('a', 'b'),
-#'                            stringsAsFactors = FALSE)",
-#'   label = character(0)
+#' x4 <- rcd_cdisc_dataset_connector("ADTTE", radtte, cached = TRUE)
+#' tc <- teal:::RelationalData$new(x, x2, x3, x4)
+#' tc$get_datanames()
+#' \dontrun{
+#' tc$get_datasets()
+#' tc$get_dataset("ADAE")
+#' }
+#' tc$get_items()
+#' tc$get_code()
+#' tc$get_code("ADAE")
+#' \dontrun{
+#' tc$launch()
+#' tc$get_datasets()
+#' tc$get_dataset("ADAE")
+#' tc$check()
+#' }
+#'
+#' library(random.cdisc.data)
+#' x <- cdisc_dataset(
+#'   dataname = "ADSL", # RelationalDataset
+#'   data = radsl(cached = TRUE),
+#'   code = "library(random.cdisc.data)\nADSL <- radsl(cached = TRUE)"
 #' )
 #'
-#' rd <- teal:::RelationalData$new(x, x2)
-RelationalData <- R6::R6Class( #nolint
+#' x2 <- rcd_cdisc_dataset_connector("ADTTE", radtte, cached = TRUE)
+#' tc <- teal:::RelationalData$new(x, x2)
+#' \dontrun{
+#' tc$get_datasets()
+#' get_raw_data(tc)
+#' tc$launch()
+#' get_raw_data(tc)
+#' }
+#' @importFrom R6 R6Class
+#' @importFrom shinyjs hide
+#' @importFrom methods is
+RelationalData <- R6::R6Class( # nolint
   classname = "RelationalData",
+  inherit = RelationalDataCollection,
   ## __Public Methods ====
   public = list(
-    #' @description
-    #' Create a new \code{RelationalData} object from multiple
-    #' \code{RelationalDataset} objects.
+    #' @param ... (\code{RelationalDataConnector}, \code{RelationalDataset},
+    #'  \code{RelationalDatasetConnector}) objects
     #'
-    #' @param ... (\code{RelationalDataset})\cr
-    #'  at least one object.
-    #'
-    #' @return new \code{RelationalData} object
     initialize = function(...) {
-      datasets <- list(...)
-      stopifnot(is_class_list("RelationalDataset")(datasets))
+      dot_args <- list(...)
+      possible_classes <- c("RelationalDataConnector",
+                            "RelationalDataset", "RelationalDatasetConnector")
 
-      dataset_names <- vapply(datasets, get_dataname, character(1))
-      names(datasets) <- dataset_names
+      is_teal_data <- is_any_class_list(dot_args, possible_classes)
+      if (!all(is_teal_data)) {
+        stop("All data elements should be RelationalDataset or RelationalData(set)Connector")
+      }
 
-      private$check_names(datasets)
+      datanames <- ulapply(dot_args, get_dataname)
+      if (any(duplicated(datanames))) {
+        stop("Found duplicated dataset names.")
+      }
 
-      private$datasets <- datasets
+      private$datasets <- dot_args
 
       private$pull_code <- CodeClass$new()
       private$mutate_code <- CodeClass$new()
 
+      if (length(self$get_connectors()) > 0) {
+        private$set_ui()
+        private$set_server()
+      }
+
       return(invisible(self))
     },
     #' @description
-    #'   Check if the object raw data is reproducible from the \code{get_code()} code.
-    #' @return
-    #'   \code{NULL} if check step has been disabled
-    #'   \code{TRUE} if all the datasets generated from evaluating the
-    #'   \code{get_code()} code are identical to the raw data, else \code{FALSE}.
-    check = function() {
-      # code can be put only to the mutate with empty code in datasets
-      res <- if (isFALSE(private$.check)) {
-        NULL
-      } else {
-        if (!is_empty(private$pull_code$code)) {
-          private$check_combined_code()
-        } else {
-          all(vapply(
-            private$datasets,
-            function(x) {
-              check_res <- x$check()
-              # NULL is still ok
-              is.null(check_res) || isTRUE(check_res)
-            },
-            logical(1)
-          ))
-        }
-      }
-      private$check_result <- res
-      return(res)
-    },
-    #' @description
-    #' Get result of reproducibility check
-    #' @return \code{NULL} if check has not been called yet, \code{TRUE} / \code{FALSE} otherwise
-    get_check_result = function() {
-      private$check_result
-    },
-    #' @description
-    #' Get code for all datasets.
-    #' @param dataname (\code{character}) dataname or \code{NULL} for all datasets
-    #' @param deparse (\code{logical}) whether to return the deparsed form of a call
-    #' @return (\code{character}) vector of code to generate datasets.
-    get_code = function(dataname = NULL, deparse = TRUE) {
-      stopifnot(is.null(dataname) || is_character_vector(dataname))
-      stopifnot(is_logical_single(deparse))
-
-      return(self$get_code_class()$get_code(dataname = dataname, deparse = deparse))
-    },
-    #' @description
-    #' Get internal \code{CodeClass} object
-    #' @param only_pull (\code{logical} value)\cr
-    #'   if \code{TRUE} only code to pull datasets will be returned without mutate code.
     #'
-    #' @return \code{CodeClass}
-    get_code_class = function(only_pull = FALSE) {
-      all_code_class <- CodeClass$new()
-
-      pull_code_class <- private$get_pull_code_class()
-      all_code_class$append(pull_code_class)
-
-      datasets_code_class <- private$get_datasets_code_class()
-      all_code_class$append(datasets_code_class)
-
-      if (isFALSE(only_pull)) {
-        mutate_code_class <- private$get_mutate_code_class()
-        all_code_class$append(mutate_code_class)
-      }
-
-      return(all_code_class)
-    },
-    #' @description
-    #' Get names of the datasets.
-    #'
-    #' @return \code{character} vector with names of all datasets.
+    #' Derive the names of all datasets
+    #' @return \code{character} vector with names
     get_datanames = function() {
-      vapply(private$datasets, get_dataname, character(1))
+      datasets_names <- ulapply(private$datasets, get_dataname)
+
+      return(datasets_names)
     },
     #' @description
-    #' Get \code{RelationalDataset} object.
     #'
-    #' @param dataname (\code{character} value)\cr
-    #'   name of dataset to be returned. If \code{NULL}, all datasets are returned.
+    #' Get a shiny-module UI to render the necessary app to
+    #' derive \code{RelationalDataConnector} object's data
     #'
-    #' @return \code{RelationalDataset}.
-    get_dataset = function(dataname = NULL) {
-      stopifnot(is.null(dataname) || is_character_single(dataname))
-
-      if (is_character_single(dataname)) {
-        if (!(dataname %in% self$get_datanames())) {
-          stop(paste("dataset", dataname, "not found"))
-        }
-
-        res <- self$get_datasets()[[dataname]]
-        return(res)
+    #' @param id (\code{character}) item ID for the shiny module
+    #' @return the \code{shiny} \code{ui} function
+    get_ui = function(id) {
+      if (is.null(private$ui)) {
+        div(id = id, "Data Loaded")
       } else {
-        return(self$get_datasets())
+        private$ui(id)
       }
+    },
+    #' Get data connectors.
+    #'
+    #' @return \code{list} with all \code{RelationalDataConnector} objects.
+    get_connectors = function() {
+      return(Filter(
+        function(x) {
+          is(object = x, class2 = "RelationalDatasetConnector") || is(object = x, class2 = "RelationalDataConnector")
+        },
+        private$datasets
+      ))
     },
     #' @description
-    #' Get \code{list} of \code{RelationalDataset} objects.
     #'
-    #' @return \code{list} of \code{RelationalDataset}.
-    get_datasets = function() {
-      if (!self$is_pulled()) {
-        stop("Not all datasets have been pulled yet.\n",
-             "- Please use `load_datasets()` to retrieve complete results.")
-      }
-
-      if (is_empty(private$mutate_code$code)) {
-        res <- ulapply(
-          private$datasets,
-          function(x) {
-            if (is_pulled(x)) {
-              get_datasets(x)
-            } else {
-              NULL
-            }
-          }
-        )
-      } else {
-        # have to evaluate post-processing code (i.e. private$mutate_code) before returning dataset
-        new_env <- new.env(parent = parent.env(globalenv()))
-        for (dataset in self$get_items()) {
-          assign(get_dataname(dataset), get_raw_data(dataset), envir = new_env)
-        }
-
-        for (var_idx in seq_along(private$mutate_vars)) {
-          mutate_var <- private$mutate_vars[[var_idx]]
-          if (is(dataset, "RawDataset") || is(dataset, "RawDatasetConnector")) {
-            assign(
-              x = names(private$mutate_vars)[[var_idx]],
-              value = get_raw_data(mutate_var),
-              envir = new_env
-            )
-          } else {
-            assign(
-              x = names(private$mutate_vars)[[var_idx]],
-              value = mutate_var,
-              envir = new_env
-            )
-          }
-        }
-
-        private$mutate_code$eval(envir = new_env)
-        res <- sapply(
-          self$get_items(),
-          function(x) {
-            x_name <- x$get_dataname()
-            relational_dataset(
-              dataname = x_name,
-              x = get(x_name, new_env),
-              keys = x$get_keys(),
-              code = x$get_code(),
-              label = x$get_dataset_label()
-            )
-          },
-          USE.NAMES = TRUE,
-          simplify = FALSE
-        )
-      }
-      return(if_not_null(res, setNames(res, vapply(res, get_dataname, character(1)))))
-    },
     #' @description
     #' Get all datasets and all dataset connectors
     #'
@@ -223,223 +137,192 @@ RelationalData <- R6::R6Class( #nolint
     get_items = function(dataname = NULL) {
       stopifnot(is.null(dataname) || is_character_single(dataname))
 
+      get_sets <- function(x) {
+        if (is(object = x, class2 = "RelationalDataConnector")) {
+          x$get_items()
+        } else {
+          x
+        }
+      }
+
+      sets <- ulapply(private$datasets, get_sets)
+      names(sets) <- vapply(sets, get_dataname, character(1))
+
       if (is_character_single(dataname)) {
         if (!(dataname %in% self$get_datanames())) {
           stop(paste("dataset", dataname, "not found"))
         }
-        return(private$datasets[[dataname]])
+        return(sets[[dataname]])
       } else {
-        return(private$datasets)
+        return(sets)
       }
     },
     #' @description
-    #' Check if dataset has already been pulled.
     #'
-    #' @return \code{TRUE} if dataset has been already pulled, else \code{FALSE}
-    is_pulled = function() {
-      all(vapply(private$datasets, is_pulled, logical(1)))
+    #' Get a shiny-module server to render the necessary app to
+    #' derive \code{RelationalDataConnector} object's data
+    #'
+    #' @return \code{shiny} \code{server} module.
+    get_server = function() {
+      if (is.null(private$server)) {
+        return(function(input, output, session) {
+          reactive(self)
+        })
+      } else {
+        private$server
+      }
     },
     #' @description
-    #' Mutate data by code
     #'
-    #' @param code (\code{character}) Code to mutate the dataset. Must contain the
-    #'  \code{dataset$dataname}
-    #' @param vars (list)\cr
-    #'   In case when this object code depends on the \code{raw_data} from the other
-    #'   \code{RelationalDataset}, \code{RelationalDatasetConnector} object(s) or other constant value,
-    #'   this/these object(s) should be included
+    #' Launch an app that allows to run the user-interfaces of all
+    #' \code{DataConnector} and \code{DatasetConnector} modules
     #'
-    #' @return self invisibly for chaining
-    mutate = function(code, vars = list()) {
-      private$set_mutate_vars(vars)
-      private$set_mutate_code(
-        code = code,
-        deps = names(vars)
-      )
-
-      private$check_result <- NULL
-
-      return(invisible(self))
-    },
-    #' @description
-    #' Mutate dataset by code
-    #'
-    #' @param dataname (\code{character}) Dataname to be mutated
-    #' @param code (\code{character}) Code to mutate the dataset. Must contain the
-    #'  \code{dataset$dataname}
-    #' @param vars (list)\cr
-    #'   In case when this object code depends on the \code{raw_data} from the other
-    #'   \code{RelationalDataset}, \code{RelationalDatasetConnector} object(s) or other constant value,
-    #'   this/these object(s) should be included
-    #'
-    #' @return self invisibly for chaining
-    mutate_dataset = function(dataname, code, vars = list()) {
-      stopifnot(is_character_vector(dataname))
-      stopifnot(all(dataname %in% self$get_datanames()))
-
-      private$set_mutate_vars(vars = vars)
-      private$set_mutate_code(
-        code = code,
-        dataname = dataname,
-        deps = names(vars)
-      )
-
-      private$check_result <- NULL
-
-      return(invisible(self))
-    },
-    #' @description
-    #' Set reproducibility check
-    #'
-    #' @param check (\code{logical}) whether to perform reproducibility check.
-    #'
-    #' @return \code{self} invisibly for chaining.
-    set_check = function(check = FALSE) {
-      stopifnot(is_logical_single(check))
-      private$.check <- check
-      return(invisible(self))
-    },
-    #' @description
-    #' Set pull code
-    #'
-    #' @param code (\code{character} value)\cr
-    #'   code to reproduce \code{data} in \code{RawDataset} objects. Can't be set if any dataset
-    #'   has \code{code} set already.
-    #'
-    #' @return \code{self} invisibly for chaining.
-    set_pull_code = function(code) {
-      stopifnot(is_character_single(code))
-      is_code_set <- vapply(
-        X = self$get_items(),
-        FUN = function(item) {
-          get_code(item, deparse = TRUE) != ""
-        },
-        FUN.VALUE = logical(1)
-      )
-
-      is_dataset <- vapply(
-        X = self$get_items(),
-        FUN = function(item) {
-          is(item, "RawDataset")
-        },
-        FUN.VALUE = logical(1)
-      )
-
-      if (any(is_code_set & is_dataset)) {
-        stop(
-          "'code' argument should be specified only in the 'cdisc_data' or in 'cdisc_dataset' but not in both",
-          call. = FALSE
-        )
+    #' This piece is mainly used for debugging.
+    launch = function() {
+      # if no data connectors can append any dataset connectors
+      # and not load an app
+      if (self$is_pulled()) {
+        stop("All the datasets have already been pulled.")
       }
 
-      if (all(!is_dataset)) {
-        stop(
-          "Connectors are reproducible by default and setting 'code' argument might break it",
-          call. = FALSE
-        )
-      }
+      # otherwise load RelationDataConnector and
+      # RelationalDatasetConnector with shiny app
+      shinyApp(
+        ui = fluidPage(
+          fluidRow(
+            column(
+              width = 8,
+              offset = 2,
+              private$ui(id = "main_app"),
+              shinyjs::hidden(
+                tags$div(
+                  id = "data_loaded",
+                  div(
+                    h3("Data successfully loaded."),
+                    p("You can close this window and get back to R console.")
+                  )
+                )
+              ),
+              useShinyjs(),
+              br()
+            )
+          )
+        ),
+        server = function(input, output, session) {
+          session$onSessionEnded(stopApp)
+          dat <- callModule(private$server, id = "main_app")
 
-      private$pull_code <- private$pull_code$set_code(
-        code = code,
-        dataname = self$get_datanames()
+          observeEvent(dat(), {
+            if (self$is_pulled()) {
+              shinyjs::show("data_loaded")
+              stopApp()
+            }
+          })
+        }
       )
-      return(invisible(self))
     }
   ),
 
   ## __Private Fields ====
   private = list(
-    datasets = NULL,
-    .check = FALSE,
-    check_result = NULL, # TRUE / FALSE after calling check()
-    mutate_code = NULL, # CodeClass after initialization
-    mutate_vars = list(), # named list with vars used to mutate object
-    pull_code = NULL, # code to reproduce loading of NamedDataset(s) only
+    ui = NULL,
+    server = NULL,
 
     ## __Private Methods ====
-    check_combined_code = function() {
-      execution_environment <- new.env(parent = parent.env(globalenv()))
-      self$get_code_class(only_pull = TRUE)$eval(envir = execution_environment)
-      all(vapply(
-        self$get_items(),
-        function(dataset) {
-          data <- get_raw_data(dataset)
-          data_from_code <- get(get_dataname(dataset), execution_environment)
-          identical(data, data_from_code)
-        },
-        logical(1)
-      ))
-    },
-    get_datasets_code_class = function() {
-      res <- CodeClass$new()
-      if (is.null(private$datasets)) {
-        return(res)
-      }
-      for (dataset in private$datasets) {
-        res$append(dataset$get_code_class())
-      }
-      return(res)
-    },
-    get_mutate_code_class = function() {
-      res <- CodeClass$new()
-      res$append(list_to_code_class(private$mutate_vars))
-      res$append(private$mutate_code)
-      return(res)
-    },
-    get_pull_code_class = function() {
-      res <- CodeClass$new()
-      res$append(private$pull_code)
-      return(res)
-    },
-    set_mutate_code = function(code, dataname = self$get_datanames(), deps = names(private_mutate_vars)) {
-      stopifnot(is_character_vector(code, 0, 1))
+    set_ui = function() {
+      private$ui <- function(id) {
+        ns <- NS(id)
 
-      if (length(code) > 0 && code != "") {
-        private$mutate_code$set_code(code = code, dataname = dataname, deps = deps)
-      }
-
-      return(invisible(self))
-    },
-    set_mutate_vars = function(vars) {
-      stopifnot(is_fully_named_list(vars))
-
-      if (length(vars) > 0) {
-        private$mutate_vars <- c(
-          private$mutate_vars,
-          vars[!names(vars) %in% names(private$mutate_vars)]
+        # connectors ui(s) + submit button
+        fluidPage(
+          shinyjs::hidden(
+            column(
+              id = ns("delayed_data"),
+              width = 8,
+              offset = 2,
+              tagList(
+                lapply(
+                  private$datasets,
+                  function(x) {
+                    div(
+                      if (!is(x, c("RelationalDatasetConnector", "RelationalDataConnector"))) {
+                        div(
+                          h4("Data(set) for: ", lapply(x$get_datanames(), code)),
+                          p(icon("check"), "Loaded")
+                          )
+                        } else {
+                          if_null(
+                            x$get_ui(
+                              id = ns(paste0(x$get_datanames(), collapse = "_"))
+                              ),
+                            div(
+                              h4("Dataset Connector for: ", lapply(x$get_datanames(), code)),
+                              p(icon("check"), "Ready to Load")
+                              )
+                            )
+                          },
+                      br()
+                      )
+                    }
+                  ),
+                actionButton(inputId = ns("submit"), label = "Submit all")
+                )
+              )
+            )
         )
-      }
-
-      return(invisible(self))
+        }
     },
-    check_names = function(x) {
-      x_names <- names(x)
-      if (any(vapply(x_names, is_empty_string, logical(1)))) {
-        stop("Cannot extract some dataset names")
-      }
-      if (any(duplicated(x_names))) {
-        stop("Datasets names should be unique")
-      }
-      if (any(x_names %in% self$get_datanames())) {
-        stop("Some datanames already exists")
-      }
-      return(invisible(self))
-    },
-    check_dataset_all_code = function(dataset) {
-      new_env <- new.env(parent = parent.env(.GlobalEnv))
-      tryCatch({
-        self$get_code_class()$eval(envir = new_env)
-      }, error = function(e) {
-        error_dialog(e)
-      })
+    set_server = function() {
+      private$server <- function(input, output, session) {
+        shinyjs::show("delayed_data")
+        rv <- reactiveVal(NULL)
+        observeEvent(input$submit, {
+          # load data from all connectors
+          for (dc in self$get_connectors()) {
+            if (is(dc, class2 = "RelationalDataConnector")) {
+              callModule(dc$get_server(),
+                         id = paste0(dc$get_datanames(), collapse = "_"),
+                         connection = dc$get_connection(),
+                         connectors = dc$get_items()
+              )
 
-      res_check <- tryCatch({
-        identical(get_raw_data(dataset), get(get_dataname(dataset), envir = new_env))
-      }, error = function(e) {
-        FALSE
-      })
+            } else if (is(dc, class2 = "NamedDatasetConnector")) {
+              callModule(dc$get_server(),
+                         id = dc$get_dataname()
+              )
+            }
+            if (dc$is_failed()) {
+              break
+            }
+          }
 
-      return(res_check)
+
+          if (self$is_pulled()) {
+            shinyjs::hide("delayed_data")
+            rv(self)
+          }
+        })
+        return(rv)
+      }
     }
   )
 )
+
+## Functions ====
+is_any_class_list <- function(x, class) {
+  vapply(
+    x,
+    FUN = function(xx) {
+      any(
+        vapply(
+          class,
+          function(class_name) {
+            is(object = xx, class2 = class_name)
+          },
+          FUN.VALUE = logical(1)
+        )
+      )
+    },
+    FUN.VALUE = logical(1)
+  )
+}

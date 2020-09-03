@@ -4,7 +4,7 @@
 \alias{is_pulled}
 \alias{is_pulled.RawDatasetConnector}
 \alias{is_pulled.RawDataset}
-\alias{is_pulled.RelationalData}
+\alias{is_pulled.RelationalDataCollection}
 \title{Is pulled}
 \usage{
 is_pulled(x)
@@ -13,11 +13,11 @@ is_pulled(x)
 
 \method{is_pulled}{RawDataset}(x)
 
-\method{is_pulled}{RelationalData}(x)
+\method{is_pulled}{RelationalDataCollection}(x)
 }
 \arguments{
 \item{x}{(\code{object}) of class \link{RawDatasetConnector}, \link{RelationalDataset},
-\link{RelationalDatasetConnector}, or \link{RelationalDataConnector}.}
+\link{RelationalDatasetConnector}, or \link{RelationalDataConnector} or \link{RelationalData}}
 }
 \value{
 (\code{logical}) \code{TRUE} if connector has been already pulled, else \code{FALSE}.

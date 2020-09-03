@@ -726,7 +726,7 @@ test_that("Error - duplicated names", {
 test_that("Error - dataset is not of correct class", {
   expect_error(
     cdisc_data(ARG1 = 1, code = "", check = FALSE),
-    "All arguments should be of RelationalData(set) or RelationalData(set)Connector class",
+    "All arguments should be of RelationalDataset or RelationalData(set)Connector class",
     fixed = TRUE
   )
 })
@@ -842,4 +842,24 @@ test_that("Error - Two root datasets with different keys", {
     ),
     "Root dataset keys doesn't match ADSL primary keys"
   )
+})
+
+# 7. invalid arguments -----
+
+test_that("Cannot create abstract RelationalDataCollection class", {
+  expect_error(
+    teal:::RelationalDataCollection$new()
+  )
+})
+
+
+test_that("Cannot create RelationData if arguments include RelationalData object", {
+
+  c_data <- cdisc_data(
+    cdisc_dataset("ADSL", ADSL)
+  )
+
+  expect_error(cdisc_data(c_data))
+  expect_error(cdisc_data(cdisc_dataset("ADSL", ADSL), c_data))
+
 })

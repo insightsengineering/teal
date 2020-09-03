@@ -1,7 +1,7 @@
 #' Mutate dataset by code
 #'
 #' @param x (\code{NamedDataset})\cr
-#'    object or \code{RealtionalDataset} which inherited from it.
+#'    object or \code{RelationalDataset} which inherited from it.
 #' @param dataname (\code{character})\cr
 #'   Dataname to be mutated.
 #' @param code (\code{character})\cr
@@ -81,7 +81,7 @@ mutate_dataset.NamedDatasetConnector <- function(x, code = character(0), script 
 
 #' @rdname mutate_dataset
 #' @export
-mutate_dataset.RelationalData <- function(x, dataname, code = character(0), script = character(0), vars = list(), ...) { #nolint
+mutate_dataset.RelationalDataCollection <- function(x, dataname, code = character(0), script = character(0), vars = list(), ...) { #nolint
   stopifnot(is_character_single(code) || is_character_single(script))
   stopifnot(is_fully_named_list(vars))
 
@@ -93,7 +93,7 @@ mutate_dataset.RelationalData <- function(x, dataname, code = character(0), scri
 
 #' Mutate data by code
 #'
-#' @param x (\code{RelationalData}, \code{RelationalDataList} or \code{RealtionalDataConnector})\cr
+#' @param x (\code{RelationalData} or \code{RelationalDataConnector})\cr
 #'   object.
 #' @inheritParams mutate_dataset
 #'
@@ -105,7 +105,7 @@ mutate_data <- function(x, code = character(0), script = character(0), vars = li
 
 #' @rdname mutate_data
 #' @export
-mutate_data.RelationalData <- function(x, code = character(0), script = character(0), vars = list()) { #nolint
+mutate_data.RelationalDataCollection <- function(x, code = character(0), script = character(0), vars = list()) { #nolint
   code <- code_from_script(code, script) # nolint
 
   x$mutate(code = code, vars = vars)

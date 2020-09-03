@@ -2,15 +2,15 @@
 % Please edit documentation in R/mutate_dataset.R
 \name{mutate_data}
 \alias{mutate_data}
-\alias{mutate_data.RelationalData}
+\alias{mutate_data.RelationalDataCollection}
 \title{Mutate data by code}
 \usage{
 mutate_data(x, code = character(0), script = character(0), vars = list())
 
-\method{mutate_data}{RelationalData}(x, code = character(0), script = character(0), vars = list())
+\method{mutate_data}{RelationalDataCollection}(x, code = character(0), script = character(0), vars = list())
 }
 \arguments{
-\item{x}{(\code{RelationalData}, \code{RelationalDataList} or \code{RealtionalDataConnector})\cr
+\item{x}{(\code{RelationalData} or \code{RelationalDataConnector})\cr
 object.}
 
 \item{code}{(\code{character})\cr

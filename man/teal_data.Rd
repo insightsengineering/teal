@@ -7,11 +7,11 @@
 teal_data(...)
 }
 \arguments{
-\item{...}{(\code{RelationalData}, \code{RelationalDataConnector}, \code{RelationalDataset} or
-\code{RelationalDatasetConnector}) elements to include into teal data object}
+\item{...}{(\code{RelationalDataConnector}, \code{RelationalDataset} or
+\code{RelationalDatasetConnector}) elements to include in \code{RelationalData} object}
 }
 \value{
-\code{RelationalDataList}
+\code{RelationalData}
 }
 \description{
 Universal function to pass data to teal application
@@ -38,7 +38,7 @@ x2 <- relational_dataset(
 data <- cdisc_data(x1, x2)
 get_raw_data(data)
 
-# RelationalDataList
+# RelationalData with connectors
 x3 <- rcd_data( # RelationalDataConnector
   rcd_cdisc_dataset_connector("ADSL", radsl, cached = TRUE),
   rcd_cdisc_dataset_connector("ADLB", radlb, cached = TRUE)
@@ -48,7 +48,7 @@ x4 <- rcd_data( # RelationalDataConnector
   rcd_cdisc_dataset_connector("ADRS", radrs, cached = TRUE)
 )
 
-data_list <- cdisc_data(x3, x2, x4)
+data_list <- teal_data(x3, x2, x4)
 \dontrun{
 data_list$launch()
 get_raw_data(data_list)

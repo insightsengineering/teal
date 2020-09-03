@@ -15,7 +15,7 @@
 #' @md
 #' @param id (`character` value)\cr
 #'   module id
-#' @param data (`RealtionalDataList`)\cr
+#' @param data (`RelationalData`)\cr
 #'   object containing data
 #' @inheritParams ui_teal
 #' @export
@@ -24,8 +24,8 @@ ui_teal_with_splash <- function(id,
                                 title,
                                 header = tags$p("Add Title Here"),
                                 footer = tags$p("Add Footer Here")) {
-  stopifnot(is(data, "RelationalDataList"))
-  is_pulled_data <- is_pulled(data) # `RelationalDataList`
+  stopifnot(is(data, "RelationalData"))
+  is_pulled_data <- is_pulled(data)
   ns <- NS(id)
 
   # Startup splash screen for delayed loading
@@ -50,16 +50,16 @@ ui_teal_with_splash <- function(id,
 #'
 #' @md
 #' @inheritParams srv_shiny_module_arguments
-#' @param data `RealtionalDataList` R6 object and container for data
+#' @param data `RelationalData` R6 object and container for data
 #' @inheritParams srv_teal
 #' @return `reactive`, return value of `\link{srv_teal}`
 #' @export
 srv_teal_with_splash <- function(input, output, session, data, modules, filter = list()) {
-  stopifnot(is(data, "RelationalDataList"))
+  stopifnot(is(data, "RelationalData"))
 
   is_pulled_data <- is_pulled(data)
 
-  # raw_data contains RelationalDataList, i.e. R6 object and container for data
+  # raw_data contains RelationalData, i.e. R6 object and container for data
   # reactive to get data through delayed loading
   # we must leave it inside the server because of callModule which needs to pick up the right session
   if (is_pulled_data) {

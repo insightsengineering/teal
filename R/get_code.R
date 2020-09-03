@@ -80,7 +80,7 @@ get_code.NamedDataset <- function(x, deparse = TRUE, ...) {
 #' get_code(rd)
 #' get_code(rd, "XY")
 #' get_code(rd, "XYZ")
-get_code.RelationalData <- function(x, dataname = character(0), deparse = TRUE, ...) { # nolint
+get_code.RelationalDataCollection <- function(x, dataname = character(0), deparse = TRUE, ...) { # nolint
   if (!is_empty(dataname)) {
     if (any(!(dataname %in% x$get_datanames()))) {
       stop("The dataname provided does not exist")

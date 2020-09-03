@@ -1,6 +1,7 @@
+#' @importFrom methods is
 set_datasets_data <- function(datasets, data) {
   stopifnot(is(datasets, "FilteredData"))
-  stopifnot(is(data, "RelationalDataList"))
+  stopifnot(is(data, "RelationalData"))
 
   # execute reproducibility check on just loaded data
   # check will be executed according to data class configuration (it's possible to disable this step)
@@ -24,6 +25,7 @@ set_datasets_data <- function(datasets, data) {
   return(invisible(NULL))
 }
 
+#' @importFrom methods is
 set_datasets_filters <- function(datasets, filter) {
   stopifnot(
     is(datasets, "FilteredData"),

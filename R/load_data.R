@@ -108,29 +108,6 @@ load_datasets.RawDatasetConnector <- function(x, args = NULL, try = FALSE, ...) 
   return(invisible(x))
 }
 
-#' @rdname load_datasets
-#' @export
-#' @examples
-#'
-#' # RelationalData ------
-#' library(random.cdisc.data)
-#' adsl <- cdisc_dataset(dataname = "ADSL", # RelationalDataset
-#'                       data = radsl(cached = TRUE),
-#'                       code = "library(random.cdisc.data)\nADSL <- radsl(cached = TRUE)")
-#'
-#' adtte <- cdisc_dataset(dataname = "ADTTE", # RelationalDataset
-#'                        data = radtte(cached = TRUE),
-#'                        code = "library(random.cdisc.data)\nADTTE <- radtte(cached = TRUE)")
-#'
-#' rd <- teal:::RelationalData$new(adsl, adtte)
-#'
-#' \dontrun{
-#' # return a warning
-#' load_datasets(rd)
-#' }
-load_datasets.RelationalData <- function(x, ...) {
-  warning("This is a RelationalData object so data is already loaded")
-}
 
 #' @rdname load_datasets
 #' @export
@@ -158,7 +135,7 @@ load_datasets.RelationalDataConnector <- function(x, ...) { # nolint
 #' @export
 #' @examples
 #'
-#' # RelationalDataList --------
+#' # RelationalData --------
 #' library(random.cdisc.data)
 #' adsl <- rcd_cdisc_dataset_connector(dataname = "ADSL", fun = radsl, cached = TRUE)
 #' adlb <- rcd_cdisc_dataset_connector(dataname = "ADLB", fun = radlb, cached = TRUE)
@@ -172,7 +149,7 @@ load_datasets.RelationalDataConnector <- function(x, ...) { # nolint
 #' \dontrun{
 #' load_datasets(tc)
 #' }
-load_datasets.RelationalDataList <- function(x, ...) { # nolint
+load_datasets.RelationalData <- function(x, ...) { # nolint
   if (interactive()) {
     x$launch()
   } else {

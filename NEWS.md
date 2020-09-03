@@ -3,6 +3,9 @@
 * Added new function `csv_dataset_connector` and `csv_cdisc_dataset_connector`.
 * Include `Keep Inf` checkbox for numerical filter items. `Keep NA` and `Keep Inf` checkbox doesn't 
 appear if there are no missing or infinite values.
+* Replace existing `RelationalData` class with abstract class `RelationalDataCollection` and 
+rename `RelationalDataList` class as `RelationalData`. The `data` argument to `teal::init` is
+now always a `RelationalData` object.
 * issues with no news: 
 
 # teal 0.9.0

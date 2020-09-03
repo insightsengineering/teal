@@ -4,7 +4,7 @@
 \alias{get_dataset}
 \alias{get_dataset.RawDatasetConnector}
 \alias{get_dataset.RawDataset}
-\alias{get_dataset.RelationalData}
+\alias{get_dataset.RelationalDataCollection}
 \title{Get dataset from \code{DatasetConnector}}
 \usage{
 get_dataset(x, dataname)
@@ -13,7 +13,7 @@ get_dataset(x, dataname)
 
 \method{get_dataset}{RawDataset}(x, dataname = NULL)
 
-\method{get_dataset}{RelationalData}(x, dataname = NULL)
+\method{get_dataset}{RelationalDataCollection}(x, dataname = NULL)
 }
 \arguments{
 \item{x}{\code{RawDatasetConnector} or \code{RelationalDatasetConnector})}
@@ -45,7 +45,7 @@ rd <- raw_dataset(ADSL)
 
 get_dataset(rd)
 
-# RelationalData --------
+# RelationalData  (not containing connectors) --------
 library(random.cdisc.data)
 adsl <- cdisc_dataset(dataname = "ADSL", # RelationalDataset
                       data = radsl(cached = TRUE),
@@ -71,10 +71,10 @@ get_datasets(rdc)
 get_dataset(rdc, dataname = "ADSL")
 }
 
-# RelationalDataList --------
-rdl <- cdisc_data(rdc, adae)
+# RelationalData (containing connectors) --------
+rd <- cdisc_data(rdc, adae)
 
 \dontrun{
-get_dataset(rdl, "ADSL")
+get_dataset(rd, "ADSL")
 }
 }

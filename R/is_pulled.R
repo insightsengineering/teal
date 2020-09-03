@@ -2,7 +2,7 @@
 #'
 #' @description S3 method to determine if dataset is pulled (loaded).
 #' @param x (\code{object}) of class \link{RawDatasetConnector}, \link{RelationalDataset},
-#'   \link{RelationalDatasetConnector}, or \link{RelationalDataConnector}.
+#'   \link{RelationalDatasetConnector}, or \link{RelationalDataConnector} or \link{RelationalData}
 #'
 #' @return (\code{logical}) \code{TRUE} if connector has been already pulled, else \code{FALSE}.
 #' @export
@@ -80,6 +80,6 @@ is_pulled.RawDataset <- function(x) {
 #' load_datasets(rdc)
 #' is_pulled(rdc)
 #' }
-is_pulled.RelationalData <- function(x) { # nolint
+is_pulled.RelationalDataCollection <- function(x) { # nolint
   return(x$is_pulled())
 }

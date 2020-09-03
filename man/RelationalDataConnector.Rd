@@ -40,7 +40,7 @@ x$get_datasets()
 }
 }
 \section{Super class}{
-\code{\link[teal:RelationalData]{teal::RelationalData}} -> \code{RelationalDataConnector}
+\code{\link[teal:RelationalDataCollection]{teal::RelationalDataCollection}} -> \code{RelationalDataConnector}
 }
 \section{Methods}{
 \subsection{Public methods}{
@@ -61,18 +61,18 @@ x$get_datasets()
 \if{html}{
 \out{<details ><summary>Inherited methods</summary>}
 \itemize{
-\item \out{<span class="pkg-link" data-pkg="teal" data-topic="RelationalData" data-id="check">}\href{../../teal/html/RelationalData.html#method-check}{\code{teal::RelationalData$check()}}\out{</span>}
-\item \out{<span class="pkg-link" data-pkg="teal" data-topic="RelationalData" data-id="get_check_result">}\href{../../teal/html/RelationalData.html#method-get_check_result}{\code{teal::RelationalData$get_check_result()}}\out{</span>}
-\item \out{<span class="pkg-link" data-pkg="teal" data-topic="RelationalData" data-id="get_code">}\href{../../teal/html/RelationalData.html#method-get_code}{\code{teal::RelationalData$get_code()}}\out{</span>}
-\item \out{<span class="pkg-link" data-pkg="teal" data-topic="RelationalData" data-id="get_datanames">}\href{../../teal/html/RelationalData.html#method-get_datanames}{\code{teal::RelationalData$get_datanames()}}\out{</span>}
-\item \out{<span class="pkg-link" data-pkg="teal" data-topic="RelationalData" data-id="get_dataset">}\href{../../teal/html/RelationalData.html#method-get_dataset}{\code{teal::RelationalData$get_dataset()}}\out{</span>}
-\item \out{<span class="pkg-link" data-pkg="teal" data-topic="RelationalData" data-id="get_datasets">}\href{../../teal/html/RelationalData.html#method-get_datasets}{\code{teal::RelationalData$get_datasets()}}\out{</span>}
-\item \out{<span class="pkg-link" data-pkg="teal" data-topic="RelationalData" data-id="get_items">}\href{../../teal/html/RelationalData.html#method-get_items}{\code{teal::RelationalData$get_items()}}\out{</span>}
-\item \out{<span class="pkg-link" data-pkg="teal" data-topic="RelationalData" data-id="is_pulled">}\href{../../teal/html/RelationalData.html#method-is_pulled}{\code{teal::RelationalData$is_pulled()}}\out{</span>}
-\item \out{<span class="pkg-link" data-pkg="teal" data-topic="RelationalData" data-id="mutate">}\href{../../teal/html/RelationalData.html#method-mutate}{\code{teal::RelationalData$mutate()}}\out{</span>}
-\item \out{<span class="pkg-link" data-pkg="teal" data-topic="RelationalData" data-id="mutate_dataset">}\href{../../teal/html/RelationalData.html#method-mutate_dataset}{\code{teal::RelationalData$mutate_dataset()}}\out{</span>}
-\item \out{<span class="pkg-link" data-pkg="teal" data-topic="RelationalData" data-id="set_check">}\href{../../teal/html/RelationalData.html#method-set_check}{\code{teal::RelationalData$set_check()}}\out{</span>}
-\item \out{<span class="pkg-link" data-pkg="teal" data-topic="RelationalData" data-id="set_pull_code">}\href{../../teal/html/RelationalData.html#method-set_pull_code}{\code{teal::RelationalData$set_pull_code()}}\out{</span>}
+\item \out{<span class="pkg-link" data-pkg="teal" data-topic="RelationalDataCollection" data-id="check">}\href{../../teal/html/RelationalDataCollection.html#method-check}{\code{teal::RelationalDataCollection$check()}}\out{</span>}
+\item \out{<span class="pkg-link" data-pkg="teal" data-topic="RelationalDataCollection" data-id="get_check_result">}\href{../../teal/html/RelationalDataCollection.html#method-get_check_result}{\code{teal::RelationalDataCollection$get_check_result()}}\out{</span>}
+\item \out{<span class="pkg-link" data-pkg="teal" data-topic="RelationalDataCollection" data-id="get_code">}\href{../../teal/html/RelationalDataCollection.html#method-get_code}{\code{teal::RelationalDataCollection$get_code()}}\out{</span>}
+\item \out{<span class="pkg-link" data-pkg="teal" data-topic="RelationalDataCollection" data-id="get_datanames">}\href{../../teal/html/RelationalDataCollection.html#method-get_datanames}{\code{teal::RelationalDataCollection$get_datanames()}}\out{</span>}
+\item \out{<span class="pkg-link" data-pkg="teal" data-topic="RelationalDataCollection" data-id="get_dataset">}\href{../../teal/html/RelationalDataCollection.html#method-get_dataset}{\code{teal::RelationalDataCollection$get_dataset()}}\out{</span>}
+\item \out{<span class="pkg-link" data-pkg="teal" data-topic="RelationalDataCollection" data-id="get_datasets">}\href{../../teal/html/RelationalDataCollection.html#method-get_datasets}{\code{teal::RelationalDataCollection$get_datasets()}}\out{</span>}
+\item \out{<span class="pkg-link" data-pkg="teal" data-topic="RelationalDataCollection" data-id="get_items">}\href{../../teal/html/RelationalDataCollection.html#method-get_items}{\code{teal::RelationalDataCollection$get_items()}}\out{</span>}
+\item \out{<span class="pkg-link" data-pkg="teal" data-topic="RelationalDataCollection" data-id="is_pulled">}\href{../../teal/html/RelationalDataCollection.html#method-is_pulled}{\code{teal::RelationalDataCollection$is_pulled()}}\out{</span>}
+\item \out{<span class="pkg-link" data-pkg="teal" data-topic="RelationalDataCollection" data-id="mutate">}\href{../../teal/html/RelationalDataCollection.html#method-mutate}{\code{teal::RelationalDataCollection$mutate()}}\out{</span>}
+\item \out{<span class="pkg-link" data-pkg="teal" data-topic="RelationalDataCollection" data-id="mutate_dataset">}\href{../../teal/html/RelationalDataCollection.html#method-mutate_dataset}{\code{teal::RelationalDataCollection$mutate_dataset()}}\out{</span>}
+\item \out{<span class="pkg-link" data-pkg="teal" data-topic="RelationalDataCollection" data-id="set_check">}\href{../../teal/html/RelationalDataCollection.html#method-set_check}{\code{teal::RelationalDataCollection$set_check()}}\out{</span>}
+\item \out{<span class="pkg-link" data-pkg="teal" data-topic="RelationalDataCollection" data-id="set_pull_code">}\href{../../teal/html/RelationalDataCollection.html#method-set_pull_code}{\code{teal::RelationalDataCollection$set_pull_code()}}\out{</span>}
 }
 \out{</details>}
 }

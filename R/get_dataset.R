@@ -51,7 +51,7 @@ get_dataset.RawDataset <- function(x, dataname = NULL) { # nolint
 #' @export
 #' @examples
 #'
-#' # RelationalData --------
+#' # RelationalData  (not containing connectors) --------
 #' library(random.cdisc.data)
 #' adsl <- cdisc_dataset(dataname = "ADSL", # RelationalDataset
 #'                       data = radsl(cached = TRUE),
@@ -77,13 +77,13 @@ get_dataset.RawDataset <- function(x, dataname = NULL) { # nolint
 #' get_dataset(rdc, dataname = "ADSL")
 #'}
 #'
-#' # RelationalDataList --------
-#' rdl <- cdisc_data(rdc, adae)
+#' # RelationalData (containing connectors) --------
+#' rd <- cdisc_data(rdc, adae)
 #'
 #'\dontrun{
-#' get_dataset(rdl, "ADSL")
+#' get_dataset(rd, "ADSL")
 #' }
-get_dataset.RelationalData <- function(x, dataname = NULL) { # nolint
+get_dataset.RelationalDataCollection <- function(x, dataname = NULL) { # nolint
   if (is.null(dataname)) {
     stop("To get singe dataset from 'RelationalData' one must specify the name of the dataset.
          To get all datasets please use get_datasets()")

@@ -4,10 +4,10 @@
 #'
 #' @export
 #'
-#' @param ... (\code{RelationalData}, \code{RelationalDataConnector}, \code{RelationalDataset} or
-#'   \code{RelationalDatasetConnector}) elements to include into teal data object
+#' @param ... (\code{RelationalDataConnector}, \code{RelationalDataset} or
+#'   \code{RelationalDatasetConnector}) elements to include in \code{RelationalData} object
 #'
-#' @return \code{RelationalDataList}
+#' @return \code{RelationalData}
 #'
 #' @examples
 #' # RelationalData
@@ -31,7 +31,7 @@
 #' data <- cdisc_data(x1, x2)
 #' get_raw_data(data)
 #'
-#' # RelationalDataList
+#' # RelationalData with connectors
 #' x3 <- rcd_data( # RelationalDataConnector
 #'   rcd_cdisc_dataset_connector("ADSL", radsl, cached = TRUE),
 #'   rcd_cdisc_dataset_connector("ADLB", radlb, cached = TRUE)
@@ -41,21 +41,21 @@
 #'   rcd_cdisc_dataset_connector("ADRS", radrs, cached = TRUE)
 #' )
 #'
-#' data_list <- cdisc_data(x3, x2, x4)
+#' data_list <- teal_data(x3, x2, x4)
 #' \dontrun{
 #' data_list$launch()
 #' get_raw_data(data_list)
 #' }
 teal_data <- function(...) {
   datasets <- list(...)
-  possible_classes <- c("RelationalData", "RelationalDataConnector", "RelationalDataset", "RelationalDatasetConnector")
+  possible_classes <- c("RelationalDataConnector", "RelationalDataset", "RelationalDatasetConnector")
 
   is_teal_data <- is_any_class_list(datasets, possible_classes)
   if (!all(is_teal_data)) {
-    stop("All arguments should be of RelationalData(set) or RelationalData(set)Connector class")
+    stop("All arguments should be of RelationalDataset or RelationalData(set)Connector class")
   }
 
-  teal_data <- RelationalDataList$new(...)
+  teal_data <- RelationalData$new(...)
 
 
   return(teal_data)
@@ -71,7 +71,6 @@ teal_data <- function(...) {
 #'
 #' @return \code{RelationalData} object
 #'
-#' @importFrom methods is
 #'
 #' @export
 #'
@@ -129,10 +128,10 @@ teal_data_file <- function(path, code = get_code(path)) {
   lines <- paste0(readLines(path), collapse = "\n")
   object <- eval(parse(text = lines))
 
-  if (is(object, "RelationalDataList")) {
+  if (is(object, "RelationalData")) {
     object$mutate(code)
     return(object)
   } else {
-    stop("The object returned from the file is not RelationalDataList object.")
+    stop("The object returned from the file is not RelationalData object.")
   }
 }

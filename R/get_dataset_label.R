@@ -1,5 +1,5 @@
 #' S3 method for getting a label of
-#' (\code{RelationalDatasetConnector }or \code{NamedDataset}) R6 object
+#' (\code{RelationalDatasetConnector} or \code{NamedDataset}) R6 object
 #'
 #' @param x (\code{RelationalDatasetConnector} or \code{NamedDataset}) R6 object
 #'

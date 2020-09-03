@@ -1,7 +1,7 @@
 ## CallableFunction ====
 #' A \code{CallableFunction} class of objects
 #'
-#' Object that stores function name with it's arguments. Methods to get call and run it.
+#' Object that stores function name with its arguments. Methods to get call and run it.
 #'
 #' @importFrom R6 R6Class
 #' @importFrom rlang parse_expr

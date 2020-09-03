@@ -7,7 +7,7 @@
 cdisc_data(..., code = "", check = FALSE)
 }
 \arguments{
-\item{...}{(\code{RelationalData}, \code{RelationalDataConnector}, \code{RelationalDataset} or
+\item{...}{(\code{RelationalDataConnector}, \code{RelationalDataset} or
 \code{RelationalDatasetConnector}) elements to include where `ADSL` data is mandatory.}
 
 \item{code}{(\code{character}) code to reproduce the datasets.}
@@ -16,7 +16,7 @@ cdisc_data(..., code = "", check = FALSE)
 as provided in arguments. Check is run only if flag is true and preprocessing code is not empty.}
 }
 \value{
-a list of the input data sets
+a \code{RelationalData} object
 }
 \description{
 Function passes datasets to teal application with option to read preprocessing code and reproducibility checking.

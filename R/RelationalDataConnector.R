@@ -40,9 +40,10 @@
 #' }
 #' @importFrom R6 R6Class
 #' @importFrom shinyjs enable
+#' @importFrom methods is
 RelationalDataConnector <- R6::R6Class( #nolint
   classname = "RelationalDataConnector",
-  inherit = RelationalData,
+  inherit = RelationalDataCollection,
   ## __Public Methods ====
   public = list(
     #' @description

@@ -9,7 +9,7 @@ A \code{CallableFunction} class of objects
 A \code{CallableFunction} class of objects
 }
 \details{
-Object that stores function name with it's arguments. Methods to get call and run it.
+Object that stores function name with its arguments. Methods to get call and run it.
 }
 \section{Methods}{
 \subsection{Public methods}{

@@ -4,7 +4,7 @@
 \alias{mutate_dataset}
 \alias{mutate_dataset.NamedDataset}
 \alias{mutate_dataset.NamedDatasetConnector}
-\alias{mutate_dataset.RelationalData}
+\alias{mutate_dataset.RelationalDataCollection}
 \title{Mutate dataset by code}
 \usage{
 mutate_dataset(x, ...)
@@ -25,7 +25,7 @@ mutate_dataset(x, ...)
   ...
 )
 
-\method{mutate_dataset}{RelationalData}(
+\method{mutate_dataset}{RelationalDataCollection}(
   x,
   dataname,
   code = character(0),
@@ -36,7 +36,7 @@ mutate_dataset(x, ...)
 }
 \arguments{
 \item{x}{(\code{NamedDataset})\cr
-object or \code{RealtionalDataset} which inherited from it.}
+object or \code{RelationalDataset} which inherited from it.}
 
 \item{...}{not used, only for support of S3}
 

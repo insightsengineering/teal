@@ -14,7 +14,7 @@ get_dataname <- function(x) {
 
 #' @rdname get_dataname
 #' @export
-get_dataname.RelationalData <- function(x) { # nolint
+get_dataname.RelationalDataCollection <- function(x) { # nolint
   return(x$get_datanames())
 }
 

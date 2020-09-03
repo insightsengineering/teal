@@ -5,7 +5,7 @@
 \alias{get_dataset_label.NamedDatasetConnector}
 \alias{get_dataset_label.NamedDataset}
 \title{S3 method for getting a label of
-(\code{RelationalDatasetConnector }or \code{NamedDataset}) R6 object}
+(\code{RelationalDatasetConnector} or \code{NamedDataset}) R6 object}
 \usage{
 get_dataset_label(x)
 
@@ -21,7 +21,7 @@ label (\code{character}) Label to describe the dataset
 }
 \description{
 S3 method for getting a label of
-(\code{RelationalDatasetConnector }or \code{NamedDataset}) R6 object
+(\code{RelationalDatasetConnector} or \code{NamedDataset}) R6 object
 }
 \examples{
 library(random.cdisc.data)

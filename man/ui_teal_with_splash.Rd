@@ -16,7 +16,7 @@ ui_teal_with_splash(
 \item{id}{(\code{character} value)\cr
 module id}
 
-\item{data}{(\code{RealtionalDataList})\cr
+\item{data}{(\code{RelationalData})\cr
 object containing data}
 
 \item{title}{(\code{character}) The browser window title (defaults to the host URL of the page)}

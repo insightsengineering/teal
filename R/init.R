@@ -14,7 +14,7 @@
 #' an end-user, don't use this function, but instead this module.
 #'
 #' @md
-#' @param data (`RelationalDataList`) R6 object where \code{cdisc_data} or \code{teal_data} returns such a one.
+#' @param data (`RelationalData`) R6 object where \code{cdisc_data} or \code{teal_data} returns such a one.
 #' @param modules nested list with one list per module with the
 #'   following named list elements:
 #'   \tabular{ll}{
@@ -126,7 +126,7 @@ init <- function(data,
                  footer = tags$p("Add Footer Here"),
                  id = character(0)) {
   stopifnot(
-    is(data, "RelationalDataList"),
+    is(data, "RelationalData"),
     is(modules, "teal_modules"),
     is.null(title) || is_character_single(title),
     is_fully_named_list(filter),

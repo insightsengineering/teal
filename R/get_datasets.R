@@ -12,7 +12,7 @@ get_datasets <- function(x) {
 #' @export
 #' @examples
 #'
-#' # RelationalDataList --------
+#' # RelationalData --------
 #' library(random.cdisc.data)
 #' adsl <- cdisc_dataset(dataname = "ADSL", # RelationalDataset
 #'                       data = radsl(cached = TRUE),
@@ -36,12 +36,12 @@ get_datasets <- function(x) {
 #' get_datasets(rdc)
 #'}
 #'
-#' # RelationalDataList --------
+#' # RelationalData --------
 #' drc <- cdisc_data(rdc, adae)
 #' \dontrun{
 #' get_datasets(drc)
 #' }
-get_datasets.RelationalData <- function(x) {
+get_datasets.RelationalDataCollection <- function(x) { # nolint
   res <- x$get_datasets()
   if (is_empty(res)) {
     return(invisible(NULL))

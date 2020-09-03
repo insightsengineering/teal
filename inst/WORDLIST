@@ -82,6 +82,10 @@ rcode
 reactives
 recurse
 refiltered
+RelationalDataCollection
+RelationalDataConnector
+RelationalDataset
+RelationalDatasetConnector
 reproducibility
 roche
 shiny's

@@ -4,9 +4,8 @@
 \alias{load_datasets}
 \alias{load_datasets.RawDataset}
 \alias{load_datasets.RawDatasetConnector}
-\alias{load_datasets.RelationalData}
 \alias{load_datasets.RelationalDataConnector}
-\alias{load_datasets.RelationalDataList}
+\alias{load_datasets.RelationalData}
 \title{Load datasets}
 \usage{
 load_datasets(x, ...)
@@ -15,11 +14,9 @@ load_datasets(x, ...)
 
 \method{load_datasets}{RawDatasetConnector}(x, args = NULL, try = FALSE, ...)
 
-\method{load_datasets}{RelationalData}(x, ...)
-
 \method{load_datasets}{RelationalDataConnector}(x, ...)
 
-\method{load_datasets}{RelationalDataList}(x, ...)
+\method{load_datasets}{RelationalData}(x, ...)
 }
 \arguments{
 \item{x}{(\code{object} of class \code{\link{RelationalData}}, \code{\link{RawDataset}} or
@@ -61,23 +58,6 @@ get_dataset(adsl)
 adae <- rcd_cdisc_dataset_connector("ADAE", fun = radae, ADSL = adsl, max_n_aes = 2L)
 load_datasets(adae)
 
-# RelationalData ------
-library(random.cdisc.data)
-adsl <- cdisc_dataset(dataname = "ADSL", # RelationalDataset
-                      data = radsl(cached = TRUE),
-                      code = "library(random.cdisc.data)\nADSL <- radsl(cached = TRUE)")
-
-adtte <- cdisc_dataset(dataname = "ADTTE", # RelationalDataset
-                       data = radtte(cached = TRUE),
-                       code = "library(random.cdisc.data)\nADTTE <- radtte(cached = TRUE)")
-
-rd <- teal:::RelationalData$new(adsl, adtte)
-
-\dontrun{
-# return a warning
-load_datasets(rd)
-}
-
 # RelationalDataConnector --------
 library(random.cdisc.data)
 adsl <- rcd_cdisc_dataset_connector(dataname = "ADSL", fun = radsl, cached = TRUE)
@@ -89,7 +69,7 @@ rdc <- rcd_data(adsl, adrs)
 load_datasets(rdc)
 }
 
-# RelationalDataList --------
+# RelationalData --------
 library(random.cdisc.data)
 adsl <- rcd_cdisc_dataset_connector(dataname = "ADSL", fun = radsl, cached = TRUE)
 adlb <- rcd_cdisc_dataset_connector(dataname = "ADLB", fun = radlb, cached = TRUE)

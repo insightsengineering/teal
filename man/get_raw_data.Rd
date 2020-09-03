@@ -4,7 +4,7 @@
 \alias{get_raw_data}
 \alias{get_raw_data.RawDataset}
 \alias{get_raw_data.RawDatasetConnector}
-\alias{get_raw_data.RelationalData}
+\alias{get_raw_data.RelationalDataCollection}
 \title{Retrieve raw data}
 \usage{
 get_raw_data(x, dataname = NULL)
@@ -13,7 +13,7 @@ get_raw_data(x, dataname = NULL)
 
 \method{get_raw_data}{RawDatasetConnector}(x, dataname = NULL)
 
-\method{get_raw_data}{RelationalData}(x, dataname = NULL)
+\method{get_raw_data}{RelationalDataCollection}(x, dataname = NULL)
 }
 \arguments{
 \item{x}{(\code{RawDataset, RawDatasetConnector, RelationalData, cdisc_data})\cr object}
@@ -76,7 +76,7 @@ load_datasets(rdc)
 get_raw_data(rdc)
 }
 
-# RelationalDataList --------
+# RelationalData (with connectors) --------
 rdc2 <- rcd_data(
   rcd_cdisc_dataset_connector("ADRS", radrs, cached = TRUE),
   rcd_cdisc_dataset_connector("ADLB", radlb, cached = TRUE)

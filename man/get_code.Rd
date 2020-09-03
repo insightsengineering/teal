@@ -4,7 +4,7 @@
 \alias{get_code}
 \alias{get_code.RawDatasetConnector}
 \alias{get_code.NamedDataset}
-\alias{get_code.RelationalData}
+\alias{get_code.RelationalDataCollection}
 \alias{get_code.default}
 \title{Get code}
 \usage{
@@ -14,7 +14,7 @@ get_code(x, ...)
 
 \method{get_code}{NamedDataset}(x, deparse = TRUE, ...)
 
-\method{get_code}{RelationalData}(x, dataname = character(0), deparse = TRUE, ...)
+\method{get_code}{RelationalDataCollection}(x, dataname = character(0), deparse = TRUE, ...)
 
 \method{get_code}{default}(
   x,

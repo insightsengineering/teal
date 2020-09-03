@@ -2,14 +2,14 @@
 % Please edit documentation in R/get_datasets.R
 \name{get_datasets}
 \alias{get_datasets}
-\alias{get_datasets.RelationalData}
+\alias{get_datasets.RelationalDataCollection}
 \alias{get_datasets.RawDatasetConnector}
 \alias{get_datasets.RawDataset}
 \title{Get a \code{\link{RelationalDataset}} objects.}
 \usage{
 get_datasets(x)
 
-\method{get_datasets}{RelationalData}(x)
+\method{get_datasets}{RelationalDataCollection}(x)
 
 \method{get_datasets}{RawDatasetConnector}(x)
 
@@ -27,7 +27,7 @@ Get a \code{\link{RelationalDataset}} objects.
 }
 \examples{
 
-# RelationalDataList --------
+# RelationalData --------
 library(random.cdisc.data)
 adsl <- cdisc_dataset(dataname = "ADSL", # RelationalDataset
                       data = radsl(cached = TRUE),
@@ -51,7 +51,7 @@ load_datasets(rdc)
 get_datasets(rdc)
 }
 
-# RelationalDataList --------
+# RelationalData --------
 drc <- cdisc_data(rdc, adae)
 \dontrun{
 get_datasets(drc)

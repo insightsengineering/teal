@@ -83,7 +83,7 @@ get_raw_data.RawDatasetConnector <- function(x, dataname = NULL) { # nolint
 #' get_raw_data(rdc)
 #'}
 #'
-#' # RelationalDataList --------
+#' # RelationalData (with connectors) --------
 #' rdc2 <- rcd_data(
 #'   rcd_cdisc_dataset_connector("ADRS", radrs, cached = TRUE),
 #'   rcd_cdisc_dataset_connector("ADLB", radlb, cached = TRUE)
@@ -93,7 +93,7 @@ get_raw_data.RawDatasetConnector <- function(x, dataname = NULL) { # nolint
 #' \dontrun{
 #' get_raw_data(drc)
 #' }
-get_raw_data.RelationalData <- function(x, dataname = NULL) {
+get_raw_data.RelationalDataCollection <- function(x, dataname = NULL) { # nolint
   if (!is.null(dataname)) {
     datasets_names <- x$get_datanames()
     if (dataname %in% datasets_names) {
