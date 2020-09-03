@@ -261,20 +261,41 @@ NamedDatasetConnector <- R6::R6Class( #nolint
     set_ui = function(args = NULL) {
       private$ui <- function(id) {
         ns <- NS(id)
+        # add namespace to input ids
+        ui <- if_not_null(args, do.call(args, list(ns = ns)))
+        # check ui inputs
+        if (!is.null(ui)) {
+          stopifnot(is.list(ui))
+          stop_if_not(
+            list(
+              all(vapply(ui, is, logical(1), class2 = "shiny.tag")),
+              "All elements must be of class shiny.tag"
+            )
+          )
+          stop_if_not(
+            list(
+              all(
+                grepl(
+                  "shiny-input-container",
+                  vapply(lapply(ui, "[[", i = "attribs"), "[[", character(1), i = "class")
+                )
+              ),
+              "All elements must be shiny inputs"
+            )
+          )
+        }
+        # create ui
         if_not_null(
-          args,
+          ui,
           tags$div(
             tags$div(
               id = ns("inputs"),
               h4("Dataset Connector for ", code(self$get_dataname())),
-              lapply(
-                seq_along(args),
-                function(i) match_ui(ns = ns, value = args[[i]], label = names(args[i]))
-                )
-              )
+              ui
             )
           )
-        }
+        )
+      }
       return(invisible(self))
     },
     set_server = function() {
@@ -283,8 +304,7 @@ NamedDatasetConnector <- R6::R6Class( #nolint
       private$server <- function(input, output, session, data_args = NULL) {
         withProgress(value = 1, message = paste("Pulling", self$get_dataname()), {
           # set args to save them - args set will be returned in the call
-          dataset_args <- if_not_null(private$ui_input,
-                                      reactiveValuesToList(input)[names(private$ui_input)])
+          dataset_args <- if_not_null(private$ui_input, reactiveValuesToList(input))
           if (!is_empty(dataset_args)) {
             self$set_args(args = dataset_args)
           }

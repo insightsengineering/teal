@@ -144,28 +144,30 @@ RawDatasetConnector <- R6::R6Class( #nolint
       isFALSE(is.null(private$dataset))
     },
     #' @description Sets the shiny UI according to the given inputs.
-    #' It creates a checkboxInput for logical type, numericInput for numeric type,
-    #' and textInput for character type. No other types are allowed.
-    #' Inputs provide only scalar (length of 1) variables.
-    #' @param inputs (\code{list}) Named list with specification of what inputs
-    #' should be provided in the UI.
-    #' Elements of the list should be one of \code{c("logical", "numeric", "character")}
-    #' with length 1.
-    #' Names of the list elements will become the labels of the respective UI widgets.
+    #' Inputs must provide only scalar (length of 1) variables.
+    #' @param inputs (\code{function}) A shiny module UI function with single argument \code{ns}.
+    #' This function needs to return a list of shiny inputs with their \code{inputId} wrapped
+    #' in function \code{ns}, see example.
     #' Nested lists are not allowed.
     #' @return \code{self} invisibly for chaining.
     #' @examples
     #' ds <- raw_dataset_connector(pull_fun = callable_function(data.frame))
-    #' ds$set_ui_input(list(z = "character", w = "character", xx = 2))
+    #' ds$set_ui_input(
+    #'   function(ns) {
+    #'     list(sliderInput(ns("colA"), "Select value for colA", min = 0, max = 10, value = 3),
+    #'          sliderInput(ns("colB"), "Select value for colB", min = 0, max = 10, value = 7))
+    #'   }
+    #' )
     #' \dontrun{
     #' ds$launch()
     #' }
     set_ui_input = function(inputs = NULL) {
-      stopifnot(is.null(inputs) || is.list(inputs))
-      if (!is.null(inputs)) {
-        stopifnot(is_fully_named_list(inputs))
-        stopifnot(all(vapply(inputs, length, integer(1)) == 1)) # do not allow nested lists
-        stopifnot(all(vapply(inputs, mode, character(1)) %in% c("logical", "numeric", "character")))
+      stopifnot(is.null(inputs) || is.function(inputs))
+      if (is.function(inputs)) {
+        stop_if_not(list(
+          length(formals(inputs)) == 1 && names(formals(inputs)) == "ns",
+          "'inputs' must be a function of a single argument called 'ns'"
+        ))
       }
       private$ui_input <- inputs
       private$set_ui(inputs)
@@ -188,7 +190,12 @@ RawDatasetConnector <- R6::R6Class( #nolint
     #' @return Shiny app
     #' @examples
     #' ds <- raw_dataset_connector(pull_fun = callable_function(data.frame))
-    #' ds$set_ui_input(list(z = "character 1", w = "character 2", xx = 2L))
+    #' ds$set_ui_input(
+    #'   function(ns) {
+    #'     list(sliderInput(ns("colA"), "Select value for colA", min = 0, max = 10, value = 3),
+    #'          sliderInput(ns("colB"), "Select value for colB", min = 0, max = 10, value = 7))
+    #'   }
+    #' )
     #' \dontrun{
     #' ds$launch()
     #' }
@@ -301,13 +308,35 @@ RawDatasetConnector <- R6::R6Class( #nolint
     set_ui = function(args = NULL) {
       private$ui <- function(id) {
         ns <- NS(id)
+        # add namespace to input ids
+        ui <- if_not_null(args, do.call(args, list(ns = ns)))
+        # check ui inputs
+        if (!is.null(ui)) {
+          stopifnot(is.list(ui))
+          stop_if_not(
+            list(
+              all(vapply(ui, is, logical(1), class2 = "shiny.tag")),
+              "All elements must be of class shiny.tag"
+            )
+          )
+          stop_if_not(
+            list(
+              all(
+                grepl(
+                  "shiny-input-container",
+                  vapply(lapply(ui, "[[", i = "attribs"), "[[", character(1), i = "class")
+                )
+              ),
+              "All elements must be shiny inputs"
+            )
+          )
+        }
+        # create ui
         tags$div(
           tags$div(
             id = ns("inputs"),
-            if_not_null(args, h4("Dataset Connector:")),
-            lapply(seq_along(args),
-                   function(i) match_ui(ns = ns, value = args[[i]], label = names(args[i]))
-            )
+            if_not_null(ui, h4("Dataset Connector:")),
+            ui
           )
         )
 
@@ -318,8 +347,7 @@ RawDatasetConnector <- R6::R6Class( #nolint
       private$server <- function(input, output, session, data_args = NULL) {
         withProgress(value = 1, message = "Pulling dataset", {
           # set args to save them - args set will be returned in the call
-          dataset_args <- if_not_null(private$ui_input,
-                                     reactiveValuesToList(input)[names(private$ui_input)])
+          dataset_args <- if_not_null(private$ui_input, reactiveValuesToList(input))
           if (!is_empty(dataset_args)) {
             self$set_args(args = dataset_args)
           }
@@ -341,21 +369,3 @@ RawDatasetConnector <- R6::R6Class( #nolint
     }
   )
 )
-
-## Functions ====
-
-# create UI with given ns function and label according to the type of variable
-match_ui <- function(ns, value, label) {
-  type <- mode(value)
-
-  if (type == "logical") {
-    out <- checkboxInput(ns(label), code(label), value)
-  } else if (type == "numeric") {
-    out <- numericInput(ns(label), code(label), value)
-  } else if (type == "character") {
-    out <- textInput(ns(label), code(label), value)
-  } else {
-    stop(paste("Unknown type", type))
-  }
-  return(out)
-}

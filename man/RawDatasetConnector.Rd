@@ -23,7 +23,12 @@ Pulled data inherits from the class \link{RelationalDataset}.
 ## ------------------------------------------------
 
 ds <- raw_dataset_connector(pull_fun = callable_function(data.frame))
-ds$set_ui_input(list(z = "character", w = "character", xx = 2))
+ds$set_ui_input(
+  function(ns) {
+    list(sliderInput(ns("colA"), "Select value for colA", min = 0, max = 10, value = 3),
+         sliderInput(ns("colB"), "Select value for colB", min = 0, max = 10, value = 7))
+  }
+)
 \dontrun{
 ds$launch()
 }
@@ -33,7 +38,12 @@ ds$launch()
 ## ------------------------------------------------
 
 ds <- raw_dataset_connector(pull_fun = callable_function(data.frame))
-ds$set_ui_input(list(z = "character 1", w = "character 2", xx = 2L))
+ds$set_ui_input(
+  function(ns) {
+    list(sliderInput(ns("colA"), "Select value for colA", min = 0, max = 10, value = 3),
+         sliderInput(ns("colB"), "Select value for colB", min = 0, max = 10, value = 7))
+  }
+)
 \dontrun{
 ds$launch()
 }
@@ -255,9 +265,7 @@ Check if dataset has already been pulled.
 \if{latex}{\out{\hypertarget{method-set_ui_input}{}}}
 \subsection{Method \code{set_ui_input()}}{
 Sets the shiny UI according to the given inputs.
-It creates a checkboxInput for logical type, numericInput for numeric type,
-and textInput for character type. No other types are allowed.
-Inputs provide only scalar (length of 1) variables.
+Inputs must provide only scalar (length of 1) variables.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{RawDatasetConnector$set_ui_input(inputs = NULL)}\if{html}{\out{</div>}}
 }
@@ -265,11 +273,9 @@ Inputs provide only scalar (length of 1) variables.
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{inputs}}{(\code{list}) Named list with specification of what inputs
-should be provided in the UI.
-Elements of the list should be one of \code{c("logical", "numeric", "character")}
-with length 1.
-Names of the list elements will become the labels of the respective UI widgets.
+\item{\code{inputs}}{(\code{function}) A shiny module UI function with single argument \code{ns}.
+This function needs to return a list of shiny inputs with their \code{inputId} wrapped
+in function \code{ns}, see example.
 Nested lists are not allowed.}
 }
 \if{html}{\out{</div>}}
@@ -280,7 +286,12 @@ Nested lists are not allowed.}
 \subsection{Examples}{
 \if{html}{\out{<div class="r example copy">}}
 \preformatted{ds <- raw_dataset_connector(pull_fun = callable_function(data.frame))
-ds$set_ui_input(list(z = "character", w = "character", xx = 2))
+ds$set_ui_input(
+  function(ns) {
+    list(sliderInput(ns("colA"), "Select value for colA", min = 0, max = 10, value = 3),
+         sliderInput(ns("colB"), "Select value for colB", min = 0, max = 10, value = 7))
+  }
+)
 \dontrun{
 ds$launch()
 }
@@ -338,7 +349,12 @@ Shiny app
 \subsection{Examples}{
 \if{html}{\out{<div class="r example copy">}}
 \preformatted{ds <- raw_dataset_connector(pull_fun = callable_function(data.frame))
-ds$set_ui_input(list(z = "character 1", w = "character 2", xx = 2L))
+ds$set_ui_input(
+  function(ns) {
+    list(sliderInput(ns("colA"), "Select value for colA", min = 0, max = 10, value = 3),
+         sliderInput(ns("colB"), "Select value for colB", min = 0, max = 10, value = 7))
+  }
+)
 \dontrun{
 ds$launch()
 }
