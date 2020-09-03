@@ -29,6 +29,8 @@
 #' @param header `shiny.tag or character` header to display above the app
 #' @param footer `shiny.tag or character` footer to display below the app
 #'
+#' @importFrom shiny tags
+#'
 #' @return `HTML` for Shiny module UI
 #'
 #' @examples
@@ -121,6 +123,7 @@ ui_teal <- function(id,
 #' @param raw_data `reactive` which returns the `RelationalData`, only evaluated once,
 #'   `NULL` value is ignored
 #' @inheritParams init
+#' @importFrom shiny tags
 #'
 #' @return `reactive` which returns the currently active module
 srv_teal <- function(input, output, session, modules, raw_data, filter = list()) {

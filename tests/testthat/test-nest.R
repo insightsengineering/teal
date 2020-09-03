@@ -6,3 +6,4 @@ if (Sys.getenv("R_COVR") != "true") {
 }
 test_regexp()
 test_spell()
+test_importfrom()

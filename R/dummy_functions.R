@@ -68,6 +68,7 @@ get_dummy_datasets <- function() { # nousage # nolint
 #' a teal app can be created.
 #'
 #' @md
+#' @importFrom shiny tags
 #' @return `teal_modules`
 get_dummy_modules <- function() { # nousage # nolint
   create_mod <- function(module_name) module(

@@ -7,7 +7,6 @@
 #' \url{Project Website} or read the \code{\link{init}} manual pages.
 #'
 #' @importFrom utils tail
-#' @importFrom dplyr mutate
 #' @import magrittr
 #' @import utils.nest
 #' @import shiny
