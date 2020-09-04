@@ -111,6 +111,9 @@ RelationalDataConnector <- R6::R6Class( #nolint
     #'
     #' @return the \code{ui} function of the \code{RelationalDataConnector}
     get_ui = function(id) {
+      if (is.null(private$ui)) {
+        stop("No UI set yet. Please use set_ui method first.")
+      }
       return(private$ui(id))
     },
     #' @description
