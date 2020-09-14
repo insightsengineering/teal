@@ -90,8 +90,7 @@ root_modules <- function(...) {
 #'   server function. Note that the \code{FilteredDatasets} object gets
 #'   automatically passed to the server function as arguments \code{datasets}.
 #' @param ui_args (\code{list}) Named list with additional arguments passed on to the
-#'   ui function. The argument \code{'teal_datasets'} will always be
-#'   replaced by the \code{FilteredData} object.
+#'   ui function.
 #'
 #' @export
 #'
@@ -102,11 +101,6 @@ module <- function(label, server, ui, filters, server_args = NULL, ui_args = NUL
   stopifnot(is_character_vector(filters) || is.null(filters))
   stopifnot(is.null(server_args) || is.list(server_args))
   stopifnot(is.null(ui_args) || is.list(ui_args))
-
-  if (any(vapply(server_args, function(x) identical(x, "teal_datasets"), logical(1)))) {
-    warning("teal_datasets is now deprecated, the datasets object gets automatically passed to the server function")
-    server_args <- Filter(function(x) !identical(x, "teal_datasets"), server_args)
-  }
 
   if (!identical(names(formals(server))[1:4], c("input", "output", "session", "datasets"))) {
     stop("teal modules need the arguments input, output, session, and datasets in that order in their server function")

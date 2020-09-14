@@ -27,8 +27,7 @@ server function. Note that the \code{FilteredDatasets} object gets
 automatically passed to the server function as arguments \code{datasets}.}
 
 \item{ui_args}{(\code{list}) Named list with additional arguments passed on to the
-ui function. The argument \code{'teal_datasets'} will always be
-replaced by the \code{FilteredData} object.}
+ui function.}
 }
 \description{
 Tab items allows you to add a shiny module to the teal app

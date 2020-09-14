@@ -149,9 +149,7 @@ resolve_teal_module <- function(x, datasets) {
 #' @importFrom methods is
 resolve_teal_args <- function(args, datasets) {
   Map(function(arg) {
-    if (identical(arg, "teal_datasets")) {
-      datasets
-    } else if (is(arg, "delayed_data")) {
+    if (is(arg, "delayed_data")) {
       resolve_delayed(arg, datasets)
     } else if (is.list(arg) && any(vapply(arg, is, logical(1), "delayed_data"))) {
       idx <- vapply(arg, is, logical(1), "delayed_data")
