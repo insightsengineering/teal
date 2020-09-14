@@ -1,4 +1,4 @@
-context("delayed_data_loading")
+context("delayed_data_objects")
 
 library(random.cdisc.data)
 
@@ -105,17 +105,20 @@ test_that("Single rice_data connector with two rice dataset connectors", {
   expect_equal(
     get_code(adsl_adlb, "ADSL"),
     "rice::rice_session_open(password = askpass::askpass())
-ADSL <- rice::rice_read(node = \"/path/to/ADSL\", prolong = TRUE, quiet = TRUE)"
+ADSL <- rice::rice_read(node = \"/path/to/ADSL\", prolong = TRUE, quiet = TRUE)
+rice::rice_session_close(message = FALSE)"
   )
   expect_equal(
     get_code(adsl_adlb, "ADLB"),
     "rice::rice_session_open(password = askpass::askpass())
-ADLB <- rice::rice_read(node = \"/path/to/ADLB\", prolong = TRUE, quiet = TRUE)"
+ADLB <- rice::rice_read(node = \"/path/to/ADLB\", prolong = TRUE, quiet = TRUE)
+rice::rice_session_close(message = FALSE)"
   )
   expect_equal(
     get_code(adsl_adlb), "rice::rice_session_open(password = askpass::askpass())
 ADSL <- rice::rice_read(node = \"/path/to/ADSL\", prolong = TRUE, quiet = TRUE)
-ADLB <- rice::rice_read(node = \"/path/to/ADLB\", prolong = TRUE, quiet = TRUE)"
+ADLB <- rice::rice_read(node = \"/path/to/ADLB\", prolong = TRUE, quiet = TRUE)
+rice::rice_session_close(message = FALSE)"
   )
 })
 

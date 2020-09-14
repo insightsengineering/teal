@@ -99,6 +99,42 @@ test_that("CodeClass append deps", {
   )
 })
 
+test_that("Exception handling with dataname of *xyz", {
+  x <- CodeClass$new()
+  x$set_code("open_connection()", dataname = "*open")
+  x$set_code("x1 <- foo()", dataname = "x1")
+  x$set_code("x2 <- bar()", dataname = "x2")
+  x$set_code("close_connection()", dataname = "*close")
+
+  expect_identical(
+    x$get_code(),
+    "open_connection()\nx1 <- foo()\nx2 <- bar()\nclose_connection()"
+  )
+  expect_identical(
+    x$get_code("x1"),
+    "open_connection()\nx1 <- foo()\nclose_connection()"
+  )
+  expect_identical(
+    x$get_code("x2"),
+    "open_connection()\nx2 <- bar()\nclose_connection()"
+  )
+
+  # add mutation
+  x$set_code("x1 <- baz(x1)", dataname = "x1")
+  expect_identical(
+    x$get_code(),
+    "open_connection()\nx1 <- foo()\nx2 <- bar()\nclose_connection()\nx1 <- baz(x1)"
+  )
+  expect_identical(
+    x$get_code("x1"),
+    "open_connection()\nx1 <- foo()\nclose_connection()\nx1 <- baz(x1)"
+  )
+  expect_identical(
+    x$get_code("x2"),
+    "open_connection()\nx2 <- bar()\nclose_connection()"
+  )
+})
+
 adsl <- rcd_cdisc_dataset_connector("ADSL", radsl)
 adae <- rcd_cdisc_dataset_connector("ADAE", radae, ADSL = adsl)
 adaem <- adae %>% mutate_dataset("ADAE$vv=nrow(ADSL); attr(ADSL$vv, 'label') <- 'vv'", vars = list(ADSL = adsl))

@@ -80,11 +80,15 @@ RelationalDataConnector <- R6::R6Class( #nolint
     get_code_class = function() {
       all_code <- CodeClass$new()
 
-      connection_code <- if_not_null(private$connection, private$connection$get_open_call(deparse = TRUE))
-      all_code$set_code(connection_code)
+      open_connection_code <- if_not_null(private$connection, private$connection$get_open_call(deparse = TRUE))
+      if_not_null(open_connection_code, all_code$set_code(open_connection_code, dataname = "*open"))
 
       datasets_code_class <- private$get_datasets_code_class()
       all_code$append(datasets_code_class)
+
+      close_connection_code <- if_not_null(private$connection,
+                                           private$connection$get_close_call(deparse = TRUE, silent = TRUE))
+      if_not_null(close_connection_code, all_code$set_code(close_connection_code, dataname = "*close"))
 
       mutate_code_class <- private$get_mutate_code_class()
       all_code$append(mutate_code_class)

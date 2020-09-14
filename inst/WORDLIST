@@ -29,6 +29,7 @@ NEST
 NamedDataset
 PARAMCD
 RawDatasetConnector
+RelationalDataCollection
 RelationalDataConnector
 RelationalDataset
 RelationalDatasetConnector
@@ -82,10 +83,6 @@ rcode
 reactives
 recurse
 refiltered
-RelationalDataCollection
-RelationalDataConnector
-RelationalDataset
-RelationalDatasetConnector
 reproducibility
 roche
 shiny's

@@ -169,9 +169,10 @@ CodeClass <- R6::R6Class( # nolint
         code_entry <- private$.code[[idx]]
 
         # line of code is one we want if it is not empty and
-        # has any dataname attribute in the vector datanames - or is global code and
+        # has any dataname attribute in the vector datanames or dataname starts with * or is global code and
         # already have some lines of code selected
         if ((any(datanames %in% attr(code_entry, "dataname")) ||
+             any(grepl("^[*]", attr(code_entry, "dataname"))) ||
              (!is_empty(res) && is_empty(attr(code_entry, "dataname")))) &&
             !is_empty(code_entry)) {
 
