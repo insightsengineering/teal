@@ -17,6 +17,7 @@
 \alias{code_cdisc_dataset_connector}
 \alias{teradata_cdisc_dataset_connector}
 \alias{csv_cdisc_dataset_connector}
+\alias{fun_cdisc_dataset_connector}
 \title{Create a new \code{RelationalDatasetConnector} object}
 \usage{
 relational_dataset_connector(
@@ -161,6 +162,17 @@ csv_cdisc_dataset_connector(
   label = character(0),
   ...
 )
+
+fun_cdisc_dataset_connector(
+  dataname,
+  func,
+  func_args = NULL,
+  label = character(0),
+  code = character(0),
+  script = character(0),
+  keys = get_cdisc_keys(dataname),
+  ...
+)
 }
 \arguments{
 \item{dataname}{(\code{character})\cr
@@ -208,6 +220,12 @@ path to (\code{.csv}) (or general delimited) file that contains \code{data.frame
 function call with arguments to obtain dataset.}
 
 \item{table}{(\code{character}) table name}
+
+\item{func}{(\code{function})\cr
+function to obtain dataset.}
+
+\item{func_args}{(\code{list})\cr
+additional arguments for (\code{func})\cr.}
 }
 \value{
 new \code{RelationalDatasetConnector} object
@@ -263,6 +281,10 @@ automatically by \code{dataname}.
 
 \code{csv_cdisc_dataset_connector} -
 Create a \code{RelationalDatasetConnector} from \code{csv} (or general delimited) file
+with keys assigned automatically by \code{dataname}.
+
+\code{fun_cdisc_dataset_connector} -
+Create a \code{RelationalDatasetConnector} from \code{function} and its arguments
 with keys assigned automatically by \code{dataname}.
 }
 \note{
@@ -345,4 +367,87 @@ x <- csv_dataset_connector(
 )
 x$get_code()
 }
+\dontrun{
+my_data <- function(...) {
+  # whatever code
+  set.seed(1234)
+  library(MASS)
+  require(dplyr)
+  x <- data.frame(
+    STUDYID = 1,
+    USUBJID = 1:40,
+    z = stats::rnorm(40),
+    zz = factor(sample(letters[1:3], 40, replace = TRUE)),
+    NAs = rep(NA, 40)
+  )
+  x$w <- as.numeric(mvrnorm(40, 0, 1))
+  x$ww <- as.numeric(mvrnorm(40, 0, 1))
+  rtables::var_labels(x) <- c("STUDYID", "USUBJID", "z", "zz", "NAs", "w", "ww")
+  x
+}
+y <- fun_cdisc_dataset_connector(
+  dataname = "ADSL",
+  func = my_data
+)
+
+y$get_code()
+
+y$pull()
+
+get_raw_data(y)
+}
+# Error as global var is used in the function.
+# Thus not reproducible.
+\dontrun{
+x <- 40
+my_data <- function(global_var = x) {
+  # whatever code
+  set.seed(1234)
+  library(MASS)
+  x <- data.frame(
+    STUDYID = 1,
+    USUBJID = 1:global_var,
+    z = stats::rnorm(40),
+    zz = factor(sample(letters[1:3], 40, replace = TRUE)),
+    NAs = rep(NA, 40)
+  )
+  x$w <- as.numeric(mvrnorm(40, 0, 1))
+  x$ww <- as.numeric(mvrnorm(40, 0, 1))
+  rtables::var_labels(x) <- c("STUDYID", "USUBJID", "z", "zz", "NAs", "w", "ww")
+  x
+}
+y <- fun_cdisc_dataset_connector(
+  dataname = "ADSL",
+  func = my_data
+)
+
+y$pull()
+}
+# Error - same as previous one
+\dontrun{
+global_var <- 40
+my_data <- function() {
+  # whatever code
+  set.seed(1234)
+  library(MASS)
+  x <- data.frame(
+    STUDYID = 1,
+    USUBJID = 1:global_var,
+    z = stats::rnorm(40),
+    zz = factor(sample(letters[1:3], 40, replace = TRUE)),
+    NAs = rep(NA, 40)
+  )
+  x$w <- as.numeric(mvrnorm(40, 0, 1))
+  x$ww <- as.numeric(mvrnorm(40, 0, 1))
+  rtables::var_labels(x) <- c("STUDYID", "USUBJID", "z", "zz", "NAs", "w", "ww")
+  x
+}
+y <- fun_cdisc_dataset_connector(
+  dataname = "ADSL",
+  func = my_data
+)
+
+y$pull()
+}
+
 }

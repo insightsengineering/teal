@@ -542,3 +542,58 @@ test_that("rice_dataset", {
     "ADLB <- rice::rice_read(node = \"/path/to/ADLB\", prolong = TRUE, quiet = TRUE)\nADLB$x <- 1"
   )
 })
+
+test_that("fun_cdisc_dataset_connector", {
+  my_data_1 <- function() {
+    set.seed(1234)
+    # whatever code
+    library(MASS)
+    require(dplyr)
+    x <- data.frame(
+      STUDYID = 1,
+      USUBJID = 1:40,
+      z = stats::rnorm(40),
+      zz = factor(sample(letters[1:3], 40, replace = T)),
+      NAs = rep(NA, 40)
+    )
+    x$w <- as.numeric(mvrnorm(40, 0, 1))
+    x$ww <- as.numeric(mvrnorm(40, 0, 1))
+    rtables::var_labels(x) <- c("STUDYID", "USUBJID", "z", "zz", "NAs", "w", "ww")
+    x
+  }
+
+  global_var <- 40
+  my_data_wrong <- function() {
+    # whatever code
+    set.seed(1234)
+    library(MASS)
+    x <- data.frame(
+      STUDYID = 1,
+      USUBJID = 1:global_var,
+      z = stats::rnorm(40),
+      zz = factor(sample(letters[1:3], 40, replace = T)),
+      NAs = rep(NA, 40)
+    )
+    x$w <- as.numeric(mvrnorm(40, 0, 1))
+    x$ww <- as.numeric(mvrnorm(40, 0, 1))
+    rtables::var_labels(x) <- c("STUDYID", "USUBJID", "z", "zz", "NAs", "w", "ww")
+    x
+  }
+
+  y_1 <- fun_cdisc_dataset_connector(
+    dataname = "ADSL",
+    func = my_data_1
+  )
+
+  y_wrong <- fun_cdisc_dataset_connector(
+    dataname = "ADSL",
+    func = my_data_wrong
+  )
+
+  expect_message(y_1$pull())
+
+  expect_error(y_wrong$pull())
+
+  expect_identical(get_raw_data(y_1), my_data_1())
+
+})

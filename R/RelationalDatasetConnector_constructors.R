@@ -762,3 +762,154 @@ csv_cdisc_dataset_connector <- function(dataname,
 
   return(x)
 }
+
+
+#' @description
+#' \code{fun_cdisc_dataset_connector} -
+#' Create a \code{RelationalDatasetConnector} from \code{function} and its arguments
+#' with keys assigned automatically by \code{dataname}.
+#'
+#' @inheritParams relational_dataset_connector
+#' @param func (\code{function})\cr
+#'   function to obtain dataset.
+#' @param func_args (\code{list})\cr
+#'   additional arguments for (\code{func})\cr.
+#' @rdname relational_dataset_connector
+#' @importFrom rlang set_env
+#' @export
+#' @examples
+#' \dontrun{
+#' my_data <- function(...) {
+#'   # whatever code
+#'   set.seed(1234)
+#'   library(MASS)
+#'   require(dplyr)
+#'   x <- data.frame(
+#'     STUDYID = 1,
+#'     USUBJID = 1:40,
+#'     z = stats::rnorm(40),
+#'     zz = factor(sample(letters[1:3], 40, replace = TRUE)),
+#'     NAs = rep(NA, 40)
+#'   )
+#'   x$w <- as.numeric(mvrnorm(40, 0, 1))
+#'   x$ww <- as.numeric(mvrnorm(40, 0, 1))
+#'   rtables::var_labels(x) <- c("STUDYID", "USUBJID", "z", "zz", "NAs", "w", "ww")
+#'   x
+#' }
+#' y <- fun_cdisc_dataset_connector(
+#'   dataname = "ADSL",
+#'   func = my_data
+#' )
+#'
+#' y$get_code()
+#'
+#' y$pull()
+#'
+#' get_raw_data(y)
+#' }
+#' # Error as global var is used in the function.
+#' # Thus not reproducible.
+#' \dontrun{
+#' x <- 40
+#' my_data <- function(global_var = x) {
+#'   # whatever code
+#'   set.seed(1234)
+#'   library(MASS)
+#'   x <- data.frame(
+#'     STUDYID = 1,
+#'     USUBJID = 1:global_var,
+#'     z = stats::rnorm(40),
+#'     zz = factor(sample(letters[1:3], 40, replace = TRUE)),
+#'     NAs = rep(NA, 40)
+#'   )
+#'   x$w <- as.numeric(mvrnorm(40, 0, 1))
+#'   x$ww <- as.numeric(mvrnorm(40, 0, 1))
+#'   rtables::var_labels(x) <- c("STUDYID", "USUBJID", "z", "zz", "NAs", "w", "ww")
+#'   x
+#' }
+#' y <- fun_cdisc_dataset_connector(
+#'   dataname = "ADSL",
+#'   func = my_data
+#' )
+#'
+#' y$pull()
+#' }
+#' # Error - same as previous one
+#' \dontrun{
+#' global_var <- 40
+#' my_data <- function() {
+#'   # whatever code
+#'   set.seed(1234)
+#'   library(MASS)
+#'   x <- data.frame(
+#'     STUDYID = 1,
+#'     USUBJID = 1:global_var,
+#'     z = stats::rnorm(40),
+#'     zz = factor(sample(letters[1:3], 40, replace = TRUE)),
+#'     NAs = rep(NA, 40)
+#'   )
+#'   x$w <- as.numeric(mvrnorm(40, 0, 1))
+#'   x$ww <- as.numeric(mvrnorm(40, 0, 1))
+#'   rtables::var_labels(x) <- c("STUDYID", "USUBJID", "z", "zz", "NAs", "w", "ww")
+#'   x
+#' }
+#' y <- fun_cdisc_dataset_connector(
+#'   dataname = "ADSL",
+#'   func = my_data
+#' )
+#'
+#' y$pull()
+#' }
+#'
+fun_cdisc_dataset_connector <- function(dataname,
+                                        func,
+                                        func_args = NULL,
+                                        label = character(0),
+                                        code = character(0),
+                                        script = character(0),
+                                        keys = get_cdisc_keys(dataname),
+                                        ...) {
+
+  vars <- list(...)
+
+  stopifnot(is_fully_named_list(vars))
+
+  stopifnot(is.function(func))
+
+  stopifnot(is.list(func_args) || is.null(func_args))
+
+  fun_name <- substitute(func)
+
+  fun_char <- as.character(fun_name)
+
+  ee <- new.env(parent = parent.env(globalenv()))
+
+  ee$library <- function(...) {
+    mc <- match.call()
+    mc[[1]] <- quote(base::library)
+    eval(mc, envir = globalenv())
+    this_env <- parent.frame()
+    if (!identical(this_env, globalenv())) {
+      parent.env(this_env) <- parent.env(globalenv())
+    }
+  }
+
+  eval(bquote(.(fun_name) <- rlang::set_env(.(fun_name), .(ee))), envir = parent.frame())
+
+  x_fun <- CallableFunction$new(fun_name, env = ee)
+  x_fun$set_args(func_args)
+
+  vars[[fun_char]] <- get(fun_char, parent.frame())
+
+  x <- relational_dataset_connector(
+    dataname = dataname,
+    pull_fun = x_fun,
+    keys = keys,
+    code = code_from_script(code, script),
+    label = label,
+    vars = vars
+  )
+
+  return(x)
+
+}

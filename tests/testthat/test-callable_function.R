@@ -117,7 +117,7 @@ test_that("test callable errors", {
 
   expect_error(
     callable_function(x),
-    "is.function"
+    "1 is not a function"
   )
 
   expect_error(
@@ -127,7 +127,7 @@ test_that("test callable errors", {
 
   expect_error(
     callable_function("garbageIn"),
-    "is.function"
+    "garbageIn is not a function"
   )
 
   expect_error(

@@ -234,28 +234,35 @@ CallableFunction <- R6::R6Class( #nolint
     #
     get_callable_function = function(callable) {
       if (is.character(callable)) {
-        callable <- str2lang(callable)
+        fun <- str2lang(callable)
       }
 
       fr <- rev(sys.frames())
-      callable <- substitute(callable, fr[[1]])
+
+      # search for function name over all environments in the stack
+      search <- lapply(fr, function(x) substitute(fun, x))
+      found_idx <- which((search != as.name("fun")) & (search != as.name("callable")))[[1]]
+
+      found_name <- search[[found_idx]]
 
       # search for function object by name sequentially
       # over the entire call stack
-      fn <- tryCatch(get(as.character(callable), envir = fr[[1]]),
-                     error = function(e) NULL)
-
       for (i in seq_along(fr)[-1]) {
-        callable <- eval(bquote(substitute(.(callable), fr[[i]])))
-
-        fn <- tryCatch(get(as.character(callable), envir = fr[[1]]),
+        fn <- tryCatch(get(as.character(found_name), envir = fr[[i]]),
                        error = function(e) NULL)
+        is_symbol <- is.symbol(fn)
+        if (is_symbol) {
+          found_name <- fn
+          fn <- tryCatch(get(as.character(fn), envir = fr[[i]]),
+                       error = function(e) NULL)
+        }
+        if (is.function(fn)) {
+          return(found_name)
+        }
       }
 
-      # if a function is not found, stop initialization
-      stopifnot(is.function(fn))
-
-      return(callable)
+      # if a function was not found, stop
+      stop(paste(as.character(callable), "is not a function"))
     }
   )
 )

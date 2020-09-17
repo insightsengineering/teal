@@ -7,6 +7,7 @@ appear if there are no missing or infinite values.
 * Replace existing `RelationalData` class with abstract class `RelationalDataCollection` and 
 rename `RelationalDataList` class as `RelationalData`. The `data` argument to `teal::init` is
 now always a `RelationalData` object.
+* `fun_cdisc_dataset_connector` to enable providing a custom function which returning a dataset.
 * issues with no news: 
 
 # teal 0.9.0
