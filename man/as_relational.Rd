@@ -55,10 +55,8 @@ A given name for the dataset it may not contain spaces}
 object of S3 class keys containing foreign, primary keys and parent information}
 
 \item{code}{(\code{character})\cr
-A character string defining code to modify \code{raw_data} from this dataset. To modify
-current dataset code should contain at least one assignment to object defined in \code{dataname}
-argument. For example if \code{dataname = ADSL} example code should contain
-\code{ADSL <- <some R code>}. Can't be used simultaneously with \code{script}}
+String containing the code to produce the object.
+The code must end in a call to the object.}
 
 \item{script}{(\code{character})\cr
 Alternatively to \code{code} - location of the file containing modification code.

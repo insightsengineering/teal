@@ -41,7 +41,7 @@ Pulled data inherits from the class \link{NamedDataset}.
 \itemize{
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="RawDatasetConnector" data-id="get_code">}\href{../../teal/html/RawDatasetConnector.html#method-get_code}{\code{teal::RawDatasetConnector$get_code()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="RawDatasetConnector" data-id="get_error_message">}\href{../../teal/html/RawDatasetConnector.html#method-get_error_message}{\code{teal::RawDatasetConnector$get_error_message()}}\out{</span>}
-\item \out{<span class="pkg-link" data-pkg="teal" data-topic="RawDatasetConnector" data-id="get_pull_fun">}\href{../../teal/html/RawDatasetConnector.html#method-get_pull_fun}{\code{teal::RawDatasetConnector$get_pull_fun()}}\out{</span>}
+\item \out{<span class="pkg-link" data-pkg="teal" data-topic="RawDatasetConnector" data-id="get_pull_callable">}\href{../../teal/html/RawDatasetConnector.html#method-get_pull_callable}{\code{teal::RawDatasetConnector$get_pull_callable()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="RawDatasetConnector" data-id="get_raw_data">}\href{../../teal/html/RawDatasetConnector.html#method-get_raw_data}{\code{teal::RawDatasetConnector$get_raw_data()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="RawDatasetConnector" data-id="get_server">}\href{../../teal/html/RawDatasetConnector.html#method-get_server}{\code{teal::RawDatasetConnector$get_server()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="RawDatasetConnector" data-id="get_ui">}\href{../../teal/html/RawDatasetConnector.html#method-get_ui}{\code{teal::RawDatasetConnector$get_ui()}}\out{</span>}
@@ -63,7 +63,7 @@ of object to be assigned.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{NamedDatasetConnector$new(
   dataname,
-  pull_fun,
+  pull_callable,
   code = character(0),
   label = character(0),
   vars = list()
@@ -76,7 +76,7 @@ of object to be assigned.
 \item{\code{dataname}}{(\code{character})\cr
 A given name for the dataset, it may not contain spaces.}
 
-\item{\code{pull_fun}}{(\code{CallableFunction})\cr
+\item{\code{pull_callable}}{(\code{CallableFunction})\cr
 function to load the data, must return a \code{data.frame}.}
 
 \item{\code{code}}{(\code{character})\cr
@@ -219,7 +219,7 @@ this/these object(s) should be included}
 \subsection{Method \code{pull()}}{
 Pull the data
 
-Read or create the data using \code{pull_fun} specified in the constructor.
+Read or create the data using \code{pull_callable} specified in the constructor.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{NamedDatasetConnector$pull(args = NULL, try = FALSE)}\if{html}{\out{</div>}}
 }
@@ -228,10 +228,10 @@ Read or create the data using \code{pull_fun} specified in the constructor.
 \if{html}{\out{<div class="arguments">}}
 \describe{
 \item{\code{args}}{(\code{NULL} or named \code{list})\cr
-additional dynamic arguments for pull function. \code{args} can be omitted if \code{pull_fun}
+additional dynamic arguments for pull function. \code{args} can be omitted if \code{pull_callable}
 from constructor already contains all necessary arguments to pull data. One can try
-to execute \code{pull_fun} directly by \code{x$pull_fun$run()} or to get code using
-\code{x$pull_fun$get_code()}. \code{args} specified in pull are used temporary to get data but
+to execute \code{pull_callable} directly by \code{x$pull_callable$run()} or to get code using
+\code{x$pull_callable$get_code()}. \code{args} specified in pull are used temporary to get data but
 not saved in code.}
 
 \item{\code{try}}{(\code{logical} value)\cr

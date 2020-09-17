@@ -29,14 +29,14 @@ fun <- callable_function(data.frame)
 fun$set_args(list(n = 5, seed = 1, cached = TRUE))
 
 x <- named_dataset_connector(
- pull_fun = fun,
+ pull_callable = fun,
  dataname = "ADSL"
 )
 get_dataset_label(x)
 
 x1 <- relational_dataset_connector(
  dataname = "ADSL",
- pull_fun = fun,
+ pull_callable = fun,
  keys = get_cdisc_keys("ADSL")
 )
 get_dataset_label(x1)

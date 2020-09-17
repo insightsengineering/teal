@@ -22,7 +22,7 @@ Pulled data inherits from the class \link{RelationalDataset}.
 ## Method `RawDatasetConnector$set_ui_input`
 ## ------------------------------------------------
 
-ds <- raw_dataset_connector(pull_fun = callable_function(data.frame))
+ds <- raw_dataset_connector(pull_callable = callable_function(data.frame))
 ds$set_ui_input(
   function(ns) {
     list(sliderInput(ns("colA"), "Select value for colA", min = 0, max = 10, value = 3),
@@ -37,7 +37,7 @@ ds$launch()
 ## Method `RawDatasetConnector$launch`
 ## ------------------------------------------------
 
-ds <- raw_dataset_connector(pull_fun = callable_function(data.frame))
+ds <- raw_dataset_connector(pull_callable = callable_function(data.frame))
 ds$set_ui_input(
   function(ns) {
     list(sliderInput(ns("colA"), "Select value for colA", min = 0, max = 10, value = 3),
@@ -57,7 +57,7 @@ ds$launch()
 \item \href{#method-get_code_class}{\code{RawDatasetConnector$get_code_class()}}
 \item \href{#method-get_dataset}{\code{RawDatasetConnector$get_dataset()}}
 \item \href{#method-get_error_message}{\code{RawDatasetConnector$get_error_message()}}
-\item \href{#method-get_pull_fun}{\code{RawDatasetConnector$get_pull_fun()}}
+\item \href{#method-get_pull_callable}{\code{RawDatasetConnector$get_pull_callable()}}
 \item \href{#method-get_raw_data}{\code{RawDatasetConnector$get_raw_data()}}
 \item \href{#method-pull}{\code{RawDatasetConnector$pull()}}
 \item \href{#method-is_failed}{\code{RawDatasetConnector$is_failed()}}
@@ -77,13 +77,13 @@ Create a new \code{RawDatasetConnector} object. Set the pulling function
 \link{CallableFunction} which returns a \code{data.frame}, e.g. by reading
 from a function or creating it on the fly.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{RawDatasetConnector$new(pull_fun, vars = list())}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{RawDatasetConnector$new(pull_callable, vars = list())}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{pull_fun}}{(\code{CallableFunction})\cr
+\item{\code{pull_callable}}{(\code{CallableFunction})\cr
 function to pull the data.}
 
 \item{\code{vars}}{(list)\cr
@@ -179,12 +179,12 @@ Get error message from last pull
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-get_pull_fun"></a>}}
-\if{latex}{\out{\hypertarget{method-get_pull_fun}{}}}
-\subsection{Method \code{get_pull_fun()}}{
+\if{html}{\out{<a id="method-get_pull_callable"></a>}}
+\if{latex}{\out{\hypertarget{method-get_pull_callable}{}}}
+\subsection{Method \code{get_pull_callable()}}{
 Get pull function
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{RawDatasetConnector$get_pull_fun()}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{RawDatasetConnector$get_pull_callable()}\if{html}{\out{</div>}}
 }
 
 \subsection{Returns}{
@@ -210,7 +210,7 @@ Get raw data from dataset
 \subsection{Method \code{pull()}}{
 Pull the data
 
-Read or create data using \code{pull_fun} specified in the constructor.
+Read or create data using \code{pull_callable} specified in the constructor.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{RawDatasetConnector$pull(args = NULL, try = FALSE)}\if{html}{\out{</div>}}
 }
@@ -219,10 +219,10 @@ Read or create data using \code{pull_fun} specified in the constructor.
 \if{html}{\out{<div class="arguments">}}
 \describe{
 \item{\code{args}}{(\code{NULL} or named \code{list})\cr
-additional dynamic arguments for pull function. \code{args} can be omitted if \code{pull_fun}
+additional dynamic arguments for pull function. \code{args} can be omitted if \code{pull_callable}
 from constructor already contains all necessary arguments to pull data. One can try
-to execute \code{pull_fun} directly by \code{x$pull_fun$run()} or to get code using
-\code{x$pull_fun$get_code()}. \code{args} specified in pull are used temporary to get data but
+to execute \code{pull_callable} directly by \code{x$pull_callable$run()} or to get code using
+\code{x$pull_callable$get_code()}. \code{args} specified in pull are used temporary to get data but
 not saved in code.}
 
 \item{\code{try}}{(\code{logical} value)\cr
@@ -285,7 +285,7 @@ Nested lists are not allowed.}
 }
 \subsection{Examples}{
 \if{html}{\out{<div class="r example copy">}}
-\preformatted{ds <- raw_dataset_connector(pull_fun = callable_function(data.frame))
+\preformatted{ds <- raw_dataset_connector(pull_callable = callable_function(data.frame))
 ds$set_ui_input(
   function(ns) {
     list(sliderInput(ns("colA"), "Select value for colA", min = 0, max = 10, value = 3),
@@ -348,7 +348,7 @@ Shiny app
 }
 \subsection{Examples}{
 \if{html}{\out{<div class="r example copy">}}
-\preformatted{ds <- raw_dataset_connector(pull_fun = callable_function(data.frame))
+\preformatted{ds <- raw_dataset_connector(pull_callable = callable_function(data.frame))
 ds$set_ui_input(
   function(ns) {
     list(sliderInput(ns("colA"), "Select value for colA", min = 0, max = 10, value = 3),

@@ -56,6 +56,8 @@ Suggests:
     testthat (>= 2.0)
 VignetteBuilder: knitr
 Collate: 
+    'Callable.R'
+    'CallableCode.R'
     'CallableFunction.R'
     'CodeClass.R'
     'DataConnection.R'

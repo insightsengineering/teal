@@ -22,7 +22,7 @@
 \usage{
 relational_dataset_connector(
   dataname,
-  pull_fun,
+  pull_callable,
   keys,
   code = character(0),
   script = character(0),
@@ -64,9 +64,9 @@ script_dataset_connector(
 
 code_dataset_connector(
   dataname,
-  pull_code,
+  code,
   keys,
-  code = character(0),
+  mutate_code = character(0),
   label = character(0),
   ...
 )
@@ -139,8 +139,8 @@ script_cdisc_dataset_connector(
 
 code_cdisc_dataset_connector(
   dataname,
-  pull_code = character(0),
-  code = character(0),
+  code,
+  mutate_code = character(0),
   label = character(0),
   ...
 )
@@ -178,17 +178,15 @@ fun_cdisc_dataset_connector(
 \item{dataname}{(\code{character})\cr
 A given name for the dataset it may not contain spaces}
 
-\item{pull_fun}{(\code{CallableFunction})\cr
+\item{pull_callable}{(\code{CallableFunction})\cr
 function with necessary arguments set to fetch data from connection.}
 
 \item{keys}{(\code{keys})\cr
 object of S3 class keys containing foreign, primary keys and parent information}
 
 \item{code}{(\code{character})\cr
-A character string defining code to modify \code{raw_data} from this dataset. To modify
-current dataset code should contain at least one assignment to object defined in \code{dataname}
-argument. For example if \code{dataname = ADSL} example code should contain
-\code{ADSL <- <some R code>}. Can't be used simultaneously with \code{script}}
+String containing the code to produce the object.
+The code must end in a call to the object.}
 
 \item{script}{(\code{character})\cr
 Alternatively to \code{code} - location of the file containing modification code.
@@ -216,8 +214,9 @@ additional arguments applied to pull function (\code{readr::read_delim}) by defa
 \item{file}{(\code{character})\cr
 path to (\code{.csv}) (or general delimited) file that contains \code{data.frame} object}
 
-\item{pull_code}{(\code{character})\cr
-function call with arguments to obtain dataset.}
+\item{mutate_code}{(\code{character})\cr
+String containing the code used to mutate the object
+after it is produced.}
 
 \item{table}{(\code{character}) table name}
 
@@ -244,7 +243,7 @@ Please note that the script has to end with a call creating desired object. The 
 \code{script_dataset_connector} - Create a \code{RelationalDatasetConnector} from \code{.R} file.
 
 \code{code_dataset_connector} - Create a \code{RelationalDatasetConnector}
-  from a string.
+  from a string of code.
 
 \code{rice_dataset_connector} -
 Create a \code{RelationalDatasetConnector} from \code{RICE} dataset.
@@ -271,9 +270,8 @@ automatically by \code{dataname}.
 Create a \code{RelationalDatasetConnector} from \code{script} file with keys assigned
 automatically by \code{dataname}.
 
-\code{code_cdisc_dataset_connector} -
-Create a \code{RelationalDatasetConnector} from \code{code} string with keys assigned
-automatically by \code{dataname}.
+\code{code_cdisc_dataset_connector} - Create a \code{RelationalDatasetConnector}
+  from a string of code with keys assigned automatically by \code{dataname}.
 
 \code{teradata_cdisc_dataset_connector} -
 Create a \code{RelationalDatasetConnector} from \code{TERADATA} dataset with keys assigned
@@ -287,11 +285,6 @@ with keys assigned automatically by \code{dataname}.
 Create a \code{RelationalDatasetConnector} from \code{function} and its arguments
 with keys assigned automatically by \code{dataname}.
 }
-\note{
-Do not include assignment in \code{code} argument. \code{code} string
-  should be a single function call which returns an object. Use \code{mutate_code}
-  to make additional transformations.
-}
 \examples{
 # simple example
 file_example <- tempfile(fileext = ".R")
@@ -300,9 +293,9 @@ writeLines(
     "library(teal)
      library(random.cdisc.data)
 
-     pull_fun <- callable_function(radsl)
-     pull_fun$set_args(list(cached = TRUE))
-     relational_dataset_connector(\"ADSL\", pull_fun, get_cdisc_keys(\"ADSL\"))"
+     pull_callable <- callable_function(radsl)
+     pull_callable$set_args(list(cached = TRUE))
+     relational_dataset_connector(\"ADSL\", pull_callable, get_cdisc_keys(\"ADSL\"))"
   ),
   con = file_example
 )
@@ -339,13 +332,28 @@ library(random.cdisc.data)
 x <- code_dataset_connector(
   dataname = "ADSL",
   keys = get_cdisc_keys("ADSL"),
-  pull_code = "radsl(cached = TRUE)"
+  code = "ADSL <- radsl(cached = TRUE); ADSL"
 )
 
 x$get_code()
 
 mutate_dataset(x, code = "ADSL$new_variable <- 1")
 x$get_code()
+
+file_example <- tempfile(fileext = ".R")
+writeLines(
+  text = c(
+    "seed <- 1; ADSL <- radsl(cached = TRUE, seed = seed)\nADSL"
+  ),
+  con = file_example
+)
+
+y <- code_dataset_connector(
+  dataname = "ADSL",
+  keys = get_cdisc_keys("ADSL"),
+  code = paste0(readLines(file_example), collapse = "\n")
+)
+
 x <- rice_dataset_connector(
   dataname = "ADSL",
   path = "/path/to/file.sas7bdat",

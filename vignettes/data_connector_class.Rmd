@@ -179,7 +179,7 @@ understand how to create another wrapper.
 ```{r}
 foo_dataset <- function(dataname, fun) {
   dc <- relational_dataset_connector(
-    pull_fun = fun,
+    pull_callable = fun,
     dataname = dataname,
     keys = keys(
       primary = "x",
@@ -299,15 +299,15 @@ To confirm that shiny input has been saved, one can check reproducible code to s
      + get_dataset()
      + get_dataname()
      + set/get_dataname(dataname)
-     + set/get_pull_fun(CallableFunction fun)
-     + set/get_pull_fun_args(args)
+     + set/get_pull_callable(CallableFunction fun)
+     + set/get_pull_callable_args(args)
      + set/get_pull_arg_value(name, value)|
      - list data
      - character dataname
      - list keys
      - character labels
      - character path
-     - CallableFunction pull_fun
+     - CallableFunction pull_callable
      ]
   
   [RelationalDataConnection||
@@ -343,15 +343,15 @@ To confirm that shiny input has been saved, one can check reproducible code to s
      + get_dataset()
      + get_dataname()
      + set/get_dataname(dataname)
-     + set/get_pull_fun(CallableFunction fun)
-     + set/get_pull_fun_args(args)
+     + set/get_pull_callable(CallableFunction fun)
+     + set/get_pull_callable_args(args)
      + set/get_pull_arg_value(name, value)|
      - list data
      - character dataname
      - list keys
      - character labels
      - character path
-     - CallableFunction pull_fun
+     - CallableFunction pull_callable
      ]
   
   [RelationalData||

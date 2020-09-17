@@ -24,7 +24,7 @@ NamedDatasetConnector <- R6::R6Class( #nolint
     #' @param dataname (\code{character})\cr
     #'  A given name for the dataset, it may not contain spaces.
     #'
-    #' @param pull_fun (\code{CallableFunction})\cr
+    #' @param pull_callable (\code{CallableFunction})\cr
     #'  function to load the data, must return a \code{data.frame}.
     #'
     #' @param code (\code{character})\cr
@@ -42,8 +42,8 @@ NamedDatasetConnector <- R6::R6Class( #nolint
     #'   this/these object(s) should be included.
     #'
     #' @return new \code{NamedDatasetConnector} object
-    initialize = function(dataname, pull_fun, code = character(0), label = character(0), vars = list()) {
-      super$initialize(pull_fun = pull_fun, vars = vars)
+    initialize = function(dataname, pull_callable, code = character(0), label = character(0), vars = list()) {
+      super$initialize(pull_callable = pull_callable, vars = vars)
 
       private$set_dataname(dataname)
 
@@ -145,13 +145,13 @@ NamedDatasetConnector <- R6::R6Class( #nolint
     #' @description
     #' Pull the data
     #'
-    #' Read or create the data using \code{pull_fun} specified in the constructor.
+    #' Read or create the data using \code{pull_callable} specified in the constructor.
     #'
     #' @param args (\code{NULL} or named \code{list})\cr
-    #'  additional dynamic arguments for pull function. \code{args} can be omitted if \code{pull_fun}
+    #'  additional dynamic arguments for pull function. \code{args} can be omitted if \code{pull_callable}
     #'  from constructor already contains all necessary arguments to pull data. One can try
-    #'  to execute \code{pull_fun} directly by \code{x$pull_fun$run()} or to get code using
-    #'  \code{x$pull_fun$get_code()}. \code{args} specified in pull are used temporary to get data but
+    #'  to execute \code{pull_callable} directly by \code{x$pull_callable$run()} or to get code using
+    #'  \code{x$pull_callable$get_code()}. \code{args} specified in pull are used temporary to get data but
     #'  not saved in code.
     #' @param try (\code{logical} value)\cr
     #'  whether perform function evaluation inside \code{try} clause
@@ -184,7 +184,7 @@ NamedDatasetConnector <- R6::R6Class( #nolint
     #' Derive the arguments this connector will pull with
     #' @return \code{list} of pull function fixed arguments
     get_pull_args = function() {
-      private$pull_fun$get_args()
+      private$pull_callable$get_args()
     },
     #' @description
     #'   Check to determine if the raw data is reproducible from the
@@ -214,8 +214,17 @@ NamedDatasetConnector <- R6::R6Class( #nolint
     get_pull_code_class = function(args = NULL) {
       res <- CodeClass$new()
       res$append(list_to_code_class(private$pull_vars))
-      code <- pdeparse(substitute(a <- b, list(a = as.name(private$dataname),
-                                               b = private$pull_fun$get_call(deparse = FALSE, args = args))))
+
+      code <- if (inherits(private$pull_callable, "CallableCode")) {
+        tmp <- private$pull_callable$get_call(deparse = FALSE)
+        tmp[[length(tmp)]] <- substitute(a <- b, list(a = as.name(private$dataname),
+                                                      b = tmp[[length(tmp)]]))
+        paste0(vapply(tmp, pdeparse, character(1)), collapse = "\n")
+      } else {
+        pdeparse(substitute(a <- b, list(a = as.name(private$dataname),
+                                         b = private$pull_callable$get_call(deparse = FALSE, args = args))))
+      }
+
       res$set_code(code = code, dataname = private$dataname, deps = names(private$pull_vars))
       return(res)
     },

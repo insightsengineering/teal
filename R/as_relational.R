@@ -100,7 +100,7 @@ as_relational.RawDatasetConnector <- function(x, # nolint
   return(
     relational_dataset_connector(
       dataname = dataname,
-      pull_fun = x$get_pull_fun(),
+      pull_callable = x$get_pull_callable(),
       keys = keys,
       code = code,
       label = label

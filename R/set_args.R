@@ -25,7 +25,7 @@ set_args.CallableFunction <- function(x, args) {
 #' @rdname set_args
 #' @export
 #' @examples
-#' ds <- raw_dataset_connector(pull_fun = callable_function(data.frame))
+#' ds <- raw_dataset_connector(pull_callable = callable_function(data.frame))
 #' set_args(ds, list(x = 1:5, y = letters[1:5]))
 set_args.RawDatasetConnector <- function(x, args) {
   x$set_args(args)

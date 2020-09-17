@@ -50,7 +50,7 @@ load_dataset.RawDatasetConnector <- function(x, args = NULL, try = FALSE, conn =
     conn$open()
     conn_obj <- conn$get_conn()
 
-    x$get_pull_fun()$assign_to_env("conn", conn_obj)
+    x$get_pull_callable()$assign_to_env("conn", conn_obj)
   }
 
   x$pull(args = args, try = try)

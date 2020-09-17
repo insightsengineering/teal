@@ -27,6 +27,6 @@ Set arguments of a \code{CallableFunction}
 library(random.cdisc.data)
 fun <- callable_function(radsl)
 set_args(fun, list(N = 5, seed = 1, cached = TRUE))
-ds <- raw_dataset_connector(pull_fun = callable_function(data.frame))
+ds <- raw_dataset_connector(pull_callable = callable_function(data.frame))
 set_args(ds, list(x = 1:5, y = letters[1:5]))
 }

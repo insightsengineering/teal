@@ -7,7 +7,7 @@ test_that("RawDatasetConnector", {
   fun <- callable_function(data.frame)
   fun$set_args(list(n = 5, seed = 1, cached = TRUE))
 
-  x <- raw_dataset_connector(pull_fun = fun)
+  x <- raw_dataset_connector(pull_callable = fun)
 
   expect_identical(
     x$get_code(deparse = TRUE),
@@ -59,7 +59,7 @@ test_that("RawDatasetConnector", {
   )
 
   expect_true(
-    is(x$get_pull_fun(), "CallableFunction")
+    is(x$get_pull_callable(), "CallableFunction")
   )
 
   expect_identical(
@@ -114,7 +114,7 @@ test_that("RawDatasetConnector", {
 
 
   fun2 <- callable_function(paste)
-  x2 <- raw_dataset_connector(pull_fun = fun2)
+  x2 <- raw_dataset_connector(pull_callable = fun2)
 
   expect_error(
     x2$pull(),
@@ -142,14 +142,14 @@ test_that("RelationalDatasetConnector", {
   fun$set_args(list(N = 5, seed = 1, cached = TRUE))
 
   expect_error(
-    relational_dataset_connector(pull_fun = fun),
+    relational_dataset_connector(pull_callable = fun),
     "dataname"
   )
 
   expect_error(
     relational_dataset_connector(
       dataname = "ADSL",
-      pull_fun = fun
+      pull_callable = fun
     ),
     "keys"
   )
@@ -157,7 +157,7 @@ test_that("RelationalDatasetConnector", {
   expect_silent(
     x1 <- relational_dataset_connector(
       dataname = "ADSL",
-      pull_fun = fun,
+      pull_callable = fun,
       keys = get_cdisc_keys("ADSL")
     )
   )
@@ -210,7 +210,7 @@ test_that("RelationalDatasetConnector", {
   expect_silent(
     x2 <- relational_dataset_connector(
       dataname = "ADSL",
-      pull_fun = fun,
+      pull_callable = fun,
       keys = get_cdisc_keys("ADSL")
     )
   )
@@ -235,7 +235,7 @@ test_that("RelationalDatasetConnector", {
   expect_silent(
     x3 <- relational_dataset_connector(
       dataname = "ADSL",
-      pull_fun = fun,
+      pull_callable = fun,
       keys = keys(primary = "id", foreign = NULL, parent = NULL)
     )
   )
@@ -273,7 +273,7 @@ test_that("conversions", {
   fun <- callable_function(radsl)
   fun$set_args(list(N = 5, seed = 1, cached = TRUE))
 
-  x <- raw_dataset_connector(pull_fun = fun)
+  x <- raw_dataset_connector(pull_callable = fun)
 
   expect_silent(
     x1 <- as_relational(
@@ -323,7 +323,7 @@ test_that("as_relational", {
   fun <- callable_function(radsl)
   fun$set_args(list(N = 5, seed = 1, cached = TRUE))
 
-  x <- raw_dataset_connector(pull_fun = fun)
+  x <- raw_dataset_connector(pull_callable = fun)
 
   expect_silent(
     x1 <- as_relational(
@@ -374,7 +374,7 @@ test_that("rcd_dataset_connector", {
   expect_true(is(x, c("DatasetConnector", "R6")))
 
   expect_identical(
-    x$.__enclos_env__$private$pull_fun$.__enclos_env__$private$fun_name,
+    x$.__enclos_env__$private$pull_callable$.__enclos_env__$private$fun_name,
     "radsl"
   )
 

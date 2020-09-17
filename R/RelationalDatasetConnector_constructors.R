@@ -1,20 +1,20 @@
 #' Create \code{RawDatasetConnector} object
 #'
 #' Create \link{RawDatasetConnector} object to execute specific call to fetch data
-#' @param pull_fun (\code{CallableFunction})\cr
+#' @param pull_callable (\code{CallableFunction})\cr
 #'   function with necessary arguments set to fetch data from connection.
 #' @examples
-#' ds <- raw_dataset_connector(pull_fun = callable_function(data.frame))
+#' ds <- raw_dataset_connector(pull_callable = callable_function(data.frame))
 #' set_args(ds, list(x = 1:5, y = letters[1:5], stringsAsFactors = FALSE))
 #' ds$pull()
 #' ds$get_raw_data()
 #' ds$get_code()
 #' @return \code{RawDatasetConnector} object
 #' @export
-raw_dataset_connector <- function(pull_fun) {
-  stopifnot(is(pull_fun, "CallableFunction"))
+raw_dataset_connector <- function(pull_callable) {
+  stopifnot(is(pull_callable, "Callable"))
 
-  RawDatasetConnector$new(pull_fun = pull_fun)
+  RawDatasetConnector$new(pull_callable = pull_callable)
 }
 
 #' Create a new \code{NamedDatasetConnector} object
@@ -48,19 +48,19 @@ raw_dataset_connector <- function(pull_fun) {
 #'
 #' @export
 named_dataset_connector <- function(dataname,
-                                    pull_fun,
+                                    pull_callable,
                                     code = character(0),
                                     script = character(0),
                                     label = character(0),
                                     vars = list()) {
   stopifnot(is_character_single(dataname))
-  stopifnot(is(pull_fun, "CallableFunction"))
+  stopifnot(is(pull_callable, "Callable"))
   stopifnot(is_character_empty(code) || is_character_vector(code))
   stopifnot(is_character_empty(label) || is_character_vector(label))
 
   x <- NamedDatasetConnector$new(
     dataname = dataname,
-    pull_fun = pull_fun,
+    pull_callable = pull_callable,
     code = code_from_script(code, script),
     label = label,
     vars = vars
@@ -84,21 +84,21 @@ named_dataset_connector <- function(dataname,
 #'
 #' @export
 relational_dataset_connector <- function(dataname,
-                                         pull_fun,
+                                         pull_callable,
                                          keys,
                                          code = character(0),
                                          script = character(0),
                                          label = character(0),
                                          vars = list()) {
   stopifnot(is_character_single(dataname))
-  stopifnot(is(pull_fun, "CallableFunction"))
+  stopifnot(is(pull_callable, "Callable"))
   stopifnot(is(keys, "keys"))
   stopifnot(is_character_empty(code) || is_character_vector(code))
   stopifnot(is_character_empty(label) || is_character_vector(label))
 
   x <- RelationalDatasetConnector$new(
     dataname = dataname,
-    pull_fun = pull_fun,
+    pull_callable = pull_callable,
     keys = keys,
     code = code_from_script(code, script),
     label = label,
@@ -130,9 +130,9 @@ relational_dataset_connector <- function(dataname,
 #'     "library(teal)
 #'      library(random.cdisc.data)
 #'
-#'      pull_fun <- callable_function(radsl)
-#'      pull_fun$set_args(list(cached = TRUE))
-#'      relational_dataset_connector(\"ADSL\", pull_fun, get_cdisc_keys(\"ADSL\"))"
+#'      pull_callable <- callable_function(radsl)
+#'      pull_callable$set_args(list(cached = TRUE))
+#'      relational_dataset_connector(\"ADSL\", pull_callable, get_cdisc_keys(\"ADSL\"))"
 #'   ),
 #'   con = file_example
 #' )
@@ -210,7 +210,7 @@ rcd_dataset_connector <- function(dataname,
 
   x <- relational_dataset_connector(
     dataname = dataname,
-    pull_fun = x_fun,
+    pull_callable = x_fun,
     keys = keys,
     code = code_from_script(code, script),
     label = label,
@@ -267,7 +267,7 @@ rds_dataset_connector <- function(dataname,
 
   x <- relational_dataset_connector(
     dataname = dataname,
-    pull_fun = x_fun,
+    pull_callable = x_fun,
     keys = keys,
     code = code_from_script(code, script),
     label = label
@@ -322,7 +322,7 @@ script_dataset_connector <- function(dataname,
 
   x <- relational_dataset_connector(
     dataname = dataname,
-    pull_fun = x_fun,
+    pull_callable = x_fun,
     keys = keys,
     code = code_from_script(code, script),
     label = label,
@@ -331,21 +331,20 @@ script_dataset_connector <- function(dataname,
 
   return(x)
 }
-
 #' @description
 #' \code{code_dataset_connector} - Create a \code{RelationalDatasetConnector}
-#'   from a string.
+#'   from a string of code.
 #'
 #' @inheritParams relational_dataset_connector
 #'
-#' @param pull_code (\code{character})\cr
-#'   function call with arguments to obtain dataset.
+#' @param code (\code{character})\cr
+#'   String containing the code to produce the object.
+#'   The code must end in a call to the object.
+#' @param mutate_code (\code{character})\cr
+#'   String containing the code used to mutate the object
+#'   after it is produced.
 #'
 #' @rdname relational_dataset_connector
-#'
-#' @note Do not include assignment in \code{code} argument. \code{code} string
-#'   should be a single function call which returns an object. Use \code{mutate_code}
-#'   to make additional transformations.
 #'
 #' @export
 #'
@@ -354,36 +353,47 @@ script_dataset_connector <- function(dataname,
 #' x <- code_dataset_connector(
 #'   dataname = "ADSL",
 #'   keys = get_cdisc_keys("ADSL"),
-#'   pull_code = "radsl(cached = TRUE)"
+#'   code = "ADSL <- radsl(cached = TRUE); ADSL"
 #' )
 #'
 #' x$get_code()
 #'
 #' mutate_dataset(x, code = "ADSL$new_variable <- 1")
 #' x$get_code()
+#'
+#' file_example <- tempfile(fileext = ".R")
+#' writeLines(
+#'   text = c(
+#'     "seed <- 1; ADSL <- radsl(cached = TRUE, seed = seed)\nADSL"
+#'   ),
+#'   con = file_example
+#' )
+#'
+#' y <- code_dataset_connector(
+#'   dataname = "ADSL",
+#'   keys = get_cdisc_keys("ADSL"),
+#'   code = paste0(readLines(file_example), collapse = "\n")
+#' )
+#'
 code_dataset_connector <- function(dataname,
-                                   pull_code,
+                                   code,
                                    keys,
-                                   code = character(0),
+                                   mutate_code = character(0),
                                    label = character(0),
                                    ...) {
   vars <- list(...)
 
   stopifnot(is_fully_named_list(vars))
-  stopifnot(is_character_single(pull_code))
+  stopifnot(is_character_single(code))
   stopifnot(is_character_vector(code, min_length = 0L, max_length = 1L))
 
-  cl <- as.list(str2lang(pull_code))
-  fn <- cl[[1]]
-
-  x_fun <- callable_function(fn)
-  x_fun$set_args(cl[-1])
+  call <- callable_code(code = code)
 
   x <- relational_dataset_connector(
     dataname = dataname,
-    pull_fun = x_fun,
+    pull_callable = call,
     keys = keys,
-    code = code,
+    code = mutate_code,
     label = label,
     vars = vars
   )
@@ -441,7 +451,7 @@ rice_dataset_connector <- function(dataname,
 
   x <- relational_dataset_connector(
     dataname = dataname,
-    pull_fun = x_fun,
+    pull_callable = x_fun,
     keys = keys,
     code = code_from_script(code, script),
     label = label
@@ -481,7 +491,7 @@ teradata_dataset_connector <- function(dataname,
 
   x <- relational_dataset_connector(
     dataname = dataname,
-    pull_fun = x_fun,
+    pull_callable = x_fun,
     keys = keys,
     code = code_from_script(code, script),
     label = label
@@ -547,7 +557,7 @@ csv_dataset_connector <- function(dataname,
 
   x <- relational_dataset_connector(
     dataname = dataname,
-    pull_fun = x_fun,
+    pull_callable = x_fun,
     keys = keys,
     code = code_from_script(code, script),
     label = label
@@ -678,9 +688,8 @@ script_cdisc_dataset_connector <- function(dataname,
 }
 
 #' @description
-#' \code{code_cdisc_dataset_connector} -
-#' Create a \code{RelationalDatasetConnector} from \code{code} string with keys assigned
-#' automatically by \code{dataname}.
+#' \code{code_cdisc_dataset_connector} - Create a \code{RelationalDatasetConnector}
+#'   from a string of code with keys assigned automatically by \code{dataname}.
 #'
 #' @inheritParams code_dataset_connector
 #'
@@ -688,16 +697,16 @@ script_cdisc_dataset_connector <- function(dataname,
 #'
 #' @export
 code_cdisc_dataset_connector <- function(dataname,
-                                         pull_code = character(0),
-                                         code = character(0),
+                                         code,
+                                         mutate_code = character(0),
                                          label = character(0),
                                          ...) {
 
   x <- code_dataset_connector(
     dataname = dataname,
-    pull_code = pull_code,
+    code = code,
     keys = get_cdisc_keys(dataname),
-    mutate_code = code,
+    mutate_code = mutate_code,
     label = label,
     ...
   )
@@ -903,7 +912,7 @@ fun_cdisc_dataset_connector <- function(dataname,
 
   x <- relational_dataset_connector(
     dataname = dataname,
-    pull_fun = x_fun,
+    pull_callable = x_fun,
     keys = keys,
     code = code_from_script(code, script),
     label = label,

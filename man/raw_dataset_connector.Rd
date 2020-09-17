@@ -4,10 +4,10 @@
 \alias{raw_dataset_connector}
 \title{Create \code{RawDatasetConnector} object}
 \usage{
-raw_dataset_connector(pull_fun)
+raw_dataset_connector(pull_callable)
 }
 \arguments{
-\item{pull_fun}{(\code{CallableFunction})\cr
+\item{pull_callable}{(\code{CallableFunction})\cr
 function with necessary arguments set to fetch data from connection.}
 }
 \value{
@@ -17,7 +17,7 @@ function with necessary arguments set to fetch data from connection.}
 Create \link{RawDatasetConnector} object to execute specific call to fetch data
 }
 \examples{
-ds <- raw_dataset_connector(pull_fun = callable_function(data.frame))
+ds <- raw_dataset_connector(pull_callable = callable_function(data.frame))
 set_args(ds, list(x = 1:5, y = letters[1:5], stringsAsFactors = FALSE))
 ds$pull()
 ds$get_raw_data()

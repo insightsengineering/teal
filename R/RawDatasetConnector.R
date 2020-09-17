@@ -20,7 +20,7 @@ RawDatasetConnector <- R6::R6Class( #nolint
     #' \link{CallableFunction} which returns a \code{data.frame}, e.g. by reading
     #' from a function or creating it on the fly.
     #'
-    #' @param pull_fun (\code{CallableFunction})\cr
+    #' @param pull_callable (\code{CallableFunction})\cr
     #'  function to pull the data.
     #' @param vars (list)\cr
     #'   In case when this object code depends on the \code{raw_data} from the other
@@ -28,8 +28,8 @@ RawDatasetConnector <- R6::R6Class( #nolint
     #'   this/these object(s) should be included
     #'
     #' @return new \code{RawDatasetConnector} object
-    initialize = function(pull_fun, vars = list()) {
-      private$set_pull_fun(pull_fun)
+    initialize = function(pull_callable, vars = list()) {
+      private$set_pull_callable(pull_callable)
       private$set_pull_vars(vars)
 
       private$set_ui()
@@ -44,7 +44,7 @@ RawDatasetConnector <- R6::R6Class( #nolint
     #'
     #' @return \code{self} invisibly for chaining
     set_args = function(args) {
-      private$pull_fun$set_args(args)
+      private$pull_callable$set_args(args)
       return(invisible(self))
     },
 
@@ -90,14 +90,14 @@ RawDatasetConnector <- R6::R6Class( #nolint
     #' @return \code{try-error} object with error message or \code{character(0)} if last
     #'  pull was successful.
     get_error_message = function() {
-      return(private$pull_fun$get_error_message())
+      return(private$pull_callable$get_error_message())
     },
     #' @description
     #' Get pull function
     #'
     #' @return \code{CallableFunction}
-    get_pull_fun = function() {
-      return(private$pull_fun)
+    get_pull_callable = function() {
+      return(private$pull_callable)
     },
     #' @description
     #' Get raw data from dataset
@@ -110,13 +110,13 @@ RawDatasetConnector <- R6::R6Class( #nolint
     #' @description
     #' Pull the data
     #'
-    #' Read or create data using \code{pull_fun} specified in the constructor.
+    #' Read or create data using \code{pull_callable} specified in the constructor.
     #'
     #' @param args (\code{NULL} or named \code{list})\cr
-    #'  additional dynamic arguments for pull function. \code{args} can be omitted if \code{pull_fun}
+    #'  additional dynamic arguments for pull function. \code{args} can be omitted if \code{pull_callable}
     #'  from constructor already contains all necessary arguments to pull data. One can try
-    #'  to execute \code{pull_fun} directly by \code{x$pull_fun$run()} or to get code using
-    #'  \code{x$pull_fun$get_code()}. \code{args} specified in pull are used temporary to get data but
+    #'  to execute \code{pull_callable} directly by \code{x$pull_callable$run()} or to get code using
+    #'  \code{x$pull_callable$get_code()}. \code{args} specified in pull are used temporary to get data but
     #'  not saved in code.
     #' @param try (\code{logical} value)\cr
     #'  whether perform function evaluation inside \code{try} clause
@@ -134,7 +134,7 @@ RawDatasetConnector <- R6::R6Class( #nolint
     #'
     #' @return \code{TRUE} if pull failed, else \code{FALSE}
     is_failed = function() {
-      return(private$pull_fun$is_failed())
+      return(private$pull_callable$is_failed())
     },
     #' @description
     #' Check if dataset has already been pulled.
@@ -151,7 +151,7 @@ RawDatasetConnector <- R6::R6Class( #nolint
     #' Nested lists are not allowed.
     #' @return \code{self} invisibly for chaining.
     #' @examples
-    #' ds <- raw_dataset_connector(pull_fun = callable_function(data.frame))
+    #' ds <- raw_dataset_connector(pull_callable = callable_function(data.frame))
     #' ds$set_ui_input(
     #'   function(ns) {
     #'     list(sliderInput(ns("colA"), "Select value for colA", min = 0, max = 10, value = 3),
@@ -189,7 +189,7 @@ RawDatasetConnector <- R6::R6Class( #nolint
     #' @description Launches a shiny app.
     #' @return Shiny app
     #' @examples
-    #' ds <- raw_dataset_connector(pull_fun = callable_function(data.frame))
+    #' ds <- raw_dataset_connector(pull_callable = callable_function(data.frame))
     #' ds$set_ui_input(
     #'   function(ns) {
     #'     list(sliderInput(ns("colA"), "Select value for colA", min = 0, max = 10, value = 3),
@@ -229,7 +229,7 @@ RawDatasetConnector <- R6::R6Class( #nolint
   ## __Private Fields ====
   private = list(
     dataset = NULL, # RawDataset
-    pull_fun = NULL, # CallableFunction
+    pull_callable = NULL, # Callable
     pull_vars = list(), # named list
     ui_input = NULL, # NULL or list
     ui = NULL, # NULL or shiny.tag.list
@@ -240,14 +240,14 @@ RawDatasetConnector <- R6::R6Class( #nolint
       res <- CodeClass$new()
       res$append(list_to_code_class(private$pull_vars))
       res$set_code(
-        code = private$pull_fun$get_call(deparse = TRUE, args = args),
+        code = private$pull_callable$get_call(deparse = TRUE, args = args),
         deps = names(private$pull_vars)
       )
       return(res)
     },
-    set_pull_fun = function(pull_fun) {
-      stopifnot(is(pull_fun, "CallableFunction"))
-      private$pull_fun <- pull_fun
+    set_pull_callable = function(pull_callable) {
+      stopifnot(is(pull_callable, "Callable"))
+      private$pull_callable <- pull_callable
       return(invisible(self))
     },
     set_pull_vars = function(pull_vars) {
@@ -262,7 +262,7 @@ RawDatasetConnector <- R6::R6Class( #nolint
           var_name <- names(private$pull_vars)[[var_idx]]
           var_value <- private$pull_vars[[var_idx]]
 
-          private$pull_fun$assign_to_env(
+          private$pull_callable$assign_to_env(
             x = var_name,
             value = if (is(var_value, "RawDatasetConnector") || is(var_value, "RawDataset")) {
               get_raw_data(var_value)
@@ -277,7 +277,7 @@ RawDatasetConnector <- R6::R6Class( #nolint
 
       # eval CallableFunction with dynamic args
       tryCatch({
-        private$pull_fun$run(args = args, try = try)
+        private$pull_callable$run(args = args, try = try)
         }, error = function(e) {
           if (grepl("object 'conn' not found", e$message)) {
             output_message <- "This dataset connector requires connection object (conn) to be provided."

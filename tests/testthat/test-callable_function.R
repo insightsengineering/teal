@@ -132,7 +132,7 @@ test_that("test callable errors", {
 
   expect_error(
     callable_function(),
-    "is missing, with no default"
+    "A valid function name must be provided."
   )
 
 

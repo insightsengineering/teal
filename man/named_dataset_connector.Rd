@@ -6,7 +6,7 @@
 \usage{
 named_dataset_connector(
   dataname,
-  pull_fun,
+  pull_callable,
   code = character(0),
   script = character(0),
   label = character(0),
@@ -17,7 +17,7 @@ named_dataset_connector(
 \item{dataname}{(\code{character})\cr
 A given name for the dataset it may not contain spaces}
 
-\item{pull_fun}{(\code{CallableFunction})\cr
+\item{pull_callable}{(\code{CallableFunction})\cr
 function with necessary arguments set to fetch data from connection.}
 
 \item{code}{(\code{character})\cr

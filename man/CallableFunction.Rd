@@ -11,20 +11,29 @@ A \code{CallableFunction} class of objects
 \details{
 Object that stores function name with its arguments. Methods to get call and run it.
 }
+\section{Super class}{
+\code{\link[teal:Callable]{teal::Callable}} -> \code{CallableFunction}
+}
 \section{Methods}{
 \subsection{Public methods}{
 \itemize{
 \item \href{#method-new}{\code{CallableFunction$new()}}
-\item \href{#method-assign_to_env}{\code{CallableFunction$assign_to_env()}}
-\item \href{#method-is_failed}{\code{CallableFunction$is_failed()}}
 \item \href{#method-get_args}{\code{CallableFunction$get_args()}}
 \item \href{#method-get_call}{\code{CallableFunction$get_call()}}
-\item \href{#method-get_error_message}{\code{CallableFunction$get_error_message()}}
-\item \href{#method-run}{\code{CallableFunction$run()}}
 \item \href{#method-set_args}{\code{CallableFunction$set_args()}}
 \item \href{#method-set_arg_value}{\code{CallableFunction$set_arg_value()}}
 \item \href{#method-clone}{\code{CallableFunction$clone()}}
 }
+}
+\if{html}{
+\out{<details open ><summary>Inherited methods</summary>}
+\itemize{
+\item \out{<span class="pkg-link" data-pkg="teal" data-topic="Callable" data-id="assign_to_env">}\href{../../teal/html/Callable.html#method-assign_to_env}{\code{teal::Callable$assign_to_env()}}\out{</span>}
+\item \out{<span class="pkg-link" data-pkg="teal" data-topic="Callable" data-id="get_error_message">}\href{../../teal/html/Callable.html#method-get_error_message}{\code{teal::Callable$get_error_message()}}\out{</span>}
+\item \out{<span class="pkg-link" data-pkg="teal" data-topic="Callable" data-id="is_failed">}\href{../../teal/html/Callable.html#method-is_failed}{\code{teal::Callable$is_failed()}}\out{</span>}
+\item \out{<span class="pkg-link" data-pkg="teal" data-topic="Callable" data-id="run">}\href{../../teal/html/Callable.html#method-run}{\code{teal::Callable$run()}}\out{</span>}
+}
+\out{</details>}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-new"></a>}}
@@ -48,44 +57,6 @@ environment where function will be evaluated}
 }
 \subsection{Returns}{
 new \code{CallableFunction} object
-}
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-assign_to_env"></a>}}
-\if{latex}{\out{\hypertarget{method-assign_to_env}{}}}
-\subsection{Method \code{assign_to_env()}}{
-Assigns \code{x <- value} object to \code{env}
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{CallableFunction$assign_to_env(x, value)}\if{html}{\out{</div>}}
-}
-
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{x}}{(\code{character} value)\cr
-name of the variable in class environment}
-
-\item{\code{value}}{(\code{data.frame})\cr
-object to be assigned to \code{x}}
-}
-\if{html}{\out{</div>}}
-}
-\subsection{Returns}{
-arguments the function gets called with
-}
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-is_failed"></a>}}
-\if{latex}{\out{\hypertarget{method-is_failed}{}}}
-\subsection{Method \code{is_failed()}}{
-Check if evaluation of the function has not failed.
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{CallableFunction$is_failed()}\if{html}{\out{</div>}}
-}
-
-\subsection{Returns}{
-\code{TRUE} if evaluation of the function failed or \code{FALSE}
- if evaluation failed or function hasn't yet been called.
 }
 }
 \if{html}{\out{<hr>}}
@@ -124,48 +95,6 @@ dynamic arguments to function}
 }
 \subsection{Returns}{
 \code{call} or \code{character} depending on \code{deparse} argument
-}
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-get_error_message"></a>}}
-\if{latex}{\out{\hypertarget{method-get_error_message}{}}}
-\subsection{Method \code{get_error_message()}}{
-Get error message from last function execution
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{CallableFunction$get_error_message()}\if{html}{\out{</div>}}
-}
-
-\subsection{Returns}{
-\code{try-error} object with error message or \code{character(0)} if last
- function evaluation was successful.
-}
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-run"></a>}}
-\if{latex}{\out{\hypertarget{method-run}{}}}
-\subsection{Method \code{run()}}{
-Run function
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{CallableFunction$run(return = TRUE, args = NULL, try = FALSE)}\if{html}{\out{</div>}}
-}
-
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{return}}{(\code{logical} value)\cr
-whether to return an object}
-
-\item{\code{args}}{(\code{NULL} or named \code{list})\cr
-dynamic arguments passed to function. Dynamic arguments are executed in this call and are not
-saved which means that \code{self$get_call()} won't include them later.}
-
-\item{\code{try}}{(\code{logical} value)\cr
-whether perform function evaluation inside \code{try} clause}
-}
-\if{html}{\out{</div>}}
-}
-\subsection{Returns}{
-nothing or output from function depending on \code{return} argument
 }
 }
 \if{html}{\out{<hr>}}

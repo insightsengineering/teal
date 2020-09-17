@@ -219,7 +219,7 @@ RelationalDataConnector <- R6::R6Class( #nolint
         conn <- private$connection$get_conn()
         if (!is.null(conn)) {
           for (connector in private$datasets) {
-            connector$get_pull_fun()$assign_to_env("conn", conn)
+            connector$get_pull_callable()$assign_to_env("conn", conn)
           }
         }
       }

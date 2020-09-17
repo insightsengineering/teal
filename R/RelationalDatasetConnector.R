@@ -23,7 +23,7 @@ RelationalDatasetConnector <- R6::R6Class( #nolint
     #' @param dataname (\code{character})\cr
     #'  A given name for the dataset, it may not contain spaces.
     #'
-    #' @param pull_fun (\code{CallableFunction})\cr
+    #' @param pull_callable (\code{CallableFunction})\cr
     #'  function to load the data, must return a \code{data.frame}.
     #'
     #' @param keys (\code{keys})\cr
@@ -44,8 +44,8 @@ RelationalDatasetConnector <- R6::R6Class( #nolint
     #'   this/these object(s) should be included
     #'
     #' @return new \code{RelationalDatasetConnector} object
-    initialize = function(dataname, pull_fun, keys, code = character(0), label = character(0), vars = list()) {
-      super$initialize(dataname = dataname, pull_fun = pull_fun, code = code, label = label, vars = vars)
+    initialize = function(dataname, pull_callable, keys, code = character(0), label = character(0), vars = list()) {
+      super$initialize(dataname = dataname, pull_callable = pull_callable, code = code, label = label, vars = vars)
       private$set_keys(keys)
       return(invisible(self))
     },
@@ -60,13 +60,13 @@ RelationalDatasetConnector <- R6::R6Class( #nolint
     #' @description
     #' Pull the data
     #'
-    #' Read or create the data using \code{pull_fun} specified in the constructor.
+    #' Read or create the data using \code{pull_callable} specified in the constructor.
     #'
     #' @param args (\code{NULL} or named \code{list})\cr
-    #'  additional dynamic arguments for pull function. \code{args} can be omitted if \code{pull_fun}
+    #'  additional dynamic arguments for pull function. \code{args} can be omitted if \code{pull_callable}
     #'  from constructor already contains all necessary arguments to pull data. One can try
-    #'  to execute \code{pull_fun} directly by \code{x$pull_fun$run()} or to get code using
-    #'  \code{x$pull_fun$get_code()}. \code{args} specified in pull are used temporary to get data but
+    #'  to execute \code{pull_callable} directly by \code{x$pull_callable$run()} or to get code using
+    #'  \code{x$pull_callable$get_code()}. \code{args} specified in pull are used temporary to get data but
     #'  not saved in code.
     #' @param try (\code{logical} value)\cr
     #'  whether perform function evaluation inside \code{try} clause

@@ -65,8 +65,8 @@ test_that("One cached and one dependent connector wrapped in a single rcd data c
   expect_true(inherits(data, "RelationalDataConnector"))
   expect_true(all(vapply(items, inherits, logical(1), "RelationalDatasetConnector")))
 
-  expect_equal(items$ADSL$get_pull_fun()$get_call(), "radsl(cached = TRUE)")
-  expect_equal(items$ADAE$get_pull_fun()$get_call(), "radae(ADSL = ADSL)")
+  expect_equal(items$ADSL$get_pull_callable()$get_call(), "radsl(cached = TRUE)")
+  expect_equal(items$ADAE$get_pull_callable()$get_call(), "radae(ADSL = ADSL)")
   # pull args supplied this way does not persist to the reproducible code
   data$pull(args = list(seed = 2, na_percentage = .10))
 
@@ -94,11 +94,11 @@ test_that("Single rice_data connector with two rice dataset connectors", {
   expect_true(all(vapply(items, inherits, logical(1), "RelationalDatasetConnector")))
 
   expect_equal(
-    items$ADSL$get_pull_fun()$get_call(),
+    items$ADSL$get_pull_callable()$get_call(),
     "rice::rice_read(node = \"/path/to/ADSL\", prolong = TRUE, quiet = TRUE)"
   )
   expect_equal(
-    items$ADLB$get_pull_fun()$get_call(),
+    items$ADLB$get_pull_callable()$get_call(),
     "rice::rice_read(node = \"/path/to/ADLB\", prolong = TRUE, quiet = TRUE)"
   )
 
@@ -134,8 +134,8 @@ test_that("RelationalDataConnector with custom UI and server", {
   expect_true(inherits(x, "RelationalDataConnector"))
   expect_true(all(vapply(items, inherits, logical(1), "RelationalDatasetConnector")))
 
-  expect_equal(items$ADSL$get_pull_fun()$get_call(), "radsl()")
-  expect_equal(items$ADLB$get_pull_fun()$get_call(), "radlb(ADSL = ADSL)")
+  expect_equal(items$ADSL$get_pull_callable()$get_call(), "radsl()")
+  expect_equal(items$ADLB$get_pull_callable()$get_call(), "radlb(ADSL = ADSL)")
 
   expect_error(x$get_ui("main-app"), regex = "No UI set yet. Please use set_ui method first.")
 
@@ -227,10 +227,10 @@ test_that("Multiple rcd_data connectors wrapped in cdisc_data", {
 
   expect_equal(unname(get_dataname(data)), c("ADSL", "ADAE", "ADVS", "ADTTE"))
 
-  expect_equal(items$ADSL$get_pull_fun()$get_call(), "radsl()")
-  expect_equal(items$ADAE$get_pull_fun()$get_call(), "radae(ADSL = ADSL)")
-  expect_equal(items$ADVS$get_pull_fun()$get_call(), "radvs(ADSL = ADSL)")
-  expect_equal(items$ADTTE$get_pull_fun()$get_call(), "radtte(ADSL = ADSL)")
+  expect_equal(items$ADSL$get_pull_callable()$get_call(), "radsl()")
+  expect_equal(items$ADAE$get_pull_callable()$get_call(), "radae(ADSL = ADSL)")
+  expect_equal(items$ADVS$get_pull_callable()$get_call(), "radvs(ADSL = ADSL)")
+  expect_equal(items$ADTTE$get_pull_callable()$get_call(), "radtte(ADSL = ADSL)")
 
   expect_equal(
     get_code(data, "ADSL"),
@@ -296,8 +296,8 @@ test_that("RelationalData with single dataset and connector", {
       inherits(connectors[[2]], "RelationalDatasetConnector")
   )
 
-  expect_equal(items$ADSL$get_pull_fun()$get_call(), "radsl()")
-  expect_equal(items$ADAE$get_pull_fun()$get_call(), "radae(ADSL = ADSL)")
+  expect_equal(items$ADSL$get_pull_callable()$get_call(), "radsl()")
+  expect_equal(items$ADAE$get_pull_callable()$get_call(), "radae(ADSL = ADSL)")
   expect_identical(adtte$get_raw_data, items$ADTTE$get_raw_data)
 
   # simulate pull with a click of the submit button
@@ -386,12 +386,12 @@ test_that("RelationalData with mutliple datasets and connectors", {
   expect_true(all(vapply(items[-2], inherits, logical(1), "RelationalDatasetConnector")))
   expect_true(inherits(items$ADTTE, "RelationalDataset"))
 
-  expect_equal(items$ADSL$get_pull_fun()$get_call(), "radsl()")
-  expect_equal(items$ADAE$get_pull_fun()$get_call(), "radae(ADSL = ADSL)")
-  expect_equal(items$ADVS$get_pull_fun()$get_call(), "radvs(ADSL = ADSL)")
-  expect_equal(items$ADLB$get_pull_fun()$get_call(), "radlb(ADSL = ADSL)")
+  expect_equal(items$ADSL$get_pull_callable()$get_call(), "radsl()")
+  expect_equal(items$ADAE$get_pull_callable()$get_call(), "radae(ADSL = ADSL)")
+  expect_equal(items$ADVS$get_pull_callable()$get_call(), "radvs(ADSL = ADSL)")
+  expect_equal(items$ADLB$get_pull_callable()$get_call(), "radlb(ADSL = ADSL)")
   expect_equal(
-    items$ADSAMP$get_pull_fun()$get_call(),
+    items$ADSAMP$get_pull_callable()$get_call(),
     "source(file = \"delayed_data_script/asdamp_with_adsl.R\", local = TRUE)$value"
   )
   expect_identical(adtte$get_raw_data, items$ADTTE$get_raw_data)

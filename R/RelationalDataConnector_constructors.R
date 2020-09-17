@@ -301,7 +301,7 @@ teradata_data <- function(..., connection = teradata_connection()) {
         conn <- connection$get_conn()
         if (!is.null(conn)) {
           for (connector in connectors) {
-            connector$get_pull_fun()$assign_to_env("conn", conn)
+            connector$get_pull_callable()$assign_to_env("conn", conn)
           }
         }
 
