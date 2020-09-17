@@ -268,7 +268,7 @@ trigger_after_first_cycle <- function(expr) { # nousage # nolint
 #' @inheritParams filter_calls_module
 #' @inheritParams init
 #'
-predefined_filters_module <- function(label = "Apply filters", filter) {
+predefined_filters_module <- function(label = "Apply filters", filter) { # nousage # nolint
   stopifnot(
     is_character_single(label),
     is_fully_named_list(filter)

@@ -214,4 +214,9 @@ print.teal_modules <- function(x, ...) {
   return(invisible(s))
 }
 
+#' Print `teal_module`
+#' @md
+#' @param x `teal_module`
+#' @param ... parameters passed to `toString`
+#' @export
 print.teal_module <- print.teal_modules

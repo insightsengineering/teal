@@ -7,7 +7,7 @@
 #' `\link{srv_teal}`.
 #' @md
 #' @return dummy filter states
-get_dummy_filter <- function() {
+get_dummy_filter <- function() { # nousage # nolint
   res <- list(
     ADSL = list(SEX = list(choices = "M", keep_na = TRUE), AGE = default_filter()),
     ADLB = list(ASEQ = default_filter())
