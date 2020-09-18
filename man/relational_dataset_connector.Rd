@@ -17,6 +17,7 @@
 \alias{code_cdisc_dataset_connector}
 \alias{teradata_cdisc_dataset_connector}
 \alias{csv_cdisc_dataset_connector}
+\alias{fun_dataset_connector}
 \alias{fun_cdisc_dataset_connector}
 \title{Create a new \code{RelationalDatasetConnector} object}
 \usage{
@@ -163,6 +164,17 @@ csv_cdisc_dataset_connector(
   ...
 )
 
+fun_dataset_connector(
+  dataname,
+  func,
+  func_args = NULL,
+  label = character(0),
+  code = character(0),
+  script = character(0),
+  keys,
+  ...
+)
+
 fun_cdisc_dataset_connector(
   dataname,
   func,
@@ -170,7 +182,6 @@ fun_cdisc_dataset_connector(
   label = character(0),
   code = character(0),
   script = character(0),
-  keys = get_cdisc_keys(dataname),
   ...
 )
 }
@@ -221,7 +232,7 @@ after it is produced.}
 \item{table}{(\code{character}) table name}
 
 \item{func}{(\code{function})\cr
-function to obtain dataset.}
+a custom function to obtain dataset.}
 
 \item{func_args}{(\code{list})\cr
 additional arguments for (\code{func})\cr.}
@@ -281,6 +292,9 @@ automatically by \code{dataname}.
 \code{csv_cdisc_dataset_connector} -
 Create a \code{RelationalDatasetConnector} from \code{csv} (or general delimited) file
 with keys assigned automatically by \code{dataname}.
+
+\code{fun_dataset_connector} -
+Create a \code{RelationalDatasetConnector} from \code{function} and its arguments.
 
 \code{fun_cdisc_dataset_connector} -
 Create a \code{RelationalDatasetConnector} from \code{function} and its arguments
@@ -389,8 +403,8 @@ my_data <- function(...) {
     zz = factor(sample(letters[1:3], 40, replace = TRUE)),
     NAs = rep(NA, 40)
   )
-  x$w <- as.numeric(mvrnorm(40, 0, 1))
-  x$ww <- as.numeric(mvrnorm(40, 0, 1))
+  x$w <- as.numeric(MASS::mvrnorm(40, 0, 1))
+  x$ww <- as.numeric(MASS::mvrnorm(40, 0, 1))
   rtables::var_labels(x) <- c("STUDYID", "USUBJID", "z", "zz", "NAs", "w", "ww")
   x
 }
@@ -420,8 +434,8 @@ my_data <- function(global_var = x) {
     zz = factor(sample(letters[1:3], 40, replace = TRUE)),
     NAs = rep(NA, 40)
   )
-  x$w <- as.numeric(mvrnorm(40, 0, 1))
-  x$ww <- as.numeric(mvrnorm(40, 0, 1))
+  x$w <- as.numeric(MASS::mvrnorm(40, 0, 1))
+  x$ww <- as.numeric(MASS::mvrnorm(40, 0, 1))
   rtables::var_labels(x) <- c("STUDYID", "USUBJID", "z", "zz", "NAs", "w", "ww")
   x
 }
@@ -446,8 +460,8 @@ my_data <- function() {
     zz = factor(sample(letters[1:3], 40, replace = TRUE)),
     NAs = rep(NA, 40)
   )
-  x$w <- as.numeric(mvrnorm(40, 0, 1))
-  x$ww <- as.numeric(mvrnorm(40, 0, 1))
+  x$w <- as.numeric(MASS::mvrnorm(40, 0, 1))
+  x$ww <- as.numeric(MASS::mvrnorm(40, 0, 1))
   rtables::var_labels(x) <- c("STUDYID", "USUBJID", "z", "zz", "NAs", "w", "ww")
   x
 }

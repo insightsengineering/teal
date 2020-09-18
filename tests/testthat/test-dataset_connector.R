@@ -555,11 +555,13 @@ test_that("fun_cdisc_dataset_connector", {
       zz = factor(sample(letters[1:3], 40, replace = T)),
       NAs = rep(NA, 40)
     )
-    x$w <- as.numeric(mvrnorm(40, 0, 1))
-    x$ww <- as.numeric(mvrnorm(40, 0, 1))
+    x$w <- as.numeric(MASS::mvrnorm(40, 0, 1))
+    x$ww <- as.numeric(MASS::mvrnorm(40, 0, 1))
     rtables::var_labels(x) <- c("STUDYID", "USUBJID", "z", "zz", "NAs", "w", "ww")
     x
   }
+
+  org_env_my_data_1 <- environment(my_data_1)
 
   global_var <- 40
   my_data_wrong <- function() {
@@ -572,8 +574,8 @@ test_that("fun_cdisc_dataset_connector", {
       zz = factor(sample(letters[1:3], 40, replace = T)),
       NAs = rep(NA, 40)
     )
-    x$w <- as.numeric(mvrnorm(40, 0, 1))
-    x$ww <- as.numeric(mvrnorm(40, 0, 1))
+    x$w <- as.numeric(MASS::mvrnorm(40, 0, 1))
+    x$ww <- as.numeric(MASS::mvrnorm(40, 0, 1))
     rtables::var_labels(x) <- c("STUDYID", "USUBJID", "z", "zz", "NAs", "w", "ww")
     x
   }
@@ -588,10 +590,34 @@ test_that("fun_cdisc_dataset_connector", {
     func = my_data_wrong
   )
 
-  expect_message(y_1$pull())
+  y_1$pull()
+
+  expect_identical(org_env_my_data_1, environment(my_data_1))
 
   expect_error(y_wrong$pull())
 
   expect_identical(get_raw_data(y_1), my_data_1())
+
+  fun_direct <- fun_cdisc_dataset_connector(
+    dataname = "ADSL",
+    func = radsl,
+    func_args = list(seed = 1234)
+  )
+
+  fun_direct2 <- fun_cdisc_dataset_connector(
+    dataname = "ADSL",
+    func = random.cdisc.data::radsl,
+    func_args = list(seed = 1234)
+  )
+  fun_direct$pull()
+
+  fun_direct2$pull()
+
+  data_1 <- get_raw_data(fun_direct)
+  data_2 <- get_raw_data(fun_direct2)
+
+  expect_true(is.data.frame(data_1))
+  expect_true(is.data.frame(data_2))
+  expect_identical(data_1, data_2)
 
 })

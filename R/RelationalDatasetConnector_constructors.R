@@ -778,13 +778,12 @@ csv_cdisc_dataset_connector <- function(dataname,
 
 
 #' @description
-#' \code{fun_cdisc_dataset_connector} -
-#' Create a \code{RelationalDatasetConnector} from \code{function} and its arguments
-#' with keys assigned automatically by \code{dataname}.
+#' \code{fun_dataset_connector} -
+#' Create a \code{RelationalDatasetConnector} from \code{function} and its arguments.
 #'
 #' @inheritParams relational_dataset_connector
 #' @param func (\code{function})\cr
-#'   function to obtain dataset.
+#'   a custom function to obtain dataset.
 #' @param func_args (\code{list})\cr
 #'   additional arguments for (\code{func})\cr.
 #' @rdname relational_dataset_connector
@@ -804,8 +803,8 @@ csv_cdisc_dataset_connector <- function(dataname,
 #'     zz = factor(sample(letters[1:3], 40, replace = TRUE)),
 #'     NAs = rep(NA, 40)
 #'   )
-#'   x$w <- as.numeric(mvrnorm(40, 0, 1))
-#'   x$ww <- as.numeric(mvrnorm(40, 0, 1))
+#'   x$w <- as.numeric(MASS::mvrnorm(40, 0, 1))
+#'   x$ww <- as.numeric(MASS::mvrnorm(40, 0, 1))
 #'   rtables::var_labels(x) <- c("STUDYID", "USUBJID", "z", "zz", "NAs", "w", "ww")
 #'   x
 #' }
@@ -835,8 +834,8 @@ csv_cdisc_dataset_connector <- function(dataname,
 #'     zz = factor(sample(letters[1:3], 40, replace = TRUE)),
 #'     NAs = rep(NA, 40)
 #'   )
-#'   x$w <- as.numeric(mvrnorm(40, 0, 1))
-#'   x$ww <- as.numeric(mvrnorm(40, 0, 1))
+#'   x$w <- as.numeric(MASS::mvrnorm(40, 0, 1))
+#'   x$ww <- as.numeric(MASS::mvrnorm(40, 0, 1))
 #'   rtables::var_labels(x) <- c("STUDYID", "USUBJID", "z", "zz", "NAs", "w", "ww")
 #'   x
 #' }
@@ -861,8 +860,8 @@ csv_cdisc_dataset_connector <- function(dataname,
 #'     zz = factor(sample(letters[1:3], 40, replace = TRUE)),
 #'     NAs = rep(NA, 40)
 #'   )
-#'   x$w <- as.numeric(mvrnorm(40, 0, 1))
-#'   x$ww <- as.numeric(mvrnorm(40, 0, 1))
+#'   x$w <- as.numeric(MASS::mvrnorm(40, 0, 1))
+#'   x$ww <- as.numeric(MASS::mvrnorm(40, 0, 1))
 #'   rtables::var_labels(x) <- c("STUDYID", "USUBJID", "z", "zz", "NAs", "w", "ww")
 #'   x
 #' }
@@ -874,14 +873,14 @@ csv_cdisc_dataset_connector <- function(dataname,
 #' y$pull()
 #' }
 #'
-fun_cdisc_dataset_connector <- function(dataname,
-                                        func,
-                                        func_args = NULL,
-                                        label = character(0),
-                                        code = character(0),
-                                        script = character(0),
-                                        keys = get_cdisc_keys(dataname),
-                                        ...) {
+fun_dataset_connector <- function(dataname,
+                                  func,
+                                  func_args = NULL,
+                                  label = character(0),
+                                  code = character(0),
+                                  script = character(0),
+                                  keys,
+                                  ...) {
 
   vars <- list(...)
 
@@ -891,7 +890,22 @@ fun_cdisc_dataset_connector <- function(dataname,
 
   stopifnot(is.list(func_args) || is.null(func_args))
 
-  fun_name <- substitute(func)
+  fun_name <- if (length(sys.calls()) == 1) substitute(func) else substitute(func, env = parent.frame())
+
+  cal <- if (!is.symbol(fun_name)) as.call(fun_name) else NULL
+
+  is_pak <- FALSE
+  is_locked <- TRUE
+  if ((!is.null(cal)) && identical(cal[[1]], as.symbol("::"))) {
+    pak <- cal[[2]]
+    pak_char <- as.character(pak) #nolint
+    library(pak_char, character.only = TRUE)
+    fun_name <- cal[[3]]
+    is_pak <- TRUE
+    is_locked <- TRUE
+  } else {
+    is_locked <- environmentIsLocked(environment(func))
+  }
 
   fun_char <- as.character(fun_name)
 
@@ -907,12 +921,16 @@ fun_cdisc_dataset_connector <- function(dataname,
     }
   }
 
-  eval(bquote(.(fun_name) <- rlang::set_env(.(fun_name), .(ee))), envir = parent.frame())
+  original_env <- environment(func)
+
+  if (!is_pak && !is_locked) {
+    eval(bquote(.(fun_name) <- rlang::set_env(.(fun_name), .(ee))), envir = original_env)
+  }
 
   x_fun <- CallableFunction$new(fun_name, env = ee)
   x_fun$set_args(func_args)
 
-  vars[[fun_char]] <- get(fun_char, parent.frame())
+  vars[[fun_char]] <- get(fun_char, environment(func))
 
   x <- relational_dataset_connector(
     dataname = dataname,
@@ -921,6 +939,45 @@ fun_cdisc_dataset_connector <- function(dataname,
     code = code_from_script(code, script),
     label = label,
     vars = vars
+  )
+
+  if (!is_pak && !is_locked) {
+    eval(bquote(.(fun_name) <- rlang::set_env(.(fun_name), .(original_env))), envir = original_env)
+  }
+
+  return(x)
+
+}
+
+#' @description
+#' \code{fun_cdisc_dataset_connector} -
+#' Create a \code{RelationalDatasetConnector} from \code{function} and its arguments
+#' with keys assigned automatically by \code{dataname}.
+#'
+#' @inheritParams relational_dataset_connector
+#' @param func (\code{function})\cr
+#'   a custom function to obtain dataset.
+#' @param func_args (\code{list})\cr
+#'   additional arguments for (\code{func})\cr.
+#' @rdname relational_dataset_connector
+#' @export
+fun_cdisc_dataset_connector <- function(dataname,
+                                        func,
+                                        func_args = NULL,
+                                        label = character(0),
+                                        code = character(0),
+                                        script = character(0),
+                                        ...) {
+
+  x <- fun_dataset_connector(
+    dataname,
+    func,
+    func_args = func_args,
+    label = label,
+    code = code,
+    script = script,
+    keys = get_cdisc_keys(dataname),
+    ...
   )
 
   return(x)
