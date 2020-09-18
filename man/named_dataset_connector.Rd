@@ -42,5 +42,6 @@ this/these object(s) should be included.}
 new \code{NamedDatasetConnector} object
 }
 \description{
+\ifelse{html}{\out{<a href='https://www.tidyverse.org/lifecycle/#experimental'><img src='figures/lifecycle-experimental.svg' alt='Experimental lifecycle'></a>}}{\strong{Experimental}}
 Create \code{NamedDatasetConnector} from \link{callable_function}.
 }

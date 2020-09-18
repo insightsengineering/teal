@@ -30,5 +30,5 @@ then that name rather than the value is displayed to the user.}
 \code{NULL}
 }
 \description{
-Update \code{optionalSelectInput}
+\ifelse{html}{\out{<a href='https://www.tidyverse.org/lifecycle/#maturing'><img src='figures/lifecycle-maturing.svg' alt='Maturing lifecycle'></a>}}{\strong{Maturing}}
 }

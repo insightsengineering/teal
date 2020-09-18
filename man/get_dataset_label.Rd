@@ -20,8 +20,7 @@ get_dataset_label(x)
 label (\code{character}) Label to describe the dataset
 }
 \description{
-S3 method for getting a label of
-(\code{RelationalDatasetConnector} or \code{NamedDataset}) R6 object
+\ifelse{html}{\out{<a href='https://www.tidyverse.org/lifecycle/#experimental'><img src='figures/lifecycle-experimental.svg' alt='Experimental lifecycle'></a>}}{\strong{Experimental}}
 }
 \examples{
 library(random.cdisc.data)

@@ -13,7 +13,7 @@ data_label(data)
 (\code{character}) label or \code{NULL} if it's missing
 }
 \description{
-Get dataset label attribute
+\ifelse{html}{\out{<a href='https://www.tidyverse.org/lifecycle/#maturing'><img src='figures/lifecycle-maturing.svg' alt='Maturing lifecycle'></a>}}{\strong{Maturing}}
 }
 \examples{
 library(random.cdisc.data)

@@ -40,21 +40,21 @@ key variables of the data set to be filtered.
 \code{delayed_data} objects can be created via \code{variable_choices} or \code{value_choices}.}
 
 \item{choices}{(\code{character}) or (\code{delayed_data}) object.
-  Named character vector to define the choices
-  of a shiny \code{\link[shiny]{selectInput}}. These choices will be used to filter the
-  dataset.
+Named character vector to define the choices
+of a shiny \code{\link[shiny]{selectInput}}. These choices will be used to filter the
+dataset.
 
-  These shall be filter values of the \code{vars} input separated by the separator(\code{sep}). Please
-  watch out that the filter values have to follow the order of the \code{vars} input. In the following
-  example we will show how to filter two columns:
+These shall be filter values of the \code{vars} input separated by the separator(\code{sep}). Please
+watch out that the filter values have to follow the order of the \code{vars} input. In the following
+example we will show how to filter two columns:
 
-   \code{vars = c("PARAMCD","AVISIT")} and \code{choices = c("CRP - BASELINE", "ALT - BASELINE")}
- will lead to a filtering of
- \code{(PARAMCD == "CRP" & AVISIT == "BASELINE") | (PARAMCD == "ALT" & AVISIT == "BASELINE")}.
+\code{vars = c("PARAMCD","AVISIT")} and \code{choices = c("CRP - BASELINE", "ALT - BASELINE")}
+will lead to a filtering of
+\code{(PARAMCD == "CRP" & AVISIT == "BASELINE") | (PARAMCD == "ALT" & AVISIT == "BASELINE")}.
 
- The \code{sep} input has to be \code{" - "} in this case.
+The \code{sep} input has to be \code{" - "} in this case.
 
- \code{delayed_data} objects can be created via \code{variable_choices} or \code{value_choices}.}
+\code{delayed_data} objects can be created via \code{variable_choices} or \code{value_choices}.}
 
 \item{selected}{(\code{character} or \code{delayed_data} object) Named character vector to define the selected
 values of a shiny \code{\link[shiny]{selectInput}} (default values). This value will
@@ -73,6 +73,7 @@ on top of this specific shiny \code{\link[shiny]{selectInput}}.}
 \code{filter_spec}-S3-class object or \code{delayed_filter_spec}-S3-class object.
 }
 \description{
+\ifelse{html}{\out{<a href='https://www.tidyverse.org/lifecycle/#maturing'><img src='figures/lifecycle-maturing.svg' alt='Maturing lifecycle'></a>}}{\strong{Maturing}}
 It consists in choices and additionally the variable names for the choices
 }
 \details{
@@ -84,8 +85,8 @@ The following examples should show how a \code{filter_spec} setup will influence
 the drop-down menu the app user will see:
 
 \enumerate{
-  \item{Filtering two variables }{
-    \preformatted{
+\item{Filtering two variables }{
+\preformatted{
      filter_spec(
        vars = c("PARAMCD", "CNSR"),
        sep = "-",
@@ -96,16 +97,16 @@ the drop-down menu the app user will see:
      )
    }
 
-   \if{html}{
+\if{html}{
      \figure{filter_spec_1.png}{options: alt="Filtering two variables"}
    }
-   \if{html}{
+\if{html}{
      \figure{filter_spec_11.png}{options: alt="Filtering two variables"}
    }
-  }
+}
 
-  \item{Filtering a single variable }{
-    \preformatted{
+\item{Filtering a single variable }{
+\preformatted{
      filter_spec(
        vars = c("PARAMCD"),
        sep = "-",
@@ -116,16 +117,16 @@ the drop-down menu the app user will see:
      )
    }
 
-   \if{html}{
+\if{html}{
      \figure{filter_spec_2.png}{options: alt="Filtering two variables"}
    }
-   \if{html}{
+\if{html}{
      \figure{filter_spec_21.png}{options: alt="Filtering two variables"}
    }
-  }
+}
 
-  \item{Filtering a single variable with multiple selections }{
-    \preformatted{
+\item{Filtering a single variable with multiple selections }{
+\preformatted{
      filter_spec(
        vars = c("PARAMCD"),
        sep = "-",
@@ -136,15 +137,15 @@ the drop-down menu the app user will see:
      )
    }
 
-   \if{html}{
+\if{html}{
      \figure{filter_spec_3.png}{options: alt="Filtering two variables"}
    }
-   \if{html}{
+\if{html}{
      \figure{filter_spec_31.png}{options: alt="Filtering two variables"}
    }
-  }
-  \item{Delayed version}{
-    \preformatted{
+}
+\item{Delayed version}{
+\preformatted{
       adsl_filter <- filter_spec(
         vars = variable_choices("ADSL", "SEX"),
         sep = "-",
@@ -154,7 +155,7 @@ the drop-down menu the app user will see:
         label = "Choose endpoint and Censor"
       )
     }
-  }
+}
 
 }
 }

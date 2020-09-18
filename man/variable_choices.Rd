@@ -36,7 +36,7 @@ See examples for more details.}
 named character vector with additional attributes or \code{delayed_data} object
 }
 \description{
-Wrapper on \code{\link{choices_labeled}} to label variables basing on existing labels in data
+\ifelse{html}{\out{<a href='https://www.tidyverse.org/lifecycle/#maturing'><img src='figures/lifecycle-maturing.svg' alt='Maturing lifecycle'></a>}}{\strong{Maturing}}
 }
 \examples{
 library(random.cdisc.data)

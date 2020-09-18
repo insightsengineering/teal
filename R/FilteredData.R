@@ -1269,13 +1269,15 @@ FilteredData <- R6::R6Class( # nolint
 
 #' Refer to the default filter state
 #'
+#' @md
+#' @description `r lifecycle::badge("maturing")`
 #' You can use it to refer to the variable's default filter state,
 #' which will be set when `FilteredData::set_data` is called.
 #' It can be used together with `teal::init`.
 #'
+#' @details
 #' This is a simple wrapper around an S3 class.
 #'
-#' @md
 #' @export
 #' @examples
 #' default_filter() # test printing

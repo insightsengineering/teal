@@ -50,14 +50,14 @@ multiple files is joined together.}
 (\code{character}) code of import and preparation of data for teal application.
 }
 \description{
+\ifelse{html}{\out{<a href='https://www.tidyverse.org/lifecycle/#experimental'><img src='figures/lifecycle-experimental.svg' alt='Experimental lifecycle'></a>}}{\strong{Experimental}}
 Reads code from specified files or an R6 object.
-}
-\details{
+
 \itemize{
-  \item{if reading from R6: }{get the R code stored inside the object.}
-  \item{if reading from files: }{
-    Includes code from source if reading from files. Method reads code without
-  }
+\item{if reading from R6: }{get the R code stored inside the object.}
+\item{if reading from files: }{
+Includes code from source if reading from files. Method reads code without
+}
 }
 \code{library()} or \code{require()} calls. Function created for teal app, but can be used with any file.
 Get code from certain files and for specific datasets
@@ -67,8 +67,8 @@ Reads code from specified files and specific code chunks.
 Code chunks are described with:
 
 \itemize{
-  \item{to open chunk }{\code{#code>} or \code{#code ADSL>} or \code{#code ADSL ADTTE>}}
-  \item{to close chunk }{\code{#<code} or \code{#<ADSL code} or \code{#<ADSL ADTTE code}}
+\item{to open chunk }{\code{#code>} or \code{#code ADSL>} or \code{#code ADSL ADTTE>}}
+\item{to close chunk }{\code{#<code} or \code{#<ADSL code} or \code{#<ADSL ADTTE code}}
 }
 }
 \examples{

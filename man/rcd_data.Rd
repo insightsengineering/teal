@@ -18,6 +18,7 @@ In case \code{cached = FALSE}, please watch the order and call \code{ADSL} gener
 An object of class \code{RelationalDataConnector}
 }
 \description{
+\ifelse{html}{\out{<a href='https://www.tidyverse.org/lifecycle/#experimental'><img src='figures/lifecycle-experimental.svg' alt='Experimental lifecycle'></a>}}{\strong{Experimental}}
 Build data connector for \code{random.cdisc.data} functions or datasets
 }
 \details{

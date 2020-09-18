@@ -15,6 +15,7 @@ read_script(file, dataname = NULL)
 (\code{character}) vector with the code
 }
 \description{
+\ifelse{html}{\out{<a href='https://www.tidyverse.org/lifecycle/#maturing'><img src='figures/lifecycle-maturing.svg' alt='Maturing lifecycle'></a>}}{\strong{Maturing}}
 Comments will be excluded
 }
 \examples{

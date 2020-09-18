@@ -64,6 +64,7 @@ It contains all input values.
 If \code{select_spec}, then the function double checks the \code{choices} and \code{selected} inputs.
 }
 \description{
+\ifelse{html}{\out{<a href='https://www.tidyverse.org/lifecycle/#maturing'><img src='figures/lifecycle-maturing.svg' alt='Maturing lifecycle'></a>}}{\strong{Maturing}}
 \code{select_spec} is used inside teal to create a \code{\link[shiny]{selectInput}}
 that will select columns from a dataset.
 }
@@ -72,8 +73,8 @@ To give you some more insights into this function there are several examples. Th
 start by a data set containing the columns \code{"AGE"}, \code{"AVAL"} and \code{"BMRKR1"}.
 
 \enumerate{
-  \item{Selection with just one column allowed }{
-    \preformatted{
+\item{Selection with just one column allowed }{
+\preformatted{
 select = select_spec(
   choices = c("AVAL", "BMRKR1", "AGE"),
   selected = c("AVAL"),
@@ -82,15 +83,15 @@ select = select_spec(
   label = "Column"
 )
     }
-    \if{html}{
+\if{html}{
       \figure{select_spec_1.png}{options: alt="Selection with just one column allowed"}
     }
-    \if{html}{
+\if{html}{
       \figure{select_spec_11.png}{options: alt="Selection with just one column allowed"}
     }
-  }
-  \item{Selection with just multiple columns allowed }{
-    \preformatted{
+}
+\item{Selection with just multiple columns allowed }{
+\preformatted{
 select = select_spec(
   choices = c("AVAL", "BMRKR1", "AGE"),
   selected = c("AVAL", "BMRKR1"),
@@ -99,15 +100,15 @@ select = select_spec(
   label = "Columns"
 )
     }
-    \if{html}{
+\if{html}{
       \figure{select_spec_2.png}{options: alt="Selection with just multiple columns allowed"}
     }
-    \if{html}{
+\if{html}{
       \figure{select_spec_21.png}{options: alt="Selection with just multiple columns allowed"}
     }
-  }
-  \item{Selection without user access }{
-    \preformatted{
+}
+\item{Selection without user access }{
+\preformatted{
 select = select_spec(
   choices = c("AVAL", "BMRKR1"),
   selected = c("AVAL", "BMRKR1"),
@@ -116,12 +117,12 @@ select = select_spec(
   label = "Columns"
 )
     }
-    \if{html}{
+\if{html}{
       \figure{select_spec_3.png}{options: alt="Selection without user access"}
     }
-  }
-  \item{Delayed version}{
-    \preformatted{
+}
+\item{Delayed version}{
+\preformatted{
       adsl_select <- select_spec(
         label = "Select variable:",
         choices = variable_choices("ADSL", c("BMRKR1", "BMRKR2")),
@@ -130,7 +131,7 @@ select = select_spec(
         fixed = FALSE
       )
     }
-  }
+}
 }
 }
 \examples{

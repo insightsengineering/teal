@@ -37,7 +37,7 @@ this/these object(s) should be included as named element of the list.}
 object of class \code{RelaionalDataset}
 }
 \description{
-Create \code{RelationalDataset} object
+\ifelse{html}{\out{<a href='https://www.tidyverse.org/lifecycle/#experimental'><img src='figures/lifecycle-experimental.svg' alt='Experimental lifecycle'></a>}}{\strong{Experimental}}
 }
 \examples{
 library(random.cdisc.data)

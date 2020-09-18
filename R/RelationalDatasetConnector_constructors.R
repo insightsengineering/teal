@@ -1,5 +1,7 @@
 #' Create \code{RawDatasetConnector} object
 #'
+#' @md
+#' @description `r lifecycle::badge("experimental")`
 #' Create \link{RawDatasetConnector} object to execute specific call to fetch data
 #' @param pull_callable (\code{CallableFunction})\cr
 #'   function with necessary arguments set to fetch data from connection.
@@ -19,7 +21,8 @@ raw_dataset_connector <- function(pull_callable) {
 
 #' Create a new \code{NamedDatasetConnector} object
 #'
-#' @description
+#' @md
+#' @description `r lifecycle::badge("experimental")`
 #'  Create \code{NamedDatasetConnector} from \link{callable_function}.
 #'
 #' @inheritParams raw_dataset_connector
@@ -72,7 +75,8 @@ named_dataset_connector <- function(dataname,
 
 #' Create a new \code{RelationalDatasetConnector} object
 #'
-#' @description
+#' @md
+#' @description  `r lifecycle::badge("experimental")`
 #'  Create \code{RelationalDatasetConnector} from \link{callable_function}.
 #'
 #' @inheritParams named_dataset_connector

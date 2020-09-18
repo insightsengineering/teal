@@ -1,6 +1,9 @@
 #' Data input for teal app
 #'
+#' @md
+#' @description `r lifecycle::badge("experimental")`
 #' Abstract function that creates dataset object with connected metadata.
+#'
 #' @param dataname (\code{character} value)\cr
 #'   name of dataset.
 #'
@@ -82,6 +85,8 @@ dataset <- function(dataname,
 
 #' Load \code{RelationalDataset} object from a file
 #'
+#' @md
+#' @description `r lifecycle::badge("experimental")`
 #' Please note that the script has to end with a call creating desired object. The error will be raised otherwise.
 #'
 #' @param path (\code{character}) string giving the pathname of the file to read from.
@@ -135,9 +140,12 @@ dataset_file <- function(path, code = get_code(path)) {
 
 #' Data input for teal app
 #'
+#' @md
+#' @description `r lifecycle::badge("maturing")`
 #' Function that creates CDISC dataset object
 #'
 #' @inheritParams dataset
+#'
 #' @return a dataset with connected metadata
 #'
 #' @export
@@ -159,6 +167,8 @@ cdisc_dataset <- function(dataname,
 
 #' Load \code{CDISC} \code{RelationalDataset} object from a file
 #'
+#' @md
+#' @description `r lifecycle::badge("maturing")`
 #' Please note that the script has to end with a call creating desired object. The error will be raised otherwise.
 #'
 #' @inheritParams dataset_file
@@ -210,6 +220,9 @@ cdisc_dataset_file <- function(path, code = get_code(path)) {
 
 #' Get dataset label attribute
 #'
+#' @md
+#' @description `r lifecycle::badge("maturing")`
+#'
 #' @param data \code{data.frame} from which attribute is extracted
 #'
 #' @return (\code{character}) label or \code{NULL} if it's missing
@@ -224,6 +237,9 @@ data_label <- function(data) {
 }
 
 #' Set dataset label attribute
+#'
+#' @md
+#' @description `r lifecycle::badge("maturing")`
 #'
 #' @param x \code{data.frame} for which attribute is set
 #' @param value (\code{character}) label
@@ -246,6 +262,9 @@ data_label <- function(data) {
 }
 
 #' Function that returns a keys object
+#'
+#' @md
+#' @description `r lifecycle::badge("maturing")`
 #'
 #' @param primary vector of primary key values
 #' @param foreign vector of foreign key values
@@ -272,6 +291,8 @@ keys <- function(primary, foreign, parent) {
 #' Function that returns the default keys for a `CDISC` dataset by name
 #'
 #' @md
+#' @description `r lifecycle::badge("maturing")`
+#'
 #' @param dataname name of the `CDISC` dataset
 #'
 #' @return \code{keys} object
@@ -300,6 +321,9 @@ get_cdisc_keys <- function(dataname) {
 
 #' Function that extract labels from CDISC dataset
 #'
+#' @md
+#' @description `r lifecycle::badge("maturing")`
+#'
 #' @param data (\code{data.frame}) table to extract the labels from
 #' @inheritParams rtables::var_labels
 #'
@@ -327,6 +351,9 @@ get_labels <- function(data, fill = TRUE) {
 }
 
 #' Function that extract column labels from CDISC dataset
+#'
+#' @md
+#' @description `r lifecycle::badge("maturing")`
 #'
 #' @param data (\code{data.frame}) any CDISC data set
 #' @param columns optional, (\code{character}) column names to extract the labels from. If (\code{NULL}) then all
@@ -432,7 +459,10 @@ check_foreign_keys <- function(datasets_keys) {
 
 #' Data input for teal app
 #'
+#' @md
+#' @description `r lifecycle::badge("maturing")`
 #' Function passes datasets to teal application with option to read preprocessing code and reproducibility checking.
+#'
 #' @param ... (\code{RelationalDataConnector}, \code{RelationalDataset} or
 #'   \code{RelationalDatasetConnector}) elements to include where `ADSL` data is mandatory.
 #' @param code (\code{character}) code to reproduce the datasets.
@@ -514,6 +544,9 @@ cdisc_data <- function(...,
 
 
 #' Load \code{cdisc_data} object from a file
+#'
+#' @md
+#' @description `r lifecycle::badge("maturing")`
 #'
 #' @param path A (\code{connection}) or a (\code{character}) string giving the pathname
 #'   of the file or URL to read from. "" indicates the connection \code{stdin}.

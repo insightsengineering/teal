@@ -2,9 +2,7 @@
 % Please edit documentation in R/choices_labeled.R
 \name{choices_labeled}
 \alias{choices_labeled}
-\title{Set "<choice>: <label>" type of Names
-This is often useful for \code{\link[teal]{choices_selected}} as it marks up the dropdown boxes
-for \code{\link[shiny]{selectInput}}.}
+\title{Set "\verb{<choice>:<label>}" type of Names}
 \usage{
 choices_labeled(choices, labels, subset = NULL, types = NULL)
 }
@@ -24,7 +22,7 @@ icons to the \code{\link[teal]{choices_selected}} drop down box}
 a named character vector
 }
 \description{
-Set "<choice>: <label>" type of Names
+\ifelse{html}{\out{<a href='https://www.tidyverse.org/lifecycle/#maturing'><img src='figures/lifecycle-maturing.svg' alt='Maturing lifecycle'></a>}}{\strong{Maturing}}
 This is often useful for \code{\link[teal]{choices_selected}} as it marks up the dropdown boxes
 for \code{\link[shiny]{selectInput}}.
 }

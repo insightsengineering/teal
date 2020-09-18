@@ -1,6 +1,9 @@
 #' S3 method for getting a label of
 #' (\code{RelationalDatasetConnector} or \code{NamedDataset}) R6 object
 #'
+#' @md
+#' @description `r lifecycle::badge("experimental")`
+#'
 #' @param x (\code{RelationalDatasetConnector} or \code{NamedDataset}) R6 object
 #'
 #' @return label (\code{character}) Label to describe the dataset

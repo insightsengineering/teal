@@ -15,7 +15,7 @@ resolve_delayed(x, datasets)
 Resolved object.
 }
 \description{
-Resolve delayed inputs by evaluating the code within the provided datasets
+\ifelse{html}{\out{<a href='https://www.tidyverse.org/lifecycle/#maturing'><img src='figures/lifecycle-maturing.svg' alt='Maturing lifecycle'></a>}}{\strong{Maturing}}
 }
 \examples{
 library(random.cdisc.data)

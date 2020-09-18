@@ -2,6 +2,8 @@
 
 #' UI to show a splash screen in the beginning, then delegate to `\link{srv_teal}`
 #'
+#' @md
+#' @description `r lifecycle::badge("maturing")`
 #' The splash screen could be used to query for a password to fetch the data.
 #' `\link{init}` is a very thin wrapper around this module useful for end-users which
 #' assumes that it is a top-level module and cannot be embedded.
@@ -12,7 +14,6 @@
 #'
 #' Please also refer to the doc of `\link{init}`.
 #'
-#' @md
 #' @param id (`character` value)\cr
 #'   module id
 #' @param data (`RelationalData`)\cr
@@ -46,9 +47,10 @@ ui_teal_with_splash <- function(id,
 #' Server function that loads the data through reactive loading and then delegates
 #' to `\link{srv_teal}`.
 #'
+#' @md
+#' @description `r lifecycle::badge("maturing")`
 #' Please also refer to the doc of `\link{init}`.
 #'
-#' @md
 #' @inheritParams srv_shiny_module_arguments
 #' @param data `RelationalData` R6 object and container for data
 #' @inheritParams srv_teal

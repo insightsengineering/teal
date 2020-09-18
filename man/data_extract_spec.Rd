@@ -30,11 +30,12 @@ function.}
 with multiple keys selected in filter part.}
 }
 \description{
+\ifelse{html}{\out{<a href='https://www.tidyverse.org/lifecycle/#maturing'><img src='figures/lifecycle-maturing.svg' alt='Maturing lifecycle'></a>}}{\strong{Maturing}}
+
 The Data Extract input can be used to filter and select columns from a data
 set. This function enables such an input in teal.
 Please use the constructor function \link{data_extract_spec} to set it up.
-}
-\details{
+
 Note that no checks based on columns can be done because the data is only referred to by name.
 }
 \section{Module Development}{
@@ -49,8 +50,8 @@ be constructed. This input can be read by a \code{teal.devel::data_extract_modul
 
 \describe{
 \enumerate{
-  \item{Dataset with multiple filters and column selection}{
-    \preformatted{
+\item{Dataset with multiple filters and column selection}{
+\preformatted{
 adtte_filters <- filter_spec(
 vars = c("PARAMCD", "CNSR"),
 sep = "-",
@@ -72,18 +73,18 @@ data_extract_spec(
     )
 )
     }
-    \if{html}{
+\if{html}{
       \figure{data_extract_spec_1.png}{options: alt="Dataset with multiple filters and column selection"}
     }
-    \if{html}{
+\if{html}{
       \figure{data_extract_spec_12.png}{options: alt="Dataset with multiple filters and column selection"}
     }
-    \if{html}{
+\if{html}{
       \figure{data_extract_spec_11.png}{options: alt="Dataset with multiple filters and column selection"}
     }
-  }
-  \item{Data extract without filtering}{
-  \preformatted{
+}
+\item{Data extract without filtering}{
+\preformatted{
 
 data_extract_spec(
   dataname = "ADSL",
@@ -96,8 +97,8 @@ data_extract_spec(
     )
 )
   }
-  }
-  \if{html}{
+}
+\if{html}{
       \figure{data_extract_spec_2.png}{options: alt="Data extract without filtering"}
     }
 }

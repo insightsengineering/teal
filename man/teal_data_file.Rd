@@ -15,6 +15,7 @@ teal_data_file(path, code = get_code(path))
 \code{RelationalData} object
 }
 \description{
+\ifelse{html}{\out{<a href='https://www.tidyverse.org/lifecycle/#experimental'><img src='figures/lifecycle-experimental.svg' alt='Experimental lifecycle'></a>}}{\strong{Experimental}}
 Please note that the script has to end with a call creating desired object. The error will be raised otherwise.
 }
 \examples{

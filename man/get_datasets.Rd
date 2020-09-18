@@ -23,7 +23,7 @@ object containing datasets.}
 \code{list} or \code{RelationalDataset} objects
 }
 \description{
-Get a \code{\link{RelationalDataset}} objects.
+\ifelse{html}{\out{<a href='https://www.tidyverse.org/lifecycle/#experimental'><img src='figures/lifecycle-experimental.svg' alt='Experimental lifecycle'></a>}}{\strong{Experimental}}
 }
 \examples{
 

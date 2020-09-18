@@ -1,6 +1,9 @@
 #' Is pulled
 #'
-#' @description S3 method to determine if dataset is pulled (loaded).
+#' @md
+#' @description `r lifecycle::badge("experimental")`
+#'   S3 method to determine if dataset is pulled (loaded).
+#'
 #' @param x (\code{object}) of class \link{RawDatasetConnector}, \link{RelationalDataset},
 #'   \link{RelationalDatasetConnector}, or \link{RelationalDataConnector} or \link{RelationalData}
 #'

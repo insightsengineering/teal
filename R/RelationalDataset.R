@@ -97,6 +97,9 @@ RelationalDataset <- R6::R6Class( # nolint
 
 #' Create \code{RelationalDataset} object
 #'
+#' @md
+#' @description `r lifecycle::badge("experimental")`
+#'
 #' @inheritParams named_dataset
 #' @param keys (\code{keys})\cr
 #'   object of S3 class keys containing foreign, primary keys and parent information
@@ -132,6 +135,8 @@ relational_dataset <- function(dataname,
 
 #' Load \code{RelationalDataset} object from a file
 #'
+#' @md
+#' @description `r lifecycle::badge("experimental")`
 #' Please note that the script has to end with a call creating desired object. The error will be raised otherwise.
 #'
 #' @param path (\code{character}) string giving the pathname of the file to read from.

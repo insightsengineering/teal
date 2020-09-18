@@ -22,5 +22,5 @@ will be overwritten with \code{FALSE}.}
 \code{DataConnection} type of object
 }
 \description{
-Open connection to \code{rice}
+\ifelse{html}{\out{<a href='https://www.tidyverse.org/lifecycle/#experimental'><img src='figures/lifecycle-experimental.svg' alt='Experimental lifecycle'></a>}}{\strong{Experimental}}
 }

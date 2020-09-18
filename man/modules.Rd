@@ -15,6 +15,7 @@ modules(label, ...)
 object of class \code{teal_modules}
 }
 \description{
+\ifelse{html}{\out{<a href='https://www.tidyverse.org/lifecycle/#maturing'><img src='figures/lifecycle-maturing.svg' alt='Maturing lifecycle'></a>}}{\strong{Maturing}}
 Modules collects a tree of \verb{\link{module}} and \verb{\link{modules}}
 objects. This is useful to define the navigation structure of a teal app.
 }

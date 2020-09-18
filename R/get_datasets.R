@@ -1,5 +1,8 @@
 #' Get a \code{\link{RelationalDataset}} objects.
 #'
+#' @md
+#' @description `r lifecycle::badge("experimental")`
+#'
 #' @param x (\code{\link{RelationalData}})\cr
 #'  object containing datasets.
 #' @export

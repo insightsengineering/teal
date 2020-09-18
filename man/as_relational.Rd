@@ -69,6 +69,7 @@ Label to describe the dataset.}
 \code{RelationalDataset} or \code{RelationalDatasetConnector} object
 }
 \description{
+\ifelse{html}{\out{<a href='https://www.tidyverse.org/lifecycle/#experimental'><img src='figures/lifecycle-experimental.svg' alt='Experimental lifecycle'></a>}}{\strong{Experimental}}
 Convert a \code{Raw<...>} to a \code{Relational<...>}
 }
 \details{

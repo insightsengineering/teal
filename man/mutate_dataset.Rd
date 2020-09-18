@@ -56,7 +56,7 @@ this/these object(s) should be included.}
 Dataname to be mutated.}
 }
 \description{
-Mutate dataset by code
+\ifelse{html}{\out{<a href='https://www.tidyverse.org/lifecycle/#experimental'><img src='figures/lifecycle-experimental.svg' alt='Experimental lifecycle'></a>}}{\strong{Experimental}}
 }
 \examples{
 library(random.cdisc.data)

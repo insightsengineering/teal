@@ -23,6 +23,7 @@ fit between \code{min} and \code{max}.}
 \item{...}{optional arguments to \code{sliderInput}}
 }
 \description{
+\ifelse{html}{\out{<a href='https://www.tidyverse.org/lifecycle/#maturing'><img src='figures/lifecycle-maturing.svg' alt='Maturing lifecycle'></a>}}{\strong{Maturing}}
 Hidden input widgets are useful to have the \code{input[[inputId]]} variable
 on available in the server function but no corresponding visual clutter from
 input widgets that provide only a single choice.

@@ -1,5 +1,7 @@
 #' Load data from connection
 #'
+#' @md
+#' @description `r lifecycle::badge("experimental")`
 #' Load data from connection. Function used on \link{RawDatasetConnector} and
 #' \link{RawDataset} to obtain data from connection.
 #'
@@ -59,6 +61,10 @@ load_dataset.RawDatasetConnector <- function(x, args = NULL, try = FALSE, conn =
 }
 
 #' Load datasets
+#'
+#' @md
+#' @description `r lifecycle::badge("experimental")`
+#'
 #' @param x (\code{object} of class \code{\link{RelationalData}}, \code{\link{RawDataset}} or
 #'  \code{\link{RawDatasetConnector}})
 #' @param args (\code{NULL} or named \code{list})\cr

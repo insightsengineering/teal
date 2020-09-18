@@ -26,5 +26,5 @@ In case when this object code depends on the \code{raw_data} from the other
 this/these object(s) should be included.}
 }
 \description{
-Mutate data by code
+\ifelse{html}{\out{<a href='https://www.tidyverse.org/lifecycle/#experimental'><img src='figures/lifecycle-experimental.svg' alt='Experimental lifecycle'></a>}}{\strong{Experimental}}
 }

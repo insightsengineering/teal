@@ -14,6 +14,7 @@ a string containing R code to reproduce the desired object.}
 \code{CallableCode} object
 }
 \description{
+\ifelse{html}{\out{<a href='https://www.tidyverse.org/lifecycle/#experimental'><img src='figures/lifecycle-experimental.svg' alt='Experimental lifecycle'></a>}}{\strong{Experimental}}
 Create \link{CallableCode} object to execute specific code and get reproducible call.
 }
 \examples{

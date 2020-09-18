@@ -1,8 +1,11 @@
 #' Retrieve raw data
 #'
+#' @md
 #' @param x (\code{RawDataset, RawDatasetConnector, RelationalData, cdisc_data})\cr object
 #' @param dataname (\code{character} value)\cr
 #'  Name of dataset to return raw data for.
+#'
+#' @description `r lifecycle::badge("experimental")`
 #'
 #' @return \code{data.frame} with the raw data inserted into the R6 objects. In case of
 #' \code{RelationalData} or \code{cdisc_data} \code{list} of \code{data.frame} can be returned

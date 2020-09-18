@@ -1,6 +1,8 @@
 ## RawDatasetConnector ====
 #' A \code{RawDatasetConnector} class of objects
 #'
+#' @md
+#' @description `r lifecycle::badge("experimental")`
 #' Objects of this class store the connection function to fetch a single dataset.
 #' Note that for some specific connection types (e.g. \code{RICE} or \code{SAICE}),
 #' an object of class \code{DataConnection} must be provided.

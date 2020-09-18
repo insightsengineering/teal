@@ -19,7 +19,7 @@ columns are being used.}
 labels of the columns
 }
 \description{
-Function that extract column labels from CDISC dataset
+\ifelse{html}{\out{<a href='https://www.tidyverse.org/lifecycle/#maturing'><img src='figures/lifecycle-maturing.svg' alt='Maturing lifecycle'></a>}}{\strong{Maturing}}
 }
 \examples{
 library(random.cdisc.data)

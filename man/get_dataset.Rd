@@ -24,6 +24,8 @@ get_dataset(x, dataname)
 (\code{RawDataset} or \code{RelationalDataset})
 }
 \description{
+\ifelse{html}{\out{<a href='https://www.tidyverse.org/lifecycle/#experimental'><img src='figures/lifecycle-experimental.svg' alt='Experimental lifecycle'></a>}}{\strong{Experimental}}
+
 Get dataset from \code{DatasetConnector}
 }
 \examples{

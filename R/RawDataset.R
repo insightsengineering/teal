@@ -173,6 +173,9 @@ RawDataset <- R6::R6Class( # nolint
 
 #' Constructor for \link{RawDataset} object
 #'
+#' @md
+#' @description `r lifecycle::badge("experimental")`
+#'
 #' @param x (\code{data.frame} or \code{rtable}) object
 #'
 #' @examples

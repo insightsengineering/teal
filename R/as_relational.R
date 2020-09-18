@@ -1,8 +1,12 @@
 #' Convert a \code{Raw<...>} to a \code{Relational<...>}
 #'
+#' @md
+#' @description `r lifecycle::badge("experimental")`
 #' Convert a \code{Raw<...>} to a \code{Relational<...>}
+#'
 #' @inheritParams relational_dataset_connector
 #' @param x (\code{RawDataset}, \code{NamedDataset}, \code{RawDatasetConnector})
+#'
 #' @return \code{RelationalDataset} or \code{RelationalDatasetConnector} object
 #'
 #' @export

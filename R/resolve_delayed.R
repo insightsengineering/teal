@@ -2,6 +2,9 @@
 
 #' Resolve delayed inputs by evaluating the code within the provided datasets
 #'
+#' @description `r lifecycle::badge("maturing")`
+#'
+#' @md
 #' @param x Object of class \code{delayed_data} to resolve.
 #' @param datasets Object of class \code{FilteredData} to use for evaluation.
 #'

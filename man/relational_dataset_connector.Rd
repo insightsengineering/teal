@@ -232,6 +232,7 @@ new \code{RelationalDatasetConnector} object
 \code{RelationalDatasetConnector} object
 }
 \description{
+\ifelse{html}{\out{<a href='https://www.tidyverse.org/lifecycle/#experimental'><img src='figures/lifecycle-experimental.svg' alt='Experimental lifecycle'></a>}}{\strong{Experimental}}
 Create \code{RelationalDatasetConnector} from \link{callable_function}.
 
 Please note that the script has to end with a call creating desired object. The error will be raised otherwise.

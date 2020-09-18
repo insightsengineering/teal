@@ -1,6 +1,10 @@
-#' Set "<choice>: <label>" type of Names
+#' Set "`<choice>:<label>`" type of Names
+#'
+#' @md
+#' @description `r lifecycle::badge("maturing")`
 #' This is often useful for \code{\link[teal]{choices_selected}} as it marks up the dropdown boxes
 #' for \code{\link[shiny]{selectInput}}.
+#'
 #' @param choices a character vector
 #' @param labels vector containing labels to be applied to \code{choices}
 #' @param subset a character vector that is a subset of \code{choices}. This is useful if
@@ -106,6 +110,9 @@ choices_labeled <- function(choices, labels, subset = NULL, types = NULL) {
 
 
 #' Wrapper on \code{\link{choices_labeled}} to label variables basing on existing labels in data
+#'
+#' @md
+#' @description `r lifecycle::badge("maturing")`
 #'
 #' @param data (\code{data.frame}) or (\code{character})
 #' If \code{data.frame}, then data to extract labels from.
@@ -226,6 +233,9 @@ variable_choices.NamedDatasetConnector <- function(data, subset = NULL, fill = F
 
 
 #' Wrapper on \code{\link{choices_labeled}} to label variable values basing on other variable values
+#'
+#' @md
+#' @description `r lifecycle::badge("maturing")`
 #'
 #' @param data (\code{data.frame}) or (\code{character})
 #' If \code{data.frame}, then data to extract labels from

@@ -33,6 +33,7 @@ Imports:
   ggplot2,
   grDevices,
   htmltools,
+  lifecycle,
   magrittr,
   methods,
   R6,
@@ -114,3 +115,4 @@ Collate:
     'teal_data.R'
     'utils.R'
     'zzz.R'
+RdMacros: lifecycle

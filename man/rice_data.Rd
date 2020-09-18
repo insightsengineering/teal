@@ -19,6 +19,7 @@ additional user interface to be visible over login panel}
 An object of class \code{RelatonalDataConnector}
 }
 \description{
+\ifelse{html}{\out{<a href='https://www.tidyverse.org/lifecycle/#experimental'><img src='figures/lifecycle-experimental.svg' alt='Experimental lifecycle'></a>}}{\strong{Experimental}}
 Build data connector for \code{RICE} datasets
 }
 \examples{

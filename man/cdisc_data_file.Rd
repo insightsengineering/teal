@@ -12,10 +12,10 @@ of the file or URL to read from. "" indicates the connection \code{stdin}.}
 }
 \value{
 \code{cdisc_data} object if file returns a \code{cdisc_data}
-  object.
+object.
 }
 \description{
-Load \code{cdisc_data} object from a file
+\ifelse{html}{\out{<a href='https://www.tidyverse.org/lifecycle/#maturing'><img src='figures/lifecycle-maturing.svg' alt='Maturing lifecycle'></a>}}{\strong{Maturing}}
 }
 \examples{
 file_example <- tempfile(fileext = ".R")

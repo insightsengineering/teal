@@ -2,6 +2,9 @@
 #' (\code{RelationalDataConnector}, (\code{RelationalDatasetConnector} or
 #' \code{NamedDataset}) R6 object
 #'
+#' @md
+#' @description `r lifecycle::badge("experimental")`
+#'
 #' @param x (\code{RelationalDataConnector}, (\code{RelationalDatasetConnector} or
 #' \code{NamedDataset}) R6 object
 #'

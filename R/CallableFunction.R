@@ -195,17 +195,23 @@ CallableFunction <- R6::R6Class( #nolint
 
 #' Create \code{CallableFunction} object
 #'
+#' @md
+#' @description `r lifecycle::badge("experimental")`
 #' Create \link{CallableFunction} object to execute specific function and get reproducible
 #' call.
+#'
 #' @param fun (\code{function})\cr
 #'   any R function, directly by name or \code{character} string.
+#'
 #' @return \code{CallableFunction} object
+#'
+#' @export
+#'
 #' @examples
 #' cf <- callable_function(fun = mean)
 #' cf$set_args(list(x = 1:10, na.rm = FALSE))
 #' cf$run()
 #' cf$get_call()
-#' @export
 callable_function <- function(fun) {
   CallableFunction$new(fun)
 }

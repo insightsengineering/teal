@@ -261,6 +261,9 @@ NamedDataset <- R6::R6Class( # nolint
 
 #' Constructor for \link{NamedDataset} class
 #'
+#' @md
+#' @description `r lifecycle::badge("experimental")`
+#'
 #' @inheritParams raw_dataset
 #' @param dataname (\code{character})\cr
 #'  A given name for the dataset it may not contain spaces
@@ -275,7 +278,6 @@ NamedDataset <- R6::R6Class( # nolint
 #'   In case when this object code depends on the \code{raw_data} from the other
 #'   \code{RelationalDataset} object(s) or other constant value,
 #'   this/these object(s) should be included as named element of the list.
-#'
 #' @return \link{NamedDataset} object
 #' @export
 #' @examples

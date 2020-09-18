@@ -23,10 +23,8 @@ get_dataname(x)
 }
 \value{
 dataname (\code{character}) A given name for the dataset(s)
-  it may not contain spaces
+it may not contain spaces
 }
 \description{
-S3 method for getting a dataname(s) of
-(\code{RelationalDataConnector}, (\code{RelationalDatasetConnector} or
-\code{NamedDataset}) R6 object
+\ifelse{html}{\out{<a href='https://www.tidyverse.org/lifecycle/#experimental'><img src='figures/lifecycle-experimental.svg' alt='Experimental lifecycle'></a>}}{\strong{Experimental}}
 }

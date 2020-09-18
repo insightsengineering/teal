@@ -2,6 +2,9 @@ no_select_keyword <- "-- no selection --"
 
 #' Choices function
 #'
+#' @md
+#' @description `r lifecycle::badge("maturing")`
+#'
 #' @param choices vector of possible choices or \code{delayed_data} object
 #' @param selected vector of pre-selected options or \code{delayed_data} object.
 #' If vector, then first element of \code{choices} if blank
@@ -144,8 +147,10 @@ choices_selected <- function(choices, selected = if (is(choices, "delayed_data")
 
 #' Check if an object is a choices_selected class.
 #'
-#' @param x object to check
+#' @md
+#' @description `r lifecycle::badge("maturing")`
 #'
+#' @param x object to check
 #' @export
 is.choices_selected <- function(x) { # nolint
   is(x, "choices_selected")
@@ -153,9 +158,11 @@ is.choices_selected <- function(x) { # nolint
 
 #' Add empty choice to choices selected
 #'
+#' @md
+#' @description `r lifecycle::badge("maturing")`
+#'
 #' @param x (\code{choices_selected}) output
 #' @param multiple (\code{logical}) whether multiple selections are allowed or not
-#'
 #'
 #' @export
 add_no_selected_choices <- function(x, multiple = FALSE) {
@@ -177,12 +184,15 @@ add_no_selected_choices <- function(x, multiple = FALSE) {
 
 #' Check select choices for no choice made
 #'
-#' @export
+#' @md
+#' @description `r lifecycle::badge("maturing")`
 #'
 #' @param x (\code{character}) Word that shall be checked for
 #'   NULL, empty, "--no-selection"
 #'
 #' @return the word or NULL
+#'
+#' @export
 no_selected_as_NULL <- function(x) { #nolint
   if (is.null(x) || identical(x, no_select_keyword) || x == "") {
     NULL

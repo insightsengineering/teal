@@ -464,6 +464,9 @@ DataConnection <- R6::R6Class( # nolint
 # DataConnection wrappers ----
 #' Open connection to \code{random.cdisc.data}
 #'
+#' @md
+#' @description `r lifecycle::badge("experimental")`
+#'
 #' @param open_args optional, named (\code{list}) of additional parameters for \code{\link{library}} open
 #'   function such as \code{quietly}. Please note that the \code{package} argument will be overwritten
 #'   with \code{random.cdisc.data}.
@@ -500,6 +503,9 @@ rcd_connection <- function(open_args = list()) {
 
 
 #' Open connection to \code{rice}
+#'
+#' @md
+#' @description `r lifecycle::badge("experimental")`
 #'
 #' @param open_args optional, named (\code{list}) of additional parameters for the connection's
 #'   \code{\link[rice]{rice_session_open}} open function. Please note that the \code{password} argument will be
@@ -598,6 +604,9 @@ rice_connection <- function(open_args = list(), close_args = list(), ping_args =
 
 
 #' Open connection to \code{Teradata}
+#'
+#' @md
+#' @description `r lifecycle::badge("experimental")`
 #'
 #' @param open_args optional, named (\code{list}) of additional parameters for the connection's
 #'   \code{RocheTeradata::connect_teradata} open function. Please note that the \code{type}

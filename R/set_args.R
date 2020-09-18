@@ -1,6 +1,9 @@
 #' Set arguments of a \code{CallableFunction}
 #'
+#' @md
+#' @description `r lifecycle::badge("experimental")`
 #' Set arguments of a \code{CallableFunction}
+#'
 #' @param x \code{CallableFunction} or \code{RawDatasetConnector})
 #' @param args (\code{NULL} or named \code{list}) dynamic arguments to function
 #'

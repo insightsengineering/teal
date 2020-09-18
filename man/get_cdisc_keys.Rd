@@ -13,7 +13,7 @@ get_cdisc_keys(dataname)
 \code{keys} object
 }
 \description{
-Function that returns the default keys for a \code{CDISC} dataset by name
+\ifelse{html}{\out{<a href='https://www.tidyverse.org/lifecycle/#maturing'><img src='figures/lifecycle-maturing.svg' alt='Maturing lifecycle'></a>}}{\strong{Maturing}}
 }
 \examples{
 get_cdisc_keys("ADSL")

@@ -15,7 +15,7 @@ data_label(x) <- value
 modified \code{x} object
 }
 \description{
-Set dataset label attribute
+\ifelse{html}{\out{<a href='https://www.tidyverse.org/lifecycle/#maturing'><img src='figures/lifecycle-maturing.svg' alt='Maturing lifecycle'></a>}}{\strong{Maturing}}
 }
 \examples{
 library(random.cdisc.data)

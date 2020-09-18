@@ -33,7 +33,7 @@ this/these object(s) should be included as named element of the list.}
 \link{NamedDataset} object
 }
 \description{
-Constructor for \link{NamedDataset} class
+\ifelse{html}{\out{<a href='https://www.tidyverse.org/lifecycle/#experimental'><img src='figures/lifecycle-experimental.svg' alt='Experimental lifecycle'></a>}}{\strong{Experimental}}
 }
 \examples{
 library(random.cdisc.data)

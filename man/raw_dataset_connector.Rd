@@ -14,6 +14,7 @@ function with necessary arguments set to fetch data from connection.}
 \code{RawDatasetConnector} object
 }
 \description{
+\ifelse{html}{\out{<a href='https://www.tidyverse.org/lifecycle/#experimental'><img src='figures/lifecycle-experimental.svg' alt='Experimental lifecycle'></a>}}{\strong{Experimental}}
 Create \link{RawDatasetConnector} object to execute specific call to fetch data
 }
 \examples{

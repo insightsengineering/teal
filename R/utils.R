@@ -1,6 +1,9 @@
 # also returns a list if only a single element
 #' Split by separator
 #'
+#' @md
+#' @description `r lifecycle::badge("maturing")`
+#'
 #' @param x (\code{character}) Character (single)
 #' @param sep (\code{character}) Separator
 #' @export
@@ -11,6 +14,8 @@ split_by_sep <- function(x, sep) {
 
 #' List element in other list
 #'
+#' @md
+#' @description `r lifecycle::badge("maturing")`
 #' Checks if \code{x} element matches any of \code{y} element. If one of the arguments is a list then list elements
 #' are treated as whole - in this case list elements can be a vector, so it looks
 #' for equal element in second vector to be matched.

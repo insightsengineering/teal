@@ -105,7 +105,8 @@ CallableCode <- R6::R6Class( # nolint
 ## Constructors ====
 
 #' Create \code{CallableCode} object
-#'
+#' @md
+#' @description `r lifecycle::badge("experimental")`
 #' Create \link{CallableCode} object to execute specific code and get reproducible call.
 #'
 #' @param code (\code{character})\cr

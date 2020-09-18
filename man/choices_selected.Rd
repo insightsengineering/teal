@@ -26,7 +26,7 @@ will be on top of the drop-down field.}
 Object of class \code{choices_selected} and of type list.
 }
 \description{
-Choices function
+\ifelse{html}{\out{<a href='https://www.tidyverse.org/lifecycle/#maturing'><img src='figures/lifecycle-maturing.svg' alt='Maturing lifecycle'></a>}}{\strong{Maturing}}
 }
 \details{
 Please note that the order of selected will always follow the order of choices. The \code{keep_order}

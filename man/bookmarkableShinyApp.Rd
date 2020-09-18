@@ -19,9 +19,10 @@ one argument (\code{request})}
 \code{shinyApp} value
 }
 \description{
+\ifelse{html}{\out{<a href='https://www.tidyverse.org/lifecycle/#experimental'><img src='figures/lifecycle-experimental.svg' alt='Experimental lifecycle'></a>}}{\strong{Experimental}}
+
 This is a customization of \code{shinyApp}.
-}
-\details{
+
 To be bookmarkable, the Shiny UI function must have an
 argument \code{request}. This function ensures this.
 

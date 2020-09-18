@@ -15,6 +15,7 @@ cdisc_dataset_file(path, code = get_code(path))
 \code{RelationalDataset} object
 }
 \description{
+\ifelse{html}{\out{<a href='https://www.tidyverse.org/lifecycle/#maturing'><img src='figures/lifecycle-maturing.svg' alt='Maturing lifecycle'></a>}}{\strong{Maturing}}
 Please note that the script has to end with a call creating desired object. The error will be raised otherwise.
 }
 \examples{

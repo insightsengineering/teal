@@ -2,8 +2,7 @@
 % Please edit documentation in R/stop_shiny.R
 \name{stop_shiny}
 \alias{stop_shiny}
-\title{Stop app.R evaluation with a Jumbotron Shiny App
-This will start a separate shiny app with a message}
+\title{Stop app.R evaluation with a Jumbotron Shiny App}
 \usage{
 stop_shiny(title, body)
 }
@@ -13,7 +12,7 @@ stop_shiny(title, body)
 \item{body}{either a string or an object of class \code{shiny.tag}}
 }
 \description{
-Stop app.R evaluation with a Jumbotron Shiny App
+\ifelse{html}{\out{<a href='https://www.tidyverse.org/lifecycle/#maturing'><img src='figures/lifecycle-maturing.svg' alt='Maturing lifecycle'></a>}}{\strong{Maturing}}
 This will start a separate shiny app with a message
 }
 \examples{

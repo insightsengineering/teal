@@ -1,5 +1,7 @@
 #' Get code
 #'
+#' @md
+#' @description `r lifecycle::badge("experimental")`
 #' Reads code from specified files or an R6 object.
 #'
 #' \itemize{
@@ -395,6 +397,8 @@ include_source_code <- function(lines, dir = NULL) {
 
 #' Read .R file into character
 #'
+#' @md
+#' @description `r lifecycle::badge("maturing")`
 #' Comments will be excluded
 #'
 #' @param file (\code{character}) File to be parsed into code

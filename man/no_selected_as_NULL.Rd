@@ -14,5 +14,5 @@ NULL, empty, "--no-selection"}
 the word or NULL
 }
 \description{
-Check select choices for no choice made
+\ifelse{html}{\out{<a href='https://www.tidyverse.org/lifecycle/#maturing'><img src='figures/lifecycle-maturing.svg' alt='Maturing lifecycle'></a>}}{\strong{Maturing}}
 }

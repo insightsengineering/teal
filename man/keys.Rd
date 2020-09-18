@@ -17,7 +17,7 @@ keys(primary, foreign, parent)
 keys
 }
 \description{
-Function that returns a keys object
+\ifelse{html}{\out{<a href='https://www.tidyverse.org/lifecycle/#maturing'><img src='figures/lifecycle-maturing.svg' alt='Maturing lifecycle'></a>}}{\strong{Maturing}}
 }
 \examples{
 

@@ -1,5 +1,7 @@
 #' \code{RelationalDataConnector} connector for \code{random.cdisc.data}
 #'
+#' @md
+#' @description `r lifecycle::badge("experimental")`
 #' Build data connector for \code{random.cdisc.data} functions or datasets
 #'
 #' @export
@@ -110,8 +112,9 @@ rcd_data <- function(..., connection = rcd_connection(), check = TRUE) {
 
 #' Data connector for \code{RICE}
 #'
+#' @md
+#' @description `r lifecycle::badge("experimental")`
 #' Build data connector for \code{RICE} datasets
-#'
 #'
 #' @export
 #'
@@ -219,6 +222,8 @@ rice_data <- function(..., connection = rice_connection(), additional_ui = NULL)
 
 #' \code{RelationalDataConnector} connector for \code{TERADATA}
 #'
+#' @md
+#' @description `r lifecycle::badge("experimental")`
 #' Build data connector for \code{TERADATA} functions or datasets
 #'
 #' @export

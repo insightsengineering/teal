@@ -8,7 +8,7 @@ cdisc_data(..., code = "", check = FALSE)
 }
 \arguments{
 \item{...}{(\code{RelationalDataConnector}, \code{RelationalDataset} or
-\code{RelationalDatasetConnector}) elements to include where `ADSL` data is mandatory.}
+\code{RelationalDatasetConnector}) elements to include where \code{ADSL} data is mandatory.}
 
 \item{code}{(\code{character}) code to reproduce the datasets.}
 
@@ -19,11 +19,12 @@ as provided in arguments. Check is run only if flag is true and preprocessing co
 a \code{RelationalData} object
 }
 \description{
+\ifelse{html}{\out{<a href='https://www.tidyverse.org/lifecycle/#maturing'><img src='figures/lifecycle-maturing.svg' alt='Maturing lifecycle'></a>}}{\strong{Maturing}}
 Function passes datasets to teal application with option to read preprocessing code and reproducibility checking.
 }
 \details{
 This function checks if there were keys added to all data
-  sets that shall be analyzed inside a teal app.
+sets that shall be analyzed inside a teal app.
 }
 \examples{
 library(random.cdisc.data)

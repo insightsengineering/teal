@@ -12,5 +12,5 @@ split_by_sep(x, sep)
 \item{sep}{(\code{character}) Separator}
 }
 \description{
-Split by separator
+\ifelse{html}{\out{<a href='https://www.tidyverse.org/lifecycle/#maturing'><img src='figures/lifecycle-maturing.svg' alt='Maturing lifecycle'></a>}}{\strong{Maturing}}
 }

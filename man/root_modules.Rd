@@ -10,6 +10,7 @@ root_modules(...)
 \item{...}{\verb{\link{module}} and \verb{\link{modules}} object}
 }
 \description{
+\ifelse{html}{\out{<a href='https://www.tidyverse.org/lifecycle/#maturing'><img src='figures/lifecycle-maturing.svg' alt='Maturing lifecycle'></a>}}{\strong{Maturing}}
 To be used with \verb{\link{init}} in the \code{modules} argument.
 }
 \details{

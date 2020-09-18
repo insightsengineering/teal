@@ -6,6 +6,8 @@
 
 #' Create the Server and UI Function For the Shiny App
 #'
+#' @md
+#' @description `r lifecycle::badge("maturing")`
 #' End-users: This is the most important function for you to start a
 #' teal app that is composed out of teal modules.
 #'
@@ -13,7 +15,6 @@
 #' This is a wrapper function around the `module_teal.R` functions. Unless you are
 #' an end-user, don't use this function, but instead this module.
 #'
-#' @md
 #' @param data (`RelationalData`) R6 object where \code{cdisc_data} or \code{teal_data} returns such a one.
 #' @param modules nested list with one list per module with the
 #'   following named list elements:
@@ -62,6 +63,7 @@
 #' the server function must be called with `callModule`;
 #' See the vignette for an example. However, `\link{ui_teal_with_splash}`
 #' is then preferred to this function.
+#'
 #' @return named list with server and ui function
 #'
 #' @export
@@ -152,6 +154,9 @@ init <- function(data,
 
 #' Make a Shiny UI function bookmarkable
 #'
+#' @md
+#' @description `r lifecycle::badge("experimental")`
+#'
 #' This is a customization of `shinyApp`.
 #'
 #' To be bookmarkable, the Shiny UI function must have an
@@ -180,7 +185,6 @@ init <- function(data,
 #' We guarantee that anything that can be run with `shinyApp` can be replaced
 #' by a call to this function without any changes.
 #'
-#' @md
 #' @param ui `function or shiny.tag` Shiny UI; either a
 #'   `shiny.tag` or a function with no argument or
 #'   one argument (`request`)

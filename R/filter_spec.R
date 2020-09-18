@@ -1,5 +1,7 @@
 #' filter spec
 #'
+#' @md
+#' @description `r lifecycle::badge("maturing")`
 #' It consists in choices and additionally the variable names for the choices
 #'
 #' @export

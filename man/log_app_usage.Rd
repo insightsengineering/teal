@@ -24,6 +24,7 @@ log_app_usage(
 \item{pkg_meta}{package metadata fields. default values: \code{c("Package", "Title", "Version", "RemoteRef")}.}
 }
 \description{
+\ifelse{html}{\out{<a href='https://www.tidyverse.org/lifecycle/#maturing'><img src='figures/lifecycle-maturing.svg' alt='Maturing lifecycle'></a>}}{\strong{Maturing}}
 Analysis of Teal application utilization is a key component towards ongoing enhancements
 of the framework. The utilization logs provide source data for better understanding
 frequency and extent of use.

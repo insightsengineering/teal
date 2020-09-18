@@ -10,7 +10,7 @@ raw_dataset(x)
 \item{x}{(\code{data.frame} or \code{rtable}) object}
 }
 \description{
-Constructor for \link{RawDataset} object
+\ifelse{html}{\out{<a href='https://www.tidyverse.org/lifecycle/#experimental'><img src='figures/lifecycle-experimental.svg' alt='Experimental lifecycle'></a>}}{\strong{Experimental}}
 }
 \examples{
 library(random.cdisc.data)

@@ -1,5 +1,8 @@
 #' Get dataset from \code{DatasetConnector}
 #'
+#' @md
+#' @description `r lifecycle::badge("experimental")`
+#'
 #' Get dataset from \code{DatasetConnector}
 #' @param x \code{RawDatasetConnector} or \code{RelationalDatasetConnector})
 #' @param dataname \code{character} a name of dataset to be retrieved

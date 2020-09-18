@@ -1,5 +1,9 @@
 #' Stop app.R evaluation with a Jumbotron Shiny App
+#'
+#' @md
+#' @description `r lifecycle::badge("maturing")`
 #' This will start a separate shiny app with a message
+#'
 #' @param title string with title
 #' @param body either a string or an object of class \code{shiny.tag}
 #' @importFrom methods is

@@ -30,9 +30,9 @@ a dataset label}
 code to reproduce \code{data}}
 
 \item{vars}{(named \code{list})) \cr
-  In case when this object code depends on the \code{raw_data} from the other
-  \code{RelationalDataset} object(s) or other constant value,
-  this/these object(s) should be included as named element of the list.
+In case when this object code depends on the \code{raw_data} from the other
+\code{RelationalDataset} object(s) or other constant value,
+this/these object(s) should be included as named element of the list.
 
 Please note that the order of keys is important.
 
@@ -55,6 +55,7 @@ As you can see the names of foreign ADTTE are different to ADSL keys, but the or
 a dataset with connected metadata
 }
 \description{
+\ifelse{html}{\out{<a href='https://www.tidyverse.org/lifecycle/#maturing'><img src='figures/lifecycle-maturing.svg' alt='Maturing lifecycle'></a>}}{\strong{Maturing}}
 Function that creates CDISC dataset object
 }
 \examples{

@@ -1,5 +1,7 @@
 #' Teal data
 #'
+#' @md
+#' @description `r lifecycle::badge("experimental")`
 #' Universal function to pass data to teal application
 #'
 #' @export
@@ -64,6 +66,8 @@ teal_data <- function(...) {
 
 #' Load \code{RelationalData} object from a file
 #'
+#' @md
+#' @description `r lifecycle::badge("experimental")`
 #' Please note that the script has to end with a call creating desired object. The error will be raised otherwise.
 #'
 #' @param path (\code{character}) string giving the pathname of the file to read from.

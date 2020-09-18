@@ -14,6 +14,7 @@ any R function, directly by name or \code{character} string.}
 \code{CallableFunction} object
 }
 \description{
+\ifelse{html}{\out{<a href='https://www.tidyverse.org/lifecycle/#experimental'><img src='figures/lifecycle-experimental.svg' alt='Experimental lifecycle'></a>}}{\strong{Experimental}}
 Create \link{CallableFunction} object to execute specific function and get reproducible
 call.
 }

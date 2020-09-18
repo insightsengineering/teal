@@ -4,11 +4,7 @@
 \alias{RawDatasetConnector}
 \title{A \code{RawDatasetConnector} class of objects}
 \description{
-A \code{RawDatasetConnector} class of objects
-
-A \code{RawDatasetConnector} class of objects
-}
-\details{
+\ifelse{html}{\out{<a href='https://www.tidyverse.org/lifecycle/#experimental'><img src='figures/lifecycle-experimental.svg' alt='Experimental lifecycle'></a>}}{\strong{Experimental}}
 Objects of this class store the connection function to fetch a single dataset.
 Note that for some specific connection types (e.g. \code{RICE} or \code{SAICE}),
 an object of class \code{DataConnection} must be provided.
@@ -175,7 +171,7 @@ Get error message from last pull
 
 \subsection{Returns}{
 \code{try-error} object with error message or \code{character(0)} if last
- pull was successful.
+pull was successful.
 }
 }
 \if{html}{\out{<hr>}}

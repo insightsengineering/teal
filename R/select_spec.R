@@ -1,5 +1,7 @@
 #' Column selection input specification
 #'
+#' @md
+#' @description `r lifecycle::badge("maturing")`
 #' \code{select_spec} is used inside teal to create a \code{\link[shiny]{selectInput}}
 #' that will select columns from a dataset.
 #'
@@ -26,7 +28,6 @@
 #'
 #' @param label optional (\code{logical}). Define a label
 #' on top of this specific shiny \code{\link[shiny]{selectInput}}.
-#'
 #'
 #' @return A \code{select_spec}-S3 class object or \code{delayed_select_spec}-S3-class object.
 #' It contains all input values.

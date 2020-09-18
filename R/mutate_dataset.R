@@ -1,5 +1,8 @@
 #' Mutate dataset by code
 #'
+#' @md
+#' @description `r lifecycle::badge("experimental")`
+#'
 #' @param x (\code{NamedDataset})\cr
 #'    object or \code{RelationalDataset} which inherited from it.
 #' @param dataname (\code{character})\cr
@@ -92,6 +95,9 @@ mutate_dataset.RelationalDataCollection <- function(x, dataname, code = characte
 
 
 #' Mutate data by code
+#'
+#' @md
+#' @description `r lifecycle::badge("experimental")`
 #'
 #' @param x (\code{RelationalData} or \code{RelationalDataConnector})\cr
 #'   object.

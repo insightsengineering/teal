@@ -26,12 +26,12 @@ object containing data}
 \item{footer}{\verb{shiny.tag or character} footer to display below the app}
 }
 \description{
+\ifelse{html}{\out{<a href='https://www.tidyverse.org/lifecycle/#maturing'><img src='figures/lifecycle-maturing.svg' alt='Maturing lifecycle'></a>}}{\strong{Maturing}}
 The splash screen could be used to query for a password to fetch the data.
 \verb{\link{init}} is a very thin wrapper around this module useful for end-users which
 assumes that it is a top-level module and cannot be embedded.
 This function instead adheres to the Shiny module conventions.
-}
-\details{
+
 If data is obtained through delayed loading, its splash screen is used. Otherwise,
 a default splash screen is shown.
 

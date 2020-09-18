@@ -35,10 +35,10 @@ whether perform function evaluation inside \code{try} clause. Applicable only on
 }
 \value{
 If executed in the interactive session shiny app is opened to load the data. If executed in
- shiny application - it returns shiny server module.
+shiny application - it returns shiny server module.
 }
 \description{
-Load datasets
+\ifelse{html}{\out{<a href='https://www.tidyverse.org/lifecycle/#experimental'><img src='figures/lifecycle-experimental.svg' alt='Experimental lifecycle'></a>}}{\strong{Experimental}}
 }
 \examples{
 
