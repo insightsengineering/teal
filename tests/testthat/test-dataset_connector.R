@@ -547,7 +547,6 @@ test_that("fun_cdisc_dataset_connector", {
   my_data_1 <- function() {
     set.seed(1234)
     # whatever code
-    library(MASS)
     require(dplyr)
     x <- data.frame(
       STUDYID = 1,
@@ -566,7 +565,6 @@ test_that("fun_cdisc_dataset_connector", {
   my_data_wrong <- function() {
     # whatever code
     set.seed(1234)
-    library(MASS)
     x <- data.frame(
       STUDYID = 1,
       USUBJID = 1:global_var,
