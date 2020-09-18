@@ -46,12 +46,14 @@ get_code <- function(x, ...) {
 #' @export
 #' @rdname get_code
 get_code.RawDatasetConnector <- function(x, deparse = TRUE, ...) {
+  check_ellipsis(...)
   x$get_code(deparse = deparse)
 }
 
 #' @export
 #' @rdname get_code
 get_code.NamedDataset <- function(x, deparse = TRUE, ...) {
+  check_ellipsis(...)
   x$get_code(deparse = deparse)
 }
 
@@ -83,6 +85,7 @@ get_code.NamedDataset <- function(x, deparse = TRUE, ...) {
 #' get_code(rd, "XY")
 #' get_code(rd, "XYZ")
 get_code.RelationalDataCollection <- function(x, dataname = character(0), deparse = TRUE, ...) { # nolint
+  check_ellipsis(...)
   if (!is_empty(dataname)) {
     if (any(!(dataname %in% x$get_datanames()))) {
       stop("The dataname provided does not exist")
@@ -110,6 +113,7 @@ get_code.default <- function(x,
     x <- files_path
   }
 
+  check_ellipsis(...)
   stopifnot(is_character_vector(x))
   stopifnot(is_logical_single(exclude_comments))
   stopifnot(is_logical_single(read_sources))

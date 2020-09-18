@@ -29,6 +29,7 @@ load_dataset <- function(x, ...) {
 #' load_dataset(ADSL_dataset)
 #' @export
 load_dataset.RawDataset <- function(x, ...) { # nolint
+  check_ellipsis(...)
   return(invisible(x))
 }
 
@@ -45,7 +46,7 @@ load_dataset.RawDataset <- function(x, ...) { # nolint
 #' load_dataset(adae)
 #' @export
 load_dataset.RawDatasetConnector <- function(x, args = NULL, try = FALSE, conn = NULL, ...) { # nolint
-
+  check_ellipsis(...)
   if (!is.null(conn)) {
     stopifnot(inherits(conn, "DataConnection"))
 
@@ -94,6 +95,7 @@ load_datasets <- function(x, ...) {
 #' load_datasets(ADSL_dataset)
 #' @export
 load_datasets.RawDataset <- function(x, ...) { # nolint
+  check_ellipsis(...)
   return(invisible(x))
 }
 
@@ -110,6 +112,7 @@ load_datasets.RawDataset <- function(x, ...) { # nolint
 #' load_datasets(adae)
 #' @export
 load_datasets.RawDatasetConnector <- function(x, args = NULL, try = FALSE, ...) { # nolint
+  check_ellipsis(...)
   x$pull(args = args, try = try)
   return(invisible(x))
 }
@@ -130,6 +133,7 @@ load_datasets.RawDatasetConnector <- function(x, args = NULL, try = FALSE, ...) 
 #' load_datasets(rdc)
 #' }
 load_datasets.RelationalDataConnector <- function(x, ...) { # nolint
+  check_ellipsis(...)
   if (interactive()) {
     x$launch()
   } else {
@@ -156,6 +160,7 @@ load_datasets.RelationalDataConnector <- function(x, ...) { # nolint
 #' load_datasets(tc)
 #' }
 load_datasets.RelationalData <- function(x, ...) { # nolint
+  check_ellipsis(...)
   if (interactive()) {
     x$launch()
   } else {

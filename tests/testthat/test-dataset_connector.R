@@ -555,8 +555,8 @@ test_that("fun_cdisc_dataset_connector", {
       zz = factor(sample(letters[1:3], 40, replace = T)),
       NAs = rep(NA, 40)
     )
-    x$w <- as.numeric(MASS::mvrnorm(40, 0, 1))
-    x$ww <- as.numeric(MASS::mvrnorm(40, 0, 1))
+    x$w <- as.numeric(rnorm(40, 0, 1))
+    x$ww <- as.numeric(rnorm(40, 0, 1))
     rtables::var_labels(x) <- c("STUDYID", "USUBJID", "z", "zz", "NAs", "w", "ww")
     x
   }
@@ -574,8 +574,8 @@ test_that("fun_cdisc_dataset_connector", {
       zz = factor(sample(letters[1:3], 40, replace = T)),
       NAs = rep(NA, 40)
     )
-    x$w <- as.numeric(MASS::mvrnorm(40, 0, 1))
-    x$ww <- as.numeric(MASS::mvrnorm(40, 0, 1))
+    x$w <- as.numeric(rnorm(40, 0, 1))
+    x$ww <- as.numeric(rnorm(40, 0, 1))
     rtables::var_labels(x) <- c("STUDYID", "USUBJID", "z", "zz", "NAs", "w", "ww")
     x
   }
