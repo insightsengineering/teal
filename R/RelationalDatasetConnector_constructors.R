@@ -921,16 +921,16 @@ fun_dataset_connector <- function(dataname,
     }
   }
 
-  original_env <- environment(func)
 
   if (!is_pak && !is_locked) {
-    eval(bquote(.(fun_name) <- rlang::set_env(.(fun_name), .(ee))), envir = original_env)
+    eval(bquote(.(fun_name) <- get(.(fun_char), .(environment(func)))), envir = ee)
+    eval(bquote(.(fun_name) <- rlang::set_env(.(fun_name), .(ee))), envir = ee)
   }
 
   x_fun <- CallableFunction$new(fun_name, env = ee)
   x_fun$set_args(func_args)
 
-  vars[[fun_char]] <- get(fun_char, environment(func))
+  vars[[fun_char]] <- ee[[fun_char]]
 
   x <- relational_dataset_connector(
     dataname = dataname,
@@ -940,10 +940,6 @@ fun_dataset_connector <- function(dataname,
     label = label,
     vars = vars
   )
-
-  if (!is_pak && !is_locked) {
-    eval(bquote(.(fun_name) <- rlang::set_env(.(fun_name), .(original_env))), envir = original_env)
-  }
 
   return(x)
 
