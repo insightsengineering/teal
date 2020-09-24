@@ -11,6 +11,9 @@ rename `RelationalDataList` class as `RelationalData`. The `data` argument to `t
 now always a `RelationalData` object.
 * `fun_cdisc_dataset_connector` to enable providing a custom function which returning a dataset.
 * `filer` argument in `init` has added a validation step to ensure compatibility with the rest of the app. Variables inherited from ADSL have to be specified only for ADSL dataset.
+* Fixes the issue with connection close code not being present in `get_code` results.
+* Fixes the issue of occasional incorrect ordering of bar charts on the filter panel.
+* More informative error displayed when `pull_fun` of `DataConnection` produces an error.
 * issues with no news: 
 
 # teal 0.9.0
