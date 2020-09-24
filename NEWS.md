@@ -1,5 +1,6 @@
 # teal 0.9.0.9000
 
+* Added lifecycle badges to all exported functions
 * Added new `code_dataset_connector` and `code_cdisc_dataset_connector` functions which enable the creation of new delayed data objects given a string of code.
 * Added new function `csv_dataset_connector` and `csv_cdisc_dataset_connector`.
 * Updated `set_ui_input` method of `RawDatasetConnector` and `NamedDatasetConnector` to handle user defined shiny inputs.
