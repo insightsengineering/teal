@@ -10,6 +10,7 @@ appear if there are no missing or infinite values.
 rename `RelationalDataList` class as `RelationalData`. The `data` argument to `teal::init` is
 now always a `RelationalData` object.
 * `fun_cdisc_dataset_connector` to enable providing a custom function which returning a dataset.
+* `filer` argument in `init` has added a validation step to ensure compatibility with the rest of the app. Variables inherited from ADSL have to be specified only for ADSL dataset.
 * issues with no news: 
 
 # teal 0.9.0
