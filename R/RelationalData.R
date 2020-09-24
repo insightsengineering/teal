@@ -66,8 +66,7 @@ RelationalData <- R6::R6Class( # nolint
     #'
     initialize = function(...) {
       dot_args <- list(...)
-      possible_classes <- c("RelationalDataConnector",
-                            "RelationalDataset", "RelationalDatasetConnector")
+      possible_classes <- c("RelationalDataConnector", "RelationalDataset", "RelationalDatasetConnector")
 
       is_teal_data <- is_any_class_list(dot_args, possible_classes)
       if (!all(is_teal_data)) {
@@ -246,21 +245,16 @@ RelationalData <- R6::R6Class( # nolint
                   function(x) {
                     div(
                       if (!is(x, c("RelationalDatasetConnector", "RelationalDataConnector"))) {
-                        div(
-                          h4("Data(set) for: ", lapply(x$get_datanames(), code)),
-                          p(icon("check"), "Loaded")
-                          )
-                        } else {
-                          if_null(
-                            x$get_ui(
-                              id = ns(paste0(x$get_datanames(), collapse = "_"))
-                              ),
-                            div(
-                              h4("Dataset Connector for: ", lapply(x$get_datanames(), code)),
-                              p(icon("check"), "Ready to Load")
-                              )
+                        div(h4("Data(set) for: ", lapply(x$get_datanames(), code)), p(icon("check"), "Loaded"))
+                      } else {
+                        if_null(
+                          x$get_ui(id = ns(paste0(x$get_datanames(), collapse = "_"))),
+                          div(
+                            h4("Dataset Connector for: ", lapply(x$get_datanames(), code)),
+                            p(icon("check"), "Ready to Load")
                             )
-                          },
+                          )
+                      },
                       br()
                       )
                     }

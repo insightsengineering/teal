@@ -94,11 +94,12 @@
 data_extract_spec <- function(dataname, select, filter = NULL, reshape = FALSE) {
   stopifnot(is_character_single(dataname))
   stopifnot(is(select, "select_spec") || is(select, "delayed_select_spec"), length(select) >= 1)
-  stopifnot(is.null(filter) ||
-              (is(filter, "filter_spec") & length(filter) >= 1) ||
-              is_class_list("filter_spec")(filter) ||
-              is(filter, "delayed_filter_spec") ||
-              is_class_list("delayed_filter_spec")(filter))
+  stopifnot(
+    is.null(filter) ||
+    (is(filter, "filter_spec") & length(filter) >= 1) ||
+    is_class_list("filter_spec")(filter) ||
+    is(filter, "delayed_filter_spec") ||
+    is_class_list("delayed_filter_spec")(filter))
   stopifnot(is_logical_single(reshape))
 
   if (is(select, "delayed_select_spec") ||
@@ -113,11 +114,9 @@ data_extract_spec <- function(dataname, select, filter = NULL, reshape = FALSE) 
 #' @export
 #' @rdname data_extract_spec
 data_extract_spec.delayed_data <- function(dataname, select, filter = NULL, reshape = FALSE) {
-  out <- structure(list(dataname = dataname,
-                        select = select,
-                        filter = filter,
-                        reshape = reshape),
-                   class = c("delayed_data_extract_spec", "delayed_data", "data_extract_spec"))
+  out <- structure(
+    list(dataname = dataname, select = select, filter = filter, reshape = reshape),
+    class = c("delayed_data_extract_spec", "delayed_data", "data_extract_spec"))
   return(out)
 }
 

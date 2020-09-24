@@ -543,9 +543,7 @@ rice_connection <- function(open_args = list(), close_args = list(), ping_args =
   close_args$message <- FALSE
   close_fun$set_args(close_args)
 
-  x <- DataConnection$new(open_fun = open_fun,
-                          close_fun = close_fun,
-                          ping_fun = ping_fun)
+  x <- DataConnection$new(open_fun = open_fun, close_fun = close_fun, ping_fun = ping_fun)
 
   # open connection
   x$set_open_ui(
@@ -560,9 +558,7 @@ rice_connection <- function(open_args = list(), close_args = list(), ping_args =
 
   x$set_open_server(
     function(input, output, session, connection) {
-      connection$open(args = list(username = input$username,
-                                  password = input$password),
-                      try = TRUE)
+      connection$open(args = list(username = input$username, password = input$password), try = TRUE)
 
       if (connection$is_open_failed()) {
         shinyjs::alert(
@@ -647,10 +643,7 @@ teradata_connection <- function(open_args = list(), close_args = list(), ping_ar
   ping_args$dbObj <- as.name("conn") # nolint
   ping_fun$set_args(ping_args)
 
-  x <- DataConnection$new(open_fun = open_fun,
-                          close_fun = close_fun,
-                          ping_fun = ping_fun,
-                          if_conn_obj = TRUE)
+  x <- DataConnection$new(open_fun = open_fun, close_fun = close_fun, ping_fun = ping_fun, if_conn_obj = TRUE)
 
   # open connection
   x$set_open_ui(
@@ -665,9 +658,7 @@ teradata_connection <- function(open_args = list(), close_args = list(), ping_ar
 
   x$set_open_server(
     function(input, output, session, connection) {
-      connection$open(args = list(uid = input$username,
-                                  pwd = input$password),
-                      try = TRUE)
+      connection$open(args = list(uid = input$username, pwd = input$password), try = TRUE)
 
       if (connection$is_open_failed()) {
         shinyjs::alert(

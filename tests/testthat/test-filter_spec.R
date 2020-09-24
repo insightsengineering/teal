@@ -24,11 +24,12 @@ test_that("Proper argument types", {
 })
 
 test_that("Single choice", {
-  expect_silent(f1 <- filter_spec(vars = "var1",
-                                  choices = choices,
-                                  selected = choices[1],
-                                  multiple = FALSE,
-                                  label = "test"))
+  expect_silent(f1 <- filter_spec(
+    vars = "var1",
+    choices = choices,
+    selected = choices[1],
+    multiple = FALSE,
+    label = "test"))
   expect_identical(names(f1), c("vars", "choices", "selected", "multiple", "label", "sep"))
   expect_identical(f1$choices, as.list(setNames(choices, choices)))
   expect_identical(f1$selected, as.list(setNames(choices[1], choices[1])))
@@ -49,29 +50,32 @@ test_that("Multiple choices", {
 })
 
 test_that("Multiple vars", {
-  expect_error(filter_spec(vars = c("var1", "var2"), choices = c("val1.1-val2.1", "val1.1-val2.2"), sep = ":"),
-               "length\\(vars\\)")
+  expect_error(
+    filter_spec(vars = c("var1", "var2"), choices = c("val1.1-val2.1", "val1.1-val2.2"), sep = ":"),
+    "length\\(vars\\)")
 
-  expect_error(filter_spec(vars = c("var1", "var2"), choices = c("val1.1-val2.1", "val1.1-val2.2")),
-               "length\\(vars\\)")
+  expect_error(
+    filter_spec(vars = c("var1", "var2"), choices = c("val1.1-val2.1", "val1.1-val2.2")),
+    "length\\(vars\\)")
 
-  expect_error(filter_spec(vars = "var1", choices = c("val-1", "val2", "val3", "val4"), sep = "-"),
-               "length\\(vars\\)")
+  expect_error(
+    filter_spec(vars = "var1", choices = c("val-1", "val2", "val3", "val4"), sep = "-"),
+    "length\\(vars\\)")
 
-  expect_silent(f1 <- filter_spec(vars = c("var1", "var2"),
-                                  choices = c("val1.1 - val2.1", "val1.1 - val2.2"),
-                                  sep = " - "))
+  expect_silent(f1 <- filter_spec(
+    vars = c("var1", "var2"),
+    choices = c("val1.1 - val2.1", "val1.1 - val2.2"),
+    sep = " - "))
 
-  expect_silent(f2 <- filter_spec(vars = c("var1", "var2"),
-                                  choices = c("val1.1 - val2.1", "val1.1 - val2.2")))
+  expect_silent(f2 <- filter_spec(vars = c("var1", "var2"), choices = c("val1.1 - val2.1", "val1.1 - val2.2")))
 
-  expect_silent(f3 <- filter_spec(vars = c("var1", "var2"),
-                                  choices = c(`val1.1 - val2.1` = "val1.1 - val2.1",
-                                              `val1.1 - val2.2` = "val1.1 - val2.2")))
+  expect_silent(f3 <- filter_spec(
+    vars = c("var1", "var2"),
+    choices = c(`val1.1 - val2.1` = "val1.1 - val2.1", `val1.1 - val2.2` = "val1.1 - val2.2")))
 
-  expect_silent(f5 <- filter_spec(vars = c("var1", "var2"),
-                                  choices = c(`combo1` = "val1.1 - val2.1",
-                                              `combo2` = "val1.1 - val2.2")))
+  expect_silent(f5 <- filter_spec(
+    vars = c("var1", "var2"),
+    choices = c(`combo1` = "val1.1 - val2.1", `combo2` = "val1.1 - val2.2")))
 
 
 
@@ -88,29 +92,33 @@ test_that("Multiple vars", {
   choices <- c("val1.1 - val2.1", "val1.1 - val2.2", "val1.1 - val2.3")
 
   expect_silent(
-    f1m <- filter_spec(vars = c("var1", "var2"),
-                      choices = choices,
-                      selected = choices[1:2],
-                      multiple = TRUE,
-                      sep = " - ")
+    f1m <- filter_spec(
+      vars = c("var1", "var2"),
+      choices = choices,
+      selected = choices[1:2],
+      multiple = TRUE,
+      sep = " - ")
   )
 
   expect_silent(
-    f2m <- filter_spec(vars = c("var1", "var2"),
-                       choices = choices,
-                       selected = choices[1:2],
-                       sep = " - ")
+    f2m <- filter_spec(vars = c("var1", "var2"), choices = choices, selected = choices[1:2], sep = " - ")
   )
 
   expect_identical(f1m, f2m)
 
   # correct object structure
   expect_identical(names(f1m), c("vars", "choices", "selected", "multiple", "label", "sep"))
-  expect_identical(f1m$choices, list(`val1.1 - val2.1` = c("val1.1", "val2.1"),
-                                     `val1.1 - val2.2` = c("val1.1", "val2.2"),
-                                     `val1.1 - val2.3` = c("val1.1", "val2.3")))
-  expect_identical(f1m$selected, list(`val1.1 - val2.1` = c("val1.1", "val2.1"),
-                                      `val1.1 - val2.2` = c("val1.1", "val2.2")))
+  expect_identical(
+    f1m$choices,
+    list(
+      `val1.1 - val2.1` = c("val1.1", "val2.1"),
+      `val1.1 - val2.2` = c("val1.1", "val2.2"),
+      `val1.1 - val2.3` = c("val1.1", "val2.3"))
+    )
+  expect_identical(
+    f1m$selected,
+    list(`val1.1 - val2.1` = c("val1.1", "val2.1"), `val1.1 - val2.2` = c("val1.1", "val2.2"))
+    )
 
   expect_true(f1m$multiple)
   expect_identical(f1m$label, "Filter")
@@ -118,9 +126,10 @@ test_that("Multiple vars", {
 
 test_that("delayed filter_spec works", {
   set.seed(1)
-  ADSL <- data.frame(USUBJID = letters[1:10],  # nolint
-                     SEX = sample(c("F", "M", "U"), 10, replace = TRUE),
-                     stringsAsFactors = FALSE)
+  ADSL <- data.frame( # nolint
+    USUBJID = letters[1:10],
+    SEX = sample(c("F", "M", "U"), 10, replace = TRUE),
+    stringsAsFactors = FALSE)
   attr(ADSL, "keys") <- get_cdisc_keys("ADSL")
 
   expected_spec <- filter_spec(

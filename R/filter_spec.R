@@ -183,13 +183,9 @@ filter_spec.delayed_data <- function(vars,
   stopifnot(is_character_vector(choices) || is(choices, "delayed_data"))
   stopifnot(is.null(selected) || is_character_vector(selected) || is(selected, "delayed_data"))
 
-  out <- structure(list(vars = vars,
-                        choices = choices,
-                        selected = selected,
-                        multiple = multiple,
-                        label = label,
-                        sep = sep),
-                   class = c("delayed_filter_spec", "delayed_data", "filter_spec"))
+  out <- structure(
+    list(vars = vars, choices = choices, selected = selected, multiple = multiple, label = label, sep = sep),
+    class = c("delayed_filter_spec", "delayed_data", "filter_spec"))
   return(out)
 }
 
@@ -228,12 +224,7 @@ filter_spec.default <- function(vars,
   }
 
 
-  res <- list(vars = vars,
-              choices = choices,
-              selected = selected,
-              multiple = multiple,
-              label = label,
-              sep = sep)
+  res <- list(vars = vars, choices = choices, selected = selected, multiple = multiple, label = label, sep = sep)
   class(res) <- "filter_spec"
 
   return(res)

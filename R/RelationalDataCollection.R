@@ -21,8 +21,9 @@ RelationalDataCollection <- R6::R6Class( #nolint
     #'
     #' @return throws error
     initialize = function() {
-      stop("Cannot create RelationalDataCollection objects directly please create
-            RelationalData or RelationalDataConnector object.")
+      stop(
+        "Cannot create RelationalDataCollection objects directly please create
+        RelationalData or RelationalDataConnector object.")
     },
     #' @description
     #'   Check if the object raw data is reproducible from the \code{get_code()} code.

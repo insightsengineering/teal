@@ -49,8 +49,7 @@ log_app_usage <- function(ta,
 
     # add header record
     log_handle <- file("./logs/utilization.log")
-    writeLines(c("UNIXID|SESSIONDTM|APP_DIR|TA|MOLECULE|INDICATION|ANL_TYPE|PKGS"),
-               log_handle)
+    writeLines(c("UNIXID|SESSIONDTM|APP_DIR|TA|MOLECULE|INDICATION|ANL_TYPE|PKGS"), log_handle)
     close(log_handle)
   }
 
@@ -102,9 +101,10 @@ line_usage_log <- function(...) {
 #' }
 #' @importFrom utils sessionInfo
 line_pkg_log <- function(fields) {
-  nest_packages <- c("test.nest", "utils.nest", "devtools.nest", "random.cdisc.data", "rtables",
-                     "tern", "teal", "teal.devel", "teal.modules.general", "teal.modules.clinical",
-                     "oosprey", "teal.osprey", "goshawk", "teal.goshawk", "tlgdown")
+  nest_packages <- c(
+    "test.nest", "utils.nest", "devtools.nest", "random.cdisc.data", "rtables",
+    "tern", "teal", "teal.devel", "teal.modules.general", "teal.modules.clinical",
+    "oosprey", "teal.osprey", "goshawk", "teal.goshawk", "tlgdown")
   pkg_desc <- sessionInfo()$otherPkgs
   pkg_desc <- lapply(pkg_desc, function(x) if (x$Package %in% nest_packages) x[fields] else NULL)
   pkg_desc <- Filter(Negate(is.null), pkg_desc)

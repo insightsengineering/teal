@@ -172,13 +172,11 @@ CallableFunction <- R6::R6Class( #nolint
       # search for function object by name sequentially
       # over the entire call stack
       for (i in seq_along(fr)[-1]) {
-        fn <- tryCatch(get(as.character(found_name), envir = fr[[i]]),
-                       error = function(e) NULL)
+        fn <- tryCatch(get(as.character(found_name), envir = fr[[i]]), error = function(e) NULL)
         is_symbol <- is.symbol(fn)
         if (is_symbol) {
           found_name <- fn
-          fn <- tryCatch(get(as.character(fn), envir = fr[[i]]),
-                       error = function(e) NULL)
+          fn <- tryCatch(get(as.character(fn), envir = fr[[i]]), error = function(e) NULL)
         }
         if (is.function(fn)) {
           return(found_name)

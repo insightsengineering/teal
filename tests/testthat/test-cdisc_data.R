@@ -76,9 +76,10 @@ test_that("two datasets / datasets code", {
   expect_silent(
     data <- cdisc_data(adsl, adtte, check = TRUE)  %>%
       mutate_dataset(dataname = "ADSL", code = "ADSL <- dplyr::filter(ADSL, SEX == 'F')") %>%
-      mutate_dataset(dataname = "ADTTE",
-                     code = "ADTTE <- dplyr::filter(ADTTE, USUBJID %in% ADSL$USUBJID)",
-                     vars = list(ADSL = adsl)) %>%
+      mutate_dataset(
+        dataname = "ADTTE",
+        code = "ADTTE <- dplyr::filter(ADTTE, USUBJID %in% ADSL$USUBJID)",
+        vars = list(ADSL = adsl)) %>%
       mutate_dataset(dataname = "ADSL", code = "ADSL$x <- 1")
   )
 
@@ -127,8 +128,7 @@ test_that("two datasets / datasets code", {
     cdisc_data(
       cdisc_dataset(dataname = "ADSL", data = ADSL, code = "ADSL <- radsl(cached = TRUE)"),
       cdisc_dataset(dataname = "ADTTE", data = ADTTE, code = "ADTTE <- radtte(cached = TRUE)"),
-      code = "ADSL <- radsl(cached = TRUE)
-              ADTTE <- radtte(cached = TRUE)",
+      code = "ADSL <- radsl(cached = TRUE)\nADTTE <- radtte(cached = TRUE)",
       check = TRUE
     )
   )
@@ -137,8 +137,7 @@ test_that("two datasets / datasets code", {
     data <- cdisc_data(
       adsl,
       adtte,
-      code = "ADSL <- radsl(cached = TRUE)
-              ADTTE <- radtte(cached = TRUE)",
+      code = "ADSL <- radsl(cached = TRUE)\nADTTE <- radtte(cached = TRUE)",
       check = TRUE
     )
   )
@@ -166,12 +165,13 @@ test_that("two datasets / datasets code", {
   adtte <- cdisc_dataset(dataname = "ADTTE", data = ADTTE)
 
   expect_silent(
-    data <- cdisc_data(adsl, adtte,
-                       code = "ADSL <- radsl(cached = TRUE)\nADTTE <- radtte(cached = TRUE)",
-                       check = TRUE) %>%
+    data <- cdisc_data(
+      adsl,
+      adtte,
+      code = "ADSL <- radsl(cached = TRUE)\nADTTE <- radtte(cached = TRUE)",
+      check = TRUE) %>%
       mutate_data(code = "ADSL <- dplyr::filter(ADSL, SEX == 'F')") %>%
-      mutate_dataset(dataname = "ADTTE",
-                     code = "ADTTE <- dplyr::filter(ADTTE, USUBJID %in% ADSL$USUBJID)") %>%
+      mutate_dataset(dataname = "ADTTE", code = "ADTTE <- dplyr::filter(ADTTE, USUBJID %in% ADSL$USUBJID)") %>%
       mutate_dataset(dataname = "ADSL", code = "ADSL$x <- 1")
   )
 
@@ -238,8 +238,7 @@ test_that("dataset + connector / global code", {
 
   data <- cdisc_data(adsl, adtte, check = TRUE) %>%
     mutate_data(code = "ADSL <- dplyr::filter(ADSL, SEX == 'F')") %>%
-    mutate_dataset(dataname = "ADTTE",
-                   code = "ADTTE <- dplyr::filter(ADTTE, USUBJID %in% ADSL$USUBJID)") %>%
+    mutate_dataset(dataname = "ADTTE", code = "ADTTE <- dplyr::filter(ADTTE, USUBJID %in% ADSL$USUBJID)") %>%
     mutate_dataset(dataname = "ADSL", code = "ADSL$x <- 1")
 
   expect_identical(
@@ -295,9 +294,13 @@ test_that("two datasets / datasets code", {
     "ADTTE <- radtte(ADSL = ADSL, cached = TRUE)"
   )
 
-  data <- cdisc_data(adsl, adlb, adtte, adrs,
-                     code = "ADSL <- radsl(cached = TRUE)\nADRS <- radrs(cached = TRUE)",
-                     check = TRUE)
+  data <- cdisc_data(
+    adsl,
+    adlb,
+    adtte,
+    adrs,
+    code = "ADSL <- radsl(cached = TRUE)\nADRS <- radrs(cached = TRUE)",
+    check = TRUE)
 
   expect_identical(
     get_code(data),
@@ -344,8 +347,7 @@ test_that("two datasets / datasets code", {
   adtte <- rcd_cdisc_dataset_connector("ADTTE", radtte, ADSL = adsl, cached = TRUE)
   data <- cdisc_data(adsl, adtte, code = "ADSL <- radsl(cached = TRUE)", check = TRUE) %>%
     mutate_data(code = "ADSL <- dplyr::filter(ADSL, SEX == 'F')") %>%
-    mutate_dataset(dataname = "ADTTE",
-                   code = "ADTTE <- dplyr::filter(ADTTE, USUBJID %in% ADSL$USUBJID)") %>%
+    mutate_dataset(dataname = "ADTTE", code = "ADTTE <- dplyr::filter(ADTTE, USUBJID %in% ADSL$USUBJID)") %>%
     mutate_dataset(dataname = "ADSL", code = "ADSL$x <- 1")
 
   expect_identical(
@@ -397,11 +399,11 @@ test_that("only connectors", {
 
   expect_silent(
     data <- cdisc_data(adsl, adtte, check = TRUE) %>%
-      mutate_dataset(dataname = "ADSL",
-                     code = "ADSL <- dplyr::filter(ADSL, SEX == 'F')") %>%
-      mutate_dataset(dataname = "ADTTE",
-                     code = "ADTTE <- dplyr::filter(ADTTE, USUBJID %in% ADSL$USUBJID)",
-                     vars = list(ADSL = adsl)) %>%
+      mutate_dataset(dataname = "ADSL", code = "ADSL <- dplyr::filter(ADSL, SEX == 'F')") %>%
+      mutate_dataset(
+        dataname = "ADTTE",
+        code = "ADTTE <- dplyr::filter(ADTTE, USUBJID %in% ADSL$USUBJID)",
+        vars = list(ADSL = adsl)) %>%
       mutate_dataset(dataname = "ADSL", code = "ADSL$x <- 1")
   )
 
@@ -493,9 +495,10 @@ test_that("Basic example - check overall code", {
   expect_error(
     cdisc_data(
       cdisc_dataset("ADSL", ADSL, code = "ADSL <- radsl(cached = TRUE)"),
-      dataset(dataname = "ARG1",
-              data = dplyr::mutate(ADSL, x1 = 1),
-              keys = get_cdisc_keys("ADSL"), code = "ARG1 <- radsl(cached = TRUE)"),
+      dataset(
+        dataname = "ARG1",
+        data = dplyr::mutate(ADSL, x1 = 1),
+        keys = get_cdisc_keys("ADSL"), code = "ARG1 <- radsl(cached = TRUE)"),
       dataset("ARG2", ADSL, keys = get_cdisc_keys("ADSL"), code = "ARG2 <- radsl(cached = TRUE)"),
       check = TRUE
     ),
@@ -525,25 +528,18 @@ test_that("Basic example - dataset depending on other dataset", {
     "'code' argument should be specified only in the 'cdisc_data' or in 'cdisc_dataset' but not in both"
   )
 
-  arg2 <- dataset(dataname = "ARG2",
-                  data = ARG2,
-                  keys = get_cdisc_keys("ADSL"),
-                  code = "ARG2 <- cadsl")
+  arg2 <- dataset(dataname = "ARG2", data = ARG2, keys = get_cdisc_keys("ADSL"), code = "ARG2 <- cadsl")
 
-  arg1 <- dataset(dataname = "ARG1",
-                  data = ARG1,
-                  keys = get_cdisc_keys("ADSL"),
-                  code = "ARG1 <- ARG2",
-                  vars = list(ARG2 = arg2))
+  arg1 <- dataset(
+    dataname = "ARG1",
+    data = ARG1,
+    keys = get_cdisc_keys("ADSL"),
+    code = "ARG1 <- ARG2",
+    vars = list(ARG2 = arg2))
 
-  adsl <- cdisc_dataset(dataname = "ADSL",
-                        data = ADSL,
-                        code = "ADSL <- ARG2",
-                        vars = list(ARG2 = arg2))
+  adsl <- cdisc_dataset(dataname = "ADSL", data = ADSL, code = "ADSL <- ARG2", vars = list(ARG2 = arg2))
 
-  expect_silent(
-    cd <- cdisc_data(arg2, arg1, adsl, check = TRUE)
-  )
+  expect_silent(cd <- cdisc_data(arg2, arg1, adsl, check = TRUE))
 
   expect_true(arg1$check())
   expect_true(arg2$check())
@@ -585,18 +581,18 @@ test_that("Basic example - with line break code and check", {
   expect_true(is.data.frame(ARG1))
   expect_true(is.data.frame(ARG2))
 
-  expect_silent(cdisc_data(cdisc_dataset("ADSL", ADSL),
-                           code = "ADSL <- cadsl\n ADSL$x1 <- 1",
-                           check = FALSE))
+  expect_silent(cdisc_data(cdisc_dataset("ADSL", ADSL), code = "ADSL <- cadsl\n ADSL$x1 <- 1", check = FALSE))
 })
 
 test_that("Naming list elements", {
 
   expect_identical(names(get_datasets(cdisc_data(cdisc_dataset("ADSL", ADSL)))), "ADSL")
-  expect_identical(names(get_datasets(cdisc_data(cdisc_dataset("ADSL", ADSL),
-                                                 cdisc_dataset("ADTTE", ADTTE),
-                                                 cdisc_dataset("ADRS", ADRS)))),
-                   c("ADSL", "ADTTE", "ADRS"))
+  expect_identical(
+    names(get_datasets(cdisc_data(
+      cdisc_dataset("ADSL", ADSL),
+      cdisc_dataset("ADTTE", ADTTE),
+      cdisc_dataset("ADRS", ADRS)))),
+    c("ADSL", "ADTTE", "ADRS"))
 })
 
 test_that("List values", {
@@ -621,8 +617,7 @@ test_that("List values", {
 
   expect_equal(result, result_to_compare)
 
-  result <- cdisc_data(cdisc_dataset("ADSL", ADSL),
-                       cdisc_dataset("ADTTE", ADTTE))
+  result <- cdisc_data(cdisc_dataset("ADSL", ADSL), cdisc_dataset("ADTTE", ADTTE))
 
   datasets <- list(
     relational_dataset(
@@ -739,10 +734,7 @@ test_that("Empty keys for single and multiple datasets", {
 
 test_that("Error - primary keys are not unique for the dataset", {
   expect_error(
-    cdisc_data(cdisc_dataset("ADSL", ADSL,
-                             keys = keys(primary = c("SEX"),
-                                         foreign = NULL,
-                                         parent = NULL))),
+    cdisc_data(cdisc_dataset("ADSL", ADSL, keys = keys(primary = c("SEX"), foreign = NULL, parent = NULL))),
     "ADSL: Keys don't uniquely distinguish the rows,  i.e. some rows share the same keys")
 })
 
@@ -816,13 +808,14 @@ test_that("Error - items dataset to wide (without parent)", {
 
   expect_silent(
     cdisc_data(
-      cdisc_dataset("ADSL", ADSL,
-                    keys = keys(primary = c("STUDYID", "USUBJID", "COUNTRY"), foreign = NULL, parent = NULL)),
-      dataset(dataname = "COUNTRIES",
-              data = COUNTRIES,
-              keys = keys(primary = c("COUNTRY"),
-                          foreign = c("COUNTRY"),
-                          parent = "ADSL"))
+      cdisc_dataset(
+        "ADSL",
+        ADSL,
+        keys = keys(primary = c("STUDYID", "USUBJID", "COUNTRY"), foreign = NULL, parent = NULL)),
+      dataset(
+        dataname = "COUNTRIES",
+        data = COUNTRIES,
+        keys = keys(primary = c("COUNTRY"), foreign = c("COUNTRY"), parent = "ADSL"))
     )
   )
 
@@ -834,10 +827,10 @@ test_that("Error - Two root datasets with different keys", {
   expect_error(
     cdisc_data(
       cdisc_dataset("ADSL", ADSL),
-      dataset("ADSL2", ADSL2,
-              keys = keys(primary = c("ADSL_STUDYID", "USUBJID"),
-                          foreign = NULL,
-                          parent = NULL)),
+      dataset(
+        "ADSL2",
+        ADSL2,
+        keys = keys(primary = c("ADSL_STUDYID", "USUBJID"), foreign = NULL, parent = NULL)),
       cdisc_dataset("ADTTE", ADTTE)
     ),
     "Root dataset keys doesn't match ADSL primary keys"

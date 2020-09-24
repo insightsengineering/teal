@@ -103,11 +103,12 @@ test_that("data_extract_spec works with valid input", {
 test_that("delayed data_extract_spec works", {
 
   set.seed(1)
-  ADSL <- data.frame(USUBJID = letters[1:10],  # nolint
-                     SEX = sample(c("F", "M", "U"), 10, replace = T),
-                     BMRKR1 = rnorm(10),
-                     BMRKR2 = sample(c("L", "M", "H"), 10, replace = T),
-                     stringsAsFactors = F)
+  ADSL <- data.frame( # nolint
+    USUBJID = letters[1:10],
+    SEX = sample(c("F", "M", "U"), 10, replace = T),
+    BMRKR1 = rnorm(10),
+    BMRKR2 = sample(c("L", "M", "H"), 10, replace = T),
+    stringsAsFactors = F)
   attr(ADSL, "keys") <- get_cdisc_keys("ADSL")
 
   filter_normal <- filter_spec(

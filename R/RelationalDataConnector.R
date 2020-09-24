@@ -86,8 +86,9 @@ RelationalDataConnector <- R6::R6Class( #nolint
       datasets_code_class <- private$get_datasets_code_class()
       all_code$append(datasets_code_class)
 
-      close_connection_code <- if_not_null(private$connection,
-                                           private$connection$get_close_call(deparse = TRUE, silent = TRUE))
+      close_connection_code <- if_not_null(
+        private$connection,
+        private$connection$get_close_call(deparse = TRUE, silent = TRUE))
       if_not_null(close_connection_code, all_code$set_code(close_connection_code, dataname = "*close"))
 
       mutate_code_class <- private$get_mutate_code_class()
@@ -276,10 +277,7 @@ RelationalDataConnector <- R6::R6Class( #nolint
 
       private$server <- function(input, output, session, connection, connectors) {
         rv <- reactiveVal(NULL)
-        callModule(data_module,
-                   id = "data_input",
-                   connection = connection,
-                   connectors = connectors)
+        callModule(data_module, id = "data_input", connection = connection, connectors = connectors)
 
         if (self$is_pulled()) {
           return(rv(TRUE))
@@ -307,11 +305,9 @@ RelationalDataConnector <- R6::R6Class( #nolint
           try(
             dataset$set_code(code = paste(
               c(
-                if_not_null(private$connection,
-                            private$connection$get_open_call(deparse = TRUE)),
+                if_not_null(private$connection, private$connection$get_open_call(deparse = TRUE)),
                 get_code(dataset, deparse = TRUE, FUN.VALUE = character(1)),
-                if_not_null(private$connection,
-                            private$connection$get_close_call(deparse = TRUE, silent = TRUE))
+                if_not_null(private$connection, private$connection$get_close_call(deparse = TRUE, silent = TRUE))
               ),
               collapse = "\n"
             ))

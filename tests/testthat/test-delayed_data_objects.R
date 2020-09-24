@@ -74,8 +74,8 @@ test_that("One cached and one dependent connector wrapped in a single rcd data c
     get_code(data, "ADSL"), "library(package = \"random.cdisc.data\")\nADSL <- radsl(cached = TRUE)"
   )
   expect_equal(
-    get_code(data, "ADAE"), "library(package = \"random.cdisc.data\")
-ADSL <- radsl(cached = TRUE)\nADAE <- radae(ADSL = ADSL)"
+    get_code(data, "ADAE"),
+    "library(package = \"random.cdisc.data\")\nADSL <- radsl(cached = TRUE)\nADAE <- radae(ADSL = ADSL)"
   )
   expect_equal(
     get_code(data), "library(package = \"random.cdisc.data\")\nADSL <- radsl(cached = TRUE)\nADAE <- radae(ADSL = ADSL)"
@@ -104,21 +104,15 @@ test_that("Single rice_data connector with two rice dataset connectors", {
 
   expect_equal(
     get_code(adsl_adlb, "ADSL"),
-    "rice::rice_session_open(password = askpass::askpass())
-ADSL <- rice::rice_read(node = \"/path/to/ADSL\", prolong = TRUE, quiet = TRUE)
-rice::rice_session_close(message = FALSE)"
+    "rice::rice_session_open(password = askpass::askpass())\nADSL <- rice::rice_read(node = \"/path/to/ADSL\", prolong = TRUE, quiet = TRUE)\nrice::rice_session_close(message = FALSE)" # nolint
   )
   expect_equal(
     get_code(adsl_adlb, "ADLB"),
-    "rice::rice_session_open(password = askpass::askpass())
-ADLB <- rice::rice_read(node = \"/path/to/ADLB\", prolong = TRUE, quiet = TRUE)
-rice::rice_session_close(message = FALSE)"
+    "rice::rice_session_open(password = askpass::askpass())\nADLB <- rice::rice_read(node = \"/path/to/ADLB\", prolong = TRUE, quiet = TRUE)\nrice::rice_session_close(message = FALSE)" # nolint
   )
   expect_equal(
-    get_code(adsl_adlb), "rice::rice_session_open(password = askpass::askpass())
-ADSL <- rice::rice_read(node = \"/path/to/ADSL\", prolong = TRUE, quiet = TRUE)
-ADLB <- rice::rice_read(node = \"/path/to/ADLB\", prolong = TRUE, quiet = TRUE)
-rice::rice_session_close(message = FALSE)"
+    get_code(adsl_adlb),
+    "rice::rice_session_open(password = askpass::askpass())\nADSL <- rice::rice_read(node = \"/path/to/ADSL\", prolong = TRUE, quiet = TRUE)\nADLB <- rice::rice_read(node = \"/path/to/ADLB\", prolong = TRUE, quiet = TRUE)\nrice::rice_session_close(message = FALSE)" # nolint
   )
 })
 
@@ -156,11 +150,7 @@ test_that("RelationalDataConnector with custom UI and server", {
         tags$div(
           id = "main-app-data_input",
           numericInput("main-app-data_input-seed", "Choose seed", min = 1, max = 100, value = 1),
-          sliderInput("main-app-data_input-N",
-                      "Choose number of observations",
-                      min = 1,
-                      max = 400,
-                      value = 10),
+          sliderInput("main-app-data_input-N", "Choose number of observations", min = 1, max = 400, value = 10),
           tags$div(id = "main-app-data_input-pull_validate", class = "shiny-html-output")
         )
       )
@@ -250,8 +240,7 @@ test_that("Multiple rcd_data connectors wrapped in cdisc_data", {
   )
   expect_equal(
     get_code(data),
-    "library(package = \"random.cdisc.data\")
-ADSL <- radsl()\nADAE <- radae(ADSL = ADSL)\nADVS <- radvs(ADSL = ADSL)\nADTTE <- radtte(ADSL = ADSL)"
+    "library(package = \"random.cdisc.data\")\nADSL <- radsl()\nADAE <- radae(ADSL = ADSL)\nADVS <- radvs(ADSL = ADSL)\nADTTE <- radtte(ADSL = ADSL)" # nolint
   )
 })
 
@@ -271,12 +260,13 @@ test_that("RelationalData with single dataset and connector", {
   adae$set_ui_input(function(ns) {
     list(
       numericInput(inputId = ns("seed"), label = "ADSL seed", min = 0, value = 2),
-      optionalSliderInput(inputId = ns("max_n_aes"),
-                          label = "Maximum number of AEs per patient",
-                          min = 0,
-                          max = 10,
-                          value = 10,
-                          step = 1)
+      optionalSliderInput(
+        inputId = ns("max_n_aes"),
+        label = "Maximum number of AEs per patient",
+        min = 0,
+        max = 10,
+        value = 10,
+        step = 1)
     )
   }
   )
@@ -318,8 +308,7 @@ test_that("RelationalData with single dataset and connector", {
     "library(package = \"random.cdisc.data\")\nADSL <- radsl()\nADAE <- radae(ADSL = ADSL)"
   )
   expect_equal(
-    get_code(data), "library(package = \"random.cdisc.data\")\nADSL <- radsl()
-ADTTE <- radtte(cached = TRUE)\nADAE <- radae(ADSL = ADSL)"
+    get_code(data), "library(package = \"random.cdisc.data\")\nADSL <- radsl()\nADTTE <- radtte(cached = TRUE)\nADAE <- radae(ADSL = ADSL)" # nolint
   )
 })
 
@@ -414,8 +403,7 @@ test_that("RelationalData with mutliple datasets and connectors", {
   )
   expect_equal(
     get_code(data, "ADSAMP"),
-    "library(package = \"random.cdisc.data\")\nADSL <- radsl()\nADVS <- radvs(ADSL = ADSL)
-ADSAMP <- source(file = \"delayed_data_script/asdamp_with_adsl.R\", local = TRUE)$value"
+    "library(package = \"random.cdisc.data\")\nADSL <- radsl()\nADVS <- radvs(ADSL = ADSL)\nADSAMP <- source(file = \"delayed_data_script/asdamp_with_adsl.R\", local = TRUE)$value" # nolint
   )
   expect_equal(
     get_code(data, "ADTTE"),

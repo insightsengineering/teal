@@ -188,8 +188,7 @@ NamedDataset <- R6::R6Class( # nolint
         )
       }
 
-      execution_environment <- private$execute_code(code = self$get_code_class(),
-                                                    vars = private$vars)
+      execution_environment <- private$execute_code(code = self$get_code_class(), vars = private$vars)
       new_set <- execution_environment[[self$get_dataname()]]
 
       res_check <- tryCatch({

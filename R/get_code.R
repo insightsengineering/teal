@@ -256,8 +256,10 @@ enclosed_with_dataname <- function(lines, dataname = NULL) {
   }
 
   # set stop of preprocessing
-  idx_stop <- grep(sprintf("#\\s*<(?:[\\sa-zA-Z_]*%s[\\sa-zA-Z_]*|[\\s]*)(?<![a-zA-Z])code", dataname),
-                   lines, perl = TRUE)
+  idx_stop <- grep(
+    sprintf("#\\s*<(?:[\\sa-zA-Z_]*%s[\\sa-zA-Z_]*|[\\s]*)(?<![a-zA-Z])code", dataname),
+    lines,
+    perl = TRUE)
   line_stops <- if (length(idx_stop) >= 1) {
     idx_stop - 1
   } else {

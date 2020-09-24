@@ -147,13 +147,15 @@ select_spec.delayed_data <- function(choices,
                                      label = ifelse(multiple, "Columns", "Column")) {
   stopifnot(is.null(selected) || is.atomic(selected) || is(selected, "delayed_data"))
 
-  out <- structure(list(choices = choices,
-                        selected = selected,
-                        always_selected = always_selected,
-                        multiple = multiple,
-                        fixed = fixed,
-                        label = label),
-                   class = c("delayed_select_spec", "delayed_data", "select_spec"))
+  out <- structure(
+    list(
+      choices = choices,
+      selected = selected,
+      always_selected = always_selected,
+      multiple = multiple,
+      fixed = fixed,
+      label = label),
+    class = c("delayed_select_spec", "delayed_data", "select_spec"))
 
   return(out)
 }

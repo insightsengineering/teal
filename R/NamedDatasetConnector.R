@@ -68,8 +68,7 @@ NamedDatasetConnector <- R6::R6Class( #nolint
     get_dataset = function() {
       if (!self$is_pulled()) {
         stop(
-          sprintf("'%s' has not been pulled yet\n - please use `load_dataset()` first.",
-                  self$get_dataname()),
+          sprintf("'%s' has not been pulled yet\n - please use `load_dataset()` first.", self$get_dataname()),
           call. = FALSE
         )
       }
@@ -217,12 +216,13 @@ NamedDatasetConnector <- R6::R6Class( #nolint
 
       code <- if (inherits(private$pull_callable, "CallableCode")) {
         tmp <- private$pull_callable$get_call(deparse = FALSE)
-        tmp[[length(tmp)]] <- substitute(a <- b, list(a = as.name(private$dataname),
-                                                      b = tmp[[length(tmp)]]))
+        tmp[[length(tmp)]] <- substitute(a <- b, list(a = as.name(private$dataname), b = tmp[[length(tmp)]]))
         paste0(vapply(tmp, pdeparse, character(1)), collapse = "\n")
       } else {
-        pdeparse(substitute(a <- b, list(a = as.name(private$dataname),
-                                         b = private$pull_callable$get_call(deparse = FALSE, args = args))))
+        pdeparse(substitute(
+          a <- b,
+          list(a = as.name(private$dataname),
+          b = private$pull_callable$get_call(deparse = FALSE, args = args))))
       }
 
       res$set_code(code = code, dataname = private$dataname, deps = names(private$pull_vars))

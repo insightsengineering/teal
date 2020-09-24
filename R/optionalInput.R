@@ -73,10 +73,11 @@ optionalSelectInput <- function(inputId, # nolint
   stopifnot(is_character_single(inputId))
   stopifnot(is.null(label) || is_character_single(label) || is_html_like(label))
   stopifnot(is.null(choices) || length(choices) >= 1)
-  stopifnot(is.null(selected) ||
-              length(selected) == 0 ||
-              all(selected %in% choices) ||
-              all(selected %in% unlist(choices, recursive = FALSE)))
+  stopifnot(
+    is.null(selected) ||
+    length(selected) == 0 ||
+    all(selected %in% choices) ||
+    all(selected %in% unlist(choices, recursive = FALSE)))
   stopifnot(is_logical_single(multiple))
   stopifnot(is.null(sep) || is_character_single(sep))
   stopifnot(is.list(options))
@@ -132,10 +133,7 @@ optionalSelectInput <- function(inputId, # nolint
 
       return(div(
         hidden(ui),
-        tags$span(id = paste0(inputId, "_textonly"),
-                  style = "font-weight:bold",
-                  sub(":[[:space:]]+$", "", label)
-                  ),
+        tags$span(id = paste0(inputId, "_textonly"), style = "font-weight:bold", sub(":[[:space:]]+$", "", label)),
         tags$span(
           id = paste0(inputId, "_valueonly"),
           paste(if_null(label_selected, selected), collapse = ", ")

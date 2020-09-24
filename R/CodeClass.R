@@ -121,9 +121,7 @@ CodeClass <- R6::R6Class( # nolint
        )
 
        if (is(out, "error")) {
-         error_msg <- sprintf("%s\n\nEvaluation of the code failed:\n %s",
-                              pdeparse(x),
-                              conditionMessage(out))
+         error_msg <- sprintf("%s\n\nEvaluation of the code failed:\n %s", pdeparse(x), conditionMessage(out))
 
          rlang::with_options(
            stop(error_msg, call. = FALSE),
@@ -171,10 +169,11 @@ CodeClass <- R6::R6Class( # nolint
         # line of code is one we want if it is not empty and
         # has any dataname attribute in the vector datanames or dataname starts with * or is global code and
         # already have some lines of code selected
-        if ((any(datanames %in% attr(code_entry, "dataname")) ||
-             any(grepl("^[*]", attr(code_entry, "dataname"))) ||
-             (!is_empty(res) && is_empty(attr(code_entry, "dataname")))) &&
-            !is_empty(code_entry)) {
+        if ((
+          any(datanames %in% attr(code_entry, "dataname")) ||
+          any(grepl("^[*]", attr(code_entry, "dataname"))) ||
+          (!is_empty(res) && is_empty(attr(code_entry, "dataname")))) &&
+          !is_empty(code_entry)) {
 
           #append to index of code we want
           res <- c(idx, res)

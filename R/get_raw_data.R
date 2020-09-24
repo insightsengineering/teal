@@ -106,9 +106,7 @@ get_raw_data.RelationalDataCollection <- function(x, dataname = NULL) { # nolint
         )
       } else {
         stop(
-          sprintf("'%s' has not been pulled yet\n - please use `load_dataset()` first.",
-                  dataname),
-          call. = FALSE
+          sprintf("'%s' has not been pulled yet\n - please use `load_dataset()` first.", dataname), call. = FALSE
         )
       }
     } else {

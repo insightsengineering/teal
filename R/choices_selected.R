@@ -96,11 +96,9 @@ choices_selected <- function(choices, selected = if (is(choices, "delayed_data")
   }
 
   if (is(choices, "delayed_data")) {
-    out <- structure(list(choices = choices,
-                          selected = selected,
-                          keep_order = keep_order,
-                          fixed = fixed),
-                     class = c("delayed_choices_selected", "delayed_data", "choices_selected"))
+    out <- structure(
+      list(choices = choices, selected = selected, keep_order = keep_order, fixed = fixed),
+      class = c("delayed_choices_selected", "delayed_data", "choices_selected"))
     return(out)
   }
 
