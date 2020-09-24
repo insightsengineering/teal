@@ -13,7 +13,8 @@ optionalSelectInput(
   sep = NULL,
   options = list(),
   label_help = NULL,
-  fixed = FALSE
+  fixed = FALSE,
+  width = NULL
 )
 }
 \arguments{
@@ -46,6 +47,9 @@ To limit the number of selection possible, see example below.}
 returned by \code{\link[shiny]{helpText}}}
 
 \item{fixed}{(\code{logical}) (optional) whether to block user to select choices}
+
+\item{width}{(\code{character}) The width of the input passed to \code{pickerInput}
+e.g. 'auto', 'fit', '100px' or '75\%'}
 }
 \description{
 \ifelse{html}{\out{<a href='https://www.tidyverse.org/lifecycle/#maturing'><img src='figures/lifecycle-maturing.svg' alt='Maturing lifecycle'></a>}}{\strong{Maturing}}

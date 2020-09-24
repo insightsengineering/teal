@@ -24,6 +24,9 @@
 #'
 #' @param fixed (\code{logical}) (optional) whether to block user to select choices
 #'
+#' @param width (\code{character}) The width of the input passed to \code{pickerInput}
+#'   e.g. 'auto', 'fit', '100px' or '75%'
+#'
 #' @export
 #'
 #' @importFrom shinyjs hidden
@@ -69,7 +72,8 @@ optionalSelectInput <- function(inputId, # nolint
                                 sep = NULL,
                                 options = list(),
                                 label_help = NULL,
-                                fixed = FALSE) {
+                                fixed = FALSE,
+                                width = NULL) {
   stopifnot(is_character_single(inputId))
   stopifnot(is.null(label) || is_character_single(label) || is_html_like(label))
   stopifnot(is.null(choices) || length(choices) >= 1)
@@ -84,6 +88,9 @@ optionalSelectInput <- function(inputId, # nolint
   stopifnot(is.null(label_help) || is_character_single(label_help) || is_html_like(label_help))
   stopifnot(is_logical_single(fixed))
 
+  if (!is.null(width)) {
+    shiny::validateCssUnit(width)
+  }
 
   default_options <- list(
     "actions-box" = multiple,
@@ -114,6 +121,7 @@ optionalSelectInput <- function(inputId, # nolint
     choices = raw_choices,
     selected = raw_selected,
     multiple = TRUE,
+    width = width,
     options = options,
     choicesOpt = picker_options(choices)
   )
