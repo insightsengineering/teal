@@ -90,7 +90,6 @@ ui_nested_tabs <- function(id, modules, datasets) {
         args <- isolate(resolve_teal_args(modules$ui_args, datasets))
         # we pass the unfiltered datasets as they may be needed to create the UI
         tagList(
-          div(style = "margin-top: 25px;"),
           do.call(
             modules$ui,
             c(list(id = ns(id), datasets = datasets), args)

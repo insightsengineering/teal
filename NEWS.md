@@ -1,5 +1,6 @@
 # teal 0.9.0.9000
 
+* Nested tabs module now has better alignment with the filter panel on the page.
 * Allow `width` argument to `optionalSelectInput`.
 * Added lifecycle badges to all exported functions
 * Added new `code_dataset_connector` and `code_cdisc_dataset_connector` functions which enable the creation of new delayed data objects given a string of code.
