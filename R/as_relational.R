@@ -13,8 +13,6 @@
 as_relational <- function(x,
                           dataname,
                           keys,
-                          code,
-                          script,
                           label) {
   UseMethod("as_relational")
 }
@@ -37,17 +35,12 @@ as_relational <- function(x,
 as_relational.RawDataset <- function(x,
                                      dataname,
                                      keys,
-                                     code = character(0),
-                                     script = character(0),
                                      label = character(0)) {
-  code <- code_from_script(code, script, dataname = dataname)
-
   return(
     relational_dataset(
       x = get_raw_data(x),
       dataname = dataname,
       keys = keys,
-      code = code,
       label = label
     )
   )
@@ -58,18 +51,14 @@ as_relational.RawDataset <- function(x,
 as_relational.NamedDataset <- function(x,
                                        dataname,
                                        keys,
-                                       code = character(0),
-                                       script = character(0),
                                        label = character(0)) {
   warning("Only raw_data of 'x' will be used. All other fields get lost by using 'as_relational'.")
-  code <- code_from_script(code, script, dataname = dataname)
 
   return(
     relational_dataset(
       dataname = dataname,
       x = get_raw_data(x),
       keys = keys,
-      code = code,
       label = label
     )
   )
@@ -87,10 +76,7 @@ as_relational.NamedDataset <- function(x,
 as_relational.RawDatasetConnector <- function(x, # nolint
                                               dataname,
                                               keys,
-                                              code = character(0),
-                                              script = character(0),
                                               label = character(0)) {
-  code <- code_from_script(code, script, dataname = dataname)
   ds <- tryCatch(
     expr = get_dataset(x),
     error = function(e) NULL
@@ -106,7 +92,6 @@ as_relational.RawDatasetConnector <- function(x, # nolint
       dataname = dataname,
       pull_callable = x$get_pull_callable(),
       keys = keys,
-      code = code,
       label = label
     )
   )
@@ -122,17 +107,12 @@ as_relational.RawDatasetConnector <- function(x, # nolint
 #' @export
 as_cdisc_relational <- function(x,
                                 dataname,
-                                code = character(0),
-                                script = character(0),
                                 label = character(0)) {
-  code <- code_from_script(code, script, dataname = dataname)
-
   return(
     as_relational(
       x = x,
       dataname = dataname,
       keys = get_cdisc_keys(dataname),
-      code = code,
       label = label
     )
   )

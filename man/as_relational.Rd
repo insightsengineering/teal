@@ -8,42 +8,15 @@
 \alias{as_cdisc_relational}
 \title{Convert a \code{Raw<...>} to a \code{Relational<...>}}
 \usage{
-as_relational(x, dataname, keys, code, script, label)
+as_relational(x, dataname, keys, label)
 
-\method{as_relational}{RawDataset}(
-  x,
-  dataname,
-  keys,
-  code = character(0),
-  script = character(0),
-  label = character(0)
-)
+\method{as_relational}{RawDataset}(x, dataname, keys, label = character(0))
 
-\method{as_relational}{NamedDataset}(
-  x,
-  dataname,
-  keys,
-  code = character(0),
-  script = character(0),
-  label = character(0)
-)
+\method{as_relational}{NamedDataset}(x, dataname, keys, label = character(0))
 
-\method{as_relational}{RawDatasetConnector}(
-  x,
-  dataname,
-  keys,
-  code = character(0),
-  script = character(0),
-  label = character(0)
-)
+\method{as_relational}{RawDatasetConnector}(x, dataname, keys, label = character(0))
 
-as_cdisc_relational(
-  x,
-  dataname,
-  code = character(0),
-  script = character(0),
-  label = character(0)
-)
+as_cdisc_relational(x, dataname, label = character(0))
 }
 \arguments{
 \item{x}{(\code{RawDataset}, \code{NamedDataset}, \code{RawDatasetConnector})}
@@ -53,14 +26,6 @@ A given name for the dataset it may not contain spaces}
 
 \item{keys}{(\code{keys})\cr
 object of S3 class keys containing foreign, primary keys and parent information}
-
-\item{code}{(\code{character})\cr
-String containing the code to produce the object.
-The code must end in a call to the object.}
-
-\item{script}{(\code{character})\cr
-Alternatively to \code{code} - location of the file containing modification code.
-Can't be used simultaneously with \code{script}.}
 
 \item{label}{(\code{character})\cr
 Label to describe the dataset.}

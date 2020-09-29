@@ -242,8 +242,6 @@ test_that("RelationalDataset basics", {
 })
 
 ## as_relational ====
-context("as_relational")
-
 test_that("as_relational function", {
   x <- data.frame(x = c(1, 2), y = c("a", "b"), stringsAsFactors = TRUE)
   rtables::var_labels(x) <- c("X", "Y")
@@ -263,14 +261,12 @@ test_that("as_relational function", {
       dataname = "abc",
       x = x,
       keys = keys(primary = "x", foreign = NULL, parent = NULL),
-      code = "xx",
       label = character(0)
     ),
     as_relational(
       x = test_ds,
       dataname = "abc",
       keys = keys(primary = "x", foreign = NULL, parent = NULL),
-      code = "xx",
       label = character(0)
     )
   )

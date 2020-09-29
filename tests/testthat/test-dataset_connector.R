@@ -329,7 +329,6 @@ test_that("as_relational", {
     x1 <- as_relational(
       dataname = "ADSL",
       x = x,
-      code = "ADSL$test_col <- seq_len(nrow(ADSL))",
       keys = get_cdisc_keys("ADSL")
     )
   )
@@ -337,7 +336,7 @@ test_that("as_relational", {
 
   expect_identical(
     x1$get_code(),
-    "ADSL <- radsl(N = 5, seed = 1, cached = TRUE)\nADSL$test_col <- seq_len(nrow(ADSL))"
+    "ADSL <- radsl(N = 5, seed = 1, cached = TRUE)"
   )
 
   expect_error(
