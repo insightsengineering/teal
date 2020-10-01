@@ -59,6 +59,15 @@
 #'   resolve_delayed(adsl_filter, ds)
 #'   resolve_delayed(adsl_select, ds)
 #'   resolve_delayed(adsl_de, ds)
+#'
+#'   # nested list (arm_ref_comp)
+#'   arm_ref_comp <- list(
+#'     ARMCD = list(ref = variable_choices("ADSL"),
+#'     comp = variable_choices("ADSL")
+#'     )
+#'   )
+#'
+#'   resolve_delayed(arm_ref_comp, ds)
 #' })
 resolve_delayed <- function(x, datasets) {
   stopifnot(is(datasets, "FilteredData"))
@@ -129,10 +138,17 @@ resolve_delayed.delayed_data_extract_spec <- function(x, datasets) { # nolint
 }
 
 #' @export
+resolve_delayed.list <- function(x, datasets) { # nolint
+
+  # If specified explicitly, return it unchanged. Otherwise if delayed, resolve.
+  res <- lapply(x, resolve_delayed, datasets)
+  return(res)
+}
+
+#' @export
 #' @importFrom methods is
 resolve_delayed.default <- function(x, datasets) {
-  stop(paste('No "resolve_delayed" method implemented for object of class',
-             paste(class(x), collapse = ", ")))
+  return(x)
 }
 
 #' @importFrom methods is

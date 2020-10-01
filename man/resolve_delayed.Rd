@@ -63,5 +63,14 @@ isolate({
   resolve_delayed(adsl_filter, ds)
   resolve_delayed(adsl_select, ds)
   resolve_delayed(adsl_de, ds)
+
+  # nested list (arm_ref_comp)
+  arm_ref_comp <- list(
+    ARMCD = list(ref = variable_choices("ADSL"),
+    comp = variable_choices("ADSL")
+    )
+  )
+
+  resolve_delayed(arm_ref_comp, ds)
 })
 }

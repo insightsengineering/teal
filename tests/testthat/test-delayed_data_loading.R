@@ -1,11 +1,13 @@
 context("tests for delayed data loading functionality")
 
 library(random.cdisc.data)
-ADSL <- radsl(cached = T) #nolint
+ADSL <- radsl(cached = TRUE) # nolint
 attr(ADSL, "keys") <- get_cdisc_keys("ADSL")
+ADTTE <- radtte(cached = TRUE) # nolint
 
 ds <- FilteredData$new()
 isolate(ds$set_data("ADSL", ADSL))
+isolate(ds$set_data("ADTTE", ADTTE))
 
 
 test_that("resolve_delayed_expr works correctly", {
@@ -50,6 +52,27 @@ test_that("resolve_delayed_expr works correctly", {
   expect_equal(resolve_delayed_expr(function(data) 1:2, ds = ADSL, is_value_choices = TRUE), 1:2)
 })
 
+test_that("resolve_delayed.list works correctly", {
+  arm_ref_comp <- list(
+    ARMCD = list(
+      ref = value_choices(ADTTE, var_choices = "ARMCD", var_label = "ARM", subset = "ARM A"),
+      comp = value_choices(ADTTE, var_choices = "ARMCD", var_label = "ARM", subset = c("ARM B", "ARM C"))),
+    ARM = list(
+      ref = variable_choices(ADSL, subset = "ARM"), comp = variable_choices(ADSL, subset = "ARMCD")),
+    ARM2 = list(ref = "A: Drug X", comp = c("B: Placebo", "C: Combination"))
+  )
+  arm_ref_comp_ddl <- list(
+    ARMCD = list(
+      ref = value_choices("ADTTE", var_choices = "ARMCD", var_label = "ARM", subset = "ARM A"),
+      comp = value_choices("ADTTE", var_choices = "ARMCD", var_label = "ARM", subset = c("ARM B", "ARM C"))),
+    ARM = list(
+      ref = variable_choices("ADSL", subset = "ARM"), comp = variable_choices("ADSL", subset = "ARMCD")),
+    ARM2 = list(ref = "A: Drug X", comp = c("B: Placebo", "C: Combination"))
+  )
+
+  ddl_resolved <- isolate(resolve_delayed(arm_ref_comp_ddl, ds))
+  expect_identical(arm_ref_comp, ddl_resolved)
+})
 
 test_that("delayed version of variable_choices", {
 

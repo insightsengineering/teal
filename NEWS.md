@@ -1,5 +1,6 @@
 # teal 0.9.0.9000
 
+* Adds method to resolve nested lists containing delayed data objects, which can be used for `arm_ref_comp` objects.
 * Nested tabs module now has better alignment with the filter panel on the page.
 * Allow `width` argument to `optionalSelectInput`.
 * Added lifecycle badges to all exported functions
