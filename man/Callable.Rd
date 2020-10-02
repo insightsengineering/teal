@@ -50,7 +50,10 @@ new \code{CallableCode} object
 \if{html}{\out{<a id="method-assign_to_env"></a>}}
 \if{latex}{\out{\hypertarget{method-assign_to_env}{}}}
 \subsection{Method \code{assign_to_env()}}{
-Assigns \code{x <- value} object to \code{env}
+Assigns \code{x <- value} object to \code{env}. Assigned object can't
+be modified within local environment as it will be locked by using
+\code{lockBinding}. This also means that this object can't be reassigned
+which will throw an error.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{Callable$assign_to_env(x, value)}\if{html}{\out{</div>}}
 }
@@ -74,7 +77,7 @@ arguments the function gets called with
 \if{html}{\out{<a id="method-run"></a>}}
 \if{latex}{\out{\hypertarget{method-run}{}}}
 \subsection{Method \code{run()}}{
-Run function
+Execute \code{Callable} function or code.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{Callable$run(return = TRUE, args = NULL, try = FALSE)}\if{html}{\out{</div>}}
 }
@@ -96,7 +99,9 @@ whether perform function evaluation inside \code{try} clause}
 \if{html}{\out{</div>}}
 }
 \subsection{Returns}{
-nothing or output from function depending on \code{return} argument
+nothing or output from function depending on \code{return}
+argument. If \code{run} fails it will return object of class \code{simple-error error}
+when \code{try = TRUE} or will stop if \code{try = FALSE}.
 }
 }
 \if{html}{\out{<hr>}}
@@ -123,7 +128,7 @@ Get error message from last function execution
 }
 
 \subsection{Returns}{
-\code{try-error} object with error message or \code{character(0)} if last
+\code{character} object with error message or \code{character(0)} if last
  function evaluation was successful.
 }
 }

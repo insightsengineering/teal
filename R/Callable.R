@@ -24,7 +24,10 @@ Callable <- R6::R6Class( #nolint
       return(invisible(self))
     },
     #' @description
-    #' Assigns \code{x <- value} object to \code{env}
+    #' Assigns \code{x <- value} object to \code{env}. Assigned object can't
+    #' be modified within local environment as it will be locked by using
+    #' \code{lockBinding}. This also means that this object can't be reassigned
+    #' which will throw an error.
     #' @param x (\code{character} value)\cr
     #'  name of the variable in class environment
     #' @param value (\code{data.frame})\cr
@@ -32,11 +35,18 @@ Callable <- R6::R6Class( #nolint
     #'
     #' @return arguments the function gets called with
     assign_to_env = function(x, value) {
-      assign(x, value, envir = private$env)
+      # assign variable once
+      if (!exists(x, envir = private$env)) {
+        assign(x, value, envir = private$env)
+
+        # variable can't be modified
+        lockBinding(sym = x, env = private$env)
+      }
+
       return(invisible(self))
     },
     #' @description
-    #' Run function
+    #' Execute \code{Callable} function or code.
     #'
     #' @param return (\code{logical} value)\cr
     #'  whether to return an object
@@ -47,7 +57,9 @@ Callable <- R6::R6Class( #nolint
     #' @param try (\code{logical} value)\cr
     #'  whether perform function evaluation inside \code{try} clause
     #'
-    #' @return nothing or output from function depending on \code{return} argument
+    #' @return nothing or output from function depending on \code{return}
+    #' argument. If \code{run} fails it will return object of class \code{simple-error error}
+    #' when \code{try = TRUE} or will stop if \code{try = FALSE}.
     run = function(return = TRUE, args = NULL, try = FALSE) {
       stopifnot(is_logical_single(return))
       stopifnot(is_empty(args) || is_fully_named_list(args))
@@ -57,16 +69,11 @@ Callable <- R6::R6Class( #nolint
       # - args not saved to private$call persistently
       expr <- self$get_call(deparse = FALSE, args = args)
 
-      res <- if (try) {
-        try(
-          eval(expr, envir = private$env),
-          silent = TRUE
-        )
-      } else {
-        eval(expr, envir = private$env)
-      }
-
-      private$check_run_output(res)
+      res <- tryCatch(
+        eval(expr, envir = private$env),
+        error = function(e) e
+      )
+      private$check_run_output(res, try = try)
 
       if (return) {
         return(res)
@@ -85,7 +92,7 @@ Callable <- R6::R6Class( #nolint
     #' @description
     #' Get error message from last function execution
     #'
-    #' @return \code{try-error} object with error message or \code{character(0)} if last
+    #' @return \code{character} object with error message or \code{character(0)} if last
     #'  function evaluation was successful.
     get_error_message = function() {
       return(private$error_msg)
@@ -99,17 +106,33 @@ Callable <- R6::R6Class( #nolint
     failed = FALSE,
     error_msg = character(0),
     ## __Private Methods ====
-    # check if the function was evaluated properly - if not keep error message
-    check_run_output = function(res) {
-      if (is(res, "try-error")) {
-        private$failed <- TRUE
-        private$error_msg <- res
+    # Checks output and handles error messages
+    check_run_output = function(res, try) {
+      if (is(res, "error")) {
+        msg <- conditionMessage(res)
+        is_locked <- grepl(pattern = "cannot change value of locked", x = msg)
+
+        error_msg <- if (is_locked) {
+          locked_var <- gsub("^.+\\'(.+)\\'$", "\\1", x = msg)
+          sprintf(
+            "Modification of the local variable '%1$s' is not allowed. %2$s '%1$s'",
+            locked_var,
+            "Please add proxy variable to CallableCode to obtain results depending on altered"
+          )
+        } else {
+          msg
+        }
+
+        if (try) {
+          private$failed <- TRUE
+          private$error_msg <- error_msg
+        } else {
+          stop(error_msg, call. = FALSE)
+        }
       } else {
         private$failed <- FALSE
         private$error_msg <- character(0)
       }
-
-      return(NULL)
     }
   )
 )

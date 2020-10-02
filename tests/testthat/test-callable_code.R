@@ -71,3 +71,102 @@ test_that("Test various inputs", {
     code = get_code(file_example, dataname = "ADSL")
   )
 })
+
+test_that("Modify vars", {
+  adsl <- cdisc_dataset(
+    dataname = "ADSL",
+    data = radsl(cached = TRUE),
+    keys = get_cdisc_keys("ADSL"),
+    code = "ADSL <- radsl(cached = TRUE)",
+    label = "ADSL dataset"
+  )
+
+  adtte <- relational_dataset_connector(
+    dataname = "ADTTE",
+    pull_callable = callable_code(
+      "ADSL <- dplyr::filter(ADSL, SEX == 'F')
+      radtte(
+        ADSL = ADSL,
+        seed = 1
+      )"
+    ),
+    keys = get_cdisc_keys("ADTTE"),
+    label = "ADTTE dataset",
+    vars = list(ADSL = adsl)
+  )
+
+
+  expect_error(
+    adtte$pull(try = FALSE),
+    "Modification of the local variable 'ADSL' is not allowed."
+  )
+
+  expect_silent(adtte$pull(try = TRUE))
+
+  expect_true(
+    grepl("Modification of the local variable", adtte$get_error_message())
+  )
+})
+
+test_that("library calls", {
+  adsl <- relational_dataset_connector(
+    dataname = "ADSL",
+    pull_callable = callable_function(radsl) %>% set_args(args = list(cached = TRUE)),
+    keys = get_cdisc_keys("ADSL"),
+    label = "ADSL dataset"
+  )
+
+  adtte <- relational_dataset_connector(
+    dataname = "ADTTE",
+    pull_callable = callable_code(
+      "library(dplyr)
+      ADSL_local <- filter(ADSL, SEX == 'F')
+      radtte(
+        ADSL = ADSL_local,
+        seed = 1
+      )"
+    ),
+    keys = get_cdisc_keys("ADTTE"),
+    label = "ADTTE dataset",
+    vars = list(ADSL = adsl)
+  )
+
+  adrs <- relational_dataset_connector(
+    dataname = "ADRS",
+    pull_callable = callable_code(
+      "library(dplyr)
+      radrs(
+        ADSL = filter(ADSL, SEX == 'F'),
+        seed = 1
+      )"
+      ),
+      keys = get_cdisc_keys("ADRS"),
+      label = "ADRS dataset",
+      vars = list(ADSL = adsl)
+    )
+
+  data <- cdisc_data(adsl, adtte, adrs, check = TRUE)
+  expect_silent(
+    lapply(
+      data$get_items(),
+      load_dataset
+    )
+  )
+
+  datasets <- get_datasets(data)
+  expect_identical(
+    get_raw_data(datasets[[1]]),
+    radsl(cached = TRUE)
+  )
+
+  expect_identical(
+    unique(get_raw_data(datasets[[2]])$SEX),
+    factor("F", levels = c("F", "M"))
+  )
+
+  expect_identical(
+    unique(get_raw_data(datasets[[3]])$SEX),
+    factor("F", levels = c("F", "M"))
+  )
+
+})

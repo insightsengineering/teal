@@ -148,7 +148,9 @@ Note that if the connection is already opened then it does nothing.
 \if{html}{\out{</div>}}
 }
 \subsection{Returns}{
-if \code{try = TRUE} then \code{try-error} on error, \code{NULL} otherwise
+returns \code{self} if successful or if connection has been already
+opened. If \code{open_fun} fails, app returns an error in form of
+\code{shinyjs::alert} (if \code{try=TRUE}) or breaks the app (if \code{try=FALSE})
 }
 }
 \if{html}{\out{<hr>}}
@@ -198,7 +200,8 @@ Get error message from last connection
 }
 
 \subsection{Returns}{
-\code{try-error} object with error message or \code{character(0)} if last
+(\code{character} value)\cr
+ text of the error message or \code{character(0)} if last
  connection was successful.
 }
 }
@@ -336,7 +339,9 @@ Close the connection.
 \if{html}{\out{</div>}}
 }
 \subsection{Returns}{
-if \code{try = TRUE} then \code{try-error} on error, \code{NULL} otherwise
+returns \code{self} if successful. For unsuccessful evaluation it
+depends on \code{try} argument: if \code{try = TRUE} then returns
+\code{error}, for \code{try = FALSE} otherwise
 }
 }
 \if{html}{\out{<hr>}}
@@ -371,7 +376,8 @@ Get error message from last connection
 }
 
 \subsection{Returns}{
-\code{try-error} object with error message or \code{character(0)} if last
+(\code{character} value)\cr
+ text of the error message or \code{character(0)} if last
  connection was successful.
 }
 }

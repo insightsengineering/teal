@@ -177,12 +177,12 @@ test_that("is failed", {
   )
   expect_s3_class(
     fun$run(args = list(x = ""), try = TRUE),
-    "try-error"
+    "error"
   )
   expect_true(fun$is_failed())
   expect_identical(
-    as.character(fun$get_error_message()),
-    "Error in sqrt(x = \"\") : non-numeric argument to mathematical function\n"
+    fun$get_error_message(),
+    "non-numeric argument to mathematical function"
   )
 
   expect_silent(fun$run(args = list(x = 1.5)))

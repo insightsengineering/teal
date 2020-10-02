@@ -5,7 +5,6 @@
 #' open/close connection.
 #'
 #' @importFrom R6 R6Class
-#' @importFrom shinyjs enable
 #'
 #' @examples
 #' library(random.cdisc.data)
@@ -39,7 +38,6 @@
 #' x$get_datasets()
 #' }
 #' @importFrom R6 R6Class
-#' @importFrom shinyjs enable
 #' @importFrom methods is
 RelationalDataConnector <- R6::R6Class( #nolint
   classname = "RelationalDataConnector",
@@ -314,19 +312,6 @@ RelationalDataConnector <- R6::R6Class( #nolint
           )
         }
       )
-
-    },
-    stop_on_error = function(x, submit_id = character(0), progress = NULL) {
-      if (is(x, "try-error")) {
-        private$connection$close(silent = TRUE)
-        if (shiny::isRunning()) {
-          shinyjs::enable(submit_id)
-          if_not_null(progress, progress$close())
-        }
-        error_dialog(x)
-      } else {
-        x
-      }
     }
   )
 )

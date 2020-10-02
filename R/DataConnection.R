@@ -81,12 +81,15 @@ DataConnection <- R6::R6Class( # nolint
     #' @param silent (\code{logical}) whether convert all "missing function" errors to messages
     #' @param try (\code{logical}) whether perform function evaluation inside \code{try} clause
     #'
-    #' @return if \code{try = TRUE} then \code{try-error} on error, \code{NULL} otherwise
+    #' @return returns \code{self} if successful or if connection has been already
+    #' opened. If \code{open_fun} fails, app returns an error in form of
+    #' \code{shinyjs::alert} (if \code{try=TRUE}) or breaks the app (if \code{try=FALSE})
+    #'
     open = function(args = NULL, silent = FALSE, try = FALSE) {
       stopifnot(is.null(args) || (is.list(args) && is_fully_named_list(args)))
       if_cond(private$check_open_fun(silent = silent), return(), isFALSE)
       if (isTRUE(private$opened) && isTRUE(private$ping())) {
-        return(invisible(NULL))
+        return(invisible(self))
       } else {
         open_res <- private$open_fun$run(args = args, try = try)
         if (!self$is_open_failed()) {
@@ -140,7 +143,8 @@ DataConnection <- R6::R6Class( # nolint
     #' @description
     #' Get error message from last connection
     #'
-    #' @return \code{try-error} object with error message or \code{character(0)} if last
+    #' @return (\code{character} value)\cr
+    #'  text of the error message or \code{character(0)} if last
     #'  connection was successful.
     get_open_error_message = function() {
       return(private$open_fun$get_error_message())
@@ -240,12 +244,14 @@ DataConnection <- R6::R6Class( # nolint
     #' @param silent (\code{logical}) whether convert all "missing function" errors to messages
     #' @param try (\code{logical}) whether perform function evaluation inside \code{try} clause
     #'
-    #' @return if \code{try = TRUE} then \code{try-error} on error, \code{NULL} otherwise
+    #' @return returns \code{self} if successful. For unsuccessful evaluation it
+    #' depends on \code{try} argument: if \code{try = TRUE} then returns
+    #' \code{error}, for \code{try = FALSE} otherwise
     close = function(silent = FALSE, try = FALSE) {
       if_cond(private$check_close_fun(silent = silent), return(), isFALSE)
       if (isTRUE(private$ping())) {
         close_res <- private$close_fun$run(try = try)
-        if (is(close_res, "try-error")) {
+        if (is(close_res, "error")) {
           return(close_res)
         } else {
           private$opened <- FALSE
@@ -269,7 +275,8 @@ DataConnection <- R6::R6Class( # nolint
     #' @description
     #' Get error message from last connection
     #'
-    #' @return \code{try-error} object with error message or \code{character(0)} if last
+    #' @return (\code{character} value)\cr
+    #'  text of the error message or \code{character(0)} if last
     #'  connection was successful.
     get_close_error_message = function() {
       return(private$close_fun$get_error_message())
@@ -564,7 +571,7 @@ rice_connection <- function(open_args = list(), close_args = list(), ping_args =
         shinyjs::alert(
           paste(
             "Error opening connection\nError message: ",
-            conditionMessage(attr(connection$get_open_error_message(), "condition"))
+            connection$get_open_error_message()
           )
         )
       }
@@ -664,7 +671,7 @@ teradata_connection <- function(open_args = list(), close_args = list(), ping_ar
         shinyjs::alert(
           paste(
             "Error opening connection\nError message: ",
-            conditionMessage(attr(connection$get_open_error_message(), "condition"))
+            connection$get_open_error_message()
           )
         )
       }

@@ -89,7 +89,7 @@ RawDatasetConnector <- R6::R6Class( #nolint
     #' @description
     #' Get error message from last pull
     #'
-    #' @return \code{try-error} object with error message or \code{character(0)} if last
+    #' @return \code{character} object with error message or \code{character(0)} if last
     #'  pull was successful.
     get_error_message = function() {
       return(private$pull_callable$get_error_message())
@@ -123,7 +123,7 @@ RawDatasetConnector <- R6::R6Class( #nolint
     #' @param try (\code{logical} value)\cr
     #'  whether perform function evaluation inside \code{try} clause
     #'
-    #' @return \code{self} if successful or \code{try-error} if not.
+    #' @return \code{self} if successful.
     pull = function(args = NULL, try = FALSE) {
       data <- private$pull_internal(args = args, try = try)
       if (!self$is_failed()) {
@@ -264,6 +264,10 @@ RawDatasetConnector <- R6::R6Class( #nolint
           var_name <- names(private$pull_vars)[[var_idx]]
           var_value <- private$pull_vars[[var_idx]]
 
+          # assignment is done in pull_callable only once
+          # because x is locked within local environment
+          # this meas that re-assignment is not possible and will be silently skipped
+          # During the app loading, assign is called only once.
           private$pull_callable$assign_to_env(
             x = var_name,
             value = if (is(var_value, "RawDatasetConnector") || is(var_value, "RawDataset")) {
@@ -290,9 +294,9 @@ RawDatasetConnector <- R6::R6Class( #nolint
         })
     },
     set_failure = function(res) {
-      if (is(res, "try-error")) {
+      if (is(res, "error")) {
         private$failed <- TRUE
-        private$failure_msg <- res
+        private$failure_msg <- conditionMessage(res)
       } else {
         private$failed <- FALSE
         private$failure_msg <- NULL
@@ -352,7 +356,7 @@ RawDatasetConnector <- R6::R6Class( #nolint
             shinyjs::alert(
               paste(
                 "Error pulling dataset\nError message: ",
-                conditionMessage(attr(self$get_error_message(), "condition"))
+                self$get_error_message()
               )
             )
           }

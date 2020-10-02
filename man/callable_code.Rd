@@ -8,7 +8,9 @@ callable_code(code)
 }
 \arguments{
 \item{code}{(\code{character})\cr
-a string containing R code to reproduce the desired object.}
+a string containing R code to reproduce the desired object. Please be aware
+that objects assigned to temporary environment are locked which means
+that they can't be modified.}
 }
 \value{
 \code{CallableCode} object

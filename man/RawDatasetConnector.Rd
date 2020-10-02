@@ -170,7 +170,7 @@ Get error message from last pull
 }
 
 \subsection{Returns}{
-\code{try-error} object with error message or \code{character(0)} if last
+\code{character} object with error message or \code{character(0)} if last
 pull was successful.
 }
 }
@@ -227,7 +227,7 @@ whether perform function evaluation inside \code{try} clause}
 \if{html}{\out{</div>}}
 }
 \subsection{Returns}{
-\code{self} if successful or \code{try-error} if not.
+\code{self} if successful.
 }
 }
 \if{html}{\out{<hr>}}

@@ -110,7 +110,9 @@ CallableCode <- R6::R6Class( # nolint
 #' Create \link{CallableCode} object to execute specific code and get reproducible call.
 #'
 #' @param code (\code{character})\cr
-#'   a string containing R code to reproduce the desired object.
+#'   a string containing R code to reproduce the desired object. Please be aware
+#'   that objects assigned to temporary environment are locked which means
+#'   that they can't be modified.
 #'
 #' @return \code{CallableCode} object
 #' @examples

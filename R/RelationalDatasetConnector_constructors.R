@@ -42,11 +42,12 @@ raw_dataset_connector <- function(pull_callable) {
 #' @param label (\code{character})\cr
 #'  Label to describe the dataset.
 #'
-#' @param vars (list)\cr
+#' @param vars (\code{named list})\cr
 #'   In case when this object code depends on the \code{raw_data} from the other
 #'   \code{NamedDataset}, \code{NamedDatasetConnector} object(s) or other constant value,
-#'   this/these object(s) should be included.
-#'
+#'   this/these object(s) should be included. Please note that \code{vars}
+#'   are included to this object as \code{local vars} and they cannot be modified
+#'   within another dataset.
 #' @return new \code{NamedDatasetConnector} object
 #'
 #' @export

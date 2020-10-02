@@ -327,7 +327,7 @@ NamedDatasetConnector <- R6::R6Class( #nolint
               sprintf(
                 "Error pulling %s:\nError message: %s",
                 self$get_dataname(),
-                conditionMessage(attr(self$get_error_message(), "condition"))
+                self$get_error_message()
               )
             )
           }
