@@ -1,4 +1,4 @@
-# teal 0.9.0.9000
+# teal 0.9.1
 
 * Adds method to resolve nested lists containing delayed data objects, which can be used for `arm_ref_comp` objects.
 * Nested tabs module now has better alignment with the filter panel on the page.
@@ -18,7 +18,6 @@ now always a `RelationalData` object.
 * Fixes the issue with connection close code not being present in `get_code` results.
 * Fixes the issue of occasional incorrect ordering of bar charts on the filter panel.
 * More informative error displayed when `pull_fun` of `DataConnection` produces an error.
-* issues with no news: 
 
 # teal 0.9.0
 
