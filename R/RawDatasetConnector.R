@@ -149,7 +149,8 @@ RawDatasetConnector <- R6::R6Class( #nolint
     #' Inputs must provide only scalar (length of 1) variables.
     #' @param inputs (\code{function}) A shiny module UI function with single argument \code{ns}.
     #' This function needs to return a list of shiny inputs with their \code{inputId} wrapped
-    #' in function \code{ns}, see example.
+    #' in function \code{ns}. The \code{inputId} must match exactly the argument name to be set.
+    #' See example.
     #' Nested lists are not allowed.
     #' @return \code{self} invisibly for chaining.
     #' @examples
