@@ -289,9 +289,9 @@ RawDatasetConnector <- R6::R6Class( #nolint
           if (grepl("object 'conn' not found", e$message)) {
             output_message <- "This dataset connector requires connection object (conn) to be provided."
           } else {
-            output_message <- e$message
+            output_message <- paste("Could not pull dataset, the following error message was returned:", e$message)
           }
-          stop(output_message)
+          stop(output_message, call. = FALSE)
         })
     },
     set_failure = function(res) {
