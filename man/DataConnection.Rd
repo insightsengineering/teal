@@ -20,10 +20,10 @@ open_fun$set_args(list(x = 1:5)) # define fixed arguments to opening function
 close_fun <- callable_function(print) # define closing function
 close_fun$set_args(list(x = "Hi there")) # define fixed arguments to closing function
 
-x <- DataConnection$new() # define connection
-x$set_ping_fun(ping_fun) # able to set an optional ping function - eg. rice::rice_session_active
-x$set_open_fun(open_fun) # define opening function
-x$set_close_fun(close_fun) # define closing function
+x <- DataConnection$new( # define connection
+  ping_fun = ping_fun, # able to set an optional ping function - eg. rice::rice_session_active
+  open_fun = open_fun, # define opening function
+  close_fun = close_fun) # define closing function
 
 x$set_open_args(args = list(y = letters[1:5])) # define additional arguments if necessary
 
