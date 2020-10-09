@@ -36,9 +36,6 @@ Create a new \code{CallableCode} object
 \describe{
 \item{\code{env}}{(\code{environment})\cr
 environment where the call will be evaluated}
-
-\item{\code{fun}}{(\code{function})\cr
-function to be evaluated in class. Function should be named}
 }
 \if{html}{\out{</div>}}
 }

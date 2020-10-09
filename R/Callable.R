@@ -12,8 +12,6 @@ Callable <- R6::R6Class( #nolint
     #' @description
     #' Create a new \code{CallableCode} object
     #'
-    #' @param fun (\code{function})\cr
-    #'  function to be evaluated in class. Function should be named
     #' @param env (\code{environment})\cr
     #'  environment where the call will be evaluated
     #'
