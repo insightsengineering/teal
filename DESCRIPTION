@@ -42,7 +42,6 @@ Imports:
   shinyjs,
   shinyWidgets (>= 0.5.0),
   utils.nest (>= 0.2.6),
-  withr,
   yaml
 RoxygenNote: 7.1.1
 Suggests:
