@@ -22,7 +22,7 @@ argument will be overwritten with \code{ODBC}.}
 \code{\link[DBI]{dbIsValid}} ping function.}
 }
 \value{
-\code{DataConnection} type of object
+(\code{DataConnection}) type of object
 }
 \description{
 \ifelse{html}{\out{<a href='https://www.tidyverse.org/lifecycle/#experimental'><img src='figures/lifecycle-experimental.svg' alt='Experimental lifecycle'></a>}}{\strong{Experimental}}

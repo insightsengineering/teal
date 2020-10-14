@@ -1,10 +1,7 @@
 # Teal: Interactive Exploratory Data Analysis with Shiny Web-Applications
 
 
-*teal* is a shiny-based interactive exploration framework for analyzing clinical
-trials data. `teal` currently provides a dynamic filtering facility and diverse
-data viewers. `teal` shiny applications are built using standard [shiny
-modules](https://shiny.rstudio.com/articles/modules.html).
+*teal* is a shiny-based interactive exploration framework for analyzing clinical trials data. `teal` currently provides a dynamic filtering facility and diverse data viewers. `teal` shiny applications are built using standard [shiny modules](https://shiny.rstudio.com/articles/modules.html).
 
 Please read more about teal on our agile-R website at [go.roche.com/agile-R](http://go.roche.com/agile-R).
 
@@ -13,7 +10,7 @@ Please read more about teal on our agile-R website at [go.roche.com/agile-R](htt
 Please refer to the quick start section in agile-R [here](https://pages.github.roche.com/NEST/docs/hugo/NEST/agile-R/master/quick_start/install-nest-environment/)
 
 The latest version of `teal` can be installed locally with:
-```
+```r
 devtools::install_github(
   repo = "NEST/teal",
   host = "https://github.roche.com/api/v3",
@@ -33,7 +30,7 @@ We would like to thank everyone who made `teal` a better analysis environment. S
 Shiny modules are implemented in files `<module>.R` with UI function `ui_<module>` and server function `srv_<module>`.
 
 A module with a `id` should not use the id itself (`ns(character(0))`) as this id belongs to the parent module:
-```
+```r
 ns <- NS(id)
 ns(character(0)) # should not be used as parent module may be using it to show / hide this module
 ns("whole") # is okay, as long as the input to ns is not character(0)
@@ -42,7 +39,7 @@ ns("") # empty string "" is allowed
 HTML elements can be given CSS classes even if they are not used within this package to give the end-user the possibility to modify the look-and-feel.
 
 Here is a full example:
-```
+```r
 child_ui <- function(id) {
   ns <- NS(id)
   div(
@@ -66,7 +63,7 @@ parent_ui("PatrickMcCarty")
 ```
 
 Use the `roxygen2` marker `@md` to include code-style ticks with backticks. This makes it easier to read. For example:
-```
+```r
 #' My function
 #' 
 #' A special `variable` we refer to.
@@ -81,19 +78,24 @@ my_fcn <- function(arg1) {
 Note that `\link{another_fcn}` links don't work in the development version. For this, you need to install the package.
 
 To temporarily install the package, the following code is useful:
-```
+```r
 .libPaths()
-temp_install_dir <- tempfile(); dir.create(temp_install_dir)
-.libPaths(c(temp_install_dir, .libPaths())); .libPaths()
+
+temp_install_dir <- tempfile()
+dir.create(temp_install_dir)
+.libPaths(c(temp_install_dir, .libPaths()))
+.libPaths()
+
 ?init # look at doc
 # restore old path once done
-.libPaths(.libPaths()[-1]); .libPaths()
+.libPaths(.libPaths()[-1])
+.libPaths()
 ```
 
 Add a summary at the top of each file to describe what it does.
 
 Shiny modules should return `reactives` along with the observers they create. An example is here:
-```
+```r
 srv_child <- function(input, output, session) {
   o <- observeEvent(...)
   return(list(
@@ -119,15 +121,15 @@ Note: Whenever you return input objects, it seems that you explicitly need to wr
 Modules should respect the argument order: `function(input, output, session, datasets, ...)`, where `...` can also include further named arguments.
 
 The idiom `shinyApp(ui, server) %>% invisible()` is used with internal Shiny modules that are not exported. Printing a `shinyApp` causes it to call `runApp`, so never print a `shinyApp`. Instead do:
-```
+```r
 #' app <- shinyApp(...)
 #' \dontrun{
 #' runApp(app)
 #' }
 ```
 
-Refactor
-```
+Avoid overloading return statements. For example, refactor:
+```r
 return(list(
   # must be a list and not atomic vector, otherwise jsonlite::toJSON gives a warning
   data_md5sums = setNames(
@@ -138,8 +140,8 @@ return(list(
   preproc_code = self$get_preproc_code()
 ))
 ```
-into the more easily debuggable form
-```
+Into the more easily debuggable form:
+```r
 res <- list(
   # must be a list and not atomic vector, otherwise jsonlite::toJSON gives a warning
   data_md5sums = setNames(
@@ -163,17 +165,12 @@ While working on a PR, you can add a `scratch` directory to keep scripts to test
 
 For `FilteredData`, when you work on a new module that directly changes it, you can check internal consistency in your
 reactive expressions through code like:
-```
-datasets$.__enclos_env__$private$validate() #todo: remove before merging (COPY THIS ENTIRELY WITH THE COMMENT, SO CI FAILS IF IN CODE)
+```r
+datasets$.__enclos_env__$private$validate()
 ```
 
 ### `system.file`
 We recommend against exporting functions that use `system.file` to access files in other packages as this breaks encapsulation and leads to issues with `devtools` as explained below.
-`base::system.file` is only overwritten by `pkgload:::shim_system.file` if the package is loaded by
-`devtools::load_all()`. This is done to access files transparently, independent of whether a package was loaded
-using `library(pkg)` or `devtools::load(pkg)`. The `inst` folder is in different locations for each of these cases.
-If a package uses `system.file` without being loaded via `devtools`, it will fail when it tries to locate something
-in another package that is loaded with `devtools` because it still uses `base::system.file`. The solution is to
-explicitly use `pkgload:::system.file` whenever providing a function that relies on `system.file` from another
-package. Or not do it at all (this is the current approach we take with `include_css_files`).
-We don't directly overwrite `system.file`, this may have unexpected behavior.
+
+`base::system.file` is only overwritten by `pkgload:::shim_system.file` if the package is loaded by `devtools::load_all()`. This is done to access files transparently, independent of whether a package was loaded using `library(pkg)` or `devtools::load(pkg)`. The `inst` folder is in different locations for each of these cases.
+If a package uses `system.file` without being loaded via `devtools`, it will fail when it tries to locate something in another package that is loaded with `devtools` because it still uses `base::system.file`. The solution is to explicitly use `pkgload:::system.file` whenever providing a function that relies on `system.file` from another package. Or not do it at all (this is the current approach we take with `include_css_files`). We don't directly overwrite `system.file`, this may have unexpected behavior.

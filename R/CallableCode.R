@@ -35,8 +35,10 @@ CallableCode <- R6::R6Class( # nolint
         mc[[1]] <- quote(base::library)
         eval(mc, envir = globalenv())
         this_env <- parent.frame()
-        if (!identical(this_env, globalenv()))
+
+        if (!identical(this_env, globalenv())) {
           parent.env(this_env) <- parent.env(globalenv())
+        }
       }
 
       super$initialize(env = env)

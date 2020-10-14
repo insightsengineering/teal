@@ -13,29 +13,31 @@ Objects of this class store the connection to a data source.
 It can be a database or server (\code{RICE} or \code{SAICE}) connection.
 }
 \examples{
-\dontrun{
 open_fun <- callable_function(data.frame) # define opening function
 open_fun$set_args(list(x = 1:5)) # define fixed arguments to opening function
 
 close_fun <- callable_function(print) # define closing function
 close_fun$set_args(list(x = "Hi there")) # define fixed arguments to closing function
 
-x <- DataConnection$new( # define connection
-  ping_fun = ping_fun, # able to set an optional ping function - eg. rice::rice_session_active
+ping_fun <- callable_function(rice::rice_session_active)
+
+x <- teal:::DataConnection$new( # define connection
+  ping_fun = ping_fun, # define ping function
   open_fun = open_fun, # define opening function
   close_fun = close_fun) # define closing function
 
 x$set_open_args(args = list(y = letters[1:5])) # define additional arguments if necessary
 
 x$open() # call opening function
-
-x$open(args = list(x = 1:5, y = letters[1:5])) # able to call opening function with arguments
-
 x$get_open_call() # check reproducible R code
+
 # get data from connection via DataConnector$get_dataset()
 
+\dontrun{
+x$open(args = list(x = 1:5, y = letters[1:5])) # able to call opening function with arguments
 x$close() # call closing function
 }
+
 }
 \section{Methods}{
 \subsection{Public methods}{
@@ -109,7 +111,7 @@ If open connection has been successfully evaluated
 }
 
 \subsection{Returns}{
-\code{logical} if connection is open
+(\code{logical}) if connection is open
 }
 }
 \if{html}{\out{<hr>}}
@@ -122,7 +124,7 @@ Check if connection has not failed.
 }
 
 \subsection{Returns}{
-\code{TRUE} if connection failed, else \code{FALSE}
+(\code{logical}) \code{TRUE} if connection failed, else \code{FALSE}
 }
 }
 \if{html}{\out{<hr>}}
@@ -150,7 +152,7 @@ Note that if the connection is already opened then it does nothing.
 \subsection{Returns}{
 returns \code{self} if successful or if connection has been already
 opened. If \code{open_fun} fails, app returns an error in form of
-\code{shinyjs::alert} (if \code{try=TRUE}) or breaks the app (if \code{try=FALSE})
+\code{shinyjs::alert} (if \code{try = TRUE}) or breaks the app (if \code{try = FALSE})
 }
 }
 \if{html}{\out{<hr>}}
@@ -200,9 +202,9 @@ Get error message from last connection
 }
 
 \subsection{Returns}{
-(\code{character} value)\cr
- text of the error message or \code{character(0)} if last
- connection was successful.
+(\code{character})\cr
+text of the error message or \code{character(0)} if last
+connection was successful.
 }
 }
 \if{html}{\out{<hr>}}
@@ -215,7 +217,7 @@ Get shiny server module to open connection.
 }
 
 \subsection{Returns}{
-the \code{server} \code{function} to open connection.
+the (\verb{server function}) to open connection.
 }
 }
 \if{html}{\out{<hr>}}
@@ -235,7 +237,7 @@ Get Shiny module with inputs to open connection
 \if{html}{\out{</div>}}
 }
 \subsection{Returns}{
-the \code{ui} function to set arguments to open connection function.
+the (\verb{ui function}) to set arguments to open connection function.
 }
 }
 \if{html}{\out{<hr>}}
@@ -248,7 +250,7 @@ Check if open connection has not failed.
 }
 
 \subsection{Returns}{
-\code{TRUE} if open connection failed, else \code{FALSE}
+(\code{logical}) \code{TRUE} if open connection failed, else \code{FALSE}
 }
 }
 \if{html}{\out{<hr>}}
@@ -270,7 +272,7 @@ Set open connection function argument
 \if{html}{\out{</div>}}
 }
 \subsection{Returns}{
-\code{self} invisibly for chaining.
+(\code{self}) invisibly for chaining.
 }
 }
 \if{html}{\out{<hr>}}
@@ -295,7 +297,7 @@ A shiny module server function that should load data from all connectors}
 \if{html}{\out{</div>}}
 }
 \subsection{Returns}{
-\code{self} invisibly for chaining.
+(\code{self}) invisibly for chaining.
 }
 }
 \if{html}{\out{<hr>}}
@@ -317,7 +319,7 @@ defined by \code{set_open_server} method.}
 \if{html}{\out{</div>}}
 }
 \subsection{Returns}{
-\code{self} invisibly for chaining.
+(\code{self}) invisibly for chaining.
 }
 }
 \if{html}{\out{<hr>}}
@@ -339,7 +341,7 @@ Close the connection.
 \if{html}{\out{</div>}}
 }
 \subsection{Returns}{
-returns \code{self} if successful. For unsuccessful evaluation it
+returns (\code{self}) if successful. For unsuccessful evaluation it
 depends on \code{try} argument: if \code{try = TRUE} then returns
 \code{error}, for \code{try = FALSE} otherwise
 }
@@ -376,9 +378,9 @@ Get error message from last connection
 }
 
 \subsection{Returns}{
-(\code{character} value)\cr
- text of the error message or \code{character(0)} if last
- connection was successful.
+(\code{character})\cr
+text of the error message or \code{character(0)} if last
+connection was successful.
 }
 }
 \if{html}{\out{<hr>}}
@@ -391,7 +393,7 @@ Get shiny server module to close connection.
 }
 
 \subsection{Returns}{
-the \code{server} \code{function} to close connection.
+the \verb{server function} to close connection.
 }
 }
 \if{html}{\out{<hr>}}
@@ -406,12 +408,12 @@ Get Shiny module with inputs to close connection
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{id}}{\code{character} shiny element id}
+\item{\code{id}}{(\code{character}) shiny element id}
 }
 \if{html}{\out{</div>}}
 }
 \subsection{Returns}{
-the \code{ui} function to set arguments to close connection function.
+the (\verb{ui function}) to set arguments to close connection function.
 }
 }
 \if{html}{\out{<hr>}}
@@ -424,7 +426,7 @@ Check if close connection has not failed.
 }
 
 \subsection{Returns}{
-\code{TRUE} if close connection failed, else \code{FALSE}
+(\code{logical}) \code{TRUE} if close connection failed, else \code{FALSE}
 }
 }
 \if{html}{\out{<hr>}}
@@ -446,7 +448,7 @@ Set close connection function argument
 \if{html}{\out{</div>}}
 }
 \subsection{Returns}{
-\code{self} invisibly for chaining.
+(\code{self}) invisibly for chaining.
 }
 }
 \if{html}{\out{<hr>}}
@@ -468,7 +470,7 @@ defined by \code{set_close_server} method.}
 \if{html}{\out{</div>}}
 }
 \subsection{Returns}{
-\code{self} invisibly for chaining.
+(\code{self}) invisibly for chaining.
 }
 }
 \if{html}{\out{<hr>}}
@@ -493,7 +495,7 @@ A shiny module server function that should load data from all connectors}
 \if{html}{\out{</div>}}
 }
 \subsection{Returns}{
-\code{self} invisibly for chaining.
+(\code{self}) invisibly for chaining.
 }
 }
 \if{html}{\out{<hr>}}

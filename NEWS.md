@@ -2,17 +2,14 @@
 
 * Adds method to resolve nested lists containing delayed data objects, which can be used for `arm_ref_comp` objects.
 * Nested tabs module now has better alignment with the filter panel on the page.
-* Allow `width` argument to `optionalSelectInput`.
-* Added lifecycle badges to all exported functions
+* Allow `width` argument in `optionalSelectInput`.
+* Added lifecycle badges to all exported functions.
 * Added new `code_dataset_connector` and `code_cdisc_dataset_connector` functions which enable the creation of new delayed data objects given a string of code.
-* Added new function `csv_dataset_connector` and `csv_cdisc_dataset_connector`.
+* Added new functions `csv_dataset_connector` and `csv_cdisc_dataset_connector`.
 * Updated `set_ui_input` method of `RawDatasetConnector` and `NamedDatasetConnector` to handle user defined shiny inputs.
-* Include `Keep Inf` checkbox for numerical filter items. `Keep NA` and `Keep Inf` checkbox doesn't 
-appear if there are no missing or infinite values.
-* Replace existing `RelationalData` class with abstract class `RelationalDataCollection` and 
-rename `RelationalDataList` class as `RelationalData`. The `data` argument to `teal::init` is
-now always a `RelationalData` object.
-* `fun_cdisc_dataset_connector` to enable providing a custom function which returning a dataset.
+* Include `Keep Inf` checkbox for numerical filter items. `Keep NA` and `Keep Inf` checkbox doesn't appear if there are no missing or infinite values.
+* Replace existing `RelationalData` class with abstract class `RelationalDataCollection` and rename `RelationalDataList` class as `RelationalData`. The `data` argument to `teal::init` is now always a `RelationalData` object.
+* Added `fun_cdisc_dataset_connector` to enable providing a custom function which returning a dataset.
 * Removed `code` and `script` arguments from `as_relational` wrapper. This is intended to be done with `mutate_dataset` functionality.
 * `filer` argument in `init` has added a validation step to ensure compatibility with the rest of the app. Variables inherited from ADSL have to be specified only for ADSL dataset.
 * Fixes the issue with connection close code not being present in `get_code` results.

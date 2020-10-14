@@ -6,7 +6,7 @@
 \alias{as_relational.NamedDataset}
 \alias{as_relational.RawDatasetConnector}
 \alias{as_cdisc_relational}
-\title{Convert a \code{Raw<...>} to a \code{Relational<...>}}
+\title{Convert a \verb{Raw<...>} object to a \verb{Relational<...>} object}
 \usage{
 as_relational(x, dataname, keys, label)
 
@@ -31,11 +31,11 @@ object of S3 class keys containing foreign, primary keys and parent information}
 Label to describe the dataset.}
 }
 \value{
-\code{RelationalDataset} or \code{RelationalDatasetConnector} object
+(\code{RelationalDataset} or \code{RelationalDatasetConnector}) object
 }
 \description{
 \ifelse{html}{\out{<a href='https://www.tidyverse.org/lifecycle/#experimental'><img src='figures/lifecycle-experimental.svg' alt='Experimental lifecycle'></a>}}{\strong{Experimental}}
-Convert a \code{Raw<...>} to a \code{Relational<...>}
+Convert a \verb{Raw<...>} to a \verb{Relational<...>}
 }
 \details{
 \code{as_cdisc_relational} will derive the keys by the \code{dataname} and therefore

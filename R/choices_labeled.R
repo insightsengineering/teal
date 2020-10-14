@@ -237,19 +237,19 @@ variable_choices.NamedDatasetConnector <- function(data, subset = NULL, fill = F
 #' @md
 #' @description `r lifecycle::badge("maturing")`
 #'
-#' @param data (\code{data.frame}) or (\code{character})
-#' If \code{data.frame}, then data to extract labels from
-#' If \code{character}, then name of the dataset to extract data from once available.
-#' @param var_choices (\code{character}) vector with choices column names
-#' @param var_label (\code{character}) vector with labels column names
-#' @param subset (\code{character} or \code{function})
-#' If \code{character}, vector with values to subset.
-#' If \code{function}, then this function is used to determine the possible columns (e.g. all factor columns).
+#' @param data (`data.frame` or `character`)
+#' If `data.frame`, then data to extract labels from
+#' If `character`, then name of the dataset to extract data from once available.
+#' @param var_choices (`character` or `NULL`) vector with choices column names
+#' @param var_label (`character`) vector with labels column names
+#' @param subset (`character` or `function`)
+#' If `character`, vector with values to subset.
+#' If `function`, then this function is used to determine the possible columns (e.g. all factor columns).
 #' In this case, the function must take only single argument "data" and return a character vector.
 #' See examples for more details.
-#' @param sep (\code{character}) separator used in case of multiple column names
+#' @param sep (`character`) separator used in case of multiple column names
 #'
-#' @return named character vector or \code{delayed_data} object
+#' @return named character vector or `delayed_data` object
 #'
 #' @rdname value_choices
 #'

@@ -32,7 +32,6 @@ Imports:
   dplyr,
   ggplot2,
   grDevices,
-  htmltools,
   lifecycle,
   magrittr,
   methods,

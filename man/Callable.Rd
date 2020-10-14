@@ -67,7 +67,7 @@ object to be assigned to \code{x}}
 \if{html}{\out{</div>}}
 }
 \subsection{Returns}{
-arguments the function gets called with
+(\code{self}) invisibly for chaining.
 }
 }
 \if{html}{\out{<hr>}}
@@ -111,7 +111,7 @@ Check if evaluation of the function has not failed.
 }
 
 \subsection{Returns}{
-\code{TRUE} if evaluation of the function failed or \code{FALSE}
+(\code{logical}) \code{TRUE} if evaluation of the function failed or \code{FALSE}
  if evaluation failed or function hasn't yet been called.
 }
 }
@@ -125,7 +125,7 @@ Get error message from last function execution
 }
 
 \subsection{Returns}{
-\code{character} object with error message or \code{character(0)} if last
+(\code{character}) object with error message or \code{character(0)} if last
  function evaluation was successful.
 }
 }
