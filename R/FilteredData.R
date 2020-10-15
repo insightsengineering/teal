@@ -1168,7 +1168,8 @@ FilteredData <- R6::R6Class( # nolint
               label = if_null(attr(var, "label"), ""),
               range = range(var, finite = TRUE),
               histogram_data = data.frame(x = density$x, y = density$y),
-              inf_count = sum(is.infinite(var))
+              inf_count = sum(is.infinite(var)),
+              is_integer = is.integer(var)
             )
           } else if (is.logical(var)) {
             var <- factor(var, levels = c("TRUE", "FALSE"))
