@@ -45,6 +45,7 @@ x$close() # call closing function
 \item \href{#method-new}{\code{DataConnection$new()}}
 \item \href{#method-is_opened}{\code{DataConnection$is_opened()}}
 \item \href{#method-is_failed}{\code{DataConnection$is_failed()}}
+\item \href{#method-launch}{\code{DataConnection$launch()}}
 \item \href{#method-open}{\code{DataConnection$open()}}
 \item \href{#method-get_conn}{\code{DataConnection$get_conn()}}
 \item \href{#method-get_open_call}{\code{DataConnection$get_open_call()}}
@@ -125,6 +126,22 @@ Check if connection has not failed.
 
 \subsection{Returns}{
 (\code{logical}) \code{TRUE} if connection failed, else \code{FALSE}
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-launch"></a>}}
+\if{latex}{\out{\hypertarget{method-launch}{}}}
+\subsection{Method \code{launch()}}{
+Run simple application that uses its \code{ui} and \code{server} fields to open the
+connection.
+
+Useful for debugging
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{DataConnection$launch()}\if{html}{\out{</div>}}
+}
+
+\subsection{Returns}{
+An object that represents the app
 }
 }
 \if{html}{\out{<hr>}}

@@ -30,7 +30,7 @@ as_relational <- function(x,
 #'   keys = keys(primary = c("USUBJID", "STUDYID"), foreign = NULL, parent = NULL)
 #' )
 #' get_raw_data(ADSL_relational)
-#' ADSL_relational$keys
+#' ADSL_relational$get_keys()
 #' @export
 as_relational.RawDataset <- function(x,
                                      dataname,

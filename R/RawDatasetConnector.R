@@ -46,7 +46,7 @@ RawDatasetConnector <- R6::R6Class( #nolint
     #'
     #' @return \code{self} invisibly for chaining
     set_args = function(args) {
-      private$pull_callable$set_args(args)
+      set_args(private$pull_callable, args)
       return(invisible(self))
     },
 
@@ -223,8 +223,6 @@ RawDatasetConnector <- R6::R6Class( #nolint
               output$result <- renderTable(head(self$get_raw_data()))
             }
           })
-
-
         }
       )
     }

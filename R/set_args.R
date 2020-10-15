@@ -28,6 +28,20 @@ set_args.CallableFunction <- function(x, args) {
 #' @rdname set_args
 #' @export
 #' @examples
+#' library(random.cdisc.data)
+#' code <- callable_code("radsl()")
+#' set_args(code, list(N = 5, seed = 1, cached = TRUE))
+set_args.CallableCode <- function(x, args) {
+  warning(
+    "'CallableCode' is unchangable. Ignoring arguments set by 'set_args'",
+    call. = FALSE
+  )
+  return(invisible(x))
+}
+
+#' @rdname set_args
+#' @export
+#' @examples
 #' ds <- raw_dataset_connector(pull_callable = callable_function(data.frame))
 #' set_args(ds, list(x = 1:5, y = letters[1:5]))
 set_args.RawDatasetConnector <- function(x, args) {

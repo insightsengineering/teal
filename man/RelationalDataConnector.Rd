@@ -53,6 +53,7 @@ x$get_datasets()
 \item \href{#method-is_failed}{\code{RelationalDataConnector$is_failed()}}
 \item \href{#method-launch}{\code{RelationalDataConnector$launch()}}
 \item \href{#method-pull}{\code{RelationalDataConnector$pull()}}
+\item \href{#method-set_pull_args}{\code{RelationalDataConnector$set_pull_args()}}
 \item \href{#method-set_ui}{\code{RelationalDataConnector$set_ui()}}
 \item \href{#method-set_server}{\code{RelationalDataConnector$set_server()}}
 \item \href{#method-clone}{\code{RelationalDataConnector$clone()}}
@@ -219,6 +220,28 @@ whether perform function evaluation inside \code{try} clause}
 }
 \subsection{Returns}{
 \code{self} invisibly for chaining. In order to get the data please use \code{get_datasets} method.
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-set_pull_args"></a>}}
+\if{latex}{\out{\hypertarget{method-set_pull_args}{}}}
+\subsection{Method \code{set_pull_args()}}{
+Set argument to the \code{pull_fun}
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{RelationalDataConnector$set_pull_args(args)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{args}}{(named \code{list})\cr
+arguments values as separate list elements named by argument name. These arguments
+are passed to each dataset.}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Returns}{
+nothing
 }
 }
 \if{html}{\out{<hr>}}

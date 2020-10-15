@@ -57,6 +57,17 @@ DataConnection <- R6::R6Class( # nolint
         private$set_ping_fun(ping_fun)
       }
       private$if_conn_obj <- if_conn_obj
+
+
+      private$open_ui <- function(id) {
+        NULL
+      }
+      private$ping_ui <- function(id) {
+        NULL
+      }
+      private$close_ui <- function(id) {
+        NULL
+      }
     },
     #' @description
     #' If connection is opened
@@ -75,6 +86,61 @@ DataConnection <- R6::R6Class( # nolint
     #' @return (`logical`) `TRUE` if connection failed, else `FALSE`
     is_failed = function() {
       self$is_open_failed() || self$is_close_failed()
+    },
+    #' @description
+    #' Run simple application that uses its \code{ui} and \code{server} fields to open the
+    #' connection.
+    #'
+    #' Useful for debugging
+    #'
+    #' @return An object that represents the app
+    launch = function() {
+      shinyApp(
+        ui = fluidPage(
+          useShinyjs(),
+          fluidRow(
+            column(
+              width = 8,
+              offset = 2,
+              tags$div(
+                id = "connection_inputs",
+                self$get_open_ui(id = "data_connection"),
+                actionButton("submit", "Submit")
+              ),
+              shinyjs::hidden(
+                tags$div(
+                  id = "connection_set",
+                  div(
+                    h3("Connection successfully set."),
+                    p("You can close this window and get back to R console.")
+                  )
+                )
+              )
+            )
+          )
+        ),
+        server = function(input, output, session) {
+          session$onSessionEnded(stopApp)
+          observeEvent(input$submit, {
+            rv <- reactiveVal(NULL)
+            rv(
+              callModule(self$get_open_server(),
+                         id = "data_connection",
+                         connection = self)
+            )
+
+            observeEvent(rv(), {
+              if (self$is_opened()) {
+                removeUI(sprintf("#%s", session$ns("connection_inputs")))
+                shinyjs::show("connection_set")
+                stopApp()
+              }
+            })
+
+
+          })
+        }
+      )
     },
     # .. open connection -----
     #' @description
@@ -523,17 +589,24 @@ rcd_connection <- function(open_args = list()) {
   open_fun$set_args(open_args)
 
   x <- DataConnection$new(open_fun = open_fun)
-  x$set_open_ui(
-    function(id) {
-      NULL
+
+  # open connection
+  x$set_open_server(
+    function(input, output, session, connection) {
+      connection$open(try = TRUE)
+
+      if (connection$is_open_failed()) {
+        shinyjs::alert(
+          paste(
+            "Error opening rcd connection\nError message: ",
+            connection$get_open_error_message()
+          )
+        )
+      }
+      return(invisible(connection))
     }
   )
 
-  x$set_open_server(
-    function(input, output, session, connection) {
-      NULL
-    }
-  )
   return(x)
 }
 
@@ -604,16 +677,11 @@ rice_connection <- function(open_args = list(), close_args = list(), ping_args =
           )
         )
       }
+      return(invisible(connection))
     }
   )
 
   # close connection
-  x$set_close_ui(
-    function(id) {
-      NULL
-    }
-  )
-
   x$set_close_server(
     function(input, output, session, connection) {
       connection$close(try = TRUE)
@@ -626,6 +694,7 @@ rice_connection <- function(open_args = list(), close_args = list(), ping_args =
           )
         )
       }
+      return(invisible(connection))
     }
   )
 
@@ -704,6 +773,7 @@ teradata_connection <- function(open_args = list(), close_args = list(), ping_ar
           )
         )
       }
+      return(invisible(connection))
     }
   )
 
@@ -726,6 +796,7 @@ teradata_connection <- function(open_args = list(), close_args = list(), ping_ar
           )
         )
       }
+      return(invisible(connection))
     }
   )
 

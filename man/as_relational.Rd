@@ -52,7 +52,7 @@ ADSL_relational <- as_relational(
   keys = keys(primary = c("USUBJID", "STUDYID"), foreign = NULL, parent = NULL)
 )
 get_raw_data(ADSL_relational)
-ADSL_relational$keys
+ADSL_relational$get_keys()
 library(random.cdisc.data)
 fun <- callable_function(radsl)
 fun$set_args(list(N = 5, seed = 1, cached = TRUE))

@@ -234,6 +234,18 @@ RelationalDataConnector <- R6::R6Class( #nolint
       return(invisible(self))
     },
     #' @description
+    #' Set argument to the \code{pull_fun}
+    #'
+    #' @param args (named \code{list})\cr
+    #'  arguments values as separate list elements named by argument name. These arguments
+    #'  are passed to each dataset.
+    #'
+    #' @return nothing
+    set_pull_args = function(args) {
+      lapply(private$datasets, function(x) set_args(x, args))
+      return(invisible(NULL))
+    },
+    #' @description
     #' Set connector UI function
     #'
     #' @param data_input (\code{function})\cr
