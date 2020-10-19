@@ -112,6 +112,21 @@ test_that("RawDataset basics", {
     x
   )
 
+})
+
+test_that("RawDataset edge case: column types with more than 1 classes", {
+
+  # class(x$y) is [1] "POSIXct" "POSIXt", i.e. a vector of length 2
+  x <- data.frame(
+    x = c(1, 2),
+    y = c(as.POSIXct("2020-10-16"), as.POSIXct("2020-10-17")),
+    z = factor(c("a", "b")),
+    a = c("a", "b"),
+    b = factor(c(1, 2)), stringsAsFactors = FALSE)
+  obj <- RawDataset$new(x)
+  expect_equal(obj$get_character_colnames(), "a")
+  expect_equal(obj$get_factor_colnames(), c("z", "b"))
+  expect_equal(obj$get_numeric_colnames(), "x")
 
 })
 
