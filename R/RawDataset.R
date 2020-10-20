@@ -110,13 +110,17 @@ RawDataset <- R6::R6Class( # nolint
       if (class_type == "factor") {
         include_factors <- TRUE
       }
-      return_cols <- private$.colnames[which(vapply(lapply(private$.raw_data, class),
-                                                    `%in%`,
-                                                    logical(1), table = class_type)
-      )]
+      return_cols <- private$.colnames[which(vapply(
+        lapply(private$.raw_data, class),
+        function(x, target_class_name) any(x %in% target_class_name),
+        logical(1),
+        target_class_name = class_type))]
 
       if (!include_factors) {
-        factor_columns <- private$.colnames[which(lapply(private$.raw_data, class) == "factor")]
+        factor_columns <- private$.colnames[which(vapply(
+          lapply(private$.raw_data, class),
+          function(x) any(x %in% "factor"),
+          logical(1)))]
         return_cols <- setdiff(return_cols, factor_columns)
       }
       return(return_cols)

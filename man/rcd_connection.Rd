@@ -8,11 +8,11 @@ rcd_connection(open_args = list())
 }
 \arguments{
 \item{open_args}{optional, named (\code{list}) of additional parameters for \code{\link{library}} open
-function such as \code{quietly}. Please note that the \code{package} argument will be overwritten
+function such as \code{quietly.} Please note that the \code{package} argument will be overwritten
 with \code{random.cdisc.data}.}
 }
 \value{
-\code{DataConnection} type of object.
+(\code{DataConnection}) type of object.
 }
 \description{
 \ifelse{html}{\out{<a href='https://www.tidyverse.org/lifecycle/#experimental'><img src='figures/lifecycle-experimental.svg' alt='Experimental lifecycle'></a>}}{\strong{Experimental}}

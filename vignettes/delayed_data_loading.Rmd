@@ -1,0 +1,808 @@
+---
+title: "Delayed Data Loading"
+author: "Dawid Kałędkowski"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Delayed Data Loading}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include = FALSE, echo=FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+library(nomnoml)
+```
+
+### Overview
+Data plays an essential role in data analysis and `teal` provides several ways to 
+include datasets into shiny applications. Normally, one develops an application 
+in such a way that data are available before the app starts. This always involves 
+passing `data.frame` objects using the `cdisc_data` function to the teal application. 
+This way of building an app is applicable if data is physically available before 
+the call to `teal::init()`, so it can be obtained in pre-processing. 
+Including data to the shiny 
+app as [global objects](https://shiny.rstudio.com/articles/scoping.html) means 
+that they will be fixed and data won't change in time.
+In contrary, data can be loaded by the shiny app and can include custom information such 
+as login, password, file location etc.. Delayed data loading in teal application 
+involves specifying metadata which stores all information needed to pull the data 
+from the right source with appropriate arguments. In delayed data loading application, before the main app loads a data loading screen is visible first.. 
+This means that teal application can be 
+
+two-staged:
+
+1. Data loading app
+2. Main app
+
+## Key definitions
+
+Before we jump to creating application it's important to define a few terms
+which are the key to understand new classes.
+1. `Dataset` and `DatasetConnector` - `Dataset` is a class which contains physical
+data in form of `data.frame` plus reproducible code. `DatasetConnector` is a 
+class which contains R call to obtain `Dataset`.
+
+2. `Raw`, `Named`, `Relational` - denotes what kind of information are attached 
+to dataset. `Raw` indicates that there are no additional information, `Named` 
+has a `dataname` and `Relational` holds also keys. Above also defines 
+inheritance order `Raw` <- `Named` <- `Relational`.
+```{nomnoml, svg=TRUE, fig.height=1, include=FALSE}
+#spacing: 100
+#arrowSize: 0.2
+#fontSize: 12
+[Raw](set dataname)->[Named]
+[Named](set keys)->[Relational]
+```
+3. `data.frame`, `Dataset` and `Data`- object of class `Dataset` contains 
+a single `data.frame` object. `Data` is a collection of `Dataset` objects.
+```{nomnoml, svg=TRUE, fig.height=1, include=FALSE}
+#fontSize: 20
+[Data||
+   [Dataset 1|[data.frame]]
+   [Dataset 2|[data.frame]]
+   [Dataset n|[data.frame]]
+]
+```
+## Creating an app 
+
+### `Callable`
+
+#### `CallableFunction`
+This class won't be used often by the developers but it's essential for all 
+connectors to store and execute R function with possibility to get code to 
+reproduce function call. In example below object of class `CallableFunction` is 
+created which runs `radtte` function with arguments set before. 
+
+```{r}
+library(teal)
+library(random.cdisc.data)
+
+# initialize object
+fun <- callable_function(fun = radtte)
+
+# set arguments to function
+fun$set_args(list(cached = TRUE, na_percentage = 0.05))
+
+# execute function with arguments set
+fun$run()
+
+# check reproducible code
+cat(fun$get_call())
+```
+
+It's possible also execute `fun$run()` function with arguments added on the fly 
+in named `list`. Dynamic arguments won't be reflected in the reproducible code, 
+what will have a consequences in other places - we will get back to this in latter
+stages of the documentation.
+
+```{r}
+# add arguments on the fly
+fun$run(args = list(seed = 1, na_percentage = 0.1))
+
+# dynamic arguments not reflected in the call
+cat(fun$get_call())
+```
+
+`CallableFunction` can also depend on other R object same as `radtte` function 
+depends on `ADSL`. Function can be executed in specific environment where we can 
+copy object needed to execute call. To include this object in the function call, 
+one has to use `$assign_to_env()` to copy object and 
+`$set_args(list(ADSL = as.symbol(ADSL)))` to link object with function argument.
+
+```{r}
+ADSL <- radsl(cached = TRUE)
+
+# copy ADSL to CallableFunction environment 
+fun$assign_to_env("ADSL", ADSL)
+
+# set arguments
+fun$set_args(args = list(ADSL = as.name("ADSL"), cached = FALSE))
+
+# execute function
+fun$run()
+
+# get R code
+fun$get_call()
+```
+### `CallableCode`
+
+Simpler version of `Callable` class is `CallableCode`. Similarly to `CallableFunction`,
+`CallableCode` stores some code which can be evaluated using `run()` but it
+isn't able to use dynamic arguments to have the code more elastic. `CallableCode`
+also allows to assign objects to independent environment. `CallableCode` can 
+contain multiple line code and also allows `library` calls.
+Please note that objects assigned to independent environment can't be modified 
+because they are locked immediately. This means that in `CallableCode` created 
+below it is not allowed to make any changes in `ADSL`.
+```{r}
+code <- callable_code(
+  "library(dplyr)
+  ADTTE <- radtte(
+    ADSL = filter(ADSL, SEX == 'M'),
+    seed = 1
+  )
+  ADTTE$x1 <- 1
+  ADTTE <- filter(ADTTE, PARAMCD %in% c('EFS', 'OS'))"
+)
+
+# examine call
+cat(code$get_call())
+
+# assign ADSL to environment
+code$assign_to_env("ADSL", ADSL)
+
+# evaluate call
+code$run()
+```
+
+### Dataset
+ 
+`Dataset` object is a container which keeps `data.frame` in `raw_data` slot. One
+can create `Dataset` by including `data.frame` and setting data attributes. In 
+the example below we first create `adsl` and then put this `data.frame` to 
+`cdisc_dataset` function. Together with `data.frame` one should always provide a
+`dataname` and `code` to reproduce the data. For irreproducible apps `code` 
+can be omitted.
+
+```{r}
+ADSL <- radsl(cached = TRUE)
+
+adsl <- cdisc_dataset(data = ADSL, 
+                      dataname = "ADSL",
+                      code = "ADSL <- radsl(cached = TRUE)")
+```
+
+Object created above contains all previously defined attributes which can be 
+extracted in any occasion.
+
+```{r}
+# check if code is reproducible
+get_dataname(adsl)
+
+# get label
+get_dataset_label(adsl)
+
+# get reproducible code
+get_code(adsl)
+
+# get data.frame
+get_raw_data(adsl)
+
+# get keys
+adsl$get_keys()
+```
+
+### `DatasetConnector`
+
+`DatasetConnector` contains `Callable` object to obtain a single dataset along 
+with other information such as keys, dataname, label and reproducible code. In 
+the code chunk below, connector is created basing on `radsl` function with 
+prespecified `cached = TRUE` argument.
+
+```{r}
+library(magrittr)
+adsl <- relational_dataset_connector(
+  dataname = "ADSL", 
+  pull_callable = callable_function(radsl) %>% set_args(list(cached = TRUE)), 
+  keys = get_cdisc_keys("ADSL"),
+  label = "Subject-Level Analysis Dataset"
+)
+```
+
+Initially, `adsl` doesn't contain any data, but they can be loaded using 
+`load_dataset()` function. Before data loading, `adsl` contains reproducible 
+code which is also an execution code to pull the data.
+
+```{r}
+# execution/reproducible code
+get_code(adsl)
+
+# pull data
+load_dataset(adsl)
+
+# get raw data
+get_raw_data(adsl)
+```
+
+`teal` allows also to include other variables which `Callable` object will 
+depend on. Let's think about `radlb(ADSL, ...)` function which requires 
+`data.frame` (`ADSL`) as an argument. In the code below, one can add `adsl` 
+object created above and `set_args` to `CallableFunction`. To properly link 
+`ADSL` argument in `radlb` function several parameters have to match: 
+1. `dataname` of `adsl` should be `"ADSL"`
+2. `vars = list(ADSL = adsl)` - `adsl` object should be passed to vars as a list 
+element with name `ADSL`.
+3. Value of the `ADSL` argument in the `CallableFunction` has to be `as.name("ADSL")`.
+
+```{r eval=TRUE}
+adlb <- relational_dataset_connector(
+  dataname = "ADLB", 
+  pull_callable = callable_function(fun = radlb) %>% set_args(list(ADSL = as.name("ADSL"))), 
+  keys = get_cdisc_keys("ADLB"),
+  label = "Laboratory Data Analysis Dataset",
+  vars = list(ADSL = adsl)
+)
+
+load_dataset(adlb)
+```
+
+`RelationalDatasetConnector` like the other delayed data objects contains 
+`launch` method which can be used to obtain data using shiny application. 
+Function can be used to check if the objects are specified correctly and to 
+investigate potential mistakes. By default shiny app won't render any inputs for 
+dataset until we specify them. To set inputs we should use `$set_ui_input()`, by 
+passing ui module function, with `ns` argument (shiny namespaced ID object).
+
+```{r eval=FALSE}
+adtte <- relational_dataset_connector(
+  dataname = "ADTTE", 
+  pull_callable = callable_function(radtte) %>% set_args(list(ADSL = as.name("ADSL"))), 
+  keys = get_cdisc_keys("ADTTE"),
+  label = "Laboratory Data Analysis Dataset",
+  vars = list(ADSL = adsl)
+)
+
+adtte$set_ui_input(function(ns) {
+  list(
+    numericInput(inputId = ns("seed"), label = "Choose seed", min = 0, value = 1),
+    optionalSliderInput(inputId = ns("na_percentage"),
+                        label = "NA percentage",
+                        min = 0,
+                        max = 1,
+                        value = 0.5,
+                        step = 0.1)
+  )
+  }
+)
+
+adtte$launch()
+```
+
+### `DataConnection`
+Objects of this class are responsible to set connection with remote data source. 
+`DataConnection` opens and closes connection by calling `CallableFunction` with
+appropriate arguments. For example in simplified version of `rice_connection` 
+below, a `DataConnection `uses `rice_session_open` and `rice_session_close` 
+functions.
+
+```{r}
+library(rice)
+open_fun <- callable_function(rice::rice_session_open)
+close_fun <- callable_function(rice::rice_session_close)
+close_fun$set_args(list(message = FALSE))
+
+rice_conn <- teal:::DataConnection$new(
+  open_fun = open_fun, 
+  close_fun = close_fun
+)
+```
+
+One can open and close connection by using `rice_conn$open()` and `rice_conn$close()` 
+functions respectively. As in `DatasetConnector$pull()`, `open()` and `close()` 
+delegates function execution to `CallableFunction$run()`. Developers should use 
+`rice_conn$set_open_args()` to set some argument values to the reproducible call. 
+Arguments values set to the `CallableFunction` are saved persistently and will 
+be reflected when getting open code. Arguments passed to `rice_conn$open()` will 
+be used only to execute the function, but won't be returned in the code as they 
+are not stored anywhere. This feature is designed to hide some arguments from 
+being revealed in the code and can be intentional - for example, when using 
+personal passwords or other sensitive information. In code below `username` is 
+set (and stored) to the open function and `password` is a dynamic argument not 
+included in `rice_conn$get_open_call()` output.
+
+```{r eval=FALSE}
+# set open args
+rice_conn$set_open_args(list(username = "your username"))
+
+# open the rice connection
+rice_conn$open(args = list(password = "your password"))
+
+# check if open (open function evaluated successfuly)
+rice_conn$is_opened()
+
+# check if open failed
+rice_conn$is_open_failed()
+
+# close 
+rice_conn$close()
+
+# get reproducible call
+rice_conn$get_open_call()
+rice_conn$get_close_call()
+```
+
+In `shiny` application connection arguments needs to be linked with `inputs`, 
+that is why `DataConnection` is a module. Developers can customize UI inputs to 
+open the connection using `set_open_ui()` and specify relevant server function 
+using `set_open_server()`. It's important to keep in mind that server module 
+needs a connection as a argument to `open()` and `close()` if needed.
+
+```{r eval=FALSE}
+rice_conn$set_open_ui(
+  function(id) {
+    ns <- NS(id)
+    div(
+      textInput(ns("username"), "Username"),
+      passwordInput(ns("password"), "Password")
+    )
+  }
+)
+
+rice_conn$set_open_server(
+  function(input, output, session, connection) {
+    connection$open(args = list(username = input$username,
+                                password = input$password),
+                    try = TRUE)
+
+    if (connection$is_open_failed()) {
+      shinyjs::alert(
+        paste("Error opening connection\nError message:", connection$get_open_error_message())
+      )
+    }
+  }
+)
+
+rice_conn$launch()
+```
+
+### `DataConnector`
+
+This class combines multiple `DatasetConnector` and single `DataConnection` objects and creates 
+module to manage connection and to load data. Below we create two 
+`RelationalDatasetConnector` objects, `DataConnection` and we combine them
+together in `RelationalDataConnector` object.
+
+```{r}
+# create DatasetConnectors
+adsl <- relational_dataset_connector(
+  dataname = "ADSL", 
+  pull_callable = callable_code("radsl(cached = TRUE)"), 
+  keys = get_cdisc_keys("ADSL"),
+  label = "ADSL"
+)
+
+adlb <- relational_dataset_connector(
+  dataname = "ADLB", 
+  pull_callable = callable_function(radlb) %>% set_args(list(ADSL = as.name("ADSL"))), 
+  keys = get_cdisc_keys("ADLB"),
+  label = "ADLB",
+  vars = list(ADSL = adsl)
+)
+connectors <- list(adsl, adlb)
+
+# create connection
+rcd_open_fun <- callable_function(fun = library)
+rcd_open_fun$set_args(list(package = "random.cdisc.data"))
+rcd_conn <- teal:::DataConnection$new(open_fun = rcd_open_fun)  # nolint
+
+# create DataConnector
+data <- teal:::RelationalDataConnector$new(
+  connection = rcd_conn,
+  connectors = connectors
+)
+```
+
+Object created above can be used to pull data and obtain the code which combines 
+code of datasets preceded by open connection code (if set), and followed by 
+close connection code (if set). Please note that `DataConnector` doesn't limit 
+what kind of connectors are set within, but one must be aware that it should 
+rather contain similar (calling functions which shares some arguments). 
+For example, if we execute `data$set_pull_args(args = list(seed = 2))`, this 
+argument will be set for all connectors. In case when one connector contains 
+`CallableFunction` which won't have `seed` in it's formals then it will fail.
+`CallableCode` can't hold any additional arguments as it's fixed and it will
+ignore every arguments set with `set_pull_args`.
+
+```{r}
+cat(get_code(data))
+
+# pull ADSL and ADLB
+data$set_pull_args(args = list(seed = 2))
+data$pull()
+get_code(data)
+```
+
+By default `RelationalDataConnector` creates simple shiny module without any 
+inputs for connectors and datasets. This means that connection opening/closing 
+and pulling datasets are done on default arguments. However, user can easily 
+extend module using `rcd_data$set_ui()` and `rcd_data$set_server()` to specify 
+the UI and server function themselves. The general rule for creating these modules is that callback 
+from server to UI is not possible, because server module is executed after submit 
+button is hit. 
+Below we extend app interface by numeric input which will be passed to 
+`random.cdisc.data` function as a seed. UI is created from `rcd_conn` and 
+`connectors` object while server module requires `connectors` and `connection` 
+objects as additional arguments. 
+   
+
+```{r}
+data$set_ui(
+  function(id) {
+    ns <- NS(id)
+    tagList(
+      rcd_conn$get_open_ui(ns("open_connection")),
+      numericInput(ns("seed"), p("Choose", code("seed")), min = 1, max = 1000, value = 1),
+      do.call(
+        what = "tagList",
+        args = lapply(
+          connectors,
+          function(connector) {
+            div(
+              connector$get_ui(
+                id = ns(connector$get_dataname())
+              ),
+              br()
+            )
+          }
+        )
+      )
+    )
+  }
+)
+
+data$set_server(
+  function(input, output, session, connection, connectors) {
+    # opens connection
+    if (!is.null(connection$get_open_server())) {
+      callModule(connection$get_open_server(),
+                 id = "open_connection",
+                 connection = connection)
+    }
+
+    for (connector in connectors) {
+      # set_args before to return them in the code (fixed args)
+      set_args(connector, args = list(seed = input$seed))
+
+      # pull each dataset
+      callModule(connector$get_server(), id = connector$get_dataname())
+      if (connector$is_failed()) {
+        break
+      }
+    }
+  }
+)
+```
+
+Executing `data$launch()` will open shiny application. Remember that data can be 
+loaded only once, in case you run above code please reinitialize datasets, 
+connection and data object again. 
+
+```{r eval=FALSE}
+# if datasets have been pulled already
+#  - reinitialize datasets and data object again
+data$launch()
+```
+
+### `RelationalData`
+
+Objects of class `RelationalData` is similar to the `RelationalDataConnector` as
+both inherits from `RelationalDataCollection`. `RelationalData` manages 
+`RelationalDataset`, `RelationalDatasetConnector` and `RelationalDataConnector`
+objects.
+
+```{r}
+data <- cdisc_data(
+  cdisc_dataset(dataname = "ADSL", 
+                data = radsl(cached = TRUE), 
+                code = "ADSL <- radsl(cached = TRUE)"),
+  
+  cdisc_dataset(dataname = "ADTTE", 
+                data = radtte(cached = TRUE), 
+                code = "ADTTE <- radtte(cached = TRUE)")
+)
+```
+
+One can combine multiple delayed data objects using `cdisc_data` function and 
+include them to shiny application. `RelationalData` gathers all objects and sets 
+combined UI with shiny inputs from all objects. 
+In the code chunk below we specified two connectors with `rcd_data()`, but 
+developers can include any number and any type of objects.
+
+```{r}
+adsl <- rcd_cdisc_dataset_connector("ADSL", radsl)
+adae <- rcd_cdisc_dataset_connector("ADAE", radae, ADSL = adsl)
+advs <- rcd_cdisc_dataset_connector("ADVS", radvs, ADSL = adsl)
+adtte <- rcd_cdisc_dataset_connector("ADTTE", radtte, ADSL = adsl)
+
+adsl_adae <- rcd_data(adsl, adae)
+advs_adtte <- rcd_data(advs, adtte)
+
+data <- cdisc_data(adsl_adae, advs_adtte)
+```
+
+Similar to other connectors one can use `launch()` method to investigate if data is set 
+correctly. Unlike the other connectors, this class lacks `pull()` method.
+
+```{r eval=FALSE}
+data$launch()
+```
+
+Reproducible code attached to the `data` object is a combined code of all components, 
+but one can also extract code from single dataset by specifying `dataname` argument.
+
+```{r}
+get_code(data)
+get_code(data, dataname = "ADSL")
+get_code(data, dataname = "ADTTE")
+```
+
+Developers can also extract datasets and connectors included in the `RelationalData`. 
+
+```{r, eval=FALSE}
+# get loaded datasets
+data$get_datasets()
+
+# get single dataset
+data$get_dataset(dataname = "ADSL")
+
+# get data and dataset connectors
+data$get_connectors()
+
+# get all datasets/connectors
+data$get_items()
+```
+
+### Data modification
+
+Since delayed data objects are just a metadata before data is loaded there are 
+dedicated functions to allow datasets mutations. To modify single dataset one 
+should use `mutate_dataset` by specifying `code` argument with code as a single 
+character or `script` with location of the script file. 
+
+```{r}
+adsl <- cdisc_dataset(
+    dataname = "ADSL", 
+    data = radsl(cached = TRUE),
+    code = "ADSL <- radsl(cached = TRUE)"
+  ) %>%
+    mutate_dataset(code = "ADSL$x1 <- 1")
+
+
+adtte <- rcd_cdisc_dataset_connector(
+    dataname = "ADTTE", 
+    fun = radtte,
+    cached = TRUE  
+  ) %>%
+  mutate_dataset(code = "ADTTE$x2 <- 2")
+```
+
+`get_code()` function returns loading code from `CallableFunction` and mutation
+code as provided in using `mutate_dataset`.
+
+```{r}
+cat(get_code(adsl))
+cat(get_code(adtte))
+```
+
+`mutate_dataset` can also be used on `RelationalData` object which applies
+the `code` to the dataset specified in `dataname`. This is important, as `RelationalData` 
+can track each call which affects this particular dataset. Check the code below, 
+where we create data containing two datasets using `cdisc_data` function.
+We can still use `mutate_dataset` on the object which contains multiple datasets,
+with one requirement - one needs to specify `dataname`. Afterwards, one can
+extract reproducible code from data which affects this particular ``dataname`. 
+
+```{r}
+data <- cdisc_data(adsl, adtte) %>%
+  mutate_dataset(code = "ADSL$x3 <- 3", dataname = "ADSL")
+
+# get reproducible code of all datasets
+cat(get_code(data, dataname = "ADSL"))
+
+# get ADSL reproducible code 
+cat(get_code(data, dataname = "ADSL"))
+```
+
+One can also combine multiple `mutate_dataset` calls applied interchangeably to
+all datasets. 
+
+```{r}
+data <- mutate_dataset(data, code = "ADTTE$x4 <- 4", dataname = "ADTTE") %>%
+  mutate_dataset(code = "ADSL <- dplyr::filter(ADSL, SEX == 'F')", dataname = "ADSL") 
+
+cat(get_code(data, "ADSL"))
+cat(get_code(data, "ADTTE"))
+```
+
+Sometimes code of one object can depend on the another, in this case we can link 
+them in the same way how we link `DatasetConnector` objects. If object code
+is dependent on the another, same as ADTTE depends on ADSL below, `get_code`
+will return everything what needs to be executed to reproduce this dataset.
+
+```{r}
+data <- mutate_dataset(
+  data, 
+  code = "ADTTE <- filter(ADTTE, USUBJID %in% ADSL$USUBJID)",
+  dataname = "ADTTE",
+  vars = list(ADSL = adsl) # vars = list(<DATANAME> = <dataset name>))
+) %>%
+  mutate_dataset("ADSL$var_created_after <- NA", dataname = "ADSL")
+
+
+cat(get_code(data, dataname = "ADTTE"))
+```
+
+Using `mutate_dataset` creates a tree of calls, which can be easily
+subset by `dataname`, but developers can also use `mutate_data` function which 
+doesn't require to specify `dataname`. When `mutate_data` is used, code for
+single dataset is not possible to be subset, instead code of all datasets is 
+returned.
+
+```{r}
+data <- mutate_data(data, 
+  code = "
+    ADSL$x3 <- 3
+    proxy_var <- 4    
+    ADTTE$x4 <- proxy_var
+  "
+)
+
+# single dataset code is not possible to obtain anymore
+cat(get_code(data, "ADSL"))
+```
+
+### Delayed choices
+
+The `teal` applications which initialize with data consisting only datasets, 
+all data are accessible in the pre-processing. Getting column names, factor 
+levels or numeric variables range are possible before app starts. It means
+that the developer can explicitly specify `data_extract_spec`, `choices_selected` 
+and their components. The `teal` package also supports these functions for the 
+delayed data loading, but the way to use them slightly differs. 
+In the code block below default version of `variable_choices` is presented,
+where function got an `ADSL` object containing "physical" data.
+
+```{r}
+ADSL <- radsl(cached = TRUE)
+variable_choices(data = ADSL)
+```
+
+Alternative option is to put a dataname into `data` argument, which will result 
+in creating `delayed_variable_choices` object. The developer can always
+explicitly specify `subset` of column names regardless class of the `data`.
+
+```{r}
+variable_choices(data = "ADSL", subset = c("AVAL", "BMRKR1"))
+```
+
+If the dataset is not known before, one can use a function which subsets
+column names from data. This function will be executed after the data will be 
+pulled.
+
+```{r}
+get_continuous <- function(data) {
+  idx <- vapply(data, function(x) is.numeric(x) && length(unique(x)) > 6, logical(1))
+  colnames(data)[idx]
+}
+
+variable_choices(data = "ADSL", subset = get_continuous)
+```
+
+Another function which can be used with the delayed data loading is a 
+`value_choices`, which defines choices from levels of one or multiple variables.
+By default `value_choices` uses `data.frame` from `data` argument and
+choices will be immediately constructed from this object.
+
+```{r}
+ADTTE <- radtte(cached = TRUE)
+value_choices(
+  data = ADTTE, 
+  var_choices = "PARAMCD",
+  var_label = "PARAM",
+  subset = levels(ADTTE$PARAMCD)[1:2]
+)
+```
+
+Similar to the `variable_choices`, developer can specify `data` argument with
+data name (`"ADTTE"`) and use function to `subset` choices. `subset` function
+will be executed after data is pulled.
+
+```{r}
+value_choices(
+  data = "ADTTE", 
+  var_choices = "PARAMCD",
+  var_label = "PARAM",
+  subset = function(data) levels(data$PARAMCD)[1:2]
+)
+```
+
+`variable_choices` and `value_choices` can be used with `choices_selected`, 
+`select_spec` or `filter_spec` to properly declare data extracts. 
+
+```{r}
+adsl <- rcd_cdisc_dataset_connector("ADSL", radsl, cached = TRUE)
+adrs <- rcd_cdisc_dataset_connector("ADRS", radrs, cached = TRUE)
+
+
+get_continuous <- function(data) {
+  idx <- vapply(data, function(x) is.numeric(x) && length(unique(x)) > 6, logical(1))
+  colnames(data)[idx]
+}
+
+data_extract_x <- data_extract_spec(
+  dataname = "ADSL",
+  select =  select_spec(
+    choices = variable_choices("ADSL", subset = get_continuous)
+  ),
+  filter = filter_spec(
+    label = "Select endpoints:",
+    vars = "ARMCD", #variable_choices("ADSL", "ARMCD")
+    choices = value_choices("ADSL",
+                            var_choices = "ARMCD",
+                            var_label = "ARM",
+                            subset = function(data) unique(as.character(data$ARMCD))),
+    selected = "ARM A",
+    multiple = TRUE
+  )
+)
+
+data_extract_y <- data_extract_spec(
+  dataname = "ADRS",
+  select =  select_spec(
+    choices = variable_choices("ADRS", subset = get_continuous)
+  ),
+  filter = filter_spec(
+    label = "Select endpoints:",
+    vars = c("PARAMCD", "AVISIT"),
+    choices = value_choices(
+      data = "ADRS",
+      var_choices = c("PARAMCD", "AVISIT"),
+      var_label = c("PARAMCD", "AVISIT"),
+      subset = function(data) {
+        unique(
+          paste(
+            data$PARAMCD,
+            data$AVISIT,
+            sep = " - "
+          )
+        )
+      }),
+    multiple = TRUE
+  )
+)
+```
+
+The `delayed_data_extract_spec` objects created above can be included to the 
+teal modules to run an application. 
+
+```{r, eval=FALSE}
+app <- init(
+  data = teal_data(rcd_data(adsl, adrs)),
+  modules = root_modules(
+    teal.modules.general::tm_g_bivariate(
+      x = data_extract_x,
+      y = data_extract_y,
+      use_density = FALSE,
+      plot_height = c(600L, 200L, 2000L),
+      ggtheme = "grey"
+    )
+  )
+)
+
+shinyApp(app$ui, app$server)
+```
+

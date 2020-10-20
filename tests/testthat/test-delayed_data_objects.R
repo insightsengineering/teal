@@ -131,7 +131,10 @@ test_that("RelationalDataConnector with custom UI and server", {
   expect_equal(items$ADSL$get_pull_callable()$get_call(), "radsl()")
   expect_equal(items$ADLB$get_pull_callable()$get_call(), "radlb(ADSL = ADSL)")
 
-  expect_error(x$get_ui("main-app"), regex = "No UI set yet. Please use set_ui method first.")
+  expect_error(
+    x$get_ui("main-app"),
+    "No UI set yet"
+  )
 
   x$set_ui(function(id) {
     ns <- NS(id)
@@ -158,6 +161,7 @@ test_that("RelationalDataConnector with custom UI and server", {
   )
 
   default_server <- x$get_server()
+
   expect_equal(default_server, NULL)
   x$set_server(function(input, output, session, connectors, connection) {
     output$pull_validate <- renderUI({

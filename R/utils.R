@@ -269,3 +269,13 @@ check_setequal <- function(x, y, pre_msg = "") {
 pdeparse <- function(x, width.cutoff = 500L) { # nolint
   paste0(deparse(x, width.cutoff = width.cutoff), collapse = "\n") # nolint
 }
+
+teal_with_pkg <- function(pkg, code) {
+  pkg_name <- paste0("package:", pkg)
+  if (! pkg_name %in% search()) {
+    require(pkg, character.only = TRUE)
+    on.exit(detach(pkg_name, character.only = TRUE))
+  }
+  eval.parent(code)
+  return(invisible(NULL))
+}

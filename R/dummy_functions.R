@@ -23,7 +23,7 @@ get_dummy_filter <- function() { # nousage # nolint
 #' @md
 #' @return `cdisc_data`
 get_dummy_cdisc_data <- function() { # nousage # nolint
-  withr::with_package("random.cdisc.data", code = {
+  teal_with_pkg("random.cdisc.data", code = {
     ADSL <- random.cdisc.data::radsl(cached = TRUE) # nolint
     ADAE <- random.cdisc.data::radae(cached = TRUE) # nolint
     ADLB <- random.cdisc.data::radlb(cached = TRUE) # nolint
@@ -50,9 +50,9 @@ ADLB <- radlb(cached = TRUE)
 #' @md
 #' @return `FilteredData` with `ADSL` set
 get_dummy_datasets <- function() { # nousage # nolint
-  withr::with_package("random.cdisc.data", code = {
+  teal_with_pkg("random.cdisc.data", code = {
     ADSL <- random.cdisc.data::radsl(cached = TRUE) # nolint
-  })
+    })
   attr(ADSL, "keys") <- get_cdisc_keys("ADSL")
   datasets <- FilteredData$new()
 

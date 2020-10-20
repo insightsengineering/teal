@@ -12,8 +12,6 @@ Callable <- R6::R6Class( #nolint
     #' @description
     #' Create a new \code{CallableCode} object
     #'
-    #' @param fun (\code{function})\cr
-    #'  function to be evaluated in class. Function should be named
     #' @param env (\code{environment})\cr
     #'  environment where the call will be evaluated
     #'
@@ -33,7 +31,7 @@ Callable <- R6::R6Class( #nolint
     #' @param value (\code{data.frame})\cr
     #'  object to be assigned to \code{x}
     #'
-    #' @return arguments the function gets called with
+    #' @return (\code{self}) invisibly for chaining.
     assign_to_env = function(x, value) {
       # assign variable once
       if (!exists(x, envir = private$env)) {
@@ -84,7 +82,7 @@ Callable <- R6::R6Class( #nolint
     #' @description
     #' Check if evaluation of the function has not failed.
     #'
-    #' @return \code{TRUE} if evaluation of the function failed or \code{FALSE}
+    #' @return (\code{logical}) \code{TRUE} if evaluation of the function failed or \code{FALSE}
     #'  if evaluation failed or function hasn't yet been called.
     is_failed = function() {
       return(private$failed)
@@ -92,7 +90,7 @@ Callable <- R6::R6Class( #nolint
     #' @description
     #' Get error message from last function execution
     #'
-    #' @return \code{character} object with error message or \code{character(0)} if last
+    #' @return (\code{character}) object with error message or \code{character(0)} if last
     #'  function evaluation was successful.
     get_error_message = function() {
       return(private$error_msg)

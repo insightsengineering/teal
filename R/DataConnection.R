@@ -4,29 +4,31 @@
 #' It can be a database or server (\code{RICE} or \code{SAICE}) connection.
 #'
 #' @examples
-#' \dontrun{
 #' open_fun <- callable_function(data.frame) # define opening function
 #' open_fun$set_args(list(x = 1:5)) # define fixed arguments to opening function
 #'
 #' close_fun <- callable_function(print) # define closing function
 #' close_fun$set_args(list(x = "Hi there")) # define fixed arguments to closing function
 #'
-#' x <- DataConnection$new() # define connection
-#' x$set_ping_fun(ping_fun) # able to set an optional ping function - eg. rice::rice_session_active
-#' x$set_open_fun(open_fun) # define opening function
-#' x$set_close_fun(close_fun) # define closing function
+#' ping_fun <- callable_function(rice::rice_session_active)
+#'
+#' x <- teal:::DataConnection$new( # define connection
+#'   ping_fun = ping_fun, # define ping function
+#'   open_fun = open_fun, # define opening function
+#'   close_fun = close_fun) # define closing function
 #'
 #' x$set_open_args(args = list(y = letters[1:5])) # define additional arguments if necessary
 #'
 #' x$open() # call opening function
-#'
-#' x$open(args = list(x = 1:5, y = letters[1:5])) # able to call opening function with arguments
-#'
 #' x$get_open_call() # check reproducible R code
+#'
 #' # get data from connection via DataConnector$get_dataset()
 #'
+#' \dontrun{
+#' x$open(args = list(x = 1:5, y = letters[1:5])) # able to call opening function with arguments
 #' x$close() # call closing function
 #' }
+#'
 #' @importFrom R6 R6Class
 #' @importFrom shinyjs alert
 DataConnection <- R6::R6Class( # nolint
@@ -34,14 +36,15 @@ DataConnection <- R6::R6Class( # nolint
   "DataConnection",
   public = list(
     #' @description
-    #' Create a new \code{DataConnection} object
+    #' Create a new `DataConnection` object
+    #' @md
     #'
-    #' @param open_fun (\code{CallableFunction}) function to open connection
-    #' @param close_fun (\code{CallableFunction}) function to close connection
-    #' @param ping_fun (\code{CallableFunction}) function to ping connection
-    #' @param if_conn_obj optional, (\code{logical}) whether to store \code{conn} object returned from opening
+    #' @param open_fun (`CallableFunction`) function to open connection
+    #' @param close_fun (`CallableFunction`) function to close connection
+    #' @param ping_fun (`CallableFunction`) function to ping connection
+    #' @param if_conn_obj optional, (`logical`) whether to store `conn` object returned from opening
     #'   connection
-    #' @return new \code{DataConnection} object
+    #' @return new `DataConnection` object
     initialize = function(open_fun = NULL, close_fun = NULL, ping_fun = NULL, if_conn_obj = FALSE) {
       stopifnot(is_logical_single(if_conn_obj))
       if (!is.null(open_fun)) {
@@ -54,36 +57,105 @@ DataConnection <- R6::R6Class( # nolint
         private$set_ping_fun(ping_fun)
       }
       private$if_conn_obj <- if_conn_obj
+
+
+      private$open_ui <- function(id) {
+        NULL
+      }
+      private$ping_ui <- function(id) {
+        NULL
+      }
+      private$close_ui <- function(id) {
+        NULL
+      }
     },
     #' @description
     #' If connection is opened
     #'
     #' If open connection has been successfully evaluated
+    #' @md
     #'
-    #' @return \code{logical} if connection is open
+    #' @return (`logical`) if connection is open
     is_opened = function() {
       return(private$opened)
     },
     #' @description
     #' Check if connection has not failed.
+    #' @md
     #'
-    #' @return \code{TRUE} if connection failed, else \code{FALSE}
+    #' @return (`logical`) `TRUE` if connection failed, else `FALSE`
     is_failed = function() {
       self$is_open_failed() || self$is_close_failed()
+    },
+    #' @description
+    #' Run simple application that uses its \code{ui} and \code{server} fields to open the
+    #' connection.
+    #'
+    #' Useful for debugging
+    #'
+    #' @return An object that represents the app
+    launch = function() {
+      shinyApp(
+        ui = fluidPage(
+          useShinyjs(),
+          fluidRow(
+            column(
+              width = 8,
+              offset = 2,
+              tags$div(
+                id = "connection_inputs",
+                self$get_open_ui(id = "data_connection"),
+                actionButton("submit", "Submit")
+              ),
+              shinyjs::hidden(
+                tags$div(
+                  id = "connection_set",
+                  div(
+                    h3("Connection successfully set."),
+                    p("You can close this window and get back to R console.")
+                  )
+                )
+              )
+            )
+          )
+        ),
+        server = function(input, output, session) {
+          session$onSessionEnded(stopApp)
+          observeEvent(input$submit, {
+            rv <- reactiveVal(NULL)
+            rv(
+              callModule(self$get_open_server(),
+                         id = "data_connection",
+                         connection = self)
+            )
+
+            observeEvent(rv(), {
+              if (self$is_opened()) {
+                removeUI(sprintf("#%s", session$ns("connection_inputs")))
+                shinyjs::show("connection_set")
+                stopApp()
+              }
+            })
+
+
+          })
+        }
+      )
     },
     # .. open connection -----
     #' @description
     #' Open the connection.
     #'
     #' Note that if the connection is already opened then it does nothing.
+    #' @md
     #'
-    #' @param args (\code{NULL} or named \code{list}) additional arguments not set up previously
-    #' @param silent (\code{logical}) whether convert all "missing function" errors to messages
-    #' @param try (\code{logical}) whether perform function evaluation inside \code{try} clause
+    #' @param args (`NULL` or named `list`) additional arguments not set up previously
+    #' @param silent (`logical`) whether convert all "missing function" errors to messages
+    #' @param try (`logical`) whether perform function evaluation inside `try` clause
     #'
-    #' @return returns \code{self} if successful or if connection has been already
-    #' opened. If \code{open_fun} fails, app returns an error in form of
-    #' \code{shinyjs::alert} (if \code{try=TRUE}) or breaks the app (if \code{try=FALSE})
+    #' @return returns `self` if successful or if connection has been already
+    #' opened. If `open_fun` fails, app returns an error in form of
+    #' `shinyjs::alert` (if `try = TRUE`) or breaks the app (if `try = FALSE`)
     #'
     open = function(args = NULL, silent = FALSE, try = FALSE) {
       stopifnot(is.null(args) || (is.list(args) && is_fully_named_list(args)))
@@ -111,18 +183,21 @@ DataConnection <- R6::R6Class( # nolint
 
     #' @description
     #' Get internal connection object
-    #' @return \code{connection} object
+    #' @md
+    #'
+    #' @return `connection` object
     get_conn = function() {
       return(private$conn)
     },
     #' @description
     #' Get executed open connection call
+    #' @md
     #'
-    #' @param deparse (\code{logical}) whether return deparsed form of a call
-    #' @param args (\code{NULL} or named \code{list}) additional arguments not set up previously
-    #' @param silent (\code{logical}) whether convert all "missing function" errors to messages
+    #' @param deparse (`logical`) whether return deparsed form of a call
+    #' @param args (`NULL` or named `list`) additional arguments not set up previously
+    #' @param silent (`logical`) whether convert all "missing function" errors to messages
     #'
-    #' @return optionally deparsed \code{call} object
+    #' @return optionally deparsed `call` object
     get_open_call = function(deparse = TRUE, args = NULL, silent = FALSE) {
       stopifnot(is_logical_single(deparse))
       stopifnot(is.null(args) || (is.list(args) && is_fully_named_list(args)))
@@ -142,33 +217,37 @@ DataConnection <- R6::R6Class( # nolint
     },
     #' @description
     #' Get error message from last connection
+    #' @md
     #'
-    #' @return (\code{character} value)\cr
-    #'  text of the error message or \code{character(0)} if last
+    #' @return (`character`)\cr
+    #'  text of the error message or `character(0)` if last
     #'  connection was successful.
     get_open_error_message = function() {
       return(private$open_fun$get_error_message())
     },
     #' @description
     #' Get shiny server module to open connection.
+    #' @md
     #'
-    #' @return the \code{server} \code{function} to open connection.
+    #' @return the (`server function`) to open connection.
     get_open_server = function() {
       return(private$open_server)
     },
     #' @description
     #' Get Shiny module with inputs to open connection
+    #' @md
     #'
-    #' @param id \code{character} shiny element id
+    #' @param id `character` shiny element id
     #'
-    #' @return the \code{ui} function to set arguments to open connection function.
+    #' @return the (`ui function`) to set arguments to open connection function.
     get_open_ui = function(id) {
       return(private$open_ui(id))
     },
     #' @description
     #' Check if open connection has not failed.
+    #' @md
     #'
-    #' @return \code{TRUE} if open connection failed, else \code{FALSE}
+    #' @return (`logical`) `TRUE` if open connection failed, else `FALSE`
     is_open_failed = function() {
       if (!is.null(private$open_fun)) {
         private$open_fun$is_failed()
@@ -178,11 +257,12 @@ DataConnection <- R6::R6Class( # nolint
     },
     #' @description
     #' Set open connection function argument
+    #' @md
     #'
-    #' @param args (\code{NULL} or named \code{list}) with values where list names are argument names
-    #' @param silent (\code{logical}) whether convert all "missing function" errors to messages
+    #' @param args (`NULL` or named `list`) with values where list names are argument names
+    #' @param silent (`logical`) whether convert all "missing function" errors to messages
     #'
-    #' @return \code{self} invisibly for chaining.
+    #' @return (`self`) invisibly for chaining.
     set_open_args = function(args, silent = FALSE) {
       stopifnot(is.null(args) || (is.list(args) && is_fully_named_list(args)))
       if_cond(private$check_open_fun(silent = silent), return(), isFALSE)
@@ -194,13 +274,14 @@ DataConnection <- R6::R6Class( # nolint
     #' Set open-connection server function
     #'
     #' This function will be called after submit button will be hit. There is no possibility to
-    #' specify some dynamic \code{ui} as \code{server} function is executed after hitting submit
+    #' specify some dynamic `ui` as `server` function is executed after hitting submit
     #' button.
+    #' @md
     #'
-    #' @param open_module (\code{function})\cr
+    #' @param open_module (`function`)\cr
     #'  A shiny module server function that should load data from all connectors
     #'
-    #' @return \code{self} invisibly for chaining.
+    #' @return (`self`) invisibly for chaining.
     set_open_server = function(open_module) {
       stopifnot(is(open_module, "function"))
       stopifnot(names(formals(open_module)) %in% c("input", "output", "session", "connection"))
@@ -215,12 +296,13 @@ DataConnection <- R6::R6Class( # nolint
     },
     #' @description
     #' Set open connection UI function
+    #' @md
     #'
-    #' @param open_module (\code{function})\cr
-    #'  shiny module as function. Inputs specified in this \code{ui} are passed to server module
-    #'  defined by \code{set_open_server} method.
+    #' @param open_module (`function`)\cr
+    #'  shiny module as function. Inputs specified in this `ui` are passed to server module
+    #'  defined by `set_open_server` method.
     #'
-    #' @return \code{self} invisibly for chaining.
+    #' @return (`self`) invisibly for chaining.
     set_open_ui = function(open_module) {
       stopifnot(is(open_module, "function"))
       stopifnot(identical(names(formals(open_module)), "id"))
@@ -240,13 +322,14 @@ DataConnection <- R6::R6Class( # nolint
     # .. close connection -------
     #' @description
     #' Close the connection.
+    #' @md
     #'
-    #' @param silent (\code{logical}) whether convert all "missing function" errors to messages
-    #' @param try (\code{logical}) whether perform function evaluation inside \code{try} clause
+    #' @param silent (`logical`) whether convert all "missing function" errors to messages
+    #' @param try (`logical`) whether perform function evaluation inside `try` clause
     #'
-    #' @return returns \code{self} if successful. For unsuccessful evaluation it
-    #' depends on \code{try} argument: if \code{try = TRUE} then returns
-    #' \code{error}, for \code{try = FALSE} otherwise
+    #' @return returns (`self`) if successful. For unsuccessful evaluation it
+    #' depends on `try` argument: if `try = TRUE` then returns
+    #' `error`, for `try = FALSE` otherwise
     close = function(silent = FALSE, try = FALSE) {
       if_cond(private$check_close_fun(silent = silent), return(), isFALSE)
       if (isTRUE(private$ping())) {
@@ -262,11 +345,12 @@ DataConnection <- R6::R6Class( # nolint
     },
     #' @description
     #' Get executed close connection call
+    #' @md
     #'
-    #' @param deparse (\code{logical}) whether return deparsed form of a call
-    #' @param silent (\code{logical}) whether convert all "missing function" errors to messages
+    #' @param deparse (`logical`) whether return deparsed form of a call
+    #' @param silent (`logical`) whether convert all "missing function" errors to messages
     #'
-    #' @return optionally deparsed \code{call} object
+    #' @return optionally deparsed `call` object
     get_close_call = function(deparse = TRUE, silent = FALSE) {
       stopifnot(is_logical_single(deparse))
       if_cond(private$check_close_fun(silent = silent), return(), isFALSE)
@@ -274,33 +358,37 @@ DataConnection <- R6::R6Class( # nolint
     },
     #' @description
     #' Get error message from last connection
+    #' @md
     #'
-    #' @return (\code{character} value)\cr
-    #'  text of the error message or \code{character(0)} if last
+    #' @return (`character`)\cr
+    #'  text of the error message or `character(0)` if last
     #'  connection was successful.
     get_close_error_message = function() {
       return(private$close_fun$get_error_message())
     },
     #' @description
     #' Get shiny server module to close connection.
+    #' @md
     #'
-    #' @return the \code{server} \code{function} to close connection.
+    #' @return the `server function` to close connection.
     get_close_server = function() {
       return(private$close_server)
     },
     #' @description
     #' Get Shiny module with inputs to close connection
+    #' @md
     #'
-    #' @param id \code{character} shiny element id
+    #' @param id (`character`) shiny element id
     #'
-    #' @return the \code{ui} function to set arguments to close connection function.
+    #' @return the (`ui function`) to set arguments to close connection function.
     get_close_ui = function(id) {
       return(private$close_ui(id))
     },
     #' @description
     #' Check if close connection has not failed.
+    #' @md
     #'
-    #' @return \code{TRUE} if close connection failed, else \code{FALSE}
+    #' @return (`logical`) `TRUE` if close connection failed, else `FALSE`
     is_close_failed = function() {
       if (!is.null(private$close_fun)) {
         private$close_fun$is_failed()
@@ -311,11 +399,12 @@ DataConnection <- R6::R6Class( # nolint
 
     #' @description
     #' Set close connection function argument
+    #' @md
     #'
-    #' @param args (named \code{list}) with values where list names are argument names
-    #' @param silent (\code{logical}) whether convert all "missing function" errors to messages
+    #' @param args (named `list`) with values where list names are argument names
+    #' @param silent (`logical`) whether convert all "missing function" errors to messages
     #'
-    #' @return \code{self} invisibly for chaining.
+    #' @return (`self`) invisibly for chaining.
     set_close_args = function(args, silent = FALSE) {
       stopifnot(is.null(args) || (is.list(args) && is_fully_named_list(args)))
       if_cond(private$check_close_fun(silent = silent), return(), isFALSE)
@@ -326,12 +415,13 @@ DataConnection <- R6::R6Class( # nolint
 
     #' @description
     #' Set close connection UI function
+    #' @md
     #'
-    #' @param close_module (\code{function})\cr
-    #'  shiny module as function. Inputs specified in this \code{ui} are passed to server module
-    #'  defined by \code{set_close_server} method.
+    #' @param close_module (`function`)\cr
+    #'  shiny module as function. Inputs specified in this `ui` are passed to server module
+    #'  defined by `set_close_server` method.
     #'
-    #' @return \code{self} invisibly for chaining.
+    #' @return (`self`) invisibly for chaining.
     set_close_ui = function(close_module) {
       stopifnot(is(close_module, "function"))
       stopifnot(identical(names(formals(close_module)), "id"))
@@ -352,13 +442,14 @@ DataConnection <- R6::R6Class( # nolint
     #' Set close-connection server function
     #'
     #' This function will be called after submit button will be hit. There is no possibility to
-    #' specify some dynamic \code{ui} as \code{server} function is executed after hitting submit
+    #' specify some dynamic `ui` as `server` function is executed after hitting submit
     #' button.
+    #' @md
     #'
-    #' @param close_module (\code{function})\cr
+    #' @param close_module (`function`)\cr
     #'  A shiny module server function that should load data from all connectors
     #'
-    #' @return \code{self} invisibly for chaining.
+    #' @return (`self`) invisibly for chaining.
     set_close_server = function(close_module) {
       stopifnot(is(close_module, "function"))
       stopifnot(names(formals(close_module)) %in% c("input", "output", "session", "connection"))
@@ -390,7 +481,8 @@ DataConnection <- R6::R6Class( # nolint
     close_server = NULL,
     ping_server = NULL,
 
-    #
+    opened = FALSE,
+
     check_open_fun = function(silent = FALSE) {
       stopifnot(is_logical_single(silent))
 
@@ -419,13 +511,13 @@ DataConnection <- R6::R6Class( # nolint
         return(TRUE)
       }
     },
-    opened = FALSE,
     # @description
     # Set close connection function
+    # @md
     #
-    # @param fun (\code{CallableFunction}) function to close connection
+    # @param fun (`CallableFunction`) function to close connection
     #
-    # @return \code{self} invisibly for chaining.
+    # @return (`self`) invisibly for chaining.
     set_close_fun = function(fun) {
       stopifnot(is(fun, "CallableFunction"))
       private$close_fun <- fun
@@ -433,10 +525,11 @@ DataConnection <- R6::R6Class( # nolint
     },
     # @description
     # Set open connection function
+    # @md
     #
-    # @param fun (\code{CallableFunction}) function to open connection
+    # @param fun (`CallableFunction`) function to open connection
     #
-    # @return \code{self} invisibly for chaining.
+    # @return (`self`) invisibly for chaining.
     set_open_fun = function(fun) {
       stopifnot(is(fun, "CallableFunction"))
       private$open_fun <- fun
@@ -444,10 +537,11 @@ DataConnection <- R6::R6Class( # nolint
     },
     # @description
     # Set a ping function
+    # @md
     #
-    # @param fun (\code{CallableFunction}) function to ping connection
+    # @param fun (`CallableFunction`) function to ping connection
     #
-    # @return \code{self} invisibly for chaining.
+    # @return (`self`) invisibly for chaining.
     set_ping_fun = function(fun) {
       stopifnot(is(fun, "CallableFunction"))
       private$ping_fun <- fun
@@ -455,8 +549,9 @@ DataConnection <- R6::R6Class( # nolint
     },
     # @description
     # Ping the connection.
+    # @md
     #
-    # @return logical
+    # @return (`logical`)
     ping = function() {
       if (!is.null(private$ping_fun)) {
         ping_res <- private$ping_fun$run()
@@ -469,16 +564,16 @@ DataConnection <- R6::R6Class( # nolint
 )
 
 # DataConnection wrappers ----
-#' Open connection to \code{random.cdisc.data}
+#' Open connection to `random.cdisc.data`
 #'
 #' @md
 #' @description `r lifecycle::badge("experimental")`
 #'
-#' @param open_args optional, named (\code{list}) of additional parameters for \code{\link{library}} open
-#'   function such as \code{quietly}. Please note that the \code{package} argument will be overwritten
-#'   with \code{random.cdisc.data}.
+#' @param open_args optional, named (`list`) of additional parameters for \code{\link{library}} open
+#'   function such as `quietly.` Please note that the `package` argument will be overwritten
+#'   with `random.cdisc.data`.
 #'
-#' @return \code{DataConnection} type of object.
+#' @return (`DataConnection`) type of object.
 #'
 #' @export
 rcd_connection <- function(open_args = list()) {
@@ -494,36 +589,43 @@ rcd_connection <- function(open_args = list()) {
   open_fun$set_args(open_args)
 
   x <- DataConnection$new(open_fun = open_fun)
-  x$set_open_ui(
-    function(id) {
-      NULL
+
+  # open connection
+  x$set_open_server(
+    function(input, output, session, connection) {
+      connection$open(try = TRUE)
+
+      if (connection$is_open_failed()) {
+        shinyjs::alert(
+          paste(
+            "Error opening rcd connection\nError message: ",
+            connection$get_open_error_message()
+          )
+        )
+      }
+      return(invisible(connection))
     }
   )
 
-  x$set_open_server(
-    function(input, output, session, connection) {
-      NULL
-    }
-  )
   return(x)
 }
 
 
-#' Open connection to \code{rice}
+#' Open connection to `rice`
 #'
 #' @md
 #' @description `r lifecycle::badge("experimental")`
 #'
-#' @param open_args optional, named (\code{list}) of additional parameters for the connection's
-#'   \code{\link[rice]{rice_session_open}} open function. Please note that the \code{password} argument will be
-#'   overwritten with \code{askpass::askpass}.
-#' @param close_args optional, named (\code{list}) of additional parameters for the connection's
-#'   \code{\link[rice]{rice_session_close}} close function. Please note that the \code{message} argument
-#'   will be overwritten with \code{FALSE}.
-#' @param ping_args optional, named (\code{list}) of additional parameters for the connection's
+#' @param open_args optional, named (`list`) of additional parameters for the connection's
+#'   \code{\link[rice]{rice_session_open}} open function. Please note that the `password` argument will be
+#'   overwritten with `askpass::askpass`.
+#' @param close_args optional, named (`list`) of additional parameters for the connection's
+#'   \code{\link[rice]{rice_session_close}} close function. Please note that the `message` argument
+#'   will be overwritten with `FALSE`.
+#' @param ping_args optional, named (`list`) of additional parameters for the connection's
 #'   \code{\link[rice]{rice_session_active}} ping function.
 #'
-#' @return \code{DataConnection} type of object
+#' @return (`DataConnection`) type of object
 #'
 #' @export
 rice_connection <- function(open_args = list(), close_args = list(), ping_args = list()) {
@@ -575,16 +677,11 @@ rice_connection <- function(open_args = list(), close_args = list(), ping_args =
           )
         )
       }
+      return(invisible(connection))
     }
   )
 
   # close connection
-  x$set_close_ui(
-    function(id) {
-      NULL
-    }
-  )
-
   x$set_close_server(
     function(input, output, session, connection) {
       connection$close(try = TRUE)
@@ -597,6 +694,7 @@ rice_connection <- function(open_args = list(), close_args = list(), ping_args =
           )
         )
       }
+      return(invisible(connection))
     }
   )
 
@@ -606,20 +704,20 @@ rice_connection <- function(open_args = list(), close_args = list(), ping_args =
 
 
 
-#' Open connection to \code{Teradata}
+#' Open connection to `Teradata`
 #'
 #' @md
 #' @description `r lifecycle::badge("experimental")`
 #'
-#' @param open_args optional, named (\code{list}) of additional parameters for the connection's
-#'   \code{RocheTeradata::connect_teradata} open function. Please note that the \code{type}
-#'   argument will be overwritten with \code{ODBC}.
-#' @param close_args optional, named (\code{list}) of additional parameters for the connection's
+#' @param open_args optional, named (`list`) of additional parameters for the connection's
+#'   `RocheTeradata::connect_teradata` open function. Please note that the `type`
+#'   argument will be overwritten with `ODBC`.
+#' @param close_args optional, named (`list`) of additional parameters for the connection's
 #'   \code{\link[DBI]{dbDisconnect}} close function.
-#' @param ping_args optional, named (\code{list}) of additional parameters for the connection's
+#' @param ping_args optional, named (`list`) of additional parameters for the connection's
 #'   \code{\link[DBI]{dbIsValid}} ping function.
 #'
-#' @return \code{DataConnection} type of object
+#' @return (`DataConnection`) type of object
 #'
 #' @importFrom shinyjs alert
 #' @export
@@ -675,6 +773,7 @@ teradata_connection <- function(open_args = list(), close_args = list(), ping_ar
           )
         )
       }
+      return(invisible(connection))
     }
   )
 
@@ -697,6 +796,7 @@ teradata_connection <- function(open_args = list(), close_args = list(), ping_ar
           )
         )
       }
+      return(invisible(connection))
     }
   )
 

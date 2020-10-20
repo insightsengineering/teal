@@ -37,35 +37,151 @@ reference:
     - select_spec
     - value_choices
     - variable_choices
-  - title: Delayed data loading
+  - title: Teal modules UI
+    desc: Functions used to filter observations and select variables from dataset.
     contents:
-    - resolve_delayed
-  - title: Helpers
+    - optionalSelectInput
+    - optionalSliderInput
+    - optionalSliderInputValMinMax
+    - updateOptionalSelectInput
+  - title: Delayed Data Constructors
+    desc: For creating delayed data objects.
     contents:
-    - log_app_usage
-    - no_selected_as_NULL
-    - split_by_sep
-    - stop_shiny
-  - title: DataConnector
-    contents:
-    - rcd_dataset_connector
+    - cdisc_data_file
+    - cdisc_dataset_file
+    - relational_dataset_connector
+    - relational_dataset_file
     - rcd_connection
-    - rcd_cdisc_data
-    - rds_dataset_connector
-    - rds_connection
-    - rds_data
-    - rice_dataset_connector
+    - rcd_data
     - rice_connection
     - rice_data
-  - title: Unexported Functions for Developers
-    desc: These functions are useful for teal developers
+    - teradata_connection
+    - teradata_data
+    - as_relational
+    - raw_dataset
+    - named_dataset
+    - relational_dataset
+    - raw_dataset_connector
+    - named_dataset_connector
+    - teal_data
+    - teal_data_file
+  - title: Delayed Data Functions
+    desc: For loading and modifying delayed data objects.
     contents:
-      - filter_calls_module
-      - bookmark_module
-      - debug_browser_module
-      - filter_panel_ui
-      - ui_filter_items
-      - ui_single_filter_item
+    - callable_code
+    - callable_function
+    - get_cdisc_keys
+    - get_dataname
+    - get_dataset
+    - get_dataset_label
+    - get_datasets
+    - get_raw_data
+    - is_pulled
+    - load_dataset
+    - load_datasets
+    - mutate_data
+    - mutate_dataset
+    - resolve_delayed
+    - resolve_delayed_expr
+    - set_args
+  - title: Helpers
+    desc: Other useful functions for users and developers.
+    contents:
+    - bookmarkableShinyApp
+    - data_label
+    - dataset
+    - dataset_file
+    - default_filter
+    - get_labels
+    - keys
+    - log_app_usage
+    - no_selected_as_NULL
+    - read_script
+    - run_js_files
+    - split_by_sep
+    - stop_shiny
+  - title: For Developers
+  - subtitle: R6 Classes
+    desc: Abstract and concrete classes used to build teal functionality.
+    contents:
+    - FilteredData
+    - Callable
+    - CallableCode
+    - CallableFunction
+    - CodeClass
+    - RawDataset
+    - NamedDataset
+    - RelationalDataset
+    - DataConnection
+    - RawDatasetConnector
+    - NamedDatasetConnector
+    - RelationalDatasetConnector
+    - RelationalDataCollection
+    - RelationalDataConnector
+    - RelationalData
+  - subtitle: Unexported Functions
+    desc: These functions are useful for teal developers.
+    contents:
+    - bookmark_module
+    - check_foreign_keys
+    - check_in_subset
+    - check_pkg_quietly
+    - check_setequal
+    - code_exclude
+    - code_from_script
+    - debug_browser_module
+    - enclosed_with
+    - enclosed_with_dataname
+    - execute_in_next_cycle
+    - extract_choices_labels
+    - extract_raw_choices
+    - filter_calls_module
+    - filter_state_to_str
+    - find_source_code
+    - get_code_single
+    - get_dummy_cdisc_data
+    - get_dummy_datasets
+    - get_dummy_filter
+    - get_dummy_modules
+    - get_filter_vars
+    - handle_active_datanames
+    - include_css_files
+    - include_js_files
+    - include_source_code
+    - include_teal_css_js
+    - label_to_id
+    - list_adsl_first
+    - modules_depth
+    - picker_options
+    - picker_options_content
+    - predefined_filters_module
+    - pretty_code_string
+    - reset_filters_module
+    - resolve_teal_args
+    - srv_add_filter_variable
+    - set_single_filter_state
+    - srv_filter_items
+    - srv_filter_panel
+    - srv_filtered_data_overview
+    - srv_nested_tabs
+    - srv_shiny_module_arguments
+    - srv_single_filter_item
+    - srv_tabs_with_filters
+    - srv_teal
+    - srv_teal_with_splash
+    - text_to_call
+    - trigger_after_first_cycle
+    - ui_add_filter_variable
+    - ui_filter_items
+    - ui_filter_panel
+    - ui_filtered_data_overview
+    - ui_nested_tabs
+    - ui_single_filter_item
+    - ui_tabs_with_filters
+    - ui_teal
+    - ui_teal_with_splash
+    - variable_type_icons
+    - variable_types
 
 
 

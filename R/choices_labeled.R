@@ -237,19 +237,19 @@ variable_choices.NamedDatasetConnector <- function(data, subset = NULL, fill = F
 #' @md
 #' @description `r lifecycle::badge("maturing")`
 #'
-#' @param data (\code{data.frame}) or (\code{character})
-#' If \code{data.frame}, then data to extract labels from
-#' If \code{character}, then name of the dataset to extract data from once available.
-#' @param var_choices (\code{character}) vector with choices column names
-#' @param var_label (\code{character}) vector with labels column names
-#' @param subset (\code{character} or \code{function})
-#' If \code{character}, vector with values to subset.
-#' If \code{function}, then this function is used to determine the possible columns (e.g. all factor columns).
+#' @param data (`data.frame` or `character`)
+#' If `data.frame`, then data to extract labels from
+#' If `character`, then name of the dataset to extract data from once available.
+#' @param var_choices (`character` or `NULL`) vector with choices column names
+#' @param var_label (`character`) vector with labels column names
+#' @param subset (`character` or `function`)
+#' If `character`, vector with values to subset.
+#' If `function`, then this function is used to determine the possible columns (e.g. all factor columns).
 #' In this case, the function must take only single argument "data" and return a character vector.
 #' See examples for more details.
-#' @param sep (\code{character}) separator used in case of multiple column names
+#' @param sep (`character`) separator used in case of multiple column names
 #'
-#' @return named character vector or \code{delayed_data} object
+#' @return named character vector or `delayed_data` object
 #'
 #' @rdname value_choices
 #'
@@ -273,19 +273,20 @@ variable_choices.NamedDatasetConnector <- function(data, subset = NULL, fill = F
 #' value_choices(ADRS, "PARAMCD", "PARAM", subset = function(data) {
 #'   return(levels(data$PARAMCD)[1:2])
 #' })
-value_choices <- function(data, var_choices, var_label, subset = NULL, sep = " - ") {
+value_choices <- function(data, var_choices, var_label = NULL, subset = NULL, sep = " - ") {
+  stopifnot(is_character_vector(var_choices, min_length = 0L))
   stopifnot(
-    is_character_vector(var_choices, min_length = 0L),
-    is_character_vector(var_label, min_length = 0L),
-    length(var_choices) == length(var_label)
-  )
+    is.null(var_label) ||
+    (is_character_vector(var_label, min_length = 0L) &&
+      length(var_choices) == length(var_label))
+    )
   stopifnot(is.null(subset) || is.vector(subset) || is.function(subset))
   UseMethod("value_choices")
 }
 
 #' @rdname value_choices
 #' @export
-value_choices.character <- function(data, var_choices, var_label, subset = NULL, sep = " - ") {
+value_choices.character <- function(data, var_choices, var_label = NULL, subset = NULL, sep = " - ") {
   out <- structure(list(
     data = data,
     var_choices = var_choices,
@@ -300,7 +301,7 @@ value_choices.character <- function(data, var_choices, var_label, subset = NULL,
 
 #' @rdname value_choices
 #' @export
-value_choices.data.frame <- function(data, var_choices, var_label, subset = NULL, sep = " - ") { # nolint
+value_choices.data.frame <- function(data, var_choices, var_label = NULL, subset = NULL, sep = " - ") { # nolint
   choices <- apply(data[var_choices], 1, paste, collapse = sep)
   labels <- apply(data[var_label], 1, paste, collapse = sep)
   df <- unique(data.frame(choices, labels, stringsAsFactors = FALSE)) # unique combo of choices x labels
@@ -320,7 +321,7 @@ value_choices.data.frame <- function(data, var_choices, var_label, subset = NULL
 
 #' @rdname value_choices
 #' @export
-value_choices.RawDataset <- function(data, var_choices, var_label, subset = NULL, sep = " - ") {
+value_choices.RawDataset <- function(data, var_choices, var_label = NULL, subset = NULL, sep = " - ") {
   value_choices(
     data = get_raw_data(data),
     var_choices = var_choices,
@@ -332,7 +333,7 @@ value_choices.RawDataset <- function(data, var_choices, var_label, subset = NULL
 
 #' @rdname value_choices
 #' @export
-value_choices.NamedDatasetConnector <- function(data, var_choices, var_label, subset = NULL, sep = " - ") { # nolint
+value_choices.NamedDatasetConnector <- function(data, var_choices, var_label = NULL, subset = NULL, sep = " - ") { # nolint
   if (is_pulled(data)) {
     value_choices(
       data = get_raw_data(data),

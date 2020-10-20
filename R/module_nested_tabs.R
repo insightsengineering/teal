@@ -55,7 +55,8 @@ ui_nested_tabs <- function(id, modules, datasets) {
   # each module within the `ns` is the label plus the id of its parent (id_parent)
   # is_root: whether top element of modules should be at the root,
   # i.e. in no `tabSet`, ignored if `teal_module`
-  create_ui <- function(modules, id_parent, is_root = TRUE) {
+  # depth: stores the depth of the module nesting
+  create_ui <- function(modules, id_parent, is_root = TRUE, depth = 0) {
     stopifnot(
       is_character_single(id_parent) || is.null(id_parent),
       is_logical_single(is_root)
@@ -77,7 +78,7 @@ ui_nested_tabs <- function(id, modules, datasets) {
               function(submodules) {
                 tabPanel(
                   title = submodules$label, # also acts as value of input$tabsetId that this tabPanel is embedded in
-                  create_ui(modules = submodules, id_parent = id, is_root = FALSE)
+                  create_ui(modules = submodules, id_parent = id, is_root = FALSE, depth = depth + 1)
                 )
               }
             ))
@@ -90,6 +91,7 @@ ui_nested_tabs <- function(id, modules, datasets) {
         args <- isolate(resolve_teal_args(modules$ui_args, datasets))
         # we pass the unfiltered datasets as they may be needed to create the UI
         tagList(
+          if (depth >= 2) div(style = "margin-top: 25px;"),
           do.call(
             modules$ui,
             c(list(id = ns(id), datasets = datasets), args)

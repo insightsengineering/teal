@@ -168,7 +168,6 @@ test_that("RelationalDatasetConnector", {
     "ADSL <- radsl(N = 5, seed = 1, cached = TRUE)"
   )
 
-
   expect_identical(
     x1$get_code(deparse = FALSE),
     as.list(as.call(parse(text = "ADSL <- radsl(N = 5, seed = 1, cached = TRUE)")))
@@ -421,38 +420,186 @@ test_that("rds_dataset_connector", {
   )
 })
 
-test_that("csv_dataset_connector", {
+# test csv_dataset_connector
+temp_file_csv <- tempfile(fileext = ".csv")
+on.exit(unlink(temp_file_csv))
+
+# test with unexpected input
+test_that("csv_dataset_connector not expected input", {
 
   # check error if csv file doesn't exist
   expect_error(
     csv_dataset_connector("ADSL", file = "not_exists.csv", keys = get_cdisc_keys("ADSL"))
   )
 
+  # check error if args are named
+  expect_error(
+    csv_dataset_connector("ADSL",
+      file = temp_file_csv,
+      keys = get_cdisc_keys("ADSL"),
+      code = character(0),
+      script = character(0),
+      label = character(0),
+      "a"
+    )
+  )
+
+  # check error if is_character_single(file)
+  expect_error(
+    csv_dataset_connector("ADSL", file = c("a", "b"))
+  )
+  expect_error(
+    csv_dataset_connector("ADSL", file = 1)
+  )
+})
+
+# test with cdisc data input
+test_that("csv_dataset_connector random.cdisc.data", {
   # create csv file
   ADSL <- radsl(cached = TRUE) # nolint
-  temp_file <- tempfile()
-  on.exit(unlink(tempfile()))
-  write.csv(ADSL, file = temp_file, row.names = FALSE)
+  write.csv(ADSL, file = temp_file_csv, row.names = FALSE)
+
+  # check can pull data and get code without delimiter assigned
+  x <- csv_dataset_connector("ADSL", file = temp_file_csv, keys = get_cdisc_keys("ADSL"))
+  x$pull()
+  expect_true(is_pulled(x))
+  expect_identical(get_dataname(x), "ADSL")
+  expect_identical(get_code(x), paste0("ADSL <- readr::read_delim(file = \"", temp_file_csv, "\", delim = \",\")"))
+  data <- get_raw_data(x)
+  expect_true(is.data.frame(data))
+  expect_identical(nrow(data), nrow(ADSL))
+  expect_identical(colnames(data), colnames(ADSL))
+
+  # next check can pass arguments to read_delim (e.g. delim = '|')
+  write.table(ADSL, file = temp_file_csv, row.names = FALSE, sep = "|")
+  x <- csv_dataset_connector("ADSL", file = temp_file_csv, keys = get_cdisc_keys("ADSL"), delim = "|")
+  x$pull()
+  expect_true(is_pulled(x))
+  expect_identical(get_dataname(x), "ADSL")
+  expect_identical(get_code(x), paste0("ADSL <- readr::read_delim(file = \"", temp_file_csv, "\", delim = \"|\")"))
+  data <- get_raw_data(x)
+  expect_true(is.data.frame(data))
+  expect_identical(nrow(data), nrow(ADSL))
+  expect_identical(ncol(data), ncol(ADSL))
+  expect_identical(colnames(data), colnames(ADSL))
+
+  # next check can pass arguments to read_delim (using '\t')
+  write.table(ADSL, file = temp_file_csv, row.names = FALSE, sep = "\t")
+  x <- csv_dataset_connector("ADSL", file = temp_file_csv, keys = get_cdisc_keys("ADSL"), delim = "\t")
+  x$pull()
+  expect_true(is_pulled(x))
+  expect_identical(get_dataname(x), "ADSL")
+  expect_identical(get_code(x), paste0("ADSL <- readr::read_delim(file = \"", temp_file_csv, "\", delim = \"\\t\")"))
+  data <- get_raw_data(x)
+  expect_true(is.data.frame(data))
+  expect_identical(nrow(data), nrow(ADSL))
+  expect_identical(ncol(data), ncol(ADSL))
+  expect_identical(colnames(data), colnames(ADSL))
+
+  # next check can pass arguments to read_delim (using ';')
+  write.table(ADSL, file = temp_file_csv, row.names = FALSE, sep = ";")
+  x <- csv_dataset_connector("ADSL", file = temp_file_csv, keys = get_cdisc_keys("ADSL"), delim = ";")
+  x$pull()
+  expect_true(is_pulled(x))
+  expect_identical(get_dataname(x), "ADSL")
+  expect_identical(get_code(x), paste0("ADSL <- readr::read_delim(file = \"", temp_file_csv, "\", delim = \";\")"))
+  data <- get_raw_data(x)
+  expect_true(is.data.frame(data))
+  expect_identical(nrow(data), nrow(ADSL))
+  expect_identical(ncol(data), ncol(ADSL))
+  expect_identical(colnames(data), colnames(ADSL))
+})
+
+# non-standard dataset
+test_that("csv_dataset_connector non-standard datasets multi/space character delim", {
+  ADSL <- radsl(cached = TRUE) # nolint
+  ADSL_ns <- data.frame( # nolint
+    STUDYID = "A",
+    USUBJID = paste0("A", 1:3),
+    SUBJID = 1:3,
+    RACE = c("sth1|sth2", "sth", "sth"),
+    stringsAsFactors = FALSE
+  )
+
+  # next check can pass arguments to read_delim (using '|||')
+  write.table(ADSL_ns, file = temp_file_csv, row.names = FALSE, sep = "|||")
+  x <- csv_dataset_connector("ADSL", file = temp_file_csv, keys = get_cdisc_keys("ADSL"), delim = "|||")
+  expect_warning(x$pull())
+  expect_true(is_pulled(x))
+  expect_identical(get_dataname(x), "ADSL")
+  expect_identical(get_code(x), paste0("ADSL <- readr::read_delim(file = \"", temp_file_csv, "\", delim = \"|||\")"))
+  data <- get_raw_data(x)
+  expect_true(is.data.frame(data))
+  expect_identical(nrow(data), nrow(ADSL_ns))
+  expect_false(identical(colnames(data), colnames(ADSL_ns)))
+
+  # next check can pass arguments to read_delim (using space ' ')
+  write.table(ADSL, file = temp_file_csv, row.names = FALSE, sep = " ")
+  x <- csv_dataset_connector("ADSL", file = temp_file_csv, keys = get_cdisc_keys("ADSL"), delim = " ")
+  expect_warning(x$pull())
+  expect_true(is_pulled(x))
+  expect_identical(get_dataname(x), "ADSL")
+  expect_identical(get_code(x), paste0("ADSL <- readr::read_delim(file = \"", temp_file_csv, "\", delim = \" \")"))
+  data <- get_raw_data(x)
+  expect_true(is.data.frame(data))
+  expect_false(identical(data, ADSL))
+})
+
+# column names attributes
+test_that("csv_dataset_connector attritubes", {
+  ADSL_ns <- data.frame( # nolint
+    STUDYID = "A",
+    USUBJID = paste0("A", 1:3),
+    SUBJID = 1:3,
+    RACE = c("sth1|sth2", "sth", "sth"),
+    stringsAsFactors = FALSE
+  )
+  rtables::var_labels(ADSL_ns) <- letters[1:4]
+  write.table(ADSL_ns, file = temp_file_csv, row.names = FALSE, sep = ",")
 
   # check can pull data and get code
-  x <- csv_dataset_connector("ADSL", file = temp_file, keys = get_cdisc_keys("ADSL"))
+  x <- csv_dataset_connector("ADSL", file = temp_file_csv, keys = get_cdisc_keys("ADSL"), delim = ",")
   x$pull()
-  expect_equal(get_code(x), paste0("ADSL <- readr::read_delim(file = \"", temp_file, "\", delim = \",\")"))
+  expect_true(is_pulled(x))
+  expect_identical(get_dataname(x), "ADSL")
+  expect_identical(get_code(x), paste0("ADSL <- readr::read_delim(file = \"", temp_file_csv, "\", delim = \",\")"))
+  data <- get_raw_data(x)
+  expect_null(attributes(data[[1]])$label)
+
+  # we should use mutate_dataset
+  data <- get_raw_data(x %>% mutate_dataset("rtables::var_labels(ADSL) <- letters[1:4]"))
+  expect_identical(attributes(data[[1]])$label, "a")
+})
+
+# test csv_cdisc_dataset_connector
+test_that("csv_cdisc_dataset_connector random.cdisc.data", {
+  # create csv file
+  ADSL <- radsl(cached = TRUE) # nolint
+  write.csv(ADSL, file = temp_file_csv, row.names = FALSE)
+
+  # check can pull data and get code without delimiter assigned
+  x <- csv_cdisc_dataset_connector("ADSL", file = temp_file_csv)
+  x$pull()
+  expect_true(is_pulled(x))
+  expect_identical(get_dataname(x), "ADSL")
+  expect_identical(get_code(x), paste0("ADSL <- readr::read_delim(file = \"", temp_file_csv, "\", delim = \",\")"))
   data <- get_raw_data(x)
   expect_true(is.data.frame(data))
-  expect_equal(nrow(data), nrow(ADSL))
-  expect_equal(ncol(data), ncol(ADSL))
+  expect_identical(nrow(data), nrow(ADSL))
+  expect_identical(colnames(data), colnames(ADSL))
 
-
-  # next check can pass arguments to read_delim (e.g. delim)
-  write.table(ADSL, file = temp_file, row.names = FALSE, sep = "|")
-  x <- csv_cdisc_dataset_connector("ADSL", file = temp_file, delim = "|")
+  # next check can pass arguments to read_delim (e.g. delim = '|')
+  write.table(ADSL, file = temp_file_csv, row.names = FALSE, sep = "|")
+  x <- csv_cdisc_dataset_connector("ADSL", file = temp_file_csv, delim = "|")
   x$pull()
-  expect_equal(get_code(x), paste0("ADSL <- readr::read_delim(file = \"", temp_file, "\", delim = \"|\")"))
+  expect_true(is_pulled(x))
+  expect_identical(get_dataname(x), "ADSL")
+  expect_identical(get_code(x), paste0("ADSL <- readr::read_delim(file = \"", temp_file_csv, "\", delim = \"|\")"))
   data <- get_raw_data(x)
   expect_true(is.data.frame(data))
-  expect_equal(nrow(data), nrow(ADSL))
-  expect_equal(ncol(data), ncol(ADSL))
+  expect_identical(nrow(data), nrow(ADSL))
+  expect_identical(ncol(data), ncol(ADSL))
+  expect_identical(colnames(data), colnames(ADSL))
 })
 
 test_that("script_dataset_connector", {
@@ -618,5 +765,149 @@ test_that("fun_cdisc_dataset_connector", {
   expect_true(is.data.frame(data_1))
   expect_true(is.data.frame(data_2))
   expect_identical(data_1, data_2)
+})
+
+
+
+test_that("code_dataset_connector - Test various inputs", {
+  ADSL <- radsl(seed = 1) # nolint
+
+  file_example <- tempfile(fileext = ".R")
+  writeLines(
+    text = c("seed <- 1; ADSL <- radsl(seed = seed)\nADSL"),
+    con = file_example
+  )
+
+  from_file <- code_dataset_connector(
+    dataname = "ADSL",
+    keys = get_cdisc_keys("ADSL"),
+    code = paste0(readLines(file_example), collapse = "\n")
+  )
+
+  expect_equal(from_file$get_code(), "seed <- 1\nADSL <- radsl(seed = seed)\nADSL <- ADSL")
+  expect_identical(from_file$pull()$get_raw_data(), ADSL)
+
+  ADSL <- radsl(cached = TRUE) # nolint
+
+  file_example <- tempfile(fileext = ".R")
+  writeLines(
+    text = c(
+      "mtcars
+      # code ADSL>
+      library(random.cdisc.data)
+      ADSL <- radsl(cached = TRUE)
+      ADSL
+      # <ADSL code
+      ADAE <- radae(cached = TRUE)"
+    ),
+    con = file_example
+  )
+
+  get_code_file <- code_dataset_connector(
+    dataname = "ADSL",
+    keys = get_cdisc_keys("ADSL"),
+    code = get_code(file_example, dataname = "ADSL")
+  )
+
+  expect_equal(get_code_file$get_code(), "library(random.cdisc.data)\nADSL <- radsl(cached = TRUE)\nADSL <- ADSL")
+  expect_identical(get_code_file$pull()$get_raw_data(), ADSL)
+
+})
+
+test_that("code_dataset_connector - Modify vars", {
+  adsl <- cdisc_dataset(
+    dataname = "ADSL",
+    data = radsl(cached = TRUE),
+    keys = get_cdisc_keys("ADSL"),
+    code = "ADSL <- radsl(cached = TRUE)",
+    label = "ADSL dataset"
+  )
+
+  adtte <- relational_dataset_connector(
+    dataname = "ADTTE",
+    pull_callable = callable_code(
+      "ADSL <- dplyr::filter(ADSL, SEX == 'F')
+      radtte(
+        ADSL = ADSL,
+        seed = 1
+      )"
+    ),
+    keys = get_cdisc_keys("ADTTE"),
+    label = "ADTTE dataset",
+    vars = list(ADSL = adsl)
+  )
+
+  expect_error(
+    adtte$pull(try = FALSE),
+    "Modification of the local variable 'ADSL' is not allowed."
+  )
+
+  expect_silent(adtte$pull(try = TRUE))
+
+  expect_true(
+    grepl("Modification of the local variable", adtte$get_error_message())
+  )
+})
+
+test_that("code_dataset_connector - library calls", {
+  adsl <- relational_dataset_connector(
+    dataname = "ADSL",
+    pull_callable = callable_function(radsl) %>% set_args(args = list(cached = TRUE)),
+    keys = get_cdisc_keys("ADSL"),
+    label = "ADSL dataset"
+  )
+
+  adtte <- relational_dataset_connector(
+    dataname = "ADTTE",
+    pull_callable = callable_code(
+      "library(dplyr)
+      ADSL_local <- filter(ADSL, SEX == 'F')
+      radtte(
+        ADSL = ADSL_local,
+        seed = 1
+      )"
+    ),
+    keys = get_cdisc_keys("ADTTE"),
+    label = "ADTTE dataset",
+    vars = list(ADSL = adsl)
+  )
+
+  adrs <- relational_dataset_connector(
+    dataname = "ADRS",
+    pull_callable = callable_code(
+      "library(dplyr)
+      radrs(
+        ADSL = filter(ADSL, SEX == 'F'),
+        seed = 1
+      )"
+    ),
+    keys = get_cdisc_keys("ADRS"),
+    label = "ADRS dataset",
+    vars = list(ADSL = adsl)
+  )
+
+  data <- cdisc_data(adsl, adtte, adrs, check = TRUE)
+  expect_silent(
+    lapply(
+      data$get_items(),
+      load_dataset
+    )
+  )
+
+  datasets <- get_datasets(data)
+  expect_identical(
+    get_raw_data(datasets[[1]]),
+    radsl(cached = TRUE)
+  )
+
+  expect_identical(
+    unique(get_raw_data(datasets[[2]])$SEX),
+    factor("F", levels = c("F", "M"))
+  )
+
+  expect_identical(
+    unique(get_raw_data(datasets[[3]])$SEX),
+    factor("F", levels = c("F", "M"))
+  )
 
 })

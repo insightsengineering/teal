@@ -138,10 +138,15 @@ debug_browser_module <- function(label = "Browser Debug Module") { # nousage # n
         # we also set a global option `teal_debug` so that the code can insert debug statements that trigger when in
         # this mode (but should be used for development purposes only):
         # `if (isTRUE(getOption("teal_debug"))) { debug_code }` #nolint
-        withr::with_options(list(teal_debug = TRUE), {
+        fun <- function() {
+          ori_state <- options("teal_debug")
+          on.exit(options(teal_debug = ori_state))
+          options(teal_debug = TRUE)
           # `browser()`, this escapes the regexp that checks for browser as it is needed here as part of the module
           do.call(browser, list())
-        })
+          return(invisible(NULL))
+        }
+        fun()
       })
     },
     ui = function(id, ...) {

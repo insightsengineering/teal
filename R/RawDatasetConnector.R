@@ -46,7 +46,7 @@ RawDatasetConnector <- R6::R6Class( #nolint
     #'
     #' @return \code{self} invisibly for chaining
     set_args = function(args) {
-      private$pull_callable$set_args(args)
+      set_args(private$pull_callable, args)
       return(invisible(self))
     },
 
@@ -149,7 +149,8 @@ RawDatasetConnector <- R6::R6Class( #nolint
     #' Inputs must provide only scalar (length of 1) variables.
     #' @param inputs (\code{function}) A shiny module UI function with single argument \code{ns}.
     #' This function needs to return a list of shiny inputs with their \code{inputId} wrapped
-    #' in function \code{ns}, see example.
+    #' in function \code{ns}. The \code{inputId} must match exactly the argument name to be set.
+    #' See example.
     #' Nested lists are not allowed.
     #' @return \code{self} invisibly for chaining.
     #' @examples
@@ -222,8 +223,6 @@ RawDatasetConnector <- R6::R6Class( #nolint
               output$result <- renderTable(head(self$get_raw_data()))
             }
           })
-
-
         }
       )
     }
@@ -288,9 +287,9 @@ RawDatasetConnector <- R6::R6Class( #nolint
           if (grepl("object 'conn' not found", e$message)) {
             output_message <- "This dataset connector requires connection object (conn) to be provided."
           } else {
-            output_message <- e$message
+            output_message <- paste("Could not pull dataset, the following error message was returned:", e$message)
           }
-          stop(output_message)
+          stop(output_message, call. = FALSE)
         })
     },
     set_failure = function(res) {

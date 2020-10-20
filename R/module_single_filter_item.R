@@ -112,12 +112,12 @@ ui_single_filter_item <- function(id, filter_info, filter_state, prelabel) {
       optionalSliderInput(
         inputId = id_selection,
         label = NULL,
-        # `round()` may round to a slightly smaller interval (with negative numbers), so
-        # we avoid this and then truncate it when we read the input in the server function
+        # `round()` may return a slightly smaller interval e.g. round(c(-0.3, 1.4)) for doubles
         min = filter_info$range[[1]],
         max = filter_info$range[[2]],
         value = filter_state$range,
-        width = "100%"
+        width = "100%",
+        step = if (filter_info$is_integer) 1L
       ),
       if (filter_info$inf_count > 0) {
         checkboxInput(id_keep_inf,
