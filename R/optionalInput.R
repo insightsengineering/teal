@@ -335,13 +335,15 @@ extract_raw_choices <- function(choices, sep) {
 #' input widgets that provide only a single choice.
 #'
 #' @inheritParams shiny::sliderInput
+#' @param label_help optional an object of class \code{shiny.tag}. E.g. an object
+#'   returned by \code{\link[shiny]{helpText}}
 #' @param ... optional arguments to \code{sliderInput}
 #'
 #' @export
 #'
 #' @examples
 #' optionalSliderInput("a", "b", 0, 1, 0.2)
-optionalSliderInput <- function(inputId, label, min, max, value, ...) { # nolint
+optionalSliderInput <- function(inputId, label, min, max, value, label_help = NULL, ...) { # nolint
   hide <- if (is.na(min) || is.na(max)) {
     min <- value - 1
     max <- value + 1
@@ -353,6 +355,10 @@ optionalSliderInput <- function(inputId, label, min, max, value, ...) { # nolint
   }
 
   slider <- sliderInput(inputId, label, min, max, value, ...)
+
+  if (!is.null(label_help)) {
+    slider[[3]] <- append(slider[[3]], list(div(class = "label-help", label_help)), after = 1)
+  }
 
   if (hide) {
     hidden(slider)
@@ -387,7 +393,7 @@ optionalSliderInput <- function(inputId, label, min, max, value, ...) { # nolint
 #'
 #' optionalSliderInputValMinMax("a", "b", 1)
 #' optionalSliderInputValMinMax("a", "b", c(3, 1, 5))
-optionalSliderInputValMinMax <- function(inputId, label, value_min_max, ...) { # nolint
+optionalSliderInputValMinMax <- function(inputId, label, value_min_max, label_help = NULL, ...) { # nolint
 
   x <- value_min_max
 
@@ -404,5 +410,10 @@ optionalSliderInputValMinMax <- function(inputId, label, value_min_max, ...) { #
     stop(paste("value_min_max is expected to be of length 1 (value) or of length 3 (value, min, max)"))
   }
 
-  optionalSliderInput(inputId, label, vals$min, vals$max, vals$value, ...)
+  slider <- optionalSliderInput(inputId, label, vals$min, vals$max, vals$value, ...)
+
+  if (!is.null(label_help)) {
+    slider[[3]] <- append(slider[[3]], list(div(class = "label-help", label_help)), after = 1)
+  }
+  return(slider)
 }

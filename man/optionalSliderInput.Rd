@@ -4,7 +4,7 @@
 \alias{optionalSliderInput}
 \title{if min or max are \code{NA} then the slider widget will be hidden}
 \usage{
-optionalSliderInput(inputId, label, min, max, value, ...)
+optionalSliderInput(inputId, label, min, max, value, label_help = NULL, ...)
 }
 \arguments{
 \item{inputId}{The \code{input} slot that will be used to access the value.}
@@ -19,6 +19,9 @@ optionalSliderInput(inputId, label, min, max, value, ...)
 will create a regular slider; a numeric vector of length two will create a
 double-ended range slider. A warning will be issued if the value doesn't
 fit between \code{min} and \code{max}.}
+
+\item{label_help}{optional an object of class \code{shiny.tag}. E.g. an object
+returned by \code{\link[shiny]{helpText}}}
 
 \item{...}{optional arguments to \code{sliderInput}}
 }

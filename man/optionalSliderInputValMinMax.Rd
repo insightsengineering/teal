@@ -5,7 +5,13 @@
 \title{For teal modules we parameterize an \code{optionalSliderInput} with one argument
 \code{value_min_max}}
 \usage{
-optionalSliderInputValMinMax(inputId, label, value_min_max, ...)
+optionalSliderInputValMinMax(
+  inputId,
+  label,
+  value_min_max,
+  label_help = NULL,
+  ...
+)
 }
 \arguments{
 \item{inputId}{The \code{input} slot that will be used to access the value.}
@@ -16,6 +22,9 @@ optionalSliderInputValMinMax(inputId, label, value_min_max, ...)
 to that number and the \code{sliderInput} will be hidden. Otherwise, if it is of
 length three the three elements will map to \code{value}, \code{min} and
 \code{max} of the \code{\link{optionalSliderInput}} function.}
+
+\item{label_help}{optional an object of class \code{shiny.tag}. E.g. an object
+returned by \code{\link[shiny]{helpText}}}
 
 \item{...}{optional arguments to \code{sliderInput}}
 }
