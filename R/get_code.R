@@ -400,30 +400,3 @@ include_source_code <- function(lines, dir = NULL) {
 
   lines
 }
-
-#' Read .R file into character
-#'
-#' @md
-#' @description `r lifecycle::badge("maturing")`
-#' Comments will be excluded
-#'
-#' @param file (\code{character}) File to be parsed into code
-#' @param dataname (\code{character}) dataset name to subset code from chunks
-#' @return (\code{character}) vector with the code
-#'
-#' @export
-#' @examples
-#' file_example <- tempfile()
-#' writeLines(c("x <- 2", "#second line comment", "x <- x + 2"), file_example)
-#'
-#' read_script(file_example)
-#'
-#' @importFrom magrittr %>%
-read_script <- function(file, dataname = NULL) {
-  stopifnot(is_character_single(file))
-  stopifnot(file.exists(file))
-  get_code_single(file, read_sources = TRUE) %>%
-    enclosed_with_dataname(dataname = dataname) %>%
-    code_exclude(exclude_comments = TRUE) %>%
-    paste(sep = "\n", collapse = "\n")
-}

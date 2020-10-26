@@ -114,7 +114,7 @@ test_that("two datasets / datasets code", {
 
   expect_identical(
     vapply(get_raw_data(data), nrow, integer(1)),
-    c(ADSL = 231L, ADTTE = 693L)
+    c(ADSL = 231L, ADTTE = 924L)
   )
 
 })
@@ -201,7 +201,7 @@ test_that("two datasets / datasets code", {
 
   expect_identical(
     vapply(get_raw_data(data), nrow, integer(1)),
-    c(ADSL = 231L, ADTTE = 693L)
+    c(ADSL = 231L, ADTTE = 924L)
   )
 })
 
@@ -278,7 +278,7 @@ test_that("dataset + connector / global code", {
 
   expect_identical(
     vapply(get_raw_data(data), nrow, integer(1)),
-    c(ADSL = 231L, ADTTE = 693L)
+    c(ADSL = 231L, ADTTE = 924L)
   )
 })
 
@@ -384,7 +384,7 @@ test_that("two datasets / datasets code", {
   expect_true(data$check()) # TRUE
   expect_identical(
     vapply(get_raw_data(data), nrow, integer(1)),
-    c(ADSL = 231L, ADTTE = 693L)
+    c(ADSL = 231L, ADTTE = 924L)
   )
 })
 

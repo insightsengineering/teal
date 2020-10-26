@@ -24,7 +24,7 @@ function with necessary arguments set to fetch data from connection.}
 A character string defining code to modify \code{raw_data} from this dataset. To modify
 current dataset code should contain at least one assignment to object defined in \code{dataname}
 argument. For example if \code{dataname = ADSL} example code should contain
-\code{ADSL <- <some R code>}. Can't be used simultaneously with \code{script}}
+\verb{ADSL <- <some R code>}. Can't be used simultaneously with \code{script}}
 
 \item{script}{(\code{character})\cr
 Alternatively to \code{code} - location of the file containing modification code.
@@ -33,11 +33,11 @@ Can't be used simultaneously with \code{script}.}
 \item{label}{(\code{character})\cr
 Label to describe the dataset.}
 
-\item{vars}{(\code{named list})\cr
+\item{vars}{(named \code{list})\cr
 In case when this object code depends on the \code{raw_data} from the other
 \code{NamedDataset}, \code{NamedDatasetConnector} object(s) or other constant value,
 this/these object(s) should be included. Please note that \code{vars}
-are included to this object as \code{local vars} and they cannot be modified
+are included to this object as local \code{vars} and they cannot be modified
 within another dataset.}
 }
 \value{

@@ -1,9 +1,10 @@
-#' Create \code{RawDatasetConnector} object
+#' Create `RawDatasetConnector` object
 #'
-#' @md
-#' @description `r lifecycle::badge("experimental")`
+#'`r lifecycle::badge("experimental")`
 #' Create \link{RawDatasetConnector} object to execute specific call to fetch data
-#' @param pull_callable (\code{CallableFunction})\cr
+#' @md
+#'
+#' @param pull_callable (`CallableFunction`)\cr
 #'   function with necessary arguments set to fetch data from connection.
 #' @examples
 #' ds <- raw_dataset_connector(pull_callable = callable_function(data.frame))
@@ -11,7 +12,7 @@
 #' ds$pull()
 #' ds$get_raw_data()
 #' ds$get_code()
-#' @return \code{RawDatasetConnector} object
+#' @return `RawDatasetConnector` object
 #' @export
 raw_dataset_connector <- function(pull_callable) {
   stopifnot(is(pull_callable, "Callable"))
@@ -19,36 +20,36 @@ raw_dataset_connector <- function(pull_callable) {
   RawDatasetConnector$new(pull_callable = pull_callable)
 }
 
-#' Create a new \code{NamedDatasetConnector} object
+#' Create a new `NamedDatasetConnector` object
 #'
+#' `r lifecycle::badge("experimental")`
+#' Create `NamedDatasetConnector` from \link{callable_function}.
 #' @md
-#' @description `r lifecycle::badge("experimental")`
-#'  Create \code{NamedDatasetConnector} from \link{callable_function}.
 #'
 #' @inheritParams raw_dataset_connector
-#' @param dataname (\code{character})\cr
+#' @param dataname (`character`)\cr
 #'  A given name for the dataset it may not contain spaces
 #'
-#' @param code (\code{character})\cr
-#'  A character string defining code to modify \code{raw_data} from this dataset. To modify
-#'  current dataset code should contain at least one assignment to object defined in \code{dataname}
-#'  argument. For example if \code{dataname = ADSL} example code should contain
-#'  \code{ADSL <- <some R code>}. Can't be used simultaneously with \code{script}
+#' @param code (`character`)\cr
+#'  A character string defining code to modify `raw_data` from this dataset. To modify
+#'  current dataset code should contain at least one assignment to object defined in `dataname`
+#'  argument. For example if `dataname = ADSL` example code should contain
+#'  `ADSL <- <some R code>`. Can't be used simultaneously with `script`
 #'
-#' @param script (\code{character})\cr
-#'   Alternatively to \code{code} - location of the file containing modification code.
-#'   Can't be used simultaneously with \code{script}.
+#' @param script (`character`)\cr
+#'   Alternatively to `code` - location of the file containing modification code.
+#'   Can't be used simultaneously with `script`.
 #'
-#' @param label (\code{character})\cr
+#' @param label (`character`)\cr
 #'  Label to describe the dataset.
 #'
-#' @param vars (\code{named list})\cr
-#'   In case when this object code depends on the \code{raw_data} from the other
-#'   \code{NamedDataset}, \code{NamedDatasetConnector} object(s) or other constant value,
-#'   this/these object(s) should be included. Please note that \code{vars}
-#'   are included to this object as \code{local vars} and they cannot be modified
+#' @param vars (named `list`)\cr
+#'   In case when this object code depends on the `raw_data` from the other
+#'   `NamedDataset`, `NamedDatasetConnector` object(s) or other constant value,
+#'   this/these object(s) should be included. Please note that `vars`
+#'   are included to this object as local `vars` and they cannot be modified
 #'   within another dataset.
-#' @return new \code{NamedDatasetConnector} object
+#' @return new `NamedDatasetConnector` object
 #'
 #' @export
 named_dataset_connector <- function(dataname,
@@ -74,18 +75,18 @@ named_dataset_connector <- function(dataname,
 }
 
 
-#' Create a new \code{RelationalDatasetConnector} object
+#' Create a new `RelationalDatasetConnector` object
 #'
+#' `r lifecycle::badge("experimental")`
+#' Create `RelationalDatasetConnector` from \link{callable_function}.
 #' @md
-#' @description  `r lifecycle::badge("experimental")`
-#'  Create \code{RelationalDatasetConnector} from \link{callable_function}.
 #'
 #' @inheritParams named_dataset_connector
 #'
-#' @param keys (\code{keys})\cr
+#' @param keys (`keys`)\cr
 #'  object of S3 class keys containing foreign, primary keys and parent information
 #'
-#' @return new \code{RelationalDatasetConnector} object
+#' @return new `RelationalDatasetConnector` object
 #'
 #' @export
 relational_dataset_connector <- function(dataname,
@@ -113,17 +114,18 @@ relational_dataset_connector <- function(dataname,
   return(x)
 }
 
-#' Load \code{RelationalDatasetConnector} object from a file
+#' Load `RelationalDatasetConnector` object from a file
 #'
-#' Please note that the script has to end with a call creating desired object. The error will be raised otherwise.
+#' `r lifecycle::badge("experimental")`
+#' Please note that the script has to end with a call creating desired object. The error will
+#' be raised otherwise.
+#' @md
 #'
 #' @inheritParams relational_dataset_file
 #'
-#' @return \code{RelationalDatasetConnector} object
+#' @return `RelationalDatasetConnector` object
 #'
 #' @importFrom methods is
-#'
-#' @rdname relational_dataset_connector
 #'
 #' @export
 #'
@@ -157,19 +159,25 @@ relational_dataset_connector_file <- function(path) { # nolint
   }
 }
 
-#' @description
-#' \code{rcd_dataset_connector} - Create a \code{RelationalDatasetConnector} from any R function.
+#' `RCD` Dataset Connector
 #'
-#' @param fun (\code{function})\cr
-#'   any R function which generates \code{data.frame}, especially functions from
-#'   \code{random.cdisc.data} like \code{\link[random.cdisc.data]{radsl}}
+#' `r lifecycle::badge("experimental")`
+#' Create a `RelationalDatasetConnector` from any R function.
+#' @md
 #'
-#' @param ... (\code{optional})\cr
-#'   additional arguments applied to pull function
+#' @param fun (`function`)\cr
+#'   any R function which generates `data.frame`, especially functions from
+#'   `random.cdisc.data` like \code{\link[random.cdisc.data]{radsl}}
+#'
+#' @param ... (`optional`)\cr
+#'   Additional arguments applied to pull function.
+#'   In case when this object code depends on the `raw_data` from the other
+#'   `NamedDataset`, `NamedDatasetConnector` object(s) or other constant value,
+#'   this/these object(s) should be included. Please note that `vars`
+#'   are included to this object as local `vars` and they cannot be modified
+#'   within another dataset.
 #'
 #' @inheritParams relational_dataset_connector
-#'
-#' @rdname relational_dataset_connector
 #'
 #' @export
 #'
@@ -225,20 +233,20 @@ rcd_dataset_connector <- function(dataname,
   return(x)
 }
 
-
-#' @description
-#' \code{rds_dataset_connector} - Create a \code{RelationalDatasetConnector} from \code{RDS} file.
+#' `RDS` Dataset Connector
 #'
-#' @param file (\code{character})\cr
-#'   path to (\code{.rds} or \code{.R}) that contains \code{data.frame} object or
-#'   code to \code{source}
+#' `r lifecycle::badge("experimental")`
+#' Create a `RelationalDatasetConnector` from `RDS` file.
+#' @md
 #'
-#' @param ... (\code{optional})\cr
-#'   additional arguments applied to pull function
+#' @param file (`character`)\cr
+#'   path to (`.rds` or `.R`) that contains `data.frame` object or
+#'   code to `source`
+#'
+#' @param ... (`optional`)\cr
+#'   additional arguments applied to \code{\link[base]{readRDS}} function
 #'
 #' @inheritParams relational_dataset_connector
-#'
-#' @rdname relational_dataset_connector
 #'
 #' @export
 #'
@@ -282,19 +290,18 @@ rds_dataset_connector <- function(dataname,
 }
 
 
-#' @description
-#' \code{script_dataset_connector} - Create a \code{RelationalDatasetConnector} from \code{.R} file.
+#' Script Dataset Connector
 #'
-#' @param file (\code{character})\cr
+#' `r lifecycle::badge("experimental")`
+#' Create a `RelationalDatasetConnector` from `.R` file.
+#' @md
+#'
+#' @param file (`character`)\cr
 #'   file location containing code to be evaluated in connector. Object obtained in the last
-#'   call from file will be returned to the connector - same as \code{source(file = file)$value}
-#'
-#' @param ... (\code{optional})\cr
-#'   additional arguments applied to \code{source} function.
+#'   call from file will be returned to the connector - same as `source(file = file)$value`
 #'
 #' @inheritParams relational_dataset_connector
-#'
-#' @rdname relational_dataset_connector
+#' @inheritParams rcd_dataset_connector
 #'
 #' @export
 #'
@@ -336,20 +343,25 @@ script_dataset_connector <- function(dataname,
 
   return(x)
 }
-#' @description
-#' \code{code_dataset_connector} - Create a \code{RelationalDatasetConnector}
-#'   from a string of code.
+#' Code Dataset Connector
+#'
+#' `r lifecycle::badge("experimental")`
+#' Create a `RelationalDatasetConnector`
+#' from a string of code.
+#' @md
 #'
 #' @inheritParams relational_dataset_connector
+#' @inheritParams rcd_dataset_connector
 #'
-#' @param code (\code{character})\cr
+#' @param code (`character`)\cr
 #'   String containing the code to produce the object.
 #'   The code must end in a call to the object.
-#' @param mutate_code (\code{character})\cr
+#' @param mutate_code (`character`)\cr
 #'   String containing the code used to mutate the object
 #'   after it is produced.
-#'
-#' @rdname relational_dataset_connector
+#' @param mutate_script (`character`)\cr
+#'   Alternatively to `mutate_code` - location of the file containing modification code.
+#'   Can't be used simultaneously with `mutate_script`.
 #'
 #' @export
 #'
@@ -384,6 +396,7 @@ code_dataset_connector <- function(dataname,
                                    code,
                                    keys,
                                    mutate_code = character(0),
+                                   mutate_script = character(0),
                                    label = character(0),
                                    ...) {
   vars <- list(...)
@@ -398,7 +411,7 @@ code_dataset_connector <- function(dataname,
     dataname = dataname,
     pull_callable = call,
     keys = keys,
-    code = mutate_code,
+    code = code_from_script(mutate_code, mutate_script),
     label = label,
     vars = vars
   )
@@ -406,19 +419,128 @@ code_dataset_connector <- function(dataname,
   return(x)
 }
 
-#' @description
-#' \code{rice_dataset_connector} -
-#' Create a \code{RelationalDatasetConnector} from \code{RICE} dataset.
+#' Python Dataset Connector
 #'
-#' @param path (\code{character})\cr
+#' `r lifecycle::badge("experimental")`
+#' Create a `RelationalDatasetConnector` from `.py` file
+#' or through python code supplied directly.
+#' @md
+#'
+#' @details
+#'   Note that in addition to the `reticulate` package, support for python requires an
+#'   existing python installation. By default, `reticulate` will attempt to use the
+#'   location `Sys.which("python")`, however the path to the python installation can be
+#'   supplied directly via `reticulate::use_python`.
+#'
+#'   The `teal` API for delayed data requires the python code or script to return a
+#'   data.frame object. For this, the `pandas` package is required. This can be installed
+#'   using `reticulate::py_install("pandas")`.
+#'
+#'   Please see the package documentation for more details.
+#'
+#' @inheritParams relational_dataset_connector
+#' @inheritParams code_dataset_connector
+#' @param file (`character`)\cr
+#'   Path to the file location containing the python script used to generate the object.
+#' @param code (`character`)\cr
+#'   string containing the python code to be run using `reticulate`. Carefully consider
+#'   indentation to follow proper python syntax.
+#' @param object (`character`)\cr
+#'   name of the object from the python script that is assigned to the dataset to be used.
+#'
+#' @note
+#'   When using `code`, keep in mind that when using `reticulate` with delayed data, python
+#'   functions do not have access to other objects in the `code` and must be self contained.
+#'   In the following example, the function `makedata()` doesn't have access to variable `x`:
+#'
+#' \preformatted{import pandas as pd
+#'
+#' x = 1
+#' def makedata():
+#'   return pd.DataFrame({'x': [x, 2], 'y': [3, 4]})
+#'
+#' data = makedata()}
+#'
+#'   When using custom functions, the function environment must be entirely self contained:
+#'
+#' \preformatted{def makedata():
+#'   import pandas as pd
+#'   x = 1
+#'   return pd.DataFrame({'x': [x, 2], 'y': [3, 4]})
+#'
+#' data = makedata()
+#'   }
+#'
+#' @export
+#'
+#' @examples
+#' \dontrun{
+#' library(reticulate)
+#'
+#' x <- python_dataset_connector(
+#'   "ADSL",
+#'   code = "import pandas as pd
+#' data = pd.DataFrame({'STUDYID':  [1, 2], 'USUBJID': [3, 4]})",
+#'   object = "data",
+#'   keys = get_cdisc_keys("ADSL")
+#'   )
+#'
+#' x$pull()
+#' x$get_raw_data()
+#' }
+python_dataset_connector <- function(dataname,
+                                     file,
+                                     code,
+                                     object,
+                                     keys,
+                                     mutate_code = character(0),
+                                     mutate_script = character(0),
+                                     label = character(0)) {
+  stopifnot(is_character_single(object))
+
+  if (!missing(file)) {
+    stop_if_not(
+      is_character_single(file),
+      list(file.exists(file), paste("File", file, "does not exist")),
+      endsWith(file, ".py")
+    )
+
+    x_fun <- callable_function("py_run_file") # nolint
+    x_fun$set_args(list(file = file, local = TRUE))
+
+  } else if (!missing(code)) {
+    stopifnot(is_character_single(code))
+
+    x_fun <- callable_function("py_run_string") # nolint
+    x_fun$set_args(list(code = code, local = TRUE))
+  }
+
+  x_fun$set_object(object)
+
+  x <- relational_dataset_connector(
+    dataname = dataname,
+    pull_callable = x_fun,
+    keys = keys,
+    code = code_from_script(mutate_code, mutate_script),
+    label = label
+  )
+
+  return(x)
+}
+
+#' Rice Dataset Connector
+#'
+#' `r lifecycle::badge("experimental")`
+#' Create a `RelationalDatasetConnector` from `RICE` dataset.
+#' @md
+#'
+#' @param path (`character`)\cr
 #'   path to the file
 #'
-#' @param ... (\code{optional})\cr
+#' @param ... (`optional`)\cr
 #'   additional arguments applied to pull function
 #'
 #' @inheritParams relational_dataset_connector
-#'
-#' @rdname relational_dataset_connector
 #'
 #' @export
 #'
@@ -467,14 +589,15 @@ rice_dataset_connector <- function(dataname,
   return(x)
 }
 
-#' @description
-#' \code{teradata_dataset_connector} -
-#' Create a \code{RelationalDatasetConnector} from \code{TERADATA} dataset
+#' `Teradata` Dataset Connector
+#'
+#' `r lifecycle::badge("experimental")`
+#' Create a `RelationalDatasetConnector` from `Teradata` dataset
+#' @md
 #'
 #' @inheritParams relational_dataset_connector
-#' @param table (\code{character}) table name
-#'
-#' @rdname relational_dataset_connector
+#' @inheritParams rcd_dataset_connector
+#' @param table (`character`) table name
 #'
 #' @export
 teradata_dataset_connector <- function(dataname,
@@ -507,19 +630,21 @@ teradata_dataset_connector <- function(dataname,
   return(x)
 }
 
-#' @description
-#' \code{csv_dataset_connector} - Create a \code{RelationalDatasetConnector} from \code{csv} (or
-#' general delimited file).
-#' @param file (\code{character})\cr
-#'   path to (\code{.csv}) (or general delimited) file that contains \code{data.frame} object
+#' `csv` Dataset Connector
 #'
-#' @param ... (\code{optional})\cr
-#'   additional arguments applied to pull function (\code{readr::read_delim}) by default
-#'   \code{delim = ","}.
+#' `r lifecycle::badge("experimental")`
+#' Create a `RelationalDatasetConnector` from `csv` (or general delimited file).
+#' @md
+#'
+#' @param file (`character`)\cr
+#'   path to (`.csv)` (or general delimited) file that contains `data.frame` object
+#'
+#' @param ... (`optional`)\cr
+#'   additional arguments applied to pull function (`readr::read_delim`) by default
+#'   `delim = ","`.
 #'
 #' @inheritParams relational_dataset_connector
 #'
-#' @rdname relational_dataset_connector
 #' @export
 #'
 #' @examples
@@ -575,14 +700,14 @@ csv_dataset_connector <- function(dataname,
 
 
 
-#' @description
-#' \code{rds_cdisc_dataset_connector} -
-#' Create a \code{RelationalDatasetConnector} from \code{RDS} file with keys automatically
-#' assigned by \code{dataname}
+#' `RDS` `CDSIC` Dataset Connector
+#'
+#' `r lifecycle::badge("experimental")`
+#' Create a `RelationalDatasetConnector` from `RDS` file with keys automatically
+#' assigned by `dataname`
+#' @md
 #'
 #' @inheritParams rds_dataset_connector
-#'
-#' @rdname relational_dataset_connector
 #'
 #' @export
 rds_cdisc_dataset_connector <- function(dataname,
@@ -605,14 +730,14 @@ rds_cdisc_dataset_connector <- function(dataname,
 }
 
 
-#' @description
-#' \code{rcd_cdisc_dataset_connector} -
-#' Create a \code{DatasetConnector} from any R function with keys assigned automatically
-#' by \code{dataname}.
+#' `RCD` `CDISC` Dataset Connector
+#'
+#' `r lifecycle::badge("experimental")`
+#' Create a `DatasetConnector` from any R function with keys assigned automatically
+#' by `dataname`.
+#' @md
 #'
 #' @inheritParams rcd_dataset_connector
-#'
-#' @rdname relational_dataset_connector
 #'
 #' @export
 rcd_cdisc_dataset_connector <- function(dataname,
@@ -636,14 +761,14 @@ rcd_cdisc_dataset_connector <- function(dataname,
 
 
 
-#' @description
-#' \code{rice_cdisc_dataset_connector} -
-#' Create a \code{RelationalDatasetConnector} from \code{RICE} dataset with keys assigned
-#' automatically by \code{dataname}.
+#' Rice `CDISC` Dataset Connector
+#'
+#' `r lifecycle::badge("experimental")`
+#' Create a `RelationalDatasetConnector` from `RICE` dataset with keys assigned
+#' automatically by `dataname`.
+#' @md
 #'
 #' @inheritParams rice_dataset_connector
-#'
-#' @rdname relational_dataset_connector
 #'
 #' @export
 rice_cdisc_dataset_connector <- function(dataname,
@@ -665,14 +790,14 @@ rice_cdisc_dataset_connector <- function(dataname,
 }
 
 
-#' @description
-#' \code{script_cdisc_dataset_connector} -
-#' Create a \code{RelationalDatasetConnector} from \code{script} file with keys assigned
-#' automatically by \code{dataname}.
+#' Script `CDISC` Dataset Connector
+#'
+#' `r lifecycle::badge("experimental")`
+#' Create a `RelationalDatasetConnector` from `script` file with keys assigned
+#' automatically by `dataname`.
+#' @md
 #'
 #' @inheritParams script_dataset_connector
-#'
-#' @rdname relational_dataset_connector
 #'
 #' @export
 script_cdisc_dataset_connector <- function(dataname,
@@ -694,13 +819,15 @@ script_cdisc_dataset_connector <- function(dataname,
   return(x)
 }
 
-#' @description
-#' \code{code_cdisc_dataset_connector} - Create a \code{RelationalDatasetConnector}
-#'   from a string of code with keys assigned automatically by \code{dataname}.
+#' Code `CDISC` Dataset Connector
+#'
+#' `r lifecycle::badge("experimental")`
+#' Create a `RelationalDatasetConnector` from a string of code with keys
+#' assigned automatically by `dataname`.
+#' @md
 #'
 #' @inheritParams code_dataset_connector
-#'
-#' @rdname relational_dataset_connector
+#' @inheritParams rcd_dataset_connector
 #'
 #' @export
 code_cdisc_dataset_connector <- function(dataname,
@@ -721,14 +848,15 @@ code_cdisc_dataset_connector <- function(dataname,
   return(x)
 }
 
-#' @description
-#' \code{teradata_cdisc_dataset_connector} -
-#' Create a \code{RelationalDatasetConnector} from \code{TERADATA} dataset with keys assigned
-#' automatically by \code{dataname}.
+#' `Teradata` `CDISC` Dataset Connector
+#'
+#' `r lifecycle::badge("experimental")`
+#' Create a `RelationalDatasetConnector` from `Teradata` dataset with keys assigned
+#' automatically by `dataname`.
+#' @md
 #'
 #' @inheritParams teradata_dataset_connector
-#'
-#' @rdname relational_dataset_connector
+#' @inheritParams rcd_dataset_connector
 #'
 #' @export
 teradata_cdisc_dataset_connector <- function(dataname, # nolint
@@ -750,14 +878,14 @@ teradata_cdisc_dataset_connector <- function(dataname, # nolint
   return(x)
 }
 
-#' @description
-#' \code{csv_cdisc_dataset_connector} -
-#' Create a \code{RelationalDatasetConnector} from \code{csv} (or general delimited) file
-#' with keys assigned automatically by \code{dataname}.
+#' `csv` `CDISC` Dataset Connector
+#'
+#' `r lifecycle::badge("experimental")`
+#' Create a `RelationalDatasetConnector` from `csv` (or general delimited) file
+#' with keys assigned automatically by `dataname`.
+#' @md
 #'
 #' @inheritParams csv_dataset_connector
-#'
-#' @rdname relational_dataset_connector
 #'
 #' @export
 csv_cdisc_dataset_connector <- function(dataname,
@@ -780,18 +908,23 @@ csv_cdisc_dataset_connector <- function(dataname,
 }
 
 
-#' @description
-#' \code{fun_dataset_connector} -
-#' Create a \code{RelationalDatasetConnector} from \code{function} and its arguments.
+#' Function Dataset Connector
+#'
+#' `r lifecycle::badge("experimental")`
+#' Create a `RelationalDatasetConnector` from `function` and its arguments.
+#' @md
 #'
 #' @inheritParams relational_dataset_connector
-#' @param func (\code{function})\cr
+#' @inheritParams rcd_dataset_connector
+#' @param func (`function`)\cr
 #'   a custom function to obtain dataset.
-#' @param func_args (\code{list})\cr
-#'   additional arguments for (\code{func})\cr.
-#' @rdname relational_dataset_connector
+#' @param func_args (`list`)\cr
+#'   additional arguments for (`func`)\cr.
+#'
 #' @importFrom rlang set_env
+#'
 #' @export
+#'
 #' @examples
 #' \dontrun{
 #' my_data <- function(...) {
@@ -948,17 +1081,16 @@ fun_dataset_connector <- function(dataname,
 
 }
 
-#' @description
-#' \code{fun_cdisc_dataset_connector} -
-#' Create a \code{RelationalDatasetConnector} from \code{function} and its arguments
-#' with keys assigned automatically by \code{dataname}.
+#' Function `CDISC` Dataset Connector
 #'
-#' @inheritParams relational_dataset_connector
-#' @param func (\code{function})\cr
-#'   a custom function to obtain dataset.
-#' @param func_args (\code{list})\cr
-#'   additional arguments for (\code{func})\cr.
-#' @rdname relational_dataset_connector
+#' `r lifecycle::badge("experimental")`
+#' Create a `RelationalDatasetConnector` from `function` and its arguments
+#' with keys assigned automatically by `dataname`.
+#' @md
+#'
+#' @inheritParams fun_dataset_connector
+#' @inheritParams rcd_dataset_connector
+#'
 #' @export
 fun_cdisc_dataset_connector <- function(dataname,
                                         func,

@@ -117,30 +117,3 @@ as_cdisc_relational <- function(x,
     )
   )
 }
-
-#' Get code from script
-#'
-#' Get code from script. Switches between \code{code} and \code{script arguments}
-#' to return non-empty one to pass it further to constructors.
-#' @param code (\code{character} value)\cr
-#'   an R code to be evaluated.
-#' @inheritParams relational_dataset_connector
-#' @return code (\code{character})
-code_from_script <- function(code, script, dataname = NULL) {
-  stopifnot(is_character_vector(code, min_length = 0, max_length = 1))
-  stopifnot(is_character_vector(script, min_length = 0, max_length = 1))
-  if (length(code) == 0 && length(script) == 0) {
-    return(character(0))
-  }
-
-  if (is_character_single(code) && is_character_single(script)) {
-    stop("Function doesn't accept 'code' and 'script' at the same time.
-         Please specify either 'code' or 'script'", call. = FALSE)
-  }
-
-  if (is_character_single(script)) {
-    code <- read_script(file = script, dataname = dataname)
-  }
-
-  return(code)
-}

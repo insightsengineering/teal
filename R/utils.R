@@ -279,3 +279,57 @@ teal_with_pkg <- function(pkg, code) {
   eval.parent(code)
   return(invisible(NULL))
 }
+
+#' Get code from script
+#'
+#' Get code from script. Switches between \code{code} and \code{script arguments}
+#' to return non-empty one to pass it further to constructors.
+#' @param code (\code{character} value)\cr
+#'   an R code to be evaluated.
+#' @inheritParams relational_dataset_connector
+#' @return code (\code{character})
+code_from_script <- function(code, script, dataname = NULL) {
+  stopifnot(is_character_vector(code, min_length = 0, max_length = 1))
+  stopifnot(is_character_vector(script, min_length = 0, max_length = 1))
+  if (length(code) == 0 && length(script) == 0) {
+    return(character(0))
+  }
+
+  if (is_character_single(code) && is_character_single(script)) {
+    stop("Function doesn't accept 'code' and 'script' at the same time.
+         Please specify either 'code' or 'script'", call. = FALSE)
+  }
+
+  if (is_character_single(script)) {
+    code <- read_script(file = script, dataname = dataname)
+  }
+
+  return(code)
+}
+
+#' Read .R file into character
+#'
+#' @md
+#' @description `r lifecycle::badge("maturing")`
+#' Comments will be excluded
+#'
+#' @param file (\code{character}) File to be parsed into code
+#' @param dataname (\code{character}) dataset name to subset code from chunks
+#' @return (\code{character}) vector with the code
+#'
+#' @export
+#' @examples
+#' file_example <- tempfile()
+#' writeLines(c("x <- 2", "#second line comment", "x <- x + 2"), file_example)
+#'
+#' read_script(file_example)
+#'
+#' @importFrom magrittr %>%
+read_script <- function(file, dataname = NULL) {
+  stopifnot(is_character_single(file))
+  stopifnot(file.exists(file))
+  get_code_single(file, read_sources = TRUE) %>%
+    enclosed_with_dataname(dataname = dataname) %>%
+    code_exclude(exclude_comments = TRUE) %>%
+    paste(sep = "\n", collapse = "\n")
+}
