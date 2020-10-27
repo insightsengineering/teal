@@ -151,13 +151,17 @@ ui_single_filter_item <- function(id, filter_info, filter_state, prelabel) {
   # label before select input and button to remove filter
   res <- fluidPage(
     fluidRow(
-      column(8, class = "no-left-right-padding", tags$span(
+      column(10, class = "no-left-right-padding",
+        tags$div(
         tags$span(prelabel, class = "filter_panel_varname"),
         if (!is.null(filter_info$label) || (filter_info$label != "")) {
-          tags$span(filter_info$label, class = "filter_panel_varlabel")
+          tagList(
+            tags$br(),
+            tags$span(filter_info$label, class = "filter_panel_varlabel"))
         }
-      )),
-      column(4, class = "no-left-right-padding", actionLink(
+        )
+      ),
+      column(2, class = "no-left-right-padding", actionLink(
         id_remove_filter, "", icon("trash-alt", lib = "font-awesome"),
         class = "remove pull-right"
       ))

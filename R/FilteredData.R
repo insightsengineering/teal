@@ -1137,6 +1137,8 @@ FilteredData <- R6::R6Class( # nolint
 
             add_counts <- TRUE
 
+            label_var <- if_null(attr(var, "label"), "")
+
             if (!is(var, "factor")) {
               var <- factor(var, levels = as.character(sort(unique(var))))
             } else if (is.character(var)) {
@@ -1152,7 +1154,7 @@ FilteredData <- R6::R6Class( # nolint
 
             list(
               type = "choices",
-              label = if_null(attr(var, "label"), ""),
+              label = label_var,
               choices = as.list(choices), # convert named vector to named list as Shiny `toJSON` otherwise complains
               histogram_data = histogram_data
             )

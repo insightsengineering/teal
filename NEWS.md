@@ -1,6 +1,7 @@
 # teal 0.9.1.9000
 
 * Adds `python_dataset_connector` to create delayed data objects from python scripts or directly from python code.
+* Fixing lack of labels for `character` and `factor` variables in the Filter Panel.
 * Remove `include_factors` option in `get_class_colnames` in `RawDataset`
 * issues with no news:
 

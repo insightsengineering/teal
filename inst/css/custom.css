@@ -85,6 +85,7 @@ currently not used, instead one can click anywhere in the element to move it
 
 .filter_panel_varname {
   font-weight: bold;
+  width: 100%;
 }
 
 .filter_panel_varlabel {
