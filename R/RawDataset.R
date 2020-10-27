@@ -40,17 +40,15 @@ RawDataset <- R6::R6Class( # nolint
     },
     #' @description
     #' Derive the names of all \code{numeric} columns
-    #' @param include_factors \code{logical} Whether to include
-    #'   factor variables
     #' @return \code{character} vector.
-    get_numeric_colnames = function(include_factors = FALSE) {
-      private$get_class_colnames("numeric", include_factors = FALSE)
+    get_numeric_colnames = function() {
+      private$get_class_colnames("numeric")
     },
     #' @description
     #' Derive the names of all \code{character} columns
     #' @return \code{character} vector.
     get_character_colnames = function() {
-      private$get_class_colnames("character", include_factors = FALSE)
+      private$get_class_colnames("character")
     },
     #' @description
     #' Derive the names of all \code{factor} columns
@@ -104,25 +102,15 @@ RawDataset <- R6::R6Class( # nolint
 
     ## __Private Methods ====
     #' @import utils.nest
-    get_class_colnames = function(class_type = "character", include_factors = FALSE) {
+    get_class_colnames = function(class_type = "character") {
       stopifnot(utils.nest::is_character_single(class_type))
 
-      if (class_type == "factor") {
-        include_factors <- TRUE
-      }
       return_cols <- private$.colnames[which(vapply(
         lapply(private$.raw_data, class),
         function(x, target_class_name) any(x %in% target_class_name),
         logical(1),
         target_class_name = class_type))]
 
-      if (!include_factors) {
-        factor_columns <- private$.colnames[which(vapply(
-          lapply(private$.raw_data, class),
-          function(x) any(x %in% "factor"),
-          logical(1)))]
-        return_cols <- setdiff(return_cols, factor_columns)
-      }
       return(return_cols)
     }
   ),

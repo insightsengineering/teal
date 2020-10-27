@@ -90,17 +90,9 @@ Derive the raw data frame inside this object
 \subsection{Method \code{get_numeric_colnames()}}{
 Derive the names of all \code{numeric} columns
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{RawDataset$get_numeric_colnames(include_factors = FALSE)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{RawDataset$get_numeric_colnames()}\if{html}{\out{</div>}}
 }
 
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{include_factors}}{\code{logical} Whether to include
-factor variables}
-}
-\if{html}{\out{</div>}}
-}
 \subsection{Returns}{
 \code{character} vector.
 }
