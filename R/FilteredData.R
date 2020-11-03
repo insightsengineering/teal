@@ -1027,9 +1027,17 @@ FilteredData <- R6::R6Class( # nolint
             },
             date = {
               # format daterange to human readable string for R code
-              # maximum precision of 6ms
-              selection_state <- format(filter_state$daterange, "%Y-%m-%d %H:%M:%OS6")
-              as <- if (filter_info$is_datetime) "as.POSIXct" else "as.Date"
+              # using the maximum 6 decimal places for POSIXct
+              if (filter_info$is_datetime) {
+                dateformat <- "%Y-%m-%d %H:%M:%OS6"
+                as <- "as.POSIXct"
+              } else {
+                dateformat <- "%Y-%m-%d"
+                as <- "as.Date"
+              }
+
+              selection_state <- format(filter_state$daterange, dateformat)
+
               call(
                 "&",
                 call(">=", as.name(varname), call(as, selection_state[1])),
