@@ -2,7 +2,8 @@
 
 * Adds `python_dataset_connector` to create delayed data objects from python scripts or directly from python code.
 * Fixing lack of labels for `character` and `factor` variables in the Filter Panel.
-* Remove `include_factors` option in `get_class_colnames` in `RawDataset`
+* Remove `include_factors` option in `get_class_colnames` in `RawDataset`.
+* Adds support for filtering on `Date` and `Datetime` variables in the Filter Panel.
 * issues with no news:
 
 # teal 0.9.1

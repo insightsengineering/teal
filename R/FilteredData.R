@@ -431,12 +431,14 @@ FilteredData <- R6::R6Class( # nolint
         var_state = state
       )
 
-      for (varname in names(internal_state)) {
-        private$check_valid_filter_state(
-          dataname = dataname,
-          varname = varname,
-          var_state = internal_state[[varname]]
-        )
+        for (varname in names(internal_state)) {
+          if (is.null(private$filter_states[[dataname]][[varname]])) {
+            private$check_valid_filter_state(
+              dataname = dataname,
+              varname = varname,
+              var_state = internal_state[[varname]]
+            )
+        }
       }
 
       new_state <- if (remove_omitted) {
@@ -487,6 +489,7 @@ FilteredData <- R6::R6Class( # nolint
         choices = list(choices = unlist(unname(filter_info$choices))),
         range = list(range = unlist(unname(filter_info$range))),
         logical = list(status = "TRUE"),
+        date = list(daterange = unlist(unname(filter_info$daterange))),
         stop("unknown type")
       )
       return(c(state, list(keep_na = FALSE, keep_inf = FALSE)))
@@ -956,22 +959,16 @@ FilteredData <- R6::R6Class( # nolint
           check_in_subset(selection_state, var_info$choices, pre_msg = pre_msg)
         },
         range = {
-          selection_state <- var_state$range
-          if ((length(selection_state) != 2) ||
-            (selection_state[[1]] > selection_state[[2]]) ||
-            ((selection_state[[1]] < var_info$range[[1]]) || (selection_state[[2]] > var_info$range[[2]]))
-          ) {
-            stop(paste0(
-              pre_msg, " range (", toString(selection_state),
-              ") not valid for full range (", toString(var_info$range), ")"
-            ))
-          }
+          check_in_range(var_state$range, var_info$range, pre_msg = pre_msg)
         },
         logical = {
           selection_state <- var_state$status
           # the conceptual difference to type 'choices' is that it allows exactly one value rather than a subset
           stopifnot(length(selection_state) == 1)
           check_in_subset(selection_state, var_info$choices, pre_msg = pre_msg)
+        },
+        date = {
+          check_in_range(var_state$daterange, var_info$daterange, pre_msg = pre_msg)
         },
         stop(paste("Unknown filter type", var_info$type, "for data", dataname, "and variable", varname))
       )
@@ -1026,6 +1023,17 @@ FilteredData <- R6::R6Class( # nolint
                   "Unknown filter state", toString(selection_state),
                   " for logical var ", varname, " in data", dataname
                 )
+              )
+            },
+            date = {
+              # format daterange to human readable string for R code
+              # maximum precision of 6ms
+              selection_state <- format(filter_state$daterange, "%Y-%m-%d %H:%M:%OS6")
+              as <- if (filter_info$is_datetime) "as.POSIXct" else "as.Date"
+              call(
+                "&",
+                call(">=", as.name(varname), call(as, selection_state[1])),
+                call("<=", as.name(varname), call(as, selection_state[2]))
               )
             },
             stop(paste("filter type for variable", varname, "in", dataname, "not known"))
@@ -1183,6 +1191,13 @@ FilteredData <- R6::R6Class( # nolint
               label = if_null(attr(var, "label"), ""),
               choices = as.list(choices), # convert named vector to named list as Shiny `toJSON` otherwise complains
               histogram_data = histogram_data
+            )
+          } else if (inherits(var, "Date") || inherits(var, "POSIXct")) {
+            list(
+              type = "date",
+              label = if_null(attr(var, "label"), ""),
+              daterange = range(var, finite = TRUE),
+              is_datetime = inherits(var, "POSIXct")
             )
           } else {
             .log(
@@ -1351,6 +1366,7 @@ filter_state_to_str <- function(var_type, state, add_na = FALSE) {
       }
     },
     logical = toString(state),
+    date = paste(state$daterange, collapse = " - "),
     "" # no special info when filter type is unknown
   )
   if (add_na) {

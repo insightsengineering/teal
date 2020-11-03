@@ -24,6 +24,8 @@ get_keep_inf_label <- function(inf_count) {
 #' @param filter_state `filter_state` returned by datasets class
 #' @param prelabel `character` label to append before computed label of input
 #'
+#' @importFrom shinyWidgets airDatepickerInput
+#'
 #' @examples
 #' library(random.cdisc.data)
 #' library(dplyr)
@@ -69,6 +71,7 @@ ui_single_filter_item <- function(id, filter_info, filter_state, prelabel) {
 
   id_remove_filter <- ns("remove_filter")
   id_selection <- ns("selection")
+  id_end_date <- ns("end_date")
   id_keep_na <- ns("keepNA")
   id_keep_inf <- ns("keepInf")
 
@@ -143,6 +146,36 @@ ui_single_filter_item <- function(id, filter_info, filter_state, prelabel) {
         width = "100%"
       )
     )
+  } else if (filter_info$type == "date") {
+
+    # airDatePickerInput does a timezone correction to UTC even for dates which
+    # might move the selection bounds outside the real range, re-corrected here
+    if (!filter_info$is_datetime) {
+      daterange <- as.POSIXct(as.character(filter_info$daterange), tz = Sys.timezone())
+    } else {
+      daterange <- filter_info$daterange
+    }
+
+      div(
+        airDatepickerInput(
+          inputId = id_selection,
+          label = "From:",
+          value = daterange[[1]],
+          timepicker = filter_info$is_datetime,
+          minDate = daterange[[1]],
+          maxDate = daterange[[2]],
+          update_on = "close"
+        ),
+        airDatepickerInput(
+          inputId = id_end_date,
+          label = "To:",
+          value = daterange[[2]],
+          timepicker = filter_info$is_datetime,
+          minDate = daterange[[1]],
+          maxDate = daterange[[2]],
+          update_on = "close"
+        )
+      )
   } else {
     # fail gracefully although this should have been caught before already
     tags$p(paste("Variable with id", id, "has unknown type:", filter_info$type))
@@ -250,6 +283,7 @@ srv_single_filter_item <- function(input, output, session, datasets, dataname, v
 
   # define observers ----
   id_selection <- "selection"
+  id_end_date <- "end_date"
   id_keep_na <- "keepNA"
   id_keep_inf <- "keepInf"
   id_remove_filter <- "remove_filter"
@@ -257,6 +291,7 @@ srv_single_filter_item <- function(input, output, session, datasets, dataname, v
   # observers for Browser UI state -> FilteredData filter_state ----
   o1 <- observeEvent({
     input[[id_selection]]
+    input[[id_end_date]]
     input[[id_keep_inf]]
     input[[id_keep_na]]
   }, {
@@ -282,6 +317,21 @@ srv_single_filter_item <- function(input, output, session, datasets, dataname, v
       )
     } else if (type == "logical") {
       list(status = selection_state)
+    } else if (type == "date") {
+      start_date <- selection_state
+      end_date <- input[[id_end_date]]
+
+      validate(
+        need(start_date, "Please select a valid start date."),
+        need(end_date, "Please select a valid end date.")
+        )
+
+      stopifnot(
+        inherits(start_date, "Date") || inherits(start_date, "POSIXct"),
+        inherits(end_date, "Date") || inherits(end_date, "POSIXct")
+        )
+
+      list(daterange = c(start_date, end_date))
     } else {
       stop("Unknown filter type ", type, " for var ", varname)
     }

@@ -68,22 +68,20 @@ isolate({
     )
   })
 
-  test_that("set wrong filter states", {
-    expect_error(
+  test_that("set wrong filter states after init", {
+    expect_silent(
       # real range is (20, 69)
-      set_single_filter_state(ds, "ADSL", "AGE", list(range = c(-10, 110), keep_na = TRUE)),
-      "full range"
+      set_single_filter_state(ds, "ADSL", "AGE", list(range = c(-10, 110), keep_na = TRUE))
     )
 
     # range too large
-    expect_error(
+    expect_silent(
       set_single_filter_state(
         datasets = ds,
         dataname =  "ADSL",
         varname = "AGE",
         state = list(range = range(ADSL$AGE, finite = TRUE) + c(-1, +1), keep_na = TRUE)
-      ),
-      "not valid for", fixed = TRUE
+      )
     )
   })
 

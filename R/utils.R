@@ -203,6 +203,38 @@ label_to_id <- function(label, prefix = NULL) {
 srv_shiny_module_arguments <- function(input, output, session, datasets, modules) { # nousage # nolint
 }
 
+#' Check that a given range is valid
+#' @md
+#' @param subinterval (`numeric` or `date`) vector of length 2 to be
+#'   compared against the full range.
+#' @param range (`numeric` or `date`) vector of length 2 containing
+#'   the full range to validate against.
+#' @param pre_msg `character` message to print before error for
+#'   additional context.
+#'
+#' @return `NULL` if `subinterval` is a valid range or error with message
+#'   otherwise.
+#'
+#' @examples
+#' \dontrun{
+#' check_in_range(c(3,1), c(1,3))
+#' check_in_range(
+#'   c(as.Date("2020-01-01"), as.Date("2020-01-20")),
+#'   c(as.Date("2020-01-01"), as.Date("2020-01-02"))
+#'   )
+#' }
+check_in_range <- function(subinterval, range, pre_msg = "") {
+  if ((length(subinterval) != 2) ||
+      (subinterval[[1]] > subinterval[[2]]) ||
+      ((subinterval[[1]] < range[[1]]) || (subinterval[[2]] > range[[2]]))
+  ) {
+    stop(paste0(
+      pre_msg, " range (", toString(subinterval),
+      ") not valid for full range (", toString(range), ")"
+    ))
+  }
+}
+
 
 #' Check that one set is a subset of another
 #'
