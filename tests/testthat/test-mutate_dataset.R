@@ -57,7 +57,7 @@ test_that("mutate_dataset", {
 
   expect_error({
     test_ds %>% mutate_dataset(c("x <- 3", "som"))
-  }, "is_character_single")
+  }, "is_character_vector")
 
   expect_silent({
     test_ds <- relational_dataset(

@@ -125,17 +125,25 @@ NamedDataset <- R6::R6Class( # nolint
     #' @return self invisibly for chaining
     mutate = function(code, vars = list()) {
       self$set_vars(vars)
+
+      if (inherits(code, "PythonCodeClass")) {
+        self$set_code(code$get_code())
+        new_set <- code$eval(dataname = self$get_dataname())
+        super$initialize(new_set)
+
+        return(invisible(self))
+      }
+
       self$set_code(code)
 
       code_container <- CodeClass$new()
       code_container$set_code(code)
 
-      execution_environment <- private$execute_code(
-        code = code_container,
-        # environment needs also this var to mutate self
-        vars = c(private$vars, setNames(list(self), self$get_dataname()))
-      )
-      new_set <- execution_environment[[self$get_dataname()]]
+      # environment needs also this var to mutate self
+      vars <- c(private$vars, setNames(list(self), self$get_dataname()))
+
+      new_set <- private$execute_code(code = code_container, vars = vars)
+
       super$initialize(new_set)
 
       return(invisible(self))
@@ -166,9 +174,11 @@ NamedDataset <- R6::R6Class( # nolint
       stopifnot(is_character_vector(code, 0, 1))
 
       if (length(code) > 0 && code != "") {
-        private$code$set_code(code = code,
-                              dataname = self$get_datanames(),
-                              deps = names(private$vars))
+        private$code$set_code(
+          code = code,
+          dataname = self$get_datanames(),
+          deps = names(private$vars)
+          )
       }
 
       return(invisible(NULL))
@@ -188,8 +198,10 @@ NamedDataset <- R6::R6Class( # nolint
         )
       }
 
-      execution_environment <- private$execute_code(code = self$get_code_class(), vars = private$vars)
-      new_set <- execution_environment[[self$get_dataname()]]
+      new_set <- private$execute_code(
+        code = self$get_code_class(),
+        vars = private$vars
+        )
 
       res_check <- tryCatch({
         identical(self$get_raw_data(), new_set)
@@ -207,6 +219,7 @@ NamedDataset <- R6::R6Class( # nolint
     vars = list(),
     dataset_label = character(0),
     ## __Private Methods ====
+
     # Evaluate script code to modify data or to reproduce data
     #
     # Evaluate script code to modify data or to reproduce data
@@ -216,8 +229,10 @@ NamedDataset <- R6::R6Class( # nolint
     execute_code = function(code, vars = list()) {
       stopifnot(is(code, "CodeClass"))
       stopifnot(is_fully_named_list(vars))
+
       execution_environment <- new.env(parent = parent.env(globalenv()))
 
+      # set up environment for execution
       for (vars_idx in seq_along(vars)) {
         var_name <- names(vars)[[vars_idx]]
         var_value <- vars[[vars_idx]]
@@ -227,6 +242,7 @@ NamedDataset <- R6::R6Class( # nolint
         assign(envir = execution_environment, x = var_name, value = var_value)
       }
 
+      # execute
       code$eval(envir = execution_environment)
 
       if (!is.data.frame(execution_environment[[self$get_dataname()]])) {
@@ -241,7 +257,10 @@ NamedDataset <- R6::R6Class( # nolint
           warning.length = max(min(8170, nchar(out_msg) + 30), 100)
         )
       }
-      return(execution_environment)
+
+      new_set <- execution_environment[[self$get_dataname()]]
+
+      return(new_set)
     },
     # @description
     # Set the name for the dataset

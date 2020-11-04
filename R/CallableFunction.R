@@ -116,20 +116,6 @@ CallableFunction <- R6::R6Class( #nolint
 
       private$refresh()
       return(invisible(self))
-    },
-    #' @description
-    #'   For scripts and code that contain multiple objects, save the name
-    #'   of the object that corresponds to the final dataset of interest.
-    #'   This is required for running python scripts with \code{reticulate}.
-    #'
-    #' @param x (\code{character}) the name of the object produced by the code
-    #'   or script.
-    #'
-    #' @return (\code{self}) invisibly for chaining.
-    set_object = function(x) {
-      private$object <- x
-      private$refresh()
-      return(invisible(self))
     }
   ),
 
@@ -137,7 +123,6 @@ CallableFunction <- R6::R6Class( #nolint
   private = list(
     fun_name = character(0),
     args = NULL, # named list with argument names and values
-    object = NULL,
     ## __Private Methods ====
     # @description
     # Refresh call with function name and saved arguments

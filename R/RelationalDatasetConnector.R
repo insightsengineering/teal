@@ -85,9 +85,15 @@ RelationalDatasetConnector <- R6::R6Class( #nolint
         )
 
         if (!is_empty_string(private$get_mutate_code_class()$get_code())) {
+          mutate_code <- private$get_mutate_code_class()$get_code(deparse = TRUE)
+
+          if (inherits(private$get_mutate_code_class(), "PythonCodeClass")) {
+            mutate_code <- private$get_mutate_code_class()
+          }
+
           private$dataset <- mutate_dataset(
             x = self$get_dataset(),
-            code = private$get_mutate_code_class()$get_code(deparse = TRUE),
+            code = mutate_code,
             vars = private$mutate_vars
           )
         }

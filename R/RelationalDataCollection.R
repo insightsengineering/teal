@@ -141,6 +141,15 @@ RelationalDataCollection <- R6::R6Class( #nolint
             }
           }
         )
+        # exit early if mutate isn't required
+        return(if_not_null(res, setNames(res, vapply(res, get_dataname, character(1)))))
+      }
+
+      if (inherits(private$mutate_code, "PythonCodeClass")) {
+        items <- lapply(self$get_items(), get_raw_data)
+        datasets <- setNames(items, vapply(self$get_items(), get_dataname, character(1)))
+
+        new_env <- private$mutate_code$eval(vars = c(datasets, private$mutate_vars))
       } else {
         # have to evaluate post-processing code (i.e. private$mutate_code) before returning dataset
         new_env <- new.env(parent = parent.env(globalenv()))
@@ -166,6 +175,8 @@ RelationalDataCollection <- R6::R6Class( #nolint
         }
 
         private$mutate_code$eval(envir = new_env)
+      }
+
         res <- sapply(
           self$get_items(),
           function(x) {
@@ -181,7 +192,7 @@ RelationalDataCollection <- R6::R6Class( #nolint
           USE.NAMES = TRUE,
           simplify = FALSE
         )
-      }
+
       return(if_not_null(res, setNames(res, vapply(res, get_dataname, character(1)))))
     },
     #' @description
@@ -362,7 +373,15 @@ RelationalDataCollection <- R6::R6Class( #nolint
       return(res)
     },
     set_mutate_code = function(code, dataname = self$get_datanames(), deps = names(private_mutate_vars)) {
-      stopifnot(is_character_vector(code, 0, 1))
+      stopifnot(is_character_vector(code, 0, 1) || inherits(code, "PythonCodeClass"))
+
+      if (inherits(code, "PythonCodeClass")) {
+        r <- PythonCodeClass$new()
+        r$append(private$mutate_code)
+        private$mutate_code <- r
+
+        code <- code$get_code()
+      }
 
       if (length(code) > 0 && code != "") {
         private$mutate_code$set_code(code = code, dataname = dataname, deps = deps)

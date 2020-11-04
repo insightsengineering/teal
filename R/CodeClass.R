@@ -80,11 +80,14 @@ CodeClass <- R6::R6Class( # nolint
     #' @param dataname optional, (\code{character}) vector of datanames to assign code to. If empty then the code
     #' is considered to be "global"
     #' @param deps optional, (\code{character}) vector of datanames that given code depends on
+    #'
     #' @return changed \code{CodeClass} object
     set_code = function(code, dataname = character(0), deps = character(0)) {
-      stopifnot(is_character_vector(code))
-      stopifnot(is_character_vector(dataname, min_length = 0))
-      stopifnot(!(dataname %in% deps))
+      stopifnot(
+        is_character_vector(code),
+        is_character_vector(dataname, min_length = 0),
+        !(dataname %in% deps)
+        )
 
       code <- pretty_code_string(code)
 

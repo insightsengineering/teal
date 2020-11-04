@@ -22,7 +22,6 @@ Object that stores function name with its arguments. Methods to get call and run
 \item \href{#method-get_call}{\code{CallableFunction$get_call()}}
 \item \href{#method-set_args}{\code{CallableFunction$set_args()}}
 \item \href{#method-set_arg_value}{\code{CallableFunction$set_arg_value()}}
-\item \href{#method-set_object}{\code{CallableFunction$set_object()}}
 \item \href{#method-clone}{\code{CallableFunction$clone()}}
 }
 }
@@ -141,29 +140,6 @@ Set up single function argument with value
 }
 \subsection{Returns}{
 \code{self} invisibly for chaining.
-}
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-set_object"></a>}}
-\if{latex}{\out{\hypertarget{method-set_object}{}}}
-\subsection{Method \code{set_object()}}{
-For scripts and code that contain multiple objects, save the name
-  of the object that corresponds to the final dataset of interest.
-  This is required for running python scripts with \code{reticulate}.
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{CallableFunction$set_object(x)}\if{html}{\out{</div>}}
-}
-
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{x}}{(\code{character}) the name of the object produced by the code
-or script.}
-}
-\if{html}{\out{</div>}}
-}
-\subsection{Returns}{
-(\code{self}) invisibly for chaining.
 }
 }
 \if{html}{\out{<hr>}}

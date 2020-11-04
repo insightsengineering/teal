@@ -41,10 +41,11 @@ object or \code{RelationalDataset} which inherited from it.}
 \item{...}{not used, only for support of S3}
 
 \item{code}{(\code{character})\cr
-Code to mutate the dataset. Must contain the \code{dataset$dataname}.}
+Code to mutate the dataset. Must contain the \code{dataset$dataname}. Or can also be an object
+of class \code{PythonCodeClass} returned by \code{\link{python_code}}.}
 
 \item{script}{(\code{character})\cr
-file that contains R Code that can be read using \link{read_script}.
+file that contains R Code that can be read using \code{\link{read_script}}.
 Preferred before \code{code} argument.}
 
 \item{vars}{(list)\cr

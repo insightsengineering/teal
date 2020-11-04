@@ -3,18 +3,19 @@
 #' @md
 #' @description `r lifecycle::badge("experimental")`
 #'
-#' @param x (\code{NamedDataset})\cr
-#'    object or \code{RelationalDataset} which inherited from it.
-#' @param dataname (\code{character})\cr
+#' @param x (`NamedDataset`)\cr
+#'    object or `RelationalDataset` which inherited from it.
+#' @param dataname (`character`)\cr
 #'   Dataname to be mutated.
-#' @param code (\code{character})\cr
-#'   Code to mutate the dataset. Must contain the \code{dataset$dataname}.
-#' @param script (\code{character})\cr
-#'   file that contains R Code that can be read using \link{read_script}.
-#'   Preferred before \code{code} argument.
+#' @param code (`character`)\cr
+#'   Code to mutate the dataset. Must contain the `dataset$dataname`. Or can also be an object
+#'   of class `PythonCodeClass` returned by [`python_code`].
+#' @param script (`character`)\cr
+#'   file that contains R Code that can be read using [`read_script`].
+#'   Preferred before `code` argument.
 #' @param vars (list)\cr
-#'   In case when this object code depends on the \code{raw_data} from the other
-#'   \code{RelationalDataset}, \code{RelationalDatasetConnector} object(s) or other constant value,
+#'   In case when this object code depends on the `raw_data` from the other
+#'   `RelationalDataset`, `RelationalDatasetConnector` object(s) or other constant value,
 #'   this/these object(s) should be included.
 #' @param ... not used, only for support of S3
 #'
@@ -63,7 +64,6 @@ mutate_dataset <- function(x, ...) {
 #'
 #' @export
 mutate_dataset.NamedDataset <- function(x, code = character(0), script = character(0), vars = list(), ...) { #nolint
-  stopifnot(is_character_single(code) || is_character_single(script))
   stopifnot(is_fully_named_list(vars))
 
   code <- code_from_script(code, script)
@@ -74,7 +74,6 @@ mutate_dataset.NamedDataset <- function(x, code = character(0), script = charact
 #' @rdname mutate_dataset
 #' @export
 mutate_dataset.NamedDatasetConnector <- function(x, code = character(0), script = character(0), vars = list(), ...) { #nolint
-  stopifnot(is_character_single(code) || is_character_single(script))
   stopifnot(is_fully_named_list(vars))
 
   code <- code_from_script(code, script)
@@ -85,7 +84,6 @@ mutate_dataset.NamedDatasetConnector <- function(x, code = character(0), script 
 #' @rdname mutate_dataset
 #' @export
 mutate_dataset.RelationalDataCollection <- function(x, dataname, code = character(0), script = character(0), vars = list(), ...) { #nolint
-  stopifnot(is_character_single(code) || is_character_single(script))
   stopifnot(is_fully_named_list(vars))
 
   code <- code_from_script(code, script)
@@ -105,15 +103,15 @@ mutate_dataset.RelationalDataCollection <- function(x, dataname, code = characte
 #'
 #' @export
 mutate_data <- function(x, code = character(0), script = character(0), vars = list()) {
-  stopifnot(is_character_single(code) || is_character_single(script))
   UseMethod("mutate_data")
 }
 
 #' @rdname mutate_data
 #' @export
 mutate_data.RelationalDataCollection <- function(x, code = character(0), script = character(0), vars = list()) { #nolint
-  code <- code_from_script(code, script) # nolint
+  stopifnot(is_fully_named_list(vars))
 
+  code <- code_from_script(code, script)
   x$mutate(code = code, vars = vars)
   return(x)
 }

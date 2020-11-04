@@ -314,15 +314,19 @@ teal_with_pkg <- function(pkg, code) {
 
 #' Get code from script
 #'
-#' Get code from script. Switches between \code{code} and \code{script arguments}
+#' Get code from script. Switches between `code` and `script` arguments
 #' to return non-empty one to pass it further to constructors.
-#' @param code (\code{character} value)\cr
-#'   an R code to be evaluated.
+#' @md
+#'
+#' @param code (`character`)\cr
+#'   an R code to be evaluated or a `PythonCodeClass` created using [python_code].
 #' @inheritParams relational_dataset_connector
-#' @return code (\code{character})
+#' @return code (`character`)
 code_from_script <- function(code, script, dataname = NULL) {
-  stopifnot(is_character_vector(code, min_length = 0, max_length = 1))
-  stopifnot(is_character_vector(script, min_length = 0, max_length = 1))
+  stopifnot(
+    is_character_vector(code, min_length = 0, max_length = 1) || inherits(code, "PythonCodeClass"),
+    is_character_vector(script, min_length = 0, max_length = 1)
+    )
   if (length(code) == 0 && length(script) == 0) {
     return(character(0))
   }

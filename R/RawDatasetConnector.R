@@ -265,14 +265,12 @@ RawDatasetConnector <- R6::R6Class( #nolint
 
           # assignment is done in pull_callable only once
           # because x is locked within local environment
-          # this meas that re-assignment is not possible and will be silently skipped
+          # this means that re-assignment is not possible and will be silently skipped
           # During the app loading, assign is called only once.
           private$pull_callable$assign_to_env(
             x = var_name,
             value = if (is(var_value, "RawDatasetConnector") || is(var_value, "RawDataset")) {
               get_raw_data(var_value)
-            } else if (is(var_value, "data.frame")) {
-              var_value
             } else {
               var_value
             }

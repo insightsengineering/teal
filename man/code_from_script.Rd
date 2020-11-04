@@ -7,8 +7,8 @@
 code_from_script(code, script, dataname = NULL)
 }
 \arguments{
-\item{code}{(\code{character} value)\cr
-an R code to be evaluated.}
+\item{code}{(\code{character})\cr
+an R code to be evaluated or a \code{PythonCodeClass} created using \link{python_code}.}
 
 \item{script}{(\code{character})\cr
 Alternatively to \code{code} - location of the file containing modification code.
@@ -21,6 +21,6 @@ A given name for the dataset it may not contain spaces}
 code (\code{character})
 }
 \description{
-Get code from script. Switches between \code{code} and \code{script arguments}
+Get code from script. Switches between \code{code} and \code{script} arguments
 to return non-empty one to pass it further to constructors.
 }

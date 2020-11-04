@@ -231,18 +231,32 @@ NamedDatasetConnector <- R6::R6Class( #nolint
 
     get_mutate_code_class = function() {
       res <- CodeClass$new()
+      if (inherits(private$mutate_code, "PythonCodeClass")) {
+        res <- PythonCodeClass$new()
+      }
+
       res$append(list_to_code_class(private$mutate_vars))
       res$append(private$mutate_code)
       return(res)
     },
 
     set_mutate_code = function(code) {
-      stopifnot(is_character_vector(code, 0, 1))
+      stopifnot(is_character_vector(code, 0, 1) || inherits(code, "PythonCodeClass"))
+
+      if (inherits(code, "PythonCodeClass")) {
+        r <- PythonCodeClass$new()
+        r$append(private$mutate_code)
+        private$mutate_code <- r
+
+        code <- code$get_code()
+      }
 
       if (length(code) > 0 && code != "") {
-        private$mutate_code$set_code(code = code,
-                                     dataname = private$dataname,
-                                     deps = names(private$mutate_vars))
+        private$mutate_code$set_code(
+          code = code,
+          dataname = private$dataname,
+          deps = names(private$mutate_vars)
+          )
       }
 
       return(invisible(self))
