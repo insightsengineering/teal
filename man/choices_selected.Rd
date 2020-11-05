@@ -2,7 +2,7 @@
 % Please edit documentation in R/choices_selected.R
 \name{choices_selected}
 \alias{choices_selected}
-\title{Choices function}
+\title{Choices Selected}
 \usage{
 choices_selected(
   choices,
@@ -12,21 +12,30 @@ choices_selected(
 )
 }
 \arguments{
-\item{choices}{vector of possible choices or \code{delayed_data} object}
+\item{choices}{(\code{character}) vector of possible choices or \code{delayed_data} object\cr
+See \code{\link{variable_choices}} and \code{\link{value_choices}}.}
 
-\item{selected}{vector of pre-selected options or \code{delayed_data} object.
-If vector, then first element of \code{choices} if blank}
+\item{selected}{(\code{character}) vector of pre-selected options or (\code{delayed_data}) object\cr
+If \code{delayed_data} object then \code{choices} must also be a \code{delayed_data} object.
+If not supplied it will default to the first element of \code{choices} if \code{choices} is
+a vector, or \code{NULL} if \code{choices} is a \code{delayed_data} object.}
 
-\item{keep_order}{(\code{logical}) In case of \code{FALSE} the selected variables
-will be on top of the drop-down field.}
+\item{keep_order}{(\code{logical})\cr
+In case of \code{FALSE} the selected variables will be on top of the drop-down field.}
 
-\item{fixed}{(\code{logical}) (optional) whether to block user to select choices}
+\item{fixed}{optional, (\code{logical})\cr
+Whether to block user to select choices}
 }
 \value{
-Object of class \code{choices_selected} and of type list.
+Object of class \code{choices_selected} and of type list which contains the specified
+\code{choices}, \code{selected}, \code{keep_order} and \code{fixed}.
 }
 \description{
 \ifelse{html}{\out{<a href='https://www.tidyverse.org/lifecycle/#maturing'><img src='figures/lifecycle-maturing.svg' alt='Maturing lifecycle'></a>}}{\strong{Maturing}}
+Construct a single list containing available choices, the default selected value, and
+additional settings such as to order the choices with the selected elements appearing first
+or whether to block the user from making selections. Can be used in \code{ui} input elements
+such as \code{\link{optionalSelectInput}}
 }
 \details{
 Please note that the order of selected will always follow the order of choices. The \code{keep_order}
@@ -93,4 +102,20 @@ choices_selected(variable_choices("ADSL", subset = function(data) {
   return(names(data)[idx])
 }))
 
+# used in a teal `optionalSelectInput`
+
+cs <- choices_selected(
+  choices = c("A", "B", "C"),
+  selected = "A"
+)
+
+ui <- fluidPage(
+  optionalSelectInput(
+  inputId = "id",
+  choices = cs$choices,
+  selected = cs$selected)
+)
+\dontrun{
+shinyApp(ui, server = function(input, output, session) {})
+}
 }

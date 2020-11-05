@@ -1,27 +1,36 @@
 no_select_keyword <- "-- no selection --"
 
-#' Choices function
+#' Choices Selected
 #'
-#' @md
 #' @description `r lifecycle::badge("maturing")`
+#'   Construct a single list containing available choices, the default selected value, and
+#'   additional settings such as to order the choices with the selected elements appearing first
+#'   or whether to block the user from making selections. Can be used in `ui` input elements
+#'   such as [`optionalSelectInput`]
+#' @md
 #'
-#' @param choices vector of possible choices or \code{delayed_data} object
-#' @param selected vector of pre-selected options or \code{delayed_data} object.
-#' If vector, then first element of \code{choices} if blank
-#' @param keep_order (\code{logical}) In case of \code{FALSE} the selected variables
-#'   will be on top of the drop-down field.
-#' @param fixed (\code{logical}) (optional) whether to block user to select choices
+#' @param choices (`character`) vector of possible choices or `delayed_data` object\cr
+#'   See [`variable_choices`] and [`value_choices`].
+#' @param selected (`character`) vector of pre-selected options or (`delayed_data`) object\cr
+#'  If `delayed_data` object then `choices` must also be a `delayed_data` object.
+#'  If not supplied it will default to the first element of `choices` if `choices` is
+#'  a vector, or `NULL` if `choices` is a `delayed_data` object.
+#' @param keep_order (`logical`)\cr
+#'  In case of `FALSE` the selected variables will be on top of the drop-down field.
+#' @param fixed optional, (`logical`)\cr
+#'  Whether to block user to select choices
 #'
 #' @details
 #'
-#' Please note that the order of selected will always follow the order of choices. The \code{keep_order}
+#' Please note that the order of selected will always follow the order of choices. The `keep_order`
 #' argument is set to false which will run the following code inside:
 #'
-#' \code{choices <- c(selected, setdiff(choices, selected))}
+#' `choices <- c(selected, setdiff(choices, selected))`
 #'
-#' in case you want to keep your specific order of choices, set \code{keep_order} to \code{TRUE}.
+#' in case you want to keep your specific order of choices, set `keep_order` to `TRUE`.
 #'
-#' @return Object of class \code{choices_selected} and of type list.
+#' @return Object of class `choices_selected` and of type list which contains the specified
+#'   `choices`, `selected`, `keep_order` and `fixed`.
 #'
 #' @export
 #' @importFrom methods is
@@ -83,8 +92,26 @@ no_select_keyword <- "-- no selection --"
 #'   return(names(data)[idx])
 #' }))
 #'
-choices_selected <- function(choices, selected = if (is(choices, "delayed_data")) NULL else choices[1],
-                             keep_order = FALSE, fixed = FALSE) {
+#' # used in a teal `optionalSelectInput`
+#'
+#' cs <- choices_selected(
+#'   choices = c("A", "B", "C"),
+#'   selected = "A"
+#' )
+#'
+#' ui <- fluidPage(
+#'   optionalSelectInput(
+#'   inputId = "id",
+#'   choices = cs$choices,
+#'   selected = cs$selected)
+#' )
+#' \dontrun{
+#' shinyApp(ui, server = function(input, output, session) {})
+#' }
+choices_selected <- function(choices,
+                             selected = if (is(choices, "delayed_data")) NULL else choices[1],
+                             keep_order = FALSE,
+                             fixed = FALSE) {
 
   stopifnot(is.atomic(choices) || is(choices, "delayed_data"))
   stopifnot(is.atomic(selected) || is(selected, "delayed_data"))
