@@ -317,35 +317,90 @@ FilteredData <- R6::R6Class( # nolint
     #' e.g. `range` for a `numeric` variable, `choices` for a
     #' `factor` variable, `logical` for a `logical` variable.
     #'
-    #' This can be used to see how the variable must be filtered.
+    #' This can be used to see filtering conditions of a variable or a vector of variables.
+    #' This method looks into `private$filter_infos` and returns a list of multiple `filter information` in case
+    #' `varname` is a list or a named list of a single `filter information` in case `varname` is a singular name.
+    #' The `include_unknown` argument is considered if and only when the `varname` is `NULL`.
     #'
     #' @md
     #' @param dataname `character` name of the dataset
-    #' @param varname `character` column within the dataset,
-    #'   if `NULL`, return all (filtered) variables
-    #' @param all_vars `logical` (only applies if `varname` is NULL)
-    #'   whether to include non-filtered variables; attention: only
-    #'   filterable variables are included
-    get_filter_info = function(dataname, varname = NULL, all_vars = FALSE) {
-      private$check_data_varname_exists(dataname, varname)
-      stopifnot(
-        is_logical_single(all_vars),
-        is.null(varname) || !all_vars
-      )
+    #' @param varname `character` vector of variable names to include in the result.
+    #' Default: all variables in `dataname`
+    #' @param include_unknown `logical` whether to include variables with unknown filter type.
+    #' Is ignored when `varname` is not `NULL`. Default: TRUE
+    #'
+    #' @return a named list with filter information of `varname` variables.
+    #' If `include_unknown` is TRUE, then also return `filter information`
+    #' of variables with `filter information` of type unknown.
+    #'
+    #' @examples
+    #' library(random.cdisc.data)
+    #'
+    #' ADSL <- radsl(cached = TRUE)
+    #' attr(ADSL, "keys") <- get_cdisc_keys("ADSL")
+    #' datasets <- teal:::FilteredData$new()
+    #'
+    #' # to avoid using isolate(), you can provide a default isolate context by calling
+    #' # options(shiny.suppressMissingContextError = TRUE) #nolint
+    #' # don't forget to deactivate this option at the end
+    #' # options(shiny.suppressMissingContextError = FALSE) #nolint
+    #'
+    #' isolate({
+    #'   datasets
+    #'
+    #'   datasets$set_data("ADSL", ADSL)
+    #'   datasets
+    #'   datasets$get_data_info("ADSL", filtered = FALSE)
+    #'   datasets$datanames()
+    #'   # filters dataset to obtain information
+    #'   datasets$get_data_info("ADSL", filtered = TRUE)
+    #'   datasets$get_filter_info("ADSL")
+    #'   df <- datasets$get_data("ADSL", filtered = FALSE)
+    #'   # df
+    #'
+    #'   datasets$get_filter_type("ADSL", "SEX")
+    #'   datasets$set_filter_state("ADSL", state = list(
+    #'     AGE = list(range = c(33, 44), keep_na = FALSE),
+    #'     SEX = list(choices = c("M", "F"), keep_na = FALSE)
+    #'   ))
+    #'
+    #'   infos <- datasets$get_filter_info("ADSL") # will return a named list of all active filters
+    #'   names(infos) # notice that names correspond to variable names
+    #'
+    #'   single_info <- datasets$get_filter_info("ADSL", "AGE") # will return a list of AGE filter infos
+    #'   names(single_info) # note that this contains filter informations, not variable names as names
+    #'
+    #'   single_info2 <- datasets$get_filter_info("ADSL", include_unknown = TRUE)
+    #'   single_info2 # will include active filters of type unknown
+    #'
+    #'   single_info3 <- datasets$get_filter_info("ADSL",
+    #'     varname = c("AGE", "SEX"),
+    #'     include_unknown = FALSE)
+    #'   single_info3 # make note that include_unknown will be ignored, when varname is not NULL
+    #' })
+    #'
+    get_filter_info = function(dataname,
+                               varname = NULL,
+                               include_unknown = TRUE) {
+      lapply(varname, function(x) private$check_data_varname_exists(dataname, x))
+      stopifnot(is_logical_single(include_unknown))
 
       infos <- private$filter_infos[[dataname]]()
-      return(if (is.null(varname)) {
-        # filter out variables that are not filtered
-        if (all_vars) {
-          # all filterable variables
-          infos[vapply(infos, function(var_info) var_info$type != "unknown", logical(1))]
-        } else {
-          # only filtered variables, a subset of filterable variables
-          infos[names(self$get_filter_state(dataname))]
-        }
+
+      if (is.null(varname)) {
+        active_filter_names <- names(self$get_filter_state(dataname, include_unknown = include_unknown))
+        infos <- infos[vapply(names(infos),
+          function(x) x %in% active_filter_names,
+          FUN.VALUE = logical(1),
+          USE.NAMES = FALSE)]
+        infos <- infos[active_filter_names]  # needed, because otherwise the order does not match
+      } else if (length(varname) == 1) {
+        infos <- infos[[varname]]
       } else {
-        infos[[varname]]
-      })
+        infos <- infos[varname]
+      }
+
+      infos
     },
 
     #' @details
@@ -362,21 +417,35 @@ FilteredData <- R6::R6Class( # nolint
     },
 
     #' @details
-    #' Filter state for a dataset (or only a variable within it).
+    #' Returns active filter state for a dataset (or only a variable within it).
     #'
     #' @md
     #' @param dataname `character` name of the dataset
     #' @param varname `character` column within the dataset;
     #'   if `NULL`, return all variables in a list
+    #' @param include_unknown `logical` whether to include the "unknown" type of variables
+    #'   (TRUE) or not to include them (FALSE). Default: TRUE
     #' @return `character vector` filter state or list of these
-    get_filter_state = function(dataname, varname = NULL) {
+    get_filter_state = function(dataname, varname = NULL, include_unknown = TRUE) {
       private$check_data_varname_exists(dataname, varname)
+      stopifnot(is_logical_single(include_unknown))
 
-      if (is.null(varname)) {
-        private$filter_states[[dataname]]
-      } else {
-        private$filter_states[[dataname]][[varname]]
+      filter_states <- private$filter_states[[dataname]]
+
+      if (!is.null(varname)) {
+        return(filter_states[[varname]])
       }
+
+      # filter out unknowns
+      if (!include_unknown) {
+        filter_states <- filter_states[vapply(
+          filter_states,
+          function(x) !is.null(x[[1]]),  # unknown filters have NULL as the first element
+          FUN.VALUE = logical(1)
+        )]
+      }
+
+      filter_states
     },
 
     #' @details
@@ -490,24 +559,10 @@ FilteredData <- R6::R6Class( # nolint
         range = list(range = unlist(unname(filter_info$range))),
         logical = list(status = "TRUE"),
         date = list(daterange = unlist(unname(filter_info$daterange))),
-        stop("unknown type")
+        unknown = list(NULL),
+        stop(paste0(varname, " is of unrecognized type: ", filter_info$class))
       )
       return(c(state, list(keep_na = FALSE, keep_inf = FALSE)))
-    },
-
-    #' @details
-    #' Check whether the variable can be filtered, i.e. not of unknown type
-    #'
-    #' @md
-    #' @param dataname `character` name of the dataset
-    #' @param varname `character` column within the dataset;
-    #'   must be provided
-    #' @return whether the variable can be filtered (type not unknown)
-    is_filterable = function(dataname, varname) {
-      stopifnot(is_character_single(dataname))
-      stopifnot(is_character_single(varname))
-
-      return(self$get_filter_type(dataname, varname) != "unknown")
     },
 
     #' @details
@@ -950,7 +1005,6 @@ FilteredData <- R6::R6Class( # nolint
         )
       }
 
-
       pre_msg <- paste0("data ", dataname, ", variable ", varname, ": ")
       switch(
         var_info$type,
@@ -970,6 +1024,9 @@ FilteredData <- R6::R6Class( # nolint
         date = {
           check_in_range(var_state$daterange, var_info$daterange, pre_msg = pre_msg)
         },
+        unknown = {
+          stopifnot(is.null(var_state[[1]]))
+        },
         stop(paste("Unknown filter type", var_info$type, "for data", dataname, "and variable", varname))
       )
       return(invisible(NULL))
@@ -985,7 +1042,6 @@ FilteredData <- R6::R6Class( # nolint
     # @return `call` to obtain the filtered dataset from the unfiltered one
     get_pure_filter_call = function(dataname) {
       private$check_data_varname_exists(dataname)
-
       data_filter_call_items <- Map(
         function(filter_info, filter_state, varname) {
           stopifnot(!is.null(filter_state)) # filter_state only contains non-NULL values
@@ -1044,25 +1100,33 @@ FilteredData <- R6::R6Class( # nolint
                 call("<=", as.name(varname), call(as, selection_state[2]))
               )
             },
+            unknown = {
+              NULL
+            },
             stop(paste("filter type for variable", varname, "in", dataname, "not known"))
           )
 
-          if (type == "range" && isTRUE(filter_state$keep_inf)) {
-            filter_call <- call("|", call("is.infinite", as.name(varname)), filter_call)
+          if (type == "unknown") {
+            return(filter_call)
+          } else {
+            if (type == "range" && isTRUE(filter_state$keep_inf)) {
+              filter_call <- call("|", call("is.infinite", as.name(varname)), filter_call)
+            }
+
+            # allow NA as well, i.e. do not filter it out
+            if (isTRUE(filter_state$keep_na)) {
+              # we add `is.na` independent of whether the variable has na values or not
+              # dplyr's filter allows for: c(NA, "F", "M") == "F" - which normally throws NA, T, F
+              filter_call <- call("|", call("is.na", as.name(varname)), filter_call)
+            }
+
+            return(filter_call)
           }
 
-          # allow NA as well, i.e. do not filter it out
-          if (isTRUE(filter_state$keep_na)) {
-            # we add `is.na` independent of whether the variable has na values or not
-            # dplyr's filter allows for: c(NA, "F", "M") == "F" - which normally throws NA, T, F
-            filter_call <- call("|", call("is.na", as.name(varname)), filter_call)
-          }
-
-          return(filter_call)
         },
-        self$get_filter_info(dataname),
-        self$get_filter_state(dataname),
-        names(self$get_filter_info(dataname))
+        self$get_filter_info(dataname, include_unknown = FALSE),
+        self$get_filter_state(dataname, include_unknown = FALSE),
+        names(self$get_filter_info(dataname, include_unknown = FALSE))
       )
 
       data_filter_call_items <- Filter(function(x) !is.null(x), data_filter_call_items)
@@ -1125,7 +1189,8 @@ FilteredData <- R6::R6Class( # nolint
     # - `factor or character`: `type: "choices", choices: , histogram_data: `
     # - `numeric`: `type: "range", range: , histogram_data: `
     # - `logical`: `type: "logical", choices: , histogram_data: `
-    # - default (or all `NA` entries): `type: unknown, class: `, cannot be filtered
+    # - all `NA` entries: `type: unknown, class: , all_na = TRUE`, cannot be filtered
+    # - default: `type: unknown, class: `, cannot be filtered
     # Each variable's filter info is a list with entries `type`, `labels` and others
     # that depend on the variable type as outlined above.
     #
@@ -1144,8 +1209,9 @@ FilteredData <- R6::R6Class( # nolint
             .log("all elements in", varname, "are NA")
             list(
               type = "unknown",
-              label = if_null(attr(var, "label"), ""),
-              class = class(var)
+              label = if_null(attr(var, "label"), varname),
+              class = class(var),
+              all_na = TRUE
             )
           } else if (is.factor(var) ||
                      is.character(var) ||
@@ -1210,12 +1276,12 @@ FilteredData <- R6::R6Class( # nolint
           } else {
             .log(
               "variable '", varname, "' is of class '",
-              class(var), "' which has currently no filter UI element",
+              class(var), "' which currently does not support filtering",
               sep = ""
             )
             list(
               type = "unknown",
-              label = if_null(attr(var, "label"), ""),
+              label = if_null(attr(var, "label"), varname),
               class = class(var)
             )
           }
@@ -1327,11 +1393,14 @@ print.default_filter <- function(x, ...) {
 #' @md
 #' @param datasets `FilteredData`
 #' @param dataname `character` dataname to get filter variables for
+#' @param include_unknown `logical` whether to include unknown type variables. Default: TRUE
 #'
 #' @return `character` vector of active filter variables
-get_filter_vars <- function(datasets, dataname) {
-  stopifnot(is(datasets, "FilteredData"))
-  names(datasets$get_filter_state(dataname))
+get_filter_vars <- function(datasets, dataname, include_unknown = TRUE) {
+  stopifnot(
+    is(datasets, "FilteredData"),
+    is_logical_single(include_unknown))
+  names(datasets$get_filter_state(dataname, include_unknown = include_unknown))
 }
 
 #' Set the filter state for a single variable

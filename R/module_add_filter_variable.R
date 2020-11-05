@@ -113,13 +113,11 @@ srv_add_filter_variable <- function(input, output, session, datasets, dataname, 
       names(datasets$get_data(dataname, filtered = FALSE)),
       c(active_filter_vars(), omit_vars())
     )
-    choices <- choices[
-      vapply(choices, function(varname) datasets$is_filterable(dataname, varname = varname), logical(1))
-      ]
 
     # we add variable labels to be nicely displayed with the variable short name
     # and get types so that icons can be displayed as well
     choice_labels <- datasets$get_variable_labels(dataname)
+    choice_labels[is.na(choice_labels)] <- names(choice_labels[is.na(choice_labels)])
     choice_types <- variable_types(datasets$get_data(dataname, filtered = FALSE))
     names(choice_types) <- names(datasets$get_data(dataname, filtered = FALSE))
 
@@ -142,7 +140,6 @@ srv_add_filter_variable <- function(input, output, session, datasets, dataname, 
     # if NULL, it was just reset (to select a new variable to filter); at startup, this is also called with NULL
     var_to_add <- input$var_to_add
     if (!is.null(var_to_add)) {
-      stopifnot(datasets$is_filterable(dataname, var_to_add))
       .log("add filter variable", var_to_add)
       set_single_filter_state(
         datasets = datasets,

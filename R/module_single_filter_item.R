@@ -176,9 +176,10 @@ ui_single_filter_item <- function(id, filter_info, filter_state, prelabel) {
           update_on = "close"
         )
       )
+  } else if ("all_na" %in% names(filter_info)) {
+    "All values missing - no filtering possible"
   } else {
-    # fail gracefully although this should have been caught before already
-    tags$p(paste("Variable with id", id, "has unknown type:", filter_info$type))
+    paste0("Filtering variable of class ", filter_info$class[1], " is not yet supported")
   }
 
   # label before select input and button to remove filter
@@ -200,7 +201,7 @@ ui_single_filter_item <- function(id, filter_info, filter_state, prelabel) {
       ))
     ),
     fluidRow(select_input),
-    if (filter_info$na_count > 0) {
+    if (filter_info$na_count > 0 && filter_info$type != "unknown") {
       fluidRow(
         checkboxInput(id_keep_na, get_keep_na_label(filter_info$na_count), value = filter_state$keep_na)
       )
@@ -332,6 +333,8 @@ srv_single_filter_item <- function(input, output, session, datasets, dataname, v
         )
 
       list(daterange = c(start_date, end_date))
+    } else if (type == "unknown") {
+      list(NULL)
     } else {
       stop("Unknown filter type ", type, " for var ", varname)
     }

@@ -4,6 +4,7 @@
 * Fixing lack of labels for `character` and `factor` variables in the Filter Panel.
 * Remove `include_factors` option in `get_class_colnames` in `RawDataset`.
 * Adds support for filtering on `Date` and `Datetime` variables in the Filter Panel.
+* Show all variables in `module_filter_panel`, not only those of types `numeric`, `logical`, `factor`, `character` and `Date`
 * Fixing `mutate_data` to accept the whole scope of objects for `vars`.
 * issues with no news:
 

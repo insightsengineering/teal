@@ -4,12 +4,14 @@
 \alias{get_filter_vars}
 \title{Get filter variable names that are currently active}
 \usage{
-get_filter_vars(datasets, dataname)
+get_filter_vars(datasets, dataname, include_unknown = TRUE)
 }
 \arguments{
 \item{datasets}{\code{FilteredData}}
 
 \item{dataname}{\code{character} dataname to get filter variables for}
+
+\item{include_unknown}{\code{logical} whether to include unknown type variables. Default: TRUE}
 }
 \value{
 \code{character} vector of active filter variables

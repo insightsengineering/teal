@@ -148,7 +148,6 @@ srv_filter_items <- function(input, output, session, datasets, dataname) {
     filtered_vars(), {
       # this block has an effect whenever the shown variable filters differ from the datasets state
       .log("regenerating ui filters for data", dataname)
-
       # add variables not shown currently
       added_varnames <- setdiff(filtered_vars(), names(shown_vars_observers))
       lapply(added_varnames, function(varname) {
@@ -185,7 +184,6 @@ srv_filter_items <- function(input, output, session, datasets, dataname) {
         lapply(shown_vars_observers[[varname]], function(obs) obs$destroy())
         shown_vars_observers[[varname]] <<- NULL
       })
-
       stopifnot(setequal(filtered_vars(), names(shown_vars_observers)))
     },
     # we also need to find out when there are no filtered variables to hide / show the UI

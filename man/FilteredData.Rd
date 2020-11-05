@@ -105,6 +105,56 @@ isolate({
 
   datasets$print_filter_info("ADSL")
 })
+
+## ------------------------------------------------
+## Method `FilteredData$get_filter_info`
+## ------------------------------------------------
+
+library(random.cdisc.data)
+
+ADSL <- radsl(cached = TRUE)
+attr(ADSL, "keys") <- get_cdisc_keys("ADSL")
+datasets <- teal:::FilteredData$new()
+
+# to avoid using isolate(), you can provide a default isolate context by calling
+# options(shiny.suppressMissingContextError = TRUE) #nolint
+# don't forget to deactivate this option at the end
+# options(shiny.suppressMissingContextError = FALSE) #nolint
+
+isolate({
+  datasets
+
+  datasets$set_data("ADSL", ADSL)
+  datasets
+  datasets$get_data_info("ADSL", filtered = FALSE)
+  datasets$datanames()
+  # filters dataset to obtain information
+  datasets$get_data_info("ADSL", filtered = TRUE)
+  datasets$get_filter_info("ADSL")
+  df <- datasets$get_data("ADSL", filtered = FALSE)
+  # df
+
+  datasets$get_filter_type("ADSL", "SEX")
+  datasets$set_filter_state("ADSL", state = list(
+    AGE = list(range = c(33, 44), keep_na = FALSE),
+    SEX = list(choices = c("M", "F"), keep_na = FALSE)
+  ))
+
+  infos <- datasets$get_filter_info("ADSL") # will return a named list of all active filters
+  names(infos) # notice that names correspond to variable names
+
+  single_info <- datasets$get_filter_info("ADSL", "AGE") # will return a list of AGE filter infos
+  names(single_info) # note that this contains filter informations, not variable names as names
+
+  single_info2 <- datasets$get_filter_info("ADSL", include_unknown = TRUE)
+  single_info2 # will include active filters of type unknown
+
+  single_info3 <- datasets$get_filter_info("ADSL",
+    varname = c("AGE", "SEX"),
+    include_unknown = FALSE)
+  single_info3 # make note that include_unknown will be ignored, when varname is not NULL
+})
+
 }
 \section{Methods}{
 \subsection{Public methods}{
@@ -125,7 +175,6 @@ isolate({
 \item \href{#method-get_filter_state}{\code{FilteredData$get_filter_state()}}
 \item \href{#method-set_filter_state}{\code{FilteredData$set_filter_state()}}
 \item \href{#method-get_default_filter_state}{\code{FilteredData$get_default_filter_state()}}
-\item \href{#method-is_filterable}{\code{FilteredData$is_filterable()}}
 \item \href{#method-get_filter_expr}{\code{FilteredData$get_filter_expr()}}
 \item \href{#method-print}{\code{FilteredData$print()}}
 \item \href{#method-print_filter_info}{\code{FilteredData$print_filter_info()}}
@@ -404,7 +453,7 @@ Useful to display in \verb{Show R Code}.
 \if{latex}{\out{\hypertarget{method-get_filter_info}{}}}
 \subsection{Method \code{get_filter_info()}}{
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{FilteredData$get_filter_info(dataname, varname = NULL, all_vars = FALSE)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{FilteredData$get_filter_info(dataname, varname = NULL, include_unknown = TRUE)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
@@ -412,12 +461,11 @@ Useful to display in \verb{Show R Code}.
 \describe{
 \item{\code{dataname}}{\code{character} name of the dataset}
 
-\item{\code{varname}}{\code{character} column within the dataset,
-if \code{NULL}, return all (filtered) variables}
+\item{\code{varname}}{\code{character} vector of variable names to include in the result.
+Default: all variables in \code{dataname}}
 
-\item{\code{all_vars}}{\code{logical} (only applies if \code{varname} is NULL)
-whether to include non-filtered variables; attention: only
-filterable variables are included}
+\item{\code{include_unknown}}{\code{logical} whether to include variables with unknown filter type.
+Is ignored when \code{varname} is not \code{NULL}. Default: TRUE}
 }
 \if{html}{\out{</div>}}
 }
@@ -426,7 +474,67 @@ Return filter characteristics for a variable in a dataset
 e.g. \code{range} for a \code{numeric} variable, \code{choices} for a
 \code{factor} variable, \code{logical} for a \code{logical} variable.
 
-This can be used to see how the variable must be filtered.
+This can be used to see filtering conditions of a variable or a vector of variables.
+This method looks into \code{private$filter_infos} and returns a list of multiple \verb{filter information} in case
+\code{varname} is a list or a named list of a single \verb{filter information} in case \code{varname} is a singular name.
+The \code{include_unknown} argument is considered if and only when the \code{varname} is \code{NULL}.
+}
+
+\subsection{Returns}{
+a named list with filter information of \code{varname} variables.
+If \code{include_unknown} is TRUE, then also return \verb{filter information}
+of variables with \verb{filter information} of type unknown.
+}
+\subsection{Examples}{
+\if{html}{\out{<div class="r example copy">}}
+\preformatted{library(random.cdisc.data)
+
+ADSL <- radsl(cached = TRUE)
+attr(ADSL, "keys") <- get_cdisc_keys("ADSL")
+datasets <- teal:::FilteredData$new()
+
+# to avoid using isolate(), you can provide a default isolate context by calling
+# options(shiny.suppressMissingContextError = TRUE) #nolint
+# don't forget to deactivate this option at the end
+# options(shiny.suppressMissingContextError = FALSE) #nolint
+
+isolate({
+  datasets
+
+  datasets$set_data("ADSL", ADSL)
+  datasets
+  datasets$get_data_info("ADSL", filtered = FALSE)
+  datasets$datanames()
+  # filters dataset to obtain information
+  datasets$get_data_info("ADSL", filtered = TRUE)
+  datasets$get_filter_info("ADSL")
+  df <- datasets$get_data("ADSL", filtered = FALSE)
+  # df
+
+  datasets$get_filter_type("ADSL", "SEX")
+  datasets$set_filter_state("ADSL", state = list(
+    AGE = list(range = c(33, 44), keep_na = FALSE),
+    SEX = list(choices = c("M", "F"), keep_na = FALSE)
+  ))
+
+  infos <- datasets$get_filter_info("ADSL") # will return a named list of all active filters
+  names(infos) # notice that names correspond to variable names
+
+  single_info <- datasets$get_filter_info("ADSL", "AGE") # will return a list of AGE filter infos
+  names(single_info) # note that this contains filter informations, not variable names as names
+
+  single_info2 <- datasets$get_filter_info("ADSL", include_unknown = TRUE)
+  single_info2 # will include active filters of type unknown
+
+  single_info3 <- datasets$get_filter_info("ADSL",
+    varname = c("AGE", "SEX"),
+    include_unknown = FALSE)
+  single_info3 # make note that include_unknown will be ignored, when varname is not NULL
+})
+
+}
+\if{html}{\out{</div>}}
+
 }
 
 }
@@ -461,7 +569,7 @@ See \code{get_filter_info}, only returns filter type (\code{choices}, \code{rang
 \if{latex}{\out{\hypertarget{method-get_filter_state}{}}}
 \subsection{Method \code{get_filter_state()}}{
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{FilteredData$get_filter_state(dataname, varname = NULL)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{FilteredData$get_filter_state(dataname, varname = NULL, include_unknown = TRUE)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
@@ -471,11 +579,14 @@ See \code{get_filter_info}, only returns filter type (\code{choices}, \code{rang
 
 \item{\code{varname}}{\code{character} column within the dataset;
 if \code{NULL}, return all variables in a list}
+
+\item{\code{include_unknown}}{\code{logical} whether to include the "unknown" type of variables
+(TRUE) or not to include them (FALSE). Default: TRUE}
 }
 \if{html}{\out{</div>}}
 }
 \subsection{Details}{
-Filter state for a dataset (or only a variable within it).
+Returns active filter state for a dataset (or only a variable within it).
 }
 
 \subsection{Returns}{
@@ -549,32 +660,6 @@ for numerics, full range; for factors, all choices etc.
 
 \subsection{Returns}{
 \verb{character vector} default filter state for this variable
-}
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-is_filterable"></a>}}
-\if{latex}{\out{\hypertarget{method-is_filterable}{}}}
-\subsection{Method \code{is_filterable()}}{
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{FilteredData$is_filterable(dataname, varname)}\if{html}{\out{</div>}}
-}
-
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{dataname}}{\code{character} name of the dataset}
-
-\item{\code{varname}}{\code{character} column within the dataset;
-must be provided}
-}
-\if{html}{\out{</div>}}
-}
-\subsection{Details}{
-Check whether the variable can be filtered, i.e. not of unknown type
-}
-
-\subsection{Returns}{
-whether the variable can be filtered (type not unknown)
 }
 }
 \if{html}{\out{<hr>}}
