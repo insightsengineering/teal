@@ -159,7 +159,7 @@ RelationalDataCollection <- R6::R6Class( #nolint
 
         for (var_idx in seq_along(private$mutate_vars)) {
           mutate_var <- private$mutate_vars[[var_idx]]
-          if (is(dataset, "RawDataset") || is(dataset, "RawDatasetConnector")) {
+          if (is(mutate_var, "RawDataset") || is(mutate_var, "RawDatasetConnector")) {
             assign(
               x = names(private$mutate_vars)[[var_idx]],
               value = get_raw_data(mutate_var),
