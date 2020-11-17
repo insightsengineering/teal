@@ -6,6 +6,7 @@
 * Adds support for filtering on `Date` and `Datetime` variables in the Filter Panel.
 * Show all variables in `module_filter_panel`, not only those of types `numeric`, `logical`, `factor`, `character` and `Date`
 * Fixing `mutate_data` to accept the whole scope of objects for `vars`.
+* Clarifying `teal::init` function documentation to state that custom css loading code with `htmltools::htmlDependency` should be included in the `header` argument rather than inside `ui` arguments of modules. 
 * issues with no news:
 
 # teal 0.9.1

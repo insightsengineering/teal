@@ -24,7 +24,11 @@ following named list elements:
 \cr server \tab required, shiny server module function, see
 \verb{\link[shiny]\{callModule\}} for more information
 \cr ui \tab required, shiny ui module function, see
-\verb{\link[shiny]\{callModule\}} for more information
+\verb{\link[shiny]\{callModule\}} for more information. Note, due to the app's initialization by teal,
+this \code{ui} function is actually part of the \code{server} function of the shiny app which means code which must
+be included in the shiny \code{ui} function (such as using \code{htmltools::htmlDependency}) should not be placed here
+but should instead be placed in the \code{header} argument to \code{teal::init} as that is included in the shiny \code{ui}
+function.
 \cr data \tab required, vector with datasets names that are passed
 on (filtered) to the server function
 \cr options \tab optional, other arguments passed on to the server
@@ -60,7 +64,9 @@ A general example is:
 Ignored if the app is restored from a bookmarked state.
 }}
 
-\item{header}{(\code{character} or \code{shiny.tag}) the header of the app}
+\item{header}{(\code{character} or \code{shiny.tag}) the header of the app. Note shiny code placed here (and in the footer
+argument) will be placed in the app's \code{ui} function so code which needs to be placed in the \code{ui} function
+(such as loading css via \code{htmltools::htmlDependency}) should be included here.}
 
 \item{footer}{(\code{character} or \code{shiny.tag}) the footer of the app}
 
