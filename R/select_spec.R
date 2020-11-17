@@ -26,7 +26,7 @@
 #' @param always_selected (\code{character}) Additional column names from the data set that should
 #'   always be selected
 #'
-#' @param label optional (\code{logical}). Define a label
+#' @param label optional (\code{character}). Define a label
 #' on top of this specific shiny \code{\link[shiny]{selectInput}}.
 #'
 #' @return A \code{select_spec}-S3 class object or \code{delayed_select_spec}-S3-class object.
@@ -125,11 +125,11 @@ select_spec <- function(choices,
                         multiple = length(selected) > 1,
                         fixed = FALSE,
                         always_selected = NULL,
-                        label = ifelse(multiple, "Columns", "Column")) {
+                        label = NULL) {
   stopifnot(is_logical_single(multiple))
   stopifnot(is_logical_single(fixed))
   stopifnot(is.null(always_selected) || is_character_vector(always_selected, 1))
-  stopifnot(is_character_single(label))
+  stopifnot(is.null(label) || is_character_single(label))
   if (fixed) {
     stopifnot(is.null(always_selected))
   }
@@ -144,7 +144,7 @@ select_spec.delayed_data <- function(choices,
                                      multiple = length(selected) > 1,
                                      fixed = FALSE,
                                      always_selected = NULL,
-                                     label = ifelse(multiple, "Columns", "Column")) {
+                                     label = NULL) {
   stopifnot(is.null(selected) || is.atomic(selected) || is(selected, "delayed_data"))
 
   out <- structure(
@@ -167,7 +167,7 @@ select_spec.default <- function(choices,
                                 multiple = length(selected) > 1,
                                 fixed = FALSE,
                                 always_selected = NULL,
-                                label = ifelse(multiple, "Columns", "Column")) {
+                                label = NULL) {
   stopifnot(is.null(selected) || is.atomic(selected))
 
   # if names is NULL, shiny will put strange labels (with quotes etc.) in the selectInputs, so we set it to the values

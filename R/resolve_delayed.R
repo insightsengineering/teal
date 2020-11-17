@@ -108,8 +108,8 @@ resolve_delayed.delayed_choices_selected <- function(x, datasets) { # nolint
 
 #' @export
 resolve_delayed.delayed_select_spec <- function(x, datasets) { # nolint
-  x$selected <- `if`(is(x$selected, "delayed_data"), resolve_delayed(x$selected, datasets = datasets), x$selected)
   x$choices <- resolve_delayed(x$choices, datasets = datasets)
+  x$selected <- `if`(is(x$selected, "delayed_data"), resolve_delayed(x$selected, datasets = datasets), x$selected)
   return(do.call("select_spec", x))
 }
 

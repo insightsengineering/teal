@@ -46,7 +46,7 @@ test_that("Single choice", {
   expect_identical(c3$selected, setNames("AVAL", "AVAL"))
   expect_false(c3$multiple)
   expect_false(c3$fixed)
-  expect_identical(c3$label, "Column")
+  expect_identical(c3$label, NULL)
 })
 
 test_that("Multiple choices", {
@@ -64,7 +64,7 @@ test_that("Multiple choices", {
 
   expect_true(c1$multiple)
   expect_false(c1$fixed)
-  expect_identical(c1$label, "Columns")
+  expect_identical(c1$label, NULL)
 })
 
 test_that("resolve_delayed select_spec works", {

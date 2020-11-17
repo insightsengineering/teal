@@ -316,6 +316,8 @@ value_choices.data.frame <- function(data, var_choices, var_label = NULL, subset
     subset = subset
   )
   attr(res, "sep") <- sep
+  attr(res, "var_choices") <- var_choices
+  attr(res, "var_label") <- var_label
   return(res)
 }
 

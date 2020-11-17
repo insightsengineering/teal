@@ -268,7 +268,7 @@ test_that("delayed version of select_spec", {
         choices = vc_hard_exp,
         selected = vc_hard_short_exp,
         always_selected = NULL,
-        multiple = FALSE, fixed = FALSE, label = "Column"),
+        multiple = FALSE, fixed = FALSE, label = NULL),
       class = c("delayed_select_spec", "delayed_data", "select_spec")
     )
   )
@@ -288,7 +288,7 @@ test_that("delayed version of select_spec", {
         choices = vc_fun_exp,
         selected = vc_fun_short,
         always_selected = NULL,
-        multiple = FALSE, fixed = FALSE, label = "Column"),
+        multiple = FALSE, fixed = FALSE, label = NULL),
       class = c("delayed_select_spec", "delayed_data", "select_spec")
     )
   )
@@ -316,8 +316,9 @@ test_that("delayed version of filter_spec", {
         choices = value_choices("ADSL", var_choices = "ARMCD", var_label = "ARM", subset = c("ARM A", "ARM B")),
         selected = value_choices("ADSL", var_choices = "ARMCD", var_label = "ARM", subset = "ARM A"),
         multiple = FALSE,
-        label = "Filter",
-        sep = " - "
+        label = NULL,
+        sep = " - ",
+        drop_keys = TRUE
       ),
       class = c("delayed_filter_spec", "delayed_data", "filter_spec")
     )
@@ -371,8 +372,9 @@ test_that("delayed version of filter_spec", {
           var_label = "ARM",
           subset = function(data) "ARM A"),
         multiple = FALSE,
-        label = "Filter",
-        sep = " - "
+        label = NULL,
+        sep = " - ",
+        drop_keys = TRUE
       ),
       class = c("delayed_filter_spec", "delayed_data", "filter_spec")
     )

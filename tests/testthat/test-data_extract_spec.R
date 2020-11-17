@@ -1,7 +1,7 @@
 test_that("data_extract_spec argument checking", {
   expect_error(
     data_extract_spec("toyDataset", select = NULL),
-    "select, \"select_spec\"", fixed = TRUE
+    "Either select or filter should be not empty", fixed = TRUE
   )
   expect_error(
     data_extract_spec("toyDataset", select = c("A", "B")),

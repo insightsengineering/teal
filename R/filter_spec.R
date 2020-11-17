@@ -33,6 +33,9 @@
 #'  values of a shiny \code{\link[shiny]{selectInput}} (default values). This value will
 #'  be displayed inside the shiny app upon start.
 #'
+#' @param drop_keys optional, (\code{logical}) whether to drop filter column from the dataset keys,
+#'   \code{TRUE} on default
+#'
 #' @inheritParams select_spec
 #'
 #' @return \code{filter_spec}-S3-class object or \code{delayed_filter_spec}-S3-class object.
@@ -156,17 +159,26 @@ filter_spec <- function(vars,
                         choices,
                         selected = `if`(is(choices, "delayed_data"), NULL, choices[1]),
                         multiple = length(selected) > 1,
-                        label = "Filter",
-                        sep = if_null(attr(choices, "sep"), " - ")) {
+                        label = NULL,
+                        sep = if_null(attr(choices, "sep"), " - "),
+                        drop_keys = TRUE) {
   stopifnot(is_logical_single(multiple))
-  stopifnot(is_character_single(label))
+  stopifnot(is.null(label) || is_character_single(label))
   stopifnot(is_character_single(sep))
+  stopifnot(is_logical_single(drop_keys))
 
   # class dispatch also on a choices arg
   # filter_spec.delayed_data dispatch on two arguments - s3 can dispatch only on 1 argument
   if (is(choices, "delayed_data") || is(selected, "delayed_data")) {
-    filter_spec.delayed_data(vars = vars, choices = choices, selected = selected,
-                             multiple = multiple, label = label, sep = sep)
+    filter_spec.delayed_data(
+      vars = vars,
+      choices = choices,
+      selected = selected,
+      multiple = multiple,
+      label = label,
+      sep = sep,
+      drop_keys = drop_keys
+    )
   } else {
     UseMethod("filter_spec")
   }
@@ -178,13 +190,22 @@ filter_spec.delayed_data <- function(vars,
                                      choices,
                                      selected = NULL,
                                      multiple = length(selected) > 1,
-                                     label = "Filter",
-                                     sep = if_null(attr(choices, "sep"), " - ")) {
+                                     label = NULL,
+                                     sep = if_null(attr(choices, "sep"), " - "),
+                                     drop_keys = TRUE) {
   stopifnot(is_character_vector(choices) || is(choices, "delayed_data"))
   stopifnot(is.null(selected) || is_character_vector(selected) || is(selected, "delayed_data"))
 
   out <- structure(
-    list(vars = vars, choices = choices, selected = selected, multiple = multiple, label = label, sep = sep),
+    list(
+      vars = vars,
+      choices = choices,
+      selected = selected,
+      multiple = multiple,
+      label = label,
+      sep = sep,
+      drop_keys = drop_keys
+    ),
     class = c("delayed_filter_spec", "delayed_data", "filter_spec"))
   return(out)
 }
@@ -195,8 +216,9 @@ filter_spec.default <- function(vars,
                                 choices,
                                 selected = choices[1],
                                 multiple = length(selected) > 1,
-                                label = "Filter",
-                                sep = if_null(attr(choices, "sep"), " - ")) {
+                                label = NULL,
+                                sep = if_null(attr(choices, "sep"), " - "),
+                                drop_keys = TRUE) {
 
   stopifnot(is_character_vector(vars))
   stopifnot(is_character_vector(choices))
@@ -224,7 +246,15 @@ filter_spec.default <- function(vars,
   }
 
 
-  res <- list(vars = vars, choices = choices, selected = selected, multiple = multiple, label = label, sep = sep)
+  res <- list(
+    vars = vars,
+    choices = choices,
+    selected = selected,
+    multiple = multiple,
+    label = label,
+    sep = sep,
+    drop_keys = drop_keys
+  )
   class(res) <- "filter_spec"
 
   return(res)

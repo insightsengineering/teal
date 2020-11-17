@@ -113,8 +113,6 @@ optionalSelectInput <- function(inputId, # nolint
   raw_choices <- extract_raw_choices(choices, attr(choices, "sep"))
   raw_selected <- extract_raw_choices(selected, attr(choices, "sep"))
 
-
-
   ui <- pickerInput(
     inputId = inputId,
     label = label,
@@ -137,14 +135,16 @@ optionalSelectInput <- function(inputId, # nolint
   } else {
 
     if (fixed) {
-      label_selected <- extract_choices_labels(choices, selected)
 
       return(div(
         hidden(ui),
-        tags$span(id = paste0(inputId, "_textonly"), style = "font-weight:bold", sub(":[[:space:]]+$", "", label)),
-        tags$span(
-          id = paste0(inputId, "_valueonly"),
-          paste(if_null(label_selected, selected), collapse = ", ")
+        tags$label(id = paste0(inputId, "_textonly"), class = "control-label", sub(":[[:space:]]+$", "", label)),
+        if_not_empty(
+          selected,
+          tags$code(
+            id = paste0(inputId, "_valueonly"),
+            paste(selected, collapse = ", ")
+          )
         ),
         label_help
       ))

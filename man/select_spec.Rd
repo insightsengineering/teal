@@ -12,7 +12,7 @@ select_spec(
   multiple = length(selected) > 1,
   fixed = FALSE,
   always_selected = NULL,
-  label = ifelse(multiple, "Columns", "Column")
+  label = NULL
 )
 
 \method{select_spec}{delayed_data}(
@@ -21,7 +21,7 @@ select_spec(
   multiple = length(selected) > 1,
   fixed = FALSE,
   always_selected = NULL,
-  label = ifelse(multiple, "Columns", "Column")
+  label = NULL
 )
 
 \method{select_spec}{default}(
@@ -30,7 +30,7 @@ select_spec(
   multiple = length(selected) > 1,
   fixed = FALSE,
   always_selected = NULL,
-  label = ifelse(multiple, "Columns", "Column")
+  label = NULL
 )
 }
 \arguments{
@@ -55,7 +55,7 @@ columns in the dataset that is defined by the developer of the app.}
 \item{always_selected}{(\code{character}) Additional column names from the data set that should
 always be selected}
 
-\item{label}{optional (\code{logical}). Define a label
+\item{label}{optional (\code{character}). Define a label
 on top of this specific shiny \code{\link[shiny]{selectInput}}.}
 }
 \value{

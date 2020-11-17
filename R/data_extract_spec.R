@@ -23,13 +23,14 @@
 #' @param dataname (\code{character}) The name of the \code{teal} dataset to
 #'   be extracted. This dataset has to be handed over to the \code{data} argument of the
 #'   \code{\link[teal]{init}} function.
-#' @param filter (\code{filter_spec}-S3-class) or (\code{delayed_filter_spec}-S3-class) object.
+#' @param select (\code{NULL} or \code{select_spec}-S3 class or \code{delayed_select_spec}-S3-class object)
+#'  Columns to be selected from the input dataset
+#'  mentioned in \code{dataname}. The setup can be created using \code{\link{select_spec}} function.
+#' @param filter (\code{NULL} or \code{filter_spec}-S3-class or \code{delayed_filter_spec}-S3-class object)
 #'  Setup of the filtering of
 #'  key columns inside the dataset. This setup can be created using the \code{\link{filter_spec}}
 #'  function.
-#' @param select (\code{select_spec}-S3 class) or (\code{delayed_select_spec}-S3-class) object.
-#'  Columns to be selected from the input dataset
-#'  mentioned in \code{dataname.} The setup can be created using \code{\link{select_spec}} function.
+#'  Please note that both select and filter cannot be empty at the same time.
 #' @param reshape (\code{logical}) whether reshape long to wide. Note that it will be used only in case of long dataset
 #'  with multiple keys selected in filter part.
 #'
@@ -91,16 +92,22 @@
 #'}
 #'
 #' @references \link{select_spec} \link{filter_spec}
-data_extract_spec <- function(dataname, select, filter = NULL, reshape = FALSE) {
+data_extract_spec <- function(dataname, select = NULL, filter = NULL, reshape = FALSE) {
   stopifnot(is_character_single(dataname))
-  stopifnot(is(select, "select_spec") || is(select, "delayed_select_spec"), length(select) >= 1)
+  stopifnot(
+    is.null(select) ||
+    (is(select, "select_spec") && length(select) >= 1) ||
+    is(select, "delayed_select_spec")
+  )
   stopifnot(
     is.null(filter) ||
-    (is(filter, "filter_spec") & length(filter) >= 1) ||
+    (is(filter, "filter_spec") && length(filter) >= 1) ||
     is_class_list("filter_spec")(filter) ||
     is(filter, "delayed_filter_spec") ||
-    is_class_list("delayed_filter_spec")(filter))
+    is_class_list("delayed_filter_spec")(filter)
+  )
   stopifnot(is_logical_single(reshape))
+  stop_if_not(list(!is.null(select) || !is.null(filter), "Either select or filter should be not empty"))
 
   if (is(select, "delayed_select_spec") ||
       is(filter, "delayed_filter_spec") ||
@@ -113,21 +120,25 @@ data_extract_spec <- function(dataname, select, filter = NULL, reshape = FALSE) 
 
 #' @export
 #' @rdname data_extract_spec
-data_extract_spec.delayed_data <- function(dataname, select, filter = NULL, reshape = FALSE) {
-  out <- structure(
+data_extract_spec.delayed_data <- function(dataname, select = NULL, filter = NULL, reshape = FALSE) {
+  if (is(filter, "filter_spec") || is(filter, "delayed_filter_spec")) {
+    filter <- list(filter)
+  }
+  res <- structure(
     list(dataname = dataname, select = select, filter = filter, reshape = reshape),
     class = c("delayed_data_extract_spec", "delayed_data", "data_extract_spec"))
-  return(out)
+  return(res)
 }
 
 #' @export
 #' @rdname data_extract_spec
-data_extract_spec.default <- function(dataname, select, filter = NULL, reshape = FALSE) {
-  if (is(filter, "filter_spec")) {
+data_extract_spec.default <- function(dataname, select = NULL, filter = NULL, reshape = FALSE) {
+  if (is(filter, "filter_spec") || is(filter, "delayed_filter_spec")) {
     filter <- list(filter)
   }
-  res <- list(dataname = dataname, select = select, filter = filter, reshape = reshape)
-  class(res) <- "data_extract_spec"
-
+  res <- structure(
+    list(dataname = dataname, select = select, filter = filter, reshape = reshape),
+    class = "data_extract_spec"
+  )
   return(res)
 }

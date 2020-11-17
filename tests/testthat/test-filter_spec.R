@@ -30,7 +30,7 @@ test_that("Single choice", {
     selected = choices[1],
     multiple = FALSE,
     label = "test"))
-  expect_identical(names(f1), c("vars", "choices", "selected", "multiple", "label", "sep"))
+  expect_identical(names(f1), c("vars", "choices", "selected", "multiple", "label", "sep", "drop_keys"))
   expect_identical(f1$choices, as.list(setNames(choices, choices)))
   expect_identical(f1$selected, as.list(setNames(choices[1], choices[1])))
 
@@ -107,7 +107,7 @@ test_that("Multiple vars", {
   expect_identical(f1m, f2m)
 
   # correct object structure
-  expect_identical(names(f1m), c("vars", "choices", "selected", "multiple", "label", "sep"))
+  expect_identical(names(f1m), c("vars", "choices", "selected", "multiple", "label", "sep", "drop_keys"))
   expect_identical(
     f1m$choices,
     list(
@@ -121,7 +121,22 @@ test_that("Multiple vars", {
     )
 
   expect_true(f1m$multiple)
-  expect_identical(f1m$label, "Filter")
+  expect_identical(f1m$label, NULL)
+})
+
+test_that("Dropping keys attribute", {
+  expect_silent(f1 <- filter_spec(
+    vars = "var1",
+    choices = choices,
+    selected = choices[1]))
+  expect_true(f1$drop_keys)
+
+  expect_silent(f2 <- filter_spec(
+    vars = "var1",
+    choices = choices,
+    selected = choices[1],
+    drop_keys = FALSE))
+  expect_false(f2$drop_keys)
 })
 
 test_that("delayed filter_spec works", {
