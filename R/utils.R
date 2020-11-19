@@ -369,3 +369,181 @@ read_script <- function(file, dataname = NULL) {
     code_exclude(exclude_comments = TRUE) %>%
     paste(sep = "\n", collapse = "\n")
 }
+
+#' S3 generic for creating an information summary about the duplicate key values in a dataset
+#'
+#' @md
+#' @description `r lifecycle::badge("experimental")`
+#'
+#' @details The information summary provides row numbers and number of duplicates
+#' for each duplicated key value.
+#'
+#' @param dataset \code{RelationalDataset} or \code{dataframe} a dataset, which will be tested
+#' @param keys \code{character} vector of variable names in `dataset` consisting the key
+#' or \code{keys} object, which does have a `primary` element with a vector of variable
+#' names in `dataset` consisting the key. Optional, default: NULL
+#'
+#' @return a \code{tibble} with variables consisting the key and \code{row_no} and \code{duplicates_count} columns
+#'
+#' @examples
+#' library(random.cdisc.data)
+#'
+#' adsl <- radsl(cached = TRUE)
+#' # Creates a RelationalDataset, keys are automatically assigned,
+#' # because the name is in the recognized ADAM nomenclature ("ADSL")
+#' rel_adsl <- cdisc_dataset("ADSL", adsl)
+#' get_key_duplicates(rel_adsl)
+#'
+#' df <- as.data.frame(
+#'   list(a = c('a', 'a', 'b', 'b', 'c'), b = c(1, 2, 3, 3, 4), c = c(1, 2, 3, 4, 5))
+#' )
+#' res <- get_key_duplicates(df, keys = c('a', 'b')) # duplicated keys are in rows 3 and 4
+#' print(res) # prints a tibble
+#'
+#' \dontrun{
+#' get_key_duplicates(df) # raises an exception, because keys are missing with no default
+#' }
+#'
+#' @seealso \itemize{
+#' \item{\link{get_key_duplicates_util}}
+#' \item{\link{get_key_duplicates.RelationalDataset}}
+#' \item{\link{get_key_duplicates.data.frame}}
+#' }
+#'
+#' @export
+get_key_duplicates <- function(dataset, keys = NULL) {
+ UseMethod("get_key_duplicates", dataset)
+}
+
+
+#' Creates a short information summary about the duplicate primary key values in a dataset
+#'
+#' @md
+#' @description `r lifecycle::badge("experimental")`
+#' @details S3 method for get_key_duplicates. Uses the public API of
+#' `teal.devel::RelationalDataset` to read the primary key and the raw data.
+#'
+#' If `keys` argument is provided, then checks against that, if it's `NULL`, then checks
+#' against the \code{get_keys()$primary} method of the `dataset` argument.
+#'
+#' @inheritParams get_key_duplicates
+#' @param dataset a \code{RelationalDataset} object, which will be used to detect duplicated
+#' primary keys
+#'
+#' @examples
+#' library(random.cdisc.data)
+#'
+#' adsl <- radsl(cached = TRUE)
+#' # Keys are automatically assigned, because the name
+#' # is in the recognized ADAM nomenclature ("ADSL")
+#' rel_adsl <- cdisc_dataset("ADSL", adsl)
+#' get_key_duplicates(rel_adsl)
+#'
+#' @seealso \link{get_key_duplicates} \link{get_key_duplicates_util}
+#'
+#' @export
+get_key_duplicates.RelationalDataset <- function(dataset, keys = NULL) { #nolint
+  stopifnot("RelationalDataset" %in% class(dataset))
+
+  df <- dataset$get_raw_data()
+  keys <- if ("keys" %in% class(keys)) {
+    keys$primary
+  } else if (!is.null(keys)) {
+    keys
+  } else if (!is.null(dataset$get_keys()$primary)) {
+    dataset$get_keys()$primary
+  }
+
+  get_key_duplicates_util(df, keys)
+}
+
+#' Creates a short information summary about the duplicate key values in a dataset.
+#'
+#' @md
+#' @description `r lifecycle::badge("experimental")`
+#'
+#' @details
+#' When the key argument is provided the function uses it to generate the summary, otherwise
+#' looks for `primary_key` attribute of the `dataset`. If neither are provided raises an exception.
+#'
+#' @inheritParams get_key_duplicates
+#' @param dataset \code{data.frame} object
+#'
+#' @return a \code{tibble} with a short information summary
+#'
+#' @examples
+#' df <- as.data.frame(
+#'   list(a = c('a', 'a', 'b', 'b', 'c'), b = c(1, 2, 3, 3, 4), c = c(1, 2, 3, 4, 5))
+#' )
+#' res <- get_key_duplicates(df, keys = c('a', 'b')) # duplicated keys are in rows 3 and 4
+#' print(res) # outputs a tibble
+#'
+#' @seealso \link{get_key_duplicates} \link{get_key_duplicates_util}
+#'
+#' @export
+get_key_duplicates.data.frame <- function(dataset, keys = NULL) { #nolint
+  keys <- if ("keys" %in% class(keys)) {
+    keys$primary
+  } else if (!is.null(keys)) {
+    keys
+  } else if (!is.null(attr(dataset, "primary_key"))) {
+    attr(dataset, "primary_key")
+  }
+
+  get_key_duplicates_util(dataset, keys)
+}
+
+#' Creates a duplicate keys information summary.
+#'
+#' @description `r lifecycle::badge("experimental")`
+#'
+#' @md
+#' @details
+#' Accepts a list of variable names - \code{keys}, which are treated as the
+#' key to the \code{dataframe} argument. An instance of duplicated key is
+#' defined as two rows, which have the same values in columns defined by \code{keys}.
+#' Per each key value with duplicates returns a row in a \code{tibble}. The return table
+#' has columns corresponding to the variable names passed in \code{keys} and
+#' two additional columns: \code{row_no} and \code{duplicates_count}, which provide
+#' information about row numbers of the original dataframe, which contain duplicated keys
+#' and total duplicates counts.
+#'
+#' @param dataframe dataframe
+#' @param keys \code{character} list of variable names consisting the key to the \code{dataframe}
+#'
+#' @return \code{tibble} with a duplicate keys information summary
+#'
+#' @importFrom dplyr mutate row_number select all_of summarise group_by across n
+#' @importFrom rlang .data
+#'
+#' @examples
+#' df <- as.data.frame(
+#'   list(a = c("a", "a", "b", "b", "c"), b = c(1, 2, 3, 3, 4), c = c(1, 2, 3, 4, 5))
+#' )
+#' res <- teal:::get_key_duplicates_util(df, keys = c("a", "b")) # duplicated keys are in rows 3 and 4
+#' print(res) # outputs a tibble
+#'
+#' @seealso \link{get_key_duplicates}
+get_key_duplicates_util <- function(dataframe, keys) {
+  stopifnot(!is.null(keys))
+  stopifnot(is.data.frame(dataframe))
+  stopifnot(is.character(keys))
+  stopifnot(
+    all(
+      vapply(keys, function(key) key %in% colnames(dataframe), FUN.VALUE = logical(1))
+    )
+  )
+
+  # The goal is to print values of duplicated primary keys with number of duplicates and row numbers
+  # Seemed like adding a column with id numbers and pasting it once duplicates are subset was
+  # the simplest course of action.
+  summary <- mutate(dataframe, rows = row_number())
+  summary <- summary[duplicated(
+    select(summary, all_of(keys))) | duplicated(select(summary, all_of(keys)), fromLast = TRUE), ]
+  summary <- summarise(
+    group_by(summary, across(all_of(keys))),
+    rows = paste0(.data[["rows"]], collapse = ","),
+    n = n(),
+    .groups = "drop")
+  summary
+}

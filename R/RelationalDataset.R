@@ -76,11 +76,18 @@ RelationalDataset <- R6::R6Class( # nolint
       stopifnot(is(keys, "keys"))
       stopifnot(all(keys$primary %in% self$get_colnames()))
       stopifnot(all(keys$foreign %in% self$get_colnames()))
+
       if (!is.null(keys$primary)) {
-        stop_if_not(list(
-          anyDuplicated(self$get_raw_data()[, keys$primary, drop = FALSE]) == 0,
-          "Provided keys do not distinguish unique rows."
-        ))
+        duplicates <- get_key_duplicates(self$get_raw_data(), keys$primary)
+        if (nrow(duplicates) > 0) {
+          warning("Duplicate primary key values found in the dataset:\n",
+            paste0(capture.output(print(duplicates))[-c(1, 3)], collapse = "\n"),
+            call. = FALSE,
+            immediate. = TRUE)
+          # default tibble print outputs only 10 rows and as many cols as a screen can fit
+          stop("The provided primary key does not distinguish unique rows. Run get_key_duplicates(dataframe, keys)
+            to get the full list of the duplicated primary keys and their rows.")
+        }
       }
 
       private$.keys <- keys

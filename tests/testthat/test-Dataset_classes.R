@@ -254,6 +254,14 @@ test_that("RelationalDataset basics", {
     test_ds$get_keys(),
     keys(primary = "y", foreign = NULL, parent = NULL)
   )
+
+  teal_keys <- teal::keys(primary = c("a", "b"), foreign = NULL, parent = NULL)
+  df <- as.data.frame(
+    list(a = c("a", "a", "b", "b", "c"), b = c(1, 2, 3, 3, 4), c = c(1, 2, 3, 4, 5))
+  )
+  expect_error(suppressWarnings(
+    RelationalDataset$new(dataname = "test", x = df, keys = teal_keys),
+    regexp = "The provided primary key does not distinguish unique rows"))
 })
 
 ## as_relational ====

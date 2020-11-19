@@ -6,7 +6,8 @@
 * Adds support for filtering on `Date` and `Datetime` variables in the Filter Panel.
 * Show all variables in `module_filter_panel`, not only those of types `numeric`, `logical`, `factor`, `character` and `Date`
 * Fixing `mutate_data` to accept the whole scope of objects for `vars`.
-* Clarifying `teal::init` function documentation to state that custom css loading code with `htmltools::htmlDependency` should be included in the `header` argument rather than inside `ui` arguments of modules. 
+* Clarifying `teal::init` function documentation to state that custom css loading code with `htmltools::htmlDependency` should be included in the `header` argument rather than inside `ui` arguments of modules.
+* New function `check_key_duplicates`, which creates a short summary about rows with duplicated primary key (row numbers and the number of duplicates)
 * Enable empty select field inside `data_extract_spec`.
 * Added new argument `drop_keys` to `filter_spec` to decide whether to drop or keep keys columns on single filter on those columns.
 * issues with no news:
