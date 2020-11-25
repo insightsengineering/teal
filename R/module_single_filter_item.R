@@ -147,35 +147,47 @@ ui_single_filter_item <- function(id, filter_info, filter_state, prelabel) {
       )
     )
   } else if (filter_info$type == "date") {
+    daterange <- filter_info$daterange
 
-    # airDatePickerInput does a timezone correction to UTC even for dates which
-    # might move the selection bounds outside the real range, re-corrected here
-    if (!filter_info$is_datetime) {
-      daterange <- as.POSIXct(as.character(filter_info$daterange), tz = Sys.timezone())
-    } else {
-      daterange <- filter_info$daterange
-    }
-
+    if (filter_info$is_datetime) {
       div(
         airDatepickerInput(
           inputId = id_selection,
-          label = "From:",
+          label = div(
+            "From:",
+            title = "Times are displayed in the local timezone and are converted to UTC in the analysis",
+            icon("info-circle")
+          ),
           value = daterange[[1]],
-          timepicker = filter_info$is_datetime,
+          timepicker = TRUE,
           minDate = daterange[[1]],
           maxDate = daterange[[2]],
           update_on = "close"
         ),
         airDatepickerInput(
           inputId = id_end_date,
-          label = "To:",
+          label = div(
+            "To:",
+            title = "Times are displayed in the local timezone and are converted to UTC in the analysis",
+            icon("info-circle")
+          ),
           value = daterange[[2]],
-          timepicker = filter_info$is_datetime,
+          timepicker = TRUE,
           minDate = daterange[[1]],
           maxDate = daterange[[2]],
           update_on = "close"
         )
       )
+    } else {
+      dateRangeInput(
+        inputId = id_selection,
+        label = NULL,
+        start = daterange[[1]],
+        end = daterange[[2]],
+        min = daterange[[1]],
+        max = daterange[[2]]
+        )
+    }
   } else if ("all_na" %in% names(filter_info)) {
     "All values missing - no filtering possible"
   } else {
@@ -233,6 +245,8 @@ srv_single_filter_item <- function(input, output, session, datasets, dataname, v
     is_character_single(dataname),
     is_character_single(varname)
   )
+
+  get_client_timezone(session$ns)
 
   # compute plot that might overlay along with filtering (e.g. histogram) ----
 
@@ -319,8 +333,12 @@ srv_single_filter_item <- function(input, output, session, datasets, dataname, v
     } else if (type == "logical") {
       list(status = selection_state)
     } else if (type == "date") {
-      start_date <- selection_state
-      end_date <- input[[id_end_date]]
+      start_date <- selection_state[[1]]
+      end_date <- if (datasets$get_filter_info(dataname, varname)$is_datetime) {
+        input[[id_end_date]]
+      } else {
+        selection_state[[2]]
+      }
 
       validate(
         need(start_date, "Please select a valid start date."),
@@ -332,7 +350,8 @@ srv_single_filter_item <- function(input, output, session, datasets, dataname, v
         inherits(end_date, "Date") || inherits(end_date, "POSIXct")
         )
 
-      list(daterange = c(start_date, end_date))
+      list(daterange = c(start_date, end_date), timezone = input$tz)
+
     } else if (type == "unknown") {
       list(NULL)
     } else {

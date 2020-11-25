@@ -1083,22 +1083,29 @@ FilteredData <- R6::R6Class( # nolint
             },
             date = {
               # format daterange to human readable string for R code
-              # using the maximum 6 decimal places for POSIXct
               if (filter_info$is_datetime) {
-                dateformat <- "%Y-%m-%d %H:%M:%OS6"
-                as <- "as.POSIXct"
+                attributes(filter_state$daterange)$tzone <- Sys.timezone()
+                # use maximum precision of 6 decimal places for POSIXct
+                selection_state <- format(filter_state$daterange, "%Y-%m-%d %H:%M:%OS6")
+                # timezone in server may be different from browser, so user is
+                # informed which timezone is being used (could use timezone from
+                # browser with filter_state$timezone but using Sys.timezone here)
+                filter_state$daterange <- format(filter_state$daterange, tz = Sys.timezone())
+                timezone <- Sys.timezone()
+
+                call(
+                  "&",
+                  call(">=", as.name(varname), call("as.POSIXct", selection_state[1], tz = timezone)),
+                  call("<=", as.name(varname), call("as.POSIXct", selection_state[2], tz = timezone))
+                  )
               } else {
-                dateformat <- "%Y-%m-%d"
-                as <- "as.Date"
+                selection_state <- format(filter_state$daterange, "%Y-%m-%d")
+                call(
+                  "&",
+                  call(">=", as.name(varname), call("as.Date", selection_state[1])),
+                  call("<=", as.name(varname), call("as.Date", selection_state[2]))
+                )
               }
-
-              selection_state <- format(filter_state$daterange, dateformat)
-
-              call(
-                "&",
-                call(">=", as.name(varname), call(as, selection_state[1])),
-                call("<=", as.name(varname), call(as, selection_state[2]))
-              )
             },
             unknown = {
               NULL
@@ -1266,12 +1273,13 @@ FilteredData <- R6::R6Class( # nolint
               choices = as.list(choices), # convert named vector to named list as Shiny `toJSON` otherwise complains
               histogram_data = histogram_data
             )
-          } else if (inherits(var, "Date") || inherits(var, "POSIXct")) {
+          } else if (inherits(var, "Date") || inherits(var, "POSIXct") || inherits(var, "POSIXlt")) {
             list(
               type = "date",
               label = if_null(attr(var, "label"), ""),
               daterange = range(var, finite = TRUE),
-              is_datetime = inherits(var, "POSIXct")
+              is_datetime = inherits(var, "POSIXct") || inherits(var, "POSIXlt"),
+              timezone = NULL
             )
           } else {
             .log(
