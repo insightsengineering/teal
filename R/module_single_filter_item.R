@@ -24,7 +24,7 @@ get_keep_inf_label <- function(inf_count) {
 #' @param filter_state `filter_state` returned by datasets class
 #' @param prelabel `character` label to append before computed label of input
 #'
-#' @importFrom shinyWidgets airDatepickerInput
+#' @importFrom shinyWidgets airDatepickerInput updateAirDateInput
 #'
 #' @examples
 #' library(random.cdisc.data)
@@ -302,6 +302,54 @@ srv_single_filter_item <- function(input, output, session, datasets, dataname, v
   id_keep_na <- "keepNA"
   id_keep_inf <- "keepInf"
   id_remove_filter <- "remove_filter"
+
+  if (var_type == "date" && datasets$get_filter_info(dataname, varname)$is_datetime) {
+    id_selection_button <- "selection_button"
+    id_end_date_button <- "end_date_button"
+    daterange <- datasets$get_filter_info(dataname, varname)$daterange
+    observeEvent(input[[id_selection_button]], {
+      updateAirDateInput(
+        session = session,
+        inputId = id_selection,
+        value = daterange[[1]])
+    })
+    observeEvent(input[[id_end_date_button]], {
+      updateAirDateInput(
+        session = session,
+        inputId = id_end_date,
+        value = daterange[[2]])
+    })
+    observe({
+      start_date <- input[[id_selection]]
+      if (is_empty(start_date) || daterange[[1]] != start_date) {
+        updateActionButton(
+          session = session,
+          inputId = id_selection_button,
+          icon = icon("redo"))
+      } else {
+        updateActionButton(
+          session = session,
+          inputId = id_selection_button,
+          icon = character(0)
+        )
+      }
+    })
+    observe({
+      end_date <- input[[id_end_date]]
+      if (is_empty(end_date) || daterange[[2]] != end_date) {
+        updateActionButton(
+          session = session,
+          inputId = id_end_date_button,
+          icon = icon("redo"))
+      } else {
+        updateActionButton(
+          session = session,
+          inputId = id_end_date_button,
+          icon = character(0)
+        )
+      }
+    })
+  }
 
   # observers for Browser UI state -> FilteredData filter_state ----
   o1 <- observeEvent({
