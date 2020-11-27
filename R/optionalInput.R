@@ -213,6 +213,7 @@ variable_type_icons <- function(var_type) {
     POSIXlt = "calendar",
     factor = "chart-bar",
     character = "keyboard",
+    primary_key = "key",
     unknown = "question-circle"
   )
   class_to_icon <- lapply(class_to_icon, function(icon_name) toString(icon(icon_name, lib = "font-awesome")))

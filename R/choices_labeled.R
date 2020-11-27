@@ -122,6 +122,10 @@ choices_labeled <- function(choices, labels, subset = NULL, types = NULL) {
 #' If \code{function}, then this function is used to determine the possible columns (e.g. all factor columns).
 #' In this case, the function must take only single argument "data" and return a character vector.
 #' See examples for more details.
+#' @param key (\code{character}) vector with names of the variables, which are part of the primary key
+#' of the \code{data} argument. This is an optional argument, which allows to identify variables
+#' associated with the primary key and display the appropriate icon for them in the
+#' \code{\link{optionalSelectInput}} widget.
 #' @inheritParams rtables::var_labels
 #'
 #' @return named character vector with additional attributes or \code{delayed_data} object
@@ -137,26 +141,38 @@ choices_labeled <- function(choices, labels, subset = NULL, types = NULL) {
 #' variable_choices(ADRS)
 #' variable_choices(ADRS, subset = c("PARAM", "PARAMCD"))
 #' variable_choices(ADRS, subset = c("", "PARAM", "PARAMCD"))
+#' variable_choices(ADRS, subset = c("", "PARAM", "PARAMCD"), key = get_cdisc_keys("ADRS")$primary)
 #'
 #' # delayed version
 #' variable_choices("ADRS", subset = c("USUBJID", "STUDYID"))
+#'
+#' # also works with RelationalDataset and RelationalDatasetConnector
+#' rel_ADRS <- relational_dataset("ADRS", ADRS, key = get_cdisc_keys("ADRS"))
+#' variable_choices(rel_ADRS)
+#'
+#' rel_conn_ADRS <- relational_dataset_connector(
+#'   "ADRS",
+#'   pull_callable = callable_code("radrs(cached = TRUE)"),
+#'   key = get_cdisc_keys("ADRS"))
+#' variable_choices(rel_conn_ADRS)
 #'
 #' # functional subset (with delayed data) - return only factor variables
 #' variable_choices("ADRS", subset = function(data) {
 #'   idx <- vapply(data, is.factor, logical(1))
 #'   return(names(data)[idx])
 #' })
-variable_choices <- function(data, subset = NULL, fill = FALSE) {
+variable_choices <- function(data, subset = NULL, fill = FALSE, key = NULL) {
   stopifnot(is.null(subset) || is_character_vector(subset, min_length = 0L) || is.function(subset))
   stopifnot(is_logical_single(fill))
+  stopifnot(is.null(key) || is_character_vector(key, min_length = 0L))
 
   UseMethod("variable_choices")
 }
 
 #' @rdname variable_choices
 #' @export
-variable_choices.character <- function(data, subset = NULL, fill = FALSE) {
-  out <- structure(list(data = data, subset = subset),
+variable_choices.character <- function(data, subset = NULL, fill = FALSE, key = NULL) {
+  out <- structure(list(data = data, subset = subset, key = key),
     class = c("delayed_variable_choices", "delayed_data", "choices_labeled")
   )
   return(out)
@@ -164,7 +180,7 @@ variable_choices.character <- function(data, subset = NULL, fill = FALSE) {
 
 #' @rdname variable_choices
 #' @export
-variable_choices.data.frame <- function(data, subset = NULL, fill = FALSE) { # nolint
+variable_choices.data.frame <- function(data, subset = NULL, fill = FALSE, key = NULL) { # nolint
 
   if (is.function(subset)) {
     subset <- resolve_delayed_expr(subset, ds = data, is_value_choices = FALSE)
@@ -173,8 +189,14 @@ variable_choices.data.frame <- function(data, subset = NULL, fill = FALSE) { # n
   if (is_empty(subset)) {
     subset <- names(data)
   }
-
   stopifnot(all(subset %in% c("", names(data))))
+
+  key <- intersect(subset, key)
+
+  var_types <- setNames(variable_types(data = data), names(data))
+  if (length(key) != 0) {
+    var_types[key] <- "primary_key"
+  }
 
   if (any(duplicated(subset))) {
     warning(
@@ -189,14 +211,14 @@ variable_choices.data.frame <- function(data, subset = NULL, fill = FALSE) { # n
       choices = c("", names(data)),
       labels = c("", unname(get_variable_labels(data))),
       subset = subset,
-      types = c("", variable_types(data = data))
+      types = c("", var_types)
     )
   } else {
     choices_labeled(
       choices = names(data),
       labels = unname(get_variable_labels(data)),
       subset = subset,
-      types = variable_types(data = data)
+      types = var_types
     )
   }
 
@@ -205,30 +227,51 @@ variable_choices.data.frame <- function(data, subset = NULL, fill = FALSE) { # n
 
 #' @rdname variable_choices
 #' @export
-variable_choices.RawDataset <- function(data, subset = NULL, fill = FALSE) {
+variable_choices.RawDataset <- function(data, subset = NULL, fill = FALSE, key = NULL) {
   variable_choices(
     data = get_raw_data(data),
     subset = subset,
-    fill = fill
+    fill = fill,
+    key = key
   )
 }
 
 #' @rdname variable_choices
 #' @export
-variable_choices.NamedDatasetConnector <- function(data, subset = NULL, fill = FALSE) { # nolint
+variable_choices.NamedDatasetConnector <- function(data, subset = NULL, fill = FALSE, key = NULL) { # nolint
   if (is_pulled(data)) {
     variable_choices(
       data = get_raw_data(data),
       subset = subset,
-      fill = fill
+      fill = fill,
+      key = key
     )
   } else {
     variable_choices(
       data = get_dataname(data),
       subset = subset,
-      fill = fill
+      fill = fill,
+      key = key
     )
   }
+}
+
+#' @rdname variable_choices
+#' @export
+variable_choices.RelationalDataset <- function(data, # nolint
+                                               subset = NULL,
+                                               fill = FALSE,
+                                               key = data$get_keys()$primary) {
+  variable_choices.RawDataset(data, subset = subset, fill = fill, key = key)
+}
+
+#' @rdname variable_choices
+#' @export
+variable_choices.RelationalDatasetConnector <- function(data, # nolint
+                                                        subset = NULL,
+                                                        fill = FALSE,
+                                                        key = data$get_keys()$primary) {
+  variable_choices.NamedDatasetConnector(data = data, subset = subset, fill = fill, key = key)
 }
 
 

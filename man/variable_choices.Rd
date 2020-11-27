@@ -6,17 +6,33 @@
 \alias{variable_choices.data.frame}
 \alias{variable_choices.RawDataset}
 \alias{variable_choices.NamedDatasetConnector}
+\alias{variable_choices.RelationalDataset}
+\alias{variable_choices.RelationalDatasetConnector}
 \title{Wrapper on \code{\link{choices_labeled}} to label variables basing on existing labels in data}
 \usage{
-variable_choices(data, subset = NULL, fill = FALSE)
+variable_choices(data, subset = NULL, fill = FALSE, key = NULL)
 
-\method{variable_choices}{character}(data, subset = NULL, fill = FALSE)
+\method{variable_choices}{character}(data, subset = NULL, fill = FALSE, key = NULL)
 
-\method{variable_choices}{data.frame}(data, subset = NULL, fill = FALSE)
+\method{variable_choices}{data.frame}(data, subset = NULL, fill = FALSE, key = NULL)
 
-\method{variable_choices}{RawDataset}(data, subset = NULL, fill = FALSE)
+\method{variable_choices}{RawDataset}(data, subset = NULL, fill = FALSE, key = NULL)
 
-\method{variable_choices}{NamedDatasetConnector}(data, subset = NULL, fill = FALSE)
+\method{variable_choices}{NamedDatasetConnector}(data, subset = NULL, fill = FALSE, key = NULL)
+
+\method{variable_choices}{RelationalDataset}(
+  data,
+  subset = NULL,
+  fill = FALSE,
+  key = data$get_keys()$primary
+)
+
+\method{variable_choices}{RelationalDatasetConnector}(
+  data,
+  subset = NULL,
+  fill = FALSE,
+  key = data$get_keys()$primary
+)
 }
 \arguments{
 \item{data}{(\code{data.frame}) or (\code{character})
@@ -31,6 +47,11 @@ See examples for more details.}
 
 \item{fill}{boolean in case the \code{label} attribute does not exist if
 \code{TRUE} the variable names is returned, otherwise \code{NA}}
+
+\item{key}{(\code{character}) vector with names of the variables, which are part of the primary key
+of the \code{data} argument. This is an optional argument, which allows to identify variables
+associated with the primary key and display the appropriate icon for them in the
+\code{\link{optionalSelectInput}} widget.}
 }
 \value{
 named character vector with additional attributes or \code{delayed_data} object
@@ -45,9 +66,20 @@ ADRS <- radrs(cached = TRUE)
 variable_choices(ADRS)
 variable_choices(ADRS, subset = c("PARAM", "PARAMCD"))
 variable_choices(ADRS, subset = c("", "PARAM", "PARAMCD"))
+variable_choices(ADRS, subset = c("", "PARAM", "PARAMCD"), key = get_cdisc_keys("ADRS")$primary)
 
 # delayed version
 variable_choices("ADRS", subset = c("USUBJID", "STUDYID"))
+
+# also works with RelationalDataset and RelationalDatasetConnector
+rel_ADRS <- relational_dataset("ADRS", ADRS, key = get_cdisc_keys("ADRS"))
+variable_choices(rel_ADRS)
+
+rel_conn_ADRS <- relational_dataset_connector(
+  "ADRS",
+  pull_callable = callable_code("radrs(cached = TRUE)"),
+  key = get_cdisc_keys("ADRS"))
+variable_choices(rel_conn_ADRS)
 
 # functional subset (with delayed data) - return only factor variables
 variable_choices("ADRS", subset = function(data) {

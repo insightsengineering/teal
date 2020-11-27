@@ -11,6 +11,7 @@
 * New function `check_key_duplicates`, which creates a short summary about rows with duplicated primary key (row numbers and the number of duplicates)
 * Enable empty select field inside `data_extract_spec`.
 * Added new argument `drop_keys` to `filter_spec` to decide whether to drop or keep keys columns on single filter on those columns.
+* Added a new optional argument `keys` to `variable_choices`. `keys` specifies the names of the variables, which should have the new key icon shown next to them in the variable drop down menus in the left-hand side encoding panels instead of the icon appropriate for their original R variable type. `variable_choices` now also works with `RelationalDataset` and `RelationalDatasetConnector` objects.
 * issues with no news:
 
 # teal 0.9.1

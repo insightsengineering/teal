@@ -5,7 +5,7 @@ ADSL <- radsl(cached = TRUE) # nolint
 attr(ADSL, "keys") <- get_cdisc_keys("ADSL")
 ADTTE <- radtte(cached = TRUE) # nolint
 
-ds <- FilteredData$new()
+ds <- teal:::FilteredData$new()
 isolate(ds$set_data("ADSL", ADSL))
 isolate(ds$set_data("ADTTE", ADTTE))
 
@@ -81,7 +81,7 @@ test_that("delayed version of variable_choices", {
   expect_equal(
     obj,
     structure(
-      list(data = "ADSL", subset = c("SEX", "ARMCD", "COUNTRY")),
+      list(data = "ADSL", subset = c("SEX", "ARMCD", "COUNTRY"), key = NULL),
       class = c("delayed_variable_choices", "delayed_data", "choices_labeled")
     )
   )
@@ -98,7 +98,7 @@ test_that("delayed version of variable_choices", {
   expect_equal(
     obj,
     structure(
-      list(data = "ADSL", subset = function(data) colnames(data)[1:2]),
+      list(data = "ADSL", subset = function(data) colnames(data)[1:2], key = NULL),
       class = c("delayed_variable_choices", "delayed_data", "choices_labeled")
     )
   )
@@ -106,9 +106,24 @@ test_that("delayed version of variable_choices", {
   res_obj <- isolate(resolve_delayed(obj, datasets = ds))
   expect_equal(
     res_obj,
-    variable_choices(ADSL, subset = colnames(ADSL)[1:2])
+    variable_choices(ADSL, subset = colnames(ADSL)[1:2], key = get_cdisc_keys("ADSL")$primary)
   )
 
+  # non-null key value
+  obj <- variable_choices("ADSL", key = c("USUBJID", "STUDYID"))
+  expect_equal(
+    obj,
+    structure(
+      list(data = "ADSL", subset = NULL, key = c("USUBJID", "STUDYID")),
+      class = c("delayed_variable_choices", "delayed_data", "choices_labeled")
+    )
+  )
+
+  res_obj <- isolate(resolve_delayed(obj, datasets = ds))
+  expect_equal(
+    res_obj,
+    variable_choices(ADSL, key = c("USUBJID", "STUDYID"))
+  )
 })
 
 test_that("delayed version of value_choices", {
@@ -202,25 +217,25 @@ test_that("delayed version of value_choices", {
 
 vc_hard <- variable_choices("ADSL", subset = c("STUDYID", "USUBJID"))
 vc_hard_exp <- structure(
-  list(data = "ADSL", subset = c("STUDYID", "USUBJID")),
+  list(data = "ADSL", subset = c("STUDYID", "USUBJID"), key = NULL),
   class = c("delayed_variable_choices", "delayed_data", "choices_labeled")
 )
 
 vc_hard_short <- variable_choices("ADSL", subset = "STUDYID")
 vc_hard_short_exp <- structure(
-  list(data = "ADSL", subset = "STUDYID"),
+  list(data = "ADSL", subset = "STUDYID", key = NULL),
   class = c("delayed_variable_choices", "delayed_data", "choices_labeled")
 )
 
 vc_fun <- variable_choices("ADSL", subset = function(data) colnames(data)[1:2])
 vc_fun_exp <- structure(
-  list(data = "ADSL", subset = function(data) colnames(data)[1:2]),
+  list(data = "ADSL", subset = function(data) colnames(data)[1:2], key = NULL),
   class = c("delayed_variable_choices", "delayed_data", "choices_labeled")
 )
 
 vc_fun_short <- variable_choices("ADSL", subset = function(data) colnames(data)[1])
 vc_fun_short_exp <- structure(
-  list(data = "ADSL", subset = function(data) colnames(data)[1]),
+  list(data = "ADSL", subset = function(data) colnames(data)[1], key = NULL),
   class = c("delayed_variable_choices", "delayed_data", "choices_labeled")
 )
 
@@ -238,9 +253,9 @@ test_that("delayed version of choices_selected", {
 
   res_obj <- isolate(resolve_delayed(obj, datasets = ds))
   exp_obj <- choices_selected(
-    variable_choices(ADSL, subset = c("STUDYID", "USUBJID")),
-    selected = variable_choices(ADSL, subset = "STUDYID"))
-  expect_equal(res_obj, exp_obj)
+    variable_choices(ADSL, subset = c("STUDYID", "USUBJID"), key = get_cdisc_keys("ADSL")$primary),
+    selected = variable_choices(ADSL, subset = c("STUDYID"), key = get_cdisc_keys("ADSL")$primary))
+  expect_equal(res_obj, exp_obj, check.attributes = TRUE)
 
   # functional choices and selected
   obj <- choices_selected(vc_fun, selected = vc_fun_short)
@@ -275,8 +290,8 @@ test_that("delayed version of select_spec", {
 
   res_obj <- isolate(resolve_delayed(obj, datasets = ds))
   exp_obj <- select_spec(
-    variable_choices(ADSL, subset = c("STUDYID", "USUBJID")),
-    selected = variable_choices(ADSL, "STUDYID"))
+    variable_choices(ADSL, subset = c("STUDYID", "USUBJID"), key = get_cdisc_keys("ADSL")$primary),
+    selected = variable_choices(ADSL, "STUDYID", key = get_cdisc_keys("ADSL")$primary))
   expect_equal(res_obj, exp_obj)
 
   # functional choices & selected
@@ -406,9 +421,10 @@ test_that("delayed version of data_extract_spec", {
   res_obj <- isolate(resolve_delayed(obj, datasets = ds))
   exp_obj <- data_extract_spec(
     "ADSL",
-    select = select_spec(variable_choices(ADSL, c("STUDYID", "USUBJID")), selected = variable_choices(ADSL, "STUDYID")),
+    select = select_spec(variable_choices(ADSL, c("STUDYID", "USUBJID"), key = get_cdisc_keys("ADSL")$primary),
+      selected = variable_choices(ADSL, "STUDYID", key = get_cdisc_keys("ADSL")$primary)),
     filter = filter_spec(
-      vars = variable_choices(ADSL, subset = "ARMCD"),
+      vars = variable_choices(ADSL, subset = "ARMCD", key = get_cdisc_keys("ADSL")$primary),
       choices = value_choices(ADSL, var_choices = "ARMCD", var_label = "ARM", subset = c("ARM A", "ARM B")),
       selected = value_choices(ADSL, var_choices = "ARMCD", var_label = "ARM", subset = "ARM A"),
       multiple = FALSE
@@ -443,9 +459,10 @@ test_that("delayed version of data_extract_spec", {
   res_obj <- isolate(resolve_delayed(obj, datasets = ds))
   exp_obj <- data_extract_spec(
     "ADSL",
-    select = select_spec(variable_choices(ADSL, c("STUDYID", "USUBJID")), selected = variable_choices(ADSL, "STUDYID")),
+    select = select_spec(variable_choices(ADSL, c("STUDYID", "USUBJID"), key = get_cdisc_keys("ADSL")$primary),
+      selected = variable_choices(ADSL, "STUDYID", key = get_cdisc_keys("ADSL")$primary)),
     filter = filter_spec(
-      vars = variable_choices(ADSL, subset = "ARMCD"),
+      vars = variable_choices(ADSL, subset = "ARMCD", key = get_cdisc_keys("ADSL")$primary),
       choices = value_choices(ADSL, var_choices = "ARMCD", var_label = "ARM", subset = c("ARM A", "ARM B")),
       selected = value_choices(ADSL, var_choices = "ARMCD", var_label = "ARM", subset = "ARM A"),
       multiple = FALSE
@@ -468,8 +485,8 @@ get_continuous <- function(data) {
 
 test_that("Delayed data extract - single data connector with two rcd dataset connectors", {
 
-  adsl <- rcd_cdisc_dataset_connector("ADSL", radsl)
-  adae <- rcd_cdisc_dataset_connector("ADAE", radae, ADSL = adsl)
+  adsl <- rcd_cdisc_dataset_connector("ADSL", radsl, cached = TRUE)
+  adae <- rcd_cdisc_dataset_connector("ADAE", radae, cached = TRUE, ADSL = adsl)
   data <- cdisc_data(rcd_data(adsl, adae))
 
   x <- data_extract_spec(
@@ -497,13 +514,13 @@ test_that("Delayed data extract - single data connector with two rcd dataset con
   x_expected <- data_extract_spec(
     dataname = "ADSL",
     select = select_spec(
-      choices = variable_choices(ADSL, subset = get_continuous)
+      choices = variable_choices(ADSL, subset = get_continuous, key = get_cdisc_keys("ADSL")$primary)
     )
   )
   y_expected <- data_extract_spec(
     dataname = "ADAE",
     select = select_spec(
-      choices = variable_choices(ADAE, subset = get_continuous)
+      choices = variable_choices(ADAE, subset = get_continuous, key = get_cdisc_keys("ADAE")$primary)
     )
   )
   x_result <- isolate(resolve_delayed(x, datasets = ds))
@@ -516,8 +533,8 @@ test_that("Delayed data extract - single data connector with two rcd dataset con
 
 test_that("Delayed choices selected - single data connector with two rcd dataset connectors", {
 
-  adsl <- rcd_cdisc_dataset_connector("ADSL", radsl)
-  adae <- rcd_cdisc_dataset_connector("ADAE", radae, ADSL = adsl)
+  adsl <- rcd_cdisc_dataset_connector("ADSL", radsl, cached = TRUE)
+  adae <- rcd_cdisc_dataset_connector("ADAE", radae, cached = TRUE, ADSL = adsl)
   data <- cdisc_data(rcd_data(adsl, adae))
 
   choices <- variable_choices("ADSL")
@@ -528,7 +545,7 @@ test_that("Delayed choices selected - single data connector with two rcd dataset
   isolate(set_datasets_data(ds, data))
 
   ADSL <- get_raw_data(data, "ADSL") # nolint
-  choices_expected <- variable_choices(ADSL)
+  choices_expected <- variable_choices(ADSL, key = get_cdisc_keys("ADSL")$primary)
   choices_result <- isolate(resolve_delayed(choices, datasets = ds))
   expect_identical(choices_result, choices_expected)
 })
@@ -536,7 +553,7 @@ test_that("Delayed choices selected - single data connector with two rcd dataset
 # Delayed data extract - filtered ----
 
 test_that("Delayed data extract - filtered", {
-  adsl <- rcd_cdisc_dataset_connector("ADSL", radsl)
+  adsl <- rcd_cdisc_dataset_connector("ADSL", radsl, cached = TRUE)
   adsl$set_ui_input(function(ns) {
     list(
       numericInput(inputId = ns("seed"), label = "ADSL seed", min = 0, value = 1),
@@ -549,7 +566,7 @@ test_that("Delayed data extract - filtered", {
     )
   }
   )
-  adrs <- rcd_cdisc_dataset_connector("ADRS", radrs, ADSL = adsl)
+  adrs <- rcd_cdisc_dataset_connector("ADRS", radrs, cached = TRUE, ADSL = adsl)
   data <- cdisc_data(rcd_data(adsl, adrs))
 
   # object is a duplicate of Mixed Data and Datasets -no class tests required
@@ -621,8 +638,8 @@ test_that("Delayed data extract - filtered", {
 
 test_that("Delayed extract filter concatenated - single data connector with two rcd dataset connectors", {
 
-  adsl <- rcd_cdisc_dataset_connector("ADSL", radsl)
-  adrs <- rcd_cdisc_dataset_connector("ADRS", radrs, ADSL = adsl)
+  adsl <- rcd_cdisc_dataset_connector("ADSL", radsl, cached = TRUE)
+  adrs <- rcd_cdisc_dataset_connector("ADRS", radrs, cached = TRUE, ADSL = adsl)
   data <- teal_data(rcd_data(adsl, adrs))
 
   x <- data_extract_spec(
@@ -726,8 +743,8 @@ test_that("Delayed extract filter concatenated - single data connector with two 
 
 test_that("Delayed extract two filters - single data connector with two rcd dataset connectors", {
 
-  adsl <- rcd_cdisc_dataset_connector("ADSL", radsl)
-  adrs <- rcd_cdisc_dataset_connector("ADRS", radrs, ADSL = adsl)
+  adsl <- rcd_cdisc_dataset_connector("ADSL", radsl, cached = TRUE)
+  adrs <- rcd_cdisc_dataset_connector("ADRS", radrs, cached = TRUE, ADSL = adsl)
   data <- teal_data(rcd_data(adsl, adrs))
 
   x <- data_extract_spec(
@@ -847,14 +864,14 @@ test_that("Delayed extract two filters - single data connector with two rcd data
 
 test_that("Delayed extract - RelationalData with single dataset and multiple connectors", {
 
-  adsl <- relational_dataset(radsl(),
+  adsl <- relational_dataset(radsl(cached = TRUE),
                              dataname = "ADSL",
                              keys = get_cdisc_keys("ADSL"),
-                             code = "ADSL <- radsl()",
+                             code = "ADSL <- radsl(cached = TRUE)",
                              label = "ADSL"
   )
-  adrs <- rcd_cdisc_dataset_connector("ADRS", radrs, ADSL = adsl)
-  adtte <- rcd_cdisc_dataset_connector("ADTTE", radtte, ADSL = adsl)
+  adrs <- rcd_cdisc_dataset_connector("ADRS", radrs, cached = TRUE, ADSL = adsl)
+  adtte <- rcd_cdisc_dataset_connector("ADTTE", radtte, cached = TRUE, ADSL = adsl)
   data <- cdisc_data(adsl, rcd_data(adrs, adtte))
 
   x <- data_extract_spec(
@@ -914,7 +931,7 @@ test_that("Delayed extract - RelationalData with single dataset and multiple con
   x_expected <- data_extract_spec(
     dataname = "ADSL",
     select = select_spec(
-      choices = variable_choices(ADSL, subset = get_continuous)
+      choices = variable_choices(ADSL, subset = get_continuous, key = get_cdisc_keys("ADSL")$primary)
     ),
     filter = filter_spec(
       label = "Select endpoints:",
@@ -927,7 +944,7 @@ test_that("Delayed extract - RelationalData with single dataset and multiple con
   y_expected <- data_extract_spec(
     dataname = "ADRS",
     select = select_spec(
-      choices = variable_choices(ADRS, subset = get_continuous)
+      choices = variable_choices(ADRS, subset = get_continuous, key = get_cdisc_keys("ADRS")$primary)
     ),
     filter = list(
       filter_spec(
