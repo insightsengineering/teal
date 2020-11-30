@@ -1,4 +1,4 @@
-# teal 0.9.1.9000
+# teal 0.9.2
 
 * The functionality of the button for `datetime` filter widget now has been implemented to reset the value to the original. 
 * Adds `python_dataset_connector` to create delayed data objects from python scripts or directly from python code.
@@ -12,7 +12,6 @@
 * Enable empty select field inside `data_extract_spec`.
 * Added new argument `drop_keys` to `filter_spec` to decide whether to drop or keep keys columns on single filter on those columns.
 * Added a new optional argument `keys` to `variable_choices`. `keys` specifies the names of the variables, which should have the new key icon shown next to them in the variable drop down menus in the left-hand side encoding panels instead of the icon appropriate for their original R variable type. `variable_choices` now also works with `RelationalDataset` and `RelationalDatasetConnector` objects.
-* issues with no news:
 
 # teal 0.9.1
 

@@ -1,8 +1,8 @@
 Package: teal
 Type: Package
 Title: Exploratory Web Apps for Analyzing Clinical Trials Data
-Date: 2020-10-20
-Version: 0.9.1.9000
+Date: 2020-12-15
+Version: 0.9.2
 Authors@R: c(
   person("NEST", email = "nestcicd@roche.com", role = c("aut", "cre")),
   person("Adrian", "Waddell", email = "adrian.waddell@roche.com", role = "aut"),
@@ -37,20 +37,20 @@ Imports:
   methods,
   R6,
   rlang,
-  rtables (>= 0.1.7),
+  rtables (>= 0.3.3),
   shinyjs,
   shinyWidgets (>= 0.5.0),
-  utils.nest (>= 0.2.6),
+  utils.nest (>= 0.2.7),
   yaml
 RoxygenNote: 7.1.1
 Suggests:
     knitr,
     nomnoml,
-    random.cdisc.data (>= 0.3.6),
+    random.cdisc.data (>= 0.3.7),
     readr,
     rice,
     rmarkdown,
-    tern (>= 0.6.9),
+    tern (>= 0.6.10),
     test.nest (>= 0.2.5),
     testthat (>= 2.0)
 VignetteBuilder: knitr
