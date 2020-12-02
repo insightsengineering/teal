@@ -67,10 +67,6 @@ dataset <- function(dataname,
     stop(dataname, ": Please specify both foreign keys and a parent!")
   }
 
-  if (!is.null(keys$primary) && any(duplicated(data[, unique(c(keys$primary, keys$foreign))]))) {
-    stop(dataname, ": Keys don't uniquely distinguish the rows,  i.e. some rows share the same keys")
-  }
-
   res <- relational_dataset(
     dataname = dataname,
     x = data,

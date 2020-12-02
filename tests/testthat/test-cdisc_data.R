@@ -732,10 +732,16 @@ test_that("Empty keys for single and multiple datasets", {
   expect_silent(cdisc_data(dataset("ADSL", ADSL), dataset("ADTTE", ADTTE)))
 })
 
-test_that("Error - primary keys are not unique for the dataset", {
-  expect_error(
+test_that("Warning - primary keys are not unique for the dataset", {
+  expect_true(tryCatch(
     cdisc_data(cdisc_dataset("ADSL", ADSL, keys = keys(primary = c("SEX"), foreign = NULL, parent = NULL))),
-    "ADSL: Keys don't uniquely distinguish the rows,  i.e. some rows share the same keys")
+    warning = function(e) TRUE))
+})
+
+test_that("Error - primary keys are not unique for the dataset", {
+  expect_error(suppressWarnings(
+    cdisc_data(cdisc_dataset("ADSL", ADSL, keys = keys(primary = c("SEX"), foreign = NULL, parent = NULL))),
+    "The provided primary key does not distinguish unique rows"))
 })
 
 test_that("Error - parent is defined without foreign key", {
