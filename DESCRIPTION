@@ -50,7 +50,7 @@ Suggests:
     readr,
     rice,
     rmarkdown,
-    tern (>= 0.6.10),
+    tern (>= 0.7.0),
     test.nest (>= 0.2.5),
     testthat (>= 2.0)
 VignetteBuilder: knitr
