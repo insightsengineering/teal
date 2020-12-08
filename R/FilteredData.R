@@ -525,8 +525,8 @@ FilteredData <- R6::R6Class( # nolint
 
       # for this to work reliably, the previous state must really capture all info
       # i.e. NA filtering or not
-      # all.equal returns TRUE if all equal, otherwise character vector of differences
-      if (isTRUE(all.equal(private$filter_states[[dataname]], new_state))) {
+      # identical returns TRUE if all equal, otherwise FALSE
+      if (identical(private$filter_states[[dataname]], new_state)) {
         return(FALSE)
       }
 
