@@ -51,7 +51,7 @@ Suggests:
     rice,
     rmarkdown,
     tern (>= 0.7.0),
-    test.nest (>= 0.2.5),
+    test.nest (>= 0.2.6),
     testthat (>= 2.0)
 VignetteBuilder: knitr
 Collate: 
