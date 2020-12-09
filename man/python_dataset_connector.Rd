@@ -69,6 +69,8 @@ using \code{reticulate::py_install("pandas")}.
 Please see the package documentation for more details.
 }
 \note{
+Raises an error when passed \code{code} and \code{file} are passed at the same time.
+
 When using \code{code}, keep in mind that when using \code{reticulate} with delayed data, python
 functions do not have access to other objects in the \code{code} and must be self contained.
 In the following example, the function \code{makedata()} doesn't have access to variable \code{x}:

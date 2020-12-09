@@ -28,6 +28,8 @@
 #'   name of the object from the python script that is assigned to the dataset to be used.
 #'
 #' @note
+#'   Raises an error when passed `code` and `file` are passed at the same time.
+#'
 #'   When using `code`, keep in mind that when using `reticulate` with delayed data, python
 #'   functions do not have access to other objects in the `code` and must be self contained.
 #'   In the following example, the function `makedata()` doesn't have access to variable `x`:
@@ -122,6 +124,7 @@ python_dataset_connector <- function(dataname,
                                      label = character(0),
                                      vars = list()) {
   stopifnot(is_character_single(object))
+  if (!xor(missing(code), missing(file))) stop("Exactly one of 'code' and 'script' is required")
 
   if (!missing(file)) {
     stop_if_not(
@@ -133,7 +136,7 @@ python_dataset_connector <- function(dataname,
     x_fun <- CallablePythonCode$new("py_run_file") # nolint
     x_fun$set_args(list(file = file, local = TRUE))
 
-  } else if (!missing(code)) {
+  } else {
     stopifnot(is_character_single(code))
 
     x_fun <- CallablePythonCode$new("py_run_string") # nolint
@@ -425,6 +428,8 @@ PythonCodeClass <- R6::R6Class( # nolint
 #' ds$get_raw_data()
 #' }
 python_code <- function(code = character(0), script = character(0)) {
+  if (!xor(missing(code), missing(script))) stop("Exactly one of 'code' and 'script' is required")
+
   if (!is_empty(script)) {
     code <- deparse(call("py_run_file", script))
   } else {
