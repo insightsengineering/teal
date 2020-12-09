@@ -151,42 +151,88 @@ ui_single_filter_item <- function(id, filter_info, filter_state, prelabel) {
 
     if (filter_info$is_datetime) {
       div(
-        airDatepickerInput(
-          inputId = id_selection,
-          label = div(
-            "From:",
-            title = "Times are displayed in the local timezone and are converted to UTC in the analysis",
-            icon("info-circle")
-          ),
-          value = daterange[[1]],
-          timepicker = TRUE,
-          minDate = daterange[[1]],
-          maxDate = daterange[[2]],
-          update_on = "close"
+        actionButton(
+          inputId = ns("selection_button"),
+          label = NULL,
+          icon = icon("undo fa-xs"),
+          style = "float: left; padding: 0; padding-top: 4px; padding-bottom: 5px; width: 10%;"
         ),
-        airDatepickerInput(
-          inputId = id_end_date,
-          label = div(
-            "To:",
-            title = "Times are displayed in the local timezone and are converted to UTC in the analysis",
-            icon("info-circle")
+        actionButton(
+          inputId = ns("end_date_button"),
+          label = NULL,
+          icon = icon("undo fa-xs"),
+          style = "float: right; padding: 0; padding-top: 4px; padding-bottom: 5px; width: 10%;"
+        ),
+        div(
+          class = "input-daterange input-group",
+          style = "margin: auto; width: 80%;",
+          div(
+            style = "float: left; width: 100%;",
+            local({
+              x <- airDatepickerInput(
+                inputId = id_selection,
+                value = daterange[[1]],
+                timepicker = TRUE,
+                minDate = daterange[[1]],
+                maxDate = daterange[[2]],
+                update_on = "close",
+                addon = "none",
+                position = "bottom right"
+              )
+              x$children[[2]]$attribs <- c(x$children[[2]]$attribs, list(class = " input-sm"))
+              x
+            })
           ),
-          value = daterange[[2]],
-          timepicker = TRUE,
-          minDate = daterange[[1]],
-          maxDate = daterange[[2]],
-          update_on = "close"
+          span(
+            class = "input-group-addon",
+            "to",
+            title = "Times are displayed in the local timezone and are converted to UTC in the analysis"
+          ),
+          div(
+            style = "float: right; width: 100%;",
+            local({
+              x <- airDatepickerInput(
+                inputId = id_end_date,
+                value = daterange[[2]],
+                timepicker = TRUE,
+                minDate = daterange[[1]],
+                maxDate = daterange[[2]],
+                update_on = "close",
+                addon = "none",
+                position = "bottom right"
+              )
+              x$children[[2]]$attribs <- c(x$children[[2]]$attribs, list(class = " input-sm"))
+              x
+            })
+          )
         )
       )
     } else {
-      dateRangeInput(
-        inputId = id_selection,
-        label = NULL,
-        start = daterange[[1]],
-        end = daterange[[2]],
-        min = daterange[[1]],
-        max = daterange[[2]]
+      div(
+        actionButton(
+          inputId = ns("selection_button"),
+          label = NULL,
+          icon = icon("undo fa-xs"),
+          style = "float: left; padding: 0; padding-top: 4px; padding-bottom: 5px; width: 10%;"
+        ),
+        actionButton(
+          inputId = ns("end_date_button"),
+          label = NULL,
+          icon = icon("undo fa-xs"),
+          style = "float: right; padding: 0; padding-top: 4px; padding-bottom: 5px; width: 10%;"
+        ),
+        div(
+          style = "margin: auto; width: 80%;",
+          dateRangeInput(
+            inputId = id_selection,
+            label = NULL,
+            start = daterange[[1]],
+            end = daterange[[2]],
+            min = daterange[[1]],
+            max = daterange[[2]]
+          )
         )
+      )
     }
   } else if ("all_na" %in% names(filter_info)) {
     "All values missing - no filtering possible"
@@ -303,54 +349,6 @@ srv_single_filter_item <- function(input, output, session, datasets, dataname, v
   id_keep_inf <- "keepInf"
   id_remove_filter <- "remove_filter"
 
-  if (var_type == "date" && datasets$get_filter_info(dataname, varname)$is_datetime) {
-    id_selection_button <- "selection_button"
-    id_end_date_button <- "end_date_button"
-    daterange <- datasets$get_filter_info(dataname, varname)$daterange
-    observeEvent(input[[id_selection_button]], {
-      updateAirDateInput(
-        session = session,
-        inputId = id_selection,
-        value = daterange[[1]])
-    })
-    observeEvent(input[[id_end_date_button]], {
-      updateAirDateInput(
-        session = session,
-        inputId = id_end_date,
-        value = daterange[[2]])
-    })
-    observe({
-      start_date <- input[[id_selection]]
-      if (is_empty(start_date) || daterange[[1]] != start_date) {
-        updateActionButton(
-          session = session,
-          inputId = id_selection_button,
-          icon = icon("redo"))
-      } else {
-        updateActionButton(
-          session = session,
-          inputId = id_selection_button,
-          icon = character(0)
-        )
-      }
-    })
-    observe({
-      end_date <- input[[id_end_date]]
-      if (is_empty(end_date) || daterange[[2]] != end_date) {
-        updateActionButton(
-          session = session,
-          inputId = id_end_date_button,
-          icon = icon("redo"))
-      } else {
-        updateActionButton(
-          session = session,
-          inputId = id_end_date_button,
-          icon = character(0)
-        )
-      }
-    })
-  }
-
   # observers for Browser UI state -> FilteredData filter_state ----
   o1 <- observeEvent({
     input[[id_selection]]
@@ -429,6 +427,40 @@ srv_single_filter_item <- function(input, output, session, datasets, dataname, v
     # the user has not clicked, see the doc
     ignoreInit = TRUE
   )
+
+  if (var_type == "date") {
+    id_selection_button <- "selection_button"
+    id_end_date_button <- "end_date_button"
+    daterange <- datasets$get_filter_info(dataname, varname)$daterange
+    if (datasets$get_filter_info(dataname, varname)$is_datetime) {
+      o3 <- observeEvent(input[[id_selection_button]], {
+        updateAirDateInput(
+          session = session,
+          inputId = id_selection,
+          value = daterange[[1]])
+      })
+      o4 <- observeEvent(input[[id_end_date_button]], {
+        updateAirDateInput(
+          session = session,
+          inputId = id_end_date,
+          value = daterange[[2]])
+      })
+    } else {
+      o3 <- observeEvent(input[[id_selection_button]], {
+        updateDateRangeInput(
+          session = session,
+          inputId = id_selection,
+          start = daterange[[1]])
+      })
+      o4 <- observeEvent(input[[id_end_date_button]], {
+        updateDateRangeInput(
+          session = session,
+          inputId = id_selection,
+          end = daterange[[2]])
+      })
+    }
+    return(list(o1, o2, o3, o4))
+  }
 
   return(list(observers = list(o1, o2))) # so we can cancel them
 }
