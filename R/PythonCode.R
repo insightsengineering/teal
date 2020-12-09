@@ -226,8 +226,6 @@ CallablePythonCode <- R6::R6Class( #nolint
     #'   Execute `Callable` python code.
     #' @md
     #'
-    #' @param return (`logical`)\cr
-    #'  whether to return an object
     #' @param args (`NULL` or named `list`)\cr
     #'  supplied for callable functions only, these are dynamic arguments passed to
     #'  `reticulate::py_run_string` or `reticulate::py_run_file`. Dynamic arguments
@@ -239,7 +237,7 @@ CallablePythonCode <- R6::R6Class( #nolint
     #' @return nothing or output from function depending on `return`
     #' argument. If `run` fails it will return object of class `simple-error` error
     #' when `try = TRUE` or will stop if `try = FALSE`.
-    run = function(return = TRUE, args = NULL, try = FALSE) {
+    run = function(args = NULL, try = FALSE) {
       on.exit({
         # clean up environment if global env was used
         # remove all newly assigned vars
@@ -261,7 +259,10 @@ CallablePythonCode <- R6::R6Class( #nolint
         assign(var, private$vars_to_assign[[var]], envir = private$env)
       }
 
-      super$run(return = return, args = args, try = try)
+      if_null(
+        super$run(args = args, try = try),
+        stop("The specified python object returned NULL or does not exist in the python code")
+      )
     }
   ),
 

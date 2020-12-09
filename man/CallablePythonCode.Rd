@@ -113,15 +113,12 @@ after \verb{$run}.
 \subsection{Method \code{run()}}{
 Execute \code{Callable} python code.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{CallablePythonCode$run(return = TRUE, args = NULL, try = FALSE)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{CallablePythonCode$run(args = NULL, try = FALSE)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{return}}{(\code{logical})\cr
-whether to return an object}
-
 \item{\code{args}}{(\code{NULL} or named \code{list})\cr
 supplied for callable functions only, these are dynamic arguments passed to
 \code{reticulate::py_run_string} or \code{reticulate::py_run_file}. Dynamic arguments

@@ -73,9 +73,17 @@ RelationalDataset <- R6::R6Class( # nolint
     #' @param keys (\code{keys}) Set the keys
     #' @return \code{self} invisibly for chaining.
     set_keys = function(keys) {
-      stopifnot(is(keys, "keys"))
-      stopifnot(all(keys$primary %in% self$get_colnames()))
-      stopifnot(all(keys$foreign %in% self$get_colnames()))
+      stop_if_not(
+        is(keys, "keys"),
+        list(
+          all(keys$primary %in% self$get_colnames()),
+          paste("Primary keys specifed for", self$get_dataname(), "do not exist in the data.")
+        ),
+        list(
+          all(keys$foreign %in% self$get_colnames()),
+          paste("Foreign keys specified for", self$get_dataname(), "do not exist in the data.")
+        )
+      )
 
       if (!is.null(keys$primary)) {
         duplicates <- get_key_duplicates(self$get_raw_data(), keys$primary)
