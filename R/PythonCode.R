@@ -3,6 +3,7 @@
 #' `r lifecycle::badge("experimental")`
 #' Create a `RelationalDatasetConnector` from `.py` file
 #' or through python code supplied directly.
+#' NOTE: This function is not yet ready for deployment to rsconnect.
 #' @md
 #'
 #' @details

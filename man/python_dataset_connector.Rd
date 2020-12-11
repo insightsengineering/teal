@@ -55,6 +55,7 @@ within another dataset.}
 \ifelse{html}{\out{<a href='https://www.tidyverse.org/lifecycle/#experimental'><img src='figures/lifecycle-experimental.svg' alt='Experimental lifecycle'></a>}}{\strong{Experimental}}
 Create a \code{RelationalDatasetConnector} from \code{.py} file
 or through python code supplied directly.
+NOTE: This function is not yet ready for deployment to rsconnect.
 }
 \details{
 Note that in addition to the \code{reticulate} package, support for python requires an

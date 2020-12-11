@@ -1,17 +1,23 @@
 # teal 0.9.2
 
+### New Features
+* Added `python_dataset_connector` to create delayed data objects from python scripts or directly from python code.
+* NOTE: `python_dataset_connector` is not yet ready to be deployed on RSConnect because it does not contain `numpy` and `pandas`, which are `Python` libraries used in `python_dataset_connector`.
+* Added support for filtering on `Date` and `Datetime` variables in the Filter Panel.
 * Added buttons for `date` and `datetime` filter widgets to reset the value to the original.
-* Adds `python_dataset_connector` to create delayed data objects from python scripts or directly from python code.
-* Fixing lack of labels for `character` and `factor` variables in the Filter Panel.
-* Remove `include_factors` option in `get_class_colnames` in `RawDataset`.
-* Adds support for filtering on `Date` and `Datetime` variables in the Filter Panel.
-* Show all variables in `module_filter_panel`, not only those of types `numeric`, `logical`, `factor`, `character` and `Date`
-* Fixing `mutate_data` to accept the whole scope of objects for `vars`.
-* Clarifying `teal::init` function documentation to state that custom css loading code with `htmltools::htmlDependency` should be included in the `header` argument rather than inside `ui` arguments of modules.
 * New function `check_key_duplicates`, which creates a short summary about rows with duplicated primary key (row numbers and the number of duplicates)
-* Enable empty select field inside `data_extract_spec`.
+
+### Enhancements
+* Fixed lack of labels for `character` and `factor` variables in the Filter Panel.
+* Showed all variables in `module_filter_panel`, not only those of types `numeric`, `logical`, `factor`, `character` and `Date`
+* Fixed `mutate_data` to accept the whole scope of objects for `vars`.
+* Clarified `teal::init` function documentation to state that custom css loading code with `htmltools::htmlDependency` should be included in the `header` argument rather than inside `ui` arguments of modules.
+* Enabled empty select field inside `data_extract_spec`.
 * Added new argument `drop_keys` to `filter_spec` to decide whether to drop or keep keys columns on single filter on those columns.
 * Added a new optional argument `keys` to `variable_choices`. `keys` specifies the names of the variables, which should have the new key icon shown next to them in the variable drop down menus in the left-hand side encoding panels instead of the icon appropriate for their original R variable type. `variable_choices` now also works with `RelationalDataset` and `RelationalDatasetConnector` objects.
+
+### Miscellaneous
+* Remove `include_factors` option in `get_class_colnames` in `RawDataset`.
 
 # teal 0.9.1
 
