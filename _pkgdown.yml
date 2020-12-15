@@ -18,12 +18,8 @@ reference:
     - module
     - modules
     - root_modules
-  - title: Reproducibility
-    desc: Functions allowing teal output reproducibility.
-    contents:
-    - cdisc_data
-    - cdisc_dataset
-    - get_code
+    - toString.teal_module
+    - toString.teal_modules
   - title: Teal Filtering and Selecting
     desc: Functions used to filter observations and select variables from dataset.
     contents:
@@ -44,33 +40,63 @@ reference:
     - optionalSliderInput
     - optionalSliderInputValMinMax
     - updateOptionalSelectInput
-  - title: Delayed Data Constructors
-    desc: For creating delayed data objects.
+  - title: Delayed Dataset Constructors
+    desc: For creating delayed dataset objects.
     contents:
-    - cdisc_data_file
-    - cdisc_dataset_file
-    - relational_dataset_connector
-    - relational_dataset_file
-    - rcd_connection
-    - rcd_data
-    - rice_connection
-    - rice_data
-    - teradata_connection
-    - teradata_data
-    - as_relational
     - raw_dataset
     - named_dataset
     - relational_dataset
-    - raw_dataset_connector
+    - relational_dataset_file
+    - cdisc_dataset_file
+  - title: Delayed Dataset Connectors Constructors
+    desc: For creating delayed dataset objects.
+    contents:
+    - cdisc_dataset
+    - code_cdisc_dataset_connector
+    - code_dataset_connector
+    - csv_cdisc_dataset_connector
+    - csv_dataset_connector
+    - fun_cdisc_dataset_connector
+    - fun_dataset_connector
     - named_dataset_connector
+    - python_dataset_connector
+    - raw_dataset_connector
+    - rcd_cdisc_dataset_connector
+    - rcd_dataset_connector
+    - rds_cdisc_dataset_connector
+    - rds_dataset_connector
+    - relational_dataset_connector
+    - relational_dataset_connector_file
+    - rice_cdisc_dataset_connector
+    - rice_dataset_connector
+    - script_cdisc_dataset_connector
+    - script_dataset_connector
+    - teradata_cdisc_dataset_connector
+    - teradata_dataset_connector
+  - title: Delayed Data Connection Constructors
+    desc: For creating delayed dataset objects.
+    contents:
+    - rcd_connection
+    - rice_connection
+    - teradata_connection
+  - title: Delayed Data Constructors
+    desc: For creating delayed data objects.
+    contents:
+    - cdisc_data
+    - cdisc_data_file
+    - rcd_data
+    - rice_data
     - teal_data
     - teal_data_file
-  - title: Delayed Data Functions
+    - teradata_data
+  - title: Delayed Dataset Functions
     desc: For loading and modifying delayed data objects.
     contents:
+    - as_relational
     - callable_code
     - callable_function
     - get_cdisc_keys
+    - get_code
     - get_dataname
     - get_dataset
     - get_dataset_label
@@ -89,17 +115,27 @@ reference:
     contents:
     - bookmarkableShinyApp
     - data_label
+    - data_label<-
     - dataset
     - dataset_file
     - default_filter
     - get_labels
+    - get_key_duplicates
+    - get_key_duplicates.RelationalDataset
+    - get_key_duplicates.data.frame
+    - get_key_duplicates_util
     - keys
     - log_app_usage
     - no_selected_as_NULL
+    - print.choices_labeled
+    - print.teal_module
+    - print.teal_modules
+    - python_code
     - read_script
     - run_js_files
     - split_by_sep
     - stop_shiny
+    - "%is_in%"
   - title: For Developers
   - subtitle: R6 Classes
     desc: Abstract and concrete classes used to build teal functionality.
@@ -107,8 +143,10 @@ reference:
     - FilteredData
     - Callable
     - CallableCode
+    - CallablePythonCode
     - CallableFunction
     - CodeClass
+    - PythonCodeClass
     - RawDataset
     - NamedDataset
     - RelationalDataset
@@ -119,11 +157,14 @@ reference:
     - RelationalDataCollection
     - RelationalDataConnector
     - RelationalData
+    - srv_teal_with_splash
+    - ui_teal_with_splash
   - subtitle: Unexported Functions
     desc: These functions are useful for teal developers.
     contents:
     - bookmark_module
     - check_foreign_keys
+    - check_in_range
     - check_in_subset
     - check_pkg_quietly
     - check_setequal
@@ -138,6 +179,7 @@ reference:
     - filter_calls_module
     - filter_state_to_str
     - find_source_code
+    - get_client_timezone
     - get_code_single
     - get_dummy_cdisc_data
     - get_dummy_datasets
@@ -168,7 +210,6 @@ reference:
     - srv_single_filter_item
     - srv_tabs_with_filters
     - srv_teal
-    - srv_teal_with_splash
     - text_to_call
     - trigger_after_first_cycle
     - ui_add_filter_variable
@@ -179,7 +220,6 @@ reference:
     - ui_single_filter_item
     - ui_tabs_with_filters
     - ui_teal
-    - ui_teal_with_splash
     - variable_type_icons
     - variable_types
 
