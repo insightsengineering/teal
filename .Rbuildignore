@@ -6,3 +6,4 @@
 ^Jenkinsfile$
 docs
 scratch
+^\.lintr$
