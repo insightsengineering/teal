@@ -60,6 +60,18 @@ CodeClass <- R6::R6Class( # nolint
   ## __Public Methods ====
   public = list(
     #' @description
+    #' CodeClass constructor
+    #' @param code (\code{character}) vector of code text to be set
+    #' @param dataname optional, (\code{character}) vector of datanames to assign code to. If empty then the code
+    #' is considered to be "global"
+    #' @param deps optional, (\code{character}) vector of datanames that given code depends on
+    #' @return object of class CodeClass
+    initialize = function(code = character(0), dataname = character(0), deps = character(0)) {
+      if (length(code) > 0)
+        self$set_code(code, dataname, deps)
+      return(invisible(self))
+    },
+    #' @description
     #' Append \code{CodeClass} object to a given \code{CodeClass} object
     #' @param x (\code{CodeClass}) object to be appended
     #' @return changed \code{CodeClass} object
@@ -145,7 +157,10 @@ CodeClass <- R6::R6Class( # nolint
                                dataname = if_null(attr(code, "dataname"), character(0)),
                                deps = if_null(attr(code, "deps"), character(0)),
                                id = if_null(attr(code, "id"), digest::sha1(c(private$.code, code)))) {
-      if (!id %in% ulapply(private$.code, "attr", "id")) {
+      # Line shouldn't be added when it contains the same code and the same dataname
+      # as a line already present in an object of CodeClass
+      if (!id %in% ulapply(private$.code, "attr", "id") ||
+          all_true(dataname, function(x) !x %in% ulapply(private$.code, "attr", "dataname"))) {
         attr(code, "dataname") <- dataname
         attr(code, "deps") <- deps
         attr(code, "id") <- id

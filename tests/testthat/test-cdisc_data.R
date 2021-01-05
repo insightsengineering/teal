@@ -119,6 +119,37 @@ test_that("two datasets / datasets code", {
 
 })
 
+test_that("Duplicated code from datasets is shown", {
+  some_var <- TRUE
+  adae <- radae(cached = some_var)
+  adsl <- radsl(cached = some_var)
+  some_var <- "TEST"
+  adsl$test <- some_var
+
+  adsl <- cdisc_dataset(
+    dataname = "ADSL",
+    data = adsl,
+    code = "some_var <- TRUE
+      ADSL <- radsl(cached = some_var)
+      some_var <- 'TEST'
+      ADSL$test <- some_var"
+  )
+
+  adae <- cdisc_dataset(
+    dataname = "ADAE",
+    data = adae,
+    code = "some_var <- TRUE
+      ADAE <- radae(cached = some_var)"
+  )
+
+  data <- cdisc_data(adsl, adae, check = TRUE)
+
+  expect_equal(
+    data$get_code(),
+    "some_var <- TRUE\nADSL <- radsl(cached = some_var)\nsome_var <- \"TEST\"\nADSL$test <- some_var\nsome_var <- TRUE\nADAE <- radae(cached = some_var)" # nolint
+  )
+})
+
 # 3. two datasets / global code -------------------------------
 test_that("two datasets / datasets code", {
   adsl <- cdisc_dataset(dataname = "ADSL", data = ADSL)
@@ -378,7 +409,6 @@ test_that("two datasets / datasets code", {
     "ADSL <- radsl(cached = TRUE)\nADTTE <- radtte(ADSL = ADSL, cached = TRUE)"
   )
 
-
   expect_error(data$check(), "'ADTTE' has not been pulled yet")
   load_dataset(adtte)
   expect_true(data$check()) # TRUE
@@ -443,7 +473,6 @@ test_that("only connectors", {
   expect_true(
     data$check()
   )
-
 })
 
 # 6. mutate -----

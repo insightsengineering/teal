@@ -69,11 +69,41 @@ x$get_code("ADRS")
 \section{Methods}{
 \subsection{Public methods}{
 \itemize{
+\item \href{#method-new}{\code{CodeClass$new()}}
 \item \href{#method-append}{\code{CodeClass$append()}}
 \item \href{#method-set_code}{\code{CodeClass$set_code()}}
 \item \href{#method-get_code}{\code{CodeClass$get_code()}}
 \item \href{#method-eval}{\code{CodeClass$eval()}}
 \item \href{#method-clone}{\code{CodeClass$clone()}}
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-new"></a>}}
+\if{latex}{\out{\hypertarget{method-new}{}}}
+\subsection{Method \code{new()}}{
+CodeClass constructor
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{CodeClass$new(
+  code = character(0),
+  dataname = character(0),
+  deps = character(0)
+)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{code}}{(\code{character}) vector of code text to be set}
+
+\item{\code{dataname}}{optional, (\code{character}) vector of datanames to assign code to. If empty then the code
+is considered to be "global"}
+
+\item{\code{deps}}{optional, (\code{character}) vector of datanames that given code depends on}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Returns}{
+object of class CodeClass
 }
 }
 \if{html}{\out{<hr>}}

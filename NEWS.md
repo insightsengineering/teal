@@ -1,6 +1,8 @@
 # teal 0.9.2.9000
+### Bug fixes
+* Duplicated lines of code passed to `teal::cdisc_dataset` and other `teal::RelationalDataset` constructors should now be shown when getting the code from `teal::cdisc_data` objects and other `teal::RelationalData` objects.
 
-* Issues with no news: 
+* Issues with no news:
 
 # teal 0.9.2
 

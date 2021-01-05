@@ -23,6 +23,7 @@ A \code{CallablePythonCode} class of objects
 \itemize{
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="CodeClass" data-id="append">}\href{../../teal/html/CodeClass.html#method-append}{\code{teal::CodeClass$append()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="CodeClass" data-id="get_code">}\href{../../teal/html/CodeClass.html#method-get_code}{\code{teal::CodeClass$get_code()}}\out{</span>}
+\item \out{<span class="pkg-link" data-pkg="teal" data-topic="CodeClass" data-id="initialize">}\href{../../teal/html/CodeClass.html#method-initialize}{\code{teal::CodeClass$initialize()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="CodeClass" data-id="set_code">}\href{../../teal/html/CodeClass.html#method-set_code}{\code{teal::CodeClass$set_code()}}\out{</span>}
 }
 \out{</details>}

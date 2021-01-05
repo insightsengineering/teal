@@ -145,3 +145,32 @@ test_that("CodeClass list_to_code_class", {
   expect_true(inherits(adaem$get_code_class(), "CodeClass"))
   expect_true(inherits(adaem2$get_code_class(), "CodeClass"))
 })
+
+# Append duplicated code ====
+# Regression test from https://github.roche.com/NEST/teal/issues/974
+test_that("Duplicated code is appended if it doesn't have a dataname", {
+  cc1 <- CodeClass$new(code = "print('test')")
+  cc2 <- CodeClass$new(code = "print('test')")
+  cc1$append(cc2)
+  expect_equal(
+    cc1$get_code(),
+    "print(\"test\")\nprint(\"test\")")
+})
+
+test_that("Duplicated code is not appended if its dataname is duplicated", {
+  cc1 <- CodeClass$new(code = "print('test')", dataname = "test")
+  cc2 <- CodeClass$new(code = "print('test')", dataname = "test")
+  cc1$append(cc2)
+  expect_equal(
+    cc1$get_code(),
+    "print(\"test\")")
+})
+
+test_that("Duplicated code is appended if its dataname is different", {
+  cc1 <- CodeClass$new(code = "print('test')", dataname = "test1")
+  cc2 <- CodeClass$new(code = "print('test')", dataname = "test2")
+  cc1$append(cc2)
+  expect_equal(
+    cc1$get_code(),
+    "print(\"test\")\nprint(\"test\")")
+})
