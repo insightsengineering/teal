@@ -203,6 +203,7 @@ RelationalData <- R6::R6Class( # nolint
                 )
               ),
               useShinyjs(),
+              include_teal_css_js(),
               br()
             )
           )
@@ -239,32 +240,35 @@ RelationalData <- R6::R6Class( # nolint
               id = ns("delayed_data"),
               width = 8,
               offset = 2,
-              tagList(
-                lapply(
-                  private$datasets,
-                  function(x) {
-                    div(
-                      if (!is(x, c("RelationalDatasetConnector", "RelationalDataConnector"))) {
-                        div(h4("Data(set) for: ", lapply(x$get_datanames(), code)), p(icon("check"), "Loaded"))
-                      } else {
-                        if_null(
-                          x$get_ui(id = ns(paste0(x$get_datanames(), collapse = "_"))),
-                          div(
-                            h4("Dataset Connector for: ", lapply(x$get_datanames(), code)),
-                            p(icon("check"), "Ready to Load")
+              div(
+                tagList(
+                  lapply(
+                    private$datasets,
+                    function(x) {
+                      div(
+                        if (!is(x, c("RelationalDatasetConnector", "RelationalDataConnector"))) {
+                          div(h4("Data(set) for: ", lapply(x$get_datanames(), code)), p(icon("check"), "Loaded"))
+                        } else {
+                          if_null(
+                            x$get_ui(id = ns(paste0(x$get_datanames(), collapse = "_"))),
+                            div(
+                              h4("Dataset Connector for: ", lapply(x$get_datanames(), code)),
+                              p(icon("check"), "Ready to Load")
                             )
                           )
-                      },
-                      br()
+                        },
+                        br()
                       )
                     }
                   ),
-                actionButton(inputId = ns("submit"), label = "Submit all")
-                )
+                  actionButton(inputId = ns("submit"), label = "Submit all")
+                ),
+                `data-proxy-click` = ns("submit")
               )
             )
+          )
         )
-        }
+      }
     },
     set_server = function() {
       private$server <- function(input, output, session) {

@@ -97,6 +97,7 @@ DataConnection <- R6::R6Class( # nolint
     launch = function() {
       shinyApp(
         ui = fluidPage(
+          include_teal_css_js(),
           useShinyjs(),
           fluidRow(
             column(
@@ -105,7 +106,8 @@ DataConnection <- R6::R6Class( # nolint
               tags$div(
                 id = "connection_inputs",
                 self$get_open_ui(id = "data_connection"),
-                actionButton("submit", "Submit")
+                actionButton("submit", "Submit"),
+                `data-proxy-click` = "submit"
               ),
               shinyjs::hidden(
                 tags$div(

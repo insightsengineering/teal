@@ -143,6 +143,7 @@ RelationalDataConnector <- R6::R6Class( #nolint
 
       shinyApp(
         ui = fluidPage(
+          include_teal_css_js(),
           useShinyjs(),
           fluidRow(
             column(
@@ -151,7 +152,8 @@ RelationalDataConnector <- R6::R6Class( #nolint
               tags$div(
                 id = "data_inputs",
                 private$ui(id = "data_connector"),
-                actionButton("submit", "Submit")
+                actionButton("submit", "Submit"),
+                `data-proxy-click` = "submit"
               ),
               shinyjs::hidden(
                 tags$div(
