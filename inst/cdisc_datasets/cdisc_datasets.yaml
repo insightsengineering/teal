@@ -57,3 +57,8 @@ ADVS:
   primary: ["STUDYID", "USUBJID", "PARAMCD", "AVISIT"]
   foreign: ["STUDYID", "USUBJID"]
   parent: "ADSL"
+
+ADDV:
+  primary: ["STUDYID", "USUBJID", "ASTDT", "DVTERM", "DVSEQ"]
+  foreign: ["STUDYID", "USUBJID"]
+  parent: "ADSL"
