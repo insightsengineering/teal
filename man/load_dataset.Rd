@@ -43,7 +43,7 @@ load_dataset(ADSL_dataset)
 
 # RawDatasetConnector --------
 library(random.cdisc.data)
-adsl <- rcd_cdisc_dataset_connector("ADSL", fun = radsl, cached = TRUE)
+adsl <- rcd_cdisc_dataset_connector("ADSL", fun = radsl, cached = FALSE)
 load_dataset(adsl)
 get_dataset(adsl)
 

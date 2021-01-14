@@ -38,7 +38,7 @@ load_dataset.RawDataset <- function(x, ...) { # nolint
 #'
 #' # RawDatasetConnector --------
 #' library(random.cdisc.data)
-#' adsl <- rcd_cdisc_dataset_connector("ADSL", fun = radsl, cached = TRUE)
+#' adsl <- rcd_cdisc_dataset_connector("ADSL", fun = radsl, cached = FALSE)
 #' load_dataset(adsl)
 #' get_dataset(adsl)
 #'
@@ -104,7 +104,7 @@ load_datasets.RawDataset <- function(x, ...) { # nolint
 #'
 #' # RawDatasetConnector ------
 #' library(random.cdisc.data)
-#' adsl <- rcd_cdisc_dataset_connector("ADSL", fun = radsl, cached = TRUE)
+#' adsl <- rcd_cdisc_dataset_connector("ADSL", fun = radsl, cached = FALSE)
 #' load_datasets(adsl)
 #' get_dataset(adsl)
 #'
@@ -124,7 +124,7 @@ load_datasets.RawDatasetConnector <- function(x, args = NULL, try = FALSE, ...) 
 #'
 #' # RelationalDataConnector --------
 #' library(random.cdisc.data)
-#' adsl <- rcd_cdisc_dataset_connector(dataname = "ADSL", fun = radsl, cached = TRUE)
+#' adsl <- rcd_cdisc_dataset_connector(dataname = "ADSL", fun = radsl, cached = FALSE)
 #' adrs <- rcd_cdisc_dataset_connector(dataname = "ADRS", fun = radrs, ADSL = adsl)
 #'
 #' rdc <- rcd_data(adsl, adrs)
@@ -147,8 +147,8 @@ load_datasets.RelationalDataConnector <- function(x, ...) { # nolint
 #'
 #' # RelationalData --------
 #' library(random.cdisc.data)
-#' adsl <- rcd_cdisc_dataset_connector(dataname = "ADSL", fun = radsl, cached = TRUE)
-#' adlb <- rcd_cdisc_dataset_connector(dataname = "ADLB", fun = radlb, cached = TRUE)
+#' adsl <- rcd_cdisc_dataset_connector(dataname = "ADSL", fun = radsl, cached = FALSE)
+#' adlb <- rcd_cdisc_dataset_connector(dataname = "ADLB", fun = radlb, cached = FALSE)
 #' adrs <- rcd_cdisc_dataset_connector("ADRS", radrs, ADSL = adsl)
 #'
 #' tc <- cdisc_data(

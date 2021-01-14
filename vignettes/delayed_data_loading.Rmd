@@ -82,10 +82,10 @@ library(teal)
 library(random.cdisc.data)
 
 # initialize object
-fun <- callable_function(fun = radtte)
+fun <- callable_function(fun = radsl)
 
 # set arguments to function
-fun$set_args(list(cached = TRUE, na_percentage = 0.05))
+fun$set_args(list(cached = FALSE, na_percentage = .1))
 
 # execute function with arguments set
 fun$run()
@@ -100,11 +100,14 @@ what will have a consequences in other places - we will get back to this in latt
 stages of the documentation.
 
 ```{r}
+# initialize object
+fun_adtte <- callable_function(fun = radtte)
+
 # add arguments on the fly
-fun$run(args = list(seed = 1, na_percentage = 0.1))
+fun_adtte$run(args = list(cached = TRUE))
 
 # dynamic arguments not reflected in the call
-cat(fun$get_call())
+cat(fun_adtte$get_call())
 ```
 
 `CallableFunction` can also depend on other R object same as `radtte` function 
@@ -114,19 +117,19 @@ one has to use `$assign_to_env()` to copy object and
 `$set_args(list(ADSL = as.symbol(ADSL)))` to link object with function argument.
 
 ```{r}
-ADSL <- radsl(cached = TRUE)
+ADSL <- radsl(cached = FALSE)
 
 # copy ADSL to CallableFunction environment 
-fun$assign_to_env("ADSL", ADSL)
+fun_adtte$assign_to_env("ADSL", ADSL)
 
 # set arguments
-fun$set_args(args = list(ADSL = as.name("ADSL"), cached = FALSE))
+fun_adtte$set_args(args = list(ADSL = as.name("ADSL"), cached = FALSE))
 
 # execute function
-fun$run()
+fun_adtte$run()
 
 # get R code
-fun$get_call()
+fun_adtte$get_call()
 ```
 ### `CallableCode`
 
@@ -207,7 +210,7 @@ prespecified `cached = TRUE` argument.
 library(magrittr)
 adsl <- relational_dataset_connector(
   dataname = "ADSL", 
-  pull_callable = callable_function(radsl) %>% set_args(list(cached = TRUE)), 
+  pull_callable = callable_function(radsl) %>% set_args(list(cached = FALSE)), 
   keys = get_cdisc_keys("ADSL"),
   label = "Subject-Level Analysis Dataset"
 )
@@ -380,7 +383,7 @@ together in `RelationalDataConnector` object.
 # create DatasetConnectors
 adsl <- relational_dataset_connector(
   dataname = "ADSL", 
-  pull_callable = callable_code("radsl(cached = TRUE)"), 
+  pull_callable = callable_code("radsl(cached = FALSE)"), 
   keys = get_cdisc_keys("ADSL"),
   label = "ADSL"
 )
