@@ -354,11 +354,25 @@ isolate({
       "ADSL_FILTERED <- dplyr::filter(ADSL, is.na(AGE) | AGE >= 38 & AGE <= 40, SEX == \"F\")"
     )
 
+    # covr adds extra lines of code into the code base
+    # to keep track of coverage but these are included
+    # in the deparsed get_filter_expr string!
+    # In the future this should be fixed in a general way but at
+    # the moment this is the only test case causing issues so for now we check the environment
+    # variable R_COVR (requires covr >= 3.0.0) to determine if we are running tests within
+    # covr and pull out the appropriate lines of the deparsed string to check
+    if (Sys.getenv("R_COVR") != "") {
+      required_code_lines <- c(4, 8)
+    }
+    else {
+      required_code_lines <- 2:3
+    }
+
     expect_identical(
-      deparse(ds$get_filter_expr("ADAE"), width.cutoff = 500L)[2:3],
+      trimws(deparse(ds$get_filter_expr("ADAE"), width.cutoff = 500L)[required_code_lines]),
       c(
-        "    ADAE_FILTERED_ALONE <- dplyr::filter(ADAE, is.na(ASEQ) | (is.infinite(ASEQ) | ASEQ >= 1 & ASEQ <= 5))", # nolint
-        "    ADAE_FILTERED <- dplyr::inner_join(x = ADSL_FILTERED[, c(\"STUDYID\", \"USUBJID\")], y = ADAE_FILTERED_ALONE, by = c(\"STUDYID\", \"USUBJID\"))" # nolint
+        "ADAE_FILTERED_ALONE <- dplyr::filter(ADAE, is.na(ASEQ) | (is.infinite(ASEQ) | ASEQ >= 1 & ASEQ <= 5))", # nolint
+        "ADAE_FILTERED <- dplyr::inner_join(x = ADSL_FILTERED[, c(\"STUDYID\", \"USUBJID\")], y = ADAE_FILTERED_ALONE, by = c(\"STUDYID\", \"USUBJID\"))" # nolint
       )
     )
   })
