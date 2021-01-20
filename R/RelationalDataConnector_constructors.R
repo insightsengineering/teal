@@ -89,18 +89,27 @@ rcd_data <- function(..., connection = rcd_connection(), check = TRUE) {
       # opens connection
       if (!is.null(connection$get_open_server())) {
         callModule(connection$get_open_server(),
-                   id = "open_connection",
-                   connection = connection)
+          id = "open_connection",
+          connection = connection
+        )
       }
+      if (connection$is_opened()) {
+        for (connector in connectors) {
+          # set_args before to return them in the code (fixed args)
+          set_args(connector, args = list(seed = input$seed))
 
-      for (connector in connectors) {
-        # set_args before to return them in the code (fixed args)
-        set_args(connector, args = list(seed = input$seed))
+          # pull each dataset
+          callModule(connector$get_server(), id = connector$get_dataname())
+          if (connector$is_failed()) {
+            break
+          }
+        }
 
-        # pull each dataset
-        callModule(connector$get_server(), id = connector$get_dataname())
-        if (connector$is_failed()) {
-          break
+        if (!is.null(connection$get_close_server())) {
+          callModule(connection$get_close_server(),
+            id = "close_connection",
+            connection = connection
+          )
         }
       }
     }
@@ -108,7 +117,6 @@ rcd_data <- function(..., connection = rcd_connection(), check = TRUE) {
 
   return(x)
 }
-
 
 #' Data connector for \code{RICE}
 #'

@@ -692,7 +692,7 @@ rice_connection <- function(open_args = list(), close_args = list(), ping_args =
         shinyjs::alert(
           paste(
             "Error closing connection\nError message: ",
-            conditionMessage(attr(connection$get_close_error_message(), "condition"))
+            connection$get_close_error_message()
           )
         )
       }
@@ -794,7 +794,7 @@ teradata_connection <- function(open_args = list(), close_args = list(), ping_ar
         shinyjs::alert(
           paste(
             "Error closing connection\nError message: ",
-            conditionMessage(attr(connection$get_close_error_message(), "condition"))
+            connection$get_close_error_message()
           )
         )
       }
