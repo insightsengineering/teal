@@ -6,7 +6,8 @@
 #' for \code{\link[shiny]{selectInput}}.
 #'
 #' @param choices a character vector
-#' @param labels vector containing labels to be applied to \code{choices}
+#' @param labels character vector containing labels to be applied to \code{choices}. If `NA` then
+#' "Label Missing" will be used.
 #' @param subset a character vector that is a subset of \code{choices}. This is useful if
 #'   only a few variables need to be named. If this argument is used, the returned vector will
 #'   match its order.
@@ -59,7 +60,8 @@ choices_labeled <- function(choices, labels, subset = NULL, types = NULL) {
   if (is.factor(labels)) {
     labels <- as.character(labels)
   }
-  stopifnot(is_character_vector(labels, min_length = 0L))
+
+  stopifnot(is_character_vector(labels[!is.na(labels)], min_length = 0L))
 
   stop_if_not(list(length(choices) == length(labels), "length of choices must be the same as labels"))
 

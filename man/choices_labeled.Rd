@@ -9,7 +9,8 @@ choices_labeled(choices, labels, subset = NULL, types = NULL)
 \arguments{
 \item{choices}{a character vector}
 
-\item{labels}{vector containing labels to be applied to \code{choices}}
+\item{labels}{character vector containing labels to be applied to \code{choices}. If \code{NA} then
+"Label Missing" will be used.}
 
 \item{subset}{a character vector that is a subset of \code{choices}. This is useful if
 only a few variables need to be named. If this argument is used, the returned vector will

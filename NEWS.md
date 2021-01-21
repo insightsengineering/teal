@@ -2,6 +2,7 @@
 ### Bug fixes
 * Duplicated lines of code passed to `teal::cdisc_dataset` and other `teal::RelationalDataset` constructors should now be shown when getting the code from `teal::cdisc_data` objects and other `teal::RelationalData` objects.
 * Added ability to press "Enter" key without having to set focus to the Submit button for delayed data loading.
+* Allow `variable_choices` to use datasets with missing labels.
 
 * Issues with no news:
 
