@@ -852,7 +852,7 @@ test_that("code_dataset_connector - Modify vars", {
 test_that("code_dataset_connector - library calls", {
   adsl <- relational_dataset_connector(
     dataname = "ADSL",
-    pull_callable = callable_function(radsl) %>% set_args(args = list(cached = FALSE, seed = 1)),
+    pull_callable = callable_function(radsl) %>% set_args(args = list(cached = TRUE)),
     keys = get_cdisc_keys("ADSL"),
     label = "ADSL dataset"
   )
@@ -883,7 +883,7 @@ test_that("code_dataset_connector - library calls", {
     ),
     keys = get_cdisc_keys("ADRS"),
     label = "ADRS dataset",
-    vars = list(ADSL = adsl, seed = 1)
+    vars = list(ADSL = adsl)
   )
 
   data <- cdisc_data(adsl, adtte, adrs, check = TRUE)
@@ -897,7 +897,7 @@ test_that("code_dataset_connector - library calls", {
   datasets <- get_datasets(data)
   expect_identical(
     get_raw_data(datasets[[1]]),
-    radsl(cached = FALSE, seed = 1)
+    radsl(cached = TRUE)
   )
 
   expect_identical(
