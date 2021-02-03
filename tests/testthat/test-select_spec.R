@@ -1,5 +1,3 @@
-context("select_spec")
-
 test_that("Proper argument types", {
   choices <- c("c1", "c2", "c3")
   selected <- c("c1", "c2")

@@ -1,4 +1,3 @@
-context("Data Connector")
 library(random.cdisc.data)
 
 test_that("data connection", {

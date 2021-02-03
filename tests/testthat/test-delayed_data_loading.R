@@ -1,4 +1,3 @@
-context("tests for delayed data loading functionality")
 
 library(random.cdisc.data)
 ADSL <- radsl(cached = TRUE) # nolint

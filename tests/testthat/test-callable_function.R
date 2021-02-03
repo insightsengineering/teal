@@ -1,5 +1,3 @@
-context("CallableFunction")
-
 test_that("Test inputs", {
   x_fun <- callable_function("mean")
   x_fun$set_args(list(x = c(1.0, 2.0, NA_real_), na.rm = TRUE))

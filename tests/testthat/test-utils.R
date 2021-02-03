@@ -1,5 +1,3 @@
-context("utils")
-
 test_that("is in operator", {
   # if both are vectors then it behaves like normal %in%
   expect_identical(c("a", "b") %is_in% c("a", "b", "c"), c("a", "b") %in% c("a", "b", "c"))

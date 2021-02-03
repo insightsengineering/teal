@@ -1,4 +1,3 @@
-context("delayed_data_objects")
 
 library(random.cdisc.data)
 

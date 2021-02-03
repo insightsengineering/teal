@@ -1,7 +1,5 @@
 library(random.cdisc.data)
 
-context("FilteredData")
-
 options(teal_logging = FALSE)
 
 ds <- teal:::FilteredData$new()

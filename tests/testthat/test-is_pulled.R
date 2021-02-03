@@ -1,5 +1,3 @@
-context("is_pulled")
-
 library(random.cdisc.data)
 
 test_that("Test RawDatasetConnector is_pulled", {

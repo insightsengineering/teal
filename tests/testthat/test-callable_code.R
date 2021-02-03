@@ -1,5 +1,3 @@
-context("CallableCode")
-
 library(random.cdisc.data)
 
 ADSL <- radsl(cached = TRUE) # nolint

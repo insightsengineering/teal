@@ -1,4 +1,3 @@
-context("filter_spec")
 
 choices <- c("val1", "val2", "val3")
 choices_d <- c("val1", "val1", "val2", "val3")

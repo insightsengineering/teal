@@ -1,6 +1,5 @@
-context("cdisc_data")
-
 library(random.cdisc.data)
+
 ADSL <- ARG1 <- ARG2 <- radsl(cached = TRUE) # nolint
 ADTTE <- radtte(cached = TRUE) # nolint
 ADRS <- radrs(cached = TRUE) # nolint

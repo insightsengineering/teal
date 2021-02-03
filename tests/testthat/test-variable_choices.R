@@ -1,5 +1,3 @@
-context("Variable_choices")
-
 test_that("Can create variable_choices with datasets with no or missing labels", {
 
   example_data <- data.frame(USUBJID = 1:2, STUDYID = 1:1)

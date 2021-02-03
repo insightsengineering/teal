@@ -1,5 +1,3 @@
-context("get_code")
-
 file_path  <- "./app_get_code/app.R"
 file_path1 <- "./app_get_code/app_source1.R"
 file_path2 <- "./app_get_code/app_source2.R"

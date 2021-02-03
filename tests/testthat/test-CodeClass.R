@@ -1,5 +1,3 @@
-context("CodeClass")
-
 library(random.cdisc.data)
 
 cc <- teal:::CodeClass$new()

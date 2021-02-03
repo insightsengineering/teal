@@ -1,5 +1,4 @@
 ## mutate_dataset ====
-context("mutate_dataset")
 
 test_that("mutate_dataset", {
 

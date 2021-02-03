@@ -1,4 +1,4 @@
-context("Dataset Connector")
+
 library(testthat)
 library(random.cdisc.data)
 

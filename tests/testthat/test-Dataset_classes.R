@@ -1,5 +1,4 @@
 ## RawDataset ====
-context("RawDataset")
 
 test_that("RawDataset basics", {
 
@@ -131,7 +130,6 @@ test_that("RawDataset edge case: column types with more than 1 classes", {
 })
 
 ## NamedDataset ====
-context("NamedDataset")
 
 test_that("NamedDataset basics", {
 
@@ -225,7 +223,6 @@ test_that("NamedDataset basics", {
 })
 
 ## RelationalDataset ====
-context("RelationalDataset")
 
 test_that("RelationalDataset basics", {
 
