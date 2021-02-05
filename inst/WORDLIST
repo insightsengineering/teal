@@ -14,8 +14,8 @@ ADaM
 BCE
 CDISC
 CMD
-CodeClass
 CSR
+CodeClass
 DataConnector
 Datanames
 FilteredData
@@ -29,6 +29,9 @@ Modularizing
 NEST
 NamedDataset
 PARAMCD
+PR
+PRs
+RSConnect
 RawDatasetConnector
 RelationalDataCollection
 RelationalDataConnector
@@ -93,7 +96,6 @@ refiltered
 reproducibility
 roche
 rsconnect
-RSConnect
 shiny's
 shinyServer
 songy

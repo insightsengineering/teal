@@ -497,7 +497,8 @@ test_that("Delayed data extract - single data connector with two rcd dataset con
   y <- data_extract_spec(
     dataname = "ADAE",
     select = select_spec(
-      choices = variable_choices("ADAE", subset = get_continuous)
+      choices = variable_choices("ADAE", subset = get_continuous),
+      selected = c("AGE: Age" = "AGE")
     )
   )
 
@@ -513,7 +514,8 @@ test_that("Delayed data extract - single data connector with two rcd dataset con
   x_expected <- data_extract_spec(
     dataname = "ADSL",
     select = select_spec(
-      choices = variable_choices(ADSL, subset = get_continuous, key = get_cdisc_keys("ADSL")$primary)
+      choices = variable_choices(ADSL, subset = get_continuous, key = get_cdisc_keys("ADSL")$primary),
+      selected = NULL
     )
   )
   y_expected <- data_extract_spec(
@@ -590,7 +592,8 @@ test_that("Delayed data extract - filtered", {
   y <- data_extract_spec(
     dataname = "ADRS",
     select = select_spec(
-      choices = variable_choices("ADRS", subset = get_continuous)
+      choices = variable_choices("ADRS", subset = get_continuous),
+      selected = c("AGE: Age" = "AGE")
     )
   )
 
@@ -605,7 +608,8 @@ test_that("Delayed data extract - filtered", {
   x_expected <- data_extract_spec(
     dataname = "ADSL",
     select = select_spec(
-      choices = variable_choices(ADSL, subset = get_continuous)
+      choices = variable_choices(ADSL, subset = get_continuous),
+      selected = NULL
     ),
     filter = filter_spec(
       label = "Select endpoints:",
@@ -661,7 +665,8 @@ test_that("Delayed extract filter concatenated - single data connector with two 
   y <- data_extract_spec(
     dataname = "ADRS",
     select = select_spec(
-      choices = variable_choices("ADRS", subset = get_continuous)
+      choices = variable_choices("ADRS", subset = get_continuous),
+      selected = c("AGE: Age" = "AGE")
     ),
     filter = filter_spec(
       label = "Select endpoints:",
@@ -694,7 +699,8 @@ test_that("Delayed extract filter concatenated - single data connector with two 
   x_expected <- data_extract_spec(
     dataname = "ADSL",
     select = select_spec(
-      choices = variable_choices(ADSL, subset = get_continuous)
+      choices = variable_choices(ADSL, subset = get_continuous),
+      selected = NULL
     ),
     filter = filter_spec(
       label = "Select endpoints:",
@@ -766,7 +772,8 @@ test_that("Delayed extract two filters - single data connector with two rcd data
   y <- data_extract_spec(
     dataname = "ADRS",
     select = select_spec(
-      choices = variable_choices("ADRS", subset = get_continuous)
+      choices = variable_choices("ADRS", subset = get_continuous),
+      selected = c("AGE: Age" = "AGE")
     ),
     filter = list(
       filter_spec(
@@ -807,7 +814,8 @@ test_that("Delayed extract two filters - single data connector with two rcd data
   x_expected <- data_extract_spec(
     dataname = "ADSL",
     select = select_spec(
-      choices = variable_choices(ADSL, subset = get_continuous)
+      choices = variable_choices(ADSL, subset = get_continuous),
+      selected = NULL
     ),
     filter = filter_spec(
       label = "Select endpoints:",
@@ -889,7 +897,8 @@ test_that("Delayed extract - RelationalData with single dataset and multiple con
   y <- data_extract_spec(
     dataname = "ADRS",
     select = select_spec(
-      choices = variable_choices("ADRS", subset = get_continuous)
+      choices = variable_choices("ADRS", subset = get_continuous),
+      selected = c("AGE: Age" = "AGE")
     ),
     filter = list(
       filter_spec(
@@ -930,7 +939,8 @@ test_that("Delayed extract - RelationalData with single dataset and multiple con
   x_expected <- data_extract_spec(
     dataname = "ADSL",
     select = select_spec(
-      choices = variable_choices(ADSL, subset = get_continuous, key = get_cdisc_keys("ADSL")$primary)
+      choices = variable_choices(ADSL, subset = get_continuous, key = get_cdisc_keys("ADSL")$primary),
+      NULL
     ),
     filter = filter_spec(
       label = "Select endpoints:",

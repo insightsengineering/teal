@@ -96,12 +96,8 @@ resolve_delayed.delayed_value_choices <- function(x, datasets) { # nolint
 #' @export
 #' @importFrom methods is
 resolve_delayed.delayed_choices_selected <- function(x, datasets) { # nolint
-  if (!is.null(x$selected)) {
-    x$selected <- if (is(x$selected, "delayed_data")) {
-      resolve_delayed(x$selected, datasets = datasets)
-    } else {
-      x$selected
-    }
+  if (is(x$selected, "delayed_data")) {
+    x$selected <- resolve_delayed(x$selected, datasets = datasets)
   }
   x$choices <- resolve_delayed(x$choices, datasets = datasets)
   return(do.call("choices_selected", x))
@@ -110,16 +106,24 @@ resolve_delayed.delayed_choices_selected <- function(x, datasets) { # nolint
 #' @export
 resolve_delayed.delayed_select_spec <- function(x, datasets) { # nolint
   x$choices <- resolve_delayed(x$choices, datasets = datasets)
-  x$selected <- `if`(is(x$selected, "delayed_data"), resolve_delayed(x$selected, datasets = datasets), x$selected)
+  if (is(x$selected, "delayed_data")) {
+    x$selected <- resolve_delayed(x$selected, datasets = datasets)
+  }
   return(do.call("select_spec", x))
 }
 
 #' @export
 #' @importFrom methods is
 resolve_delayed.delayed_filter_spec <- function(x, datasets) { # nolint
-  x$selected <- `if`(is(x$selected, "delayed_data"), resolve_delayed(x$selected, datasets = datasets), x$selected)
-  x$choices <- `if`(is(x$choices, "delayed_data"), resolve_delayed(x$choices, datasets = datasets), x$choices)
-  x$vars <- `if`(is(x$vars, "delayed_data"), resolve_delayed(x$vars, datasets = datasets), x$vars)
+  if (is(x$selected, "delayed_data")) {
+    x$selected <- resolve_delayed(x$selected, datasets = datasets)
+  }
+  if (is(x$choices, "delayed_data")) {
+    x$choices <- resolve_delayed(x$choices, datasets = datasets)
+  }
+  if (is(x$vars, "delayed_data")) {
+    x$vars <- resolve_delayed(x$vars, datasets = datasets)
+  }
   return(do.call("filter_spec", x))
 }
 
