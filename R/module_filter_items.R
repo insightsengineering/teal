@@ -67,7 +67,7 @@ ui_filter_items <- function(id, dataname) {
     fluidRow(
       column(8, tags$span(dataname, class = "filter_panel_dataname")),
       column(4, actionLink(
-        ns("remove_filters"), "", icon("trash-alt", lib = "font-awesome"),
+        ns("remove_filters"), "", icon("times-circle", lib = "font-awesome"),
         class = "remove pull-right"
       ))
     ),

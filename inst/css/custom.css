@@ -1,55 +1,72 @@
 .no-left-right-padding {
-   padding-left: 0 !important;
-   padding-right: 0 !important;
+  padding-left: 0 !important;
+  padding-right: 0 !important;
 }
 
-#teal_filter_panel_whole > div.well div.form-group label { width: 100% }
+#teal_filter_panel_whole > div.well div.form-group label {
+  width: 100%;
+}
 
-#teal_filter_active_vars p {margin-bottom: 0}
+#teal_filter_active_vars p {
+  margin-bottom: 0;
+}
 
 a.remove {
   font-weight: normal;
   float: right;
   border: 0;
-  background-color: whitesmoke;
-  color: black;
+  background-color: transparent;
+  color: rgba(0, 0, 0, 0.3);
   font-weight: 100;
   font-size: 0.9em;
-  border-radius: 0.25em;
-  padding: 0;
-  padding-left: 4px;
-  padding-right: 4px;
-  border: 1px solid #ffffff00;
-  padding: 2px 4px; /* todo1: duplicate properties? which has priority */
+  padding: 2px 4px;
   margin-top: 0;
 }
 
-a.remove:hover{
+a.remove:hover {
   color: #337ab7;
-  border: 1px solid #337ab7;
+}
+
+a.remove_all {
+  font-weight: normal;
+  float: right;
+  border: 0;
+  background-color: transparent;
+  color: #8800006b;
+  font-weight: 100;
+  font-size: 0.9em;
+  padding: 2px 4px;
+  margin-top: 0;
+  opacity: 50%;
+}
+
+a.remove_all:hover {
+  color: #d40000;
 }
 
 /* display waiting box at bottom right corner when Shiny is computing */
 .shinybusymessage {
-    position: fixed;
-    bottom: 0;
-    right: 0;
-    width: 140px;
-    margin: 15px;
-    padding: 5px 0 5px 10px;
-    text-align: left;
-    font-weight: bold;
-    font-size: 100%;
-    color: #ffffff;
-    background-color: #347ab7;
-    z-index: 105;
+  position: fixed;
+  bottom: 0;
+  right: 0;
+  width: 140px;
+  margin: 15px;
+  padding: 5px 0 5px 10px;
+  text-align: left;
+  font-weight: bold;
+  font-size: 100%;
+  color: #ffffff;
+  background-color: #347ab7;
+  z-index: 105;
 }
 
 .filterPlotOverlayBoxes {
   position: absolute;
-  top: -2px; right: 16px; bottom: -2px; left: 16px;
-  animation:
-    0.75s ease-out 0s 1 shinyDataFilterEnlargeX,
+  top: -2px;
+  right: 16px;
+  bottom: -2px;
+  left: 16px;
+  animation: 0.75s ease-out 0s 1 shinyDataFilterEnlargeX,
     0.5s ease-in 0s 1 shinyDataFilterFadeIn;
   transform-origin: left;
 }
@@ -57,9 +74,8 @@ a.remove:hover{
 .filterPlotOverlayRange {
   margin: 10px 11px -25px 11px;
   height: 25px;
-  animation:
-    0.75s ease-out 0s 1 shinyDataFilterEnlargeY,
-    0.5s ease-in  0s 1 shinyDataFilterFadeIn;
+  animation: 0.75s ease-out 0s 1 shinyDataFilterEnlargeY,
+    0.5s ease-in 0s 1 shinyDataFilterFadeIn;
   transform-origin: bottom;
 }
 
@@ -78,7 +94,6 @@ currently not used, instead one can click anywhere in the element to move it
   cursor: -webkit-grabbing;
 }
 
-
 .filter_panel_dataname {
   font-weight: bold;
 }
@@ -93,4 +108,3 @@ currently not used, instead one can click anywhere in the element to move it
   font-weight: normal;
   margin-left: 3px;
 }
-

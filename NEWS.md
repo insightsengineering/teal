@@ -4,6 +4,9 @@
 * Added ability to press "Enter" key without having to set focus to the Submit button for delayed data loading.
 * Allow `variable_choices` to use datasets with missing labels.
 
+### Enhancements
+* Added button to remove all active filters from the Filter Panel.
+
 * Issues with no news:
 
 # teal 0.9.2

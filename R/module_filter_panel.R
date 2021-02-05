@@ -70,6 +70,13 @@ ui_filter_panel <- function(id, datanames) {
       id = ns("teal_filter_active_vars"), # not used, can be used to customize CSS behavior
       class = "well",
       tags$label("Active Filter Variables", class = "text-primary", style = "margin-bottom: 15px;"),
+      actionLink(
+        ns("remove_all_filters"),
+        "",
+        icon("times-circle", lib = "font-awesome"),
+        title = "remove active filters",
+        class = "remove_all pull-right"
+      ),
       tagList(
         lapply(datanames, function(dataname) {
           id <- ns(paste0("teal_filters_", dataname))
@@ -181,5 +188,20 @@ srv_filter_panel <- function(input, output, session, datasets, active_datanames 
       )
     }
   }, ignoreNULL = FALSE)
+
+
+  observeEvent(input$remove_all_filters, {
+    .log("removing all active filters from filter panel")
+    lapply(datasets$datanames(), function(dataname) {
+      lapply(get_filter_vars(datasets, dataname = dataname), function(varname) {
+        set_single_filter_state(
+          datasets,
+          dataname = dataname,
+          varname = varname,
+          state = NULL
+        )
+      })
+    })
+  })
 
 }

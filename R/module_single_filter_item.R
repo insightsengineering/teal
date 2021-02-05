@@ -254,7 +254,7 @@ ui_single_filter_item <- function(id, filter_info, filter_state, prelabel) {
         )
       ),
       column(2, class = "no-left-right-padding", actionLink(
-        id_remove_filter, "", icon("trash-alt", lib = "font-awesome"),
+        id_remove_filter, "", icon("times-circle", lib = "font-awesome"),
         class = "remove pull-right"
       ))
     ),
