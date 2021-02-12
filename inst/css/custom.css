@@ -32,7 +32,7 @@ a.remove_all {
   float: right;
   border: 0;
   background-color: transparent;
-  color: #8800006b;
+  color: rgb(136, 0, 0, 0.72);
   font-weight: 100;
   font-size: 0.9em;
   padding: 2px 4px;

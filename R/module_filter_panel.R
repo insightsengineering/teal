@@ -57,46 +57,93 @@ ui_filter_panel <- function(id, datanames) {
   )
 
   ns <- NS(id)
+
   div(
     id = ns("teal_filter_panel_whole"), # used for hiding / showing
 
     div(
       id = ns("teal_filters_overview"), # not used, can be used to customize CSS behavior
       class = "well",
-      ui_filtered_data_overview(ns("teal_filters_info")),
+      tags$label("Active Filter Summary", class = "text-primary", style = "margin-bottom: 15px;"),
+      tags$a(
+        href = "javascript:void(0)",
+        class = "remove pull-right",
+        onclick = paste0(
+          "$('#",
+          ns("teal_filters_overview_contents"),
+          "').toggle();"
+        ),
+        title = "minimise panel",
+        tags$span(icon("minus-circle", lib = "font-awesome"))
+      ),
+      tags$br(),
+      div(
+        id = ns("teal_filters_overview_contents"),
+        ui_filtered_data_overview(ns("teal_filters_info"))
+      )
     ),
 
     div(
       id = ns("teal_filter_active_vars"), # not used, can be used to customize CSS behavior
       class = "well",
-      tags$label("Active Filter Variables", class = "text-primary", style = "margin-bottom: 15px;"),
-      actionLink(
-        ns("remove_all_filters"),
-        "",
-        icon("times-circle", lib = "font-awesome"),
-        title = "remove active filters",
-        class = "remove_all pull-right"
+      tags$div(
+        class = "row",
+        tags$div(
+          class = "col-sm-6",
+          tags$label("Active Filter Variables", class = "text-primary", style = "margin-bottom: 15px;")
+        ),
+        tags$div(
+          class = "col-sm-6",
+          tags$a(
+            href = "javascript:void(0)",
+            class = "remove pull-right",
+            onclick = paste0(
+              "$('#",
+              ns("teal_filter_active_vars_contents"),
+              "').toggle();"
+            ),
+            title = "minimise panel",
+            tags$span(icon("minus-circle", lib = "font-awesome"))
+          ),
+          actionLink(
+            ns("remove_all_filters"),
+            "",
+            icon("times-circle", lib = "font-awesome"),
+            title = "remove active filters",
+            class = "remove_all pull-right"
+          )
+        )
       ),
-      tagList(
-        lapply(datanames, function(dataname) {
-          id <- ns(paste0("teal_filters_", dataname))
-          # add span with same id to show / hide
-          return(span(id = id, ui_filter_items(id, dataname)))
-        })
-      )
+
+      div(id = ns("teal_filter_active_vars_contents"),
+          tagList(lapply(datanames, function(dataname) {
+            id <- ns(paste0("teal_filters_", dataname))
+            # add span with same id to show / hide
+            return(span(id = id, ui_filter_items(id, dataname)))
+          })))
     ),
 
     div(
       id = ns("teal_filter_add_vars"), # not used, can be used to customize CSS behavior
       class = "well",
       tags$label("Add Filter Variables", class = "text-primary", style = "margin-bottom: 15px;"),
-      tagList(
-        lapply(datanames, function(dataname) {
-          id <- ns(paste0("teal_add_", dataname, "_filter"))
-          # add span with same id to show / hide
-          return(span(id = id, ui_add_filter_variable(id, dataname)))
-        })
-      )
+      tags$a(
+        href = "javascript:void(0)",
+        class = "remove pull-right",
+        onclick = paste0(
+          "$('#",
+          ns("teal_filter_add_vars_contents"),
+          "').toggle();"
+        ),
+        title = "minimise panel",
+        tags$span(icon("minus-circle", lib = "font-awesome"))
+      ),
+      div(id = ns("teal_filter_add_vars_contents"),
+          tagList(lapply(datanames, function(dataname) {
+            id <- ns(paste0("teal_add_", dataname, "_filter"))
+            # add span with same id to show / hide
+            return(span(id = id, ui_add_filter_variable(id, dataname)))
+          })))
     )
 
   )
@@ -188,7 +235,6 @@ srv_filter_panel <- function(input, output, session, datasets, active_datanames 
       )
     }
   }, ignoreNULL = FALSE)
-
 
   observeEvent(input$remove_all_filters, {
     .log("removing all active filters from filter panel")

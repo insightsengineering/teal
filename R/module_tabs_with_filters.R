@@ -96,16 +96,30 @@ ui_tabs_with_filters <- function(id, modules, datasets) {
   # modules must be teal_modules, not teal_module; otherwise we will get the UI and not a tabsetPanel of UIs
   teal_ui <- ui_nested_tabs(ns("modules_ui"), modules = modules, datasets)
 
+  filter_panel_btn <- tags$li(
+    style = "flex-grow : 1;",
+    tags$a(
+      href = "javascript:void(0)",
+      class = "menubtn",
+      onclick = "toggle_sidebar();",
+      title = "toggle filter panels",
+      tags$span(icon("navicon", lib = "font-awesome"))
+    )
+  )
+
   stopifnot(length(teal_ui$children) == 2)
   # teal_ui$children[[1]] contains links to tabs
   # teal_ui$children[[2]] contains actual tab contents
+
+  # adding filter_panel_btn to the tabsetPanel pills
+  teal_ui$children[[1]] <- tagAppendChild(teal_ui$children[[1]], filter_panel_btn)
+
   teal_ui$children <- list(
     teal_ui$children[[1]],
     tags$hr(style = "margin: 7px 0;"),
     fluidRow(
-      column(9, teal_ui$children[[2]]),
-      column(3, filter_and_info_ui)
-    )
+      column(width = 9, teal_ui$children[[2]], id = "teal_primary_col"),
+      column(width = 3, filter_and_info_ui, id = "teal_secondary_col"))
   )
   return(teal_ui)
 }
