@@ -62,3 +62,8 @@ ADDV:
   primary: ["STUDYID", "USUBJID", "ASTDT", "DVTERM", "DVSEQ"]
   foreign: ["STUDYID", "USUBJID"]
   parent: "ADSL"
+
+ADSUB:
+  primary: ["STUDYID", "USUBJID", "PARAMCD", "AVISITN", "ADTM", "SRCSEQ"]
+  foreign: ["STUDYID", "USUBJID"]
+  parent: "ADSL"
