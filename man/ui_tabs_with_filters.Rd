@@ -2,14 +2,14 @@
 % Please edit documentation in R/module_tabs_with_filters.R
 \name{ui_tabs_with_filters}
 \alias{ui_tabs_with_filters}
-\title{Add right filter panel into each of the top-level `teal_modules` UIs.}
+\title{Add right filter panel into each of the top-level \code{teal_modules} UIs.}
 \usage{
 ui_tabs_with_filters(id, modules, datasets)
 }
 \arguments{
 \item{id}{(\code{character}) module id to embed it, if provided,
 the server function must be called with \code{callModule};
-See the vignette for an example. However, \verb{\link{ui_teal_with_splash}}
+See the vignette for an example. However, \code{\link{ui_teal_with_splash}}
 is then preferred to this function.}
 
 \item{modules}{nested list with one list per module with the
@@ -35,16 +35,16 @@ datasets, shared across modules}
 }
 \value{
 A \code{tagList} of The main menu, place holders for filters and
-  place holders for the teal modules
+place holders for the teal modules
 }
 \description{
-The `\link{ui_nested_tabs}` function returns a nested tabbed UI corresponding
+The \code{\link{ui_nested_tabs}} function returns a nested tabbed UI corresponding
 to the nested modules.
 This function adds the right filter panel to each main tab.
 }
 \details{
-The right filter panel's filter choices affect the `datasets` object. Therefore,
-all modules using the same `datasets` share the same filters.
+The right filter panel's filter choices affect the \code{datasets} object. Therefore,
+all modules using the same \code{datasets} share the same filters.
 
 This works with nested modules of depth greater than 2, though the filter
 panel is inserted at the right of the modules at depth 1 and not at the leaves.

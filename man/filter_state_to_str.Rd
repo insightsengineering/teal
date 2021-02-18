@@ -7,12 +7,12 @@
 filter_state_to_str(var_type, state, add_na = FALSE)
 }
 \arguments{
-\item{var_type}{\code{character} variable type}
+\item{var_type}{(\code{character}) variable type}
 
-\item{state}{\code{list} with elements corresponding to variable
+\item{state}{(\code{list}) with elements corresponding to variable
 type; can be \code{filter_state} or \code{filter_info}}
 
-\item{add_na}{\code{logical} whether to display information about NA,
+\item{add_na}{(\code{logical}) whether to display information about NA,
 either \code{keep_na} (for \code{filter_state}) or \code{na_count} (for \code{filter_info})}
 }
 \description{

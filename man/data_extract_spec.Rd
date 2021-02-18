@@ -35,7 +35,7 @@ with multiple keys selected in filter part.}
 
 The Data Extract input can be used to filter and select columns from a data
 set. This function enables such an input in teal.
-Please use the constructor function \link{data_extract_spec} to set it up.
+Please use the constructor function \code{\link{data_extract_spec}} to set it up.
 
 Note that no checks based on columns can be done because the data is only referred to by name.
 }
@@ -107,5 +107,5 @@ data_extract_spec(
 }
 
 \references{
-\link{select_spec} \link{filter_spec}
+\code{\link{select_spec}} \code{\link{filter_spec}}
 }

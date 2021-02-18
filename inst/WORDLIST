@@ -42,6 +42,7 @@ Roche
 SDTM
 SREPs
 STUDYID
+Subclasses
 TLG
 TLGs
 UI
@@ -90,6 +91,7 @@ numericInput
 pre
 px
 rcode
+reactively
 reactives
 recurse
 refiltered
@@ -99,6 +101,7 @@ rsconnect
 shiny's
 shinyServer
 songy
+subclasses
 submodule
 swimlane
 tabsetted

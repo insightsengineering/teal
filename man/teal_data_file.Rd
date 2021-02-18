@@ -7,9 +7,11 @@
 teal_data_file(path, code = get_code(path))
 }
 \arguments{
-\item{path}{(\code{character}) string giving the pathname of the file to read from.}
+\item{path}{A (\code{connection}) or a (\code{character})\cr
+string giving the pathname of the file or URL to read from. "" indicates the connection \code{stdin}.}
 
-\item{code}{(\code{character}) reproducible code to re-create object}
+\item{code}{(\code{character})\cr
+reproducible code to re-create object}
 }
 \value{
 \code{RelationalData} object
@@ -27,11 +29,11 @@ writeLines(
      library(random.cdisc.data)
 
      adsl <- cdisc_dataset(dataname = \"ADSL\",
-                           data = radsl(cached = TRUE),
+                           x = radsl(cached = TRUE),
                            code = \"library(random.cdisc.data)\nADSL <- radsl(cached = TRUE)\")
 
      adtte <- cdisc_dataset(dataname = \"ADTTE\",
-                            data = radtte(cached = TRUE),
+                            x = radtte(cached = TRUE),
                             code = \"library(random.cdisc.data)\nADTTE <- radtte(cached = TRUE)\")
 
      cdisc_data(adsl, adtte)"
@@ -56,8 +58,8 @@ writeLines(
     ADTTE$n <- nrow(ADSL)
     # <code
 
-    ADSL <- cdisc_dataset(dataname = \"ADSL\", data = ADSL)
-    ADTTE <- cdisc_dataset(dataname = \"ADTTE\", data = ADTTE)
+    ADSL <- cdisc_dataset(dataname = \"ADSL\", x = ADSL)
+    ADTTE <- cdisc_dataset(dataname = \"ADTTE\", x = ADTTE)
 
     cdisc_data(ADSL, ADTTE)"
   ),

@@ -17,7 +17,7 @@ srv_shiny_module_arguments(input, output, session, datasets, modules)
 datasets, shared across modules}
 
 \item{modules}{\code{teal_module} or \code{teal_modules} object, the latter
-can be used for nested tabs, see \verb{\link{ui_nested_tabs}}}
+can be used for nested tabs, see \code{\link{ui_nested_tabs}}}
 }
 \description{
 Function to inherit Shiny module arguments that must always be present

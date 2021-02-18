@@ -8,7 +8,7 @@ test_that("Objects can be generated from the code", {
   expect_identical(y_code$run(), ADSL)
 
   y2_code <- callable_code("library(random.cdisc.data)\n\nADSL <- radsl(cached = TRUE)\nADSL")
-  # we losing one \n character - code is parsed then joind with \n
+  # we are losing one \n character - code is parsed then joind with \n
   expect_equal(y2_code$get_call(), c("library(random.cdisc.data)\nADSL <- radsl(cached = TRUE)\nADSL"))
   expect_identical(y2_code$run(), ADSL)
 
@@ -22,17 +22,16 @@ test_that("Objects can be generated from the code", {
 
   x <- code_dataset_connector(
     dataname = "ADSL",
-    keys = get_cdisc_keys("ADSL"),
-    code = "x <- radsl(cached = TRUE); x"
+    code = "x <- radsl(cached = TRUE); x",
+    keys = get_cdisc_keys("ADSL")
   )
 
   expect_equal(x$get_code(), "x <- radsl(cached = TRUE)\nADSL <- x")
 
   # direct usage of function from package
-  y_code <- callable_code("ADSL <- random.cdisc.data::radsl(cached = TRUE)\nADSL")
+  y_code <- callable_code("ADSL <- random.cdisc.data::radsl(cached = TRUE); ADSL")
   expect_equal(y_code$get_call(), c("ADSL <- random.cdisc.data::radsl(cached = TRUE)\nADSL"))
   expect_identical(y_code$run(), ADSL)
-
 })
 
 test_that("Connector objects contain the incorrect code", {

@@ -3,7 +3,7 @@
 
 #' Add right filter panel into each of the top-level `teal_modules` UIs.
 #'
-#' The `\link{ui_nested_tabs}` function returns a nested tabbed UI corresponding
+#' The \code{\link{ui_nested_tabs}} function returns a nested tabbed UI corresponding
 #' to the nested modules.
 #' This function adds the right filter panel to each main tab.
 #'
@@ -91,7 +91,7 @@ ui_tabs_with_filters <- function(id, modules, datasets) {
 
   # use isolate because we assume that the number of datasets does not change over the course of the teal app
   # this will just create placeholders which are shown only if non-empty
-  filter_and_info_ui <- ui_filter_panel(ns("filter_panel"), datanames = isolate(datasets$datanames()))
+  filter_and_info_ui <- ui_filter_panel(ns("filter_panel"), datasets, datanames = isolate(datasets$datanames()))
 
   # modules must be teal_modules, not teal_module; otherwise we will get the UI and not a tabsetPanel of UIs
   teal_ui <- ui_nested_tabs(ns("modules_ui"), modules = modules, datasets)
@@ -126,8 +126,8 @@ ui_tabs_with_filters <- function(id, modules, datasets) {
 
 #' Server function
 #'
-#' @md
 #' @inheritParams srv_shiny_module_arguments
+#' @inheritParams srv_filter_panel
 #' @return `reactive` currently selected active_module
 srv_tabs_with_filters <- function(input, output, session, datasets, modules) {
   active_module <- callModule(srv_nested_tabs, "modules_ui", datasets = datasets, modules = modules)

@@ -11,7 +11,7 @@ enclosed_with(lines)
 }
 \value{
 (\code{character}) subset of lines which start and end with preprocessing
-  start and stop tags.
+start and stop tags.
 }
 \description{
 Extracts lines from code which are enclosed within regexp starts_at and stops_at

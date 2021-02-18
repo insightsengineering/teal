@@ -2,13 +2,13 @@
 % Please edit documentation in R/RelationalDataConnector_constructors.R
 \name{rice_data}
 \alias{rice_data}
-\title{Data connector for \code{RICE}}
+\title{\code{RelationalDataConnector} connector for \code{RICE}}
 \usage{
 rice_data(..., connection = rice_connection(), additional_ui = NULL)
 }
 \arguments{
-\item{...}{(\code{RelationalDatasetConnector} objects)\cr
-dataset connectors created using \link{rice_dataset_connector}}
+\item{...}{(\code{DatasetConnector} objects)\cr
+dataset connectors created using \code{\link{rice_dataset_connector}}}
 
 \item{connection}{(\code{DataConnection}) object returned from \code{rice_connection}.}
 

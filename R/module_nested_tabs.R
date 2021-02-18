@@ -9,7 +9,6 @@
 #' The `datasets` argument is required to resolve the teal arguments in an
 #' isolated context (with respect to reactivity)
 #'
-#' @md
 #' @param id module id
 #' @inheritParams srv_shiny_module_arguments
 #' @return depending on class of `modules`:
@@ -107,7 +106,6 @@ ui_nested_tabs <- function(id, modules, datasets) {
 
 #' Server function that returns currently active module
 #'
-#' @md
 #' @inheritParams srv_shiny_module_arguments
 #' @return `reactive` which returns the active module that corresponds to the selected tab
 srv_nested_tabs <- function(input, output, session, datasets, modules) {

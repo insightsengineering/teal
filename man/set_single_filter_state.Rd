@@ -7,15 +7,15 @@
 set_single_filter_state(datasets, dataname, varname, state)
 }
 \arguments{
-\item{datasets}{`FilteredData`}
+\item{datasets}{(\code{FilteredData})}
 
-\item{dataname}{`character` dataname}
+\item{dataname}{(\code{character}) dataname}
 
-\item{varname}{`character` variable name}
+\item{varname}{(\code{character}) variable name}
 
-\item{state}{`list` new state for the variable, can be
-`default_filter()`}
+\item{state}{(\code{list}) new state for the variable, can be
+\code{default_filter()}}
 }
 \description{
-See `FilteredData$set_filter_state`.
+See \code{FilteredData$set_filter_state}.
 }

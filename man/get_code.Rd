@@ -2,19 +2,19 @@
 % Please edit documentation in R/get_code.R
 \name{get_code}
 \alias{get_code}
-\alias{get_code.RawDatasetConnector}
-\alias{get_code.NamedDataset}
-\alias{get_code.RelationalDataCollection}
+\alias{get_code.DatasetConnector}
+\alias{get_code.Dataset}
+\alias{get_code.DataAbstract}
 \alias{get_code.default}
 \title{Get code}
 \usage{
 get_code(x, ...)
 
-\method{get_code}{RawDatasetConnector}(x, deparse = TRUE, ...)
+\method{get_code}{DatasetConnector}(x, deparse = TRUE, ...)
 
-\method{get_code}{NamedDataset}(x, deparse = TRUE, ...)
+\method{get_code}{Dataset}(x, deparse = TRUE, ...)
 
-\method{get_code}{RelationalDataCollection}(x, dataname = character(0), deparse = TRUE, ...)
+\method{get_code}{DataAbstract}(x, dataname = character(0), deparse = TRUE, ...)
 
 \method{get_code}{default}(
   x,
@@ -27,7 +27,7 @@ get_code(x, ...)
 )
 }
 \arguments{
-\item{x}{(\code{object}) of class \link{RawDatasetConnector} or \link{NamedDataset}. If of
+\item{x}{(\code{object}) of class \code{\link{DatasetConnector}} or \code{\link{Dataset}}. If of
 class \code{character} will be treated as file to read.}
 
 \item{...}{not used, only for support of S3}
@@ -72,25 +72,23 @@ Code chunks are described with:
 }
 }
 \examples{
-# RelationalData ---------
-x1 <- relational_dataset(
+x1 <- dataset(
   x = data.frame(x = c(1, 2), y = c("a", "b"), stringsAsFactors = FALSE),
-  keys = keys(primary = "y", foreign = NULL, parent = NULL),
+  keys = "y",
   dataname = "XY",
   code = "XY <- data.frame(x = c(1, 2), y = c('aa', 'bb'), stringsAsFactors = FALSE)",
   label = character(0)
 )
 
-x2 <- relational_dataset(
+x2 <- dataset(
   x = data.frame(x = c(1, 2), y = c("a", "b"), stringsAsFactors = FALSE),
-  keys = keys(primary = "y", foreign = NULL, parent = NULL),
+  keys = "y",
   dataname = "XYZ",
   code = "XYZ <- data.frame(x = c(1, 2), y = c('aa', 'bb'), stringsAsFactors = FALSE)",
   label = character(0)
 )
 
 rd <- teal_data(x1, x2)
-
 
 get_code(rd)
 get_code(rd, "XY")

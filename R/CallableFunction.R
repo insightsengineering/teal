@@ -81,7 +81,7 @@ CallableFunction <- R6::R6Class( #nolint
     #'  remove other \code{args}, only create new of modify previous of the same name.
     #'  To clean arguments specify \code{args = NULL}.
     #'
-    #' @return \code{self} invisibly for chaining.
+    #' @return (`self`) invisibly for chaining.
     set_args = function(args) {
       # remove args if empty
       if (is_empty(args)) {
@@ -103,7 +103,7 @@ CallableFunction <- R6::R6Class( #nolint
     #' @param name (\code{character}) argument name
     #' @param value argument value
     #'
-    #' @return \code{self} invisibly for chaining.
+    #' @return (`self`) invisibly for chaining.
     set_arg_value = function(name, value) {
       stopifnot(is_character_single(name))
       arg_names <- names(formals(eval(str2lang(private$fun_name))))
@@ -195,9 +195,8 @@ CallableFunction <- R6::R6Class( #nolint
 
 #' Create \code{CallableFunction} object
 #'
-#' @md
 #' @description `r lifecycle::badge("experimental")`
-#' Create \link{CallableFunction} object to execute specific function and get reproducible
+#' Create \code{\link{CallableFunction}} object to execute specific function and get reproducible
 #' call.
 #'
 #' @param fun (\code{function})\cr

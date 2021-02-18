@@ -1,15 +1,15 @@
 #' Retrieve raw data
 #'
-#' @md
-#' @param x (\code{RawDataset, RawDatasetConnector, RelationalData, cdisc_data})\cr object
-#' @param dataname (\code{character} value)\cr
+#' @param x (`Dataset`, `DatasetConnector`, `DataAbstract`)\cr
+#'   object
+#' @param dataname (\code{character})\cr
 #'  Name of dataset to return raw data for.
 #'
 #' @description `r lifecycle::badge("experimental")`
 #'
 #' @return \code{data.frame} with the raw data inserted into the R6 objects. In case of
-#' \code{RelationalData} or \code{cdisc_data} \code{list} of \code{data.frame} can be returned
-#' if user doesn't specify \code{dataname} (\code{get_raw_data} from all datasets).
+#' \code{DataAbstract}, \code{list} of \code{data.frame} can be returned
+#' if user doesn't specify \code{dataname} - (\code{get_raw_data} from all datasets).
 #'
 #' @export
 get_raw_data <- function(x, dataname = NULL) {
@@ -21,23 +21,15 @@ get_raw_data <- function(x, dataname = NULL) {
 #' @rdname get_raw_data
 #' @examples
 #'
-#' # RawDataset ---------
+#' # Dataset ---------
 #' library(random.cdisc.data)
 #' ADSL <- radsl(cached = TRUE)
-#' ADSL_raw <- raw_dataset(x = ADSL)
-#' get_raw_data(ADSL_raw)
 #'
-#' ADSL_named <- named_dataset(dataname = "ADSL", x = ADSL)
-#' get_raw_data(ADSL_named)
-#'
-#' ADSL_relational <- as_relational(ADSL_raw,
-#'   dataname = "ADSL",
-#'   keys = keys(primary = c("USUBJID", "STUDYID"), foreign = NULL, parent = NULL)
-#' )
-#' get_raw_data(ADSL_relational)
-get_raw_data.RawDataset <- function(x, dataname = NULL) {
+#' x <- dataset(dataname = "ADSL", x = ADSL)
+#' get_raw_data(x)
+get_raw_data.Dataset <- function(x, dataname = NULL) {
   if (!is.null(dataname)) {
-    warning("'dataname' argument ignored - RawDataset can contain only one dataset.")
+    warning("'dataname' argument ignored - Dataset can contain only one dataset.")
   }
   x$get_raw_data()
 }
@@ -46,14 +38,14 @@ get_raw_data.RawDataset <- function(x, dataname = NULL) {
 #' @rdname get_raw_data
 #' @examples
 #'
-#' # RawDatasetConnector ---------
+#' # DatasetConnector ---------
 #' library(random.cdisc.data)
 #' dc <- rcd_cdisc_dataset_connector(dataname = "ADSL", fun = radsl, cached = TRUE)
 #' load_dataset(dc)
 #' get_raw_data(dc)
-get_raw_data.RawDatasetConnector <- function(x, dataname = NULL) { # nolint
+get_raw_data.DatasetConnector <- function(x, dataname = NULL) { # nolint
   if (!is.null(dataname)) {
-    warning("'dataname' argument ignored - RawDatasetConnector can contain only one dataset.")
+    warning("'dataname' argument ignored - DatasetConnector can contain only one dataset.")
   }
   x$get_raw_data()
 }
@@ -64,12 +56,12 @@ get_raw_data.RawDatasetConnector <- function(x, dataname = NULL) { # nolint
 #'
 #' # RelationalData ----------------
 #' library(random.cdisc.data)
-#' adsl <- cdisc_dataset(dataname = "ADSL", # RelationalDataset
-#'                       data = radsl(cached = TRUE),
+#' adsl <- cdisc_dataset(dataname = "ADSL",
+#'                       x = radsl(cached = TRUE),
 #'                       code = "library(random.cdisc.data)\nADSL <- radsl(cached = TRUE)")
 #'
-#' adtte <- cdisc_dataset(dataname = "ADTTE", # RelationalDataset
-#'                        data = radtte(cached = TRUE),
+#' adtte <- cdisc_dataset(dataname = "ADTTE",
+#'                        x = radtte(cached = TRUE),
 #'                        code = "library(random.cdisc.data)\nADTTE <- radtte(cached = TRUE)")
 #'
 #' rd <- teal:::RelationalData$new(adsl, adtte)
@@ -96,7 +88,7 @@ get_raw_data.RawDatasetConnector <- function(x, dataname = NULL) { # nolint
 #' \dontrun{
 #' get_raw_data(drc)
 #' }
-get_raw_data.RelationalDataCollection <- function(x, dataname = NULL) { # nolint
+get_raw_data.DataAbstract <- function(x, dataname = NULL) { # nolint
   if (!is.null(dataname)) {
     datasets_names <- x$get_datanames()
     if (dataname %in% datasets_names) {

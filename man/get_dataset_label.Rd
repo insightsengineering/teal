@@ -2,19 +2,19 @@
 % Please edit documentation in R/get_dataset_label.R
 \name{get_dataset_label}
 \alias{get_dataset_label}
-\alias{get_dataset_label.NamedDatasetConnector}
-\alias{get_dataset_label.NamedDataset}
+\alias{get_dataset_label.DatasetConnector}
+\alias{get_dataset_label.Dataset}
 \title{S3 method for getting a label of
-(\code{RelationalDatasetConnector} or \code{NamedDataset}) R6 object}
+(\code{DatasetConnector} or \code{Dataset}) R6 object}
 \usage{
 get_dataset_label(x)
 
-\method{get_dataset_label}{NamedDatasetConnector}(x)
+\method{get_dataset_label}{DatasetConnector}(x)
 
-\method{get_dataset_label}{NamedDataset}(x)
+\method{get_dataset_label}{Dataset}(x)
 }
 \arguments{
-\item{x}{(\code{RelationalDatasetConnector} or \code{NamedDataset}) R6 object}
+\item{x}{(\code{DatasetConnector} or \code{Dataset}) R6 object}
 }
 \value{
 label (\code{character}) Label to describe the dataset
@@ -27,20 +27,14 @@ library(random.cdisc.data)
 fun <- callable_function(data.frame)
 fun$set_args(list(n = 5, seed = 1, cached = TRUE))
 
-x <- named_dataset_connector(
+x <- dataset_connector(
  pull_callable = fun,
- dataname = "ADSL"
+ dataname = "ADSL",
+ label = "My custom label"
 )
 get_dataset_label(x)
-
-x1 <- relational_dataset_connector(
- dataname = "ADSL",
- pull_callable = fun,
- keys = get_cdisc_keys("ADSL")
-)
-get_dataset_label(x1)
 library(random.cdisc.data)
 ADSL <- radsl(cached = TRUE)
-ADSL_dataset <- named_dataset(dataname = "ADSL", x = ADSL)
+ADSL_dataset <- dataset(dataname = "ADSL", x = ADSL, label = "My custom label")
 get_dataset_label(ADSL_dataset)
 }

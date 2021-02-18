@@ -2,51 +2,44 @@
 % Please edit documentation in R/get_raw_data.R
 \name{get_raw_data}
 \alias{get_raw_data}
-\alias{get_raw_data.RawDataset}
-\alias{get_raw_data.RawDatasetConnector}
-\alias{get_raw_data.RelationalDataCollection}
+\alias{get_raw_data.Dataset}
+\alias{get_raw_data.DatasetConnector}
+\alias{get_raw_data.DataAbstract}
 \title{Retrieve raw data}
 \usage{
 get_raw_data(x, dataname = NULL)
 
-\method{get_raw_data}{RawDataset}(x, dataname = NULL)
+\method{get_raw_data}{Dataset}(x, dataname = NULL)
 
-\method{get_raw_data}{RawDatasetConnector}(x, dataname = NULL)
+\method{get_raw_data}{DatasetConnector}(x, dataname = NULL)
 
-\method{get_raw_data}{RelationalDataCollection}(x, dataname = NULL)
+\method{get_raw_data}{DataAbstract}(x, dataname = NULL)
 }
 \arguments{
-\item{x}{(\code{RawDataset, RawDatasetConnector, RelationalData, cdisc_data})\cr object}
+\item{x}{(\code{Dataset}, \code{DatasetConnector}, \code{DataAbstract})\cr
+object}
 
-\item{dataname}{(\code{character} value)\cr
+\item{dataname}{(\code{character})\cr
 Name of dataset to return raw data for.}
 }
 \value{
 \code{data.frame} with the raw data inserted into the R6 objects. In case of
-\code{RelationalData} or \code{cdisc_data} \code{list} of \code{data.frame} can be returned
-if user doesn't specify \code{dataname} (\code{get_raw_data} from all datasets).
+\code{DataAbstract}, \code{list} of \code{data.frame} can be returned
+if user doesn't specify \code{dataname} - (\code{get_raw_data} from all datasets).
 }
 \description{
 \ifelse{html}{\out{<a href='https://www.tidyverse.org/lifecycle/#experimental'><img src='figures/lifecycle-experimental.svg' alt='Experimental lifecycle'></a>}}{\strong{Experimental}}
 }
 \examples{
 
-# RawDataset ---------
+# Dataset ---------
 library(random.cdisc.data)
 ADSL <- radsl(cached = TRUE)
-ADSL_raw <- raw_dataset(x = ADSL)
-get_raw_data(ADSL_raw)
 
-ADSL_named <- named_dataset(dataname = "ADSL", x = ADSL)
-get_raw_data(ADSL_named)
+x <- dataset(dataname = "ADSL", x = ADSL)
+get_raw_data(x)
 
-ADSL_relational <- as_relational(ADSL_raw,
-  dataname = "ADSL",
-  keys = keys(primary = c("USUBJID", "STUDYID"), foreign = NULL, parent = NULL)
-)
-get_raw_data(ADSL_relational)
-
-# RawDatasetConnector ---------
+# DatasetConnector ---------
 library(random.cdisc.data)
 dc <- rcd_cdisc_dataset_connector(dataname = "ADSL", fun = radsl, cached = TRUE)
 load_dataset(dc)
@@ -54,12 +47,12 @@ get_raw_data(dc)
 
 # RelationalData ----------------
 library(random.cdisc.data)
-adsl <- cdisc_dataset(dataname = "ADSL", # RelationalDataset
-                      data = radsl(cached = TRUE),
+adsl <- cdisc_dataset(dataname = "ADSL",
+                      x = radsl(cached = TRUE),
                       code = "library(random.cdisc.data)\nADSL <- radsl(cached = TRUE)")
 
-adtte <- cdisc_dataset(dataname = "ADTTE", # RelationalDataset
-                       data = radtte(cached = TRUE),
+adtte <- cdisc_dataset(dataname = "ADTTE",
+                       x = radtte(cached = TRUE),
                        code = "library(random.cdisc.data)\nADTTE <- radtte(cached = TRUE)")
 
 rd <- teal:::RelationalData$new(adsl, adtte)

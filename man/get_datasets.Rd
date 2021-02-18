@@ -2,25 +2,25 @@
 % Please edit documentation in R/get_datasets.R
 \name{get_datasets}
 \alias{get_datasets}
-\alias{get_datasets.RelationalDataCollection}
-\alias{get_datasets.RawDatasetConnector}
-\alias{get_datasets.RawDataset}
-\title{Get a \code{\link{RelationalDataset}} objects.}
+\alias{get_datasets.DataAbstract}
+\alias{get_datasets.DatasetConnector}
+\alias{get_datasets.Dataset}
+\title{Get a \code{\link{Dataset}} objects.}
 \usage{
 get_datasets(x)
 
-\method{get_datasets}{RelationalDataCollection}(x)
+\method{get_datasets}{DataAbstract}(x)
 
-\method{get_datasets}{RawDatasetConnector}(x)
+\method{get_datasets}{DatasetConnector}(x)
 
-\method{get_datasets}{RawDataset}(x)
+\method{get_datasets}{Dataset}(x)
 }
 \arguments{
 \item{x}{(\code{\link{RelationalData}})\cr
 object containing datasets.}
 }
 \value{
-\code{list} or \code{RelationalDataset} objects
+\code{list} or \code{Dataset} objects
 }
 \description{
 \ifelse{html}{\out{<a href='https://www.tidyverse.org/lifecycle/#experimental'><img src='figures/lifecycle-experimental.svg' alt='Experimental lifecycle'></a>}}{\strong{Experimental}}
@@ -29,12 +29,12 @@ object containing datasets.}
 
 # RelationalData --------
 library(random.cdisc.data)
-adsl <- cdisc_dataset(dataname = "ADSL", # RelationalDataset
-                      data = radsl(cached = TRUE),
+adsl <- cdisc_dataset(dataname = "ADSL",
+                      x = radsl(cached = TRUE),
                       code = "library(random.cdisc.data)\nADSL <- radsl(cached = TRUE)")
 
-adae <- cdisc_dataset(dataname = "ADAE", # RelationalDataset
-                       data = radae(cached = TRUE),
+adae <- cdisc_dataset(dataname = "ADAE",
+                       x = radae(cached = TRUE),
                        code = "library(random.cdisc.data)\nADTTE <- radae(cached = TRUE)")
 
 rd <- cdisc_data(adsl, adae)
@@ -57,7 +57,7 @@ drc <- cdisc_data(rdc, adae)
 get_datasets(drc)
 }
 
-# RawDatasetConnector --------
+# DatasetConnector --------
 library(random.cdisc.data)
 rdc <- rcd_cdisc_dataset_connector("ADSL", radsl, cached = TRUE)
 
@@ -66,10 +66,10 @@ load_datasets(rdc)
 get_datasets(rdc)
 }
 
-# RawDataset --------
+# Dataset --------
 library(random.cdisc.data)
 adsl <- cdisc_dataset(dataname = "ADSL",
-                      data = radsl(cached = TRUE),
+                      x = radsl(cached = TRUE),
                       code = "library(random.cdisc.data)\nADSL <- radsl(cached = TRUE)")
 
 get_datasets(adsl)

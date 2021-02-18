@@ -4,7 +4,7 @@
 \alias{set_args}
 \alias{set_args.CallableFunction}
 \alias{set_args.CallableCode}
-\alias{set_args.RawDatasetConnector}
+\alias{set_args.DatasetConnector}
 \title{Set arguments of a \code{CallableFunction}}
 \usage{
 set_args(x, args)
@@ -13,10 +13,10 @@ set_args(x, args)
 
 \method{set_args}{CallableCode}(x, args)
 
-\method{set_args}{RawDatasetConnector}(x, args)
+\method{set_args}{DatasetConnector}(x, args)
 }
 \arguments{
-\item{x}{\code{CallableFunction} or \code{RawDatasetConnector})}
+\item{x}{\code{CallableFunction} or \code{DatasetConnector})}
 
 \item{args}{(\code{NULL} or named \code{list}) dynamic arguments to function}
 }
@@ -34,6 +34,6 @@ set_args(fun, list(N = 5, seed = 1, cached = TRUE))
 library(random.cdisc.data)
 code <- callable_code("radsl()")
 set_args(code, list(N = 5, seed = 1, cached = TRUE))
-ds <- raw_dataset_connector(pull_callable = callable_function(data.frame))
+ds <- dataset_connector("x", pull_callable = callable_function(data.frame))
 set_args(ds, list(x = 1:5, y = letters[1:5]))
 }

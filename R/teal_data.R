@@ -1,20 +1,22 @@
 #' Teal data
 #'
-#' @md
 #' @description `r lifecycle::badge("experimental")`
 #' Universal function to pass data to teal application
 #'
+#' @param ... (`RelationalDataConnector`, `Dataset`, `DatasetConnector`)\cr
+#'   objects
+#' @param join_keys (`JoinKeys`) or a single (`JoinKeySet`)\cr
+#'   (optional) object with dataset column relationships used for joining.
+#'   If empty then no joins between pairs of objects
+#'
+#' @return (\code{RelationalData})
+#'
 #' @export
-#'
-#' @param ... (\code{RelationalDataConnector}, \code{RelationalDataset} or
-#'   \code{RelationalDatasetConnector}) elements to include in \code{RelationalData} object
-#'
-#' @return \code{RelationalData}
 #'
 #' @examples
 #' # RelationalData
 #' library(random.cdisc.data)
-#' x1 <- relational_dataset(
+#' x1 <- dataset(
 #'   x = radsl(cached = TRUE),
 #'   dataname = "ADSL",
 #'   keys = get_cdisc_keys("ADSL"),
@@ -22,7 +24,7 @@
 #'   label = "ADTTE dataset"
 #' )
 #'
-#' x2 <- relational_dataset(
+#' x2 <- dataset(
 #'   x = radtte(cached = TRUE),
 #'   dataname = "ADTTE",
 #'   keys = get_cdisc_keys("ADTTE"),
@@ -30,16 +32,16 @@
 #'   label = "ADTTE dataset"
 #' )
 #'
-#' data <- cdisc_data(x1, x2)
+#' data <- teal_data(x1, x2)
 #' get_raw_data(data)
 #'
 #' # RelationalData with connectors
-#' x3 <- rcd_data( # RelationalDataConnector
+#' x3 <- rcd_data(
 #'   rcd_cdisc_dataset_connector("ADSL", radsl, cached = TRUE),
 #'   rcd_cdisc_dataset_connector("ADLB", radlb, cached = TRUE)
 #' )
 #'
-#' x4 <- rcd_data( # RelationalDataConnector
+#' x4 <- rcd_data(
 #'   rcd_cdisc_dataset_connector("ADRS", radrs, cached = TRUE)
 #' )
 #'
@@ -48,30 +50,20 @@
 #' data_list$launch()
 #' get_raw_data(data_list)
 #' }
-teal_data <- function(...) {
-  datasets <- list(...)
-  possible_classes <- c("RelationalDataConnector", "RelationalDataset", "RelationalDatasetConnector")
-
-  is_teal_data <- is_any_class_list(datasets, possible_classes)
-  if (!all(is_teal_data)) {
-    stop("All arguments should be of RelationalDataset or RelationalData(set)Connector class")
-  }
-
-  teal_data <- RelationalData$new(...)
-
-
-  return(teal_data)
+teal_data <- function(..., join_keys) {
+  RelationalData$new(..., join_keys = join_keys)
 }
 
 
 #' Load \code{RelationalData} object from a file
 #'
-#' @md
 #' @description `r lifecycle::badge("experimental")`
 #' Please note that the script has to end with a call creating desired object. The error will be raised otherwise.
 #'
-#' @param path (\code{character}) string giving the pathname of the file to read from.
-#' @param code (\code{character}) reproducible code to re-create object
+#' @param path A (`connection`) or a (`character`)\cr
+#'   string giving the pathname of the file or URL to read from. "" indicates the connection `stdin`.
+#' @param code (`character`)\cr
+#'   reproducible code to re-create object
 #'
 #' @return \code{RelationalData} object
 #'
@@ -87,11 +79,11 @@ teal_data <- function(...) {
 #'      library(random.cdisc.data)
 #'
 #'      adsl <- cdisc_dataset(dataname = \"ADSL\",
-#'                            data = radsl(cached = TRUE),
+#'                            x = radsl(cached = TRUE),
 #'                            code = \"library(random.cdisc.data)\nADSL <- radsl(cached = TRUE)\")
 #'
 #'      adtte <- cdisc_dataset(dataname = \"ADTTE\",
-#'                             data = radtte(cached = TRUE),
+#'                             x = radtte(cached = TRUE),
 #'                             code = \"library(random.cdisc.data)\nADTTE <- radtte(cached = TRUE)\")
 #'
 #'      cdisc_data(adsl, adtte)"
@@ -116,8 +108,8 @@ teal_data <- function(...) {
 #'     ADTTE$n <- nrow(ADSL)
 #'     # <code
 #'
-#'     ADSL <- cdisc_dataset(dataname = \"ADSL\", data = ADSL)
-#'     ADTTE <- cdisc_dataset(dataname = \"ADTTE\", data = ADTTE)
+#'     ADSL <- cdisc_dataset(dataname = \"ADSL\", x = ADSL)
+#'     ADTTE <- cdisc_dataset(dataname = \"ADTTE\", x = ADTTE)
 #'
 #'     cdisc_data(ADSL, ADTTE)"
 #'   ),
@@ -126,16 +118,7 @@ teal_data <- function(...) {
 #' x <- teal_data_file(file_example)
 #' get_code(x)
 teal_data_file <- function(path, code = get_code(path)) {
-  stopifnot(is_character_single(path))
-  stopifnot(file.exists(path))
-
-  lines <- paste0(readLines(path), collapse = "\n")
-  object <- eval(parse(text = lines))
-
-  if (is(object, "RelationalData")) {
-    object$mutate(code)
-    return(object)
-  } else {
-    stop("The object returned from the file is not RelationalData object.")
-  }
+  object <- object_file(path, "RelationalData")
+  object$mutate(code)
+  return(object)
 }

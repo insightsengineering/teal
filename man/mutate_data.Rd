@@ -2,15 +2,27 @@
 % Please edit documentation in R/mutate_dataset.R
 \name{mutate_data}
 \alias{mutate_data}
-\alias{mutate_data.RelationalDataCollection}
+\alias{mutate_data.DataAbstract}
 \title{Mutate data by code}
 \usage{
-mutate_data(x, code = character(0), script = character(0), vars = list())
+mutate_data(
+  x,
+  code = character(0),
+  script = character(0),
+  vars = list(),
+  keys = list()
+)
 
-\method{mutate_data}{RelationalDataCollection}(x, code = character(0), script = character(0), vars = list())
+\method{mutate_data}{DataAbstract}(
+  x,
+  code = character(0),
+  script = character(0),
+  vars = list(),
+  keys = list()
+)
 }
 \arguments{
-\item{x}{(\code{RelationalData} or \code{RelationalDataConnector})\cr
+\item{x}{(\code{DataAbstract})\cr
 object.}
 
 \item{code}{(\code{character})\cr
@@ -23,8 +35,14 @@ Preferred before \code{code} argument.}
 
 \item{vars}{(list)\cr
 In case when this object code depends on the \code{raw_data} from the other
-\code{RelationalDataset}, \code{RelationalDatasetConnector} object(s) or other constant value,
+\code{Dataset}, \code{DatasetConnector} object(s) or other constant value,
 this/these object(s) should be included.}
+
+\item{keys}{optional, (\code{character})\cr
+vector with primary keys}
+}
+\value{
+modified \code{x} object
 }
 \description{
 \ifelse{html}{\out{<a href='https://www.tidyverse.org/lifecycle/#experimental'><img src='figures/lifecycle-experimental.svg' alt='Experimental lifecycle'></a>}}{\strong{Experimental}}

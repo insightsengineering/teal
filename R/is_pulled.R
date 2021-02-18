@@ -1,11 +1,9 @@
 #' Is pulled
 #'
-#' @md
 #' @description `r lifecycle::badge("experimental")`
 #'   S3 method to determine if dataset is pulled (loaded).
 #'
-#' @param x (\code{object}) of class \link{RawDatasetConnector}, \link{RelationalDataset},
-#'   \link{RelationalDatasetConnector}, or \link{RelationalDataConnector} or \link{RelationalData}
+#' @param x (\code{object}) of class \code{\link{DatasetConnector}}, \code{\link{Dataset}} or \code{\link{DataAbstract}}
 #'
 #' @return (\code{logical}) \code{TRUE} if connector has been already pulled, else \code{FALSE}.
 #' @export
@@ -17,15 +15,15 @@ is_pulled <- function(x) {
 #' @export
 #'
 #' @examples
-#' # RawDatasetConnector --------
-#' ds <- raw_dataset_connector(pull_callable = callable_function(data.frame))
-#' set_args(ds, list(x = 1:5, y = letters[1:5], stringsAsFactors = FALSE))
+#' # DatasetConnector --------
+#' library(random.cdisc.data)
+#' x <- rcd_dataset_connector("ADSL", radsl)
 #'
-#' is_pulled(ds)
+#' is_pulled(x)
 #'
-#' load_dataset(ds)
-#' is_pulled(ds)
-is_pulled.RawDatasetConnector <- function(x) {
+#' load_dataset(x)
+#' is_pulled(x)
+is_pulled.DatasetConnector <- function(x) {
   return(x$is_pulled())
 }
 
@@ -33,16 +31,17 @@ is_pulled.RawDatasetConnector <- function(x) {
 #' @export
 #'
 #' @examples
-#' rel_data <- relational_dataset(
+#' # Dataset --------
+#' x <- dataset(
 #'   dataname = "XY",
 #'   x = data.frame(x = c(1, 2), y = c("a", "b"), stringsAsFactors = FALSE),
-#'   keys = keys(primary = "y", foreign = NULL, parent = NULL),
+#'   keys = "y",
 #'   code = "XY <- data.frame(x = c(1, 2), y = c('aa', 'bb'),
 #'                            stringsAsFactors = FALSE)"
 #' )
 #'
-#' is_pulled(rel_data)
-is_pulled.RawDataset <- function(x) {
+#' is_pulled(x)
+is_pulled.Dataset <- function(x) {
   return(x$is_pulled())
 }
 
@@ -52,7 +51,7 @@ is_pulled.RawDataset <- function(x) {
 #' @examples
 #' # RelationalData --------
 #' library(random.cdisc.data)
-#' x1 <- relational_dataset(
+#' x1 <- dataset(
 #'   x = radsl(cached = TRUE),
 #'   dataname = "ADSL",
 #'   keys = get_cdisc_keys("ADSL"),
@@ -60,7 +59,7 @@ is_pulled.RawDataset <- function(x) {
 #'   label = "ADTTE dataset"
 #' )
 #'
-#' x2 <- relational_dataset(
+#' x2 <- dataset(
 #'   x = radtte(cached = TRUE),
 #'   dataname = "ADTTE",
 #'   keys = get_cdisc_keys("ADTTE"),
@@ -83,6 +82,6 @@ is_pulled.RawDataset <- function(x) {
 #' load_datasets(rdc)
 #' is_pulled(rdc)
 #' }
-is_pulled.RelationalDataCollection <- function(x) { # nolint
+is_pulled.DataAbstract <- function(x) { # nolint
   return(x$is_pulled())
 }

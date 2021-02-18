@@ -1,7 +1,6 @@
 # also returns a list if only a single element
 #' Split by separator
 #'
-#' @md
 #' @description `r lifecycle::badge("maturing")`
 #'
 #' @param x (\code{character}) Character (single)
@@ -14,7 +13,6 @@ split_by_sep <- function(x, sep) {
 
 #' List element in other list
 #'
-#' @md
 #' @description `r lifecycle::badge("maturing")`
 #' Checks if \code{x} element matches any of \code{y} element. If one of the arguments is a list then list elements
 #' are treated as whole - in this case list elements can be a vector, so it looks
@@ -63,7 +61,6 @@ extract_choices_labels <- function(choices, values = NULL) {
 #' Local timezone in the browser may differ from the system timezone from the server.
 #'   This script can be run to register a shiny input which contains information about
 #'   the timezone in the browser.
-#' @md
 #'
 #' @param ns (`function`) namespace function passed from the `session` object in the
 #'   Shiny server. For Shiny modules this will allow for proper name spacing of the
@@ -98,61 +95,9 @@ check_pkg_quietly <- function(pckg, msg) {
   return(invisible(NULL))
 }
 
-#' @importFrom shiny isRunning showModal modalDialog tags req
-error_dialog <- function(x) {
-  if (shiny::isRunning()) {
-    showModal(
-      modalDialog(
-        tags$span("Error while evaluating following call:"),
-        tags$br(),
-        tags$code(ifelse(
-          "condition" %in% class(x),
-          pdeparse(x$call),
-          pdeparse(attr(x, "condition")$call)
-        ), "\n"),
-        tags$br(),
-        tags$span("Error message:"),
-        tags$br(),
-        tags$code(
-          ifelse("condition" %in% class(x),
-            pdeparse(x$message),
-            pdeparse(attr(x, "condition")$message)
-          )
-        )
-      )
-    )
-    req(FALSE)
-  } else {
-    stop(x)
-  }
-}
-
-
-#' Move ADSL to the first index in a vector
-#'
-#' This is useful in the UI as ADSL should always appear first in
-#' any vector of the dataset names.
-#' If it does not contain ADSL, the vector is returned unmodified.
-#'
-#' @md
-#' @param datanames (`character` vector) datanames
-#'
-#' @examples
-#' list_adsl_first <- teal:::list_adsl_first
-#' list_adsl_first(c("A", "B", "ADSL", "C"))
-#' list_adsl_first(c("A", "B", "C"))
-list_adsl_first <- function(datanames) {
-  if ("ADSL" %in% datanames) {
-    # make ADSL first
-    datanames <- c("ADSL", setdiff(datanames, "ADSL"))
-  }
-  return(datanames)
-}
-
 #' When active_datanames is "all", sets them to all datanames
 #' otherwise, it makes sure that it is a subset of the available datanames
 #'
-#' @md
 #' @param datasets `FilteredData` object
 #' @param datanames `character vector` datanames to pick
 #'
@@ -160,14 +105,18 @@ list_adsl_first <- function(datanames) {
 handle_active_datanames <- function(datasets, datanames) {
   if (identical(datanames, "all")) {
     datanames <- datasets$datanames()
+  } else {
+    # convert error to warning
+    tryCatch(
+      check_in_subset(datanames, datasets$datanames(), "Some datasets are not available: "),
+      error = function(e) {
+        message(e$message)
+      }
+    )
   }
-  # convert error to warning
-  tryCatch(
-    check_in_subset(datanames, datasets$datanames(), "Some datasets are not available: "),
-    error = function(e) {
-      message(e$message)
-    }
-  )
+
+  datanames <- datasets$get_filterable_datanames(datanames)
+
   return(intersect(datasets$datanames(), datanames))
 }
 
@@ -179,9 +128,8 @@ handle_active_datanames <- function(datasets, datanames) {
 #' This can be used to create a hierarchy within a Shiny module namespace
 #' itself, e.g. create nested tabs whose ids all live in one namespace,
 #' but where a child tab's name is prefixed with the parent tab's name.
-#' See `\link{ui_nested_tabs}`.
+#' See \code{\link{ui_nested_tabs}}.
 #'
-#' @md
 #' @param label label of module
 #' @param prefix `character or NULL` to prepend to label;
 #'   `NULL` for no prefix
@@ -214,19 +162,17 @@ label_to_id <- function(label, prefix = NULL) {
 
 #' Function to inherit Shiny module arguments that must always be present
 #'
-#' @md
 #' @param input `Shiny input object`
 #' @param output `Shiny output object`
 #' @param session `Shiny session object`
 #' @param modules `teal_module` or `teal_modules` object, the latter
-#'   can be used for nested tabs, see `\link{ui_nested_tabs}`
+#'   can be used for nested tabs, see \code{\link{ui_nested_tabs}}
 #' @param datasets `FilteredData` object to store filter state and filtered
 #'   datasets, shared across modules
 srv_shiny_module_arguments <- function(input, output, session, datasets, modules) { # nousage # nolint
 }
 
 #' Check that a given range is valid
-#' @md
 #' @param subinterval (`numeric` or `date`) vector of length 2 to be
 #'   compared against the full range.
 #' @param range (`numeric` or `date`) vector of length 2 containing
@@ -263,7 +209,6 @@ check_in_range <- function(subinterval, range, pre_msg = "") {
 #' Raises an error message if not and says which elements are not in
 #' the allowed `choices`.
 #'
-#' @md
 #' @param subset `collection-like` should be a subset of `choices`
 #' @param choices `collection-like` superset
 #' @param pre_msg `character` message to print before
@@ -295,7 +240,6 @@ check_in_subset <- function(subset, choices, pre_msg = "") {
 
 #' Check that two sets are equal and informative error message otherwise
 #'
-#' @md
 #' @param x object to be compared to other
 #' @param y object to be compared to other
 #' @param pre_msg `character` to be displayed before error message
@@ -326,7 +270,7 @@ pdeparse <- function(x, width.cutoff = 500L) { # nolint
 
 teal_with_pkg <- function(pkg, code) {
   pkg_name <- paste0("package:", pkg)
-  if (! pkg_name %in% search()) {
+  if (!pkg_name %in% search()) {
     require(pkg, character.only = TRUE)
     on.exit(detach(pkg_name, character.only = TRUE))
   }
@@ -338,11 +282,10 @@ teal_with_pkg <- function(pkg, code) {
 #'
 #' Get code from script. Switches between `code` and `script` arguments
 #' to return non-empty one to pass it further to constructors.
-#' @md
 #'
 #' @param code (`character`)\cr
 #'   an R code to be evaluated or a `PythonCodeClass` created using [python_code].
-#' @inheritParams relational_dataset_connector
+#' @inheritParams dataset_connector
 #' @return code (`character`)
 code_from_script <- function(code, script, dataname = NULL) {
   stopifnot(
@@ -367,7 +310,6 @@ code_from_script <- function(code, script, dataname = NULL) {
 
 #' Read .R file into character
 #'
-#' @md
 #' @description `r lifecycle::badge("maturing")`
 #' Comments will be excluded
 #'
@@ -394,13 +336,12 @@ read_script <- function(file, dataname = NULL) {
 
 #' S3 generic for creating an information summary about the duplicate key values in a dataset
 #'
-#' @md
 #' @description `r lifecycle::badge("experimental")`
 #'
 #' @details The information summary provides row numbers and number of duplicates
 #' for each duplicated key value.
 #'
-#' @param dataset \code{RelationalDataset} or \code{dataframe} a dataset, which will be tested
+#' @param dataset \code{Dataset} or \code{dataframe} a dataset, which will be tested
 #' @param keys \code{character} vector of variable names in `dataset` consisting the key
 #' or \code{keys} object, which does have a `primary` element with a vector of variable
 #' names in `dataset` consisting the key. Optional, default: NULL
@@ -411,8 +352,7 @@ read_script <- function(file, dataname = NULL) {
 #' library(random.cdisc.data)
 #'
 #' adsl <- radsl(cached = TRUE)
-#' # Creates a RelationalDataset, keys are automatically assigned,
-#' # because the name is in the recognized ADAM nomenclature ("ADSL")
+#' # create a Dataset with default keys
 #' rel_adsl <- cdisc_dataset("ADSL", adsl)
 #' get_key_duplicates(rel_adsl)
 #'
@@ -427,9 +367,9 @@ read_script <- function(file, dataname = NULL) {
 #' }
 #'
 #' @seealso \itemize{
-#' \item{\link{get_key_duplicates_util}}
-#' \item{\link{get_key_duplicates.RelationalDataset}}
-#' \item{\link{get_key_duplicates.data.frame}}
+#' \item{\code{\link{get_key_duplicates_util}}}
+#' \item{\code{\link{get_key_duplicates.Dataset}}}
+#' \item{\code{\link{get_key_duplicates.data.frame}}}
 #' }
 #'
 #' @export
@@ -437,19 +377,17 @@ get_key_duplicates <- function(dataset, keys = NULL) {
  UseMethod("get_key_duplicates", dataset)
 }
 
-
 #' Creates a short information summary about the duplicate primary key values in a dataset
 #'
-#' @md
 #' @description `r lifecycle::badge("experimental")`
 #' @details S3 method for get_key_duplicates. Uses the public API of
-#' `teal.devel::RelationalDataset` to read the primary key and the raw data.
+#' `Dataset` to read the primary key and the raw data.
 #'
 #' If `keys` argument is provided, then checks against that, if it's `NULL`, then checks
 #' against the \code{get_keys()$primary} method of the `dataset` argument.
 #'
 #' @inheritParams get_key_duplicates
-#' @param dataset a \code{RelationalDataset} object, which will be used to detect duplicated
+#' @param dataset a \code{Dataset} object, which will be used to detect duplicated
 #' primary keys
 #'
 #' @examples
@@ -461,27 +399,18 @@ get_key_duplicates <- function(dataset, keys = NULL) {
 #' rel_adsl <- cdisc_dataset("ADSL", adsl)
 #' get_key_duplicates(rel_adsl)
 #'
-#' @seealso \link{get_key_duplicates} \link{get_key_duplicates_util}
+#' @seealso \code{\link{get_key_duplicates}} \code{\link{get_key_duplicates_util}}
 #'
 #' @export
-get_key_duplicates.RelationalDataset <- function(dataset, keys = NULL) { #nolint
-  stopifnot("RelationalDataset" %in% class(dataset))
-
-  df <- dataset$get_raw_data()
-  keys <- if ("keys" %in% class(keys)) {
-    keys$primary
-  } else if (!is.null(keys)) {
-    keys
-  } else if (!is.null(dataset$get_keys()$primary)) {
-    dataset$get_keys()$primary
-  }
+get_key_duplicates.Dataset <- function(dataset, keys = NULL) { #nolint
+  df <- get_raw_data(dataset)
+  keys <- if_null(keys, if_null(get_keys(dataset), character(0)))
 
   get_key_duplicates_util(df, keys)
 }
 
 #' Creates a short information summary about the duplicate key values in a dataset.
 #'
-#' @md
 #' @description `r lifecycle::badge("experimental")`
 #'
 #' @details
@@ -500,17 +429,11 @@ get_key_duplicates.RelationalDataset <- function(dataset, keys = NULL) { #nolint
 #' res <- get_key_duplicates(df, keys = c('a', 'b')) # duplicated keys are in rows 3 and 4
 #' print(res) # outputs a tibble
 #'
-#' @seealso \link{get_key_duplicates} \link{get_key_duplicates_util}
+#' @seealso \code{\link{get_key_duplicates}} \code{\link{get_key_duplicates_util}}
 #'
 #' @export
 get_key_duplicates.data.frame <- function(dataset, keys = NULL) { #nolint
-  keys <- if ("keys" %in% class(keys)) {
-    keys$primary
-  } else if (!is.null(keys)) {
-    keys
-  } else if (!is.null(attr(dataset, "primary_key"))) {
-    attr(dataset, "primary_key")
-  }
+  keys <- if_null(keys, if_null(attr(dataset, "primary_key"), character(0)))
 
   get_key_duplicates_util(dataset, keys)
 }
@@ -519,7 +442,6 @@ get_key_duplicates.data.frame <- function(dataset, keys = NULL) { #nolint
 #'
 #' @description `r lifecycle::badge("experimental")`
 #'
-#' @md
 #' @details
 #' Accepts a list of variable names - \code{keys}, which are treated as the
 #' key to the \code{dataframe} argument. An instance of duplicated key is
@@ -545,7 +467,7 @@ get_key_duplicates.data.frame <- function(dataset, keys = NULL) { #nolint
 #' res <- teal:::get_key_duplicates_util(df, keys = c("a", "b")) # duplicated keys are in rows 3 and 4
 #' print(res) # outputs a tibble
 #'
-#' @seealso \link{get_key_duplicates}
+#' @seealso \code{\link{get_key_duplicates}}
 get_key_duplicates_util <- function(dataframe, keys) {
   stopifnot(!is.null(keys))
   stopifnot(is.data.frame(dataframe))
@@ -568,4 +490,18 @@ get_key_duplicates_util <- function(dataframe, keys) {
     n = n(),
     .groups = "drop")
   summary
+}
+
+# Function to be used while trying to load the object of specific class from the script.
+object_file <- function(path, class) {
+  stopifnot(is_character_single(path))
+  stopifnot(file.exists(path))
+  stopifnot(is_character_single(class))
+
+  lines <- paste0(readLines(path), collapse = "\n")
+  object <- eval(parse(text = lines))
+
+  stop_if_not(list(is(object, class), paste("The object returned from the file is not of", class, "class.")))
+
+  return(object)
 }

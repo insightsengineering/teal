@@ -13,7 +13,7 @@ filter_spec(
   multiple = length(selected) > 1,
   label = NULL,
   sep = if_null(attr(choices, "sep"), " - "),
-  drop_keys = TRUE
+  drop_keys = FALSE
 )
 
 \method{filter_spec}{delayed_data}(
@@ -23,7 +23,7 @@ filter_spec(
   multiple = length(selected) > 1,
   label = NULL,
   sep = if_null(attr(choices, "sep"), " - "),
-  drop_keys = TRUE
+  drop_keys = FALSE
 )
 
 \method{filter_spec}{default}(
@@ -33,7 +33,7 @@ filter_spec(
   multiple = length(selected) > 1,
   label = NULL,
   sep = if_null(attr(choices, "sep"), " - "),
-  drop_keys = TRUE
+  drop_keys = FALSE
 )
 }
 \arguments{

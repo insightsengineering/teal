@@ -106,9 +106,10 @@ CallableCode <- R6::R6Class( # nolint
 
 ## Constructors ====
 
-#' Create \code{CallableCode} object
-#' @md
+#' Create \code{\link{CallableCode}} object
+#'
 #' @description `r lifecycle::badge("experimental")`
+#'
 #' Create \link{CallableCode} object to execute specific code and get reproducible call.
 #'
 #' @param code (\code{character})\cr
@@ -117,11 +118,13 @@ CallableCode <- R6::R6Class( # nolint
 #'   that they can't be modified.
 #'
 #' @return \code{CallableCode} object
+#'
+#' @export
+#'
 #' @examples
 #' cf <- callable_code(code = "mtcars")
 #' cf$run()
 #' cf$get_call()
-#' @export
 callable_code <- function(code) {
   CallableCode$new(code)
 }

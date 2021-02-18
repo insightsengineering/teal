@@ -2,9 +2,9 @@
 % Please edit documentation in R/RelationalDataConnector.R
 \name{RelationalDataConnector}
 \alias{RelationalDataConnector}
-\title{Manage multiple and \code{RelationalDatasetConnector} of the same type.}
+\title{Manage multiple and \code{DatasetConnector} of the same type.}
 \description{
-Class manages \code{RelationalDatasetConnector} to specify additional dynamic arguments and to
+Class manages \code{DatasetConnector} to specify additional dynamic arguments and to
 open/close connection.
 }
 \examples{
@@ -40,40 +40,40 @@ x$get_datasets()
 }
 }
 \section{Super class}{
-\code{\link[teal:RelationalDataCollection]{teal::RelationalDataCollection}} -> \code{RelationalDataConnector}
+\code{\link[teal:DataAbstract]{teal::DataAbstract}} -> \code{RelationalDataConnector}
 }
 \section{Methods}{
 \subsection{Public methods}{
 \itemize{
 \item \href{#method-new}{\code{RelationalDataConnector$new()}}
-\item \href{#method-get_code_class}{\code{RelationalDataConnector$get_code_class()}}
 \item \href{#method-get_connection}{\code{RelationalDataConnector$get_connection()}}
+\item \href{#method-get_code_class}{\code{RelationalDataConnector$get_code_class()}}
 \item \href{#method-get_server}{\code{RelationalDataConnector$get_server()}}
 \item \href{#method-get_ui}{\code{RelationalDataConnector$get_ui()}}
-\item \href{#method-is_failed}{\code{RelationalDataConnector$is_failed()}}
-\item \href{#method-launch}{\code{RelationalDataConnector$launch()}}
-\item \href{#method-pull}{\code{RelationalDataConnector$pull()}}
 \item \href{#method-set_pull_args}{\code{RelationalDataConnector$set_pull_args()}}
 \item \href{#method-set_ui}{\code{RelationalDataConnector$set_ui()}}
 \item \href{#method-set_server}{\code{RelationalDataConnector$set_server()}}
+\item \href{#method-pull}{\code{RelationalDataConnector$pull()}}
+\item \href{#method-launch}{\code{RelationalDataConnector$launch()}}
+\item \href{#method-is_failed}{\code{RelationalDataConnector$is_failed()}}
 \item \href{#method-clone}{\code{RelationalDataConnector$clone()}}
 }
 }
 \if{html}{
 \out{<details ><summary>Inherited methods</summary>}
 \itemize{
-\item \out{<span class="pkg-link" data-pkg="teal" data-topic="RelationalDataCollection" data-id="check">}\href{../../teal/html/RelationalDataCollection.html#method-check}{\code{teal::RelationalDataCollection$check()}}\out{</span>}
-\item \out{<span class="pkg-link" data-pkg="teal" data-topic="RelationalDataCollection" data-id="get_check_result">}\href{../../teal/html/RelationalDataCollection.html#method-get_check_result}{\code{teal::RelationalDataCollection$get_check_result()}}\out{</span>}
-\item \out{<span class="pkg-link" data-pkg="teal" data-topic="RelationalDataCollection" data-id="get_code">}\href{../../teal/html/RelationalDataCollection.html#method-get_code}{\code{teal::RelationalDataCollection$get_code()}}\out{</span>}
-\item \out{<span class="pkg-link" data-pkg="teal" data-topic="RelationalDataCollection" data-id="get_datanames">}\href{../../teal/html/RelationalDataCollection.html#method-get_datanames}{\code{teal::RelationalDataCollection$get_datanames()}}\out{</span>}
-\item \out{<span class="pkg-link" data-pkg="teal" data-topic="RelationalDataCollection" data-id="get_dataset">}\href{../../teal/html/RelationalDataCollection.html#method-get_dataset}{\code{teal::RelationalDataCollection$get_dataset()}}\out{</span>}
-\item \out{<span class="pkg-link" data-pkg="teal" data-topic="RelationalDataCollection" data-id="get_datasets">}\href{../../teal/html/RelationalDataCollection.html#method-get_datasets}{\code{teal::RelationalDataCollection$get_datasets()}}\out{</span>}
-\item \out{<span class="pkg-link" data-pkg="teal" data-topic="RelationalDataCollection" data-id="get_items">}\href{../../teal/html/RelationalDataCollection.html#method-get_items}{\code{teal::RelationalDataCollection$get_items()}}\out{</span>}
-\item \out{<span class="pkg-link" data-pkg="teal" data-topic="RelationalDataCollection" data-id="is_pulled">}\href{../../teal/html/RelationalDataCollection.html#method-is_pulled}{\code{teal::RelationalDataCollection$is_pulled()}}\out{</span>}
-\item \out{<span class="pkg-link" data-pkg="teal" data-topic="RelationalDataCollection" data-id="mutate">}\href{../../teal/html/RelationalDataCollection.html#method-mutate}{\code{teal::RelationalDataCollection$mutate()}}\out{</span>}
-\item \out{<span class="pkg-link" data-pkg="teal" data-topic="RelationalDataCollection" data-id="mutate_dataset">}\href{../../teal/html/RelationalDataCollection.html#method-mutate_dataset}{\code{teal::RelationalDataCollection$mutate_dataset()}}\out{</span>}
-\item \out{<span class="pkg-link" data-pkg="teal" data-topic="RelationalDataCollection" data-id="set_check">}\href{../../teal/html/RelationalDataCollection.html#method-set_check}{\code{teal::RelationalDataCollection$set_check()}}\out{</span>}
-\item \out{<span class="pkg-link" data-pkg="teal" data-topic="RelationalDataCollection" data-id="set_pull_code">}\href{../../teal/html/RelationalDataCollection.html#method-set_pull_code}{\code{teal::RelationalDataCollection$set_pull_code()}}\out{</span>}
+\item \out{<span class="pkg-link" data-pkg="teal" data-topic="DataAbstract" data-id="check">}\href{../../teal/html/DataAbstract.html#method-check}{\code{teal::DataAbstract$check()}}\out{</span>}
+\item \out{<span class="pkg-link" data-pkg="teal" data-topic="DataAbstract" data-id="get_check_result">}\href{../../teal/html/DataAbstract.html#method-get_check_result}{\code{teal::DataAbstract$get_check_result()}}\out{</span>}
+\item \out{<span class="pkg-link" data-pkg="teal" data-topic="DataAbstract" data-id="get_code">}\href{../../teal/html/DataAbstract.html#method-get_code}{\code{teal::DataAbstract$get_code()}}\out{</span>}
+\item \out{<span class="pkg-link" data-pkg="teal" data-topic="DataAbstract" data-id="get_datanames">}\href{../../teal/html/DataAbstract.html#method-get_datanames}{\code{teal::DataAbstract$get_datanames()}}\out{</span>}
+\item \out{<span class="pkg-link" data-pkg="teal" data-topic="DataAbstract" data-id="get_dataset">}\href{../../teal/html/DataAbstract.html#method-get_dataset}{\code{teal::DataAbstract$get_dataset()}}\out{</span>}
+\item \out{<span class="pkg-link" data-pkg="teal" data-topic="DataAbstract" data-id="get_datasets">}\href{../../teal/html/DataAbstract.html#method-get_datasets}{\code{teal::DataAbstract$get_datasets()}}\out{</span>}
+\item \out{<span class="pkg-link" data-pkg="teal" data-topic="DataAbstract" data-id="get_items">}\href{../../teal/html/DataAbstract.html#method-get_items}{\code{teal::DataAbstract$get_items()}}\out{</span>}
+\item \out{<span class="pkg-link" data-pkg="teal" data-topic="DataAbstract" data-id="is_pulled">}\href{../../teal/html/DataAbstract.html#method-is_pulled}{\code{teal::DataAbstract$is_pulled()}}\out{</span>}
+\item \out{<span class="pkg-link" data-pkg="teal" data-topic="DataAbstract" data-id="mutate">}\href{../../teal/html/DataAbstract.html#method-mutate}{\code{teal::DataAbstract$mutate()}}\out{</span>}
+\item \out{<span class="pkg-link" data-pkg="teal" data-topic="DataAbstract" data-id="mutate_dataset">}\href{../../teal/html/DataAbstract.html#method-mutate_dataset}{\code{teal::DataAbstract$mutate_dataset()}}\out{</span>}
+\item \out{<span class="pkg-link" data-pkg="teal" data-topic="DataAbstract" data-id="set_check">}\href{../../teal/html/DataAbstract.html#method-set_check}{\code{teal::DataAbstract$set_check()}}\out{</span>}
+\item \out{<span class="pkg-link" data-pkg="teal" data-topic="DataAbstract" data-id="set_pull_code">}\href{../../teal/html/DataAbstract.html#method-set_pull_code}{\code{teal::DataAbstract$set_pull_code()}}\out{</span>}
 }
 \out{</details>}
 }
@@ -89,27 +89,13 @@ Create a new \code{RelationalDataConnector} object
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{connection}}{(\code{DataConnection}) connection to data source}
+\item{\code{connection}}{(\code{DataConnection})\cr
+connection to data source}
 
-\item{\code{connectors}}{(\code{list} of \code{RelationalDatasetConnector} elements) list with dataset connectors}
+\item{\code{connectors}}{(\code{list} of \code{DatasetConnector} elements)\cr
+list with dataset connectors}
 }
 \if{html}{\out{</div>}}
-}
-\subsection{Returns}{
-new \code{RelationalDataConnector} object
-}
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-get_code_class"></a>}}
-\if{latex}{\out{\hypertarget{method-get_code_class}{}}}
-\subsection{Method \code{get_code_class()}}{
-Get internal \code{CodeClass} object
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{RelationalDataConnector$get_code_class()}\if{html}{\out{</div>}}
-}
-
-\subsection{Returns}{
-\code{CodeClass}
 }
 }
 \if{html}{\out{<hr>}}
@@ -126,6 +112,19 @@ connector's connection
 }
 }
 \if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-get_code_class"></a>}}
+\if{latex}{\out{\hypertarget{method-get_code_class}{}}}
+\subsection{Method \code{get_code_class()}}{
+Get internal \code{CodeClass} object
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{RelationalDataConnector$get_code_class()}\if{html}{\out{</div>}}
+}
+
+\subsection{Returns}{
+\verb{\code{CodeClass}}
+}
+}
+\if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-get_server"></a>}}
 \if{latex}{\out{\hypertarget{method-get_server}{}}}
 \subsection{Method \code{get_server()}}{
@@ -135,14 +134,14 @@ connector's connection
 }
 
 \subsection{Returns}{
-the \code{server} function of the \code{RelationalDataConnector}
+the \code{server} function
 }
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-get_ui"></a>}}
 \if{latex}{\out{\hypertarget{method-get_ui}{}}}
 \subsection{Method \code{get_ui()}}{
-Get Shiny module with inputs for all \code{RelationalDatasetConnector} objects
+Get Shiny module with inputs for all \code{DatasetConnector} objects
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{RelationalDataConnector$get_ui(id)}\if{html}{\out{</div>}}
 }
@@ -155,71 +154,7 @@ Get Shiny module with inputs for all \code{RelationalDatasetConnector} objects
 \if{html}{\out{</div>}}
 }
 \subsection{Returns}{
-the \code{ui} function of the \code{RelationalDataConnector}
-}
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-is_failed"></a>}}
-\if{latex}{\out{\hypertarget{method-is_failed}{}}}
-\subsection{Method \code{is_failed()}}{
-Check if pull or connection has not failed.
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{RelationalDataConnector$is_failed()}\if{html}{\out{</div>}}
-}
-
-\subsection{Returns}{
-\code{TRUE} if pull or connection failed, else \code{FALSE}
-}
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-launch"></a>}}
-\if{latex}{\out{\hypertarget{method-launch}{}}}
-\subsection{Method \code{launch()}}{
-Run simple application that uses its \code{ui} and \code{server} fields to pull data from
-connection.
-
-Useful for debugging
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{RelationalDataConnector$launch()}\if{html}{\out{</div>}}
-}
-
-\subsection{Returns}{
-An object that represents the app
-}
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-pull"></a>}}
-\if{latex}{\out{\hypertarget{method-pull}{}}}
-\subsection{Method \code{pull()}}{
-Load data from each \code{RelationalDatasetConnector}
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{RelationalDataConnector$pull(con_args = NULL, args = NULL, try = TRUE)}\if{html}{\out{</div>}}
-}
-
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{con_args}}{(\code{NULL} or named \code{list})\cr
- additional dynamic arguments for connection function. \code{args} will be passed to each
-\code{RelationalDatasetConnector} object to evaluate \code{CallableFunction} assigned to
-this dataset. If \code{args} is null than default set of arguments will be used, otherwise
-call will be executed on these arguments only (arguments set before will be ignored).
-\code{pull} function doesn't update reproducible call, it's just evaluate function.}
-
-\item{\code{args}}{(\code{NULL} or named \code{list})\cr
-additional dynamic arguments to pull dataset. \code{args} will be passed to each
-\code{RelationalDatasetConnector} object to evaluate \code{CallableFunction} assigned to
-this dataset. If \code{args} is null than default set of arguments will be used, otherwise
-call will be executed on these arguments only (arguments set before will be ignored).
-\code{pull} function doesn't update reproducible call, it's just evaluate function.}
-
-\item{\code{try}}{(\code{logical} value)\cr
-whether perform function evaluation inside \code{try} clause}
-}
-\if{html}{\out{</div>}}
-}
-\subsection{Returns}{
-\code{self} invisibly for chaining. In order to get the data please use \code{get_datasets} method.
+the \code{ui} function
 }
 }
 \if{html}{\out{<hr>}}
@@ -289,6 +224,70 @@ A shiny module server function that should load data from all connectors}
 }
 \subsection{Returns}{
 \code{NULL} or \code{self} if data is loaded.
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-pull"></a>}}
+\if{latex}{\out{\hypertarget{method-pull}{}}}
+\subsection{Method \code{pull()}}{
+Load data from each \code{DatasetConnector}
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{RelationalDataConnector$pull(con_args = NULL, args = NULL, try = TRUE)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{con_args}}{(\code{NULL} or named \code{list})\cr
+additional dynamic arguments for connection function. \code{args} will be passed to each
+\code{DatasetConnector} object to evaluate \code{CallableFunction} assigned to
+this dataset. If \code{args} is null than default set of arguments will be used, otherwise
+call will be executed on these arguments only (arguments set before will be ignored).
+\code{pull} function doesn't update reproducible call, it's just evaluate function.}
+
+\item{\code{args}}{(\code{NULL} or named \code{list})\cr
+additional dynamic arguments to pull dataset. \code{args} will be passed to each
+\code{DatasetConnector} object to evaluate \code{CallableFunction} assigned to
+this dataset. If \code{args} is null than default set of arguments will be used, otherwise
+call will be executed on these arguments only (arguments set before will be ignored).
+\code{pull} function doesn't update reproducible call, it's just evaluate function.}
+
+\item{\code{try}}{(\code{logical} value)\cr
+whether perform function evaluation inside \code{try} clause}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Returns}{
+(\code{self}) invisibly for chaining. In order to get the data please use \code{get_datasets} method.
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-launch"></a>}}
+\if{latex}{\out{\hypertarget{method-launch}{}}}
+\subsection{Method \code{launch()}}{
+Run simple application that uses its \code{ui} and \code{server} fields to pull data from
+connection.
+
+Useful for debugging
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{RelationalDataConnector$launch()}\if{html}{\out{</div>}}
+}
+
+\subsection{Returns}{
+An object that represents the app
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-is_failed"></a>}}
+\if{latex}{\out{\hypertarget{method-is_failed}{}}}
+\subsection{Method \code{is_failed()}}{
+Check if pull or connection has not failed.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{RelationalDataConnector$is_failed()}\if{html}{\out{</div>}}
+}
+
+\subsection{Returns}{
+\code{TRUE} if pull or connection failed, else \code{FALSE}
 }
 }
 \if{html}{\out{<hr>}}

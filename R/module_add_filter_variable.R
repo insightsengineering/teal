@@ -6,12 +6,11 @@
 #' Once something is selected, it sets the `filter_state` (from inexistent) to `NULL`
 #' for that variable in the `datasets` object. This essentially makes it available
 #' for filtering.
-#' Indeed, the top right panel (see `\link{module_filter_items}`) picks this up,
+#' Indeed, the top right panel picks this up,
 #' so you can adjust the filtering for that variable. The selection is then undone and
 #' the choices are updated, so other variables can be added for filtering.
 #' Variables that cannot be filtered are not available in the selection.
 #'
-#' @md
 #' @param id module id
 #' @param dataname name of dataset whose columns should be filtered
 #'
@@ -27,6 +26,7 @@
 #' attr(ADAE, "keys") <- get_cdisc_keys("ADAE")
 #'
 #' datasets <- teal:::FilteredData$new()
+#'
 #' # these filters will no longer be available for selection
 #' isolate({
 #'   datasets$set_data("ADSL", ADSL)
@@ -92,16 +92,15 @@ ui_add_filter_variable <- function(id, dataname) {
 #' reset in the UI for the user to select another variable.
 #' So, it will be `NULL` again in the next reactive flush.
 #'
-#' @md
 #' @inheritParams srv_shiny_module_arguments
 #' @inheritParams ui_add_filter_variable
-#' @param omit_vars `function / reactive returning a character vector` variables that are
-#'   not available for filtering
-srv_add_filter_variable <- function(input, output, session, datasets, dataname, omit_vars = function() c()) {
+#' @param varnames `function / reactive returning a character vector` variables that are
+#'   available for filtering
+srv_add_filter_variable <- function(input, output, session, datasets, dataname, varnames = function() c()) {
   stopifnot(
     is(datasets, "FilteredData"),
     is_character_single(dataname),
-    is.function(omit_vars)
+    is.function(varnames)
   )
 
   # currently active filter vars for this dataset
@@ -110,17 +109,17 @@ srv_add_filter_variable <- function(input, output, session, datasets, dataname, 
   # available choices to display
   avail_choices <- reactive({
     choices <- setdiff(
-      names(datasets$get_data(dataname, filtered = FALSE)),
-      c(active_filter_vars(), omit_vars())
+      datasets$get_filterable_varnames(dataname),
+      active_filter_vars()
     )
 
     # we add variable labels to be nicely displayed with the variable short name
     # and get types so that icons can be displayed as well
-    choice_labels <- datasets$get_variable_labels(dataname)
+    choice_labels <- datasets$get_varlabels(dataname)
     choice_labels[is.na(choice_labels)] <- names(choice_labels[is.na(choice_labels)])
-    choice_types <- setNames(variable_types(datasets$get_data(dataname, filtered = FALSE)),
-      colnames(datasets$get_data(dataname, filtered = FALSE)))
-    choice_types[datasets$get_keys(dataname = dataname)$primary] <- "primary_key"
+    data <- datasets$get_data(dataname, filtered = FALSE)[1, ]
+    choice_types <- setNames(variable_types(data), colnames(data))
+    choice_types[datasets$get_data_attr(dataname = dataname, "keys")] <- "primary_key"
 
     if (!is.null(choice_labels) && !is_empty(choices)) {
       # `NA` not supported by `choices_labeled`

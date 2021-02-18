@@ -7,17 +7,19 @@
 execute_in_next_cycle(f)
 }
 \arguments{
-\item{f}{`function` function / reactive to evaluate}
+\item{f}{\code{function} function / reactive to evaluate}
 }
 \value{
-`function` that returns a trigger to make it active
+\code{function} that returns a trigger to make it active
 }
 \description{
 Once it is made active, it executes the expression one reactive cycle after
-1. calling this function
-2. after it is invalidated (but it is only re-evaluated on the next reactive)
-You can avoid case 2 by isolating any calls within `f`. Note that
-`isolate(f)` won't work because `f` itself is not evaluated.
+\enumerate{
+\item calling this function
+\item after it is invalidated (but it is only re-evaluated on the next reactive)
+You can avoid case 2 by isolating any calls within \code{f}. Note that
+\code{isolate(f)} won't work because \code{f} itself is not evaluated.
+}
 }
 \details{
 This can be useful to make sure that first all current reactives finish before

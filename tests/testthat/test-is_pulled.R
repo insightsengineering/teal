@@ -2,7 +2,7 @@ library(random.cdisc.data)
 
 test_that("Test RawDatasetConnector is_pulled", {
 
-  dc <- rcd_cdisc_dataset_connector(dataname = "ADSL", fun = radsl)
+  dc <- rcd_cdisc_dataset_connector(dataname = "ADSL", fun = radsl, cached = TRUE)
   expect_false(is_pulled(dc))
 
   load_dataset(dc)
@@ -11,10 +11,10 @@ test_that("Test RawDatasetConnector is_pulled", {
 
 test_that("Test RelationalDataset is_pulled", {
 
-  rel_data <- relational_dataset(
+  rel_data <- dataset(
     dataname = "XY",
     x = data.frame(x = c(1, 2), y = c("a", "b"), stringsAsFactors = FALSE),
-    keys = keys(primary = "y", foreign = NULL, parent = NULL),
+    keys = "y",
     code = "XY <- data.frame(x = c(1, 2), y = c('aa', 'bb'),
                              stringsAsFactors = FALSE)"
   )

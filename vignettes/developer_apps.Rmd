@@ -31,7 +31,7 @@ EXECUTE_LIKE_INTERACTIVE <- interactive()
 # load the development version of teal if you have not installed it
 LOAD_DEV_TEAL <- EXECUTE_LIKE_INTERACTIVE
 if (LOAD_DEV_TEAL) {
-  #devtools::load_all() # obfuscated call to avoid dependence on devtools required by R CMD CHECK
+  # devtools::load_all() # obfuscated call to avoid dependence on devtools required by R CMD CHECK
   do.call(`::`, list(quote(devtools), quote(load_all)))()
 } else {
   cat("Loading non-dev version.\n")
@@ -90,9 +90,9 @@ This is the main debugging app to check that the functionality still works after
 ```{r mainDebugApp}
 app <- init(
   data = cdisc_data(
-    cdisc_dataset(dataname = "ADSL", data = ADSL),
-    cdisc_dataset(dataname = "ADAE", data = ADAE),
-    cdisc_dataset(dataname = "ADLB", data = ADLB),
+    cdisc_dataset(dataname = "ADSL", x = ADSL),
+    cdisc_dataset(dataname = "ADAE", x = ADAE),
+    cdisc_dataset(dataname = "ADLB", x = ADLB),
     code = "
 ADSL <- radsl(cached = TRUE)
 ADAE <- radae(cached = TRUE)
@@ -108,7 +108,7 @@ ADLB <- radlb(cached = TRUE)
     ADSL = list(SEX = list(choices = "M", keep_na = TRUE), AGE = default_filter()),
     ADLB = list(ASEQ = list(range = c(5.6, 20), keep_na = FALSE))
   ),
-  header = "Simple teal app",
+  header = "App with Debugging Modules",
   footer = tags$p(class = "text-muted", "Source: agile-R website")
 ); safeBookmarkableShinyApp(app$ui, app$server, enableBookmarking = "url")
 ```
@@ -120,9 +120,9 @@ The datasets are lazily filtered meaning that when they are not needed for the c
 ```{r lazyFilteringApp}
 app <- init(
   data = cdisc_data(
-    cdisc_dataset(dataname = "ADSL", data = ADSL),
-    cdisc_dataset(dataname = "ADAE", data = ADAE),
-    cdisc_dataset(dataname = "ADLB", data = ADLB),
+    cdisc_dataset(dataname = "ADSL", x = ADSL),
+    cdisc_dataset(dataname = "ADAE", x = ADAE),
+    cdisc_dataset(dataname = "ADLB", x = ADLB),
     code = "
 ADSL <- radsl(cached = TRUE)
 ADAE <- radae(cached = TRUE)
@@ -140,7 +140,7 @@ ADLB <- radlb(cached = TRUE)
     COUNTRY = c("USA", NA),
     AGE = default_filter()
   )),
-  header = "Simple teal app",
+  header = "Data is Lazily Filtered",
   footer = tags$p(class = "text-muted", "Source: agile-R website")
 ); safeBookmarkableShinyApp(app$ui, app$server, enableBookmarking = "url")
 ```
@@ -165,7 +165,7 @@ app <- init(
     teal:::debug_browser_module()
   ),
   filter = list(ADSL = list(SEX = list(choices = "M", keep_na = TRUE), AGE = default_filter())),
-  header = "Simple teal app",
+  header = "App with Delayed Data",
   footer = tags$p(class = "text-muted", "Source: agile-R website")
 ); safeBookmarkableShinyApp(app$ui, app$server, enableBookmarking = "url")
 ```
@@ -176,9 +176,9 @@ This app shows nested modules and how the filters apply to them. Check the tab h
 ```{r nestedModulesApp}
 app <- init(
   data = cdisc_data(
-    cdisc_dataset(dataname = "ADSL", data = ADSL),
-    cdisc_dataset(dataname = "ADAE", data = ADAE),
-    cdisc_dataset(dataname = "ADLB", data = ADLB),
+    cdisc_dataset(dataname = "ADSL", x = ADSL),
+    cdisc_dataset(dataname = "ADAE", x = ADAE),
+    cdisc_dataset(dataname = "ADLB", x = ADLB),
     code = "
 ADSL <- radsl(cached = TRUE)
 ADAE <- radae(cached = TRUE)
@@ -202,7 +202,7 @@ ADLB <- radlb(cached = TRUE)
     COUNTRY = c("USA", NA),
     AGE = default_filter()
   )),
-  header = "Simple teal app",
+  header = "Modules in Nested Tabs",
   footer = tags$p(class = "text-muted", "Source: agile-R website")
 ); safeBookmarkableShinyApp(app$ui, app$server, enableBookmarking = "url")
 ```
@@ -224,10 +224,9 @@ fake_data <- data.frame(
 
 data <- cdisc_data(
   cdisc_dataset(
-    # FilteredData requires `ADSL` dataname
     dataname = "ADSL",
-    data = fake_data,
-    keys = teal:::keys(primary = c("USUBJID"), foreign = NULL, parent = NULL)
+    x = fake_data,
+    keys = "USUBJID"
   )
 )
 
@@ -243,7 +242,7 @@ app <- init(
     SEX4 = c("M", "F", NA),
     SEX5 = default_filter()
   )),
-  header = "Simple teal app",
+  header = "Different Ways to Specify Initial Filter States",
   footer = tags$p(class = "text-muted", "Source: agile-R website")
 ); safeBookmarkableShinyApp(app$ui, app$server, enableBookmarking = "url")
 ```
@@ -255,8 +254,8 @@ This app shows what happens when a dataset, `ADAE`, is not provided, but still a
 ```{r nonProvidedDataset}
 app <- init(
   data = cdisc_data(
-    cdisc_dataset(dataname = "ADSL", data = ADSL),
-    cdisc_dataset(dataname = "ADLB", data = ADLB),
+    cdisc_dataset(dataname = "ADSL", x = ADSL),
+    cdisc_dataset(dataname = "ADLB", x = ADLB),
     code = "
 ADSL <- radsl(cached = TRUE)
 ADLB <- radlb(cached = TRUE)
@@ -266,7 +265,7 @@ ADLB <- radlb(cached = TRUE)
     teal:::filter_calls_module("ADSL", active_datanames = c("ADSL")),
     teal:::debug_browser_module()
   ),
-  header = "Simple teal app",
+  header = "Missing ADAE Dataset Raises Warning",
   footer = tags$p(class = "text-muted", "Source: agile-R website")
 ); safeBookmarkableShinyApp(app$ui, app$server, enableBookmarking = "url")
 ```
@@ -284,9 +283,9 @@ safety_filter <- list(
 )
 app <- init(
   data = cdisc_data(
-    cdisc_dataset(dataname = "ADSL", data = ADSL),
-    cdisc_dataset(dataname = "ADAE", data = ADAE),
-    cdisc_dataset(dataname = "ADLB", data = ADLB),
+    cdisc_dataset(dataname = "ADSL", x = ADSL),
+    cdisc_dataset(dataname = "ADAE", x = ADAE),
+    cdisc_dataset(dataname = "ADLB", x = ADLB),
     code = "
 ADSL <- radsl(cached = TRUE)
 ADAE <- radae(cached = TRUE)
@@ -306,7 +305,7 @@ ADLB <- radlb(cached = TRUE)
       AEHLT = default_filter()
     )
   ),
-  header = "Simple teal app",
+  header = "Start with Pre-defined Filters",
   footer = tags$p(class = "text-muted", "Source: agile-R website")
 ); safeBookmarkableShinyApp(app$ui, app$server, enableBookmarking = "url")
 ```
@@ -329,8 +328,8 @@ module_hidden_filters <- teal:::module(
 )
 app <- init(
   data = cdisc_data(
-    cdisc_dataset(dataname = "ADSL", data = ADSL),
-    cdisc_dataset(dataname = "ADLB", data = ADLB),
+    cdisc_dataset(dataname = "ADSL", x = ADSL),
+    cdisc_dataset(dataname = "ADLB", x = ADLB),
     code = "
 ADSL <- radsl(cached = TRUE)
 ADLB <- radlb(cached = TRUE)
@@ -339,7 +338,7 @@ ADLB <- radlb(cached = TRUE)
     module_hidden_filters,
     teal:::filter_calls_module()
   ),
-  header = "Simple teal app",
+  header = "Hidden Right Filter Panel",
   footer = tags$p(class = "text-muted", "Source: agile-R website")
 ); safeBookmarkableShinyApp(app$ui, app$server, enableBookmarking = "url")
 ```
@@ -352,8 +351,8 @@ This app purely tests the modules, it only has one tab and two datasets. It can 
 ```{r rawApp}
 app <- init(
   data = cdisc_data(
-    cdisc_dataset(dataname = "ADSL", data = ADSL),
-    cdisc_dataset(dataname = "ADLB", data = ADLB),
+    cdisc_dataset(dataname = "ADSL", x = ADSL),
+    cdisc_dataset(dataname = "ADLB", x = ADLB),
     code = "
 ADSL <- radsl(cached = TRUE)
 ADLB <- radlb(cached = TRUE)
@@ -361,7 +360,33 @@ ADLB <- radlb(cached = TRUE)
   modules = root_modules(
     teal:::debug_browser_module()
   ),
-  header = "Simple teal app",
+  header = "Raw App",
+  footer = tags$p(class = "text-muted", "Source: agile-R website")
+); safeBookmarkableShinyApp(app$ui, app$server, enableBookmarking = "url")
+```
+
+## App with Independent and Non-Independent Data
+
+This app shows how to incorporate independent data like `iris` and `mtcars` alongside some `CDISC` datasets.
+
+```{r independentDependentData}
+# construct a unique primary key
+iris_d <- iris
+iris_d["rowname"] <- rownames(iris)
+mtcars_d <- mtcars
+mtcars_d["rowname"] <- rownames(mtcars)
+
+app <- init(
+  data = teal_data(
+    cdisc_dataset(dataname = "ADSL", x = ADSL),
+    cdisc_dataset(dataname = "ADLB", x = ADLB),
+    dataset("iris", iris_d, "rowname"),
+    dataset("mtcars", mtcars_d, "rowname")
+  ),
+  modules = root_modules(
+    teal:::debug_browser_module()
+  ),
+  header = "Mixed Independent and Dependent Data",
   footer = tags$p(class = "text-muted", "Source: agile-R website")
 ); safeBookmarkableShinyApp(app$ui, app$server, enableBookmarking = "url")
 ```

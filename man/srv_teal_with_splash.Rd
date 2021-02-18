@@ -3,7 +3,7 @@
 \name{srv_teal_with_splash}
 \alias{srv_teal_with_splash}
 \title{Server function that loads the data through reactive loading and then delegates
-to \verb{\link{srv_teal}}.}
+to \code{\link{srv_teal}}.}
 \usage{
 srv_teal_with_splash(input, output, session, data, modules, filter = list())
 }
@@ -14,27 +14,25 @@ srv_teal_with_splash(input, output, session, data, modules, filter = list())
 
 \item{session}{\verb{Shiny session object}}
 
-\item{data}{\code{RelationalData} R6 object and container for data}
+\item{data}{\code{DataAbstract} R6 object and container for data}
 
 \item{modules}{\code{teal_module} or \code{teal_modules} object, the latter
-can be used for nested tabs, see \verb{\link{ui_nested_tabs}}}
+can be used for nested tabs, see \code{\link{ui_nested_tabs}}}
 
 \item{filter}{(\code{list}) You can define filters that show when
-the app starts. Variables inherited from ADSL have to be specified only for ADSL dataset.
-Thus variable like RACE have to be specified for ADSL datasets even when other sets contain it too.
+the app starts.
 The general pattern is:
-\code{list(ADSL = list(SEX = ..., AGE = ...), ADAE = ...)}.
+\code{list(iris = list(Species = ..., Sepal.Length = ...), mtcars = ...)}.
 An example is:
-\code{list(ADSL = list(SEX = c("M", "F")))}.
-More generally, the filters for the variable, e.g. \code{SEX} can be
+\code{list(iris = list(Species = c("setosa", "versicolor")))}.
+More generally, the filters for the variable, e.g. \code{Species} can be
 specified as follows:
-\code{list(SEX = list(choices = c("M", "F")))},
-\code{list(SEX = list(choices = c("M", "F"), keep_na = TRUE))},
+\code{list(Species = c("setosa", "versicolor"))},
+\verb{list(Species = c("setosa", "versicolor"), keep_na = TRUE))},
 or equivalently with:
-\code{list(SEX = c("M", "F"))},
-\code{list(SEX = c("M", "F", NA))},
+\code{list(Species = c("setosa", "versicolor", NA))},
 or for the default filter (not very restrictive):
-\code{list(SEX = default_filter())}
+\code{list(Species = default_filter())}
 
 Instead of \code{choices} above, use the following names:
 \itemize{
@@ -42,14 +40,14 @@ Instead of \code{choices} above, use the following names:
 \item \code{factor}: \code{choices}
 \item \code{logical}: \code{logical}
 A general example is:
-\code{list(   ADSL = list(AGE = default_filter(), SEX = c("M", NA)),   ADAE = list(AETOXGR = default_filter())   )}
+\code{list( iris = list(Sepal.Length = default_filter(), Species = c("M", NA)), mtcars = list(mpg = default_filter())   )}
 Ignored if the app is restored from a bookmarked state.
 }}
 }
 \value{
-\code{reactive}, return value of \verb{\link{srv_teal}}
+\code{reactive}, return value of \code{\link{srv_teal}}
 }
 \description{
 \ifelse{html}{\out{<a href='https://www.tidyverse.org/lifecycle/#maturing'><img src='figures/lifecycle-maturing.svg' alt='Maturing lifecycle'></a>}}{\strong{Maturing}}
-Please also refer to the doc of \verb{\link{init}}.
+Please also refer to the doc of \code{\link{init}}.
 }

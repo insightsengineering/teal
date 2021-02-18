@@ -1,293 +1,191 @@
-## RawDataset ====
-
-test_that("RawDataset basics", {
+## Dataset =====
+test_that("Dataset basics", {
 
   x <- data.frame(x = c(1, 2), y = c("a", "b"), stringsAsFactors = TRUE)
   rtables::var_labels(x) <- c("X", "Y")
 
-  expect_error(
-    RawDataset$new()
-  )
-
   expect_silent({
-    test_ds <- RawDataset$new(x)
+    test_ds <- Dataset$new(
+      dataname = "testds",
+      x = x,
+      keys = "x"
+    )
   })
 
-  labels <- expect_warning(test_ds$column_labels)
-
   expect_equal(
-    labels,
-    setNames(c("X", "Y"), c("x", "y"))
-  )
-
-  expect_equal(
-    test_ds$get_column_labels(),
-    setNames(c("X", "Y"), c("x", "y"))
-  )
-
-  expect_equal(
-    test_ds$get_character_colnames(),
-    character(0)
-  )
-
-  expect_equal(
-    test_ds$get_factor_colnames(),
-    "y"
-  )
-
-  expect_equal(
-    test_ds$get_numeric_colnames(),
+    get_keys(test_ds),
     "x"
   )
 
+  expect_silent(set_keys(test_ds, "y"))
   expect_equal(
-    test_ds$ncol,
-    2
-  )
-
-  expect_equal(
-    test_ds$nrow,
-    2
-  )
-
-  expect_equal(
-    test_ds$data,
-    test_ds$raw_data
-  )
-
-  expect_equal(
-    test_ds$data,
-    x
-  )
-
-  expect_equal(
-    test_ds$dim,
-    c(2, 2)
-  )
-
-  x <- data.frame(x = c(1, 2), y = c("a", "b"), stringsAsFactors = FALSE)
-  rtables::var_labels(x) <- c("X", "Y")
-  expect_silent({
-    test_ds <- RawDataset$new(x)
-  })
-
-  expect_equal(
-    RawDataset$new(x),
-    raw_dataset(x)
-  )
-
-  expect_equal(
-    test_ds$get_character_colnames(),
+    get_keys(test_ds),
     "y"
   )
 
-  expect_equal(
-    test_ds$get_factor_colnames(),
-    character(0)
-  )
-
-  expect_equal(
-    test_ds$get_numeric_colnames(),
-    "x"
-  )
-
-  expect_equal(
-    test_ds$get_colnames(),
-    test_ds$colnames
-  )
-
-  expect_equal(
-    test_ds$get_rownames(),
-    test_ds$rownames
-  )
-
-  expect_equal(
-    test_ds$get_colnames(),
-    test_ds$var_names
-  )
-
-  expect_equal(
-    get_raw_data(test_ds),
-    x
-  )
-
-})
-
-test_that("RawDataset edge case: column types with more than 1 classes", {
-
-  # class(x$y) is [1] "POSIXct" "POSIXt", i.e. a vector of length 2
-  x <- data.frame(
-    x = c(1, 2),
-    y = c(as.POSIXct("2020-10-16"), as.POSIXct("2020-10-17")),
-    z = factor(c("a", "b")),
-    a = c("a", "b"),
-    b = factor(c(1, 2)), stringsAsFactors = FALSE)
-  obj <- RawDataset$new(x)
-  expect_equal(obj$get_character_colnames(), "a")
-  expect_equal(obj$get_factor_colnames(), c("z", "b"))
-  expect_equal(obj$get_numeric_colnames(), "x")
-
-})
-
-## NamedDataset ====
-
-test_that("NamedDataset basics", {
-
-  x <- data.frame(x = c(1, 2), y = c("a", "b"), stringsAsFactors = TRUE)
-  rtables::var_labels(x) <- c("X", "Y")
-
-  expect_error(
-    NamedDataset$new()
-  )
-
-  expect_error(
-    NamedDataset$new(x = x)
-  )
-
-  expect_silent(
-    NamedDataset$new(dataname = "abc", x = x)
-  )
-
-  expect_silent(
-    NamedDataset$new(dataname = "abc", x = x, label = NULL)
-  )
-  expect_equal(
-    NamedDataset$new(dataname = "abc", x = x, label = NULL),
-    named_dataset(dataname = "abc", x = x, label = NULL)
-  )
-
-  expect_error(
-    NamedDataset$new(x = x, code = "abc")
-  )
-
-  expect_silent({
-    test_ds <- NamedDataset$new(
-      dataname = "testds",
-      x = x,
-      code = "test_ds <- data.frame(x = c(1, 2), y = c('a', 'b'), stringsAsFactors = TRUE)",
-      label = "Testing Dataset"
-    )
-  })
-
-  expect_equal(
-    test_ds$ncol,
-    2
-  )
-
-  expect_equal(
-    "Testing Dataset",
-    test_ds$get_dataset_label()
-  )
-
-  expect_equal(
-    "Testing Dataset",
-    test_ds$get_dataset_label()
-  )
-
-  expect_equal(
-    test_ds$get_code(deparse = TRUE),
-    "test_ds <- data.frame(x = c(1, 2), y = c(\"a\", \"b\"), stringsAsFactors = TRUE)"
-  )
-  expect_equal(
-    get_code(test_ds, deparse = TRUE),
-    "test_ds <- data.frame(x = c(1, 2), y = c(\"a\", \"b\"), stringsAsFactors = TRUE)"
-  )
-
-  expect_equal(
-    test_ds$get_code(deparse = FALSE),
-    as.list(
-      as.call(
-        parse(
-          text = "test_ds <- data.frame(x = c(1, 2), y = c(\"a\", \"b\"), stringsAsFactors = TRUE)"
-        )
-      )
-    )
-  )
-  expect_equal(
-    test_ds$get_code(deparse = FALSE),
-    get_code(test_ds, deparse = FALSE)
-  )
-
-  expect_true(
-    is.list(test_ds$get_code(deparse = FALSE))
-  )
-
-  expect_true(
-    all(vapply(test_ds$get_code(deparse = FALSE), is.call, logical(1)))
-  )
-
-  expect_equal(
-    test_ds$get_dataname(),
-    "testds"
-  )
-})
-
-## RelationalDataset ====
-
-test_that("RelationalDataset basics", {
-
-  x <- data.frame(x = c(1, 2), y = c("a", "b"), stringsAsFactors = TRUE)
-  rtables::var_labels(x) <- c("X", "Y")
-
-  expect_error(
-    RelationalDataset$new(dataname = "abc", x = x)
-  )
-
-  expect_silent({
-    test_ds <- RelationalDataset$new(
-      dataname = "testds",
-      x = x,
-      keys = keys(primary = "x", foreign = NULL, parent = NULL)
-    )
-  })
-
-  expect_equal(
-    test_ds$get_keys(),
-    keys(primary = "x", foreign = NULL, parent = NULL)
-  )
-
-  expect_silent(test_ds$set_keys(keys(primary = "y", foreign = NULL, parent = NULL)))
-  expect_equal(
-    test_ds$get_keys(),
-    keys(primary = "y", foreign = NULL, parent = NULL)
-  )
-
-  teal_keys <- teal::keys(primary = c("a", "b"), foreign = NULL, parent = NULL)
   df <- as.data.frame(
     list(a = c("a", "a", "b", "b", "c"), b = c(1, 2, 3, 3, 4), c = c(1, 2, 3, 4, 5))
   )
-  expect_error(suppressWarnings(
-    RelationalDataset$new(dataname = "test", x = df, keys = teal_keys),
-    regexp = "The provided primary key does not distinguish unique rows"))
+  expect_error(
+    suppressWarnings(Dataset$new(dataname = "test", x = df, keys = c("a", "b"))),
+    regexp = "The provided primary key does not distinguish unique rows"
+  )
 })
 
-## as_relational ====
-test_that("as_relational function", {
+test_that("Dataset$recreate", {
+  ds <- Dataset$new(
+    dataname = "mtcars",
+    x = mtcars,
+    keys = character(0),
+    code = "mtcars",
+    label = character(0),
+    vars = list())
+  ds2 <- ds$recreate()
+
+  expect_identical(ds, ds2)
+})
+
+test_that("Dataset$get_*_colnames", {
+  df <- as.data.frame(
+    list(
+      num = c(1, 2, 3),
+      char = as.character(c("a", "b", "c")),
+      fac = factor(x = c("lev1", "lev2", "lev1"), levels = c("lev1", "lev2"))
+    ),
+    stringsAsFactors = FALSE
+  )
+  ds <- Dataset$new("ds", x = df)
+
+  expect_equal(ds$get_numeric_colnames(), c("num"))
+  expect_equal(ds$get_character_colnames(), c("char"))
+  expect_equal(ds$get_factor_colnames(), c("fac"))
+})
+
+test_that("Dataset$get_rownames", {
+  df <- as.data.frame(
+    list(
+      num = c(1, 2, 3),
+      char = as.character(c("a", "b", "c")),
+      fac = factor(x = c("lev1", "lev2", "lev1"), levels = c("lev1", "lev2"))
+    ),
+    stringsAsFactors = FALSE
+  )
+  ds <- Dataset$new("ds", x = df)
+
+  expect_equal(ds$get_rownames(), c("1", "2", "3"))
+})
+
+test_that("Dataset active bindings", {
+  df <- as.data.frame(
+    list(
+      num = c(1, 2, 3),
+      char = as.character(c("a", "b", "c")),
+      fac = factor(x = c("lev1", "lev2", "lev1"), levels = c("lev1", "lev2")),
+      num2 = c(3, 4, 5)
+    ),
+    stringsAsFactors = FALSE
+  )
+  ds <- Dataset$new("ds", x = df)
+
+  expect_equal(ds$ncol, 4)
+  expect_equal(ds$nrow, 3)
+  expect_equal(ds$dim, c(3, 4))
+  expect_equal(ds$colnames, c("num", "char", "fac", "num2"))
+  expect_equal(ds$rownames, c("1", "2", "3"))
+  expect_equal(
+    ds$raw_data,
+    as.data.frame(
+      list(
+        num = c(1, 2, 3),
+        char = as.character(c("a", "b", "c")),
+        fac = factor(x = c("lev1", "lev2", "lev1"), levels = c("lev1", "lev2")),
+        num2 = c(3, 4, 5)
+      ),
+      stringsAsFactors = FALSE
+    )
+  )
+  expect_equal(ds$var_names, ds$colnames)
+  expect_true(is.null(ds$row_labels))
+
+  # Depreciation warnings
+  expect_warning(labs <- ds$column_labels)
+  exp <- as.character(rep(NA, 4))
+  names(exp) <- c("num", "char", "fac", "num2")
+  expect_equal(labs, exp)
+})
+
+test_that("Dataset supplementary constructors", {
+  file_example <- tempfile(fileext = ".R")
+  writeLines(
+    text = c(
+      "library(teal)
+
+      # code>
+      x <- iris
+      x$a1 <- 1
+      x$a2 <- 2
+
+      # <code
+      dataset(dataname = \"iris_mod\", x = x)"
+    ),
+    con = file_example
+  )
+  expect_silent(x <- dataset_file(file_example))
+
+  # Not a Dataset object causes an error
+  file_example2 <- tempfile(fileext = "2.R")
+  writeLines(
+    text = c(
+      "iris"
+    ),
+    con = file_example2
+  )
+  expect_error(
+    x <- dataset_file(file_example2),
+    regexp = "The object returned from the file is not of Dataset class.",
+    fixed = TRUE
+  )
+
+  # Deprecation warnings
+  expect_warning(x2 <- named_dataset_file(file_example))
+  expect_warning(x3 <- relational_dataset_file(file_example))
+  expect_equal(x, x2)
+  expect_equal(x, x3)
+
+  # Deprecated constructors
+  expect_error(raw_dataset(iris))
+  expect_warning(ds1 <- named_dataset("ds", iris))
+  expect_warning(ds2 <- relational_dataset("ds", iris))
+  expect_equal(ds1, ds2)
+})
+
+## CDISCDataset ====
+test_that("CDISCDataset basics", {
+
   x <- data.frame(x = c(1, 2), y = c("a", "b"), stringsAsFactors = TRUE)
   rtables::var_labels(x) <- c("X", "Y")
 
-  expect_silent({
-    test_ds <- RawDataset$new(x)
-  })
-
-  expect_error({
-    as_relational(list(data = "a"))
-    },
-    "no applicable method for"
+  expect_error(
+    CDISCDataset$new(dataname = "abc", x = x)
   )
 
-  expect_equal(
-    RelationalDataset$new(
-      dataname = "abc",
+  expect_silent({
+    test_ds <- CDISCDataset$new(
+      dataname = "testds",
       x = x,
-      keys = keys(primary = "x", foreign = NULL, parent = NULL),
-      label = character(0)
-    ),
-    as_relational(
-      x = test_ds,
-      dataname = "abc",
-      keys = keys(primary = "x", foreign = NULL, parent = NULL),
-      label = character(0)
+      keys = "x",
+      parent = "testds2"
     )
+  })
+
+  expect_equal(
+    test_ds$get_parent(),
+    "testds2"
+  )
+
+  expect_silent(test_ds$set_parent("testds3"))
+  expect_equal(
+    test_ds$get_parent(),
+    "testds3"
   )
 })

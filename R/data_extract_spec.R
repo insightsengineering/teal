@@ -1,11 +1,10 @@
 #' Data Extract input for teal modules
 #'
-#' @md
 #' @description `r lifecycle::badge("maturing")`
 #'
 #' The Data Extract input can be used to filter and select columns from a data
 #' set. This function enables such an input in teal.
-#' Please use the constructor function \link{data_extract_spec} to set it up.
+#' Please use the constructor function \code{\link{data_extract_spec}} to set it up.
 #'
 #' Note that no checks based on columns can be done because the data is only referred to by name.
 #'
@@ -91,7 +90,7 @@
 #' }
 #'}
 #'
-#' @references \link{select_spec} \link{filter_spec}
+#' @references \code{\link{select_spec}} \code{\link{filter_spec}}
 data_extract_spec <- function(dataname, select = NULL, filter = NULL, reshape = FALSE) {
   stopifnot(is_character_single(dataname))
   stopifnot(

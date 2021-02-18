@@ -2,61 +2,36 @@
 % Please edit documentation in R/as_relational.R
 \name{as_relational}
 \alias{as_relational}
-\alias{as_relational.RawDataset}
-\alias{as_relational.NamedDataset}
-\alias{as_relational.RawDatasetConnector}
 \alias{as_cdisc_relational}
-\title{Convert a \verb{Raw<...>} object to a \verb{Relational<...>} object}
+\title{Convert a \verb{Named<...>} object to a \verb{Relational<...>} object}
 \usage{
-as_relational(x, dataname, keys, label)
-
-\method{as_relational}{RawDataset}(x, dataname, keys, label = character(0))
-
-\method{as_relational}{NamedDataset}(x, dataname, keys, label = character(0))
-
-\method{as_relational}{RawDatasetConnector}(x, dataname, keys, label = character(0))
+as_relational(x, keys)
 
 as_cdisc_relational(x, dataname, label = character(0))
 }
 \arguments{
-\item{x}{(\code{RawDataset}, \code{NamedDataset}, \code{RawDatasetConnector})}
+\item{x}{an object of (\code{NamedDataset} or \code{NamedDatasetConnector}) class}
+
+\item{keys}{optional, (\code{character})\cr
+vector with primary keys}
 
 \item{dataname}{(\code{character})\cr
 A given name for the dataset it may not contain spaces}
 
-\item{keys}{(\code{keys})\cr
-object of S3 class keys containing foreign, primary keys and parent information}
-
 \item{label}{(\code{character})\cr
-Label to describe the dataset.}
+Label to describe the dataset}
 }
 \value{
 (\code{RelationalDataset} or \code{RelationalDatasetConnector}) object
 }
 \description{
-\ifelse{html}{\out{<a href='https://www.tidyverse.org/lifecycle/#experimental'><img src='figures/lifecycle-experimental.svg' alt='Experimental lifecycle'></a>}}{\strong{Experimental}}
-Convert a \verb{Raw<...>} to a \verb{Relational<...>}
+\ifelse{html}{\figure{lifecycle-soft-deprecated.svg}{options: alt='Soft-deprecated lifecycle'}}{\strong{Soft-deprecated}}
+
+\ifelse{html}{\figure{lifecycle-defunct.svg}{options: alt='Defunct lifecycle'}}{\strong{Defunct}}
 }
 \details{
+Convert a \verb{Named<...>} to a \verb{Relational<...>}
+
 \code{as_cdisc_relational} will derive the keys by the \code{dataname} and therefore
-  does not need the \code{keys} argument to be specified
-}
-\examples{
-library(random.cdisc.data)
-ADSL <- radsl(cached = TRUE)
-ADSL_raw <- raw_dataset(x = ADSL)
-
-ADSL_relational <- as_relational(
-  ADSL_raw,
-  dataname = "ADSL",
-  keys = keys(primary = c("USUBJID", "STUDYID"), foreign = NULL, parent = NULL)
-)
-get_raw_data(ADSL_relational)
-ADSL_relational$get_keys()
-library(random.cdisc.data)
-fun <- callable_function(radsl)
-fun$set_args(list(N = 5, seed = 1, cached = TRUE))
-x <- raw_dataset_connector(fun)
-
-x2 <- as_relational(x, dataname = "ADSL", keys = get_cdisc_keys("ADSL"))
+does not need the \code{keys} argument to be specified
 }

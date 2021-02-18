@@ -1,0 +1,1367 @@
+#' Create a new `DatasetConnector` object
+#'
+#' Create `DatasetConnector` from \code{\link{callable_function}}.
+#'
+#' `r lifecycle::badge("experimental")`
+#'
+#' @param dataname (`character`)\cr
+#'  A given name for the dataset it may not contain spaces
+#'
+#' @param pull_callable (`CallableFunction`)\cr
+#'   function with necessary arguments set to fetch data from connection.
+#'
+#' @param keys optional, (`character`)\cr
+#'  vector of dataset primary keys column names
+#'
+#' @param label (`character`)\cr
+#'  Label to describe the dataset.
+#'
+#' @param code (`character`)\cr
+#'  A character string defining code to modify `raw_data` from this dataset. To modify
+#'  current dataset code should contain at least one assignment to object defined in `dataname`
+#'  argument. For example if `dataname = ADSL` example code should contain
+#'  `ADSL <- <some R code>`. Can't be used simultaneously with `script`
+#'
+#' @param script (`character`)\cr
+#'   Alternatively to `code` - location of the file containing modification code.
+#'   Can't be used simultaneously with `script`.
+#'
+#' @param vars (named `list`)\cr
+#'   In case when this object code depends on the `raw_data` from the other
+#'   `Dataset`, `DatasetConnector` object(s) or other constant value,
+#'   this/these object(s) should be included. Please note that `vars`
+#'   are included to this object as local `vars` and they cannot be modified
+#'   within another dataset.
+#'
+#' @return new `DatasetConnector` object
+#'
+#' @export
+dataset_connector <- function(dataname,
+                              pull_callable,
+                              keys = character(0),
+                              label = character(0),
+                              code = character(0),
+                              script = character(0),
+                              vars = list()) {
+  stopifnot(is_character_single(dataname))
+  stopifnot(is(pull_callable, "Callable"))
+  stopifnot(is_character_vector(keys, min_length = 0L))
+  stopifnot(is_character_empty(code) || is_character_vector(code))
+  stopifnot(is_character_empty(label) || is_character_vector(label))
+
+  x <- DatasetConnector$new(
+    dataname = dataname,
+    pull_callable = pull_callable,
+    keys = keys,
+    code = code_from_script(code, script),
+    label = label,
+    vars = vars
+  )
+
+  return(x)
+}
+
+
+#' @rdname dataset_connector
+#' @description `r lifecycle::badge("defunct")`
+#' @export
+raw_dataset_connector <- function(pull_callable) {
+  lifecycle::deprecate_stop(
+    "0.9.2",
+    "teal::raw_dataset_connector()",
+    details = "Please use `teal::dataset_connector()` instead"
+  )
+}
+
+#' @rdname dataset_connector
+#' @description `r lifecycle::badge("soft-deprecated")`
+#' @export
+named_dataset_connector <- function(dataname,
+                                    pull_callable,
+                                    label = character(0),
+                                    code = character(0),
+                                    script = character(0),
+                                    vars = list()) {
+  lifecycle::deprecate_warn(
+    "0.9.2",
+    "teal::named_dataset_connector()",
+    details = "Please use teal::dataset_connector() instead."
+  )
+
+  dataset_connector(
+    dataname = dataname,
+    pull_callable = pull_callable,
+    code = code_from_script(code, script),
+    label = label,
+    vars = vars
+  )
+}
+
+
+#' @rdname dataset_connector
+#' @description `r lifecycle::badge("soft-deprecated")`
+#' @export
+relational_dataset_connector <- function(dataname,
+                                         pull_callable,
+                                         keys,
+                                         label = character(0),
+                                         code = character(0),
+                                         script = character(0),
+                                         vars = list()) {
+  lifecycle::deprecate_warn(
+    "0.9.2",
+    "teal::relational_dataset_connector()",
+    details = "Please use teal::dataset_connector() instead."
+  )
+
+  dataset_connector(
+    dataname = dataname,
+    pull_callable = pull_callable,
+    keys = keys,
+    code = code_from_script(code, script),
+    label = label,
+    vars = vars
+  )
+}
+
+#' Create a new `CDISCDatasetConnector` object
+#'
+#' `r lifecycle::badge("experimental")`
+#'
+#' Create `CDISCDatasetConnector` from \code{\link{callable_function}}.
+#'
+#' @inheritParams dataset_connector
+#' @inheritParams cdisc_dataset
+#'
+#' @return new `CDISCDatasetConnector` object
+#'
+#' @export
+cdisc_dataset_connector <- function(dataname,
+                                    pull_callable,
+                                    keys,
+                                    parent = `if`(identical(dataname, "ADSL"), character(0), "ADSL"),
+                                    label = character(0),
+                                    code = character(0),
+                                    script = character(0),
+                                    vars = list()) {
+  stopifnot(is_character_single(dataname))
+  stopifnot(is(pull_callable, "Callable"))
+  stopifnot(is_character_vector(keys, min_length = 0L))
+  stopifnot(is_character_empty(parent) || is_character_single(parent))
+  stopifnot(is_character_empty(code) || is_character_vector(code))
+  stopifnot(is_character_empty(label) || is_character_vector(label))
+
+  x <- CDISCDatasetConnector$new(
+    dataname = dataname,
+    pull_callable = pull_callable,
+    keys = keys,
+    parent = parent,
+    code = code_from_script(code, script),
+    label = label,
+    vars = vars
+  )
+
+  return(x)
+}
+
+#' Load `DatasetConnector` object from a file
+#'
+#' `r lifecycle::badge("experimental")`
+#'
+#' Please note that the script has to end with a call creating desired object. The error will
+#' be raised otherwise.
+#'
+#' @inheritParams dataset_file
+#'
+#' @return `DatasetConnector` object
+#'
+#' @importFrom methods is
+#'
+#' @export
+#'
+#' @examples
+#' # simple example
+#' file_example <- tempfile(fileext = ".R")
+#' writeLines(
+#'   text = c(
+#'     "library(teal)
+#'      library(random.cdisc.data)
+#'
+#'      pull_callable <- callable_function(radsl)
+#'      pull_callable$set_args(list(cached = TRUE))
+#'      dataset_connector(\"ADSL\", pull_callable, get_cdisc_keys(\"ADSL\"))"
+#'   ),
+#'   con = file_example
+#' )
+#' x <- dataset_connector_file(file_example)
+#' get_code(x)
+dataset_connector_file <- function(path) { # nolint
+  object <- object_file(path, "DatasetConnector")
+  return(object)
+}
+
+#' @rdname dataset_connector_file
+#' @description `r lifecycle::badge("soft-deprecated")`
+#' @export
+relational_dataset_connector_file <- function(path) { # nolint
+  lifecycle::deprecate_warn(
+    "0.9.2",
+    "teal::relational_dataset_connector_file()",
+    details = "Please use teal::dataset_connector_file() instead."
+  )
+  dataset_connector_file(path = path)
+}
+
+
+#' Load `CDISCDatasetConnector` object from a file
+#'
+#' `r lifecycle::badge("experimental")`
+#'
+#' Please note that the script has to end with a call creating desired object. The error will
+#' be raised otherwise.
+#'
+#' @inheritParams dataset_connector_file
+#'
+#' @return `CDISCDatasetConnector` object
+#'
+#' @export
+#'
+#' @examples
+#' # simple example
+#' file_example <- tempfile(fileext = ".R")
+#' writeLines(
+#'   text = c(
+#'     "library(teal)
+#'      library(random.cdisc.data)
+#'
+#'      pull_callable <- callable_function(radsl)
+#'      pull_callable$set_args(list(cached = TRUE))
+#'      cdisc_dataset_connector(\"ADSL\", pull_callable, get_cdisc_keys(\"ADSL\"))"
+#'   ),
+#'   con = file_example
+#' )
+#' x <- cdisc_dataset_connector_file(file_example)
+#' get_code(x)
+cdisc_dataset_connector_file <- function(path) { # nolint # nousage
+  object <- object_file(path, "CDISCDatasetConnector")
+  return(object)
+}
+
+
+# RCD ====
+
+#' `RCD` `DatasetConnector`
+#'
+#' `r lifecycle::badge("experimental")`
+#'
+#' Create a `DatasetConnector` from function in `random.cdisc.data`.
+#'
+#' @inheritParams dataset_connector
+#'
+#' @param fun (`function`)\cr
+#'   any R function which generates `data.frame`, especially functions from
+#'   `random.cdisc.data` like \code{\link[random.cdisc.data]{radsl}}
+#'
+#' @param ... (`optional`)\cr
+#'   Additional arguments applied to pull function.
+#'   In case when this object code depends on the `raw_data` from the other
+#'   `Dataset`, `DatasetConnector` object(s) or other constant value,
+#'   this/these object(s) should be included. Please note that `vars`
+#'   are included to this object as local `vars` and they cannot be modified
+#'   within another dataset.
+#'
+#' @export
+#'
+#' @examples
+#' library(random.cdisc.data)
+#' x <- rcd_dataset_connector(
+#'   dataname = "ADSL",
+#'   fun = radsl,
+#'   cached = TRUE
+#' )
+#' x$get_code()
+#' load_dataset(x)
+#' get_dataset(x)
+#' x$get_raw_data()
+rcd_dataset_connector <- function(dataname,
+                                  fun,
+                                  keys = character(0),
+                                  label = character(0),
+                                  code = character(0),
+                                  script = character(0),
+                                  ...) {
+  stopifnot(is.function(fun))
+
+  dot_args <- list(...)
+  stopifnot(is_fully_named_list(dot_args))
+
+  x_fun <- callable_function(fun) # nolint
+
+  adsl <- if ("ADSL" %in% names(dot_args)) {
+    # ADSL argument to be included in radxxx
+    x_fun$set_args(
+      c(
+        list(ADSL = as.name("ADSL")),
+        dot_args[!names(dot_args) %in% "ADSL"]
+      )
+    )
+    dot_args["ADSL"]
+  } else {
+    x_fun$set_args(dot_args)
+    list()
+  }
+
+  x <- dataset_connector(
+    dataname = dataname,
+    pull_callable = x_fun,
+    keys = keys,
+    label = label,
+    code = code_from_script(code, script),
+    vars = adsl
+  )
+
+  return(x)
+}
+
+#' `RCD` `CDISCDatasetConnector`
+#'
+#' `r lifecycle::badge("experimental")`
+#'
+#' Create a `CDISCDatasetConnector` from function in `random.cdisc.data`.
+#'
+#' @inheritParams rcd_dataset_connector
+#' @inheritParams cdisc_dataset_connector
+#'
+#' @export
+rcd_cdisc_dataset_connector <- function(dataname,
+                                        fun,
+                                        keys = get_cdisc_keys(dataname),
+                                        parent = `if`(identical(dataname, "ADSL"), character(0L), "ADSL"),
+                                        label = character(0),
+                                        code = character(0),
+                                        script = character(0),
+                                        ...) {
+  x <- rcd_dataset_connector(
+    dataname = dataname,
+    fun = fun,
+    keys = keys,
+    code = code,
+    script = script,
+    label = label,
+    ...
+  )
+
+  res <- as_cdisc(
+    x,
+    parent = parent
+  )
+
+  return(res)
+}
+
+
+# RDS ====
+
+#' `RDS` `DatasetConnector`
+#'
+#' `r lifecycle::badge("experimental")`
+#'
+#' Create a `DatasetConnector` from `RDS` file.
+#'
+#' @inheritParams dataset_connector
+#' @inheritParams rcd_dataset_connector
+#'
+#' @param file (`character`)\cr
+#'   path to (`.rds` or `.R`) that contains `data.frame` object or
+#'   code to `source`
+#'
+#' @param ... (`optional`)\cr
+#'   additional arguments applied to \code{\link[base]{readRDS}} function
+#'
+#' @export
+#'
+#' @examples
+#' \dontrun{
+#' x <- rds_dataset_connector(
+#'   dataname = "ADSL",
+#'   file = "path/to/file.RDS"
+#' )
+#' x$get_code()
+#' }
+rds_dataset_connector <- function(dataname,
+                                  file,
+                                  keys = character(0),
+                                  label = character(0),
+                                  code = character(0),
+                                  script = character(0),
+                                  ...) {
+  dot_args <- list(...)
+  stopifnot(is_fully_named_list(dot_args))
+
+  stopifnot(is_character_single(file))
+  if (!file.exists(file)) {
+    stop("File ", file, " does not exist.", call. = FALSE)
+  }
+
+  x_fun <- callable_function(readRDS) # nolint
+  args <- c(list(file = file), dot_args)
+  x_fun$set_args(args)
+
+  x <- dataset_connector(
+    dataname = dataname,
+    pull_callable = x_fun,
+    keys = keys,
+    label = label,
+    code = code_from_script(code, script)
+  )
+
+  return(x)
+}
+
+#' `RDS` `CDSICDatasetConnector`
+#'
+#' `r lifecycle::badge("experimental")`
+#'
+#' Create a `CDSICDatasetConnector` from `RDS` file with keys automatically
+#' assigned by `dataname`
+#'
+#' @inheritParams rds_dataset_connector
+#' @inheritParams cdisc_dataset_connector
+#'
+#' @export
+rds_cdisc_dataset_connector <- function(dataname,
+                                        file,
+                                        keys = get_cdisc_keys(dataname),
+                                        parent = `if`(identical(dataname, "ADSL"), character(0L), "ADSL"),
+                                        label = character(0),
+                                        code = character(0),
+                                        script = character(0),
+                                        ...) {
+
+  x <- rds_dataset_connector(
+    dataname = dataname,
+    file = file,
+    keys = keys,
+    code = code_from_script(code, script),
+    label = label,
+    ...
+  )
+
+  res <- as_cdisc(
+    x,
+    parent = parent
+  )
+
+  return(res)
+}
+
+# SCRIPT ====
+
+#' Script `DatasetConnector`
+#'
+#' `r lifecycle::badge("experimental")`
+#'
+#' Create a `DatasetConnector` from `.R` file.
+#'
+#' @inheritParams dataset_connector
+#' @inheritParams rcd_dataset_connector
+#'
+#' @param file (`character`)\cr
+#'   file location containing code to be evaluated in connector. Object obtained in the last
+#'   call from file will be returned to the connector - same as `source(file = file)$value`
+#'
+#' @export
+#'
+#' @examples
+#' \dontrun{
+#' x <- script_dataset_connector(
+#'   dataname = "ADSL",
+#'   file = "path/to/script.R",
+#'   keys = get_cdisc_keys("ADSL")
+#' )
+#' x$get_code()
+#' }
+script_dataset_connector <- function(dataname,
+                                     file,
+                                     keys = character(0),
+                                     label = character(0),
+                                     code = character(0),
+                                     script = character(0),
+                                     ...) {
+  vars <- list(...)
+  stopifnot(is_fully_named_list(vars))
+
+  stopifnot(is_character_single(file))
+  if (!file.exists(file)) {
+    stop("File ", file, " does not exist.", call. = FALSE)
+  }
+
+  x_fun <- callable_function(source) # nolint
+  x_fun$set_args(list(file = file, local = TRUE))
+
+  x <- dataset_connector(
+    dataname = dataname,
+    pull_callable = x_fun,
+    keys = keys,
+    label = label,
+    code = code_from_script(code, script),
+    vars = vars
+  )
+
+  return(x)
+}
+
+#' Script `CDISCDatasetConnector`
+#'
+#' `r lifecycle::badge("experimental")`
+#'
+#' Create a `CDISCDatasetConnector` from `script` file with keys assigned
+#' automatically by `dataname`.
+#'
+#' @inheritParams script_dataset_connector
+#' @inheritParams cdisc_dataset_connector
+#'
+#' @export
+script_cdisc_dataset_connector <- function(dataname,
+                                           file,
+                                           keys = get_cdisc_keys(dataname),
+                                           parent = `if`(identical(dataname, "ADSL"), character(0L), "ADSL"),
+                                           label = character(0),
+                                           code = character(0),
+                                           script = character(0),
+                                           ...) {
+
+  x <- script_dataset_connector(
+    dataname = dataname,
+    file = file,
+    keys = keys,
+    code = code_from_script(code, script),
+    script = script,
+    label = label,
+    ...
+  )
+
+  res <- as_cdisc(
+    x,
+    parent = parent
+  )
+
+  return(res)
+}
+
+# CODE ====
+
+#' Code `DatasetConnector`
+#'
+#' `r lifecycle::badge("experimental")`
+#'
+#' Create a `DatasetConnector` from a string of code.
+#'
+#' @inheritParams dataset_connector
+#' @inheritParams rcd_dataset_connector
+#'
+#' @param code (`character`)\cr
+#'   String containing the code to produce the object.
+#'   The code must end in a call to the object.
+#' @param mutate_code (`character`)\cr
+#'   String containing the code used to mutate the object
+#'   after it is produced.
+#' @param mutate_script (`character`)\cr
+#'   Alternatively to `mutate_code` - location of the file containing modification code.
+#'   Can't be used simultaneously with `mutate_script`.
+#'
+#' @export
+#'
+#' @examples
+#' library(random.cdisc.data)
+#' x <- code_dataset_connector(
+#'   dataname = "ADSL",
+#'   keys = get_cdisc_keys("ADSL"),
+#'   code = "ADSL <- radsl(cached = TRUE); ADSL"
+#' )
+#'
+#' x$get_code()
+#'
+#' mutate_dataset(x, code = "ADSL$new_variable <- 1")
+#' x$get_code()
+#'
+#' file_example <- tempfile(fileext = ".R")
+#' writeLines(
+#'   text = c(
+#'     "seed <- 1; ADSL <- radsl(cached = TRUE, seed = seed)\nADSL"
+#'   ),
+#'   con = file_example
+#' )
+#'
+#' y <- code_dataset_connector(
+#'   dataname = "ADSL",
+#'   keys = get_cdisc_keys("ADSL"),
+#'   code = paste0(readLines(file_example), collapse = "\n")
+#' )
+code_dataset_connector <- function(dataname,
+                                   code,
+                                   keys = character(0),
+                                   label = character(0),
+                                   mutate_code = character(0),
+                                   mutate_script = character(0),
+                                   ...) {
+  vars <- list(...)
+
+  stopifnot(is_fully_named_list(vars))
+  stopifnot(is_character_single(code))
+  stopifnot(is_character_vector(code, min_length = 0L, max_length = 1L))
+
+  call <- callable_code(code = code)
+
+  x <- dataset_connector(
+    dataname = dataname,
+    pull_callable = call,
+    keys = keys,
+    label = label,
+    code = code_from_script(mutate_code, mutate_script),
+    vars = vars
+  )
+
+  return(x)
+}
+
+#' Code `CDISCDatasetConnector`
+#'
+#' `r lifecycle::badge("experimental")`
+#'
+#' Create a `CDISCDatasetConnector` from a string of code with keys
+#' assigned automatically by `dataname`.
+#'
+#' @inheritParams code_dataset_connector
+#' @inheritParams cdisc_dataset_connector
+#'
+#' @export
+code_cdisc_dataset_connector <- function(dataname,
+                                         code,
+                                         keys = get_cdisc_keys(dataname),
+                                         parent = `if`(identical(dataname, "ADSL"), character(0L), "ADSL"),
+                                         label = character(0),
+                                         mutate_code = character(0),
+                                         ...) {
+
+  x <- code_dataset_connector(
+    dataname = dataname,
+    code = code,
+    keys = keys,
+    mutate_code = mutate_code,
+    label = label,
+    ...
+  )
+
+  res <- as_cdisc(
+    x,
+    parent = parent
+  )
+
+  return(res)
+}
+
+# RICE ====
+
+#' Rice `DatasetConnector`
+#'
+#' `r lifecycle::badge("experimental")`
+#'
+#' Create a `DatasetConnector` from `RICE`.
+#'
+#' @inheritParams dataset_connector
+#' @inheritParams rcd_dataset_connector
+#'
+#' @param path (`character`)\cr
+#'   path to the file
+#'
+#' @param ... (`optional`)\cr
+#'   additional arguments applied to pull function
+#'
+#' @export
+#'
+#' @examples
+#' x <- rice_dataset_connector(
+#'   dataname = "ADSL",
+#'   path = "/path/to/file.sas7bdat"
+#' )
+#' x$get_code()
+#' \dontrun{
+#' load_dataset(x)
+#' get_dataset(x)
+#' x$get_raw_data()
+#' }
+rice_dataset_connector <- function(dataname,
+                                   path,
+                                   keys = character(0),
+                                   label = character(0),
+                                   code = character(0),
+                                   script = character(0),
+                                   ...) {
+  dot_args <- list(...)
+  stopifnot(is_fully_named_list(dot_args))
+  stopifnot(is_character_single(path))
+
+  check_pkg_quietly(
+    "rice",
+    paste0(
+      "Connection to entimICE via rice was requested, but rice package is not available.",
+      "Please install it from https://github.roche.com/Rpackages/rice.")
+    )
+
+  x_fun <- callable_function("rice::rice_read") # nolint
+  args <- append(list(node = path, prolong = TRUE, quiet = TRUE), dot_args)
+  x_fun$set_args(args)
+
+  x <- dataset_connector(
+    dataname = dataname,
+    pull_callable = x_fun,
+    keys = keys,
+    code = code_from_script(code, script),
+    label = label
+  )
+
+  return(x)
+}
+
+#' Rice `CDISCDatasetConnector`
+#'
+#' `r lifecycle::badge("experimental")`
+#'
+#' Create a `CDISCDatasetConnector` from `RICE` dataset with keys and parent name assigned
+#' automatically by `dataname`.
+#'
+#' @inheritParams rice_dataset_connector
+#' @inheritParams cdisc_dataset_connector
+#'
+#' @export
+rice_cdisc_dataset_connector <- function(dataname,
+                                         path,
+                                         keys = get_cdisc_keys(dataname),
+                                         parent = `if`(identical(dataname, "ADSL"), character(0L), "ADSL"),
+                                         label = character(0),
+                                         code = character(0),
+                                         script = character(0),
+                                         ...) {
+
+  x <- rice_dataset_connector(
+    dataname = dataname,
+    path = path,
+    keys = keys,
+    code = code_from_script(code, script),
+    label = label,
+    ...
+  )
+
+  res <- as_cdisc(
+    x,
+    parent = parent
+  )
+
+  return(res)
+}
+
+
+# TERADATA ====
+
+#' `Teradata` `DatasetConnector`
+#'
+#' `r lifecycle::badge("experimental")`
+#'
+#' Create a `DatasetConnector` from `Teradata`.
+#'
+#' @inheritParams dataset_connector
+#' @inheritParams rcd_dataset_connector
+#'
+#' @param table (`character`) table name
+#'
+#' @export
+teradata_dataset_connector <- function(dataname,
+                                       table,
+                                       keys = character(0),
+                                       label = character(0),
+                                       code = character(0),
+                                       script = character(0),
+                                       ...) {
+  dot_args <- list(...)
+  stopifnot(is_fully_named_list(dot_args))
+
+  check_pkg_quietly(
+    "DBI",
+    "Connection to Teradata tables was requested, but DBI package is not available."
+  )
+
+  x_fun <- callable_function("DBI::dbReadTable")
+  args <- append(list(conn = as.name("conn"), name = table), dot_args)
+  x_fun$set_args(args)
+
+  x <- dataset_connector(
+    dataname = dataname,
+    pull_callable = x_fun,
+    keys = keys,
+    label = label,
+    code = code_from_script(code, script)
+  )
+
+  return(x)
+}
+
+#' `Teradata` `CDISCDatasetConnector`
+#'
+#' `r lifecycle::badge("experimental")`
+#'
+#' Create a `CDISCDatasetConnector` from `Teradata` with keys and parent name assigned
+#' automatically by `dataname`.
+#'
+#' @inheritParams teradata_dataset_connector
+#' @inheritParams cdisc_dataset_connector
+#'
+#' @export
+teradata_cdisc_dataset_connector <- function(dataname, # nolint
+                                             table,
+                                             keys = get_cdisc_keys(dataname),
+                                             parent = `if`(identical(dataname, "ADSL"), character(0L), "ADSL"),
+                                             label = character(0),
+                                             code = character(0),
+                                             script = character(0),
+                                             ...) {
+
+  x <- teradata_dataset_connector(
+    dataname = dataname,
+    table = table,
+    keys = keys,
+    code = code_from_script(code, script),
+    label = label,
+    ...
+  )
+
+  res <- as_cdisc(
+    x,
+    parent = parent
+  )
+
+  return(res)
+}
+
+
+# CSV ====
+
+#' `csv` `DatasetConnector`
+#'
+#' `r lifecycle::badge("experimental")`
+#'
+#' Create a `DatasetConnector` from `csv` (or general delimited file).
+#'
+#'
+#' @inheritParams dataset_connector
+#' @inheritParams rcd_dataset_connector
+#'
+#' @param file (`character`)\cr
+#'   path to (`.csv)` (or general delimited) file that contains `data.frame` object
+#'
+#' @param ... (`optional`)\cr
+#'   additional arguments applied to pull function (`readr::read_delim`) by default
+#'   `delim = ","`.
+#'
+#' @export
+#'
+#' @examples
+#' \dontrun{
+#' x <- csv_dataset_connector(
+#'   dataname = "ADSL",
+#'   file = "path/to/file.csv",
+#'   delim = ",",
+#'   col_types = quote(readr::cols(AGE = "i"))
+#' )
+#' x$get_code()
+#' }
+csv_dataset_connector <- function(dataname,
+                                  file,
+                                  keys = character(0),
+                                  label = character(0),
+                                  code = character(0),
+                                  script = character(0),
+                                  ...) {
+  dot_args <- list(...)
+  stopifnot(is_fully_named_list(dot_args))
+
+  check_pkg_quietly(
+    "readr",
+    "library readr is required to use csv connectors please install it."
+  )
+
+  # add default delim as ","
+  if (!"delim" %in% names(dot_args)) {
+    dot_args$delim <- ","
+  }
+
+  stopifnot(is_character_single(file))
+  if (!file.exists(file)) {
+    stop("File ", file, " does not exist.", call. = FALSE)
+  }
+
+  x_fun <- callable_function(readr::read_delim) # using read_delim as preserves dates (read.csv does not)
+  args <- c(list(file = file), dot_args)
+  x_fun$set_args(args)
+
+  x <- dataset_connector(
+    dataname = dataname,
+    pull_callable = x_fun,
+    keys = keys,
+    label = label,
+    code = code_from_script(code, script)
+  )
+
+  return(x)
+}
+
+#' `csv` `CDISCDatasetConnector`
+#'
+#' `r lifecycle::badge("experimental")`
+#'
+#' Create a `CDISCDatasetConnector` from `csv` (or general delimited) file
+#' with keys and parent name assigned automatically by `dataname`.
+#'
+#' @inheritParams csv_dataset_connector
+#' @inheritParams cdisc_dataset_connector
+#'
+#' @export
+csv_cdisc_dataset_connector <- function(dataname,
+                                        file,
+                                        keys = get_cdisc_keys(dataname),
+                                        parent = `if`(identical(dataname, "ADSL"), character(0L), "ADSL"),
+                                        label = character(0),
+                                        code = character(0),
+                                        script = character(0),
+                                        ...) {
+
+  x <- csv_dataset_connector(
+    dataname = dataname,
+    file = file,
+    keys = keys,
+    code = code_from_script(code, script),
+    label = label,
+    ...
+  )
+
+  res <- as_cdisc(
+    x,
+    parent = parent
+  )
+
+  return(res)
+}
+
+
+# FUN ====
+
+#' Function Dataset Connector
+#'
+#' `r lifecycle::badge("experimental")`
+#'
+#' Create a `DatasetConnector` from `function` and its arguments.
+#'
+#' @inheritParams dataset_connector
+#' @inheritParams rcd_dataset_connector
+#'
+#' @param func (`function`)\cr
+#'   a custom function to obtain dataset.
+#' @param func_args (`list`)\cr
+#'   additional arguments for (`func`).
+#' @param func_name (`name`)\cr
+#'   for internal purposes, please keep it default
+#'
+#' @importFrom rlang set_env
+#'
+#' @export
+#'
+#' @examples
+#' \dontrun{
+#' my_data <- function(...) {
+#'   # whatever code
+#'   set.seed(1234)
+#'   library(MASS)
+#'   require(dplyr)
+#'   x <- data.frame(
+#'     STUDYID = 1,
+#'     USUBJID = 1:40,
+#'     z = stats::rnorm(40),
+#'     zz = factor(sample(letters[1:3], 40, replace = TRUE)),
+#'     NAs = rep(NA, 40)
+#'   )
+#'   x$w <- as.numeric(MASS::mvrnorm(40, 0, 1))
+#'   x$ww <- as.numeric(MASS::mvrnorm(40, 0, 1))
+#'   rtables::var_labels(x) <- c("STUDYID", "USUBJID", "z", "zz", "NAs", "w", "ww")
+#'   x
+#' }
+#' y <- fun_cdisc_dataset_connector(
+#'   dataname = "ADSL",
+#'   func = my_data
+#' )
+#'
+#' y$get_code()
+#'
+#' y$pull()
+#'
+#' get_raw_data(y)
+#' }
+#' # Error as global var is used in the function.
+#' # Thus not reproducible.
+#' \dontrun{
+#' x <- 40
+#' my_data <- function(global_var = x) {
+#'   # whatever code
+#'   set.seed(1234)
+#'   library(MASS)
+#'   x <- data.frame(
+#'     STUDYID = 1,
+#'     USUBJID = 1:global_var,
+#'     z = stats::rnorm(40),
+#'     zz = factor(sample(letters[1:3], 40, replace = TRUE)),
+#'     NAs = rep(NA, 40)
+#'   )
+#'   x$w <- as.numeric(MASS::mvrnorm(40, 0, 1))
+#'   x$ww <- as.numeric(MASS::mvrnorm(40, 0, 1))
+#'   rtables::var_labels(x) <- c("STUDYID", "USUBJID", "z", "zz", "NAs", "w", "ww")
+#'   x
+#' }
+#' y <- fun_cdisc_dataset_connector(
+#'   dataname = "ADSL",
+#'   func = my_data
+#' )
+#'
+#' y$pull()
+#' }
+#' # Error - same as previous one
+#' \dontrun{
+#' global_var <- 40
+#' my_data <- function() {
+#'   # whatever code
+#'   set.seed(1234)
+#'   library(MASS)
+#'   x <- data.frame(
+#'     STUDYID = 1,
+#'     USUBJID = 1:global_var,
+#'     z = stats::rnorm(40),
+#'     zz = factor(sample(letters[1:3], 40, replace = TRUE)),
+#'     NAs = rep(NA, 40)
+#'   )
+#'   x$w <- as.numeric(MASS::mvrnorm(40, 0, 1))
+#'   x$ww <- as.numeric(MASS::mvrnorm(40, 0, 1))
+#'   rtables::var_labels(x) <- c("STUDYID", "USUBJID", "z", "zz", "NAs", "w", "ww")
+#'   x
+#' }
+#' y <- fun_cdisc_dataset_connector(
+#'   dataname = "ADSL",
+#'   func = my_data
+#' )
+#'
+#' y$pull()
+#' }
+fun_dataset_connector <- function(dataname,
+                                  func,
+                                  func_args = NULL,
+                                  keys = character(0),
+                                  label = character(0),
+                                  code = character(0),
+                                  script = character(0),
+                                  func_name = substitute(func),
+                                  ...) {
+  vars <- list(...)
+
+  stopifnot(is_fully_named_list(vars))
+
+  stopifnot(is.function(func))
+
+  stopifnot(is.list(func_args) || is.null(func_args))
+
+  cal <- if (!is.symbol(func_name)) as.call(func_name) else NULL
+
+  is_pak <- FALSE
+  is_locked <- TRUE
+  if ((!is.null(cal)) && identical(cal[[1]], as.symbol("::"))) {
+    pak <- cal[[2]]
+    pak_char <- as.character(pak) #nolint
+    library(pak_char, character.only = TRUE)
+    func_name <- cal[[3]]
+    is_pak <- TRUE
+    is_locked <- TRUE
+  } else {
+    is_locked <- environmentIsLocked(environment(func))
+  }
+
+  func_char <- as.character(func_name)
+
+  ee <- new.env(parent = parent.env(globalenv()))
+
+  ee$library <- function(...) {
+    mc <- match.call()
+    mc[[1]] <- quote(base::library)
+    eval(mc, envir = globalenv())
+    this_env <- parent.frame()
+    if (!identical(this_env, globalenv())) {
+      parent.env(this_env) <- parent.env(globalenv())
+    }
+  }
+
+
+  if (!is_pak && !is_locked) {
+    eval(bquote(.(func_name) <- get(.(func_char), .(environment(func)))), envir = ee)
+    eval(bquote(.(func_name) <- rlang::set_env(.(func_name), .(ee))), envir = ee)
+  }
+
+  x_fun <- CallableFunction$new(func_name, env = ee)
+  x_fun$set_args(func_args)
+
+  vars[[func_char]] <- ee[[func_char]]
+
+  x <- dataset_connector(
+    dataname = dataname,
+    pull_callable = x_fun,
+    keys = keys,
+    code = code_from_script(code, script),
+    label = label,
+    vars = vars
+  )
+
+  return(x)
+
+}
+
+#' Function `CDISCDatasetConnector`
+#'
+#' `r lifecycle::badge("experimental")`
+#'
+#' Create a `CDISCDatasetConnector` from `function` and its arguments
+#' with keys and parent name assigned automatically by `dataname`.
+#'
+#' @inheritParams fun_dataset_connector
+#' @inheritParams cdisc_dataset_connector
+#'
+#' @export
+fun_cdisc_dataset_connector <- function(dataname,
+                                        func,
+                                        func_args = NULL,
+                                        keys = get_cdisc_keys(dataname),
+                                        parent = `if`(identical(dataname, "ADSL"), character(0L), "ADSL"),
+                                        label = character(0),
+                                        code = character(0),
+                                        script = character(0),
+                                        func_name = substitute(func),
+                                        ...) {
+
+  x <- fun_dataset_connector(
+    dataname = dataname,
+    func = func,
+    func_args = func_args,
+    func_name = func_name,
+    keys = keys,
+    label = label,
+    code = code,
+    script = script,
+    ...
+  )
+
+  res <- as_cdisc(
+    x,
+    parent = parent
+  )
+
+  return(res)
+}
+
+
+# PYTHON ====
+#' `Python` `DatasetConnector`
+#'
+#' `r lifecycle::badge("experimental")`
+#' Create a `DatasetConnector` from `.py` file or through python code supplied directly.
+#'
+#' @details
+#'   Note that in addition to the `reticulate` package, support for python requires an
+#'   existing python installation. By default, `reticulate` will attempt to use the
+#'   location `Sys.which("python")`, however the path to the python installation can be
+#'   supplied directly via `reticulate::use_python`.
+#'
+#'   The `teal` API for delayed data requires the python code or script to return a
+#'   data.frame object. For this, the `pandas` package is required. This can be installed
+#'   using `reticulate::py_install("pandas")`.
+#'
+#'   Please see the package documentation for more details.
+#'
+#' @inheritParams dataset_connector
+#' @inheritParams code_dataset_connector
+#' @param file (`character`)\cr
+#'   Path to the file location containing the python script used to generate the object.
+#' @param code (`character`)\cr
+#'   string containing the python code to be run using `reticulate`. Carefully consider
+#'   indentation to follow proper python syntax.
+#' @param object (`character`)\cr
+#'   name of the object from the python script that is assigned to the dataset to be used.
+#'
+#' @note
+#'   Raises an error when passed `code` and `file` are passed at the same time.
+#'
+#'   When using `code`, keep in mind that when using `reticulate` with delayed data, python
+#'   functions do not have access to other objects in the `code` and must be self contained.
+#'   In the following example, the function `makedata()` doesn't have access to variable `x`:
+#'
+#' \preformatted{import pandas as pd
+#'
+#' x = 1
+#' def makedata():
+#'   return pd.DataFrame({'x': [x, 2], 'y': [3, 4]})
+#'
+#' data = makedata()}
+#'
+#'   When using custom functions, the function environment must be entirely self contained:
+#'
+#' \preformatted{def makedata():
+#'   import pandas as pd
+#'   x = 1
+#'   return pd.DataFrame({'x': [x, 2], 'y': [3, 4]})
+#'
+#' data = makedata()
+#'   }
+#'
+#'   **Additional `reticulate` considerations:**
+#'   1. Note that when using pull `vars`, `R` objects  referenced in the python
+#'   code or script have to be prefixed with `r.`.
+#'   2. `reticulate` isn't able to convert `POSIXct` objects. Please take extra
+#'   care when working with `datetime` variables.
+#'
+#'   Please read the official documentation for the `reticulate` package for additional
+#'   features and current limitations.
+#'
+#' @export
+#'
+#' @examples
+#' \dontrun{
+#' library(reticulate)
+#'
+#' # supply python code directly in R
+#'
+#' x <- python_dataset_connector(
+#'   "ADSL",
+#'   code = "import pandas as pd
+#' data = pd.DataFrame({'STUDYID':  [1, 2], 'USUBJID': [3, 4]})",
+#'   object = "data"
+#'   )
+#'
+#' x$pull()
+#' x$get_raw_data()
+#'
+#' # supply an external python script
+#'
+#' python_file <- tempfile(fileext = ".py")
+#' writeLines(
+#'   text = "import pandas as pd
+#' data = pd.DataFrame({'STUDYID':  [1, 2], 'USUBJID': [3, 4]})",
+#'   con = python_file
+#' )
+#'
+#' x <- python_dataset_connector(
+#'   "ADSL",
+#'   file = python_file,
+#'   object = "data",
+#' )
+#'
+#' x$pull()
+#' x$get_raw_data()
+#'
+#' # supply pull `vars` from R
+#'
+#' y <- 8
+#' x <- python_dataset_connector(
+#'   "ADSL",
+#'   code = "import pandas as pd
+#'   data = pd.DataFrame({'STUDYID':  [r.y], 'USUBJID': [r.y]})",
+#'   object = "data",
+#'   vars = list(y = y)
+#' )
+#'
+#' x$pull()
+#' x$get_raw_data()
+#' }
+python_dataset_connector <- function(dataname,
+                                     file,
+                                     code,
+                                     object,
+                                     keys = character(0),
+                                     label = character(0),
+                                     mutate_code = character(0),
+                                     mutate_script = character(0),
+                                     vars = list()) {
+  stopifnot(is_character_single(object))
+  if (!xor(missing(code), missing(file))) stop("Exactly one of 'code' and 'script' is required")
+
+  if (!missing(file)) {
+    stop_if_not(
+      is_character_single(file),
+      list(file.exists(file), paste("File", file, "does not exist")),
+      endsWith(file, ".py")
+    )
+
+    x_fun <- CallablePythonCode$new("py_run_file") # nolint
+    x_fun$set_args(list(file = file, local = TRUE))
+
+  } else {
+    stopifnot(is_character_single(code))
+
+    x_fun <- CallablePythonCode$new("py_run_string") # nolint
+    x_fun$set_args(list(code = code, local = TRUE))
+  }
+
+  x_fun$set_object(object)
+
+  x <- dataset_connector(
+    dataname = dataname,
+    pull_callable = x_fun,
+    keys = keys,
+    label = label,
+    code = code_from_script(mutate_code, mutate_script),
+    vars = vars
+  )
+
+  return(x)
+}
+
+#' `Python` `CDISCDatasetConnector`
+#'
+#' `r lifecycle::badge("experimental")`
+#' Create a `CDISCDatasetConnector` from `.py` file or through python code supplied directly.
+#'
+#' @inheritParams python_dataset_connector
+#' @inheritParams cdisc_dataset_connector
+#'
+#' @export
+#'
+python_cdisc_dataset_connector <- function(dataname,
+                                           file,
+                                           code,
+                                           object,
+                                           keys = get_cdisc_keys(dataname),
+                                           parent = `if`(identical(dataname, "ADSL"), character(0L), "ADSL"),
+                                           mutate_code = character(0),
+                                           mutate_script = character(0),
+                                           label = character(0),
+                                           vars = list()) {
+  x <- python_dataset_connector(
+    dataname = dataname,
+    file = file,
+    code = code,
+    object = object,
+    keys = keys,
+    mutate_code = mutate_code,
+    mutate_script = mutate_script,
+    label = label,
+    vars = vars
+  )
+
+  res <- as_cdisc(
+    x,
+    parent = parent
+  )
+
+  return(res)
+}

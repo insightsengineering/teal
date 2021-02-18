@@ -1,6 +1,5 @@
 #' Set "`<choice>:<label>`" type of Names
 #'
-#' @md
 #' @description `r lifecycle::badge("maturing")`
 #' This is often useful for \code{\link[teal]{choices_selected}} as it marks up the dropdown boxes
 #' for \code{\link[shiny]{selectInput}}.
@@ -113,12 +112,12 @@ choices_labeled <- function(choices, labels, subset = NULL, types = NULL) {
 
 #' Wrapper on \code{\link{choices_labeled}} to label variables basing on existing labels in data
 #'
-#' @md
 #' @description `r lifecycle::badge("maturing")`
 #'
-#' @param data (\code{data.frame}) or (\code{character})
-#' If \code{data.frame}, then data to extract labels from.
-#' If \code{character}, then name of the dataset to extract data from once available.
+#' @param data (`data.frame`, `character`, `Dataset`, `DatasetConnector`)
+#' If `data.frame`, then data to extract labels from
+#' If `character`, then name of the dataset to extract data from once available
+#' If `Dataset` or `DatasetConnector`, then raw data to extract labels from.
 #' @param subset (\code{character} or \code{function})
 #' If \code{character}, then a vector of column names.
 #' If \code{function}, then this function is used to determine the possible columns (e.g. all factor columns).
@@ -143,20 +142,20 @@ choices_labeled <- function(choices, labels, subset = NULL, types = NULL) {
 #' variable_choices(ADRS)
 #' variable_choices(ADRS, subset = c("PARAM", "PARAMCD"))
 #' variable_choices(ADRS, subset = c("", "PARAM", "PARAMCD"))
-#' variable_choices(ADRS, subset = c("", "PARAM", "PARAMCD"), key = get_cdisc_keys("ADRS")$primary)
+#' variable_choices(ADRS, subset = c("", "PARAM", "PARAMCD"), key = get_cdisc_keys("ADRS"))
 #'
 #' # delayed version
 #' variable_choices("ADRS", subset = c("USUBJID", "STUDYID"))
 #'
-#' # also works with RelationalDataset and RelationalDatasetConnector
-#' rel_ADRS <- relational_dataset("ADRS", ADRS, key = get_cdisc_keys("ADRS"))
-#' variable_choices(rel_ADRS)
+#' # also works with Dataset and DatasetConnector
+#' ADRS_dataset <- dataset("ADRS", ADRS, key = get_cdisc_keys("ADRS"))
+#' variable_choices(ADRS_dataset)
 #'
-#' rel_conn_ADRS <- relational_dataset_connector(
+#' ADRS_conn <- dataset_connector(
 #'   "ADRS",
 #'   pull_callable = callable_code("radrs(cached = TRUE)"),
 #'   key = get_cdisc_keys("ADRS"))
-#' variable_choices(rel_conn_ADRS)
+#' variable_choices(ADRS_conn)
 #'
 #' # functional subset (with delayed data) - return only factor variables
 #' variable_choices("ADRS", subset = function(data) {
@@ -229,7 +228,7 @@ variable_choices.data.frame <- function(data, subset = NULL, fill = FALSE, key =
 
 #' @rdname variable_choices
 #' @export
-variable_choices.RawDataset <- function(data, subset = NULL, fill = FALSE, key = NULL) {
+variable_choices.Dataset <- function(data, subset = NULL, fill = FALSE, key = get_keys(data)) {
   variable_choices(
     data = get_raw_data(data),
     subset = subset,
@@ -240,7 +239,10 @@ variable_choices.RawDataset <- function(data, subset = NULL, fill = FALSE, key =
 
 #' @rdname variable_choices
 #' @export
-variable_choices.NamedDatasetConnector <- function(data, subset = NULL, fill = FALSE, key = NULL) { # nolint
+variable_choices.DatasetConnector <- function(data, # nolint
+                                              subset = NULL,
+                                              fill = FALSE,
+                                              key = get_keys(data)) {
   if (is_pulled(data)) {
     variable_choices(
       data = get_raw_data(data),
@@ -258,33 +260,15 @@ variable_choices.NamedDatasetConnector <- function(data, subset = NULL, fill = F
   }
 }
 
-#' @rdname variable_choices
-#' @export
-variable_choices.RelationalDataset <- function(data, # nolint
-                                               subset = NULL,
-                                               fill = FALSE,
-                                               key = data$get_keys()$primary) {
-  variable_choices.RawDataset(data, subset = subset, fill = fill, key = key)
-}
-
-#' @rdname variable_choices
-#' @export
-variable_choices.RelationalDatasetConnector <- function(data, # nolint
-                                                        subset = NULL,
-                                                        fill = FALSE,
-                                                        key = data$get_keys()$primary) {
-  variable_choices.NamedDatasetConnector(data = data, subset = subset, fill = fill, key = key)
-}
-
 
 #' Wrapper on \code{\link{choices_labeled}} to label variable values basing on other variable values
 #'
-#' @md
 #' @description `r lifecycle::badge("maturing")`
 #'
-#' @param data (`data.frame` or `character`)
+#' @param data (`data.frame`, `character`, `Dataset`, `DatasetConnector`)
 #' If `data.frame`, then data to extract labels from
-#' If `character`, then name of the dataset to extract data from once available.
+#' If `character`, then name of the dataset to extract data from once available
+#' If `Dataset` or `DatasetConnector`, then raw data to extract labels from.
 #' @param var_choices (`character` or `NULL`) vector with choices column names
 #' @param var_label (`character`) vector with labels column names
 #' @param subset (`character` or `function`)
@@ -368,7 +352,7 @@ value_choices.data.frame <- function(data, var_choices, var_label = NULL, subset
 
 #' @rdname value_choices
 #' @export
-value_choices.RawDataset <- function(data, var_choices, var_label = NULL, subset = NULL, sep = " - ") {
+value_choices.Dataset <- function(data, var_choices, var_label = NULL, subset = NULL, sep = " - ") {
   value_choices(
     data = get_raw_data(data),
     var_choices = var_choices,
@@ -380,7 +364,7 @@ value_choices.RawDataset <- function(data, var_choices, var_label = NULL, subset
 
 #' @rdname value_choices
 #' @export
-value_choices.NamedDatasetConnector <- function(data, var_choices, var_label = NULL, subset = NULL, sep = " - ") { # nolint
+value_choices.DatasetConnector <- function(data, var_choices, var_label = NULL, subset = NULL, sep = " - ") { # nolint
   if (is_pulled(data)) {
     value_choices(
       data = get_raw_data(data),
@@ -425,10 +409,13 @@ value_choices.NamedDatasetConnector <- function(data, var_choices, var_label = N
 #'   ),
 #'   c("x", "z")
 #' )
-#' teal:::variable_types(data.frame(
-#'   x = 1:3, y = factor(c("a", "b", "a")), z = c("h1", "h2", "h3"),
-#'   stringsAsFactors = FALSE
-#' ))
+#'
+#' teal:::variable_types(
+#'   data.frame(
+#'     x = 1:3, y = factor(c("a", "b", "a")), z = c("h1", "h2", "h3"),
+#'     stringsAsFactors = FALSE
+#'   )
+#' )
 variable_types <- function(data, columns = NULL) {
   stopifnot(
     is.data.frame(data),
@@ -443,7 +430,7 @@ variable_types <- function(data, columns = NULL) {
       USE.NAMES = FALSE
     )
   } else if (is_character_vector(columns, min_length = 0L)) {
-    stopifnot(all(columns %in% names(data) | columns == ""))
+    stopifnot(all(columns %in% names(data) | vapply(columns, identical, logical(1L), "")))
     vapply(
       columns,
       function(x) ifelse(x == "", "", class(data[[x]])[[1]]),

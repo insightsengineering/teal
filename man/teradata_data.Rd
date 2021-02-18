@@ -7,7 +7,7 @@
 teradata_data(..., connection = teradata_connection())
 }
 \arguments{
-\item{...}{(\code{RelationalDatasetConnector}) dataset connectors created using \link{teradata_dataset_connector}}
+\item{...}{(\code{DatasetConnector}) dataset connectors created using \code{\link{teradata_dataset_connector}}}
 
 \item{connection}{(\code{DataConnection}) object returned from \code{teradata_connection}.}
 }

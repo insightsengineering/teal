@@ -16,7 +16,6 @@
 #' to user changes to the inputs while the UI was updated, then the correct new
 #' input values (as sent with the new UI).
 #'
-#' @md
 #' @param id module id
 #' @param dataname `character` dataname to show filters for
 #'
@@ -82,7 +81,6 @@ ui_filter_items <- function(id, dataname) {
 
 #' Server function to display filters for a dataset
 #'
-#' @md
 #' @inheritParams srv_shiny_module_arguments
 #' @inheritParams ui_filter_items
 #' @return `reactive` returning a named list, names being the shown variables

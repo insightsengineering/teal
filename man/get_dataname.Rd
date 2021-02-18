@@ -2,24 +2,24 @@
 % Please edit documentation in R/get_dataname.R
 \name{get_dataname}
 \alias{get_dataname}
-\alias{get_dataname.RelationalDataCollection}
-\alias{get_dataname.NamedDatasetConnector}
-\alias{get_dataname.NamedDataset}
+\alias{get_dataname.DataAbstract}
+\alias{get_dataname.DatasetConnector}
+\alias{get_dataname.Dataset}
 \title{S3 method for getting a dataname(s) of
-(\code{RelationalDataConnector}, (\code{RelationalDatasetConnector} or
-\code{NamedDataset}) R6 object}
+(\code{DataAbstract}, (\code{DatasetConnector} or
+\code{Dataset}) R6 object}
 \usage{
 get_dataname(x)
 
-\method{get_dataname}{RelationalDataCollection}(x)
+\method{get_dataname}{DataAbstract}(x)
 
-\method{get_dataname}{NamedDatasetConnector}(x)
+\method{get_dataname}{DatasetConnector}(x)
 
-\method{get_dataname}{NamedDataset}(x)
+\method{get_dataname}{Dataset}(x)
 }
 \arguments{
-\item{x}{(\code{RelationalDataConnector}, (\code{RelationalDatasetConnector} or
-\code{NamedDataset}) R6 object}
+\item{x}{(\code{DataAbstract}, (\code{DatasetConnector} or
+\code{Dataset}) R6 object}
 }
 \value{
 dataname (\code{character}) A given name for the dataset(s)

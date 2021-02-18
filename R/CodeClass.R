@@ -1,7 +1,7 @@
 ## CodeClass ====
 #' Code Class
 #'
-#' @importFrom digest sha1
+#' @importFrom digest digest
 #' @importFrom rlang with_options
 #' @importFrom R6 R6Class
 #'
@@ -99,7 +99,7 @@ CodeClass <- R6::R6Class( # nolint
         is_character_vector(code),
         is_character_vector(dataname, min_length = 0),
         !(dataname %in% deps)
-        )
+      )
 
       code <- pretty_code_string(code)
 
@@ -156,7 +156,7 @@ CodeClass <- R6::R6Class( # nolint
     set_code_single = function(code,
                                dataname = if_null(attr(code, "dataname"), character(0)),
                                deps = if_null(attr(code, "deps"), character(0)),
-                               id = if_null(attr(code, "id"), digest::sha1(c(private$.code, code)))) {
+                               id = if_null(attr(code, "id"), digest::digest(c(private$.code, code)))) {
       # Line shouldn't be added when it contains the same code and the same dataname
       # as a line already present in an object of CodeClass
       if (!id %in% ulapply(private$.code, "attr", "id") ||
@@ -229,7 +229,7 @@ CodeClass <- R6::R6Class( # nolint
 
 ## Functions ====
 
-# Convert named list to \code{CodeClass} utilizing both \code{NamedDatasetConnector} and \code{NamedDataset}
+# Convert named list to \code{CodeClass} utilizing both \code{DatasetConnector} and \code{Dataset}
 list_to_code_class <- function(x) {
   stopifnot(is_fully_named_list(x))
 
@@ -238,7 +238,7 @@ list_to_code_class <- function(x) {
   if (!is_empty(x)) {
     for (var_idx in seq_along(x)) {
       var_value <- x[[var_idx]]
-      if (is(var_value, "NamedDatasetConnector") || is(var_value, "NamedDataset")) {
+      if (is(var_value, "DatasetConnector") || is(var_value, "Dataset")) {
         res$append(var_value$get_code_class())
       } else {
         var_name <- names(x)[[var_idx]]

@@ -6,7 +6,6 @@
 
 #' Create the Server and UI Function For the Shiny App
 #'
-#' @md
 #' @description `r lifecycle::badge("maturing")`
 #' End-users: This is the most important function for you to start a
 #' teal app that is composed out of teal modules.
@@ -35,21 +34,19 @@
 #'   }
 #' @param title (`NULL` or `character`) The browser window title (defaults to the host URL of the page).
 #' @param filter (`list`) You can define filters that show when
-#'   the app starts. Variables inherited from ADSL have to be specified only for ADSL dataset.
-#'   Thus variable like RACE have to be specified for ADSL datasets even when other sets contain it too.
+#'   the app starts.
 #'   The general pattern is:
-#'   `list(ADSL = list(SEX = ..., AGE = ...), ADAE = ...)`.
+#'   `list(iris = list(Species = ..., Sepal.Length = ...), mtcars = ...)`.
 #'   An example is:
-#'   `list(ADSL = list(SEX = c("M", "F")))`.
-#'   More generally, the filters for the variable, e.g. `SEX` can be
+#'   `list(iris = list(Species = c("setosa", "versicolor")))`.
+#'   More generally, the filters for the variable, e.g. `Species` can be
 #'   specified as follows:
-#'   `list(SEX = list(choices = c("M", "F")))`,
-#'   `list(SEX = list(choices = c("M", "F"), keep_na = TRUE))`,
+#'   `list(Species = c("setosa", "versicolor"))`,
+#'   `list(Species = c("setosa", "versicolor"), keep_na = TRUE))`,
 #'   or equivalently with:
-#'   `list(SEX = c("M", "F"))`,
-#'   `list(SEX = c("M", "F", NA))`,
+#'   `list(Species = c("setosa", "versicolor", NA))`,
 #'   or for the default filter (not very restrictive):
-#'   `list(SEX = default_filter())`
+#'   `list(Species = default_filter())`
 #'
 #'   Instead of `choices` above, use the following names:
 #'   - `numerical`: `range`
@@ -57,8 +54,8 @@
 #'   - `logical`: `logical`
 #'   A general example is:
 #'   `list(
-#'   ADSL = list(AGE = default_filter(), SEX = c("M", NA)),
-#'   ADAE = list(AETOXGR = default_filter())
+#'     iris = list(Sepal.Length = default_filter(), Species = c("M", NA)),
+#'     mtcars = list(mpg = default_filter())
 #'   )`
 #'   Ignored if the app is restored from a bookmarked state.
 #' @param header (`character` or `shiny.tag`) the header of the app. Note shiny code placed here (and in the footer
@@ -66,9 +63,9 @@
 #' (such as loading css via `htmltools::htmlDependency`) should be included here.
 #' @param footer (`character` or `shiny.tag`) the footer of the app
 #' @param id (`character`) module id to embed it, if provided,
-#' the server function must be called with `callModule`;
-#' See the vignette for an example. However, `\link{ui_teal_with_splash}`
-#' is then preferred to this function.
+#'   the server function must be called with `callModule`;
+#'   See the vignette for an example. However, \code{\link{ui_teal_with_splash}}
+#'   is then preferred to this function.
 #'
 #' @return named list with server and ui function
 #'
@@ -158,9 +155,9 @@ init <- function(data,
   return(res)
 }
 
+
 #' Make a Shiny UI function bookmarkable
 #'
-#' @md
 #' @description `r lifecycle::badge("experimental")`
 #'
 #' This is a customization of `shinyApp`.

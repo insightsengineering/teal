@@ -9,13 +9,13 @@ modules(label, ...)
 \arguments{
 \item{label}{label of modules collection}
 
-\item{...}{\verb{\link{module}} and \verb{\link{modules}} object}
+\item{...}{\code{\link{module}} and \code{\link{modules}} object}
 }
 \value{
 object of class \code{teal_modules}
 }
 \description{
 \ifelse{html}{\out{<a href='https://www.tidyverse.org/lifecycle/#maturing'><img src='figures/lifecycle-maturing.svg' alt='Maturing lifecycle'></a>}}{\strong{Maturing}}
-Modules collects a tree of \verb{\link{module}} and \verb{\link{modules}}
+Modules collects a tree of \code{\link{module}} and \code{\link{modules}}
 objects. This is useful to define the navigation structure of a teal app.
 }

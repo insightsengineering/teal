@@ -98,7 +98,7 @@ test_that("CodeClass append deps", {
 })
 
 test_that("Exception handling with dataname of *xyz", {
-  x <- CodeClass$new()
+  x <- teal:::CodeClass$new()
   x$set_code("open_connection()", dataname = "*open")
   x$set_code("x1 <- foo()", dataname = "x1")
   x$set_code("x2 <- bar()", dataname = "x2")

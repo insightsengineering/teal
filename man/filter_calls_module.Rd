@@ -32,7 +32,7 @@ app <- init(
   data = cdisc_data(
     cdisc_dataset(
       dataname = "ADSL",
-      data = ADSL
+      x = ADSL
     ),
     code = "ADSL <- radsl(cached = TRUE)"
   ),

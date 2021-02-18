@@ -4,10 +4,8 @@
 \alias{variable_choices}
 \alias{variable_choices.character}
 \alias{variable_choices.data.frame}
-\alias{variable_choices.RawDataset}
-\alias{variable_choices.NamedDatasetConnector}
-\alias{variable_choices.RelationalDataset}
-\alias{variable_choices.RelationalDatasetConnector}
+\alias{variable_choices.Dataset}
+\alias{variable_choices.DatasetConnector}
 \title{Wrapper on \code{\link{choices_labeled}} to label variables basing on existing labels in data}
 \usage{
 variable_choices(data, subset = NULL, fill = FALSE, key = NULL)
@@ -16,28 +14,15 @@ variable_choices(data, subset = NULL, fill = FALSE, key = NULL)
 
 \method{variable_choices}{data.frame}(data, subset = NULL, fill = FALSE, key = NULL)
 
-\method{variable_choices}{RawDataset}(data, subset = NULL, fill = FALSE, key = NULL)
+\method{variable_choices}{Dataset}(data, subset = NULL, fill = FALSE, key = get_keys(data))
 
-\method{variable_choices}{NamedDatasetConnector}(data, subset = NULL, fill = FALSE, key = NULL)
-
-\method{variable_choices}{RelationalDataset}(
-  data,
-  subset = NULL,
-  fill = FALSE,
-  key = data$get_keys()$primary
-)
-
-\method{variable_choices}{RelationalDatasetConnector}(
-  data,
-  subset = NULL,
-  fill = FALSE,
-  key = data$get_keys()$primary
-)
+\method{variable_choices}{DatasetConnector}(data, subset = NULL, fill = FALSE, key = get_keys(data))
 }
 \arguments{
-\item{data}{(\code{data.frame}) or (\code{character})
-If \code{data.frame}, then data to extract labels from.
-If \code{character}, then name of the dataset to extract data from once available.}
+\item{data}{(\code{data.frame}, \code{character}, \code{Dataset}, \code{DatasetConnector})
+If \code{data.frame}, then data to extract labels from
+If \code{character}, then name of the dataset to extract data from once available
+If \code{Dataset} or \code{DatasetConnector}, then raw data to extract labels from.}
 
 \item{subset}{(\code{character} or \code{function})
 If \code{character}, then a vector of column names.
@@ -66,20 +51,20 @@ ADRS <- radrs(cached = TRUE)
 variable_choices(ADRS)
 variable_choices(ADRS, subset = c("PARAM", "PARAMCD"))
 variable_choices(ADRS, subset = c("", "PARAM", "PARAMCD"))
-variable_choices(ADRS, subset = c("", "PARAM", "PARAMCD"), key = get_cdisc_keys("ADRS")$primary)
+variable_choices(ADRS, subset = c("", "PARAM", "PARAMCD"), key = get_cdisc_keys("ADRS"))
 
 # delayed version
 variable_choices("ADRS", subset = c("USUBJID", "STUDYID"))
 
-# also works with RelationalDataset and RelationalDatasetConnector
-rel_ADRS <- relational_dataset("ADRS", ADRS, key = get_cdisc_keys("ADRS"))
-variable_choices(rel_ADRS)
+# also works with Dataset and DatasetConnector
+ADRS_dataset <- dataset("ADRS", ADRS, key = get_cdisc_keys("ADRS"))
+variable_choices(ADRS_dataset)
 
-rel_conn_ADRS <- relational_dataset_connector(
+ADRS_conn <- dataset_connector(
   "ADRS",
   pull_callable = callable_code("radrs(cached = TRUE)"),
   key = get_cdisc_keys("ADRS"))
-variable_choices(rel_conn_ADRS)
+variable_choices(ADRS_conn)
 
 # functional subset (with delayed data) - return only factor variables
 variable_choices("ADRS", subset = function(data) {

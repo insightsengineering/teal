@@ -4,16 +4,14 @@
 
 #' Create a collection of `module` and `modules` object
 #'
-#' @md
 #' @description `r lifecycle::badge("maturing")`
-#' Modules collects a tree of `\link{module}` and `\link{modules}`
+#' Modules collects a tree of \code{\link{module}} and \code{\link{modules}}
 #' objects. This is useful to define the navigation structure of a teal app.
 #'
 #' @importFrom methods is
 #'
-#' @md
 #' @param label label of modules collection
-#' @param ... `\link{module}` and `\link{modules}` object
+#' @param ... \code{\link{module}} and \code{\link{modules}} object
 #'
 #' @export
 #'
@@ -51,12 +49,11 @@ modules <- function(label, ...) {
 
 #' Create the root modules container
 #'
-#' @md
 #' @description `r lifecycle::badge("maturing")`
-#' To be used with `\link{init}` in the `modules` argument.
+#' To be used with \code{\link{init}} in the `modules` argument.
 #'
 #' @details
-#' The function `\link{modules}` can also be used. The purpose of this
+#' The function \code{\link{modules}} can also be used. The purpose of this
 #' function is to not confuse the end-user as the label of the top-module
 #' will not be displayed as a tab name (because the root is only one element
 #' which has multiple children).
@@ -77,7 +74,6 @@ root_modules <- function(...) {
 
 #' Create a module with a new shiny page
 #'
-#' @md
 #' @description `r lifecycle::badge("maturing")`
 #' Tab items allows you to add a shiny module to the teal app
 #'
@@ -134,7 +130,6 @@ module <- function(label, server, ui, filters, server_args = NULL, ui_args = NUL
 #' Depth starts at 0, so a single `teal.module` has depth 0.
 #' Nesting it increases overall depth by 1.
 #'
-#' @md
 #' @inheritParams srv_shiny_module_arguments
 #' @param depth optional, integer determining current depth level
 #'
@@ -185,7 +180,6 @@ modules_depth <- function(modules, depth = 0) {
 #' The first line prints the `modules` label.
 #' The consecutive lines recursively list each submodule.
 #'
-#' @md
 #' @param x (`teal_modules`) to print
 #' @param indent (`integer`) indent level;
 #'   each submodule is indented one level more
@@ -210,7 +204,6 @@ toString.teal_module <- function(x, indent = 0, ...) { # nolint
 }
 
 #' Print `teal_modules`
-#' @md
 #' @param x `teal_modules`
 #' @param ... parameters passed to `toString`
 #' @export
@@ -221,7 +214,6 @@ print.teal_modules <- function(x, ...) {
 }
 
 #' Print `teal_module`
-#' @md
 #' @param x `teal_module`
 #' @param ... parameters passed to `toString`
 #' @export

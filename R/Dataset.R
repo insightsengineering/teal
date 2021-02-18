@@ -1,0 +1,697 @@
+## Dataset ====
+#' @title  R6 Class representing a dataset with its attributes
+#' @description
+#' Any \code{data.frame} object can be stored inside this object.
+#' Some attributes like colnames, dimension or column names for a specific type will
+#' be automatically derived.
+#'
+#' @rdname dataset_class
+#'
+#' @param dataname (`character`)\cr
+#'  A given name for the dataset it may not contain spaces
+#'
+#' @param x (`data.frame`)\cr
+#'
+#' @param keys optional, (`character`)\cr
+#'   vector with primary keys
+#'
+#' @param code (`character`)\cr
+#'   A character string defining the code needed to produce the data set in \code{x}
+#'
+#' @param label (`character`)\cr
+#'   Label to describe the dataset
+#'
+#' @param vars (named `list`)) \cr
+#'   In case when this object code depends on the \code{raw_data} from the other
+#'   \code{Dataset} object(s) or other constant value,
+#'   this/these object(s) should be included as named element of the list.
+#'
+#' @importFrom rlang with_options
+#' @importFrom R6 R6Class
+Dataset <- R6::R6Class( # nolint
+  "Dataset",
+
+  ## __Public Methods ====
+  public = list(
+    #' @description
+    #' Create a new object of `Dataset` class
+    #'
+    #' @importFrom rtables var_labels
+    initialize = function(dataname,
+                          x,
+                          keys = character(0),
+                          code = character(0),
+                          label = character(0),
+                          vars = list()) {
+      stopifnot(is.data.frame(x))
+
+      private$.raw_data <- x
+      private$.ncol <- ncol(x)
+      private$.nrow <- nrow(x)
+      private$.dim <- c(private$.nrow, private$.ncol)
+      private$.colnames <- colnames(x)
+      private$.rownames <- rownames(x)
+      private$.col_labels <- rtables::var_labels(x)
+      private$.row_labels <- c() # not yet defined in rtables
+
+      private$set_dataname(dataname)
+      private$code <- CodeClass$new()
+      self$set_vars(vars)
+      self$set_code(code)
+      self$set_dataset_label(label)
+      self$set_keys(keys)
+
+      return(invisible(self))
+    },
+    #' @description
+    #' Recreate a dataset with its current attributes
+    #' This is useful way to have access to class initialize method basing on class object
+    #'
+    #' @return a new object of `Dataset` class
+    recreate = function(dataname = self$get_dataname(),
+                        x = self$get_raw_data(),
+                        keys = self$get_keys(),
+                        code = self$get_code(),
+                        label = self$get_dataset_label(),
+                        vars = list()) {
+      res <- self$initialize(
+        dataname = dataname,
+        x = x,
+        keys = keys,
+        code = code,
+        label = label,
+        vars = vars)
+
+      return(res)
+    },
+
+    # ___ getters ====
+    #' @description
+    #' Get all dataset attributes
+    #' @return (named `list`) with dataset attributes
+    get_attrs = function() {
+      x <- append(
+        attributes(self$get_raw_data()),
+        list(
+          column_labels = self$get_column_labels(),
+          row_labels = self$get_row_labels(),
+          dataname = self$get_dataname(),
+          dataset_label = self$get_dataset_label(),
+          keys = self$get_keys()
+        )
+      )
+      return(x)
+    },
+    #' @description
+    #' Derive the raw data frame inside this object
+    #' @return
+    #' \code{data.frame} or \code{rtable}
+    get_raw_data = function() {
+      private$.raw_data
+    },
+    #' @description
+    #' Derive the names of all \code{numeric} columns
+    #' @return \code{character} vector.
+    get_numeric_colnames = function() {
+      private$get_class_colnames("numeric")
+    },
+    #' @description
+    #' Derive the names of all \code{character} columns
+    #' @return \code{character} vector.
+    get_character_colnames = function() {
+      private$get_class_colnames("character")
+    },
+    #' @description
+    #' Derive the names of all \code{factor} columns
+    #' @return \code{character} vector.
+    get_factor_colnames = function() {
+      private$get_class_colnames("factor")
+    },
+    #' @description
+    #' Derive the column names
+    #' @return \code{character} vector.
+    get_colnames = function() {
+      private$.colnames
+    },
+    #' @description
+    #' Derive the column labels
+    #' @return \code{character} vector.
+    get_column_labels = function() {
+      private$.col_labels
+    },
+    #' @description
+    #' Derive the row names
+    #' @return \code{character} vector.
+    get_rownames = function() {
+      private$.rownames
+    },
+    #' @description
+    #' Derive the row labels
+    #' @return \code{character} vector.
+    get_row_labels = function() {
+      private$.row_labels
+    },
+    #' @description
+    #' Derive the \code{name} which was formerly called \code{dataname}
+    #' @return \code{character} name of the dataset
+    get_dataname = function() {
+      private$dataname
+    },
+    #' @description
+    #' Derive the dataname
+    #' @return \code{character} name of the dataset
+    get_datanames = function() {
+      private$dataname
+    },
+    #' @description
+    #' Derive the \code{label} which was former called \code{datalabel}
+    #' @return \code{character} label of the dataset
+    get_dataset_label = function() {
+      private$dataset_label
+    },
+    #' @description
+    #' Get primary keys of dataset
+    #' @return (\code{character} vector) with dataset primary keys
+    get_keys = function() {
+      private$.keys
+    },
+
+    # ___ setters ====
+    #' @description
+    #' Set the label for the dataset
+    #' @return (`self`) invisibly for chaining
+    set_dataset_label = function(label) {
+      if (is.null(label)) {
+        label <- character(0)
+      }
+      stopifnot(is_character_vector(label, min_length = 0, max_length = 1))
+      private$dataset_label <- label
+      return(invisible(self))
+    },
+    #' @description
+    #' Set new keys
+    #' @return (`self`) invisibly for chaining.
+    set_keys = function(keys) {
+      stopifnot(is_character_vector(keys, min_length = 0))
+
+      if (!is_empty(keys)) {
+        stop_if_not(list(
+          all(keys %in% self$get_colnames()),
+          paste("Primary keys specifed for", self$get_dataname(), "do not exist in the data.")
+        ))
+
+        duplicates <- get_key_duplicates(self$get_raw_data(), keys)
+        if (nrow(duplicates) > 0) {
+          warning(
+            "Duplicate primary key values found in the dataset:\n",
+            paste0(capture.output(print(duplicates))[-c(1, 3)], collapse = "\n"),
+            call. = FALSE,
+            immediate. = TRUE
+          )
+          # default tibble print outputs only 10 rows and as many cols as a screen can fit
+          stop("The provided primary key does not distinguish unique rows. Run get_key_duplicates(dataframe, keys)
+            to get the full list of the duplicated primary keys and their rows.")
+        }
+      }
+
+      private$.keys <- keys
+      return(invisible(self))
+    },
+
+    # ___ get_code ====
+    #' @description
+    #' Get code to get data
+    #'
+    #' @param deparse (\code{logical}) whether return deparsed form of a call
+    #'
+    #' @return optionally deparsed \code{call} object
+    get_code = function(deparse = TRUE) {
+      stopifnot(is_logical_single(deparse))
+
+      return(self$get_code_class()$get_code(deparse = deparse))
+    },
+    #' @description
+    #' Get internal \code{CodeClass} object
+    #'
+    #' @return `\code{CodeClass}`
+    get_code_class = function() {
+      res <- CodeClass$new()
+      res$append(list_to_code_class(private$vars))
+      res$append(private$code)
+
+      return(res)
+    },
+
+    # ___ mutate ====
+    #' @description
+    #' Mutate dataset by code
+    #'
+    #' Either code or script must be provided, but not both.
+    #'
+    #' @return (`self`) invisibly for chaining
+    mutate = function(code, vars = list(), keys = self$get_keys()) {
+      self$set_vars(vars)
+
+      if (inherits(code, "PythonCodeClass")) {
+        self$set_code(code$get_code())
+        new_set <- code$eval(dataname = self$get_dataname())
+        self$initialize(
+          dataname = self$get_dataname(),
+          x = new_set,
+          keys = keys,
+          code = self$get_code(),
+          label = self$get_dataset_label(),
+          vars = list()
+        )
+      } else {
+        self$set_code(code)
+
+        code_container <- CodeClass$new()
+        code_container$set_code(code)
+
+        # environment needs also this var to mutate self
+        vars <- c(private$vars, setNames(list(self), self$get_dataname()))
+
+        new_df <- private$execute_code(code = code_container, vars = vars)
+
+        self_code <- self$get_code()
+        self$initialize(
+          dataname = self$get_dataname(),
+          x = new_df,
+          keys = keys,
+          code = self_code,
+          label = self$get_dataset_label(),
+          vars = list()
+        )
+      }
+
+      return(invisible(self))
+    },
+    #' @description
+    #' Adds variables which code depends on
+    #'
+    #' @return (`self`) invisibly for chaining
+    set_vars = function(vars) {
+      stopifnot(is_fully_named_list(vars))
+
+      if (length(vars) > 0) {
+        # include only new (by name) variable
+        private$vars <- c(private$vars, vars)
+      }
+
+      return(invisible(NULL))
+    },
+    #' @description
+    #' Sets reproducible code
+    #'
+    #' @return (`self`) invisibly for chaining
+    set_code = function(code) {
+      stopifnot(is_character_vector(code, 0, 1))
+
+      if (length(code) > 0 && code != "") {
+        private$code$set_code(
+          code = code,
+          dataname = self$get_datanames(),
+          deps = names(private$vars)
+        )
+      }
+
+      return(invisible(NULL))
+    },
+
+    # ___ check ====
+    #' @description
+    #'   Check to determine if the raw data is reproducible from the \code{get_code()} code.
+    #' @return
+    #'   \code{TRUE} if the dataset generated from evaluating the
+    #'   \code{get_code()} code is identical to the raw data, else \code{FALSE}.
+    check = function() {
+      if (!is_character_single(self$get_code()) || !grepl("\\w+", self$get_code())) {
+        stop(
+          sprintf(
+            "Cannot check preprocessing code of '%s' - code is empty.",
+            self$get_dataname()
+          )
+        )
+      }
+
+      new_set <- private$execute_code(
+        code = self$get_code_class(),
+        vars = private$vars
+      )
+
+      res_check <- tryCatch({
+        identical(self$get_raw_data(), new_set)
+      }, error = function(e) {
+        FALSE
+      })
+
+      return(res_check)
+    },
+    #' @description
+    #' Check if dataset has already been pulled.
+    #'
+    #' @return \code{TRUE} if dataset has been already pulled, else \code{FALSE}
+    is_pulled = function() {
+      return(TRUE)
+    }
+
+  ),
+  ## __Private Fields ====
+  private = list(
+    .ncol = 0L,
+    .nrow = 0L,
+    .dim = c(0L, 0L),
+    .raw_data = data.frame(),
+    .rownames = character(),
+    .colnames = character(),
+    .col_labels = character(),
+    .row_labels = character(),
+    dataname = character(0),
+    code = NULL, # CodeClass after initialization
+    vars = list(),
+    dataset_label = character(0),
+    .keys = character(0),
+
+    ## __Private Methods ====
+    get_class_colnames = function(class_type = "character") {
+      stopifnot(is_character_single(class_type))
+
+      return_cols <- private$.colnames[which(vapply(
+        lapply(private$.raw_data, class),
+        function(x, target_class_name) any(x %in% target_class_name),
+        logical(1),
+        target_class_name = class_type))]
+
+      return(return_cols)
+    },
+
+
+    # Evaluate script code to modify data or to reproduce data
+    #
+    # Evaluate script code to modify data or to reproduce data
+    # @param vars (named \code{list}) additional pre-requisite vars to execute code
+    # @return (\code{environment}) which stores modified \code{x}
+    execute_code = function(code, vars = list()) {
+      stopifnot(is(code, "CodeClass"))
+      stopifnot(is_fully_named_list(vars))
+
+      execution_environment <- new.env(parent = parent.env(globalenv()))
+
+      # set up environment for execution
+      for (vars_idx in seq_along(vars)) {
+        var_name <- names(vars)[[vars_idx]]
+        var_value <- vars[[vars_idx]]
+        if (is(var_value, "DatasetConnector") || is(var_value, "Dataset")) {
+          var_value <- get_raw_data(var_value)
+        }
+        assign(envir = execution_environment, x = var_name, value = var_value)
+      }
+
+      # execute
+      code$eval(envir = execution_environment)
+
+      if (!is.data.frame(execution_environment[[self$get_dataname()]])) {
+        out_msg <- sprintf(
+          "\n%s\n\n - Code from %s need to return a data.frame assigned to an object of dataset name.",
+          self$get_code(),
+          self$get_dataname()
+        )
+
+        rlang::with_options(
+          .expr = stop(out_msg, call. = FALSE),
+          warning.length = max(min(8170, nchar(out_msg) + 30), 100)
+        )
+      }
+
+      new_set <- execution_environment[[self$get_dataname()]]
+
+      return(new_set)
+    },
+
+    # @description
+    # Set the name for the dataset
+    # @param dataname (\code{character}) the new name
+    # @return self invisibly for chaining
+    set_dataname = function(dataname) {
+      stopifnot(is_character_single(dataname))
+      stopifnot(!grepl("\\s", dataname))
+      private$dataname <- dataname
+      return(invisible(self))
+    }
+  ),
+  ## __Active Fields ====
+  active = list(
+    #' @field ncol Number of columns
+    ncol = function() {
+      private$.ncol
+    },
+    #' @field nrow Number of rows
+    nrow = function() {
+      private$.nrow
+    },
+    #' @field dim Dimension \code{c(x, y)}
+    dim = function() {
+      private$.dim
+    },
+    #' @field colnames The column names of the data
+    colnames = function() {
+      private$.colnames
+    },
+    #' @field rownames The rownames of the data
+    rownames = function() {
+      private$.rownames
+    },
+    #' @field raw_data The data.frame behind this R6 class
+    raw_data = function() {
+      private$.raw_data
+    },
+    #' @field data The data.frame behind this R6 class
+    data = function() {
+      private$.raw_data
+    },
+    #' @field column_labels for backwards compatibility
+    #' will be deprecated in future
+    column_labels = function() {
+      warning("'column_labels'will be deprecated in future. Use 'get_column_labels()' instead.")
+      private$.col_labels
+    },
+    #' @field var_names The column names of the data
+    var_names = function() {
+      private$.colnames
+    },
+    #' @field row_labels Row labels (can have spaces)
+    row_labels = function() {
+      private$.row_labels
+    }
+  )
+)
+
+## Constructors ====
+
+#' Constructor for \code{\link{Dataset}} class
+#'
+#' @description `r lifecycle::badge("experimental")`
+#'
+#' @param dataname (`character`)\cr
+#'  A given name for the dataset it may not contain spaces
+#'
+#' @param x (`data.frame`)\cr
+#'
+#' @param keys optional, (`character`)\cr
+#'   vector with primary keys
+#'
+#' @param code (`character`)\cr
+#'   A character string defining the code needed to produce the data set in \code{x}
+#'
+#' @param label (`character`)\cr
+#'   Label to describe the dataset
+#'
+#' @param vars (named `list`)) \cr
+#'   In case when this object code depends on the \code{raw_data} from the other
+#'   \code{Dataset} object(s) or other constant value,
+#'   this/these object(s) should be included as named element of the list.
+#'
+#' @return \code{\link{Dataset}} object
+#'
+#' @export
+#'
+#' @examples
+#' # Simple example
+#' dataset("iris", iris)
+#'
+#' # Example with more arguments
+#' library(random.cdisc.data)
+#' ADSL <- radsl(cached = TRUE)
+#' ADSL_dataset <- dataset(dataname = "ADSL", x = ADSL)
+#'
+#' ADSL_dataset$get_dataname()
+#'
+#' ADSL_dataset <- dataset(
+#'   dataname = "ADSL",
+#'   x = ADSL,
+#'   label = "AdAM subject-level dataset",
+#'   code = "ADSL <- radsl(cached = TRUE)"
+#' )
+#'
+#' ADSL_dataset$get_dataset_label()
+#' ADSL_dataset$get_code()
+dataset <- function(dataname,
+                    x,
+                    keys = character(0),
+                    label = data_label(x),
+                    code = character(0),
+                    vars = list()) {
+  stopifnot(is_character_single(dataname))
+  stopifnot(is.data.frame(x))
+  stopifnot(is_character_vector(code, min_length = 0, max_length = 1))
+  stopifnot(identical(vars, list()) || is_fully_named_list(vars))
+
+  Dataset$new(
+    dataname = dataname,
+    x = x,
+    keys = keys,
+    code = code,
+    label = label,
+    vars = vars
+  )
+}
+
+#' @rdname dataset
+#' @description `r lifecycle::badge("defunct")`
+#' @export
+raw_dataset <- function(x) {
+  lifecycle::deprecate_stop(
+    "0.9.2",
+    "teal::raw_dataset()",
+    details = "Please use `teal::dataset()` instead"
+  )
+}
+
+#' @rdname dataset
+#' @description `r lifecycle::badge("soft-deprecated")`
+#' @export
+named_dataset <- function(dataname,
+                          x,
+                          code = character(0),
+                          label = character(0),
+                          vars = list()) {
+  lifecycle::deprecate_warn(
+    "0.9.2",
+    "teal::named_dataset()",
+    details = "Please use teal::dataset() instead."
+  )
+
+  dataset(
+    dataname = dataname,
+    x = x,
+    code = code,
+    label = label,
+    vars = vars
+  )
+}
+
+#' @rdname dataset
+#' @description `r lifecycle::badge("soft-deprecated")`
+#' @export
+relational_dataset <- function(dataname,
+                               x,
+                               keys = character(0),
+                               code = character(0),
+                               label = character(0),
+                               vars = list()) {
+  lifecycle::deprecate_warn(
+    "0.9.2",
+    "teal::relational_dataset()",
+    details = "Please use teal::dataset() instead."
+  )
+
+  dataset(
+    dataname = dataname,
+    x = x,
+    keys = keys,
+    code = code,
+    label = label,
+    vars = vars
+  )
+}
+
+
+
+
+#' Load \code{Dataset} object from a file
+#'
+#' @description `r lifecycle::badge("experimental")`
+#' Please note that the script has to end with a call creating desired object. The error will be raised otherwise.
+#'
+#' @param path (\code{character}) string giving the pathname of the file to read from.
+#' @param code (\code{character}) reproducible code to re-create object
+#'
+#' @return \code{Dataset} object
+#'
+#' @importFrom methods is
+#'
+#' @export
+#'
+#' @examples
+#' # simple example
+#' file_example <- tempfile(fileext = ".R")
+#' writeLines(
+#'   text = c(
+#'     "library(teal)
+#'      dataset(dataname = \"iris\",
+#'              x = iris,
+#'              code = \"iris\")"
+#'   ),
+#'   con = file_example
+#' )
+#' x <- dataset_file(file_example, code = character(0))
+#' get_code(x)
+#'
+#' # custom code
+#' file_example <- tempfile(fileext = ".R")
+#' writeLines(
+#'   text = c(
+#'     "library(teal)
+#'
+#'      # code>
+#'      x <- iris
+#'      x$a1 <- 1
+#'      x$a2 <- 2
+#'
+#'      # <code
+#'      dataset(dataname = \"iris_mod\", x = x)"
+#'   ),
+#'   con = file_example
+#' )
+#' x <- dataset_file(file_example)
+#' get_code(x)
+dataset_file <- function(path, code = get_code(path)) {
+  object <- object_file(path, "Dataset")
+  object$set_code(code)
+  return(object)
+}
+
+#' @rdname dataset_file
+#' @description `r lifecycle::badge("soft-deprecated")`
+#' @export
+named_dataset_file <- function(path, code = get_code(path)) {
+  lifecycle::deprecate_warn(
+    "0.9.2",
+    "teal::named_dataset_file()",
+    details = "Please use teal::dataset_file() instead."
+  )
+  dataset_file(path = path, code = code)
+}
+
+#' @rdname dataset_file
+#' @description `r lifecycle::badge("soft-deprecated")`
+#' @export
+relational_dataset_file <- function(path, code = get_code(path)) {
+  lifecycle::deprecate_warn(
+    "0.9.2",
+    "teal::relational_dataset_file()",
+    details = "Please use teal::dataset_file() instead."
+  )
+  dataset_file(path = path, code = code)
+}

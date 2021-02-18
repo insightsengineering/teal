@@ -182,7 +182,7 @@ test_that("delayed data_extract_spec works", {
   expect_equal(names(expected_spec), names(mix2))
   expect_equal(names(expected_spec), names(mix3))
 
-  ds <- teal:::FilteredData$new()
+  ds <- teal:::CDISCFilteredData$new()
   isolate({
     ds$set_data("ADSL", ADSL)
     expect_identical(expected_spec, resolve_delayed(delayed_spec, ds))

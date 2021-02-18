@@ -17,7 +17,7 @@ ui_teal(
 
 \item{splash_ui}{\code{shiny.tag} UI to display initially,
 can be a splash screen or a Shiny module UI. For the latter, see
-\verb{\link{init}} about how to call the corresponding server function.}
+\code{\link{init}} about how to call the corresponding server function.}
 
 \item{title}{(\code{character}) The browser window title (defaults to the host URL of the page)}
 

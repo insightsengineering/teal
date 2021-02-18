@@ -1,12 +1,11 @@
 #' \code{RelationalDataConnector} connector for \code{random.cdisc.data}
 #'
-#' @md
 #' @description `r lifecycle::badge("experimental")`
 #' Build data connector for \code{random.cdisc.data} functions or datasets
 #'
 #' @export
 #'
-#' @param ... (\code{RelationalDatasetConnector}) dataset connectors created using \link{rcd_dataset_connector}
+#' @param ... (\code{DatasetConnector}) dataset connectors created using \code{\link{rcd_dataset_connector}}
 #'   In case \code{cached = FALSE}, please watch the order and call \code{ADSL} generation first.
 #' @param connection (\code{DataConnection}) object returned from \code{rcd_connection}.
 #' @param check optional, (\code{logical}) whether perform reproducibility check
@@ -14,8 +13,8 @@
 #' @details
 #'
 #' This data connector can load data from \code{random.cdisc.data}. datasets can be loaded
-#' from a seed or cached. In case datasets should be loaded from cached the
-#' \link{rcd_cdisc_dataset_connector} needs to be used with the cached argument set
+#' from a seed or cached. In case datasets should be loaded from cache, the
+#' \code{\link{rcd_dataset_connector}} needs to be used with the cached argument set
 #' to \code{TRUE} for all datasets.
 #'
 #' In case non-cached datasets should be used, please watch the order of datasets. Most
@@ -53,11 +52,16 @@
 #' }
 rcd_data <- function(..., connection = rcd_connection(), check = TRUE) {
   connectors <- list(...)
-  stopifnot(is_class_list("RelationalDatasetConnector")(connectors))
+  stopifnot(is_class_list("DatasetConnector")(connectors))
   stopifnot(inherits(connection, "DataConnection"))
   stopifnot(is_logical_single(check))
 
-  x <- RelationalDataConnector$new(connection = connection, connectors = connectors)
+  x <- if (any(vapply(connectors, is, logical(1), "CDISCDatasetConnector"))) {
+    CDISCDataConnector$new(connection = connection, connectors = connectors)
+  } else {
+    RelationalDataConnector$new(connection = connection, connectors = connectors)
+  }
+
   x$set_check(check)
 
   x$set_ui(
@@ -118,16 +122,16 @@ rcd_data <- function(..., connection = rcd_connection(), check = TRUE) {
   return(x)
 }
 
-#' Data connector for \code{RICE}
+
+#' \code{RelationalDataConnector} connector for \code{RICE}
 #'
-#' @md
 #' @description `r lifecycle::badge("experimental")`
 #' Build data connector for \code{RICE} datasets
 #'
 #' @export
 #'
-#' @param ... (\code{RelationalDatasetConnector} objects)\cr
-#'  dataset connectors created using \link{rice_dataset_connector}
+#' @param ... (\code{DatasetConnector} objects)\cr
+#'  dataset connectors created using \code{\link{rice_dataset_connector}}
 #' @param connection (\code{DataConnection}) object returned from \code{rice_connection}.
 #' @param additional_ui (\code{shiny.tag})\cr
 #'  additional user interface to be visible over login panel
@@ -161,11 +165,16 @@ rcd_data <- function(..., connection = rcd_connection(), check = TRUE) {
 #' }
 rice_data <- function(..., connection = rice_connection(), additional_ui = NULL) {
   connectors <- list(...)
-  stopifnot(is_class_list("RelationalDatasetConnector")(connectors))
+  stopifnot(is_class_list("DatasetConnector")(connectors))
   stopifnot(inherits(connection, "DataConnection"))
   stopifnot(is.null(additional_ui) || is_html_like(additional_ui))
 
-  x <- RelationalDataConnector$new(connection = connection, connectors = connectors)
+  x <- if (any(vapply(connectors, is, logical(1), "CDISCDatasetConnector"))) {
+    CDISCDataConnector$new(connection = connection, connectors = connectors)
+  } else {
+    RelationalDataConnector$new(connection = connection, connectors = connectors)
+  }
+
   x$set_check(FALSE)
 
   x$set_ui(
@@ -230,13 +239,12 @@ rice_data <- function(..., connection = rice_connection(), additional_ui = NULL)
 
 #' \code{RelationalDataConnector} connector for \code{TERADATA}
 #'
-#' @md
 #' @description `r lifecycle::badge("experimental")`
 #' Build data connector for \code{TERADATA} functions or datasets
 #'
 #' @export
 #'
-#' @param ... (\code{RelationalDatasetConnector}) dataset connectors created using \link{teradata_dataset_connector}
+#' @param ... (\code{DatasetConnector}) dataset connectors created using \code{\link{teradata_dataset_connector}}
 #' @param connection (\code{DataConnection}) object returned from \code{teradata_connection}.
 #'
 #' @return An object of class \code{RelationalDataConnector}
@@ -270,9 +278,14 @@ rice_data <- function(..., connection = rice_connection(), additional_ui = NULL)
 #' }
 teradata_data <- function(..., connection = teradata_connection()) {
   connectors <- list(...)
-  stopifnot(is_class_list("RelationalDatasetConnector")(connectors))
+  stopifnot(is_class_list("DatasetConnector")(connectors))
 
-  x <- RelationalDataConnector$new(connection = connection, connectors = connectors)
+  x <- if (any(vapply(connectors, is, logical(1), "CDISCDatasetConnector"))) {
+    CDISCDataConnector$new(connection = connection, connectors = connectors)
+  } else {
+    RelationalDataConnector$new(connection = connection, connectors = connectors)
+  }
+
   x$set_check(FALSE)
 
   x$set_ui(

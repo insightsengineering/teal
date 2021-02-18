@@ -12,7 +12,6 @@
 #' dependencies and simplifies `\link[devtools]{load_all}` which otherwise fails
 #' and avoids session restarts!
 #'
-#' @md
 #' @param label `character` label of module
 #' @param active_datanames `character vector` datanames shown in filter panel;
 #'   can be `"all"` to mean all available datasets
@@ -28,7 +27,7 @@
 #'   data = cdisc_data(
 #'     cdisc_dataset(
 #'       dataname = "ADSL",
-#'       data = ADSL
+#'       x = ADSL
 #'     ),
 #'     code = "ADSL <- radsl(cached = TRUE)"
 #'   ),
@@ -50,7 +49,7 @@ filter_calls_module <- function(label = "Filter Calls Module", active_datanames 
       output$filter_calls <- renderText({
         active_datanames <- handle_active_datanames(datasets, active_datanames)
         paste(lapply(
-          list_adsl_first(active_datanames),
+          active_datanames,
           function(dataname) datasets$get_filter_expr(dataname)
         ), collapse = "\n\n")
       })
@@ -73,7 +72,6 @@ filter_calls_module <- function(label = "Filter Calls Module", active_datanames 
 #' `enableBookmarking` is set to `server`.
 #' The module also prints a nice error message if bookmarking is not enabled.
 #'
-#' @md
 #' @inheritParams filter_calls_module
 bookmark_module <- function(label = "Bookmark Module") { # nousage # nolint
   stopifnot(is_character_single(label))
@@ -126,7 +124,6 @@ bookmark_module <- function(label = "Bookmark Module") { # nousage # nolint
 #' Currently not supported, but a good idea is to provide an argument that contains
 #' code that is executed before `browser()` is called.
 #'
-#' @md
 #' @inheritParams filter_calls_module
 debug_browser_module <- function(label = "Browser Debug Module") { # nousage # nolint
   stopifnot(is_character_single(label))
@@ -166,7 +163,6 @@ debug_browser_module <- function(label = "Browser Debug Module") { # nousage # n
 #' The module presents a group of checkboxes to select the datasets for which to reset
 #' all filters.
 #'
-#' @md
 #' @inheritParams filter_calls_module
 reset_filters_module <- function(label = "Reset Filters Module", active_datanames = "all") { # nousage # nolint
   stopifnot(is_character_single(label))
@@ -228,7 +224,6 @@ reset_filters_module <- function(label = "Reset Filters Module", active_dataname
 #' )
 #' ```
 #'
-#' @md
 #' @param expr `function or reactive`
 #' @return `reactive`
 # sodo1: do you like this code? I don't.
@@ -269,7 +264,6 @@ trigger_after_first_cycle <- function(expr) { # nousage # nolint
 #' dataset immediately after reset (which may take a lot of time) and the new
 #' filter state is only applied in the next reactive cycle.
 #'
-#' @md
 #' @inheritParams filter_calls_module
 #' @inheritParams init
 #'

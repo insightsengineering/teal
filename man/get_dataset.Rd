@@ -2,26 +2,26 @@
 % Please edit documentation in R/get_dataset.R
 \name{get_dataset}
 \alias{get_dataset}
-\alias{get_dataset.RawDatasetConnector}
-\alias{get_dataset.RawDataset}
-\alias{get_dataset.RelationalDataCollection}
+\alias{get_dataset.DatasetConnector}
+\alias{get_dataset.Dataset}
+\alias{get_dataset.DataAbstract}
 \title{Get dataset from \code{DatasetConnector}}
 \usage{
 get_dataset(x, dataname)
 
-\method{get_dataset}{RawDatasetConnector}(x, dataname = NULL)
+\method{get_dataset}{DatasetConnector}(x, dataname = NULL)
 
-\method{get_dataset}{RawDataset}(x, dataname = NULL)
+\method{get_dataset}{Dataset}(x, dataname = NULL)
 
-\method{get_dataset}{RelationalDataCollection}(x, dataname = NULL)
+\method{get_dataset}{DataAbstract}(x, dataname = NULL)
 }
 \arguments{
-\item{x}{\code{RawDatasetConnector} or \code{RelationalDatasetConnector})}
+\item{x}{(\code{DatasetConnector} or \code{DatasetConnector} or \code{DataAbstract})}
 
 \item{dataname}{\code{character} a name of dataset to be retrieved}
 }
 \value{
-(\code{RawDataset} or \code{RelationalDataset})
+(\code{Dataset})
 }
 \description{
 \ifelse{html}{\out{<a href='https://www.tidyverse.org/lifecycle/#experimental'><img src='figures/lifecycle-experimental.svg' alt='Experimental lifecycle'></a>}}{\strong{Experimental}}
@@ -30,31 +30,31 @@ Get dataset from \code{DatasetConnector}
 }
 \examples{
 
-# RawDatasetConnector --------
+# DatasetConnector --------
 library(random.cdisc.data)
 ADSL <- radsl(cached = TRUE)
 
-dc <- rcd_cdisc_dataset_connector(dataname = "ADAE", fun = radae,
-                                  ADSL = ADSL, max_n_aes = 2L)
+dc <- rcd_dataset_connector(dataname = "ADAE", fun = radae,
+                            ADSL = ADSL, max_n_aes = 2L)
 
 load_dataset(dc)
 get_dataset(dc)
 
-# RawDataset --------
+# Dataset --------
 library(random.cdisc.data)
 ADSL <- radsl(cached = TRUE)
-rd <- raw_dataset(ADSL)
+x <- dataset("ADSL", ADSL)
 
-get_dataset(rd)
+get_dataset(x)
 
 # RelationalData  (not containing connectors) --------
 library(random.cdisc.data)
-adsl <- cdisc_dataset(dataname = "ADSL", # RelationalDataset
-                      data = radsl(cached = TRUE),
+adsl <- cdisc_dataset(dataname = "ADSL",
+                      x = radsl(cached = TRUE),
                       code = "library(random.cdisc.data)\nADSL <- radsl(cached = TRUE)")
 
-adae <- cdisc_dataset(dataname = "ADAE", # RelationalDataset
-                       data = radae(cached = TRUE),
+adae <- cdisc_dataset(dataname = "ADAE",
+                       x = radae(cached = TRUE),
                        code = "library(random.cdisc.data)\nADTTE <- radae(cached = TRUE)")
 
 rd <- teal:::RelationalData$new(adsl, adae)

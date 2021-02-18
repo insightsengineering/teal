@@ -1,6 +1,5 @@
 #' Get code
 #'
-#' @md
 #' @description `r lifecycle::badge("experimental")`
 #' Reads code from specified files or an R6 object.
 #'
@@ -22,7 +21,7 @@
 #'   \item{to close chunk }{\code{#<code} or \code{#<ADSL code} or \code{#<ADSL ADTTE code}}
 #' }
 #'
-#' @param x (\code{object}) of class \link{RawDatasetConnector} or \link{NamedDataset}. If of
+#' @param x (\code{object}) of class \code{\link{DatasetConnector}} or \code{\link{Dataset}}. If of
 #'   class \code{character} will be treated as file to read.
 #' @param exclude_comments (\code{logical}) whether exclude commented-out lines of code. Lines to be excluded
 #' should be ended with \code{# nocode}. For multiple line exclusions one should enclose ignored block of code with
@@ -45,14 +44,14 @@ get_code <- function(x, ...) {
 
 #' @export
 #' @rdname get_code
-get_code.RawDatasetConnector <- function(x, deparse = TRUE, ...) {
+get_code.DatasetConnector <- function(x, deparse = TRUE, ...) {
   check_ellipsis(...)
   x$get_code(deparse = deparse)
 }
 
 #' @export
 #' @rdname get_code
-get_code.NamedDataset <- function(x, deparse = TRUE, ...) {
+get_code.Dataset <- function(x, deparse = TRUE, ...) {
   check_ellipsis(...)
   x$get_code(deparse = deparse)
 }
@@ -61,18 +60,17 @@ get_code.NamedDataset <- function(x, deparse = TRUE, ...) {
 #' @rdname get_code
 #' @export
 #' @examples
-#' # RelationalData ---------
-#' x1 <- relational_dataset(
+#' x1 <- dataset(
 #'   x = data.frame(x = c(1, 2), y = c("a", "b"), stringsAsFactors = FALSE),
-#'   keys = keys(primary = "y", foreign = NULL, parent = NULL),
+#'   keys = "y",
 #'   dataname = "XY",
 #'   code = "XY <- data.frame(x = c(1, 2), y = c('aa', 'bb'), stringsAsFactors = FALSE)",
 #'   label = character(0)
 #' )
 #'
-#' x2 <- relational_dataset(
+#' x2 <- dataset(
 #'   x = data.frame(x = c(1, 2), y = c("a", "b"), stringsAsFactors = FALSE),
-#'   keys = keys(primary = "y", foreign = NULL, parent = NULL),
+#'   keys = "y",
 #'   dataname = "XYZ",
 #'   code = "XYZ <- data.frame(x = c(1, 2), y = c('aa', 'bb'), stringsAsFactors = FALSE)",
 #'   label = character(0)
@@ -80,11 +78,10 @@ get_code.NamedDataset <- function(x, deparse = TRUE, ...) {
 #'
 #' rd <- teal_data(x1, x2)
 #'
-#'
 #' get_code(rd)
 #' get_code(rd, "XY")
 #' get_code(rd, "XYZ")
-get_code.RelationalDataCollection <- function(x, dataname = character(0), deparse = TRUE, ...) { # nolint
+get_code.DataAbstract <- function(x, dataname = character(0), deparse = TRUE, ...) { # nolint
   check_ellipsis(...)
   if (!is_empty(dataname)) {
     if (any(!(dataname %in% x$get_datanames()))) {

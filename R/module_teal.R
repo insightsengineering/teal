@@ -20,11 +20,10 @@
 #'
 #' It is written as a Shiny module so it can be added into other apps as well.
 #'
-#' @md
 #' @param id module id
 #' @param splash_ui `shiny.tag` UI to display initially,
 #'   can be a splash screen or a Shiny module UI. For the latter, see
-#'   `\link{init}` about how to call the corresponding server function.
+#'   \code{\link{init}} about how to call the corresponding server function.
 #' @param title (`character`) The browser window title (defaults to the host URL of the page)
 #' @param header `shiny.tag or character` header to display above the app
 #' @param footer `shiny.tag or character` footer to display below the app
@@ -116,12 +115,12 @@ ui_teal <- function(id,
 #' The initially displayed filter states can be provided, bookmarked filter
 #' states always take precedence over them.
 #'
-#' For more doc, see `\link{ui_teal}`.
+#' For more doc, see \code{\link{ui_teal}}.
 #'
-#' @md
 #' @inheritParams srv_shiny_module_arguments
 #' @param raw_data `reactive` which returns the `RelationalData`, only evaluated once,
 #'   `NULL` value is ignored
+#' @inheritParams srv_tabs_with_filters
 #' @inheritParams init
 #' @importFrom shiny tags
 #'
@@ -136,14 +135,11 @@ srv_teal <- function(input, output, session, modules, raw_data, filter = list())
   }
   run_js_files(files = "init.js") # Javascript code to make the clipboard accessible
 
-  # Datasets to store filter states and filtered datasets per session
-  # Each tab for each user is an independent session and the tabs should be independent
-  datasets <- FilteredData$new()
 
   # Shiny bookmarking ----
 
   # The Shiny bookmarking functionality by default only stores inputs.
-  # We need to add FilteredData to the state so we restore it as well.
+  # We need to add `FilteredData` object to the state so we restore it as well.
   # To test bookmarking, include the `bookmark_module`, click on the bookmark
   # button and then get the link. Keep the Shiny app running and open the
   # obtained link in another browser tab.
@@ -175,7 +171,10 @@ srv_teal <- function(input, output, session, modules, raw_data, filter = list())
     progress <- shiny::Progress$new(session)
     on.exit(progress$close())
     progress$set(0.1, message = "Setting data")
-    set_datasets_data(datasets, raw_data())
+    # create the FilteredData object (here called 'datasets') whose class depends on the class of raw_data()
+    datasets <- filtered_data_new(isolate(raw_data()))
+    # transfer the datasets from raw_data() into the FilteredData object
+    filtered_data_set(raw_data(), datasets)
     progress$set(0.3, message = "Setting filters")
 
     if (!is.null(saved_datasets_state)) {
@@ -208,7 +207,7 @@ srv_teal <- function(input, output, session, modules, raw_data, filter = list())
       }
       )
     } else {
-      set_datasets_filters(datasets, filter)
+      filtered_data_set_filters(datasets, filter)
     }
 
     # replace splash screen by teal UI

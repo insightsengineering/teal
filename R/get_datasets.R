@@ -1,12 +1,11 @@
-#' Get a \code{\link{RelationalDataset}} objects.
+#' Get a \code{\link{Dataset}} objects.
 #'
-#' @md
 #' @description `r lifecycle::badge("experimental")`
 #'
 #' @param x (\code{\link{RelationalData}})\cr
 #'  object containing datasets.
 #' @export
-#' @return \code{list} or \code{RelationalDataset} objects
+#' @return \code{list} or \code{Dataset} objects
 get_datasets <- function(x) {
   UseMethod("get_datasets")
 }
@@ -17,12 +16,12 @@ get_datasets <- function(x) {
 #'
 #' # RelationalData --------
 #' library(random.cdisc.data)
-#' adsl <- cdisc_dataset(dataname = "ADSL", # RelationalDataset
-#'                       data = radsl(cached = TRUE),
+#' adsl <- cdisc_dataset(dataname = "ADSL",
+#'                       x = radsl(cached = TRUE),
 #'                       code = "library(random.cdisc.data)\nADSL <- radsl(cached = TRUE)")
 #'
-#' adae <- cdisc_dataset(dataname = "ADAE", # RelationalDataset
-#'                        data = radae(cached = TRUE),
+#' adae <- cdisc_dataset(dataname = "ADAE",
+#'                        x = radae(cached = TRUE),
 #'                        code = "library(random.cdisc.data)\nADTTE <- radae(cached = TRUE)")
 #'
 #' rd <- cdisc_data(adsl, adae)
@@ -44,7 +43,7 @@ get_datasets <- function(x) {
 #' \dontrun{
 #' get_datasets(drc)
 #' }
-get_datasets.RelationalDataCollection <- function(x) { # nolint
+get_datasets.DataAbstract <- function(x) { # nolint
   res <- x$get_datasets()
   if (is_empty(res)) {
     return(invisible(NULL))
@@ -56,7 +55,7 @@ get_datasets.RelationalDataCollection <- function(x) { # nolint
 #' @export
 #' @examples
 #'
-#' # RawDatasetConnector --------
+#' # DatasetConnector --------
 #' library(random.cdisc.data)
 #' rdc <- rcd_cdisc_dataset_connector("ADSL", radsl, cached = TRUE)
 #'
@@ -64,7 +63,7 @@ get_datasets.RelationalDataCollection <- function(x) { # nolint
 #' load_datasets(rdc)
 #' get_datasets(rdc)
 #'}
-get_datasets.RawDatasetConnector <- function(x) { # nolint
+get_datasets.DatasetConnector <- function(x) { # nolint
   res <- x$get_dataset()
   if (is_empty(res)) {
     return(invisible(NULL))
@@ -76,13 +75,13 @@ get_datasets.RawDatasetConnector <- function(x) { # nolint
 #' @export
 #' @examples
 #'
-#' # RawDataset --------
+#' # Dataset --------
 #' library(random.cdisc.data)
 #' adsl <- cdisc_dataset(dataname = "ADSL",
-#'                       data = radsl(cached = TRUE),
+#'                       x = radsl(cached = TRUE),
 #'                       code = "library(random.cdisc.data)\nADSL <- radsl(cached = TRUE)")
 #'
 #' get_datasets(adsl)
-get_datasets.RawDataset <- function(x) {
+get_datasets.Dataset <- function(x) {
   x
 }

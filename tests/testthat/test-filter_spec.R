@@ -128,7 +128,7 @@ test_that("Dropping keys attribute", {
     vars = "var1",
     choices = choices,
     selected = choices[1]))
-  expect_true(f1$drop_keys)
+  expect_false(f1$drop_keys)
 
   expect_silent(f2 <- filter_spec(
     vars = "var1",
@@ -167,7 +167,7 @@ test_that("delayed filter_spec works", {
 
   expect_equal(names(expected_spec), names(delayed))
 
-  ds <- teal:::FilteredData$new()
+  ds <- teal:::CDISCFilteredData$new()
   isolate(ds$set_data("ADSL", ADSL))
   expect_identical(expected_spec, isolate(resolve_delayed(delayed, ds)))
 })

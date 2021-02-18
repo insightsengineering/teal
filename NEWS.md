@@ -1,4 +1,11 @@
 # teal 0.9.2.9000
+### New Features
+* Support for data-standard independent input and filtering. That includes refactor of the all data and dataset structures together with refactor of `FilteredData` class.
+* New `JoinKeys` class (with `join_keys()` constructors and `join_key()` constructor for its elements) to store joining key columns between datasets.
+* Refactored the most basic `dataset()` constructor, added `cdisc_dataset()` constructor and `as_cdisc()` conversion function. 
+* Soft-deprecate removed class constructors and obsolete functions (e.g. `keys()`).
+* Added `get_keys()` and `set_keys()` functions to extract and manipulate datasets primary keys respectively.
+
 ### Bug fixes
 * Duplicated lines of code passed to `teal::cdisc_dataset` and other `teal::RelationalDataset` constructors should now be shown when getting the code from `teal::cdisc_data` objects and other `teal::RelationalData` objects.
 * Added ability to press "Enter" key without having to set focus to the Submit button for delayed data loading.

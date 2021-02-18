@@ -14,27 +14,25 @@ srv_teal(input, output, session, modules, raw_data, filter = list())
 \item{session}{\verb{Shiny session object}}
 
 \item{modules}{\code{teal_module} or \code{teal_modules} object, the latter
-can be used for nested tabs, see \verb{\link{ui_nested_tabs}}}
+can be used for nested tabs, see \code{\link{ui_nested_tabs}}}
 
 \item{raw_data}{\code{reactive} which returns the \code{RelationalData}, only evaluated once,
 \code{NULL} value is ignored}
 
 \item{filter}{(\code{list}) You can define filters that show when
-the app starts. Variables inherited from ADSL have to be specified only for ADSL dataset.
-Thus variable like RACE have to be specified for ADSL datasets even when other sets contain it too.
+the app starts.
 The general pattern is:
-\code{list(ADSL = list(SEX = ..., AGE = ...), ADAE = ...)}.
+\code{list(iris = list(Species = ..., Sepal.Length = ...), mtcars = ...)}.
 An example is:
-\code{list(ADSL = list(SEX = c("M", "F")))}.
-More generally, the filters for the variable, e.g. \code{SEX} can be
+\code{list(iris = list(Species = c("setosa", "versicolor")))}.
+More generally, the filters for the variable, e.g. \code{Species} can be
 specified as follows:
-\code{list(SEX = list(choices = c("M", "F")))},
-\code{list(SEX = list(choices = c("M", "F"), keep_na = TRUE))},
+\code{list(Species = c("setosa", "versicolor"))},
+\verb{list(Species = c("setosa", "versicolor"), keep_na = TRUE))},
 or equivalently with:
-\code{list(SEX = c("M", "F"))},
-\code{list(SEX = c("M", "F", NA))},
+\code{list(Species = c("setosa", "versicolor", NA))},
 or for the default filter (not very restrictive):
-\code{list(SEX = default_filter())}
+\code{list(Species = default_filter())}
 
 Instead of \code{choices} above, use the following names:
 \itemize{
@@ -42,7 +40,7 @@ Instead of \code{choices} above, use the following names:
 \item \code{factor}: \code{choices}
 \item \code{logical}: \code{logical}
 A general example is:
-\code{list(   ADSL = list(AGE = default_filter(), SEX = c("M", NA)),   ADAE = list(AETOXGR = default_filter())   )}
+\code{list( iris = list(Sepal.Length = default_filter(), Species = c("M", NA)), mtcars = list(mpg = default_filter())   )}
 Ignored if the app is restored from a bookmarked state.
 }}
 }
@@ -61,5 +59,5 @@ The initially displayed filter states can be provided, bookmarked filter
 states always take precedence over them.
 }
 \details{
-For more doc, see \verb{\link{ui_teal}}.
+For more doc, see \code{\link{ui_teal}}.
 }

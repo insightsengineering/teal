@@ -174,7 +174,7 @@ library(magrittr)
 library(dplyr)
  
 app <- teal::init(
-  data = cdisc_data(cdisc_dataset("ADSL", data = iris %>% mutate(USUBJID = 1:dplyr::n(), STUDYID = "A"))),
+  data = cdisc_data(cdisc_dataset("ADSL", x = iris %>% mutate(USUBJID = 1:dplyr::n(), STUDYID = "A"))),
   modules = root_modules(
     module(
       label = "sample module",
@@ -335,7 +335,7 @@ The `datasets` object of class `FilteredData` that is passed an argument to the
 ```{r}
 library(teal)
 options(teal_logging = FALSE)
-datasets <- teal:::FilteredData$new()
+datasets <- teal:::CDISCFilteredData$new()
 
 # the `datasets` object contains reactives
 # we activate this option, so we don't need to wrap all reactives in isolate calls
@@ -427,7 +427,7 @@ or more generally a collection of independently filtered datasets:
 knitr::include_graphics('./images/design_simple_filtered_data.png')
 ```
 
-Lets call this particular filtering the `SimpleFilteredData` class.
+Let's call this particular filtering the `SimpleFilteredData` class.
 
 
 Finally we would also need a filtering for [expression sets][expressionSets]

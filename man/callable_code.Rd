@@ -2,7 +2,7 @@
 % Please edit documentation in R/CallableCode.R
 \name{callable_code}
 \alias{callable_code}
-\title{Create \code{CallableCode} object}
+\title{Create \code{\link{CallableCode}} object}
 \usage{
 callable_code(code)
 }
@@ -17,6 +17,7 @@ that they can't be modified.}
 }
 \description{
 \ifelse{html}{\out{<a href='https://www.tidyverse.org/lifecycle/#experimental'><img src='figures/lifecycle-experimental.svg' alt='Experimental lifecycle'></a>}}{\strong{Experimental}}
+
 Create \link{CallableCode} object to execute specific code and get reproducible call.
 }
 \examples{

@@ -7,14 +7,14 @@
 root_modules(...)
 }
 \arguments{
-\item{...}{\verb{\link{module}} and \verb{\link{modules}} object}
+\item{...}{\code{\link{module}} and \code{\link{modules}} object}
 }
 \description{
 \ifelse{html}{\out{<a href='https://www.tidyverse.org/lifecycle/#maturing'><img src='figures/lifecycle-maturing.svg' alt='Maturing lifecycle'></a>}}{\strong{Maturing}}
-To be used with \verb{\link{init}} in the \code{modules} argument.
+To be used with \code{\link{init}} in the \code{modules} argument.
 }
 \details{
-The function \verb{\link{modules}} can also be used. The purpose of this
+The function \code{\link{modules}} can also be used. The purpose of this
 function is to not confuse the end-user as the label of the top-module
 will not be displayed as a tab name (because the root is only one element
 which has multiple children).

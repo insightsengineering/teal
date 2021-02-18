@@ -3,7 +3,7 @@
 #' `system.file` should not be used to access files in other packages, it does
 #' not work with `devtools`. Therefore, we redefine this method in each package
 #' as needed. Thus, we do not export this method
-#' @md
+#'
 #' @param pattern (`character`) pattern of files to be included
 #'
 #' @return HTML code that includes `CSS` files
@@ -20,7 +20,6 @@ include_css_files <- function(pattern = "*") {
 #' not work with `devtools`. Therefore, we redefine this method in each package
 #' as needed. Thus, we do not export this method
 #'
-#' @md
 #' @param pattern (`character`) pattern of files to be included, passed to `system.file`
 #' @param except (`character`) vector of basename filenames to be excluded
 #'
@@ -45,7 +44,6 @@ include_js_files <- function(pattern = "*", except = NULL) {
 #' not work with `devtools`. Therefore, we redefine this method in each package
 #' as needed. Thus, we do not export this method
 #'
-#' @md
 #' @param files (`character`) vector of filenames
 run_js_files <- function(files) {
   stopifnot(is_character_vector(files))
@@ -64,7 +62,6 @@ run_js_files <- function(files) {
 #' styles.
 #' Also initializes `shinyjs` so you can use it.
 #'
-#' @md
 #' @return HTML code to include
 #' @examples
 #' shiny_ui <- tagList(

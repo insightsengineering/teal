@@ -1,6 +1,5 @@
 #' Stop app.R evaluation with a Jumbotron Shiny App
 #'
-#' @md
 #' @description `r lifecycle::badge("maturing")`
 #' This will start a separate shiny app with a message
 #'

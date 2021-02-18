@@ -2,41 +2,44 @@
 % Please edit documentation in R/mutate_dataset.R
 \name{mutate_dataset}
 \alias{mutate_dataset}
-\alias{mutate_dataset.NamedDataset}
-\alias{mutate_dataset.NamedDatasetConnector}
-\alias{mutate_dataset.RelationalDataCollection}
+\alias{mutate_dataset.Dataset}
+\alias{mutate_dataset.DatasetConnector}
+\alias{mutate_dataset.DataAbstract}
 \title{Mutate dataset by code}
 \usage{
 mutate_dataset(x, ...)
 
-\method{mutate_dataset}{NamedDataset}(
+\method{mutate_dataset}{Dataset}(
   x,
   code = character(0),
   script = character(0),
   vars = list(),
+  keys = get_keys(x),
   ...
 )
 
-\method{mutate_dataset}{NamedDatasetConnector}(
+\method{mutate_dataset}{DatasetConnector}(
   x,
   code = character(0),
   script = character(0),
   vars = list(),
+  keys = get_keys(x),
   ...
 )
 
-\method{mutate_dataset}{RelationalDataCollection}(
+\method{mutate_dataset}{DataAbstract}(
   x,
   dataname,
   code = character(0),
   script = character(0),
   vars = list(),
+  keys = get_keys(x$get_items(dataname)),
   ...
 )
 }
 \arguments{
-\item{x}{(\code{NamedDataset})\cr
-object or \code{RelationalDataset} which inherited from it.}
+\item{x}{(\code{Dataset})\cr
+object.}
 
 \item{...}{not used, only for support of S3}
 
@@ -50,11 +53,17 @@ Preferred before \code{code} argument.}
 
 \item{vars}{(list)\cr
 In case when this object code depends on the \code{raw_data} from the other
-\code{RelationalDataset}, \code{RelationalDatasetConnector} object(s) or other constant value,
+\code{Dataset}, \code{DatasetConnector} object(s) or other constant value,
 this/these object(s) should be included.}
+
+\item{keys}{optional, (\code{character})\cr
+vector with primary keys}
 
 \item{dataname}{(\code{character})\cr
 Dataname to be mutated.}
+}
+\value{
+modified \code{x} object
 }
 \description{
 \ifelse{html}{\out{<a href='https://www.tidyverse.org/lifecycle/#experimental'><img src='figures/lifecycle-experimental.svg' alt='Experimental lifecycle'></a>}}{\strong{Experimental}}
@@ -65,7 +74,7 @@ library(magrittr)
 
 ADSL <- radsl(cached = TRUE)
 
-ADSL_dataset <- named_dataset(
+ADSL_dataset <- dataset(
   dataname = "ADSL",
   x = ADSL,
   label = "AdAM subject-level dataset",

@@ -1,0 +1,403 @@
+## DataAbstract ====
+#' @title `DataAbstract` class
+#' @description
+#' Abstract class containing code for handling set of datasets.
+#'
+#' @importFrom R6 R6Class
+#' @importFrom methods is
+DataAbstract <- R6::R6Class( #nolint
+  classname = "DataAbstract",
+  ## __Public Methods ====
+  public = list(
+    #' @description
+    #' Cannot create a \code{DataAbstract} object
+    #'
+    #' @return throws error
+    initialize = function() {
+      stop("Not implemented!")
+    },
+    #' @description
+    #' Check if the object raw data is reproducible from the \code{get_code()} code.
+    #' @return
+    #'   \code{NULL} if check step has been disabled
+    #'   \code{TRUE} if all the datasets generated from evaluating the
+    #'   \code{get_code()} code are identical to the raw data, else \code{FALSE}.
+    check = function() {
+      # code can be put only to the mutate with empty code in datasets
+      res <- if (isFALSE(private$.check)) {
+        NULL
+      } else {
+        if (!is_empty(private$pull_code$code)) {
+          private$check_combined_code()
+        } else {
+          all(vapply(
+            private$datasets,
+            function(x) {
+              check_res <- x$check()
+              # NULL is still ok
+              is.null(check_res) || isTRUE(check_res)
+            },
+            logical(1)
+          ))
+        }
+      }
+      private$check_result <- res
+      return(res)
+    },
+    #' @description
+    #' Get result of reproducibility check
+    #' @return \code{NULL} if check has not been called yet, \code{TRUE} / \code{FALSE} otherwise
+    get_check_result = function() {
+      private$check_result
+    },
+    #' @description
+    #' Get code for all datasets.
+    #' @param dataname (\code{character}) dataname or \code{NULL} for all datasets
+    #' @param deparse (\code{logical}) whether to return the deparsed form of a call
+    #' @return (\code{character}) vector of code to generate datasets.
+    get_code = function(dataname = NULL, deparse = TRUE) {
+      stopifnot(is.null(dataname) || is_character_vector(dataname))
+      stopifnot(is_logical_single(deparse))
+
+      return(self$get_code_class()$get_code(dataname = dataname, deparse = deparse))
+    },
+    #' @description
+    #' Get internal \code{CodeClass} object
+    #' @param only_pull (\code{logical} value)\cr
+    #'   if \code{TRUE} only code to pull datasets will be returned without mutate code.
+    #'
+    #' @return `\code{CodeClass}`
+    get_code_class = function(only_pull = FALSE) {
+      all_code_class <- CodeClass$new()
+
+      pull_code_class <- private$get_pull_code_class()
+      all_code_class$append(pull_code_class)
+
+      datasets_code_class <- private$get_datasets_code_class()
+      all_code_class$append(datasets_code_class)
+
+      if (isFALSE(only_pull)) {
+        mutate_code_class <- private$get_mutate_code_class()
+        all_code_class$append(mutate_code_class)
+      }
+
+      return(all_code_class)
+    },
+    #' @description
+    #' Get names of the datasets.
+    #'
+    #' @return \code{character} vector with names of all datasets.
+    get_datanames = function() {
+      vapply(private$datasets, get_dataname, character(1))
+    },
+    #' @description
+    #' Get \code{Dataset} object.
+    #'
+    #' @param dataname (\code{character} value)\cr
+    #'   name of dataset to be returned. If \code{NULL}, all datasets are returned.
+    #'
+    #' @return \code{Dataset}.
+    get_dataset = function(dataname = NULL) {
+      stopifnot(is.null(dataname) || is_character_single(dataname))
+
+      if (is_character_single(dataname)) {
+        if (!(dataname %in% self$get_datanames())) {
+          stop(paste("dataset", dataname, "not found"))
+        }
+
+        res <- self$get_datasets()[[dataname]]
+        return(res)
+      } else {
+        return(self$get_datasets())
+      }
+    },
+    #' @description
+    #' Get \code{list} of \code{Dataset} objects.
+    #'
+    #' @return \code{list} of \code{Dataset}.
+    get_datasets = function() {
+      if (!self$is_pulled()) {
+        stop("Not all datasets have been pulled yet.\n",
+             "- Please use `load_datasets()` to retrieve complete results.")
+      }
+
+      if (is_empty(private$mutate_code$code)) {
+        res <- ulapply(
+          private$datasets,
+          function(x) {
+            if (is_pulled(x)) {
+              get_datasets(x)
+            } else {
+              NULL
+            }
+          }
+        )
+        # exit early if mutate isn't required
+        return(if_not_null(res, setNames(res, vapply(res, get_dataname, character(1)))))
+      }
+
+      if (inherits(private$mutate_code, "PythonCodeClass")) {
+        items <- lapply(self$get_items(), get_raw_data)
+        datasets <- setNames(items, vapply(self$get_items(), get_dataname, character(1)))
+
+        new_env <- private$mutate_code$eval(vars = c(datasets, private$mutate_vars))
+      } else {
+        # have to evaluate post-processing code (i.e. private$mutate_code) before returning dataset
+        new_env <- new.env(parent = parent.env(globalenv()))
+        for (dataset in self$get_items()) {
+          assign(get_dataname(dataset), get_raw_data(dataset), envir = new_env)
+        }
+
+        for (var_idx in seq_along(private$mutate_vars)) {
+          mutate_var <- private$mutate_vars[[var_idx]]
+          if (is(mutate_var, "Dataset") || is(mutate_var, "DatasetConnector")) {
+            assign(
+              x = names(private$mutate_vars)[[var_idx]],
+              value = get_raw_data(mutate_var),
+              envir = new_env
+            )
+          } else {
+            assign(
+              x = names(private$mutate_vars)[[var_idx]],
+              value = mutate_var,
+              envir = new_env
+            )
+          }
+        }
+
+        private$mutate_code$eval(envir = new_env)
+      }
+
+      res <- sapply(
+        self$get_items(),
+        function(x) {
+          x_name <- get_dataname(x)
+          x_dataset <- get_dataset(x)
+          x_dataset$recreate(x = get(x_name, new_env))
+        },
+        USE.NAMES = TRUE,
+        simplify = FALSE
+      )
+
+      return(if_not_null(res, setNames(res, vapply(res, get_dataname, character(1)))))
+    },
+    #' @description
+    #' Get all datasets and all dataset connectors
+    #'
+    #' @param dataname (\code{character} value)\cr
+    #'   name of dataset connector to be returned. If \code{NULL}, all connectors are returned.
+    #' @return \code{list} with all datasets and all connectors
+    get_items = function(dataname = NULL) {
+      stopifnot(is.null(dataname) || is_character_single(dataname))
+
+      if (is_character_single(dataname)) {
+        if (!(dataname %in% self$get_datanames())) {
+          stop(paste("dataset", dataname, "not found"))
+        }
+        return(private$datasets[[dataname]])
+      } else {
+        return(private$datasets)
+      }
+    },
+    #' @description
+    #' Check if dataset has already been pulled.
+    #'
+    #' @return \code{TRUE} if dataset has been already pulled, else \code{FALSE}
+    is_pulled = function() {
+      all(vapply(private$datasets, is_pulled, logical(1)))
+    },
+    #' @description
+    #' Mutate data by code
+    #'
+    #' @param code (\code{character}) Code to mutate the dataset. Must contain the
+    #'  \code{dataset$dataname}
+    #' @param vars (list)\cr
+    #'   In case when this object code depends on the \code{raw_data} from the other
+    #'   \code{Dataset}, \code{DatasetConnector} object(s) or other constant value,
+    #'   this/these object(s) should be included
+    #'
+    #' @return self invisibly for chaining
+    mutate = function(code, vars = list()) {
+      private$set_mutate_vars(vars)
+      private$set_mutate_code(
+        code = code,
+        deps = names(vars)
+      )
+
+      private$check_result <- NULL
+
+      return(invisible(self))
+    },
+    #' @description
+    #' Mutate dataset by code
+    #'
+    #' @param dataname (\code{character}) Dataname to be mutated
+    #' @param code (\code{character}) Code to mutate the dataset. Must contain the
+    #'  \code{dataset$dataname}
+    #' @param vars (list)\cr
+    #'   In case when this object code depends on the \code{raw_data} from the other
+    #'   \code{Dataset}, \code{DatasetConnector} object(s) or other constant value,
+    #'   this/these object(s) should be included
+    #'
+    #' @return self invisibly for chaining
+    mutate_dataset = function(dataname, code, vars = list()) {
+      stopifnot(is_character_vector(dataname))
+      stopifnot(all(dataname %in% self$get_datanames()))
+
+      private$set_mutate_vars(vars = vars)
+      private$set_mutate_code(
+        code = code,
+        dataname = dataname,
+        deps = names(vars)
+      )
+
+      private$check_result <- NULL
+
+      return(invisible(self))
+    },
+    #' @description
+    #' Set reproducibility check
+    #'
+    #' @param check (\code{logical}) whether to perform reproducibility check.
+    #'
+    #' @return (`self`) invisibly for chaining.
+    set_check = function(check = FALSE) {
+      stopifnot(is_logical_single(check))
+      private$.check <- check
+      return(invisible(self))
+    },
+    #' @description
+    #' Set pull code
+    #'
+    #' @param code (\code{character} value)\cr
+    #'   code to reproduce \code{data} in \code{Dataset} objects. Can't be set if any dataset
+    #'   has \code{code} set already.
+    #'
+    #' @return (`self`) invisibly for chaining.
+    set_pull_code = function(code) {
+      stopifnot(is_character_single(code))
+      is_code_set <- vapply(
+        self$get_items(),
+        function(item) {
+          get_code(item, deparse = TRUE) != ""
+        },
+        logical(1)
+      )
+
+      is_dataset <- vapply(
+        self$get_items(),
+        function(item) {
+          is(item, "Dataset")
+        },
+        logical(1)
+      )
+
+      if (any(is_code_set & is_dataset)) {
+        stop(
+          "'code' argument should be specified only in the 'cdisc_data' or in 'cdisc_dataset' but not in both",
+          call. = FALSE
+        )
+      }
+
+      if (all(!is_dataset)) {
+        stop(
+          "Connectors are reproducible by default and setting 'code' argument might break it",
+          call. = FALSE
+        )
+      }
+
+      private$pull_code <- private$pull_code$set_code(
+        code = code,
+        dataname = self$get_datanames()
+      )
+      return(invisible(self))
+    }
+  ),
+
+  ## __Private Fields ====
+  private = list(
+    datasets = NULL,
+    .check = FALSE,
+    check_result = NULL, # TRUE / FALSE after calling check()
+    mutate_code = NULL, # CodeClass after initialization
+    mutate_vars = list(), # named list with vars used to mutate object
+    pull_code = NULL, # CodeClass - code to reproduce loading of Dataset(s) only
+
+    ## __Private Methods ====
+    check_combined_code = function() {
+      execution_environment <- new.env(parent = parent.env(globalenv()))
+      self$get_code_class(only_pull = TRUE)$eval(envir = execution_environment)
+      all(vapply(
+        self$get_items(),
+        function(dataset) {
+          data <- get_raw_data(dataset)
+          data_from_code <- get(get_dataname(dataset), execution_environment)
+          identical(data, data_from_code)
+        },
+        logical(1)
+      ))
+    },
+    get_datasets_code_class = function() {
+      res <- CodeClass$new()
+      if (is.null(private$datasets)) {
+        return(res)
+      }
+      for (dataset in private$datasets) {
+        res$append(dataset$get_code_class())
+      }
+      return(res)
+    },
+    get_mutate_code_class = function() {
+      res <- CodeClass$new()
+      res$append(list_to_code_class(private$mutate_vars))
+      res$append(private$mutate_code)
+      return(res)
+    },
+    get_pull_code_class = function() {
+      res <- CodeClass$new()
+      res$append(private$pull_code)
+      return(res)
+    },
+    set_mutate_code = function(code, dataname = self$get_datanames(), deps = names(private_mutate_vars)) {
+      stopifnot(is_character_vector(code, 0, 1) || inherits(code, "PythonCodeClass"))
+
+      if (inherits(code, "PythonCodeClass")) {
+        r <- PythonCodeClass$new()
+        r$append(private$mutate_code)
+        private$mutate_code <- r
+
+        code <- code$get_code()
+      }
+
+      if (length(code) > 0 && code != "") {
+        private$mutate_code$set_code(code = code, dataname = dataname, deps = deps)
+      }
+
+      return(invisible(self))
+    },
+    set_mutate_vars = function(vars) {
+      stopifnot(is_fully_named_list(vars))
+
+      if (length(vars) > 0) {
+        private$mutate_vars <- c(
+          private$mutate_vars,
+          vars[!names(vars) %in% names(private$mutate_vars)]
+        )
+      }
+
+      return(invisible(self))
+    },
+    check_names = function(x) {
+      if (any(vapply(x, is_empty_string, logical(1)))) {
+        stop("Cannot extract some dataset names")
+      }
+      if (any(duplicated(x))) {
+        stop("Datasets names should be unique")
+      }
+      if (any(x %in% self$get_datanames())) {
+        stop("Some datanames already exists")
+      }
+      return(TRUE)
+    }
+  )
+)

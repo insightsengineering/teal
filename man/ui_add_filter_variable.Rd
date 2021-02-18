@@ -15,7 +15,7 @@ ui_add_filter_variable(id, dataname)
 Once something is selected, it sets the \code{filter_state} (from inexistent) to \code{NULL}
 for that variable in the \code{datasets} object. This essentially makes it available
 for filtering.
-Indeed, the top right panel (see \verb{\link{module_filter_items}}) picks this up,
+Indeed, the top right panel picks this up,
 so you can adjust the filtering for that variable. The selection is then undone and
 the choices are updated, so other variables can be added for filtering.
 Variables that cannot be filtered are not available in the selection.
@@ -30,6 +30,7 @@ ADAE <- radlb(cached = TRUE)
 attr(ADAE, "keys") <- get_cdisc_keys("ADAE")
 
 datasets <- teal:::FilteredData$new()
+
 # these filters will no longer be available for selection
 isolate({
   datasets$set_data("ADSL", ADSL)

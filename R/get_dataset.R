@@ -1,13 +1,12 @@
-#' Get dataset from \code{DatasetConnector}
+#' Get dataset from `DatasetConnector`
 #'
-#' @md
 #' @description `r lifecycle::badge("experimental")`
 #'
 #' Get dataset from \code{DatasetConnector}
-#' @param x \code{RawDatasetConnector} or \code{RelationalDatasetConnector})
+#' @param x (`DatasetConnector` or `DatasetConnector` or `DataAbstract`)
 #' @param dataname \code{character} a name of dataset to be retrieved
 #'
-#' @return (\code{RawDataset} or \code{RelationalDataset})
+#' @return (`Dataset`)
 #' @export
 get_dataset <- function(x, dataname) {
   UseMethod("get_dataset")
@@ -17,18 +16,18 @@ get_dataset <- function(x, dataname) {
 #' @export
 #' @examples
 #'
-#' # RawDatasetConnector --------
+#' # DatasetConnector --------
 #' library(random.cdisc.data)
 #' ADSL <- radsl(cached = TRUE)
 #'
-#' dc <- rcd_cdisc_dataset_connector(dataname = "ADAE", fun = radae,
-#'                                   ADSL = ADSL, max_n_aes = 2L)
+#' dc <- rcd_dataset_connector(dataname = "ADAE", fun = radae,
+#'                             ADSL = ADSL, max_n_aes = 2L)
 #'
 #' load_dataset(dc)
 #' get_dataset(dc)
-get_dataset.RawDatasetConnector <- function(x, dataname = NULL) { # nolint
+get_dataset.DatasetConnector <- function(x, dataname = NULL) { # nolint
   if (!is.null(dataname)) {
-    warning("'dataname' argument ignored - RawDatasetConnector can contain only one dataset.")
+    warning("'dataname' argument ignored - DatasetConnector can contain only one dataset.")
   }
   return(x$get_dataset())
 }
@@ -37,15 +36,15 @@ get_dataset.RawDatasetConnector <- function(x, dataname = NULL) { # nolint
 #' @export
 #' @examples
 #'
-#' # RawDataset --------
+#' # Dataset --------
 #' library(random.cdisc.data)
 #' ADSL <- radsl(cached = TRUE)
-#' rd <- raw_dataset(ADSL)
+#' x <- dataset("ADSL", ADSL)
 #'
-#' get_dataset(rd)
-get_dataset.RawDataset <- function(x, dataname = NULL) { # nolint
+#' get_dataset(x)
+get_dataset.Dataset <- function(x, dataname = NULL) { # nolint
   if (!is.null(dataname)) {
-    warning("'dataname' argument ignored - RawDataset can contain only one dataset.")
+    warning("'dataname' argument ignored - Dataset can contain only one dataset.")
   }
   return(x)
 }
@@ -56,12 +55,12 @@ get_dataset.RawDataset <- function(x, dataname = NULL) { # nolint
 #'
 #' # RelationalData  (not containing connectors) --------
 #' library(random.cdisc.data)
-#' adsl <- cdisc_dataset(dataname = "ADSL", # RelationalDataset
-#'                       data = radsl(cached = TRUE),
+#' adsl <- cdisc_dataset(dataname = "ADSL",
+#'                       x = radsl(cached = TRUE),
 #'                       code = "library(random.cdisc.data)\nADSL <- radsl(cached = TRUE)")
 #'
-#' adae <- cdisc_dataset(dataname = "ADAE", # RelationalDataset
-#'                        data = radae(cached = TRUE),
+#' adae <- cdisc_dataset(dataname = "ADAE",
+#'                        x = radae(cached = TRUE),
 #'                        code = "library(random.cdisc.data)\nADTTE <- radae(cached = TRUE)")
 #'
 #' rd <- teal:::RelationalData$new(adsl, adae)
@@ -86,10 +85,10 @@ get_dataset.RawDataset <- function(x, dataname = NULL) { # nolint
 #'\dontrun{
 #' get_dataset(rd, "ADSL")
 #' }
-get_dataset.RelationalDataCollection <- function(x, dataname = NULL) { # nolint
+get_dataset.DataAbstract <- function(x, dataname = NULL) {
   if (is.null(dataname)) {
-    stop("To get singe dataset from 'RelationalData' one must specify the name of the dataset.
-         To get all datasets please use get_datasets()")
+    stop(paste("To get single dataset from data class one must specify the name of the dataset.",
+               "To get all datasets please use get_datasets()"))
   }
   return(x$get_dataset(dataname = dataname))
 }

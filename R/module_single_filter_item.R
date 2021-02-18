@@ -18,7 +18,6 @@ get_keep_inf_label <- function(inf_count) {
 #' We pass in the initial state to avoid filtering twice that otherwise comes
 #' with the `updateInput` functions.
 #'
-#' @md
 #' @param id module id
 #' @param filter_info `filter_info` returned by datasets class
 #' @param filter_state `filter_state` returned by datasets class
@@ -275,7 +274,6 @@ ui_single_filter_item <- function(id, filter_info, filter_state, prelabel) {
 #' Regarding the return value: The `observers` are returned so they can be canceled
 #' when the module is removed.
 #'
-#' @md
 #' @inheritParams srv_shiny_module_arguments
 #' @param dataname `character` dataname
 #' @param varname `character` variable within `dataname` to filter

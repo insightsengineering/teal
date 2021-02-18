@@ -37,7 +37,6 @@ DataConnection <- R6::R6Class( # nolint
   public = list(
     #' @description
     #' Create a new `DataConnection` object
-    #' @md
     #'
     #' @param open_fun (`CallableFunction`) function to open connection
     #' @param close_fun (`CallableFunction`) function to close connection
@@ -73,7 +72,6 @@ DataConnection <- R6::R6Class( # nolint
     #' If connection is opened
     #'
     #' If open connection has been successfully evaluated
-    #' @md
     #'
     #' @return (`logical`) if connection is open
     is_opened = function() {
@@ -81,7 +79,6 @@ DataConnection <- R6::R6Class( # nolint
     },
     #' @description
     #' Check if connection has not failed.
-    #' @md
     #'
     #' @return (`logical`) `TRUE` if connection failed, else `FALSE`
     is_failed = function() {
@@ -149,7 +146,6 @@ DataConnection <- R6::R6Class( # nolint
     #' Open the connection.
     #'
     #' Note that if the connection is already opened then it does nothing.
-    #' @md
     #'
     #' @param args (`NULL` or named `list`) additional arguments not set up previously
     #' @param silent (`logical`) whether convert all "missing function" errors to messages
@@ -185,7 +181,6 @@ DataConnection <- R6::R6Class( # nolint
 
     #' @description
     #' Get internal connection object
-    #' @md
     #'
     #' @return `connection` object
     get_conn = function() {
@@ -193,7 +188,6 @@ DataConnection <- R6::R6Class( # nolint
     },
     #' @description
     #' Get executed open connection call
-    #' @md
     #'
     #' @param deparse (`logical`) whether return deparsed form of a call
     #' @param args (`NULL` or named `list`) additional arguments not set up previously
@@ -219,7 +213,6 @@ DataConnection <- R6::R6Class( # nolint
     },
     #' @description
     #' Get error message from last connection
-    #' @md
     #'
     #' @return (`character`)\cr
     #'  text of the error message or `character(0)` if last
@@ -229,7 +222,6 @@ DataConnection <- R6::R6Class( # nolint
     },
     #' @description
     #' Get shiny server module to open connection.
-    #' @md
     #'
     #' @return the (`server function`) to open connection.
     get_open_server = function() {
@@ -237,7 +229,6 @@ DataConnection <- R6::R6Class( # nolint
     },
     #' @description
     #' Get Shiny module with inputs to open connection
-    #' @md
     #'
     #' @param id `character` shiny element id
     #'
@@ -247,7 +238,6 @@ DataConnection <- R6::R6Class( # nolint
     },
     #' @description
     #' Check if open connection has not failed.
-    #' @md
     #'
     #' @return (`logical`) `TRUE` if open connection failed, else `FALSE`
     is_open_failed = function() {
@@ -259,7 +249,6 @@ DataConnection <- R6::R6Class( # nolint
     },
     #' @description
     #' Set open connection function argument
-    #' @md
     #'
     #' @param args (`NULL` or named `list`) with values where list names are argument names
     #' @param silent (`logical`) whether convert all "missing function" errors to messages
@@ -278,7 +267,6 @@ DataConnection <- R6::R6Class( # nolint
     #' This function will be called after submit button will be hit. There is no possibility to
     #' specify some dynamic `ui` as `server` function is executed after hitting submit
     #' button.
-    #' @md
     #'
     #' @param open_module (`function`)\cr
     #'  A shiny module server function that should load data from all connectors
@@ -298,7 +286,6 @@ DataConnection <- R6::R6Class( # nolint
     },
     #' @description
     #' Set open connection UI function
-    #' @md
     #'
     #' @param open_module (`function`)\cr
     #'  shiny module as function. Inputs specified in this `ui` are passed to server module
@@ -324,7 +311,6 @@ DataConnection <- R6::R6Class( # nolint
     # .. close connection -------
     #' @description
     #' Close the connection.
-    #' @md
     #'
     #' @param silent (`logical`) whether convert all "missing function" errors to messages
     #' @param try (`logical`) whether perform function evaluation inside `try` clause
@@ -347,7 +333,6 @@ DataConnection <- R6::R6Class( # nolint
     },
     #' @description
     #' Get executed close connection call
-    #' @md
     #'
     #' @param deparse (`logical`) whether return deparsed form of a call
     #' @param silent (`logical`) whether convert all "missing function" errors to messages
@@ -360,7 +345,6 @@ DataConnection <- R6::R6Class( # nolint
     },
     #' @description
     #' Get error message from last connection
-    #' @md
     #'
     #' @return (`character`)\cr
     #'  text of the error message or `character(0)` if last
@@ -370,7 +354,6 @@ DataConnection <- R6::R6Class( # nolint
     },
     #' @description
     #' Get shiny server module to close connection.
-    #' @md
     #'
     #' @return the `server function` to close connection.
     get_close_server = function() {
@@ -378,7 +361,6 @@ DataConnection <- R6::R6Class( # nolint
     },
     #' @description
     #' Get Shiny module with inputs to close connection
-    #' @md
     #'
     #' @param id (`character`) shiny element id
     #'
@@ -388,7 +370,6 @@ DataConnection <- R6::R6Class( # nolint
     },
     #' @description
     #' Check if close connection has not failed.
-    #' @md
     #'
     #' @return (`logical`) `TRUE` if close connection failed, else `FALSE`
     is_close_failed = function() {
@@ -401,7 +382,6 @@ DataConnection <- R6::R6Class( # nolint
 
     #' @description
     #' Set close connection function argument
-    #' @md
     #'
     #' @param args (named `list`) with values where list names are argument names
     #' @param silent (`logical`) whether convert all "missing function" errors to messages
@@ -417,7 +397,6 @@ DataConnection <- R6::R6Class( # nolint
 
     #' @description
     #' Set close connection UI function
-    #' @md
     #'
     #' @param close_module (`function`)\cr
     #'  shiny module as function. Inputs specified in this `ui` are passed to server module
@@ -446,7 +425,6 @@ DataConnection <- R6::R6Class( # nolint
     #' This function will be called after submit button will be hit. There is no possibility to
     #' specify some dynamic `ui` as `server` function is executed after hitting submit
     #' button.
-    #' @md
     #'
     #' @param close_module (`function`)\cr
     #'  A shiny module server function that should load data from all connectors
@@ -515,7 +493,6 @@ DataConnection <- R6::R6Class( # nolint
     },
     # @description
     # Set close connection function
-    # @md
     #
     # @param fun (`CallableFunction`) function to close connection
     #
@@ -527,7 +504,6 @@ DataConnection <- R6::R6Class( # nolint
     },
     # @description
     # Set open connection function
-    # @md
     #
     # @param fun (`CallableFunction`) function to open connection
     #
@@ -539,7 +515,6 @@ DataConnection <- R6::R6Class( # nolint
     },
     # @description
     # Set a ping function
-    # @md
     #
     # @param fun (`CallableFunction`) function to ping connection
     #
@@ -551,7 +526,6 @@ DataConnection <- R6::R6Class( # nolint
     },
     # @description
     # Ping the connection.
-    # @md
     #
     # @return (`logical`)
     ping = function() {
@@ -568,7 +542,6 @@ DataConnection <- R6::R6Class( # nolint
 # DataConnection wrappers ----
 #' Open connection to `random.cdisc.data`
 #'
-#' @md
 #' @description `r lifecycle::badge("experimental")`
 #'
 #' @param open_args optional, named (`list`) of additional parameters for \code{\link{library}} open
@@ -615,7 +588,6 @@ rcd_connection <- function(open_args = list()) {
 
 #' Open connection to `rice`
 #'
-#' @md
 #' @description `r lifecycle::badge("experimental")`
 #'
 #' @param open_args optional, named (`list`) of additional parameters for the connection's
@@ -708,7 +680,6 @@ rice_connection <- function(open_args = list(), close_args = list(), ping_args =
 
 #' Open connection to `Teradata`
 #'
-#' @md
 #' @description `r lifecycle::badge("experimental")`
 #'
 #' @param open_args optional, named (`list`) of additional parameters for the connection's

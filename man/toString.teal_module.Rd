@@ -2,12 +2,12 @@
 % Please edit documentation in R/modules.R
 \name{toString.teal_module}
 \alias{toString.teal_module}
-\title{Convert `teal_module` to a string}
+\title{Convert \code{teal_module} to a string}
 \usage{
 \method{toString}{teal_module}(x, indent = 0, ...)
 }
 \arguments{
-\item{x}{`teal_module`}
+\item{x}{\code{teal_module}}
 
 \item{indent}{(\code{integer}) indent level;
 each submodule is indented one level more}
@@ -15,5 +15,5 @@ each submodule is indented one level more}
 \item{...}{ignored}
 }
 \description{
-Convert `teal_module` to a string
+Convert \code{teal_module} to a string
 }

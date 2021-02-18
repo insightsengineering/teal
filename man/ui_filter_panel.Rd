@@ -5,12 +5,15 @@
 \title{Module for the right filter panel in the teal app
 with a filter overview panel and a filter variable panel.}
 \usage{
-ui_filter_panel(id, datanames)
+ui_filter_panel(id, datasets, datanames)
 }
 \arguments{
 \item{id}{module id}
 
-\item{datanames}{`character` datanames to create empty UIs for (which
+\item{datasets}{\code{FilteredData} object to store filter state and filtered
+datasets, shared across modules}
+
+\item{datanames}{\code{character} datanames to create empty UIs for (which
 will be populated in the server)}
 }
 \description{

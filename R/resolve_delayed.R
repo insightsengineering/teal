@@ -4,7 +4,6 @@
 #'
 #' @description `r lifecycle::badge("maturing")`
 #'
-#' @md
 #' @param x Object of class \code{delayed_data} to resolve.
 #' @param datasets Object of class \code{FilteredData} to use for evaluation.
 #'
@@ -76,7 +75,7 @@ resolve_delayed <- function(x, datasets) {
 
 #' @export
 resolve_delayed.delayed_variable_choices <- function(x, datasets) { # nolint
-  if_null(x$key, x$key <- datasets$get_keys(x$data)$primary)
+  if_null(x$key, x$key <- datasets$get_keys(x$data))
   x$data <- datasets$get_data(x$data)
   if (is(x$subset, "function")) {
     x$subset <- resolve_delayed_expr(x$subset, ds = x$data, is_value_choices = FALSE)
@@ -167,7 +166,6 @@ resolve_teal_module <- function(x, datasets) {
 
 #' Handles teal arguments that are only available through delayed loading
 #'
-#' @md
 #' @param args `list` arguments to evaluate by passing them the datasets
 #' @param datasets `datasets` datasets used to set `args`
 #' @importFrom methods is

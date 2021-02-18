@@ -140,13 +140,12 @@ because they are locked immediately. This means that in `CallableCode` created
 below it is not allowed to make any changes in `ADSL`.
 ```{r}
 code <- callable_code(
-  "library(dplyr)
-  ADTTE <- radtte(
-    ADSL = filter(ADSL, SEX == 'M'),
+  "ADTTE <- radtte(
+    ADSL = dplyr::filter(ADSL, SEX == 'M'),
     seed = 1
   )
   ADTTE$x1 <- 1
-  ADTTE <- filter(ADTTE, PARAMCD %in% c('EFS', 'OS'))"
+  ADTTE <- dplyr::filter(ADTTE, PARAMCD %in% c('EFS', 'OS'))"
 )
 
 # examine call
@@ -171,8 +170,8 @@ can be omitted.
 ```{r}
 ADSL <- radsl(cached = TRUE)
 
-adsl <- cdisc_dataset(data = ADSL, 
-                      dataname = "ADSL",
+adsl <- cdisc_dataset(dataname = "ADSL",
+                      x = ADSL,
                       code = "ADSL <- radsl(cached = TRUE)")
 ```
 
@@ -205,7 +204,7 @@ prespecified `cached = TRUE` argument.
 
 ```{r}
 library(magrittr)
-adsl <- relational_dataset_connector(
+adsl <- dataset_connector(
   dataname = "ADSL", 
   pull_callable = callable_function(radsl) %>% set_args(list(cached = TRUE)), 
   keys = get_cdisc_keys("ADSL"),
@@ -239,7 +238,7 @@ element with name `ADSL`.
 3. Value of the `ADSL` argument in the `CallableFunction` has to be `as.name("ADSL")`.
 
 ```{r eval=TRUE}
-adlb <- relational_dataset_connector(
+adlb <- dataset_connector(
   dataname = "ADLB", 
   pull_callable = callable_function(fun = radlb) %>% set_args(list(ADSL = as.name("ADSL"))), 
   keys = get_cdisc_keys("ADLB"),
@@ -258,7 +257,7 @@ dataset until we specify them. To set inputs we should use `$set_ui_input()`, by
 passing ui module function, with `ns` argument (shiny namespaced ID object).
 
 ```{r eval=FALSE}
-adtte <- relational_dataset_connector(
+adtte <- dataset_connector(
   dataname = "ADTTE", 
   pull_callable = callable_function(radtte) %>% set_args(list(ADSL = as.name("ADSL"))), 
   keys = get_cdisc_keys("ADTTE"),
@@ -378,14 +377,14 @@ together in `RelationalDataConnector` object.
 
 ```{r}
 # create DatasetConnectors
-adsl <- relational_dataset_connector(
+adsl <- dataset_connector(
   dataname = "ADSL", 
   pull_callable = callable_code("radsl(cached = TRUE)"), 
   keys = get_cdisc_keys("ADSL"),
   label = "ADSL"
 )
 
-adlb <- relational_dataset_connector(
+adlb <- dataset_connector(
   dataname = "ADLB", 
   pull_callable = callable_function(radlb) %>% set_args(list(ADSL = as.name("ADSL"))), 
   keys = get_cdisc_keys("ADLB"),
@@ -507,11 +506,11 @@ objects.
 ```{r}
 data <- cdisc_data(
   cdisc_dataset(dataname = "ADSL", 
-                data = radsl(cached = TRUE), 
+                x = radsl(cached = TRUE), 
                 code = "ADSL <- radsl(cached = TRUE)"),
   
   cdisc_dataset(dataname = "ADTTE", 
-                data = radtte(cached = TRUE), 
+                x = radtte(cached = TRUE), 
                 code = "ADTTE <- radtte(cached = TRUE)")
 )
 ```
@@ -576,7 +575,7 @@ character or `script` with location of the script file.
 ```{r}
 adsl <- cdisc_dataset(
     dataname = "ADSL", 
-    data = radsl(cached = TRUE),
+    x = radsl(cached = TRUE),
     code = "ADSL <- radsl(cached = TRUE)"
   ) %>%
     mutate_dataset(code = "ADSL$x1 <- 1")

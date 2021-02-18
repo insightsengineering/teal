@@ -11,7 +11,7 @@ variable_type_icons(var_type)
 }
 \value{
 (atomic vector of \code{character}) vector of HTML icons corresponding to
-  data type in each column.
+data type in each column.
 }
 \description{
 Get icons to represent variable types in dataset

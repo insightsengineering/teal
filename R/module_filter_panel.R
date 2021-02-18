@@ -5,6 +5,8 @@
 #' the (active) datasets and allows to filter the datasets.
 #'
 #' @param id module id
+#' @param datasets `FilteredData` object to store filter state and filtered
+#'   datasets, shared across modules
 #' @param datanames `character` datanames to create empty UIs for (which
 #'   will be populated in the server)
 #'
@@ -51,8 +53,9 @@
 #' \dontrun{
 #' runApp(app)
 #' }
-ui_filter_panel <- function(id, datanames) {
+ui_filter_panel <- function(id, datasets, datanames) {
   stopifnot(
+    is(datasets, "FilteredData"),
     is_character_vector(datanames)
   )
 
@@ -79,7 +82,7 @@ ui_filter_panel <- function(id, datanames) {
       tags$br(),
       div(
         id = ns("teal_filters_overview_contents"),
-        ui_filtered_data_overview(ns("teal_filters_info"))
+        ui_filter_overview(ns("teal_filters_info"))
       )
     ),
 
@@ -115,12 +118,19 @@ ui_filter_panel <- function(id, datanames) {
         )
       ),
 
-      div(id = ns("teal_filter_active_vars_contents"),
-          tagList(lapply(datanames, function(dataname) {
-            id <- ns(paste0("teal_filters_", dataname))
-            # add span with same id to show / hide
-            return(span(id = id, ui_filter_items(id, dataname)))
-          })))
+      div(
+        id = ns("teal_filter_active_vars_contents"),
+        tagList(
+          lapply(
+            datanames,
+            function(dataname) {
+              id <- ns(paste0("teal_filters_", dataname))
+              # add span with same id to show / hide
+              return(span(id = id, ui_filter_items(id, dataname)))
+            }
+          )
+        )
+      )
     ),
 
     div(
@@ -138,12 +148,19 @@ ui_filter_panel <- function(id, datanames) {
         title = "minimise panel",
         tags$span(icon("minus-circle", lib = "font-awesome"))
       ),
-      div(id = ns("teal_filter_add_vars_contents"),
-          tagList(lapply(datanames, function(dataname) {
-            id <- ns(paste0("teal_add_", dataname, "_filter"))
-            # add span with same id to show / hide
-            return(span(id = id, ui_add_filter_variable(id, dataname)))
-          })))
+      div(
+        id = ns("teal_filter_add_vars_contents"),
+        tagList(
+          lapply(
+            datanames,
+            function(dataname) {
+              id <- ns(paste0("teal_add_", dataname, "_filter"))
+              # add span with same id to show / hide
+              return(span(id = id, ui_add_filter_variable(id, dataname)))
+            }
+          )
+        )
+      )
     )
 
   )
@@ -151,38 +168,30 @@ ui_filter_panel <- function(id, datanames) {
 
 #' Server function for filter panel
 #'
-#' @md
 #' @inheritParams srv_shiny_module_arguments
 #' @param active_datanames `function / reactive` returning datanames that
-#'   should be shown on the filter panel, `ADSL` is always added;
+#'   should be shown on the filter panel,
 #'   must be a subset of the `datanames` argument provided to `ui_filter_panel`;
 #'   if the function returns `NULL` (as opposed to `character(0)`), the filter
 #'   panel will be hidden
 #'
 #' @importFrom shinyjs hide show
 srv_filter_panel <- function(input, output, session, datasets, active_datanames = function() "all") {
-  unhandled_active_datanames <- active_datanames # assign to new var to overwrite old var, see below
   stopifnot(
     is(datasets, "FilteredData"),
-    is.function(unhandled_active_datanames)
+    is.function(active_datanames) || is.reactive(active_datanames)
   )
 
-  # as the reactive is only evaluated later, we cannot reassign to the same as the constructed reactive
-  # depends on the old value
-  # `unhandled_active_datanames` may or may not contain `ADSL`
-  active_datanames <- reactive({
-    # always add ADSL because the other datasets are filtered based on ADSL
-    # we still distinguish it from `unhandled_active_datanames` to hide this entire module
-    # when it returns `NULL` (as opposed to `character(0)`)
-    datanames <- union("ADSL", unhandled_active_datanames())
-    return(list_adsl_first(datanames))
-  })
-
-  callModule(srv_filtered_data_overview, "teal_filters_info", datasets, datanames = active_datanames)
+  callModule(
+    srv_filter_overview,
+    "teal_filters_info",
+    datasets = datasets,
+    datanames = active_datanames
+  )
 
   # use isolate because we assume that the number of datasets does not change over the course of the teal app
   # alternatively, one can proceed as in modules_filter_items to dynamically insert, remove UIs
-  isol_datanames <- list_adsl_first(isolate(datasets$datanames()))
+  isol_datanames <- isolate(datasets$datanames()) # they are already ordered
   # should not use for-loop as variables are otherwise only bound by reference and last dataname would be used
   lapply(
     isol_datanames,
@@ -191,11 +200,14 @@ srv_filter_panel <- function(input, output, session, datasets, active_datanames 
 
   lapply(
     isol_datanames,
-    function(dataname) callModule(
-      srv_add_filter_variable, paste0("teal_add_", dataname, "_filter"),
-      datasets, dataname,
-      omit_vars = reactive(if (dataname == "ADSL") character(0) else names(datasets$get_data("ADSL", filtered = FALSE)))
-    )
+    function(dataname) {
+      callModule(
+        srv_add_filter_variable,
+        paste0("teal_add_", dataname, "_filter"),
+        datasets,
+        dataname
+      )
+    }
   )
 
   # we keep anything that may be selected to add (happens when the variable is not available for filtering)
@@ -211,8 +223,8 @@ srv_filter_panel <- function(input, output, session, datasets, active_datanames 
   # optimization: we set `priority = 1` to execute it before the other
   # observers (default priority 0), so that they are not computed if they are hidden anyways
   observeEvent(active_datanames(), priority = 1, {
-    if (length(active_datanames()) == 0 || is.null(unhandled_active_datanames())) {
-      # hide whole module UI when no datasets or when `unhandled_active_datanames` is `NULL`
+    if (length(active_datanames()) == 0 || is.null(active_datanames())) {
+      # hide whole module UI when no datasets or when NULL
       shinyjs::hide("teal_filter_panel_whole")
     } else {
       shinyjs::show("teal_filter_panel_whole")

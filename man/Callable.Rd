@@ -112,7 +112,7 @@ Check if evaluation of the function has not failed.
 
 \subsection{Returns}{
 (\code{logical}) \code{TRUE} if evaluation of the function failed or \code{FALSE}
- if evaluation failed or function hasn't yet been called.
+if evaluation failed or function hasn't yet been called.
 }
 }
 \if{html}{\out{<hr>}}
@@ -126,7 +126,7 @@ Get error message from last function execution
 
 \subsection{Returns}{
 (\code{character}) object with error message or \code{character(0)} if last
- function evaluation was successful.
+function evaluation was successful.
 }
 }
 \if{html}{\out{<hr>}}

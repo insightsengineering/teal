@@ -4,14 +4,18 @@
 \alias{teal_data}
 \title{Teal data}
 \usage{
-teal_data(...)
+teal_data(..., join_keys)
 }
 \arguments{
-\item{...}{(\code{RelationalDataConnector}, \code{RelationalDataset} or
-\code{RelationalDatasetConnector}) elements to include in \code{RelationalData} object}
+\item{...}{(\code{RelationalDataConnector}, \code{Dataset}, \code{DatasetConnector})\cr
+objects}
+
+\item{join_keys}{(\code{JoinKeys}) or a single (\code{JoinKeySet})\cr
+(optional) object with dataset column relationships used for joining.
+If empty then no joins between pairs of objects}
 }
 \value{
-\code{RelationalData}
+(\code{RelationalData})
 }
 \description{
 \ifelse{html}{\out{<a href='https://www.tidyverse.org/lifecycle/#experimental'><img src='figures/lifecycle-experimental.svg' alt='Experimental lifecycle'></a>}}{\strong{Experimental}}
@@ -20,7 +24,7 @@ Universal function to pass data to teal application
 \examples{
 # RelationalData
 library(random.cdisc.data)
-x1 <- relational_dataset(
+x1 <- dataset(
   x = radsl(cached = TRUE),
   dataname = "ADSL",
   keys = get_cdisc_keys("ADSL"),
@@ -28,7 +32,7 @@ x1 <- relational_dataset(
   label = "ADTTE dataset"
 )
 
-x2 <- relational_dataset(
+x2 <- dataset(
   x = radtte(cached = TRUE),
   dataname = "ADTTE",
   keys = get_cdisc_keys("ADTTE"),
@@ -36,16 +40,16 @@ x2 <- relational_dataset(
   label = "ADTTE dataset"
 )
 
-data <- cdisc_data(x1, x2)
+data <- teal_data(x1, x2)
 get_raw_data(data)
 
 # RelationalData with connectors
-x3 <- rcd_data( # RelationalDataConnector
+x3 <- rcd_data(
   rcd_cdisc_dataset_connector("ADSL", radsl, cached = TRUE),
   rcd_cdisc_dataset_connector("ADLB", radlb, cached = TRUE)
 )
 
-x4 <- rcd_data( # RelationalDataConnector
+x4 <- rcd_data(
   rcd_cdisc_dataset_connector("ADRS", radrs, cached = TRUE)
 )
 

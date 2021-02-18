@@ -17,7 +17,7 @@ srv_tabs_with_filters(input, output, session, datasets, modules)
 datasets, shared across modules}
 
 \item{modules}{\code{teal_module} or \code{teal_modules} object, the latter
-can be used for nested tabs, see \verb{\link{ui_nested_tabs}}}
+can be used for nested tabs, see \code{\link{ui_nested_tabs}}}
 }
 \value{
 \code{reactive} currently selected active_module

@@ -7,7 +7,6 @@ no_select_keyword <- "-- no selection --"
 #'   additional settings such as to order the choices with the selected elements appearing first
 #'   or whether to block the user from making selections. Can be used in `ui` input elements
 #'   such as [`optionalSelectInput`]
-#' @md
 #'
 #' @param choices (`character`) vector of possible choices or `delayed_data` object\cr
 #'   See [`variable_choices`] and [`value_choices`].
@@ -172,7 +171,6 @@ choices_selected <- function(choices,
 
 #' Check if an object is a choices_selected class.
 #'
-#' @md
 #' @description `r lifecycle::badge("maturing")`
 #'
 #' @param x object to check
@@ -183,7 +181,6 @@ is.choices_selected <- function(x) { # nolint
 
 #' Add empty choice to choices selected
 #'
-#' @md
 #' @description `r lifecycle::badge("maturing")`
 #'
 #' @param x (\code{choices_selected}) output
@@ -209,7 +206,6 @@ add_no_selected_choices <- function(x, multiple = FALSE) {
 
 #' Check select choices for no choice made
 #'
-#' @md
 #' @description `r lifecycle::badge("maturing")`
 #'
 #' @param x (\code{character}) Word that shall be checked for

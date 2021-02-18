@@ -2,22 +2,21 @@
 % Please edit documentation in R/is_pulled.R
 \name{is_pulled}
 \alias{is_pulled}
-\alias{is_pulled.RawDatasetConnector}
-\alias{is_pulled.RawDataset}
-\alias{is_pulled.RelationalDataCollection}
+\alias{is_pulled.DatasetConnector}
+\alias{is_pulled.Dataset}
+\alias{is_pulled.DataAbstract}
 \title{Is pulled}
 \usage{
 is_pulled(x)
 
-\method{is_pulled}{RawDatasetConnector}(x)
+\method{is_pulled}{DatasetConnector}(x)
 
-\method{is_pulled}{RawDataset}(x)
+\method{is_pulled}{Dataset}(x)
 
-\method{is_pulled}{RelationalDataCollection}(x)
+\method{is_pulled}{DataAbstract}(x)
 }
 \arguments{
-\item{x}{(\code{object}) of class \link{RawDatasetConnector}, \link{RelationalDataset},
-\link{RelationalDatasetConnector}, or \link{RelationalDataConnector} or \link{RelationalData}}
+\item{x}{(\code{object}) of class \code{\link{DatasetConnector}}, \code{\link{Dataset}} or \code{\link{DataAbstract}}}
 }
 \value{
 (\code{logical}) \code{TRUE} if connector has been already pulled, else \code{FALSE}.
@@ -27,26 +26,27 @@ is_pulled(x)
 S3 method to determine if dataset is pulled (loaded).
 }
 \examples{
-# RawDatasetConnector --------
-ds <- raw_dataset_connector(pull_callable = callable_function(data.frame))
-set_args(ds, list(x = 1:5, y = letters[1:5], stringsAsFactors = FALSE))
+# DatasetConnector --------
+library(random.cdisc.data)
+x <- rcd_dataset_connector("ADSL", radsl)
 
-is_pulled(ds)
+is_pulled(x)
 
-load_dataset(ds)
-is_pulled(ds)
-rel_data <- relational_dataset(
+load_dataset(x)
+is_pulled(x)
+# Dataset --------
+x <- dataset(
   dataname = "XY",
   x = data.frame(x = c(1, 2), y = c("a", "b"), stringsAsFactors = FALSE),
-  keys = keys(primary = "y", foreign = NULL, parent = NULL),
+  keys = "y",
   code = "XY <- data.frame(x = c(1, 2), y = c('aa', 'bb'),
                            stringsAsFactors = FALSE)"
 )
 
-is_pulled(rel_data)
+is_pulled(x)
 # RelationalData --------
 library(random.cdisc.data)
-x1 <- relational_dataset(
+x1 <- dataset(
   x = radsl(cached = TRUE),
   dataname = "ADSL",
   keys = get_cdisc_keys("ADSL"),
@@ -54,7 +54,7 @@ x1 <- relational_dataset(
   label = "ADTTE dataset"
 )
 
-x2 <- relational_dataset(
+x2 <- dataset(
   x = radtte(cached = TRUE),
   dataname = "ADTTE",
   keys = get_cdisc_keys("ADTTE"),

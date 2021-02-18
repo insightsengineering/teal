@@ -6,7 +6,7 @@ ADRS <- radrs(cached = TRUE) # nolint
 
 # 1. single dataset / dataset code -------------------------------
 test_that("single dataset / dataset code", {
-  adsl <- cdisc_dataset(dataname = "ADSL", data = ADSL, code = "ADSL <- radsl(cached = TRUE)")
+  adsl <- cdisc_dataset(dataname = "ADSL", x = ADSL, code = "ADSL <- radsl(cached = TRUE)")
   expect_silent(
     data <- cdisc_data(adsl, check = TRUE)
   )
@@ -43,8 +43,8 @@ test_that("single dataset / dataset code", {
 
 # 2. two datasets / datasets code -------------------------------
 test_that("two datasets / datasets code", {
-  adsl <- cdisc_dataset(dataname = "ADSL", data = ADSL, code = "ADSL <- radsl(cached = TRUE)")
-  adtte <- cdisc_dataset(dataname = "ADTTE", data = ADTTE, code = "ADTTE <- radtte(cached = TRUE)")
+  adsl <- cdisc_dataset(dataname = "ADSL", x = ADSL, code = "ADSL <- radsl(cached = TRUE)")
+  adtte <- cdisc_dataset(dataname = "ADTTE", x = ADTTE, code = "ADTTE <- radtte(cached = TRUE)")
 
   expect_silent(
     data <- cdisc_data(adsl, adtte, check = TRUE)
@@ -69,8 +69,8 @@ test_that("two datasets / datasets code", {
   )
 
   # MUTATE
-  adsl <- cdisc_dataset(dataname = "ADSL", data = ADSL, code = "ADSL <- radsl(cached = TRUE)")
-  adtte <- cdisc_dataset(dataname = "ADTTE", data = ADTTE, code = "ADTTE <- radtte(cached = TRUE)")
+  adsl <- cdisc_dataset(dataname = "ADSL", x = ADSL, code = "ADSL <- radsl(cached = TRUE)")
+  adtte <- cdisc_dataset(dataname = "ADTTE", x = ADTTE, code = "ADTTE <- radtte(cached = TRUE)")
 
   expect_silent(
     data <- cdisc_data(adsl, adtte, check = TRUE)  %>%
@@ -127,7 +127,7 @@ test_that("Duplicated code from datasets is shown", {
 
   adsl <- cdisc_dataset(
     dataname = "ADSL",
-    data = adsl,
+    x = adsl,
     code = "some_var <- TRUE
       ADSL <- radsl(cached = some_var)
       some_var <- 'TEST'
@@ -136,7 +136,7 @@ test_that("Duplicated code from datasets is shown", {
 
   adae <- cdisc_dataset(
     dataname = "ADAE",
-    data = adae,
+    x = adae,
     code = "some_var <- TRUE
       ADAE <- radae(cached = some_var)"
   )
@@ -151,13 +151,13 @@ test_that("Duplicated code from datasets is shown", {
 
 # 3. two datasets / global code -------------------------------
 test_that("two datasets / datasets code", {
-  adsl <- cdisc_dataset(dataname = "ADSL", data = ADSL)
-  adtte <- cdisc_dataset(dataname = "ADTTE", data = ADTTE)
+  adsl <- cdisc_dataset(dataname = "ADSL", x = ADSL)
+  adtte <- cdisc_dataset(dataname = "ADTTE", x = ADTTE)
 
   expect_error(
     cdisc_data(
-      cdisc_dataset(dataname = "ADSL", data = ADSL, code = "ADSL <- radsl(cached = TRUE)"),
-      cdisc_dataset(dataname = "ADTTE", data = ADTTE, code = "ADTTE <- radtte(cached = TRUE)"),
+      cdisc_dataset(dataname = "ADSL", x = ADSL, code = "ADSL <- radsl(cached = TRUE)"),
+      cdisc_dataset(dataname = "ADTTE", x = ADTTE, code = "ADTTE <- radtte(cached = TRUE)"),
       code = "ADSL <- radsl(cached = TRUE)\nADTTE <- radtte(cached = TRUE)",
       check = TRUE
     )
@@ -191,8 +191,8 @@ test_that("two datasets / datasets code", {
   expect_true(data$check())
 
   # MUTATE
-  adsl <- cdisc_dataset(dataname = "ADSL", data = ADSL)
-  adtte <- cdisc_dataset(dataname = "ADTTE", data = ADTTE)
+  adsl <- cdisc_dataset(dataname = "ADSL", x = ADSL)
+  adtte <- cdisc_dataset(dataname = "ADTTE", x = ADTTE)
 
   expect_silent(
     data <- cdisc_data(
@@ -237,7 +237,7 @@ test_that("two datasets / datasets code", {
 
 # 4. dataset + connector / code for dataset -------------------------------
 test_that("dataset + connector / global code", {
-  adsl <- cdisc_dataset(dataname = "ADSL", data = ADSL, code = "ADSL <- radsl(cached = TRUE)")
+  adsl <- cdisc_dataset(dataname = "ADSL", x = ADSL, code = "ADSL <- radsl(cached = TRUE)")
   adtte <- rcd_cdisc_dataset_connector("ADTTE", radtte, cached = TRUE, ADSL = adsl)
 
   expect_silent(
@@ -263,7 +263,7 @@ test_that("dataset + connector / global code", {
   expect_true(data$check())
 
   # MUTATE
-  adsl <- cdisc_dataset(dataname = "ADSL", data = ADSL, code = "ADSL <- radsl(cached = TRUE)")
+  adsl <- cdisc_dataset(dataname = "ADSL", x = ADSL, code = "ADSL <- radsl(cached = TRUE)")
   adtte <- rcd_cdisc_dataset_connector("ADTTE", radtte, ADSL = adsl, cached = TRUE)
 
   data <- cdisc_data(adsl, adtte, check = TRUE) %>%
@@ -486,24 +486,26 @@ test_that("only connectors", {
 
 })
 test_that("Basic example cdisc dataset", {
-  expect_identical(ADSL, cdisc_dataset("ADSL", ADSL)$data)
-  expect_identical("ADSL", cdisc_dataset("ADSL", ADSL)$get_dataname())
-  expect_true(any(class(cdisc_dataset("ADSL", ADSL)) == c("RelationalDataset")))
+  simple_cdisc_dataset <- cdisc_dataset("ADSL", ADSL)
+
+  expect_identical(ADSL, simple_cdisc_dataset$data)
+  expect_identical("ADSL", simple_cdisc_dataset$get_dataname())
+  expect_true(class(simple_cdisc_dataset)[1] == "CDISCDataset")
 })
 
 test_that("Basic example - without code and check", {
   expect_silent(cdisc_data(cdisc_dataset("ADSL", ADSL), code = "", check = FALSE))
   expect_silent(cdisc_data(cdisc_dataset("ADSL", ADSL),
-                           dataset("ARG1", ARG1, keys = get_cdisc_keys("ADSL")),
-                           dataset("ARG2", ARG2, keys = get_cdisc_keys("ADSL")), code = "", check = FALSE))
+    cdisc_dataset("ARG1", ARG1, keys = get_cdisc_keys("ADSL")),
+    cdisc_dataset("ARG2", ARG2, keys = get_cdisc_keys("ADSL")), code = "", check = FALSE))
 })
 
 test_that("Basic example - check overall code", {
   expect_silent(
     cdisc_data(
       cdisc_dataset("ADSL", ADSL),
-      dataset("ARG1", ARG1, keys = get_cdisc_keys("ADSL")),
-      dataset("ARG2", ARG2, keys = get_cdisc_keys("ADSL")),
+      cdisc_dataset("ARG1", ARG1, keys = get_cdisc_keys("ADSL")),
+      cdisc_dataset("ARG2", ARG2, keys = get_cdisc_keys("ADSL")),
       code = "ADSL <- ARG1 <- ARG2 <- cadsl;",
       check = TRUE
     )
@@ -512,8 +514,8 @@ test_that("Basic example - check overall code", {
   expect_error(
     cdisc_data(
       cdisc_dataset("ADSL", ADSL, code = "ADSL <- radsl(cached = TRUE)"),
-      dataset("ARG1", ARG1, keys = get_cdisc_keys("ADSL")),
-      dataset("ARG2", ARG2, keys = get_cdisc_keys("ADSL")),
+      cdisc_dataset("ARG1", ARG1, keys = get_cdisc_keys("ADSL")),
+      cdisc_dataset("ARG2", ARG2, keys = get_cdisc_keys("ADSL")),
       code = "ARG1 <- ARG2 <- cadsl;",
       check = TRUE
     ),
@@ -523,11 +525,13 @@ test_that("Basic example - check overall code", {
   expect_error(
     cdisc_data(
       cdisc_dataset("ADSL", ADSL, code = "ADSL <- radsl(cached = TRUE)"),
-      dataset(
+      cdisc_dataset(
         dataname = "ARG1",
-        data = dplyr::mutate(ADSL, x1 = 1),
-        keys = get_cdisc_keys("ADSL"), code = "ARG1 <- radsl(cached = TRUE)"),
-      dataset("ARG2", ADSL, keys = get_cdisc_keys("ADSL"), code = "ARG2 <- radsl(cached = TRUE)"),
+        x = dplyr::mutate(ADSL, x1 = 1),
+        keys = get_cdisc_keys("ADSL"),
+        code = "ARG1 <- radsl(cached = TRUE)"
+      ),
+      cdisc_dataset("ARG2", ADSL, keys = get_cdisc_keys("ADSL"), code = "ARG2 <- radsl(cached = TRUE)"),
       check = TRUE
     ),
     "Reproducibility check failed."
@@ -548,24 +552,24 @@ test_that("Basic example - dataset depending on other dataset", {
   expect_error(
     cdisc_data(
       cdisc_dataset("ADSL", ADSL, code = "ADSL <- radsl(cached = TRUE)"),
-      dataset("ARG1", ARG1, keys = get_cdisc_keys("ADSL"), code = "ARG1 <- radsl(cached = TRUE)"),
-      dataset("ARG2", ARG2, keys = get_cdisc_keys("ADSL"), code = "ARG2 <- radsl(cached = TRUE)"),
+      cdisc_dataset("ARG1", ARG1, keys = get_cdisc_keys("ADSL"), code = "ARG1 <- radsl(cached = TRUE)"),
+      cdisc_dataset("ARG2", ARG2, keys = get_cdisc_keys("ADSL"), code = "ARG2 <- radsl(cached = TRUE)"),
       code = "ADSL <- ARG1 <- ARG2 <- cadsl;",
       check = TRUE
     ),
     "'code' argument should be specified only in the 'cdisc_data' or in 'cdisc_dataset' but not in both"
   )
 
-  arg2 <- dataset(dataname = "ARG2", data = ARG2, keys = get_cdisc_keys("ADSL"), code = "ARG2 <- cadsl")
+  arg2 <- cdisc_dataset(dataname = "ARG2", x = ARG2, keys = get_cdisc_keys("ADSL"), code = "ARG2 <- cadsl")
 
-  arg1 <- dataset(
+  arg1 <- cdisc_dataset(
     dataname = "ARG1",
-    data = ARG1,
+    x = ARG1,
     keys = get_cdisc_keys("ADSL"),
     code = "ARG1 <- ARG2",
     vars = list(ARG2 = arg2))
 
-  adsl <- cdisc_dataset(dataname = "ADSL", data = ADSL, code = "ADSL <- ARG2", vars = list(ARG2 = arg2))
+  adsl <- cdisc_dataset(dataname = "ADSL", x = ADSL, code = "ADSL <- ARG2", vars = list(ARG2 = arg2))
 
   expect_silent(cd <- cdisc_data(arg2, arg1, adsl, check = TRUE))
 
@@ -630,14 +634,11 @@ test_that("List values", {
   adsl_yaml <- yaml::yaml.load_file(system.file("metadata/ADSL.yml", package = "random.cdisc.data", mustWork = TRUE))
   adtte_yaml <- yaml::yaml.load_file(system.file("metadata/ADTTE.yml", package = "random.cdisc.data", mustWork = TRUE))
 
-  datasets <- list(relational_dataset(
+  datasets <- list(cdisc_dataset(
     dataname = "ADSL",
     x = ADSL,
-    keys = keys(
-      primary = c("STUDYID", "USUBJID"),
-      foreign = NULL,
-      parent = NULL
-    ),
+    keys = c("STUDYID", "USUBJID"),
+    parent = character(0),
     label = adsl_yaml$domain$label
   ))
 
@@ -645,27 +646,22 @@ test_that("List values", {
 
   expect_equal(result, result_to_compare)
 
+
   result <- cdisc_data(cdisc_dataset("ADSL", ADSL), cdisc_dataset("ADTTE", ADTTE))
 
   datasets <- list(
-    relational_dataset(
+    cdisc_dataset(
       dataname = "ADSL",
       x = ADSL,
-      keys = keys(
-        primary = c("STUDYID", "USUBJID"),
-        foreign = NULL,
-        parent = NULL
-      ),
+      keys = c("STUDYID", "USUBJID"),
+      parent = character(0),
       label = adsl_yaml$domain$label
     ),
-    relational_dataset(
+    cdisc_dataset(
       dataname = "ADTTE",
       x = ADTTE,
-      keys = keys(
-        primary = c("STUDYID", "USUBJID", "PARAMCD"),
-        foreign = c("STUDYID", "USUBJID"),
-        parent = "ADSL"
-      ),
+      keys = c("STUDYID", "USUBJID", "PARAMCD"),
+      parent = "ADSL",
       label = adtte_yaml$domain$label
     ))
 
@@ -675,25 +671,19 @@ test_that("List values", {
 })
 
 test_that("Keys in cached datasets", {
-  expect_true(all(get_cdisc_keys("ADSL")$primary %in% names(random.cdisc.data::cadsl)))
+  expect_true(all(get_cdisc_keys("ADSL") %in% names(random.cdisc.data::cadsl)))
 
-  expect_true(all(get_cdisc_keys("ADAE")$primary %in% names(random.cdisc.data::cadae)))
-  expect_true(all(get_cdisc_keys("ADAE")$foreign %in% names(random.cdisc.data::cadae)))
+  expect_true(all(get_cdisc_keys("ADAE") %in% names(random.cdisc.data::cadae)))
 
-  expect_true(all(get_cdisc_keys("ADTTE")$primary %in% names(random.cdisc.data::cadtte)))
-  expect_true(all(get_cdisc_keys("ADTTE")$foreign %in% names(random.cdisc.data::cadtte)))
+  expect_true(all(get_cdisc_keys("ADTTE") %in% names(random.cdisc.data::cadtte)))
 
-  expect_true(all(get_cdisc_keys("ADCM")$primary %in% names(random.cdisc.data::cadcm)))
-  expect_true(all(get_cdisc_keys("ADCM")$foreign %in% names(random.cdisc.data::cadcm)))
+  expect_true(all(get_cdisc_keys("ADCM") %in% names(random.cdisc.data::cadcm)))
 
-  expect_true(all(get_cdisc_keys("ADLB")$primary %in% names(random.cdisc.data::cadlb)))
-  expect_true(all(get_cdisc_keys("ADLB")$foreign %in% names(random.cdisc.data::cadlb)))
+  expect_true(all(get_cdisc_keys("ADLB") %in% names(random.cdisc.data::cadlb)))
 
-  expect_true(all(get_cdisc_keys("ADRS")$primary %in% names(random.cdisc.data::cadrs)))
-  expect_true(all(get_cdisc_keys("ADRS")$foreign %in% names(random.cdisc.data::cadrs)))
+  expect_true(all(get_cdisc_keys("ADRS") %in% names(random.cdisc.data::cadrs)))
 
-  expect_true(all(get_cdisc_keys("ADVS")$primary %in% names(random.cdisc.data::cadvs)))
-  expect_true(all(get_cdisc_keys("ADVS")$foreign %in% names(random.cdisc.data::cadvs)))
+  expect_true(all(get_cdisc_keys("ADVS") %in% names(random.cdisc.data::cadvs)))
 })
 
 test_that("Empty code", {
@@ -722,15 +712,17 @@ test_that("Error - objects differs", {
   )
 
   expect_error(
-    cdisc_data(cdisc_dataset("ADSL", ADSL, code = "ADSL <- radsl(N = 10);"), check = TRUE),
+    cdisc_data(cdisc_dataset("ADSL", ADSL, code = "ADSL <- mtcars;"), check = TRUE),
     "Reproducibility check failed."
   )
 })
 
 test_that("Error - ADSL is missing in cdisc_data", {
-  expect_error(
-    cdisc_data(cdisc_dataset("ADTTE", ADTTE), code = "ADTTE <- cadtte", check = FALSE),
-    "ADSL argument is missing."
+  expect_error({
+    x <- cdisc_data(cdisc_dataset("ADTTE", ADTTE), code = "ADTTE <- cadtte", check = FALSE)
+    x$check_metadata()
+  },
+  "ADSL dataset is missing."
   )
 })
 
@@ -742,143 +734,31 @@ test_that("Error - duplicated names", {
       code = "",
       check = FALSE
     ),
-    "Found duplicated dataset names."
+    "Datasets names should be unique"
   )
 })
 
 test_that("Error - dataset is not of correct class", {
   expect_error(
     cdisc_data(ARG1 = 1, code = "", check = FALSE),
-    "All arguments should be of RelationalDataset or RelationalData(set)Connector class",
+    "All elements should be of Dataset(Connector) or RelationalDataConnector class",
     fixed = TRUE
   )
 })
 
 test_that("Empty keys for single and multiple datasets", {
-  expect_silent(cdisc_data(dataset("ADSL", ADSL)))
+  expect_silent(cdisc_data(cdisc_dataset("ADSL", ADSL)))
 
-  expect_silent(cdisc_data(dataset("ADSL", ADSL), dataset("ADTTE", ADTTE)))
+  expect_silent(cdisc_data(cdisc_dataset("ADSL", ADSL), cdisc_dataset("ADTTE", ADTTE)))
 })
 
 test_that("Warning - primary keys are not unique for the dataset", {
   expect_true(tryCatch(
-    cdisc_data(cdisc_dataset("ADSL", ADSL, keys = keys(primary = c("SEX"), foreign = NULL, parent = NULL))),
+    cdisc_data(cdisc_dataset("ADSL", ADSL, keys = c("SEX"))),
     warning = function(e) TRUE))
 })
 
-test_that("Error - primary keys are not unique for the dataset", {
-  expect_error(suppressWarnings(
-    cdisc_data(cdisc_dataset("ADSL", ADSL, keys = keys(primary = c("SEX"), foreign = NULL, parent = NULL))),
-    "The provided primary key does not distinguish unique rows"))
-})
-
-test_that("Error - parent is defined without foreign key", {
-  expect_error(cdisc_data(cdisc_dataset("ADTTE", ADTTE, keys = keys(primary = c("STUDYID", "USUBJID"),
-                                                                    foreign = NULL,
-                                                                    parent = "ADSL"))
-  ), "ADTTE: Please specify both foreign keys and a parent!")
-
-  expect_error(
-    cdisc_data(cdisc_dataset("ADTTE", ADTTE,
-                             keys = keys(primary = c("STUDYID", "USUBJID"),
-                                         foreign = c("STUDYID", "USUBJID"),
-                                         parent = NULL)
-    )), "ADTTE: Please specify both foreign keys and a parent!")
-
-})
-
-test_that("Warning - Different keys names but same length", {
-  ADTTE <- dplyr::rename(ADTTE, ADSL_STUDYID = STUDYID, ADSL_USUBJID = USUBJID) # nolint
-  expect_warning(
-    cdisc_data(
-      cdisc_dataset("ADSL", ADSL),
-      dataset("ADTTE", ADTTE,
-              keys = keys(primary = c("ADSL_STUDYID", "ADSL_USUBJID", "PARAMCD"),
-                          foreign = c("ADSL_STUDYID", "ADSL_USUBJID"),
-                          parent = "ADSL"))
-    ),
-    "Following foreign keys are not identical to the primary keys"
-  )
-})
-
-test_that("Error - length of child keys > length of parent keys", {
-  expect_error(
-    cdisc_data(
-      cdisc_dataset("ADSL", ADSL),
-      dataset("ADTTE", ADTTE,
-              keys = keys(primary = c("STUDYID", "USUBJID", "PARAMCD"),
-                          foreign = c("STUDYID", "USUBJID", "PARAMCD"),
-                          parent = "ADSL"))
-    ),
-    "Number of foreign keys can't be larger than"
-  )
-
-  ADTTE <- dplyr::rename(ADTTE, ADSL_STUDYID = STUDYID, ADSL_USUBJID = USUBJID) # nolint
-  expect_error(
-    cdisc_data(
-      cdisc_dataset("ADSL", ADSL),
-      dataset("ADTTE", ADTTE,
-              keys = keys(primary = c("ADSL_STUDYID", "ADSL_USUBJID", "PARAMCD"),
-                          foreign = c("ADSL_STUDYID", "ADSL_USUBJID", "PARAMCD"),
-                          parent = "ADSL"))
-    ),
-    "Number of foreign keys can't be larger than"
-  )
-})
-
-test_that("Error - items dataset to wide (without parent)", {
-  COUNTRIES <- data.frame(COUNTRY = unique(ADSL$COUNTRY), VALUE = rnorm(length(unique(ADSL$COUNTRY)))) # nolint
-
-  expect_error(
-    cdisc_data(
-      cdisc_dataset("ADSL", ADSL),
-      dataset("COUNTRIES", COUNTRIES,
-              keys = keys(primary = c("COUNTRY"),
-                          foreign = c("COUNTRY"),
-                          parent = "ADSL"))
-    ),
-    "Foreign keys are don't match all parent keys and both have different length"
-  )
-
-  expect_silent(
-    cdisc_data(
-      cdisc_dataset(
-        "ADSL",
-        ADSL,
-        keys = keys(primary = c("STUDYID", "USUBJID", "COUNTRY"), foreign = NULL, parent = NULL)),
-      dataset(
-        dataname = "COUNTRIES",
-        data = COUNTRIES,
-        keys = keys(primary = c("COUNTRY"), foreign = c("COUNTRY"), parent = "ADSL"))
-    )
-  )
-
-})
-
-test_that("Error - Two root datasets with different keys", {
-  ADSL2 <- ADSL %>% dplyr::rename(ADSL_STUDYID = STUDYID) # nolint
-
-  expect_error(
-    cdisc_data(
-      cdisc_dataset("ADSL", ADSL),
-      dataset(
-        "ADSL2",
-        ADSL2,
-        keys = keys(primary = c("ADSL_STUDYID", "USUBJID"), foreign = NULL, parent = NULL)),
-      cdisc_dataset("ADTTE", ADTTE)
-    ),
-    "Root dataset keys doesn't match ADSL primary keys"
-  )
-})
-
 # 7. invalid arguments -----
-
-test_that("Cannot create abstract RelationalDataCollection class", {
-  expect_error(
-    teal:::RelationalDataCollection$new()
-  )
-})
-
 
 test_that("Cannot create RelationData if arguments include RelationalData object", {
 

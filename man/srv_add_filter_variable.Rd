@@ -10,7 +10,7 @@ srv_add_filter_variable(
   session,
   datasets,
   dataname,
-  omit_vars = function() c()
+  varnames = function() c()
 )
 }
 \arguments{
@@ -25,8 +25,8 @@ datasets, shared across modules}
 
 \item{dataname}{name of dataset whose columns should be filtered}
 
-\item{omit_vars}{\verb{function / reactive returning a character vector} variables that are
-not available for filtering}
+\item{varnames}{\verb{function / reactive returning a character vector} variables that are
+available for filtering}
 }
 \description{
 For the return value, note that the currently selected input will be

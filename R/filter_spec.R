@@ -1,6 +1,5 @@
 #' filter spec
 #'
-#' @md
 #' @description `r lifecycle::badge("maturing")`
 #' It consists in choices and additionally the variable names for the choices
 #'
@@ -161,7 +160,7 @@ filter_spec <- function(vars,
                         multiple = length(selected) > 1,
                         label = NULL,
                         sep = if_null(attr(choices, "sep"), " - "),
-                        drop_keys = TRUE) {
+                        drop_keys = FALSE) {
   stopifnot(is_logical_single(multiple))
   stopifnot(is.null(label) || is_character_single(label))
   stopifnot(is_character_single(sep))
@@ -192,7 +191,7 @@ filter_spec.delayed_data <- function(vars,
                                      multiple = length(selected) > 1,
                                      label = NULL,
                                      sep = if_null(attr(choices, "sep"), " - "),
-                                     drop_keys = TRUE) {
+                                     drop_keys = FALSE) {
   stopifnot(is_character_vector(choices) || is(choices, "delayed_data"))
   stopifnot(is.null(selected) || is_character_vector(selected) || is(selected, "delayed_data"))
 
@@ -218,7 +217,7 @@ filter_spec.default <- function(vars,
                                 multiple = length(selected) > 1,
                                 label = NULL,
                                 sep = if_null(attr(choices, "sep"), " - "),
-                                drop_keys = TRUE) {
+                                drop_keys = FALSE) {
 
   stopifnot(is_character_vector(vars))
   stopifnot(is_character_vector(choices))

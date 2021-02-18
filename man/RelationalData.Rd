@@ -2,30 +2,29 @@
 % Please edit documentation in R/RelationalData.R
 \name{RelationalData}
 \alias{RelationalData}
-\title{Manage multiple \code{RelationalDataConnector}, \code{RelationalDatasetConnector}
-and \code{RelationalDataset} objects.}
+\title{Manage multiple \code{RelationalDataConnector}, \code{DatasetConnector} and \code{Dataset} objects.}
 \description{
-Class manages \code{RelationalDataConnector}, \code{RelationalDatasetConnector} and
-\code{RelationalDataset} objects and aggregate them in one application.
+Class manages \code{RelationalDataConnector}, \code{DatasetConnector} and
+\code{Dataset} objects and aggregate them in one collection.
 Class also decides whether to launch app before initialize teal application.
 }
 \examples{
 library(random.cdisc.data)
-x <- rcd_data( # RelationalDataConnector
+x1 <- rcd_data(
   rcd_cdisc_dataset_connector("ADSL", radsl, cached = TRUE),
   rcd_cdisc_dataset_connector("ADLB", radlb, cached = TRUE)
 )
-x2 <- rcd_data( # RelationalDataConnector
+x2 <- rcd_data(
   rcd_cdisc_dataset_connector("ADRS", radrs, cached = TRUE)
 )
 x3 <- cdisc_dataset(
-  dataname = "ADAE", # RelationalDataset
-  data = radae(cached = TRUE),
+  dataname = "ADAE",
+  x = radae(cached = TRUE),
   code = "library(random.cdisc.data)\nADAE <- radae(cached = TRUE)"
 )
 
 x4 <- rcd_cdisc_dataset_connector("ADTTE", radtte, cached = TRUE)
-tc <- teal:::RelationalData$new(x, x2, x3, x4)
+tc <- teal:::RelationalData$new(x1, x2, x3, x4)
 tc$get_datanames()
 \dontrun{
 tc$get_datasets()
@@ -43,8 +42,8 @@ tc$check()
 
 library(random.cdisc.data)
 x <- cdisc_dataset(
-  dataname = "ADSL", # RelationalDataset
-  data = radsl(cached = TRUE),
+  dataname = "ADSL",
+  x = radsl(cached = TRUE),
   code = "library(random.cdisc.data)\nADSL <- radsl(cached = TRUE)"
 )
 
@@ -58,35 +57,38 @@ get_raw_data(tc)
 }
 }
 \section{Super class}{
-\code{\link[teal:RelationalDataCollection]{teal::RelationalDataCollection}} -> \code{RelationalData}
+\code{\link[teal:DataAbstract]{teal::DataAbstract}} -> \code{RelationalData}
 }
 \section{Methods}{
 \subsection{Public methods}{
 \itemize{
 \item \href{#method-new}{\code{RelationalData$new()}}
 \item \href{#method-get_datanames}{\code{RelationalData$get_datanames()}}
-\item \href{#method-get_ui}{\code{RelationalData$get_ui()}}
+\item \href{#method-get_join_keys}{\code{RelationalData$get_join_keys()}}
 \item \href{#method-get_connectors}{\code{RelationalData$get_connectors()}}
 \item \href{#method-get_items}{\code{RelationalData$get_items()}}
+\item \href{#method-get_ui}{\code{RelationalData$get_ui()}}
 \item \href{#method-get_server}{\code{RelationalData$get_server()}}
 \item \href{#method-launch}{\code{RelationalData$launch()}}
+\item \href{#method-mutate_join_keys}{\code{RelationalData$mutate_join_keys()}}
+\item \href{#method-check_metadata}{\code{RelationalData$check_metadata()}}
 \item \href{#method-clone}{\code{RelationalData$clone()}}
 }
 }
 \if{html}{
 \out{<details ><summary>Inherited methods</summary>}
 \itemize{
-\item \out{<span class="pkg-link" data-pkg="teal" data-topic="RelationalDataCollection" data-id="check">}\href{../../teal/html/RelationalDataCollection.html#method-check}{\code{teal::RelationalDataCollection$check()}}\out{</span>}
-\item \out{<span class="pkg-link" data-pkg="teal" data-topic="RelationalDataCollection" data-id="get_check_result">}\href{../../teal/html/RelationalDataCollection.html#method-get_check_result}{\code{teal::RelationalDataCollection$get_check_result()}}\out{</span>}
-\item \out{<span class="pkg-link" data-pkg="teal" data-topic="RelationalDataCollection" data-id="get_code">}\href{../../teal/html/RelationalDataCollection.html#method-get_code}{\code{teal::RelationalDataCollection$get_code()}}\out{</span>}
-\item \out{<span class="pkg-link" data-pkg="teal" data-topic="RelationalDataCollection" data-id="get_code_class">}\href{../../teal/html/RelationalDataCollection.html#method-get_code_class}{\code{teal::RelationalDataCollection$get_code_class()}}\out{</span>}
-\item \out{<span class="pkg-link" data-pkg="teal" data-topic="RelationalDataCollection" data-id="get_dataset">}\href{../../teal/html/RelationalDataCollection.html#method-get_dataset}{\code{teal::RelationalDataCollection$get_dataset()}}\out{</span>}
-\item \out{<span class="pkg-link" data-pkg="teal" data-topic="RelationalDataCollection" data-id="get_datasets">}\href{../../teal/html/RelationalDataCollection.html#method-get_datasets}{\code{teal::RelationalDataCollection$get_datasets()}}\out{</span>}
-\item \out{<span class="pkg-link" data-pkg="teal" data-topic="RelationalDataCollection" data-id="is_pulled">}\href{../../teal/html/RelationalDataCollection.html#method-is_pulled}{\code{teal::RelationalDataCollection$is_pulled()}}\out{</span>}
-\item \out{<span class="pkg-link" data-pkg="teal" data-topic="RelationalDataCollection" data-id="mutate">}\href{../../teal/html/RelationalDataCollection.html#method-mutate}{\code{teal::RelationalDataCollection$mutate()}}\out{</span>}
-\item \out{<span class="pkg-link" data-pkg="teal" data-topic="RelationalDataCollection" data-id="mutate_dataset">}\href{../../teal/html/RelationalDataCollection.html#method-mutate_dataset}{\code{teal::RelationalDataCollection$mutate_dataset()}}\out{</span>}
-\item \out{<span class="pkg-link" data-pkg="teal" data-topic="RelationalDataCollection" data-id="set_check">}\href{../../teal/html/RelationalDataCollection.html#method-set_check}{\code{teal::RelationalDataCollection$set_check()}}\out{</span>}
-\item \out{<span class="pkg-link" data-pkg="teal" data-topic="RelationalDataCollection" data-id="set_pull_code">}\href{../../teal/html/RelationalDataCollection.html#method-set_pull_code}{\code{teal::RelationalDataCollection$set_pull_code()}}\out{</span>}
+\item \out{<span class="pkg-link" data-pkg="teal" data-topic="DataAbstract" data-id="check">}\href{../../teal/html/DataAbstract.html#method-check}{\code{teal::DataAbstract$check()}}\out{</span>}
+\item \out{<span class="pkg-link" data-pkg="teal" data-topic="DataAbstract" data-id="get_check_result">}\href{../../teal/html/DataAbstract.html#method-get_check_result}{\code{teal::DataAbstract$get_check_result()}}\out{</span>}
+\item \out{<span class="pkg-link" data-pkg="teal" data-topic="DataAbstract" data-id="get_code">}\href{../../teal/html/DataAbstract.html#method-get_code}{\code{teal::DataAbstract$get_code()}}\out{</span>}
+\item \out{<span class="pkg-link" data-pkg="teal" data-topic="DataAbstract" data-id="get_code_class">}\href{../../teal/html/DataAbstract.html#method-get_code_class}{\code{teal::DataAbstract$get_code_class()}}\out{</span>}
+\item \out{<span class="pkg-link" data-pkg="teal" data-topic="DataAbstract" data-id="get_dataset">}\href{../../teal/html/DataAbstract.html#method-get_dataset}{\code{teal::DataAbstract$get_dataset()}}\out{</span>}
+\item \out{<span class="pkg-link" data-pkg="teal" data-topic="DataAbstract" data-id="get_datasets">}\href{../../teal/html/DataAbstract.html#method-get_datasets}{\code{teal::DataAbstract$get_datasets()}}\out{</span>}
+\item \out{<span class="pkg-link" data-pkg="teal" data-topic="DataAbstract" data-id="is_pulled">}\href{../../teal/html/DataAbstract.html#method-is_pulled}{\code{teal::DataAbstract$is_pulled()}}\out{</span>}
+\item \out{<span class="pkg-link" data-pkg="teal" data-topic="DataAbstract" data-id="mutate">}\href{../../teal/html/DataAbstract.html#method-mutate}{\code{teal::DataAbstract$mutate()}}\out{</span>}
+\item \out{<span class="pkg-link" data-pkg="teal" data-topic="DataAbstract" data-id="mutate_dataset">}\href{../../teal/html/DataAbstract.html#method-mutate_dataset}{\code{teal::DataAbstract$mutate_dataset()}}\out{</span>}
+\item \out{<span class="pkg-link" data-pkg="teal" data-topic="DataAbstract" data-id="set_check">}\href{../../teal/html/DataAbstract.html#method-set_check}{\code{teal::DataAbstract$set_check()}}\out{</span>}
+\item \out{<span class="pkg-link" data-pkg="teal" data-topic="DataAbstract" data-id="set_pull_code">}\href{../../teal/html/DataAbstract.html#method-set_pull_code}{\code{teal::DataAbstract$set_pull_code()}}\out{</span>}
 }
 \out{</details>}
 }
@@ -94,15 +96,20 @@ get_raw_data(tc)
 \if{html}{\out{<a id="method-new"></a>}}
 \if{latex}{\out{\hypertarget{method-new}{}}}
 \subsection{Method \code{new()}}{
+Create a new object of \code{RelationalData} class
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{RelationalData$new(...)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{RelationalData$new(..., join_keys)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{...}}{(\code{RelationalDataConnector}, \code{RelationalDataset},
-\code{RelationalDatasetConnector}) objects}
+\item{\code{...}}{(\code{RelationalDataConnector}, \code{Dataset}, \code{DatasetConnector})\cr
+objects}
+
+\item{\code{join_keys}}{(\code{JoinKeys}) or a single (\code{JoinKeySet})\cr
+(optional) object with dataset column relationships used for joining.
+If empty then no joins between pairs of objects}
 }
 \if{html}{\out{</div>}}
 }
@@ -117,7 +124,58 @@ Derive the names of all datasets
 }
 
 \subsection{Returns}{
-\code{character} vector with names
+(\code{character} vector) with names
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-get_join_keys"></a>}}
+\if{latex}{\out{\hypertarget{method-get_join_keys}{}}}
+\subsection{Method \code{get_join_keys()}}{
+Get \code{JoinKeys} object with keys used for joining.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{RelationalData$get_join_keys()}\if{html}{\out{</div>}}
+}
+
+\subsection{Returns}{
+(\code{JoinKeys})
+Get data connectors.
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-get_connectors"></a>}}
+\if{latex}{\out{\hypertarget{method-get_connectors}{}}}
+\subsection{Method \code{get_connectors()}}{
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{RelationalData$get_connectors()}\if{html}{\out{</div>}}
+}
+
+\subsection{Returns}{
+(\code{list}) with all \code{DatasetConnector} or \code{RelationalDataConnector} objects.
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-get_items"></a>}}
+\if{latex}{\out{\hypertarget{method-get_items}{}}}
+\subsection{Method \code{get_items()}}{
+
+
+
+Get all datasets and all dataset connectors
+
+name of dataset connector to be returned. If \code{NULL}, all connectors are returned.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{RelationalData$get_items(dataname = NULL)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{dataname}}{(\code{character} value)\cr}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Returns}{
+\code{list} with all datasets and all connectors
 }
 }
 \if{html}{\out{<hr>}}
@@ -139,44 +197,6 @@ derive \code{RelationalDataConnector} object's data
 }
 \subsection{Returns}{
 the \code{shiny} \code{ui} function
-Get data connectors.
-}
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-get_connectors"></a>}}
-\if{latex}{\out{\hypertarget{method-get_connectors}{}}}
-\subsection{Method \code{get_connectors()}}{
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{RelationalData$get_connectors()}\if{html}{\out{</div>}}
-}
-
-\subsection{Returns}{
-\code{list} with all \code{RelationalDataConnector} objects.
-}
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-get_items"></a>}}
-\if{latex}{\out{\hypertarget{method-get_items}{}}}
-\subsection{Method \code{get_items()}}{
-
-
-
-Get all datasets and all dataset connectors
-
-  name of dataset connector to be returned. If \code{NULL}, all connectors are returned.
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{RelationalData$get_items(dataname = NULL)}\if{html}{\out{</div>}}
-}
-
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{dataname}}{(\code{character} value)\cr}
-}
-\if{html}{\out{</div>}}
-}
-\subsection{Returns}{
-\code{list} with all datasets and all connectors
 }
 }
 \if{html}{\out{<hr>}}
@@ -205,6 +225,41 @@ This piece is mainly used for debugging.
 \if{html}{\out{<div class="r">}}\preformatted{RelationalData$launch()}\if{html}{\out{</div>}}
 }
 
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-mutate_join_keys"></a>}}
+\if{latex}{\out{\hypertarget{method-mutate_join_keys}{}}}
+\subsection{Method \code{mutate_join_keys()}}{
+Change join_keys for a given pair of dataset names
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{RelationalData$mutate_join_keys(dataset_1, dataset_2, val)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{dataset_1, dataset_2}}{(\code{character}) datasets for which join_keys are to be returned}
+
+\item{\code{val}}{(named \code{character}) column names used to join}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Returns}{
+(\code{self}) invisibly for chaining
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-check_metadata"></a>}}
+\if{latex}{\out{\hypertarget{method-check_metadata}{}}}
+\subsection{Method \code{check_metadata()}}{
+Check there is consistency between the datasets and join_keys
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{RelationalData$check_metadata()}\if{html}{\out{</div>}}
+}
+
+\subsection{Returns}{
+raise and error or invisible \code{TRUE}
+}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-clone"></a>}}

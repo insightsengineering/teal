@@ -1,8 +1,13 @@
 # RelationalDataConnector ------
-#' @title Manage multiple and \code{RelationalDatasetConnector} of the same type.
+#' @title Manage multiple and \code{DatasetConnector} of the same type.
 #' @description
-#' Class manages \code{RelationalDatasetConnector} to specify additional dynamic arguments and to
+#' Class manages \code{DatasetConnector} to specify additional dynamic arguments and to
 #' open/close connection.
+#'
+#' @param connection (\code{DataConnection})\cr
+#'   connection to data source
+#' @param connectors (\code{list} of \code{DatasetConnector} elements)\cr
+#'   list with dataset connectors
 #'
 #' @importFrom R6 R6Class
 #'
@@ -41,40 +46,45 @@
 #' @importFrom methods is
 RelationalDataConnector <- R6::R6Class( #nolint
   classname = "RelationalDataConnector",
-  inherit = RelationalDataCollection,
+  inherit = DataAbstract,
+
   ## __Public Methods ====
   public = list(
     #' @description
-    #' Create a new \code{RelationalDataConnector} object
-    #'
-    #' @param connection (\code{DataConnection}) connection to data source
-    #' @param connectors (\code{list} of \code{RelationalDatasetConnector} elements) list with dataset connectors
-    #'
-    #' @return new \code{RelationalDataConnector} object
+    #' Create a new `RelationalDataConnector` object
     initialize = function(connection, connectors) {
-      stopifnot(is_class_list("RelationalDatasetConnector")(connectors))
+      stopifnot(is_class_list("DatasetConnector")(connectors))
+
+      connectors_names <- vapply(connectors, get_dataname, character(1))
+      connectors <- setNames(connectors, connectors_names)
+
+      private$check_names(connectors_names)
 
       if (!missing(connection)) {
         stopifnot(is(connection, "DataConnection"))
         private$connection <- connection
       }
 
-      connectors_names <- vapply(connectors, get_dataname, character(1))
-      connectors <- setNames(connectors, connectors_names)
-
-      private$check_names(connectors)
-
       private$datasets <- connectors
 
       private$pull_code <- CodeClass$new()
       private$mutate_code <- CodeClass$new()
 
-      invisible(self)
+      return(invisible(self))
+    },
+
+    # ___ getters ====
+    #' @description
+    #' Get connection to data source
+    #'
+    #' @return connector's connection
+    get_connection = function() {
+      return(private$connection)
     },
     #' @description
     #' Get internal \code{CodeClass} object
     #'
-    #' @return \code{CodeClass}
+    #' @return `\code{CodeClass}`
     get_code_class = function() {
       all_code <- CodeClass$new()
 
@@ -95,146 +105,25 @@ RelationalDataConnector <- R6::R6Class( #nolint
       return(all_code)
     },
     #' @description
-    #' Get connection to data source
     #'
-    #' @return connector's connection
-    get_connection = function() {
-      return(private$connection)
-    },
-    #' @description
-    #'
-    #' @return the \code{server} function of the \code{RelationalDataConnector}
+    #' @return the \code{server} function
     get_server = function() {
       return(private$server)
     },
     #' @description
-    #' Get Shiny module with inputs for all \code{RelationalDatasetConnector} objects
+    #' Get Shiny module with inputs for all \code{DatasetConnector} objects
     #'
     #' @param id \code{character} shiny element id
     #'
-    #' @return the \code{ui} function of the \code{RelationalDataConnector}
+    #' @return the \code{ui} function
     get_ui = function(id) {
       if (is.null(private$ui)) {
         stop("No UI set yet. Please use set_ui method first.")
       }
       return(private$ui(id))
     },
-    #' @description
-    #' Check if pull or connection has not failed.
-    #'
-    #' @return \code{TRUE} if pull or connection failed, else \code{FALSE}
-    is_failed = function() {
-      private$connection$is_failed() ||
-        any(vapply(private$datasets, function(x) x$is_failed(), logical(1)))
-    },
 
-    #' @description
-    #' Run simple application that uses its \code{ui} and \code{server} fields to pull data from
-    #' connection.
-    #'
-    #' Useful for debugging
-    #'
-    #' @return An object that represents the app
-    launch = function() {
-      # load RelationDatasetConnector objects
-      if (self$is_pulled()) {
-        stop("All the datasets have already been pulled.")
-      }
-
-      shinyApp(
-        ui = fluidPage(
-          include_teal_css_js(),
-          useShinyjs(),
-          fluidRow(
-            column(
-              width = 8,
-              offset = 2,
-              tags$div(
-                id = "data_inputs",
-                private$ui(id = "data_connector"),
-                actionButton("submit", "Submit"),
-                `data-proxy-click` = "submit"
-              ),
-              shinyjs::hidden(
-                tags$div(
-                  id = "data_loaded",
-                  div(
-                    h3("Data successfully loaded."),
-                    p("You can close this window and get back to R console.")
-                  )
-                )
-              )
-
-            )
-          )
-        ),
-        server = function(input, output, session) {
-          session$onSessionEnded(stopApp)
-          observeEvent(input$submit, {
-            rv <- reactiveVal(NULL)
-            rv(
-              callModule(self$get_server(),
-                         id = "data_connector",
-                         connection = private$connection,
-                         connectors = private$datasets)
-            )
-
-            observeEvent(rv(), {
-              if (self$is_pulled()) {
-                removeUI(sprintf("#%s", session$ns("data_inputs")))
-                shinyjs::show("data_loaded")
-                stopApp()
-              }
-            })
-
-          })
-        }
-      )
-    },
-    #' @description
-    #' Load data from each \code{RelationalDatasetConnector}
-    #'
-    #' @param con_args (\code{NULL} or named \code{list})\cr
-    #'   additional dynamic arguments for connection function. \code{args} will be passed to each
-    #'  \code{RelationalDatasetConnector} object to evaluate \code{CallableFunction} assigned to
-    #'  this dataset. If \code{args} is null than default set of arguments will be used, otherwise
-    #'  call will be executed on these arguments only (arguments set before will be ignored).
-    #'  \code{pull} function doesn't update reproducible call, it's just evaluate function.
-    #'
-    #' @param args (\code{NULL} or named \code{list})\cr
-    #'  additional dynamic arguments to pull dataset. \code{args} will be passed to each
-    #'  \code{RelationalDatasetConnector} object to evaluate \code{CallableFunction} assigned to
-    #'  this dataset. If \code{args} is null than default set of arguments will be used, otherwise
-    #'  call will be executed on these arguments only (arguments set before will be ignored).
-    #'  \code{pull} function doesn't update reproducible call, it's just evaluate function.
-    #'
-    #' @param try (\code{logical} value)\cr
-    #'  whether perform function evaluation inside \code{try} clause
-    #'
-    #' @return \code{self} invisibly for chaining. In order to get the data please use \code{get_datasets} method.
-    pull = function(con_args = NULL, args = NULL, try = TRUE) {
-      # open connection
-      if (!is.null(private$connection)) {
-        private$connection$open(args = con_args, try = try)
-
-        conn <- private$connection$get_conn()
-        if (!is.null(conn)) {
-          for (connector in private$datasets) {
-            connector$get_pull_callable()$assign_to_env("conn", conn)
-          }
-        }
-      }
-
-      # load datasets
-      for (dataset in private$datasets) {
-        load_dataset(dataset, args = args)
-      }
-
-      # close connection
-      if_not_null(private$connection, private$connection$close(silent = TRUE))
-
-      return(invisible(self))
-    },
+    # ___ setters ====
     #' @description
     #' Set argument to the \code{pull_fun}
     #'
@@ -299,15 +188,134 @@ RelationalDataConnector <- R6::R6Class( #nolint
       }
 
       return(invisible(NULL))
+    },
+
+    # ___ pull ====
+    #' @description
+    #' Load data from each \code{DatasetConnector}
+    #'
+    #' @param con_args (\code{NULL} or named \code{list})\cr
+    #'   additional dynamic arguments for connection function. \code{args} will be passed to each
+    #'  \code{DatasetConnector} object to evaluate \code{CallableFunction} assigned to
+    #'  this dataset. If \code{args} is null than default set of arguments will be used, otherwise
+    #'  call will be executed on these arguments only (arguments set before will be ignored).
+    #'  \code{pull} function doesn't update reproducible call, it's just evaluate function.
+    #'
+    #' @param args (\code{NULL} or named \code{list})\cr
+    #'  additional dynamic arguments to pull dataset. \code{args} will be passed to each
+    #'  \code{DatasetConnector} object to evaluate \code{CallableFunction} assigned to
+    #'  this dataset. If \code{args} is null than default set of arguments will be used, otherwise
+    #'  call will be executed on these arguments only (arguments set before will be ignored).
+    #'  \code{pull} function doesn't update reproducible call, it's just evaluate function.
+    #'
+    #' @param try (\code{logical} value)\cr
+    #'  whether perform function evaluation inside \code{try} clause
+    #'
+    #' @return (`self`) invisibly for chaining. In order to get the data please use \code{get_datasets} method.
+    pull = function(con_args = NULL, args = NULL, try = TRUE) {
+      # open connection
+      if (!is.null(private$connection)) {
+        private$connection$open(args = con_args, try = try)
+
+        conn <- private$connection$get_conn()
+        if (!is.null(conn)) {
+          for (connector in private$datasets) {
+            connector$get_pull_callable()$assign_to_env("conn", conn)
+          }
+        }
+      }
+
+      # load datasets
+      for (dataset in private$datasets) {
+        load_dataset(dataset, args = args)
+      }
+
+      # close connection
+      if_not_null(private$connection, private$connection$close(silent = TRUE))
+
+      return(invisible(self))
+    },
+    #' @description
+    #' Run simple application that uses its \code{ui} and \code{server} fields to pull data from
+    #' connection.
+    #'
+    #' Useful for debugging
+    #'
+    #' @return An object that represents the app
+    launch = function() {
+      # load RelationDatasetConnector objects
+      if (self$is_pulled()) {
+        stop("All the datasets have already been pulled.")
+      }
+
+      shinyApp(
+        ui = fluidPage(
+          include_teal_css_js(),
+          useShinyjs(),
+          fluidRow(
+            column(
+              width = 8,
+              offset = 2,
+              tags$div(
+                id = "data_inputs",
+                private$ui(id = "data_connector"),
+                actionButton("submit", "Submit"),
+                `data-proxy-click` = "submit"
+              ),
+              shinyjs::hidden(
+                tags$div(
+                  id = "data_loaded",
+                  div(
+                    h3("Data successfully loaded."),
+                    p("You can close this window and get back to R console.")
+                  )
+                )
+              )
+
+            )
+          )
+        ),
+        server = function(input, output, session) {
+          session$onSessionEnded(stopApp)
+          observeEvent(input$submit, {
+            rv <- reactiveVal(NULL)
+            rv(
+              callModule(self$get_server(),
+                         id = "data_connector",
+                         connection = private$connection,
+                         connectors = private$datasets)
+            )
+
+            observeEvent(rv(), {
+              if (self$is_pulled()) {
+                removeUI(sprintf("#%s", session$ns("data_inputs")))
+                shinyjs::show("data_loaded")
+                stopApp()
+              }
+            })
+
+          })
+        }
+      )
+    },
+
+    # ___ status ====
+    #' @description
+    #' Check if pull or connection has not failed.
+    #'
+    #' @return \code{TRUE} if pull or connection failed, else \code{FALSE}
+    is_failed = function() {
+      private$connection$is_failed() ||
+        any(vapply(private$datasets, function(x) x$is_failed(), logical(1)))
     }
   ),
   ## __Private Fields ====
   private = list(
     server = NULL,
     ui = NULL,
-    connection = NULL,
-    ## __Private Methods ====
+    connection = NULL, # DataConnection
 
+    ## __Private Methods ====
     # adds open/close connection code at beginning/end of the dataset code
     append_connection_code = function() {
       lapply(

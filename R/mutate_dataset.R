@@ -1,10 +1,9 @@
 #' Mutate dataset by code
 #'
-#' @md
 #' @description `r lifecycle::badge("experimental")`
 #'
-#' @param x (`NamedDataset`)\cr
-#'    object or `RelationalDataset` which inherited from it.
+#' @param x (`Dataset`)\cr
+#'    object.
 #' @param dataname (`character`)\cr
 #'   Dataname to be mutated.
 #' @param code (`character`)\cr
@@ -15,9 +14,13 @@
 #'   Preferred before `code` argument.
 #' @param vars (list)\cr
 #'   In case when this object code depends on the `raw_data` from the other
-#'   `RelationalDataset`, `RelationalDatasetConnector` object(s) or other constant value,
+#'   `Dataset`, `DatasetConnector` object(s) or other constant value,
 #'   this/these object(s) should be included.
+#' @param keys optional, (`character`)\cr
+#'   vector with primary keys
 #' @param ... not used, only for support of S3
+#'
+#' @return modified `x` object
 #'
 #' @export
 mutate_dataset <- function(x, ...) {
@@ -31,7 +34,7 @@ mutate_dataset <- function(x, ...) {
 #'
 #' ADSL <- radsl(cached = TRUE)
 #'
-#' ADSL_dataset <- named_dataset(
+#' ADSL_dataset <- dataset(
 #'   dataname = "ADSL",
 #'   x = ADSL,
 #'   label = "AdAM subject-level dataset",
@@ -63,55 +66,92 @@ mutate_dataset <- function(x, ...) {
 #' ADSL_mutated$get_raw_data()$new_variable[1]
 #'
 #' @export
-mutate_dataset.NamedDataset <- function(x, code = character(0), script = character(0), vars = list(), ...) { #nolint
+mutate_dataset.Dataset <- function(x,
+                                   code = character(0),
+                                   script = character(0),
+                                   vars = list(),
+                                   keys = get_keys(x),
+                                   ...) {
+  check_ellipsis(...)
   stopifnot(is_fully_named_list(vars))
 
   code <- code_from_script(code, script)
-  x$mutate(code = code, vars = vars)
+  x$mutate(code = code, vars = vars, keys = keys, ...)
 }
 
 
 #' @rdname mutate_dataset
 #' @export
-mutate_dataset.NamedDatasetConnector <- function(x, code = character(0), script = character(0), vars = list(), ...) { #nolint
+mutate_dataset.DatasetConnector <- function(x, # nolint
+                                            code = character(0),
+                                            script = character(0),
+                                            vars = list(),
+                                            keys = get_keys(x),
+                                            ...) {
+  check_ellipsis(...)
   stopifnot(is_fully_named_list(vars))
 
   code <- code_from_script(code, script)
-  x$mutate(code = code, vars = vars)
+  x$mutate(code = code, vars = vars, keys = keys, ...)
 }
 
 
 #' @rdname mutate_dataset
 #' @export
-mutate_dataset.RelationalDataCollection <- function(x, dataname, code = character(0), script = character(0), vars = list(), ...) { #nolint
+mutate_dataset.DataAbstract <- function(x,
+                                        dataname,
+                                        code = character(0),
+                                        script = character(0),
+                                        vars = list(),
+                                        keys = get_keys(x$get_items(dataname)),
+                                        ...) {
+  check_ellipsis(...)
   stopifnot(is_fully_named_list(vars))
 
   code <- code_from_script(code, script)
   x$mutate_dataset(dataname = dataname, code = code, vars = vars)
+  set_keys(x, dataname, keys)
 }
 
 
 
 #' Mutate data by code
 #'
-#' @md
 #' @description `r lifecycle::badge("experimental")`
 #'
-#' @param x (\code{RelationalData} or \code{RelationalDataConnector})\cr
+#' @param x (\code{DataAbstract})\cr
 #'   object.
 #' @inheritParams mutate_dataset
 #'
+#' @return modified `x` object
+#'
 #' @export
-mutate_data <- function(x, code = character(0), script = character(0), vars = list()) {
+mutate_data <- function(x,
+                        code = character(0),
+                        script = character(0),
+                        vars = list(),
+                        keys = list()) {
   UseMethod("mutate_data")
 }
 
 #' @rdname mutate_data
 #' @export
-mutate_data.RelationalDataCollection <- function(x, code = character(0), script = character(0), vars = list()) { #nolint
+mutate_data.DataAbstract <- function(x,
+                                     code = character(0),
+                                     script = character(0),
+                                     vars = list(),
+                                     keys = list()) {
   stopifnot(is_fully_named_list(vars))
+  stopifnot(identical(keys, list()) || (is_character_list(keys, min_length = 0) && is_fully_named_list(keys)))
 
   code <- code_from_script(code, script)
   x$mutate(code = code, vars = vars)
-  return(x)
+  if (!is_empty(keys)) {
+    for (key_idx in seq_along(keys)) {
+      key_dataname <- names(keys)[[key_idx]]
+      key_val <- keys[[key_idx]]
+      set_keys(x, key_dataname, key_val)
+    }
+  }
+  return(invisible(x))
 }
