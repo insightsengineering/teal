@@ -108,3 +108,8 @@ currently not used, instead one can click anywhere in the element to move it
   font-weight: normal;
   margin-left: 3px;
 }
+
+.nav {
+    display: flex;
+    flex-wrap: wrap;
+}
