@@ -147,7 +147,8 @@ Modularizing code also makes it easier to build a company wide standard for
 creating and sharing shiny code and also for creating project specific
 applications quickly.
 
-Finally, the user interface layout is based on [Bootstrap 3][bootstrap_3] when
+Finally, the user interface layout in the version of shiny we currently support 
+is based on [Bootstrap 3][bootstrap_3] when
 using the `fluidPage` and `fixedPage` layout functions (which we do for `teal`).
 Understanding the bootstrap framework for layout, class and css association is
 useful for creating clean user interfaces.
@@ -170,17 +171,15 @@ A simple example for a completely custom `teal` module is the following
 
 ```{r, eval = FALSE}
 library(teal)
-library(magrittr)
-library(dplyr)
- 
+
 app <- teal::init(
-  data = cdisc_data(cdisc_dataset("ADSL", x = iris %>% mutate(USUBJID = 1:dplyr::n(), STUDYID = "A"))),
+  data = teal_data(dataset("IRIS", x = iris)),
   modules = root_modules(
     module(
       label = "sample module",
       server = function(input, output, session, datasets) {
         output$scatterplot <- renderPlot({
-          iris <- datasets$get_data("ADSL", filtered = TRUE)
+          iris <- datasets$get_data("IRIS", filtered = TRUE)
           with(iris, plot(Sepal.Length, Sepal.Width, col = Species))
         })
       },
@@ -188,7 +187,7 @@ app <- teal::init(
         ns <- NS(id)
         plotOutput(ns("scatterplot"))
       },
-      filters = "ADSL"
+      filters = "IRIS"
     )
   )
 )
@@ -197,11 +196,7 @@ shinyApp(app$ui, app$server)
 
 Please run the above code by copy pasting it to the command line. The example
 shows how simple it is to create a module that has no dynamic encodings but
-still is interactive due to the possibility of filtering the data. The example
-also highlights a current issue where we require a dataset with the name `ADSL`
-that has the variables `USUBJID` and `SUBJID`. We describe the reason and the
-future refactoring needed to overcome this later in this document.
-
+still is interactive due to the possibility of filtering the data. 
 
 The default `teal` web application has the following components
 
@@ -254,7 +249,7 @@ The `FilteredData` class is an [`R6`][R6] reference class to handle the datasets
 and the filtering state. In general, every dataset can be filtered based on
 values of its variables.
 
-* if a variable `xi` is continuous then the filtering is based on a range: `xi in
+* if a variable `xi` is continuous or date/date time then the filtering is based on a range: `xi in
 [a,b]` where `min(xi)<=a<b<=max(xi)`
 
 * if a variable `xi` is categorical then the filtering is based on a set:
@@ -294,9 +289,11 @@ dataset is the `USUBJID` and `STUDYID` variable (if not specified otherwise).
 
 ### FilteredData Class for Clinical Trials Data
 
-Because of the central role of the `ADSL` dataset and due to tight project
-delivery timelines I have unfortunately implemented a filtering mechanism that
-always depends on `ADSL` as illustrated here:
+`teal` supports both general relational data (using `teal_data` function output as
+`data` argument to `teal::init`) and CDISC specific data (using `cdisc_data` function instead) 
+
+When using CDISC specific data, the filtering mechanism makes use of `ADSL` 
+being a "special" dataset as described below.
 
 ```{r echo=FALSE, out.width='100%'}
 knitr::include_graphics('./images/design_cdisc_filtered_datasets.png')
@@ -329,8 +326,8 @@ ADTTE <- data.frame(
 set.seed(0)
 ```
 
-The `datasets` object of class `FilteredData` that is passed an argument to the
-`server` function is created by `teal` as follows:
+The `datasets` object of class `CDISCFilteredData` 
+that is passed an argument to the `server` function is created by `teal` as follows:
 
 ```{r}
 library(teal)
@@ -349,19 +346,7 @@ datasets$set_data("ADTTE", ADTTE)
 shiny:::flushReact() # force evaluation outside of Shiny apps
 ```
 
-Note that this code also runs outside of a teal instance. The public methods of
-the `FilteredData` class are:
-
-```{r}
-names(datasets)
-```
-
-these public methods are currently a bit too numerous because I initially
-thought that I can hide the `FilteredData` instance (i.e. the `datasets` object)
-and pass only the reactive filtered datasets to the modules (using argument
-matching). However that is difficult due to the use of `do.call` when composing
-the `server` function (and time pressure). We can query the `datasets` object to
-display the filter options for each variable:
+Note that this code also runs outside of a teal instance. 
 
 
 ```{r}
@@ -398,12 +383,8 @@ data, respectively, as illustrated from the above figure. We can also get the
 datasets$get_filter_expr("ADTTE")
 ```
 
-Note that when setting `reactive = TRUE` in the `datasets$get_data` method then
-a reactive value with the requested dataset gets returned which can be directly
-used in the reactive environment of the teal module `server` functions.
 
-
-### Needed Generalization of FilteredData
+### FilteredData for general relational data 
 
 The CDISC filtering mechanism which we have introduced in the previous section
 can be abstracted with the following diagram:
@@ -414,7 +395,7 @@ knitr::include_graphics('./images/design_cdisc_filtered_data.png')
 
 This is, however, a very particular filtering setup that has not much use
 besides analyzing clinical trials data that follows CDISC standards. A more
-general filtering setup would be to have variable based filtering for an
+general filtering is to have variable based filtering for an
 arbitrary dataset:
 
 ```{r echo=FALSE}
@@ -427,10 +408,10 @@ or more generally a collection of independently filtered datasets:
 knitr::include_graphics('./images/design_simple_filtered_data.png')
 ```
 
-Let's call this particular filtering the `SimpleFilteredData` class.
+This filtering is implemented using the `FilteredData` class
+(which is created when using the `teal_data` and which `CDISCFilteredData` inherits from). 
 
-
-Finally we would also need a filtering for [expression sets][expressionSets]
+In the future we may also need filtering for [expression sets][expressionSets]
 
 ```{r echo=FALSE}
 knitr::include_graphics('./images/expressionset.png')
@@ -440,44 +421,7 @@ that is, filtering expression sets is a slightly more advanced filtering as one
 probably wants to filter the biomarker data on a sample level but also on
 gene-meta data level (filter columns and rows).
 
-In terms of refactoring `teal` this means that the `FilteredData` class needs to
-become abstract with multiple concrete classes that inherit from `FilteredData`:
-
-```{r echo=FALSE}
-knitr::include_graphics('./images/design_FilteredData.png')
-```
-
-### Optimizing The FilteredData Class
-
-The arrows that point downwards in the filtering related diagrams above indicate
-a propagation mechanism that happens to be inefficient. That is, when filtering
-with `ADSL` variables then all the dependent datasets (that is currently every
-other dataset) gets updated regardless if there is any output currently
-displayed that requires the information from a particular dataset. Hence we
-loose the lazy evaluation that is provided with shiny's reactivity framework. It
-would be better to set up the datasets reactive and only have them apply the
-filtering and merging if there is actually something displayed in the shiny app
-that requires the particular dataset.
-
-
-```{r echo=FALSE}
-knitr::include_graphics('./images/design_reactive_filtered_data.png')
-```
-
-### Summary of filtering related issues
-
-First the main issues mentioned above:
-
-* make `FilteredData` class abstract and implement concrete classes (as outlined
-above) inheriting from `FilteredData`.
-
-* make the filtering lazy by making better use of reactivity (using
-`reactiveValues()`).
-
-
-Also, a simple feature but still useful improvement is to support:
-
-* filtering with variables of class `Date`
+In terms of refactoring `teal` this means changes to the `FilteredData` class hierarchy
 
 
 ## Composition of the ui and server functions with `teal::init`
@@ -488,7 +432,8 @@ the `ui` object and the `server` function which are returned and then passed to
 `shinyApp` to start the web app.
 
 The datasets passed to the `data` arguments get encapsulated within the `init`
-function into a local instance of `FilteredData` (i.e. the `datasets` object).
+function into a local instance of `FilteredData` or `CDISCFilteredData`
+(i.e. the `datasets` object).
 
 Next, the `ui` object is created. The composition of ui and server happens
 entirely with the object passed via `modules`, `header`, and `footers`
@@ -499,16 +444,6 @@ in `modules` happens recursively via the `create_ui` function. Note that the
 returned object structure to add the filter panel on the right hand side (this
 improves the UI as it places the filter panel below the `tabsetPanel` menu).
 
-There are two major improvement opportunities in creating the ui object:
-
-1) the ui object should optionally be a `ui` function so that the whole `teal`
-application can be modularized
-
-2) the filter panel has not been abstracted and encapsulated nicely enough to be
-a reusable view/controller for the `datasets` object (i.e. for the class
-`FilteredData`). This currently does not limit the teal functionality. However
-it has implications for the server function composition as will be illustrated
-below.
 
 Also note that the added javascript in the `ui` object is necessary to manually
 interrupt reactivity when hiding the ui elements for filtering based on variables
@@ -518,65 +453,6 @@ filter variables if we analyse an output based on `ATE`).
 Next: the creation of the server function. The easy part is the composition of
 the module server functions which happens with the `call_modules` function call.
 
-The rest of the server function creation related code revolves around the
-filtered data panel. Again, a nice improvement here would be to
-
-* make the filter panel a module
-
-## Reproducibility
-
-There are multiple parts to create reproducible code for the displayed outputs:
-
-1. what `R` version is used and on which platform
-
-1. what libraries are used, and which version
-
-1. data used and hash sum (currently on BCE the path is the identifier and the
-hash sum in needed as the data may change over time)
-
-1. subset call to get the filtered data
-
-1. code to create the output
-
-In `teal` we started to streamline 1) and 2) with the `get_rcode_header`
-function. This function needs to be improved but that is a simple exercise.
-Next, 3) can either be achieved via the `get_filter_call` method of the
-`datasets` object or simpler via the `get_filter_txt` function. Finally 4) is
-currently the most difficult to achieve well. We have tried to create the R call
-(in a string to preserve the formatting) and then evaluating that string to
-create the output, however that is not a good approach as it makes it
-essentially impossible to debug the modules. Another approach that we have tried
-is to use tagging with `@start_label` and `@end_label` as documented in the
-`02_reproducible-code` vignette. Two more promising approaches are to tag the
-code chunks via a function call with tag and chunk-code and then remove the
-function call but leave the code when creating the server function (as proposed
-by Michael) and another approach is developed by Doug and Gabe.
-
-
-After having created a number of modules for
-[`teal.modules.clinical`](https://github.roche.com/NEST/teal.modules.clinical) it seems
-probably easiest to keep the modules simple by making a module to be a user
-interface for a simple function call with dynamic arguments. E.g. we created am
-analysis package [tern](https://github.roche.com/NEST/tern) which has the
-function `kmplot` to create a Kaplan-Meier plot. We have then also created the
-[`teal.modules.clinical`](https://github.roche.com/NEST/teal.modules.clinical) R package
-which has the module `tm_kplot` which provides a user interface that allows one
-to modify certain arguments of `tern::kmplot` via the encodings panel. This
-reduces 4) essentially to an argument tracking problem. This is, however, work
-in progress.
-
-## Desiderata
-
-* save the state of an app and provide shareable links that capture the state of
-the analysis/app
-
-* inheritance model for teal modules, e.g. make slightly modified modules (this
-needs to be better formulated, e.g. what exactly changes: output arguments,
-encoding ui/logic, etc...?
-
-* `teal` modules probably need a shared state such as selected arm variable.
-This could be achieved by a reactive value that is passed as an argument to the
-modules.
 
 # Embed teal into other applications
 Here is an example of an app with two independent teal applications side-by-side. The same idea can be used to embed it into other Shiny modules.

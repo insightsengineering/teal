@@ -15,7 +15,7 @@ vignette: >
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-This vignette provides apps for the developer to check that the functionality still works. It uses debugging modules and
+This vignette provides apps for the developer to check that functionality still works. It uses debugging modules and
 these should not be deleted. Eventually, Shiny tests for these modules should be developed.
 
 We load the libraries and set relevant options. Be careful to load the development version of `teal` when developing.
@@ -151,7 +151,7 @@ This app tests that the app works with delayed data that is not available initia
 
 ```{r delayedDataApp, eval=FALSE}
 app <- init(
-  data = teal_data(
+  data = cdisc_data(
     rcd_data(
       rcd_cdisc_dataset_connector(dataname = "ADSL", radsl, cached = TRUE),
       rcd_cdisc_dataset_connector(dataname = "ADLB", radlb, cached = TRUE)

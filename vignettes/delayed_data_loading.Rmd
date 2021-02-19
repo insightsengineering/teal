@@ -21,16 +21,17 @@ library(nomnoml)
 Data plays an essential role in data analysis and `teal` provides several ways to 
 include datasets into shiny applications. Normally, one develops an application 
 in such a way that data are available before the app starts. This always involves 
-passing `data.frame` objects using the `cdisc_data` function to the teal application. 
+passing `data.frame` objects using the `cdisc_data` or `teal_data` functions to the teal application. 
 This way of building an app is applicable if data is physically available before 
 the call to `teal::init()`, so it can be obtained in pre-processing. 
 Including data to the shiny 
 app as [global objects](https://shiny.rstudio.com/articles/scoping.html) means 
 that they will be fixed and data won't change in time.
-In contrary, data can be loaded by the shiny app and can include custom information such 
-as login, password, file location etc.. Delayed data loading in teal application 
+On the other hand data can be loaded by the shiny app itself and can request information from the app user such 
+as login, password, file location etc. before being loaded. Delayed data loading in teal application 
 involves specifying metadata which stores all information needed to pull the data 
-from the right source with appropriate arguments. In delayed data loading application, before the main app loads a data loading screen is visible first.. 
+from the right source with appropriate arguments. 
+In delayed data loading application, before the main app loads a data loading screen is visible first. 
 This means that teal application can be 
 
 two-staged:
@@ -40,24 +41,14 @@ two-staged:
 
 ## Key definitions
 
-Before we jump to creating application it's important to define a few terms
+Before we jump to creating application it is important to define a few terms
 which are the key to understand new classes.
+
 1. `Dataset` and `DatasetConnector` - `Dataset` is a class which contains physical
 data in form of `data.frame` plus reproducible code. `DatasetConnector` is a 
 class which contains R call to obtain `Dataset`.
 
-2. `Raw`, `Named`, `Relational` - denotes what kind of information are attached 
-to dataset. `Raw` indicates that there are no additional information, `Named` 
-has a `dataname` and `Relational` holds also keys. Above also defines 
-inheritance order `Raw` <- `Named` <- `Relational`.
-```{nomnoml, svg=TRUE, fig.height=1, include=FALSE}
-#spacing: 100
-#arrowSize: 0.2
-#fontSize: 12
-[Raw](set dataname)->[Named]
-[Named](set keys)->[Relational]
-```
-3. `data.frame`, `Dataset` and `Data`- object of class `Dataset` contains 
+2. `data.frame`, `Dataset` and `Data`- object of class `Dataset` contains 
 a single `data.frame` object. `Data` is a collection of `Dataset` objects.
 ```{nomnoml, svg=TRUE, fig.height=1, include=FALSE}
 #fontSize: 20
@@ -74,7 +65,7 @@ a single `data.frame` object. `Data` is a collection of `Dataset` objects.
 #### `CallableFunction`
 This class won't be used often by the developers but it's essential for all 
 connectors to store and execute R function with possibility to get code to 
-reproduce function call. In example below object of class `CallableFunction` is 
+reproduce function calls. In the example below and object of class `CallableFunction` is 
 created which runs `radtte` function with arguments set before. 
 
 ```{r}
@@ -94,9 +85,9 @@ fun$run()
 cat(fun$get_call())
 ```
 
-It's possible also execute `fun$run()` function with arguments added on the fly 
-in named `list`. Dynamic arguments won't be reflected in the reproducible code, 
-what will have a consequences in other places - we will get back to this in latter
+It's also possible to execute `fun$run()` function with arguments added on the fly 
+in a named `list`. Dynamic arguments won't be reflected in the reproducible code, 
+what will have a consequences in other places - we will get back to this in later
 stages of the documentation.
 
 ```{r}
@@ -107,9 +98,9 @@ fun$run(args = list(seed = 1, na_percentage = 0.1))
 cat(fun$get_call())
 ```
 
-`CallableFunction` can also depend on other R object same as `radtte` function 
-depends on `ADSL`. Function can be executed in specific environment where we can 
-copy object needed to execute call. To include this object in the function call, 
+`CallableFunction` can also depend on other R objects as the `radtte` function 
+depends on `ADSL`. The function can be executed in specific environment where we can 
+copy objects needed to execute call. To include object in the function call, 
 one has to use `$assign_to_env()` to copy object and 
 `$set_args(list(ADSL = as.symbol(ADSL)))` to link object with function argument.
 
@@ -132,10 +123,10 @@ fun$get_call()
 
 Simpler version of `Callable` class is `CallableCode`. Similarly to `CallableFunction`,
 `CallableCode` stores some code which can be evaluated using `run()` but it
-isn't able to use dynamic arguments to have the code more elastic. `CallableCode`
-also allows to assign objects to independent environment. `CallableCode` can 
-contain multiple line code and also allows `library` calls.
-Please note that objects assigned to independent environment can't be modified 
+isn't able to use dynamic arguments to have the code more general. `CallableCode`
+also allows the assignment of objects to an independent environment. `CallableCode` can 
+contain multiple lines code and also allows `library` calls.
+Please note that objects assigned to this independent environment can't be modified 
 because they are locked immediately. This means that in `CallableCode` created 
 below it is not allowed to make any changes in `ADSL`.
 ```{r}
@@ -158,14 +149,17 @@ code$assign_to_env("ADSL", ADSL)
 code$run()
 ```
 
-### Dataset
+### `Dataset` (including `CDISCDataset`)
  
-`Dataset` object is a container which keeps `data.frame` in `raw_data` slot. One
-can create `Dataset` by including `data.frame` and setting data attributes. In 
-the example below we first create `adsl` and then put this `data.frame` to 
+`Dataset` object is an R6 class which keeps a `data.frame` in its `raw_data` slot. One
+can create a `Dataset` by including `data.frame` and setting data attributes. In 
+the example below we first create `adsl` and then put this `data.frame` into the  
 `cdisc_dataset` function. Together with `data.frame` one should always provide a
 `dataname` and `code` to reproduce the data. For irreproducible apps `code` 
 can be omitted.
+
+Note `cdisc_dataset` returns an object of `CDISCDataset` (inherited from `Dataset`) which
+allows datasets to have parents and is needed for CDISC analysis.
 
 ```{r}
 ADSL <- radsl(cached = TRUE)
@@ -175,7 +169,7 @@ adsl <- cdisc_dataset(dataname = "ADSL",
                       code = "ADSL <- radsl(cached = TRUE)")
 ```
 
-Object created above contains all previously defined attributes which can be 
+The object created above contains all previously defined attributes which can be 
 extracted in any occasion.
 
 ```{r}
@@ -191,11 +185,11 @@ get_code(adsl)
 # get data.frame
 get_raw_data(adsl)
 
-# get keys
+# get keys (i.e. the primary keys of the dataset)
 adsl$get_keys()
 ```
 
-### `DatasetConnector`
+### `DatasetConnector` (including `CDISCDatasetConnector`)
 
 `DatasetConnector` contains `Callable` object to obtain a single dataset along 
 with other information such as keys, dataname, label and reproducible code. In 
@@ -227,9 +221,9 @@ load_dataset(adsl)
 get_raw_data(adsl)
 ```
 
-`teal` allows also to include other variables which `Callable` object will 
-depend on. Let's think about `radlb(ADSL, ...)` function which requires 
-`data.frame` (`ADSL`) as an argument. In the code below, one can add `adsl` 
+`teal` also allows other variables to be passed to the connector which `Callable` object  
+can depend on. Let's think about `radlb(ADSL, ...)` function which requires 
+`data.frame` (`ADSL`) as an argument. In the code below, one can add an `adsl` 
 object created above and `set_args` to `CallableFunction`. To properly link 
 `ADSL` argument in `radlb` function several parameters have to match: 
 1. `dataname` of `adsl` should be `"ADSL"`
@@ -238,6 +232,8 @@ element with name `ADSL`.
 3. Value of the `ADSL` argument in the `CallableFunction` has to be `as.name("ADSL")`.
 
 ```{r eval=TRUE}
+# here we use the general dataset_connector function which pulls an object of type Dataset
+# there is also a cdisc_dataset_connector function which pulls an object of type CDISCDataset
 adlb <- dataset_connector(
   dataname = "ADLB", 
   pull_callable = callable_function(fun = radlb) %>% set_args(list(ADSL = as.name("ADSL"))), 
@@ -249,11 +245,11 @@ adlb <- dataset_connector(
 load_dataset(adlb)
 ```
 
-`RelationalDatasetConnector` like the other delayed data objects contains 
+`DatasetConnector` like the other delayed data objects contains  a
 `launch` method which can be used to obtain data using shiny application. 
-Function can be used to check if the objects are specified correctly and to 
+This function can be used to check if the objects are specified correctly and to 
 investigate potential mistakes. By default shiny app won't render any inputs for 
-dataset until we specify them. To set inputs we should use `$set_ui_input()`, by 
+datasets until we specify them. To set inputs we should use `$set_ui_input()`, by 
 passing ui module function, with `ns` argument (shiny namespaced ID object).
 
 ```{r eval=FALSE}
@@ -282,9 +278,9 @@ adtte$launch()
 ```
 
 ### `DataConnection`
-Objects of this class are responsible to set connection with remote data source. 
-`DataConnection` opens and closes connection by calling `CallableFunction` with
-appropriate arguments. For example in simplified version of `rice_connection` 
+Objects of this class are responsible to set connection with remote data sources. 
+`DataConnection` opens and closes connections by calling `CallableFunction` with
+appropriate arguments. For example in a simplified version of `rice_connection` 
 below, a `DataConnection `uses `rice_session_open` and `rice_session_close` 
 functions.
 
@@ -335,9 +331,9 @@ rice_conn$get_close_call()
 ```
 
 In `shiny` application connection arguments needs to be linked with `inputs`, 
-that is why `DataConnection` is a module. Developers can customize UI inputs to 
-open the connection using `set_open_ui()` and specify relevant server function 
-using `set_open_server()`. It's important to keep in mind that server module 
+that is why `DataConnection` contains a module. Developers can customize UI inputs to 
+open the connection using `set_open_ui()` and specify a relevant server function 
+using `set_open_server()`. It's important to keep in mind that the server module 
 needs a connection as a argument to `open()` and `close()` if needed.
 
 ```{r eval=FALSE}
@@ -368,12 +364,12 @@ rice_conn$set_open_server(
 rice_conn$launch()
 ```
 
-### `DataConnector`
+### `RelationalDataConnector` (including `CDISCDataConnector`)
 
-This class combines multiple `DatasetConnector` and single `DataConnection` objects and creates 
-module to manage connection and to load data. Below we create two 
-`RelationalDatasetConnector` objects, `DataConnection` and we combine them
-together in `RelationalDataConnector` object.
+This class combines multiple `DatasetConnector` (or `CDISCDatasetConnector`) and a single `DataConnection` object.
+It creates a module to manage connection and to load data. Below we create two 
+`DatasetConnector` objects and a `DataConnection` and we combine them
+together in a `RelationalDataConnector` object.
 
 ```{r}
 # create DatasetConnectors
@@ -405,14 +401,14 @@ data <- teal:::RelationalDataConnector$new(
 )
 ```
 
-Object created above can be used to pull data and obtain the code which combines 
-code of datasets preceded by open connection code (if set), and followed by 
-close connection code (if set). Please note that `DataConnector` doesn't limit 
+The object created above can be used to pull data and obtain the code. It combines 
+code to pull the datasets preceded by any open connection code and followed by 
+any close connection code. Please note that `DataConnector` doesn't limit 
 what kind of connectors are set within, but one must be aware that it should 
-rather contain similar (calling functions which shares some arguments). 
+rather contain similar connectors (i.e. calling functions which share some arguments). 
 For example, if we execute `data$set_pull_args(args = list(seed = 2))`, this 
 argument will be set for all connectors. In case when one connector contains 
-`CallableFunction` which won't have `seed` in it's formals then it will fail.
+`CallableFunction` which won't have `seed` in its formals then it will fail.
 `CallableCode` can't hold any additional arguments as it's fixed and it will
 ignore every arguments set with `set_pull_args`.
 
@@ -427,14 +423,14 @@ get_code(data)
 
 By default `RelationalDataConnector` creates simple shiny module without any 
 inputs for connectors and datasets. This means that connection opening/closing 
-and pulling datasets are done on default arguments. However, user can easily 
-extend module using `rcd_data$set_ui()` and `rcd_data$set_server()` to specify 
+and pulling datasets are done on default arguments. However, users can easily 
+extend the module using `rcd_data$set_ui()` and `rcd_data$set_server()` to specify 
 the UI and server function themselves. The general rule for creating these modules is that callback 
-from server to UI is not possible, because server module is executed after submit 
-button is hit. 
-Below we extend app interface by numeric input which will be passed to 
-`random.cdisc.data` function as a seed. UI is created from `rcd_conn` and 
-`connectors` object while server module requires `connectors` and `connection` 
+from server to UI is not possible, because server module is executed after the submit 
+button is clicked. 
+Below we extend the app interface by adding a numeric input which will be passed to the 
+`random.cdisc.data` function as a seed. The UI is created from `rcd_conn` and 
+`connectors` object while the server module requires `connectors` and `connection` 
 objects as additional arguments. 
    
 
@@ -496,12 +492,13 @@ connection and data object again.
 data$launch()
 ```
 
-### `RelationalData`
+### `RelationalData` (including `CDISCData`)
 
-Objects of class `RelationalData` is similar to the `RelationalDataConnector` as
-both inherits from `RelationalDataCollection`. `RelationalData` manages 
-`RelationalDataset`, `RelationalDatasetConnector` and `RelationalDataConnector`
-objects.
+ `RelationalData` manages `Dataset`, `DatasetConnector` and `RelationalDataConnector`
+objects. `CDISCData` is the equivalent object when creating apps to analyse CDISC data.
+These objects are created using `teal_data` and `cdisc_data` respectively and these
+objects are passed as the `data` argument into `teal::init`.
+
 
 ```{r}
 data <- cdisc_data(
@@ -515,8 +512,8 @@ data <- cdisc_data(
 )
 ```
 
-One can combine multiple delayed data objects using `cdisc_data` function and 
-include them to shiny application. `RelationalData` gathers all objects and sets 
+One can combine multiple delayed data objects using `[teal|cdisc]_data` functions and 
+include them in a  shiny application. `RelationalData` gathers all objects and sets 
 combined UI with shiny inputs from all objects. 
 In the code chunk below we specified two connectors with `rcd_data()`, but 
 developers can include any number and any type of objects.
@@ -567,8 +564,8 @@ data$get_items()
 
 ### Data modification
 
-Since delayed data objects are just a metadata before data is loaded there are 
-dedicated functions to allow datasets mutations. To modify single dataset one 
+Since delayed data objects are just metadata before data is loaded there are 
+dedicated functions to allow dataset mutations. To modify a single dataset one 
 should use `mutate_dataset` by specifying `code` argument with code as a single 
 character or `script` with location of the script file. 
 
@@ -597,10 +594,10 @@ cat(get_code(adsl))
 cat(get_code(adtte))
 ```
 
-`mutate_dataset` can also be used on `RelationalData` object which applies
+`mutate_dataset` can also be used on `RelationalData` objects which applies
 the `code` to the dataset specified in `dataname`. This is important, as `RelationalData` 
 can track each call which affects this particular dataset. Check the code below, 
-where we create data containing two datasets using `cdisc_data` function.
+where we create data containing two datasets using the `cdisc_data` function.
 We can still use `mutate_dataset` on the object which contains multiple datasets,
 with one requirement - one needs to specify `dataname`. Afterwards, one can
 extract reproducible code from data which affects this particular ``dataname`. 
@@ -627,10 +624,10 @@ cat(get_code(data, "ADSL"))
 cat(get_code(data, "ADTTE"))
 ```
 
-Sometimes code of one object can depend on the another, in this case we can link 
+Sometimes code of one object can depend on  another, in this case we can link 
 them in the same way how we link `DatasetConnector` objects. If object code
-is dependent on the another, same as ADTTE depends on ADSL below, `get_code`
-will return everything what needs to be executed to reproduce this dataset.
+is dependent on another, as ADTTE depends on ADSL below, `get_code`
+will return everything we need to be executed to reproduce this dataset.
 
 ```{r}
 data <- mutate_dataset(
@@ -647,8 +644,8 @@ cat(get_code(data, dataname = "ADTTE"))
 
 Using `mutate_dataset` creates a tree of calls, which can be easily
 subset by `dataname`, but developers can also use `mutate_data` function which 
-doesn't require to specify `dataname`. When `mutate_data` is used, code for
-single dataset is not possible to be subset, instead code of all datasets is 
+doesn't require `dataname` to be specified. When `mutate_data` is used, code for
+a single dataset is not possible to be subset, instead code of all datasets is 
 returned.
 
 ```{r}
@@ -666,30 +663,30 @@ cat(get_code(data, "ADSL"))
 
 ### Delayed choices
 
-The `teal` applications which initialize with data consisting only datasets, 
-all data are accessible in the pre-processing. Getting column names, factor 
-levels or numeric variables range are possible before app starts. It means
+`teal` applications which initialize using data consisting only of pre-existing datasets 
+have all data accessible when pre-processing for the app. Getting column names, factor 
+levels or numeric variables ranges are possible before the app starts. It means
 that the developer can explicitly specify `data_extract_spec`, `choices_selected` 
-and their components. The `teal` package also supports these functions for the 
-delayed data loading, but the way to use them slightly differs. 
-In the code block below default version of `variable_choices` is presented,
-where function got an `ADSL` object containing "physical" data.
+and their components. The `teal` package also supports these functions for
+delayed data loading, but the way to use them differs slightly. 
+In the code block below, the default version of `variable_choices` is presented
+where the function uses an `ADSL` object containing "physical" data.
 
 ```{r}
 ADSL <- radsl(cached = TRUE)
 variable_choices(data = ADSL)
 ```
 
-Alternative option is to put a dataname into `data` argument, which will result 
-in creating `delayed_variable_choices` object. The developer can always
-explicitly specify `subset` of column names regardless class of the `data`.
+An alternative option is to put a dataname into `data` argument, which will result 
+in creating a `delayed_variable_choices` object. The developer can always
+explicitly specify a `subset` of column names regardless of the class of the `data`.
 
 ```{r}
 variable_choices(data = "ADSL", subset = c("AVAL", "BMRKR1"))
 ```
 
 If the dataset is not known before, one can use a function which subsets
-column names from data. This function will be executed after the data will be 
+column names from data. This function will be executed after the data is 
 pulled.
 
 ```{r}
@@ -701,9 +698,9 @@ get_continuous <- function(data) {
 variable_choices(data = "ADSL", subset = get_continuous)
 ```
 
-Another function which can be used with the delayed data loading is a 
+Another function which can be used with the delayed data loading is 
 `value_choices`, which defines choices from levels of one or multiple variables.
-By default `value_choices` uses `data.frame` from `data` argument and
+By default `value_choices` uses a `data.frame` from the `data` argument and
 choices will be immediately constructed from this object.
 
 ```{r}
@@ -716,8 +713,8 @@ value_choices(
 )
 ```
 
-Similar to the `variable_choices`, developer can specify `data` argument with
-data name (`"ADTTE"`) and use function to `subset` choices. `subset` function
+Similar to `variable_choices`, developers can specify the `data` argument with
+data name (`"ADTTE"`) and use a function to `subset` choices. The `subset` function
 will be executed after data is pulled.
 
 ```{r}
@@ -785,8 +782,8 @@ data_extract_y <- data_extract_spec(
 )
 ```
 
-The `delayed_data_extract_spec` objects created above can be included to the 
-teal modules to run an application. 
+The `delayed_data_extract_spec` objects created above can be included in 
+teal modules to create an application. 
 
 ```{r, eval=FALSE}
 app <- init(

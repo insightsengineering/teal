@@ -14,7 +14,7 @@ vignette: >
 ## Introduction
 
 *teal* is a shiny based interactive exploration framework for analyzing clinical
-trials data. `teal` currently provides a dynamic filtering facility and 
+trials data and more general relational data. `teal` currently provides a dynamic filtering facility and 
 different data viewers. `teal` shiny applications are built using standard
 [shiny modules][shiny_modules].
 
@@ -36,18 +36,16 @@ library(random.cdisc.data)
 library(teal.modules.general)
 library(teal.modules.clinical) 
 
-ADSL <-  radsl()
-ADRS <-  radrs(ADSL = ADSL)
-ADTTE <-  radtte(ADSL = ADSL)
+ADSL <-  radsl(cached = TRUE)
+ADRS <-  radrs(cached = TRUE)
+ADTTE <-  radtte(cached = TRUE)
 
 app <- teal::init(
   data =  cdisc_data(
-    cdisc_dataset("ADSL", ADSL),
-    cdisc_dataset("ADRS", ADRS),
-    cdisc_dataset("ADTTE", ADTTE),
-    code = "ADSL <- radsl()
-            ADRS <-  radrs(ADSL = ADSL)
-            ADTTE <-  radtte(ADSL = ADSL)"),
+    cdisc_dataset("ADSL", ADSL, code = "radsl(cached = TRUE)"),
+    cdisc_dataset("ADRS", ADRS, code = "radrs(cached = TRUE)"),
+    cdisc_dataset("ADTTE", ADTTE, code ="radtte(cached = TRUE)")
+  ),
   modules = root_modules(
     teal.modules.general::tm_data_table("Data Table"),
     teal.modules.general::tm_variable_browser("Variable Browser"),
@@ -95,8 +93,8 @@ each teal application:
 <img src="images/teal_containers.png" alt="Simple Example Of Teal" style="width: 100%;"/>
 
 These containers correspond to actual html block elements and we use shiny's 
-default layout manager [bootstrap 3](http://getbootstrap.com) with a 
-fluid-container. Web-app based on teal can control the following:
+default layout manager (currently [bootstrap 3](http://getbootstrap.com)) with a 
+fluid-container. Web-apps based on teal can control the following:
 
  - analysis data
  - header and footer content
@@ -176,13 +174,13 @@ mentioned above.
 
 ## Filtering
 
-Currently we apply a specific filtering mechanism that is useful for clinical 
-trials data and that requires an `ADSL` analysis dataset to be part of every 
-`teal` app. That is, the filter framework provides lets the user dynamically 
+For clinical trial data analysis (as opposed to more general relational data)
+we apply a specific filtering mechanism that requires an `ADSL` analysis dataset to be part of every 
+`teal` app. That is, the filter framework lets the user dynamically 
 specify which variables she/he wants to use for filtering (using ranges or 
 categories). Teal then creates the `filter` code for each filter condition and
 links them with an elementwise logical **AND**  operator (i.e. `&`). Further,
-all datasets other then `ADSL` will also be filtered with the remaining subjects
+all datasets other than `ADSL` will also be filtered with the remaining subjects
 in `ADSL` through the `ADSL.USUBJID` and `ADSL.STUDYID` variables. Hence, assume
 you have the following three filters
 
