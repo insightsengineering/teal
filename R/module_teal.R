@@ -135,7 +135,6 @@ srv_teal <- function(input, output, session, modules, raw_data, filter = list())
   }
   run_js_files(files = "init.js") # Javascript code to make the clipboard accessible
 
-
   # Shiny bookmarking ----
 
   # The Shiny bookmarking functionality by default only stores inputs.
@@ -158,6 +157,10 @@ srv_teal <- function(input, output, session, modules, raw_data, filter = list())
     saved_datasets_state <<- state$values$datasets_state
   })
 
+  # This will be a FilteredData object - needs to be at this scope
+  # so the bookmarking functions above work. See inside the
+  # observeEvent below for where this is initialized.
+  datasets <- NULL
 
   # Replace splash / welcome screen once data is loaded ----
 
@@ -172,7 +175,8 @@ srv_teal <- function(input, output, session, modules, raw_data, filter = list())
     on.exit(progress$close())
     progress$set(0.1, message = "Setting data")
     # create the FilteredData object (here called 'datasets') whose class depends on the class of raw_data()
-    datasets <- filtered_data_new(isolate(raw_data()))
+    # this is placed in the module scope so that bookmarking can be used with FilteredData object
+    datasets <<- filtered_data_new(isolate(raw_data()))
     # transfer the datasets from raw_data() into the FilteredData object
     filtered_data_set(raw_data(), datasets)
     progress$set(0.3, message = "Setting filters")

@@ -90,14 +90,10 @@ This is the main debugging app to check that the functionality still works after
 ```{r mainDebugApp}
 app <- init(
   data = cdisc_data(
-    cdisc_dataset(dataname = "ADSL", x = ADSL),
-    cdisc_dataset(dataname = "ADAE", x = ADAE),
-    cdisc_dataset(dataname = "ADLB", x = ADLB),
-    code = "
-ADSL <- radsl(cached = TRUE)
-ADAE <- radae(cached = TRUE)
-ADLB <- radlb(cached = TRUE)
-"),
+    cdisc_dataset(dataname = "ADSL", x = ADSL, code = "ADSL <- radsl(cached = TRUE)"),
+    cdisc_dataset(dataname = "ADAE", x = ADAE, code = "ADAE <- radae(cached = TRUE)"),
+    cdisc_dataset(dataname = "ADLB", x = ADLB, code = "ADLB <- radlb(cached = TRUE)")
+  ),
   modules = root_modules(
     teal:::filter_calls_module(),
     teal:::bookmark_module(),
@@ -120,14 +116,10 @@ The datasets are lazily filtered meaning that when they are not needed for the c
 ```{r lazyFilteringApp}
 app <- init(
   data = cdisc_data(
-    cdisc_dataset(dataname = "ADSL", x = ADSL),
-    cdisc_dataset(dataname = "ADAE", x = ADAE),
-    cdisc_dataset(dataname = "ADLB", x = ADLB),
-    code = "
-ADSL <- radsl(cached = TRUE)
-ADAE <- radae(cached = TRUE)
-ADLB <- radlb(cached = TRUE)
-"),
+    cdisc_dataset(dataname = "ADSL", x = ADSL, code = "ADSL <- radsl(cached = TRUE)"),
+    cdisc_dataset(dataname = "ADAE", x = ADAE, code = "ADAE <- radae(cached = TRUE)"),
+    cdisc_dataset(dataname = "ADLB", x = ADLB, code = "ADLB <- radlb(cached = TRUE)")
+  ),
   modules = root_modules(
     teal:::filter_calls_module("ADAE", active_datanames = c("ADAE")),
     teal:::filter_calls_module("ADSL", active_datanames = c("ADSL")),
@@ -176,14 +168,10 @@ This app shows nested modules and how the filters apply to them. Check the tab h
 ```{r nestedModulesApp}
 app <- init(
   data = cdisc_data(
-    cdisc_dataset(dataname = "ADSL", x = ADSL),
-    cdisc_dataset(dataname = "ADAE", x = ADAE),
-    cdisc_dataset(dataname = "ADLB", x = ADLB),
-    code = "
-ADSL <- radsl(cached = TRUE)
-ADAE <- radae(cached = TRUE)
-ADLB <- radlb(cached = TRUE)
-"),
+    cdisc_dataset(dataname = "ADSL", x = ADSL, code = "ADSL <- radsl(cached = TRUE)"),
+    cdisc_dataset(dataname = "ADAE", x = ADAE, code = "ADAE <- radae(cached = TRUE)"),
+    cdisc_dataset(dataname = "ADLB", x = ADLB, code = "ADLB <- radlb(cached = TRUE)")
+  ),
   modules = root_modules(
     modules(
       label = "A1", 
@@ -254,12 +242,9 @@ This app shows what happens when a dataset, `ADAE`, is not provided, but still a
 ```{r nonProvidedDataset}
 app <- init(
   data = cdisc_data(
-    cdisc_dataset(dataname = "ADSL", x = ADSL),
-    cdisc_dataset(dataname = "ADLB", x = ADLB),
-    code = "
-ADSL <- radsl(cached = TRUE)
-ADLB <- radlb(cached = TRUE)
-"),
+    cdisc_dataset(dataname = "ADSL", x = ADSL, code = "ADSL <- radsl(cached = TRUE)"),
+    cdisc_dataset(dataname = "ADLB", x = ADLB, code = "ADLB <- radlb(cached = TRUE)")
+  ),
   modules = root_modules(
     teal:::filter_calls_module("ADAE", active_datanames = c("ADAE")),
     teal:::filter_calls_module("ADSL", active_datanames = c("ADSL")),
@@ -283,14 +268,10 @@ safety_filter <- list(
 )
 app <- init(
   data = cdisc_data(
-    cdisc_dataset(dataname = "ADSL", x = ADSL),
-    cdisc_dataset(dataname = "ADAE", x = ADAE),
-    cdisc_dataset(dataname = "ADLB", x = ADLB),
-    code = "
-ADSL <- radsl(cached = TRUE)
-ADAE <- radae(cached = TRUE)
-ADLB <- radlb(cached = TRUE)
-"),
+    cdisc_dataset(dataname = "ADSL", x = ADSL, code = "ADSL <- radsl(cached = TRUE)"),
+    cdisc_dataset(dataname = "ADAE", x = ADAE, code = "ADAE <- radae(cached = TRUE)"),
+    cdisc_dataset(dataname = "ADLB", x = ADLB, code = "ADLB <- radlb(cached = TRUE)")
+  ),
   modules = root_modules(
     teal:::predefined_filters_module(filter = safety_filter),
     teal:::filter_calls_module()
@@ -328,12 +309,9 @@ module_hidden_filters <- teal:::module(
 )
 app <- init(
   data = cdisc_data(
-    cdisc_dataset(dataname = "ADSL", x = ADSL),
-    cdisc_dataset(dataname = "ADLB", x = ADLB),
-    code = "
-ADSL <- radsl(cached = TRUE)
-ADLB <- radlb(cached = TRUE)
-"),
+    cdisc_dataset(dataname = "ADSL", x = ADSL, code = "ADSL <- radsl(cached = TRUE)"),
+    cdisc_dataset(dataname = "ADLB", x = ADLB, code = "ADLB <- radlb(cached = TRUE)")
+  ),
   modules = root_modules(
     module_hidden_filters,
     teal:::filter_calls_module()
@@ -351,12 +329,9 @@ This app purely tests the modules, it only has one tab and two datasets. It can 
 ```{r rawApp}
 app <- init(
   data = cdisc_data(
-    cdisc_dataset(dataname = "ADSL", x = ADSL),
-    cdisc_dataset(dataname = "ADLB", x = ADLB),
-    code = "
-ADSL <- radsl(cached = TRUE)
-ADLB <- radlb(cached = TRUE)
-"),
+    cdisc_dataset(dataname = "ADSL", x = ADSL, code = "ADSL <- radsl(cached = TRUE)"),
+    cdisc_dataset(dataname = "ADLB", x = ADLB, code = "ADLB <- radlb(cached = TRUE)")
+  ),
   modules = root_modules(
     teal:::debug_browser_module()
   ),

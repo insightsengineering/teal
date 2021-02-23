@@ -851,9 +851,8 @@ FilteredData <- R6::R6Class( # nolint
         is.list(state),
         is_logical_single(check_data_hash)
       )
-
       check_setequal(
-        names(state$check_data_hash), self$datanames(),
+        names(state$data_hash), self$datanames(),
         pre_msg = "The names of the stored hash sums and the datanames don't agree:"
       )
       check_setequal(
