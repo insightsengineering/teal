@@ -469,8 +469,7 @@ options(teal_logging = FALSE)
 create_teal_app <- function(title, id) {
   init(
     data = cdisc_data(
-      cdisc_dataset("ADSL", ADSL),
-      code = "ADSL <- radsl(seed = 1)"
+      cdisc_dataset("ADSL", ADSL, code = "ADSL <- radsl(cached = TRUE)")
     ),
     modules = root_modules(
       module(

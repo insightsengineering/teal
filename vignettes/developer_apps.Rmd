@@ -146,7 +146,8 @@ app <- init(
   data = cdisc_data(
     rcd_data(
       rcd_cdisc_dataset_connector(dataname = "ADSL", radsl, cached = TRUE),
-      rcd_cdisc_dataset_connector(dataname = "ADLB", radlb, cached = TRUE)
+      rcd_cdisc_dataset_connector(dataname = "ADLB", radlb, cached = TRUE),
+      rcd_cdisc_dataset_connector(dataname = "ADAE", radae, cached = TRUE)
     )    
   ),
   modules = root_modules(

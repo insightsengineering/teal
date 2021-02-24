@@ -66,14 +66,14 @@ a single `data.frame` object. `Data` is a collection of `Dataset` objects.
 This class won't be used often by the developers but it's essential for all 
 connectors to store and execute R function with possibility to get code to 
 reproduce function calls. In the example below and object of class `CallableFunction` is 
-created which runs `radtte` function with arguments set before. 
+created which runs `radsl` function with arguments set before. 
 
 ```{r}
 library(teal)
 library(random.cdisc.data)
 
 # initialize object
-fun <- callable_function(fun = radtte)
+fun <- callable_function(fun = radsl)
 
 # set arguments to function
 fun$set_args(list(cached = TRUE, na_percentage = 0.05))
@@ -92,7 +92,7 @@ stages of the documentation.
 
 ```{r}
 # add arguments on the fly
-fun$run(args = list(seed = 1, na_percentage = 0.1))
+fun$run(args = list(seed = 1, na_percentage = 0.1, N = 3))
 
 # dynamic arguments not reflected in the call
 cat(fun$get_call())
@@ -107,11 +107,13 @@ one has to use `$assign_to_env()` to copy object and
 ```{r}
 ADSL <- radsl(cached = TRUE)
 
-# copy ADSL to CallableFunction environment 
+fun <- callable_function(fun = radtte)
+
+# copy ADSL to CallableFunction environment
 fun$assign_to_env("ADSL", ADSL)
 
 # set arguments
-fun$set_args(args = list(ADSL = as.name("ADSL"), cached = FALSE))
+fun$set_args(args = list(ADSL = as.name("ADSL"), cached = TRUE))
 
 # execute function
 fun$run()
@@ -132,7 +134,7 @@ below it is not allowed to make any changes in `ADSL`.
 ```{r}
 code <- callable_code(
   "ADTTE <- radtte(
-    ADSL = dplyr::filter(ADSL, SEX == 'M'),
+    ADSL = head(ADSL, 3),
     seed = 1
   )
   ADTTE$x1 <- 1
@@ -162,11 +164,12 @@ Note `cdisc_dataset` returns an object of `CDISCDataset` (inherited from `Datase
 allows datasets to have parents and is needed for CDISC analysis.
 
 ```{r}
-ADSL <- radsl(cached = TRUE)
+library(magrittr)
+ADSL <- radsl(cached = TRUE) %>% head(3)
 
 adsl <- cdisc_dataset(dataname = "ADSL",
                       x = ADSL,
-                      code = "ADSL <- radsl(cached = TRUE)")
+                      code = "ADSL <- radsl(cached = TRUE) %>% head(3)")
 ```
 
 The object created above contains all previously defined attributes which can be 
@@ -197,10 +200,9 @@ the code chunk below, connector is created basing on `radsl` function with
 prespecified `cached = TRUE` argument.
 
 ```{r}
-library(magrittr)
 adsl <- dataset_connector(
   dataname = "ADSL", 
-  pull_callable = callable_function(radsl) %>% set_args(list(cached = TRUE)), 
+  pull_callable = callable_function(radsl) %>% set_args(list(N = 3, seed = 1)), 
   keys = get_cdisc_keys("ADSL"),
   label = "Subject-Level Analysis Dataset"
 )
@@ -375,7 +377,7 @@ together in a `RelationalDataConnector` object.
 # create DatasetConnectors
 adsl <- dataset_connector(
   dataname = "ADSL", 
-  pull_callable = callable_code("radsl(cached = TRUE)"), 
+  pull_callable = callable_code("radsl(N = 3, seed = 1)"), 
   keys = get_cdisc_keys("ADSL"),
   label = "ADSL"
 )
