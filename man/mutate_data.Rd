@@ -5,21 +5,9 @@
 \alias{mutate_data.DataAbstract}
 \title{Mutate data by code}
 \usage{
-mutate_data(
-  x,
-  code = character(0),
-  script = character(0),
-  vars = list(),
-  keys = list()
-)
+mutate_data(x, code = character(0), script = character(0), vars = list())
 
-\method{mutate_data}{DataAbstract}(
-  x,
-  code = character(0),
-  script = character(0),
-  vars = list(),
-  keys = list()
-)
+\method{mutate_data}{DataAbstract}(x, code = character(0), script = character(0), vars = list())
 }
 \arguments{
 \item{x}{(\code{DataAbstract})\cr
@@ -37,13 +25,18 @@ Preferred before \code{code} argument.}
 In case when this object code depends on the \code{raw_data} from the other
 \code{Dataset}, \code{DatasetConnector} object(s) or other constant value,
 this/these object(s) should be included.}
-
-\item{keys}{optional, (\code{character})\cr
-vector with primary keys}
 }
 \value{
 modified \code{x} object
 }
 \description{
 \ifelse{html}{\out{<a href='https://www.tidyverse.org/lifecycle/#experimental'><img src='figures/lifecycle-experimental.svg' alt='Experimental lifecycle'></a>}}{\strong{Experimental}}
+Code used in this mutation is not linked to particular
+but refers to all datasets.
+Consequence of this is that when using \code{get_code(<dataset>)} this
+part of the code will be returned for each dataset specified. This method
+should be used only if particular call involve changing multiple datasets.
+Otherwise please use \code{mutate_dataset}.
+Execution of \code{mutate_code} is delayed after datasets are pulled
+(\code{isTRUE(is_pulled)}).
 }

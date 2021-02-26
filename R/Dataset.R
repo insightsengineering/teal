@@ -16,7 +16,9 @@
 #'   vector with primary keys
 #'
 #' @param code (`character`)\cr
-#'   A character string defining the code needed to produce the data set in \code{x}
+#'   A character string defining the code needed to produce the data set in \code{x}.
+#'   \code{initialize()} and \code{recreate()} accept code as \code{CodeClass} also
+#'   which is needed to preserve the code uniqueness and correct order.
 #'
 #' @param label (`character`)\cr
 #'   Label to describe the dataset
@@ -43,7 +45,14 @@ Dataset <- R6::R6Class( # nolint
                           code = character(0),
                           label = character(0),
                           vars = list()) {
+      stopifnot(is_character_single(dataname))
       stopifnot(is.data.frame(x))
+      stopifnot(is_character_vector(keys, min_length = 0))
+      stopifnot(is_character_vector(code, min_length = 0, max_length = 1) || is(code, "CodeClass"))
+      # label might be NULL also because of taking label attribute from data.frame - missing attr is NULL
+      stopifnot(is.null(label) || is_character_vector(label, min_length = 0, max_length = 1))
+      stopifnot(is.list(vars))
+
 
       private$.raw_data <- x
       private$.ncol <- ncol(x)
@@ -55,32 +64,40 @@ Dataset <- R6::R6Class( # nolint
       private$.row_labels <- c() # not yet defined in rtables
 
       private$set_dataname(dataname)
-      private$code <- CodeClass$new()
       self$set_vars(vars)
-      self$set_code(code)
       self$set_dataset_label(label)
       self$set_keys(keys)
+
+      # needed if recreating dataset - we need to preserve code order and uniqueness
+      private$code <- CodeClass$new()
+      if (is.character(code)) {
+        self$set_code(code)
+      } else {
+        private$code$append(code)
+      }
 
       return(invisible(self))
     },
     #' @description
     #' Recreate a dataset with its current attributes
-    #' This is useful way to have access to class initialize method basing on class object
+    #' This is useful way to have access to class initialize method basing on class object.
     #'
     #' @return a new object of `Dataset` class
     recreate = function(dataname = self$get_dataname(),
                         x = self$get_raw_data(),
                         keys = self$get_keys(),
-                        code = self$get_code(),
+                        code = self$get_code_class(),
                         label = self$get_dataset_label(),
                         vars = list()) {
+
       res <- self$initialize(
         dataname = dataname,
         x = x,
         keys = keys,
         code = code,
         label = label,
-        vars = vars)
+        vars = vars
+      )
 
       return(res)
     },
@@ -193,27 +210,6 @@ Dataset <- R6::R6Class( # nolint
     #' @return (`self`) invisibly for chaining.
     set_keys = function(keys) {
       stopifnot(is_character_vector(keys, min_length = 0))
-
-      if (!is_empty(keys)) {
-        stop_if_not(list(
-          all(keys %in% self$get_colnames()),
-          paste("Primary keys specifed for", self$get_dataname(), "do not exist in the data.")
-        ))
-
-        duplicates <- get_key_duplicates(self$get_raw_data(), keys)
-        if (nrow(duplicates) > 0) {
-          warning(
-            "Duplicate primary key values found in the dataset:\n",
-            paste0(capture.output(print(duplicates))[-c(1, 3)], collapse = "\n"),
-            call. = FALSE,
-            immediate. = TRUE
-          )
-          # default tibble print outputs only 10 rows and as many cols as a screen can fit
-          stop("The provided primary key does not distinguish unique rows. Run get_key_duplicates(dataframe, keys)
-            to get the full list of the duplicated primary keys and their rows.")
-        }
-      }
-
       private$.keys <- keys
       return(invisible(self))
     },
@@ -249,41 +245,36 @@ Dataset <- R6::R6Class( # nolint
     #' Either code or script must be provided, but not both.
     #'
     #' @return (`self`) invisibly for chaining
-    mutate = function(code, vars = list(), keys = self$get_keys()) {
+    mutate = function(code, vars = list()) {
       self$set_vars(vars)
 
       if (inherits(code, "PythonCodeClass")) {
         self$set_code(code$get_code())
-        new_set <- code$eval(dataname = self$get_dataname())
-        self$initialize(
-          dataname = self$get_dataname(),
-          x = new_set,
-          keys = keys,
-          code = self$get_code(),
-          label = self$get_dataset_label(),
-          vars = list()
-        )
+        new_df <- code$eval(dataname = self$get_dataname())
       } else {
-        self$set_code(code)
-
-        code_container <- CodeClass$new()
-        code_container$set_code(code)
-
         # environment needs also this var to mutate self
-        vars <- c(private$vars, setNames(list(self), self$get_dataname()))
-
-        new_df <- private$execute_code(code = code_container, vars = vars)
-
-        self_code <- self$get_code()
-        self$initialize(
-          dataname = self$get_dataname(),
-          x = new_df,
-          keys = keys,
-          code = self_code,
-          label = self$get_dataset_label(),
-          vars = list()
+        code_container <- CodeClass$new()
+        code_container$set_code(
+          code = code,
+          dataname = self$get_dataname()
         )
+        new_df <- private$execute_code(
+          code = code_container,
+          vars = c(private$vars, setNames(list(self), self$get_dataname()))
+        )
+
+        # code set after successful evaluation
+        # otherwise code != dataset
+        self$set_code(code)
       }
+
+      # dataset is recreated by replacing data by mutated object
+      # mutation code is added to the code which replicates the data
+      # because new_code contains also code of the
+      self$recreate(
+        x = new_df,
+        vars = list()
+      )
 
       return(invisible(self))
     },
@@ -347,6 +338,29 @@ Dataset <- R6::R6Class( # nolint
       })
 
       return(res_check)
+    },
+    #' Check if keys has been specified correctly for dataset. Set of \code{keys}
+    #' should distinguish unique rows or be `character(0)`.
+    #'
+    #' @return \code{TRUE} if dataset has been already pulled, else \code{FALSE}
+    check_keys = function(keys = private$.keys) {
+      if (!is_empty(keys)) {
+        stop_if_not(list(
+          all(keys %in% self$get_colnames()),
+          paste("Primary keys specifed for", self$get_dataname(), "do not exist in the data.")
+        ))
+
+        duplicates <- get_key_duplicates(self$get_raw_data(), keys)
+        if (nrow(duplicates) > 0) {
+          stop(
+            "Duplicate primary key values found in the dataset '", self$get_dataname(), "' :\n",
+            paste0(capture.output(print(duplicates))[-c(1, 3)], collapse = "\n"),
+            call. = FALSE
+          )
+
+        }
+      }
+
     },
     #' @description
     #' Check if dataset has already been pulled.
@@ -544,7 +558,7 @@ dataset <- function(dataname,
                     vars = list()) {
   stopifnot(is_character_single(dataname))
   stopifnot(is.data.frame(x))
-  stopifnot(is_character_vector(code, min_length = 0, max_length = 1))
+  stopifnot(is_character_vector(code, min_length = 0, max_length = 1) || is(code, "CodeClass"))
   stopifnot(identical(vars, list()) || is_fully_named_list(vars))
 
   Dataset$new(

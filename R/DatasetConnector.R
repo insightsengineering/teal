@@ -223,7 +223,7 @@ DatasetConnector <- R6::R6Class( #nolint
           x = data,
           keys = character(0), # keys needs to be set after mutate
           label = self$get_dataset_label(),
-          code = private$get_pull_code_class()$get_code(deparse = TRUE)
+          code = private$get_pull_code_class()
         )
 
         if (!is_empty_string(private$get_mutate_code_class()$get_code())) {
@@ -262,13 +262,12 @@ DatasetConnector <- R6::R6Class( #nolint
     #' Either code or script must be provided, but not both.
     #'
     #' @return (`self`) invisibly for chaining.
-    mutate = function(code, vars = list(), keys = self$get_keys()) {
+    mutate = function(code, vars = list()) {
       if (!is.null(private$dataset)) {
-        private$dataset <- mutate_dataset(private$dataset, code = code, vars = vars, keys = keys)
+        private$dataset <- mutate_dataset(private$dataset, code = code, vars = vars)
       }
       private$set_mutate_vars(vars)
       private$set_mutate_code(code)
-      self$set_keys(keys)
 
       return(invisible(self))
     },

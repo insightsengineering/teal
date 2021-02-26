@@ -40,15 +40,6 @@ filtered_data_set <- function(data, datasets) {
 #' @rdname filtered_data_set
 #' @export
 filtered_data_set.RelationalData <- function(data, datasets) { # nolint
-  #check the metadata is consistent with the given datasets
-  data$check_metadata()
-
-  # execute reproducibility check on just loaded data
-  # check will be executed according to data class configuration (it's possible to disable this step)
-  data$check()
-  if (isFALSE(data$get_check_result())) {
-    stop("Reproducibility error. Couldn't reproduce object(s) with a given code")
-  }
 
   datasets$set_code(data$get_code_class())
 

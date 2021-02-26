@@ -212,18 +212,18 @@ CDISCFilteredData <- R6::R6Class( # nolint
           "<-", as.name(filtered_dataname),
           call_with_colon(
             "dplyr::inner_join", # better than merge since we use `dplyr` everywhere
-            x = if (is_empty(parent_keys)) {
+            x = as.name(filtered_dataname_alone),
+            y = if (is_empty(parent_keys)) {
               as.name(private$filtered_dataname(parent_dataname))
             } else {
               call("[", as.name(private$filtered_dataname(parent_dataname)), quote(expr = ), parent_keys) # nolint
             },
-            y = as.name(filtered_dataname_alone),
             unlist_args = if (is_empty(parent_keys) || is_empty(dataset_keys)) {
               list()
             } else if (identical(parent_keys, dataset_keys)) {
               list(by = parent_keys)
             } else {
-              list(by = setNames(dataset_keys, nm = parent_keys))
+              list(by = setNames(parent_keys, nm = dataset_keys))
             }
           )
         )
@@ -255,7 +255,7 @@ CDISCFilteredData <- R6::R6Class( # nolint
       subject_keys <- if (is_empty(parent_name)) {
         self$get_primary_keys(dataname)
       } else {
-        self$get_primary_keys(parent_name)
+        self$get_join_keys(parent_name, dataname)
       }
       no_subjects <- if (is_empty(subject_keys)) {
         dplyr::n_distinct(data)

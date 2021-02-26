@@ -11,6 +11,7 @@ Abstract class containing code for handling set of datasets.
 \itemize{
 \item \href{#method-new}{\code{DataAbstract$new()}}
 \item \href{#method-check}{\code{DataAbstract$check()}}
+\item \href{#method-execute_mutate}{\code{DataAbstract$execute_mutate()}}
 \item \href{#method-get_check_result}{\code{DataAbstract$get_check_result()}}
 \item \href{#method-get_code}{\code{DataAbstract$get_code()}}
 \item \href{#method-get_code_class}{\code{DataAbstract$get_code_class()}}
@@ -53,6 +54,18 @@ Check if the object raw data is reproducible from the \code{get_code()} code.
 \code{TRUE} if all the datasets generated from evaluating the
 \code{get_code()} code are identical to the raw data, else \code{FALSE}.
 }
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-execute_mutate"></a>}}
+\if{latex}{\out{\hypertarget{method-execute_mutate}{}}}
+\subsection{Method \code{execute_mutate()}}{
+Execute mutate code. Using \code{mutate_data(set).DataAbstract}
+does not cause instant execution, the \code{mutate_code} is
+delayed and can be evaluated using this method.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{DataAbstract$execute_mutate()}\if{html}{\out{</div>}}
+}
+
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-get_check_result"></a>}}
@@ -195,7 +208,14 @@ Check if dataset has already been pulled.
 \if{html}{\out{<a id="method-mutate"></a>}}
 \if{latex}{\out{\hypertarget{method-mutate}{}}}
 \subsection{Method \code{mutate()}}{
-Mutate data by code
+Mutate data by code. Code used in this mutation is not linked to particular
+but refers to all datasets.
+Consequence of this is that when using \code{get_code(<dataset>)} this
+part of the code will be returned for each specified dataset. This method
+should be used only if particular call involve changing multiple datasets.
+Otherwise please use \code{mutate_dataset}.
+Execution of \code{mutate_code} is delayed after datasets are pulled
+(\code{isTRUE(is_pulled)}).
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{DataAbstract$mutate(code, vars = list())}\if{html}{\out{</div>}}
 }
@@ -209,7 +229,7 @@ Mutate data by code
 \item{\code{vars}}{(list)\cr
 In case when this object code depends on the \code{raw_data} from the other
 \code{Dataset}, \code{DatasetConnector} object(s) or other constant value,
-this/these object(s) should be included}
+this/these object(s) should be included.}
 }
 \if{html}{\out{</div>}}
 }
@@ -221,7 +241,9 @@ self invisibly for chaining
 \if{html}{\out{<a id="method-mutate_dataset"></a>}}
 \if{latex}{\out{\hypertarget{method-mutate_dataset}{}}}
 \subsection{Method \code{mutate_dataset()}}{
-Mutate dataset by code
+Mutate dataset by code.
+Execution of \code{mutate_code} is delayed after datasets are pulled
+(\code{isTRUE(is_pulled)}).
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{DataAbstract$mutate_dataset(dataname, code, vars = list())}\if{html}{\out{</div>}}
 }

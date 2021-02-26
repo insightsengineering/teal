@@ -16,8 +16,6 @@
 #'   In case when this object code depends on the `raw_data` from the other
 #'   `Dataset`, `DatasetConnector` object(s) or other constant value,
 #'   this/these object(s) should be included.
-#' @param keys optional, (`character`)\cr
-#'   vector with primary keys
 #' @param ... not used, only for support of S3
 #'
 #' @return modified `x` object
@@ -70,13 +68,12 @@ mutate_dataset.Dataset <- function(x,
                                    code = character(0),
                                    script = character(0),
                                    vars = list(),
-                                   keys = get_keys(x),
                                    ...) {
   check_ellipsis(...)
   stopifnot(is_fully_named_list(vars))
 
   code <- code_from_script(code, script)
-  x$mutate(code = code, vars = vars, keys = keys, ...)
+  x$mutate(code = code, vars = vars, ...)
 }
 
 
@@ -86,13 +83,12 @@ mutate_dataset.DatasetConnector <- function(x, # nolint
                                             code = character(0),
                                             script = character(0),
                                             vars = list(),
-                                            keys = get_keys(x),
                                             ...) {
   check_ellipsis(...)
   stopifnot(is_fully_named_list(vars))
 
   code <- code_from_script(code, script)
-  x$mutate(code = code, vars = vars, keys = keys, ...)
+  x$mutate(code = code, vars = vars, ...)
 }
 
 
@@ -103,14 +99,12 @@ mutate_dataset.DataAbstract <- function(x,
                                         code = character(0),
                                         script = character(0),
                                         vars = list(),
-                                        keys = get_keys(x$get_items(dataname)),
                                         ...) {
   check_ellipsis(...)
   stopifnot(is_fully_named_list(vars))
 
   code <- code_from_script(code, script)
   x$mutate_dataset(dataname = dataname, code = code, vars = vars)
-  set_keys(x, dataname, keys)
 }
 
 
@@ -118,6 +112,14 @@ mutate_dataset.DataAbstract <- function(x,
 #' Mutate data by code
 #'
 #' @description `r lifecycle::badge("experimental")`
+#' Code used in this mutation is not linked to particular
+#' but refers to all datasets.
+#' Consequence of this is that when using \code{get_code(<dataset>)} this
+#' part of the code will be returned for each dataset specified. This method
+#' should be used only if particular call involve changing multiple datasets.
+#' Otherwise please use \code{mutate_dataset}.
+#' Execution of \code{mutate_code} is delayed after datasets are pulled
+#' (\code{isTRUE(is_pulled)}).
 #'
 #' @param x (\code{DataAbstract})\cr
 #'   object.
@@ -129,8 +131,7 @@ mutate_dataset.DataAbstract <- function(x,
 mutate_data <- function(x,
                         code = character(0),
                         script = character(0),
-                        vars = list(),
-                        keys = list()) {
+                        vars = list()) {
   UseMethod("mutate_data")
 }
 
@@ -139,19 +140,10 @@ mutate_data <- function(x,
 mutate_data.DataAbstract <- function(x,
                                      code = character(0),
                                      script = character(0),
-                                     vars = list(),
-                                     keys = list()) {
+                                     vars = list()) {
   stopifnot(is_fully_named_list(vars))
-  stopifnot(identical(keys, list()) || (is_character_list(keys, min_length = 0) && is_fully_named_list(keys)))
 
   code <- code_from_script(code, script)
   x$mutate(code = code, vars = vars)
-  if (!is_empty(keys)) {
-    for (key_idx in seq_along(keys)) {
-      key_dataname <- names(keys)[[key_idx]]
-      key_val <- keys[[key_idx]]
-      set_keys(x, key_dataname, key_val)
-    }
-  }
   return(invisible(x))
 }

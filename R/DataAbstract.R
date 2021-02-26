@@ -45,6 +45,67 @@ DataAbstract <- R6::R6Class( #nolint
       return(res)
     },
     #' @description
+    #' Execute mutate code. Using \code{mutate_data(set).DataAbstract}
+    #' does not cause instant execution, the \code{mutate_code} is
+    #' delayed and can be evaluated using this method.
+    execute_mutate = function() {
+      # this will be pulled already! - not needed?
+      if (is_empty(private$mutate_code$code)) {
+        res <- ulapply(
+          private$datasets,
+          function(x) {
+            if (is_pulled(x)) {
+              get_datasets(x)
+            } else {
+              NULL
+            }
+          }
+        )
+        # exit early if mutate isn't required
+        return(if_not_null(res, setNames(res, vapply(res, get_dataname, character(1)))))
+      }
+
+      if (inherits(private$mutate_code, "PythonCodeClass")) {
+        items <- lapply(self$get_items(), get_raw_data)
+        datasets <- setNames(items, vapply(self$get_items(), get_dataname, character(1)))
+
+        new_env <- private$mutate_code$eval(vars = c(datasets, private$mutate_vars))
+      } else {
+        # have to evaluate post-processing code (i.e. private$mutate_code) before returning dataset
+        new_env <- new.env(parent = parent.env(globalenv()))
+        for (dataset in self$get_items()) {
+          assign(get_dataname(dataset), get_raw_data(dataset), envir = new_env)
+        }
+
+        for (var_idx in seq_along(private$mutate_vars)) {
+          mutate_var <- private$mutate_vars[[var_idx]]
+          assign(
+            x = names(private$mutate_vars)[[var_idx]],
+            value = `if`(
+              is(mutate_var, "Dataset") || is(mutate_var, "DatasetConnector"),
+              get_raw_data(mutate_var),
+              mutate_var
+            ),
+            envir = new_env
+          )
+        }
+
+        private$mutate_code$eval(envir = new_env)
+      }
+
+      lapply(
+        self$get_datasets(),
+        function(x) {
+          x$recreate(
+            x = get(get_dataname(x), new_env)
+          )
+        }
+      )
+
+      return(invisible(NULL))
+
+    },
+    #' @description
     #' Get result of reproducibility check
     #' @return \code{NULL} if check has not been called yet, \code{TRUE} / \code{FALSE} otherwise
     get_check_result = function() {
@@ -120,66 +181,7 @@ DataAbstract <- R6::R6Class( #nolint
         stop("Not all datasets have been pulled yet.\n",
              "- Please use `load_datasets()` to retrieve complete results.")
       }
-
-      if (is_empty(private$mutate_code$code)) {
-        res <- ulapply(
-          private$datasets,
-          function(x) {
-            if (is_pulled(x)) {
-              get_datasets(x)
-            } else {
-              NULL
-            }
-          }
-        )
-        # exit early if mutate isn't required
-        return(if_not_null(res, setNames(res, vapply(res, get_dataname, character(1)))))
-      }
-
-      if (inherits(private$mutate_code, "PythonCodeClass")) {
-        items <- lapply(self$get_items(), get_raw_data)
-        datasets <- setNames(items, vapply(self$get_items(), get_dataname, character(1)))
-
-        new_env <- private$mutate_code$eval(vars = c(datasets, private$mutate_vars))
-      } else {
-        # have to evaluate post-processing code (i.e. private$mutate_code) before returning dataset
-        new_env <- new.env(parent = parent.env(globalenv()))
-        for (dataset in self$get_items()) {
-          assign(get_dataname(dataset), get_raw_data(dataset), envir = new_env)
-        }
-
-        for (var_idx in seq_along(private$mutate_vars)) {
-          mutate_var <- private$mutate_vars[[var_idx]]
-          if (is(mutate_var, "Dataset") || is(mutate_var, "DatasetConnector")) {
-            assign(
-              x = names(private$mutate_vars)[[var_idx]],
-              value = get_raw_data(mutate_var),
-              envir = new_env
-            )
-          } else {
-            assign(
-              x = names(private$mutate_vars)[[var_idx]],
-              value = mutate_var,
-              envir = new_env
-            )
-          }
-        }
-
-        private$mutate_code$eval(envir = new_env)
-      }
-
-      res <- sapply(
-        self$get_items(),
-        function(x) {
-          x_name <- get_dataname(x)
-          x_dataset <- get_dataset(x)
-          x_dataset$recreate(x = get(x_name, new_env))
-        },
-        USE.NAMES = TRUE,
-        simplify = FALSE
-      )
-
-      return(if_not_null(res, setNames(res, vapply(res, get_dataname, character(1)))))
+      ulapply(self$get_items(), get_dataset)
     },
     #' @description
     #' Get all datasets and all dataset connectors
@@ -207,14 +209,21 @@ DataAbstract <- R6::R6Class( #nolint
       all(vapply(private$datasets, is_pulled, logical(1)))
     },
     #' @description
-    #' Mutate data by code
+    #' Mutate data by code. Code used in this mutation is not linked to particular
+    #' but refers to all datasets.
+    #' Consequence of this is that when using \code{get_code(<dataset>)} this
+    #' part of the code will be returned for each specified dataset. This method
+    #' should be used only if particular call involve changing multiple datasets.
+    #' Otherwise please use \code{mutate_dataset}.
+    #' Execution of \code{mutate_code} is delayed after datasets are pulled
+    #' (\code{isTRUE(is_pulled)}).
     #'
     #' @param code (\code{character}) Code to mutate the dataset. Must contain the
     #'  \code{dataset$dataname}
     #' @param vars (list)\cr
     #'   In case when this object code depends on the \code{raw_data} from the other
     #'   \code{Dataset}, \code{DatasetConnector} object(s) or other constant value,
-    #'   this/these object(s) should be included
+    #'   this/these object(s) should be included.
     #'
     #' @return self invisibly for chaining
     mutate = function(code, vars = list()) {
@@ -229,7 +238,9 @@ DataAbstract <- R6::R6Class( #nolint
       return(invisible(self))
     },
     #' @description
-    #' Mutate dataset by code
+    #' Mutate dataset by code.
+    #' Execution of \code{mutate_code} is delayed after datasets are pulled
+    #' (\code{isTRUE(is_pulled)}).
     #'
     #' @param dataname (\code{character}) Dataname to be mutated
     #' @param code (\code{character}) Code to mutate the dataset. Must contain the

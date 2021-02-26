@@ -34,7 +34,6 @@ x$get_parent()
 \itemize{
 \item \href{#method-new}{\code{CDISCDataset$new()}}
 \item \href{#method-recreate}{\code{CDISCDataset$recreate()}}
-\item \href{#method-mutate}{\code{CDISCDataset$mutate()}}
 \item \href{#method-get_attrs}{\code{CDISCDataset$get_attrs()}}
 \item \href{#method-get_parent}{\code{CDISCDataset$get_parent()}}
 \item \href{#method-set_parent}{\code{CDISCDataset$set_parent()}}
@@ -45,6 +44,7 @@ x$get_parent()
 \out{<details ><summary>Inherited methods</summary>}
 \itemize{
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="Dataset" data-id="check">}\href{../../teal/html/Dataset.html#method-check}{\code{teal::Dataset$check()}}\out{</span>}
+\item \out{<span class="pkg-link" data-pkg="teal" data-topic="Dataset" data-id="check_keys">}\href{../../teal/html/Dataset.html#method-check_keys}{\code{teal::Dataset$check_keys()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="Dataset" data-id="get_character_colnames">}\href{../../teal/html/Dataset.html#method-get_character_colnames}{\code{teal::Dataset$get_character_colnames()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="Dataset" data-id="get_code">}\href{../../teal/html/Dataset.html#method-get_code}{\code{teal::Dataset$get_code()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="Dataset" data-id="get_code_class">}\href{../../teal/html/Dataset.html#method-get_code_class}{\code{teal::Dataset$get_code_class()}}\out{</span>}
@@ -60,6 +60,7 @@ x$get_parent()
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="Dataset" data-id="get_row_labels">}\href{../../teal/html/Dataset.html#method-get_row_labels}{\code{teal::Dataset$get_row_labels()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="Dataset" data-id="get_rownames">}\href{../../teal/html/Dataset.html#method-get_rownames}{\code{teal::Dataset$get_rownames()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="Dataset" data-id="is_pulled">}\href{../../teal/html/Dataset.html#method-is_pulled}{\code{teal::Dataset$is_pulled()}}\out{</span>}
+\item \out{<span class="pkg-link" data-pkg="teal" data-topic="Dataset" data-id="mutate">}\href{../../teal/html/Dataset.html#method-mutate}{\code{teal::Dataset$mutate()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="Dataset" data-id="set_code">}\href{../../teal/html/Dataset.html#method-set_code}{\code{teal::Dataset$set_code()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="Dataset" data-id="set_dataset_label">}\href{../../teal/html/Dataset.html#method-set_dataset_label}{\code{teal::Dataset$set_dataset_label()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="Dataset" data-id="set_keys">}\href{../../teal/html/Dataset.html#method-set_keys}{\code{teal::Dataset$set_keys()}}\out{</span>}
@@ -124,7 +125,7 @@ This is useful way to have access to class initialize method basing on class obj
   x = self$get_raw_data(),
   keys = self$get_keys(),
   parent = self$get_parent(),
-  code = self$get_code(),
+  code = self$get_code_class(),
   label = self$get_dataset_label(),
   vars = list()
 )}\if{html}{\out{</div>}}
@@ -159,37 +160,6 @@ this/these object(s) should be included as named element of the list.}
 }
 \subsection{Returns}{
 a new object of \code{CDISCDataset} class
-}
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-mutate"></a>}}
-\if{latex}{\out{\hypertarget{method-mutate}{}}}
-\subsection{Method \code{mutate()}}{
-Mutate dataset by code
-
-Either code or script must be provided, but not both.
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{CDISCDataset$mutate(code, vars = list(), keys = self$get_keys())}\if{html}{\out{</div>}}
-}
-
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{code}}{(\code{character})\cr
-A character string defining the code needed to produce the data set in \code{x}}
-
-\item{\code{vars}}{(named \code{list})) \cr
-In case when this object code depends on the \code{raw_data} from the other
-\code{Dataset} object(s) or other constant value,
-this/these object(s) should be included as named element of the list.}
-
-\item{\code{keys}}{(\code{character})\cr
-vector with primary keys}
-}
-\if{html}{\out{</div>}}
-}
-\subsection{Returns}{
-(\code{self}) invisibly for chaining
 }
 }
 \if{html}{\out{<hr>}}

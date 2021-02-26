@@ -103,7 +103,6 @@ CDISCData <- R6::R6Class( # nolint
       }
 
       super$check_metadata()
-
       for (idx1 in seq_along(private$parent)) {
         name_from <- names(private$parent)[[idx1]]
         for (idx2 in seq_along(private$parent[[idx1]])) {

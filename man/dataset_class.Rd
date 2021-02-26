@@ -60,6 +60,7 @@ will be deprecated in future}
 \item \href{#method-set_vars}{\code{Dataset$set_vars()}}
 \item \href{#method-set_code}{\code{Dataset$set_code()}}
 \item \href{#method-check}{\code{Dataset$check()}}
+\item \href{#method-check_keys}{\code{Dataset$check_keys()}}
 \item \href{#method-is_pulled}{\code{Dataset$is_pulled()}}
 \item \href{#method-clone}{\code{Dataset$clone()}}
 }
@@ -92,7 +93,9 @@ A given name for the dataset it may not contain spaces}
 vector with primary keys}
 
 \item{\code{code}}{(\code{character})\cr
-A character string defining the code needed to produce the data set in \code{x}}
+A character string defining the code needed to produce the data set in \code{x}.
+\code{initialize()} and \code{recreate()} accept code as \code{CodeClass} also
+which is needed to preserve the code uniqueness and correct order.}
 
 \item{\code{label}}{(\code{character})\cr
 Label to describe the dataset}
@@ -110,13 +113,13 @@ this/these object(s) should be included as named element of the list.}
 \if{latex}{\out{\hypertarget{method-recreate}{}}}
 \subsection{Method \code{recreate()}}{
 Recreate a dataset with its current attributes
-This is useful way to have access to class initialize method basing on class object
+This is useful way to have access to class initialize method basing on class object.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{Dataset$recreate(
   dataname = self$get_dataname(),
   x = self$get_raw_data(),
   keys = self$get_keys(),
-  code = self$get_code(),
+  code = self$get_code_class(),
   label = self$get_dataset_label(),
   vars = list()
 )}\if{html}{\out{</div>}}
@@ -134,7 +137,9 @@ A given name for the dataset it may not contain spaces}
 vector with primary keys}
 
 \item{\code{code}}{(\code{character})\cr
-A character string defining the code needed to produce the data set in \code{x}}
+A character string defining the code needed to produce the data set in \code{x}.
+\code{initialize()} and \code{recreate()} accept code as \code{CodeClass} also
+which is needed to preserve the code uniqueness and correct order.}
 
 \item{\code{label}}{(\code{character})\cr
 Label to describe the dataset}
@@ -402,22 +407,21 @@ Mutate dataset by code
 
 Either code or script must be provided, but not both.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{Dataset$mutate(code, vars = list(), keys = self$get_keys())}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{Dataset$mutate(code, vars = list())}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
 \item{\code{code}}{(\code{character})\cr
-A character string defining the code needed to produce the data set in \code{x}}
+A character string defining the code needed to produce the data set in \code{x}.
+\code{initialize()} and \code{recreate()} accept code as \code{CodeClass} also
+which is needed to preserve the code uniqueness and correct order.}
 
 \item{\code{vars}}{(named \code{list})) \cr
 In case when this object code depends on the \code{raw_data} from the other
 \code{Dataset} object(s) or other constant value,
 this/these object(s) should be included as named element of the list.}
-
-\item{\code{keys}}{optional, (\code{character})\cr
-vector with primary keys}
 }
 \if{html}{\out{</div>}}
 }
@@ -461,7 +465,9 @@ Sets reproducible code
 \if{html}{\out{<div class="arguments">}}
 \describe{
 \item{\code{code}}{(\code{character})\cr
-A character string defining the code needed to produce the data set in \code{x}}
+A character string defining the code needed to produce the data set in \code{x}.
+\code{initialize()} and \code{recreate()} accept code as \code{CodeClass} also
+which is needed to preserve the code uniqueness and correct order.}
 }
 \if{html}{\out{</div>}}
 }
@@ -481,6 +487,28 @@ Check to determine if the raw data is reproducible from the \code{get_code()} co
 \subsection{Returns}{
 \code{TRUE} if the dataset generated from evaluating the
 \code{get_code()} code is identical to the raw data, else \code{FALSE}.
+Check if keys has been specified correctly for dataset. Set of \code{keys}
+should distinguish unique rows or be \code{character(0)}.
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-check_keys"></a>}}
+\if{latex}{\out{\hypertarget{method-check_keys}{}}}
+\subsection{Method \code{check_keys()}}{
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{Dataset$check_keys(keys = private$.keys)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{keys}}{optional, (\code{character})\cr
+vector with primary keys}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Returns}{
+\code{TRUE} if dataset has been already pulled, else \code{FALSE}
 }
 }
 \if{html}{\out{<hr>}}

@@ -53,6 +53,7 @@ CDISCDataset <- R6::R6Class( # nolint
     #' @description
     #' Create a new object of `CDISCDataset` class
     initialize = function(dataname, x, keys, parent, code = character(0), label = character(0), vars = list()) {
+      stopifnot(is_character_empty(parent) || is_character_single(parent))
       super$initialize(dataname = dataname, x = x, keys = keys, code = code, label = label, vars = vars)
 
       self$set_parent(parent)
@@ -67,7 +68,7 @@ CDISCDataset <- R6::R6Class( # nolint
                         x = self$get_raw_data(),
                         keys = self$get_keys(),
                         parent = self$get_parent(),
-                        code = self$get_code(),
+                        code = self$get_code_class(),
                         label = self$get_dataset_label(),
                         vars = list()) {
       res <- self$initialize(
@@ -77,55 +78,10 @@ CDISCDataset <- R6::R6Class( # nolint
         parent = parent,
         code = code,
         label = label,
-        vars = vars)
+        vars = vars
+      )
 
       return(res)
-    },
-    #' @description
-    #' Mutate dataset by code
-    #'
-    #' Either code or script must be provided, but not both.
-    #'
-    #' @return (`self`) invisibly for chaining
-    mutate = function(code, vars = list(), keys = self$get_keys()) {
-      self$set_vars(vars)
-
-      if (inherits(code, "PythonCodeClass")) {
-        self$set_code(code$get_code())
-        new_set <- code$eval(dataname = self$get_dataname())
-        self$initialize(
-          dataname = self$get_dataname(),
-          x = new_set,
-          keys = keys,
-          parent = self$get_parent(),
-          code = self$get_code(),
-          label = self$get_dataset_label(),
-          vars = list()
-        )
-      } else {
-        self$set_code(code)
-
-        code_container <- CodeClass$new()
-        code_container$set_code(code)
-
-        # environment needs also this var to mutate self
-        vars <- c(private$vars, setNames(list(self), self$get_dataname()))
-
-        new_set <- private$execute_code(code = code_container, vars = vars)
-
-        self_code <- self$get_code()
-        self$initialize(
-          dataname = self$get_dataname(),
-          x = new_set,
-          keys = keys,
-          parent = self$get_parent(),
-          code = self_code,
-          label = self$get_dataset_label(),
-          vars = list()
-        )
-      }
-
-      return(invisible(self))
     },
     #' @description
     #' Get all dataset attributes

@@ -382,7 +382,7 @@ isolate({
       trimws(deparse(ds$get_filter_expr("ADAE"), width.cutoff = 500L)[expected_lines]),
       c(
         "ADAE_FILTERED_ALONE <- dplyr::filter(ADAE, is.na(ASEQ) | (is.infinite(ASEQ) | ASEQ >= 1 & ASEQ <= 5))", # nolint
-        "ADAE_FILTERED <- dplyr::inner_join(x = ADSL_FILTERED[, c(\"STUDYID\", \"USUBJID\")], y = ADAE_FILTERED_ALONE, by = c(\"STUDYID\", \"USUBJID\"))" # nolint
+        "ADAE_FILTERED <- dplyr::inner_join(x = ADAE_FILTERED_ALONE, y = ADSL_FILTERED[, c(\"STUDYID\", \"USUBJID\")], by = c(\"STUDYID\", \"USUBJID\"))" # nolint
       )
     )
   })

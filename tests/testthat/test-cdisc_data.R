@@ -39,6 +39,22 @@ test_that("single dataset / dataset code", {
     data$get_code_class(FALSE)$get_code(),
     "ADSL <- radsl(cached = TRUE)\nADSL <- dplyr::filter(ADSL, SEX == \"F\")"
   )
+  expect_reference(
+    data$get_dataset("ADSL")$get_raw_data(),
+    ADSL
+  )
+
+  expect_true(data$check())
+  data$execute_mutate()
+  expect_false(data$check())
+  data$check_metadata()
+
+  new_env <- new.env()
+  eval(parse(text = data$get_code("ADSL")), envir = new_env)
+  expect_identical(
+    get(x = "ADSL", envir = new_env),
+    data$get_dataset("ADSL")$get_raw_data()
+  )
 })
 
 # 2. two datasets / datasets code -------------------------------
@@ -78,7 +94,8 @@ test_that("two datasets / datasets code", {
       mutate_dataset(
         dataname = "ADTTE",
         code = "ADTTE <- dplyr::filter(ADTTE, USUBJID %in% ADSL$USUBJID)",
-        vars = list(ADSL = adsl)) %>%
+        vars = list(ADSL = adsl)
+      ) %>%
       mutate_dataset(dataname = "ADSL", code = "ADSL$x <- 1")
   )
 
@@ -112,10 +129,20 @@ test_that("two datasets / datasets code", {
   )
 
   expect_identical(
+    get_code(data),
+    "ADSL <- radsl(cached = TRUE)\nADTTE <- radtte(cached = TRUE)\nADSL <- dplyr::filter(ADSL, SEX == \"F\")\nADTTE <- dplyr::filter(ADTTE, USUBJID %in% ADSL$USUBJID)\nADSL$x <- 1" #nolint
+  )
+
+  expect_identical(
+    vapply(get_raw_data(data), nrow, integer(1)),
+    c(ADSL = 400L, ADTTE = 1600L)
+  )
+
+  data$execute_mutate()
+  expect_identical(
     vapply(get_raw_data(data), nrow, integer(1)),
     c(ADSL = 231L, ADTTE = 924L)
   )
-
 })
 
 test_that("Duplicated code from datasets is shown", {
@@ -229,9 +256,25 @@ test_that("two datasets / datasets code", {
     "ADSL <- radsl(cached = TRUE)\nADTTE <- radtte(cached = TRUE)\nADSL <- dplyr::filter(ADSL, SEX == \"F\")\nADSL$x <- 1" #nolint
   )
 
+  expect_reference(
+    data$get_dataset("ADSL")$get_raw_data(),
+    ADSL
+  )
+  expect_reference(
+    data$get_dataset("ADTTE")$get_raw_data(),
+    ADTTE
+  )
+  data$execute_mutate()
+
+  new_env <- new.env()
+  eval(parse(text = data$get_code()), envir = new_env)
   expect_identical(
-    vapply(get_raw_data(data), nrow, integer(1)),
-    c(ADSL = 231L, ADTTE = 924L)
+    get(x = "ADSL", envir = new_env),
+    data$get_dataset("ADSL")$get_raw_data()
+  )
+  expect_identical(
+    get(x = "ADTTE", envir = new_env),
+    data$get_dataset("ADTTE")$get_raw_data()
   )
 })
 
@@ -268,7 +311,11 @@ test_that("dataset + connector / global code", {
 
   data <- cdisc_data(adsl, adtte, check = TRUE) %>%
     mutate_data(code = "ADSL <- dplyr::filter(ADSL, SEX == 'F')") %>%
-    mutate_dataset(dataname = "ADTTE", code = "ADTTE <- dplyr::filter(ADTTE, USUBJID %in% ADSL$USUBJID)") %>%
+    mutate_dataset(
+      dataname = "ADTTE",
+      code = "ADTTE <- dplyr::filter(ADTTE, USUBJID %in% ADSL$USUBJID)",
+      vars = list(ADSL = adsl)
+    ) %>%
     mutate_dataset(dataname = "ADSL", code = "ADSL$x <- 1")
 
   expect_identical(
@@ -282,6 +329,10 @@ test_that("dataset + connector / global code", {
   expect_identical(
     get_code(data, "ADSL"),
     "ADSL <- radsl(cached = TRUE)\nADTTE <- radtte(ADSL = ADSL, cached = TRUE)\nADSL <- dplyr::filter(ADSL, SEX == \"F\")\nADSL$x <- 1" #nolint
+  )
+  expect_identical(
+    get_code(data),
+    "ADSL <- radsl(cached = TRUE)\nADTTE <- radtte(ADSL = ADSL, cached = TRUE)\nADSL <- dplyr::filter(ADSL, SEX == \"F\")\nADTTE <- dplyr::filter(ADTTE, USUBJID %in% ADSL$USUBJID)\nADSL$x <- 1" #nolint
   )
 
   expect_identical(
@@ -303,13 +354,8 @@ test_that("dataset + connector / global code", {
   )
 
   expect_error(data$check(), "Cannot check the raw data of 'ADTTE' until it is pulled.")
-  expect_silent(load_datasets(adtte))
+  load_dataset(adtte)
   expect_true(data$check())
-
-  expect_identical(
-    vapply(get_raw_data(data), nrow, integer(1)),
-    c(ADSL = 231L, ADTTE = 924L)
-  )
 })
 
 # 5.dataset + connector / global code
@@ -411,6 +457,7 @@ test_that("two datasets / datasets code", {
   expect_error(data$check(), "'ADTTE' has not been pulled yet")
   load_dataset(adtte)
   expect_true(data$check()) # TRUE
+  data$execute_mutate()
   expect_identical(
     vapply(get_raw_data(data), nrow, integer(1)),
     c(ADSL = 231L, ADTTE = 924L)
@@ -746,16 +793,37 @@ test_that("Error - dataset is not of correct class", {
   )
 })
 
-test_that("Empty keys for single and multiple datasets", {
-  expect_silent(cdisc_data(cdisc_dataset("ADSL", ADSL)))
+test_that("Check the keys", {
+  data1 <- teal_data(dataset(dataname = "ADSL", x = ADSL, keys = "non_existing_column"))
+  expect_error(
+    data1$check_metadata(),
+    "The join key specification requires dataset ADSL to contain the following columns: non_existing_column"
+  )
 
-  expect_silent(cdisc_data(cdisc_dataset("ADSL", ADSL), cdisc_dataset("ADTTE", ADTTE)))
-})
+  data2 <- cdisc_data(dataset("ADSL", ADSL), dataset("ADTTE", ADTTE))
+  expect_identical(
+    data2$get_dataset("ADSL")$get_keys(),
+    character(0)
+  )
+  expect_identical(
+    data2$get_dataset("ADTTE")$get_keys(),
+    character(0)
+  )
 
-test_that("Warning - primary keys are not unique for the dataset", {
-  expect_true(tryCatch(
-    cdisc_data(cdisc_dataset("ADSL", ADSL, keys = c("SEX"))),
-    warning = function(e) TRUE))
+  # we can have a empty keys - then we don't check them
+  expect_silent(data2$check_metadata())
+
+  ds <- cdisc_dataset("ADSL", ADSL, keys = c("SEX"))
+  expect_error(
+    ds$check_keys(),
+    "Duplicate primary key values found in the dataset 'ADSL'"
+  )
+
+  data <- cdisc_data(ds)
+  expect_error(
+    data$check_metadata(),
+    "Duplicate primary key values found in the dataset 'ADSL'"
+  )
 })
 
 # 7. invalid arguments -----

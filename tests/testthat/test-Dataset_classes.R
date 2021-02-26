@@ -26,9 +26,23 @@ test_that("Dataset basics", {
   df <- as.data.frame(
     list(a = c("a", "a", "b", "b", "c"), b = c(1, 2, 3, 3, 4), c = c(1, 2, 3, 4, 5))
   )
+  # keys checking is not immediate
+  ds1 <- dataset(dataname = "df", x = df, keys = character(0))
+  expect_silent(ds1$check_keys())
+
+  ds2 <- dataset(dataname = "df", x = df, keys = character(0)) %>% set_keys(c("c"))
+  expect_silent(ds2$check_keys())
+
+  ds3 <- dataset(dataname = "df", x = df) %>% set_keys("non_existing_col")
   expect_error(
-    suppressWarnings(Dataset$new(dataname = "test", x = df, keys = c("a", "b"))),
-    regexp = "The provided primary key does not distinguish unique rows"
+    ds3$check_keys(),
+    "Primary keys specifed for df do not exist in the data."
+  )
+
+  ds4 <- dataset(dataname = "df", x = df) %>% set_keys("a")
+  expect_error(
+    ds4$check_keys(),
+    "Duplicate primary key values found in the dataset 'df'"
   )
 })
 

@@ -14,7 +14,6 @@ mutate_dataset(x, ...)
   code = character(0),
   script = character(0),
   vars = list(),
-  keys = get_keys(x),
   ...
 )
 
@@ -23,7 +22,6 @@ mutate_dataset(x, ...)
   code = character(0),
   script = character(0),
   vars = list(),
-  keys = get_keys(x),
   ...
 )
 
@@ -33,7 +31,6 @@ mutate_dataset(x, ...)
   code = character(0),
   script = character(0),
   vars = list(),
-  keys = get_keys(x$get_items(dataname)),
   ...
 )
 }
@@ -55,9 +52,6 @@ Preferred before \code{code} argument.}
 In case when this object code depends on the \code{raw_data} from the other
 \code{Dataset}, \code{DatasetConnector} object(s) or other constant value,
 this/these object(s) should be included.}
-
-\item{keys}{optional, (\code{character})\cr
-vector with primary keys}
 
 \item{dataname}{(\code{character})\cr
 Dataname to be mutated.}

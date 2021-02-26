@@ -375,7 +375,7 @@ Mutate dataset by code
 
 Either code or script must be provided, but not both.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{DatasetConnector$mutate(code, vars = list(), keys = self$get_keys())}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{DatasetConnector$mutate(code, vars = list())}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
@@ -393,9 +393,6 @@ In case when this object code depends on the \code{raw_data} from the other
 this/these object(s) should be included. Please note that \code{vars}
 are included to this object as local \code{vars} and they cannot be modified
 within another dataset.}
-
-\item{\code{keys}}{optional, (\code{character})\cr
-vector of dataset primary keys column names}
 }
 \if{html}{\out{</div>}}
 }

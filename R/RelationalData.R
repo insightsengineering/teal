@@ -267,9 +267,7 @@ RelationalData <- R6::R6Class( # nolint
     #' Check there is consistency between the datasets and join_keys
     #' @return raise and error or invisible `TRUE`
     check_metadata = function() {
-
       for (dataset in self$get_datasets()) {
-
         dataname <- get_dataname(dataset)
         dataset_colnames <- dataset$get_colnames()
 
@@ -298,6 +296,7 @@ RelationalData <- R6::R6Class( # nolint
             )
           )
         }
+        dataset$check_keys()
       }
       return(invisible(TRUE))
     }
@@ -374,8 +373,23 @@ RelationalData <- R6::R6Class( # nolint
             }
           }
 
-
           if (self$is_pulled()) {
+
+            withProgress(value = 1, message = "Checking data reproducibility", {
+              # We check first and then mutate.
+              #  mutate_code is reproducible by default we assume that we don't
+              #  have to check the result of the re-evaluation of the code
+              self$check()
+              if (isFALSE(self$get_check_result())) {
+                stop("Reproducibility error. Couldn't reproduce object(s) with a given code")
+              }
+            })
+
+            withProgress(value = 1, message = "Executing processing code", {
+              self$execute_mutate()
+              self$check_metadata()
+            })
+
             shinyjs::hide("delayed_data")
             rv(self)
           }
