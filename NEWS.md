@@ -1,4 +1,5 @@
-# teal 0.9.2.9000
+# teal 0.9.3
+
 ### New Features
 * Support for data-standard independent input and filtering. That includes refactor of the all data and dataset structures together with refactor of `FilteredData` class.
 * New `JoinKeys` class (with `join_keys()` constructors and `join_key()` constructor for its elements) to store joining key columns between datasets.
@@ -14,8 +15,6 @@
 
 ### Enhancements
 * Added button to remove all active filters from the Filter Panel.
-
-* Issues with no news:
 
 # teal 0.9.2
 
