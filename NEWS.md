@@ -6,6 +6,7 @@
 * Refactored the most basic `dataset()` constructor, added `cdisc_dataset()` constructor and `as_cdisc()` conversion function. 
 * Soft-deprecate removed class constructors and obsolete functions (e.g. `keys()`).
 * Added `get_keys()` and `set_keys()` functions to extract and manipulate datasets primary keys respectively.
+* Unexported `filtered_data_new`, `filtered_data_set` and `filtered_data_set_filters`.
 
 ### Bug fixes
 * Duplicated lines of code passed to `teal::cdisc_dataset` and other `teal::RelationalDataset` constructors should now be shown when getting the code from `teal::cdisc_data` objects and other `teal::RelationalData` objects.

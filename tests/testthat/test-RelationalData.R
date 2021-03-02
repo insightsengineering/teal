@@ -17,7 +17,7 @@ test_that("check_metadata does not produce error if join_keys are consistent for
   df_1 <- data.frame(x = 1:10, y = 1:10)
   df_2 <- data.frame(u = 1:10, v = 1:10)
 
-  constructor_wrapper <- function(join_keys){
+  constructor_wrapper <- function(join_keys) {
     data <- teal_data(
       dataset("df_1", df_1),
       dataset("df_2", df_2),
@@ -56,7 +56,7 @@ test_that("check_metadata fails if inconsistent join_keys for given datasets", {
   df_1 <- data.frame(x = 1:10, y = 1:10)
   df_2 <- data.frame(u = 1:10, v = 1:10)
 
-  constructor_wrapper <- function(join_keys){
+  constructor_wrapper <- function(join_keys) {
     data <- teal_data(
       dataset("df_1", df_1),
       dataset("df_2", df_2),

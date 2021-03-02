@@ -6,20 +6,16 @@
 #'
 #' @return a (`CDISCDataset`, `CDISCDatasetConnector`) object
 #'
-#' @export
+#' @noRd
 filtered_data_new <- function(x) {
   UseMethod("filtered_data_new")
 }
 
-#' @rdname filtered_data_new
-#' @export
-filtered_data_new.RelationalData <- function(x) { # nolint
+filtered_data_new.RelationalData <- function(x) { # nolintr # nousage
   FilteredData$new()
 }
 
-#' @rdname filtered_data_new
-#' @export
-filtered_data_new.CDISCData <- function(x) {
+filtered_data_new.CDISCData <- function(x) { # nolintr # nousage
   CDISCFilteredData$new()
 }
 
@@ -32,14 +28,12 @@ filtered_data_new.CDISCData <- function(x) {
 #'
 #' @return modified `FilteredData` object
 #'
-#' @export
-filtered_data_set <- function(data, datasets) {
+#' @noRd
+filtered_data_set <- function(data, datasets) { # nolintr # nousage
   UseMethod("filtered_data_set")
 }
 
-#' @rdname filtered_data_set
-#' @export
-filtered_data_set.RelationalData <- function(data, datasets) { # nolint
+filtered_data_set.RelationalData <- function(data, datasets) { # nolintr # nousage
 
   datasets$set_code(data$get_code_class())
 
@@ -63,7 +57,7 @@ filtered_data_set.RelationalData <- function(data, datasets) { # nolint
 #' @param filter (named `list`) of filter entries
 #'
 #' @importFrom methods is
-#' @export
+#' @noRd
 filtered_data_set_filters <- function(datasets, filter) {
   stopifnot(
     is(datasets, "FilteredData"),
