@@ -97,6 +97,13 @@ ui_filter_panel <- function(id, datasets, datanames) {
         ),
         tags$div(
           class = "col-sm-6",
+          actionLink(
+            ns("remove_all_filters"),
+            "",
+            icon("times-circle", lib = "font-awesome"),
+            title = "remove active filters",
+            class = "remove_all pull-right"
+          ),
           tags$a(
             href = "javascript:void(0)",
             class = "remove pull-right",
@@ -107,13 +114,6 @@ ui_filter_panel <- function(id, datasets, datanames) {
             ),
             title = "minimise panel",
             tags$span(icon("minus-circle", lib = "font-awesome"))
-          ),
-          actionLink(
-            ns("remove_all_filters"),
-            "",
-            icon("times-circle", lib = "font-awesome"),
-            title = "remove active filters",
-            class = "remove_all pull-right"
           )
         )
       ),
