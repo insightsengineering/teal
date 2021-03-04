@@ -117,7 +117,7 @@ srv_add_filter_variable <- function(input, output, session, datasets, dataname, 
     # and get types so that icons can be displayed as well
     choice_labels <- datasets$get_varlabels(dataname)
     choice_labels[is.na(choice_labels)] <- names(choice_labels[is.na(choice_labels)])
-    data <- datasets$get_data(dataname, filtered = FALSE)[1, ]
+    data <- datasets$get_data(dataname, filtered = FALSE)[1, , drop = FALSE]
     choice_types <- setNames(variable_types(data), colnames(data))
     choice_types[datasets$get_data_attr(dataname = dataname, "keys")] <- "primary_key"
 
