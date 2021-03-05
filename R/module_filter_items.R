@@ -91,6 +91,7 @@ ui_filter_items <- function(id, dataname) {
 #'   filters at once is not returned)
 #'
 #' @importFrom shinyWidgets pickerInput pickerOptions
+#' @importFrom digest digest
 srv_filter_items <- function(input, output, session, datasets, dataname) {
   stopifnot(
     is(datasets, "FilteredData"),
@@ -140,7 +141,7 @@ srv_filter_items <- function(input, output, session, datasets, dataname) {
   shown_vars_observers <- NULL
   # variables to filter according to datasets state
   filtered_vars <- reactive(get_filter_vars(datasets, dataname = dataname))
-  filter_id_for_var <- function(varname) paste0("filter_", varname)
+  filter_id_for_var <- function(varname) paste0("filter_", digest::digest(varname))
 
   observeEvent(
     filtered_vars(), {
