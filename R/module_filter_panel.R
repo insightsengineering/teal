@@ -63,21 +63,27 @@ ui_filter_panel <- function(id, datasets, datanames) {
 
   div(
     id = ns("teal_filter_panel_whole"), # used for hiding / showing
-
     div(
       id = ns("teal_filters_overview"), # not used, can be used to customize CSS behavior
       class = "well",
-      tags$label("Active Filter Summary", class = "text-primary", style = "margin-bottom: 15px;"),
-      tags$a(
-        href = "javascript:void(0)",
-        class = "remove pull-right",
-        onclick = paste0(
-          "$('#",
-          ns("teal_filters_overview_contents"),
-          "').toggle();"
+      tags$div(
+        class = "row",
+        tags$div(
+          class = "col-sm-9",
+          tags$label("Active Filter Summary", class = "text-primary", style = "margin-bottom: 15px;")
         ),
-        title = "minimise panel",
-        tags$span(icon("minus-circle", lib = "font-awesome"))
+        tags$div(
+          class = "col-sm-3",
+          tags$a(
+            href = "javascript:void(0)",
+            class = "remove pull-right",
+            onclick = paste0("$('#",
+                             ns("teal_filters_overview_contents"),
+                             "').toggle();"),
+            title = "minimise panel",
+            tags$span(icon("minus-circle", lib = "font-awesome"))
+          )
+        )
       ),
       tags$br(),
       div(
@@ -136,17 +142,24 @@ ui_filter_panel <- function(id, datasets, datanames) {
     div(
       id = ns("teal_filter_add_vars"), # not used, can be used to customize CSS behavior
       class = "well",
-      tags$label("Add Filter Variables", class = "text-primary", style = "margin-bottom: 15px;"),
-      tags$a(
-        href = "javascript:void(0)",
-        class = "remove pull-right",
-        onclick = paste0(
-          "$('#",
-          ns("teal_filter_add_vars_contents"),
-          "').toggle();"
+      tags$div(
+        class = "row",
+        tags$div(
+          class = "col-sm-9",
+          tags$label("Add Filter Variables", class = "text-primary", style = "margin-bottom: 15px;")
         ),
-        title = "minimise panel",
-        tags$span(icon("minus-circle", lib = "font-awesome"))
+        tags$div(
+          class = "col-sm-3",
+          tags$a(
+            href = "javascript:void(0)",
+            class = "remove pull-right",
+            onclick = paste0("$('#",
+                             ns("teal_filter_add_vars_contents"),
+                             "').toggle();"),
+            title = "minimise panel",
+            tags$span(icon("minus-circle", lib = "font-awesome"))
+          )
+        )
       ),
       div(
         id = ns("teal_filter_add_vars_contents"),
