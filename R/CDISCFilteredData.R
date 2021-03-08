@@ -211,12 +211,18 @@ CDISCFilteredData <- R6::R6Class( # nolint
         merge_call <- call(
           "<-", as.name(filtered_dataname),
           call_with_colon(
-            "dplyr::inner_join", # better than merge since we use `dplyr` everywhere
+            "dplyr::inner_join",
             x = as.name(filtered_dataname_alone),
             y = if (is_empty(parent_keys)) {
               as.name(private$filtered_dataname(parent_dataname))
             } else {
-              call("[", as.name(private$filtered_dataname(parent_dataname)), quote(expr = ), parent_keys) # nolint
+              call(
+                "[",
+                as.name(private$filtered_dataname(parent_dataname)),
+                quote(expr = ), # nolint
+                parent_keys,
+                drop = FALSE
+              )
             },
             unlist_args = if (is_empty(parent_keys) || is_empty(dataset_keys)) {
               list()
