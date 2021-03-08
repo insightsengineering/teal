@@ -24,7 +24,7 @@ ADAETTE:
   parent: "ADSL"
 
 ADCM:
-  primary: ["STUDYID", "USUBJID", "ASTDTM", "CMSEQ"]
+  primary: ["STUDYID", "USUBJID", "ASTDTM", "CMSEQ", "ATC1CD", "ATC2CD", "ATC3CD", "ATC4CD"]
   foreign: ["STUDYID", "USUBJID"]
   parent: "ADSL"
 
