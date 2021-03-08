@@ -7,7 +7,7 @@
 \alias{set_keys.DataAbstract}
 \title{Set dataset primary keys}
 \usage{
-set_keys(x, keys = character(0), ...)
+set_keys(x, ...)
 
 \method{set_keys}{Dataset}(x, keys, ...)
 
@@ -18,9 +18,9 @@ set_keys(x, keys = character(0), ...)
 \arguments{
 \item{x}{an object of \code{Dataset} or \code{DatasetConnector} class}
 
-\item{keys}{optional, (\code{character}) vector with primary keys}
-
 \item{...}{not used, only for support of S3}
+
+\item{keys}{optional, (\code{character}) vector with primary keys}
 
 \item{dataname}{(\code{character}) name of dataset for which set the keys}
 }

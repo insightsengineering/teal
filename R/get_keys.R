@@ -83,7 +83,7 @@ get_keys.DataAbstract <- function(x, dataname, ...) {
 #' @return (`character`) vector of column names
 #'
 #' @export
-set_keys <- function(x, keys = character(0), ...) {
+set_keys <- function(x, ...) {
   UseMethod("set_keys")
 }
 
