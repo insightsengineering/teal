@@ -17,7 +17,7 @@
 #' adlb <- rcd_cdisc_dataset_connector("ADLB", radlb, ADSL = adsl)
 #' con <- teal:::rcd_connection()
 #'
-#' ui <- function(id) {
+#' ui <- function(id, ...) {
 #'   ns <- NS(id)
 #'   tagList(
 #'     numericInput(ns("seed"), "Choose seed", min = 1, max = 1000, value = 1),
@@ -108,7 +108,19 @@ RelationalDataConnector <- R6::R6Class( #nolint
     #'
     #' @return the \code{server} function
     get_server = function() {
-      return(private$server)
+      if (is.null(private$server)) {
+        stop("No server function set yet. Please use set_server method first.")
+      }
+      function(input, output, session, connection = private$connection, connectors = private$datasets) {
+        rv <- reactiveVal(NULL)
+        callModule(private$server, id = "data_input", connection = connection, connectors = connectors)
+
+        if (self$is_pulled()) {
+          return(rv(TRUE))
+        } else {
+          return(rv(FALSE))
+        }
+      }
     },
     #' @description
     #' Get Shiny module with inputs for all \code{DatasetConnector} objects
@@ -120,7 +132,17 @@ RelationalDataConnector <- R6::R6Class( #nolint
       if (is.null(private$ui)) {
         stop("No UI set yet. Please use set_ui method first.")
       }
-      return(private$ui(id))
+      x <- function(id, connection = private$connection, connectors = private$datasets) {
+        ns <- NS(id)
+        tags$div(
+          h3("Data Connector for:", lapply(self$get_datanames(), code)),
+          tags$div(
+            id = ns("data_input"),
+            private$ui(id = ns("data_input"), connection = connection, connectors = connectors)
+          )
+        )
+      }
+      x(id)
     },
 
     # ___ setters ====
@@ -139,26 +161,17 @@ RelationalDataConnector <- R6::R6Class( #nolint
     #' @description
     #' Set connector UI function
     #'
-    #' @param data_input (\code{function})\cr
+    #' @param f (\code{function})\cr
     #'  shiny module as function. Inputs specified in this \code{ui} are passed to server module
     #'  defined by \code{set_server} method.
     #'
     #' @return nothing
-    set_ui = function(data_input) {
-      stopifnot(is(data_input, "function"))
-      stopifnot(identical(names(formals(data_input)), "id"))
+    set_ui = function(f) {
+      stopifnot(is(f, "function"))
+      stopifnot("id" %in% names(formals(f)))
+      stopifnot(all(c("connection", "connectors") %in% names(formals(f))) || "..." %in% names(formals(f)))
 
-      private$ui <- function(id) {
-        ns <- NS(id)
-        tags$div(
-          h3("Data Connector for:", lapply(self$get_datanames(), code)),
-          tags$div(
-            id = ns("data_input"),
-            data_input(id = ns("data_input"))
-          )
-        )
-      }
-
+      private$ui <- f
       return(invisible(NULL))
     },
     #' @description
@@ -168,25 +181,15 @@ RelationalDataConnector <- R6::R6Class( #nolint
     #' specify some dynamic \code{ui} as \code{server} function is executed after hitting submit
     #' button.
     #'
-    #' @param data_module (\code{function})\cr
+    #' @param f (\code{function})\cr
     #'  A shiny module server function that should load data from all connectors
     #'
     #' @return \code{NULL} or \code{self} if data is loaded.
-    set_server = function(data_module) {
-      stopifnot(is(data_module, "function"))
-      stopifnot(all(c("input", "output", "session") %in% names(formals(data_module))))
+    set_server = function(f) {
+      stopifnot(is(f, "function"))
+      stopifnot(all(c("input", "output", "session") %in% names(formals(f))))
 
-      private$server <- function(input, output, session, connection, connectors) {
-        rv <- reactiveVal(NULL)
-        callModule(data_module, id = "data_input", connection = connection, connectors = connectors)
-
-        if (self$is_pulled()) {
-          return(rv(TRUE))
-        } else {
-          return(rv(FALSE))
-        }
-      }
-
+      private$server <- f
       return(invisible(NULL))
     },
 
@@ -258,7 +261,7 @@ RelationalDataConnector <- R6::R6Class( #nolint
               offset = 2,
               tags$div(
                 id = "data_inputs",
-                private$ui(id = "data_connector"),
+                self$get_ui(id = "data_connector"),
                 actionButton("submit", "Submit"),
                 `data-proxy-click` = "submit"
               ),
@@ -311,8 +314,8 @@ RelationalDataConnector <- R6::R6Class( #nolint
   ),
   ## __Private Fields ====
   private = list(
-    server = NULL,
-    ui = NULL,
+    server = NULL, # shiny server function
+    ui = NULL, # shiny ui function
     connection = NULL, # DataConnection
 
     ## __Private Methods ====

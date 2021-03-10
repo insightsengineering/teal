@@ -93,11 +93,6 @@ RelationalData <- R6::R6Class( # nolint
       private$pull_code <- CodeClass$new()
       private$mutate_code <- CodeClass$new()
 
-      if (length(self$get_connectors()) > 0) {
-        private$set_ui()
-        private$set_server()
-      }
-
       private$join_keys <- join_keys
       # fill in primary keys as a join keys to self
       for (i in datanames) {
@@ -221,7 +216,7 @@ RelationalData <- R6::R6Class( # nolint
             column(
               width = 8,
               offset = 2,
-              private$ui(id = "main_app"),
+              self$get_ui(id = "main_app"),
               shinyjs::hidden(
                 tags$div(
                   id = "data_loaded",
@@ -239,7 +234,7 @@ RelationalData <- R6::R6Class( # nolint
         ),
         server = function(input, output, session) {
           session$onSessionEnded(stopApp)
-          dat <- callModule(private$server, id = "main_app")
+          dat <- callModule(self$get_server(), id = "main_app")
 
           observeEvent(dat(), {
             if (self$is_pulled()) {
@@ -304,99 +299,92 @@ RelationalData <- R6::R6Class( # nolint
 
   ## __Private Fields ====
   private = list(
-    ui = NULL,
-    server = NULL,
-    join_keys = NULL, # JoinKeys after initialization
-    ## __Private Methods ====
-    set_ui = function() {
-      private$ui <- function(id) {
-        ns <- NS(id)
+    ui = function(id) {
+      ns <- NS(id)
 
-        # connectors ui(s) + submit button
-        fluidPage(
-          shinyjs::hidden(
-            column(
-              id = ns("delayed_data"),
-              width = 8,
-              offset = 2,
-              div(
-                tagList(
-                  lapply(
-                    private$datasets,
-                    function(x) {
-                      div(
-                        if (!is(x, c("DatasetConnector", "RelationalDataConnector"))) {
-                          div(h4("Data(set) for: ", lapply(x$get_datanames(), code)), p(icon("check"), "Loaded"))
-                        } else {
-                          if_null(
-                            x$get_ui(id = ns(paste0(x$get_datanames(), collapse = "_"))),
-                            div(
-                              h4("Dataset Connector for: ", lapply(x$get_datanames(), code)),
-                              p(icon("check"), "Ready to Load")
-                            )
+      # connectors ui(s) + submit button
+      fluidPage(
+        shinyjs::hidden(
+          column(
+            id = ns("delayed_data"),
+            width = 8,
+            offset = 2,
+            div(
+              tagList(
+                lapply(
+                  private$datasets,
+                  function(x) {
+                    div(
+                      if (!is(x, c("DatasetConnector", "RelationalDataConnector"))) {
+                        div(h4("Data(set) for: ", lapply(x$get_datanames(), code)), p(icon("check"), "Loaded"))
+                      } else {
+                        if_null(
+                          x$get_ui(id = ns(paste0(x$get_datanames(), collapse = "_"))),
+                          div(
+                            h4("Dataset Connector for: ", lapply(x$get_datanames(), code)),
+                            p(icon("check"), "Ready to Load")
                           )
-                        },
-                        br()
-                      )
-                    }
-                  ),
-                  actionButton(inputId = ns("submit"), label = "Submit all")
+                        )
+                      },
+                      br()
+                    )
+                  }
                 ),
-                `data-proxy-click` = ns("submit")
-              )
+                actionButton(inputId = ns("submit"), label = "Submit all")
+              ),
+              `data-proxy-click` = ns("submit")
             )
           )
         )
-      }
+      )
     },
-    set_server = function() {
-      private$server <- function(input, output, session) {
-        shinyjs::show("delayed_data")
-        rv <- reactiveVal(NULL)
-        observeEvent(input$submit, {
-          # load data from all connectors
-          for (dc in self$get_connectors()) {
-            if (is(dc, class2 = "RelationalDataConnector")) {
-              callModule(dc$get_server(),
-                         id = paste0(dc$get_datanames(), collapse = "_"),
-                         connection = dc$get_connection(),
-                         connectors = dc$get_items()
-              )
+    server = function(input, output, session) {
+      shinyjs::show("delayed_data")
+      rv <- reactiveVal(NULL)
+      observeEvent(input$submit, {
+        # load data from all connectors
+        for (dc in self$get_connectors()) {
+          if (is(dc, class2 = "RelationalDataConnector")) {
+            callModule(dc$get_server(),
+                       id = paste0(dc$get_datanames(), collapse = "_"),
+                       connection = dc$get_connection(),
+                       connectors = dc$get_items()
+            )
 
-            } else if (is(dc, class2 = "DatasetConnector")) {
-              callModule(dc$get_server(),
-                         id = dc$get_dataname()
-              )
-            }
-            if (dc$is_failed()) {
-              break
-            }
+          } else if (is(dc, class2 = "DatasetConnector")) {
+            callModule(dc$get_server(),
+                       id = dc$get_dataname()
+            )
           }
-
-          if (self$is_pulled()) {
-
-            withProgress(value = 1, message = "Checking data reproducibility", {
-              # We check first and then mutate.
-              #  mutate_code is reproducible by default we assume that we don't
-              #  have to check the result of the re-evaluation of the code
-              self$check()
-              if (isFALSE(self$get_check_result())) {
-                stop("Reproducibility error. Couldn't reproduce object(s) with a given code")
-              }
-            })
-
-            withProgress(value = 1, message = "Executing processing code", {
-              self$execute_mutate()
-              self$check_metadata()
-            })
-
-            shinyjs::hide("delayed_data")
-            rv(self)
+          if (dc$is_failed()) {
+            break
           }
-        })
-        return(rv)
-      }
-    }
+        }
+
+        if (self$is_pulled()) {
+
+          withProgress(value = 1, message = "Checking data reproducibility", {
+            # We check first and then mutate.
+            #  mutate_code is reproducible by default we assume that we don't
+            #  have to check the result of the re-evaluation of the code
+            self$check()
+            if (isFALSE(self$get_check_result())) {
+              stop("Reproducibility error. Couldn't reproduce object(s) with a given code")
+            }
+          })
+
+          withProgress(value = 1, message = "Executing processing code", {
+            self$execute_mutate()
+            self$check_metadata()
+          })
+
+          shinyjs::hide("delayed_data")
+          rv(self)
+        }
+      })
+      return(rv)
+    },
+    join_keys = NULL # JoinKeys after initialization
   )
 )
 

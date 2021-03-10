@@ -335,6 +335,18 @@ DataAbstract <- R6::R6Class( #nolint
     pull_code = NULL, # CodeClass - code to reproduce loading of Dataset(s) only
 
     ## __Private Methods ====
+    # need to have a custom deep_clone because one of the key fields are reference-type object
+    # in particular: datasets is a list of R6 objects that wouldn't be cloned using default clone(deep = T)
+    deep_clone = function(name, value) {
+      if (is_class_list("R6")(value)) {
+        lapply(value, function(x) x$clone(deep = TRUE))
+      } else if (R6::is.R6(value)) {
+        value$clone(deep = TRUE)
+      } else {
+        value
+      }
+    },
+
     check_combined_code = function() {
       execution_environment <- new.env(parent = parent.env(globalenv()))
       self$get_code_class(only_pull = TRUE)$eval(envir = execution_environment)

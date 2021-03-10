@@ -1,3 +1,4 @@
+## DataConnection ====
 #' A \code{DataConnection} class of objects
 #'
 #' Objects of this class store the connection to a data source.
@@ -32,7 +33,7 @@
 #' @importFrom R6 R6Class
 #' @importFrom shinyjs alert
 DataConnection <- R6::R6Class( # nolint
-  # DataConnection public ----
+  ## __Public Methods ====
   "DataConnection",
   public = list(
     #' @description
@@ -141,7 +142,7 @@ DataConnection <- R6::R6Class( # nolint
         }
       )
     },
-    # .. open connection -----
+    # ___ open connection -----
     #' @description
     #' Open the connection.
     #'
@@ -308,7 +309,7 @@ DataConnection <- R6::R6Class( # nolint
 
       return(invisible(self))
     },
-    # .. close connection -------
+    # ___ close connection -------
     #' @description
     #' Close the connection.
     #'
@@ -442,7 +443,7 @@ DataConnection <- R6::R6Class( # nolint
       return(invisible(self))
     }
   ),
-  # DataConnection private ----
+  ## __Private Fields ====
   private = list(
     # callableFunctions
     open_fun = NULL,
@@ -462,6 +463,19 @@ DataConnection <- R6::R6Class( # nolint
     ping_server = NULL,
 
     opened = FALSE,
+
+    ## __Private Methods ====
+    # need to have a custom deep_clone because one of the key fields are reference-type object
+    # in particular: open_fun is a R6 object that wouldn't be cloned using default clone(deep = T)
+    deep_clone = function(name, value) {
+      if (is_class_list("R6")(value)) {
+        lapply(value, function(x) x$clone(deep = TRUE))
+      } else if (R6::is.R6(value)) {
+        value$clone(deep = TRUE)
+      } else {
+        value
+      }
+    },
 
     check_open_fun = function(silent = FALSE) {
       stopifnot(is_logical_single(silent))

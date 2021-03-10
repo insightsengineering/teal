@@ -65,7 +65,7 @@ rcd_data <- function(..., connection = rcd_connection(), check = TRUE) {
   x$set_check(check)
 
   x$set_ui(
-    function(id) {
+    function(id, connection, connectors) {
       ns <- NS(id)
       tagList(
         connection$get_open_ui(ns("open_connection")),
@@ -178,7 +178,7 @@ rice_data <- function(..., connection = rice_connection(), additional_ui = NULL)
   x$set_check(FALSE)
 
   x$set_ui(
-    function(id) {
+    function(id, connection, connectors) {
       ns <- NS(id)
       div(
         div(
@@ -289,7 +289,7 @@ teradata_data <- function(..., connection = teradata_connection()) {
   x$set_check(FALSE)
 
   x$set_ui(
-    function(id) {
+    function(id, connection, connectors) {
       ns <- NS(id)
       div(
         div(

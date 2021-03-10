@@ -14,9 +14,8 @@ get_dataset_label <- function(x) {
 #' @rdname get_dataset_label
 #' @export
 #' @examples
-#' library(random.cdisc.data)
 #' fun <- callable_function(data.frame)
-#' fun$set_args(list(n = 5, seed = 1, cached = TRUE))
+#' fun$set_args(list(c1 = seq_len(10)))
 #'
 #' x <- dataset_connector(
 #'  pull_callable = fun,

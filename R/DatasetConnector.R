@@ -58,9 +58,6 @@ DatasetConnector <- R6::R6Class( #nolint
       private$set_pull_callable(pull_callable)
       private$set_pull_vars(vars)
 
-      private$set_ui()
-      private$set_server()
-
       private$set_dataname(dataname)
       self$set_dataset_label(label)
       self$set_keys(keys)
@@ -334,8 +331,6 @@ DatasetConnector <- R6::R6Class( #nolint
         ))
       }
       private$ui_input <- inputs
-      private$set_ui(inputs)
-      private$set_server()
       return(invisible(self))
     },
     #' @description Get shiny ui function
@@ -369,7 +364,7 @@ DatasetConnector <- R6::R6Class( #nolint
       }
       shinyApp(
         ui = fluidPage(
-          private$ui(id = "main_app"),
+          self$get_ui(id = "main_app"),
           shinyjs::useShinyjs(),
           br(),
           actionButton("pull", "Get data"),
@@ -379,7 +374,7 @@ DatasetConnector <- R6::R6Class( #nolint
         server = function(input, output, session) {
           session$onSessionEnded(stopApp)
           observeEvent(input$pull, {
-            callModule(private$server, id = "main_app")
+            callModule(self$get_server(), id = "main_app")
             if (self$is_pulled()) {
               output$result <- renderTable(head(self$get_raw_data()))
             }
@@ -399,10 +394,82 @@ DatasetConnector <- R6::R6Class( #nolint
     mutate_code = NULL, # CodeClass after initialization
     mutate_vars = list(), # named list with vars used to mutate object
     ui_input = NULL, # NULL or list
-    ui = NULL, # NULL or shiny.tag.list
-    server = NULL, # NULL or shiny server function
+    ui = function(id) {
+      ns <- NS(id)
+      # add namespace to input ids
+      ui <- if_not_null(private$ui_input, do.call(private$ui_input, list(ns = ns)))
+      # check ui inputs
+      if (!is.null(ui)) {
+        stopifnot(is.list(ui))
+        stop_if_not(
+          list(
+            all(vapply(ui, is, logical(1), class2 = "shiny.tag")),
+            "All elements must be of class shiny.tag"
+          )
+        )
+        stop_if_not(
+          list(
+            all(
+              grepl(
+                "shiny-input-container",
+                vapply(lapply(ui, "[[", i = "attribs"), "[[", character(1), i = "class")
+              )
+            ),
+            "All elements must be shiny inputs"
+          )
+        )
+      }
+      # create ui
+      if_not_null(
+        ui,
+        tags$div(
+          tags$div(
+            id = ns("inputs"),
+            h4("Dataset Connector for ", code(self$get_dataname())),
+            ui
+          )
+        )
+      )
+    },
+    server = function(input, output, session, data_args = NULL) {
+      withProgress(value = 1, message = paste("Pulling", self$get_dataname()), {
+        # set args to save them - args set will be returned in the call
+        dataset_args <- if_not_null(private$ui_input, reactiveValuesToList(input))
+        if (!is_empty(dataset_args)) {
+          self$set_args(args = dataset_args)
+        }
+
+        self$pull(args = data_args, try = TRUE)
+
+        # print error if any
+        # error doesn't break an app
+        if (self$is_failed()) {
+          shinyjs::alert(
+            sprintf(
+              "Error pulling %s:\nError message: %s",
+              self$get_dataname(),
+              self$get_error_message()
+            )
+          )
+        }
+      })
+
+      return(invisible(self))
+    },
 
     ## __Private Methods ====
+    # need to have a custom deep_clone because one of the key fields are reference-type object
+    # in particular: dataset is a R6 object that wouldn't be cloned using default clone(deep = T)
+    deep_clone = function(name, value) {
+      if (is_class_list("R6")(value)) {
+        lapply(value, function(x) x$clone(deep = TRUE))
+      } else if (R6::is.R6(value)) {
+        value$clone(deep = TRUE)
+      } else {
+        value
+      }
+    },
+
     get_pull_code_class = function(args = NULL) {
       res <- CodeClass$new()
       res$append(list_to_code_class(private$pull_vars))
@@ -527,11 +594,11 @@ DatasetConnector <- R6::R6Class( #nolint
       return(invisible(self))
     },
 
-    set_ui = function(args = NULL) {
+    set_ui = function(ui_args = NULL) {
       private$ui <- function(id) {
         ns <- NS(id)
         # add namespace to input ids
-        ui <- if_not_null(args, do.call(args, list(ns = ns)))
+        ui <- if_not_null(ui_args, do.call(ui_args, list(ns = ns)))
         # check ui inputs
         if (!is.null(ui)) {
           stopifnot(is.list(ui))
@@ -564,34 +631,6 @@ DatasetConnector <- R6::R6Class( #nolint
             )
           )
         )
-      }
-      return(invisible(self))
-    },
-    set_server = function() {
-      private$server <- function(input, output, session, data_args = NULL) {
-        withProgress(value = 1, message = paste("Pulling", self$get_dataname()), {
-          # set args to save them - args set will be returned in the call
-          dataset_args <- if_not_null(private$ui_input, reactiveValuesToList(input))
-          if (!is_empty(dataset_args)) {
-            self$set_args(args = dataset_args)
-          }
-
-          self$pull(args = data_args, try = TRUE)
-
-          # print error if any
-          # error doesn't break an app
-          if (self$is_failed()) {
-            shinyjs::alert(
-              sprintf(
-                "Error pulling %s:\nError message: %s",
-                self$get_dataname(),
-                self$get_error_message()
-              )
-            )
-          }
-        })
-
-        return(invisible(self))
       }
       return(invisible(self))
     }

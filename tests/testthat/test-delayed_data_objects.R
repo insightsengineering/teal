@@ -135,7 +135,7 @@ test_that("RelationalDataConnector with custom UI and server", {
     "No UI set yet"
   )
 
-  x$set_ui(function(id) {
+  x$set_ui(function(id, ...) {
     ns <- NS(id)
     tagList(
       numericInput(ns("seed"), "Choose seed", min = 1, max = 100, value = 1),
@@ -159,9 +159,6 @@ test_that("RelationalDataConnector with custom UI and server", {
     )
   )
 
-  default_server <- x$get_server()
-
-  expect_equal(default_server, NULL)
   x$set_server(function(input, output, session, connectors, connection) {
     output$pull_validate <- renderUI({
       raw_datasets <- lapply(connectors, function(connector) {

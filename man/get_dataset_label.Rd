@@ -23,9 +23,8 @@ label (\code{character}) Label to describe the dataset
 \ifelse{html}{\out{<a href='https://www.tidyverse.org/lifecycle/#experimental'><img src='figures/lifecycle-experimental.svg' alt='Experimental lifecycle'></a>}}{\strong{Experimental}}
 }
 \examples{
-library(random.cdisc.data)
 fun <- callable_function(data.frame)
-fun$set_args(list(n = 5, seed = 1, cached = TRUE))
+fun$set_args(list(c1 = seq_len(10)))
 
 x <- dataset_connector(
  pull_callable = fun,

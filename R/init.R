@@ -146,6 +146,8 @@ init <- function(data,
   res <- list(
     ui = ui_teal_with_splash(id = id, data = data, title = title, header = header, footer = footer),
     server = function(input, output, session) {
+      # copy object so that load won't be shared between the session
+      data <- data$clone(deep = TRUE)
       srv_teal_with_splash(
         input, output, session,
         data = data, modules = modules, filter = filter

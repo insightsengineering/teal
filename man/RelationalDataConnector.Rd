@@ -13,7 +13,7 @@ adsl <- rcd_cdisc_dataset_connector("ADSL", radsl)
 adlb <- rcd_cdisc_dataset_connector("ADLB", radlb, ADSL = adsl)
 con <- teal:::rcd_connection()
 
-ui <- function(id) {
+ui <- function(id, ...) {
   ns <- NS(id)
   tagList(
     numericInput(ns("seed"), "Choose seed", min = 1, max = 1000, value = 1),
@@ -186,13 +186,13 @@ nothing
 \subsection{Method \code{set_ui()}}{
 Set connector UI function
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{RelationalDataConnector$set_ui(data_input)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{RelationalDataConnector$set_ui(f)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{data_input}}{(\code{function})\cr
+\item{\code{f}}{(\code{function})\cr
 shiny module as function. Inputs specified in this \code{ui} are passed to server module
 defined by \code{set_server} method.}
 }
@@ -212,13 +212,13 @@ This function will be called after submit button will be hit. There is no possib
 specify some dynamic \code{ui} as \code{server} function is executed after hitting submit
 button.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{RelationalDataConnector$set_server(data_module)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{RelationalDataConnector$set_server(f)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{data_module}}{(\code{function})\cr
+\item{\code{f}}{(\code{function})\cr
 A shiny module server function that should load data from all connectors}
 }
 \if{html}{\out{</div>}}

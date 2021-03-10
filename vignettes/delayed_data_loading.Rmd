@@ -438,7 +438,7 @@ objects as additional arguments.
 
 ```{r}
 data$set_ui(
-  function(id) {
+  function(id, ...) {
     ns <- NS(id)
     tagList(
       rcd_conn$get_open_ui(ns("open_connection")),

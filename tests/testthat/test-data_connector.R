@@ -67,7 +67,7 @@ test_that("RelationalDataConnector with DataConnection", {
   x <- RelationalDataConnector$new(connection = con, connectors = list(rcd1, rcd2))
   expect_true(is(x, "RelationalDataConnector"))
 
-  x$set_ui(function(id) {
+  x$set_ui(function(id, ...) {
     ns <- NS(id)
     tagList(
       numericInput(ns("seed"), "Choose seed", min = 1, max = 1000, value = 1),
