@@ -41,8 +41,7 @@ CDISCData <- R6::R6Class( # nolint
           } else {
             sapply(x$get_datanames(), function(i) character(0), USE.NAMES = TRUE, simplify = FALSE)
           }
-          tmp_new_parent <- c(new_parent, added_parent)
-          new_parent <<- tmp_new_parent
+          new_parent <- c(new_parent, added_parent)
         } else {
           stop(paste("The child elements of CDISCData should be only of Dataset or DatasetConnector or",
                      "RelationalDataConnector class."))
