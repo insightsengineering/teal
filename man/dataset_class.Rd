@@ -54,11 +54,11 @@ will be deprecated in future}
 \item \href{#method-get_keys}{\code{Dataset$get_keys()}}
 \item \href{#method-set_dataset_label}{\code{Dataset$set_dataset_label()}}
 \item \href{#method-set_keys}{\code{Dataset$set_keys()}}
+\item \href{#method-set_vars}{\code{Dataset$set_vars()}}
+\item \href{#method-set_code}{\code{Dataset$set_code()}}
 \item \href{#method-get_code}{\code{Dataset$get_code()}}
 \item \href{#method-get_code_class}{\code{Dataset$get_code_class()}}
 \item \href{#method-mutate}{\code{Dataset$mutate()}}
-\item \href{#method-set_vars}{\code{Dataset$set_vars()}}
-\item \href{#method-set_code}{\code{Dataset$set_code()}}
 \item \href{#method-check}{\code{Dataset$check()}}
 \item \href{#method-check_keys}{\code{Dataset$check_keys()}}
 \item \href{#method-is_pulled}{\code{Dataset$is_pulled()}}
@@ -367,6 +367,52 @@ vector with primary keys}
 }
 }
 \if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-set_vars"></a>}}
+\if{latex}{\out{\hypertarget{method-set_vars}{}}}
+\subsection{Method \code{set_vars()}}{
+Adds variables which code depends on
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{Dataset$set_vars(vars)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{vars}}{(named \code{list})) \cr
+In case when this object code depends on the \code{raw_data} from the other
+\code{Dataset} object(s) or other constant value,
+this/these object(s) should be included as named element of the list.}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Returns}{
+(\code{self}) invisibly for chaining
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-set_code"></a>}}
+\if{latex}{\out{\hypertarget{method-set_code}{}}}
+\subsection{Method \code{set_code()}}{
+Sets reproducible code
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{Dataset$set_code(code)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{code}}{(\code{character})\cr
+A character string defining the code needed to produce the data set in \code{x}.
+\code{initialize()} and \code{recreate()} accept code as \code{CodeClass} also
+which is needed to preserve the code uniqueness and correct order.}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Returns}{
+(\code{self}) invisibly for chaining
+}
+}
+\if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-get_code"></a>}}
 \if{latex}{\out{\hypertarget{method-get_code}{}}}
 \subsection{Method \code{get_code()}}{
@@ -422,52 +468,6 @@ which is needed to preserve the code uniqueness and correct order.}
 In case when this object code depends on the \code{raw_data} from the other
 \code{Dataset} object(s) or other constant value,
 this/these object(s) should be included as named element of the list.}
-}
-\if{html}{\out{</div>}}
-}
-\subsection{Returns}{
-(\code{self}) invisibly for chaining
-}
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-set_vars"></a>}}
-\if{latex}{\out{\hypertarget{method-set_vars}{}}}
-\subsection{Method \code{set_vars()}}{
-Adds variables which code depends on
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{Dataset$set_vars(vars)}\if{html}{\out{</div>}}
-}
-
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{vars}}{(named \code{list})) \cr
-In case when this object code depends on the \code{raw_data} from the other
-\code{Dataset} object(s) or other constant value,
-this/these object(s) should be included as named element of the list.}
-}
-\if{html}{\out{</div>}}
-}
-\subsection{Returns}{
-(\code{self}) invisibly for chaining
-}
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-set_code"></a>}}
-\if{latex}{\out{\hypertarget{method-set_code}{}}}
-\subsection{Method \code{set_code()}}{
-Sets reproducible code
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{Dataset$set_code(code)}\if{html}{\out{</div>}}
-}
-
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{code}}{(\code{character})\cr
-A character string defining the code needed to produce the data set in \code{x}.
-\code{initialize()} and \code{recreate()} accept code as \code{CodeClass} also
-which is needed to preserve the code uniqueness and correct order.}
 }
 \if{html}{\out{</div>}}
 }

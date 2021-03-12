@@ -63,6 +63,7 @@ x$get_datasets()
 \out{<details ><summary>Inherited methods</summary>}
 \itemize{
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="DataAbstract" data-id="check">}\href{../../teal/html/DataAbstract.html#method-check}{\code{teal::DataAbstract$check()}}\out{</span>}
+\item \out{<span class="pkg-link" data-pkg="teal" data-topic="DataAbstract" data-id="execute_check">}\href{../../teal/html/DataAbstract.html#method-execute_check}{\code{teal::DataAbstract$execute_check()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="DataAbstract" data-id="execute_mutate">}\href{../../teal/html/DataAbstract.html#method-execute_mutate}{\code{teal::DataAbstract$execute_mutate()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="DataAbstract" data-id="get_check_result">}\href{../../teal/html/DataAbstract.html#method-get_check_result}{\code{teal::DataAbstract$get_check_result()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="DataAbstract" data-id="get_code">}\href{../../teal/html/DataAbstract.html#method-get_code}{\code{teal::DataAbstract$get_code()}}\out{</span>}

@@ -4,7 +4,7 @@
 \alias{teal_data}
 \title{Teal data}
 \usage{
-teal_data(..., join_keys)
+teal_data(..., join_keys, code = "", check = FALSE)
 }
 \arguments{
 \item{...}{(\code{RelationalDataConnector}, \code{Dataset}, \code{DatasetConnector})\cr
@@ -13,6 +13,11 @@ objects}
 \item{join_keys}{(\code{JoinKeys}) or a single (\code{JoinKeySet})\cr
 (optional) object with dataset column relationships used for joining.
 If empty then no joins between pairs of objects}
+
+\item{code}{(\code{character}) code to reproduce the datasets.}
+
+\item{check}{(\code{logical}) reproducibility check - whether evaluated preprocessing code gives the same objects
+as provided in arguments. Check is run only if flag is true and preprocessing code is not empty.}
 }
 \value{
 (\code{RelationalData})
@@ -22,40 +27,17 @@ If empty then no joins between pairs of objects}
 Universal function to pass data to teal application
 }
 \examples{
-# RelationalData
-library(random.cdisc.data)
 x1 <- dataset(
-  x = radsl(cached = TRUE),
-  dataname = "ADSL",
-  keys = get_cdisc_keys("ADSL"),
-  code = "ADSL <- radsl(cached = TRUE)",
-  label = "ADTTE dataset"
+  "x1",
+  iris,
+  code = "x1 <- iris"
 )
 
 x2 <- dataset(
-  x = radtte(cached = TRUE),
-  dataname = "ADTTE",
-  keys = get_cdisc_keys("ADTTE"),
-  code = "ADTTE <- radtte(cached = TRUE)",
-  label = "ADTTE dataset"
+  "x2",
+  mtcars,
+  code = "x2 <- mtcars"
 )
 
-data <- teal_data(x1, x2)
-get_raw_data(data)
-
-# RelationalData with connectors
-x3 <- rcd_data(
-  rcd_cdisc_dataset_connector("ADSL", radsl, cached = TRUE),
-  rcd_cdisc_dataset_connector("ADLB", radlb, cached = TRUE)
-)
-
-x4 <- rcd_data(
-  rcd_cdisc_dataset_connector("ADRS", radrs, cached = TRUE)
-)
-
-data_list <- teal_data(x3, x2, x4)
-\dontrun{
-data_list$launch()
-get_raw_data(data_list)
-}
+teal_data(x1, x2)
 }

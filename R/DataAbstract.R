@@ -45,6 +45,16 @@ DataAbstract <- R6::R6Class( #nolint
       return(res)
     },
     #' @description
+    #' Execute \code{check} and raise an error if it's not reproducible.
+    #' @return error if code is not reproducible else invisibly nothing
+    execute_check = function() {
+      self$check()
+      if (isFALSE(self$get_check_result())) {
+        stop("Reproducibility check failed.")
+      }
+      return(invisible(NULL))
+    },
+    #' @description
     #' Execute mutate code. Using \code{mutate_data(set).DataAbstract}
     #' does not cause instant execution, the \code{mutate_code} is
     #' delayed and can be evaluated using this method.
@@ -351,7 +361,7 @@ DataAbstract <- R6::R6Class( #nolint
       execution_environment <- new.env(parent = parent.env(globalenv()))
       self$get_code_class(only_pull = TRUE)$eval(envir = execution_environment)
       all(vapply(
-        self$get_items(),
+        Filter(is_pulled, self$get_items()),
         function(dataset) {
           data <- get_raw_data(dataset)
           data_from_code <- get(get_dataname(dataset), execution_environment)

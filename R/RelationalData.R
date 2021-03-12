@@ -10,6 +10,8 @@
 #' @param join_keys (`JoinKeys`) or a single (`JoinKeySet`)\cr
 #'   (optional) object with dataset column relationships used for joining.
 #'   If empty then no joins between pairs of objects
+#' @param check (\code{logical}) reproducibility check - whether evaluated preprocessing code gives the same objects
+#'   as provided in arguments. Check is run only if flag is true and preprocessing code is not empty.
 #'
 #' @examples
 #' library(random.cdisc.data)
@@ -68,7 +70,7 @@ RelationalData <- R6::R6Class( # nolint
   public = list(
     #' @description
     #' Create a new object of `RelationalData` class
-    initialize = function(..., join_keys) {
+    initialize = function(..., check = FALSE, join_keys) {
       dot_args <- list(...)
       allowed_classes <- c("RelationalDataConnector", "Dataset", "DatasetConnector")
 
@@ -89,6 +91,8 @@ RelationalData <- R6::R6Class( # nolint
       private$check_names(datanames)
 
       private$datasets <- dot_args
+
+      self$set_check(check)
 
       private$pull_code <- CodeClass$new()
       private$mutate_code <- CodeClass$new()
@@ -367,10 +371,7 @@ RelationalData <- R6::R6Class( # nolint
             # We check first and then mutate.
             #  mutate_code is reproducible by default we assume that we don't
             #  have to check the result of the re-evaluation of the code
-            self$check()
-            if (isFALSE(self$get_check_result())) {
-              stop("Reproducibility error. Couldn't reproduce object(s) with a given code")
-            }
+            self$execute_check()
           })
 
           withProgress(value = 1, message = "Executing processing code", {

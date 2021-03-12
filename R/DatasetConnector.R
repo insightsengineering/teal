@@ -292,14 +292,6 @@ DatasetConnector <- R6::R6Class( #nolint
     #' @return
     #'   \code{TRUE} always for all connectors to avoid evaluating the same code multiple times.
     check = function() {
-      if (!self$is_pulled()) {
-        stop(
-          sprintf(
-            "Cannot check the raw data of '%s' until it is pulled.",
-            self$get_dataname()
-          )
-        )
-      }
       return(TRUE)
     },
     # ___ shiny ====

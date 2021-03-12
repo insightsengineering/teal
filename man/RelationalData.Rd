@@ -79,6 +79,7 @@ get_raw_data(tc)
 \out{<details ><summary>Inherited methods</summary>}
 \itemize{
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="DataAbstract" data-id="check">}\href{../../teal/html/DataAbstract.html#method-check}{\code{teal::DataAbstract$check()}}\out{</span>}
+\item \out{<span class="pkg-link" data-pkg="teal" data-topic="DataAbstract" data-id="execute_check">}\href{../../teal/html/DataAbstract.html#method-execute_check}{\code{teal::DataAbstract$execute_check()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="DataAbstract" data-id="execute_mutate">}\href{../../teal/html/DataAbstract.html#method-execute_mutate}{\code{teal::DataAbstract$execute_mutate()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="DataAbstract" data-id="get_check_result">}\href{../../teal/html/DataAbstract.html#method-get_check_result}{\code{teal::DataAbstract$get_check_result()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="DataAbstract" data-id="get_code">}\href{../../teal/html/DataAbstract.html#method-get_code}{\code{teal::DataAbstract$get_code()}}\out{</span>}
@@ -99,7 +100,7 @@ get_raw_data(tc)
 \subsection{Method \code{new()}}{
 Create a new object of \code{RelationalData} class
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{RelationalData$new(..., join_keys)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{RelationalData$new(..., check = FALSE, join_keys)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
@@ -107,6 +108,9 @@ Create a new object of \code{RelationalData} class
 \describe{
 \item{\code{...}}{(\code{RelationalDataConnector}, \code{Dataset}, \code{DatasetConnector})\cr
 objects}
+
+\item{\code{check}}{(\code{logical}) reproducibility check - whether evaluated preprocessing code gives the same objects
+as provided in arguments. Check is run only if flag is true and preprocessing code is not empty.}
 
 \item{\code{join_keys}}{(\code{JoinKeys}) or a single (\code{JoinKeySet})\cr
 (optional) object with dataset column relationships used for joining.

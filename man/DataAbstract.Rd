@@ -11,6 +11,7 @@ Abstract class containing code for handling set of datasets.
 \itemize{
 \item \href{#method-new}{\code{DataAbstract$new()}}
 \item \href{#method-check}{\code{DataAbstract$check()}}
+\item \href{#method-execute_check}{\code{DataAbstract$execute_check()}}
 \item \href{#method-execute_mutate}{\code{DataAbstract$execute_mutate()}}
 \item \href{#method-get_check_result}{\code{DataAbstract$get_check_result()}}
 \item \href{#method-get_code}{\code{DataAbstract$get_code()}}
@@ -53,6 +54,19 @@ Check if the object raw data is reproducible from the \code{get_code()} code.
 \code{NULL} if check step has been disabled
 \code{TRUE} if all the datasets generated from evaluating the
 \code{get_code()} code are identical to the raw data, else \code{FALSE}.
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-execute_check"></a>}}
+\if{latex}{\out{\hypertarget{method-execute_check}{}}}
+\subsection{Method \code{execute_check()}}{
+Execute \code{check} and raise an error if it's not reproducible.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{DataAbstract$execute_check()}\if{html}{\out{</div>}}
+}
+
+\subsection{Returns}{
+error if code is not reproducible else invisibly nothing
 }
 }
 \if{html}{\out{<hr>}}

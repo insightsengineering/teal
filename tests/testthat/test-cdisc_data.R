@@ -301,7 +301,7 @@ test_that("dataset + connector / global code", {
   )
 
 
-  expect_error(data$check(), "Cannot check the raw data of 'ADTTE' until it is pulled.")
+  expect_true(data$check())
   expect_silent(load_dataset(adtte))
   expect_true(data$check())
 
@@ -353,7 +353,7 @@ test_that("dataset + connector / global code", {
     "ADSL <- radsl(cached = TRUE)\nADTTE <- radtte(ADSL = ADSL, cached = TRUE)\nADSL <- dplyr::filter(ADSL, SEX == \"F\")\nADTTE <- dplyr::filter(ADTTE, USUBJID %in% ADSL$USUBJID)" #nolint
   )
 
-  expect_error(data$check(), "Cannot check the raw data of 'ADTTE' until it is pulled.")
+  expect_true(data$check())
   load_dataset(adtte)
   expect_true(data$check())
 })
@@ -413,7 +413,6 @@ test_that("two datasets / datasets code", {
     "ADSL <- radsl(cached = TRUE)\nADRS <- radrs(cached = TRUE)\nADLB <- radlb(ADSL = ADSL, cached = TRUE)\nADTTE <- radtte(ADSL = ADSL, cached = TRUE)" # nolint
   )
 
-  expect_error(data$check())
   load_dataset(adtte)
   load_dataset(adlb)
   expect_silent(data$check())
@@ -454,7 +453,6 @@ test_that("two datasets / datasets code", {
     "ADSL <- radsl(cached = TRUE)\nADTTE <- radtte(ADSL = ADSL, cached = TRUE)"
   )
 
-  expect_error(data$check(), "'ADTTE' has not been pulled yet")
   load_dataset(adtte)
   expect_true(data$check()) # TRUE
   data$execute_mutate()
@@ -505,16 +503,7 @@ test_that("only connectors", {
     "ADSL <- radsl(cached = TRUE)\nADTTE <- radtte(ADSL = ADSL, cached = TRUE)\nADSL <- dplyr::filter(ADSL, SEX == \"F\")\nADTTE <- dplyr::filter(ADTTE, USUBJID %in% ADSL$USUBJID)" # nolint
   )
 
-  expect_error(
-    data$check(),
-    "Cannot check the raw data of 'ADSL' until it is pulled."
-  )
   load_dataset(adsl)
-
-  expect_error(
-    data$check(),
-    "Cannot check the raw data of 'ADTTE' until it is pulled."
-  )
   load_dataset(adtte)
   expect_true(
     data$check()

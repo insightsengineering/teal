@@ -26,45 +26,18 @@ file_example <- tempfile(fileext = ".R")
 writeLines(
   text = c(
     "library(teal)
-     library(random.cdisc.data)
 
-     adsl <- cdisc_dataset(dataname = \"ADSL\",
-                           x = radsl(cached = TRUE),
-                           code = \"library(random.cdisc.data)\nADSL <- radsl(cached = TRUE)\")
+     x1 <- dataset(dataname = \"IRIS\",
+                   x = iris,
+                   code = \"IRIS <- iris\")
 
-     adtte <- cdisc_dataset(dataname = \"ADTTE\",
-                            x = radtte(cached = TRUE),
-                            code = \"library(random.cdisc.data)\nADTTE <- radtte(cached = TRUE)\")
+     x2 <- dataset(dataname = \"MTCARS\",
+                   x = mtcars,
+                   code = \"MTCARS <- mtcars\")
 
-     cdisc_data(adsl, adtte)"
+     teal_data(x1, x2)"
   ),
   con = file_example
 )
-x <- teal_data_file(file_example, code = character(0))
-get_code(x)
-
-# exaample with custom datasets
-file_example <- tempfile(fileext = ".R")
-writeLines(
-  text = c(
-    "library(teal)
-    library(random.cdisc.data)
-
-    # code>
-    ADSL <- radsl(cached = TRUE)
-    ADTTE <- radtte(cached = TRUE)
-
-    ADSL$n <- nrow(ADTTE)
-    ADTTE$n <- nrow(ADSL)
-    # <code
-
-    ADSL <- cdisc_dataset(dataname = \"ADSL\", x = ADSL)
-    ADTTE <- cdisc_dataset(dataname = \"ADTTE\", x = ADTTE)
-
-    cdisc_data(ADSL, ADTTE)"
-  ),
-  con = file_example
-)
-x <- teal_data_file(file_example)
-get_code(x)
+teal_data_file(file_example, code = character(0))
 }

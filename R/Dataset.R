@@ -213,6 +213,37 @@ Dataset <- R6::R6Class( # nolint
       private$.keys <- keys
       return(invisible(self))
     },
+    #' @description
+    #' Adds variables which code depends on
+    #'
+    #' @return (`self`) invisibly for chaining
+    set_vars = function(vars) {
+      stopifnot(is_fully_named_list(vars))
+
+      if (length(vars) > 0) {
+        # include only new (by name) variable
+        private$vars <- c(private$vars, vars)
+      }
+
+      return(invisible(NULL))
+    },
+    #' @description
+    #' Sets reproducible code
+    #'
+    #' @return (`self`) invisibly for chaining
+    set_code = function(code) {
+      stopifnot(is_character_vector(code, 0, 1))
+
+      if (length(code) > 0 && code != "") {
+        private$code$set_code(
+          code = code,
+          dataname = self$get_datanames(),
+          deps = names(private$vars)
+        )
+      }
+
+      return(invisible(NULL))
+    },
 
     # ___ get_code ====
     #' @description
@@ -277,37 +308,6 @@ Dataset <- R6::R6Class( # nolint
       )
 
       return(invisible(self))
-    },
-    #' @description
-    #' Adds variables which code depends on
-    #'
-    #' @return (`self`) invisibly for chaining
-    set_vars = function(vars) {
-      stopifnot(is_fully_named_list(vars))
-
-      if (length(vars) > 0) {
-        # include only new (by name) variable
-        private$vars <- c(private$vars, vars)
-      }
-
-      return(invisible(NULL))
-    },
-    #' @description
-    #' Sets reproducible code
-    #'
-    #' @return (`self`) invisibly for chaining
-    set_code = function(code) {
-      stopifnot(is_character_vector(code, 0, 1))
-
-      if (length(code) > 0 && code != "") {
-        private$code$set_code(
-          code = code,
-          dataname = self$get_datanames(),
-          deps = names(private$vars)
-        )
-      }
-
-      return(invisible(NULL))
     },
 
     # ___ check ====

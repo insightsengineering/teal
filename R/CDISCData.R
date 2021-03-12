@@ -10,6 +10,8 @@
 #' @param join_keys (`JoinKeys`) or a single (`JoinKeySet`)\cr
 #'   (optional) object with datasets column names used for joining.
 #'   If empty then it would be automatically derived basing on intersection of datasets primary keys
+#' @param check (\code{logical}) reproducibility check - whether evaluated preprocessing code gives the same objects
+#'   as provided in arguments. Check is run only if flag is true and preprocessing code is not empty.
 #'
 #' @importFrom R6 R6Class
 #' @importFrom methods is
@@ -21,10 +23,10 @@ CDISCData <- R6::R6Class( # nolint
   public = list(
     #' @description
     #' Create a new object of `CDISCData` class
-    initialize = function(..., join_keys) {
+    initialize = function(..., check = FALSE, join_keys) {
       dot_args <- list(...)
 
-      super$initialize(..., join_keys = join_keys)
+      super$initialize(..., check = check, join_keys = join_keys)
 
       new_parent <- list()
       for (x in dot_args) {
@@ -137,14 +139,12 @@ CDISCData <- R6::R6Class( # nolint
 #' @description `r lifecycle::badge("maturing")`
 #' Function passes datasets to teal application with option to read preprocessing code and reproducibility checking.
 #'
+#' @inheritParams teal_data
 #' @param ... (\code{RelationalDataConnector}, \code{Dataset} or
 #'   \code{DatasetConnector}) elements to include where `ADSL` data is mandatory.
 #' @param join_keys (`JoinKeys`) or a single (`JoinKeySet`)\cr
 #'   (optional) object with datasets column names used for joining.
 #'   If empty then it would be automatically derived basing on intersection of datasets primary keys
-#' @param code (\code{character}) code to reproduce the datasets.
-#' @param check (\code{logical}) reproducibility check - whether evaluated preprocessing code gives the same objects
-#'   as provided in arguments. Check is run only if flag is true and preprocessing code is not empty.
 #'
 #' @return a `CDISCData` object
 #'
@@ -192,20 +192,12 @@ cdisc_data <- function(...,
                        join_keys,
                        code = "",
                        check = FALSE) {
-  stopifnot(is_logical_single(check))
-
-  x <- CDISCData$new(..., join_keys = join_keys)
+  x <- CDISCData$new(..., check = check, join_keys = join_keys)
   if (length(code) > 0 && !identical(code, "")) {
     x$set_pull_code(code = code)
   }
-  x$set_check(check)
 
-  if (check && is_pulled(x)) {
-    x$check()
-    if (isFALSE(x$get_check_result())) {
-      stop("Reproducibility check failed.")
-    }
-  }
+  x$execute_check()
 
   return(x)
 }
