@@ -240,10 +240,15 @@ Execution of \code{mutate_code} is delayed after datasets are pulled
 \item{\code{code}}{(\code{character}) Code to mutate the dataset. Must contain the
 \code{dataset$dataname}}
 
-\item{\code{vars}}{(list)\cr
-In case when this object code depends on the \code{raw_data} from the other
-\code{Dataset}, \code{DatasetConnector} object(s) or other constant value,
-this/these object(s) should be included.}
+\item{\code{vars}}{(named \code{list})) \cr
+In case when this object code depends on other \code{Dataset} object(s) or
+other constant value, this/these object(s) should be included as named
+element(s) of the list. For example if this object code needs \code{ADSL}
+object we should specify \verb{vars = list(ADSL = <adsl object>)}.
+It's recommended to include \code{Dataset} or \code{DatasetConnector} objects to
+the \code{vars} list to preserve reproducibility. Please note that \code{vars}
+are included to this object as local \code{vars} and they cannot be modified
+within another dataset.}
 }
 \if{html}{\out{</div>}}
 }
@@ -270,10 +275,15 @@ Execution of \code{mutate_code} is delayed after datasets are pulled
 \item{\code{code}}{(\code{character}) Code to mutate the dataset. Must contain the
 \code{dataset$dataname}}
 
-\item{\code{vars}}{(list)\cr
-In case when this object code depends on the \code{raw_data} from the other
-\code{Dataset}, \code{DatasetConnector} object(s) or other constant value,
-this/these object(s) should be included}
+\item{\code{vars}}{(named \code{list})) \cr
+In case when this object code depends on other \code{Dataset} object(s) or
+other constant value, this/these object(s) should be included as named
+element(s) of the list. For example if this object code needs \code{ADSL}
+object we should specify \verb{vars = list(ADSL = <adsl object>)}.
+It's recommended to include \code{Dataset} or \code{DatasetConnector} objects to
+the \code{vars} list to preserve reproducibility. Please note that \code{vars}
+are included to this object as local \code{vars} and they cannot be modified
+within another dataset.}
 }
 \if{html}{\out{</div>}}
 }

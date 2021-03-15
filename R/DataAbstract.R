@@ -230,10 +230,15 @@ DataAbstract <- R6::R6Class( #nolint
     #'
     #' @param code (\code{character}) Code to mutate the dataset. Must contain the
     #'  \code{dataset$dataname}
-    #' @param vars (list)\cr
-    #'   In case when this object code depends on the \code{raw_data} from the other
-    #'   \code{Dataset}, \code{DatasetConnector} object(s) or other constant value,
-    #'   this/these object(s) should be included.
+    #' @param vars (named `list`)) \cr
+    #'   In case when this object code depends on other `Dataset` object(s) or
+    #'   other constant value, this/these object(s) should be included as named
+    #'   element(s) of the list. For example if this object code needs `ADSL`
+    #'   object we should specify `vars = list(ADSL = <adsl object>)`.
+    #'   It's recommended to include `Dataset` or `DatasetConnector` objects to
+    #'   the `vars` list to preserve reproducibility. Please note that `vars`
+    #'   are included to this object as local `vars` and they cannot be modified
+    #'   within another dataset.
     #'
     #' @return self invisibly for chaining
     mutate = function(code, vars = list()) {
@@ -255,10 +260,15 @@ DataAbstract <- R6::R6Class( #nolint
     #' @param dataname (\code{character}) Dataname to be mutated
     #' @param code (\code{character}) Code to mutate the dataset. Must contain the
     #'  \code{dataset$dataname}
-    #' @param vars (list)\cr
-    #'   In case when this object code depends on the \code{raw_data} from the other
-    #'   \code{Dataset}, \code{DatasetConnector} object(s) or other constant value,
-    #'   this/these object(s) should be included
+    #' @param vars (named `list`)) \cr
+    #'   In case when this object code depends on other `Dataset` object(s) or
+    #'   other constant value, this/these object(s) should be included as named
+    #'   element(s) of the list. For example if this object code needs `ADSL`
+    #'   object we should specify `vars = list(ADSL = <adsl object>)`.
+    #'   It's recommended to include `Dataset` or `DatasetConnector` objects to
+    #'   the `vars` list to preserve reproducibility. Please note that `vars`
+    #'   are included to this object as local `vars` and they cannot be modified
+    #'   within another dataset.
     #'
     #' @return self invisibly for chaining
     mutate_dataset = function(dataname, code, vars = list()) {

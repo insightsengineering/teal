@@ -101,9 +101,14 @@ which is needed to preserve the code uniqueness and correct order.}
 Label to describe the dataset}
 
 \item{\code{vars}}{(named \code{list})) \cr
-In case when this object code depends on the \code{raw_data} from the other
-\code{Dataset} object(s) or other constant value,
-this/these object(s) should be included as named element of the list.}
+In case when this object code depends on other \code{Dataset} object(s) or
+other constant value, this/these object(s) should be included as named
+element(s) of the list. For example if this object code needs \code{ADSL}
+object we should specify \verb{vars = list(ADSL = <adsl object>)}.
+It's recommended to include \code{Dataset} or \code{DatasetConnector} objects to
+the \code{vars} list to preserve reproducibility. Please note that \code{vars}
+are included to this object as local \code{vars} and they cannot be modified
+within another dataset.}
 }
 \if{html}{\out{</div>}}
 }
@@ -145,9 +150,14 @@ which is needed to preserve the code uniqueness and correct order.}
 Label to describe the dataset}
 
 \item{\code{vars}}{(named \code{list})) \cr
-In case when this object code depends on the \code{raw_data} from the other
-\code{Dataset} object(s) or other constant value,
-this/these object(s) should be included as named element of the list.}
+In case when this object code depends on other \code{Dataset} object(s) or
+other constant value, this/these object(s) should be included as named
+element(s) of the list. For example if this object code needs \code{ADSL}
+object we should specify \verb{vars = list(ADSL = <adsl object>)}.
+It's recommended to include \code{Dataset} or \code{DatasetConnector} objects to
+the \code{vars} list to preserve reproducibility. Please note that \code{vars}
+are included to this object as local \code{vars} and they cannot be modified
+within another dataset.}
 }
 \if{html}{\out{</div>}}
 }
@@ -379,9 +389,14 @@ Adds variables which code depends on
 \if{html}{\out{<div class="arguments">}}
 \describe{
 \item{\code{vars}}{(named \code{list})) \cr
-In case when this object code depends on the \code{raw_data} from the other
-\code{Dataset} object(s) or other constant value,
-this/these object(s) should be included as named element of the list.}
+In case when this object code depends on other \code{Dataset} object(s) or
+other constant value, this/these object(s) should be included as named
+element(s) of the list. For example if this object code needs \code{ADSL}
+object we should specify \verb{vars = list(ADSL = <adsl object>)}.
+It's recommended to include \code{Dataset} or \code{DatasetConnector} objects to
+the \code{vars} list to preserve reproducibility. Please note that \code{vars}
+are included to this object as local \code{vars} and they cannot be modified
+within another dataset.}
 }
 \if{html}{\out{</div>}}
 }
@@ -465,9 +480,14 @@ A character string defining the code needed to produce the data set in \code{x}.
 which is needed to preserve the code uniqueness and correct order.}
 
 \item{\code{vars}}{(named \code{list})) \cr
-In case when this object code depends on the \code{raw_data} from the other
-\code{Dataset} object(s) or other constant value,
-this/these object(s) should be included as named element of the list.}
+In case when this object code depends on other \code{Dataset} object(s) or
+other constant value, this/these object(s) should be included as named
+element(s) of the list. For example if this object code needs \code{ADSL}
+object we should specify \verb{vars = list(ADSL = <adsl object>)}.
+It's recommended to include \code{Dataset} or \code{DatasetConnector} objects to
+the \code{vars} list to preserve reproducibility. Please note that \code{vars}
+are included to this object as local \code{vars} and they cannot be modified
+within another dataset.}
 }
 \if{html}{\out{</div>}}
 }

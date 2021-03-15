@@ -12,10 +12,15 @@
 #' @param script (`character`)\cr
 #'   file that contains R Code that can be read using [`read_script`].
 #'   Preferred before `code` argument.
-#' @param vars (list)\cr
-#'   In case when this object code depends on the `raw_data` from the other
-#'   `Dataset`, `DatasetConnector` object(s) or other constant value,
-#'   this/these object(s) should be included.
+#' @param vars (named `list`)) \cr
+#'   In case when this object code depends on other `Dataset` object(s) or
+#'   other constant value, this/these object(s) should be included as named
+#'   element(s) of the list. For example if this object code needs `ADSL`
+#'   object we should specify `vars = list(ADSL = <adsl object>)`.
+#'   It's recommended to include `Dataset` or `DatasetConnector` objects to
+#'   the `vars` list to preserve reproducibility. Please note that `vars`
+#'   are included to this object as local `vars` and they cannot be modified
+#'   within another dataset.
 #' @param ... not used, only for support of S3
 #'
 #' @return modified `x` object

@@ -24,9 +24,14 @@
 #'   Label to describe the dataset
 #'
 #' @param vars (named `list`)) \cr
-#'   In case when this object code depends on the \code{raw_data} from the other
-#'   \code{Dataset} object(s) or other constant value,
-#'   this/these object(s) should be included as named element of the list.
+#'   In case when this object code depends on other `Dataset` object(s) or
+#'   other constant value, this/these object(s) should be included as named
+#'   element(s) of the list. For example if this object code needs `ADSL`
+#'   object we should specify `vars = list(ADSL = <adsl object>)`.
+#'   It's recommended to include `Dataset` or `DatasetConnector` objects to
+#'   the `vars` list to preserve reproducibility. Please note that `vars`
+#'   are included to this object as local `vars` and they cannot be modified
+#'   within another dataset.
 #'
 #' @importFrom rlang with_options
 #' @importFrom R6 R6Class
@@ -534,9 +539,14 @@ Dataset <- R6::R6Class( # nolint
 #'   Label to describe the dataset
 #'
 #' @param vars (named `list`)) \cr
-#'   In case when this object code depends on the \code{raw_data} from the other
-#'   \code{Dataset} object(s) or other constant value,
-#'   this/these object(s) should be included as named element of the list.
+#'   In case when this object code depends on other `Dataset` object(s) or
+#'   other constant value, this/these object(s) should be included as named
+#'   element(s) of the list. For example if this object code needs `ADSL`
+#'   object we should specify `vars = list(ADSL = <adsl object>)`.
+#'   It's recommended to include `Dataset` or `DatasetConnector` objects to
+#'   the `vars` list to preserve reproducibility. Please note that `vars`
+#'   are included to this object as local `vars` and they cannot be modified
+#'   within another dataset.
 #'
 #' @return \code{\link{Dataset}} object
 #'
