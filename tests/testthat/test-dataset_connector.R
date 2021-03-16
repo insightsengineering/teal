@@ -446,14 +446,14 @@ test_that("rice_dataset", {
 
   expect_identical(
     x$get_items()[[1]]$get_code(),
-    "ADSL <- rice::rice_read(node = \"/path/to/ADSL\", prolong = TRUE, quiet = TRUE)"
+    "ADSL <- rice::rice_read(node = \"/path/to/ADSL\", prolong = TRUE)"
   )
 
 
   x <- mutate_dataset(rice_cdisc_dataset_connector("ADLB", "/path/to/ADLB"), code = "ADLB$x <- 1")
   expect_equal(
     get_code(x),
-    "ADLB <- rice::rice_read(node = \"/path/to/ADLB\", prolong = TRUE, quiet = TRUE)\nADLB$x <- 1"
+    "ADLB <- rice::rice_read(node = \"/path/to/ADLB\", prolong = TRUE)\nADLB$x <- 1"
   )
 })
 

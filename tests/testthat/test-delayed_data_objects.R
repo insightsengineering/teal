@@ -94,24 +94,24 @@ test_that("Single rice_data connector with two rice dataset connectors", {
 
   expect_equal(
     items$ADSL$get_pull_callable()$get_call(),
-    "rice::rice_read(node = \"/path/to/ADSL\", prolong = TRUE, quiet = TRUE)"
+    "rice::rice_read(node = \"/path/to/ADSL\", prolong = TRUE)"
   )
   expect_equal(
     items$ADLB$get_pull_callable()$get_call(),
-    "rice::rice_read(node = \"/path/to/ADLB\", prolong = TRUE, quiet = TRUE)"
+    "rice::rice_read(node = \"/path/to/ADLB\", prolong = TRUE)"
   )
 
   expect_equal(
     get_code(adsl_adlb, "ADSL"),
-    "rice::rice_session_open(password = askpass::askpass())\nADSL <- rice::rice_read(node = \"/path/to/ADSL\", prolong = TRUE, quiet = TRUE)\nrice::rice_session_close(message = FALSE)" # nolint
+    "rice::rice_session_open(password = askpass::askpass())\nADSL <- rice::rice_read(node = \"/path/to/ADSL\", prolong = TRUE)\nrice::rice_session_close(message = FALSE)" # nolint
   )
   expect_equal(
     get_code(adsl_adlb, "ADLB"),
-    "rice::rice_session_open(password = askpass::askpass())\nADLB <- rice::rice_read(node = \"/path/to/ADLB\", prolong = TRUE, quiet = TRUE)\nrice::rice_session_close(message = FALSE)" # nolint
+    "rice::rice_session_open(password = askpass::askpass())\nADLB <- rice::rice_read(node = \"/path/to/ADLB\", prolong = TRUE)\nrice::rice_session_close(message = FALSE)" # nolint
   )
   expect_equal(
     get_code(adsl_adlb),
-    "rice::rice_session_open(password = askpass::askpass())\nADSL <- rice::rice_read(node = \"/path/to/ADSL\", prolong = TRUE, quiet = TRUE)\nADLB <- rice::rice_read(node = \"/path/to/ADLB\", prolong = TRUE, quiet = TRUE)\nrice::rice_session_close(message = FALSE)" # nolint
+    "rice::rice_session_open(password = askpass::askpass())\nADSL <- rice::rice_read(node = \"/path/to/ADSL\", prolong = TRUE)\nADLB <- rice::rice_read(node = \"/path/to/ADLB\", prolong = TRUE)\nrice::rice_session_close(message = FALSE)" # nolint
   )
 })
 

@@ -713,7 +713,7 @@ rice_dataset_connector <- function(dataname,
     )
 
   x_fun <- callable_function("rice::rice_read") # nolint
-  args <- append(list(node = path, prolong = TRUE, quiet = TRUE), dot_args)
+  args <- append(list(node = path, prolong = TRUE), dot_args)
   x_fun$set_args(args)
 
   x <- dataset_connector(
