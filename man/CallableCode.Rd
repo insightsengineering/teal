@@ -2,15 +2,12 @@
 % Please edit documentation in R/CallableCode.R
 \name{CallableCode}
 \alias{CallableCode}
-\title{A \code{CallableCode} class of objects}
-\description{
-A \code{CallableCode} class of objects
+\title{A \code{CallableCode} class of objects
 
-A \code{CallableCode} class of objects
-}
-\details{
 Object that stores code to reproduce an object. It includes methods to
-get or run the code and return the object.
+get or run the code and return the object.}
+\description{
+\ifelse{html}{\out{<a href='https://www.tidyverse.org/lifecycle/#experimental'><img src='figures/lifecycle-experimental.svg' alt='Experimental lifecycle'></a>}}{\strong{Experimental}}
 }
 \section{Super class}{
 \code{\link[teal:Callable]{teal::Callable}} -> \code{CallableCode}

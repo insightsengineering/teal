@@ -1,5 +1,8 @@
 ## CallableCode ====
-#' A \code{CallableCode} class of objects
+#'
+#' @description `r lifecycle::badge("experimental")`
+#'
+#' @title A \code{CallableCode} class of objects
 #'
 #' Object that stores code to reproduce an object. It includes methods to
 #' get or run the code and return the object.

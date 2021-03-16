@@ -2,14 +2,11 @@
 % Please edit documentation in R/CallableFunction.R
 \name{CallableFunction}
 \alias{CallableFunction}
-\title{A \code{CallableFunction} class of objects}
-\description{
-A \code{CallableFunction} class of objects
+\title{A \code{CallableFunction} class of objects
 
-A \code{CallableFunction} class of objects
-}
-\details{
-Object that stores function name with its arguments. Methods to get call and run it.
+Object that stores function name with its arguments. Methods to get call and run it.}
+\description{
+\ifelse{html}{\out{<a href='https://www.tidyverse.org/lifecycle/#experimental'><img src='figures/lifecycle-experimental.svg' alt='Experimental lifecycle'></a>}}{\strong{Experimental}}
 }
 \section{Super class}{
 \code{\link[teal:Callable]{teal::Callable}} -> \code{CallableFunction}

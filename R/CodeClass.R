@@ -1,5 +1,8 @@
 ## CodeClass ====
-#' Code Class
+#'
+#' @description `r lifecycle::badge("experimental")`
+#'
+#' @title Code Class
 #'
 #' @importFrom digest digest
 #' @importFrom rlang with_options

@@ -1,5 +1,9 @@
 # RelationalDataConnector ------
+#'
+#' @description `r lifecycle::badge("experimental")`
+#'
 #' @title Manage multiple and \code{DatasetConnector} of the same type.
+#'
 #' @description
 #' Class manages \code{DatasetConnector} to specify additional dynamic arguments and to
 #' open/close connection.

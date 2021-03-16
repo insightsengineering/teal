@@ -2,15 +2,12 @@
 % Please edit documentation in R/DataConnection.R
 \name{DataConnection}
 \alias{DataConnection}
-\title{A \code{DataConnection} class of objects}
-\description{
-A \code{DataConnection} class of objects
+\title{A \code{DataConnection} class of objects
 
-A \code{DataConnection} class of objects
-}
-\details{
 Objects of this class store the connection to a data source.
-It can be a database or server (\code{RICE} or \code{SAICE}) connection.
+It can be a database or server (\code{RICE} or \code{SAICE}) connection.}
+\description{
+\ifelse{html}{\out{<a href='https://www.tidyverse.org/lifecycle/#experimental'><img src='figures/lifecycle-experimental.svg' alt='Experimental lifecycle'></a>}}{\strong{Experimental}}
 }
 \examples{
 open_fun <- callable_function(data.frame) # define opening function

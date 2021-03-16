@@ -20,7 +20,7 @@ and \code{dataset_2}.}
 object of class \code{JoinKeySet} to be passed into \code{join_keys} function.
 }
 \description{
-Create a relationship between a pair of datasets
+\ifelse{html}{\out{<a href='https://www.tidyverse.org/lifecycle/#experimental'><img src='figures/lifecycle-experimental.svg' alt='Experimental lifecycle'></a>}}{\strong{Experimental}}
 }
 \seealso{
 \code{\link[=join_keys]{join_keys()}}

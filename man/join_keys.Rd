@@ -13,7 +13,7 @@ join_keys(...)
 \code{JoinKeys}
 }
 \description{
-Create a \code{JoinKeys} out of a list of \code{JoinKeySet} objects
+\ifelse{html}{\out{<a href='https://www.tidyverse.org/lifecycle/#experimental'><img src='figures/lifecycle-experimental.svg' alt='Experimental lifecycle'></a>}}{\strong{Experimental}}
 }
 \details{
 Note that join keys are symmetric although the relationship only needs

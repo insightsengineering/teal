@@ -186,6 +186,8 @@ resolve_teal_args <- function(args, datasets) {
 
 #' Resolve expression after delayed data are loaded
 #'
+#' @description `r lifecycle::badge("maturing")`
+#'
 #' @param x \code{function} Function that is applied on dataset.
 #' It must take only a single argument "data" and return character vector with columns / values.
 #' @param ds \code{data.frame} Dataset on which the function is applied to.

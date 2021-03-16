@@ -1,5 +1,8 @@
 ## CallableFunction ====
-#' A \code{CallableFunction} class of objects
+#'
+#' @description `r lifecycle::badge("experimental")`
+#'
+#' @title A \code{CallableFunction} class of objects
 #'
 #' Object that stores function name with its arguments. Methods to get call and run it.
 #'

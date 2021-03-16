@@ -1,5 +1,9 @@
 ## CDISCDataset ====
+#'
+#' @description `r lifecycle::badge("experimental")`
+#'
 #' @title R6 Class representing a dataset with parent attribute
+#'
 #' @description
 #' Any \code{data.frame} object can be stored inside this object.
 #'
@@ -163,7 +167,7 @@ cdisc_dataset <- function(dataname,
 
 #' Load \code{CDISCDataset} object from a file
 #'
-#' @description `r lifecycle::badge("maturing")`
+#' @description `r lifecycle::badge("experimental")`
 #' Please note that the script has to end with a call creating desired object. The error will be raised otherwise.
 #'
 #' @inheritParams dataset_file

@@ -5,9 +5,7 @@
 \alias{FilteredData}
 \title{Class to encapsulate filtered datasets}
 \description{
-Class to encapsulate filtered datasets
-
-Class to encapsulate filtered datasets
+\ifelse{html}{\out{<a href='https://www.tidyverse.org/lifecycle/#experimental'><img src='figures/lifecycle-experimental.svg' alt='Experimental lifecycle'></a>}}{\strong{Experimental}}
 }
 \details{
 The main purpose of this class is to provide a collection of reactive datasets,

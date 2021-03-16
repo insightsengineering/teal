@@ -4,6 +4,8 @@
 \alias{DataAbstract}
 \title{\code{DataAbstract} class}
 \description{
+\ifelse{html}{\out{<a href='https://www.tidyverse.org/lifecycle/#experimental'><img src='figures/lifecycle-experimental.svg' alt='Experimental lifecycle'></a>}}{\strong{Experimental}}
+
 Abstract class containing code for handling set of datasets.
 }
 \section{Methods}{

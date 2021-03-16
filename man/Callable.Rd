@@ -2,14 +2,11 @@
 % Please edit documentation in R/Callable.R
 \name{Callable}
 \alias{Callable}
-\title{A \code{Callable} class of objects}
-\description{
-A \code{Callable} class of objects
+\title{A \code{Callable} class of objects
 
-A \code{Callable} class of objects
-}
-\details{
-Object that stores function name with its arguments. Methods to get call and run it.
+Object that stores function name with its arguments. Methods to get call and run it.}
+\description{
+\ifelse{html}{\out{<a href='https://www.tidyverse.org/lifecycle/#experimental'><img src='figures/lifecycle-experimental.svg' alt='Experimental lifecycle'></a>}}{\strong{Experimental}}
 }
 \section{Methods}{
 \subsection{Public methods}{

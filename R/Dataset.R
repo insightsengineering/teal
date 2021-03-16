@@ -1,5 +1,9 @@
 ## Dataset ====
+#'
+#' @description `r lifecycle::badge("experimental")`
+#'
 #' @title  R6 Class representing a dataset with its attributes
+#'
 #' @description
 #' Any \code{data.frame} object can be stored inside this object.
 #' Some attributes like colnames, dimension or column names for a specific type will
@@ -593,7 +597,7 @@ dataset <- function(dataname,
   )
 }
 
-#' @rdname dataset
+#' @inherit dataset
 #' @description `r lifecycle::badge("defunct")`
 #' @export
 raw_dataset <- function(x) {
@@ -604,7 +608,7 @@ raw_dataset <- function(x) {
   )
 }
 
-#' @rdname dataset
+#' @inherit dataset
 #' @description `r lifecycle::badge("soft-deprecated")`
 #' @export
 named_dataset <- function(dataname,
@@ -627,7 +631,7 @@ named_dataset <- function(dataname,
   )
 }
 
-#' @rdname dataset
+#' @inherit dataset
 #' @description `r lifecycle::badge("soft-deprecated")`
 #' @export
 relational_dataset <- function(dataname,
@@ -708,7 +712,7 @@ dataset_file <- function(path, code = get_code(path)) {
   return(object)
 }
 
-#' @rdname dataset_file
+#' @inherit dataset_file
 #' @description `r lifecycle::badge("soft-deprecated")`
 #' @export
 named_dataset_file <- function(path, code = get_code(path)) {
@@ -720,7 +724,7 @@ named_dataset_file <- function(path, code = get_code(path)) {
   dataset_file(path = path, code = code)
 }
 
-#' @rdname dataset_file
+#' @inherit dataset_file
 #' @description `r lifecycle::badge("soft-deprecated")`
 #' @export
 relational_dataset_file <- function(path, code = get_code(path)) {

@@ -1,6 +1,8 @@
 #' @name CDISCFilteredData
 #' @docType class
 #'
+#' @description `r lifecycle::badge("experimental")`
+#'
 #' @title Class to encapsulate relational filtered datasets with its parents.
 #'
 #' @details

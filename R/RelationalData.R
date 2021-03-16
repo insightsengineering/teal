@@ -1,5 +1,9 @@
 ## RelationalData ====
+#'
+#' @description `r lifecycle::badge("experimental")`
+#'
 #' @title Manage multiple `RelationalDataConnector`, `DatasetConnector` and `Dataset` objects.
+#'
 #' @description
 #' Class manages `RelationalDataConnector`, `DatasetConnector` and
 #' `Dataset` objects and aggregate them in one collection.

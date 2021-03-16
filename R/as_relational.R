@@ -18,13 +18,9 @@ as_relational <- function(x, keys) {
   return(x)
 }
 
-#' @rdname as_relational
-#'
+#' @inherit as_relational
+#' @inheritParams dataset
 #' @description `r lifecycle::badge("defunct")`
-#' @details
-#' \code{as_cdisc_relational} will derive the keys by the \code{dataname} and therefore
-#'   does not need the \code{keys} argument to be specified
-#'
 #' @export
 as_cdisc_relational <- function(x,
                                 dataname,

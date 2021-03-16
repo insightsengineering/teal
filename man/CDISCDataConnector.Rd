@@ -4,6 +4,8 @@
 \alias{CDISCDataConnector}
 \title{Manage multiple and \code{DatasetConnector} of the same type.}
 \description{
+\ifelse{html}{\out{<a href='https://www.tidyverse.org/lifecycle/#experimental'><img src='figures/lifecycle-experimental.svg' alt='Experimental lifecycle'></a>}}{\strong{Experimental}}
+
 Class manages \code{DatasetConnector} to specify additional dynamic arguments and to
 open/close connection.
 }

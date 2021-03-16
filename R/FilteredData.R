@@ -1,6 +1,8 @@
 #' @name FilteredData
 #' @docType class
 #'
+#' @description `r lifecycle::badge("experimental")`
+#'
 #' @title Class to encapsulate filtered datasets
 #'
 #' @details

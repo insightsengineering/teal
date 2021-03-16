@@ -1,5 +1,9 @@
 ## JoinKeys ====
+#'
+#' @description `r lifecycle::badge("experimental")`
+#'
 #' @title R6 Class to store relationships for joining datasets
+#'
 #' @description
 #' This class stores symmetric links between pairs of key-values
 #' (e.g. column A of dataset X can be joined with column B of dataset Y). This relationship
@@ -163,6 +167,7 @@ JoinKeys <- R6::R6Class( # nolint
 
 #' Create a `JoinKeys` out of a list of `JoinKeySet` objects
 #'
+#' @description `r lifecycle::badge("experimental")`
 #'
 #' @param ... optional, a `JoinKeySet` objects created using the `join_key` function.
 #' @details Note that join keys are symmetric although the relationship only needs
@@ -250,13 +255,19 @@ mutate_join_keys.RelationalData <- function(x, dataset_1, dataset_2, val) { # no
 
 
 #' Create a relationship between a pair of datasets
+#'
+#' @description `r lifecycle::badge("experimental")`
+#'
 #' @inheritParams mutate_join_keys
 #' @param keys (optionally named `character`) where `names(keys)` are columns in `dataset_1`
 #' with relationship to columns of `dataset_2` given by the elements in `keys`.
 #' If `names(keys)` is `NULL` then the same column names are used for both `dataset_1`
 #' and `dataset_2`.
+#'
 #' @return object of class `JoinKeySet` to be passed into `join_keys` function.
+#'
 #' @seealso [join_keys()]
+#'
 #' @importFrom rlang is_named
 #' @export
 join_key <- function(dataset_1, dataset_2, keys) {

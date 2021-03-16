@@ -1,5 +1,9 @@
 ## CDISCData ====
+#'
+#' @description `r lifecycle::badge("experimental")`
+#'
 #' @title Manage multiple `CDISCDataConnector`, `CDISCDatasetConnector` and `CDISCDataset` objects.
+#'
 #' @description
 #' Class manages `CDISCDataConnector`, `CDISCDatasetConnector` and
 #' `CDISCDataset` objects and aggregate them in one collection.
@@ -136,7 +140,7 @@ CDISCData <- R6::R6Class( # nolint
 # CONSTRUCTORS ====
 #' Data input for teal app
 #'
-#' @description `r lifecycle::badge("maturing")`
+#' @description `r lifecycle::badge("experimental")`
 #' Function passes datasets to teal application with option to read preprocessing code and reproducibility checking.
 #'
 #' @inheritParams teal_data
@@ -204,7 +208,7 @@ cdisc_data <- function(...,
 
 #' Load `CDISCData` object from a file
 #'
-#' @description `r lifecycle::badge("maturing")`
+#' @description `r lifecycle::badge("experimental")`
 #'
 #' @inheritParams teal_data_file
 #'

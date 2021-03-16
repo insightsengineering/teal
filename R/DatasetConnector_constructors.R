@@ -1,8 +1,8 @@
 #' Create a new `DatasetConnector` object
 #'
-#' Create `DatasetConnector` from \code{\link{callable_function}}.
-#'
 #' `r lifecycle::badge("experimental")`
+#'
+#' Create `DatasetConnector` from \code{\link{callable_function}}.
 #'
 #' @param dataname (`character`)\cr
 #'  A given name for the dataset it may not contain spaces
@@ -65,7 +65,7 @@ dataset_connector <- function(dataname,
 }
 
 
-#' @rdname dataset_connector
+#' @inherit dataset_connector
 #' @description `r lifecycle::badge("defunct")`
 #' @export
 raw_dataset_connector <- function(pull_callable) {
@@ -76,7 +76,7 @@ raw_dataset_connector <- function(pull_callable) {
   )
 }
 
-#' @rdname dataset_connector
+#' @inherit dataset_connector
 #' @description `r lifecycle::badge("soft-deprecated")`
 #' @export
 named_dataset_connector <- function(dataname,
@@ -101,7 +101,7 @@ named_dataset_connector <- function(dataname,
 }
 
 
-#' @rdname dataset_connector
+#' @inherit dataset_connector
 #' @description `r lifecycle::badge("soft-deprecated")`
 #' @export
 relational_dataset_connector <- function(dataname,
@@ -203,7 +203,7 @@ dataset_connector_file <- function(path) { # nolint
   return(object)
 }
 
-#' @rdname dataset_connector_file
+#' @inherit dataset_connector_file
 #' @description `r lifecycle::badge("soft-deprecated")`
 #' @export
 relational_dataset_connector_file <- function(path) { # nolint

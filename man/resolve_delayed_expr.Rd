@@ -18,7 +18,7 @@ It must take only a single argument "data" and return character vector with colu
 Character vector - result of calling function \code{x} on dataset \code{ds}.
 }
 \description{
-Resolve expression after delayed data are loaded
+\ifelse{html}{\out{<a href='https://www.tidyverse.org/lifecycle/#maturing'><img src='figures/lifecycle-maturing.svg' alt='Maturing lifecycle'></a>}}{\strong{Maturing}}
 }
 \examples{
 \dontrun{

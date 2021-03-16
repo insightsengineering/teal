@@ -45,34 +45,27 @@ reference:
     contents:
     - dataset
     - dataset_file
-    - raw_dataset
-    - named_dataset
-    - relational_dataset
-    - relational_dataset_file
     - cdisc_dataset
     - cdisc_dataset_file
   - title: Delayed Dataset Connectors Constructors
     desc: For creating delayed dataset objects.
     contents:
+    - dataset_connector
+    - dataset_connector_file
     - cdisc_dataset_connector
     - cdisc_dataset_connector_file
     - code_cdisc_dataset_connector
     - code_dataset_connector
     - csv_cdisc_dataset_connector
     - csv_dataset_connector
-    - dataset_connector
-    - dataset_connector_file
     - fun_cdisc_dataset_connector
     - fun_dataset_connector
-    - named_dataset_connector
     - python_dataset_connector
-    - raw_dataset_connector
+    - python_cdisc_dataset_connector
     - rcd_cdisc_dataset_connector
     - rcd_dataset_connector
     - rds_cdisc_dataset_connector
     - rds_dataset_connector
-    - relational_dataset_connector
-    - relational_dataset_connector_file
     - rice_cdisc_dataset_connector
     - rice_dataset_connector
     - script_cdisc_dataset_connector
@@ -98,15 +91,17 @@ reference:
   - title: Delayed Dataset Functions
     desc: For loading and modifying delayed data objects.
     contents:
-    - as_relational
+    - as_cdisc
     - callable_code
     - callable_function
+    - get_attrs
     - get_cdisc_keys
     - get_code
     - get_dataname
     - get_dataset
     - get_dataset_label
     - get_datasets
+    - get_keys
     - get_raw_data
     - is_pulled
     - load_dataset
@@ -124,17 +119,14 @@ reference:
     - bookmarkableShinyApp
     - data_label
     - data_label<-
-    - dataset
-    - dataset_file
     - default_filter
+    - get_filter_expr
     - get_labels
     - get_key_duplicates
     - get_key_duplicates.Dataset
     - get_key_duplicates.data.frame
-    - get_key_duplicates_util
     - join_key
     - join_keys
-    - keys
     - log_app_usage
     - no_selected_as_NULL
     - print.choices_labeled
@@ -151,51 +143,43 @@ reference:
     desc: Abstract and concrete classes used to build teal functionality.
     contents:
     - FilteredData
+    - CDISCFilteredData
+    - Dataset
+    - CDISCDataset
+    - DatasetConnector
+    - CDISCDatasetConnector
+    - DataConnection
+    - DataAbstract
+    - RelationalData
+    - CDISCData
+    - RelationalDataConnector
+    - CDISCDataConnector
     - Callable
     - CallableCode
     - CallablePythonCode
     - CallableFunction
-    - CDISCData
-    - CDISCDataConnector
-    - CDISCDataset
-    - CDISCDatasetConnector
-    - CDISCFilteredData
     - CodeClass
-    - Dataset
-    - DatasetConnector
-    - JoinKeys
     - PythonCodeClass
-    - DataAbstract
-    - DataConnection
-    - RelationalDataConnector
-    - RelationalData
+    - JoinKeys
     - srv_teal_with_splash
     - ui_teal_with_splash
   - subtitle: Unexported Functions
     desc: These functions are useful for teal developers.
     contents:
-    - bookmark_module
     - check_in_range
     - check_in_subset
     - check_pkg_quietly
     - check_setequal
     - code_exclude
     - code_from_script
-    - debug_browser_module
     - enclosed_with
     - enclosed_with_dataname
-    - execute_in_next_cycle
     - extract_choices_labels
     - extract_raw_choices
-    - filter_calls_module
     - filter_state_to_str
     - find_source_code
     - get_client_timezone
     - get_code_single
-    - get_dummy_cdisc_data
-    - get_dummy_datasets
-    - get_dummy_filter
-    - get_dummy_modules
     - get_filter_vars
     - handle_active_datanames
     - include_css_files
@@ -206,22 +190,23 @@ reference:
     - modules_depth
     - picker_options
     - picker_options_content
-    - predefined_filters_module
     - pretty_code_string
-    - reset_filters_module
     - resolve_teal_args
     - srv_add_filter_variable
     - set_single_filter_state
     - srv_filter_items
     - srv_filter_panel
+    - srv_filter_overview
     - srv_nested_tabs
     - srv_shiny_module_arguments
     - srv_single_filter_item
     - srv_tabs_with_filters
     - srv_teal
+    - topological_sort
     - text_to_call
     - ui_add_filter_variable
     - ui_filter_items
+    - ui_filter_overview
     - ui_filter_panel
     - ui_nested_tabs
     - ui_single_filter_item

@@ -1,7 +1,9 @@
 ## CDISCDatasetConnector ====
-#' A `CDISCDatasetConnector` class of objects
 #'
 #' @description `r lifecycle::badge("experimental")`
+#'
+#' @title A `CDISCDatasetConnector` class of objects
+#'
 #' Objects of this class store the connection function to fetch a single dataset.
 #'
 #' The difference compared to the inherited class is a parent field that

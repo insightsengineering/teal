@@ -1,5 +1,8 @@
 ## DataConnection ====
-#' A \code{DataConnection} class of objects
+#'
+#' @description `r lifecycle::badge("experimental")`
+#'
+#' @title A \code{DataConnection} class of objects
 #'
 #' Objects of this class store the connection to a data source.
 #' It can be a database or server (\code{RICE} or \code{SAICE}) connection.

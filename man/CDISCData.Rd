@@ -4,6 +4,8 @@
 \alias{CDISCData}
 \title{Manage multiple \code{CDISCDataConnector}, \code{CDISCDatasetConnector} and \code{CDISCDataset} objects.}
 \description{
+\ifelse{html}{\out{<a href='https://www.tidyverse.org/lifecycle/#experimental'><img src='figures/lifecycle-experimental.svg' alt='Experimental lifecycle'></a>}}{\strong{Experimental}}
+
 Class manages \code{CDISCDataConnector}, \code{CDISCDatasetConnector} and
 \code{CDISCDataset} objects and aggregate them in one collection.
 Class also decides whether to launch app before initialize teal application.

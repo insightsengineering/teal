@@ -2,15 +2,16 @@
 % Please edit documentation in R/DatasetConnector.R
 \name{DatasetConnector}
 \alias{DatasetConnector}
-\title{A \code{DatasetConnector} class of objects}
-\description{
-\ifelse{html}{\out{<a href='https://www.tidyverse.org/lifecycle/#experimental'><img src='figures/lifecycle-experimental.svg' alt='Experimental lifecycle'></a>}}{\strong{Experimental}}
+\title{A \code{DatasetConnector} class of objects
+
 Objects of this class store the connection function to fetch a single dataset.
 Note that for some specific connection types (e.g. \code{RICE} or \code{SAICE}),
 an object of class \code{DataConnection} must be provided.
 Data can be pulled via the \code{pull} method and accessed directly
 through the \code{dataset} active binding.
-Pulled data inherits from the class \code{\link{Dataset}}
+Pulled data inherits from the class \code{\link{Dataset}}}
+\description{
+\ifelse{html}{\out{<a href='https://www.tidyverse.org/lifecycle/#experimental'><img src='figures/lifecycle-experimental.svg' alt='Experimental lifecycle'></a>}}{\strong{Experimental}}
 }
 \examples{
 

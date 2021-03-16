@@ -2,14 +2,15 @@
 % Please edit documentation in R/CDISCDatasetConnector.R
 \name{CDISCDatasetConnector}
 \alias{CDISCDatasetConnector}
-\title{A \code{CDISCDatasetConnector} class of objects}
-\description{
-\ifelse{html}{\out{<a href='https://www.tidyverse.org/lifecycle/#experimental'><img src='figures/lifecycle-experimental.svg' alt='Experimental lifecycle'></a>}}{\strong{Experimental}}
+\title{A \code{CDISCDatasetConnector} class of objects
+
 Objects of this class store the connection function to fetch a single dataset.
 
 The difference compared to the inherited class is a parent field that
 indicates name of the parent dataset. Note that the parent field might
-be empty (i.e. \code{character(0)}).
+be empty (i.e. \code{character(0)}).}
+\description{
+\ifelse{html}{\out{<a href='https://www.tidyverse.org/lifecycle/#experimental'><img src='figures/lifecycle-experimental.svg' alt='Experimental lifecycle'></a>}}{\strong{Experimental}}
 }
 \section{Super class}{
 \code{\link[teal:DatasetConnector]{teal::DatasetConnector}} -> \code{CDISCDatasetConnector}

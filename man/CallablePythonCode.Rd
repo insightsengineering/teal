@@ -4,9 +4,7 @@
 \alias{CallablePythonCode}
 \title{A \code{CallablePythonCode} class of objects}
 \description{
-A \code{CallablePythonCode} class of objects
-
-A \code{CallablePythonCode} class of objects
+\ifelse{html}{\out{<a href='https://www.tidyverse.org/lifecycle/#experimental'><img src='figures/lifecycle-experimental.svg' alt='Experimental lifecycle'></a>}}{\strong{Experimental}}
 }
 \section{Super classes}{
 \code{\link[teal:Callable]{teal::Callable}} -> \code{\link[teal:CallableFunction]{teal::CallableFunction}} -> \code{CallablePythonCode}

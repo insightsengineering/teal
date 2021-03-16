@@ -1,5 +1,9 @@
 ## DataAbstract ====
+#'
+#' @description `r lifecycle::badge("experimental")`
+#'
 #' @title `DataAbstract` class
+#'
 #' @description
 #' Abstract class containing code for handling set of datasets.
 #'

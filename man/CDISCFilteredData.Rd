@@ -5,9 +5,7 @@
 \alias{CDISCFilteredData}
 \title{Class to encapsulate relational filtered datasets with its parents.}
 \description{
-Class to encapsulate relational filtered datasets with its parents.
-
-Class to encapsulate relational filtered datasets with its parents.
+\ifelse{html}{\out{<a href='https://www.tidyverse.org/lifecycle/#experimental'><img src='figures/lifecycle-experimental.svg' alt='Experimental lifecycle'></a>}}{\strong{Experimental}}
 }
 \details{
 The \code{CDISCFilteredData} class implements logic to filter a relational

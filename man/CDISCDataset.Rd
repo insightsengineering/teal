@@ -4,6 +4,8 @@
 \alias{CDISCDataset}
 \title{R6 Class representing a dataset with parent attribute}
 \description{
+\ifelse{html}{\out{<a href='https://www.tidyverse.org/lifecycle/#experimental'><img src='figures/lifecycle-experimental.svg' alt='Experimental lifecycle'></a>}}{\strong{Experimental}}
+
 Any \code{data.frame} object can be stored inside this object.
 
 The difference compared to the inherited class is a parent field that
