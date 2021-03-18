@@ -102,7 +102,6 @@ CDISCData <- R6::R6Class( # nolint
     #' Check correctness of stored joining keys and presence of keys to parent
     #' @return raise and error or invisible `TRUE`
     check_metadata = function() {
-
       if (!("ADSL" %in% self$get_datanames())) {
         stop("ADSL dataset is missing.")
       }
@@ -201,7 +200,8 @@ cdisc_data <- function(...,
     x$set_pull_code(code = code)
   }
 
-  x$execute_check()
+  x$check_reproducibility()
+  x$check_metadata()
 
   return(x)
 }

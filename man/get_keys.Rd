@@ -54,7 +54,7 @@ get_keys(
 # RelationalData --------
 
 get_keys(
-  cdisc_data(
+  teal_data(
     dataset("x", data.frame(x1 = 1:10, y1 = 11:20), keys = "x1"),
     dataset("y", data.frame(x2 = 1:10, y2 = 11:20), keys = "x2")
   ),

@@ -57,7 +57,7 @@ get_keys.DatasetConnector <- function(x, ...) {
 #' # RelationalData --------
 #'
 #' get_keys(
-#'   cdisc_data(
+#'   teal_data(
 #'     dataset("x", data.frame(x1 = 1:10, y1 = 11:20), keys = "x1"),
 #'     dataset("y", data.frame(x2 = 1:10, y2 = 11:20), keys = "x2")
 #'   ),
@@ -130,7 +130,7 @@ set_keys.DatasetConnector <- function(x, keys, ...) {
 #' # RelationalData --------
 #'
 #' set_keys(
-#'   cdisc_data(
+#'   teal_data(
 #'     dataset("x", data.frame(x1 = 1:10, y1 = 11:20), keys = "x1"),
 #'     dataset("y", data.frame(x2 = 1:10, y2 = 11:20), keys = "x2")
 #'   ),

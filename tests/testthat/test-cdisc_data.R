@@ -783,9 +783,8 @@ test_that("Error - dataset is not of correct class", {
 })
 
 test_that("Check the keys", {
-  data1 <- teal_data(dataset(dataname = "ADSL", x = ADSL, keys = "non_existing_column"))
   expect_error(
-    data1$check_metadata(),
+    teal_data(dataset(dataname = "ADSL", x = ADSL, keys = "non_existing_column")),
     "The join key specification requires dataset ADSL to contain the following columns: non_existing_column"
   )
 
@@ -808,9 +807,8 @@ test_that("Check the keys", {
     "Duplicate primary key values found in the dataset 'ADSL'"
   )
 
-  data <- cdisc_data(ds)
   expect_error(
-    data$check_metadata(),
+    cdisc_data(ds),
     "Duplicate primary key values found in the dataset 'ADSL'"
   )
 })

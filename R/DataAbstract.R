@@ -51,7 +51,7 @@ DataAbstract <- R6::R6Class( #nolint
     #' @description
     #' Execute \code{check} and raise an error if it's not reproducible.
     #' @return error if code is not reproducible else invisibly nothing
-    execute_check = function() {
+    check_reproducibility = function() {
       self$check()
       if (isFALSE(self$get_check_result())) {
         stop("Reproducibility check failed.")

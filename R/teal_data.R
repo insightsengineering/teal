@@ -39,7 +39,8 @@ teal_data <- function(...,
     x$set_pull_code(code = code)
   }
 
-  x$execute_check()
+  x$check_reproducibility()
+  x$check_metadata()
 
   return(x)
 }

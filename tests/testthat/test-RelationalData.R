@@ -1,16 +1,3 @@
-test_that("check_metadata fails when a dataset hasn't been pulled", {
-
-  cf <- callable_function(fun = data.frame)
-  cf$set_args(list(x = 1:10, y = 1:10))
-
-  data <- teal_data(
-    dataset("mtcars", mtcars),
-    dataset_connector("iris", cf)
-  )
-
-  expect_error(data$check_metadata())
-})
-
 test_that("check_metadata does not produce error if join_keys are consistent for given datasets", {
 
   df_1 <- data.frame(x = 1:10, y = 1:10)

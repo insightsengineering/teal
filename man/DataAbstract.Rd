@@ -13,7 +13,7 @@ Abstract class containing code for handling set of datasets.
 \itemize{
 \item \href{#method-new}{\code{DataAbstract$new()}}
 \item \href{#method-check}{\code{DataAbstract$check()}}
-\item \href{#method-execute_check}{\code{DataAbstract$execute_check()}}
+\item \href{#method-check_reproducibility}{\code{DataAbstract$check_reproducibility()}}
 \item \href{#method-execute_mutate}{\code{DataAbstract$execute_mutate()}}
 \item \href{#method-get_check_result}{\code{DataAbstract$get_check_result()}}
 \item \href{#method-get_code}{\code{DataAbstract$get_code()}}
@@ -59,12 +59,12 @@ Check if the object raw data is reproducible from the \code{get_code()} code.
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-execute_check"></a>}}
-\if{latex}{\out{\hypertarget{method-execute_check}{}}}
-\subsection{Method \code{execute_check()}}{
+\if{html}{\out{<a id="method-check_reproducibility"></a>}}
+\if{latex}{\out{\hypertarget{method-check_reproducibility}{}}}
+\subsection{Method \code{check_reproducibility()}}{
 Execute \code{check} and raise an error if it's not reproducible.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{DataAbstract$execute_check()}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{DataAbstract$check_reproducibility()}\if{html}{\out{</div>}}
 }
 
 \subsection{Returns}{

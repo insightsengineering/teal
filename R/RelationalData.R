@@ -270,6 +270,10 @@ RelationalData <- R6::R6Class( # nolint
     #' Check there is consistency between the datasets and join_keys
     #' @return raise and error or invisible `TRUE`
     check_metadata = function() {
+      if (isFALSE(self$is_pulled())) {
+        # all the checks below required data to be already pulled
+        return(invisible(TRUE))
+      }
       for (dataset in self$get_datasets()) {
         dataname <- get_dataname(dataset)
         dataset_colnames <- dataset$get_colnames()
@@ -375,7 +379,7 @@ RelationalData <- R6::R6Class( # nolint
             # We check first and then mutate.
             #  mutate_code is reproducible by default we assume that we don't
             #  have to check the result of the re-evaluation of the code
-            self$execute_check()
+            self$check_reproducibility()
           })
 
           withProgress(value = 1, message = "Executing processing code", {
