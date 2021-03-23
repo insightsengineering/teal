@@ -1,4 +1,7 @@
 # teal 0.9.3.9000
+### Enhancements
+* Changed ordering of datasets to be more intuitive (first topologically then alphabetically).
+
 Issues with no news:
 
 # teal 0.9.3

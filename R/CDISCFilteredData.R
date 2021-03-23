@@ -305,11 +305,11 @@ CDISCFilteredData <- R6::R6Class( # nolint
     },
 
     # Method to compute the order in which datasets should be evaluated
-    # It needs to return a reactive because it's inputs are reactive
+    # It needs to return a reactive because its inputs are reactive
     # (in particular: private$unfiltered_datasets is a reactiveValues)
     reactive_ordered_datanames = function() {
       reactive({
-        datanames <- names(private$unfiltered_datasets)
+        datanames <- sort(names(private$unfiltered_datasets), decreasing = TRUE)
         # get_keys checks dataname is in datanames, not by calling `self$datanames()`,
         # but `names(private$unfiltered_datasets)` to avoid an infinite recursion
         child_parent <- sapply(datanames, function(i) self$get_parentname(i), USE.NAMES = TRUE, simplify = FALSE)
