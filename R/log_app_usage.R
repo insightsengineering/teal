@@ -92,23 +92,21 @@ line_usage_log <- function(...) {
 #' @param fields package metadata to be retrieved
 #' @noRd
 #'
-#' @importFrom utils capture.output sessionInfo
 #' @examples
 #' \dontrun{
 #' teal.utils:::line_pkg_log(pkgs = c("rtables", "tern", "teal"),
 #' fields = c("Package", "Title", "Version", "RemoteRef"))
 #' }
-#' @importFrom utils sessionInfo
 line_pkg_log <- function(fields) {
   nest_packages <- c(
     "test.nest", "utils.nest", "devtools.nest", "random.cdisc.data", "rtables",
     "tern", "teal", "teal.devel", "teal.modules.general", "teal.modules.clinical",
     "oosprey", "teal.osprey", "goshawk", "teal.goshawk", "tlgdown")
-  pkg_desc <- sessionInfo()$otherPkgs
+  pkg_desc <- utils::sessionInfo()$otherPkgs
   pkg_desc <- lapply(pkg_desc, function(x) if (x$Package %in% nest_packages) x[fields] else NULL)
   pkg_desc <- Filter(Negate(is.null), pkg_desc)
   pkg_desc_no_pipe <- lapply(pkg_desc, function(x) sub("|", "/", x, fixed = TRUE))
   pkg_desc_save <- lapply(pkg_desc_no_pipe, setNames, fields)
 
-  paste(capture.output(dput(pkg_desc_save, file = "")), collapse = "")
+  paste(utils::capture.output(dput(pkg_desc_save, file = "")), collapse = "")
 }

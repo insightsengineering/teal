@@ -178,8 +178,6 @@ cdisc_dataset_connector <- function(dataname,
 #'
 #' @return `DatasetConnector` object
 #'
-#' @importFrom methods is
-#'
 #' @export
 #'
 #' @examples
@@ -973,8 +971,6 @@ csv_cdisc_dataset_connector <- function(dataname,
 #'   additional arguments for (`func`).
 #' @param func_name (`name`)\cr
 #'   for internal purposes, please keep it default
-#'
-#' @importFrom rlang set_env
 #'
 #' @export
 #'

@@ -4,8 +4,6 @@
 #'
 #' @title A `CallablePythonCode` class of objects
 #'
-#' @importFrom rlang with_options
-#' @importFrom R6 R6Class
 CallablePythonCode <- R6::R6Class( #nolint
 
   ## __Public Methods ====
@@ -135,7 +133,6 @@ CallablePythonCode <- R6::R6Class( #nolint
 #'
 #' @title A `CallablePythonCode` class of objects
 #'
-#' @importFrom R6 R6Class
 PythonCodeClass <- R6::R6Class( # nolint
   classname = "PythonCodeClass",
   inherit = CodeClass,

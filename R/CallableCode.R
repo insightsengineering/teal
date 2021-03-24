@@ -7,7 +7,6 @@
 #' Object that stores code to reproduce an object. It includes methods to
 #' get or run the code and return the object.
 #'
-#' @importFrom R6 R6Class
 CallableCode <- R6::R6Class( # nolint
   "CallableCode",
   inherit = Callable,

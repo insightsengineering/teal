@@ -71,9 +71,6 @@
 #'
 #' @export
 #'
-#' @importFrom shinyjs useShinyjs hidden hide show
-#' @importFrom methods is
-#'
 #' @include FilteredData.R
 #' @include modules.R
 #'

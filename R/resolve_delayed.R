@@ -9,7 +9,6 @@
 #'
 #' @return Resolved object.
 #'
-#' @importFrom methods is
 #' @export
 #'
 #' @examples
@@ -93,7 +92,6 @@ resolve_delayed.delayed_value_choices <- function(x, datasets) { # nolint
 }
 
 #' @export
-#' @importFrom methods is
 resolve_delayed.delayed_choices_selected <- function(x, datasets) { # nolint
   if (is(x$selected, "delayed_data")) {
     x$selected <- resolve_delayed(x$selected, datasets = datasets)
@@ -112,7 +110,6 @@ resolve_delayed.delayed_select_spec <- function(x, datasets) { # nolint
 }
 
 #' @export
-#' @importFrom methods is
 resolve_delayed.delayed_filter_spec <- function(x, datasets) { # nolint
   if (is(x$selected, "delayed_data")) {
     x$selected <- resolve_delayed(x$selected, datasets = datasets)
@@ -127,7 +124,7 @@ resolve_delayed.delayed_filter_spec <- function(x, datasets) { # nolint
 }
 
 #' @export
-#' @importFrom methods is
+#'
 resolve_delayed.delayed_data_extract_spec <- function(x, datasets) { # nolint
   x$select <- `if`(is(x$select, "delayed_data"), resolve_delayed(x$select, datasets = datasets), x$select)
 
@@ -150,12 +147,10 @@ resolve_delayed.list <- function(x, datasets) { # nolint
 }
 
 #' @export
-#' @importFrom methods is
 resolve_delayed.default <- function(x, datasets) {
   return(x)
 }
 
-#' @importFrom methods is
 resolve_teal_module <- function(x, datasets) {
   stopifnot(is(x, "teal_module"))
   stopifnot(is(datasets, "FilteredData"))
@@ -168,7 +163,7 @@ resolve_teal_module <- function(x, datasets) {
 #'
 #' @param args `list` arguments to evaluate by passing them the datasets
 #' @param datasets `datasets` datasets used to set `args`
-#' @importFrom methods is
+#'
 resolve_teal_args <- function(args, datasets) {
   Map(function(arg) {
     if (is(arg, "delayed_data")) {
@@ -273,7 +268,6 @@ print.delayed_select_spec <- function(x, indent = 0L, ...) {
 }
 
 #' @export
-#' @importFrom methods is
 print.delayed_filter_spec <- function(x, indent = 0L, ...) {
   cat(indent_msg(indent, paste("filter_spec with delayed data:", x$choices$data)))
   cat("\n")
@@ -282,7 +276,6 @@ print.delayed_filter_spec <- function(x, indent = 0L, ...) {
 }
 
 #' @export
-#' @importFrom methods is
 print.delayed_data_extract_spec <- function(x, indent = 0L, ...) {
   cat(paste("data_extract_spec with delayed data:", x$dataname))
   cat("\n\n")
@@ -309,7 +302,7 @@ print_delayed_list <- function(obj, n = 0L) {
     } else if (is.list(obj[[idx]])) {
       print_delayed_list(obj[[idx]], n + 1L)
     } else {
-      cat(indent_msg(n, paste(capture.output(print(obj[[idx]])), collapse = "\n")))
+      cat(indent_msg(n, paste(utils::capture.output(print(obj[[idx]])), collapse = "\n")))
       cat("\n")
     }
   }

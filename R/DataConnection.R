@@ -33,8 +33,6 @@
 #' x$close() # call closing function
 #' }
 #'
-#' @importFrom R6 R6Class
-#' @importFrom shinyjs alert
 DataConnection <- R6::R6Class( # nolint
   ## __Public Methods ====
   "DataConnection",
@@ -99,7 +97,7 @@ DataConnection <- R6::R6Class( # nolint
       shinyApp(
         ui = fluidPage(
           include_teal_css_js(),
-          useShinyjs(),
+          shinyjs::useShinyjs(),
           fluidRow(
             column(
               width = 8,
@@ -709,7 +707,6 @@ rice_connection <- function(open_args = list(), close_args = list(), ping_args =
 #'
 #' @return (`DataConnection`) type of object
 #'
-#' @importFrom shinyjs alert
 #' @export
 teradata_connection <- function(open_args = list(), close_args = list(), ping_args = list()) {
   check_pkg_quietly(

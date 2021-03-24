@@ -40,6 +40,7 @@ x$set_server(function(input, output, session, connectors, connection) {
 x$launch()
 x$get_datasets()
 }
+
 }
 \section{Super class}{
 \code{\link[teal:DataAbstract]{teal::DataAbstract}} -> \code{RelationalDataConnector}

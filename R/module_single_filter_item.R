@@ -23,8 +23,6 @@ get_keep_inf_label <- function(inf_count) {
 #' @param filter_state `filter_state` returned by datasets class
 #' @param prelabel `character` label to append before computed label of input
 #'
-#' @importFrom shinyWidgets airDatepickerInput updateAirDateInput
-#'
 #' @examples
 #' library(random.cdisc.data)
 #' library(dplyr)
@@ -98,7 +96,7 @@ ui_single_filter_item <- function(id, filter_info, filter_state, prelabel) {
         choices = filter_info$choices,
         selected = filter_state$choices,
         multiple = TRUE,
-        options = pickerOptions(
+        options = shinyWidgets::pickerOptions(
           actionsBox = TRUE,
           liveSearch = (length(filter_info$choices) > 10),
           noneSelectedText = "Select a value"
@@ -168,7 +166,7 @@ ui_single_filter_item <- function(id, filter_info, filter_state, prelabel) {
           div(
             style = "float: left; width: 100%;",
             local({
-              x <- airDatepickerInput(
+              x <- shinyWidgets::airDatepickerInput(
                 inputId = id_selection,
                 value = daterange[[1]],
                 timepicker = TRUE,
@@ -190,7 +188,7 @@ ui_single_filter_item <- function(id, filter_info, filter_state, prelabel) {
           div(
             style = "float: right; width: 100%;",
             local({
-              x <- airDatepickerInput(
+              x <- shinyWidgets::airDatepickerInput(
                 inputId = id_end_date,
                 value = daterange[[2]],
                 timepicker = TRUE,
@@ -280,9 +278,6 @@ ui_single_filter_item <- function(id, filter_info, filter_state, prelabel) {
 #'
 #' @return `reactive` which returns `list(observers = ...)` with registered observers.
 #'
-#' @importFrom grDevices rgb
-#' @importFrom ggplot2 ggplot aes_string geom_area theme_void scale_y_continuous scale_x_continuous geom_col
-#' @importFrom ggplot2 coord_flip scale_x_discrete
 srv_single_filter_item <- function(input, output, session, datasets, dataname, varname) {
   stopifnot(
     is(datasets, "FilteredData"),
@@ -305,19 +300,19 @@ srv_single_filter_item <- function(input, output, session, datasets, dataname, v
         data <- filter_info$histogram_data
         data$y <- rev(data$y / sum(data$y)) # we have to reverse because the histogram is turned by 90 degrees
         data$x <- seq_len(nrow(data)) # to prevent ggplot reordering columns using the characters in x column
-        ggplot(data) +
+        ggplot2::ggplot(data) +
           # sort factor so that it reflects checkbox order
-          aes_string(x = "x", y = "y") +
-          geom_col(
+          ggplot2::aes_string(x = "x", y = "y") +
+          ggplot2::geom_col(
             width = 0.95,
-            fill = rgb(66 / 255, 139 / 255, 202 / 255),
+            fill = grDevices::rgb(66 / 255, 139 / 255, 202 / 255),
             color = NA,
             alpha = 0.2
           ) +
-          coord_flip() +
-          theme_void() +
-          scale_x_discrete(expand = c(0, 0)) +
-          scale_y_continuous(expand = c(0, 0), limits = c(0, 1))
+          ggplot2::coord_flip() +
+          ggplot2::theme_void() +
+          ggplot2::scale_x_discrete(expand = c(0, 0)) +
+          ggplot2::scale_y_continuous(expand = c(0, 0), limits = c(0, 1))
       }
     })
   } else if (var_type == "range") {
@@ -325,15 +320,15 @@ srv_single_filter_item <- function(input, output, session, datasets, dataname, v
       bg = "transparent",
       height = 25, {
         filter_info <- datasets$get_filter_info(dataname, varname)
-        ggplot(filter_info$histogram_data) +
-          aes_string(x = "x", y = "y") +
-          geom_area(
-            fill = rgb(66 / 255, 139 / 255, 202 / 255),
+        ggplot2::ggplot(filter_info$histogram_data) +
+          ggplot2::aes_string(x = "x", y = "y") +
+          ggplot2::geom_area(
+            fill = grDevices::rgb(66 / 255, 139 / 255, 202 / 255),
             color = NA,
             alpha = 0.2) +
-          theme_void() +
-          scale_y_continuous(expand = c(0, 0)) +
-          scale_x_continuous(expand = c(0, 0))
+          ggplot2::theme_void() +
+          ggplot2::scale_y_continuous(expand = c(0, 0)) +
+          ggplot2::scale_x_continuous(expand = c(0, 0))
       })
   } else {
     # no plot generated
@@ -432,13 +427,13 @@ srv_single_filter_item <- function(input, output, session, datasets, dataname, v
     daterange <- datasets$get_filter_info(dataname, varname)$daterange
     if (datasets$get_filter_info(dataname, varname)$is_datetime) {
       o3 <- observeEvent(input[[id_selection_button]], {
-        updateAirDateInput(
+        shinyWidgets::updateAirDateInput(
           session = session,
           inputId = id_selection,
           value = daterange[[1]])
       })
       o4 <- observeEvent(input[[id_end_date_button]], {
-        updateAirDateInput(
+        shinyWidgets::updateAirDateInput(
           session = session,
           inputId = id_end_date,
           value = daterange[[2]])

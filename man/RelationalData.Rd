@@ -57,6 +57,7 @@ get_raw_data(tc)
 tc$launch()
 get_raw_data(tc)
 }
+
 }
 \section{Super class}{
 \code{\link[teal:DataAbstract]{teal::DataAbstract}} -> \code{RelationalData}

@@ -28,9 +28,6 @@
 #'
 #' @export
 #'
-#' @importFrom shinyjs hidden
-#' @importFrom shinyWidgets pickerInput
-#'
 #' @examples
 #'
 #' optionalSelectInput(inputId = "xvar", label = "x variable", choices = "A", selected = "A")
@@ -112,7 +109,7 @@ optionalSelectInput <- function(inputId, # nolint
   raw_choices <- extract_raw_choices(choices, attr(choices, "sep"))
   raw_selected <- extract_raw_choices(selected, attr(choices, "sep"))
 
-  ui <- pickerInput(
+  ui <- shinyWidgets::pickerInput(
     inputId = inputId,
     label = label,
     choices = raw_choices,
@@ -129,14 +126,14 @@ optionalSelectInput <- function(inputId, # nolint
 
   if (is.null(choices)) {
 
-    return(hidden(ui))
+    return(shinyjs::hidden(ui))
 
   } else {
 
     if (fixed) {
 
       return(div(
-        hidden(ui),
+        shinyjs::hidden(ui),
         tags$label(id = paste0(inputId, "_textonly"), class = "control-label", sub(":[[:space:]]+$", "", label)),
         if_not_empty(
           selected,
@@ -163,8 +160,6 @@ optionalSelectInput <- function(inputId, # nolint
 #'
 #' @export
 #'
-#' @importFrom shinyjs hide show
-#' @importFrom shinyWidgets updatePickerInput
 updateOptionalSelectInput <- function(session, # nolint
                                       inputId, # nolint
                                       label = NULL,
@@ -174,7 +169,7 @@ updateOptionalSelectInput <- function(session, # nolint
   raw_choices <- extract_raw_choices(choices, attr(choices, "sep"))
   raw_selected <- extract_raw_choices(selected, attr(choices, "sep"))
 
-  updatePickerInput(
+  shinyWidgets::updatePickerInput(
     session = session,
     inputId = inputId,
     label = label,
@@ -359,7 +354,7 @@ optionalSliderInput <- function(inputId, label, min, max, value, label_help = NU
   }
 
   if (hide) {
-    hidden(slider)
+    shinyjs::hidden(slider)
   } else {
     slider
   }
@@ -383,8 +378,6 @@ optionalSliderInput <- function(inputId, label, min, max, value, label_help = NU
 #'   \code{max} of the \code{\link{optionalSliderInput}} function.
 #'
 #' @export
-#'
-#' @importFrom shinyjs hidden
 #'
 #' @examples
 #'

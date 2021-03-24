@@ -13,8 +13,6 @@
 #' @param connectors (\code{list} of \code{DatasetConnector} elements)\cr
 #'   list with dataset connectors
 #'
-#' @importFrom R6 R6Class
-#'
 #' @examples
 #' library(random.cdisc.data)
 #' adsl <- rcd_cdisc_dataset_connector("ADSL", radsl)
@@ -46,8 +44,7 @@
 #' x$launch()
 #' x$get_datasets()
 #' }
-#' @importFrom R6 R6Class
-#' @importFrom methods is
+#'
 RelationalDataConnector <- R6::R6Class( #nolint
   classname = "RelationalDataConnector",
   inherit = DataAbstract,
@@ -258,7 +255,7 @@ RelationalDataConnector <- R6::R6Class( #nolint
       shinyApp(
         ui = fluidPage(
           include_teal_css_js(),
-          useShinyjs(),
+          shinyjs::useShinyjs(),
           fluidRow(
             column(
               width = 8,

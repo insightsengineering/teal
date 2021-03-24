@@ -17,8 +17,6 @@
 #' be constructed. This input can be read by a \code{teal.devel::data_extract_module} module.
 #' }
 #'
-#' @importFrom methods is
-#'
 #' @param dataname (\code{character}) The name of the \code{teal} dataset to
 #'   be extracted. This dataset has to be handed over to the \code{data} argument of the
 #'   \code{\link[teal]{init}} function.

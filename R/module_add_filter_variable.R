@@ -14,8 +14,6 @@
 #' @param id module id
 #' @param dataname name of dataset whose columns should be filtered
 #'
-#' @importFrom shinyWidgets pickerOptions
-#'
 #' @examples
 #' library(random.cdisc.data)
 #' library(dplyr)
@@ -78,7 +76,7 @@ ui_add_filter_variable <- function(id, dataname) {
       ns("var_to_add"),
       label = dataname,
       choices = NULL,
-      options = pickerOptions(
+      options = shinyWidgets::pickerOptions(
         liveSearch = TRUE,
         noneSelectedText = "Select a variable"
       )

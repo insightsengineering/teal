@@ -17,8 +17,6 @@
 #' @param check (\code{logical}) reproducibility check - whether evaluated preprocessing code gives the same objects
 #'   as provided in arguments. Check is run only if flag is true and preprocessing code is not empty.
 #'
-#' @importFrom R6 R6Class
-#' @importFrom methods is
 CDISCData <- R6::R6Class( # nolint
   classname = "CDISCData",
   inherit = RelationalData,
@@ -213,8 +211,6 @@ cdisc_data <- function(...,
 #' @inheritParams teal_data_file
 #'
 #' @return `CDISCData` object
-#'
-#' @importFrom methods is
 #'
 #' @export
 #'

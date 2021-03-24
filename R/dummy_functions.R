@@ -59,8 +59,8 @@ get_dummy_datasets <- function() { # nousage # nolint
 #' Create an example hierarchy of `teal_modules` from which
 #' a teal app can be created.
 #'
-#' @importFrom shiny tags
 #' @return `teal_modules`
+#'
 get_dummy_modules <- function() { # nousage # nolint
   create_mod <- function(module_name) module(
     module_name,

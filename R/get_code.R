@@ -97,7 +97,6 @@ get_code.DataAbstract <- function(x, dataname = character(0), deparse = TRUE, ..
 
 #' @rdname get_code
 #' @export
-#' @importFrom methods hasArg
 #' @importFrom magrittr %>%
 get_code.default <- function(x,
                              exclude_comments = TRUE,
@@ -115,7 +114,7 @@ get_code.default <- function(x,
   stopifnot(is_logical_single(exclude_comments))
   stopifnot(is_logical_single(read_sources))
 
-  if (!hasArg(dataname)) {
+  if (!methods::hasArg(dataname)) {
     l_lines <- lapply(x, function(file_path) {
       get_code_single(file_path, read_sources = read_sources) %>%
         enclosed_with() %>%
@@ -208,7 +207,7 @@ enclosed_with <- function(lines) {
   idx_stop <- grep("#\\s*<code", lines)
   line_stops <- if (length(idx_stop) > 1) {
     warning("More than one preproc stops found - using the last one.")
-    tail(idx_stop, 1) - 1
+    utils::tail(idx_stop, 1) - 1
   } else if (length(idx_stop) == 1) {
     idx_stop - 1
   } else {

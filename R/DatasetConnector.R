@@ -43,8 +43,6 @@
 #'   are included to this object as local `vars` and they cannot be modified
 #'   within another dataset.
 #'
-#' @importFrom R6 R6Class
-#' @importFrom shinyjs alert useShinyjs
 DatasetConnector <- R6::R6Class( #nolint
 
   ## __Public Methods ====

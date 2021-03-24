@@ -5,8 +5,6 @@
 #'
 #' @param title string with title
 #' @param body either a string or an object of class \code{shiny.tag}
-#' @importFrom methods is
-#' @importFrom shiny fixedPage shinyApp
 #' @export
 #' @examples
 #' \dontrun{
@@ -18,8 +16,8 @@ stop_shiny <- function(title, body) {
   if (!is_html_like(body)) {
     body <- tags$p(body)
   }
-  shinyApp(
-    ui =  fixedPage(
+  shiny::shinyApp(
+    ui =  shiny::fixedPage(
       div(
         class = "jumbotron",
         tags$h1(title),

@@ -13,8 +13,6 @@
 #' @param connectors (\code{list} of \code{DatasetConnector} elements)\cr
 #'   list with dataset connectors
 #'
-#' @importFrom R6 R6Class
-#' @importFrom methods is
 CDISCDataConnector <- R6::R6Class( #nolint
   classname = "CDISCDataConnector",
   inherit = RelationalDataConnector,

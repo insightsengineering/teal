@@ -32,7 +32,6 @@ no_select_keyword <- "-- no selection --"
 #'   `choices`, `selected`, `keep_order` and `fixed`.
 #'
 #' @export
-#' @importFrom methods is
 #'
 #' @examples
 #'
@@ -225,7 +224,6 @@ no_selected_as_NULL <- function(x) { #nolint
 
 ## Non-exported utils functions ----
 ## Modify vectors and keep attributes
-#' @importFrom utils head tail
 vector_append <- function(vec1, vec2, idx = seq_along(vec2)) {
   stopifnot(is.atomic(vec1))
   stopifnot(is.atomic(vec2))
@@ -235,7 +233,7 @@ vector_append <- function(vec1, vec2, idx = seq_along(vec2)) {
   vector_append_internal <- function(x, elem, idx = seq_along(elem)) {
     res <- x
     for (i in seq_along(idx)) {
-      res <- c(head(res, idx[i] - 1L), elem[i], `if`(idx[i] == 1L, res, tail(res, -idx[i] + 1L)))
+      res <- c(utils::head(res, idx[i] - 1L), elem[i], `if`(idx[i] == 1L, res, utils::tail(res, -idx[i] + 1L)))
     }
     return(res)
   }

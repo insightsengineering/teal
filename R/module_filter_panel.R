@@ -188,7 +188,6 @@ ui_filter_panel <- function(id, datasets, datanames) {
 #'   if the function returns `NULL` (as opposed to `character(0)`), the filter
 #'   panel will be hidden
 #'
-#' @importFrom shinyjs hide show
 srv_filter_panel <- function(input, output, session, datasets, active_datanames = function() "all") {
   stopifnot(
     is(datasets, "FilteredData"),

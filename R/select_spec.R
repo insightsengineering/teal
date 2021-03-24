@@ -100,8 +100,6 @@
 #'   }
 #' }
 #'
-#' @importFrom stats setNames
-#'
 #' @rdname select_spec
 #'
 #' @export

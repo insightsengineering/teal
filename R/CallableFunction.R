@@ -6,8 +6,6 @@
 #'
 #' Object that stores function name with its arguments. Methods to get call and run it.
 #'
-#' @importFrom R6 R6Class
-#' @importFrom rlang parse_expr
 CallableFunction <- R6::R6Class( #nolint
   "CallableFunction",
   inherit = Callable,

@@ -53,7 +53,6 @@
 #' x$get_dataname()
 #' x$get_keys()
 #' x$get_parent()
-#' @importFrom R6 R6Class
 CDISCDataset <- R6::R6Class( # nolint
   "CDISCDataset",
   inherit = Dataset,

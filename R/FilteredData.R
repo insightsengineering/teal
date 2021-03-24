@@ -33,7 +33,6 @@
 #' 2. `dataname`: one of the datasets
 #' 3. `varname`: one of the columns in a dataset
 #'
-#' @importFrom digest digest
 #'
 #' @examples
 #' datasets <- teal:::FilteredData$new()

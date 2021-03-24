@@ -37,8 +37,6 @@
 #'   are included to this object as local `vars` and they cannot be modified
 #'   within another dataset.
 #'
-#' @importFrom rlang with_options
-#' @importFrom R6 R6Class
 Dataset <- R6::R6Class( # nolint
   "Dataset",
 
@@ -47,7 +45,6 @@ Dataset <- R6::R6Class( # nolint
     #' @description
     #' Create a new object of `Dataset` class
     #'
-    #' @importFrom rtables var_labels
     initialize = function(dataname,
                           x,
                           keys = character(0),
@@ -363,7 +360,7 @@ Dataset <- R6::R6Class( # nolint
         if (nrow(duplicates) > 0) {
           stop(
             "Duplicate primary key values found in the dataset '", self$get_dataname(), "' :\n",
-            paste0(capture.output(print(duplicates))[-c(1, 3)], collapse = "\n"),
+            paste0(utils::capture.output(print(duplicates))[-c(1, 3)], collapse = "\n"),
             call. = FALSE
           )
 
@@ -668,8 +665,6 @@ relational_dataset <- function(dataname,
 #' @param code (\code{character}) reproducible code to re-create object
 #'
 #' @return \code{Dataset} object
-#'
-#' @importFrom methods is
 #'
 #' @export
 #'

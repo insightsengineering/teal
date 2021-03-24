@@ -4,9 +4,6 @@
 #'
 #' @title Code Class
 #'
-#' @importFrom digest digest
-#' @importFrom rlang with_options
-#' @importFrom R6 R6Class
 #'
 #' @examples
 #' cc <- teal:::CodeClass$new()

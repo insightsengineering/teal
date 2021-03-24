@@ -10,10 +10,8 @@
 "_PACKAGE"
 
 #'
-#' @importFrom utils tail
-#' @import lifecycle
-#' @import magrittr
-#' @import utils.nest
 #' @import shiny
-#' @import stats
+#' @import utils.nest
+#' @importFrom stats setNames
+#' @importFrom methods is
 NULL

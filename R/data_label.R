@@ -67,8 +67,6 @@ keys <- function(primary, foreign, parent) {
 #'
 #' @return \code{keys} object
 #'
-#' @importFrom yaml yaml.load_file
-#' @importFrom utils.nest get_package_file
 #' @export
 #'
 #' @examples
@@ -77,7 +75,8 @@ get_cdisc_keys <- function(dataname) {
   stopifnot(is_character_single(dataname))
 
   # copy from excel file
-  default_cdisc_keys <- yaml.load_file(get_package_file("teal", "cdisc_datasets/cdisc_datasets.yaml")) #nolint
+  default_cdisc_keys <- yaml::yaml.load_file(
+    utils.nest::get_package_file("teal", "cdisc_datasets/cdisc_datasets.yaml")) #nolint
 
   if (!(dataname %in% names(default_cdisc_keys))) {
     stop(sprintf("There is no dataset called: %s \n  List of supported cdisc_datasets:\n   %s",
@@ -100,7 +99,6 @@ get_cdisc_keys <- function(dataname) {
 #'
 #' @export
 #'
-#' @importFrom rtables var_labels
 #'
 #' @examples
 #' library(random.cdisc.data)
@@ -114,7 +112,7 @@ get_labels <- function(data, fill = TRUE) {
 
   cdisc_labels <- list(
     "dataset_label" = data_label(data),
-    "column_labels" = var_labels(data, fill = fill)
+    "column_labels" = rtables::var_labels(data, fill = fill)
   )
   return(cdisc_labels)
 }

@@ -40,6 +40,8 @@ Imports:
   rtables (>= 0.3.3),
   shinyjs,
   shinyWidgets (>= 0.5.0),
+  stats,
+  utils,
   utils.nest (>= 0.2.8),
   yaml
 Roxygen: list(markdown = TRUE)

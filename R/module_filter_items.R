@@ -90,8 +90,6 @@ ui_filter_items <- function(id, dataname) {
 #'   all observers defined in this module are returned (the observer to remove all
 #'   filters at once is not returned)
 #'
-#' @importFrom shinyWidgets pickerInput pickerOptions
-#' @importFrom digest digest
 srv_filter_items <- function(input, output, session, datasets, dataname) {
   stopifnot(
     is(datasets, "FilteredData"),

@@ -64,9 +64,7 @@
 #' tc$launch()
 #' get_raw_data(tc)
 #' }
-#' @importFrom R6 R6Class
-#' @importFrom shinyjs hide
-#' @importFrom methods is
+#'
 RelationalData <- R6::R6Class( # nolint
   classname = "RelationalData",
   inherit = DataAbstract,
@@ -234,7 +232,7 @@ RelationalData <- R6::R6Class( # nolint
                   )
                 )
               ),
-              useShinyjs(),
+              shinyjs::useShinyjs(),
               include_teal_css_js(),
               br()
             )

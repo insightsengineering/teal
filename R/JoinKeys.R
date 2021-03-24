@@ -268,7 +268,6 @@ mutate_join_keys.RelationalData <- function(x, dataset_1, dataset_2, val) { # no
 #'
 #' @seealso [join_keys()]
 #'
-#' @importFrom rlang is_named
 #' @export
 join_key <- function(dataset_1, dataset_2, keys) {
   stopifnot(is_character_single(dataset_1))

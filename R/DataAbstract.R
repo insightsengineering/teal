@@ -7,8 +7,6 @@
 #' @description
 #' Abstract class containing code for handling set of datasets.
 #'
-#' @importFrom R6 R6Class
-#' @importFrom methods is
 DataAbstract <- R6::R6Class( #nolint
   classname = "DataAbstract",
   ## __Public Methods ====

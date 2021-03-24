@@ -396,19 +396,19 @@ isolate({
     ## check with all labels provided
     # preconditions on ADSL so tests below work as expected
     stopifnot(
-      all_false(var_labels(ADSL), is.na), # no NA label
-      setequal(names(var_labels(ADSL)), colnames(ADSL)) # all variables have labels
+      all_false(rtables::var_labels(ADSL), is.na), # no NA label
+      setequal(names(rtables::var_labels(ADSL)), colnames(ADSL)) # all variables have labels
     )
-    attr(data, "column_labels") <- var_labels(ADSL)
+    attr(data, "column_labels") <- rtables::var_labels(ADSL)
     ds$set_data("ADSL", data)
     expect_equal(
       ds$get_varlabels("ADSL"),
-      var_labels(ADSL)
+      rtables::var_labels(ADSL)
     )
     # only some variables
     expect_equal(
       ds$get_varlabels("ADSL", variables = c("AGE", "SEX")),
-      var_labels(ADSL)[c("AGE", "SEX")]
+      rtables::var_labels(ADSL)[c("AGE", "SEX")]
     )
 
     ## check with no labels (NULL)

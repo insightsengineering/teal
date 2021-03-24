@@ -69,7 +69,6 @@ extract_choices_labels <- function(choices, values = NULL) {
 #' @return (`Shiny`) input variable accessible with `input$tz` which is a (`character`)
 #'  string containing the timezone of the browser/client.
 #'
-#' @importFrom shinyjs runjs
 get_client_timezone <- function(ns) {
   script <- paste0(
   "var tz = Intl.DateTimeFormat().resolvedOptions().timeZone;
@@ -457,7 +456,6 @@ get_key_duplicates.data.frame <- function(dataset, keys = NULL) { #nolint
 #'
 #' @return \code{tibble} with a duplicate keys information summary
 #'
-#' @importFrom dplyr mutate row_number select all_of summarise group_by across n
 #' @importFrom rlang .data
 #'
 #' @examples
@@ -481,13 +479,14 @@ get_key_duplicates_util <- function(dataframe, keys) {
   # The goal is to print values of duplicated primary keys with number of duplicates and row numbers
   # Seemed like adding a column with id numbers and pasting it once duplicates are subset was
   # the simplest course of action.
-  summary <- mutate(dataframe, rows = row_number())
-  summary <- summary[duplicated(
-    select(summary, all_of(keys))) | duplicated(select(summary, all_of(keys)), fromLast = TRUE), ]
-  summary <- summarise(
-    group_by(summary, across(all_of(keys))),
-    rows = paste0(.data[["rows"]], collapse = ","),
-    n = n(),
+  summary <- dplyr::mutate(dataframe, rows = dplyr::row_number())
+  summary <- summary[
+    duplicated(dplyr::select(summary, dplyr::all_of(keys))) |
+    duplicated(dplyr::select(summary, dplyr::all_of(keys)), fromLast = TRUE), ]
+  summary <- dplyr::summarise(
+    dplyr::group_by(summary, dplyr::across(dplyr::all_of(keys))),
+    rows = paste0(.data$rows, collapse = ","),
+    n = dplyr::n(),
     .groups = "drop")
   summary
 }

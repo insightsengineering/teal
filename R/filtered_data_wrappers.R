@@ -56,7 +56,6 @@ filtered_data_set.RelationalData <- function(data, datasets) { # nolintr # nousa
 #' @param datasets an object that inherits from `FilteredData`
 #' @param filter (named `list`) of filter entries
 #'
-#' @importFrom methods is
 #' @noRd
 filtered_data_set_filters <- function(datasets, filter) {
   stopifnot(
