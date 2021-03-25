@@ -40,6 +40,7 @@ x$close() # call closing function
 \subsection{Public methods}{
 \itemize{
 \item \href{#method-new}{\code{DataConnection$new()}}
+\item \href{#method-finalize}{\code{DataConnection$finalize()}}
 \item \href{#method-is_opened}{\code{DataConnection$is_opened()}}
 \item \href{#method-is_failed}{\code{DataConnection$is_failed()}}
 \item \href{#method-launch}{\code{DataConnection$launch()}}
@@ -95,6 +96,19 @@ connection}
 }
 \subsection{Returns}{
 new \code{DataConnection} object
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-finalize"></a>}}
+\if{latex}{\out{\hypertarget{method-finalize}{}}}
+\subsection{Method \code{finalize()}}{
+Finalize method closing the connection.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{DataConnection$finalize()}\if{html}{\out{</div>}}
+}
+
+\subsection{Returns}{
+NULL
 }
 }
 \if{html}{\out{<hr>}}

@@ -16,8 +16,8 @@ stop_shiny <- function(title, body) {
   if (!is_html_like(body)) {
     body <- tags$p(body)
   }
-  shiny::shinyApp(
-    ui =  shiny::fixedPage(
+  shinyApp(
+    ui =  fixedPage(
       div(
         class = "jumbotron",
         tags$h1(title),

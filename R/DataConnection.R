@@ -71,6 +71,14 @@ DataConnection <- R6::R6Class( # nolint
       }
     },
     #' @description
+    #' Finalize method closing the connection.
+    #'
+    #' @return NULL
+    finalize = function() {
+      self$close(silent = TRUE, try = TRUE)
+      return(NULL)
+    },
+    #' @description
     #' If connection is opened
     #'
     #' If open connection has been successfully evaluated
@@ -593,6 +601,12 @@ rcd_connection <- function(open_args = list()) {
           )
         )
       }
+
+      # we want the connection closed (if it's opened) when the user shiny session ends
+      session$onSessionEnded(function() {
+        connection$close(silent = TRUE, try = TRUE)
+      })
+
       return(invisible(connection))
     }
   )
@@ -666,6 +680,11 @@ rice_connection <- function(open_args = list(), close_args = list(), ping_args =
           )
         )
       }
+
+      session$onSessionEnded(function() {
+        connection$close(silent = TRUE, try = TRUE)
+      })
+
       return(invisible(connection))
     }
   )
@@ -760,6 +779,11 @@ teradata_connection <- function(open_args = list(), close_args = list(), ping_ar
           )
         )
       }
+
+      session$onSessionEnded(function() {
+        connection$close(silent = TRUE, try = TRUE)
+      })
+
       return(invisible(connection))
     }
   )

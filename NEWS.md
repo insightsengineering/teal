@@ -4,6 +4,8 @@
 
 ### Enhancements
 * Changed ordering of datasets to be more intuitive (first topologically then alphabetically).
+* `DataConnection` now tries to close its connection before the app stops (did not close it at all before).
+* When closing a teal app (ending a user shiny session), all `DataConnection`s will now try to close their connections.
 
 Issues with no news:
 

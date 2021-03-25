@@ -85,7 +85,7 @@ optionalSelectInput <- function(inputId, # nolint
   stopifnot(is_logical_single(fixed))
 
   if (!is.null(width)) {
-    shiny::validateCssUnit(width)
+    validateCssUnit(width)
   }
 
   default_options <- list(
