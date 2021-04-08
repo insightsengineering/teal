@@ -81,8 +81,8 @@
 #'   )
 #'   datasets$set_filter_state(
 #'     "ADSL",
-#'     state = list(
-#'       SEX = list(choices = c("M", "F"), keep_na = FALSE)
+#'      state = list(
+#'        SEX = list(choices = c("M", "F"), keep_na = FALSE)
 #'     )
 #'   )
 #'   datasets$get_filter_type("ADSL", "SEX")
@@ -145,6 +145,7 @@ CDISCFilteredData <- R6::R6Class( # nolint
     #' @param dataname (`character` vector) names of the dataset
     #' @return (`character` vector) of dataset names
     get_filterable_datanames = function(dataname) {
+
       parents <- character(0)
       for (i in dataname) {
         while (!is_empty(i)) {
@@ -180,32 +181,20 @@ CDISCFilteredData <- R6::R6Class( # nolint
     #' @return (`expression`) to filter dataset
     #'
     get_filter_expr = function(dataname) {
+      private$check_data_varname_exists(dataname)
+
       filtered_dataname <- private$filtered_dataname(dataname)
       parent_dataname <- self$get_parentname(dataname)
 
       if (is_empty(parent_dataname)) {
         # use bquote to return same types whether or not parent is present
-
-        filter_call <- as.call(list(
-          as.name("<-"),
-          as.name(filtered_dataname),
-          private$get_pure_filter_call(dataname)
-        ))
-
-        drop_level_call <- private$get_drop_levels_call(dataname)[[1]]
-        varlabel_call <- private$get_drop_levels_call(dataname)[[2]]
-
-        if (is.null(drop_level_call)) {
-          return(bquote({
-            .(filter_call)
-          }))
-        } else {
-          return(bquote({
-            .(filter_call)
-            .(drop_level_call)
-            .(varlabel_call)
-          }))
-        }
+        bquote({
+          .(as.call(list(
+            as.name("<-"),
+            as.name(filtered_dataname),
+            private$get_pure_filter_call(dataname)
+          )))
+        })
       } else {
         filtered_dataname_alone <- paste0(filtered_dataname, "_ALONE")
         filter_call <- as.call(list(
@@ -213,9 +202,6 @@ CDISCFilteredData <- R6::R6Class( # nolint
           as.name(filtered_dataname_alone),
           private$get_pure_filter_call(dataname)
         ))
-
-        drop_level_call <- private$get_drop_levels_call(dataname)[[1]]
-        varlabel_call <- private$get_drop_levels_call(dataname)[[2]]
 
         # join with parent dataset
         keys <- self$get_join_keys(parent_dataname, dataname)
@@ -250,23 +236,10 @@ CDISCFilteredData <- R6::R6Class( # nolint
           )
         )
 
-        if (is.null(drop_level_call)) {
-          return(
-            bquote({
-              .(filter_call)
-              .(merge_call)
-            })
-          )
-        } else {
-          return(
-            bquote({
-              .(filter_call)
-              .(drop_level_call)
-              .(varlabel_call)
-              .(merge_call)
-            })
-          )
-        }
+        return(bquote({
+          .(filter_call)
+          .(merge_call)
+        }))
       }
     },
 
@@ -312,6 +285,7 @@ CDISCFilteredData <- R6::R6Class( # nolint
     get_parentname = function(dataname) {
       self$get_data_attr(dataname, "parent")
     }
+
   ),
 
   ## __Private Methods---------------------
@@ -443,10 +417,8 @@ topological_sort <- function(graph) {
   }
 
   if (visited != length(in_degrees)) {
-    stop(
-      "Graph is not a directed acyclic graph. Cycles involving nodes: ",
-      paste0(setdiff(names(in_degrees), sorted), collapse = " ")
-    )
+    stop("Graph is not a directed acyclic graph. Cycles involving nodes: ",
+      paste0(setdiff(names(in_degrees), sorted), collapse = " "))
   } else {
     return(sorted)
   }

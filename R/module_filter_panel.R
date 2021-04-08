@@ -77,7 +77,9 @@ ui_filter_panel <- function(id, datasets, datanames) {
           tags$a(
             href = "javascript:void(0)",
             class = "remove pull-right",
-            onclick = paste0("$('#", ns("teal_filters_overview_contents"), "').toggle();"),
+            onclick = paste0("$('#",
+                             ns("teal_filters_overview_contents"),
+                             "').toggle();"),
             title = "minimise panel",
             tags$span(icon("minus-circle", lib = "font-awesome"))
           )
@@ -96,11 +98,11 @@ ui_filter_panel <- function(id, datasets, datanames) {
       tags$div(
         class = "row",
         tags$div(
-          class = "col-sm-8",
+          class = "col-sm-6",
           tags$label("Active Filter Variables", class = "text-primary", style = "margin-bottom: 15px;")
         ),
         tags$div(
-          class = "col-sm-4",
+          class = "col-sm-6",
           actionLink(
             ns("remove_all_filters"),
             "",
@@ -121,14 +123,7 @@ ui_filter_panel <- function(id, datasets, datanames) {
           )
         )
       ),
-      tags$div(
-        class = "row",
-        tags$div(
-          class = "col-sm-12",
-          style = "margin-top: -20px;",
-          checkboxInput(ns("drop_levels"), "Drop unused factor levels ", value = FALSE)
-        )
-      ),
+
       div(
         id = ns("teal_filter_active_vars_contents"),
         tagList(
@@ -158,7 +153,9 @@ ui_filter_panel <- function(id, datasets, datanames) {
           tags$a(
             href = "javascript:void(0)",
             class = "remove pull-right",
-            onclick = paste0("$('#", ns("teal_filter_add_vars_contents"), "').toggle();"),
+            onclick = paste0("$('#",
+                             ns("teal_filter_add_vars_contents"),
+                             "').toggle();"),
             title = "minimise panel",
             tags$span(icon("minus-circle", lib = "font-awesome"))
           )
@@ -210,12 +207,7 @@ srv_filter_panel <- function(input, output, session, datasets, active_datanames 
   # should not use for-loop as variables are otherwise only bound by reference and last dataname would be used
   lapply(
     isol_datanames,
-    function(dataname) callModule(
-      srv_filter_items,
-      paste0("teal_filters_", dataname),
-      datasets,
-      dataname,
-      if (is.null(input$drop_levels)) reactive(FALSE) else reactive(input$drop_levels))
+    function(dataname) callModule(srv_filter_items, paste0("teal_filters_", dataname), datasets, dataname)
   )
 
   lapply(

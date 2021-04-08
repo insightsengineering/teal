@@ -275,17 +275,14 @@ ui_single_filter_item <- function(id, filter_info, filter_state, prelabel) {
 #' @inheritParams srv_shiny_module_arguments
 #' @param dataname `character` dataname
 #' @param varname `character` variable within `dataname` to filter
-#' @param drop_levels `reactive` the reactive logical flag indicating whether to drop unused levels of variables
-#' in the `dataname` dataset
 #'
 #' @return `reactive` which returns `list(observers = ...)` with registered observers.
 #'
-srv_single_filter_item <- function(input, output, session, datasets, dataname, varname, drop_levels) {
+srv_single_filter_item <- function(input, output, session, datasets, dataname, varname) {
   stopifnot(
     is(datasets, "FilteredData"),
     is_character_single(dataname),
-    is_character_single(varname),
-    is_logical_single(drop_levels())
+    is_character_single(varname)
   )
 
   get_client_timezone(session$ns)
@@ -351,8 +348,6 @@ srv_single_filter_item <- function(input, output, session, datasets, dataname, v
     input[[id_end_date]]
     input[[id_keep_inf]]
     input[[id_keep_na]]
-    input[[id_remove_filter]]
-    drop_levels()
   }, {
     selection_state <- input[[id_selection]]
     type <- datasets$get_filter_type(dataname, varname)
@@ -405,7 +400,7 @@ srv_single_filter_item <- function(input, output, session, datasets, dataname, v
     keep_na_state <- if_null(input[[id_keep_na]], FALSE) # input field may not exist if variable contains no `NA`
     keep_inf_state <- if_null(input[[id_keep_inf]], FALSE)
 
-    state <- c(state, list(keep_na = keep_na_state, keep_inf = keep_inf_state, drop_levels = drop_levels()))
+    state <- c(state, list(keep_na = keep_na_state, keep_inf = keep_inf_state))
     .log("State for ", varname, ":", filter_state_to_str(type, state)) # truncates the output if too much
 
     set_single_filter_state(datasets,

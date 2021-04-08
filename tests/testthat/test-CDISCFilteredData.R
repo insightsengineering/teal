@@ -71,7 +71,7 @@ isolate({
     expect_equal(names(ds$get_filter_state("ADSL")), "AGE")
     expect_identical(
       ds$get_filter_state("ADSL")$AGE,
-      list(range = range(ADSL$AGE, finite = TRUE), keep_na = FALSE, keep_inf = FALSE, drop_levels = FALSE)
+      list(range = range(ADSL$AGE, finite = TRUE), keep_na = FALSE, keep_inf = FALSE)
     )
 
     expect_identical(
@@ -116,7 +116,7 @@ isolate({
 
     expect_identical(
       ds$get_filter_state("ADSL")$AGE,
-      list(range = c(30, 50), keep_na = TRUE, keep_inf = TRUE, drop_levels = FALSE)
+      list(range = c(30, 50), keep_na = TRUE, keep_inf = TRUE)
     )
 
     expected_lines <- covr_deparse_fix(c(1, 4, 6), c(1, 2, 3))
@@ -139,7 +139,7 @@ isolate({
 
     expect_identical(
       ds$get_filter_state("ADSL")$AGE,
-      list(range = c(30, 50), keep_na = TRUE, keep_inf = TRUE, drop_levels = FALSE)
+      list(range = c(30, 50), keep_na = TRUE, keep_inf = TRUE)
     )
   })
 
@@ -150,7 +150,7 @@ isolate({
     expect_setequal(names(ds$get_filter_state("ADSL")), c("AGE", "SEX"))
     expect_identical(
       ds$get_filter_state("ADSL")$SEX,
-      list(choices = levels(ADSL$SEX), keep_na = FALSE, keep_inf = FALSE, drop_levels = FALSE)
+      list(choices = levels(ADSL$SEX), keep_na = FALSE, keep_inf = FALSE)
     )
 
     expect_true(
@@ -173,12 +173,12 @@ isolate({
 
     expect_equal(
       ds$get_filter_state("ADSL")$AGE,
-      list(range = range(ADSL$AGE, finite = TRUE) + c(+1, -1), keep_na = FALSE, keep_inf = FALSE, drop_levels = FALSE)
+      list(range = range(ADSL$AGE, finite = TRUE) + c(+1, -1), keep_na = FALSE, keep_inf = FALSE)
     )
 
     expect_equal(
       ds$get_filter_state("ADSL")$SEX,
-      list(choices = c("M", "F"), keep_na = FALSE, keep_inf = FALSE, drop_levels = FALSE)
+      list(choices = c("M", "F"), keep_na = FALSE, keep_inf = FALSE)
     )
 
     expected_lines <- covr_deparse_fix(c(1, 4, 6), c(1, 2, 3))
@@ -332,9 +332,9 @@ isolate({
     expect_identical(
       ds$get_filter_state("ADSL"),
       list(
-        AGE = list(range = c(38, 40), keep_na = TRUE, keep_inf = FALSE, drop_levels = FALSE),
-        SEX = list(choices = "F", keep_na = FALSE, keep_inf = TRUE, drop_levels = FALSE),
-        COUNTRY = list(choices = c("CHN", "USA", "BRA"), keep_na = FALSE, keep_inf = FALSE, drop_levels = FALSE)
+        AGE = list(range = c(38, 40), keep_na = TRUE, keep_inf = FALSE),
+        SEX = list(choices = "F", keep_na = FALSE, keep_inf = TRUE),
+        COUNTRY = list(choices = c("CHN", "USA", "BRA"), keep_na = FALSE, keep_inf = FALSE)
       )
     )
 

@@ -1,7 +1,6 @@
 # teal 0.9.3.9000
 ### Bug fixes
 * Cleaned up imports in the package.
-* Added the option to drop unused factor levels for filters.
 
 ### Enhancements
 * Changed ordering of datasets to be more intuitive (first topologically then alphabetically).

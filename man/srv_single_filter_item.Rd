@@ -4,15 +4,7 @@
 \alias{srv_single_filter_item}
 \title{Server function to filter for a single variable}
 \usage{
-srv_single_filter_item(
-  input,
-  output,
-  session,
-  datasets,
-  dataname,
-  varname,
-  drop_levels
-)
+srv_single_filter_item(input, output, session, datasets, dataname, varname)
 }
 \arguments{
 \item{input}{\verb{Shiny input object}}
@@ -27,9 +19,6 @@ datasets, shared across modules}
 \item{dataname}{\code{character} dataname}
 
 \item{varname}{\code{character} variable within \code{dataname} to filter}
-
-\item{drop_levels}{\code{reactive} the reactive logical flag indicating whether to drop unused levels of variables
-in the \code{dataname} dataset}
 }
 \value{
 \code{reactive} which returns \code{list(observers = ...)} with registered observers.

@@ -83,8 +83,6 @@ ui_filter_items <- function(id, dataname) {
 #'
 #' @inheritParams srv_shiny_module_arguments
 #' @inheritParams ui_filter_items
-#' @param drop_levels `reactive` the reactive logical flag indicating whether
-#'   to drop unused levels of variables
 #' @return `reactive` returning a named list, names being the shown variables
 #'   and values being the observers for the modules associated to that variable
 #'   (by calling a Shiny submodule for each variable). This is useful for dynamic
@@ -92,7 +90,7 @@ ui_filter_items <- function(id, dataname) {
 #'   all observers defined in this module are returned (the observer to remove all
 #'   filters at once is not returned)
 #'
-srv_filter_items <- function(input, output, session, datasets, dataname, drop_levels) {
+srv_filter_items <- function(input, output, session, datasets, dataname) {
   stopifnot(
     is(datasets, "FilteredData"),
     is_character_single(dataname)
@@ -170,12 +168,7 @@ srv_filter_items <- function(input, output, session, datasets, dataname, drop_le
           shown_vars_observers,
           setNames(
             list(
-              callModule(srv_single_filter_item,
-                filter_id_for_var(varname),
-                datasets,
-                dataname,
-                varname,
-                drop_levels)
+              callModule(srv_single_filter_item, filter_id_for_var(varname), datasets, dataname, varname)$observers
             ),
             varname
           )
@@ -185,7 +178,7 @@ srv_filter_items <- function(input, output, session, datasets, dataname, drop_le
       removed_varnames <- setdiff(names(shown_vars_observers), filtered_vars())
       lapply(removed_varnames, function(varname) {
         removeUI(selector = paste0("#", session$ns(filter_id_for_var(varname))))
-        lapply(shown_vars_observers[[varname]]$observers, function(obs) obs$destroy())
+        lapply(shown_vars_observers[[varname]], function(obs) obs$destroy())
         shown_vars_observers[[varname]] <<- NULL
       })
       stopifnot(setequal(filtered_vars(), names(shown_vars_observers)))

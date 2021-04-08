@@ -4,7 +4,7 @@
 \alias{srv_filter_items}
 \title{Server function to display filters for a dataset}
 \usage{
-srv_filter_items(input, output, session, datasets, dataname, drop_levels)
+srv_filter_items(input, output, session, datasets, dataname)
 }
 \arguments{
 \item{input}{\verb{Shiny input object}}
@@ -17,9 +17,6 @@ srv_filter_items(input, output, session, datasets, dataname, drop_levels)
 datasets, shared across modules}
 
 \item{dataname}{\code{character} dataname to show filters for}
-
-\item{drop_levels}{\code{reactive} the reactive logical flag indicating whether
-to drop unused levels of variables}
 }
 \value{
 \code{reactive} returning a named list, names being the shown variables
