@@ -448,8 +448,9 @@ FilteredData <- R6::R6Class( # nolint
         infos <- infos[vapply(names(infos),
           function(x) x %in% active_filter_names,
           FUN.VALUE = logical(1),
-          USE.NAMES = FALSE)]
-        infos <- infos[active_filter_names]  # needed, because otherwise the order does not match
+          USE.NAMES = FALSE
+        )]
+        infos <- infos[active_filter_names] # needed, because otherwise the order does not match
       } else if (length(varname) == 1) {
         infos <- infos[[varname]]
       } else {
@@ -537,7 +538,7 @@ FilteredData <- R6::R6Class( # nolint
       if (!include_unknown) {
         filter_states <- filter_states[vapply(
           filter_states,
-          function(x) !is.null(x[[1]]),  # unknown filters have NULL as the first element
+          function(x) !is.null(x[[1]]), # unknown filters have NULL as the first element
           FUN.VALUE = logical(1)
         )]
       }
@@ -653,7 +654,7 @@ FilteredData <- R6::R6Class( # nolint
         unknown = list(NULL),
         stop(paste0(varname, " is of unrecognized type: ", filter_info$class))
       )
-      return(c(state, list(keep_na = FALSE, keep_inf = FALSE)))
+      return(c(state, list(keep_na = FALSE, keep_inf = FALSE, drop_levels = FALSE)))
     },
 
     #' @description
@@ -681,17 +682,27 @@ FilteredData <- R6::R6Class( # nolint
     #' @param dataname (`character`) name of the dataset
     #' @return (`expression`) which returns the filtered dataset
     get_filter_expr = function(dataname) {
-      private$check_data_varname_exists(dataname)
-
       filtered_dataname <- private$filtered_dataname(dataname)
 
-      bquote({
-        .(as.call(list(
-          as.name("<-"),
-          as.name(filtered_dataname),
-          private$get_pure_filter_call(dataname)
-        )))
-      })
+      filter_call <- as.call(list(
+        as.name("<-"),
+        as.name(filtered_dataname),
+        private$get_pure_filter_call(dataname)
+      ))
+
+      drop_levels_calls <-  private$get_drop_levels_call(dataname)
+
+      if (is.null(drop_levels_calls[[1]])) {
+        return(bquote({
+          .(filter_call)
+        }))
+      } else {
+        return(bquote({
+          .(filter_call)
+          .(drop_levels_calls[[1]])
+          .(drop_levels_calls[[2]])
+        }))
+      }
     },
 
     # info functions for end user ----
@@ -720,9 +731,10 @@ FilteredData <- R6::R6Class( # nolint
         cat("- Contains Datasets:", "\n")
         cat("     dataname (dim. unfiltered) (dim. filtered)", "\n")
         lapply(datanames, function(name) {
-          cat("   -", name,
-              paste0("(", paste(dim(self$get_data(name, filtered = FALSE)), collapse = " x "), ")"),
-              paste0("(", paste(dim(self$get_data(name, filtered = TRUE)), collapse = " x "), ")"), "\n"
+          cat(
+            "   -", name,
+            paste0("(", paste(dim(self$get_data(name, filtered = FALSE)), collapse = " x "), ")"),
+            paste0("(", paste(dim(self$get_data(name, filtered = TRUE)), collapse = " x "), ")"), "\n"
           )
           fs <- self$get_filter_info(name)
           if (length(fs) > 0) {
@@ -730,8 +742,8 @@ FilteredData <- R6::R6Class( # nolint
           }
         })
 
-        cat(paste0('   - x$print_filter_info("', datanames[[1]], '")', "\n")) #nolint
-        cat(paste0('   - x$get_data_info("', datanames[[1]], '", filtered = FALSE)', "\n")) #nolint
+        cat(paste0('   - x$print_filter_info("', datanames[[1]], '")', "\n")) # nolint
+        cat(paste0('   - x$get_data_info("', datanames[[1]], '", filtered = FALSE)', "\n")) # nolint
       }
 
       return(invisible(NULL))
@@ -1066,6 +1078,13 @@ FilteredData <- R6::R6Class( # nolint
         )
       }
 
+      if (!is_logical_single(var_state$drop_levels)) {
+        stop(
+          "data", dataname, "variable", varname, ":",
+          "Drop levels selection must be one of TRUE, FALSE, but is ", var_state$drop_levels
+        )
+      }
+
       pre_msg <- paste0("data ", dataname, ", variable ", varname, ": ")
       switch(
         var_info$type,
@@ -1110,7 +1129,6 @@ FilteredData <- R6::R6Class( # nolint
             # such a filter should never have been set
             stop(paste("filter type for variable", varname, "in", dataname, "not known"))
           }
-
           filter_call <- switch(
             type,
             choices = {
@@ -1157,7 +1175,7 @@ FilteredData <- R6::R6Class( # nolint
                   "&",
                   call(">=", as.name(varname), call("as.POSIXct", selection_state[1], tz = timezone)),
                   call("<=", as.name(varname), call("as.POSIXct", selection_state[2], tz = timezone))
-                  )
+                )
               } else {
                 selection_state <- format(filter_state$daterange, "%Y-%m-%d")
                 call(
@@ -1189,12 +1207,12 @@ FilteredData <- R6::R6Class( # nolint
 
             return(filter_call)
           }
-
         },
         self$get_filter_info(dataname, include_unknown = FALSE),
         self$get_filter_state(dataname, include_unknown = FALSE),
         names(self$get_filter_info(dataname, include_unknown = FALSE))
       )
+
 
       data_filter_call_items <- Filter(function(x) !is.null(x), data_filter_call_items)
 
@@ -1204,6 +1222,49 @@ FilteredData <- R6::R6Class( # nolint
       } else {
         # subset is meant for interactive use, so we use filter
         return(call_with_colon("dplyr::filter", as.name(dataname), unlist_args = unname(data_filter_call_items)))
+      }
+    },
+    # @description
+    # Creates a call that drops unused levels of factors from a filtered dataset.
+    # An unused factor levels is a factor level that has no observations in the
+    # filtered dataset - all observations with the dropped factor levels
+    # were previously filtered out by the filter call in this FilteredData.
+    # Returns NULL if the filter states don't specify dropping factor levels.
+    #
+    # @param dataname (`character`) the name of the dataset
+    # @return (`list`) a list of two calls: the call to drop unused factor levels and the call
+    # to restore the lost variable attributes
+    get_drop_levels_call = function(dataname) {
+      filter_state <- self$get_filter_state(dataname, include_unknown = FALSE)
+
+      filtered_vars_mask <- vapply(
+        X = filter_state,
+        FUN = function(x) x$drop_levels && "choices" %in% names(x),
+        FUN.VALUE = logical(1),
+        USE.NAMES = FALSE)
+      filtered_vars_names <- names(filter_state)[filtered_vars_mask]
+
+      if (length(filtered_vars_names) > 0) {
+        clean_call <- call(
+          "%>%",
+          call("[", as.name(private$filtered_dataname(dataname)), filtered_vars_names),
+          as.call(quote(droplevels()))
+        )
+        assign_call <- as.call(list(
+          as.name("<-"),
+          call("[", as.name(private$filtered_dataname(dataname)), filtered_vars_names),
+          clean_call
+        ))
+
+        varlabel_call <- as.call(list(
+          as.name("<-"),
+          call_with_colon("rtables::var_labels", as.name(private$filtered_dataname(dataname))),
+          call_with_colon("rtables::var_labels", as.name(dataname))
+        ))
+
+        return(list(assign_call, varlabel_call))
+      } else {
+        return(NULL)
       }
     },
 
@@ -1277,9 +1338,8 @@ FilteredData <- R6::R6Class( # nolint
               all_na = TRUE
             )
           } else if (is.factor(var) ||
-                     is.character(var) ||
-                     (is.numeric(var) && length(unique(var[!is.na(var)])) < .threshold_slider_vs_checkboxgroup)) {
-
+            is.character(var) ||
+            (is.numeric(var) && length(unique(var[!is.na(var)])) < .threshold_slider_vs_checkboxgroup)) {
             add_counts <- TRUE
 
             label_var <- if_null(attr(var, "label"), "")
@@ -1407,14 +1467,16 @@ FilteredData <- R6::R6Class( # nolint
               var_state
             ),
             any(is.na(var_state)),
-            any(is.infinite(var_state))
+            any(is.infinite(var_state)),
+            FALSE
           ),
-          nm = c(self$get_filter_type(dataname, varname), "keep_na", "keep_inf")
+          nm = c(self$get_filter_type(dataname, varname), "keep_na", "keep_inf", "drop_levels")
         )
       }
       # if `keep_na/inf` is not provided, default to `FALSE`
       var_state$keep_na <- if_null(var_state$keep_na, FALSE)
       var_state$keep_inf <- if_null(var_state$keep_inf, FALSE)
+      var_state$drop_levels <- if_null(var_state$drop_levels, FALSE)
       var_state
     }
   )
@@ -1489,7 +1551,8 @@ get_filter_expr <- function(datasets, datanames = datasets$get_datanames()) {
 get_filter_vars <- function(datasets, dataname, include_unknown = TRUE) {
   stopifnot(
     is(datasets, "FilteredData"),
-    is_logical_single(include_unknown))
+    is_logical_single(include_unknown)
+  )
   names(datasets$get_filter_state(dataname, include_unknown = include_unknown))
 }
 

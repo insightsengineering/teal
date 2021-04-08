@@ -83,8 +83,8 @@ isolate({
   )
   datasets$set_filter_state(
     "ADSL",
-     state = list(
-       SEX = list(choices = c("M", "F"), keep_na = FALSE)
+    state = list(
+      SEX = list(choices = c("M", "F"), keep_na = FALSE)
     )
   )
   datasets$get_filter_type("ADSL", "SEX")

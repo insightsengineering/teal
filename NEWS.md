@@ -1,6 +1,7 @@
 # teal 0.9.3.9000
 ### Bug fixes
 * Cleaned up imports in the package.
+* Added the option to drop unused factor levels for filters.
 
 ### Enhancements
 * Introduced `dynamic_filter_spec` to include encoding panel filters which allows column levels which are unknown in the
