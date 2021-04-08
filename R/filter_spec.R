@@ -40,7 +40,7 @@
 #'
 #' @return \code{filter_spec}-S3-class object or \code{delayed_filter_spec}-S3-class object.
 #'
-#' @seealso dynamic_filter_spec
+#' @seealso \code{\link{dynamic_filter_spec}}
 #'
 #' @examples
 #' filter_spec(
@@ -313,10 +313,12 @@ dynamic_filter_spec <- function(choices,
                                 selected = `if`(is(choices, "delayed_data"), NULL, choices[1]),
                                 multiple = length(selected) > 1,
                                 label = NULL,
+                                sep = if_null(attr(choices, "sep"), " - "),
                                 drop_keys = FALSE) {
   stopifnot(is_logical_single(multiple))
   stopifnot(is.null(label) || is_character_single(label))
   stopifnot(is_logical_single(drop_keys))
+  stopifnot(is_character_single(sep))
 
   UseMethod("dynamic_filter_spec")
 }
@@ -327,6 +329,7 @@ dynamic_filter_spec.delayed_data <- function(choices, # nolint
                                              selected = NULL,
                                              multiple = length(selected) > 1,
                                              label = NULL,
+                                             sep = if_null(attr(choices, "sep"), " - "),
                                              drop_keys = FALSE) {
   stopifnot(
     is_character_vector(choices) ||
@@ -348,6 +351,7 @@ dynamic_filter_spec.delayed_data <- function(choices, # nolint
       selected = selected,
       multiple = multiple,
       label = label,
+      sep = sep,
       drop_keys = drop_keys
     ),
     class = c("delayed_dynamic_filter_spec", "delayed_data", "dynamic_filter_spec"))
@@ -360,6 +364,7 @@ dynamic_filter_spec.default <- function(choices,
                                         selected = choices[1],
                                         multiple = length(selected) > 1,
                                         label = NULL,
+                                        sep = if_null(attr(choices, "sep"), " - "),
                                         drop_keys = FALSE) {
   stopifnot(
     is_character_vector(choices) ||
@@ -379,6 +384,7 @@ dynamic_filter_spec.default <- function(choices,
     selected = selected,
     multiple = multiple,
     label = label,
+    sep = sep,
     drop_keys = drop_keys
   )
   class(res) <- "dynamic_filter_spec"

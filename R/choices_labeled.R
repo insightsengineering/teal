@@ -4,14 +4,13 @@
 #' This is often useful for \code{\link[teal]{choices_selected}} as it marks up the dropdown boxes
 #' for \code{\link[shiny]{selectInput}}.
 #'
-#' @param choices (`character`, `numeric` or `logical` vector)
-#' @param labels (`character` vector)\cr
-#'  labels to be applied to \code{choices}. If `NA` then "Label Missing" will be used.
-#' @param subset (`character`, `numeric` or `logical` vector)\cr
-#'   Subset of \code{choices}. This is useful if only a few variables need to be named.
-#'   If this argument is used, the returned vector will match its order.
-#' @param types (`vector`)\cr
-#'   Types of the columns to be used for applying the appropriate
+#' @param choices a character / numeric / logical vector
+#' @param labels character vector containing labels to be applied to \code{choices}. If `NA` then
+#' "Label Missing" will be used.
+#' @param subset a vector that is a subset of \code{choices}. This is useful if
+#'   only a few variables need to be named. If this argument is used, the returned vector will
+#'   match its order.
+#' @param types vector containing the types of the columns to be used for applying the appropriate
 #'   icons to the \code{\link[teal]{choices_selected}} drop down box
 #' @details If either \code{choices} or \code{labels} are factors, they are coerced to character.
 #' Duplicated elements from \code{choices} get removed.
@@ -25,8 +24,8 @@
 #'
 #' ADSL <- radsl(cached = TRUE)
 #' ADTTE <- radtte(cached = TRUE)
-#' choices1 <- choices_labeled(choices = names(ADSL), labels = rtables::var_labels(ADSL))
-#' choices2 <- choices_labeled(choices = ADTTE$PARAMCD, labels = ADTTE$PARAM)
+#' choices1 <- choices_labeled(names(ADSL), rtables::var_labels(ADSL))
+#' choices2 <- choices_labeled(ADTTE$PARAMCD, ADTTE$PARAM)
 #' # if only a subset of variables are needed, use subset argument
 #' choices3 <- choices_labeled(names(ADSL), rtables::var_labels(ADSL), subset = c("ARMCD", "ARM"))
 #' \dontrun{
@@ -119,17 +118,16 @@ choices_labeled <- function(choices, labels, subset = NULL, types = NULL) {
 #'
 #' @description `r lifecycle::badge("maturing")`
 #'
-#' @param data (`data.frame`, `character`, `Dataset`, `DatasetConnector`)\cr
-#' If `data.frame`, then data to extract labels from\cr
-#' If `character`, then name of the dataset to extract data from once available\cr
+#' @param data (`data.frame`, `character`, `Dataset`, `DatasetConnector`)
+#' If `data.frame`, then data to extract labels from
+#' If `character`, then name of the dataset to extract data from once available
 #' If `Dataset` or `DatasetConnector`, then raw data to extract labels from.
-#' @param subset (\code{character} or \code{function})\cr
+#' @param subset (\code{character} or \code{function})
 #' If \code{character}, then a vector of column names.
 #' If \code{function}, then this function is used to determine the possible columns (e.g. all factor columns).
 #' In this case, the function must take only single argument "data" and return a character vector.
 #' See examples for more details.
-#' @param key (\code{character})\cr
-#' Vector with names of the variables, which are part of the primary key
+#' @param key (\code{character}) vector with names of the variables, which are part of the primary key
 #' of the \code{data} argument. This is an optional argument, which allows to identify variables
 #' associated with the primary key and display the appropriate icon for them in the
 #' \code{\link{optionalSelectInput}} widget.

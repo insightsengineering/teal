@@ -2,8 +2,6 @@
 
 S3method(as_cdisc,Dataset)
 S3method(as_cdisc,DatasetConnector)
-S3method(data_extract_spec,default)
-S3method(data_extract_spec,delayed_data)
 S3method(dynamic_filter_spec,default)
 S3method(dynamic_filter_spec,delayed_data)
 S3method(filter_spec,default)

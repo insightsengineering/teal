@@ -17,19 +17,17 @@
 #' be constructed. This input can be read by a \code{teal.devel::data_extract_module} module.
 #' }
 #'
-#' @param dataname (\code{character})\cr
-#'   The name of the \code{teal} dataset to
+#' @param dataname (\code{character}) The name of the \code{teal} dataset to
 #'   be extracted. This dataset has to be handed over to the \code{data} argument of the
 #'   \code{\link[teal]{init}} function.
-#' @param select (\code{NULL} or \code{select_spec}-S3 class or \code{delayed_select_spec}-S3-class object)\cr
+#' @param select (\code{NULL} or \code{select_spec}-S3 class or \code{delayed_select_spec}-S3-class object)
 #'  Columns to be selected from the input dataset
 #'  mentioned in \code{dataname}. The setup can be created using \code{\link{select_spec}} function.
-#' @param filter (`NULL` or `filter_spec` or `dynamic_filter_spec` or its respective delayed version)\cr
+#' @param filter (`NULL` or `filter_spec` or `dynamic_filter_spec` or its respective delayed version)
 #'  Setup of the filtering of key columns inside the dataset.
 #'  This setup can be created using the \code{\link{filter_spec}} \code{\link{dynamic_filter_spec}} function.
 #'  Please note that both select and filter cannot be empty at the same time.
-#' @param reshape (\code{logical})\cr
-#'  whether reshape long to wide. Note that it will be used only in case of long dataset
+#' @param reshape (\code{logical}) whether reshape long to wide. Note that it will be used only in case of long dataset
 #'  with multiple keys selected in filter part.
 #'
 #' @section Examples:
@@ -116,34 +114,16 @@ data_extract_spec <- function(dataname, select = NULL, filter = NULL, reshape = 
     }
   }
 
-  # hacky way (i.e. below line won't be executed) to set data_extract_spec.xyz as a S3 method and not function
-  if (0)  UseMethod("data_extract_spec") # noregexp
-
   if (is(select, "delayed_select_spec") ||
       any(vapply(filter, is, logical(1), "delayed_filter_spec")) ||
       any(vapply(filter, is, logical(1), "delayed_dynamic_filter_spec"))) {
-    data_extract_spec.delayed_data(dataname = dataname, select = select, filter = filter, reshape = reshape)
+    structure(
+      list(dataname = dataname, select = select, filter = filter, reshape = reshape),
+      class = c("delayed_data_extract_spec", "delayed_data", "data_extract_spec"))
   } else {
-    # not: UseMethod("data_extract_spec") because we modified input args
-    data_extract_spec.default(dataname = dataname, select = select, filter = filter, reshape = reshape)
+    structure(
+      list(dataname = dataname, select = select, filter = filter, reshape = reshape),
+      class = "data_extract_spec"
+    )
   }
-}
-
-#' @export
-#' @rdname data_extract_spec
-data_extract_spec.delayed_data <- function(dataname, select = NULL, filter = NULL, reshape = FALSE) { # nolint
-  res <- structure(
-    list(dataname = dataname, select = select, filter = filter, reshape = reshape),
-    class = c("delayed_data_extract_spec", "delayed_data", "data_extract_spec"))
-  return(res)
-}
-
-#' @export
-#' @rdname data_extract_spec
-data_extract_spec.default <- function(dataname, select = NULL, filter = NULL, reshape = FALSE) { # nolint
-  res <- structure(
-    list(dataname = dataname, select = select, filter = filter, reshape = reshape),
-    class = "data_extract_spec"
-  )
-  return(res)
 }

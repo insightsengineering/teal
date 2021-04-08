@@ -2,33 +2,25 @@
 % Please edit documentation in R/data_extract_spec.R
 \name{data_extract_spec}
 \alias{data_extract_spec}
-\alias{data_extract_spec.delayed_data}
-\alias{data_extract_spec.default}
 \title{Data Extract input for teal modules}
 \usage{
 data_extract_spec(dataname, select = NULL, filter = NULL, reshape = FALSE)
-
-\method{data_extract_spec}{delayed_data}(dataname, select = NULL, filter = NULL, reshape = FALSE)
-
-\method{data_extract_spec}{default}(dataname, select = NULL, filter = NULL, reshape = FALSE)
 }
 \arguments{
-\item{dataname}{(\code{character})\cr
-The name of the \code{teal} dataset to
+\item{dataname}{(\code{character}) The name of the \code{teal} dataset to
 be extracted. This dataset has to be handed over to the \code{data} argument of the
 \code{\link[teal]{init}} function.}
 
-\item{select}{(\code{NULL} or \code{select_spec}-S3 class or \code{delayed_select_spec}-S3-class object)\cr
+\item{select}{(\code{NULL} or \code{select_spec}-S3 class or \code{delayed_select_spec}-S3-class object)
 Columns to be selected from the input dataset
 mentioned in \code{dataname}. The setup can be created using \code{\link{select_spec}} function.}
 
-\item{filter}{(\code{NULL} or \code{filter_spec} or \code{dynamic_filter_spec} or its respective delayed version)\cr
+\item{filter}{(\code{NULL} or \code{filter_spec} or \code{dynamic_filter_spec} or its respective delayed version)
 Setup of the filtering of key columns inside the dataset.
 This setup can be created using the \code{\link{filter_spec}} \code{\link{dynamic_filter_spec}} function.
 Please note that both select and filter cannot be empty at the same time.}
 
-\item{reshape}{(\code{logical})\cr
-whether reshape long to wide. Note that it will be used only in case of long dataset
+\item{reshape}{(\code{logical}) whether reshape long to wide. Note that it will be used only in case of long dataset
 with multiple keys selected in filter part.}
 }
 \description{

@@ -196,5 +196,5 @@ filter_spec(
 )
 }
 \seealso{
-dynamic_filter_spec
+\code{\link{dynamic_filter_spec}}
 }

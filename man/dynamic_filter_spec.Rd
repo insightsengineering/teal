@@ -11,6 +11,7 @@ dynamic_filter_spec(
   selected = if (is(choices, "delayed_data")) NULL else choices[1],
   multiple = length(selected) > 1,
   label = NULL,
+  sep = if_null(attr(choices, "sep"), " - "),
   drop_keys = FALSE
 )
 
@@ -19,6 +20,7 @@ dynamic_filter_spec(
   selected = NULL,
   multiple = length(selected) > 1,
   label = NULL,
+  sep = if_null(attr(choices, "sep"), " - "),
   drop_keys = FALSE
 )
 
@@ -27,6 +29,7 @@ dynamic_filter_spec(
   selected = choices[1],
   multiple = length(selected) > 1,
   label = NULL,
+  sep = if_null(attr(choices, "sep"), " - "),
   drop_keys = FALSE
 )
 }
@@ -43,6 +46,9 @@ allow multiple filter value selection.}
 
 \item{label}{optional (\code{character}). Define a label
 on top of this specific shiny \code{\link[shiny]{selectInput}}.}
+
+\item{sep}{(\code{character}) A separator string to split the \code{choices} or
+\code{selected} inputs into the values of the different columns}
 
 \item{drop_keys}{optional, (\code{logical}) whether to drop filter column from the dataset keys,
 \code{TRUE} on default}

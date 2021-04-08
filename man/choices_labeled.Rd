@@ -7,17 +7,16 @@
 choices_labeled(choices, labels, subset = NULL, types = NULL)
 }
 \arguments{
-\item{choices}{(\code{character}, \code{numeric} or \code{logical} vector)}
+\item{choices}{a character / numeric / logical vector}
 
-\item{labels}{(\code{character} vector)\cr
-labels to be applied to \code{choices}. If \code{NA} then "Label Missing" will be used.}
+\item{labels}{character vector containing labels to be applied to \code{choices}. If \code{NA} then
+"Label Missing" will be used.}
 
-\item{subset}{(\code{character}, \code{numeric} or \code{logical} vector)\cr
-Subset of \code{choices}. This is useful if only a few variables need to be named.
-If this argument is used, the returned vector will match its order.}
+\item{subset}{a vector that is a subset of \code{choices}. This is useful if
+only a few variables need to be named. If this argument is used, the returned vector will
+match its order.}
 
-\item{types}{(\code{vector})\cr
-Types of the columns to be used for applying the appropriate
+\item{types}{vector containing the types of the columns to be used for applying the appropriate
 icons to the \code{\link[teal]{choices_selected}} drop down box}
 }
 \value{
@@ -37,8 +36,8 @@ library(random.cdisc.data)
 
 ADSL <- radsl(cached = TRUE)
 ADTTE <- radtte(cached = TRUE)
-choices1 <- choices_labeled(choices = names(ADSL), labels = rtables::var_labels(ADSL))
-choices2 <- choices_labeled(choices = ADTTE$PARAMCD, labels = ADTTE$PARAM)
+choices1 <- choices_labeled(names(ADSL), rtables::var_labels(ADSL))
+choices2 <- choices_labeled(ADTTE$PARAMCD, ADTTE$PARAM)
 # if only a subset of variables are needed, use subset argument
 choices3 <- choices_labeled(names(ADSL), rtables::var_labels(ADSL), subset = c("ARMCD", "ARM"))
 \dontrun{

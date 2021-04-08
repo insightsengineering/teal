@@ -19,12 +19,12 @@ variable_choices(data, subset = NULL, fill = FALSE, key = NULL)
 \method{variable_choices}{DatasetConnector}(data, subset = NULL, fill = FALSE, key = get_keys(data))
 }
 \arguments{
-\item{data}{(\code{data.frame}, \code{character}, \code{Dataset}, \code{DatasetConnector})\cr
-If \code{data.frame}, then data to extract labels from\cr
-If \code{character}, then name of the dataset to extract data from once available\cr
+\item{data}{(\code{data.frame}, \code{character}, \code{Dataset}, \code{DatasetConnector})
+If \code{data.frame}, then data to extract labels from
+If \code{character}, then name of the dataset to extract data from once available
 If \code{Dataset} or \code{DatasetConnector}, then raw data to extract labels from.}
 
-\item{subset}{(\code{character} or \code{function})\cr
+\item{subset}{(\code{character} or \code{function})
 If \code{character}, then a vector of column names.
 If \code{function}, then this function is used to determine the possible columns (e.g. all factor columns).
 In this case, the function must take only single argument "data" and return a character vector.
@@ -33,8 +33,7 @@ See examples for more details.}
 \item{fill}{boolean in case the \code{label} attribute does not exist if
 \code{TRUE} the variable names is returned, otherwise \code{NA}}
 
-\item{key}{(\code{character})\cr
-Vector with names of the variables, which are part of the primary key
+\item{key}{(\code{character}) vector with names of the variables, which are part of the primary key
 of the \code{data} argument. This is an optional argument, which allows to identify variables
 associated with the primary key and display the appropriate icon for them in the
 \code{\link{optionalSelectInput}} widget.}
