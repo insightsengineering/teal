@@ -3,6 +3,8 @@
 * Cleaned up imports in the package.
 
 ### Enhancements
+* Introduced `dynamic_filter_spec` to include encoding panel filters which allows column levels which are unknown in the
+preprocessing.
 * Changed ordering of datasets to be more intuitive (first topologically then alphabetically).
 * `DataConnection` now tries to close its connection before the app stops (did not close it at all before).
 * When closing a teal app (ending a user shiny session), all `DataConnection`s will now try to close their connections.

@@ -4,7 +4,7 @@
 \alias{filter_spec}
 \alias{filter_spec.delayed_data}
 \alias{filter_spec.default}
-\title{filter spec}
+\title{Data extract filter specification}
 \usage{
 filter_spec(
   vars,
@@ -40,9 +40,9 @@ filter_spec(
 \item{vars}{(\code{character}) or (\code{delayed_data}) object.
 Character vector giving the columns to be filtered. These should be
 key variables of the data set to be filtered.
-\code{delayed_data} objects can be created via \code{variable_choices} or \code{value_choices}.}
+\code{delayed_data} objects can be created via \code{\link{variable_choices}} or \code{\link{value_choices}}.}
 
-\item{choices}{(\code{character}) or (\code{delayed_data}) object.
+\item{choices}{(\code{character} or \code{numeric} or \code{logical} or (\code{delayed_data}) object.
 Named character vector to define the choices
 of a shiny \code{\link[shiny]{selectInput}}. These choices will be used to filter the
 dataset.
@@ -57,9 +57,10 @@ will lead to a filtering of
 
 The \code{sep} input has to be \code{" - "} in this case.
 
-\code{delayed_data} objects can be created via \code{variable_choices} or \code{value_choices}.}
+\code{delayed_data} objects can be created via \code{\link{variable_choices}} or \code{\link{value_choices}}.}
 
-\item{selected}{(\code{character} or \code{delayed_data} object) Named character vector to define the selected
+\item{selected}{(\code{character} or \code{numeric} or \code{logical} or (\code{delayed_data}) object.
+Named character vector to define the selected
 values of a shiny \code{\link[shiny]{selectInput}} (default values). This value will
 be displayed inside the shiny app upon start.}
 
@@ -193,4 +194,7 @@ filter_spec(
     levels(data$ARMCD)[1]
   })
 )
+}
+\seealso{
+dynamic_filter_spec
 }

@@ -191,7 +191,6 @@ reference:
     - picker_options
     - picker_options_content
     - pretty_code_string
-    - resolve_teal_args
     - srv_add_filter_variable
     - set_single_filter_state
     - srv_filter_items

@@ -101,7 +101,6 @@ test_that("data_extract_spec works with valid input", {
 })
 
 test_that("delayed data_extract_spec works", {
-
   set.seed(1)
   ADSL <- data.frame( # nolint
     USUBJID = letters[1:10],

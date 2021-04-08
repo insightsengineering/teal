@@ -1,17 +1,19 @@
-#' filter spec
+#' Data extract filter specification
 #'
 #' @description `r lifecycle::badge("maturing")`
 #' It consists in choices and additionally the variable names for the choices
 #'
 #' @export
 #'
+#' @inheritParams select_spec
+#'
 #' @param vars (\code{character}) or (\code{delayed_data}) object.
 #'   Character vector giving the columns to be filtered. These should be
 #'   key variables of the data set to be filtered.
-#'   \code{delayed_data} objects can be created via \code{variable_choices} or \code{value_choices}.
+#'   \code{delayed_data} objects can be created via \code{\link{variable_choices}} or \code{\link{value_choices}}.
 #' @param sep (\code{character}) A separator string to split the \code{choices} or
 #'   \code{selected} inputs into the values of the different columns
-#' @param choices (\code{character}) or (\code{delayed_data}) object.
+#' @param choices (\code{character} or \code{numeric} or \code{logical} or (\code{delayed_data}) object.
 #'   Named character vector to define the choices
 #'   of a shiny \code{\link[shiny]{selectInput}}. These choices will be used to filter the
 #'   dataset.
@@ -20,26 +22,25 @@
 #'   watch out that the filter values have to follow the order of the \code{vars} input. In the following
 #'   example we will show how to filter two columns:
 #'
-#'    \code{vars = c("PARAMCD","AVISIT")} and \code{choices = c("CRP - BASELINE", "ALT - BASELINE")}
-#'  will lead to a filtering of
-#'  \code{(PARAMCD == "CRP" & AVISIT == "BASELINE") | (PARAMCD == "ALT" & AVISIT == "BASELINE")}.
+#'   \code{vars = c("PARAMCD","AVISIT")} and \code{choices = c("CRP - BASELINE", "ALT - BASELINE")}
+#'   will lead to a filtering of
+#'   \code{(PARAMCD == "CRP" & AVISIT == "BASELINE") | (PARAMCD == "ALT" & AVISIT == "BASELINE")}.
 #'
-#'  The \code{sep} input has to be \code{" - "} in this case.
+#'   The \code{sep} input has to be \code{" - "} in this case.
 #'
-#'  \code{delayed_data} objects can be created via \code{variable_choices} or \code{value_choices}.
+#'   \code{delayed_data} objects can be created via \code{\link{variable_choices}} or \code{\link{value_choices}}.
 #'
-#' @param selected (\code{character} or \code{delayed_data} object) Named character vector to define the selected
+#' @param selected (\code{character} or \code{numeric} or \code{logical} or (\code{delayed_data}) object.
+#'  Named character vector to define the selected
 #'  values of a shiny \code{\link[shiny]{selectInput}} (default values). This value will
 #'  be displayed inside the shiny app upon start.
 #'
 #' @param drop_keys optional, (\code{logical}) whether to drop filter column from the dataset keys,
 #'   \code{TRUE} on default
 #'
-#' @inheritParams select_spec
-#'
 #' @return \code{filter_spec}-S3-class object or \code{delayed_filter_spec}-S3-class object.
 #'
-#' @rdname filter_spec
+#' @seealso dynamic_filter_spec
 #'
 #' @examples
 #' filter_spec(
@@ -161,6 +162,20 @@ filter_spec <- function(vars,
                         label = NULL,
                         sep = if_null(attr(choices, "sep"), " - "),
                         drop_keys = FALSE) {
+  stopifnot(is_character_vector(vars) || is(vars, "delayed_data"))
+  stopifnot(
+    is_character_vector(choices) ||
+    is_numeric_vector(choices) ||
+    is_logical_vector(choices) ||
+    is(choices, "delayed_data")
+  )
+  stopifnot(
+    is.null(selected) ||
+    is_character_vector(selected) ||
+    is_numeric_vector(selected) ||
+    is_logical_vector(selected) ||
+    is(selected, "delayed_data")
+  )
   stopifnot(is_logical_single(multiple))
   stopifnot(is.null(label) || is_character_single(label))
   stopifnot(is_character_single(sep))
@@ -168,7 +183,7 @@ filter_spec <- function(vars,
 
   # class dispatch also on a choices arg
   # filter_spec.delayed_data dispatch on two arguments - s3 can dispatch only on 1 argument
-  if (is(choices, "delayed_data") || is(selected, "delayed_data")) {
+  if (is(vars, "delayed_data") || is(choices, "delayed_data") || is(selected, "delayed_data")) {
     filter_spec.delayed_data(
       vars = vars,
       choices = choices,
@@ -192,9 +207,6 @@ filter_spec.delayed_data <- function(vars,
                                      label = NULL,
                                      sep = if_null(attr(choices, "sep"), " - "),
                                      drop_keys = FALSE) {
-  stopifnot(is_character_vector(choices) || is(choices, "delayed_data"))
-  stopifnot(is.null(selected) || is_character_vector(selected) || is(selected, "delayed_data"))
-
   out <- structure(
     list(
       vars = vars,
@@ -218,13 +230,12 @@ filter_spec.default <- function(vars,
                                 label = NULL,
                                 sep = if_null(attr(choices, "sep"), " - "),
                                 drop_keys = FALSE) {
-
-  stopifnot(is_character_vector(vars))
-  stopifnot(is_character_vector(choices))
-  stopifnot(is.null(selected) || is_character_vector(selected))
-
   stopifnot(all(!duplicated(vars)))
+  stopifnot(is_character_vector(choices) || is_numeric_vector(choices) || is_logical_vector(choices))
   stopifnot(all(!duplicated(choices)))
+
+  # eval selected before split_by_sep(chocies)
+  force(selected)
 
   choices_attrs <- attributes(choices)
   choices <- split_by_sep(choices, sep)
@@ -234,16 +245,14 @@ filter_spec.default <- function(vars,
   attributes(choices) <- choices_attrs
   names(choices) <- if_null(names(choices), vapply(choices, paste, collapse = sep, character(1)))
 
-
   if (!is.null(selected)) {
     stopifnot(multiple || length(selected) == 1)
-    stopifnot(is_character_vector(selected))
+    stopifnot(is_character_vector(selected) || is_numeric_vector(selected) || is_logical_vector(selected))
     stopifnot(all(!duplicated(selected)))
     selected <- split_by_sep(selected, sep)
     stopifnot(all(selected %is_in% choices))
     names(selected) <- if_null(names(selected), vapply(selected, paste, collapse = sep, character(1)))
   }
-
 
   res <- list(
     vars = vars,
@@ -255,6 +264,124 @@ filter_spec.default <- function(vars,
     drop_keys = drop_keys
   )
   class(res) <- "filter_spec"
+
+  return(res)
+}
+
+
+#' Data extract dynamic filter specification
+#'
+#' @description `r lifecycle::badge("experimental")`
+#' Set the variables from which dynamically build a filter.
+#'
+#' @export
+#'
+#' @inheritParams filter_spec
+#' @param choices (`character` or `delayed_data`) \cr
+#'   vector of dataset column names available to build dynamic filter
+#'   \code{delayed_data} objects can be created via \code{\link{variable_choices}}.
+#' @param selected (`NULL` or named `character`) \cr
+#'   selected column name out from `choices`.
+#' @param multiple (`logical`) \cr
+#'   allow multiple filter value selection.
+#'
+#' @return `dynamic_filter_spec` or `delayed_dynamic_filter_spec` S3-class object.
+#'
+#' @seealso filter_spec
+#'
+#' @examples
+#' dynamic_filter_spec(
+#'   choices = c("PARAMCD", "AVISIT"),
+#'   selected = "PARAMCD",
+#'   multiple = TRUE
+#' )
+#'
+#' library(random.cdisc.data)
+#' ADRS <- radrs(cached = TRUE)
+#' dynamic_filter_spec(
+#'   choices = variable_choices(ADRS),
+#'   selected = "PARAMCD",
+#'   multiple = TRUE
+#' )
+#'
+#' dynamic_filter_spec(
+#'   choices = variable_choices("ADRS"),
+#'   selected = "PARAMCD",
+#'   multiple = TRUE
+#' )
+dynamic_filter_spec <- function(choices,
+                                selected = `if`(is(choices, "delayed_data"), NULL, choices[1]),
+                                multiple = length(selected) > 1,
+                                label = NULL,
+                                drop_keys = FALSE) {
+  stopifnot(is_logical_single(multiple))
+  stopifnot(is.null(label) || is_character_single(label))
+  stopifnot(is_logical_single(drop_keys))
+
+  UseMethod("dynamic_filter_spec")
+}
+
+#' @rdname dynamic_filter_spec
+#' @export
+dynamic_filter_spec.delayed_data <- function(choices, # nolint
+                                             selected = NULL,
+                                             multiple = length(selected) > 1,
+                                             label = NULL,
+                                             drop_keys = FALSE) {
+  stopifnot(
+    is_character_vector(choices) ||
+    is_numeric_vector(choices) ||
+    is_logical_vector(choices) ||
+    is(choices, "delayed_data")
+  )
+  stopifnot(
+    is.null(selected) ||
+    is_character_vector(selected) ||
+    is_numeric_vector(selected) ||
+    is_logical_vector(selected) ||
+    is(selected, "delayed_data")
+  )
+
+  out <- structure(
+    list(
+      choices = choices,
+      selected = selected,
+      multiple = multiple,
+      label = label,
+      drop_keys = drop_keys
+    ),
+    class = c("delayed_dynamic_filter_spec", "delayed_data", "dynamic_filter_spec"))
+  return(out)
+}
+
+#' @rdname dynamic_filter_spec
+#' @export
+dynamic_filter_spec.default <- function(choices,
+                                        selected = choices[1],
+                                        multiple = length(selected) > 1,
+                                        label = NULL,
+                                        drop_keys = FALSE) {
+  stopifnot(
+    is_character_vector(choices) ||
+    is_numeric_vector(choices) ||
+    is_logical_vector(choices)
+  )
+  stopifnot(all(!duplicated(choices)))
+
+  if (!is.null(selected)) {
+    stopifnot(multiple || length(selected) == 1)
+    stopifnot(is_character_vector(selected) || is_numeric_vector(selected) || is_logical_vector(selected))
+    stopifnot(all(!duplicated(selected)))
+  }
+
+  res <- list(
+    choices = choices,
+    selected = selected,
+    multiple = multiple,
+    label = label,
+    drop_keys = drop_keys
+  )
+  class(res) <- "dynamic_filter_spec"
 
   return(res)
 }

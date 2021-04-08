@@ -9,7 +9,6 @@ test_that("Proper argument types", {
   expect_error(filter_spec(vars = "var", choices = choices_l), "is_character_vector")
   expect_error(filter_spec(vars = "var", choices = choices, selected = list("val2")), "is_character_vector")
   expect_error(filter_spec(vars = 1, choices = choices, selected = choices[1]), "is.character")
-  expect_error(filter_spec(vars = "var", choices = 1:3, selected = 1), "is.character")
   expect_error(filter_spec(vars = factor("var"), choices = choices, selected = choices[1]), "is.character")
   expect_error(filter_spec(vars = "var", choices = choices_f, selected = choices_f[1]), "is.character")
   expect_error(filter_spec(vars = "var", choices = choices, multiple = 1), "is.logical")
@@ -138,7 +137,7 @@ test_that("Dropping keys attribute", {
   expect_false(f2$drop_keys)
 })
 
-test_that("delayed filter_spec works", {
+test_that("delayed filter_spec", {
   set.seed(1)
   ADSL <- data.frame( # nolint
     USUBJID = letters[1:10],
@@ -169,5 +168,90 @@ test_that("delayed filter_spec works", {
 
   ds <- teal:::CDISCFilteredData$new()
   isolate(ds$set_data("ADSL", ADSL))
+  expect_identical(expected_spec, isolate(resolve_delayed(delayed, ds)))
+})
+
+
+test_that("dynamic_filter_spec", {
+  expect_silent(
+    dynamic_filter_spec(
+      choices = letters,
+      selected = letters[1]
+    )
+  )
+
+  expect_silent(
+    dynamic_filter_spec(
+      choices = letters,
+      selected = letters[1:5]
+    )
+  )
+
+  expect_silent(
+    dynamic_filter_spec(
+      choices = variable_choices("ADSL")
+    )
+  )
+})
+
+test_that("dynamic_filter_spec contains dataname", {
+  ADSL <- radsl(cached = TRUE) # nolint
+
+  x_filter <- dynamic_filter_spec(
+    choices = variable_choices(ADSL)
+  )
+
+  expect_null(x_filter$dataname)
+
+  x <- data_extract_spec(
+    dataname = "ADSL",
+    filter = x_filter
+  )
+
+  expect_equal(x$filter[[1]]$dataname, "ADSL")
+})
+
+test_that("delayed filter_spec works", {
+  set.seed(1)
+  ADSL <- data.frame( # nolint
+    USUBJID = letters[1:10],
+    SEX = sample(c("F", "M", "U"), 10, replace = TRUE),
+    stringsAsFactors = FALSE)
+
+  expected_spec <- dynamic_filter_spec(
+    choices = variable_choices(ADSL),
+    selected = "SEX"
+  )
+
+  # spec obtained using delayed approach
+  delayed <- dynamic_filter_spec(
+    choices = variable_choices("ADSL"),
+    selected = "SEX"
+  )
+
+  expect_equal(class(delayed), c("delayed_dynamic_filter_spec", "delayed_data", "dynamic_filter_spec"))
+
+  expect_equal(names(expected_spec), names(delayed))
+
+  ds <- teal:::CDISCFilteredData$new()
+  isolate(ds$set_data("ADSL", ADSL))
+  expect_identical(expected_spec, isolate(resolve_delayed(delayed, ds)))
+
+  expected_spec <- data_extract_spec(
+    dataname = "ADSL",
+    filter = dynamic_filter_spec(
+      choices = variable_choices(ADSL),
+      selected = "SEX"
+    )
+  )
+
+  delayed <- data_extract_spec(
+    dataname = "ADSL",
+    filter = dynamic_filter_spec(
+      choices = variable_choices("ADSL"),
+      selected = "SEX"
+    )
+  )
+
   expect_identical(expected_spec, isolate(resolve_delayed(delayed, ds)))
 })

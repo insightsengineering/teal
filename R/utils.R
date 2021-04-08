@@ -8,7 +8,11 @@
 #' @export
 split_by_sep <- function(x, sep) {
   stopifnot(is.atomic(x))
-  strsplit(x, sep, fixed = TRUE)
+  if (is.character(x)) {
+    strsplit(x, sep, fixed = TRUE)
+  } else {
+    x
+  }
 }
 
 #' List element in other list

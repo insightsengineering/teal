@@ -87,7 +87,7 @@ ui_nested_tabs <- function(id, modules, datasets) {
       teal_module = {
         .log("UI id for module is", ns(id))
 
-        args <- isolate(resolve_teal_args(modules$ui_args, datasets))
+        args <- isolate(resolve_delayed(modules$ui_args, datasets))
         # we pass the unfiltered datasets as they may be needed to create the UI
         tagList(
           if (depth >= 2) div(style = "margin-top: 25px;"),
@@ -125,7 +125,7 @@ srv_nested_tabs <- function(input, output, session, datasets, modules) {
       },
       teal_module = {
         .log("server tab_module  id:", id)
-        modules <- resolve_teal_module(modules, datasets)
+        modules$server_args <- resolve_delayed(modules$server_args, datasets)
         do.call(
           callModule,
           c(

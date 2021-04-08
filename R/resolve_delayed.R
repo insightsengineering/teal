@@ -111,27 +111,32 @@ resolve_delayed.delayed_select_spec <- function(x, datasets) { # nolint
 
 #' @export
 resolve_delayed.delayed_filter_spec <- function(x, datasets) { # nolint
-  if (is(x$selected, "delayed_data")) {
-    x$selected <- resolve_delayed(x$selected, datasets = datasets)
+  if (is(x$vars, "delayed_data")) {
+    x$vars <- resolve_delayed(x$vars, datasets = datasets)
   }
   if (is(x$choices, "delayed_data")) {
     x$choices <- resolve_delayed(x$choices, datasets = datasets)
   }
-  if (is(x$vars, "delayed_data")) {
-    x$vars <- resolve_delayed(x$vars, datasets = datasets)
+  if (is(x$selected, "delayed_data")) {
+    x$selected <- resolve_delayed(x$selected, datasets = datasets)
   }
   return(do.call("filter_spec", x))
 }
 
 #' @export
-#'
+resolve_delayed.delayed_dynamic_filter_spec <- function(x, datasets) { # nolint
+  if (is(x$choices, "delayed_data")) {
+    x$choices <- resolve_delayed(x$choices, datasets = datasets)
+  }
+  return(do.call("dynamic_filter_spec", x[intersect(names(x), methods::formalArgs(dynamic_filter_spec))]))
+}
+
+#' @export
 resolve_delayed.delayed_data_extract_spec <- function(x, datasets) { # nolint
   x$select <- `if`(is(x$select, "delayed_data"), resolve_delayed(x$select, datasets = datasets), x$select)
 
-  if (is(x$filter, "delayed_data")) {
-    x$filter <- resolve_delayed(x$filter, datasets)
-  } else if (any(ulapply(x$filter, class) %in% "delayed_data")) {
-    idx <- vapply(x$filter, inherits, logical(1), what = "delayed_data")
+  if (any(vapply(x$filter, is, logical(1L), "delayed_data"))) {
+    idx <- vapply(x$filter, is, logical(1), "delayed_data")
     x$filter[idx] <- lapply(x$filter[idx], resolve_delayed, datasets = datasets)
   }
 
@@ -150,34 +155,6 @@ resolve_delayed.list <- function(x, datasets) { # nolint
 resolve_delayed.default <- function(x, datasets) {
   return(x)
 }
-
-resolve_teal_module <- function(x, datasets) {
-  stopifnot(is(x, "teal_module"))
-  stopifnot(is(datasets, "FilteredData"))
-
-  x$server_args <- resolve_teal_args(x$server_args, datasets)
-  return(x)
-}
-
-#' Handles teal arguments that are only available through delayed loading
-#'
-#' @param args `list` arguments to evaluate by passing them the datasets
-#' @param datasets `datasets` datasets used to set `args`
-#'
-resolve_teal_args <- function(args, datasets) {
-  Map(function(arg) {
-    if (is(arg, "delayed_data")) {
-      resolve_delayed(arg, datasets)
-    } else if (is.list(arg) && any(vapply(arg, is, logical(1), "delayed_data"))) {
-      idx <- vapply(arg, is, logical(1), "delayed_data")
-      arg[idx] <- lapply(arg[idx], resolve_delayed, datasets = datasets)
-      arg
-    } else {
-      arg
-    }
-  }, args)
-}
-
 
 #' Resolve expression after delayed data are loaded
 #'
@@ -270,6 +247,14 @@ print.delayed_select_spec <- function(x, indent = 0L, ...) {
 #' @export
 print.delayed_filter_spec <- function(x, indent = 0L, ...) {
   cat(indent_msg(indent, paste("filter_spec with delayed data:", x$choices$data)))
+  cat("\n")
+  print_delayed_list(x, indent)
+  return(invisible(NULL))
+}
+
+#' @export
+print.delayed_dynamic_filter_spec <- function(x, indent = 0L, ...) {
+  cat(indent_msg(indent, paste("dynamic_filter_spec with delayed data:", x$choices$data)))
   cat("\n")
   print_delayed_list(x, indent)
   return(invisible(NULL))
