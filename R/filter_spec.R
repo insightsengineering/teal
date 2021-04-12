@@ -284,6 +284,8 @@ filter_spec.default <- function(vars,
 #'   selected column name out from `choices`.
 #' @param multiple (`logical`) \cr
 #'   allow multiple filter value selection.
+#' @param vars_label (`character`)\cr
+#'   the title on the UI element generated on the basis of this \code{dynamic_filter_spec}.
 #'
 #' @return `dynamic_filter_spec` or `delayed_dynamic_filter_spec` S3-class object.
 #'
@@ -312,11 +314,11 @@ filter_spec.default <- function(vars,
 dynamic_filter_spec <- function(choices,
                                 selected = `if`(is(choices, "delayed_data"), NULL, choices[1]),
                                 multiple = length(selected) > 1,
-                                label = NULL,
+                                vars_label = NULL,
                                 sep = if_null(attr(choices, "sep"), " - "),
                                 drop_keys = FALSE) {
   stopifnot(is_logical_single(multiple))
-  stopifnot(is.null(label) || is_character_single(label))
+  stopifnot(is.null(vars_label) || is_character_single(vars_label))
   stopifnot(is_logical_single(drop_keys))
   stopifnot(is_character_single(sep))
 
@@ -328,7 +330,7 @@ dynamic_filter_spec <- function(choices,
 dynamic_filter_spec.delayed_data <- function(choices, # nolint
                                              selected = NULL,
                                              multiple = length(selected) > 1,
-                                             label = NULL,
+                                             vars_label = NULL,
                                              sep = if_null(attr(choices, "sep"), " - "),
                                              drop_keys = FALSE) {
   stopifnot(
@@ -350,7 +352,7 @@ dynamic_filter_spec.delayed_data <- function(choices, # nolint
       choices = choices,
       selected = selected,
       multiple = multiple,
-      label = label,
+      vars_label = vars_label,
       sep = sep,
       drop_keys = drop_keys
     ),
@@ -363,7 +365,7 @@ dynamic_filter_spec.delayed_data <- function(choices, # nolint
 dynamic_filter_spec.default <- function(choices,
                                         selected = choices[1],
                                         multiple = length(selected) > 1,
-                                        label = NULL,
+                                        vars_label = NULL,
                                         sep = if_null(attr(choices, "sep"), " - "),
                                         drop_keys = FALSE) {
   stopifnot(
@@ -383,7 +385,7 @@ dynamic_filter_spec.default <- function(choices,
     choices = choices,
     selected = selected,
     multiple = multiple,
-    label = label,
+    vars_label = vars_label,
     sep = sep,
     drop_keys = drop_keys
   )
