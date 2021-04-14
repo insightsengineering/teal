@@ -133,7 +133,12 @@ test_that("delayed version of value_choices", {
   expect_equal(
     obj,
     structure(
-      list(data = "ADSL", var_choices = "ARMCD", var_label = "ARM", subset = c("ARM A", "ARM B"), sep = " - "),
+      list(
+        data = "ADSL",
+        var_choices = "ARMCD",
+        var_label = "ARM",
+        subset = c("ARM A", "ARM B"),
+        sep = " - "),
       class = c("delayed_value_choices", "delayed_data", "choices_labeled")
     )
   )

@@ -306,7 +306,11 @@ variable_choices.DatasetConnector <- function(data, # nolint
 #' value_choices(ADRS, "PARAMCD", "PARAM", subset = function(data) {
 #'   return(levels(data$PARAMCD)[1:2])
 #' })
-value_choices <- function(data, var_choices, var_label = NULL, subset = NULL, sep = " - ") {
+value_choices <- function(data,
+                          var_choices,
+                          var_label = NULL,
+                          subset = NULL,
+                          sep = " - ") {
   stopifnot(is_character_vector(var_choices, min_length = 0L))
   stopifnot(
     is.null(var_label) ||
@@ -314,12 +318,17 @@ value_choices <- function(data, var_choices, var_label = NULL, subset = NULL, se
       length(var_choices) == length(var_label))
     )
   stopifnot(is.null(subset) || is.vector(subset) || is.function(subset))
+  stopifnot(is_character_single(sep))
   UseMethod("value_choices")
 }
 
 #' @rdname value_choices
 #' @export
-value_choices.character <- function(data, var_choices, var_label = NULL, subset = NULL, sep = " - ") {
+value_choices.character <- function(data,
+                                    var_choices,
+                                    var_label = NULL,
+                                    subset = NULL,
+                                    sep = " - ") {
   out <- structure(list(
     data = data,
     var_choices = var_choices,
@@ -334,23 +343,38 @@ value_choices.character <- function(data, var_choices, var_label = NULL, subset 
 
 #' @rdname value_choices
 #' @export
-value_choices.data.frame <- function(data, var_choices, var_label = NULL, subset = NULL, sep = " - ") { # nolint
-  choices <- if (length(var_choices) > 1) {
-    apply(data[var_choices], 1, paste, collapse = sep)
-  } else {
-    data[[var_choices]]
+value_choices.data.frame <- function(data, # nolint
+                                     var_choices,
+                                     var_label = NULL,
+                                     subset = NULL,
+                                     sep = " - ") {
+  stopifnot(all(var_choices %in% names(data)))
+  stopifnot(is.null(var_label) || all(var_label %in% names(data)))
+
+  df_choices <- data[var_choices]
+  df_label <- data[var_label]
+
+  for (i in seq_along(var_choices)) {
+    if ("NA" %in% c(df_choices[[i]], levels(df_choices[[i]])))
+      warning(paste0(
+        "Missing values and the string value of 'NA' both exist in the column of ", var_choices[i],
+        " either as value(s) or level(s). ",
+        "This will cause the missing values to be grouped with the actual string 'NA' values in the UI widget."
+      )
+    )
   }
-  labels <- if (length(var_label) > 1) {
-    apply(data[var_label], 1, paste, collapse = sep)
+
+  choices <- if (length(var_choices) > 1 || is.character(df_choices[[1]]) || is.factor(df_choices[[1]])) {
+    apply(df_choices, 1, paste, collapse = sep)
   } else {
-    rep("", length(choices))
+    df_choices[[var_choices]]
   }
-  df <- unique(data.frame(choices, labels, stringsAsFactors = FALSE))
+  labels <- apply(df_label, 1, paste, collapse = sep)
+  df <- unique(data.frame(choices, labels, stringsAsFactors = FALSE)) # unique combo of choices x labels
 
   if (is.function(subset)) {
     subset <- resolve_delayed_expr(subset, ds = data, is_value_choices = TRUE)
   }
-
   res <- choices_labeled(
     choices = df$choices,
     labels = df$labels,
@@ -364,7 +388,11 @@ value_choices.data.frame <- function(data, var_choices, var_label = NULL, subset
 
 #' @rdname value_choices
 #' @export
-value_choices.Dataset <- function(data, var_choices, var_label = NULL, subset = NULL, sep = " - ") {
+value_choices.Dataset <- function(data,
+                                  var_choices,
+                                  var_label = NULL,
+                                  subset = NULL,
+                                  sep = " - ") {
   value_choices(
     data = get_raw_data(data),
     var_choices = var_choices,
@@ -376,7 +404,11 @@ value_choices.Dataset <- function(data, var_choices, var_label = NULL, subset = 
 
 #' @rdname value_choices
 #' @export
-value_choices.DatasetConnector <- function(data, var_choices, var_label = NULL, subset = NULL, sep = " - ") { # nolint
+value_choices.DatasetConnector <- function(data, # nolint
+                                           var_choices,
+                                           var_label = NULL,
+                                           subset = NULL,
+                                           sep = " - ") {
   if (is_pulled(data)) {
     value_choices(
       data = get_raw_data(data),
