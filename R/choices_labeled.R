@@ -355,7 +355,7 @@ value_choices.data.frame <- function(data, # nolint
   df_label <- data[var_label]
 
   for (i in seq_along(var_choices)) {
-    if ("NA" %in% c(df_choices[[i]], levels(df_choices[[i]])))
+    if ("NA" %in% c(df_choices[[i]], levels(df_choices[[i]])) && any(is.na(df_choices[[i]])))
       warning(paste0(
         "Missing values and the string value of 'NA' both exist in the column of ", var_choices[i],
         " either as value(s) or level(s). ",

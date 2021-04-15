@@ -8,7 +8,8 @@ test_that("Will output warnings when value_choices applied on datasets with miss
     F = c(NA, "NA", "M"),
     G = c(1, 2, NA),
     H = c(TRUE, NA, FALSE),
-    I = rep(TRUE, 3)
+    I = rep(TRUE, 3),
+    J = c("NA", "a", "b")
   )
   expect_warning(value_choices(data, var_choices = c("F")))
   expect_warning(value_choices(data, var_choices = c("D")))
@@ -17,5 +18,6 @@ test_that("Will output warnings when value_choices applied on datasets with miss
   expect_warning(value_choices(data, var_choices = c("A", "F")))
   expect_error(value_choices(data, var_choices = "K"))
   expect_error(value_choices(data, var_choices = "F", var_label = "K"))
-
+  expect_warning(value_choices(data, var_choices = c("J")), NA)
+  expect_warning(value_choices(data, var_choices = c("B")), NA)
 })
