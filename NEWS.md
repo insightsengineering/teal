@@ -1,11 +1,14 @@
 # teal 0.9.3.9000
-### Bug fixes
-* Cleaned up imports in the package.
 
 ### Enhancements
 * Changed ordering of datasets to be more intuitive (first topologically then alphabetically).
-* `DataConnection` now tries to close its connection before the app stops (did not close it at all before).
 * When closing a teal app (ending a user shiny session), all `DataConnection`s will now try to close their connections.
+* Added ADHY keys to configuration file. 
+
+### Bug fixes
+* Cleaned up imports in the package.
+* Modified `value_choices` function to handle edge case when `"NA"` and  `NA` values exist in the `character` column that choices are derived from.
+* Added the option to drop unused factor levels for filters.
 
 Issues with no news:
 
