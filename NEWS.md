@@ -1,6 +1,7 @@
 # teal 0.9.3.9000
 
 ### Enhancements
+* Released `snowflake` connection and connectors.
 * Changed ordering of datasets to be more intuitive (first topologically then alphabetically).
 * When closing a teal app (ending a user shiny session), all `DataConnection`s will now try to close their connections.
 * Added ADHY keys to configuration file. 

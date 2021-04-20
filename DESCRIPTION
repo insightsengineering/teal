@@ -47,9 +47,13 @@ Imports:
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.1.1
 Suggests:
+    askpass,
     covr,
+    DBI,
+    httr,
     knitr,
     nomnoml,
+    odbc,
     random.cdisc.data (>= 0.3.8),
     readr,
     rice,

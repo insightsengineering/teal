@@ -845,6 +845,89 @@ teradata_cdisc_dataset_connector <- function(dataname, # nolint
 }
 
 
+# SNOWFLAKE ====
+
+#' `Snowflake` `DatasetConnector`
+#'
+#' `r lifecycle::badge("experimental")`
+#'
+#' Create a `DatasetConnector` from `Snowflake`.
+#'
+#' @inheritParams dataset_connector
+#' @inheritParams rcd_dataset_connector
+#'
+#' @param sql_query (`character`) SQL statement to extract data from snowflake
+#'
+#' @export
+snowflake_dataset_connector <- function(dataname,
+                                        sql_query,
+                                        keys = character(0),
+                                        label = character(0),
+                                        code = character(0),
+                                        script = character(0),
+                                        ...) {
+  dot_args <- list(...)
+  stopifnot(is_fully_named_list(dot_args))
+
+  check_pkg_quietly(
+    "DBI",
+    "Connection to Snowflake requested, but DBI package is not available."
+  )
+
+  x_fun <- callable_function("DBI::dbGetQuery")
+  args <- append(list(conn = as.name("conn"), statement = sql_query), dot_args)
+  x_fun$set_args(args)
+
+  x <- dataset_connector(
+    dataname = dataname,
+    pull_callable = x_fun,
+    keys = keys,
+    label = label,
+    code = code_from_script(code, script)
+  )
+
+  return(x)
+}
+
+#' `Snowflake` `CDISCDatasetConnector`
+#'
+#' `r lifecycle::badge("experimental")`
+#'
+#' Create a `CDISCDatasetConnector` from `Snowflake` with keys and parent name assigned
+#' automatically by `dataname`.
+#'
+#' @inheritParams snowflake_dataset_connector
+#' @inheritParams cdisc_dataset_connector
+#'
+#' @export
+snowflake_cdisc_dataset_connector <- function(dataname, # nolint
+                                              sql_query,
+                                              keys = get_cdisc_keys(dataname),
+                                              parent = `if`(identical(dataname, "ADSL"), character(0L), "ADSL"),
+                                              label = character(0),
+                                              code = character(0),
+                                              script = character(0),
+                                              ...) {
+
+  x <- snowflake_dataset_connector(
+    dataname = dataname,
+    sql_query = sql_query,
+    keys = keys,
+    code = code_from_script(code, script),
+    label = label,
+    ...
+  )
+
+  res <- as_cdisc(
+    x,
+    parent = parent
+  )
+
+  return(res)
+}
+
+
+
 # CSV ====
 
 #' `csv` `DatasetConnector`
