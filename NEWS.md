@@ -1,4 +1,4 @@
-# teal 0.9.3.9000
+# teal 0.9.4
 
 ### Enhancements
 * Released `snowflake` connection and connectors.
@@ -8,10 +8,7 @@
 
 ### Bug fixes
 * Cleaned up imports in the package.
-* Modified `value_choices` function to handle edge case when `"NA"` and  `NA` values exist in the `character` column that choices are derived from.
-* Added the option to drop unused factor levels for filters.
-
-Issues with no news:
+* Modified `value_choices` function to handle edge case when `"NA"` and  `NA` values exist in the `character` column that choices are derived from.\
 
 # teal 0.9.3
 
