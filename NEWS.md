@@ -5,6 +5,7 @@
 * Changed ordering of datasets to be more intuitive (first topologically then alphabetically).
 * When closing a teal app (ending a user shiny session), all `DataConnection`s will now try to close their connections.
 * Added ADHY keys to configuration file. 
+* Extended the `filter_spec` function: the parameter `choices` is no longer mandatory (the function will take all possible choices by default) and the `vars` parameter additionally accepts the `choices_selected` and allows to change the variables for filtering using the UI elements in the encoding panel.
 
 ### Bug fixes
 * Cleaned up imports in the package.

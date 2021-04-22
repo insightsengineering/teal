@@ -23,9 +23,9 @@
 #' @param select (\code{NULL} or \code{select_spec}-S3 class or \code{delayed_select_spec}-S3-class object)
 #'  Columns to be selected from the input dataset
 #'  mentioned in \code{dataname}. The setup can be created using \code{\link{select_spec}} function.
-#' @param filter (`NULL` or `filter_spec` or `dynamic_filter_spec` or its respective delayed version)
+#' @param filter (`NULL` or `filter_spec` or its respective delayed version)
 #'  Setup of the filtering of key columns inside the dataset.
-#'  This setup can be created using the \code{\link{filter_spec}} \code{\link{dynamic_filter_spec}} function.
+#'  This setup can be created using the \code{\link{filter_spec}} function.
 #'  Please note that both select and filter cannot be empty at the same time.
 #' @param reshape (\code{logical}) whether reshape long to wide. Note that it will be used only in case of long dataset
 #'  with multiple keys selected in filter part.
@@ -84,6 +84,17 @@
 #'   \if{html}{
 #'       \figure{data_extract_spec_2.png}{options: alt="Data extract without filtering"}
 #'     }
+#'
+#'   \item{Data extract with a single filter}{
+#'     \preformatted{
+#'  data_extract_spec(
+#'    dataname = "ADSL",
+#'    filter = filter_spec(
+#'      vars = variable_choices("ADSL", subset = c("AGE"))
+#'    )
+#'  )
+#'     }
+#'   }
 #' }
 #'}
 #'
@@ -96,27 +107,18 @@ data_extract_spec <- function(dataname, select = NULL, filter = NULL, reshape = 
   )
   stopifnot(
     is.null(filter) ||
-    (is(filter, "filter_spec") && length(filter) >= 1) ||
-    is_class_list("filter_spec")(filter) ||
-    is(filter, "dynamic_filter_spec") ||
-    is_class_list("dynamic_filter_spec")(filter)
+    is(filter, "filter_spec") ||
+    is_class_list("filter_spec")(filter)
   )
   stopifnot(is_logical_single(reshape))
   stop_if_not(list(!is.null(select) || !is.null(filter), "Either select or filter should be not empty"))
 
-  if (is(filter, "filter_spec") || is(filter, "dynamic_filter_spec")) {
-    filter <- list(filter)
-  }
+  if (is(filter, "filter_spec")) filter <- list(filter)
 
-  for (idx in seq_along(filter)) {
-    if (is(filter[[idx]], "dynamic_filter_spec")) {
-      filter[[idx]]$dataname <- dataname
-    }
-  }
+  for (idx in seq_along(filter)) filter[[idx]]$dataname <- dataname
 
   if (is(select, "delayed_select_spec") ||
-      any(vapply(filter, is, logical(1), "delayed_filter_spec")) ||
-      any(vapply(filter, is, logical(1), "delayed_dynamic_filter_spec"))) {
+      any(vapply(filter, is, logical(1), "delayed_filter_spec"))) {
     structure(
       list(dataname = dataname, select = select, filter = filter, reshape = reshape),
       class = c("delayed_data_extract_spec", "delayed_data", "data_extract_spec"))

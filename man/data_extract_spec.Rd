@@ -15,9 +15,9 @@ be extracted. This dataset has to be handed over to the \code{data} argument of 
 Columns to be selected from the input dataset
 mentioned in \code{dataname}. The setup can be created using \code{\link{select_spec}} function.}
 
-\item{filter}{(\code{NULL} or \code{filter_spec} or \code{dynamic_filter_spec} or its respective delayed version)
+\item{filter}{(\code{NULL} or \code{filter_spec} or its respective delayed version)
 Setup of the filtering of key columns inside the dataset.
-This setup can be created using the \code{\link{filter_spec}} \code{\link{dynamic_filter_spec}} function.
+This setup can be created using the \code{\link{filter_spec}} function.
 Please note that both select and filter cannot be empty at the same time.}
 
 \item{reshape}{(\code{logical}) whether reshape long to wide. Note that it will be used only in case of long dataset
@@ -95,6 +95,17 @@ data_extract_spec(
 \if{html}{
       \figure{data_extract_spec_2.png}{options: alt="Data extract without filtering"}
     }
+
+\item{Data extract with a single filter}{
+\preformatted{
+ data_extract_spec(
+   dataname = "ADSL",
+   filter = filter_spec(
+     vars = variable_choices("ADSL", subset = c("AGE"))
+   )
+ )
+    }
+}
 }
 }
 }

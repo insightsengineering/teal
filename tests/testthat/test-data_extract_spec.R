@@ -54,6 +54,7 @@ test_that("data_extract_spec works with valid input", {
     selected = "PFS",
     multiple = FALSE
   )
+  filter_spec1$dataname <- "ADTTE"
 
   filter_spec2 <- filter_spec(
     label = "Select parameter:",
@@ -62,6 +63,7 @@ test_that("data_extract_spec works with valid input", {
     selected = "BASELINE",
     multiple = FALSE
   )
+  filter_spec2$dataname <- "ADTTE"
 
   data_extract_spec1 <- expect_silent(data_extract_spec(
     dataname = "ADTTE",
@@ -69,6 +71,7 @@ test_that("data_extract_spec works with valid input", {
     filter = filter_spec1
   ))
   expect_identical(data_extract_spec1$select, select_spec1)
+
   expect_identical(data_extract_spec1$filter, list(filter_spec1))
 
   data_extract_spec2 <- expect_silent(data_extract_spec(
@@ -88,6 +91,7 @@ test_that("data_extract_spec works with valid input", {
     selected = c("OS", "PFS"),
     multiple = TRUE
   )
+  filter_spec1$dataname <- "ADTTE"
   data_extract_spec1 <- expect_silent(data_extract_spec(
     dataname = "ADTTE",
     select = select_spec1,
@@ -97,7 +101,6 @@ test_that("data_extract_spec works with valid input", {
   expect_identical(data_extract_spec1$select, select_spec1)
   expect_identical(data_extract_spec1$filter, list(filter_spec1))
   expect_identical(data_extract_spec1$reshape, TRUE)
-
 })
 
 test_that("delayed data_extract_spec works", {

@@ -10,7 +10,8 @@
 #' @param vars (\code{character}) or (\code{delayed_data}) object.
 #'   Character vector giving the columns to be filtered. These should be
 #'   key variables of the data set to be filtered.
-#'   \code{delayed_data} objects can be created via \code{\link{variable_choices}} or \code{\link{value_choices}}.
+#'   \code{delayed_data} objects can be created via \code{\link{variable_choices}}, \code{\link{value_choices}},
+#'   or \code{\link{choices_selected}}.
 #' @param sep (\code{character}) A separator string to split the \code{choices} or
 #'   \code{selected} inputs into the values of the different columns
 #' @param choices (\code{character} or \code{numeric} or \code{logical} or (\code{delayed_data}) object.
@@ -39,8 +40,6 @@
 #'   \code{TRUE} on default
 #'
 #' @return \code{filter_spec}-S3-class object or \code{delayed_filter_spec}-S3-class object.
-#'
-#' @seealso \code{\link{dynamic_filter_spec}}
 #'
 #' @examples
 #' filter_spec(
@@ -109,7 +108,7 @@
 #'    }
 #'   }
 #'
-#'   \item{Filtering a single variable with multiple selections }{
+#'   \item{Filtering a single variable by multiple levels of the variable}{
 #'     \preformatted{
 #'      filter_spec(
 #'        vars = c("PARAMCD"),
@@ -141,6 +140,18 @@
 #'     }
 #'   }
 #'
+#'   \item{The version with \code{choices_selected}}
+#'     \preformatted{
+#'       adsl_filter <- filter_spec(
+#'         vars = choices_selected("ADSL", "SEX", fixed = FALSE),
+#'         multiple = TRUE
+#'       )
+#'
+#'       adsl_filter2 <- filter_spec(
+#'         vars = choices_selected("ADSL", "SEX", fixed = TRUE),
+#'         multiple = TRUE
+#'       )
+#'     }
 #' }
 #'
 #' @examples
@@ -156,14 +167,15 @@
 #'   })
 #' )
 filter_spec <- function(vars,
-                        choices,
+                        choices = NULL,
                         selected = `if`(is(choices, "delayed_data"), NULL, choices[1]),
                         multiple = length(selected) > 1,
                         label = NULL,
                         sep = if_null(attr(choices, "sep"), " - "),
                         drop_keys = FALSE) {
-  stopifnot(is_character_vector(vars) || is(vars, "delayed_data"))
+  stopifnot(is_character_vector(vars) || is(vars, "delayed_data") || is(vars, "choices_selected"))
   stopifnot(
+    is.null(choices) ||
     is_character_vector(choices) ||
     is_numeric_vector(choices) ||
     is_logical_vector(choices) ||
@@ -181,69 +193,233 @@ filter_spec <- function(vars,
   stopifnot(is_character_single(sep))
   stopifnot(is_logical_single(drop_keys))
 
-  # class dispatch also on a choices arg
-  # filter_spec.delayed_data dispatch on two arguments - s3 can dispatch only on 1 argument
-  if (is(vars, "delayed_data") || is(choices, "delayed_data") || is(selected, "delayed_data")) {
-    filter_spec.delayed_data(
-      vars = vars,
+  if (is(vars, "choices_selected")) {
+    filter_spec_internal(
+      vars_choices = vars$choices,
+      vars_selected = vars$selected,
+      vars_label = if (vars$fixed) NULL else label,
+      vars_fixed = vars$fixed,
+      vars_multiple = if (is.null(vars$selected)) FALSE else length(vars$selected) > 1,
       choices = choices,
       selected = selected,
+      label = if (vars$fixed) label else NULL,
+      fixed = FALSE,
       multiple = multiple,
-      label = label,
       sep = sep,
       drop_keys = drop_keys
     )
   } else {
-    UseMethod("filter_spec")
+    filter_spec_internal(
+      vars_choices = vars,
+      vars_selected = vars,
+      vars_label = NULL,
+      vars_fixed = TRUE,
+      vars_multiple = TRUE,
+      choices = choices,
+      selected = selected,
+      label = label,
+      fixed = FALSE,
+      multiple = multiple,
+      sep = sep,
+      drop_keys = drop_keys
+    )
   }
 }
 
-#' @rdname filter_spec
+
+#' Data extract dynamic filter specification
+#'
+#' @description `r lifecycle::badge("experimental")`
+#' This function returns a configuration for the \code{data_extract_input} module. This function covers
+#' the configuration of filtering datasets (so called `filter_spec`), which then is used to build
+#' the UI element in the `teal` app.
+#'
+#' @inheritParams filter_spec
+#' @param vars_choices (`character` or `delayed_data`) \cr
+#'   the vector of dataset column names available to build dynamic filter
+#'   \code{delayed_data} objects can be created via \code{\link{variable_choices}}.
+#' @param vars_selected (`NULL` or named `character`) \cr
+#'   the selected column name out from `choices`.
+#' @param vars_label (`character`)\cr
+#'   the title printed on the UI element generated on the basis of this \code{filter_spec}.
+#' @param vars_fixed (`logical`)\cr
+#'   if true allow to change the selected variables in the UI element; otherwise, do not allow.
+#' @param vars_multiple (`logical`)\cr
+#'   if true allow to select multiple variables in the UI elements; otherwise, do not allow.
+#' @param fixed (`logical`)\cr
+#'   if true allow to change the initially selected values of the variables; otherwise, do not allow.
+#'
+#' @return `filter_spec` or `delayed_filter_spec` S3-class object.
+#'
+#' @seealso filter_spec
+#'
+#' @examples
+#' teal:::filter_spec_internal(
+#'   vars_choices = c("PARAMCD", "AVISIT"),
+#'   vars_selected = "PARAMCD",
+#'   vars_multiple = TRUE
+#' )
+#'
+#' library(random.cdisc.data)
+#' ADRS <- radrs(cached = TRUE)
+#' teal:::filter_spec_internal(
+#'   vars_choices = variable_choices(ADRS),
+#'   vars_selected = "PARAMCD",
+#'   vars_multiple = TRUE
+#' )
+#'
+#' teal:::filter_spec_internal(
+#'   vars_choices = variable_choices("ADRS"),
+#'   vars_selected = "PARAMCD",
+#'   vars_multiple = TRUE
+#' )
+filter_spec_internal <- function(vars_choices,
+                                 vars_selected = `if`(is(vars_choices, "delayed_data"), NULL, vars_choices[1]),
+                                 vars_label = NULL,
+                                 vars_fixed = FALSE,
+                                 vars_multiple = TRUE,
+                                 choices = NULL,
+                                 selected = NULL,
+                                 label = NULL,
+                                 fixed = FALSE,
+                                 multiple = TRUE,
+                                 sep = if_null(attr(vars_choices, "sep"), " - "),
+                                 drop_keys = FALSE) {
+  stopifnot(is.null(vars_label) || is_character_single(vars_label))
+  stopifnot(is_logical_single(vars_fixed))
+  stopifnot(is_logical_single(vars_multiple))
+  stopifnot(is.null(label) || is_character_single(label))
+  stopifnot(is_logical_single(fixed))
+  stopifnot(is_logical_single(multiple))
+  stopifnot(is_character_single(sep))
+  stopifnot(is_logical_single(drop_keys))
+
+  if (is(vars_choices, "delayed_data") ||
+    is(vars_selected, "delayed_data") ||
+    is(choices, "delayed_data") ||
+    is(selected, "delayed_data")) {
+    filter_spec_internal.delayed_data(
+      vars_choices,
+      vars_selected,
+      vars_label,
+      vars_fixed,
+      vars_multiple,
+      choices,
+      selected,
+      label,
+      fixed,
+      multiple,
+      sep,
+      drop_keys
+    )
+  } else {
+    UseMethod("filter_spec_internal")
+  }
+}
+
+#' @rdname filter_spec_internal
 #' @export
-filter_spec.delayed_data <- function(vars,
-                                     choices,
-                                     selected = NULL,
-                                     multiple = length(selected) > 1,
-                                     label = NULL,
-                                     sep = if_null(attr(choices, "sep"), " - "),
-                                     drop_keys = FALSE) {
+filter_spec_internal.delayed_data <- function(vars_choices, # nolint
+                                              vars_selected = NULL,
+                                              vars_label = NULL,
+                                              vars_fixed = FALSE,
+                                              vars_multiple = TRUE,
+                                              choices = NULL,
+                                              selected = NULL,
+                                              label = NULL,
+                                              fixed = FALSE,
+                                              multiple = TRUE,
+                                              sep = if_null(attr(vars_choices, "sep"), " - "),
+                                              drop_keys = FALSE) {
+
+  stopifnot(
+    is_character_vector(vars_choices) ||
+    is_numeric_vector(vars_choices) ||
+    is_logical_vector(vars_choices) ||
+    is(vars_choices, "delayed_data")
+  )
+  stopifnot(
+    is.null(vars_selected) ||
+    is_character_vector(vars_selected) ||
+    is_numeric_vector(vars_selected) ||
+    is_logical_vector(vars_selected) ||
+    is(vars_selected, "delayed_data")
+  )
+  stopifnot(
+    is.null(choices) ||
+      is_character_vector(choices) ||
+      is_numeric_vector(choices) ||
+      is_logical_vector(choices) ||
+      is(choices, "delayed_data")
+  )
+  stopifnot(
+    is.null(selected) ||
+      is_character_vector(selected) ||
+      is_numeric_vector(selected) ||
+      is_logical_vector(selected) ||
+      is(selected, "delayed_data")
+  )
+
   out <- structure(
     list(
-      vars = vars,
+      vars_choices = vars_choices,
+      vars_selected = vars_selected,
+      vars_label = vars_label,
+      vars_fixed = vars_fixed,
+      vars_multiple = vars_multiple,
       choices = choices,
       selected = selected,
-      multiple = multiple,
       label = label,
+      multiple = multiple,
+      fixed = fixed,
       sep = sep,
       drop_keys = drop_keys
     ),
-    class = c("delayed_filter_spec", "delayed_data", "filter_spec"))
+    class = c(
+      "delayed_filter_spec",
+      "filter_spec",
+      "delayed_data")
+    )
   return(out)
 }
 
-#' @rdname filter_spec
+#' @rdname filter_spec_internal
 #' @export
-filter_spec.default <- function(vars,
-                                choices,
-                                selected = choices[1],
-                                multiple = length(selected) > 1,
-                                label = NULL,
-                                sep = if_null(attr(choices, "sep"), " - "),
-                                drop_keys = FALSE) {
-  stopifnot(all(!duplicated(vars)))
-  stopifnot(is_character_vector(choices) || is_numeric_vector(choices) || is_logical_vector(choices))
-  stopifnot(all(!duplicated(choices)))
+filter_spec_internal.default <- function(vars_choices, # nousage
+                                         vars_selected = vars_choices[1],
+                                         vars_label = NULL,
+                                         vars_fixed = FALSE,
+                                         vars_multiple = TRUE,
+                                         choices = NULL,
+                                         selected = NULL,
+                                         label = NULL,
+                                         fixed = FALSE,
+                                         multiple = TRUE,
+                                         sep = if_null(attr(vars_choices, "sep"), " - "),
+                                         drop_keys = FALSE) {
 
-  # eval selected before split_by_sep(chocies)
-  force(selected)
+  stopifnot(
+    is_character_vector(vars_choices) ||
+    is_numeric_vector(vars_choices) ||
+    is_logical_vector(vars_choices)
+  )
+  stopifnot(all(!duplicated(vars_choices)))
 
-  choices_attrs <- attributes(choices)
-  choices <- split_by_sep(choices, sep)
+  if (!is.null(vars_selected)) {
+    stopifnot(vars_multiple || length(vars_selected) == 1)
+    stopifnot(is_character_vector(vars_selected) ||
+      is_numeric_vector(vars_selected) || is_logical_vector(vars_selected))
+    stopifnot(all(!duplicated(vars_selected)))
+  }
 
-  stopifnot(all(vapply(choices, length, integer(1)) == length(vars)))
-
-  attributes(choices) <- choices_attrs
-  names(choices) <- if_null(names(choices), vapply(choices, paste, collapse = sep, character(1)))
+  if (!is.null(choices)) {
+    stopifnot(all(!duplicated(choices)))
+    choices_attrs <- attributes(choices)
+    choices <- split_by_sep(choices, sep)
+    stopifnot(all(vapply(choices, length, integer(1)) == length(vars_selected)))
+    attributes(choices) <- choices_attrs
+    names(choices) <- if_null(names(choices), vapply(choices, paste, collapse = sep, character(1)))
+  }
 
   if (!is.null(selected)) {
     stopifnot(multiple || length(selected) == 1)
@@ -255,141 +431,20 @@ filter_spec.default <- function(vars,
   }
 
   res <- list(
-    vars = vars,
+    vars_choices = vars_choices,
+    vars_selected = vars_selected,
+    vars_label = vars_label,
+    vars_fixed = vars_fixed,
+    vars_multiple = vars_multiple,
     choices = choices,
     selected = selected,
-    multiple = multiple,
     label = label,
+    multiple = multiple,
+    fixed = fixed,
     sep = sep,
     drop_keys = drop_keys
   )
   class(res) <- "filter_spec"
-
-  return(res)
-}
-
-
-#' Data extract dynamic filter specification
-#'
-#' @description `r lifecycle::badge("experimental")`
-#' Set the variables from which dynamically build a filter.
-#'
-#' @export
-#'
-#' @inheritParams filter_spec
-#' @param choices (`character` or `delayed_data`) \cr
-#'   vector of dataset column names available to build dynamic filter
-#'   \code{delayed_data} objects can be created via \code{\link{variable_choices}}.
-#' @param selected (`NULL` or named `character`) \cr
-#'   selected column name out from `choices`.
-#' @param multiple (`logical`) \cr
-#'   allow multiple filter value selection.
-#' @param vars_label (`character`)\cr
-#'   the title on the UI element generated on the basis of this \code{dynamic_filter_spec}.
-#'
-#' @return `dynamic_filter_spec` or `delayed_dynamic_filter_spec` S3-class object.
-#'
-#' @seealso filter_spec
-#'
-#' @examples
-#' dynamic_filter_spec(
-#'   choices = c("PARAMCD", "AVISIT"),
-#'   selected = "PARAMCD",
-#'   multiple = TRUE
-#' )
-#'
-#' library(random.cdisc.data)
-#' ADRS <- radrs(cached = TRUE)
-#' dynamic_filter_spec(
-#'   choices = variable_choices(ADRS),
-#'   selected = "PARAMCD",
-#'   multiple = TRUE
-#' )
-#'
-#' dynamic_filter_spec(
-#'   choices = variable_choices("ADRS"),
-#'   selected = "PARAMCD",
-#'   multiple = TRUE
-#' )
-dynamic_filter_spec <- function(choices,
-                                selected = `if`(is(choices, "delayed_data"), NULL, choices[1]),
-                                multiple = length(selected) > 1,
-                                vars_label = NULL,
-                                sep = if_null(attr(choices, "sep"), " - "),
-                                drop_keys = FALSE) {
-  stopifnot(is_logical_single(multiple))
-  stopifnot(is.null(vars_label) || is_character_single(vars_label))
-  stopifnot(is_logical_single(drop_keys))
-  stopifnot(is_character_single(sep))
-
-  UseMethod("dynamic_filter_spec")
-}
-
-#' @rdname dynamic_filter_spec
-#' @export
-dynamic_filter_spec.delayed_data <- function(choices, # nolint
-                                             selected = NULL,
-                                             multiple = length(selected) > 1,
-                                             vars_label = NULL,
-                                             sep = if_null(attr(choices, "sep"), " - "),
-                                             drop_keys = FALSE) {
-  stopifnot(
-    is_character_vector(choices) ||
-    is_numeric_vector(choices) ||
-    is_logical_vector(choices) ||
-    is(choices, "delayed_data")
-  )
-  stopifnot(
-    is.null(selected) ||
-    is_character_vector(selected) ||
-    is_numeric_vector(selected) ||
-    is_logical_vector(selected) ||
-    is(selected, "delayed_data")
-  )
-
-  out <- structure(
-    list(
-      choices = choices,
-      selected = selected,
-      multiple = multiple,
-      vars_label = vars_label,
-      sep = sep,
-      drop_keys = drop_keys
-    ),
-    class = c("delayed_dynamic_filter_spec", "delayed_data", "dynamic_filter_spec"))
-  return(out)
-}
-
-#' @rdname dynamic_filter_spec
-#' @export
-dynamic_filter_spec.default <- function(choices,
-                                        selected = choices[1],
-                                        multiple = length(selected) > 1,
-                                        vars_label = NULL,
-                                        sep = if_null(attr(choices, "sep"), " - "),
-                                        drop_keys = FALSE) {
-  stopifnot(
-    is_character_vector(choices) ||
-    is_numeric_vector(choices) ||
-    is_logical_vector(choices)
-  )
-  stopifnot(all(!duplicated(choices)))
-
-  if (!is.null(selected)) {
-    stopifnot(multiple || length(selected) == 1)
-    stopifnot(is_character_vector(selected) || is_numeric_vector(selected) || is_logical_vector(selected))
-    stopifnot(all(!duplicated(selected)))
-  }
-
-  res <- list(
-    choices = choices,
-    selected = selected,
-    multiple = multiple,
-    vars_label = vars_label,
-    sep = sep,
-    drop_keys = drop_keys
-  )
-  class(res) <- "dynamic_filter_spec"
 
   return(res)
 }

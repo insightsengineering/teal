@@ -332,15 +332,24 @@ test_that("delayed version of filter_spec", {
     obj,
     structure(
       list(
-        vars = variable_choices("ADSL", subset = "ARMCD"),
+        vars_choices = variable_choices("ADSL", subset = "ARMCD"),
+        vars_selected = variable_choices("ADSL", subset = "ARMCD"),
+        vars_label = NULL,
+        vars_fixed = TRUE,
+        vars_multiple = TRUE,
         choices = value_choices("ADSL", var_choices = "ARMCD", var_label = "ARM", subset = c("ARM A", "ARM B")),
         selected = value_choices("ADSL", var_choices = "ARMCD", var_label = "ARM", subset = "ARM A"),
-        multiple = FALSE,
         label = NULL,
+        multiple = FALSE,
+        fixed = FALSE,
         sep = " - ",
         drop_keys = FALSE
       ),
-      class = c("delayed_filter_spec", "delayed_data", "filter_spec")
+      class = c(
+        "delayed_filter_spec",
+        "filter_spec",
+        "delayed_data"
+      )
     )
   )
 
@@ -380,7 +389,11 @@ test_that("delayed version of filter_spec", {
     obj,
     structure(
       list(
-        vars = variable_choices("ADSL", subset = function(data) "ARMCD"),
+        vars_choices = variable_choices("ADSL", subset = function(data) "ARMCD"),
+        vars_selected = variable_choices("ADSL", subset = function(data) "ARMCD"),
+        vars_label = NULL,
+        vars_fixed = TRUE,
+        vars_multiple = TRUE,
         choices = value_choices(
           "ADSL",
           var_choices = "ARMCD",
@@ -391,12 +404,17 @@ test_that("delayed version of filter_spec", {
           var_choices = "ARMCD",
           var_label = "ARM",
           subset = function(data) "ARM A"),
-        multiple = FALSE,
         label = NULL,
+        multiple = FALSE,
+        fixed = FALSE,
         sep = " - ",
         drop_keys = FALSE
       ),
-      class = c("delayed_filter_spec", "delayed_data", "filter_spec")
+      class = c(
+        "delayed_filter_spec",
+        "filter_spec",
+        "delayed_data"
+      )
     )
   )
 

@@ -2,34 +2,12 @@
 % Please edit documentation in R/filter_spec.R
 \name{filter_spec}
 \alias{filter_spec}
-\alias{filter_spec.delayed_data}
-\alias{filter_spec.default}
 \title{Data extract filter specification}
 \usage{
 filter_spec(
   vars,
-  choices,
+  choices = NULL,
   selected = if (is(choices, "delayed_data")) NULL else choices[1],
-  multiple = length(selected) > 1,
-  label = NULL,
-  sep = if_null(attr(choices, "sep"), " - "),
-  drop_keys = FALSE
-)
-
-\method{filter_spec}{delayed_data}(
-  vars,
-  choices,
-  selected = NULL,
-  multiple = length(selected) > 1,
-  label = NULL,
-  sep = if_null(attr(choices, "sep"), " - "),
-  drop_keys = FALSE
-)
-
-\method{filter_spec}{default}(
-  vars,
-  choices,
-  selected = choices[1],
   multiple = length(selected) > 1,
   label = NULL,
   sep = if_null(attr(choices, "sep"), " - "),
@@ -40,7 +18,8 @@ filter_spec(
 \item{vars}{(\code{character}) or (\code{delayed_data}) object.
 Character vector giving the columns to be filtered. These should be
 key variables of the data set to be filtered.
-\code{delayed_data} objects can be created via \code{\link{variable_choices}} or \code{\link{value_choices}}.}
+\code{delayed_data} objects can be created via \code{\link{variable_choices}}, \code{\link{value_choices}},
+or \code{\link{choices_selected}}.}
 
 \item{choices}{(\code{character} or \code{numeric} or \code{logical} or (\code{delayed_data}) object.
 Named character vector to define the choices
@@ -132,7 +111,7 @@ the drop-down menu the app user will see:
    }
 }
 
-\item{Filtering a single variable with multiple selections }{
+\item{Filtering a single variable by multiple levels of the variable}{
 \preformatted{
      filter_spec(
        vars = c("PARAMCD"),
@@ -164,6 +143,18 @@ the drop-down menu the app user will see:
     }
 }
 
+\item{The version with \code{choices_selected}}
+\preformatted{
+      adsl_filter <- filter_spec(
+        vars = choices_selected("ADSL", "SEX", fixed = FALSE),
+        multiple = TRUE
+      )
+
+      adsl_filter2 <- filter_spec(
+        vars = choices_selected("ADSL", "SEX", fixed = TRUE),
+        multiple = TRUE
+      )
+    }
 }
 }
 \examples{
@@ -194,7 +185,4 @@ filter_spec(
     levels(data$ARMCD)[1]
   })
 )
-}
-\seealso{
-\code{\link{dynamic_filter_spec}}
 }

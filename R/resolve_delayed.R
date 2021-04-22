@@ -111,8 +111,11 @@ resolve_delayed.delayed_select_spec <- function(x, datasets) { # nolint
 
 #' @export
 resolve_delayed.delayed_filter_spec <- function(x, datasets) { # nolint
-  if (is(x$vars, "delayed_data")) {
-    x$vars <- resolve_delayed(x$vars, datasets = datasets)
+  if (is(x$vars_choices, "delayed_data")) {
+    x$vars_choices <- resolve_delayed(x$vars_choices, datasets = datasets)
+  }
+  if (is(x$vars_selected, "delayed_data")) {
+    x$vars_selected <- resolve_delayed(x$vars_selected, datasets = datasets)
   }
   if (is(x$choices, "delayed_data")) {
     x$choices <- resolve_delayed(x$choices, datasets = datasets)
@@ -120,15 +123,7 @@ resolve_delayed.delayed_filter_spec <- function(x, datasets) { # nolint
   if (is(x$selected, "delayed_data")) {
     x$selected <- resolve_delayed(x$selected, datasets = datasets)
   }
-  return(do.call("filter_spec", x))
-}
-
-#' @export
-resolve_delayed.delayed_dynamic_filter_spec <- function(x, datasets) { # nolint
-  if (is(x$choices, "delayed_data")) {
-    x$choices <- resolve_delayed(x$choices, datasets = datasets)
-  }
-  return(do.call("dynamic_filter_spec", x[intersect(names(x), methods::formalArgs(dynamic_filter_spec))]))
+  return(do.call("filter_spec_internal", x[intersect(names(x), methods::formalArgs(filter_spec_internal))]))
 }
 
 #' @export
@@ -245,16 +240,8 @@ print.delayed_select_spec <- function(x, indent = 0L, ...) {
 }
 
 #' @export
-print.delayed_filter_spec <- function(x, indent = 0L, ...) {
+print.filter_spec <- function(x, indent = 0L, ...) {
   cat(indent_msg(indent, paste("filter_spec with delayed data:", x$choices$data)))
-  cat("\n")
-  print_delayed_list(x, indent)
-  return(invisible(NULL))
-}
-
-#' @export
-print.delayed_dynamic_filter_spec <- function(x, indent = 0L, ...) {
-  cat(indent_msg(indent, paste("dynamic_filter_spec with delayed data:", x$choices$data)))
   cat("\n")
   print_delayed_list(x, indent)
   return(invisible(NULL))
