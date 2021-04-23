@@ -103,7 +103,7 @@ FilteredData <- R6::R6Class( # nolint
     #' evaluated (in case of dependencies).
     #' @return (`character` vector) of datanames
     datanames = function() {
-      return(as.character(names(private$unfiltered_datasets)))
+      return(as.character(names(private$filtered_datasets)))
     },
 
     #' @description
@@ -239,6 +239,8 @@ FilteredData <- R6::R6Class( # nolint
     #' @param dataset_2 (`character`) other dataset name
     #' @return (`named character`) vector with column names
     get_join_keys = function(dataset_1, dataset_2) {
+      if (is.null(private$join_keys))
+        return(character(0))
       private$join_keys$get(dataset_1, dataset_2)
     },
 
