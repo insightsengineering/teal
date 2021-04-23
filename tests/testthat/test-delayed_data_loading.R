@@ -343,7 +343,9 @@ test_that("delayed version of filter_spec", {
         multiple = FALSE,
         fixed = FALSE,
         sep = " - ",
-        drop_keys = FALSE
+        drop_keys = FALSE,
+        dataname = NULL,
+        initialized = FALSE
       ),
       class = c(
         "delayed_filter_spec",
@@ -408,7 +410,9 @@ test_that("delayed version of filter_spec", {
         multiple = FALSE,
         fixed = FALSE,
         sep = " - ",
-        drop_keys = FALSE
+        drop_keys = FALSE,
+        dataname = NULL,
+        initialized = FALSE
       ),
       class = c(
         "delayed_filter_spec",

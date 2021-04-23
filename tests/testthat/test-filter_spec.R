@@ -37,11 +37,12 @@ test_that("Single choice", {
     "multiple",
     "fixed",
     "sep",
-    "drop_keys"
+    "drop_keys",
+    "dataname",
+    "initialized"
   ))
-  expect_identical(f1$choices, as.list(setNames(choices, choices)))
-  expect_identical(f1$selected, as.list(setNames(choices[1], choices[1])))
-
+  expect_identical(f1$choices, choices, choices)
+  expect_identical(f1$selected, choices[1])
   expect_false(f1$multiple)
   expect_identical(f1$label, "test")
 })
@@ -53,15 +54,13 @@ test_that("Multiple choices", {
   expect_identical(f1, f2)
 
   expect_true(f1$multiple)
-  expect_identical(f1$choices, as.list(setNames(choices, choices)))
-  expect_identical(f1$selected, as.list(setNames(choices[1:2], choices[1:2])))
+  expect_identical(f1$choices, choices)
+  expect_identical(f1$selected, choices[1:2])
 })
 
 test_that("Multiple vars", {
   expect_error(filter_spec(vars = c("var1", "var2"), choices = c("val1.1-val2.1", "val1.1-val2.2"), sep = ":"))
-
   expect_error(filter_spec(vars = c("var1", "var2"), choices = c("val1.1-val2.1", "val1.1-val2.2")))
-
   expect_error(filter_spec(vars = "var1", choices = c("val-1", "val2", "val3", "val4"), sep = "-"))
 
   expect_silent(f1 <- filter_spec(
@@ -71,24 +70,17 @@ test_that("Multiple vars", {
 
   expect_silent(f2 <- filter_spec(vars = c("var1", "var2"), choices = c("val1.1 - val2.1", "val1.1 - val2.2")))
 
-  expect_silent(f3 <- filter_spec(
-    vars = c("var1", "var2"),
-    choices = c(`val1.1 - val2.1` = "val1.1 - val2.1", `val1.1 - val2.2` = "val1.1 - val2.2")))
-
   expect_silent(f5 <- filter_spec(
     vars = c("var1", "var2"),
     choices = c(`combo1` = "val1.1 - val2.1", `combo2` = "val1.1 - val2.2")))
 
-
-
   expect_identical(f1, f2)
-  expect_identical(f1, f3)
   expect_true(all(names(f1$choices) != names(f5$choices)))
 
   expect_identical(f1$vars_choices, c("var1", "var2"))
-  expect_identical(names(f1$choices), c("val1.1 - val2.1", "val1.1 - val2.2"))
+  expect_identical(f1$choices, c("val1.1 - val2.1", "val1.1 - val2.2"))
   expect_identical(names(f5$choices), c("combo1", "combo2"))
-  expect_identical(f1$selected, list(`val1.1 - val2.1` = c("val1.1", "val2.1")))
+  expect_identical(f1$selected, c("val1.1 - val2.1"))
 
   # Multiple vars and multiple = TRUE
   choices <- c("val1.1 - val2.1", "val1.1 - val2.2", "val1.1 - val2.3")
@@ -109,17 +101,8 @@ test_that("Multiple vars", {
   expect_identical(f1m, f2m)
 
   # correct object structure
-  expect_identical(
-    f1m$choices,
-    list(
-      `val1.1 - val2.1` = c("val1.1", "val2.1"),
-      `val1.1 - val2.2` = c("val1.1", "val2.2"),
-      `val1.1 - val2.3` = c("val1.1", "val2.3"))
-    )
-  expect_identical(
-    f1m$selected,
-    list(`val1.1 - val2.1` = c("val1.1", "val2.1"), `val1.1 - val2.2` = c("val1.1", "val2.2"))
-    )
+  expect_identical(f1m$choices, c("val1.1 - val2.1", "val1.1 - val2.2", "val1.1 - val2.3"))
+  expect_identical(f1m$selected, c("val1.1 - val2.1", "val1.1 - val2.2"))
 
   expect_true(f1m$multiple)
   expect_identical(f1m$label, NULL)
@@ -244,6 +227,8 @@ test_that("delayed filter_spec works", {
 
   ds <- teal:::CDISCFilteredData$new()
   isolate(ds$set_data("ADSL", ADSL))
+  delayed$dataname <- "ADSL"
+  expected_spec$dataname <- "ADSL"
   expect_identical(expected_spec, isolate(resolve_delayed(delayed, ds)))
 
   expected_spec <- data_extract_spec(

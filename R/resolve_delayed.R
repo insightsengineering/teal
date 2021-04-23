@@ -123,6 +123,7 @@ resolve_delayed.delayed_filter_spec <- function(x, datasets) { # nolint
   if (is(x$selected, "delayed_data")) {
     x$selected <- resolve_delayed(x$selected, datasets = datasets)
   }
+
   return(do.call("filter_spec_internal", x[intersect(names(x), methods::formalArgs(filter_spec_internal))]))
 }
 
@@ -241,6 +242,14 @@ print.delayed_select_spec <- function(x, indent = 0L, ...) {
 
 #' @export
 print.filter_spec <- function(x, indent = 0L, ...) {
+  cat(indent_msg(indent, paste("filter_spec with delayed data:", x$choices)))
+  cat("\n")
+  print_delayed_list(x, indent)
+  return(invisible(NULL))
+}
+
+#' @export
+print.delayed_filter_spec <- function(x, indent = 0L, ...) {
   cat(indent_msg(indent, paste("filter_spec with delayed data:", x$choices$data)))
   cat("\n")
   print_delayed_list(x, indent)

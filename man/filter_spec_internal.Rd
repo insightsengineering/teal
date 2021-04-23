@@ -8,7 +8,7 @@
 \usage{
 filter_spec_internal(
   vars_choices,
-  vars_selected = if (is(vars_choices, "delayed_data")) NULL else vars_choices[1],
+  vars_selected = NULL,
   vars_label = NULL,
   vars_fixed = FALSE,
   vars_multiple = TRUE,
@@ -18,7 +18,9 @@ filter_spec_internal(
   fixed = FALSE,
   multiple = TRUE,
   sep = if_null(attr(vars_choices, "sep"), " - "),
-  drop_keys = FALSE
+  drop_keys = FALSE,
+  dataname = NULL,
+  initialized = FALSE
 )
 
 \method{filter_spec_internal}{delayed_data}(
@@ -33,12 +35,14 @@ filter_spec_internal(
   fixed = FALSE,
   multiple = TRUE,
   sep = if_null(attr(vars_choices, "sep"), " - "),
-  drop_keys = FALSE
+  drop_keys = FALSE,
+  dataname = NULL,
+  initialized = FALSE
 )
 
 \method{filter_spec_internal}{default}(
   vars_choices,
-  vars_selected = vars_choices[1],
+  vars_selected = NULL,
   vars_label = NULL,
   vars_fixed = FALSE,
   vars_multiple = TRUE,
@@ -48,7 +52,9 @@ filter_spec_internal(
   fixed = FALSE,
   multiple = TRUE,
   sep = if_null(attr(vars_choices, "sep"), " - "),
-  drop_keys = FALSE
+  drop_keys = FALSE,
+  dataname = NULL,
+  initialized = FALSE
 )
 }
 \arguments{
@@ -104,6 +110,13 @@ shiny \code{\link[shiny]{selectInput}}.}
 
 \item{drop_keys}{optional, (\code{logical}) whether to drop filter column from the dataset keys,
 \code{TRUE} on default}
+
+\item{dataname}{(\code{character})\cr
+the name of the dataset this filter covers. Set during the initialization of the teal application.}
+
+\item{initialized}{(\code{logical})\cr
+indicates whether this filter was already initialized by \code{data_extract_input_filter_srv}.
+TRUE if this filter was already consumed by the server function; FALSE otherwise.}
 }
 \value{
 \code{filter_spec} or \code{delayed_filter_spec} S3-class object.

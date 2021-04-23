@@ -248,6 +248,11 @@ filter_spec <- function(vars,
 #'   if true allow to select multiple variables in the UI elements; otherwise, do not allow.
 #' @param fixed (`logical`)\cr
 #'   if true allow to change the initially selected values of the variables; otherwise, do not allow.
+#' @param dataname (`character`)\cr
+#'   the name of the dataset this filter covers. Set during the initialization of the teal application.
+#' @param initialized (`logical`)\cr
+#'   indicates whether this filter was already initialized by \code{data_extract_input_filter_srv}.
+#'   TRUE if this filter was already consumed by the server function; FALSE otherwise.
 #'
 #' @return `filter_spec` or `delayed_filter_spec` S3-class object.
 #'
@@ -274,7 +279,7 @@ filter_spec <- function(vars,
 #'   vars_multiple = TRUE
 #' )
 filter_spec_internal <- function(vars_choices,
-                                 vars_selected = `if`(is(vars_choices, "delayed_data"), NULL, vars_choices[1]),
+                                 vars_selected = NULL,
                                  vars_label = NULL,
                                  vars_fixed = FALSE,
                                  vars_multiple = TRUE,
@@ -284,7 +289,9 @@ filter_spec_internal <- function(vars_choices,
                                  fixed = FALSE,
                                  multiple = TRUE,
                                  sep = if_null(attr(vars_choices, "sep"), " - "),
-                                 drop_keys = FALSE) {
+                                 drop_keys = FALSE,
+                                 dataname = NULL,
+                                 initialized = FALSE) {
   stopifnot(is.null(vars_label) || is_character_single(vars_label))
   stopifnot(is_logical_single(vars_fixed))
   stopifnot(is_logical_single(vars_multiple))
@@ -299,18 +306,20 @@ filter_spec_internal <- function(vars_choices,
     is(choices, "delayed_data") ||
     is(selected, "delayed_data")) {
     filter_spec_internal.delayed_data(
-      vars_choices,
-      vars_selected,
-      vars_label,
-      vars_fixed,
-      vars_multiple,
-      choices,
-      selected,
-      label,
-      fixed,
-      multiple,
-      sep,
-      drop_keys
+      vars_choices = vars_choices,
+      vars_selected = vars_selected,
+      vars_label = vars_label,
+      vars_fixed = vars_fixed,
+      vars_multiple = vars_multiple,
+      choices = choices,
+      selected = selected,
+      label = label,
+      multiple = multiple,
+      fixed = fixed,
+      sep = sep,
+      drop_keys = drop_keys,
+      dataname = dataname,
+      initialized = initialized
     )
   } else {
     UseMethod("filter_spec_internal")
@@ -330,7 +339,9 @@ filter_spec_internal.delayed_data <- function(vars_choices, # nolint
                                               fixed = FALSE,
                                               multiple = TRUE,
                                               sep = if_null(attr(vars_choices, "sep"), " - "),
-                                              drop_keys = FALSE) {
+                                              drop_keys = FALSE,
+                                              dataname = NULL,
+                                              initialized = FALSE) {
 
   stopifnot(
     is_character_vector(vars_choices) ||
@@ -373,7 +384,9 @@ filter_spec_internal.delayed_data <- function(vars_choices, # nolint
       multiple = multiple,
       fixed = fixed,
       sep = sep,
-      drop_keys = drop_keys
+      drop_keys = drop_keys,
+      dataname = dataname, # modified by data_extract_spec,
+      initialized = initialized
     ),
     class = c(
       "delayed_filter_spec",
@@ -386,7 +399,7 @@ filter_spec_internal.delayed_data <- function(vars_choices, # nolint
 #' @rdname filter_spec_internal
 #' @export
 filter_spec_internal.default <- function(vars_choices, # nousage
-                                         vars_selected = vars_choices[1],
+                                         vars_selected = NULL,
                                          vars_label = NULL,
                                          vars_fixed = FALSE,
                                          vars_multiple = TRUE,
@@ -396,8 +409,9 @@ filter_spec_internal.default <- function(vars_choices, # nousage
                                          fixed = FALSE,
                                          multiple = TRUE,
                                          sep = if_null(attr(vars_choices, "sep"), " - "),
-                                         drop_keys = FALSE) {
-
+                                         drop_keys = FALSE,
+                                         dataname = NULL,
+                                         initialized = FALSE) {
   stopifnot(
     is_character_vector(vars_choices) ||
     is_numeric_vector(vars_choices) ||
@@ -405,29 +419,24 @@ filter_spec_internal.default <- function(vars_choices, # nousage
   )
   stopifnot(all(!duplicated(vars_choices)))
 
-  if (!is.null(vars_selected)) {
-    stopifnot(vars_multiple || length(vars_selected) == 1)
-    stopifnot(is_character_vector(vars_selected) ||
-      is_numeric_vector(vars_selected) || is_logical_vector(vars_selected))
-    stopifnot(all(!duplicated(vars_selected)))
-  }
+  if (is.null(vars_selected)) vars_selected <- vars_choices[1]
+  stopifnot(vars_multiple || length(vars_selected) == 1)
+  stopifnot(is_character_vector(vars_selected) ||
+    is_numeric_vector(vars_selected) || is_logical_vector(vars_selected))
+  stopifnot(all(!duplicated(vars_selected)))
+
 
   if (!is.null(choices)) {
     stopifnot(all(!duplicated(choices)))
-    choices_attrs <- attributes(choices)
-    choices <- split_by_sep(choices, sep)
-    stopifnot(all(vapply(choices, length, integer(1)) == length(vars_selected)))
-    attributes(choices) <- choices_attrs
-    names(choices) <- if_null(names(choices), vapply(choices, paste, collapse = sep, character(1)))
+    split_choices <- split_by_sep(choices, sep)
+    stopifnot(all(vapply(split_choices, length, integer(1)) == length(vars_selected)))
   }
 
   if (!is.null(selected)) {
     stopifnot(multiple || length(selected) == 1)
     stopifnot(is_character_vector(selected) || is_numeric_vector(selected) || is_logical_vector(selected))
     stopifnot(all(!duplicated(selected)))
-    selected <- split_by_sep(selected, sep)
-    stopifnot(all(selected %is_in% choices))
-    names(selected) <- if_null(names(selected), vapply(selected, paste, collapse = sep, character(1)))
+    stopifnot(all(selected %in% choices))
   }
 
   res <- list(
@@ -442,7 +451,9 @@ filter_spec_internal.default <- function(vars_choices, # nousage
     multiple = multiple,
     fixed = fixed,
     sep = sep,
-    drop_keys = drop_keys
+    drop_keys = drop_keys,
+    dataname = dataname, # modified by data_extract_spec
+    initialized = initialized
   )
   class(res) <- "filter_spec"
 
