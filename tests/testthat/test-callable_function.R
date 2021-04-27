@@ -211,3 +211,40 @@ test_that("find callable function name", {
     "mean"
   )
 })
+
+test_that("test cloning", {
+  fun <- callable_function(stats::sd)
+  fun$set_args(list(x = call(":", as.name("x1"), as.name("x2"))))
+  fun$assign_to_env(x = "x1", value = 0)
+  fun$assign_to_env(x = "x2", value = 10)
+  expect_identical(
+    fun$get_call(),
+    "stats::sd(x = x1:x2)"
+  )
+
+  expect_identical(
+    ls(envir = fun$.__enclos_env__$private$env),
+    c("x1", "x2")
+  )
+
+  expect_identical(
+    fun$run(),
+    stats::sd(0:10)
+  )
+
+  fun_cloned <- fun$clone()
+  expect_identical(
+    fun$.__enclos_env__$private$env,
+    fun_cloned$.__enclos_env__$private$env
+  )
+
+  fun_cloned_deep <- fun$clone(deep = TRUE)
+  expect_false(
+    identical(
+      fun$.__enclos_env__$private$env,
+      fun_cloned_deep$.__enclos_env__$private$env
+    )
+  )
+
+
+})

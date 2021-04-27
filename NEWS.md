@@ -10,6 +10,7 @@
 ### Bug fixes
 * Cleaned up imports in the package.
 * Modified `value_choices` function to handle edge case when `"NA"` and  `NA` values exist in the `character` column that choices are derived from.\
+* Fixed issue with cloning `Callable` class.
 
 # teal 0.9.3
 

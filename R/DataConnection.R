@@ -330,15 +330,13 @@ DataConnection <- R6::R6Class( # nolint
     #' `error`, for `try = FALSE` otherwise
     close = function(silent = FALSE, try = FALSE) {
       if_cond(private$check_close_fun(silent = silent), return(), isFALSE)
-      if (isTRUE(private$ping())) {
-        close_res <- private$close_fun$run(try = try)
-        if (is(close_res, "error")) {
-          return(close_res)
-        } else {
-          private$opened <- FALSE
-          private$conn <- NULL
-          return(invisible(NULL))
-        }
+      close_res <- private$close_fun$run(try = try)
+      if (is(close_res, "error")) {
+        return(close_res)
+      } else {
+        private$opened <- FALSE
+        private$conn <- NULL
+        return(invisible(NULL))
       }
     },
     #' @description
@@ -477,13 +475,7 @@ DataConnection <- R6::R6Class( # nolint
     # need to have a custom deep_clone because one of the key fields are reference-type object
     # in particular: open_fun is a R6 object that wouldn't be cloned using default clone(deep = T)
     deep_clone = function(name, value) {
-      if (is_class_list("R6")(value)) {
-        lapply(value, function(x) x$clone(deep = TRUE))
-      } else if (R6::is.R6(value)) {
-        value$clone(deep = TRUE)
-      } else {
-        value
-      }
+      deep_clone_r6(name, value)
     },
 
     check_open_fun = function(silent = FALSE) {
@@ -604,7 +596,7 @@ rcd_connection <- function(open_args = list()) {
 
       # we want the connection closed (if it's opened) when the user shiny session ends
       session$onSessionEnded(function() {
-        connection$close(silent = TRUE, try = TRUE)
+        suppressWarnings(connection$close(silent = TRUE, try = TRUE))
       })
 
       return(invisible(connection))
@@ -682,7 +674,7 @@ rice_connection <- function(open_args = list(), close_args = list(), ping_args =
       }
 
       session$onSessionEnded(function() {
-        connection$close(silent = TRUE, try = TRUE)
+        suppressWarnings(connection$close(silent = TRUE, try = TRUE))
       })
 
       return(invisible(connection))
@@ -781,7 +773,7 @@ teradata_connection <- function(open_args = list(), close_args = list(), ping_ar
       }
 
       session$onSessionEnded(function() {
-        connection$close(silent = TRUE, try = TRUE)
+        suppressWarnings(connection$close(silent = TRUE, try = TRUE))
       })
 
       return(invisible(connection))
@@ -817,15 +809,15 @@ teradata_connection <- function(open_args = list(), close_args = list(), ping_ar
 #' Helper function to connect to `Snowflake`
 #'
 #' This is used by \code{snowflake_connection} and does not need to be called directly
-#' @param username The username used to collect the auth token to connect to snowflake.
-#' @param password The password used to collect the auth token to connect to snowflake
-#' @param role The user role used to connect to `Snowflake`.
-#' @param database The `Snowflake` database to connect to.
-#' @param schema The `Snowflake` schema to connect to.
-#' @param warehouse The `Snowflake` warehouse to connect to.
-#' @param server The `Snowflake`server to connect to.
-#' @param port The port to connect to the `Snowflake` instance.
-#' @param driver The driver to use to connect to the `Snowflake` instance.
+#' @param username the username used to collect the auth token to connect to snowflake.
+#' @param password the password used to collect the auth token to connect to snowflake
+#' @param role the user role used to connect to `Snowflake`.
+#' @param database the `Snowflake` database to connect to.
+#' @param schema the `Snowflake` schema to connect to.
+#' @param warehouse the `Snowflake` warehouse to connect to.
+#' @param server the `Snowflake`server to connect to.
+#' @param port the port to connect to the `Snowflake` instance.
+#' @param driver the driver to use to connect to the `Snowflake` instance.
 #' @export
 snowflake_connection_function <- function(username = askpass::askpass("Please enter your username"),
                                           password = askpass::askpass("Please enter your password"),
@@ -950,7 +942,7 @@ snowflake_connection <- function(open_args = list(), close_args = list(), ping_a
       }
 
       session$onSessionEnded(function() {
-        connection$close(silent = TRUE, try = TRUE)
+        suppressWarnings(connection$close(silent = TRUE, try = TRUE))
       })
 
       return(invisible(connection))

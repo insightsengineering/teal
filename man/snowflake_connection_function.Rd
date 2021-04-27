@@ -17,23 +17,23 @@ snowflake_connection_function(
 )
 }
 \arguments{
-\item{username}{The username used to collect the auth token to connect to snowflake.}
+\item{username}{the username used to collect the auth token to connect to snowflake.}
 
-\item{password}{The password used to collect the auth token to connect to snowflake}
+\item{password}{the password used to collect the auth token to connect to snowflake}
 
-\item{role}{The user role used to connect to \code{Snowflake}.}
+\item{role}{the user role used to connect to \code{Snowflake}.}
 
-\item{database}{The \code{Snowflake} database to connect to.}
+\item{database}{the \code{Snowflake} database to connect to.}
 
-\item{schema}{The \code{Snowflake} schema to connect to.}
+\item{schema}{the \code{Snowflake} schema to connect to.}
 
-\item{warehouse}{The \code{Snowflake} warehouse to connect to.}
+\item{warehouse}{the \code{Snowflake} warehouse to connect to.}
 
-\item{server}{The \code{Snowflake}server to connect to.}
+\item{server}{the \code{Snowflake}server to connect to.}
 
-\item{port}{The port to connect to the \code{Snowflake} instance.}
+\item{port}{the port to connect to the \code{Snowflake} instance.}
 
-\item{driver}{The driver to use to connect to the \code{Snowflake} instance.}
+\item{driver}{the driver to use to connect to the \code{Snowflake} instance.}
 }
 \description{
 This is used by \code{snowflake_connection} and does not need to be called directly

@@ -456,13 +456,7 @@ DatasetConnector <- R6::R6Class( #nolint
     # need to have a custom deep_clone because one of the key fields are reference-type object
     # in particular: dataset is a R6 object that wouldn't be cloned using default clone(deep = T)
     deep_clone = function(name, value) {
-      if (is_class_list("R6")(value)) {
-        lapply(value, function(x) x$clone(deep = TRUE))
-      } else if (R6::is.R6(value)) {
-        value$clone(deep = TRUE)
-      } else {
-        value
-      }
+      deep_clone_r6(name, value)
     },
 
     get_pull_code_class = function(args = NULL) {
@@ -514,7 +508,6 @@ DatasetConnector <- R6::R6Class( #nolint
           )
         }
       }
-
       # eval CallableFunction with dynamic args
       tryCatch({
         private$pull_callable$run(args = args, try = try)

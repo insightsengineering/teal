@@ -397,13 +397,7 @@ Dataset <- R6::R6Class( # nolint
     # need to have a custom deep_clone because one of the key fields are reference-type object
     # in particular: code is a R6 object that wouldn't be cloned using default clone(deep = T)
     deep_clone = function(name, value) {
-      if (is_class_list("R6")(value)) {
-        lapply(value, function(x) x$clone(deep = TRUE))
-      } else if (R6::is.R6(value)) {
-        value$clone(deep = TRUE)
-      } else {
-        value
-      }
+      deep_clone_r6(name, value)
     },
 
     get_class_colnames = function(class_type = "character") {

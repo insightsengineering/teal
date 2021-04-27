@@ -106,6 +106,12 @@ Callable <- R6::R6Class( #nolint
     failed = FALSE,
     error_msg = character(0),
     ## __Private Methods ====
+
+    # The deep clone function deep clones the environment of the Callable so
+    # that it is distinct for the copy
+    deep_clone = function(name, value) {
+      deep_clone_r6(name, value)
+    },
     # Checks output and handles error messages
     check_run_output = function(res, try) {
       if (is(res, "error")) {
