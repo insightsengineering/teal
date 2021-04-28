@@ -19,8 +19,7 @@ CallablePythonCode <- R6::R6Class( #nolint
     #'
     #' @return new `CallablePythonCode` object
     initialize = function(fun) {
-      super$initialize(fun = fun, env = .GlobalEnv)
-
+      super$initialize(fun = fun)
       return(invisible(self))
     },
     #' @description
@@ -88,13 +87,13 @@ CallablePythonCode <- R6::R6Class( #nolint
         for (idx in seq_along(private$duplicate_vars)) {
           var_name <- names(private$duplicate_vars)[idx]
           var_value <- private$duplicate_vars[[idx]]
-          assign(var_name, var_value, envir = private$env)
+          assign(var_name, var_value, envir = .GlobalEnv)
         }
       })
 
       # for execution of pull function, assign pull vars to .GlobalEnv
       for (var in names(private$vars_to_assign)) {
-        assign(var, private$vars_to_assign[[var]], envir = private$env)
+        assign(var, private$vars_to_assign[[var]], envir = .GlobalEnv)
       }
 
       if_null(
