@@ -12,6 +12,7 @@
 #'
 #' @import shiny
 #' @import utils.nest
+#' @import R6
 #' @importFrom stats setNames
 #' @importFrom methods is
 NULL
