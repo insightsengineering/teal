@@ -3,11 +3,11 @@
 
 *teal* is a shiny-based interactive exploration framework for analyzing clinical trials data. `teal` currently provides a dynamic filtering facility and diverse data viewers. `teal` shiny applications are built using standard [shiny modules](https://shiny.rstudio.com/articles/modules.html).
 
-Please read more about teal on our agile-R website at [go.roche.com/agile-R](http://go.roche.com/agile-R).
+Please read more about teal on our agile-R website at [go.roche.com/agile-R](https://go.roche.com/agile-R).
 
 # Installation
 
-Please refer to the quick start section in agile-R [here](https://pages.github.roche.com/NEST/docs/hugo/NEST/agile-R/master/quick_start/install-nest-environment/)
+Please refer to the quick start section in agile-R [here](https://go.roche.com/agile-R).
 
 The latest version of `teal` can be installed locally with:
 ```r
@@ -22,7 +22,7 @@ devtools::install_github(
 
 We would like to thank everyone who made `teal` a better analysis environment. Special thanks go to:
 
- * `Doug Kelkhoff` for his contributions to the styling of the filter panel, see https://github.roche.com/kelkhofd/shinyDataFilter.
+ * `Doug Kelkhoff` for his contributions to the styling of the filter panel.
  
 
 # Notes for Developers
