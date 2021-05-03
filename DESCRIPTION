@@ -59,7 +59,7 @@ Suggests:
     rice,
     rmarkdown,
     tern (>= 0.7.3),
-    test.nest (>= 0.2.7),
+    test.nest (>= 0.2.8),
     testthat (>= 2.0)
 VignetteBuilder: knitr
 RdMacros: lifecycle
