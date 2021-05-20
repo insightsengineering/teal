@@ -139,7 +139,10 @@ optionalSelectInput <- function(inputId, # nolint
           selected,
           tags$code(
             id = paste0(inputId, "_valueonly"),
-            paste(selected, collapse = ", ")
+            paste(attr(fixed, which = "dataname"),
+                  selected,
+                  sep = ".",
+                  collapse = ", ")
           )
         ),
         label_help
