@@ -53,6 +53,11 @@ ADRS:
   foreign: ["STUDYID", "USUBJID"]
   parent: "ADSL"
 
+ADSAFTTE:
+  primary: ["STUDYID", "USUBJID", "PARAMCD"]
+  foreign: ["STUDYID", "USUBJID"]
+  parent: "ADSL"
+
 ADVS:
   primary: ["STUDYID", "USUBJID", "PARAMCD", "AVISIT"]
   foreign: ["STUDYID", "USUBJID"]
