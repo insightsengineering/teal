@@ -52,3 +52,20 @@ new \code{DatasetConnector} object
 \details{
 Create \code{DatasetConnector} from \code{\link{callable_function}}.
 }
+\examples{
+library(MultiAssayExperiment)
+# data.frame example
+pull_fun2 <- callable_function(data.frame)
+pull_fun2$set_args(args = list(a = c(1,2,3)))
+dataset_connector("test", pull_fun2)
+
+# MultiAssayExperiment example
+pull_fun <- callable_function(
+  function() { library("MultiAssayExperiment"); data("miniACC"); return(miniACC) })
+dataset_connector(
+  "miniacc",
+  pull_fun,
+  code = 'library("MultiAssayExperiment"); data("miniACC"); return(miniACC)'
+)
+
+}

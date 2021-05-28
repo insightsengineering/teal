@@ -1,10 +1,10 @@
 ## Dataset =====
-test_that("Dataset basics", {
+testthat::test_that("Dataset basics", {
 
   x <- data.frame(x = c(1, 2), y = c("a", "b"), stringsAsFactors = TRUE)
   rtables::var_labels(x) <- c("X", "Y")
 
-  expect_silent({
+  testthat::expect_silent({
     test_ds <- Dataset$new(
       dataname = "testds",
       x = x,
@@ -12,13 +12,13 @@ test_that("Dataset basics", {
     )
   })
 
-  expect_equal(
+  testthat::expect_equal(
     get_keys(test_ds),
     "x"
   )
 
-  expect_silent(set_keys(test_ds, "y"))
-  expect_equal(
+  testthat::expect_silent(set_keys(test_ds, "y"))
+  testthat::expect_equal(
     get_keys(test_ds),
     "y"
   )
@@ -28,25 +28,25 @@ test_that("Dataset basics", {
   )
   # keys checking is not immediate
   ds1 <- dataset(dataname = "df", x = df, keys = character(0))
-  expect_silent(ds1$check_keys())
+  testthat::expect_silent(ds1$check_keys())
 
   ds2 <- dataset(dataname = "df", x = df, keys = character(0)) %>% set_keys(c("c"))
-  expect_silent(ds2$check_keys())
+  testthat::expect_silent(ds2$check_keys())
 
   ds3 <- dataset(dataname = "df", x = df) %>% set_keys("non_existing_col")
-  expect_error(
+  testthat::expect_error(
     ds3$check_keys(),
     "Primary keys specifed for df do not exist in the data."
   )
 
   ds4 <- dataset(dataname = "df", x = df) %>% set_keys("a")
-  expect_error(
+  testthat::expect_error(
     ds4$check_keys(),
     "Duplicate primary key values found in the dataset 'df'"
   )
 })
 
-test_that("Dataset$recreate", {
+testthat::test_that("Dataset$recreate", {
   ds <- Dataset$new(
     dataname = "mtcars",
     x = mtcars,
@@ -56,10 +56,10 @@ test_that("Dataset$recreate", {
     vars = list())
   ds2 <- ds$recreate()
 
-  expect_identical(ds, ds2)
+  testthat::expect_identical(ds, ds2)
 })
 
-test_that("Dataset$get_*_colnames", {
+testthat::test_that("Dataset$get_*_colnames", {
   df <- as.data.frame(
     list(
       num = c(1, 2, 3),
@@ -70,12 +70,12 @@ test_that("Dataset$get_*_colnames", {
   )
   ds <- Dataset$new("ds", x = df)
 
-  expect_equal(ds$get_numeric_colnames(), c("num"))
-  expect_equal(ds$get_character_colnames(), c("char"))
-  expect_equal(ds$get_factor_colnames(), c("fac"))
+  testthat::expect_equal(ds$get_numeric_colnames(), c("num"))
+  testthat::expect_equal(ds$get_character_colnames(), c("char"))
+  testthat::expect_equal(ds$get_factor_colnames(), c("fac"))
 })
 
-test_that("Dataset$get_rownames", {
+testthat::test_that("Dataset$get_rownames", {
   df <- as.data.frame(
     list(
       num = c(1, 2, 3),
@@ -86,10 +86,10 @@ test_that("Dataset$get_rownames", {
   )
   ds <- Dataset$new("ds", x = df)
 
-  expect_equal(ds$get_rownames(), c("1", "2", "3"))
+  testthat::expect_equal(ds$get_rownames(), c("1", "2", "3"))
 })
 
-test_that("Dataset active bindings", {
+testthat::test_that("Dataset active bindings", {
   df <- as.data.frame(
     list(
       num = c(1, 2, 3),
@@ -101,12 +101,12 @@ test_that("Dataset active bindings", {
   )
   ds <- Dataset$new("ds", x = df)
 
-  expect_equal(ds$ncol, 4)
-  expect_equal(ds$nrow, 3)
-  expect_equal(ds$dim, c(3, 4))
-  expect_equal(ds$colnames, c("num", "char", "fac", "num2"))
-  expect_equal(ds$rownames, c("1", "2", "3"))
-  expect_equal(
+  testthat::expect_equal(ds$ncol, 4)
+  testthat::expect_equal(ds$nrow, 3)
+  testthat::expect_equal(ds$dim, c(3, 4))
+  testthat::expect_equal(ds$colnames, c("num", "char", "fac", "num2"))
+  testthat::expect_equal(ds$rownames, c("1", "2", "3"))
+  testthat::expect_equal(
     ds$raw_data,
     as.data.frame(
       list(
@@ -118,17 +118,17 @@ test_that("Dataset active bindings", {
       stringsAsFactors = FALSE
     )
   )
-  expect_equal(ds$var_names, ds$colnames)
-  expect_true(is.null(ds$row_labels))
+  testthat::expect_equal(ds$var_names, ds$colnames)
+  testthat::expect_true(is.null(ds$row_labels))
 
   # Depreciation warnings
-  expect_warning(labs <- ds$column_labels)
+  testthat::expect_warning(labs <- ds$column_labels)
   exp <- as.character(rep(NA, 4))
   names(exp) <- c("num", "char", "fac", "num2")
-  expect_equal(labs, exp)
+  testthat::expect_equal(labs, exp)
 })
 
-test_that("Dataset supplementary constructors", {
+testthat::test_that("Dataset supplementary constructors", {
   file_example <- tempfile(fileext = ".R")
   writeLines(
     text = c(
@@ -144,7 +144,7 @@ test_that("Dataset supplementary constructors", {
     ),
     con = file_example
   )
-  expect_silent(x <- dataset_file(file_example))
+  testthat::expect_silent(x <- dataset_file(file_example))
 
   # Not a Dataset object causes an error
   file_example2 <- tempfile(fileext = "2.R")
@@ -154,52 +154,21 @@ test_that("Dataset supplementary constructors", {
     ),
     con = file_example2
   )
-  expect_error(
+  testthat::expect_error(
     x <- dataset_file(file_example2),
     regexp = "The object returned from the file is not of Dataset class.",
     fixed = TRUE
   )
 
   # Deprecation warnings
-  expect_warning(x2 <- named_dataset_file(file_example))
-  expect_warning(x3 <- relational_dataset_file(file_example))
-  expect_equal(x, x2)
-  expect_equal(x, x3)
+  testthat::expect_warning(x2 <- named_dataset_file(file_example))
+  testthat::expect_warning(x3 <- relational_dataset_file(file_example))
+  testthat::expect_equal(x, x2)
+  testthat::expect_equal(x, x3)
 
   # Deprecated constructors
-  expect_error(raw_dataset(iris))
-  expect_warning(ds1 <- named_dataset("ds", iris))
-  expect_warning(ds2 <- relational_dataset("ds", iris))
-  expect_equal(ds1, ds2)
-})
-
-## CDISCDataset ====
-test_that("CDISCDataset basics", {
-
-  x <- data.frame(x = c(1, 2), y = c("a", "b"), stringsAsFactors = TRUE)
-  rtables::var_labels(x) <- c("X", "Y")
-
-  expect_error(
-    CDISCDataset$new(dataname = "abc", x = x)
-  )
-
-  expect_silent({
-    test_ds <- CDISCDataset$new(
-      dataname = "testds",
-      x = x,
-      keys = "x",
-      parent = "testds2"
-    )
-  })
-
-  expect_equal(
-    test_ds$get_parent(),
-    "testds2"
-  )
-
-  expect_silent(test_ds$set_parent("testds3"))
-  expect_equal(
-    test_ds$get_parent(),
-    "testds3"
-  )
+  testthat::expect_error(raw_dataset(iris))
+  testthat::expect_warning(ds1 <- named_dataset("ds", iris))
+  testthat::expect_warning(ds2 <- relational_dataset("ds", iris))
+  testthat::expect_equal(ds1, ds2)
 })

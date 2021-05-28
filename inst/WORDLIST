@@ -57,6 +57,7 @@ lifecycle
 linters
 lintr
 loess
+MAEDataset
 mockup
 modularization
 modularize

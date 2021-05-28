@@ -17,7 +17,7 @@ relational_dataset(
 \item{dataname}{(\code{character})\cr
 A given name for the dataset it may not contain spaces}
 
-\item{x}{(\code{data.frame})\cr}
+\item{x}{(\code{data.frame} or \code{MultiAssayExperiment})\cr}
 
 \item{keys}{optional, (\code{character})\cr
 vector with primary keys}
@@ -64,4 +64,13 @@ ADSL_dataset <- dataset(
 
 ADSL_dataset$get_dataset_label()
 ADSL_dataset$get_code()
+# Simple example
+\dontrun{
+library(MultiAssayExperiment)
+MAE_dataset <- dataset("MAE", miniACC, keys = c("STUDYID", "USUBJID"))
+MAE_dataset$get_dataname()
+MAE_dataset$get_dataset_label()
+MAE_dataset$get_code()
+MAE_dataset$get_raw_data()
+}
 }

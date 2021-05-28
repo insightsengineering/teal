@@ -18,7 +18,7 @@ cdisc_dataset(
 \item{dataname}{(\code{character})\cr
 A given name for the dataset it may not contain spaces}
 
-\item{x}{(\code{data.frame})\cr}
+\item{x}{(\code{data.frame} or \code{MultiAssayExperiment})\cr}
 
 \item{keys}{optional, (\code{character})\cr
 vector with primary keys}

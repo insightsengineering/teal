@@ -17,7 +17,7 @@
 #' @param x (`data.frame`)\cr
 #'
 #' @param keys optional, (`character`)\cr
-#'   vector with primary keys
+#'   Vector with primary keys
 #'
 #' @param code (`character`)\cr
 #'   A character string defining the code needed to produce the data set in \code{x}.
@@ -107,7 +107,23 @@ Dataset <- R6::R6Class( # nolint
 
       return(res)
     },
-
+    #' Prints this Dataset.
+    #'
+    #' @param ... additional arguments to the printing method
+    #' @return invisibly self
+    print = function(...) {
+      cat(sprintf(
+        "A Dataset object containing the following data.frame (%s rows and %s columns):\n",
+        private$.nrow,
+        private$.ncol
+      ))
+      print(head(as.data.frame(private$.raw_data)))
+      if(private$.nrow > 6) {
+        cat("\n...\n")
+        print(tail(as.data.frame(private$.raw_data)))
+      }
+      invisible(self)
+    },
     # ___ getters ====
     #' @description
     #' Get all dataset attributes
@@ -522,7 +538,7 @@ Dataset <- R6::R6Class( # nolint
 #' @param dataname (`character`)\cr
 #'  A given name for the dataset it may not contain spaces
 #'
-#' @param x (`data.frame`)\cr
+#' @param x (`data.frame` or `MultiAssayExperiment`)\cr
 #'
 #' @param keys optional, (`character`)\cr
 #'   vector with primary keys
@@ -544,6 +560,8 @@ Dataset <- R6::R6Class( # nolint
 #'   within another dataset.
 #'
 #' @return \code{\link{Dataset}} object
+#'
+#' @rdname dataset
 #'
 #' @export
 #'
@@ -573,6 +591,17 @@ dataset <- function(dataname,
                     label = data_label(x),
                     code = character(0),
                     vars = list()) {
+  UseMethod("dataset", x)
+}
+
+#' @rdname dataset
+#' @export
+dataset.data.frame <- function(dataname,
+                               x,
+                               keys = character(0),
+                               label = data_label(x),
+                               code = character(0),
+                               vars = list()) {
   stopifnot(is_character_single(dataname))
   stopifnot(is.data.frame(x))
   stopifnot(is_character_vector(code, min_length = 0, max_length = 1) || is(code, "CodeClass"))
@@ -587,6 +616,40 @@ dataset <- function(dataname,
     vars = vars
   )
 }
+
+#' @rdname dataset
+#' @export
+#'
+#' @examples
+#' # Simple example
+#' \dontrun{
+#' library(MultiAssayExperiment)
+#' MAE_dataset <- dataset("MAE", miniACC, keys = c("STUDYID", "USUBJID"))
+#' MAE_dataset$get_dataname()
+#' MAE_dataset$get_dataset_label()
+#' MAE_dataset$get_code()
+#' MAE_dataset$get_raw_data()
+#' }
+dataset.MultiAssayExperiment <- function(dataname,
+                                         x,
+                                         keys = character(0),
+                                         label = data_label(x),
+                                         code = character(0),
+                                         vars = list()) {
+  stopifnot(is_character_single(dataname))
+  stopifnot(is_character_vector(code, min_length = 0, max_length = 1) || is(code, "CodeClass"))
+  stopifnot(identical(vars, list()) || is_fully_named_list(vars))
+
+  MAEDataset$new(
+    dataname = dataname,
+    x = x,
+    keys = keys,
+    code = code,
+    label = label,
+    vars = vars
+  )
+}
+
 
 #' @inherit dataset
 #' @description `r lifecycle::badge("defunct")`
@@ -646,9 +709,6 @@ relational_dataset <- function(dataname,
     vars = vars
   )
 }
-
-
-
 
 #' Load \code{Dataset} object from a file
 #'

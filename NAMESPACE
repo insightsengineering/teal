@@ -2,6 +2,8 @@
 
 S3method(as_cdisc,Dataset)
 S3method(as_cdisc,DatasetConnector)
+S3method(dataset,MultiAssayExperiment)
+S3method(dataset,data.frame)
 S3method(filter_spec_internal,default)
 S3method(filter_spec_internal,delayed_data)
 S3method(get_attrs,Dataset)
