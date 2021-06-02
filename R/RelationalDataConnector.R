@@ -303,6 +303,18 @@ RelationalDataConnector <- R6::R6Class( #nolint
       )
     },
 
+    # ___ mutate ====
+    #' @description
+    #' Mutate data by code.
+    #'
+    #' @param ... parameters inherited from `DataAbstract`.
+    #'
+    #' @return Informational message to not use mutate_data() with RelationalDataConnectors.
+    mutate = function(...) {
+      stop("RelationalDataConnectors do not support mutate_data().
+      Please use mutate_data() with teal_data() or cdisc_data()")
+    },
+
     # ___ status ====
     #' @description
     #' Check if pull or connection has not failed.

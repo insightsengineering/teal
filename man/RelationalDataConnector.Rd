@@ -58,6 +58,7 @@ x$get_datasets()
 \item \href{#method-set_server}{\code{RelationalDataConnector$set_server()}}
 \item \href{#method-pull}{\code{RelationalDataConnector$pull()}}
 \item \href{#method-launch}{\code{RelationalDataConnector$launch()}}
+\item \href{#method-mutate}{\code{RelationalDataConnector$mutate()}}
 \item \href{#method-is_failed}{\code{RelationalDataConnector$is_failed()}}
 \item \href{#method-clone}{\code{RelationalDataConnector$clone()}}
 }
@@ -75,7 +76,6 @@ x$get_datasets()
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="DataAbstract" data-id="get_datasets">}\href{../../teal/html/DataAbstract.html#method-get_datasets}{\code{teal::DataAbstract$get_datasets()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="DataAbstract" data-id="get_items">}\href{../../teal/html/DataAbstract.html#method-get_items}{\code{teal::DataAbstract$get_items()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="DataAbstract" data-id="is_pulled">}\href{../../teal/html/DataAbstract.html#method-is_pulled}{\code{teal::DataAbstract$is_pulled()}}\out{</span>}
-\item \out{<span class="pkg-link" data-pkg="teal" data-topic="DataAbstract" data-id="mutate">}\href{../../teal/html/DataAbstract.html#method-mutate}{\code{teal::DataAbstract$mutate()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="DataAbstract" data-id="mutate_dataset">}\href{../../teal/html/DataAbstract.html#method-mutate_dataset}{\code{teal::DataAbstract$mutate_dataset()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="DataAbstract" data-id="set_check">}\href{../../teal/html/DataAbstract.html#method-set_check}{\code{teal::DataAbstract$set_check()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="DataAbstract" data-id="set_pull_code">}\href{../../teal/html/DataAbstract.html#method-set_pull_code}{\code{teal::DataAbstract$set_pull_code()}}\out{</span>}
@@ -280,6 +280,26 @@ Useful for debugging
 
 \subsection{Returns}{
 An object that represents the app
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-mutate"></a>}}
+\if{latex}{\out{\hypertarget{method-mutate}{}}}
+\subsection{Method \code{mutate()}}{
+Mutate data by code.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{RelationalDataConnector$mutate(...)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{...}}{parameters inherited from \code{DataAbstract}.}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Returns}{
+Informational message to not use mutate_data() with RelationalDataConnectors.
 }
 }
 \if{html}{\out{<hr>}}

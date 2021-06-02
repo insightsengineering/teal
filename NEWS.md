@@ -1,5 +1,5 @@
 # teal 0.9.4.9000
-.
+* Added informational stop message when using `mutate_data` with `RelationalDataConnector`.
 
 # teal 0.9.4
 
