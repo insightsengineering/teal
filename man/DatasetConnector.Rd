@@ -80,8 +80,8 @@ ds$launch()
 \if{latex}{\out{\hypertarget{method-new}{}}}
 \subsection{Method \code{new()}}{
 Create a new \code{DatasetConnector} object. Set the pulling function
-\code{CallableFunction} which returns a \code{data.frame}, e.g. by reading
-from a function or creating it on the fly.
+\code{CallableFunction} which returns a \code{data.frame} or \code{MultiAssayExperiment},
+e.g. by reading from a function or creating it on the fly.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{DatasetConnector$new(
   dataname,
@@ -276,7 +276,7 @@ Get raw data from dataset
 }
 
 \subsection{Returns}{
-\code{data.frame} data
+\code{data.frame} or \code{MultiAssayExperiment} data
 }
 }
 \if{html}{\out{<hr>}}

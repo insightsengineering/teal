@@ -50,8 +50,8 @@ DatasetConnector <- R6::R6Class( #nolint
   public = list(
     #' @description
     #' Create a new `DatasetConnector` object. Set the pulling function
-    #' `CallableFunction` which returns a `data.frame`, e.g. by reading
-    #' from a function or creating it on the fly.
+    #' `CallableFunction` which returns a `data.frame` or `MultiAssayExperiment`,
+    #' e.g. by reading from a function or creating it on the fly.
     initialize = function(dataname,
                           pull_callable,
                           keys = character(0),
@@ -164,7 +164,7 @@ DatasetConnector <- R6::R6Class( #nolint
     #' @description
     #' Get raw data from dataset
     #'
-    #' @return \code{data.frame} data
+    #' @return \code{data.frame} or \code{MultiAssayExperiment} data
     get_raw_data = function() {
       dataset <- self$get_dataset()
       return(dataset$get_raw_data())
