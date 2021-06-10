@@ -36,6 +36,9 @@ parent dataset name}
 \details{
 Convert a \code{Dataset(Connector)} object to a \code{CDISCDataset(Connector)} object
 }
+\note{
+If passed a \code{cdisc}-flavored object it returns the unmodified object.
+}
 \examples{
 # Dataset --------
 
@@ -71,7 +74,7 @@ as_cdisc(
   rcd_dataset_connector(
     "ADAE",
     radae,
-    keys = get_cdisc_keys("ADSL")
+    keys = get_cdisc_keys("ADAE")
   ),
   parent = "ADSL"
 )

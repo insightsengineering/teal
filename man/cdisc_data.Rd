@@ -30,6 +30,11 @@ Function passes datasets to teal application with option to read preprocessing c
 This function checks if there were keys added to all data
 sets that shall be analyzed inside a teal app.
 }
+\note{
+This function does not automatically assign keys to \code{Dataset}
+and \code{DatasetConnector} objects passed to it. If the keys are needed
+they should be assigned before calling \code{cdisc_data}. See example:\preformatted{}
+}
 \examples{
 library(random.cdisc.data)
 

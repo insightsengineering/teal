@@ -1,5 +1,6 @@
 # teal 0.9.4.9000
 * Added informational stop message when using `mutate_data` with `RelationalDataConnector`.
+* Modified `as_cdisc` to behave similarly to `cdisc_dataset` when called on a `Dataset` object.
 
 # teal 0.9.4
 

@@ -140,6 +140,20 @@ CDISCData <- R6::R6Class( # nolint
 #' @description `r lifecycle::badge("experimental")`
 #' Function passes datasets to teal application with option to read preprocessing code and reproducibility checking.
 #'
+#' @note This function does not automatically assign keys to `Dataset`
+#' and `DatasetConnector` objects passed to it. If the keys are needed
+#' they should be assigned before calling `cdisc_data`. See example:
+#' ```
+# library(random.cdisc.data)
+# test_dataset <- dataset("ADAE", radae(cached = TRUE)) # does not have keys
+# test_adsl <- cdisc_dataset("ADSL", radsl(cached = TRUE))
+# test_data <- cdisc_data(test_dataset, test_adsl)
+# get_keys(test_data, "ADAE") # returns character(0)
+#
+# test_dataset <- cdisc_dataset("ADAE", radae(cached = TRUE))
+# test_data <- cdisc_data(test_dataset, test_adsl)
+# get_keys(test_data, "ADAE") # returns [1] "STUDYID" "USUBJID" "ASTDTM"  "AETERM"  "AESEQ"
+#' ```
 #' @inheritParams teal_data
 #' @param ... (\code{RelationalDataConnector}, \code{Dataset} or
 #'   \code{DatasetConnector}) elements to include where `ADSL` data is mandatory.

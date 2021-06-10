@@ -74,10 +74,6 @@ keys <- function(primary, foreign, parent) {
 get_cdisc_keys <- function(dataname) {
   stopifnot(is_character_single(dataname))
 
-  # copy from excel file
-  default_cdisc_keys <- yaml::yaml.load_file(
-    utils.nest::get_package_file("teal", "cdisc_datasets/cdisc_datasets.yaml")) #nolint
-
   if (!(dataname %in% names(default_cdisc_keys))) {
     stop(sprintf("There is no dataset called: %s \n  List of supported cdisc_datasets:\n   %s",
                  dataname, paste(names(default_cdisc_keys), collapse = ", ")))

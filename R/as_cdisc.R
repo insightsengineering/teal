@@ -4,6 +4,8 @@
 #'
 #' @description `r lifecycle::badge("experimental")`
 #'
+#' @note If passed a \code{cdisc}-flavored object it returns the unmodified object.
+#'
 #' @param x an object of `Dataset` or `DatasetConnector` class
 #' @inheritParams cdisc_dataset
 #'
@@ -11,7 +13,11 @@
 #'
 #' @export
 as_cdisc <- function(x, parent = `if`(identical(get_dataname(x), "ADSL"), character(0), "ADSL")) {
-  UseMethod("as_cdisc")
+  if (any(class(x) %in% c("CDISCDataset", "CDISCDatasetConnector"))) {
+    x
+  } else {
+    UseMethod("as_cdisc")
+  }
 }
 
 #' @rdname as_cdisc
@@ -38,7 +44,7 @@ as_cdisc <- function(x, parent = `if`(identical(get_dataname(x), "ADSL"), charac
 #'   parent = "ADSL"
 #' )
 as_cdisc.Dataset <- function(x, parent = `if`(identical(get_dataname(x), "ADSL"), character(0), "ADSL")) {
-  return(
+  if (length(get_keys(x)) > 0 || !(get_dataname(x) %in% names(default_cdisc_keys))) {
     cdisc_dataset(
       dataname = get_dataname(x),
       x = get_raw_data(x),
@@ -47,7 +53,15 @@ as_cdisc.Dataset <- function(x, parent = `if`(identical(get_dataname(x), "ADSL")
       label = get_dataset_label(x),
       code = get_code(x)
     )
-  )
+  } else {
+    cdisc_dataset(
+      dataname = get_dataname(x),
+      x = get_raw_data(x),
+      parent = parent,
+      label = get_dataset_label(x),
+      code = get_code(x)
+    )
+  }
 }
 
 #' @rdname as_cdisc
@@ -67,7 +81,7 @@ as_cdisc.Dataset <- function(x, parent = `if`(identical(get_dataname(x), "ADSL")
 #'   rcd_dataset_connector(
 #'     "ADAE",
 #'     radae,
-#'     keys = get_cdisc_keys("ADSL")
+#'     keys = get_cdisc_keys("ADAE")
 #'   ),
 #'   parent = "ADSL"
 #' )
@@ -78,18 +92,17 @@ as_cdisc.DatasetConnector <- function(x, parent = `if`(identical(get_dataname(x)
   )
   if (!is.null(ds)) {
     warning(
-      "Pulled 'dataset' from 'x' will not be passed to DatasetConnector.
+      "Pulled 'dataset' from 'x' will not be passed to CDISCDatasetConnector.
       Avoid pulling before conversion."
     )
   }
-  return(
-    cdisc_dataset_connector(
-      dataname = get_dataname(x),
-      pull_callable = x$get_pull_callable(),
-      keys = get_keys(x),
-      parent = parent,
-      label = get_dataset_label(x),
-      vars = x$.__enclos_env__$private$pull_vars
-    )
+
+  cdisc_dataset_connector(
+    dataname = get_dataname(x),
+    pull_callable = x$get_pull_callable(),
+    keys = get_keys(x),
+    parent = parent,
+    label = get_dataset_label(x),
+    vars = x$.__enclos_env__$private$pull_vars
   )
 }
