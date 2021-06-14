@@ -95,6 +95,20 @@
 #'  )
 #'     }
 #'   }
+#'
+#'   \item{Data extract with a filter that also selects columns due to no select_spec}{
+#'     \preformatted{
+#'
+#'  dynamic_filter <- filter_spec(
+#'    vars = choices_selected(variable_choices(ADSL), "COUNTRY"),
+#'    multiple = TRUE
+#'   )
+#'  data_extract_spec(
+#'    dataname = "ADSL",
+#'    filter = dynamic_filter
+#'  )
+#'     }
+#'   }
 #' }
 #'}
 #'
