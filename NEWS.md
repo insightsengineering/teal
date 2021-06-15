@@ -1,6 +1,7 @@
 # teal 0.9.4.9000
 * Added informational stop message when using `mutate_data` with `RelationalDataConnector`.
 * Modified `as_cdisc` to behave similarly to `cdisc_dataset` when called on a `Dataset` object.
+* Fix edge case error when creating filter on variable with all missing values.
 
 # teal 0.9.4
 

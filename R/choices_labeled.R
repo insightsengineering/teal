@@ -54,10 +54,12 @@ choices_labeled <- function(choices, labels, subset = NULL, types = NULL) {
   if (is.factor(choices)) {
     choices <- as.character(choices)
   }
+
   stopifnot(
-    is_character_vector(choices, min_length = 0L) ||
-    is_numeric_vector(choices, min_length = 0L) ||
-    is_logical_vector(choices, min_length = 0L)
+    is.character(choices) ||
+    is.numeric(choices) ||
+    is.logical(choices) ||
+    (length(choices) == 1 && is.na(choices))
   )
 
   if (is.factor(labels)) {
