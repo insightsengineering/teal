@@ -1,7 +1,17 @@
 # teal 0.9.4.9000
+
+### New features
+* Added `MAEDataset` representing a `MultiAssayExperiment` object.
+
+### Enhancements
 * Added informational stop message when using `mutate_data` with `RelationalDataConnector`.
 * Modified `as_cdisc` to behave similarly to `cdisc_dataset` when called on a `Dataset` object.
-* Fix edge case error when creating filter on variable with all missing values.
+* Changed the displayed format of the data name and the column name in `data_extract_spec` UI elements. Both are now compressed to `<data name>.<column name>` if they don't change during runtime of the app.
+* Added `ADSAFTTE` to the list of recognized ADaM dataset names.
+* Added another example to `data_extract_spec`'s doc string showcasing app users can choose a variable used for filtering in the encoding panel.
+
+### Bug fixes
+* Fixed an edge case error when creating a filter on variable with all missing values crashed the app.
 
 # teal 0.9.4
 
