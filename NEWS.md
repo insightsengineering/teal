@@ -1,4 +1,4 @@
-# teal 0.9.4.9000
+# teal 0.9.5
 
 ### New features
 * Added `MAEDataset` representing a `MultiAssayExperiment` object.
