@@ -123,7 +123,7 @@ mutate_dataset.DataAbstract <- function(x,
 #' part of the code will be returned for each dataset specified. This method
 #' should be used only if particular call involve changing multiple datasets.
 #' Otherwise please use \code{mutate_dataset}.
-#' Execution of \code{mutate_code} is delayed after datasets are pulled
+#' Execution of the code is delayed after datasets are pulled
 #' (\code{isTRUE(is_pulled)}).
 #'
 #' @param x (\code{DataAbstract})\cr

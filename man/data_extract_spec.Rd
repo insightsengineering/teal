@@ -24,7 +24,7 @@ Please note that both select and filter cannot be empty at the same time.}
 with multiple keys selected in filter part.}
 }
 \description{
-\ifelse{html}{\out{<a href='https://www.tidyverse.org/lifecycle/#maturing'><img src='figures/lifecycle-maturing.svg' alt='Maturing lifecycle'></a>}}{\strong{Maturing}}
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#maturing}{\figure{lifecycle-maturing.svg}{options: alt='[Maturing]'}}}{\strong{[Maturing]}}
 
 The Data Extract input can be used to filter and select columns from a data
 set. This function enables such an input in teal.

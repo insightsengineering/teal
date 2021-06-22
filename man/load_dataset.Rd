@@ -28,7 +28,7 @@ additional dynamic arguments passed to function which loads the data.}
 \code{x} with loaded \code{dataset} object
 }
 \description{
-\ifelse{html}{\out{<a href='https://www.tidyverse.org/lifecycle/#experimental'><img src='figures/lifecycle-experimental.svg' alt='Experimental lifecycle'></a>}}{\strong{Experimental}}
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
 Load data from connection. Function used on \code{\link{DatasetConnector}} and
 \code{\link{Dataset}} to obtain data from connection.
 }

@@ -29,7 +29,7 @@ returned by \code{\link[shiny]{helpText}}}
 \item{...}{optional arguments to \code{sliderInput}}
 }
 \description{
-\ifelse{html}{\out{<a href='https://www.tidyverse.org/lifecycle/#maturing'><img src='figures/lifecycle-maturing.svg' alt='Maturing lifecycle'></a>}}{\strong{Maturing}}
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#maturing}{\figure{lifecycle-maturing.svg}{options: alt='[Maturing]'}}}{\strong{[Maturing]}}
 The \code{\link{optionalSliderInput}} function needs three arguments to decided
 whether to hide the \code{sliderInput} widget or not. For teal modules we specify an
 optional slider input with one argument here called \code{value_min_max}.

@@ -35,13 +35,13 @@ within another dataset.}
 modified \code{x} object
 }
 \description{
-\ifelse{html}{\out{<a href='https://www.tidyverse.org/lifecycle/#experimental'><img src='figures/lifecycle-experimental.svg' alt='Experimental lifecycle'></a>}}{\strong{Experimental}}
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
 Code used in this mutation is not linked to particular
 but refers to all datasets.
 Consequence of this is that when using \code{get_code(<dataset>)} this
 part of the code will be returned for each dataset specified. This method
 should be used only if particular call involve changing multiple datasets.
 Otherwise please use \code{mutate_dataset}.
-Execution of \code{mutate_code} is delayed after datasets are pulled
+Execution of the code is delayed after datasets are pulled
 (\code{isTRUE(is_pulled)}).
 }
