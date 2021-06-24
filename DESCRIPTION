@@ -38,7 +38,7 @@ Imports:
   MultiAssayExperiment,
   R6,
   rlang,
-  rtables (>= 0.3.7),
+  rtables (>= 0.3.8),
   shinyjs,
   shinyWidgets (>= 0.5.0),
   stats,
