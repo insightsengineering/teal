@@ -1,8 +1,5 @@
 # teal 0.9.5
 
-### New features
-* Added `MAEDataset` representing a `MultiAssayExperiment` object.
-
 ### Enhancements
 * Added informational stop message when using `mutate_data` with `RelationalDataConnector`.
 * Modified `as_cdisc` to behave similarly to `cdisc_dataset` when called on a `Dataset` object.

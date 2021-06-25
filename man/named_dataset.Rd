@@ -60,13 +60,4 @@ ADSL_dataset <- dataset(
 
 ADSL_dataset$get_dataset_label()
 ADSL_dataset$get_code()
-# Simple example
-\dontrun{
-library(MultiAssayExperiment)
-MAE_dataset <- dataset("MAE", miniACC, keys = c("STUDYID", "USUBJID"))
-MAE_dataset$get_dataname()
-MAE_dataset$get_dataset_label()
-MAE_dataset$get_code()
-MAE_dataset$get_raw_data()
-}
 }
