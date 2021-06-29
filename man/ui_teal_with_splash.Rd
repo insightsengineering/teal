@@ -26,7 +26,7 @@ object containing data}
 \item{footer}{(\code{character} or \code{shiny.tag}) the footer of the app}
 }
 \description{
-\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#maturing}{\figure{lifecycle-maturing.svg}{options: alt='[Maturing]'}}}{\strong{[Maturing]}}
+\ifelse{html}{\out{<a href='https://www.tidyverse.org/lifecycle/#maturing'><img src='figures/lifecycle-maturing.svg' alt='Maturing lifecycle'></a>}}{\strong{Maturing}}
 The splash screen could be used to query for a password to fetch the data.
 \code{\link{init}} is a very thin wrapper around this module useful for end-users which
 assumes that it is a top-level module and cannot be embedded.

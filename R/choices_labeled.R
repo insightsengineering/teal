@@ -366,7 +366,23 @@ value_choices.data.frame <- function(data, # nolint
     )
   }
 
-  choices <- if (length(var_choices) > 1 || is.character(df_choices[[1]]) || is.factor(df_choices[[1]])) {
+  choices <- if (
+    length(var_choices) > 1 ||
+    is.character(df_choices[[1]]) ||
+    is.factor(df_choices[[1]]) ||
+    inherits(df_choices[[1]], c("Date", "POSIXct", "POSIXlt", "POSIXt"))
+    ) {
+    df_choices <- dplyr::mutate_if(
+      df_choices,
+      .predicate = function(col) inherits(col, c("POSIXct", "POSIXlt", "POSIXt")),
+      .fun = function(col) {
+        if (is.null(attr(col, "tzone")) || all(attr(col, "tzone") == "")) {
+          format(trunc(col), "%Y-%m-%d %H:%M:%S")
+        } else {
+          format(trunc(col), "%Y-%m-%d %H:%M:%S %Z")
+        }
+      }
+    )
     apply(df_choices, 1, paste, collapse = sep)
   } else {
     df_choices[[var_choices]]

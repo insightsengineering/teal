@@ -16,7 +16,7 @@ vector with primary keys}
 (\code{RelationalDataset} or \code{RelationalDatasetConnector}) object
 }
 \description{
-\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#soft-deprecated}{\figure{lifecycle-soft-deprecated.svg}{options: alt='[Soft-deprecated]'}}}{\strong{[Soft-deprecated]}}
+\ifelse{html}{\figure{lifecycle-soft-deprecated.svg}{options: alt='Soft-deprecated lifecycle'}}{\strong{Soft-deprecated}}
 }
 \details{
 Convert a \verb{Named<...>} to a \verb{Relational<...>}

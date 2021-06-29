@@ -10,7 +10,7 @@ The difference compared to the inherited class is a parent field that
 indicates name of the parent dataset. Note that the parent field might
 be empty (i.e. \code{character(0)}).}
 \description{
-\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
+\ifelse{html}{\out{<a href='https://www.tidyverse.org/lifecycle/#experimental'><img src='figures/lifecycle-experimental.svg' alt='Experimental lifecycle'></a>}}{\strong{Experimental}}
 }
 \section{Super class}{
 \code{\link[teal:DatasetConnector]{teal::DatasetConnector}} -> \code{CDISCDatasetConnector}

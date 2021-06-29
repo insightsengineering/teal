@@ -9,6 +9,7 @@
 
 ### Bug fixes
 * Fixed an edge case error when creating a filter on variable with all missing values crashed the app.
+* Fixed a bug that crashes app whenever a `Date` or `datetime` column is selected from a `filter_spec`.
 
 # teal 0.9.4
 
