@@ -26,7 +26,7 @@ This can be useful to make sure that first all current reactives finish before
 executing the function.
 }
 \examples{
-\donttest{
+\dontrun{
 smth_next_cycle <- execute_in_next_cycle(reactive(input$smth))
 # make it active by calling it
 smth_next_cycle()

@@ -30,7 +30,7 @@ filtered_data_new.CDISCData <- function(x) { # nolintr # nousage
 #'
 #' @noRd
 filtered_data_set <- function(data, datasets) { # nolintr # nousage
-  UseMethod("filtered_data_set")
+  UseMethod("filtered_data_set", data)
 }
 
 filtered_data_set.RelationalData <- function(data, datasets) { # nolintr # nousage

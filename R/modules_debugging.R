@@ -429,7 +429,7 @@ predefined_filters_module <- function(label = "Apply filters", filter) { # nousa
 #' @param f `function` function / reactive to evaluate
 #' @return `function` that returns a trigger to make it active
 #' @examples
-#' \donttest{
+#' \dontrun{
 #' smth_next_cycle <- execute_in_next_cycle(reactive(input$smth))
 #' # make it active by calling it
 #' smth_next_cycle()
