@@ -1,31 +1,31 @@
 
 ---
 upstream_repos:
-- repo: NEST/utils.nest
-  host: https://github.roche.com
-- repo: NEST/test.nest
-  host: https://github.roche.com
-- repo: NEST/test.nest
-  host: https://github.roche.com
-- repo: NEST/random.cdisc.data
-  host: https://github.roche.com
-- repo: NEST/tern
-  host: https://github.roche.com
+- repo: insightsengineering/utils.nest
+  host: https://github.com
+- repo: insightsengineering/test.nest
+  host: https://github.com
+- repo: insightsengineering/test.nest
+  host: https://github.com
+- repo: insightsengineering/random.cdisc.data
+  host: https://github.com
+- repo: insightsengineering/tern
+  host: https://github.com
 
 downstream_repos:
-- repo: NEST/teal.devel
-  host: https://github.roche.com
-- repo: NEST/teal.modules.clinical
-  host: https://github.roche.com
-- repo: NEST/teal.modules.general
-  host: https://github.roche.com
-- repo: NEST/teal.modules.general
-  host: https://github.roche.com
-- repo: NEST/teal.osprey
-  host: https://github.roche.com
-- repo: NEST/teal.goshawk
-  host: https://github.roche.com
+- repo: insightsengineering/teal.devel
+  host: https://github.com
+- repo: insightsengineering/teal.modules.clinical
+  host: https://github.com
+- repo: insightsengineering/teal.modules.general
+  host: https://github.com
+- repo: insightsengineering/teal.modules.general
+  host: https://github.com
+- repo: insightsengineering/teal.osprey
+  host: https://github.com
+- repo: insightsengineering/teal.goshawk
+  host: https://github.com
 
 current_repo:
-  repo: NEST/teal
-  host: https://github.roche.com
+  repo: insightsengineering/teal
+  host: https://github.com
