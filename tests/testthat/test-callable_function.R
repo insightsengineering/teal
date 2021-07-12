@@ -1,3 +1,119 @@
+test_that("Function found", {
+  expect_silent(
+    cfun <- callable_function(fun = data.frame)
+  )
+
+  expect_identical(
+    cfun$get_call(),
+    "data.frame()"
+  )
+
+  expect_silent(
+    cfun2 <- callable_function(fun = base::data.frame)
+  )
+
+  expect_identical(
+    cfun2$get_call(),
+    "data.frame()"
+  )
+
+  custom_fun <- function() {
+    1L
+  }
+  expect_silent(
+    cfun3 <- callable_function(
+      fun = custom_fun
+    )
+  )
+
+  expect_identical(
+    cfun3$get_call(),
+    "(function() {\n    1L\n})()"
+  )
+
+  expect_identical(
+    cfun3$run(),
+    1L
+  )
+
+  expect_silent(
+    cfun4 <- callable_function(
+      function() {
+        library("MultiAssayExperiment")
+        data("miniACC")
+        return(miniACC)
+      }
+    )
+  )
+
+  expect_identical(
+    cfun4$get_call(),
+    "(function() {\n    library(\"MultiAssayExperiment\")\n    data(\"miniACC\")\n    return(miniACC)\n})()"
+  )
+
+  fun5 <- mean
+  expect_silent(
+    cfun5 <- callable_function(fun5)
+  )
+})
+
+testthat::test_that("CallableFunction returns the correct name if passed a base function directly", {
+  testthat::expect_equal(callable_function(print)$get_call(), "print()")
+})
+
+testthat::test_that("CallableFunction returns the correct name if passed an anonymous function", {
+  testthat::expect_equal(callable_function(function() "test")$get_call(), "(function() \"test\")()")
+})
+
+testthat::test_that("CallableFunction returns the correct name if passed a name of a base function", {
+  testthat::expect_equal(callable_function("print")$get_call(), "print()")
+})
+
+testthat::test_that("CallableFunction returns the correct name if passed a generic from a namespace", {
+  testthat::expect_equal(callable_function(utils::head)$get_call(), "head()")
+})
+
+testthat::test_that("CallableFunction returns the correct name if passed a prefixed name of a function", {
+  testthat::expect_equal(callable_function("base::print")$get_call(), "base::print()")
+})
+
+testthat::test_that("CallableFunction returns the correct name if passed a namespace function indirectly", {
+  x <- print
+  testthat::expect_equal(callable_function(x)$get_call(), "print()")
+})
+
+testthat::test_that("CallableFunction returns the correct name if passed a function from global env indirectly", {
+  x <- function() "test"
+  testthat::expect_equal(callable_function(x)$get_call(), "(function() \"test\")()")
+})
+
+testthat::test_that("CallableFunction returns the correct name if passed a function name indirectly", {
+  x <- "print"
+  testthat::expect_equal(callable_function(x)$get_call(), "print()")
+})
+
+testthat::test_that(
+  "CallableFunction throws an error if passed a namespace function via a binding in the parent frame", {
+    x <- print
+    testthat::expect_error(callable_function("x")$get_call(), "object 'x' of mode 'function' was not found")
+  }
+)
+
+testthat::test_that("CallableFunction returns the correct name if passed a Primitive directly", {
+  testthat::expect_equal(callable_function(.Primitive("+"))$get_call(), ".Primitive(\"+\")()")
+})
+
+testthat::test_that("CallableFunction throws an error if passed a Primitive by character", {
+  testthat::expect_error(callable_function(".Primitive('+')")$get_call())
+})
+
+testthat::test_that("CallableFunction throws an error if passed a prefixed object (not a function)", {
+  testthat::expect_error(
+    callable_function("datasets::iris")$get_call(),
+    regexp = "object 'datasets::iris' of mode 'function' was not found"
+  )
+})
+
 test_that("Test inputs", {
   x_fun <- callable_function("mean")
   x_fun$set_args(list(x = c(1.0, 2.0, NA_real_), na.rm = TRUE))
@@ -7,8 +123,8 @@ test_that("Test inputs", {
     "mean(x = c(1, 2, NA), na.rm = TRUE)"
   )
 
-  y <- str2lang("mean")
-  y_fun <- callable_function(y)
+  fun <- as.symbol("mean")
+  y_fun <- callable_function(fun)
   y_fun$set_args(list(x = c(1.0, 2.0, NA_real_), na.rm = TRUE))
 
   expect_identical(
@@ -21,12 +137,12 @@ test_that("Test inputs", {
 
   expect_identical(
     z_fun$get_call(),
-    "base::mean(x = c(1, 2, NA), na.rm = TRUE)"
+    "mean(x = c(1, 2, NA), na.rm = TRUE)"
   )
 })
 
 test_that("Test callable", {
-  x_fun <- callable_function(mean)
+  x_fun <- callable_function(base::mean)
   x_fun$set_args(list(x = c(1.0, 2.0, NA_real_), na.rm = TRUE))
 
   expect_identical(
@@ -115,17 +231,22 @@ test_that("test callable errors", {
 
   expect_error(
     callable_function(x),
-    "1 is not a function"
+    "CallableFunction can be specified as character, symbol, call or function"
+  )
+
+  expect_error(
+    callable_function("x"),
+    "object 'x' of mode 'function' was not found"
   )
 
   expect_error(
     callable_function(garbageIn),
-    "object .* not found"
+    "not found"
   )
 
   expect_error(
     callable_function("garbageIn"),
-    "garbageIn is not a function"
+    "object 'garbageIn' of mode 'function' was not found"
   )
 
   expect_error(
@@ -136,6 +257,7 @@ test_that("test callable errors", {
 
   expect_silent(x_fun <- callable_function(mean))
 
+
   # mean accepts extra arguments
   expect_silent(
     x_fun$set_args(list(y = 2, x = 1, na.rm = TRUE))
@@ -143,10 +265,6 @@ test_that("test callable errors", {
   expect_identical(
     x_fun$run(),
     mean(y = 2, x = 1, na.rm = TRUE)
-  )
-
-  expect_error(
-    callable_function(`+`)
   )
 
   expect_equal({
@@ -192,7 +310,6 @@ test_that("is failed", {
 })
 
 test_that("find callable function name", {
-
   fun <- function(fun) {
     fun1(fun)
   }
@@ -207,7 +324,7 @@ test_that("find callable function name", {
   }
 
   expect_identical(
-    fun(mean),
+    fun(base::mean),
     "mean"
   )
 })
@@ -219,7 +336,7 @@ test_that("test cloning", {
   fun$assign_to_env(x = "x2", value = 10)
   expect_identical(
     fun$get_call(),
-    "stats::sd(x = x1:x2)"
+    "sd(x = x1:x2)"
   )
 
   expect_identical(

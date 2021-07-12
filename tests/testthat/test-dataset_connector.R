@@ -494,12 +494,12 @@ test_that("fun_cdisc_dataset_connector", {
 
   y_1 <- fun_cdisc_dataset_connector(
     dataname = "ADSL",
-    func = my_data_1
+    fun = my_data_1
   )
 
   y_wrong <- fun_cdisc_dataset_connector(
     dataname = "ADSL",
-    func = my_data_wrong
+    fun = my_data_wrong
   )
 
   y_1$pull()
@@ -512,14 +512,14 @@ test_that("fun_cdisc_dataset_connector", {
 
   fun_direct <- fun_cdisc_dataset_connector(
     dataname = "ADSL",
-    func = radsl,
-    func_args = list(cached = TRUE)
+    fun = radsl,
+    fun_args = list(cached = TRUE)
   )
 
   fun_direct2 <- fun_cdisc_dataset_connector(
     dataname = "ADSL",
-    func = random.cdisc.data::radsl,
-    func_args = list(cached = TRUE)
+    fun = random.cdisc.data::radsl,
+    fun_args = list(cached = TRUE)
   )
   fun_direct$pull()
 

@@ -14,7 +14,7 @@ testthat::test_that("MAEDataset constructors do not raise exceptions", {
 testthat::test_that("MAEDataset$recreate updates the class fields", {
   mae <- MAEDataset$new("testMAE", miniACC)
 
-  new_data <- miniACC[, , "RNASeq2GeneNorm"]
+  suppressWarnings(new_data <- miniACC[, , "RNASeq2GeneNorm"]) # warning only on rocker 4.1
   new_name <- "new_name"
   new_label <- "new_label"
   new_code <- "new_code"

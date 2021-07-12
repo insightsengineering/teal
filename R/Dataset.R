@@ -512,12 +512,6 @@ Dataset <- R6::R6Class( # nolint
     data = function() {
       private$.raw_data
     },
-    #' @field column_labels for backwards compatibility
-    #' will be deprecated in future
-    column_labels = function() {
-      warning("'column_labels'will be deprecated in future. Use 'get_column_labels()' instead.")
-      private$.col_labels
-    },
     #' @field var_names The column names of the data
     var_names = function() {
       private$.colnames

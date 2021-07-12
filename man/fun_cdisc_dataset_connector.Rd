@@ -6,14 +6,14 @@
 \usage{
 fun_cdisc_dataset_connector(
   dataname,
-  func,
-  func_args = NULL,
+  fun,
+  fun_args = NULL,
   keys = get_cdisc_keys(dataname),
   parent = if (identical(dataname, "ADSL")) character(0L) else "ADSL",
   label = character(0),
   code = character(0),
   script = character(0),
-  func_name = substitute(func),
+  func_name = substitute(fun),
   ...
 )
 }
@@ -21,10 +21,10 @@ fun_cdisc_dataset_connector(
 \item{dataname}{(\code{character})\cr
 A given name for the dataset it may not contain spaces}
 
-\item{func}{(\code{function})\cr
+\item{fun}{(\code{function})\cr
 a custom function to obtain dataset.}
 
-\item{func_args}{(\code{list})\cr
+\item{fun_args}{(\code{list})\cr
 additional arguments for (\code{func}).}
 
 \item{keys}{optional, (\code{character})\cr
