@@ -122,7 +122,7 @@ testthat::test_that("Dataset active bindings", {
   testthat::expect_true(is.null(ds$row_labels))
 
   # Depreciation warnings
-  testthat::expect_warning(labs <- ds$column_labels)
+  labs <- ds$get_column_labels()
   exp <- as.character(rep(NA, 4))
   names(exp) <- c("num", "char", "fac", "num2")
   testthat::expect_equal(labs, exp)

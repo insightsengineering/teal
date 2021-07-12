@@ -214,6 +214,7 @@ MAEDataset <- R6::R6Class( # nolint
 #' MAE_dataset$get_code()
 #' MAE_dataset$get_raw_data()
 #' }
+#' @export
 dataset.MultiAssayExperiment <- function(dataname, # nousage
                                          x,
                                          keys = character(0),

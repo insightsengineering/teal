@@ -1000,7 +1000,7 @@ csv_dataset_connector <- function(dataname,
     stop("File ", file, " does not exist.", call. = FALSE)
   }
 
-  x_fun <- callable_function(readr::read_delim) # using read_delim as preserves dates (read.csv does not)
+  x_fun <- callable_function("readr::read_delim") # using read_delim as preserves dates (read.csv does not)
   args <- c(list(file = file), dot_args)
   x_fun$set_args(args)
 
@@ -1064,9 +1064,9 @@ csv_cdisc_dataset_connector <- function(dataname,
 #' @inheritParams dataset_connector
 #' @inheritParams rcd_dataset_connector
 #'
-#' @param func (`function`)\cr
+#' @param fun (`function`)\cr
 #'   a custom function to obtain dataset.
-#' @param func_args (`list`)\cr
+#' @param fun_args (`list`)\cr
 #'   additional arguments for (`func`).
 #' @param func_name (`name`)\cr
 #'   for internal purposes, please keep it default
@@ -1094,7 +1094,7 @@ csv_cdisc_dataset_connector <- function(dataname,
 #' }
 #' y <- fun_cdisc_dataset_connector(
 #'   dataname = "ADSL",
-#'   func = my_data
+#'   fun = my_data
 #' )
 #'
 #' y$get_code()
@@ -1125,7 +1125,7 @@ csv_cdisc_dataset_connector <- function(dataname,
 #' }
 #' y <- fun_cdisc_dataset_connector(
 #'   dataname = "ADSL",
-#'   func = my_data
+#'   fun = my_data
 #' )
 #'
 #' y$pull()
@@ -1151,27 +1151,27 @@ csv_cdisc_dataset_connector <- function(dataname,
 #' }
 #' y <- fun_cdisc_dataset_connector(
 #'   dataname = "ADSL",
-#'   func = my_data
+#'   fun = my_data
 #' )
 #'
 #' y$pull()
 #' }
 fun_dataset_connector <- function(dataname,
-                                  func,
-                                  func_args = NULL,
+                                  fun,
+                                  fun_args = NULL,
                                   keys = character(0),
                                   label = character(0),
                                   code = character(0),
                                   script = character(0),
-                                  func_name = substitute(func),
+                                  func_name = substitute(fun),
                                   ...) {
   vars <- list(...)
 
   stopifnot(is_fully_named_list(vars))
 
-  stopifnot(is.function(func))
+  stopifnot(is.function(fun))
 
-  stopifnot(is.list(func_args) || is.null(func_args))
+  stopifnot(is.list(fun_args) || is.null(fun_args))
 
   cal <- if (!is.symbol(func_name)) as.call(func_name) else NULL
 
@@ -1185,7 +1185,7 @@ fun_dataset_connector <- function(dataname,
     is_pak <- TRUE
     is_locked <- TRUE
   } else {
-    is_locked <- environmentIsLocked(environment(func))
+    is_locked <- environmentIsLocked(environment(fun))
   }
 
   func_char <- as.character(func_name)
@@ -1204,12 +1204,12 @@ fun_dataset_connector <- function(dataname,
 
 
   if (!is_pak && !is_locked) {
-    eval(bquote(.(func_name) <- get(.(func_char), .(environment(func)))), envir = ee)
+    eval(bquote(.(func_name) <- get(.(func_char), .(environment(fun)))), envir = ee)
     eval(bquote(.(func_name) <- rlang::set_env(.(func_name), .(ee))), envir = ee)
   }
 
-  x_fun <- CallableFunction$new(func_name, env = ee)
-  x_fun$set_args(func_args)
+  x_fun <- CallableFunction$new(fun, env = ee)
+  x_fun$set_args(fun_args)
 
   vars[[func_char]] <- ee[[func_char]]
 
@@ -1238,20 +1238,20 @@ fun_dataset_connector <- function(dataname,
 #'
 #' @export
 fun_cdisc_dataset_connector <- function(dataname,
-                                        func,
-                                        func_args = NULL,
+                                        fun,
+                                        fun_args = NULL,
                                         keys = get_cdisc_keys(dataname),
                                         parent = `if`(identical(dataname, "ADSL"), character(0L), "ADSL"),
                                         label = character(0),
                                         code = character(0),
                                         script = character(0),
-                                        func_name = substitute(func),
+                                        func_name = substitute(fun),
                                         ...) {
 
   x <- fun_dataset_connector(
     dataname = dataname,
-    func = func,
-    func_args = func_args,
+    fun = fun,
+    fun_args = fun_args,
     func_name = func_name,
     keys = keys,
     label = label,

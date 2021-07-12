@@ -28,6 +28,10 @@ CallableFunction <- R6::R6Class( #nolint
         list(!missing(fun),
              "A valid function name must be provided.")
       )
+      stop_if_not(list(
+        is_character_single(fun) || is.function(fun) || is.call(fun) || is.symbol(fun),
+        "CallableFunction can be specified as character, symbol, call or function"
+      ))
 
       fun_name <- private$get_callable_function(fun)
       private$fun_name <- pdeparse(fun_name)
@@ -150,44 +154,53 @@ CallableFunction <- R6::R6Class( #nolint
       }
     },
     # @description
-    # Finds original function name
+    # Returns a call to a function
     #
-    # In recursive call when function is passed from environment to environment
-    # and name of the function is overwritten
+    # Returns the call to the function as defined in the enclosing environment.
     #
-    # @param callable \code{function} function to be found
+    # @param callable \code{function, character, call, symbol} the function to return
     #
-    # @return name \code{name} of the original function
+    # @return `call` the call to the function
     #
     get_callable_function = function(callable) {
-      if (is.character(callable)) {
-        fun <- str2lang(callable)
+      if (is.character(callable) && private$is_prefixed_function(callable)) {
+        private$get_call_from_prefixed_function(callable)
+      } else {
+        private$get_call_from_symbol(callable)
       }
-
-      fr <- rev(sys.frames())
-
-      # search for function name over all environments in the stack
-      search <- lapply(fr, function(x) substitute(fun, x))
-      found_idx <- which((search != as.name("fun")) & (search != as.name("callable")))[[1]]
-
-      found_name <- search[[found_idx]]
-
-      # search for function object by name sequentially
-      # over the entire call stack
-      for (i in seq_along(fr)[-1]) {
-        fn <- tryCatch(get(as.character(found_name), envir = fr[[i]]), error = function(e) NULL)
-        is_symbol <- is.symbol(fn)
-        if (is_symbol) {
-          found_name <- fn
-          fn <- tryCatch(get(as.character(fn), envir = fr[[i]]), error = function(e) NULL)
-        }
-        if (is.function(fn)) {
-          return(found_name)
-        }
+    },
+    # @param function_name (`character`) the function name prefixed with \code{::}
+    # and the package name
+    # @return `call` the call to the function passed to this method
+    get_call_from_prefixed_function = function(function_name) {
+      package_function_names <- strsplit(function_name, "::")[[1]]
+      fun <- get(package_function_names[2], envir = getNamespace(package_function_names[1]))
+      stop_if_not(list(
+        is.function(fun),
+        sprintf("object '%s' of mode 'function' was not found", function_name)
+      ))
+      str2lang(function_name)
+    },
+    # @param symbol (`function`, `symbol` or `character`) the item matching a function
+    # @return `call` the call to the function passed to this method
+    get_call_from_symbol = function(symbol) {
+      fun <- match.fun(symbol)
+      fun_environment <- environment(fun)
+      if (isNamespace(fun_environment)) {
+        fun_name <- get_binding_name(fun, fun_environment)
+        fun <- str2lang(fun_name)
       }
-
-      # if a function was not found, stop
-      stop(paste(as.character(callable), "is not a function"))
+      fun
+    },
+    # Checks whether a character vector is of this format
+    # <package_name>::<function_name>
+    #
+    # @param function_name (`character`) the character vector
+    # @return `logical` `TRUE` if \code{function_name} is of the specified
+    # format; `FALSE` otherwise
+    #
+    is_prefixed_function = function(function_name) {
+      grepl("^[[:ascii:]]+::[[:ascii:]]+$", function_name, perl = TRUE)
     }
   )
 )
@@ -214,4 +227,38 @@ CallableFunction <- R6::R6Class( #nolint
 #' cf$get_call()
 callable_function <- function(fun) {
   CallableFunction$new(fun)
+}
+
+#' Gets the name of the binding
+#'
+#' Gets the name of the object by finding its origin.
+#' Depending on type of object function uses different methods
+#' to obtain original location. If no `env` is specified then
+#' object is tracked by `substitute` along the `sys.frames`.
+#' If `env` is specified then search is limited to specified
+#' environment.\cr
+#'
+#' @note
+#' Raises an error if the object is not found in the environment.
+#'
+#' @param object (R object)\cr
+#'   any R object
+#' @param envir (`environment`)\cr
+#'  if origin of the object is known then should be provided for
+#'  more precise search
+#' @return character
+#'
+get_binding_name <- function(object, envir) {
+  bindings_names <- ls(envir)
+  identical_binding_mask <- vapply(
+    bindings_names,
+    function(binding_name) identical(get(binding_name, envir), object),
+    FUN.VALUE = logical(1),
+    USE.NAMES = FALSE
+  )
+  stop_if_not(list(
+    !is_empty(bindings_names[identical_binding_mask]),
+    "Object not found in the environment"
+  ))
+  bindings_names[identical_binding_mask]
 }

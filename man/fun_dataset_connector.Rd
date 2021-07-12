@@ -6,13 +6,13 @@
 \usage{
 fun_dataset_connector(
   dataname,
-  func,
-  func_args = NULL,
+  fun,
+  fun_args = NULL,
   keys = character(0),
   label = character(0),
   code = character(0),
   script = character(0),
-  func_name = substitute(func),
+  func_name = substitute(fun),
   ...
 )
 }
@@ -20,10 +20,10 @@ fun_dataset_connector(
 \item{dataname}{(\code{character})\cr
 A given name for the dataset it may not contain spaces}
 
-\item{func}{(\code{function})\cr
+\item{fun}{(\code{function})\cr
 a custom function to obtain dataset.}
 
-\item{func_args}{(\code{list})\cr
+\item{fun_args}{(\code{list})\cr
 additional arguments for (\code{func}).}
 
 \item{keys}{optional, (\code{character})\cr
@@ -80,7 +80,7 @@ my_data <- function(...) {
 }
 y <- fun_cdisc_dataset_connector(
   dataname = "ADSL",
-  func = my_data
+  fun = my_data
 )
 
 y$get_code()
@@ -111,7 +111,7 @@ my_data <- function(global_var = x) {
 }
 y <- fun_cdisc_dataset_connector(
   dataname = "ADSL",
-  func = my_data
+  fun = my_data
 )
 
 y$pull()
@@ -137,7 +137,7 @@ my_data <- function() {
 }
 y <- fun_cdisc_dataset_connector(
   dataname = "ADSL",
-  func = my_data
+  fun = my_data
 )
 
 y$pull()

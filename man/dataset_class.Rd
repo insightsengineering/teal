@@ -34,9 +34,6 @@ be automatically derived.
 
 \item{\code{data}}{The data.frame behind this R6 class}
 
-\item{\code{column_labels}}{for backwards compatibility
-will be deprecated in future}
-
 \item{\code{var_names}}{The column names of the data}
 
 \item{\code{row_labels}}{Row labels (can have spaces)}
