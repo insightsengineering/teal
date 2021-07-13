@@ -1,5 +1,8 @@
 # teal 0.9.5.9000
 
+### Enhancements 
+* Modified the mutate method of `DatasetConnector` and `Dataset` objects to delay execution whenever possible.
+
 # teal 0.9.5
 
 ### Enhancements
