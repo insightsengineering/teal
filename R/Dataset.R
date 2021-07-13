@@ -84,6 +84,15 @@ Dataset <- R6::R6Class( # nolint
 
       return(invisible(self))
     },
+
+    get_dataset = function() {
+      if (private$mutate_code$get_code() != "") {
+        private$execute_mutate(private$mutate_code$get_code())
+        private$mutate_code <- CodeClass$new()
+      }
+      return(self)
+    },
+
     #' @description
     #' Recreate a dataset with its current attributes
     #' This is useful way to have access to class initialize method basing on class object.
@@ -304,30 +313,26 @@ Dataset <- R6::R6Class( # nolint
       if (inherits(code, "PythonCodeClass")) {
         self$set_code(code$get_code())
         new_df <- code$eval(dataname = self$get_dataname())
+
+        # dataset is recreated by replacing data by mutated object
+        # mutation code is added to the code which replicates the data
+        # because new_code contains also code of the
+        self$recreate(
+          x = new_df,
+          vars = list()
+        )
       } else {
-        # environment needs also this var to mutate self
-        code_container <- CodeClass$new()
-        code_container$set_code(
-          code = code,
-          dataname = self$get_dataname()
-        )
-        new_df <- private$execute_code(
-          code = code_container,
-          vars = c(private$vars, setNames(list(self), self$get_dataname()))
-        )
-
-        # code set after successful evaluation
-        # otherwise code != dataset
-        self$set_code(code)
+        delay_mutate <- any(vapply(
+          vars,
+          FUN = function(var) is(var, "DatasetConnector"),
+          FUN.VALUE = logical(1)
+        ))
+        if (!delay_mutate && private$mutate_code$get_code() == "") {
+          private$execute_mutate(code)
+        } else {
+          private$mutate_code$set_code(code)
+        }
       }
-
-      # dataset is recreated by replacing data by mutated object
-      # mutation code is added to the code which replicates the data
-      # because new_code contains also code of the
-      self$recreate(
-        x = new_df,
-        vars = list()
-      )
 
       return(invisible(self))
     },
@@ -408,6 +413,32 @@ Dataset <- R6::R6Class( # nolint
     vars = list(),
     dataset_label = character(0),
     .keys = character(0),
+    mutate_code = CodeClass$new(),
+
+    execute_mutate = function(code) {
+      # environment needs also this var to mutate self
+      code_container <- CodeClass$new()
+      code_container$set_code(
+        code = code,
+        dataname = self$get_dataname()
+      )
+      new_df <- private$execute_code(
+        code = code_container,
+        vars = c(private$vars, setNames(list(self), self$get_dataname()))
+      )
+
+      # code set after successful evaluation
+      # otherwise code != dataset
+      self$set_code(code)
+
+      # dataset is recreated by replacing data by mutated object
+      # mutation code is added to the code which replicates the data
+      # because new_code contains also code of the
+      self$recreate(
+        x = new_df,
+        vars = list()
+      )
+    },
 
     ## __Private Methods ====
     # need to have a custom deep_clone because one of the key fields are reference-type object

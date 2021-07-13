@@ -29,7 +29,7 @@ load_dataset <- function(x, ...) {
 #' @export
 load_dataset.Dataset <- function(x, ...) { # nolint
   check_ellipsis(...)
-  return(invisible(x))
+  return(invisible(x$get_dataset()))
 }
 
 #' @rdname load_dataset
