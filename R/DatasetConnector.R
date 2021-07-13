@@ -144,6 +144,18 @@ DatasetConnector <- R6::R6Class( #nolint
           call. = FALSE
         )
       }
+      if (!is_empty_string(private$get_mutate_code_class()$get_code())) {
+        mutate_code <- private$get_mutate_code_class()$get_code(deparse = TRUE)
+        if (inherits(private$get_mutate_code_class(), "PythonCodeClass")) {
+          mutate_code <- private$get_mutate_code_class()
+        }
+
+        private$dataset <- mutate_dataset(
+          x = private$dataset,
+          code = mutate_code,
+          vars = private$mutate_vars
+        )
+      }
       return(private$dataset)
     },
     #' @description
@@ -226,20 +238,7 @@ DatasetConnector <- R6::R6Class( #nolint
           code = private$get_pull_code_class()
         )
 
-        if (!is_empty_string(private$get_mutate_code_class()$get_code())) {
-          mutate_code <- private$get_mutate_code_class()$get_code(deparse = TRUE)
-          if (inherits(private$get_mutate_code_class(), "PythonCodeClass")) {
-            mutate_code <- private$get_mutate_code_class()
-          }
-
-          private$dataset <- mutate_dataset(
-            x = self$get_dataset(),
-            code = mutate_code,
-            vars = private$mutate_vars
-          )
-        }
-
-        set_keys(private$dataset, self$get_keys())
+        set_keys(self$get_dataset(), self$get_keys())
       }
 
       return(invisible(self))
@@ -263,9 +262,6 @@ DatasetConnector <- R6::R6Class( #nolint
     #'
     #' @return (`self`) invisibly for chaining.
     mutate = function(code, vars = list()) {
-      if (!is.null(private$dataset)) {
-        private$dataset <- mutate_dataset(private$dataset, code = code, vars = vars)
-      }
       private$set_mutate_vars(vars)
       private$set_mutate_code(code)
 
