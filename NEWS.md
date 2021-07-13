@@ -1,7 +1,6 @@
 # teal 0.9.5.9000
 
 ### Bug fixes
-* Fixed bug caused by calling `mutate_dataset` multiple times on the same `DatasetConnector` or `Dataset` object.
 
 # teal 0.9.5
 
