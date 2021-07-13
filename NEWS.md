@@ -1,7 +1,5 @@
 # teal 0.9.5.9000
 
-### Bug fixes
-
 # teal 0.9.5
 
 ### Enhancements
