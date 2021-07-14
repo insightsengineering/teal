@@ -244,7 +244,7 @@ Dataset <- R6::R6Class( # nolint
 
       if (length(vars) > 0) {
         # include only new (by name) variable
-        private$vars <- c(private$vars, vars[!names(vars) %in% names(private$vars)])
+        private$vars <- c(private$vars[!names(private$vars) %in% names(vars)], vars)
       }
 
       return(invisible(NULL))

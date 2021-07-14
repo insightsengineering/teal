@@ -566,8 +566,7 @@ DatasetConnector <- R6::R6Class( #nolint
       stopifnot(is_fully_named_list(vars))
       if (length(vars) > 0) {
         private$mutate_vars <- c(
-          private$mutate_vars,
-          vars[!names(vars) %in% names(private$mutate_vars)]
+          c(private$mutate_vars[!names(private$mutate_vars) %in% names(vars)], vars)
         )
       }
 
