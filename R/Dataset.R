@@ -252,7 +252,11 @@ Dataset <- R6::R6Class( # nolint
       stopifnot(is_fully_named_list(vars))
 
       if (length(vars) > 0) {
-        # include only new (by name) variable
+        # allows overriding old bindings with warning message
+        over_rides <- names(private$vars)[names(private$vars) %in% names(vars)]
+        if (length(over_rides) > 0) {
+          warning(paste("You will be overriding these variables:", paste(over_rides, collapse = ", ")))
+        }
         private$vars <- c(private$vars[!names(private$vars) %in% names(vars)], vars)
       }
 
