@@ -576,9 +576,7 @@ DatasetConnector <- R6::R6Class( #nolint
         if (length(over_rides) > 0) {
           warning(paste("You will be overriding these variables:", paste(over_rides, collapse = ", ")))
         }
-        private$mutate_vars <- c(
-          c(private$mutate_vars[!names(private$mutate_vars) %in% names(vars)], vars)
-        )
+        private$mutate_vars <- c(private$mutate_vars[!names(private$mutate_vars) %in% names(vars)], vars)
       }
 
       return(invisible(self))
