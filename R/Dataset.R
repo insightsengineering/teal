@@ -244,7 +244,13 @@ Dataset <- R6::R6Class( # nolint
 
       if (length(vars) > 0) {
         # allows overriding old bindings with warning message
-        over_rides <- names(private$vars)[names(private$vars) %in% names(vars)]
+        over_rides <- names(vars)[vapply(
+          names(vars), function(var_name) {
+            var_name %in% names(private$vars) &&
+              !identical(private$vars[[var_name]], vars[[var_name]])
+          },
+          FUN.VALUE = logical(1)
+        )]
         if (length(over_rides) > 0) {
           warning(paste("You will be overriding these variables:", paste(over_rides, collapse = ", ")))
         }

@@ -566,7 +566,13 @@ DatasetConnector <- R6::R6Class( #nolint
       stopifnot(is_fully_named_list(vars))
       if (length(vars) > 0) {
         # allows overriding old bindings with warning message
-        over_rides <- names(private$mutate_vars)[names(private$mutate_vars) %in% names(vars)]
+        over_rides <- names(vars)[vapply(
+          names(vars), function(var_name) {
+            var_name %in% names(private$mutate_vars) &&
+            !identical(private$mutate_vars[[var_name]], vars[[var_name]])
+            },
+          FUN.VALUE = logical(1)
+        )]
         if (length(over_rides) > 0) {
           warning(paste("You will be overriding these variables:", paste(over_rides, collapse = ", ")))
         }
