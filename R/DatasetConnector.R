@@ -565,6 +565,11 @@ DatasetConnector <- R6::R6Class( #nolint
     set_mutate_vars = function(vars) {
       stopifnot(is_fully_named_list(vars))
       if (length(vars) > 0) {
+        # allows overriding old bindings with warning message
+        over_rides <- names(private$mutate_vars)[names(private$mutate_vars) %in% names(vars)]
+        if (length(over_rides) > 0) {
+          warning(paste("You will be overriding these variables:", paste(over_rides, collapse = ", ")))
+        }
         private$mutate_vars <- c(
           c(private$mutate_vars[!names(private$mutate_vars) %in% names(vars)], vars)
         )
