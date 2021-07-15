@@ -5,8 +5,6 @@ upstream_repos:
   host: https://github.com
 - repo: insightsengineering/test.nest
   host: https://github.com
-- repo: insightsengineering/test.nest
-  host: https://github.com
 - repo: insightsengineering/random.cdisc.data
   host: https://github.com
 - repo: insightsengineering/tern
@@ -16,8 +14,6 @@ downstream_repos:
 - repo: insightsengineering/teal.devel
   host: https://github.com
 - repo: insightsengineering/teal.modules.clinical
-  host: https://github.com
-- repo: insightsengineering/teal.modules.general
   host: https://github.com
 - repo: insightsengineering/teal.modules.general
   host: https://github.com
