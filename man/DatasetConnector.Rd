@@ -64,7 +64,7 @@ ds$launch()
 \item \href{#method-set_keys}{\code{DatasetConnector$set_keys()}}
 \item \href{#method-pull}{\code{DatasetConnector$pull()}}
 \item \href{#method-set_args}{\code{DatasetConnector$set_args()}}
-\item \href{#method-mutate}{\code{DatasetConnector$mutate()}}
+\item \href{#method-mutate_delayed}{\code{DatasetConnector$mutate_delayed()}}
 \item \href{#method-is_failed}{\code{DatasetConnector$is_failed()}}
 \item \href{#method-is_pulled}{\code{DatasetConnector$is_pulled()}}
 \item \href{#method-check}{\code{DatasetConnector$check()}}
@@ -372,14 +372,14 @@ Set arguments to the pulling function
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-mutate"></a>}}
-\if{latex}{\out{\hypertarget{method-mutate}{}}}
-\subsection{Method \code{mutate()}}{
-Mutate dataset by code
+\if{html}{\out{<a id="method-mutate_delayed"></a>}}
+\if{latex}{\out{\hypertarget{method-mutate_delayed}{}}}
+\subsection{Method \code{mutate_delayed()}}{
+Storing code and dependencies to perform mutation on dataset when dataset is loaded or requested
 
 Either code or script must be provided, but not both.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{DatasetConnector$mutate(code, vars = list())}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{DatasetConnector$mutate_delayed(code, vars = list())}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
