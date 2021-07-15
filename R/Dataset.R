@@ -337,6 +337,7 @@ Dataset <- R6::R6Class( # nolint
           FUN = function(var) is(var, "DatasetConnector"),
           FUN.VALUE = logical(1)
         ))
+        # delaying mutate if it has already been delayed
         if (!delay_mutate && private$mutate_code$get_code() == "") {
           private$execute_mutate(code)
         } else {
