@@ -5,13 +5,13 @@
 \alias{MAEDataset}
 \title{R6 Class representing a dataset with its attributes}
 \description{
-\ifelse{html}{\out{<a href='https://www.tidyverse.org/lifecycle/#experimental'><img src='figures/lifecycle-experimental.svg' alt='Experimental lifecycle'></a>}}{\strong{Experimental}}
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
 
 Any \code{data.frame} object can be stored inside this object.
 Some attributes like colnames, dimension or column names for a specific type will
 be automatically derived.
 
-\ifelse{html}{\out{<a href='https://www.tidyverse.org/lifecycle/#experimental'><img src='figures/lifecycle-experimental.svg' alt='Experimental lifecycle'></a>}}{\strong{Experimental}}
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
 
 Any \code{MultiAssayExperiment} object can be stored inside this MAEDataset.
 Some attributes like colnames, dimension or column names for a specific type will
@@ -44,6 +44,7 @@ be automatically derived.
 \subsection{Public methods}{
 \itemize{
 \item \href{#method-new}{\code{Dataset$new()}}
+\item \href{#method-get_dataset}{\code{Dataset$get_dataset()}}
 \item \href{#method-recreate}{\code{Dataset$recreate()}}
 \item \href{#method-print}{\code{Dataset$print()}}
 \item \href{#method-get_attrs}{\code{Dataset$get_attrs()}}
@@ -118,6 +119,19 @@ are included to this object as local \code{vars} and they cannot be modified
 within another dataset.}
 }
 \if{html}{\out{</div>}}
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-get_dataset"></a>}}
+\if{latex}{\out{\hypertarget{method-get_dataset}{}}}
+\subsection{Method \code{get_dataset()}}{
+Performs any delayed mutate calls before returning self.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{Dataset$get_dataset()}\if{html}{\out{</div>}}
+}
+
+\subsection{Returns}{
+dataset (\code{Dataset})
 }
 }
 \if{html}{\out{<hr>}}
@@ -613,6 +627,7 @@ The objects of this class are cloneable with this method.
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="Dataset" data-id="get_column_labels">}\href{../../teal/html/Dataset.html#method-get_column_labels}{\code{teal::Dataset$get_column_labels()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="Dataset" data-id="get_dataname">}\href{../../teal/html/Dataset.html#method-get_dataname}{\code{teal::Dataset$get_dataname()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="Dataset" data-id="get_datanames">}\href{../../teal/html/Dataset.html#method-get_datanames}{\code{teal::Dataset$get_datanames()}}\out{</span>}
+\item \out{<span class="pkg-link" data-pkg="teal" data-topic="Dataset" data-id="get_dataset">}\href{../../teal/html/Dataset.html#method-get_dataset}{\code{teal::Dataset$get_dataset()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="Dataset" data-id="get_dataset_label">}\href{../../teal/html/Dataset.html#method-get_dataset_label}{\code{teal::Dataset$get_dataset_label()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="Dataset" data-id="get_factor_colnames">}\href{../../teal/html/Dataset.html#method-get_factor_colnames}{\code{teal::Dataset$get_factor_colnames()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="Dataset" data-id="get_keys">}\href{../../teal/html/Dataset.html#method-get_keys}{\code{teal::Dataset$get_keys()}}\out{</span>}

@@ -15,7 +15,7 @@ x \%is_in\% y
 \code{logical} vector length of \code{x} denoting if element was found in second list.
 }
 \description{
-\ifelse{html}{\out{<a href='https://www.tidyverse.org/lifecycle/#maturing'><img src='figures/lifecycle-maturing.svg' alt='Maturing lifecycle'></a>}}{\strong{Maturing}}
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#maturing}{\figure{lifecycle-maturing.svg}{options: alt='[Maturing]'}}}{\strong{[Maturing]}}
 Checks if \code{x} element matches any of \code{y} element. If one of the arguments is a list then list elements
 are treated as whole - in this case list elements can be a vector, so it looks
 for equal element in second vector to be matched.
