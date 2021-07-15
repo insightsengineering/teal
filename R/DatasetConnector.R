@@ -564,12 +564,19 @@ DatasetConnector <- R6::R6Class( #nolint
     },
     set_mutate_vars = function(vars) {
       stopifnot(is_fully_named_list(vars))
-
       if (length(vars) > 0) {
-        private$mutate_vars <- c(
-          private$mutate_vars,
-          vars[!names(vars) %in% private$mutate_vars]
-        )
+        # now allowing overriding variable names
+        over_rides <- names(vars)[vapply(
+          names(vars), function(var_name) {
+            var_name %in% names(private$mutate_vars) &&
+            !identical(private$mutate_vars[[var_name]], vars[[var_name]])
+            },
+          FUN.VALUE = logical(1)
+        )]
+        if (length(over_rides) > 0) {
+          stop(paste("Variable name(s) already used:", paste(over_rides, collapse = ", ")))
+        }
+        private$mutate_vars <- c(private$mutate_vars[!names(private$mutate_vars) %in% names(vars)], vars)
       }
 
       return(invisible(self))
