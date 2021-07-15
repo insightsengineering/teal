@@ -254,14 +254,14 @@ DatasetConnector <- R6::R6Class( #nolint
       return(invisible(self))
     },
 
-    # ___ mutate ====
+    # ___ mutate_delayed ====
     #' @description
-    #' Mutate dataset by code
+    #' Storing code and dependencies to perform mutation on dataset when dataset is loaded or requested
     #'
     #' Either code or script must be provided, but not both.
     #'
     #' @return (`self`) invisibly for chaining.
-    mutate = function(code, vars = list()) {
+    mutate_delayed = function(code, vars = list()) {
       private$set_mutate_vars(vars)
       private$set_mutate_code(code)
 
