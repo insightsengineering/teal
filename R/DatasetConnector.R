@@ -561,7 +561,7 @@ DatasetConnector <- R6::R6Class( #nolint
     set_mutate_vars = function(vars) {
       stopifnot(is_fully_named_list(vars))
       if (length(vars) > 0) {
-        # allows overriding old bindings with warning message
+        # now allowing overriding variable names
         over_rides <- names(vars)[vapply(
           names(vars), function(var_name) {
             var_name %in% names(private$mutate_vars) &&
@@ -570,7 +570,7 @@ DatasetConnector <- R6::R6Class( #nolint
           FUN.VALUE = logical(1)
         )]
         if (length(over_rides) > 0) {
-          warning(paste("You will be overriding these variables:", paste(over_rides, collapse = ", ")))
+          stop(paste("Variable name(s) already used:", paste(over_rides, collapse = ", ")))
         }
         private$mutate_vars <- c(private$mutate_vars[!names(private$mutate_vars) %in% names(vars)], vars)
       }
