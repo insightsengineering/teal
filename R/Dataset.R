@@ -243,7 +243,7 @@ Dataset <- R6::R6Class( # nolint
       stopifnot(is_fully_named_list(vars))
 
       if (length(vars) > 0) {
-        # allows overriding old bindings with warning message
+        # now allowing overriding variable names
         over_rides <- names(vars)[vapply(
           names(vars), function(var_name) {
             var_name %in% names(private$vars) &&
@@ -252,7 +252,7 @@ Dataset <- R6::R6Class( # nolint
           FUN.VALUE = logical(1)
         )]
         if (length(over_rides) > 0) {
-          warning(paste("You will be overriding these variables:", paste(over_rides, collapse = ", ")))
+          stop(paste("Variable name(s) already used:", paste(over_rides, collapse = ", ")))
         }
         private$vars <- c(private$vars[!names(private$vars) %in% names(vars)], vars)
       }
