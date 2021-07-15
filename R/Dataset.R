@@ -73,6 +73,7 @@ Dataset <- R6::R6Class( # nolint
       self$set_vars(vars)
       self$set_dataset_label(label)
       self$set_keys(keys)
+      private$mutate_code <- CodeClass$new()
 
       # needed if recreating dataset - we need to preserve code order and uniqueness
       private$code <- CodeClass$new()
@@ -90,7 +91,7 @@ Dataset <- R6::R6Class( # nolint
     #'
     #' @return dataset (\code{Dataset})
     get_dataset = function() {
-      if (private$mutate_code$get_code() != "") {
+      if (!is_empty(private$mutate_code$code)) {
         private$execute_mutate(private$mutate_code$get_code())
         private$mutate_code <- CodeClass$new()
       }
@@ -342,7 +343,7 @@ Dataset <- R6::R6Class( # nolint
           FUN.VALUE = logical(1)
         ))
         # delaying mutate if it has already been delayed
-        if (!delay_mutate && private$mutate_code$get_code() == "") {
+        if (!delay_mutate && is_empty(private$mutate_code$code)) {
           private$execute_mutate(code)
         } else {
           private$mutate_code$set_code(code)
@@ -428,7 +429,7 @@ Dataset <- R6::R6Class( # nolint
     vars = list(),
     dataset_label = character(0),
     .keys = character(0),
-    mutate_code = CodeClass$new(),
+    mutate_code = NULL, # CodeClass after initialization
 
     execute_mutate = function(code) {
       # environment needs also this var to mutate self
