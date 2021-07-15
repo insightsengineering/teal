@@ -92,7 +92,7 @@ Dataset <- R6::R6Class( # nolint
     #' @return dataset (\code{Dataset})
     get_dataset = function() {
       if (!is_empty(private$mutate_code$code)) {
-        private$execute_mutate(private$mutate_code$get_code())
+        private$mutate_eager(private$mutate_code$get_code())
         private$mutate_code <- CodeClass$new()
       }
       return(self)
@@ -344,9 +344,9 @@ Dataset <- R6::R6Class( # nolint
         ))
         # delaying mutate if it has already been delayed
         if (!delay_mutate && is_empty(private$mutate_code$code)) {
-          private$execute_mutate(code)
+          private$mutate_eager(code)
         } else {
-          private$mutate_code$set_code(code)
+          private$mutate_delayed(code)
         }
       }
 
@@ -431,7 +431,11 @@ Dataset <- R6::R6Class( # nolint
     .keys = character(0),
     mutate_code = NULL, # CodeClass after initialization
 
-    execute_mutate = function(code) {
+    mutate_delayed = function(code) {
+      private$mutate_code$set_code(code)
+    },
+
+    mutate_eager = function(code) {
       # environment needs also this var to mutate self
       code_container <- CodeClass$new()
       code_container$set_code(
