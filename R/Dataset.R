@@ -85,6 +85,10 @@ Dataset <- R6::R6Class( # nolint
       return(invisible(self))
     },
 
+    #' @description
+    #' Performs any delayed mutate calls before returning self.
+    #'
+    #' @return dataset (\code{Dataset})
     get_dataset = function() {
       if (private$mutate_code$get_code() != "") {
         private$execute_mutate(private$mutate_code$get_code())
