@@ -3,6 +3,9 @@
 ### Enhancements 
 * Modified the mutate method of `DatasetConnector` and `Dataset` objects to delay execution whenever possible.
 
+### Bug fixes
+* Fixed the bug caused by calling `mutate_dataset` multiple times on the same `DatasetConnector` or `Dataset` object.
+
 # teal 0.9.5
 
 ### Enhancements
