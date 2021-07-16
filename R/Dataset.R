@@ -358,6 +358,7 @@ Dataset <- R6::R6Class( # nolint
         if (!delay_mutate && !self$is_mutate_delayed()) {
           private$mutate_eager(code)
         } else {
+          message("Mutation is delayed")
           private$mutate_delayed(code)
         }
       }

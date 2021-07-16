@@ -256,6 +256,7 @@ DatasetConnector <- R6::R6Class( #nolint
       if (self$is_pulled()) {
         private$mutate_eager()
       }  else {
+        message("Mutation is delayed")
         private$mutate_delayed()
       }
       return(invisible(self))
@@ -467,6 +468,9 @@ DatasetConnector <- R6::R6Class( #nolint
         # i.e. if private$dataset is delayed, the self is delayed, if private$dataset has been mutated then self is
         # mutated
         private$is_mutate_delayed_flag <- private$dataset$is_mutate_delayed()
+        if (! private$is_mutate_delayed_flag) {
+          private$mutate_code <- CodeClass$new()
+        }
       } else {
         private$is_mutate_delayed_flag <- FALSE
       }
