@@ -132,7 +132,7 @@ Dataset <- R6::R6Class( # nolint
     #'
     #' @return dataset (\code{Dataset})
     get_dataset = function() {
-      if (!is_empty(private$mutate_code$code)) {
+      if (self$is_mutate_delayed()) {
         private$mutate_eager(private$mutate_code$get_code())
       }
       return(self)
@@ -341,18 +341,21 @@ Dataset <- R6::R6Class( # nolint
         )
       } else {
         delay_mutate <- any(vapply(
-          vars,
+          private$vars,
           FUN = function(var) {
             if (is(var, "DatasetConnector")) {
               (! var$is_pulled()) || var$is_mutate_delayed()
+            } else if (is(var, "Dataset")) {
+              var$is_mutate_delayed()
             } else {
               FALSE
             }
           },
           FUN.VALUE = logical(1)
-        ))
+          )
+        )
         # delaying mutate if it has already been delayed
-        if (!delay_mutate && is_empty(private$mutate_code$code)) {
+        if (!delay_mutate && !self$is_mutate_delayed()) {
           private$mutate_eager(code)
         } else {
           private$mutate_delayed(code)
