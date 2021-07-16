@@ -11,7 +11,7 @@ Data can be pulled via the \code{pull} method and accessed directly
 through the \code{dataset} active binding.
 Pulled data inherits from the class \code{\link{Dataset}}}
 \description{
-\ifelse{html}{\out{<a href='https://www.tidyverse.org/lifecycle/#experimental'><img src='figures/lifecycle-experimental.svg' alt='Experimental lifecycle'></a>}}{\strong{Experimental}}
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
 }
 \examples{
 
@@ -64,9 +64,10 @@ ds$launch()
 \item \href{#method-set_keys}{\code{DatasetConnector$set_keys()}}
 \item \href{#method-pull}{\code{DatasetConnector$pull()}}
 \item \href{#method-set_args}{\code{DatasetConnector$set_args()}}
-\item \href{#method-mutate_delayed}{\code{DatasetConnector$mutate_delayed()}}
+\item \href{#method-mutate}{\code{DatasetConnector$mutate()}}
 \item \href{#method-is_failed}{\code{DatasetConnector$is_failed()}}
 \item \href{#method-is_pulled}{\code{DatasetConnector$is_pulled()}}
+\item \href{#method-is_mutate_delayed}{\code{DatasetConnector$is_mutate_delayed()}}
 \item \href{#method-check}{\code{DatasetConnector$check()}}
 \item \href{#method-set_ui_input}{\code{DatasetConnector$set_ui_input()}}
 \item \href{#method-get_ui}{\code{DatasetConnector$get_ui()}}
@@ -372,14 +373,14 @@ Set arguments to the pulling function
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-mutate_delayed"></a>}}
-\if{latex}{\out{\hypertarget{method-mutate_delayed}{}}}
-\subsection{Method \code{mutate_delayed()}}{
+\if{html}{\out{<a id="method-mutate"></a>}}
+\if{latex}{\out{\hypertarget{method-mutate}{}}}
+\subsection{Method \code{mutate()}}{
 Storing code and dependencies to perform mutation on dataset when dataset is loaded or requested
 
 Either code or script must be provided, but not both.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{DatasetConnector$mutate_delayed(code, vars = list())}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{DatasetConnector$mutate(code, vars = list())}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
@@ -431,6 +432,19 @@ Check if dataset has already been pulled.
 
 \subsection{Returns}{
 \code{TRUE} if connector has been already pulled, else \code{FALSE}
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-is_mutate_delayed"></a>}}
+\if{latex}{\out{\hypertarget{method-is_mutate_delayed}{}}}
+\subsection{Method \code{is_mutate_delayed()}}{
+Check if dataset has mutations that are delayed
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{DatasetConnector$is_mutate_delayed()}\if{html}{\out{</div>}}
+}
+
+\subsection{Returns}{
+\code{logical}
 }
 }
 \if{html}{\out{<hr>}}

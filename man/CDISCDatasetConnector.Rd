@@ -10,7 +10,7 @@ The difference compared to the inherited class is a parent field that
 indicates name of the parent dataset. Note that the parent field might
 be empty (i.e. \code{character(0)}).}
 \description{
-\ifelse{html}{\out{<a href='https://www.tidyverse.org/lifecycle/#experimental'><img src='figures/lifecycle-experimental.svg' alt='Experimental lifecycle'></a>}}{\strong{Experimental}}
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
 }
 \section{Super class}{
 \code{\link[teal:DatasetConnector]{teal::DatasetConnector}} -> \code{CDISCDatasetConnector}
@@ -42,9 +42,10 @@ be empty (i.e. \code{character(0)}).}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="DatasetConnector" data-id="get_server">}\href{../../teal/html/DatasetConnector.html#method-get_server}{\code{teal::DatasetConnector$get_server()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="DatasetConnector" data-id="get_ui">}\href{../../teal/html/DatasetConnector.html#method-get_ui}{\code{teal::DatasetConnector$get_ui()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="DatasetConnector" data-id="is_failed">}\href{../../teal/html/DatasetConnector.html#method-is_failed}{\code{teal::DatasetConnector$is_failed()}}\out{</span>}
+\item \out{<span class="pkg-link" data-pkg="teal" data-topic="DatasetConnector" data-id="is_mutate_delayed">}\href{../../teal/html/DatasetConnector.html#method-is_mutate_delayed}{\code{teal::DatasetConnector$is_mutate_delayed()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="DatasetConnector" data-id="is_pulled">}\href{../../teal/html/DatasetConnector.html#method-is_pulled}{\code{teal::DatasetConnector$is_pulled()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="DatasetConnector" data-id="launch">}\href{../../teal/html/DatasetConnector.html#method-launch}{\code{teal::DatasetConnector$launch()}}\out{</span>}
-\item \out{<span class="pkg-link" data-pkg="teal" data-topic="DatasetConnector" data-id="mutate_delayed">}\href{../../teal/html/DatasetConnector.html#method-mutate_delayed}{\code{teal::DatasetConnector$mutate_delayed()}}\out{</span>}
+\item \out{<span class="pkg-link" data-pkg="teal" data-topic="DatasetConnector" data-id="mutate">}\href{../../teal/html/DatasetConnector.html#method-mutate}{\code{teal::DatasetConnector$mutate()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="DatasetConnector" data-id="set_args">}\href{../../teal/html/DatasetConnector.html#method-set_args}{\code{teal::DatasetConnector$set_args()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="DatasetConnector" data-id="set_dataset_label">}\href{../../teal/html/DatasetConnector.html#method-set_dataset_label}{\code{teal::DatasetConnector$set_dataset_label()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="DatasetConnector" data-id="set_keys">}\href{../../teal/html/DatasetConnector.html#method-set_keys}{\code{teal::DatasetConnector$set_keys()}}\out{</span>}

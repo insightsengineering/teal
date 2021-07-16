@@ -5,13 +5,13 @@
 \alias{MAEDataset}
 \title{R6 Class representing a dataset with its attributes}
 \description{
-\ifelse{html}{\out{<a href='https://www.tidyverse.org/lifecycle/#experimental'><img src='figures/lifecycle-experimental.svg' alt='Experimental lifecycle'></a>}}{\strong{Experimental}}
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
 
 Any \code{data.frame} object can be stored inside this object.
 Some attributes like colnames, dimension or column names for a specific type will
 be automatically derived.
 
-\ifelse{html}{\out{<a href='https://www.tidyverse.org/lifecycle/#experimental'><img src='figures/lifecycle-experimental.svg' alt='Experimental lifecycle'></a>}}{\strong{Experimental}}
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
 
 Any \code{MultiAssayExperiment} object can be stored inside this MAEDataset.
 Some attributes like colnames, dimension or column names for a specific type will
@@ -66,6 +66,7 @@ be automatically derived.
 \item \href{#method-set_code}{\code{Dataset$set_code()}}
 \item \href{#method-get_code}{\code{Dataset$get_code()}}
 \item \href{#method-get_code_class}{\code{Dataset$get_code_class()}}
+\item \href{#method-is_mutate_delayed}{\code{Dataset$is_mutate_delayed()}}
 \item \href{#method-mutate}{\code{Dataset$mutate()}}
 \item \href{#method-check}{\code{Dataset$check()}}
 \item \href{#method-check_keys}{\code{Dataset$check_keys()}}
@@ -502,6 +503,18 @@ Get internal \code{CodeClass} object
 }
 }
 \if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-is_mutate_delayed"></a>}}
+\if{latex}{\out{\hypertarget{method-is_mutate_delayed}{}}}
+\subsection{Method \code{is_mutate_delayed()}}{
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{Dataset$is_mutate_delayed()}\if{html}{\out{</div>}}
+}
+
+\subsection{Returns}{
+\code{logical}
+}
+}
+\if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-mutate"></a>}}
 \if{latex}{\out{\hypertarget{method-mutate}{}}}
 \subsection{Method \code{mutate()}}{
@@ -635,6 +648,7 @@ The objects of this class are cloneable with this method.
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="Dataset" data-id="get_raw_data">}\href{../../teal/html/Dataset.html#method-get_raw_data}{\code{teal::Dataset$get_raw_data()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="Dataset" data-id="get_row_labels">}\href{../../teal/html/Dataset.html#method-get_row_labels}{\code{teal::Dataset$get_row_labels()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="Dataset" data-id="get_rownames">}\href{../../teal/html/Dataset.html#method-get_rownames}{\code{teal::Dataset$get_rownames()}}\out{</span>}
+\item \out{<span class="pkg-link" data-pkg="teal" data-topic="Dataset" data-id="is_mutate_delayed">}\href{../../teal/html/Dataset.html#method-is_mutate_delayed}{\code{teal::Dataset$is_mutate_delayed()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="Dataset" data-id="is_pulled">}\href{../../teal/html/Dataset.html#method-is_pulled}{\code{teal::Dataset$is_pulled()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="Dataset" data-id="mutate">}\href{../../teal/html/Dataset.html#method-mutate}{\code{teal::Dataset$mutate()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="Dataset" data-id="recreate">}\href{../../teal/html/Dataset.html#method-recreate}{\code{teal::Dataset$recreate()}}\out{</span>}
