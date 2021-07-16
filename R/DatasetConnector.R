@@ -67,7 +67,6 @@ DatasetConnector <- R6::R6Class( #nolint
 
       private$mutate_code <- CodeClass$new()
       private$set_mutate_code(code)
-      private$is_mutate_delayed_flag <- FALSE
 
       return(invisible(self))
     },
@@ -386,7 +385,7 @@ DatasetConnector <- R6::R6Class( #nolint
     mutate_code = NULL, # CodeClass after initialization
     mutate_vars = list(), # named list with vars used to mutate object
     ui_input = NULL, # NULL or list
-    is_mutate_delayed_flag = NULL,
+    is_mutate_delayed_flag = FALSE,
 
     ## __Private Methods ====
     ui = function(id) {
