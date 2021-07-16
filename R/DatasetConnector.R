@@ -463,7 +463,9 @@ DatasetConnector <- R6::R6Class( #nolint
           code = mutate_code,
           vars = private$mutate_vars
         )
-        # resetting flag only if mutation is successful
+        # allowing private$dataset to decide whether the mutate code of self has been delayed or not
+        # i.e. if private$dataset is delayed, the self is delayed, if private$dataset has been mutated then self is
+        # mutated
         private$is_mutate_delayed_flag <- private$dataset$is_mutate_delayed()
       } else {
         private$is_mutate_delayed_flag <- FALSE
