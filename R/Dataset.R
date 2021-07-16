@@ -87,18 +87,6 @@ Dataset <- R6::R6Class( # nolint
     },
 
     #' @description
-    #' Performs any delayed mutate calls before returning self.
-    #'
-    #' @return dataset (\code{Dataset})
-    get_dataset = function() {
-      if (!is_empty(private$mutate_code$code)) {
-        private$mutate_eager(private$mutate_code$get_code())
-        private$mutate_code <- CodeClass$new()
-      }
-      return(self)
-    },
-
-    #' @description
     #' Recreate a dataset with its current attributes
     #' This is useful way to have access to class initialize method basing on class object.
     #'
@@ -139,6 +127,17 @@ Dataset <- R6::R6Class( # nolint
       invisible(self)
     },
     # ___ getters ====
+    #' @description
+    #' Performs any delayed mutate calls before returning self.
+    #'
+    #' @return dataset (\code{Dataset})
+    get_dataset = function() {
+      if (!is_empty(private$mutate_code$code)) {
+        private$mutate_eager(private$mutate_code$get_code())
+        private$mutate_code <- CodeClass$new()
+      }
+      return(self)
+    },
     #' @description
     #' Get all dataset attributes
     #' @return (named `list`) with dataset attributes
@@ -431,6 +430,7 @@ Dataset <- R6::R6Class( # nolint
     .keys = character(0),
     mutate_code = NULL, # CodeClass after initialization
 
+    ## __Private Methods ====
     mutate_delayed = function(code) {
       private$mutate_code$set_code(code)
     },
@@ -460,7 +460,6 @@ Dataset <- R6::R6Class( # nolint
       )
     },
 
-    ## __Private Methods ====
     # need to have a custom deep_clone because one of the key fields are reference-type object
     # in particular: code is a R6 object that wouldn't be cloned using default clone(deep = T)
     deep_clone = function(name, value) {

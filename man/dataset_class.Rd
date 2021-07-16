@@ -44,9 +44,9 @@ be automatically derived.
 \subsection{Public methods}{
 \itemize{
 \item \href{#method-new}{\code{Dataset$new()}}
-\item \href{#method-get_dataset}{\code{Dataset$get_dataset()}}
 \item \href{#method-recreate}{\code{Dataset$recreate()}}
 \item \href{#method-print}{\code{Dataset$print()}}
+\item \href{#method-get_dataset}{\code{Dataset$get_dataset()}}
 \item \href{#method-get_attrs}{\code{Dataset$get_attrs()}}
 \item \href{#method-get_raw_data}{\code{Dataset$get_raw_data()}}
 \item \href{#method-get_numeric_colnames}{\code{Dataset$get_numeric_colnames()}}
@@ -122,19 +122,6 @@ within another dataset.}
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-get_dataset"></a>}}
-\if{latex}{\out{\hypertarget{method-get_dataset}{}}}
-\subsection{Method \code{get_dataset()}}{
-Performs any delayed mutate calls before returning self.
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{Dataset$get_dataset()}\if{html}{\out{</div>}}
-}
-
-\subsection{Returns}{
-dataset (\code{Dataset})
-}
-}
-\if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-recreate"></a>}}
 \if{latex}{\out{\hypertarget{method-recreate}{}}}
 \subsection{Method \code{recreate()}}{
@@ -204,6 +191,19 @@ Prints this Dataset.
 }
 \subsection{Returns}{
 invisibly self
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-get_dataset"></a>}}
+\if{latex}{\out{\hypertarget{method-get_dataset}{}}}
+\subsection{Method \code{get_dataset()}}{
+Performs any delayed mutate calls before returning self.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{Dataset$get_dataset()}\if{html}{\out{</div>}}
+}
+
+\subsection{Returns}{
+dataset (\code{Dataset})
 }
 }
 \if{html}{\out{<hr>}}

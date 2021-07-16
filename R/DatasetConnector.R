@@ -385,6 +385,8 @@ DatasetConnector <- R6::R6Class( #nolint
     mutate_code = NULL, # CodeClass after initialization
     mutate_vars = list(), # named list with vars used to mutate object
     ui_input = NULL, # NULL or list
+
+    ## __Private Methods ====
     ui = function(id) {
       ns <- NS(id)
       # add namespace to input ids
@@ -448,7 +450,6 @@ DatasetConnector <- R6::R6Class( #nolint
       return(invisible(self))
     },
 
-    ## __Private Methods ====
     # need to have a custom deep_clone because one of the key fields are reference-type object
     # in particular: dataset is a R6 object that wouldn't be cloned using default clone(deep = T)
     deep_clone = function(name, value) {
