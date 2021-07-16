@@ -144,7 +144,7 @@ DatasetConnector <- R6::R6Class( #nolint
           call. = FALSE
         )
       }
-      if (!is_empty_string(private$get_mutate_code_class()$get_code())) {
+      if (!is_empty(private$get_mutate_code_class()$code)) {
         mutate_code <- private$get_mutate_code_class()$get_code(deparse = TRUE)
         if (inherits(private$get_mutate_code_class(), "PythonCodeClass")) {
           mutate_code <- private$get_mutate_code_class()
