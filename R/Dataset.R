@@ -134,7 +134,6 @@ Dataset <- R6::R6Class( # nolint
     get_dataset = function() {
       if (!is_empty(private$mutate_code$code)) {
         private$mutate_eager(private$mutate_code$get_code())
-        private$mutate_code <- CodeClass$new()
       }
       return(self)
     },
@@ -313,6 +312,11 @@ Dataset <- R6::R6Class( # nolint
 
       return(res)
     },
+    #'
+    #' @return \code{logical}
+    is_mutate_delayed = function() {
+      return(!is_empty(private$mutate_code$code))
+    },
 
     # ___ mutate ====
     #' @description
@@ -338,7 +342,13 @@ Dataset <- R6::R6Class( # nolint
       } else {
         delay_mutate <- any(vapply(
           vars,
-          FUN = function(var) is(var, "DatasetConnector"),
+          FUN = function(var) {
+            if (is(var, "DatasetConnector")) {
+              (! var$is_pulled()) || var$is_mutate_delayed()
+            } else {
+              FALSE
+            }
+          },
           FUN.VALUE = logical(1)
         ))
         # delaying mutate if it has already been delayed
@@ -450,6 +460,7 @@ Dataset <- R6::R6Class( # nolint
       # code set after successful evaluation
       # otherwise code != dataset
       self$set_code(code)
+      private$mutate_code <- CodeClass$new()
 
       # dataset is recreated by replacing data by mutated object
       # mutation code is added to the code which replicates the data

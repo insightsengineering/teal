@@ -67,6 +67,7 @@ DatasetConnector <- R6::R6Class( #nolint
 
       private$mutate_code <- CodeClass$new()
       private$set_mutate_code(code)
+      private$is_mutate_delayed_flag <- FALSE
 
       return(invisible(self))
     },
@@ -243,18 +244,20 @@ DatasetConnector <- R6::R6Class( #nolint
       return(invisible(self))
     },
 
-    # ___ mutate_delayed ====
+    # ___ mutate ====
     #' @description
     #' Storing code and dependencies to perform mutation on dataset when dataset is loaded or requested
     #'
     #' Either code or script must be provided, but not both.
     #'
     #' @return (`self`) invisibly for chaining.
-    mutate_delayed = function(code, vars = list()) {
+    mutate = function(code, vars = list()) {
       private$set_mutate_vars(vars)
       private$set_mutate_code(code)
       if (self$is_pulled()) {
         private$mutate_eager()
+      }  else {
+        private$mutate_delayed()
       }
       return(invisible(self))
     },
@@ -273,6 +276,13 @@ DatasetConnector <- R6::R6Class( #nolint
     #' @return \code{TRUE} if connector has been already pulled, else \code{FALSE}
     is_pulled = function() {
       isFALSE(is.null(private$dataset))
+    },
+    #' @description
+    #' Check if dataset has mutations that are delayed
+    #'
+    #' @return \code{logical}
+    is_mutate_delayed = function() {
+      private$is_mutate_delayed_flag
     },
 
     # ___ check ====
@@ -376,6 +386,7 @@ DatasetConnector <- R6::R6Class( #nolint
     mutate_code = NULL, # CodeClass after initialization
     mutate_vars = list(), # named list with vars used to mutate object
     ui_input = NULL, # NULL or list
+    is_mutate_delayed_flag = NULL,
 
     ## __Private Methods ====
     ui = function(id) {
@@ -453,7 +464,15 @@ DatasetConnector <- R6::R6Class( #nolint
           code = mutate_code,
           vars = private$mutate_vars
         )
+        # resetting flag only if mutation is successful
+        private$is_mutate_delayed_flag <- private$dataset$is_mutate_delayed()
+      } else {
+        private$is_mutate_delayed_flag <- FALSE
       }
+    },
+
+    mutate_delayed = function() {
+      private$is_mutate_delayed_flag <- TRUE
     },
 
     # need to have a custom deep_clone because one of the key fields are reference-type object

@@ -93,7 +93,7 @@ mutate_dataset.DatasetConnector <- function(x, # nolint
   stopifnot(is_fully_named_list(vars))
 
   code <- code_from_script(code, script)
-  x$mutate_delayed(code = code, vars = vars, ...)
+  x$mutate(code = code, vars = vars, ...)
 }
 
 
