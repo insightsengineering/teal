@@ -475,6 +475,7 @@ DatasetConnector <- R6::R6Class( #nolint
 
     mutate_delayed = function() {
       private$is_mutate_delayed_flag <- TRUE
+      return(invisible(self))
     },
 
     # need to have a custom deep_clone because one of the key fields are reference-type object
