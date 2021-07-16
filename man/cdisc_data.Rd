@@ -23,7 +23,7 @@ as provided in arguments. Check is run only if flag is true and preprocessing co
 a \code{CDISCData} object
 }
 \description{
-\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
+\ifelse{html}{\out{<a href='https://www.tidyverse.org/lifecycle/#experimental'><img src='figures/lifecycle-experimental.svg' alt='Experimental lifecycle'></a>}}{\strong{Experimental}}
 Function passes datasets to teal application with option to read preprocessing code and reproducibility checking.
 }
 \details{

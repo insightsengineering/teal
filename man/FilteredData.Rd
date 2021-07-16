@@ -5,7 +5,7 @@
 \alias{FilteredData}
 \title{Class to encapsulate filtered datasets}
 \description{
-\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
+\ifelse{html}{\out{<a href='https://www.tidyverse.org/lifecycle/#experimental'><img src='figures/lifecycle-experimental.svg' alt='Experimental lifecycle'></a>}}{\strong{Experimental}}
 }
 \details{
 The main purpose of this class is to provide a collection of reactive datasets,
@@ -492,7 +492,7 @@ Set data attributes for the dataset
 \if{html}{\out{<a id="method-get_variable_labels"></a>}}
 \if{latex}{\out{\hypertarget{method-get_variable_labels}{}}}
 \subsection{Method \code{get_variable_labels()}}{
-\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#soft-deprecated}{\figure{lifecycle-soft-deprecated.svg}{options: alt='[Soft-deprecated]'}}}{\strong{[Soft-deprecated]}}
+\ifelse{html}{\figure{lifecycle-soft-deprecated.svg}{options: alt='Soft-deprecated lifecycle'}}{\strong{Soft-deprecated}}
 Get labels of variables in the data
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{FilteredData$get_variable_labels(dataname, variables = NULL)}\if{html}{\out{</div>}}

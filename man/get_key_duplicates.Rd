@@ -17,7 +17,7 @@ names in \code{dataset} consisting the key. Optional, default: NULL}
 a \code{tibble} with variables consisting the key and \code{row_no} and \code{duplicates_count} columns
 }
 \description{
-\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
+\ifelse{html}{\out{<a href='https://www.tidyverse.org/lifecycle/#experimental'><img src='figures/lifecycle-experimental.svg' alt='Experimental lifecycle'></a>}}{\strong{Experimental}}
 }
 \details{
 The information summary provides row numbers and number of duplicates

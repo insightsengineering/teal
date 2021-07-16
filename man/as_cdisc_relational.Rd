@@ -19,7 +19,7 @@ Label to describe the dataset}
 (\code{RelationalDataset} or \code{RelationalDatasetConnector}) object
 }
 \description{
-\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#defunct}{\figure{lifecycle-defunct.svg}{options: alt='[Defunct]'}}}{\strong{[Defunct]}}
+\ifelse{html}{\figure{lifecycle-defunct.svg}{options: alt='Defunct lifecycle'}}{\strong{Defunct}}
 }
 \details{
 Convert a \verb{Named<...>} to a \verb{Relational<...>}
