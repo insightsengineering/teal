@@ -159,7 +159,7 @@ Dataset <- R6::R6Class( # nolint
     #' \code{data.frame} or \code{rtable}
     get_raw_data = function() {
       if (self$is_mutate_delayed()) {
-        message("There are mutate statements that are delayed. Returned may (or) not reflect the mutations.")
+        message("There are mutate statements that are delayed. Returned data may (or) not reflect the mutations.")
       }
       private$.raw_data
     },
