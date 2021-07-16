@@ -470,6 +470,7 @@ DatasetConnector <- R6::R6Class( #nolint
       } else {
         private$is_mutate_delayed_flag <- FALSE
       }
+      return(invisible(self))
     },
 
     mutate_delayed = function() {
