@@ -67,6 +67,7 @@ DatasetConnector <- R6::R6Class( #nolint
 
       private$mutate_code <- CodeClass$new()
       private$set_mutate_code(code)
+      private$staged_mutate_code <- CodeClass$new()
 
       return(invisible(self))
     },
@@ -108,7 +109,9 @@ DatasetConnector <- R6::R6Class( #nolint
     #' @return optionally deparsed \code{call} object
     get_code = function(deparse = TRUE) {
       stopifnot(is_logical_single(deparse))
-
+      if (self$is_mutate_delayed()) {
+        message("There are mutate code that are delayed and not part of the output of this function")
+      }
       return(self$get_code_class()$get_code(deparse = deparse))
     },
     #' @description
@@ -251,8 +254,8 @@ DatasetConnector <- R6::R6Class( #nolint
     #'
     #' @return (`self`) invisibly for chaining.
     mutate = function(code, vars = list()) {
-      private$set_mutate_vars(vars)
-      private$set_mutate_code(code)
+      private$set_staged_mutate_vars(vars)
+      private$set_staged_mutate_code(code)
       if (self$is_pulled()) {
         private$mutate_eager()
       }  else {
@@ -384,7 +387,9 @@ DatasetConnector <- R6::R6Class( #nolint
     dataset_label = character(0),
     keys = NULL,
     mutate_code = NULL, # CodeClass after initialization
+    staged_mutate_code = NULL,
     mutate_vars = list(), # named list with vars used to mutate object
+    staged_mutate_vars = list(),
     ui_input = NULL, # NULL or list
     is_mutate_delayed_flag = FALSE,
 
@@ -453,23 +458,29 @@ DatasetConnector <- R6::R6Class( #nolint
     },
 
     mutate_eager = function() {
-      if (!is_empty(private$get_mutate_code_class()$code)) {
-        mutate_code <- private$get_mutate_code_class()$get_code(deparse = TRUE)
-        if (inherits(private$get_mutate_code_class(), "PythonCodeClass")) {
-          mutate_code <- private$get_mutate_code_class()
+      if (!is_empty(private$get_staged_mutate_code_class()$code)) {
+        mutate_code <- private$get_staged_mutate_code_class()$get_code(deparse = TRUE)
+        if (inherits(private$get_staged_mutate_code_class(), "PythonCodeClass")) {
+          mutate_code <- private$get_staged_mutate_code_class()
         }
 
         private$dataset <- mutate_dataset(
           x = private$dataset,
           code = mutate_code,
-          vars = private$mutate_vars
+          vars = private$staged_mutate_vars
         )
         # allowing private$dataset to decide whether the mutate code of self has been delayed or not
         # i.e. if private$dataset is delayed, the self is delayed, if private$dataset has been mutated then self is
         # mutated
         private$is_mutate_delayed_flag <- private$dataset$is_mutate_delayed()
         if (! private$is_mutate_delayed_flag) {
-          private$mutate_code <- CodeClass$new()
+          private$mutate_code$append(private$staged_mutate_code)
+          private$mutate_vars <- c(
+            private$mutate_vars[!names(private$mutate_vars) %in% names(private$staged_mutate_vars)],
+            private$staged_mutate_vars
+          )
+          private$staged_mutate_code <- CodeClass$new()
+          private$staged_mutate_vars <- list()
         }
       } else {
         private$is_mutate_delayed_flag <- FALSE
@@ -570,6 +581,37 @@ DatasetConnector <- R6::R6Class( #nolint
       res$append(private$mutate_code)
       return(res)
     },
+    get_staged_mutate_code_class = function() {
+      res <- CodeClass$new()
+      if (inherits(private$mutate_code, "PythonCodeClass")) {
+        res <- PythonCodeClass$new()
+      }
+
+      res$append(list_to_code_class(private$staged_mutate_vars))
+      res$append(private$staged_mutate_code)
+      return(res)
+    },
+    set_staged_mutate_code = function(code) {
+      stopifnot(is_character_vector(code, 0, 1) || inherits(code, "PythonCodeClass"))
+
+      if (inherits(code, "PythonCodeClass")) {
+        r <- PythonCodeClass$new()
+        r$append(private$staged_mutate_code)
+        private$staged_mutate_code <- r
+
+        code <- code$get_code()
+      }
+
+      if (length(code) > 0 && code != "") {
+        private$staged_mutate_code$set_code(
+          code = code,
+          dataname = private$dataname,
+          deps = names(private$staged_mutate_vars)
+        )
+      }
+
+      return(invisible(self))
+    },
     set_mutate_code = function(code) {
       stopifnot(is_character_vector(code, 0, 1) || inherits(code, "PythonCodeClass"))
 
@@ -591,21 +633,25 @@ DatasetConnector <- R6::R6Class( #nolint
 
       return(invisible(self))
     },
-    set_mutate_vars = function(vars) {
+    set_staged_mutate_vars = function(vars) {
       stopifnot(is_fully_named_list(vars))
+      total_vars <- c(private$staged_mutate_vars, private$mutate_vars)
       if (length(vars) > 0) {
         # now allowing overriding variable names
         over_rides <- names(vars)[vapply(
           names(vars), function(var_name) {
-            var_name %in% names(private$mutate_vars) &&
-            !identical(private$mutate_vars[[var_name]], vars[[var_name]])
-            },
+            var_name %in% names(total_vars) &&
+              !identical(total_vars[[var_name]], vars[[var_name]])
+          },
           FUN.VALUE = logical(1)
         )]
         if (length(over_rides) > 0) {
           stop(paste("Variable name(s) already used:", paste(over_rides, collapse = ", ")))
         }
-        private$mutate_vars <- c(private$mutate_vars[!names(private$mutate_vars) %in% names(vars)], vars)
+        private$staged_mutate_vars <- c(
+          private$staged_mutate_vars[!names(private$staged_mutate_vars) %in% names(vars)],
+          vars
+        )
       }
 
       return(invisible(self))
