@@ -159,7 +159,7 @@ Dataset <- R6::R6Class( # nolint
     #' \code{data.frame} or \code{rtable}
     get_raw_data = function() {
       if (self$is_mutate_delayed()) {
-        message("There are mutate statements that are delayed. Returned data may (or) not reflect the mutations.")
+        message("There are mutate statements that are delayed. Returned data may (or may not) reflect the mutations.")
       }
       private$.raw_data
     },
@@ -301,7 +301,9 @@ Dataset <- R6::R6Class( # nolint
     #' @return optionally deparsed \code{call} object
     get_code = function(deparse = TRUE) {
       stopifnot(is_logical_single(deparse))
-
+      if (self$is_mutate_delayed()) {
+        message("There are mutate code that are delayed and not part of the output")
+      }
       return(self$get_code_class()$get_code(deparse = deparse))
     },
     #' @description
