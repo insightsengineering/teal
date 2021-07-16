@@ -446,6 +446,7 @@ Dataset <- R6::R6Class( # nolint
     ## __Private Methods ====
     mutate_delayed = function(code) {
       private$mutate_code$set_code(code)
+      return(invisible(self))
     },
 
     mutate_eager = function(code) {
