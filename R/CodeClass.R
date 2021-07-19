@@ -80,8 +80,12 @@ CodeClass <- R6::R6Class( # nolint
       if (is_empty(x$code)) {
         return(invisible(self))
       } else {
+        prior <- self$code
         for (code_i in x$code) {
           private$set_code_single(code_i)
+        }
+        if (identical(prior, self$code)) {
+          warning("Code is not added because it is identical to previously added code.")
         }
         return(invisible(self))
       }
@@ -103,8 +107,12 @@ CodeClass <- R6::R6Class( # nolint
 
       code <- pretty_code_string(code)
 
+      prior <- self$code
       for (code_single in code) {
         private$set_code_single(code_single, dataname, deps)
+      }
+      if (identical(prior, self$code)) {
+        warning("Code is not added because it is identical to previously added code.")
       }
 
       return(invisible(self))
@@ -166,9 +174,6 @@ CodeClass <- R6::R6Class( # nolint
         attr(code, "id") <- id
 
         private$.code <- base::append(private$.code, list(code))
-      }
-      if (all_true(dataname, function(x) !x %in% ulapply(private$.code, "attr", "dataname"))) {
-        warning("Code is not added because it is identical to previously added code.")
       }
       return(invisible(NULL))
     },
