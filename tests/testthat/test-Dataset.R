@@ -172,3 +172,20 @@ testthat::test_that("Dataset supplementary constructors", {
   testthat::expect_warning(ds2 <- relational_dataset("ds", iris))
   testthat::expect_equal(ds1, ds2)
 })
+
+testthat::test_that("Dataset mutate method with delayed logic", {
+  test_ds0 <- Dataset$new("mtcars", mtcars)
+  test_ds1 <- Dataset$new("iris", iris)
+  test_ds2 <- Dataset$new("rock", rock)
+
+  pull_fun2 <- callable_function(data.frame)
+  pull_fun2$set_args(args = list(a = c(1,2,3)))
+  t_dc <- dataset_connector("test", pull_fun2, vars = list(test_ds0 = test_ds0))
+
+  mutate_dataset(test_ds0, code = "mtcars$new_var <- iris$Species[1]", vars = list(test_ds1 = test_ds1))
+  expect_true("new_var" %in% names(test_ds0$get_raw_data()))
+  expect_true("setosa" == unique(test_ds0$get_raw_data()$new_var))
+  expect_silent(test_ds0$get_dataset())
+  expect_true(!test_ds0$is_mutate_delayed())
+
+})

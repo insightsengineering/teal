@@ -664,3 +664,7 @@ test_that("code_dataset_connector - library calls", {
     factor("F", levels = c("F", "M"))
   )
 })
+
+testthat::test_that("DatasetConnector mutate method", {
+
+})
