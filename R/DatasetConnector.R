@@ -110,7 +110,7 @@ DatasetConnector <- R6::R6Class( #nolint
     get_code = function(deparse = TRUE) {
       stopifnot(is_logical_single(deparse))
       if (self$is_mutate_delayed()) {
-        message("There are mutate code that are delayed and not part of the output")
+        message("There are mutate code that are delayed and not part of this output")
       }
       return(self$get_code_class()$get_code(deparse = deparse))
     },
@@ -219,18 +219,23 @@ DatasetConnector <- R6::R6Class( #nolint
     #'
     #' @return (`self`) if successful.
     pull = function(args = NULL, try = FALSE) {
-      data <- private$pull_internal(args = args, try = try)
+      if (!self$is_pulled() || self$is_mutate_delayed()) {
+        data <- private$pull_internal(args = args, try = try)
+        if (!self$is_failed()) {
+          private$dataset <- dataset(
+            dataname = self$get_dataname(),
+            x = data,
+            keys = character(0), # keys needs to be set after mutate
+            label = self$get_dataset_label(),
+            code = private$get_pull_code_class()
+          )
 
-      if (!self$is_failed()) {
-        private$dataset <- dataset(
-          dataname = self$get_dataname(),
-          x = data,
-          keys = character(0), # keys needs to be set after mutate
-          label = self$get_dataset_label(),
-          code = private$get_pull_code_class()
-        )
+          private$mutate_eager()
 
-        set_keys(self$get_dataset(), self$get_keys())
+          set_keys(self$get_dataset(), self$get_keys())
+        }
+      } else {
+        message("The DatasetConnector had already been pulled and all mutate code had been executed.")
       }
 
       return(invisible(self))
@@ -474,7 +479,11 @@ DatasetConnector <- R6::R6Class( #nolint
         # mutated
         private$is_mutate_delayed_flag <- private$dataset$is_mutate_delayed()
         if (! private$is_mutate_delayed_flag) {
-          private$mutate_code$append(private$staged_mutate_code)
+          private$mutate_code$set_code(
+            mutate_code,
+            dataname = private$dataname,
+            deps = private$staged_mutate_vars
+          )
           private$mutate_vars <- c(
             private$mutate_vars[!names(private$mutate_vars) %in% names(private$staged_mutate_vars)],
             private$staged_mutate_vars
