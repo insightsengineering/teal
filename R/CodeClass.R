@@ -167,7 +167,9 @@ CodeClass <- R6::R6Class( # nolint
 
         private$.code <- base::append(private$.code, list(code))
       }
-      warning("Code is not added because it is identical to previously added code.")
+      if (all_true(dataname, function(x) !x %in% ulapply(private$.code, "attr", "dataname"))) {
+        warning("Code is not added because it is identical to previously added code.")
+      }
       return(invisible(NULL))
     },
     get_code_all = function(deparse) {
