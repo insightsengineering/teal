@@ -286,7 +286,7 @@ Dataset <- R6::R6Class( # nolint
     get_code = function(deparse = TRUE) {
       stopifnot(is_logical_single(deparse))
       if (self$is_mutate_delayed()) {
-        message("There are mutate code that are delayed and not part of the output")
+        message("There are mutate code that are delayed and not part of this output")
       }
       return(self$get_code_class()$get_code(deparse = deparse))
     },
@@ -349,7 +349,6 @@ Dataset <- R6::R6Class( # nolint
           self$set_vars(vars)
           private$mutate_eager(code)
         } else {
-          message("Mutation is delayed")
           private$mutate_delayed(code, vars)
         }
       }
@@ -438,6 +437,7 @@ Dataset <- R6::R6Class( # nolint
 
     ## __Private Methods ====
     mutate_delayed = function(code, vars) {
+      message("Mutation is delayed")
       private$set_vars_internal(vars, is_mutate_vars = TRUE)
       private$mutate_code$set_code(code)
       return(invisible(self))
