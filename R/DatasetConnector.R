@@ -147,7 +147,7 @@ DatasetConnector <- R6::R6Class( #nolint
           call. = FALSE
         )
       }
-      private$mutate_eager()
+      private$mutate_eager(is_re_pull = FALSE)
       return(private$dataset)
     },
     #' @description
@@ -219,20 +219,18 @@ DatasetConnector <- R6::R6Class( #nolint
     #'
     #' @return (`self`) if successful.
     pull = function(args = NULL, try = FALSE) {
-      if (!self$is_pulled() || self$is_mutate_delayed()) {
-        data <- private$pull_internal(args = args, try = try)
-        if (!self$is_failed()) {
-          private$dataset <- dataset(
-            dataname = self$get_dataname(),
-            x = data,
-            keys = character(0), # keys needs to be set after mutate
-            label = self$get_dataset_label(),
-            code = private$get_pull_code_class()
-          )
-          set_keys(self$get_dataset(), self$get_keys())
-        }
-      } else {
-        message("The DatasetConnector had already been pulled and all mutate code had been executed. Nothing done.")
+      data <- private$pull_internal(args = args, try = try)
+      if (!self$is_failed()) {
+        private$dataset <- dataset(
+          dataname = self$get_dataname(),
+          x = data,
+          keys = character(0), # keys needs to be set after mutate
+          label = self$get_dataset_label(),
+          code = private$get_pull_code_class()
+        )
+        private$mutate_eager(is_re_pull = TRUE)
+        private$mutate_eager(is_re_pull = FALSE)
+        set_keys(private$dataset, self$get_keys())
       }
 
       return(invisible(self))
@@ -259,7 +257,7 @@ DatasetConnector <- R6::R6Class( #nolint
       private$set_staged_mutate_vars(vars)
       private$set_staged_mutate_code(code)
       if (self$is_pulled()) {
-        private$mutate_eager()
+        private$mutate_eager(is_re_pull = FALSE)
       }  else {
         private$mutate_delayed()
       }
@@ -458,27 +456,30 @@ DatasetConnector <- R6::R6Class( #nolint
       return(invisible(self))
     },
 
-    mutate_eager = function() {
-      if (!is_empty(private$get_staged_mutate_code_class()$code)) {
-        mutate_code <- private$get_staged_mutate_code_class()$get_code(deparse = TRUE)
-        if (inherits(private$get_staged_mutate_code_class(), "PythonCodeClass")) {
-          mutate_code <- private$get_staged_mutate_code_class()
+    mutate_eager = function(is_re_pull = FALSE) {
+      code_obj <- ifelse(is_re_pull, "get_mutate_code_class", "get_staged_mutate_code_class")
+      vars_list <- ifelse(is_re_pull, "mutate_vars", "staged_mutate_vars")
+      if (!is_empty(private[[code_obj]]()$code)) {
+        mutate_code <- private[[code_obj]]()$get_code(deparse = TRUE)
+        if (inherits(private[[code_obj]](), "PythonCodeClass")) {
+          mutate_code <- private[[code_obj]]()
         }
 
         private$dataset <- mutate_dataset(
           x = private$dataset,
           code = mutate_code,
-          vars = private$staged_mutate_vars
+          vars = private[[vars_list]]
         )
+
+        private$is_mutate_delayed_flag <- private$dataset$is_mutate_delayed()
         # allowing private$dataset to decide whether the mutate code of self has been delayed or not
         # i.e. if private$dataset is delayed, the self is delayed, if private$dataset has been mutated then self is
         # mutated
-        private$is_mutate_delayed_flag <- private$dataset$is_mutate_delayed()
-        if (! private$is_mutate_delayed_flag) {
+        if (! private$is_mutate_delayed_flag && !is_re_pull) {
           private$mutate_code$set_code(
-            mutate_code,
+            if (inherits(mutate_code, "PythonCodeClass")) mutate_code$get_code(deparse = TRUE) else mutate_code,
             dataname = private$dataname,
-            deps = private$staged_mutate_vars
+            deps = names(private$staged_mutate_vars)
           )
           private$mutate_vars <- c(
             private$mutate_vars[!names(private$mutate_vars) %in% names(private$staged_mutate_vars)],

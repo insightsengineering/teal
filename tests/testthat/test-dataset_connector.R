@@ -670,7 +670,41 @@ testthat::test_that("DatasetConnector mutate method with delayed logic", {
   test_ds1 <- Dataset$new("head_iris", head(iris))
   test_ds2 <- Dataset$new("head_rock", head(rock))
 
+  pull_fun <- callable_function(data.frame)
+  pull_fun$set_args(args = list(head_letters = head(letters)))
+  t_dc <- dataset_connector("test_dc", pull_fun, vars = list(test_ds1 = test_ds1))
+
   pull_fun2 <- callable_function(data.frame)
-  pull_fun2$set_args(args = list(head_letters = head(letters)))
-  t_dc <- dataset_connector("test_dc", pull_fun2, vars = list(test_ds1 = test_ds1))
+  pull_fun2$set_args(args = list(head_integers = 1:6))
+  t_dc2 <- dataset_connector("test_dc2", pull_fun2, vars = list(test_ds2 = test_ds2))
+
+  expect_false(t_dc$is_mutate_delayed())
+  # mutation is delayed when data hasn't been loaded/pulled yet.
+  expect_message(
+    mutate_dataset(t_dc, code = "test_dc$tail_letters <- tail(letters)"),
+    "Mutation is delayed"
+  )
+  expect_false(t_dc$is_pulled())
+  load_dataset(t_dc)
+  expect_true(all(c("head_letters", "tail_letters") %in% names(get_raw_data(t_dc))))
+
+  expect_message(
+    mutate_dataset(t_dc, code = "test_dc$head_integers <- t_dc2$head_integers", vars = list(t_dc2 = t_dc2)),
+    "Mutation is delayed"
+  )
+  load_dataset(t_dc2)
+  load_dataset(t_dc)
+  expect_true(all(c("head_letters", "tail_letters", "tail_letters") %in% names(get_raw_data(t_dc))))
+
+  mutate_dataset(t_dc2, code = "test_dc2$five <- 5")
+  expect_equal(get_raw_data(t_dc2)$five, rep(5, 6))
+
+  mutate_dataset(t_dc, code = "test_dc$five <- t_dc2$five", vars = list(t_dc2 = t_dc2))
+  expect_equal(get_raw_data(t_dc)$five, rep(5, 6))
+
+  # multiple lines of identical code
+  mutate_dataset(t_dc, code = "test_dc$five <- 2 * test_dc$five")
+  mutate_dataset(t_dc, code = "test_dc$five <- 2 * test_dc$five")
+  mutate_dataset(t_dc, code = "test_dc$five <- 2 * test_dc$five")
+  expect_equal(get_raw_data(t_dc)$five, rep(40, 6))
 })
