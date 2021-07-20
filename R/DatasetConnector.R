@@ -229,13 +229,10 @@ DatasetConnector <- R6::R6Class( #nolint
             label = self$get_dataset_label(),
             code = private$get_pull_code_class()
           )
-
-          private$mutate_eager()
-
           set_keys(self$get_dataset(), self$get_keys())
         }
       } else {
-        message("The DatasetConnector had already been pulled and all mutate code had been executed. Nothing changed.")
+        message("The DatasetConnector had already been pulled and all mutate code had been executed. Nothing done.")
       }
 
       return(invisible(self))

@@ -665,6 +665,12 @@ test_that("code_dataset_connector - library calls", {
   )
 })
 
-testthat::test_that("DatasetConnector mutate method", {
+testthat::test_that("DatasetConnector mutate method with delayed logic", {
+  test_ds0 <- Dataset$new("head_mtcars", head(mtcars))
+  test_ds1 <- Dataset$new("head_iris", head(iris))
+  test_ds2 <- Dataset$new("head_rock", head(rock))
 
+  pull_fun2 <- callable_function(data.frame)
+  pull_fun2$set_args(args = list(head_letters = head(letters)))
+  t_dc <- dataset_connector("test_dc", pull_fun2, vars = list(test_ds1 = test_ds1))
 })
