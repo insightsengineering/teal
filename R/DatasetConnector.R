@@ -261,7 +261,7 @@ DatasetConnector <- R6::R6Class( #nolint
     #' @return (`self`) invisibly for chaining.
     mutate = function(code, vars = list()) {
       private$set_staged_mutate_vars(vars)
-      private$set_staged_mutate_code(code)
+      private$set_mutate_code(code, stage = TRUE)
       if (self$is_pulled()) {
         private$mutate_eager(is_re_pull = FALSE)
       }  else {
@@ -464,18 +464,16 @@ DatasetConnector <- R6::R6Class( #nolint
     },
 
     mutate_eager = function(is_re_pull = FALSE) {
-      code_obj <- ifelse(is_re_pull, "get_mutate_code_class", "get_staged_mutate_code_class")
-      vars_list <- ifelse(is_re_pull, "mutate_vars", "staged_mutate_vars")
-      if (!is_empty(private[[code_obj]]()$code)) {
-        mutate_code <- private[[code_obj]]()$get_code(deparse = TRUE)
-        if (inherits(private[[code_obj]](), "PythonCodeClass")) {
-          mutate_code <- private[[code_obj]]()
+      if (!is_empty(private$get_mutate_code_class(staged = ! is_re_pull)$code)) {
+        mutate_code <- private$get_mutate_code_class(staged = ! is_re_pull)$get_code(deparse = TRUE)
+        if (inherits(private$get_mutate_code_class(staged = ! is_re_pull), "PythonCodeClass")) {
+          mutate_code <- private$get_mutate_code_class(staged = ! is_re_pull)
         }
 
         private$dataset <- mutate_dataset(
           x = private$dataset,
           code = mutate_code,
-          vars = private[[vars_list]]
+          vars = private[[ifelse(is_re_pull, "mutate_vars", "staged_mutate_vars")]]
         )
 
         private$is_mutate_delayed_flag <- private$dataset$is_mutate_delayed()
@@ -588,63 +586,37 @@ DatasetConnector <- R6::R6Class( #nolint
       return(NULL)
     },
 
-    get_mutate_code_class = function() {
+    get_mutate_code_class = function(staged = FALSE) {
+      code_obj <- ifelse(staged, "staged_mutate_code", "mutate_code")
+      vars_list <- ifelse(staged, "staged_mutate_vars", "mutate_vars")
+
       res <- CodeClass$new()
-      if (inherits(private$mutate_code, "PythonCodeClass")) {
+      if (inherits(private[[code_obj]], "PythonCodeClass")) {
         res <- PythonCodeClass$new()
       }
 
-      res$append(list_to_code_class(private$mutate_vars))
-      res$append(private$mutate_code)
+      res$append(list_to_code_class(private[[vars_list]]))
+      res$append(private[[code_obj]])
       return(res)
     },
-    get_staged_mutate_code_class = function() {
-      res <- CodeClass$new()
-      if (inherits(private$staged_mutate_code, "PythonCodeClass")) {
-        res <- PythonCodeClass$new()
-      }
-
-      res$append(list_to_code_class(private$staged_mutate_vars))
-      res$append(private$staged_mutate_code)
-      return(res)
-    },
-    set_staged_mutate_code = function(code) {
+    set_mutate_code = function(code, staged = FALSE) {
       stopifnot(is_character_vector(code, 0, 1) || inherits(code, "PythonCodeClass"))
+      code_obj <- ifelse(staged, "staged_mutate_code", "mutate_code")
+      vars_list <- ifelse(staged, "staged_mutate_vars", "mutate_vars")
 
       if (inherits(code, "PythonCodeClass")) {
         r <- PythonCodeClass$new()
-        r$append(private$staged_mutate_code)
-        private$staged_mutate_code <- r
+        r$append(private[[code_obj]])
+        private[[code_obj]] <- r
 
         code <- code$get_code()
       }
 
       if (length(code) > 0 && code != "") {
-        private$staged_mutate_code$set_code(
+        private[[code_obj]]$set_code(
           code = code,
           dataname = private$dataname,
-          deps = names(private$staged_mutate_vars)
-        )
-      }
-
-      return(invisible(self))
-    },
-    set_mutate_code = function(code) {
-      stopifnot(is_character_vector(code, 0, 1) || inherits(code, "PythonCodeClass"))
-
-      if (inherits(code, "PythonCodeClass")) {
-        r <- PythonCodeClass$new()
-        r$append(private$mutate_code)
-        private$mutate_code <- r
-
-        code <- code$get_code()
-      }
-
-      if (length(code) > 0 && code != "") {
-        private$mutate_code$set_code(
-          code = code,
-          dataname = private$dataname,
-          deps = names(private$mutate_vars)
+          deps = names(private[[vars_list]])
         )
       }
 

@@ -873,7 +873,7 @@ testthat::test_that("DatasetConnector mutate method with delayed logic", {
     expect_true(all(names(get_raw_data(t_dc)) %in% c("head_letters", "tail_letters", "head_integers", "one", "five"))),
     regexp = "Mutation is delayed"
   )
-  TODO
+
   # load_dataset, which calls pull method, will reset to original state because dependencies have changed
   expect_message(
     load_dataset(t_dc),
@@ -884,6 +884,13 @@ testthat::test_that("DatasetConnector mutate method with delayed logic", {
   expect_message(
     expect_true(all(names(get_raw_data(t_dc)) %in% c("head_letters"))),
     regexp = "Mutation is delayed"
+  )
+  expect_message(
+    expect_equal(
+      pretty_code_string(t_dc$get_code()),
+      c("test_dc <- data.frame(head_letters = c(\"a\", \"b\", \"c\", \"d\", \"e\", \"f\"))")
+    ),
+    "There are mutate code that are delayed and not part of this output"
   )
 
   # confirming that mutation has not happened
