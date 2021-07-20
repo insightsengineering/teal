@@ -40,6 +40,10 @@ jobs:
               core.setFailed(`Request failed with error ${err}`)
             }
 
+# TODO check if R is installed
+# TODO ensure that git and qpdf are installed in the docker image
+# TODO also use R remotes::system_requirements() to get the correct system dependencies
+
       - name: Checkout repo during PR
         uses: actions/checkout@v2
         if: github.event_name == 'pull_request'
@@ -58,27 +62,32 @@ jobs:
         run: |
            cd ${{ github.event.repository.name }}
            git branch --show-current
+        shell: bash
 
       - name: Install Dependencies
         run: |
           setwd("${{ github.event.repository.name }}")
           options(repos = c(CRAN = "https://cloud.r-project.org/"))
+          ncores <- parallel::detectCores(all.tests = FALSE, logical = TRUE)
+          cat(paste("\n\nnumber of cores detected:", ncores, "\n\n"))
           if (file.exists("renv.lock")) {
             renv::restore()
           } else {
-            "remotes" %in% installed.packages() || install.packages("remotes", upgrade = "never")
-            remotes::install_deps(dependencies = TRUE, upgrade = "never")
+            if (!("remotes" %in% installed.packages())) install.packages("remotes", upgrade = "never", Ncpus = ncores)
+            remotes::install_deps(dependencies = TRUE, upgrade = "never", Ncpus = ncores)
           }
 
           if (file.exists("staged_dependencies.yaml")) {
-            "remotes" %in% installed.packages() || install.packages("remotes", upgrade = "never")
-            remotes::install_github("openpharma/staged.dependencies", ref = "main")
-            cat("\nInstall Spaged Dependencies\n\n\n")
+            if (!("remotes" %in% installed.packages())) install.packages("remotes", upgrade = "never", Ncpus = ncores)
+            cat("\nInstall Staged Dependencies\n\n\n")
+            remotes::install_github("openpharma/staged.dependencies", ref = "main", Ncpus = ncores)
+            print(staged.dependencies::dependency_table(), width = 120)
+            cat("\n\n")
             staged.dependencies::install_deps(install_project = FALSE, verbose = TRUE)
           }
         shell: Rscript {0}
         env:
-          GITHUB_PAT: ${{ secrets.REPO_GITHUB_TOKEN }}
+          GITHUB_PAT: ${{ secrets.REPO_GITHUB_TOKEN }} # or ${{ secrets.GITHUB_TOKEN }}
 
       - name: Build R package
         run: |
@@ -86,9 +95,11 @@ jobs:
           echo "PKGBUILD=$(echo *.tar.gz)" >> $GITHUB_ENV
         shell: bash
 
+# TODO: if configurable then --as-cran optionally
       - name: Run R CMD CHECK
         run: R CMD check --no-manual ${{ env.PKGBUILD }}
         shell: bash
+        continue-on-error: true
 
       - name: Parse check output for posting as PR comment
         if: github.event_name == 'pull_request'
@@ -112,6 +123,8 @@ jobs:
           echo "::set-output name=check-status::$status"
         shell: bash
 
+
+# TODO: only if there are Errors, warnings, or notes
       - name: Post check output as PR comment
         if: github.event_name == 'pull_request'
         uses: actions/github-script@v4
@@ -144,7 +157,8 @@ jobs:
         run: |
           x <- tail(readLines("${{ github.event.repository.name }}.Rcheck/00check.log"), 1)
           if (!grepl("^Status", x)) stop("No status line found in R CMD check log")
-          if (grepl("WARNINGs", x)) stop("R CMD check has warnings")
+          if (grepl("ERROR", x)) stop("R CMD check has errors")
+          if (grepl("WARNING", x)) stop("R CMD check has warnings")
         shell: Rscript {0}
 
       - name: Upload check results
