@@ -107,12 +107,8 @@ CodeClass <- R6::R6Class( # nolint
 
       code <- pretty_code_string(code)
 
-      prior <- self$code
       for (code_single in code) {
         private$set_code_single(code_single, dataname, deps)
-      }
-      if (identical(prior, self$code)) {
-        warning("Code is not added because it is identical to previously added code.", call. = FALSE)
       }
 
       return(invisible(self))
