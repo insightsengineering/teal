@@ -174,18 +174,93 @@ testthat::test_that("Dataset supplementary constructors", {
 })
 
 testthat::test_that("Dataset mutate method with delayed logic", {
-  test_ds0 <- Dataset$new("mtcars", mtcars)
-  test_ds1 <- Dataset$new("iris", iris)
-  test_ds2 <- Dataset$new("rock", rock)
+  test_ds0 <- Dataset$new("head_mtcars", head(mtcars))
+  test_ds1 <- Dataset$new("head_iris", head(iris))
+  test_ds2 <- Dataset$new("head_rock", head(rock))
 
   pull_fun2 <- callable_function(data.frame)
-  pull_fun2$set_args(args = list(a = c(1,2,3)))
-  t_dc <- dataset_connector("test", pull_fun2, vars = list(test_ds0 = test_ds0))
+  pull_fun2$set_args(args = list(head_letters = head(letters)))
+  t_dc <- dataset_connector("test_dc", pull_fun2, vars = list(test_ds1 = test_ds1))
 
-  mutate_dataset(test_ds0, code = "mtcars$new_var <- iris$Species[1]", vars = list(test_ds1 = test_ds1))
-  expect_true("new_var" %in% names(test_ds0$get_raw_data()))
-  expect_true("setosa" == unique(test_ds0$get_raw_data()$new_var))
-  expect_silent(test_ds0$get_dataset())
-  expect_true(!test_ds0$is_mutate_delayed())
+  expect_false(test_ds0$is_mutate_delayed())
+  expect_equal(test_ds0$get_code(), "")
 
+  mutate_dataset(test_ds0, code = "head_mtcars$carb <- head_mtcars$carb * 2")
+  expect_equal(get_raw_data(test_ds0)$carb, 2 * head(mtcars)$carb)
+  expect_false(test_ds0$is_mutate_delayed())
+  expect_equal(test_ds0$get_code(), "head_mtcars$carb <- head_mtcars$carb * 2")
+
+  mutate_dataset(test_ds0, code = "head_mtcars$Species <- ds1$Species", vars = list(ds1 = test_ds1))
+  expect_false(test_ds0$is_mutate_delayed())
+  expect_equal(get_raw_data(test_ds0)$Species, get_raw_data(test_ds0)$Species)
+  expect_equal(
+    test_ds0$get_code(),
+    "head_mtcars$carb <- head_mtcars$carb * 2\nhead_mtcars$Species <- ds1$Species")
+
+  expect_message(
+    mutate_dataset(test_ds0, code = "head_mtcars$head_letters <- dc$head_letters", vars = list(dc = t_dc)),
+    regexp = "Mutation is delayed"
+  )
+  expect_message(
+    expect_null(get_raw_data(test_ds0)$head_mtcars),
+    regexp = "There are mutate statements that are delayed. Returned data may \\(or may not\\) reflect the mutations."
+    )
+  expect_true(test_ds0$is_mutate_delayed())
+
+  # continuing to delay
+  expect_message(
+    mutate_dataset(test_ds0, code = "head_mtcars$new_var <- 1"),
+    regexp = "Mutation is delayed"
+  )
+  expect_message(
+    expect_null(get_raw_data(test_ds0)$new_var),
+    regexp = "There are mutate statements that are delayed. Returned data may \\(or may not\\) reflect the mutations."
+    )
+  expect_true(test_ds0$is_mutate_delayed())
+
+  expect_message(
+    mutate_dataset(test_ds0, code = "head_mtcars$perm <- ds2$perm", vars = list(ds2 = test_ds2)),
+    regexp = "Mutation is delayed"
+  )
+  expect_message(
+    expect_null(get_raw_data(test_ds0)$perm),
+    regexp = "There are mutate statements that are delayed. Returned data may \\(or may not\\) reflect the mutations."
+  )
+  expect_true(test_ds0$is_mutate_delayed())
+
+  load_dataset(t_dc)
+  get_raw_data(test_ds0)
+  expect_true(test_ds0$is_mutate_delayed())
+
+  expect_message(
+    load_dataset(test_ds0),
+    regexp = "There are mutate statements that are delayed. Returned data may \\(or may not\\) reflect the mutations."
+  )
+  expect_false(test_ds0$is_mutate_delayed())
+  expect_true(all(c("head_letters", "new_var", "perm") %in% names(get_raw_data(test_ds0))))
+  expect_equal(
+    pretty_code_string(test_ds0$get_code()),
+    c("test_dc <- data.frame(head_letters = c(\"a\", \"b\", \"c\", \"d\", \"e\", \"f\"))",
+      "head_mtcars$carb <- head_mtcars$carb * 2",
+      "head_mtcars$Species <- ds1$Species",
+      "head_mtcars$head_letters <- dc$head_letters",
+      "head_mtcars$new_var <- 1",
+      "head_mtcars$perm <- ds2$perm"
+    )
+  )
+
+  mutate_dataset(test_ds0, code = "head_mtcars$new_var2 <- 2")
+  expect_equal(
+    pretty_code_string(test_ds0$get_code()),
+    c("test_dc <- data.frame(head_letters = c(\"a\", \"b\", \"c\", \"d\", \"e\", \"f\"))",
+      "head_mtcars$carb <- head_mtcars$carb * 2",
+      "head_mtcars$Species <- ds1$Species",
+      "head_mtcars$head_letters <- dc$head_letters",
+      "head_mtcars$new_var <- 1",
+      "head_mtcars$perm <- ds2$perm",
+      "head_mtcars$new_var2 <- 2"
+    )
+  )
+  expect_false(test_ds0$is_mutate_delayed())
+  expect_equal(get_raw_data(test_ds0)$new_var2, rep(2, 6))
 })

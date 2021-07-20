@@ -255,23 +255,7 @@ Dataset <- R6::R6Class( # nolint
     #'
     #' @return (`self`) invisibly for chaining
     set_vars = function(vars) {
-      stopifnot(is_fully_named_list(vars))
-
-      if (length(vars) > 0) {
-        # now allowing overriding variable names
-        over_rides <- names(vars)[vapply(
-          names(vars), function(var_name) {
-            var_name %in% names(private$vars) &&
-              !identical(private$vars[[var_name]], vars[[var_name]])
-          },
-          FUN.VALUE = logical(1)
-        )]
-        if (length(over_rides) > 0) {
-          stop(paste("Variable name(s) already used:", paste(over_rides, collapse = ", ")))
-        }
-        private$vars <- c(private$vars[!names(private$vars) %in% names(vars)], vars)
-      }
-
+      private$set_vars_internal(vars, is_mutate_vars = FALSE)
       return(invisible(NULL))
     },
     #' @description
@@ -331,9 +315,10 @@ Dataset <- R6::R6Class( # nolint
     #'
     #' @return (`self`) invisibly for chaining
     mutate = function(code, vars = list()) {
-      self$set_vars(vars)
+      stopifnot(is_fully_named_list(vars))
 
       if (inherits(code, "PythonCodeClass")) {
+        self$set_vars(vars)
         self$set_code(code$get_code())
         new_df <- code$eval(dataname = self$get_dataname())
 
@@ -346,7 +331,7 @@ Dataset <- R6::R6Class( # nolint
         )
       } else {
         delay_mutate <- any(vapply(
-          private$vars,
+          c(private$vars, vars),
           FUN = function(var) {
             if (is(var, "DatasetConnector")) {
               (! var$is_pulled()) || var$is_mutate_delayed()
@@ -361,10 +346,11 @@ Dataset <- R6::R6Class( # nolint
         )
         # delaying mutate if it has already been delayed
         if (!delay_mutate && !self$is_mutate_delayed()) {
+          self$set_vars(vars)
           private$mutate_eager(code)
         } else {
           message("Mutation is delayed")
-          private$mutate_delayed(code)
+          private$mutate_delayed(code, vars)
         }
       }
 
@@ -448,9 +434,11 @@ Dataset <- R6::R6Class( # nolint
     dataset_label = character(0),
     .keys = character(0),
     mutate_code = NULL, # CodeClass after initialization
+    mutate_vars = list(),
 
     ## __Private Methods ====
-    mutate_delayed = function(code) {
+    mutate_delayed = function(code, vars) {
+      private$set_vars_internal(vars, is_mutate_vars = TRUE)
       private$mutate_code$set_code(code)
       return(invisible(self))
     },
@@ -464,13 +452,15 @@ Dataset <- R6::R6Class( # nolint
       )
       new_df <- private$execute_code(
         code = code_container,
-        vars = c(private$vars, setNames(list(self), self$get_dataname()))
+        vars = c(private$vars, private$mutate_vars, setNames(list(self), self$get_dataname()))
       )
 
       # code set after successful evaluation
       # otherwise code != dataset
       self$set_code(code)
+      self$set_vars(private$mutate_vars)
       private$mutate_code <- CodeClass$new()
+      private$mutate_vars <- list()
 
       # dataset is recreated by replacing data by mutated object
       # mutation code is added to the code which replicates the data
@@ -497,6 +487,37 @@ Dataset <- R6::R6Class( # nolint
         target_class_name = class_type))]
 
       return(return_cols)
+    },
+
+    set_vars_internal = function(vars, is_mutate_vars = FALSE) {
+      stopifnot(is_fully_named_list(vars))
+
+      total_vars <- if (is_mutate_vars) {
+        c(private$vars, private$mutate_vars)
+      } else {
+        private$vars
+      }
+
+      if (length(vars) > 0) {
+        # now allowing overriding variable names
+        over_rides <- names(vars)[vapply(
+          names(vars), function(var_name) {
+            var_name %in% names(total_vars) &&
+              !identical(total_vars[[var_name]], vars[[var_name]])
+          },
+          FUN.VALUE = logical(1)
+        )]
+        if (length(over_rides) > 0) {
+          stop(paste("Variable name(s) already used:", paste(over_rides, collapse = ", ")))
+        }
+        if (is_mutate_vars) {
+          private$mutate_vars <- c(private$mutate_vars[!names(private$mutate_vars) %in% names(vars)], vars)
+        } else {
+          private$vars <- c(private$vars[!names(private$vars) %in% names(vars)], vars)
+        }
+      }
+
+      return(invisible(NULL))
     },
 
 
