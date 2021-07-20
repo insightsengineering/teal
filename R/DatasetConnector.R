@@ -123,9 +123,10 @@ DatasetConnector <- R6::R6Class( #nolint
 
       pull_code_class <- private$get_pull_code_class()
       code_class$append(pull_code_class)
-
-      mutate_code_class <- private$get_mutate_code_class()
-      code_class$append(mutate_code_class)
+      if (private$is_mutated) {
+        mutate_code_class <- private$get_mutate_code_class()
+        code_class$append(mutate_code_class)
+      }
 
       return(code_class)
     },
@@ -228,8 +229,13 @@ DatasetConnector <- R6::R6Class( #nolint
           label = self$get_dataset_label(),
           code = private$get_pull_code_class()
         )
+        pre_mutate_dataset <- get_raw_data(private$dataset)
         private$mutate_eager(is_re_pull = TRUE)
         private$mutate_eager(is_re_pull = FALSE)
+
+        if (identical(pre_mutate_dataset, get_raw_data(private$dataset))) {
+          private$is_mutated <- FALSE
+        }
         set_keys(private$dataset, self$get_keys())
       }
 
@@ -391,6 +397,7 @@ DatasetConnector <- R6::R6Class( #nolint
     staged_mutate_vars = list(),
     ui_input = NULL, # NULL or list
     is_mutate_delayed_flag = FALSE,
+    is_mutated = FALSE,
 
     ## __Private Methods ====
     ui = function(id) {
@@ -476,17 +483,20 @@ DatasetConnector <- R6::R6Class( #nolint
         # i.e. if private$dataset is delayed, the self is delayed, if private$dataset has been mutated then self is
         # mutated
         if (! private$is_mutate_delayed_flag && !is_re_pull) {
-          private$mutate_code$set_code(
-            if (inherits(mutate_code, "PythonCodeClass")) mutate_code$get_code(deparse = TRUE) else mutate_code,
-            dataname = private$dataname,
-            deps = names(private$staged_mutate_vars)
-          )
-          private$mutate_vars <- c(
-            private$mutate_vars[!names(private$mutate_vars) %in% names(private$staged_mutate_vars)],
-            private$staged_mutate_vars
-          )
-          private$staged_mutate_code <- CodeClass$new()
-          private$staged_mutate_vars <- list()
+          private$is_mutated <- TRUE
+          if (!is_re_pull) {
+            private$mutate_code$set_code(
+              if (inherits(mutate_code, "PythonCodeClass")) mutate_code$get_code(deparse = TRUE) else mutate_code,
+              dataname = private$dataname,
+              deps = names(private$staged_mutate_vars)
+            )
+            private$mutate_vars <- c(
+              private$mutate_vars[!names(private$mutate_vars) %in% names(private$staged_mutate_vars)],
+              private$staged_mutate_vars
+            )
+            private$staged_mutate_code <- CodeClass$new()
+            private$staged_mutate_vars <- list()
+          }
         }
       } else {
         private$is_mutate_delayed_flag <- FALSE
