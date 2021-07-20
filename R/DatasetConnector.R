@@ -261,7 +261,7 @@ DatasetConnector <- R6::R6Class( #nolint
     #' @return (`self`) invisibly for chaining.
     mutate = function(code, vars = list()) {
       private$set_staged_mutate_vars(vars)
-      private$set_mutate_code(code, stage = TRUE)
+      private$set_mutate_code(code, staged = TRUE)
       if (self$is_pulled()) {
         private$mutate_eager(is_re_pull = FALSE)
       }  else {
