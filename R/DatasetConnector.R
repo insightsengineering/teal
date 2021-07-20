@@ -600,7 +600,7 @@ DatasetConnector <- R6::R6Class( #nolint
     },
     get_staged_mutate_code_class = function() {
       res <- CodeClass$new()
-      if (inherits(private$mutate_code, "PythonCodeClass")) {
+      if (inherits(private$staged_mutate_code, "PythonCodeClass")) {
         res <- PythonCodeClass$new()
       }
 
