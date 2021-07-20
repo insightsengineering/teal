@@ -250,7 +250,7 @@ DatasetConnector <- R6::R6Class( #nolint
 
     # ___ mutate ====
     #' @description
-    #' Storing code and dependencies to perform mutation on dataset when dataset is loaded or requested
+    #' Dispatcher for either eager or deplayed mutate methods
     #'
     #' Either code or script must be provided, but not both.
     #'
@@ -261,7 +261,6 @@ DatasetConnector <- R6::R6Class( #nolint
       if (self$is_pulled()) {
         private$mutate_eager()
       }  else {
-        message("Mutation is delayed")
         private$mutate_delayed()
       }
       return(invisible(self))
@@ -495,6 +494,7 @@ DatasetConnector <- R6::R6Class( #nolint
     },
 
     mutate_delayed = function() {
+      message("Mutation is delayed")
       private$is_mutate_delayed_flag <- TRUE
       return(invisible(self))
     },
