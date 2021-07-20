@@ -786,5 +786,7 @@ testthat::test_that("DatasetConnector mutate method with delayed logic", {
   expect_equal(get_raw_data(t_dc)$seven, rep(7, 6))
   expect_equal(get_raw_data(t_dc)$six, rep(41, 6))
   expect_equal(get_raw_data(t_dc)$five, rep(40, 6))
-
+  # back to eager mutate
+  mutate_dataset(t_dc, code = "test_dc$eight <- 8")
+  expect_equal(get_raw_data(t_dc)$eight, rep(8, 6))
 })
