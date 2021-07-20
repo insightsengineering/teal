@@ -666,7 +666,6 @@ test_that("code_dataset_connector - library calls", {
 })
 
 testthat::test_that("DatasetConnector mutate method with delayed logic", {
-  test_ds0 <- Dataset$new("head_mtcars", head(mtcars))
   test_ds1 <- Dataset$new("head_iris", head(iris))
   test_ds2 <- Dataset$new("head_rock", head(rock))
 
@@ -688,18 +687,29 @@ testthat::test_that("DatasetConnector mutate method with delayed logic", {
   load_dataset(t_dc)
   expect_true(all(c("head_letters", "tail_letters") %in% names(get_raw_data(t_dc))))
 
+  # mutation is delayed because t_dc2 hasn't been loaded yet
   expect_message(
-    mutate_dataset(t_dc, code = "test_dc$head_integers <- t_dc2$head_integers", vars = list(t_dc2 = t_dc2)),
+    mutate_dataset(t_dc, code = "test_dc$head_integers <- test_dc2$head_integers", vars = list(t_dc2 = t_dc2)),
     "Mutation is delayed"
   )
-  load_dataset(t_dc2)
-  load_dataset(t_dc)
-  expect_true(all(c("head_letters", "tail_letters", "tail_letters") %in% names(get_raw_data(t_dc))))
+  # mutation is delayed even, though it could be executed, because it had already been delayed
+  expect_message(
+    mutate_dataset(t_dc, code = "test_dc$one <- 1"),
+    "Mutation is delayed"
+  )
 
+  load_dataset(t_dc2)
+  # testing t_dc$pull, which re-runs all (already executed and staged) mutate code
+  # "head_letters" and "tail_letters" columns had already been executed
+  # "head_integers" and "one" columns are delayed
+  load_dataset(t_dc)
+  expect_true(all(c("head_letters", "tail_letters", "head_integers", "one") %in% names(get_raw_data(t_dc))))
+
+  # mutate should again be eager
   mutate_dataset(t_dc2, code = "test_dc2$five <- 5")
   expect_equal(get_raw_data(t_dc2)$five, rep(5, 6))
 
-  mutate_dataset(t_dc, code = "test_dc$five <- t_dc2$five", vars = list(t_dc2 = t_dc2))
+  mutate_dataset(t_dc, code = "test_dc$five <- test_dc2$five", vars = list(t_dc2 = t_dc2))
   expect_equal(get_raw_data(t_dc)$five, rep(5, 6))
 
   # multiple lines of identical code
@@ -707,4 +717,74 @@ testthat::test_that("DatasetConnector mutate method with delayed logic", {
   mutate_dataset(t_dc, code = "test_dc$five <- 2 * test_dc$five")
   mutate_dataset(t_dc, code = "test_dc$five <- 2 * test_dc$five")
   expect_equal(get_raw_data(t_dc)$five, rep(40, 6))
+
+  # multi layer dependencies
+  pull_fun3 <- callable_function(data.frame)
+  pull_fun3$set_args(args = list(neg_integers = -(1:6)))
+  t_dc3 <- dataset_connector("test_dc3", pull_fun3)
+
+  expect_message(
+    mutate_dataset(t_dc2, code = "test_dc2$neg_integers <- test_dc3$neg_integers", vars = list(t_dc3 = t_dc3)),
+    regexp = "Mutation is delayed"
+  )
+
+  # delayed, even though the column is ready, because t_dc2 is delayed by t_dc3
+  expect_message(
+    mutate_dataset(t_dc, code = "test_dc$six <- test_dc$five + 1", vars = list(t_dc2 = t_dc2)),
+    regexp = "Mutation is delayed"
+  )
+  # stilled delayed, even though it dependds on itself, because it had already been delayed
+  expect_message(
+    mutate_dataset(t_dc, code = "test_dc$seven <- 7"),
+    regexp = "Mutation is delayed"
+  )
+  # confirming that mutation has not happened
+  expect_message(
+    expect_false(any(c("six", "seven") %in% names(get_raw_data(t_dc)))),
+    regexp = "Mutation is delayed"
+  )
+  load_dataset(t_dc3)
+
+  # current state
+  expect_message(
+    expect_true(all(names(get_raw_data(t_dc)) %in% c("head_letters", "tail_letters", "head_integers", "one", "five"))),
+    regexp = "Mutation is delayed"
+  )
+  # load_dataset, which calls pull method, will reset to original state because dependencies have changed
+  expect_message(
+    load_dataset(t_dc),
+    regexp = "Mutation is delayed"
+  )
+  # original state. all columns resulting from mutations have been removed
+  expect_message(
+    expect_true(all(names(get_raw_data(t_dc)) %in% c("head_letters"))),
+    regexp = "Mutation is delayed"
+  )
+
+  # confirming that mutation has not happened
+  expect_message(
+    expect_false(any(c("six", "seven") %in% names(get_raw_data(t_dc)))),
+    regexp = "Mutation is delayed"
+  )
+
+  # confirming that mutation has not happened for t_dc2
+  expect_message(
+    expect_false(any(c("neg_integers") %in% names(get_raw_data(t_dc2)))),
+    regexp = "Mutation is delayed"
+  )
+
+  load_dataset(t_dc2)
+  # confirming that mutation has happened
+  expect_true(all(c("head_integers", "five", "neg_integers") %in% names(get_raw_data(t_dc2))))
+
+  # re running all mutation statements
+  load_dataset(t_dc)
+  expect_true(all(c(
+    "head_integers", "tail_letters", "head_integers", "one", "five", "six", "seven") %in% names(get_raw_data(t_dc)))
+  )
+
+  expect_equal(get_raw_data(t_dc)$seven, rep(7, 6))
+  expect_equal(get_raw_data(t_dc)$six, rep(41, 6))
+  expect_equal(get_raw_data(t_dc)$five, rep(40, 6))
+
 })
