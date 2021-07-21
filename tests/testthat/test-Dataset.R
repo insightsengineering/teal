@@ -172,3 +172,48 @@ testthat::test_that("Dataset supplementary constructors", {
   testthat::expect_warning(ds2 <- relational_dataset("ds", iris))
   testthat::expect_equal(ds1, ds2)
 })
+
+testthat::test_that("Dataset$set_vars throws an error if passed the enclosing Dataset object directly", {
+  test_ds <- Dataset$new("mtcars", mtcars)
+  testthat::expect_error(test_ds$set_vars(vars = list(itself = test_ds)), regexp = "Circular dependencies detected")
+})
+
+testthat::test_that("Dataset$set_vars throws an error if passed the enclosing Dataset object indirectly, distance 1", {
+  test_ds0 <- Dataset$new("mtcars", mtcars)
+  test_ds1 <- Dataset$new("iris", iris)
+  test_ds1$set_vars(vars = list(test_ds0 = test_ds0))
+  testthat::expect_error(test_ds0$set_vars(vars = list(test_ds1 = test_ds1)), regexp = "Circular dependencies detected")
+})
+
+testthat::test_that("Dataset$set_vars throws an error if passed the enclosing Dataset object indirectly, distance 2", {
+  test_ds0 <- Dataset$new("mtcars", mtcars)
+  test_ds1 <- Dataset$new("iris", iris)
+  test_ds2 <- Dataset$new("rock", rock)
+  test_ds1$set_vars(vars = list(test_ds0 = test_ds0))
+  test_ds2$set_vars(vars = list(test_ds1 = test_ds1))
+
+  testthat::expect_error(test_ds0$set_vars(vars = list(test_ds2 = test_ds2)), regexp = "Circular dependencies detected")
+})
+
+testthat::test_that("Dataset$set_vars throws an error if passed the enclosing DatasetConnector", {
+  test_ds0 <- Dataset$new("mtcars", mtcars)
+  test_ds1 <- Dataset$new("iris", iris)
+  test_ds2 <- Dataset$new("rock", rock)
+  test_ds1$set_vars(vars = list(test_ds0 = test_ds0))
+  test_ds2$set_vars(vars = list(test_ds1 = test_ds1))
+
+  testthat::expect_error(mutate_dataset(
+    test_ds0, code = "mtcars$new_var <- rock$perm[1]", vars = list(test_ds2 = test_ds2)
+    ),
+    regexp = "Circular dependencies detected")
+
+  pull_fun2 <- callable_function(data.frame)
+  pull_fun2$set_args(args = list(a = c(1, 2, 3)))
+  t_dc <- dataset_connector("test", pull_fun2, vars = list(test_ds0 = test_ds0))
+  testthat::expect_error(test_ds0$set_vars(vars = list(t_dc = t_dc)), regexp = "Circular dependencies detected")
+  mutate_dataset(t_dc, code = "test$new_var <- iris$Species[1]", vars = list(test_ds1 = test_ds1))
+  testthat::expect_error(
+    mutate_dataset(test_ds0, code = "mtcars$new_var <- t_dc$a[1]", vars = list(t_dc = t_dc)),
+    regexp = "Circular dependencies detected"
+  )
+})

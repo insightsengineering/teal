@@ -33,6 +33,7 @@ DataConnector
 dataname
 datanames
 Datanames
+DatasetConnector
 debuggable
 dropdown
 extensibility
