@@ -85,7 +85,7 @@ CodeClass <- R6::R6Class( # nolint
           private$set_code_single(code_i)
         }
         if (identical(prior, self$code)) {
-          warning("Code is not added because it is identical to previously added code.", call. =  FALSE)
+          warning("Code is not appended because it is identical to previously added code.", call. =  FALSE)
         }
         return(invisible(self))
       }
