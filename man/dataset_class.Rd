@@ -60,6 +60,7 @@ be automatically derived.
 \item \href{#method-get_datanames}{\code{Dataset$get_datanames()}}
 \item \href{#method-get_dataset_label}{\code{Dataset$get_dataset_label()}}
 \item \href{#method-get_keys}{\code{Dataset$get_keys()}}
+\item \href{#method-get_var_r6}{\code{Dataset$get_var_r6()}}
 \item \href{#method-set_dataset_label}{\code{Dataset$set_dataset_label()}}
 \item \href{#method-set_keys}{\code{Dataset$set_keys()}}
 \item \href{#method-set_vars}{\code{Dataset$set_vars()}}
@@ -377,6 +378,19 @@ Get primary keys of dataset
 }
 }
 \if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-get_var_r6"></a>}}
+\if{latex}{\out{\hypertarget{method-get_var_r6}{}}}
+\subsection{Method \code{get_var_r6()}}{
+Get the list of dependencies that are Dataset or DatasetConnector objects
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{Dataset$get_var_r6()}\if{html}{\out{</div>}}
+}
+
+\subsection{Returns}{
+\code{list}
+}
+}
+\if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-set_dataset_label"></a>}}
 \if{latex}{\out{\hypertarget{method-set_dataset_label}{}}}
 \subsection{Method \code{set_dataset_label()}}{
@@ -648,6 +662,7 @@ The objects of this class are cloneable with this method.
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="Dataset" data-id="get_raw_data">}\href{../../teal/html/Dataset.html#method-get_raw_data}{\code{teal::Dataset$get_raw_data()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="Dataset" data-id="get_row_labels">}\href{../../teal/html/Dataset.html#method-get_row_labels}{\code{teal::Dataset$get_row_labels()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="Dataset" data-id="get_rownames">}\href{../../teal/html/Dataset.html#method-get_rownames}{\code{teal::Dataset$get_rownames()}}\out{</span>}
+\item \out{<span class="pkg-link" data-pkg="teal" data-topic="Dataset" data-id="get_var_r6">}\href{../../teal/html/Dataset.html#method-get_var_r6}{\code{teal::Dataset$get_var_r6()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="Dataset" data-id="is_mutate_delayed">}\href{../../teal/html/Dataset.html#method-is_mutate_delayed}{\code{teal::Dataset$is_mutate_delayed()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="Dataset" data-id="is_pulled">}\href{../../teal/html/Dataset.html#method-is_pulled}{\code{teal::Dataset$is_pulled()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="Dataset" data-id="mutate">}\href{../../teal/html/Dataset.html#method-mutate}{\code{teal::Dataset$mutate()}}\out{</span>}

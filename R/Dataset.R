@@ -70,6 +70,7 @@ Dataset <- R6::R6Class( # nolint
       private$.row_labels <- c() # not yet defined in rtables
 
       private$set_dataname(dataname)
+      private$set_var_r6(vars)
       self$set_vars(vars)
       self$set_dataset_label(label)
       self$set_keys(keys)
@@ -228,6 +229,13 @@ Dataset <- R6::R6Class( # nolint
     #' @return (\code{character} vector) with dataset primary keys
     get_keys = function() {
       private$.keys
+    },
+    #' @description
+    #' Get the list of dependencies that are Dataset or DatasetConnector objects
+    #'
+    #' @return \code{list}
+    get_var_r6 = function() {
+      return(private$var_r6)
     },
 
     # ___ setters ====
@@ -430,6 +438,7 @@ Dataset <- R6::R6Class( # nolint
     dataname = character(0),
     code = NULL, # CodeClass after initialization
     vars = list(),
+    var_r6 = list(),
     dataset_label = character(0),
     .keys = character(0),
     mutate_code = NULL, # CodeClass after initialization
@@ -571,6 +580,20 @@ Dataset <- R6::R6Class( # nolint
       stopifnot(is_character_single(dataname))
       stopifnot(!grepl("\\s", dataname))
       private$dataname <- dataname
+      return(invisible(self))
+    },
+    set_var_r6 = function(vars) {
+      stopifnot(is_fully_named_list(vars))
+      for (var in vars) {
+        if (is(var, "DatasetConnector") || is(var, "Dataset")) {
+          for (var_dep in c(var, var$get_var_r6())) {
+            if (identical(self, var_dep)) {
+              stop("Circular dependencies detected")
+            }
+          }
+          private$var_r6 <- c(private$var_r6, var, var$get_var_r6())
+        }
+      }
       return(invisible(self))
     }
   ),
