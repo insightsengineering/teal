@@ -98,8 +98,9 @@ test_that("DatasetConnector", {
     "ADSL <- data.frame(id = 1:3, marker = c(100, 1, 10), alive = TRUE, new_feature = c(3, 4, 1))"
   )
 
-  expect_silent(
-    m <- mutate_dataset(x3, "ADSL$newest <- 'xxx'")
+  expect_message(
+    m <- mutate_dataset(x3, "ADSL$newest <- 'xxx'"),
+    "Mutation is delayed"
   )
 
   expect_silent(load_dataset(m))
@@ -450,11 +451,23 @@ test_that("rice_dataset", {
   )
 
 
-  x <- mutate_dataset(rice_cdisc_dataset_connector("ADLB", "/path/to/ADLB"), code = "ADLB$x <- 1")
+  x <- rice_cdisc_dataset_connector("ADLB", "/path/to/ADLB")
+  expect_message(
+    mutate_dataset(x, code = "ADLB$x <- 1"),
+    "Mutation is delayed"
+  )
+
   expect_equal(
     get_code(x),
-    "ADLB <- rice::rice_read(node = \"/path/to/ADLB\", prolong = TRUE)\nADLB$x <- 1"
+    "ADLB <- rice::rice_read(node = \"/path/to/ADLB\", prolong = TRUE)"
   )
+
+  # requires entimice log in
+  # load_dataset(x)
+  # expect_equal(
+  #   get_code(x),
+  #   "ADLB <- rice::rice_read(node = \"/path/to/ADLB\", prolong = TRUE)\nADLB$x <- 1"
+  # )
 })
 
 test_that("fun_cdisc_dataset_connector", {

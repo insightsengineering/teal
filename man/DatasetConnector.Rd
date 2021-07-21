@@ -376,7 +376,7 @@ Set arguments to the pulling function
 \if{html}{\out{<a id="method-mutate"></a>}}
 \if{latex}{\out{\hypertarget{method-mutate}{}}}
 \subsection{Method \code{mutate()}}{
-Storing code and dependencies to perform mutation on dataset when dataset is loaded or requested
+Dispatcher for either eager or deplayed mutate methods
 
 Either code or script must be provided, but not both.
 \subsection{Usage}{
