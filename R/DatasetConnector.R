@@ -254,7 +254,7 @@ DatasetConnector <- R6::R6Class( #nolint
 
     # ___ mutate ====
     #' @description
-    #' Dispatcher for either eager or deplayed mutate methods
+    #' Dispatcher for either eager or delayed mutate methods
     #'
     #' Either code or script must be provided, but not both.
     #'

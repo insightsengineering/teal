@@ -376,7 +376,7 @@ Set arguments to the pulling function
 \if{html}{\out{<a id="method-mutate"></a>}}
 \if{latex}{\out{\hypertarget{method-mutate}{}}}
 \subsection{Method \code{mutate()}}{
-Dispatcher for either eager or deplayed mutate methods
+Dispatcher for either eager or delayed mutate methods
 
 Either code or script must be provided, but not both.
 \subsection{Usage}{

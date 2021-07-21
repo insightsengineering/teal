@@ -259,7 +259,7 @@ testthat::test_that("Dataset mutate method with delayed logic", {
   expect_silent(get_raw_data(test_ds0))
   expect_false(test_ds0$is_mutate_delayed())
   expect_true(all(c("head_letters", "new_var", "perm") %in% names(get_raw_data(test_ds0))))
-  expect_code <-c(
+  expect_code <- c(
     "test_dc <- data.frame(head_letters = c(\"a\", \"b\", \"c\", \"d\", \"e\", \"f\"))",
     "head_mtcars$carb <- head_mtcars$carb * 2",
     "head_mtcars$Species <- ds1$Species",

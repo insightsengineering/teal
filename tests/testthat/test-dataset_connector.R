@@ -461,13 +461,6 @@ test_that("rice_dataset", {
     get_code(x),
     "ADLB <- rice::rice_read(node = \"/path/to/ADLB\", prolong = TRUE)"
   )
-
-  # requires entimice log in
-  # load_dataset(x)
-  # expect_equal(
-  #   get_code(x),
-  #   "ADLB <- rice::rice_read(node = \"/path/to/ADLB\", prolong = TRUE)\nADLB$x <- 1"
-  # )
 })
 
 test_that("fun_cdisc_dataset_connector", {
@@ -811,7 +804,7 @@ testthat::test_that("DatasetConnector mutate method with delayed logic", {
 
   # multi layer dependencies
   pull_fun3 <- callable_function(data.frame)
-  pull_fun3$set_args(args = list(neg_integers = -(1:6)))
+  pull_fun3$set_args(args = list(neg_integers = - (1:6)))
   t_dc3 <- dataset_connector("test_dc3", pull_fun3)
 
   expect_message(
