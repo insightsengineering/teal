@@ -160,7 +160,7 @@ test_that("Duplicated code is not appended if its dataname is duplicated", {
   cc2 <- CodeClass$new(code = "print('test')", dataname = "test")
   expect_warning(
     cc1$append(cc2),
-    regexp = "Code is not added because it is identical to previously added code."
+    regexp = "Code is not appended because it is identical to previously added code."
   )
   expect_equal(
     cc1$get_code(),
