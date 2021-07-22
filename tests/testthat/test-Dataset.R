@@ -251,9 +251,9 @@ testthat::test_that("Dataset mutate method with delayed logic", {
     expect_equal(
       expect_message(
         test_ds0$get_code(),
-        regexp = "There are mutate code that are delayed and not part of this output"
+        regexp = "The output includes mutate code that are delayed"
       ),
-      "head_mtcars$carb <- head_mtcars$carb * 2\nhead_mtcars$Species <- ds1$Species"
+      paste(test_ds0$get_code_class()$get_code(), test_ds0$get_mutate_code_class()$get_code(), sep = "\n")
     )
   }
   repeated_call()

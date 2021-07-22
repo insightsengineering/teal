@@ -294,9 +294,22 @@ Dataset <- R6::R6Class( # nolint
     get_code = function(deparse = TRUE) {
       stopifnot(is_logical_single(deparse))
       if (self$is_mutate_delayed()) {
-        message("There are mutate code that are delayed and not part of this output")
+        message("The output includes mutate code that are delayed")
       }
-      return(self$get_code_class()$get_code(deparse = deparse))
+      executed <- self$get_code_class()$get_code(deparse = deparse)
+      delayed <- self$get_mutate_code_class()$get_code(deparse = deparse)
+      res <- if (deparse) {
+        if (is_empty_string(delayed)) {
+          executed
+        } else if (is_empty_string(executed)) {
+          delayed
+        } else {
+          paste(executed, delayed, sep = "\n")
+        }
+      } else {
+        c(executed, delayed)
+      }
+      return(res)
     },
     #' @description
     #' Get internal \code{CodeClass} object
@@ -306,6 +319,17 @@ Dataset <- R6::R6Class( # nolint
       res <- CodeClass$new()
       res$append(list_to_code_class(private$vars))
       res$append(private$code)
+
+      return(res)
+    },
+    #' @description
+    #' Get internal \code{CodeClass} object
+    #'
+    #' @return `\code{CodeClass}`
+    get_mutate_code_class = function() {
+      res <- CodeClass$new()
+      res$append(list_to_code_class(private$mutate_vars))
+      res$append(private$mutate_code)
 
       return(res)
     },
@@ -382,7 +406,7 @@ Dataset <- R6::R6Class( # nolint
 
       new_set <- private$execute_code(
         code = self$get_code_class(),
-        vars = private$vars
+        vars = c(private$vars, setNames(list(self), self$get_dataname()))
       )
 
       res_check <- tryCatch({
