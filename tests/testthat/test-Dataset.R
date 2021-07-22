@@ -237,7 +237,7 @@ testthat::test_that("Dataset mutate method with delayed logic", {
 
   mutate_dataset(test_ds0, code = "head_mtcars$Species <- ds1$Species", vars = list(ds1 = test_ds1))
   expect_false(test_ds0$is_mutate_delayed())
-  expect_equal(get_raw_data(test_ds0)$Species, get_raw_data(test_ds0)$Species)
+  expect_equal(get_raw_data(test_ds0)$Species, get_raw_data(test_ds1)$Species)
   expect_equal(
     test_ds0$get_code(),
     "head_mtcars$carb <- head_mtcars$carb * 2\nhead_mtcars$Species <- ds1$Species"
