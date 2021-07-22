@@ -693,7 +693,8 @@ testthat::test_that("DatasetConnector mutate method with delayed logic", {
     expect_equal(
       t_dc$get_code(),
       "test_dc <- data.frame(head_letters = c(\"a\", \"b\", \"c\", \"d\", \"e\", \"f\"))"
-    )
+    ),
+    "There are mutate code that are delayed and not part of this output"
   )
   expect_false(t_dc$is_pulled())
   load_dataset(t_dc)
