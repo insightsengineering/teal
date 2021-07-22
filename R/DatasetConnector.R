@@ -399,11 +399,11 @@ DatasetConnector <- R6::R6Class( #nolint
     dataname = character(0),
     dataset_label = character(0),
     keys = NULL,
-    mutate_code = NULL, # CodeClass after initialization
-    staged_mutate_code = NULL,
+    mutate_code = NULL, # CodeClass after initialization. used for storing code that has already been executed.
+    staged_mutate_code = NULL, # CodeClass after initialization. used for storing code that has not been executed.
     mutate_vars = list(), # named list with vars used to mutate object
-    var_r6 = list(),
     staged_mutate_vars = list(),
+    var_r6 = list(),
     ui_input = NULL, # NULL or list
     is_mutate_delayed_flag = FALSE,
     is_mutated = FALSE,
@@ -472,6 +472,10 @@ DatasetConnector <- R6::R6Class( #nolint
       return(invisible(self))
     },
 
+    # There are two CodeClass objects that store code used for mutating self, mutate_code and staged_mutate_code.
+    # mutate_eager by default (is_re_pull = FALSE) will execute code from staged_mutate_code because code inside of
+    # mutate_code has already been executed. However, when the self$pull method is called, the entire dataset is
+    # recomputed. This means that all code from `mutate_code` need to be recomputed.
     mutate_eager = function(is_re_pull = FALSE) {
       if (!is_empty(private$get_mutate_code_class(staged = ! is_re_pull)$code)) {
         mutate_code <- private$get_mutate_code_class(staged = ! is_re_pull)$get_code(deparse = TRUE)
@@ -487,8 +491,10 @@ DatasetConnector <- R6::R6Class( #nolint
 
         private$is_mutate_delayed_flag <- private$dataset$is_mutate_delayed()
         # allowing private$dataset to decide whether the mutate code of self has been delayed or not
-        # i.e. if private$dataset is delayed, the self is delayed, if private$dataset has been mutated then self is
-        # mutated
+        # i.e. if private$dataset is delayed, then self will be delayed,
+        # if private$dataset has been mutated then self will be mutated.
+        # For example,
+        #   private$dataset could be delayed if one of the vars is a DataConnector object that has not been pulled yet.
         if (! private$is_mutate_delayed_flag && !is_re_pull) {
           private$is_mutated <- TRUE
           if (!is_re_pull) {
