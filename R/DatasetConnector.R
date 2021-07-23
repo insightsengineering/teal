@@ -59,6 +59,7 @@ DatasetConnector <- R6::R6Class( #nolint
                           code = character(0),
                           vars = list()) {
       private$set_pull_callable(pull_callable)
+      private$set_var_r6(vars)
       private$set_pull_vars(vars)
 
       private$set_dataname(dataname)
@@ -168,6 +169,13 @@ DatasetConnector <- R6::R6Class( #nolint
     get_raw_data = function() {
       dataset <- self$get_dataset()
       return(dataset$get_raw_data())
+    },
+    #' @description
+    #' Get the list of dependencies that are Dataset or DatasetConnector objects
+    #'
+    #' @return \code{list}
+    get_var_r6 = function() {
+      return(private$var_r6)
     },
 
     # ___ setters ====
@@ -388,6 +396,7 @@ DatasetConnector <- R6::R6Class( #nolint
     keys = NULL,
     mutate_code = NULL, # CodeClass after initialization
     mutate_vars = list(), # named list with vars used to mutate object
+    var_r6 = list(),
     ui_input = NULL, # NULL or list
     ui = function(id) {
       ns <- NS(id)
@@ -564,6 +573,7 @@ DatasetConnector <- R6::R6Class( #nolint
     },
     set_mutate_vars = function(vars) {
       stopifnot(is_fully_named_list(vars))
+      private$set_var_r6(vars)
       if (length(vars) > 0) {
         # now allowing overriding variable names
         over_rides <- names(vars)[vapply(
@@ -581,7 +591,20 @@ DatasetConnector <- R6::R6Class( #nolint
 
       return(invisible(self))
     },
-
+    set_var_r6 = function(vars) {
+      stopifnot(is_fully_named_list(vars))
+      for (var in vars) {
+        if (is(var, "DatasetConnector") || is(var, "Dataset")) {
+          for (var_dep in c(var, var$get_var_r6())) {
+            if (identical(self, var_dep)) {
+              stop("Circular dependencies detected")
+            }
+          }
+          private$var_r6 <- c(private$var_r6, var, var$get_var_r6())
+        }
+      }
+      return(invisible(self))
+    },
     set_dataname = function(dataname) {
       stopifnot(is_character_single(dataname))
       stopifnot(!grepl("\\s", dataname))
