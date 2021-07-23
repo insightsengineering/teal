@@ -60,6 +60,7 @@ ds$launch()
 \item \href{#method-get_error_message}{\code{DatasetConnector$get_error_message()}}
 \item \href{#method-get_pull_callable}{\code{DatasetConnector$get_pull_callable()}}
 \item \href{#method-get_raw_data}{\code{DatasetConnector$get_raw_data()}}
+\item \href{#method-get_var_r6}{\code{DatasetConnector$get_var_r6()}}
 \item \href{#method-set_dataset_label}{\code{DatasetConnector$set_dataset_label()}}
 \item \href{#method-set_keys}{\code{DatasetConnector$set_keys()}}
 \item \href{#method-pull}{\code{DatasetConnector$pull()}}
@@ -277,6 +278,19 @@ Get raw data from dataset
 
 \subsection{Returns}{
 \code{data.frame} or \code{MultiAssayExperiment} data
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-get_var_r6"></a>}}
+\if{latex}{\out{\hypertarget{method-get_var_r6}{}}}
+\subsection{Method \code{get_var_r6()}}{
+Get the list of dependencies that are Dataset or DatasetConnector objects
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{DatasetConnector$get_var_r6()}\if{html}{\out{</div>}}
+}
+
+\subsection{Returns}{
+\code{list}
 }
 }
 \if{html}{\out{<hr>}}

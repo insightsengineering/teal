@@ -1,5 +1,11 @@
 # teal 0.9.5.9000
 
+### Bug fixes
+* Fixed the bug caused by calling `mutate_dataset` multiple times on the same `DatasetConnector` or `Dataset` object.
+
+### Enhancements
+* The `append` method of a `CodeClass` object has been modified to print a warning message when the argument does not result in any code being added because it is duplicated.
+
 # teal 0.9.5
 
 ### Enhancements

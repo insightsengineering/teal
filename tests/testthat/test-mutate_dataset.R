@@ -121,3 +121,45 @@ test_that("mutate_dataset", {
     test_ds_mut <- test_ds %>% mutate_dataset(code = "rm('testds')")
   }, "Code from testds need to return a data.frame")
 })
+
+test_that("mutate_dataset with vars argument", {
+  x <- data.frame(x = c(1, 2), y = c("a", "b"), stringsAsFactors = FALSE)
+  var1 <- "3"
+  var2 <- "4"
+  test_ds <- dataset(
+    dataname = "x",
+    x = x,
+    code = "data.frame(x = c(1, 2), y = c('a', 'b'), stringsAsFactors = TRUE)"
+  )
+  expect_silent(
+    mutate_dataset(x = test_ds, code = "x$z <- var", vars = list(var = var1))
+  )
+  expect_silent(
+    mutate_dataset(x = test_ds, code = "x$z <- var2", vars = list(var2 = paste(var1, var2)))
+  )
+  expect_error(
+    mutate_dataset(x = test_ds, code = "x$z <- var", vars = list(var = var2))
+  )
+  expect_silent(
+    mutate_dataset(x = test_ds, code = "x$zz <- var", vars = list(var = var1))
+  )
+
+  pull_fun2 <- callable_function(data.frame)
+  pull_fun2$set_args(args = list(a = c(1, 2, 3)))
+  expect_silent({
+    t <- dataset_connector("test", pull_fun2)
+  })
+  expect_silent(load_dataset(t))
+  expect_silent(
+    mutate_dataset(x = t, code = "test$z <- var", vars = list(var = var1))
+  )
+  expect_silent(
+    mutate_dataset(x = t, code = "test$z <- var2", vars = list(var2 = paste(var1, var2)))
+  )
+  expect_error(
+    mutate_dataset(x = t, code = "test$z <- var", vars = list(var = var2))
+  )
+  expect_silent(
+    mutate_dataset(x = t, code = "test$zz <- var", vars = list(var = var1))
+  )
+})
