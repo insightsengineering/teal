@@ -378,8 +378,14 @@ Dataset <- R6::R6Class( # nolint
         )
         # delaying mutate if it has already been delayed
         if (!delay_mutate && !self$is_mutate_delayed()) {
+          # environment needs also this var to mutate self
+          code_container <- CodeClass$new()
+          code_container$set_code(
+            code = code,
+            dataname = self$get_dataname()
+          )
           self$set_vars(vars)
-          private$mutate_eager(code)
+          private$mutate_eager(code_container)
         } else {
           private$mutate_delayed(code, vars)
         }
@@ -479,18 +485,8 @@ Dataset <- R6::R6Class( # nolint
       return(invisible(self))
     },
 
-    mutate_eager = function(code) {
-      # environment needs also this var to mutate self
-      code_container <- if (is(code, "CodeClass")) {
-        code
-      } else {
-        res <- CodeClass$new()
-        res$set_code(
-          code = code,
-          dataname = self$get_dataname()
-        )
-        res
-      }
+    mutate_eager = function(code_container) {
+      stopifnot(is(code_container, "CodeClass"))
       new_df <- private$execute_code(
         code = code_container,
         vars = c(private$vars, private$mutate_vars, setNames(list(self), self$get_dataname()))
@@ -498,7 +494,7 @@ Dataset <- R6::R6Class( # nolint
 
       # code set after successful evaluation
       # otherwise code != dataset
-      self$set_code(if (!is(code, "CodeClass")) code else code$get_code())
+      self$set_code(code_container$get_code())
       self$set_vars(private$mutate_vars)
       private$mutate_code <- CodeClass$new()
       private$mutate_vars <- list()
