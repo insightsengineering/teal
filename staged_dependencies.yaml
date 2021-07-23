@@ -1,9 +1,11 @@
 
 ---
+current_repo:
+  repo: insightsengineering/teal
+  host: https://github.com
+
 upstream_repos:
 - repo: insightsengineering/utils.nest
-  host: https://github.com
-- repo: insightsengineering/test.nest
   host: https://github.com
 - repo: insightsengineering/random.cdisc.data
   host: https://github.com
@@ -20,8 +22,4 @@ downstream_repos:
 - repo: insightsengineering/teal.osprey
   host: https://github.com
 - repo: insightsengineering/teal.goshawk
-  host: https://github.com
-
-current_repo:
-  repo: insightsengineering/teal
   host: https://github.com
