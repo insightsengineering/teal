@@ -369,7 +369,7 @@ Dataset <- R6::R6Class( # nolint
 
       new_set <- private$execute_code(
         code = self$get_code_class(),
-        vars = private$vars
+        vars = c(private$vars, setNames(list(self), self$get_dataname()))
       )
 
       res_check <- tryCatch({

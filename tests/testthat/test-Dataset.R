@@ -217,3 +217,35 @@ testthat::test_that("Dataset$set_vars throws an error if passed the enclosing Da
     regexp = "Circular dependencies detected"
   )
 })
+
+testthat::test_that("Dataset check method", {
+  test_ds0 <- Dataset$new("head_mtcars", head(mtcars))
+  expect_error(
+    test_ds0$check(),
+    regex = "Cannot check preprocessing code of 'head_mtcars' - code is empty."
+  )
+  test_ds1 <- Dataset$new("head_mtcars", x = head(mtcars), code = "head_mtcars <- head(mtcars)")
+  expect_true(
+    test_ds1$check()
+  )
+  test_ds2 <- Dataset$new("head_mtcars", x = head(mtcars), code = "head_mtcars <- mtcars[1:6, ]")
+  expect_true(
+    test_ds2$check()
+  )
+  mutate_dataset(test_ds0, code = "head_mtcars$one <- 1")
+  expect_true(
+    test_ds1$check()
+  )
+  mutate_dataset(test_ds0, code = "head_mtcars$one <- head_mtcars$one * 2")
+  expect_true(
+    test_ds1$check()
+  )
+  mutate_dataset(test_ds1, code = "head_mtcars$one <- 1")
+  expect_true(
+    test_ds1$check()
+  )
+  mutate_dataset(test_ds1, code = "head_mtcars$one <- head_mtcars$one * 2")
+  expect_true(
+    test_ds1$check()
+  )
+})
