@@ -60,7 +60,10 @@ input widgets that provide only a single choice.
 \examples{
 
 optionalSelectInput(inputId = "xvar", label = "x variable", choices = "A", selected = "A")
-optionalSelectInput(inputId = "xvar", label = "x variable", choices = LETTERS[1:5], selected = "A")
+optionalSelectInput(inputId = "xvar",
+                    label = "x variable",
+                    choices = LETTERS[1:5],
+                     selected = "A")
 optionalSelectInput(inputId = "xvar",
                     label = "x variable",
                     choices = c("A - value A" = "A"),
@@ -73,6 +76,11 @@ optionalSelectInput(inputId = "xvar",
                     choices = choices_labeled(
                       choices = letters,
                       labels = LETTERS,
+                      types = sample(
+                        c("primary_key", "numeric", "factor", "Date"),
+                        length(letters),
+                        TRUE
+                      ),
                       subset = c("a", "b", "c")
                     ),
                     selected = "a")

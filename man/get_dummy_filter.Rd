@@ -4,7 +4,10 @@
 \alias{get_dummy_filter}
 \title{Get dummy filter states to apply initially}
 \usage{
-get_dummy_filter()
+get_dummy_filter(data)
+}
+\arguments{
+\item{data}{(\code{RelationalData})}
 }
 \value{
 dummy filter states

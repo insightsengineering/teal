@@ -1,0 +1,782 @@
+#' Initialize `FilteredDataset`
+#'
+#' `FilteredDataset` contains `Dataset`
+#' @param dataset (`Dataset`)\cr
+#' @param join_keys (`named list`)\cr
+#'   named list of join keys to merge this dataset with
+#'   it's relatives.
+#' @examples
+#' library(random.cdisc.data)
+#' adsl <- cdisc_dataset("ADSL", radsl(cached = TRUE))
+#' adtte <- cdisc_dataset("ADTTE", radtte(cached = TRUE))
+#' data <- cdisc_data(adsl, adtte)
+#'
+#' filtered_dataset <- teal:::init_filtered_dataset(
+#'   dataset = adtte,
+#'   join_keys = data$get_join_keys()$get("ADTTE")
+#' )
+#'
+#' \dontrun{
+#' shinyApp(
+#'   ui = fluidPage(
+#'     actionButton("clear", span(icon("times"), "Remove all filters")),
+#'     filtered_dataset$ui_add_filter_state(id = "add"),
+#'     filtered_dataset$ui("dataset"),
+#'     verbatimTextOutput("call"),
+#'     tableOutput("tbl")
+#'   ),
+#'   server = function(input, output, session) {
+#'     callModule(
+#'       filtered_dataset$srv_add_filter_state,
+#'       id = "add"
+#'     )
+#'
+#'     callModule(filtered_dataset$server, id = "dataset")
+#'
+#'     output$call <- renderText({
+#'       paste(
+#'         vapply(filtered_dataset$get_call(), pdeparse, character(1)),
+#'         collapse = "\n"
+#'       )
+#'     })
+#'
+#'     output$tbl <- renderTable({
+#'       filtered_dataset$get_data(filtered = TRUE)
+#'     })
+#'
+#'     observeEvent(
+#'       input$clear,
+#'       filtered_dataset$queues_empty()
+#'     )
+#'   }
+#' )
+#' }
+init_filtered_dataset <- function(dataset, join_keys) { #nolint
+  UseMethod("init_filtered_dataset")
+}
+
+#' @export
+init_filtered_dataset.Dataset <- function(dataset, join_keys) { #nolint #nousage
+  DefaultFilteredDataset$new(dataset, join_keys)
+}
+
+#' @export
+init_filtered_dataset.CDISCDataset <- function(dataset, join_keys) { #nolint #nousage
+  CDISCFilteredDataset$new(dataset, join_keys)
+}
+
+#' @export
+init_filtered_dataset.MAEDataset <- function(dataset, join_keys) { #nolint #nousage
+  MAEFilteredDataset$new(dataset, join_keys)
+}
+
+# FilteredDataset abstract --------
+#' @title `FilterStates` R6 class
+#' @description
+#' `FilteredDataset` is a class which renders/controls `FilterStates`(s) for `Dataset`.
+#' Each `FilteredDataset` contains `filter_states` field - a `list` which contains one
+#' (`data.frame`) or multiple (`MultiAssayExperiment`) `FilterStates` objects.
+#' Each `FilterStates` is responsible for one filter/subset expression applied for specific
+#' components of the `Dataset`.
+FilteredDataset <- R6::R6Class( # nolint
+  "FilteredDataset",
+  ## __Public Methods ====
+  public = list(
+    #' @description
+    #' Initialize `FilteredDataset` object
+    #'
+    #' @param dataset (`Dataset`)\cr
+    #'  single dataset for which filters are rendered
+    #' @param join_keys (`list`)\cr
+    #'  keys to join this `dataset` with the other
+    initialize = function(dataset, join_keys) {
+      stopifnot(is.null(join_keys) || is_fully_named_list(join_keys))
+      stopifnot(is(dataset, "Dataset"))
+      private$dataset <- dataset
+      private$hash <- digest::digest(
+        get_raw_data(dataset),
+        algo = "md5"
+      )
+      private$join_keys <- join_keys
+
+      dataname <- self$get_dataname()
+      private$reactive_data <- reactive({
+        .log("################################################# Refiltering dataset ", dataname)
+        env <- new.env(parent = parent.env(globalenv()))
+        for (idx in seq_along(private$eval_env)) {
+          env[[names(private$eval_env)[idx]]] <- if (is.reactive(private$eval_env[[idx]])) {
+            private$eval_env[[idx]]()
+          } else {
+            private$eval_env[[idx]]
+          }
+        }
+        env[[dataname]] <- self$get_data(filtered = FALSE)
+        filter_call <- self$get_call()
+        eval_expr_with_msg(filter_call, env)
+        get(x = self$get_filtered_dataname(), envir = env)
+      })
+
+      return(invisible(self))
+    },
+
+    #' @description
+    #' Add objects to the filter call evaluation environment
+    #' @param name (`character`) object name
+    #' @param value object value
+    add_to_eval_env = function(name, value) {
+      stopifnot(is_character_single(name))
+      private$eval_env <- c(private$eval_env, setNames(value, name))
+      return(invisible(self))
+    },
+
+
+    #' @description
+    #' Removes all active filter items applied to this dataset
+    queues_empty = function() {
+      lapply(
+        self$get_filter_states(),
+        function(queue) queue$queue_empty()
+      )
+      return(NULL)
+    },
+
+    # getters ----
+    #' @description
+    #' Get filter expression
+    #'
+    #' This functions returns filter calls equivalent to selected items
+    #' within each of `filter_states`. Configuration of the calls is constant and
+    #' depends on `filter_states` type and order which are set during initialization.
+    #' @return filter `call` or `list` of filter calls
+    get_call = function() {
+      stop("Abstract class method")
+    },
+
+    #' @description
+    #' Get raw data of this dataset
+    #' @param filtered (`logical(1)`)\cr
+    #'   whether returned data should be filtered or not
+    #' @return type of returned object depending on a data stored in
+    #' `Dataset`. Currently `data.frame` or `MultiAssayExperiment`
+    get_data = function(filtered) {
+      if (isTRUE(filtered)) {
+        self$get_data_reactive()()
+      } else {
+        get_raw_data(self$get_dataset())
+      }
+    },
+
+    #' @description
+    #' Get reactive object which returns filtered data
+    #' @return (`reactive`)
+    get_data_reactive = function() {
+      private$reactive_data
+    },
+
+    #' @description
+    #' Get filter states
+    #' @param queue_name (`character(1)`, `character(0)`)\cr
+    #'   name of the `private$filter_states` list element where `FilterStates` is kept.
+    #' @return `FilterStates` or `list` of `FilterStates` objects.
+    get_filter_states = function(queue_name = character(0)) {
+      if (is_empty(queue_name)) {
+        private$filter_states
+      } else {
+        private$filter_states[[queue_name]]
+      }
+    },
+
+    #' @description
+    #' Get data info
+    #' @param filtered (`logical(1)`)\cr
+    #'   whether `data.info` should depend on filtered data.
+    #' @return `integer(1)` number of rows
+    get_data_info = function(filtered = FALSE) {
+      nrow(self$get_data(filtered = filtered))
+    },
+
+    #' @description
+    #' Get subjects info
+    #' @param filtered (`logical(1)`)\cr
+    #'   whether `data.info` should depend on filtered data.
+    #' @return `integer` number of unique subjects
+    get_subjects_info = function(filtered) {
+      integer(0)
+    },
+
+    #' @description
+    #' Get name of the dataset
+    #'
+    #' Get name of the dataset
+    #' @return `character(1)` as a name of this dataset
+    get_dataname = function() {
+      get_dataname(self$get_dataset())
+    },
+
+    #' @description
+    #' Get dataset
+    #' @return `Dataset`
+    get_dataset = function() {
+      private$dataset
+    },
+
+    #' @description
+    #' Hash of the unfiltered dataset
+    #' @return (`character(1)`)
+    get_hash = function() {
+      private$hash
+    },
+
+    #' Get keys for the dataset
+    #' @return (`character`) keys of dataset
+    get_keys = function() {
+      self$get_dataset()$get_keys()
+    },
+
+    #' Get join keys to join this dataset with others
+    #' @return `list` of keys
+    get_join_keys = function() {
+      private$join_keys
+    },
+
+    #' @description
+    #' Get labels of variables in the data
+    #'
+    #' Variables are the column names of the data.
+    #' Either, all labels must have been provided for all variables
+    #' in `set_data` or `NULL`.
+    #'
+    #' @param variables (`character` vector) variables to get labels for;
+    #'   if `NULL`, for all variables in data
+    #' @return (`character` or `NULL`) variable labels, `NULL` if `column_labels`
+    #'   attribute does not exist for the data
+    get_varlabels = function(variables = NULL) {
+      stopifnot(is.null(variables) || is_character_vector(variables, min_length = 0L))
+
+      labels <- self$get_dataset()$get_column_labels()
+      if (is.null(labels)) {
+        return(NULL)
+      }
+
+      if (!is.null(variables)) {
+        check_in_subset(
+          variables,
+          self$get_varnames(),
+          pre_msg = sprintf("Variables do not exist in data %s:", self$get_dataname())
+        ) # otherwise, NA values will be added (also as names)
+        labels <- labels[variables]
+      }
+
+      return(labels)
+    },
+
+    #' @description
+    #' Get variable names from dataset
+    #' @return `character`
+    get_varnames = function() {
+      colnames(self$get_data(filtered = FALSE))
+    },
+
+    #' @description
+    #' Get suffixed dataname
+    #' Used when filtering the data to get `<dataname>_FILTERED`,
+    #' `<dataname>_FILTERED_ALONE` or any other name.
+    #' @param dataname (`character(1)`) dataname
+    #' @param suffix (`character(1)`) string to be putted after dataname
+    #' @return `character(1)`
+    get_filtered_dataname = function(dataname = self$get_dataname(), suffix = "_FILTERED") {
+      paste0(dataname, suffix)
+    },
+
+    # modules ------
+    #' @description
+    #' UI module for dataset active filters
+    #'
+    #' UI module containing dataset active filters along with
+    #' title and remove button.
+    #' @param id (`character(1)`)\cr
+    #'  identifier of the element - preferably containing dataset name
+    #'
+    #' @return function - shiny UI module
+    ui = function(id) {
+      dataname <- self$get_dataname()
+      stopifnot(
+        is_character_single(dataname)
+      )
+      ns <- NS(id)
+      span(
+        id = id,
+        div(
+          id = ns("whole_ui"), # to hide it entirely
+          fluidRow(
+            column(
+              width = 8,
+              tags$span(dataname, class = "filter_panel_dataname")
+            ),
+            column(
+              width = 4,
+              actionLink(
+                ns("remove_filters"),
+                label = "",
+                icon = icon("times-circle", lib = "font-awesome"),
+                class = "remove pull-right"
+              )
+            )
+          ),
+          div(
+            # id needed to insert and remove UI to filter single variable as needed
+            # it is currently also used by the above module to entirely hide this panel
+            id = ns("filters"),
+            tagList(
+              lapply(
+                names(self$get_filter_states()),
+                function(x) {
+                  self$get_filter_states(queue_name = x)$ui(id = ns(x))
+                }
+              )
+            )
+          )
+        )
+      )
+    },
+
+    #' @description
+    #' Server module for a dataset active filters
+    #'
+    #' Server module managing a  active filters.
+    #' @param input (`shiny`)\cr
+    #' @param output (`shiny`)\cr
+    #' @param session (`shiny`)\cr
+    #'  single dataset for which filters are rendered
+    #' @return function - shiny server module
+    server = function(input, output, session) {
+      dataname <- self$get_dataname()
+      stopifnot(
+        is_character_single(dataname)
+      )
+
+      observeEvent(input$remove_filters, {
+        .log("removing all filters for data", self$get_dataname())
+        lapply(
+          self$get_filter_states(),
+          function(x) x$queue_empty()
+        )
+      })
+    },
+
+    #' @description
+    #' UI module to add filter variable for this dataset
+    #'
+    #' UI module to add filter variable for this dataset
+    #' @param id (`character(1)`)\cr
+    #'  identifier of the element - preferably containing dataset name
+    #'
+    #' @return function - shiny UI module
+    ui_add_filter_state = function(id) {
+      stop("Abstract class method")
+    },
+
+    #' @description
+    #' Server module to add filter variable for this dataset
+    #'
+    #' Server module to add filter variable for this dataset
+    #' @param input (`shiny`)\cr
+    #' @param output (`shiny`)\cr
+    #' @param session (`shiny`)\cr
+    #' @return function - shiny server module
+    srv_add_filter_state = function(input, output, session) {
+      stop("Abstract class method")
+    }
+  ),
+  ## __Private Methods ====
+  private = list(
+    dataset = NULL, # Dataset
+    reactive_data = NULL, # reactive
+    eval_env = list(),
+    filter_states = list(),
+    hash = character(0),
+    join_keys = NULL, # JoinKeySet
+
+    # Adds `FilterStates` to the `private$filter_states`.
+    # `FilterStates` is added once for each element of the dataset.
+    # @param filter_states (`FilterStates`)
+    # @param queue_name (`character(1)`)
+    add_filter_states = function(filter_states, queue_name) {
+      stopifnot(is(filter_states, "FilterStates"))
+      stopifnot(is_character_single(queue_name))
+      list <- setNames(list(filter_states), queue_name)
+      private$filter_states <- c(self$get_filter_states(), list)
+    },
+
+    # @description
+    # Checks if the dataname exists and
+    # (if provided) that varname is a valid column in the dataset
+    #
+    # Stops when this is not the case.
+    #
+    # @param varname (`character`) column within the dataset;
+    #   if `NULL`, this check is not performed
+    check_data_varname_exists = function(varname = NULL) {
+      stopifnot(is.null(varname) || is_character_single(varname))
+
+      isolate({
+        if (!is.null(varname) && !(varname %in% self$get_varnames())) {
+          stop(
+            sprintf("variable '%s' does not exist in data '%s'", varname, dataname)
+          )
+        }
+      })
+
+      return(invisible(NULL))
+    }
+  )
+)
+
+# DefaultFilteredDataset ------
+#' @title `DefaultFilteredDataset` R6 class
+DefaultFilteredDataset <- R6::R6Class( # nolint
+  classname = "DefaultFilteredDataset",
+  inherit = FilteredDataset,
+  public = list(
+
+    #' @description
+    #' Initialize `DefaultFilteredDataset` object
+    #'
+    #' @param dataset (`Dataset`)\cr
+    #'  single dataset for which filters are rendered
+    #' @param join_keys (`list`)\cr
+    #'  keys to join this `dataset` with the other
+    initialize = function(dataset, join_keys) {
+      stopifnot(is(dataset, "Dataset"))
+      super$initialize(dataset, join_keys)
+      dataname <- get_dataname(dataset)
+
+      private$add_filter_states(
+        filter_states = init_filter_states(
+          data = get_raw_data(dataset),
+          input_dataname = as.name(dataname),
+          output_dataname = as.name(sprintf("%s_FILTERED", dataname)),
+          varlabels = self$get_varlabels(),
+          keys = self$get_keys()
+        ),
+        queue_name = "filter"
+      )
+      return(invisible(self))
+    },
+
+    #' @description
+    #' Get filter expression
+    #'
+    #' This functions returns filter calls equivalent to selected items
+    #' within each of `filter_states`. Configuration of the calls is constant and
+    #' depends on `filter_states` type and order which are set during initialization.
+    #' This class contains single `FilterStates`
+    #' which contains single `ReactiveQueue` and all `FilterState` objects
+    #' applies to one argument (`...`) in `dplyr::filter` call.
+    #' @return filter `call` or `list` of filter calls
+    get_call = function() {
+      Filter(
+        f = Negate(is.null),
+        x = lapply(
+          self$get_filter_states(),
+          function(x) x$get_call()
+        )
+      )
+    },
+
+    #' @description
+    #' UI module to add filter variable for this dataset
+    #'
+    #' UI module to add filter variable for this dataset
+    #' @param id (`character(1)`)\cr
+    #'  identifier of the element - preferably containing dataset name
+    #'
+    #' @return function - shiny UI module
+    ui_add_filter_state = function(id) {
+      ns <- NS(id)
+      self$get_filter_states(queue_name = "filter")$ui_add_filter_state(
+        id = ns("filter"),
+        data = get_raw_data(self$get_dataset())
+      )
+    },
+
+    #' @description
+    #' Server module to add filter variable for this dataset
+    #'
+    #' Server module to add filter variable for this dataset.
+    #' For this class `srv_add_filter_state` calls single module
+    #' `srv_add_filter_state` from `FilterStates` (`DefaultFilteredDataset`
+    #' contains single `FilterStates`)
+    #'
+    #' @param input (`shiny`)\cr
+    #' @param output (`shiny`)\cr
+    #' @param session (`shiny`)\cr
+    #' @return function - shiny server module
+    srv_add_filter_state = function(input, output, session) {
+      data <- get_raw_data(self$get_dataset())
+      callModule(
+        module = self$get_filter_states(queue_name = "filter")$srv_add_filter_state,
+        id = "filter",
+        data = data
+      )
+    }
+  ),
+  private = list(
+  )
+)
+
+
+# CDISCFilteredDataset ------
+#' @title `CDISCFilteredDataset` R6 class
+CDISCFilteredDataset <- R6::R6Class( # nolint
+  classname = "CDISCFilteredDataset",
+  inherit = DefaultFilteredDataset,
+  public = list(
+    #' @description
+    #' Get filter expression
+    #'
+    #' This functions returns filter calls equivalent to selected items
+    #' within each of `filter_states`. Configuration of the calls is constant and
+    #' depends on `filter_states` type and order which are set during initialization.
+    #' This class contains single `FilterStates`
+    #' which contains single `ReactiveQueue` and all `FilterState` objects
+    #' applies to one argument (`...`) in `dplyr::filter` call.
+    #' It's also possible within this class to return `merge` call
+    #' with other `data.frame` which is a parent.
+    #' @return filter `call` or `list` of filter calls
+    get_call = function() {
+      if (is_empty(self$get_dataset()$get_parent())) {
+        super$get_call()
+      } else {
+        parent_dataname <- self$get_dataset()$get_parent()
+        keys <- self$get_join_keys()[[parent_dataname]]
+        parent_keys <- names(keys)
+        dataset_keys <- unname(keys)
+
+        filtered_dataname_alone <- self$get_filtered_dataname(suffix = "_FILTERED_ALONE")
+        filtered_dataname <- self$get_filtered_dataname()
+        filtered_parentname <- self$get_filtered_dataname(dataname = parent_dataname)
+
+        premerge_call <- Filter(
+          f = Negate(is.null),
+          x = lapply(
+            self$get_filter_states(),
+            function(x) x$get_call()
+          )
+        )
+        premerge_call[[1]][[2]] <- as.name(filtered_dataname_alone)
+        merge_call <- call(
+          "<-",
+          as.name(filtered_dataname),
+          call_with_colon(
+            "dplyr::inner_join",
+            x = as.name(filtered_dataname_alone),
+            y = if (is_empty(parent_keys)) {
+              as.name(filtered_parentname)
+            } else {
+              call_extract_array(
+                dataname = filtered_parentname,
+                column = parent_keys,
+                aisle = call("=", as.name("drop"), FALSE)
+              )
+            },
+            unlist_args = if (is_empty(parent_keys) || is_empty(dataset_keys)) {
+              list()
+            } else if (identical(parent_keys, dataset_keys)) {
+              list(by = parent_keys)
+            } else {
+              list(by = setNames(parent_keys, nm = dataset_keys))
+            }
+          )
+        )
+        c(premerge_call, merge_call)
+      }
+    },
+
+    #' @description
+    #' Get subjects info
+    #' @param filtered (`logical(1)`)\cr
+    #'   whether subject number should depend on filtered data.
+    #' @return `integer(1)` number of unique subjects
+    get_subjects_info = function(filtered) {
+      subject_keys <- if (!is_empty(self$get_dataset()$get_parent())) {
+        self$get_join_keys()[[self$get_dataset()$get_parent()]]
+      } else {
+        self$get_keys()
+      }
+      if (is_empty(subject_keys)) {
+        dplyr::n_distinct(self$get_data(filtered = filtered))
+      } else {
+        dplyr::n_distinct(self$get_data(filtered = filtered)[subject_keys])
+      }
+    }
+  )
+)
+
+
+# MAEFilteredDataset ------
+#' @title `MAEFilteredDataset` R6 class
+MAEFilteredDataset <- R6::R6Class( # nolint
+  classname = "MAEFilteredDataset",
+  inherit = FilteredDataset,
+  public = list(
+
+    #' @description
+    #' Initialize `MAEFilteredDataset` object
+    #'
+    #' @param dataset (`MAEDataset`)\cr
+    #'  single dataset for which filters are rendered
+    #' @param join_keys (`list`)\cr
+    #'  keys to join this `dataset` with the other
+    initialize = function(dataset, join_keys) {
+      stopifnot(is(dataset, "MAEDataset"))
+      super$initialize(dataset, join_keys)
+
+      dataname <- self$get_dataname()
+      raw_data <- get_raw_data(dataset)
+      experiment_names <- names(raw_data)
+
+      # subsetting by patient means subsetting by colData(MAE)
+      private$add_filter_states(
+        filter_states = init_filter_states(
+          data = raw_data,
+          input_dataname = as.name(dataname),
+          output_dataname = as.name(sprintf("%s_FILTERED", dataname)),
+          varlabels = self$get_varlabels(),
+          keys = self$get_keys()
+        ),
+        queue_name = "patient"
+      )
+
+      # elements of the list (experiments) are unknown
+      # dispatch needed because we can't hardcode methods otherwise:
+      #  if (matrix) else if (SummarizedExperiment) else if ...
+      lapply(
+        experiment_names,
+        function(experiment_name) {
+          input_dataname <- call_extract_list(
+            sprintf("%s_FILTERED", dataname),
+            experiment_name,
+            dollar = FALSE
+          )
+
+          private$add_filter_states(
+            filter_states = init_filter_states(
+              data = raw_data[[experiment_name]],
+              input_dataname = input_dataname,
+              output_dataname = input_dataname
+            ),
+            queue_name = experiment_name
+          )
+
+        }
+      )
+
+    },
+
+    #' @description
+    #' Get filter expression
+    #'
+    #' This functions returns filter calls equivalent to selected items
+    #' within each of `filter_states`. Configuration of the calls is constant and
+    #' depends on `filter_states` type and order which are set during initialization.
+    #' This class contains multiple `FilterStates`:
+    #' \itemize{
+    #'   \item{`colData(dataset)`}{for this object single `MAEFilterStates`
+    #'   which returns `subsetByColData` call}
+    #'   \item{experiments}{for each experiment single `SEFilterStates` and
+    #'   `FilterStates_matrix`, both returns `subset` call}
+    #' }
+    #' @return filter `call` or `list` of filter calls
+    get_call = function() {
+      Filter(
+        f = Negate(is.null),
+        x = lapply(
+          self$get_filter_states(),
+          function(x) x$get_call()
+        )
+      )
+    },
+
+    #' @description
+    #' Get data info
+    #' @param filtered (`logical(1)`)\cr
+    #'   whether `data.info` should depend on filtered data.
+    #' @return `integer(1)` number of rows in `colData(data)`
+    get_data_info = function(filtered = FALSE) {
+      nrow(
+        SummarizedExperiment::colData(
+          self$get_data(filtered = filtered)
+        )
+      )
+    },
+
+    #' @description
+    #' UI module to add filter variable for this dataset
+    #'
+    #' UI module to add filter variable for this dataset
+    #' @param id (`character(1)`)\cr
+    #'  identifier of the element - preferably containing dataset name
+    #'
+    #' @return function - shiny UI module
+    ui_add_filter_state = function(id) {
+      ns <- NS(id)
+      dataname <- self$get_dataname()
+      data <- get_raw_data(self$get_dataset())
+      col_data <- colData(data)
+      experiment_names <- names(data)
+
+      div(
+        self$get_filter_states("patient")$ui_add_filter_state(
+          ns("patient"),
+          data = data
+        ),
+        tagList(
+          lapply(
+            experiment_names,
+            function(experiment_name) {
+              self$get_filter_states(experiment_name)$ui_add_filter_state(
+                ns(experiment_name),
+                data = data[[experiment_name]]
+              )
+            }
+          )
+        )
+      )
+    },
+
+    #' @description
+    #' Server module to add filter variable for this dataset
+    #'
+    #' Server module to add filter variable for this dataset.
+    #' For this class `srv_add_filter_state` calls multiple modules
+    #' of the same name from `FilterStates` as `MAEFilteredDataset`
+    #' contains one `FilterStates` object for `colData` and one for each
+    #' experiment.
+    #'
+    #' @param input (`shiny`)\cr
+    #' @param output (`shiny`)\cr
+    #' @param session (`shiny`)\cr
+    #' @return function - shiny server module
+    srv_add_filter_state = function(input, output, session) {
+      data <- get_raw_data(self$get_dataset())
+      callModule(
+        module = self$get_filter_states("patient")$srv_add_filter_state,
+        id = "patient",
+        data = data # MultiAssayExperiment
+      )
+
+      experiment_names <- names(data)
+      lapply(
+        experiment_names,
+        function(experiment_name) {
+          callModule(
+            module = self$get_filter_states(experiment_name)$srv_add_filter_state,
+            id = experiment_name,
+            data = data[[experiment_name]] # SummarizedExperiment or matrix
+          )
+        }
+      )
+    }
+  )
+)

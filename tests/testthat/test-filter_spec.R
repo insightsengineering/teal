@@ -1,3 +1,4 @@
+library(random.cdisc.data)
 choices <- c("val1", "val2", "val3")
 choices_d <- c("val1", "val1", "val2", "val3")
 choices_f <- as.factor(choices)
@@ -129,7 +130,6 @@ test_that("delayed filter_spec", {
     USUBJID = letters[1:10],
     SEX = sample(c("F", "M", "U"), 10, replace = TRUE),
     stringsAsFactors = FALSE)
-  attr(ADSL, "keys") <- get_cdisc_keys("ADSL")
 
   expected_spec <- filter_spec(
     vars = variable_choices(ADSL, "SEX"),
@@ -151,7 +151,7 @@ test_that("delayed filter_spec", {
   expect_equal(names(expected_spec), names(delayed))
 
   ds <- teal:::CDISCFilteredData$new()
-  isolate(ds$set_data("ADSL", ADSL))
+  isolate(ds$set_dataset(cdisc_dataset("ADSL", ADSL)))
   result_spec <- isolate(resolve_delayed(delayed, ds))
   expect_identical(expected_spec, isolate(resolve_delayed(delayed, ds)))
 })
@@ -180,7 +180,7 @@ test_that("filter_spec_internal", {
 })
 
 test_that("filter_spec_internal contains dataname", {
-  ADSL <- random.cdisc.data::radsl(cached = TRUE) # nolint
+  ADSL <- radsl(cached = TRUE) # nolint
 
   x_filter <- filter_spec_internal(
     vars_choices = variable_choices(ADSL)
@@ -225,11 +225,14 @@ test_that("delayed filter_spec works", {
 
   expect_equal(names(expected_spec), names(delayed))
 
-  ds <- teal:::CDISCFilteredData$new()
-  isolate(ds$set_data("ADSL", ADSL))
+  ds <- teal:::FilteredData$new()
+  isolate(ds$set_dataset(dataset("ADSL", ADSL)))
   delayed$dataname <- "ADSL"
   expected_spec$dataname <- "ADSL"
-  expect_identical(expected_spec, isolate(resolve_delayed(delayed, ds)))
+  expect_identical(
+    expected_spec,
+    isolate(resolve_delayed(delayed, ds))
+  )
 
   expected_spec <- data_extract_spec(
     dataname = "ADSL",

@@ -8,16 +8,17 @@ to \code{\link{srv_teal}}.}
 srv_teal_with_splash(input, output, session, data, modules, filter = list())
 }
 \arguments{
-\item{input}{\verb{Shiny input object}}
+\item{input}{(\verb{Shiny input object})}
 
-\item{output}{\verb{Shiny output object}}
+\item{output}{(\verb{Shiny output object})}
 
-\item{session}{\verb{Shiny session object}}
+\item{session}{(\verb{Shiny session object})}
 
 \item{data}{\code{DataAbstract} R6 object and container for data}
 
-\item{modules}{\code{teal_module} or \code{teal_modules} object, the latter
-can be used for nested tabs, see \code{\link{ui_nested_tabs}}}
+\item{modules}{(\code{teal_module} or \code{teal_modules})
+single or multiple modules. \code{teal_modules}  can be used for nested
+tabs, see \code{\link{ui_nested_tabs}}}
 
 \item{filter}{(\code{list}) You can define filters that show when
 the app starts.

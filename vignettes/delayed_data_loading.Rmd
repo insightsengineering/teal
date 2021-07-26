@@ -602,7 +602,7 @@ can track each call which affects this particular dataset. Check the code below,
 where we create data containing two datasets using the `cdisc_data` function.
 We can still use `mutate_dataset` on the object which contains multiple datasets,
 with one requirement - one needs to specify `dataname`. Afterwards, one can
-extract reproducible code from data which affects this particular ``dataname`. 
+extract reproducible code from data which affects this particular `dataname`. 
 
 ```{r}
 data <- cdisc_data(adsl, adtte) %>%

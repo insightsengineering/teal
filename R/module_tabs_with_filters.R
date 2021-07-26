@@ -86,7 +86,6 @@ ui_tabs_with_filters <- function(id, modules, datasets) {
     is(modules, "teal_modules"),
     is(datasets, "FilteredData")
   )
-
   ns <- NS(id)
 
   # use isolate because we assume that the number of datasets does not change over the course of the teal app

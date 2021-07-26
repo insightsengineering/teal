@@ -39,6 +39,7 @@ Imports:
   R6,
   rlang,
   rtables (>= 0.3.8),
+  S4Vectors,
   shinyjs,
   shinyWidgets (>= 0.5.0),
   stats,
@@ -81,9 +82,13 @@ Collate:
     'Dataset.R'
     'DatasetConnector.R'
     'DatasetConnector_constructors.R'
+    'FilterState.R'
+    'FilterStates.R'
     'FilteredData.R'
+    'FilteredDataset.R'
     'JoinKeys.R'
     'MAEDataset.R'
+    'Queue.R'
     'RelationalData.R'
     'RelationalDataConnector.R'
     'RelationalDataConnector_constructors.R'
@@ -95,6 +100,7 @@ Collate:
     'data_label.R'
     'dummy_functions.R'
     'filter_spec.R'
+    'filter_utils.R'
     'filtered_data_wrappers.R'
     'get_attrs.R'
     'get_code.R'
@@ -111,12 +117,9 @@ Collate:
     'load_dataset.R'
     'log_app_usage.R'
     'logging.R'
-    'module_add_filter_variable.R'
-    'module_filter_items.R'
     'module_filter_overview.R'
     'module_filter_panel.R'
     'module_nested_tabs.R'
-    'module_single_filter_item.R'
     'module_tabs_with_filters.R'
     'module_teal.R'
     'module_teal_with_splash.R'

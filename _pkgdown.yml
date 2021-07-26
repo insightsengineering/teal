@@ -169,7 +169,6 @@ reference:
     - check_in_range
     - check_in_subset
     - check_pkg_quietly
-    - check_setequal
     - code_exclude
     - code_from_script
     - enclosed_with

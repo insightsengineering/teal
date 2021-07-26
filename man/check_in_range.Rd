@@ -7,11 +7,11 @@
 check_in_range(subinterval, range, pre_msg = "")
 }
 \arguments{
-\item{subinterval}{(\code{numeric} or \code{date}) vector of length 2 to be
-compared against the full range.}
+\item{subinterval}{(\code{numeric} or \code{date})\cr
+vector of length 2 to be  compared against the full range.}
 
-\item{range}{(\code{numeric} or \code{date}) vector of length 2 containing
-the full range to validate against.}
+\item{range}{(\code{numeric} or \code{date})\cr
+vector of length 2 containing the full range to validate against.}
 
 \item{pre_msg}{\code{character} message to print before error for
 additional context.}
@@ -25,7 +25,8 @@ Check that a given range is valid
 }
 \examples{
 \dontrun{
-check_in_range(c(3,1), c(1,3))
+check_in_range(c(3, 1), c(1, 3))
+check_in_range(c(0, 3), c(1, 3))
 check_in_range(
   c(as.Date("2020-01-01"), as.Date("2020-01-20")),
   c(as.Date("2020-01-01"), as.Date("2020-01-02"))

@@ -29,9 +29,14 @@
 #'
 #' @examples
 #' library(random.cdisc.data)
+#' library(shiny)
 #'
 #' ADSL <- radsl(cached = TRUE)
-#' attr(ADSL, "keys") <- get_cdisc_keys("ADSL")
+#' ADTTE <- radtte(cached = TRUE)
+#'
+#' adsl <- cdisc_dataset("ADSL", ADSL)
+#' adtte <- cdisc_dataset("ADTTE", ADTTE)
+#' data <- cdisc_data(adsl, adtte)
 #' datasets <- teal:::CDISCFilteredData$new()
 #'
 #' # to avoid using isolate(), you can provide a default isolate context by calling
@@ -39,81 +44,56 @@
 #' # don't forget to deactivate this option at the end
 #' # options(shiny.suppressMissingContextError = FALSE) #nolint
 #'
+#' # setting the data
+#' isolate({
+#'   datasets$set_dataset(adsl,  data$get_join_keys()$get(dataset_1 = "ADSL"))
+#'   datasets$set_dataset(adtte, data$get_join_keys()$get(dataset_1 = "ADTTE"))
+#'   datasets$set_join_keys(join_keys())
+#'  })
+#'
+#'
 #' isolate({
 #'   datasets$datanames()
-#'   datasets
-#'
-#'   datasets$set_data("ADSL", ADSL)
-#'   datasets$set_join_keys(join_keys())
-#'
-#'   datasets$datanames()
-#'   datasets
-#'
-#'   datasets$datanames()
 #'   datasets$get_data_info("ADSL", filtered = FALSE)
+#'
 #'   # filters dataset to obtain information
 #'   datasets$get_data_info("ADSL", filtered = TRUE)
-#'   datasets$get_filter_info("ADSL")
+#'
+#'   print(datasets$get_call("ADSL"))
+#'   print(datasets$get_call("ADTTE"))
+#'
 #'   df <- datasets$get_data("ADSL", filtered = FALSE)
-#'   # df
+#'   print(df)
+#'  })
 #'
-#'   datasets$get_filter_type("ADSL", "SEX")
-#'   datasets$set_filter_state("ADSL", state = list(
-#'     AGE = list(range = c(33, 44), keep_na = FALSE),
-#'     SEX = list(choices = c("M", "F"), keep_na = FALSE)
-#'   ))
-#'   datasets
-#'   datasets$get_filter_type("ADSL", "SEX")
-#'   datasets$get_filter_info("ADSL")[["SEX"]]$type
 #'
-#'   # will fail because of invalid range
-#'   # datasets$set_filter_state("ADSL", list(
-#'   #   AGE = list(range = c(3, 7), keep_na = FALSE)
-#'   # ))
-#'   datasets$set_filter_state("ADSL", list(
-#'     AGE = list(range = c(33, 44), keep_na = FALSE)
-#'   ))
-#'   # wrapper functions
-#'   teal:::set_single_filter_state(datasets, "ADSL", "AGE", c(35, 42))
-#'   teal:::set_single_filter_state(
-#'     datasets, "ADSL", "AGE",
-#'     state = list(range = c(33, 44), keep_na = FALSE)
-#'   )
-#'   datasets$set_filter_state(
-#'     "ADSL",
-#'      state = list(
-#'        SEX = list(choices = c("M", "F"), keep_na = FALSE)
-#'     )
-#'   )
-#'   datasets$get_filter_type("ADSL", "SEX")
+#' filter_state_adtte <- teal:::init_filter_state(
+#'   ADTTE$PARAMCD,
+#'   varname = "PARAMCD",
+#'   input_dataname = as.name("ADTTE"),
+#'   use_dataname = TRUE
+#' )
+#' filter_state_adtte$set_selected("OS")
 #'
-#'   datasets$get_filter_state("ADSL")
+#' states <- datasets$get_filtered_datasets("ADTTE")$get_filter_states(1)
+#' states$queue_push(filter_state_adtte, queue_index = 1L, element_id = "PARAMCD")
 #'
-#'   datasets$print_filter_info("ADSL")
+#' isolate(datasets$get_call("ADTTE"))
 #'
-#'   # add ADAE to show dependency
-#'   ADAE <- radae(cached = TRUE)
-#'   ADAE_indep <- ADAE
-#'   attr(ADAE, "keys") <- get_cdisc_keys("ADAE")
-#'   attr(ADAE_indep, "keys") <- get_cdisc_keys("ADAE")
-#'   attr(ADAE, "parent") <- "ADSL"
 #'
-#'   datasets$set_data("ADAE", ADAE)
-#'   datasets$set_data("ADAEIndep", ADAE_indep)
+#' filter_state_adsl <- teal:::init_filter_state(
+#'   ADSL$SEX,
+#'   varname = "SEX",
+#'   input_dataname = as.name("SEX"),
+#'   use_dataname = TRUE
+#' )
+#' filter_state_adsl$set_selected("F")
 #'
-#'   datasets$set_join_keys(join_keys(join_key("ADSL", "ADAE", c("STUDYID", "USUBJID"))))
+#' states <- datasets$get_filtered_datasets("ADSL")$get_filter_states("filter")
+#' states$queue_push(filter_state_adsl, queue_index = 1L, element_id = "SEX")
 #'
-#'   datasets$get_data_info("ADSL", filtered = FALSE)
-#'   datasets$get_data_info("ADSL", filtered = TRUE)
-#'   datasets$get_data_info("ADAE", filtered = FALSE)
-#'   datasets$get_data_info("ADAE", filtered = TRUE)
-#'   datasets$get_data_info("ADAEIndep", filtered = FALSE)
-#'   datasets$get_data_info("ADAEIndep", filtered = TRUE)
-#'
-#'   # see generated code
-#'   datasets$get_filter_expr("ADSL")
-#'   datasets$get_filter_expr("ADAEIndep")
-#' })
+#' isolate(datasets$get_call("ADSL"))
+#' isolate(datasets$get_call("ADTTE"))
 CDISCFilteredData <- R6::R6Class( # nolint
   "CDISCFilteredData",
   inherit = FilteredData,
@@ -143,7 +123,48 @@ CDISCFilteredData <- R6::R6Class( # nolint
     },
 
     #' @description
-    #' Get dataset names of a given dataname for the filtering.
+    #'
+    #' Returns the filter `call` to filter a single dataset including the `inner_join`
+    #' with its parent dataset. It assumes that the filtered datasets it depends
+    #' on are available.
+    #'
+    #' @param dataname (`character`) name of the dataset
+    #' @return (`call` or `list` of calls ) to filter dataset
+    #'
+    get_call = function(dataname) {
+      filtered_dataname <- private$filtered_dataname(dataname)
+      parent_dataname <- self$get_parentname(dataname)
+
+      if (is_empty(parent_dataname)) {
+        super$get_call(dataname)
+      } else {
+        self$get_filtered_datasets(dataname)$get_call()
+      }
+    },
+
+    #' @description
+    #' Get info about dataname, i.e. number of rows, subjects.
+    #'
+    #' @param dataname (`character`) name of the dataset
+    #' @param filtered (`logical`) whether to obtain this info for the
+    #'   filtered dataset
+    #' @return a named vector
+    get_data_info = function(dataname, filtered) {
+      private$check_data_varname_exists(dataname)
+      stopifnot(is_logical_single(filtered))
+
+      nrows <- self$get_filtered_datasets(dataname)$get_data_info(filtered = filtered)
+      nsubjects <- self$get_filtered_datasets(dataname)$get_subjects_info(filtered = filtered)
+
+      list(
+        Obs = nrows,
+        Subjects = nsubjects
+      )
+    },
+
+
+    #' @description
+    #' Get names of datasets available for filtering
     #'
     #' @param dataname (`character` vector) names of the dataset
     #' @return (`character` vector) of dataset names
@@ -160,125 +181,6 @@ CDISCFilteredData <- R6::R6Class( # nolint
 
       return(unique(c(parents, dataname)))
     },
-    #' @description
-    #' Get variable names of a given dataname for the filtering.
-    #'
-    #' This method incorporates parent-child relations, i.e.
-    #' parent variable names are removed from child variable names.
-    #' @param dataname (`character`) name of the dataset
-    #' @return (`character` vector) of variable names
-    get_filterable_varnames = function(dataname) {
-      varnames <- self$get_varnames(dataname)
-      parent_dataname <- self$get_parentname(dataname)
-      parent_varnames <- if_not_empty(parent_dataname, self$get_varnames(parent_dataname))
-      setdiff(varnames, parent_varnames)
-    },
-
-    #' @description
-    #'
-    #' Returns the filter expression to filter a single dataset including the `inner_join`
-    #' with its parent dataset. It assumes that the filtered datasets it depends
-    #' on are available.
-    #'
-    #' @param dataname (`character`) name of the dataset
-    #' @return (`expression`) to filter dataset
-    #'
-    get_filter_expr = function(dataname) {
-      private$check_data_varname_exists(dataname)
-
-      filtered_dataname <- private$filtered_dataname(dataname)
-      parent_dataname <- self$get_parentname(dataname)
-
-      if (is_empty(parent_dataname)) {
-        # use bquote to return same types whether or not parent is present
-        bquote({
-          .(as.call(list(
-            as.name("<-"),
-            as.name(filtered_dataname),
-            private$get_pure_filter_call(dataname)
-          )))
-        })
-      } else {
-        filtered_dataname_alone <- paste0(filtered_dataname, "_ALONE")
-        filter_call <- as.call(list(
-          as.name("<-"),
-          as.name(filtered_dataname_alone),
-          private$get_pure_filter_call(dataname)
-        ))
-
-        # join with parent dataset
-        keys <- self$get_join_keys(parent_dataname, dataname)
-        parent_keys <- names(keys)
-        dataset_keys <- unname(keys)
-        check_in_subset(parent_keys, self$get_varnames(parent_dataname), pre_msg = "Join keys not in columns: ")
-        check_in_subset(dataset_keys, self$get_varnames(dataname), pre_msg = "Join keys not in columns: ")
-
-        merge_call <- call(
-          "<-", as.name(filtered_dataname),
-          call_with_colon(
-            "dplyr::inner_join",
-            x = as.name(filtered_dataname_alone),
-            y = if (is_empty(parent_keys)) {
-              as.name(private$filtered_dataname(parent_dataname))
-            } else {
-              call(
-                "[",
-                as.name(private$filtered_dataname(parent_dataname)),
-                quote(expr = ), # nolint
-                parent_keys,
-                drop = FALSE
-              )
-            },
-            unlist_args = if (is_empty(parent_keys) || is_empty(dataset_keys)) {
-              list()
-            } else if (identical(parent_keys, dataset_keys)) {
-              list(by = parent_keys)
-            } else {
-              list(by = setNames(parent_keys, nm = dataset_keys))
-            }
-          )
-        )
-
-        return(bquote({
-          .(filter_call)
-          .(merge_call)
-        }))
-      }
-    },
-
-    #' @description
-    #' Get info about dataname, i.e. number of rows, subjects.
-    #'
-    #' @param dataname (`character`) name of the dataset
-    #' @param filtered (`logical`) whether to obtain this info for the
-    #'   filtered dataset
-    #' @return a named vector
-    get_data_info = function(dataname, filtered) {
-      private$check_data_varname_exists(dataname)
-      stopifnot(is_logical_single(filtered))
-
-      data <- self$get_data(dataname, filtered = filtered)
-
-      nrows <- nrow(data)
-
-      # here goes strong assumption that parent keys distinguish subject id
-      parent_name <- self$get_parentname(dataname)
-      subject_keys <- if (is_empty(parent_name)) {
-        self$get_primary_keys(dataname)
-      } else {
-        self$get_join_keys(parent_name, dataname)
-      }
-      no_subjects <- if (is_empty(subject_keys)) {
-        dplyr::n_distinct(data)
-      } else {
-        dplyr::n_distinct(data[subject_keys])
-      }
-
-      c(
-        Obs = nrows,
-        Subjects = no_subjects
-      )
-    },
 
     #' @description
     #' Get parent dataset name
@@ -287,6 +189,34 @@ CDISCFilteredData <- R6::R6Class( # nolint
     #' @return (`character`) name of parent dataset
     get_parentname = function(dataname) {
       self$get_data_attr(dataname, "parent")
+    },
+
+    #' @description
+    #' Add dataset
+    #'
+    #' Add dataset and preserve all attributes attached to this object.
+    #' Technically `set_dataset` created `FilteredDataset` which keeps
+    #' `dataset` for filtering purpose.
+    #'
+    #' @param dataset (`Dataset`)\cr
+    #'   object containing data and attributes.
+    #' @param join_key_set (`JoinKeySet`)\cr
+    #'   keys to merge this `dataset` to the other datasets
+    #' @return (`self`) object of this class
+    set_dataset = function(dataset, join_key_set = NULL) {
+      super$set_dataset(dataset, join_key_set)
+
+      dataname <- get_dataname(dataset)
+      parent_dataname <- self$get_parentname(dataname)
+
+      if (!is_empty(parent_dataname)) {
+        parent_dataset <- self$get_filtered_datasets(parent_dataname)
+        fdataset <- self$get_filtered_datasets(dataname)
+        fdataset$add_to_eval_env(
+          parent_dataset$get_filtered_dataname(),
+          list(parent_dataset$get_data_reactive())
+        )
+      }
     }
 
   ),
@@ -301,43 +231,10 @@ CDISCFilteredData <- R6::R6Class( # nolint
 
     validate = function() {
       stopifnot(
-        setequal(private$ordered_datanames, names(private$unfiltered_datasets)),
+        setequal(private$ordered_datanames, names(private$dataset_filters)),
       )
       stopifnot(is.null(join_keys))
       super$validate()
-    },
-
-    # Reactive to compute the filtered dataset
-    # @details
-    # This returns a reactive that computes the filtered dataset.
-    # Through reactivity, it is only lazily evaluated and also re-evaluates
-    # whenever the unfiltered datasets it depends on change.
-    #
-    # @param dataname `character` name of the dataset
-    # @return `reactive` expression for the provided `dataname` that returns
-    #   the filtered dataset when evaluated
-    reactive_filtered_dataset = function(dataname) {
-      private$check_data_varname_exists(dataname)
-
-      reactive({
-        .log("################################################# Refiltering dataset ", dataname)
-
-        # We could use a chunks object here, but don't do so for simplicity as we don't need its capabilities.
-        # We take the parent of the global env, i.e. the last attached package, to avoid picking up
-        # any variables defined in the global environment. This is okay as it takes whatever is the current
-        # `globalenv` when this reactive is evaluated, i.e. when the relevant packages are already loaded.
-        env <- new.env(parent = parent.env(globalenv()))
-
-        # the filtered parent dataset must be available as well as the unfiltered dataset
-        env[[dataname]] <- self$get_data(dataname, filtered = FALSE)
-        parent_dataname <- self$get_data_attr(dataname, "parent")
-        if (!is_empty(parent_dataname)) {
-          env[[private$filtered_dataname(parent_dataname)]] <- self$get_data(parent_dataname, filtered = TRUE)
-        }
-
-        eval(self$get_filter_expr(dataname), envir = env)
-        return(env[[private$filtered_dataname(dataname)]])
-      })
     }
   )
 )
