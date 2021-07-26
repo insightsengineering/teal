@@ -93,6 +93,6 @@ test_that("resolve_delayed select_spec works", {
   expect_equal(names(expected_spec), names(delayed_spec))
 
   ds <- teal:::CDISCFilteredData$new()
-  isolate(ds$set_data("ADSL", ADSL))
+  isolate(ds$set_dataset(dataset("ADSL", ADSL)))
   expect_identical(expected_spec, isolate(resolve_delayed(delayed_spec, ds)))
 })

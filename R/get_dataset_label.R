@@ -18,9 +18,9 @@ get_dataset_label <- function(x) {
 #' fun$set_args(list(c1 = seq_len(10)))
 #'
 #' x <- dataset_connector(
-#'  pull_callable = fun,
-#'  dataname = "ADSL",
-#'  label = "My custom label"
+#'   pull_callable = fun,
+#'   dataname = "ADSL",
+#'   label = "My custom label"
 #' )
 #' get_dataset_label(x)
 get_dataset_label.DatasetConnector <- function(x) { # nolint

@@ -20,7 +20,7 @@ these should not be deleted. Eventually, Shiny tests for these modules should be
 
 We load the libraries and set relevant options. Be careful to load the development version of `teal` when developing.
 
-```{r loadLibraries}
+```{r loadLibraries, eval=FALSE}
 library(random.cdisc.data)
 
 # execute the vignette as if it were executed interactively
@@ -61,7 +61,7 @@ safeBookmarkableShinyApp <- function(..., execute_app = EXECUTE_APPS) {
 }
 ```
 
-```{r createDatasets}
+```{r createDatasets, eval=FALSE}
 # Create the dataset with some NA values and a logical value
 ADSL <- radsl(cached = TRUE)
 ADSL$logical_test <- sample(c(TRUE, FALSE, NA), size = nrow(ADSL), replace = TRUE)
@@ -87,7 +87,8 @@ You can execute these apps in any order.
 ## Main Debugging App
 
 This is the main debugging app to check that the functionality still works after code changes:
-```{r mainDebugApp}
+```{r mainDebugApp, eval=FALSE}
+library(teal)
 app <- init(
   data = cdisc_data(
     cdisc_dataset(dataname = "ADSL", x = ADSL, code = "ADSL <- radsl(cached = TRUE)"),
@@ -113,7 +114,7 @@ app <- init(
 
 The datasets are lazily filtered meaning that when they are not needed for the current tab (as specified with `active_datanames`), they will simply not be refiltered. You can check this by modifying the filters of `ADSL` in a tab without `ADAE`. Then, the console should print that `ADSL` is refiltered, but not `ADAE`. Other datasets the tab depends on like `ADLB` will be refiltered.
 
-```{r lazyFilteringApp}
+```{r lazyFilteringApp, eval=FALSE}
 app <- init(
   data = cdisc_data(
     cdisc_dataset(dataname = "ADSL", x = ADSL, code = "ADSL <- radsl(cached = TRUE)"),
@@ -166,7 +167,7 @@ app <- init(
 ## Nested Modules
 
 This app shows nested modules and how the filters apply to them. Check the tab hierarchy `A1 -> B1.3`.
-```{r nestedModulesApp}
+```{r nestedModulesApp, eval=FALSE}
 app <- init(
   data = cdisc_data(
     cdisc_dataset(dataname = "ADSL", x = ADSL, code = "ADSL <- radsl(cached = TRUE)"),
@@ -201,7 +202,7 @@ app <- init(
 We show different ways of how to specify the initial filter states.
 To show this, we generate fake data. We implicitly also check that the code works without the usual key `STUDYID`.
 
-```{r initialFilterStatesApp}
+```{r initialFilterStatesApp, eval=FALSE}
 fake_data <- data.frame(
   USUBJID = 1:8,
   SEX1 = c("F", "F", "F", "M", "M", "M", "F", "M"),
@@ -240,7 +241,7 @@ app <- init(
 
 This app shows what happens when a dataset, `ADAE`, is not provided, but still appears in the `active_datanames`. A warning is displayed to the console.
 
-```{r nonProvidedDataset}
+```{r nonProvidedDataset, eval=FALSE}
 app <- init(
   data = cdisc_data(
     cdisc_dataset(dataname = "ADSL", x = ADSL, code = "ADSL <- radsl(cached = TRUE)"),
@@ -261,7 +262,7 @@ app <- init(
 
 This app checks that several filters can be applied at once. The logic is non-trivial. For instance, one can define a safety filter.
 
-```{r predefinedFiltersApp}
+```{r predefinedFiltersApp, eval=FALSE}
 # dummy filter to show how several filters can be applied at once, not sensible
 safety_filter <- list(
   ADSL = list(SEX = list(choices = "M", keep_na = TRUE), AGE = default_filter()),
@@ -298,7 +299,7 @@ app <- init(
 
 This app tests that the right filter panel can be hidden.
 
-```{r hiddenFilterApp}
+```{r hiddenFilterApp, eval=FALSE}
 module_hidden_filters <- teal:::module(
   label = "Hidden Filters",
   server = function(input, output, session, datasets) {
@@ -327,7 +328,7 @@ app <- init(
 
 This app purely tests the modules, it only has one tab and two datasets. It can be used to check that all labels are preserved and shown in the UI.
 
-```{r rawApp}
+```{r rawApp, eval=FALSE}
 app <- init(
   data = cdisc_data(
     cdisc_dataset(dataname = "ADSL", x = ADSL, code = "ADSL <- radsl(cached = TRUE)"),
@@ -345,7 +346,7 @@ app <- init(
 
 This app shows how to incorporate independent data like `iris` and `mtcars` alongside some `CDISC` datasets.
 
-```{r independentDependentData}
+```{r independentDependentData, eval=FALSE}
 # construct a unique primary key
 iris_d <- iris
 iris_d["rowname"] <- rownames(iris)
