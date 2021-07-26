@@ -38,9 +38,7 @@
 #'     teal:::ui_teal("dummy")
 #'   },
 #'   server = function(input, output, session) {
-#'     active_module <- callModule(
-#'       teal:::srv_teal, "dummy", modules = mods, raw_data = raw_data,
-#'       filter = teal:::get_dummy_filter()
+#'     active_module <- callModule(teal:::srv_teal, "dummy", modules = mods, raw_data = raw_data,
 #'     )
 #'   }
 #' )
@@ -167,7 +165,6 @@ srv_teal <- function(input, output, session, modules, raw_data, filter = list())
   # if restored from bookmarked state, `filter` is ignored
   observeEvent(raw_data(), ignoreNULL = TRUE, once = TRUE, {
     .log("data loaded successfully")
-
     progress <- shiny::Progress$new(session)
     on.exit(progress$close())
     progress$set(0.1, message = "Setting data")

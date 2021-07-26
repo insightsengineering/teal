@@ -40,136 +40,85 @@ Common arguments are:
 }
 }
 \examples{
+library(shiny)
 datasets <- teal:::FilteredData$new()
 
-# to avoid using isolate(), you can provide a default isolate context by calling
-# options(shiny.suppressMissingContextError = TRUE) #nolint
-# don't forget to deactivate this option at the end
-# options(shiny.suppressMissingContextError = FALSE) #nolint
+# setting the data
 isolate({
-  datasets
-  # we don't set keys because datasets are independent
-  datasets$set_data("iris", iris)
-  datasets$set_data("mtcars", mtcars)
+  datasets$set_dataset(dataset("iris", iris))
+  datasets$set_dataset(dataset("mtcars", mtcars))
+ })
 
-  datasets
 
+isolate({
   datasets$datanames()
   datasets$get_data_info("iris", filtered = FALSE)
 
-  datasets$get_filter_type("iris", "Species")
-  datasets$set_filter_state("iris", state = list(
-    Sepal.Length = list(range = c(4.5, 4.9), keep_na = FALSE),
-    Species = list(choices = c("setosa", "virginica"), keep_na = FALSE)
-  ))
-  datasets
-  datasets$get_filter_type("iris", "Species")
-  datasets$get_filter_info("iris")[["Species"]]
-
-  datasets$get_data("iris")
-
-  # will fail because of invalid range
-  # datasets$set_filter_state("iris", list(
-  #   Sepal.Length = list(range = c(3, 7), keep_na = FALSE)
-  # ))
-
-  # wrapper functions
-  teal:::set_single_filter_state(datasets, "mtcars", "cyl", c(4, 8))
-  teal:::set_single_filter_state(datasets, "mtcars", "qsec", c(14.5, 16))
-  datasets$get_data("mtcars")
-
-  datasets$get_filter_state("iris")
-  datasets$get_filter_state("mtcars")
-
-  datasets$get_default_filter_state("iris", "Sepal.Length")
-  datasets$get_filter_expr("iris")
-
-  datasets$print_filter_info("mtcars")
-})
-
-## ------------------------------------------------
-## Method `FilteredData$get_filter_info`
-## ------------------------------------------------
-
-library(random.cdisc.data)
-
-ADSL <- radsl(cached = TRUE)
-attr(ADSL, "keys") <- get_cdisc_keys("ADSL")
-datasets <- teal:::FilteredData$new()
-
-# to avoid using isolate(), you can provide a default isolate context by calling
-# options(shiny.suppressMissingContextError = TRUE) #nolint
-# don't forget to deactivate this option at the end
-# options(shiny.suppressMissingContextError = FALSE) #nolint
-
-isolate({
-  datasets
-
-  datasets$set_data("ADSL", ADSL)
-  datasets
-  datasets$get_data_info("ADSL", filtered = FALSE)
-  datasets$datanames()
   # filters dataset to obtain information
-  datasets$get_data_info("ADSL", filtered = TRUE)
-  datasets$get_filter_info("ADSL")
-  df <- datasets$get_data("ADSL", filtered = FALSE)
-  # df
+  datasets$get_data_info("mtcars", filtered = TRUE)
 
-  datasets$get_filter_type("ADSL", "SEX")
-  datasets$set_filter_state("ADSL", state = list(
-    AGE = list(range = c(33, 44), keep_na = FALSE),
-    SEX = list(choices = c("M", "F"), keep_na = FALSE)
-  ))
+  print(datasets$get_call("iris"))
+  print(datasets$get_call("mtcars"))
 
-  infos <- datasets$get_filter_info("ADSL") # will return a named list of all active filters
-  names(infos) # notice that names correspond to variable names
+  df <- datasets$get_data("iris", filtered = FALSE)
+  print(df)
+ })
 
-  single_info <- datasets$get_filter_info("ADSL", "AGE") # will return a list of AGE filter infos
-  names(single_info) # note that this contains filter informations, not variable names as names
 
-  single_info2 <- datasets$get_filter_info("ADSL", include_unknown = TRUE)
-  single_info2 # will include active filters of type unknown
+filter_state_iris <- teal:::init_filter_state(
+  iris$Species,
+  varname = "Species",
+  varlabel = "Species name",
+  input_dataname = as.name("iris"),
+  use_dataname = TRUE
+)
+filter_state_iris$set_selected("virginica")
 
-  single_info3 <- datasets$get_filter_info("ADSL",
-    varname = c("AGE", "SEX"),
-    include_unknown = FALSE)
-  single_info3 # make note that include_unknown will be ignored, when varname is not NULL
-})
+queue <- datasets$get_filtered_datasets("iris")$get_filter_states(1)
+queue$queue_push(filter_state_iris, queue_index = 1L, element_id = "virginica")
 
+isolate(datasets$get_call("iris"))
+
+
+filter_state_mtcars <- teal:::init_filter_state(
+  mtcars$mpg,
+  varname = "mpg",
+  varlabel = "Miles per galon",
+  input_dataname = as.name("mpg"),
+  use_dataname = TRUE
+)
+filter_state_mtcars$set_selected(c(15, 20))
+
+queue <- datasets$get_filtered_datasets("mtcars")$get_filter_states("filter")
+queue$queue_push(filter_state_mtcars, queue_index = 1L, element_id = "mpg")
+
+isolate(datasets$get_call("iris"))
+isolate(datasets$get_call("mtcars"))
 }
 \section{Methods}{
 \subsection{Public methods}{
 \itemize{
 \item \href{#method-new}{\code{FilteredData$new()}}
 \item \href{#method-datanames}{\code{FilteredData$datanames()}}
-\item \href{#method-get_varnames}{\code{FilteredData$get_varnames()}}
+\item \href{#method-get_datalabel}{\code{FilteredData$get_datalabel()}}
 \item \href{#method-get_filterable_datanames}{\code{FilteredData$get_filterable_datanames()}}
 \item \href{#method-get_filterable_varnames}{\code{FilteredData$get_filterable_varnames()}}
-\item \href{#method-get_data}{\code{FilteredData$get_data()}}
-\item \href{#method-set_data}{\code{FilteredData$set_data()}}
+\item \href{#method-get_call}{\code{FilteredData$get_call()}}
 \item \href{#method-get_code}{\code{FilteredData$get_code()}}
+\item \href{#method-get_filtered_datasets}{\code{FilteredData$get_filtered_datasets()}}
+\item \href{#method-get_data}{\code{FilteredData$get_data()}}
+\item \href{#method-get_data_attr}{\code{FilteredData$get_data_attr()}}
+\item \href{#method-get_data_info}{\code{FilteredData$get_data_info()}}
+\item \href{#method-get_join_keys}{\code{FilteredData$get_join_keys()}}
+\item \href{#method-get_filter_overview_tbl}{\code{FilteredData$get_filter_overview_tbl()}}
+\item \href{#method-get_keys}{\code{FilteredData$get_keys()}}
+\item \href{#method-get_varlabels}{\code{FilteredData$get_varlabels()}}
+\item \href{#method-get_varnames}{\code{FilteredData$get_varnames()}}
+\item \href{#method-set_dataset}{\code{FilteredData$set_dataset()}}
 \item \href{#method-set_code}{\code{FilteredData$set_code()}}
 \item \href{#method-set_join_keys}{\code{FilteredData$set_join_keys()}}
-\item \href{#method-get_join_keys}{\code{FilteredData$get_join_keys()}}
-\item \href{#method-get_primary_keys}{\code{FilteredData$get_primary_keys()}}
-\item \href{#method-get_data_attr}{\code{FilteredData$get_data_attr()}}
-\item \href{#method-set_data_attr}{\code{FilteredData$set_data_attr()}}
-\item \href{#method-set_data_attrs}{\code{FilteredData$set_data_attrs()}}
-\item \href{#method-get_variable_labels}{\code{FilteredData$get_variable_labels()}}
-\item \href{#method-get_varlabels}{\code{FilteredData$get_varlabels()}}
-\item \href{#method-get_keys}{\code{FilteredData$get_keys()}}
-\item \href{#method-get_datalabel}{\code{FilteredData$get_datalabel()}}
-\item \href{#method-get_filter_info}{\code{FilteredData$get_filter_info()}}
-\item \href{#method-get_filter_overview_tbl}{\code{FilteredData$get_filter_overview_tbl()}}
-\item \href{#method-get_filter_type}{\code{FilteredData$get_filter_type()}}
-\item \href{#method-get_filter_state}{\code{FilteredData$get_filter_state()}}
-\item \href{#method-set_filter_state}{\code{FilteredData$set_filter_state()}}
-\item \href{#method-get_default_filter_state}{\code{FilteredData$get_default_filter_state()}}
-\item \href{#method-get_filter_expr}{\code{FilteredData$get_filter_expr()}}
-\item \href{#method-print}{\code{FilteredData$print()}}
-\item \href{#method-print_filter_info}{\code{FilteredData$print_filter_info()}}
-\item \href{#method-get_data_info}{\code{FilteredData$get_data_info()}}
 \item \href{#method-get_bookmark_state}{\code{FilteredData$get_bookmark_state()}}
+\item \href{#method-set_bookmark_state}{\code{FilteredData$set_bookmark_state()}}
 \item \href{#method-restore_state_from_bookmark}{\code{FilteredData$restore_state_from_bookmark()}}
 \item \href{#method-clone}{\code{FilteredData$clone()}}
 }
@@ -198,15 +147,17 @@ evaluated (in case of dependencies).
 
 \subsection{Returns}{
 (\code{character} vector) of datanames
+Get data label for the dataset
+
+Useful to display in \verb{Show R Code}.
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-get_varnames"></a>}}
-\if{latex}{\out{\hypertarget{method-get_varnames}{}}}
-\subsection{Method \code{get_varnames()}}{
-Get variable names
+\if{html}{\out{<a id="method-get_datalabel"></a>}}
+\if{latex}{\out{\hypertarget{method-get_datalabel}{}}}
+\subsection{Method \code{get_datalabel()}}{
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{FilteredData$get_varnames(dataname)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{FilteredData$get_datalabel(dataname)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
@@ -217,7 +168,7 @@ Get variable names
 \if{html}{\out{</div>}}
 }
 \subsection{Returns}{
-(\code{character} vector) of variable names
+(\code{character}) keys of dataset
 }
 }
 \if{html}{\out{<hr>}}
@@ -261,6 +212,84 @@ Get variable names of a given dataname for the filtering.
 }
 }
 \if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-get_call"></a>}}
+\if{latex}{\out{\hypertarget{method-get_call}{}}}
+\subsection{Method \code{get_call()}}{
+Get a \code{call} to filter the dataset according to the filter state
+
+It returns a \code{call} to filter the dataset only, assuming the
+other (filtered) datasets it depends on are available.
+
+Together with \code{self$datanames()} which returns the datasets in the correct
+evaluation order, this generates the whole filter code, see the function
+\code{FilteredData$get_filter_code}.
+
+For the return type, note that \code{rlang::is_expression} returns \code{TRUE} on the
+return type, both for base R expressions and calls (single expression,
+capturing a function call).
+
+The filtered dataset has the name given by \code{self$filtered_dataname(dataname)}
+
+This can be used for the \verb{Show R Code} generation.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{FilteredData$get_call(dataname)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{dataname}}{(\code{character}) name of the dataset}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Returns}{
+(\code{call} or \code{list} of calls) to filter dataset
+calls
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-get_code"></a>}}
+\if{latex}{\out{\hypertarget{method-get_code}{}}}
+\subsection{Method \code{get_code()}}{
+Get the R preprocessing code string that generates the unfiltered datasets
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{FilteredData$get_code(dataname = self$datanames())}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{dataname}}{(\code{character}) name(s) of dataset(s)}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Returns}{
+(\code{character}) deparsed code
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-get_filtered_datasets"></a>}}
+\if{latex}{\out{\hypertarget{method-get_filtered_datasets}{}}}
+\subsection{Method \code{get_filtered_datasets()}}{
+Get \code{FilteredDataset} object which contains all informations
+related to specific dataset.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{FilteredData$get_filtered_datasets(dataname = character(0))}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{dataname}}{(\code{character(1)})\cr
+name of the dataset.}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Returns}{
+\code{FilteredDataset} object or list of \code{FilteredDataset}
+}
+}
+\if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-get_data"></a>}}
 \if{latex}{\out{\hypertarget{method-get_data}{}}}
 \subsection{Method \code{get_data()}}{
@@ -283,55 +312,192 @@ For \code{filtered = FALSE}, the original data set with
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-set_data"></a>}}
-\if{latex}{\out{\hypertarget{method-set_data}{}}}
-\subsection{Method \code{set_data()}}{
-Add data
+\if{html}{\out{<a id="method-get_data_attr"></a>}}
+\if{latex}{\out{\hypertarget{method-get_data_attr}{}}}
+\subsection{Method \code{get_data_attr()}}{
+Get data attribute for the dataset
 
-Will also add the hash sum of the data.
-
-Note: due to the nature of \code{reactiveValues()}, once a dataname
-is added, it cannot be removed anymore because some code may depend
-on it. You can try to achieve this by setting the data to NULL
-and the observers must then know that NULL means that the dataset
-was removed.
-
-Any attributes attached to the data are kept in the unfiltered data.
+sets and gets the data attribute on unfiltered data as it is never modified
+as attributes
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{FilteredData$set_data(dataname, data)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{FilteredData$get_data_attr(dataname, attr)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{dataname}}{(\code{character}) name of the dataset, without spaces}
+\item{\code{dataname}}{(\code{character}) name of the dataset}
 
-\item{\code{data}}{(\code{data.frame}) data that corresponds to \code{dataname}}
+\item{\code{attr}}{(\code{character}) attribute to get from the data attributes of the dataset}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Returns}{
+value of attribute, may be \code{NULL} if it does not exist
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-get_data_info"></a>}}
+\if{latex}{\out{\hypertarget{method-get_data_info}{}}}
+\subsection{Method \code{get_data_info()}}{
+Get info about dataname, i.e. number of rows
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{FilteredData$get_data_info(dataname, filtered)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{dataname}}{(\code{character}) name of the dataset}
+
+\item{\code{filtered}}{\code{logical} whether to obtain this info for the
+filtered dataset}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Returns}{
+a named vector
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-get_join_keys"></a>}}
+\if{latex}{\out{\hypertarget{method-get_join_keys}{}}}
+\subsection{Method \code{get_join_keys()}}{
+Get join keys between two datasets.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{FilteredData$get_join_keys(dataset_1, dataset_2)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{dataset_1}}{(\code{character}) one dataset name}
+
+\item{\code{dataset_2}}{(\code{character}) other dataset name}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Returns}{
+(\verb{named character}) vector with column names
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-get_filter_overview_tbl"></a>}}
+\if{latex}{\out{\hypertarget{method-get_filter_overview_tbl}{}}}
+\subsection{Method \code{get_filter_overview_tbl()}}{
+Get filter overview table in form of X (filtered) / Y (non-filtered)
+
+This is intended to be presented in the application.
+The content for each of the data names is defined in \code{get_data_info} method.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{FilteredData$get_filter_overview_tbl(datanames)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{datanames}}{(\code{character} vector) names of the dataset}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Returns}{
+(\code{data.frame})
+Get keys for the dataset
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-get_keys"></a>}}
+\if{latex}{\out{\hypertarget{method-get_keys}{}}}
+\subsection{Method \code{get_keys()}}{
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{FilteredData$get_keys(dataname)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{dataname}}{(\code{character}) name of the dataset}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Returns}{
+(\code{character}) keys of dataset
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-get_varlabels"></a>}}
+\if{latex}{\out{\hypertarget{method-get_varlabels}{}}}
+\subsection{Method \code{get_varlabels()}}{
+Get labels of variables in the data
+
+Variables are the column names of the data.
+Either, all labels must have been provided for all variables
+in \code{set_data} or \code{NULL}.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{FilteredData$get_varlabels(dataname, variables = NULL)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{dataname}}{(\code{character}) name of the dataset}
+
+\item{\code{variables}}{(\code{character} vector) variables to get labels for;
+if \code{NULL}, for all variables in data}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Returns}{
+(\code{character} or \code{NULL}) variable labels, \code{NULL} if \code{column_labels}
+attribute does not exist for the data
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-get_varnames"></a>}}
+\if{latex}{\out{\hypertarget{method-get_varnames}{}}}
+\subsection{Method \code{get_varnames()}}{
+Get variable names
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{FilteredData$get_varnames(dataname)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{dataname}}{(\code{character}) name of the dataset}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Returns}{
+(\code{character} vector) of variable names
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-set_dataset"></a>}}
+\if{latex}{\out{\hypertarget{method-set_dataset}{}}}
+\subsection{Method \code{set_dataset()}}{
+Add dataset
+
+Add dataset and preserve all attributes attached to this object.
+Technically \code{set_dataset} created \code{FilteredDataset} which keeps
+\code{dataset} for filtering purpose.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{FilteredData$set_dataset(dataset, join_key_set = NULL)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{dataset}}{(\code{Dataset})\cr
+object containing data and attributes.}
+
+\item{\code{join_key_set}}{(\code{JoinKeySet})\cr
+keys to merge this \code{dataset} to the other datasets}
 }
 \if{html}{\out{</div>}}
 }
 \subsection{Returns}{
 (\code{self}) object of this class
-}
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-get_code"></a>}}
-\if{latex}{\out{\hypertarget{method-get_code}{}}}
-\subsection{Method \code{get_code()}}{
-Get the R preprocessing code string that generates the unfiltered datasets
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{FilteredData$get_code(dataname = self$datanames())}\if{html}{\out{</div>}}
-}
-
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{dataname}}{(\code{character}) name(s) of dataset(s)}
-}
-\if{html}{\out{</div>}}
-}
-\subsection{Returns}{
-(\code{character}) deparsed code
 }
 }
 \if{html}{\out{<hr>}}
@@ -376,556 +542,37 @@ Set join keys object
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-get_join_keys"></a>}}
-\if{latex}{\out{\hypertarget{method-get_join_keys}{}}}
-\subsection{Method \code{get_join_keys()}}{
-Get join keys between two datasets.
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{FilteredData$get_join_keys(dataset_1, dataset_2)}\if{html}{\out{</div>}}
-}
-
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{dataset_1}}{(\code{character}) one dataset name}
-
-\item{\code{dataset_2}}{(\code{character}) other dataset name}
-}
-\if{html}{\out{</div>}}
-}
-\subsection{Returns}{
-(\verb{named character}) vector with column names
-}
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-get_primary_keys"></a>}}
-\if{latex}{\out{\hypertarget{method-get_primary_keys}{}}}
-\subsection{Method \code{get_primary_keys()}}{
-Get dataset primary keys
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{FilteredData$get_primary_keys(dataname)}\if{html}{\out{</div>}}
-}
-
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{dataname}}{(\code{character}) name of the dataset}
-}
-\if{html}{\out{</div>}}
-}
-\subsection{Returns}{
-(\code{character}) vector with column names
-}
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-get_data_attr"></a>}}
-\if{latex}{\out{\hypertarget{method-get_data_attr}{}}}
-\subsection{Method \code{get_data_attr()}}{
-Get data attribute for the dataset
-
-sets and gets the data attribute on unfiltered data as it is never modified
-as attributes
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{FilteredData$get_data_attr(dataname, attr)}\if{html}{\out{</div>}}
-}
-
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{dataname}}{(\code{character}) name of the dataset}
-
-\item{\code{attr}}{(\code{character}) attribute to get from the data attributes of the dataset}
-}
-\if{html}{\out{</div>}}
-}
-\subsection{Returns}{
-value of attribute, may be \code{NULL} if it does not exist
-}
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-set_data_attr"></a>}}
-\if{latex}{\out{\hypertarget{method-set_data_attr}{}}}
-\subsection{Method \code{set_data_attr()}}{
-Set data attribute for the dataset
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{FilteredData$set_data_attr(dataname, attr, value)}\if{html}{\out{</div>}}
-}
-
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{dataname}}{(\code{character}) name of the dataset}
-
-\item{\code{attr}}{attribute to get from the data attributes of the dataset}
-
-\item{\code{value}}{value to set attribute to}
-}
-\if{html}{\out{</div>}}
-}
-\subsection{Returns}{
-(\code{self}) invisibly for chaining
-}
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-set_data_attrs"></a>}}
-\if{latex}{\out{\hypertarget{method-set_data_attrs}{}}}
-\subsection{Method \code{set_data_attrs()}}{
-Set data attributes for the dataset
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{FilteredData$set_data_attrs(dataname, attrs)}\if{html}{\out{</div>}}
-}
-
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{dataname}}{(\code{character}) name of the dataset}
-
-\item{\code{attrs}}{(named \code{list}) data attributes of the dataset}
-}
-\if{html}{\out{</div>}}
-}
-\subsection{Returns}{
-(\code{self}) invisibly for chaining
-}
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-get_variable_labels"></a>}}
-\if{latex}{\out{\hypertarget{method-get_variable_labels}{}}}
-\subsection{Method \code{get_variable_labels()}}{
-\ifelse{html}{\figure{lifecycle-soft-deprecated.svg}{options: alt='Soft-deprecated lifecycle'}}{\strong{Soft-deprecated}}
-Get labels of variables in the data
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{FilteredData$get_variable_labels(dataname, variables = NULL)}\if{html}{\out{</div>}}
-}
-
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{dataname}}{(\code{character}) name of the dataset}
-
-\item{\code{variables}}{(\code{character} vector) variables to get labels for;
-if \code{NULL}, for all variables in data}
-}
-\if{html}{\out{</div>}}
-}
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-get_varlabels"></a>}}
-\if{latex}{\out{\hypertarget{method-get_varlabels}{}}}
-\subsection{Method \code{get_varlabels()}}{
-Get labels of variables in the data
-
-Variables are the column names of the data.
-Either, all labels must have been provided for all variables
-in \code{set_data} or \code{NULL}.
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{FilteredData$get_varlabels(dataname, variables = NULL)}\if{html}{\out{</div>}}
-}
-
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{dataname}}{(\code{character}) name of the dataset}
-
-\item{\code{variables}}{(\code{character} vector) variables to get labels for;
-if \code{NULL}, for all variables in data}
-}
-\if{html}{\out{</div>}}
-}
-\subsection{Returns}{
-(\code{character} or \code{NULL}) variable labels, \code{NULL} if \code{column_labels}
-attribute does not exist for the data
-Get keys for the dataset
-}
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-get_keys"></a>}}
-\if{latex}{\out{\hypertarget{method-get_keys}{}}}
-\subsection{Method \code{get_keys()}}{
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{FilteredData$get_keys(dataname)}\if{html}{\out{</div>}}
-}
-
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{dataname}}{(\code{character}) name of the dataset}
-}
-\if{html}{\out{</div>}}
-}
-\subsection{Returns}{
-(\code{character}) keys of dataset
-Get data label for the dataset
-
-Useful to display in \verb{Show R Code}.
-}
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-get_datalabel"></a>}}
-\if{latex}{\out{\hypertarget{method-get_datalabel}{}}}
-\subsection{Method \code{get_datalabel()}}{
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{FilteredData$get_datalabel(dataname)}\if{html}{\out{</div>}}
-}
-
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{dataname}}{(\code{character}) name of the dataset}
-}
-\if{html}{\out{</div>}}
-}
-\subsection{Returns}{
-(\code{character}) keys of dataset
-}
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-get_filter_info"></a>}}
-\if{latex}{\out{\hypertarget{method-get_filter_info}{}}}
-\subsection{Method \code{get_filter_info()}}{
-Return filter characteristics for a variable in a dataset
-e.g. \code{range} for a \code{numeric} variable, \code{choices} for a
-\code{factor} variable, \code{logical} for a \code{logical} variable.
-
-This can be used to see filtering conditions of a variable or a vector of variables.
-This method looks into \code{private$filter_infos} and returns a list of multiple \verb{filter information} in case
-\code{varname} is a list or a named list of a single \verb{filter information} in case \code{varname} is a singular name.
-The \code{include_unknown} argument is considered if and only when the \code{varname} is \code{NULL}.
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{FilteredData$get_filter_info(dataname, varname = NULL, include_unknown = TRUE)}\if{html}{\out{</div>}}
-}
-
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{dataname}}{(\code{character}) name of the dataset}
-
-\item{\code{varname}}{(\code{character}) vector of variable names to include in the result.
-Default: all variables in \code{dataname}}
-
-\item{\code{include_unknown}}{(\code{logical}) whether to include variables with unknown filter type.
-Is ignored when \code{varname} is not \code{NULL}. Default: TRUE}
-}
-\if{html}{\out{</div>}}
-}
-\subsection{Returns}{
-a (named \code{list}) with filter information of \code{varname} variables.
-If \code{include_unknown} is TRUE, then also return \verb{filter information}
-of variables with \verb{filter information} of type unknown.
-}
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{library(random.cdisc.data)
-
-ADSL <- radsl(cached = TRUE)
-attr(ADSL, "keys") <- get_cdisc_keys("ADSL")
-datasets <- teal:::FilteredData$new()
-
-# to avoid using isolate(), you can provide a default isolate context by calling
-# options(shiny.suppressMissingContextError = TRUE) #nolint
-# don't forget to deactivate this option at the end
-# options(shiny.suppressMissingContextError = FALSE) #nolint
-
-isolate({
-  datasets
-
-  datasets$set_data("ADSL", ADSL)
-  datasets
-  datasets$get_data_info("ADSL", filtered = FALSE)
-  datasets$datanames()
-  # filters dataset to obtain information
-  datasets$get_data_info("ADSL", filtered = TRUE)
-  datasets$get_filter_info("ADSL")
-  df <- datasets$get_data("ADSL", filtered = FALSE)
-  # df
-
-  datasets$get_filter_type("ADSL", "SEX")
-  datasets$set_filter_state("ADSL", state = list(
-    AGE = list(range = c(33, 44), keep_na = FALSE),
-    SEX = list(choices = c("M", "F"), keep_na = FALSE)
-  ))
-
-  infos <- datasets$get_filter_info("ADSL") # will return a named list of all active filters
-  names(infos) # notice that names correspond to variable names
-
-  single_info <- datasets$get_filter_info("ADSL", "AGE") # will return a list of AGE filter infos
-  names(single_info) # note that this contains filter informations, not variable names as names
-
-  single_info2 <- datasets$get_filter_info("ADSL", include_unknown = TRUE)
-  single_info2 # will include active filters of type unknown
-
-  single_info3 <- datasets$get_filter_info("ADSL",
-    varname = c("AGE", "SEX"),
-    include_unknown = FALSE)
-  single_info3 # make note that include_unknown will be ignored, when varname is not NULL
-})
-
-}
-\if{html}{\out{</div>}}
-
-}
-
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-get_filter_overview_tbl"></a>}}
-\if{latex}{\out{\hypertarget{method-get_filter_overview_tbl}{}}}
-\subsection{Method \code{get_filter_overview_tbl()}}{
-Get filter overview table in form of X (filtered) / Y (non-filtered)
-
-This is intended to be presented in the application.
-The content for each of the data names is defined in \code{get_data_info} method.
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{FilteredData$get_filter_overview_tbl(datanames)}\if{html}{\out{</div>}}
-}
-
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{datanames}}{(\code{character} vector) names of the dataset}
-}
-\if{html}{\out{</div>}}
-}
-\subsection{Returns}{
-(\code{data.frame})
-}
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-get_filter_type"></a>}}
-\if{latex}{\out{\hypertarget{method-get_filter_type}{}}}
-\subsection{Method \code{get_filter_type()}}{
-See \code{get_filter_info}, only returns filter type (\code{choices}, \code{range}, \code{logical}).
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{FilteredData$get_filter_type(dataname, varname)}\if{html}{\out{</div>}}
-}
-
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{dataname}}{(\code{character}) name of the dataset}
-
-\item{\code{varname}}{(\code{character}) column within the dataset,
-must be provided}
-}
-\if{html}{\out{</div>}}
-}
-\subsection{Returns}{
-(\code{character}) filter type
-}
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-get_filter_state"></a>}}
-\if{latex}{\out{\hypertarget{method-get_filter_state}{}}}
-\subsection{Method \code{get_filter_state()}}{
-Returns active filter state for a dataset (or only a variable within it).
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{FilteredData$get_filter_state(dataname, varname = NULL, include_unknown = TRUE)}\if{html}{\out{</div>}}
-}
-
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{dataname}}{(\code{character}) name of the dataset}
-
-\item{\code{varname}}{(\code{character}) column within the dataset;
-if \code{NULL}, return all variables in a list}
-
-\item{\code{include_unknown}}{(\code{logical}) whether to include the "unknown" type of variables
-(TRUE) or not to include them (FALSE). Default: TRUE}
-}
-\if{html}{\out{</div>}}
-}
-\subsection{Returns}{
-(\code{character} vector) filter state or list of these
-}
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-set_filter_state"></a>}}
-\if{latex}{\out{\hypertarget{method-set_filter_state}{}}}
-\subsection{Method \code{set_filter_state()}}{
-Set the filter state for a dataname
-
-The state is only updated and triggers reactive behavior when it actually
-changes.
-
-To set a state for a single variable, you can write:
-\code{set_filter_state(dataname, setNames(list(single_state), varname))}
-or use the wrapper function \code{set_single_filter_state}.
-To remove a filter for a variable, pass in \code{NULL}, e.g.
-\code{state = list(SEX = NULL, ..)}.
-To remove all filters for a dataset, call
-\code{set_filter_state(dataname, state = list(), remove_omitted = TRUE)}.
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{FilteredData$set_filter_state(dataname, state, remove_omitted = FALSE)}\if{html}{\out{</div>}}
-}
-
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{dataname}}{(\code{character}) name of the dataset to set filter state for}
-
-\item{\code{state}}{(named \code{list}) of new state to set; for each \code{varname},
-\code{state[[varname]]} is the new state to set for \code{varname}}
-
-\item{\code{remove_omitted}}{(\code{logical}) whether to remove the filters for the
-variables that are not present in the named list \code{state}}
-}
-\if{html}{\out{</div>}}
-}
-\subsection{Returns}{
-(\code{logical}) if the state for the \code{dataname} was changed
-}
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-get_default_filter_state"></a>}}
-\if{latex}{\out{\hypertarget{method-get_default_filter_state}{}}}
-\subsection{Method \code{get_default_filter_state()}}{
-Get the default filter state (useful for initial UI state)
-This is different to NULL state which means no filter applied.
-Instead, this filter is a sensible default, e.g. filter out NAs.
-for numerics, full range; for factors, all choices etc.
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{FilteredData$get_default_filter_state(dataname, varname)}\if{html}{\out{</div>}}
-}
-
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{dataname}}{(\code{character}) name of the dataset}
-
-\item{\code{varname}}{(\code{character}) column within the dataset;
-must be provided}
-}
-\if{html}{\out{</div>}}
-}
-\subsection{Returns}{
-(\code{character} vector) default filter state for this variable
-}
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-get_filter_expr"></a>}}
-\if{latex}{\out{\hypertarget{method-get_filter_expr}{}}}
-\subsection{Method \code{get_filter_expr()}}{
-Get an expression to filter the dataset according to the filter state
-
-Helper function for \code{reactive_filtered_dataset}. The latter actually
-makes sure the dependent datasets are available and then evaluates the
-dataset.
-
-It returns an expression to filter the dataset only, assuming the
-other (filtered) datasets it depends on are available.
-
-Together with \code{self$datanames()} which returns the datasets in the correct
-evaluation order, this generates the whole filter code, see the function
-\code{FilteredData$get_filter_code}.
-
-For the return type, note that \code{rlang::is_expression} returns \code{TRUE} on the
-return type, both for base R expressions and calls (single expression,
-capturing a function call).
-
-The filtered dataset has the name given by \code{self$filtered_dataname(dataname)}
-
-This can be used for the \verb{Show R Code} generation.
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{FilteredData$get_filter_expr(dataname)}\if{html}{\out{</div>}}
-}
-
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{dataname}}{(\code{character}) name of the dataset}
-}
-\if{html}{\out{</div>}}
-}
-\subsection{Returns}{
-(\code{expression}) which returns the filtered dataset
-}
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-print"></a>}}
-\if{latex}{\out{\hypertarget{method-print}{}}}
-\subsection{Method \code{print()}}{
-Print method
-
-To obtain the default printing of R6 objects with method listing,
-use \code{cat(format(x))}.
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{FilteredData$print(...)}\if{html}{\out{</div>}}
-}
-
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{...}}{unused arguments}
-}
-\if{html}{\out{</div>}}
-}
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-print_filter_info"></a>}}
-\if{latex}{\out{\hypertarget{method-print_filter_info}{}}}
-\subsection{Method \code{print_filter_info()}}{
-Prints filter characteristics of each variable for a given dataset to the
-console.
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{FilteredData$print_filter_info(
-  dataname,
-  filtered_vars_only = FALSE,
-  variables = NULL
-)}\if{html}{\out{</div>}}
-}
-
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{dataname}}{(\code{character}) name of the dataset}
-
-\item{\code{filtered_vars_only}}{(\code{logical}) whether to only consider filtered
-vars or unfiltered as well}
-
-\item{\code{variables}}{(\code{character} vector) variables to consider; if NULL, takes all}
-}
-\if{html}{\out{</div>}}
-}
-\subsection{Returns}{
-\code{NULL}, only prints
-}
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-get_data_info"></a>}}
-\if{latex}{\out{\hypertarget{method-get_data_info}{}}}
-\subsection{Method \code{get_data_info()}}{
-Get info about dataname, i.e. number of rows
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{FilteredData$get_data_info(dataname, filtered)}\if{html}{\out{</div>}}
-}
-
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{dataname}}{(\code{character}) name of the dataset}
-
-\item{\code{filtered}}{\code{logical} whether to obtain this info for the
-filtered dataset}
-}
-\if{html}{\out{</div>}}
-}
-\subsection{Returns}{
-a named vector
-}
-}
-\if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-get_bookmark_state"></a>}}
 \if{latex}{\out{\hypertarget{method-get_bookmark_state}{}}}
 \subsection{Method \code{get_bookmark_state()}}{
 Returns the state to be bookmarked
 
-hash sums of \code{datasets}, \code{filter_states} and \code{preproc_code} are bookmarked.
+hash sums of \code{datasets}, \code{FilterState} selections and \code{preproc_code}
+are bookmarked.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{FilteredData$get_bookmark_state()}\if{html}{\out{</div>}}
 }
 
 \subsection{Returns}{
 named list
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-set_bookmark_state"></a>}}
+\if{latex}{\out{\hypertarget{method-set_bookmark_state}{}}}
+\subsection{Method \code{set_bookmark_state()}}{
+Sets bookmark state
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{FilteredData$set_bookmark_state(state)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{state}}{(\verb{named list})\cr
+nested list of filter selections applied to datasets.}
+}
+\if{html}{\out{</div>}}
 }
 }
 \if{html}{\out{<hr>}}
@@ -948,7 +595,8 @@ class may be used outside of a Shiny app.
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{state}}{(\code{list}) containing fields \code{data_hash}, \code{filter_states}
+\item{\code{state}}{(\verb{named list})\cr
+containing fields \code{data_hash}, \code{filter_states}
 and \code{preproc_code}.}
 
 \item{\code{check_data_hash}}{(\code{logical}) whether to check that \code{md5sums} agree

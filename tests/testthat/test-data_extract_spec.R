@@ -110,7 +110,7 @@ test_that("delayed data_extract_spec works", {
     SEX = sample(c("F", "M", "U"), 10, replace = T),
     BMRKR1 = rnorm(10),
     BMRKR2 = sample(c("L", "M", "H"), 10, replace = T),
-    stringsAsFactors = F)
+    stringsAsFactors = FALSE)
   attr(ADSL, "keys") <- get_cdisc_keys("ADSL")
 
   filter_normal <- filter_spec(
@@ -186,7 +186,7 @@ test_that("delayed data_extract_spec works", {
 
   ds <- teal:::CDISCFilteredData$new()
   isolate({
-    ds$set_data("ADSL", ADSL)
+    ds$set_dataset(cdisc_dataset("ADSL", ADSL))
     expect_identical(expected_spec, resolve_delayed(delayed_spec, ds))
     expect_identical(expected_spec, resolve_delayed(mix1, ds))
     expect_identical(expected_spec, resolve_delayed(mix2, ds))

@@ -93,7 +93,7 @@ elements are separated by using namespaces. For the above example, we can
 modularize the selection and the plotting of the data as follows:
 
 
-```{r, eval = FALSE}
+```{r}
 ui_example <- function(id) {
   ns <- NS(id)
   tagList(
@@ -198,14 +198,14 @@ Please run the above code by copy pasting it to the command line. The example
 shows how simple it is to create a module that has no dynamic encodings but
 still is interactive due to the possibility of filtering the data. 
 
-The default `teal` web application has the following components
+The default `teal` web application has the following components:
 
 ```{r echo=FALSE}
 knitr::include_graphics('./images/teal_containers.png')
 ```
 
-and the composition of the shiny app `ui` object is based on the [`tabsetPanel`]
-and the composition of the `server` function is based on the modules as
+- the composition of the shiny app `ui` object is based on the [`tabsetPanel`]
+- the composition of the `server` function is based on the modules as
 illustrated here:
 
 ```{r echo=FALSE}
@@ -218,8 +218,7 @@ The important new parts in the above diagram are:
 to access and modify the data and variable based filtering. The `datasets`
 object is of class `FilteredData` which uses the [`R6`][R6] object system.
 
-* Filter panel related code: that is, a view and controller for the `FiltereData`
-object.
+* Filter panel related code: that is module encapsulated within `FilteredData`.
 
 * shiny's [`tabsetPanel`] for displaying only one analysis module at a time (e.g.
 the one with a bold outline). The modules that are not active (visible) get the
@@ -230,9 +229,8 @@ These have been the three main challenges (in addition to code reproducibility)
 when designing and implementing `teal`. The relevant R-code for these main parts
 are in the [teal repository][tealGitHub] in the following files:
 
-* `R/FilteredData.R`
-* `R/init.R`, `R/module_filter_items.R`, `R/module_add_filter_variables.R`
-* `R/init.R`
+* `R/FilteredData.R`, `R/FilteredDataset.R`, `R/FilterStates.R`, `R/FilterState.R`
+* `R/init.R`, 
 
 We have also a logging facility with the `.log` function with the corresponding
 code saved in `R/logging.R`. Logging to the prompt can be disabled with
@@ -280,7 +278,7 @@ knitr::include_graphics('./images/sdtm_overview.png')
 The names of ADaM datasets often prefix a `AD` or `A` to their corresponding
 `SDTM` dataset names.
 
-There is one particularly important dataset called `ASL` or `ADLS` that contains
+There is one particularly important dataset called `ADSL` or `ADLS` that contains
 patient information (e.g. Unique Subject Identifier `USUBJID`, `ARM`, `SEX`,
 `Age`, randomization date, etc.) with one row per patient. Often this dataset is
 merged to all other `ADaM` datasets as its information is frequently used for
@@ -300,7 +298,7 @@ knitr::include_graphics('./images/design_cdisc_filtered_datasets.png')
 ```
 
 This filtering will now be explained step by step for two example datasets (`ADSL`
-and `ATE`):
+and `ADTTE`):
 
 ```{r}
 # for reproducibility
@@ -332,24 +330,22 @@ that is passed an argument to the `server` function is created by `teal` as foll
 ```{r}
 library(teal)
 options(teal_logging = FALSE)
-datasets <- teal:::CDISCFilteredData$new()
 
+datasets <- teal:::CDISCFilteredData$new()
 # the `datasets` object contains reactives
 # we activate this option, so we don't need to wrap all reactives in isolate calls
 options(shiny.suppressMissingContextError = TRUE)
-
-attr(ADSL, "keys") <- teal::get_cdisc_keys("ADSL")
-attr(ADTTE, "keys") <- teal::get_cdisc_keys("ADTTE")
-
-datasets$set_data("ADSL", ADSL)
-datasets$set_data("ADTTE", ADTTE)
+datasets$set_dataset(dataset = dataset("ADSL", ADSL), 
+                     join_key_set = NULL)
+datasets$set_dataset(dataset = dataset("ADTTE", ADTTE), 
+                     join_key_set = list(ADSL = c("STUDYID", "USUBJID")))
 shiny:::flushReact() # force evaluation outside of Shiny apps
 ```
 
 Note that this code also runs outside of a teal instance. 
 
 
-```{r}
+```{r, eval=FALSE}
 datasets$print_filter_info("ADSL")
 # for all variables
 # datasets$print_filter_info("ADSL", filtered_vars_only = FALSE)
@@ -358,7 +354,7 @@ datasets$print_filter_info("ADSL")
 Now say we want to filter out all the patients except patients with `USUBJID`
 equal to `id-1`, `id-2`, `id-3`, or `id-4`:
 
-```{r}
+```{r, eval=FALSE}
 datasets$set_filter_state("ADSL", state = list(USUBJID = list(choices = paste0("id-", 1:4), keep_na = FALSE)))
 # or
 teal:::set_single_filter_state(datasets, "ADSL", "USUBJID", list(choices = paste0("id-", 1:4), keep_na = FALSE))
@@ -380,7 +376,7 @@ data, respectively, as illustrated from the above figure. We can also get the
 `call` object that was used for the filtering:
 
 ```{r}
-datasets$get_filter_expr("ADTTE")
+datasets$get_call("ADTTE")
 ```
 
 

@@ -13,14 +13,14 @@ srv_filter_panel(
 )
 }
 \arguments{
-\item{input}{\verb{Shiny input object}}
+\item{input}{(\verb{Shiny input object})}
 
-\item{output}{\verb{Shiny output object}}
+\item{output}{(\verb{Shiny output object})}
 
-\item{session}{\verb{Shiny session object}}
+\item{session}{(\verb{Shiny session object})}
 
-\item{datasets}{\code{FilteredData} object to store filter state and filtered
-datasets, shared across modules}
+\item{datasets}{(\code{FilteredData})\cr
+object to store filter state and filtered datasets, shared across modules}
 
 \item{active_datanames}{\verb{function / reactive} returning datanames that
 should be shown on the filter panel,

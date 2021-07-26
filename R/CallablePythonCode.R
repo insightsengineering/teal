@@ -217,7 +217,6 @@ PythonCodeClass <- R6::R6Class( # nolint
 #' `r lifecycle::badge("experimental")`
 #' Create a python code object directly from python code or a
 #' script containing python code.
-#' @md
 #'
 #' @details
 #'   Used to mutate dataset connector objects with python code. See

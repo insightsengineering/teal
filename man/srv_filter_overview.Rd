@@ -14,14 +14,14 @@ srv_filter_overview(
 )
 }
 \arguments{
-\item{input}{\verb{Shiny input object}}
+\item{input}{(\verb{Shiny input object})}
 
-\item{output}{\verb{Shiny output object}}
+\item{output}{(\verb{Shiny output object})}
 
-\item{session}{\verb{Shiny session object}}
+\item{session}{(\verb{Shiny session object})}
 
-\item{datasets}{\code{FilteredData} object to store filter state and filtered
-datasets, shared across modules}
+\item{datasets}{(\code{FilteredData})\cr
+object to store filter state and filtered datasets, shared across modules}
 
 \item{datanames}{\verb{function / reactive returning a character vector} datanames
 to show information for; if \code{"all"}, takes all datanames, if \code{NULL}}

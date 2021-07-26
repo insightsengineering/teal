@@ -8,59 +8,16 @@ with a filter overview panel and a filter variable panel.}
 ui_filter_panel(id, datasets, datanames)
 }
 \arguments{
-\item{id}{module id}
+\item{id}{(\code{character(1)})\cr
+module id}
 
-\item{datasets}{\code{FilteredData} object to store filter state and filtered
-datasets, shared across modules}
+\item{datasets}{(\code{FilteredData})\cr
+object which stores datasets and manages filters.}
 
-\item{datanames}{\code{character} datanames to create empty UIs for (which
-will be populated in the server)}
+\item{datanames}{(\code{character})\cr
+datanames to create empty UIs for (which will be populated in the server)}
 }
 \description{
 This panel contains info about the number of observations left in
 the (active) datasets and allows to filter the datasets.
-}
-\examples{
-# Example with ADSL, ADAE and ADRS dataset
-library(random.cdisc.data)
-library(dplyr)
-
-ADSL <- radsl(cached = TRUE)
-attr(ADSL, "keys") <- get_cdisc_keys("ADSL")
-ADAE <- radlb(cached = TRUE)
-attr(ADAE, "keys") <- get_cdisc_keys("ADAE")
-ADRS <- radrs(cached = TRUE)
-attr(ADRS, "keys") <- get_cdisc_keys("ADRS")
-
-datasets <- teal:::FilteredData$new()
-isolate({
-  datasets$set_data("ADSL", ADSL)
-  datasets$set_filter_state("ADSL", list(
-    AGE = list(range = c(33, 44), keep_na = FALSE),
-    SEX = list(choices = "M", keep_na = TRUE)
-  ))
-  datasets$set_data("ADAE", ADAE)
-  datasets$set_filter_state("ADAE", list(
-    CHG = list(range = c(20, 35), keep_na = FALSE)
-  ))
-  datasets$set_data("ADRS", ADRS)
-})
-
-app <- shinyApp(ui = function() {
-  tagList(
-    teal:::include_teal_css_js(),
-    selectInput("datanames", "Display for datasets:",
-       choices = c("ADSL", "ADAE", "ADRS"),
-       selected = c("ADSL", "ADAE", "ADRS"), multiple = TRUE),
-    teal:::ui_filter_panel("filter_panel", c("ADSL", "ADAE", "ADRS"))
-  )
-}, server = function(input, output, session) {
-  callModule(
-    teal:::srv_filter_panel, "filter_panel", datasets,
-    active_datanames = reactive(input$datanames)
-  )
-})
-\dontrun{
-runApp(app)
-}
 }

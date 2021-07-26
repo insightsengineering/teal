@@ -478,9 +478,15 @@ value_choices.DatasetConnector <- function(data, # nolint
 #'     stringsAsFactors = FALSE
 #'   )
 #' )
+#'
 variable_types <- function(data, columns = NULL) {
+  UseMethod("variable_types")
+}
+
+
+#' @export
+variable_types.default <- function(data, columns = NULL) { #nousage
   stopifnot(
-    is.data.frame(data),
     is.null(columns) || is_character_vector(columns, min_length = 0L)
   )
 
@@ -496,6 +502,53 @@ variable_types <- function(data, columns = NULL) {
     vapply(
       columns,
       function(x) ifelse(x == "", "", class(data[[x]])[[1]]),
+      character(1),
+      USE.NAMES = FALSE
+    )
+  } else {
+    character(0)
+  }
+
+  return(res)
+}
+
+#' @export
+variable_types.data.frame <- function(data, columns = NULL) { #nousage
+  variable_types.default(data, columns)
+}
+
+#' @export
+variable_types.DataTable <- function(data, columns = NULL) { #nousage
+  variable_types.default(data, columns)
+}
+
+#' @export
+variable_types.DFrame <- function(data, columns = NULL) { #nousage
+  variable_types.default(data, columns)
+}
+
+#' @export
+variable_types.matrix <- function(data, columns = NULL) { #nousage
+  stopifnot(
+    is.null(columns) || is_character_vector(columns, min_length = 0L)
+  )
+
+  res <- if (is.null(columns)) {
+    apply(
+      data,
+      2,
+      function(x) class(x)[1]
+    )
+  } else if (is_character_vector(columns, min_length = 0L)) {
+    stopifnot(
+      all(
+        columns %in% colnames(data) |
+          vapply(columns, identical, logical(1L), "")
+      )
+    )
+    vapply(
+      columns,
+      function(x) ifelse(x == "", "", class(data[, x])[1]),
       character(1),
       USE.NAMES = FALSE
     )

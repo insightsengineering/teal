@@ -30,8 +30,8 @@ on (filtered) to the server function
 function
 }}
 
-\item{datasets}{\code{FilteredData} object to store filter state and filtered
-datasets, shared across modules}
+\item{datasets}{(\code{FilteredData})\cr
+object to store filter state and filtered datasets, shared across modules}
 }
 \value{
 A \code{tagList} of The main menu, place holders for filters and
