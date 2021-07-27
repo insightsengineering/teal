@@ -719,7 +719,7 @@ MAEFilteredDataset <- R6::R6Class( # nolint
       ns <- NS(id)
       dataname <- self$get_dataname()
       data <- get_raw_data(self$get_dataset())
-      col_data <- colData(data)
+      col_data <- SummarizedExperiment::colData(data)
       experiment_names <- names(data)
 
       div(

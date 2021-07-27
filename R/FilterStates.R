@@ -783,10 +783,10 @@ MAEFilterStates <- R6::R6Class( # nolint
       # available choices to display
       avail_column_choices <- reactive({
         choices <- setdiff(
-          get_filterable_varnames(data = colData(data)),
+          get_filterable_varnames(data = SummarizedExperiment::colData(data)),
           active_filter_vars()
         )
-        data_choices_labeled(data = colData(data),
+        data_choices_labeled(data = SummarizedExperiment::colData(data),
                              choices = choices,
                              varlabels = private$get_varlabels(choices),
                              keys = private$keys)
@@ -817,7 +817,7 @@ MAEFilterStates <- R6::R6Class( # nolint
             private$add_filter_state,
             id = id,
             filter_state = init_filter_state(
-              colData(data)[[input$var_to_add]],
+              SummarizedExperiment::colData(data)[[input$var_to_add]],
               varname = as.name(input$var_to_add),
               varlabel = private$get_varlabels(input$var_to_add),
               input_dataname = private$input_dataname,
@@ -1048,7 +1048,7 @@ SEFilterStates <- R6::R6Class( # nolint
             private$add_filter_state,
             id = id,
             filter_state = init_filter_state(
-              colData(data)[[input$col_to_add]],
+              SummarizedExperiment::colData(data)[[input$col_to_add]],
               varname = as.name(input$col_to_add),
               input_dataname = private$input_dataname,
               use_dataname = FALSE
@@ -1067,7 +1067,7 @@ SEFilterStates <- R6::R6Class( # nolint
             private$add_filter_state,
             id = id,
             filter_state = init_filter_state(
-              rowData(data)[[input$row_to_add]],
+              SummarizedExperiment::rowData(data)[[input$row_to_add]],
               varname = as.name(input$row_to_add),
               input_dataname = private$input_dataname,
               use_dataname = FALSE
