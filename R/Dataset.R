@@ -366,7 +366,7 @@ Dataset <- R6::R6Class( # nolint
           c(private$vars, vars),
           FUN = function(var) {
             if (is(var, "DatasetConnector")) {
-              (! var$is_pulled()) || var$is_mutate_delayed()
+              (!var$is_pulled()) || var$is_mutate_delayed()
             } else if (is(var, "Dataset")) {
               var$is_mutate_delayed()
             } else {
