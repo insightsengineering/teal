@@ -111,7 +111,7 @@ DatasetConnector <- R6::R6Class( #nolint
     get_code = function(deparse = TRUE) {
       stopifnot(is_logical_single(deparse))
       if (self$is_mutate_delayed()) {
-        message("The output includes mutate code that are delayed")
+        message("The output includes mutate code that is delayed")
       }
       return(self$get_code_class()$get_code(deparse = deparse))
     },
