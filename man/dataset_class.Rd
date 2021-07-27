@@ -60,6 +60,7 @@ be automatically derived.
 \item \href{#method-get_datanames}{\code{Dataset$get_datanames()}}
 \item \href{#method-get_dataset_label}{\code{Dataset$get_dataset_label()}}
 \item \href{#method-get_keys}{\code{Dataset$get_keys()}}
+\item \href{#method-get_hash}{\code{Dataset$get_hash()}}
 \item \href{#method-get_var_r6}{\code{Dataset$get_var_r6()}}
 \item \href{#method-set_dataset_label}{\code{Dataset$set_dataset_label()}}
 \item \href{#method-set_keys}{\code{Dataset$set_keys()}}
@@ -127,8 +128,7 @@ within another dataset.}
 \if{html}{\out{<a id="method-recreate"></a>}}
 \if{latex}{\out{\hypertarget{method-recreate}{}}}
 \subsection{Method \code{recreate()}}{
-Recreate a dataset with its current attributes
-This is useful way to have access to class initialize method basing on class object.
+Recreate this Dataset with its current attributes.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{Dataset$recreate(
   dataname = self$get_dataname(),
@@ -172,7 +172,7 @@ within another dataset.}
 \if{html}{\out{</div>}}
 }
 \subsection{Returns}{
-a new object of \code{Dataset} class
+a new object of the \code{Dataset} class
 Prints this Dataset.
 }
 }
@@ -375,6 +375,19 @@ Get primary keys of dataset
 
 \subsection{Returns}{
 (\code{character} vector) with dataset primary keys
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-get_hash"></a>}}
+\if{latex}{\out{\hypertarget{method-get_hash}{}}}
+\subsection{Method \code{get_hash()}}{
+Returns the string representation of the raw data hashed with the MD5 hash algorithm.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{Dataset$get_hash()}\if{html}{\out{</div>}}
+}
+
+\subsection{Returns}{
+\code{character} the hash of the raw data
 }
 }
 \if{html}{\out{<hr>}}
@@ -657,6 +670,7 @@ The objects of this class are cloneable with this method.
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="Dataset" data-id="get_dataset">}\href{../../teal/html/Dataset.html#method-get_dataset}{\code{teal::Dataset$get_dataset()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="Dataset" data-id="get_dataset_label">}\href{../../teal/html/Dataset.html#method-get_dataset_label}{\code{teal::Dataset$get_dataset_label()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="Dataset" data-id="get_factor_colnames">}\href{../../teal/html/Dataset.html#method-get_factor_colnames}{\code{teal::Dataset$get_factor_colnames()}}\out{</span>}
+\item \out{<span class="pkg-link" data-pkg="teal" data-topic="Dataset" data-id="get_hash">}\href{../../teal/html/Dataset.html#method-get_hash}{\code{teal::Dataset$get_hash()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="Dataset" data-id="get_keys">}\href{../../teal/html/Dataset.html#method-get_keys}{\code{teal::Dataset$get_keys()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="Dataset" data-id="get_numeric_colnames">}\href{../../teal/html/Dataset.html#method-get_numeric_colnames}{\code{teal::Dataset$get_numeric_colnames()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="Dataset" data-id="get_raw_data">}\href{../../teal/html/Dataset.html#method-get_raw_data}{\code{teal::Dataset$get_raw_data()}}\out{</span>}

@@ -75,6 +75,7 @@ Dataset <- R6::R6Class( # nolint
       self$set_dataset_label(label)
       self$set_keys(keys)
       private$mutate_code <- CodeClass$new()
+      private$calculate_hash()
 
       # needed if recreating dataset - we need to preserve code order and uniqueness
       private$code <- CodeClass$new()
@@ -88,10 +89,9 @@ Dataset <- R6::R6Class( # nolint
     },
 
     #' @description
-    #' Recreate a dataset with its current attributes
-    #' This is useful way to have access to class initialize method basing on class object.
+    #' Recreate this Dataset with its current attributes.
     #'
-    #' @return a new object of `Dataset` class
+    #' @return a new object of the `Dataset` class
     recreate = function(dataname = self$get_dataname(),
                         x = self$get_raw_data(),
                         keys = self$get_keys(),
@@ -229,6 +229,12 @@ Dataset <- R6::R6Class( # nolint
     #' @return (\code{character} vector) with dataset primary keys
     get_keys = function() {
       private$.keys
+    },
+    #' @description
+    #' Returns the string representation of the raw data hashed with the MD5 hash algorithm.
+    #' @return \code{character} the hash of the raw data
+    get_hash = function() {
+      private$data_hash
     },
     #' @description
     #' Get the list of dependencies that are Dataset or DatasetConnector objects
@@ -472,6 +478,7 @@ Dataset <- R6::R6Class( # nolint
     .keys = character(0),
     mutate_code = NULL, # CodeClass after initialization
     mutate_vars = list(),
+    data_hash = character(0),
 
     ## __Private Methods ====
     mutate_delayed = function(code, vars) {
@@ -600,7 +607,13 @@ Dataset <- R6::R6Class( # nolint
       return(new_set)
     },
 
-    # @description
+    # Calculates the MD5 hash of the raw data stored in this Dataset.
+    # @return NULL
+    calculate_hash = function() {
+        private$data_hash <- digest::digest(self$get_raw_data(), algo = "md5")
+        NULL
+    },
+
     # Set the name for the dataset
     # @param dataname (\code{character}) the new name
     # @return self invisibly for chaining

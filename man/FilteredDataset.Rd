@@ -234,20 +234,20 @@ Get dataset
 \if{html}{\out{<a id="method-get_hash"></a>}}
 \if{latex}{\out{\hypertarget{method-get_hash}{}}}
 \subsection{Method \code{get_hash()}}{
-Hash of the unfiltered dataset
+Returns the hash of the unfiltered dataset
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{FilteredDataset$get_hash()}\if{html}{\out{</div>}}
 }
 
 \subsection{Returns}{
 (\code{character(1)})
-Get keys for the dataset
 }
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-get_keys"></a>}}
 \if{latex}{\out{\hypertarget{method-get_keys}{}}}
 \subsection{Method \code{get_keys()}}{
+Get keys for the dataset
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{FilteredDataset$get_keys()}\if{html}{\out{</div>}}
 }

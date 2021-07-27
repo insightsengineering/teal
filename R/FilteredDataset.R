@@ -93,10 +93,6 @@ FilteredDataset <- R6::R6Class( # nolint
       stopifnot(is.null(join_keys) || is_fully_named_list(join_keys))
       stopifnot(is(dataset, "Dataset"))
       private$dataset <- dataset
-      private$hash <- digest::digest(
-        get_raw_data(dataset),
-        algo = "md5"
-      )
       private$join_keys <- join_keys
 
       dataname <- self$get_dataname()
@@ -221,12 +217,13 @@ FilteredDataset <- R6::R6Class( # nolint
     },
 
     #' @description
-    #' Hash of the unfiltered dataset
+    #' Returns the hash of the unfiltered dataset
     #' @return (`character(1)`)
     get_hash = function() {
-      private$hash
+      private$dataset$get_hash()
     },
 
+    #' @description
     #' Get keys for the dataset
     #' @return (`character`) keys of dataset
     get_keys = function() {
@@ -388,13 +385,12 @@ FilteredDataset <- R6::R6Class( # nolint
       stop("Abstract class method")
     }
   ),
-  ## __Private Methods ====
+  ## __Private Fields ====
   private = list(
     dataset = NULL, # Dataset
     reactive_data = NULL, # reactive
     eval_env = list(),
     filter_states = list(),
-    hash = character(0),
     join_keys = NULL, # JoinKeySet
 
     # Adds `FilterStates` to the `private$filter_states`.

@@ -324,4 +324,41 @@ testthat::test_that("Dataset mutate method with delayed logic", {
   )
   expect_false(test_ds0$is_mutate_delayed())
   expect_equal(get_raw_data(test_ds0)$new_var2, rep(2, 6))
+
+testthat::test_that("Dataset check method", {
+  test_ds0 <- Dataset$new("head_mtcars", head(mtcars))
+  testthat::expect_error(
+    test_ds0$check(),
+    regex = "Cannot check preprocessing code of 'head_mtcars' - code is empty."
+  )
+  test_ds1 <- Dataset$new("head_mtcars", x = head(mtcars), code = "head_mtcars <- head(mtcars)")
+  testthat::expect_true(
+    test_ds1$check()
+  )
+  test_ds2 <- Dataset$new("head_mtcars", x = head(mtcars), code = "head_mtcars <- mtcars[1:6, ]")
+  testthat::expect_true(
+    test_ds2$check()
+  )
+  mutate_dataset(test_ds0, code = "head_mtcars$one <- 1")
+  testthat::expect_true(
+    test_ds1$check()
+  )
+  mutate_dataset(test_ds0, code = "head_mtcars$one <- head_mtcars$one * 2")
+  testthat::expect_true(
+    test_ds1$check()
+  )
+  mutate_dataset(test_ds1, code = "head_mtcars$one <- 1")
+  testthat::expect_true(
+    test_ds1$check()
+  )
+  mutate_dataset(test_ds1, code = "head_mtcars$one <- head_mtcars$one * 2")
+  testthat::expect_true(
+    test_ds1$check()
+  )
+})
+
+testthat::test_that("get_hash returns the hash of the object passed to the constructor", {
+  iris_hash <- digest::digest(iris, algo = "md5")
+  ds <- Dataset$new("iris", iris)
+  testthat::expect_equal(ds$get_hash(), iris_hash)
 })
