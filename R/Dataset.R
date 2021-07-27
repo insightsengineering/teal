@@ -377,7 +377,9 @@ Dataset <- R6::R6Class( # nolint
           )
         )
         # delaying mutate if it has already been delayed
-        if (!delay_mutate && !self$is_mutate_delayed()) {
+        if (delay_mutate || self$is_mutate_delayed()) {
+          private$mutate_delayed(code, vars)
+        } else {
           # environment needs also this var to mutate self
           code_container <- CodeClass$new()
           code_container$set_code(
@@ -386,8 +388,6 @@ Dataset <- R6::R6Class( # nolint
           )
           self$set_vars(vars)
           private$mutate_eager(code_container)
-        } else {
-          private$mutate_delayed(code, vars)
         }
       }
 
