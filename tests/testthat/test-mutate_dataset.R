@@ -163,3 +163,11 @@ test_that("mutate_dataset with vars argument", {
     mutate_dataset(x = t, code = "test$zz <- var", vars = list(var = var1))
   )
 })
+
+testthat::test_that("get_hash returns the correct hash after mutating the Dataset object", {
+  mutated_iris <- iris
+  mutated_iris$test <- 1
+  mutated_iris_hash <- digest::digest(mutated_iris, algo = "md5")
+  ds <- Dataset$new("iris", iris) %>% mutate_dataset("iris$test <- 1")
+  testthat::expect_equal(ds$get_hash(), mutated_iris_hash)
+})

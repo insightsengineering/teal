@@ -137,3 +137,13 @@ test_that("deep clone", {
   # check one of the private fields of R6 class
   expect_false(rlang::is_reference(x$get_join_keys(), x_copy$get_join_keys()))
 })
+
+testthat::test_that("The hashes of Datasets objects are correct after mutating the RelationalData object", {
+  mutated_iris <- iris
+  mutated_iris$test <- 1
+  mutated_iris_hash <- digest::digest(mutated_iris, algo = "md5")
+  rd <- teal_data(dataset("iris", iris))
+  mutate_data(rd, code = "iris$test <- 1")
+  rd$execute_mutate()
+  testthat::expect_equal(rd$get_dataset("iris")$get_hash(), mutated_iris_hash)
+})
