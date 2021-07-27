@@ -528,7 +528,6 @@ Dataset <- R6::R6Class( # nolint
 
     set_vars_internal = function(vars, is_mutate_vars = FALSE) {
       stopifnot(is_fully_named_list(vars))
-      private$set_var_r6(vars)
 
       total_vars <- if (is_mutate_vars) {
         c(private$vars, private$mutate_vars)
@@ -554,7 +553,8 @@ Dataset <- R6::R6Class( # nolint
           private$vars <- c(private$vars[!names(private$vars) %in% names(vars)], vars)
         }
       }
-
+      # only adding dependencies if checks passed
+      private$set_var_r6(vars)
       return(invisible(NULL))
     },
 

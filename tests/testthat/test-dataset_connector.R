@@ -699,7 +699,7 @@ testthat::test_that("DatasetConnector mutate method with delayed logic", {
         "test_dc$tail_letters <- tail(letters)"
       )
     ),
-    "The output includes mutate code that are delayed"
+    regexp = "The output includes mutate code that is delayed"
   )
   expect_false(t_dc$is_pulled())
   load_dataset(t_dc)
@@ -730,7 +730,7 @@ testthat::test_that("DatasetConnector mutate method with delayed logic", {
         "test_dc$head_integers <- test_dc2$head_integers"
       )
     ),
-    "The output includes mutate code that are delayed"
+    "The output includes mutate code that is delayed"
   )
   # mutation is delayed even, though it could be executed, because it had already been delayed
   expect_message(
@@ -748,7 +748,7 @@ testthat::test_that("DatasetConnector mutate method with delayed logic", {
         "test_dc$one <- 1"
       )
     ),
-    "The output includes mutate code that are delayed"
+    "The output includes mutate code that is delayed"
   )
 
   load_dataset(t_dc2)
@@ -855,7 +855,7 @@ testthat::test_that("DatasetConnector mutate method with delayed logic", {
         "test_dc$six <- test_dc$five + 1"
       )
     ),
-    "The output includes mutate code that are delayed"
+    "The output includes mutate code that is delayed"
   )
   # now it does know
   expect_true(t_dc$is_mutate_delayed())
@@ -886,7 +886,7 @@ testthat::test_that("DatasetConnector mutate method with delayed logic", {
         "test_dc$seven <- 7"
       )
     ),
-    "The output includes mutate code that are delayed"
+    "The output includes mutate code that is delayed"
   )
   expect_true(t_dc$is_mutate_delayed())
   # confirming that mutation has not happened
@@ -936,7 +936,7 @@ testthat::test_that("DatasetConnector mutate method with delayed logic", {
         "test_dc$seven <- 7"
       )
     ),
-    "The output includes mutate code that are delayed"
+    "The output includes mutate code that is delayed"
   )
 
   # confirming that mutation has not happened
