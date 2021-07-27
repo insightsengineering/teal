@@ -300,7 +300,7 @@ DatasetConnector <- R6::R6Class( #nolint
       )
       private$set_staged_mutate_vars(vars)
       private$set_mutate_code(code, staged = TRUE)
-      if (self$is_pulled() && !delay_mutate && !self$is_mutate_delayed()) {
+      if (self$is_pulled() && !delay_mutate) {
         private$mutate_eager(is_re_pull = FALSE)
       }  else {
         private$mutate_delayed()

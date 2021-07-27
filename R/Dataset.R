@@ -363,7 +363,7 @@ Dataset <- R6::R6Class( # nolint
         )
       } else {
         delay_mutate <- any(vapply(
-          c(private$vars, vars),
+          c(private$var_r6, vars),
           FUN = function(var) {
             if (is(var, "DatasetConnector")) {
               (!var$is_pulled()) || var$is_mutate_delayed()
@@ -377,10 +377,9 @@ Dataset <- R6::R6Class( # nolint
           )
         )
         # delaying mutate if it has already been delayed
-        if (delay_mutate || self$is_mutate_delayed()) {
+        if (delay_mutate) {
           private$mutate_delayed(code, vars)
         } else {
-          # environment needs also this var to mutate self
           code_container <- CodeClass$new()
           code_container$set_code(
             code = code,
