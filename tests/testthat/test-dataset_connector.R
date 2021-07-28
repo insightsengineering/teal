@@ -675,8 +675,9 @@ test_that("code_dataset_connector - library calls", {
 })
 
 testthat::test_that("DatasetConnector mutate method with delayed logic", {
-  test_ds1 <- Dataset$new("head_iris", head(iris))
-  test_ds2 <- Dataset$new("head_rock", head(rock))
+  test_ds1 <- Dataset$new("head_mtcars", head(mtcars), code = "head_mtcars <- head(mtcars)")
+  test_ds2 <- Dataset$new("head_iris", head(iris), code = "head_iris <- head(iris)")
+  expect_true(all(test_ds1$check(), test_ds2$check()))
 
   pull_fun <- callable_function(data.frame)
   pull_fun$set_args(args = list(head_letters = head(letters)))
@@ -695,7 +696,9 @@ testthat::test_that("DatasetConnector mutate method with delayed logic", {
   expect_message(
     expect_equal(
       pretty_code_string(t_dc$get_code()),
-      c("test_dc <- data.frame(head_letters = c(\"a\", \"b\", \"c\", \"d\", \"e\", \"f\"))",
+      c("head_mtcars <- head(mtcars)",
+        "test_ds1 <- head_mtcars",
+        "test_dc <- data.frame(head_letters = c(\"a\", \"b\", \"c\", \"d\", \"e\", \"f\"))",
         "test_dc$tail_letters <- tail(letters)"
       )
     ),
@@ -709,7 +712,9 @@ testthat::test_that("DatasetConnector mutate method with delayed logic", {
   expect_silent(
     expect_equal(
       pretty_code_string(t_dc$get_code()),
-      c("test_dc <- data.frame(head_letters = c(\"a\", \"b\", \"c\", \"d\", \"e\", \"f\"))",
+      c("head_mtcars <- head(mtcars)",
+        "test_ds1 <- head_mtcars",
+        "test_dc <- data.frame(head_letters = c(\"a\", \"b\", \"c\", \"d\", \"e\", \"f\"))",
         "test_dc$tail_letters <- tail(letters)"
       )
     )
@@ -724,9 +729,14 @@ testthat::test_that("DatasetConnector mutate method with delayed logic", {
   expect_message(
     expect_equal(
       pretty_code_string(t_dc$get_code()),
-      c("test_dc <- data.frame(head_letters = c(\"a\", \"b\", \"c\", \"d\", \"e\", \"f\"))",
+      c("head_mtcars <- head(mtcars)",
+        "test_ds1 <- head_mtcars",
+        "test_dc <- data.frame(head_letters = c(\"a\", \"b\", \"c\", \"d\", \"e\", \"f\"))",
         "test_dc$tail_letters <- tail(letters)",
+        "head_iris <- head(iris)",
+        "test_ds2 <- head_iris",
         "test_dc2 <- data.frame(head_integers = 1:6)",
+        "t_dc2 <- test_dc2",
         "test_dc$head_integers <- test_dc2$head_integers"
       )
     ),
@@ -741,9 +751,14 @@ testthat::test_that("DatasetConnector mutate method with delayed logic", {
   expect_message(
     expect_equal(
       pretty_code_string(t_dc$get_code()),
-      c("test_dc <- data.frame(head_letters = c(\"a\", \"b\", \"c\", \"d\", \"e\", \"f\"))",
+      c("head_mtcars <- head(mtcars)",
+        "test_ds1 <- head_mtcars",
+        "test_dc <- data.frame(head_letters = c(\"a\", \"b\", \"c\", \"d\", \"e\", \"f\"))",
         "test_dc$tail_letters <- tail(letters)",
+        "head_iris <- head(iris)",
+        "test_ds2 <- head_iris",
         "test_dc2 <- data.frame(head_integers = 1:6)",
+        "t_dc2 <- test_dc2",
         "test_dc$head_integers <- test_dc2$head_integers",
         "test_dc$one <- 1"
       )
@@ -761,10 +776,18 @@ testthat::test_that("DatasetConnector mutate method with delayed logic", {
   expect_silent(
     expect_equal(
       pretty_code_string(t_dc$get_code()),
-      c("test_dc <- data.frame(head_letters = c(\"a\", \"b\", \"c\", \"d\", \"e\", \"f\"))",
+      c("head_mtcars <- head(mtcars)",
+        "test_ds1 <- head_mtcars",
+        "test_dc <- data.frame(head_letters = c(\"a\", \"b\", \"c\", \"d\", \"e\", \"f\"))",
+        "head_iris <- head(iris)",
+        "test_ds2 <- head_iris",
         "test_dc2 <- data.frame(head_integers = 1:6)",
+        "t_dc2 <- test_dc2",
         "test_dc$tail_letters <- tail(letters)",
+        "head_iris <- head(iris)",
+        "test_ds2 <- head_iris",
         "test_dc2 <- data.frame(head_integers = 1:6)",
+        "t_dc2 <- test_dc2",
         "test_dc$head_integers <- test_dc2$head_integers",
         "test_dc$one <- 1"
       )
@@ -780,15 +803,26 @@ testthat::test_that("DatasetConnector mutate method with delayed logic", {
   expect_false(t_dc$is_mutate_delayed())
   expect_equal(
     pretty_code_string(t_dc$get_code()),
-    c("test_dc <- data.frame(head_letters = c(\"a\", \"b\", \"c\", \"d\", \"e\", \"f\"))",
+    c("head_mtcars <- head(mtcars)",
+      "test_ds1 <- head_mtcars",
+      "test_dc <- data.frame(head_letters = c(\"a\", \"b\", \"c\", \"d\", \"e\", \"f\"))",
+      "head_iris <- head(iris)",
+      "test_ds2 <- head_iris",
       "test_dc2 <- data.frame(head_integers = 1:6)",
       "test_dc2$five <- 5",
+      "t_dc2 <- test_dc2",
       "test_dc$tail_letters <- tail(letters)",
+      "head_iris <- head(iris)",
+      "test_ds2 <- head_iris",
       "test_dc2 <- data.frame(head_integers = 1:6)",
+      "t_dc2 <- test_dc2",
       "test_dc$head_integers <- test_dc2$head_integers",
       "test_dc$one <- 1",
+      "head_iris <- head(iris)",
+      "test_ds2 <- head_iris",
       "test_dc2 <- data.frame(head_integers = 1:6)",
       "test_dc2$five <- 5",
+      "t_dc2 <- test_dc2",
       "test_dc$five <- test_dc2$five"
     )
   )
@@ -801,15 +835,26 @@ testthat::test_that("DatasetConnector mutate method with delayed logic", {
   expect_false(t_dc$is_mutate_delayed())
   expect_equal(
     pretty_code_string(t_dc$get_code()),
-    c("test_dc <- data.frame(head_letters = c(\"a\", \"b\", \"c\", \"d\", \"e\", \"f\"))",
+    c("head_mtcars <- head(mtcars)",
+      "test_ds1 <- head_mtcars",
+      "test_dc <- data.frame(head_letters = c(\"a\", \"b\", \"c\", \"d\", \"e\", \"f\"))",
+      "head_iris <- head(iris)",
+      "test_ds2 <- head_iris",
       "test_dc2 <- data.frame(head_integers = 1:6)",
       "test_dc2$five <- 5",
+      "t_dc2 <- test_dc2",
       "test_dc$tail_letters <- tail(letters)",
+      "head_iris <- head(iris)",
+      "test_ds2 <- head_iris",
       "test_dc2 <- data.frame(head_integers = 1:6)",
+      "t_dc2 <- test_dc2",
       "test_dc$head_integers <- test_dc2$head_integers",
       "test_dc$one <- 1",
+      "head_iris <- head(iris)",
+      "test_ds2 <- head_iris",
       "test_dc2 <- data.frame(head_integers = 1:6)",
       "test_dc2$five <- 5",
+      "t_dc2 <- test_dc2",
       "test_dc$five <- test_dc2$five",
       "test_dc$five <- 2 * test_dc$five",
       "test_dc$five <- 2 * test_dc$five",
@@ -835,25 +880,9 @@ testthat::test_that("DatasetConnector mutate method with delayed logic", {
     regexp = "Mutation is delayed"
   )
   expect_message(
-    expect_equal(
-      pretty_code_string(t_dc$get_code()),
-      c("test_dc <- data.frame(head_letters = c(\"a\", \"b\", \"c\", \"d\", \"e\", \"f\"))",
-        "test_dc2 <- data.frame(head_integers = 1:6)",
-        "test_dc2$five <- 5",
-        "test_dc3 <- data.frame(neg_integers = -1:-6)",
-        "test_dc2$neg_integers <- test_dc3$neg_integers",
-        "test_dc$tail_letters <- tail(letters)",
-        "test_dc2 <- data.frame(head_integers = 1:6)",
-        "test_dc$head_integers <- test_dc2$head_integers",
-        "test_dc$one <- 1",
-        "test_dc2 <- data.frame(head_integers = 1:6)",
-        "test_dc2$five <- 5",
-        "test_dc$five <- test_dc2$five",
-        "test_dc$five <- 2 * test_dc$five",
-        "test_dc$five <- 2 * test_dc$five",
-        "test_dc$five <- 2 * test_dc$five",
-        "test_dc$six <- test_dc$five + 1"
-      )
+    expect_true(
+      all(c("test_dc2$neg_integers <- test_dc3$neg_integers", "test_dc$six <- test_dc$five + 1") %in%
+        pretty_code_string(t_dc$get_code()))
     ),
     "The output includes mutate code that is delayed"
   )
@@ -865,26 +894,8 @@ testthat::test_that("DatasetConnector mutate method with delayed logic", {
     regexp = "Mutation is delayed"
   )
   expect_message(
-    expect_equal(
-      pretty_code_string(t_dc$get_code()),
-      c("test_dc <- data.frame(head_letters = c(\"a\", \"b\", \"c\", \"d\", \"e\", \"f\"))",
-        "test_dc2 <- data.frame(head_integers = 1:6)",
-        "test_dc2$five <- 5",
-        "test_dc3 <- data.frame(neg_integers = -1:-6)",
-        "test_dc2$neg_integers <- test_dc3$neg_integers",
-        "test_dc$tail_letters <- tail(letters)",
-        "test_dc2 <- data.frame(head_integers = 1:6)",
-        "test_dc$head_integers <- test_dc2$head_integers",
-        "test_dc$one <- 1",
-        "test_dc2 <- data.frame(head_integers = 1:6)",
-        "test_dc2$five <- 5",
-        "test_dc$five <- test_dc2$five",
-        "test_dc$five <- 2 * test_dc$five",
-        "test_dc$five <- 2 * test_dc$five",
-        "test_dc$five <- 2 * test_dc$five",
-        "test_dc$six <- test_dc$five + 1",
-        "test_dc$seven <- 7"
-      )
+    expect_true(
+      "test_dc$seven <- 7" %in% pretty_code_string(t_dc$get_code()),
     ),
     "The output includes mutate code that is delayed"
   )
@@ -915,26 +926,8 @@ testthat::test_that("DatasetConnector mutate method with delayed logic", {
   )
   # still it must return code from all previously inputted mutate statements
   expect_message(
-    expect_equal(
-      pretty_code_string(t_dc$get_code()),
-      c("test_dc <- data.frame(head_letters = c(\"a\", \"b\", \"c\", \"d\", \"e\", \"f\"))",
-        "test_dc2 <- data.frame(head_integers = 1:6)",
-        "test_dc2$five <- 5",
-        "test_dc3 <- data.frame(neg_integers = -1:-6)",
-        "test_dc2$neg_integers <- test_dc3$neg_integers",
-        "test_dc$tail_letters <- tail(letters)",
-        "test_dc2 <- data.frame(head_integers = 1:6)",
-        "test_dc$head_integers <- test_dc2$head_integers",
-        "test_dc$one <- 1",
-        "test_dc2 <- data.frame(head_integers = 1:6)",
-        "test_dc2$five <- 5",
-        "test_dc$five <- test_dc2$five",
-        "test_dc$five <- 2 * test_dc$five",
-        "test_dc$five <- 2 * test_dc$five",
-        "test_dc$five <- 2 * test_dc$five",
-        "test_dc$six <- test_dc$five + 1",
-        "test_dc$seven <- 7"
-      )
+    expect_true(
+      "test_dc$seven <- 7" %in% pretty_code_string(t_dc$get_code()),
     ),
     "The output includes mutate code that is delayed"
   )
