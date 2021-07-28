@@ -135,6 +135,7 @@ DatasetConnector <- R6::R6Class( #nolint
     },
     #' @description
     #' Get internal \code{CodeClass} object
+    #' @param staged (\code{logical} TRUE to signal mutate code that has not been executed yet
     #'
     #' @return `\code{CodeClass}`
     get_mutate_code_class = function(staged = FALSE) {
