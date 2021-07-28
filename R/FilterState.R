@@ -94,7 +94,7 @@ init_filter_state.default <- function(x, #nousage
 #' @export
 init_filter_state.logical <- function(x, #nousage
                                       varname,
-                                      varlabel = attr(x, "label"),
+                                      varlabel = if_null(attr(x, "label"), character(0)),
                                       input_dataname = NULL,
                                       use_dataname = FALSE) {
   LogicalFilterState$new(x = x,
@@ -584,7 +584,7 @@ LogicalFilterState <- R6::R6Class( # nolint
                           input_dataname = NULL,
                           use_dataname = FALSE) {
       stopifnot(is.logical(x))
-      super$initialize(x, varname , varlabel, input_dataname, use_dataname)
+      super$initialize(x, varname, varlabel, input_dataname, use_dataname)
       tbl <- table(x)
 
       choices <- as.logical(names(tbl))
