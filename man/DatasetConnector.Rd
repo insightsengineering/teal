@@ -55,6 +55,7 @@ ds$launch()
 \item \href{#method-get_keys}{\code{DatasetConnector$get_keys()}}
 \item \href{#method-get_code}{\code{DatasetConnector$get_code()}}
 \item \href{#method-get_code_class}{\code{DatasetConnector$get_code_class()}}
+\item \href{#method-get_mutate_code_class}{\code{DatasetConnector$get_mutate_code_class()}}
 \item \href{#method-get_pull_args}{\code{DatasetConnector$get_pull_args()}}
 \item \href{#method-get_dataset}{\code{DatasetConnector$get_dataset()}}
 \item \href{#method-get_error_message}{\code{DatasetConnector$get_error_message()}}
@@ -209,6 +210,19 @@ optionally deparsed \code{call} object
 Get internal \code{CodeClass} object
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{DatasetConnector$get_code_class()}\if{html}{\out{</div>}}
+}
+
+\subsection{Returns}{
+\verb{\code{CodeClass}}
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-get_mutate_code_class"></a>}}
+\if{latex}{\out{\hypertarget{method-get_mutate_code_class}{}}}
+\subsection{Method \code{get_mutate_code_class()}}{
+Get internal \code{CodeClass} object
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{DatasetConnector$get_mutate_code_class(staged = FALSE)}\if{html}{\out{</div>}}
 }
 
 \subsection{Returns}{
