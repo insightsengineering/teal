@@ -121,35 +121,16 @@ DatasetConnector <- R6::R6Class( #nolint
     #' @return `\code{CodeClass}`
     get_code_class = function() {
       code_class <- CodeClass$new()
-
       pull_code_class <- private$get_pull_code_class()
       code_class$append(pull_code_class)
 
-      mutate_code_class <- self$get_mutate_code_class()
+      mutate_code_class <- private$get_mutate_code_class()
       code_class$append(mutate_code_class)
 
-      staged_code_class <- self$get_mutate_code_class(staged = TRUE)
+      staged_code_class <- private$get_mutate_code_class(staged = TRUE)
       code_class$append(staged_code_class)
 
       return(code_class)
-    },
-    #' @description
-    #' Get internal \code{CodeClass} object
-    #' @param staged (\code{logical} TRUE to signal mutate code that has not been executed yet
-    #'
-    #' @return `\code{CodeClass}`
-    get_mutate_code_class = function(staged = FALSE) {
-      code_obj <- `if`(staged, "staged_mutate_code", "mutate_code")
-      vars_list <- `if`(staged, "staged_mutate_vars", "mutate_vars")
-
-      res <- CodeClass$new()
-      if (inherits(private[[code_obj]], "PythonCodeClass")) {
-        res <- PythonCodeClass$new()
-      }
-
-      res$append(list_to_code_class(private[[vars_list]]))
-      res$append(private[[code_obj]])
-      return(res)
     },
     #' @description
     #'
@@ -507,10 +488,10 @@ DatasetConnector <- R6::R6Class( #nolint
     # mutate_code has already been executed. However, when the self$pull method is called, the entire dataset is
     # recomputed. This means that all code from `mutate_code` need to be recomputed.
     mutate_eager = function(is_re_pull = FALSE) {
-      if (!is_empty(self$get_mutate_code_class(staged = ! is_re_pull)$code)) {
-        mutate_code <- self$get_mutate_code_class(staged = ! is_re_pull)$get_code(deparse = TRUE)
-        if (inherits(self$get_mutate_code_class(staged = ! is_re_pull), "PythonCodeClass")) {
-          mutate_code <- self$get_mutate_code_class(staged = ! is_re_pull)
+      if (!is_empty(private$get_mutate_code_class(staged = ! is_re_pull)$code)) {
+        mutate_code <- private$get_mutate_code_class(staged = ! is_re_pull)$get_code(deparse = TRUE)
+        if (inherits(private$get_mutate_code_class(staged = ! is_re_pull), "PythonCodeClass")) {
+          mutate_code <- private$get_mutate_code_class(staged = ! is_re_pull)
         }
 
         private$dataset <- mutate_dataset(
@@ -567,6 +548,19 @@ DatasetConnector <- R6::R6Class( #nolint
       }
 
       res$set_code(code = code, dataname = private$dataname, deps = names(private$pull_vars))
+      return(res)
+    },
+    get_mutate_code_class = function(staged = FALSE) {
+      code_obj <- `if`(staged, "staged_mutate_code", "mutate_code")
+      vars_list <- `if`(staged, "staged_mutate_vars", "mutate_vars")
+
+      res <- CodeClass$new()
+      if (inherits(private[[code_obj]], "PythonCodeClass")) {
+        res <- PythonCodeClass$new()
+      }
+
+      res$append(list_to_code_class(private[[vars_list]]))
+      res$append(private[[code_obj]])
       return(res)
     },
     set_pull_callable = function(pull_callable) {

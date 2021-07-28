@@ -462,7 +462,7 @@ test_that("rice_dataset", {
       get_code(x),
       "ADLB <- rice::rice_read(node = \"/path/to/ADLB\", prolong = TRUE)\nADLB$x <- 1"
     ),
-    "The output includes mutate code that are delayed"
+    "The output includes mutate code that is delayed"
   )
 })
 
