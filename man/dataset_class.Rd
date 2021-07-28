@@ -68,6 +68,7 @@ be automatically derived.
 \item \href{#method-set_code}{\code{Dataset$set_code()}}
 \item \href{#method-get_code}{\code{Dataset$get_code()}}
 \item \href{#method-get_code_class}{\code{Dataset$get_code_class()}}
+\item \href{#method-get_mutate_code_class}{\code{Dataset$get_mutate_code_class()}}
 \item \href{#method-is_mutate_delayed}{\code{Dataset$is_mutate_delayed()}}
 \item \href{#method-mutate}{\code{Dataset$mutate()}}
 \item \href{#method-check}{\code{Dataset$check()}}
@@ -530,6 +531,19 @@ Get internal \code{CodeClass} object
 }
 }
 \if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-get_mutate_code_class"></a>}}
+\if{latex}{\out{\hypertarget{method-get_mutate_code_class}{}}}
+\subsection{Method \code{get_mutate_code_class()}}{
+Get internal \code{CodeClass} object
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{Dataset$get_mutate_code_class()}\if{html}{\out{</div>}}
+}
+
+\subsection{Returns}{
+\verb{\code{CodeClass}}
+}
+}
+\if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-is_mutate_delayed"></a>}}
 \if{latex}{\out{\hypertarget{method-is_mutate_delayed}{}}}
 \subsection{Method \code{is_mutate_delayed()}}{
@@ -672,6 +686,7 @@ The objects of this class are cloneable with this method.
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="Dataset" data-id="get_factor_colnames">}\href{../../teal/html/Dataset.html#method-get_factor_colnames}{\code{teal::Dataset$get_factor_colnames()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="Dataset" data-id="get_hash">}\href{../../teal/html/Dataset.html#method-get_hash}{\code{teal::Dataset$get_hash()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="Dataset" data-id="get_keys">}\href{../../teal/html/Dataset.html#method-get_keys}{\code{teal::Dataset$get_keys()}}\out{</span>}
+\item \out{<span class="pkg-link" data-pkg="teal" data-topic="Dataset" data-id="get_mutate_code_class">}\href{../../teal/html/Dataset.html#method-get_mutate_code_class}{\code{teal::Dataset$get_mutate_code_class()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="Dataset" data-id="get_numeric_colnames">}\href{../../teal/html/Dataset.html#method-get_numeric_colnames}{\code{teal::Dataset$get_numeric_colnames()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="Dataset" data-id="get_raw_data">}\href{../../teal/html/Dataset.html#method-get_raw_data}{\code{teal::Dataset$get_raw_data()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="Dataset" data-id="get_row_labels">}\href{../../teal/html/Dataset.html#method-get_row_labels}{\code{teal::Dataset$get_row_labels()}}\out{</span>}
