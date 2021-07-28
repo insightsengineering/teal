@@ -773,26 +773,6 @@ testthat::test_that("DatasetConnector mutate method with delayed logic", {
   load_dataset(t_dc)
   expect_true(all(c("head_letters", "tail_letters", "head_integers", "one") %in% names(get_raw_data(t_dc))))
   expect_false(t_dc$is_mutate_delayed())
-  expect_silent(
-    expect_equal(
-      pretty_code_string(t_dc$get_code()),
-      c("head_mtcars <- head(mtcars)",
-        "test_ds1 <- head_mtcars",
-        "test_dc <- data.frame(head_letters = c(\"a\", \"b\", \"c\", \"d\", \"e\", \"f\"))",
-        "head_iris <- head(iris)",
-        "test_ds2 <- head_iris",
-        "test_dc2 <- data.frame(head_integers = 1:6)",
-        "t_dc2 <- test_dc2",
-        "test_dc$tail_letters <- tail(letters)",
-        "head_iris <- head(iris)",
-        "test_ds2 <- head_iris",
-        "test_dc2 <- data.frame(head_integers = 1:6)",
-        "t_dc2 <- test_dc2",
-        "test_dc$head_integers <- test_dc2$head_integers",
-        "test_dc$one <- 1"
-      )
-    )
-  )
 
   # mutate should again be eager
   mutate_dataset(t_dc2, code = "test_dc2$five <- 5")
@@ -801,31 +781,6 @@ testthat::test_that("DatasetConnector mutate method with delayed logic", {
   mutate_dataset(t_dc, code = "test_dc$five <- test_dc2$five", vars = list(t_dc2 = t_dc2))
   expect_equal(get_raw_data(t_dc)$five, rep(5, 6))
   expect_false(t_dc$is_mutate_delayed())
-  expect_equal(
-    pretty_code_string(t_dc$get_code()),
-    c("head_mtcars <- head(mtcars)",
-      "test_ds1 <- head_mtcars",
-      "test_dc <- data.frame(head_letters = c(\"a\", \"b\", \"c\", \"d\", \"e\", \"f\"))",
-      "head_iris <- head(iris)",
-      "test_ds2 <- head_iris",
-      "test_dc2 <- data.frame(head_integers = 1:6)",
-      "test_dc2$five <- 5",
-      "t_dc2 <- test_dc2",
-      "test_dc$tail_letters <- tail(letters)",
-      "head_iris <- head(iris)",
-      "test_ds2 <- head_iris",
-      "test_dc2 <- data.frame(head_integers = 1:6)",
-      "t_dc2 <- test_dc2",
-      "test_dc$head_integers <- test_dc2$head_integers",
-      "test_dc$one <- 1",
-      "head_iris <- head(iris)",
-      "test_ds2 <- head_iris",
-      "test_dc2 <- data.frame(head_integers = 1:6)",
-      "test_dc2$five <- 5",
-      "t_dc2 <- test_dc2",
-      "test_dc$five <- test_dc2$five"
-    )
-  )
 
   # multiple lines of identical code
   mutate_dataset(t_dc, code = "test_dc$five <- 2 * test_dc$five")
@@ -833,34 +788,6 @@ testthat::test_that("DatasetConnector mutate method with delayed logic", {
   mutate_dataset(t_dc, code = "test_dc$five <- 2 * test_dc$five")
   expect_equal(get_raw_data(t_dc)$five, rep(40, 6))
   expect_false(t_dc$is_mutate_delayed())
-  expect_equal(
-    pretty_code_string(t_dc$get_code()),
-    c("head_mtcars <- head(mtcars)",
-      "test_ds1 <- head_mtcars",
-      "test_dc <- data.frame(head_letters = c(\"a\", \"b\", \"c\", \"d\", \"e\", \"f\"))",
-      "head_iris <- head(iris)",
-      "test_ds2 <- head_iris",
-      "test_dc2 <- data.frame(head_integers = 1:6)",
-      "test_dc2$five <- 5",
-      "t_dc2 <- test_dc2",
-      "test_dc$tail_letters <- tail(letters)",
-      "head_iris <- head(iris)",
-      "test_ds2 <- head_iris",
-      "test_dc2 <- data.frame(head_integers = 1:6)",
-      "t_dc2 <- test_dc2",
-      "test_dc$head_integers <- test_dc2$head_integers",
-      "test_dc$one <- 1",
-      "head_iris <- head(iris)",
-      "test_ds2 <- head_iris",
-      "test_dc2 <- data.frame(head_integers = 1:6)",
-      "test_dc2$five <- 5",
-      "t_dc2 <- test_dc2",
-      "test_dc$five <- test_dc2$five",
-      "test_dc$five <- 2 * test_dc$five",
-      "test_dc$five <- 2 * test_dc$five",
-      "test_dc$five <- 2 * test_dc$five"
-    )
-  )
 
   # multi layer dependencies
   pull_fun3 <- callable_function(data.frame)
@@ -903,26 +830,26 @@ testthat::test_that("DatasetConnector mutate method with delayed logic", {
   # confirming that mutation has not happened
   expect_message(
     expect_false(any(c("six", "seven") %in% names(get_raw_data(t_dc)))),
-    regexp = "Mutation is delayed"
+    regexp = "There are mutate code that are delayed. The dataset in the output does not reflect these code."
   )
   load_dataset(t_dc3)
 
   # current state
   expect_message(
     expect_true(all(names(get_raw_data(t_dc)) %in% c("head_letters", "tail_letters", "head_integers", "one", "five"))),
-    regexp = "There are mutate statements that are delayed. Returned data may \\(or may not\\) reflect the mutations."
+    regexp = "There are mutate code that are delayed. The dataset in the output does not reflect these code."
   )
 
   # load_dataset, which calls pull method, will reset to original state because dependencies have changed
   expect_message(
     load_dataset(t_dc),
-    regexp = "Mutation is delayed"
+    regexp = "Some dependencies have delayed status. Thus the object itself is delayed."
   )
   expect_true(t_dc$is_mutate_delayed())
   # original state. all columns resulting from mutations have been removed
   expect_message(
     expect_true(all(names(get_raw_data(t_dc)) %in% c("head_letters"))),
-    regexp = "Mutation is delayed"
+    regexp = "There are mutate code that are delayed. The dataset in the output does not reflect these code."
   )
   # still it must return code from all previously inputted mutate statements
   expect_message(
@@ -935,7 +862,7 @@ testthat::test_that("DatasetConnector mutate method with delayed logic", {
   # confirming that mutation has not happened
   expect_message(
     expect_false(any(c("six", "seven") %in% names(get_raw_data(t_dc)))),
-    regexp = "Mutation is delayed"
+    regexp = "There are mutate code that are delayed. The dataset in the output does not reflect these code."
   )
 
   # confirming that mutation is delayed
@@ -957,4 +884,17 @@ testthat::test_that("DatasetConnector mutate method with delayed logic", {
   # back to eager mutate
   mutate_dataset(t_dc, code = "test_dc$eight <- 8")
   expect_equal(get_raw_data(t_dc)$eight, rep(8, 6))
+})
+
+testthat::test_that("DatasetConnector mutate method edge cases", {
+  test_ds1 <- Dataset$new("head_mtcars", head(mtcars))
+
+  pull_fun <- callable_function(data.frame)
+  pull_fun$set_args(args = list(head_letters = head(letters)))
+  t_dc <- dataset_connector("test_dc", pull_fun)
+  load_dataset(t_dc)
+  expect_silent(
+    mutate_dataset(t_dc, code = "test_dc$new_var <- head_mtcars$carb", vars = list(head_mtcars = test_ds1))
+  )
+  expect_equal(get_raw_data(t_dc)$new_var, c(4, 4, 1, 1, 2, 1))
 })
