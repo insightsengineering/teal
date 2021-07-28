@@ -39,7 +39,6 @@ Imports:
   R6,
   rlang,
   rtables (>= 0.3.8),
-  S4Vectors,
   shinyjs,
   shinyWidgets (>= 0.5.0),
   stats,
