@@ -624,7 +624,7 @@ LogicalFilterState <- R6::R6Class( # nolint
     #'  id of shiny element
     ui = function(id) {
       ns <- NS(id)
-      res <- fluidRow(
+      fluidRow(
         div(
           style = "position: relative;",
           # same overlay as for choices with no more than (default: 5) elements
@@ -636,10 +636,9 @@ LogicalFilterState <- R6::R6Class( # nolint
             ns("selection"),
             label = NULL,
             choices = private$choices,
-            selected = private$choices,
+            selected = private$choices[1],
             width = "100%"
           )
-
         ),
         if (private$na_count > 0) {
           checkboxInput(
@@ -651,7 +650,6 @@ LogicalFilterState <- R6::R6Class( # nolint
           NULL
         }
       )
-
     },
 
     #' @description
@@ -823,7 +821,7 @@ RangeFilterState <- R6::R6Class( # nolint
     #'  id of shiny element
     ui = function(id) {
       ns <- NS(id)
-      res <- fluidRow(
+      fluidRow(
         div(
           class = "filterPlotOverlayRange",
           plotOutput(ns("plot"), height = "100%")
@@ -857,7 +855,6 @@ RangeFilterState <- R6::R6Class( # nolint
           NULL
         }
       )
-
     },
 
     #' @description
@@ -1112,7 +1109,6 @@ ChoicesFilterState <- R6::R6Class( # nolint
           NULL
         }
       )
-
     },
 
     #' @description
@@ -1273,7 +1269,7 @@ DateFilterState <- R6::R6Class( # nolint
     #'  id of shiny element
     ui = function(id) {
       ns <- NS(id)
-      res <- fluidRow(
+      fluidRow(
         div(
           actionButton(
             inputId = ns("start_date_reset"),
@@ -1309,7 +1305,6 @@ DateFilterState <- R6::R6Class( # nolint
           NULL
         }
       )
-
     },
 
     #' @description
@@ -1460,7 +1455,7 @@ DatetimeFilterState <- R6::R6Class( # nolint
     #'  id of shiny element
     ui = function(id) {
       ns <- NS(id)
-      res <- fluidRow(
+      fluidRow(
         div(
           actionButton(
             inputId = ns("start_date_reset"),
@@ -1530,7 +1525,6 @@ DatetimeFilterState <- R6::R6Class( # nolint
           NULL
         }
       )
-
     },
 
     #' @description
