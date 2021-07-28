@@ -324,6 +324,7 @@ testthat::test_that("Dataset mutate method with delayed logic", {
   )
   expect_false(test_ds0$is_mutate_delayed())
   expect_equal(get_raw_data(test_ds0)$new_var2, rep(2, 6))
+})
 
 testthat::test_that("Dataset check method", {
   test_ds0 <- Dataset$new("head_mtcars", head(mtcars))
