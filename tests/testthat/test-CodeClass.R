@@ -206,9 +206,9 @@ test_that("list_to_code_class: assigning dataname to the object name inside of t
     c("test_dc <- data.frame(head_letters = c(\"a\", \"b\", \"c\", \"d\", \"e\", \"f\"))",
       "test_dc2 <- data.frame(head_integers = 1:6)",
       "t_dc2 <- test_dc2",
+      "t_dc2 <- NULL",
       "head_mtcars <- head(mtcars)",
       "ds <- head_mtcars",
-      "t_dc2 <- NULL",
       "test_dc$carb <- ds$carb"
     )
   )

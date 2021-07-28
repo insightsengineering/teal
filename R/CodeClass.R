@@ -245,7 +245,10 @@ list_to_code_class <- function(x) {
       if (is(var_value, "DatasetConnector") || is(var_value, "Dataset")) {
         res$append(var_value$get_code_class())
         if (var_name != var_value$get_dataname()) {
-          res$set_code(pdeparse(call("<-", as.name(var_name), as.name(var_value$get_dataname()))))
+          res$set_code(
+            pdeparse(call("<-", as.name(var_name), as.name(var_value$get_dataname()))),
+            dataname = var_value$get_dataname()
+          )
         }
       } else {
         var_code <- pdeparse(call("<-", as.name(var_name), var_value))

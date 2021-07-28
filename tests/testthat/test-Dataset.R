@@ -219,28 +219,33 @@ testthat::test_that("Dataset$set_vars throws an error if passed the enclosing Da
 })
 
 testthat::test_that("Dataset mutate method with delayed logic", {
-  test_ds0 <- Dataset$new("head_mtcars", head(mtcars))
-  test_ds1 <- Dataset$new("head_iris", head(iris))
-  test_ds2 <- Dataset$new("head_rock", head(rock))
+  test_ds0 <- Dataset$new("head_mtcars", head(mtcars), code = "head_mtcars <- head(mtcars)")
+  test_ds1 <- Dataset$new("head_iris", head(iris), code = "head_iris <- head(iris)")
+  test_ds2 <- Dataset$new("head_rock", head(rock), code = "head_rock <- head(rock)")
 
   pull_fun2 <- callable_function(data.frame)
   pull_fun2$set_args(args = list(head_letters = head(letters)))
   t_dc <- dataset_connector("test_dc", pull_fun2, vars = list(test_ds1 = test_ds1))
 
   testthat::expect_false(test_ds0$is_mutate_delayed())
-  testthat::expect_equal(test_ds0$get_code(), "")
+  testthat::expect_equal(test_ds0$get_code(), "head_mtcars <- head(mtcars)")
 
   mutate_dataset(test_ds0, code = "head_mtcars$carb <- head_mtcars$carb * 2")
   testthat::expect_equal(get_raw_data(test_ds0)$carb, 2 * head(mtcars)$carb)
   testthat::expect_false(test_ds0$is_mutate_delayed())
-  testthat::expect_equal(test_ds0$get_code(), "head_mtcars$carb <- head_mtcars$carb * 2")
+  testthat::expect_equal(test_ds0$get_code(), "head_mtcars <- head(mtcars)\nhead_mtcars$carb <- head_mtcars$carb * 2")
 
   mutate_dataset(test_ds0, code = "head_mtcars$Species <- ds1$Species", vars = list(ds1 = test_ds1))
   testthat::expect_false(test_ds0$is_mutate_delayed())
   testthat::expect_equal(get_raw_data(test_ds0)$Species, get_raw_data(test_ds1)$Species)
   testthat::expect_equal(
-    test_ds0$get_code(),
-    "ds1 <- head_iris\nds1 <- head_iris\nhead_mtcars$carb <- head_mtcars$carb * 2\nhead_mtcars$Species <- ds1$Species"
+    pretty_code_string(test_ds0$get_code()),
+    c("head_iris <- head(iris)",
+      "ds1 <- head_iris",
+      "head_mtcars <- head(mtcars)",
+      "head_mtcars$carb <- head_mtcars$carb * 2",
+      "head_mtcars$Species <- ds1$Species"
+    )
   )
 
   testthat::expect_message(
@@ -305,7 +310,14 @@ testthat::test_that("Dataset mutate method with delayed logic", {
   testthat::expect_false(test_ds0$is_mutate_delayed())
   testthat::expect_true(all(c("head_letters", "new_var", "perm") %in% names(get_raw_data(test_ds0))))
   expect_code <- c(
+    "head_iris <- head(iris)",
+    "ds1 <- head_iris",
+    "test_ds1 <- head_iris",
     "test_dc <- data.frame(head_letters = c(\"a\", \"b\", \"c\", \"d\", \"e\", \"f\"))",
+    "dc <- test_dc",
+    "head_rock <- head(rock)",
+    "ds2 <- head_rock",
+    "head_mtcars <- head(mtcars)",
     "head_mtcars$carb <- head_mtcars$carb * 2",
     "head_mtcars$Species <- ds1$Species",
     "head_mtcars$head_letters <- dc$head_letters",

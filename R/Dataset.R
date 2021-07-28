@@ -382,15 +382,18 @@ Dataset <- R6::R6Class( # nolint
           FUN.VALUE = logical(1)
           )
         )
-        # delaying mutate if it has already been delayed
         if (delay_mutate) {
           private$mutate_delayed(code, vars)
         } else {
-          code_container <- CodeClass$new()
-          code_container$set_code(
-            code = code,
-            dataname = self$get_dataname()
-          )
+          if (!is(code, "CodeClass")) {
+            code_container <- CodeClass$new()
+            code_container$set_code(
+              code = code,
+              dataname = self$get_dataname()
+            )
+          } else {
+            code_container <- code
+          }
           self$set_vars(vars)
           private$mutate_eager(code_container)
         }
