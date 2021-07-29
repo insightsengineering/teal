@@ -412,8 +412,7 @@ FilterStates <- R6::R6Class( # nolint
         element_id = element_id
       )
 
-      id <- filter_state$get_id()
-      card_id <- session$ns(id)
+      card_id <- session$ns("card")
       queue_id <- sprintf("%s-%s", queue_index, element_id)
       private$card_ids[queue_id] <- card_id
 
@@ -446,30 +445,29 @@ FilterStates <- R6::R6Class( # nolint
                 width = 2,
                 class = "no-left-right-padding",
                 actionLink(
-                  session$ns(sprintf("%s_remove", id)),
+                  session$ns("remove"),
                   label = "",
                   icon = icon("times-circle", lib = "font-awesome"),
                   class = "remove pull-right"
                 )
               )
             ),
-            filter_state$ui(id = session$ns(id))
+            filter_state$ui(id = session$ns("content"))
           )
         )
       )
 
-      callModule(filter_state$server, id = id)
+      callModule(filter_state$server, id = "content")
 
       private$observers[[queue_id]] <- observeEvent(
         ignoreInit = TRUE,
         ignoreNULL = TRUE,
-        eventExpr = input[[sprintf("%s_remove", id)]],
+        eventExpr = input$remove,
         handlerExpr = {
           self$queue_remove(queue_index, element_id)
           private$remove_filter_state(queue_index, element_id)
         }
       )
-
 
       return(invisible(NULL))
     },
@@ -640,7 +638,7 @@ DFFilterStates <- R6::R6Class( # nolint
       observeEvent(
         eventExpr = input$var_to_add,
         handlerExpr = {
-          id <- sprintf("%s_%s", 1L, input$var_to_add)
+          id <- digest::digest(sprintf("%s_%s", 1L, input$var_to_add), algo = "md5")
           callModule(
             private$add_filter_state,
             id = id,
@@ -827,7 +825,7 @@ MAEFilterStates <- R6::R6Class( # nolint
       observeEvent(
         eventExpr = input$var_to_add,
         handlerExpr = {
-          id <- sprintf("%s_%s", "y", input$var_to_add)
+          id <- digest::digest(sprintf("%s_%s", "y", input$var_to_add), algo = "md5")
           callModule(
             private$add_filter_state,
             id = id,
@@ -1058,7 +1056,7 @@ SEFilterStates <- R6::R6Class( # nolint
       observeEvent(
         eventExpr = input$col_to_add,
         handlerExpr = {
-          id <- sprintf("%s_%s", "select", input$col_to_add)
+          id <- digest::digest(sprintf("%s_%s", "select", input$col_to_add), algo = "md5")
           callModule(
             private$add_filter_state,
             id = id,
@@ -1077,7 +1075,7 @@ SEFilterStates <- R6::R6Class( # nolint
       observeEvent(
         eventExpr = input$row_to_add,
         handlerExpr = {
-          id <- sprintf("%s_%s", "subset", input$row_to_add)
+          id <- digest::digest(sprintf("%s_%s", "subset", input$row_to_add), algo = "md5")
           callModule(
             private$add_filter_state,
             id = id,
@@ -1231,8 +1229,7 @@ MatrixFilterStates <- R6::R6Class( # nolint
       observeEvent(
         eventExpr = input$var_to_add,
         handlerExpr = {
-          id <- sprintf("%s_%s", "subset", input$var_to_add)
-
+          id <- digest::digest(sprintf("%s_%s", "subset", input$var_to_add), algo = "md5")
           callModule(
             private$add_filter_state,
             id = id,

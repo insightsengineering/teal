@@ -303,13 +303,6 @@ FilterState <- R6::R6Class( # nolint
     },
 
     #' @description
-    #' Get ID string without special characters
-    #' @return `character(1)`
-    get_id = function() {
-      digest::digest(self$get_varname(deparse = TRUE), algo = "md5")
-    },
-
-    #' @description
     #' Returns variable label
     #' @return (`character(1)`)
     get_varlabel = function() {

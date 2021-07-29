@@ -38,7 +38,6 @@ chain.
 \item \href{#method-destroy_observers}{\code{FilterState$destroy_observers()}}
 \item \href{#method-get_call}{\code{FilterState$get_call()}}
 \item \href{#method-get_dataname}{\code{FilterState$get_dataname()}}
-\item \href{#method-get_id}{\code{FilterState$get_id()}}
 \item \href{#method-get_varlabel}{\code{FilterState$get_varlabel()}}
 \item \href{#method-get_varname}{\code{FilterState$get_varname()}}
 \item \href{#method-get_selected}{\code{FilterState$get_selected()}}
@@ -128,19 +127,6 @@ whether dataname should be deparsed. \code{TRUE} by default}
 }
 \subsection{Returns}{
 (\code{name} or \code{character(1)})
-}
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-get_id"></a>}}
-\if{latex}{\out{\hypertarget{method-get_id}{}}}
-\subsection{Method \code{get_id()}}{
-Get ID string without special characters
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{FilterState$get_id()}\if{html}{\out{</div>}}
-}
-
-\subsection{Returns}{
-\code{character(1)}
 }
 }
 \if{html}{\out{<hr>}}
