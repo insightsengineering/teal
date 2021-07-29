@@ -542,7 +542,7 @@ print.default_filter <- function(x, ...) {
 #' @export
 #'
 #' @return (`expression`)
-get_filter_expr <- function(datasets, datanames = datasets$get_datanames()) {
+get_filter_expr <- function(datasets, datanames = datasets$datanames()) {
   stopifnot(
     is(datasets, "FilteredData"),
     is_character_vector(datanames),
@@ -550,10 +550,10 @@ get_filter_expr <- function(datasets, datanames = datasets$get_datanames()) {
   )
 
   paste(
-    sapply(
+    utils.nest::ulapply(
       datanames,
       function(dataname) {
-        as.character(datasets$get_call(dataname))
+        datasets$get_call(dataname)
       }
     ),
     collapse = "\n"

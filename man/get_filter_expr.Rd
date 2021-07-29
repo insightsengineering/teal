@@ -4,7 +4,7 @@
 \alias{get_filter_expr}
 \title{Get filter expression for multiple datanames taking into account its order.}
 \usage{
-get_filter_expr(datasets, datanames = datasets$get_datanames())
+get_filter_expr(datasets, datanames = datasets$datanames())
 }
 \arguments{
 \item{datasets}{(\code{FilteredData})}
