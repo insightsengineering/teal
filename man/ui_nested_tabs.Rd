@@ -9,11 +9,12 @@ ui_nested_tabs(id, modules, datasets)
 \arguments{
 \item{id}{module id}
 
-\item{modules}{\code{teal_module} or \code{teal_modules} object, the latter
-can be used for nested tabs, see \code{\link{ui_nested_tabs}}}
+\item{modules}{(\code{teal_module} or \code{teal_modules})
+single or multiple modules. \code{teal_modules}  can be used for nested
+tabs, see \code{\link{ui_nested_tabs}}}
 
-\item{datasets}{\code{FilteredData} object to store filter state and filtered
-datasets, shared across modules}
+\item{datasets}{(\code{FilteredData})\cr
+object to store filter state and filtered datasets, shared across modules}
 }
 \value{
 depending on class of \code{modules}:

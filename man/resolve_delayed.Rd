@@ -24,7 +24,7 @@ ds <- teal:::FilteredData$new()
 ADSL <- radsl(cached = TRUE)
 attr(ADSL, "keys") <- get_cdisc_keys("ADSL")
 isolate({
-  ds$set_data("ADSL", ADSL)
+  ds$set_dataset(dataset("ADSL", ADSL))
 
   # value_choices example
   v1 <- value_choices("ADSL", "SEX", "SEX")

@@ -50,7 +50,7 @@ filter_calls_module <- function(label = "Filter Calls Module", active_datanames 
         active_datanames <- handle_active_datanames(datasets, active_datanames)
         paste(lapply(
           active_datanames,
-          function(dataname) datasets$get_filter_expr(dataname)
+          function(dataname) datasets$get_call(dataname)
         ), collapse = "\n\n")
       })
     },

@@ -6,7 +6,6 @@
 #'
 #' @param name (`character`) argument passed by `deep_clone` function.
 #' @param value (any `R` object) argument passed by `deep_clone` function.
-#' @md
 deep_clone_r6 <- function(name, value) {
   if (is_class_list("R6")(value)) {
     lapply(value, function(x) x$clone(deep = TRUE))
@@ -98,8 +97,8 @@ extract_choices_labels <- function(choices, values = NULL) {
 #'
 get_client_timezone <- function(ns) {
   script <- paste0(
-  "var tz = Intl.DateTimeFormat().resolvedOptions().timeZone;
-  Shiny.onInputChange('", ns("tz"), "', Intl.DateTimeFormat().resolvedOptions().timeZone);"
+    "var tz = Intl.DateTimeFormat().resolvedOptions().timeZone;
+    Shiny.onInputChange('", ns("tz"), "', Intl.DateTimeFormat().resolvedOptions().timeZone);"
   )
   shinyjs::runjs(script)
 }
@@ -188,21 +187,22 @@ label_to_id <- function(label, prefix = NULL) {
 
 #' Function to inherit Shiny module arguments that must always be present
 #'
-#' @param input `Shiny input object`
-#' @param output `Shiny output object`
-#' @param session `Shiny session object`
-#' @param modules `teal_module` or `teal_modules` object, the latter
-#'   can be used for nested tabs, see \code{\link{ui_nested_tabs}}
-#' @param datasets `FilteredData` object to store filter state and filtered
-#'   datasets, shared across modules
+#' @param input (`Shiny input object`)
+#' @param output (`Shiny output object`)
+#' @param session (`Shiny session object`)
+#' @param modules (`teal_module` or `teal_modules`)
+#'  single or multiple modules. `teal_modules`  can be used for nested
+#'  tabs, see \code{\link{ui_nested_tabs}}
+#' @param datasets (`FilteredData`)\cr
+#'   object to store filter state and filtered datasets, shared across modules
 srv_shiny_module_arguments <- function(input, output, session, datasets, modules) { # nousage # nolint
 }
 
 #' Check that a given range is valid
-#' @param subinterval (`numeric` or `date`) vector of length 2 to be
-#'   compared against the full range.
-#' @param range (`numeric` or `date`) vector of length 2 containing
-#'   the full range to validate against.
+#' @param subinterval (`numeric` or `date`)\cr
+#'  vector of length 2 to be  compared against the full range.
+#' @param range (`numeric` or `date`)\cr
+#'  vector of length 2 containing the full range to validate against.
 #' @param pre_msg `character` message to print before error for
 #'   additional context.
 #'
@@ -211,21 +211,39 @@ srv_shiny_module_arguments <- function(input, output, session, datasets, modules
 #'
 #' @examples
 #' \dontrun{
-#' check_in_range(c(3,1), c(1,3))
+#' check_in_range(c(3, 1), c(1, 3))
+#' check_in_range(c(0, 3), c(1, 3))
 #' check_in_range(
 #'   c(as.Date("2020-01-01"), as.Date("2020-01-20")),
 #'   c(as.Date("2020-01-01"), as.Date("2020-01-02"))
 #'   )
 #' }
 check_in_range <- function(subinterval, range, pre_msg = "") {
-  if ((length(subinterval) != 2) ||
-      (subinterval[[1]] > subinterval[[2]]) ||
-      ((subinterval[[1]] < range[[1]]) || (subinterval[[2]] > range[[2]]))
-  ) {
-    stop(paste0(
-      pre_msg, " range (", toString(subinterval),
-      ") not valid for full range (", toString(range), ")"
-    ))
+  if ((length(subinterval) != 2)) {
+    stop(
+      sprintf(
+        "%s range length should be 2 while it is %s",
+        pre_msg,
+        length(subinterval)
+      )
+    )
+  }
+  if (subinterval[[2]] < subinterval[[1]]) {
+    stop(
+      sprintf("%s upper bound of the range than lower bound \n %s < %s"),
+      pre_msg,
+      subinterval[[2]],
+      subinterval[[1]]
+    )
+  }
+
+  if ((subinterval[[1]] < range[[1]]) || (subinterval[[2]] > range[[2]])) {
+    stop(
+      sprintf(
+        "%s range (%s) not valid for full range (%s)",
+        pre_msg, toString(subinterval), toString(range)
+      )
+    )
   }
 }
 
@@ -263,33 +281,6 @@ check_in_subset <- function(subset, choices, pre_msg = "") {
   }
   return(invisible(NULL))
 }
-
-#' Check that two sets are equal and informative error message otherwise
-#'
-#' @param x object to be compared to other
-#' @param y object to be compared to other
-#' @param pre_msg `character` to be displayed before error message
-#' @examples
-#' check_setequal <- teal:::check_setequal
-#' check_setequal(1:3, 1:3)
-#' check_setequal(c(1, 1, 3), c(1, 3, 3))
-#' try(check_setequal(c(1, 2, 3), c(1, 3, 3), pre_msg = "Not equal: "))
-#' try(check_setequal(c(1, 2, 3), c("a", "b"), pre_msg = "Not equal: "))
-check_setequal <- function(x, y, pre_msg = "") {
-  stopifnot(is_character_single(pre_msg))
-  x <- unique(x)
-  y <- unique(y)
-  if (!setequal(x, y)) {
-    stop(paste0(
-      pre_msg,
-      "(", toString(x, width = 100), ")",
-      " is not equal to ",
-      "(", toString(y, width = 100), ")"
-    ), call. = FALSE)
-  }
-  return(invisible(NULL))
-}
-
 pdeparse <- function(x, width.cutoff = 500L) { # nolint
   paste0(deparse(x, width.cutoff = width.cutoff), collapse = "\n") # nolint
 }
@@ -317,7 +308,7 @@ code_from_script <- function(code, script, dataname = NULL) {
   stopifnot(
     is_character_vector(code, min_length = 0, max_length = 1) || inherits(code, "PythonCodeClass"),
     is_character_vector(script, min_length = 0, max_length = 1)
-    )
+  )
   if (length(code) == 0 && length(script) == 0) {
     return(character(0))
   }
@@ -332,7 +323,7 @@ code_from_script <- function(code, script, dataname = NULL) {
   }
 
   return(code)
-}
+  }
 
 #' Read .R file into character
 #'
@@ -400,7 +391,7 @@ read_script <- function(file, dataname = NULL) {
 #'
 #' @export
 get_key_duplicates <- function(dataset, keys = NULL) {
- UseMethod("get_key_duplicates", dataset)
+  UseMethod("get_key_duplicates", dataset)
 }
 
 #' Creates a short information summary about the duplicate primary key values in a dataset
@@ -509,12 +500,14 @@ get_key_duplicates_util <- function(dataframe, keys) {
   summary <- dplyr::mutate(dataframe, rows = dplyr::row_number())
   summary <- summary[
     duplicated(dplyr::select(summary, dplyr::all_of(keys))) |
-    duplicated(dplyr::select(summary, dplyr::all_of(keys)), fromLast = TRUE), ]
+      duplicated(dplyr::select(summary, dplyr::all_of(keys)), fromLast = TRUE),
+    ]
   summary <- dplyr::summarise(
     dplyr::group_by(summary, dplyr::across(dplyr::all_of(keys))),
     rows = paste0(.data$rows, collapse = ","),
     n = dplyr::n(),
-    .groups = "drop")
+    .groups = "drop"
+  )
   summary
 }
 
@@ -530,4 +523,24 @@ object_file <- function(path, class) {
   stop_if_not(list(is(object, class), paste("The object returned from the file is not of", class, "class.")))
 
   return(object)
+}
+
+eval_expr_with_msg <- function(expr, env) {
+  lapply(
+    expr,
+    function(x) {
+      tryCatch(
+        eval(x, envir = env),
+        error = function(e) {
+          stop(
+            sprintf(
+              "Call execution failed:\n - call:\n   %s\n - message:\n   %s ",
+              pdeparse(x), e
+            )
+          )
+        }
+      )
+
+    }
+  )
 }

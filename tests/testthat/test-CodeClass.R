@@ -175,3 +175,51 @@ test_that("Duplicated code is appended if its dataname is different", {
     cc1$get_code(),
     "print(\"test\")\nprint(\"test\")")
 })
+
+test_that("list_to_code_class: assigning dataname to the object name inside of the list", {
+  pull_fun <- callable_function(data.frame)
+  pull_fun$set_args(args = list(head_letters = head(letters)))
+  t_dc <- dataset_connector("test_dc", pull_fun)
+
+  pull_fun2 <- callable_function(data.frame)
+  pull_fun2$set_args(args = list(head_integers = 1:6))
+  t_dc2 <- dataset_connector("test_dc2", pull_fun2)
+
+  load_dataset(t_dc)
+  load_dataset(t_dc2)
+
+  mutate_dataset(t_dc, "t_dc2 <- NULL", vars = list(t_dc2 = t_dc2))
+  expect_equal(
+    pretty_code_string(t_dc$get_code()),
+    c("test_dc <- data.frame(head_letters = c(\"a\", \"b\", \"c\", \"d\", \"e\", \"f\"))",
+      "test_dc2 <- data.frame(head_integers = 1:6)",
+      "t_dc2 <- test_dc2",
+      "t_dc2 <- NULL"
+    )
+  )
+
+  ds <- Dataset$new("head_mtcars", x = head(mtcars), code = "head_mtcars <- head(mtcars)")
+
+  mutate_dataset(t_dc, "test_dc$carb <- ds$carb", vars = list(ds = ds))
+  expect_equal(
+    pretty_code_string(t_dc$get_code()),
+    c("test_dc <- data.frame(head_letters = c(\"a\", \"b\", \"c\", \"d\", \"e\", \"f\"))",
+      "test_dc2 <- data.frame(head_integers = 1:6)",
+      "t_dc2 <- test_dc2",
+      "head_mtcars <- head(mtcars)",
+      "ds <- head_mtcars",
+      "t_dc2 <- NULL",
+      "test_dc$carb <- ds$carb"
+    )
+  )
+
+  ds2 <- Dataset$new("head_iris", x = head(iris), code = "head_iris <- head(iris)")
+  mutate_dataset(t_dc2, "test_dc2$Species <- head_iris$Species", vars = list(head_iris = ds2))
+  expect_equal(
+    pretty_code_string(t_dc2$get_code()),
+    c("test_dc2 <- data.frame(head_integers = 1:6)",
+      "head_iris <- head(iris)",
+      "test_dc2$Species <- head_iris$Species"
+    )
+  )
+})

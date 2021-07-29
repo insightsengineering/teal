@@ -31,7 +31,10 @@
 #' @examples
 #'
 #' optionalSelectInput(inputId = "xvar", label = "x variable", choices = "A", selected = "A")
-#' optionalSelectInput(inputId = "xvar", label = "x variable", choices = LETTERS[1:5], selected = "A")
+#' optionalSelectInput(inputId = "xvar",
+#'                     label = "x variable",
+#'                     choices = LETTERS[1:5],
+#'                      selected = "A")
 #' optionalSelectInput(inputId = "xvar",
 #'                     label = "x variable",
 #'                     choices = c("A - value A" = "A"),
@@ -44,6 +47,11 @@
 #'                     choices = choices_labeled(
 #'                       choices = letters,
 #'                       labels = LETTERS,
+#'                       types = sample(
+#'                         c("primary_key", "numeric", "factor", "Date"),
+#'                         length(letters),
+#'                         TRUE
+#'                       ),
 #'                       subset = c("a", "b", "c")
 #'                     ),
 #'                     selected = "a")
@@ -139,10 +147,7 @@ optionalSelectInput <- function(inputId, # nolint
           selected,
           tags$code(
             id = paste0(inputId, "_valueonly"),
-            paste(attr(fixed, which = "dataname"),
-                  selected,
-                  sep = ".",
-                  collapse = ", ")
+            paste(selected, collapse = ", ")
           )
         ),
         label_help

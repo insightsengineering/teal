@@ -4,12 +4,49 @@
 #' Get dummy filter states to apply initially
 #'
 #' This can be used for the argument `filter` in \code{\link{srv_teal}}.
+#'
+#' @param data (`RelationalData`)
 #' @return dummy filter states
-get_dummy_filter <- function() { # nousage # nolint
+get_dummy_filter <- function(data) { # nousage # nolint
+  ADSL <- get_raw_data(x = data, dataname = "ADSL") #nolint
+  ADLB <- get_raw_data(x = data, dataname = "ADLB") #nolint
+
   res <- list(
-    ADSL = list(SEX = list(choices = "M", keep_na = TRUE), AGE = default_filter()),
-    ADLB = list(ASEQ = default_filter())
+    ADSL = list(
+      filter = list(
+        list(
+          SEX = init_filter_state(
+            x = ADSL$SEX,
+            varname = "SEX",
+            varlabel = "Sex",
+            input_dataname = as.name("ADSL"),
+            use_dataname = FALSE
+          ),
+          AGE = init_filter_state(
+            x = ADSL$AGE,
+            varname = "AGE",
+            varlabel = "Age",
+            input_dataname = as.name("ADSL"),
+            use_dataname = FALSE
+          )
+        )
+      )
+    ),
+    ADLB = list(
+      filter = list(
+        list(
+          ASEQ = init_filter_state(
+            x = ADLB$ASEQ,
+            varname = "ASEQ",
+            varlabel = "Sequence Number",
+            input_dataname = as.name("ADLB"),
+            use_dataname = FALSE
+          )
+        )
+      )
+    )
   )
+
   return(res)
 }
 
@@ -34,10 +71,10 @@ get_dummy_cdisc_data <- function() { # nousage # nolint
     cdisc_dataset(dataname = "ADAE", x = ADAE),
     cdisc_dataset(dataname = "ADLB", x = ADLB),
     code = "
-ADSL <- radsl(cached = TRUE)
-ADAE <- radae(cached = TRUE)
-ADLB <- radlb(cached = TRUE)
-")
+      ADSL <- radsl(cached = TRUE)
+      ADAE <- radae(cached = TRUE)
+      ADLB <- radlb(cached = TRUE)
+    ")
   return(res)
 }
 

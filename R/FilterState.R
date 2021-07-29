@@ -1,0 +1,1619 @@
+.threshold_slider_vs_checkboxgroup <- 5 #nolint
+
+# label of checkbox to keep / remove NAs
+label_keep_na_count <- function(na_count) {
+  sprintf("Keep NA (%s)", na_count)
+}
+
+#' Initializes `FilterState`
+#'
+#' Initializes `FilterState` depending on a variable class.\cr
+#' @param x (`vector`)\cr
+#'   values of the variable used in filter
+#'
+#' @param varname (`character(1)`, `name`)\cr
+#'   name of the variable
+#'
+#' @param varlabel (`character(1)`)\cr
+#'   label of the variable (optional).
+#'
+#' @param input_dataname (`name` or `call`)\cr
+#'   name of dataset where `x` is taken from
+#'
+#' @param use_dataname (`logical(1)`)\cr
+#' whether to prefix condition calls with `input_dataname$`.
+#' For example `dataset$variable == "selection"`
+#'
+#' @examples
+#' filter_state <- teal:::RangeFilterState$new(
+#'   c(1:10, NA, Inf),
+#'   varname = "x",
+#'   varlabel = "Pretty name",
+#'   input_dataname = as.name("dataname"),
+#'   use_dataname = TRUE
+#' )
+#'
+#' filter_state$get_varname()
+#' filter_state$get_varlabel()
+#' isolate(filter_state$get_call())
+#'
+#' \dontrun{
+#' shinyApp(
+#'   ui = fluidPage(
+#'     isolate(filter_state$ui(id = "app")),
+#'     verbatimTextOutput("call")
+#'   ),
+#'   server = function(input, output, session) {
+#'     callModule(filter_state$server, "app")
+#'
+#'     output$call <- renderText(
+#'       pdeparse(filter_state$get_call())
+#'     )
+#'   }
+#' )
+#' }
+#' @return `FilterState` object
+init_filter_state <- function(x,
+                              varname,
+                              varlabel = if_null(attr(x, "label"), character(0)),
+                              input_dataname = NULL,
+                              use_dataname = FALSE) {
+  stopifnot(is_character_single(varname) || is.name(varname))
+  stopifnot(is_character_vector(varlabel, min_length = 0, max_length = 1))
+  stopifnot(is.null(input_dataname) || is.name(input_dataname) || is.call(input_dataname))
+  stopifnot(is_logical_single(use_dataname))
+
+  if (all(is.na(x))) {
+    return(
+      EmptyFilterState$new(
+        x = x,
+        varname = varname,
+        varlabel = varlabel,
+        input_dataname = input_dataname,
+        use_dataname = use_dataname
+      )
+    )
+  }
+
+  UseMethod("init_filter_state")
+}
+
+#' @export
+init_filter_state.default <- function(x, #nousage
+                                      varname,
+                                      varlabel = if_null(attr(x, "label"), character(0)),
+                                      input_dataname = NULL,
+                                      use_dataname = FALSE) {
+  FilterState$new(x = x,
+                  varname = varname,
+                  varlabel = varlabel,
+                  input_dataname = input_dataname,
+                  use_dataname = use_dataname)
+}
+
+#' @export
+init_filter_state.logical <- function(x, #nousage
+                                      varname,
+                                      varlabel = if_null(attr(x, "label"), character(0)),
+                                      input_dataname = NULL,
+                                      use_dataname = FALSE) {
+  LogicalFilterState$new(x = x,
+                         varname = varname,
+                         varlabel = varlabel,
+                         input_dataname = input_dataname,
+                         use_dataname = use_dataname)
+}
+
+#' @export
+init_filter_state.numeric <- function(x, #nousage
+                                      varname,
+                                      varlabel = if_null(attr(x, "label"), character(0)),
+                                      input_dataname = NULL,
+                                      use_dataname = FALSE) {
+  if (length(unique(x[!is.na(x)])) < .threshold_slider_vs_checkboxgroup) {
+    ChoicesFilterState$new(x = x,
+                           varname = varname,
+                           varlabel = varlabel,
+                           input_dataname = input_dataname,
+                           use_dataname = use_dataname)
+  } else {
+    RangeFilterState$new(x = x,
+                         varname = varname,
+                         varlabel = varlabel,
+                         input_dataname = input_dataname,
+                         use_dataname = use_dataname)
+  }
+
+}
+
+#' @export
+init_filter_state.factor <- function(x, #nousage
+                                     varname,
+                                     varlabel = if_null(attr(x, "label"), character(0)),
+                                     input_dataname = NULL,
+                                     use_dataname = FALSE) {
+  ChoicesFilterState$new(x = x,
+                         varname = varname,
+                         varlabel = varlabel,
+                         input_dataname = input_dataname,
+                         use_dataname = use_dataname)
+}
+
+#' @export
+init_filter_state.character <- function(x, #nousage
+                                        varname,
+                                        varlabel = if_null(attr(x, "label"), character(0)),
+                                        input_dataname = NULL,
+                                        use_dataname = FALSE) {
+  ChoicesFilterState$new(x = x,
+                         varname = varname,
+                         varlabel = varlabel,
+                         input_dataname = input_dataname,
+                         use_dataname = use_dataname)
+}
+
+#' @export
+init_filter_state.Date <- function(x, #nousage
+                                   varname,
+                                   varlabel = if_null(attr(x, "label"), character(0)),
+                                   input_dataname = NULL,
+                                   use_dataname = FALSE) {
+  DateFilterState$new(x = x,
+                      varname = varname,
+                      varlabel = varlabel,
+                      input_dataname = input_dataname,
+                      use_dataname = use_dataname)
+}
+
+#' @export
+init_filter_state.POSIXct <- function(x, #nousage
+                                      varname,
+                                      varlabel = if_null(attr(x, "label"), character(0)),
+                                      input_dataname = NULL,
+                                      use_dataname = FALSE) {
+  DatetimeFilterState$new(x = x,
+                          varname = varname,
+                          varlabel = varlabel,
+                          input_dataname = input_dataname,
+                          use_dataname = use_dataname)
+}
+
+#' @export
+init_filter_state.POSIXlt <- function(x, #nousage
+                                      varname,
+                                      varlabel = if_null(attr(x, "label"), character(0)),
+                                      input_dataname = NULL,
+                                      use_dataname = FALSE) {
+  DatetimeFilterState$new(x = x,
+                          varname = varname,
+                          varlabel = varlabel,
+                          input_dataname = input_dataname,
+                          use_dataname = use_dataname)
+}
+
+
+# FilterState ------
+#' @name FilterState
+#' @docType class
+#'
+#' @description `r lifecycle::badge("experimental")`
+#'
+#' @title Abstract class to encapsulate filter states
+#'
+#' @details
+#' This class is responsible for managing single filter item within
+#' `FilteredData` class. Filter states depend on the variable type:
+#' (`logical`, `integer`, `numeric`, `factor`, `character`, `Date`, `POSIXct`, `POSIXlt`)
+#' and returns `FilterState` object with class corresponding to input variable.
+#' Class controls single filter entry in `module_single_filter_item` and returns
+#' code relevant to selected values.
+#' - `factor`, `character`: `class = ChoicesFilterState`
+#' - `numeric`: `class = RangeFilterState`
+#' - `logical`: `class = LogicalFilterState`
+#' - `Date`: `class = DateFilterState`
+#' - `POSIXct`, `POSIXlt`: `class = DatetimeFilterState`
+#' - all `NA` entries: `class: FilterState`, cannot be filtered
+#' - default: `FilterState`, cannot be filtered
+#' Each variable's filter state is a `R6` object which contains `choices`,
+#' `selected`, `varname`, `dataname`, `labels`, `na_count`, `keep_na` and other
+#' variable type specific fields (`keep_inf`, `inf_count`, `timezone`).
+#' Object contains also shiny module (`ui` and `server`) which manages
+#' state of the filter through reactive values `selected`, `keep_na`, `keep_inf`
+#' which trigger `get_call()` and every R function call up in reactive
+#' chain.
+FilterState <- R6::R6Class( # nolint
+  "FilterState",
+  public = list(
+    #' @description
+    #' Initialize a `FilterState` object
+    #' @param x (`vector`)\cr
+    #'   values of the variable used in filter
+    #' @param varname (`character`, `name`)\cr
+    #'   name of the variable
+    #' @param varlabel (`character(1)`)\cr
+    #'   label of the variable (optional).
+    #' @param input_dataname (`name` or `call`)\cr
+    #'   name of dataset where `x` is taken from
+    #' @param use_dataname (`logical(1)`)\cr
+    #' whether to prefix condition calls with `input_dataname$`.
+    #' For example `input_dataname$variable == "selection"`
+    initialize = function(x,
+                          varname,
+                          varlabel = character(0),
+                          input_dataname = NULL,
+                          use_dataname = FALSE) {
+      stopifnot(is.name(varname) || is.call(varname) || is_character_single(varname))
+      stopifnot(is_character_vector(varlabel, min_length = 0, max_length = 1))
+      stopifnot(is.null(varname) || is.name(input_dataname) || is.call(input_dataname))
+      stopifnot(is_logical_single(use_dataname))
+
+      private$input_dataname <- input_dataname
+      private$varname <- if (is.character(varname)) {
+        as.name(varname)
+      } else {
+        varname
+      }
+      private$varlabel <- if (identical(varlabel, as.character(varname))) {
+        # to not display duplicated label
+        character(0)
+      } else {
+        varlabel
+      }
+      private$use_dataname <- use_dataname
+      private$selected <- reactiveVal(NULL)
+      private$na_count <- sum(is.na(x))
+      private$keep_na <- reactiveVal(value = FALSE)
+
+      return(invisible(self))
+    },
+
+    #' @description
+    #' Destroy observers stored in `private$observers`.
+    destroy_observers = function() {
+      .log(
+        "Destroying observers for varname ",
+        self$get_varname(deparse = TRUE),
+        "in dataset",
+        self$get_dataname(deparse = TRUE)
+      )
+      lapply(private$observers, function(x) x$destroy())
+      return(invisible(NULL))
+    },
+
+    #' @description
+    #' Returns reproducible condition call for current selection relevant
+    #' for selected variable type.
+    #' Method is using internal reactive values which makes it reactive
+    #' and must be executed in reactive or isolated context.
+    get_call = function() {
+      NULL
+    },
+
+    #' @description
+    #' Returns dataname
+    #' @param deparse (`logical(1)`)\cr
+    #' whether dataname should be deparsed. `TRUE` by default
+    #' @return (`name` or `character(1)`)
+    get_dataname = function(deparse = TRUE) {
+      if (isTRUE(deparse)) {
+        deparse(private$input_dataname)
+      } else {
+        private$input_dataname
+      }
+    },
+
+    #' @description
+    #' Returns variable label
+    #' @return (`character(1)`)
+    get_varlabel = function() {
+      private$varlabel
+    },
+
+    #' @description
+    #' Get variable name
+    #' @param deparse (`logical(1)`)\cr
+    #' whether variable name should be deparsed. `FALSE` by default
+    #' @return (`name` or `character(1)`)
+    get_varname = function(deparse = FALSE) {
+      if (isTRUE(deparse)) {
+        deparse(private$varname)
+      } else {
+        private$varname
+      }
+    },
+
+    #' @description
+    #' Get selected values from `FilterState`
+    #' @return class of returned object depends of class of the
+    #' `FilterState`
+    get_selected = function() {
+      private$selected()
+    },
+
+    #' @description
+    #' Set if `NA` should be kept
+    #' @param value (`logical(1)`)\cr
+    #'  Value(s) which come from the filter selection. Value is set in `server`
+    #'  modules after selecting check-box-input in the shiny interface. Values are set to
+    #'  `private$keep_na` which is reactive.
+    set_keep_na = function(value) {
+      stopifnot(is_logical_single(value))
+      private$keep_na(value)
+      return(invisible(NULL))
+    },
+
+    #' @description
+    #' Set selection
+    #' @param value (`vector`)\cr
+    #'  Value(s) which come from the filter selection. Values are set in `server`
+    #'  modules after choosing value in app interface. Values are set to
+    #'  `private$selected` which is reactive. Values type have to be the
+    #'  same as `private$choices`.
+    set_selected = function(value) {
+      private$validate_selection(value)
+      private$selected(value)
+      return(invisible(NULL))
+    },
+
+    #' @description
+    #' Server module
+    #' @param input (`Shiny`)\cr input object
+    #' @param output (`Shiny`)\cr output object
+    #' @param session (`Shiny`)\cr session object
+    #' @return nothing
+    server = function(input, output, session) {
+      NULL
+    },
+
+    #' @description
+    #' UI Module
+    #' @param id (`character(1)`)\cr
+    #'  id of shiny element. UI for this class contains simple message
+    #'  informing that it's not supported
+    ui = function(id) {
+      span("Variable type is not supported in teal framework. Please remove this filter and continue")
+    }
+  ),
+  private = list(
+    choices = NULL,  # because each class has different choices type
+    input_dataname = character(0),
+    keep_na = NULL,  # reactiveVal logical()
+    na_count = integer(0),
+    observers = NULL, # here observers are stored
+    selected = NULL,  # because it holds reactiveVal and each class has different choices type
+    varname = character(0),
+    varlabel = character(0),
+    use_dataname = logical(0),
+
+    #' description
+    #' Adds `is.na(varname)` before existing condition calls if `keep_na` is selected
+    #' return (`call`)
+    add_keep_na_call = function(filter_call) {
+      if (isTRUE(private$keep_na())) {
+        call(
+          "|",
+          call("is.na", private$get_varname_prefixed()),
+          filter_call
+        )
+      } else {
+        filter_call
+      }
+    },
+
+    #' description
+    #' Prefixed (or not) variable
+    #'
+    #' Return variable name needed to condition call.
+    #' If `isTRUE(private$use_dataset)` variable is prefixed by
+    #' dataname to be evaluated as extracted object, for example
+    #' `data$var`
+    #' return (`name` or `call`)
+    get_varname_prefixed = function() {
+      if (isTRUE(private$use_dataname)) {
+        call_extract_list(private$input_dataname, private$varname)
+      } else {
+        private$varname
+      }
+    },
+
+    #' Print the state in a nice format
+    #'
+    #' The `keep_na` and `keep_inf` is not printed.
+    #'
+    log_state = function() {
+      return(NULL)
+    },
+
+    #' Sets `keep_na` field according to observed `input$keep_na`
+    #' If `keep_na = TRUE` `is.na(varname)` is added to the returned call.
+    #' Otherwise returned call excludes `NA` when executed.
+    observe_keep_na = function(input) {
+      private$observers$keep_na <- observeEvent(
+        ignoreNULL = FALSE, # ignoreNULL: we don't want to ignore NULL when nothing is selected in the `selectInput`,
+        ignoreInit = TRUE, # ignoreInit: should not matter because we set the UI with the desired initial state
+        eventExpr = input$keep_na,
+        handlerExpr = {
+          self$set_keep_na(if_null(input$keep_na, FALSE))
+          private$log_state()
+        }
+      )
+      return(invisible(NULL))
+    },
+    #' Set choices
+    #'
+    #' Set choices is supposed to be executed once in the constructor
+    #' to define set/range which selection is made from.
+    #' parameter choices (`vector`)\cr
+    #'  class of the vector depends on the `FilterState` class.
+    #' return a `NULL`
+    set_choices = function(choices) {
+      private$choices <- choices
+      return(invisible(NULL))
+    },
+
+    # Checks if the selection is valid in terms of class and length.
+    # It should not return anything but throw an error if selection
+    # has a wrong class or is outside of possible choices
+    validate_selection = function(value) {
+      return(invisible(NULL))
+    }
+  )
+)
+
+
+# EmptyFilterState ---------
+#' @name EmptyFilterState
+#' @title `FilterState` object for empty variable
+#' @docType class
+#'
+#' @description `r lifecycle::badge("experimental")`
+#'
+#' @examples
+#' filter_state <- teal:::EmptyFilterState$new(
+#'   NA,
+#'   varname = "x",
+#'   input_dataname = as.name("data"),
+#'   use_dataname = TRUE
+#' )
+#' isolate(filter_state$get_call())
+
+#' isolate(filter_state$set_selected(TRUE))
+#' isolate(filter_state$set_keep_na(TRUE))
+#' isolate(filter_state$get_call())
+EmptyFilterState <- R6::R6Class( # nolint
+  "EmptyFilterState",
+  inherit = FilterState,
+  public = list(
+
+    #' @description
+    #' Initialize `EmptyFilterState` object
+    #' @param x (`vector`)\cr
+    #'   values of the variable used in filter
+    #' @param varname (`character`, `name`)\cr
+    #'   name of the variable
+    #' @param varlabel (`character(1)`)\cr
+    #'   label of the variable (optional).
+    #' @param input_dataname (`name` or `call`)\cr
+    #'   name of dataset where `x` is taken from
+    #' @param use_dataname (`logical(1)`)\cr
+    #' whether to prefix condition calls with `input_dataname$`.
+    #' For example `input_dataname$variable == "selection"`
+    initialize = function(x,
+                          varname,
+                          varlabel = character(0),
+                          input_dataname = NULL,
+                          use_dataname = FALSE) {
+      super$initialize(x, varname, varlabel, input_dataname, use_dataname)
+      private$set_choices(list())
+      self$set_selected(list())
+
+      return(invisible(self))
+    },
+
+    #' @description
+    #' Returns reproducible condition call for current selection relevant
+    #' for selected variable type.
+    #' Method is using internal reactive values which makes it reactive
+    #' and must be executed in reactive or isolated context.
+    get_call = function() {
+      filter_call <- NULL
+
+      if (isTRUE(private$keep_na())) {
+        filter_call <- call("is.na", private$get_varname_prefixed())
+      }
+
+      filter_call
+    },
+
+    #' @description
+    #' UI Module for `EmptyFilterState`.
+    #' This UI element contains information that all values are missing.
+    #' @param id (`character(1)`)\cr
+    #'  id of shiny element
+    ui = function(id) {
+      span("Variable contains missing values only. Please remove this filter and continue")
+    }
+  ),
+  private = list(
+    log_state = function() {
+      .log("all elements in", self$get_varname(deparse = TRUE), "are NA")
+    }
+  )
+)
+
+# LogicalFilterState ---------
+#' @name LogicalFilterState
+#' @title `FilterState` object for logical variable
+#' @docType class
+#'
+#' @description `r lifecycle::badge("experimental")`
+#'
+#' @examples
+#' filter_state <- teal:::LogicalFilterState$new(
+#'   sample(c(TRUE, FALSE, NA), 10, replace = TRUE),
+#'   varname = "x",
+#'   input_dataname = as.name("data"),
+#'   use_dataname = TRUE
+#' )
+#' isolate(filter_state$get_call())
+#'
+#' isolate(filter_state$set_selected(TRUE))
+#' isolate(filter_state$set_keep_na(TRUE))
+#' isolate(filter_state$get_call())
+LogicalFilterState <- R6::R6Class( # nolint
+  "LogicalFilterState",
+  inherit = FilterState,
+  public = list(
+
+    #' @description
+    #' Initialize a `FilterState` object
+    #' @param x (`logical`)\cr
+    #'   values of the variable used in filter
+    #' @param varname (`character`, `name`)\cr
+    #'   label of the variable (optional).
+    #' @param varlabel (`character(1)`)\cr
+    #'   label of the variable (optional).
+    #' @param input_dataname (`name` or `call`)\cr
+    #'   name of dataset where `x` is taken from
+    #' @param use_dataname (`logical(1)`)\cr
+    #' whether to prefix condition calls with `input_dataname$`.
+    #' For example `input_dataname$variable == "selection"`
+    initialize = function(x,
+                          varname,
+                          varlabel = character(0),
+                          input_dataname = NULL,
+                          use_dataname = FALSE) {
+      stopifnot(is.logical(x))
+      super$initialize(x, varname, varlabel, input_dataname, use_dataname)
+      tbl <- table(x)
+
+      choices <- as.logical(names(tbl))
+      names(choices) <- sprintf("%s (%s)", choices, tbl)
+
+      private$set_choices(as.list(choices))
+      self$set_selected(unname(choices)[1])
+      private$histogram_data <- data.frame(
+        x = names(choices),
+        y = as.vector(tbl)
+      )
+
+      return(invisible(self))
+    },
+
+
+    #' @description
+    #' Returns reproducible condition call for current selection.
+    #' For `LogicalFilterState` it's a `!<varname>` or `<varname>` and optionally
+    #' `is.na(<varname>)`
+    get_call = function() {
+      filter_call <- call_condition_logical(
+        varname = private$get_varname_prefixed(),
+        choice = private$selected()
+      )
+
+      filter_call <- private$add_keep_na_call(filter_call)
+
+      filter_call
+    },
+
+    #' @description
+    #' UI Module for `EmptyFilterState`.
+    #' This UI element contains available choices selection and
+    #' checkbox whether to keep or not keep the `NA` values.
+    #' @param id (`character(1)`)\cr
+    #'  id of shiny element
+    ui = function(id) {
+      ns <- NS(id)
+      fluidRow(
+        div(
+          style = "position: relative;",
+          # same overlay as for choices with no more than (default: 5) elements
+          div(
+            class = "filterPlotOverlayBoxes",
+            plotOutput(ns("plot"), height = "100%")
+          ),
+          radioButtons(
+            ns("selection"),
+            label = NULL,
+            choices = private$choices,
+            selected = private$choices[1],
+            width = "100%"
+          )
+        ),
+        if (private$na_count > 0) {
+          checkboxInput(
+            ns("keep_na"),
+            label_keep_na_count(private$na_count),
+            value = FALSE
+          )
+        } else {
+          NULL
+        }
+      )
+    },
+
+    #' @description
+    #' Server module
+    #' @param input (`Shiny`)\cr input object
+    #' @param output (`Shiny`)\cr output object
+    #' @param session (`Shiny`)\cr session object
+    #' @return nothing
+    server = function(input, output, session) {
+      output$plot <- renderPlot(
+        bg = "transparent",
+        expr = {
+          data <- private$histogram_data
+          data$y <- rev(data$y / sum(data$y)) # we have to reverse because the histogram is turned by 90 degrees
+          data$x <- seq_len(nrow(data)) # to prevent ggplot reordering columns using the characters in x column
+          ggplot2::ggplot(data) +
+            # sort factor so that it reflects checkbox order
+            ggplot2::aes_string(x = "x", y = "y") +
+            ggplot2::geom_col(
+              width = 0.95,
+              fill = grDevices::rgb(66 / 255, 139 / 255, 202 / 255),
+              color = NA,
+              alpha = 0.2
+            ) +
+            ggplot2::coord_flip() +
+            ggplot2::theme_void() +
+            ggplot2::scale_x_discrete(expand = c(0, 0)) +
+            ggplot2::scale_y_continuous(expand = c(0, 0), limits = c(0, 1))
+        }
+      )
+
+      private$observers$selection <- observeEvent(
+        ignoreNULL = FALSE,
+        ignoreInit = TRUE,
+        eventExpr = input$selection,
+        handlerExpr = {
+          selection_state <- input$selection
+          self$set_selected(
+            value = if_null(
+              as.logical(selection_state),
+              logical(0)
+            )
+          )
+          private$log_state()
+        }
+      )
+
+      private$observe_keep_na(input)
+
+      return(NULL)
+    }
+  ),
+  private = list(
+    histogram_data = data.frame(),
+    log_state = function() {
+      .log(
+        "State for", self$get_varname(deparse = TRUE),
+        "set to:", toString(private$selected()),
+        "NA:", toString(private$keep_na())
+      )
+    },
+    validate_selection = function(value) {
+      if (!(is_logical_empty(value) || is_logical_single(value))) {
+        stop(
+          sprintf(
+            "value of the selection for `%s` in `%s` should be a logical",
+            self$get_varname(deparse = TRUE),
+            self$get_dataname(deparse = TRUE)
+          )
+        )
+      }
+
+      pre_msg <- sprintf(
+        "dataset '%s', variable '%s': ",
+        self$get_dataname(deparse = TRUE),
+        self$get_varname(deparse = TRUE)
+      )
+      check_in_subset(value, private$choices, pre_msg = pre_msg)
+
+    }
+  )
+)
+
+# RangeFilterState ---------
+#' @name RangeFilterState
+#' @title `FilterState` object for numeric variable
+#' @docType class
+#'
+#' @description `r lifecycle::badge("experimental")`
+#'
+#' @examples
+#' filter_state <- teal:::RangeFilterState$new(
+#'   c(NA, Inf, seq(1:10)),
+#'   varname = "x",
+#'   input_dataname = as.name("data"),
+#'   use_dataname = TRUE
+#' )
+#' isolate(filter_state$get_call())
+#'
+#' isolate(filter_state$set_selected(c(3L, 8L)))
+#' isolate(filter_state$set_keep_na(TRUE))
+#' isolate(filter_state$set_keep_inf(TRUE))
+#' isolate(filter_state$get_call())
+RangeFilterState <- R6::R6Class( # nolint
+  "RangeFilterState",
+  inherit = FilterState,
+  public = list(
+
+    #' @description
+    #' Initialize a `FilterState` object
+    #' @param x (`numeric`)\cr
+    #'   values of the variable used in filter
+    #' @param varname (`character`, `name`)\cr
+    #'   name of the variable
+    #' @param varlabel (`character(1)`)\cr
+    #'   label of the variable (optional).
+    #' @param input_dataname (`name` or `call`)\cr
+    #'   name of dataset where `x` is taken from
+    #' @param use_dataname (`logical(1)`)\cr
+    #' whether to prefix condition calls with `input_dataname$`.
+    #' For example `input_dataname$variable == "selection"`
+    initialize = function(x,
+                          varname,
+                          varlabel = character(0),
+                          input_dataname = NULL,
+                          use_dataname = FALSE) {
+      stopifnot(is.numeric(x))
+      super$initialize(x, varname, varlabel, input_dataname, use_dataname)
+      var_range <- range(x, finite = TRUE)
+      private$set_choices(var_range)
+      self$set_selected(var_range)
+
+      private$histogram_data <- if (sum(is.finite(x)) >= 2) {
+        as.data.frame(
+          stats::density(x, na.rm = TRUE, n = 100)[c("x", "y")] # 100 bins only
+        )
+      } else {
+        data.frame(x = NA_real_, y = NA_real_)
+      }
+      private$inf_count <- sum(is.infinite(x))
+      private$is_integer <- is.integer(x)
+      private$keep_inf <- reactiveVal(value = FALSE)
+
+      return(invisible(self))
+    },
+
+    #' @description
+    #' Returns reproducible condition call for current selection.
+    #' For this class returned call looks like
+    #' `<varname> >= <min value> & <varname> <= <max value>` with
+    #' optional `is.na(<varname>)` and `is.finite(<varname>)`.
+    #' @return (`call`)
+    get_call = function() {
+      filter_call <- call_condition_range(
+        varname = private$get_varname_prefixed(),
+        range = private$selected()
+      )
+
+      filter_call <- private$add_keep_inf_call(filter_call)
+      filter_call <- private$add_keep_na_call(filter_call)
+
+      filter_call
+    },
+
+    #' UI Module for `EmptyFilterState`.
+    #' This UI element contains two values for `min` and `max`
+    #' of the range and two checkboxes whether to keep the `NA` or `Inf`  values.
+    #' @param id (`character(1)`)\cr
+    #'  id of shiny element
+    ui = function(id) {
+      ns <- NS(id)
+      fluidRow(
+        div(
+          class = "filterPlotOverlayRange",
+          plotOutput(ns("plot"), height = "100%")
+        ),
+        optionalSliderInput(
+          inputId = ns("selection"),
+          label = NULL,
+          # `round()` may return a slightly smaller interval e.g. round(c(-0.3, 1.4)) for doubles
+          min = private$choices[[1]],
+          max = private$choices[[2]],
+          value = private$choices,
+          width = "100%",
+          step = if (private$is_integer) 1L
+        ),
+        if (private$inf_count > 0) {
+          checkboxInput(
+            ns("keep_inf"),
+            sprintf("Keep Inf (%s)", private$inf_count),
+            value = FALSE
+          )
+        } else {
+          NULL
+        },
+        if (private$na_count > 0) {
+          checkboxInput(
+            ns("keep_na"),
+            label_keep_na_count(private$na_count),
+            value = FALSE
+          )
+        } else {
+          NULL
+        }
+      )
+    },
+
+    #' @description
+    #' Server module
+    #' @param input (`Shiny`)\cr input object
+    #' @param output (`Shiny`)\cr output object
+    #' @param session (`Shiny`)\cr session object
+    #' @return nothing
+    server = function(input, output, session) {
+      output$plot <- renderPlot(
+        bg = "transparent",
+        height = 25,
+        expr = {
+          ggplot2::ggplot(private$histogram_data) +
+            ggplot2::aes_string(x = "x", y = "y") +
+            ggplot2::geom_area(
+              fill = grDevices::rgb(66 / 255, 139 / 255, 202 / 255),
+              color = NA,
+              alpha = 0.2) +
+            ggplot2::theme_void() +
+            ggplot2::scale_y_continuous(expand = c(0, 0)) +
+            ggplot2::scale_x_continuous(expand = c(0, 0))
+        }
+      )
+
+      private$observers$selection <- observeEvent(
+        ignoreNULL = FALSE, # ignoreNULL: we don't want to ignore NULL when nothing is selected in the `selectInput`,
+        ignoreInit = TRUE, # ignoreInit: should not matter because we set the UI with the desired initial state
+        eventExpr = input$selection,
+        handlerExpr = {
+          selection_state <- input$selection
+          if (!setequal(selection_state, private$selected())) {
+            validate(
+              need(
+                input$selection[1] <= input$selection[2],
+                "Left range boundary should be lower than right"
+              )
+            )
+
+            self$set_selected(
+              value = if_null(
+                selection_state,
+                numeric(0)
+              )
+            )
+          }
+          private$log_state()
+        })
+
+      private$observe_keep_na(input)
+
+      private$observers$keep_inf <- observeEvent(
+        ignoreNULL = FALSE, # ignoreNULL: we don't want to ignore NULL when nothing is selected in the `selectInput`,
+        ignoreInit = TRUE, # ignoreInit: should not matter because we set the UI with the desired initial state
+        eventExpr = input$keep_inf,
+        handlerExpr = {
+          self$set_keep_inf(if_null(input$keep_inf, FALSE))
+          private$log_state()
+        }
+      )
+
+
+    },
+
+    #' @description
+    #' Set if `Inf` should be kept
+    #' @param value (`logical(1)`)\cr
+    #'  Value(s) which come from the filter selection. Value is set in `server`
+    #'  modules after selecting check-box-input in the shiny interface. Values are set to
+    #'  `private$keep_inf` which is reactive.
+    set_keep_inf = function(value) {
+      stopifnot(is_logical_single(value))
+      private$keep_inf(value)
+    }
+  ),
+  private = list(
+    histogram_data = data.frame(),
+    keep_inf = NULL, # because it holds reactiveVal
+    inf_count = integer(0),
+    is_integer = logical(0),
+
+    #' Adds `is.infinite(varname)` before existing condition calls if keep_inf is selected
+    #' returns a call
+    add_keep_inf_call = function(filter_call) {
+      if (isTRUE(private$keep_inf())) {
+        call(
+          "|",
+          call("is.infinite", private$get_varname_prefixed()),
+          filter_call
+        )
+      } else {
+        filter_call
+      }
+    },
+
+    log_state = function() {
+      .log(
+        "State for", self$get_varname(deparse = TRUE),
+        "set to:", paste(private$selected(), collapse = " - "),
+        "NA:", toString(private$keep_na()),
+        "Inf:", toString(private$keep_inf())
+      )
+    },
+
+    validate_selection = function(value) {
+      if (!is.numeric(value)) {
+        stop(
+          sprintf(
+            "value of the selection for `%s` in `%s` should be a numeric",
+            self$get_varname(deparse = TRUE),
+            self$get_dataname(deparse = TRUE)
+          )
+        )
+      }
+      pre_msg <- sprintf(
+        "data '%s', variable '%s': ",
+        self$get_dataname(deparse = TRUE),
+        self$get_varname(deparse = TRUE)
+      )
+      check_in_range(value, private$choices, pre_msg = pre_msg)
+    }
+  )
+)
+
+# ChoicesFilterState --------
+#' @name ChoicesFilterState
+#' @title `FilterState` object for factor or character variable
+#' @docType class
+#'
+#' @description `r lifecycle::badge("experimental")`
+#'
+#' @examples
+#' filter_state <- teal:::init_filter_state(
+#'   c(LETTERS, NA),
+#'   varname = "x",
+#'   input_dataname = as.name("data"),
+#'   use_dataname = TRUE
+#' )
+#' isolate(filter_state$get_call())
+
+#' isolate(filter_state$set_selected("B"))
+#' isolate(filter_state$set_keep_na(TRUE))
+#' isolate(filter_state$get_call())
+ChoicesFilterState <- R6::R6Class( # nolint
+  "ChoicesFilterState",
+  inherit = FilterState,
+  public = list(
+
+    #' @description
+    #' Initialize a `FilterState` object
+    #' @param x (`character` or `factor`)\cr
+    #'   values of the variable used in filter
+    #' @param varname (`character`, `name`)\cr
+    #'   name of the variable
+    #' @param varlabel (`character(1)`)\cr
+    #'   label of the variable (optional).
+    #' @param input_dataname (`name` or `call`)\cr
+    #'   name of dataset where `x` is taken from
+    #' @param use_dataname (`logical(1)`)\cr
+    #' whether to prefix condition calls with `input_dataname$`.
+    #' For example `input_dataname$variable == "selection"`
+    initialize = function(x, varname, varlabel, input_dataname, use_dataname = FALSE) {
+      stopifnot(
+        is.character(x) ||
+          is.factor(x) ||
+          (length(unique(x[!is.na(x)])) < .threshold_slider_vs_checkboxgroup)
+      )
+      super$initialize(x, varname, varlabel, input_dataname, use_dataname)
+
+      add_counts <- if (!is(x, "factor")) {
+        x <- factor(x, levels = as.character(sort(unique(x))))
+        TRUE
+      } else {
+        FALSE
+      }
+      x <- droplevels(x)
+      choices <- levels(x)
+
+      if (add_counts) {
+        names(choices) <- sprintf("%s (%s)", choices, tabulate(x))
+      }
+
+      private$set_choices(as.list(choices))
+      self$set_selected(unname(choices))
+      private$histogram_data <- data.frame(
+        x = levels(x),
+        y = tabulate(x)
+      )
+
+      return(invisible(self))
+    },
+
+    #' @description
+    #' Returns reproducible condition call for current selection.
+    #' For this class returned call looks like
+    #' `<varname> %in%  c(<values selected>)` with
+    #' optional `is.na(<varname>)`.
+    #' @return (`call`)
+    get_call = function() {
+      filter_call <- call_condition_choice(
+        varname = private$get_varname_prefixed(),
+        choice = private$selected()
+      )
+
+      filter_call <- private$add_keep_na_call(filter_call)
+
+      filter_call
+    },
+
+
+    #' @description
+    #' UI Module for `EmptyFilterState`.
+    #' This UI element contains available choices selection and
+    #' checkbox whether to keep or not keep the `NA` values.
+    #' @param id (`character(1)`)\cr
+    #'  id of shiny element
+    ui = function(id) {
+      ns <- NS(id)
+      fluidRow(
+        if (length(private$choices) <= .threshold_slider_vs_checkboxgroup) {
+          div(
+            style = "position: relative;",
+            checkboxGroupInput(
+              ns("selection"),
+              label = NULL,
+              choices =  private$choices,
+              selected = private$choices,
+              width = "100%"
+            )
+          )
+        } else {
+          optionalSelectInput(
+            inputId = ns("selection"),
+            label = icon("fa-plus"),
+            choices = private$choices,
+            selected = private$choices,
+            multiple = TRUE,
+            options = shinyWidgets::pickerOptions(
+              actionsBox = TRUE,
+              liveSearch = (length(private$choices) > 10),
+              noneSelectedText = "Select a value"
+            )
+          )
+        },
+        if (private$na_count > 0) {
+          checkboxInput(
+            ns("keep_na"),
+            label_keep_na_count(private$na_count),
+            value = FALSE
+          )
+        } else {
+          NULL
+        }
+      )
+    },
+
+    #' @description
+    #' Server module
+    #' @param input (`Shiny`)\cr input object
+    #' @param output (`Shiny`)\cr output object
+    #' @param session (`Shiny`)\cr session object
+    #' @return nothing
+    server = function(input, output, session) {
+      output$plot <- renderPlot(
+        bg = "transparent",
+        expr = {
+          if (length(filter_state$choices) <= .threshold_slider_vs_checkboxgroup) {
+            # Proportional
+            data <- filter_state$histogram_data
+            data$y <- rev(data$y / sum(data$y)) # we have to reverse because the histogram is turned by 90 degrees
+            data$x <- seq_len(nrow(data)) # to prevent ggplot reordering columns using the characters in x column
+            ggplot2::ggplot(data) +
+              # sort factor so that it reflects checkbox order
+              ggplot2::aes_string(x = "x", y = "y") +
+              ggplot2::geom_col(
+                width = 0.95,
+                fill = grDevices::rgb(66 / 255, 139 / 255, 202 / 255),
+                color = NA,
+                alpha = 0.2
+              ) +
+              ggplot2::coord_flip() +
+              ggplot2::theme_void() +
+              ggplot2::scale_x_discrete(expand = c(0, 0)) +
+              ggplot2::scale_y_continuous(expand = c(0, 0), limits = c(0, 1))
+          }
+        }
+      )
+
+
+      private$observers$selection <- observeEvent(
+        ignoreNULL = FALSE, # ignoreNULL: we don't want to ignore NULL when nothing is selected in the `selectInput`,
+        ignoreInit = TRUE, # ignoreInit: should not matter because we set the UI with the desired initial state
+        eventExpr = input$selection,
+        handlerExpr = {
+          self$set_selected(if_null(input$selection, character(0)))
+          private$log_state()
+        }
+      )
+      private$observe_keep_na(input)
+
+      return(NULL)
+    }
+  ),
+  private = list(
+    histogram_data = data.frame(),
+    log_state = function() {
+      .log(
+        "State for", self$get_varname(deparse = TRUE),
+        "set to:",
+        if (length(private$selected()) > 5) {
+          paste0(toString(private$selected()[1:5]), ", ...")
+        } else {
+          toString(private$selected())
+        },
+        "NA:", toString(private$keep_na())
+      )
+    },
+    validate_selection = function(value) {
+      if (!is.character(value)) {
+        stop(
+          sprintf(
+            "value of the selection for `%s` in `%s` should be a character",
+            self$get_varname(deparse = TRUE),
+            self$get_dataname(deparse = TRUE)
+          )
+        )
+      }
+      pre_msg <- sprintf(
+        "data '%s', variable '%s': ",
+        self$get_dataname(deparse = TRUE),
+        self$get_varname(deparse = TRUE)
+      )
+      check_in_subset(value, private$choices, pre_msg = pre_msg)
+    }
+  )
+)
+
+# DateFilterState ---------
+#' @name DateFilterState
+#' @title `FilterState` object for Date variable
+#' @docType class
+#'
+#' @description `r lifecycle::badge("experimental")`
+#'
+#' @examples
+#' filter_state <- teal:::DateFilterState$new(
+#'   c(Sys.Date() + seq(1:10), NA),
+#'   varname = "x",
+#'   input_dataname = as.name("data"),
+#'   use_dataname = TRUE
+#' )
+#' isolate(filter_state$get_call())
+#'
+#' isolate(filter_state$set_selected(c(Sys.Date() + 3L, Sys.Date() + 8L)))
+#' isolate(filter_state$set_keep_na(TRUE))
+#' isolate(filter_state$get_call())
+DateFilterState <- R6::R6Class( # nolint
+  "DateFilterState",
+  inherit = FilterState,
+  public = list(
+
+    #' @description
+    #' Initialize a `FilterState` object
+    #' @param x (`Date`)\cr
+    #'   values of the variable used in filter
+    #' @param varname (`character`, `name`)\cr
+    #'   name of the variable
+    #' @param varlabel (`character(1)`)\cr
+    #'   label of the variable (optional).
+    #' @param input_dataname (`name` or `call`)\cr
+    #'   name of dataset where `x` is taken from
+    #' @param use_dataname (`logical(1)`)\cr
+    #' whether to prefix condition calls with `input_dataname$`.
+    #' For example `input_dataname$variable == "selection"`
+    initialize = function(x,
+                          varname,
+                          varlabel = character(0),
+                          input_dataname = NULL,
+                          use_dataname = FALSE) {
+      stopifnot(is(x, "Date"))
+      super$initialize(x, varname, varlabel, input_dataname, use_dataname)
+
+      var_range <- range(x, finite = TRUE)
+      private$set_choices(var_range)
+      self$set_selected(var_range)
+
+      return(invisible(self))
+    },
+
+    #' @description
+    #' Returns reproducible condition call for current selection.
+    #' For this class returned call looks like
+    #' `<varname> >= <min value> & <varname> <= <max value>` with
+    #' optional `is.na(<varname>)`.
+    #' @return (`call`)
+    get_call = function() {
+      filter_call <- call_condition_range_date(
+        varname = private$get_varname_prefixed(),
+        range = private$selected()
+      )
+
+      filter_call <- private$add_keep_na_call(filter_call)
+
+      filter_call
+    },
+
+    #' @description
+    #' UI Module for `EmptyFilterState`.
+    #' This UI element contains two date selections for `min` and `max`
+    #' of the range and a checkbox whether to keep the `NA` values.
+    #' @param id (`character(1)`)\cr
+    #'  id of shiny element
+    ui = function(id) {
+      ns <- NS(id)
+      fluidRow(
+        div(
+          actionButton(
+            inputId = ns("start_date_reset"),
+            label = NULL,
+            icon = icon("undo fa-xs"),
+            style = "float: left; padding: 0; padding-top: 4px; padding-bottom: 5px; width: 10%;"
+          ),
+          actionButton(
+            inputId = ns("end_date_reset"),
+            label = NULL,
+            icon = icon("undo fa-xs"),
+            style = "float: right; padding: 0; padding-top: 4px; padding-bottom: 5px; width: 10%;"
+          ),
+          div(
+            style = "margin: auto; width: 80%;",
+            dateRangeInput(
+              inputId = ns("selection"),
+              label = NULL,
+              start = private$choices[1],
+              end = private$choices[2],
+              min = private$choices[1],
+              max = private$choices[2]
+            )
+          )
+        ),
+        if (private$na_count > 0) {
+          checkboxInput(
+            ns("keep_na"),
+            label_keep_na_count(private$na_count),
+            value = FALSE
+          )
+        } else {
+          NULL
+        }
+      )
+    },
+
+    #' @description
+    #' Server module
+    #' @param input (`Shiny`)\cr input object
+    #' @param output (`Shiny`)\cr output object
+    #' @param session (`Shiny`)\cr session object
+    #' @return nothing
+    server = function(input, output, session) {
+      private$observers$selection <- observeEvent(
+        ignoreNULL = FALSE, # ignoreNULL: we don't want to ignore NULL when nothing is selected in the `selectInput`,
+        ignoreInit = TRUE, # ignoreInit: should not matter because we set the UI with the desired initial state
+        eventExpr = input$selection,
+        handlerExpr = {
+          start_date <- input$selection[1]
+          end_date <- input$selection[2]
+
+          self$set_selected(c(start_date, end_date))
+          private$log_state()
+        }
+      )
+
+      private$observe_keep_na(input)
+
+      private$observers$reset1 <- observeEvent(input$start_date_reset, {
+        updateDateRangeInput(
+          session = session,
+          inputId = "selection",
+          start = private$choices[1]
+        )
+      })
+
+      private$observers$reset2 <- observeEvent(input$end_date_reset, {
+        updateDateRangeInput(
+          session = session,
+          inputId = "selection",
+          end = private$choices[2]
+        )
+      })
+
+      return(NULL)
+    }
+  ),
+  private = list(
+    log_state = function() {
+      .log(
+        "State for", self$get_varname(deparse = TRUE),
+        "set to:", paste(private$selected(), collapse = " - "),
+        "NA:", toString(private$keep_na())
+      )
+    },
+
+    validate_selection = function(value) {
+      if (!is(value, "Date")) {
+        stop(
+          sprintf(
+            "value of the selection for `%s` in `%s` should be a Date",
+            self$get_varname(deparse = TRUE),
+            self$get_dataname(deparse = TRUE)
+          )
+        )
+      }
+      pre_msg <- sprintf(
+        "dataset '%s', variable '%s': ",
+        self$get_dataname(deparse = TRUE),
+        self$get_varname(deparse = TRUE)
+      )
+      check_in_range(value, private$choices, pre_msg = pre_msg)
+    }
+  )
+)
+
+
+# DatetimeFilterState ---------
+#' @rdname DatetimeFilterState
+#' @title `FilterState` object for `POSIXct` variable
+#' @docType class
+#'
+#' @description `r lifecycle::badge("experimental")`
+#'
+#' @examples
+#' filter_state <- teal:::init_filter_state(
+#'   c(Sys.time() + seq(0, by = 3600, length.out = 10), NA),
+#'   varname = "x",
+#'   input_dataname = as.name("data"),
+#'   use_dataname = TRUE
+#' )
+#'
+#' isolate(filter_state$get_call())
+#' isolate(filter_state$set_selected(c(Sys.time() + 3L, Sys.time() + 8L)))
+#' isolate(filter_state$set_keep_na(TRUE))
+#' isolate(filter_state$get_call())
+DatetimeFilterState <- R6::R6Class( # nolint
+  "DatetimeFilterState",
+  inherit = FilterState,
+  public = list(
+
+    #' @description
+    #' Initialize a `FilterState` object
+    #' @param x (`POSIXct` or `POSIXlt`)\cr
+    #'   values of the variable used in filter
+    #' @param varname (`character`, `name`)\cr
+    #'   name of the variable
+    #' @param varlabel (`character(1)`)\cr
+    #'   label of the variable (optional).
+    #' @param input_dataname (`name` or `call`)\cr
+    #'   name of dataset where `x` is taken from
+    #' @param use_dataname (`logical(1)`)\cr
+    #'   whether to prefix condition calls with `input_dataname$`.
+    #'   For example `input_dataname$variable == "selection"`
+    initialize = function(x,
+                          varname,
+                          varlabel = character(0),
+                          input_dataname = NULL,
+                          use_dataname = FALSE) {
+      stopifnot(is(x, "POSIXct") || is(x, "POSIXlt"))
+      super$initialize(x, varname, varlabel, input_dataname, use_dataname)
+
+      var_range <- range(x, finite = TRUE)
+      private$set_choices(var_range)
+      self$set_selected(var_range)
+      private$timezone <- Sys.timezone()
+      return(invisible(self))
+    },
+
+    #' @description
+    #' Returns reproducible condition call for current selection.
+    #' For this class returned call looks like
+    #' `<varname> >= as.POSIXct(<min>, tz = <timezone>) & <varname> <= <max>, tz = <timezone>)`
+    #' with optional `is.na(<varname>)`.
+    get_call = function() {
+      filter_call <- call_condition_range_posixct(
+        varname = private$get_varname_prefixed(),
+        range = private$selected(),
+        timezone = private$timezone
+      )
+
+      filter_call <- private$add_keep_na_call(filter_call)
+
+      filter_call
+    },
+
+    #' @description
+    #' UI Module for `EmptyFilterState`.
+    #' This UI element contains two date-time selections for `min` and `max`
+    #' of the range and a checkbox whether to keep the `NA` values.
+    #' @param id (`character(1)`)\cr
+    #'  id of shiny element
+    ui = function(id) {
+      ns <- NS(id)
+      fluidRow(
+        div(
+          actionButton(
+            inputId = ns("start_date_reset"),
+            label = NULL,
+            icon = icon("undo fa-xs"),
+            style = "float: left; padding: 0; padding-top: 4px; padding-bottom: 5px; width: 10%;"
+          ),
+          actionButton(
+            inputId = ns("end_date_reset"),
+            label = NULL,
+            icon = icon("undo fa-xs"),
+            style = "float: right; padding: 0; padding-top: 4px; padding-bottom: 5px; width: 10%;"
+          ),
+          div(
+            class = "input-daterange input-group",
+            style = "margin: auto; width: 80%;",
+            div(
+              style = "float: left; width: 100%;",
+              {
+                x <- shinyWidgets::airDatepickerInput(
+                  inputId = ns("selection_start"),
+                  value = private$choices[1],
+                  startView = private$choices[1],
+                  timepicker = TRUE,
+                  minDate = private$choices[1],
+                  maxDate = private$choices[2],
+                  update_on = "close",
+                  addon = "none",
+                  position = "bottom right"
+                )
+                x$children[[2]]$attribs <- c(x$children[[2]]$attribs, list(class = " input-sm"))
+                x
+              }
+            ),
+            span(
+              class = "input-group-addon",
+              "to",
+              title = "Times are displayed in the local timezone and are converted to UTC in the analysis"
+            ),
+            div(
+              style = "float: right; width: 100%;",
+              {
+                x <- shinyWidgets::airDatepickerInput(
+                  inputId = ns("selection_end"),
+                  value = private$choices[2],
+                  startView = private$choices[2],
+                  timepicker = TRUE,
+                  minDate = private$choices[1],
+                  maxDate = private$choices[2],
+                  update_on = "close",
+                  addon = "none",
+                  position = "bottom right"
+                )
+                x$children[[2]]$attribs <- c(x$children[[2]]$attribs, list(class = " input-sm"))
+                x
+              }
+            )
+          )
+        ),
+        if (private$na_count > 0) {
+          checkboxInput(
+            ns("keep_na"),
+            label_keep_na_count(private$na_count),
+            value = FALSE
+          )
+        } else {
+          NULL
+        }
+      )
+    },
+
+    #' @description
+    #' Server module
+    #' @param input (`Shiny`)\cr input object
+    #' @param output (`Shiny`)\cr output object
+    #' @param session (`Shiny`)\cr session object
+    #' @return nothing
+    server = function(input, output, session) {
+      get_client_timezone(ns = session$ns)
+      private$timezone <- input$timezone
+
+      private$observers$selection <- observeEvent(
+        ignoreNULL = FALSE, # ignoreNULL: we don't want to ignore NULL when nothing is selected in the `selectInput`,
+        ignoreInit = TRUE, # ignoreInit: should not matter because we set the UI with the desired initial state
+        eventExpr = {
+          input$selection_start
+          input$selection_end
+        },
+        handlerExpr = {
+          print("selected observer")
+          start_date <- input$selection_start
+          end_date <- input$selection_end
+
+          if (start_date < private$choices[1]) {
+            start_date <- private$choices[1]
+          }
+
+          if (end_date > private$choices[2]) {
+            end_date <- private$choices[2]
+          }
+
+
+          self$set_selected(c(start_date, end_date))
+          private$log_state()
+        }
+      )
+
+
+      private$observe_keep_na(input)
+
+      private$observers$reset1 <- observeEvent(input$start_date_reset, {
+        shinyWidgets::updateAirDateInput(
+          session = session,
+          inputId = "selection_start",
+          value = private$choices[1]
+        )
+      })
+      private$observers$reset2 <- observeEvent(input$end_date_reset, {
+        print("reset start observer")
+        print(as.numeric(private$choices))
+        shinyWidgets::updateAirDateInput(
+          session = session,
+          inputId = "selection_end",
+          value = private$choices[2]
+        )
+      })
+
+      return(NULL)
+    }
+  ),
+  private = list(
+    timezone = character(0),
+
+    log_state = function() {
+      .log(
+        "State for", self$get_varname(deparse = TRUE),
+        "set to:", paste(private$selected(), collapse = " - "),
+        "NA:", toString(private$keep_na())
+      )
+    },
+
+    validate_selection = function(value) {
+      if (!(is(value, "POSIXct") || is(value, "POSIXlt"))) {
+        stop(
+          sprintf(
+            "value of the selection for `%s` in `%s` should be a POSIXct or POSIXlt",
+            self$get_varname(deparse = TRUE),
+            self$get_dataname(deparse = TRUE)
+          )
+        )
+      }
+
+      pre_msg <- sprintf(
+        "dataset '%s', variable '%s': ",
+        self$get_dataname(deparse = TRUE),
+        self$get_varname(deparse = TRUE)
+      )
+      check_in_range(value, private$choices, pre_msg = pre_msg)
+    }
+  )
+)

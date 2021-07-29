@@ -11,10 +11,12 @@ filtered_data_new <- function(x) {
   UseMethod("filtered_data_new")
 }
 
+#' @export
 filtered_data_new.RelationalData <- function(x) { # nolintr # nousage
   FilteredData$new()
 }
 
+#' @export
 filtered_data_new.CDISCData <- function(x) { # nolintr # nousage
   CDISCFilteredData$new()
 }
@@ -33,16 +35,15 @@ filtered_data_set <- function(data, datasets) { # nolintr # nousage
   UseMethod("filtered_data_set", data)
 }
 
+#' @export
 filtered_data_set.RelationalData <- function(data, datasets) { # nolintr # nousage
 
   datasets$set_code(data$get_code_class())
-
   for (dataset in data$get_datasets()) {
-    dataname <- get_dataname(dataset)
-    raw_dataset <- get_raw_data(dataset)
-    datasets$set_data(dataname, raw_dataset)
-    datasets$set_data_attrs(dataname, get_attrs(dataset))
-    datasets$set_data_attr(dataname, "check", data$get_check_result())
+    datasets$set_dataset(
+      dataset,
+      join_key_set = data$get_join_keys()$get(dataset_1 = dataset$get_dataname())
+    )
   }
 
   datasets$set_join_keys(data$get_join_keys())
@@ -64,9 +65,10 @@ filtered_data_set_filters <- function(datasets, filter) {
     all(names(filter) %in% datasets$datanames())
   )
 
-  Map(function(dataname, filters_for_dataname) {
-    datasets$set_filter_state(dataname, state = filters_for_dataname)
-  }, names(filter), filter)
+  if (length(filter) > 0) {
+    warning("This function needs to be fixed. See https://github.roche.com/NEST/teal/issues/1248")
+  }
+
 
   return(invisible(NULL))
 }

@@ -64,7 +64,18 @@ MAEDataset <- R6::R6Class( # nolint
       private$.dim <- c(private$.nrow, private$.ncol)
       private$.colnames <- colnames(SummarizedExperiment::colData(x))
       private$.rownames <- rownames(SummarizedExperiment::colData(x))
-      private$.col_labels <- private$.colnames
+      private$.col_labels <- vapply(
+        X = SummarizedExperiment::colData(x),
+        FUN = function(x) {
+          label <- attr(x, "label")
+          if (length(label) != 1) {
+            NA_character_
+          } else {
+            label
+          }
+        },
+        FUN.VALUE = character(1)
+      )
 
       private$set_dataname(dataname)
       self$set_vars(vars)
