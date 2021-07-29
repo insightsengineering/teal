@@ -171,14 +171,14 @@ FilteredDataset <- R6::R6Class( # nolint
 
     #' @description
     #' Get filter states
-    #' @param queue_name (`character(1)`, `character(0)`)\cr
-    #'   name of the `private$filter_states` list element where `FilterStates` is kept.
+    #' @param id (`character(1)`, `character(0)`)\cr
+    #'   id of the `private$filter_states` list element where `FilterStates` is kept.
     #' @return `FilterStates` or `list` of `FilterStates` objects.
-    get_filter_states = function(queue_name = character(0)) {
-      if (is_empty(queue_name)) {
+    get_filter_states = function(id = character(0)) {
+      if (is_empty(id)) {
         private$filter_states
       } else {
-        private$filter_states[[queue_name]]
+        private$filter_states[[id]]
       }
     },
 
@@ -301,6 +301,7 @@ FilteredDataset <- R6::R6Class( # nolint
         is_character_single(dataname)
       )
       ns <- NS(id)
+      if_multiple_filter_states <- length(self$get_filter_states()) > 1
       span(
         id = id,
         div(
@@ -328,7 +329,10 @@ FilteredDataset <- R6::R6Class( # nolint
               lapply(
                 names(self$get_filter_states()),
                 function(x) {
-                  self$get_filter_states(queue_name = x)$ui(id = ns(x))
+                  tagList(
+                    `if`(if_multiple_filter_states, tagList(HTML("&#9658;"), tags$label(tags$code(x))), NULL),
+                    self$get_filter_states(id = x)$ui(id = ns(x))
+                  )
                 }
               )
             )
@@ -396,12 +400,13 @@ FilteredDataset <- R6::R6Class( # nolint
     # Adds `FilterStates` to the `private$filter_states`.
     # `FilterStates` is added once for each element of the dataset.
     # @param filter_states (`FilterStates`)
-    # @param queue_name (`character(1)`)
-    add_filter_states = function(filter_states, queue_name) {
+    # @param id (`character(1)`)
+    add_filter_states = function(filter_states, id) {
       stopifnot(is(filter_states, "FilterStates"))
-      stopifnot(is_character_single(queue_name))
-      list <- setNames(list(filter_states), queue_name)
-      private$filter_states <- c(self$get_filter_states(), list)
+      stopifnot(is_character_single(id))
+
+      x <- setNames(list(filter_states), id)
+      private$filter_states <- c(self$get_filter_states(), x)
     },
 
     # @description
@@ -455,7 +460,7 @@ DefaultFilteredDataset <- R6::R6Class( # nolint
           varlabels = self$get_varlabels(),
           keys = self$get_keys()
         ),
-        queue_name = "filter"
+        id = "filter"
       )
       return(invisible(self))
     },
@@ -490,9 +495,12 @@ DefaultFilteredDataset <- R6::R6Class( # nolint
     #' @return function - shiny UI module
     ui_add_filter_state = function(id) {
       ns <- NS(id)
-      self$get_filter_states(queue_name = "filter")$ui_add_filter_state(
-        id = ns("filter"),
-        data = get_raw_data(self$get_dataset())
+      tagList(
+        tags$label("Add", tags$code(self$get_dataname()), "filter"),
+        self$get_filter_states(id = "filter")$ui_add_filter_state(
+          id = ns("filter"),
+          data = get_raw_data(self$get_dataset())
+        )
       )
     },
 
@@ -511,7 +519,7 @@ DefaultFilteredDataset <- R6::R6Class( # nolint
     srv_add_filter_state = function(input, output, session) {
       data <- get_raw_data(self$get_dataset())
       callModule(
-        module = self$get_filter_states(queue_name = "filter")$srv_add_filter_state,
+        module = self$get_filter_states(id = "filter")$srv_add_filter_state,
         id = "filter",
         data = data
       )
@@ -632,7 +640,7 @@ MAEFilteredDataset <- R6::R6Class( # nolint
       raw_data <- get_raw_data(dataset)
       experiment_names <- names(raw_data)
 
-      # subsetting by patient means subsetting by colData(MAE)
+      # subsetting by subjects means subsetting by colData(MAE)
       private$add_filter_states(
         filter_states = init_filter_states(
           data = raw_data,
@@ -641,7 +649,7 @@ MAEFilteredDataset <- R6::R6Class( # nolint
           varlabels = self$get_varlabels(),
           keys = self$get_keys()
         ),
-        queue_name = "patient"
+        id = "subjects"
       )
 
       # elements of the list (experiments) are unknown
@@ -662,7 +670,7 @@ MAEFilteredDataset <- R6::R6Class( # nolint
               input_dataname = input_dataname,
               output_dataname = input_dataname
             ),
-            queue_name = experiment_name
+            id = experiment_name
           )
 
         }
@@ -717,23 +725,29 @@ MAEFilteredDataset <- R6::R6Class( # nolint
     #' @return function - shiny UI module
     ui_add_filter_state = function(id) {
       ns <- NS(id)
-      dataname <- self$get_dataname()
       data <- get_raw_data(self$get_dataset())
-      col_data <- SummarizedExperiment::colData(data)
       experiment_names <- names(data)
 
       div(
-        self$get_filter_states("patient")$ui_add_filter_state(
-          ns("patient"),
+        tags$label("Add", tags$code(self$get_dataname()), "filter"),
+        br(),
+        HTML("&#9658;"),
+        tags$label("Add subjects filter"),
+        self$get_filter_states("subjects")$ui_add_filter_state(
+          id = ns("subjects"),
           data = data
         ),
         tagList(
           lapply(
             experiment_names,
             function(experiment_name) {
-              self$get_filter_states(experiment_name)$ui_add_filter_state(
-                ns(experiment_name),
-                data = data[[experiment_name]]
+              tagList(
+                HTML("&#9658;"),
+                tags$label("Add", tags$code(experiment_name), "filter"),
+                self$get_filter_states(experiment_name)$ui_add_filter_state(
+                  id = ns(experiment_name),
+                  data = data[[experiment_name]]
+                )
               )
             }
           )
@@ -757,8 +771,8 @@ MAEFilteredDataset <- R6::R6Class( # nolint
     srv_add_filter_state = function(input, output, session) {
       data <- get_raw_data(self$get_dataset())
       callModule(
-        module = self$get_filter_states("patient")$srv_add_filter_state,
-        id = "patient",
+        module = self$get_filter_states("subjects")$srv_add_filter_state,
+        id = "subjects",
         data = data # MultiAssayExperiment
       )
 

@@ -555,17 +555,13 @@ DFFilterStates <- R6::R6Class( # nolint
     ui_add_filter_state = function(id, data) {
       stopifnot(is_character_single(id))
       stopifnot(is.data.frame(data))
+
       ns <- NS(id)
 
       if (nrow(data) == 0) {
         div(sprintf("data '%s' has zero rows", deparse(private$input_dataname)))
       } else {
         div(
-          span(
-            tags$label("Add"),
-            tags$code(deparse(private$input_dataname)),
-            tags$label("filter")
-          ),
           optionalSelectInput(
             ns("var_to_add"),
             choices = NULL,
@@ -745,25 +741,18 @@ MAEFilterStates <- R6::R6Class( # nolint
       stopifnot(is(data, "MultiAssayExperiment"))
 
       ns <- NS(id)
+
       if (nrow(SummarizedExperiment::colData(data)) == 0) {
         div(sprintf("colData of '%s' has zero rows", deparse(private$input_dataname)))
       } else {
-        div(
-          span(
-            tags$label("Add"),
-            tags$code(deparse(private$input_dataname)),
-            tags$label("filter")
-          ),
-          optionalSelectInput(
-            ns("var_to_add"),
-            choices = NULL,
-            options = shinyWidgets::pickerOptions(
-              liveSearch = TRUE,
-              noneSelectedText = "Select colData variable to filter"
-            )
+        optionalSelectInput(
+          ns("var_to_add"),
+          choices = NULL,
+          options = shinyWidgets::pickerOptions(
+            liveSearch = TRUE,
+            noneSelectedText = "Select colData variable to filter"
           )
         )
-
       }
     },
 
@@ -912,6 +901,7 @@ SEFilterStates <- R6::R6Class( # nolint
     ui_add_filter_state = function(id, data) {
       stopifnot(is_character_single(id))
       stopifnot(is(data, "SummarizedExperiment"))
+
       ns <- NS(id)
 
       row_input <- if (nrow(SummarizedExperiment::rowData(data)) == 0) {
@@ -942,11 +932,6 @@ SEFilterStates <- R6::R6Class( # nolint
       }
 
       div(
-        span(
-          tags$label("Add"),
-          tags$code(deparse(private$input_dataname)),
-          tags$label("filter")
-        ),
         row_input,
         col_input
       )
@@ -1137,34 +1122,18 @@ MatrixFilterStates <- R6::R6Class( # nolint
 
       ns <- NS(id)
 
-      input <- if (nrow(data) == 0) {
+      if (nrow(data) == 0) {
         div(sprintf("data '%s' has zero rows", deparse(private$input_dataname)))
       } else {
-        div(
-          span(
-            tags$label("Add"),
-            tags$code(deparse(private$input_dataname)),
-            tags$label("filter")
-          ),
-          optionalSelectInput(
-            ns("var_to_add"),
-            choices = NULL,
-            options = shinyWidgets::pickerOptions(
-              liveSearch = TRUE,
-              noneSelectedText = "Select variable to filter"
-            )
+        optionalSelectInput(
+          ns("var_to_add"),
+          choices = NULL,
+          options = shinyWidgets::pickerOptions(
+            liveSearch = TRUE,
+            noneSelectedText = "Select variable to filter"
           )
         )
       }
-
-      div(
-        span(
-          tags$label("Add"),
-          tags$code(deparse(private$input_dataname)),
-          tags$label("filter")
-        ),
-        input
-      )
     },
 
     #' @description

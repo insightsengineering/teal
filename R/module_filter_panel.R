@@ -86,8 +86,8 @@ ui_filter_panel <- function(id, datasets, datanames) {
           lapply(
             datanames,
             function(dataname) {
-              dataset_filters <- datasets$get_filtered_datasets(dataname)
-              dataset_filters$ui(
+              fdataset <- datasets$get_filtered_datasets(dataname)
+              fdataset$ui(
                 id = ns(sprintf("%s_filters", dataname))
               )
             }
@@ -122,14 +122,12 @@ ui_filter_panel <- function(id, datasets, datanames) {
           lapply(
             datanames,
             function(dataname) {
-              dataset_filters <- datasets$get_filtered_datasets(dataname)
+              fdataset <- datasets$get_filtered_datasets(dataname)
               id <- ns(sprintf("add_%s_filter", dataname))
               # add span with same id to show / hide
-              return(
-                span(
-                  id = id,
-                  dataset_filters$ui_add_filter_state(id)
-                )
+              span(
+                id = id,
+                fdataset$ui_add_filter_state(id)
               )
             }
           )
