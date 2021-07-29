@@ -677,7 +677,7 @@ test_that("code_dataset_connector - library calls", {
 testthat::test_that("DatasetConnector mutate method with delayed logic", {
   test_ds1 <- Dataset$new("head_mtcars", head(mtcars), code = "head_mtcars <- head(mtcars)")
   test_ds2 <- Dataset$new("head_iris", head(iris), code = "head_iris <- head(iris)")
-  expect_true(all(test_ds1$check(), test_ds2$check()))
+  testthat::expect_true(all(test_ds1$check(), test_ds2$check()))
 
   pull_fun <- callable_function(data.frame)
   pull_fun$set_args(args = list(head_letters = head(letters)))
@@ -687,14 +687,14 @@ testthat::test_that("DatasetConnector mutate method with delayed logic", {
   pull_fun2$set_args(args = list(head_integers = 1:6))
   t_dc2 <- dataset_connector("test_dc2", pull_fun2, vars = list(test_ds2 = test_ds2))
 
-  expect_false(t_dc$is_mutate_delayed())
+  testthat::expect_false(t_dc$is_mutate_delayed())
   # mutation is delayed when data hasn't been loaded/pulled yet.
-  expect_message(
+  testthat::expect_message(
     mutate_dataset(t_dc, code = "test_dc$tail_letters <- tail(letters)"),
     "Mutation is delayed"
   )
-  expect_message(
-    expect_equal(
+  testthat::expect_message(
+    testthat::expect_equal(
       pretty_code_string(t_dc$get_code()),
       c("head_mtcars <- head(mtcars)",
         "test_ds1 <- head_mtcars",
@@ -704,13 +704,13 @@ testthat::test_that("DatasetConnector mutate method with delayed logic", {
     ),
     regexp = "The output includes mutate code that is delayed"
   )
-  expect_false(t_dc$is_pulled())
+  testthat::expect_false(t_dc$is_pulled())
   load_dataset(t_dc)
-  expect_false(t_dc$is_mutate_delayed())
-  expect_true(all(c("head_letters", "tail_letters") %in% names(get_raw_data(t_dc))))
+  testthat::expect_false(t_dc$is_mutate_delayed())
+  testthat::expect_true(all(c("head_letters", "tail_letters") %in% names(get_raw_data(t_dc))))
 
-  expect_silent(
-    expect_equal(
+  testthat::expect_silent(
+    testthat::expect_equal(
       pretty_code_string(t_dc$get_code()),
       c("head_mtcars <- head(mtcars)",
         "test_ds1 <- head_mtcars",
@@ -721,13 +721,13 @@ testthat::test_that("DatasetConnector mutate method with delayed logic", {
   )
 
   # mutation is delayed because t_dc2 hasn't been loaded yet
-  expect_message(
+  testthat::expect_message(
     mutate_dataset(t_dc, code = "test_dc$head_integers <- test_dc2$head_integers", vars = list(t_dc2 = t_dc2)),
     "Mutation is delayed"
   )
-  expect_true(t_dc$is_mutate_delayed())
-  expect_message(
-    expect_equal(
+  testthat::expect_true(t_dc$is_mutate_delayed())
+  testthat::expect_message(
+    testthat::expect_equal(
       pretty_code_string(t_dc$get_code()),
       c("head_mtcars <- head(mtcars)",
         "test_ds1 <- head_mtcars",
@@ -743,13 +743,13 @@ testthat::test_that("DatasetConnector mutate method with delayed logic", {
     "The output includes mutate code that is delayed"
   )
   # mutation is delayed even, though it could be executed, because it had already been delayed
-  expect_message(
+  testthat::expect_message(
     mutate_dataset(t_dc, code = "test_dc$one <- 1"),
     "Mutation is delayed"
   )
-  expect_true(t_dc$is_mutate_delayed())
-  expect_message(
-    expect_equal(
+  testthat::expect_true(t_dc$is_mutate_delayed())
+  testthat::expect_message(
+    testthat::expect_equal(
       pretty_code_string(t_dc$get_code()),
       c("head_mtcars <- head(mtcars)",
         "test_ds1 <- head_mtcars",
@@ -771,130 +771,131 @@ testthat::test_that("DatasetConnector mutate method with delayed logic", {
   # "head_letters" and "tail_letters" columns had already been executed
   # "head_integers" and "one" columns are delayed
   load_dataset(t_dc)
-  expect_true(all(c("head_letters", "tail_letters", "head_integers", "one") %in% names(get_raw_data(t_dc))))
-  expect_false(t_dc$is_mutate_delayed())
+  testthat::expect_true(all(c("head_letters", "tail_letters", "head_integers", "one") %in% names(get_raw_data(t_dc))))
+  testthat::expect_false(t_dc$is_mutate_delayed())
 
   # mutate should again be eager
   mutate_dataset(t_dc2, code = "test_dc2$five <- 5")
-  expect_equal(get_raw_data(t_dc2)$five, rep(5, 6))
+  testthat::expect_equal(get_raw_data(t_dc2)$five, rep(5, 6))
 
   mutate_dataset(t_dc, code = "test_dc$five <- test_dc2$five", vars = list(t_dc2 = t_dc2))
-  expect_equal(get_raw_data(t_dc)$five, rep(5, 6))
-  expect_false(t_dc$is_mutate_delayed())
+  testthat::expect_equal(get_raw_data(t_dc)$five, rep(5, 6))
+  testthat::expect_false(t_dc$is_mutate_delayed())
 
   # multiple lines of identical code
   mutate_dataset(t_dc, code = "test_dc$five <- 2 * test_dc$five")
   mutate_dataset(t_dc, code = "test_dc$five <- 2 * test_dc$five")
   mutate_dataset(t_dc, code = "test_dc$five <- 2 * test_dc$five")
-  expect_equal(get_raw_data(t_dc)$five, rep(40, 6))
-  expect_false(t_dc$is_mutate_delayed())
+  testthat::expect_equal(get_raw_data(t_dc)$five, rep(40, 6))
+  testthat::expect_false(t_dc$is_mutate_delayed())
 
   # multi layer dependencies
   pull_fun3 <- callable_function(data.frame)
   pull_fun3$set_args(args = list(neg_integers = - (1:6)))
   t_dc3 <- dataset_connector("test_dc3", pull_fun3)
 
-  expect_message(
+  testthat::expect_message(
     mutate_dataset(t_dc2, code = "test_dc2$neg_integers <- test_dc3$neg_integers", vars = list(t_dc3 = t_dc3)),
     regexp = "Mutation is delayed"
   )
 
   # t_dc doesn't know that t_dc2 is delayed
-  expect_false(t_dc$is_mutate_delayed())
+  testthat::expect_false(t_dc$is_mutate_delayed())
   # delayed, even though the column is ready, because t_dc2 is delayed by t_dc3
-  expect_message(
+  testthat::expect_message(
     mutate_dataset(t_dc, code = "test_dc$six <- test_dc$five + 1", vars = list(t_dc2 = t_dc2)),
     regexp = "Mutation is delayed"
   )
-  expect_message(
-    expect_true(
+  testthat::expect_message(
+    testthat::expect_true(
       all(c("test_dc2$neg_integers <- test_dc3$neg_integers", "test_dc$six <- test_dc$five + 1") %in%
         pretty_code_string(t_dc$get_code()))
     ),
     "The output includes mutate code that is delayed"
   )
   # now it does know
-  expect_true(t_dc$is_mutate_delayed())
+  testthat::expect_true(t_dc$is_mutate_delayed())
   # stilled delayed, even though it dependds on itself, because it had already been delayed
-  expect_message(
+  testthat::expect_message(
     mutate_dataset(t_dc, code = "test_dc$seven <- 7"),
     regexp = "Mutation is delayed"
   )
-  expect_message(
-    expect_true(
+  testthat::expect_message(
+    testthat::expect_true(
       "test_dc$seven <- 7" %in% pretty_code_string(t_dc$get_code()),
     ),
     "The output includes mutate code that is delayed"
   )
-  expect_true(t_dc$is_mutate_delayed())
+  testthat::expect_true(t_dc$is_mutate_delayed())
   # confirming that mutation has not happened
-  expect_message(
-    expect_false(any(c("six", "seven") %in% names(get_raw_data(t_dc)))),
+  testthat::expect_message(
+    testthat::expect_false(any(c("six", "seven") %in% names(get_raw_data(t_dc)))),
     regexp = "There are mutate code that are delayed. The dataset in the output does not reflect these code."
   )
   load_dataset(t_dc3)
 
   # current state
-  expect_message(
-    expect_true(all(names(get_raw_data(t_dc)) %in% c("head_letters", "tail_letters", "head_integers", "one", "five"))),
+  testthat::expect_message(
+    testthat::expect_true(all(names(get_raw_data(t_dc)) %in% c("head_letters", "tail_letters", "head_integers", "one", "five"))),
     regexp = "There are mutate code that are delayed. The dataset in the output does not reflect these code."
   )
 
   # load_dataset, which calls pull method, will reset to original state because dependencies have changed
-  expect_message(
+  testthat::expect_message(
     load_dataset(t_dc),
     regexp = "Some dependencies have delayed status. Thus the object itself is delayed."
   )
-  expect_true(t_dc$is_mutate_delayed())
+  testthat::expect_true(t_dc$is_mutate_delayed())
   # original state. all columns resulting from mutations have been removed
-  expect_message(
-    expect_true(all(names(get_raw_data(t_dc)) %in% c("head_letters"))),
+  testthat::expect_message(
+    testthat::expect_true(all(names(get_raw_data(t_dc)) %in% c("head_letters"))),
     regexp = "There are mutate code that are delayed. The dataset in the output does not reflect these code."
   )
   # still it must return code from all previously inputted mutate statements
-  expect_message(
-    expect_true(
+  testthat::expect_message(
+    testthat::expect_true(
       "test_dc$seven <- 7" %in% pretty_code_string(t_dc$get_code()),
     ),
     "The output includes mutate code that is delayed"
   )
 
   # confirming that mutation has not happened
-  expect_message(
-    expect_false(any(c("six", "seven") %in% names(get_raw_data(t_dc)))),
+  testthat::expect_message(
+    testthat::expect_false(any(c("six", "seven") %in% names(get_raw_data(t_dc)))),
     regexp = "There are mutate code that are delayed. The dataset in the output does not reflect these code."
   )
 
   # confirming that mutation is delayed
-  expect_true(t_dc2$is_mutate_delayed())
+  testthat::expect_true(t_dc2$is_mutate_delayed())
 
   # confirming get_raw_data will eager mutate t_dc2 because t_dc3 has been loaded
-  expect_true(all(c("head_integers", "five", "neg_integers") %in% names(get_raw_data(t_dc2))))
+  testthat::expect_true(all(c("head_integers", "five", "neg_integers") %in% names(get_raw_data(t_dc2))))
 
   # re running all mutation statements
   load_dataset(t_dc)
-  expect_false(t_dc$is_mutate_delayed())
-  expect_true(all(c(
+  testthat::expect_false(t_dc$is_mutate_delayed())
+  testthat::expect_true(all(c(
     "head_integers", "tail_letters", "head_integers", "one", "five", "six", "seven") %in% names(get_raw_data(t_dc)))
   )
 
-  expect_equal(get_raw_data(t_dc)$seven, rep(7, 6))
-  expect_equal(get_raw_data(t_dc)$six, rep(41, 6))
-  expect_equal(get_raw_data(t_dc)$five, rep(40, 6))
+  testthat::expect_equal(get_raw_data(t_dc)$seven, rep(7, 6))
+  testthat::expect_equal(get_raw_data(t_dc)$six, rep(41, 6))
+  testthat::expect_equal(get_raw_data(t_dc)$five, rep(40, 6))
   # back to eager mutate
   mutate_dataset(t_dc, code = "test_dc$eight <- 8")
-  expect_equal(get_raw_data(t_dc)$eight, rep(8, 6))
+  testthat::expect_equal(get_raw_data(t_dc)$eight, rep(8, 6))
 })
 
 testthat::test_that("DatasetConnector mutate method edge cases", {
+  # edge because test_ds1 does not contain the code to recreate head_mtcars
   test_ds1 <- Dataset$new("head_mtcars", head(mtcars))
 
   pull_fun <- callable_function(data.frame)
   pull_fun$set_args(args = list(head_letters = head(letters)))
   t_dc <- dataset_connector("test_dc", pull_fun)
   load_dataset(t_dc)
-  expect_silent(
+  testthat::expect_silent(
     mutate_dataset(t_dc, code = "test_dc$new_var <- head_mtcars$carb", vars = list(head_mtcars = test_ds1))
   )
-  expect_equal(get_raw_data(t_dc)$new_var, c(4, 4, 1, 1, 2, 1))
+  testthat::expect_equal(get_raw_data(t_dc)$new_var, c(4, 4, 1, 1, 2, 1))
 })
