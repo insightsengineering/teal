@@ -302,18 +302,11 @@ Dataset <- R6::R6Class( # nolint
       if (self$is_mutate_delayed()) {
         message("The output includes mutate code that are delayed")
       }
-      executed <- self$get_code_class()$get_code(deparse = deparse)
-      delayed <- self$get_mutate_code_class()$get_code(deparse = deparse)
-      res <- if (deparse) {
-        if (is_empty_string(delayed)) {
-          executed
-        } else if (is_empty_string(executed)) {
-          delayed
-        } else {
-          paste(executed, delayed, sep = "\n")
-        }
-      } else {
-        c(executed, delayed)
+      executed <- self$get_code_class()$get_code(deparse = FALSE)
+      delayed <- self$get_mutate_code_class()$get_code(deparse = FALSE)
+      res <- c(executed, delayed)
+      if (deparse) {
+        return(paste(res, collapse = "\n"))
       }
       return(res)
     },
