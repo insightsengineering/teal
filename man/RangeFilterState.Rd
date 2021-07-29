@@ -40,6 +40,7 @@ isolate(filter_state$get_call())
 \itemize{
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="FilterState" data-id="destroy_observers">}\href{../../teal/html/FilterState.html#method-destroy_observers}{\code{teal::FilterState$destroy_observers()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="FilterState" data-id="get_dataname">}\href{../../teal/html/FilterState.html#method-get_dataname}{\code{teal::FilterState$get_dataname()}}\out{</span>}
+\item \out{<span class="pkg-link" data-pkg="teal" data-topic="FilterState" data-id="get_id">}\href{../../teal/html/FilterState.html#method-get_id}{\code{teal::FilterState$get_id()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="FilterState" data-id="get_selected">}\href{../../teal/html/FilterState.html#method-get_selected}{\code{teal::FilterState$get_selected()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="FilterState" data-id="get_varlabel">}\href{../../teal/html/FilterState.html#method-get_varlabel}{\code{teal::FilterState$get_varlabel()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="FilterState" data-id="get_varname">}\href{../../teal/html/FilterState.html#method-get_varname}{\code{teal::FilterState$get_varname()}}\out{</span>}
