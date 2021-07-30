@@ -261,7 +261,7 @@ DatasetConnector <- R6::R6Class( #nolint
           }
           private$mutate_eager()
         } else {
-          if (!is.null(mutate_code_in_dataset)) {
+          if (has_dataset) {
             private$dataset$set_code(mutate_code_in_dataset$get_code())
           }
           message("Some dependencies have delayed status. Thus the object itself is delayed.")
@@ -293,6 +293,7 @@ DatasetConnector <- R6::R6Class( #nolint
     mutate = function(code, vars = list()) {
       stopifnot(is_fully_named_list(vars))
 
+      # order matters here
       private$set_mutate_vars(vars)
       private$set_mutate_code(code)
       if (self$is_pulled() && !private$is_any_dependency_delayed(vars)) {
@@ -633,8 +634,7 @@ DatasetConnector <- R6::R6Class( #nolint
       if (length(code) > 0 && code != "") {
         private$mutate_code$set_code(
           code = code,
-          dataname = private$dataname,
-          deps = names(private$mutate_vars)
+          deps = c(private$dataname, names(private$mutate_vars))
         )
       }
 

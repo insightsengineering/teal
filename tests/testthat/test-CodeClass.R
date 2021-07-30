@@ -194,8 +194,6 @@ test_that("list_to_code_class: assigning dataname to the object name inside of t
     c("test_dc2 <- data.frame(head_integers = 1:6)",
       "t_dc2 <- test_dc2",
       "test_dc <- data.frame(head_letters = c(\"a\", \"b\", \"c\", \"d\", \"e\", \"f\"))",
-      "test_dc2 <- data.frame(head_integers = 1:6)",
-      "t_dc2 <- test_dc2",
       "t_dc2 <- NULL"
     )
   )
@@ -210,10 +208,7 @@ test_that("list_to_code_class: assigning dataname to the object name inside of t
       "head_mtcars <- head(mtcars)",
       "ds <- head_mtcars",
       "test_dc <- data.frame(head_letters = c(\"a\", \"b\", \"c\", \"d\", \"e\", \"f\"))",
-      "test_dc2 <- data.frame(head_integers = 1:6)",
-      "t_dc2 <- test_dc2",
       "t_dc2 <- NULL",
-      "head_mtcars <- head(mtcars)",
       "ds <- head_mtcars",
       "test_dc$carb <- ds$carb"
     )
@@ -225,7 +220,6 @@ test_that("list_to_code_class: assigning dataname to the object name inside of t
     pretty_code_string(t_dc2$get_code()),
     c("head_iris <- head(iris)",
       "test_dc2 <- data.frame(head_integers = 1:6)",
-      "head_iris <- head(iris)",
       "test_dc2$Species <- head_iris$Species"
     )
   )

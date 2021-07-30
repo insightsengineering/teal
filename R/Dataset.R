@@ -384,10 +384,7 @@ Dataset <- R6::R6Class( # nolint
         } else {
           if (!is(code, "CodeClass")) {
             code_container <- CodeClass$new()
-            code_container$set_code(
-              code = code,
-              dataname = self$get_dataname()
-            )
+            code_container$set_code(code = code, deps = c(private$dataname, names(vars)))
           } else {
             code_container <- code
           }
@@ -484,9 +481,13 @@ Dataset <- R6::R6Class( # nolint
     mutate_delayed = function(code, vars) {
       message("Mutation is delayed")
       private$set_vars_internal(vars, is_mutate_vars = TRUE)
-      private$mutate_code$set_code(
-        code,
-        dataname = self$get_dataname()
+      if (is(code, "CodeClass")) {
+        private$mutate_code$append(code)
+      } else (
+        private$mutate_code$set_code(
+          code,
+          dataname = self$get_dataname()
+        )
       )
       return(invisible(self))
     },
@@ -500,7 +501,7 @@ Dataset <- R6::R6Class( # nolint
 
       # code set after successful evaluation
       # otherwise code != dataset
-      self$set_code(code_container$get_code())
+      private$code$append(code_container)
       self$set_vars(private$mutate_vars)
       private$mutate_code <- CodeClass$new()
       private$mutate_vars <- list()
