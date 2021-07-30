@@ -94,7 +94,7 @@ init_filter_state.default <- function(x, #nousage
 #' @export
 init_filter_state.logical <- function(x, #nousage
                                       varname,
-                                      varlabel = attr(x, "label"),
+                                      varlabel = if_null(attr(x, "label"), character(0)),
                                       input_dataname = NULL,
                                       use_dataname = FALSE) {
   LogicalFilterState$new(x = x,
@@ -584,7 +584,7 @@ LogicalFilterState <- R6::R6Class( # nolint
                           input_dataname = NULL,
                           use_dataname = FALSE) {
       stopifnot(is.logical(x))
-      super$initialize(x, varname , varlabel, input_dataname, use_dataname)
+      super$initialize(x, varname, varlabel, input_dataname, use_dataname)
       tbl <- table(x)
 
       choices <- as.logical(names(tbl))
@@ -624,7 +624,7 @@ LogicalFilterState <- R6::R6Class( # nolint
     #'  id of shiny element
     ui = function(id) {
       ns <- NS(id)
-      res <- fluidRow(
+      fluidRow(
         div(
           style = "position: relative;",
           # same overlay as for choices with no more than (default: 5) elements
@@ -636,10 +636,9 @@ LogicalFilterState <- R6::R6Class( # nolint
             ns("selection"),
             label = NULL,
             choices = private$choices,
-            selected = private$choices,
+            selected = private$choices[1],
             width = "100%"
           )
-
         ),
         if (private$na_count > 0) {
           checkboxInput(
@@ -651,7 +650,6 @@ LogicalFilterState <- R6::R6Class( # nolint
           NULL
         }
       )
-
     },
 
     #' @description
@@ -823,7 +821,7 @@ RangeFilterState <- R6::R6Class( # nolint
     #'  id of shiny element
     ui = function(id) {
       ns <- NS(id)
-      res <- fluidRow(
+      fluidRow(
         div(
           class = "filterPlotOverlayRange",
           plotOutput(ns("plot"), height = "100%")
@@ -857,7 +855,6 @@ RangeFilterState <- R6::R6Class( # nolint
           NULL
         }
       )
-
     },
 
     #' @description
@@ -1080,6 +1077,10 @@ ChoicesFilterState <- R6::R6Class( # nolint
         if (length(private$choices) <= .threshold_slider_vs_checkboxgroup) {
           div(
             style = "position: relative;",
+            div(
+              class = "filterPlotOverlayBoxes",
+              plotOutput(ns("plot"), height = "100%")
+            ),
             checkboxGroupInput(
               ns("selection"),
               label = NULL,
@@ -1112,7 +1113,6 @@ ChoicesFilterState <- R6::R6Class( # nolint
           NULL
         }
       )
-
     },
 
     #' @description
@@ -1125,9 +1125,9 @@ ChoicesFilterState <- R6::R6Class( # nolint
       output$plot <- renderPlot(
         bg = "transparent",
         expr = {
-          if (length(filter_state$choices) <= .threshold_slider_vs_checkboxgroup) {
+          if (length(private$choices) <= .threshold_slider_vs_checkboxgroup) {
             # Proportional
-            data <- filter_state$histogram_data
+            data <- private$histogram_data
             data$y <- rev(data$y / sum(data$y)) # we have to reverse because the histogram is turned by 90 degrees
             data$x <- seq_len(nrow(data)) # to prevent ggplot reordering columns using the characters in x column
             ggplot2::ggplot(data) +
@@ -1273,7 +1273,7 @@ DateFilterState <- R6::R6Class( # nolint
     #'  id of shiny element
     ui = function(id) {
       ns <- NS(id)
-      res <- fluidRow(
+      fluidRow(
         div(
           actionButton(
             inputId = ns("start_date_reset"),
@@ -1309,7 +1309,6 @@ DateFilterState <- R6::R6Class( # nolint
           NULL
         }
       )
-
     },
 
     #' @description
@@ -1460,7 +1459,7 @@ DatetimeFilterState <- R6::R6Class( # nolint
     #'  id of shiny element
     ui = function(id) {
       ns <- NS(id)
-      res <- fluidRow(
+      fluidRow(
         div(
           actionButton(
             inputId = ns("start_date_reset"),
@@ -1530,7 +1529,6 @@ DatetimeFilterState <- R6::R6Class( # nolint
           NULL
         }
       )
-
     },
 
     #' @description

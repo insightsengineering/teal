@@ -9,6 +9,7 @@
 
 ### Enhancements
 * The `append` method of a `CodeClass` object has been modified to print a warning message when the argument does not result in any code being added because it is duplicated.
+* `modules` parameter of `teal::init` function can now receive a `list` instead of `root_modules` function call.
 
 ### Miscellaneous
 * Added a method `get_hash` to the `Dataset` class returning the MD5 hash of the object stored inside the `Dataset` object.

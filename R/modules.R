@@ -22,7 +22,7 @@ modules <- function(label, ...) {
   is_right_class <- vapply(submodules, function(x) is(x, "teal_module") || is(x, "teal_modules"), logical(1))
   if (any(!is_right_class)) {
     stop(paste(
-      "modules: not all argument are of class teal_module or teal_modules. Indices:",
+      "modules: not all arguments are of class teal_module or teal_modules. Indices:",
       toString(which(!is_right_class))
     ))
   }

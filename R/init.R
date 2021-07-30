@@ -129,12 +129,14 @@ init <- function(data,
                  id = character(0)) {
   stopifnot(
     is(data, "RelationalData"),
-    is(modules, "teal_modules"),
+    is(modules, "list") || is(modules, "teal_modules"),
     is.null(title) || is_character_single(title),
     is_fully_named_list(filter),
     all(names(filter) %in% get_dataname(data)),
     is_character_vector(id, min_length = 0, max_length = 1)
   )
+
+  if(is(modules, "list"))  modules <- do.call(root_modules, modules)
 
   # Note regarding case `id = character(0)`:
   # rather than using `callModule` and creating a submodule of this module, we directly modify

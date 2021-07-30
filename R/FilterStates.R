@@ -260,6 +260,9 @@ FilterStates <- R6::R6Class( # nolint
         queue_elements <- names(self$queue_get(queue_index = queue_index))
         lapply(queue_elements, function(element_id) {
           self$queue_remove(queue_index = queue_index, element_id = element_id)
+          if (shiny::isRunning()) {
+            private$remove_filter_state(queue_index, element_id)
+          }
         })
       })
 
@@ -335,10 +338,6 @@ FilterStates <- R6::R6Class( # nolint
       filters <- self$queue_get(queue_index = queue_index, element_id = element_id)
       lapply(filters, function(filter) filter$destroy_observers())
       private$queue[[queue_index]]$remove(filters)
-
-      id <- sprintf("%s_%s", queue_index, element_id)
-      removeUI(selector = sprintf("#%s", private$ns(id)))
-      private$destroy_observers(queue_index, element_id)
     },
 
     #' @description
@@ -351,9 +350,10 @@ FilterStates <- R6::R6Class( # nolint
     #'   id of the shiny element
     #' @return shiny.tag
     ui = function(id) {
-      private$ns <- NS(id)
+      ns <- NS(id)
+      private$card_id <- ns("cards")
       tags$div(
-        id = private$ns("cards"),
+        id = private$card_id,
         class = "listWithHandle list-group"
       )
     },
@@ -383,6 +383,8 @@ FilterStates <- R6::R6Class( # nolint
     }
   ),
   private = list(
+    card_id = character(0),
+    card_ids = character(0),
     input_dataname = NULL,  # because it holds object of class name
     output_dataname = NULL,  # because it holds object of class name,
     ns = NULL, # shiny ns()
@@ -403,7 +405,6 @@ FilterStates <- R6::R6Class( # nolint
       stopifnot(is(filter_state, "FilterState"))
       stopifnot(is_character_single(queue_index) || is_integer_single(queue_index))
       stopifnot(is_character_single(element_id))
-      id <- sprintf("%s_%s", queue_index, element_id)
 
       self$queue_push(
         x = filter_state,
@@ -411,72 +412,84 @@ FilterStates <- R6::R6Class( # nolint
         element_id = element_id
       )
 
+      card_id <- session$ns("card")
+      queue_id <- sprintf("%s-%s", queue_index, element_id)
+      private$card_ids[queue_id] <- card_id
+
       insertUI(
-        selector = sprintf("#%s", private$ns("cards")),
+        selector = sprintf("#%s", private$card_id),
         where = "beforeEnd",
         # add span with id to be removable
-        ui = {
-          span(
-            id = private$ns(id),
-            class = "list-group-item",
-            fluidPage(
-              fluidRow(
-                column(
-                  width = 10,
-                  class = "no-left-right-padding",
-                  tags$div(
+        ui = span(
+          id = card_id,
+          class = "list-group-item",
+          fluidPage(
+            fluidRow(
+              column(
+                width = 10,
+                class = "no-left-right-padding",
+                tags$div(
+                  tags$span(
+                    filter_state$get_varname(),
+                    class = "filter_panel_varname"
+                  ),
+                  tagList(
+                    tags$br(),
                     tags$span(
-                      filter_state$get_varname(),
-                      class = "filter_panel_varname"
-                    ),
-                    tagList(
-                      tags$br(),
-                      tags$span(
-                        filter_state$get_varlabel(),
-                        class = "filter_panel_varlabel")
-                    )
-                  )
-                ),
-                column(
-                  width = 2,
-                  class = "no-left-right-padding",
-                  actionLink(
-                    session$ns(sprintf("%s_remove", id)),
-                    label = "",
-                    icon = icon("times-circle", lib = "font-awesome"),
-                    class = "remove pull-right"
+                      filter_state$get_varlabel(),
+                      class = "filter_panel_varlabel")
                   )
                 )
               ),
-              filter_state$ui(id = session$ns(id))
-            )
+              column(
+                width = 2,
+                class = "no-left-right-padding",
+                actionLink(
+                  session$ns("remove"),
+                  label = "",
+                  icon = icon("times-circle", lib = "font-awesome"),
+                  class = "remove pull-right"
+                )
+              )
+            ),
+            filter_state$ui(id = session$ns("content"))
           )
-        }
+        )
       )
 
-      callModule(filter_state$server, id = id)
+      callModule(filter_state$server, id = "content")
 
-      private$observers[[id]] <- observeEvent(
+      private$observers[[queue_id]] <- observeEvent(
         ignoreInit = TRUE,
         ignoreNULL = TRUE,
-        input[[sprintf("%s_remove", id)]],
-        self$queue_remove(queue_index, element_id)
+        eventExpr = input$remove,
+        handlerExpr = {
+          self$queue_remove(queue_index, element_id)
+          private$remove_filter_state(queue_index, element_id)
+        }
       )
-
 
       return(invisible(NULL))
     },
 
-    #' Destroy observers
+    #' @description
+    #' Remove shiny element. Method can be called from reactive session where
+    #' `observeEvent` for remove-filter-state is set and also from `FilteredDataset`
+    #' level, where shiny-session-namespace is different. That is why it's important
+    #' to remove shiny elements from anywhere. In `add_filter_state` `session$ns(NULL)`
+    #' is equivalent to `private$ns(queue_index)`. This means that
     #'
-    #' Observers should be destroyed after removing module
-    #' parameter filter_state (`FilterState`)
-    #' parameter queue_index (`character(1)`, `logical(1)`)\cr
-    #'   index of the `private$queue` list where `ReactiveQueue` are kept.
-    destroy_observers = function(queue_index, element_id) {
-      id <- sprintf("%s_%s", queue_index, element_id)
-      private$observers[[id]]$destroy()
-      private$observers[id] <- NULL
+    #'
+    remove_filter_state = function(queue_index, element_id) {
+      queue_id <- sprintf("%s-%s", queue_index, element_id)
+
+      removeUI(
+        selector = sprintf("#%s", private$card_ids[queue_id])
+      )
+      private$card_ids <- private$card_ids[names(private$card_ids) != queue_id]
+
+      private$observers[[queue_id]]$destroy()
+      private$observers[[queue_id]] <- NULL
     }
   )
 )
@@ -542,17 +555,13 @@ DFFilterStates <- R6::R6Class( # nolint
     ui_add_filter_state = function(id, data) {
       stopifnot(is_character_single(id))
       stopifnot(is.data.frame(data))
+
       ns <- NS(id)
 
       if (nrow(data) == 0) {
         div(sprintf("data '%s' has zero rows", deparse(private$input_dataname)))
       } else {
         div(
-          span(
-            tags$label("Add"),
-            tags$code(deparse(private$input_dataname)),
-            tags$label("filter")
-          ),
           optionalSelectInput(
             ns("var_to_add"),
             choices = NULL,
@@ -625,7 +634,7 @@ DFFilterStates <- R6::R6Class( # nolint
       observeEvent(
         eventExpr = input$var_to_add,
         handlerExpr = {
-          id <- sprintf("%s_%s", 1L, input$var_to_add)
+          id <- digest::digest(sprintf("%s_%s", 1L, input$var_to_add), algo = "md5")
           callModule(
             private$add_filter_state,
             id = id,
@@ -732,25 +741,18 @@ MAEFilterStates <- R6::R6Class( # nolint
       stopifnot(is(data, "MultiAssayExperiment"))
 
       ns <- NS(id)
+
       if (nrow(SummarizedExperiment::colData(data)) == 0) {
         div(sprintf("colData of '%s' has zero rows", deparse(private$input_dataname)))
       } else {
-        div(
-          span(
-            tags$label("Add"),
-            tags$code(deparse(private$input_dataname)),
-            tags$label("filter")
-          ),
-          optionalSelectInput(
-            ns("var_to_add"),
-            choices = NULL,
-            options = shinyWidgets::pickerOptions(
-              liveSearch = TRUE,
-              noneSelectedText = "Select colData variable to filter"
-            )
+        optionalSelectInput(
+          ns("var_to_add"),
+          choices = NULL,
+          options = shinyWidgets::pickerOptions(
+            liveSearch = TRUE,
+            noneSelectedText = "Select colData variable to filter"
           )
         )
-
       }
     },
 
@@ -812,7 +814,7 @@ MAEFilterStates <- R6::R6Class( # nolint
       observeEvent(
         eventExpr = input$var_to_add,
         handlerExpr = {
-          id <- sprintf("%s_%s", "y", input$var_to_add)
+          id <- digest::digest(sprintf("%s_%s", "y", input$var_to_add), algo = "md5")
           callModule(
             private$add_filter_state,
             id = id,
@@ -899,6 +901,7 @@ SEFilterStates <- R6::R6Class( # nolint
     ui_add_filter_state = function(id, data) {
       stopifnot(is_character_single(id))
       stopifnot(is(data, "SummarizedExperiment"))
+
       ns <- NS(id)
 
       row_input <- if (nrow(SummarizedExperiment::rowData(data)) == 0) {
@@ -929,11 +932,6 @@ SEFilterStates <- R6::R6Class( # nolint
       }
 
       div(
-        span(
-          tags$label("Add"),
-          tags$code(deparse(private$input_dataname)),
-          tags$label("filter")
-        ),
         row_input,
         col_input
       )
@@ -1043,7 +1041,7 @@ SEFilterStates <- R6::R6Class( # nolint
       observeEvent(
         eventExpr = input$col_to_add,
         handlerExpr = {
-          id <- sprintf("%s_%s", "select", input$col_to_add)
+          id <- digest::digest(sprintf("%s_%s", "select", input$col_to_add), algo = "md5")
           callModule(
             private$add_filter_state,
             id = id,
@@ -1062,7 +1060,7 @@ SEFilterStates <- R6::R6Class( # nolint
       observeEvent(
         eventExpr = input$row_to_add,
         handlerExpr = {
-          id <- sprintf("%s_%s", "subset", input$row_to_add)
+          id <- digest::digest(sprintf("%s_%s", "subset", input$row_to_add), algo = "md5")
           callModule(
             private$add_filter_state,
             id = id,
@@ -1124,34 +1122,18 @@ MatrixFilterStates <- R6::R6Class( # nolint
 
       ns <- NS(id)
 
-      input <- if (nrow(data) == 0) {
+      if (nrow(data) == 0) {
         div(sprintf("data '%s' has zero rows", deparse(private$input_dataname)))
       } else {
-        div(
-          span(
-            tags$label("Add"),
-            tags$code(deparse(private$input_dataname)),
-            tags$label("filter")
-          ),
-          optionalSelectInput(
-            ns("var_to_add"),
-            choices = NULL,
-            options = shinyWidgets::pickerOptions(
-              liveSearch = TRUE,
-              noneSelectedText = "Select variable to filter"
-            )
+        optionalSelectInput(
+          ns("var_to_add"),
+          choices = NULL,
+          options = shinyWidgets::pickerOptions(
+            liveSearch = TRUE,
+            noneSelectedText = "Select variable to filter"
           )
         )
       }
-
-      div(
-        span(
-          tags$label("Add"),
-          tags$code(deparse(private$input_dataname)),
-          tags$label("filter")
-        ),
-        input
-      )
     },
 
     #' @description
@@ -1216,8 +1198,7 @@ MatrixFilterStates <- R6::R6Class( # nolint
       observeEvent(
         eventExpr = input$var_to_add,
         handlerExpr = {
-          id <- sprintf("%s_%s", "subset", input$var_to_add)
-
+          id <- digest::digest(sprintf("%s_%s", "subset", input$var_to_add), algo = "md5")
           callModule(
             private$add_filter_state,
             id = id,

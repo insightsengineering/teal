@@ -334,6 +334,29 @@ FilteredData <- R6::R6Class( # nolint
       self$get_filtered_datasets(dataname)$get_varnames()
     },
 
+    #' When active_datanames is "all", sets them to all datanames
+    #' otherwise, it makes sure that it is a subset of the available datanames
+    #'
+    #' @param datanames `character vector` datanames to pick
+    #'
+    #' @return intersection of `self$datanames()` and `datanames`
+    handle_active_datanames = function(datanames) {
+      if (identical(datanames, "all")) {
+        datanames <- self$datanames()
+      } else {
+        tryCatch(
+          self$check_data_varname_exists(dataname = datanames),
+          error = function(e) {
+            message(e$message)
+          }
+        )
+      }
+
+      datanames <- self$get_filterable_datanames(datanames)
+
+      return(intersect(self$datanames(), datanames))
+    },
+
 
     #' @description
     #' Add dataset
@@ -421,7 +444,285 @@ FilteredData <- R6::R6Class( # nolint
     #'   for the data; may not make sense with randomly generated data per session
     restore_state_from_bookmark = function(state, check_data_hash = TRUE) {
       stop("Not implemented")
+    },
+
+    # shiny modules -----
+
+    #' Module for the right filter panel in the teal app
+    #' with a filter overview panel and a filter variable panel.
+    #'
+    #' This panel contains info about the number of observations left in
+    #' the (active) datasets and allows to filter the datasets.
+    #'
+    #' @param id (`character(1)`)\cr
+    #'   module id
+    ui_filter_panel = function(id) {
+      ns <- NS(id)
+      div(
+        id = ns("filter_panel_whole"), # used for hiding / showing
+        div(
+          id = ns("filters_overview"), # not used, can be used to customize CSS behavior
+          class = "well",
+          tags$div(
+            class = "row",
+            tags$div(
+              class = "col-sm-9",
+              tags$label("Active Filter Summary", class = "text-primary", style = "margin-bottom: 15px;")
+            ),
+            tags$div(
+              class = "col-sm-3",
+              tags$a(
+                href = "javascript:void(0)",
+                class = "remove pull-right",
+                onclick = sprintf(
+                  "$('#%s').toggle();",
+                  ns("filters_overview_contents")
+                ),
+                title = "minimise panel",
+                tags$span(icon("minus-circle", lib = "font-awesome"))
+              )
+            )
+          ),
+          tags$br(),
+          div(
+            id = ns("filters_overview_contents"),
+            self$ui_filter_overview(ns("teal_filters_info"))
+          )
+        ),
+
+        div(
+          id = ns("filter_active_vars"), # not used, can be used to customize CSS behavior
+          class = "well",
+          tags$div(
+            class = "row",
+            tags$div(
+              class = "col-sm-6",
+              tags$label("Active Filter Variables", class = "text-primary", style = "margin-bottom: 15px;")
+            ),
+            tags$div(
+              class = "col-sm-6",
+              actionLink(
+                ns("remove_all_filters"),
+                "",
+                icon("times-circle", lib = "font-awesome"),
+                title = "remove active filters",
+                class = "remove_all pull-right"
+              ),
+              tags$a(
+                href = "javascript:void(0)",
+                class = "remove pull-right",
+                onclick = sprintf(
+                  "$('#%s').toggle();",
+                  ns("filter_active_vars_contents")
+                ),
+                title = "minimise panel",
+                tags$span(icon("minus-circle", lib = "font-awesome"))
+              )
+            )
+          ),
+
+          div(
+            id = ns("filter_active_vars_contents"),
+            tagList(
+              lapply(
+                self$datanames(),
+                function(dataname) {
+                  dataset_filters <- self$get_filtered_datasets(dataname)
+                  dataset_filters$ui(
+                    id = ns(sprintf("%s_filters", dataname))
+                  )
+                }
+              )
+            )
+          )
+        ),
+
+        div(
+          id = ns("filter_add_vars"), # not used, can be used to customize CSS behavior
+          class = "well",
+          tags$div(
+            class = "row",
+            tags$div(
+              class = "col-sm-9",
+              tags$label("Add Filter Variables", class = "text-primary", style = "margin-bottom: 15px;")
+            ),
+            tags$div(
+              class = "col-sm-3",
+              tags$a(
+                href = "javascript:void(0)",
+                class = "remove pull-right",
+                onclick = sprintf("$('#%s').toggle();", ns("filter_add_vars_contents")),
+                title = "minimise panel",
+                tags$span(icon("minus-circle", lib = "font-awesome"))
+              )
+            )
+          ),
+          div(
+            id = ns("filter_add_vars_contents"),
+            tagList(
+              lapply(
+                self$datanames(),
+                function(dataname) {
+                  dataset_filters <- self$get_filtered_datasets(dataname)
+                  id <- ns(sprintf("add_%s_filter", dataname))
+                  # add span with same id to show / hide
+                  return(
+                    span(
+                      id = id,
+                      dataset_filters$ui_add_filter_state(id)
+                    )
+                  )
+                }
+              )
+            )
+          )
+        )
+      )
+    },
+
+    #' Server function for filter panel
+    #'
+    #' @param input (`shiny`)\cr
+    #' @param output (`shiny`)\cr
+    #' @param session (`shiny`)\cr
+    #' @param active_datanames `function / reactive` returning datanames that
+    #'   should be shown on the filter panel,
+    #'   must be a subset of the `datanames` argument provided to `ui_filter_panel`;
+    #'   if the function returns `NULL` (as opposed to `character(0)`), the filter
+    #'   panel will be hidden
+    #'
+    srv_filter_panel = function(input, output, session, active_datanames = function() "all") {
+      stopifnot(
+        is.function(active_datanames) || is.reactive(active_datanames)
+      )
+      callModule(
+        self$srv_filter_overview,
+        "teal_filters_info",
+        active_datanames = active_datanames
+      )
+
+      # use isolate because we assume that the number of datasets does not change over the course of the teal app
+      # alternatively, one can proceed as in modules_filter_items to dynamically insert, remove UIs
+      isol_datanames <- isolate(self$datanames()) # they are already ordered
+      # should not use for-loop as variables are otherwise only bound by reference and last dataname would be used
+      lapply(
+        isol_datanames,
+        function(dataname) {
+          dataset_filters <- self$get_filtered_datasets(dataname)
+          callModule(
+            module = dataset_filters$server,
+            id = sprintf("%s_filters", dataname)
+          )
+        }
+      )
+
+      lapply(
+        isol_datanames,
+        function(dataname) {
+          dataset_filters <- self$get_filtered_datasets(dataname)
+          callModule(
+            module = dataset_filters$srv_add_filter_state,
+            id = sprintf("add_%s_filter", dataname)
+          )
+        }
+      )
+
+
+      # we keep anything that may be selected to add (happens when the variable is not available for filtering)
+      # lapply(isol_datanames, function(dataname) paste0("teal_add_", dataname, "_filter")) #nolint
+      setBookmarkExclude(names = c(
+        # these will be regenerated dynamically
+        lapply(isol_datanames, function(dataname) paste0(dataname, "filters"))
+      ))
+
+      # rather than regenerating the UI dynamically for the dataset filtering,
+      # we instead choose to hide/show the elements
+      # the filters for this dataset are just hidden from the UI, but still applied
+      # optimization: we set `priority = 1` to execute it before the other
+      # observers (default priority 0), so that they are not computed if they are hidden anyways
+      observeEvent(active_datanames(), priority = 1, {
+        if (length(active_datanames()) == 0 || is.null(active_datanames())) {
+          # hide whole module UI when no datasets or when NULL
+          shinyjs::hide("filter_panel_whole")
+        } else {
+          shinyjs::show("filter_panel_whole")
+
+          # selectively hide / show to only show `active_datanames` out of all datanames
+          lapply(
+            self$datanames(),
+            function(dataname) {
+              id_add_filter <- sprintf("add_%s_filter", dataname)
+              id_filter_dataname <- sprintf("%s_filters", dataname)
+
+              if (dataname %in% active_datanames()) {
+                # shinyjs takes care of the namespace around the id
+                shinyjs::show(id_add_filter)
+                shinyjs::show(id_filter_dataname)
+              } else {
+                shinyjs::hide(id_add_filter)
+                shinyjs::hide(id_filter_dataname)
+              }
+            }
+          )
+        }
+      }, ignoreNULL = FALSE)
+
+      observeEvent(input$remove_all_filters, {
+        .log("removing all active filters from filter panel")
+        lapply(self$datanames(), function(dataname) {
+          dataset_filter <- self$get_filtered_datasets(dataname = dataname)
+          dataset_filter$queues_empty()
+        })
+      })
+    },
+
+    #' Creates the UI for the module showing counts for each dataset
+    #' contrasting the filtered to the full unfiltered dataset
+    #'
+    #' Per dataset, it displays
+    #' the number of rows/observations in each dataset,
+    #' the number of unique subjects.
+    #'
+    #' @param id module id
+    ui_filter_overview = function(id) {
+      ns <- NS(id)
+
+      div(
+        style = "overflow: overlay",
+        tableOutput(ns("table"))
+      )
+    },
+
+    #' Server function to display the number of patients in the filtered and unfiltered
+    #' data
+    #'
+    #' @param input (`shiny`)\cr
+    #' @param output (`shiny`)\cr
+    #' @param session (`shiny`)\cr
+    #' @param active_datanames (`function`, `reactive`)\cr
+    #'   returning datanames that should be shown on the filter panel,
+    #'   must be a subset of the `datanames` argument provided to `ui_filter_panel`;
+    #'   if the function returns `NULL` (as opposed to `character(0)`), the filter
+    #'   panel will be hidden.
+    srv_filter_overview = function(input, output, session, active_datanames = function() "all") {
+      stopifnot(
+        is.function(active_datanames) || is.reactive(active_datanames)
+      )
+
+      output$table <- renderTable({
+        .log("update uifiltersinfo")
+        datanames <- if (identical(active_datanames(), "all")) {
+          self$datanames()
+        } else {
+          active_datanames()
+        }
+
+        self$get_filter_overview_tbl(datanames = datanames)
+      }, width = "100%")
+
+      return(invisible(NULL))
     }
+
   ),
 
   ## __Private Methods ====
@@ -542,7 +843,7 @@ print.default_filter <- function(x, ...) {
 #' @export
 #'
 #' @return (`expression`)
-get_filter_expr <- function(datasets, datanames = datasets$get_datanames()) {
+get_filter_expr <- function(datasets, datanames = datasets$datanames()) {
   stopifnot(
     is(datasets, "FilteredData"),
     is_character_vector(datanames),
@@ -550,10 +851,10 @@ get_filter_expr <- function(datasets, datanames = datasets$get_datanames()) {
   )
 
   paste(
-    sapply(
+    utils.nest::ulapply(
       datanames,
       function(dataname) {
-        as.character(datasets$get_call(dataname))
+        datasets$get_call(dataname)
       }
     ),
     collapse = "\n"

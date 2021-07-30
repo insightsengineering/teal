@@ -120,31 +120,6 @@ check_pkg_quietly <- function(pckg, msg) {
   return(invisible(NULL))
 }
 
-#' When active_datanames is "all", sets them to all datanames
-#' otherwise, it makes sure that it is a subset of the available datanames
-#'
-#' @param datasets `FilteredData` object
-#' @param datanames `character vector` datanames to pick
-#'
-#' @return intersection of `datasets$datanames()` and `datanames`
-handle_active_datanames <- function(datasets, datanames) {
-  if (identical(datanames, "all")) {
-    datanames <- datasets$datanames()
-  } else {
-    # convert error to warning
-    tryCatch(
-      check_in_subset(datanames, datasets$datanames(), "Some datasets are not available: "),
-      error = function(e) {
-        message(e$message)
-      }
-    )
-  }
-
-  datanames <- datasets$get_filterable_datanames(datanames)
-
-  return(intersect(datasets$datanames(), datanames))
-}
-
 #' Turn a label into a valid html id, prefix a string
 #'
 #' From both `label` and `prefix`, remove one trailing and

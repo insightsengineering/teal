@@ -302,12 +302,6 @@ parameter queue_index (\code{character(1)}, \code{logical(1)})\cr
 index of the \code{private$queue} list where \code{ReactiveQueue} are kept.
 parameter element_id (\code{character(1)})\cr
 name of \code{ReactiveQueue} element.
-Destroy observers
-
-Observers should be destroyed after removing module
-parameter filter_state (\code{FilterState})
-parameter queue_index (\code{character(1)}, \code{logical(1)})\cr
-index of the \code{private$queue} list where \code{ReactiveQueue} are kept.
 }
 }
 \if{html}{\out{<hr>}}

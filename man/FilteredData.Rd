@@ -114,12 +114,17 @@ isolate(datasets$get_call("mtcars"))
 \item \href{#method-get_keys}{\code{FilteredData$get_keys()}}
 \item \href{#method-get_varlabels}{\code{FilteredData$get_varlabels()}}
 \item \href{#method-get_varnames}{\code{FilteredData$get_varnames()}}
+\item \href{#method-handle_active_datanames}{\code{FilteredData$handle_active_datanames()}}
 \item \href{#method-set_dataset}{\code{FilteredData$set_dataset()}}
 \item \href{#method-set_code}{\code{FilteredData$set_code()}}
 \item \href{#method-set_join_keys}{\code{FilteredData$set_join_keys()}}
 \item \href{#method-get_bookmark_state}{\code{FilteredData$get_bookmark_state()}}
 \item \href{#method-set_bookmark_state}{\code{FilteredData$set_bookmark_state()}}
 \item \href{#method-restore_state_from_bookmark}{\code{FilteredData$restore_state_from_bookmark()}}
+\item \href{#method-ui_filter_panel}{\code{FilteredData$ui_filter_panel()}}
+\item \href{#method-srv_filter_panel}{\code{FilteredData$srv_filter_panel()}}
+\item \href{#method-ui_filter_overview}{\code{FilteredData$ui_filter_overview()}}
+\item \href{#method-srv_filter_overview}{\code{FilteredData$srv_filter_overview()}}
 \item \href{#method-clone}{\code{FilteredData$clone()}}
 }
 }
@@ -470,6 +475,27 @@ Get variable names
 }
 \subsection{Returns}{
 (\code{character} vector) of variable names
+When active_datanames is "all", sets them to all datanames
+otherwise, it makes sure that it is a subset of the available datanames
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-handle_active_datanames"></a>}}
+\if{latex}{\out{\hypertarget{method-handle_active_datanames}{}}}
+\subsection{Method \code{handle_active_datanames()}}{
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{FilteredData$handle_active_datanames(datanames)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{datanames}}{\verb{character vector} datanames to pick}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Returns}{
+intersection of \code{self$datanames()} and \code{datanames}
 }
 }
 \if{html}{\out{<hr>}}
@@ -600,7 +626,117 @@ containing fields \code{data_hash}, \code{filter_states}
 and \code{preproc_code}.}
 
 \item{\code{check_data_hash}}{(\code{logical}) whether to check that \code{md5sums} agree
-for the data; may not make sense with randomly generated data per session}
+for the data; may not make sense with randomly generated data per session
+Module for the right filter panel in the teal app
+with a filter overview panel and a filter variable panel.
+
+This panel contains info about the number of observations left in
+the (active) datasets and allows to filter the datasets.}
+}
+\if{html}{\out{</div>}}
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-ui_filter_panel"></a>}}
+\if{latex}{\out{\hypertarget{method-ui_filter_panel}{}}}
+\subsection{Method \code{ui_filter_panel()}}{
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{FilteredData$ui_filter_panel(id)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{id}}{(\code{character(1)})\cr
+module id
+Server function for filter panel}
+}
+\if{html}{\out{</div>}}
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-srv_filter_panel"></a>}}
+\if{latex}{\out{\hypertarget{method-srv_filter_panel}{}}}
+\subsection{Method \code{srv_filter_panel()}}{
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{FilteredData$srv_filter_panel(
+  input,
+  output,
+  session,
+  active_datanames = function() "all"
+)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{input}}{(\code{shiny})\cr}
+
+\item{\code{output}}{(\code{shiny})\cr}
+
+\item{\code{session}}{(\code{shiny})\cr}
+
+\item{\code{active_datanames}}{\verb{function / reactive} returning datanames that
+should be shown on the filter panel,
+must be a subset of the \code{datanames} argument provided to \code{ui_filter_panel};
+if the function returns \code{NULL} (as opposed to \code{character(0)}), the filter
+panel will be hidden
+
+Creates the UI for the module showing counts for each dataset
+contrasting the filtered to the full unfiltered dataset
+
+Per dataset, it displays
+the number of rows/observations in each dataset,
+the number of unique subjects.}
+}
+\if{html}{\out{</div>}}
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-ui_filter_overview"></a>}}
+\if{latex}{\out{\hypertarget{method-ui_filter_overview}{}}}
+\subsection{Method \code{ui_filter_overview()}}{
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{FilteredData$ui_filter_overview(id)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{id}}{module id
+Server function to display the number of patients in the filtered and unfiltered
+data}
+}
+\if{html}{\out{</div>}}
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-srv_filter_overview"></a>}}
+\if{latex}{\out{\hypertarget{method-srv_filter_overview}{}}}
+\subsection{Method \code{srv_filter_overview()}}{
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{FilteredData$srv_filter_overview(
+  input,
+  output,
+  session,
+  active_datanames = function() "all"
+)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{input}}{(\code{shiny})\cr}
+
+\item{\code{output}}{(\code{shiny})\cr}
+
+\item{\code{session}}{(\code{shiny})\cr}
+
+\item{\code{active_datanames}}{(\code{function}, \code{reactive})\cr
+returning datanames that should be shown on the filter panel,
+must be a subset of the \code{datanames} argument provided to \code{ui_filter_panel};
+if the function returns \code{NULL} (as opposed to \code{character(0)}), the filter
+panel will be hidden.}
 }
 \if{html}{\out{</div>}}
 }

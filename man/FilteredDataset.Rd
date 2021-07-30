@@ -145,14 +145,14 @@ Get reactive object which returns filtered data
 \subsection{Method \code{get_filter_states()}}{
 Get filter states
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{FilteredDataset$get_filter_states(queue_name = character(0))}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{FilteredDataset$get_filter_states(id = character(0))}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{queue_name}}{(\code{character(1)}, \code{character(0)})\cr
-name of the \code{private$filter_states} list element where \code{FilterStates} is kept.}
+\item{\code{id}}{(\code{character(1)}, \code{character(0)})\cr
+id of the \code{private$filter_states} list element where \code{FilterStates} is kept.}
 }
 \if{html}{\out{</div>}}
 }

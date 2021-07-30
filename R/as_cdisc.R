@@ -51,7 +51,7 @@ as_cdisc.Dataset <- function(x, parent = `if`(identical(get_dataname(x), "ADSL")
       keys = get_keys(x),
       parent = parent,
       label = get_dataset_label(x),
-      code = get_code(x)
+      code = x$get_code_class()
     )
   } else {
     cdisc_dataset(
@@ -59,7 +59,7 @@ as_cdisc.Dataset <- function(x, parent = `if`(identical(get_dataname(x), "ADSL")
       x = get_raw_data(x),
       parent = parent,
       label = get_dataset_label(x),
-      code = get_code(x)
+      code = x$get_code_class()
     )
   }
 }
