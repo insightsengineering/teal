@@ -1077,6 +1077,10 @@ ChoicesFilterState <- R6::R6Class( # nolint
         if (length(private$choices) <= .threshold_slider_vs_checkboxgroup) {
           div(
             style = "position: relative;",
+            div(
+              class = "filterPlotOverlayBoxes",
+              plotOutput(ns("plot"), height = "100%")
+            ),
             checkboxGroupInput(
               ns("selection"),
               label = NULL,
@@ -1121,9 +1125,9 @@ ChoicesFilterState <- R6::R6Class( # nolint
       output$plot <- renderPlot(
         bg = "transparent",
         expr = {
-          if (length(filter_state$choices) <= .threshold_slider_vs_checkboxgroup) {
+          if (length(private$choices) <= .threshold_slider_vs_checkboxgroup) {
             # Proportional
-            data <- filter_state$histogram_data
+            data <- private$histogram_data
             data$y <- rev(data$y / sum(data$y)) # we have to reverse because the histogram is turned by 90 degrees
             data$x <- seq_len(nrow(data)) # to prevent ggplot reordering columns using the characters in x column
             ggplot2::ggplot(data) +
