@@ -76,7 +76,6 @@ Dataset <- R6::R6Class( # nolint
       self$set_keys(keys)
       private$mutate_code <- CodeClass$new()
       private$calculate_hash()
-
       # needed if recreating dataset - we need to preserve code order and uniqueness
       private$code <- CodeClass$new()
       if (is.character(code)) {
@@ -321,6 +320,7 @@ Dataset <- R6::R6Class( # nolint
 
       return(res)
     },
+
     #' @description
     #' Get internal \code{CodeClass} object
     #'
@@ -328,10 +328,14 @@ Dataset <- R6::R6Class( # nolint
     get_mutate_code_class = function() {
       res <- CodeClass$new()
       res$append(list_to_code_class(private$mutate_vars))
-      res$append(private$mutate_code)
+      # MAE dataset does not initialize mutate_code
+      if (!is.null(private$mutate_code)) {
+        res$append(private$mutate_code)
+      }
 
       return(res)
     },
+
     #'
     #' @return \code{logical}
     is_mutate_delayed = function() {
@@ -559,7 +563,6 @@ Dataset <- R6::R6Class( # nolint
       private$set_var_r6(vars)
       return(invisible(NULL))
     },
-
 
     # Evaluate script code to modify data or to reproduce data
     #
