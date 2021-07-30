@@ -722,7 +722,7 @@ testthat::test_that("DatasetConnector mutate method with delayed logic", {
 
   # mutation is delayed because t_dc2 hasn't been loaded yet
   testthat::expect_message(
-    mutate_dataset(t_dc, code = "test_dc$head_integers <- test_dc2$head_integers", vars = list(t_dc2 = t_dc2)),
+    mutate_dataset(t_dc, code = "test_dc$head_integers <- t_dc2$head_integers", vars = list(t_dc2 = t_dc2)),
     "Mutation is delayed"
   )
   testthat::expect_true(t_dc$is_mutate_delayed())
@@ -737,7 +737,7 @@ testthat::test_that("DatasetConnector mutate method with delayed logic", {
         "test_ds2 <- head_iris",
         "test_dc2 <- data.frame(head_integers = 1:6)",
         "t_dc2 <- test_dc2",
-        "test_dc$head_integers <- test_dc2$head_integers"
+        "test_dc$head_integers <- t_dc2$head_integers"
       )
     ),
     "The output includes mutate code that is delayed"
@@ -759,7 +759,7 @@ testthat::test_that("DatasetConnector mutate method with delayed logic", {
         "test_ds2 <- head_iris",
         "test_dc2 <- data.frame(head_integers = 1:6)",
         "t_dc2 <- test_dc2",
-        "test_dc$head_integers <- test_dc2$head_integers",
+        "test_dc$head_integers <- t_dc2$head_integers",
         "test_dc$one <- 1"
       )
     ),
@@ -778,7 +778,7 @@ testthat::test_that("DatasetConnector mutate method with delayed logic", {
   mutate_dataset(t_dc2, code = "test_dc2$five <- 5")
   testthat::expect_equal(get_raw_data(t_dc2)$five, rep(5, 6))
 
-  mutate_dataset(t_dc, code = "test_dc$five <- test_dc2$five", vars = list(t_dc2 = t_dc2))
+  mutate_dataset(t_dc, code = "test_dc$five <- t_dc2$five", vars = list(t_dc2 = t_dc2))
   testthat::expect_equal(get_raw_data(t_dc)$five, rep(5, 6))
   testthat::expect_false(t_dc$is_mutate_delayed())
 
@@ -795,7 +795,7 @@ testthat::test_that("DatasetConnector mutate method with delayed logic", {
   t_dc3 <- dataset_connector("test_dc3", pull_fun3)
 
   testthat::expect_message(
-    mutate_dataset(t_dc2, code = "test_dc2$neg_integers <- test_dc3$neg_integers", vars = list(t_dc3 = t_dc3)),
+    mutate_dataset(t_dc2, code = "test_dc2$neg_integers <- t_dc3$neg_integers", vars = list(t_dc3 = t_dc3)),
     regexp = "Mutation is delayed"
   )
 
@@ -808,7 +808,7 @@ testthat::test_that("DatasetConnector mutate method with delayed logic", {
   )
   testthat::expect_message(
     testthat::expect_true(
-      all(c("test_dc2$neg_integers <- test_dc3$neg_integers", "test_dc$six <- test_dc$five + 1") %in%
+      all(c("test_dc2$neg_integers <- t_dc3$neg_integers", "test_dc$six <- test_dc$five + 1") %in%
         pretty_code_string(t_dc$get_code()))
     ),
     "The output includes mutate code that is delayed"
