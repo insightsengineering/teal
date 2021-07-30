@@ -47,11 +47,14 @@ filter_calls_module <- function(label = "Filter Calls Module", active_datanames 
     label = label,
     server = function(input, output, session, datasets) {
       output$filter_calls <- renderText({
-        active_datanames <- handle_active_datanames(datasets, active_datanames)
-        paste(lapply(
-          active_datanames,
-          function(dataname) datasets$get_call(dataname)
-        ), collapse = "\n\n")
+        active_datanames <- datasets$handle_active_datanames(active_datanames)
+        paste(
+          lapply(
+            active_datanames,
+            function(dataname) datasets$get_call(dataname)
+          ),
+          collapse = "\n\n"
+        )
       })
     },
     ui = function(id, ...) {
@@ -182,7 +185,9 @@ reset_filters_module <- function(label = "Reset Filters Module", active_dataname
       })
 
       # reactive, handles "all" datanames
-      active_datanames_r <- reactive(handle_active_datanames(datasets, active_datanames))
+      active_datanames_r <- reactive(
+        datasets$handle_active_datanames(active_datanames)
+      )
       # The UI may not be ready yet, i.e. updating "datasets_to_reset" won't have any effect.
       # Therefore, we ignore the first reactive cycle. The UI is ready at the next reactive cycle.
       active_datanames_r_next_cycle <- trigger_after_first_cycle(active_datanames_r)

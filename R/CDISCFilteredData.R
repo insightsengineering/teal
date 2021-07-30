@@ -114,7 +114,7 @@ CDISCFilteredData <- R6::R6Class( # nolint
     #' evaluated (in case of dependencies).
     #' @return (`character` vector) of datanames
     datanames = function() {
-      datanames <- names(private$filtered_datasets)
+      datanames <- super$datanames()
       # get_keys checks dataname is in datanames, not by calling `self$datanames()`,
       # but `names(private$unfiltered_datasets)` to avoid an infinite recursion
       child_parent <- sapply(datanames, function(i) self$get_parentname(i), USE.NAMES = TRUE, simplify = FALSE)

@@ -131,10 +131,15 @@ isolate(datasets$get_call("ADTTE"))
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="FilteredData" data-id="get_keys">}\href{../../teal/html/FilteredData.html#method-get_keys}{\code{teal::FilteredData$get_keys()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="FilteredData" data-id="get_varlabels">}\href{../../teal/html/FilteredData.html#method-get_varlabels}{\code{teal::FilteredData$get_varlabels()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="FilteredData" data-id="get_varnames">}\href{../../teal/html/FilteredData.html#method-get_varnames}{\code{teal::FilteredData$get_varnames()}}\out{</span>}
+\item \out{<span class="pkg-link" data-pkg="teal" data-topic="FilteredData" data-id="handle_active_datanames">}\href{../../teal/html/FilteredData.html#method-handle_active_datanames}{\code{teal::FilteredData$handle_active_datanames()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="FilteredData" data-id="restore_state_from_bookmark">}\href{../../teal/html/FilteredData.html#method-restore_state_from_bookmark}{\code{teal::FilteredData$restore_state_from_bookmark()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="FilteredData" data-id="set_bookmark_state">}\href{../../teal/html/FilteredData.html#method-set_bookmark_state}{\code{teal::FilteredData$set_bookmark_state()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="FilteredData" data-id="set_code">}\href{../../teal/html/FilteredData.html#method-set_code}{\code{teal::FilteredData$set_code()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="FilteredData" data-id="set_join_keys">}\href{../../teal/html/FilteredData.html#method-set_join_keys}{\code{teal::FilteredData$set_join_keys()}}\out{</span>}
+\item \out{<span class="pkg-link" data-pkg="teal" data-topic="FilteredData" data-id="srv_filter_overview">}\href{../../teal/html/FilteredData.html#method-srv_filter_overview}{\code{teal::FilteredData$srv_filter_overview()}}\out{</span>}
+\item \out{<span class="pkg-link" data-pkg="teal" data-topic="FilteredData" data-id="srv_filter_panel">}\href{../../teal/html/FilteredData.html#method-srv_filter_panel}{\code{teal::FilteredData$srv_filter_panel()}}\out{</span>}
+\item \out{<span class="pkg-link" data-pkg="teal" data-topic="FilteredData" data-id="ui_filter_overview">}\href{../../teal/html/FilteredData.html#method-ui_filter_overview}{\code{teal::FilteredData$ui_filter_overview()}}\out{</span>}
+\item \out{<span class="pkg-link" data-pkg="teal" data-topic="FilteredData" data-id="ui_filter_panel">}\href{../../teal/html/FilteredData.html#method-ui_filter_panel}{\code{teal::FilteredData$ui_filter_panel()}}\out{</span>}
 }
 \out{</details>}
 }

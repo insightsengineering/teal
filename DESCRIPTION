@@ -116,8 +116,6 @@ Collate:
     'load_dataset.R'
     'log_app_usage.R'
     'logging.R'
-    'module_filter_overview.R'
-    'module_filter_panel.R'
     'module_nested_tabs.R'
     'module_tabs_with_filters.R'
     'module_teal.R'

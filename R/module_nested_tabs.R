@@ -166,11 +166,11 @@ srv_nested_tabs <- function(input, output, session, datasets, modules) {
     return(res)
   }
 
-  active_module <- reactive({
-    # inputs may be NULL when UI hasn't loaded yet, but this expression still is evaluated
-    req(!is.null(input[[label_to_id(modules$label)]]))
-
-    get_active_module(modules, id_parent = NULL)
+  active_module <- eventReactive(
+    eventExpr = input[[label_to_id(modules$label)]],
+    ignoreNULL = TRUE,
+    valueExpr = {
+      get_active_module(modules, id_parent = NULL)
   })
   return(active_module)
 }
