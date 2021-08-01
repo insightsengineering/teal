@@ -213,6 +213,8 @@ DataAbstract <- R6::R6Class( #nolint
         return(private$datasets)
       }
     },
+    #' @field id String used to create unique GUI elements
+    id = NULL,
     #' @description
     #' Check if dataset has already been pulled.
     #'

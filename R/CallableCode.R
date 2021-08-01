@@ -91,7 +91,7 @@ CallableCode <- R6::R6Class( # nolint
     #
     get_callable_code = function(code) {
       expr <- tryCatch(
-        parse(text = code),
+        str2expression(code),
         error = function(e) {
           private$error_msg <- e$message
           private$failed <- TRUE

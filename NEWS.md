@@ -1,5 +1,8 @@
 # teal 0.9.5.9000
 
+### New features
+* Added `cdse_dataset_connector` to create delayed data objects from `CDSE`.
+
 ### Bug fixes
 * Fixed the bug caused by calling `mutate_dataset` multiple times on the same `DatasetConnector` or `Dataset` object.
 * Fixed a bug that caused the output of `get_code` function to not reproduce its raw data set.

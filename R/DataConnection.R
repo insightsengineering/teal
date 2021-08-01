@@ -59,7 +59,6 @@ DataConnection <- R6::R6Class( # nolint
       }
       private$if_conn_obj <- if_conn_obj
 
-
       private$open_ui <- function(id) {
         NULL
       }
@@ -130,12 +129,19 @@ DataConnection <- R6::R6Class( # nolint
         ),
         server = function(input, output, session) {
           session$onSessionEnded(stopApp)
+          callModule(
+            self$get_preopen_server(),
+            id = "data_connection",
+            connection = self
+          )
           observeEvent(input$submit, {
             rv <- reactiveVal(NULL)
             rv(
-              callModule(self$get_open_server(),
-                         id = "data_connection",
-                         connection = self)
+              callModule(
+                self$get_open_server(),
+                id = "data_connection",
+                connection = self
+              )
             )
 
             observeEvent(rv(), {
@@ -145,7 +151,6 @@ DataConnection <- R6::R6Class( # nolint
                 stopApp()
               }
             })
-
 
           })
         }
@@ -231,9 +236,16 @@ DataConnection <- R6::R6Class( # nolint
       return(private$open_fun$get_error_message())
     },
     #' @description
+    #' Get shiny server module prior opening connection.
+    #'
+    #' @return (`function`) shiny server prior opening connection.
+    get_preopen_server = function() {
+      return(private$preopen_server)
+    },
+    #' @description
     #' Get shiny server module to open connection.
     #'
-    #' @return the (`server function`) to open connection.
+    #' @return (`function`) shiny server to open connection.
     get_open_server = function() {
       return(private$open_server)
     },
@@ -242,7 +254,7 @@ DataConnection <- R6::R6Class( # nolint
     #'
     #' @param id `character` shiny element id
     #'
-    #' @return the (`ui function`) to set arguments to open connection function.
+    #' @return (`function`) shiny ui to set arguments to open connection function.
     get_open_ui = function(id) {
       return(private$open_ui(id))
     },
@@ -272,7 +284,26 @@ DataConnection <- R6::R6Class( # nolint
       return(invisible(self))
     },
     #' @description
-    #' Set open-connection server function
+    #' Set pre-open connection server function
+    #'
+    #' This function will be called before submit button will be hit.
+    #'
+    #' @param preopen_module (`function`)\cr
+    #'  A shiny module server function
+    #'
+    #' @return (`self`) invisibly for chaining.
+    set_preopen_server = function(preopen_module) {
+      stopifnot(is(preopen_module, "function"))
+      stopifnot(names(formals(preopen_module)) %in% c("input", "output", "session", "connection"))
+
+      private$preopen_server <- function(input, output, session, connection) {
+        callModule(preopen_module, id = "open_conn", connection = connection)
+      }
+
+      return(invisible(self))
+    },
+    #' @description
+    #' Set open connection server function
     #'
     #' This function will be called after submit button will be hit. There is no possibility to
     #' specify some dynamic `ui` as `server` function is executed after hitting submit
@@ -465,6 +496,7 @@ DataConnection <- R6::R6Class( # nolint
     open_ui = NULL,
     close_ui = NULL,
     ping_ui = NULL,
+    preopen_server = NULL,
     open_server = NULL,
     close_server = NULL,
     ping_server = NULL,
@@ -509,33 +541,33 @@ DataConnection <- R6::R6Class( # nolint
     # @description
     # Set close connection function
     #
-    # @param fun (`CallableFunction`) function to close connection
+    # @param fun (`Callable`) function to close connection
     #
     # @return (`self`) invisibly for chaining.
     set_close_fun = function(fun) {
-      stopifnot(is(fun, "CallableFunction"))
+      stopifnot(is(fun, "Callable"))
       private$close_fun <- fun
       return(invisible(self))
     },
     # @description
     # Set open connection function
     #
-    # @param fun (`CallableFunction`) function to open connection
+    # @param fun (`Callable`) function to open connection
     #
     # @return (`self`) invisibly for chaining.
     set_open_fun = function(fun) {
-      stopifnot(is(fun, "CallableFunction"))
+      stopifnot(is(fun, "Callable"))
       private$open_fun <- fun
       return(invisible(self))
     },
     # @description
     # Set a ping function
     #
-    # @param fun (`CallableFunction`) function to ping connection
+    # @param fun (`Callable`) function to ping connection
     #
     # @return (`self`) invisibly for chaining.
     set_ping_fun = function(fun) {
-      stopifnot(is(fun, "CallableFunction"))
+      stopifnot(is(fun, "Callable"))
       private$ping_fun <- fun
       return(invisible(self))
     },
@@ -974,3 +1006,67 @@ snowflake_connection <- function(open_args = list(), close_args = list(), ping_a
 
   return(x)
 }
+
+#' Open connection to `CDSE`
+#'
+#' @description `r lifecycle::badge("experimental")`
+#'
+#' @param env optional, `CDSE` environment name.
+#'
+#' @return (`DataConnection`) type of object
+#'
+#' @export
+cdse_connection <- function(env = "prod") {
+  check_pkg_quietly(
+    "CDSE",
+    "Connection to CDSE was requested, but CDSE package is not available."
+  )
+
+  open_call <- callable_code(sprintf("
+  if (require(\"shiny\") && is.null(shiny::getDefaultReactiveDomain())) {
+    CDSE::cdse_login()
+    CDSE::cdse_set_environment(\"%s\")
+    Sys.wait(1)
+    NULL
+  }", env))
+
+  x <- DataConnection$new(open_fun = open_call, if_conn_obj = TRUE)
+
+  # ugly hack to silent CDSE dependency note
+  x$.__enclos_env__$private$conn <- eval(parse(text = "CDSE::cdse_connection$new()"))
+
+  # open connection
+  x$set_open_ui(
+    function(id) {
+      ns <- NS(id)
+      div(
+        eval(parse(text = "CDSE::useCDSElogin()")),
+        "Please login to CDSE first before submitting!",
+        br(),
+        eval(parse(text = "CDSE::cdse_login_button(id = ns(\"cdse_login\"), label = \"Login to CDSE\")"))
+      )
+    }
+  )
+
+  x$set_preopen_server(
+    function(input, output, session, connection) {
+      conn <- connection$get_conn()
+      callModule(module = eval(parse(text = "CDSE::cdse_login_shiny")), id = "cdse_login", env = env, con = conn)
+
+      observeEvent(conn$reactive()(), {
+        if (!conn$is_valid()) {
+          connection$open()
+        }
+      })
+
+      session$onSessionEnded(function() {
+        suppressWarnings(connection$close(silent = TRUE, try = TRUE))
+      })
+
+      return(invisible(connection))
+    }
+  )
+
+  return(x)
+}
+

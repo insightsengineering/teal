@@ -71,6 +71,8 @@ RelationalDataConnector <- R6::R6Class( #nolint
       private$pull_code <- CodeClass$new()
       private$mutate_code <- CodeClass$new()
 
+      self$id <- digest::digest2int(as.character(Sys.time()))
+
       return(invisible(self))
     },
 
@@ -121,6 +123,14 @@ RelationalDataConnector <- R6::R6Class( #nolint
         } else {
           return(rv(FALSE))
         }
+      }
+    },
+    #' @description
+    #'
+    #' @return the \code{server} function
+    get_preopen_server = function() {
+      function(input, output, session, connection = private$connection) {
+        callModule(private$preopen_server, id = "data_input", connection = connection)
       }
     },
     #' @description
@@ -185,12 +195,28 @@ RelationalDataConnector <- R6::R6Class( #nolint
     #' @param f (\code{function})\cr
     #'  A shiny module server function that should load data from all connectors
     #'
-    #' @return \code{NULL} or \code{self} if data is loaded.
+    #' @return nothing
     set_server = function(f) {
       stopifnot(is(f, "function"))
       stopifnot(all(c("input", "output", "session") %in% names(formals(f))))
 
       private$server <- f
+      return(invisible(NULL))
+    },
+    #' @description
+    #' Set connector pre-open server function
+    #'
+    #' This function will be called before submit button will be hit.
+    #'
+    #' @param f (\code{function})\cr
+    #'  A shiny module server function
+    #'
+    #' @return nothing
+    set_preopen_server = function(f) {
+      stopifnot(is(f, "function"))
+      stopifnot(all(c("input", "output", "session") %in% names(formals(f))))
+
+      private$preopen_server <- f
       return(invisible(NULL))
     },
 
@@ -222,10 +248,8 @@ RelationalDataConnector <- R6::R6Class( #nolint
         private$connection$open(args = con_args, try = try)
 
         conn <- private$connection$get_conn()
-        if (!is.null(conn)) {
-          for (connector in private$datasets) {
-            connector$get_pull_callable()$assign_to_env("conn", conn)
-          }
+        for (connector in private$datasets) {
+          connector$get_pull_callable()$assign_to_env("conn", conn)
         }
       }
 
@@ -281,6 +305,11 @@ RelationalDataConnector <- R6::R6Class( #nolint
         ),
         server = function(input, output, session) {
           session$onSessionEnded(stopApp)
+          callModule(
+            self$get_preopen_server(),
+            id = "data_connector",
+            connection = private$connection
+          )
           observeEvent(input$submit, {
             rv <- reactiveVal(NULL)
             rv(
@@ -328,6 +357,7 @@ RelationalDataConnector <- R6::R6Class( #nolint
   ## __Private Fields ====
   private = list(
     server = NULL, # shiny server function
+    preopen_server = NULL, # shiny server function
     ui = NULL, # shiny ui function
     connection = NULL, # DataConnection
 

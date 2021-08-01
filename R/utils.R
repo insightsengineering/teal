@@ -113,7 +113,7 @@ get_client_timezone <- function(ns) {
 check_pkg_quietly <- function(pckg, msg) {
   stopifnot(is_character_single(pckg), is_character_single(msg))
 
-  if (!requireNamespace(pckg, quietly = TRUE)) {
+  if (!pckg %in% utils::installed.packages()) {
     stop(msg)
   }
 

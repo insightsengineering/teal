@@ -107,6 +107,8 @@ RelationalData <- R6::R6Class( # nolint
         }
       }
 
+      self$id <- digest::digest2int(as.character(Sys.time()))
+
       return(invisible(self))
     },
 
@@ -325,16 +327,25 @@ RelationalData <- R6::R6Class( # nolint
                   private$datasets,
                   function(x) {
                     div(
-                      if (!is(x, c("DatasetConnector", "RelationalDataConnector"))) {
-                        div(h4("Data(set) for: ", lapply(x$get_datanames(), code)), p(icon("check"), "Loaded"))
-                      } else {
+                      if (is(x, class2 = "RelationalDataConnector")) {
                         if_null(
-                          x$get_ui(id = ns(paste0(x$get_datanames(), collapse = "_"))),
+                          x$get_ui(id = ns(x$id)),
                           div(
                             h4("Dataset Connector for: ", lapply(x$get_datanames(), code)),
                             p(icon("check"), "Ready to Load")
                           )
                         )
+
+                      } else if (is(x, class2 = "DatasetConnector")) {
+                        if_null(
+                          x$get_ui(id = ns(paste0(x$get_datanames(), collapse = "_"))),
+                          div(
+                            h4("Dataset Connector for: ", code(x$get_dataname())),
+                            p(icon("check"), "Ready to Load")
+                          )
+                        )
+                      } else {
+                        div(h4("Data(set) for: ", lapply(x$get_datanames(), code)), p(icon("check"), "Loaded"))
                       },
                       br()
                     )
@@ -350,13 +361,19 @@ RelationalData <- R6::R6Class( # nolint
     },
     server = function(input, output, session) {
       shinyjs::show("delayed_data")
+      for (dc in self$get_connectors()) {
+        if (is(dc, class2 = "RelationalDataConnector")) {
+          callModule(dc$get_preopen_server(),
+                     id = dc$id)
+        }
+      }
       rv <- reactiveVal(NULL)
       observeEvent(input$submit, {
         # load data from all connectors
         for (dc in self$get_connectors()) {
           if (is(dc, class2 = "RelationalDataConnector")) {
             callModule(dc$get_server(),
-                       id = paste0(dc$get_datanames(), collapse = "_"),
+                       id = dc$id,
                        connection = dc$get_connection(),
                        connectors = dc$get_items()
             )
