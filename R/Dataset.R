@@ -132,7 +132,7 @@ Dataset <- R6::R6Class( # nolint
     #'
     #' @return dataset (\code{Dataset})
     get_dataset = function() {
-      if (self$is_mutate_delayed()) {
+      if (self$is_mutate_delayed() && !private$is_any_dependency_delayed(vars)) {
         private$mutate_eager(private$mutate_code)
       }
       return(self)
@@ -158,9 +158,6 @@ Dataset <- R6::R6Class( # nolint
     #' @return
     #' \code{data.frame} or \code{rtable}
     get_raw_data = function() {
-      if (self$is_mutate_delayed()) {
-        message("There are mutate statements that are delayed. Returned data may (or may not) reflect the mutations.")
-      }
       private$.raw_data
     },
     #' @description
@@ -298,15 +295,10 @@ Dataset <- R6::R6Class( # nolint
     #' @return optionally deparsed \code{call} object
     get_code = function(deparse = TRUE) {
       stopifnot(is_logical_single(deparse))
-      if (self$is_mutate_delayed()) {
-        message("The output includes mutate code that are delayed")
-      }
-      executed <- self$get_code_class()$get_code(deparse = FALSE)
-      delayed <- self$get_mutate_code_class()$get_code(deparse = FALSE)
-      res <- c(executed, delayed)
-      if (deparse) {
-        return(paste(res, collapse = "\n"))
-      }
+      executed <- self$get_code_class()
+      delayed <- self$get_mutate_code_class()
+      # calling append instead of set_code is important to prevent duplicates
+      res <- executed$append(delayed)$get_code(deparse = deparse)
       return(res)
     },
     #' @description
@@ -319,6 +311,13 @@ Dataset <- R6::R6Class( # nolint
       res$append(private$code)
 
       return(res)
+    },
+    #' @description
+    #' Get internal \code{vars} object
+    #'
+    #' @return `\code{list}`
+    get_vars = function() {
+      return(private$vars)
     },
 
     #' @description
@@ -335,6 +334,13 @@ Dataset <- R6::R6Class( # nolint
 
       return(res)
     },
+    #' @description
+    #' Get internal \code{mutate_vars} object
+    #'
+    #' @return `\code{list}`
+    get_mutate_vars = function() {
+      return(private$mutate_vars)
+    },
 
     #'
     #' @return \code{logical}
@@ -349,7 +355,7 @@ Dataset <- R6::R6Class( # nolint
     #' Either code or script must be provided, but not both.
     #'
     #' @return (`self`) invisibly for chaining
-    mutate = function(code, vars = list()) {
+    mutate = function(code, vars = list(), force_delay = FALSE) {
       stopifnot(is_fully_named_list(vars))
 
       if (inherits(code, "PythonCodeClass")) {
@@ -365,21 +371,8 @@ Dataset <- R6::R6Class( # nolint
           vars = list()
         )
       } else {
-        delay_mutate <- any(vapply(
-          c(private$var_r6, vars),
-          FUN = function(var) {
-            if (is(var, "DatasetConnector")) {
-              (!var$is_pulled()) || var$is_mutate_delayed()
-            } else if (is(var, "Dataset")) {
-              var$is_mutate_delayed()
-            } else {
-              FALSE
-            }
-          },
-          FUN.VALUE = logical(1)
-          )
-        )
-        if (delay_mutate) {
+        private$is_any_dependency_delayed(vars)
+        if (private$is_any_dependency_delayed(vars) || force_delay) {
           private$mutate_delayed(code, vars)
         } else {
           if (!is(code, "CodeClass")) {
@@ -479,7 +472,6 @@ Dataset <- R6::R6Class( # nolint
 
     ## __Private Methods ====
     mutate_delayed = function(code, vars) {
-      message("Mutation is delayed")
       private$set_vars_internal(vars, is_mutate_vars = TRUE)
       if (is(code, "CodeClass")) {
         private$mutate_code$append(code)
@@ -496,7 +488,12 @@ Dataset <- R6::R6Class( # nolint
       stopifnot(is(code_container, "CodeClass"))
       new_df <- private$execute_code(
         code = code_container,
-        vars = c(private$vars, private$mutate_vars, setNames(list(self), self$get_dataname()))
+        vars = c(
+          private$vars,
+          # if they have the same name, then they are guaranteed to be same identical objects.
+          private$mutate_vars[!names(private$mutate_vars) %in% names(private$vars)],
+          setNames(list(self), self$get_dataname())
+        )
       )
 
       # code set after successful evaluation
@@ -533,6 +530,22 @@ Dataset <- R6::R6Class( # nolint
       return(return_cols)
     },
 
+    is_any_dependency_delayed = function(vars = list()) {
+      any(vapply(
+        c(private$var_r6, vars),
+        FUN = function(var) {
+          if (is(var, "DatasetConnector")) {
+            (! var$is_pulled()) || var$is_mutate_delayed()
+          } else if (is(var, "Dataset")) {
+            var$is_mutate_delayed()
+          } else {
+            FALSE
+          }
+        },
+        FUN.VALUE = logical(1))
+      )
+    },
+
     set_vars_internal = function(vars, is_mutate_vars = FALSE) {
       stopifnot(is_fully_named_list(vars))
 
@@ -543,7 +556,7 @@ Dataset <- R6::R6Class( # nolint
       }
 
       if (length(vars) > 0) {
-        # now allowing overriding variable names
+        # not allowing overriding variable names
         over_rides <- names(vars)[vapply(
           names(vars), function(var_name) {
             var_name %in% names(total_vars) &&

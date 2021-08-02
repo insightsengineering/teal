@@ -258,7 +258,7 @@ testthat::test_that("Dataset mutate method with delayed logic", {
         test_ds0$get_code(),
         regexp = "The output includes mutate code that are delayed"
       ),
-      paste(test_ds0$get_code_class()$get_code(), test_ds0$get_mutate_code_class()$get_code(), sep = "\n")
+      paste(test_ds0$get_code_class()$append(test_ds0$get_mutate_code_class())$get_code(deparse = TRUE))
     )
   }
   repeated_call()
