@@ -1,0 +1,23 @@
+
+---
+current_repo:
+  repo: insightsengineering/teal
+  host: https://github.com
+
+upstream_repos:
+- repo: insightsengineering/random.cdisc.data
+  host: https://github.com
+- repo: insightsengineering/tern
+  host: https://github.com
+
+downstream_repos:
+- repo: insightsengineering/teal.devel
+  host: https://github.com
+- repo: insightsengineering/teal.modules.clinical
+  host: https://github.com
+- repo: insightsengineering/teal.modules.general
+  host: https://github.com
+- repo: insightsengineering/teal.osprey
+  host: https://github.com
+- repo: insightsengineering/teal.goshawk
+  host: https://github.com
