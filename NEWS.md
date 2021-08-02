@@ -1,7 +1,7 @@
 # teal 0.9.5.9000
 
-### Enhancements 
-* Modified the mutate method of `DatasetConnector` and `Dataset` objects to delay execution whenever possible.
+### New features
+* Added `cdse_dataset_connector` to create delayed data objects from `CDSE`.
 
 ### Bug fixes
 * Fixed the bug caused by calling `mutate_dataset` multiple times on the same `DatasetConnector` or `Dataset` object.

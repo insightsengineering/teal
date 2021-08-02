@@ -48,10 +48,12 @@ x$close() # call closing function
 \item \href{#method-get_conn}{\code{DataConnection$get_conn()}}
 \item \href{#method-get_open_call}{\code{DataConnection$get_open_call()}}
 \item \href{#method-get_open_error_message}{\code{DataConnection$get_open_error_message()}}
+\item \href{#method-get_preopen_server}{\code{DataConnection$get_preopen_server()}}
 \item \href{#method-get_open_server}{\code{DataConnection$get_open_server()}}
 \item \href{#method-get_open_ui}{\code{DataConnection$get_open_ui()}}
 \item \href{#method-is_open_failed}{\code{DataConnection$is_open_failed()}}
 \item \href{#method-set_open_args}{\code{DataConnection$set_open_args()}}
+\item \href{#method-set_preopen_server}{\code{DataConnection$set_preopen_server()}}
 \item \href{#method-set_open_server}{\code{DataConnection$set_open_server()}}
 \item \href{#method-set_open_ui}{\code{DataConnection$set_open_ui()}}
 \item \href{#method-close}{\code{DataConnection$close()}}
@@ -236,6 +238,19 @@ connection was successful.
 }
 }
 \if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-get_preopen_server"></a>}}
+\if{latex}{\out{\hypertarget{method-get_preopen_server}{}}}
+\subsection{Method \code{get_preopen_server()}}{
+Get shiny server module prior opening connection.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{DataConnection$get_preopen_server()}\if{html}{\out{</div>}}
+}
+
+\subsection{Returns}{
+(\code{function}) shiny server prior opening connection.
+}
+}
+\if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-get_open_server"></a>}}
 \if{latex}{\out{\hypertarget{method-get_open_server}{}}}
 \subsection{Method \code{get_open_server()}}{
@@ -245,7 +260,7 @@ Get shiny server module to open connection.
 }
 
 \subsection{Returns}{
-the (\verb{server function}) to open connection.
+(\code{function}) shiny server to open connection.
 }
 }
 \if{html}{\out{<hr>}}
@@ -265,7 +280,7 @@ Get Shiny module with inputs to open connection
 \if{html}{\out{</div>}}
 }
 \subsection{Returns}{
-the (\verb{ui function}) to set arguments to open connection function.
+(\code{function}) shiny ui to set arguments to open connection function.
 }
 }
 \if{html}{\out{<hr>}}
@@ -304,10 +319,33 @@ Set open connection function argument
 }
 }
 \if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-set_preopen_server"></a>}}
+\if{latex}{\out{\hypertarget{method-set_preopen_server}{}}}
+\subsection{Method \code{set_preopen_server()}}{
+Set pre-open connection server function
+
+This function will be called before submit button will be hit.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{DataConnection$set_preopen_server(preopen_module)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{preopen_module}}{(\code{function})\cr
+A shiny module server function}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Returns}{
+(\code{self}) invisibly for chaining.
+}
+}
+\if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-set_open_server"></a>}}
 \if{latex}{\out{\hypertarget{method-set_open_server}{}}}
 \subsection{Method \code{set_open_server()}}{
-Set open-connection server function
+Set open connection server function
 
 This function will be called after submit button will be hit. There is no possibility to
 specify some dynamic \code{ui} as \code{server} function is executed after hitting submit

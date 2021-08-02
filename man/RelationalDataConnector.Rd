@@ -52,10 +52,12 @@ x$get_datasets()
 \item \href{#method-get_connection}{\code{RelationalDataConnector$get_connection()}}
 \item \href{#method-get_code_class}{\code{RelationalDataConnector$get_code_class()}}
 \item \href{#method-get_server}{\code{RelationalDataConnector$get_server()}}
+\item \href{#method-get_preopen_server}{\code{RelationalDataConnector$get_preopen_server()}}
 \item \href{#method-get_ui}{\code{RelationalDataConnector$get_ui()}}
 \item \href{#method-set_pull_args}{\code{RelationalDataConnector$set_pull_args()}}
 \item \href{#method-set_ui}{\code{RelationalDataConnector$set_ui()}}
 \item \href{#method-set_server}{\code{RelationalDataConnector$set_server()}}
+\item \href{#method-set_preopen_server}{\code{RelationalDataConnector$set_preopen_server()}}
 \item \href{#method-pull}{\code{RelationalDataConnector$pull()}}
 \item \href{#method-launch}{\code{RelationalDataConnector$launch()}}
 \item \href{#method-mutate}{\code{RelationalDataConnector$mutate()}}
@@ -136,6 +138,19 @@ Get internal \code{CodeClass} object
 
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{RelationalDataConnector$get_server()}\if{html}{\out{</div>}}
+}
+
+\subsection{Returns}{
+the \code{server} function
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-get_preopen_server"></a>}}
+\if{latex}{\out{\hypertarget{method-get_preopen_server}{}}}
+\subsection{Method \code{get_preopen_server()}}{
+
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{RelationalDataConnector$get_preopen_server()}\if{html}{\out{</div>}}
 }
 
 \subsection{Returns}{
@@ -228,7 +243,30 @@ A shiny module server function that should load data from all connectors}
 \if{html}{\out{</div>}}
 }
 \subsection{Returns}{
-\code{NULL} or \code{self} if data is loaded.
+nothing
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-set_preopen_server"></a>}}
+\if{latex}{\out{\hypertarget{method-set_preopen_server}{}}}
+\subsection{Method \code{set_preopen_server()}}{
+Set connector pre-open server function
+
+This function will be called before submit button will be hit.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{RelationalDataConnector$set_preopen_server(f)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{f}}{(\code{function})\cr
+A shiny module server function}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Returns}{
+nothing
 }
 }
 \if{html}{\out{<hr>}}
