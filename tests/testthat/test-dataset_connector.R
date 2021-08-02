@@ -98,10 +98,7 @@ test_that("DatasetConnector", {
     "ADSL <- data.frame(id = 1:3, marker = c(100, 1, 10), alive = TRUE, new_feature = c(3, 4, 1))"
   )
 
-  expect_message(
-    m <- mutate_dataset(x3, "ADSL$newest <- 'xxx'"),
-    "Mutation is delayed"
-  )
+  m <- mutate_dataset(x3, "ADSL$newest <- 'xxx'")
 
   expect_silent(load_dataset(m))
 
