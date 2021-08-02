@@ -80,12 +80,8 @@ CodeClass <- R6::R6Class( # nolint
       if (is_empty(x$code)) {
         return(invisible(self))
       } else {
-        prior <- self$code
         for (code_i in x$code) {
           private$set_code_single(code_i)
-        }
-        if (identical(prior, self$code)) {
-          warning("Code is not appended because it is identical to previously added code.", call. =  FALSE)
         }
         return(invisible(self))
       }

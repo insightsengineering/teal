@@ -248,64 +248,41 @@ testthat::test_that("Dataset mutate method with delayed logic", {
     )
   )
 
-  testthat::expect_message(
-    mutate_dataset(test_ds0, code = "head_mtcars$head_letters <- dc$head_letters", vars = list(dc = t_dc)),
-    regexp = "Mutation is delayed"
-  )
+  mutate_dataset(test_ds0, code = "head_mtcars$head_letters <- dc$head_letters", vars = list(dc = t_dc))
+
   repeated_call <- function() {
     testthat::expect_equal(
-      testthat::expect_message(
-        test_ds0$get_code(),
-        regexp = "The output includes mutate code that are delayed"
-      ),
+      test_ds0$get_code(),
       paste(test_ds0$get_code_class()$append(test_ds0$get_mutate_code_class())$get_code(deparse = TRUE))
     )
   }
   repeated_call()
-  repeated_message <-
-    "There are mutate statements that are delayed. Returned data may \\(or may not\\) reflect the mutations."
-  testthat::expect_message(
-    testthat::expect_null(get_raw_data(test_ds0)$head_mtcars),
-    regexp = repeated_message
-  )
+
+
+  testthat::expect_null(get_raw_data(test_ds0)$head_mtcars)
+
   testthat::expect_true(test_ds0$is_mutate_delayed())
   repeated_call()
 
   # continuing to delay
-  testthat::expect_message(
-    mutate_dataset(test_ds0, code = "head_mtcars$new_var <- 1"),
-    regexp = "Mutation is delayed"
-  )
-  repeated_call()
-  testthat::expect_message(
-    expect_null(get_raw_data(test_ds0)$new_var),
-    regexp = repeated_message
-    )
+  mutate_dataset(test_ds0, code = "head_mtcars$new_var <- 1")
   testthat::expect_true(test_ds0$is_mutate_delayed())
 
-  testthat::expect_message(
-    mutate_dataset(test_ds0, code = "head_mtcars$perm <- ds2$perm", vars = list(ds2 = test_ds2)),
-    regexp = "Mutation is delayed"
-  )
   repeated_call()
-  testthat::expect_message(
-    expect_null(get_raw_data(test_ds0)$perm),
-    regexp = repeated_message
-  )
+  expect_null(get_raw_data(test_ds0)$new_var)
+  testthat::expect_true(test_ds0$is_mutate_delayed())
+
+  mutate_dataset(test_ds0, code = "head_mtcars$perm <- ds2$perm", vars = list(ds2 = test_ds2))
+  repeated_call()
+
+  expect_null(get_raw_data(test_ds0)$perm)
   repeated_call()
   testthat::expect_true(test_ds0$is_mutate_delayed())
 
   load_dataset(t_dc)
-  testthat::expect_message(
-    get_raw_data(test_ds0),
-    regexp = repeated_message
-  )
   testthat::expect_true(test_ds0$is_mutate_delayed())
 
-  testthat::expect_message(
-    load_dataset(test_ds0),
-    regexp = repeated_message
-  )
+  load_dataset(test_ds0)
   testthat::expect_silent(get_raw_data(test_ds0))
   testthat::expect_false(test_ds0$is_mutate_delayed())
   testthat::expect_true(all(c("head_letters", "new_var", "perm") %in% names(get_raw_data(test_ds0))))
