@@ -645,6 +645,9 @@ Dataset <- R6::R6Class( # nolint
               stop("Circular dependencies detected")
             }
           }
+          # this may cause duplicates.
+          # as of now, no reason why it makes any difference
+          # no nothing is done
           private$var_r6 <- c(private$var_r6, var, var$get_var_r6())
         }
       }
