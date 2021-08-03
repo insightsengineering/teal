@@ -507,15 +507,6 @@ DatasetConnector <- R6::R6Class( #nolint
       return(res)
     },
 
-    get_mutate_code_class = function() {
-      res <- CodeClass$new()
-      if (inherits(private$mutate_code, "PythonCodeClass")) {
-        res <- PythonCodeClass$new()
-      }
-      res$append(list_to_code_class(private$mutate_vars))
-      res$append(private$mutate_code)
-      return(res)
-    },
     set_pull_callable = function(pull_callable) {
       stopifnot(is(pull_callable, "Callable"))
       private$pull_callable <- pull_callable
