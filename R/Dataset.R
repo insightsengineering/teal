@@ -135,7 +135,7 @@ Dataset <- R6::R6Class( # nolint
     #'
     #' @return dataset (\code{Dataset})
     get_dataset = function() {
-      if (self$is_mutate_delayed() && !private$is_any_dependency_delayed(vars)) {
+      if (self$is_mutate_delayed() && !private$is_any_dependency_delayed()) {
         private$mutate_eager(private$mutate_code)
       }
       return(self)
@@ -487,7 +487,7 @@ Dataset <- R6::R6Class( # nolint
       } else (
         private$mutate_code$set_code(
           code,
-          dataname = self$get_dataname()
+          deps = names(vars)
         )
       )
       return(invisible(self))

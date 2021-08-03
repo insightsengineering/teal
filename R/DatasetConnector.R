@@ -279,7 +279,7 @@ DatasetConnector <- R6::R6Class( #nolint
     mutate = function(code, vars = list()) {
       stopifnot(is_fully_named_list(vars))
 
-      if (!self$is_pulled()) {
+      if (is.null(private$dataset)) {
         # just needs a dummy Dataset object to store mutate code, hence col = 1
         private$dataset <- Dataset$new(dataname = self$get_dataname(), x = data.frame(col = 1))
       }
@@ -309,7 +309,7 @@ DatasetConnector <- R6::R6Class( #nolint
     #'
     #' @return \code{logical}
     is_mutate_delayed = function() {
-      if (is_null(private$dataset)) {
+      if (is.null(private$dataset)) {
         FALSE
       } else {
         private$dataset$is_mutate_delayed()
