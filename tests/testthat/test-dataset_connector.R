@@ -847,3 +847,78 @@ testthat::test_that("DatasetConnector mutate method edge cases", {
   )
   testthat::expect_equal(get_raw_data(t_dc)$new_var, c(4, 4, 1, 1, 2, 1))
 })
+
+testthat::test_that("get_code_class returns the correct CodeClass object", {
+  cc1 <- CodeClass$new(code = "iris <- (function() head(iris))()", dataname = "iris")
+  cf1 <- CallableFunction$new(function() head(iris))
+  dc1 <- DatasetConnector$new("iris", cf1)
+  testthat::expect_equal(dc1$get_code_class(), cc1)
+})
+
+testthat::test_that("Pulled DatasetConnector returns the same CodeClass as before pulling", {
+  cf1 <- CallableFunction$new(function() head(iris))
+  dc1 <- DatasetConnector$new("iris", cf1)
+  pre_pull_cc <- dc1$get_code_class()
+  dc1$pull()
+  post_pull_cc <- dc1$get_code_class()
+
+  testthat::expect_equal(post_pull_cc, pre_pull_cc)
+})
+
+testthat::test_that("Pulled dependent DatasetConnector returns the same CodeClass as before pulling", {
+  ds <- Dataset$new("iris", head(iris), code = "iris <- head(iris)")
+  cf <- CallableFunction$new(function() head(mtcars))
+  dc <- DatasetConnector$new("mtcars", cf, vars = list(iris = ds))
+  pre_pull_code_class <- dc$get_code_class()
+  dc$pull()
+  post_pull_code_class <- dc$get_code_class()
+  testthat::expect_equal(post_pull_code_class, pre_pull_code_class)
+})
+
+testthat::test_that("Pulling twice doesn't change the returned DatasetConnector's CodeClass", {
+  ds <- Dataset$new("iris", head(iris), code = "iris <- head(iris)")
+  cf <- CallableFunction$new(function() head(mtcars))
+  dc <- DatasetConnector$new("mtcars", cf, vars = list(iris = ds))
+  dc$pull()
+  pre_pull_code_class <- dc$get_code_class()
+  dc$pull()
+  post_pull_code_class <- dc$get_code_class()
+  testthat::expect_equal(post_pull_code_class, pre_pull_code_class)
+})
+
+testthat::test_that("Identical mutation expressions are added to the mutation code", {
+  cf <- CallableFunction$new(function() head(mtcars))
+  dc <- DatasetConnector$new("mtcars", cf)
+  dc$mutate("mtcars$test <- 1")
+  dc$mutate("mtcars$test <- 1")
+  testthat::expect_equal(dc$get_code(), "mtcars <- (function() head(mtcars))()\nmtcars$test <- 1\nmtcars$test <- 1")
+})
+
+testthat::test_that("Identical mutation expressions are executed upon pulling the Connector object", {
+  cf <- CallableFunction$new(function() head(mtcars))
+  dc <- DatasetConnector$new("mtcars", cf)
+  dc$mutate("mtcars$test <- 1")
+  dc$mutate("mtcars$test <- mtcars$test * 2")
+  dc$mutate("mtcars$test <- mtcars$test * 2")
+  dc$pull()
+  testthat::expect_equal(dc$get_raw_data()$test, rep(4, 6))
+})
+
+testthat::test_that("Identical mutation expressions are shown in the returned code after pulling", {
+  cf <- CallableFunction$new(function() head(mtcars))
+  dc <- DatasetConnector$new("mtcars", cf)
+  dc$mutate("mtcars$test <- 1")
+  dc$mutate("mtcars$test <- mtcars$test * 2")
+  dc$mutate("mtcars$test <- mtcars$test * 2")
+  dc$pull()
+  testthat::expect_equal(
+    dc$get_code(),
+    paste(
+      "mtcars <- (function() head(mtcars))()",
+      "mtcars$test <- 1",
+      "mtcars$test <- mtcars$test * 2",
+      "mtcars$test <- mtcars$test * 2",
+      sep = "\n"
+    )
+  )
+})
