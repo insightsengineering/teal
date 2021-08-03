@@ -371,3 +371,14 @@ testthat::test_that("get_code_class returns the correct CodeClass after mutating
   cc3 <- CodeClass$new(code = "iris$test <- 1", dataname = "iris")
   testthat::expect_equal(ds1$get_code_class(), cc1$append(cc2)$append(cc3))
 })
+
+testthat::test_that("Dataset$recreate does not reset the mutation code", {
+  cf <- CallableFunction$new(function() head(mtcars))
+  dataset_connector1 <- DatasetConnector$new("mtcars", cf)
+  dataset1 <- Dataset$new("iris", head(iris))
+  dataset1$mutate(code = "test", vars = list(test = dataset_connector1))
+  code_before_recreating <- dataset1$get_code()
+  dataset1$recreate()
+  code_after_recreating <- dataset1$get_code()
+  testthat::expect_equal(code_after_recreating, code_before_recreating)
+})
