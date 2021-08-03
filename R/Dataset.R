@@ -73,10 +73,7 @@ Dataset <- R6::R6Class( # nolint
       self$set_vars(vars)
       self$set_dataset_label(label)
       self$set_keys(keys)
-      # may not be NULL if object is being recreated
-      if (is.null(private$mutate_code)) {
-        private$mutate_code <- CodeClass$new()
-      }
+      private$mutate_code <- CodeClass$new()
       private$calculate_hash()
       # needed if recreating dataset - we need to preserve code order and uniqueness
       private$code <- CodeClass$new()
@@ -100,6 +97,8 @@ Dataset <- R6::R6Class( # nolint
                         label = self$get_dataset_label(),
                         vars = list()) {
 
+      mutate_code <- private$mutate_code
+
       res <- self$initialize(
         dataname = dataname,
         x = x,
@@ -108,6 +107,11 @@ Dataset <- R6::R6Class( # nolint
         label = label,
         vars = vars
       )
+
+      if (!is.null(mutate_code)) {
+        # vars argument not needed because it was not overridden
+        res$mutate(code = mutate_code, force_delay = TRUE)
+      }
 
       return(res)
     },
