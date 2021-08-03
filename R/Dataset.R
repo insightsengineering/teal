@@ -557,11 +557,7 @@ Dataset <- R6::R6Class( # nolint
     set_vars_internal = function(vars, is_mutate_vars = FALSE) {
       stopifnot(is_fully_named_list(vars))
 
-      total_vars <- if (is_mutate_vars) {
-        c(private$vars, private$mutate_vars)
-      } else {
-        private$vars
-      }
+      total_vars <- c(private$vars, private$mutate_vars)
 
       if (length(vars) > 0) {
         # not allowing overriding variable names
@@ -655,7 +651,7 @@ Dataset <- R6::R6Class( # nolint
           }
           # this may cause duplicates.
           # as of now, no reason why it makes any difference
-          # no nothing is done
+          # so nothing is done
           private$var_r6 <- c(private$var_r6, var, var$get_var_r6())
         }
       }
