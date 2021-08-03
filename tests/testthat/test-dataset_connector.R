@@ -922,4 +922,3 @@ testthat::test_that("Identical mutation expressions are shown in the returned co
     )
   )
 })
-
