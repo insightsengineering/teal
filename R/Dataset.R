@@ -380,7 +380,10 @@ Dataset <- R6::R6Class( # nolint
         } else {
           if (!is(code, "CodeClass")) {
             code_container <- CodeClass$new()
-            code_container$set_code(code = code, deps = c(private$dataname, names(vars)))
+            code_container$set_code(
+              code = code,
+              deps = names(vars)
+            )
           } else {
             code_container <- code
           }

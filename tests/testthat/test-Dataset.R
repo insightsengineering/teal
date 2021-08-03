@@ -365,9 +365,9 @@ testthat::test_that("get_code_class returns the correct CodeClass object", {
 testthat::test_that("get_code_class returns the correct CodeClass after mutating with another Dataset", {
   ds1 <- Dataset$new("iris", head(iris), code = "iris <- head(iris)")
   ds2 <- Dataset$new("mtcars", head(mtcars), code = "mtcars <- head(mtcars)")
-  ds1$mutate("iris$test <- 1", vars = list(mtcars = ds2))
   cc1 <- CodeClass$new(code = "mtcars <- head(mtcars)", dataname = "mtcars")
   cc2 <- CodeClass$new(code = "iris <- head(iris)", dataname = "iris")
   cc3 <- CodeClass$new(code = "iris$test <- 1", dataname = "iris")
+  ds1$mutate(cc3, vars = list(mtcars = ds2))
   testthat::expect_equal(ds1$get_code_class(), cc1$append(cc2)$append(cc3))
 })
