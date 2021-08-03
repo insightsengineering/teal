@@ -498,7 +498,7 @@ Dataset <- R6::R6Class( # nolint
         code = code_container,
         vars = c(
           private$vars,
-          # if they have the same name, then they are guaranteed to be same identical objects.
+          # if they have the same name, then they are guaranteed to be identical objects.
           private$mutate_vars[!names(private$mutate_vars) %in% names(private$vars)],
           setNames(list(self), self$get_dataname())
         )
