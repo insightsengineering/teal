@@ -375,7 +375,6 @@ Dataset <- R6::R6Class( # nolint
           vars = list()
         )
       } else {
-        private$is_any_dependency_delayed(vars)
         if (private$is_any_dependency_delayed(vars) || force_delay) {
           private$mutate_delayed(code, vars)
         } else {
