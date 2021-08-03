@@ -51,21 +51,18 @@ RoxygenNote: 7.1.1
 Suggests:
     askpass,
     covr,
-    DBI,
     httr,
     knitr,
     nomnoml,
-    odbc,
     random.cdisc.data (>= 0.3.11),
     readr,
-    rice,
     rmarkdown,
     tern (>= 0.7.4),
     test.nest (>= 0.2.9),
     testthat (>= 2.0)
 VignetteBuilder: knitr
 RdMacros: lifecycle
-Collate: 
+Collate:
     'CDISCData.R'
     'CDISCDataConnector.R'
     'CDISCDataset.R'
