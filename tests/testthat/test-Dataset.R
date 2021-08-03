@@ -352,3 +352,22 @@ testthat::test_that("get_hash returns the hash of the object passed to the const
   ds <- Dataset$new("iris", iris)
   testthat::expect_equal(ds$get_hash(), iris_hash)
 })
+
+testthat::test_that("get_code_class returns the correct CodeClass object", {
+  cc1 <- CodeClass$new(code = "iris <- head(iris)", dataname = "iris")
+  cc2 <- CodeClass$new(code = "mtcars <- head(mtcars)", dataname = "mtcars", deps = "iris")
+  ds1 <- Dataset$new("iris", head(iris), code = "iris <- head(iris)")
+  ds2 <- Dataset$new("mtcars", head(mtcars), code = "mtcars <- head(mtcars)", vars = list(iris = ds1))
+  testthat::expect_equal(ds1$get_code_class(), cc1)
+  testthat::expect_equal(ds2$get_code_class(), cc1$append(cc2))
+})
+
+testthat::test_that("get_code_class returns the correct CodeClass after mutating with another Dataset", {
+  ds1 <- Dataset$new("iris", head(iris), code = "iris <- head(iris)")
+  ds2 <- Dataset$new("mtcars", head(mtcars), code = "mtcars <- head(mtcars)")
+  ds1$mutate("iris$test <- 1", vars = list(mtcars = ds2))
+  cc1 <- CodeClass$new(code = "mtcars <- head(mtcars)", dataname = "mtcars")
+  cc2 <- CodeClass$new(code = "iris <- head(iris)", dataname = "iris")
+  cc3 <- CodeClass$new(code = "iris$test <- 1", dataname = "iris")
+  testthat::expect_equal(ds1$get_code_class(), cc1$append(cc2)$append(cc3))
+})
