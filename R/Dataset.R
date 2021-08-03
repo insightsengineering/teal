@@ -372,7 +372,6 @@ Dataset <- R6::R6Class( # nolint
 
         # dataset is recreated by replacing data by mutated object
         # mutation code is added to the code which replicates the data
-        # because new_code contains also code of the
         self$recreate(
           x = new_df,
           vars = list()
