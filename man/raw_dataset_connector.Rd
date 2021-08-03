@@ -14,7 +14,7 @@ function with necessary arguments set to fetch data from connection.}
 new \code{DatasetConnector} object
 }
 \description{
-\ifelse{html}{\figure{lifecycle-defunct.svg}{options: alt='Defunct lifecycle'}}{\strong{Defunct}}
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#defunct}{\figure{lifecycle-defunct.svg}{options: alt='[Defunct]'}}}{\strong{[Defunct]}}
 }
 \details{
 Create \code{DatasetConnector} from \code{\link{callable_function}}.

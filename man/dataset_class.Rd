@@ -5,13 +5,13 @@
 \alias{MAEDataset}
 \title{R6 Class representing a dataset with its attributes}
 \description{
-\ifelse{html}{\out{<a href='https://www.tidyverse.org/lifecycle/#experimental'><img src='figures/lifecycle-experimental.svg' alt='Experimental lifecycle'></a>}}{\strong{Experimental}}
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
 
 Any \code{data.frame} object can be stored inside this object.
 Some attributes like colnames, dimension or column names for a specific type will
 be automatically derived.
 
-\ifelse{html}{\out{<a href='https://www.tidyverse.org/lifecycle/#experimental'><img src='figures/lifecycle-experimental.svg' alt='Experimental lifecycle'></a>}}{\strong{Experimental}}
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
 
 Any \code{MultiAssayExperiment} object can be stored inside this MAEDataset.
 Some attributes like colnames, dimension or column names for a specific type will
@@ -68,7 +68,9 @@ be automatically derived.
 \item \href{#method-set_code}{\code{Dataset$set_code()}}
 \item \href{#method-get_code}{\code{Dataset$get_code()}}
 \item \href{#method-get_code_class}{\code{Dataset$get_code_class()}}
+\item \href{#method-get_vars}{\code{Dataset$get_vars()}}
 \item \href{#method-get_mutate_code_class}{\code{Dataset$get_mutate_code_class()}}
+\item \href{#method-get_mutate_vars}{\code{Dataset$get_mutate_vars()}}
 \item \href{#method-is_mutate_delayed}{\code{Dataset$is_mutate_delayed()}}
 \item \href{#method-mutate}{\code{Dataset$mutate()}}
 \item \href{#method-check}{\code{Dataset$check()}}
@@ -531,6 +533,19 @@ Get internal \code{CodeClass} object
 }
 }
 \if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-get_vars"></a>}}
+\if{latex}{\out{\hypertarget{method-get_vars}{}}}
+\subsection{Method \code{get_vars()}}{
+Get internal \code{vars} object
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{Dataset$get_vars()}\if{html}{\out{</div>}}
+}
+
+\subsection{Returns}{
+\verb{\code{list}}
+}
+}
+\if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-get_mutate_code_class"></a>}}
 \if{latex}{\out{\hypertarget{method-get_mutate_code_class}{}}}
 \subsection{Method \code{get_mutate_code_class()}}{
@@ -541,6 +556,19 @@ Get internal \code{CodeClass} object
 
 \subsection{Returns}{
 \verb{\code{CodeClass}}
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-get_mutate_vars"></a>}}
+\if{latex}{\out{\hypertarget{method-get_mutate_vars}{}}}
+\subsection{Method \code{get_mutate_vars()}}{
+Get internal \code{mutate_vars} object
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{Dataset$get_mutate_vars()}\if{html}{\out{</div>}}
+}
+
+\subsection{Returns}{
+\verb{\code{list}}
 }
 }
 \if{html}{\out{<hr>}}
@@ -560,29 +588,20 @@ Get internal \code{CodeClass} object
 \if{latex}{\out{\hypertarget{method-mutate}{}}}
 \subsection{Method \code{mutate()}}{
 Mutate dataset by code
-
-Either code or script must be provided, but not both.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{Dataset$mutate(code, vars = list())}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{Dataset$mutate(code, vars = list(), force_delay = FALSE)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{code}}{(\code{character})\cr
-A character string defining the code needed to produce the data set in \code{x}.
-\code{initialize()} and \code{recreate()} accept code as \code{CodeClass} also
-which is needed to preserve the code uniqueness and correct order.}
+\item{\code{code}}{(\code{CodeClass}) or (\code{character}) R expressions to be executed}
 
-\item{\code{vars}}{(named \code{list})) \cr
-In case when this object code depends on other \code{Dataset} object(s) or
-other constant value, this/these object(s) should be included as named
-element(s) of the list. For example if this object code needs \code{ADSL}
-object we should specify \verb{vars = list(ADSL = <adsl object>)}.
-It's recommended to include \code{Dataset} or \code{DatasetConnector} objects to
-the \code{vars} list to preserve reproducibility. Please note that \code{vars}
-are included to this object as local \code{vars} and they cannot be modified
-within another dataset.}
+\item{\code{vars}}{a named list of R objects that \code{code} depends on to execute}
+
+\item{\code{force_delay}}{should only be set by the containing DatasetConnector object
+
+Either code or script must be provided, but not both.}
 }
 \if{html}{\out{</div>}}
 }
@@ -687,11 +706,13 @@ The objects of this class are cloneable with this method.
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="Dataset" data-id="get_hash">}\href{../../teal/html/Dataset.html#method-get_hash}{\code{teal::Dataset$get_hash()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="Dataset" data-id="get_keys">}\href{../../teal/html/Dataset.html#method-get_keys}{\code{teal::Dataset$get_keys()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="Dataset" data-id="get_mutate_code_class">}\href{../../teal/html/Dataset.html#method-get_mutate_code_class}{\code{teal::Dataset$get_mutate_code_class()}}\out{</span>}
+\item \out{<span class="pkg-link" data-pkg="teal" data-topic="Dataset" data-id="get_mutate_vars">}\href{../../teal/html/Dataset.html#method-get_mutate_vars}{\code{teal::Dataset$get_mutate_vars()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="Dataset" data-id="get_numeric_colnames">}\href{../../teal/html/Dataset.html#method-get_numeric_colnames}{\code{teal::Dataset$get_numeric_colnames()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="Dataset" data-id="get_raw_data">}\href{../../teal/html/Dataset.html#method-get_raw_data}{\code{teal::Dataset$get_raw_data()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="Dataset" data-id="get_row_labels">}\href{../../teal/html/Dataset.html#method-get_row_labels}{\code{teal::Dataset$get_row_labels()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="Dataset" data-id="get_rownames">}\href{../../teal/html/Dataset.html#method-get_rownames}{\code{teal::Dataset$get_rownames()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="Dataset" data-id="get_var_r6">}\href{../../teal/html/Dataset.html#method-get_var_r6}{\code{teal::Dataset$get_var_r6()}}\out{</span>}
+\item \out{<span class="pkg-link" data-pkg="teal" data-topic="Dataset" data-id="get_vars">}\href{../../teal/html/Dataset.html#method-get_vars}{\code{teal::Dataset$get_vars()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="Dataset" data-id="is_mutate_delayed">}\href{../../teal/html/Dataset.html#method-is_mutate_delayed}{\code{teal::Dataset$is_mutate_delayed()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="Dataset" data-id="is_pulled">}\href{../../teal/html/Dataset.html#method-is_pulled}{\code{teal::Dataset$is_pulled()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="Dataset" data-id="mutate">}\href{../../teal/html/Dataset.html#method-mutate}{\code{teal::Dataset$mutate()}}\out{</span>}
