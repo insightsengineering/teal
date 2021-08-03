@@ -333,10 +333,7 @@ Dataset <- R6::R6Class( # nolint
     get_mutate_code_class = function() {
       res <- CodeClass$new()
       res$append(list_to_code_class(private$mutate_vars))
-      # MAE dataset does not initialize mutate_code
-      if (!is.null(private$mutate_code)) {
-        res$append(private$mutate_code)
-      }
+      res$append(private$mutate_code)
 
       return(res)
     },
