@@ -70,7 +70,6 @@ Dataset <- R6::R6Class( # nolint
       private$.row_labels <- c() # not yet defined in rtables
 
       private$set_dataname(dataname)
-      private$set_var_r6(vars)
       self$set_vars(vars)
       self$set_dataset_label(label)
       self$set_keys(keys)
