@@ -968,3 +968,19 @@ testthat::test_that("DatasetConnector$is_mutate_delayed returns TRUE if mutated 
   dc$pull()
   testthat::expect_false(dc$is_mutate_delayed())
 })
+
+testthat::test_that("DatasetConnector$is_mutate_delayed returns FALSE if mutated with no vars after pulling", {
+  cf <- CallableFunction$new(function() head(mtcars))
+  dc <- DatasetConnector$new("mtcars", cf)
+  dc$pull()
+  dc$mutate(code = "")
+  testthat::expect_false(dc$is_mutate_delayed())
+})
+
+testthat::test_that("DatasetConnector returns the correct code when mutated with no vars after pulling", {
+  cf <- CallableFunction$new(function() head(mtcars))
+  dc <- DatasetConnector$new("mtcars", cf)
+  dc$pull()
+  dc$mutate(code = "1")
+  testthat::expect_equal(dc$get_code_class()$get_code(), "mtcars <- (function() head(mtcars))()\n1")
+})

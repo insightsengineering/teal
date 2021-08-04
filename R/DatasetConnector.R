@@ -283,7 +283,7 @@ DatasetConnector <- R6::R6Class( #nolint
         # just needs a dummy Dataset object to store mutate code, hence col = 1
         private$dataset <- Dataset$new(dataname = self$get_dataname(), x = data.frame(col = 1))
       }
-      private$dataset$mutate(code = code, vars = vars, force_delay = TRUE)
+      private$dataset$mutate(code = code, vars = vars, force_delay = !self$is_pulled())
       # should be called at the end so that failure in Dataset object will prevent it.
       private$set_var_r6(vars)
       return(invisible(self))

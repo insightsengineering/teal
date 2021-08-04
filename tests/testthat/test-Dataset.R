@@ -202,10 +202,13 @@ testthat::test_that("Dataset$set_vars throws an error if passed the enclosing Da
   test_ds1$set_vars(vars = list(test_ds0 = test_ds0))
   test_ds2$set_vars(vars = list(test_ds1 = test_ds1))
 
-  testthat::expect_error(mutate_dataset(
-    test_ds0, code = "mtcars$new_var <- rock$perm[1]", vars = list(test_ds2 = test_ds2)
+  testthat::expect_error(
+    mutate_dataset(
+      test_ds0,
+      code = "mtcars$new_var <- rock$perm[1]", vars = list(test_ds2 = test_ds2)
     ),
-    regexp = "Circular dependencies detected")
+    regexp = "Circular dependencies detected"
+  )
 
   pull_fun2 <- callable_function(data.frame)
   pull_fun2$set_args(args = list(a = c(1, 2, 3)))
