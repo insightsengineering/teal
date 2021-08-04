@@ -1539,7 +1539,14 @@ DatetimeFilterState <- R6::R6Class( # nolint
     #' @return nothing
     server = function(input, output, session) {
       get_client_timezone(ns = session$ns)
-      private$timezone <- input$timezone
+
+      observeEvent(
+        once = TRUE,
+        eventExpr = input$timezone,
+        handlerExpr = {
+          private$timezone <- input$timezone
+        }
+      )
 
       private$observers$selection <- observeEvent(
         ignoreNULL = FALSE, # ignoreNULL: we don't want to ignore NULL when nothing is selected in the `selectInput`,
@@ -1549,7 +1556,6 @@ DatetimeFilterState <- R6::R6Class( # nolint
           input$selection_end
         },
         handlerExpr = {
-          print("selected observer")
           start_date <- input$selection_start
           end_date <- input$selection_end
 
@@ -1578,8 +1584,6 @@ DatetimeFilterState <- R6::R6Class( # nolint
         )
       })
       private$observers$reset2 <- observeEvent(input$end_date_reset, {
-        print("reset start observer")
-        print(as.numeric(private$choices))
         shinyWidgets::updateAirDateInput(
           session = session,
           inputId = "selection_end",
