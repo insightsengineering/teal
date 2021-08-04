@@ -186,15 +186,20 @@ FilterStates <- R6::R6Class( # nolint
         X = queue_list,
         function(queue) {
           items <- queue$get()
-          if (length(items) > 0) {
+          calls <- lapply(
+            items,
+            function(state) {
+              state$get_call()
+            }
+          )
+          calls <- Filter(
+            f = Negate(is.null),
+            x = calls
+          )
+          if (length(calls) > 0) {
             calls_combine_by(
               operator = "&",
-              calls = lapply(
-                items,
-                function(state) {
-                  state$get_call()
-                }
-              )
+              calls = calls
             )
           } else {
             NULL
