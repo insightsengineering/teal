@@ -325,13 +325,15 @@ FilteredDataset <- R6::R6Class( # nolint
             # id needed to insert and remove UI to filter single variable as needed
             # it is currently also used by the above module to entirely hide this panel
             id = ns("filters"),
+            class = "parent-hideable-list-group",
             tagList(
               lapply(
                 names(self$get_filter_states()),
                 function(x) {
                   tagList(
-                    `if`(if_multiple_filter_states, tagList(HTML("&#9658;"), tags$label(tags$code(x))), NULL),
-                    self$get_filter_states(id = x)$ui(id = ns(x))
+                      self$get_filter_states(id = x)$ui(id = ns(x),
+                                                        label = ifelse(dataname == "MAE", paste0('> ', x), "")
+                                                        )
                   )
                 }
               )

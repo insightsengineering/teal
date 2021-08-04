@@ -354,12 +354,13 @@ FilterStates <- R6::R6Class( # nolint
     #' @param id (`character(1)`)\cr
     #'   id of the shiny element
     #' @return shiny.tag
-    ui = function(id) {
+    ui = function(id, label) {
       ns <- NS(id)
       private$card_id <- ns("cards")
       tags$div(
         id = private$card_id,
-        class = "listWithHandle list-group"
+        class = "list-group hideable-list-group",
+        `data-label` = label
       )
     },
 
