@@ -984,3 +984,26 @@ testthat::test_that("DatasetConnector returns the correct code when mutated with
   dc$mutate(code = "1")
   testthat::expect_equal(dc$get_code_class()$get_code(), "mtcars <- (function() head(mtcars))()\n1")
 })
+
+testthat::test_that("Pulling an already pulled DatasetConnector after mutating it with a delayed object
+  undoes any eager pre-pull mutations", {
+  cf <- CallableFunction$new(function() head(mtcars))
+  dc <- DatasetConnector$new("mtcars", cf)
+  dc$pull()
+  dc$mutate(code = "mtcars[1] <- NULL")
+  dc$mutate(code = "", vars = list(delayed = DatasetConnector$new("iris", CallableFunction$new(function() head(iris)))))
+  dc$pull()
+  testthat::expect_equal(dc$get_raw_data(), head(mtcars))
+})
+
+testthat::test_that("Pulling an already pulled DatasetConnector after mutating it with a delayed object
+  does not change the returned code", {
+  cf <- CallableFunction$new(function() head(mtcars))
+  dc <- DatasetConnector$new("mtcars", cf)
+  dc$pull()
+  dc$mutate(code = "mtcars[1] <- NULL")
+  dc$mutate(code = "", vars = list(delayed = DatasetConnector$new("iris", CallableFunction$new(function() head(iris)))))
+  pre_pull_code <- dc$get_code()
+  dc$pull()
+  testthat::expect_equal(dc$get_code(), pre_pull_code)
+})
