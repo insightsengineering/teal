@@ -382,3 +382,36 @@ testthat::test_that("Dataset$recreate does not reset the mutation code", {
   code_after_recreating <- dataset1$get_code()
   testthat::expect_equal(code_after_recreating, code_before_recreating)
 })
+
+testthat::test_that("Dataset$recreate does not reset the variables needed for mutation", {
+  cf <- CallableFunction$new(function() head(mtcars))
+  dataset_connector1 <- DatasetConnector$new("mtcars", cf)
+  dataset1 <- Dataset$new("iris", head(iris))
+  dataset1$mutate(code = "test", vars = list(test = dataset_connector1))
+  mutate_vars_before_recreation <- dataset1$get_mutate_vars()
+  dataset1$recreate()
+  testthat::expect_identical(dataset1$get_mutate_vars(), mutate_vars_before_recreation)
+})
+
+testthat::test_that("Dataset$is_mutate_delayed returns TRUE if the Dataset's dependency is delayed", {
+  cf <- CallableFunction$new(function() head(mtcars))
+  dataset_connector1 <- DatasetConnector$new("mtcars", cf)
+  dataset1 <- Dataset$new("iris", head(iris))
+  dataset1$mutate(code = "", vars = list(test = dataset_connector1))
+  testthat::expect_true(dataset1$is_mutate_delayed())
+})
+
+testthat::test_that("Dataset$is_mutate_delayed stays FALSE if the Dataset's
+  dependency turns from not delayed to delayed", {
+  cf <- CallableFunction$new(function() head(mtcars))
+  dataset_connector1 <- DatasetConnector$new("mtcars", cf)
+  dataset1 <- Dataset$new("iris", head(iris))
+  dataset_dependency <- Dataset$new("plantgrowth", head(PlantGrowth))
+
+  dataset1$mutate(code = "", vars = list(test = dataset_dependency))
+  testthat::expect_false(dataset1$is_mutate_delayed())
+
+  dataset_dependency$mutate(code = "", vars = list(test = dataset_connector1))
+  testthat::expect_true(dataset_dependency$is_mutate_delayed())
+  testthat::expect_false(dataset1$is_mutate_delayed())
+})

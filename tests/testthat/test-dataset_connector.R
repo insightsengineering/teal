@@ -922,3 +922,31 @@ testthat::test_that("Identical mutation expressions are shown in the returned co
     )
   )
 })
+
+testthat::test_that("DatasetConnector$is_mutate_delayed is FALSE if not yet pulled and not mutated", {
+  cf <- CallableFunction$new(function() head(mtcars))
+  dc <- DatasetConnector$new("mtcars", cf)
+  testthat::expect_false(dc$is_mutate_delayed())
+})
+
+testthat::test_that("DatasetConnector$is_mutate_delayed returns FALSE if pulled and not mutated", {
+  cf <- CallableFunction$new(function() head(mtcars))
+  dc <- DatasetConnector$new("mtcars", cf)
+  dc$pull()
+  testthat::expect_false(dc$is_mutate_delayed())
+})
+
+testthat::test_that("DatasetConnector$is_mutate_delayed returns TRUE if not pulled and mutated", {
+  cf <- CallableFunction$new(function() head(mtcars))
+  dc <- DatasetConnector$new("mtcars", cf)
+  dc$mutate(code = "test")
+  testthat::expect_true(dc$is_mutate_delayed())
+})
+
+testthat::test_that("DatasetConnector$is_mutate_delayed returns TRUE if mutated with no delayed objects and pulled", {
+  cf <- CallableFunction$new(function() head(mtcars))
+  dc <- DatasetConnector$new("mtcars", cf)
+  dc$mutate(code = "")
+  dc$pull()
+  testthat::expect_false(dc$is_mutate_delayed())
+})

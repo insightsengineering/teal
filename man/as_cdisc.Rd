@@ -31,7 +31,7 @@ parent dataset name}
 (\code{CDISCDataset} or \code{CDISCDatasetConnector}) object
 }
 \description{
-\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
+\ifelse{html}{\out{<a href='https://www.tidyverse.org/lifecycle/#experimental'><img src='figures/lifecycle-experimental.svg' alt='Experimental lifecycle'></a>}}{\strong{Experimental}}
 }
 \details{
 Convert a \code{Dataset(Connector)} object to a \code{CDISCDataset(Connector)} object

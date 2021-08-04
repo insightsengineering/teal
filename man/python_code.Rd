@@ -17,7 +17,7 @@ file that contains python Code that can be read using \code{reticulate::py_run_s
 (\code{PythonCodeClass}) object containing python code
 }
 \description{
-\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
+\ifelse{html}{\out{<a href='https://www.tidyverse.org/lifecycle/#experimental'><img src='figures/lifecycle-experimental.svg' alt='Experimental lifecycle'></a>}}{\strong{Experimental}}
 Create a python code object directly from python code or a
 script containing python code.
 }
