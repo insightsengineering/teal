@@ -28,22 +28,32 @@ object containing datasets.}
 \examples{
 
 # RelationalData --------
+library(scda)
 library(random.cdisc.data)
 adsl <- cdisc_dataset(dataname = "ADSL",
-                      x = radsl(cached = TRUE),
-                      code = "library(random.cdisc.data)\nADSL <- radsl(cached = TRUE)")
+                      x = synthetic_cdisc_data("latest")$adsl,
+                      code = "library(scda)\nADSL <- synthetic_cdisc_data(\"latest\")$adsl")
 
 adae <- cdisc_dataset(dataname = "ADAE",
-                       x = radae(cached = TRUE),
-                       code = "library(random.cdisc.data)\nADTTE <- radae(cached = TRUE)")
+                       x = synthetic_cdisc_data("latest")$adae,
+                       code = "library(scda)\nADTTE <- synthetic_cdisc_data(\"latest\")$adae")
 
 rd <- cdisc_data(adsl, adae)
 get_datasets(rd)
 
 # RelationalDataConnector --------
-rdc <- rcd_data(
-  rcd_cdisc_dataset_connector("ADSL", radsl, cached = TRUE),
-  rcd_cdisc_dataset_connector("ADTTE", radtte, cached = TRUE)
+adsl_cf <- callable_function(function() synthetic_cdisc_data("latest")$adsl)
+adsl <- cdisc_dataset_connector(dataname = "ADSL",
+                                pull_callable = adsl_cf,
+                                keys = get_cdisc_keys("ADSL"))
+adlb_cf <- callable_function(function() synthetic_cdisc_data("latest")$adlb)
+adlb <- cdisc_dataset_connector(dataname = "ADLB",
+                                pull_callable = adlb_cf,
+                                keys = get_cdisc_keys("ADLB"))
+
+rdc <- teal:::RelationalDataConnector$new(
+  connection = teal:::DataConnection$new(),
+  connectors = list(adsl, adlb)
 )
 
 \dontrun{
@@ -58,8 +68,11 @@ get_datasets(drc)
 }
 
 # DatasetConnector --------
-library(random.cdisc.data)
-rdc <- rcd_cdisc_dataset_connector("ADSL", radsl, cached = TRUE)
+library(scda)
+adsl_cf <- callable_function(
+  function() {synthetic_cdisc_data("latest")$adsl}
+)
+rdc <- cdisc_dataset_connector("ADSL", adsl_cf, keys = get_cdisc_keys("ADSL"))
 
 \dontrun{
 load_datasets(rdc)
@@ -67,10 +80,10 @@ get_datasets(rdc)
 }
 
 # Dataset --------
-library(random.cdisc.data)
+library(scda)
 adsl <- cdisc_dataset(dataname = "ADSL",
-                      x = radsl(cached = TRUE),
-                      code = "library(random.cdisc.data)\nADSL <- radsl(cached = TRUE)")
+                      x = synthetic_cdisc_data("latest")$adsl,
+                      code = "library(scda)\nADSL <- synthetic_cdisc_data(\"latest\")$adsl")
 
 get_datasets(adsl)
 }

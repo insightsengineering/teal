@@ -24,9 +24,9 @@ The information summary provides row numbers and number of duplicates
 for each duplicated key value.
 }
 \examples{
-library(random.cdisc.data)
+library(scda)
 
-adsl <- radsl(cached = TRUE)
+adsl <- synthetic_cdisc_data("latest")$adsl
 # create a Dataset with default keys
 rel_adsl <- cdisc_dataset("ADSL", adsl)
 get_key_duplicates(rel_adsl)

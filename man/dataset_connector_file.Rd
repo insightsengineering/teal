@@ -25,10 +25,9 @@ file_example <- tempfile(fileext = ".R")
 writeLines(
   text = c(
     "library(teal)
-     library(random.cdisc.data)
+     library(scda)
 
-     pull_callable <- callable_function(radsl)
-     pull_callable$set_args(list(cached = TRUE))
+     pull_callable <- callable_function(function() {synthetic_cdisc_data('latest')$adsl})
      dataset_connector(\"ADSL\", pull_callable, get_cdisc_keys(\"ADSL\"))"
   ),
   con = file_example

@@ -1,13 +1,6 @@
-library(random.cdisc.data)
-
-test_that("Test RawDatasetConnector is_pulled", {
-
-  dc <- rcd_cdisc_dataset_connector(dataname = "ADSL", fun = radsl, cached = TRUE)
-  expect_false(is_pulled(dc))
-
-  load_dataset(dc)
-  expect_true(is_pulled(dc))
-})
+library(scda)
+adsl_cf <- callable_function(function() synthetic_cdisc_data("rcd_2021_05_05")$adsl)
+adrs_cf <- callable_function(function() synthetic_cdisc_data("rcd_2021_05_05")$adrs)
 
 test_that("Test RelationalDataset is_pulled", {
 
@@ -23,8 +16,7 @@ test_that("Test RelationalDataset is_pulled", {
 
 test_that("Test RelationalDatasetConnector is_pulled", {
 
-
-  adsl <- rcd_cdisc_dataset_connector(dataname = "ADSL", fun = radsl, cached = TRUE)
+  adsl <- cdisc_dataset_connector(dataname = "ADSL", adsl_cf, keys = get_cdisc_keys("ADSL"))
   expect_false(is_pulled(adsl))
 
   load_dataset(adsl)
@@ -33,10 +25,10 @@ test_that("Test RelationalDatasetConnector is_pulled", {
 
 test_that("Test RelationalDataConnector is_pulled", {
 
-  adsl <- rcd_cdisc_dataset_connector(dataname = "ADSL", fun = radsl, cached = TRUE)
-  adrs <- rcd_cdisc_dataset_connector(dataname = "ADRS", fun = radrs, ADSL = adsl)
+  adsl <- cdisc_dataset_connector(dataname = "ADSL", adsl_cf, keys = get_cdisc_keys("ADSL"))
+  adrs <- cdisc_dataset_connector(dataname = "ADRS", adrs_cf, keys = get_cdisc_keys("ADRS"))
 
-  rdc <- rcd_data(adsl, adrs)
+  rdc <- cdisc_data(adsl, adrs)
 
   expect_false(is_pulled(rdc))
 })

@@ -52,8 +52,8 @@ choices_selected(
    selected = "X"
 )
 
-library(random.cdisc.data)
-ADSL <- radsl(cached = TRUE)
+library(scda)
+ADSL <- synthetic_cdisc_data("latest")$adsl
 choices_selected(variable_choices(ADSL), "SEX")
 
 # How to select nothing

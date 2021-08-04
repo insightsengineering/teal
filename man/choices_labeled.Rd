@@ -32,10 +32,10 @@ If either \code{choices} or \code{labels} are factors, they are coerced to chara
 Duplicated elements from \code{choices} get removed.
 }
 \examples{
-library(random.cdisc.data)
+library(scda)
 
-ADSL <- radsl(cached = TRUE)
-ADTTE <- radtte(cached = TRUE)
+ADSL <- synthetic_cdisc_data("latest")$adsl
+ADTTE <- synthetic_cdisc_data("latest")$adtte
 choices1 <- choices_labeled(names(ADSL), rtables::var_labels(ADSL))
 choices2 <- choices_labeled(ADTTE$PARAMCD, ADTTE$PARAM)
 # if only a subset of variables are needed, use subset argument

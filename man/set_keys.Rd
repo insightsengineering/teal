@@ -34,22 +34,25 @@ Set dataset primary keys
 \examples{
 # Dataset --------
 
-library(random.cdisc.data)
+library(scda)
 set_keys(
   dataset(
     "ADSL",
-    radsl(cached = TRUE),
-    code = "ADSL <- radsl(cached = TRUE)"
+    synthetic_cdisc_data("latest")$adsl,
+    code = "ADSL <- synthetic_cdisc_data(\"latest\")$adsl"
   ),
   keys = get_cdisc_keys("ADSL")
 )
 # DatasetConnector --------
 
-library(random.cdisc.data)
+library(scda)
+pull_fun_adsl <- callable_function(
+  function() {synthetic_cdisc_data("latest")$adsl}
+)
 set_keys(
-  rcd_dataset_connector(
+  dataset_connector(
     "ADSL",
-    radsl
+    pull_fun_adsl
   ),
   keys = get_cdisc_keys("ADSL")
 )

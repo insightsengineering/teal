@@ -36,17 +36,17 @@ and \code{DatasetConnector} objects passed to it. If the keys are needed
 they should be assigned before calling \code{cdisc_data}. See example:\preformatted{}
 }
 \examples{
-library(random.cdisc.data)
+library(scda)
 
-ADSL <- radsl(cached = TRUE)
-ADTTE <- radtte(cached = TRUE)
+ADSL <- synthetic_cdisc_data("latest")$adsl
+ADTTE <- synthetic_cdisc_data("latest")$adtte
 
 # basic example
 cdisc_data(
   cdisc_dataset("ADSL", ADSL),
   cdisc_dataset("ADTTE", ADTTE),
-  code = 'ADSL <- radsl(cached = TRUE)
-          ADTTE <- radtte(cached = TRUE)',
+  code = 'ADSL <- synthetic_cdisc_data("latest")$adsl
+          ADTTE <- synthetic_cdisc_data("latest")$adtte',
   check = TRUE
 )
 
@@ -66,8 +66,8 @@ cdisc_data(
       c("STUDYID" = "STUDYID", "USUBJID" = "USUBJID")
     )
   ),
-  code = "ADSL <- radsl(cached = TRUE)
-          ADTTE <- radtte(cached = TRUE)",
+  code = 'ADSL <- synthetic_cdisc_data("latest")$adsl
+          ADTTE <- synthetic_cdisc_data("latest")$adtte',
   check = TRUE
 )
 }

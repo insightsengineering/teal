@@ -25,9 +25,9 @@ If \code{keys} argument is provided, then checks against that, if it's \code{NUL
 against the \code{get_keys()$primary} method of the \code{dataset} argument.
 }
 \examples{
-library(random.cdisc.data)
+library(scda)
 
-adsl <- radsl(cached = TRUE)
+adsl <- synthetic_cdisc_data("latest")$adsl
 # Keys are automatically assigned, because the name
 # is in the recognized ADAM nomenclature ("ADSL")
 rel_adsl <- cdisc_dataset("ADSL", adsl)

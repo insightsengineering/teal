@@ -1,4 +1,4 @@
-library(random.cdisc.data)
+library(scda)
 
 test_that("data connection", {
   open_fun <- callable_function(data.frame)
@@ -38,8 +38,6 @@ test_that("data connection", {
     "data.frame(x = 1:5, y = c(\"a\", \"b\", \"c\", \"d\", \"e\"))"
   )
 
-
-
   expect_null(
     con$close(silent = TRUE)
   )
@@ -61,8 +59,11 @@ test_that("RelationalDataConnector with DataConnection", {
   code <- "ADSL$x <- 1"
   check <- TRUE
 
-  rcd1 <- rcd_cdisc_dataset_connector("ADSL", radsl, cached = TRUE)
-  rcd2 <- rcd_cdisc_dataset_connector("ADLB", radlb, cached = TRUE)
+  adsl_cf <- callable_function(function() synthetic_cdisc_data("rcd_2021_05_05")$adsl)
+  adlb_cf <- callable_function(function() synthetic_cdisc_data("rcd_2021_05_05")$adlb)
+
+  rcd1 <- cdisc_dataset_connector(dataname = "ADSL", adsl_cf, keys = get_cdisc_keys("ADSL"))
+  rcd2 <- cdisc_dataset_connector(dataname = "ADLB", adlb_cf, keys = get_cdisc_keys("ADLB"))
 
   x <- RelationalDataConnector$new(connection = con, connectors = list(rcd1, rcd2))
   expect_true(is(x, "RelationalDataConnector"))

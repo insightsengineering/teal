@@ -611,8 +611,8 @@ Dataset <- R6::R6Class( # nolint
 #' dataset("iris", iris)
 #'
 #' # Example with more arguments
-#' library(random.cdisc.data)
-#' ADSL <- radsl(cached = TRUE)
+#' library(scda)
+#' ADSL <- synthetic_cdisc_data("latest")$adsl
 #' ADSL_dataset <- dataset(dataname = "ADSL", x = ADSL)
 #'
 #' ADSL_dataset$get_dataname()
@@ -621,7 +621,7 @@ Dataset <- R6::R6Class( # nolint
 #'   dataname = "ADSL",
 #'   x = ADSL,
 #'   label = "AdAM subject-level dataset",
-#'   code = "ADSL <- radsl(cached = TRUE)"
+#'   code = "ADSL <- synthetic_cdisc_data(\"latest\")$adsl"
 #' )
 #'
 #' ADSL_dataset$get_dataset_label()

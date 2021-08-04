@@ -45,8 +45,8 @@ named character vector with additional attributes or \code{delayed_data} object
 \ifelse{html}{\out{<a href='https://www.tidyverse.org/lifecycle/#maturing'><img src='figures/lifecycle-maturing.svg' alt='Maturing lifecycle'></a>}}{\strong{Maturing}}
 }
 \examples{
-library(random.cdisc.data)
-ADRS <- radrs(cached = TRUE)
+library(scda)
+ADRS <- synthetic_cdisc_data("latest")$adrs
 
 variable_choices(ADRS)
 variable_choices(ADRS, subset = c("PARAM", "PARAMCD"))

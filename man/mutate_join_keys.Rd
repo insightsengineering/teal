@@ -41,10 +41,10 @@ mutate_join_keys(x, "dataset_A", "dataset_B", c("col_1" = "col_10"))
 x$get("dataset_A", "dataset_B")
 # RelationalData ----
 
-library(random.cdisc.data)
+library(scda)
 
-ADSL <- radsl(cached = TRUE)
-ADRS <- radrs(cached = TRUE)
+ADSL <- synthetic_cdisc_data("latest")$adsl
+ADRS <- synthetic_cdisc_data("latest")$adrs
 
 x <- cdisc_data(
   cdisc_dataset("ADSL", ADSL),

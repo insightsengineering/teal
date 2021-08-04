@@ -19,9 +19,9 @@ labels
 \ifelse{html}{\out{<a href='https://www.tidyverse.org/lifecycle/#maturing'><img src='figures/lifecycle-maturing.svg' alt='Maturing lifecycle'></a>}}{\strong{Maturing}}
 }
 \examples{
-library(random.cdisc.data)
+library(scda)
 
-ADSL <-  radsl(cached = TRUE)
+ADSL <-  synthetic_cdisc_data("latest")$adsl
 
 get_labels(ADSL)
 }

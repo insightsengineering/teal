@@ -35,18 +35,24 @@ Load data from connection. Function used on \code{\link{DatasetConnector}} and
 \examples{
 
 # Dataset --------
-library(random.cdisc.data)
-ADSL <- radsl(cached = TRUE)
+library(scda)
+ADSL <- synthetic_cdisc_data("latest")$adsl
 ADSL_dataset <- dataset("ADSL", x = ADSL)
 
 load_dataset(ADSL_dataset)
 
 # DatasetConnector --------
-library(random.cdisc.data)
-adsl <- rcd_cdisc_dataset_connector("ADSL", fun = radsl, cached = FALSE)
+library(scda)
+pull_fun_adsl <- callable_function(
+  function() {synthetic_cdisc_data("latest")$adsl}
+)
+adsl <- dataset_connector("ADSL", pull_fun_adsl)
 load_dataset(adsl)
 get_dataset(adsl)
 
-adae <- rcd_cdisc_dataset_connector("ADAE", fun = radae, ADSL = adsl, max_n_aes = 2L)
+pull_fun_adae <- callable_function(
+  function() {synthetic_cdisc_data("latest")$adae}
+)
+adae <- dataset_connector("ADAE", pull_fun_adae)
 load_dataset(adae)
 }

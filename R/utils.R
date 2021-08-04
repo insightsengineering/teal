@@ -341,9 +341,9 @@ read_script <- function(file, dataname = NULL) {
 #' @return a \code{tibble} with variables consisting the key and \code{row_no} and \code{duplicates_count} columns
 #'
 #' @examples
-#' library(random.cdisc.data)
+#' library(scda)
 #'
-#' adsl <- radsl(cached = TRUE)
+#' adsl <- synthetic_cdisc_data("latest")$adsl
 #' # create a Dataset with default keys
 #' rel_adsl <- cdisc_dataset("ADSL", adsl)
 #' get_key_duplicates(rel_adsl)
@@ -383,9 +383,9 @@ get_key_duplicates <- function(dataset, keys = NULL) {
 #' primary keys
 #'
 #' @examples
-#' library(random.cdisc.data)
+#' library(scda)
 #'
-#' adsl <- radsl(cached = TRUE)
+#' adsl <- synthetic_cdisc_data("latest")$adsl
 #' # Keys are automatically assigned, because the name
 #' # is in the recognized ADAM nomenclature ("ADSL")
 #' rel_adsl <- cdisc_dataset("ADSL", adsl)

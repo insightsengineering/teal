@@ -22,8 +22,8 @@ labels of the columns
 \ifelse{html}{\out{<a href='https://www.tidyverse.org/lifecycle/#maturing'><img src='figures/lifecycle-maturing.svg' alt='Maturing lifecycle'></a>}}{\strong{Maturing}}
 }
 \examples{
-library(random.cdisc.data)
-ADSL <- radsl(cached = TRUE)
+library(scda)
+ADSL <- synthetic_cdisc_data("latest")$adsl
 
 get_variable_labels(ADSL)
 get_variable_labels(ADSL, c("AGE", "RACE", "BMRKR1"))

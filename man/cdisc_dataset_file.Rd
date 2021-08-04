@@ -24,11 +24,11 @@ file_example <- tempfile(fileext = ".R")
 writeLines(
   text = c(
     "library(teal)
-     library(random.cdisc.data)
+     library(scda)
 
      cdisc_dataset(dataname = \"ADSL\",
-                   x = radsl(cached = TRUE),
-                   code = \"library(random.cdisc.data)\nADSL <- radsl(cached = TRUE)\")"
+                   x = synthetic_cdisc_data('latest')$adsl,
+                   code = \"library(scda)\nADSL <- synthetic_cdisc_data('latest')$adsl\")"
   ),
   con = file_example
 )

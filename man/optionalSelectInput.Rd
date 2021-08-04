@@ -69,8 +69,8 @@ optionalSelectInput(inputId = "xvar",
                     choices = c("A - value A" = "A"),
                     selected = "A")
 
-library(random.cdisc.data)
-ADRS <- radrs(cached = TRUE)
+library(scda)
+ADRS <- synthetic_cdisc_data("latest")$adrs
 optionalSelectInput(inputId = "xvar",
                     label = "x variable",
                     choices = choices_labeled(

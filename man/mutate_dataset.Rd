@@ -68,16 +68,16 @@ modified \code{x} object
 \ifelse{html}{\out{<a href='https://www.tidyverse.org/lifecycle/#experimental'><img src='figures/lifecycle-experimental.svg' alt='Experimental lifecycle'></a>}}{\strong{Experimental}}
 }
 \examples{
-library(random.cdisc.data)
+library(scda)
 library(magrittr)
 
-ADSL <- radsl(cached = TRUE)
+ADSL <- synthetic_cdisc_data("latest")$adsl
 
 ADSL_dataset <- dataset(
   dataname = "ADSL",
   x = ADSL,
   label = "AdAM subject-level dataset",
-  code = "ADSL <- radsl(cached = TRUE)"
+  code = "ADSL <- synthetic_cdisc_data(\"latest\")$adsl"
 )
 ADSL_mutated <- ADSL_dataset \%>\%
   mutate_dataset(code = "ADSL$new_variable <- 1")

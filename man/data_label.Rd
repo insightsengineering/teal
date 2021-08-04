@@ -16,6 +16,6 @@ data_label(data)
 \ifelse{html}{\out{<a href='https://www.tidyverse.org/lifecycle/#maturing'><img src='figures/lifecycle-maturing.svg' alt='Maturing lifecycle'></a>}}{\strong{Maturing}}
 }
 \examples{
-library(random.cdisc.data)
-data_label(radsl(cached = TRUE))
+library(scda)
+data_label(synthetic_cdisc_data("latest")$adsl)
 }
