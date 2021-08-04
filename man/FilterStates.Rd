@@ -228,7 +228,7 @@ Shiny UI element being a container for \code{FilterState} elements.
 Content of this container is created using \code{renderUI} in
 \code{server} module
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{FilterStates$ui(id)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{FilterStates$ui(id, label)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
@@ -236,6 +236,9 @@ Content of this container is created using \code{renderUI} in
 \describe{
 \item{\code{id}}{(\code{character(1)})\cr
 id of the shiny element}
+
+\item{\code{label}}{(\code{character(1)})\cr
+helper label of the shiny element}
 }
 \if{html}{\out{</div>}}
 }
