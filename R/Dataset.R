@@ -139,7 +139,7 @@ Dataset <- R6::R6Class( # nolint
     #' @return dataset (\code{Dataset})
     get_dataset = function() {
       if (self$is_mutate_delayed() && !private$is_any_dependency_delayed()) {
-        private$mutate_eager(private$mutate_code)
+        private$mutate_eager()
       }
       return(self)
     },
@@ -377,20 +377,9 @@ Dataset <- R6::R6Class( # nolint
           vars = list()
         )
       } else {
-        if (private$is_any_dependency_delayed(vars) || force_delay) {
-          private$mutate_delayed(code, vars)
-        } else {
-          if (!is(code, "CodeClass")) {
-            code_container <- CodeClass$new()
-            code_container$set_code(
-              code = code,
-              deps = names(vars)
-            )
-          } else {
-            code_container <- code
-          }
-          self$set_vars(vars)
-          private$mutate_eager(code_container)
+        private$mutate_delayed(code, vars)
+        if (! (private$is_any_dependency_delayed(vars) || force_delay)) {
+          private$mutate_eager()
         }
       }
 
@@ -492,10 +481,9 @@ Dataset <- R6::R6Class( # nolint
       return(invisible(self))
     },
 
-    mutate_eager = function(code_container) {
-      stopifnot(is(code_container, "CodeClass"))
+    mutate_eager = function() {
       new_df <- private$execute_code(
-        code = code_container,
+        code = private$mutate_code,
         vars = c(
           private$vars,
           # if they have the same name, then they are guaranteed to be identical objects.
@@ -506,7 +494,7 @@ Dataset <- R6::R6Class( # nolint
 
       # code set after successful evaluation
       # otherwise code != dataset
-      private$code$append(code_container)
+      private$code$append(private$mutate_code)
       self$set_vars(private$mutate_vars)
       private$mutate_code <- CodeClass$new()
       private$mutate_vars <- list()
