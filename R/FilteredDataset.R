@@ -331,9 +331,7 @@ FilteredDataset <- R6::R6Class( # nolint
                 names(self$get_filter_states()),
                 function(x) {
                   tagList(
-                      self$get_filter_states(id = x)$ui(id = ns(x),
-                                                        label = ifelse(dataname == "MAE", paste0('> ', x), "")
-                                                        )
+                      self$get_filter_states(id = x)$ui(id = ns(x))
                   )
                 }
               )
@@ -649,6 +647,7 @@ MAEFilteredDataset <- R6::R6Class( # nolint
           input_dataname = as.name(dataname),
           output_dataname = as.name(sprintf("%s_FILTERED", dataname)),
           varlabels = self$get_varlabels(),
+          datalabel = "subjects",
           keys = self$get_keys()
         ),
         id = "subjects"
@@ -670,7 +669,8 @@ MAEFilteredDataset <- R6::R6Class( # nolint
             filter_states = init_filter_states(
               data = raw_data[[experiment_name]],
               input_dataname = input_dataname,
-              output_dataname = input_dataname
+              output_dataname = input_dataname,
+              datalabel = experiment_name
             ),
             id = experiment_name
           )
