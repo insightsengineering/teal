@@ -698,16 +698,20 @@ code_cdisc_dataset_connector <- function(dataname,
 #' @export
 #'
 #' @examples
-#' x <- rice_dataset_connector(
-#'   dataname = "ADSL",
-#'   path = "/path/to/file.sas7bdat"
-#' )
-#' x$get_code()
+#'
+#' if (requireNamespace("rice")) {
+#'   x <- rice_dataset_connector(
+#'     dataname = "ADSL",
+#'     path = "/path/to/file.sas7bdat"
+#'   )
+#'   x$get_code()
+#' }
 #' \dontrun{
 #' load_dataset(x)
 #' get_dataset(x)
 #' x$get_raw_data()
 #' }
+#'
 rice_dataset_connector <- function(dataname,
                                    path,
                                    keys = character(0),

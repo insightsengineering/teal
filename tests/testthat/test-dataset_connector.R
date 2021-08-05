@@ -430,6 +430,9 @@ test_that("script_cdisc_dataset_connector", {
 })
 
 test_that("rice_dataset", {
+  if (!requireNamespace("rice")) {
+    testthat::skip("rice package not available")
+  }
   x <- rice_data(
     rice_dataset_connector("ADSL", "/path/to/ADSL", keys = get_cdisc_keys("ADSL")),
     rice_cdisc_dataset_connector("ADLB", "/path/to/ADLB")

@@ -47,14 +47,18 @@ additional arguments applied to pull function}
 Create a \code{DatasetConnector} from \code{RICE}.
 }
 \examples{
-x <- rice_dataset_connector(
-  dataname = "ADSL",
-  path = "/path/to/file.sas7bdat"
-)
-x$get_code()
+
+if (requireNamespace("rice")) {
+  x <- rice_dataset_connector(
+    dataname = "ADSL",
+    path = "/path/to/file.sas7bdat"
+  )
+  x$get_code()
+}
 \dontrun{
 load_dataset(x)
 get_dataset(x)
 x$get_raw_data()
 }
+
 }

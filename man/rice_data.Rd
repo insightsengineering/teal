@@ -24,27 +24,30 @@ Build data connector for \code{RICE} datasets
 }
 \examples{
 
-x <- rice_data(
-  rice_cdisc_dataset_connector("ADSL", "/path/to/ADSL"),
-  rice_cdisc_dataset_connector("ADLB", "/path/to/ADLB")
-)
-app <- init(
-  data = cdisc_data(x),
-  modules = root_modules(
-    module(
-      "ADSL AGE histogram",
-      server = function(input, output, session, datasets) {
-        output$hist <- renderPlot({
-          hist(datasets$get_data("ADSL", filtered = TRUE)$AGE)
-        })
-      },
-      ui = function(id, ...) {ns <- NS(id); plotOutput(ns('hist'))},
-      filters = "ADSL"
-    )
-  ),
-  header = tags$h1("Sample App")
-)
+if (requireNamespace("rice")) {
+  x <- rice_data(
+    rice_cdisc_dataset_connector("ADSL", "/path/to/ADSL"),
+    rice_cdisc_dataset_connector("ADLB", "/path/to/ADLB")
+  )
+  app <- init(
+    data = cdisc_data(x),
+    modules = root_modules(
+      module(
+        "ADSL AGE histogram",
+        server = function(input, output, session, datasets) {
+          output$hist <- renderPlot({
+            hist(datasets$get_data("ADSL", filtered = TRUE)$AGE)
+          })
+        },
+        ui = function(id, ...) {ns <- NS(id); plotOutput(ns('hist'))},
+        filters = "ADSL"
+      )
+    ),
+    header = tags$h1("Sample App")
+  )
+}
 \dontrun{
 shinyApp(app$ui, app$server)
 }
+
 }
