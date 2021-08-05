@@ -489,7 +489,13 @@ DefaultFilteredDataset <- R6::R6Class( # nolint
       )
     },
 
+    #' @description
+    #' Set bookmark state
+    #'
+    #' @param state (`named list`)\cr
+
     set_bookmark_state = function(state) {
+      stopifnot(is.list(state))
       data <- self$get_data(filtered = FALSE)
       fs <- self$get_filter_states()[[1]]
       fs$set_bookmark_state(
@@ -729,17 +735,31 @@ MAEFilteredDataset <- R6::R6Class( # nolint
       )
     },
 
+    #' @description
+    #' Set bookmark state
+    #'
+    #' @param state (`named list`)\cr
+    #'   names of the list should correspond to the names of the initialized `FilterStates`
+    #'   kept in `private$filter_states`. For this object they are `"subjects"` and
+    #'   names of the experiments.
+    #'
     set_bookmark_state = function(state) {
       data <- self$get_data(filtered = FALSE)
-      stopifnot(all(names(state) %in% c("subjects", names(data))))
+      stopifnot(
+        is.list(state),
+        all(names(state) %in% c(names(self$get_filter_states())))
+      )
 
-      for (i in names(state)) {
-        fs <- self$get_filter_states()[[i]]
-        fs$set_bookmark_state(
-          state = state[[i]],
-          data = `if`(i == "subjects", data, data[[i]])
-        )
-      }
+      lapply(
+        names(state),
+        function(fs_name) {
+          fs <- self$get_filter_states()[[fs_name]]
+          fs$set_bookmark_state(
+            state = state[[fs_name]],
+            data = `if`(fs_name == "subjects", data, data[[fs_name]])
+          )
+        }
+      )
 
       return(invisible(NULL))
     },

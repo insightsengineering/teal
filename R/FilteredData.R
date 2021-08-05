@@ -351,9 +351,7 @@ FilteredData <- R6::R6Class( # nolint
           }
         )
       }
-
       datanames <- self$get_filterable_datanames(datanames)
-
       return(intersect(self$datanames(), datanames))
     },
 
@@ -408,26 +406,20 @@ FilteredData <- R6::R6Class( # nolint
     # Functions useful for restoring from another dataset ----
 
     #' @description
-    #' Returns the state to be bookmarked
-    #'
-    #' hash sums of `datasets`, `FilterState` selections and `preproc_code`
-    #'  are bookmarked.
-    #'
-    #' @return named list
-    get_bookmark_state = function() {
-     stop("Not implemented")
-    },
-
-    #' @description
     #' Sets bookmark state
     #' @param state (`named list`)\cr
     #'  nested list of filter selections applied to datasets.
     set_bookmark_state = function(state) {
-      stopifnot(all(names(state) %in% self$datanames()))
-      for (i in names(state)) {
-        fd <- self$get_filtered_datasets(dataname = i)
-        fd$set_bookmark_state(state = state[[i]])
-      }
+      stopifnot(
+        all(names(state) %in% self$datanames())
+      )
+      lapply(
+        names(state),
+        function(dataname) {
+          fd <- self$get_filtered_datasets(dataname = dataname)
+          fd$set_bookmark_state(state = state[[dataname]])
+        }
+      )
 
       return(invisible(NULL))
     },

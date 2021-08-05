@@ -372,7 +372,7 @@ FilterStates <- R6::R6Class( # nolint
     },
 
     #' @description
-    #' Shiny UI module to add filter variable
+    #' Shiny UI module to add filter variable.
     #' @param id (`character(1)`)\cr
     #'  id of shiny module
     #' @param data (`data.frame`, `MultiAssayExperiment`, `SummarizedExperiment`, `matrix`)\cr
@@ -786,7 +786,7 @@ MAEFilterStates <- R6::R6Class( # nolint
     #' @param state (`named list`)\cr
     #'   should contain values which are initial selection in the `FilterState`.
     #'   Names of the `list` element should correspond to the name of the
-    #'   column in `data`.
+    #'   column in `colData(data)`
     set_bookmark_state = function(data, state) {
       stopifnot(is(data, "MultiAssayExperiment"))
       stopifnot(
@@ -803,12 +803,6 @@ MAEFilterStates <- R6::R6Class( # nolint
           use_dataname = TRUE
         )
         fstate$set_selected(value = value)
-
-        self$queue_push(
-          x = fstate,
-          queue_index = "y",
-          element_id = varname
-        )
 
         id <- digest::digest(sprintf("%s_%s", "y", varname), algo = "md5")
         callModule(
@@ -986,12 +980,13 @@ SEFilterStates <- R6::R6Class( # nolint
     #' @description
     #' Set bookmark state
     #'
-    #' @param data (`MultiAssayExperiment`)\cr
+    #' @param data (`SummarizedExperiment`)\cr
     #'   data which are supposed to be filtered
     #' @param state (`named list`)\cr
-    #'   should contain values which are initial selection in the `FilterState`.
-    #'   Names of the `list` element should correspond to the name of the
-    #'   column in `data`.
+    #'   This list should contain `subset` and `select` element where
+    #'   each should be a named list containini values as a selection in the `FilterState`.
+    #'   Names of each the `list` element in `subset` and `select` should correspond to
+    #'   the name of the column in `rowData(data)` and `colData(data)`.
     set_bookmark_state = function(data, state) {
       stopifnot(is(data, "SummarizedExperiment"))
       stopifnot(
@@ -1000,21 +995,21 @@ SEFilterStates <- R6::R6Class( # nolint
         is.null(state$select) || all(names(state$select) %in% names(colData(data)))
       )
 
-
       lapply(
-        state$subset,
+        names(state$subset),
         function(varname) {
           value <- state$subset[[varname]]
           fstate <- init_filter_state(
-            rowData(data)[[varname]],
+            SummarizedExperiment::rowData(data)[[varname]],
             varname = as.name(varname),
-            varlabel = private$get_varlabels(varname),
             input_dataname = private$input_dataname,
-            use_dataname = TRUE
+            use_dataname = FALSE
           )
           fstate$set_selected(value = value)
 
           id <- digest::digest(sprintf("%s_%s", "subset", varname), algo = "md5")
+
+
           callModule(
             private$add_filter_state,
             id = id,
@@ -1026,15 +1021,14 @@ SEFilterStates <- R6::R6Class( # nolint
       )
 
       lapply(
-        state$select,
+        names(state$select),
         function(varname) {
           value <- state$select[[varname]]
           fstate <- init_filter_state(
-            colData(data)[[varname]],
+            SummarizedExperiment::colData(data)[[varname]],
             varname = as.name(varname),
-            varlabel = private$get_varlabels(varname),
             input_dataname = private$input_dataname,
-            use_dataname = TRUE
+            use_dataname = FALSE
           )
           fstate$set_selected(value = value)
 
@@ -1275,7 +1269,7 @@ MatrixFilterStates <- R6::R6Class( # nolint
     #' @description
     #' Set bookmark state
     #'
-    #' @param data (`MultiAssayExperiment`)\cr
+    #' @param data (`matrix`)\cr
     #'   data which are supposed to be filtered
     #' @param state (`named list`)\cr
     #'   should contain values which are initial selection in the `FilterState`.
@@ -1294,7 +1288,7 @@ MatrixFilterStates <- R6::R6Class( # nolint
           varname = as.name(varname),
           varlabel = private$get_varlabels(varname),
           input_dataname = private$input_dataname,
-          use_dataname = TRUE
+          use_dataname = FALSE
         )
         fstate$set_selected(value = value)
 

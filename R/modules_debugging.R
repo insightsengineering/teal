@@ -48,13 +48,7 @@ filter_calls_module <- function(label = "Filter Calls Module", active_datanames 
     server = function(input, output, session, datasets) {
       output$filter_calls <- renderText({
         active_datanames <- datasets$handle_active_datanames(active_datanames)
-        paste(
-          lapply(
-            active_datanames,
-            function(dataname) datasets$get_call(dataname)
-          ),
-          collapse = "\n\n"
-        )
+        get_filter_expr(datasets, datanames = active_datanames)
       })
     },
     ui = function(id, ...) {
