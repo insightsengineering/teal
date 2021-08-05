@@ -5,8 +5,6 @@ on:
     branches:
       - main
   pull_request:
-    branches:
-      - main
 
 jobs:
   build-install-check:
@@ -18,9 +16,22 @@ jobs:
       fail-fast: false
       matrix:
         config:
-          - {image: waddella/rocker_rstudio_4.1.0_deps, tag: 'latest'}
+          - {image: ghcr.io/insightsengineering/rstudio_4.1.0_bioc_3.13, tag: 'latest'}
 
     steps:
+      - name: Check if Docker image meets requirements
+        run: |
+          lsb=$(lsb_release -d)
+          [[ ! $lsb =~ "Ubuntu" ]] && exit 1
+
+          required_pkgs="r-base curl git"
+          for PKG in $required_pkgs
+          do {
+            DPKG_PAGER=cat dpkg -l $PKG
+          }
+          done
+        shell: bash
+
       - name: Gather info from PR
         uses: actions/github-script@v4
         id: get-pr
@@ -40,9 +51,16 @@ jobs:
               core.setFailed(`Request failed with error ${err}`)
             }
 
-# TODO check if R is installed
-# TODO ensure that git and qpdf are installed in the docker image
-# TODO also use R remotes::system_requirements() to get the correct system dependencies
+      - name: Install remotes R package if needed
+        run: |
+           options(repos = c(CRAN = "https://cloud.r-project.org/"))
+           ncores <- parallel::detectCores(all.tests = FALSE, logical = TRUE)
+           cat(paste("\n\nnumber of cores detected:", ncores, "\n\n"))
+           if (!require("remotes")) install.packages("remotes", upgrade = "never", Ncpus = ncores)
+        shell: Rscript {0}
+        env:
+          GITHUB_PAT: ${{ secrets.REPO_GITHUB_TOKEN }} # or ${{ secrets.GITHUB_TOKEN }}
+
 
       - name: Checkout repo during PR
         uses: actions/checkout@v2
@@ -58,13 +76,33 @@ jobs:
         with:
           path: ${{ github.event.repository.name }}
 
-      - name: Print Branch Name
+      - name: Print branch name
         run: |
            cd ${{ github.event.repository.name }}
            git branch --show-current
         shell: bash
 
-      - name: Install Dependencies
+      - name: Install system dependencies for R package
+        run: |
+          ubuntu_info <- read.csv("/etc/os-release", sep = "=", header = FALSE)
+          v_ubuntu_info <- setNames(ubuntu_info$V2, ubuntu_info$V1)
+          if (v_ubuntu_info[['NAME']] != "Ubuntu") stop("only works on ubuntu")
+          ubuntu_version <- v_ubuntu_info[['VERSION_ID']]
+
+          sys_deps_for_pkg <- remotes::system_requirements("ubuntu", ubuntu_version, path = "${{ github.event.repository.name }}")
+
+          sys_pgks <- gsub("^apt-get install -y ", "", sys_deps_for_pkg)
+
+          has_pkgs <- vapply(sys_pgks, function(pkg) system2("dpkg", c("-l", pkg), stdout = NULL, stderr = NULL) == 0,  logical(1))
+
+          if (any(!has_pkgs)) {
+            system2("apt-get", "update")
+            system2("apt-get", c("install", "-y", sys_pgks[!has_pkgs]))
+          }
+        shell: Rscript {0}
+
+
+      - name: Install R package dependencies
         run: |
           setwd("${{ github.event.repository.name }}")
           options(repos = c(CRAN = "https://cloud.r-project.org/"))
@@ -73,14 +111,13 @@ jobs:
           if (file.exists("renv.lock")) {
             renv::restore()
           } else {
-            if (!("remotes" %in% installed.packages())) install.packages("remotes", upgrade = "never", Ncpus = ncores)
             remotes::install_deps(dependencies = TRUE, upgrade = "never", Ncpus = ncores)
           }
 
           if (file.exists("staged_dependencies.yaml")) {
-            if (!("remotes" %in% installed.packages())) install.packages("remotes", upgrade = "never", Ncpus = ncores)
             cat("\nInstall Staged Dependencies\n\n\n")
-            remotes::install_github("openpharma/staged.dependencies", ref = "main", Ncpus = ncores)
+            if (!require("staged.dependencies")) remotes::install_github("openpharma/staged.dependencies", ref = "main", Ncpus = ncores)
+            cat("\nCalculating Staged Dependency Table...\n\n")
             print(staged.dependencies::dependency_table(), width = 120)
             cat("\n\n")
             staged.dependencies::install_deps(install_project = FALSE, verbose = TRUE)
@@ -100,57 +137,8 @@ jobs:
         run: R CMD check --no-manual ${{ env.PKGBUILD }}
         shell: bash
         continue-on-error: true
-
-      - name: Parse check output for posting as PR comment
-        if: github.event_name == 'pull_request'
-        id: check
-        run: |
-          # Convert UTF-8 encoded check output to ASCII
-          iconv -sc \
-            -f UTF-8 \
-            -t ascii//TRANSLIT \
-            -o ${{ github.event.repository.name }}.Rcheck/00check.ascii \
-            ${{ github.event.repository.name }}.Rcheck/00check.log
-          # Escape backslashes
-          sed -i -e 's/\\/\\\\/g' ${{ github.event.repository.name }}.Rcheck/00check.ascii
-          # https://trstringer.com/github-actions-multiline-strings/
-          output=$(cat ${{ github.event.repository.name }}.Rcheck/00check.ascii)
-          output="${output//'%'/'%25'}"
-          output="${output//$'\n'/'%0A'}"
-          output="${output//$'\r'/'%0D'}"
-          echo "::set-output name=check-output::$output"
-          status=$(tail -1 ${{ github.event.repository.name }}.Rcheck/00check.ascii)
-          echo "::set-output name=check-status::$status"
-        shell: bash
-
-
-# TODO: only if there are Errors, warnings, or notes
-      - name: Post check output as PR comment
-        if: github.event_name == 'pull_request'
-        uses: actions/github-script@v4
-        with:
-          script: |
-            const output = `#### R CMD check for R v${{ matrix.config.tag }}
-
-            \`R CMD check\` resulted in \`${{ steps.check.outputs.check-status }}\`
-
-            <details><summary>Click here to show full output</summary>
-
-            \`\`\`R
-            ${{ steps.check.outputs.check-output }}
-            \`\`\`
-
-            </details>
-
-            *Pusher: @${{ github.actor }}, Action: \`${{ github.event_name }}\`*`;
-
-            github.issues.createComment({
-              issue_number: context.issue.number,
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              body: output
-            })
-
+        env:
+          TESTING_DEPTH: 1
 
       - name: Catch warnings in R CMD check output
         id: catch-errors
