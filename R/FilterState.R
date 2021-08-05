@@ -1430,7 +1430,7 @@ DatetimeFilterState <- R6::R6Class( # nolint
       var_range <- range(x, finite = TRUE)
       private$set_choices(var_range)
       self$set_selected(var_range)
-      private$timezone <- Sys.timezone()
+
       return(invisible(self))
     },
 
