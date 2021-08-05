@@ -4,7 +4,13 @@
 \alias{init_filter_states}
 \title{Initialize \code{FilterStates} object}
 \usage{
-init_filter_states(data, input_dataname, output_dataname = input_dataname, ...)
+init_filter_states(
+  data,
+  input_dataname,
+  output_dataname = input_dataname,
+  datalabel = character(0),
+  ...
+)
 }
 \arguments{
 \item{data}{(\code{data.frame}, \code{MultiAssayExperiment}, \code{SummarizedExperiment}, \code{matrix})\cr

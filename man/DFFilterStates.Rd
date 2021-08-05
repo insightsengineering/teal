@@ -46,7 +46,7 @@ conditions are passed to unnamed arguments (\code{...}).
 \if{latex}{\out{\hypertarget{method-new}{}}}
 \subsection{Method \code{new()}}{
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{DFFilterStates$new(input_dataname, output_dataname, varlabels, keys)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{DFFilterStates$new(input_dataname, output_dataname, varlabels, datalabel, keys)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{

@@ -42,7 +42,7 @@ Initialize \code{SEFilterStates} object
 \if{latex}{\out{\hypertarget{method-new}{}}}
 \subsection{Method \code{new()}}{
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{SEFilterStates$new(input_dataname, output_dataname)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{SEFilterStates$new(input_dataname, output_dataname, datalabel)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
