@@ -14,7 +14,7 @@ vignette: >
 ## Introduction
 
 *teal* is a shiny based interactive exploration framework for analyzing clinical
-trials data and more general relational data. `teal` currently provides a dynamic filtering facility and 
+trials data and more general relational data. `teal` currently provides a dynamic filtering facility and
 different data viewers. `teal` shiny applications are built using standard
 [shiny modules][shiny_modules].
 
@@ -22,19 +22,19 @@ More information can be found on the [agile-R website][agileR].
 
 ## Initializing A Teal application
 
-The workflow to create a shiny app using teal is as follows. The `teal::init` 
-function is used to create a shiny `server` and `ui` function which in turn can 
-then be passed to the `shiny::shinyApp` function to start a shiny application. 
+The workflow to create a shiny app using teal is as follows. The `teal::init`
+function is used to create a shiny `server` and `ui` function which in turn can
+then be passed to the `shiny::shinyApp` function to start a shiny application.
 The following code is sufficient for a single file shiny app.
 
-Note this app require the libraries `teal.modules.general` and `teal.modules.clinical` 
+Note this app require the libraries `teal.modules.general` and `teal.modules.clinical`
 as these libraries provide standard modules for teal apps (see below for details of modules).
 
-```{r, eval=FALSE} 
+```{r, eval=FALSE}
 library(teal)
 library(random.cdisc.data)
 library(teal.modules.general)
-library(teal.modules.clinical) 
+library(teal.modules.clinical)
 
 ADSL <-  radsl(cached = TRUE)
 ADRS <-  radrs(cached = TRUE)
@@ -68,10 +68,10 @@ This will produce the following web app:
 
 <img src="images/simple_setup.png" alt="Simple Example Of Teal" style="width: 100%;"/>
 
-That is, we see a web app with a navigation bar at the top, the filter elements 
-on the right, and the data table viewer in the center. The data table and the 
-variable browser are two of the items that we provide with the libraries of teal modules 
-`teal.modules.clinical` and `teal.modules.general` . Other items can be added 
+That is, we see a web app with a navigation bar at the top, the filter elements
+on the right, and the data table viewer in the center. The data table and the
+variable browser are two of the items that we provide with the libraries of teal modules
+`teal.modules.clinical` and `teal.modules.general` . Other items can be added
 using shiny modules. Note that if you would like to deploy the above app to a
 shiny server then place the code into an `app.R` file.
 
@@ -92,8 +92,8 @@ each teal application:
 
 <img src="images/teal_containers.png" alt="Simple Example Of Teal" style="width: 100%;"/>
 
-These containers correspond to actual html block elements and we use shiny's 
-default layout manager (currently [bootstrap 3](http://getbootstrap.com)) with a 
+These containers correspond to actual html block elements and we use shiny's
+default layout manager (currently [bootstrap 3](http://getbootstrap.com)) with a
 fluid-container. Web-apps based on teal can control the following:
 
  - analysis data
@@ -110,32 +110,32 @@ And the following items can currently not be controlled:
 
 ### Data
 
-In the code listing above we specified the analysis data with a named list that 
-is passed to the `data` argument of `teal::init`. Because we filter every other 
-data set with the ADSL filters (more on this below) you always need to specify 
+In the code listing above we specified the analysis data with a named list that
+is passed to the `data` argument of `teal::init`. Because we filter every other
+data set with the ADSL filters (more on this below) you always need to specify
 the `ADSL` data with the `USUBJID` variable. Note that the dataset names are case
 sensitive.
 
 
 ### Navigation Tabs, Application Content, Shiny Modules
 
-The second argument of `teal::init` that we specified in the code listing above 
+The second argument of `teal::init` that we specified in the code listing above
 is the `modules` arguments. Modules define the elements displayed with tabs in
 the *`Navbar`* and their corresponding content in the *Tabs Content* box. A
 `modules` object can contain `module` and `modules` objects.
 
-We start the tree with the `root_modules` function which is a wrapper around 
+We start the tree with the `root_modules` function which is a wrapper around
 `modules` that sets the `label` argument to `"root"`.
 
 The [shiny modules][shiny_modules] are specified in the `module` function with
-the `server` and `ui` argument. Both, `module` and `modules` are documented 
+the `server` and `ui` argument. Both, `module` and `modules` are documented
 in the `teal` package, see `?module` and `?modules`.
 
 
 ## Accessing the Analysis Data in Shiny Modules
 
-`teal` encapsulates all analysis datasets and provides the filtering facility. 
-The filtered and unfiltered data is then made accessible via a `FilteredData` 
+`teal` encapsulates all analysis datasets and provides the filtering facility.
+The filtered and unfiltered data is then made accessible via a `FilteredData`
 object that we usually assign to a `datasets` variable. The `FilteredData` class
 is based on the [R6][R6] object system. The key method for the `FilteredData` object
 is `get_data` method which returns either the filtered or unfiltered dataset of interest.
@@ -159,32 +159,32 @@ module(
 )
 ```
 
-This analysis item shows up as *Frequency Table* in the `navbar` and displays a 
-table of the `ADSL.SEX` variable in the *Tab Contents* section of the app. The 
-`ui` function requires the `id` argument, as defined in [shiny 
-modules][shiny_modules] and the `server` function requires the three arguments 
-`input`, `output`, and `session`. The `dataset` argument is added to the 
-`server` function call by `teal` based on the `server_args` argument list 
-specified in the `module` function. The `server_args` expects a named list 
+This analysis item shows up as *Frequency Table* in the `navbar` and displays a
+table of the `ADSL.SEX` variable in the *Tab Contents* section of the app. The
+`ui` function requires the `id` argument, as defined in [shiny
+modules][shiny_modules] and the `server` function requires the three arguments
+`input`, `output`, and `session`. The `dataset` argument is added to the
+`server` function call by `teal` based on the `server_args` argument list
+specified in the `module` function. The `server_args` expects a named list
 with additional arguments that should be passed to the server function. The list
-names (e.g. `datasets` in the above code) map to the argument names and the 
+names (e.g. `datasets` in the above code) map to the argument names and the
 content is usually mapped one-to-one with the exception of some keywords such as
-`teal_datasets` which will be replaced by teal with the `FilteredData` object 
-mentioned above. 
+`teal_datasets` which will be replaced by teal with the `FilteredData` object
+mentioned above.
 
 ## Filtering
 
 For clinical trial data analysis (as opposed to more general relational data)
-we apply a specific filtering mechanism that requires an `ADSL` analysis dataset to be part of every 
-`teal` app. That is, the filter framework lets the user dynamically 
-specify which variables she/he wants to use for filtering (using ranges or 
+we apply a specific filtering mechanism that requires an `ADSL` analysis dataset to be part of every
+`teal` app. That is, the filter framework lets the user dynamically
+specify which variables she/he wants to use for filtering (using ranges or
 categories). Teal then creates the `filter` code for each filter condition and
 links them with an elementwise logical **AND**  operator (i.e. `&`). Further,
 all datasets other than `ADSL` will also be filtered with the remaining subjects
 in `ADSL` through the `ADSL.USUBJID` and `ADSL.STUDYID` variables. Hence, assume
 you have the following three filters
 
- - `ADSL.STUDYID %in% c('BP29392', 'WP29945')` 
+ - `ADSL.STUDYID %in% c('BP29392', 'WP29945')`
  - `ADSL.AGE > 15 & ADSL.AGE < 35`
  - `ADRS.ADY > 0 & ADRS.ADY < 500`
 
@@ -196,7 +196,7 @@ ADSL_FILTERED <- dplyr::filter(ADSL, STUDYID %in% c('BP29392', 'WP29945') & AGE 
 ADRS_FILTERED_ALONE <- dplyr::filter(ADRS, ADY > 0 & ADY < 500)
 
 ADRS_FILTERED <- dplyr::inner_join(x = ADSL_FILTERED,
-                      y = ADRS_FILTERED_ALONE, 
+                      y = ADRS_FILTERED_ALONE,
                       by = c("USUBJID", "STUDYID"))
 ```
 
@@ -205,8 +205,8 @@ ADRS_FILTERED <- dplyr::inner_join(x = ADSL_FILTERED,
 
 ### Defining Custom Header and Footers
 
-The `teal::init` function also has the `header` and `footer` arguments that 
-expects an object of class `shiny.tag` which can be created with the functions 
+The `teal::init` function also has the `header` and `footer` arguments that
+expects an object of class `shiny.tag` which can be created with the functions
 stored in the `tags` list (exported by shiny). So, a possible header could be
 defined as follows:
 
@@ -217,7 +217,6 @@ tags$div(tags$h1("My New Analysis Web-app"), tags$p(class="pull-left", "Logo"))
 
 [shiny_modules]: https://shiny.rstudio.com/articles/modules.html "Modularizing Shiny app code"
 [R6]: https://cran.r-project.org/web/packages/R6/vignettes/Introduction.html "Introduction to R6 classes"
-[teal_git]: https://github.roche.com/NEST/teal "Teal GitHub Repository"
+[teal_git]: https://github.roche.com/NEST/teal "Teal Roche GitHub Repository"
 [gran]: http://gran.roche.com "Roche R Package Server"
 [agileR]: http://go.roche.com/agile-R
-

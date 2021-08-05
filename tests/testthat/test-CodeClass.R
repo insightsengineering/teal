@@ -145,7 +145,6 @@ test_that("CodeClass list_to_code_class", {
 })
 
 # Append duplicated code ====
-# Regression test from https://github.roche.com/NEST/teal/issues/974
 test_that("Duplicated code is appended if it doesn't have a dataname", {
   cc1 <- CodeClass$new(code = "print('test')")
   cc2 <- CodeClass$new(code = "print('test')")
