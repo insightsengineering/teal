@@ -477,7 +477,6 @@ FilterStates <- R6::R6Class( # nolint
       return(invisible(NULL))
     },
 
-    #' @description
     #' Remove shiny element. Method can be called from reactive session where
     #' `observeEvent` for remove-filter-state is set and also from `FilteredDataset`
     #' level, where shiny-session-namespace is different. That is why it's important

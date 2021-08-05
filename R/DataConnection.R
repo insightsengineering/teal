@@ -656,6 +656,13 @@ rcd_connection <- function(open_args = list()) {
 #'
 #' @export
 rice_connection <- function(open_args = list(), close_args = list(), ping_args = list()) {
+  check_pkg_quietly(
+    "rice",
+    paste0(
+      "Connection to entimICE via rice was requested, but rice package is not available.",
+      "Please install it from https://github.roche.com/Rpackages/rice."
+    )
+  )
   stopifnot(is_fully_named_list(open_args))
   stopifnot(is_fully_named_list(close_args))
   stopifnot(is_fully_named_list(ping_args))
@@ -744,6 +751,15 @@ rice_connection <- function(open_args = list(), close_args = list(), ping_args =
 #'
 #' @export
 teradata_connection <- function(open_args = list(), close_args = list(), ping_args = list()) {
+  check_pkg_quietly(
+    "RocheTeradata",
+    "Connection to Teradata was requested, but RocheTeradata package is not available."
+  )
+  check_pkg_quietly(
+    "DBI",
+    "Connection to Teradata was requested, but RocheTeradata package is not available."
+  )
+
   stopifnot(is_fully_named_list(open_args))
   stopifnot(is_fully_named_list(close_args))
   stopifnot(is_fully_named_list(ping_args))
@@ -865,7 +881,7 @@ snowflake_connection_function <- function(username = askpass::askpass("Please en
   # long enough to pull the data in
   token <- httr::content(res)$access_token
 
-  tryCatch(
+  eval(parse(text = "tryCatch(
     con <- DBI::dbConnect(
       odbc::odbc(),
       Server = server,
@@ -875,13 +891,14 @@ snowflake_connection_function <- function(username = askpass::askpass("Please en
       schema = schema,
       Warehouse = warehouse,
       role = role,
-      authenticator = "oauth",
+      authenticator = \"oauth\",
       token = token
     ),
     error = function(cond){
-      stop(paste("Unable to connect to snowflake. Error message:", cond$message), call. = FALSE)
+      stop(paste(\"Unable to connect to snowflake. Error message:\", cond$message), call. = FALSE)
     }
-  )
+  )"
+  ))
   return(con)
 }
 

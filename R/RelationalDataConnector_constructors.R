@@ -140,7 +140,7 @@ rcd_data <- function(..., connection = rcd_connection(), check = TRUE) {
 #'
 #' @examples
 #'
-#' if (requireNamespace("rice")) {
+#' if ("rice" %in% installed.packages()) {
 #'   x <- rice_data(
 #'     rice_cdisc_dataset_connector("ADSL", "/path/to/ADSL"),
 #'     rice_cdisc_dataset_connector("ADLB", "/path/to/ADLB")

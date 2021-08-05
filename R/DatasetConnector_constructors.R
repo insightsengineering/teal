@@ -699,7 +699,7 @@ code_cdisc_dataset_connector <- function(dataname,
 #'
 #' @examples
 #'
-#' if (requireNamespace("rice")) {
+#' if ("rice" %in% installed.packages()) {
 #'   x <- rice_dataset_connector(
 #'     dataname = "ADSL",
 #'     path = "/path/to/file.sas7bdat"
