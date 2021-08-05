@@ -386,7 +386,7 @@ FilterStates <- R6::R6Class( # nolint
       tags$div(
         id = private$card_id,
         class = "list-group hideable-list-group",
-        `data-label` = private$datalabel
+        `data-label` = ifelse(private$datalabel == "", "", (paste0("> ", private$datalabel)))
       )
     },
 
