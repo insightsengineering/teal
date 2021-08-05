@@ -436,7 +436,11 @@ test_that("script_cdisc_dataset_connector", {
 })
 
 test_that("rice_dataset", {
+<<<<<<< HEAD
   if (!"rice" %in% installed.packages()) {
+=======
+  if (!requireNamespace("rice")) {
+>>>>>>> 2_fix_checks_missing_pkgs@main
     testthat::skip("rice package not available")
   }
   x <- rice_data(
