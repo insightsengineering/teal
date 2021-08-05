@@ -613,6 +613,59 @@ CDISCFilteredDataset <- R6::R6Class( # nolint
       } else {
         dplyr::n_distinct(self$get_data(filtered = filtered)[subject_keys])
       }
+    },
+
+    #' @description
+    #' UI module to add filter variable for this dataset
+    #'
+    #' UI module to add filter variable for this dataset
+    #' @param id (`character(1)`)\cr
+    #'  identifier of the element - preferably containing dataset name
+    #'
+    #' @return function - shiny UI module
+    ui_add_filter_state = function(id) {
+      ns <- NS(id)
+      tagList(
+        tags$label("Add", tags$code(self$get_dataname()), "filter"),
+        self$get_filter_states(id = "filter")$ui_add_filter_state(
+          id = ns("filter"),
+          data = private$get_data_without_join_cols()
+        )
+      )
+    },
+
+    #' @description
+    #' Server module to add filter variable for this dataset
+    #'
+    #' Server module to add filter variable for this dataset.
+    #' For this class `srv_add_filter_state` calls single module
+    #' `srv_add_filter_state` from `FilterStates` (`DefaultFilteredDataset`
+    #' contains single `FilterStates`)
+    #'
+    #' @param input (`shiny`)\cr
+    #' @param output (`shiny`)\cr
+    #' @param session (`shiny`)\cr
+    #' @return function - shiny server module
+    srv_add_filter_state = function(input, output, session) {
+      data <- get_raw_data(self$get_dataset())
+      callModule(
+        module = self$get_filter_states(id = "filter")$srv_add_filter_state,
+        id = "filter",
+        data = private$get_data_without_join_cols()
+      )
+    }
+  ),
+  # Returns the data.frame object without the columns used to join
+  # with the parent dataset specified in the join_keys argument
+  # to the constructor.
+  private = list(
+    get_data_without_join_cols = function() {
+      if (is_empty(self$get_dataset()$get_parent())) {
+        self$get_dataset()$data
+      } else {
+        join_columns_names <- self$get_join_keys()[[self$get_dataset()$get_parent()]]
+        dplyr::select(self$get_dataset()$data, -all_of(join_columns_names))
+      }
     }
   )
 )
