@@ -62,6 +62,9 @@ name of the output data on the lhs of the assignment expression.}
 \item{\code{varlabels}}{(\code{character})\cr
 labels of the variables used in this object}
 
+\item{\code{datalabel}}{(\code{character(0)})\cr
+text label value.}
+
 \item{\code{keys}}{(\code{character})\cr
 key columns names
 Get function name
