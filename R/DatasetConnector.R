@@ -229,27 +229,30 @@ DatasetConnector <- R6::R6Class( #nolint
       if (!self$is_failed()) {
         # The first time object is pulled, private$dataset may be NULL if mutate method was never called
         has_dataset <- !is.null(private$dataset)
+        code <- private$get_pull_code_class()
+        vars <- list()
         if (has_dataset) {
           code_in_dataset <- private$dataset$get_code_class()
           mutate_code_in_dataset <- private$dataset$get_mutate_code_class()
           vars_in_dataset <- private$dataset$get_vars()
           mutate_vars_in_dataset <- private$dataset$get_mutate_vars()
+
+          code$append(code_in_dataset)
+          vars <- vars_in_dataset
         }
         private$dataset <- dataset(
           dataname = self$get_dataname(),
           x = data,
           keys = character(0), # keys need to be set after mutate
           label = self$get_dataset_label(),
-          code = private$get_pull_code_class()
+          code = code,
+          vars = vars
         )
         if (has_dataset) {
           private$dataset$mutate(
-            code = code_in_dataset$append(mutate_code_in_dataset),  # if code is same, append method will not append
-            vars = c(
-              vars_in_dataset,
-              # if they have the same name, then they are guaranteed to be same identical objects.
-              mutate_vars_in_dataset[!names(mutate_vars_in_dataset) %in% names(vars_in_dataset)]
-            )
+            code = mutate_code_in_dataset,
+            vars = mutate_vars_in_dataset[!names(mutate_vars_in_dataset) %in% names(vars_in_dataset)],
+            is_re_pull = TRUE
           )
         }
         set_keys(private$dataset, self$get_keys())
