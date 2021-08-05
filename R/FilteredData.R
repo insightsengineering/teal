@@ -293,6 +293,16 @@ FilteredData <- R6::R6Class( # nolint
         }
       )
 
+      # add labels for mae experiments separately
+      mae_exps <- (sapply(res_list, length) > 2)
+      res_list_mae <- res_list[mae_exps]
+      res_list_mae_labeled <- lapply(names(res_list_mae), function(x) {
+        data <- res_list_mae[[x]]
+        rownames(data) <- paste0(names(res_list_mae[x]), ".", names(data_info_filtered[[x]]$Obs))
+        data
+      })
+
+      res_list[mae_exps] <- res_list_mae_labeled
       res_df <- as.data.frame(do.call(rbind, res_list))
       res_df[, "Dataset"] <- rownames(res_df)
       rownames(res_df) <- NULL

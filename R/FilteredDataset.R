@@ -708,11 +708,22 @@ MAEFilteredDataset <- R6::R6Class( # nolint
     #'   whether `data.info` should depend on filtered data.
     #' @return `integer(1)` number of rows in `colData(data)`
     get_data_info = function(filtered = FALSE) {
-      nrow(
-        SummarizedExperiment::colData(
-          self$get_data(filtered = filtered)
+      data <- self$get_data(filtered = filtered)
+      experiment_names <- names(data)
+      obs <- sapply(experiment_names, function(x) ncol(data[[x]]), USE.NAMES = TRUE)
+    },
+
+    #' @description
+    #' Get subjects info
+    #' @param filtered (`logical(1)`)\cr
+    #'   whether `data.info` should depend on filtered data.
+    #' @return `integer` number of unique subjects
+    get_subjects_info = function(filtered) {
+      data <- self$get_data(filtered = filtered)
+      experiment_names <- names(data)
+      subjs <- sapply(experiment_names, function(x)
+        nrow(subset(MultiAssayExperiment::sampleMap(data), colname %in% colnames(data[[x]]))), USE.NAMES = TRUE
         )
-      )
     },
 
     #' @description
