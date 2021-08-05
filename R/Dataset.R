@@ -362,7 +362,7 @@ Dataset <- R6::R6Class( # nolint
     #' Either code or script must be provided, but not both.
     #'
     #' @return (`self`) invisibly for chaining
-    mutate = function(code, vars = list(), force_delay = FALSE, is_re_pull = FALSE) {
+    mutate = function(code, vars = list(), force_delay = FALSE) {
       stopifnot(is_fully_named_list(vars))
 
       if (inherits(code, "PythonCodeClass")) {
@@ -379,7 +379,7 @@ Dataset <- R6::R6Class( # nolint
       } else {
         private$mutate_delayed(code, vars)
         if (! (private$is_any_dependency_delayed(vars) || force_delay)) {
-          private$mutate_eager(is_re_pull = is_re_pull)
+          private$mutate_eager()
         }
       }
 
@@ -481,14 +481,9 @@ Dataset <- R6::R6Class( # nolint
       return(invisible(self))
     },
 
-    mutate_eager = function(is_re_pull = FALSE) {
-      code <- if (is_re_pull) {
-        CodeClass$new()$append(private$code)$append(private$mutate_code)
-      } else {
-        private$mutate_code
-      }
+    mutate_eager = function() {
       new_df <- private$execute_code(
-        code = code,
+        code = private$mutate_code,
         vars = c(
           private$vars,
           # if they have the same name, then they are guaranteed to be identical objects.

@@ -251,8 +251,7 @@ DatasetConnector <- R6::R6Class( #nolint
         if (has_dataset) {
           private$dataset$mutate(
             code = mutate_code_in_dataset,
-            vars = mutate_vars_in_dataset[!names(mutate_vars_in_dataset) %in% names(vars_in_dataset)],
-            is_re_pull = TRUE
+            vars = mutate_vars_in_dataset[!names(mutate_vars_in_dataset) %in% names(vars_in_dataset)]
           )
         }
         set_keys(private$dataset, self$get_keys())
