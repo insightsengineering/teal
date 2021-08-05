@@ -217,6 +217,6 @@ tags$div(tags$h1("My New Analysis Web-app"), tags$p(class="pull-left", "Logo"))
 
 [shiny_modules]: https://shiny.rstudio.com/articles/modules.html "Modularizing Shiny app code"
 [R6]: https://cran.r-project.org/web/packages/R6/vignettes/Introduction.html "Introduction to R6 classes"
-[teal_git]: https://github.roche.com/NEST/teal "Teal Roche GitHub Repository"
+[teal_git]: https://github.com/insightsengineering/teal "Teal GitHub Repository"
 [gran]: http://gran.roche.com "Roche R Package Server"
 [agileR]: http://go.roche.com/agile-R

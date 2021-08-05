@@ -14,7 +14,7 @@
 #' close_fun <- callable_function(print) # define closing function
 #' close_fun$set_args(list(x = "Hi there")) # define fixed arguments to closing function
 #'
-#' ping_fun <- callable_function(rice::rice_session_active)
+#' ping_fun <- callable_function(function() TRUE)
 #'
 #' x <- teal:::DataConnection$new( # define connection
 #'   ping_fun = ping_fun, # define ping function
