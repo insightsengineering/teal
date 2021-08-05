@@ -330,9 +330,7 @@ FilteredDataset <- R6::R6Class( # nolint
               lapply(
                 names(self$get_filter_states()),
                 function(x) {
-                  tagList(
-                      self$get_filter_states(id = x)$ui(id = ns(x))
-                  )
+                  tagList(self$get_filter_states(id = x)$ui(id = ns(x)))
                 }
               )
             )
