@@ -285,6 +285,10 @@ FilteredDataset <- R6::R6Class( # nolint
       paste0(dataname, suffix)
     },
 
+    set_bookmark_state = function(state) {
+      stop("Abstract class")
+    },
+
     # modules ------
     #' @description
     #' UI module for dataset active filters
@@ -483,6 +487,16 @@ DefaultFilteredDataset <- R6::R6Class( # nolint
           function(x) x$get_call()
         )
       )
+    },
+
+    set_bookmark_state = function(state) {
+      data <- self$get_data(filtered = FALSE)
+      fs <- self$get_filter_states()[[1]]
+      fs$set_bookmark_state(
+        state = state,
+        data = data
+      )
+      return(invisible(NULL))
     },
 
     #' @description
@@ -713,6 +727,21 @@ MAEFilteredDataset <- R6::R6Class( # nolint
           self$get_data(filtered = filtered)
         )
       )
+    },
+
+    set_bookmark_state = function(state) {
+      data <- self$get_data(filtered = FALSE)
+      stopifnot(all(names(state) %in% c("subjects", names(data))))
+
+      for (i in names(state)) {
+        fs <- self$get_filter_states()[[i]]
+        fs$set_bookmark_state(
+          state = state[[i]],
+          data = `if`(i == "subjects", data, data[[i]])
+        )
+      }
+
+      return(invisible(NULL))
     },
 
     #' @description

@@ -66,7 +66,7 @@ filtered_data_set_filters <- function(datasets, filter) {
   )
 
   if (length(filter) > 0) {
-    warning("This function needs to be fixed. See https://github.roche.com/NEST/teal/issues/1248")
+    datasets$set_bookmark_state(filter)
   }
 
 

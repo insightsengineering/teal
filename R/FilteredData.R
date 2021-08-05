@@ -423,7 +423,13 @@ FilteredData <- R6::R6Class( # nolint
     #' @param state (`named list`)\cr
     #'  nested list of filter selections applied to datasets.
     set_bookmark_state = function(state) {
-      stop("Not implemented")
+      stopifnot(all(names(state) %in% self$datanames()))
+      for (i in names(state)) {
+        fd <- self$get_filtered_datasets(dataname = i)
+        fd$set_bookmark_state(state = state[[i]])
+      }
+
+      return(invisible(NULL))
     },
 
     #' @description
