@@ -30,22 +30,18 @@ test_that("mutate_dataset", {
   })
 
   expect_equal(
-    test_ds_mut$get_raw_data(),
-    data.frame(x = c(1, 2), y = c("a", "b"),
-               z = c("one", "two"),
-               stringsAsFactors = FALSE)
+    test_ds$get_raw_data(),
+    data.frame(x = c(1, 2), y = c("a", "b"), stringsAsFactors = FALSE)
   )
 
   expect_equal(
-    get_raw_data(test_ds_mut),
-    data.frame(x = c(1, 2), y = c("a", "b"),
-               z = c("one", "two"),
-               stringsAsFactors = FALSE)
+    get_raw_data(test_ds),
+    data.frame(x = c(1, 2), y = c("a", "b"), stringsAsFactors = FALSE)
   )
 
   expect_error({
     test_ds %>% mutate_dataset("x <- 3")
-  }, "data.frame")
+  }, "object 'test' not found")
 
   expect_error({
     test_ds %>% mutate_dataset(c("x <- 3", "som"))
@@ -82,8 +78,10 @@ test_that("mutate_dataset", {
                stringsAsFactors = FALSE)
   )
 
+  test_script <- system.file("tests", "testthat", "mutate_code", "testds.R", package = "teal")
+
   expect_silent({
-    test_ds_mut <- test_ds %>% mutate_dataset(read_script("mutate_code/testds.R"))
+    test_ds_mut <- test_ds %>% mutate_dataset(read_script(test_script))
   })
 
   expect_equal(
@@ -101,7 +99,7 @@ test_that("mutate_dataset", {
   expect_true(is(test_ds_mut, "Dataset"))
 
   expect_silent({
-    test_ds_mut <- test_ds %>% mutate_dataset(script = "mutate_code/testds.R")
+    test_ds_mut <- test_ds %>% mutate_dataset(script = test_script)
   })
 
   expect_equal(
