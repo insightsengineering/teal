@@ -121,9 +121,6 @@ DatasetConnector <- R6::R6Class( #nolint
       if (!is.null(private$dataset)) {
         executed_code_in_dataset <- private$dataset$get_code_class()
         code_class$append(executed_code_in_dataset)
-
-        delayed_code_in_dataset <- private$dataset$get_mutate_code_class()
-        code_class$append(delayed_code_in_dataset)
       }
 
       return(code_class)
@@ -229,29 +226,21 @@ DatasetConnector <- R6::R6Class( #nolint
       if (!self$is_failed()) {
         # The first time object is pulled, private$dataset may be NULL if mutate method was never called
         has_dataset <- !is.null(private$dataset)
-        code <- private$get_pull_code_class()
-        vars <- list()
         if (has_dataset) {
           code_in_dataset <- private$dataset$get_code_class()
-          mutate_code_in_dataset <- private$dataset$get_mutate_code_class()
           vars_in_dataset <- private$dataset$get_vars()
-          mutate_vars_in_dataset <- private$dataset$get_mutate_vars()
-
-          code$append(code_in_dataset)
-          vars <- vars_in_dataset
         }
         private$dataset <- dataset(
           dataname = self$get_dataname(),
           x = data,
           keys = character(0), # keys need to be set after mutate
           label = self$get_dataset_label(),
-          code = code,
-          vars = vars
+          code = private$get_pull_code_class()
         )
         if (has_dataset) {
           private$dataset$mutate(
-            code = mutate_code_in_dataset,
-            vars = mutate_vars_in_dataset[!names(mutate_vars_in_dataset) %in% names(vars_in_dataset)]
+            code = code_in_dataset,
+            vars = vars_in_dataset
           )
         }
         set_keys(private$dataset, self$get_keys())

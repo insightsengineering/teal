@@ -93,7 +93,7 @@ Dataset <- R6::R6Class( # nolint
     recreate = function(dataname = self$get_dataname(),
                         x = self$get_raw_data(),
                         keys = self$get_keys(),
-                        code = self$get_code_class(),
+                        code = self$get_code_class(include_mutate = FALSE),
                         label = self$get_dataset_label(),
                         vars = list()) {
 
@@ -301,31 +301,28 @@ Dataset <- R6::R6Class( # nolint
     #' @return optionally deparsed \code{call} object
     get_code = function(deparse = TRUE) {
       stopifnot(is_logical_single(deparse))
-      executed <- self$get_code_class()
-      delayed <- self$get_mutate_code_class()
-      # calling append instead of set_code is important to prevent duplicates
-      res <- executed$append(delayed)$get_code(deparse = deparse)
+      res <- self$get_code_class()$get_code(deparse = deparse)
       return(res)
     },
     #' @description
     #' Get internal \code{CodeClass} object
     #'
+    #' @param include_mutate \code{logical} whether to include mutate code in output
+    #'
     #' @return `\code{CodeClass}`
-    get_code_class = function() {
+    get_code_class = function(include_mutate = TRUE) {
       res <- CodeClass$new()
       res$append(list_to_code_class(private$vars))
+      if (include_mutate) {
+        res$append(list_to_code_class(private$mutate_vars))
+      }
       res$append(private$code)
+      if (include_mutate) {
+        res$append(private$mutate_code)
+      }
 
       return(res)
     },
-    #' @description
-    #' Get internal \code{vars} object
-    #'
-    #' @return `\code{list}`
-    get_vars = function() {
-      return(private$vars)
-    },
-
     #' @description
     #' Get internal \code{CodeClass} object
     #'
@@ -336,6 +333,18 @@ Dataset <- R6::R6Class( # nolint
       res$append(private$mutate_code)
 
       return(res)
+    },
+    #' @description
+    #' Get internal \code{vars} object
+    #'
+    #' @param include_mutate \code{logical} whether to include mutate code in output
+    #'
+    #' @return `\code{list}`
+    get_vars = function(include_mutate = TRUE) {
+      return(c(
+        private$vars,
+        if (include_mutate) private$mutate_vars[!names(private$mutate_vars) %in% names(private$vars)])
+      )
     },
     #' @description
     #' Get internal \code{mutate_vars} object

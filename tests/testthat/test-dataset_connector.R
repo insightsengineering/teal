@@ -731,18 +731,18 @@ testthat::test_that("DatasetConnector mutate method with delayed logic", {
   # mutation is delayed because t_dc2 hasn't been loaded yet
   mutate_dataset(t_dc, code = "test_dc$head_integers <- t_dc2$head_integers", vars = list(t_dc2 = t_dc2))
   testthat::expect_true(t_dc$is_mutate_delayed())
-    testthat::expect_equal(
-      pretty_code_string(t_dc$get_code()),
-      c("head_mtcars <- head(mtcars)",
-        "test_ds1 <- head_mtcars",
-        "test_dc <- data.frame(head_letters = c(\"a\", \"b\", \"c\", \"d\", \"e\", \"f\"))",
-        "test_dc$tail_letters <- tail(letters)",
-        "head_iris <- head(iris)",
-        "test_ds2 <- head_iris",
-        "test_dc2 <- data.frame(head_integers = 1:6)",
-        "t_dc2 <- test_dc2",
-        "test_dc$head_integers <- t_dc2$head_integers"
-      )
+  testthat::expect_equal(
+    pretty_code_string(t_dc$get_code()),
+    c("head_mtcars <- head(mtcars)",
+      "test_ds1 <- head_mtcars",
+      "test_dc <- data.frame(head_letters = c(\"a\", \"b\", \"c\", \"d\", \"e\", \"f\"))",
+      "head_iris <- head(iris)",
+      "test_ds2 <- head_iris",
+      "test_dc2 <- data.frame(head_integers = 1:6)",
+      "t_dc2 <- test_dc2",
+      "test_dc$tail_letters <- tail(letters)",
+      "test_dc$head_integers <- t_dc2$head_integers"
+    )
   )
   # mutation is delayed even, though it could be executed, because it had already been delayed
   mutate_dataset(t_dc, code = "test_dc$one <- 1")
@@ -752,11 +752,11 @@ testthat::test_that("DatasetConnector mutate method with delayed logic", {
     c("head_mtcars <- head(mtcars)",
       "test_ds1 <- head_mtcars",
       "test_dc <- data.frame(head_letters = c(\"a\", \"b\", \"c\", \"d\", \"e\", \"f\"))",
-      "test_dc$tail_letters <- tail(letters)",
       "head_iris <- head(iris)",
       "test_ds2 <- head_iris",
       "test_dc2 <- data.frame(head_integers = 1:6)",
       "t_dc2 <- test_dc2",
+      "test_dc$tail_letters <- tail(letters)",
       "test_dc$head_integers <- t_dc2$head_integers",
       "test_dc$one <- 1"
     )

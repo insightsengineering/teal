@@ -253,33 +253,96 @@ testthat::test_that("Dataset mutate method with delayed logic", {
 
   mutate_dataset(test_ds0, code = "head_mtcars$head_letters <- dc$head_letters", vars = list(dc = t_dc))
 
-  repeated_call <- function() {
-    testthat::expect_equal(
-      test_ds0$get_code(),
-      paste(test_ds0$get_code_class()$append(test_ds0$get_mutate_code_class())$get_code(deparse = TRUE))
+  testthat::expect_equal(
+    pretty_code_string(test_ds0$get_code()),
+    c("head_iris <- head(iris)",
+      "ds1 <- head_iris",
+      "test_ds1 <- head_iris",
+      "test_dc <- data.frame(head_letters = c(\"a\", \"b\", \"c\", \"d\", \"e\", \"f\"))",
+      "dc <- test_dc",
+      "head_mtcars <- head(mtcars)",
+      "head_mtcars$carb <- head_mtcars$carb * 2",
+      "head_mtcars$Species <- ds1$Species",
+      "head_mtcars$head_letters <- dc$head_letters"
     )
-  }
-  repeated_call()
+  )
 
 
   testthat::expect_null(get_raw_data(test_ds0)$head_mtcars)
 
   testthat::expect_true(test_ds0$is_mutate_delayed())
-  repeated_call()
+  testthat::expect_equal(
+    pretty_code_string(test_ds0$get_code()),
+    c("head_iris <- head(iris)",
+      "ds1 <- head_iris",
+      "test_ds1 <- head_iris",
+      "test_dc <- data.frame(head_letters = c(\"a\", \"b\", \"c\", \"d\", \"e\", \"f\"))",
+      "dc <- test_dc",
+      "head_mtcars <- head(mtcars)",
+      "head_mtcars$carb <- head_mtcars$carb * 2",
+      "head_mtcars$Species <- ds1$Species",
+      "head_mtcars$head_letters <- dc$head_letters"
+    )
+  )
 
   # continuing to delay
   mutate_dataset(test_ds0, code = "head_mtcars$new_var <- 1")
   testthat::expect_true(test_ds0$is_mutate_delayed())
 
-  repeated_call()
+  testthat::expect_equal(
+    pretty_code_string(test_ds0$get_code()),
+    c("head_iris <- head(iris)",
+      "ds1 <- head_iris",
+      "test_ds1 <- head_iris",
+      "test_dc <- data.frame(head_letters = c(\"a\", \"b\", \"c\", \"d\", \"e\", \"f\"))",
+      "dc <- test_dc",
+      "head_mtcars <- head(mtcars)",
+      "head_mtcars$carb <- head_mtcars$carb * 2",
+      "head_mtcars$Species <- ds1$Species",
+      "head_mtcars$head_letters <- dc$head_letters",
+      "head_mtcars$new_var <- 1"
+    )
+  )
   expect_null(get_raw_data(test_ds0)$new_var)
   testthat::expect_true(test_ds0$is_mutate_delayed())
 
   mutate_dataset(test_ds0, code = "head_mtcars$perm <- ds2$perm", vars = list(ds2 = test_ds2))
-  repeated_call()
+  testthat::expect_equal(
+    pretty_code_string(test_ds0$get_code()),
+    c("head_iris <- head(iris)",
+      "ds1 <- head_iris",
+      "test_ds1 <- head_iris",
+      "test_dc <- data.frame(head_letters = c(\"a\", \"b\", \"c\", \"d\", \"e\", \"f\"))",
+      "dc <- test_dc",
+      "head_rock <- head(rock)",
+      "ds2 <- head_rock",
+      "head_mtcars <- head(mtcars)",
+      "head_mtcars$carb <- head_mtcars$carb * 2",
+      "head_mtcars$Species <- ds1$Species",
+      "head_mtcars$head_letters <- dc$head_letters",
+      "head_mtcars$new_var <- 1",
+      "head_mtcars$perm <- ds2$perm"
+    )
+  )
 
   expect_null(get_raw_data(test_ds0)$perm)
-  repeated_call()
+  testthat::expect_equal(
+    pretty_code_string(test_ds0$get_code()),
+    c("head_iris <- head(iris)",
+      "ds1 <- head_iris",
+      "test_ds1 <- head_iris",
+      "test_dc <- data.frame(head_letters = c(\"a\", \"b\", \"c\", \"d\", \"e\", \"f\"))",
+      "dc <- test_dc",
+      "head_rock <- head(rock)",
+      "ds2 <- head_rock",
+      "head_mtcars <- head(mtcars)",
+      "head_mtcars$carb <- head_mtcars$carb * 2",
+      "head_mtcars$Species <- ds1$Species",
+      "head_mtcars$head_letters <- dc$head_letters",
+      "head_mtcars$new_var <- 1",
+      "head_mtcars$perm <- ds2$perm"
+    )
+  )
   testthat::expect_true(test_ds0$is_mutate_delayed())
 
   load_dataset(t_dc)
