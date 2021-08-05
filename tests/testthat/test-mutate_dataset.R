@@ -24,6 +24,10 @@ test_that("mutate_dataset", {
     mutate_dataset(x = test_ds, code = "y <- test")
   }, "Evaluation of the code failed")
 
+  # I believe that this is supposed to produce error.
+  # "y <- test" was added to object's mutate code anyways from the last line.
+  # that's one of the drawbacks to having mutate delayed.
+  # There should be a ticket opened for this.
   expect_silent({
     test_ds_mut <- test_ds %>% mutate_dataset("x$z <- c('one', 'two')")
   })
