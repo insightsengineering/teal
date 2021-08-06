@@ -97,7 +97,7 @@ test_that("mutate_dataset", {
   expect_true(is(test_ds_mut, "Dataset"))
 
   expect_silent({
-    test_ds_mut <- test_ds %>% mutate_dataset(script = read_script("mutate_code/testds.R"))
+    test_ds_mut <- test_ds %>% mutate_dataset(read_script("mutate_code/testds.R"))
   })
 
   expect_equal(
