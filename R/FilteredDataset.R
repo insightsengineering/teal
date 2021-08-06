@@ -743,12 +743,11 @@ MAEFilteredDataset <- R6::R6Class( # nolint
     #'   names of the experiments.
     #'
     set_bookmark_state = function(state) {
-      data <- self$get_data(filtered = FALSE)
       stopifnot(
         is.list(state),
         all(names(state) %in% c(names(self$get_filter_states())))
       )
-
+      data <- self$get_data(filtered = FALSE)
       for (fs_name in names(state)) {
         fs <- self$get_filter_states()[[fs_name]]
         fs$set_bookmark_state(
