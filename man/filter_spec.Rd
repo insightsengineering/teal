@@ -59,7 +59,7 @@ on top of this specific shiny \code{\link[shiny]{selectInput}}.}
 \code{filter_spec}-S3-class object or \code{delayed_filter_spec}-S3-class object.
 }
 \description{
-\ifelse{html}{\out{<a href='https://www.tidyverse.org/lifecycle/#maturing'><img src='figures/lifecycle-maturing.svg' alt='Maturing lifecycle'></a>}}{\strong{Maturing}}
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#maturing}{\figure{lifecycle-maturing.svg}{options: alt='[Maturing]'}}}{\strong{[Maturing]}}
 It consists in choices and additionally the variable names for the choices
 }
 \details{

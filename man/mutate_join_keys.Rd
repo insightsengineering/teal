@@ -25,7 +25,7 @@ mutate_join_keys(x, dataset_1, dataset_2, val)
 modified \code{JoinKeys} object
 }
 \description{
-\ifelse{html}{\out{<a href='https://www.tidyverse.org/lifecycle/#experimental'><img src='figures/lifecycle-experimental.svg' alt='Experimental lifecycle'></a>}}{\strong{Experimental}}
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
 Mutate \code{JoinKeys} with a new values
 }
 \examples{
@@ -41,10 +41,10 @@ mutate_join_keys(x, "dataset_A", "dataset_B", c("col_1" = "col_10"))
 x$get("dataset_A", "dataset_B")
 # RelationalData ----
 
-library(random.cdisc.data)
+library(scda)
 
-ADSL <- radsl(cached = TRUE)
-ADRS <- radrs(cached = TRUE)
+ADSL <- synthetic_cdisc_data("latest")$adsl
+ADRS <- synthetic_cdisc_data("latest")$adrs
 
 x <- cdisc_data(
   cdisc_dataset("ADSL", ADSL),

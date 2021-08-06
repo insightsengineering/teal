@@ -17,22 +17,22 @@ reproducible code to re-create object}
 \code{CDISCData} object
 }
 \description{
-\ifelse{html}{\out{<a href='https://www.tidyverse.org/lifecycle/#experimental'><img src='figures/lifecycle-experimental.svg' alt='Experimental lifecycle'></a>}}{\strong{Experimental}}
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
 }
 \examples{
 file_example <- tempfile(fileext = ".R")
 writeLines(
   text = c(
-    "library(random.cdisc.data)
+    "library(scda)
 
      # code>
-     ADSL <- radsl(cached = TRUE)
-     ADTTE <- radtte(ADSL, cached = TRUE)
+     ADSL <- synthetic_cdisc_data('latest')$adsl
+     ADTTE <- synthetic_cdisc_data('latest')$adtte
 
      cdisc_data(
           cdisc_dataset(\"ADSL\", ADSL), cdisc_dataset(\"ADTTE\", ADTTE),
-          code = \"ADSL <- radsl(cached = TRUE)
-                  ADTTE <- radtte(ADSL, cached = TRUE)\",
+          code = \"ADSL <- synthetic_cdisc_data('latest')$adsl
+                  ADTTE <- synthetic_cdisc_data('latest')$adtte\",
           check = FALSE
      )
      # <code"

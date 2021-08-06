@@ -202,10 +202,9 @@ cdisc_dataset_connector <- function(dataname,
 #' writeLines(
 #'   text = c(
 #'     "library(teal)
-#'      library(random.cdisc.data)
+#'      library(scda)
 #'
-#'      pull_callable <- callable_function(radsl)
-#'      pull_callable$set_args(list(cached = TRUE))
+#'      pull_callable <- callable_function(function() {synthetic_cdisc_data('latest')$adsl})
 #'      dataset_connector(\"ADSL\", pull_callable, get_cdisc_keys(\"ADSL\"))"
 #'   ),
 #'   con = file_example
@@ -249,10 +248,9 @@ relational_dataset_connector_file <- function(path) { # nolint
 #' writeLines(
 #'   text = c(
 #'     "library(teal)
-#'      library(random.cdisc.data)
+#'      library(scda)
 #'
-#'      pull_callable <- callable_function(radsl)
-#'      pull_callable$set_args(list(cached = TRUE))
+#'      pull_callable <- callable_function(function() {synthetic_cdisc_data('latest')$adsl})
 #'      cdisc_dataset_connector(\"ADSL\", pull_callable, get_cdisc_keys(\"ADSL\"))"
 #'   ),
 #'   con = file_example
@@ -590,11 +588,11 @@ script_cdisc_dataset_connector <- function(dataname,
 #' @export
 #'
 #' @examples
-#' library(random.cdisc.data)
+#' library(scda)
 #' x <- code_dataset_connector(
 #'   dataname = "ADSL",
 #'   keys = get_cdisc_keys("ADSL"),
-#'   code = "ADSL <- radsl(cached = TRUE); ADSL"
+#'   code = "ADSL <- synthetic_cdisc_data(\"latest\")$adsl; ADSL"
 #' )
 #'
 #' x$get_code()
@@ -698,16 +696,20 @@ code_cdisc_dataset_connector <- function(dataname,
 #' @export
 #'
 #' @examples
-#' x <- rice_dataset_connector(
-#'   dataname = "ADSL",
-#'   path = "/path/to/file.sas7bdat"
-#' )
-#' x$get_code()
+#'
+#' if ("rice" %in% installed.packages()) {
+#'   x <- rice_dataset_connector(
+#'     dataname = "ADSL",
+#'     path = "/path/to/file.sas7bdat"
+#'   )
+#'   x$get_code()
+#' }
 #' \dontrun{
 #' load_dataset(x)
 #' get_dataset(x)
 #' x$get_raw_data()
 #' }
+#'
 rice_dataset_connector <- function(dataname,
                                    path,
                                    keys = character(0),
@@ -718,13 +720,12 @@ rice_dataset_connector <- function(dataname,
   dot_args <- list(...)
   stopifnot(is_fully_named_list(dot_args))
   stopifnot(is_character_single(path))
-
   check_pkg_quietly(
     "rice",
     paste0(
       "Connection to entimICE via rice was requested, but rice package is not available.",
       "Please install it from https://github.roche.com/Rpackages/rice.")
-    )
+  )
 
   x_fun <- callable_function("rice::rice_read") # nolint
   args <- append(list(node = path, prolong = TRUE), dot_args)

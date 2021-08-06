@@ -28,25 +28,31 @@ additional dynamic arguments passed to function which loads the data.}
 \code{x} with loaded \code{dataset} object
 }
 \description{
-\ifelse{html}{\out{<a href='https://www.tidyverse.org/lifecycle/#experimental'><img src='figures/lifecycle-experimental.svg' alt='Experimental lifecycle'></a>}}{\strong{Experimental}}
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
 Load data from connection. Function used on \code{\link{DatasetConnector}} and
 \code{\link{Dataset}} to obtain data from connection.
 }
 \examples{
 
 # Dataset --------
-library(random.cdisc.data)
-ADSL <- radsl(cached = TRUE)
+library(scda)
+ADSL <- synthetic_cdisc_data("latest")$adsl
 ADSL_dataset <- dataset("ADSL", x = ADSL)
 
 load_dataset(ADSL_dataset)
 
 # DatasetConnector --------
-library(random.cdisc.data)
-adsl <- rcd_cdisc_dataset_connector("ADSL", fun = radsl, cached = FALSE)
+library(scda)
+pull_fun_adsl <- callable_function(
+  function() {synthetic_cdisc_data("latest")$adsl}
+)
+adsl <- dataset_connector("ADSL", pull_fun_adsl)
 load_dataset(adsl)
 get_dataset(adsl)
 
-adae <- rcd_cdisc_dataset_connector("ADAE", fun = radae, ADSL = adsl, max_n_aes = 2L)
+pull_fun_adae <- callable_function(
+  function() {synthetic_cdisc_data("latest")$adae}
+)
+adae <- dataset_connector("ADAE", pull_fun_adae)
 load_dataset(adae)
 }

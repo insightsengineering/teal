@@ -14,7 +14,7 @@
 #' close_fun <- callable_function(print) # define closing function
 #' close_fun$set_args(list(x = "Hi there")) # define fixed arguments to closing function
 #'
-#' ping_fun <- callable_function(rice::rice_session_active)
+#' ping_fun <- callable_function(function() TRUE)
 #'
 #' x <- teal:::DataConnection$new( # define connection
 #'   ping_fun = ping_fun, # define ping function
@@ -663,7 +663,6 @@ rice_connection <- function(open_args = list(), close_args = list(), ping_args =
       "Please install it from https://github.roche.com/Rpackages/rice."
     )
   )
-
   stopifnot(is_fully_named_list(open_args))
   stopifnot(is_fully_named_list(close_args))
   stopifnot(is_fully_named_list(ping_args))
@@ -760,7 +759,6 @@ teradata_connection <- function(open_args = list(), close_args = list(), ping_ar
     "DBI",
     "Connection to Teradata was requested, but RocheTeradata package is not available."
   )
-
 
   stopifnot(is_fully_named_list(open_args))
   stopifnot(is_fully_named_list(close_args))
@@ -883,7 +881,7 @@ snowflake_connection_function <- function(username = askpass::askpass("Please en
   # long enough to pull the data in
   token <- httr::content(res)$access_token
 
-  tryCatch(
+  eval(parse(text = "tryCatch(
     con <- DBI::dbConnect(
       odbc::odbc(),
       Server = server,
@@ -893,13 +891,14 @@ snowflake_connection_function <- function(username = askpass::askpass("Please en
       schema = schema,
       Warehouse = warehouse,
       role = role,
-      authenticator = "oauth",
+      authenticator = \"oauth\",
       token = token
     ),
     error = function(cond){
-      stop(paste("Unable to connect to snowflake. Error message:", cond$message), call. = FALSE)
+      stop(paste(\"Unable to connect to snowflake. Error message:\", cond$message), call. = FALSE)
     }
-  )
+  )"
+  ))
   return(con)
 }
 
@@ -1069,4 +1068,3 @@ cdse_connection <- function(env = "prod") {
 
   return(x)
 }
-

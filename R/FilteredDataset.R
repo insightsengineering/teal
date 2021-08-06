@@ -6,9 +6,9 @@
 #'   named list of join keys to merge this dataset with
 #'   it's relatives.
 #' @examples
-#' library(random.cdisc.data)
-#' adsl <- cdisc_dataset("ADSL", radsl(cached = TRUE))
-#' adtte <- cdisc_dataset("ADTTE", radtte(cached = TRUE))
+#' library(scda)
+#' adsl <- cdisc_dataset("ADSL", synthetic_cdisc_data("latest")$adsl)
+#' adtte <- cdisc_dataset("ADTTE", synthetic_cdisc_data("latest")$adtte)
 #' data <- cdisc_data(adsl, adtte)
 #'
 #' filtered_dataset <- teal:::init_filtered_dataset(

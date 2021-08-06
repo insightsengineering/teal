@@ -24,16 +24,18 @@ set_args(x, args)
 nothing
 }
 \description{
-\ifelse{html}{\out{<a href='https://www.tidyverse.org/lifecycle/#experimental'><img src='figures/lifecycle-experimental.svg' alt='Experimental lifecycle'></a>}}{\strong{Experimental}}
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
 Set arguments of a \code{CallableFunction}
 }
 \examples{
-library(random.cdisc.data)
-fun <- callable_function(radsl)
-set_args(fun, list(N = 5, seed = 1, cached = TRUE))
-library(random.cdisc.data)
-code <- callable_code("radsl()")
-set_args(code, list(N = 5, seed = 1, cached = TRUE))
+library(scda)
+f <- function(df) {synthetic_cdisc_data('latest')[[df]]}
+fun <- callable_function(f)
+set_args(fun, list(df = "adsl"))
+library(scda)
+f <- function(df) {synthetic_cdisc_data('latest')[[df]]}
+code <- callable_code("f()")
+set_args(code, list(df = "adsl"))
 ds <- dataset_connector("x", pull_callable = callable_function(data.frame))
 set_args(ds, list(x = 1:5, y = letters[1:5]))
 }
