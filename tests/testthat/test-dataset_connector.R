@@ -1,3 +1,4 @@
+library(scda)
 library(random.cdisc.data)
 # test csv_dataset_connector
 temp_file_csv <- tempfile(fileext = ".csv")
@@ -5,8 +6,8 @@ on.exit(unlink(temp_file_csv))
 
 # Test DatasetConnector ------
 testthat::test_that("DatasetConnector", {
-  fun <- callable_function(radsl)
-  fun$set_args(list(N = 5, seed = 1, cached = TRUE))
+
+  fun <- callable_function(function() synthetic_cdisc_data("rcd_2021_05_05")$adsl)
 
   testthat::expect_error(
     dataset_connector(pull_callable = fun),
@@ -24,12 +25,12 @@ testthat::test_that("DatasetConnector", {
 
   testthat::expect_identical(
     x1$get_code(deparse = TRUE),
-    "ADSL <- radsl(N = 5, seed = 1, cached = TRUE)"
+    "ADSL <- (function() synthetic_cdisc_data(\"rcd_2021_05_05\")$adsl)()"
   )
 
   testthat::expect_identical(
     x1$get_code(deparse = FALSE),
-    as.list(as.call(parse(text = "ADSL <- radsl(N = 5, seed = 1, cached = TRUE)")))
+    as.list(as.call(parse(text = 'ADSL <- (function() synthetic_cdisc_data("rcd_2021_05_05")$adsl)()')))
   )
 
   testthat::expect_error(
@@ -61,7 +62,7 @@ testthat::test_that("DatasetConnector", {
 
   testthat::expect_identical(
     get_raw_data(x1),
-    radsl(N = 5, seed = 1, cached = TRUE)
+    synthetic_cdisc_data("rcd_2021_05_05")$adsl
   )
 
   testthat::expect_silent(
