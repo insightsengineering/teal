@@ -16,6 +16,7 @@
 \itemize{
 \item \href{#method-new}{\code{DefaultFilteredDataset$new()}}
 \item \href{#method-get_call}{\code{DefaultFilteredDataset$get_call()}}
+\item \href{#method-set_bookmark_state}{\code{DefaultFilteredDataset$set_bookmark_state()}}
 \item \href{#method-ui_add_filter_state}{\code{DefaultFilteredDataset$ui_add_filter_state()}}
 \item \href{#method-srv_add_filter_state}{\code{DefaultFilteredDataset$srv_add_filter_state()}}
 \item \href{#method-clone}{\code{DefaultFilteredDataset$clone()}}
@@ -83,6 +84,25 @@ applies to one argument (\code{...}) in \code{dplyr::filter} call.
 
 \subsection{Returns}{
 filter \code{call} or \code{list} of filter calls
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-set_bookmark_state"></a>}}
+\if{latex}{\out{\hypertarget{method-set_bookmark_state}{}}}
+\subsection{Method \code{set_bookmark_state()}}{
+Set bookmark state
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{DefaultFilteredDataset$set_bookmark_state(state)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{state}}{(\verb{named list})\cr
+containing values of the initial filter. Values should be relevant
+to the referred column.}
+}
+\if{html}{\out{</div>}}
 }
 }
 \if{html}{\out{<hr>}}

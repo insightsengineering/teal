@@ -18,6 +18,7 @@ Initialize \code{MatrixFilterStates} object
 \subsection{Public methods}{
 \itemize{
 \item \href{#method-new}{\code{MatrixFilterStates$new()}}
+\item \href{#method-set_bookmark_state}{\code{MatrixFilterStates$set_bookmark_state()}}
 \item \href{#method-ui_add_filter_state}{\code{MatrixFilterStates$ui_add_filter_state()}}
 \item \href{#method-srv_add_filter_state}{\code{MatrixFilterStates$srv_add_filter_state()}}
 \item \href{#method-clone}{\code{MatrixFilterStates$clone()}}
@@ -60,6 +61,29 @@ text label value.}
 
 \item{\code{data}}{(\code{matrix})\cr
 R object which \code{subset} function is applied on.}
+}
+\if{html}{\out{</div>}}
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-set_bookmark_state"></a>}}
+\if{latex}{\out{\hypertarget{method-set_bookmark_state}{}}}
+\subsection{Method \code{set_bookmark_state()}}{
+Set bookmark state
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{MatrixFilterStates$set_bookmark_state(data, state)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{data}}{(\code{matrix})\cr
+data which are supposed to be filtered}
+
+\item{\code{state}}{(\verb{named list})\cr
+should contain values which are initial selection in the \code{FilterState}.
+Names of the \code{list} element should correspond to the name of the
+column in \code{data}.}
 }
 \if{html}{\out{</div>}}
 }

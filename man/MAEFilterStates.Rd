@@ -19,6 +19,7 @@ Initialize \code{MAEFilterStates} object
 \itemize{
 \item \href{#method-new}{\code{MAEFilterStates$new()}}
 \item \href{#method-get_fun}{\code{MAEFilterStates$get_fun()}}
+\item \href{#method-set_bookmark_state}{\code{MAEFilterStates$set_bookmark_state()}}
 \item \href{#method-ui_add_filter_state}{\code{MAEFilterStates$ui_add_filter_state()}}
 \item \href{#method-srv_add_filter_state}{\code{MAEFilterStates$srv_add_filter_state()}}
 \item \href{#method-clone}{\code{MAEFilterStates$clone()}}
@@ -91,6 +92,29 @@ R object which \code{SummarizedExperiment::summarizeByColData} function is appli
 
 \subsection{Returns}{
 \code{character(1)}
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-set_bookmark_state"></a>}}
+\if{latex}{\out{\hypertarget{method-set_bookmark_state}{}}}
+\subsection{Method \code{set_bookmark_state()}}{
+Set bookmark state
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{MAEFilterStates$set_bookmark_state(data, state)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{data}}{(\code{MultiAssayExperiment})\cr
+data which are supposed to be filtered}
+
+\item{\code{state}}{(\verb{named list})\cr
+should contain values which are initial selection in the \code{FilterState}.
+Names of the \code{list} element should correspond to the name of the
+column in \code{colData(data)}}
+}
+\if{html}{\out{</div>}}
 }
 }
 \if{html}{\out{<hr>}}

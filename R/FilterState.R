@@ -636,7 +636,7 @@ LogicalFilterState <- R6::R6Class( # nolint
             ns("selection"),
             label = NULL,
             choices = private$choices,
-            selected = private$choices[1],
+            selected = isolate(private$selected()),
             width = "100%"
           )
         ),
@@ -1085,7 +1085,7 @@ ChoicesFilterState <- R6::R6Class( # nolint
               ns("selection"),
               label = NULL,
               choices =  private$choices,
-              selected = private$choices,
+              selected = isolate(private$selected()),
               width = "100%"
             )
           )
@@ -1094,7 +1094,7 @@ ChoicesFilterState <- R6::R6Class( # nolint
             inputId = ns("selection"),
             label = icon("fa-plus"),
             choices = private$choices,
-            selected = private$choices,
+            selected = isolate(private$selected()),
             multiple = TRUE,
             options = shinyWidgets::pickerOptions(
               actionsBox = TRUE,

@@ -390,7 +390,20 @@ FilterStates <- R6::R6Class( # nolint
     },
 
     #' @description
-    #' Shiny UI module to add filter variable
+    #' Set bookmark state
+    #'
+    #' @param data (`data.frame`)\cr
+    #'   data which are supposed to be filtered
+    #' @param state (`named list`)\cr
+    #'   should contain values which are initial selection in the `FilterState`.
+    #'   Names of the `list` element should correspond to the name of the
+    #'   column in `data`.
+    set_bookmark_state = function(data, state) {
+      stop("Abstract class")
+    },
+
+    #' @description
+    #' Shiny UI module to add filter variable.
     #' @param id (`character(1)`)\cr
     #'  id of shiny module
     #' @param data (`data.frame`, `MultiAssayExperiment`, `SummarizedExperiment`, `matrix`)\cr
@@ -452,7 +465,7 @@ FilterStates <- R6::R6Class( # nolint
         selector = sprintf("#%s", private$card_id),
         where = "beforeEnd",
         # add span with id to be removable
-        ui = span(
+        ui = div(
           id = card_id,
           class = "list-group-item",
           fluidPage(
@@ -489,7 +502,7 @@ FilterStates <- R6::R6Class( # nolint
         )
       )
 
-      callModule(filter_state$server, id = "content")
+      moduleServer(id = "content", filter_state$server)
 
       private$observers[[queue_id]] <- observeEvent(
         ignoreInit = TRUE,
@@ -577,6 +590,43 @@ DFFilterStates <- R6::R6Class( # nolint
     get_fun = function() {
       return("dplyr::filter")
     },
+
+    #' @description
+    #' Set bookmark state
+    #'
+    #' @param data (`data.frame`)\cr
+    #'   data which are supposed to be filtered
+    #' @param state (`named list`)\cr
+    #'   should contain values which are initial selection in the `FilterState`.
+    #'   Names of the `list` element should correspond to the name of the
+    #'   column in `data`.
+    set_bookmark_state = function(data, state) {
+      stopifnot(is.data.frame(data))
+      stopifnot(all(names(state) %in% names(data)))
+
+      for (varname in names(state)) {
+        value <- state[[varname]]
+        fstate <- init_filter_state(
+          data[[varname]],
+          varname = as.name(varname),
+          varlabel = private$get_varlabels(varname),
+          input_dataname = private$input_dataname,
+          use_dataname = FALSE
+        )
+        fstate$set_selected(value = value)
+
+        id <- digest::digest(sprintf("%s_%s", 1L, varname), algo = "md5")
+        callModule(
+          module = private$add_filter_state,
+          id = id,
+          filter_state = fstate,
+          queue_index = 1L,
+          element_id = varname
+        )
+
+      }
+    },
+
 
     #' @description
     #' Shiny UI module to add filter variable
@@ -765,6 +815,44 @@ MAEFilterStates <- R6::R6Class( # nolint
     },
 
     #' @description
+    #' Set bookmark state
+    #'
+    #' @param data (`MultiAssayExperiment`)\cr
+    #'   data which are supposed to be filtered
+    #' @param state (`named list`)\cr
+    #'   should contain values which are initial selection in the `FilterState`.
+    #'   Names of the `list` element should correspond to the name of the
+    #'   column in `colData(data)`
+    set_bookmark_state = function(data, state) {
+      stopifnot(is(data, "MultiAssayExperiment"))
+      stopifnot(
+        all(names(state) %in% names(colData(data)))
+      )
+
+      for (varname in names(state)) {
+        value <- state[[varname]]
+        fstate <- init_filter_state(
+          SummarizedExperiment::colData(data)[[varname]],
+          varname = as.name(varname),
+          varlabel = private$get_varlabels(varname),
+          input_dataname = private$input_dataname,
+          use_dataname = TRUE
+        )
+        fstate$set_selected(value = value)
+
+        id <- digest::digest(sprintf("%s_%s", "y", varname), algo = "md5")
+        callModule(
+          private$add_filter_state,
+          id = id,
+          filter_state = fstate,
+          queue_index = "y",
+          element_id = varname
+        )
+
+      }
+    },
+
+    #' @description
     #' Shiny UI module to add filter variable
     #' @param id (`character(1)`)\cr
     #'  id of shiny module
@@ -926,6 +1014,68 @@ SEFilterStates <- R6::R6Class( # nolint
           select = ReactiveQueue$new()
         )
       )
+    },
+
+    #' @description
+    #' Set bookmark state
+    #'
+    #' @param data (`SummarizedExperiment`)\cr
+    #'   data which are supposed to be filtered
+    #' @param state (`named list`)\cr
+    #'   This list should contain `subset` and `select` element where
+    #'   each should be a named list containing values as a selection in the `FilterState`.
+    #'   Names of each the `list` element in `subset` and `select` should correspond to
+    #'   the name of the column in `rowData(data)` and `colData(data)`.
+    set_bookmark_state = function(data, state) {
+      stopifnot(is(data, "SummarizedExperiment"))
+      stopifnot(
+        all(names(state) %in% c("subset", "select")),
+        is.null(state$subset) || all(names(state$subset) %in% names(rowData(data))),
+        is.null(state$select) || all(names(state$select) %in% names(colData(data)))
+      )
+
+      for (varname in names(state$subset)) {
+        value <- state$subset[[varname]]
+        fstate <- init_filter_state(
+          SummarizedExperiment::rowData(data)[[varname]],
+          varname = as.name(varname),
+          input_dataname = private$input_dataname,
+          use_dataname = FALSE
+        )
+        fstate$set_selected(value = value)
+
+        id <- digest::digest(sprintf("%s_%s", "subset", varname), algo = "md5")
+        callModule(
+          private$add_filter_state,
+          id = id,
+          filter_state = fstate,
+          queue_index = "subset",
+          element_id = varname
+        )
+      }
+
+
+      for (varname in names(state$select)) {
+        value <- state$select[[varname]]
+        fstate <- init_filter_state(
+          SummarizedExperiment::colData(data)[[varname]],
+          varname = as.name(varname),
+          input_dataname = private$input_dataname,
+          use_dataname = FALSE
+        )
+        fstate$set_selected(value = value)
+
+        id <- digest::digest(sprintf("%s_%s", "select", varname), algo = "md5")
+        callModule(
+          private$add_filter_state,
+          id = id,
+          filter_state = fstate,
+          queue_index = "select",
+          element_id = varname
+        )
+      }
+
+      return(NULL)
     },
 
     #' @description
@@ -1149,6 +1299,43 @@ MatrixFilterStates <- R6::R6Class( # nolint
           subset = ReactiveQueue$new()
         )
       )
+    },
+
+    #' @description
+    #' Set bookmark state
+    #'
+    #' @param data (`matrix`)\cr
+    #'   data which are supposed to be filtered
+    #' @param state (`named list`)\cr
+    #'   should contain values which are initial selection in the `FilterState`.
+    #'   Names of the `list` element should correspond to the name of the
+    #'   column in `data`.
+    set_bookmark_state = function(data, state) {
+      stopifnot(is(data, "matrix"))
+      stopifnot(
+        all(names(state) %in% names(colData(data)))
+      )
+
+      for (varname in names(state)) {
+        value <- state[[varname]]
+        fstate <- init_filter_state(
+          data[[varname]],
+          varname = as.name(varname),
+          varlabel = private$get_varlabels(varname),
+          input_dataname = private$input_dataname,
+          use_dataname = FALSE
+        )
+        fstate$set_selected(value = value)
+
+        id <- digest::digest(sprintf("%s_%s", "subset", varname), algo = "md5")
+        callModule(
+          private$add_filter_state,
+          id = id,
+          filter_state = fstate,
+          queue_index = "subset",
+          element_id = varname
+        )
+      }
     },
 
     #' @description

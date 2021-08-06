@@ -285,6 +285,16 @@ FilteredDataset <- R6::R6Class( # nolint
       paste0(dataname, suffix)
     },
 
+    #' @description
+    #' Set bookmark state
+    #'
+    #' @param state (`named list`)\cr
+    #'  containing values of the initial filter. Values should be relevant
+    #'  to the referred column.
+    set_bookmark_state = function(state) {
+      stop("Abstract class")
+    },
+
     # modules ------
     #' @description
     #' UI module for dataset active filters
@@ -481,6 +491,23 @@ DefaultFilteredDataset <- R6::R6Class( # nolint
           function(x) x$get_call()
         )
       )
+    },
+
+    #' @description
+    #' Set bookmark state
+    #'
+    #' @param state (`named list`)\cr
+    #'  containing values of the initial filter. Values should be relevant
+    #'  to the referred column.
+    set_bookmark_state = function(state) {
+      stopifnot(is.list(state))
+      data <- self$get_data(filtered = FALSE)
+      fs <- self$get_filter_states()[[1]]
+      fs$set_bookmark_state(
+        state = state,
+        data = data
+      )
+      return(invisible(NULL))
     },
 
     #' @description
@@ -713,6 +740,32 @@ MAEFilteredDataset <- R6::R6Class( # nolint
           self$get_data(filtered = filtered)
         )
       )
+    },
+
+    #' @description
+    #' Set bookmark state
+    #'
+    #' @param state (`named list`)\cr
+    #'  names of the list should correspond to the names of the initialized `FilterStates`
+    #'  kept in `private$filter_states`. For this object they are `"subjects"` and
+    #'  names of the experiments. Values of initial state should be relevant
+    #'  to the referred column.
+    #'
+    set_bookmark_state = function(state) {
+      stopifnot(
+        is.list(state),
+        all(names(state) %in% c(names(self$get_filter_states())))
+      )
+      data <- self$get_data(filtered = FALSE)
+      for (fs_name in names(state)) {
+        fs <- self$get_filter_states()[[fs_name]]
+        fs$set_bookmark_state(
+          state = state[[fs_name]],
+          data = `if`(fs_name == "subjects", data, data[[fs_name]])
+        )
+      }
+
+      return(invisible(NULL))
     },
 
     #' @description
