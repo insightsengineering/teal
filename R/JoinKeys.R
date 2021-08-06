@@ -235,10 +235,10 @@ mutate_join_keys.JoinKeys <- function(x, dataset_1, dataset_2, val) {
 #' @examples
 #' # RelationalData ----
 #'
-#' library(random.cdisc.data)
+#' library(scda)
 #'
-#' ADSL <- radsl(cached = TRUE)
-#' ADRS <- radrs(cached = TRUE)
+#' ADSL <- synthetic_cdisc_data("latest")$adsl
+#' ADRS <- synthetic_cdisc_data("latest")$adrs
 #'
 #' x <- cdisc_data(
 #'   cdisc_dataset("ADSL", ADSL),

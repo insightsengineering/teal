@@ -57,10 +57,10 @@ get_dummy_filter <- function(data) { # nousage # nolint
 #'
 #' @return `cdisc_data`
 get_dummy_cdisc_data <- function() { # nousage # nolint
-  teal_with_pkg("random.cdisc.data", code = {
-    ADSL <- random.cdisc.data::radsl(cached = TRUE) # nolint
-    ADAE <- random.cdisc.data::radae(cached = TRUE) # nolint
-    ADLB <- random.cdisc.data::radlb(cached = TRUE) # nolint
+  teal_with_pkg("scda", code = {
+    ADSL <- scda::synthetic_cdisc_data("latest")$adsl # nolint
+    ADAE <- scda::synthetic_cdisc_data("latest")$adae # nolint
+    ADLB <- scda::synthetic_cdisc_data("latest")$adlb # nolint
   })
 
   ADSL$logical_test <- sample(c(TRUE, FALSE, NA), size = nrow(ADSL), replace = TRUE)
@@ -71,9 +71,9 @@ get_dummy_cdisc_data <- function() { # nousage # nolint
     cdisc_dataset(dataname = "ADAE", x = ADAE),
     cdisc_dataset(dataname = "ADLB", x = ADLB),
     code = "
-      ADSL <- radsl(cached = TRUE)
-      ADAE <- radae(cached = TRUE)
-      ADLB <- radlb(cached = TRUE)
+      ADSL <- synthetic_cdisc_data(\"latest\")$adsl
+      ADAE <- synthetic_cdisc_data(\"latest\")$adae
+      ADLB <- synthetic_cdisc_data(\"latest\")$adlb
     ")
   return(res)
 }
