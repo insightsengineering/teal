@@ -42,40 +42,48 @@ If passed a \code{cdisc}-flavored object it returns the unmodified object.
 \examples{
 # Dataset --------
 
-library(random.cdisc.data)
+library(scda)
 as_cdisc(
   dataset(
     "ADSL",
-    radsl(cached = TRUE),
+    synthetic_cdisc_data("latest")$adsl,
     keys = get_cdisc_keys("ADSL"),
-    code = "ADSL <- radsl(cached = TRUE)"
+    code = "ADSL <- synthetic_cdisc_data(\"latest\")$adsl"
   )
 )
 as_cdisc(
   dataset(
     "ADAE",
-    radae(cached = TRUE),
+    synthetic_cdisc_data("latest")$adae,
     keys = get_cdisc_keys("ADAE"),
-    code = "ADAE <- radae(cached = TRUE)"
+    code = "ADAE <- synthetic_cdisc_data(\"latest\")$adae"
   ),
   parent = "ADSL"
 )
 # DatasetConnector --------
 
-library(random.cdisc.data)
+library(scda)
+pull_fun_adsl <- callable_function(
+  function() {synthetic_cdisc_data("latest")$adsl}
+)
 as_cdisc(
-  rcd_dataset_connector(
+  dataset_connector(
     "ADSL",
-    radsl,
+    pull_fun_adsl,
     keys = get_cdisc_keys("ADSL")
   )
 )
+
+pull_fun_adae <- callable_function(
+  function() {synthetic_cdisc_data("latest")$adae}
+)
 as_cdisc(
-  rcd_dataset_connector(
+  dataset_connector(
     "ADAE",
-    radae,
+    pull_fun_adae,
     keys = get_cdisc_keys("ADAE")
   ),
   parent = "ADSL"
 )
+
 }

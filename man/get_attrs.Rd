@@ -22,8 +22,8 @@ Get dataset attributes in form of named list.
 \examples{
 # Dataset --------
 
-library(random.cdisc.data)
-ADSL <- radsl(cached = TRUE)
+library(scda)
+ADSL <- synthetic_cdisc_data("latest")$adsl
 
 x1 <- dataset("ADSL", x = ADSL, label = "custom label")
 get_attrs(x1)
@@ -38,8 +38,8 @@ get_attrs(x2)
 
 # CDISCDataset --------
 
-library(random.cdisc.data)
-ADSL <- radsl(cached = TRUE)
+library(scda)
+ADSL <- synthetic_cdisc_data("latest")$adsl
 x3 <- cdisc_dataset(
   "ADSL",
   x = ADSL,

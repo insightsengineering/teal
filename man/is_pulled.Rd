@@ -27,8 +27,11 @@ S3 method to determine if dataset is pulled (loaded).
 }
 \examples{
 # DatasetConnector --------
-library(random.cdisc.data)
-x <- rcd_dataset_connector("ADSL", radsl)
+library(scda)
+pull_fun_adsl <- callable_function(
+  function() {synthetic_cdisc_data("latest")$adsl}
+)
+x <- dataset_connector("ADSL", pull_fun_adsl)
 
 is_pulled(x)
 
@@ -45,20 +48,20 @@ x <- dataset(
 
 is_pulled(x)
 # RelationalData --------
-library(random.cdisc.data)
+library(scda)
 x1 <- dataset(
-  x = radsl(cached = TRUE),
+  x = synthetic_cdisc_data("latest")$adsl,
   dataname = "ADSL",
   keys = get_cdisc_keys("ADSL"),
-  code = "ADSL <- radsl(cached = TRUE)",
+  code = "ADSL <- synthetic_cdisc_data(\"latest\")$adsl",
   label = "ADTTE dataset"
 )
 
 x2 <- dataset(
-  x = radtte(cached = TRUE),
+  x = synthetic_cdisc_data("latest")$adtte,
   dataname = "ADTTE",
   keys = get_cdisc_keys("ADTTE"),
-  code = "ADTTE <- radtte(cached = TRUE)",
+  code = "ADTTE <- synthetic_cdisc_data(\"latest\")$adtte",
   label = "ADTTE dataset"
 )
 
@@ -66,11 +69,24 @@ rd <- teal_data(x1, x2)
 is_pulled(rd)
 
 # RelationalDataConnector --------
-library(random.cdisc.data)
-adsl <- rcd_cdisc_dataset_connector(dataname = "ADSL", fun = radsl, cached = TRUE)
-adrs <- rcd_cdisc_dataset_connector(dataname = "ADRS", fun = radrs, ADSL = adsl)
+library(scda)
+adsl_cf <- callable_function(
+  function() {synthetic_cdisc_data("latest")$adsl}
+)
+adsl <- cdisc_dataset_connector(dataname = "ADSL",
+                                pull_callable = adsl_cf,
+                                keys = get_cdisc_keys("ADSL"))
 
-rdc <- rcd_data(adsl, adrs)
+new_cf <- callable_function(function(x) {x$NEW <- 1:nrow(x); x})
+new_cf$set_args(list(x = as.name("x")))
+new <- cdisc_dataset_connector(
+  dataname = "NEW",
+  pull_callable = new_cf,
+  keys = get_cdisc_keys("ADSL"),
+  vars = list(x = adsl)
+)
+
+rdc <- cdisc_data(adsl, new)
 
 is_pulled(rdc)
 \dontrun{

@@ -51,11 +51,11 @@ within another dataset.}
 Create a \code{DatasetConnector} from a string of code.
 }
 \examples{
-library(random.cdisc.data)
+library(scda)
 x <- code_dataset_connector(
   dataname = "ADSL",
   keys = get_cdisc_keys("ADSL"),
-  code = "ADSL <- radsl(cached = TRUE); ADSL"
+  code = "ADSL <- synthetic_cdisc_data(\"latest\")$adsl; ADSL"
 )
 
 x$get_code()

@@ -50,9 +50,9 @@ within another dataset.}
 Function that creates \code{CDISCDataset} object
 }
 \examples{
-library(random.cdisc.data)
+library(scda)
 
-ADSL <- radsl(cached = TRUE)
+ADSL <- synthetic_cdisc_data("latest")$adsl
 
 cdisc_dataset("ADSL", ADSL)
 }
