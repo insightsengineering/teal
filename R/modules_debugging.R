@@ -17,8 +17,8 @@
 #'   can be `"all"` to mean all available datasets
 #'
 #' @examples
-#' library(random.cdisc.data)
-#' ADSL <- radsl(cached = TRUE)
+#' library(scda)
+#' ADSL <- synthetic_cdisc_data("latest")$adsl
 #' # by testing with NA values, we will see whether the filtering really works when
 #' # we add and remove filters
 #' ADSL$SEX[1:150] <- NA
@@ -29,7 +29,7 @@
 #'       dataname = "ADSL",
 #'       x = ADSL
 #'     ),
-#'     code = "ADSL <- radsl(cached = TRUE)"
+#'     code = "ADSL <- synthetic_cdisc_data(\"latest\")$adsl"
 #'   ),
 #'   modules = root_modules(
 #'     teal:::filter_calls_module()

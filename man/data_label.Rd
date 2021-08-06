@@ -16,6 +16,6 @@ data_label(data)
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#maturing}{\figure{lifecycle-maturing.svg}{options: alt='[Maturing]'}}}{\strong{[Maturing]}}
 }
 \examples{
-library(random.cdisc.data)
-data_label(radsl(cached = TRUE))
+library(scda)
+data_label(synthetic_cdisc_data("latest")$adsl)
 }

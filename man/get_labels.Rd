@@ -19,9 +19,9 @@ labels
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#maturing}{\figure{lifecycle-maturing.svg}{options: alt='[Maturing]'}}}{\strong{[Maturing]}}
 }
 \examples{
-library(random.cdisc.data)
+library(scda)
 
-ADSL <-  radsl(cached = TRUE)
+ADSL <-  synthetic_cdisc_data("latest")$adsl
 
 get_labels(ADSL)
 }

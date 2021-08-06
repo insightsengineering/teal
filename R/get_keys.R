@@ -19,13 +19,13 @@ get_keys <- function(x, ...) {
 #' @examples
 #' # Dataset --------
 #'
-#' library(random.cdisc.data)
+#' library(scda)
 #' get_keys(
 #'   dataset(
 #'     "ADSL",
-#'     radsl(cached = TRUE),
+#'     synthetic_cdisc_data("latest")$adsl,
 #'     keys = get_cdisc_keys("ADSL"),
-#'     code = "ADSL <- radsl(cached = TRUE)"
+#'     code = "ADSL <- synthetic_cdisc_data(\"latest\")$adsl"
 #'   )
 #' )
 get_keys.Dataset <- function(x, ...) {
@@ -38,11 +38,14 @@ get_keys.Dataset <- function(x, ...) {
 #' @examples
 #' # DatasetConnector --------
 #'
-#' library(random.cdisc.data)
+#' library(scda)
+#' pull_fun_adsl <- callable_function(
+#'   function() {synthetic_cdisc_data("latest")$adsl}
+#' )
 #' get_keys(
-#'   rcd_dataset_connector(
+#'   dataset_connector(
 #'     "ADSL",
-#'     radsl,
+#'     pull_fun_adsl,
 #'     keys = get_cdisc_keys("ADSL"),
 #'   )
 #' )
@@ -92,12 +95,12 @@ set_keys <- function(x, ...) {
 #' @examples
 #' # Dataset --------
 #'
-#' library(random.cdisc.data)
+#' library(scda)
 #' set_keys(
 #'   dataset(
 #'     "ADSL",
-#'     radsl(cached = TRUE),
-#'     code = "ADSL <- radsl(cached = TRUE)"
+#'     synthetic_cdisc_data("latest")$adsl,
+#'     code = "ADSL <- synthetic_cdisc_data(\"latest\")$adsl"
 #'   ),
 #'   keys = get_cdisc_keys("ADSL")
 #' )
@@ -111,11 +114,14 @@ set_keys.Dataset <- function(x, keys, ...) {
 #' @examples
 #' # DatasetConnector --------
 #'
-#' library(random.cdisc.data)
+#' library(scda)
+#' pull_fun_adsl <- callable_function(
+#'   function() {synthetic_cdisc_data("latest")$adsl}
+#' )
 #' set_keys(
-#'   rcd_dataset_connector(
+#'   dataset_connector(
 #'     "ADSL",
-#'     radsl
+#'     pull_fun_adsl
 #'   ),
 #'   keys = get_cdisc_keys("ADSL")
 #' )
