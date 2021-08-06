@@ -9,8 +9,8 @@
 #' @export
 #'
 #' @examples
-#' library(random.cdisc.data)
-#' data_label(radsl(cached = TRUE))
+#' library(scda)
+#' data_label(synthetic_cdisc_data("latest")$adsl)
 data_label <- function(data) {
   attr(data, "label")
 }
@@ -27,8 +27,8 @@ data_label <- function(data) {
 #' @export
 #'
 #' @examples
-#' library(random.cdisc.data)
-#' x <- radsl(cached = TRUE)
+#' library(scda)
+#' x <- synthetic_cdisc_data("latest")$adsl
 #' data_label(x) <- "My custom label"
 #' data_label(x)
 `data_label<-` <- function(x, value) { # nolint
@@ -97,9 +97,9 @@ get_cdisc_keys <- function(dataname) {
 #'
 #'
 #' @examples
-#' library(random.cdisc.data)
+#' library(scda)
 #'
-#' ADSL <-  radsl(cached = TRUE)
+#' ADSL <-  synthetic_cdisc_data("latest")$adsl
 #'
 #' get_labels(ADSL)
 get_labels <- function(data, fill = TRUE) {
@@ -127,8 +127,8 @@ get_labels <- function(data, fill = TRUE) {
 #' @export
 #'
 #' @examples
-#' library(random.cdisc.data)
-#' ADSL <- radsl(cached = TRUE)
+#' library(scda)
+#' ADSL <- synthetic_cdisc_data("latest")$adsl
 #'
 #' get_variable_labels(ADSL)
 #' get_variable_labels(ADSL, c("AGE", "RACE", "BMRKR1"))

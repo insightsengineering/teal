@@ -13,15 +13,15 @@ raw_dataset(x)
 \code{\link{Dataset}} object
 }
 \description{
-\ifelse{html}{\figure{lifecycle-defunct.svg}{options: alt='Defunct lifecycle'}}{\strong{Defunct}}
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#defunct}{\figure{lifecycle-defunct.svg}{options: alt='[Defunct]'}}}{\strong{[Defunct]}}
 }
 \examples{
 # Simple example
 dataset("iris", iris)
 
 # Example with more arguments
-library(random.cdisc.data)
-ADSL <- radsl(cached = TRUE)
+library(scda)
+ADSL <- synthetic_cdisc_data("latest")$adsl
 ADSL_dataset <- dataset(dataname = "ADSL", x = ADSL)
 
 ADSL_dataset$get_dataname()
@@ -30,7 +30,7 @@ ADSL_dataset <- dataset(
   dataname = "ADSL",
   x = ADSL,
   label = "AdAM subject-level dataset",
-  code = "ADSL <- radsl(cached = TRUE)"
+  code = "ADSL <- synthetic_cdisc_data(\"latest\")$adsl"
 )
 
 ADSL_dataset$get_dataset_label()

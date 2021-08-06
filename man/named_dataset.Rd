@@ -38,15 +38,15 @@ within another dataset.}
 \code{\link{Dataset}} object
 }
 \description{
-\ifelse{html}{\figure{lifecycle-soft-deprecated.svg}{options: alt='Soft-deprecated lifecycle'}}{\strong{Soft-deprecated}}
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#soft-deprecated}{\figure{lifecycle-soft-deprecated.svg}{options: alt='[Soft-deprecated]'}}}{\strong{[Soft-deprecated]}}
 }
 \examples{
 # Simple example
 dataset("iris", iris)
 
 # Example with more arguments
-library(random.cdisc.data)
-ADSL <- radsl(cached = TRUE)
+library(scda)
+ADSL <- synthetic_cdisc_data("latest")$adsl
 ADSL_dataset <- dataset(dataname = "ADSL", x = ADSL)
 
 ADSL_dataset$get_dataname()
@@ -55,7 +55,7 @@ ADSL_dataset <- dataset(
   dataname = "ADSL",
   x = ADSL,
   label = "AdAM subject-level dataset",
-  code = "ADSL <- radsl(cached = TRUE)"
+  code = "ADSL <- synthetic_cdisc_data(\"latest\")$adsl"
 )
 
 ADSL_dataset$get_dataset_label()

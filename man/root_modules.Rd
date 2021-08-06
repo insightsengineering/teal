@@ -10,7 +10,7 @@ root_modules(...)
 \item{...}{\code{\link{module}} and \code{\link{modules}} object}
 }
 \description{
-\ifelse{html}{\out{<a href='https://www.tidyverse.org/lifecycle/#maturing'><img src='figures/lifecycle-maturing.svg' alt='Maturing lifecycle'></a>}}{\strong{Maturing}}
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#maturing}{\figure{lifecycle-maturing.svg}{options: alt='[Maturing]'}}}{\strong{[Maturing]}}
 To be used with \code{\link{init}} in the \code{modules} argument.
 }
 \details{

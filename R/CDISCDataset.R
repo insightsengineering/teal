@@ -141,9 +141,9 @@ CDISCDataset <- R6::R6Class( # nolint
 #' @export
 #'
 #' @examples
-#' library(random.cdisc.data)
+#' library(scda)
 #'
-#' ADSL <- radsl(cached = TRUE)
+#' ADSL <- synthetic_cdisc_data("latest")$adsl
 #'
 #' cdisc_dataset("ADSL", ADSL)
 cdisc_dataset <- function(dataname,
@@ -181,11 +181,11 @@ cdisc_dataset <- function(dataname,
 #' writeLines(
 #'   text = c(
 #'     "library(teal)
-#'      library(random.cdisc.data)
+#'      library(scda)
 #'
 #'      cdisc_dataset(dataname = \"ADSL\",
-#'                    x = radsl(cached = TRUE),
-#'                    code = \"library(random.cdisc.data)\nADSL <- radsl(cached = TRUE)\")"
+#'                    x = synthetic_cdisc_data('latest')$adsl,
+#'                    code = \"library(scda)\nADSL <- synthetic_cdisc_data('latest')$adsl\")"
 #'   ),
 #'   con = file_example
 #' )

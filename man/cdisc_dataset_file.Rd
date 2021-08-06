@@ -15,7 +15,7 @@ cdisc_dataset_file(path, code = get_code(path))
 (\code{CDISCDataset}) object
 }
 \description{
-\ifelse{html}{\out{<a href='https://www.tidyverse.org/lifecycle/#experimental'><img src='figures/lifecycle-experimental.svg' alt='Experimental lifecycle'></a>}}{\strong{Experimental}}
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
 Please note that the script has to end with a call creating desired object. The error will be raised otherwise.
 }
 \examples{
@@ -24,11 +24,11 @@ file_example <- tempfile(fileext = ".R")
 writeLines(
   text = c(
     "library(teal)
-     library(random.cdisc.data)
+     library(scda)
 
      cdisc_dataset(dataname = \"ADSL\",
-                   x = radsl(cached = TRUE),
-                   code = \"library(random.cdisc.data)\nADSL <- radsl(cached = TRUE)\")"
+                   x = synthetic_cdisc_data('latest')$adsl,
+                   code = \"library(scda)\nADSL <- synthetic_cdisc_data('latest')$adsl\")"
   ),
   con = file_example
 )

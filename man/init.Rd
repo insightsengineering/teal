@@ -77,7 +77,7 @@ is then preferred to this function.}
 named list with server and ui function
 }
 \description{
-\ifelse{html}{\out{<a href='https://www.tidyverse.org/lifecycle/#maturing'><img src='figures/lifecycle-maturing.svg' alt='Maturing lifecycle'></a>}}{\strong{Maturing}}
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#maturing}{\figure{lifecycle-maturing.svg}{options: alt='[Maturing]'}}}{\strong{[Maturing]}}
 End-users: This is the most important function for you to start a
 teal app that is composed out of teal modules.
 
@@ -86,16 +86,16 @@ This is a wrapper function around the \code{module_teal.R} functions. Unless you
 an end-user, don't use this function, but instead this module.
 }
 \examples{
-library(random.cdisc.data)
+library(scda)
 
-ADSL <- radsl(cached = TRUE)
+ADSL <- synthetic_cdisc_data("latest")$adsl
 
 options(teal_logging = FALSE)
 
 app <- init(
   data = cdisc_data(
     cdisc_dataset("ADSL", ADSL),
-    code = "ADSL <- radsl(seed = 1)"
+    code = "ADSL <- synthetic_cdisc_data(\"latest\")$adsl"
   ),
   modules = root_modules(
     module(

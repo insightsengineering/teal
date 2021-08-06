@@ -20,10 +20,10 @@
 #' @export
 #'
 #' @examples
-#' library(random.cdisc.data)
+#' library(scda)
 #'
-#' ADSL <- radsl(cached = TRUE)
-#' ADTTE <- radtte(cached = TRUE)
+#' ADSL <- synthetic_cdisc_data("latest")$adsl
+#' ADTTE <- synthetic_cdisc_data("latest")$adtte
 #' choices1 <- choices_labeled(names(ADSL), rtables::var_labels(ADSL))
 #' choices2 <- choices_labeled(ADTTE$PARAMCD, ADTTE$PARAM)
 #' # if only a subset of variables are needed, use subset argument
@@ -142,8 +142,8 @@ choices_labeled <- function(choices, labels, subset = NULL, types = NULL) {
 #' @export
 #'
 #' @examples
-#' library(random.cdisc.data)
-#' ADRS <- radrs(cached = TRUE)
+#' library(scda)
+#' ADRS <- synthetic_cdisc_data("latest")$adrs
 #'
 #' variable_choices(ADRS)
 #' variable_choices(ADRS, subset = c("PARAM", "PARAMCD"))
@@ -291,8 +291,8 @@ variable_choices.DatasetConnector <- function(data, # nolint
 #' @export
 #'
 #' @examples
-#' library(random.cdisc.data)
-#' ADRS <- radrs(cached = TRUE)
+#' library(scda)
+#' ADRS <- synthetic_cdisc_data("latest")$adrs
 #'
 #' value_choices(ADRS, "PARAMCD", "PARAM", subset = c("BESRSPI", "INVET"))
 #' value_choices(ADRS, c("PARAMCD", "ARMCD"), c("PARAM", "ARM"))

@@ -45,17 +45,17 @@ are included to this object as local \code{vars} and they cannot be modified
 within another dataset.}
 }
 \description{
-\ifelse{html}{\out{<a href='https://www.tidyverse.org/lifecycle/#experimental'><img src='figures/lifecycle-experimental.svg' alt='Experimental lifecycle'></a>}}{\strong{Experimental}}
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
 }
 \details{
 Create a \code{DatasetConnector} from a string of code.
 }
 \examples{
-library(random.cdisc.data)
+library(scda)
 x <- code_dataset_connector(
   dataname = "ADSL",
   keys = get_cdisc_keys("ADSL"),
-  code = "ADSL <- radsl(cached = TRUE); ADSL"
+  code = "ADSL <- synthetic_cdisc_data(\"latest\")$adsl; ADSL"
 )
 
 x$get_code()

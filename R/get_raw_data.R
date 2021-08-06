@@ -22,8 +22,8 @@ get_raw_data <- function(x, dataname = NULL) {
 #' @examples
 #'
 #' # Dataset ---------
-#' library(random.cdisc.data)
-#' ADSL <- radsl(cached = TRUE)
+#' library(scda)
+#' ADSL <- synthetic_cdisc_data("latest")$adsl
 #'
 #' x <- dataset(dataname = "ADSL", x = ADSL)
 #' get_raw_data(x)
@@ -39,8 +39,11 @@ get_raw_data.Dataset <- function(x, dataname = NULL) {
 #' @examples
 #'
 #' # DatasetConnector ---------
-#' library(random.cdisc.data)
-#' dc <- rcd_cdisc_dataset_connector(dataname = "ADSL", fun = radsl, cached = TRUE)
+#' library(scda)
+#' pull_fun_adsl <- callable_function(
+#'   function() {synthetic_cdisc_data("latest")$adsl}
+#' )
+#' dc <- dataset_connector("ADSL", pull_fun_adsl)
 #' load_dataset(dc)
 #' get_raw_data(dc)
 get_raw_data.DatasetConnector <- function(x, dataname = NULL) { # nolint
@@ -55,22 +58,31 @@ get_raw_data.DatasetConnector <- function(x, dataname = NULL) { # nolint
 #' @examples
 #'
 #' # RelationalData ----------------
-#' library(random.cdisc.data)
+#' library(scda)
 #' adsl <- cdisc_dataset(dataname = "ADSL",
-#'                       x = radsl(cached = TRUE),
-#'                       code = "library(random.cdisc.data)\nADSL <- radsl(cached = TRUE)")
+#'                       x = synthetic_cdisc_data("latest")$adsl,
+#'                       code = "library(scda)\nADSL <- synthetic_cdisc_data(\"latest\")$adsl")
 #'
 #' adtte <- cdisc_dataset(dataname = "ADTTE",
-#'                        x = radtte(cached = TRUE),
-#'                        code = "library(random.cdisc.data)\nADTTE <- radtte(cached = TRUE)")
+#'                        x = synthetic_cdisc_data("latest")$adtte,
+#'                        code = "library(scda)\nADTTE <- synthetic_cdisc_data(\"latest\")$adtte")
 #'
 #' rd <- teal:::RelationalData$new(adsl, adtte)
 #' get_raw_data(rd)
 #'
 #' # RelationalDataConnector --------
-#' rdc <- rcd_data(
-#'   rcd_cdisc_dataset_connector("ADSL", radsl, cached = TRUE),
-#'   rcd_cdisc_dataset_connector("ADTTE", radtte, cached = TRUE)
+#' adsl_cf <- callable_function(function() synthetic_cdisc_data("latest")$adsl)
+#' adsl <- cdisc_dataset_connector(dataname = "ADSL",
+#'                                 pull_callable = adsl_cf,
+#'                                 keys = get_cdisc_keys("ADSL"))
+#' adlb_cf <- callable_function(function() synthetic_cdisc_data("latest")$adlb)
+#' adlb <- cdisc_dataset_connector(dataname = "ADLB",
+#'                                 pull_callable = adlb_cf,
+#'                                 keys = get_cdisc_keys("ADLB"))
+#'
+#' rdc <- teal:::RelationalDataConnector$new(
+#'   connection = teal:::DataConnection$new(),
+#'   connectors = list(adsl, adlb)
 #' )
 #'
 #'\dontrun{
@@ -79,12 +91,7 @@ get_raw_data.DatasetConnector <- function(x, dataname = NULL) { # nolint
 #'}
 #'
 #' # RelationalData (with connectors) --------
-#' rdc2 <- rcd_data(
-#'   rcd_cdisc_dataset_connector("ADRS", radrs, cached = TRUE),
-#'   rcd_cdisc_dataset_connector("ADLB", radlb, cached = TRUE)
-#' )
-#'
-#' drc <- cdisc_data(adsl, adtte, rdc2)
+#' drc <- cdisc_data(rdc)
 #' \dontrun{
 #' get_raw_data(drc)
 #' }

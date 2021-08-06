@@ -144,13 +144,13 @@ CDISCData <- R6::R6Class( # nolint
 #' and `DatasetConnector` objects passed to it. If the keys are needed
 #' they should be assigned before calling `cdisc_data`. See example:
 #' ```
-# library(random.cdisc.data)
-# test_dataset <- dataset("ADAE", radae(cached = TRUE)) # does not have keys
-# test_adsl <- cdisc_dataset("ADSL", radsl(cached = TRUE))
+# library(scda)
+# test_dataset <- dataset("ADAE", synthetic_cdisc_data("latest")$adae) # does not have keys
+# test_adsl <- cdisc_dataset("ADSL", synthetic_cdisc_data("latest")$adsl)
 # test_data <- cdisc_data(test_dataset, test_adsl)
 # get_keys(test_data, "ADAE") # returns character(0)
 #
-# test_dataset <- cdisc_dataset("ADAE", radae(cached = TRUE))
+# test_dataset <- cdisc_dataset("ADAE", synthetic_cdisc_data("latest")$adae)
 # test_data <- cdisc_data(test_dataset, test_adsl)
 # get_keys(test_data, "ADAE") # returns [1] "STUDYID" "USUBJID" "ASTDTM"  "AETERM"  "AESEQ"
 #' ```
@@ -169,17 +169,17 @@ CDISCData <- R6::R6Class( # nolint
 #' @export
 #'
 #' @examples
-#' library(random.cdisc.data)
+#' library(scda)
 #'
-#' ADSL <- radsl(cached = TRUE)
-#' ADTTE <- radtte(cached = TRUE)
+#' ADSL <- synthetic_cdisc_data("latest")$adsl
+#' ADTTE <- synthetic_cdisc_data("latest")$adtte
 #'
 #' # basic example
 #' cdisc_data(
 #'   cdisc_dataset("ADSL", ADSL),
 #'   cdisc_dataset("ADTTE", ADTTE),
-#'   code = 'ADSL <- radsl(cached = TRUE)
-#'           ADTTE <- radtte(cached = TRUE)',
+#'   code = 'ADSL <- synthetic_cdisc_data("latest")$adsl
+#'           ADTTE <- synthetic_cdisc_data("latest")$adtte',
 #'   check = TRUE
 #' )
 #'
@@ -199,8 +199,8 @@ CDISCData <- R6::R6Class( # nolint
 #'       c("STUDYID" = "STUDYID", "USUBJID" = "USUBJID")
 #'     )
 #'   ),
-#'   code = "ADSL <- radsl(cached = TRUE)
-#'           ADTTE <- radtte(cached = TRUE)",
+#'   code = 'ADSL <- synthetic_cdisc_data("latest")$adsl
+#'           ADTTE <- synthetic_cdisc_data("latest")$adtte',
 #'   check = TRUE
 #' )
 cdisc_data <- function(...,
@@ -232,16 +232,16 @@ cdisc_data <- function(...,
 #' file_example <- tempfile(fileext = ".R")
 #' writeLines(
 #'   text = c(
-#'     "library(random.cdisc.data)
+#'     "library(scda)
 #'
 #'      # code>
-#'      ADSL <- radsl(cached = TRUE)
-#'      ADTTE <- radtte(ADSL, cached = TRUE)
+#'      ADSL <- synthetic_cdisc_data('latest')$adsl
+#'      ADTTE <- synthetic_cdisc_data('latest')$adtte
 #'
 #'      cdisc_data(
 #'           cdisc_dataset(\"ADSL\", ADSL), cdisc_dataset(\"ADTTE\", ADTTE),
-#'           code = \"ADSL <- radsl(cached = TRUE)
-#'                   ADTTE <- radtte(ADSL, cached = TRUE)\",
+#'           code = \"ADSL <- synthetic_cdisc_data('latest')$adsl
+#'                   ADTTE <- synthetic_cdisc_data('latest')$adtte\",
 #'           check = FALSE
 #'      )
 #'      # <code"
