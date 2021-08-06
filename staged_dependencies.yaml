@@ -5,6 +5,8 @@ current_repo:
   host: https://github.com
 
 upstream_repos:
+- repo: insightsengineering/scda
+  host: https://github.com
 - repo: insightsengineering/random.cdisc.data
   host: https://github.com
 - repo: insightsengineering/tern
