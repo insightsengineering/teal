@@ -17,7 +17,7 @@ file that contains python Code that can be read using \code{reticulate::py_run_s
 (\code{PythonCodeClass}) object containing python code
 }
 \description{
-\ifelse{html}{\out{<a href='https://www.tidyverse.org/lifecycle/#experimental'><img src='figures/lifecycle-experimental.svg' alt='Experimental lifecycle'></a>}}{\strong{Experimental}}
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
 Create a python code object directly from python code or a
 script containing python code.
 }
@@ -27,12 +27,12 @@ Used to mutate dataset connector objects with python code. See
 }
 \examples{
 \dontrun{
-library(random.cdisc.data)
+library(scda)
 library(reticulate)
 
 # mutate dataset object
 
-ADSL <- radsl(cached = TRUE)
+ADSL <- synthetic_cdisc_data("latest")$adsl
 
 x <- rcd_cdisc_dataset_connector("ADSL", radsl, cached = TRUE)
 

@@ -4,28 +4,26 @@
 \alias{RelationalData}
 \title{Manage multiple \code{RelationalDataConnector}, \code{DatasetConnector} and \code{Dataset} objects.}
 \description{
-\ifelse{html}{\out{<a href='https://www.tidyverse.org/lifecycle/#experimental'><img src='figures/lifecycle-experimental.svg' alt='Experimental lifecycle'></a>}}{\strong{Experimental}}
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
 
 Class manages \code{RelationalDataConnector}, \code{DatasetConnector} and
 \code{Dataset} objects and aggregate them in one collection.
 Class also decides whether to launch app before initialize teal application.
 }
 \examples{
-library(random.cdisc.data)
-x1 <- rcd_data(
-  rcd_cdisc_dataset_connector("ADSL", radsl, cached = TRUE),
-  rcd_cdisc_dataset_connector("ADLB", radlb, cached = TRUE)
-)
-x2 <- rcd_data(
-  rcd_cdisc_dataset_connector("ADRS", radrs, cached = TRUE)
-)
+library(scda)
+adsl_cf <- callable_function(function() synthetic_cdisc_data("latest")$adsl)
+adlb_cf <- callable_function(function() synthetic_cdisc_data("latest")$adlb)
+adrs_cf <- callable_function(function() synthetic_cdisc_data("latest")$adrs)
+adtte_cf <- callable_function(function() synthetic_cdisc_data("latest")$adtte)
+x1 <- cdisc_dataset_connector("ADSL", adsl_cf, keys = get_cdisc_keys("ADSL"))
+x2 <- cdisc_dataset_connector("ADRS", adrs_cf, keys = get_cdisc_keys("ADRS"))
 x3 <- cdisc_dataset(
   dataname = "ADAE",
-  x = radae(cached = TRUE),
-  code = "library(random.cdisc.data)\nADAE <- radae(cached = TRUE)"
+  x = synthetic_cdisc_data("latest")$adae,
+  code = "library(scda)\nADAE <- synthetic_cdisc_data(\"latest\")$adae"
 )
-
-x4 <- rcd_cdisc_dataset_connector("ADTTE", radtte, cached = TRUE)
+x4 <- cdisc_dataset_connector("ADTTE", adtte_cf, keys = get_cdisc_keys("ADTTE"))
 tc <- teal:::RelationalData$new(x1, x2, x3, x4)
 tc$get_datanames()
 \dontrun{
@@ -42,14 +40,14 @@ tc$get_dataset("ADAE")
 tc$check()
 }
 
-library(random.cdisc.data)
+library(scda)
 x <- cdisc_dataset(
   dataname = "ADSL",
-  x = radsl(cached = TRUE),
-  code = "library(random.cdisc.data)\nADSL <- radsl(cached = TRUE)"
+  x = synthetic_cdisc_data("latest")$adsl,
+  code = "library(scda)\nADSL <- synthetic_cdisc_data(\"latest\")$adsl"
 )
 
-x2 <- rcd_cdisc_dataset_connector("ADTTE", radtte, cached = TRUE)
+x2 <- cdisc_dataset_connector("ADTTE", adtte_cf, keys = get_cdisc_keys("ADTTE"))
 tc <- teal:::RelationalData$new(x, x2)
 \dontrun{
 tc$get_datasets()

@@ -17,16 +17,16 @@ names in \code{dataset} consisting the key. Optional, default: NULL}
 a \code{tibble} with variables consisting the key and \code{row_no} and \code{duplicates_count} columns
 }
 \description{
-\ifelse{html}{\out{<a href='https://www.tidyverse.org/lifecycle/#experimental'><img src='figures/lifecycle-experimental.svg' alt='Experimental lifecycle'></a>}}{\strong{Experimental}}
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
 }
 \details{
 The information summary provides row numbers and number of duplicates
 for each duplicated key value.
 }
 \examples{
-library(random.cdisc.data)
+library(scda)
 
-adsl <- radsl(cached = TRUE)
+adsl <- synthetic_cdisc_data("latest")$adsl
 # create a Dataset with default keys
 rel_adsl <- cdisc_dataset("ADSL", adsl)
 get_key_duplicates(rel_adsl)

@@ -52,15 +52,15 @@ within another dataset.}
 \code{\link{Dataset}} object
 }
 \description{
-\ifelse{html}{\out{<a href='https://www.tidyverse.org/lifecycle/#experimental'><img src='figures/lifecycle-experimental.svg' alt='Experimental lifecycle'></a>}}{\strong{Experimental}}
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
 }
 \examples{
 # Simple example
 dataset("iris", iris)
 
 # Example with more arguments
-library(random.cdisc.data)
-ADSL <- radsl(cached = TRUE)
+library(scda)
+ADSL <- synthetic_cdisc_data("latest")$adsl
 ADSL_dataset <- dataset(dataname = "ADSL", x = ADSL)
 
 ADSL_dataset$get_dataname()
@@ -69,7 +69,7 @@ ADSL_dataset <- dataset(
   dataname = "ADSL",
   x = ADSL,
   label = "AdAM subject-level dataset",
-  code = "ADSL <- radsl(cached = TRUE)"
+  code = "ADSL <- synthetic_cdisc_data(\"latest\")$adsl"
 )
 
 ADSL_dataset$get_dataset_label()

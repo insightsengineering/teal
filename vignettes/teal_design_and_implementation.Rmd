@@ -147,7 +147,7 @@ Modularizing code also makes it easier to build a company wide standard for
 creating and sharing shiny code and also for creating project specific
 applications quickly.
 
-Finally, the user interface layout in the version of shiny we currently support 
+Finally, the user interface layout in the version of shiny we currently support
 is based on [Bootstrap 3][bootstrap_3] when
 using the `fluidPage` and `fixedPage` layout functions (which we do for `teal`).
 Understanding the bootstrap framework for layout, class and css association is
@@ -196,7 +196,7 @@ shinyApp(app$ui, app$server)
 
 Please run the above code by copy pasting it to the command line. The example
 shows how simple it is to create a module that has no dynamic encodings but
-still is interactive due to the possibility of filtering the data. 
+still is interactive due to the possibility of filtering the data.
 
 The default `teal` web application has the following components:
 
@@ -230,7 +230,7 @@ when designing and implementing `teal`. The relevant R-code for these main parts
 are in the [teal repository][tealGitHub] in the following files:
 
 * `R/FilteredData.R`, `R/FilteredDataset.R`, `R/FilterStates.R`, `R/FilterState.R`
-* `R/init.R`, 
+* `R/init.R`,
 
 We have also a logging facility with the `.log` function with the corresponding
 code saved in `R/logging.R`. Logging to the prompt can be disabled with
@@ -288,9 +288,9 @@ dataset is the `USUBJID` and `STUDYID` variable (if not specified otherwise).
 ### FilteredData Class for Clinical Trials Data
 
 `teal` supports both general relational data (using `teal_data` function output as
-`data` argument to `teal::init`) and CDISC specific data (using `cdisc_data` function instead) 
+`data` argument to `teal::init`) and CDISC specific data (using `cdisc_data` function instead)
 
-When using CDISC specific data, the filtering mechanism makes use of `ADSL` 
+When using CDISC specific data, the filtering mechanism makes use of `ADSL`
 being a "special" dataset as described below.
 
 ```{r echo=FALSE, out.width='100%'}
@@ -324,7 +324,7 @@ ADTTE <- data.frame(
 set.seed(0)
 ```
 
-The `datasets` object of class `CDISCFilteredData` 
+The `datasets` object of class `CDISCFilteredData`
 that is passed an argument to the `server` function is created by `teal` as follows:
 
 ```{r}
@@ -335,14 +335,14 @@ datasets <- teal:::CDISCFilteredData$new()
 # the `datasets` object contains reactives
 # we activate this option, so we don't need to wrap all reactives in isolate calls
 options(shiny.suppressMissingContextError = TRUE)
-datasets$set_dataset(dataset = dataset("ADSL", ADSL), 
+datasets$set_dataset(dataset = dataset("ADSL", ADSL),
                      join_key_set = NULL)
-datasets$set_dataset(dataset = dataset("ADTTE", ADTTE), 
+datasets$set_dataset(dataset = dataset("ADTTE", ADTTE),
                      join_key_set = list(ADSL = c("STUDYID", "USUBJID")))
 shiny:::flushReact() # force evaluation outside of Shiny apps
 ```
 
-Note that this code also runs outside of a teal instance. 
+Note that this code also runs outside of a teal instance.
 
 
 ```{r, eval=FALSE}
@@ -380,7 +380,7 @@ datasets$get_call("ADTTE")
 ```
 
 
-### FilteredData for general relational data 
+### FilteredData for general relational data
 
 The CDISC filtering mechanism which we have introduced in the previous section
 can be abstracted with the following diagram:
@@ -405,7 +405,7 @@ knitr::include_graphics('./images/design_simple_filtered_data.png')
 ```
 
 This filtering is implemented using the `FilteredData` class
-(which is created when using the `teal_data` and which `CDISCFilteredData` inherits from). 
+(which is created when using the `teal_data` and which `CDISCFilteredData` inherits from).
 
 In the future we may also need filtering for [expression sets][expressionSets]
 
@@ -531,5 +531,5 @@ shinyApp(ui = fluidPage(
 [ADAM]: https://www.cdisc.org/standards/foundational/adam
 [CDISC]: https://www.cdisc.org
 [tabsetPanel]: https://shiny.rstudio.com/reference/shiny/1.0.5/tabsetPanel.html
-[tealGitHub]: https://github.roche.com/NEST/teal
+[tealGitHub]: https://github.com/insightsengineering/teal
 [expressionSets]: https://www.bioconductor.org/packages/3.7/bioc/vignettes/Biobase/inst/doc/ExpressionSetIntroduction.pdf

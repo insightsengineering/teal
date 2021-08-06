@@ -57,6 +57,7 @@ Suggests:
     random.cdisc.data (>= 0.3.11),
     readr,
     rmarkdown,
+    scda,
     tern (>= 0.7.4),
     test.nest (>= 0.2.9),
     testthat (>= 2.0)

@@ -5,13 +5,13 @@
 \alias{MAEDataset}
 \title{R6 Class representing a dataset with its attributes}
 \description{
-\ifelse{html}{\out{<a href='https://www.tidyverse.org/lifecycle/#experimental'><img src='figures/lifecycle-experimental.svg' alt='Experimental lifecycle'></a>}}{\strong{Experimental}}
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
 
 Any \code{data.frame} object can be stored inside this object.
 Some attributes like colnames, dimension or column names for a specific type will
 be automatically derived.
 
-\ifelse{html}{\out{<a href='https://www.tidyverse.org/lifecycle/#experimental'><img src='figures/lifecycle-experimental.svg' alt='Experimental lifecycle'></a>}}{\strong{Experimental}}
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
 
 Any \code{MultiAssayExperiment} object can be stored inside this MAEDataset.
 Some attributes like colnames, dimension or column names for a specific type will
@@ -68,8 +68,8 @@ be automatically derived.
 \item \href{#method-set_code}{\code{Dataset$set_code()}}
 \item \href{#method-get_code}{\code{Dataset$get_code()}}
 \item \href{#method-get_code_class}{\code{Dataset$get_code_class()}}
-\item \href{#method-get_vars}{\code{Dataset$get_vars()}}
 \item \href{#method-get_mutate_code_class}{\code{Dataset$get_mutate_code_class()}}
+\item \href{#method-get_vars}{\code{Dataset$get_vars()}}
 \item \href{#method-get_mutate_vars}{\code{Dataset$get_mutate_vars()}}
 \item \href{#method-is_mutate_delayed}{\code{Dataset$is_mutate_delayed()}}
 \item \href{#method-mutate}{\code{Dataset$mutate()}}
@@ -137,7 +137,7 @@ Recreate this Dataset with its current attributes.
   dataname = self$get_dataname(),
   x = self$get_raw_data(),
   keys = self$get_keys(),
-  code = self$get_code_class(),
+  code = self$get_code_class(include_mutate = FALSE),
   label = self$get_dataset_label(),
   vars = list()
 )}\if{html}{\out{</div>}}
@@ -525,24 +525,18 @@ optionally deparsed \code{call} object
 \subsection{Method \code{get_code_class()}}{
 Get internal \code{CodeClass} object
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{Dataset$get_code_class()}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{Dataset$get_code_class(include_mutate = TRUE)}\if{html}{\out{</div>}}
 }
 
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{include_mutate}}{\code{logical} whether to include mutate code in output}
+}
+\if{html}{\out{</div>}}
+}
 \subsection{Returns}{
 \verb{\code{CodeClass}}
-}
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-get_vars"></a>}}
-\if{latex}{\out{\hypertarget{method-get_vars}{}}}
-\subsection{Method \code{get_vars()}}{
-Get internal \code{vars} object
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{Dataset$get_vars()}\if{html}{\out{</div>}}
-}
-
-\subsection{Returns}{
-\verb{\code{list}}
 }
 }
 \if{html}{\out{<hr>}}
@@ -556,6 +550,26 @@ Get internal \code{CodeClass} object
 
 \subsection{Returns}{
 \verb{\code{CodeClass}}
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-get_vars"></a>}}
+\if{latex}{\out{\hypertarget{method-get_vars}{}}}
+\subsection{Method \code{get_vars()}}{
+Get internal \code{vars} object
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{Dataset$get_vars(include_mutate = TRUE)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{include_mutate}}{\code{logical} whether to include mutate code in output}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Returns}{
+\verb{\code{list}}
 }
 }
 \if{html}{\out{<hr>}}

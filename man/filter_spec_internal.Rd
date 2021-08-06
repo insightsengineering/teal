@@ -122,7 +122,7 @@ TRUE if this filter was already consumed by the server function; FALSE otherwise
 \code{filter_spec} or \code{delayed_filter_spec} S3-class object.
 }
 \description{
-\ifelse{html}{\out{<a href='https://www.tidyverse.org/lifecycle/#experimental'><img src='figures/lifecycle-experimental.svg' alt='Experimental lifecycle'></a>}}{\strong{Experimental}}
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
 This function returns a configuration for the \code{data_extract_input} module. This function covers
 the configuration of filtering datasets (so called \code{filter_spec}), which then is used to build
 the UI element in the \code{teal} app.
@@ -134,8 +134,8 @@ teal:::filter_spec_internal(
   vars_multiple = TRUE
 )
 
-library(random.cdisc.data)
-ADRS <- radrs(cached = TRUE)
+library(scda)
+ADRS <- synthetic_cdisc_data("latest")$adrs
 teal:::filter_spec_internal(
   vars_choices = variable_choices(ADRS),
   vars_selected = "PARAMCD",

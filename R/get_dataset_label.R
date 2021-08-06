@@ -30,8 +30,8 @@ get_dataset_label.DatasetConnector <- function(x) { # nolint
 #' @rdname get_dataset_label
 #' @export
 #' @examples
-#' library(random.cdisc.data)
-#' ADSL <- radsl(cached = TRUE)
+#' library(scda)
+#' ADSL <- synthetic_cdisc_data("latest")$adsl
 #' ADSL_dataset <- dataset(dataname = "ADSL", x = ADSL, label = "My custom label")
 #' get_dataset_label(ADSL_dataset)
 get_dataset_label.Dataset <- function(x) {
