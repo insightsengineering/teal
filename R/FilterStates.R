@@ -796,7 +796,7 @@ MAEFilterStates <- R6::R6Class( # nolint
       for (varname in names(state)) {
         value <- state[[varname]]
         fstate <- init_filter_state(
-          colData(data)[[varname]],
+          SummarizedExperiment::colData(data)[[varname]],
           varname = as.name(varname),
           varlabel = private$get_varlabels(varname),
           input_dataname = private$input_dataname,
