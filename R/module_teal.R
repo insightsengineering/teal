@@ -178,7 +178,7 @@ srv_teal <- function(input, output, session, modules, raw_data, filter = list())
     # replace splash screen by teal UI
     .log("initialize modules and filter panel")
 
-    progress$set(0.7, message = "Setting up main UI")
+    progress$set(0.5, message = "Setting up main UI")
     # main_ui_container contains splash screen first and we remove it and replace it by the real UI
     removeUI(sprintf("#%s:first-child", session$ns("main_ui_container")))
     insertUI(
@@ -200,28 +200,32 @@ srv_teal <- function(input, output, session, modules, raw_data, filter = list())
       # password was finally provided
       .log("restoring filter state from bookmarked state - filter is ignored")
       tryCatch({
-        progress$set(0.5, message = "Restoring from bookmarked state")
+        progress$set(0.7, message = "Restoring from bookmarked state")
         datasets$restore_state_from_bookmark(saved_datasets_state)
       },
       error = function(cnd) {
-        showModal(modalDialog(
-          div(
-            p("Could not restore the session: "),
-            tags$pre(id = session$ns("error_msg"), cnd$message),
-          ),
-          title = "Error restoring the bookmarked state",
-          footer = tagList(
-            actionButton(
-              "copy_code", "Copy to Clipboard",
-              `data-clipboard-target` = paste0("#", session$ns("error_msg"))
+        showModal(
+          modalDialog(
+            div(
+              p("Could not restore the session: "),
+              tags$pre(id = session$ns("error_msg"), cnd$message)
             ),
-            modalButton("Dismiss")
-          ),
-          size = "l", easyClose = TRUE
-        ))
+            title = "Error restoring the bookmarked state",
+            footer = tagList(
+              actionButton(
+                "copy_code", "Copy to Clipboard",
+                `data-clipboard-target` = paste0("#", session$ns("error_msg"))
+              ),
+              modalButton("Dismiss")
+            ),
+            size = "l",
+            easyClose = TRUE
+          )
+        )
       }
       )
     } else {
+      progress$set(0.7, message = "Setting initial filter state")
       filtered_data_set_filters(datasets, filter)
     }
 

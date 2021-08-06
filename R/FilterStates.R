@@ -373,7 +373,7 @@ FilterStates <- R6::R6Class( # nolint
     #'   Names of the `list` element should correspond to the name of the
     #'   column in `data`.
     set_bookmark_state = function(data, state) {
-     stop("Abstract class")
+      stop("Abstract class")
     },
 
     #' @description
@@ -998,55 +998,48 @@ SEFilterStates <- R6::R6Class( # nolint
         is.null(state$select) || all(names(state$select) %in% names(colData(data)))
       )
 
-      lapply(
-        names(state$subset),
-        function(varname) {
-          value <- state$subset[[varname]]
-          fstate <- init_filter_state(
-            SummarizedExperiment::rowData(data)[[varname]],
-            varname = as.name(varname),
-            input_dataname = private$input_dataname,
-            use_dataname = FALSE
-          )
-          fstate$set_selected(value = value)
+      for (varname in names(state$subset)) {
+        value <- state$subset[[varname]]
+        fstate <- init_filter_state(
+          SummarizedExperiment::rowData(data)[[varname]],
+          varname = as.name(varname),
+          input_dataname = private$input_dataname,
+          use_dataname = FALSE
+        )
+        fstate$set_selected(value = value)
+        id <- digest::digest(sprintf("%s_%s", "subset", varname), algo = "md5")
 
-          id <- digest::digest(sprintf("%s_%s", "subset", varname), algo = "md5")
-
-
-          callModule(
-            private$add_filter_state,
-            id = id,
-            filter_state = fstate,
-            queue_index = "subset",
-            element_id = varname
-          )
-        }
-      )
-
-      lapply(
-        names(state$select),
-        function(varname) {
-          value <- state$select[[varname]]
-          fstate <- init_filter_state(
-            SummarizedExperiment::colData(data)[[varname]],
-            varname = as.name(varname),
-            input_dataname = private$input_dataname,
-            use_dataname = FALSE
-          )
-          fstate$set_selected(value = value)
-
-          id <- digest::digest(sprintf("%s_%s", "select", varname), algo = "md5")
-          callModule(
-            private$add_filter_state,
-            id = id,
-            filter_state = fstate,
-            queue_index = "select",
-            element_id = varname
-          )
-        }
-      )
+        callModule(
+          private$add_filter_state,
+          id = id,
+          filter_state = fstate,
+          queue_index = "subset",
+          element_id = varname
+        )
+      }
 
 
+      for (varname in names(state$select)) {
+        value <- state$select[[varname]]
+        fstate <- init_filter_state(
+          SummarizedExperiment::colData(data)[[varname]],
+          varname = as.name(varname),
+          input_dataname = private$input_dataname,
+          use_dataname = FALSE
+        )
+        fstate$set_selected(value = value)
+
+        id <- digest::digest(sprintf("%s_%s", "select", varname), algo = "md5")
+        callModule(
+          private$add_filter_state,
+          id = id,
+          filter_state = fstate,
+          queue_index = "select",
+          element_id = varname
+        )
+      }
+
+      return(NULL)
     },
 
     #' @description

@@ -749,16 +749,13 @@ MAEFilteredDataset <- R6::R6Class( # nolint
         all(names(state) %in% c(names(self$get_filter_states())))
       )
 
-      lapply(
-        names(state),
-        function(fs_name) {
-          fs <- self$get_filter_states()[[fs_name]]
-          fs$set_bookmark_state(
-            state = state[[fs_name]],
-            data = `if`(fs_name == "subjects", data, data[[fs_name]])
-          )
-        }
-      )
+      for (fs_name in names(state)) {
+        fs <- self$get_filter_states()[[fs_name]]
+        fs$set_bookmark_state(
+          state = state[[fs_name]],
+          data = `if`(fs_name == "subjects", data, data[[fs_name]])
+        )
+      }
 
       return(invisible(NULL))
     },

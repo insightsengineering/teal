@@ -413,13 +413,10 @@ FilteredData <- R6::R6Class( # nolint
       stopifnot(
         all(names(state) %in% self$datanames())
       )
-      lapply(
-        names(state),
-        function(dataname) {
-          fd <- self$get_filtered_datasets(dataname = dataname)
-          fd$set_bookmark_state(state = state[[dataname]])
-        }
-      )
+      for(dataname in names(state)) {
+        fd <- self$get_filtered_datasets(dataname = dataname)
+        fd$set_bookmark_state(state = state[[dataname]])
+      }
 
       return(invisible(NULL))
     },
