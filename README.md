@@ -29,7 +29,7 @@
    ```
    $ R CMD build teal
    ```
-   This command builds the package and creates an archive. The name of the archive is output by the command at then of building.
+   This command builds the package and creates an archive. The name of the archive is output by the command at then of building. Then input in the shell:
    ```
    $ Rscript -e 'install.packages("name_of_the_archive")
    ```
