@@ -285,6 +285,16 @@ FilteredDataset <- R6::R6Class( # nolint
       paste0(dataname, suffix)
     },
 
+    #' @description
+    #' Set bookmark state
+    #'
+    #' @param state (`named list`)\cr
+    #'  containing values of the initial filter. Values should be relevant
+    #'  to the referred column.
+    set_bookmark_state = function(state) {
+      stop("Abstract class")
+    },
+
     # modules ------
     #' @description
     #' UI module for dataset active filters
@@ -325,14 +335,12 @@ FilteredDataset <- R6::R6Class( # nolint
             # id needed to insert and remove UI to filter single variable as needed
             # it is currently also used by the above module to entirely hide this panel
             id = ns("filters"),
+            class = "parent-hideable-list-group",
             tagList(
               lapply(
                 names(self$get_filter_states()),
                 function(x) {
-                  tagList(
-                    `if`(if_multiple_filter_states, tagList(HTML("&#9658;"), tags$label(tags$code(x))), NULL),
-                    self$get_filter_states(id = x)$ui(id = ns(x))
-                  )
+                  tagList(self$get_filter_states(id = x)$ui(id = ns(x)))
                 }
               )
             )
@@ -483,6 +491,23 @@ DefaultFilteredDataset <- R6::R6Class( # nolint
           function(x) x$get_call()
         )
       )
+    },
+
+    #' @description
+    #' Set bookmark state
+    #'
+    #' @param state (`named list`)\cr
+    #'  containing values of the initial filter. Values should be relevant
+    #'  to the referred column.
+    set_bookmark_state = function(state) {
+      stopifnot(is.list(state))
+      data <- self$get_data(filtered = FALSE)
+      fs <- self$get_filter_states()[[1]]
+      fs$set_bookmark_state(
+        state = state,
+        data = data
+      )
+      return(invisible(NULL))
     },
 
     #' @description
@@ -647,6 +672,7 @@ MAEFilteredDataset <- R6::R6Class( # nolint
           input_dataname = as.name(dataname),
           output_dataname = as.name(sprintf("%s_FILTERED", dataname)),
           varlabels = self$get_varlabels(),
+          datalabel = "subjects",
           keys = self$get_keys()
         ),
         id = "subjects"
@@ -668,7 +694,8 @@ MAEFilteredDataset <- R6::R6Class( # nolint
             filter_states = init_filter_states(
               data = raw_data[[experiment_name]],
               input_dataname = input_dataname,
-              output_dataname = input_dataname
+              output_dataname = input_dataname,
+              datalabel = experiment_name
             ),
             id = experiment_name
           )
@@ -724,6 +751,32 @@ MAEFilteredDataset <- R6::R6Class( # nolint
       subjs <- sapply(experiment_names, function(x)
         nrow(subset(MultiAssayExperiment::sampleMap(data), colname %in% colnames(data[[x]]))), USE.NAMES = TRUE
         )
+    },
+
+    #' @description
+    #' Set bookmark state
+    #'
+    #' @param state (`named list`)\cr
+    #'  names of the list should correspond to the names of the initialized `FilterStates`
+    #'  kept in `private$filter_states`. For this object they are `"subjects"` and
+    #'  names of the experiments. Values of initial state should be relevant
+    #'  to the referred column.
+    #'
+    set_bookmark_state = function(state) {
+      stopifnot(
+        is.list(state),
+        all(names(state) %in% c(names(self$get_filter_states())))
+      )
+      data <- self$get_data(filtered = FALSE)
+      for (fs_name in names(state)) {
+        fs <- self$get_filter_states()[[fs_name]]
+        fs$set_bookmark_state(
+          state = state[[fs_name]],
+          data = `if`(fs_name == "subjects", data, data[[fs_name]])
+        )
+      }
+
+      return(invisible(NULL))
     },
 
     #' @description
