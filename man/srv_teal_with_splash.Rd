@@ -49,6 +49,6 @@ Ignored if the app is restored from a bookmarked state.
 \code{reactive}, return value of \code{\link{srv_teal}}
 }
 \description{
-\ifelse{html}{\out{<a href='https://www.tidyverse.org/lifecycle/#maturing'><img src='figures/lifecycle-maturing.svg' alt='Maturing lifecycle'></a>}}{\strong{Maturing}}
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#maturing}{\figure{lifecycle-maturing.svg}{options: alt='[Maturing]'}}}{\strong{[Maturing]}}
 Please also refer to the doc of \code{\link{init}}.
 }

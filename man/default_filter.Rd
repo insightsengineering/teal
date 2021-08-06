@@ -7,7 +7,7 @@
 default_filter()
 }
 \description{
-\ifelse{html}{\out{<a href='https://www.tidyverse.org/lifecycle/#maturing'><img src='figures/lifecycle-maturing.svg' alt='Maturing lifecycle'></a>}}{\strong{Maturing}}
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#maturing}{\figure{lifecycle-maturing.svg}{options: alt='[Maturing]'}}}{\strong{[Maturing]}}
 You can use it to refer to the variable's default filter state,
 which will be set when \code{FilteredData$set_data} is called.
 It can be used together with \code{teal::init}.
