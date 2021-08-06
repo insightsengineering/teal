@@ -367,6 +367,7 @@ Dataset <- R6::R6Class( # nolint
     #'
     #' @return (`self`) invisibly for chaining
     mutate = function(code, vars = list(), force_delay = FALSE) {
+      stopifnot(is_logical_single(force_delay))
       stopifnot(is_fully_named_list(vars))
 
       if (inherits(code, "PythonCodeClass")) {
