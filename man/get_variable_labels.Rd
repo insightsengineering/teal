@@ -22,8 +22,8 @@ labels of the columns
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#maturing}{\figure{lifecycle-maturing.svg}{options: alt='[Maturing]'}}}{\strong{[Maturing]}}
 }
 \examples{
-library(random.cdisc.data)
-ADSL <- radsl(cached = TRUE)
+library(scda)
+ADSL <- synthetic_cdisc_data("latest")$adsl
 
 get_variable_labels(ADSL)
 get_variable_labels(ADSL, c("AGE", "RACE", "BMRKR1"))

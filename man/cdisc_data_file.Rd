@@ -23,16 +23,16 @@ reproducible code to re-create object}
 file_example <- tempfile(fileext = ".R")
 writeLines(
   text = c(
-    "library(random.cdisc.data)
+    "library(scda)
 
      # code>
-     ADSL <- radsl(cached = TRUE)
-     ADTTE <- radtte(ADSL, cached = TRUE)
+     ADSL <- synthetic_cdisc_data('latest')$adsl
+     ADTTE <- synthetic_cdisc_data('latest')$adtte
 
      cdisc_data(
           cdisc_dataset(\"ADSL\", ADSL), cdisc_dataset(\"ADTTE\", ADTTE),
-          code = \"ADSL <- radsl(cached = TRUE)
-                  ADTTE <- radtte(ADSL, cached = TRUE)\",
+          code = \"ADSL <- synthetic_cdisc_data('latest')$adsl
+                  ADTTE <- synthetic_cdisc_data('latest')$adtte\",
           check = FALSE
      )
      # <code"

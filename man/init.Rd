@@ -86,16 +86,16 @@ This is a wrapper function around the \code{module_teal.R} functions. Unless you
 an end-user, don't use this function, but instead this module.
 }
 \examples{
-library(random.cdisc.data)
+library(scda)
 
-ADSL <- radsl(cached = TRUE)
+ADSL <- synthetic_cdisc_data("latest")$adsl
 
 options(teal_logging = FALSE)
 
 app <- init(
   data = cdisc_data(
     cdisc_dataset("ADSL", ADSL),
-    code = "ADSL <- radsl(seed = 1)"
+    code = "ADSL <- synthetic_cdisc_data(\"latest\")$adsl"
   ),
   modules = root_modules(
     module(

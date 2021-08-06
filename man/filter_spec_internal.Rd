@@ -134,8 +134,8 @@ teal:::filter_spec_internal(
   vars_multiple = TRUE
 )
 
-library(random.cdisc.data)
-ADRS <- radrs(cached = TRUE)
+library(scda)
+ADRS <- synthetic_cdisc_data("latest")$adrs
 teal:::filter_spec_internal(
   vars_choices = variable_choices(ADRS),
   vars_selected = "PARAMCD",

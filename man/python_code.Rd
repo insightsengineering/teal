@@ -27,12 +27,12 @@ Used to mutate dataset connector objects with python code. See
 }
 \examples{
 \dontrun{
-library(random.cdisc.data)
+library(scda)
 library(reticulate)
 
 # mutate dataset object
 
-ADSL <- radsl(cached = TRUE)
+ADSL <- synthetic_cdisc_data("latest")$adsl
 
 x <- rcd_cdisc_dataset_connector("ADSL", radsl, cached = TRUE)
 

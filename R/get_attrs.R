@@ -18,8 +18,8 @@ get_attrs <- function(x) {
 #' @examples
 #' # Dataset --------
 #'
-#' library(random.cdisc.data)
-#' ADSL <- radsl(cached = TRUE)
+#' library(scda)
+#' ADSL <- synthetic_cdisc_data("latest")$adsl
 #'
 #' x1 <- dataset("ADSL", x = ADSL, label = "custom label")
 #' get_attrs(x1)
@@ -34,8 +34,8 @@ get_attrs <- function(x) {
 #'
 #' # CDISCDataset --------
 #'
-#' library(random.cdisc.data)
-#' ADSL <- radsl(cached = TRUE)
+#' library(scda)
+#' ADSL <- synthetic_cdisc_data("latest")$adsl
 #' x3 <- cdisc_dataset(
 #'   "ADSL",
 #'   x = ADSL,

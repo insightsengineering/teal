@@ -18,10 +18,10 @@ Resolved object.
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#maturing}{\figure{lifecycle-maturing.svg}{options: alt='[Maturing]'}}}{\strong{[Maturing]}}
 }
 \examples{
-library(random.cdisc.data)
+library(scda)
 
 ds <- teal:::FilteredData$new()
-ADSL <- radsl(cached = TRUE)
+ADSL <- synthetic_cdisc_data("latest")$adsl
 attr(ADSL, "keys") <- get_cdisc_keys("ADSL")
 isolate({
   ds$set_dataset(dataset("ADSL", ADSL))

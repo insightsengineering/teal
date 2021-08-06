@@ -18,8 +18,8 @@ modified \code{x} object
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#maturing}{\figure{lifecycle-maturing.svg}{options: alt='[Maturing]'}}}{\strong{[Maturing]}}
 }
 \examples{
-library(random.cdisc.data)
-x <- radsl(cached = TRUE)
+library(scda)
+x <- synthetic_cdisc_data("latest")$adsl
 data_label(x) <- "My custom label"
 data_label(x)
 }
