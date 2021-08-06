@@ -17,6 +17,7 @@
 \item \href{#method-new}{\code{MAEFilteredDataset$new()}}
 \item \href{#method-get_call}{\code{MAEFilteredDataset$get_call()}}
 \item \href{#method-get_data_info}{\code{MAEFilteredDataset$get_data_info()}}
+\item \href{#method-set_bookmark_state}{\code{MAEFilteredDataset$set_bookmark_state()}}
 \item \href{#method-ui_add_filter_state}{\code{MAEFilteredDataset$ui_add_filter_state()}}
 \item \href{#method-srv_add_filter_state}{\code{MAEFilteredDataset$srv_add_filter_state()}}
 \item \href{#method-clone}{\code{MAEFilteredDataset$clone()}}
@@ -108,6 +109,27 @@ whether \code{data.info} should depend on filtered data.}
 }
 \subsection{Returns}{
 \code{integer(1)} number of rows in \code{colData(data)}
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-set_bookmark_state"></a>}}
+\if{latex}{\out{\hypertarget{method-set_bookmark_state}{}}}
+\subsection{Method \code{set_bookmark_state()}}{
+Set bookmark state
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{MAEFilteredDataset$set_bookmark_state(state)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{state}}{(\verb{named list})\cr
+names of the list should correspond to the names of the initialized \code{FilterStates}
+kept in \code{private$filter_states}. For this object they are \code{"subjects"} and
+names of the experiments. Values of initial state should be relevant
+to the referred column.}
+}
+\if{html}{\out{</div>}}
 }
 }
 \if{html}{\out{<hr>}}

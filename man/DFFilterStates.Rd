@@ -23,6 +23,7 @@ conditions are passed to unnamed arguments (\code{...}).
 \itemize{
 \item \href{#method-new}{\code{DFFilterStates$new()}}
 \item \href{#method-get_fun}{\code{DFFilterStates$get_fun()}}
+\item \href{#method-set_bookmark_state}{\code{DFFilterStates$set_bookmark_state()}}
 \item \href{#method-ui_add_filter_state}{\code{DFFilterStates$ui_add_filter_state()}}
 \item \href{#method-srv_add_filter_state}{\code{DFFilterStates$srv_add_filter_state()}}
 \item \href{#method-clone}{\code{DFFilterStates$clone()}}
@@ -85,6 +86,29 @@ R object which \code{dplyr::filter} function is applied on.}
 
 \subsection{Returns}{
 \code{character(1)}
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-set_bookmark_state"></a>}}
+\if{latex}{\out{\hypertarget{method-set_bookmark_state}{}}}
+\subsection{Method \code{set_bookmark_state()}}{
+Set bookmark state
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{DFFilterStates$set_bookmark_state(data, state)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{data}}{(\code{data.frame})\cr
+data which are supposed to be filtered}
+
+\item{\code{state}}{(\verb{named list})\cr
+should contain values which are initial selection in the \code{FilterState}.
+Names of the \code{list} element should correspond to the name of the
+column in \code{data}.}
+}
+\if{html}{\out{</div>}}
 }
 }
 \if{html}{\out{<hr>}}

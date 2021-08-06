@@ -30,6 +30,7 @@ components of the \code{Dataset}.
 \item \href{#method-get_varlabels}{\code{FilteredDataset$get_varlabels()}}
 \item \href{#method-get_varnames}{\code{FilteredDataset$get_varnames()}}
 \item \href{#method-get_filtered_dataname}{\code{FilteredDataset$get_filtered_dataname()}}
+\item \href{#method-set_bookmark_state}{\code{FilteredDataset$set_bookmark_state()}}
 \item \href{#method-ui}{\code{FilteredDataset$ui()}}
 \item \href{#method-server}{\code{FilteredDataset$server()}}
 \item \href{#method-ui_add_filter_state}{\code{FilteredDataset$ui_add_filter_state()}}
@@ -333,6 +334,25 @@ Used when filtering the data to get \verb{<dataname>_FILTERED},
 }
 \subsection{Returns}{
 \code{character(1)}
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-set_bookmark_state"></a>}}
+\if{latex}{\out{\hypertarget{method-set_bookmark_state}{}}}
+\subsection{Method \code{set_bookmark_state()}}{
+Set bookmark state
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{FilteredDataset$set_bookmark_state(state)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{state}}{(\verb{named list})\cr
+containing values of the initial filter. Values should be relevant
+to the referred column.}
+}
+\if{html}{\out{</div>}}
 }
 }
 \if{html}{\out{<hr>}}
