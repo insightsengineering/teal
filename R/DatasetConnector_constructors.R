@@ -722,6 +722,12 @@ rice_dataset_connector <- function(dataname,
   dot_args <- list(...)
   stopifnot(is_fully_named_list(dot_args))
   stopifnot(is_character_single(path))
+  check_pkg_quietly(
+    "rice",
+    paste0(
+      "Connection to entimICE via rice was requested, but rice package is not available.",
+      "Please install it from https://github.roche.com/Rpackages/rice.")
+  )
 
   x_fun <- callable_function("rice::rice_read") # nolint
   args <- append(list(node = path, prolong = TRUE), dot_args)
