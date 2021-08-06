@@ -606,7 +606,7 @@ Mutate dataset by code
 
 \item{\code{vars}}{a named list of R objects that \code{code} depends on to execute}
 
-\item{\code{force_delay}}{should only be set by the containing DatasetConnector object
+\item{\code{force_delay}}{(\code{logical}) used by the containing DatasetConnector object
 
 Either code or script must be provided, but not both.}
 }

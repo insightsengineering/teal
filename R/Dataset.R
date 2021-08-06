@@ -361,7 +361,7 @@ Dataset <- R6::R6Class( # nolint
     #'
     #' @param code (\code{CodeClass}) or (\code{character}) R expressions to be executed
     #' @param vars a named list of R objects that \code{code} depends on to execute
-    #' @param force_delay should only be set by the containing DatasetConnector object
+    #' @param force_delay (\code{logical}) used by the containing DatasetConnector object
     #'
     #' Either code or script must be provided, but not both.
     #'
