@@ -1007,8 +1007,8 @@ SEFilterStates <- R6::R6Class( # nolint
           use_dataname = FALSE
         )
         fstate$set_selected(value = value)
+        
         id <- digest::digest(sprintf("%s_%s", "subset", varname), algo = "md5")
-
         callModule(
           private$add_filter_state,
           id = id,
