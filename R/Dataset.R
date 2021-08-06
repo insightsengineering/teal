@@ -307,19 +307,14 @@ Dataset <- R6::R6Class( # nolint
     #' @description
     #' Get internal \code{CodeClass} object
     #'
-    #' @param include_mutate \code{logical} whether to include mutate code in output
-    #'
     #' @return `\code{CodeClass}`
-    get_code_class = function(include_mutate = TRUE) {
+    get_code_class = function() {
       res <- CodeClass$new()
+      # precise order matters
       res$append(list_to_code_class(private$vars))
-      if (include_mutate) {
-        res$append(list_to_code_class(private$mutate_vars))
-      }
+      res$append(list_to_code_class(private$mutate_vars))
       res$append(private$code)
-      if (include_mutate) {
-        res$append(private$mutate_code)
-      }
+      res$append(private$mutate_code)
 
       return(res)
     },
