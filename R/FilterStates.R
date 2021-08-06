@@ -549,7 +549,7 @@ DFFilterStates <- R6::R6Class( # nolint
     #' @param output_dataname (`character(1)` or `name` or `call`)\cr
     #'   name of the output data on the lhs of the assignment expression.
     #'
-    #' @param datalabel (`character(0)`)\cr
+    #' @param datalabel (`character(0)` or `character(1)`)\cr
     #'   text label value.
     #'
     #' @param varlabels (`character`)\cr
