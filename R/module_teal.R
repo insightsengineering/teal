@@ -167,16 +167,12 @@ srv_teal <- function(input, output, session, modules, raw_data, filter = list())
     .log("data loaded successfully")
     progress <- shiny::Progress$new(session)
     on.exit(progress$close())
-    progress$set(0.1, message = "Setting data")
+    progress$set(0.25, message = "Setting data")
     # create the FilteredData object (here called 'datasets') whose class depends on the class of raw_data()
     # this is placed in the module scope so that bookmarking can be used with FilteredData object
     datasets <<- filtered_data_new(isolate(raw_data()))
     # transfer the datasets from raw_data() into the FilteredData object
     filtered_data_set(raw_data(), datasets)
-    progress$set(0.3, message = "Setting filters")
-
-    # replace splash screen by teal UI
-    .log("initialize modules and filter panel")
 
     progress$set(0.5, message = "Setting up main UI")
     # main_ui_container contains splash screen first and we remove it and replace it by the real UI
@@ -200,7 +196,7 @@ srv_teal <- function(input, output, session, modules, raw_data, filter = list())
       # password was finally provided
       .log("restoring filter state from bookmarked state - filter is ignored")
       tryCatch({
-        progress$set(0.7, message = "Restoring from bookmarked state")
+        progress$set(0.75, message = "Restoring from bookmarked state")
         datasets$restore_state_from_bookmark(saved_datasets_state)
       },
       error = function(cnd) {
@@ -225,7 +221,8 @@ srv_teal <- function(input, output, session, modules, raw_data, filter = list())
       }
       )
     } else {
-      progress$set(0.7, message = "Setting initial filter state")
+      progress$set(0.75, message = "Setting initial filter state")
+      .log("Setting initial filter state")
       filtered_data_set_filters(datasets, filter)
     }
 
