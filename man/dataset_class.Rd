@@ -137,7 +137,7 @@ Recreate this Dataset with its current attributes.
   dataname = self$get_dataname(),
   x = self$get_raw_data(),
   keys = self$get_keys(),
-  code = self$get_code_class(include_mutate = FALSE),
+  code = private$code,
   label = self$get_dataset_label(),
   vars = list()
 )}\if{html}{\out{</div>}}
