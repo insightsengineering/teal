@@ -66,7 +66,7 @@ filtered_data_set_filters <- function(datasets, filter) {
   )
 
   if (length(filter) > 0) {
-    warning("This function needs to be fixed.")
+    datasets$set_bookmark_state(filter)
   }
 
 
