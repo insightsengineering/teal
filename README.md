@@ -5,13 +5,38 @@
 
 # Installation
 
-The latest version of `teal` can be installed locally with:
-```r
-remotes::install_git(
-  "https://github.com/insightsengineering/teal.git",
-  credentials = git2r::cred_user_pass("<GITHUB_USERNAME>", "<GITHUB_PAT>")
-)
-```
+## Clone and install manually
+1. Clone the repository
+
+   The repository can be downloaded directly from the `github.com` site as an archive. Alternatively, Git command line tools offer the same fuctionality, without the need for manual downloading and unpacking the archive, but require to authenticate to Github. You can authenticate using an  key pair or a Personal Access Token (PAT). Please refer to excellent Github tutorials on  to [connect to Github using SSH] (https://docs.github.com/en/github/authenticating-to-github connecting-to-github-with-ssh) or [creating and using PAT](https://docs.github.com/en/github authenticating-to-github/  keeping-your-account-and-data-secure/creating-a-personal-access-token).
+   1. Using PAT. Input in the Git Bash console, PowerShell or any Linux shell:
+
+      ```
+      $ git clone https://github.com/insightsengineering/teal.git
+      Username: your_username_goes_here
+      Password: your_token_goes_here
+      ```
+    1. Using SSH. If set up properly, the repository is ready to be cloned executing:
+
+       ```
+       $ git clone https://github.com/insightsengineering/teal.git
+       ```
+   This creates a subdirectory `teal` containing the cloned repository.
+
+2. Build and install
+
+   The native R tools provide a quick way to install a package. Run in PowerShell or any Linux shell:
+   ```
+   $ R CMD build teal
+   ```
+   This command builds the package and creates an archive. The name of the archive is output by the command at then of building.
+   ```
+   $ Rscript -e 'install.packages("name_of_the_archive")
+   ```
+   Here is an example of a real command (with the name_of_the_archive substited by the output of the build command):
+   ```
+   $ Rscript -e 'install.packages("teal_0.9.5.9000.tar.gz")'
+   ```
 
 # Acknowledgment
 
