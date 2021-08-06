@@ -493,7 +493,6 @@ DefaultFilteredDataset <- R6::R6Class( # nolint
     #' Set bookmark state
     #'
     #' @param state (`named list`)\cr
-
     set_bookmark_state = function(state) {
       stopifnot(is.list(state))
       data <- self$get_data(filtered = FALSE)
