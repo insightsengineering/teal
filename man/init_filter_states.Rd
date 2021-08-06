@@ -23,7 +23,7 @@ specified to the function argument attached to this \code{FilterStates}.}
 \item{output_dataname}{(\code{character(1)} or \code{name} or \code{call})\cr
 name of the output data on the lhs of the assignment expression.}
 
-\item{datalabel}{(\code{character(0)})\cr
+\item{datalabel}{(\code{character(0)} or \code{character(1)})\cr
 text label value.}
 
 \item{...}{(optional)

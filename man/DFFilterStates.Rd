@@ -46,7 +46,7 @@ conditions are passed to unnamed arguments (\code{...}).
 \if{latex}{\out{\hypertarget{method-new}{}}}
 \subsection{Method \code{new()}}{
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{DFFilterStates$new(input_dataname, output_dataname, varlabels, datalabel, keys)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{DFFilterStates$new(input_dataname, output_dataname, datalabel, varlabels, keys)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
@@ -59,11 +59,11 @@ specified to the function argument attached to this \code{FilterStates}.}
 \item{\code{output_dataname}}{(\code{character(1)} or \code{name} or \code{call})\cr
 name of the output data on the lhs of the assignment expression.}
 
-\item{\code{varlabels}}{(\code{character})\cr
-labels of the variables used in this object}
-
 \item{\code{datalabel}}{(\code{character(0)})\cr
 text label value.}
+
+\item{\code{varlabels}}{(\code{character})\cr
+labels of the variables used in this object}
 
 \item{\code{keys}}{(\code{character})\cr
 key columns names

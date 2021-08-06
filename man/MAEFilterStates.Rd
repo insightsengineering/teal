@@ -45,8 +45,8 @@ Initialize \code{MAEFilterStates} object
 \if{html}{\out{<div class="r">}}\preformatted{MAEFilterStates$new(
   input_dataname,
   output_dataname,
-  varlabels,
   datalabel,
+  varlabels,
   keys
 )}\if{html}{\out{</div>}}
 }
@@ -61,11 +61,11 @@ specified to the function argument attached to this \code{FilterStates}.}
 \item{\code{output_dataname}}{(\code{character(1)} or \code{name} or \code{call})\cr
 name of the output data on the lhs of the assignment expression.}
 
+\item{\code{datalabel}}{(\code{character(0)} or \code{character(1)})\cr
+text label value.}
+
 \item{\code{varlabels}}{(\code{character})\cr
 labels of the variables used in this object}
-
-\item{\code{datalabel}}{(\code{character(0)})\cr
-text label value.}
 
 \item{\code{keys}}{(\code{character})\cr
 key columns names

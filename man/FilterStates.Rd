@@ -72,7 +72,7 @@ specified to the function argument attached to this \code{FilterStates}.}
 \item{\code{output_dataname}}{(\code{character(1)} or \code{name} or \code{call})\cr
 name of the output data on the lhs of the assignment expression.}
 
-\item{\code{datalabel}}{(\code{character(0)})\cr
+\item{\code{datalabel}}{(\code{character(0)} or \code{character(1)})\cr
 text label value.}
 
 \item{\code{data}}{(\code{data.frame}, \code{MultiAssayExperiment}, \code{SummarizedExperiment}, \code{matrix})\cr
