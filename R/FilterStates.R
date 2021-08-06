@@ -987,7 +987,7 @@ SEFilterStates <- R6::R6Class( # nolint
     #'   data which are supposed to be filtered
     #' @param state (`named list`)\cr
     #'   This list should contain `subset` and `select` element where
-    #'   each should be a named list containini values as a selection in the `FilterState`.
+    #'   each should be a named list containing values as a selection in the `FilterState`.
     #'   Names of each the `list` element in `subset` and `select` should correspond to
     #'   the name of the column in `rowData(data)` and `colData(data)`.
     set_bookmark_state = function(data, state) {
@@ -1007,7 +1007,7 @@ SEFilterStates <- R6::R6Class( # nolint
           use_dataname = FALSE
         )
         fstate$set_selected(value = value)
-        
+
         id <- digest::digest(sprintf("%s_%s", "subset", varname), algo = "md5")
         callModule(
           private$add_filter_state,

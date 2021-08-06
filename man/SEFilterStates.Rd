@@ -79,7 +79,7 @@ data which are supposed to be filtered}
 
 \item{\code{state}}{(\verb{named list})\cr
 This list should contain \code{subset} and \code{select} element where
-each should be a named list containini values as a selection in the \code{FilterState}.
+each should be a named list containing values as a selection in the \code{FilterState}.
 Names of each the \code{list} element in \code{subset} and \code{select} should correspond to
 the name of the column in \code{rowData(data)} and \code{colData(data)}.}
 }
