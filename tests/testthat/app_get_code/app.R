@@ -1,6 +1,6 @@
 #code>
 library(teal) #nocode
-library(random.cdisc.data) #nolint
+library(scda) #nolint
 require(magrittr)
 library(teal)
 set.seed(1)

@@ -1,6 +1,6 @@
-library(random.cdisc.data)
+library(scda)
 
-ADSL <- radsl(cached = TRUE) #nolint
+ADSL <- synthetic_cdisc_data("rcd_2021_05_05")$adsl #nolint
 ADSL$xxx <- "1"
 
 # instead of return

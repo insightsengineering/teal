@@ -1,4 +1,4 @@
-library(random.cdisc.data)
+library(scda)
 
 # covr adds extra lines of code into the code base
 # to keep track of coverage but these are included
@@ -23,8 +23,8 @@ test_that("Initialization is correct", {
   expect_setequal(isolate(ds$datanames()), character(0))
 })
 
-ADSL <- radsl(cached = TRUE) #nolint
-ADAE <- radae(cached = TRUE) #nolint
+ADSL <- synthetic_cdisc_data("rcd_2021_05_05")$adsl #nolint
+ADAE <- synthetic_cdisc_data("rcd_2021_05_05")$adae #nolint
 
 ADSL$AGE[1:40] <- NaN
 ADSL$AGE[41:50] <- NA

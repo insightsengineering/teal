@@ -1,4 +1,4 @@
-library(random.cdisc.data)
+library(scda)
 choices <- c("val1", "val2", "val3")
 choices_d <- c("val1", "val1", "val2", "val3")
 choices_f <- as.factor(choices)
@@ -180,7 +180,7 @@ test_that("filter_spec_internal", {
 })
 
 test_that("filter_spec_internal contains dataname", {
-  ADSL <- radsl(cached = TRUE) # nolint
+  ADSL <- synthetic_cdisc_data("rcd_2021_05_05")$adsl # nolint
 
   x_filter <- filter_spec_internal(
     vars_choices = variable_choices(ADSL)
