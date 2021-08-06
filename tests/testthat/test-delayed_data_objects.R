@@ -84,6 +84,9 @@ test_that("One cached and one dependent connector wrapped in a single rcd data c
 # Single rice_data connector ----
 
 test_that("Single rice_data connector with two rice dataset connectors", {
+  if (!"rice" %in% installed.packages()) {
+    testthat::skip("rice package not available")
+  }
   adsl <- rice_cdisc_dataset_connector(dataname = "ADSL", "/path/to/ADSL")
   adlb <- rice_cdisc_dataset_connector("ADLB", "/path/to/ADLB")
   adsl_adlb <- rice_data(adsl, adlb)

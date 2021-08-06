@@ -287,9 +287,11 @@ below, a `DataConnection `uses `rice_session_open` and `rice_session_close`
 functions.
 
 ```{r eval=FALSE}
-library(rice)
-open_fun <- callable_function(rice::rice_session_open)
-close_fun <- callable_function(rice::rice_session_close)
+if ("rice" %in% installed.packages()) {
+  eval(parse(text = "library(rice)"))
+}
+open_fun <- callable_function("rice::rice_session_open")
+close_fun <- callable_function("rice::rice_session_close")
 close_fun$set_args(list(message = FALSE))
 
 rice_conn <- teal:::DataConnection$new(
