@@ -13,6 +13,7 @@
 
 ### Miscellaneous
 * Added a method `get_hash` to the `Dataset` class returning the MD5 hash of the object stored inside the `Dataset` object.
+* Removed mentions of internal Roche services from the documentation.
 
 # teal 0.9.5
 
