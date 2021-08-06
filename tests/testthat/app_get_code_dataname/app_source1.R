@@ -1,10 +1,10 @@
 
 # code ADSL ADTTE>
-ADSL <- radsl(N = 600) # nolint
+ADSL <- synthetic_cdisc_data("rcd_2021_05_05")$adsl # nolint
 tern::keys(ADSL) <- c("USUBJID", "STUDYID")
 # <ADSL ADTTE code
 
 # code ADTTE>
-ADTTE <- radtte(ADSL, event.descr = c("STUDYID", "USUBJID", "PARAMCD")) # nolint
+ADTTE <- synthetic_cdisc_data("rcd_2021_05_05")$adtte # nolint
 tern::keys(ADTTE) <- c("USUBJID", "STUDYID", "PARAMCD")
 # <ADTTE code

@@ -11,6 +11,9 @@
 #' @param output_dataname (`character(1)` or `name` or `call`)\cr
 #'   name of the output data on the lhs of the assignment expression.
 #'
+#' @param datalabel (`character(0)` or `character(1)`)\cr
+#'   text label value.
+#'
 #' @param ... (optional)
 #'   additional arguments for specific classes: keys
 #'
@@ -58,6 +61,7 @@
 init_filter_states <- function(data,
                                input_dataname,
                                output_dataname = input_dataname,
+                               datalabel = character(0),
                                ...) {
   UseMethod("init_filter_states")
 }
@@ -66,32 +70,48 @@ init_filter_states <- function(data,
 init_filter_states.data.frame <- function(data, #nolint #nousage
                                           input_dataname,
                                           output_dataname = input_dataname,
+                                          datalabel = character(0),
                                           varlabels = character(0),
                                           keys = character(0)) {
-  DFFilterStates$new(input_dataname, output_dataname, varlabels, keys)
+  DFFilterStates$new(input_dataname = input_dataname,
+                     output_dataname = output_dataname,
+                     datalabel = datalabel,
+                     varlabels = varlabels,
+                     keys = keys)
 }
 
 #' @export
 init_filter_states.matrix <- function(data, #nolint #nousage
                                       input_dataname,
-                                      output_dataname = input_dataname) {
-  MatrixFilterStates$new(input_dataname, output_dataname)
+                                      output_dataname = input_dataname,
+                                      datalabel = character(0)) {
+  MatrixFilterStates$new(input_dataname = input_dataname,
+                         output_dataname = output_dataname,
+                         datalabel = datalabel)
 }
 
 #' @export
 init_filter_states.MultiAssayExperiment <- function(data, #nolint #nousage
                                                     input_dataname,
                                                     output_dataname = input_dataname,
+                                                    datalabel = character(0),
                                                     varlabels,
                                                     keys = character(0)) {
-  MAEFilterStates$new(input_dataname, output_dataname, varlabels, keys)
+  MAEFilterStates$new(input_dataname = input_dataname,
+                      output_dataname = output_dataname,
+                      datalabel = datalabel,
+                      varlabels = varlabels,
+                      keys = keys)
 }
 
 #' @export
 init_filter_states.SummarizedExperiment <- function(data, #nolint #nousage
                                                     input_dataname,
-                                                    output_dataname = input_dataname) {
-  SEFilterStates$new(input_dataname, output_dataname)
+                                                    output_dataname = input_dataname,
+                                                    datalabel = character(0)) {
+  SEFilterStates$new(input_dataname = input_dataname,
+                     output_dataname = output_dataname,
+                     datalabel = datalabel)
 }
 
 
@@ -114,6 +134,7 @@ init_filter_states.SummarizedExperiment <- function(data, #nolint #nousage
 #'   input_dataname = "data",
 #'   output_dataname = "data_filtered",
 #'   varlabels = c(x = "x variable", SEX = "Sex"),
+#'   datalabel = character(0),
 #'   keys = character(0)
 #' )
 #' filter_state <- teal:::RangeFilterState$new(
@@ -146,7 +167,10 @@ FilterStates <- R6::R6Class( # nolint
     #' @param output_dataname (`character(1)` or `name` or `call`)\cr
     #'   name of the output data on the lhs of the assignment expression.
     #'
-    initialize = function(input_dataname, output_dataname) {
+    #' @param datalabel (`character(0)` or `character(1)`)\cr
+    #'   text label value.
+    #'
+    initialize = function(input_dataname, output_dataname, datalabel) {
       stopifnot(
         is.call(input_dataname) || is.name(input_dataname) || is_character_single(input_dataname)
       )
@@ -164,6 +188,7 @@ FilterStates <- R6::R6Class( # nolint
 
       private$input_dataname <- char_to_name(input_dataname)
       private$output_dataname <- char_to_name(output_dataname)
+      private$datalabel <- datalabel
       return(invisible(self))
     },
     #' @description
@@ -359,7 +384,8 @@ FilterStates <- R6::R6Class( # nolint
       private$card_id <- ns("cards")
       tags$div(
         id = private$card_id,
-        class = "listWithHandle list-group"
+        class = "list-group hideable-list-group",
+        `data-label` = ifelse(private$datalabel == "", "", (paste0("> ", private$datalabel)))
       )
     },
 
@@ -403,6 +429,7 @@ FilterStates <- R6::R6Class( # nolint
   private = list(
     card_id = character(0),
     card_ids = character(0),
+    datalabel = character(0),
     input_dataname = NULL,  # because it holds object of class name
     output_dataname = NULL,  # because it holds object of class name,
     ns = NULL, # shiny ns()
@@ -535,13 +562,16 @@ DFFilterStates <- R6::R6Class( # nolint
     #' @param output_dataname (`character(1)` or `name` or `call`)\cr
     #'   name of the output data on the lhs of the assignment expression.
     #'
+    #' @param datalabel (`character(0)` or `character(1)`)\cr
+    #'   text label value.
+    #'
     #' @param varlabels (`character`)\cr
     #'   labels of the variables used in this object
     #'
     #' @param keys (`character`)\cr
     #'   key columns names
-    initialize = function(input_dataname, output_dataname, varlabels, keys) {
-      super$initialize(input_dataname, output_dataname)
+    initialize = function(input_dataname, output_dataname, datalabel, varlabels, keys) {
+      super$initialize(input_dataname, output_dataname, datalabel)
       private$varlabels <- varlabels
       private$keys <- keys
 
@@ -753,13 +783,16 @@ MAEFilterStates <- R6::R6Class( # nolint
     #' @param output_dataname (`character(1)` or `name` or `call`)\cr
     #'   name of the output data on the lhs of the assignment expression.
     #'
+    #' @param datalabel (`character(0)` or `character(1)`)\cr
+    #'   text label value.
+    #'
     #' @param varlabels (`character`)\cr
     #'   labels of the variables used in this object
     #'
     #' @param keys (`character`)\cr
     #'   key columns names
-    initialize = function(input_dataname, output_dataname, varlabels, keys) {
-      super$initialize(input_dataname, output_dataname)
+    initialize = function(input_dataname, output_dataname, datalabel, varlabels, keys) {
+      super$initialize(input_dataname, output_dataname, datalabel)
       private$keys <- keys
       private$varlabels <- varlabels
 
@@ -970,8 +1003,11 @@ SEFilterStates <- R6::R6Class( # nolint
     #'
     #' @param output_dataname (`character(1)` or `name` or `call`)\cr
     #'   name of the output data on the lhs of the assignment expression.
-    initialize = function(input_dataname, output_dataname) {
-      super$initialize(input_dataname, output_dataname)
+    #'
+    #' @param datalabel (`character(0)` or `character(1)`)\cr
+    #'   text label value.
+    initialize = function(input_dataname, output_dataname, datalabel) {
+      super$initialize(input_dataname, output_dataname, datalabel)
       self$queue_initialize(
         list(
           subset = ReactiveQueue$new(),
@@ -1253,8 +1289,11 @@ MatrixFilterStates <- R6::R6Class( # nolint
     #'
     #' @param output_dataname (`character(1)` or `name` or `call`)\cr
     #'   name of the output data on the lhs of the assignment expression.
-    initialize = function(input_dataname, output_dataname) {
-      super$initialize(input_dataname, output_dataname)
+    #'
+    #' @param datalabel (`character(0)` or `character(1)`)\cr
+    #'   text label value.
+    initialize = function(input_dataname, output_dataname, datalabel) {
+      super$initialize(input_dataname, output_dataname, datalabel)
       self$queue_initialize(
         list(
           subset = ReactiveQueue$new()
