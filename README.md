@@ -3,18 +3,13 @@
 
 *teal* is a shiny-based interactive exploration framework for analyzing clinical trials data. `teal` currently provides a dynamic filtering facility and diverse data viewers. `teal` shiny applications are built using standard [shiny modules](https://shiny.rstudio.com/articles/modules.html).
 
-Please read more about teal on our agile-R website at [go.roche.com/agile-R](https://go.roche.com/agile-R).
-
 # Installation
-
-Please refer to the quick start section in agile-R [here](https://go.roche.com/agile-R).
 
 The latest version of `teal` can be installed locally with:
 ```r
-devtools::install_github(
-  repo = "NEST/teal",
-  host = "https://github.roche.com/api/v3",
-  upgrade_dependencies = FALSE
+remotes::install_git(
+  "https://github.com/insightsengineering/teal.git",
+  credentials = git2r::cred_user_pass("<GITHUB_USERNAME>", "<GITHUB_PAT>")
 )
 ```
 
@@ -23,7 +18,7 @@ devtools::install_github(
 We would like to thank everyone who made `teal` a better analysis environment. Special thanks go to:
 
  * `Doug Kelkhoff` for his contributions to the styling of the filter panel.
- 
+
 
 # Notes for Developers
 ## Conventions
@@ -65,10 +60,10 @@ parent_ui("PatrickMcCarty")
 Use the `roxygen2` marker `@md` to include code-style ticks with backticks. This makes it easier to read. For example:
 ```r
 #' My function
-#' 
+#'
 #' A special `variable` we refer to.
 #' We link to another function `\link{another_fcn}`
-#' 
+#'
 #' @md
 #' @param arg1 `character` person's name
 my_fcn <- function(arg1) {
