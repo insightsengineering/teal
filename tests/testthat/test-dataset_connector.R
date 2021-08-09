@@ -28,7 +28,7 @@ testthat::test_that("DatasetConnector", {
     "ADSL <- (function() synthetic_cdisc_data(\"rcd_2021_05_05\")$adsl)()"
   )
 
-  testthat::expect_identical(
+  testthat::expect_equal(
     x1$get_code(deparse = FALSE),
     as.list(as.call(parse(text = 'ADSL <- (function() synthetic_cdisc_data("rcd_2021_05_05")$adsl)()')))
   )
