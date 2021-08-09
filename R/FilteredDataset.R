@@ -654,7 +654,7 @@ CDISCFilteredDataset <- R6::R6Class( # nolint
         tags$label("Add", tags$code(self$get_dataname()), "filter"),
         self$get_filter_states(id = "filter")$ui_add_filter_state(
           id = ns("filter"),
-          data = private$get_data_without_join_cols()
+          data = private$get_data_without_parent_keys()
         )
       )
     },
@@ -672,19 +672,18 @@ CDISCFilteredDataset <- R6::R6Class( # nolint
     #' @param session (`shiny`)\cr
     #' @return function - shiny server module
     srv_add_filter_state = function(input, output, session) {
-      data <- get_raw_data(self$get_dataset())
       callModule(
         module = self$get_filter_states(id = "filter")$srv_add_filter_state,
         id = "filter",
-        data = private$get_data_without_join_cols()
+        data = private$get_data_without_parent_keys()
       )
     }
   ),
+  private = list(
   # Returns the data.frame object without the columns used to join
   # with the parent dataset specified in the join_keys argument
   # to the constructor.
-  private = list(
-    get_data_without_join_cols = function() {
+    get_data_without_parent_keys = function() {
       if (is_empty(self$get_dataset()$get_parent())) {
         self$get_dataset()$data
       } else {
