@@ -194,6 +194,8 @@ srv_shiny_module_arguments <- function(input, output, session, datasets, modules
 #'   )
 #' }
 check_in_range <- function(subinterval, range, pre_msg = "") {
+  epsilon <- 1e-12 #needed for floating point arithmetic
+
   if ((length(subinterval) != 2)) {
     stop(
       sprintf(
@@ -203,7 +205,7 @@ check_in_range <- function(subinterval, range, pre_msg = "") {
       )
     )
   }
-  if (subinterval[[2]] < subinterval[[1]]) {
+  if (subinterval[[2]] + epsilon < subinterval[[1]]) {
     stop(
       sprintf("%s upper bound of the range than lower bound \n %s < %s"),
       pre_msg,
@@ -212,7 +214,7 @@ check_in_range <- function(subinterval, range, pre_msg = "") {
     )
   }
 
-  if ((subinterval[[1]] < range[[1]]) || (subinterval[[2]] > range[[2]])) {
+  if ((subinterval[[1]] + epsilon < range[[1]]) || (subinterval[[2]] - epsilon > range[[2]])) {
     stop(
       sprintf(
         "%s range (%s) not valid for full range (%s)",
