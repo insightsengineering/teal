@@ -14,7 +14,6 @@
 
 ### Miscellaneous
 * Added a method `get_hash` to the `Dataset` class returning the MD5 hash of the object stored inside the `Dataset` object.
-* Updated filter labels in MAE related filter selectors.
 
 # teal 0.9.5
 
