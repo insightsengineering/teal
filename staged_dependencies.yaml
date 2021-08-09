@@ -1,25 +1,41 @@
-
----
 current_repo:
   repo: insightsengineering/teal
   host: https://github.com
-
 upstream_repos:
-- repo: insightsengineering/scda
-  host: https://github.com
-- repo: insightsengineering/random.cdisc.data
-  host: https://github.com
-- repo: insightsengineering/tern
-  host: https://github.com
-
+  insightsengineering/tern:
+    repo: insightsengineering/tern
+    host: https://github.com
+  Roche/rtables:
+    repo: Roche/rtables
+    host: https://github.com
+  insightsengineering/utils.nest:
+    repo: insightsengineering/utils.nest
+    host: https://github.com
+  insightsengineering/scda:
+    repo: insightsengineering/scda
+    host: https://github.com
+  insightsengineering/test.nest:
+    repo: insightsengineering/test.nest
+    host: https://github.com
+  insightsengineering/random.cdisc.data:
+    repo: insightsengineering/random.cdisc.data
+    host: https://github.com
 downstream_repos:
-- repo: insightsengineering/teal.devel
-  host: https://github.com
-- repo: insightsengineering/teal.modules.clinical
-  host: https://github.com
-- repo: insightsengineering/teal.modules.general
-  host: https://github.com
-- repo: insightsengineering/teal.osprey
-  host: https://github.com
-- repo: insightsengineering/teal.goshawk
-  host: https://github.com
+  insightsengineering/teal.devel:
+    repo: insightsengineering/teal.devel
+    host: https://github.com
+  insightsengineering/teal.modules.general:
+    repo: insightsengineering/teal.modules.general
+    host: https://github.com
+  insightsengineering/teal.modules.clinical:
+    repo: insightsengineering/teal.modules.clinical
+    host: https://github.com
+  insightsengineering/teal.osprey:
+    repo: insightsengineering/teal.osprey
+    host: https://github.com
+  insightsengineering/teal.goshawk:
+    repo: insightsengineering/teal.goshawk
+    host: https://github.com
+  insightsengineering/teal.modules.hermes:
+    repo: insightsengineering/teal.modules.hermes
+    host: https://github.com
