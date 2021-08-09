@@ -8,7 +8,7 @@
 ## Clone and install manually
 1. Clone the repository
 
-   The repository can be downloaded directly from the `github.com` site as an archive. Alternatively, Git command line tools offer the same fuctionality, without the need for manual downloading and unpacking the archive, but require to authenticate to Github. You can authenticate using an  key pair or a Personal Access Token (PAT). Please refer to excellent Github tutorials on  to [connect to Github using SSH] (https://docs.github.com/en/github/authenticating-to-github connecting-to-github-with-ssh) or [creating and using PAT](https://docs.github.com/en/github authenticating-to-github/  keeping-your-account-and-data-secure/creating-a-personal-access-token).
+   The repository can be downloaded directly from the `github.com` site as an archive (see [Github tutorial on cloning to learn more](https://docs.github.com/en/github/creating-cloning-and-archiving-repositories/cloning-a-repository-from-github/cloning-a-repository)). Alternatively, Git command line tools offer the same functionality, without the need for manual downloading and unpacking the archive, but require to authenticate to Github. You can authenticate using a key pair or a Personal Access Token (PAT). Please refer to excellent Github tutorials on [connecting to Github using SSH](https://docs.github.com/en/github/authenticating-to-github) or [creating and using PAT](https://docs.github.com/en/github/authenticating-to-github/keeping-your-account-and-data-secure/creating-a-personal-access-token).
    1. Using PAT. Input in the Git Bash console, PowerShell or any Linux shell:
 
       ```
@@ -33,7 +33,7 @@
    ```
    $ Rscript -e 'install.packages("name_of_the_archive")
    ```
-   Here is an example of a real command (with the name_of_the_archive substited by the output of the build command):
+   Here is an example of a real command (with name_of_the_archive substituted by the output of the build command):
    ```
    $ Rscript -e 'install.packages("teal_0.9.5.9000.tar.gz")'
    ```
