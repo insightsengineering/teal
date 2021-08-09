@@ -3,27 +3,47 @@
 
 *teal* is a shiny-based interactive exploration framework for analyzing clinical trials data. `teal` currently provides a dynamic filtering facility and diverse data viewers. `teal` shiny applications are built using standard [shiny modules](https://shiny.rstudio.com/articles/modules.html).
 
-Please read more about teal on our agile-R website at [go.roche.com/agile-R](https://go.roche.com/agile-R).
-
 # Installation
 
-Please refer to the quick start section in agile-R [here](https://go.roche.com/agile-R).
+## Clone and install manually
+1. Clone the repository
 
-The latest version of `teal` can be installed locally with:
-```r
-devtools::install_github(
-  repo = "NEST/teal",
-  host = "https://github.roche.com/api/v3",
-  upgrade_dependencies = FALSE
-)
-```
+   The repository can be downloaded directly from the `github.com` site as an archive (see [Github tutorial on cloning to learn more](https://docs.github.com/en/github/creating-cloning-and-archiving-repositories/cloning-a-repository-from-github/cloning-a-repository)). Alternatively, Git command line tools offer the same functionality, without the need for manual downloading and unpacking the archive, but require to authenticate to Github. You can authenticate using a key pair or a Personal Access Token (PAT). Please refer to excellent Github tutorials on [connecting to Github using SSH](https://docs.github.com/en/github/authenticating-to-github) or [creating and using PAT](https://docs.github.com/en/github/authenticating-to-github/keeping-your-account-and-data-secure/creating-a-personal-access-token).
+   1. Using PAT. Input in the Git Bash console, PowerShell or any Linux shell:
+
+      ```
+      $ git clone https://github.com/insightsengineering/teal.git
+      Username: your_username_goes_here
+      Password: your_token_goes_here
+      ```
+    1. Using SSH. If set up properly, the repository is ready to be cloned executing:
+
+       ```
+       $ git clone https://github.com/insightsengineering/teal.git
+       ```
+   This creates a subdirectory `teal` containing the cloned repository.
+
+2. Build and install
+
+   The native R tools provide a quick way to install a package. Run in PowerShell or any Linux shell:
+   ```
+   $ R CMD build teal
+   ```
+   This command builds the package and creates an archive. The name of the archive is output by the command at then of building. Then input in the shell:
+   ```
+   $ Rscript -e 'install.packages("name_of_the_archive")
+   ```
+   Here is an example of a real command (with name_of_the_archive substituted by the output of the build command):
+   ```
+   $ Rscript -e 'install.packages("teal_0.9.5.9000.tar.gz")'
+   ```
 
 # Acknowledgment
 
 We would like to thank everyone who made `teal` a better analysis environment. Special thanks go to:
 
  * `Doug Kelkhoff` for his contributions to the styling of the filter panel.
- 
+
 
 # Notes for Developers
 ## Conventions
@@ -65,10 +85,10 @@ parent_ui("PatrickMcCarty")
 Use the `roxygen2` marker `@md` to include code-style ticks with backticks. This makes it easier to read. For example:
 ```r
 #' My function
-#' 
+#'
 #' A special `variable` we refer to.
 #' We link to another function `\link{another_fcn}`
-#' 
+#'
 #' @md
 #' @param arg1 `character` person's name
 my_fcn <- function(arg1) {

@@ -18,8 +18,6 @@ trials data and more general relational data. `teal` currently provides a dynami
 different data viewers. `teal` shiny applications are built using standard
 [shiny modules][shiny_modules].
 
-More information can be found on the [agile-R website][agileR].
-
 ## Initializing A Teal application
 
 The workflow to create a shiny app using teal is as follows. The `teal::init`
@@ -218,5 +216,3 @@ tags$div(tags$h1("My New Analysis Web-app"), tags$p(class="pull-left", "Logo"))
 [shiny_modules]: https://shiny.rstudio.com/articles/modules.html "Modularizing Shiny app code"
 [R6]: https://cran.r-project.org/web/packages/R6/vignettes/Introduction.html "Introduction to R6 classes"
 [teal_git]: https://github.com/insightsengineering/teal "Teal GitHub Repository"
-[gran]: http://gran.roche.com "Roche R Package Server"
-[agileR]: http://go.roche.com/agile-R
