@@ -881,8 +881,8 @@ snowflake_connection_function <- function(username = askpass::askpass("Please en
   # long enough to pull the data in
   token <- httr::content(res)$access_token
 
-  eval(parse(text = "tryCatch(
-    con <- DBI::dbConnect(
+  tryCatch(
+    con <- eval(parse(text = "DBI::dbConnect(
       odbc::odbc(),
       Server = server,
       port = port,
@@ -892,13 +892,11 @@ snowflake_connection_function <- function(username = askpass::askpass("Please en
       Warehouse = warehouse,
       role = role,
       authenticator = \"oauth\",
-      token = token
-    ),
+      token = token")),
     error = function(cond){
-      stop(paste(\"Unable to connect to snowflake. Error message:\", cond$message), call. = FALSE)
+      stop(paste("Unable to connect to snowflake. Error message:", cond$message), call. = FALSE)
     }
-  )"
-  ))
+  )
   return(con)
 }
 
