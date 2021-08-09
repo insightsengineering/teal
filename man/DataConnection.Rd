@@ -7,7 +7,7 @@
 Objects of this class store the connection to a data source.
 It can be a database or server (\code{RICE} or \code{SAICE}) connection.}
 \description{
-\ifelse{html}{\out{<a href='https://www.tidyverse.org/lifecycle/#experimental'><img src='figures/lifecycle-experimental.svg' alt='Experimental lifecycle'></a>}}{\strong{Experimental}}
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
 }
 \examples{
 open_fun <- callable_function(data.frame) # define opening function
@@ -16,7 +16,7 @@ open_fun$set_args(list(x = 1:5)) # define fixed arguments to opening function
 close_fun <- callable_function(print) # define closing function
 close_fun$set_args(list(x = "Hi there")) # define fixed arguments to closing function
 
-ping_fun <- callable_function(rice::rice_session_active)
+ping_fun <- callable_function(function() TRUE)
 
 x <- teal:::DataConnection$new( # define connection
   ping_fun = ping_fun, # define ping function

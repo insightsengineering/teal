@@ -13,7 +13,7 @@ relational_dataset_connector_file(path)
 \code{DatasetConnector} object
 }
 \description{
-\ifelse{html}{\figure{lifecycle-soft-deprecated.svg}{options: alt='Soft-deprecated lifecycle'}}{\strong{Soft-deprecated}}
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#soft-deprecated}{\figure{lifecycle-soft-deprecated.svg}{options: alt='[Soft-deprecated]'}}}{\strong{[Soft-deprecated]}}
 }
 \details{
 Please note that the script has to end with a call creating desired object. The error will
@@ -25,10 +25,9 @@ file_example <- tempfile(fileext = ".R")
 writeLines(
   text = c(
     "library(teal)
-     library(random.cdisc.data)
+     library(scda)
 
-     pull_callable <- callable_function(radsl)
-     pull_callable$set_args(list(cached = TRUE))
+     pull_callable <- callable_function(function() {synthetic_cdisc_data('latest')$adsl})
      dataset_connector(\"ADSL\", pull_callable, get_cdisc_keys(\"ADSL\"))"
   ),
   con = file_example

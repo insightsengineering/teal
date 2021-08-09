@@ -15,7 +15,7 @@ or \code{keys} object, which does have a \code{primary} element with a vector of
 names in \code{dataset} consisting the key. Optional, default: NULL}
 }
 \description{
-\ifelse{html}{\out{<a href='https://www.tidyverse.org/lifecycle/#experimental'><img src='figures/lifecycle-experimental.svg' alt='Experimental lifecycle'></a>}}{\strong{Experimental}}
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
 }
 \details{
 S3 method for get_key_duplicates. Uses the public API of
@@ -25,9 +25,9 @@ If \code{keys} argument is provided, then checks against that, if it's \code{NUL
 against the \code{get_keys()$primary} method of the \code{dataset} argument.
 }
 \examples{
-library(random.cdisc.data)
+library(scda)
 
-adsl <- radsl(cached = TRUE)
+adsl <- synthetic_cdisc_data("latest")$adsl
 # Keys are automatically assigned, because the name
 # is in the recognized ADAM nomenclature ("ADSL")
 rel_adsl <- cdisc_dataset("ADSL", adsl)

@@ -1,26 +1,26 @@
-library(random.cdisc.data)
+library(scda)
 
-ADSL <- ARG1 <- ARG2 <- radsl(cached = TRUE) # nolint
-ADTTE <- radtte(cached = TRUE) # nolint
-ADRS <- radrs(cached = TRUE) # nolint
+ADSL <- ARG1 <- ARG2 <- synthetic_cdisc_data("rcd_2021_05_05")$adsl # nolint
+ADTTE <- synthetic_cdisc_data("rcd_2021_05_05")$adtte # nolint
+ADRS <- synthetic_cdisc_data("rcd_2021_05_05")$adrs # nolint
 
 # 1. single dataset / dataset code -------------------------------
 test_that("single dataset / dataset code", {
-  adsl <- cdisc_dataset(dataname = "ADSL", x = ADSL, code = "ADSL <- radsl(cached = TRUE)")
+  adsl <- cdisc_dataset(dataname = "ADSL", x = ADSL, code = "ADSL <- synthetic_cdisc_data(\"rcd_2021_05_05\")$adsl")
   expect_silent(
     data <- cdisc_data(adsl, check = TRUE)
   )
 
   expect_true(adsl$check())
   expect_true(data$check())
-  expect_identical(get_code(data), "ADSL <- radsl(cached = TRUE)")
+  expect_identical(get_code(data), "ADSL <- synthetic_cdisc_data(\"rcd_2021_05_05\")$adsl")
   expect_identical(get_code(data), get_code(adsl))
 
   # MUTATE
   expect_silent(
     data <- cdisc_data(
       cdisc_dataset("ADSL", ADSL),
-      code = "ADSL <- radsl(cached = TRUE)",
+      code = "ADSL <- synthetic_cdisc_data(\"rcd_2021_05_05\")$adsl",
       check = TRUE
     ) %>% mutate_data(code = "ADSL <- dplyr::filter(ADSL, SEX == 'F')")
   )
@@ -28,16 +28,16 @@ test_that("single dataset / dataset code", {
   expect_true(data$check())
   expect_identical(
     get_code(data),
-    "ADSL <- radsl(cached = TRUE)\nADSL <- dplyr::filter(ADSL, SEX == \"F\")"
+    "ADSL <- synthetic_cdisc_data(\"rcd_2021_05_05\")$adsl\nADSL <- dplyr::filter(ADSL, SEX == \"F\")"
   )
 
   expect_identical(
     data$get_code_class(TRUE)$get_code(),
-    "ADSL <- radsl(cached = TRUE)"
+    "ADSL <- synthetic_cdisc_data(\"rcd_2021_05_05\")$adsl"
   )
   expect_identical(
     data$get_code_class(FALSE)$get_code(),
-    "ADSL <- radsl(cached = TRUE)\nADSL <- dplyr::filter(ADSL, SEX == \"F\")"
+    "ADSL <- synthetic_cdisc_data(\"rcd_2021_05_05\")$adsl\nADSL <- dplyr::filter(ADSL, SEX == \"F\")"
   )
   expect_reference(
     data$get_dataset("ADSL")$get_raw_data(),
@@ -59,8 +59,10 @@ test_that("single dataset / dataset code", {
 
 # 2. two datasets / datasets code -------------------------------
 test_that("two datasets / datasets code", {
-  adsl <- cdisc_dataset(dataname = "ADSL", x = ADSL, code = "ADSL <- radsl(cached = TRUE)")
-  adtte <- cdisc_dataset(dataname = "ADTTE", x = ADTTE, code = "ADTTE <- radtte(cached = TRUE)")
+  adsl <- cdisc_dataset(dataname = "ADSL", x = ADSL, code = "ADSL <- synthetic_cdisc_data(\"rcd_2021_05_05\")$adsl")
+  adtte <- cdisc_dataset(
+    dataname = "ADTTE", x = ADTTE, code = "ADTTE <- synthetic_cdisc_data(\"rcd_2021_05_05\")$adtte"
+  )
 
   expect_silent(
     data <- cdisc_data(adsl, adtte, check = TRUE)
@@ -73,20 +75,22 @@ test_that("two datasets / datasets code", {
 
   expect_identical(
     get_code(adsl),
-    "ADSL <- radsl(cached = TRUE)"
+    "ADSL <- synthetic_cdisc_data(\"rcd_2021_05_05\")$adsl"
   )
   expect_identical(
     get_code(adtte),
-    "ADTTE <- radtte(cached = TRUE)"
+    "ADTTE <- synthetic_cdisc_data(\"rcd_2021_05_05\")$adtte"
   )
   expect_identical(
     get_code(data),
-    "ADSL <- radsl(cached = TRUE)\nADTTE <- radtte(cached = TRUE)"
+    "ADSL <- synthetic_cdisc_data(\"rcd_2021_05_05\")$adsl\nADTTE <- synthetic_cdisc_data(\"rcd_2021_05_05\")$adtte"
   )
 
   # MUTATE
-  adsl <- cdisc_dataset(dataname = "ADSL", x = ADSL, code = "ADSL <- radsl(cached = TRUE)")
-  adtte <- cdisc_dataset(dataname = "ADTTE", x = ADTTE, code = "ADTTE <- radtte(cached = TRUE)")
+  adsl <- cdisc_dataset(dataname = "ADSL", x = ADSL, code = "ADSL <- synthetic_cdisc_data(\"rcd_2021_05_05\")$adsl")
+  adtte <- cdisc_dataset(
+    dataname = "ADTTE", x = ADTTE, code = "ADTTE <- synthetic_cdisc_data(\"rcd_2021_05_05\")$adtte"
+  )
 
   expect_silent(
     data <- cdisc_data(adsl, adtte, check = TRUE)  %>%
@@ -102,35 +106,35 @@ test_that("two datasets / datasets code", {
   expect_true(data$check())
   expect_identical(
     data$get_code_class(TRUE)$get_code(),
-    "ADSL <- radsl(cached = TRUE)\nADTTE <- radtte(cached = TRUE)"
+    "ADSL <- synthetic_cdisc_data(\"rcd_2021_05_05\")$adsl\nADTTE <- synthetic_cdisc_data(\"rcd_2021_05_05\")$adtte"
   )
 
   expect_identical(
     data$get_code_class(TRUE)$get_code(dataname = "ADSL"),
-    "ADSL <- radsl(cached = TRUE)"
+    "ADSL <- synthetic_cdisc_data(\"rcd_2021_05_05\")$adsl"
   )
   expect_identical(
     data$get_code_class(TRUE)$get_code(dataname = "ADTTE"),
-    "ADTTE <- radtte(cached = TRUE)"
+    "ADTTE <- synthetic_cdisc_data(\"rcd_2021_05_05\")$adtte"
   )
 
   expect_identical(
     data$get_code_class(FALSE)$get_code(),
-    "ADSL <- radsl(cached = TRUE)\nADTTE <- radtte(cached = TRUE)\nADSL <- dplyr::filter(ADSL, SEX == \"F\")\nADTTE <- dplyr::filter(ADTTE, USUBJID %in% ADSL$USUBJID)\nADSL$x <- 1" #nolint
+    "ADSL <- synthetic_cdisc_data(\"rcd_2021_05_05\")$adsl\nADTTE <- synthetic_cdisc_data(\"rcd_2021_05_05\")$adtte\nADSL <- dplyr::filter(ADSL, SEX == \"F\")\nADTTE <- dplyr::filter(ADTTE, USUBJID %in% ADSL$USUBJID)\nADSL$x <- 1" #nolint
   )
 
   expect_identical(
     get_code(data, "ADSL"),
-    "ADSL <- radsl(cached = TRUE)\nADSL <- dplyr::filter(ADSL, SEX == \"F\")\nADSL$x <- 1"
+    "ADSL <- synthetic_cdisc_data(\"rcd_2021_05_05\")$adsl\nADSL <- dplyr::filter(ADSL, SEX == \"F\")\nADSL$x <- 1"
   )
   expect_identical(
     get_code(data, "ADTTE"),
-    "ADSL <- radsl(cached = TRUE)\nADTTE <- radtte(cached = TRUE)\nADSL <- dplyr::filter(ADSL, SEX == \"F\")\nADTTE <- dplyr::filter(ADTTE, USUBJID %in% ADSL$USUBJID)" #nolint
+    "ADSL <- synthetic_cdisc_data(\"rcd_2021_05_05\")$adsl\nADTTE <- synthetic_cdisc_data(\"rcd_2021_05_05\")$adtte\nADSL <- dplyr::filter(ADSL, SEX == \"F\")\nADTTE <- dplyr::filter(ADTTE, USUBJID %in% ADSL$USUBJID)" #nolint
   )
 
   expect_identical(
     get_code(data),
-    "ADSL <- radsl(cached = TRUE)\nADTTE <- radtte(cached = TRUE)\nADSL <- dplyr::filter(ADSL, SEX == \"F\")\nADTTE <- dplyr::filter(ADTTE, USUBJID %in% ADSL$USUBJID)\nADSL$x <- 1" #nolint
+    "ADSL <- synthetic_cdisc_data(\"rcd_2021_05_05\")$adsl\nADTTE <- synthetic_cdisc_data(\"rcd_2021_05_05\")$adtte\nADSL <- dplyr::filter(ADSL, SEX == \"F\")\nADTTE <- dplyr::filter(ADTTE, USUBJID %in% ADSL$USUBJID)\nADSL$x <- 1" #nolint
   )
 
   expect_identical(
@@ -146,17 +150,17 @@ test_that("two datasets / datasets code", {
 })
 
 test_that("Duplicated code from datasets is shown", {
-  some_var <- TRUE
-  adae <- radae(cached = some_var)
-  adsl <- radsl(cached = some_var)
+
+  adae <- synthetic_cdisc_data("rcd_2021_05_05")$adae
+  adsl <- synthetic_cdisc_data("rcd_2021_05_05")$adsl
   some_var <- "TEST"
   adsl$test <- some_var
 
   adsl <- cdisc_dataset(
     dataname = "ADSL",
     x = adsl,
-    code = "some_var <- TRUE
-      ADSL <- radsl(cached = some_var)
+    code = "
+      ADSL <- synthetic_cdisc_data(\"rcd_2021_05_05\")$adsl
       some_var <- 'TEST'
       ADSL$test <- some_var"
   )
@@ -164,15 +168,15 @@ test_that("Duplicated code from datasets is shown", {
   adae <- cdisc_dataset(
     dataname = "ADAE",
     x = adae,
-    code = "some_var <- TRUE
-      ADAE <- radae(cached = some_var)"
+    code = "
+      ADAE <- synthetic_cdisc_data(\"rcd_2021_05_05\")$adae"
   )
 
   data <- cdisc_data(adsl, adae, check = TRUE)
 
   expect_equal(
     data$get_code(),
-    "some_var <- TRUE\nADSL <- radsl(cached = some_var)\nsome_var <- \"TEST\"\nADSL$test <- some_var\nsome_var <- TRUE\nADAE <- radae(cached = some_var)" # nolint
+    "ADSL <- synthetic_cdisc_data(\"rcd_2021_05_05\")$adsl\nsome_var <- \"TEST\"\nADSL$test <- some_var\nADAE <- synthetic_cdisc_data(\"rcd_2021_05_05\")$adae" # nolint
   )
 })
 
@@ -183,9 +187,9 @@ test_that("two datasets / datasets code", {
 
   expect_error(
     cdisc_data(
-      cdisc_dataset(dataname = "ADSL", x = ADSL, code = "ADSL <- radsl(cached = TRUE)"),
-      cdisc_dataset(dataname = "ADTTE", x = ADTTE, code = "ADTTE <- radtte(cached = TRUE)"),
-      code = "ADSL <- radsl(cached = TRUE)\nADTTE <- radtte(cached = TRUE)",
+      cdisc_dataset(dataname = "ADSL", x = ADSL, code = "ADSL <- synthetic_cdisc_data(\"rcd_2021_05_05\")$adsl"),
+      cdisc_dataset(dataname = "ADTTE", x = ADTTE, code = "ADTTE <- synthetic_cdisc_data(\"rcd_2021_05_05\")$adtte"),
+      code = "ADSL <- synthetic_cdisc_data(\"rcd_2021_05_05\")$adsl\nADTTE <- synthetic_cdisc_data(\"rcd_2021_05_05\")$adtte", #nolint
       check = TRUE
     )
   )
@@ -194,24 +198,24 @@ test_that("two datasets / datasets code", {
     data <- cdisc_data(
       adsl,
       adtte,
-      code = "ADSL <- radsl(cached = TRUE)\nADTTE <- radtte(cached = TRUE)",
+      code = "ADSL <- synthetic_cdisc_data(\"rcd_2021_05_05\")$adsl\nADTTE <- synthetic_cdisc_data(\"rcd_2021_05_05\")$adtte", #nolint
       check = TRUE
     )
   )
 
   expect_identical(
     get_code(data),
-    "ADSL <- radsl(cached = TRUE)\nADTTE <- radtte(cached = TRUE)"
+    "ADSL <- synthetic_cdisc_data(\"rcd_2021_05_05\")$adsl\nADTTE <- synthetic_cdisc_data(\"rcd_2021_05_05\")$adtte"
   )
 
 
   expect_identical(
     get_code(data, "ADSL"),
-    "ADSL <- radsl(cached = TRUE)\nADTTE <- radtte(cached = TRUE)"
+    "ADSL <- synthetic_cdisc_data(\"rcd_2021_05_05\")$adsl\nADTTE <- synthetic_cdisc_data(\"rcd_2021_05_05\")$adtte"
   )
   expect_identical(
     get_code(data, "ADTTE"),
-    "ADSL <- radsl(cached = TRUE)\nADTTE <- radtte(cached = TRUE)"
+    "ADSL <- synthetic_cdisc_data(\"rcd_2021_05_05\")$adsl\nADTTE <- synthetic_cdisc_data(\"rcd_2021_05_05\")$adtte"
   )
   expect_error(adsl$check(), "code is empty")
   expect_error(adtte$check(), "code is empty")
@@ -225,7 +229,7 @@ test_that("two datasets / datasets code", {
     data <- cdisc_data(
       adsl,
       adtte,
-      code = "ADSL <- radsl(cached = TRUE)\nADTTE <- radtte(cached = TRUE)",
+      code = "ADSL <- synthetic_cdisc_data(\"rcd_2021_05_05\")$adsl\nADTTE <- synthetic_cdisc_data(\"rcd_2021_05_05\")$adtte", #nolint
       check = TRUE) %>%
       mutate_data(code = "ADSL <- dplyr::filter(ADSL, SEX == 'F')") %>%
       mutate_dataset(dataname = "ADTTE", code = "ADTTE <- dplyr::filter(ADTTE, USUBJID %in% ADSL$USUBJID)") %>%
@@ -239,21 +243,21 @@ test_that("two datasets / datasets code", {
 
   expect_identical(
     data$get_code_class(TRUE)$get_code(),
-    "ADSL <- radsl(cached = TRUE)\nADTTE <- radtte(cached = TRUE)"
+    "ADSL <- synthetic_cdisc_data(\"rcd_2021_05_05\")$adsl\nADTTE <- synthetic_cdisc_data(\"rcd_2021_05_05\")$adtte"
   )
 
   expect_identical(
     get_code(data),
-    "ADSL <- radsl(cached = TRUE)\nADTTE <- radtte(cached = TRUE)\nADSL <- dplyr::filter(ADSL, SEX == \"F\")\nADTTE <- dplyr::filter(ADTTE, USUBJID %in% ADSL$USUBJID)\nADSL$x <- 1" #nolint
+    "ADSL <- synthetic_cdisc_data(\"rcd_2021_05_05\")$adsl\nADTTE <- synthetic_cdisc_data(\"rcd_2021_05_05\")$adtte\nADSL <- dplyr::filter(ADSL, SEX == \"F\")\nADTTE <- dplyr::filter(ADTTE, USUBJID %in% ADSL$USUBJID)\nADSL$x <- 1" #nolint
   )
 
   expect_identical(
     get_code(data, "ADTTE"),
-    "ADSL <- radsl(cached = TRUE)\nADTTE <- radtte(cached = TRUE)\nADSL <- dplyr::filter(ADSL, SEX == \"F\")\nADTTE <- dplyr::filter(ADTTE, USUBJID %in% ADSL$USUBJID)" #nolint
+    "ADSL <- synthetic_cdisc_data(\"rcd_2021_05_05\")$adsl\nADTTE <- synthetic_cdisc_data(\"rcd_2021_05_05\")$adtte\nADSL <- dplyr::filter(ADSL, SEX == \"F\")\nADTTE <- dplyr::filter(ADTTE, USUBJID %in% ADSL$USUBJID)" #nolint
   )
   expect_identical(
     get_code(data, "ADSL"),
-    "ADSL <- radsl(cached = TRUE)\nADTTE <- radtte(cached = TRUE)\nADSL <- dplyr::filter(ADSL, SEX == \"F\")\nADSL$x <- 1" #nolint
+    "ADSL <- synthetic_cdisc_data(\"rcd_2021_05_05\")$adsl\nADTTE <- synthetic_cdisc_data(\"rcd_2021_05_05\")$adtte\nADSL <- dplyr::filter(ADSL, SEX == \"F\")\nADSL$x <- 1" #nolint
   )
 
   expect_reference(
@@ -280,8 +284,13 @@ test_that("two datasets / datasets code", {
 
 # 4. dataset + connector / code for dataset -------------------------------
 test_that("dataset + connector / global code", {
-  adsl <- cdisc_dataset(dataname = "ADSL", x = ADSL, code = "ADSL <- radsl(cached = TRUE)")
-  adtte <- rcd_cdisc_dataset_connector("ADTTE", radtte, cached = TRUE, ADSL = adsl)
+  adsl <- cdisc_dataset(dataname = "ADSL", x = ADSL, code = "ADSL <- synthetic_cdisc_data(\"rcd_2021_05_05\")$adsl")
+  adtte_cf <- callable_function(
+    function() {
+      synthetic_cdisc_data("rcd_2021_05_05")$adtte
+    }
+  )
+  adtte <- cdisc_dataset_connector("ADTTE", adtte_cf, keys = get_cdisc_keys("ADSL"), vars = list(x = adsl))
 
   expect_silent(
     data <- cdisc_data(adsl, adtte, check = TRUE)
@@ -289,15 +298,15 @@ test_that("dataset + connector / global code", {
 
   expect_identical(
     get_code(data),
-    "ADSL <- radsl(cached = TRUE)\nADTTE <- radtte(ADSL = ADSL, cached = TRUE)"
+    "ADSL <- synthetic_cdisc_data(\"rcd_2021_05_05\")$adsl\nx <- ADSL\nADTTE <- (function() {\n    synthetic_cdisc_data(\"rcd_2021_05_05\")$adtte\n})()" #nolint
   )
   expect_identical(
     get_code(data, "ADSL"),
-    "ADSL <- radsl(cached = TRUE)"
+    "ADSL <- synthetic_cdisc_data(\"rcd_2021_05_05\")$adsl"
   )
   expect_identical(
     get_code(data, "ADTTE"),
-    "ADSL <- radsl(cached = TRUE)\nADTTE <- radtte(ADSL = ADSL, cached = TRUE)"
+    "x <- ADSL\nADTTE <- (function() {\n    synthetic_cdisc_data(\"rcd_2021_05_05\")$adtte\n})()"
   )
 
 
@@ -306,8 +315,8 @@ test_that("dataset + connector / global code", {
   expect_true(data$check())
 
   # MUTATE
-  adsl <- cdisc_dataset(dataname = "ADSL", x = ADSL, code = "ADSL <- radsl(cached = TRUE)")
-  adtte <- rcd_cdisc_dataset_connector("ADTTE", radtte, ADSL = adsl, cached = TRUE)
+  adsl <- cdisc_dataset(dataname = "ADSL", x = ADSL, code = "ADSL <- synthetic_cdisc_data(\"rcd_2021_05_05\")$adsl")
+  adtte <- cdisc_dataset_connector("ADTTE", adtte_cf, keys = get_cdisc_keys("ADSL"), vars = list(x = adsl))
 
   data <- cdisc_data(adsl, adtte, check = TRUE) %>%
     mutate_data(code = "ADSL <- dplyr::filter(ADSL, SEX == 'F')") %>%
@@ -320,37 +329,37 @@ test_that("dataset + connector / global code", {
 
   expect_identical(
     get_code(data),
-    "ADSL <- radsl(cached = TRUE)\nADTTE <- radtte(ADSL = ADSL, cached = TRUE)\nADSL <- dplyr::filter(ADSL, SEX == \"F\")\nADTTE <- dplyr::filter(ADTTE, USUBJID %in% ADSL$USUBJID)\nADSL$x <- 1" #nolint
+    "ADSL <- synthetic_cdisc_data(\"rcd_2021_05_05\")$adsl\nx <- ADSL\nADTTE <- (function() {\n    synthetic_cdisc_data(\"rcd_2021_05_05\")$adtte\n})()\nADSL <- dplyr::filter(ADSL, SEX == \"F\")\nADTTE <- dplyr::filter(ADTTE, USUBJID %in% ADSL$USUBJID)\nADSL$x <- 1" #nolint
   )
   expect_identical(
     get_code(data, "ADTTE"),
-    "ADSL <- radsl(cached = TRUE)\nADTTE <- radtte(ADSL = ADSL, cached = TRUE)\nADSL <- dplyr::filter(ADSL, SEX == \"F\")\nADTTE <- dplyr::filter(ADTTE, USUBJID %in% ADSL$USUBJID)" #nolint
+    "ADSL <- synthetic_cdisc_data(\"rcd_2021_05_05\")$adsl\nx <- ADSL\nADTTE <- (function() {\n    synthetic_cdisc_data(\"rcd_2021_05_05\")$adtte\n})()\nADSL <- dplyr::filter(ADSL, SEX == \"F\")\nADTTE <- dplyr::filter(ADTTE, USUBJID %in% ADSL$USUBJID)" #nolint
   )
   expect_identical(
     get_code(data, "ADSL"),
-    "ADSL <- radsl(cached = TRUE)\nADTTE <- radtte(ADSL = ADSL, cached = TRUE)\nADSL <- dplyr::filter(ADSL, SEX == \"F\")\nADSL$x <- 1" #nolint
+    "ADSL <- synthetic_cdisc_data(\"rcd_2021_05_05\")$adsl\nx <- ADSL\nADTTE <- (function() {\n    synthetic_cdisc_data(\"rcd_2021_05_05\")$adtte\n})()\nADSL <- dplyr::filter(ADSL, SEX == \"F\")\nADSL$x <- 1" #nolint
   )
   expect_identical(
     get_code(data),
-    "ADSL <- radsl(cached = TRUE)\nADTTE <- radtte(ADSL = ADSL, cached = TRUE)\nADSL <- dplyr::filter(ADSL, SEX == \"F\")\nADTTE <- dplyr::filter(ADTTE, USUBJID %in% ADSL$USUBJID)\nADSL$x <- 1" #nolint
+    "ADSL <- synthetic_cdisc_data(\"rcd_2021_05_05\")$adsl\nx <- ADSL\nADTTE <- (function() {\n    synthetic_cdisc_data(\"rcd_2021_05_05\")$adtte\n})()\nADSL <- dplyr::filter(ADSL, SEX == \"F\")\nADTTE <- dplyr::filter(ADTTE, USUBJID %in% ADSL$USUBJID)\nADSL$x <- 1" #nolint
   )
 
   expect_identical(
     data$get_code_class(TRUE)$get_code(),
-    "ADSL <- radsl(cached = TRUE)\nADTTE <- radtte(ADSL = ADSL, cached = TRUE)"
+    "ADSL <- synthetic_cdisc_data(\"rcd_2021_05_05\")$adsl\nx <- ADSL\nADTTE <- (function() {\n    synthetic_cdisc_data(\"rcd_2021_05_05\")$adtte\n})()" #nolint
   )
   expect_identical(
     data$get_code_class(TRUE)$get_code(dataname = "ADSL"),
-    "ADSL <- radsl(cached = TRUE)"
+    "ADSL <- synthetic_cdisc_data(\"rcd_2021_05_05\")$adsl"
   )
   expect_identical(
     data$get_code_class(TRUE)$get_code(dataname = "ADTTE"),
-    "ADSL <- radsl(cached = TRUE)\nADTTE <- radtte(ADSL = ADSL, cached = TRUE)"
+    "x <- ADSL\nADTTE <- (function() {\n    synthetic_cdisc_data(\"rcd_2021_05_05\")$adtte\n})()"
   )
 
   expect_identical(
     get_code(data, "ADTTE"),
-    "ADSL <- radsl(cached = TRUE)\nADTTE <- radtte(ADSL = ADSL, cached = TRUE)\nADSL <- dplyr::filter(ADSL, SEX == \"F\")\nADTTE <- dplyr::filter(ADTTE, USUBJID %in% ADSL$USUBJID)" #nolint
+    "ADSL <- synthetic_cdisc_data(\"rcd_2021_05_05\")$adsl\nx <- ADSL\nADTTE <- (function() {\n    synthetic_cdisc_data(\"rcd_2021_05_05\")$adtte\n})()\nADSL <- dplyr::filter(ADSL, SEX == \"F\")\nADTTE <- dplyr::filter(ADTTE, USUBJID %in% ADSL$USUBJID)" #nolint
   )
 
   expect_true(data$check())
@@ -362,12 +371,22 @@ test_that("dataset + connector / global code", {
 test_that("two datasets / datasets code", {
   adsl <- cdisc_dataset("ADSL", ADSL)
   adrs <- cdisc_dataset("ADRS", ADRS)
-  adtte <- rcd_cdisc_dataset_connector("ADTTE", radtte, ADSL = adsl, cached = TRUE)
-  adlb <- rcd_cdisc_dataset_connector("ADLB", radlb, ADSL = adsl, cached = TRUE)
+  adtte_cf <- callable_function(
+    function() {
+      synthetic_cdisc_data("rcd_2021_05_05")$adtte
+    }
+  )
+  adtte <- cdisc_dataset_connector("ADTTE", adtte_cf, keys = get_cdisc_keys("ADSL"), vars = list(x = adsl))
+  adlb_cf <- callable_function(
+    function() {
+      synthetic_cdisc_data("rcd_2021_05_05")$adlb
+    }
+  )
+  adlb <- cdisc_dataset_connector("ADLB", adlb_cf, keys = get_cdisc_keys("ADSL"), vars = list(x = adsl))
 
   expect_identical(
     get_code(adtte),
-    "ADTTE <- radtte(ADSL = ADSL, cached = TRUE)"
+    "x <- ADSL\nADTTE <- (function() {\n    synthetic_cdisc_data(\"rcd_2021_05_05\")$adtte\n})()"
   )
 
   data <- cdisc_data(
@@ -375,42 +394,42 @@ test_that("two datasets / datasets code", {
     adlb,
     adtte,
     adrs,
-    code = "ADSL <- radsl(cached = TRUE)\nADRS <- radrs(cached = TRUE)",
+    code = "ADSL <- synthetic_cdisc_data(\"rcd_2021_05_05\")$adsl\nADRS <- synthetic_cdisc_data(\"rcd_2021_05_05\")$adrs", #nolint
     check = TRUE)
 
   expect_identical(
     get_code(data),
-    "ADSL <- radsl(cached = TRUE)\nADRS <- radrs(cached = TRUE)\nADLB <- radlb(ADSL = ADSL, cached = TRUE)\nADTTE <- radtte(ADSL = ADSL, cached = TRUE)" # nolint
+    "ADSL <- synthetic_cdisc_data(\"rcd_2021_05_05\")$adsl\nADRS <- synthetic_cdisc_data(\"rcd_2021_05_05\")$adrs\nx <- ADSL\nADLB <- (function() {\n    synthetic_cdisc_data(\"rcd_2021_05_05\")$adlb\n})()\nx <- ADSL\nADTTE <- (function() {\n    synthetic_cdisc_data(\"rcd_2021_05_05\")$adtte\n})()" # nolint
   )
 
   expect_identical(
     get_code(data, "ADSL"),
-    "ADSL <- radsl(cached = TRUE)\nADRS <- radrs(cached = TRUE)"
+    "ADSL <- synthetic_cdisc_data(\"rcd_2021_05_05\")$adsl\nADRS <- synthetic_cdisc_data(\"rcd_2021_05_05\")$adrs"
   )
 
   expect_identical(
     get_code(data, "ADTTE"),
-    "ADSL <- radsl(cached = TRUE)\nADRS <- radrs(cached = TRUE)\nADTTE <- radtte(ADSL = ADSL, cached = TRUE)" # nolint
+    "ADSL <- synthetic_cdisc_data(\"rcd_2021_05_05\")$adsl\nADRS <- synthetic_cdisc_data(\"rcd_2021_05_05\")$adrs\nx <- ADSL\nx <- ADSL\nADTTE <- (function() {\n    synthetic_cdisc_data(\"rcd_2021_05_05\")$adtte\n})()" # nolint
   )
 
   expect_identical(
     data$get_code_class(TRUE)$get_code(),
-    "ADSL <- radsl(cached = TRUE)\nADRS <- radrs(cached = TRUE)\nADLB <- radlb(ADSL = ADSL, cached = TRUE)\nADTTE <- radtte(ADSL = ADSL, cached = TRUE)" # nolint
+    "ADSL <- synthetic_cdisc_data(\"rcd_2021_05_05\")$adsl\nADRS <- synthetic_cdisc_data(\"rcd_2021_05_05\")$adrs\nx <- ADSL\nADLB <- (function() {\n    synthetic_cdisc_data(\"rcd_2021_05_05\")$adlb\n})()\nx <- ADSL\nADTTE <- (function() {\n    synthetic_cdisc_data(\"rcd_2021_05_05\")$adtte\n})()" # nolint
   )
 
   expect_identical(
     data$get_code_class(TRUE)$get_code(dataname = "ADSL"),
-    "ADSL <- radsl(cached = TRUE)\nADRS <- radrs(cached = TRUE)"
+    "ADSL <- synthetic_cdisc_data(\"rcd_2021_05_05\")$adsl\nADRS <- synthetic_cdisc_data(\"rcd_2021_05_05\")$adrs"
   )
 
   expect_identical(
     data$get_code_class(TRUE)$get_code(dataname = "ADTTE"),
-    "ADSL <- radsl(cached = TRUE)\nADRS <- radrs(cached = TRUE)\nADTTE <- radtte(ADSL = ADSL, cached = TRUE)"
+    "ADSL <- synthetic_cdisc_data(\"rcd_2021_05_05\")$adsl\nADRS <- synthetic_cdisc_data(\"rcd_2021_05_05\")$adrs\nx <- ADSL\nx <- ADSL\nADTTE <- (function() {\n    synthetic_cdisc_data(\"rcd_2021_05_05\")$adtte\n})()" #nolint
   )
 
   expect_identical(
     data$get_code_class(FALSE)$get_code(),
-    "ADSL <- radsl(cached = TRUE)\nADRS <- radrs(cached = TRUE)\nADLB <- radlb(ADSL = ADSL, cached = TRUE)\nADTTE <- radtte(ADSL = ADSL, cached = TRUE)" # nolint
+    "ADSL <- synthetic_cdisc_data(\"rcd_2021_05_05\")$adsl\nADRS <- synthetic_cdisc_data(\"rcd_2021_05_05\")$adrs\nx <- ADSL\nADLB <- (function() {\n    synthetic_cdisc_data(\"rcd_2021_05_05\")$adlb\n})()\nx <- ADSL\nADTTE <- (function() {\n    synthetic_cdisc_data(\"rcd_2021_05_05\")$adtte\n})()" # nolint
   )
 
   load_dataset(adtte)
@@ -419,38 +438,38 @@ test_that("two datasets / datasets code", {
 
   # MUTATE
   adsl <- cdisc_dataset("ADSL", ADSL)
-  adtte <- rcd_cdisc_dataset_connector("ADTTE", radtte, ADSL = adsl, cached = TRUE)
-  data <- cdisc_data(adsl, adtte, code = "ADSL <- radsl(cached = TRUE)", check = TRUE) %>%
+  adtte <- cdisc_dataset_connector("ADTTE", adtte_cf, keys = get_cdisc_keys("ADSL"), vars = list(x = adsl))
+  data <- cdisc_data(adsl, adtte, code = "ADSL <- synthetic_cdisc_data(\"rcd_2021_05_05\")$adsl", check = TRUE) %>%
     mutate_data(code = "ADSL <- dplyr::filter(ADSL, SEX == 'F')") %>%
     mutate_dataset(dataname = "ADTTE", code = "ADTTE <- dplyr::filter(ADTTE, USUBJID %in% ADSL$USUBJID)") %>%
     mutate_dataset(dataname = "ADSL", code = "ADSL$x <- 1")
 
   expect_identical(
     get_code(data),
-    "ADSL <- radsl(cached = TRUE)\nADTTE <- radtte(ADSL = ADSL, cached = TRUE)\nADSL <- dplyr::filter(ADSL, SEX == \"F\")\nADTTE <- dplyr::filter(ADTTE, USUBJID %in% ADSL$USUBJID)\nADSL$x <- 1" #nolint
+    "ADSL <- synthetic_cdisc_data(\"rcd_2021_05_05\")$adsl\nx <- ADSL\nADTTE <- (function() {\n    synthetic_cdisc_data(\"rcd_2021_05_05\")$adtte\n})()\nADSL <- dplyr::filter(ADSL, SEX == \"F\")\nADTTE <- dplyr::filter(ADTTE, USUBJID %in% ADSL$USUBJID)\nADSL$x <- 1" #nolint
   )
 
   expect_identical(
     get_code(data, "ADSL"),
-    "ADSL <- radsl(cached = TRUE)\nADTTE <- radtte(ADSL = ADSL, cached = TRUE)\nADSL <- dplyr::filter(ADSL, SEX == \"F\")\nADSL$x <- 1" #nolint
+    "ADSL <- synthetic_cdisc_data(\"rcd_2021_05_05\")$adsl\nx <- ADSL\nADTTE <- (function() {\n    synthetic_cdisc_data(\"rcd_2021_05_05\")$adtte\n})()\nADSL <- dplyr::filter(ADSL, SEX == \"F\")\nADSL$x <- 1" #nolint
   )
 
   expect_identical(
     get_code(data, "ADTTE"),
-    "ADSL <- radsl(cached = TRUE)\nADTTE <- radtte(ADSL = ADSL, cached = TRUE)\nADSL <- dplyr::filter(ADSL, SEX == \"F\")\nADTTE <- dplyr::filter(ADTTE, USUBJID %in% ADSL$USUBJID)" #nolint
+    "ADSL <- synthetic_cdisc_data(\"rcd_2021_05_05\")$adsl\nx <- ADSL\nADTTE <- (function() {\n    synthetic_cdisc_data(\"rcd_2021_05_05\")$adtte\n})()\nADSL <- dplyr::filter(ADSL, SEX == \"F\")\nADTTE <- dplyr::filter(ADTTE, USUBJID %in% ADSL$USUBJID)" #nolint
   )
 
   expect_identical(
     data$get_code_class(TRUE)$get_code(),
-    "ADSL <- radsl(cached = TRUE)\nADTTE <- radtte(ADSL = ADSL, cached = TRUE)"
+    "ADSL <- synthetic_cdisc_data(\"rcd_2021_05_05\")$adsl\nx <- ADSL\nADTTE <- (function() {\n    synthetic_cdisc_data(\"rcd_2021_05_05\")$adtte\n})()" #nolint
   )
   expect_identical(
     data$get_code_class(TRUE)$get_code(dataname = "ADSL"),
-    "ADSL <- radsl(cached = TRUE)"
+    "ADSL <- synthetic_cdisc_data(\"rcd_2021_05_05\")$adsl"
   )
   expect_identical(
     data$get_code_class(TRUE)$get_code(dataname = "ADTTE"),
-    "ADSL <- radsl(cached = TRUE)\nADTTE <- radtte(ADSL = ADSL, cached = TRUE)"
+    "ADSL <- synthetic_cdisc_data(\"rcd_2021_05_05\")$adsl\nx <- ADSL\nADTTE <- (function() {\n    synthetic_cdisc_data(\"rcd_2021_05_05\")$adtte\n})()" #nolint
   )
 
   load_dataset(adtte)
@@ -464,10 +483,25 @@ test_that("two datasets / datasets code", {
 
 # 5. only connectors ------
 test_that("only connectors", {
-  adsl <- rcd_cdisc_dataset_connector("ADSL", radsl, cached = TRUE)
-  adtte <- rcd_cdisc_dataset_connector("ADTTE", radtte, ADSL = adsl, cached = TRUE)
+  adsl_cf <- callable_function(
+    function() {
+      synthetic_cdisc_data("latest")$adsl
+    }
+  )
+  adsl <- cdisc_dataset_connector(
+    dataname = "ADSL",
+    pull_callable = adsl_cf,
+    keys = get_cdisc_keys("ADSL")
+  )
+  adtte_cf <- callable_function(
+    function() {
+      synthetic_cdisc_data("rcd_2021_05_05")$adtte
+    }
+  )
+  adtte <- cdisc_dataset_connector("ADTTE", adtte_cf, keys = get_cdisc_keys("ADSL"), vars = list(x = adsl))
+
   expect_error(
-    cdisc_data(adsl, adtte, code = "ADSL <- radsl(cached = TRUE)", check = TRUE),
+    cdisc_data(adsl, adtte, code = "ADSL <- synthetic_cdisc_data(\"rcd_2021_05_05\")$adsl", check = TRUE),
     "Connectors are reproducible by default and setting 'code' argument might break it"
   )
 
@@ -483,24 +517,24 @@ test_that("only connectors", {
 
   expect_identical(
     data$get_code_class(TRUE)$get_code(),
-    "ADSL <- radsl(cached = TRUE)\nADTTE <- radtte(ADSL = ADSL, cached = TRUE)"
+    "ADSL <- (function() {\n    synthetic_cdisc_data(\"latest\")$adsl\n})()\nx <- ADSL\nADTTE <- (function() {\n    synthetic_cdisc_data(\"rcd_2021_05_05\")$adtte\n})()" #nolint
   )
   expect_identical(
     data$get_code_class(TRUE)$get_code("ADSL"),
-    "ADSL <- radsl(cached = TRUE)"
+    "ADSL <- (function() {\n    synthetic_cdisc_data(\"latest\")$adsl\n})()"
   )
   expect_identical(
     data$get_code_class(TRUE)$get_code("ADTTE"),
-    "ADSL <- radsl(cached = TRUE)\nADTTE <- radtte(ADSL = ADSL, cached = TRUE)"
+    "x <- ADSL\nADTTE <- (function() {\n    synthetic_cdisc_data(\"rcd_2021_05_05\")$adtte\n})()"
   )
 
   expect_identical(
     get_code(data, "ADSL"),
-    "ADSL <- radsl(cached = TRUE)\nADSL <- dplyr::filter(ADSL, SEX == \"F\")\nADSL$x <- 1"
+    "ADSL <- (function() {\n    synthetic_cdisc_data(\"latest\")$adsl\n})()\nx <- ADSL\nADSL <- dplyr::filter(ADSL, SEX == \"F\")\nADSL$x <- 1" #nolint
   )
   expect_identical(
     get_code(data, "ADTTE"),
-    "ADSL <- radsl(cached = TRUE)\nADTTE <- radtte(ADSL = ADSL, cached = TRUE)\nADSL <- dplyr::filter(ADSL, SEX == \"F\")\nADTTE <- dplyr::filter(ADTTE, USUBJID %in% ADSL$USUBJID)" # nolint
+    "ADSL <- (function() {\n    synthetic_cdisc_data(\"latest\")$adsl\n})()\nx <- ADSL\nADTTE <- (function() {\n    synthetic_cdisc_data(\"rcd_2021_05_05\")$adtte\n})()\nADSL <- dplyr::filter(ADSL, SEX == \"F\")\nADTTE <- dplyr::filter(ADTTE, USUBJID %in% ADSL$USUBJID)" # nolint
   )
 
   load_dataset(adsl)
@@ -512,10 +546,25 @@ test_that("only connectors", {
 
 # 6. mutate -----
 test_that("only connectors", {
-  adsl <- rcd_cdisc_dataset_connector("ADSL", radsl, cached = TRUE)
-  adtte <- rcd_cdisc_dataset_connector("ADTTE", radtte, ADSL = adsl, cached = TRUE)
+  adsl_cf <- callable_function(
+    function() {
+      synthetic_cdisc_data("latest")$adsl
+    }
+  )
+  adsl <- cdisc_dataset_connector(
+    dataname = "ADSL",
+    pull_callable = adsl_cf,
+    keys = get_cdisc_keys("ADSL")
+  )
+  adtte_cf <- callable_function(
+    function() {
+      synthetic_cdisc_data("rcd_2021_05_05")$adtte
+    }
+  )
+  adtte <- cdisc_dataset_connector("ADTTE", adtte_cf, keys = get_cdisc_keys("ADSL"), vars = list(x = adsl))
+
   expect_error(
-    cdisc_data(adsl, adtte, code = "ADSL <- radsl(cached = TRUE)", check = TRUE),
+    cdisc_data(adsl, adtte, code = "ADSL <- synthetic_cdisc_data(\"latest\")$adsl", check = TRUE),
     "Connectors are reproducible by default and setting 'code' argument might break it"
   )
 
@@ -542,14 +591,14 @@ test_that("Basic example - check overall code", {
       cdisc_dataset("ADSL", ADSL),
       cdisc_dataset("ARG1", ARG1, keys = get_cdisc_keys("ADSL")),
       cdisc_dataset("ARG2", ARG2, keys = get_cdisc_keys("ADSL")),
-      code = "ADSL <- ARG1 <- ARG2 <- cadsl;",
+      code = "ADSL <- ARG1 <- ARG2 <- synthetic_cdisc_data(\"rcd_2021_05_05\")$adsl;",
       check = TRUE
     )
   )
 
   expect_error(
     cdisc_data(
-      cdisc_dataset("ADSL", ADSL, code = "ADSL <- radsl(cached = TRUE)"),
+      cdisc_dataset("ADSL", ADSL, code = "ADSL <- synthetic_cdisc_data(\"rcd_2021_05_05\")$adsl"),
       cdisc_dataset("ARG1", ARG1, keys = get_cdisc_keys("ADSL")),
       cdisc_dataset("ARG2", ARG2, keys = get_cdisc_keys("ADSL")),
       code = "ARG1 <- ARG2 <- cadsl;",
@@ -560,14 +609,17 @@ test_that("Basic example - check overall code", {
 
   expect_error(
     cdisc_data(
-      cdisc_dataset("ADSL", ADSL, code = "ADSL <- radsl(cached = TRUE)"),
+      cdisc_dataset("ADSL", ADSL, code = "ADSL <- synthetic_cdisc_data(\"rcd_2021_05_05\")$adsl"),
       cdisc_dataset(
         dataname = "ARG1",
         x = dplyr::mutate(ADSL, x1 = 1),
         keys = get_cdisc_keys("ADSL"),
-        code = "ARG1 <- radsl(cached = TRUE)"
+        code = "ARG1 <- synthetic_cdisc_data(\"rcd_2021_05_05\")$adsl"
       ),
-      cdisc_dataset("ARG2", ADSL, keys = get_cdisc_keys("ADSL"), code = "ARG2 <- radsl(cached = TRUE)"),
+      cdisc_dataset(
+        "ARG2", ADSL, keys = get_cdisc_keys("ADSL"),
+        code = "ARG2 <- synthetic_cdisc_data(\"rcd_2021_05_05\")$adsl"
+      ),
       check = TRUE
     ),
     "Reproducibility check failed."
@@ -581,29 +633,33 @@ test_that("Basic example - dataset depending on other dataset", {
 
   expect_silent(
     cdisc_data(
-      cdisc_dataset("ADSL", ADSL, code = "ADSL <- cadsl"),
+      cdisc_dataset("ADSL", ADSL, code = "ADSL <- synthetic_cdisc_data(\"rcd_2021_05_05\")$adsl"),
       check = TRUE
     )
   )
   expect_error(
     cdisc_data(
-      cdisc_dataset("ADSL", ADSL, code = "ADSL <- radsl(cached = TRUE)"),
-      cdisc_dataset("ARG1", ARG1, keys = get_cdisc_keys("ADSL"), code = "ARG1 <- radsl(cached = TRUE)"),
-      cdisc_dataset("ARG2", ARG2, keys = get_cdisc_keys("ADSL"), code = "ARG2 <- radsl(cached = TRUE)"),
-      code = "ADSL <- ARG1 <- ARG2 <- cadsl;",
+      cdisc_dataset("ADSL", ADSL, code = "ADSL <- synthetic_cdisc_data(\"rcd_2021_05_05\")$adsl"),
+      cdisc_dataset("ARG1", ARG1, keys = get_cdisc_keys("ADSL"), code = "ARG1 <- synthetic_cdisc_data(\"rcd_2021_05_05\")$adsl"), #nolint
+      cdisc_dataset("ARG2", ARG2, keys = get_cdisc_keys("ADSL"), code = "ARG2 <- synthetic_cdisc_data(\"rcd_2021_05_05\")$adsl"), #nolint
+      code = "ADSL <- ARG1 <- ARG2 <- synthetic_cdisc_data(\"rcd_2021_05_05\")$adsl;",
       check = TRUE
     ),
     "'code' argument should be specified only in the 'cdisc_data' or in 'cdisc_dataset' but not in both"
   )
 
-  arg2 <- cdisc_dataset(dataname = "ARG2", x = ARG2, keys = get_cdisc_keys("ADSL"), code = "ARG2 <- cadsl")
+  arg2 <- cdisc_dataset(
+    dataname = "ARG2", x = ARG2, keys = get_cdisc_keys("ADSL"),
+    code = "ARG2 <- synthetic_cdisc_data(\"rcd_2021_05_05\")$adsl"
+  )
 
   arg1 <- cdisc_dataset(
     dataname = "ARG1",
     x = ARG1,
     keys = get_cdisc_keys("ADSL"),
     code = "ARG1 <- ARG2",
-    vars = list(ARG2 = arg2))
+    vars = list(ARG2 = arg2)
+  )
 
   adsl <- cdisc_dataset(dataname = "ADSL", x = ADSL, code = "ADSL <- ARG2", vars = list(ARG2 = arg2))
 
@@ -630,7 +686,7 @@ test_that("Basic example - missing code for dataset", {
   expect_silent(
     cdisc_data(
       cdisc_dataset("ADSL", ADSL),
-      code = c("ADSL <- cadsl"),
+      code = c("ADSL <- synthetic_cdisc_data(\"rcd_2021_05_05\")$adsl"),
       check = TRUE
     )
   )
@@ -638,7 +694,7 @@ test_that("Basic example - missing code for dataset", {
   expect_silent(
     cdisc_data(
       cdisc_dataset("ADSL", ADSL),
-      code = c("ADSL <- cadsl"),
+      code = c("ADSL <- synthetic_cdisc_data(\"rcd_2021_05_05\")$adsl"),
       check = FALSE
     )
   )
@@ -649,7 +705,9 @@ test_that("Basic example - with line break code and check", {
   expect_true(is.data.frame(ARG1))
   expect_true(is.data.frame(ARG2))
 
-  expect_silent(cdisc_data(cdisc_dataset("ADSL", ADSL), code = "ADSL <- cadsl\n ADSL$x1 <- 1", check = FALSE))
+  expect_silent(cdisc_data(cdisc_dataset("ADSL", ADSL),
+                           code = "ADSL <- synthetic_cdisc_data(\"rcd_2021_05_05\")$adsl\n ADSL$x1 <- 1", check = FALSE)
+                )
 })
 
 test_that("Naming list elements", {
@@ -755,7 +813,10 @@ test_that("Error - objects differs", {
 
 test_that("Error - ADSL is missing in cdisc_data", {
   expect_error({
-    x <- cdisc_data(cdisc_dataset("ADTTE", ADTTE), code = "ADTTE <- cadtte", check = FALSE)
+    x <- cdisc_data(
+      cdisc_dataset("ADTTE", ADTTE),
+      code = "ADTTE <- synthetic_cdisc_data(\"rcd_2021_05_05\")$adtte", check = FALSE
+    )
     x$check_metadata()
   },
   "ADSL dataset is missing."

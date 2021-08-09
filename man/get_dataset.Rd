@@ -24,38 +24,42 @@ get_dataset(x, dataname)
 (\code{Dataset})
 }
 \description{
-\ifelse{html}{\out{<a href='https://www.tidyverse.org/lifecycle/#experimental'><img src='figures/lifecycle-experimental.svg' alt='Experimental lifecycle'></a>}}{\strong{Experimental}}
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
 
 Get dataset from \code{DatasetConnector}
 }
 \examples{
 
 # DatasetConnector --------
-library(random.cdisc.data)
-ADSL <- radsl(cached = TRUE)
+library(scda)
+pull_fun_adae <- callable_function(
+  function() {synthetic_cdisc_data("latest")$adae}
+)
 
-dc <- rcd_dataset_connector(dataname = "ADAE", fun = radae,
-                            ADSL = ADSL, max_n_aes = 2L)
+ADSL <- synthetic_cdisc_data("latest")$adsl
 
+dc <- dataset_connector(dataname = "ADAE", pull_callable = pull_fun_adae,
+                            keys = get_cdisc_keys("ADSL"))
 load_dataset(dc)
 get_dataset(dc)
 
 # Dataset --------
-library(random.cdisc.data)
-ADSL <- radsl(cached = TRUE)
+library(scda)
+ADSL <- synthetic_cdisc_data("latest")$adsl
 x <- dataset("ADSL", ADSL)
 
 get_dataset(x)
 
 # RelationalData  (not containing connectors) --------
+library(scda)
 library(random.cdisc.data)
 adsl <- cdisc_dataset(dataname = "ADSL",
-                      x = radsl(cached = TRUE),
-                      code = "library(random.cdisc.data)\nADSL <- radsl(cached = TRUE)")
+                      x = synthetic_cdisc_data("latest")$adsl,
+                      code = "library(scda)\nADSL <- synthetic_cdisc_data(\"latest\")$adsl")
 
 adae <- cdisc_dataset(dataname = "ADAE",
-                       x = radae(cached = TRUE),
-                       code = "library(random.cdisc.data)\nADTTE <- radae(cached = TRUE)")
+                       x = synthetic_cdisc_data("latest")$adsl,
+                       code = "library(scda)\nADTTE <- synthetic_cdisc_data(\"latest\")$adsl")
 
 rd <- teal:::RelationalData$new(adsl, adae)
 get_dataset(rd, "ADSL")

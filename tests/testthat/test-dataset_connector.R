@@ -1,8 +1,13 @@
+library(scda)
 library(random.cdisc.data)
+# test csv_dataset_connector
+temp_file_csv <- tempfile(fileext = ".csv")
+on.exit(unlink(temp_file_csv))
+
 # Test DatasetConnector ------
 test_that("DatasetConnector", {
-  fun <- callable_function(radsl)
-  fun$set_args(list(N = 5, seed = 1, cached = TRUE))
+
+  fun <- callable_function(function() synthetic_cdisc_data("rcd_2021_05_05")$adsl)
 
   expect_error(
     dataset_connector(pull_callable = fun),
@@ -20,12 +25,12 @@ test_that("DatasetConnector", {
 
   expect_identical(
     x1$get_code(deparse = TRUE),
-    "ADSL <- radsl(N = 5, seed = 1, cached = TRUE)"
+    "ADSL <- (function() synthetic_cdisc_data(\"rcd_2021_05_05\")$adsl)()"
   )
 
-  expect_identical(
+  expect_equal(
     x1$get_code(deparse = FALSE),
-    as.list(as.call(parse(text = "ADSL <- radsl(N = 5, seed = 1, cached = TRUE)")))
+    as.list(as.call(parse(text = 'ADSL <- (function() synthetic_cdisc_data("rcd_2021_05_05")$adsl)()')))
   )
 
   expect_error(
@@ -57,7 +62,7 @@ test_that("DatasetConnector", {
 
   expect_identical(
     get_raw_data(x1),
-    radsl(N = 5, seed = 1, cached = TRUE)
+    synthetic_cdisc_data("rcd_2021_05_05")$adsl
   )
 
   expect_silent(
@@ -188,10 +193,6 @@ test_that("rds_dataset_connector", {
   )
 })
 
-# test csv_dataset_connector
-temp_file_csv <- tempfile(fileext = ".csv")
-on.exit(unlink(temp_file_csv))
-
 # test with unexpected input
 test_that("csv_dataset_connector not expected input", {
 
@@ -280,8 +281,8 @@ test_that("csv_dataset_connector random.cdisc.data", {
 
 # non-standard dataset
 test_that("csv_dataset_connector non-standard datasets multi/space character delim", {
-  ADSL <- radsl(cached = TRUE) # nolint
-  ADSL_ns <- data.frame( # nolint
+  test_adsl <- radsl(cached = TRUE)
+  test_adsl_ns <- data.frame(
     STUDYID = "A",
     USUBJID = paste0("A", 1:3),
     SUBJID = 1:3,
@@ -290,27 +291,33 @@ test_that("csv_dataset_connector non-standard datasets multi/space character del
   )
 
   # next check can pass arguments to read_delim (using '|||')
-  write.table(ADSL_ns, file = temp_file_csv, row.names = FALSE, sep = "|||")
+  write.table(test_adsl_ns, file = temp_file_csv, row.names = FALSE, sep = "|||")
   x <- csv_cdisc_dataset_connector("ADSL", file = temp_file_csv, delim = "|||")
-  expect_warning(x$pull())
-  expect_true(is_pulled(x))
-  expect_identical(get_dataname(x), "ADSL")
-  expect_identical(get_code(x), paste0("ADSL <- readr::read_delim(file = \"", temp_file_csv, "\", delim = \"|||\")"))
+  x$pull()
+  testthat::expect_true(is_pulled(x))
+  testthat::expect_identical(get_dataname(x), "ADSL")
+  testthat::expect_identical(
+    get_code(x),
+    paste0("ADSL <- readr::read_delim(file = \"", temp_file_csv, "\", delim = \"|||\")")
+  )
   data <- get_raw_data(x)
-  expect_true(is.data.frame(data))
-  expect_identical(nrow(data), nrow(ADSL_ns))
-  expect_false(identical(colnames(data), colnames(ADSL_ns)))
+  testthat::expect_true(is.data.frame(data))
+  testthat::expect_identical(nrow(data), nrow(test_adsl_ns))
+  testthat::expect_equal(colnames(x$get_raw_data()), colnames(test_adsl_ns))
 
   # next check can pass arguments to read_delim (using space ' ')
-  write.table(ADSL, file = temp_file_csv, row.names = FALSE, sep = " ")
+  write.table(test_adsl, file = temp_file_csv, row.names = FALSE, sep = " ")
   x <- csv_cdisc_dataset_connector("ADSL", file = temp_file_csv, keys = get_cdisc_keys("ADSL"), delim = " ")
-  expect_warning(x$pull())
-  expect_true(is_pulled(x))
-  expect_identical(get_dataname(x), "ADSL")
-  expect_identical(get_code(x), paste0("ADSL <- readr::read_delim(file = \"", temp_file_csv, "\", delim = \" \")"))
+  testthat::expect_warning(x$pull())
+  testthat::expect_true(is_pulled(x))
+  testthat::expect_identical(get_dataname(x), "ADSL")
+  testthat::expect_identical(
+    get_code(x), paste0("ADSL <- readr::read_delim(file = \"",
+    temp_file_csv, "\", delim = \" \")")
+  )
   data <- get_raw_data(x)
-  expect_true(is.data.frame(data))
-  expect_false(identical(data, ADSL))
+  testthat::expect_true(is.data.frame(data))
+  testthat::expect_false(identical(data, test_adsl))
 })
 
 # column names attributes
@@ -430,6 +437,9 @@ test_that("script_cdisc_dataset_connector", {
 })
 
 test_that("rice_dataset", {
+  if (!"rice" %in% installed.packages()) {
+    testthat::skip("rice package not available")
+  }
   x <- rice_data(
     rice_dataset_connector("ADSL", "/path/to/ADSL", keys = get_cdisc_keys("ADSL")),
     rice_cdisc_dataset_connector("ADLB", "/path/to/ADLB")

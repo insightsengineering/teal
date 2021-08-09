@@ -4,38 +4,24 @@
 \alias{RelationalDataConnector}
 \title{Manage multiple and \code{DatasetConnector} of the same type.}
 \description{
-\ifelse{html}{\out{<a href='https://www.tidyverse.org/lifecycle/#experimental'><img src='figures/lifecycle-experimental.svg' alt='Experimental lifecycle'></a>}}{\strong{Experimental}}
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
 
 Class manages \code{DatasetConnector} to specify additional dynamic arguments and to
 open/close connection.
 }
 \examples{
-library(random.cdisc.data)
-adsl <- rcd_cdisc_dataset_connector("ADSL", radsl)
-adlb <- rcd_cdisc_dataset_connector("ADLB", radlb, ADSL = adsl)
+library(scda)
+adsl_cf <- callable_function(function() synthetic_cdisc_data("latest")$adsl)
+adsl <- cdisc_dataset_connector(dataname = "ADSL",
+                                pull_callable = adsl_cf,
+                                keys = get_cdisc_keys("ADSL"))
+adlb_cf <- callable_function(function() synthetic_cdisc_data("latest")$adlb)
+adlb <- cdisc_dataset_connector(dataname = "ADLB",
+                                pull_callable = adlb_cf,
+                                keys = get_cdisc_keys("ADLB"))
 con <- teal:::rcd_connection()
-
-ui <- function(id, ...) {
-  ns <- NS(id)
-  tagList(
-    numericInput(ns("seed"), "Choose seed", min = 1, max = 1000, value = 1),
-    sliderInput(ns("N"), "Choose number of observations", min = 1, max = 400, value = 10)
-  )
-}
-
 x <- teal:::RelationalDataConnector$new(connection = con, connectors = list(adsl, adlb))
 
-x$set_ui(ui)
-x$set_server(function(input, output, session, connectors, connection) {
-  lapply(connectors, function(connector) {
-    if (get_dataname(connector) == "ADSL") {
-      set_args(connector, args = list(seed = input$seed, N = input$N))
-    } else {
-      set_args(connector, args = list(seed = input$seed))
-    }
-    connector$pull(try = TRUE)
-  })
-})
 \dontrun{
 x$launch()
 x$get_datasets()

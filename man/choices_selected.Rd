@@ -31,7 +31,7 @@ Object of class \code{choices_selected} and of type list which contains the spec
 \code{choices}, \code{selected}, \code{keep_order} and \code{fixed}.
 }
 \description{
-\ifelse{html}{\out{<a href='https://www.tidyverse.org/lifecycle/#maturing'><img src='figures/lifecycle-maturing.svg' alt='Maturing lifecycle'></a>}}{\strong{Maturing}}
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#maturing}{\figure{lifecycle-maturing.svg}{options: alt='[Maturing]'}}}{\strong{[Maturing]}}
 Construct a single list containing available choices, the default selected value, and
 additional settings such as to order the choices with the selected elements appearing first
 or whether to block the user from making selections. Can be used in \code{ui} input elements
@@ -52,8 +52,8 @@ choices_selected(
    selected = "X"
 )
 
-library(random.cdisc.data)
-ADSL <- radsl(cached = TRUE)
+library(scda)
+ADSL <- synthetic_cdisc_data("latest")$adsl
 choices_selected(variable_choices(ADSL), "SEX")
 
 # How to select nothing

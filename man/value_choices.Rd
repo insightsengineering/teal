@@ -40,11 +40,11 @@ See examples for more details.}
 named character vector or \code{delayed_data} object
 }
 \description{
-\ifelse{html}{\out{<a href='https://www.tidyverse.org/lifecycle/#maturing'><img src='figures/lifecycle-maturing.svg' alt='Maturing lifecycle'></a>}}{\strong{Maturing}}
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#maturing}{\figure{lifecycle-maturing.svg}{options: alt='[Maturing]'}}}{\strong{[Maturing]}}
 }
 \examples{
-library(random.cdisc.data)
-ADRS <- radrs(cached = TRUE)
+library(scda)
+ADRS <- synthetic_cdisc_data("latest")$adrs
 
 value_choices(ADRS, "PARAMCD", "PARAM", subset = c("BESRSPI", "INVET"))
 value_choices(ADRS, c("PARAMCD", "ARMCD"), c("PARAM", "ARM"))
