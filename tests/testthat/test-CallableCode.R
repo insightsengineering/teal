@@ -3,18 +3,21 @@ testthat::test_that("Objects can be generated from the code", {
   testthat::expect_equal(y_code$get_call(), c("7"))
   testthat::expect_identical(y_code$run(), 7)
 
-  # we are losing one \n character - code is parsed then joind with \n
-  y2_code <- callable_code("13\n\n7")
-  testthat::expect_equal(y2_code$get_call(), c("13\n7"))
-  testthat::expect_identical(y2_code$run(), 7)
-
   a_code <- callable_code("library(dplyr); starwars")
   testthat::expect_s3_class(a_code$run(), "data.frame")
+})
 
+testthat::test_that("CallableCode can use objects from namespaces other than global", {
   # direct usage of function from package
   y_code <- callable_code("datasets::iris")
   expect_equal(y_code$get_call(), c("datasets::iris"))
   expect_identical(y_code$run(), datasets::iris)
+})
+
+testthat::test_that("get_call transforms double new lines into one new line", {
+  y2_code <- callable_code("13\n\n7")
+  testthat::expect_equal(y2_code$get_call(), c("13\n7"))
+  testthat::expect_identical(y2_code$run(), 7)
 })
 
 test_that("Connector objects contain the incorrect code", {
