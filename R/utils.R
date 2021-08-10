@@ -195,7 +195,7 @@ srv_shiny_module_arguments <- function(input, output, session, datasets, modules
 #'   )
 #' }
 check_in_range <- function(subinterval, range, pre_msg = "") {
-  epsilon <- 1e-12 #needed for floating point arithmetic
+  epsilon <- .Machine$double.eps^0.5 #needed for floating point arithmetic; same value as in base::all.equal()
 
   if ((length(subinterval) != 2)) {
     stop(
