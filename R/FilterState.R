@@ -1545,9 +1545,6 @@ DatetimeFilterState <- R6::R6Class( # nolint
     #' @param session (`Shiny`)\cr session object
     #' @return nothing
     server = function(input, output, session) {
-      get_client_timezone(ns = session$ns)
-      private$timezone <- input$timezone
-
       private$observers$selection <- observeEvent(
         ignoreNULL = FALSE, # ignoreNULL: we don't want to ignore NULL when nothing is selected in the `selectInput`,
         ignoreInit = TRUE, # ignoreInit: should not matter because we set the UI with the desired initial state
