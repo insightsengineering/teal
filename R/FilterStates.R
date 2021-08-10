@@ -874,7 +874,7 @@ MAEFilterStates <- R6::R6Class( # nolint
           choices = NULL,
           options = shinyWidgets::pickerOptions(
             liveSearch = TRUE,
-            noneSelectedText = "Select colData variable to filter"
+            noneSelectedText = "Select subject variable"
           )
         )
       }
@@ -1101,7 +1101,7 @@ SEFilterStates <- R6::R6Class( # nolint
           choices = NULL,
           options = shinyWidgets::pickerOptions(
             liveSearch = TRUE,
-            noneSelectedText = "Select rowData variable to filter"
+            noneSelectedText = "Select gene variable"
           )
         )
       }
@@ -1114,7 +1114,7 @@ SEFilterStates <- R6::R6Class( # nolint
           choices = NULL,
           options = shinyWidgets::pickerOptions(
             liveSearch = TRUE,
-            noneSelectedText = "Select colData variable to filter"
+            noneSelectedText = "Select sample variable"
           )
         )
 
