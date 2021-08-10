@@ -1430,11 +1430,12 @@ DatetimeFilterState <- R6::R6Class( # nolint
       var_range <- range(x, finite = TRUE)
       private$set_choices(var_range)
       self$set_selected(var_range)
-      private$timezone <- if (shiny::isRunning()) {
+
+      if (shiny::isRunning()) {
         session <- getDefaultReactiveDomain()
-        session$userData$timezone
-      } else {
-        Sys.timezone()
+        if (!is.null(session$userData$timezone)) {
+          private$timezone <- session$userData$timezone
+        }
       }
 
       return(invisible(self))
@@ -1597,7 +1598,7 @@ DatetimeFilterState <- R6::R6Class( # nolint
     }
   ),
   private = list(
-    timezone = character(0),
+    timezone = Sys.timezone(),
 
     log_state = function() {
       .log(
