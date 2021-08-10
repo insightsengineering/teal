@@ -66,6 +66,12 @@ DatasetConnector <- R6::R6Class( #nolint
       self$set_dataset_label(label)
       self$set_keys(keys)
 
+      if (!is_empty(code)) {
+        # just needs a dummy Dataset object to store mutate code, hence col = 1
+        private$dataset <- Dataset$new(dataname = self$get_dataname(), x = data.frame(col = 1))
+        private$dataset$mutate(code = code, vars = vars, force_delay = TRUE)
+      }
+
       return(invisible(self))
     },
 
