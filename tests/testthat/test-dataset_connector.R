@@ -1011,3 +1011,42 @@ testthat::test_that("Pulling an already pulled DatasetConnector after mutating i
   dc$pull()
   testthat::expect_equal(dc$get_code(), pre_pull_code)
 })
+
+testthat::test_that("Initializing DatasetConnector with code argument works", {
+  test_ds1 <- Dataset$new("head_mtcars", head(mtcars), code = "head_mtcars <- head(mtcars)")
+
+  pull_fun <- callable_function(data.frame)
+  pull_fun$set_args(args = list(head_letters = head(letters)))
+  t_dc <- dataset_connector(
+    "test_dc",
+    pull_fun,
+    code = "test_dc$tail_letters = tail(letters)",
+    vars = list(test_ds1 = test_ds1)
+  )
+  testthat::expect_equal(
+    t_dc$get_code(),
+    "head_mtcars <- head(mtcars)\ntest_ds1 <- head_mtcars\ntest_dc <- data.frame(head_letters = c(\"a\", \"b\", \"c\", \"d\", \"e\", \"f\"))\ntest_dc$tail_letters = tail(letters)" #nolint
+  )
+  testthat::expect_equal(
+    attr(t_dc$get_code_class()$code[[1]], "dataname"),
+    "head_mtcars"
+  )
+  testthat::expect_equal(
+    attr(t_dc$get_code_class()$code[[2]], "dataname"),
+    "head_mtcars"
+  )
+  testthat::expect_equal(
+    attr(t_dc$get_code_class()$code[[3]], "dataname"),
+    "test_dc"
+  )
+  # mutate code passed in as string values will not have dataname attribute.
+  testthat::expect_equal(
+    attr(t_dc$get_code_class()$code[[4]], "dataname"),
+    character(0)
+  )
+  t_dc$pull()
+  testthat::expect_equal(
+    t_dc$get_raw_data(),
+    data.frame(head_letters = head(letters), tail_letters = tail(letters))
+  )
+})
