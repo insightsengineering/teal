@@ -332,13 +332,11 @@ Dataset <- R6::R6Class( # nolint
     #' @description
     #' Get internal \code{vars} object
     #'
-    #' @param include_mutate \code{logical} whether to include mutate code in output
-    #'
     #' @return `\code{list}`
-    get_vars = function(include_mutate = TRUE) {
+    get_vars = function() {
       return(c(
         private$vars,
-        if (include_mutate) private$mutate_vars[!names(private$mutate_vars) %in% names(private$vars)])
+        private$mutate_vars[!names(private$mutate_vars) %in% names(private$vars)])
       )
     },
     #' @description

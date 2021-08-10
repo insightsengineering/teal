@@ -551,16 +551,9 @@ Get internal \code{CodeClass} object
 \subsection{Method \code{get_vars()}}{
 Get internal \code{vars} object
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{Dataset$get_vars(include_mutate = TRUE)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{Dataset$get_vars()}\if{html}{\out{</div>}}
 }
 
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{include_mutate}}{\code{logical} whether to include mutate code in output}
-}
-\if{html}{\out{</div>}}
-}
 \subsection{Returns}{
 \verb{\code{list}}
 }
