@@ -145,6 +145,18 @@ init <- function(data,
   res <- list(
     ui = ui_teal_with_splash(id = id, data = data, title = title, header = header, footer = footer),
     server = function(input, output, session) {
+      # set timezone in shiny app
+      # timezone is set in the early beginning so it will be available also
+      # for DDL and all shiny modules
+      get_client_timezone(session$ns)
+      observeEvent(
+        eventExpr = input$timezone,
+        once = TRUE,
+        handlerExpr = {
+          session$userData$timezone <- input$timezone
+        }
+      )
+
       # copy object so that load won't be shared between the session
       data <- data$clone(deep = TRUE)
       srv_teal_with_splash(
