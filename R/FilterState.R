@@ -263,6 +263,12 @@ FilterState <- R6::R6Class( # nolint
       private$selected <- reactiveVal(NULL)
       private$na_count <- sum(is.na(x))
       private$keep_na <- reactiveVal(value = FALSE)
+      private$timezone <- if (shiny::isRunning()) {
+        session <- getDefaultReactiveDomain()
+        session$userData$timezone
+      } else {
+        Sys.timezone()
+      }
 
       return(invisible(self))
     },
