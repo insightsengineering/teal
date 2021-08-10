@@ -46,6 +46,7 @@ be automatically derived.
 \item \href{#method-new}{\code{Dataset$new()}}
 \item \href{#method-recreate}{\code{Dataset$recreate()}}
 \item \href{#method-print}{\code{Dataset$print()}}
+\item \href{#method-get_dataset}{\code{Dataset$get_dataset()}}
 \item \href{#method-get_attrs}{\code{Dataset$get_attrs()}}
 \item \href{#method-get_raw_data}{\code{Dataset$get_raw_data()}}
 \item \href{#method-get_numeric_colnames}{\code{Dataset$get_numeric_colnames()}}
@@ -67,6 +68,10 @@ be automatically derived.
 \item \href{#method-set_code}{\code{Dataset$set_code()}}
 \item \href{#method-get_code}{\code{Dataset$get_code()}}
 \item \href{#method-get_code_class}{\code{Dataset$get_code_class()}}
+\item \href{#method-get_mutate_code_class}{\code{Dataset$get_mutate_code_class()}}
+\item \href{#method-get_vars}{\code{Dataset$get_vars()}}
+\item \href{#method-get_mutate_vars}{\code{Dataset$get_mutate_vars()}}
+\item \href{#method-is_mutate_delayed}{\code{Dataset$is_mutate_delayed()}}
 \item \href{#method-mutate}{\code{Dataset$mutate()}}
 \item \href{#method-check}{\code{Dataset$check()}}
 \item \href{#method-check_keys}{\code{Dataset$check_keys()}}
@@ -132,7 +137,7 @@ Recreate this Dataset with its current attributes.
   dataname = self$get_dataname(),
   x = self$get_raw_data(),
   keys = self$get_keys(),
-  code = self$get_code_class(),
+  code = private$code,
   label = self$get_dataset_label(),
   vars = list()
 )}\if{html}{\out{</div>}}
@@ -191,6 +196,19 @@ Prints this Dataset.
 }
 \subsection{Returns}{
 invisibly self
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-get_dataset"></a>}}
+\if{latex}{\out{\hypertarget{method-get_dataset}{}}}
+\subsection{Method \code{get_dataset()}}{
+Performs any delayed mutate calls before returning self.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{Dataset$get_dataset()}\if{html}{\out{</div>}}
+}
+
+\subsection{Returns}{
+dataset (\code{Dataset})
 }
 }
 \if{html}{\out{<hr>}}
@@ -515,33 +533,75 @@ Get internal \code{CodeClass} object
 }
 }
 \if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-get_mutate_code_class"></a>}}
+\if{latex}{\out{\hypertarget{method-get_mutate_code_class}{}}}
+\subsection{Method \code{get_mutate_code_class()}}{
+Get internal \code{CodeClass} object
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{Dataset$get_mutate_code_class()}\if{html}{\out{</div>}}
+}
+
+\subsection{Returns}{
+\verb{\code{CodeClass}}
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-get_vars"></a>}}
+\if{latex}{\out{\hypertarget{method-get_vars}{}}}
+\subsection{Method \code{get_vars()}}{
+Get internal \code{vars} object
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{Dataset$get_vars()}\if{html}{\out{</div>}}
+}
+
+\subsection{Returns}{
+\verb{\code{list}}
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-get_mutate_vars"></a>}}
+\if{latex}{\out{\hypertarget{method-get_mutate_vars}{}}}
+\subsection{Method \code{get_mutate_vars()}}{
+Get internal \code{mutate_vars} object
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{Dataset$get_mutate_vars()}\if{html}{\out{</div>}}
+}
+
+\subsection{Returns}{
+\verb{\code{list}}
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-is_mutate_delayed"></a>}}
+\if{latex}{\out{\hypertarget{method-is_mutate_delayed}{}}}
+\subsection{Method \code{is_mutate_delayed()}}{
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{Dataset$is_mutate_delayed()}\if{html}{\out{</div>}}
+}
+
+\subsection{Returns}{
+\code{logical}
+}
+}
+\if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-mutate"></a>}}
 \if{latex}{\out{\hypertarget{method-mutate}{}}}
 \subsection{Method \code{mutate()}}{
 Mutate dataset by code
-
-Either code or script must be provided, but not both.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{Dataset$mutate(code, vars = list())}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{Dataset$mutate(code, vars = list(), force_delay = FALSE)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{code}}{(\code{character})\cr
-A character string defining the code needed to produce the data set in \code{x}.
-\code{initialize()} and \code{recreate()} accept code as \code{CodeClass} also
-which is needed to preserve the code uniqueness and correct order.}
+\item{\code{code}}{(\code{CodeClass}) or (\code{character}) R expressions to be executed}
 
-\item{\code{vars}}{(named \code{list})) \cr
-In case when this object code depends on other \code{Dataset} object(s) or
-other constant value, this/these object(s) should be included as named
-element(s) of the list. For example if this object code needs \code{ADSL}
-object we should specify \verb{vars = list(ADSL = <adsl object>)}.
-It's recommended to include \code{Dataset} or \code{DatasetConnector} objects to
-the \code{vars} list to preserve reproducibility. Please note that \code{vars}
-are included to this object as local \code{vars} and they cannot be modified
-within another dataset.}
+\item{\code{vars}}{a named list of R objects that \code{code} depends on to execute}
+
+\item{\code{force_delay}}{(\code{logical}) used by the containing DatasetConnector object
+
+Either code or script must be provided, but not both.}
 }
 \if{html}{\out{</div>}}
 }
@@ -640,15 +700,20 @@ The objects of this class are cloneable with this method.
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="Dataset" data-id="get_column_labels">}\href{../../teal/html/Dataset.html#method-get_column_labels}{\code{teal::Dataset$get_column_labels()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="Dataset" data-id="get_dataname">}\href{../../teal/html/Dataset.html#method-get_dataname}{\code{teal::Dataset$get_dataname()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="Dataset" data-id="get_datanames">}\href{../../teal/html/Dataset.html#method-get_datanames}{\code{teal::Dataset$get_datanames()}}\out{</span>}
+\item \out{<span class="pkg-link" data-pkg="teal" data-topic="Dataset" data-id="get_dataset">}\href{../../teal/html/Dataset.html#method-get_dataset}{\code{teal::Dataset$get_dataset()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="Dataset" data-id="get_dataset_label">}\href{../../teal/html/Dataset.html#method-get_dataset_label}{\code{teal::Dataset$get_dataset_label()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="Dataset" data-id="get_factor_colnames">}\href{../../teal/html/Dataset.html#method-get_factor_colnames}{\code{teal::Dataset$get_factor_colnames()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="Dataset" data-id="get_hash">}\href{../../teal/html/Dataset.html#method-get_hash}{\code{teal::Dataset$get_hash()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="Dataset" data-id="get_keys">}\href{../../teal/html/Dataset.html#method-get_keys}{\code{teal::Dataset$get_keys()}}\out{</span>}
+\item \out{<span class="pkg-link" data-pkg="teal" data-topic="Dataset" data-id="get_mutate_code_class">}\href{../../teal/html/Dataset.html#method-get_mutate_code_class}{\code{teal::Dataset$get_mutate_code_class()}}\out{</span>}
+\item \out{<span class="pkg-link" data-pkg="teal" data-topic="Dataset" data-id="get_mutate_vars">}\href{../../teal/html/Dataset.html#method-get_mutate_vars}{\code{teal::Dataset$get_mutate_vars()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="Dataset" data-id="get_numeric_colnames">}\href{../../teal/html/Dataset.html#method-get_numeric_colnames}{\code{teal::Dataset$get_numeric_colnames()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="Dataset" data-id="get_raw_data">}\href{../../teal/html/Dataset.html#method-get_raw_data}{\code{teal::Dataset$get_raw_data()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="Dataset" data-id="get_row_labels">}\href{../../teal/html/Dataset.html#method-get_row_labels}{\code{teal::Dataset$get_row_labels()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="Dataset" data-id="get_rownames">}\href{../../teal/html/Dataset.html#method-get_rownames}{\code{teal::Dataset$get_rownames()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="Dataset" data-id="get_var_r6">}\href{../../teal/html/Dataset.html#method-get_var_r6}{\code{teal::Dataset$get_var_r6()}}\out{</span>}
+\item \out{<span class="pkg-link" data-pkg="teal" data-topic="Dataset" data-id="get_vars">}\href{../../teal/html/Dataset.html#method-get_vars}{\code{teal::Dataset$get_vars()}}\out{</span>}
+\item \out{<span class="pkg-link" data-pkg="teal" data-topic="Dataset" data-id="is_mutate_delayed">}\href{../../teal/html/Dataset.html#method-is_mutate_delayed}{\code{teal::Dataset$is_mutate_delayed()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="Dataset" data-id="is_pulled">}\href{../../teal/html/Dataset.html#method-is_pulled}{\code{teal::Dataset$is_pulled()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="Dataset" data-id="mutate">}\href{../../teal/html/Dataset.html#method-mutate}{\code{teal::Dataset$mutate()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="Dataset" data-id="recreate">}\href{../../teal/html/Dataset.html#method-recreate}{\code{teal::Dataset$recreate()}}\out{</span>}

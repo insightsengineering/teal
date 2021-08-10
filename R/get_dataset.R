@@ -49,7 +49,7 @@ get_dataset.Dataset <- function(x, dataname = NULL) { # nolint
   if (!is.null(dataname)) {
     warning("'dataname' argument ignored - Dataset can contain only one dataset.")
   }
-  return(x)
+  return(x$get_dataset())
 }
 
 #' @rdname get_dataset
