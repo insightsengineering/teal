@@ -1,3 +1,5 @@
+library(random.cdisc.data)
+
 test_that("Proper argument types", {
   choices <- c("c1", "c2", "c3")
   selected <- c("c1", "c2")
@@ -95,4 +97,77 @@ test_that("resolve_delayed select_spec works", {
   ds <- teal:::CDISCFilteredData$new()
   isolate(ds$set_dataset(dataset("ADSL", ADSL)))
   expect_identical(expected_spec, isolate(resolve_delayed(delayed_spec, ds)))
+})
+
+ADSL <- radsl(cached = TRUE) # nolint
+ADTTE <- radtte(cached = TRUE) # nolint
+data <- cdisc_data(
+  cdisc_dataset("ADSL", ADSL),
+  cdisc_dataset("ADTTE", ADTTE)
+)
+
+ds <- teal:::CDISCFilteredData$new()
+isolate(filtered_data_set(data, ds))
+
+vc_hard <- variable_choices("ADSL", subset = c("STUDYID", "USUBJID"))
+vc_hard_exp <- structure(
+  list(data = "ADSL", subset = c("STUDYID", "USUBJID"), key = NULL),
+  class = c("delayed_variable_choices", "delayed_data", "choices_labeled")
+)
+
+vc_hard_short <- variable_choices("ADSL", subset = "STUDYID")
+vc_hard_short_exp <- structure(
+  list(data = "ADSL", subset = "STUDYID", key = NULL),
+  class = c("delayed_variable_choices", "delayed_data", "choices_labeled")
+)
+
+vc_fun <- variable_choices("ADSL", subset = function(data) colnames(data)[1:2])
+vc_fun_exp <- structure(
+  list(data = "ADSL", subset = function(data) colnames(data)[1:2], key = NULL),
+  class = c("delayed_variable_choices", "delayed_data", "choices_labeled")
+)
+
+vc_fun_short <- variable_choices("ADSL", subset = function(data) colnames(data)[1])
+vc_fun_short_exp <- structure(
+  list(data = "ADSL", subset = function(data) colnames(data)[1], key = NULL),
+  class = c("delayed_variable_choices", "delayed_data", "choices_labeled")
+)
+
+testthat::test_that("delayed version of select_spec", {
+  # hard-coded choices & selected
+  obj <- select_spec(vc_hard, selected = vc_hard_short, multiple = FALSE)
+  testthat::expect_equal(
+    obj,
+    structure(
+      list(
+        choices = vc_hard_exp,
+        selected = vc_hard_short_exp,
+        always_selected = NULL,
+        multiple = FALSE, fixed = FALSE, label = NULL),
+      class = c("delayed_select_spec", "delayed_data", "select_spec")
+    )
+  )
+
+  res_obj <- isolate(resolve_delayed(obj, datasets = ds))
+  exp_obj <- select_spec(
+    variable_choices(ADSL, subset = c("STUDYID", "USUBJID"), key = get_cdisc_keys("ADSL")),
+    selected = variable_choices(ADSL, "STUDYID", key = get_cdisc_keys("ADSL")))
+  testthat::expect_equal(res_obj, exp_obj)
+
+  # functional choices & selected
+  obj <- select_spec(vc_fun, selected = vc_fun_short, multiple = FALSE)
+  testthat::expect_equal(
+    obj,
+    structure(
+      list(
+        choices = vc_fun_exp,
+        selected = vc_fun_short,
+        always_selected = NULL,
+        multiple = FALSE, fixed = FALSE, label = NULL),
+      class = c("delayed_select_spec", "delayed_data", "select_spec")
+    )
+  )
+
+  res_obj <- isolate(resolve_delayed(obj, datasets = ds))
+  testthat::expect_equal(res_obj, exp_obj)
 })

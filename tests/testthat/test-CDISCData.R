@@ -711,7 +711,6 @@ test_that("Basic example - with line break code and check", {
 })
 
 test_that("Naming list elements", {
-
   expect_identical(names(get_datasets(cdisc_data(cdisc_dataset("ADSL", ADSL)))), "ADSL")
   expect_identical(
     names(get_datasets(cdisc_data(
@@ -722,7 +721,6 @@ test_that("Naming list elements", {
 })
 
 test_that("List values", {
-
   result <- cdisc_data(cdisc_dataset("ADSL", ADSL))
 
   adsl_yaml <- yaml::yaml.load_file(system.file("metadata/ADSL.yml", package = "random.cdisc.data", mustWork = TRUE))
