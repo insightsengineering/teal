@@ -302,11 +302,11 @@ test_that("dataset + connector / global code", {
   )
   expect_identical(
     get_code(data, "ADSL"),
-    "ADSL <- synthetic_cdisc_data(\"rcd_2021_05_05\")$adsl"
+    "ADSL <- synthetic_cdisc_data(\"rcd_2021_05_05\")$adsl\nx <- ADSL"
   )
   expect_identical(
     get_code(data, "ADTTE"),
-    "x <- ADSL\nADTTE <- (function() {\n    synthetic_cdisc_data(\"rcd_2021_05_05\")$adtte\n})()"
+    "ADTTE <- (function() {\n    synthetic_cdisc_data(\"rcd_2021_05_05\")$adtte\n})()"
   )
 
 
@@ -350,11 +350,11 @@ test_that("dataset + connector / global code", {
   )
   expect_identical(
     data$get_code_class(TRUE)$get_code(dataname = "ADSL"),
-    "ADSL <- synthetic_cdisc_data(\"rcd_2021_05_05\")$adsl"
+    "ADSL <- synthetic_cdisc_data(\"rcd_2021_05_05\")$adsl\nx <- ADSL"
   )
   expect_identical(
     data$get_code_class(TRUE)$get_code(dataname = "ADTTE"),
-    "x <- ADSL\nADTTE <- (function() {\n    synthetic_cdisc_data(\"rcd_2021_05_05\")$adtte\n})()"
+    "ADTTE <- (function() {\n    synthetic_cdisc_data(\"rcd_2021_05_05\")$adtte\n})()"
   )
 
   expect_identical(
@@ -399,37 +399,37 @@ test_that("two datasets / datasets code", {
 
   expect_identical(
     get_code(data),
-    "ADSL <- synthetic_cdisc_data(\"rcd_2021_05_05\")$adsl\nADRS <- synthetic_cdisc_data(\"rcd_2021_05_05\")$adrs\nx <- ADSL\nADLB <- (function() {\n    synthetic_cdisc_data(\"rcd_2021_05_05\")$adlb\n})()\nx <- ADSL\nADTTE <- (function() {\n    synthetic_cdisc_data(\"rcd_2021_05_05\")$adtte\n})()" # nolint
+    "ADSL <- synthetic_cdisc_data(\"rcd_2021_05_05\")$adsl\nADRS <- synthetic_cdisc_data(\"rcd_2021_05_05\")$adrs\nx <- ADSL\nADLB <- (function() {\n    synthetic_cdisc_data(\"rcd_2021_05_05\")$adlb\n})()\nADTTE <- (function() {\n    synthetic_cdisc_data(\"rcd_2021_05_05\")$adtte\n})()" # nolint
   )
 
   expect_identical(
     get_code(data, "ADSL"),
-    "ADSL <- synthetic_cdisc_data(\"rcd_2021_05_05\")$adsl\nADRS <- synthetic_cdisc_data(\"rcd_2021_05_05\")$adrs"
+    "ADSL <- synthetic_cdisc_data(\"rcd_2021_05_05\")$adsl\nADRS <- synthetic_cdisc_data(\"rcd_2021_05_05\")$adrs\nx <- ADSL" #nolint
   )
 
   expect_identical(
     get_code(data, "ADTTE"),
-    "ADSL <- synthetic_cdisc_data(\"rcd_2021_05_05\")$adsl\nADRS <- synthetic_cdisc_data(\"rcd_2021_05_05\")$adrs\nx <- ADSL\nx <- ADSL\nADTTE <- (function() {\n    synthetic_cdisc_data(\"rcd_2021_05_05\")$adtte\n})()" # nolint
+    "ADSL <- synthetic_cdisc_data(\"rcd_2021_05_05\")$adsl\nADRS <- synthetic_cdisc_data(\"rcd_2021_05_05\")$adrs\nADTTE <- (function() {\n    synthetic_cdisc_data(\"rcd_2021_05_05\")$adtte\n})()" # nolint
   )
 
   expect_identical(
     data$get_code_class(TRUE)$get_code(),
-    "ADSL <- synthetic_cdisc_data(\"rcd_2021_05_05\")$adsl\nADRS <- synthetic_cdisc_data(\"rcd_2021_05_05\")$adrs\nx <- ADSL\nADLB <- (function() {\n    synthetic_cdisc_data(\"rcd_2021_05_05\")$adlb\n})()\nx <- ADSL\nADTTE <- (function() {\n    synthetic_cdisc_data(\"rcd_2021_05_05\")$adtte\n})()" # nolint
+    "ADSL <- synthetic_cdisc_data(\"rcd_2021_05_05\")$adsl\nADRS <- synthetic_cdisc_data(\"rcd_2021_05_05\")$adrs\nx <- ADSL\nADLB <- (function() {\n    synthetic_cdisc_data(\"rcd_2021_05_05\")$adlb\n})()\nADTTE <- (function() {\n    synthetic_cdisc_data(\"rcd_2021_05_05\")$adtte\n})()" # nolint
   )
 
   expect_identical(
     data$get_code_class(TRUE)$get_code(dataname = "ADSL"),
-    "ADSL <- synthetic_cdisc_data(\"rcd_2021_05_05\")$adsl\nADRS <- synthetic_cdisc_data(\"rcd_2021_05_05\")$adrs"
+    "ADSL <- synthetic_cdisc_data(\"rcd_2021_05_05\")$adsl\nADRS <- synthetic_cdisc_data(\"rcd_2021_05_05\")$adrs\nx <- ADSL" #nolint
   )
 
   expect_identical(
     data$get_code_class(TRUE)$get_code(dataname = "ADTTE"),
-    "ADSL <- synthetic_cdisc_data(\"rcd_2021_05_05\")$adsl\nADRS <- synthetic_cdisc_data(\"rcd_2021_05_05\")$adrs\nx <- ADSL\nx <- ADSL\nADTTE <- (function() {\n    synthetic_cdisc_data(\"rcd_2021_05_05\")$adtte\n})()" #nolint
+    "ADSL <- synthetic_cdisc_data(\"rcd_2021_05_05\")$adsl\nADRS <- synthetic_cdisc_data(\"rcd_2021_05_05\")$adrs\nADTTE <- (function() {\n    synthetic_cdisc_data(\"rcd_2021_05_05\")$adtte\n})()" #nolint
   )
 
   expect_identical(
     data$get_code_class(FALSE)$get_code(),
-    "ADSL <- synthetic_cdisc_data(\"rcd_2021_05_05\")$adsl\nADRS <- synthetic_cdisc_data(\"rcd_2021_05_05\")$adrs\nx <- ADSL\nADLB <- (function() {\n    synthetic_cdisc_data(\"rcd_2021_05_05\")$adlb\n})()\nx <- ADSL\nADTTE <- (function() {\n    synthetic_cdisc_data(\"rcd_2021_05_05\")$adtte\n})()" # nolint
+    "ADSL <- synthetic_cdisc_data(\"rcd_2021_05_05\")$adsl\nADRS <- synthetic_cdisc_data(\"rcd_2021_05_05\")$adrs\nx <- ADSL\nADLB <- (function() {\n    synthetic_cdisc_data(\"rcd_2021_05_05\")$adlb\n})()\nADTTE <- (function() {\n    synthetic_cdisc_data(\"rcd_2021_05_05\")$adtte\n})()" # nolint
   )
 
   load_dataset(adtte)
@@ -465,11 +465,11 @@ test_that("two datasets / datasets code", {
   )
   expect_identical(
     data$get_code_class(TRUE)$get_code(dataname = "ADSL"),
-    "ADSL <- synthetic_cdisc_data(\"rcd_2021_05_05\")$adsl"
+    "ADSL <- synthetic_cdisc_data(\"rcd_2021_05_05\")$adsl\nx <- ADSL"
   )
   expect_identical(
     data$get_code_class(TRUE)$get_code(dataname = "ADTTE"),
-    "ADSL <- synthetic_cdisc_data(\"rcd_2021_05_05\")$adsl\nx <- ADSL\nADTTE <- (function() {\n    synthetic_cdisc_data(\"rcd_2021_05_05\")$adtte\n})()" #nolint
+    "ADSL <- synthetic_cdisc_data(\"rcd_2021_05_05\")$adsl\nADTTE <- (function() {\n    synthetic_cdisc_data(\"rcd_2021_05_05\")$adtte\n})()" #nolint
   )
 
   load_dataset(adtte)
@@ -521,11 +521,11 @@ test_that("only connectors", {
   )
   expect_identical(
     data$get_code_class(TRUE)$get_code("ADSL"),
-    "ADSL <- (function() {\n    synthetic_cdisc_data(\"latest\")$adsl\n})()"
+    "ADSL <- (function() {\n    synthetic_cdisc_data(\"latest\")$adsl\n})()\nx <- ADSL"
   )
   expect_identical(
     data$get_code_class(TRUE)$get_code("ADTTE"),
-    "x <- ADSL\nADTTE <- (function() {\n    synthetic_cdisc_data(\"rcd_2021_05_05\")$adtte\n})()"
+    "ADTTE <- (function() {\n    synthetic_cdisc_data(\"rcd_2021_05_05\")$adtte\n})()"
   )
 
   expect_identical(

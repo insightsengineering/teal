@@ -70,12 +70,11 @@ Dataset <- R6::R6Class( # nolint
       private$.row_labels <- c() # not yet defined in rtables
 
       private$set_dataname(dataname)
-      private$set_var_r6(vars)
       self$set_vars(vars)
       self$set_dataset_label(label)
       self$set_keys(keys)
+      private$mutate_code <- CodeClass$new()
       private$calculate_hash()
-
       # needed if recreating dataset - we need to preserve code order and uniqueness
       private$code <- CodeClass$new()
       if (is.character(code)) {
@@ -86,6 +85,7 @@ Dataset <- R6::R6Class( # nolint
 
       return(invisible(self))
     },
+
     #' @description
     #' Recreate this Dataset with its current attributes.
     #'
@@ -93,9 +93,11 @@ Dataset <- R6::R6Class( # nolint
     recreate = function(dataname = self$get_dataname(),
                         x = self$get_raw_data(),
                         keys = self$get_keys(),
-                        code = self$get_code_class(),
+                        code = private$code,
                         label = self$get_dataset_label(),
                         vars = list()) {
+
+      mutate_code <- private$mutate_code
 
       res <- self$initialize(
         dataname = dataname,
@@ -105,6 +107,11 @@ Dataset <- R6::R6Class( # nolint
         label = label,
         vars = vars
       )
+
+      if (!is.null(mutate_code)) {
+        # vars argument not needed because it was not overridden
+        res$mutate(code = mutate_code, force_delay = TRUE)
+      }
 
       return(res)
     },
@@ -126,6 +133,16 @@ Dataset <- R6::R6Class( # nolint
       invisible(self)
     },
     # ___ getters ====
+    #' @description
+    #' Performs any delayed mutate calls before returning self.
+    #'
+    #' @return dataset (\code{Dataset})
+    get_dataset = function() {
+      if (self$is_mutate_delayed() && !private$is_any_dependency_delayed()) {
+        private$mutate_eager()
+      }
+      return(self)
+    },
     #' @description
     #' Get all dataset attributes
     #' @return (named `list`) with dataset attributes
@@ -254,24 +271,7 @@ Dataset <- R6::R6Class( # nolint
     #'
     #' @return (`self`) invisibly for chaining
     set_vars = function(vars) {
-      stopifnot(is_fully_named_list(vars))
-      private$set_var_r6(vars)
-
-      if (length(vars) > 0) {
-        # now allowing overriding variable names
-        over_rides <- names(vars)[vapply(
-          names(vars), function(var_name) {
-            var_name %in% names(private$vars) &&
-              !identical(private$vars[[var_name]], vars[[var_name]])
-          },
-          FUN.VALUE = logical(1)
-        )]
-        if (length(over_rides) > 0) {
-          stop(paste("Variable name(s) already used:", paste(over_rides, collapse = ", ")))
-        }
-        private$vars <- c(private$vars[!names(private$vars) %in% names(vars)], vars)
-      }
-
+      private$set_vars_internal(vars, is_mutate_vars = FALSE)
       return(invisible(NULL))
     },
     #' @description
@@ -301,8 +301,8 @@ Dataset <- R6::R6Class( # nolint
     #' @return optionally deparsed \code{call} object
     get_code = function(deparse = TRUE) {
       stopifnot(is_logical_single(deparse))
-
-      return(self$get_code_class()$get_code(deparse = deparse))
+      res <- self$get_code_class()$get_code(deparse = deparse)
+      return(res)
     },
     #' @description
     #' Get internal \code{CodeClass} object
@@ -310,49 +310,81 @@ Dataset <- R6::R6Class( # nolint
     #' @return `\code{CodeClass}`
     get_code_class = function() {
       res <- CodeClass$new()
+      # precise order matters
       res$append(list_to_code_class(private$vars))
+      res$append(list_to_code_class(private$mutate_vars))
       res$append(private$code)
+      res$append(private$mutate_code)
 
       return(res)
+    },
+    #' @description
+    #' Get internal \code{CodeClass} object
+    #'
+    #' @return `\code{CodeClass}`
+    get_mutate_code_class = function() {
+      res <- CodeClass$new()
+      res$append(list_to_code_class(private$mutate_vars))
+      res$append(private$mutate_code)
+
+      return(res)
+    },
+    #' @description
+    #' Get internal \code{vars} object
+    #'
+    #' @return `\code{list}`
+    get_vars = function() {
+      return(c(
+        private$vars,
+        private$mutate_vars[!names(private$mutate_vars) %in% names(private$vars)])
+      )
+    },
+    #' @description
+    #' Get internal \code{mutate_vars} object
+    #'
+    #' @return `\code{list}`
+    get_mutate_vars = function() {
+      return(private$mutate_vars)
+    },
+
+    #'
+    #' @return \code{logical}
+    is_mutate_delayed = function() {
+      return(!is_empty(private$mutate_code$code))
     },
 
     # ___ mutate ====
     #' @description
     #' Mutate dataset by code
     #'
+    #' @param code (\code{CodeClass}) or (\code{character}) R expressions to be executed
+    #' @param vars a named list of R objects that \code{code} depends on to execute
+    #' @param force_delay (\code{logical}) used by the containing DatasetConnector object
+    #'
     #' Either code or script must be provided, but not both.
     #'
     #' @return (`self`) invisibly for chaining
-    mutate = function(code, vars = list()) {
-      self$set_vars(vars)
+    mutate = function(code, vars = list(), force_delay = FALSE) {
+      stopifnot(is_logical_single(force_delay))
+      stopifnot(is_fully_named_list(vars))
 
       if (inherits(code, "PythonCodeClass")) {
+        self$set_vars(vars)
         self$set_code(code$get_code())
         new_df <- code$eval(dataname = self$get_dataname())
+
+        # dataset is recreated by replacing data by mutated object
+        # mutation code is added to the code which replicates the data
+        self$recreate(
+          x = new_df,
+          vars = list()
+        )
       } else {
-        # environment needs also this var to mutate self
-        code_container <- CodeClass$new()
-        code_container$set_code(
-          code = code,
-          dataname = self$get_dataname()
-        )
-        new_df <- private$execute_code(
-          code = code_container,
-          vars = c(private$vars, setNames(list(self), self$get_dataname()))
-        )
-
-        # code set after successful evaluation
-        # otherwise code != dataset
-        self$set_code(code)
+        private$mutate_delayed(code, vars)
+        if (! (private$is_any_dependency_delayed(vars) || force_delay)) {
+          private$mutate_eager()
+        }
       }
-
-      # dataset is recreated by replacing data by mutated object
-      # mutation code is added to the code which replicates the data
-      # because new_code contains also code of the
-      self$recreate(
-        x = new_df,
-        vars = list()
-      )
 
       return(invisible(self))
     },
@@ -434,9 +466,51 @@ Dataset <- R6::R6Class( # nolint
     var_r6 = list(),
     dataset_label = character(0),
     .keys = character(0),
+    mutate_code = NULL, # CodeClass after initialization
+    mutate_vars = list(),
     data_hash = character(0),
 
     ## __Private Methods ====
+    mutate_delayed = function(code, vars) {
+      private$set_vars_internal(vars, is_mutate_vars = TRUE)
+      if (is(code, "CodeClass")) {
+        private$mutate_code$append(code)
+      } else (
+        private$mutate_code$set_code(
+          code,
+          deps = names(vars)
+        )
+      )
+      return(invisible(self))
+    },
+
+    mutate_eager = function() {
+      new_df <- private$execute_code(
+        code = private$mutate_code,
+        vars = c(
+          private$vars,
+          # if they have the same name, then they are guaranteed to be identical objects.
+          private$mutate_vars[!names(private$mutate_vars) %in% names(private$vars)],
+          setNames(list(self), self$get_dataname())
+        )
+      )
+
+      # code set after successful evaluation
+      # otherwise code != dataset
+      private$code$append(private$mutate_code)
+      self$set_vars(private$mutate_vars)
+      private$mutate_code <- CodeClass$new()
+      private$mutate_vars <- list()
+
+      # dataset is recreated by replacing data by mutated object
+      # mutation code is added to the code which replicates the data
+      # because new_code contains also code of the
+      self$recreate(
+        x = new_df,
+        vars = list()
+      )
+    },
+
     # need to have a custom deep_clone because one of the key fields are reference-type object
     # in particular: code is a R6 object that wouldn't be cloned using default clone(deep = T)
     deep_clone = function(name, value) {
@@ -455,6 +529,49 @@ Dataset <- R6::R6Class( # nolint
       return(return_cols)
     },
 
+    is_any_dependency_delayed = function(vars = list()) {
+      any(vapply(
+        c(private$var_r6, vars),
+        FUN = function(var) {
+          if (is(var, "DatasetConnector")) {
+            (! var$is_pulled()) || var$is_mutate_delayed()
+          } else if (is(var, "Dataset")) {
+            var$is_mutate_delayed()
+          } else {
+            FALSE
+          }
+        },
+        FUN.VALUE = logical(1))
+      )
+    },
+
+    set_vars_internal = function(vars, is_mutate_vars = FALSE) {
+      stopifnot(is_fully_named_list(vars))
+
+      total_vars <- c(private$vars, private$mutate_vars)
+
+      if (length(vars) > 0) {
+        # not allowing overriding variable names
+        over_rides <- names(vars)[vapply(
+          names(vars), function(var_name) {
+            var_name %in% names(total_vars) &&
+              !identical(total_vars[[var_name]], vars[[var_name]])
+          },
+          FUN.VALUE = logical(1)
+        )]
+        if (length(over_rides) > 0) {
+          stop(paste("Variable name(s) already used:", paste(over_rides, collapse = ", ")))
+        }
+        if (is_mutate_vars) {
+          private$mutate_vars <- c(private$mutate_vars[!names(private$mutate_vars) %in% names(vars)], vars)
+        } else {
+          private$vars <- c(private$vars[!names(private$vars) %in% names(vars)], vars)
+        }
+      }
+      # only adding dependencies if checks passed
+      private$set_var_r6(vars)
+      return(invisible(NULL))
+    },
 
     # Evaluate script code to modify data or to reproduce data
     #
@@ -523,6 +640,9 @@ Dataset <- R6::R6Class( # nolint
               stop("Circular dependencies detected")
             }
           }
+          # this may cause duplicates.
+          # as of now, no reason why it makes any difference
+          # so nothing is done
           private$var_r6 <- c(private$var_r6, var, var$get_var_r6())
         }
       }

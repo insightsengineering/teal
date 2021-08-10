@@ -24,27 +24,24 @@ test_that("mutate_dataset", {
     mutate_dataset(x = test_ds, code = "y <- test")
   }, "Evaluation of the code failed")
 
-  expect_silent({
+  # error because the code, "y <- test", was added even though it yielded an error.
+  expect_error({
     test_ds_mut <- test_ds %>% mutate_dataset("x$z <- c('one', 'two')")
   })
 
   expect_equal(
-    test_ds_mut$get_raw_data(),
-    data.frame(x = c(1, 2), y = c("a", "b"),
-               z = c("one", "two"),
-               stringsAsFactors = FALSE)
+    test_ds$get_raw_data(),
+    data.frame(x = c(1, 2), y = c("a", "b"), stringsAsFactors = FALSE)
   )
 
   expect_equal(
-    get_raw_data(test_ds_mut),
-    data.frame(x = c(1, 2), y = c("a", "b"),
-               z = c("one", "two"),
-               stringsAsFactors = FALSE)
+    get_raw_data(test_ds),
+    data.frame(x = c(1, 2), y = c("a", "b"), stringsAsFactors = FALSE)
   )
 
   expect_error({
     test_ds %>% mutate_dataset("x <- 3")
-  }, "data.frame")
+  }, "object 'test' not found")
 
   expect_error({
     test_ds %>% mutate_dataset(c("x <- 3", "som"))
@@ -100,7 +97,7 @@ test_that("mutate_dataset", {
   expect_true(is(test_ds_mut, "Dataset"))
 
   expect_silent({
-    test_ds_mut <- test_ds %>% mutate_dataset(script = "mutate_code/testds.R")
+    test_ds_mut <- test_ds %>% mutate_dataset(read_script("mutate_code/testds.R"))
   })
 
   expect_equal(

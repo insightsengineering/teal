@@ -68,6 +68,7 @@ ds$launch()
 \item \href{#method-mutate}{\code{DatasetConnector$mutate()}}
 \item \href{#method-is_failed}{\code{DatasetConnector$is_failed()}}
 \item \href{#method-is_pulled}{\code{DatasetConnector$is_pulled()}}
+\item \href{#method-is_mutate_delayed}{\code{DatasetConnector$is_mutate_delayed()}}
 \item \href{#method-check}{\code{DatasetConnector$check()}}
 \item \href{#method-set_ui_input}{\code{DatasetConnector$set_ui_input()}}
 \item \href{#method-get_ui}{\code{DatasetConnector$get_ui()}}
@@ -389,7 +390,7 @@ Set arguments to the pulling function
 \if{html}{\out{<a id="method-mutate"></a>}}
 \if{latex}{\out{\hypertarget{method-mutate}{}}}
 \subsection{Method \code{mutate()}}{
-Mutate dataset by code
+Dispatcher for either eager or delayed mutate methods
 
 Either code or script must be provided, but not both.
 \subsection{Usage}{
@@ -445,6 +446,19 @@ Check if dataset has already been pulled.
 
 \subsection{Returns}{
 \code{TRUE} if connector has been already pulled, else \code{FALSE}
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-is_mutate_delayed"></a>}}
+\if{latex}{\out{\hypertarget{method-is_mutate_delayed}{}}}
+\subsection{Method \code{is_mutate_delayed()}}{
+Check if dataset has mutations that are delayed
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{DatasetConnector$is_mutate_delayed()}\if{html}{\out{</div>}}
+}
+
+\subsection{Returns}{
+\code{logical}
 }
 }
 \if{html}{\out{<hr>}}
