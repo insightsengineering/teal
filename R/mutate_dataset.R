@@ -91,7 +91,6 @@ mutate_dataset.DatasetConnector <- function(x, # nolint
                                             ...) {
   check_ellipsis(...)
   stopifnot(is_fully_named_list(vars))
-
   code <- code_from_script(code, script)
   x$mutate(code = code, vars = vars, ...)
 }

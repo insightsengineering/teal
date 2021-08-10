@@ -16,6 +16,8 @@
 \itemize{
 \item \href{#method-get_call}{\code{CDISCFilteredDataset$get_call()}}
 \item \href{#method-get_subjects_info}{\code{CDISCFilteredDataset$get_subjects_info()}}
+\item \href{#method-ui_add_filter_state}{\code{CDISCFilteredDataset$ui_add_filter_state()}}
+\item \href{#method-srv_add_filter_state}{\code{CDISCFilteredDataset$srv_add_filter_state()}}
 \item \href{#method-clone}{\code{CDISCFilteredDataset$clone()}}
 }
 }
@@ -40,8 +42,6 @@
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="FilteredDataset" data-id="ui">}\href{../../teal/html/FilteredDataset.html#method-ui}{\code{teal::FilteredDataset$ui()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="DefaultFilteredDataset" data-id="initialize">}\href{../../teal/html/DefaultFilteredDataset.html#method-initialize}{\code{teal::DefaultFilteredDataset$initialize()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="DefaultFilteredDataset" data-id="set_bookmark_state">}\href{../../teal/html/DefaultFilteredDataset.html#method-set_bookmark_state}{\code{teal::DefaultFilteredDataset$set_bookmark_state()}}\out{</span>}
-\item \out{<span class="pkg-link" data-pkg="teal" data-topic="DefaultFilteredDataset" data-id="srv_add_filter_state">}\href{../../teal/html/DefaultFilteredDataset.html#method-srv_add_filter_state}{\code{teal::DefaultFilteredDataset$srv_add_filter_state()}}\out{</span>}
-\item \out{<span class="pkg-link" data-pkg="teal" data-topic="DefaultFilteredDataset" data-id="ui_add_filter_state">}\href{../../teal/html/DefaultFilteredDataset.html#method-ui_add_filter_state}{\code{teal::DefaultFilteredDataset$ui_add_filter_state()}}\out{</span>}
 }
 \out{</details>}
 }
@@ -86,6 +86,58 @@ whether subject number should depend on filtered data.}
 }
 \subsection{Returns}{
 \code{integer(1)} number of unique subjects
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-ui_add_filter_state"></a>}}
+\if{latex}{\out{\hypertarget{method-ui_add_filter_state}{}}}
+\subsection{Method \code{ui_add_filter_state()}}{
+UI module to add filter variable for this dataset
+
+UI module to add filter variable for this dataset
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{CDISCFilteredDataset$ui_add_filter_state(id)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{id}}{(\code{character(1)})\cr
+identifier of the element - preferably containing dataset name}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Returns}{
+function - shiny UI module
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-srv_add_filter_state"></a>}}
+\if{latex}{\out{\hypertarget{method-srv_add_filter_state}{}}}
+\subsection{Method \code{srv_add_filter_state()}}{
+Server module to add filter variable for this dataset
+
+Server module to add filter variable for this dataset.
+For this class \code{srv_add_filter_state} calls single module
+\code{srv_add_filter_state} from \code{FilterStates} (\code{DefaultFilteredDataset}
+contains single \code{FilterStates})
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{CDISCFilteredDataset$srv_add_filter_state(input, output, session)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{input}}{(\code{shiny})\cr}
+
+\item{\code{output}}{(\code{shiny})\cr}
+
+\item{\code{session}}{(\code{shiny})\cr}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Returns}{
+function - shiny server module
 }
 }
 \if{html}{\out{<hr>}}

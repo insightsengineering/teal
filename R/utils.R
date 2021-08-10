@@ -96,11 +96,12 @@ extract_choices_labels <- function(choices, values = NULL) {
 #'  string containing the timezone of the browser/client.
 #'
 get_client_timezone <- function(ns) {
-  script <- paste0(
-    "var tz = Intl.DateTimeFormat().resolvedOptions().timeZone;
-    Shiny.onInputChange('", ns("tz"), "', Intl.DateTimeFormat().resolvedOptions().timeZone);"
+  script <- sprintf(
+    "Shiny.setInputValue(`%s`, Intl.DateTimeFormat().resolvedOptions().timeZone)",
+    ns("timezone")
   )
-  shinyjs::runjs(script)
+  shinyjs::runjs(script) # function does not return anything
+  return(invisible(NULL))
 }
 
 #' Check if package can be loaded

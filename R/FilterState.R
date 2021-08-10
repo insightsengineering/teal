@@ -1407,7 +1407,11 @@ DatetimeFilterState <- R6::R6Class( # nolint
   public = list(
 
     #' @description
-    #' Initialize a `FilterState` object
+    #' Initialize a `FilterState` object. This class
+    #' has an extra field, `private$timezone`, which is set to `Sys.timezone()` by
+    #' default. However, in case when using this module in `teal` app, one needs
+    #' timezone of the app user. App user timezone is taken from `session$userData$timezone`
+    #' and is set only if object is initialized in `shiny`.
     #' @param x (`POSIXct` or `POSIXlt`)\cr
     #'   values of the variable used in filter
     #' @param varname (`character`, `name`)\cr
@@ -1430,7 +1434,14 @@ DatetimeFilterState <- R6::R6Class( # nolint
       var_range <- range(x, finite = TRUE)
       private$set_choices(var_range)
       self$set_selected(var_range)
-      private$timezone <- Sys.timezone()
+
+      if (shiny::isRunning()) {
+        session <- getDefaultReactiveDomain()
+        if (!is.null(session$userData$timezone)) {
+          private$timezone <- session$userData$timezone
+        }
+      }
+
       return(invisible(self))
     },
 
@@ -1538,9 +1549,6 @@ DatetimeFilterState <- R6::R6Class( # nolint
     #' @param session (`Shiny`)\cr session object
     #' @return nothing
     server = function(input, output, session) {
-      get_client_timezone(ns = session$ns)
-      private$timezone <- input$timezone
-
       private$observers$selection <- observeEvent(
         ignoreNULL = FALSE, # ignoreNULL: we don't want to ignore NULL when nothing is selected in the `selectInput`,
         ignoreInit = TRUE, # ignoreInit: should not matter because we set the UI with the desired initial state
@@ -1549,7 +1557,6 @@ DatetimeFilterState <- R6::R6Class( # nolint
           input$selection_end
         },
         handlerExpr = {
-          print("selected observer")
           start_date <- input$selection_start
           end_date <- input$selection_end
 
@@ -1578,8 +1585,6 @@ DatetimeFilterState <- R6::R6Class( # nolint
         )
       })
       private$observers$reset2 <- observeEvent(input$end_date_reset, {
-        print("reset start observer")
-        print(as.numeric(private$choices))
         shinyWidgets::updateAirDateInput(
           session = session,
           inputId = "selection_end",
@@ -1591,7 +1596,7 @@ DatetimeFilterState <- R6::R6Class( # nolint
     }
   ),
   private = list(
-    timezone = character(0),
+    timezone = Sys.timezone(),
 
     log_state = function() {
       .log(
