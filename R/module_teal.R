@@ -129,6 +129,17 @@ srv_teal <- function(input, output, session, modules, raw_data, filter = list())
     shinyjs::showLog() # to show Javascript console logs in the R console
   }
   run_js_files(files = "init.js") # Javascript code to make the clipboard accessible
+  # set timezone in shiny app
+  # timezone is set in the early beginning so it will be available also
+  # for DDL and all shiny modules
+  get_client_timezone(session$ns)
+  observeEvent(
+    eventExpr = input$timezone,
+    once = TRUE,
+    handlerExpr = {
+      session$userData$timezone <- input$timezone
+    }
+  )
 
   # Shiny bookmarking ----
 
