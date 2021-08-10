@@ -1407,7 +1407,11 @@ DatetimeFilterState <- R6::R6Class( # nolint
   public = list(
 
     #' @description
-    #' Initialize a `FilterState` object
+    #' Initialize a `FilterState` object. This class
+    #' have a extra fields which is `private$timezone` which is set to `Sys.timezone()` by
+    #' default. However, in case when using this module in `teal` app, one needs
+    #' timezone of the app user. App user timezone is taken from `session$userData$timezone`
+    #' and is set only if object is initialized in `shiny`.
     #' @param x (`POSIXct` or `POSIXlt`)\cr
     #'   values of the variable used in filter
     #' @param varname (`character`, `name`)\cr
