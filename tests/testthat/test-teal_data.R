@@ -1,6 +1,7 @@
 library(random.cdisc.data)
 library(hermes)
-testthat::test_that("teal_data returns CDISCData object rather than RelationalData object", {
+testthat::test_that("teal_data returns CDISCData object rather than RelationalData
+  object when arguments contain any type of CDISCData object", {
   adsl <- cdisc_dataset("ADSL", radsl(cached = TRUE, na_percentage = 0.2))
   adtte <- cdisc_dataset("ADTTE", radtte(cached = TRUE))
   ds2 <- dataset("ds", iris)

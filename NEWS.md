@@ -1,5 +1,6 @@
 # teal 0.9.5.9000
 * Replaced `random.cdisc.data` with `scda` in examples and tests.
+* Modified `teal_data` to return a `CDISCData` object whenever any of its arguments is a type of `CDISCData` object.
 
 ### New features
 * Added `cdse_dataset_connector` to create delayed data objects from `CDSE`.
