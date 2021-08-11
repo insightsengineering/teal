@@ -1,15 +1,14 @@
 library(random.cdisc.data)
-library(hermes)
 testthat::test_that("teal_data returns CDISCData object rather than RelationalData
   object when arguments contain any type of CDISCData object", {
   adsl <- cdisc_dataset("ADSL", radsl(cached = TRUE, na_percentage = 0.2))
   adtte <- cdisc_dataset("ADTTE", radtte(cached = TRUE))
   ds2 <- dataset("ds", iris)
 
-  mae <- multi_assay_experiment
-  mae <- dataset("MAE", mae)
+  dummy_mae <- head(iris)
+  class(dummy_mae) <- "MultiAssayExperiment"
 
-
+  mae <- MAEDataset$new("MAE", dummy_mae)
 
   mixed_data <- teal_data(mae, adsl, adtte, ds2)
   testthat::expect_equal(class(mixed_data), c("CDISCData", "RelationalData", "DataAbstract", "R6"))
