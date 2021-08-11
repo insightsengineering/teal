@@ -339,7 +339,7 @@ FilterState <- R6::R6Class( # nolint
     set_keep_na = function(value) {
       stopifnot(is_logical_single(value))
       private$keep_na(value)
-      return(invisible(NULL))
+      invisible(NULL)
     },
 
     #' @description
@@ -352,7 +352,7 @@ FilterState <- R6::R6Class( # nolint
     set_selected = function(value) {
       private$validate_selection(value)
       private$selected(value)
-      return(invisible(NULL))
+      invisible(NULL)
     },
 
     #' @description
@@ -421,7 +421,7 @@ FilterState <- R6::R6Class( # nolint
     #' The `keep_na` and `keep_inf` is not printed.
     #'
     log_state = function() {
-      return(NULL)
+      NULL
     },
 
     #' Sets `keep_na` field according to observed `input$keep_na`
@@ -437,7 +437,7 @@ FilterState <- R6::R6Class( # nolint
           private$log_state()
         }
       )
-      return(invisible(NULL))
+      invisible(NULL)
     },
     #' Set choices
     #'
@@ -448,18 +448,17 @@ FilterState <- R6::R6Class( # nolint
     #' return a `NULL`
     set_choices = function(choices) {
       private$choices <- choices
-      return(invisible(NULL))
+      invisible(NULL)
     },
 
     # Checks if the selection is valid in terms of class and length.
     # It should not return anything but throw an error if selection
     # has a wrong class or is outside of possible choices
     validate_selection = function(value) {
-      return(invisible(NULL))
+      invisible(NULL)
     }
   )
 )
-
 
 # EmptyFilterState ---------
 #' @name EmptyFilterState
@@ -1016,7 +1015,11 @@ ChoicesFilterState <- R6::R6Class( # nolint
     #' @param use_dataname (`logical(1)`)\cr
     #' whether to prefix condition calls with `input_dataname$`.
     #' For example `input_dataname$variable == "selection"`
-    initialize = function(x, varname, varlabel, input_dataname, use_dataname = FALSE) {
+    initialize = function(x,
+                          varname,
+                          varlabel = character(0),
+                          input_dataname = NULL,
+                          use_dataname = FALSE) {
       stopifnot(
         is.character(x) ||
           is.factor(x) ||
