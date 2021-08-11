@@ -300,7 +300,7 @@ knitr::include_graphics('./images/design_cdisc_filtered_datasets.png')
 This filtering will now be explained step by step for two example datasets (`ADSL`
 and `ADTTE`):
 
-```{r}
+```{r, eval=TRUE}
 # for reproducibility
 set.seed(1)
 
@@ -327,7 +327,7 @@ set.seed(0)
 The `datasets` object of class `CDISCFilteredData`
 that is passed an argument to the `server` function is created by `teal` as follows:
 
-```{r}
+```{r, eval=TRUE}
 library(teal)
 options(teal_logging = FALSE)
 
@@ -335,9 +335,8 @@ datasets <- teal:::CDISCFilteredData$new()
 # the `datasets` object contains reactives
 # we activate this option, so we don't need to wrap all reactives in isolate calls
 options(shiny.suppressMissingContextError = TRUE)
-datasets$set_dataset(dataset = dataset("ADSL", ADSL),
-                     join_key_set = NULL)
-datasets$set_dataset(dataset = dataset("ADTTE", ADTTE),
+datasets$set_dataset(dataset = cdisc_dataset("ADSL", ADSL))
+datasets$set_dataset(dataset = cdisc_dataset("ADTTE", ADTTE),
                      join_key_set = list(ADSL = c("STUDYID", "USUBJID")))
 shiny:::flushReact() # force evaluation outside of Shiny apps
 ```
@@ -348,22 +347,25 @@ Note that this code also runs outside of a teal instance.
 ```{r, eval=FALSE}
 datasets$print_filter_info("ADSL")
 # for all variables
-# datasets$print_filter_info("ADSL", filtered_vars_only = FALSE)
+datasets$print_filter_info("ADSL", filtered_vars_only = FALSE)
 ```
 
-Now say we want to filter out all the patients except patients with `USUBJID`
+Now say we want to filter out all the patients in `ADSL` except patients with `USUBJID`
 equal to `id-1`, `id-2`, `id-3`, or `id-4`:
 
-```{r, eval=FALSE}
-datasets$set_filter_state("ADSL", state = list(USUBJID = list(choices = paste0("id-", 1:4), keep_na = FALSE)))
-# or
-teal:::set_single_filter_state(datasets, "ADSL", "USUBJID", list(choices = paste0("id-", 1:4), keep_na = FALSE))
-shiny:::flushReact()
+```{r, eval=TRUE}
+datasets$set_bookmark_state(
+  state = list(
+    ADSL = list(
+      USUBJID = sprintf("id-%s", 1:4)
+    )
+  )
+)
 
 datasets$get_data("ADSL", filtered = TRUE)
 ```
 
-Note that this `USUBJID` variable based filtering also filters the `ATE` data
+Note that this `USUBJID` variable based filtering also filters the `ADTE` data
 (with an inner join based on `USUBJID` and `STUDYID`), as illustrated in the
 previous figure:
 
@@ -376,7 +378,9 @@ data, respectively, as illustrated from the above figure. We can also get the
 `call` object that was used for the filtering:
 
 ```{r}
-datasets$get_call("ADTTE")
+cat(
+  get_filter_expr(datasets, "ADTTE")
+)
 ```
 
 
@@ -443,8 +447,8 @@ improves the UI as it places the filter panel below the `tabsetPanel` menu).
 
 Also note that the added javascript in the `ui` object is necessary to manually
 interrupt reactivity when hiding the ui elements for filtering based on variables
-that are not relevant for a particular analysis (i.e. we do not show `ARS`
-filter variables if we analyse an output based on `ATE`).
+that are not relevant for a particular analysis (i.e. we do not show `ADRS`
+filter variables if we analyse an output based on `ADTE`).
 
 Next: the creation of the server function. The easy part is the composition of
 the module server functions which happens with the `call_modules` function call.
@@ -488,7 +492,7 @@ create_teal_app <- function(title, id) {
         filters = "ADSL"
       )
     ),
-    filter = list(ADSL = list(AGE = default_filter())),
+    filter = list(ADSL = list(AGE = c(20, 50))),
     header = tags$h1(title),
     footer = tags$p("Copyright 2017 - 2020"),
     id = id
@@ -505,21 +509,78 @@ shinyApp(ui = fluidPage(
   callModule(app1$server, "app1")
   callModule(app2$server, "app2")
 })
+```
 
-# However, we recommend to use `ui_teal_with_splash` and `srv_teal_with_splash` if you would
-# want to use the teal app in the same way as Shiny modules with `callModule`, `ARGS` needs to
-# be filled in:
-# app1 <- create_teal_app("Sample App1")
-# app2 <- create_teal_app("Sample App2")
-# shinyApp(ui = fluidPage(
-#   fluidRow(
-#     column(6, ui_teal_with_splash("app1", ARGS)),
-#     column(6, ui_teal_with_splash("app2", ARGS))
-#   )
-# ), server = function(input, output, session) {
-#   callModule(srv_teal_with_splash, "app1", ARGS)
-#   callModule(srv_teal_with_splash, "app2", ARGS)
-# })
+However, we recommend to use `ui_teal_with_splash` and `srv_teal_with_splash` if you would
+want to use the teal app in the same way as Shiny modules with `callModule`.
+
+```{r eval=FALSE}
+modules <- root_modules(
+  module(
+    "data source",
+    server = function(input, output, session, datasets) {},
+    ui = function(id, ...) div(p("information about data source")),
+    filters = "all"
+  ),
+  module(
+    "ADSL AGE histogram",
+    server = function(input, output, session, datasets) {
+      output$hist <- renderPlot(
+        hist(datasets$get_data("ADSL", filtered = TRUE)$AGE)
+      )
+    },
+    ui = function(id, ...) {
+      ns <- NS(id)
+      plotOutput(ns("hist"))
+    },
+    filters = "ADSL"
+  )
+)
+
+shinyApp(
+  ui = fluidPage(
+    fluidRow(
+      column(
+        6, 
+        ui_teal_with_splash(
+          "app1", 
+          data = cdisc_data(
+            cdisc_dataset("ADSL", ADSL, code = "ADSL <- radsl(cached = TRUE)")
+          ),
+          title = "Sample app 1"
+        )
+      ),
+      column(
+        6, 
+        ui_teal_with_splash(
+          "app2", 
+          data = cdisc_data(
+            cdisc_dataset("ADSL", ADSL, code = "ADSL <- radsl(cached = TRUE)")
+          ),
+          title = "Sample app 2"
+        )
+      )
+    )
+  ), 
+  server = function(input, output, session) {
+    callModule(
+      module = srv_teal_with_splash, 
+      id = "app1",
+      data = cdisc_data(
+        cdisc_dataset("ADSL", ADSL, code = "ADSL <- radsl(cached = TRUE)")
+      ),
+      modules = modules
+    )
+    callModule(
+      module = srv_teal_with_splash, 
+      id = "app2", 
+      data = cdisc_data(
+        cdisc_dataset("ADSL", ADSL, code = "ADSL <- radsl(cached = TRUE)")
+      ),
+      modules = modules
+    )
+  }
+)
 ```
 
 
