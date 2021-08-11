@@ -244,7 +244,7 @@ FilterState <- R6::R6Class( # nolint
                           use_dataname = FALSE) {
       stopifnot(is.name(varname) || is.call(varname) || is_character_single(varname))
       stopifnot(is_character_vector(varlabel, min_length = 0, max_length = 1))
-      stopifnot(is.null(varname) || is.name(input_dataname) || is.call(input_dataname))
+      stopifnot(is.null(input_dataname) || is.name(input_dataname) || is.call(input_dataname))
       stopifnot(is_logical_single(use_dataname))
 
       private$input_dataname <- input_dataname
