@@ -615,15 +615,22 @@ DFFilterStates <- R6::R6Class( # nolint
         )
         fstate$set_selected(value = value)
 
-        id <- digest::digest(sprintf("%s_%s", 1L, varname), algo = "md5")
-        callModule(
-          module = private$add_filter_state,
-          id = id,
-          filter_state = fstate,
-          queue_index = 1L,
-          element_id = varname
-        )
-
+        if (shiny::isRunning()) {
+          id <- digest::digest(sprintf("%s_%s", 1L, varname), algo = "md5")
+          callModule(
+            module = private$add_filter_state,
+            id = id,
+            filter_state = fstate,
+            queue_index = 1L,
+            element_id = varname
+          )
+        } else {
+          self$queue_push(
+            x = fstate,
+            queue_index = 1L,
+            element_id = varname
+          )
+        }
       }
     },
 
