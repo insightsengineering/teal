@@ -61,7 +61,6 @@ jobs:
         env:
           GITHUB_PAT: ${{ secrets.REPO_GITHUB_TOKEN }} # or ${{ secrets.GITHUB_TOKEN }}
 
-
       - name: Checkout repo during PR
         uses: actions/checkout@v2
         if: github.event_name == 'pull_request'
@@ -101,7 +100,6 @@ jobs:
           }
         shell: Rscript {0}
 
-
       - name: Install R package dependencies
         run: |
           setwd("${{ github.event.repository.name }}")
@@ -139,6 +137,7 @@ jobs:
         continue-on-error: true
         env:
           TESTING_DEPTH: 1
+          _R_CHECK_TESTS_NLINES_: 0
 
       - name: Catch warnings in R CMD check output
         id: catch-errors
