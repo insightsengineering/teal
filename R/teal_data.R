@@ -36,15 +36,18 @@ teal_data <- function(...,
                       check = FALSE) {
   data_objects <- list(...)
 
-  x <- NULL
-  for (data_obj in data_objects) {
-    if (is(data_obj, "CDISCDataConnector") || is(data_obj, "CDISCDatasetConnector") || is(data_obj, "CDISCDataset")) {
-      x <- CDISCData$new(..., check = check, join_keys = join_keys)
-      break;
+  is_cdisc <- vapply(
+    X = data_objects,
+    FUN.VALUE = logical(1),
+    function(x) {
+      is(x, "CDISCDataConnector") || is(x, "CDISCDatasetConnector") || is(x, "CDISCDataset")
     }
-  }
-  if (is.null(x)) {
-    x <- RelationalData$new(..., check = check, join_keys = join_keys)
+  )
+  
+  x <- if (any(is_cdisc)) {
+    CDISCData$new(..., check = check, join_keys = join_keys)
+  } else {
+    RelationalData$new(..., check = check, join_keys = join_keys)
   }
 
   if (length(code) > 0 && !identical(code, "")) {
