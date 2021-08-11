@@ -6,8 +6,8 @@ testthat::test_that("teal_data returns CDISCData object rather than RelationalDa
   adtte <- cdisc_dataset("ADTTE", radtte(cached = TRUE))
   ds2 <- dataset("ds", iris)
 
-  MAE <- multi_assay_experiment
-  mae <- dataset("MAE", MAE)
+  mae <- multi_assay_experiment
+  mae <- dataset("MAE", mae)
 
 
 
