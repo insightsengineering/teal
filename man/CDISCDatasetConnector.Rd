@@ -43,6 +43,7 @@ be empty (i.e. \code{character(0)}).}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="DatasetConnector" data-id="get_ui">}\href{../../teal/html/DatasetConnector.html#method-get_ui}{\code{teal::DatasetConnector$get_ui()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="DatasetConnector" data-id="get_var_r6">}\href{../../teal/html/DatasetConnector.html#method-get_var_r6}{\code{teal::DatasetConnector$get_var_r6()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="DatasetConnector" data-id="is_failed">}\href{../../teal/html/DatasetConnector.html#method-is_failed}{\code{teal::DatasetConnector$is_failed()}}\out{</span>}
+\item \out{<span class="pkg-link" data-pkg="teal" data-topic="DatasetConnector" data-id="is_mutate_delayed">}\href{../../teal/html/DatasetConnector.html#method-is_mutate_delayed}{\code{teal::DatasetConnector$is_mutate_delayed()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="DatasetConnector" data-id="is_pulled">}\href{../../teal/html/DatasetConnector.html#method-is_pulled}{\code{teal::DatasetConnector$is_pulled()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="DatasetConnector" data-id="launch">}\href{../../teal/html/DatasetConnector.html#method-launch}{\code{teal::DatasetConnector$launch()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="DatasetConnector" data-id="mutate">}\href{../../teal/html/DatasetConnector.html#method-mutate}{\code{teal::DatasetConnector$mutate()}}\out{</span>}

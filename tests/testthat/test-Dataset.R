@@ -202,10 +202,13 @@ testthat::test_that("Dataset$set_vars throws an error if passed the enclosing Da
   test_ds1$set_vars(vars = list(test_ds0 = test_ds0))
   test_ds2$set_vars(vars = list(test_ds1 = test_ds1))
 
-  testthat::expect_error(mutate_dataset(
-    test_ds0, code = "mtcars$new_var <- rock$perm[1]", vars = list(test_ds2 = test_ds2)
+  testthat::expect_error(
+    mutate_dataset(
+      test_ds0,
+      code = "mtcars$new_var <- rock$perm[1]", vars = list(test_ds2 = test_ds2)
     ),
-    regexp = "Circular dependencies detected")
+    regexp = "Circular dependencies detected"
+  )
 
   pull_fun2 <- callable_function(data.frame)
   pull_fun2$set_args(args = list(a = c(1, 2, 3)))
@@ -216,6 +219,166 @@ testthat::test_that("Dataset$set_vars throws an error if passed the enclosing Da
     mutate_dataset(test_ds0, code = "mtcars$new_var <- t_dc$a[1]", vars = list(t_dc = t_dc)),
     regexp = "Circular dependencies detected"
   )
+})
+
+testthat::test_that("Dataset mutate method with delayed logic", {
+  test_ds0 <- Dataset$new("head_mtcars", head(mtcars), code = "head_mtcars <- head(mtcars)")
+  test_ds1 <- Dataset$new("head_iris", head(iris), code = "head_iris <- head(iris)")
+  test_ds2 <- Dataset$new("head_rock", head(rock), code = "head_rock <- head(rock)")
+
+  pull_fun2 <- callable_function(data.frame)
+  pull_fun2$set_args(args = list(head_letters = head(letters)))
+  t_dc <- dataset_connector("test_dc", pull_fun2, vars = list(test_ds1 = test_ds1))
+
+  testthat::expect_false(test_ds0$is_mutate_delayed())
+  testthat::expect_equal(test_ds0$get_code(), "head_mtcars <- head(mtcars)")
+
+  mutate_dataset(test_ds0, code = "head_mtcars$carb <- head_mtcars$carb * 2")
+  testthat::expect_equal(get_raw_data(test_ds0)$carb, 2 * head(mtcars)$carb)
+  testthat::expect_false(test_ds0$is_mutate_delayed())
+  testthat::expect_equal(test_ds0$get_code(), "head_mtcars <- head(mtcars)\nhead_mtcars$carb <- head_mtcars$carb * 2")
+
+  mutate_dataset(test_ds0, code = "head_mtcars$Species <- ds1$Species", vars = list(ds1 = test_ds1))
+  testthat::expect_false(test_ds0$is_mutate_delayed())
+  testthat::expect_equal(get_raw_data(test_ds0)$Species, get_raw_data(test_ds1)$Species)
+  testthat::expect_equal(
+    pretty_code_string(test_ds0$get_code()),
+    c("head_iris <- head(iris)",
+      "ds1 <- head_iris",
+      "head_mtcars <- head(mtcars)",
+      "head_mtcars$carb <- head_mtcars$carb * 2",
+      "head_mtcars$Species <- ds1$Species"
+    )
+  )
+
+  mutate_dataset(test_ds0, code = "head_mtcars$head_letters <- dc$head_letters", vars = list(dc = t_dc))
+
+  testthat::expect_equal(
+    pretty_code_string(test_ds0$get_code()),
+    c("head_iris <- head(iris)",
+      "ds1 <- head_iris",
+      "test_ds1 <- head_iris",
+      "test_dc <- data.frame(head_letters = c(\"a\", \"b\", \"c\", \"d\", \"e\", \"f\"))",
+      "dc <- test_dc",
+      "head_mtcars <- head(mtcars)",
+      "head_mtcars$carb <- head_mtcars$carb * 2",
+      "head_mtcars$Species <- ds1$Species",
+      "head_mtcars$head_letters <- dc$head_letters"
+    )
+  )
+
+
+  testthat::expect_null(get_raw_data(test_ds0)$head_mtcars)
+
+  testthat::expect_true(test_ds0$is_mutate_delayed())
+  testthat::expect_equal(
+    pretty_code_string(test_ds0$get_code()),
+    c("head_iris <- head(iris)",
+      "ds1 <- head_iris",
+      "test_ds1 <- head_iris",
+      "test_dc <- data.frame(head_letters = c(\"a\", \"b\", \"c\", \"d\", \"e\", \"f\"))",
+      "dc <- test_dc",
+      "head_mtcars <- head(mtcars)",
+      "head_mtcars$carb <- head_mtcars$carb * 2",
+      "head_mtcars$Species <- ds1$Species",
+      "head_mtcars$head_letters <- dc$head_letters"
+    )
+  )
+
+  # continuing to delay
+  mutate_dataset(test_ds0, code = "head_mtcars$new_var <- 1")
+  testthat::expect_true(test_ds0$is_mutate_delayed())
+
+  testthat::expect_equal(
+    pretty_code_string(test_ds0$get_code()),
+    c("head_iris <- head(iris)",
+      "ds1 <- head_iris",
+      "test_ds1 <- head_iris",
+      "test_dc <- data.frame(head_letters = c(\"a\", \"b\", \"c\", \"d\", \"e\", \"f\"))",
+      "dc <- test_dc",
+      "head_mtcars <- head(mtcars)",
+      "head_mtcars$carb <- head_mtcars$carb * 2",
+      "head_mtcars$Species <- ds1$Species",
+      "head_mtcars$head_letters <- dc$head_letters",
+      "head_mtcars$new_var <- 1"
+    )
+  )
+  expect_null(get_raw_data(test_ds0)$new_var)
+  testthat::expect_true(test_ds0$is_mutate_delayed())
+
+  mutate_dataset(test_ds0, code = "head_mtcars$perm <- ds2$perm", vars = list(ds2 = test_ds2))
+  testthat::expect_equal(
+    pretty_code_string(test_ds0$get_code()),
+    c("head_iris <- head(iris)",
+      "ds1 <- head_iris",
+      "test_ds1 <- head_iris",
+      "test_dc <- data.frame(head_letters = c(\"a\", \"b\", \"c\", \"d\", \"e\", \"f\"))",
+      "dc <- test_dc",
+      "head_rock <- head(rock)",
+      "ds2 <- head_rock",
+      "head_mtcars <- head(mtcars)",
+      "head_mtcars$carb <- head_mtcars$carb * 2",
+      "head_mtcars$Species <- ds1$Species",
+      "head_mtcars$head_letters <- dc$head_letters",
+      "head_mtcars$new_var <- 1",
+      "head_mtcars$perm <- ds2$perm"
+    )
+  )
+
+  expect_null(get_raw_data(test_ds0)$perm)
+  testthat::expect_equal(
+    pretty_code_string(test_ds0$get_code()),
+    c("head_iris <- head(iris)",
+      "ds1 <- head_iris",
+      "test_ds1 <- head_iris",
+      "test_dc <- data.frame(head_letters = c(\"a\", \"b\", \"c\", \"d\", \"e\", \"f\"))",
+      "dc <- test_dc",
+      "head_rock <- head(rock)",
+      "ds2 <- head_rock",
+      "head_mtcars <- head(mtcars)",
+      "head_mtcars$carb <- head_mtcars$carb * 2",
+      "head_mtcars$Species <- ds1$Species",
+      "head_mtcars$head_letters <- dc$head_letters",
+      "head_mtcars$new_var <- 1",
+      "head_mtcars$perm <- ds2$perm"
+    )
+  )
+  testthat::expect_true(test_ds0$is_mutate_delayed())
+
+  load_dataset(t_dc)
+  testthat::expect_true(test_ds0$is_mutate_delayed())
+
+  load_dataset(test_ds0)
+  testthat::expect_silent(get_raw_data(test_ds0))
+  testthat::expect_false(test_ds0$is_mutate_delayed())
+  testthat::expect_true(all(c("head_letters", "new_var", "perm") %in% names(get_raw_data(test_ds0))))
+  expect_code <- c(
+    "head_iris <- head(iris)",
+    "ds1 <- head_iris",
+    "test_ds1 <- head_iris",
+    "test_dc <- data.frame(head_letters = c(\"a\", \"b\", \"c\", \"d\", \"e\", \"f\"))",
+    "dc <- test_dc",
+    "head_rock <- head(rock)",
+    "ds2 <- head_rock",
+    "head_mtcars <- head(mtcars)",
+    "head_mtcars$carb <- head_mtcars$carb * 2",
+    "head_mtcars$Species <- ds1$Species",
+    "head_mtcars$head_letters <- dc$head_letters",
+    "head_mtcars$new_var <- 1",
+    "head_mtcars$perm <- ds2$perm"
+  )
+  testthat::expect_equal(
+    pretty_code_string(test_ds0$get_code()),
+    expect_code
+  )
+
+  mutate_dataset(test_ds0, code = "head_mtcars$new_var2 <- 2")
+  testthat::expect_equal(
+    pretty_code_string(test_ds0$get_code()),
+    c(expect_code, "head_mtcars$new_var2 <- 2")
+  )
+  testthat::expect_false(test_ds0$is_mutate_delayed())
+  testthat::expect_equal(get_raw_data(test_ds0)$new_var2, rep(2, 6))
 })
 
 testthat::test_that("Dataset check method", {
@@ -254,4 +417,67 @@ testthat::test_that("get_hash returns the hash of the object passed to the const
   iris_hash <- digest::digest(iris, algo = "md5")
   ds <- Dataset$new("iris", iris)
   testthat::expect_equal(ds$get_hash(), iris_hash)
+})
+
+testthat::test_that("get_code_class returns the correct CodeClass object", {
+  cc1 <- CodeClass$new(code = "iris <- head(iris)", dataname = "iris")
+  cc2 <- CodeClass$new(code = "mtcars <- head(mtcars)", dataname = "mtcars", deps = "iris")
+  ds1 <- Dataset$new("iris", head(iris), code = "iris <- head(iris)")
+  ds2 <- Dataset$new("mtcars", head(mtcars), code = "mtcars <- head(mtcars)", vars = list(iris = ds1))
+  testthat::expect_equal(ds1$get_code_class(), cc1)
+  testthat::expect_equal(ds2$get_code_class(), cc1$append(cc2))
+})
+
+testthat::test_that("get_code_class returns the correct CodeClass after mutating with another Dataset", {
+  ds1 <- Dataset$new("iris", head(iris), code = "iris <- head(iris)")
+  ds2 <- Dataset$new("mtcars", head(mtcars), code = "mtcars <- head(mtcars)")
+  cc1 <- CodeClass$new(code = "mtcars <- head(mtcars)", dataname = "mtcars")
+  cc2 <- CodeClass$new(code = "iris <- head(iris)", dataname = "iris")
+  cc3 <- CodeClass$new(code = "iris$test <- 1", dataname = "iris")
+  ds1$mutate(cc3, vars = list(mtcars = ds2))
+  testthat::expect_equal(ds1$get_code_class(), cc1$append(cc2)$append(cc3))
+})
+
+testthat::test_that("Dataset$recreate does not reset the mutation code", {
+  cf <- CallableFunction$new(function() head(mtcars))
+  dataset_connector1 <- DatasetConnector$new("mtcars", cf)
+  dataset1 <- Dataset$new("iris", head(iris))
+  dataset1$mutate(code = "test", vars = list(test = dataset_connector1))
+  code_before_recreating <- dataset1$get_code()
+  dataset1$recreate()
+  code_after_recreating <- dataset1$get_code()
+  testthat::expect_equal(code_after_recreating, code_before_recreating)
+})
+
+testthat::test_that("Dataset$recreate does not reset the variables needed for mutation", {
+  cf <- CallableFunction$new(function() head(mtcars))
+  dataset_connector1 <- DatasetConnector$new("mtcars", cf)
+  dataset1 <- Dataset$new("iris", head(iris))
+  dataset1$mutate(code = "test", vars = list(test = dataset_connector1))
+  mutate_vars_before_recreation <- dataset1$get_mutate_vars()
+  dataset1$recreate()
+  testthat::expect_identical(dataset1$get_mutate_vars(), mutate_vars_before_recreation)
+})
+
+testthat::test_that("Dataset$is_mutate_delayed returns TRUE if the Dataset's dependency is delayed", {
+  cf <- CallableFunction$new(function() head(mtcars))
+  dataset_connector1 <- DatasetConnector$new("mtcars", cf)
+  dataset1 <- Dataset$new("iris", head(iris))
+  dataset1$mutate(code = "", vars = list(test = dataset_connector1))
+  testthat::expect_true(dataset1$is_mutate_delayed())
+})
+
+testthat::test_that("Dataset$is_mutate_delayed stays FALSE if the Dataset's
+  dependency turns from not delayed to delayed", {
+  cf <- CallableFunction$new(function() head(mtcars))
+  dataset_connector1 <- DatasetConnector$new("mtcars", cf)
+  dataset1 <- Dataset$new("iris", head(iris))
+  dataset_dependency <- Dataset$new("plantgrowth", head(PlantGrowth))
+
+  dataset1$mutate(code = "", vars = list(test = dataset_dependency))
+  testthat::expect_false(dataset1$is_mutate_delayed())
+
+  dataset_dependency$mutate(code = "", vars = list(test = dataset_connector1))
+  testthat::expect_true(dataset_dependency$is_mutate_delayed())
+  testthat::expect_false(dataset1$is_mutate_delayed())
 })

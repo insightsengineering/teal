@@ -81,6 +81,7 @@ MAEDataset <- R6::R6Class( # nolint
       self$set_vars(vars)
       self$set_dataset_label(label)
       self$set_keys(keys)
+      private$mutate_code <- CodeClass$new()
 
       # needed if recreating dataset - we need to preserve code order and uniqueness
       private$code <- CodeClass$new()
