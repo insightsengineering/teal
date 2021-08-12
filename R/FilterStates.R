@@ -217,17 +217,11 @@ FilterStates <- R6::R6Class( # nolint
               state$get_call()
             }
           )
-          calls <- Filter(
-            f = Negate(is.null),
-            x = calls
-          )
           if (length(calls) > 0) {
             calls_combine_by(
               operator = "&",
               calls = calls
             )
-          } else {
-            NULL
           }
         }
       )
