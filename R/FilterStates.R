@@ -207,7 +207,7 @@ FilterStates <- R6::R6Class( # nolint
       # queue (list) names must be the same as argument of the function
       # for ... list should be unnamed
       queue_list <- private$queue
-      filter_items <- sapply(
+      filter_items <- lapply(
         X = queue_list,
         function(queue) {
           items <- queue$get()

@@ -799,7 +799,7 @@ RangeFilterState <- R6::R6Class( # nolint
                           use_dataname = FALSE) {
       stopifnot(is.numeric(x))
       super$initialize(x, varname, varlabel, input_dataname, use_dataname)
-      var_range <- sort(range(x, finite = TRUE)) # because range(Inf, finite=TRUE) returns wrong order
+      var_range <- range(x, na.rm = TRUE)
       private$set_choices(var_range)
       self$set_selected(var_range)
 
@@ -1266,7 +1266,7 @@ DateFilterState <- R6::R6Class( # nolint
       stopifnot(is(x, "Date"))
       super$initialize(x, varname, varlabel, input_dataname, use_dataname)
 
-      var_range <- range(x, finite = TRUE)
+      var_range <- range(x, na.rm = TRUE)
       private$set_choices(var_range)
       self$set_selected(var_range)
 
@@ -1456,7 +1456,7 @@ DatetimeFilterState <- R6::R6Class( # nolint
       stopifnot(is(x, "POSIXct") || is(x, "POSIXlt"))
       super$initialize(x, varname, varlabel, input_dataname, use_dataname)
 
-      var_range <- range(x, finite = TRUE)
+      var_range <- range(x, na.rm = TRUE)
       private$set_choices(var_range)
       self$set_selected(var_range)
 
