@@ -110,7 +110,7 @@ init_filter_state.numeric <- function(x, #nousage
                                       varlabel = if_null(attr(x, "label"), character(0)),
                                       input_dataname = NULL,
                                       use_dataname = FALSE) {
-  if (length(unique(x[!is.na(x)])) < .threshold_slider_vs_checkboxgroup) {
+  if (length(unique(x[is.finite(x)])) < .threshold_slider_vs_checkboxgroup) {
     ChoicesFilterState$new(x = x,
                            varname = varname,
                            varlabel = varlabel,
@@ -123,7 +123,6 @@ init_filter_state.numeric <- function(x, #nousage
                          input_dataname = input_dataname,
                          use_dataname = use_dataname)
   }
-
 }
 
 #' @export
@@ -515,22 +514,45 @@ EmptyFilterState <- R6::R6Class( # nolint
     #' Method is using internal reactive values which makes it reactive
     #' and must be executed in reactive or isolated context.
     get_call = function() {
-      filter_call <- NULL
-
-      if (isTRUE(private$keep_na())) {
-        filter_call <- call("is.na", private$get_varname_prefixed())
+      filter_call <- if (isTRUE(private$keep_na())) {
+        call("is.na", private$get_varname_prefixed())
+      } else {
+        FALSE
       }
-
-      filter_call
     },
 
     #' @description
     #' UI Module for `EmptyFilterState`.
-    #' This UI element contains information that all values are missing.
+    #' This UI element contains checkbox input to
+    #' filter or keep missing values.
     #' @param id (`character(1)`)\cr
     #'  id of shiny element
     ui = function(id) {
-      span("Variable contains missing values only. Please remove this filter and continue")
+      ns <- NS(id)
+      fluidRow(
+        div(
+          style = "position: relative;",
+          div(
+            span("Variable contains missing values only"),
+            checkboxInput(
+              ns("keep_na"),
+              label_keep_na_count(private$na_count),
+              value = FALSE
+            )
+          )
+
+        )
+      )
+    },
+    #' @description
+    #' Controls selection of `keep_na` checkbox input
+    #' @param input (`Shiny`)\cr input object
+    #' @param output (`Shiny`)\cr output object
+    #' @param session (`Shiny`)\cr session object
+    #' @return nothing
+    server = function(input, output, session) {
+      private$observe_keep_na(input)
+      return(NULL)
     }
   ),
   private = list(
@@ -777,7 +799,7 @@ RangeFilterState <- R6::R6Class( # nolint
                           use_dataname = FALSE) {
       stopifnot(is.numeric(x))
       super$initialize(x, varname, varlabel, input_dataname, use_dataname)
-      var_range <- range(x, finite = TRUE)
+      var_range <- range(x, na.rm = TRUE)
       private$set_choices(var_range)
       self$set_selected(var_range)
 
@@ -1244,7 +1266,7 @@ DateFilterState <- R6::R6Class( # nolint
       stopifnot(is(x, "Date"))
       super$initialize(x, varname, varlabel, input_dataname, use_dataname)
 
-      var_range <- range(x, finite = TRUE)
+      var_range <- range(x, na.rm = TRUE)
       private$set_choices(var_range)
       self$set_selected(var_range)
 
@@ -1434,7 +1456,7 @@ DatetimeFilterState <- R6::R6Class( # nolint
       stopifnot(is(x, "POSIXct") || is(x, "POSIXlt"))
       super$initialize(x, varname, varlabel, input_dataname, use_dataname)
 
-      var_range <- range(x, finite = TRUE)
+      var_range <- range(x, na.rm = TRUE)
       private$set_choices(var_range)
       self$set_selected(var_range)
 
