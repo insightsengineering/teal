@@ -97,11 +97,28 @@ RelationalData <- R6::R6Class( # nolint
       private$pull_code <- CodeClass$new()
       private$mutate_code <- CodeClass$new()
 
-      private$join_keys <- join_keys
-      # fill in primary keys as a join keys to self
-      for (i in datanames) {
-        if (is_empty(self$get_join_keys()$get(i, i))) {
-          self$mutate_join_keys(i, i, get_keys(self$get_items(i)))
+      private$data_sets_and_connectors <- ulapply(
+        dot_args,
+        function(arg) {
+          if (is(arg, "DataAbstract")) {
+            arg$get_items()
+          } else {
+            arg
+          }
+        }
+      )
+
+      for (dat_obj in private$data_sets_and_connectors) {
+        dat_name <- dat_obj$get_dataname()
+        for (dataset_1 in names(join_keys$get())) {
+          if (dataset_1 == dat_name) {
+            for (dataset_2 in names(join_keys$get()[[dataset_1]])) {
+              dat_obj$set_join_keys(dataset_2, join_keys$get()[[dataset_1]][[dataset_2]])
+            }
+          }
+        }
+        if (is_empty(join_keys$get(dat_name, dat_name))) {
+          dat_obj$set_join_keys(dat_name, get_keys(self$get_items(dat_name)))
         }
       }
 
@@ -124,7 +141,15 @@ RelationalData <- R6::R6Class( # nolint
     #' Get `JoinKeys` object with keys used for joining.
     #' @return (`JoinKeys`)
     get_join_keys = function() {
-      private$join_keys
+      res <- join_keys()
+
+      for (dat_obj in private$data_sets_and_connectors) {
+        list_keys <- dat_obj$get_join_keys()$get()[[1]]
+        for (dat_name in names(list_keys)) {
+          res$mutate(dat_obj$get_dataname(), dat_name, list_keys[[dat_name]])
+        }
+      }
+      return(res)
     },
     #' Get data connectors.
     #'
@@ -259,7 +284,15 @@ RelationalData <- R6::R6Class( # nolint
     #' @param val (named `character`) column names used to join
     #' @return (`self`) invisibly for chaining
     mutate_join_keys = function(dataset_1, dataset_2, val) {
-      self$get_join_keys()$mutate(dataset_1, dataset_2, val)
+      for (dat_obj in private$data_sets_and_connectors) {
+        if (dat_obj$get_dataname() == dataset_1) {
+          dat_obj$set_join_keys(dataset_2, val)
+          next
+        }
+        if (dat_obj$get_dataname() == dataset_2) {
+          dat_obj$set_join_keys(dataset_1, val)
+        }
+      }
       return(invisible(self))
     },
 
@@ -309,6 +342,7 @@ RelationalData <- R6::R6Class( # nolint
 
   ## __Private Fields ====
   private = list(
+    data_sets_and_connectors = list(),
     ui = function(id) {
       ns <- NS(id)
 

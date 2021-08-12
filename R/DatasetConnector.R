@@ -104,6 +104,16 @@ DatasetConnector <- R6::R6Class( #nolint
       return(private$keys)
     },
     #' @description
+    #' Get `JoinKeys` object with keys used for joining.
+    #' @return (`JoinKeys`)
+    get_join_keys = function() {
+      if (is.null(private$join_keys)) {
+        private$join_keys <- join_keys()
+      }
+      private$join_keys
+    },
+
+    #' @description
     #' Get code to get data
     #'
     #' @param deparse (\code{logical})\cr
@@ -208,6 +218,15 @@ DatasetConnector <- R6::R6Class( #nolint
         set_keys(private$dataset, keys)
       }
       private$keys <- keys
+      return(invisible(self))
+    },
+    #' @description
+    #' set join_keys for a given dataset and self
+    #' @param dataset (`character`) dataset for which join_keys are to be set against self
+    #' @param val (named `character`) column names used to join
+    #' @return (`self`) invisibly for chaining
+    set_join_keys = function(dataset, val) {
+      self$get_join_keys()$mutate(private$dataname, dataset, val)
       return(invisible(self))
     },
 
@@ -414,6 +433,7 @@ DatasetConnector <- R6::R6Class( #nolint
     var_r6 = list(),
     ui_input = NULL, # NULL or list
     is_pulled_flag = FALSE,
+    join_keys = NULL,
 
     ## __Private Methods ====
     ui = function(id) {
