@@ -474,16 +474,13 @@ FilterStates <- R6::R6Class( # nolint
                 width = 10,
                 class = "no-left-right-padding",
                 tags$div(
-                  tags$span(
-                    filter_state$get_varname(),
-                    class = "filter_panel_varname"
-                  ),
-                  tagList(
-                    tags$br(),
-                    tags$span(
-                      filter_state$get_varlabel(),
-                      class = "filter_panel_varlabel")
-                  )
+                  tags$span(filter_state$get_varname(),
+                            class = "filter_panel_varname"),
+                  if_not_character_empty(filter_state$get_varlabel(),
+                                         if (tolower(filter_state$get_varname()) != tolower(filter_state$get_varlabel())) {
+                                           tags$span(filter_state$get_varlabel(),
+                                                     class = "filter_panel_varlabel")
+                                         })
                 )
               ),
               column(

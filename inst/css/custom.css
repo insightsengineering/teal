@@ -1,6 +1,7 @@
 .no-left-right-padding {
   padding-left: 0 !important;
   padding-right: 0 !important;
+  margin-bottom: 10px;
 }
 
 #teal_filter_panel_whole > div.well div.form-group label {
@@ -107,6 +108,8 @@ currently not used, instead one can click anywhere in the element to move it
   font-size: small;
   font-weight: normal;
   margin-left: 3px;
+  color:rgb(122, 122, 122);
+  font-style: oblique;
 }
 
 .nav {
