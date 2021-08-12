@@ -1,0 +1,120 @@
+---
+title: "Filter-panel"
+author: "Dawid Kałędkowski"
+date: "8/11/2021"
+output: html_document
+---
+
+## Overview
+
+Filter panel is located in the right side of the teal apps and is responsible for filtering data 
+globally for whole application. Filter panel is entirely encapsulated within `FilteredData` class, 
+which manages filter states, data filtering and reproducible filter code. `FilteredData` is passed 
+to each teal module as a `dataset` object and this class developer will face in the most of the 
+time. However, filter panel is not composed only from `FilteredData` but there are several also 
+other classes responsible to specific task. 
+
+```{r echo=FALSE, out.width='100%'}
+knitr::include_graphics('./images/filter_panel/filter_panel_uml_all.jpg')
+```
+
+`FilteredData` contains one-to-many `FilteredDataset` objects which contain `Dataset` passed from 
+`RelationalData` after all datasets are loaded. While `FilteredData` manages whole filter panel,
+`FilteredDataset` is responsible for single dataset filtering. Depending on a variant of 
+`FilteredDataset` it can contain one or many `FilterStates`. `FilterStates` class object has one or 
+two `ReactiveQueue` where `FilterState` objects are stored. `FilterState` is a single filter applied 
+to one variable/column while `FilterStates` is a collection of filters combined within single filter 
+call.   
+
+## Initialization
+
+`FilteredData` is initialized in `srv_teal` when `RelationalData$is_pulled()` returns `TRUE` - this 
+basically means that if all data are physically available in `RelationalData` teal app can be 
+initialized. `FilteredData` is a class-module which is initialized first, as it holds data necassary
+in analytical modules. 
+
+```{r echo=FALSE, out.width='100%'}
+knitr::include_graphics('./images/filter_panel/filtered_data_init.jpg')
+```
+
+`FilteredData` is dispatched on type of `RelationalData`, and if DDL is `CDISCData` then 
+`CDISCFilteredData` is initialized. Each `Dataset` from `CDISCData` determines the type of the 
+`FilteredDataset`. In above diagram `CDISCDataset` initializes `CDISCFilteredDataset` and 
+`MAEDataset` initializes `MAEFilteredDataset`.   
+Most complicated concept in the new filter panel is `FilterStates`, which are initialized in 
+`FilteredDataset`. Type and number of `FilterStates` depends on the data kept in the 
+`FilteredDataset`. Please consider `FilterStates` as one `subset` or `filter` call. In case of 
+`data.frame` (`DFFilteredDataset`) case is simple, because we know that single `dplyr::filter` call
+is sufficient to subset data rows. Consider `MultiAssayExperiment` object which contains patients
+data in `@colData` and multiple experiments in `@ExperimentList`. Because `MultiAssayExperiment`
+contains multiple objects and each must be filtered by separate call, this is why multiple 
+`FilterStates` objects are required for `MAEFilteredDataset`. `ReactiveQueue` is created within 
+`FilterStates` and number also depends on the `FilterStates` type.  
+Described objects are created instantly when data is loaded and they are remain unchanged, whereas 
+`FilterState` is initialized each time when the new filter is added. Values of the `FilterState` can 
+change and also it can be removed and added once again.
+
+
+## Classes description
+
+This section describes in detail each class managing filter panel.
+
+### FilteredData
+
+```{r echo=FALSE, out.width='100%'}
+knitr::include_graphics('./images/filter_panel/class_details_filtered_data.jpg')
+```
+
+`FilteredData` is exposed to the apps/modules developer as a `dataset` argument in the modules. `FilteredData` manages filter 
+panel by returning filtered data, combining reproducible filter call from `FilteredDatasets`. 
+`FilteredData` also contains all shiny modules displayed on the right panel in teal apps. 
+`FilteredData` is a single object which is initialized in `srv_teal` module and it's variant 
+depends on a `RelationalData`. If DDL returns `CDISCData` then `CDISCFilteredData` is initialized,
+otherwise `FilteredData`.
+
+### FilteredDataset
+
+```{r echo=FALSE, out.width='100%'}
+knitr::include_graphics('./images/filter_panel/class_details_filtered_dataset.jpg')
+```
+
+`FilteredDataset` is a class which returns the data and reproducible code of the single dataset.
+`FilteredDataset` class objects are initialized by `FilteredData`, one for each `Dataset`.
+`FilteredDataset` contains single `Dataset` object (here the unfiltered data are stored) and 
+one-to-many `FilterStates` depending on the type of object. `FilteredDataset` stores relations
+between datasets, it's attributes, combines and executes the code taken from `FilterStates`.
+
+There are following `FilteredDataset` derived classes:
+
+- `DefaultFilteredDataset`, dispatched by `Dataset` to manage filters for `data.frame` object.
+
+Type of `Dataset` also determines type of `FilteredDataset`, so that `Dataset` dispatches
+`DefaultFilteredDataset`, `CDISCDataset` dispatches `CDISCFilteredDataset` and `MAEDataset` 
+dispatches `MAEFilteredDataset`.
+
+
+
+
+
+To be more explicit
+- for data.frame we need only one expression which is
+XXX_FILTERED <- dplyr::filter(XXX, <list of conditions>)
+FilterStates is responsible exectly for above call, that is why data.frame has one FilterStates.
+
+- for MAE situation is different. MAE has patient data slot and experiments which we also would like to filter. Example call looks like this
+
+XXX_FILTERED <- MultiAssayExperiment::subsetByColData(XXX, y = <patient filter conditions>)
+XXX_FILTERED[[<experiment1>]] <- subset(XXX_FILTERED[[<experiment1>]], select = <select conditions>, subset = <subset conditions>)
+XXX_FILTERED[[<experiment1>]] <- subset(XXX_FILTERED[[<experiment2>]], select = <select conditions>, subset = <subset conditions>)
+Above means that we need one FilterStates (one expression) for patient filtering (general filter for whole MAE object) and experiment specific filter.
+We can't hardcode number and type of the experiment object because we might have 0-many experiments, where each experiment can be matrix or SummarizedExperiment (more to be added in the future). Dispatch of FilterStates is done automatically on the provided sub-dataset type.
+Be aware that dataset in FilterData/FilterDataset might be different than dataset in FilterStates object. As you could see, MAE is a basic dataset
+which contains colData and experiments - which are used to generate single filter expression in FilterStates.
+
+get_expr simply combines filter expressions from the FilterStates in a expression object (expression of expressions)
+
+
+FilterDataset class contains also:
+- srv/ui function which relates to active filter variables - it encloses FilterStates-ui/srv and also gives possibility to erase all filters for dataset by pressing 'x' in UI
+
+- srv/ui_add_filter_state - another container which keeps FilterStates-add_filter_state
