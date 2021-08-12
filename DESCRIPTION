@@ -24,6 +24,7 @@ Description: teal is a shiny based interactive exploration framework for
 License: file LICENSE
 Encoding: UTF-8
 LazyData: true
+biocViews:
 Depends:
   R (>= 3.3),
   shiny
