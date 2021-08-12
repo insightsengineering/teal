@@ -1,8 +1,9 @@
-library(scda)
 testthat::test_that("teal_data returns CDISCData object rather than RelationalData
   object when arguments contain any type of CDISCData object", {
-  adsl <- cdisc_dataset("ADSL", synthetic_cdisc_data("rcd_2021_05_05")$adsl)
-  adtte <- cdisc_dataset("ADTTE", synthetic_cdisc_data("rcd_2021_05_05")$adtte)
+  dummy_adsl <- as.data.frame(as.list(setNames(nm = get_cdisc_keys("ADSL"))))
+  adsl <- cdisc_dataset("ADSL", dummy_adsl)
+  dummy_adtte <- as.data.frame(as.list(setNames(nm = get_cdisc_keys("ADTTE"))))
+  adtte <- cdisc_dataset("ADTTE", dummy_adtte)
   ds2 <- dataset("ds", iris)
 
   dummy_mae <- head(iris)
