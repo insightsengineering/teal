@@ -24,13 +24,13 @@ testthat::test_that("get_call returns a condition true for the object in the sel
 
 testthat::test_that("get_call returns a condition evaluating to TRUE for NA values after set_keep_na(TRUE)", {
   objects <- as.POSIXct(c(1, NA), origin = "1900/01/01")
-  filter_state <- DatetimeFilterState$new(object, varname = "objects")
+  filter_state <- DatetimeFilterState$new(objects, varname = "objects")
   filter_state$set_keep_na(TRUE)
   testthat::expect_equal(eval(isolate(filter_state$get_call()))[2], TRUE)
 })
 
 testthat::test_that("get_call returns a condition evaluating to NA for NA values", {
   objects <- as.POSIXct(c(1, NA), origin = "1900/01/01")
-  filter_state <- DatetimeFilterState$new(object, varname = "objects")
+  filter_state <- DatetimeFilterState$new(objects, varname = "objects")
   testthat::expect_equal(eval(isolate(filter_state$get_call()))[2], NA)
 })
