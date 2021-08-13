@@ -1,6 +1,7 @@
 .no-left-right-padding {
   padding-left: 0 !important;
   padding-right: 0 !important;
+  margin-bottom: 10px;
 }
 
 #teal_filter_panel_whole > div.well div.form-group label {
@@ -107,9 +108,10 @@ currently not used, instead one can click anywhere in the element to move it
   font-size: small;
   font-weight: normal;
   margin-left: 3px;
+  color: rgb(122, 122, 122);
 }
 
-#.nav {
+.nav {
   display: flex;
   flex-wrap: wrap;
 }
@@ -126,7 +128,6 @@ currently not used, instead one can click anywhere in the element to move it
   max-width: 100%;
   margin-bottom: 5px;
   font-weight: 700;
-
   content: attr(data-label);
 }
 
@@ -138,3 +139,4 @@ currently not used, instead one can click anywhere in the element to move it
 #summary_panel th {
   word-wrap: anywhere;
 }
+
