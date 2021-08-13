@@ -188,7 +188,7 @@ FilterStates <- R6::R6Class( # nolint
       private$input_dataname <- char_to_name(input_dataname)
       private$output_dataname <- char_to_name(output_dataname)
       private$datalabel <- datalabel
-      return(invisible(self))
+      invisible(self)
     },
     #' @description
     #' Filter call
@@ -327,6 +327,8 @@ FilterStates <- R6::R6Class( # nolint
     #'   index of the `private$queue` list where `ReactiveQueue` are kept.
     #' @param element_id (`character(1)`)\cr
     #'   name of the `ReactiveQueue` element.
+    #' @note throws an exception if the length of `x` does not match the length of
+    #'   `element_id`
     queue_push = function(x, queue_index, element_id) {
       stopifnot(is_character_single(queue_index) || is_numeric_single(queue_index))
       stopifnot(is_character_single(element_id))
@@ -338,7 +340,7 @@ FilterStates <- R6::R6Class( # nolint
       }
       state <- setNames(states, element_id)
       private$queue[[queue_index]]$push(state)
-      return(NULL)
+      invisible(NULL)
     },
 
     #' @description
@@ -531,7 +533,6 @@ FilterStates <- R6::R6Class( # nolint
 )
 
 # DFFilterStates -----
-
 DFFilterStates <- R6::R6Class( # nolint
   classname = "DFFilterStates",
   inherit = FilterStates,
