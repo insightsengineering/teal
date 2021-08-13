@@ -51,6 +51,7 @@ be empty (i.e. \code{character(0)}).}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="DatasetConnector" data-id="mutate_join_keys">}\href{../../teal/html/DatasetConnector.html#method-mutate_join_keys}{\code{teal::DatasetConnector$mutate_join_keys()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="DatasetConnector" data-id="set_args">}\href{../../teal/html/DatasetConnector.html#method-set_args}{\code{teal::DatasetConnector$set_args()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="DatasetConnector" data-id="set_dataset_label">}\href{../../teal/html/DatasetConnector.html#method-set_dataset_label}{\code{teal::DatasetConnector$set_dataset_label()}}\out{</span>}
+\item \out{<span class="pkg-link" data-pkg="teal" data-topic="DatasetConnector" data-id="set_join_keys">}\href{../../teal/html/DatasetConnector.html#method-set_join_keys}{\code{teal::DatasetConnector$set_join_keys()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="DatasetConnector" data-id="set_keys">}\href{../../teal/html/DatasetConnector.html#method-set_keys}{\code{teal::DatasetConnector$set_keys()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="DatasetConnector" data-id="set_ui_input">}\href{../../teal/html/DatasetConnector.html#method-set_ui_input}{\code{teal::DatasetConnector$set_ui_input()}}\out{</span>}
 }

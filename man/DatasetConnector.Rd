@@ -64,6 +64,7 @@ ds$launch()
 \item \href{#method-get_var_r6}{\code{DatasetConnector$get_var_r6()}}
 \item \href{#method-set_dataset_label}{\code{DatasetConnector$set_dataset_label()}}
 \item \href{#method-set_keys}{\code{DatasetConnector$set_keys()}}
+\item \href{#method-set_join_keys}{\code{DatasetConnector$set_join_keys()}}
 \item \href{#method-mutate_join_keys}{\code{DatasetConnector$mutate_join_keys()}}
 \item \href{#method-pull}{\code{DatasetConnector$pull()}}
 \item \href{#method-set_args}{\code{DatasetConnector$set_args()}}
@@ -352,10 +353,31 @@ vector of dataset primary keys column names}
 }
 }
 \if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-set_join_keys"></a>}}
+\if{latex}{\out{\hypertarget{method-set_join_keys}{}}}
+\subsection{Method \code{set_join_keys()}}{
+set join_keys for a given dataset and self
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{DatasetConnector$set_join_keys(x)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{x}}{\code{list} of \code{JoinKeySet} objects (which are created using the \code{join_key} function)
+or single \code{JoinKeySet} objects}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Returns}{
+(\code{self}) invisibly for chaining
+}
+}
+\if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-mutate_join_keys"></a>}}
 \if{latex}{\out{\hypertarget{method-mutate_join_keys}{}}}
 \subsection{Method \code{mutate_join_keys()}}{
-set join_keys for a given dataset and self
+mutate the join_keys for a given dataset and self
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{DatasetConnector$mutate_join_keys(dataset, val)}\if{html}{\out{</div>}}
 }

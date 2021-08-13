@@ -222,6 +222,15 @@ DatasetConnector <- R6::R6Class( #nolint
     },
     #' @description
     #' set join_keys for a given dataset and self
+    #' @param x `list` of `JoinKeySet` objects (which are created using the `join_key` function)
+    #' or single `JoinKeySet` objects
+    #' @return (`self`) invisibly for chaining
+    set_join_keys = function(x) {
+      self$get_join_keys()$set(x)
+      return(invisible(self))
+    },
+    #' @description
+    #' mutate the join_keys for a given dataset and self
     #' @param dataset (`character`) dataset for which join_keys are to be set against self
     #' @param val (named `character`) column names used to join
     #' @return (`self`) invisibly for chaining
