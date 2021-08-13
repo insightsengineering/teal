@@ -703,7 +703,7 @@ FilteredData <- R6::R6Class( # nolint
       ns <- NS(id)
 
       div(
-        style = "overflow: overlay",
+        id = "summary_panel",
         tableOutput(ns("table"))
       )
     },

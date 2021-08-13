@@ -109,26 +109,32 @@ currently not used, instead one can click anywhere in the element to move it
   margin-left: 3px;
 }
 
-.nav {
-    display: flex;
-    flex-wrap: wrap;
+#.nav {
+  display: flex;
+  flex-wrap: wrap;
 }
-
 
 .parent-hideable-list-group > div.hideable-list-group:not(:empty):before {
+  padding: 2px 4px;
+  font-size: 90%;
+  color: #c7254e;
+  background-color: #f9f2f4;
+  border-radius: 4px;
+  font-family: Menlo, Monaco, Consolas, "Courier New", monospace;
 
-    padding: 2px 4px;
-    font-size: 90%;
-    color: #c7254e;
-    background-color: #f9f2f4;
-    border-radius: 4px;
-    font-family: Menlo,Monaco,Consolas,"Courier New",monospace;
+  display: inline-block;
+  max-width: 100%;
+  margin-bottom: 5px;
+  font-weight: 700;
 
-    display: inline-block;
-    max-width: 100%;
-    margin-bottom: 5px;
-    font-weight: 700;
-
-    content: attr(data-label);
+  content: attr(data-label);
 }
 
+#summary_panel table {
+  table-layout: fixed;
+}
+
+#summary_panel td,
+#summary_panel th {
+  word-wrap: anywhere;
+}
