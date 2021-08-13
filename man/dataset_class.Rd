@@ -65,7 +65,7 @@ be automatically derived.
 \item \href{#method-get_var_r6}{\code{Dataset$get_var_r6()}}
 \item \href{#method-set_dataset_label}{\code{Dataset$set_dataset_label()}}
 \item \href{#method-set_keys}{\code{Dataset$set_keys()}}
-\item \href{#method-set_join_keys}{\code{Dataset$set_join_keys()}}
+\item \href{#method-mutate_join_keys}{\code{Dataset$mutate_join_keys()}}
 \item \href{#method-set_vars}{\code{Dataset$set_vars()}}
 \item \href{#method-set_code}{\code{Dataset$set_code()}}
 \item \href{#method-get_code}{\code{Dataset$get_code()}}
@@ -464,12 +464,12 @@ Vector with primary keys}
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-set_join_keys"></a>}}
-\if{latex}{\out{\hypertarget{method-set_join_keys}{}}}
-\subsection{Method \code{set_join_keys()}}{
+\if{html}{\out{<a id="method-mutate_join_keys"></a>}}
+\if{latex}{\out{\hypertarget{method-mutate_join_keys}{}}}
+\subsection{Method \code{mutate_join_keys()}}{
 set join_keys for a given dataset and self
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{Dataset$set_join_keys(dataset, val)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{Dataset$mutate_join_keys(dataset, val)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
@@ -754,10 +754,10 @@ The objects of this class are cloneable with this method.
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="Dataset" data-id="is_mutate_delayed">}\href{../../teal/html/Dataset.html#method-is_mutate_delayed}{\code{teal::Dataset$is_mutate_delayed()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="Dataset" data-id="is_pulled">}\href{../../teal/html/Dataset.html#method-is_pulled}{\code{teal::Dataset$is_pulled()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="Dataset" data-id="mutate">}\href{../../teal/html/Dataset.html#method-mutate}{\code{teal::Dataset$mutate()}}\out{</span>}
+\item \out{<span class="pkg-link" data-pkg="teal" data-topic="Dataset" data-id="mutate_join_keys">}\href{../../teal/html/Dataset.html#method-mutate_join_keys}{\code{teal::Dataset$mutate_join_keys()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="Dataset" data-id="recreate">}\href{../../teal/html/Dataset.html#method-recreate}{\code{teal::Dataset$recreate()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="Dataset" data-id="set_code">}\href{../../teal/html/Dataset.html#method-set_code}{\code{teal::Dataset$set_code()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="Dataset" data-id="set_dataset_label">}\href{../../teal/html/Dataset.html#method-set_dataset_label}{\code{teal::Dataset$set_dataset_label()}}\out{</span>}
-\item \out{<span class="pkg-link" data-pkg="teal" data-topic="Dataset" data-id="set_join_keys">}\href{../../teal/html/Dataset.html#method-set_join_keys}{\code{teal::Dataset$set_join_keys()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="Dataset" data-id="set_keys">}\href{../../teal/html/Dataset.html#method-set_keys}{\code{teal::Dataset$set_keys()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="Dataset" data-id="set_vars">}\href{../../teal/html/Dataset.html#method-set_vars}{\code{teal::Dataset$set_vars()}}\out{</span>}
 }

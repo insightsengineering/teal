@@ -225,7 +225,7 @@ DatasetConnector <- R6::R6Class( #nolint
     #' @param dataset (`character`) dataset for which join_keys are to be set against self
     #' @param val (named `character`) column names used to join
     #' @return (`self`) invisibly for chaining
-    set_join_keys = function(dataset, val) {
+    mutate_join_keys = function(dataset, val) {
       self$get_join_keys()$mutate(private$dataname, dataset, val)
       return(invisible(self))
     },

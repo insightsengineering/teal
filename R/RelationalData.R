@@ -113,12 +113,12 @@ RelationalData <- R6::R6Class( # nolint
         for (dataset_1 in names(join_keys$get())) {
           if (dataset_1 == dat_name) {
             for (dataset_2 in names(join_keys$get()[[dataset_1]])) {
-              dat_obj$set_join_keys(dataset_2, join_keys$get()[[dataset_1]][[dataset_2]])
+              dat_obj$mutate_join_keys(dataset_2, join_keys$get()[[dataset_1]][[dataset_2]])
             }
           }
         }
         if (is_empty(join_keys$get(dat_name, dat_name))) {
-          dat_obj$set_join_keys(dat_name, get_keys(self$get_items(dat_name)))
+          dat_obj$mutate_join_keys(dat_name, get_keys(self$get_items(dat_name)))
         }
       }
 
@@ -286,11 +286,11 @@ RelationalData <- R6::R6Class( # nolint
     mutate_join_keys = function(dataset_1, dataset_2, val) {
       for (dat_obj in private$data_sets_and_connectors) {
         if (dat_obj$get_dataname() == dataset_1) {
-          dat_obj$set_join_keys(dataset_2, val)
+          dat_obj$mutate_join_keys(dataset_2, val)
           next
         }
         if (dat_obj$get_dataname() == dataset_2) {
-          dat_obj$set_join_keys(dataset_1, val)
+          dat_obj$mutate_join_keys(dataset_1, val)
         }
       }
       return(invisible(self))
