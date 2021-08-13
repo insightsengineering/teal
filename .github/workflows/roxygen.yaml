@@ -135,7 +135,7 @@ jobs:
             echo "-----------------"
             echo "/command /roxygen"
             echo "-----------------"
-            set -o errexit
+            exit 1
           else
                echo "💚 Manuals are upto date with roxygen comments"
           fi
