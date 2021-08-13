@@ -1077,8 +1077,8 @@ testthat::test_that("DatasetConnector$set_join_keys work independently", {
   testthat::expect_error(
     t_dc$set_join_keys(join_key("test_dc", "other_dataset", c("Sepal.Length" = "some_col2")))
   )
-  testthat::expect_true(is(dataset1$get_join_keys(), "JoinKeys"))
-  testthat::expect_equal(length(dataset1$get_join_keys()$get()), 2)
+  testthat::expect_true(is(t_dc$get_join_keys(), "JoinKeys"))
+  testthat::expect_equal(length(t_dc$get_join_keys()$get()), 2)
 })
 
 testthat::test_that("DatasetConnector$mutate_join_keys work independently", {
