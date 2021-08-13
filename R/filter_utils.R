@@ -265,10 +265,12 @@ call_condition_range_posixct <- function(varname, range, timezone = Sys.timezone
     varname <- as.name(varname)
   }
 
-  # use maximum precision of 6 decimal places for POSIXct
+  range[1] <- trunc(range[1], units = c("secs"))
+  range[2] <- trunc(range[2] + 1, units = c("secs"))
+
   range <- format(
     range,
-    format = "%Y-%m-%d %H:%M:%OS6",
+    format = "%Y-%m-%d %H:%M:%S",
     tz = timezone
   )
 
