@@ -291,6 +291,13 @@ RelationalData <- R6::R6Class( # nolint
       stopifnot(is_character_single(dataset_1))
       stopifnot(is_character_single(dataset_2))
 
+      if (!dataset_1 %in% names(private$data_sets_and_connectors)) {
+        stop(sprintf("%s is not a name to any dataset stored in object.", dataset_1))
+      }
+      if (!dataset_2 %in% names(private$data_sets_and_connectors)) {
+        stop(sprintf("%s is not a name to any dataset stored in object.", dataset_2))
+      }
+
       data_obj_1 <- private$data_sets_and_connectors[[dataset_1]]
       data_obj_2 <- private$data_sets_and_connectors[[dataset_2]]
 
