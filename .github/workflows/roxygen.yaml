@@ -1,0 +1,71 @@
+name: Roxygen
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+
+
+jobs:
+  man-pages:
+    name: Manual pages check ${{ matrix.config.image }}, version ${{ matrix.config.tag }}
+    runs-on: ubuntu-latest
+    container:
+      image: ${{ matrix.config.image }}:${{ matrix.config.tag }}
+    strategy:
+      fail-fast: false
+      matrix:
+        config:
+          - {image: ghcr.io/insightsengineering/rstudio_4.1.0_bioc_3.13, tag: 'latest'}
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v2
+
+      - name: Generate man pages
+        run: |
+          setwd("${{ github.event.repository.name }}")
+          d1 <- installed.packages()
+          d1[rownames(d1) == 'roxygen2', c('Version', 'LibPath')]
+          print(packageVersion("roxygen2"))
+          roxygen2::roxygenize('.', roclets = c('rd', 'collate', 'namespace'))
+        shell: Rscript {0}
+
+      - name: Roxygen check
+        run: |
+          cd ${{ github.event.repository.name }}
+          git status -s
+          if [[ -n `git status -s | grep man` ]]
+          then
+            echo "🙈 Manuals are not upto date with roxygen comments!"
+            echo "💻 Please rerun the following command on your workstation and push your changes"
+            echo "--------------------------------------------------------------------"
+            echo "roxygen2::roxygenize('.', roclets = c('rd', 'collate', 'namespace'))"
+            echo "--------------------------------------------------------------------"
+            echo "💡 Or, if you have an open PR, run the following command as PR comments to auto-commit man page updates:"
+            echo "-----------------"
+            echo "/command /roxygen"
+            echo "-----------------"
+            set -o errexit
+          else
+               echo "💚 Manuals are upto date with roxygen comments"
+          fi
+        shell: bash
+
+      - name: NEWS.md and DESCRIPTION Version check
+        run: |
+          cd ${{ github.event.repository.name }}
+          DESC_VERSION=\$(awk -F: '/Version:/{gsub(/[ ]+/,"") ; print \$2}' DESCRIPTION)
+          NEWS_VERSION=\$(awk '/^#+ /{print \$3; exit}' NEWS.md)
+          echo "NEWS.md version: \$NEWS_VERSION"
+          echo "DESCRIPTION version: \$DESC_VERSION"
+          if (test \$DESC_VERSION = \$NEWS_VERSION ); then
+              echo "NEWS.md and DESCRIPTION have the same version"
+          else
+              echo "NEWS.md and DESCRIPTION have different versions!!!"
+              echo "Fix it!!! please"
+              exit 1
+          fi
+        shell: bash
+
