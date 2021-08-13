@@ -392,7 +392,7 @@ FilterStates <- R6::R6Class( # nolint
     #'   Names of the `list` element should correspond to the name of the
     #'   column in `data`.
     set_bookmark_state = function(data, state) {
-      stop("Abstract class")
+      stop("Pure virtual method.")
     },
 
     #' @description
@@ -403,7 +403,7 @@ FilterStates <- R6::R6Class( # nolint
     #'  object containing columns to be used as filter variables.
     #' @return shiny.tag
     ui_add_filter_state = function(id, data) {
-      div("This object can't be filtered")
+      div("This object cannot be filtered")
     },
 
     #' @description
