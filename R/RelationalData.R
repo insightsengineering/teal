@@ -107,6 +107,13 @@ RelationalData <- R6::R6Class( # nolint
           }
         }
       )
+      names(private$data_sets_and_connectors) <- vapply(
+        private$data_sets_and_connectors,
+        FUN.VALUE = character(1),
+        function(arg) {
+          arg$get_dataname()
+        }
+      )
 
       for (dat_obj in private$data_sets_and_connectors) {
         dat_name <- dat_obj$get_dataname()
@@ -284,15 +291,19 @@ RelationalData <- R6::R6Class( # nolint
     #' @param val (named `character`) column names used to join
     #' @return (`self`) invisibly for chaining
     mutate_join_keys = function(dataset_1, dataset_2, val) {
-      for (dat_obj in private$data_sets_and_connectors) {
-        if (dat_obj$get_dataname() == dataset_1) {
-          dat_obj$mutate_join_keys(dataset_2, val)
-          next
-        }
-        if (dat_obj$get_dataname() == dataset_2) {
-          dat_obj$mutate_join_keys(dataset_1, val)
-        }
+      stopifnot(is_character_single(dataset_1))
+      stopifnot(is_character_single(dataset_2))
+
+      data_obj_1 <- private$data_sets_and_connectors[[dataset_1]]
+      data_obj_2 <- private$data_sets_and_connectors[[dataset_2]]
+
+      if (!is.null(data_obj_1)) {
+        data_obj_1$mutate_join_keys(dataset_2, val)
       }
+      if (!is.null(data_obj_2)) {
+        data_obj_2$mutate_join_keys(dataset_1, val)
+      }
+
       return(invisible(self))
     },
 
