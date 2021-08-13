@@ -301,12 +301,8 @@ RelationalData <- R6::R6Class( # nolint
       data_obj_1 <- private$data_sets_and_connectors[[dataset_1]]
       data_obj_2 <- private$data_sets_and_connectors[[dataset_2]]
 
-      if (!is.null(data_obj_1)) {
-        data_obj_1$mutate_join_keys(dataset_2, val)
-      }
-      if (!is.null(data_obj_2)) {
-        data_obj_2$mutate_join_keys(dataset_1, val)
-      }
+      data_obj_1$mutate_join_keys(dataset_2, val)
+      data_obj_2$mutate_join_keys(dataset_1, val)
 
       return(invisible(self))
     },
