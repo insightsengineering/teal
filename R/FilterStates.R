@@ -44,13 +44,11 @@
 #'     callModule(
 #'       module = rf$srv_add_filter_state,
 #'       id = "add",
-#'       data = df,
+#'       data = df
 #'     )
-#'
 #'     output$expr <- renderText({
 #'       pdeparse(rf$get_call())
 #'     })
-#'
 #'     observeEvent(
 #'       input$clear,
 #'       rf$queue_empty()
