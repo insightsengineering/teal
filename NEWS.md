@@ -1,5 +1,6 @@
 # teal 0.9.5.9000
 * Replaced `random.cdisc.data` with `scda` in examples and tests.
+* Redesigned variable filter labels in `Active Filter Variables` panel.
 
 ### New features
 * Added `cdse_dataset_connector` to create delayed data objects from `CDSE`.
