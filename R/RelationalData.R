@@ -358,6 +358,7 @@ RelationalData <- R6::R6Class( # nolint
   ## __Private Fields ====
   private = list(
     data_sets_and_connectors = list(),
+
     ui = function(id) {
       ns <- NS(id)
 
