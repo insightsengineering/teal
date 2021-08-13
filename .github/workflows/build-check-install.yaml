@@ -51,6 +51,7 @@ jobs:
               core.setFailed(`Request failed with error ${err}`)
             }
 
+
       - name: Install remotes R package if needed
         run: |
            options(repos = c(CRAN = "https://cloud.r-project.org/"))
@@ -123,6 +124,47 @@ jobs:
         shell: Rscript {0}
         env:
           GITHUB_PAT: ${{ secrets.REPO_GITHUB_TOKEN }} # or ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Generate documentation by roxygen
+        run: |
+          setwd("${{ github.event.repository.name }}")
+          d1 <- installed.packages()
+          d1[rownames(d1) == 'roxygen2', c('Version', 'LibPath')]
+          print(packageVersion("roxygen2"))
+          roxygen2::roxygenize('.', roclets = c('rd', 'collate', 'namespace'))
+        shell: Rscript {0}
+
+      - name: Roxygen check
+        run: |
+          git status -s
+          if [[ -n `git status -s | grep man` ]]
+          then
+              echo "manuals are not up to date with roxygen comments"
+              echo "please rerun roxygen2::roxygenize('.', roclets = c('rd', 'collate', 'namespace'))"
+              if [[ "${params.envType}" == "bee" ]]; then
+                  exit 1
+              else
+                  echo "WARNING ${params.envType} - can generate different documentation - ${params.envType} WARNING"
+              fi
+          else
+              echo "manuals are up to date with roxygen comments"
+          fi
+        shell: bash
+
+      - name: NEWS.md and DESCRIPTION Version check
+        run: |
+          DESC_VERSION=\$(awk -F: '/Version:/{gsub(/[ ]+/,"") ; print \$2}' DESCRIPTION)
+          NEWS_VERSION=\$(awk '/^#+ /{print \$3; exit}' NEWS.md)
+          echo "NEWS.md version: \$NEWS_VERSION"
+          echo "DESCRIPTION version: \$DESC_VERSION"
+          if (test \$DESC_VERSION = \$NEWS_VERSION ); then
+              echo "NEWS.md and DESCRIPTION have the same version"
+          else
+              echo "NEWS.md and DESCRIPTION have different versions!!!"
+              echo "Fix it!!! please"
+              exit 1
+          fi
+        shell: bash
 
       - name: Build R package
         run: |
