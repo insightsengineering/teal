@@ -175,6 +175,7 @@ FilterStates <- R6::R6Class( # nolint
       stopifnot(
         is.call(output_dataname) || is.name(output_dataname) || is_character_single(output_dataname)
       )
+      stopifnot(is_character_vector(datalabel, min = 0, max = 1))
 
       char_to_name <- function(x) {
         if (is.character(x)) {
