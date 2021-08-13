@@ -267,7 +267,7 @@ FilterStates <- R6::R6Class( # nolint
     #' "subset" but can be overridden by child class method.
     #' @return `character(1)`
     get_fun = function() {
-      return("subset")
+      "subset"
     },
 
     #' @description
@@ -289,18 +289,18 @@ FilterStates <- R6::R6Class( # nolint
         })
       })
 
-      return(invisible(NULL))
+      invisible(NULL)
     },
 
     #' @description
-    #' Get queue elements
+    #' Returns a list of FilterState objects stored in this FilterStates
     #' @param queue_index (`character(1)`, `integer(1)`)\cr
     #'   index of the `private$queue` list where `ReactiveQueue` are kept.
     #' @param element_id (`character(1)`)\cr
     #'   name of `ReactiveQueue` element.
     #' @return `list` of `FilterState` objects
     queue_get = function(queue_index, element_id = character(0)) {
-      stopifnot(is_character_single(queue_index) || is_integer_single(queue_index))
+      stopifnot(is_character_single(queue_index) || is_numeric_single(queue_index))
       stopifnot(is_empty(element_id) || is_character_single(element_id))
 
       if (is_empty(element_id)) {
@@ -317,18 +317,18 @@ FilterStates <- R6::R6Class( # nolint
     queue_initialize = function(x) {
       stopifnot(is_class_list("ReactiveQueue")(x))
       private$queue <- x
-      return(NULL)
+      invisible(NULL)
     },
 
     #' @description
-    #' Add new `FilterState` to the queue
+    #' Adds a new `FilterState` object to this FilterStates
     #' @param x (`FilterState`)
     #' @param queue_index (`character(1)`, `integer(1)`)\cr
     #'   index of the `private$queue` list where `ReactiveQueue` are kept.
     #' @param element_id (`character(1)`)\cr
-    #'   name of `ReactiveQueue` element.
+    #'   name of the `ReactiveQueue` element.
     queue_push = function(x, queue_index, element_id) {
-      stopifnot(is_character_single(queue_index) || is_integer_single(queue_index))
+      stopifnot(is_character_single(queue_index) || is_numeric_single(queue_index))
       stopifnot(is_character_single(element_id))
 
       states <- if (is.list(x)) {
@@ -342,9 +342,9 @@ FilterStates <- R6::R6Class( # nolint
     },
 
     #' @description
-    #' Removes single filter state
+    #' Removes a single filter state
     #'
-    #' Removes single filter state with all shiny elements associated
+    #' Removes a single filter state with all shiny elements associated
     #' with this state. It removes:\cr
     #' * particular `FilterState` from `private$queue`
     #' * UI card created for this filter
