@@ -141,11 +141,7 @@ jobs:
           then
               echo "manuals are not up to date with roxygen comments"
               echo "please rerun roxygen2::roxygenize('.', roclets = c('rd', 'collate', 'namespace'))"
-              if [[ "${params.envType}" == "bee" ]]; then
-                  exit 1
-              else
-                  echo "WARNING ${params.envType} - can generate different documentation - ${params.envType} WARNING"
-              fi
+              exit 1
           else
               echo "manuals are up to date with roxygen comments"
           fi
