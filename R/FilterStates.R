@@ -530,7 +530,7 @@ FilterStates <- R6::R6Class( # nolint
       private$observers[[queue_id]] <- NULL
     },
 
-    #' Check if queue exists
+    #' Checks if the queue of the given index was initialized in this FilterStates
     #' param queue_index (character or integer)
     #' name or index
     validate_queue_exists = function(queue_index) {
