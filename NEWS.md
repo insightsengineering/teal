@@ -18,6 +18,7 @@
 * Added a method `get_hash` to the `Dataset` class returning the MD5 hash of the object stored inside the `Dataset` object.
 * Removed mentions of internal Roche services from the documentation.
 * Replaced `random.cdisc.data` with `scda` in examples and tests.
+* Implemented functionality to store `JoinKeys` in `Dataset` and `DatasetConnector` classes.
 
 # teal 0.9.5
 
