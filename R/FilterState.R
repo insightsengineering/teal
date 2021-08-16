@@ -110,7 +110,7 @@ init_filter_state.numeric <- function(x, #nousage
                                       varlabel = if_null(attr(x, "label"), character(0)),
                                       input_dataname = NULL,
                                       use_dataname = FALSE) {
-  if (length(unique(x[is.finite(x)])) < .threshold_slider_vs_checkboxgroup) {
+  if (length(unique(x[!is.na(x)])) < .threshold_slider_vs_checkboxgroup) {
     ChoicesFilterState$new(x = x,
                            varname = varname,
                            varlabel = varlabel,
