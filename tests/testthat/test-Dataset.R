@@ -482,7 +482,7 @@ testthat::test_that("Dataset$is_mutate_delayed stays FALSE if the Dataset's
   testthat::expect_false(dataset1$is_mutate_delayed())
 })
 
-testthat::test_that("Dataset$get_join_keys returns an empty JointKeys object", {
+testthat::test_that("Dataset$get_join_keys returns an empty JoinKeys object", {
   dataset1 <- Dataset$new("iris", head(iris))
   testthat::expect_true(is(dataset1$get_join_keys(), "JoinKeys"))
   testthat::expect_equal(length(dataset1$get_join_keys()$get()), 0)
