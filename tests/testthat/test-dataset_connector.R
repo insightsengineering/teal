@@ -1063,7 +1063,7 @@ testthat::test_that("DatasetConnector$get_join_keys returns an empty JoinKeys ob
   testthat::expect_equal(length(t_dc$get_join_keys()$get()), 0)
 })
 
-testthat::test_that("DatasetConnector$set_join_keys work independently", {
+testthat::test_that("DatasetConnector$set_join_keys works independently", {
   pull_fun <- callable_function(data.frame)
   pull_fun$set_args(args = list(head_letters = head(letters)))
   t_dc <- dataset_connector(
@@ -1081,7 +1081,7 @@ testthat::test_that("DatasetConnector$set_join_keys work independently", {
   testthat::expect_equal(length(t_dc$get_join_keys()$get()), 2)
 })
 
-testthat::test_that("DatasetConnector$mutate_join_keys work independently", {
+testthat::test_that("DatasetConnector$mutate_join_keys works independently", {
   pull_fun <- callable_function(data.frame)
   pull_fun$set_args(args = list(head_letters = head(letters)))
   t_dc <- dataset_connector(

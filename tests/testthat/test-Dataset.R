@@ -488,7 +488,7 @@ testthat::test_that("Dataset$get_join_keys returns an empty JoinKeys object", {
   testthat::expect_equal(length(dataset1$get_join_keys()$get()), 0)
 })
 
-testthat::test_that("Dataset$set_join_keys work independently", {
+testthat::test_that("Dataset$set_join_keys works independently", {
   dataset1 <- Dataset$new("iris", head(iris))
   testthat::expect_silent(
     dataset1$set_join_keys(join_key("iris", "other_dataset", c("Species" = "some_col")))
@@ -500,7 +500,7 @@ testthat::test_that("Dataset$set_join_keys work independently", {
   testthat::expect_equal(length(dataset1$get_join_keys()$get()), 2)
 })
 
-testthat::test_that("Dataset$mutate_join_keys work independently", {
+testthat::test_that("Dataset$mutate_join_keys works independently", {
   dataset1 <- Dataset$new("iris", head(iris))
   testthat::expect_silent(
     dataset1$mutate_join_keys("other_dataset", c("Sepal.Length" = "some_col2"))
