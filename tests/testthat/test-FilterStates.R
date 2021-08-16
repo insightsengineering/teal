@@ -45,7 +45,7 @@ testthat::test_that("Emptying empty FilterStates does not throw", {
 
 testthat::test_that("queue_get does not throw on a freshly initialized FilterStates object", {
   filter_states <- FilterStates$new(input_dataname = "test", "test", "test")
-  testthat::expect_error(filter_states$queue_get(queue_index = 1), NA)
+  testthat::expect_error(filter_states$queue_get(queue_index = 1), "ReactiveQueue '1' .* 'test'")
   # testthat::expect_equal(filter_states$queue_get(), )
 })
 
