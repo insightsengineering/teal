@@ -300,7 +300,7 @@ FilterStates <- R6::R6Class( # nolint
     #'   name of `ReactiveQueue` element.
     #' @return `list` of `FilterState` objects
     queue_get = function(queue_index, element_id = character(0)) {
-      stopifnot(is_character_single(queue_index) || is_numeric_single(queue_index))
+      private$validate_queue_exists(queue_index)
       stopifnot(is_empty(element_id) || is_character_single(element_id))
 
       if (is_empty(element_id)) {
@@ -330,7 +330,7 @@ FilterStates <- R6::R6Class( # nolint
     #' @note throws an exception if the length of `x` does not match the length of
     #'   `element_id`
     queue_push = function(x, queue_index, element_id) {
-      stopifnot(is_character_single(queue_index) || is_numeric_single(queue_index))
+      private$validate_queue_exists(queue_index)
       stopifnot(is_character_single(element_id))
 
       states <- if (is.list(x)) {
@@ -356,9 +356,9 @@ FilterStates <- R6::R6Class( # nolint
     #' @param element_id (`character(1)`)\cr
     #'   name of `ReactiveQueue` element.
     queue_remove = function(queue_index, element_id) {
-      .log("removing filter item", element_id, "from queue", queue_index)
-      stopifnot(is_character_single(queue_index) || is_integer_single(queue_index))
+      private$validate_queue_exists(queue_index)
       stopifnot(is_character_single(element_id))
+      .log("removing filter item", element_id, "from queue", queue_index)
 
       filters <- self$queue_get(queue_index = queue_index, element_id = element_id)
       lapply(filters, function(filter) filter$destroy_observers())
@@ -528,6 +528,22 @@ FilterStates <- R6::R6Class( # nolint
 
       private$observers[[queue_id]]$destroy()
       private$observers[[queue_id]] <- NULL
+    },
+
+    #' Check if queue exists
+    #' param queue_index (character or integer)
+    #' name or index
+    validate_queue_exists = function(queue_index) {
+      stopifnot(is_character_single(queue_index) || is_numeric_single(queue_index))
+      if (!all(queue_index %in% names(private$queue))) {
+        stop(
+          sprintf(
+            "ReactiveQueue '%s' has not been initialized in FilterStates object belonging to the dataset '%s'", 
+            queue_index, 
+            private$datalabel
+          )
+        )
+      }
     }
   )
 )
