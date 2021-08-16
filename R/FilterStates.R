@@ -357,7 +357,7 @@ FilterStates <- R6::R6Class( # nolint
     #'   name of `ReactiveQueue` element.
     queue_remove = function(queue_index, element_id) {
       .log("removing filter item", element_id, "from queue", queue_index)
-      stopifnot(is_character_single(queue_index) || is_integer_single(queue_index))
+      stopifnot(is_character_single(queue_index) || is_numeric_single(queue_index))
       stopifnot(is_character_single(element_id))
 
       filters <- self$queue_get(queue_index = queue_index, element_id = element_id)
