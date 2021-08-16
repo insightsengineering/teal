@@ -154,7 +154,7 @@ FilterStates <- R6::R6Class( # nolint
   classname = "FilterStates",
   public = list(
     #' @description
-    #' Initialize `FilterStates` object
+    #' Initializes this `FilterStates` object.
     #' @param data (`data.frame`, `MultiAssayExperiment`, `SummarizedExperiment`, `matrix`)\cr
     #'   R object which `subset` function is applied on.
     #'
@@ -261,17 +261,18 @@ FilterStates <- R6::R6Class( # nolint
     },
 
     #' @description
-    #' Get function name
+    #' Gets the name of the function used to filter the data in this FilterStates.
     #'
     #' Get function name used to create filter call. By default it's a
     #' "subset" but can be overridden by child class method.
-    #' @return `character(1)`
+    #' @return `character(1)` the name of the function
     get_fun = function() {
       "subset"
     },
 
     #' @description
-    #' Empty reactive queue from active filters
+    #' Remove all FilterState objects from all queues in this FilterStates.
+    #' @return NULL
     queue_empty = function() {
       queue_indices <- if (is.null(names(private$queue))) {
         seq_along(private$queue)
@@ -293,7 +294,7 @@ FilterStates <- R6::R6Class( # nolint
     },
 
     #' @description
-    #' Returns a list of FilterState objects stored in this FilterStates
+    #' Returns a list of FilterState objects stored in this FilterStates.
     #' @param queue_index (`character(1)`, `integer(1)`)\cr
     #'   index of the `private$queue` list where `ReactiveQueue` are kept.
     #' @param element_id (`character(1)`)\cr
@@ -311,7 +312,7 @@ FilterStates <- R6::R6Class( # nolint
     },
 
     #' @description
-    #' Sets `ReactiveQueue` objects
+    #' Sets `ReactiveQueue` objects.
     #' @param x (`list` of `ReactiveQueue`)\cr
     #'  Must be a list even if single `ReactiveQueue` is set.
     queue_initialize = function(x) {
@@ -876,7 +877,7 @@ MAEFilterStates <- R6::R6Class( # nolint
     },
 
     #' @description
-    #' Shiny server module to add filter variable
+    #' Shiny server module to add filter variable.
     #'
     #' Module controls available choices to select as a filter variable.
     #' Selected filter variable is being removed from available choices.
