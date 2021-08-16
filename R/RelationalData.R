@@ -97,30 +97,12 @@ RelationalData <- R6::R6Class( # nolint
       private$pull_code <- CodeClass$new()
       private$mutate_code <- CodeClass$new()
 
-      private$data_sets_and_connectors <- ulapply(
-        dot_args,
-        function(arg) {
-          if (is(arg, "DataAbstract")) {
-            arg$get_items()
-          } else {
-            arg
-          }
-        }
-      )
-      names(private$data_sets_and_connectors) <- vapply(
-        private$data_sets_and_connectors,
-        FUN.VALUE = character(1),
-        function(arg) {
-          arg$get_dataname()
-        }
-      )
-
       for (dataset_1 in names(join_keys$get())) {
         for (dataset_2 in names(join_keys$get()[[dataset_1]])) {
           self$mutate_join_keys(dataset_1, dataset_2, join_keys$get()[[dataset_1]][[dataset_2]])
         }
       }
-      for (dat_name in names(private$data_sets_and_connectors)) {
+      for (dat_name in names(self$get_items())) {
         if (is_empty(join_keys$get(dat_name, dat_name))) {
           self$mutate_join_keys(dat_name, dat_name, get_keys(self$get_items(dat_name)))
         }
@@ -147,7 +129,7 @@ RelationalData <- R6::R6Class( # nolint
     get_join_keys = function() {
       res <- join_keys()
 
-      for (dat_obj in private$data_sets_and_connectors) {
+      for (dat_obj in self$get_items()) {
         list_keys <- dat_obj$get_join_keys()$get()[[1]]
         for (dat_name in names(list_keys)) {
           res$mutate(dat_obj$get_dataname(), dat_name, list_keys[[dat_name]])
@@ -291,15 +273,15 @@ RelationalData <- R6::R6Class( # nolint
       stopifnot(is_character_single(dataset_1))
       stopifnot(is_character_single(dataset_2))
 
-      if (!dataset_1 %in% names(private$data_sets_and_connectors)) {
+      if (!dataset_1 %in% names(self$get_items())) {
         stop(sprintf("%s is not a name to any dataset stored in object.", dataset_1))
       }
-      if (!dataset_2 %in% names(private$data_sets_and_connectors)) {
+      if (!dataset_2 %in% names(self$get_items())) {
         stop(sprintf("%s is not a name to any dataset stored in object.", dataset_2))
       }
 
-      data_obj_1 <- private$data_sets_and_connectors[[dataset_1]]
-      data_obj_2 <- private$data_sets_and_connectors[[dataset_2]]
+      data_obj_1 <- self$get_items()[[dataset_1]]
+      data_obj_2 <- self$get_items()[[dataset_2]]
 
       data_obj_1$mutate_join_keys(dataset_2, val)
       data_obj_2$mutate_join_keys(dataset_1, val)
@@ -353,8 +335,6 @@ RelationalData <- R6::R6Class( # nolint
 
   ## __Private Fields ====
   private = list(
-    data_sets_and_connectors = list(),
-
     ui = function(id) {
       ns <- NS(id)
 
