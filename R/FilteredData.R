@@ -253,7 +253,7 @@ FilteredData <- R6::R6Class( # nolint
     #' The content for each of the data names is defined in `get_data_info` method.
     #'
     #' @param datanames (`character` vector) names of the dataset
-    #' @return (`data.frame`)
+    #' @return (`shiny.tag`) shiny tag object
     get_filter_overview_tbl = function(datanames) {
       if (identical(datanames, "all")) {
         datanames <- self$datanames()
@@ -261,7 +261,7 @@ FilteredData <- R6::R6Class( # nolint
 
       check_in_subset(datanames, self$datanames(), "Some datasets are not available: ")
 
-      data_info_filtered <- sapply(
+      data_info <- sapply(
         datanames,
         function(dataname) {
           self$get_data_info(dataname, filtered = TRUE)
@@ -269,39 +269,24 @@ FilteredData <- R6::R6Class( # nolint
         USE.NAMES = TRUE,
         simplify = FALSE
       )
-      data_info_nfiltered <- sapply(
-        datanames,
-        function(dataname) {
-          self$get_data_info(dataname, filtered = FALSE)
-        },
-        USE.NAMES = TRUE,
-        simplify = FALSE
-      )
 
-      res_list <- Map(
-        x = data_info_filtered,
-        y = data_info_nfiltered,
-        function(x, y) {
-          setNames(paste0(x, "/", y), names(x))
-          sapply(
-            names(x),
-            function(xname) {
-              paste0(x[[xname]], "/", y[[xname]])
-            },
-            USE.NAMES = TRUE
-          )
-        }
-      )
+      rows_html <- lapply(data_info, function(row) {
+        row %>%
+          tags$td() %>%
+          tags$tr()
+      })
 
-      res_df <- as.data.frame(do.call(rbind, res_list))
-      res_df[, "Dataset"] <- rownames(res_df)
-      rownames(res_df) <- NULL
-      res_df <- res_df[, c("Dataset", setdiff(names(res_df), "Dataset"))]
+      final_table <- tags$table(
+        tags$thead(tags$tr(
+          tags$td(""),
+          tags$td("observations"),
+          tags$td("Subjects")
+          )),
+        tags$tbody(rows_html)
+        )
 
-      return(res_df)
+      return(final_table)
     },
-
-
 
     #' Get keys for the dataset
     #' @param dataname (`character`) name of the dataset
@@ -714,7 +699,7 @@ FilteredData <- R6::R6Class( # nolint
         is.function(active_datanames) || is.reactive(active_datanames)
       )
 
-      output$table <- renderTable({
+      output$table <- renderUI({
         .log("update uifiltersinfo")
         datanames <- if (identical(active_datanames(), "all")) {
           self$datanames()
@@ -723,7 +708,7 @@ FilteredData <- R6::R6Class( # nolint
         }
 
         self$get_filter_overview_tbl(datanames = datanames)
-      }, width = "100%")
+      })
 
       return(invisible(NULL))
     }

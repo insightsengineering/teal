@@ -85,7 +85,7 @@ whether subject number should depend on filtered data.}
 \if{html}{\out{</div>}}
 }
 \subsection{Returns}{
-\code{integer(1)} number of unique subjects
+\code{list} html tag list of the number of filtered/non-filtered subjects
 }
 }
 \if{html}{\out{<hr>}}

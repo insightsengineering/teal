@@ -1266,10 +1266,27 @@ SEFilterStates <- R6::R6Class( # nolint
       )
 
       return(NULL)
+    },
+
+    #' @description
+    #' Get data info
+    #' @param filtered (`logical(1)`)\cr
+    #'   whether `data.info` should depend on filtered data.
+    #' @return `integer(1)` number of unique rows
+    get_data_info = function(input, output, data, filtered) {
+      ncol(data)
+    },
+
+    #' @description
+    #' Get subjects info
+    #' @param filtered (`logical(1)`)\cr
+    #'   whether `data.info` should depend on filtered data.
+    #' @return `integer` number of unique subjects
+    get_subjects_info = function(input, output, data, filtered) {
+      nrow(data)
     }
   )
 )
-
 
 # MatrixFilterStates -----
 MatrixFilterStates <- R6::R6Class( # nolint

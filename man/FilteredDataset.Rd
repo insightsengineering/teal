@@ -167,7 +167,7 @@ id of the \code{private$filter_states} list element where \code{FilterStates} is
 \subsection{Method \code{get_data_info()}}{
 Get data info
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{FilteredDataset$get_data_info(filtered = FALSE)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{FilteredDataset$get_data_info(filtered)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
@@ -179,7 +179,7 @@ whether \code{data.info} should depend on filtered data.}
 \if{html}{\out{</div>}}
 }
 \subsection{Returns}{
-\code{integer(1)} number of rows
+\code{list} html tag list of the number of rows
 }
 }
 \if{html}{\out{<hr>}}
@@ -200,7 +200,7 @@ whether \code{data.info} should depend on filtered data.}
 \if{html}{\out{</div>}}
 }
 \subsection{Returns}{
-\code{integer} number of unique subjects
+\code{list} html tag list of the number of unique subjects
 }
 }
 \if{html}{\out{<hr>}}

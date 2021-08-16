@@ -406,7 +406,7 @@ The content for each of the data names is defined in \code{get_data_info} method
 \if{html}{\out{</div>}}
 }
 \subsection{Returns}{
-(\code{data.frame})
+(\code{shiny.tag}) shiny tag object
 Get keys for the dataset
 }
 }
