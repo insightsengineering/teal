@@ -1051,7 +1051,7 @@ testthat::test_that("Initializing DatasetConnector with code argument works", {
   )
 })
 
-testthat::test_that("DatasetConnector$get_join_keys returns an empty JointKeys object", {
+testthat::test_that("DatasetConnector$get_join_keys returns an empty JoinKeys object", {
   pull_fun <- callable_function(data.frame)
   pull_fun$set_args(args = list(head_letters = head(letters)))
   t_dc <- dataset_connector(
