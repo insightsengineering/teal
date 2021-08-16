@@ -540,16 +540,13 @@ DFFilterStates <- R6::R6Class( # nolint
   inherit = FilterStates,
   public = list(
 
-    #' Initialize `DFFilterStates` object
+    #' Initializes `DFFilterStates` object
     #'
-    #' Initialize `DFFilterStates` object by setting `input_dataname`,
-    #' `output_dataname` and initializing `ReactiveQueue`. This class contains
+    #' Initializes `DFFilterStates` object by setting `input_dataname`,
+    #' `output_dataname` and initializing `ReactiveQueue`. This class contains a
     #' single `ReactiveQueue` with no specified name which means that
-    #' when calling function associated to this class (`dplyr::filter`), a list of
+    #' when calling the function associated to this class (`dplyr::filter`), a list of
     #' conditions are passed to unnamed arguments (`...`).
-    #'
-    #' @param data (`data.frame`)\cr
-    #'   R object which `dplyr::filter` function is applied on.
     #'
     #' @param input_dataname (`character(1)` or `name` or `call`)\cr
     #'   name of the data used on lhs of the expression
@@ -619,7 +616,6 @@ DFFilterStates <- R6::R6Class( # nolint
           queue_index = 1L,
           element_id = varname
         )
-
       }
     },
 
@@ -1448,12 +1444,12 @@ MatrixFilterStates <- R6::R6Class( # nolint
 # utils -----
 .filterable_class <- c("logical", "integer", "numeric", "factor", "character", "Date", "POSIXct", "POSIXlt")
 
-#' Get filterable variable names
+#' Gets filterable variable names
 #'
-#' Get filterable variable names from given data which class
-#' matches `.filterable_class`
-#' @param data (`list`, `matrix`)\cr
-#'   R object containing columns which class can be checked through `vapply` or `apply`.
+#' Gets filterable variable names from a given object. The names match variables
+#' of classes in the `teal:::.filterable_class` enum.
+#' @param data (`object`)\cr
+#'   the R object containing elements which class can be checked through `vapply` or `apply`.
 #'
 #' @examples
 #' df <- data.frame(
@@ -1464,7 +1460,7 @@ MatrixFilterStates <- R6::R6Class( # nolint
 #'   z = complex(3)
 #' )
 #' teal:::get_filterable_varnames(df)
-#' @return `character` vector
+#' @return `character` the array of the matched element names
 get_filterable_varnames <- function(data) {
   UseMethod("get_filterable_varnames")
 }
@@ -1490,10 +1486,10 @@ get_filterable_varnames.matrix <- function(data) { #nolint #nousage
   }
 }
 
-
+#' @return `character(0)` if choices are empty; a `choices_labeled` object otherwise
 data_choices_labeled <- function(data, choices, varlabels = character(0), keys = character(0)) {
   if (is_empty(choices)) {
-    character(0)
+    return(character(0))
   }
 
   choice_labels <- if (identical(varlabels, character(0))) {
