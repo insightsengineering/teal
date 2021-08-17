@@ -120,7 +120,7 @@ jobs:
           git status -s
           if [[ -n `git status -s | grep man` ]]
           then
-            echo "🙈 Manuals are not upto date with roxygen comments!"
+            echo "🙈 Manuals are not up-to-date with roxygen comments!"
             echo "💻 Please rerun the following command on your workstation and push your changes"
             echo "--------------------------------------------------------------------"
             echo "roxygen2::roxygenize('.', roclets = c('rd', 'collate', 'namespace'))"
@@ -131,7 +131,7 @@ jobs:
             echo "-----------------"
             exit 1
           else
-               echo "💚 Manuals are upto date with roxygen comments"
+               echo "💚 Manuals are up-to-date with roxygen comments"
           fi
         shell: bash
 

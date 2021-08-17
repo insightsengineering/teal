@@ -26,7 +26,7 @@ jobs:
           if (test $DESC_VERSION = $NEWS_VERSION ); then
               echo "NEWS.md and DESCRIPTION have the same version"
           else
-              echo "NEWS.md and DESCRIPTION have different versions!!!"
+              echo "🙈 NEWS.md and DESCRIPTION have different versions!!!"
               echo "Fix it!!! please"
               exit 1
           fi
