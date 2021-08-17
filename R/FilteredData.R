@@ -229,8 +229,13 @@ FilteredData <- R6::R6Class( # nolint
     get_data_info = function(dataname, filtered) {
       private$check_data_varname_exists(dataname)
       stopifnot(is_logical_single(filtered))
+print("33333")
+      nrows <- self$get_filtered_datasets(dataname)$get_data_info(filtered = filtered)
+      nsubjects <- self$get_filtered_datasets(dataname)$get_subjects_info(filtered = filtered)
+
       list(
-        Rows = self$get_filtered_datasets(dataname)$get_data_info(filtered = filtered)
+        Obs = nrows,
+        Subjects = nsubjects
       )
     },
 
@@ -264,7 +269,8 @@ FilteredData <- R6::R6Class( # nolint
       data_info <- sapply(
         datanames,
         function(dataname) {
-          self$get_data_info(dataname, filtered = TRUE)
+          tagList(tags$label(dataname),
+            self$get_data_info(dataname, filtered = TRUE))
         },
         USE.NAMES = TRUE,
         simplify = FALSE

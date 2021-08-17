@@ -191,7 +191,6 @@ FilteredDataset <- R6::R6Class( # nolint
       f_rows <- nrow(self$get_data(filtered = TRUE))
       nf_rows <- nrow(self$get_data(filtered = FALSE))
       tagList(
-        tags$label(tags$code(self$get_dataname())),
         paste0(f_rows, "/", nf_rows)
       )
     },
@@ -203,7 +202,6 @@ FilteredDataset <- R6::R6Class( # nolint
     #' @return `list` html tag list of the number of unique subjects
     get_subjects_info = function(filtered) {
       tagList(
-        tags$label(tags$code(self$get_dataname())),
         paste0("", "/", "")
       )
     },
@@ -654,10 +652,7 @@ CDISCFilteredDataset <- R6::R6Class( # nolint
         dplyr::n_distinct(self$get_data(filtered = FALSE)[subject_keys])
       }
 
-      tagList(
-        tags$label(tags$code(self$get_dataname())),
-        paste0(f_rows, "/", nf_rows)
-      )
+      paste0(f_rows, "/", nf_rows)
     },
 
     #' @description
@@ -802,33 +797,33 @@ MAEFilteredDataset <- R6::R6Class( # nolint
     },
 
     #' @description
-    #' Get data info
+    #' Get subjectsinfo
     #' @param filtered (`logical(1)`)\cr
     #'   whether `data.info` should depend on filtered data.
-    #' @return (`list`) html tag list of the number of filtered/non-filtered rows
+    #' @return (`list`) html tag list of the number of filtered/non-filtered subjects
     get_data_info = function(input, output, session, filtered) {
       data_f <- self$get_data(filtered = TRUE)
       data_nf <- self$get_data(filtered = FALSE)
       experiment_names <- names(data_nf)
 
-      mae_total_data_info <- tagList(tags$label(tags$code(self$get_dataname())), "-")
+      mae_total_data_info <- "-"
 
-      tagList(
-        mae_total_data_info,
-        lapply(
+      data_info <- lapply(
           experiment_names,
           function(experiment_name) {
-            f_rows <- self$get_filter_states(experiment_name)$get_data_info(
+            data_f_rows <- self$get_filter_states(experiment_name)$get_data_info(
               data = data_f[[experiment_name]])
-            nf_rows <- self$get_filter_states(experiment_name)$get_data_info(
+            data_nf_rows <- self$get_filter_states(experiment_name)$get_data_info(
               data = data_nf[[experiment_name]])
 
-            tagList(
-              tags$label(tags$code(experiment_name)),
-              paste0(f_rows, "/", nf_rows)
-            )
+            data_info <- paste0(data_f_rows, "/", data_nf_rows)
+            data_info
           }
         )
+
+      list(
+        mae_total_data_info,
+        data_info
       )
     },
 
@@ -836,7 +831,7 @@ MAEFilteredDataset <- R6::R6Class( # nolint
     #' Get data info
     #' @param filtered (`logical(1)`)\cr
     #'   whether `data.info` should depend on filtered data.
-    #' @return (`list`) html tag list of the number of filtered/non-filtered subjects
+    #' @return (`list`) html tag list of the number of filtered/non-filtered rows
     get_subjects_info = function(input, output, session, filtered) {
       data_f <- self$get_data(filtered = TRUE)
       data_nf <- self$get_data(filtered = FALSE)
@@ -844,31 +839,25 @@ MAEFilteredDataset <- R6::R6Class( # nolint
 
       data_f_subjects_info <- nrow(SummarizedExperiment::colData(self$get_data(filtered = TRUE)))
       data_nf_subjects_info <- nrow(SummarizedExperiment::colData(self$get_data(filtered = FALSE)))
+      mae_total_subjects_info <- paste0(data_f_subjects_info, "/", data_nf_subjects_info)
 
-      mae_total_subjects_info <- tagList(
-        tags$label(tags$code(self$get_dataname())),
-        paste0(data_f_subjects_info, "/", data_nf_subjects_info)
+      subjects_info <- lapply(
+        experiment_names,
+        function(experiment_name) {
+          subjects_f_rows <- self$get_filter_states(experiment_name)$get_subjects_info(
+            data = data_f[[experiment_name]])
+          subjects_nf_rows <- self$get_filter_states(experiment_name)$get_subjects_info(
+            data = data_nf[[experiment_name]])
+
+          subjects_info <- paste0(subjects_f_rows, "/", subjects_nf_rows)
+          subjects_info
+        }
       )
-
-      tagList(
+      list(
         mae_total_subjects_info,
-        lapply(
-          experiment_names,
-          function(experiment_name) {
-            f_rows <- self$get_filter_states(experiment_name)$get_subjects_info(
-              data = data_f[[experiment_name]])
-            nf_rows <- self$get_filter_states(experiment_name)$get_subjects_info(
-              data = data_nf[[experiment_name]])
-
-            tagList(
-              tags$label(tags$code(experiment_name)),
-              paste0(f_rows, "/", nf_rows)
-            )
-          }
-        )
+        subjects_info
       )
     },
-
     #' @description
     #' Set bookmark state
     #'
