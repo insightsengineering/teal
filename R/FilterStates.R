@@ -536,14 +536,13 @@ FilterStates <- R6::R6Class( # nolint
 
     #' Checks if the queue of the given index was initialized in this FilterStates
     #' param queue_index (character or integer)
-    #' name or index
     validate_queue_exists = function(queue_index) {
       stopifnot(is_character_single(queue_index) || is_numeric_single(queue_index))
-      if (!all(queue_index %in% names(private$queue))) {
+      if (!all(queue_index <= length(private$queue) && queue_index > 0)) {
         stop(
           sprintf(
-            "ReactiveQueue '%s' has not been initialized in FilterStates object belonging to the dataset '%s'", 
-            queue_index, 
+            "ReactiveQueue '%s' has not been initialized in FilterStates object belonging to the dataset '%s'",
+            queue_index,
             private$datalabel
           )
         )
@@ -1497,7 +1496,7 @@ get_filterable_varnames.default <- function(data) { #nolint #nousage
 get_filterable_varnames.matrix <- function(data) { #nolint #nousage
   # all columns are the same type in matrix
   is_expected_class <- class(data[, 1]) %in% .filterable_class
-  if (is_expected_class) {
+  if (is_expected_class && !is.null(names(data))) {
     names(data)
   } else {
     character(0)

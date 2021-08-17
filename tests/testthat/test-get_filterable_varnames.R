@@ -6,12 +6,12 @@ testthat::test_that("get_filterable_varnames returns character(0) for an empty d
   testthat::expect_equal(get_filterable_varnames(data.frame()), character(0))
 })
 
-testthat::test_that("get_filterable_varnames returns literal 1 for a single column numeric matrix", {
-  testthat::expect_equal(get_filterable_varnames(matrix(c(1, 2, 3))), 1)
+testthat::test_that("get_filterable_varnames returns character(0) for a single column numeric matrix", {
+  testthat::expect_equal(get_filterable_varnames(matrix(c(1, 2, 3))), character(0))
 })
 
-testthat::test_that("get_filterable_varnames returns literal 1 for a single column of NA values", {
-  testthat::expect_equal(get_filterable_varnames(matrix(c(NA, NA))), 1)
+testthat::test_that("get_filterable_varnames returns character(0) for a single column of NA values", {
+  testthat::expect_equal(get_filterable_varnames(matrix(c(NA, NA))), character(0))
 })
 
 testthat::test_that("get_filterable_varnames returns column names for a non-empty data.frame", {

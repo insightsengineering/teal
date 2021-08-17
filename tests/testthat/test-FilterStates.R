@@ -67,7 +67,7 @@ testthat::test_that("queue_get returns an empty list after queue_initialize with
   reactive_queue <- ReactiveQueue$new()
   filter_states <- FilterStates$new(input_dataname = "test", "test", "test")
   filter_states$queue_initialize(list(reactive_queue))
-  testthat::expect_equal(filter_states$queue_get(1), list())
+  testthat::expect_equal(filter_states$queue_get(1), NULL)
 })
 
 testthat::test_that("queue_push throws before calling queue_initialize", {
@@ -82,13 +82,6 @@ testthat::test_that("queue_push does not throw after the queue was initialized i
   filter_state <- FilterState$new("test", varname = "test")
   testthat::expect_error(filter_states$queue_push(x = filter_state, queue_index = 1L, element_id = "test"), NA)
   testthat::expect_error(filter_states$queue_push(x = filter_state, queue_index = 1, element_id = "test"), NA)
-})
-
-testthat::test_that("queue_push does not throw after the queue was initialized if passed a string", {
-  filter_states <- FilterStates$new(input_dataname = "test", output_dataname = "test", datalabel = "test")
-  filter_states$queue_initialize(list(ReactiveQueue$new()))
-  filter_state <- FilterState$new("test", varname = "test")
-  testthat::expect_error(filter_states$queue_push(x = filter_state, queue_index = "1", element_id = "test"), NA)
 })
 
 testthat::test_that("queue_get returns the list of FilterState objects", {
@@ -117,7 +110,7 @@ testthat::test_that("Elements of the list returned by queue_get have names corre
 
 testthat::test_that("queue_remove does not throw before initializing the queue", {
   filter_states <- FilterStates$new(input_dataname = "test", output_dataname = "test", datalabel = "test")
-  testthat::expect_error(filter_states$queue_remove(queue_index = 1, element_id = "test"), NA)
+  testthat::expect_error(filter_states$queue_remove(queue_index = 1, element_id = "test"))
 })
 
 testthat::test_that("queue_remove does not throw after initializing the queue", {

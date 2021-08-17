@@ -150,7 +150,6 @@ test_that("two datasets / datasets code", {
 })
 
 test_that("Duplicated code from datasets is shown", {
-
   adae <- synthetic_cdisc_data("rcd_2021_05_05")$adae
   adsl <- synthetic_cdisc_data("rcd_2021_05_05")$adsl
   some_var <- "TEST"
