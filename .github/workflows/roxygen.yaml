@@ -41,7 +41,7 @@ jobs:
            if (!require("remotes")) install.packages("remotes", upgrade = "never", Ncpus = ncores)
         shell: Rscript {0}
         env:
-          GITHUB_PAT: ${{ secrets.REPO_GITHUB_TOKEN }} # or ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_PAT: ${{ secrets.REPO_GITHUB_TOKEN }}
 
       - name: Checkout repo during PR
         uses: actions/checkout@v2
@@ -103,7 +103,7 @@ jobs:
           }
         shell: Rscript {0}
         env:
-          GITHUB_PAT: ${{ secrets.REPO_GITHUB_TOKEN }} # or ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_PAT: ${{ secrets.REPO_GITHUB_TOKEN }}
 
       - name: Generate man pages
         run: |
