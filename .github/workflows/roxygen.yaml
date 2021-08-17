@@ -45,6 +45,23 @@ jobs:
 
       - name: Checkout repo during PR
         uses: actions/checkout@v2
+        if: github.event_name == 'pull_request'
+        with:
+          repository: ${{ fromJSON(steps.get-pr.outputs.result).head.repo.full_name }}
+          ref: ${{ fromJSON(steps.get-pr.outputs.result).head.ref }}
+          path: ${{ github.event.repository.name }}
+
+      - name: Checkout repo from push
+        uses: actions/checkout@v2
+        if: github.event_name == 'push'
+        with:
+          path: ${{ github.event.repository.name }}
+
+      - name: Print branch name
+        run: |
+           cd ${{ github.event.repository.name }}
+           git branch --show-current
+        shell: bash
 
       - name: Install system dependencies for R package
         run: |
@@ -53,7 +70,7 @@ jobs:
           if (v_ubuntu_info[['NAME']] != "Ubuntu") stop("only works on ubuntu")
           ubuntu_version <- v_ubuntu_info[['VERSION_ID']]
 
-          sys_deps_for_pkg <- remotes::system_requirements("ubuntu", ubuntu_version, path = ".")
+          sys_deps_for_pkg <- remotes::system_requirements("ubuntu", ubuntu_version, path = "${{ github.event.repository.name }}")
 
           sys_pgks <- gsub("^apt-get install -y ", "", sys_deps_for_pkg)
 
@@ -67,6 +84,7 @@ jobs:
 
       - name: Install R package dependencies
         run: |
+          setwd("${{ github.event.repository.name }}")
           options(repos = c(CRAN = "https://cloud.r-project.org/"))
           ncores <- parallel::detectCores(all.tests = FALSE, logical = TRUE)
           cat(paste("\n\nnumber of cores detected:", ncores, "\n\n"))
@@ -89,6 +107,7 @@ jobs:
 
       - name: Generate man pages
         run: |
+          setwd("${{ github.event.repository.name }}")
           d1 <- installed.packages()
           d1[rownames(d1) == 'roxygen2', c('Version', 'LibPath')]
           print(packageVersion("roxygen2"))
@@ -97,6 +116,7 @@ jobs:
 
       - name: Roxygen check
         run: |
+          cd ${{ github.event.repository.name }}
           git status -s
           if [[ -n `git status -s | grep man` ]]
           then
