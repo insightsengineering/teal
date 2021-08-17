@@ -482,6 +482,69 @@ testthat::test_that("Dataset$is_mutate_delayed stays FALSE if the Dataset's
   testthat::expect_false(dataset1$is_mutate_delayed())
 })
 
+testthat::test_that("Dataset$get_join_keys returns an empty JoinKeys object", {
+  dataset1 <- Dataset$new("iris", head(iris))
+  testthat::expect_true(is(dataset1$get_join_keys(), "JoinKeys"))
+  testthat::expect_equal(length(dataset1$get_join_keys()$get()), 0)
+})
+
+testthat::test_that("Dataset$set_join_keys works independently", {
+  dataset1 <- Dataset$new("iris", head(iris))
+  testthat::expect_silent(
+    dataset1$set_join_keys(join_key("iris", "other_dataset", c("Species" = "some_col")))
+  )
+  testthat::expect_error(
+    dataset1$set_join_keys(join_key("iris", "other_dataset", c("Sepal.Length" = "some_col2")))
+  )
+  testthat::expect_true(is(dataset1$get_join_keys(), "JoinKeys"))
+  testthat::expect_equal(length(dataset1$get_join_keys()$get()), 2)
+})
+
+testthat::test_that("Dataset$mutate_join_keys works independently", {
+  dataset1 <- Dataset$new("iris", head(iris))
+  testthat::expect_silent(
+    dataset1$mutate_join_keys("other_dataset", c("Sepal.Length" = "some_col2"))
+  )
+  testthat::expect_true(is(dataset1$get_join_keys(), "JoinKeys"))
+  testthat::expect_equal(length(dataset1$get_join_keys()$get()), 2)
+
+  dataset2 <- Dataset$new("iris", head(iris))
+  testthat::expect_silent(
+    dataset2$mutate_join_keys("other_dataset", c("Sepal.Length"))
+  )
+  testthat::expect_true(is(dataset2$get_join_keys(), "JoinKeys"))
+  testthat::expect_equal(length(dataset2$get_join_keys()$get()), 2)
+})
+
+testthat::test_that("Dataset$set_join_keys works with Dataset$mutate_join_keys", {
+  dataset1 <- Dataset$new("iris", head(iris))
+  testthat::expect_silent(
+    dataset1$set_join_keys(join_key("iris", "other_dataset", c("Species" = "some_col")))
+  )
+  testthat::expect_identical(
+    dataset1$get_join_keys()$get()$iris$other_dataset, c("Species" = "some_col")
+  )
+  testthat::expect_silent(
+    dataset1$mutate_join_keys("other_dataset", c("Sepal.Length" = "some_col2"))
+  )
+  dataset1$mutate(code = "iris$unique_id <- 1:2")
+  testthat::expect_silent(
+    dataset1$mutate_join_keys("iris", "unique_id")
+  )
+  testthat::expect_silent(
+    join_keys_list <- dataset1$get_join_keys()$get()
+  )
+  testthat::expect_identical(
+    dataset1$get_join_keys()$get()$iris$other_dataset, c("Sepal.Length" = "some_col2")
+  )
+  testthat::expect_identical(
+    dataset1$get_join_keys()$get()$iris$iris, c("unique_id" = "unique_id")
+  )
+  testthat::expect_identical(
+    dataset1$get_join_keys()$get()$other_dataset$iris, c("some_col2" = "Sepal.Length")
+  )
+})
+
 test_that("mutate_dataset", {
   x <- data.frame(x = c(1, 2), y = c("a", "b"), stringsAsFactors = FALSE)
 
