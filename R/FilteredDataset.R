@@ -257,16 +257,7 @@ FilteredDataset <- R6::R6Class( # nolint
       if (is.null(labels)) {
         return(NULL)
       }
-
-      if (!is.null(variables)) {
-        check_in_subset(
-          variables,
-          self$get_varnames(),
-          pre_msg = sprintf("Variables do not exist in data %s:", self$get_dataname())
-        ) # otherwise, NA values will be added (also as names)
-        labels <- labels[variables]
-      }
-
+      if (!is.null(variables)) labels <- labels[intersect(self$get_varnames(), variables)]
       labels
     },
 
@@ -295,7 +286,7 @@ FilteredDataset <- R6::R6Class( # nolint
     #'  containing values of the initial filter. Values should be relevant
     #'  to the referred column.
     set_bookmark_state = function(state) {
-      stop("Abstract class")
+      stop("Pure virtual method.")
     },
 
     # modules ------
@@ -385,7 +376,7 @@ FilteredDataset <- R6::R6Class( # nolint
     #'
     #' @return function - shiny UI module
     ui_add_filter_state = function(id) {
-      stop("Abstract class method")
+      stop("Pure virtual method")
     },
 
     #' @description
@@ -397,7 +388,7 @@ FilteredDataset <- R6::R6Class( # nolint
     #' @param session (`shiny`)\cr
     #' @return function - shiny server module
     srv_add_filter_state = function(input, output, session) {
-      stop("Abstract class method")
+      stop("Pure virtual method")
     }
   ),
   ## __Private Fields ====
