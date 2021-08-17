@@ -51,7 +51,6 @@ jobs:
               core.setFailed(`Request failed with error ${err}`)
             }
 
-
       - name: Install remotes R package if needed
         run: |
            options(repos = c(CRAN = "https://cloud.r-project.org/"))

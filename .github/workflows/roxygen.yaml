@@ -6,18 +6,12 @@ on:
       - main
   pull_request:
 
-
 jobs:
   man-pages:
-    name: Manual pages check ${{ matrix.config.image }}, version ${{ matrix.config.tag }}
+    name: Manual pages check
     runs-on: ubuntu-latest
     container:
-      image: ${{ matrix.config.image }}:${{ matrix.config.tag }}
-    strategy:
-      fail-fast: false
-      matrix:
-        config:
-          - {image: ghcr.io/insightsengineering/rstudio_4.1.0_bioc_3.13, tag: 'latest'}
+      image: ghcr.io/insightsengineering/rstudio_4.1.0_bioc_3.13:latest
 
     steps:
       - name: Gather info from PR
@@ -138,22 +132,6 @@ jobs:
             exit 1
           else
                echo "💚 Manuals are upto date with roxygen comments"
-          fi
-        shell: bash
-
-      - name: NEWS.md and DESCRIPTION Version check
-        run: |
-          cd ${{ github.event.repository.name }}
-          DESC_VERSION=$(awk -F: '/Version:/{gsub(/[ ]+/,"") ; print $2}' DESCRIPTION)
-          NEWS_VERSION=$(awk '/^#+ /{print $3; exit}' NEWS.md)
-          echo "NEWS.md version: $NEWS_VERSION"
-          echo "DESCRIPTION version: $DESC_VERSION"
-          if (test $DESC_VERSION = $NEWS_VERSION ); then
-              echo "NEWS.md and DESCRIPTION have the same version"
-          else
-              echo "NEWS.md and DESCRIPTION have different versions!!!"
-              echo "Fix it!!! please"
-              exit 1
           fi
         shell: bash
 
