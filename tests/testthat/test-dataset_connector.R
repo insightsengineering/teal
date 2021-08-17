@@ -1050,3 +1050,89 @@ testthat::test_that("Initializing DatasetConnector with code argument works", {
     data.frame(head_letters = head(letters), tail_letters = tail(letters))
   )
 })
+
+testthat::test_that("DatasetConnector$get_join_keys returns an empty JoinKeys object", {
+  pull_fun <- callable_function(data.frame)
+  pull_fun$set_args(args = list(head_letters = head(letters)))
+  t_dc <- dataset_connector(
+    "test_dc",
+    pull_fun,
+    code = "test_dc$tail_letters = tail(letters)"
+  )
+  testthat::expect_true(is(t_dc$get_join_keys(), "JoinKeys"))
+  testthat::expect_equal(length(t_dc$get_join_keys()$get()), 0)
+})
+
+testthat::test_that("DatasetConnector$set_join_keys works independently", {
+  pull_fun <- callable_function(data.frame)
+  pull_fun$set_args(args = list(head_letters = head(letters)))
+  t_dc <- dataset_connector(
+    "test_dc",
+    pull_fun,
+    code = "test_dc$tail_letters = tail(letters)"
+  )
+  testthat::expect_silent(
+    t_dc$set_join_keys(join_key("test_dc", "other_dataset", c("Species" = "some_col")))
+  )
+  testthat::expect_error(
+    t_dc$set_join_keys(join_key("test_dc", "other_dataset", c("Sepal.Length" = "some_col2")))
+  )
+  testthat::expect_true(is(t_dc$get_join_keys(), "JoinKeys"))
+  testthat::expect_equal(length(t_dc$get_join_keys()$get()), 2)
+})
+
+testthat::test_that("DatasetConnector$mutate_join_keys works independently", {
+  pull_fun <- callable_function(data.frame)
+  pull_fun$set_args(args = list(head_letters = head(letters)))
+  t_dc <- dataset_connector(
+    "test_dc",
+    pull_fun,
+    code = "test_dc$tail_letters = tail(letters)"
+  )
+  testthat::expect_silent(
+    t_dc$mutate_join_keys("other_dataset", c("Sepal.Length" = "some_col2"))
+  )
+  testthat::expect_true(is(t_dc$get_join_keys(), "JoinKeys"))
+  testthat::expect_equal(length(t_dc$get_join_keys()$get()), 2)
+})
+
+testthat::test_that("DatasetConnector$set_join_keys works with DatasetConnector$mutate_join_keys", {
+  pull_fun <- callable_function(data.frame)
+  pull_fun$set_args(args = list(head_letters = head(letters)))
+  t_dc <- dataset_connector(
+    "test_dc",
+    pull_fun,
+    code = "test_dc$tail_letters = tail(letters)"
+  )
+  testthat::expect_silent(
+    t_dc$set_join_keys(join_key("iris", "other_dataset", c("Species" = "some_col")))
+  )
+  testthat::expect_identical(
+    t_dc$get_join_keys()$get()$iris$other_dataset, c("Species" = "some_col")
+  )
+  testthat::expect_silent(
+    t_dc$mutate_join_keys("other_dataset", c("Sepal.Length" = "some_col2"))
+  )
+  testthat::expect_silent(
+    t_dc$mutate_join_keys("iris", "unique_id")
+  )
+  testthat::expect_silent(
+    join_keys_list <- t_dc$get_join_keys()$get()
+  )
+
+  testthat::expect_identical(
+    t_dc$get_join_keys()$get()$iris$other_dataset, c("Species" = "some_col")
+  )
+  testthat::expect_identical(
+    t_dc$get_join_keys()$get()$test_dc$other_dataset, c("Sepal.Length" = "some_col2")
+  )
+  testthat::expect_identical(
+    t_dc$get_join_keys()$get()$test_dc$iris, c("unique_id" = "unique_id")
+  )
+  testthat::expect_identical(
+    t_dc$get_join_keys()$get()$other_dataset$test_dc, c("some_col2" = "Sepal.Length")
+  )
+  testthat::expect_identical(
+    t_dc$get_join_keys()$get()$other_dataset$iris, c("some_col" = "Species")
+  )
+})
