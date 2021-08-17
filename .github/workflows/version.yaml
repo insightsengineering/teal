@@ -10,9 +10,6 @@ jobs:
   man-pages:
     name: Version check
     runs-on: ubuntu-latest
-    container:
-      image: ghcr.io/insightsengineering/rstudio_4.1.0_bioc_3.13:latest
-
     steps:
       - name: Checkout repo
         uses: actions/checkout@v2
