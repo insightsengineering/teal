@@ -1,4 +1,4 @@
-name: Roxygen
+name: Version check
 
 on:
   push:
