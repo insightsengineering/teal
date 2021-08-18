@@ -1,0 +1,24 @@
+testthat::test_that("init_filtered_dataset returns a DefaultFilteredDataset when passed a Dataset", {
+  testthat::expect_error(filtered_dataset <- init_filtered_dataset(
+    dataset = Dataset$new("iris", head(iris)),
+    join_keys = list()
+  ), NA)
+  testthat::expect_true(is(filtered_dataset, "DefaultFilteredDataset"))
+})
+
+testthat::test_that("init_filtered_dataset returns a CDISCFilteredDataset when passed a CDISCDataset", {
+  testthat::expect_error(filtered_dataset <- init_filtered_dataset(
+    dataset = CDISCDataset$new("iris", head(iris), parent = character(0), keys = c("Petal.Length")),
+    join_keys = list()
+  ), NA)
+  testthat::expect_true(is(filtered_dataset, "CDISCFilteredDataset"))
+})
+
+testthat::test_that("init_filtered_dataset returns an MAEFilteredDataset when passed an MAE", {
+  mock_mae <- structure(list(), class = "MultiAssayExperiment")
+  testthat::expect_error(filtered_dataset <- init_filtered_dataset(
+    dataset = MAEDataset$new("mock", mock_mae),
+    join_keys = list()
+  ), NA)
+  testthat::expect_true(is(filtered_dataset, "MAEFilteredDataset"))
+})
