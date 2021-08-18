@@ -618,7 +618,7 @@ LogicalFilterState <- R6::R6Class( # nolint
         y = as.vector(tbl)
       )
 
-      return(invisible(self))
+      invisible(self)
     },
 
 
@@ -720,7 +720,7 @@ LogicalFilterState <- R6::R6Class( # nolint
 
       private$observe_keep_na(input)
 
-      return(NULL)
+      NULL
     }
   ),
   private = list(
