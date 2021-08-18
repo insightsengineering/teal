@@ -76,9 +76,12 @@ CDISCDataset <- R6::R6Class( # nolint
                         x = self$get_raw_data(),
                         keys = self$get_keys(),
                         parent = self$get_parent(),
-                        code = self$get_code_class(),
+                        code = private$code,
                         label = self$get_dataset_label(),
                         vars = list()) {
+
+      mutate_code <- private$mutate_code
+
       res <- self$initialize(
         dataname = dataname,
         x = x,
@@ -88,6 +91,11 @@ CDISCDataset <- R6::R6Class( # nolint
         label = label,
         vars = vars
       )
+
+      if (!is.null(mutate_code)) {
+        # vars argument not needed because it was not overridden
+        res$mutate(code = mutate_code, force_delay = TRUE)
+      }
 
       return(res)
     },
