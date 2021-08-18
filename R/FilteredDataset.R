@@ -1,4 +1,4 @@
-#' Initialize `FilteredDataset`
+#' Initializes `FilteredDataset`
 #'
 #' `FilteredDataset` contains `Dataset`
 #' @param dataset (`Dataset`)\cr
