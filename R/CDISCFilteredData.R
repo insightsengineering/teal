@@ -155,27 +155,25 @@ CDISCFilteredData <- R6::R6Class( # nolint
 
       nrows <- self$get_filtered_datasets(dataname)$get_data_info(filtered = filtered)
       nsubjects <- self$get_filtered_datasets(dataname)$get_subjects_info(filtered = filtered)
-#browser()
-      if (any(sapply(nsubjects, is.list))) {
-          main <- cbind(nrows[[1]], nsubjects[[1]])
-          experiments <- cbind(nrows[[2]], nsubjects[[2]])
-          table <- rbind(main, experiments)
+
+      if (!is_html_like(nsubjects)) {
+          table <- cbind(nrows, nsubjects)
           names_exps <- names(self$get_data(dataname, filtered = FALSE))
-          mae_and_exps <- c(dataname, names_exps)
+          mae_and_exps <- c("", names_exps)
           table_list <- lapply(1:nrow(table), function(x){
-            list(
-              tags$label(mae_and_exps[x]),
-              Obs = table[x, 1],
-              Subjects = table[x, 2]
+            tags$tr(
+              tags$td(mae_and_exps[x]),
+              tags$td(table[x, 1]),
+              tags$td(table[x, 2])
             )
           })
           names(table_list) <-  mae_and_exps
-          table_list
+         table_list
       } else {
-        list(
-          Obs = nrows,
-          Subjects = nsubjects
-        )
+        list(tags$tr(
+          tags$td(nrows),
+          tags$td(nsubjects)
+        ))
         }
     },
 

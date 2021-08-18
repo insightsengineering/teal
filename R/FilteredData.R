@@ -229,7 +229,7 @@ FilteredData <- R6::R6Class( # nolint
     get_data_info = function(dataname, filtered) {
       private$check_data_varname_exists(dataname)
       stopifnot(is_logical_single(filtered))
-print("33333")
+
       nrows <- self$get_filtered_datasets(dataname)$get_data_info(filtered = filtered)
       nsubjects <- self$get_filtered_datasets(dataname)$get_subjects_info(filtered = filtered)
 
@@ -265,7 +265,7 @@ print("33333")
       }
 
       check_in_subset(datanames, self$datanames(), "Some datasets are not available: ")
-
+      #browser()
       data_info <- sapply(
         datanames,
         function(dataname) {
@@ -278,8 +278,7 @@ print("33333")
 
       rows_html <- lapply(data_info, function(row) {
         row %>%
-          tags$td() %>%
-          tags$tr()
+            tags$td()
       })
 
       final_table <- tags$table(

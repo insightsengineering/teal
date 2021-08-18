@@ -190,7 +190,7 @@ FilteredDataset <- R6::R6Class( # nolint
     get_data_info = function(filtered) {
       f_rows <- nrow(self$get_data(filtered = TRUE))
       nf_rows <- nrow(self$get_data(filtered = FALSE))
-      tagList(
+      tags$td(
         paste0(f_rows, "/", nf_rows)
       )
     },
@@ -201,7 +201,7 @@ FilteredDataset <- R6::R6Class( # nolint
     #'   whether `data.info` should depend on filtered data.
     #' @return `list` html tag list of the number of unique subjects
     get_subjects_info = function(filtered) {
-      tagList(
+      tags$td(
         paste0("", "/", "")
       )
     },
@@ -652,7 +652,7 @@ CDISCFilteredDataset <- R6::R6Class( # nolint
         dplyr::n_distinct(self$get_data(filtered = FALSE)[subject_keys])
       }
 
-      paste0(f_rows, "/", nf_rows)
+      tags$td(paste0(f_rows, "/", nf_rows))
     },
 
     #' @description
@@ -821,9 +821,10 @@ MAEFilteredDataset <- R6::R6Class( # nolint
           }
         )
 
-      list(
-        mae_total_data_info,
-        data_info
+      append(
+        data_info,
+        list(mae_total_data_info),
+        after = 0
       )
     },
 
@@ -853,9 +854,10 @@ MAEFilteredDataset <- R6::R6Class( # nolint
           subjects_info
         }
       )
-      list(
-        mae_total_subjects_info,
-        subjects_info
+      append(
+        subjects_info,
+        list(mae_total_subjects_info),
+        after = 0
       )
     },
     #' @description
