@@ -139,7 +139,7 @@ testthat::test_that("rcd_dataset_connector", {
   ) %>%
     as_cdisc()
   testthat::expect_equal(x, x2)
-  expect_true(is(x, c("DatasetConnector", "R6")))
+  testthat::expect_true(is(x, c("DatasetConnector", "R6")))
 
   testthat::expect_identical(
     x$.__enclos_env__$private$pull_callable$.__enclos_env__$private$fun_name,
@@ -300,15 +300,15 @@ testthat::test_that("csv_dataset_connector non-standard datasets multi/space cha
     stringsAsFactors = FALSE
   )
 
-  # next check can pass arguments to read_delim (using '|||')
-  write.table(test_adsl_ns, file = temp_file_csv, row.names = FALSE, sep = "|||")
-  x <- csv_cdisc_dataset_connector("ADSL", file = temp_file_csv, delim = "|||")
+  # next check can pass arguments to read_delim (using '$')
+  write.table(test_adsl_ns, file = temp_file_csv, row.names = FALSE, sep = "$")
+  x <- csv_cdisc_dataset_connector("ADSL", file = temp_file_csv, delim = "$")
   x$pull()
   testthat::expect_true(is_pulled(x))
   testthat::expect_identical(get_dataname(x), "ADSL")
   testthat::expect_identical(
     get_code(x),
-    paste0("ADSL <- readr::read_delim(file = \"", temp_file_csv, "\", delim = \"|||\")")
+    paste0("ADSL <- readr::read_delim(file = \"", temp_file_csv, "\", delim = \"$\")")
   )
   data <- get_raw_data(x)
   testthat::expect_true(is.data.frame(data))
@@ -556,8 +556,8 @@ testthat::test_that("fun_cdisc_dataset_connector", {
   data_1 <- get_raw_data(fun_direct)
   data_2 <- get_raw_data(fun_direct2)
 
-  expect_true(is.data.frame(data_1))
-  expect_true(is.data.frame(data_2))
+  testthat::expect_true(is.data.frame(data_1))
+  testthat::expect_true(is.data.frame(data_2))
   expect_identical(data_1, data_2)
 })
 
@@ -633,7 +633,7 @@ testthat::test_that("code_dataset_connector - Modify vars", {
 
   expect_silent(adtte$pull(try = TRUE))
 
-  expect_true(
+  testthat::expect_true(
     grepl("Modification of the local variable", adtte$get_error_message())
   )
 })
