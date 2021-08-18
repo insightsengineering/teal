@@ -1,0 +1,32 @@
+name: SuperLinter
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+
+jobs:
+  lint:
+    name: SuperLinter
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+
+      - name: Lint Code Base
+        uses: github/super-linter@v4
+        env:
+          VALIDATE_ALL_CODEBASE: false
+          DEFAULT_BRANCH: main
+          VALIDATE_DOCKERFILE: true
+          VALIDATE_BASH: true
+          VALIDATE_YAML: true
+          VALIDATE_MARKDOWN: true
+          VALIDATE_R: true
+          VALIDATE_JSCPD: true
+          FILTER_REGEX_EXCLUDE: NEWS.md
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
