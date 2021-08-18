@@ -74,14 +74,15 @@ CodeClass <- R6::R6Class( # nolint
     #' @description
     #' Append \code{CodeClass} object to a given \code{CodeClass} object
     #' @param x (\code{CodeClass}) object to be appended
+    #' @param skip_if_identical (\code{logical}) flag to skip code that are identical code already in object
     #' @return changed \code{CodeClass} object
-    append = function(x) {
+    append = function(x, skip_if_identical = FALSE) {
       stopifnot(is(x, "CodeClass"))
       if (is_empty(x$code)) {
         return(invisible(self))
       } else {
         for (code_i in x$code) {
-          private$set_code_single(code_i)
+          private$set_code_single(code_i, skip_if_identical = skip_if_identical)
         }
         return(invisible(self))
       }
@@ -156,14 +157,26 @@ CodeClass <- R6::R6Class( # nolint
     set_code_single = function(code,
                                dataname = if_null(attr(code, "dataname"), character(0)),
                                deps = if_null(attr(code, "deps"), character(0)),
-                               id = if_null(attr(code, "id"), digest::digest(c(private$.code, code)))) {
+                               id = if_null(attr(code, "id"), digest::digest(c(private$.code, code))),
+                               skip_if_identical = FALSE) {
       # Line shouldn't be added when it contains the same code and the same dataname
       # as a line already present in an object of CodeClass
       if (!id %in% ulapply(private$.code, "attr", "id") ||
           all_true(dataname, function(x) !x %in% ulapply(private$.code, "attr", "dataname"))) {
-        attr(code, "dataname") <- dataname
-        attr(code, "deps") <- deps
-        attr(code, "id") <- id
+        is_duplicate <- if (skip_if_identical) {
+          any(vapply(
+            private$.code,
+            function(x) identical(x, code),
+            FUN.VALUE = logical(1)
+          ))
+        } else {
+          FALSE
+        }
+        if (!is_duplicate) {
+          attr(code, "dataname") <- dataname
+          attr(code, "deps") <- deps
+          attr(code, "id") <- id
+        }
 
         private$.code <- base::append(private$.code, list(code))
       }
