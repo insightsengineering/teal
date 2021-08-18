@@ -1,0 +1,31 @@
+name: Version check
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+
+jobs:
+  man-pages:
+    name: Version check
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v2
+
+      - name: NEWS.md and DESCRIPTION Version check
+        run: |
+          DESC_VERSION=$(awk -F: '/Version:/{gsub(/[ ]+/,"") ; print $2}' DESCRIPTION)
+          NEWS_VERSION=$(awk '/^#+ /{print $3; exit}' NEWS.md)
+          echo "NEWS.md version: $NEWS_VERSION"
+          echo "DESCRIPTION version: $DESC_VERSION"
+          if (test $DESC_VERSION = $NEWS_VERSION ); then
+              echo "NEWS.md and DESCRIPTION have the same version"
+          else
+              echo "🙈 NEWS.md and DESCRIPTION have different versions!!!"
+              echo "Fix it!!! please"
+              exit 1
+          fi
+        shell: bash
+
