@@ -190,7 +190,6 @@ init_filter_state.POSIXlt <- function(x, #nousage
                           use_dataname = use_dataname)
 }
 
-
 # FilterState ------
 #' @name FilterState
 #' @docType class
@@ -474,7 +473,6 @@ FilterState <- R6::R6Class( # nolint
 #'   use_dataname = TRUE
 #' )
 #' isolate(filter_state$get_call())
-
 #' isolate(filter_state$set_selected(TRUE))
 #' isolate(filter_state$set_keep_na(TRUE))
 #' isolate(filter_state$get_call())
@@ -1015,7 +1013,6 @@ RangeFilterState <- R6::R6Class( # nolint
 #'   use_dataname = TRUE
 #' )
 #' isolate(filter_state$get_call())
-
 #' isolate(filter_state$set_selected("B"))
 #' isolate(filter_state$set_keep_na(TRUE))
 #' isolate(filter_state$get_call())
@@ -1405,7 +1402,6 @@ DateFilterState <- R6::R6Class( # nolint
     }
   )
 )
-
 
 # DatetimeFilterState ---------
 #' @rdname DatetimeFilterState
