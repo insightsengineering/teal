@@ -6,6 +6,7 @@
 ### Bug fixes
 * Fixed the bug caused by calling `mutate_dataset` multiple times on the same `DatasetConnector` or `Dataset` object.
 * Fixed a bug that caused the output of `get_code` function to not reproduce its raw data set.
+* Changed `filter_spec` to allow for selecting no variables in the `filter_spec` input UI in cases where previously it chose the first possible value to display.
 
 ### Enhancements
 * The `append` method of a `CodeClass` object has been modified to print a warning message when the argument does not result in any code being added because it is duplicated.
