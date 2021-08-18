@@ -340,8 +340,8 @@ Dataset <- R6::R6Class( # nolint
       # precise order matters
       res$append(list_to_code_class(private$vars))
       res$append(list_to_code_class(private$mutate_vars))
-      res$append(private$code, skip_if_identical = TRUE)
-      res$append(private$mutate_code, skip_if_identical = TRUE)
+      res$append(private$code)
+      res$append(private$mutate_code)
 
       return(res)
     },

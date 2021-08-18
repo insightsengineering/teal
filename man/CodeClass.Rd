@@ -110,15 +110,13 @@ object of class CodeClass
 \subsection{Method \code{append()}}{
 Append \code{CodeClass} object to a given \code{CodeClass} object
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{CodeClass$append(x, skip_if_identical = FALSE)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{CodeClass$append(x)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
 \item{\code{x}}{(\code{CodeClass}) object to be appended}
-
-\item{\code{skip_if_identical}}{(\code{logical}) flag to skip code that are identical code already in object}
 }
 \if{html}{\out{</div>}}
 }
