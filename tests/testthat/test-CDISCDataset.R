@@ -31,29 +31,26 @@ testthat::test_that("CDISCDataset basics", {
 
 testthat::test_that("CDISCDataset$get_code() does not return duplicated code when
   CDISCDataset$mutate method is called", {
-  adsl_d <- cdisc_dataset("ADSL", head(iris))
-  adsl_d %>% mutate_dataset("ADSL$a <- x", vars = list(x = 1)) %>% mutate_dataset("ADSL$b <- y", vars = list(y = 2))
+  iris_dataset <- CDISCDataset$new("iris", head(iris), code = "head(iris)", parent = character(0), keys = c("test"))
+  mtcars_dataset <- CDISCDatasetConnector$new(
+    "mtcars",
+    callable_function(function() head(mtcars)),
+    parent = character(0),
+    keys = c("test")
+  )
+  mtcars_dataset$pull()
+  mtcars_dataset$mutate("'mutating connector'")
 
-  adae_d <- rcd_cdisc_dataset_connector("ADAE", radae, cached = TRUE)
-  adae_d %>% mutate_dataset("ADAE$a <- x", vars = list(x = 1))
-  adae_d %>% mutate_dataset("ADAE$a <- ADAE$a*2")
-  adae_d %>% load_dataset() %>% mutate_dataset("ADAE$a <- ADAE$a*2")
-
-  adsl_d %>% mutate_dataset("ADSL$c <- z", vars = list(z = 3))
-  adsl_d %>% mutate_dataset("ADSL$d <- ADAE$a[[1]]", vars = list(ADAE = adae_d))
+  iris_dataset$mutate("'mutating dataset'", vars = list(mtcars_dataset = mtcars_dataset))
   testthat::expect_equal(
-    adsl_d %>% get_code() %>% pretty_code_string(),
-    c("x <- 1",
-      "y <- 2",
-      "z <- 3",
-      "ADAE <- radae(cached = TRUE)",
-      "ADAE$a <- x",
-      "ADAE$a <- ADAE$a * 2",
-      "ADAE$a <- ADAE$a * 2",
-      "ADSL$a <- x",
-      "ADSL$b <- y",
-      "ADSL$c <- z",
-      "ADSL$d <- ADAE$a[[1]]"
+    iris_dataset$get_code(),
+    paste(
+      "mtcars <- (function() head(mtcars))()",
+      "\"mutating connector\"",
+      "mtcars_dataset <- mtcars",
+      "head(iris)",
+      "\"mutating dataset\"",
+      sep = "\n"
     )
   )
 })
