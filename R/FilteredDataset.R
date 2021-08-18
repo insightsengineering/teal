@@ -443,12 +443,12 @@ DefaultFilteredDataset <- R6::R6Class( # nolint
   public = list(
 
     #' @description
-    #' Initialize `DefaultFilteredDataset` object
+    #' Initializes this `DefaultFilteredDataset` object
     #'
     #' @param dataset (`Dataset`)\cr
-    #'  single dataset for which filters are rendered
+    #'  the single dataset for which filters are rendered
     #' @param join_keys (`list`)\cr
-    #'  keys to join this `dataset` with the other
+    #'  the keys to join this `dataset` with the other
     initialize = function(dataset, join_keys) {
       stopifnot(is(dataset, "Dataset"))
       super$initialize(dataset, join_keys)
@@ -464,11 +464,11 @@ DefaultFilteredDataset <- R6::R6Class( # nolint
         ),
         id = "filter"
       )
-      return(invisible(self))
+      invisible(self)
     },
 
     #' @description
-    #' Get filter expression
+    #' Gets the filter expression
     #'
     #' This functions returns filter calls equivalent to selected items
     #' within each of `filter_states`. Configuration of the calls is constant and
@@ -493,6 +493,7 @@ DefaultFilteredDataset <- R6::R6Class( # nolint
     #' @param state (`named list`)\cr
     #'  containing values of the initial filter. Values should be relevant
     #'  to the referred column.
+    #' @return invisibly `NULL`
     set_bookmark_state = function(state) {
       stopifnot(is.list(state))
       data <- self$get_data(filtered = FALSE)
@@ -501,7 +502,7 @@ DefaultFilteredDataset <- R6::R6Class( # nolint
         state = state,
         data = data
       )
-      return(invisible(NULL))
+      invisible(NULL)
     },
 
     #' @description
