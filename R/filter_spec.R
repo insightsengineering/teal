@@ -419,7 +419,6 @@ filter_spec_internal.default <- function(vars_choices, # nousage
   )
   stopifnot(all(!duplicated(vars_choices)))
 
-  # if (is.null(vars_selected)) vars_selected <- vars_choices[1]
   if (!is.null(vars_selected)) {
     stopifnot(vars_multiple || length(vars_selected) == 1)
     stopifnot(is_character_vector(vars_selected) ||
