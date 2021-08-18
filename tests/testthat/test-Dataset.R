@@ -486,18 +486,31 @@ testthat::test_that("Dataset$get_code() does not return duplicated code when Dat
   ADSL <- radsl(cached = TRUE)
 
   adsl_d <- cdisc_dataset("ADSL", ADSL)
-  adsl_d |> mutate_dataset("ADSL$a <- x", vars = list(x = 1)) |> mutate_dataset("ADSL$b <- y", vars = list(y = 2))
-  adsl_d |> get_raw_data() |> names()
+  adsl_d %>% mutate_dataset("ADSL$a <- x", vars = list(x = 1)) %>% mutate_dataset("ADSL$b <- y", vars = list(y = 2))
 
   adae_d <- rcd_cdisc_dataset_connector("ADAE", radae, cached = TRUE)
-  adae_d |> mutate_dataset("ADAE$a <- x", vars = list(x = 1))
-  adae_d |> mutate_dataset("ADAE$a <- ADAE$a*2")
-  adae_d |> load_dataset() |> mutate_dataset("ADAE$a <- ADAE$a*2") |> get_raw_data() |> dplyr::select(a)
+  adae_d %>% mutate_dataset("ADAE$a <- x", vars = list(x = 1))
+  adae_d %>% mutate_dataset("ADAE$a <- ADAE$a*2")
+  adae_d %>% load_dataset() %>% mutate_dataset("ADAE$a <- ADAE$a*2")
 
-  adsl_d |> mutate_dataset("ADSL$c <- z", vars = list(z = 3)) |> get_raw_data() |> names()
-  adsl_d |> mutate_dataset("ADSL$d <- ADAE$a[[1]]", vars = list(ADAE = adae_d)) |> get_raw_data() |> names()
-  adsl_d |> get_dataset() |> get_raw_data() |> names()
-  adsl_d |> get_code() |> cat()
+  adsl_d %>% mutate_dataset("ADSL$c <- z", vars = list(z = 3))
+  adsl_d %>% mutate_dataset("ADSL$d <- ADAE$a[[1]]", vars = list(ADAE = adae_d))
+  adsl_d %>% get_dataset()
+  testthat::expect_equal(
+    adsl_d %>% get_code() %>% pretty_code_string(),
+    c("x <- 1",
+      "y <- 2",
+      "z <- 3",
+      "ADAE <- radae(cached = TRUE)",
+      "ADAE$a <- x",
+      "ADAE$a <- ADAE$a * 2",
+      "ADAE$a <- ADAE$a * 2",
+      "ADSL$a <- x",
+      "ADSL$b <- y",
+      "ADSL$c <- z",
+      "ADSL$d <- ADAE$a[[1]]"
+    )
+  )
 })
 
 testthat::test_that("Dataset$get_join_keys returns an empty JoinKeys object", {
