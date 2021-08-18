@@ -503,12 +503,12 @@ Dataset <- R6::R6Class( # nolint
       private$set_vars_internal(vars, is_mutate_vars = TRUE)
       if (is(code, "CodeClass")) {
         private$mutate_code$append(code)
-      } else (
+      } else {
         private$mutate_code$set_code(
           code,
           deps = names(vars)
         )
-      )
+      }
       return(invisible(self))
     },
 
