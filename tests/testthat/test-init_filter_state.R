@@ -14,7 +14,7 @@ testthat::test_that("init_filter_state accepts NULL, name or call as input_datan
   testthat::expect_error(init_filter_state(7, varname = "test", input_dataname = call("test")), NA)
 })
 
-testthat::test_that("init_filter_state accepts logicalas use_dataname", {
+testthat::test_that("init_filter_state accepts logical as use_dataname", {
   testthat::expect_error(init_filter_state(7, varname = "test", use_dataname = TRUE), NA)
   testthat::expect_error(init_filter_state(7, varname = "test", use_dataname = FALSE), NA)
 })

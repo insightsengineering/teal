@@ -743,7 +743,6 @@ test_that("List values", {
 
   test_relational_data_equal(result, result_to_compare)
 
-
   result <- cdisc_data(cdisc_dataset("ADSL", ADSL), cdisc_dataset("ADTTE", ADTTE))
 
   datasets <- list(
