@@ -2,7 +2,8 @@ name: SuperLinter
 
 on:
   push:
-    branches-ignore: [main]
+    branches:
+      - main
   pull_request:
 
 jobs:
@@ -26,7 +27,6 @@ jobs:
           VALIDATE_YAML: true
           VALIDATE_MARKDOWN: true
           VALIDATE_R: true
-          VALIDATE_GITHUB_ACTIONS: true
           VALIDATE_JSCPD: true
           FILTER_REGEX_EXCLUDE: NEWS.md
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
