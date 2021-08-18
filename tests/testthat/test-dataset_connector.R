@@ -1042,7 +1042,7 @@ testthat::test_that("Initializing DatasetConnector with code argument works", {
   # mutate code passed in as string values will have a hash for a dataname
   testthat::expect_equal(
     attr(t_dc$get_code_class()$code[[4]], "dataname"),
-    "38ed9e4099f3992625e08e29b5abcdc3"
+    "ae45af32efd55a0e"
   )
   t_dc$pull()
   testthat::expect_equal(

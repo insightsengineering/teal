@@ -509,7 +509,7 @@ Dataset <- R6::R6Class( # nolint
           # This might be a bit of a hack, but it ensures that identical code strings will be added.
           # The same can be achieved by leaving out the dataname argument, but this may cause duplicated code outputs
           # in self$get_code_class, because there it will be combining code from vars and from code.
-          dataname = digest::digest(c(private$code$code, private$mutate_code$code, code)),
+          dataname = digest::digest(c(private$code$code, private$mutate_code$code, code), algo = "xxhash64"),
           deps = names(vars)
         )
       }
