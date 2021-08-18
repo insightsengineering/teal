@@ -503,12 +503,16 @@ Dataset <- R6::R6Class( # nolint
       private$set_vars_internal(vars, is_mutate_vars = TRUE)
       if (is(code, "CodeClass")) {
         private$mutate_code$append(code)
-      } else (
+      } else {
         private$mutate_code$set_code(
           code,
+          # This might be a bit of a hack, but it ensures that identical code strings will be added.
+          # The same can be achieved by leaving out the dataname argument, but this may cause duplicated code outputs
+          # in self$get_code_class, because there it will be combining code from vars and from code.
+          dataname = digest::digest(c(private$code$code, private$mutate_code$code, code)),
           deps = names(vars)
         )
-      )
+      }
       return(invisible(self))
     },
 
