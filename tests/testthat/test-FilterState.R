@@ -68,3 +68,7 @@ testthat::test_that("set_selected returns NULL", {
   filter_state <- FilterState$new(7, varname = "7")
   testthat::expect_null(isolate(filter_state$set_selected()))
 })
+
+testthat::test_that("label_keep_na_count return the string with an appended element", {
+  testthat::expect_equal(label_keep_na_count(7), "Keep NA (7)")
+})
