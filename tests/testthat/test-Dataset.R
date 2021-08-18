@@ -483,9 +483,7 @@ testthat::test_that("Dataset$is_mutate_delayed stays FALSE if the Dataset's
 })
 
 testthat::test_that("Dataset$get_code() does not return duplicated code when Dataset$mutate method is called", {
-  adsl <- radsl(cached = TRUE)
-
-  adsl_d <- cdisc_dataset("ADSL", adsl)
+  adsl_d <- cdisc_dataset("ADSL", head(iris))
   adsl_d %>% mutate_dataset("ADSL$a <- x", vars = list(x = 1)) %>% mutate_dataset("ADSL$b <- y", vars = list(y = 2))
 
   adae_d <- rcd_cdisc_dataset_connector("ADAE", radae, cached = TRUE)
@@ -495,7 +493,6 @@ testthat::test_that("Dataset$get_code() does not return duplicated code when Dat
 
   adsl_d %>% mutate_dataset("ADSL$c <- z", vars = list(z = 3))
   adsl_d %>% mutate_dataset("ADSL$d <- ADAE$a[[1]]", vars = list(ADAE = adae_d))
-  adsl_d %>% get_dataset()
   testthat::expect_equal(
     adsl_d %>% get_code() %>% pretty_code_string(),
     c("x <- 1",
