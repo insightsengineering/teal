@@ -158,8 +158,8 @@ CDISCFilteredData <- R6::R6Class( # nolint
 
       if (!is_html_like(nsubjects)) {
           table <- cbind(nrows, nsubjects)
-          names_exps <- names(self$get_data(dataname, filtered = FALSE))
-          mae_and_exps <- c("", names_exps)
+          names_exps <- paste0("-", names(self$get_data(dataname, filtered = FALSE)))
+          mae_and_exps <- c(dataname, names_exps)
           table_list <- lapply(1:nrow(table), function(x){
             tags$tr(
               tags$td(mae_and_exps[x]),
@@ -168,9 +168,10 @@ CDISCFilteredData <- R6::R6Class( # nolint
             )
           })
           names(table_list) <-  mae_and_exps
-         table_list
+          table_list
       } else {
         list(tags$tr(
+          tags$td(dataname),
           tags$td(nrows),
           tags$td(nsubjects)
         ))

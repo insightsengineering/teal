@@ -234,8 +234,8 @@ FilteredData <- R6::R6Class( # nolint
       nsubjects <- self$get_filtered_datasets(dataname)$get_subjects_info(filtered = filtered)
 
       list(
-        Obs = nrows,
-        Subjects = nsubjects
+        nrows,
+        nsubjects
       )
     },
 
@@ -263,23 +263,14 @@ FilteredData <- R6::R6Class( # nolint
       if (identical(datanames, "all")) {
         datanames <- self$datanames()
       }
-
       check_in_subset(datanames, self$datanames(), "Some datasets are not available: ")
-      #browser()
-      data_info <- sapply(
+
+      rows_html <- sapply(
         datanames,
         function(dataname) {
-          tagList(tags$label(dataname),
-            self$get_data_info(dataname, filtered = TRUE))
-        },
-        USE.NAMES = TRUE,
-        simplify = FALSE
+          tagList(self$get_data_info(dataname, filtered = TRUE))
+        }
       )
-
-      rows_html <- lapply(data_info, function(row) {
-        row %>%
-            tags$td()
-      })
 
       final_table <- tags$table(
         tags$thead(tags$tr(

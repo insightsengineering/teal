@@ -190,9 +190,9 @@ FilteredDataset <- R6::R6Class( # nolint
     get_data_info = function(filtered) {
       f_rows <- nrow(self$get_data(filtered = TRUE))
       nf_rows <- nrow(self$get_data(filtered = FALSE))
-      tags$td(
+      #tags$td(
         paste0(f_rows, "/", nf_rows)
-      )
+      #)
     },
 
     #' @description
@@ -201,9 +201,7 @@ FilteredDataset <- R6::R6Class( # nolint
     #'   whether `data.info` should depend on filtered data.
     #' @return `list` html tag list of the number of unique subjects
     get_subjects_info = function(filtered) {
-      tags$td(
-        paste0("", "/", "")
-      )
+      tagList("//")
     },
 
     #' @description
@@ -652,7 +650,7 @@ CDISCFilteredDataset <- R6::R6Class( # nolint
         dplyr::n_distinct(self$get_data(filtered = FALSE)[subject_keys])
       }
 
-      tags$td(paste0(f_rows, "/", nf_rows))
+      tagList(paste0(f_rows, "/", nf_rows))
     },
 
     #' @description
@@ -797,10 +795,10 @@ MAEFilteredDataset <- R6::R6Class( # nolint
     },
 
     #' @description
-    #' Get subjectsinfo
+    #' Get data info
     #' @param filtered (`logical(1)`)\cr
     #'   whether `data.info` should depend on filtered data.
-    #' @return (`list`) html tag list of the number of filtered/non-filtered subjects
+    #' @return (`list`) html tag list of the number of filtered/non-filtered rows
     get_data_info = function(input, output, session, filtered) {
       data_f <- self$get_data(filtered = TRUE)
       data_nf <- self$get_data(filtered = FALSE)
@@ -829,10 +827,10 @@ MAEFilteredDataset <- R6::R6Class( # nolint
     },
 
     #' @description
-    #' Get data info
+    #' Get subjects info
     #' @param filtered (`logical(1)`)\cr
     #'   whether `data.info` should depend on filtered data.
-    #' @return (`list`) html tag list of the number of filtered/non-filtered rows
+    #' @return (`list`) html tag list of the number of filtered/non-filtered subjects
     get_subjects_info = function(input, output, session, filtered) {
       data_f <- self$get_data(filtered = TRUE)
       data_nf <- self$get_data(filtered = FALSE)
@@ -860,6 +858,7 @@ MAEFilteredDataset <- R6::R6Class( # nolint
         after = 0
       )
     },
+
     #' @description
     #' Set bookmark state
     #'

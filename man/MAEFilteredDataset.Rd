@@ -115,7 +115,7 @@ whether \code{data.info} should depend on filtered data.}
 \if{html}{\out{<a id="method-get_subjects_info"></a>}}
 \if{latex}{\out{\hypertarget{method-get_subjects_info}{}}}
 \subsection{Method \code{get_subjects_info()}}{
-Get data info
+Get subjects info
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{MAEFilteredDataset$get_subjects_info(input, output, session, filtered)}\if{html}{\out{</div>}}
 }
