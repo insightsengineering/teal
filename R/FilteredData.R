@@ -13,11 +13,11 @@
 #' to the filter state. The data itself can be obtained through `get_data`.
 #' Other classes take care of actually merging together all the datasets.
 #'
-#' The datasets are filtered lazily, i.e. only when requested / needed in the Shiny app.
+#' The datasets are filtered lazily, i.e. only when requested / needed in a Shiny app.
 #'
-#' By the design of the class (and `reactiveValues`), any dataname set through `set_data`
-#' cannot be removed because other code may already depend on it. As a workaround, the
-#' underlying data can be set to `NULL`.
+#' By design, any dataname set through `set_data` cannot be removed because
+#' other code may already depend on it. As a workaround, the underlying
+#' data can be set to `NULL`.
 #'
 #' The class currently supports variables of the following types within datasets:
 #' - `choices`: variable of type `factor`, e.g. `ADSL$COUNTRY`, `iris$Species`
@@ -26,13 +26,13 @@
 #'      exactly one option must be selected, `TRUE` or `FALSE`
 #' - `ranges`: variable of type `numeric`, e.g. `ADSL$AGE`, `iris$Sepal.Length`
 #'      numerical range, a range within this range can be selected
-#' Other variables cannot be filtered for.
+#' - `dates`: variable of type `Date`, `POSIXlt`
+#' Other variables cannot be used for filtering the data in this class.
 #'
 #' Common arguments are:
-#' 1. `filtered`: filtered dataset or not
-#' 2. `dataname`: one of the datasets
+#' 1. `filtered`: whether to return a filtered result or not
+#' 2. `dataname`: the name of one of the datasets in this FilteredData
 #' 3. `varname`: one of the columns in a dataset
-#'
 #'
 #' @examples
 #' library(shiny)
@@ -96,31 +96,31 @@ FilteredData <- R6::R6Class( # nolint
     #' @description
     #' Initialize a `FilteredData` object
     initialize = function() {
-      return(invisible(self))
+      invisible(self)
     },
     #' @description
-    #' Get datanames
+    #' Gets datanames
     #'
     #' The datanames are returned in the order in which they must be
     #' evaluated (in case of dependencies).
     #' @return (`character` vector) of datanames
     datanames = function() {
-      return(names(private$filtered_datasets))
+      names(private$filtered_datasets)
     },
 
 
-    #' Get data label for the dataset
+    #' Gets data label for the dataset
     #'
     #' Useful to display in `Show R Code`.
     #'
     #' @param dataname (`character`) name of the dataset
     #' @return (`character`) keys of dataset
     get_datalabel = function(dataname) {
-      return(self$get_data_attr(dataname, "data_label"))
+      self$get_data_attr(dataname, "data_label")
     },
 
     #' @description
-    #' Get dataset names of a given dataname for the filtering.
+    #' Gets dataset names of a given dataname for the filtering.
     #'
     #' @param dataname (`character` vector) names of the dataset
     #' @return (`character` vector) of dataset names
@@ -128,7 +128,7 @@ FilteredData <- R6::R6Class( # nolint
       dataname
     },
     #' @description
-    #' Get variable names of a given dataname for the filtering.
+    #' Gets variable names of a given dataname for the filtering.
     #'
     #' @param dataname (`character`) name of the dataset
     #' @return (`character` vector) of variable names
@@ -138,7 +138,7 @@ FilteredData <- R6::R6Class( # nolint
 
     # datasets methods ----
     #' @description
-    #' Get a `call` to filter the dataset according to the filter state
+    #' Gets a `call` to filter the dataset according to the filter state
     #'
     #' It returns a `call` to filter the dataset only, assuming the
     #' other (filtered) datasets it depends on are available.
@@ -164,15 +164,15 @@ FilteredData <- R6::R6Class( # nolint
     },
 
     #' @description
-    #' Get the R preprocessing code string that generates the unfiltered datasets
+    #' Gets the R preprocessing code string that generates the unfiltered datasets
     #' @param dataname (`character`) name(s) of dataset(s)
     #' @return (`character`) deparsed code
     get_code = function(dataname = self$datanames()) {
-      return(paste0(private$code$get_code(dataname), collapse = "\n"))
+      paste0(private$code$get_code(dataname), collapse = "\n")
     },
 
     #' @description
-    #' Get `FilteredDataset` object which contains all informations
+    #' Gets `FilteredDataset` object which contains all informations
     #' related to specific dataset.
     #' @param dataname (`character(1)`)\cr
     #'  name of the dataset.
@@ -186,7 +186,7 @@ FilteredData <- R6::R6Class( # nolint
     },
 
     #' @description
-    #' Get filtered or unfiltered dataset
+    #' Gets filtered or unfiltered dataset
     #'
     #' For `filtered = FALSE`, the original data set with
     #' `set_data` is returned including all attributes.
@@ -201,10 +201,10 @@ FilteredData <- R6::R6Class( # nolint
     },
 
     #' @description
-    #' Get data attribute for the dataset
+    #' Gets data attributes for a given dataset
     #'
-    #' sets and gets the data attribute on unfiltered data as it is never modified
-    #' as attributes
+    #' Sets and gets the data attribute on unfiltered data as it is never modified
+    #' as attributes.
     #'
     #' @param dataname (`character`) name of the dataset
     #' @param attr (`character`) attribute to get from the data attributes of the dataset
@@ -212,15 +212,11 @@ FilteredData <- R6::R6Class( # nolint
     get_data_attr = function(dataname, attr) {
       private$check_data_varname_exists(dataname)
       stopifnot(is_character_single(attr))
-      return(
-        get_attrs(
-          self$get_filtered_datasets(dataname)$get_dataset()
-        )[[attr]]
-      )
+      get_attrs(self$get_filtered_datasets(dataname)$get_dataset())[[attr]]
     },
 
     #' @description
-    #' Get info about dataname, i.e. number of rows
+    #' Gets info about dataname, i.e. number of rows
     #'
     #' @param dataname (`character`) name of the dataset
     #' @param filtered `logical` whether to obtain this info for the
@@ -229,13 +225,11 @@ FilteredData <- R6::R6Class( # nolint
     get_data_info = function(dataname, filtered) {
       private$check_data_varname_exists(dataname)
       stopifnot(is_logical_single(filtered))
-      list(
-        Rows = self$get_filtered_datasets(dataname)$get_data_info(filtered = filtered)
-      )
+      list(Rows = self$get_filtered_datasets(dataname)$get_data_info(filtered = filtered))
     },
 
     #' @description
-    #' Get join keys between two datasets.
+    #' Gets join keys between two datasets.
     #' @param dataset_1 (`character`) one dataset name
     #' @param dataset_2 (`character`) other dataset name
     #' @return (`named character`) vector with column names
@@ -247,7 +241,7 @@ FilteredData <- R6::R6Class( # nolint
 
 
     #' @description
-    #' Get filter overview table in form of X (filtered) / Y (non-filtered)
+    #' Gets filter overview table in form of X (filtered) / Y (non-filtered)
     #'
     #' This is intended to be presented in the application.
     #' The content for each of the data names is defined in `get_data_info` method.
@@ -303,14 +297,14 @@ FilteredData <- R6::R6Class( # nolint
 
 
 
-    #' Get keys for the dataset
+    #' Gets keys for the dataset
     #' @param dataname (`character`) name of the dataset
     #' @return (`character`) keys of dataset
     get_keys = function(dataname) {
       self$get_filtered_datasets(dataname)$get_keys()
     },
     #' @description
-    #' Get labels of variables in the data
+    #' Gets labels of variables in the data
     #'
     #' Variables are the column names of the data.
     #' Either, all labels must have been provided for all variables
@@ -326,9 +320,9 @@ FilteredData <- R6::R6Class( # nolint
     },
 
     #' @description
-    #' Get variable names
+    #' Gets variable names
     #'
-    #' @param dataname (`character`) name of the dataset
+    #' @param dataname (`character`) the name of the dataset
     #' @return (`character` vector) of variable names
     get_varnames = function(dataname) {
       self$get_filtered_datasets(dataname)$get_varnames()
@@ -339,7 +333,7 @@ FilteredData <- R6::R6Class( # nolint
     #'
     #' @param datanames `character vector` datanames to pick
     #'
-    #' @return intersection of `self$datanames()` and `datanames`
+    #' @return the intersection of `self$datanames()` and `datanames`
     handle_active_datanames = function(datanames) {
       if (identical(datanames, "all")) {
         datanames <- self$datanames()
@@ -352,22 +346,22 @@ FilteredData <- R6::R6Class( # nolint
         )
       }
       datanames <- self$get_filterable_datanames(datanames)
-      return(intersect(self$datanames(), datanames))
+      intersect(self$datanames(), datanames)
     },
 
 
     #' @description
-    #' Add dataset
+    #' Adds a `Dataset` object to this FilteredData
     #'
-    #' Add dataset and preserve all attributes attached to this object.
+    #' Adds a dataset and preserve all attributes attached to this object.
     #' Technically `set_dataset` created `FilteredDataset` which keeps
     #' `dataset` for filtering purpose.
     #'
     #' @param dataset (`Dataset`)\cr
-    #'   object containing data and attributes.
+    #'   the object containing data and attributes.
     #' @param join_key_set (`JoinKeySet`)\cr
-    #'   keys to merge this `dataset` to the other datasets
-    #' @return (`self`) object of this class
+    #'   the keys to merge this `dataset` to the other datasets
+    #' @return (`self`) invisibly this FilteredData
     set_dataset = function(dataset, join_key_set = NULL) {
       stopifnot(is(dataset, "Dataset") || is(dataset, "DatasetConnector"))
       dataname <- get_dataname(dataset)
@@ -378,11 +372,11 @@ FilteredData <- R6::R6Class( # nolint
         join_keys = join_key_set
       )
 
-      return(invisible(self))
+      invisible(self)
     },
 
     #' @description
-    #' Set the R preprocessing code for single dataset
+    #' Sets the R preprocessing code for single dataset
     #'
     #' @param code `CodeClass` preprocessing code that can be parsed to generate the
     #'   unfiltered datasets
@@ -390,17 +384,17 @@ FilteredData <- R6::R6Class( # nolint
     set_code = function(code) {
       stopifnot(inherits(code, "CodeClass"))
       private$code <- code
-      return(invisible(self))
+      invisible(self)
     },
 
     #' @description
-    #' Set join keys object
+    #' Sets join keys object
     #' @param x (`JoinKeys`)
     #' @return (`self`) invisibly for chaining
     set_join_keys = function(x) {
       stopifnot(is(x, "JoinKeys"))
       private$join_keys <- x
-      return(invisible(self))
+      invisible(self)
     },
 
     # Functions useful for restoring from another dataset ----
@@ -412,13 +406,14 @@ FilteredData <- R6::R6Class( # nolint
     #'
     #' @return named list
     get_bookmark_state = function() {
-      stop("Not implemented")
+      stop("Pure virtual method.")
     },
 
     #' @description
     #' Sets bookmark state
     #' @param state (`named list`)\cr
     #'  nested list of filter selections applied to datasets.
+    #' @return invisibly NULL
     set_bookmark_state = function(state) {
       stopifnot(
         all(names(state) %in% self$datanames())
@@ -428,11 +423,11 @@ FilteredData <- R6::R6Class( # nolint
         fd$set_bookmark_state(state = state[[dataname]])
       }
 
-      return(invisible(NULL))
+      invisible(NULL)
     },
 
     #' @description
-    #' Set this object from a bookmarked state
+    #' Sets this object from a bookmarked state
     #'
     #' Only sets the filter state, does not set the data
     #' and the preprocessing code. The data should already have been set.
@@ -725,7 +720,7 @@ FilteredData <- R6::R6Class( # nolint
         self$get_filter_overview_tbl(datanames = datanames)
       }, width = "100%")
 
-      return(invisible(NULL))
+      invisible(NULL)
     }
 
   ),
@@ -745,7 +740,7 @@ FilteredData <- R6::R6Class( # nolint
     # give informative error messages immediately
 
     # @details
-    # Validate object to inspect if something is wrong
+    # Validates the state of this FilteredData.
     # The call to this function should be isolated to avoid a reactive dependency.
     # Getting the names of a reactivevalues also needs a reactive context.
     validate = function() {
@@ -815,7 +810,7 @@ FilteredData <- R6::R6Class( # nolint
 
 # Wrapper functions for `FilteredData` class ----
 
-#' Refer to the default filter state
+#' Refers the default filter state
 #'
 #' @description `r lifecycle::badge("maturing")`
 #' You can use it to refer to the variable's default filter state,
@@ -824,6 +819,8 @@ FilteredData <- R6::R6Class( # nolint
 #'
 #' @details
 #' This is a simple wrapper around an S3 class.
+#'
+#' @return `default_filter` a default filter object
 #'
 #' @export
 #' @examples
@@ -838,7 +835,7 @@ print.default_filter <- function(x, ...) {
 }
 
 
-#' Get filter expression for multiple datanames taking into account its order.
+#' Gets filter expression for multiple datanames taking into account its order.
 #'
 #' To be used in show R code button.
 #'
