@@ -273,6 +273,7 @@ FilteredData <- R6::R6Class( # nolint
       )
 
       final_table <- tags$table(
+        class = "table custom-table",
         tags$thead(tags$tr(
           tags$td(""),
           tags$td("observations"),
