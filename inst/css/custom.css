@@ -137,3 +137,7 @@ currently not used, instead one can click anywhere in the element to move it
   font-weight: bold;
 }
 
+#summary_panel td,
+#summary_panel th {
+  word-wrap: anywhere;
+}
