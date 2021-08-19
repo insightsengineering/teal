@@ -399,7 +399,7 @@ DataAbstract <- R6::R6Class( #nolint
       res$append(private$pull_code)
       return(res)
     },
-    set_mutate_code = function(code, dataname = self$get_datanames(), deps = names(private_mutate_vars)) {
+    set_mutate_code = function(code, dataname = self$get_datanames(), deps = names(private$mutate_vars)) {
       stopifnot(is_character_vector(code, 0, 1) || inherits(code, "PythonCodeClass"))
 
       if (inherits(code, "PythonCodeClass")) {
