@@ -116,7 +116,10 @@ RelationalDataConnector <- R6::R6Class( #nolint
     #' @return the \code{server} function
     get_preopen_server = function() {
       function(input, output, session, connection = private$connection) {
-        callModule(private$preopen_server, id = "data_input", connection = connection)
+        if_not_null(
+          private$preopen_server,
+          callModule(private$preopen_server, id = "data_input", connection = connection)
+        )
       }
     },
     #' @description

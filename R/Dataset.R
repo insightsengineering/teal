@@ -233,6 +233,15 @@ Dataset <- R6::R6Class( # nolint
       private$.keys
     },
     #' @description
+    #' Get `JoinKeys` object with keys used for joining.
+    #' @return (`JoinKeys`)
+    get_join_keys = function() {
+      if (is.null(private$join_keys)) {
+        private$join_keys <- join_keys()
+      }
+      private$join_keys
+    },
+    #' @description
     #' Returns the string representation of the raw data hashed with the MD5 hash algorithm.
     #' @return \code{character} the hash of the raw data
     get_hash = function() {
@@ -264,6 +273,24 @@ Dataset <- R6::R6Class( # nolint
     set_keys = function(keys) {
       stopifnot(is_character_vector(keys, min_length = 0))
       private$.keys <- keys
+      return(invisible(self))
+    },
+    #' @description
+    #' set join_keys for a given dataset and self
+    #' @param x `list` of `JoinKeySet` objects (which are created using the `join_key` function)
+    #' or single `JoinKeySet` objects
+    #' @return (`self`) invisibly for chaining
+    set_join_keys = function(x) {
+      self$get_join_keys()$set(x)
+      return(invisible(self))
+    },
+    #' @description
+    #' mutate the join_keys for a given dataset and self
+    #' @param dataset (`character`) dataset for which join_keys are to be set against self
+    #' @param val (named `character`) column names used to join
+    #' @return (`self`) invisibly for chaining
+    mutate_join_keys = function(dataset, val) {
+      self$get_join_keys()$mutate(private$dataname, dataset, val)
       return(invisible(self))
     },
     #' @description
@@ -469,18 +496,19 @@ Dataset <- R6::R6Class( # nolint
     mutate_code = NULL, # CodeClass after initialization
     mutate_vars = list(),
     data_hash = character(0),
+    join_keys = NULL,
 
     ## __Private Methods ====
     mutate_delayed = function(code, vars) {
       private$set_vars_internal(vars, is_mutate_vars = TRUE)
       if (is(code, "CodeClass")) {
         private$mutate_code$append(code)
-      } else (
+      } else {
         private$mutate_code$set_code(
           code,
           deps = names(vars)
         )
-      )
+      }
       return(invisible(self))
     },
 

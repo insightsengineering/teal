@@ -1,4 +1,4 @@
-name: R CMD Check
+name: Roxygen
 
 on:
   push:
@@ -7,31 +7,13 @@ on:
   pull_request:
 
 jobs:
-  build-install-check:
+  man-pages:
+    name: Manual pages check
     runs-on: ubuntu-latest
     container:
-      image: ${{ matrix.config.image }}:${{ matrix.config.tag }}
-    name: ${{ matrix.config.image }}, version ${{ matrix.config.tag }}
-    strategy:
-      fail-fast: false
-      matrix:
-        config:
-          - {image: ghcr.io/insightsengineering/rstudio_4.1.0_bioc_3.13, tag: 'latest'}
+      image: ghcr.io/insightsengineering/rstudio_4.1.0_bioc_3.13:latest
 
     steps:
-      - name: Check if Docker image meets requirements
-        run: |
-          lsb=$(lsb_release -d)
-          [[ ! $lsb =~ "Ubuntu" ]] && exit 1
-
-          required_pkgs="r-base curl git"
-          for PKG in $required_pkgs
-          do {
-            DPKG_PAGER=cat dpkg -l $PKG
-          }
-          done
-        shell: bash
-
       - name: Gather info from PR
         uses: actions/github-script@v4
         id: get-pr
@@ -59,7 +41,7 @@ jobs:
            if (!require("remotes")) install.packages("remotes", upgrade = "never", Ncpus = ncores)
         shell: Rscript {0}
         env:
-          GITHUB_PAT: ${{ secrets.REPO_GITHUB_TOKEN }} # or ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_PAT: ${{ secrets.REPO_GITHUB_TOKEN }}
 
       - name: Checkout repo during PR
         uses: actions/checkout@v2
@@ -121,40 +103,28 @@ jobs:
           }
         shell: Rscript {0}
         env:
-          GITHUB_PAT: ${{ secrets.REPO_GITHUB_TOKEN }} # or ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_PAT: ${{ secrets.REPO_GITHUB_TOKEN }}
 
-
-      - name: Build R package
+      - name: Generate man pages
         run: |
-          R CMD build ${{ github.event.repository.name }}
-          echo "PKGBUILD=$(echo *.tar.gz)" >> $GITHUB_ENV
-        shell: bash
-
-# TODO: if configurable then --as-cran optionally
-      - name: Run R CMD CHECK
-        run: R CMD check --no-manual ${{ env.PKGBUILD }}
-        shell: bash
-        continue-on-error: true
-        env:
-          TESTING_DEPTH: 1
-          _R_CHECK_TESTS_NLINES_: 0
-
-      - name: Catch warnings in R CMD check output
-        id: catch-errors
-        run: |
-          x <- tail(readLines("${{ github.event.repository.name }}.Rcheck/00check.log"), 1)
-          if (!grepl("^Status", x)) stop("No status line found in R CMD check log")
-          if (grepl("ERROR", x)) stop("R CMD check has errors")
-          if (grepl("WARNING", x)) stop("R CMD check has warnings")
+          setwd("${{ github.event.repository.name }}")
+          roxygen2::roxygenize('.', roclets = c('rd', 'collate', 'namespace'))
         shell: Rscript {0}
 
-      - name: Upload check results
-        if: failure()
-        uses: actions/upload-artifact@v2
-        with:
-          name: ${{ matrix.config.tag }}-results
-          path: ${{ github.event.repository.name }}.Rcheck/00check.log
-
-      - name: Install R package
-        run: R CMD INSTALL ${{ env.PKGBUILD }}
+      - name: Roxygen check
+        run: |
+          cd ${{ github.event.repository.name }}
+          git status -s
+          if [[ -n `git status -s | grep man` ]]
+          then
+            echo "🙈 Manuals are not up-to-date with roxygen comments!"
+            echo "💻 Please rerun the following command on your workstation and push your changes"
+            echo "--------------------------------------------------------------------"
+            echo "roxygen2::roxygenize('.', roclets = c('rd', 'collate', 'namespace'))"
+            echo "--------------------------------------------------------------------"
+            exit 1
+          else
+               echo "💚 Manuals are up-to-date with roxygen comments"
+          fi
         shell: bash
+
