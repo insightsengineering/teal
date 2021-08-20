@@ -15,9 +15,10 @@ testthat::test_that("init_filtered_dataset returns a CDISCFilteredDataset when p
 })
 
 testthat::test_that("init_filtered_dataset returns an MAEFilteredDataset when passed an MAE", {
-  mock_mae <- structure(list(), class = "MultiAssayExperiment")
+  data("miniACC")
+  mock_mae <- MAEDataset$new("mock", miniACC)
   testthat::expect_error(filtered_dataset <- init_filtered_dataset(
-    dataset = MAEDataset$new("mock", mock_mae),
+    dataset = mock_mae,
     join_keys = list()
   ), NA)
   testthat::expect_true(is(filtered_dataset, "MAEFilteredDataset"))

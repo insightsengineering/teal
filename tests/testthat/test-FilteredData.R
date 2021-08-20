@@ -58,10 +58,10 @@ testthat::test_that("get_varlabels returns variable labels of a Dataset", {
   )
 })
 
-testthat::test_that("get_datalabel returns NULL for a Dataset with no labels", {
+testthat::test_that("get_datalabel returns character(0) for a Dataset with no labels", {
   filtered_data <- FilteredData$new()
   filtered_data$set_dataset(Dataset$new("iris", head(iris)))
-  testthat::expect_equal(filtered_data$get_datalabel("iris"), NULL)
+  testthat::expect_equal(filtered_data$get_datalabel("iris"), character(0))
 })
 
 testthat::test_that("get_datalabel returns the label of a passed Dataset", {
@@ -79,12 +79,6 @@ testthat::test_that("get_code return the code passed to set_code", {
   filtered_data <- FilteredData$new()
   filtered_data$set_code(CodeClass$new("'preprocessing code'"))
   testthat::expect_equal(filtered_data$get_code(), "\"preprocessing code\"")
-})
-
-testthat::test_that("get_call returns a call evaluating to the unfiltered raw data", {
-  filtered_data <- FilteredData$new()
-  filtered_data$set_dataset(Dataset$new("test_iris", head(iris), label = "test", code = "head(iris)"))
-  filtered_data$get_code()
 })
 
 testthat::test_that("get_data does not throw when passed a dataset name", {

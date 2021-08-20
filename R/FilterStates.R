@@ -1504,7 +1504,13 @@ get_filterable_varnames.matrix <- function(data) { #nolint #nousage
 }
 
 #' @title Returns a `choices_labeled` object
+#'
+#' @param data `data.frame`
+#' @param choices `character` the array of chosen variables
+#' @param varlabels `character` the labels of variables in data
+#' @param keys `character` the names of the key columns in data
 #' @return `character(0)` if choices are empty; a `choices_labeled` object otherwise
+#' @noRd
 data_choices_labeled <- function(data, choices, varlabels = character(0), keys = character(0)) {
   if (is_empty(choices)) {
     return(character(0))
