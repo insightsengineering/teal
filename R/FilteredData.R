@@ -116,7 +116,7 @@ FilteredData <- R6::R6Class( # nolint
     #' @param dataname (`character`) name of the dataset
     #' @return (`character`) keys of dataset
     get_datalabel = function(dataname) {
-      self$get_data_attr(dataname, "data_label")
+      self$get_data_attr(dataname, "dataset_label")
     },
 
     #' @description
@@ -192,7 +192,7 @@ FilteredData <- R6::R6Class( # nolint
     #' `set_data` is returned including all attributes.
     #'
     #' @param dataname (`character`) name of the dataset
-    #' @param filtered (`logical`) whether to return filtered or unfiltered dataset
+    #' @param filtered (`logical`) whether to return a filtered or unfiltered dataset
     get_data = function(dataname, filtered = TRUE) {
       private$check_data_varname_exists(dataname)
       stopifnot(is_logical_single(filtered))
@@ -234,9 +234,11 @@ FilteredData <- R6::R6Class( # nolint
     #' @param dataset_2 (`character`) other dataset name
     #' @return (`named character`) vector with column names
     get_join_keys = function(dataset_1, dataset_2) {
-      if (is.null(private$join_keys))
-        return(character(0))
-      private$join_keys$get(dataset_1, dataset_2)
+      if (is.null(private$join_keys)) {
+        character(0)
+      } else {
+        private$join_keys$get(dataset_1, dataset_2)
+      }
     },
 
 
@@ -357,7 +359,7 @@ FilteredData <- R6::R6Class( # nolint
     #' Technically `set_dataset` created `FilteredDataset` which keeps
     #' `dataset` for filtering purpose.
     #'
-    #' @param dataset (`Dataset`)\cr
+    #' @param dataset (`Dataset` or `DatasetConnector`)\cr
     #'   the object containing data and attributes.
     #' @param join_key_set (`JoinKeySet`)\cr
     #'   the keys to merge this `dataset` to the other datasets
