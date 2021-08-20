@@ -15,11 +15,11 @@ For each dataset, \code{get_filter_expr} returns the call to filter the dataset 
 to the filter state. The data itself can be obtained through \code{get_data}.
 Other classes take care of actually merging together all the datasets.
 
-The datasets are filtered lazily, i.e. only when requested / needed in the Shiny app.
+The datasets are filtered lazily, i.e. only when requested / needed in a Shiny app.
 
-By the design of the class (and \code{reactiveValues}), any dataname set through \code{set_data}
-cannot be removed because other code may already depend on it. As a workaround, the
-underlying data can be set to \code{NULL}.
+By design, any dataname set through \code{set_data} cannot be removed because
+other code may already depend on it. As a workaround, the underlying
+data can be set to \code{NULL}.
 
 The class currently supports variables of the following types within datasets:
 \itemize{
@@ -29,13 +29,14 @@ zero or more options can be selected, when the variable is a factor
 exactly one option must be selected, \code{TRUE} or \code{FALSE}
 \item \code{ranges}: variable of type \code{numeric}, e.g. \code{ADSL$AGE}, \code{iris$Sepal.Length}
 numerical range, a range within this range can be selected
-Other variables cannot be filtered for.
+\item \code{dates}: variable of type \code{Date}, \code{POSIXlt}
+Other variables cannot be used for filtering the data in this class.
 }
 
 Common arguments are:
 \enumerate{
-\item \code{filtered}: filtered dataset or not
-\item \code{dataname}: one of the datasets
+\item \code{filtered}: whether to return a filtered result or not
+\item \code{dataname}: the name of one of the datasets in this FilteredData
 \item \code{varname}: one of the columns in a dataset
 }
 }
@@ -142,7 +143,7 @@ Initialize a \code{FilteredData} object
 \if{html}{\out{<a id="method-datanames"></a>}}
 \if{latex}{\out{\hypertarget{method-datanames}{}}}
 \subsection{Method \code{datanames()}}{
-Get datanames
+Gets datanames
 
 The datanames are returned in the order in which they must be
 evaluated (in case of dependencies).
@@ -152,7 +153,7 @@ evaluated (in case of dependencies).
 
 \subsection{Returns}{
 (\code{character} vector) of datanames
-Get data label for the dataset
+Gets data label for the dataset
 
 Useful to display in \verb{Show R Code}.
 }
@@ -180,7 +181,7 @@ Useful to display in \verb{Show R Code}.
 \if{html}{\out{<a id="method-get_filterable_datanames"></a>}}
 \if{latex}{\out{\hypertarget{method-get_filterable_datanames}{}}}
 \subsection{Method \code{get_filterable_datanames()}}{
-Get dataset names of a given dataname for the filtering.
+Gets dataset names of a given dataname for the filtering.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{FilteredData$get_filterable_datanames(dataname)}\if{html}{\out{</div>}}
 }
@@ -200,7 +201,7 @@ Get dataset names of a given dataname for the filtering.
 \if{html}{\out{<a id="method-get_filterable_varnames"></a>}}
 \if{latex}{\out{\hypertarget{method-get_filterable_varnames}{}}}
 \subsection{Method \code{get_filterable_varnames()}}{
-Get variable names of a given dataname for the filtering.
+Gets variable names of a given dataname for the filtering.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{FilteredData$get_filterable_varnames(dataname)}\if{html}{\out{</div>}}
 }
@@ -220,7 +221,7 @@ Get variable names of a given dataname for the filtering.
 \if{html}{\out{<a id="method-get_call"></a>}}
 \if{latex}{\out{\hypertarget{method-get_call}{}}}
 \subsection{Method \code{get_call()}}{
-Get a \code{call} to filter the dataset according to the filter state
+Gets a \code{call} to filter the dataset according to the filter state
 
 It returns a \code{call} to filter the dataset only, assuming the
 other (filtered) datasets it depends on are available.
@@ -256,7 +257,7 @@ calls
 \if{html}{\out{<a id="method-get_code"></a>}}
 \if{latex}{\out{\hypertarget{method-get_code}{}}}
 \subsection{Method \code{get_code()}}{
-Get the R preprocessing code string that generates the unfiltered datasets
+Gets the R preprocessing code string that generates the unfiltered datasets
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{FilteredData$get_code(dataname = self$datanames())}\if{html}{\out{</div>}}
 }
@@ -276,7 +277,7 @@ Get the R preprocessing code string that generates the unfiltered datasets
 \if{html}{\out{<a id="method-get_filtered_datasets"></a>}}
 \if{latex}{\out{\hypertarget{method-get_filtered_datasets}{}}}
 \subsection{Method \code{get_filtered_datasets()}}{
-Get \code{FilteredDataset} object which contains all informations
+Gets \code{FilteredDataset} object which contains all informations
 related to specific dataset.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{FilteredData$get_filtered_datasets(dataname = character(0))}\if{html}{\out{</div>}}
@@ -298,7 +299,7 @@ name of the dataset.}
 \if{html}{\out{<a id="method-get_data"></a>}}
 \if{latex}{\out{\hypertarget{method-get_data}{}}}
 \subsection{Method \code{get_data()}}{
-Get filtered or unfiltered dataset
+Gets filtered or unfiltered dataset
 
 For \code{filtered = FALSE}, the original data set with
 \code{set_data} is returned including all attributes.
@@ -311,7 +312,7 @@ For \code{filtered = FALSE}, the original data set with
 \describe{
 \item{\code{dataname}}{(\code{character}) name of the dataset}
 
-\item{\code{filtered}}{(\code{logical}) whether to return filtered or unfiltered dataset}
+\item{\code{filtered}}{(\code{logical}) whether to return a filtered or unfiltered dataset}
 }
 \if{html}{\out{</div>}}
 }
@@ -320,10 +321,10 @@ For \code{filtered = FALSE}, the original data set with
 \if{html}{\out{<a id="method-get_data_attr"></a>}}
 \if{latex}{\out{\hypertarget{method-get_data_attr}{}}}
 \subsection{Method \code{get_data_attr()}}{
-Get data attribute for the dataset
+Gets data attributes for a given dataset
 
-sets and gets the data attribute on unfiltered data as it is never modified
-as attributes
+Sets and gets the data attribute on unfiltered data as it is never modified
+as attributes.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{FilteredData$get_data_attr(dataname, attr)}\if{html}{\out{</div>}}
 }
@@ -345,7 +346,7 @@ value of attribute, may be \code{NULL} if it does not exist
 \if{html}{\out{<a id="method-get_data_info"></a>}}
 \if{latex}{\out{\hypertarget{method-get_data_info}{}}}
 \subsection{Method \code{get_data_info()}}{
-Get info about dataname, i.e. number of rows
+Gets info about dataname, i.e. number of rows
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{FilteredData$get_data_info(dataname, filtered)}\if{html}{\out{</div>}}
 }
@@ -368,7 +369,7 @@ a named vector
 \if{html}{\out{<a id="method-get_join_keys"></a>}}
 \if{latex}{\out{\hypertarget{method-get_join_keys}{}}}
 \subsection{Method \code{get_join_keys()}}{
-Get join keys between two datasets.
+Gets join keys between two datasets.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{FilteredData$get_join_keys(dataset_1, dataset_2)}\if{html}{\out{</div>}}
 }
@@ -390,7 +391,7 @@ Get join keys between two datasets.
 \if{html}{\out{<a id="method-get_filter_overview_tbl"></a>}}
 \if{latex}{\out{\hypertarget{method-get_filter_overview_tbl}{}}}
 \subsection{Method \code{get_filter_overview_tbl()}}{
-Get filter overview table in form of X (filtered) / Y (non-filtered)
+Gets filter overview table in form of X (filtered) / Y (non-filtered)
 
 This is intended to be presented in the application.
 The content for each of the data names is defined in \code{get_data_info} method.
@@ -407,7 +408,7 @@ The content for each of the data names is defined in \code{get_data_info} method
 }
 \subsection{Returns}{
 (\code{data.frame})
-Get keys for the dataset
+Gets keys for the dataset
 }
 }
 \if{html}{\out{<hr>}}
@@ -433,7 +434,7 @@ Get keys for the dataset
 \if{html}{\out{<a id="method-get_varlabels"></a>}}
 \if{latex}{\out{\hypertarget{method-get_varlabels}{}}}
 \subsection{Method \code{get_varlabels()}}{
-Get labels of variables in the data
+Gets labels of variables in the data
 
 Variables are the column names of the data.
 Either, all labels must have been provided for all variables
@@ -461,7 +462,7 @@ attribute does not exist for the data
 \if{html}{\out{<a id="method-get_varnames"></a>}}
 \if{latex}{\out{\hypertarget{method-get_varnames}{}}}
 \subsection{Method \code{get_varnames()}}{
-Get variable names
+Gets variable names
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{FilteredData$get_varnames(dataname)}\if{html}{\out{</div>}}
 }
@@ -469,7 +470,7 @@ Get variable names
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{dataname}}{(\code{character}) name of the dataset}
+\item{\code{dataname}}{(\code{character}) the name of the dataset}
 }
 \if{html}{\out{</div>}}
 }
@@ -495,16 +496,16 @@ otherwise, it makes sure that it is a subset of the available datanames
 \if{html}{\out{</div>}}
 }
 \subsection{Returns}{
-intersection of \code{self$datanames()} and \code{datanames}
+the intersection of \code{self$datanames()} and \code{datanames}
 }
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-set_dataset"></a>}}
 \if{latex}{\out{\hypertarget{method-set_dataset}{}}}
 \subsection{Method \code{set_dataset()}}{
-Add dataset
+Adds a \code{Dataset} object to this FilteredData
 
-Add dataset and preserve all attributes attached to this object.
+Adds a dataset and preserve all attributes attached to this object.
 Technically \code{set_dataset} created \code{FilteredDataset} which keeps
 \code{dataset} for filtering purpose.
 \subsection{Usage}{
@@ -514,23 +515,23 @@ Technically \code{set_dataset} created \code{FilteredDataset} which keeps
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{dataset}}{(\code{Dataset})\cr
-object containing data and attributes.}
+\item{\code{dataset}}{(\code{Dataset} or \code{DatasetConnector})\cr
+the object containing data and attributes.}
 
 \item{\code{join_key_set}}{(\code{JoinKeySet})\cr
-keys to merge this \code{dataset} to the other datasets}
+the keys to merge this \code{dataset} to the other datasets}
 }
 \if{html}{\out{</div>}}
 }
 \subsection{Returns}{
-(\code{self}) object of this class
+(\code{self}) invisibly this FilteredData
 }
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-set_code"></a>}}
 \if{latex}{\out{\hypertarget{method-set_code}{}}}
 \subsection{Method \code{set_code()}}{
-Set the R preprocessing code for single dataset
+Sets the R preprocessing code for single dataset
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{FilteredData$set_code(code)}\if{html}{\out{</div>}}
 }
@@ -551,7 +552,7 @@ unfiltered datasets}
 \if{html}{\out{<a id="method-set_join_keys"></a>}}
 \if{latex}{\out{\hypertarget{method-set_join_keys}{}}}
 \subsection{Method \code{set_join_keys()}}{
-Set join keys object
+Sets join keys object
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{FilteredData$set_join_keys(x)}\if{html}{\out{</div>}}
 }
@@ -600,12 +601,15 @@ nested list of filter selections applied to datasets.}
 }
 \if{html}{\out{</div>}}
 }
+\subsection{Returns}{
+invisibly NULL
+}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-restore_state_from_bookmark"></a>}}
 \if{latex}{\out{\hypertarget{method-restore_state_from_bookmark}{}}}
 \subsection{Method \code{restore_state_from_bookmark()}}{
-Set this object from a bookmarked state
+Sets this object from a bookmarked state
 
 Only sets the filter state, does not set the data
 and the preprocessing code. The data should already have been set.
