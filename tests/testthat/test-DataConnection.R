@@ -21,9 +21,9 @@ testthat::test_that("data connection", {
   )
 
 
-  testthat::expect_false(con$.__enclos_env__$private$opened)
+  testthat::expect_false(con$is_opened())
   con$open()
-  testthat::expect_true(con$.__enclos_env__$private$opened)
+  testthat::expect_true(con$is_opened())
 
   # passing arguments to open doesn't overwrite args
   con$open(args = list(x = 1:5, y = LETTERS[1:5]))
