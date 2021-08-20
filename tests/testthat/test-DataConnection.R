@@ -38,7 +38,8 @@ testthat::test_that("data connection", {
     "data.frame(x = 1:5, y = c(\"a\", \"b\", \"c\", \"d\", \"e\"))"
   )
 
-  testthat::expect_null(
+  testthat::expect_silent(
     con$close(silent = TRUE)
   )
+  testthat::expect_false(con$is_opened())
 })
