@@ -1284,7 +1284,8 @@ SEFilterStates <- R6::R6Class( # nolint
     #'   whether `data.info` should depend on filtered data.
     #' @return `integer` number of unique subjects
     get_subjects_info = function(input, output, mae, data, filtered) {
-      nrow(subset(sampleMap(mae), colname %in% colnames(data)))
+      sample_subset <- subset(sampleMap(mae), colname %in% colnames(data))
+      length(unique(sample_subset$primary))
     }
   )
 )
