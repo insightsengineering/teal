@@ -10,8 +10,8 @@ test_that("One cached and one dependent connector wrapped in a single rcd data c
   expect_true(inherits(data, "RelationalDataConnector"))
   expect_true(all(vapply(items, inherits, logical(1), "DatasetConnector")))
 
-  expect_equal(items$ADSL$get_pull_callable()$get_call(), "radsl(N = 1)")
-  expect_equal(items$ADAE$get_pull_callable()$get_call(), "radae(ADSL = ADSL)")
+  expect_equal(items$ADSL()$get_code(), "radsl(N = 1)")
+  expect_equal(items$ADAE()$get_code(), "radae(ADSL = ADSL)")
   # pull args supplied this way does not persist to the reproducible code
   data$pull(args = list(seed = 2, na_percentage = .10))
 
