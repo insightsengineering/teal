@@ -123,7 +123,6 @@ init_filter_state.numeric <- function(x, #nousage
                          input_dataname = input_dataname,
                          use_dataname = use_dataname)
   }
-
 }
 
 #' @export
@@ -191,7 +190,6 @@ init_filter_state.POSIXlt <- function(x, #nousage
                           use_dataname = use_dataname)
 }
 
-
 # FilterState ------
 #' @name FilterState
 #' @docType class
@@ -244,7 +242,7 @@ FilterState <- R6::R6Class( # nolint
                           use_dataname = FALSE) {
       stopifnot(is.name(varname) || is.call(varname) || is_character_single(varname))
       stopifnot(is_character_vector(varlabel, min_length = 0, max_length = 1))
-      stopifnot(is.null(varname) || is.name(input_dataname) || is.call(input_dataname))
+      stopifnot(is.null(input_dataname) || is.name(input_dataname) || is.call(input_dataname))
       stopifnot(is_logical_single(use_dataname))
 
       private$input_dataname <- input_dataname
@@ -339,7 +337,7 @@ FilterState <- R6::R6Class( # nolint
     set_keep_na = function(value) {
       stopifnot(is_logical_single(value))
       private$keep_na(value)
-      return(invisible(NULL))
+      invisible(NULL)
     },
 
     #' @description
@@ -352,7 +350,7 @@ FilterState <- R6::R6Class( # nolint
     set_selected = function(value) {
       private$validate_selection(value)
       private$selected(value)
-      return(invisible(NULL))
+      invisible(NULL)
     },
 
     #' @description
@@ -421,7 +419,7 @@ FilterState <- R6::R6Class( # nolint
     #' The `keep_na` and `keep_inf` is not printed.
     #'
     log_state = function() {
-      return(NULL)
+      NULL
     },
 
     #' Sets `keep_na` field according to observed `input$keep_na`
@@ -437,7 +435,7 @@ FilterState <- R6::R6Class( # nolint
           private$log_state()
         }
       )
-      return(invisible(NULL))
+      invisible(NULL)
     },
     #' Set choices
     #'
@@ -448,18 +446,17 @@ FilterState <- R6::R6Class( # nolint
     #' return a `NULL`
     set_choices = function(choices) {
       private$choices <- choices
-      return(invisible(NULL))
+      invisible(NULL)
     },
 
     # Checks if the selection is valid in terms of class and length.
     # It should not return anything but throw an error if selection
     # has a wrong class or is outside of possible choices
     validate_selection = function(value) {
-      return(invisible(NULL))
+      invisible(NULL)
     }
   )
 )
-
 
 # EmptyFilterState ---------
 #' @name EmptyFilterState
@@ -476,7 +473,6 @@ FilterState <- R6::R6Class( # nolint
 #'   use_dataname = TRUE
 #' )
 #' isolate(filter_state$get_call())
-
 #' isolate(filter_state$set_selected(TRUE))
 #' isolate(filter_state$set_keep_na(TRUE))
 #' isolate(filter_state$get_call())
@@ -516,22 +512,45 @@ EmptyFilterState <- R6::R6Class( # nolint
     #' Method is using internal reactive values which makes it reactive
     #' and must be executed in reactive or isolated context.
     get_call = function() {
-      filter_call <- NULL
-
-      if (isTRUE(private$keep_na())) {
-        filter_call <- call("is.na", private$get_varname_prefixed())
+      filter_call <- if (isTRUE(private$keep_na())) {
+        call("is.na", private$get_varname_prefixed())
+      } else {
+        FALSE
       }
-
-      filter_call
     },
 
     #' @description
     #' UI Module for `EmptyFilterState`.
-    #' This UI element contains information that all values are missing.
+    #' This UI element contains checkbox input to
+    #' filter or keep missing values.
     #' @param id (`character(1)`)\cr
     #'  id of shiny element
     ui = function(id) {
-      span("Variable contains missing values only. Please remove this filter and continue")
+      ns <- NS(id)
+      fluidRow(
+        div(
+          style = "position: relative;",
+          div(
+            span("Variable contains missing values only"),
+            checkboxInput(
+              ns("keep_na"),
+              label_keep_na_count(private$na_count),
+              value = FALSE
+            )
+          )
+
+        )
+      )
+    },
+    #' @description
+    #' Controls selection of `keep_na` checkbox input
+    #' @param input (`Shiny`)\cr input object
+    #' @param output (`Shiny`)\cr output object
+    #' @param session (`Shiny`)\cr session object
+    #' @return nothing
+    server = function(input, output, session) {
+      private$observe_keep_na(input)
+      return(NULL)
     }
   ),
   private = list(
@@ -597,7 +616,7 @@ LogicalFilterState <- R6::R6Class( # nolint
         y = as.vector(tbl)
       )
 
-      return(invisible(self))
+      invisible(self)
     },
 
 
@@ -699,7 +718,7 @@ LogicalFilterState <- R6::R6Class( # nolint
 
       private$observe_keep_na(input)
 
-      return(NULL)
+      NULL
     }
   ),
   private = list(
@@ -778,7 +797,7 @@ RangeFilterState <- R6::R6Class( # nolint
                           use_dataname = FALSE) {
       stopifnot(is.numeric(x))
       super$initialize(x, varname, varlabel, input_dataname, use_dataname)
-      var_range <- range(x, finite = TRUE)
+      var_range <- range(x, na.rm = TRUE)
       private$set_choices(var_range)
       self$set_selected(var_range)
 
@@ -994,7 +1013,6 @@ RangeFilterState <- R6::R6Class( # nolint
 #'   use_dataname = TRUE
 #' )
 #' isolate(filter_state$get_call())
-
 #' isolate(filter_state$set_selected("B"))
 #' isolate(filter_state$set_keep_na(TRUE))
 #' isolate(filter_state$get_call())
@@ -1016,7 +1034,11 @@ ChoicesFilterState <- R6::R6Class( # nolint
     #' @param use_dataname (`logical(1)`)\cr
     #' whether to prefix condition calls with `input_dataname$`.
     #' For example `input_dataname$variable == "selection"`
-    initialize = function(x, varname, varlabel, input_dataname, use_dataname = FALSE) {
+    initialize = function(x,
+                          varname,
+                          varlabel = character(0),
+                          input_dataname = NULL,
+                          use_dataname = FALSE) {
       stopifnot(
         is.character(x) ||
           is.factor(x) ||
@@ -1241,7 +1263,7 @@ DateFilterState <- R6::R6Class( # nolint
       stopifnot(is(x, "Date"))
       super$initialize(x, varname, varlabel, input_dataname, use_dataname)
 
-      var_range <- range(x, finite = TRUE)
+      var_range <- range(x, na.rm = TRUE)
       private$set_choices(var_range)
       self$set_selected(var_range)
 
@@ -1381,7 +1403,6 @@ DateFilterState <- R6::R6Class( # nolint
   )
 )
 
-
 # DatetimeFilterState ---------
 #' @rdname DatetimeFilterState
 #' @title `FilterState` object for `POSIXct` variable
@@ -1431,7 +1452,7 @@ DatetimeFilterState <- R6::R6Class( # nolint
       stopifnot(is(x, "POSIXct") || is(x, "POSIXlt"))
       super$initialize(x, varname, varlabel, input_dataname, use_dataname)
 
-      var_range <- range(x, finite = TRUE)
+      var_range <- range(x, na.rm = TRUE)
       private$set_choices(var_range)
       self$set_selected(var_range)
 

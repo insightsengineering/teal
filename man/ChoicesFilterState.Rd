@@ -54,8 +54,8 @@ Initialize a \code{FilterState} object
 \if{html}{\out{<div class="r">}}\preformatted{ChoicesFilterState$new(
   x,
   varname,
-  varlabel,
-  input_dataname,
+  varlabel = character(0),
+  input_dataname = NULL,
   use_dataname = FALSE
 )}\if{html}{\out{</div>}}
 }

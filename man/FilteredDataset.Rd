@@ -42,7 +42,7 @@ components of the \code{Dataset}.
 \if{html}{\out{<a id="method-new"></a>}}
 \if{latex}{\out{\hypertarget{method-new}{}}}
 \subsection{Method \code{new()}}{
-Initialize \code{FilteredDataset} object
+Initializes this \code{FilteredDataset} object
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{FilteredDataset$new(dataset, join_keys)}\if{html}{\out{</div>}}
 }
@@ -63,7 +63,7 @@ keys to join this \code{dataset} with the other}
 \if{html}{\out{<a id="method-add_to_eval_env"></a>}}
 \if{latex}{\out{\hypertarget{method-add_to_eval_env}{}}}
 \subsection{Method \code{add_to_eval_env()}}{
-Add objects to the filter call evaluation environment
+Adds objects to the filter call evaluation environment
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{FilteredDataset$add_to_eval_env(name, value)}\if{html}{\out{</div>}}
 }
@@ -77,6 +77,9 @@ Add objects to the filter call evaluation environment
 }
 \if{html}{\out{</div>}}
 }
+\subsection{Returns}{
+invisibly this FilteredDataset
+}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-queues_empty"></a>}}
@@ -87,12 +90,15 @@ Removes all active filter items applied to this dataset
 \if{html}{\out{<div class="r">}}\preformatted{FilteredDataset$queues_empty()}\if{html}{\out{</div>}}
 }
 
+\subsection{Returns}{
+NULL
+}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-get_call"></a>}}
 \if{latex}{\out{\hypertarget{method-get_call}{}}}
 \subsection{Method \code{get_call()}}{
-Get filter expression
+Gets a filter expression
 
 This functions returns filter calls equivalent to selected items
 within each of \code{filter_states}. Configuration of the calls is constant and
@@ -109,7 +115,7 @@ filter \code{call} or \code{list} of filter calls
 \if{html}{\out{<a id="method-get_data"></a>}}
 \if{latex}{\out{\hypertarget{method-get_data}{}}}
 \subsection{Method \code{get_data()}}{
-Get raw data of this dataset
+Gets raw data of this dataset
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{FilteredDataset$get_data(filtered)}\if{html}{\out{</div>}}
 }
@@ -131,7 +137,7 @@ type of returned object depending on a data stored in
 \if{html}{\out{<a id="method-get_data_reactive"></a>}}
 \if{latex}{\out{\hypertarget{method-get_data_reactive}{}}}
 \subsection{Method \code{get_data_reactive()}}{
-Get reactive object which returns filtered data
+Gets the reactive object which returns filtered data
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{FilteredDataset$get_data_reactive()}\if{html}{\out{</div>}}
 }
@@ -144,7 +150,7 @@ Get reactive object which returns filtered data
 \if{html}{\out{<a id="method-get_filter_states"></a>}}
 \if{latex}{\out{\hypertarget{method-get_filter_states}{}}}
 \subsection{Method \code{get_filter_states()}}{
-Get filter states
+Gets the filter states
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{FilteredDataset$get_filter_states(id = character(0))}\if{html}{\out{</div>}}
 }
@@ -153,7 +159,7 @@ Get filter states
 \if{html}{\out{<div class="arguments">}}
 \describe{
 \item{\code{id}}{(\code{character(1)}, \code{character(0)})\cr
-id of the \code{private$filter_states} list element where \code{FilterStates} is kept.}
+the id of the \code{private$filter_states} list element where \code{FilterStates} is kept.}
 }
 \if{html}{\out{</div>}}
 }
@@ -165,7 +171,7 @@ id of the \code{private$filter_states} list element where \code{FilterStates} is
 \if{html}{\out{<a id="method-get_data_info"></a>}}
 \if{latex}{\out{\hypertarget{method-get_data_info}{}}}
 \subsection{Method \code{get_data_info()}}{
-Get data info
+Gets data info
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{FilteredDataset$get_data_info(filtered = FALSE)}\if{html}{\out{</div>}}
 }
@@ -186,7 +192,7 @@ whether \code{data.info} should depend on filtered data.}
 \if{html}{\out{<a id="method-get_subjects_info"></a>}}
 \if{latex}{\out{\hypertarget{method-get_subjects_info}{}}}
 \subsection{Method \code{get_subjects_info()}}{
-Get subjects info
+Gets subjects info
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{FilteredDataset$get_subjects_info(filtered)}\if{html}{\out{</div>}}
 }
@@ -207,7 +213,7 @@ whether \code{data.info} should depend on filtered data.}
 \if{html}{\out{<a id="method-get_dataname"></a>}}
 \if{latex}{\out{\hypertarget{method-get_dataname}{}}}
 \subsection{Method \code{get_dataname()}}{
-Get name of the dataset
+Gets the name of the dataset
 
 Get name of the dataset
 \subsection{Usage}{
@@ -222,7 +228,7 @@ Get name of the dataset
 \if{html}{\out{<a id="method-get_dataset"></a>}}
 \if{latex}{\out{\hypertarget{method-get_dataset}{}}}
 \subsection{Method \code{get_dataset()}}{
-Get dataset
+Gets the dataset in this FilteredDataset
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{FilteredDataset$get_dataset()}\if{html}{\out{</div>}}
 }
@@ -241,21 +247,22 @@ Returns the hash of the unfiltered dataset
 }
 
 \subsection{Returns}{
-(\code{character(1)})
+(\code{character(1)}) the hash
 }
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-get_keys"></a>}}
 \if{latex}{\out{\hypertarget{method-get_keys}{}}}
 \subsection{Method \code{get_keys()}}{
-Get keys for the dataset
+Gets the keys for the dataset of this FilteredDataset
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{FilteredDataset$get_keys()}\if{html}{\out{</div>}}
 }
 
 \subsection{Returns}{
-(\code{character}) keys of dataset
-Get join keys to join this dataset with others
+(\code{character}) the keys of dataset
+Gets join keys to join the dataset of this FilteredDataset
+with other Dataset objects.
 }
 }
 \if{html}{\out{<hr>}}
@@ -274,7 +281,7 @@ Get join keys to join this dataset with others
 \if{html}{\out{<a id="method-get_varlabels"></a>}}
 \if{latex}{\out{\hypertarget{method-get_varlabels}{}}}
 \subsection{Method \code{get_varlabels()}}{
-Get labels of variables in the data
+Gets labels of variables in the data
 
 Variables are the column names of the data.
 Either, all labels must have been provided for all variables
@@ -300,20 +307,20 @@ attribute does not exist for the data
 \if{html}{\out{<a id="method-get_varnames"></a>}}
 \if{latex}{\out{\hypertarget{method-get_varnames}{}}}
 \subsection{Method \code{get_varnames()}}{
-Get variable names from dataset
+Gets variable names from dataset
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{FilteredDataset$get_varnames()}\if{html}{\out{</div>}}
 }
 
 \subsection{Returns}{
-\code{character}
+\code{character} the variable names
 }
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-get_filtered_dataname"></a>}}
 \if{latex}{\out{\hypertarget{method-get_filtered_dataname}{}}}
 \subsection{Method \code{get_filtered_dataname()}}{
-Get suffixed dataname
+Gets the suffixed dataname
 Used when filtering the data to get \verb{<dataname>_FILTERED},
 \verb{<dataname>_FILTERED_ALONE} or any other name.
 \subsection{Usage}{
@@ -340,7 +347,7 @@ Used when filtering the data to get \verb{<dataname>_FILTERED},
 \if{html}{\out{<a id="method-set_bookmark_state"></a>}}
 \if{latex}{\out{\hypertarget{method-set_bookmark_state}{}}}
 \subsection{Method \code{set_bookmark_state()}}{
-Set bookmark state
+Sets the bookmark state
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{FilteredDataset$set_bookmark_state(state)}\if{html}{\out{</div>}}
 }

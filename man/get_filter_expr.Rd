@@ -2,7 +2,7 @@
 % Please edit documentation in R/FilteredData.R
 \name{get_filter_expr}
 \alias{get_filter_expr}
-\title{Get filter expression for multiple datanames taking into account its order.}
+\title{Gets filter expression for multiple datanames taking into account its order.}
 \usage{
 get_filter_expr(datasets, datanames = datasets$datanames())
 }

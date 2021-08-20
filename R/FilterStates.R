@@ -44,13 +44,11 @@
 #'     callModule(
 #'       module = rf$srv_add_filter_state,
 #'       id = "add",
-#'       data = df,
+#'       data = df
 #'     )
-#'
 #'     output$expr <- renderText({
 #'       pdeparse(rf$get_call())
 #'     })
-#'
 #'     observeEvent(
 #'       input$clear,
 #'       rf$queue_empty()
@@ -156,7 +154,7 @@ FilterStates <- R6::R6Class( # nolint
   classname = "FilterStates",
   public = list(
     #' @description
-    #' Initialize `FilterStates` object
+    #' Initializes this `FilterStates` object.
     #' @param data (`data.frame`, `MultiAssayExperiment`, `SummarizedExperiment`, `matrix`)\cr
     #'   R object which `subset` function is applied on.
     #'
@@ -177,6 +175,7 @@ FilterStates <- R6::R6Class( # nolint
       stopifnot(
         is.call(output_dataname) || is.name(output_dataname) || is_character_single(output_dataname)
       )
+      stopifnot(is_character_vector(datalabel, min = 0, max = 1))
 
       char_to_name <- function(x) {
         if (is.character(x)) {
@@ -189,7 +188,7 @@ FilterStates <- R6::R6Class( # nolint
       private$input_dataname <- char_to_name(input_dataname)
       private$output_dataname <- char_to_name(output_dataname)
       private$datalabel <- datalabel
-      return(invisible(self))
+      invisible(self)
     },
     #' @description
     #' Filter call
@@ -207,7 +206,7 @@ FilterStates <- R6::R6Class( # nolint
       # queue (list) names must be the same as argument of the function
       # for ... list should be unnamed
       queue_list <- private$queue
-      filter_items <- sapply(
+      filter_items <- lapply(
         X = queue_list,
         function(queue) {
           items <- queue$get()
@@ -217,17 +216,11 @@ FilterStates <- R6::R6Class( # nolint
               state$get_call()
             }
           )
-          calls <- Filter(
-            f = Negate(is.null),
-            x = calls
-          )
           if (length(calls) > 0) {
             calls_combine_by(
               operator = "&",
               calls = calls
             )
-          } else {
-            NULL
           }
         }
       )
@@ -268,17 +261,18 @@ FilterStates <- R6::R6Class( # nolint
     },
 
     #' @description
-    #' Get function name
+    #' Gets the name of the function used to filter the data in this FilterStates.
     #'
     #' Get function name used to create filter call. By default it's a
     #' "subset" but can be overridden by child class method.
-    #' @return `character(1)`
+    #' @return `character(1)` the name of the function
     get_fun = function() {
-      return("subset")
+      "subset"
     },
 
     #' @description
-    #' Empty reactive queue from active filters
+    #' Remove all FilterState objects from all queues in this FilterStates.
+    #' @return NULL
     queue_empty = function() {
       queue_indices <- if (is.null(names(private$queue))) {
         seq_along(private$queue)
@@ -296,18 +290,18 @@ FilterStates <- R6::R6Class( # nolint
         })
       })
 
-      return(invisible(NULL))
+      invisible(NULL)
     },
 
     #' @description
-    #' Get queue elements
+    #' Returns a list of FilterState objects stored in this FilterStates.
     #' @param queue_index (`character(1)`, `integer(1)`)\cr
     #'   index of the `private$queue` list where `ReactiveQueue` are kept.
     #' @param element_id (`character(1)`)\cr
     #'   name of `ReactiveQueue` element.
     #' @return `list` of `FilterState` objects
     queue_get = function(queue_index, element_id = character(0)) {
-      stopifnot(is_character_single(queue_index) || is_integer_single(queue_index))
+      private$validate_queue_exists(queue_index)
       stopifnot(is_empty(element_id) || is_character_single(element_id))
 
       if (is_empty(element_id)) {
@@ -318,24 +312,26 @@ FilterStates <- R6::R6Class( # nolint
     },
 
     #' @description
-    #' Sets `ReactiveQueue` objects
+    #' Sets `ReactiveQueue` objects.
     #' @param x (`list` of `ReactiveQueue`)\cr
     #'  Must be a list even if single `ReactiveQueue` is set.
     queue_initialize = function(x) {
       stopifnot(is_class_list("ReactiveQueue")(x))
       private$queue <- x
-      return(NULL)
+      invisible(NULL)
     },
 
     #' @description
-    #' Add new `FilterState` to the queue
+    #' Adds a new `FilterState` object to this FilterStates
     #' @param x (`FilterState`)
     #' @param queue_index (`character(1)`, `integer(1)`)\cr
     #'   index of the `private$queue` list where `ReactiveQueue` are kept.
     #' @param element_id (`character(1)`)\cr
-    #'   name of `ReactiveQueue` element.
+    #'   name of the `ReactiveQueue` element.
+    #' @note throws an exception if the length of `x` does not match the length of
+    #'   `element_id`
     queue_push = function(x, queue_index, element_id) {
-      stopifnot(is_character_single(queue_index) || is_integer_single(queue_index))
+      private$validate_queue_exists(queue_index)
       stopifnot(is_character_single(element_id))
 
       states <- if (is.list(x)) {
@@ -345,13 +341,13 @@ FilterStates <- R6::R6Class( # nolint
       }
       state <- setNames(states, element_id)
       private$queue[[queue_index]]$push(state)
-      return(NULL)
+      invisible(NULL)
     },
 
     #' @description
-    #' Removes single filter state
+    #' Removes a single filter state
     #'
-    #' Removes single filter state with all shiny elements associated
+    #' Removes a single filter state with all shiny elements associated
     #' with this state. It removes:\cr
     #' * particular `FilterState` from `private$queue`
     #' * UI card created for this filter
@@ -361,8 +357,10 @@ FilterStates <- R6::R6Class( # nolint
     #' @param element_id (`character(1)`)\cr
     #'   name of `ReactiveQueue` element.
     queue_remove = function(queue_index, element_id) {
+      private$validate_queue_exists(queue_index)
+      stopifnot(is_character_single(element_id))
       .log("removing filter item", element_id, "from queue", queue_index)
-      stopifnot(is_character_single(queue_index) || is_integer_single(queue_index))
+      stopifnot(is_character_single(queue_index) || is_numeric_single(queue_index))
       stopifnot(is_character_single(element_id))
 
       filters <- self$queue_get(queue_index = queue_index, element_id = element_id)
@@ -399,7 +397,7 @@ FilterStates <- R6::R6Class( # nolint
     #'   Names of the `list` element should correspond to the name of the
     #'   column in `data`.
     set_bookmark_state = function(data, state) {
-      stop("Abstract class")
+      stop("Pure virtual method.")
     },
 
     #' @description
@@ -410,7 +408,7 @@ FilterStates <- R6::R6Class( # nolint
     #'  object containing columns to be used as filter variables.
     #' @return shiny.tag
     ui_add_filter_state = function(id, data) {
-      div("This object can't be filtered")
+      div("This object cannot be filtered")
     },
 
     #' @description
@@ -534,27 +532,38 @@ FilterStates <- R6::R6Class( # nolint
 
       private$observers[[queue_id]]$destroy()
       private$observers[[queue_id]] <- NULL
+    },
+
+    #' Checks if the queue of the given index was initialized in this FilterStates
+    #' param queue_index (character or integer)
+    validate_queue_exists = function(queue_index) {
+      stopifnot(is_character_single(queue_index) || is_numeric_single(queue_index))
+      if (!all(queue_index <= length(private$queue) && queue_index > 0)) {
+        stop(
+          sprintf(
+            "ReactiveQueue '%s' has not been initialized in FilterStates object belonging to the dataset '%s'",
+            queue_index,
+            private$datalabel
+          )
+        )
+      }
     }
   )
 )
 
 # DFFilterStates -----
-
 DFFilterStates <- R6::R6Class( # nolint
   classname = "DFFilterStates",
   inherit = FilterStates,
   public = list(
 
-    #' Initialize `DFFilterStates` object
+    #' Initializes `DFFilterStates` object
     #'
-    #' Initialize `DFFilterStates` object by setting `input_dataname`,
-    #' `output_dataname` and initializing `ReactiveQueue`. This class contains
+    #' Initializes `DFFilterStates` object by setting `input_dataname`,
+    #' `output_dataname` and initializing `ReactiveQueue`. This class contains a
     #' single `ReactiveQueue` with no specified name which means that
-    #' when calling function associated to this class (`dplyr::filter`), a list of
+    #' when calling the function associated to this class (`dplyr::filter`), a list of
     #' conditions are passed to unnamed arguments (`...`).
-    #'
-    #' @param data (`data.frame`)\cr
-    #'   R object which `dplyr::filter` function is applied on.
     #'
     #' @param input_dataname (`character(1)` or `name` or `call`)\cr
     #'   name of the data used on lhs of the expression
@@ -624,7 +633,6 @@ DFFilterStates <- R6::R6Class( # nolint
           queue_index = 1L,
           element_id = varname
         )
-
       }
     },
 
@@ -882,7 +890,7 @@ MAEFilterStates <- R6::R6Class( # nolint
     },
 
     #' @description
-    #' Shiny server module to add filter variable
+    #' Shiny server module to add filter variable.
     #'
     #' Module controls available choices to select as a filter variable.
     #' Selected filter variable is being removed from available choices.
@@ -1453,12 +1461,12 @@ MatrixFilterStates <- R6::R6Class( # nolint
 # utils -----
 .filterable_class <- c("logical", "integer", "numeric", "factor", "character", "Date", "POSIXct", "POSIXlt")
 
-#' Get filterable variable names
+#' Gets filterable variable names
 #'
-#' Get filterable variable names from given data which class
-#' matches `.filterable_class`
-#' @param data (`list`, `matrix`)\cr
-#'   R object containing columns which class can be checked through `vapply` or `apply`.
+#' Gets filterable variable names from a given object. The names match variables
+#' of classes in the `teal:::.filterable_class` enum.
+#' @param data (`object`)\cr
+#'   the R object containing elements which class can be checked through `vapply` or `apply`.
 #'
 #' @examples
 #' df <- data.frame(
@@ -1469,7 +1477,7 @@ MatrixFilterStates <- R6::R6Class( # nolint
 #'   z = complex(3)
 #' )
 #' teal:::get_filterable_varnames(df)
-#' @return `character` vector
+#' @return `character` the array of the matched element names
 get_filterable_varnames <- function(data) {
   UseMethod("get_filterable_varnames")
 }
@@ -1488,17 +1496,24 @@ get_filterable_varnames.default <- function(data) { #nolint #nousage
 get_filterable_varnames.matrix <- function(data) { #nolint #nousage
   # all columns are the same type in matrix
   is_expected_class <- class(data[, 1]) %in% .filterable_class
-  if (is_expected_class) {
+  if (is_expected_class && !is.null(names(data))) {
     names(data)
   } else {
     character(0)
   }
 }
 
-
+#' @title Returns a `choices_labeled` object
+#'
+#' @param data `data.frame`
+#' @param choices `character` the array of chosen variables
+#' @param varlabels `character` the labels of variables in data
+#' @param keys `character` the names of the key columns in data
+#' @return `character(0)` if choices are empty; a `choices_labeled` object otherwise
+#' @noRd
 data_choices_labeled <- function(data, choices, varlabels = character(0), keys = character(0)) {
   if (is_empty(choices)) {
-    character(0)
+    return(character(0))
   }
 
   choice_labels <- if (identical(varlabels, character(0))) {

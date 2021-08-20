@@ -108,14 +108,21 @@ call_extract_list <- function(dataname, varname, dollar = TRUE) {
 #'   calls = list(
 #'     teal:::call_condition_choice("SEX", "F"),
 #'     teal:::call_condition_range("AGE", c(20, 50)),
-#'     teal:::call_condition_choice("ARM", "ARM: A")
+#'     teal:::call_condition_choice("ARM", "ARM: A"),
+#'     TRUE
 #'   )
 #' )
 #' @return a combined `call`
 calls_combine_by <- function(operator, calls) {
   stopifnot(is_character_single(operator))
   stopifnot(
-    is_class_list(class_name = "language")(calls)
+    all(
+      vapply(
+        X = calls,
+        FUN.VALUE = logical(1),
+        function(x) is.language(x) || is.logical(x)
+      )
+    )
   )
 
   Reduce(
