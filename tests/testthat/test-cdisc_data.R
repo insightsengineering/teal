@@ -722,6 +722,11 @@ test_that("Naming list elements", {
 })
 
 test_that("List values", {
+  test_relational_data_equal <- function(data1, data2) {
+    testthat::expect_equal(data1$get_items(), data2$get_items())
+    testthat::expect_equal(data1$get_join_keys(), data2$get_join_keys())
+    testthat::expect_equal(data1$get_ui("test"), data2$get_ui("test"))
+  }
 
   result <- cdisc_data(cdisc_dataset("ADSL", ADSL))
 
@@ -738,7 +743,7 @@ test_that("List values", {
 
   result_to_compare <- do.call("cdisc_data", datasets)
 
-  expect_equal(result, result_to_compare)
+  test_relational_data_equal(result, result_to_compare)
 
 
   result <- cdisc_data(cdisc_dataset("ADSL", ADSL), cdisc_dataset("ADTTE", ADTTE))
@@ -761,7 +766,7 @@ test_that("List values", {
 
   result_to_compare <- do.call("cdisc_data", datasets)
 
-  expect_equal(result, result_to_compare)
+  test_relational_data_equal(result, result_to_compare)
 })
 
 test_that("Keys in cached datasets", {

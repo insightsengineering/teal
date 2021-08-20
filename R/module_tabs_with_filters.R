@@ -47,8 +47,7 @@
 #'
 #' # An example with two filter panels in two apps side-by-side
 #' mods <- teal:::get_dummy_modules()
-#' datasets1 <- teal:::get_dummy_datasets()
-#' datasets2 <- teal:::get_dummy_datasets()
+#' datasets1 <- datasets2 <- teal:::get_dummy_datasets()
 #' app <- shinyApp(
 #'   ui = function() {
 #'     tagList(
