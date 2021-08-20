@@ -190,9 +190,9 @@ FilteredDataset <- R6::R6Class( # nolint
     get_data_info = function(filtered) {
       f_rows <- nrow(self$get_data(filtered = TRUE))
       nf_rows <- nrow(self$get_data(filtered = FALSE))
-      #tags$td(
+      tagList(
         paste0(f_rows, "/", nf_rows)
-      #)
+      )
     },
 
     #' @description
