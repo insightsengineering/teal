@@ -96,7 +96,7 @@ filter \code{call} or \code{list} of filter calls
 \subsection{Method \code{get_data_info()}}{
 Get data info
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{MAEFilteredDataset$get_data_info(input, output, session, filtered)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{MAEFilteredDataset$get_data_info(filtered)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
@@ -108,7 +108,7 @@ whether \code{data.info} should depend on filtered data.}
 \if{html}{\out{</div>}}
 }
 \subsection{Returns}{
-(\code{list}) html tag list of the number of filtered/non-filtered rows
+(\code{list}) list of the number of filtered/non-filtered rows
 }
 }
 \if{html}{\out{<hr>}}
@@ -117,7 +117,7 @@ whether \code{data.info} should depend on filtered data.}
 \subsection{Method \code{get_subjects_info()}}{
 Get subjects info
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{MAEFilteredDataset$get_subjects_info(input, output, session, filtered)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{MAEFilteredDataset$get_subjects_info(filtered)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
@@ -129,7 +129,7 @@ whether \code{data.info} should depend on filtered data.}
 \if{html}{\out{</div>}}
 }
 \subsection{Returns}{
-(\code{list}) html tag list of the number of filtered/non-filtered subjects
+(\code{list}) list of the number of filtered/non-filtered subjects
 }
 }
 \if{html}{\out{<hr>}}

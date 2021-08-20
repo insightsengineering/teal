@@ -159,19 +159,21 @@ and \code{rowData} are separate shiny entities.}
 \subsection{Method \code{get_data_info()}}{
 Get data info
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{SEFilterStates$get_data_info(input, output, data, filtered)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{SEFilterStates$get_data_info(data, filtered)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
+\item{\code{data}}{(\code{character})\cr MAE experiment dataset}
+
 \item{\code{filtered}}{(\code{logical(1)})\cr
 whether \code{data.info} should depend on filtered data.}
 }
 \if{html}{\out{</div>}}
 }
 \subsection{Returns}{
-\code{integer(1)} number of unique rows
+\code{integer(1)} number of unique columns
 }
 }
 \if{html}{\out{<hr>}}
@@ -180,12 +182,16 @@ whether \code{data.info} should depend on filtered data.}
 \subsection{Method \code{get_subjects_info()}}{
 Get subjects info
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{SEFilterStates$get_subjects_info(input, output, data, filtered)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{SEFilterStates$get_subjects_info(mae, data, filtered)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
+\item{\code{mae}}{(\code{character})\cr MAE dataset}
+
+\item{\code{data}}{(\code{character})\cr MAE experiment dataset}
+
 \item{\code{filtered}}{(\code{logical(1)})\cr
 whether \code{data.info} should depend on filtered data.}
 }

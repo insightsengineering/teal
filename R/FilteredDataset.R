@@ -798,8 +798,8 @@ MAEFilteredDataset <- R6::R6Class( # nolint
     #' Get data info
     #' @param filtered (`logical(1)`)\cr
     #'   whether `data.info` should depend on filtered data.
-    #' @return (`list`) html tag list of the number of filtered/non-filtered rows
-    get_data_info = function(input, output, session, filtered) {
+    #' @return (`list`) list of the number of filtered/non-filtered rows
+    get_data_info = function(filtered) {
       data_f <- self$get_data(filtered = TRUE)
       data_nf <- self$get_data(filtered = FALSE)
       experiment_names <- names(data_nf)
@@ -830,8 +830,8 @@ MAEFilteredDataset <- R6::R6Class( # nolint
     #' Get subjects info
     #' @param filtered (`logical(1)`)\cr
     #'   whether `data.info` should depend on filtered data.
-    #' @return (`list`) html tag list of the number of filtered/non-filtered subjects
-    get_subjects_info = function(input, output, session, filtered) {
+    #' @return (`list`) list of the number of filtered/non-filtered subjects
+    get_subjects_info = function(filtered) {
       data_f <- self$get_data(filtered = TRUE)
       data_nf <- self$get_data(filtered = FALSE)
       experiment_names <- names(data_nf)
@@ -854,6 +854,7 @@ MAEFilteredDataset <- R6::R6Class( # nolint
           subjects_info
         }
       )
+
       append(
         subjects_info,
         list(mae_total_subjects_info),

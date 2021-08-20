@@ -148,7 +148,7 @@ CDISCFilteredData <- R6::R6Class( # nolint
     #' @param dataname (`character`) name of the dataset
     #' @param filtered (`logical`) whether to obtain this info for the
     #'   filtered dataset
-    #' @return a named vector
+    #' @return a list of shiny.tag objects
     get_data_info = function(dataname, filtered) {
       private$check_data_varname_exists(dataname)
       stopifnot(is_logical_single(filtered))
@@ -175,9 +175,8 @@ CDISCFilteredData <- R6::R6Class( # nolint
           tags$td(nrows),
           tags$td(nsubjects)
         ))
-        }
+      }
     },
-
 
     #' @description
     #' Get names of datasets available for filtering

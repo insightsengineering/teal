@@ -211,7 +211,7 @@ filtered dataset}
 \if{html}{\out{</div>}}
 }
 \subsection{Returns}{
-a named vector
+a list of shiny.tag objects
 }
 }
 \if{html}{\out{<hr>}}
