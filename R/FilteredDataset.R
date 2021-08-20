@@ -201,7 +201,7 @@ FilteredDataset <- R6::R6Class( # nolint
     #'   whether `data.info` should depend on filtered data.
     #' @return `list` html tag list of the number of unique subjects
     get_subjects_info = function(filtered) {
-      tagList("//")
+      tagList("-")
     },
 
     #' @description
@@ -844,8 +844,10 @@ MAEFilteredDataset <- R6::R6Class( # nolint
         experiment_names,
         function(experiment_name) {
           subjects_f_rows <- self$get_filter_states(experiment_name)$get_subjects_info(
+            mae = data_f,
             data = data_f[[experiment_name]])
           subjects_nf_rows <- self$get_filter_states(experiment_name)$get_subjects_info(
+            mae = data_nf,
             data = data_nf[[experiment_name]])
 
           subjects_info <- paste0(subjects_f_rows, "/", subjects_nf_rows)
