@@ -175,6 +175,17 @@ select_spec.default <- function(choices,
   # Deal with selected
   if (length(selected) > 0) {
     stopifnot(is.atomic(selected))
+    if (!all(selected %in% choices)) {
+      msg <-  sprintf(
+        "%s removed from the selected variable as it is not a subset of the choices variable.",
+        paste0(selected[!selected %in% choices], collapse = ', ')
+      )
+      warning(msg)
+      if (is_empty(selected[selected %in% choices]))
+        stop("Check selected variable! None of it's values are a subset of choices variable.")
+      else
+        selected <- selected[selected %in% choices]
+    }
     stopifnot(all(selected %in% choices))
     stopifnot(multiple || length(selected) == 1)
     if (is.null(names(selected))) {
