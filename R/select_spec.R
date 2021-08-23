@@ -186,7 +186,6 @@ select_spec.default <- function(choices,
       else
         selected <- selected[selected %in% choices]
     }
-    stopifnot(all(selected %in% choices))
     stopifnot(multiple || length(selected) == 1)
     if (is.null(names(selected))) {
       names(selected) <- as.character(selected)
