@@ -552,7 +552,7 @@ test_that("mutate_dataset", {
     test_ds <- dataset(
       dataname = "x",
       x = x,
-      code = "data.frame(x = c(1, 2), y = c('a', 'b'), stringsAsFactors = TRUE)"
+      code = "data.frame(x = c(1, 2), y = c('a', 'b'), stringsAsFactors = FALSE)"
     )
   })
 

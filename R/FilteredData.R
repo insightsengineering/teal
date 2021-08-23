@@ -445,7 +445,7 @@ FilteredData <- R6::R6Class( # nolint
     #' @param check_data_hash (`logical`) whether to check that `md5sums` agree
     #'   for the data; may not make sense with randomly generated data per session
     restore_state_from_bookmark = function(state, check_data_hash = TRUE) {
-      stop("Not implemented")
+      stop("Pure virtual method")
     },
 
     # shiny modules -----
