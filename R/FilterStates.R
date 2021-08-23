@@ -256,8 +256,6 @@ FilterStates <- R6::R6Class( # nolint
         # avoid no-op call
         NULL
       }
-
-
     },
 
     #' @description

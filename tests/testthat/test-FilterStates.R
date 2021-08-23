@@ -43,10 +43,20 @@ testthat::test_that("Emptying empty FilterStates does not throw", {
   testthat::expect_error(filter_states$queue_empty(), NA)
 })
 
-testthat::test_that("queue_get does not throw on a freshly initialized FilterStates object", {
+testthat::test_that("queue_get throws on a freshly initialized FilterStates object", {
   filter_states <- FilterStates$new(input_dataname = "test", "test", "test")
-  testthat::expect_error(filter_states$queue_get(queue_index = 1), "ReactiveQueue '1' .* 'test'")
+  testthat::expect_error(filter_states$queue_get(queue_index = 1), "ReactiveQueue 1 .* test")
 })
+
+testthat::test_that("The error message displays the queue index if datalabel is character(0)", {
+  filter_states <- FilterStates$new(input_dataname = "test", output_dataname = "test", datalabel = character(0))
+  filter_states$queue_initialize(list(ReactiveQueue$new()))
+  testthat::expect_error(
+    filter_states$queue_get(7),
+    regexp = "ReactiveQueue 7 has not been initialized in FilterStates object belonging to the dataset "
+  )
+})
+
 
 testthat::test_that("queue_initialize does not throw when passed a list of ReactiveQueue", {
   filter_states <- FilterStates$new(input_dataname = "test", "test", "test")
@@ -142,22 +152,4 @@ testthat::test_that("data_choices_labeled returns labels of the elements matchin
   if the varlabels are provided for the elements", {
   result <- unname(data_choices_labeled(list(a = 1, b = 2), choices = c("a"), varlabels = c(a = "labelA"))[1])
   testthat::expect_equal(result, "a")
-})
-
-testthat::test_that("The error message displays the correct dataset name and queue index", {
-  filter_states <- FilterStates$new(input_dataname = "test", output_dataname = "test", datalabel = "test")
-  filter_states$queue_initialize(list(ReactiveQueue$new()))
-  testthat::expect_error(
-    filter_states$queue_get(7),
-    regexp = "ReactiveQueue 7 has not been initialized in FilterStates object belonging to the dataset test"
-  )
-})
-
-testthat::test_that("The error message displays the queue index of datalabel is character(0)", {
-  filter_states <- FilterStates$new(input_dataname = "test", output_dataname = "test", datalabel = character(0))
-  filter_states$queue_initialize(list(ReactiveQueue$new()))
-  testthat::expect_error(
-    filter_states$queue_get(7),
-    regexp = "ReactiveQueue 7 has not been initialized in FilterStates object belonging to the dataset "
-  )
 })

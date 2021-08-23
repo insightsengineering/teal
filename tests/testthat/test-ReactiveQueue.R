@@ -16,12 +16,12 @@ testthat::test_that("get returns the elements pushed to the queue", {
 })
 
 testthat::test_that("Pushing an array does not throw", {
-  queue <- Queue$new()
+  queue <- ReactiveQueue$new()
   testthat::expect_error(queue$push(c(1, 2)), NA)
 })
 
 testthat::test_that("get returns the pushed array", {
-  queue <- Queue$new()
+  queue <- ReactiveQueue$new()
   queue$push(c(1, 2))
   testthat::expect_equal(queue$get(), c(1, 2))
 })
