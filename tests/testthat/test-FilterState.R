@@ -59,8 +59,6 @@ testthat::test_that("get_selected returns NULL after initialization", {
   testthat::expect_null(isolate(filter_state$get_selected()))
 })
 
-
-
 testthat::test_that("label_keep_na_count return the string with an appended element", {
   testthat::expect_equal(label_keep_na_count(7), "Keep NA (7)")
 })
