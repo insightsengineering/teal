@@ -7,14 +7,14 @@ testthat::test_that("The constructor accepts infinite values", {
   testthat::expect_error(RangeFilterState$new(Inf, varname = "test"), NA)
 })
 
-testthat::test_that("get_call returns a condition TRUE for all value passed to the constructor", {
+testthat::test_that("get_call returns a condition TRUE for all values passed to the constructor", {
   filter_state <- RangeFilterState$new(c(1, 2, 3), varname = "test")
   testthat::expect_equal(isolate(filter_state$get_call()), quote(test >= 1 & test <= 3))
   test <- c(1, 2, 3)
   testthat::expect_true(all(eval(isolate(filter_state$get_call()))))
 })
 
-testthat::test_that("get_call returns a condition TRUE for all value passed to the constructor", {
+testthat::test_that("get_call returns a condition TRUE for all values passed to the constructor", {
   filter_state <- RangeFilterState$new(7, varname = "test")
   testthat::expect_equal(isolate(filter_state$get_call()), quote(test >= 7 & test <= 7))
   test <- 7

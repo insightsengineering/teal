@@ -31,7 +31,7 @@ testthat::test_that("set_join_keys does not throw when passed a JoinKeys object"
   testthat::expect_error(filtered_data$set_join_keys(JoinKeys$new()), NA)
 })
 
-testthat::test_that("get_keys returns an empty character a Dataset has no keys", {
+testthat::test_that("get_keys returns an empty character when a Dataset has no keys", {
   filtered_data <- FilteredData$new()
   filtered_data$set_dataset(Dataset$new("iris", head(iris)))
   testthat::expect_equal(filtered_data$get_keys("iris"), character(0))
