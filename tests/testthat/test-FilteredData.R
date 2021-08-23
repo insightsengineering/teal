@@ -49,12 +49,23 @@ testthat::test_that("get_varnames returns dataname's column names", {
   testthat::expect_equal(filtered_data$get_varnames("iris"), colnames(iris))
 })
 
-testthat::test_that("get_varlabels returns variable labels of a Dataset", {
+testthat::test_that("get_varlabels returns an array of NAs when a Dataset has no variable labels", {
   filtered_data <- FilteredData$new()
   filtered_data$set_dataset(Dataset$new("iris", head(iris)))
   testthat::expect_equal(
     filtered_data$get_varlabels("iris"),
     setNames(object = rep(as.character(NA), ncol(iris)), nm = colnames(iris))
+  )
+})
+
+testthat::test_that("get_varlabels returns array's labels when a Dataset has variable labels", {
+  mock_iris <- head(iris)
+  rtables::var_labels(mock_iris) <- rep("test", ncol(mock_iris))
+  filtered_data <- FilteredData$new()
+  filtered_data$set_dataset(Dataset$new("iris", mock_iris))
+  testthat::expect_equal(
+    filtered_data$get_varlabels("iris"),
+    setNames(object = rep("test", ncol(mock_iris)), nm = colnames(mock_iris))
   )
 })
 
@@ -85,4 +96,31 @@ testthat::test_that("get_data does not throw when passed a dataset name", {
   filtered_data <- FilteredData$new()
   filtered_data$set_dataset(Dataset$new("iris", head(iris)))
   testthat::expect_equal(isolate(filtered_data$get_data("iris")), head(iris))
+})
+
+testthat::test_that("get_filtered_datasets returns a list of FilteredDataset", {
+  filtered_data <- FilteredData$new()
+  filtered_data$set_dataset(Dataset$new("iris", head(iris)))
+  testthat::expect_true(is_class_list("FilteredDataset")(filtered_data$get_filtered_datasets()))
+})
+
+testthat::test_that("get_filtered_datasets returns a list with elements names after set datasets", {
+  filtered_data <- FilteredData$new()
+  filtered_data$set_dataset(Dataset$new("iris", head(iris)))
+  filtered_data$set_dataset(Dataset$new("mtcars", head(mtcars)))
+  testthat::expect_equal(names(filtered_data$get_filtered_datasets()), c("iris", "mtcars"))
+})
+
+testthat::test_that("get_call returns a list of language objects", {
+  filtered_data <- FilteredData$new()
+  filtered_data$set_dataset(Dataset$new("iris", head(iris)))
+  testthat::expect_true(is_class_list("language")(filtered_data$get_call("iris")))
+})
+
+testthat::test_that("get call returns a call assigning the filtered object to <name>_FILTERED", {
+  mock_iris <- head(iris)
+  filtered_data <- FilteredData$new()
+  filtered_data$set_dataset(Dataset$new("mock_iris", mock_iris))
+  eval(filtered_data$get_call("mock_iris")[[1]])
+  testthat::expect_equal(mock_iris_FILTERED, mock_iris)
 })

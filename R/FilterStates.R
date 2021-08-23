@@ -539,13 +539,12 @@ FilterStates <- R6::R6Class( # nolint
     validate_queue_exists = function(queue_index) {
       stopifnot(is_character_single(queue_index) || is_numeric_single(queue_index))
       if (!all(queue_index <= length(private$queue) && queue_index > 0)) {
-        stop(
-          sprintf(
-            "ReactiveQueue '%s' has not been initialized in FilterStates object belonging to the dataset '%s'",
-            queue_index,
-            private$datalabel
-          )
-        )
+        stop(paste(
+          "ReactiveQueue",
+          queue_index,
+          "has not been initialized in FilterStates object belonging to the dataset",
+          private$datalabel
+        ))
       }
     }
   )
