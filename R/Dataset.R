@@ -74,7 +74,6 @@ Dataset <- R6::R6Class( # nolint
       self$set_vars(vars)
       self$set_dataset_label(label)
       self$set_keys(keys)
-      private$mutate_code <- CodeClass$new()
       private$calculate_hash()
       # needed if recreating dataset - we need to preserve code order and uniqueness
       private$code <- CodeClass$new()
@@ -100,8 +99,6 @@ Dataset <- R6::R6Class( # nolint
                         label = self$get_dataset_label(),
                         vars = list()) {
 
-      mutate_code <- private$mutate_code
-
       res <- self$initialize(
         dataname = dataname,
         x = x,
@@ -110,11 +107,6 @@ Dataset <- R6::R6Class( # nolint
         label = label,
         vars = vars
       )
-
-      if (!is.null(mutate_code)) {
-        # vars argument not needed because it was not overridden
-        res$mutate(code = mutate_code, force_delay = TRUE)
-      }
 
       return(res)
     },
@@ -344,7 +336,7 @@ Dataset <- R6::R6Class( # nolint
       res$append(list_to_code_class(private$vars))
       res$append(list_to_code_class(private$mutate_vars))
       res$append(private$code)
-      res$append(private$mutate_code)
+      res$append(private$mutate_list_to_code_class())
 
       return(res)
     },
@@ -379,7 +371,7 @@ Dataset <- R6::R6Class( # nolint
     get_mutate_code_class = function() {
       res <- CodeClass$new()
       res$append(list_to_code_class(private$mutate_vars))
-      res$append(private$mutate_code)
+      res$append(private$mutate_list_to_code_class())
 
       return(res)
     },
@@ -404,7 +396,7 @@ Dataset <- R6::R6Class( # nolint
     #'
     #' @return \code{logical}
     is_mutate_delayed = function() {
-      return(!is_empty(private$mutate_code$code))
+      return(!is_empty(private$mutate_code))
     },
 
     # ___ mutate ====
@@ -421,6 +413,7 @@ Dataset <- R6::R6Class( # nolint
     mutate = function(code, vars = list(), force_delay = FALSE) {
       stopifnot(is_logical_single(force_delay))
       stopifnot(is_fully_named_list(vars))
+      stopifnot(is_character_single(code) || is(code, "CodeClass"))
 
       if (inherits(code, "PythonCodeClass")) {
         self$set_vars(vars)
@@ -522,7 +515,7 @@ Dataset <- R6::R6Class( # nolint
     var_r6 = list(),
     dataset_label = character(0),
     .keys = character(0),
-    mutate_code = NULL, # CodeClass after initialization
+    mutate_code = list(),
     mutate_vars = list(),
     data_hash = character(0),
     join_keys = NULL,
@@ -530,24 +523,13 @@ Dataset <- R6::R6Class( # nolint
     ## __Private Methods ====
     mutate_delayed = function(code, vars) {
       private$set_vars_internal(vars, is_mutate_vars = TRUE)
-      if (is(code, "CodeClass")) {
-        private$mutate_code$append(code)
-      } else {
-        # dataname argument is a hack so that DataAbstract object will not duplicate code when datasets are dependent
-        # on other datasets, e.g. ADTTE dependent on ADSL. ADTTE will contain ADSL code. without a dataname,
-        # they will be duplicated.
-        private$mutate_code$set_code(
-          code,
-          dataname = digest::digest(c(private$code, private$mutate_code), algo = "xxhash64"),
-          deps = names(vars)
-        )
-      }
+      private$mutate_code[[length(private$mutate_code) + 1]] <- list(code = code, deps = names(vars))
       return(invisible(self))
     },
 
     mutate_eager = function() {
       new_df <- private$execute_code(
-        code = private$mutate_code,
+        code = private$mutate_list_to_code_class(),
         vars = c(
           private$vars,
           # if they have the same name, then they are guaranteed to be identical objects.
@@ -558,9 +540,10 @@ Dataset <- R6::R6Class( # nolint
 
       # code set after successful evaluation
       # otherwise code != dataset
-      private$code$append(private$mutate_code)
+      # private$code$append(private$mutate_code)
+      private$append_mutate_code()
       self$set_vars(private$mutate_vars)
-      private$mutate_code <- CodeClass$new()
+      private$mutate_code <- list()
       private$mutate_vars <- list()
 
       # dataset is recreated by replacing data by mutated object
@@ -588,6 +571,36 @@ Dataset <- R6::R6Class( # nolint
         target_class_name = class_type))]
 
       return(return_cols)
+    },
+
+    mutate_list_to_code_class = function() {
+      res <- CodeClass$new()
+      for (mutate_code in private$mutate_code) {
+        if (is(mutate_code$code, "CodeClass")) {
+          res$append(mutate_code$code)
+        } else {
+          res$set_code(
+            code = mutate_code$code,
+            dataname = private$dataname,
+            deps = mutate_code$deps
+          )
+        }
+      }
+      return(res)
+    },
+
+    append_mutate_code = function() {
+      for (mutate_code in private$mutate_code) {
+        if (is(mutate_code$code, "CodeClass")) {
+          private$code$append(mutate_code$code)
+        } else {
+          private$code$set_code(
+            code = mutate_code$code,
+            dataname = private$dataname,
+            deps = mutate_code$deps
+          )
+        }
+      }
     },
 
     is_any_dependency_delayed = function(vars = list()) {
