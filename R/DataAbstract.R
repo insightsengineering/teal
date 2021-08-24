@@ -131,6 +131,15 @@ DataAbstract <- R6::R6Class( #nolint
     get_code = function(dataname = NULL, deparse = TRUE) {
       stopifnot(is.null(dataname) || is_character_vector(dataname))
       stopifnot(is_logical_single(deparse))
+      stopifnot(all(dataname %in% self$get_datanames()))
+
+      if (!is.null(dataname)) {
+        res <- CodeClass$new()
+        for (name in dataname) {
+          res$append(self$get_items(name)$get_code_class())
+        }
+        return(res$get_code(deparse = deparse))
+      }
 
       return(self$get_code_class()$get_code(dataname = dataname, deparse = deparse))
     },
@@ -146,7 +155,7 @@ DataAbstract <- R6::R6Class( #nolint
       pull_code_class <- private$get_pull_code_class()
       all_code_class$append(pull_code_class)
 
-      datasets_code_class <- private$get_datasets_code_class()
+      datasets_code_class <- private$get_datasets_code_class(only_pull)
       all_code_class$append(datasets_code_class)
 
       if (isFALSE(only_pull)) {
@@ -279,12 +288,16 @@ DataAbstract <- R6::R6Class( #nolint
       stopifnot(is_character_vector(dataname))
       stopifnot(all(dataname %in% self$get_datanames()))
 
-      private$set_mutate_vars(vars = vars)
-      private$set_mutate_code(
-        code = code,
-        dataname = dataname,
-        deps = names(vars)
-      )
+      for (name in dataname) {
+        self$get_items(name)$mutate(code = code, vars = vars, force_delay = TRUE)
+      }
+
+      # private$set_mutate_vars(vars = vars)
+      # private$set_mutate_code(
+      #   code = code,
+      #   dataname = dataname,
+      #   deps = names(vars)
+      # )
 
       private$check_result <- NULL
 
@@ -378,13 +391,17 @@ DataAbstract <- R6::R6Class( #nolint
         logical(1)
       ))
     },
-    get_datasets_code_class = function() {
+    get_datasets_code_class = function(only_pull = FALSE) {
       res <- CodeClass$new()
       if (is.null(private$datasets)) {
         return(res)
       }
       for (dataset in private$datasets) {
-        res$append(dataset$get_code_class())
+        if (isFALSE(only_pull)) {
+          res$append(dataset$get_code_class())
+        } else {
+          res$append(dataset$get_pull_code_class())
+        }
       }
       return(res)
     },

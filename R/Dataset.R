@@ -68,6 +68,7 @@ Dataset <- R6::R6Class( # nolint
       private$.rownames <- rownames(x)
       private$.col_labels <- rtables::var_labels(x)
       private$.row_labels <- c() # not yet defined in rtables
+      private$set_vars_internal(vars, is_pull_vars = TRUE)
 
       private$set_dataname(dataname)
       self$set_vars(vars)
@@ -77,11 +78,13 @@ Dataset <- R6::R6Class( # nolint
       private$calculate_hash()
       # needed if recreating dataset - we need to preserve code order and uniqueness
       private$code <- CodeClass$new()
+      private$pull_code <- CodeClass$new()
       if (is.character(code)) {
         self$set_code(code)
       } else {
         private$code$append(code)
       }
+      private$pull_code$append(private$code)
 
       return(invisible(self))
     },
@@ -349,6 +352,30 @@ Dataset <- R6::R6Class( # nolint
     #' Get internal \code{CodeClass} object
     #'
     #' @return `\code{CodeClass}`
+    get_executed_code_class = function() {
+      res <- CodeClass$new()
+      # precise order matters
+      res$append(list_to_code_class(private$vars))
+      res$append(private$code)
+
+      return(res)
+    },
+    #' @description
+    #' Get internal \code{CodeClass} object
+    #'
+    #' @return `\code{CodeClass}`
+    get_pull_code_class = function() {
+      res <- CodeClass$new()
+
+      res$append(list_to_code_class(private$pull_vars))
+      res$append(private$pull_code)
+
+      return(res)
+    },
+    #' @description
+    #' Get internal \code{CodeClass} object
+    #'
+    #' @return `\code{CodeClass}`
     get_mutate_code_class = function() {
       res <- CodeClass$new()
       res$append(list_to_code_class(private$mutate_vars))
@@ -433,7 +460,7 @@ Dataset <- R6::R6Class( # nolint
       }
 
       new_set <- private$execute_code(
-        code = self$get_code_class(),
+        code = self$get_executed_code_class(),
         vars = c(private$vars, setNames(list(self), self$get_dataname()))
       )
 
@@ -490,6 +517,8 @@ Dataset <- R6::R6Class( # nolint
     dataname = character(0),
     code = NULL, # CodeClass after initialization
     vars = list(),
+    pull_code = NULL,
+    pull_vars = list(),
     var_r6 = list(),
     dataset_label = character(0),
     .keys = character(0),
@@ -504,8 +533,12 @@ Dataset <- R6::R6Class( # nolint
       if (is(code, "CodeClass")) {
         private$mutate_code$append(code)
       } else {
+        # dataname argument is a hack so that DataAbstract object will not duplicate code when datasets are dependent
+        # on other datasets, e.g. ADTTE dependent on ADSL. ADTTE will contain ADSL code. without a dataname,
+        # they will be duplicated.
         private$mutate_code$set_code(
           code,
+          dataname = digest::digest(c(private$code, private$mutate_code), algo = "xxhash64"),
           deps = names(vars)
         )
       }
@@ -573,7 +606,8 @@ Dataset <- R6::R6Class( # nolint
       )
     },
 
-    set_vars_internal = function(vars, is_mutate_vars = FALSE) {
+    # is_pull_vars = TRUE should only be called once during initialization
+    set_vars_internal = function(vars, is_mutate_vars = FALSE, is_pull_vars = FALSE) {
       stopifnot(is_fully_named_list(vars))
 
       total_vars <- c(private$vars, private$mutate_vars)
@@ -594,6 +628,9 @@ Dataset <- R6::R6Class( # nolint
           private$mutate_vars <- c(private$mutate_vars[!names(private$mutate_vars) %in% names(vars)], vars)
         } else {
           private$vars <- c(private$vars[!names(private$vars) %in% names(vars)], vars)
+        }
+        if (is_pull_vars) {
+          private$pull_vars <- vars
         }
       }
       # only adding dependencies if checks passed
