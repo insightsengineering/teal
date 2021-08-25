@@ -46,13 +46,11 @@ testthat::test_that("init_filter_state returns a DatetimeFilterState object if p
 })
 
 testthat::test_that("init_filter_state returns a RangeFilterState if passed a numeric array containing Inf", {
-  testthat::expect_error(init_filter_state(c(1:5, Inf), varname = "test"), NA)
   testthat::expect_error(fs <- init_filter_state(c(1, 2, 3, 4, Inf), varname = "test"), NA)
   testthat::expect_true(is(fs, "RangeFilterState"))
 })
 
 testthat::test_that("init_filter_state returns a ChoicesFilterState if passed fewer than five non-NA elements", {
-  testthat::expect_error(init_filter_state(c(1:5, NA), varname = "test"), NA)
   testthat::expect_error(fs <- init_filter_state(c(1, 2, 3, 4, NA), varname = "test"), NA)
   testthat::expect_true(is(fs, "ChoicesFilterState"))
 })

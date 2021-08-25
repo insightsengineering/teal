@@ -37,7 +37,10 @@ DatasetConnector
 debuggable
 dropdown
 extensibility
+FilterState
+FilterStates
 FilteredData
+FilteredDataset
 funder
 Gabe
 Genetech

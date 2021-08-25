@@ -34,3 +34,15 @@ testthat::test_that("get_call returns a condition evaluating to NA for NA values
   filter_state <- DatetimeFilterState$new(objects, varname = "objects")
   testthat::expect_equal(eval(isolate(filter_state$get_call()))[2], NA)
 })
+
+testthat::test_that("DatetimeFilterState ignores the timezone of the ISO object passed to the constructor", {
+  objects <- ISOdate(2021, 8, 25, tz = "GTM+10")
+  filter_state <- DatetimeFilterState$new(objects, varname = "objects")
+  testthat::expect_equal(
+    isolate(filter_state$get_call()),
+    quote(
+      objects >= as.POSIXct("2021-08-25 22:00:00", tz = "Etc/UTC") &
+        objects <= as.POSIXct("2021-08-25 22:00:01", tz = "Etc/UTC")
+    )
+  )
+})

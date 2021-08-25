@@ -327,7 +327,6 @@ object containing columns to be used as filter variables.}
 }
 \subsection{Returns}{
 \code{NULL}
-Module to add \code{FilterState} to queue
 
 This module adds \code{FilterState} object to queue, inserts
 shiny UI to the Active Filter Variables, calls \code{FilterState} modules and
@@ -337,14 +336,10 @@ parameter queue_index (\code{character(1)}, \code{logical(1)})\cr
 index of the \code{private$queue} list where \code{ReactiveQueue} are kept.
 parameter element_id (\code{character(1)})\cr
 name of \code{ReactiveQueue} element.
-Remove shiny element. Method can be called from reactive session where
 \code{observeEvent} for remove-filter-state is set and also from \code{FilteredDataset}
 level, where shiny-session-namespace is different. That is why it's important
 to remove shiny elements from anywhere. In \code{add_filter_state} \code{session$ns(NULL)}
 is equivalent to \code{private$ns(queue_index)}. This means that
-
-Checks if the queue of the given index was initialized in this FilterStates
-param queue_index (character or integer)
 }
 }
 \if{html}{\out{<hr>}}

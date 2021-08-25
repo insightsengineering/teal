@@ -165,10 +165,10 @@ testthat::test_that("Multiple rcd_data connectors wrapped in cdisc_data", {
 
   testthat::expect_equal(unname(get_dataname(data)), c("ADSL", "ADAE", "ADVS", "ADTTE"))
 
-  testthat::expect_equal(items$ADSL$get_pull_callable()$get_call(), "radsl(N = 1)")
-  testthat::expect_equal(items$ADAE$get_pull_callable()$get_call(), "radae(ADSL = ADSL)")
-  testthat::expect_equal(items$ADVS$get_pull_callable()$get_call(), "radvs(ADSL = ADSL)")
-  testthat::expect_equal(items$ADTTE$get_pull_callable()$get_call(), "radtte(ADSL = ADSL)")
+  testthat::expect_equal(items$ADSL$get_code(), "ADSL <- radsl(N = 1)")
+  testthat::expect_equal(items$ADAE$get_code(), "ADSL <- radsl(N = 1)\nADAE <- radae(ADSL = ADSL)")
+  testthat::expect_equal(items$ADVS$get_code(), "ADSL <- radsl(N = 1)\nADVS <- radvs(ADSL = ADSL)")
+  testthat::expect_equal(items$ADTTE$get_code(), "ADSL <- radsl(N = 1)\nADTTE <- radtte(ADSL = ADSL)")
 
   testthat::expect_equal(
     get_code(data, "ADSL"),
