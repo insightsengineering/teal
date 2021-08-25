@@ -71,7 +71,7 @@ filter \code{call} or \code{list} of filter calls
 \if{html}{\out{<a id="method-get_filter_overview_nsubj"></a>}}
 \if{latex}{\out{\hypertarget{method-get_filter_overview_nsubj}{}}}
 \subsection{Method \code{get_filter_overview_nsubj()}}{
-Get filter overview table subjects number
+Get filter overview subjects number
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{CDISCFilteredDataset$get_filter_overview_nsubj()}\if{html}{\out{</div>}}
 }

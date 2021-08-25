@@ -165,7 +165,7 @@ id of the \code{private$filter_states} list element where \code{FilterStates} is
 \if{html}{\out{<a id="method-get_filter_overview_nobs"></a>}}
 \if{latex}{\out{\hypertarget{method-get_filter_overview_nobs}{}}}
 \subsection{Method \code{get_filter_overview_nobs()}}{
-Get filter overview table observations
+Get filter overview observations number
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{FilteredDataset$get_filter_overview_nobs()}\if{html}{\out{</div>}}
 }
@@ -178,7 +178,7 @@ Get filter overview table observations
 \if{html}{\out{<a id="method-get_filter_overview_nsubj"></a>}}
 \if{latex}{\out{\hypertarget{method-get_filter_overview_nsubj}{}}}
 \subsection{Method \code{get_filter_overview_nsubj()}}{
-Get filter overview table subjects number
+Get filter overview subjects number
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{FilteredDataset$get_filter_overview_nsubj()}\if{html}{\out{</div>}}
 }
