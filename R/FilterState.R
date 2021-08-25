@@ -18,7 +18,8 @@ label_keep_na_count <- function(na_count) {
 #'   label of the variable (optional).
 #'
 #' @param input_dataname (`name` or `call`)\cr
-#'   name of dataset where `x` is taken from
+#'   name of dataset where `x` is taken from. Must be specified if `extract_type` argument
+#'   is not empty.
 #'
 #' @param extract_type (`character(0)`, `character(1)`)\cr
 #' whether condition calls should be prefixed by dataname. Possible values:
@@ -67,8 +68,8 @@ init_filter_state <- function(x,
   stopifnot(is.null(input_dataname) || is.name(input_dataname) || is.call(input_dataname))
   stopifnot(is_character_vector(extract_type, min_length = 0, max_length = 1))
   stopifnot(
-    length(extract_type) == 1 && !is.null(input_dataname) ||
-      length(extract_type) == 0 && is.null(input_dataname)
+    length(extract_type) == 0 ||
+    length(extract_type) == 1 && !is.null(input_dataname)
   )
   stopifnot(extract_type %in% c("list", "matrix"))
 
@@ -241,7 +242,8 @@ FilterState <- R6::R6Class( # nolint
     #' @param varlabel (`character(1)`)\cr
     #'   label of the variable (optional).
     #' @param input_dataname (`name` or `call`)\cr
-    #'   name of dataset where `x` is taken from
+    #'   name of dataset where `x` is taken from. Must be specified if `extract_type` argument
+    #'   is not empty.
     #' @param extract_type (`character(0)`, `character(1)`)\cr
     #' whether condition calls should be prefixed by dataname. Possible values:
     #' \itemize{
@@ -259,8 +261,8 @@ FilterState <- R6::R6Class( # nolint
       stopifnot(is.null(input_dataname) || is.name(input_dataname) || is.call(input_dataname))
       stopifnot(is_character_vector(extract_type, min_length = 0, max_length = 1))
       stopifnot(
-        length(extract_type) == 1 && !is.null(input_dataname) ||
-          length(extract_type) == 0 && is.null(input_dataname)
+        length(extract_type) == 0 ||
+          length(extract_type) == 1 && !is.null(input_dataname)
       )
       stopifnot(extract_type %in% c("list", "matrix"))
 

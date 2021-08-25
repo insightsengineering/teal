@@ -77,3 +77,16 @@ testthat::test_that("get_call returns a condition true for NAs and Inf values af
   test <- c(NA, Inf)
   testthat::expect_true(all(eval(isolate(filter_state$get_call()))))
 })
+
+testthat::test_that("set_selected throw when selection not within allowed choices", {
+  filter_state <- RangeFilterState$new(c(1, 8), varname = "test")
+  testthat::expect_error(
+    filter_state$set_selected("a"),
+    "should be a numeric"
+  )
+
+  testthat::expect_error(
+    filter_state$set_selected(c(0, 1)),
+    "not valid for full range"
+  )
+})

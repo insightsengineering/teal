@@ -25,3 +25,17 @@ testthat::test_that("set_selected does not throw when passed a scalar logical va
   testthat::expect_error(filter_state$set_selected(TRUE), NA)
   testthat::expect_error(filter_state$set_selected(FALSE), NA)
 })
+
+testthat::test_that("set_selected throw when selection not within allowed choices", {
+  filter_state <- LogicalFilterState$new(TRUE, varname = "test")
+
+  testthat::expect_error(
+    filter_state$set_selected(FALSE),
+    "not in valid choices"
+  )
+
+  testthat::expect_error(
+    filter_state$set_selected(1),
+    "should be a logical"
+  )
+})

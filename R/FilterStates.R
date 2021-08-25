@@ -623,7 +623,8 @@ DFFilterStates <- R6::R6Class( # nolint
         fstate <- init_filter_state(
           data[[varname]],
           varname = as.name(varname),
-          varlabel = private$get_varlabels(varname)
+          varlabel = private$get_varlabels(varname),
+          input_dataname = private$input_dataname
         )
         fstate$set_selected(value = value)
 
@@ -735,7 +736,8 @@ DFFilterStates <- R6::R6Class( # nolint
             filter_state = init_filter_state(
               data[[input$var_to_add]],
               varname = as.name(input$var_to_add),
-              varlabel = private$get_varlabels(input$var_to_add)
+              varlabel = private$get_varlabels(input$var_to_add),
+              input_dataname = private$input_dataname
             ),
             queue_index = 1L,
             element_id = input$var_to_add
@@ -1047,7 +1049,8 @@ SEFilterStates <- R6::R6Class( # nolint
         value <- state$subset[[varname]]
         fstate <- init_filter_state(
           SummarizedExperiment::rowData(data)[[varname]],
-          varname = as.name(varname)
+          varname = as.name(varname),
+          input_dataname = private$input_dataname
         )
         fstate$set_selected(value = value)
 
@@ -1241,7 +1244,8 @@ SEFilterStates <- R6::R6Class( # nolint
             id = id,
             filter_state = init_filter_state(
               SummarizedExperiment::colData(data)[[input$col_to_add]],
-              varname = as.name(input$col_to_add)
+              varname = as.name(input$col_to_add),
+              input_dataname = private$input_dataname
             ),
             queue_index = "select",
             element_id = input$col_to_add
@@ -1258,7 +1262,8 @@ SEFilterStates <- R6::R6Class( # nolint
             id = id,
             filter_state = init_filter_state(
               SummarizedExperiment::rowData(data)[[input$row_to_add]],
-              varname = as.name(input$row_to_add)
+              varname = as.name(input$row_to_add),
+              input_dataname = private$input_dataname
             ),
             queue_index = "subset",
             element_id = input$row_to_add

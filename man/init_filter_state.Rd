@@ -23,7 +23,8 @@ name of the variable}
 label of the variable (optional).}
 
 \item{input_dataname}{(\code{name} or \code{call})\cr
-name of dataset where \code{x} is taken from}
+name of dataset where \code{x} is taken from. Must be specified if \code{extract_type} argument
+is not empty.}
 
 \item{extract_type}{(\code{character(0)}, \code{character(1)})\cr
 whether condition calls should be prefixed by dataname. Possible values:
