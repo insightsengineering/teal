@@ -1267,28 +1267,6 @@ SEFilterStates <- R6::R6Class( # nolint
       )
 
       return(NULL)
-    },
-
-    #' @description
-    #' Get data info
-    #' @param data (`character`)\cr MAE experiment dataset
-    #' @param filtered (`logical(1)`)\cr
-    #'   whether `data.info` should depend on filtered data.
-    #' @return `integer(1)` number of unique columns
-    get_data_info = function(data, filtered) {
-      ncol(data)
-    },
-
-    #' @description
-    #' Get subjects info
-    #' @param mae (`character`)\cr MAE dataset
-    #' @param data (`character`)\cr MAE experiment dataset
-    #' @param filtered (`logical(1)`)\cr
-    #'   whether `data.info` should depend on filtered data.
-    #' @return `integer` number of unique subjects
-    get_subjects_info = function(mae, data, filtered) {
-      sample_subset <- subset(MultiAssayExperiment::sampleMap(mae), colname %in% colnames(data))
-      length(unique(sample_subset$primary))
     }
   )
 )

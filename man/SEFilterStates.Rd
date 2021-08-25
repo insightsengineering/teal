@@ -21,8 +21,6 @@ Initialize \code{SEFilterStates} object
 \item \href{#method-set_bookmark_state}{\code{SEFilterStates$set_bookmark_state()}}
 \item \href{#method-ui_add_filter_state}{\code{SEFilterStates$ui_add_filter_state()}}
 \item \href{#method-srv_add_filter_state}{\code{SEFilterStates$srv_add_filter_state()}}
-\item \href{#method-get_data_info}{\code{SEFilterStates$get_data_info()}}
-\item \href{#method-get_subjects_info}{\code{SEFilterStates$get_subjects_info()}}
 \item \href{#method-clone}{\code{SEFilterStates$clone()}}
 }
 }
@@ -151,54 +149,6 @@ and \code{rowData} are separate shiny entities.}
 }
 \subsection{Returns}{
 \code{NULL}
-}
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-get_data_info"></a>}}
-\if{latex}{\out{\hypertarget{method-get_data_info}{}}}
-\subsection{Method \code{get_data_info()}}{
-Get data info
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{SEFilterStates$get_data_info(data, filtered)}\if{html}{\out{</div>}}
-}
-
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{data}}{(\code{character})\cr MAE experiment dataset}
-
-\item{\code{filtered}}{(\code{logical(1)})\cr
-whether \code{data.info} should depend on filtered data.}
-}
-\if{html}{\out{</div>}}
-}
-\subsection{Returns}{
-\code{integer(1)} number of unique columns
-}
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-get_subjects_info"></a>}}
-\if{latex}{\out{\hypertarget{method-get_subjects_info}{}}}
-\subsection{Method \code{get_subjects_info()}}{
-Get subjects info
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{SEFilterStates$get_subjects_info(mae, data, filtered)}\if{html}{\out{</div>}}
-}
-
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{mae}}{(\code{character})\cr MAE dataset}
-
-\item{\code{data}}{(\code{character})\cr MAE experiment dataset}
-
-\item{\code{filtered}}{(\code{logical(1)})\cr
-whether \code{data.info} should depend on filtered data.}
-}
-\if{html}{\out{</div>}}
-}
-\subsection{Returns}{
-\code{integer} number of unique subjects
 }
 }
 \if{html}{\out{<hr>}}

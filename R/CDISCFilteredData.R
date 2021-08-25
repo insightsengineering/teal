@@ -143,42 +143,6 @@ CDISCFilteredData <- R6::R6Class( # nolint
     },
 
     #' @description
-    #' Get info about dataname, i.e. number of rows, subjects.
-    #'
-    #' @param dataname (`character`) name of the dataset
-    #' @param filtered (`logical`) whether to obtain this info for the
-    #'   filtered dataset
-    #' @return a list of shiny.tag objects
-    get_data_info = function(dataname, filtered) {
-      private$check_data_varname_exists(dataname)
-      stopifnot(is_logical_single(filtered))
-
-      nrows <- self$get_filtered_datasets(dataname)$get_data_info(filtered = filtered)
-      nsubjects <- self$get_filtered_datasets(dataname)$get_subjects_info(filtered = filtered)
-
-      if (!is_html_like(nsubjects)) {
-          table <- cbind(nrows, nsubjects)
-          names_exps <- paste0("- ", names(self$get_data(dataname, filtered = FALSE)))
-          mae_and_exps <- c(dataname, names_exps)
-          table_list <- lapply(1:nrow(table), function(x){
-            tags$tr(
-              tags$td(mae_and_exps[x]),
-              tags$td(table[x, 1]),
-              tags$td(table[x, 2])
-            )
-          })
-          names(table_list) <-  mae_and_exps
-          table_list
-      } else {
-        list(tags$tr(
-          tags$td(dataname),
-          tags$td(nrows),
-          tags$td(nsubjects)
-        ))
-      }
-    },
-
-    #' @description
     #' Get names of datasets available for filtering
     #'
     #' @param dataname (`character` vector) names of the dataset

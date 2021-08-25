@@ -15,7 +15,7 @@
 \subsection{Public methods}{
 \itemize{
 \item \href{#method-get_call}{\code{CDISCFilteredDataset$get_call()}}
-\item \href{#method-get_subjects_info}{\code{CDISCFilteredDataset$get_subjects_info()}}
+\item \href{#method-get_filter_overview_nsubj}{\code{CDISCFilteredDataset$get_filter_overview_nsubj()}}
 \item \href{#method-ui_add_filter_state}{\code{CDISCFilteredDataset$ui_add_filter_state()}}
 \item \href{#method-srv_add_filter_state}{\code{CDISCFilteredDataset$srv_add_filter_state()}}
 \item \href{#method-clone}{\code{CDISCFilteredDataset$clone()}}
@@ -26,10 +26,10 @@
 \itemize{
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="FilteredDataset" data-id="add_to_eval_env">}\href{../../teal/html/FilteredDataset.html#method-add_to_eval_env}{\code{teal::FilteredDataset$add_to_eval_env()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="FilteredDataset" data-id="get_data">}\href{../../teal/html/FilteredDataset.html#method-get_data}{\code{teal::FilteredDataset$get_data()}}\out{</span>}
-\item \out{<span class="pkg-link" data-pkg="teal" data-topic="FilteredDataset" data-id="get_data_info">}\href{../../teal/html/FilteredDataset.html#method-get_data_info}{\code{teal::FilteredDataset$get_data_info()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="FilteredDataset" data-id="get_data_reactive">}\href{../../teal/html/FilteredDataset.html#method-get_data_reactive}{\code{teal::FilteredDataset$get_data_reactive()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="FilteredDataset" data-id="get_dataname">}\href{../../teal/html/FilteredDataset.html#method-get_dataname}{\code{teal::FilteredDataset$get_dataname()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="FilteredDataset" data-id="get_dataset">}\href{../../teal/html/FilteredDataset.html#method-get_dataset}{\code{teal::FilteredDataset$get_dataset()}}\out{</span>}
+\item \out{<span class="pkg-link" data-pkg="teal" data-topic="FilteredDataset" data-id="get_filter_overview_nobs">}\href{../../teal/html/FilteredDataset.html#method-get_filter_overview_nobs}{\code{teal::FilteredDataset$get_filter_overview_nobs()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="FilteredDataset" data-id="get_filter_states">}\href{../../teal/html/FilteredDataset.html#method-get_filter_states}{\code{teal::FilteredDataset$get_filter_states()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="FilteredDataset" data-id="get_filtered_dataname">}\href{../../teal/html/FilteredDataset.html#method-get_filtered_dataname}{\code{teal::FilteredDataset$get_filtered_dataname()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="FilteredDataset" data-id="get_hash">}\href{../../teal/html/FilteredDataset.html#method-get_hash}{\code{teal::FilteredDataset$get_hash()}}\out{</span>}
@@ -68,22 +68,14 @@ filter \code{call} or \code{list} of filter calls
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-get_subjects_info"></a>}}
-\if{latex}{\out{\hypertarget{method-get_subjects_info}{}}}
-\subsection{Method \code{get_subjects_info()}}{
-Get subjects info
+\if{html}{\out{<a id="method-get_filter_overview_nsubj"></a>}}
+\if{latex}{\out{\hypertarget{method-get_filter_overview_nsubj}{}}}
+\subsection{Method \code{get_filter_overview_nsubj()}}{
+Get filter overview table subjects number
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{CDISCFilteredDataset$get_subjects_info(filtered)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{CDISCFilteredDataset$get_filter_overview_nsubj()}\if{html}{\out{</div>}}
 }
 
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{filtered}}{(\code{logical(1)})\cr
-whether subject number should depend on filtered data.}
-}
-\if{html}{\out{</div>}}
-}
 \subsection{Returns}{
 \code{list} html tag list of the number of filtered/non-filtered subjects
 }

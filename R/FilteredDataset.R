@@ -183,11 +183,10 @@ FilteredDataset <- R6::R6Class( # nolint
     },
 
     #' @description
-    #' Get data info
-    #' @param filtered (`logical(1)`)\cr
-    #'   whether `data.info` should depend on filtered data.
+    #' Get filter overview observations number
+    #'
     #' @return `list` html tag list of the number of rows
-    get_data_info = function(filtered) {
+    get_filter_overview_nobs = function() {
       f_rows <- nrow(self$get_data(filtered = TRUE))
       nf_rows <- nrow(self$get_data(filtered = FALSE))
       tagList(
@@ -196,11 +195,10 @@ FilteredDataset <- R6::R6Class( # nolint
     },
 
     #' @description
-    #' Get subjects info
-    #' @param filtered (`logical(1)`)\cr
-    #'   whether `data.info` should depend on filtered data.
+    #' Get filter overview subjects number
+    #'
     #' @return `list` html tag list of the number of unique subjects
-    get_subjects_info = function(filtered) {
+    get_filter_overview_nsubj = function() {
       tagList("-")
     },
 
@@ -627,11 +625,10 @@ CDISCFilteredDataset <- R6::R6Class( # nolint
     },
 
     #' @description
-    #' Get subjects info
-    #' @param filtered (`logical(1)`)\cr
-    #'   whether subject number should depend on filtered data.
+    #' Get filter overview subjects number
+    #'
     #' @return `list` html tag list of the number of filtered/non-filtered subjects
-    get_subjects_info = function(filtered) {
+    get_filter_overview_nsubj = function() {
       subject_keys <- if (!is_empty(self$get_dataset()$get_parent())) {
         self$get_join_keys()[[self$get_dataset()$get_parent()]]
       } else {
@@ -795,24 +792,20 @@ MAEFilteredDataset <- R6::R6Class( # nolint
     },
 
     #' @description
-    #' Get data info
-    #' @param filtered (`logical(1)`)\cr
-    #'   whether `data.info` should depend on filtered data.
-    #' @return (`list`) list of the number of filtered/non-filtered rows
-    get_data_info = function(filtered) {
+    #' Get filter overview observations number
+    #'
+    #' @return (`list`) list of the number of filtered/non-filtered observations
+    get_filter_overview_nobs = function() {
       data_f <- self$get_data(filtered = TRUE)
       data_nf <- self$get_data(filtered = FALSE)
       experiment_names <- names(data_nf)
-
       mae_total_data_info <- "-"
 
       data_info <- lapply(
           experiment_names,
           function(experiment_name) {
-            data_f_rows <- self$get_filter_states(experiment_name)$get_data_info(
-              data = data_f[[experiment_name]])
-            data_nf_rows <- self$get_filter_states(experiment_name)$get_data_info(
-              data = data_nf[[experiment_name]])
+            data_f_rows <- ncol(data_f[[experiment_name]])
+            data_nf_rows <- ncol(data_nf[[experiment_name]])
 
             data_info <- paste0(data_f_rows, "/", data_nf_rows)
             data_info
@@ -827,28 +820,27 @@ MAEFilteredDataset <- R6::R6Class( # nolint
     },
 
     #' @description
-    #' Get subjects info
-    #' @param filtered (`logical(1)`)\cr
-    #'   whether `data.info` should depend on filtered data.
+    #' Get filter overview subjects number
+    #'
     #' @return (`list`) list of the number of filtered/non-filtered subjects
-    get_subjects_info = function(filtered) {
+    get_filter_overview_nsubj = function() {
       data_f <- self$get_data(filtered = TRUE)
       data_nf <- self$get_data(filtered = FALSE)
       experiment_names <- names(data_nf)
-
       data_f_subjects_info <- nrow(SummarizedExperiment::colData(self$get_data(filtered = TRUE)))
       data_nf_subjects_info <- nrow(SummarizedExperiment::colData(self$get_data(filtered = FALSE)))
       mae_total_subjects_info <- paste0(data_f_subjects_info, "/", data_nf_subjects_info)
 
+      get_experiment_rows <- function(mae, experiment) {
+        sample_subset <- subset(MultiAssayExperiment::sampleMap(mae), colname %in% colnames(experiment))
+        length(unique(sample_subset$primary))
+      }
+
       subjects_info <- lapply(
         experiment_names,
         function(experiment_name) {
-          subjects_f_rows <- self$get_filter_states(experiment_name)$get_subjects_info(
-            mae = data_f,
-            data = data_f[[experiment_name]])
-          subjects_nf_rows <- self$get_filter_states(experiment_name)$get_subjects_info(
-            mae = data_nf,
-            data = data_nf[[experiment_name]])
+          subjects_f_rows <- get_experiment_rows(data_f, data_f[[experiment_name]])
+          subjects_nf_rows <- get_experiment_rows(data_nf, data_nf[[experiment_name]])
 
           subjects_info <- paste0(subjects_f_rows, "/", subjects_nf_rows)
           subjects_info

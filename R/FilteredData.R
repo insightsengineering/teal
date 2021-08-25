@@ -220,23 +220,36 @@ FilteredData <- R6::R6Class( # nolint
     },
 
     #' @description
-    #' Get info about dataname, i.e. number of rows
+    #' Get info about the dataname, i.e. number of observations and subjects
     #'
     #' @param dataname (`character`) name of the dataset
-    #' @param filtered `logical` whether to obtain this info for the
-    #'   filtered dataset
+    #'
     #' @return a named vector
-    get_data_info = function(dataname, filtered) {
+    get_filter_overview_info = function(dataname) {
       private$check_data_varname_exists(dataname)
-      stopifnot(is_logical_single(filtered))
 
-      nrows <- self$get_filtered_datasets(dataname)$get_data_info(filtered = filtered)
-      nsubjects <- self$get_filtered_datasets(dataname)$get_subjects_info(filtered = filtered)
-
-      list(
-        nrows,
-        nsubjects
-      )
+      nrows <- self$get_filtered_datasets(dataname)$get_filter_overview_nobs()
+      nsubjects <- self$get_filtered_datasets(dataname)$get_filter_overview_nsubj()
+      if (!is_html_like(nsubjects)) {
+        table <- cbind(nrows, nsubjects)
+        names_exps <- paste0("- ", names(self$get_data(dataname, filtered = FALSE)))
+        mae_and_exps <- c(dataname, names_exps)
+        table_list <- lapply(1:nrow(table), function(x){
+          tags$tr(
+            tags$td(mae_and_exps[x]),
+            tags$td(table[x, 1]),
+            tags$td(table[x, 2])
+          )
+        })
+        names(table_list) <-  mae_and_exps
+        table_list
+      } else {
+      list(tags$tr(
+        tags$td(dataname),
+        tags$td(nrows),
+        tags$td(nsubjects)
+      ))
+      }
     },
 
     #' @description
@@ -258,8 +271,9 @@ FilteredData <- R6::R6Class( # nolint
     #' The content for each of the data names is defined in `get_data_info` method.
     #'
     #' @param datanames (`character` vector) names of the dataset
+    #'
     #' @return (`shiny.tag`) shiny tag object
-    get_filter_overview_tbl = function(datanames) {
+    get_filter_overview = function(datanames) {
       if (identical(datanames, "all")) {
         datanames <- self$datanames()
       }
@@ -268,8 +282,9 @@ FilteredData <- R6::R6Class( # nolint
       rows_html <- sapply(
         datanames,
         function(dataname) {
-          tagList(self$get_data_info(dataname, filtered = TRUE))
-        }
+          tagList(self$get_filter_overview_info(dataname))
+        },
+        USE.NAMES = TRUE
       )
 
       final_table <- tags$table(
@@ -704,7 +719,7 @@ FilteredData <- R6::R6Class( # nolint
           active_datanames()
         }
 
-        self$get_filter_overview_tbl(datanames = datanames)
+        self$get_filter_overview(datanames = datanames)
       })
 
       return(invisible(NULL))

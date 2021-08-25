@@ -20,8 +20,8 @@ components of the \code{Dataset}.
 \item \href{#method-get_data}{\code{FilteredDataset$get_data()}}
 \item \href{#method-get_data_reactive}{\code{FilteredDataset$get_data_reactive()}}
 \item \href{#method-get_filter_states}{\code{FilteredDataset$get_filter_states()}}
-\item \href{#method-get_data_info}{\code{FilteredDataset$get_data_info()}}
-\item \href{#method-get_subjects_info}{\code{FilteredDataset$get_subjects_info()}}
+\item \href{#method-get_filter_overview_nobs}{\code{FilteredDataset$get_filter_overview_nobs()}}
+\item \href{#method-get_filter_overview_nsubj}{\code{FilteredDataset$get_filter_overview_nsubj()}}
 \item \href{#method-get_dataname}{\code{FilteredDataset$get_dataname()}}
 \item \href{#method-get_dataset}{\code{FilteredDataset$get_dataset()}}
 \item \href{#method-get_hash}{\code{FilteredDataset$get_hash()}}
@@ -162,43 +162,27 @@ id of the \code{private$filter_states} list element where \code{FilterStates} is
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-get_data_info"></a>}}
-\if{latex}{\out{\hypertarget{method-get_data_info}{}}}
-\subsection{Method \code{get_data_info()}}{
-Get data info
+\if{html}{\out{<a id="method-get_filter_overview_nobs"></a>}}
+\if{latex}{\out{\hypertarget{method-get_filter_overview_nobs}{}}}
+\subsection{Method \code{get_filter_overview_nobs()}}{
+Get filter overview table observations
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{FilteredDataset$get_data_info(filtered)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{FilteredDataset$get_filter_overview_nobs()}\if{html}{\out{</div>}}
 }
 
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{filtered}}{(\code{logical(1)})\cr
-whether \code{data.info} should depend on filtered data.}
-}
-\if{html}{\out{</div>}}
-}
 \subsection{Returns}{
 \code{list} html tag list of the number of rows
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-get_subjects_info"></a>}}
-\if{latex}{\out{\hypertarget{method-get_subjects_info}{}}}
-\subsection{Method \code{get_subjects_info()}}{
-Get subjects info
+\if{html}{\out{<a id="method-get_filter_overview_nsubj"></a>}}
+\if{latex}{\out{\hypertarget{method-get_filter_overview_nsubj}{}}}
+\subsection{Method \code{get_filter_overview_nsubj()}}{
+Get filter overview table subjects number
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{FilteredDataset$get_subjects_info(filtered)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{FilteredDataset$get_filter_overview_nsubj()}\if{html}{\out{</div>}}
 }
 
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{filtered}}{(\code{logical(1)})\cr
-whether \code{data.info} should depend on filtered data.}
-}
-\if{html}{\out{</div>}}
-}
 \subsection{Returns}{
 \code{list} html tag list of the number of unique subjects
 }
