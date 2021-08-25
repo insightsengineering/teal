@@ -544,3 +544,10 @@ testthat::test_that("Dataset$set_join_keys works with Dataset$mutate_join_keys",
     dataset1$get_join_keys()$get()$other_dataset$iris, c("some_col2" = "Sepal.Length")
   )
 })
+
+testthat::test_that("Dupliated mutation code is shown via get_code()", {
+  dataset <- Dataset$new("iris", head(iris))
+  dataset$mutate("7")
+  dataset$mutate("7")
+  testthat::expect_equal(dataset$get_code(), paste("7", "7", sep = "\n"))
+})
