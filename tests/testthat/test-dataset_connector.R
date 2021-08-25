@@ -1039,10 +1039,10 @@ testthat::test_that("Initializing DatasetConnector with code argument works", {
     attr(t_dc$get_code_class()$code[[3]], "dataname"),
     "test_dc"
   )
-  # mutate code passed in as string values will not have dataname attribute.
+  # mutate code passed in as string values will have dataset name as its dataname attribute
   testthat::expect_equal(
     attr(t_dc$get_code_class()$code[[4]], "dataname"),
-    character(0)
+    "test_dc"
   )
   t_dc$pull()
   testthat::expect_equal(
@@ -1134,5 +1134,20 @@ testthat::test_that("DatasetConnector$set_join_keys works with DatasetConnector$
   )
   testthat::expect_identical(
     t_dc$get_join_keys()$get()$other_dataset$iris, c("some_col" = "Species")
+  )
+})
+
+testthat::test_that("Duplicated mutation code is shown via get_code()", {
+  dataset_connector <- DatasetConnector$new("iris", callable_function(function() head(iris)))
+  dataset_connector$mutate("7")
+  dataset_connector$mutate("7")
+  testthat::expect_equal(
+    dataset_connector$get_code(),
+    paste(
+      "iris <- (function() head(iris))()",
+      "7",
+      "7",
+      sep = "\n"
+    )
   )
 })
