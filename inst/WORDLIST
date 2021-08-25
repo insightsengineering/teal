@@ -36,6 +36,7 @@ Datanames
 DatasetConnector
 debuggable
 dropdown
+enum
 extensibility
 FilterState
 FilterStates
