@@ -21,6 +21,7 @@
 * Removed mentions of internal Roche services from the documentation.
 * Replaced `random.cdisc.data` with `scda` in examples and tests.
 * Implemented functionality to store `JoinKeys` in `Dataset` and `DatasetConnector` classes.
+* Removed unused method `get_close_ui` from `DataConnection` class.
 
 # teal 0.9.5
 
