@@ -140,7 +140,7 @@ init_filter_states.SummarizedExperiment <- function(data, #nolint #nousage
 #'   varname = "x",
 #'   varlabel = "x variable",
 #'   input_dataname = as.name("data"),
-#'   use_dataname = TRUE
+#'   extract_type = "list"
 #' )
 #' isolate(filter_state$set_selected(c(3L, 8L)))
 #'
@@ -536,13 +536,20 @@ FilterStates <- R6::R6Class( # nolint
     # @param queue_index (character or integer)
     validate_queue_exists = function(queue_index) {
       stopifnot(is_character_single(queue_index) || is_numeric_single(queue_index))
-      if (!all(queue_index <= length(private$queue) && queue_index > 0)) {
-        stop(paste(
-          "ReactiveQueue",
-          queue_index,
-          "has not been initialized in FilterStates object belonging to the dataset",
-          private$datalabel
-        ))
+      if (
+        !(
+          is.numeric(queue_index) && all(queue_index <= length(private$queue) && queue_index > 0) ||
+          is.character(queue_index) && all(queue_index %in% names(private$queue))
+        )
+      ) {
+        stop(
+          paste(
+            "ReactiveQueue",
+            queue_index,
+            "has not been initialized in FilterStates object belonging to the dataset",
+            private$datalabel
+          )
+        )
       }
     }
   )
@@ -616,9 +623,7 @@ DFFilterStates <- R6::R6Class( # nolint
         fstate <- init_filter_state(
           data[[varname]],
           varname = as.name(varname),
-          varlabel = private$get_varlabels(varname),
-          input_dataname = private$input_dataname,
-          use_dataname = FALSE
+          varlabel = private$get_varlabels(varname)
         )
         fstate$set_selected(value = value)
 
@@ -730,9 +735,7 @@ DFFilterStates <- R6::R6Class( # nolint
             filter_state = init_filter_state(
               data[[input$var_to_add]],
               varname = as.name(input$var_to_add),
-              varlabel = private$get_varlabels(input$var_to_add),
-              input_dataname = private$input_dataname,
-              use_dataname = FALSE
+              varlabel = private$get_varlabels(input$var_to_add)
             ),
             queue_index = 1L,
             element_id = input$var_to_add
@@ -842,7 +845,7 @@ MAEFilterStates <- R6::R6Class( # nolint
           varname = as.name(varname),
           varlabel = private$get_varlabels(varname),
           input_dataname = private$input_dataname,
-          use_dataname = TRUE
+          extract_type = "list"
         )
         fstate$set_selected(value = value)
 
@@ -953,7 +956,7 @@ MAEFilterStates <- R6::R6Class( # nolint
               varname = as.name(input$var_to_add),
               varlabel = private$get_varlabels(input$var_to_add),
               input_dataname = private$input_dataname,
-              use_dataname = TRUE
+              extract_type = "list"
             ),
             queue_index = "y",
             element_id = input$var_to_add
@@ -1044,9 +1047,7 @@ SEFilterStates <- R6::R6Class( # nolint
         value <- state$subset[[varname]]
         fstate <- init_filter_state(
           SummarizedExperiment::rowData(data)[[varname]],
-          varname = as.name(varname),
-          input_dataname = private$input_dataname,
-          use_dataname = FALSE
+          varname = as.name(varname)
         )
         fstate$set_selected(value = value)
 
@@ -1065,9 +1066,7 @@ SEFilterStates <- R6::R6Class( # nolint
         value <- state$select[[varname]]
         fstate <- init_filter_state(
           SummarizedExperiment::colData(data)[[varname]],
-          varname = as.name(varname),
-          input_dataname = private$input_dataname,
-          use_dataname = FALSE
+          varname = as.name(varname)
         )
         fstate$set_selected(value = value)
 
@@ -1242,9 +1241,7 @@ SEFilterStates <- R6::R6Class( # nolint
             id = id,
             filter_state = init_filter_state(
               SummarizedExperiment::colData(data)[[input$col_to_add]],
-              varname = as.name(input$col_to_add),
-              input_dataname = private$input_dataname,
-              use_dataname = FALSE
+              varname = as.name(input$col_to_add)
             ),
             queue_index = "select",
             element_id = input$col_to_add
@@ -1261,9 +1258,7 @@ SEFilterStates <- R6::R6Class( # nolint
             id = id,
             filter_state = init_filter_state(
               SummarizedExperiment::rowData(data)[[input$row_to_add]],
-              varname = as.name(input$row_to_add),
-              input_dataname = private$input_dataname,
-              use_dataname = FALSE
+              varname = as.name(input$row_to_add)
             ),
             queue_index = "subset",
             element_id = input$row_to_add
@@ -1329,7 +1324,7 @@ MatrixFilterStates <- R6::R6Class( # nolint
           varname = as.name(varname),
           varlabel = private$get_varlabels(varname),
           input_dataname = private$input_dataname,
-          use_dataname = FALSE
+          extract_type = "matrix"
         )
         fstate$set_selected(value = value)
 
@@ -1442,7 +1437,7 @@ MatrixFilterStates <- R6::R6Class( # nolint
               varname = as.name(input$var_to_add),
               varlabel = private$get_varlabel(input$var_to_add),
               input_dataname = private$input_dataname,
-              use_dataname = FALSE
+              extract_type = "matrix"
             ),
             queue_index = "subset",
             element_id = input$var_to_add

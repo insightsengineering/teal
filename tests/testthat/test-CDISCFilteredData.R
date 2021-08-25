@@ -38,84 +38,79 @@ data <- cdisc_data(
   cdisc_dataset("ADAE", ADAE)
 )
 
-isolate({
-  filtered_data_set(data, ds)
+filtered_data_set(data, ds)
 
-  test_that("load and set_datasets", {
-    expect_silent({
-      expect_equal(ds$get_data("ADSL", filtered = FALSE), ADSL)
-      expect_equal(ds$get_data("ADAE", filtered = FALSE), ADAE)
-    })
-    expect_setequal(ds$datanames(), c("ADSL", "ADAE"))
+test_that("load and set_datasets", {
+  expect_silent({
+    expect_equal(ds$get_data("ADSL", filtered = FALSE), ADSL)
+    expect_equal(ds$get_data("ADAE", filtered = FALSE), ADAE)
   })
+  expect_setequal(ds$datanames(), c("ADSL", "ADAE"))
+})
 
-  test_that("set filter state", {
-    filter_state_adsl <- teal:::init_filter_state(
-      ADSL$SEX,
-      varname = "SEX",
-      input_dataname = as.name("ADSL"),
-      use_dataname = FALSE
-    )
-    filter_state_adsl$set_selected("F")
+test_that("set filter state", {
+  filter_state_adsl <- teal:::init_filter_state(
+    ADSL$SEX,
+    varname = "SEX"
+  )
+  filter_state_adsl$set_selected("F")
 
-    queue <- ds$get_filtered_datasets("ADSL")$get_filter_states(1)
-    queue$queue_push(filter_state_adsl, queue_index = 1L, element_id = "SEX")
+  queue <- ds$get_filtered_datasets("ADSL")$get_filter_states(1)
+  queue$queue_push(filter_state_adsl, queue_index = 1L, element_id = "SEX")
 
-    expect_identical(
-      deparse(queue$get_call()),
-      'ADSL_FILTERED <- dplyr::filter(ADSL, SEX == "F")'
-    )
-  })
+  expect_identical(
+    isolate(deparse(queue$get_call())),
+    'ADSL_FILTERED <- dplyr::filter(ADSL, SEX == "F")'
+  )
+})
 
-  test_that("precedence NA and Inf", {
-    var <- c(NA, -Inf, 0, 1, 2, 3, Inf)
-    expect_identical(
-      is.infinite(var) | var >= 1 & var <= 2,
-      c(NA, TRUE, FALSE, TRUE, TRUE, FALSE, TRUE)
-    )
+test_that("precedence NA and Inf", {
+  var <- c(NA, -Inf, 0, 1, 2, 3, Inf)
+  expect_identical(
+    is.infinite(var) | var >= 1 & var <= 2,
+    c(NA, TRUE, FALSE, TRUE, TRUE, FALSE, TRUE)
+  )
 
-    expect_identical(
-      is.na(var) | var >= 1 & var <= 2,
-      c(TRUE, FALSE, FALSE, TRUE, TRUE, FALSE, FALSE)
-    )
+  expect_identical(
+    is.na(var) | var >= 1 & var <= 2,
+    c(TRUE, FALSE, FALSE, TRUE, TRUE, FALSE, FALSE)
+  )
 
-    expect_identical(
-      var >= 1 & var <= 2,
-      c(NA, FALSE, FALSE, TRUE, TRUE, FALSE, FALSE)
-    )
+  expect_identical(
+    var >= 1 & var <= 2,
+    c(NA, FALSE, FALSE, TRUE, TRUE, FALSE, FALSE)
+  )
 
-    expect_identical(
-      is.na(var) | (var >= 1 & var <= 2 | is.infinite(var)),
-      c(TRUE, TRUE, FALSE, TRUE, TRUE, FALSE, TRUE)
-    )
+  expect_identical(
+    is.na(var) | (var >= 1 & var <= 2 | is.infinite(var)),
+    c(TRUE, TRUE, FALSE, TRUE, TRUE, FALSE, TRUE)
+  )
 
-    expect_identical(
-      is.na(var) | is.infinite(var) | var >= 1 & var <= 2,
-      c(TRUE, TRUE, FALSE, TRUE, TRUE, FALSE, TRUE)
-    )
-  })
+  expect_identical(
+    is.na(var) | is.infinite(var) | var >= 1 & var <= 2,
+    c(TRUE, TRUE, FALSE, TRUE, TRUE, FALSE, TRUE)
+  )
+})
 
-  test_that("column_labels works", {
-    on.exit(ds$set_dataset(dataset("ADSL", ADSL)))
+test_that("column_labels works", {
+  on.exit(ds$set_dataset(dataset("ADSL", ADSL)))
 
-    data <- ADSL
+  data <- ADSL
 
-    ## check with all labels provided
-    # preconditions on ADSL so tests below work as expected
-    stopifnot(
-      all_false(rtables::var_labels(ADSL), is.na), # no NA label
-      setequal(names(rtables::var_labels(ADSL)), colnames(ADSL)) # all variables have labels
-    )
-    ds$set_dataset(dataset("ADSL", data))
-    expect_equal(
-      ds$get_varlabels("ADSL"),
-      rtables::var_labels(ADSL)
-    )
-    # only some variables
-    expect_equal(
-      ds$get_varlabels("ADSL", variables = c("AGE", "SEX")),
-      rtables::var_labels(ADSL)[c("AGE", "SEX")]
-    )
-
-  })
+  ## check with all labels provided
+  # preconditions on ADSL so tests below work as expected
+  stopifnot(
+    all_false(rtables::var_labels(ADSL), is.na), # no NA label
+    setequal(names(rtables::var_labels(ADSL)), colnames(ADSL)) # all variables have labels
+  )
+  ds$set_dataset(dataset("ADSL", data))
+  expect_equal(
+    ds$get_varlabels("ADSL"),
+    rtables::var_labels(ADSL)
+  )
+  # only some variables
+  expect_equal(
+    ds$get_varlabels("ADSL", variables = c("AGE", "SEX")),
+    rtables::var_labels(ADSL)[c("AGE", "SEX")]
+  )
 })

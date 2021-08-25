@@ -326,3 +326,4 @@ testthat::test_that("data_choices_labeled returns labels of the elements matchin
   result <- unname(data_choices_labeled(list(a = 1, b = 2), choices = c("a"), varlabels = c(a = "labelA"))[1])
   testthat::expect_equal(result, "a")
 })
+

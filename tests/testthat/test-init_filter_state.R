@@ -8,15 +8,49 @@ testthat::test_that("init_filter_state accepts a character vector of length 0 or
   testthat::expect_error(init_filter_state(7, varname = "test", varlabel = character(0)), NA)
 })
 
-testthat::test_that("init_filter_state accepts NULL, name or call as input_dataname", {
-  testthat::expect_error(init_filter_state(7, varname = "test", input_dataname = NULL), NA)
-  testthat::expect_error(init_filter_state(7, varname = "test", input_dataname = quote(test)), NA)
-  testthat::expect_error(init_filter_state(7, varname = "test", input_dataname = call("test")), NA)
+test_that("'input_dataname' must be specified with 'extract_type'", {
+  testthat::expect_error(
+    teal:::init_filter_state(
+      ADSL$SEX,
+      varname = "SEX",
+      input_dataname = as.name("ADSL"),
+      extract_type = character(0)
+    )
+  )
 })
 
-testthat::test_that("init_filter_state accepts logical as use_dataname", {
-  testthat::expect_error(init_filter_state(7, varname = "test", use_dataname = TRUE), NA)
-  testthat::expect_error(init_filter_state(7, varname = "test", use_dataname = FALSE), NA)
+test_that("'extract_type' must be specified with 'input_dataname'", {
+  testthat::expect_error(
+    teal:::init_filter_state(
+      ADSL$SEX,
+      varname = "SEX",
+      input_dataname = NULL,
+      extract_type = "matrix"
+    )
+  )
+})
+
+
+testthat::test_that("init_filter_state accepts name or call as input_dataname", {
+  testthat::expect_error(
+    init_filter_state(7, varname = "test", input_dataname = quote(test), extract_type = "list"),
+    NA
+  )
+  testthat::expect_error(
+    init_filter_state(7, varname = "test", input_dataname = call("test"), extract_type = "list"),
+    NA
+  )
+})
+
+testthat::test_that("init_filter_state accepts character as extract_type", {
+  testthat::expect_error(
+    init_filter_state(7, varname = "test", input_dataname = as.name("test"), extract_type = "list"),
+    NA
+  )
+  testthat::expect_error(
+    init_filter_state(7, varname = "test", input_dataname = as.name("test"), extract_type = "matrix"),
+    NA
+  )
 })
 
 testthat::test_that("init_filter_state provides default values for varlabel, input_dataname, use_datname", {

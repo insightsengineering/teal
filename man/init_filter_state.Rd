@@ -9,7 +9,7 @@ init_filter_state(
   varname,
   varlabel = if_null(attr(x, "label"), character(0)),
   input_dataname = NULL,
-  use_dataname = FALSE
+  extract_type = character(0)
 )
 }
 \arguments{
@@ -25,9 +25,13 @@ label of the variable (optional).}
 \item{input_dataname}{(\code{name} or \code{call})\cr
 name of dataset where \code{x} is taken from}
 
-\item{use_dataname}{(\code{logical(1)})\cr
-whether to prefix condition calls with \verb{input_dataname$}.
-For example \code{dataset$variable == "selection"}}
+\item{extract_type}{(\code{character(0)}, \code{character(1)})\cr
+whether condition calls should be prefixed by dataname. Possible values:
+\itemize{
+\item{\code{character(0)} (default)}{ \code{varname} in the condition call will not be prefixed}
+\item{\code{"list"}}{ \code{varname} in the condition call will be returned as \verb{<input_dataname>$<varname>}}
+\item{\code{"matrix"}}{ \code{varname} in the condition call will be returned as \verb{<input_dataname>[, <varname>]}}
+}}
 }
 \value{
 \code{FilterState} object
@@ -41,7 +45,7 @@ filter_state <- teal:::RangeFilterState$new(
   varname = "x",
   varlabel = "Pretty name",
   input_dataname = as.name("dataname"),
-  use_dataname = TRUE
+  extract_type = "matrix"
 )
 
 filter_state$get_varname()
