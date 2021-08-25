@@ -1136,3 +1136,18 @@ testthat::test_that("DatasetConnector$set_join_keys works with DatasetConnector$
     t_dc$get_join_keys()$get()$other_dataset$iris, c("some_col" = "Species")
   )
 })
+
+testthat::test_that("Duplicated mutation code is shown via get_code()", {
+  dataset_connector <- DatasetConnector$new("iris", callable_function(function() head(iris)))
+  dataset_connector$mutate("7")
+  dataset_connector$mutate("7")
+  testthat::expect_equal(
+    dataset_connector$get_code(),
+    paste(
+      "iris <- (function() head(iris))()",
+      "7",
+      "7",
+      sep = "\n"
+    )
+  )
+})
