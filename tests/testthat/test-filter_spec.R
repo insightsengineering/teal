@@ -398,6 +398,8 @@ testthat::test_that("delayed version of filter_spec", {
   # comparison not implemented, must be done individually
   testthat::expect_equal(res_obj$choices, exp_obj$choices)
   testthat::expect_equal(res_obj$selected, exp_obj$selected)
-  testthat::expect_equal(res_obj[-match(c("choices", "selected"), names(res_obj))],
-               exp_obj[-match(c("choices", "selected"), names(exp_obj))])
+  testthat::expect_equal(
+    res_obj[-match(c("choices", "selected"), names(res_obj))],
+    exp_obj[-match(c("choices", "selected"), names(exp_obj))]
+  )
 })

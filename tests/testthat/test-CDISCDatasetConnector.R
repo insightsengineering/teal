@@ -44,7 +44,7 @@ testthat::test_that("Single rcd dataset connector", {
 
   testthat::expect_error(get_raw_data(adsl), regexp = "'ADSL' has not been pulled yet")
   adsl$pull()
-  
+
   testthat::expect_s3_class(get_raw_data(adsl), "data.frame")
 
   # check reproducible code

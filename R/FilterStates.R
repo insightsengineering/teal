@@ -432,7 +432,7 @@ FilterStates <- R6::R6Class( # nolint
     observers = list(), # observers
     queue = NULL, # list of ReactiveQueue(s) initialized by self$queue_initialize
 
-    #' Module to add `FilterState` to queue
+    # Module to add `FilterState` to queue
     #'
     #' This module adds `FilterState` object to queue, inserts
     #' shiny UI to the Active Filter Variables, calls `FilterState` modules and
@@ -514,7 +514,7 @@ FilterStates <- R6::R6Class( # nolint
       return(invisible(NULL))
     },
 
-    #' Remove shiny element. Method can be called from reactive session where
+    # Remove shiny element. Method can be called from reactive session where
     #' `observeEvent` for remove-filter-state is set and also from `FilteredDataset`
     #' level, where shiny-session-namespace is different. That is why it's important
     #' to remove shiny elements from anywhere. In `add_filter_state` `session$ns(NULL)`
@@ -532,8 +532,8 @@ FilterStates <- R6::R6Class( # nolint
       private$observers[[queue_id]] <- NULL
     },
 
-    #' Checks if the queue of the given index was initialized in this FilterStates
-    #' param queue_index (character or integer)
+    # Checks if the queue of the given index was initialized in this FilterStates
+    # @param queue_index (character or integer)
     validate_queue_exists = function(queue_index) {
       stopifnot(is_character_single(queue_index) || is_numeric_single(queue_index))
       if (!all(queue_index <= length(private$queue) && queue_index > 0)) {
