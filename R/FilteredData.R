@@ -229,7 +229,7 @@ FilteredData <- R6::R6Class( # nolint
       private$check_data_varname_exists(dataname)
 
       nrows <- self$get_filtered_datasets(dataname)$get_filter_overview_nobs()
-      nsubjects <- self$get_filtered_datasets(dataname)$get_filter_overview_nsubj()
+      nsubjects <- self$get_filtered_datasets(dataname)$get_filter_overview_nsubjs()
       if (!is_html_like(nsubjects)) {
         table <- cbind(nrows, nsubjects)
         names_exps <- paste0("- ", names(self$get_data(dataname, filtered = FALSE)))

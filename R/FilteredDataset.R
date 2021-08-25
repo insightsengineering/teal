@@ -198,7 +198,7 @@ FilteredDataset <- R6::R6Class( # nolint
     #' Get filter overview subjects number
     #'
     #' @return `list` html tag list of the number of unique subjects
-    get_filter_overview_nsubj = function() {
+    get_filter_overview_nsubjs = function() {
       tagList("-")
     },
 
@@ -628,7 +628,7 @@ CDISCFilteredDataset <- R6::R6Class( # nolint
     #' Get filter overview subjects number
     #'
     #' @return `list` html tag list of the number of filtered/non-filtered subjects
-    get_filter_overview_nsubj = function() {
+    get_filter_overview_nsubjs = function() {
       subject_keys <- if (!is_empty(self$get_dataset()$get_parent())) {
         self$get_join_keys()[[self$get_dataset()$get_parent()]]
       } else {
@@ -823,7 +823,7 @@ MAEFilteredDataset <- R6::R6Class( # nolint
     #' Get filter overview subjects number
     #'
     #' @return (`list`) list of the number of filtered/non-filtered subjects
-    get_filter_overview_nsubj = function() {
+    get_filter_overview_nsubjs = function() {
       data_f <- self$get_data(filtered = TRUE)
       data_nf <- self$get_data(filtered = FALSE)
       experiment_names <- names(data_nf)

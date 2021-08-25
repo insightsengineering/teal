@@ -56,10 +56,9 @@ isolate({
 
 isolate({
   datasets$datanames()
-  datasets$get_data_info("ADSL", filtered = FALSE)
 
-  # filters dataset to obtain information
-  datasets$get_data_info("ADSL", filtered = TRUE)
+  # number observations and subjects of filtered/non-filtered dataset
+  datasets$get_filter_overview_info("ADSL")
 
   print(datasets$get_call("ADSL"))
   print(datasets$get_call("ADTTE"))

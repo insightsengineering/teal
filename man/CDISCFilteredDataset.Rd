@@ -15,7 +15,7 @@
 \subsection{Public methods}{
 \itemize{
 \item \href{#method-get_call}{\code{CDISCFilteredDataset$get_call()}}
-\item \href{#method-get_filter_overview_nsubj}{\code{CDISCFilteredDataset$get_filter_overview_nsubj()}}
+\item \href{#method-get_filter_overview_nsubjs}{\code{CDISCFilteredDataset$get_filter_overview_nsubjs()}}
 \item \href{#method-ui_add_filter_state}{\code{CDISCFilteredDataset$ui_add_filter_state()}}
 \item \href{#method-srv_add_filter_state}{\code{CDISCFilteredDataset$srv_add_filter_state()}}
 \item \href{#method-clone}{\code{CDISCFilteredDataset$clone()}}
@@ -68,12 +68,12 @@ filter \code{call} or \code{list} of filter calls
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-get_filter_overview_nsubj"></a>}}
-\if{latex}{\out{\hypertarget{method-get_filter_overview_nsubj}{}}}
-\subsection{Method \code{get_filter_overview_nsubj()}}{
+\if{html}{\out{<a id="method-get_filter_overview_nsubjs"></a>}}
+\if{latex}{\out{\hypertarget{method-get_filter_overview_nsubjs}{}}}
+\subsection{Method \code{get_filter_overview_nsubjs()}}{
 Get filter overview subjects number
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{CDISCFilteredDataset$get_filter_overview_nsubj()}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{CDISCFilteredDataset$get_filter_overview_nsubjs()}\if{html}{\out{</div>}}
 }
 
 \subsection{Returns}{

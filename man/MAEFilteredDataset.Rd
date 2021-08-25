@@ -17,7 +17,7 @@
 \item \href{#method-new}{\code{MAEFilteredDataset$new()}}
 \item \href{#method-get_call}{\code{MAEFilteredDataset$get_call()}}
 \item \href{#method-get_filter_overview_nobs}{\code{MAEFilteredDataset$get_filter_overview_nobs()}}
-\item \href{#method-get_filter_overview_nsubj}{\code{MAEFilteredDataset$get_filter_overview_nsubj()}}
+\item \href{#method-get_filter_overview_nsubjs}{\code{MAEFilteredDataset$get_filter_overview_nsubjs()}}
 \item \href{#method-set_bookmark_state}{\code{MAEFilteredDataset$set_bookmark_state()}}
 \item \href{#method-ui_add_filter_state}{\code{MAEFilteredDataset$ui_add_filter_state()}}
 \item \href{#method-srv_add_filter_state}{\code{MAEFilteredDataset$srv_add_filter_state()}}
@@ -104,12 +104,12 @@ Get filter overview observations number
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-get_filter_overview_nsubj"></a>}}
-\if{latex}{\out{\hypertarget{method-get_filter_overview_nsubj}{}}}
-\subsection{Method \code{get_filter_overview_nsubj()}}{
+\if{html}{\out{<a id="method-get_filter_overview_nsubjs"></a>}}
+\if{latex}{\out{\hypertarget{method-get_filter_overview_nsubjs}{}}}
+\subsection{Method \code{get_filter_overview_nsubjs()}}{
 Get filter overview subjects number
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{MAEFilteredDataset$get_filter_overview_nsubj()}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{MAEFilteredDataset$get_filter_overview_nsubjs()}\if{html}{\out{</div>}}
 }
 
 \subsection{Returns}{

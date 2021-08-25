@@ -21,7 +21,7 @@ components of the \code{Dataset}.
 \item \href{#method-get_data_reactive}{\code{FilteredDataset$get_data_reactive()}}
 \item \href{#method-get_filter_states}{\code{FilteredDataset$get_filter_states()}}
 \item \href{#method-get_filter_overview_nobs}{\code{FilteredDataset$get_filter_overview_nobs()}}
-\item \href{#method-get_filter_overview_nsubj}{\code{FilteredDataset$get_filter_overview_nsubj()}}
+\item \href{#method-get_filter_overview_nsubjs}{\code{FilteredDataset$get_filter_overview_nsubjs()}}
 \item \href{#method-get_dataname}{\code{FilteredDataset$get_dataname()}}
 \item \href{#method-get_dataset}{\code{FilteredDataset$get_dataset()}}
 \item \href{#method-get_hash}{\code{FilteredDataset$get_hash()}}
@@ -175,12 +175,12 @@ Get filter overview observations number
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-get_filter_overview_nsubj"></a>}}
-\if{latex}{\out{\hypertarget{method-get_filter_overview_nsubj}{}}}
-\subsection{Method \code{get_filter_overview_nsubj()}}{
+\if{html}{\out{<a id="method-get_filter_overview_nsubjs"></a>}}
+\if{latex}{\out{\hypertarget{method-get_filter_overview_nsubjs}{}}}
+\subsection{Method \code{get_filter_overview_nsubjs()}}{
 Get filter overview subjects number
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{FilteredDataset$get_filter_overview_nsubj()}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{FilteredDataset$get_filter_overview_nsubjs()}\if{html}{\out{</div>}}
 }
 
 \subsection{Returns}{
