@@ -52,10 +52,10 @@ isolate({
 
 isolate({
   datasets$datanames()
-  datasets$get_data_info("iris", filtered = FALSE)
+  datasets$get_filter_overview_info("iris")
 
   # filters dataset to obtain information
-  datasets$get_data_info("mtcars", filtered = TRUE)
+  datasets$get_filter_overview_info("mtcars")
 
   print(datasets$get_call("iris"))
   print(datasets$get_call("mtcars"))
@@ -390,7 +390,7 @@ Get join keys between two datasets.
 Get filter overview table in form of X (filtered) / Y (non-filtered)
 
 This is intended to be presented in the application.
-The content for each of the data names is defined in \code{get_data_info} method.
+The content for each of the data names is defined in \code{get_filter_overview_info} method.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{FilteredData$get_filter_overview(datanames)}\if{html}{\out{</div>}}
 }
