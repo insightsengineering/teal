@@ -44,6 +44,14 @@ testthat::test_that("get_call returns the call with values passed in set_selecte
   testthat::expect_equal(isolate(filter_state$get_call()), quote(test >= 3 & test <= 4))
 })
 
+testthat::test_that("get_call returns a condition true for the values from the range passed to set_selected", {
+  filter_state <- RangeFilterState$new(c(3, 5), varname = "test")
+  filter_state$set_selected(c(3, 5))
+  test <- c(2:6)
+  eval(isolate(filter_state$get_call()))
+  testthat::expect_equal(eval(isolate(filter_state$get_call())), c(FALSE, TRUE, TRUE, TRUE, FALSE))
+})
+
 testthat::test_that("get_call returns the call with a condition false for infinite values", {
   filter_state <- RangeFilterState$new(c(1, 8), varname = "test")
   test <- Inf
@@ -76,4 +84,17 @@ testthat::test_that("get_call returns a condition true for NAs and Inf values af
   filter_state$set_keep_inf(TRUE)
   test <- c(NA, Inf)
   testthat::expect_true(all(eval(isolate(filter_state$get_call()))))
+})
+
+testthat::test_that("set_selected throw when selection not within allowed choices", {
+  filter_state <- RangeFilterState$new(c(1, 8), varname = "test")
+  testthat::expect_error(
+    filter_state$set_selected("a"),
+    "should be a numeric"
+  )
+
+  testthat::expect_error(
+    filter_state$set_selected(c(0, 1)),
+    "not valid for full range"
+  )
 })
