@@ -6,7 +6,7 @@ on.exit(unlink(temp_file_csv))
 
 # Test DatasetConnector ------
 testthat::test_that("DatasetConnector", {
-
+  test.nest::skip_if_too_deep(3)
   fun <- callable_function(function() synthetic_cdisc_data("rcd_2021_05_05")$adsl)
 
   testthat::expect_error(
