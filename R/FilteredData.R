@@ -244,11 +244,11 @@ FilteredData <- R6::R6Class( # nolint
         names(table_list) <-  mae_and_exps
         table_list
       } else {
-      list(tags$tr(
-        tags$td(dataname),
-        tags$td(nrows),
-        tags$td(nsubjects)
-      ))
+        list(tags$tr(
+          tags$td(dataname),
+          tags$td(nrows),
+          tags$td(nsubjects)
+        ))
       }
     },
 
