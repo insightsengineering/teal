@@ -12,7 +12,7 @@ filter_state <- teal:::init_filter_state(
   c(Sys.time() + seq(0, by = 3600, length.out = 10), NA),
   varname = "x",
   input_dataname = as.name("data"),
-  extract_type = TRUE
+  extract_type = character(0)
 )
 
 isolate(filter_state$get_call())

@@ -12,7 +12,7 @@ filter_state <- teal:::RangeFilterState$new(
   c(NA, Inf, seq(1:10)),
   varname = "x",
   input_dataname = as.name("data"),
-  extract_type = TRUE
+  extract_type = character(0)
 )
 isolate(filter_state$get_call())
 

@@ -795,7 +795,7 @@ LogicalFilterState <- R6::R6Class( # nolint
 #'   c(NA, Inf, seq(1:10)),
 #'   varname = "x",
 #'   input_dataname = as.name("data"),
-#'   extract_type = TRUE
+#'   extract_type = character(0)
 #' )
 #' isolate(filter_state$get_call())
 #'
@@ -1045,7 +1045,7 @@ RangeFilterState <- R6::R6Class( # nolint
 #'   c(LETTERS, NA),
 #'   varname = "x",
 #'   input_dataname = as.name("data"),
-#'   extract_type = TRUE
+#'   extract_type = character(0)
 #' )
 #' isolate(filter_state$get_call())
 #' isolate(filter_state$set_selected("B"))
@@ -1269,7 +1269,7 @@ ChoicesFilterState <- R6::R6Class( # nolint
 #'   c(Sys.Date() + seq(1:10), NA),
 #'   varname = "x",
 #'   input_dataname = as.name("data"),
-#'   extract_type = TRUE
+#'   extract_type = character(0)
 #' )
 #' isolate(filter_state$get_call())
 #'
@@ -1458,7 +1458,7 @@ DateFilterState <- R6::R6Class( # nolint
 #'   c(Sys.time() + seq(0, by = 3600, length.out = 10), NA),
 #'   varname = "x",
 #'   input_dataname = as.name("data"),
-#'   extract_type = TRUE
+#'   extract_type = character(0)
 #' )
 #'
 #' isolate(filter_state$get_call())

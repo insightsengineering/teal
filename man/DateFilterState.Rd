@@ -12,7 +12,7 @@ filter_state <- teal:::DateFilterState$new(
   c(Sys.Date() + seq(1:10), NA),
   varname = "x",
   input_dataname = as.name("data"),
-  extract_type = TRUE
+  extract_type = character(0)
 )
 isolate(filter_state$get_call())
 
