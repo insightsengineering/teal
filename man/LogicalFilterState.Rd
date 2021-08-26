@@ -12,7 +12,7 @@ filter_state <- teal:::LogicalFilterState$new(
   sample(c(TRUE, FALSE, NA), 10, replace = TRUE),
   varname = "x",
   input_dataname = as.name("data"),
-  extract_type = TRUE
+  extract_type = character(0)
 )
 isolate(filter_state$get_call())
 
