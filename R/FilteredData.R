@@ -680,7 +680,7 @@ FilteredData <- R6::R6Class( # nolint
           class = "table custom-table",
           tags$thead(tags$tr(
             tags$td(""),
-            tags$td("Observations"),
+            tags$td("Obs"),
             tags$td("Subjects")
           )),
           tags$tbody(datasets_html)
