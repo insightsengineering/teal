@@ -3,7 +3,7 @@ adtte_raw <- as.data.frame(as.list(setNames(nm = get_cdisc_keys("ADTTE"))))
 
 # 1. single dataset / dataset code -------------------------------
 testthat::test_that("single dataset / dataset code", {
-    adsl_dataset <- cdisc_dataset(
+  adsl_dataset <- cdisc_dataset(
     dataname = "ADSL",
     x = adsl_raw,
     code = "as.data.frame(as.list(setNames(nm = get_cdisc_keys(\"ADSL\"))))"
