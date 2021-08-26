@@ -818,7 +818,7 @@ MAEFilteredDataset <- R6::R6Class( # nolint
         lapply(private$get_filter_overview_nsubjs(), function(x) tags$td(x))
       )
 
-      table_list <- lapply(1:nrow(table), function(x){
+      table_list <- lapply(seq_len(nrow(table)), function(x) {
         tags$tr(
           tags$td(mae_and_exps[x]),
           table[x, ],
