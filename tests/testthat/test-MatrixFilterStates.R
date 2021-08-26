@@ -21,11 +21,18 @@ testthat::test_that("get_call returns a call filtering a matrix with numeric val
     output_dataname = "output",
     datalabel = "test"
   )
-  filter_state <- RangeFilterState$new(c(1, 2, 3), varname = "a")
+  filter_state <- RangeFilterState$new(
+    x = c(1, 2, 3),
+    varname = "a",
+    input_dataname = as.name("test"),
+    extract_type = "matrix"
+  )
   filter_states$queue_push(x = filter_state, queue_index = 1, element_id = "test")
 
   test <- matrix(c(1, 2, 3, 4), nrow = 4, ncol = 1, dimnames = list(c(), c("a")))
 
-  eval(isolate(filter_states$get_call()))
+  eval(
+    isolate(filter_states$get_call())
+  )
   testthat::expect_equal(output, test[1:3, 1, drop = FALSE])
 })

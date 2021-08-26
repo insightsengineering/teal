@@ -71,7 +71,7 @@ filter_state_iris <- teal:::init_filter_state(
   varname = "Species",
   varlabel = "Species name",
   input_dataname = as.name("iris"),
-  use_dataname = TRUE
+  extract_type = "list"
 )
 filter_state_iris$set_selected("virginica")
 
@@ -86,7 +86,7 @@ filter_state_mtcars <- teal:::init_filter_state(
   varname = "mpg",
   varlabel = "Miles per galon",
   input_dataname = as.name("mpg"),
-  use_dataname = TRUE
+  extract_type = "list"
 )
 filter_state_mtcars$set_selected(c(15, 20))
 

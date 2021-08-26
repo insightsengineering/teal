@@ -33,3 +33,20 @@ testthat::test_that("get_call reutrns a condition evaluating to TRUE for NA valu
   filter_state$set_keep_na(TRUE)
   testthat::expect_true(eval(isolate(filter_state$get_call()))[2])
 })
+
+
+testthat::test_that("set_selected throw when selection not within allowed choices", {
+  test_date <- as.Date(c("2013/07/13", "2013/07/14", "2013/07/15"))
+  filter_state <- DateFilterState$new(test_date, varname = "test_date")
+
+
+  testthat::expect_error(
+    filter_state$set_selected("a"),
+    "should be a Date"
+  )
+
+  testthat::expect_error(
+    filter_state$set_selected(c(test_date[1] - 3, test_date[2])),
+    "not valid for full range"
+  )
+})

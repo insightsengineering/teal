@@ -46,3 +46,18 @@ testthat::test_that("DatetimeFilterState ignores the timezone of the ISO object 
     )
   )
 })
+
+
+testthat::test_that("set_selected throw when selection not within allowed choices", {
+  objects <- as.POSIXct(c(1, 2, 3), origin = "1900/01/01")
+  filter_state <- DatetimeFilterState$new(objects, varname = "objects")
+  testthat::expect_error(
+    filter_state$set_selected("a"),
+    "should be a POSIXct or POSIXlt"
+  )
+
+  testthat::expect_error(
+    filter_state$set_selected(c(objects[2], objects[3] + 1)),
+    "not valid for full range"
+  )
+})

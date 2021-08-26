@@ -65,7 +65,7 @@
 #'   varname = "Species",
 #'   varlabel = "Species name",
 #'   input_dataname = as.name("iris"),
-#'   use_dataname = TRUE
+#'   extract_type = "list"
 #' )
 #' filter_state_iris$set_selected("virginica")
 #'
@@ -80,7 +80,7 @@
 #'   varname = "mpg",
 #'   varlabel = "Miles per galon",
 #'   input_dataname = as.name("mpg"),
-#'   use_dataname = TRUE
+#'   extract_type = "list"
 #' )
 #' filter_state_mtcars$set_selected(c(15, 20))
 #'

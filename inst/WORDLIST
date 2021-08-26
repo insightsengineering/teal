@@ -38,10 +38,10 @@ debuggable
 dropdown
 enum
 extensibility
-FilterState
-FilterStates
 FilteredData
 FilteredDataset
+FilterState
+FilterStates
 funder
 Gabe
 Genetech

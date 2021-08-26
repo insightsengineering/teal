@@ -40,7 +40,18 @@ testthat::test_that("get_call returns a call filtering an MAE object", {
     varlabels = character(0),
     keys = character(0)
   )
-  filter_state <- ChoicesFilterState$new(c("white"), varname = "race", use_dataname = TRUE)
-  filter_states$queue_push(x = filter_state, queue_index = 1, element_id = "test")
-  isolate(filter_states$get_call())
+  filter_state <- ChoicesFilterState$new(
+    x = c("white"),
+    varname = as.name("race"),
+    input_dataname = as.name("test"),
+    extract_type = "list"
+  )
+  filter_states$queue_push(x = filter_state, queue_index = "y", element_id = "test")
+
+  test <- miniACC
+  eval(isolate(filter_states$get_call()))
+  testthat::expect_identical(
+    output,
+    MultiAssayExperiment::subsetByColData(test, test$race == "white")
+  )
 })

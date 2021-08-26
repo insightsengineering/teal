@@ -18,16 +18,12 @@ get_dummy_filter <- function(data) { # nousage # nolint
           SEX = init_filter_state(
             x = ADSL$SEX,
             varname = "SEX",
-            varlabel = "Sex",
-            input_dataname = as.name("ADSL"),
-            use_dataname = FALSE
+            varlabel = "Sex"
           ),
           AGE = init_filter_state(
             x = ADSL$AGE,
             varname = "AGE",
-            varlabel = "Age",
-            input_dataname = as.name("ADSL"),
-            use_dataname = FALSE
+            varlabel = "Age"
           )
         )
       )
@@ -38,9 +34,7 @@ get_dummy_filter <- function(data) { # nousage # nolint
           ASEQ = init_filter_state(
             x = ADLB$ASEQ,
             varname = "ASEQ",
-            varlabel = "Sequence Number",
-            input_dataname = as.name("ADLB"),
-            use_dataname = FALSE
+            varlabel = "Sequence Number"
           )
         )
       )

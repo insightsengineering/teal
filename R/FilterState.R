@@ -18,11 +18,16 @@ label_keep_na_count <- function(na_count) {
 #'   label of the variable (optional).
 #'
 #' @param input_dataname (`name` or `call`)\cr
-#'   name of dataset where `x` is taken from
+#'   name of dataset where `x` is taken from. Must be specified if `extract_type` argument
+#'   is not empty.
 #'
-#' @param use_dataname (`logical(1)`)\cr
-#' whether to prefix condition calls with `input_dataname$`.
-#' For example `dataset$variable == "selection"`
+#' @param extract_type (`character(0)`, `character(1)`)\cr
+#' whether condition calls should be prefixed by dataname. Possible values:
+#' \itemize{
+#' \item{`character(0)` (default)}{ `varname` in the condition call will not be prefixed}
+#' \item{`"list"`}{ `varname` in the condition call will be returned as `<input_dataname>$<varname>`}
+#' \item{`"matrix"`}{ `varname` in the condition call will be returned as `<input_dataname>[, <varname>]`}
+#' }
 #'
 #' @examples
 #' filter_state <- teal:::RangeFilterState$new(
@@ -30,7 +35,7 @@ label_keep_na_count <- function(na_count) {
 #'   varname = "x",
 #'   varlabel = "Pretty name",
 #'   input_dataname = as.name("dataname"),
-#'   use_dataname = TRUE
+#'   extract_type = "matrix"
 #' )
 #'
 #' filter_state$get_varname()
@@ -57,11 +62,17 @@ init_filter_state <- function(x,
                               varname,
                               varlabel = if_null(attr(x, "label"), character(0)),
                               input_dataname = NULL,
-                              use_dataname = FALSE) {
+                              extract_type = character(0)) {
   stopifnot(is_character_single(varname) || is.name(varname))
   stopifnot(is_character_vector(varlabel, min_length = 0, max_length = 1))
   stopifnot(is.null(input_dataname) || is.name(input_dataname) || is.call(input_dataname))
-  stopifnot(is_logical_single(use_dataname))
+  stopifnot(is_character_vector(extract_type, min_length = 0, max_length = 1))
+  stopifnot(
+    length(extract_type) == 0 ||
+    length(extract_type) == 1 && !is.null(input_dataname)
+  )
+  stopifnot(extract_type %in% c("list", "matrix"))
+
 
   if (all(is.na(x))) {
     return(
@@ -70,7 +81,7 @@ init_filter_state <- function(x,
         varname = varname,
         varlabel = varlabel,
         input_dataname = input_dataname,
-        use_dataname = use_dataname
+        extract_type = extract_type
       )
     )
   }
@@ -83,12 +94,12 @@ init_filter_state.default <- function(x, #nousage
                                       varname,
                                       varlabel = if_null(attr(x, "label"), character(0)),
                                       input_dataname = NULL,
-                                      use_dataname = FALSE) {
+                                      extract_type = character(0)) {
   FilterState$new(x = x,
                   varname = varname,
                   varlabel = varlabel,
                   input_dataname = input_dataname,
-                  use_dataname = use_dataname)
+                  extract_type = extract_type)
 }
 
 #' @export
@@ -96,12 +107,12 @@ init_filter_state.logical <- function(x, #nousage
                                       varname,
                                       varlabel = if_null(attr(x, "label"), character(0)),
                                       input_dataname = NULL,
-                                      use_dataname = FALSE) {
+                                      extract_type = character(0)) {
   LogicalFilterState$new(x = x,
                          varname = varname,
                          varlabel = varlabel,
                          input_dataname = input_dataname,
-                         use_dataname = use_dataname)
+                         extract_type = extract_type)
 }
 
 #' @export
@@ -109,19 +120,19 @@ init_filter_state.numeric <- function(x, #nousage
                                       varname,
                                       varlabel = if_null(attr(x, "label"), character(0)),
                                       input_dataname = NULL,
-                                      use_dataname = FALSE) {
+                                      extract_type = character(0)) {
   if (length(unique(x[!is.na(x)])) < .threshold_slider_vs_checkboxgroup) {
     ChoicesFilterState$new(x = x,
                            varname = varname,
                            varlabel = varlabel,
                            input_dataname = input_dataname,
-                           use_dataname = use_dataname)
+                           extract_type = extract_type)
   } else {
     RangeFilterState$new(x = x,
                          varname = varname,
                          varlabel = varlabel,
                          input_dataname = input_dataname,
-                         use_dataname = use_dataname)
+                         extract_type = extract_type)
   }
 }
 
@@ -130,12 +141,12 @@ init_filter_state.factor <- function(x, #nousage
                                      varname,
                                      varlabel = if_null(attr(x, "label"), character(0)),
                                      input_dataname = NULL,
-                                     use_dataname = FALSE) {
+                                     extract_type = character(0)) {
   ChoicesFilterState$new(x = x,
                          varname = varname,
                          varlabel = varlabel,
                          input_dataname = input_dataname,
-                         use_dataname = use_dataname)
+                         extract_type = extract_type)
 }
 
 #' @export
@@ -143,12 +154,12 @@ init_filter_state.character <- function(x, #nousage
                                         varname,
                                         varlabel = if_null(attr(x, "label"), character(0)),
                                         input_dataname = NULL,
-                                        use_dataname = FALSE) {
+                                        extract_type = character(0)) {
   ChoicesFilterState$new(x = x,
                          varname = varname,
                          varlabel = varlabel,
                          input_dataname = input_dataname,
-                         use_dataname = use_dataname)
+                         extract_type = extract_type)
 }
 
 #' @export
@@ -156,12 +167,12 @@ init_filter_state.Date <- function(x, #nousage
                                    varname,
                                    varlabel = if_null(attr(x, "label"), character(0)),
                                    input_dataname = NULL,
-                                   use_dataname = FALSE) {
+                                   extract_type = character(0)) {
   DateFilterState$new(x = x,
                       varname = varname,
                       varlabel = varlabel,
                       input_dataname = input_dataname,
-                      use_dataname = use_dataname)
+                      extract_type = extract_type)
 }
 
 #' @export
@@ -169,12 +180,12 @@ init_filter_state.POSIXct <- function(x, #nousage
                                       varname,
                                       varlabel = if_null(attr(x, "label"), character(0)),
                                       input_dataname = NULL,
-                                      use_dataname = FALSE) {
+                                      extract_type = character(0)) {
   DatetimeFilterState$new(x = x,
                           varname = varname,
                           varlabel = varlabel,
                           input_dataname = input_dataname,
-                          use_dataname = use_dataname)
+                          extract_type = extract_type)
 }
 
 #' @export
@@ -182,12 +193,12 @@ init_filter_state.POSIXlt <- function(x, #nousage
                                       varname,
                                       varlabel = if_null(attr(x, "label"), character(0)),
                                       input_dataname = NULL,
-                                      use_dataname = FALSE) {
+                                      extract_type = character(0)) {
   DatetimeFilterState$new(x = x,
                           varname = varname,
                           varlabel = varlabel,
                           input_dataname = input_dataname,
-                          use_dataname = use_dataname)
+                          extract_type = extract_type)
 }
 
 # FilterState ------
@@ -231,19 +242,29 @@ FilterState <- R6::R6Class( # nolint
     #' @param varlabel (`character(1)`)\cr
     #'   label of the variable (optional).
     #' @param input_dataname (`name` or `call`)\cr
-    #'   name of dataset where `x` is taken from
-    #' @param use_dataname (`logical(1)`)\cr
-    #' whether to prefix condition calls with `input_dataname$`.
-    #' For example `input_dataname$variable == "selection"`
+    #'   name of dataset where `x` is taken from. Must be specified if `extract_type` argument
+    #'   is not empty.
+    #' @param extract_type (`character(0)`, `character(1)`)\cr
+    #' whether condition calls should be prefixed by dataname. Possible values:
+    #' \itemize{
+    #' \item{`character(0)` (default)}{ `varname` in the condition call will not be prefixed}
+    #' \item{`"list"`}{ `varname` in the condition call will be returned as `<input_dataname>$<varname>`}
+    #' \item{`"matrix"`}{ `varname` in the condition call will be returned as `<input_dataname>[, <varname>]`}
+    #' }
     initialize = function(x,
                           varname,
                           varlabel = character(0),
                           input_dataname = NULL,
-                          use_dataname = FALSE) {
+                          extract_type = character(0)) {
       stopifnot(is.name(varname) || is.call(varname) || is_character_single(varname))
       stopifnot(is_character_vector(varlabel, min_length = 0, max_length = 1))
       stopifnot(is.null(input_dataname) || is.name(input_dataname) || is.call(input_dataname))
-      stopifnot(is_logical_single(use_dataname))
+      stopifnot(is_character_vector(extract_type, min_length = 0, max_length = 1))
+      stopifnot(
+        length(extract_type) == 0 ||
+          length(extract_type) == 1 && !is.null(input_dataname)
+      )
+      stopifnot(extract_type %in% c("list", "matrix"))
 
       private$input_dataname <- input_dataname
       private$varname <- if (is.character(varname)) {
@@ -257,7 +278,7 @@ FilterState <- R6::R6Class( # nolint
       } else {
         varlabel
       }
-      private$use_dataname <- use_dataname
+      private$extract_type <- extract_type
       private$selected <- reactiveVal(NULL)
       private$na_count <- sum(is.na(x))
       private$keep_na <- reactiveVal(value = FALSE)
@@ -381,7 +402,7 @@ FilterState <- R6::R6Class( # nolint
     selected = NULL,  # because it holds reactiveVal and each class has different choices type
     varname = character(0),
     varlabel = character(0),
-    use_dataname = logical(0),
+    extract_type = logical(0),
 
     #' description
     #' Adds `is.na(varname)` before existing condition calls if `keep_na` is selected
@@ -407,8 +428,10 @@ FilterState <- R6::R6Class( # nolint
     #' `data$var`
     #' return (`name` or `call`)
     get_varname_prefixed = function() {
-      if (isTRUE(private$use_dataname)) {
+      if (isTRUE(private$extract_type == "list")) {
         call_extract_list(private$input_dataname, private$varname)
+      } else if (isTRUE(private$extract_type == "matrix")) {
+        call_extract_matrix(dataname = private$input_dataname, column = as.character(private$varname))
       } else {
         private$varname
       }
@@ -470,7 +493,7 @@ FilterState <- R6::R6Class( # nolint
 #'   NA,
 #'   varname = "x",
 #'   input_dataname = as.name("data"),
-#'   use_dataname = TRUE
+#'   extract_type = character(0)
 #' )
 #' isolate(filter_state$get_call())
 #' isolate(filter_state$set_selected(TRUE))
@@ -491,15 +514,19 @@ EmptyFilterState <- R6::R6Class( # nolint
     #'   label of the variable (optional).
     #' @param input_dataname (`name` or `call`)\cr
     #'   name of dataset where `x` is taken from
-    #' @param use_dataname (`logical(1)`)\cr
-    #' whether to prefix condition calls with `input_dataname$`.
-    #' For example `input_dataname$variable == "selection"`
+    #' @param extract_type (`character(0)`, `character(1)`)\cr
+    #' whether condition calls should be prefixed by dataname. Possible values:
+    #' \itemize{
+    #' \item{`character(0)` (default)}{ `varname` in the condition call will not be prefixed}
+    #' \item{`"list"`}{ `varname` in the condition call will be returned as `<input_dataname>$<varname>`}
+    #' \item{`"matrix"`}{ `varname` in the condition call will be returned as `<input_dataname>[, <varname>]`}
+    #' }
     initialize = function(x,
                           varname,
                           varlabel = character(0),
                           input_dataname = NULL,
-                          use_dataname = FALSE) {
-      super$initialize(x, varname, varlabel, input_dataname, use_dataname)
+                          extract_type = character(0)) {
+      super$initialize(x, varname, varlabel, input_dataname, extract_type)
       private$set_choices(list())
       self$set_selected(list())
 
@@ -572,7 +599,7 @@ EmptyFilterState <- R6::R6Class( # nolint
 #'   sample(c(TRUE, FALSE, NA), 10, replace = TRUE),
 #'   varname = "x",
 #'   input_dataname = as.name("data"),
-#'   use_dataname = TRUE
+#'   extract_type = character(0)
 #' )
 #' isolate(filter_state$get_call())
 #'
@@ -594,16 +621,20 @@ LogicalFilterState <- R6::R6Class( # nolint
     #'   label of the variable (optional).
     #' @param input_dataname (`name` or `call`)\cr
     #'   name of dataset where `x` is taken from
-    #' @param use_dataname (`logical(1)`)\cr
-    #' whether to prefix condition calls with `input_dataname$`.
-    #' For example `input_dataname$variable == "selection"`
+    #' @param extract_type (`character(0)`, `character(1)`)\cr
+    #' whether condition calls should be prefixed by dataname. Possible values:
+    #' \itemize{
+    #' \item{`character(0)` (default)}{ `varname` in the condition call will not be prefixed}
+    #' \item{`"list"`}{ `varname` in the condition call will be returned as `<input_dataname>$<varname>`}
+    #' \item{`"matrix"`}{ `varname` in the condition call will be returned as `<input_dataname>[, <varname>]`}
+    #' }
     initialize = function(x,
                           varname,
                           varlabel = character(0),
                           input_dataname = NULL,
-                          use_dataname = FALSE) {
+                          extract_type = character(0)) {
       stopifnot(is.logical(x))
-      super$initialize(x, varname, varlabel, input_dataname, use_dataname)
+      super$initialize(x, varname, varlabel, input_dataname, extract_type)
       tbl <- table(x)
 
       choices <- as.logical(names(tbl))
@@ -764,7 +795,7 @@ LogicalFilterState <- R6::R6Class( # nolint
 #'   c(NA, Inf, seq(1:10)),
 #'   varname = "x",
 #'   input_dataname = as.name("data"),
-#'   use_dataname = TRUE
+#'   extract_type = character(0)
 #' )
 #' isolate(filter_state$get_call())
 #'
@@ -787,16 +818,20 @@ RangeFilterState <- R6::R6Class( # nolint
     #'   label of the variable (optional).
     #' @param input_dataname (`name` or `call`)\cr
     #'   name of dataset where `x` is taken from
-    #' @param use_dataname (`logical(1)`)\cr
-    #' whether to prefix condition calls with `input_dataname$`.
-    #' For example `input_dataname$variable == "selection"`
+    #' @param extract_type (`character(0)`, `character(1)`)\cr
+    #' whether condition calls should be prefixed by dataname. Possible values:
+    #' \itemize{
+    #' \item{`character(0)` (default)}{ `varname` in the condition call will not be prefixed}
+    #' \item{`"list"`}{ `varname` in the condition call will be returned as `<input_dataname>$<varname>`}
+    #' \item{`"matrix"`}{ `varname` in the condition call will be returned as `<input_dataname>[, <varname>]`}
+    #' }
     initialize = function(x,
                           varname,
                           varlabel = character(0),
                           input_dataname = NULL,
-                          use_dataname = FALSE) {
+                          extract_type = character(0)) {
       stopifnot(is.numeric(x))
-      super$initialize(x, varname, varlabel, input_dataname, use_dataname)
+      super$initialize(x, varname, varlabel, input_dataname, extract_type)
       var_range <- range(x, na.rm = TRUE)
       private$set_choices(var_range)
       self$set_selected(var_range)
@@ -1010,7 +1045,7 @@ RangeFilterState <- R6::R6Class( # nolint
 #'   c(LETTERS, NA),
 #'   varname = "x",
 #'   input_dataname = as.name("data"),
-#'   use_dataname = TRUE
+#'   extract_type = character(0)
 #' )
 #' isolate(filter_state$get_call())
 #' isolate(filter_state$set_selected("B"))
@@ -1031,20 +1066,24 @@ ChoicesFilterState <- R6::R6Class( # nolint
     #'   label of the variable (optional).
     #' @param input_dataname (`name` or `call`)\cr
     #'   name of dataset where `x` is taken from
-    #' @param use_dataname (`logical(1)`)\cr
-    #' whether to prefix condition calls with `input_dataname$`.
-    #' For example `input_dataname$variable == "selection"`
+    #' @param extract_type (`character(0)`, `character(1)`)\cr
+    #' whether condition calls should be prefixed by dataname. Possible values:
+    #' \itemize{
+    #' \item{`character(0)` (default)}{ `varname` in the condition call will not be prefixed}
+    #' \item{`"list"`}{ `varname` in the condition call will be returned as `<input_dataname>$<varname>`}
+    #' \item{`"matrix"`}{ `varname` in the condition call will be returned as `<input_dataname>[, <varname>]`}
+    #' }
     initialize = function(x,
                           varname,
                           varlabel = character(0),
                           input_dataname = NULL,
-                          use_dataname = FALSE) {
+                          extract_type = character(0)) {
       stopifnot(
         is.character(x) ||
           is.factor(x) ||
           (length(unique(x[!is.na(x)])) < .threshold_slider_vs_checkboxgroup)
       )
-      super$initialize(x, varname, varlabel, input_dataname, use_dataname)
+      super$initialize(x, varname, varlabel, input_dataname, extract_type)
 
       add_counts <- if (!is(x, "factor")) {
         x <- factor(x, levels = as.character(sort(unique(x))))
@@ -1230,7 +1269,7 @@ ChoicesFilterState <- R6::R6Class( # nolint
 #'   c(Sys.Date() + seq(1:10), NA),
 #'   varname = "x",
 #'   input_dataname = as.name("data"),
-#'   use_dataname = TRUE
+#'   extract_type = character(0)
 #' )
 #' isolate(filter_state$get_call())
 #'
@@ -1252,16 +1291,20 @@ DateFilterState <- R6::R6Class( # nolint
     #'   label of the variable (optional).
     #' @param input_dataname (`name` or `call`)\cr
     #'   name of dataset where `x` is taken from
-    #' @param use_dataname (`logical(1)`)\cr
-    #' whether to prefix condition calls with `input_dataname$`.
-    #' For example `input_dataname$variable == "selection"`
+    #' @param extract_type (`character(0)`, `character(1)`)\cr
+    #' whether condition calls should be prefixed by dataname. Possible values:
+    #' \itemize{
+    #' \item{`character(0)` (default)}{ `varname` in the condition call will not be prefixed}
+    #' \item{`"list"`}{ `varname` in the condition call will be returned as `<input_dataname>$<varname>`}
+    #' \item{`"matrix"`}{ `varname` in the condition call will be returned as `<input_dataname>[, <varname>]`}
+    #' }
     initialize = function(x,
                           varname,
                           varlabel = character(0),
                           input_dataname = NULL,
-                          use_dataname = FALSE) {
+                          extract_type = character(0)) {
       stopifnot(is(x, "Date"))
-      super$initialize(x, varname, varlabel, input_dataname, use_dataname)
+      super$initialize(x, varname, varlabel, input_dataname, extract_type)
 
       var_range <- range(x, na.rm = TRUE)
       private$set_choices(var_range)
@@ -1415,7 +1458,7 @@ DateFilterState <- R6::R6Class( # nolint
 #'   c(Sys.time() + seq(0, by = 3600, length.out = 10), NA),
 #'   varname = "x",
 #'   input_dataname = as.name("data"),
-#'   use_dataname = TRUE
+#'   extract_type = character(0)
 #' )
 #'
 #' isolate(filter_state$get_call())
@@ -1441,16 +1484,20 @@ DatetimeFilterState <- R6::R6Class( # nolint
     #'   label of the variable (optional).
     #' @param input_dataname (`name` or `call`)\cr
     #'   name of dataset where `x` is taken from
-    #' @param use_dataname (`logical(1)`)\cr
-    #'   whether to prefix condition calls with `input_dataname$`.
-    #'   For example `input_dataname$variable == "selection"`
+    #' @param extract_type (`character(0)`, `character(1)`)\cr
+    #' whether condition calls should be prefixed by dataname. Possible values:
+    #' \itemize{
+    #' \item{`character(0)` (default)}{ `varname` in the condition call will not be prefixed}
+    #' \item{`"list"`}{ `varname` in the condition call will be returned as `<input_dataname>$<varname>`}
+    #' \item{`"matrix"`}{ `varname` in the condition call will be returned as `<input_dataname>[, <varname>]`}
+    #' }
     initialize = function(x,
                           varname,
                           varlabel = character(0),
                           input_dataname = NULL,
-                          use_dataname = FALSE) {
+                          extract_type = character(0)) {
       stopifnot(is(x, "POSIXct") || is(x, "POSIXlt"))
-      super$initialize(x, varname, varlabel, input_dataname, use_dataname)
+      super$initialize(x, varname, varlabel, input_dataname, extract_type)
 
       var_range <- range(x, na.rm = TRUE)
       private$set_choices(var_range)

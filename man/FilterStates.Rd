@@ -29,7 +29,7 @@ filter_state <- teal:::RangeFilterState$new(
   varname = "x",
   varlabel = "x variable",
   input_dataname = as.name("data"),
-  use_dataname = TRUE
+  extract_type = "list"
 )
 isolate(filter_state$set_selected(c(3L, 8L)))
 

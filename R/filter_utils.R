@@ -49,12 +49,58 @@ call_extract_array <- function(dataname = ".", row = NULL, column = NULL, aisle 
     pdeparse(aisle, width.cutoff = 500L)
   }
 
-  as.call(
-    parse(
-      text = sprintf("%s[%s, %s, %s]", dataname, row, column, aisle)
-    )
+  parse(
+    text = sprintf("%s[%s, %s, %s]", dataname, row, column, aisle)
   )[[1]]
 }
+
+#' Get call to subset and select matrix
+#'
+#' Get call to subset and select matrix
+#' @param dataname (`character(1)` or `name`)\cr
+#' @param row (`character(1)` or `call`)\cr
+#'   optional, name of the `row` or condition
+#' @param column (`character(1)` or `call`)\cr
+#'   optional, name of the `column` or condition
+#' @return `[` call with all conditions included
+#' @examples
+#' teal:::call_extract_matrix(
+#'   dataname = "my_array",
+#'   row = teal:::call_condition_choice("my_array$SEX", "M"),
+#'   column = call("c", "SEX", "AGE")
+#' )
+#' teal:::call_extract_matrix(
+#'   "mae_object",
+#'   column = teal:::call_condition_choice("SEX", "M")
+#' )
+#' @return specific \code{\link[base]{Extract}} `call`
+call_extract_matrix <- function(dataname = ".", row = NULL, column = NULL) {
+  stopifnot(is.character(dataname) || is.name(dataname))
+  stopifnot(is.null(row) || is.call(row) || is.character(row) || is.name(row))
+  stopifnot(is.null(column) || is.call(column) || is.character(column) || is.name(column))
+
+  if (missing(dataname)) {
+    dataname <- as.name(".")
+  } else if (is.name(dataname)) {
+    dataname <-  pdeparse(dataname)
+  }
+
+  row <- if (is.null(row)) {
+    ""
+  } else {
+    pdeparse(row, width.cutoff = 500L)
+  }
+  column <- if (is.null(column)) {
+    ""
+  } else {
+    pdeparse(column, width.cutoff = 500L)
+  }
+
+  parse(
+    text = sprintf("%s[%s, %s]", dataname, row, column)
+  )[[1]]
+}
+
 
 #' Compose extract call with `$` operator
 #'
