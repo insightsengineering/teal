@@ -198,7 +198,7 @@ Get filter overview rows of a dataset
 }
 
 \subsection{Returns}{
-(\code{list}) list of shiny.tag objects
+(\code{matrix}) matrix of observations and subjects
 }
 }
 \if{html}{\out{<hr>}}

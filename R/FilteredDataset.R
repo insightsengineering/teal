@@ -201,13 +201,11 @@ FilteredDataset <- R6::R6Class( # nolint
     #' @description
     #' Get filter overview rows of a dataset
     #'
-    #' @return (`list`) list of shiny.tag objects
+    #' @return (`matrix`) matrix of observations and subjects
     get_filter_overview_info = function() {
-      list(tags$tr(
-        tags$td(self$get_dataname()),
-        tags$td(private$get_filter_overview_nobs()),
-        tags$td("")
-      ))
+      df <- cbind(private$get_filter_overview_nobs(), "")
+      rownames(df) <- self$get_dataname()
+      df
     },
 
     #' @description
@@ -628,13 +626,14 @@ CDISCFilteredDataset <- R6::R6Class( # nolint
     #' @description
     #' Get filter overview rows of a dataset
     #'
-    #' @return (`list`) list of shiny.tag objects
+    #' @return (`matrix`) matrix of observations and subjects
     get_filter_overview_info = function() {
-      list(tags$tr(
-        tags$td(self$get_dataname()),
-        tags$td(private$get_filter_overview_nobs()),
-        tags$td(private$get_filter_overview_nsubjs())
-      ))
+      df <- cbind(
+        private$get_filter_overview_nobs(),
+        private$get_filter_overview_nsubjs()
+      )
+      rownames(df) <- self$get_dataname()
+      df
     },
 
     #' @description
@@ -805,24 +804,19 @@ MAEFilteredDataset <- R6::R6Class( # nolint
     #' @description
     #' Get filter overview rows of a dataset
     #'
-    #' @return (`list`) list of shiny.tag objects
+    #' @return (`matrix`) matrix of observations and subjects
     get_filter_overview_info = function() {
       names_exps <- paste0("- ", names(self$get_data(filtered = FALSE)))
       mae_and_exps <- c(self$get_dataname(), names_exps)
 
       table <- cbind(
-        lapply(private$get_filter_overview_nobs(), function(x) tags$td(x)),
-        lapply(private$get_filter_overview_nsubjs(), function(x) tags$td(x))
+        private$get_filter_overview_nobs(),
+        private$get_filter_overview_nsubjs()
       )
 
-      table_list <- lapply(seq_len(nrow(table)), function(x) {
-        tags$tr(
-          tags$td(mae_and_exps[x]),
-          table[x, ],
-        )
-      })
+      rownames(table) <- mae_and_exps
 
-      table_list
+      table
     },
 
     #' @description

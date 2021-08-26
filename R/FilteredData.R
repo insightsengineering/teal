@@ -237,9 +237,15 @@ FilteredData <- R6::R6Class( # nolint
       rows_html <- sapply(
         datanames,
         function(dataname) {
-          self$get_filtered_datasets(dataname)$get_filter_overview_info()
-        },
-        USE.NAMES = TRUE
+          df <- self$get_filtered_datasets(dataname)$get_filter_overview_info()
+          lapply(seq_len(nrow(df)), function(x) {
+            tags$tr(
+              tags$td(rownames(df)[x]),
+              tags$td(df[x, 1]),
+              tags$td(df[x, 2]))
+            }
+          )
+        }
       )
 
       return(rows_html)
