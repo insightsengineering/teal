@@ -7,6 +7,7 @@
 * Fixed the bug caused by calling `mutate_dataset` multiple times on the same `DatasetConnector` or `Dataset` object.
 * Fixed a bug that caused the output of `get_code` function to not reproduce its raw data set.
 * Changed `filter_spec` to allow no variable selection upon app initialization, where the first possible value was previously selected.
+* Fixed reference bug in `FilteredData` that caused error message on initial application load.
 
 ### Enhancements
 * The `append` method of a `CodeClass` object has been modified to print a warning message when the argument does not result in any code being added because it is duplicated.

@@ -545,6 +545,13 @@ testthat::test_that("Dataset$set_join_keys works with Dataset$mutate_join_keys",
   )
 })
 
+testthat::test_that("Dupliated mutation code is shown via get_code()", {
+  dataset <- Dataset$new("iris", head(iris))
+  dataset$mutate("7")
+  dataset$mutate("7")
+  testthat::expect_equal(dataset$get_code(), paste("7", "7", sep = "\n"))
+})
+
 test_that("mutate_dataset", {
   x <- data.frame(x = c(1, 2), y = c("a", "b"), stringsAsFactors = FALSE)
 
