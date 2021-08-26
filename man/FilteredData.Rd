@@ -360,7 +360,7 @@ The content for each of the data names is defined in \code{get_filter_overview_i
 \if{html}{\out{</div>}}
 }
 \subsection{Returns}{
-list of shiny.tag objects
+(\code{matrix}) matrix of observations and subjects of all datasets
 }
 }
 \if{html}{\out{<hr>}}

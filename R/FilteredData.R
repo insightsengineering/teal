@@ -227,28 +227,21 @@ FilteredData <- R6::R6Class( # nolint
     #'
     #' @param datanames (`character` vector) names of the dataset
     #'
-    #' @return list of shiny.tag objects
+    #' @return (`matrix`) matrix of observations and subjects of all datasets
     get_filter_overview = function(datanames) {
       if (identical(datanames, "all")) {
         datanames <- self$datanames()
       }
       check_in_subset(datanames, self$datanames(), "Some datasets are not available: ")
 
-      rows_html <- sapply(
+      rows <- sapply(
         datanames,
         function(dataname) {
-          df <- self$get_filtered_datasets(dataname)$get_filter_overview_info()
-          lapply(seq_len(nrow(df)), function(x) {
-            tags$tr(
-              tags$td(rownames(df)[x]),
-              tags$td(df[x, 1]),
-              tags$td(df[x, 2]))
-            }
-          )
+          self$get_filtered_datasets(dataname)$get_filter_overview_info()
         }
       )
 
-      return(rows_html)
+      do.call(rbind, rows)
     },
 
     #' @description
@@ -681,7 +674,16 @@ FilteredData <- R6::R6Class( # nolint
           active_datanames()
         }
 
-        datasets_html <- self$get_filter_overview(datanames = datanames)
+        datasets_df <- self$get_filter_overview(datanames = datanames)
+
+        datasets_html <- lapply(seq_len(nrow(datasets_df)), function(x) {
+              tags$tr(
+                tags$td(rownames(datasets_df)[x]),
+                tags$td(datasets_df[x, 1]),
+                tags$td(datasets_df[x, 2]))
+            }
+        )
+
         table_html <- tags$table(
           class = "table custom-table",
           tags$thead(tags$tr(
