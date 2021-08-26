@@ -117,7 +117,6 @@ isolate(datasets$get_call("mtcars"))
 \item \href{#method-handle_active_datanames}{\code{FilteredData$handle_active_datanames()}}
 \item \href{#method-set_dataset}{\code{FilteredData$set_dataset()}}
 \item \href{#method-set_code}{\code{FilteredData$set_code()}}
-\item \href{#method-set_join_keys}{\code{FilteredData$set_join_keys()}}
 \item \href{#method-get_bookmark_state}{\code{FilteredData$get_bookmark_state()}}
 \item \href{#method-set_bookmark_state}{\code{FilteredData$set_bookmark_state()}}
 \item \href{#method-restore_state_from_bookmark}{\code{FilteredData$restore_state_from_bookmark()}}
@@ -508,7 +507,7 @@ Add dataset and preserve all attributes attached to this object.
 Technically \code{set_dataset} created \code{FilteredDataset} which keeps
 \code{dataset} for filtering purpose.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{FilteredData$set_dataset(dataset, join_key_set = NULL)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{FilteredData$set_dataset(dataset)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
@@ -516,9 +515,6 @@ Technically \code{set_dataset} created \code{FilteredDataset} which keeps
 \describe{
 \item{\code{dataset}}{(\code{Dataset})\cr
 object containing data and attributes.}
-
-\item{\code{join_key_set}}{(\code{JoinKeySet})\cr
-keys to merge this \code{dataset} to the other datasets}
 }
 \if{html}{\out{</div>}}
 }
@@ -545,26 +541,6 @@ unfiltered datasets}
 }
 \subsection{Returns}{
 (\code{self})
-}
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-set_join_keys"></a>}}
-\if{latex}{\out{\hypertarget{method-set_join_keys}{}}}
-\subsection{Method \code{set_join_keys()}}{
-Set join keys object
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{FilteredData$set_join_keys(x)}\if{html}{\out{</div>}}
-}
-
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{x}}{(\code{JoinKeys})}
-}
-\if{html}{\out{</div>}}
-}
-\subsection{Returns}{
-(\code{self}) invisibly for chaining
 }
 }
 \if{html}{\out{<hr>}}

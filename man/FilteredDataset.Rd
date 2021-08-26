@@ -44,7 +44,7 @@ components of the \code{Dataset}.
 \subsection{Method \code{new()}}{
 Initialize \code{FilteredDataset} object
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{FilteredDataset$new(dataset, join_keys)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{FilteredDataset$new(dataset)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
@@ -52,9 +52,6 @@ Initialize \code{FilteredDataset} object
 \describe{
 \item{\code{dataset}}{(\code{Dataset})\cr
 single dataset for which filters are rendered}
-
-\item{\code{join_keys}}{(\code{list})\cr
-keys to join this \code{dataset} with the other}
 }
 \if{html}{\out{</div>}}
 }

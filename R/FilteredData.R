@@ -240,9 +240,26 @@ FilteredData <- R6::R6Class( # nolint
     #' @param dataset_2 (`character`) other dataset name
     #' @return (`named character`) vector with column names
     get_join_keys = function(dataset_1, dataset_2) {
-      if (is.null(private$join_keys))
+      res <- if (!missing(dataset_1) && !missing(dataset_2)) {
+        self$get_filtered_datasets(dataset_1)$get_join_keys()[[dataset_2]]
+      } else if (!missing(dataset_1)) {
+        self$get_filtered_datasets(dataset_1)$get_join_keys()
+      } else if (!missing(dataset_2)) {
+        self$get_filtered_datasets(dataset_2)$get_join_keys()
+      } else {
+        res_list <- lapply(
+          self$datanames(), function(dat_name) {
+            self$get_filtered_datasets(dat_name)$get_join_keys()[[dat_name]]
+          }
+        )
+        names(res_list) <- self$datanames()
+      res_list
+      }
+      if (is_empty(res)) {
         return(character(0))
-      private$join_keys$get(dataset_1, dataset_2)
+      }
+
+      return(res)
     },
 
 
@@ -365,17 +382,14 @@ FilteredData <- R6::R6Class( # nolint
     #'
     #' @param dataset (`Dataset`)\cr
     #'   object containing data and attributes.
-    #' @param join_key_set (`JoinKeySet`)\cr
-    #'   keys to merge this `dataset` to the other datasets
     #' @return (`self`) object of this class
-    set_dataset = function(dataset, join_key_set = NULL) {
+    set_dataset = function(dataset) {
       stopifnot(is(dataset, "Dataset") || is(dataset, "DatasetConnector"))
       dataname <- get_dataname(dataset)
       # to include it nicely in the Show R Code; the UI also uses datanames in ids, so no whitespaces allowed
       check_simple_name(dataname)
       private$filtered_datasets[[dataname]] <- init_filtered_dataset(
-        get_dataset(dataset),
-        join_keys = join_key_set
+        get_dataset(dataset)
       )
 
       return(invisible(self))
@@ -390,16 +404,6 @@ FilteredData <- R6::R6Class( # nolint
     set_code = function(code) {
       stopifnot(inherits(code, "CodeClass"))
       private$code <- code
-      return(invisible(self))
-    },
-
-    #' @description
-    #' Set join keys object
-    #' @param x (`JoinKeys`)
-    #' @return (`self`) invisibly for chaining
-    set_join_keys = function(x) {
-      stopifnot(is(x, "JoinKeys"))
-      private$join_keys <- x
       return(invisible(self))
     },
 
@@ -738,8 +742,6 @@ FilteredData <- R6::R6Class( # nolint
 
     # preprocessing code used to generate the unfiltered datasets as a string
     code = CodeClass$new(),
-
-    join_keys = NULL,
 
     # we implement these functions as checks rather than returning logicals so they can
     # give informative error messages immediately

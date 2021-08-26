@@ -2,9 +2,6 @@
 #'
 #' `FilteredDataset` contains `Dataset`
 #' @param dataset (`Dataset`)\cr
-#' @param join_keys (`named list`)\cr
-#'   named list of join keys to merge this dataset with
-#'   it's relatives.
 #' @examples
 #' library(scda)
 #' adsl <- cdisc_dataset("ADSL", synthetic_cdisc_data("latest")$adsl)
@@ -12,8 +9,7 @@
 #' data <- cdisc_data(adsl, adtte)
 #'
 #' filtered_dataset <- teal:::init_filtered_dataset(
-#'   dataset = adtte,
-#'   join_keys = data$get_join_keys()$get("ADTTE")
+#'   dataset = adtte
 #' )
 #'
 #' \dontrun{
@@ -51,23 +47,23 @@
 #'   }
 #' )
 #' }
-init_filtered_dataset <- function(dataset, join_keys) { #nolint
+init_filtered_dataset <- function(dataset) { #nolint
   UseMethod("init_filtered_dataset")
 }
 
 #' @export
-init_filtered_dataset.Dataset <- function(dataset, join_keys) { #nolint #nousage
-  DefaultFilteredDataset$new(dataset, join_keys)
+init_filtered_dataset.Dataset <- function(dataset) { #nolint #nousage
+  DefaultFilteredDataset$new(dataset)
 }
 
 #' @export
-init_filtered_dataset.CDISCDataset <- function(dataset, join_keys) { #nolint #nousage
-  CDISCFilteredDataset$new(dataset, join_keys)
+init_filtered_dataset.CDISCDataset <- function(dataset) { #nolint #nousage
+  CDISCFilteredDataset$new(dataset)
 }
 
 #' @export
-init_filtered_dataset.MAEDataset <- function(dataset, join_keys) { #nolint #nousage
-  MAEFilteredDataset$new(dataset, join_keys)
+init_filtered_dataset.MAEDataset <- function(dataset) { #nolint #nousage
+  MAEFilteredDataset$new(dataset)
 }
 
 # FilteredDataset abstract --------
@@ -87,13 +83,9 @@ FilteredDataset <- R6::R6Class( # nolint
     #'
     #' @param dataset (`Dataset`)\cr
     #'  single dataset for which filters are rendered
-    #' @param join_keys (`list`)\cr
-    #'  keys to join this `dataset` with the other
-    initialize = function(dataset, join_keys) {
-      stopifnot(is.null(join_keys) || is_fully_named_list(join_keys))
+    initialize = function(dataset) {
       stopifnot(is(dataset, "Dataset"))
       private$dataset <- dataset
-      private$join_keys <- join_keys
 
       dataname <- self$get_dataname()
       private$reactive_data <- reactive({
@@ -233,7 +225,7 @@ FilteredDataset <- R6::R6Class( # nolint
     #' Get join keys to join this dataset with others
     #' @return `list` of keys
     get_join_keys = function() {
-      private$join_keys
+      private$dataset$get_join_keys()$get(self$get_dataname())
     },
 
     #' @description
@@ -403,7 +395,6 @@ FilteredDataset <- R6::R6Class( # nolint
     reactive_data = NULL, # reactive
     eval_env = list(),
     filter_states = list(),
-    join_keys = NULL, # JoinKeySet
 
     # Adds `FilterStates` to the `private$filter_states`.
     # `FilterStates` is added once for each element of the dataset.
@@ -453,11 +444,9 @@ DefaultFilteredDataset <- R6::R6Class( # nolint
     #'
     #' @param dataset (`Dataset`)\cr
     #'  single dataset for which filters are rendered
-    #' @param join_keys (`list`)\cr
-    #'  keys to join this `dataset` with the other
-    initialize = function(dataset, join_keys) {
+    initialize = function(dataset) {
       stopifnot(is(dataset, "Dataset"))
-      super$initialize(dataset, join_keys)
+      super$initialize(dataset)
       dataname <- get_dataname(dataset)
 
       private$add_filter_states(
@@ -707,11 +696,9 @@ MAEFilteredDataset <- R6::R6Class( # nolint
     #'
     #' @param dataset (`MAEDataset`)\cr
     #'  single dataset for which filters are rendered
-    #' @param join_keys (`list`)\cr
-    #'  keys to join this `dataset` with the other
-    initialize = function(dataset, join_keys) {
+    initialize = function(dataset) {
       stopifnot(is(dataset, "MAEDataset"))
-      super$initialize(dataset, join_keys)
+      super$initialize(dataset)
 
       dataname <- self$get_dataname()
       raw_data <- get_raw_data(dataset)

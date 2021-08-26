@@ -200,11 +200,9 @@ CDISCFilteredData <- R6::R6Class( # nolint
     #'
     #' @param dataset (`Dataset`)\cr
     #'   object containing data and attributes.
-    #' @param join_key_set (`JoinKeySet`)\cr
-    #'   keys to merge this `dataset` to the other datasets
     #' @return (`self`) object of this class
-    set_dataset = function(dataset, join_key_set = NULL) {
-      super$set_dataset(dataset, join_key_set)
+    set_dataset = function(dataset) {
+      super$set_dataset(dataset)
 
       dataname <- get_dataname(dataset)
       parent_dataname <- self$get_parentname(dataname)
