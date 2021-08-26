@@ -47,10 +47,10 @@
 #'
 #' isolate({
 #'   datasets$datanames()
-#'   datasets$get_filter_overview_info("iris")
+#'   datasets$get_filter_overview("iris")
 #'
 #'   # filters dataset to obtain information
-#'   datasets$get_filter_overview_info("mtcars")
+#'   datasets$get_filter_overview("mtcars")
 #'
 #'   print(datasets$get_call("iris"))
 #'   print(datasets$get_call("mtcars"))
@@ -220,36 +220,29 @@ FilteredData <- R6::R6Class( # nolint
     },
 
     #' @description
-    #' Get info about the dataname, i.e. number of observations and subjects
+    #' Get filter overview table in form of X (filtered) / Y (non-filtered)
     #'
-    #' @param dataname (`character`) name of the dataset
+    #' This is intended to be presented in the application.
+    #' The content for each of the data names is defined in `get_filter_overview_info` method.
     #'
-    #' @return a named vector
-    get_filter_overview_info = function(dataname) {
-      private$check_data_varname_exists(dataname)
-
-      nrows <- self$get_filtered_datasets(dataname)$get_filter_overview_nobs()
-      nsubjects <- self$get_filtered_datasets(dataname)$get_filter_overview_nsubjs()
-      if (!is_html_like(nsubjects)) {
-        table <- cbind(nrows, nsubjects)
-        names_exps <- paste0("- ", names(self$get_data(dataname, filtered = FALSE)))
-        mae_and_exps <- c(dataname, names_exps)
-        table_list <- lapply(1:nrow(table), function(x){
-          tags$tr(
-            tags$td(mae_and_exps[x]),
-            tags$td(table[x, 1]),
-            tags$td(table[x, 2])
-          )
-        })
-        names(table_list) <-  mae_and_exps
-        table_list
-      } else {
-      list(tags$tr(
-        tags$td(dataname),
-        tags$td(nrows),
-        tags$td(nsubjects)
-      ))
+    #' @param datanames (`character` vector) names of the dataset
+    #'
+    #' @return list of shiny.tag objects
+    get_filter_overview = function(datanames) {
+      if (identical(datanames, "all")) {
+        datanames <- self$datanames()
       }
+      check_in_subset(datanames, self$datanames(), "Some datasets are not available: ")
+
+      rows_html <- sapply(
+        datanames,
+        function(dataname) {
+          self$get_filtered_datasets(dataname)$get_filter_overview_info()
+        },
+        USE.NAMES = TRUE
+      )
+
+      return(rows_html)
     },
 
     #' @description
@@ -261,43 +254,6 @@ FilteredData <- R6::R6Class( # nolint
       if (is.null(private$join_keys))
         return(character(0))
       private$join_keys$get(dataset_1, dataset_2)
-    },
-
-
-    #' @description
-    #' Get filter overview table in form of X (filtered) / Y (non-filtered)
-    #'
-    #' This is intended to be presented in the application.
-    #' The content for each of the data names is defined in `get_filter_overview_info` method.
-    #'
-    #' @param datanames (`character` vector) names of the dataset
-    #'
-    #' @return (`shiny.tag`) shiny tag object
-    get_filter_overview = function(datanames) {
-      if (identical(datanames, "all")) {
-        datanames <- self$datanames()
-      }
-      check_in_subset(datanames, self$datanames(), "Some datasets are not available: ")
-
-      rows_html <- sapply(
-        datanames,
-        function(dataname) {
-          tagList(self$get_filter_overview_info(dataname))
-        },
-        USE.NAMES = TRUE
-      )
-
-      final_table <- tags$table(
-        class = "table custom-table",
-        tags$thead(tags$tr(
-          tags$td(""),
-          tags$td("observations"),
-          tags$td("Subjects")
-          )),
-        tags$tbody(rows_html)
-        )
-
-      return(final_table)
     },
 
     #' Get keys for the dataset
@@ -719,7 +675,18 @@ FilteredData <- R6::R6Class( # nolint
           active_datanames()
         }
 
-        self$get_filter_overview(datanames = datanames)
+        datasets_html <- self$get_filter_overview(datanames = datanames)
+        table_html <- tags$table(
+          class = "table custom-table",
+          tags$thead(tags$tr(
+            tags$td(""),
+            tags$td("Observations"),
+            tags$td("Subjects")
+          )),
+          tags$tbody(datasets_html)
+        )
+
+        table_html
       })
 
       return(invisible(NULL))

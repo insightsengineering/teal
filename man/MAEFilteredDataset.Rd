@@ -16,8 +16,7 @@
 \itemize{
 \item \href{#method-new}{\code{MAEFilteredDataset$new()}}
 \item \href{#method-get_call}{\code{MAEFilteredDataset$get_call()}}
-\item \href{#method-get_filter_overview_nobs}{\code{MAEFilteredDataset$get_filter_overview_nobs()}}
-\item \href{#method-get_filter_overview_nsubjs}{\code{MAEFilteredDataset$get_filter_overview_nsubjs()}}
+\item \href{#method-get_filter_overview_info}{\code{MAEFilteredDataset$get_filter_overview_info()}}
 \item \href{#method-set_bookmark_state}{\code{MAEFilteredDataset$set_bookmark_state()}}
 \item \href{#method-ui_add_filter_state}{\code{MAEFilteredDataset$ui_add_filter_state()}}
 \item \href{#method-srv_add_filter_state}{\code{MAEFilteredDataset$srv_add_filter_state()}}
@@ -91,29 +90,16 @@ filter \code{call} or \code{list} of filter calls
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-get_filter_overview_nobs"></a>}}
-\if{latex}{\out{\hypertarget{method-get_filter_overview_nobs}{}}}
-\subsection{Method \code{get_filter_overview_nobs()}}{
-Get filter overview observations number
+\if{html}{\out{<a id="method-get_filter_overview_info"></a>}}
+\if{latex}{\out{\hypertarget{method-get_filter_overview_info}{}}}
+\subsection{Method \code{get_filter_overview_info()}}{
+Get filter overview rows of a dataset
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{MAEFilteredDataset$get_filter_overview_nobs()}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{MAEFilteredDataset$get_filter_overview_info()}\if{html}{\out{</div>}}
 }
 
 \subsection{Returns}{
-(\code{list}) list of the number of filtered/non-filtered observations
-}
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-get_filter_overview_nsubjs"></a>}}
-\if{latex}{\out{\hypertarget{method-get_filter_overview_nsubjs}{}}}
-\subsection{Method \code{get_filter_overview_nsubjs()}}{
-Get filter overview subjects number
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{MAEFilteredDataset$get_filter_overview_nsubjs()}\if{html}{\out{</div>}}
-}
-
-\subsection{Returns}{
-(\code{list}) list of the number of filtered/non-filtered subjects
+(\code{list}) list of shiny.tag objects
 }
 }
 \if{html}{\out{<hr>}}

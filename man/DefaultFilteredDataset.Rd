@@ -16,6 +16,8 @@
 \itemize{
 \item \href{#method-new}{\code{DefaultFilteredDataset$new()}}
 \item \href{#method-get_call}{\code{DefaultFilteredDataset$get_call()}}
+\item \href{#method-get_filter_overview_info}{\code{DefaultFilteredDataset$get_filter_overview_info()}}
+\item \href{#method-get_filter_overview_nobs}{\code{DefaultFilteredDataset$get_filter_overview_nobs()}}
 \item \href{#method-set_bookmark_state}{\code{DefaultFilteredDataset$set_bookmark_state()}}
 \item \href{#method-ui_add_filter_state}{\code{DefaultFilteredDataset$ui_add_filter_state()}}
 \item \href{#method-srv_add_filter_state}{\code{DefaultFilteredDataset$srv_add_filter_state()}}
@@ -30,8 +32,6 @@
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="FilteredDataset" data-id="get_data_reactive">}\href{../../teal/html/FilteredDataset.html#method-get_data_reactive}{\code{teal::FilteredDataset$get_data_reactive()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="FilteredDataset" data-id="get_dataname">}\href{../../teal/html/FilteredDataset.html#method-get_dataname}{\code{teal::FilteredDataset$get_dataname()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="FilteredDataset" data-id="get_dataset">}\href{../../teal/html/FilteredDataset.html#method-get_dataset}{\code{teal::FilteredDataset$get_dataset()}}\out{</span>}
-\item \out{<span class="pkg-link" data-pkg="teal" data-topic="FilteredDataset" data-id="get_filter_overview_nobs">}\href{../../teal/html/FilteredDataset.html#method-get_filter_overview_nobs}{\code{teal::FilteredDataset$get_filter_overview_nobs()}}\out{</span>}
-\item \out{<span class="pkg-link" data-pkg="teal" data-topic="FilteredDataset" data-id="get_filter_overview_nsubjs">}\href{../../teal/html/FilteredDataset.html#method-get_filter_overview_nsubjs}{\code{teal::FilteredDataset$get_filter_overview_nsubjs()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="FilteredDataset" data-id="get_filter_states">}\href{../../teal/html/FilteredDataset.html#method-get_filter_states}{\code{teal::FilteredDataset$get_filter_states()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="FilteredDataset" data-id="get_filtered_dataname">}\href{../../teal/html/FilteredDataset.html#method-get_filtered_dataname}{\code{teal::FilteredDataset$get_filtered_dataname()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="FilteredDataset" data-id="get_hash">}\href{../../teal/html/FilteredDataset.html#method-get_hash}{\code{teal::FilteredDataset$get_hash()}}\out{</span>}
@@ -84,6 +84,32 @@ applies to one argument (\code{...}) in \code{dplyr::filter} call.
 
 \subsection{Returns}{
 filter \code{call} or \code{list} of filter calls
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-get_filter_overview_info"></a>}}
+\if{latex}{\out{\hypertarget{method-get_filter_overview_info}{}}}
+\subsection{Method \code{get_filter_overview_info()}}{
+Get filter overview rows of a dataset
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{DefaultFilteredDataset$get_filter_overview_info()}\if{html}{\out{</div>}}
+}
+
+\subsection{Returns}{
+(\code{list}) list of shiny.tag objects
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-get_filter_overview_nobs"></a>}}
+\if{latex}{\out{\hypertarget{method-get_filter_overview_nobs}{}}}
+\subsection{Method \code{get_filter_overview_nobs()}}{
+Get filter overview observations number
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{DefaultFilteredDataset$get_filter_overview_nobs()}\if{html}{\out{</div>}}
+}
+
+\subsection{Returns}{
+\code{list} list of the number of observations of filtered/non-filtered datasets
 }
 }
 \if{html}{\out{<hr>}}

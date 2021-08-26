@@ -56,7 +56,7 @@
 #'   datasets$datanames()
 #'
 #'   # number observations and subjects of filtered/non-filtered dataset
-#'   datasets$get_filter_overview_info("ADSL")
+#'   datasets$get_filter_overview("ADSL")
 #'
 #'   print(datasets$get_call("ADSL"))
 #'   print(datasets$get_call("ADTTE"))

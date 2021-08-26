@@ -20,8 +20,6 @@ components of the \code{Dataset}.
 \item \href{#method-get_data}{\code{FilteredDataset$get_data()}}
 \item \href{#method-get_data_reactive}{\code{FilteredDataset$get_data_reactive()}}
 \item \href{#method-get_filter_states}{\code{FilteredDataset$get_filter_states()}}
-\item \href{#method-get_filter_overview_nobs}{\code{FilteredDataset$get_filter_overview_nobs()}}
-\item \href{#method-get_filter_overview_nsubjs}{\code{FilteredDataset$get_filter_overview_nsubjs()}}
 \item \href{#method-get_dataname}{\code{FilteredDataset$get_dataname()}}
 \item \href{#method-get_dataset}{\code{FilteredDataset$get_dataset()}}
 \item \href{#method-get_hash}{\code{FilteredDataset$get_hash()}}
@@ -159,32 +157,6 @@ id of the \code{private$filter_states} list element where \code{FilterStates} is
 }
 \subsection{Returns}{
 \code{FilterStates} or \code{list} of \code{FilterStates} objects.
-}
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-get_filter_overview_nobs"></a>}}
-\if{latex}{\out{\hypertarget{method-get_filter_overview_nobs}{}}}
-\subsection{Method \code{get_filter_overview_nobs()}}{
-Get filter overview observations number
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{FilteredDataset$get_filter_overview_nobs()}\if{html}{\out{</div>}}
-}
-
-\subsection{Returns}{
-\code{list} html tag list of the number of rows
-}
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-get_filter_overview_nsubjs"></a>}}
-\if{latex}{\out{\hypertarget{method-get_filter_overview_nsubjs}{}}}
-\subsection{Method \code{get_filter_overview_nsubjs()}}{
-Get filter overview subjects number
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{FilteredDataset$get_filter_overview_nsubjs()}\if{html}{\out{</div>}}
-}
-
-\subsection{Returns}{
-\code{list} html tag list of the number of unique subjects
 }
 }
 \if{html}{\out{<hr>}}

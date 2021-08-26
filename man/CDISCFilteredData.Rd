@@ -58,7 +58,7 @@ isolate({
   datasets$datanames()
 
   # number observations and subjects of filtered/non-filtered dataset
-  datasets$get_filter_overview_info("ADSL")
+  datasets$get_filter_overview("ADSL")
 
   print(datasets$get_call("ADSL"))
   print(datasets$get_call("ADTTE"))
@@ -123,7 +123,6 @@ isolate(datasets$get_call("ADTTE"))
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="FilteredData" data-id="get_data_attr">}\href{../../teal/html/FilteredData.html#method-get_data_attr}{\code{teal::FilteredData$get_data_attr()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="FilteredData" data-id="get_datalabel">}\href{../../teal/html/FilteredData.html#method-get_datalabel}{\code{teal::FilteredData$get_datalabel()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="FilteredData" data-id="get_filter_overview">}\href{../../teal/html/FilteredData.html#method-get_filter_overview}{\code{teal::FilteredData$get_filter_overview()}}\out{</span>}
-\item \out{<span class="pkg-link" data-pkg="teal" data-topic="FilteredData" data-id="get_filter_overview_info">}\href{../../teal/html/FilteredData.html#method-get_filter_overview_info}{\code{teal::FilteredData$get_filter_overview_info()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="FilteredData" data-id="get_filterable_varnames">}\href{../../teal/html/FilteredData.html#method-get_filterable_varnames}{\code{teal::FilteredData$get_filterable_varnames()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="FilteredData" data-id="get_filtered_datasets">}\href{../../teal/html/FilteredData.html#method-get_filtered_datasets}{\code{teal::FilteredData$get_filtered_datasets()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="FilteredData" data-id="get_join_keys">}\href{../../teal/html/FilteredData.html#method-get_join_keys}{\code{teal::FilteredData$get_join_keys()}}\out{</span>}

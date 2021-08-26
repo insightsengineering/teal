@@ -183,26 +183,6 @@ FilteredDataset <- R6::R6Class( # nolint
     },
 
     #' @description
-    #' Get filter overview observations number
-    #'
-    #' @return `list` html tag list of the number of rows
-    get_filter_overview_nobs = function() {
-      f_rows <- nrow(self$get_data(filtered = TRUE))
-      nf_rows <- nrow(self$get_data(filtered = FALSE))
-      tagList(
-        paste0(f_rows, "/", nf_rows)
-      )
-    },
-
-    #' @description
-    #' Get filter overview subjects number
-    #'
-    #' @return `list` html tag list of the number of unique subjects
-    get_filter_overview_nsubjs = function() {
-      tagList("-")
-    },
-
-    #' @description
     #' Get name of the dataset
     #'
     #' Get name of the dataset
@@ -496,6 +476,30 @@ DefaultFilteredDataset <- R6::R6Class( # nolint
     },
 
     #' @description
+    #' Get filter overview rows of a dataset
+    #'
+    #' @return (`list`) list of shiny.tag objects
+    get_filter_overview_info = function() {
+      list(tags$tr(
+        tags$td(self$get_dataname()),
+        tags$td(self$get_filter_overview_nobs()),
+        tags$td("")
+      ))
+    },
+
+    #' @description
+    #' Get filter overview observations number
+    #'
+    #' @return `list` list of the number of observations of filtered/non-filtered datasets
+    get_filter_overview_nobs = function() {
+      f_rows <- nrow(self$get_data(filtered = TRUE))
+      nf_rows <- nrow(self$get_data(filtered = FALSE))
+      list(
+        paste0(f_rows, "/", nf_rows)
+      )
+    },
+
+    #' @description
     #' Set bookmark state
     #'
     #' @param state (`named list`)\cr
@@ -625,29 +629,15 @@ CDISCFilteredDataset <- R6::R6Class( # nolint
     },
 
     #' @description
-    #' Get filter overview subjects number
+    #' Get filter overview rows of a dataset
     #'
-    #' @return `list` html tag list of the number of filtered/non-filtered subjects
-    get_filter_overview_nsubjs = function() {
-      subject_keys <- if (!is_empty(self$get_dataset()$get_parent())) {
-        self$get_join_keys()[[self$get_dataset()$get_parent()]]
-      } else {
-        self$get_keys()
-      }
-
-      f_rows <- if (is_empty(subject_keys)) {
-        dplyr::n_distinct(self$get_data(filtered = TRUE))
-      } else {
-        dplyr::n_distinct(self$get_data(filtered = TRUE)[subject_keys])
-      }
-
-      nf_rows <- if (is_empty(subject_keys)) {
-        dplyr::n_distinct(self$get_data(filtered = FALSE))
-      } else {
-        dplyr::n_distinct(self$get_data(filtered = FALSE)[subject_keys])
-      }
-
-      tagList(paste0(f_rows, "/", nf_rows))
+    #' @return (`list`) list of shiny.tag objects
+    get_filter_overview_info = function() {
+      list(tags$tr(
+        tags$td(self$get_dataname()),
+        tags$td(self$get_filter_overview_nobs()),
+        tags$td(private$get_filter_overview_nsubjs())
+      ))
     },
 
     #' @description
@@ -700,6 +690,30 @@ CDISCFilteredDataset <- R6::R6Class( # nolint
         join_columns_names <- self$get_join_keys()[[self$get_dataset()$get_parent()]]
         dplyr::select(self$get_dataset()$data, -all_of(join_columns_names))
       }
+    },
+
+    # Gets filter overview subjects number and returns a list
+    # of the number of subjects of filtered/non-filtered datasets
+    get_filter_overview_nsubjs = function() {
+      subject_keys <- if (!is_empty(self$get_dataset()$get_parent())) {
+        self$get_join_keys()[[self$get_dataset()$get_parent()]]
+      } else {
+        self$get_keys()
+      }
+
+      f_rows <- if (is_empty(subject_keys)) {
+        dplyr::n_distinct(self$get_data(filtered = TRUE))
+      } else {
+        dplyr::n_distinct(self$get_data(filtered = TRUE)[subject_keys])
+      }
+
+      nf_rows <- if (is_empty(subject_keys)) {
+        dplyr::n_distinct(self$get_data(filtered = FALSE))
+      } else {
+        dplyr::n_distinct(self$get_data(filtered = FALSE)[subject_keys])
+      }
+
+      list(paste0(f_rows, "/", nf_rows))
     }
   )
 )
@@ -792,66 +806,26 @@ MAEFilteredDataset <- R6::R6Class( # nolint
     },
 
     #' @description
-    #' Get filter overview observations number
+    #' Get filter overview rows of a dataset
     #'
-    #' @return (`list`) list of the number of filtered/non-filtered observations
-    get_filter_overview_nobs = function() {
-      data_f <- self$get_data(filtered = TRUE)
-      data_nf <- self$get_data(filtered = FALSE)
-      experiment_names <- names(data_nf)
-      mae_total_data_info <- "-"
+    #' @return (`list`) list of shiny.tag objects
+    get_filter_overview_info = function() {
+      names_exps <- paste0("- ", names(self$get_data(filtered = FALSE)))
+      mae_and_exps <- c(self$get_dataname(), names_exps)
 
-      data_info <- lapply(
-          experiment_names,
-          function(experiment_name) {
-            data_f_rows <- ncol(data_f[[experiment_name]])
-            data_nf_rows <- ncol(data_nf[[experiment_name]])
+      table <- cbind(
+        lapply(private$get_filter_overview_nobs(), function(x) tags$td(x)),
+        lapply(private$get_filter_overview_nsubjs(), function(x) tags$td(x))
+      )
 
-            data_info <- paste0(data_f_rows, "/", data_nf_rows)
-            data_info
-          }
+      table_list <- lapply(1:nrow(table), function(x){
+        tags$tr(
+          tags$td(mae_and_exps[x]),
+          table[x, ],
         )
+      })
 
-      append(
-        data_info,
-        list(mae_total_data_info),
-        after = 0
-      )
-    },
-
-    #' @description
-    #' Get filter overview subjects number
-    #'
-    #' @return (`list`) list of the number of filtered/non-filtered subjects
-    get_filter_overview_nsubjs = function() {
-      data_f <- self$get_data(filtered = TRUE)
-      data_nf <- self$get_data(filtered = FALSE)
-      experiment_names <- names(data_nf)
-      data_f_subjects_info <- nrow(SummarizedExperiment::colData(self$get_data(filtered = TRUE)))
-      data_nf_subjects_info <- nrow(SummarizedExperiment::colData(self$get_data(filtered = FALSE)))
-      mae_total_subjects_info <- paste0(data_f_subjects_info, "/", data_nf_subjects_info)
-
-      get_experiment_rows <- function(mae, experiment) {
-        sample_subset <- subset(MultiAssayExperiment::sampleMap(mae), colname %in% colnames(experiment))
-        length(unique(sample_subset$primary))
-      }
-
-      subjects_info <- lapply(
-        experiment_names,
-        function(experiment_name) {
-          subjects_f_rows <- get_experiment_rows(data_f, data_f[[experiment_name]])
-          subjects_nf_rows <- get_experiment_rows(data_nf, data_nf[[experiment_name]])
-
-          subjects_info <- paste0(subjects_f_rows, "/", subjects_nf_rows)
-          subjects_info
-        }
-      )
-
-      append(
-        subjects_info,
-        list(mae_total_subjects_info),
-        after = 0
-      )
+      table_list
     },
 
     #' @description
@@ -951,6 +925,67 @@ MAEFilteredDataset <- R6::R6Class( # nolint
             data = data[[experiment_name]] # SummarizedExperiment or matrix
           )
         }
+      )
+    }
+  ),
+  private = list(
+    # Gets filter overview observations number and returns a
+    # list of the number of obervations of filtered/non-filtered datasets
+    get_filter_overview_nobs = function() {
+      data_f <- self$get_data(filtered = TRUE)
+      data_nf <- self$get_data(filtered = FALSE)
+      experiment_names <- names(data_nf)
+      mae_total_data_info <- ""
+
+      data_info <- lapply(
+        experiment_names,
+        function(experiment_name) {
+          data_f_rows <- ncol(data_f[[experiment_name]])
+          data_nf_rows <- ncol(data_nf[[experiment_name]])
+
+          data_info <- paste0(data_f_rows, "/", data_nf_rows)
+          data_info
+        }
+      )
+
+      append(
+        data_info,
+        list(mae_total_data_info),
+        after = 0
+      )
+    },
+
+    # Gets filter overview subjects number and returns a list
+    # of the number of subjects of filtered/non-filtered datasets
+    get_filter_overview_nsubjs = function() {
+      data_f <- self$get_data(filtered = TRUE)
+      data_nf <- self$get_data(filtered = FALSE)
+      experiment_names <- names(data_nf)
+
+      data_f_subjects_info <- nrow(SummarizedExperiment::colData(self$get_data(filtered = TRUE)))
+      data_nf_subjects_info <- nrow(SummarizedExperiment::colData(self$get_data(filtered = FALSE)))
+      mae_total_subjects_info <- paste0(data_f_subjects_info, "/", data_nf_subjects_info)
+
+      get_experiment_rows <- function(mae, experiment) {
+        sample_subset <- subset(MultiAssayExperiment::sampleMap(mae), colname %in% colnames(experiment))
+        length(unique(sample_subset$primary))
+      }
+
+      subjects_info <- lapply(
+        experiment_names,
+        function(experiment_name) {
+          subjects_f_rows <- get_experiment_rows(data_f, data_f[[experiment_name]])
+          subjects_nf_rows <- get_experiment_rows(data_nf, data_nf[[experiment_name]])
+
+          subjects_info <- paste0(subjects_f_rows, "/", subjects_nf_rows)
+          subjects_info
+        }
+      )
+
+      append(
+        subjects_info,
+        list(mae_total_subjects_info),
+        after = 0
       )
     }
   )
