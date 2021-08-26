@@ -199,6 +199,18 @@ FilteredDataset <- R6::R6Class( # nolint
     },
 
     #' @description
+    #' Get filter overview rows of a dataset
+    #'
+    #' @return (`list`) list of shiny.tag objects
+    get_filter_overview_info = function() {
+      list(tags$tr(
+        tags$td(self$get_dataname()),
+        tags$td(private$get_filter_overview_nobs()),
+        tags$td("")
+      ))
+    },
+
+    #' @description
     #' Returns the hash of the unfiltered dataset
     #' @return (`character(1)`)
     get_hash = function() {
@@ -476,30 +488,6 @@ DefaultFilteredDataset <- R6::R6Class( # nolint
     },
 
     #' @description
-    #' Get filter overview rows of a dataset
-    #'
-    #' @return (`list`) list of shiny.tag objects
-    get_filter_overview_info = function() {
-      list(tags$tr(
-        tags$td(self$get_dataname()),
-        tags$td(self$get_filter_overview_nobs()),
-        tags$td("")
-      ))
-    },
-
-    #' @description
-    #' Get filter overview observations number
-    #'
-    #' @return `list` list of the number of observations of filtered/non-filtered datasets
-    get_filter_overview_nobs = function() {
-      f_rows <- nrow(self$get_data(filtered = TRUE))
-      nf_rows <- nrow(self$get_data(filtered = FALSE))
-      list(
-        paste0(f_rows, "/", nf_rows)
-      )
-    },
-
-    #' @description
     #' Set bookmark state
     #'
     #' @param state (`named list`)\cr
@@ -557,6 +545,15 @@ DefaultFilteredDataset <- R6::R6Class( # nolint
     }
   ),
   private = list(
+    # Gets filter overview observations number and returns a
+    # list of the number of observations of filtered/non-filtered datasets
+    get_filter_overview_nobs = function() {
+      f_rows <- nrow(self$get_data(filtered = TRUE))
+      nf_rows <- nrow(self$get_data(filtered = FALSE))
+      list(
+        paste0(f_rows, "/", nf_rows)
+      )
+    }
   )
 )
 
@@ -635,7 +632,7 @@ CDISCFilteredDataset <- R6::R6Class( # nolint
     get_filter_overview_info = function() {
       list(tags$tr(
         tags$td(self$get_dataname()),
-        tags$td(self$get_filter_overview_nobs()),
+        tags$td(private$get_filter_overview_nobs()),
         tags$td(private$get_filter_overview_nsubjs())
       ))
     },
@@ -930,7 +927,7 @@ MAEFilteredDataset <- R6::R6Class( # nolint
   ),
   private = list(
     # Gets filter overview observations number and returns a
-    # list of the number of obervations of filtered/non-filtered datasets
+    # list of the number of observations of filtered/non-filtered datasets
     get_filter_overview_nobs = function() {
       data_f <- self$get_data(filtered = TRUE)
       data_nf <- self$get_data(filtered = FALSE)

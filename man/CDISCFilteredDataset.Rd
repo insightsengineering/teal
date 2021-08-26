@@ -39,7 +39,6 @@
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="FilteredDataset" data-id="queues_empty">}\href{../../teal/html/FilteredDataset.html#method-queues_empty}{\code{teal::FilteredDataset$queues_empty()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="FilteredDataset" data-id="server">}\href{../../teal/html/FilteredDataset.html#method-server}{\code{teal::FilteredDataset$server()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="FilteredDataset" data-id="ui">}\href{../../teal/html/FilteredDataset.html#method-ui}{\code{teal::FilteredDataset$ui()}}\out{</span>}
-\item \out{<span class="pkg-link" data-pkg="teal" data-topic="DefaultFilteredDataset" data-id="get_filter_overview_nobs">}\href{../../teal/html/DefaultFilteredDataset.html#method-get_filter_overview_nobs}{\code{teal::DefaultFilteredDataset$get_filter_overview_nobs()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="DefaultFilteredDataset" data-id="initialize">}\href{../../teal/html/DefaultFilteredDataset.html#method-initialize}{\code{teal::DefaultFilteredDataset$initialize()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="DefaultFilteredDataset" data-id="set_bookmark_state">}\href{../../teal/html/DefaultFilteredDataset.html#method-set_bookmark_state}{\code{teal::DefaultFilteredDataset$set_bookmark_state()}}\out{</span>}
 }
