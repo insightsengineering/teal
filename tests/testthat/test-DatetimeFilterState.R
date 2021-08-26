@@ -16,10 +16,16 @@ testthat::test_that("get_call set selected accepts an array of two POSIXct objec
 })
 
 testthat::test_that("get_call returns a condition true for the object in the selected range", {
-  objects <- as.POSIXct(c(1, 2, 3), origin = "1900/01/01")
-  filter_state <- DatetimeFilterState$new(objects, varname = "objects")
-  filter_state$set_selected(c(objects[2], objects[2]))
-  testthat::expect_true(eval(isolate(filter_state$get_call()))[2])
+  objects <- as.POSIXct(c(1:5), origin = "1900/01/01")
+  filter_state <- DatetimeFilterState$new(objects, varname = "test")
+  filter_state$set_selected(c(objects[2], objects[3]))
+  test <- as.POSIXct(c(1:4), origin = "1900/01/01")
+  testthat::expect_equal(eval(isolate(filter_state$get_call())), c(FALSE, TRUE, TRUE, FALSE))
+  testthat::expect_equal(
+    isolate(filter_state$get_call()),
+    quote(test >= as.POSIXct("1900-01-01 00:00:02", tz = "Etc/UTC") &
+      test <= as.POSIXct("1900-01-01 00:00:04", tz = "Etc/UTC"))
+  )
 })
 
 testthat::test_that("get_call returns a condition evaluating to TRUE for NA values after set_keep_na(TRUE)", {
@@ -46,7 +52,6 @@ testthat::test_that("DatetimeFilterState ignores the timezone of the ISO object 
     )
   )
 })
-
 
 testthat::test_that("set_selected throw when selection not within allowed choices", {
   objects <- as.POSIXct(c(1, 2, 3), origin = "1900/01/01")

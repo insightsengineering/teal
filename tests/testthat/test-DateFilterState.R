@@ -18,7 +18,11 @@ testthat::test_that("get_call returns a condition true for the objects in the se
   test_date <- as.Date(c("13/07/2013", "14/07/2013", "15/07/2013"))
   filter_state <- DateFilterState$new(test_date, varname = "test_date")
   filter_state$set_selected(c(test_date[2], test_date[2]))
-  testthat::expect_true(eval(isolate(filter_state$get_call()))[2])
+  testthat::expect_equal(eval(isolate(filter_state$get_call())), c(FALSE, TRUE, FALSE))
+  testthat::expect_equal(
+    isolate(filter_state$get_call()),
+    quote(test_date >= as.Date("14-07-20") & test_date <= as.Date("14-07-20"))
+  )
 })
 
 testthat::test_that("get_call returns a condition evaluating to NA for NA values", {

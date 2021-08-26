@@ -31,8 +31,6 @@ testthat::test_that("get_call returns a call filtering a matrix with numeric val
 
   test <- matrix(c(1, 2, 3, 4), nrow = 4, ncol = 1, dimnames = list(c(), c("a")))
 
-  eval(
-    isolate(filter_states$get_call())
-  )
+  eval(isolate(filter_states$get_call()))
   testthat::expect_equal(output, test[1:3, 1, drop = FALSE])
 })
