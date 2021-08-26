@@ -14,7 +14,6 @@ knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>"
 )
-library(nomnoml)
 ```
 
 ### Overview
@@ -50,14 +49,7 @@ class which contains R call to obtain `Dataset`.
 
 2. `data.frame`, `Dataset` and `Data`- object of class `Dataset` contains
 a single `data.frame` object. `Data` is a collection of `Dataset` objects.
-```{nomnoml, svg=TRUE, fig.height=1, include=FALSE}
-#fontSize: 20
-[Data||
-   [Dataset 1|[data.frame]]
-   [Dataset 2|[data.frame]]
-   [Dataset n|[data.frame]]
-]
-```
+
 ## Creating an app
 
 ### `Callable`
