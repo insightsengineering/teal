@@ -946,9 +946,8 @@ MAEFilteredDataset <- R6::R6Class( # nolint
       )
 
       append(
-        data_info,
         list(mae_total_data_info),
-        after = 0
+        data_info
       )
     },
 
@@ -980,9 +979,8 @@ MAEFilteredDataset <- R6::R6Class( # nolint
       )
 
       append(
-        subjects_info,
         list(mae_total_subjects_info),
-        after = 0
+        subjects_info
       )
     }
   )
