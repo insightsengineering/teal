@@ -60,7 +60,6 @@ x$close() # call closing function
 \item \href{#method-get_close_call}{\code{DataConnection$get_close_call()}}
 \item \href{#method-get_close_error_message}{\code{DataConnection$get_close_error_message()}}
 \item \href{#method-get_close_server}{\code{DataConnection$get_close_server()}}
-\item \href{#method-get_close_ui}{\code{DataConnection$get_close_ui()}}
 \item \href{#method-is_close_failed}{\code{DataConnection$is_close_failed()}}
 \item \href{#method-set_close_args}{\code{DataConnection$set_close_args()}}
 \item \href{#method-set_close_ui}{\code{DataConnection$set_close_ui()}}
@@ -460,26 +459,6 @@ Get shiny server module to close connection.
 
 \subsection{Returns}{
 the \verb{server function} to close connection.
-}
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-get_close_ui"></a>}}
-\if{latex}{\out{\hypertarget{method-get_close_ui}{}}}
-\subsection{Method \code{get_close_ui()}}{
-Get Shiny module with inputs to close connection
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{DataConnection$get_close_ui(id)}\if{html}{\out{</div>}}
-}
-
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{id}}{(\code{character}) shiny element id}
-}
-\if{html}{\out{</div>}}
-}
-\subsection{Returns}{
-the (\verb{ui function}) to set arguments to close connection function.
 }
 }
 \if{html}{\out{<hr>}}
