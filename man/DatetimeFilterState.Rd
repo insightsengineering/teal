@@ -51,7 +51,7 @@ isolate(filter_state$get_call())
 \if{latex}{\out{\hypertarget{method-new}{}}}
 \subsection{Method \code{new()}}{
 Initialize a \code{FilterState} object. This class
-have a extra fields which is \code{private$timezone} which is set to \code{Sys.timezone()} by
+has an extra field, \code{private$timezone}, which is set to \code{Sys.timezone()} by
 default. However, in case when using this module in \code{teal} app, one needs
 timezone of the app user. App user timezone is taken from \code{session$userData$timezone}
 and is set only if object is initialized in \code{shiny}.
