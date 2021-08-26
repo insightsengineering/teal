@@ -345,7 +345,7 @@ FilteredData <- R6::R6Class( # nolint
         datanames <- self$datanames()
       } else {
         tryCatch(
-          self$check_data_varname_exists(dataname = datanames),
+          private$check_data_varname_exists(dataname = datanames),
           error = function(e) {
             message(e$message)
           }

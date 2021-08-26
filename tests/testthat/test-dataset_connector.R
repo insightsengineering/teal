@@ -139,7 +139,7 @@ testthat::test_that("rcd_dataset_connector", {
   ) %>%
     as_cdisc()
   testthat::expect_equal(x, x2)
-  expect_true(is(x, c("DatasetConnector", "R6")))
+  testthat::expect_true(is(x, c("DatasetConnector", "R6")))
 
   testthat::expect_identical(
     x$.__enclos_env__$private$pull_callable$.__enclos_env__$private$fun_name,
@@ -300,15 +300,15 @@ testthat::test_that("csv_dataset_connector non-standard datasets multi/space cha
     stringsAsFactors = FALSE
   )
 
-  # next check can pass arguments to read_delim (using '|||')
-  write.table(test_adsl_ns, file = temp_file_csv, row.names = FALSE, sep = "|||")
-  x <- csv_cdisc_dataset_connector("ADSL", file = temp_file_csv, delim = "|||")
+  # next check can pass arguments to read_delim (using '$')
+  write.table(test_adsl_ns, file = temp_file_csv, row.names = FALSE, sep = "$")
+  x <- csv_cdisc_dataset_connector("ADSL", file = temp_file_csv, delim = "$")
   x$pull()
   testthat::expect_true(is_pulled(x))
   testthat::expect_identical(get_dataname(x), "ADSL")
   testthat::expect_identical(
     get_code(x),
-    paste0("ADSL <- readr::read_delim(file = \"", temp_file_csv, "\", delim = \"|||\")")
+    paste0("ADSL <- readr::read_delim(file = \"", temp_file_csv, "\", delim = \"$\")")
   )
   data <- get_raw_data(x)
   testthat::expect_true(is.data.frame(data))
@@ -556,8 +556,8 @@ testthat::test_that("fun_cdisc_dataset_connector", {
   data_1 <- get_raw_data(fun_direct)
   data_2 <- get_raw_data(fun_direct2)
 
-  expect_true(is.data.frame(data_1))
-  expect_true(is.data.frame(data_2))
+  testthat::expect_true(is.data.frame(data_1))
+  testthat::expect_true(is.data.frame(data_2))
   expect_identical(data_1, data_2)
 })
 
@@ -633,7 +633,7 @@ testthat::test_that("code_dataset_connector - Modify vars", {
 
   expect_silent(adtte$pull(try = TRUE))
 
-  expect_true(
+  testthat::expect_true(
     grepl("Modification of the local variable", adtte$get_error_message())
   )
 })
@@ -1039,14 +1039,115 @@ testthat::test_that("Initializing DatasetConnector with code argument works", {
     attr(t_dc$get_code_class()$code[[3]], "dataname"),
     "test_dc"
   )
-  # mutate code passed in as string values will not have dataname attribute.
+  # mutate code passed in as string values will have dataset name as its dataname attribute
   testthat::expect_equal(
     attr(t_dc$get_code_class()$code[[4]], "dataname"),
-    character(0)
+    "test_dc"
   )
   t_dc$pull()
   testthat::expect_equal(
     t_dc$get_raw_data(),
     data.frame(head_letters = head(letters), tail_letters = tail(letters))
+  )
+})
+
+testthat::test_that("DatasetConnector$get_join_keys returns an empty JoinKeys object", {
+  pull_fun <- callable_function(data.frame)
+  pull_fun$set_args(args = list(head_letters = head(letters)))
+  t_dc <- dataset_connector(
+    "test_dc",
+    pull_fun,
+    code = "test_dc$tail_letters = tail(letters)"
+  )
+  testthat::expect_true(is(t_dc$get_join_keys(), "JoinKeys"))
+  testthat::expect_equal(length(t_dc$get_join_keys()$get()), 0)
+})
+
+testthat::test_that("DatasetConnector$set_join_keys works independently", {
+  pull_fun <- callable_function(data.frame)
+  pull_fun$set_args(args = list(head_letters = head(letters)))
+  t_dc <- dataset_connector(
+    "test_dc",
+    pull_fun,
+    code = "test_dc$tail_letters = tail(letters)"
+  )
+  testthat::expect_silent(
+    t_dc$set_join_keys(join_key("test_dc", "other_dataset", c("Species" = "some_col")))
+  )
+  testthat::expect_error(
+    t_dc$set_join_keys(join_key("test_dc", "other_dataset", c("Sepal.Length" = "some_col2")))
+  )
+  testthat::expect_true(is(t_dc$get_join_keys(), "JoinKeys"))
+  testthat::expect_equal(length(t_dc$get_join_keys()$get()), 2)
+})
+
+testthat::test_that("DatasetConnector$mutate_join_keys works independently", {
+  pull_fun <- callable_function(data.frame)
+  pull_fun$set_args(args = list(head_letters = head(letters)))
+  t_dc <- dataset_connector(
+    "test_dc",
+    pull_fun,
+    code = "test_dc$tail_letters = tail(letters)"
+  )
+  testthat::expect_silent(
+    t_dc$mutate_join_keys("other_dataset", c("Sepal.Length" = "some_col2"))
+  )
+  testthat::expect_true(is(t_dc$get_join_keys(), "JoinKeys"))
+  testthat::expect_equal(length(t_dc$get_join_keys()$get()), 2)
+})
+
+testthat::test_that("DatasetConnector$set_join_keys works with DatasetConnector$mutate_join_keys", {
+  pull_fun <- callable_function(data.frame)
+  pull_fun$set_args(args = list(head_letters = head(letters)))
+  t_dc <- dataset_connector(
+    "test_dc",
+    pull_fun,
+    code = "test_dc$tail_letters = tail(letters)"
+  )
+  testthat::expect_silent(
+    t_dc$set_join_keys(join_key("iris", "other_dataset", c("Species" = "some_col")))
+  )
+  testthat::expect_identical(
+    t_dc$get_join_keys()$get()$iris$other_dataset, c("Species" = "some_col")
+  )
+  testthat::expect_silent(
+    t_dc$mutate_join_keys("other_dataset", c("Sepal.Length" = "some_col2"))
+  )
+  testthat::expect_silent(
+    t_dc$mutate_join_keys("iris", "unique_id")
+  )
+  testthat::expect_silent(
+    join_keys_list <- t_dc$get_join_keys()$get()
+  )
+
+  testthat::expect_identical(
+    t_dc$get_join_keys()$get()$iris$other_dataset, c("Species" = "some_col")
+  )
+  testthat::expect_identical(
+    t_dc$get_join_keys()$get()$test_dc$other_dataset, c("Sepal.Length" = "some_col2")
+  )
+  testthat::expect_identical(
+    t_dc$get_join_keys()$get()$test_dc$iris, c("unique_id" = "unique_id")
+  )
+  testthat::expect_identical(
+    t_dc$get_join_keys()$get()$other_dataset$test_dc, c("some_col2" = "Sepal.Length")
+  )
+  testthat::expect_identical(
+    t_dc$get_join_keys()$get()$other_dataset$iris, c("some_col" = "Species")
+  )
+})
+
+testthat::test_that("Duplicated mutation code is shown via get_code()", {
+  dataset_connector <- DatasetConnector$new("iris", callable_function(function() head(iris)))
+  dataset_connector$mutate("7")
+  dataset_connector$mutate("7")
+  testthat::expect_equal(
+    dataset_connector$get_code(),
+    paste(
+      "iris <- (function() head(iris))()",
+      "7",
+      "7",
+      sep = "\n"
+    )
   )
 })
