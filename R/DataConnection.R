@@ -399,15 +399,6 @@ DataConnection <- R6::R6Class( # nolint
       return(private$close_server)
     },
     #' @description
-    #' Get Shiny module with inputs to close connection
-    #'
-    #' @param id (`character`) shiny element id
-    #'
-    #' @return the (`ui function`) to set arguments to close connection function.
-    get_close_ui = function(id) {
-      return(private$close_ui(id))
-    },
-    #' @description
     #' Check if close connection has not failed.
     #'
     #' @return (`logical`) `TRUE` if close connection failed, else `FALSE`
