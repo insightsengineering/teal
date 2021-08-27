@@ -17,24 +17,24 @@ knitr::opts_chunk$set(echo = TRUE)
 
 # Introduction
 
-This vignette describes the core design of `teal` and explains some of `teal`s
+This vignette describes the core design of `teal` and explains some of `teal`'s
 implementation details.
 
-`teal` is a framework built on top of `shiny` that adds
+`teal` is a framework built on top of `Shiny` that adds:
 
-* data filtering: on a variable basis combined with `&` logic
-* API to request the underlying R code of an output
-* modularized approach to build customized web-apps with `teal`-modules
+- data filtering on a variable basis combined with `&` logic
+- API to request the underlying R code of an output
+- modularized approach to build customized web-apps with `teal` modules
 
-`teal` modules are `shiny` modules with an additional `datasets` argument for
+`teal` modules are `Shiny` modules with an additional `datasets` argument for
 the `server` function that provides an access to the filtered data.
 
 # Shiny Basics
 
 Shiny apps have the following two main components: the `server` function and an
-`ui` object. The `ui` object is a representation of the `html` for the webpage
-and the `server` function provides the logic to modify the html code. Hence, a
-minimal shiny app with no server logic is as follows:
+`ui` object. The `ui` object is a representation of the `HTML` for the webpage
+and the `server` function provides the logic to modify the HTML code. Hence, a
+minimal Shiny app with no server logic is as follows:
 
 ```{r, echo=FALSE}
 library(shiny)
@@ -48,8 +48,8 @@ shinyApp(
 )
 ```
 
-You can paste this code to the `R` command line which will initialize the shiny
-app. `shiny` provides a [reactivity programming model][shiny_reactivity] to
+You can paste this code to the `R` command line which will initialize the Shiny
+app. `Shiny` provides a [reactivity programming model][shiny_reactivity] to
 update and get information from the ui:
 
 ```{r, eval = FALSE}
@@ -73,10 +73,10 @@ shinyApp(
 
 Note that reactivity is used on the server side for capturing the input (i.e.
 `input$select_data`) and to update the output (i.e. `output$scatterplot`). On
-the ui side shiny keeps the `html` code up-to-date and propagates user interface
+the ui side Shiny keeps the `HTML` code up-to-date and propagates user interface
 input changes to the reactive environment on the server side. Please inspect the
-`html` code from the previous example app while the app is running with Chrome's
-developer tools and then stop the shiny app and compare that html code with the
+`HTML` code from the previous example app while the app is running with Chrome's
+developer tools and then stop the Shiny app and compare that `HTML` code with the
 ui code created by running the following code in the R console:
 
 ```{r, eval = FALSE}
@@ -86,12 +86,11 @@ fluidPage(
 )
 ```
 
-[Shiny modules][shiny_modules] provide an elegant way to split both the *ui*
-object and *server* function into reusable and self-contained functions. Please
+[Shiny modules][shiny_modules] provide an elegant way to split both the _ui_
+object and _server_ function into reusable and self-contained functions. Please
 read the [official tutorial][shiny_modules] and note that input and output
 elements are separated by using namespaces. For the above example, we can
 modularize the selection and the plotting of the data as follows:
-
 
 ```{r}
 ui_example <- function(id) {
@@ -114,7 +113,7 @@ srv_example <- function(input, output, session) {
 }
 ```
 
-Note that `ui_example` and `srv_example` functions constitute our *example*
+Note that `ui_example` and `srv_example` functions constitute our _example_
 module. To use this module twice in an app run the following code:
 
 ```{r, eval = FALSE}
@@ -133,8 +132,8 @@ shinyApp(
 ```
 
 Note that because of the namespace `id` the two modules do not conflict with
-their `html` ids and reactivity names. Please inspect the `html` code for the
-above example and pay attention to the `html` `id` attributes.
+their `HTML` ids and reactivity names. Please inspect the `HTML` code for the
+above example and pay attention to the `HTML` `id` attributes.
 
 Here is a visual representation of this modularization:
 
@@ -142,12 +141,12 @@ Here is a visual representation of this modularization:
 knitr::include_graphics('./images/design_shiny_module.png')
 ```
 
-This modularized construction of shiny apps is one of the foundations of `teal`.
+This modularized construction of Shiny apps is one of the foundations of `teal`.
 Modularizing code also makes it easier to build a company wide standard for
-creating and sharing shiny code and also for creating project specific
+creating and sharing Shiny code and also for creating project specific
 applications quickly.
 
-Finally, the user interface layout in the version of shiny we currently support
+Finally, the user interface layout in the version of Shiny we currently support
 is based on [Bootstrap 3][bootstrap_3] when
 using the `fluidPage` and `fixedPage` layout functions (which we do for `teal`).
 Understanding the bootstrap framework for layout, class and css association is
@@ -158,10 +157,10 @@ useful for creating clean user interfaces.
 The general `teal` workflow is as follows:
 
 1. pass a collection of data sets and a collection of configured teal modules to
-the `teal::init` function.
+   the `teal::init` function.
 
 2. `teal::init` composes the `ui` and `server` functions that can then be passed
-to the `shiny::shinyApp` function
+   to the `shiny::shinyApp` function
 
 ```{r echo=FALSE}
 knitr::include_graphics('./images/design_use_teal.png')
@@ -191,10 +190,10 @@ app <- teal::init(
     )
   )
 )
-shinyApp(app$ui, app$server)
+ShinyApp(app$ui, app$server)
 ```
 
-Please run the above code by copy pasting it to the command line. The example
+Please run the above code by copy-pasting it to the command line. The example
 shows how simple it is to create a module that has no dynamic encodings but
 still is interactive due to the possibility of filtering the data.
 
@@ -204,9 +203,9 @@ The default `teal` web application has the following components:
 knitr::include_graphics('./images/teal_containers.png')
 ```
 
-- the composition of the shiny app `ui` object is based on the [`tabsetPanel`]
+- the composition of the Shiny app `ui` object is based on the [`tabsetPanel`]
 - the composition of the `server` function is based on the modules as
-illustrated here:
+  illustrated here:
 
 ```{r echo=FALSE}
 knitr::include_graphics('./images/design_teal.png')
@@ -214,23 +213,23 @@ knitr::include_graphics('./images/design_teal.png')
 
 The important new parts in the above diagram are:
 
-* the `datasets` object that filters the analysis data and provides an interface
-to access and modify the data and variable based filtering. The `datasets`
-object is of class `FilteredData` which uses the [`R6`][R6] object system.
+- the `datasets` object that filters the analysis data and provides an interface
+  to access and modify the data and variable based filtering. The `datasets`
+  object is of class `FilteredData` which uses the [`R6`][r6] object system.
 
-* Filter panel related code: that is module encapsulated within `FilteredData`.
+- Filter panel related code: that is module encapsulated within `FilteredData`.
 
-* shiny's [`tabsetPanel`] for displaying only one analysis module at a time (e.g.
-the one with a bold outline). The modules that are not active (visible) get the
-attribute `class=invisible` in the html code. Note that the `html` for each
-module is always present in your app ui `html` code.
+- Shiny's [`tabsetPanel`] for displaying only one analysis module at a time (e.g.
+  the one with a bold outline). The modules that are not active (visible) get the
+  attribute `class=invisible` in the HTML code. Note that the `HTML` for each
+  module is always present in your app ui `HTML` code.
 
 These have been the three main challenges (in addition to code reproducibility)
 when designing and implementing `teal`. The relevant R-code for these main parts
-are in the [teal repository][tealGitHub] in the following files:
+are in the [teal repository][tealgithub] in the following files:
 
-* `R/FilteredData.R`, `R/FilteredDataset.R`, `R/FilterStates.R`, `R/FilterState.R`
-* `R/init.R`,
+- `R/FilteredData.R`, `R/FilteredDataset.R`, `R/FilterStates.R`, `R/FilterState.R`
+- `R/init.R`,
 
 We have also a logging facility with the `.log` function with the corresponding
 code saved in `R/logging.R`. Logging to the prompt can be disabled with
@@ -243,15 +242,14 @@ explanation.
 
 ## FilteredData
 
-The `FilteredData` class is an [`R6`][R6] reference class to handle the datasets
+The `FilteredData` class is an [`R6`][r6] reference class to handle the datasets
 and the filtering state. In general, every dataset can be filtered based on
 values of its variables.
 
-* if a variable `xi` is continuous or date/date time then the filtering is based on a range: `xi in
-[a,b]` where `min(xi)<=a<b<=max(xi)`
+- if a variable `xi` is continuous or date/date time then the filtering is based on a range: `xi in [a,b]` where `min(xi)<=a<b<=max(xi)`
 
-* if a variable `xi` is categorical then the filtering is based on a set:
-`xi in A` where `A` is a subset of the elements in `xi`.
+- if a variable `xi` is categorical then the filtering is based on a set:
+  `xi in A` where `A` is a subset of the elements in `xi`.
 
 When filtering a dataset, say `ADSL`, with `10` of its variables then the `10`
 subsetting conditions are combined with an logical AND (`&`). If a more
@@ -264,10 +262,10 @@ combined via `&` logic with other variable based subsetting conditions.
 In order to understand the current implementation of the `FilteredData` class it
 is useful to have some background of the data standards used in clinical trials.
 
-For clinical trials the datasets are standardized following the [CDISC][CDISC]
-standards [SDTM][SDTM] and [ADaM][ADAM]. Both SDTM and ADaM are based on
+For clinical trials the datasets are standardized following the [CDISC][cdisc]
+standards [SDTM][sdtm] and [ADaM][adam]. Both SDTM and ADaM are based on
 rectangular data structures and a simplified generalization is that SDTM
-contains observed raw data and ADaM adds meta data and derives new data so that
+contains observed raw data and ADaM adds metadata and derives new data so that
 an output (table/graph) can be computed directly from a single ADaM data set.
 Here is a diagram of some SDTM datasets:
 
@@ -300,7 +298,7 @@ knitr::include_graphics('./images/design_cdisc_filtered_datasets.png')
 This filtering will now be explained step by step for two example datasets (`ADSL`
 and `ADTTE`):
 
-```{r}
+```{r, eval=TRUE}
 # for reproducibility
 set.seed(1)
 
@@ -327,7 +325,7 @@ set.seed(0)
 The `datasets` object of class `CDISCFilteredData`
 that is passed an argument to the `server` function is created by `teal` as follows:
 
-```{r}
+```{r, eval=TRUE}
 library(teal)
 options(teal_logging = FALSE)
 
@@ -342,26 +340,28 @@ shiny:::flushReact() # force evaluation outside of Shiny apps
 
 Note that this code also runs outside of a teal instance.
 
-
 ```{r, eval=FALSE}
 datasets$print_filter_info("ADSL")
 # for all variables
-# datasets$print_filter_info("ADSL", filtered_vars_only = FALSE)
+datasets$print_filter_info("ADSL", filtered_vars_only = FALSE)
 ```
 
-Now say we want to filter out all the patients except patients with `USUBJID`
+Now say we want to filter out all the patients in `ADSL` except patients with `USUBJID`
 equal to `id-1`, `id-2`, `id-3`, or `id-4`:
 
-```{r, eval=FALSE}
-datasets$set_filter_state("ADSL", state = list(USUBJID = list(choices = paste0("id-", 1:4), keep_na = FALSE)))
-# or
-teal:::set_single_filter_state(datasets, "ADSL", "USUBJID", list(choices = paste0("id-", 1:4), keep_na = FALSE))
-shiny:::flushReact()
+```{r, eval=TRUE}
+datasets$set_bookmark_state(
+  state = list(
+    ADSL = list(
+      USUBJID = sprintf("id-%s", 1:4)
+    )
+  )
+)
 
 datasets$get_data("ADSL", filtered = TRUE)
 ```
 
-Note that this `USUBJID` variable based filtering also filters the `ATE` data
+Note that this `USUBJID` variable based filtering also filters the `ADTE` data
 (with an inner join based on `USUBJID` and `STUDYID`), as illustrated in the
 previous figure:
 
@@ -374,9 +374,10 @@ data, respectively, as illustrated from the above figure. We can also get the
 `call` object that was used for the filtering:
 
 ```{r}
-datasets$get_call("ADTTE")
+cat(
+  get_filter_expr(datasets, "ADTTE")
+)
 ```
-
 
 ### FilteredData for general relational data
 
@@ -405,7 +406,7 @@ knitr::include_graphics('./images/design_simple_filtered_data.png')
 This filtering is implemented using the `FilteredData` class
 (which is created when using the `teal_data` and which `CDISCFilteredData` inherits from).
 
-In the future we may also need filtering for [expression sets][expressionSets]
+In the future we may also need filtering for [expression sets][expressionsets]
 
 ```{r echo=FALSE}
 knitr::include_graphics('./images/expressionset.png')
@@ -413,13 +414,11 @@ knitr::include_graphics('./images/expressionset.png')
 
 that is, filtering expression sets is a slightly more advanced filtering as one
 probably wants to filter the biomarker data on a sample level but also on
-gene-meta data level (filter columns and rows).
+gene metadata level (filter columns and rows).
 
 In terms of refactoring `teal` this means changes to the `FilteredData` class hierarchy
 
-
 ## Composition of the ui and server functions with `teal::init`
-
 
 In this section we discuss the code in `R/init.R`. The `init` function composes
 the `ui` object and the `server` function which are returned and then passed to
@@ -438,17 +437,16 @@ in `modules` happens recursively via the `create_ui` function. Note that the
 returned object structure to add the filter panel on the right hand side (this
 improves the UI as it places the filter panel below the `tabsetPanel` menu).
 
-
 Also note that the added javascript in the `ui` object is necessary to manually
 interrupt reactivity when hiding the ui elements for filtering based on variables
-that are not relevant for a particular analysis (i.e. we do not show `ARS`
-filter variables if we analyse an output based on `ATE`).
+that are not relevant for a particular analysis (i.e. we do not show `ADRS`
+filter variables if we analyse an output based on `ADTTE`).
 
 Next: the creation of the server function. The easy part is the composition of
 the module server functions which happens with the `call_modules` function call.
 
-
 # Embed teal into other applications
+
 Here is an example of an app with two independent teal applications side-by-side. The same idea can be used to embed it into other Shiny modules.
 We use the `id` argument of the `init` function for this.
 
@@ -486,7 +484,7 @@ create_teal_app <- function(title, id) {
         filters = "ADSL"
       )
     ),
-    filter = list(ADSL = list(AGE = default_filter())),
+    filter = list(ADSL = list(AGE = c(20, 50))),
     header = tags$h1(title),
     footer = tags$p("Copyright 2017 - 2020"),
     id = id
@@ -503,31 +501,87 @@ shinyApp(ui = fluidPage(
   callModule(app1$server, "app1")
   callModule(app2$server, "app2")
 })
-
-# However, we recommend to use `ui_teal_with_splash` and `srv_teal_with_splash` if you would
-# want to use the teal app in the same way as Shiny modules with `callModule`, `ARGS` needs to
-# be filled in:
-# app1 <- create_teal_app("Sample App1")
-# app2 <- create_teal_app("Sample App2")
-# shinyApp(ui = fluidPage(
-#   fluidRow(
-#     column(6, ui_teal_with_splash("app1", ARGS)),
-#     column(6, ui_teal_with_splash("app2", ARGS))
-#   )
-# ), server = function(input, output, session) {
-#   callModule(srv_teal_with_splash, "app1", ARGS)
-#   callModule(srv_teal_with_splash, "app2", ARGS)
-# })
 ```
 
+However, we recommend to use `ui_teal_with_splash` and `srv_teal_with_splash` if you would
+want to use the teal app in the same way as Shiny modules with `callModule`.
 
-[shiny_modules]: https://shiny.rstudio.com/articles/modules.html
-[shiny_reactivity]: https://shiny.rstudio.com/articles/reactivity-overview.html
+```{r eval=FALSE}
+modules <- root_modules(
+  module(
+    "data source",
+    server = function(input, output, session, datasets) {},
+    ui = function(id, ...) div(p("information about data source")),
+    filters = "all"
+  ),
+  module(
+    "ADSL AGE histogram",
+    server = function(input, output, session, datasets) {
+      output$hist <- renderPlot(
+        hist(datasets$get_data("ADSL", filtered = TRUE)$AGE)
+      )
+    },
+    ui = function(id, ...) {
+      ns <- NS(id)
+      plotOutput(ns("hist"))
+    },
+    filters = "ADSL"
+  )
+)
+
+shinyApp(
+  ui = fluidPage(
+    fluidRow(
+      column(
+        6,
+        ui_teal_with_splash(
+          "app1",
+          data = cdisc_data(
+            cdisc_dataset("ADSL", ADSL, code = "ADSL <- radsl(cached = TRUE)")
+          ),
+          title = "Sample app 1"
+        )
+      ),
+      column(
+        6,
+        ui_teal_with_splash(
+          "app2",
+          data = cdisc_data(
+            cdisc_dataset("ADSL", ADSL, code = "ADSL <- radsl(cached = TRUE)")
+          ),
+          title = "Sample app 2"
+        )
+      )
+    )
+  ),
+  server = function(input, output, session) {
+    callModule(
+      module = srv_teal_with_splash,
+      id = "app1",
+      data = cdisc_data(
+        cdisc_dataset("ADSL", ADSL, code = "ADSL <- radsl(cached = TRUE)")
+      ),
+      modules = modules
+    )
+    callModule(
+      module = srv_teal_with_splash,
+      id = "app2",
+      data = cdisc_data(
+        cdisc_dataset("ADSL", ADSL, code = "ADSL <- radsl(cached = TRUE)")
+      ),
+      modules = modules
+    )
+  }
+)
+```
+
+[shiny_modules]: https://shiny.rstudio.com/articles/modules.HTML
+[shiny_reactivity]: https://shiny.rstudio.com/articles/reactivity-overview.HTML
 [bootstrap_3]: http://bootstrapdocs.com/v3.0.3/docs/
-[R6]: https://cran.r-project.org/web/packages/R6/vignettes/Introduction.html
-[SDTM]: https://www.cdisc.org/standards/foundational/sdtm
-[ADAM]: https://www.cdisc.org/standards/foundational/adam
-[CDISC]: https://www.cdisc.org
-[tabsetPanel]: https://shiny.rstudio.com/reference/shiny/1.0.5/tabsetPanel.html
-[tealGitHub]: https://github.com/insightsengineering/teal
-[expressionSets]: https://www.bioconductor.org/packages/3.7/bioc/vignettes/Biobase/inst/doc/ExpressionSetIntroduction.pdf
+[r6]: https://cran.r-project.org/web/packages/R6/vignettes/Introduction.HTML
+[sdtm]: https://www.cdisc.org/standards/foundational/sdtm
+[adam]: https://www.cdisc.org/standards/foundational/adam
+[cdisc]: https://www.cdisc.org
+[tabsetpanel]: https://shiny.rstudio.com/reference/shiny/1.0.5/tabsetPanel.HTML
+[tealgithub]: https://github.com/insightsengineering/teal
+[expressionsets]: https://www.bioconductor.org/packages/3.7/bioc/vignettes/Biobase/inst/doc/ExpressionSetIntroduction.pdf
