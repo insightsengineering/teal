@@ -1,5 +1,7 @@
 adsl_raw <- as.data.frame(as.list(setNames(nm = get_cdisc_keys("ADSL"))))
 adtte_raw <- as.data.frame(as.list(setNames(nm = get_cdisc_keys("ADTTE"))))
+adae_raw <- as.data.frame(as.list(setNames(nm = get_cdisc_keys("ADAE"))))
+adrs_raw <- as.data.frame(as.list(setNames(nm = get_cdisc_keys("ADRS"))))
 
 # 1. single dataset / dataset code -------------------------------
 testthat::test_that("single dataset / dataset code", {
@@ -194,8 +196,6 @@ testthat::test_that("two datasets / datasets code", {
 })
 
 testthat::test_that("Duplicated code from datasets is shown", {
-
-  adae_raw <- as.data.frame(as.list(setNames(nm = get_cdisc_keys("ADAE"))))
   some_var <- "TEST"
   adsl_raw$test <- some_var
 
@@ -542,7 +542,6 @@ testthat::test_that("dataset + connector / global code", {
 testthat::test_that("two datasets / datasets code", {
   adsl_raw <- as.data.frame(as.list(setNames(nm = get_cdisc_keys("ADSL"), object = list(1:3, letters[1:3]))))
   adsl <- cdisc_dataset("ADSL", adsl_raw)
-  adrs_raw <- as.data.frame(as.list(setNames(nm = get_cdisc_keys("ADRS"))))
   adrs <- cdisc_dataset("ADRS", adrs_raw)
   adtte_cf <- callable_function(
     function() {
@@ -869,7 +868,6 @@ testthat::test_that("only connectors", {
 })
 
 testthat::test_that("Basic example - without code and check", {
-
   testthat::expect_silent(cdisc_data(cdisc_dataset("ADSL", adsl_raw), code = "", check = FALSE))
   testthat::expect_silent(cdisc_data(cdisc_dataset("ADSL", adsl_raw),
     cdisc_dataset("ARG1", adsl_raw, keys = get_cdisc_keys("ADSL")),
@@ -877,7 +875,6 @@ testthat::test_that("Basic example - without code and check", {
 })
 
 testthat::test_that("Basic example - check overall code", {
-
   testthat::expect_silent(
     cdisc_data(
       cdisc_dataset("ADSL", adsl_raw),
@@ -929,7 +926,6 @@ testthat::test_that("Basic example - check overall code", {
 })
 
 testthat::test_that("Basic example - dataset depending on other dataset", {
-
   testthat::expect_silent(
     cdisc_data(
       cdisc_dataset(
@@ -971,7 +967,6 @@ testthat::test_that("Basic example - failing dataset code", {
 })
 
 testthat::test_that("Basic example - missing code for dataset", {
-
   testthat::expect_silent(
     cdisc_data(
       cdisc_dataset("ADSL", adsl_raw),
@@ -990,7 +985,6 @@ testthat::test_that("Basic example - missing code for dataset", {
 })
 
 testthat::test_that("Code argument of the constructor can have line breaks", {
-
   testthat::expect_silent(
     cdisc_data(
       cdisc_dataset("ADSL", adsl_raw),
@@ -1015,19 +1009,17 @@ testthat::test_that("Naming list elements", {
 })
 
 testthat::test_that("List values", {
-  adsl <- as.data.frame(as.list(setNames(nm = get_cdisc_keys("ADSL"))))
-  adtte <- as.data.frame(as.list(setNames(nm = get_cdisc_keys("ADTTE"))))
   test_relational_data_equal <- function(data1, data2) {
     testthat::expect_equal(data1$get_items(), data2$get_items())
     testthat::expect_equal(data1$get_join_keys(), data2$get_join_keys())
     testthat::expect_equal(data1$get_ui("test"), data2$get_ui("test"))
   }
 
-  result <- cdisc_data(cdisc_dataset("ADSL", adsl, label = "test_label"))
+  result <- cdisc_data(cdisc_dataset("ADSL", adsl_raw, label = "test_label"))
 
   datasets <- list(cdisc_dataset(
     dataname = "ADSL",
-    x = adsl,
+    x = adsl_raw,
     keys = c("STUDYID", "USUBJID"),
     parent = character(0),
     label = "test_label"
@@ -1037,19 +1029,19 @@ testthat::test_that("List values", {
 
   test_relational_data_equal(result, result_to_compare)
 
-  result <- cdisc_data(cdisc_dataset("ADSL", adsl), cdisc_dataset("ADTTE", adtte))
+  result <- cdisc_data(cdisc_dataset("ADSL", adsl_raw), cdisc_dataset("ADTTE", adtte_raw))
 
   datasets <- list(
     cdisc_dataset(
       dataname = "ADSL",
-      x = adsl,
+      x = adsl_raw,
       keys = c("STUDYID", "USUBJID"),
       parent = character(0),
       label = character(0)
     ),
     cdisc_dataset(
       dataname = "ADTTE",
-      x = adtte,
+      x = adtte_raw,
       keys = c("STUDYID", "USUBJID", "PARAMCD"),
       parent = "ADSL",
       label = character(0)
@@ -1078,42 +1070,39 @@ testthat::test_that("Keys in cached datasets", {
 })
 
 testthat::test_that("Empty code", {
-  adsl <- as.data.frame(as.list(setNames(nm = get_cdisc_keys("ADSL"))))
   # missing code
-  result <- cdisc_data(cdisc_dataset("ADSL", adsl), check = FALSE)
+  result <- cdisc_data(cdisc_dataset("ADSL", adsl_raw), check = FALSE)
   testthat::expect_identical(get_code(result), "")
 
   # empty code
-  result <- cdisc_data(cdisc_dataset("ADSL", adsl), code = "", check = FALSE)
+  result <- cdisc_data(cdisc_dataset("ADSL", adsl_raw), code = "", check = FALSE)
   testthat::expect_identical(get_code(result), "")
 
   # NULL code
-  testthat::expect_silent(cdisc_data(cdisc_dataset("ADSL", adsl), code = NULL, check = FALSE))
+  testthat::expect_silent(cdisc_data(cdisc_dataset("ADSL", adsl_raw), code = NULL, check = FALSE))
 })
 
 testthat::test_that("Error - objects differs", {
-  adsl <- as.data.frame(as.list(setNames(nm = get_cdisc_keys("ADSL"))))
   testthat::expect_error(
-    cdisc_data(cdisc_dataset("ADSL", adsl, code = "ADSL <- 2"), check = TRUE),
+    cdisc_data(cdisc_dataset("ADSL", adsl_raw, code = "ADSL <- 2"), check = TRUE),
     "Code from ADSL need to return a data.frame"
   )
 
   testthat::expect_error(
-    cdisc_data(cdisc_dataset("ADSL", adsl, code = "ADSL <- data.frame()"), check = TRUE),
+    cdisc_data(cdisc_dataset("ADSL", adsl_raw, code = "ADSL <- data.frame()"), check = TRUE),
     "Reproducibility check failed."
   )
 
   testthat::expect_error(
-    cdisc_data(cdisc_dataset("ADSL", adsl, code = "ADSL <- mtcars;"), check = TRUE),
+    cdisc_data(cdisc_dataset("ADSL", adsl_raw, code = "ADSL <- mtcars;"), check = TRUE),
     "Reproducibility check failed."
   )
 })
 
 testthat::test_that("Error - ADSL is missing in cdisc_data", {
-  adtte <- as.data.frame(as.list(setNames(nm = get_cdisc_keys("ADTTE"))))
   testthat::expect_error({
     x <- cdisc_data(
-      cdisc_dataset("ADTTE", adtte),
+      cdisc_dataset("ADTTE", adtte_raw),
       code = "ADTTE <- synthetic_cdisc_data(\"rcd_2021_05_05\")$adtte", check = FALSE
     )
     x$check_metadata()
@@ -1123,11 +1112,10 @@ testthat::test_that("Error - ADSL is missing in cdisc_data", {
 })
 
 testthat::test_that("Error - duplicated names", {
-  adsl <- as.data.frame(as.list(setNames(nm = get_cdisc_keys("ADSL"))))
   testthat::expect_error(
     cdisc_data(
-      cdisc_dataset("ADSL", adsl),
-      cdisc_dataset("ADSL", adsl),
+      cdisc_dataset("ADSL", adsl_raw),
+      cdisc_dataset("ADSL", adsl_raw),
       code = "",
       check = FALSE
     ),
@@ -1144,14 +1132,12 @@ testthat::test_that("Error - dataset is not of correct class", {
 })
 
 testthat::test_that("Check the keys", {
-  adsl <- as.data.frame(as.list(setNames(nm = get_cdisc_keys("ADSL"))))
-  adtte <- as.data.frame(as.list(setNames(nm = get_cdisc_keys("ADTTE"))))
   testthat::expect_error(
-    teal_data(dataset(dataname = "ADSL", x = adsl, keys = "non_existing_column")),
+    teal_data(dataset(dataname = "ADSL", x = adsl_raw, keys = "non_existing_column")),
     "The join key specification requires dataset ADSL to contain the following columns: non_existing_column"
   )
 
-  data2 <- cdisc_data(dataset("ADSL", adsl), dataset("ADTTE", adtte))
+  data2 <- cdisc_data(dataset("ADSL", adsl_raw), dataset("ADTTE", adtte_raw))
   testthat::expect_identical(
     data2$get_dataset("ADSL")$get_keys(),
     character(0)
@@ -1164,8 +1150,8 @@ testthat::test_that("Check the keys", {
   # we can have empty keys - then we don't check them
   testthat::expect_silent(data2$check_metadata())
 
-  adsl <- rbind(adsl, get_cdisc_keys("ADSL"))
-  ds <- cdisc_dataset("ADSL", adsl, keys = get_cdisc_keys("ADSL")[1])
+  adsl_extended <- rbind(adsl_raw, get_cdisc_keys("ADSL"))
+  ds <- cdisc_dataset("ADSL", adsl_extended, keys = get_cdisc_keys("ADSL")[1])
   testthat::expect_error(
     ds$check_keys(),
     "Duplicate primary key values found in the dataset 'ADSL'"
