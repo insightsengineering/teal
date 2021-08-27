@@ -50,7 +50,7 @@
 \subsection{Method \code{new()}}{
 Initializes this \code{DefaultFilteredDataset} object
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{DefaultFilteredDataset$new(dataset)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{DefaultFilteredDataset$new(dataset, join_keys)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
