@@ -50,17 +50,14 @@
 \subsection{Method \code{new()}}{
 Initializes this \code{DefaultFilteredDataset} object
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{DefaultFilteredDataset$new(dataset, join_keys)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{DefaultFilteredDataset$new(dataset)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
 \item{\code{dataset}}{(\code{Dataset})\cr
-the single dataset for which filters are rendered}
-
-\item{\code{join_keys}}{(\code{list})\cr
-the keys to join this \code{dataset} with the other}
+single dataset for which filters are rendered}
 }
 \if{html}{\out{</div>}}
 }

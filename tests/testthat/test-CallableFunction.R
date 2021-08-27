@@ -1,18 +1,18 @@
-test_that("Function found", {
-  expect_silent(
+testthat::test_that("Function found", {
+  testthat::expect_silent(
     cfun <- callable_function(fun = data.frame)
   )
 
-  expect_identical(
+  testthat::expect_identical(
     cfun$get_call(),
     "data.frame()"
   )
 
-  expect_silent(
+  testthat::expect_silent(
     cfun2 <- callable_function(fun = base::data.frame)
   )
 
-  expect_identical(
+  testthat::expect_identical(
     cfun2$get_call(),
     "data.frame()"
   )
@@ -20,23 +20,23 @@ test_that("Function found", {
   custom_fun <- function() {
     1L
   }
-  expect_silent(
+  testthat::expect_silent(
     cfun3 <- callable_function(
       fun = custom_fun
     )
   )
 
-  expect_identical(
+  testthat::expect_identical(
     cfun3$get_call(),
     "(function() {\n    1L\n})()"
   )
 
-  expect_identical(
+  testthat::expect_identical(
     cfun3$run(),
     1L
   )
 
-  expect_silent(
+  testthat::expect_silent(
     cfun4 <- callable_function(
       function() {
         library("MultiAssayExperiment")
@@ -46,7 +46,7 @@ test_that("Function found", {
     )
   )
 
-  expect_identical(
+  testthat::expect_identical(
     cfun4$get_call(),
     "(function() {\n    library(\"MultiAssayExperiment\")\n    data(\"miniACC\")\n    return(miniACC)\n})()"
   )
@@ -114,11 +114,11 @@ testthat::test_that("CallableFunction throws an error if passed a prefixed objec
   )
 })
 
-test_that("Test inputs", {
+testthat::test_that("Test inputs", {
   x_fun <- callable_function("mean")
   x_fun$set_args(list(x = c(1.0, 2.0, NA_real_), na.rm = TRUE))
 
-  expect_identical(
+  testthat::expect_identical(
     x_fun$get_call(),
     "mean(x = c(1, 2, NA), na.rm = TRUE)"
   )
@@ -127,7 +127,7 @@ test_that("Test inputs", {
   y_fun <- callable_function(fun)
   y_fun$set_args(list(x = c(1.0, 2.0, NA_real_), na.rm = TRUE))
 
-  expect_identical(
+  testthat::expect_identical(
     y_fun$get_call(),
     "mean(x = c(1, 2, NA), na.rm = TRUE)"
   )
@@ -135,22 +135,22 @@ test_that("Test inputs", {
   z_fun <- callable_function(base::mean)
   z_fun$set_args(list(x = c(1.0, 2.0, NA_real_), na.rm = TRUE))
 
-  expect_identical(
+  testthat::expect_identical(
     z_fun$get_call(),
     "mean(x = c(1, 2, NA), na.rm = TRUE)"
   )
 })
 
-test_that("Test callable", {
+testthat::test_that("Test callable", {
   x_fun <- callable_function(base::mean)
   x_fun$set_args(list(x = c(1.0, 2.0, NA_real_), na.rm = TRUE))
 
-  expect_identical(
+  testthat::expect_identical(
     x_fun$get_call(),
     "mean(x = c(1, 2, NA), na.rm = TRUE)"
   )
 
-  expect_identical(
+  testthat::expect_identical(
     x_fun$get_args(),
     list(
       x = c(1.0, 2.0, NA_real_),
@@ -158,7 +158,7 @@ test_that("Test callable", {
   )
 
   # get_call doesn't change args persistently
-  expect_false(
+  testthat::expect_false(
     identical(
       x_fun$get_call(),
       x_fun$get_call(args = list(x = c(1.0, 2.0), na.rm = TRUE))
@@ -166,28 +166,28 @@ test_that("Test callable", {
   )
 
   # args are still as in the beginning
-  expect_identical(
+  testthat::expect_identical(
     x_fun$get_args(),
     list(
       x = c(1.0, 2.0, NA_real_),
       na.rm = TRUE)
   )
 
-  expect_identical(
+  testthat::expect_identical(
     x_fun$run(),
     mean(c(1.0, 2.0, NA_real_), na.rm = TRUE)
   )
 
   # run doesn't change args persistently
   args <- list(na.rm = FALSE)
-  expect_false(
+  testthat::expect_false(
     identical(
       x_fun$run(),
       x_fun$run(args = args)
     )
   )
 
-  expect_false(
+  testthat::expect_false(
     identical(
       x_fun$.__enclos_env__$private$args,
       args
@@ -196,7 +196,7 @@ test_that("Test callable", {
 
   # args can be changed persistently by set_arg_value()
   x_fun$set_arg_value(name = "na.rm", value = FALSE)
-  expect_identical(
+  testthat::expect_identical(
     x_fun$get_call(),
     "mean(x = c(1, 2, NA), na.rm = FALSE)"
   )
@@ -204,70 +204,70 @@ test_that("Test callable", {
   # args can be changed/added persistently by set_args()
   x_fun$set_args(list(na.rm = TRUE, trim = 0.3))
 
-  expect_identical(
+  testthat::expect_identical(
     x_fun$get_call(),
     "mean(x = c(1, 2, NA), na.rm = TRUE, trim = 0.3)"
   )
 
 
   # try
-  expect_identical(
+  testthat::expect_identical(
     x_fun$run(try = TRUE),
     x_fun$run(try = FALSE)
   )
 
-  expect_identical(
+  testthat::expect_identical(
     x_fun$run(return = FALSE),
     NULL
   )
 
   # cleaning args
   x_fun$set_args(args = NULL)
-  expect_null(x_fun$get_args())
+  testthat::expect_null(x_fun$get_args())
 })
 
-test_that("test callable errors", {
+testthat::test_that("test callable errors", {
   x <- 1
 
-  expect_error(
+  testthat::expect_error(
     callable_function(x),
     "CallableFunction can be specified as character, symbol, call or function"
   )
 
-  expect_error(
+  testthat::expect_error(
     callable_function("x"),
     "object 'x' of mode 'function' was not found"
   )
 
-  expect_error(
+  testthat::expect_error(
     callable_function(garbageIn),
     "not found"
   )
 
-  expect_error(
+  testthat::expect_error(
     callable_function("garbageIn"),
     "object 'garbageIn' of mode 'function' was not found"
   )
 
-  expect_error(
+  testthat::expect_error(
     callable_function(),
     "A valid function name must be provided."
   )
 
 
-  expect_silent(x_fun <- callable_function(mean))
+  testthat::expect_silent(x_fun <- callable_function(mean))
 
 
   # mean accepts extra arguments
-  expect_silent(
+  testthat::expect_silent(
     x_fun$set_args(list(y = 2, x = 1, na.rm = TRUE))
   )
-  expect_identical(
+  testthat::expect_identical(
     x_fun$run(),
     mean(y = 2, x = 1, na.rm = TRUE)
   )
 
-  expect_equal({
+  testthat::expect_equal({
     x <- callable_function(base::all.equal)
     x$set_args(list(target = c("abc"), current = c("abc")))
     x$run()},
@@ -276,92 +276,70 @@ test_that("test callable errors", {
 
 
   x_fun <- callable_function(abs)
-  expect_silent(
+  testthat::expect_silent(
     x_fun$set_args(list(y = 2, x = 1, na.rm = TRUE))
   )
-  expect_error(
+  testthat::expect_error(
     x_fun$run(),
     "3 arguments passed to"
   )
 })
 
-test_that("is failed", {
+testthat::test_that("is failed", {
   fun <- callable_function(sqrt)
-  expect_error(
+  testthat::expect_error(
     fun$run(args = list(x = "")),
     "non-numeric argument to mathematical function"
   )
-  expect_s3_class(
+  testthat::expect_s3_class(
     fun$run(args = list(x = ""), try = TRUE),
     "error"
   )
-  expect_true(fun$is_failed())
-  expect_identical(
+  testthat::expect_true(fun$is_failed())
+  testthat::expect_identical(
     fun$get_error_message(),
     "non-numeric argument to mathematical function"
   )
 
-  expect_silent(fun$run(args = list(x = 1.5)))
-  expect_false(fun$is_failed())
-  expect_identical(
+  testthat::expect_silent(fun$run(args = list(x = 1.5)))
+  testthat::expect_false(fun$is_failed())
+  testthat::expect_identical(
     fun$get_error_message(),
     character(0)
   )
 })
 
-test_that("find callable function name", {
-  fun <- function(fun) {
-    fun1(fun)
-  }
-
-  fun1 <- function(callable) {
-    fun2(callable)
-  }
-
-  fun2 <- function(callable) {
-    x_fun <- callable_function(callable)
-    x_fun$.__enclos_env__$private$fun_name
-  }
-
-  expect_identical(
-    fun(base::mean),
-    "mean"
-  )
-})
-
-test_that("test cloning", {
+testthat::test_that("test cloning", {
   fun <- callable_function(stats::sd)
   fun$set_args(list(x = call(":", as.name("x1"), as.name("x2"))))
   fun$assign_to_env(x = "x1", value = 0)
   fun$assign_to_env(x = "x2", value = 10)
-  expect_identical(
+  testthat::expect_identical(
     fun$get_call(),
     "sd(x = x1:x2)"
   )
 
-  expect_identical(
+  testthat::expect_identical(
     ls(envir = fun$.__enclos_env__$private$env),
     c("x1", "x2")
   )
 
-  expect_identical(
+  testthat::expect_identical(
     fun$run(),
     stats::sd(0:10)
   )
 
   fun_cloned <- fun$clone()
-  expect_identical(
+  testthat::expect_identical(
     fun$.__enclos_env__$private$env,
     fun_cloned$.__enclos_env__$private$env
   )
 
   fun_cloned_deep <- fun$clone(deep = TRUE)
-  expect_false(
+  testthat::expect_false(
     identical(
       fun$.__enclos_env__$private$env,
       fun_cloned_deep$.__enclos_env__$private$env
     )
   )
-
-
 })

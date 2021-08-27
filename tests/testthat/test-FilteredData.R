@@ -26,11 +26,6 @@ testthat::test_that("set_dataset does not throw when passed a pulled DatasetConn
   testthat::expect_error(filtered_data$set_dataset(connector, NA))
 })
 
-testthat::test_that("set_join_keys does not throw when passed a JoinKeys object", {
-  filtered_data <- FilteredData$new()
-  testthat::expect_error(filtered_data$set_join_keys(JoinKeys$new()), NA)
-})
-
 testthat::test_that("get_keys returns an empty character when a Dataset has no keys", {
   filtered_data <- FilteredData$new()
   filtered_data$set_dataset(Dataset$new("iris", head(iris)))

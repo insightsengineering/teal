@@ -21,12 +21,11 @@ testthat::test_that("get_call returns a condition true for the object in the sel
   filter_state$set_selected(c(objects[2], objects[3]))
   test <- as.POSIXct(c(1:4), origin = "1900/01/01")
   testthat::expect_equal(eval(isolate(filter_state$get_call())), c(FALSE, TRUE, TRUE, FALSE))
-  test_sys_tz <- as.POSIXct(test, tz = Sys.timezone())
   testthat::expect_equal(
     isolate(filter_state$get_call()),
     bquote(
-      test >= as.POSIXct(.(as.character(test_sys_tz[2])), tz = .(Sys.timezone())) &
-      test < as.POSIXct(.(as.character(test_sys_tz[4])), tz = .(Sys.timezone()))
+      test >= as.POSIXct(.(as.character(test[2])), tz = .(Sys.timezone())) &
+      test < as.POSIXct(.(as.character(test[4])), tz = .(Sys.timezone()))
     )
   )
 })
@@ -44,19 +43,19 @@ testthat::test_that("get_call returns a condition evaluating to NA for NA values
   testthat::expect_equal(eval(isolate(filter_state$get_call()))[2], NA)
 })
 
-testthat::test_that("DatetimeFilterState applies the timezone of the ISO object passed to the constructor", {
-  objects <- ISOdate(2021, 8, 25, tz = "America/Los_Angeles")
+testthat::test_that("DatetimeFilterState echoes the timezone of the ISO object passed to the constructor", {
+  objects <- ISOdate(2021, 8, 25, tz = "GTM+10")
   filter_state <- DatetimeFilterState$new(objects, varname = "objects")
   testthat::expect_equal(
     isolate(filter_state$get_call()),
     quote(
-      objects >= as.POSIXct("2021-08-25 12:00:00", tz = "America/Los_Angeles") &
-        objects < as.POSIXct("2021-08-25 12:00:01", tz = "America/Los_Angeles")
+      objects >= as.POSIXct("2021-08-25 12:00:00", tz = "GTM+10") &
+        objects < as.POSIXct("2021-08-25 12:00:01", tz = "GTM+10")
     )
   )
 })
 
-testthat::test_that("set_selected throw when selection not within allowed choices", {
+testthat::test_that("set_selected throws when the values are not within the range passed to the constructor", {
   objects <- as.POSIXct(c(1, 2, 3), origin = "1900/01/01")
   filter_state <- DatetimeFilterState$new(objects, varname = "objects")
   testthat::expect_error(

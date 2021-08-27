@@ -46,9 +46,8 @@
 #'
 #' # setting the data
 #' isolate({
-#'   datasets$set_dataset(adsl,  data$get_join_keys()$get(dataset_1 = "ADSL"))
-#'   datasets$set_dataset(adtte, data$get_join_keys()$get(dataset_1 = "ADTTE"))
-#'   datasets$set_join_keys(join_keys())
+#'   datasets$set_dataset(adsl)
+#'   datasets$set_dataset(adtte)
 #'  })
 #'
 #'
@@ -178,11 +177,9 @@ CDISCFilteredData <- R6::R6Class( # nolint
     #'
     #' @param dataset (`Dataset`)\cr
     #'   object containing data and attributes.
-    #' @param join_key_set (`JoinKeySet`)\cr
-    #'   keys to merge this `dataset` to the other datasets
     #' @return (`self`) object of this class
-    set_dataset = function(dataset, join_key_set = NULL) {
-      super$set_dataset(dataset, join_key_set)
+    set_dataset = function(dataset) {
+      super$set_dataset(dataset)
 
       dataname <- get_dataname(dataset)
       parent_dataname <- self$get_parentname(dataname)
@@ -205,13 +202,10 @@ CDISCFilteredData <- R6::R6Class( # nolint
     # this is a reactive and kept as a field for caching
     ordered_datanames = NULL,
 
-    join_keys = NULL,
-
     validate = function() {
       stopifnot(
         setequal(private$ordered_datanames, names(private$dataset_filters)),
       )
-      stopifnot(is.null(join_keys))
       super$validate()
     }
   )
