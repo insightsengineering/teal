@@ -53,10 +53,10 @@ isolate({
 
 isolate({
   datasets$datanames()
-  datasets$get_filter_overview("iris")
+  datasets$get_data_info("iris", filtered = FALSE)
 
   # filters dataset to obtain information
-  datasets$get_filter_overview("mtcars")
+  datasets$get_data_info("mtcars", filtered = TRUE)
 
   print(datasets$get_call("iris"))
   print(datasets$get_call("mtcars"))
@@ -111,7 +111,7 @@ isolate(datasets$get_call("mtcars"))
 \item \href{#method-get_data_attr}{\code{FilteredData$get_data_attr()}}
 \item \href{#method-get_data_info}{\code{FilteredData$get_data_info()}}
 \item \href{#method-get_join_keys}{\code{FilteredData$get_join_keys()}}
-\item \href{#method-get_filter_overview}{\code{FilteredData$get_filter_overview()}}
+\item \href{#method-get_filter_overview_tbl}{\code{FilteredData$get_filter_overview_tbl()}}
 \item \href{#method-get_keys}{\code{FilteredData$get_keys()}}
 \item \href{#method-get_varlabels}{\code{FilteredData$get_varlabels()}}
 \item \href{#method-get_varnames}{\code{FilteredData$get_varnames()}}
@@ -388,15 +388,15 @@ Gets join keys between two datasets.
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-get_filter_overview"></a>}}
-\if{latex}{\out{\hypertarget{method-get_filter_overview}{}}}
-\subsection{Method \code{get_filter_overview()}}{
+\if{html}{\out{<a id="method-get_filter_overview_tbl"></a>}}
+\if{latex}{\out{\hypertarget{method-get_filter_overview_tbl}{}}}
+\subsection{Method \code{get_filter_overview_tbl()}}{
 Gets filter overview table in form of X (filtered) / Y (non-filtered)
 
 This is intended to be presented in the application.
-The content for each of the data names is defined in \code{get_filter_overview_info} method.
+The content for each of the data names is defined in \code{get_data_info} method.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{FilteredData$get_filter_overview(datanames)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{FilteredData$get_filter_overview_tbl(datanames)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
@@ -407,8 +407,8 @@ The content for each of the data names is defined in \code{get_filter_overview_i
 \if{html}{\out{</div>}}
 }
 \subsection{Returns}{
-(\code{matrix}) matrix of observations and subjects of all datasets
-Get keys for the dataset
+(\code{data.frame})
+Gets keys for the dataset
 }
 }
 \if{html}{\out{<hr>}}

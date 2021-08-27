@@ -4,10 +4,14 @@
 \alias{init_filtered_dataset}
 \title{Initializes \code{FilteredDataset}}
 \usage{
-init_filtered_dataset(dataset)
+init_filtered_dataset(dataset, join_keys)
 }
 \arguments{
 \item{dataset}{(\code{Dataset})\cr}
+
+\item{join_keys}{(\verb{named list})\cr
+named list of join keys to merge this dataset with
+it's relatives.}
 }
 \description{
 \code{FilteredDataset} contains \code{Dataset}
@@ -19,7 +23,8 @@ adtte <- cdisc_dataset("ADTTE", synthetic_cdisc_data("latest")$adtte)
 data <- cdisc_data(adsl, adtte)
 
 filtered_dataset <- teal:::init_filtered_dataset(
-  dataset = adtte
+  dataset = adtte,
+  join_keys = data$get_join_keys()$get("ADTTE")
 )
 
 \dontrun{

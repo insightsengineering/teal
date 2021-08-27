@@ -1276,6 +1276,7 @@ SEFilterStates <- R6::R6Class( # nolint
   )
 )
 
+
 # MatrixFilterStates -----
 MatrixFilterStates <- R6::R6Class( # nolint
   classname = "MatrixFilterStates",
