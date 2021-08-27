@@ -676,23 +676,24 @@ FilteredData <- R6::R6Class( # nolint
 
         datasets_df <- self$get_filter_overview(datanames = datanames)
 
-        datasets_html <- lapply(seq_len(nrow(datasets_df)), function(x) {
+        body_html <- lapply(seq_len(nrow(datasets_df)), function(x) {
           tags$tr(
             tags$td(rownames(datasets_df)[x]),
             tags$td(datasets_df[x, 1]),
             tags$td(datasets_df[x, 2])
           )
-        }
-      )
+        })
+
+        header_html <- tags$tr(
+          tags$td(""),
+          tags$td(colnames(datasets_df)[1]),
+          tags$td(colnames(datasets_df)[2])
+        )
 
         table_html <- tags$table(
           class = "table custom-table",
-          tags$thead(tags$tr(
-            tags$td(""),
-            tags$td("Obs"),
-            tags$td("Subjects")
-          )),
-          tags$tbody(datasets_html)
+          tags$thead(header_html),
+          tags$tbody(body_html)
         )
 
         table_html

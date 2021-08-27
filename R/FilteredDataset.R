@@ -205,6 +205,7 @@ FilteredDataset <- R6::R6Class( # nolint
     get_filter_overview_info = function() {
       df <- cbind(private$get_filter_overview_nobs(), "")
       rownames(df) <- self$get_dataname()
+      colnames(df) <- c("Obs", "Subjects")
       df
     },
 
@@ -633,6 +634,7 @@ CDISCFilteredDataset <- R6::R6Class( # nolint
         private$get_filter_overview_nsubjs()
       )
       rownames(df) <- self$get_dataname()
+      colnames(df) <- c("Obs", "Subjects")
       df
     },
 
@@ -809,14 +811,15 @@ MAEFilteredDataset <- R6::R6Class( # nolint
       names_exps <- paste0("- ", names(self$get_data(filtered = FALSE)))
       mae_and_exps <- c(self$get_dataname(), names_exps)
 
-      table <- cbind(
+      df <- cbind(
         private$get_filter_overview_nobs(),
         private$get_filter_overview_nsubjs()
       )
 
-      rownames(table) <- mae_and_exps
+      rownames(df) <- mae_and_exps
+      colnames(df) <- c("Obs", "Subjects")
 
-      table
+      df
     },
 
     #' @description
