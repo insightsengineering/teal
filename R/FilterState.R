@@ -1508,6 +1508,8 @@ DatetimeFilterState <- R6::R6Class( # nolint
         if (!is.null(session$userData$timezone)) {
           private$timezone <- session$userData$timezone
         }
+      } else if (isTRUE(attr(x, "tz") != "")) {
+        private$timezone <- attr(x, "tz")
       }
 
       return(invisible(self))
