@@ -131,3 +131,16 @@ currently not used, instead one can click anywhere in the element to move it
 
   content: attr(data-label);
 }
+.custom-table td:nth-child(1),
+.custom-table thead {
+  font-weight: bold;
+}
+
+.teal_active_summary_filter_panel td,
+.teal_active_summary_filter_panel th {
+  word-wrap: anywhere;
+}
+
+.dataTables_wrapper {
+    overflow: auto;
+}
