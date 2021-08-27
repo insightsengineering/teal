@@ -335,10 +335,8 @@ datasets <- teal:::CDISCFilteredData$new()
 # the `datasets` object contains reactives
 # we activate this option, so we don't need to wrap all reactives in isolate calls
 options(shiny.suppressMissingContextError = TRUE)
-datasets$set_dataset(dataset = dataset("ADSL", ADSL),
-                     join_key_set = NULL)
-datasets$set_dataset(dataset = dataset("ADTTE", ADTTE),
-                     join_key_set = list(ADSL = c("STUDYID", "USUBJID")))
+datasets$set_dataset(dataset = dataset("ADSL", ADSL))
+datasets$set_dataset(dataset = dataset("ADTTE", ADTTE))
 shiny:::flushReact() # force evaluation outside of Shiny apps
 ```
 
