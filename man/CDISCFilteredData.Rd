@@ -56,10 +56,9 @@ isolate({
 
 isolate({
   datasets$datanames()
-  datasets$get_data_info("ADSL", filtered = FALSE)
 
-  # filters dataset to obtain information
-  datasets$get_data_info("ADSL", filtered = TRUE)
+  # number observations and subjects of filtered/non-filtered dataset
+  datasets$get_filter_overview("ADSL")
 
   print(datasets$get_call("ADSL"))
   print(datasets$get_call("ADTTE"))
@@ -73,7 +72,7 @@ filter_state_adtte <- teal:::init_filter_state(
   ADTTE$PARAMCD,
   varname = "PARAMCD",
   input_dataname = as.name("ADTTE"),
-  use_dataname = TRUE
+  extract_type = "list"
 )
 filter_state_adtte$set_selected("OS")
 
@@ -87,7 +86,7 @@ filter_state_adsl <- teal:::init_filter_state(
   ADSL$SEX,
   varname = "SEX",
   input_dataname = as.name("SEX"),
-  use_dataname = TRUE
+  extract_type = "list"
 )
 filter_state_adsl$set_selected("F")
 
@@ -109,7 +108,6 @@ isolate(datasets$get_call("ADTTE"))
 \item \href{#method-new}{\code{CDISCFilteredData$new()}}
 \item \href{#method-datanames}{\code{CDISCFilteredData$datanames()}}
 \item \href{#method-get_call}{\code{CDISCFilteredData$get_call()}}
-\item \href{#method-get_data_info}{\code{CDISCFilteredData$get_data_info()}}
 \item \href{#method-get_filterable_datanames}{\code{CDISCFilteredData$get_filterable_datanames()}}
 \item \href{#method-get_parentname}{\code{CDISCFilteredData$get_parentname()}}
 \item \href{#method-set_dataset}{\code{CDISCFilteredData$set_dataset()}}
@@ -124,7 +122,7 @@ isolate(datasets$get_call("ADTTE"))
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="FilteredData" data-id="get_data">}\href{../../teal/html/FilteredData.html#method-get_data}{\code{teal::FilteredData$get_data()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="FilteredData" data-id="get_data_attr">}\href{../../teal/html/FilteredData.html#method-get_data_attr}{\code{teal::FilteredData$get_data_attr()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="FilteredData" data-id="get_datalabel">}\href{../../teal/html/FilteredData.html#method-get_datalabel}{\code{teal::FilteredData$get_datalabel()}}\out{</span>}
-\item \out{<span class="pkg-link" data-pkg="teal" data-topic="FilteredData" data-id="get_filter_overview_tbl">}\href{../../teal/html/FilteredData.html#method-get_filter_overview_tbl}{\code{teal::FilteredData$get_filter_overview_tbl()}}\out{</span>}
+\item \out{<span class="pkg-link" data-pkg="teal" data-topic="FilteredData" data-id="get_filter_overview">}\href{../../teal/html/FilteredData.html#method-get_filter_overview}{\code{teal::FilteredData$get_filter_overview()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="FilteredData" data-id="get_filterable_varnames">}\href{../../teal/html/FilteredData.html#method-get_filterable_varnames}{\code{teal::FilteredData$get_filterable_varnames()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="FilteredData" data-id="get_filtered_datasets">}\href{../../teal/html/FilteredData.html#method-get_filtered_datasets}{\code{teal::FilteredData$get_filtered_datasets()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="FilteredData" data-id="get_join_keys">}\href{../../teal/html/FilteredData.html#method-get_join_keys}{\code{teal::FilteredData$get_join_keys()}}\out{</span>}
@@ -189,29 +187,6 @@ on are available.
 }
 \subsection{Returns}{
 (\code{call} or \code{list} of calls ) to filter dataset
-}
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-get_data_info"></a>}}
-\if{latex}{\out{\hypertarget{method-get_data_info}{}}}
-\subsection{Method \code{get_data_info()}}{
-Get info about dataname, i.e. number of rows, subjects.
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{CDISCFilteredData$get_data_info(dataname, filtered)}\if{html}{\out{</div>}}
-}
-
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{dataname}}{(\code{character}) name of the dataset}
-
-\item{\code{filtered}}{(\code{logical}) whether to obtain this info for the
-filtered dataset}
-}
-\if{html}{\out{</div>}}
-}
-\subsection{Returns}{
-a named vector
 }
 }
 \if{html}{\out{<hr>}}
