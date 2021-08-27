@@ -390,7 +390,7 @@ Gets join keys between two datasets.
 \if{html}{\out{<a id="method-get_filter_overview"></a>}}
 \if{latex}{\out{\hypertarget{method-get_filter_overview}{}}}
 \subsection{Method \code{get_filter_overview()}}{
-Get filter overview table in form of X (filtered) / Y (non-filtered)
+Gets filter overview table in form of X (filtered) / Y (non-filtered)
 
 This is intended to be presented in the application.
 The content for each of the data names is defined in \code{get_filter_overview_info} method.
@@ -520,7 +520,7 @@ object containing data and attributes.}
 \if{html}{\out{</div>}}
 }
 \subsection{Returns}{
-(\code{self}) invisibly this FilteredData
+(\code{self}) object of this class
 }
 }
 \if{html}{\out{<hr>}}

@@ -167,7 +167,7 @@ the id of the \code{private$filter_states} list element where \code{FilterStates
 \if{html}{\out{<a id="method-get_dataname"></a>}}
 \if{latex}{\out{\hypertarget{method-get_dataname}{}}}
 \subsection{Method \code{get_dataname()}}{
-Gets the name of the dataset
+Get name of the dataset
 
 Get name of the dataset
 \subsection{Usage}{
