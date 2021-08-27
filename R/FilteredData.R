@@ -253,7 +253,7 @@ FilteredData <- R6::R6Class( # nolint
           }
         )
         names(res_list) <- self$datanames()
-      res_list
+        res_list
       }
       if (is_empty(res)) {
         return(character(0))
