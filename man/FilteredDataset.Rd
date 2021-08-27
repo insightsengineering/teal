@@ -167,55 +167,10 @@ the id of the \code{private$filter_states} list element where \code{FilterStates
 }
 }
 \if{html}{\out{<hr>}}
-<<<<<<< HEAD
-\if{html}{\out{<a id="method-get_data_info"></a>}}
-\if{latex}{\out{\hypertarget{method-get_data_info}{}}}
-\subsection{Method \code{get_data_info()}}{
-Gets data info
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{FilteredDataset$get_data_info(filtered = FALSE)}\if{html}{\out{</div>}}
-}
-
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{filtered}}{(\code{logical(1)})\cr
-whether \code{data.info} should depend on filtered data.}
-}
-\if{html}{\out{</div>}}
-}
-\subsection{Returns}{
-\code{integer(1)} number of rows
-}
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-get_subjects_info"></a>}}
-\if{latex}{\out{\hypertarget{method-get_subjects_info}{}}}
-\subsection{Method \code{get_subjects_info()}}{
-Gets subjects info
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{FilteredDataset$get_subjects_info(filtered)}\if{html}{\out{</div>}}
-}
-
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{filtered}}{(\code{logical(1)})\cr
-whether \code{data.info} should depend on filtered data.}
-}
-\if{html}{\out{</div>}}
-}
-\subsection{Returns}{
-\code{integer} number of unique subjects
-}
-}
-\if{html}{\out{<hr>}}
-=======
->>>>>>> main
 \if{html}{\out{<a id="method-get_dataname"></a>}}
 \if{latex}{\out{\hypertarget{method-get_dataname}{}}}
 \subsection{Method \code{get_dataname()}}{
-Gets the name of the dataset
+Get name of the dataset
 
 Get name of the dataset
 \subsection{Usage}{

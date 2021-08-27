@@ -342,12 +342,6 @@ value of attribute, may be \code{NULL} if it does not exist
 }
 }
 \if{html}{\out{<hr>}}
-<<<<<<< HEAD
-\if{html}{\out{<a id="method-get_data_info"></a>}}
-\if{latex}{\out{\hypertarget{method-get_data_info}{}}}
-\subsection{Method \code{get_data_info()}}{
-Gets info about dataname, i.e. number of rows
-=======
 \if{html}{\out{<a id="method-get_filter_overview"></a>}}
 \if{latex}{\out{\hypertarget{method-get_filter_overview}{}}}
 \subsection{Method \code{get_filter_overview()}}{
@@ -355,7 +349,6 @@ Get filter overview table in form of X (filtered) / Y (non-filtered)
 
 This is intended to be presented in the application.
 The content for each of the data names is defined in \code{get_filter_overview_info} method.
->>>>>>> main
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{FilteredData$get_filter_overview(datanames)}\if{html}{\out{</div>}}
 }
@@ -375,7 +368,7 @@ The content for each of the data names is defined in \code{get_filter_overview_i
 \if{html}{\out{<a id="method-get_join_keys"></a>}}
 \if{latex}{\out{\hypertarget{method-get_join_keys}{}}}
 \subsection{Method \code{get_join_keys()}}{
-Gets join keys between two datasets.
+Get join keys between two datasets.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{FilteredData$get_join_keys(dataset_1, dataset_2)}\if{html}{\out{</div>}}
 }
@@ -391,34 +384,7 @@ Gets join keys between two datasets.
 }
 \subsection{Returns}{
 (\verb{named character}) vector with column names
-<<<<<<< HEAD
-}
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-get_filter_overview_tbl"></a>}}
-\if{latex}{\out{\hypertarget{method-get_filter_overview_tbl}{}}}
-\subsection{Method \code{get_filter_overview_tbl()}}{
-Gets filter overview table in form of X (filtered) / Y (non-filtered)
-
-This is intended to be presented in the application.
-The content for each of the data names is defined in \code{get_data_info} method.
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{FilteredData$get_filter_overview_tbl(datanames)}\if{html}{\out{</div>}}
-}
-
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{datanames}}{(\code{character} vector) names of the dataset}
-}
-\if{html}{\out{</div>}}
-}
-\subsection{Returns}{
-(\code{data.frame})
-Gets keys for the dataset
-=======
 Get keys for the dataset
->>>>>>> main
 }
 }
 \if{html}{\out{<hr>}}
