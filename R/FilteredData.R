@@ -47,10 +47,10 @@
 #'
 #' isolate({
 #'   datasets$datanames()
-#'   datasets$get_data_info("iris", filtered = FALSE)
+#'   datasets$get_filter_overview("iris")
 #'
 #'   # filters dataset to obtain information
-#'   datasets$get_data_info("mtcars", filtered = TRUE)
+#'   datasets$get_filter_overview("mtcars")
 #'
 #'   print(datasets$get_call("iris"))
 #'   print(datasets$get_call("mtcars"))
@@ -234,72 +234,54 @@ FilteredData <- R6::R6Class( # nolint
     #' @param dataset_2 (`character`) other dataset name
     #' @return (`named character`) vector with column names
     get_join_keys = function(dataset_1, dataset_2) {
-      if (is.null(private$join_keys)) {
-        character(0)
+      res <- if (!missing(dataset_1) && !missing(dataset_2)) {
+        self$get_filtered_datasets(dataset_1)$get_join_keys()[[dataset_2]]
+      } else if (!missing(dataset_1)) {
+        self$get_filtered_datasets(dataset_1)$get_join_keys()
+      } else if (!missing(dataset_2)) {
+        self$get_filtered_datasets(dataset_2)$get_join_keys()
       } else {
-        private$join_keys$get(dataset_1, dataset_2)
+        res_list <- lapply(
+          self$datanames(), function(dat_name) {
+            self$get_filtered_datasets(dat_name)$get_join_keys()
+          }
+        )
+        names(res_list) <- self$datanames()
+      res_list
       }
-    },
+      if (is_empty(res)) {
+        return(character(0))
+      }
 
+      return(res)
+    },
 
     #' @description
     #' Gets filter overview table in form of X (filtered) / Y (non-filtered)
     #'
     #' This is intended to be presented in the application.
-    #' The content for each of the data names is defined in `get_data_info` method.
+    #' The content for each of the data names is defined in `get_filter_overview_info` method.
     #'
     #' @param datanames (`character` vector) names of the dataset
-    #' @return (`data.frame`)
-    get_filter_overview_tbl = function(datanames) {
+    #'
+    #' @return (`matrix`) matrix of observations and subjects of all datasets
+    get_filter_overview = function(datanames) {
       if (identical(datanames, "all")) {
         datanames <- self$datanames()
       }
-
       check_in_subset(datanames, self$datanames(), "Some datasets are not available: ")
 
-      data_info_filtered <- sapply(
+      rows <- sapply(
         datanames,
         function(dataname) {
-          self$get_data_info(dataname, filtered = TRUE)
-        },
-        USE.NAMES = TRUE,
-        simplify = FALSE
-      )
-      data_info_nfiltered <- sapply(
-        datanames,
-        function(dataname) {
-          self$get_data_info(dataname, filtered = FALSE)
-        },
-        USE.NAMES = TRUE,
-        simplify = FALSE
-      )
-
-      res_list <- Map(
-        x = data_info_filtered,
-        y = data_info_nfiltered,
-        function(x, y) {
-          setNames(paste0(x, "/", y), names(x))
-          sapply(
-            names(x),
-            function(xname) {
-              paste0(x[[xname]], "/", y[[xname]])
-            },
-            USE.NAMES = TRUE
-          )
+          self$get_filtered_datasets(dataname)$get_filter_overview_info()
         }
       )
 
-      res_df <- as.data.frame(do.call(rbind, res_list))
-      res_df[, "Dataset"] <- rownames(res_df)
-      rownames(res_df) <- NULL
-      res_df <- res_df[, c("Dataset", setdiff(names(res_df), "Dataset"))]
-
-      return(res_df)
+      do.call(rbind, rows)
     },
 
-
-
-    #' Gets keys for the dataset
+    #' Get keys for the dataset
     #' @param dataname (`character`) name of the dataset
     #' @return (`character`) keys of dataset
     get_keys = function(dataname) {
@@ -359,19 +341,16 @@ FilteredData <- R6::R6Class( # nolint
     #' Technically `set_dataset` created `FilteredDataset` which keeps
     #' `dataset` for filtering purpose.
     #'
-    #' @param dataset (`Dataset` or `DatasetConnector`)\cr
-    #'   the object containing data and attributes.
-    #' @param join_key_set (`JoinKeySet`)\cr
-    #'   the keys to merge this `dataset` to the other datasets
-    #' @return (`self`) invisibly this FilteredData
-    set_dataset = function(dataset, join_key_set = NULL) {
+    #' @param dataset (`Dataset`)\cr
+    #'   object containing data and attributes.
+    #' @return (`self`) object of this class
+    set_dataset = function(dataset) {
       stopifnot(is(dataset, "Dataset") || is(dataset, "DatasetConnector"))
       dataname <- get_dataname(dataset)
       # to include it nicely in the Show R Code; the UI also uses datanames in ids, so no whitespaces allowed
       check_simple_name(dataname)
       private$filtered_datasets[[dataname]] <- init_filtered_dataset(
-        get_dataset(dataset),
-        join_keys = join_key_set
+        get_dataset(dataset)
       )
 
       invisible(self)
@@ -386,16 +365,6 @@ FilteredData <- R6::R6Class( # nolint
     set_code = function(code) {
       stopifnot(inherits(code, "CodeClass"))
       private$code <- code
-      invisible(self)
-    },
-
-    #' @description
-    #' Sets join keys object
-    #' @param x (`JoinKeys`)
-    #' @return (`self`) invisibly for chaining
-    set_join_keys = function(x) {
-      stopifnot(is(x, "JoinKeys"))
-      private$join_keys <- x
       invisible(self)
     },
 
@@ -690,7 +659,7 @@ FilteredData <- R6::R6Class( # nolint
       ns <- NS(id)
 
       div(
-        style = "overflow: overlay",
+        class = "teal_active_summary_filter_panel",
         tableOutput(ns("table"))
       )
     },
@@ -711,7 +680,7 @@ FilteredData <- R6::R6Class( # nolint
         is.function(active_datanames) || is.reactive(active_datanames)
       )
 
-      output$table <- renderTable({
+      output$table <- renderUI({
         .log("update uifiltersinfo")
         datanames <- if (identical(active_datanames(), "all")) {
           self$datanames()
@@ -719,10 +688,32 @@ FilteredData <- R6::R6Class( # nolint
           active_datanames()
         }
 
-        self$get_filter_overview_tbl(datanames = datanames)
-      }, width = "100%")
+        datasets_df <- self$get_filter_overview(datanames = datanames)
 
-      invisible(NULL)
+        body_html <- lapply(seq_len(nrow(datasets_df)), function(x) {
+          tags$tr(
+            tags$td(rownames(datasets_df)[x]),
+            tags$td(datasets_df[x, 1]),
+            tags$td(datasets_df[x, 2])
+          )
+        })
+
+        header_html <- tags$tr(
+          tags$td(""),
+          tags$td(colnames(datasets_df)[1]),
+          tags$td(colnames(datasets_df)[2])
+        )
+
+        table_html <- tags$table(
+          class = "table custom-table",
+          tags$thead(header_html),
+          tags$tbody(body_html)
+        )
+
+        table_html
+      })
+
+      return(invisible(NULL))
     }
 
   ),
@@ -735,8 +726,6 @@ FilteredData <- R6::R6Class( # nolint
 
     # preprocessing code used to generate the unfiltered datasets as a string
     code = CodeClass$new(),
-
-    join_keys = NULL,
 
     # we implement these functions as checks rather than returning logicals so they can
     # give informative error messages immediately

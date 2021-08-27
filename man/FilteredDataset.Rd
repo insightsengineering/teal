@@ -20,10 +20,9 @@ components of the \code{Dataset}.
 \item \href{#method-get_data}{\code{FilteredDataset$get_data()}}
 \item \href{#method-get_data_reactive}{\code{FilteredDataset$get_data_reactive()}}
 \item \href{#method-get_filter_states}{\code{FilteredDataset$get_filter_states()}}
-\item \href{#method-get_data_info}{\code{FilteredDataset$get_data_info()}}
-\item \href{#method-get_subjects_info}{\code{FilteredDataset$get_subjects_info()}}
 \item \href{#method-get_dataname}{\code{FilteredDataset$get_dataname()}}
 \item \href{#method-get_dataset}{\code{FilteredDataset$get_dataset()}}
+\item \href{#method-get_filter_overview_info}{\code{FilteredDataset$get_filter_overview_info()}}
 \item \href{#method-get_hash}{\code{FilteredDataset$get_hash()}}
 \item \href{#method-get_keys}{\code{FilteredDataset$get_keys()}}
 \item \href{#method-get_join_keys}{\code{FilteredDataset$get_join_keys()}}
@@ -44,7 +43,7 @@ components of the \code{Dataset}.
 \subsection{Method \code{new()}}{
 Initializes this \code{FilteredDataset} object
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{FilteredDataset$new(dataset, join_keys)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{FilteredDataset$new(dataset)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
@@ -52,9 +51,6 @@ Initializes this \code{FilteredDataset} object
 \describe{
 \item{\code{dataset}}{(\code{Dataset})\cr
 single dataset for which filters are rendered}
-
-\item{\code{join_keys}}{(\code{list})\cr
-keys to join this \code{dataset} with the other}
 }
 \if{html}{\out{</div>}}
 }
@@ -168,48 +164,6 @@ the id of the \code{private$filter_states} list element where \code{FilterStates
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-get_data_info"></a>}}
-\if{latex}{\out{\hypertarget{method-get_data_info}{}}}
-\subsection{Method \code{get_data_info()}}{
-Gets data info
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{FilteredDataset$get_data_info(filtered = FALSE)}\if{html}{\out{</div>}}
-}
-
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{filtered}}{(\code{logical(1)})\cr
-whether \code{data.info} should depend on filtered data.}
-}
-\if{html}{\out{</div>}}
-}
-\subsection{Returns}{
-\code{integer(1)} number of rows
-}
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-get_subjects_info"></a>}}
-\if{latex}{\out{\hypertarget{method-get_subjects_info}{}}}
-\subsection{Method \code{get_subjects_info()}}{
-Gets subjects info
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{FilteredDataset$get_subjects_info(filtered)}\if{html}{\out{</div>}}
-}
-
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{filtered}}{(\code{logical(1)})\cr
-whether \code{data.info} should depend on filtered data.}
-}
-\if{html}{\out{</div>}}
-}
-\subsection{Returns}{
-\code{integer} number of unique subjects
-}
-}
-\if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-get_dataname"></a>}}
 \if{latex}{\out{\hypertarget{method-get_dataname}{}}}
 \subsection{Method \code{get_dataname()}}{
@@ -235,6 +189,19 @@ Gets the dataset in this FilteredDataset
 
 \subsection{Returns}{
 \code{Dataset}
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-get_filter_overview_info"></a>}}
+\if{latex}{\out{\hypertarget{method-get_filter_overview_info}{}}}
+\subsection{Method \code{get_filter_overview_info()}}{
+Get filter overview rows of a dataset
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{FilteredDataset$get_filter_overview_info()}\if{html}{\out{</div>}}
+}
+
+\subsection{Returns}{
+(\code{matrix}) matrix of observations and subjects
 }
 }
 \if{html}{\out{<hr>}}

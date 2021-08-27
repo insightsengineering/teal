@@ -53,10 +53,10 @@ isolate({
 
 isolate({
   datasets$datanames()
-  datasets$get_data_info("iris", filtered = FALSE)
+  datasets$get_filter_overview("iris")
 
   # filters dataset to obtain information
-  datasets$get_data_info("mtcars", filtered = TRUE)
+  datasets$get_filter_overview("mtcars")
 
   print(datasets$get_call("iris"))
   print(datasets$get_call("mtcars"))
@@ -111,14 +111,13 @@ isolate(datasets$get_call("mtcars"))
 \item \href{#method-get_data_attr}{\code{FilteredData$get_data_attr()}}
 \item \href{#method-get_data_info}{\code{FilteredData$get_data_info()}}
 \item \href{#method-get_join_keys}{\code{FilteredData$get_join_keys()}}
-\item \href{#method-get_filter_overview_tbl}{\code{FilteredData$get_filter_overview_tbl()}}
+\item \href{#method-get_filter_overview}{\code{FilteredData$get_filter_overview()}}
 \item \href{#method-get_keys}{\code{FilteredData$get_keys()}}
 \item \href{#method-get_varlabels}{\code{FilteredData$get_varlabels()}}
 \item \href{#method-get_varnames}{\code{FilteredData$get_varnames()}}
 \item \href{#method-handle_active_datanames}{\code{FilteredData$handle_active_datanames()}}
 \item \href{#method-set_dataset}{\code{FilteredData$set_dataset()}}
 \item \href{#method-set_code}{\code{FilteredData$set_code()}}
-\item \href{#method-set_join_keys}{\code{FilteredData$set_join_keys()}}
 \item \href{#method-get_bookmark_state}{\code{FilteredData$get_bookmark_state()}}
 \item \href{#method-set_bookmark_state}{\code{FilteredData$set_bookmark_state()}}
 \item \href{#method-restore_state_from_bookmark}{\code{FilteredData$restore_state_from_bookmark()}}
@@ -388,15 +387,15 @@ Gets join keys between two datasets.
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-get_filter_overview_tbl"></a>}}
-\if{latex}{\out{\hypertarget{method-get_filter_overview_tbl}{}}}
-\subsection{Method \code{get_filter_overview_tbl()}}{
-Gets filter overview table in form of X (filtered) / Y (non-filtered)
+\if{html}{\out{<a id="method-get_filter_overview"></a>}}
+\if{latex}{\out{\hypertarget{method-get_filter_overview}{}}}
+\subsection{Method \code{get_filter_overview()}}{
+Get filter overview table in form of X (filtered) / Y (non-filtered)
 
 This is intended to be presented in the application.
-The content for each of the data names is defined in \code{get_data_info} method.
+The content for each of the data names is defined in \code{get_filter_overview_info} method.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{FilteredData$get_filter_overview_tbl(datanames)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{FilteredData$get_filter_overview(datanames)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
@@ -407,8 +406,8 @@ The content for each of the data names is defined in \code{get_data_info} method
 \if{html}{\out{</div>}}
 }
 \subsection{Returns}{
-(\code{data.frame})
-Gets keys for the dataset
+(\code{matrix}) matrix of observations and subjects of all datasets
+Get keys for the dataset
 }
 }
 \if{html}{\out{<hr>}}
@@ -509,17 +508,14 @@ Adds a dataset and preserve all attributes attached to this object.
 Technically \code{set_dataset} created \code{FilteredDataset} which keeps
 \code{dataset} for filtering purpose.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{FilteredData$set_dataset(dataset, join_key_set = NULL)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{FilteredData$set_dataset(dataset)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{dataset}}{(\code{Dataset} or \code{DatasetConnector})\cr
-the object containing data and attributes.}
-
-\item{\code{join_key_set}}{(\code{JoinKeySet})\cr
-the keys to merge this \code{dataset} to the other datasets}
+\item{\code{dataset}}{(\code{Dataset})\cr
+object containing data and attributes.}
 }
 \if{html}{\out{</div>}}
 }
@@ -546,26 +542,6 @@ unfiltered datasets}
 }
 \subsection{Returns}{
 (\code{self})
-}
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-set_join_keys"></a>}}
-\if{latex}{\out{\hypertarget{method-set_join_keys}{}}}
-\subsection{Method \code{set_join_keys()}}{
-Sets join keys object
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{FilteredData$set_join_keys(x)}\if{html}{\out{</div>}}
-}
-
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{x}}{(\code{JoinKeys})}
-}
-\if{html}{\out{</div>}}
-}
-\subsection{Returns}{
-(\code{self}) invisibly for chaining
 }
 }
 \if{html}{\out{<hr>}}
