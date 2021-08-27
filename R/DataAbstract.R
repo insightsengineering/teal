@@ -16,7 +16,7 @@ DataAbstract <- R6::R6Class( #nolint
     #'
     #' @return throws error
     initialize = function() {
-      stop("Not implemented!")
+      stop("Pure virtual method")
     },
     #' @description
     #' Check if the object raw data is reproducible from the \code{get_code()} code.

@@ -147,3 +147,219 @@ testthat::test_that("The hashes of Datasets objects are correct after mutating t
   rd$execute_mutate()
   testthat::expect_equal(rd$get_dataset("iris")$get_hash(), mutated_iris_hash)
 })
+
+# Multiple rcd_data connectors ----
+testthat::test_that("Multiple rcd_data connectors wrapped in cdisc_data", {
+  adsl <- rcd_cdisc_dataset_connector("ADSL", radsl, N = 1)
+  adae <- rcd_cdisc_dataset_connector("ADAE", radae, ADSL = adsl)
+  advs <- rcd_cdisc_dataset_connector("ADVS", radvs, ADSL = adsl)
+  adtte <- rcd_cdisc_dataset_connector("ADTTE", radtte, ADSL = adsl)
+  adsl_adae <- rcd_data(adsl, adae)
+  advs_adtte <- rcd_data(advs, adtte)
+  data <- cdisc_data(adsl_adae, advs_adtte)
+
+  items <- data$get_items()
+  testthat::expect_true(inherits(data, "RelationalData"))
+  testthat::expect_true(all(vapply(items, inherits, logical(1), "DatasetConnector")))
+  testthat::expect_true(all(vapply(data$get_connectors(), inherits, logical(1), "RelationalDataConnector")))
+
+  testthat::expect_equal(unname(get_dataname(data)), c("ADSL", "ADAE", "ADVS", "ADTTE"))
+
+  testthat::expect_equal(items$ADSL$get_code(), "ADSL <- radsl(N = 1)")
+  testthat::expect_equal(items$ADAE$get_code(), "ADSL <- radsl(N = 1)\nADAE <- radae(ADSL = ADSL)")
+  testthat::expect_equal(items$ADVS$get_code(), "ADSL <- radsl(N = 1)\nADVS <- radvs(ADSL = ADSL)")
+  testthat::expect_equal(items$ADTTE$get_code(), "ADSL <- radsl(N = 1)\nADTTE <- radtte(ADSL = ADSL)")
+
+  testthat::expect_equal(
+    get_code(data, "ADSL"),
+    "library(package = \"random.cdisc.data\")\nADSL <- radsl(N = 1)"
+  )
+  testthat::expect_equal(
+    get_code(data, "ADAE"),
+    "library(package = \"random.cdisc.data\")\nADSL <- radsl(N = 1)\nADAE <- radae(ADSL = ADSL)"
+  )
+  testthat::expect_equal(
+    get_code(data, "ADVS"),
+    "library(package = \"random.cdisc.data\")\nADSL <- radsl(N = 1)\nADVS <- radvs(ADSL = ADSL)"
+  )
+  testthat::expect_equal(
+    get_code(data, "ADTTE"),
+    "library(package = \"random.cdisc.data\")\nADSL <- radsl(N = 1)\nADTTE <- radtte(ADSL = ADSL)"
+  )
+  testthat::expect_equal(
+    get_code(data),
+    "library(package = \"random.cdisc.data\")\nADSL <- radsl(N = 1)\nADAE <- radae(ADSL = ADSL)\nADVS <- radvs(ADSL = ADSL)\nADTTE <- radtte(ADSL = ADSL)" # nolint
+  )
+})
+
+# RelationalData with single dataset and connector ----
+testthat::test_that("RelationalData with single dataset and connector", {
+  adsl <- rcd_cdisc_dataset_connector("ADSL", radsl, cached = TRUE)
+  adsl_data <- rcd_data(adsl)
+
+  adtte <- cdisc_dataset(
+    dataname = "ADTTE",
+    x = radtte(cached = TRUE),
+    code = "ADTTE <- radtte(cached = TRUE)"
+  )
+
+  adae <- rcd_cdisc_dataset_connector("ADAE", radae, cached = TRUE)
+  adae$set_ui_input(function(ns) {
+    list(
+      numericInput(inputId = ns("seed"), label = "ADSL seed", min = 0, value = 2),
+      optionalSliderInput(
+        inputId = ns("max_n_aes"),
+        label = "Maximum number of AEs per patient",
+        min = 0,
+        max = 10,
+        value = 10,
+        step = 1)
+    )
+  }
+  )
+
+  data <- cdisc_data(adsl_data, adtte, adae)
+  items <- data$get_items()
+  testthat::expect_length(items, 3)
+  testthat::expect_true(inherits(data, "RelationalData"))
+  testthat::expect_true(inherits(items$ADSL, "DatasetConnector"))
+  testthat::expect_true(inherits(items$ADTTE, "Dataset"))
+  testthat::expect_true(inherits(items$ADAE, "DatasetConnector"))
+
+  connectors <- data$get_connectors()
+  testthat::expect_length(connectors, 2)
+  testthat::expect_true(
+    inherits(connectors[[1]], "RelationalDataConnector") &&
+      inherits(connectors[[2]], "DatasetConnector")
+  )
+
+  testthat::expect_equal(items$ADSL$get_pull_callable()$get_call(), "radsl(cached = TRUE)")
+  testthat::expect_equal(items$ADAE$get_pull_callable()$get_call(), "radae(cached = TRUE)")
+  testthat::expect_identical(adtte$get_raw_data, items$ADTTE$get_raw_data)
+
+  # simulate pull with a click of the submit button
+  for (connector in data$get_connectors()) {
+    connector$pull()
+  }
+
+  testthat::expect_equal(
+    get_code(data, "ADSL"),
+    "library(package = \"random.cdisc.data\")\nADSL <- radsl(cached = TRUE)"
+  )
+  testthat::expect_equal(
+    get_code(data, "ADTTE"),
+    "library(package = \"random.cdisc.data\")\nADTTE <- radtte(cached = TRUE)"
+  )
+  testthat::expect_equal(
+    get_code(data, "ADAE"),
+    "library(package = \"random.cdisc.data\")\nADAE <- radae(cached = TRUE)"
+  )
+  testthat::expect_equal(
+    get_code(data), "library(package = \"random.cdisc.data\")\nADSL <- radsl(cached = TRUE)\nADTTE <- radtte(cached = TRUE)\nADAE <- radae(cached = TRUE)" # nolint
+  )
+})
+
+# RelationalData with mutliple datasets and connectors ----
+testthat::test_that("RelationalData with mutliple datasets and connectors", {
+  adsl <- rcd_cdisc_dataset_connector("ADSL", radsl, N = 1)
+  adsl_data <- rcd_data(adsl)
+
+  adtte <- cdisc_dataset(
+    dataname = "ADTTE",
+    x = radtte(cached = TRUE),
+    code = "ADTTE <- radtte(cached = TRUE)"
+  )
+
+  adae <- rcd_cdisc_dataset_connector("ADAE", radae, ADSL = adsl)
+  # add custom input
+  adae$set_ui_input(function(ns) {
+    list(
+      numericInput(inputId = ns("seed"), label = "ADSL seed", min = 0, value = 2),
+      optionalSliderInput(inputId = ns("max_n_aes"),
+                          label = "Maximum number of AEs per patient",
+                          min = 0,
+                          max = 5,
+                          value = 3,
+                          step = 1)
+      )
+    }
+  )
+
+  advs <- rcd_cdisc_dataset_connector("ADVS", radvs, ADSL = adsl)
+  advs$set_ui_input(function(ns) {
+    list(
+      numericInput(inputId = ns("seed"), label = "ADSL seed", min = 0, value = 4),
+      optionalSliderInput(inputId = ns("max_n_aes"),
+                          label = "Number of weeks or cycles",
+                          min = 0,
+                          max = 10,
+                          value = 5,
+                          step = 1)
+      )
+    }
+  )
+
+  adlb <- rcd_cdisc_dataset_connector("ADLB", radlb, ADSL = adsl)
+
+  advs_adlb_data <- rcd_data(advs, adlb)
+
+  temp_file <- tempfile()
+  saveRDS(radrs(cached = TRUE), file = temp_file)
+  adrs <- rds_cdisc_dataset_connector(dataname = "ADRS", file = temp_file)
+
+  adsamp <- script_cdisc_dataset_connector(
+    dataname = "ADSAMP",
+    keys = get_cdisc_keys("ADVS"),
+    file = "delayed_data_script/asdamp_with_adsl.R",
+    ADSL = adsl,
+    ADVS = advs
+  )
+
+  data <- cdisc_data(adsl_data, adtte, adae, advs_adlb_data, adrs, adsamp)
+
+  testthat::expect_true(inherits(data, "RelationalData"))
+  items <- data$get_items()
+  testthat::expect_true(all(vapply(items[-2], inherits, logical(1), "DatasetConnector")))
+  testthat::expect_true(inherits(items$ADTTE, "Dataset"))
+
+  testthat::expect_equal(items$ADSL$get_pull_callable()$get_call(), "radsl(N = 1)")
+  testthat::expect_equal(items$ADAE$get_pull_callable()$get_call(), "radae(ADSL = ADSL)")
+  testthat::expect_equal(items$ADVS$get_pull_callable()$get_call(), "radvs(ADSL = ADSL)")
+  testthat::expect_equal(items$ADLB$get_pull_callable()$get_call(), "radlb(ADSL = ADSL)")
+  testthat::expect_equal(
+    items$ADSAMP$get_pull_callable()$get_call(),
+    "source(file = \"delayed_data_script/asdamp_with_adsl.R\", local = TRUE)$value"
+  )
+  testthat::expect_identical(adtte$get_raw_data, items$ADTTE$get_raw_data)
+
+  testthat::expect_equal(
+    get_code(data, "ADSL"),
+    "library(package = \"random.cdisc.data\")\nADSL <- radsl(N = 1)"
+  )
+  testthat::expect_equal(
+    get_code(data, "ADAE"),
+    "library(package = \"random.cdisc.data\")\nADSL <- radsl(N = 1)\nADAE <- radae(ADSL = ADSL)"
+  )
+  testthat::expect_equal(
+    get_code(data, "ADVS"),
+    "library(package = \"random.cdisc.data\")\nADSL <- radsl(N = 1)\nADVS <- radvs(ADSL = ADSL)"
+  )
+  testthat::expect_equal(
+    get_code(data, "ADLB"),
+    "library(package = \"random.cdisc.data\")\nADSL <- radsl(N = 1)\nADLB <- radlb(ADSL = ADSL)"
+  )
+  testthat::expect_equal(
+    get_code(data, "ADSAMP"),
+    "library(package = \"random.cdisc.data\")\nADSL <- radsl(N = 1)\nADVS <- radvs(ADSL = ADSL)\nADSAMP <- source(file = \"delayed_data_script/asdamp_with_adsl.R\", local = TRUE)$value" # nolint
+  )
+  testthat::expect_equal(
+    get_code(data, "ADTTE"),
+    "library(package = \"random.cdisc.data\")\nADTTE <- radtte(cached = TRUE)"
+  )
+
+  # can the shiny app be initialized without error?
+  mods <- teal:::get_dummy_modules()
+  testthat::expect_message(
+    init(data = data, modules = mods)
+  )
+})

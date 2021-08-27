@@ -49,12 +49,58 @@ call_extract_array <- function(dataname = ".", row = NULL, column = NULL, aisle 
     pdeparse(aisle, width.cutoff = 500L)
   }
 
-  as.call(
-    parse(
-      text = sprintf("%s[%s, %s, %s]", dataname, row, column, aisle)
-    )
+  parse(
+    text = sprintf("%s[%s, %s, %s]", dataname, row, column, aisle)
   )[[1]]
 }
+
+#' Get call to subset and select matrix
+#'
+#' Get call to subset and select matrix
+#' @param dataname (`character(1)` or `name`)\cr
+#' @param row (`character(1)` or `call`)\cr
+#'   optional, name of the `row` or condition
+#' @param column (`character(1)` or `call`)\cr
+#'   optional, name of the `column` or condition
+#' @return `[` call with all conditions included
+#' @examples
+#' teal:::call_extract_matrix(
+#'   dataname = "my_array",
+#'   row = teal:::call_condition_choice("my_array$SEX", "M"),
+#'   column = call("c", "SEX", "AGE")
+#' )
+#' teal:::call_extract_matrix(
+#'   "mae_object",
+#'   column = teal:::call_condition_choice("SEX", "M")
+#' )
+#' @return specific \code{\link[base]{Extract}} `call`
+call_extract_matrix <- function(dataname = ".", row = NULL, column = NULL) {
+  stopifnot(is.character(dataname) || is.name(dataname))
+  stopifnot(is.null(row) || is.call(row) || is.character(row) || is.name(row))
+  stopifnot(is.null(column) || is.call(column) || is.character(column) || is.name(column))
+
+  if (missing(dataname)) {
+    dataname <- as.name(".")
+  } else if (is.name(dataname)) {
+    dataname <-  pdeparse(dataname)
+  }
+
+  row <- if (is.null(row)) {
+    ""
+  } else {
+    pdeparse(row, width.cutoff = 500L)
+  }
+  column <- if (is.null(column)) {
+    ""
+  } else {
+    pdeparse(column, width.cutoff = 500L)
+  }
+
+  parse(
+    text = sprintf("%s[%s, %s]", dataname, row, column)
+  )[[1]]
+}
+
 
 #' Compose extract call with `$` operator
 #'
@@ -108,14 +154,21 @@ call_extract_list <- function(dataname, varname, dollar = TRUE) {
 #'   calls = list(
 #'     teal:::call_condition_choice("SEX", "F"),
 #'     teal:::call_condition_range("AGE", c(20, 50)),
-#'     teal:::call_condition_choice("ARM", "ARM: A")
+#'     teal:::call_condition_choice("ARM", "ARM: A"),
+#'     TRUE
 #'   )
 #' )
 #' @return a combined `call`
 calls_combine_by <- function(operator, calls) {
   stopifnot(is_character_single(operator))
   stopifnot(
-    is_class_list(class_name = "language")(calls)
+    all(
+      vapply(
+        X = calls,
+        FUN.VALUE = logical(1),
+        function(x) is.language(x) || is.logical(x)
+      )
+    )
   )
 
   Reduce(
@@ -270,7 +323,7 @@ call_condition_range_posixct <- function(varname, range, timezone = Sys.timezone
   call(
     "&",
     call(">=", varname, call("as.POSIXct", range[1], tz = timezone)),
-    call("<=", varname, call("as.POSIXct", range[2], tz = timezone))
+    call("<", varname, call("as.POSIXct", range[2], tz = timezone))
   )
 }
 

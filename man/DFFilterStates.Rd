@@ -2,17 +2,17 @@
 % Please edit documentation in R/FilterStates.R
 \name{DFFilterStates}
 \alias{DFFilterStates}
-\title{Initialize \code{DFFilterStates} object}
+\title{Initializes \code{DFFilterStates} object}
 \description{
-Initialize \code{DFFilterStates} object
+Initializes \code{DFFilterStates} object
 
-Initialize \code{DFFilterStates} object
+Initializes \code{DFFilterStates} object
 }
 \details{
-Initialize \code{DFFilterStates} object by setting \code{input_dataname},
-\code{output_dataname} and initializing \code{ReactiveQueue}. This class contains
+Initializes \code{DFFilterStates} object by setting \code{input_dataname},
+\code{output_dataname} and initializing \code{ReactiveQueue}. This class contains a
 single \code{ReactiveQueue} with no specified name which means that
-when calling function associated to this class (\code{dplyr::filter}), a list of
+when calling the function associated to this class (\code{dplyr::filter}), a list of
 conditions are passed to unnamed arguments (\code{...}).
 }
 \section{Super class}{
@@ -72,9 +72,6 @@ Get function name
 
 Get function name used to create filter call.
 For \code{DFFilterStates} \code{dplyr::filter} is used}
-
-\item{\code{data}}{(\code{data.frame})\cr
-R object which \code{dplyr::filter} function is applied on.}
 }
 \if{html}{\out{</div>}}
 }
