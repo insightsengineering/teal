@@ -9,7 +9,7 @@ test_that("Test Dataset is_pulled", {
 
 test_that("Test DatasetConnector is_pulled", {
   iris <- DatasetConnector$new(dataname = "iris", CallableFunction$new(function() head(iris)))
-  expect_false(is_pulled(iris))
+  testthat::expect_false(is_pulled(iris))
 
   load_dataset(iris)
   testthat::expect_true(is_pulled(iris))

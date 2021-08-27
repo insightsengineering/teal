@@ -20,8 +20,8 @@ filtered_data_set(data, ds)
 
 test_that("load and set_datasets", {
   expect_silent({
-    expect_equal(ds$get_data("ADSL", filtered = FALSE), adsl)
-    expect_equal(ds$get_data("ADAE", filtered = FALSE), adae)
+    testthat::expect_equal(ds$get_data("ADSL", filtered = FALSE), adsl)
+    testthat::expect_equal(ds$get_data("ADAE", filtered = FALSE), adae)
   })
   expect_setequal(ds$datanames(), c("ADSL", "ADAE"))
 })
