@@ -15,6 +15,7 @@
 * Implemented delayed functionality to the mutate method of the `Dataset` and `DatasetConnector` objects.
 * Redesigned variable filter labels in `Active Filter Variables` panel.
 * Modified `teal_data` to return a `CDISCData` object whenever any of its arguments is a type of `CDISCData` object.
+* Updated `Active Filter Summary` to show information of MAE datasets and their experiments.
 
 ### Miscellaneous
 * Added a method `get_hash` to the `Dataset` class returning the MD5 hash of the object stored inside the `Dataset` object.
