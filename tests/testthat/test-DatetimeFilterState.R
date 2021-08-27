@@ -24,8 +24,8 @@ testthat::test_that("get_call returns a condition true for the object in the sel
   testthat::expect_equal(
     isolate(filter_state$get_call()),
     bquote(
-      test >= as.POSIXct(.(as.character(test_sys_tz[2])), tz = .(Sys.timezone())) &
-      test < as.POSIXct(.(as.character(test_sys_tz[4])), tz = .(Sys.timezone()))
+      test >= as.POSIXct(.(as.character(test[2])), tz = .(Sys.timezone())) &
+      test < as.POSIXct(.(as.character(test[4])), tz = .(Sys.timezone()))
     )
   )
 })
