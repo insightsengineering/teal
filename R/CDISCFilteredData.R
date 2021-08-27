@@ -202,13 +202,10 @@ CDISCFilteredData <- R6::R6Class( # nolint
     # this is a reactive and kept as a field for caching
     ordered_datanames = NULL,
 
-    join_keys = NULL,
-
     validate = function() {
       stopifnot(
         setequal(private$ordered_datanames, names(private$dataset_filters)),
       )
-      stopifnot(is.null(join_keys))
       super$validate()
     }
   )
