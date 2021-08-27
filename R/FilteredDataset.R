@@ -430,8 +430,10 @@ DefaultFilteredDataset <- R6::R6Class( # nolint
     #' Initializes this `DefaultFilteredDataset` object
     #'
     #' @param dataset (`Dataset`)\cr
-    #'  single dataset for which filters are rendered
-    initialize = function(dataset) {
+    #'  the single dataset for which filters are rendered
+    #' @param join_keys (`list`)\cr
+    #'  the keys to join this `dataset` with the other
+    initialize = function(dataset, join_keys) {
       stopifnot(is(dataset, "Dataset"))
       super$initialize(dataset)
       dataname <- get_dataname(dataset)

@@ -341,10 +341,12 @@ FilteredData <- R6::R6Class( # nolint
     #' Technically `set_dataset` created `FilteredDataset` which keeps
     #' `dataset` for filtering purpose.
     #'
-    #' @param dataset (`Dataset`)\cr
-    #'   object containing data and attributes.
-    #' @return (`self`) object of this class
-    set_dataset = function(dataset) {
+    #' @param dataset (`Dataset` or `DatasetConnector`)\cr
+    #'   the object containing data and attributes.
+    #' @param join_key_set (`JoinKeySet`)\cr
+    #'   the keys to merge this `dataset` to the other datasets
+    #' @return (`self`) invisibly this FilteredData
+    set_dataset = function(dataset, join_key_set = NULL) {
       stopifnot(is(dataset, "Dataset") || is(dataset, "DatasetConnector"))
       dataname <- get_dataname(dataset)
       # to include it nicely in the Show R Code; the UI also uses datanames in ids, so no whitespaces allowed
@@ -365,6 +367,16 @@ FilteredData <- R6::R6Class( # nolint
     set_code = function(code) {
       stopifnot(inherits(code, "CodeClass"))
       private$code <- code
+      invisible(self)
+    },
+
+    #' @description
+    #' Sets join keys object
+    #' @param x (`JoinKeys`)
+    #' @return (`self`) invisibly for chaining
+    set_join_keys = function(x) {
+      stopifnot(is(x, "JoinKeys"))
+      private$join_keys <- x
       invisible(self)
     },
 

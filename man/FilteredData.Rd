@@ -514,13 +514,16 @@ Technically \code{set_dataset} created \code{FilteredDataset} which keeps
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{dataset}}{(\code{Dataset})\cr
-object containing data and attributes.}
+\item{\code{dataset}}{(\code{Dataset} or \code{DatasetConnector})\cr
+the object containing data and attributes.}
+
+\item{\code{join_key_set}}{(\code{JoinKeySet})\cr
+the keys to merge this \code{dataset} to the other datasets}
 }
 \if{html}{\out{</div>}}
 }
 \subsection{Returns}{
-(\code{self}) object of this class
+(\code{self}) invisibly this FilteredData
 }
 }
 \if{html}{\out{<hr>}}
@@ -542,6 +545,26 @@ unfiltered datasets}
 }
 \subsection{Returns}{
 (\code{self})
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-set_join_keys"></a>}}
+\if{latex}{\out{\hypertarget{method-set_join_keys}{}}}
+\subsection{Method \code{set_join_keys()}}{
+Sets join keys object
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{FilteredData$set_join_keys(x)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{x}}{(\code{JoinKeys})}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Returns}{
+(\code{self}) invisibly for chaining
 }
 }
 \if{html}{\out{<hr>}}

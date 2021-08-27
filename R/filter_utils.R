@@ -323,7 +323,7 @@ call_condition_range_posixct <- function(varname, range, timezone = Sys.timezone
   call(
     "&",
     call(">=", varname, call("as.POSIXct", range[1], tz = timezone)),
-    call("<=", varname, call("as.POSIXct", range[2], tz = timezone))
+    call("<", varname, call("as.POSIXct", range[2], tz = timezone))
   )
 }
 

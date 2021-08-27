@@ -57,7 +57,10 @@ Initializes this \code{DefaultFilteredDataset} object
 \if{html}{\out{<div class="arguments">}}
 \describe{
 \item{\code{dataset}}{(\code{Dataset})\cr
-single dataset for which filters are rendered}
+the single dataset for which filters are rendered}
+
+\item{\code{join_keys}}{(\code{list})\cr
+the keys to join this \code{dataset} with the other}
 }
 \if{html}{\out{</div>}}
 }
