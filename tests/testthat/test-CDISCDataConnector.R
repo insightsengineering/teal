@@ -1,113 +1,144 @@
-library(random.cdisc.data)
-
-# Single rcd_data connector ----
-testthat::test_that("One cached and one dependent connector wrapped in a single rcd data connector", {
-  test.nest::skip_if_too_deep(3)
-  adsl <- rcd_cdisc_dataset_connector("ADSL", radsl, cached = TRUE)
-  adae <- rcd_cdisc_dataset_connector("ADAE", radae, ADSL = adsl)
-  data <- rcd_data(adsl, adae)
+testthat::test_that("get_code returns the correct code for two CDISCDatasetConnector objects", {
+  adsl_cf <- CallableFunction$new(function() as.data.frame(as.list(setNames(nm = get_cdisc_keys("ADSL")))))
+  adae_cf <- CallableFunction$new(function() as.data.frame(as.list(setNames(nm = get_cdisc_keys("ADAE")))))
+  adsl  <- CDISCDatasetConnector$new("ADSL", adsl_cf, keys = get_cdisc_keys("ADSL"), parent = character(0))
+  adae <- CDISCDatasetConnector$new("ADAE", adae_cf, keys = get_cdisc_keys("ADAE"), parent = "ADSL")
+  data <- CDISCDataConnector$new(
+    connection = DataConnection$new(open_fun = CallableFunction$new(function() "open function")),
+    connectors = list(adsl, adae)
+  )
 
   items <- data$get_items()
   testthat::expect_true(inherits(data, "RelationalDataConnector"))
   testthat::expect_true(all(vapply(items, inherits, logical(1), "DatasetConnector")))
 
-  testthat::expect_equal(items$ADSL$get_code(), "ADSL <- radsl(cached = TRUE)")
-  testthat::expect_equal(items$ADAE$get_code(), "ADSL <- radsl(cached = TRUE)\nADAE <- radae(ADSL = ADSL)")
+  testthat::expect_equal(
+    items$ADSL$get_code(),
+    "ADSL <- (function() as.data.frame(as.list(setNames(nm = get_cdisc_keys(\"ADSL\")))))()"
+  )
+  testthat::expect_equal(
+    items$ADAE$get_code(),
+    "ADAE <- (function() as.data.frame(as.list(setNames(nm = get_cdisc_keys(\"ADAE\")))))()"
+  )
   data$pull()
 
   testthat::expect_equal(
-    get_code(data, "ADSL"), "library(package = \"random.cdisc.data\")\nADSL <- radsl(cached = TRUE)"
+    get_code(data, "ADSL"),
+    paste(
+      "(function() \"open function\")()",
+      "ADSL <- (function() as.data.frame(as.list(setNames(nm = get_cdisc_keys(\"ADSL\")))))()",
+      sep = "\n"
+    )
   )
   testthat::expect_equal(
     get_code(data, "ADAE"),
-    "library(package = \"random.cdisc.data\")\nADSL <- radsl(cached = TRUE)\nADAE <- radae(ADSL = ADSL)"
+    paste(
+      "(function() \"open function\")()",
+      "ADAE <- (function() as.data.frame(as.list(setNames(nm = get_cdisc_keys(\"ADAE\")))))()",
+      sep = "\n"
+    )
   )
   testthat::expect_equal(
-    get_code(data), "library(package = \"random.cdisc.data\")\nADSL <- radsl(cached = TRUE)\nADAE <- radae(ADSL = ADSL)"
+    get_code(data),
+    paste(
+      "(function() \"open function\")()",
+      "ADSL <- (function() as.data.frame(as.list(setNames(nm = get_cdisc_keys(\"ADSL\")))))()",
+      "ADAE <- (function() as.data.frame(as.list(setNames(nm = get_cdisc_keys(\"ADAE\")))))()",
+      sep = "\n"
+    )
   )
 })
 
 
-# RelationalDataConnector with custom UI and server ----
+# RelationalDataConnector with custom UI and server ----Ś
 testthat::test_that("RelationalDataConnector with custom UI and server", {
-  test.nest::skip_if_too_deep(3)
-  adsl <- rcd_cdisc_dataset_connector("ADSL", radsl, cached = TRUE)
-  adlb <- rcd_cdisc_dataset_connector("ADLB", radlb, ADSL = adsl)
-  con <- teal:::rcd_connection()
-  x <- teal:::RelationalDataConnector$new(connection = con, connectors = list(adsl, adlb))
+  adsl_cf <- CallableFunction$new(function(test) {
+    test
+    as.data.frame(as.list(setNames(nm = get_cdisc_keys("ADSL"))))
+  })
+  adsl  <- CDISCDatasetConnector$new("ADSL", adsl_cf, keys = get_cdisc_keys("ADSL"), parent = character(0))
+  con <- DataConnection$new(open_fun = CallableFunction$new(function() "open function"))
+  cdisc_data_connector <- CDISCDataConnector$new(connection = con, connectors = list(adsl))
 
-  items <- x$get_items()
-  testthat::expect_true(inherits(x, "RelationalDataConnector"))
+  items <- cdisc_data_connector$get_items()
+  testthat::expect_true(inherits(cdisc_data_connector, "RelationalDataConnector"))
   testthat::expect_true(all(vapply(items, inherits, logical(1), "DatasetConnector")))
 
-  testthat::expect_equal(items$ADSL$get_pull_callable()$get_call(), "radsl(cached = TRUE)")
-  testthat::expect_equal(items$ADLB$get_pull_callable()$get_call(), "radlb(ADSL = ADSL)")
+  testthat::expect_equal(
+    items$ADSL$get_pull_callable()$get_call(),
+    paste(
+      "(function(test) {",
+      "    test",
+      "    as.data.frame(as.list(setNames(nm = get_cdisc_keys(\"ADSL\"))))",
+      "})()",
+      sep = "\n"
+    )
+  )
 
   testthat::expect_error(
-    x$get_ui("main-app"),
+    cdisc_data_connector$get_ui("main-app"),
     "No UI set yet"
   )
 
-  x$set_ui(function(id, ...) {
+  cdisc_data_connector$set_ui(function(id, ...) {
     ns <- NS(id)
     tagList(
-      numericInput(ns("seed"), "Choose seed", min = 1, max = 100, value = 1),
-      sliderInput(ns("N"), "Choose number of observations", min = 1, max = 400, value = 10),
-      uiOutput(ns("pull_validate"))
+      numericInput(ns("test"), "Choose test", min = 1, max = 100, value = 1)
     )
   })
 
   testthat::expect_equal(
-    as.character(x$get_ui("main-app")),
+    as.character(cdisc_data_connector$get_ui("main-app")),
     as.character(
       tags$div(
-        h3("Data Connector for:", list(code("ADSL"), code("ADLB"))),
+        h3("Data Connector for:", list(code("ADSL"))),
         tags$div(
           id = "main-app-data_input",
-          numericInput("main-app-data_input-seed", "Choose seed", min = 1, max = 100, value = 1),
-          sliderInput("main-app-data_input-N", "Choose number of observations", min = 1, max = 400, value = 10),
-          tags$div(id = "main-app-data_input-pull_validate", class = "shiny-html-output")
+          numericInput("main-app-data_input-test", "Choose test", min = 1, max = 100, value = 1)
         )
       )
     )
   )
 
-  x$set_server(function(input, output, session, connectors, connection) {
-    output$pull_validate <- renderUI({
+  cdisc_data_connector$set_server(function(input, output, session, connectors, connection) {
       raw_datasets <- lapply(connectors, function(connector) {
-        if (get_dataname(connector) == "ADSL") {
-          set_args(connector, args = list(seed = input$seed, N = input$N))
-        } else {
-          set_args(connector, args = list(seed = input$seed))
-        }
+        set_args(connector, args(test = input$test))
         connector$pull(try = TRUE)
 
         get_raw_data(connector)
       })
-      validate(need(nrow(raw_datasets[[1]]) > 100, "ADSL needs more than 100 observations"))
-      NULL
-    })
   })
-  set_server <- x$get_server()
+  set_server <- cdisc_data_connector$get_server()
   testthat::expect_false(is.null(set_server))
 
-  testthat::expect_error(get_datasets(x), regexp = "Not all datasets have been pulled yet")
-  x$pull()
-  testthat::expect_true(is_pulled(x))
+  testthat::expect_error(get_datasets(cdisc_data_connector), regexp = "Not all datasets have been pulled yet")
+  cdisc_data_connector$set_pull_args(args = list(test = 7))
+  cdisc_data_connector$pull()
+  testthat::expect_true(is_pulled(cdisc_data_connector))
 
-  datasets <- get_datasets(x)
+  datasets <- get_datasets(cdisc_data_connector)
   testthat::expect_true(all(vapply(datasets, inherits, logical(1), "Dataset")))
 
   testthat::expect_equal(
-    get_code(x, "ADSL"),
-    "library(package = \"random.cdisc.data\")\nADSL <- radsl(cached = TRUE)"
+    get_code(cdisc_data_connector, "ADSL"),
+    paste(
+      "(function() \"open function\")()",
+      "ADSL <- (function(test) {",
+      "    test",
+      "    as.data.frame(as.list(setNames(nm = get_cdisc_keys(\"ADSL\"))))",
+      "})(test = 7)",
+      sep = "\n"
+    )
   )
   testthat::expect_equal(
-    get_code(x, "ADLB"),
-    "library(package = \"random.cdisc.data\")\nADSL <- radsl(cached = TRUE)\nADLB <- radlb(ADSL = ADSL)"
-  )
-  testthat::expect_equal(
-    get_code(x),
-    "library(package = \"random.cdisc.data\")\nADSL <- radsl(cached = TRUE)\nADLB <- radlb(ADSL = ADSL)"
+    get_code(cdisc_data_connector),
+    paste(
+      "(function() \"open function\")()",
+      "ADSL <- (function(test) {",
+      "    test",
+      "    as.data.frame(as.list(setNames(nm = get_cdisc_keys(\"ADSL\"))))",
+      "})(test = 7)",
+      sep = "\n"
+    )
   )
 })
