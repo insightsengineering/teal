@@ -109,7 +109,6 @@ isolate(datasets$get_call("mtcars"))
 \item \href{#method-get_filtered_datasets}{\code{FilteredData$get_filtered_datasets()}}
 \item \href{#method-get_data}{\code{FilteredData$get_data()}}
 \item \href{#method-get_data_attr}{\code{FilteredData$get_data_attr()}}
-\item \href{#method-get_data_info}{\code{FilteredData$get_data_info()}}
 \item \href{#method-get_join_keys}{\code{FilteredData$get_join_keys()}}
 \item \href{#method-get_filter_overview}{\code{FilteredData$get_filter_overview()}}
 \item \href{#method-get_keys}{\code{FilteredData$get_keys()}}
@@ -339,29 +338,6 @@ as attributes.
 }
 \subsection{Returns}{
 value of attribute, may be \code{NULL} if it does not exist
-}
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-get_data_info"></a>}}
-\if{latex}{\out{\hypertarget{method-get_data_info}{}}}
-\subsection{Method \code{get_data_info()}}{
-Get info about dataname, i.e. number of rows
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{FilteredData$get_data_info(dataname, filtered)}\if{html}{\out{</div>}}
-}
-
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{dataname}}{(\code{character}) name of the dataset}
-
-\item{\code{filtered}}{\code{logical} whether to obtain this info for the
-filtered dataset}
-}
-\if{html}{\out{</div>}}
-}
-\subsection{Returns}{
-a named vector
 }
 }
 \if{html}{\out{<hr>}}

@@ -216,21 +216,6 @@ FilteredData <- R6::R6Class( # nolint
     },
 
     #' @description
-    #' Get info about dataname, i.e. number of rows
-    #'
-    #' @param dataname (`character`) name of the dataset
-    #' @param filtered `logical` whether to obtain this info for the
-    #'   filtered dataset
-    #' @return a named vector
-    get_data_info = function(dataname, filtered) {
-      private$check_data_varname_exists(dataname)
-      stopifnot(is_logical_single(filtered))
-      list(
-        Rows = self$get_filtered_datasets(dataname)$get_data_info(filtered = filtered)
-      )
-    },
-
-    #' @description
     #' Get join keys between two datasets.
     #' @param dataset_1 (`character`) one dataset name
     #' @param dataset_2 (`character`) other dataset name
