@@ -131,3 +131,8 @@ currently not used, instead one can click anywhere in the element to move it
 
   content: attr(data-label);
 }
+
+
+.dataTables_wrapper {
+    overflow: auto;
+}
