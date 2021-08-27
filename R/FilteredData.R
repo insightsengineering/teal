@@ -249,7 +249,7 @@ FilteredData <- R6::R6Class( # nolint
       } else {
         res_list <- lapply(
           self$datanames(), function(dat_name) {
-            self$get_filtered_datasets(dat_name)$get_join_keys()[[dat_name]]
+            self$get_filtered_datasets(dat_name)$get_join_keys()
           }
         )
         names(res_list) <- self$datanames()
