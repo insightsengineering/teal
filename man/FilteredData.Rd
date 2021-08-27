@@ -52,10 +52,10 @@ isolate({
 
 isolate({
   datasets$datanames()
-  datasets$get_data_info("iris", filtered = FALSE)
+  datasets$get_filter_overview("iris")
 
   # filters dataset to obtain information
-  datasets$get_data_info("mtcars", filtered = TRUE)
+  datasets$get_filter_overview("mtcars")
 
   print(datasets$get_call("iris"))
   print(datasets$get_call("mtcars"))
@@ -108,9 +108,8 @@ isolate(datasets$get_call("mtcars"))
 \item \href{#method-get_filtered_datasets}{\code{FilteredData$get_filtered_datasets()}}
 \item \href{#method-get_data}{\code{FilteredData$get_data()}}
 \item \href{#method-get_data_attr}{\code{FilteredData$get_data_attr()}}
-\item \href{#method-get_data_info}{\code{FilteredData$get_data_info()}}
+\item \href{#method-get_filter_overview}{\code{FilteredData$get_filter_overview()}}
 \item \href{#method-get_join_keys}{\code{FilteredData$get_join_keys()}}
-\item \href{#method-get_filter_overview_tbl}{\code{FilteredData$get_filter_overview_tbl()}}
 \item \href{#method-get_keys}{\code{FilteredData$get_keys()}}
 \item \href{#method-get_varlabels}{\code{FilteredData$get_varlabels()}}
 \item \href{#method-get_varnames}{\code{FilteredData$get_varnames()}}
@@ -342,26 +341,26 @@ value of attribute, may be \code{NULL} if it does not exist
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-get_data_info"></a>}}
-\if{latex}{\out{\hypertarget{method-get_data_info}{}}}
-\subsection{Method \code{get_data_info()}}{
-Get info about dataname, i.e. number of rows
+\if{html}{\out{<a id="method-get_filter_overview"></a>}}
+\if{latex}{\out{\hypertarget{method-get_filter_overview}{}}}
+\subsection{Method \code{get_filter_overview()}}{
+Get filter overview table in form of X (filtered) / Y (non-filtered)
+
+This is intended to be presented in the application.
+The content for each of the data names is defined in \code{get_filter_overview_info} method.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{FilteredData$get_data_info(dataname, filtered)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{FilteredData$get_filter_overview(datanames)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{dataname}}{(\code{character}) name of the dataset}
-
-\item{\code{filtered}}{\code{logical} whether to obtain this info for the
-filtered dataset}
+\item{\code{datanames}}{(\code{character} vector) names of the dataset}
 }
 \if{html}{\out{</div>}}
 }
 \subsection{Returns}{
-a named vector
+(\code{matrix}) matrix of observations and subjects of all datasets
 }
 }
 \if{html}{\out{<hr>}}
@@ -384,29 +383,6 @@ Get join keys between two datasets.
 }
 \subsection{Returns}{
 (\verb{named character}) vector with column names
-}
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-get_filter_overview_tbl"></a>}}
-\if{latex}{\out{\hypertarget{method-get_filter_overview_tbl}{}}}
-\subsection{Method \code{get_filter_overview_tbl()}}{
-Get filter overview table in form of X (filtered) / Y (non-filtered)
-
-This is intended to be presented in the application.
-The content for each of the data names is defined in \code{get_data_info} method.
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{FilteredData$get_filter_overview_tbl(datanames)}\if{html}{\out{</div>}}
-}
-
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{datanames}}{(\code{character} vector) names of the dataset}
-}
-\if{html}{\out{</div>}}
-}
-\subsection{Returns}{
-(\code{data.frame})
 Get keys for the dataset
 }
 }

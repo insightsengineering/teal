@@ -16,7 +16,7 @@
 \itemize{
 \item \href{#method-new}{\code{MAEFilteredDataset$new()}}
 \item \href{#method-get_call}{\code{MAEFilteredDataset$get_call()}}
-\item \href{#method-get_data_info}{\code{MAEFilteredDataset$get_data_info()}}
+\item \href{#method-get_filter_overview_info}{\code{MAEFilteredDataset$get_filter_overview_info()}}
 \item \href{#method-set_bookmark_state}{\code{MAEFilteredDataset$set_bookmark_state()}}
 \item \href{#method-ui_add_filter_state}{\code{MAEFilteredDataset$ui_add_filter_state()}}
 \item \href{#method-srv_add_filter_state}{\code{MAEFilteredDataset$srv_add_filter_state()}}
@@ -36,7 +36,6 @@
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="FilteredDataset" data-id="get_hash">}\href{../../teal/html/FilteredDataset.html#method-get_hash}{\code{teal::FilteredDataset$get_hash()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="FilteredDataset" data-id="get_join_keys">}\href{../../teal/html/FilteredDataset.html#method-get_join_keys}{\code{teal::FilteredDataset$get_join_keys()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="FilteredDataset" data-id="get_keys">}\href{../../teal/html/FilteredDataset.html#method-get_keys}{\code{teal::FilteredDataset$get_keys()}}\out{</span>}
-\item \out{<span class="pkg-link" data-pkg="teal" data-topic="FilteredDataset" data-id="get_subjects_info">}\href{../../teal/html/FilteredDataset.html#method-get_subjects_info}{\code{teal::FilteredDataset$get_subjects_info()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="FilteredDataset" data-id="get_varlabels">}\href{../../teal/html/FilteredDataset.html#method-get_varlabels}{\code{teal::FilteredDataset$get_varlabels()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="FilteredDataset" data-id="get_varnames">}\href{../../teal/html/FilteredDataset.html#method-get_varnames}{\code{teal::FilteredDataset$get_varnames()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="FilteredDataset" data-id="queues_empty">}\href{../../teal/html/FilteredDataset.html#method-queues_empty}{\code{teal::FilteredDataset$queues_empty()}}\out{</span>}
@@ -91,24 +90,16 @@ filter \code{call} or \code{list} of filter calls
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-get_data_info"></a>}}
-\if{latex}{\out{\hypertarget{method-get_data_info}{}}}
-\subsection{Method \code{get_data_info()}}{
-Get data info
+\if{html}{\out{<a id="method-get_filter_overview_info"></a>}}
+\if{latex}{\out{\hypertarget{method-get_filter_overview_info}{}}}
+\subsection{Method \code{get_filter_overview_info()}}{
+Get filter overview rows of a dataset
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{MAEFilteredDataset$get_data_info(filtered = FALSE)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{MAEFilteredDataset$get_filter_overview_info()}\if{html}{\out{</div>}}
 }
 
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{filtered}}{(\code{logical(1)})\cr
-whether \code{data.info} should depend on filtered data.}
-}
-\if{html}{\out{</div>}}
-}
 \subsection{Returns}{
-\code{integer(1)} number of rows in \code{colData(data)}
+(\code{matrix}) matrix of observations and subjects
 }
 }
 \if{html}{\out{<hr>}}
