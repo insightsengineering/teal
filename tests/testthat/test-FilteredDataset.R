@@ -46,21 +46,6 @@ testthat::test_that("get_filter_states returns an empty list after initializatio
   testthat::expect_equal(filtered_dataset$get_filter_states(), list())
 })
 
-testthat::test_that("get_data_info(FALSE) returns the number of rows of the unfiltered data", {
-  filtered_dataset <- FilteredDataset$new(
-    dataset = Dataset$new("iris", head(iris))
-  )
-  testthat::expect_equal(filtered_dataset$get_data_info(filtered = FALSE), nrow(head(iris)))
-})
-
-testthat::test_that("get_subjects_info(TRUE) and get_subjects_info(FALSE) return integer(0)", {
-  filtered_dataset <- FilteredDataset$new(
-    dataset = Dataset$new("iris", head(iris))
-  )
-  testthat::expect_equal(filtered_dataset$get_subjects_info(filtered = TRUE), integer(0))
-  testthat::expect_equal(filtered_dataset$get_subjects_info(filtered = FALSE), integer(0))
-})
-
 testthat::test_that("get_dataname returns the name of the Dataset object passed to the constructor", {
   filtered_dataset <- FilteredDataset$new(
     dataset = Dataset$new("iris", head(iris))
@@ -80,11 +65,11 @@ testthat::test_that("get_keys returns the keys of the Dataset object passed to t
   testthat::expect_equal(filtered_dataset$get_keys(), dataset$get_keys())
 })
 
-testthat::test_that("get_join_keys returns the list passed to the constructor", {
+testthat::test_that("get_join_keys returns NULL", {
   filtered_dataset <- FilteredDataset$new(
     dataset = Dataset$new("iris", head(iris))
   )
-  testthat::expect_equal(filtered_dataset$get_join_keys(), list(a = 1))
+  testthat::expect_equal(filtered_dataset$get_join_keys(), NULL)
 })
 
 testthat::test_that("get_varlabels(NULL) returns a named array of NAs if Dataset has no varlabels", {
