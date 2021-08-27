@@ -12,7 +12,7 @@ test_that("Test DatasetConnector is_pulled", {
   expect_false(is_pulled(iris))
 
   load_dataset(iris)
-  expect_true(is_pulled(iris))
+  testthat::expect_true(is_pulled(iris))
 })
 
 test_that("Test RelationalDataConnector is_pulled", {
