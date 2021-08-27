@@ -118,24 +118,26 @@ testthat::test_that("get_call returns a call filtering a data.frame based on a D
 })
 
 testthat::test_that("get_call returns a call filtering a data.frame based on a DatetimeFilterState", {
-  datetime_dataset <- as.data.frame(list(datetime = seq(ISOdate(2021, 8, 25), by = "day", length.out = 3)))
+  datetime_dataset <- data.frame(
+    datetime = seq(ISOdate(2021, 8, 25, tz = Sys.timezone()), by = "day", length.out = 3)
+  )
   filter_states <- FilterStates$new(
     input_dataname = "datetime_dataset",
     output_dataname = "datetime_output",
     datalabel = "label"
   )
   filter_states$queue_initialize(list(ReactiveQueue$new()))
-  datetime_filter <- DatetimeFilterState$new(x = c(ISOdate(2021, 8, 27)), varname = "datetime")
+  datetime_filter <- DatetimeFilterState$new(x = ISOdate(2021, 8, 27, tz = Sys.timezone()), varname = "datetime")
   filter_states$queue_push(queue_index = 1, x = datetime_filter, element_id = "test")
   eval(isolate(filter_states$get_call()))
   testthat::expect_equal(datetime_output, datetime_dataset[c(3), , drop = FALSE])
   testthat::expect_equal(
     isolate(filter_states$get_call()),
-    quote(
+    bquote(
       datetime_output <- subset(
         datetime_dataset,
-        datetime >= as.POSIXct("2021-08-27 12:00:00", tz = "Etc/UTC") &
-          datetime <= as.POSIXct("2021-08-27 12:00:01", tz = "Etc/UTC")
+        datetime >= as.POSIXct("2021-08-27 12:00:00", tz = .(Sys.timezone())) &
+          datetime <= as.POSIXct("2021-08-27 12:00:01", tz = .(Sys.timezone()))
       )
     )
   )
