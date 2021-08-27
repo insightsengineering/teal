@@ -48,7 +48,7 @@
 \if{html}{\out{<a id="method-new"></a>}}
 \if{latex}{\out{\hypertarget{method-new}{}}}
 \subsection{Method \code{new()}}{
-Initialize \code{DefaultFilteredDataset} object
+Initializes this \code{DefaultFilteredDataset} object
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{DefaultFilteredDataset$new(dataset)}\if{html}{\out{</div>}}
 }
@@ -66,7 +66,7 @@ single dataset for which filters are rendered}
 \if{html}{\out{<a id="method-get_call"></a>}}
 \if{latex}{\out{\hypertarget{method-get_call}{}}}
 \subsection{Method \code{get_call()}}{
-Get filter expression
+Gets the filter expression
 
 This functions returns filter calls equivalent to selected items
 within each of \code{filter_states}. Configuration of the calls is constant and
@@ -99,6 +99,9 @@ containing values of the initial filter. Values should be relevant
 to the referred column.}
 }
 \if{html}{\out{</div>}}
+}
+\subsection{Returns}{
+invisibly \code{NULL}
 }
 }
 \if{html}{\out{<hr>}}

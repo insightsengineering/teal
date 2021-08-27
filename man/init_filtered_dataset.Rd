@@ -2,7 +2,7 @@
 % Please edit documentation in R/FilteredDataset.R
 \name{init_filtered_dataset}
 \alias{init_filtered_dataset}
-\title{Initialize \code{FilteredDataset}}
+\title{Initializes \code{FilteredDataset}}
 \usage{
 init_filtered_dataset(dataset)
 }

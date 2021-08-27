@@ -69,7 +69,7 @@
 #'   ADTTE$PARAMCD,
 #'   varname = "PARAMCD",
 #'   input_dataname = as.name("ADTTE"),
-#'   use_dataname = TRUE
+#'   extract_type = "list"
 #' )
 #' filter_state_adtte$set_selected("OS")
 #'
@@ -83,7 +83,7 @@
 #'   ADSL$SEX,
 #'   varname = "SEX",
 #'   input_dataname = as.name("SEX"),
-#'   use_dataname = TRUE
+#'   extract_type = "list"
 #' )
 #' filter_state_adsl$set_selected("F")
 #'

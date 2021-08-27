@@ -1,4 +1,4 @@
-#' Initialize `FilteredDataset`
+#' Initializes `FilteredDataset`
 #'
 #' `FilteredDataset` contains `Dataset`
 #' @param dataset (`Dataset`)\cr
@@ -79,7 +79,7 @@ FilteredDataset <- R6::R6Class( # nolint
   ## __Public Methods ====
   public = list(
     #' @description
-    #' Initialize `FilteredDataset` object
+    #' Initializes this `FilteredDataset` object
     #'
     #' @param dataset (`Dataset`)\cr
     #'  single dataset for which filters are rendered
@@ -104,44 +104,46 @@ FilteredDataset <- R6::R6Class( # nolint
         get(x = self$get_filtered_dataname(), envir = env)
       })
 
-      return(invisible(self))
+      invisible(self)
     },
 
     #' @description
-    #' Add objects to the filter call evaluation environment
+    #' Adds objects to the filter call evaluation environment
     #' @param name (`character`) object name
     #' @param value object value
+    #' @return invisibly this FilteredDataset
     add_to_eval_env = function(name, value) {
       stopifnot(is_character_single(name))
       private$eval_env <- c(private$eval_env, setNames(value, name))
-      return(invisible(self))
+      invisible(self)
     },
 
 
     #' @description
     #' Removes all active filter items applied to this dataset
+    #' @return NULL
     queues_empty = function() {
       lapply(
         self$get_filter_states(),
         function(queue) queue$queue_empty()
       )
-      return(NULL)
+      NULL
     },
 
     # getters ----
     #' @description
-    #' Get filter expression
+    #' Gets a filter expression
     #'
     #' This functions returns filter calls equivalent to selected items
     #' within each of `filter_states`. Configuration of the calls is constant and
     #' depends on `filter_states` type and order which are set during initialization.
     #' @return filter `call` or `list` of filter calls
     get_call = function() {
-      stop("Abstract class method")
+      stop("Pure virtual method.")
     },
 
     #' @description
-    #' Get raw data of this dataset
+    #' Gets raw data of this dataset
     #' @param filtered (`logical(1)`)\cr
     #'   whether returned data should be filtered or not
     #' @return type of returned object depending on a data stored in
@@ -155,16 +157,16 @@ FilteredDataset <- R6::R6Class( # nolint
     },
 
     #' @description
-    #' Get reactive object which returns filtered data
+    #' Gets the reactive object which returns filtered data
     #' @return (`reactive`)
     get_data_reactive = function() {
       private$reactive_data
     },
 
     #' @description
-    #' Get filter states
+    #' Gets the filter states
     #' @param id (`character(1)`, `character(0)`)\cr
-    #'   id of the `private$filter_states` list element where `FilterStates` is kept.
+    #'   the id of the `private$filter_states` list element where `FilterStates` is kept.
     #' @return `FilterStates` or `list` of `FilterStates` objects.
     get_filter_states = function(id = character(0)) {
       if (is_empty(id)) {
@@ -184,7 +186,7 @@ FilteredDataset <- R6::R6Class( # nolint
     },
 
     #' @description
-    #' Get dataset
+    #' Gets the dataset in this FilteredDataset
     #' @return `Dataset`
     get_dataset = function() {
       private$dataset
@@ -203,26 +205,27 @@ FilteredDataset <- R6::R6Class( # nolint
 
     #' @description
     #' Returns the hash of the unfiltered dataset
-    #' @return (`character(1)`)
+    #' @return (`character(1)`) the hash
     get_hash = function() {
       private$dataset$get_hash()
     },
 
     #' @description
-    #' Get keys for the dataset
-    #' @return (`character`) keys of dataset
+    #' Gets the keys for the dataset of this FilteredDataset
+    #' @return (`character`) the keys of dataset
     get_keys = function() {
       self$get_dataset()$get_keys()
     },
 
-    #' Get join keys to join this dataset with others
+    #' Gets join keys to join the dataset of this FilteredDataset
+    #' with other Dataset objects.
     #' @return `list` of keys
     get_join_keys = function() {
       private$dataset$get_join_keys()$get(self$get_dataname())
     },
 
     #' @description
-    #' Get labels of variables in the data
+    #' Gets labels of variables in the data
     #'
     #' Variables are the column names of the data.
     #' Either, all labels must have been provided for all variables
@@ -239,28 +242,19 @@ FilteredDataset <- R6::R6Class( # nolint
       if (is.null(labels)) {
         return(NULL)
       }
-
-      if (!is.null(variables)) {
-        check_in_subset(
-          variables,
-          self$get_varnames(),
-          pre_msg = sprintf("Variables do not exist in data %s:", self$get_dataname())
-        ) # otherwise, NA values will be added (also as names)
-        labels <- labels[variables]
-      }
-
-      return(labels)
+      if (!is.null(variables)) labels <- labels[intersect(self$get_varnames(), variables)]
+      labels
     },
 
     #' @description
-    #' Get variable names from dataset
-    #' @return `character`
+    #' Gets variable names from dataset
+    #' @return `character` the variable names
     get_varnames = function() {
       colnames(self$get_data(filtered = FALSE))
     },
 
     #' @description
-    #' Get suffixed dataname
+    #' Gets the suffixed dataname
     #' Used when filtering the data to get `<dataname>_FILTERED`,
     #' `<dataname>_FILTERED_ALONE` or any other name.
     #' @param dataname (`character(1)`) dataname
@@ -271,13 +265,13 @@ FilteredDataset <- R6::R6Class( # nolint
     },
 
     #' @description
-    #' Set bookmark state
+    #' Sets the bookmark state
     #'
     #' @param state (`named list`)\cr
     #'  containing values of the initial filter. Values should be relevant
     #'  to the referred column.
     set_bookmark_state = function(state) {
-      stop("Abstract class")
+      stop("Pure virtual method.")
     },
 
     # modules ------
@@ -367,7 +361,7 @@ FilteredDataset <- R6::R6Class( # nolint
     #'
     #' @return function - shiny UI module
     ui_add_filter_state = function(id) {
-      stop("Abstract class method")
+      stop("Pure virtual method")
     },
 
     #' @description
@@ -379,7 +373,7 @@ FilteredDataset <- R6::R6Class( # nolint
     #' @param session (`shiny`)\cr
     #' @return function - shiny server module
     srv_add_filter_state = function(input, output, session) {
-      stop("Abstract class method")
+      stop("Pure virtual method")
     }
   ),
   ## __Private Fields ====
@@ -433,7 +427,7 @@ DefaultFilteredDataset <- R6::R6Class( # nolint
   public = list(
 
     #' @description
-    #' Initialize `DefaultFilteredDataset` object
+    #' Initializes this `DefaultFilteredDataset` object
     #'
     #' @param dataset (`Dataset`)\cr
     #'  single dataset for which filters are rendered
@@ -452,11 +446,11 @@ DefaultFilteredDataset <- R6::R6Class( # nolint
         ),
         id = "filter"
       )
-      return(invisible(self))
+      invisible(self)
     },
 
     #' @description
-    #' Get filter expression
+    #' Gets the filter expression
     #'
     #' This functions returns filter calls equivalent to selected items
     #' within each of `filter_states`. Configuration of the calls is constant and
@@ -481,6 +475,7 @@ DefaultFilteredDataset <- R6::R6Class( # nolint
     #' @param state (`named list`)\cr
     #'  containing values of the initial filter. Values should be relevant
     #'  to the referred column.
+    #' @return invisibly `NULL`
     set_bookmark_state = function(state) {
       stopifnot(is.list(state))
       data <- self$get_data(filtered = FALSE)
@@ -489,7 +484,7 @@ DefaultFilteredDataset <- R6::R6Class( # nolint
         state = state,
         data = data
       )
-      return(invisible(NULL))
+      invisible(NULL)
     },
 
     #' @description

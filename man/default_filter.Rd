@@ -2,9 +2,12 @@
 % Please edit documentation in R/FilteredData.R
 \name{default_filter}
 \alias{default_filter}
-\title{Refer to the default filter state}
+\title{Refers the default filter state}
 \usage{
 default_filter()
+}
+\value{
+\code{default_filter} a default filter object
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#maturing}{\figure{lifecycle-maturing.svg}{options: alt='[Maturing]'}}}{\strong{[Maturing]}}

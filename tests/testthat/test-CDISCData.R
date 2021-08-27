@@ -150,7 +150,6 @@ test_that("two datasets / datasets code", {
 })
 
 test_that("Duplicated code from datasets is shown", {
-
   adae <- synthetic_cdisc_data("rcd_2021_05_05")$adae
   adsl <- synthetic_cdisc_data("rcd_2021_05_05")$adsl
   some_var <- "TEST"
@@ -711,7 +710,6 @@ test_that("Basic example - with line break code and check", {
 })
 
 test_that("Naming list elements", {
-
   expect_identical(names(get_datasets(cdisc_data(cdisc_dataset("ADSL", ADSL)))), "ADSL")
   expect_identical(
     names(get_datasets(cdisc_data(
@@ -744,7 +742,6 @@ test_that("List values", {
   result_to_compare <- do.call("cdisc_data", datasets)
 
   test_relational_data_equal(result, result_to_compare)
-
 
   result <- cdisc_data(cdisc_dataset("ADSL", ADSL), cdisc_dataset("ADTTE", ADTTE))
 

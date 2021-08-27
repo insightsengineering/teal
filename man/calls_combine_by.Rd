@@ -27,7 +27,8 @@ teal:::calls_combine_by(
   calls = list(
     teal:::call_condition_choice("SEX", "F"),
     teal:::call_condition_range("AGE", c(20, 50)),
-    teal:::call_condition_choice("ARM", "ARM: A")
+    teal:::call_condition_choice("ARM", "ARM: A"),
+    TRUE
   )
 )
 }

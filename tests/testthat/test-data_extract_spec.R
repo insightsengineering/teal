@@ -1,3 +1,5 @@
+library(random.cdisc.data)
+
 test_that("data_extract_spec argument checking", {
   expect_error(
     data_extract_spec("toyDataset", select = NULL),
@@ -199,4 +201,107 @@ test_that("delayed data_extract_spec works", {
   mix3_res$filter <- NULL
   expected_spec$filter <- NULL
   expect_identical(expected_spec, mix3_res)
+})
+
+adsl <- radsl(cached = TRUE)
+adtte <- radtte(cached = TRUE)
+data <- cdisc_data(
+  cdisc_dataset("ADSL", adsl),
+  cdisc_dataset("ADTTE", adtte)
+)
+
+ds <- teal:::CDISCFilteredData$new()
+isolate(filtered_data_set(data, ds))
+
+vc_hard <- variable_choices("ADSL", subset = c("STUDYID", "USUBJID"))
+vc_hard_exp <- structure(
+  list(data = "ADSL", subset = c("STUDYID", "USUBJID"), key = NULL),
+  class = c("delayed_variable_choices", "delayed_data", "choices_labeled")
+)
+
+vc_hard_short <- variable_choices("ADSL", subset = "STUDYID")
+vc_hard_short_exp <- structure(
+  list(data = "ADSL", subset = "STUDYID", key = NULL),
+  class = c("delayed_variable_choices", "delayed_data", "choices_labeled")
+)
+
+vc_fun <- variable_choices("ADSL", subset = function(data) colnames(data)[1:2])
+vc_fun_exp <- structure(
+  list(data = "ADSL", subset = function(data) colnames(data)[1:2], key = NULL),
+  class = c("delayed_variable_choices", "delayed_data", "choices_labeled")
+)
+
+vc_fun_short <- variable_choices("ADSL", subset = function(data) colnames(data)[1])
+vc_fun_short_exp <- structure(
+  list(data = "ADSL", subset = function(data) colnames(data)[1], key = NULL),
+  class = c("delayed_variable_choices", "delayed_data", "choices_labeled")
+)
+
+testthat::test_that("delayed version of data_extract_spec", {
+  # hard-coded subset
+  obj <- data_extract_spec(
+    "ADSL",
+    select = select_spec(vc_hard, selected = vc_hard_short, multiple = FALSE),
+    filter = filter_spec(
+      vars = variable_choices("ADSL", subset = "ARMCD"),
+      choices = value_choices("ADSL", var_choices = "ARMCD", var_label = "ARM", subset = c("ARM A", "ARM B")),
+      selected = value_choices("ADSL", var_choices = "ARMCD", var_label = "ARM", subset = "ARM A"),
+      multiple = FALSE
+    )
+  )
+
+  res_obj <- isolate(resolve_delayed(obj, datasets = ds))
+  exp_obj <- data_extract_spec(
+    "ADSL",
+    select = select_spec(variable_choices(adsl, c("STUDYID", "USUBJID"), key = get_cdisc_keys("ADSL")),
+      selected = variable_choices(adsl, "STUDYID", key = get_cdisc_keys("ADSL"))),
+    filter = filter_spec(
+      vars = variable_choices(adsl, subset = "ARMCD", key = get_cdisc_keys("ADSL")),
+      choices = value_choices(adsl, var_choices = "ARMCD", var_label = "ARM", subset = c("ARM A", "ARM B")),
+      selected = value_choices(adsl, var_choices = "ARMCD", var_label = "ARM", subset = "ARM A"),
+      multiple = FALSE
+    )
+  )
+
+  testthat::expect_equal(res_obj$select, exp_obj$select)
+  testthat::expect_equal(res_obj$filter[[1]]$choices, exp_obj$filter[[1]]$choices)
+  testthat::expect_equal(res_obj$filter[[1]]$selected, exp_obj$filter[[1]]$selected)
+
+
+  # functional subset
+  obj <- data_extract_spec(
+    "ADSL",
+    select = select_spec(vc_fun, selected = vc_fun_short, multiple = FALSE),
+    filter = filter_spec(
+      vars = variable_choices("ADSL", subset = "ARMCD"),
+      choices = value_choices(
+        "ADSL",
+        var_choices = "ARMCD",
+        var_label = "ARM",
+        subset = function(data) c("ARM A", "ARM B")),
+      selected = value_choices(
+        "ADSL",
+        var_choices = "ARMCD",
+        var_label = "ARM",
+        subset = function(data) "ARM A"),
+      multiple = FALSE
+    )
+  )
+
+  res_obj <- isolate(resolve_delayed(obj, datasets = ds))
+  exp_obj <- data_extract_spec(
+    "ADSL",
+    select = select_spec(variable_choices(adsl, c("STUDYID", "USUBJID"), key = get_cdisc_keys("ADSL")),
+      selected = variable_choices(adsl, "STUDYID", key = get_cdisc_keys("ADSL"))),
+    filter = filter_spec(
+      vars = variable_choices(adsl, subset = "ARMCD", key = get_cdisc_keys("ADSL")),
+      choices = value_choices(adsl, var_choices = "ARMCD", var_label = "ARM", subset = c("ARM A", "ARM B")),
+      selected = value_choices(adsl, var_choices = "ARMCD", var_label = "ARM", subset = "ARM A"),
+      multiple = FALSE
+    )
+  )
+
+  testthat::expect_equal(res_obj$select, exp_obj$select)
+  testthat::expect_equal(res_obj$filter[[1]]$choices, exp_obj$filter[[1]]$choices)
+  testthat::expect_equal(res_obj$filter[[1]]$selected, exp_obj$filter[[1]]$selected)
 })
