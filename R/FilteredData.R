@@ -261,7 +261,7 @@ FilteredData <- R6::R6Class( # nolint
 
       return(res)
     },
-    
+
     #' @description
     #' Get filter overview table in form of X (filtered) / Y (non-filtered)
     #'
@@ -285,17 +285,6 @@ FilteredData <- R6::R6Class( # nolint
       )
 
       do.call(rbind, rows)
-    },
-
-    #' @description
-    #' Get join keys between two datasets.
-    #' @param dataset_1 (`character`) one dataset name
-    #' @param dataset_2 (`character`) other dataset name
-    #' @return (`named character`) vector with column names
-    get_join_keys = function(dataset_1, dataset_2) {
-      if (is.null(private$join_keys))
-        return(character(0))
-      private$join_keys$get(dataset_1, dataset_2)
     },
 
     #' Get keys for the dataset
