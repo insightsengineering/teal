@@ -994,15 +994,12 @@ testthat::test_that("Code argument of the constructor can have line breaks", {
 })
 
 testthat::test_that("Naming list elements", {
-  adsl <- as.data.frame(as.list(setNames(nm = get_cdisc_keys("ADSL"))))
-  adtte <- as.data.frame(as.list(setNames(nm = get_cdisc_keys("ADTTE"))))
-  adrs <- as.data.frame(as.list(setNames(nm = get_cdisc_keys("ADRS"))))
-  testthat::expect_identical(names(get_datasets(cdisc_data(cdisc_dataset("ADSL", adsl)))), "ADSL")
+  testthat::expect_identical(names(get_datasets(cdisc_data(cdisc_dataset("ADSL", adsl_raw)))), "ADSL")
   testthat::expect_identical(
     names(get_datasets(cdisc_data(
-      cdisc_dataset("ADSL", adsl),
-      cdisc_dataset("ADTTE", adtte),
-      cdisc_dataset("ADRS", adrs)
+      cdisc_dataset("ADSL", adsl_raw),
+      cdisc_dataset("ADTTE", adtte_raw),
+      cdisc_dataset("ADRS", adrs_raw)
     ))),
     c("ADSL", "ADTTE", "ADRS")
   )

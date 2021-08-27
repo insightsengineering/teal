@@ -24,7 +24,7 @@ testthat::test_that("get_call returns a condition true for the object in the sel
   testthat::expect_equal(
     isolate(filter_state$get_call()),
     quote(test >= as.POSIXct("1900-01-01 00:00:02", tz = "Etc/UTC") &
-      test <= as.POSIXct("1900-01-01 00:00:04", tz = "Etc/UTC"))
+      test < as.POSIXct("1900-01-01 00:00:04", tz = "Etc/UTC"))
   )
 })
 
@@ -41,19 +41,19 @@ testthat::test_that("get_call returns a condition evaluating to NA for NA values
   testthat::expect_equal(eval(isolate(filter_state$get_call()))[2], NA)
 })
 
-testthat::test_that("DatetimeFilterState ignores the timezone of the ISO object passed to the constructor", {
+testthat::test_that("DatetimeFilterState echoes the timezone of the ISO object passed to the constructor", {
   objects <- ISOdate(2021, 8, 25, tz = "GTM+10")
   filter_state <- DatetimeFilterState$new(objects, varname = "objects")
   testthat::expect_equal(
     isolate(filter_state$get_call()),
     quote(
-      objects >= as.POSIXct("2021-08-25 22:00:00", tz = "Etc/UTC") &
-        objects <= as.POSIXct("2021-08-25 22:00:01", tz = "Etc/UTC")
+      objects >= as.POSIXct("2021-08-25 12:00:00", tz = "GTM+10") &
+        objects < as.POSIXct("2021-08-25 12:00:01", tz = "GTM+10")
     )
   )
 })
 
-testthat::test_that("set_selected throw when selection not within allowed choices", {
+testthat::test_that("set_selected throws when the values are not within the range passed to the constructor", {
   objects <- as.POSIXct(c(1, 2, 3), origin = "1900/01/01")
   filter_state <- DatetimeFilterState$new(objects, varname = "objects")
   testthat::expect_error(

@@ -1,3 +1,5 @@
+# Notice, the particular design of these tests. We don't test the particulars of
+# the calls, but only whether they evaluate to the expected value.
 testthat::test_that("The constructor accepts a call, name or string as input_dataname", {
   testthat::expect_error(
     FilterStates$new(input_dataname = "string", output_dataname = "test", datalabel = "test"),
@@ -75,10 +77,6 @@ testthat::test_that("get_call returns a call filtering a data.frame based on a C
   filter_states$queue_push(queue_index = 1, x = choices_filter, element_id = "test")
   eval(isolate(filter_states$get_call()))
   testthat::expect_equal(choices_output, choices_dataset[c(1, 3), , drop = FALSE])
-  testthat::expect_equal(
-    isolate(filter_states$get_call()),
-    quote(choices_output <- subset(choices_dataset, choices %in% c("a", "c")))
-  )
 })
 
 testthat::test_that("get_call returns a call filtering a data.frame based on a LogicalFilterState", {
@@ -93,10 +91,6 @@ testthat::test_that("get_call returns a call filtering a data.frame based on a L
   filter_states$queue_push(queue_index = 1, x = logical_filter, element_id = "test")
   eval(isolate(filter_states$get_call()))
   testthat::expect_equal(logical_output, logical_dataset[c(2, 3), , drop = FALSE])
-  testthat::expect_equal(
-    isolate(filter_states$get_call()),
-    quote(logical_output <- subset(logical_dataset, !logical))
-  )
 })
 
 testthat::test_that("get_call returns a call filtering a data.frame based on a DateFilterState", {
@@ -111,10 +105,6 @@ testthat::test_that("get_call returns a call filtering a data.frame based on a D
   filter_states$queue_push(queue_index = 1, x = date_filter, element_id = "test")
   eval(isolate(filter_states$get_call()))
   testthat::expect_equal(date_output, date_dataset[c(1, 2), , drop = FALSE])
-  testthat::expect_equal(
-    isolate(filter_states$get_call()),
-    quote(date_output <- subset(date_dataset, date >= as.Date("2021-08-25") & date <= as.Date("2021-08-26")))
-  )
 })
 
 testthat::test_that("get_call returns a call filtering a data.frame based on a DatetimeFilterState", {
@@ -131,16 +121,6 @@ testthat::test_that("get_call returns a call filtering a data.frame based on a D
   filter_states$queue_push(queue_index = 1, x = datetime_filter, element_id = "test")
   eval(isolate(filter_states$get_call()))
   testthat::expect_equal(datetime_output, datetime_dataset[c(3), , drop = FALSE])
-  testthat::expect_equal(
-    isolate(filter_states$get_call()),
-    bquote(
-      datetime_output <- subset(
-        datetime_dataset,
-        datetime >= as.POSIXct("2021-08-27 12:00:00", tz = .(Sys.timezone())) &
-          datetime <= as.POSIXct("2021-08-27 12:00:01", tz = .(Sys.timezone()))
-      )
-    )
-  )
 })
 
 testthat::test_that("get_call returns a call filtering a data.frame base on a combination of FilterState objects", {
