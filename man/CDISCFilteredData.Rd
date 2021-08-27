@@ -48,9 +48,8 @@ datasets <- teal:::CDISCFilteredData$new()
 
 # setting the data
 isolate({
-  datasets$set_dataset(adsl,  data$get_join_keys()$get(dataset_1 = "ADSL"))
-  datasets$set_dataset(adtte, data$get_join_keys()$get(dataset_1 = "ADTTE"))
-  datasets$set_join_keys(join_keys())
+  datasets$set_dataset(adsl)
+  datasets$set_dataset(adtte)
  })
 
 
