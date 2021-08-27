@@ -20,19 +20,22 @@ testthat::test_that("get_call transforms double new lines into one new line", {
   testthat::expect_identical(y2_code$run(), 7)
 })
 
-test_that("Connector objects contain the incorrect code", {
-  x_code <- callable_code("ADSL$new <- 1; ADSL")
-  expect_error(x_code$run(), "object 'ADSL' not found")
-  expect_error(callable_code("'"), "Code supplied is not valid")
-  expect_error(callable_code(""), "Code supplied is not valid")
+testthat::test_that("callable_code throws an error when supplied code is not valid", {
+  testthat::expect_error(callable_code("'"), "Code supplied is not valid")
+  testthat::expect_error(callable_code(""), "Code supplied is not valid")
   # double ;;
-  expect_error(
+  testthat::expect_error(
     callable_code("library(scda);; ADSL <- synthetic_cdisc_data(\"rcd_2021_05_05\")$adsl\nADSL;"),
     "Code supplied is not valid"
   )
   # we have to use newline or ; to separate the code lines
-  expect_error(
+  testthat::expect_error(
     callable_code("library(scda) ADSL <- synthetic_cdisc_data(\"rcd_2021_05_05\")$adsl\nADSL"),
     "Code supplied is not valid"
   )
+})
+
+testthat::test_that("run throws an error when an object referenced in the code is not found", {
+  x_code <- callable_code("ADSL$new <- 1; ADSL")
+  testthat::expect_error(x_code$run(), "object 'ADSL' not found")
 })

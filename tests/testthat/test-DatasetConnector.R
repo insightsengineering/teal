@@ -6,7 +6,6 @@ on.exit(unlink(temp_file_csv))
 
 # Test DatasetConnector ------
 testthat::test_that("DatasetConnector", {
-
   fun <- callable_function(function() synthetic_cdisc_data("rcd_2021_05_05")$adsl)
 
   testthat::expect_error(
@@ -1134,20 +1133,5 @@ testthat::test_that("DatasetConnector$set_join_keys works with DatasetConnector$
   )
   testthat::expect_identical(
     t_dc$get_join_keys()$get()$other_dataset$iris, c("some_col" = "Species")
-  )
-})
-
-testthat::test_that("Duplicated mutation code is shown via get_code()", {
-  dataset_connector <- DatasetConnector$new("iris", callable_function(function() head(iris)))
-  dataset_connector$mutate("7")
-  dataset_connector$mutate("7")
-  testthat::expect_equal(
-    dataset_connector$get_code(),
-    paste(
-      "iris <- (function() head(iris))()",
-      "7",
-      "7",
-      sep = "\n"
-    )
   )
 })
