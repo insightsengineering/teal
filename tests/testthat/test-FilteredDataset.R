@@ -82,8 +82,7 @@ testthat::test_that("get_keys returns the keys of the Dataset object passed to t
 
 testthat::test_that("get_join_keys returns the list passed to the constructor", {
   filtered_dataset <- FilteredDataset$new(
-    dataset = Dataset$new("iris", head(iris)),
-    join_keys = list(a = 1)
+    dataset = Dataset$new("iris", head(iris))
   )
   testthat::expect_equal(filtered_dataset$get_join_keys(), list(a = 1))
 })
