@@ -48,9 +48,8 @@ datasets <- teal:::CDISCFilteredData$new()
 
 # setting the data
 isolate({
-  datasets$set_dataset(adsl,  data$get_join_keys()$get(dataset_1 = "ADSL"))
-  datasets$set_dataset(adtte, data$get_join_keys()$get(dataset_1 = "ADTTE"))
-  datasets$set_join_keys(join_keys())
+  datasets$set_dataset(adsl)
+  datasets$set_dataset(adtte)
  })
 
 
@@ -133,7 +132,6 @@ isolate(datasets$get_call("ADTTE"))
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="FilteredData" data-id="restore_state_from_bookmark">}\href{../../teal/html/FilteredData.html#method-restore_state_from_bookmark}{\code{teal::FilteredData$restore_state_from_bookmark()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="FilteredData" data-id="set_bookmark_state">}\href{../../teal/html/FilteredData.html#method-set_bookmark_state}{\code{teal::FilteredData$set_bookmark_state()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="FilteredData" data-id="set_code">}\href{../../teal/html/FilteredData.html#method-set_code}{\code{teal::FilteredData$set_code()}}\out{</span>}
-\item \out{<span class="pkg-link" data-pkg="teal" data-topic="FilteredData" data-id="set_join_keys">}\href{../../teal/html/FilteredData.html#method-set_join_keys}{\code{teal::FilteredData$set_join_keys()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="FilteredData" data-id="srv_filter_overview">}\href{../../teal/html/FilteredData.html#method-srv_filter_overview}{\code{teal::FilteredData$srv_filter_overview()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="FilteredData" data-id="srv_filter_panel">}\href{../../teal/html/FilteredData.html#method-srv_filter_panel}{\code{teal::FilteredData$srv_filter_panel()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="FilteredData" data-id="ui_filter_overview">}\href{../../teal/html/FilteredData.html#method-ui_filter_overview}{\code{teal::FilteredData$ui_filter_overview()}}\out{</span>}
@@ -239,7 +237,7 @@ Add dataset and preserve all attributes attached to this object.
 Technically \code{set_dataset} created \code{FilteredDataset} which keeps
 \code{dataset} for filtering purpose.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{CDISCFilteredData$set_dataset(dataset, join_key_set = NULL)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{CDISCFilteredData$set_dataset(dataset)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
@@ -247,9 +245,6 @@ Technically \code{set_dataset} created \code{FilteredDataset} which keeps
 \describe{
 \item{\code{dataset}}{(\code{Dataset})\cr
 object containing data and attributes.}
-
-\item{\code{join_key_set}}{(\code{JoinKeySet})\cr
-keys to merge this \code{dataset} to the other datasets}
 }
 \if{html}{\out{</div>}}
 }

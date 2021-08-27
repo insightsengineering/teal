@@ -37,16 +37,10 @@ filtered_data_set <- function(data, datasets) { # nolintr # nousage
 
 #' @export
 filtered_data_set.RelationalData <- function(data, datasets) { # nolintr # nousage
-
   datasets$set_code(data$get_code_class())
   for (dataset in data$get_datasets()) {
-    datasets$set_dataset(
-      dataset,
-      join_key_set = data$get_join_keys()$get(dataset_1 = dataset$get_dataname())
-    )
+    datasets$set_dataset(dataset)
   }
-
-  datasets$set_join_keys(data$get_join_keys())
 
   return(invisible(NULL))
 }
