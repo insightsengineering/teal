@@ -560,7 +560,8 @@ variable_types.matrix <- function(data, columns = NULL) { #nousage
 }
 
 #' Print choices_labeled object
-#' @inheritParams base::print
+#' @param x an object used to select a method.
+#' @param ... further arguments passed to or from other methods.
 #' @export
 print.choices_labeled <- function(x, ...) {
   cat(
