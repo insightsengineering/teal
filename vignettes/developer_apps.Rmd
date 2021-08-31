@@ -217,7 +217,6 @@ We show different ways of how to specify the initial filter states.
 To show this, we generate fake data. We implicitly also check that the code works without the usual key `STUDYID`.
 
 ```{r initialFilterStatesApp, eval=FALSE}
-devtools::load_all()
 fake_data <- data.frame(
   USUBJID = 1:9,
   SEX1 = c("F", "F", "F", "M", "M", "M", "F", "M", NA_character_),
@@ -244,7 +243,7 @@ app <- init(
   filter = list(
     ADSL = list(
       SEX1 = c("M"),
-      SEX2 = c("M", NA)
+      SEX2 = c("M", NA),
       SEX3 = list(selected = "M"),
       SEX4 = list(selected = "M", keep_na = TRUE),
       SEX5 = default_filter()
