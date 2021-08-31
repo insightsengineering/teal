@@ -406,8 +406,8 @@ set_filter_state.default <- function(x, filter_state) {
     state$keep_inf <- TRUE
   }
 
-  if (length(x[!is.infinite(x)]) > 0) {
-    state$selected <- x[!is.infinite(x)]
+  if (length(x[!(is.infinite(x) | is.na(x))]) > 0) {
+    state$selected <- x[!(is.infinite(x) | is.na(x))]
   }
 
   filter_state$set_state(state)
