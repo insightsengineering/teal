@@ -38,11 +38,13 @@ chain.
 \item \href{#method-destroy_observers}{\code{FilterState$destroy_observers()}}
 \item \href{#method-get_call}{\code{FilterState$get_call()}}
 \item \href{#method-get_dataname}{\code{FilterState$get_dataname()}}
+\item \href{#method-get_keep_na}{\code{FilterState$get_keep_na()}}
 \item \href{#method-get_varlabel}{\code{FilterState$get_varlabel()}}
 \item \href{#method-get_varname}{\code{FilterState$get_varname()}}
 \item \href{#method-get_selected}{\code{FilterState$get_selected()}}
 \item \href{#method-set_keep_na}{\code{FilterState$set_keep_na()}}
 \item \href{#method-set_selected}{\code{FilterState$set_selected()}}
+\item \href{#method-set_state}{\code{FilterState$set_state()}}
 \item \href{#method-server}{\code{FilterState$server()}}
 \item \href{#method-ui}{\code{FilterState$ui()}}
 \item \href{#method-clone}{\code{FilterState$clone()}}
@@ -135,6 +137,19 @@ whether dataname should be deparsed. \code{TRUE} by default}
 }
 }
 \if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-get_keep_na"></a>}}
+\if{latex}{\out{\hypertarget{method-get_keep_na}{}}}
+\subsection{Method \code{get_keep_na()}}{
+Returns current \code{keep_na} selection
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{FilterState$get_keep_na()}\if{html}{\out{</div>}}
+}
+
+\subsection{Returns}{
+(\code{logical(1)})
+}
+}
+\if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-get_varlabel"></a>}}
 \if{latex}{\out{\hypertarget{method-get_varlabel}{}}}
 \subsection{Method \code{get_varlabel()}}{
@@ -219,6 +234,29 @@ Value(s) which come from the filter selection. Values are set in \code{server}
 modules after choosing value in app interface. Values are set to
 \code{private$selected} which is reactive. Values type have to be the
 same as \code{private$choices}.}
+}
+\if{html}{\out{</div>}}
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-set_state"></a>}}
+\if{latex}{\out{\hypertarget{method-set_state}{}}}
+\subsection{Method \code{set_state()}}{
+Set state
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{FilterState$set_state(state)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{state}}{(\code{list})\cr
+should contain fields relevant for specific class
+\itemize{
+\item{\code{selected}}{ defines initial selection}
+\item{\code{keep_na} (\code{logical})}{ defines whether to keep or remove \code{NA} values}
+\item{\code{keep_inf} (\code{logical})}{ defines whether to keep or remove \code{Inf} values}
+}}
 }
 \if{html}{\out{</div>}}
 }
