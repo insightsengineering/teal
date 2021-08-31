@@ -25,7 +25,7 @@ testthat::test_that("get_call returns a condition true for the object in the sel
     isolate(filter_state$get_call()),
     bquote(
       test >= as.POSIXct(.(as.character(test[2])), tz = .(Sys.timezone())) &
-      test < as.POSIXct(.(as.character(test[4])), tz = .(Sys.timezone()))
+        test < as.POSIXct(.(as.character(test[4])), tz = .(Sys.timezone()))
     )
   )
 })
@@ -88,7 +88,7 @@ testthat::test_that("set_state need named list with selected and keep_na element
 })
 
 testthat::test_that("set_state overwrites fields included in the input only", {
- objects <- as.POSIXct(c(1:5), origin = "1900/01/01")
+  objects <- as.POSIXct(c(1:5), origin = "1900/01/01")
   filter_state <- DatetimeFilterState$new(objects, varname = "test")
   testthat::expect_error(
     filter_state$set_state(list(selected = c(objects[2], objects[2]), keep_na = TRUE)),

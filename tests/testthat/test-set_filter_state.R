@@ -90,11 +90,11 @@ testthat::test_that("set_filter_state overwrites fields included in the input on
     c(2, 9)
   )
   testthat::expect_true(
-   isolate(filter_state$get_keep_na())
+    isolate(filter_state$get_keep_na())
   )
 
   testthat::expect_false(
-   isolate(filter_state$get_keep_inf())
+    isolate(filter_state$get_keep_inf())
   )
 
   testthat::expect_error(
@@ -107,10 +107,10 @@ testthat::test_that("set_filter_state overwrites fields included in the input on
     c(2, 9)
   )
   testthat::expect_true(
-   isolate(filter_state$get_keep_na())
+    isolate(filter_state$get_keep_na())
   )
   testthat::expect_true(
-   isolate(filter_state$get_keep_inf())
+    isolate(filter_state$get_keep_inf())
   )
 })
 

@@ -396,7 +396,7 @@ set_filter_state <- function(x, filter_state) {
 }
 
 #' @export
-set_filter_state.default <- function(x, filter_state) {
+set_filter_state.default <- function(x, filter_state) { #nousage
   state <- list()
   if (any(is.na(x))) {
     state$keep_na <- TRUE
@@ -414,11 +414,11 @@ set_filter_state.default <- function(x, filter_state) {
 }
 
 #' @export
-set_filter_state.default_filter <- function(x, filter_state) { # nolint
+set_filter_state.default_filter <- function(x, filter_state) { #nousage
   invisible(NULL)
 }
 
 #' @export
-set_filter_state.list <- function(x, filter_state) {
+set_filter_state.list <- function(x, filter_state) { #nousage
   filter_state$set_state(state = x)
 }
