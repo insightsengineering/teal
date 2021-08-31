@@ -322,6 +322,13 @@ FilterState <- R6::R6Class( # nolint
     },
 
     #' @description
+    #' Returns current `keep_na` selection
+    #' @return (`logical(1)`)
+    get_keep_na = function() {
+      private$keep_na()
+    },
+
+    #' @description
     #' Returns variable label
     #' @return (`character(1)`)
     get_varlabel = function() {
@@ -372,6 +379,19 @@ FilterState <- R6::R6Class( # nolint
       private$validate_selection(value)
       private$selected(value)
       invisible(NULL)
+    },
+
+    #' @description
+    #' Set state
+    #' @param state (`list`)\cr
+    #'  should contain fields relevant for specific class 
+    #' \itemize{
+    #' \item{`selected`}{ defines initial selection}
+    #' \item{`keep_na` (`logical`)}{ defines whether to keep or remove `NA` values}
+    #' \item{`keep_inf` (`logical`)}{ defines whether to keep or remove `Inf` values} 
+    #' }  
+    set_state = function(state) {
+      stop("Pure virtual method.")
     },
 
     #' @description
@@ -578,6 +598,32 @@ EmptyFilterState <- R6::R6Class( # nolint
     server = function(input, output, session) {
       private$observe_keep_na(input)
       return(NULL)
+    },
+
+    #' @description
+    #' Set state
+    #' @param state (`list`)\cr
+    #'  should contain fields relevant for specific class 
+    #' \itemize{
+    #' \item{`selected`}{ defines initial selection}
+    #' \item{`keep_na` (`logical`)}{ defines whether to keep or remove `NA` values}
+    #' \item{`keep_inf` (`logical`)}{ defines whether to keep or remove `Inf` values} 
+    #' }  
+    set_state = function(state) {
+      if (!is.null(state$selected)) {
+        stop(
+          sprintf(
+            "All values in variable '%s' are `NA`. Unable to apply filter values \n  %s",
+            self$get_varname(deparse = TRUE),
+            paste(state$selected, collapse = ", ")
+          )
+        )
+      }
+      stopifnot(is.list(state) && all(names(state) == "keep_na"))
+      if (!is.null(state$keep_na)) {
+        self$set_keep_na(state$keep_na)
+      }
+      invisible(NULL)
     }
   ),
   private = list(
@@ -694,7 +740,7 @@ LogicalFilterState <- R6::R6Class( # nolint
           checkboxInput(
             ns("keep_na"),
             label_keep_na_count(private$na_count),
-            value = FALSE
+            value = isolate(private$keep_na())
           )
         } else {
           NULL
@@ -750,6 +796,25 @@ LogicalFilterState <- R6::R6Class( # nolint
       private$observe_keep_na(input)
 
       NULL
+    },
+    #' @description
+    #' Set state
+    #' @param state (`list`)\cr
+    #'  should contain fields relevant for specific class 
+    #' \itemize{
+    #' \item{`selected`}{ defines initial selection}
+    #' \item{`keep_na` (`logical`)}{ defines whether to keep or remove `NA` values}
+    #' }  
+    set_state = function(state) {
+      stopifnot(is.list(state) && all(names(state) %in% c("selected", "keep_na", "keep_inf")))
+      if (!is.null(state$keep_na)) {
+        self$set_keep_na(state$keep_na)
+      }
+      if (!is.null(state$selected)) {
+        self$set_selected(state$selected)
+      }
+
+      invisible(NULL)
     }
   ),
   private = list(
@@ -765,7 +830,7 @@ LogicalFilterState <- R6::R6Class( # nolint
       if (!(is_logical_empty(value) || is_logical_single(value))) {
         stop(
           sprintf(
-            "value of the selection for `%s` in `%s` should be a logical",
+            "value of the selection for `%s` in `%s` should be a single logical value",
             self$get_varname(deparse = TRUE),
             self$get_dataname(deparse = TRUE)
           )
@@ -832,7 +897,7 @@ RangeFilterState <- R6::R6Class( # nolint
                           extract_type = character(0)) {
       stopifnot(is.numeric(x))
       super$initialize(x, varname, varlabel, input_dataname, extract_type)
-      var_range <- range(x, na.rm = TRUE)
+      var_range <- range(x, finite = TRUE)
       private$set_choices(var_range)
       self$set_selected(var_range)
 
@@ -868,6 +933,13 @@ RangeFilterState <- R6::R6Class( # nolint
       filter_call
     },
 
+    #' @description
+    #' Returns current `keep_inf` selection
+    #' @return (`logical(1)`)
+    get_keep_inf = function() {
+      private$keep_inf()
+    },
+
     #' UI Module for `EmptyFilterState`.
     #' This UI element contains two values for `min` and `max`
     #' of the range and two checkboxes whether to keep the `NA` or `Inf`  values.
@@ -894,7 +966,7 @@ RangeFilterState <- R6::R6Class( # nolint
           checkboxInput(
             ns("keep_inf"),
             sprintf("Keep Inf (%s)", private$inf_count),
-            value = FALSE
+            value = isolate(private$keep_inf())
           )
         } else {
           NULL
@@ -903,7 +975,7 @@ RangeFilterState <- R6::R6Class( # nolint
           checkboxInput(
             ns("keep_na"),
             label_keep_na_count(private$na_count),
-            value = FALSE
+            value = isolate(private$keep_na())
           )
         } else {
           NULL
@@ -982,7 +1054,32 @@ RangeFilterState <- R6::R6Class( # nolint
     set_keep_inf = function(value) {
       stopifnot(is_logical_single(value))
       private$keep_inf(value)
+    },
+
+    #' @description
+    #' Set state
+    #' @param state (`list`)\cr
+    #'  should contain fields relevant for specific class 
+    #' \itemize{
+    #' \item{`selected`}{ defines initial selection}
+    #' \item{`keep_na` (`logical`)}{ defines whether to keep or remove `NA` values}
+    #' \item{`keep_inf` (`logical`)}{ defines whether to keep or remove `Inf` values}
+    #' }  
+    set_state = function(state) {
+      stopifnot(is.list(state) && all(names(state) %in% c("selected", "keep_na", "keep_inf")))
+      if (!is.null(state$keep_na)) {
+        self$set_keep_na(state$keep_na)
+      }
+      if (!is.null(state$keep_inf)) {
+        self$set_keep_inf(state$keep_inf)
+      }
+      if (!is.null(state$selected)) {
+        self$set_selected(state$selected)
+      }
+
+      invisible(NULL)
     }
+
   ),
   private = list(
     histogram_data = data.frame(),
@@ -1165,10 +1262,10 @@ ChoicesFilterState <- R6::R6Class( # nolint
           )
         },
         if (private$na_count > 0) {
-          checkboxInput(
-            ns("keep_na"),
-            label_keep_na_count(private$na_count),
-            value = FALSE
+          checkboxInput(  
+            ns("keep_na"), 
+            label = label_keep_na_count(private$na_count),
+            value = isolate(private$keep_na())
           )
         } else {
           NULL
@@ -1221,6 +1318,28 @@ ChoicesFilterState <- R6::R6Class( # nolint
       private$observe_keep_na(input)
 
       return(NULL)
+    },
+
+    #' @description
+    #' Set state
+    #' @param state (`list`)\cr
+    #'  should contain fields relevant for specific class 
+    #' \itemize{
+    #' \item{`selected`}{ defines initial selection}
+    #' \item{`keep_na` (`logical`)}{ defines whether to keep or remove `NA` values}
+    #' }  
+    set_state = function(state) {
+      stopifnot(is.list(state) && all(names(state) %in% c("selected", "keep_na")))
+      if (!is.null(state$keep_na)) {
+        self$set_keep_na(state$keep_na)
+      }
+      if (!is.null(state$selected)) {
+        # converted to character because init_filter_state can initialize
+        # ChoicesFilterState from numeric input (choices < .threshold_slider_vs_checkboxgroup)
+        self$set_selected(as.character(state$selected))  
+      }
+
+      invisible(NULL)
     }
   ),
   private = list(
@@ -1368,7 +1487,7 @@ DateFilterState <- R6::R6Class( # nolint
           checkboxInput(
             ns("keep_na"),
             label_keep_na_count(private$na_count),
-            value = FALSE
+            value = isolate(private$keep_na())
           )
         } else {
           NULL
@@ -1415,6 +1534,26 @@ DateFilterState <- R6::R6Class( # nolint
       })
 
       return(NULL)
+    },
+
+    #' @description
+    #' Set state
+    #' @param state (`list`)\cr
+    #'  should contain fields relevant for specific class 
+    #' \itemize{
+    #' \item{`selected`}{ defines initial selection}
+    #' \item{`keep_na` (`logical`)}{ defines whether to keep or remove `NA` values}
+    #' }  
+    set_state = function(state) {
+      stopifnot(is.list(state) && all(names(state) %in% c("selected", "keep_na", "keep_inf")))
+      if (!is.null(state$keep_na)) {
+        self$set_keep_na(state$keep_na)
+      }
+      if (!is.null(state$selected)) {
+        self$set_selected(state$selected)
+      }
+
+      invisible(NULL)
     }
   ),
   private = list(
@@ -1604,7 +1743,7 @@ DatetimeFilterState <- R6::R6Class( # nolint
           checkboxInput(
             ns("keep_na"),
             label_keep_na_count(private$na_count),
-            value = FALSE
+            value = isolate(private$keep_na())
           )
         } else {
           NULL
@@ -1663,6 +1802,26 @@ DatetimeFilterState <- R6::R6Class( # nolint
       })
 
       return(NULL)
+    },
+
+    #' @description
+    #' Set state
+    #' @param state (`list`)\cr
+    #'  should contain fields relevant for specific class 
+    #' \itemize{
+    #' \item{`selected`}{ defines initial selection}
+    #' \item{`keep_na` (`logical`)}{ defines whether to keep or remove `NA` values}
+    #' }  
+    set_state = function(state) {
+      stopifnot(is.list(state) && all(names(state) %in% c("selected", "keep_na", "keep_inf")))
+      if (!is.null(state$keep_na)) {
+        self$set_keep_na(state$keep_na)
+      }
+      if (!is.null(state$selected)) {
+        self$set_selected(state$selected)
+      }
+
+      invisible(NULL)
     }
   ),
   private = list(

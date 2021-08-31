@@ -616,7 +616,7 @@ DFFilterStates <- R6::R6Class( # nolint
     #'   column in `data`.
     set_bookmark_state = function(data, state) {
       stopifnot(is.data.frame(data))
-      stopifnot(all(names(state) %in% names(data)))
+      stopifnot(all(names(state) %in% c(names(data))) || is(state, "default_filter"))
 
       for (varname in names(state)) {
         value <- state[[varname]]
@@ -626,7 +626,9 @@ DFFilterStates <- R6::R6Class( # nolint
           varlabel = private$get_varlabels(varname),
           input_dataname = private$input_dataname
         )
-        fstate$set_selected(value = value)
+        if (!is(value, "default_filter")) {
+          set_filter_state(x = value, fstate)
+        }
 
         if (shiny::isRunning()) {
           id <- digest::digest(sprintf("%s_%s", 1L, varname), algo = "md5")
@@ -845,7 +847,7 @@ MAEFilterStates <- R6::R6Class( # nolint
     set_bookmark_state = function(data, state) {
       stopifnot(is(data, "MultiAssayExperiment"))
       stopifnot(
-        all(names(state) %in% names(colData(data)))
+        all(names(state) %in% names(colData(data))) || is(state, "default_filter")
       )
 
       for (varname in names(state)) {
@@ -857,17 +859,27 @@ MAEFilterStates <- R6::R6Class( # nolint
           input_dataname = private$input_dataname,
           extract_type = "list"
         )
-        fstate$set_selected(value = value)
+        if (!is(state, "default_filter")) {
+          set_filter_state(x  = value, fstate)
+        }
 
-        id <- digest::digest(sprintf("%s_%s", "y", varname), algo = "md5")
-        callModule(
-          private$add_filter_state,
-          id = id,
-          filter_state = fstate,
-          queue_index = "y",
-          element_id = varname
-        )
-
+        
+        if (shiny::isRunning()) {
+          id <- digest::digest(sprintf("%s_%s", "y", varname), algo = "md5")
+          callModule(
+            private$add_filter_state,
+            id = id,
+            filter_state = fstate,
+            queue_index = "y",
+            element_id = varname
+          )
+        } else {
+          self$queue_push(
+            x = fstate,
+            queue_index = "y",
+            element_id = varname
+          )
+        }
       }
     },
 
@@ -1048,7 +1060,7 @@ SEFilterStates <- R6::R6Class( # nolint
     set_bookmark_state = function(data, state) {
       stopifnot(is(data, "SummarizedExperiment"))
       stopifnot(
-        all(names(state) %in% c("subset", "select")),
+        all(names(state) %in% c("subset", "select")) || is(state, "default_filter"),
         is.null(state$subset) || all(names(state$subset) %in% names(rowData(data))),
         is.null(state$select) || all(names(state$select) %in% names(colData(data)))
       )
@@ -1060,16 +1072,28 @@ SEFilterStates <- R6::R6Class( # nolint
           varname = as.name(varname),
           input_dataname = private$input_dataname
         )
-        fstate$set_selected(value = value)
+        if (!is(state, "default_filter")) {
+          set_filter_state(x = value, fstate)
+        }
 
-        id <- digest::digest(sprintf("%s_%s", "subset", varname), algo = "md5")
-        callModule(
-          private$add_filter_state,
-          id = id,
-          filter_state = fstate,
-          queue_index = "subset",
-          element_id = varname
-        )
+
+        if (shiny::isRunning()) {
+          id <- digest::digest(sprintf("%s_%s", "subset", varname), algo = "md5")
+          callModule(
+            private$add_filter_state,
+            id = id,
+            filter_state = fstate,
+            queue_index = "subset",
+            element_id = varname
+          )
+        } else {
+          self$queue_push(
+            x = fstate,
+            queue_index = "subset",
+            element_id = varname
+          )
+        }
+
       }
 
 
@@ -1077,18 +1101,29 @@ SEFilterStates <- R6::R6Class( # nolint
         value <- state$select[[varname]]
         fstate <- init_filter_state(
           SummarizedExperiment::colData(data)[[varname]],
-          varname = as.name(varname)
+          varname = as.name(varname),
+          input_dataname = private$input_dataname
         )
-        fstate$set_selected(value = value)
+         if (!is(state, "default_filter")) {
+          set_filter_state(x = value, fstate)
+        }
 
-        id <- digest::digest(sprintf("%s_%s", "select", varname), algo = "md5")
-        callModule(
-          private$add_filter_state,
-          id = id,
-          filter_state = fstate,
-          queue_index = "select",
-          element_id = varname
-        )
+        if (shiny::isRunning()) {
+          id <- digest::digest(sprintf("%s_%s", "select", varname), algo = "md5")
+          callModule(
+            private$add_filter_state,
+            id = id,
+            filter_state = fstate,
+            queue_index = "select",
+            element_id = varname
+          )
+        } else {
+          self$queue_push(
+            x = fstate,
+            queue_index = "select",
+            element_id = varname
+          )
+        }
       }
 
       return(NULL)
@@ -1326,7 +1361,7 @@ MatrixFilterStates <- R6::R6Class( # nolint
     set_bookmark_state = function(data, state) {
       stopifnot(is(data, "matrix"))
       stopifnot(
-        all(names(state) %in% names(colData(data)))
+        all(names(state) %in% names(colData(data))) || is(state, "default_filter")
       )
 
       for (varname in names(state)) {
@@ -1338,16 +1373,28 @@ MatrixFilterStates <- R6::R6Class( # nolint
           input_dataname = private$input_dataname,
           extract_type = "matrix"
         )
-        fstate$set_selected(value = value)
+        if (!is(state, "default_filter")) {
+          set_filter_state(x = value, fstate)
+        }
 
-        id <- digest::digest(sprintf("%s_%s", "subset", varname), algo = "md5")
-        callModule(
-          private$add_filter_state,
-          id = id,
-          filter_state = fstate,
-          queue_index = "subset",
-          element_id = varname
-        )
+
+        if (shiny::isRunning()) {
+          id <- digest::digest(sprintf("%s_%s", "subset", varname), algo = "md5")
+          callModule(
+            private$add_filter_state,
+            id = id,
+            filter_state = fstate,
+            queue_index = "subset",
+            element_id = varname
+          )
+        } else {
+          self$queue_push(
+            x = fstate,
+            queue_index = "subset",
+            element_id = varname
+          )
+        }
+        
       }
     },
 
