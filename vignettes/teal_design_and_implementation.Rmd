@@ -79,7 +79,7 @@ input changes to the reactive environment on the server side. Please inspect the
 developer tools and then stop the Shiny app and compare that `HTML` code with the
 ui code created by running the following code in the R console:
 
-```{r, eval = FALSE}
+```{r}
 fluidPage(
   selectInput(inputId = "select_data", label = "select data", choices = c("iris", "mtcars")),
   plotOutput(outputId = "scatterplotmatrix")
@@ -190,7 +190,7 @@ app <- teal::init(
     )
   )
 )
-ShinyApp(app$ui, app$server)
+shinyApp(app$ui, app$server)
 ```
 
 Please run the above code by copy-pasting it to the command line. The example

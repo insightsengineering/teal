@@ -21,8 +21,6 @@ these should not be deleted. Eventually, Shiny tests for these modules should be
 We load the libraries and set relevant options. Be careful to load the development version of `teal` when developing.
 
 ```{r loadLibraries, eval=FALSE}
-library(random.cdisc.data)
-
 # execute the vignette as if it were executed interactively
 # when you run KnitR from RStudio, it does not run the vignette interactively
 EXECUTE_LIKE_INTERACTIVE <- interactive()
@@ -62,13 +60,14 @@ safeBookmarkableShinyApp <- function(..., execute_app = EXECUTE_APPS) {
 ```
 
 ```{r createDatasets, eval=FALSE}
+library(scda.2021)
 # Create the dataset with some NA values and a logical value
-ADSL <- radsl(cached = TRUE)
+ADSL <- rcd_2021_07_07$adsl
 ADSL$logical_test <- sample(c(TRUE, FALSE, NA), size = nrow(ADSL), replace = TRUE)
 ADSL$SEX[1:150] <- NA
 
-ADAE <- radae(cached = TRUE)
-ADLB <- radlb(cached = TRUE)
+ADAE <- rcd_2021_07_07$adae
+ADLB <- rcd_2021_07_07$adlb
 ```
 
 # Apps
@@ -91,9 +90,10 @@ This is the main debugging app to check that the functionality still works after
 library(teal)
 app <- init(
   data = cdisc_data(
-    cdisc_dataset(dataname = "ADSL", x = ADSL, code = "ADSL <- radsl(cached = TRUE)"),
-    cdisc_dataset(dataname = "ADAE", x = ADAE, code = "ADAE <- radae(cached = TRUE)"),
-    cdisc_dataset(dataname = "ADLB", x = ADLB, code = "ADLB <- radlb(cached = TRUE)")
+    cdisc_dataset(dataname = "ADSL", x = ADSL, code = "rcd_2021_07_07$adsl"),
+    cdisc_dataset(dataname = "ADAE", x = ADAE, code = "rcd_2021_07_07$adae"),
+    cdisc_dataset(dataname = "ADLB", x = ADLB, code = "rcd_2021_07_07$adlb"),
+    check = TRUE
   ),
   modules = root_modules(
     teal:::filter_calls_module(),
@@ -102,12 +102,13 @@ app <- init(
     teal:::reset_filters_module("Reset", active_datanames = c("ADSL", "ADLB"))
   ),
   filter = list(
-    ADSL = list(SEX = list(choices = "M", keep_na = TRUE), AGE = default_filter()),
-    ADLB = list(ASEQ = list(range = c(5.6, 20), keep_na = FALSE))
+    ADSL = list(SEX = list(selected = "M", keep_na = TRUE), AGE = default_filter()),
+    ADLB = list(ASEQ = list(selected = c(5.6, 20), keep_na = FALSE))
   ),
   header = "App with Debugging Modules",
   footer = tags$p(class = "text-muted", "Source: agile-R website")
-); safeBookmarkableShinyApp(app$ui, app$server, enableBookmarking = "url")
+)
+safeBookmarkableShinyApp(app$ui, app$server, enableBookmarking = "url")
 ```
 
 ## Lazy Filtering of Datasets
@@ -117,9 +118,9 @@ The datasets are lazily filtered meaning that when they are not needed for the c
 ```{r lazyFilteringApp, eval=FALSE}
 app <- init(
   data = cdisc_data(
-    cdisc_dataset(dataname = "ADSL", x = ADSL, code = "ADSL <- radsl(cached = TRUE)"),
-    cdisc_dataset(dataname = "ADAE", x = ADAE, code = "ADAE <- radae(cached = TRUE)"),
-    cdisc_dataset(dataname = "ADLB", x = ADLB, code = "ADLB <- radlb(cached = TRUE)")
+    cdisc_dataset(dataname = "ADSL", x = ADSL, code = "rcd_2021_07_07$adsl"),
+    cdisc_dataset(dataname = "ADAE", x = ADAE, code = "rcd_2021_07_07$adae"),
+    cdisc_dataset(dataname = "ADLB", x = ADLB, code = "rcd_2021_07_07$adlb")
   ),
   modules = root_modules(
     teal:::filter_calls_module("ADAE", active_datanames = c("ADAE")),
@@ -128,14 +129,17 @@ app <- init(
     teal:::bookmark_module(),
     teal:::debug_browser_module()
   ),
-  filter = list(ADSL = list(
-    SEX = list(choices = "M", keep_na = TRUE),
-    COUNTRY = c("USA", NA),
-    AGE = default_filter()
-  )),
+  filter = list(
+    ADSL = list(
+      SEX = list(selected = "M", keep_na = TRUE),
+      COUNTRY = c("USA", NA),
+      AGE = default_filter()
+    )
+  ),
   header = "Data is Lazily Filtered",
   footer = tags$p(class = "text-muted", "Source: agile-R website")
-); safeBookmarkableShinyApp(app$ui, app$server, enableBookmarking = "url")
+)
+safeBookmarkableShinyApp(app$ui, app$server, enableBookmarking = "url")
 ```
 
 ## App with Delayed Data
@@ -146,9 +150,9 @@ This app tests that the app works with delayed data that is not available initia
 app <- init(
   data = cdisc_data(
     rcd_data(
-      rcd_cdisc_dataset_connector(dataname = "ADSL", radsl, cached = TRUE),
-      rcd_cdisc_dataset_connector(dataname = "ADLB", radlb, cached = TRUE),
-      rcd_cdisc_dataset_connector(dataname = "ADAE", radae, cached = TRUE)
+      cdisc_dataset(dataname = "ADSL", x = ADSL, code = "rcd_2021_07_07$adsl"),
+      cdisc_dataset(dataname = "ADAE", x = ADAE, code = "rcd_2021_07_07$adae"),
+      cdisc_dataset(dataname = "ADLB", x = ADLB, code = "rcd_2021_07_07$adlb"),
     )    
   ),
   modules = root_modules(
@@ -158,10 +162,17 @@ app <- init(
     teal:::bookmark_module(),
     teal:::debug_browser_module()
   ),
-  filter = list(ADSL = list(SEX = list(choices = "M", keep_na = TRUE), AGE = default_filter())),
+  filter = list(
+    ADSL = list(
+      SEX = list(selected = "M", keep_na = TRUE), 
+      COUNTRY = c("USA", NA),
+      AGE = default_filter()
+    )
+    ),
   header = "App with Delayed Data",
   footer = tags$p(class = "text-muted", "Source: agile-R website")
-); safeBookmarkableShinyApp(app$ui, app$server, enableBookmarking = "url")
+)
+safeBookmarkableShinyApp(app$ui, app$server, enableBookmarking = "url")
 ```
 
 ## Nested Modules
@@ -170,9 +181,9 @@ This app shows nested modules and how the filters apply to them. Check the tab h
 ```{r nestedModulesApp, eval=FALSE}
 app <- init(
   data = cdisc_data(
-    cdisc_dataset(dataname = "ADSL", x = ADSL, code = "ADSL <- radsl(cached = TRUE)"),
-    cdisc_dataset(dataname = "ADAE", x = ADAE, code = "ADAE <- radae(cached = TRUE)"),
-    cdisc_dataset(dataname = "ADLB", x = ADLB, code = "ADLB <- radlb(cached = TRUE)")
+    cdisc_dataset(dataname = "ADSL", x = ADSL, code = "rcd_2021_07_07$adsl"),
+    cdisc_dataset(dataname = "ADAE", x = ADAE, code = "rcd_2021_07_07$adae"),
+    cdisc_dataset(dataname = "ADLB", x = ADLB, code = "rcd_2021_07_07$adlb"),
   ),
   modules = root_modules(
     modules(
@@ -187,14 +198,17 @@ app <- init(
     ),
     modules(label = "A2", teal:::filter_calls_module("D2", active_datanames = c("ADSL")))
   ),
-  filter = list(ADSL = list(
-    SEX = list(choices = "M", keep_na = TRUE),
-    COUNTRY = c("USA", NA),
-    AGE = default_filter()
-  )),
+  filter = list(
+    ADSL = list(
+      SEX = list(selected = "M", keep_na = TRUE),
+      COUNTRY = c("USA", NA),
+      AGE = default_filter()
+    )
+  ),
   header = "Modules in Nested Tabs",
   footer = tags$p(class = "text-muted", "Source: agile-R website")
-); safeBookmarkableShinyApp(app$ui, app$server, enableBookmarking = "url")
+)
+safeBookmarkableShinyApp(app$ui, app$server, enableBookmarking = "url")
 ```
 
 ## Different Ways to Specify the Initial Filter States
@@ -203,13 +217,15 @@ We show different ways of how to specify the initial filter states.
 To show this, we generate fake data. We implicitly also check that the code works without the usual key `STUDYID`.
 
 ```{r initialFilterStatesApp, eval=FALSE}
+devtools::load_all()
 fake_data <- data.frame(
-  USUBJID = 1:8,
-  SEX1 = c("F", "F", "F", "M", "M", "M", "F", "M"),
-  SEX2 = c("F", "F", "F", "M", "M", "M", "F", "M"),
-  SEX3 = c("F", "F", "F", "M", "M", "M", "F", "M"),
-  SEX4 = c("F", "F", "F", "M", "M", "M", "F", "M"),
-  SEX5 = c("F", "F", "F", "M", "M", "M", "F", "M")
+  USUBJID = 1:9,
+  SEX1 = c("F", "F", "F", "M", "M", "M", "F", "M", NA_character_),
+  SEX2 = c("F", "F", "F", "M", "M", "M", "F", "M", NA_character_),
+  SEX3 = c("F", "F", "F", "M", "M", "M", "F", "M", NA_character_),
+  SEX4 = c("F", "F", "F", "M", "M", "M", "F", "M", NA_character_),
+  SEX5 = c("F", "F", "F", "M", "M", "M", "F", "M", NA_character_),
+  stringsAsFactors = FALSE
 )
 
 data <- cdisc_data(
@@ -225,16 +241,19 @@ app <- init(
   modules = root_modules(
     teal:::filter_calls_module()
   ),
-  filter = list(ADSL = list(
-    SEX1 = list(choices = c("M", "F")),
-    SEX2 = list(choices = c("M", "F"), keep_na = TRUE),
-    SEX3 = c("M", "F"),
-    SEX4 = c("M", "F", NA),
-    SEX5 = default_filter()
-  )),
+  filter = list(
+    ADSL = list(
+      SEX1 = c("M"),
+      SEX2 = c("M", NA)
+      SEX3 = list(selected = "M"),
+      SEX4 = list(selected = "M", keep_na = TRUE),
+      SEX5 = default_filter()
+    )
+  ),
   header = "Different Ways to Specify Initial Filter States",
   footer = tags$p(class = "text-muted", "Source: agile-R website")
-); safeBookmarkableShinyApp(app$ui, app$server, enableBookmarking = "url")
+)
+safeBookmarkableShinyApp(app$ui, app$server, enableBookmarking = "url")
 ```
 
 ## Dataset Not Provided But Still Referred To
@@ -254,7 +273,8 @@ app <- init(
   ),
   header = "Missing ADAE Dataset Raises Warning",
   footer = tags$p(class = "text-muted", "Source: agile-R website")
-); safeBookmarkableShinyApp(app$ui, app$server, enableBookmarking = "url")
+)
+safeBookmarkableShinyApp(app$ui, app$server, enableBookmarking = "url")
 ```
 
 
@@ -280,7 +300,7 @@ app <- init(
   ),
   filter = list(
     ADSL = list(
-      SEX = list(choices = "M", keep_na = TRUE),
+      SEX = list(selected = "M", keep_na = TRUE),
       COUNTRY = c("USA", NA),
       AGE = default_filter()
     ),
@@ -290,7 +310,8 @@ app <- init(
   ),
   header = "Start with Pre-defined Filters",
   footer = tags$p(class = "text-muted", "Source: agile-R website")
-); safeBookmarkableShinyApp(app$ui, app$server, enableBookmarking = "url")
+)
+safeBookmarkableShinyApp(app$ui, app$server, enableBookmarking = "url")
 ```
 
 
@@ -320,7 +341,8 @@ app <- init(
   ),
   header = "Hidden Right Filter Panel",
   footer = tags$p(class = "text-muted", "Source: agile-R website")
-); safeBookmarkableShinyApp(app$ui, app$server, enableBookmarking = "url")
+) 
+safeBookmarkableShinyApp(app$ui, app$server, enableBookmarking = "url")
 ```
 
 
@@ -339,7 +361,8 @@ app <- init(
   ),
   header = "Raw App",
   footer = tags$p(class = "text-muted", "Source: agile-R website")
-); safeBookmarkableShinyApp(app$ui, app$server, enableBookmarking = "url")
+)
+safeBookmarkableShinyApp(app$ui, app$server, enableBookmarking = "url")
 ```
 
 ## App with Independent and Non-Independent Data
@@ -365,5 +388,6 @@ app <- init(
   ),
   header = "Mixed Independent and Dependent Data",
   footer = tags$p(class = "text-muted", "Source: agile-R website")
-); safeBookmarkableShinyApp(app$ui, app$server, enableBookmarking = "url")
+)
+safeBookmarkableShinyApp(app$ui, app$server, enableBookmarking = "url")
 ```
