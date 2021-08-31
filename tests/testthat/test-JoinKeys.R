@@ -229,7 +229,7 @@ testthat::test_that("JoinKeys$split method returns empty list when object itself
   testthat::expect_equal(x$split(), list())
 })
 
-testthat::test_that("JoinKeys$split method works in general", {
+testthat::test_that("JoinKeys$split method returns a named list of JoinKeys objects with an element for each dataset", {
   x <- JoinKeys$new()
   x$set(
     list(
@@ -249,4 +249,45 @@ testthat::test_that("JoinKeys$split method works in general", {
   testthat::expect_equal(names(res$C$get()), c("C", "A"))
   testthat::expect_equal(names(res$Z$get()), c("Z", "Y"))
   testthat::expect_equal(names(res$Y$get()), c("Y", "Z"))
+})
+
+testthat::test_that("JoinKeys$split method returns a mutated list after JoinKeys$mutate() method call", {
+  x <- JoinKeys$new()
+  x$set(
+    list(
+      join_key("A", "B", c("a" = "b")),
+      join_key("A", "C", c("a" = "c", "aa" = "cc")),
+      join_key("Z", "Y", c("z" = "y"))
+    )
+  )
+  res <- x$split()
+
+  x$mutate("A", "B", c("a" = "b", "aa" = "bb"))
+  res2 <- x$split()
+
+  testthat::expect_false(identical(res, res2))
+  testthat::expect_identical(res2$A$get()$A$B, c("a" = "b", "aa" = "bb"))
+
+  # adding new datasets
+  x$mutate("D", "G", c("d" = "g"))
+  res3 <- x$split()
+  testthat::expect_false(identical(res, res3))
+  testthat::expect_false(identical(res2, res3))
+  testthat::expect_identical(res3$D$get()$D$G, c("d" = "g"))
+  testthat::expect_identical(res3$D$get()$G$D, c("g" = "d"))
+  testthat::expect_identical(names(res3$D$get()), c("D", "G"))
+})
+
+testthat::test_that("JoinKeys$split method does not modify self", {
+  x <- JoinKeys$new()
+  x$set(
+    list(
+      join_key("A", "B", c("a" = "b")),
+      join_key("A", "C", c("a" = "c", "aa" = "cc")),
+      join_key("Z", "Y", c("z" = "y"))
+    )
+  )
+  previous_self <- x$clone()
+  no_use_output <- x$split()
+  testthat::expect_equal(previous_self, x)
 })
