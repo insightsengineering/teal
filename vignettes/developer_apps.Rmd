@@ -23,13 +23,13 @@ We load the libraries and set relevant options. Be careful to load the developme
 ```{r loadLibraries, eval=FALSE}
 # execute the vignette as if it were executed interactively
 # when you run KnitR from RStudio, it does not run the vignette interactively
-EXECUTE_LIKE_INTERACTIVE <- interactive()
-# EXECUTE_LIKE_INTERACTIVE <- TRUE # only for developing, automation should not run apps
+execute_like_interactive <- interactive()
+# execute_like_interactive <- TRUE # only for developing, automation should not run apps #nolint
 
 # load the development version of teal if you have not installed it
-LOAD_DEV_TEAL <- EXECUTE_LIKE_INTERACTIVE
-if (LOAD_DEV_TEAL) {
-  # devtools::load_all() # obfuscated call to avoid dependence on devtools required by R CMD CHECK
+load_dev_teal <- execute_like_interactive
+if (load_dev_teal) {
+  # obfuscated call to avoid dependence on devtools required by R CMD CHECK
   do.call(`::`, list(quote(devtools), quote(load_all)))()
 } else {
   cat("Loading non-dev version.\n")
@@ -41,16 +41,14 @@ if (LOAD_DEV_TEAL) {
 options(shiny.fullstacktrace = TRUE) # to show a detailed stack trace, see `?getShinyOption()`
 options(teal_logging = TRUE) # to log to console
 # where to open app (new window or within RStudio)
-# options("shiny.launch.browser" = TRUE) # to open a new window
+# options("shiny.launch.browser" = TRUE) # to open a new window #nolint
 # to open in RStudio Viewer pane, only available in RStudio, so it won't go through `CI` if enabled
-# options("shiny.launch.browser" = function(url) invisible(.Call("rs_shinyviewer", url, getwd(), 2)))
-
+# options("shiny.launch.browser" = function(url) invisible(.Call("rs_shinyviewer", url, getwd(), 2)))  #nolint
 # to evaluate reactives without taking dependencies, implicitly wrap them into an `isolate` context
-# options("shiny.suppressMissingContextError" = FALSE)
+# options("shiny.suppressMissingContextError" = FALSE) #nolint
 
 # to make it easy for the developer to toggle it on
-EXECUTE_APPS <- EXECUTE_LIKE_INTERACTIVE
-safeBookmarkableShinyApp <- function(..., execute_app = EXECUTE_APPS) {
+safeBookmarkableShinyApp <- function(..., execute_app = execute_like_interactive) { # nolint
   if (execute_app) {
     bookmarkableShinyApp(...)
   } else {
@@ -62,12 +60,12 @@ safeBookmarkableShinyApp <- function(..., execute_app = EXECUTE_APPS) {
 ```{r createDatasets, eval=FALSE}
 library(scda.2021)
 # Create the dataset with some NA values and a logical value
-ADSL <- rcd_2021_07_07$adsl
+ADSL <- rcd_2021_07_07$adsl# nolint
 ADSL$logical_test <- sample(c(TRUE, FALSE, NA), size = nrow(ADSL), replace = TRUE)
 ADSL$SEX[1:150] <- NA
 
-ADAE <- rcd_2021_07_07$adae
-ADLB <- rcd_2021_07_07$adlb
+ADAE <- rcd_2021_07_07$adae # nolint
+ADLB <- rcd_2021_07_07$adlb # nolint
 ```
 
 # Apps
@@ -153,7 +151,7 @@ app <- init(
       cdisc_dataset(dataname = "ADSL", x = ADSL, code = "rcd_2021_07_07$adsl"),
       cdisc_dataset(dataname = "ADAE", x = ADAE, code = "rcd_2021_07_07$adae"),
       cdisc_dataset(dataname = "ADLB", x = ADLB, code = "rcd_2021_07_07$adlb"),
-    )    
+    )
   ),
   modules = root_modules(
     teal:::filter_calls_module("ADAE", active_datanames = c("ADAE")),
@@ -164,11 +162,11 @@ app <- init(
   ),
   filter = list(
     ADSL = list(
-      SEX = list(selected = "M", keep_na = TRUE), 
+      SEX = list(selected = "M", keep_na = TRUE),
       COUNTRY = c("USA", NA),
       AGE = default_filter()
     )
-    ),
+  ),
   header = "App with Delayed Data",
   footer = tags$p(class = "text-muted", "Source: agile-R website")
 )
@@ -187,12 +185,12 @@ app <- init(
   ),
   modules = root_modules(
     modules(
-      label = "A1", 
-      teal:::filter_calls_module("B1.1", active_datanames = c("ADSL", "ADAE")), 
+      label = "A1",
+      teal:::filter_calls_module("B1.1", active_datanames = c("ADSL", "ADAE")),
       teal:::filter_calls_module("B1.2"),
       modules(
-        label = "B1.3", 
-        teal:::filter_calls_module("C1.1", active_datanames = c("ADSL", "ADAE")), 
+        label = "B1.3",
+        teal:::filter_calls_module("C1.1", active_datanames = c("ADSL", "ADAE")),
         teal:::filter_calls_module("C1.2")
       )
     ),
@@ -340,7 +338,7 @@ app <- init(
   ),
   header = "Hidden Right Filter Panel",
   footer = tags$p(class = "text-muted", "Source: agile-R website")
-) 
+)
 safeBookmarkableShinyApp(app$ui, app$server, enableBookmarking = "url")
 ```
 

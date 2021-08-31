@@ -422,4 +422,3 @@ set_filter_state.default_filter <- function(x, filter_state) { # nolint
 set_filter_state.list <- function(x, filter_state) {
   filter_state$set_state(state = x)
 }
-
