@@ -155,8 +155,6 @@ FilterStates <- R6::R6Class( # nolint
   public = list(
     #' @description
     #' Initializes this `FilterStates` object.
-    #' @param data (`data.frame`, `MultiAssayExperiment`, `SummarizedExperiment`, `matrix`)\cr
-    #'   R object which `subset` function is applied on.
     #'
     #' @param input_dataname (`character(1)` or `name` or `call`)\cr
     #'   name of the data used on lhs of the expression
@@ -647,7 +645,6 @@ DFFilterStates <- R6::R6Class( # nolint
       }
     },
 
-
     #' @description
     #' Shiny UI module to add filter variable
     #' @param id (`character(1)`)\cr
@@ -792,8 +789,6 @@ MAEFilterStates <- R6::R6Class( # nolint
     #' Initialize `MAEFilterStates` object
     #'
     #' Initialize `MAEFilterStates` object
-    #' @param data (`MultiAssayExperiment`)\cr
-    #'   R object which `SummarizedExperiment::summarizeByColData` function is applied on.
     #'
     #' @param input_dataname (`character(1)` or `name` or `call`)\cr
     #'   name of the data used on lhs of the expression
@@ -1013,8 +1008,6 @@ SEFilterStates <- R6::R6Class( # nolint
     #' Initialize `SEFilterStates` object
     #'
     #' Initialize `SEFilterStates` object
-    #' @param data (`SummarizedExperiment`)\cr
-    #'   R object which `subset` function is applied on.
     #'
     #' @param input_dataname (`character(1)` or `name` or `call`)\cr
     #'   name of the data used on lhs of the expression
@@ -1293,8 +1286,6 @@ MatrixFilterStates <- R6::R6Class( # nolint
     #' Initialize `MatrixFilterStates` object
     #'
     #' Initialize `MatrixFilterStates` object
-    #' @param data (`matrix`)\cr
-    #'   R object which `subset` function is applied on.
     #'
     #' @param input_dataname (`character(1)` or `name` or `call`)\cr
     #'   name of the data used on lhs of the expression
