@@ -1,5 +1,5 @@
 testthat::test_that("set_filter_state for list", {
-  filter_state <- teal::init_filter_state(
+  filter_state <- teal:::init_filter_state(
     c(1:10, NA, Inf),
     varname = "x"
   )
@@ -34,7 +34,7 @@ testthat::test_that("set_filter_state for list", {
 })
 
 testthat::test_that("set_filter_state for vector", {
-  filter_state <- teal::init_filter_state(
+  filter_state <- teal:::init_filter_state(
     c(1:10, NA, Inf),
     varname = "x"
   )
@@ -52,7 +52,7 @@ testthat::test_that("set_filter_state for vector", {
 })
 
 testthat::test_that("set_filter_state for default_filter", {
-  filter_state <- teal::init_filter_state(
+  filter_state <- teal:::init_filter_state(
     c(1:10, NA, Inf),
     varname = "x"
   )
@@ -73,7 +73,7 @@ testthat::test_that("set_filter_state for default_filter", {
 })
 
 testthat::test_that("set_filter_state overwrites fields included in the input only", {
-  filter_state <- teal::init_filter_state(
+  filter_state <- teal:::init_filter_state(
     c(1:10, NA, Inf),
     varname = "x"
   )
@@ -115,7 +115,7 @@ testthat::test_that("set_filter_state overwrites fields included in the input on
 })
 
 testthat::test_that("set_filter_state - character values", {
-  filter_state <- teal::init_filter_state(
+  filter_state <- teal:::init_filter_state(
     c("a", "b", NA_character_),
     varname = "x"
   )
@@ -134,7 +134,7 @@ testthat::test_that("set_filter_state - character values", {
 
 testthat::test_that("set_filter_state - date values", {
   dates <- Sys.Date() + seq_len(3)
-  filter_state <- teal::init_filter_state(
+  filter_state <- teal:::init_filter_state(
     c(dates, NA),
     varname = "x"
   )
@@ -152,7 +152,7 @@ testthat::test_that("set_filter_state - date values", {
 })
 
 testthat::test_that("set_filter_state - logical values", {
-  filter_state <- teal::init_filter_state(
+  filter_state <- teal:::init_filter_state(
     c(TRUE, FALSE, NA),
     varname = "x"
   )

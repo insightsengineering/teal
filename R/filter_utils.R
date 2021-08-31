@@ -392,7 +392,7 @@ call_condition_range_date <- function(varname, range) {
 #' teal:::set_filter_state(c(1, 2, Inf), filter_state)
 #' teal:::set_filter_state(default_filter(), filter_state)
 set_filter_state <- function(x, filter_state) {
-   UseMethod("set_filter_state")
+  UseMethod("set_filter_state")
 }
 
 #' @export
