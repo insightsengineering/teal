@@ -34,6 +34,27 @@ JoinKeys <- R6::R6Class( # nolint
       return(invisible(self))
     },
     #' @description
+    #' Split the current join keys object into a named list of join keys objects with an element for each dataset
+    #' @return (`list`) a list of `JoinKeys` object
+    split = function() {
+      list_of_list_of_join_key_set <- lapply(
+        names(self$get()),
+        function(dataset_1) lapply(
+          names(self$get()[[dataset_1]]),
+          function(dataset_2) join_key(dataset_1, dataset_2, self$get()[[dataset_1]][[dataset_2]])
+        )
+      )
+      res <- lapply(
+        list_of_list_of_join_key_set,
+        function(x) {
+          y <- JoinKeys$new()
+          y$set(x)
+        }
+      )
+      names(res) <- names(self$get())
+      return(res)
+    },
+    #' @description
     #' Get join keys between two datasets.
     #' @return (`character`) named character vector x with names(x) the
     #' columns of `dataset_1` and the values of `(x)` the corresponding join

@@ -223,3 +223,30 @@ test_that("can remove keys by setting them to character(0)", {
   my_keys$mutate("d1", "d2", character(0))
   expect_equal(my_keys$get("d1", "d2"), character(0))
 })
+
+testthat::test_that("JoinKeys$split method returns empty list when object itself is empty", {
+  x <- JoinKeys$new()
+  testthat::expect_equal(x$split(), list())
+})
+
+testthat::test_that("JoinKeys$split method works in general", {
+  x <- JoinKeys$new()
+  x$set(
+    list(
+      join_key("A", "B", c("a" = "b")),
+      join_key("A", "C", c("a" = "c", "aa" = "cc")),
+      join_key("Z", "Y", c("z" = "y"))
+    )
+  )
+  res <- x$split()
+  testthat::expect_true(is(res, "list"))
+  testthat::expect_equal(length(res), 5)
+  testthat::expect_equal(names(res), c("A", "B", "C", "Z", "Y"))
+  testthat::expect_true(all(vapply(res, function(x) is(x, "JoinKeys"), logical(1))))
+
+  testthat::expect_equal(names(res$A$get()), c("A", "B", "C"))
+  testthat::expect_equal(names(res$B$get()), c("B", "A"))
+  testthat::expect_equal(names(res$C$get()), c("C", "A"))
+  testthat::expect_equal(names(res$Z$get()), c("Z", "Y"))
+  testthat::expect_equal(names(res$Y$get()), c("Y", "Z"))
+})

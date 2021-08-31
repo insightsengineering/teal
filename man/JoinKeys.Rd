@@ -27,6 +27,7 @@ x$get("dataset_A", "dataset_B")
 \subsection{Public methods}{
 \itemize{
 \item \href{#method-new}{\code{JoinKeys$new()}}
+\item \href{#method-split}{\code{JoinKeys$split()}}
 \item \href{#method-get}{\code{JoinKeys$get()}}
 \item \href{#method-mutate}{\code{JoinKeys$mutate()}}
 \item \href{#method-set}{\code{JoinKeys$set()}}
@@ -44,6 +45,19 @@ Create a new object of \code{JoinKeys}
 
 \subsection{Returns}{
 empty (\code{JoinKeys})
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-split"></a>}}
+\if{latex}{\out{\hypertarget{method-split}{}}}
+\subsection{Method \code{split()}}{
+Split the current join keys object into a named list of join keys objects with an element for each dataset
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{JoinKeys$split()}\if{html}{\out{</div>}}
+}
+
+\subsection{Returns}{
+(\code{list}) a list of \code{JoinKeys} object
 }
 }
 \if{html}{\out{<hr>}}
