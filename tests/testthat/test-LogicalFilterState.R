@@ -36,7 +36,7 @@ testthat::test_that("set_selected throw when selection not within allowed choice
 
   testthat::expect_error(
     filter_state$set_selected(1),
-    "should be a logical"
+    "should be a single logical value"
   )
 })
 
@@ -48,4 +48,24 @@ testthat::test_that("get_call returns a condition true for the values passed in 
 
   filter_state$set_selected(FALSE)
   testthat::expect_equal(eval(isolate(filter_state$get_call())), c(FALSE, TRUE, TRUE, FALSE))
+})
+
+testthat::test_that("set_state need named list with selected and keep_na elements", {
+  filter_state <- LogicalFilterState$new(x = c(TRUE, FALSE, NA), varname = "test")
+
+  testthat::expect_error(filter_state$set_state(list(selected = FALSE, keep_na = TRUE)), NA)
+  testthat::expect_identical(isolate(filter_state$get_selected()), FALSE)
+  testthat::expect_true(isolate(filter_state$get_keep_na()))
+
+  testthat::expect_error(filter_state$set_state(list(selected = TRUE, unknown = TRUE)), "all\\(names\\(state\\)")
+})
+
+testthat::test_that("set_state overwrites fields included in the input only", {
+  filter_state <- LogicalFilterState$new(x = c(TRUE, FALSE, NA), varname = "test")
+
+  testthat::expect_error(filter_state$set_state(list(selected = FALSE, keep_na = TRUE)), NA)
+  testthat::expect_error(filter_state$set_state(list(selected = TRUE)), NA)
+
+  testthat::expect_true(isolate(filter_state$get_selected()))
+  testthat::expect_true(isolate(filter_state$get_keep_na()))
 })

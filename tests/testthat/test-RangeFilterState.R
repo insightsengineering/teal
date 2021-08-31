@@ -98,3 +98,38 @@ testthat::test_that("set_selected throw when selection not within allowed choice
     "not valid for full range"
   )
 })
+
+testthat::test_that("set_state need named list with selected and keep_na elements", 
+  filter_state <- filter_state <- RangeFilterState$new(c(1, 8, NA_real_, Inf), varname = "test")
+  testthat::expect_error(
+    set_filter_state(list(selected = c(1, 2), keep_na = TRUE, keep_inf = TRUE), filter_state), 
+    NA
+  )
+  testthat::expect_identical(
+    isolate(filter_state$get_selected()),
+    c(1, 2)
+  )  
+  testthat::expect_true(isolate(filter_state$get_keep_na()))
+  testthat::expect_true(isolate(filter_state$get_keep_inf()))  
+  testthat::expect_error(filter_state$set_state(list(selected = c(1, 2), unknown = TRUE)), "all\\(names\\(state\\)")
+})
+
+
+testthat::test_that("set_state overwrites fields included in the input only", {
+  filter_state <- filter_state <- RangeFilterState$new(c(1, 8, NA_real_, Inf), varname = "test")
+  testthat::expect_error(
+    set_filter_state(list(selected = c(1, 2), keep_na = TRUE, keep_inf = TRUE), filter_state), 
+    NA
+  )
+
+  testthat::expect_error(
+    set_filter_state(list(selected = c(5, 6), keep_na = TRUE, keep_inf = TRUE), filter_state), 
+    NA
+  )
+  testthat::expect_identical(
+    isolate(filter_state$get_selected()),
+    c(5, 6)
+  )  
+  testthat::expect_true(isolate(filter_state$get_keep_na()))
+  testthat::expect_true(isolate(filter_state$get_keep_inf()))  
+})
