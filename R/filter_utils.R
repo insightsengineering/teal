@@ -414,7 +414,7 @@ set_filter_state.default <- function(x, filter_state) {
 }
 
 #' @export
-set_filter_state.default_filter <- function(x, filter_state) {
+set_filter_state.default_filter <- function(x, filter_state) { # nolint
   invisible(NULL)
 }
 

@@ -79,7 +79,7 @@ input changes to the reactive environment on the server side. Please inspect the
 developer tools and then stop the Shiny app and compare that `HTML` code with the
 ui code created by running the following code in the R console:
 
-```{r}
+```{r, eval=FALSE}
 fluidPage(
   selectInput(inputId = "select_data", label = "select data", choices = c("iris", "mtcars")),
   plotOutput(outputId = "scatterplotmatrix")
@@ -298,7 +298,7 @@ knitr::include_graphics('./images/design_cdisc_filtered_datasets.png')
 This filtering will now be explained step by step for two example datasets (`ADSL`
 and `ADTTE`):
 
-```{r, eval=TRUE}
+```{r}
 # for reproducibility
 set.seed(1)
 
@@ -325,7 +325,7 @@ set.seed(0)
 The `datasets` object of class `CDISCFilteredData`
 that is passed an argument to the `server` function is created by `teal` as follows:
 
-```{r, eval=TRUE}
+```{r}
 library(teal)
 options(teal_logging = FALSE)
 
@@ -333,8 +333,8 @@ datasets <- teal:::CDISCFilteredData$new()
 # the `datasets` object contains reactives
 # we activate this option, so we don't need to wrap all reactives in isolate calls
 options(shiny.suppressMissingContextError = TRUE)
-datasets$set_dataset(dataset = dataset("ADSL", ADSL))
-datasets$set_dataset(dataset = dataset("ADTTE", ADTTE))
+datasets$set_dataset(cdisc_dataset("ADSL", ADSL))
+datasets$set_dataset(cdisc_dataset("ADTTE", ADTTE))
 shiny:::flushReact() # force evaluation outside of Shiny apps
 ```
 
@@ -349,7 +349,7 @@ datasets$print_filter_info("ADSL", filtered_vars_only = FALSE)
 Now say we want to filter out all the patients in `ADSL` except patients with `USUBJID`
 equal to `id-1`, `id-2`, `id-3`, or `id-4`:
 
-```{r, eval=TRUE}
+```{r}
 datasets$set_bookmark_state(
   state = list(
     ADSL = list(
@@ -450,7 +450,7 @@ the module server functions which happens with the `call_modules` function call.
 Here is an example of an app with two independent teal applications side-by-side. The same idea can be used to embed it into other Shiny modules.
 We use the `id` argument of the `init` function for this.
 
-```{r, eval = FALSE}
+```{r, eval=FALSE}
 library(random.cdisc.data)
 
 ADSL <- radsl(cached = TRUE)
