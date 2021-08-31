@@ -39,12 +39,9 @@
 #' datasets <- teal:::FilteredData$new()
 #'
 #' # setting the data
-#' isolate({
-#'   datasets$set_dataset(dataset("iris", iris))
-#'   datasets$set_dataset(dataset("mtcars", mtcars))
-#'  })
-#'
-#'
+#' datasets$set_dataset(dataset("iris", iris))
+#' datasets$set_dataset(dataset("mtcars", mtcars))
+#' 
 #' isolate({
 #'   datasets$datanames()
 #'   datasets$get_filter_overview("iris")
