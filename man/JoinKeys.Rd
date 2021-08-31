@@ -28,6 +28,7 @@ x$get("dataset_A", "dataset_B")
 \itemize{
 \item \href{#method-new}{\code{JoinKeys$new()}}
 \item \href{#method-split}{\code{JoinKeys$split()}}
+\item \href{#method-merge}{\code{JoinKeys$merge()}}
 \item \href{#method-get}{\code{JoinKeys$get()}}
 \item \href{#method-mutate}{\code{JoinKeys$mutate()}}
 \item \href{#method-set}{\code{JoinKeys$set()}}
@@ -58,6 +59,26 @@ Split the current join keys object into a named list of join keys objects with a
 
 \subsection{Returns}{
 (\code{list}) a list of \code{JoinKeys} object
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-merge"></a>}}
+\if{latex}{\out{\hypertarget{method-merge}{}}}
+\subsection{Method \code{merge()}}{
+Merging a list (or one) of \code{JoinKeys} objects into the current joint keys object
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{JoinKeys$merge(x)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{x}}{\code{list} of \code{JoinKeys} objects or single \code{JoinKeys} object}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Returns}{
+(\code{self}) invisibly for chaining
 }
 }
 \if{html}{\out{<hr>}}

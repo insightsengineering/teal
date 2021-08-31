@@ -55,6 +55,23 @@ JoinKeys <- R6::R6Class( # nolint
       return(res)
     },
     #' @description
+    #' Merging a list (or one) of `JoinKeys` objects into the current joint keys object
+    #' @param x  `list` of `JoinKeys` objects or single `JoinKeys` object
+    #' @return (`self`) invisibly for chaining
+    merge = function(x) {
+      stopifnot(is_class_list("JoinKeys")(x) || is(x, "JoinKeys"))
+      if (!is_class_list("JoinKeys")(x)) {
+        x <- list(x)
+      }
+      for (jk in x) {
+        for (dataset_1 in names(jk$get())) {
+          for (dataset_2 in names(jk$get()[[dataset_1]]))
+            self$mutate(dataset_1, dataset_2, jk$get()[[dataset_1]][[dataset_2]])
+        }
+      }
+      return(invisible(self))
+    },
+    #' @description
     #' Get join keys between two datasets.
     #' @return (`character`) named character vector x with names(x) the
     #' columns of `dataset_1` and the values of `(x)` the corresponding join
