@@ -22,7 +22,7 @@ testthat::test_that("set_bookmark_state sets correct filters for DefaultFiltered
     isolate(dataset$get_call()),
     list(
       filter = quote(
-        iris_FILTERED <- dplyr::filter(
+        iris_FILTERED <- dplyr::filter( # nolint
           iris,
           Sepal.Length >= 5.1 & Sepal.Length <= 6.4 &
             Species %in% c("setosa", "versicolor")

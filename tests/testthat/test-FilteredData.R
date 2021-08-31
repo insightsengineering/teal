@@ -139,7 +139,7 @@ testthat::test_that("set_bookmark_state sets correct filters", {
     isolate(datasets$get_call("iris")),
     list(
       filter = quote(
-        iris_FILTERED <- dplyr::filter(
+        iris_FILTERED <- dplyr::filter( # nolint
           iris,
           Sepal.Length >= 5.1 & Sepal.Length <= 6.4 &
           Species %in% c("setosa", "versicolor")
@@ -152,7 +152,7 @@ testthat::test_that("set_bookmark_state sets correct filters", {
     isolate(datasets$get_call("mtcars")),
     list(
       filter = quote(
-        mtcars_FILTERED <- dplyr::filter(
+        mtcars_FILTERED <- dplyr::filter( # nolint
           mtcars,
           cyl %in% c("4", "6") & (disp >= 71.1 & disp <= 472)
         )

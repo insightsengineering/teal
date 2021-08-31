@@ -863,7 +863,7 @@ MAEFilterStates <- R6::R6Class( # nolint
           set_filter_state(x  = value, fstate)
         }
 
-        
+
         if (shiny::isRunning()) {
           id <- digest::digest(sprintf("%s_%s", "y", varname), algo = "md5")
           callModule(
@@ -1394,7 +1394,7 @@ MatrixFilterStates <- R6::R6Class( # nolint
             element_id = varname
           )
         }
-        
+
       }
     },
 

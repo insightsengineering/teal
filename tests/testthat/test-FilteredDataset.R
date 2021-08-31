@@ -138,7 +138,7 @@ testthat::test_that("set_bookmark_state sets correct filters for MAEFilteredData
     isolate(dataset$get_call()),
     list(
       subjects = quote(
-        MAE_FILTERED <- MultiAssayExperiment::subsetByColData(
+        MAE_FILTERED <- MultiAssayExperiment::subsetByColData( # nolint
           MAE,
           y = MAE$years_to_birth >=  30 & MAE$years_to_birth <= 50 &
             MAE$vital_status == "1" &
@@ -146,7 +146,7 @@ testthat::test_that("set_bookmark_state sets correct filters for MAEFilteredData
         )
       ),
       RPPAArray = quote(
-        MAE_FILTERED[["RPPAArray"]] <- subset(
+        MAE_FILTERED[["RPPAArray"]] <- subset( # nolint
           MAE_FILTERED[["RPPAArray"]],
           subset = ARRAY_TYPE == ""
         )

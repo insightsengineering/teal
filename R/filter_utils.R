@@ -123,9 +123,9 @@ call_extract_matrix <- function(dataname = ".", row = NULL, column = NULL) {
 #' teal:::call_extract_list(as.name("weird name"), as.name("AGE"))
 #' teal:::call_extract_list(as.name("ADSL"), "AGE", dollar = FALSE)
 call_extract_list <- function(dataname, varname, dollar = TRUE) {
-  stopifnot(is_character_single(dataname) || is.name(dataname))
-  stopifnot(is_character_single(varname) || is.name(varname))
-  stopifnot(is_logical_single(dollar))
+  stopifnot(utils.nest::is_character_single(dataname) || is.name(dataname))
+  stopifnot(utils.nest::is_character_single(varname) || is.name(varname))
+  stopifnot(utils.nest::is_logical_single(dollar))
   if (is.character(dataname)) {
     dataname <- as.name(dataname)
   }
@@ -160,7 +160,7 @@ call_extract_list <- function(dataname, varname, dollar = TRUE) {
 #' )
 #' @return a combined `call`
 calls_combine_by <- function(operator, calls) {
-  stopifnot(is_character_single(operator))
+  stopifnot(utils.nest::is_character_single(operator))
   stopifnot(
     all(
       vapply(
@@ -194,7 +194,7 @@ calls_combine_by <- function(operator, calls) {
 #' teal:::call_condition_choice("SEX", choices = c(1, 2))
 #' @return `call`
 call_condition_choice <- function(varname, choices) {
-  stopifnot(is_character_single("varname") || is.name(varname))
+  stopifnot(utils.nest::is_character_single("varname") || is.name(varname))
   if (is.character(varname)) {
     varname <- as.name(varname)
   }
@@ -232,7 +232,7 @@ call_condition_choice <- function(varname, choices) {
 #' )
 #' @return a `call`
 call_condition_range <- function(varname, range) {
-  stopifnot(is_character_single(varname) || is.name(varname) || is.call(varname))
+  stopifnot(utils.nest::is_character_single(varname) || is.name(varname) || is.call(varname))
   stopifnot(is.numeric(range) && length(range) == 2)
 
   if (is.character(varname)) {
@@ -261,8 +261,8 @@ call_condition_range <- function(varname, range) {
 #' teal:::call_condition_logical("event", choice = FALSE)
 #' @return a `call`
 call_condition_logical <- function(varname, choice) {
-  stopifnot(is_character_single(varname) || is.name(varname) || is.call(varname))
-  stopifnot(is_logical_single(choice))
+  stopifnot(utils.nest::is_character_single(varname) || is.name(varname) || is.call(varname))
+  stopifnot(utils.nest::is_logical_single(choice))
 
   if (is.character(varname)) {
     varname <- as.name(varname)
@@ -303,9 +303,9 @@ call_condition_logical <- function(varname, choice) {
 #' )
 #' @return a `call`
 call_condition_range_posixct <- function(varname, range, timezone = Sys.timezone()) {
-  stopifnot(is_character_single(varname) || is.name(varname) || is.call(varname))
+  stopifnot(utils.nest::is_character_single(varname) || is.name(varname) || is.call(varname))
   stopifnot(is(range, "POSIXct") && length(range) == 2)
-  stopifnot(is_character_single(timezone))
+  stopifnot(utils.nest::is_character_single(timezone))
 
   if (is.character(varname)) {
     varname <- as.name(varname)
@@ -344,7 +344,7 @@ call_condition_range_posixct <- function(varname, range, timezone = Sys.timezone
 #' )
 #' @return `call`
 call_condition_range_date <- function(varname, range) {
-  stopifnot(is_character_single(varname) || is.name(varname) || is.call(varname))
+  stopifnot(utils.nest::is_character_single(varname) || is.name(varname) || is.call(varname))
   stopifnot(is(range, "Date") && length(range) == 2)
 
 

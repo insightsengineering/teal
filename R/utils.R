@@ -259,6 +259,13 @@ check_in_subset <- function(subset, choices, pre_msg = "") {
   }
   return(invisible(NULL))
 }
+
+#' Concatenate deparsed call
+#'
+#' Concatenate deparsed call
+#' @param x (`language`)\cr
+#' @inheritParams base::deparse
+#' @return `character`
 pdeparse <- function(x, width.cutoff = 500L) { # nolint
   paste0(deparse(x, width.cutoff = width.cutoff), collapse = "\n") # nolint
 }

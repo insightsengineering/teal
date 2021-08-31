@@ -4,7 +4,7 @@ testthat::test_that("The constructor accepts numerical values", {
 
 testthat::test_that("The constructor accepts infinite values", {
   testthat::expect_error(RangeFilterState$new(c(1, Inf, -Inf), varname = "test"), NA)
-  testthat::expect_error(RangeFilterState$new(Inf, varname = "test"), NA)
+  testthat::expect_error(RangeFilterState$new(Inf, varname = "test"), "any\\(is.finite\\(x")
 })
 
 testthat::test_that("get_call returns a condition TRUE for all values passed to the constructor", {
