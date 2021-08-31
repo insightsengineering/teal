@@ -30,8 +30,8 @@ testthat::test_that("set_selected throw when selection not within allowed choice
   filter_state <- LogicalFilterState$new(TRUE, varname = "test")
 
   testthat::expect_error(
-    filter_state$set_selected(FALSE),
-    "not in valid choices"
+    filter_state$set_selected("YES"),
+    "should be a logical"
   )
 
   testthat::expect_error(
