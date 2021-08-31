@@ -73,7 +73,7 @@ testthat::test_that("set_state need named list with selected and keep_na element
   objects <- as.POSIXct(c(1:5), origin = "1900/01/01")
   filter_state <- DatetimeFilterState$new(objects, varname = "test")
   testthat::expect_error(
-    filter_state$set_state(list(selected = c(objects[2], objects[2]), keep_na = TRUE)), 
+    filter_state$set_state(list(selected = c(objects[2], objects[2]), keep_na = TRUE)),
     NA
   )
 
@@ -82,7 +82,7 @@ testthat::test_that("set_state need named list with selected and keep_na element
   testthat::expect_error(
     filter_state$set_state(
       list(selected = c(test_date[2], test_date[2]), unknown = TRUE)
-    ), 
+    ),
     "all\\(names\\(state\\)"
   )
 })
@@ -91,11 +91,11 @@ testthat::test_that("set_state overwrites fields included in the input only", {
  objects <- as.POSIXct(c(1:5), origin = "1900/01/01")
   filter_state <- DatetimeFilterState$new(objects, varname = "test")
   testthat::expect_error(
-    filter_state$set_state(list(selected = c(objects[2], objects[2]), keep_na = TRUE)), 
+    filter_state$set_state(list(selected = c(objects[2], objects[2]), keep_na = TRUE)),
     NA
   )
   testthat::expect_error(
-    filter_state$set_state(list(selected = c(objects[2], objects[2]))), 
+    filter_state$set_state(list(selected = c(objects[2], objects[2]))),
     NA
   )
 
@@ -104,8 +104,7 @@ testthat::test_that("set_state overwrites fields included in the input only", {
   testthat::expect_error(
     filter_state$set_state(
       list(selected = c(objects[2], objects[2]), unknown = TRUE)
-    ), 
+    ),
     "all\\(names\\(state\\)"
   )
 })
- 

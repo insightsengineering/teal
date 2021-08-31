@@ -56,11 +56,11 @@ testthat::test_that("set_selected throw when selection not within allowed choice
 })
 
 testthat::test_that("set_state need named list with selected and keep_na elements", {
-  test_date <- as.Date(c("2013/07/13", "2013/07/14", "2013/07/15"))  
+  test_date <- as.Date(c("2013/07/13", "2013/07/14", "2013/07/15"))
   filter_state <- DateFilterState$new(test_date, varname = "test")
 
   testthat::expect_error(
-    filter_state$set_state(list(selected = c(test_date[2], test_date[2]), keep_na = TRUE)), 
+    filter_state$set_state(list(selected = c(test_date[2], test_date[2]), keep_na = TRUE)),
     NA
   )
   testthat::expect_identical(isolate(filter_state$get_selected()), c(test_date[2], test_date[2]))
@@ -68,21 +68,21 @@ testthat::test_that("set_state need named list with selected and keep_na element
   testthat::expect_error(
     filter_state$set_state(
       list(selected = c(test_date[2], test_date[2]), unknown = TRUE)
-    ), 
+    ),
     "all\\(names\\(state\\)"
   )
 })
 
 testthat::test_that("set_state overwrites fields included in the input only", {
-  test_date <- as.Date(c("2013/07/13", "2013/07/14", "2013/07/15"))  
+  test_date <- as.Date(c("2013/07/13", "2013/07/14", "2013/07/15"))
   filter_state <- DateFilterState$new(test_date, varname = "test")
 
   testthat::expect_error(
-    filter_state$set_state(list(selected = c(test_date[2], test_date[2]), keep_na = TRUE)), 
+    filter_state$set_state(list(selected = c(test_date[2], test_date[2]), keep_na = TRUE)),
     NA
   )
   testthat::expect_error(
-    filter_state$set_state(list(selected = c(test_date[2], test_date[2]))), 
+    filter_state$set_state(list(selected = c(test_date[2], test_date[2]))),
     NA
   )
 
@@ -91,7 +91,7 @@ testthat::test_that("set_state overwrites fields included in the input only", {
   testthat::expect_error(
     filter_state$set_state(
       list(selected = c(test_date[2], test_date[2]), unknown = TRUE)
-    ), 
+    ),
     "all\\(names\\(state\\)"
   )
 })

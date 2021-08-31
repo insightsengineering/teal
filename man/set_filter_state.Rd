@@ -29,7 +29,10 @@ filter_state <- teal:::RangeFilterState$new(
   varname = "x"
 )
 
-set_filter_state(list(selected = c(1, 2), keep_na = FALSE, keep_inf = TRUE))
-set_filter_state(c(1, 2, Inf))
-set_filter_state(default_filter()) 
+teal:::set_filter_state(
+  list(selected = c(1, 2), keep_na = FALSE, keep_inf = TRUE),
+  filter_state
+)
+teal:::set_filter_state(c(1, 2, Inf), filter_state)
+teal:::set_filter_state(default_filter(), filter_state)
 }

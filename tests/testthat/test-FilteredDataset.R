@@ -120,46 +120,18 @@ testthat::test_that("ui_add_filter_state is pure virtual", {
   testthat::expect_error(filtered_dataset$ui_add_filter_state(), regex = "Pure virtual")
 })
 
-testthat::test_that("srv_add_filter_state is pure virtual", {
-  filtered_dataset <- FilteredDataset$new(
-    dataset = Dataset$new("iris", head(iris))
-  )
-  testthat::expect_error(filtered_dataset$srv_add_filter_state(), regex = "Pure virtual")
-})
-
-testthat::test_that("set_bookmark_state sets correct filters for DefaultFilteredDataset", {
-  dataset <- teal:::DefaultFilteredDataset$new(dataset("iris", iris))
-  fs <- list(
-    Sepal.Length = list(selected = c(5.1, 6.4)),
-    Species = c("setosa", "versicolor") 
-  )
-  expect_error(dataset$set_bookmark_state(fs), NA)
-  expect_equal(
-    isolate(dataset$get_call()),
-    list(
-      filter = quote(
-        iris_FILTERED <- dplyr::filter(
-          iris, 
-          Sepal.Length >= 5.1 & Sepal.Length <= 6.4 & 
-          Species %in% c("setosa", "versicolor")
-        )
-      )
-    )
-  )  
-})
-
 testthat::test_that("set_bookmark_state sets correct filters for MAEFilteredDataset", {
   library(MultiAssayExperiment)
   dataset <- teal:::MAEFilteredDataset$new(dataset("MAE", miniACC))
   fs <- list(
     subjects = list(
-      years_to_birth = c(30, 50), 
-      vital_status = 1, 
+      years_to_birth = c(30, 50),
+      vital_status = 1,
       gender = "female"
     ),
     RPPAArray = list(
       subset = list(ARRAY_TYPE = "")
-    )  
+    )
   )
   expect_error(dataset$set_bookmark_state(fs), NA)
   expect_equal(
@@ -167,18 +139,18 @@ testthat::test_that("set_bookmark_state sets correct filters for MAEFilteredData
     list(
       subjects = quote(
         MAE_FILTERED <- MultiAssayExperiment::subsetByColData(
-          MAE, 
-          y = MAE$years_to_birth >=  30 & MAE$years_to_birth <= 50 & 
-            MAE$vital_status == "1" & 
+          MAE,
+          y = MAE$years_to_birth >=  30 & MAE$years_to_birth <= 50 &
+            MAE$vital_status == "1" &
             MAE$gender == "female"
         )
       ),
       RPPAArray = quote(
         MAE_FILTERED[["RPPAArray"]] <- subset(
-          MAE_FILTERED[["RPPAArray"]], 
+          MAE_FILTERED[["RPPAArray"]],
           subset = ARRAY_TYPE == ""
         )
       )
     )
-  )  
+  )
 })

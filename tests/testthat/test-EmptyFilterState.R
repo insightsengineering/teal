@@ -13,20 +13,20 @@ testthat::test_that("get_call returns a call after set_keep_na(TRUE)", {
 testthat::test_that("set_state need named list with selected and keep_na elements", {
   filter_state <- EmptyFilterState$new(7, varname = "test")
   testthat::expect_error(
-    filter_state$set_state(list(keep_na = TRUE)), 
+    filter_state$set_state(list(keep_na = TRUE)),
     NA
   )
   testthat::expect_true(isolate(filter_state$get_keep_na()))
   testthat::expect_error(
     filter_state$set_state(
       list(selected = 1)
-    ), 
+    ),
     "All values in variable 'test' are `NA`"
   )
   testthat::expect_error(
     filter_state$set_state(
       list(keep_na = FALSE, unknown = TRUE)
-    ), 
+    ),
     "all\\(names\\(state\\)"
   )
 })
