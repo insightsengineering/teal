@@ -31,8 +31,8 @@ testthat::test_that("set_bookmark_state sets correct filters for DefaultFiltered
     Sepal.Length = list(selected = c(5.1, 6.4)),
     Species = c("setosa", "versicolor")
   )
-  expect_error(dffs$set_bookmark_state(state = fs, data = iris), NA)
-  expect_equal(
+  testthat::expect_error(dffs$set_bookmark_state(state = fs, data = iris), NA)
+  testthat::expect_equal(
     isolate(dffs$get_call()),
     quote(
       iris_filtered <- dplyr::filter(
