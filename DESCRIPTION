@@ -21,7 +21,7 @@ Description: teal is a shiny based interactive exploration framework for
     analyzing clinical trials data. teal currently provides a dynamic filtering
     facility and different data viewers. teal shiny applications are built using
     standard shiny modules.
-License: file LICENSE
+License: Apache 2.0 + file LICENSE
 Encoding: UTF-8
 LazyData: true
 biocViews:
