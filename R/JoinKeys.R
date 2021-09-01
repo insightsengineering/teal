@@ -34,7 +34,7 @@ JoinKeys <- R6::R6Class( # nolint
       return(invisible(self))
     },
     #' @description
-    #' Split the current join keys object into a named list of join keys objects with an element for each dataset
+    #' Split the current `JoinKeys` object into a named list of join keys objects with an element for each dataset
     #' @return (`list`) a list of `JoinKeys` object
     split = function() {
       list_of_list_of_join_key_set <- lapply(
@@ -55,7 +55,7 @@ JoinKeys <- R6::R6Class( # nolint
       return(res)
     },
     #' @description
-    #' Merging a list (or one) of `JoinKeys` objects into the current join keys object
+    #' Merging a list (or one) of `JoinKeys` objects into the current `JoinKeys` object
     #' @param x  `list` of `JoinKeys` objects or single `JoinKeys` object
     #' @return (`self`) invisibly for chaining
     merge = function(x) {

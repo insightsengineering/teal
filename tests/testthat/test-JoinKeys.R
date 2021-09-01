@@ -226,7 +226,7 @@ test_that("can remove keys by setting them to character(0)", {
 
 testthat::test_that("JoinKeys$split method returns empty list when object itself is empty", {
   x <- JoinKeys$new()
-  testthat::expect_equal(x$split(), list())
+  testthat::expect_identical(x$split(), list())
 })
 
 testthat::test_that("JoinKeys$split method returns a named list of JoinKeys objects with an element for each dataset", {
@@ -242,7 +242,7 @@ testthat::test_that("JoinKeys$split method returns a named list of JoinKeys obje
   testthat::expect_true(is(res, "list"))
   testthat::expect_equal(length(res), 5)
   testthat::expect_equal(names(res), c("A", "B", "C", "Z", "Y"))
-  testthat::expect_true(all(vapply(res, function(x) is(x, "JoinKeys"), logical(1))))
+  testthat::expect_true(utils.nest::is_class_list("JoinKeys")(res))
 
   testthat::expect_equal(names(res$A$get()), c("A", "B", "C"))
   testthat::expect_equal(names(res$B$get()), c("B", "A"))
@@ -251,7 +251,8 @@ testthat::test_that("JoinKeys$split method returns a named list of JoinKeys obje
   testthat::expect_equal(names(res$Y$get()), c("Y", "Z"))
 })
 
-testthat::test_that("JoinKeys$split method returns a mutated list after JoinKeys$mutate() method call", {
+testthat::test_that("JoinKeys$split method returns an updated list after
+  the state of the object is modified by JoinKeys$mutate()", {
   x <- JoinKeys$new()
   x$set(
     list(
@@ -293,7 +294,7 @@ testthat::test_that("JoinKeys$split method does not modify self", {
 })
 
 
-testthat::test_that("JoinKeys$merge works where the method is called from an empty object", {
+testthat::test_that("JoinKeys$merge can handle edge case: calling object is empty", {
   x <- JoinKeys$new()
   y <- JoinKeys$new()
   y$set(
@@ -304,10 +305,10 @@ testthat::test_that("JoinKeys$merge works where the method is called from an emp
     )
   )
   testthat::expect_silent(x$merge(y))
-  testthat::expect_equal(x$get(), y$get())
+  testthat::expect_identical(x$get(), y$get())
 })
 
-testthat::test_that("JoinKeys$merge works when the method is called on an empty object", {
+testthat::test_that("JoinKeys$merge can handle edge case: argument is an empty object", {
   x <- JoinKeys$new()
   y <- JoinKeys$new()
   y$set(
@@ -319,11 +320,29 @@ testthat::test_that("JoinKeys$merge works when the method is called on an empty 
   )
   previous_output <- y$get()
   testthat::expect_silent(y$merge(x))
-  testthat::expect_equal(previous_output, y$get())
+  testthat::expect_identical(previous_output, y$get())
 })
 
-testthat::test_that("JoinKeys$merge throws error when inproper argument is
-  passed in without modifying calling object", {
+testthat::test_that("JoinKeys$merge can handle edge case: argument is a list of empty objects", {
+  x <- JoinKeys$new()
+  y <- JoinKeys$new()
+  y$set(
+    list(
+      join_key("A", "B", c("a" = "b")),
+      join_key("A", "C", c("a" = "c", "aa" = "cc")),
+      join_key("Z", "Y", c("z" = "y"))
+    )
+  )
+  previous_output <- y$get()
+  testthat::expect_silent(y$merge(list(x, x$clone())))
+  testthat::expect_identical(previous_output, y$get())
+
+  testthat::expect_silent(y$merge(list(x, x$clone(), x$clone())))
+  testthat::expect_identical(previous_output, y$get())
+})
+
+testthat::test_that("JoinKeys$merge throws error when improper argument is
+  passed in without modifying the caller", {
   y <- JoinKeys$new()
   y$set(
     list(
@@ -352,7 +371,7 @@ testthat::test_that("JoinKeys$merge throws error when inproper argument is
   testthat::expect_identical(previous_output, y$get())
 })
 
-testthat::test_that("JoinKeys$merge works when argument is a JoinKeys object with identical data", {
+testthat::test_that("JoinKeys$merge does nothing when argument is a JoinKeys object with identical data", {
   x <- JoinKeys$new()
   y <- JoinKeys$new()
   x$set(
@@ -374,7 +393,7 @@ testthat::test_that("JoinKeys$merge works when argument is a JoinKeys object wit
   testthat::expect_identical(previous_output, y$get())
 })
 
-testthat::test_that("JoinKeys$merge works when argument is a list of one JoinKeys object with identical data", {
+testthat::test_that("JoinKeys$merge does nothing when argument is a list of one JoinKeys object with identical data", {
   x <- JoinKeys$new()
   y <- JoinKeys$new()
   x$set(
@@ -394,9 +413,12 @@ testthat::test_that("JoinKeys$merge works when argument is a list of one JoinKey
   previous_output <- y$get()
   testthat::expect_silent(y$merge(list(x)))
   testthat::expect_identical(previous_output, y$get())
+
+  testthat::expect_silent(y$merge(list(x, x$clone())))
+  testthat::expect_identical(previous_output, y$get())
 })
 
-testthat::test_that("JoinKeys$merge works when argument is a list of many JoinKeys object with identical data", {
+testthat::test_that("JoinKeys$merge does nothing when argument is a list of many JoinKeys object with identical data", {
   x <- JoinKeys$new()
   y <- JoinKeys$new()
   x$set(
@@ -418,7 +440,7 @@ testthat::test_that("JoinKeys$merge works when argument is a list of many JoinKe
   testthat::expect_identical(previous_output, y$get())
 })
 
-testthat::test_that("JoinKeys$merge works when argument is a list of one JoinKeys object that is a superset", {
+testthat::test_that("JoinKeys$merge clones data when argument is a list of one JoinKeys object that is a superset", {
   x <- JoinKeys$new()
   y <- JoinKeys$new()
   x$set(
@@ -442,7 +464,7 @@ testthat::test_that("JoinKeys$merge works when argument is a list of one JoinKey
   testthat::expect_identical(x$get(), y$get())
 })
 
-testthat::test_that("JoinKeys$merge works when argument is a list of one JoinKeys object that is a subset", {
+testthat::test_that("JoinKeys$merge does nothing when argument is a list of one JoinKeys object that is a subset", {
   x <- JoinKeys$new()
   y <- JoinKeys$new()
   x$set(

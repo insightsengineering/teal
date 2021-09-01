@@ -52,7 +52,7 @@ empty (\code{JoinKeys})
 \if{html}{\out{<a id="method-split"></a>}}
 \if{latex}{\out{\hypertarget{method-split}{}}}
 \subsection{Method \code{split()}}{
-Split the current join keys object into a named list of join keys objects with an element for each dataset
+Split the current \code{JoinKeys} object into a named list of join keys objects with an element for each dataset
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{JoinKeys$split()}\if{html}{\out{</div>}}
 }
@@ -65,7 +65,7 @@ Split the current join keys object into a named list of join keys objects with a
 \if{html}{\out{<a id="method-merge"></a>}}
 \if{latex}{\out{\hypertarget{method-merge}{}}}
 \subsection{Method \code{merge()}}{
-Merging a list (or one) of \code{JoinKeys} objects into the current joint keys object
+Merging a list (or one) of \code{JoinKeys} objects into the current \code{JoinKeys} object
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{JoinKeys$merge(x)}\if{html}{\out{</div>}}
 }
