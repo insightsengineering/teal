@@ -50,7 +50,7 @@ testthat::test_that("get_call returns a condition true for the values passed in 
   testthat::expect_equal(eval(isolate(filter_state$get_call())), c(FALSE, TRUE, TRUE, FALSE))
 })
 
-testthat::test_that("set_state need named list with selected and keep_na elements", {
+testthat::test_that("set_state needs a named list with selected and keep_na elements", {
   filter_state <- LogicalFilterState$new(x = c(TRUE, FALSE, NA), varname = "test")
 
   testthat::expect_error(filter_state$set_state(list(selected = FALSE, keep_na = TRUE)), NA)
