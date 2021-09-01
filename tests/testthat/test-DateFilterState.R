@@ -55,7 +55,7 @@ testthat::test_that("set_selected throw when selection not within allowed choice
   )
 })
 
-testthat::test_that("set_state need named list with selected and keep_na elements", {
+testthat::test_that("set_state needs a named list with selected and keep_na elements", {
   test_date <- as.Date(c("2013/07/13", "2013/07/14", "2013/07/15"))
   filter_state <- DateFilterState$new(test_date, varname = "test")
 
