@@ -69,7 +69,7 @@ testthat::test_that("set_selected throws when the values are not within the rang
   )
 })
 
-testthat::test_that("set_state need named list with selected and keep_na elements", {
+testthat::test_that("set_state needs a named list with selected and keep_na elements", {
   objects <- as.POSIXct(c(1:5), origin = "1900/01/01")
   filter_state <- DatetimeFilterState$new(objects, varname = "test")
   testthat::expect_error(
