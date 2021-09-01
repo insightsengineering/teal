@@ -99,7 +99,7 @@ testthat::test_that("set_selected throw when selection not within allowed choice
   )
 })
 
-testthat::test_that("set_state need named list with selected and keep_na elements", {
+testthat::test_that("set_state needs a named list with selected and keep_na elements", {
   filter_state <- RangeFilterState$new(c(1, 8, NA_real_, Inf), varname = "test")
   testthat::expect_error(
     filter_state$set_state(list(selected = c(1, 2), keep_na = TRUE, keep_inf = TRUE), filter_state),
