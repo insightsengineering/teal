@@ -1253,7 +1253,6 @@ ChoicesFilterState <- R6::R6Class( # nolint
         } else {
           optionalSelectInput(
             inputId = ns("selection"),
-            label = icon("fa-plus"),
             choices = private$choices,
             selected = isolate(private$selected()),
             multiple = TRUE,
