@@ -694,7 +694,6 @@ DFFilterStates <- R6::R6Class( # nolint
       stopifnot(is.data.frame(data))
 
       active_filter_vars <- reactive({
-
         vapply(
           X = self$queue_get(queue_index = 1L),
           FUN.VALUE = character(1),
@@ -734,10 +733,12 @@ DFFilterStates <- R6::R6Class( # nolint
         }
       )
 
+      filter_counter <- 0
       observeEvent(
         eventExpr = input$var_to_add,
         handlerExpr = {
-          id <- digest::digest(sprintf("%s_%s", 1L, input$var_to_add), algo = "md5")
+          filter_counter <<- filter_counter + 1
+          id <- filter_counter
           callModule(
             private$add_filter_state,
             id = id,

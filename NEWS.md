@@ -24,6 +24,7 @@
 * Implemented functionality to store `JoinKeys` in `Dataset` and `DatasetConnector` classes.
 * `FilteredData` contains `Dataset` objects (via `FilteredDataset`) and copying keys and attributes is no longer needed.
 * Added `error_on_lintr: TRUE` to `.lintr`
+* Changed how the id of an HTML element in the filter panel is created to make it deterministic.
 
 # teal 0.9.5
 
