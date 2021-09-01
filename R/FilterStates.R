@@ -733,12 +733,11 @@ DFFilterStates <- R6::R6Class( # nolint
         }
       )
 
-      filter_counter <- 0
+      html_id_mapping <- private$map_vars_to_html_ids(colnames(data))
       observeEvent(
         eventExpr = input$var_to_add,
         handlerExpr = {
-          filter_counter <<- filter_counter + 1
-          id <- filter_counter
+          id <- html_id_mapping[[input$var_to_add]]
           callModule(
             private$add_filter_state,
             id = id,
@@ -779,7 +778,15 @@ DFFilterStates <- R6::R6Class( # nolint
           ]
         varlabels
       }
+    },
+    #' Maps the array of string to sanitized unique HTML ids.
+    #' param strings `character` the array of strings
+    #' return `list` the mapping
+    map_vars_to_html_ids = function(strings) {
+      sanitized_strings <- make.unique(gsub("[^[:alnum:]]", perl = TRUE, replacement = "", x = strings))
+      stats::setNames(object = sanitized_strings, nm = strings)
     }
+
   )
 )
 
