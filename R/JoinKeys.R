@@ -55,7 +55,7 @@ JoinKeys <- R6::R6Class( # nolint
       return(res)
     },
     #' @description
-    #' Merging a list (or one) of `JoinKeys` objects into the current joint keys object
+    #' Merging a list (or one) of `JoinKeys` objects into the current join keys object
     #' @param x  `list` of `JoinKeys` objects or single `JoinKeys` object
     #' @return (`self`) invisibly for chaining
     merge = function(x) {
