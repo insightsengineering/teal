@@ -681,7 +681,15 @@ LogicalFilterState <- R6::R6Class( # nolint
                           extract_type = character(0)) {
       stopifnot(is.logical(x))
       super$initialize(x, varname, varlabel, input_dataname, extract_type)
-      tbl <- table(x)
+      df <- as.factor(x)
+      if (length(levels(df)) != 2) {
+        if (levels(df) %in% c(TRUE, FALSE)){
+          choices_not_included <- c(TRUE, FALSE)[!c(TRUE, FALSE) %in% levels(df)]
+          levels(df) <- c(levels(df), choices_not_included)
+        }
+      }
+
+      tbl <- table(df)
 
       choices <- as.logical(names(tbl))
       names(choices) <- sprintf("%s (%s)", choices, tbl)
