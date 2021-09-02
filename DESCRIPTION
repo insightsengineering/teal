@@ -97,7 +97,6 @@ Collate:
     'data_label.R'
     'dummy_functions.R'
     'filter_spec.R'
-    'filter_utils.R'
     'filtered_data_wrappers.R'
     'get_attrs.R'
     'get_code.R'
