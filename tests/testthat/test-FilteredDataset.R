@@ -126,3 +126,102 @@ testthat::test_that("srv_add_filter_state is pure virtual", {
   )
   testthat::expect_error(filtered_dataset$srv_add_filter_state(), regex = "Pure virtual")
 })
+
+library(scda)
+library(MultiAssayExperiment)
+
+datasets <- teal:::FilteredData$new()
+adsl <- as.data.frame(as.list(setNames(nm = c(get_cdisc_keys("ADSL")))))
+adsl$sex <- c("F")
+mock_iris <- head(iris)
+data("miniACC")
+
+datasets$set_dataset(cdisc_dataset("ADSL", adsl))
+datasets$set_dataset(dataset("mock_iris", mock_iris))
+datasets$set_dataset(dataset("miniACC", miniACC))
+
+test_that("get_filter_overview_info non-desired input argument", {
+  expect_silent(isolate(datasets$get_filtered_datasets("ADSL")$get_filter_overview_info()))
+  expect_error(isolate(datasets$get_filtered_datasets("")$get_filter_overview_info()))
+  expect_error(isolate(datasets$get_filtered_datasets("AA")$get_filter_overview_info()))
+})
+
+test_that("get_filter_overview_info returns right array for CDISC dataset", {
+  # without filter
+  expect_equal(
+    isolate(datasets$get_filtered_datasets("ADSL")$get_filter_overview_info()),
+    matrix(list("1/1", "1/1"), nrow = 1, dimnames = list(c("ADSL"), c("Obs", "Subjects")))
+  )
+
+  # with filter
+  filter_state_adsl <- ChoicesFilterState$new(c("F", "M"), varname = "sex")
+  filter_state_adsl$set_selected("M")
+
+  queue <- datasets$get_filtered_datasets("ADSL")$get_filter_states(1)
+  queue$queue_push(filter_state_adsl, queue_index = 1L, element_id = "sex")
+
+  expect_equal(
+    isolate(datasets$get_filtered_datasets("ADSL")$get_filter_overview_info()),
+    matrix(list("0/1", "0/1"), nrow = 1, dimnames = list(c("ADSL"), c("Obs", "Subjects")))
+  )
+})
+
+test_that("get_filter_overview_info returns right array for non-cdisc dataset", {
+  # without filter
+  expect_equal(
+    isolate(datasets$get_filtered_datasets("mock_iris")$get_filter_overview_info()),
+    matrix(list("6/6", ""), nrow = 1, dimnames = list(c("mock_iris"), c("Obs", "Subjects")))
+  )
+
+  # with filter
+  filter_state_iris <- ChoicesFilterState$new(c("setosa", "virginica"), varname = "Species")
+  filter_state_iris$set_selected("virginica")
+
+  queue <- datasets$get_filtered_datasets("mock_iris")$get_filter_states(1)
+  queue$queue_push(filter_state_iris, queue_index = 1L, element_id = "Species")
+
+  expect_equal(
+    isolate(datasets$get_filtered_datasets("mock_iris")$get_filter_overview_info()),
+    matrix(list("0/6", ""), nrow = 1, dimnames = list(c("mock_iris"), c("Obs", "Subjects")))
+  )
+})
+
+test_that("get_filter_overview_info returns right array for MAE dataset", {
+  # without filter
+  expect_equal(
+    isolate(datasets$get_filtered_datasets("miniACC")$get_filter_overview_info()),
+    matrix(
+      list("", "92/92", "79/79", "79/79", "90/90", "90/90", "46/46", "46/46", "90/90", "90/90", "80/80", "80/80"),
+      nrow = 6,
+      byrow = TRUE,
+      dimnames = list(
+        c("miniACC", "- RNASeq2GeneNorm", "- gistict", "- RPPAArray", "- Mutations", "- miRNASeqGene"),
+        c("Obs", "Subjects")
+      )
+    )
+  )
+
+  # with filter
+  filter_state_mae <- ChoicesFilterState$new(
+    x = c("white"),
+    varname = as.name("race"),
+    input_dataname = as.name("miniACC"),
+    extract_type = "list"
+  )
+
+  queue <- datasets$get_filtered_datasets("miniACC")$get_filter_states(1)
+  queue$queue_push(filter_state_mae, queue_index = 1L, element_id = "race")
+
+  expect_equal(
+    isolate(datasets$get_filtered_datasets("miniACC")$get_filter_overview_info()),
+    matrix(
+      list("", "78/92", "66/79", "66/79", "76/90", "76/90", "35/46", "35/46", "77/90", "77/90", "67/80", "67/80"),
+      nrow = 6,
+      byrow = TRUE,
+      dimnames = list(
+        c("miniACC", "- RNASeq2GeneNorm", "- gistict", "- RPPAArray", "- Mutations", "- miRNASeqGene"),
+        c("Obs", "Subjects")
+      )
+    )
+  )
+})

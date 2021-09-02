@@ -119,3 +119,75 @@ testthat::test_that("get call returns a call assigning the filtered object to <n
   eval(filtered_data$get_call("mock_iris")[[1]])
   testthat::expect_equal(mock_iris_FILTERED, mock_iris)
 })
+
+library(scda)
+library(MultiAssayExperiment)
+
+datasets <- teal:::FilteredData$new()
+adsl <- as.data.frame(as.list(setNames(nm = c(get_cdisc_keys("ADSL")))))
+adsl$sex <- c("F")
+mock_iris <- head(iris)
+data("miniACC")
+
+datasets$set_dataset(cdisc_dataset("ADSL", adsl))
+datasets$set_dataset(dataset("mock_iris", mock_iris))
+datasets$set_dataset(dataset("miniACC", miniACC))
+
+test_that("get_filter_overview wrong or empty argument", {
+  expect_error(isolate(datasets$get_filter_overview("AA")), "Some datasets are not available:")
+  expect_error(isolate(datasets$get_filter_overview("")), "Some datasets are not available:")
+  expect_error(isolate(datasets$get_filter_overview()), "argument \"datanames\" is missing, with no default")
+  expect_silent(isolate(datasets$get_filter_overview("ADSL")))
+})
+
+test_that("get_filter_overview returns right array for datasets", {
+  # without filter
+  expect_equal(
+    isolate(datasets$get_filter_overview(datasets$datanames())),
+    matrix(
+      list(
+        "1/1", "1/1", "6/6", "", "", "92/92", "79/79", "79/79", "90/90",
+        "90/90", "46/46", "46/46", "90/90", "90/90", "80/80", "80/80"),
+      nrow = 8,
+      byrow = TRUE,
+      dimnames = list(
+        c("ADSL", "mock_iris", "miniACC", "- RNASeq2GeneNorm", "- gistict",
+          "- RPPAArray", "- Mutations", "- miRNASeqGene"),
+        c("Obs", "Subjects")
+      )
+    )
+  )
+
+  # with filter on ADSL and MAE
+  filter_state_adsl <- ChoicesFilterState$new(c("F", "M"), varname = "sex")
+  filter_state_adsl$set_selected("M")
+
+  queue <- datasets$get_filtered_datasets("ADSL")$get_filter_states(1)
+  queue$queue_push(filter_state_adsl, queue_index = 1L, element_id = "sex")
+
+  filter_state_mae <- ChoicesFilterState$new(
+    x = c("white"),
+    varname = as.name("race"),
+    input_dataname = as.name("miniACC"),
+    extract_type = "list"
+  )
+
+  queue <- datasets$get_filtered_datasets("miniACC")$get_filter_states(1)
+  queue$queue_push(filter_state_mae, queue_index = 1L, element_id = "race")
+
+  expect_equal(
+    isolate(datasets$get_filter_overview(datasets$datanames())),
+    matrix(
+      list(
+        "0/1", "0/1", "6/6", "", "", "78/92", "66/79", "66/79", "76/90",
+        "76/90", "35/46", "35/46", "77/90", "77/90", "67/80", "67/80"),
+      nrow = 8,
+      byrow = TRUE,
+      dimnames = list(
+        c("ADSL", "mock_iris", "miniACC", "- RNASeq2GeneNorm", "- gistict",
+          "- RPPAArray", "- Mutations", "- miRNASeqGene"),
+        c("Obs", "Subjects")
+      )
+    )
+  )
+})
