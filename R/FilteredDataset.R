@@ -589,7 +589,7 @@ CDISCFilteredDataset <- R6::R6Class( # nolint
             y = if (is_empty(parent_keys)) {
               as.name(filtered_parentname)
             } else {
-              call_extract_array(
+              utils.nest::call_extract_array(
                 dataname = filtered_parentname,
                 column = parent_keys,
                 aisle = call("=", as.name("drop"), FALSE)
@@ -740,7 +740,7 @@ MAEFilteredDataset <- R6::R6Class( # nolint
       lapply(
         experiment_names,
         function(experiment_name) {
-          input_dataname <- call_extract_list(
+          input_dataname <- utils.nest::call_extract_list(
             sprintf("%s_FILTERED", dataname),
             experiment_name,
             dollar = FALSE
