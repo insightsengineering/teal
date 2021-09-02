@@ -12,7 +12,9 @@ testthat::test_that("The constructor initializes two queues", {
     output_dataname = "test",
     datalabel = "test"
   )
+  testthat::expect_null(filter_states$queue_get(1))
   testthat::expect_null(filter_states$queue_get(2))
+  testthat::expect_error(filter_states$queue_get(3))
 })
 
 testthat::test_that("set_bookmark_state throws error when input is missing", {
@@ -86,4 +88,31 @@ testthat::test_that("set_bookmark_state returns NULL when state argument is an e
   data <- data.frame(a = "test")
   class(data) <- "SummarizedExperiment"
   testthat::expect_null(filter_states$set_bookmark_state(data = data, state = list()))
+})
+
+testthat::test_that("clone method returns object with the same state", {
+  se <- SEFilterStates$new(
+    input_dataname = "test",
+    output_dataname = "test",
+    datalabel = "test"
+  )
+  testthat::expect_equal(se, se$clone())
+})
+
+testthat::test_that("get_call method returns NULL", {
+  se <- SEFilterStates$new(
+    input_dataname = "test",
+    output_dataname = "test",
+    datalabel = "test"
+  )
+  testthat::expect_null(se$get_call())
+})
+
+testthat::test_that("get_fun method returns subset", {
+  se <- SEFilterStates$new(
+    input_dataname = "test",
+    output_dataname = "test",
+    datalabel = "test"
+  )
+  testthat::expect_equal(se$get_fun(), "subset")
 })
