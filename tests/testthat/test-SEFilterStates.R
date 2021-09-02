@@ -24,7 +24,7 @@ testthat::test_that("set_bookmark_state throws error when input is missing", {
   testthat::expect_error(filter_states$set_bookmark_state())
 })
 
-testthat::test_that("set_bookmark_state throws error when data argument is inputted", {
+testthat::test_that("set_bookmark_state throws error when no data argument is inputted", {
   filter_states <- SEFilterStates$new(
     input_dataname = "test",
     output_dataname = "test",
