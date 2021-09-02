@@ -1,4 +1,4 @@
-testthat::test_that("get_filter_overview_info returns right array for MAEFilteredDataset without filtering", {
+testthat::test_that("get_filter_overview_info returns overview matrix for MAEFilteredDataset without filtering", {
   library(MultiAssayExperiment)
   data(miniACC)
   filtered_dataset <- MAEFilteredDataset$new(dataset = MAEDataset$new("miniACC", miniACC))
@@ -16,7 +16,7 @@ testthat::test_that("get_filter_overview_info returns right array for MAEFiltere
   )
 })
 
-testthat::test_that("get_filter_overview_info returns right array for MAEFilteredDataset with filtering", {
+testthat::test_that("get_filter_overview_info returns overview matrix for MAEFilteredDataset with filtering", {
   filtered_dataset <- MAEFilteredDataset$new(dataset = MAEDataset$new("miniACC", miniACC))
 
   filter_state_mae <- ChoicesFilterState$new(
