@@ -68,7 +68,7 @@ testthat::test_that("get_filter_overview_info returns right array for CDISCFilte
   queue <- filtered_dataset$get_filter_states(1)
   queue$queue_push(filter_state_adsl, queue_index = 1L, element_id = "sex")
 
-  testthat::uexpect_equal(
+  testthat::expect_equal(
     isolate(filtered_dataset$get_filter_overview_info()),
     matrix(list("0/1", "0/1"), nrow = 1, dimnames = list(c("ADSL"), c("Obs", "Subjects")))
   )
