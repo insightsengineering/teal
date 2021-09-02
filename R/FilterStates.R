@@ -1038,12 +1038,13 @@ SEFilterStates <- R6::R6Class( # nolint
     #'   each should be a named list containing values as a selection in the `FilterState`.
     #'   Names of each the `list` element in `subset` and `select` should correspond to
     #'   the name of the column in `rowData(data)` and `colData(data)`.
-    set_bookmark_state = function(data, state) {
+    set_bookmark_state = function(data, state = list()) {
       stopifnot(is(data, "SummarizedExperiment"))
       stopifnot(
+        is(state, "list"),
         all(names(state) %in% c("subset", "select")),
-        is.null(state$subset) || all(names(state$subset) %in% names(rowData(data))),
-        is.null(state$select) || all(names(state$select) %in% names(colData(data)))
+        is.null(state$subset) || (is(state$subset, "list") && all(names(state$subset) %in% names(rowData(data)))),
+        is.null(state$select) || (is(state$select, "list") && all(names(state$select) %in% names(colData(data))))
       )
 
       for (varname in names(state$subset)) {

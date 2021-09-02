@@ -68,7 +68,7 @@ text label value.}
 \subsection{Method \code{set_bookmark_state()}}{
 Set bookmark state
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{SEFilterStates$set_bookmark_state(data, state)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{SEFilterStates$set_bookmark_state(data, state = list())}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
