@@ -223,3 +223,298 @@ test_that("can remove keys by setting them to character(0)", {
   my_keys$mutate("d1", "d2", character(0))
   expect_equal(my_keys$get("d1", "d2"), character(0))
 })
+
+testthat::test_that("JoinKeys$split method returns empty list when object itself is empty", {
+  x <- JoinKeys$new()
+  testthat::expect_identical(x$split(), list())
+})
+
+testthat::test_that("JoinKeys$split method returns a named list of JoinKeys objects with an element for each dataset", {
+  x <- JoinKeys$new()
+  x$set(
+    list(
+      join_key("A", "B", c("a" = "b")),
+      join_key("A", "C", c("a" = "c", "aa" = "cc")),
+      join_key("Z", "Y", c("z" = "y"))
+    )
+  )
+  res <- x$split()
+  testthat::expect_true(is(res, "list"))
+  testthat::expect_equal(length(res), 5)
+  testthat::expect_equal(names(res), c("A", "B", "C", "Z", "Y"))
+  testthat::expect_true(utils.nest::is_class_list("JoinKeys")(res))
+
+  testthat::expect_equal(names(res$A$get()), c("A", "B", "C"))
+  testthat::expect_equal(names(res$B$get()), c("B", "A"))
+  testthat::expect_equal(names(res$C$get()), c("C", "A"))
+  testthat::expect_equal(names(res$Z$get()), c("Z", "Y"))
+  testthat::expect_equal(names(res$Y$get()), c("Y", "Z"))
+})
+
+testthat::test_that("JoinKeys$split method returns an updated list after
+  the state of the object is modified by JoinKeys$mutate()", {
+  x <- JoinKeys$new()
+  x$set(
+    list(
+      join_key("A", "B", c("a" = "b")),
+      join_key("A", "C", c("a" = "c", "aa" = "cc")),
+      join_key("Z", "Y", c("z" = "y"))
+    )
+  )
+  res <- x$split()
+
+  x$mutate("A", "B", c("a" = "b", "aa" = "bb"))
+  res2 <- x$split()
+
+  testthat::expect_false(identical(res, res2))
+  testthat::expect_identical(res2$A$get()$A$B, c("a" = "b", "aa" = "bb"))
+
+  # adding new datasets
+  x$mutate("D", "G", c("d" = "g"))
+  res3 <- x$split()
+  testthat::expect_false(identical(res, res3))
+  testthat::expect_false(identical(res2, res3))
+  testthat::expect_identical(res3$D$get()$D$G, c("d" = "g"))
+  testthat::expect_identical(res3$D$get()$G$D, c("g" = "d"))
+  testthat::expect_identical(names(res3$D$get()), c("D", "G"))
+})
+
+testthat::test_that("JoinKeys$split method does not modify self", {
+  x <- JoinKeys$new()
+  x$set(
+    list(
+      join_key("A", "B", c("a" = "b")),
+      join_key("A", "C", c("a" = "c", "aa" = "cc")),
+      join_key("Z", "Y", c("z" = "y"))
+    )
+  )
+  previous_self <- x$clone()
+  no_use_output <- x$split()
+  testthat::expect_equal(previous_self, x)
+})
+
+
+testthat::test_that("JoinKeys$merge can handle edge case: calling object is empty", {
+  x <- JoinKeys$new()
+  y <- JoinKeys$new()
+  y$set(
+    list(
+      join_key("A", "B", c("a" = "b")),
+      join_key("A", "C", c("a" = "c", "aa" = "cc")),
+      join_key("Z", "Y", c("z" = "y"))
+    )
+  )
+  testthat::expect_silent(x$merge(y))
+  testthat::expect_identical(x$get(), y$get())
+})
+
+testthat::test_that("JoinKeys$merge can handle edge case: argument is an empty object", {
+  x <- JoinKeys$new()
+  y <- JoinKeys$new()
+  y$set(
+    list(
+      join_key("A", "B", c("a" = "b")),
+      join_key("A", "C", c("a" = "c", "aa" = "cc")),
+      join_key("Z", "Y", c("z" = "y"))
+    )
+  )
+  previous_output <- y$get()
+  testthat::expect_silent(y$merge(x))
+  testthat::expect_identical(previous_output, y$get())
+})
+
+testthat::test_that("JoinKeys$merge can handle edge case: argument is a list of empty objects", {
+  x <- JoinKeys$new()
+  y <- JoinKeys$new()
+  y$set(
+    list(
+      join_key("A", "B", c("a" = "b")),
+      join_key("A", "C", c("a" = "c", "aa" = "cc")),
+      join_key("Z", "Y", c("z" = "y"))
+    )
+  )
+  previous_output <- y$get()
+  testthat::expect_silent(y$merge(list(x, x$clone())))
+  testthat::expect_identical(previous_output, y$get())
+
+  testthat::expect_silent(y$merge(list(x, x$clone(), x$clone())))
+  testthat::expect_identical(previous_output, y$get())
+})
+
+testthat::test_that("JoinKeys$merge throws error when improper argument is
+  passed in without modifying the caller", {
+  y <- JoinKeys$new()
+  y$set(
+    list(
+      join_key("A", "B", c("a" = "b")),
+      join_key("A", "C", c("a" = "c", "aa" = "cc")),
+      join_key("Z", "Y", c("z" = "y"))
+    )
+  )
+  previous_output <- y$get()
+  testthat::expect_error(y$merge())
+  testthat::expect_identical(previous_output, y$get())
+
+  testthat::expect_error(y$merge(1))
+  testthat::expect_identical(previous_output, y$get())
+
+  testthat::expect_error(y$merge("A"))
+  testthat::expect_identical(previous_output, y$get())
+
+  testthat::expect_error(y$merge(list()))
+  testthat::expect_identical(previous_output, y$get())
+
+  testthat::expect_error(y$merge(list(1)))
+  testthat::expect_identical(previous_output, y$get())
+
+  testthat::expect_error(y$merge(list("A")))
+  testthat::expect_identical(previous_output, y$get())
+})
+
+testthat::test_that("JoinKeys$merge does nothing when argument is a JoinKeys object with identical data", {
+  x <- JoinKeys$new()
+  y <- JoinKeys$new()
+  x$set(
+    list(
+      join_key("A", "B", c("a" = "b")),
+      join_key("A", "C", c("a" = "c", "aa" = "cc")),
+      join_key("Z", "Y", c("z" = "y"))
+    )
+  )
+  y$set(
+    list(
+      join_key("A", "B", c("a" = "b")),
+      join_key("A", "C", c("a" = "c", "aa" = "cc")),
+      join_key("Z", "Y", c("z" = "y"))
+    )
+  )
+  previous_output <- y$get()
+  testthat::expect_silent(y$merge(x))
+  testthat::expect_identical(previous_output, y$get())
+})
+
+testthat::test_that("JoinKeys$merge does nothing when argument is a list of one JoinKeys object with identical data", {
+  x <- JoinKeys$new()
+  y <- JoinKeys$new()
+  x$set(
+    list(
+      join_key("A", "B", c("a" = "b")),
+      join_key("A", "C", c("a" = "c", "aa" = "cc")),
+      join_key("Z", "Y", c("z" = "y"))
+    )
+  )
+  y$set(
+    list(
+      join_key("A", "B", c("a" = "b")),
+      join_key("A", "C", c("a" = "c", "aa" = "cc")),
+      join_key("Z", "Y", c("z" = "y"))
+    )
+  )
+  previous_output <- y$get()
+  testthat::expect_silent(y$merge(list(x)))
+  testthat::expect_identical(previous_output, y$get())
+
+  testthat::expect_silent(y$merge(list(x, x$clone())))
+  testthat::expect_identical(previous_output, y$get())
+})
+
+testthat::test_that("JoinKeys$merge does nothing when argument is a list of many JoinKeys object with identical data", {
+  x <- JoinKeys$new()
+  y <- JoinKeys$new()
+  x$set(
+    list(
+      join_key("A", "B", c("a" = "b")),
+      join_key("A", "C", c("a" = "c", "aa" = "cc")),
+      join_key("Z", "Y", c("z" = "y"))
+    )
+  )
+  y$set(
+    list(
+      join_key("A", "B", c("a" = "b")),
+      join_key("A", "C", c("a" = "c", "aa" = "cc")),
+      join_key("Z", "Y", c("z" = "y"))
+    )
+  )
+  previous_output <- y$get()
+  testthat::expect_silent(y$merge(list(x, x, x, x, x, x, x, x)))
+  testthat::expect_identical(previous_output, y$get())
+})
+
+testthat::test_that("JoinKeys$merge clones data when argument is a list of one JoinKeys object that is a superset", {
+  x <- JoinKeys$new()
+  y <- JoinKeys$new()
+  x$set(
+    list(
+      join_key("A", "B", c("a" = "b")),
+      join_key("A", "C", c("a" = "c", "aa" = "cc")),
+      join_key("Z", "Y", c("z" = "y")),
+      join_key("ZZ", "YY", c("zz" = "yy"))
+    )
+  )
+  y$set(
+    list(
+      join_key("A", "B", c("a" = "b")),
+      join_key("A", "C", c("a" = "c", "aa" = "cc")),
+      join_key("Z", "Y", c("z" = "y"))
+    )
+  )
+  previous_output <- y$get()
+  testthat::expect_silent(y$merge(list(x)))
+  testthat::expect_false(identical(previous_output, y$get()))
+  testthat::expect_identical(x$get(), y$get())
+})
+
+testthat::test_that("JoinKeys$merge does nothing when argument is a list of one JoinKeys object that is a subset", {
+  x <- JoinKeys$new()
+  y <- JoinKeys$new()
+  x$set(
+    list(
+      join_key("A", "B", c("a" = "b")),
+      join_key("A", "C", c("a" = "c", "aa" = "cc")),
+      join_key("Z", "Y", c("z" = "y")),
+      join_key("ZZ", "YY", c("zz" = "yy"))
+    )
+  )
+  y$set(
+    list(
+      join_key("A", "B", c("a" = "b")),
+      join_key("A", "C", c("a" = "c", "aa" = "cc")),
+      join_key("Z", "Y", c("z" = "y"))
+    )
+  )
+  previous_output <- x$get()
+  testthat::expect_silent(x$merge(list(y)))
+  testthat::expect_identical(previous_output, x$get())
+})
+
+testthat::test_that("JoinKeys$merge merges mutually exclusive data", {
+  x <- JoinKeys$new()
+  y <- JoinKeys$new()
+  x$set(
+    list(
+      join_key("A", "B", c("a" = "b"))
+    )
+  )
+  y$set(
+    list(
+      join_key("Z", "Y", c("z" = "y"))
+    )
+  )
+  z <- JoinKeys$new()
+  z$merge(list(x, y))
+  testthat::expect_identical(c(x$get(), y$get()), z$get())
+
+  x$merge(y)
+  y$merge(x)
+
+  testthat::expect_identical(x$get(), z$get())
+  testthat::expect_true(all(y$get() %in% z$get()) && all(z$get() %in% y$get()))
+  testthat::expect_true(all(y$get() %in% x$get()) && all(x$get() %in% y$get()))
+
+  testthat::expect_identical(names(z$get()), c("A", "B", "Z", "Y"))
+  testthat::expect_equal(length(z$get()), 4)
+  testthat::expect_identical(z$get()$A$B, c("a" = "b"))
+  testthat::expect_identical(z$get()$B$A, c("b" = "a"))
+  testthat::expect_identical(z$get()$Z$Y, c("z" = "y"))
+  testthat::expect_identical(z$get()$Y$Z, c("y" = "z"))
+})
