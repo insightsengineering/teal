@@ -217,7 +217,7 @@ FilterStates <- R6::R6Class( # nolint
             }
           )
           if (length(calls) > 0) {
-            calls_combine_by(
+            utils.nest::calls_combine_by(
               operator = "&",
               calls = calls
             )
@@ -231,7 +231,7 @@ FilterStates <- R6::R6Class( # nolint
 
       if (length(filter_items) > 0) {
         # below code translates to call by the names of filter_items
-        rhs <- call_with_colon(
+        rhs <- utils.nest::call_with_colon(
           self$get_fun(),
           private$input_dataname,
           unlist_args = filter_items
