@@ -120,29 +120,38 @@ testthat::test_that("get call returns a call assigning the filtered object to <n
   testthat::expect_equal(mock_iris_FILTERED, mock_iris)
 })
 
-library(scda)
 library(MultiAssayExperiment)
-
-datasets <- teal:::FilteredData$new()
+datasets <- FilteredData$new()
 adsl <- as.data.frame(as.list(setNames(nm = c(get_cdisc_keys("ADSL")))))
 adsl$sex <- c("F")
-mock_iris <- head(iris)
 data("miniACC")
 
 datasets$set_dataset(cdisc_dataset("ADSL", adsl))
-datasets$set_dataset(dataset("mock_iris", mock_iris))
+datasets$set_dataset(dataset("mock_iris", head(iris)))
 datasets$set_dataset(dataset("miniACC", miniACC))
 
-test_that("get_filter_overview wrong or empty argument", {
-  expect_error(isolate(datasets$get_filter_overview("AA")), "Some datasets are not available:")
-  expect_error(isolate(datasets$get_filter_overview("")), "Some datasets are not available:")
-  expect_error(isolate(datasets$get_filter_overview()), "argument \"datanames\" is missing, with no default")
-  expect_silent(isolate(datasets$get_filter_overview("ADSL")))
+testthat::test_that("get_filter_overview accepts all datasets argument input", {
+  testthat::expect_error(isolate(datasets$get_filter_overview("all")), NA)
 })
 
-test_that("get_filter_overview returns right array for datasets", {
-  # without filter
-  expect_equal(
+testthat::test_that("get_filter_overview accepts single dataset argument input", {
+  testthat::expect_error(isolate(datasets$get_filter_overview("ADSL")), NA)
+  testthat::expect_error(isolate(datasets$get_filter_overview("mock_iris")), NA)
+  testthat::expect_error(isolate(datasets$get_filter_overview("miniACC")), NA)
+})
+
+testthat::test_that("get_filter_overview throws error with empty argument input", {
+  testthat::expect_error(isolate(datasets$get_filter_overview()), "argument \"datanames\" is missing, with no default")
+})
+
+testthat::test_that("get_filter_overview throws error with wrong argument input", {
+  testthat::expect_error(isolate(datasets$get_filter_overview("AA")), "Some datasets are not available:")
+  testthat::expect_error(isolate(datasets$get_filter_overview("")), "Some datasets are not available:")
+  testthat::expect_error(isolate(datasets$get_filter_overview(23)), "Some datasets are not available:")
+})
+
+testthat::test_that("get_filter_overview returns overview matrix for non-filtered datasets", {
+  testthat::expect_equal(
     isolate(datasets$get_filter_overview(datasets$datanames())),
     matrix(
       list(
@@ -157,8 +166,9 @@ test_that("get_filter_overview returns right array for datasets", {
       )
     )
   )
+})
 
-  # with filter on ADSL and MAE
+testthat::test_that("get_filter_overview returns overview matrix for filtered datasets", {
   filter_state_adsl <- ChoicesFilterState$new(c("F", "M"), varname = "sex")
   filter_state_adsl$set_selected("M")
 
@@ -175,7 +185,7 @@ test_that("get_filter_overview returns right array for datasets", {
   queue <- datasets$get_filtered_datasets("miniACC")$get_filter_states(1)
   queue$queue_push(filter_state_mae, queue_index = 1L, element_id = "race")
 
-  expect_equal(
+  testthat::expect_equal(
     isolate(datasets$get_filter_overview(datasets$datanames())),
     matrix(
       list(
