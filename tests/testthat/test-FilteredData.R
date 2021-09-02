@@ -120,7 +120,7 @@ testthat::test_that("get call returns a call assigning the filtered object to <n
   testthat::expect_equal(mock_iris_FILTERED, mock_iris)
 })
 
-testthat::test_that("set_bookmark_state sets correct filters", {
+testthat::test_that("FilteredData$set_bookmark_state sets filters is FilteredDataset specified by the named list", {
   datasets <- teal:::FilteredData$new()
   datasets$set_dataset(dataset("iris", iris))
   datasets$set_dataset(dataset("mtcars", mtcars))
@@ -134,7 +134,7 @@ testthat::test_that("set_bookmark_state sets correct filters", {
         disp = default_filter()
       )
     )
-  expect_error(datasets$set_bookmark_state(fs), NA)
+  datasets$set_bookmark_state(fs)
   expect_equal(
     isolate(datasets$get_call("iris")),
     list(

@@ -87,7 +87,7 @@ testthat::test_that("get_call returns a call filtering an MAE object using Range
   )
 })
 
-testthat::test_that("set_bookmark_state sets correct filters for MAEFilterStates", {
+testthat::test_that("MAEFilterStates$set_bookmark_state sets filters in FilterState(s) specified by the named list", {
   maefs <- teal:::MAEFilterStates$new(
     input_dataname = "test",
     output_dataname = "test_filtered",
@@ -102,7 +102,7 @@ testthat::test_that("set_bookmark_state sets correct filters for MAEFilterStates
   )
 
   library(MultiAssayExperiment)
-  testthat::expect_error(maefs$set_bookmark_state(state = fs, data = miniACC), NA)
+  maefs$set_bookmark_state(state = fs, data = miniACC)
   expect_equal(
     isolate(maefs$get_call()),
     quote(

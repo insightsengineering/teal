@@ -11,13 +11,13 @@ testthat::test_that("get_call returns a list of calls", {
   testthat::expect_true(is_class_list("language")(filtered_dataset$get_call()))
 })
 
-testthat::test_that("set_bookmark_state sets correct filters for DefaultFilteredDataset", {
+testthat::test_that("DefaultFilteredDataset$set_bookmark_state sets filters in FilterStates specified by list names", {
   dataset <- teal:::DefaultFilteredDataset$new(dataset("iris", iris))
   fs <- list(
     Sepal.Length = list(selected = c(5.1, 6.4)),
     Species = c("setosa", "versicolor")
   )
-  expect_error(dataset$set_bookmark_state(fs), NA)
+  dataset$set_bookmark_state(fs)
   expect_equal(
     isolate(dataset$get_call()),
     list(

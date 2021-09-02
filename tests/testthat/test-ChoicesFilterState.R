@@ -60,8 +60,8 @@ testthat::test_that("set_state need named list with selected and keep_na element
 testthat::test_that("set_state overwrites fields included in the input only", {
   filter_state <- ChoicesFilterState$new(x = c("a", "b", NA_character_), varname = "test")
 
-  testthat::expect_error(filter_state$set_state(list(selected = "a", keep_na = TRUE)), NA)
-  testthat::expect_error(filter_state$set_state(list(selected = "b")), NA)
+  filter_state$set_state(list(selected = "a", keep_na = TRUE))
+  filter_state$set_state(list(selected = "b"))
 
   testthat::expect_identical(isolate(filter_state$get_selected()), "b")
   testthat::expect_true(isolate(filter_state$get_keep_na()))

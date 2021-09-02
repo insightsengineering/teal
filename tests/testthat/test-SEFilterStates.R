@@ -15,7 +15,7 @@ testthat::test_that("The constructor initializes two queues", {
   testthat::expect_null(filter_states$queue_get(2))
 })
 
-testthat::test_that("set_bookmark_state sets correct filters for SEFilterStates", {
+testthat::test_that("SEFilterStates$set_bookmark_state sets filters in ReactiveQueue specified by the named list", {
   sefs <- teal:::SEFilterStates$new(
     input_dataname = "test",
     output_dataname = "test_filtered",

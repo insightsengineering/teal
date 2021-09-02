@@ -12,10 +12,7 @@ testthat::test_that("get_call returns a call after set_keep_na(TRUE)", {
 
 testthat::test_that("set_state needs a named list with selected and keep_na elements", {
   filter_state <- EmptyFilterState$new(7, varname = "test")
-  testthat::expect_error(
-    filter_state$set_state(list(keep_na = TRUE)),
-    NA
-  )
+  filter_state$set_state(list(keep_na = TRUE))
   testthat::expect_true(isolate(filter_state$get_keep_na()))
   testthat::expect_error(
     filter_state$set_state(

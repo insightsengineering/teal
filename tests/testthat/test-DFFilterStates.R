@@ -19,7 +19,7 @@ testthat::test_that("get_fun returns dplyr::filter", {
   testthat::expect_equal(filter_states$get_fun(), "dplyr::filter")
 })
 
-testthat::test_that("set_bookmark_state sets correct filters for DefaultFilteredDataset", {
+testthat::test_that("DFFilterStates$set_bookmark_state sets filters in FilterState(s) specified by the named list", {
   dffs <- teal:::DFFilterStates$new(
     input_dataname = "iris",
     output_dataname = "iris_filtered",
