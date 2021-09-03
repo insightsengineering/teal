@@ -549,6 +549,15 @@ FilterStates <- R6::R6Class( # nolint
           )
         )
       }
+    },
+
+    # Maps the array of strings to sanitized unique HTML ids.
+    # @param keys `character` the array of strings
+    # @return `list` the mapping
+    map_vars_to_html_ids = function(keys) {
+      sanitized_values <- make.unique(gsub("[^[:alnum:]]", perl = TRUE, replacement = "", x = keys))
+      sanitized_values <- paste0("var_", sanitized_values)
+      stats::setNames(object = sanitized_values, nm = keys)
     }
   )
 )
@@ -616,6 +625,7 @@ DFFilterStates <- R6::R6Class( # nolint
       stopifnot(is.data.frame(data))
       stopifnot(all(names(state) %in% names(data)))
 
+      html_id_mapping <- private$map_vars_to_html_ids(get_filterable_varnames(colnames(data)))
       for (varname in names(state)) {
         value <- state[[varname]]
         fstate <- init_filter_state(
@@ -627,7 +637,7 @@ DFFilterStates <- R6::R6Class( # nolint
         fstate$set_selected(value = value)
 
         if (shiny::isRunning()) {
-          id <- digest::digest(sprintf("%s_%s", 1L, varname), algo = "md5")
+          id <- html_id_mapping[[varname]]
           callModule(
             module = private$add_filter_state,
             id = id,
@@ -691,7 +701,6 @@ DFFilterStates <- R6::R6Class( # nolint
       stopifnot(is.data.frame(data))
 
       active_filter_vars <- reactive({
-
         vapply(
           X = self$queue_get(queue_index = 1L),
           FUN.VALUE = character(1),
@@ -731,10 +740,11 @@ DFFilterStates <- R6::R6Class( # nolint
         }
       )
 
+      html_id_mapping <- private$map_vars_to_html_ids(get_filterable_varnames(colnames(data)))
       observeEvent(
         eventExpr = input$var_to_add,
         handlerExpr = {
-          id <- digest::digest(sprintf("%s_%s", 1L, input$var_to_add), algo = "md5")
+          id <- html_id_mapping[[input$var_to_add]]
           callModule(
             private$add_filter_state,
             id = id,
@@ -751,7 +761,7 @@ DFFilterStates <- R6::R6Class( # nolint
         }
       )
 
-      return(NULL)
+      NULL
     }
   ),
   private = list(
@@ -843,6 +853,7 @@ MAEFilterStates <- R6::R6Class( # nolint
         all(names(state) %in% names(colData(data)))
       )
 
+      html_id_mapping <- private$map_vars_to_html_ids(get_filterable_varnames(SummarizedExperiment::colData(data)))
       for (varname in names(state)) {
         value <- state[[varname]]
         fstate <- init_filter_state(
@@ -854,7 +865,7 @@ MAEFilterStates <- R6::R6Class( # nolint
         )
         fstate$set_selected(value = value)
 
-        id <- digest::digest(sprintf("%s_%s", "y", varname), algo = "md5")
+        id <- html_id_mapping[[varname]]
         callModule(
           private$add_filter_state,
           id = id,
@@ -949,10 +960,11 @@ MAEFilterStates <- R6::R6Class( # nolint
         }
       )
 
+      html_id_mapping <- private$map_vars_to_html_ids(get_filterable_varnames(SummarizedExperiment::colData(data)))
       observeEvent(
         eventExpr = input$var_to_add,
         handlerExpr = {
-          id <- digest::digest(sprintf("%s_%s", "y", input$var_to_add), algo = "md5")
+          id <- html_id_mapping[[input$var_to_add]]
           callModule(
             private$add_filter_state,
             id = id,
@@ -1047,6 +1059,8 @@ SEFilterStates <- R6::R6Class( # nolint
         is.null(state$select) || (is(state$select, "list") && all(names(state$select) %in% names(colData(data))))
       )
 
+      row_html_mapping <- private$map_vars_to_html_ids(get_filterable_varnames(row_data))
+      row_html_mapping <- setNames(object = paste0("rowData_", row_html_mapping), nm = names(row_html_mapping))
       for (varname in names(state$subset)) {
         value <- state$subset[[varname]]
         fstate <- init_filter_state(
@@ -1056,7 +1070,7 @@ SEFilterStates <- R6::R6Class( # nolint
         )
         fstate$set_selected(value = value)
 
-        id <- digest::digest(sprintf("%s_%s", "subset", varname), algo = "md5")
+        id <- row_html_mapping[[varname]]
         callModule(
           private$add_filter_state,
           id = id,
@@ -1067,6 +1081,8 @@ SEFilterStates <- R6::R6Class( # nolint
       }
 
 
+      col_html_mapping <- private$map_vars_to_html_ids(get_filterable_varnames(col_data))
+      col_html_mapping <- setNames(object = paste0("colData_", col_html_mapping), nm = names(col_html_mapping))
       for (varname in names(state$select)) {
         value <- state$select[[varname]]
         fstate <- init_filter_state(
@@ -1075,7 +1091,7 @@ SEFilterStates <- R6::R6Class( # nolint
         )
         fstate$set_selected(value = value)
 
-        id <- digest::digest(sprintf("%s_%s", "select", varname), algo = "md5")
+        id <- col_html_mapping[[varname]]
         callModule(
           private$add_filter_state,
           id = id,
@@ -1237,10 +1253,12 @@ SEFilterStates <- R6::R6Class( # nolint
         }
       )
 
+      col_html_mapping <- private$map_vars_to_html_ids(get_filterable_varnames(col_data))
+      col_html_mapping <- setNames(object = paste0("colData_", col_html_mapping), nm = names(col_html_mapping))
       observeEvent(
         eventExpr = input$col_to_add,
         handlerExpr = {
-          id <- digest::digest(sprintf("%s_%s", "select", input$col_to_add), algo = "md5")
+          id <- col_html_mapping[[input$col_to_add]]
           callModule(
             private$add_filter_state,
             id = id,
@@ -1255,10 +1273,12 @@ SEFilterStates <- R6::R6Class( # nolint
         }
       )
 
+      row_html_mapping <- private$map_vars_to_html_ids(get_filterable_varnames(row_data))
+      row_html_mapping <- setNames(object = paste0("rowData_", row_html_mapping), nm = names(row_html_mapping))
       observeEvent(
         eventExpr = input$row_to_add,
         handlerExpr = {
-          id <- digest::digest(sprintf("%s_%s", "subset", input$row_to_add), algo = "md5")
+          id <- row_html_mapping[[input$row_to_add]]
           callModule(
             private$add_filter_state,
             id = id,
@@ -1273,7 +1293,7 @@ SEFilterStates <- R6::R6Class( # nolint
         }
       )
 
-      return(NULL)
+      NULL
     }
   )
 )
@@ -1321,6 +1341,7 @@ MatrixFilterStates <- R6::R6Class( # nolint
         all(names(state) %in% names(colData(data)))
       )
 
+      html_id_mapping <- private$map_vars_to_html_ids(get_filterable_varnames(data))
       for (varname in names(state)) {
         value <- state[[varname]]
         fstate <- init_filter_state(
@@ -1332,7 +1353,7 @@ MatrixFilterStates <- R6::R6Class( # nolint
         )
         fstate$set_selected(value = value)
 
-        id <- digest::digest(sprintf("%s_%s", "subset", varname), algo = "md5")
+        id <- html_id_mapping[[varname]]
         callModule(
           private$add_filter_state,
           id = id,
@@ -1429,10 +1450,11 @@ MatrixFilterStates <- R6::R6Class( # nolint
         }
       )
 
+      html_id_mapping <- private$map_vars_to_html_ids(get_filterable_varnames(data))
       observeEvent(
         eventExpr = input$var_to_add,
         handlerExpr = {
-          id <- digest::digest(sprintf("%s_%s", "subset", input$var_to_add), algo = "md5")
+          id <- html_id_mapping[[input$var_to_add]]
           callModule(
             private$add_filter_state,
             id = id,
@@ -1449,7 +1471,7 @@ MatrixFilterStates <- R6::R6Class( # nolint
         }
       )
 
-      return(NULL)
+      NULL
     }
   )
 )
