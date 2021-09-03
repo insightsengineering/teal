@@ -554,12 +554,12 @@ FilterStates <- R6::R6Class( # nolint
     },
 
     # Maps the array of strings to sanitized unique HTML ids.
-    # @param strings `character` the array of strings
+    # @param keys `character` the array of strings
     # @return `list` the mapping
-    map_vars_to_html_ids = function(strings) {
-      strings <- paste0("var", strings)
-      sanitized_strings <- make.unique(gsub("[^[:alnum:]]", perl = TRUE, replacement = "", x = strings))
-      stats::setNames(object = sanitized_strings, nm = strings)
+    map_vars_to_html_ids = function(keys) {
+      values <- paste0("var", keys)
+      sanitized_values <- make.unique(gsub("[^[:alnum:]]", perl = TRUE, replacement = "", x = values))
+      stats::setNames(object = sanitized_values, nm = keys)
     }
   )
 )
@@ -963,7 +963,7 @@ MAEFilterStates <- R6::R6Class( # nolint
         }
       )
 
-      html_id_mapping <- private$map_vars_to_htmls_ids(get_filterable_varnames(SummarizedExperiment::colData(data)))
+      html_id_mapping <- private$map_vars_to_html_ids(get_filterable_varnames(SummarizedExperiment::colData(data)))
       observeEvent(
         eventExpr = input$var_to_add,
         handlerExpr = {
