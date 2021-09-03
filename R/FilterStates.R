@@ -1349,6 +1349,7 @@ MatrixFilterStates <- R6::R6Class( # nolint
         all(names(state) %in% names(colData(data)))
       )
 
+      html_id_mapping <- private$map_vars_to_html_ids(get_filterable_varnames(data))
       for (varname in names(state)) {
         value <- state[[varname]]
         fstate <- init_filter_state(
@@ -1360,7 +1361,7 @@ MatrixFilterStates <- R6::R6Class( # nolint
         )
         fstate$set_selected(value = value)
 
-        id <- digest::digest(sprintf("%s_%s", "subset", varname), algo = "md5")
+        id <- html_id_mapping[[varname]]
         callModule(
           private$add_filter_state,
           id = id,
