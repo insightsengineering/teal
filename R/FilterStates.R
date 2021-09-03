@@ -557,7 +557,7 @@ FilterStates <- R6::R6Class( # nolint
     # @param keys `character` the array of strings
     # @return `list` the mapping
     map_vars_to_html_ids = function(keys) {
-      values <- paste0("var", keys)
+      values <- paste0("var_", keys)
       sanitized_values <- make.unique(gsub("[^[:alnum:]]", perl = TRUE, replacement = "", x = values))
       stats::setNames(object = sanitized_values, nm = keys)
     }
@@ -1253,11 +1253,11 @@ SEFilterStates <- R6::R6Class( # nolint
         }
       )
 
-      col_html_mapping <- private$map_vars_to_html_ids(paste0("col", get_filterable_varnames(col_data)))
+      col_html_mapping <- private$map_vars_to_html_ids(paste0("colData_", get_filterable_varnames(col_data)))
       observeEvent(
         eventExpr = input$col_to_add,
         handlerExpr = {
-          id <- col_html_mapping[[paste0("col", input$col_to_add)]]
+          id <- col_html_mapping[[paste0("colData_", input$col_to_add)]]
           callModule(
             private$add_filter_state,
             id = id,
@@ -1272,11 +1272,11 @@ SEFilterStates <- R6::R6Class( # nolint
         }
       )
 
-      row_html_mapping <- private$map_vars_to_html_ids(paste0("row", get_filterable_varnames(row_data)))
+      row_html_mapping <- private$map_vars_to_html_ids(paste0("rowData_", get_filterable_varnames(row_data)))
       observeEvent(
         eventExpr = input$row_to_add,
         handlerExpr = {
-          id <- row_html_mapping[[paste0("row", input$row_to_add)]]
+          id <- row_html_mapping[[paste0("rowData_", input$row_to_add)]]
           callModule(
             private$add_filter_state,
             id = id,
