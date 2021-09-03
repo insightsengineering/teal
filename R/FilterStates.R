@@ -616,7 +616,7 @@ DFFilterStates <- R6::R6Class( # nolint
     #'   column in `data`.
     set_bookmark_state = function(data, state) {
       stopifnot(is.data.frame(data))
-      stopifnot(all(names(state) %in% c(names(data))) || is(state, "default_filter"))
+      stopifnot(all(names(state) %in% names(data)) || is(state, "default_filter"))
 
       for (varname in names(state)) {
         value <- state[[varname]]
