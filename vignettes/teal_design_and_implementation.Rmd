@@ -338,14 +338,6 @@ datasets$set_dataset(dataset = dataset("ADTTE", ADTTE))
 shiny:::flushReact() # force evaluation outside of Shiny apps
 ```
 
-Note that this code also runs outside of a teal instance.
-
-```{r, eval=FALSE}
-datasets$print_filter_info("ADSL")
-# for all variables
-datasets$print_filter_info("ADSL", filtered_vars_only = FALSE)
-```
-
 Now say we want to filter out all the patients in `ADSL` except patients with `USUBJID`
 equal to `id-1`, `id-2`, `id-3`, or `id-4`:
 
