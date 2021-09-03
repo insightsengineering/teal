@@ -101,7 +101,7 @@ JoinKeys <- R6::R6Class( # nolint
     mutate = function(dataset_1, dataset_2, val) {
       stopifnot(is_character_single(dataset_1))
       stopifnot(is_character_single(dataset_2))
-      stopifnot(is_character_vector(val, min_length = 0L))
+      stopifnot(is_character_vector(val, min_length = 1L))
 
       private$join_pair(join_key(dataset_1, dataset_2, val))
       return(invisible(self))
