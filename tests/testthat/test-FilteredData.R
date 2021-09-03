@@ -160,3 +160,85 @@ testthat::test_that("FilteredData$set_bookmark_state sets filters is FilteredDat
     )
   )
 })
+
+library(MultiAssayExperiment)
+datasets <- FilteredData$new()
+adsl <- as.data.frame(as.list(setNames(nm = c(get_cdisc_keys("ADSL")))))
+adsl$sex <- c("F")
+data("miniACC")
+
+datasets$set_dataset(cdisc_dataset("ADSL", adsl))
+datasets$set_dataset(dataset("mock_iris", head(iris)))
+datasets$set_dataset(dataset("miniACC", miniACC))
+
+testthat::test_that("get_filter_overview accepts all datasets argument input", {
+  testthat::expect_error(isolate(datasets$get_filter_overview("all")), NA)
+})
+
+testthat::test_that("get_filter_overview accepts single dataset argument input", {
+  testthat::expect_error(isolate(datasets$get_filter_overview("ADSL")), NA)
+  testthat::expect_error(isolate(datasets$get_filter_overview("mock_iris")), NA)
+  testthat::expect_error(isolate(datasets$get_filter_overview("miniACC")), NA)
+})
+
+testthat::test_that("get_filter_overview throws error with empty argument input", {
+  testthat::expect_error(isolate(datasets$get_filter_overview()), "argument \"datanames\" is missing, with no default")
+})
+
+testthat::test_that("get_filter_overview throws error with wrong argument input", {
+  testthat::expect_error(isolate(datasets$get_filter_overview("AA")), "Some datasets are not available:")
+  testthat::expect_error(isolate(datasets$get_filter_overview("")), "Some datasets are not available:")
+  testthat::expect_error(isolate(datasets$get_filter_overview(23)), "Some datasets are not available:")
+})
+
+testthat::test_that("get_filter_overview returns overview matrix for non-filtered datasets", {
+  testthat::expect_equal(
+    isolate(datasets$get_filter_overview(datasets$datanames())),
+    matrix(
+      list(
+        "1/1", "1/1", "6/6", "", "", "92/92", "79/79", "79/79", "90/90",
+        "90/90", "46/46", "46/46", "90/90", "90/90", "80/80", "80/80"),
+      nrow = 8,
+      byrow = TRUE,
+      dimnames = list(
+        c("ADSL", "mock_iris", "miniACC", "- RNASeq2GeneNorm", "- gistict",
+          "- RPPAArray", "- Mutations", "- miRNASeqGene"),
+        c("Obs", "Subjects")
+      )
+    )
+  )
+})
+
+testthat::test_that("get_filter_overview returns overview matrix for filtered datasets", {
+  filter_state_adsl <- ChoicesFilterState$new(c("F", "M"), varname = "sex")
+  filter_state_adsl$set_selected("M")
+
+  queue <- datasets$get_filtered_datasets("ADSL")$get_filter_states(1)
+  queue$queue_push(filter_state_adsl, queue_index = 1L, element_id = "sex")
+
+  filter_state_mae <- ChoicesFilterState$new(
+    x = c("white"),
+    varname = as.name("race"),
+    input_dataname = as.name("miniACC"),
+    extract_type = "list"
+  )
+
+  queue <- datasets$get_filtered_datasets("miniACC")$get_filter_states(1)
+  queue$queue_push(filter_state_mae, queue_index = 1L, element_id = "race")
+
+  testthat::expect_equal(
+    isolate(datasets$get_filter_overview(datasets$datanames())),
+    matrix(
+      list(
+        "0/1", "0/1", "6/6", "", "", "78/92", "66/79", "66/79", "76/90",
+        "76/90", "35/46", "35/46", "77/90", "77/90", "67/80", "67/80"),
+      nrow = 8,
+      byrow = TRUE,
+      dimnames = list(
+        c("ADSL", "mock_iris", "miniACC", "- RNASeq2GeneNorm", "- gistict",
+          "- RPPAArray", "- Mutations", "- miRNASeqGene"),
+        c("Obs", "Subjects")
+      )
+    )
+  )
+})
