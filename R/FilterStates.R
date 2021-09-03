@@ -1065,6 +1065,7 @@ SEFilterStates <- R6::R6Class( # nolint
         is.null(state$select) || all(names(state$select) %in% names(colData(data)))
       )
 
+      row_data <- SummarizedExperiment::rowData(data)
       row_html_mapping <- private$map_vars_to_html_ids(get_filterable_varnames(row_data))
       row_html_mapping <- setNames(object = paste0("rowData_", row_html_mapping), nm = names(row_html_mapping))
       for (varname in names(state$subset)) {
