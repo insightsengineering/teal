@@ -370,6 +370,9 @@
 
             prettify_enabled: $inp.data("prettifyEnabled"),
             prettify_separator: $inp.data("prettifySeparator"),
+            // custom function to format the min-max labels to be in line with the intermediate label values formats
+            // in this case, the numeric precision is calculated by the `step` parameter given by the `shiny:::findStepSize` function
+            // the precision of the label rounding is given by the precision of the step value i.e. number of decimals 
             prettify: function (n) { if (!isNaN(n)) return n.toFixed($inp.data("step").toString().split(".")[1].length); },
 
             force_edges: $inp.data("forceEdges"),

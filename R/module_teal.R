@@ -86,7 +86,6 @@ ui_teal <- function(id,
 
   res <- shinyUI(
     fluidPage(
-      htmltools::suppressDependencies(get_suppress_deps()),
       title = title,
       include_teal_css_js(),
       tags$header(header),

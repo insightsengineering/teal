@@ -356,6 +356,11 @@ optionalSliderInput <- function(inputId, label, min, max, value, label_help = NU
   }
 
   slider <- sliderInput(inputId, label, min, max, value, ...)
+  slider_deps <- htmltools::findDependencies(slider)
+  # remove this dependency as the custom version of it will be loaded on runtime by teal from the inst/js folder
+  slider_deps <- htmltools::subtractDependencies(slider_deps, c("ionrangeslider-javascript"))
+  slider_deps <- htmltools::resolveDependencies(slider_deps)
+  slider <- htmltools::attachDependencies(slider, slider_deps)
 
   if (!is.null(label_help)) {
     slider[[3]] <- append(slider[[3]], list(div(class = "label-help", label_help)), after = 1)

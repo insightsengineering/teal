@@ -523,8 +523,3 @@ eval_expr_with_msg <- function(expr, env) {
   )
 }
 
-#' Helper function to keep the list of HTML dependencies to be suppressed
-#'
-get_suppress_deps <- function() {
-  c("ionrangeslider-javascript")
-}
