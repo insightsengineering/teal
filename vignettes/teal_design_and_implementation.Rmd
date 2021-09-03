@@ -68,9 +68,9 @@ shinyApp(
     output$scatterplotmatrix <- renderPlot({
       data <- input$select_data
       if (data == "iris") {
-        pairs(iris[,-5], col = iris$Species)
+        pairs(iris[, -5], col = iris$Species)
       } else {
-        pairs(mtcars[,-2], col = mtcars$cyl)
+        pairs(mtcars[, -2], col = mtcars$cyl)
       }
     })
   }
@@ -119,9 +119,9 @@ srv_example <- function(input, output, session) {
   output$scatterplotmatrix <- renderPlot({
     data <- input$select_data
     if (data == "iris") {
-      pairs(iris[,-5], col = iris$Species)
+      pairs(iris[, -5], col = iris$Species)
     } else {
-      pairs(mtcars[,-2], col = mtcars$cyl)
+      pairs(mtcars[, -2], col = mtcars$cyl)
     }
   })
 }
