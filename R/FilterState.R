@@ -977,7 +977,7 @@ RangeFilterState <- R6::R6Class( # nolint
           checkboxInput(
             ns("keep_inf"),
             sprintf("Keep Inf (%s)", private$inf_count),
-            value = isolate(private$keep_inf())
+            value = isolate(self$get_keep_inf())
           )
         } else {
           NULL
