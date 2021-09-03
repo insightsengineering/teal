@@ -44,7 +44,9 @@ library(shiny)
 library(shiny)
 shinyApp(
   ui = tags$p("Hello World"),
-  server = function(input, output, session) {}
+  server = function(input, output, session) {
+    
+  }
 )
 ```
 
@@ -55,7 +57,11 @@ update and get information from the ui:
 ```{r, eval = FALSE}
 shinyApp(
   ui = fluidPage(
-    selectInput(inputId = "select_data", label = "select data", choices = c("iris", "mtcars")),
+    selectInput(
+      inputId = "select_data",
+      label = "select data",
+      choices = c("iris", "mtcars")
+    ),
     plotOutput(outputId = "scatterplotmatrix")
   ),
   server = function(input, output, session) {
@@ -64,7 +70,7 @@ shinyApp(
       if (data == "iris") {
         pairs(iris[,-5], col = iris$Species)
       } else {
-        pairs(mtcars[, -2], col = mtcars$cyl)
+        pairs(mtcars[,-2], col = mtcars$cyl)
       }
     })
   }
@@ -81,7 +87,11 @@ ui code created by running the following code in the R console:
 
 ```{r, eval = FALSE}
 fluidPage(
-  selectInput(inputId = "select_data", label = "select data", choices = c("iris", "mtcars")),
+  selectInput(
+    inputId = "select_data",
+    label = "select data",
+    choices = c("iris", "mtcars")
+  ),
   plotOutput(outputId = "scatterplotmatrix")
 )
 ```
@@ -96,7 +106,11 @@ modularize the selection and the plotting of the data as follows:
 ui_example <- function(id) {
   ns <- NS(id)
   tagList(
-    selectInput(inputId = ns("select_data"), label = "select data", choices = c("iris", "mtcars")),
+    selectInput(
+      inputId = ns("select_data"),
+      label = "select data",
+      choices = c("iris", "mtcars")
+    ),
     plotOutput(outputId = ns("scatterplotmatrix"))
   )
 }
@@ -107,7 +121,7 @@ srv_example <- function(input, output, session) {
     if (data == "iris") {
       pairs(iris[,-5], col = iris$Species)
     } else {
-      pairs(mtcars[, -2], col = mtcars$cyl)
+      pairs(mtcars[,-2], col = mtcars$cyl)
     }
   })
 }
@@ -119,10 +133,8 @@ module. To use this module twice in an app run the following code:
 ```{r, eval = FALSE}
 shinyApp(
   ui = function() {
-    tagList(
-      ui_example(id = "first"),
-      ui_example(id = "second")
-    )
+    tagList(ui_example(id = "first"),
+            ui_example(id = "second"))
   },
   server = function(input, output, session) {
     callModule(srv_example, id = "first")
@@ -171,25 +183,23 @@ A simple example for a completely custom `teal` module is the following
 ```{r, eval = FALSE}
 library(teal)
 
-app <- teal::init(
-  data = teal_data(dataset("IRIS", x = iris)),
-  modules = root_modules(
-    module(
-      label = "sample module",
-      server = function(input, output, session, datasets) {
-        output$scatterplot <- renderPlot({
-          iris <- datasets$get_data("IRIS", filtered = TRUE)
-          with(iris, plot(Sepal.Length, Sepal.Width, col = Species))
-        })
-      },
-      ui = function(id, datasets) {
-        ns <- NS(id)
-        plotOutput(ns("scatterplot"))
-      },
-      filters = "IRIS"
-    )
-  )
-)
+app <- teal::init(data = teal_data(dataset("IRIS", x = iris)),
+                  modules = root_modules(
+                    module(
+                      label = "sample module",
+                      server = function(input, output, session, datasets) {
+                        output$scatterplot <- renderPlot({
+                          iris <- datasets$get_data("IRIS", filtered = TRUE)
+                          with(iris, plot(Sepal.Length, Sepal.Width, col = Species))
+                        })
+                      },
+                      ui = function(id, datasets) {
+                        ns <- NS(id)
+                        plotOutput(ns("scatterplot"))
+                      },
+                      filters = "IRIS"
+                    )
+                  ))
 ShinyApp(app$ui, app$server)
 ```
 
@@ -313,8 +323,8 @@ ADSL <- data.frame(
 ADTTE <- data.frame(
   USUBJID = paste0("id-", 1:100),
   STUDYID = "studyA",
-  AVAL = abs(rexp(100, rate = 1/20)),
-  CNSR = sample(c(0,1), 100, TRUE),
+  AVAL = abs(rexp(100, rate = 1 / 20)),
+  CNSR = sample(c(0, 1), 100, TRUE),
   PARAMCD = "OS",
   stringsAsFactors = FALSE
 )
@@ -342,13 +352,7 @@ Now say we want to filter out all the patients in `ADSL` except patients with `U
 equal to `id-1`, `id-2`, `id-3`, or `id-4`:
 
 ```{r, eval=TRUE}
-datasets$set_bookmark_state(
-  state = list(
-    ADSL = list(
-      USUBJID = sprintf("id-%s", 1:4)
-    )
-  )
-)
+datasets$set_bookmark_state(state = list(ADSL = list(USUBJID = sprintf("id-%s", 1:4))))
 
 datasets$get_data("ADSL", filtered = TRUE)
 ```
@@ -458,16 +462,16 @@ create_teal_app <- function(title, id) {
     modules = root_modules(
       module(
         "data source",
-        server = function(input, output, session, datasets) {},
-        ui = function(id, ...) div(p("information about data source")),
+        server = function(input, output, session, datasets) {
+        },
+        ui = function(id, ...)
+          div(p("information about data source")),
         filters = "all"
       ),
       module(
         "ADSL AGE histogram",
         server = function(input, output, session, datasets) {
-          output$hist <- renderPlot(
-            hist(datasets$get_data("ADSL", filtered = TRUE)$AGE)
-          )
+          output$hist <- renderPlot(hist(datasets$get_data("ADSL", filtered = TRUE)$AGE))
         },
         ui = function(id, ...) {
           ns <- NS(id)
@@ -484,15 +488,14 @@ create_teal_app <- function(title, id) {
 }
 app1 <- create_teal_app("Sample App1", id = "app1")
 app2 <- create_teal_app("Sample App2", id = "app2")
-shinyApp(ui = fluidPage(
-  fluidRow(
-    column(6, app1$ui),
-    column(6, app2$ui)
-  )
-), server = function(input, output, session) {
-  callModule(app1$server, "app1")
-  callModule(app2$server, "app2")
-})
+shinyApp(
+  ui = fluidPage(fluidRow(column(6, app1$ui),
+                          column(6, app2$ui))),
+  server = function(input, output, session) {
+    callModule(app1$server, "app1")
+    callModule(app2$server, "app2")
+  }
+)
 ```
 
 However, we recommend to use `ui_teal_with_splash` and `srv_teal_with_splash` if you would
@@ -502,16 +505,16 @@ want to use the teal app in the same way as Shiny modules with `callModule`.
 modules <- root_modules(
   module(
     "data source",
-    server = function(input, output, session, datasets) {},
-    ui = function(id, ...) div(p("information about data source")),
+    server = function(input, output, session, datasets) {
+    },
+    ui = function(id, ...)
+      div(p("information about data source")),
     filters = "all"
   ),
   module(
     "ADSL AGE histogram",
     server = function(input, output, session, datasets) {
-      output$hist <- renderPlot(
-        hist(datasets$get_data("ADSL", filtered = TRUE)$AGE)
-      )
+      output$hist <- renderPlot(hist(datasets$get_data("ADSL", filtered = TRUE)$AGE))
     },
     ui = function(id, ...) {
       ns <- NS(id)
@@ -522,30 +525,24 @@ modules <- root_modules(
 )
 
 shinyApp(
-  ui = fluidPage(
-    fluidRow(
-      column(
-        6,
-        ui_teal_with_splash(
-          "app1",
-          data = cdisc_data(
-            cdisc_dataset("ADSL", ADSL, code = "ADSL <- radsl(cached = TRUE)")
-          ),
-          title = "Sample app 1"
-        )
-      ),
-      column(
-        6,
-        ui_teal_with_splash(
-          "app2",
-          data = cdisc_data(
-            cdisc_dataset("ADSL", ADSL, code = "ADSL <- radsl(cached = TRUE)")
-          ),
-          title = "Sample app 2"
-        )
-      )
+  ui = fluidPage(fluidRow(
+    column(
+      6,
+      ui_teal_with_splash("app1",
+                          data = cdisc_data(
+                            cdisc_dataset("ADSL", ADSL, code = "ADSL <- radsl(cached = TRUE)")
+                          ),
+                          title = "Sample app 1")
+    ),
+    column(
+      6,
+      ui_teal_with_splash("app2",
+                          data = cdisc_data(
+                            cdisc_dataset("ADSL", ADSL, code = "ADSL <- radsl(cached = TRUE)")
+                          ),
+                          title = "Sample app 2")
     )
-  ),
+  )),
   server = function(input, output, session) {
     callModule(
       module = srv_teal_with_splash,
