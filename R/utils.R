@@ -260,9 +260,9 @@ check_in_subset <- function(subset, choices, pre_msg = "") {
   return(invisible(NULL))
 }
 
-#' Concatenate deparsed call
+#' Deparses and concatenates an expression
 #'
-#' Concatenate deparsed call
+#' Deparses and concatenates an expression
 #' @param x (`language`)\cr
 #' @inheritParams base::deparse
 #' @return `character`
