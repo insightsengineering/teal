@@ -138,7 +138,7 @@ above example and pay attention to the `HTML` `id` attributes.
 Here is a visual representation of this modularization:
 
 ```{r echo=FALSE}
-knitr::include_graphics('./images/design_shiny_module.png')
+knitr::include_graphics("./images/design_shiny_module.png")
 ```
 
 This modularized construction of Shiny apps is one of the foundations of `teal`.
@@ -163,7 +163,7 @@ The general `teal` workflow is as follows:
    to the `shiny::shinyApp` function
 
 ```{r echo=FALSE}
-knitr::include_graphics('./images/design_use_teal.png')
+knitr::include_graphics("./images/design_use_teal.png")
 ```
 
 A simple example for a completely custom `teal` module is the following
@@ -200,7 +200,7 @@ still is interactive due to the possibility of filtering the data.
 The default `teal` web application has the following components:
 
 ```{r echo=FALSE}
-knitr::include_graphics('./images/teal_containers.png')
+knitr::include_graphics("./images/teal_containers.png")
 ```
 
 - the composition of the Shiny app `ui` object is based on the [`tabsetPanel`]
@@ -208,7 +208,7 @@ knitr::include_graphics('./images/teal_containers.png')
   illustrated here:
 
 ```{r echo=FALSE}
-knitr::include_graphics('./images/design_teal.png')
+knitr::include_graphics("./images/design_teal.png")
 ```
 
 The important new parts in the above diagram are:
@@ -270,7 +270,7 @@ an output (table/graph) can be computed directly from a single ADaM data set.
 Here is a diagram of some SDTM datasets:
 
 ```{r echo=FALSE, out.width='80%'}
-knitr::include_graphics('./images/sdtm_overview.png')
+knitr::include_graphics("./images/sdtm_overview.png")
 ```
 
 The names of ADaM datasets often prefix a `AD` or `A` to their corresponding
@@ -292,7 +292,7 @@ When using CDISC specific data, the filtering mechanism makes use of `ADSL`
 being a "special" dataset as described below.
 
 ```{r echo=FALSE, out.width='100%'}
-knitr::include_graphics('./images/design_cdisc_filtered_datasets.png')
+knitr::include_graphics("./images/design_cdisc_filtered_datasets.png")
 ```
 
 This filtering will now be explained step by step for two example datasets (`ADSL`
@@ -306,7 +306,7 @@ ADSL <- data.frame(
   USUBJID = paste0("id-", 1:100),
   STUDYID = "studyA",
   AGE = abs(rnorm(100, sd = 20) + 40),
-  SEX = sample(c('M', 'F'), 100, TRUE),
+  SEX = sample(c("M", "F"), 100, TRUE),
   stringsAsFactors = FALSE
 )
 
@@ -377,7 +377,7 @@ The CDISC filtering mechanism which we have introduced in the previous section
 can be abstracted with the following diagram:
 
 ```{r echo=FALSE}
-knitr::include_graphics('./images/design_cdisc_filtered_data.png')
+knitr::include_graphics("./images/design_cdisc_filtered_data.png")
 ```
 
 This is, however, a very particular filtering setup that has not much use
@@ -386,13 +386,13 @@ general filtering is to have variable based filtering for an
 arbitrary dataset:
 
 ```{r echo=FALSE}
-knitr::include_graphics('./images/design_one_dataset_filtered_data.png')
+knitr::include_graphics("./images/design_one_dataset_filtered_data.png")
 ```
 
 or more generally a collection of independently filtered datasets:
 
 ```{r echo=FALSE}
-knitr::include_graphics('./images/design_simple_filtered_data.png')
+knitr::include_graphics("./images/design_simple_filtered_data.png")
 ```
 
 This filtering is implemented using the `FilteredData` class
@@ -401,7 +401,7 @@ This filtering is implemented using the `FilteredData` class
 In the future we may also need filtering for [expression sets][expressionsets]
 
 ```{r echo=FALSE}
-knitr::include_graphics('./images/expressionset.png')
+knitr::include_graphics("./images/expressionset.png")
 ```
 
 that is, filtering expression sets is a slightly more advanced filtering as one
