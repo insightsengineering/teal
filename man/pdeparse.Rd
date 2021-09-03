@@ -2,7 +2,7 @@
 % Please edit documentation in R/utils.R
 \name{pdeparse}
 \alias{pdeparse}
-\title{Concatenate deparsed call}
+\title{Deparses and concatenates an expression}
 \usage{
 pdeparse(x, width.cutoff = 500L)
 }
@@ -16,5 +16,5 @@ pdeparse(x, width.cutoff = 500L)
 \code{character}
 }
 \description{
-Concatenate deparsed call
+Deparses and concatenates an expression
 }
