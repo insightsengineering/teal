@@ -986,7 +986,7 @@ RangeFilterState <- R6::R6Class( # nolint
           checkboxInput(
             ns("keep_na"),
             label_keep_na_count(private$na_count),
-            value = isolate(private$keep_na())
+            value = isolate(self$get_keep_inf())
           )
         } else {
           NULL
