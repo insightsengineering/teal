@@ -44,8 +44,7 @@ testthat::test_that("get_filter_overview_info returns overview matrix for MAEFil
 })
 
 testthat::test_that("MAEFilteredDataset$set_bookmark_state sets filters in FilterStates specified by list names", {
-  library(MultiAssayExperiment)
-  dataset <- teal:::MAEFilteredDataset$new(dataset("MAE", miniACC))
+  dataset <- teal:::MAEFilteredDataset$new(dataset("MAE", MultiAssayExperiment::miniACC))
   fs <- list(
     subjects = list(
       years_to_birth = c(30, 50),
