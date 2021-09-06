@@ -384,7 +384,7 @@ FilterState <- R6::R6Class( # nolint
     #' @description
     #' Set state
     #' @param state (`list`)\cr
-    #'  should contain fields relevant for specific class
+    #'  contains fields relevant for a specific class
     #' \itemize{
     #' \item{`selected`}{ defines initial selection}
     #' \item{`keep_na` (`logical`)}{ defines whether to keep or remove `NA` values}
