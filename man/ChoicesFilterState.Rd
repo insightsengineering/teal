@@ -161,7 +161,7 @@ Set state
 \if{html}{\out{<div class="arguments">}}
 \describe{
 \item{\code{state}}{(\code{list})\cr
-should contain fields relevant for specific class
+contains fields relevant for a specific class
 \itemize{
 \item{\code{selected}}{ defines initial selection}
 \item{\code{keep_na} (\code{logical})}{ defines whether to keep or remove \code{NA} values}
