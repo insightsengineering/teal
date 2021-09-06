@@ -897,7 +897,7 @@ RangeFilterState <- R6::R6Class( # nolint
           label = NULL,
           min = v_min,
           max = v_max,
-          value = c(v_min, v_max),
+          value = v_pretty_range,
           width = "100%",
           step = v_step
         ),
