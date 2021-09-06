@@ -316,7 +316,7 @@ join_key <- function(dataset_1, dataset_2, keys) {
     if (is.null(names(keys))) {
       names(keys) <- keys
     }
-    stopifnot(rlang::is_named(keys))
+    stopifnot(!is.null(names(keys)))
     stopifnot(!anyDuplicated(keys))
     stopifnot(!anyDuplicated(names(keys)))
   }

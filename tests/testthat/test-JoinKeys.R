@@ -4,12 +4,6 @@ test_that("join_key throws error with invalid keys arguments", {
   expect_error(join_key("d1", "d2", keys = NULL))
   expect_error(join_key("d1", "d2", keys = 1:10))
 
-  # not fully named
-  expect_error(join_key("d1", "d2", keys = c("X" = "A", "B")))
-  keys <- c("A", "C" = "B")
-  names(keys)[1] <- ""
-  expect_error(join_key("d1", "d2", keys))
-
   # duplicates in names or values
   expect_error(join_key("d1", "d2", keys = c("A" = "A", "A" = "B")))
   expect_error(join_key("d1", "d2", keys = c("C" = "A", "D" = "A")))
@@ -17,6 +11,16 @@ test_that("join_key throws error with invalid keys arguments", {
   # names(keys)!= keys if datasets are the same
   expect_error(join_key("d1", "d1", keys = c("B" = "A", "A" = "B")))
 })
+
+test_that("can set key on empty variable name equal to '' ", {
+  # not fully named
+  expect_silent(join_key("d1", "d2", keys = c("X" = "A",  "")))
+  expect_silent(join_key("d1", "d2", keys = c("X" = "A", "B")))
+  keys <- c("A", "C" = "B")
+  names(keys)[1] <- ""
+  expect_silent(join_key("d1", "d2", keys))
+})
+
 
 test_that("join_key throws error with invalid dataset arguments", {
 
