@@ -44,9 +44,7 @@ library(shiny)
 library(shiny)
 shinyApp(
   ui = tags$p("Hello World"),
-  server = function(input, output, session) {
-    
-  }
+  server = function(input, output, session) { } # nolint
 )
 ```
 
@@ -312,7 +310,7 @@ and `ADTTE`):
 # for reproducibility
 set.seed(1)
 
-ADSL <- data.frame(
+ADSL <- data.frame( # nolint
   USUBJID = paste0("id-", 1:100),
   STUDYID = "studyA",
   AGE = abs(rnorm(100, sd = 20) + 40),
@@ -320,7 +318,7 @@ ADSL <- data.frame(
   stringsAsFactors = FALSE
 )
 
-ADTTE <- data.frame(
+ADTTE <- data.frame( # nolint
   USUBJID = paste0("id-", 1:100),
   STUDYID = "studyA",
   AVAL = abs(rexp(100, rate = 1 / 20)),
@@ -449,7 +447,7 @@ We use the `id` argument of the `init` function for this.
 ```{r, eval = FALSE}
 library(random.cdisc.data)
 
-ADSL <- radsl(cached = TRUE)
+ADSL <- radsl(cached = TRUE) # nolint
 
 options(teal_logging = FALSE)
 
