@@ -884,7 +884,7 @@ RangeFilterState <- R6::R6Class( # nolint
     ui = function(id) {
       ns <- NS(id)
       v_pretty_range <- pretty(private$choices, n = 100)
-      v_step <- v_pretty_range[2] - v_pretty_range[1]
+      v_step <- ifelse(private$is_integer, 1L, v_pretty_range[2] - v_pretty_range[1])
       v_min <- v_pretty_range[1]
       v_max <- v_pretty_range[length(v_pretty_range)]
       fluidRow(
@@ -897,7 +897,7 @@ RangeFilterState <- R6::R6Class( # nolint
           label = NULL,
           min = v_min,
           max = v_max,
-          value = v_pretty_range,
+          value = c(v_min, v_max),
           width = "100%",
           step = v_step
         ),
