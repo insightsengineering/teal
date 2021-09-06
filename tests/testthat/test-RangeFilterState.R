@@ -5,6 +5,16 @@ testthat::test_that("The constructor accepts numerical values", {
 testthat::test_that("The constructor accepts infinite values but not infinite only", {
   testthat::expect_error(RangeFilterState$new(c(1, Inf, -Inf), varname = "test"), NA)
   testthat::expect_error(RangeFilterState$new(Inf, varname = "test"), "any\\(is.finite\\(x")
+  testthat::expect_error(RangeFilterState$new(c(Inf, NA), varname = "test"), "any\\(is.finite\\(x")
+})
+
+testthat::test_that("get_selected returns range computed on a vector containing c(1, Inf, -Inf, NA)", {
+  test <- c(1, Inf, -Inf, NA)
+  filter_state <- RangeFilterState$new(test, varname = "test")
+  expect_identical(
+    isolate(filter_state$get_selected()),
+    c(1, 1)
+  )
 })
 
 testthat::test_that("get_call returns a condition TRUE for all values passed to the constructor", {
