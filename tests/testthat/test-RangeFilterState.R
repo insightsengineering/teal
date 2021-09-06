@@ -122,7 +122,7 @@ testthat::test_that("set_state needs a named list with selected, keep_na and kee
 testthat::test_that("set_state overwrites fields included in the input only", {
   filter_state <- RangeFilterState$new(c(1, 8, NA_real_, Inf), varname = "test")
   filter_state$set_state(list(selected = c(1, 2), keep_na = TRUE, keep_inf = TRUE))
-  filter_state$set_state(list(selected = c(5, 6), keep_na = TRUE, keep_inf = TRUE))
+  testthat::expect_error(filter_state$set_state(list(selected = c(5, 6), keep_na = TRUE, keep_inf = TRUE)), NA)
   testthat::expect_identical(isolate(filter_state$get_selected()), c(5, 6))
   testthat::expect_true(isolate(filter_state$get_keep_na()))
   testthat::expect_true(isolate(filter_state$get_keep_inf()))

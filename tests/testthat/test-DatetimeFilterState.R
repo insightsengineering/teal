@@ -87,7 +87,7 @@ testthat::test_that("set_state overwrites fields included in the input only", {
   objects <- as.POSIXct(c(1:5), origin = "1900/01/01")
   filter_state <- DatetimeFilterState$new(objects, varname = "test")
   filter_state$set_state(list(selected = c(objects[2], objects[2]), keep_na = TRUE))
-  filter_state$set_state(list(selected = c(objects[2], objects[2])))
+  testthat::expect_error(filter_state$set_state(list(selected = c(objects[2], objects[2])))
   testthat::expect_identical(isolate(filter_state$get_selected()), c(objects[2], objects[2]))
   testthat::expect_true(isolate(filter_state$get_keep_na()))
 })
