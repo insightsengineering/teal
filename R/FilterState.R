@@ -388,8 +388,6 @@ FilterState <- R6::R6Class( # nolint
     #' \itemize{
     #' \item{`selected`}{ defines initial selection}
     #' \item{`keep_na` (`logical`)}{ defines whether to keep or remove `NA` values}
-    #' \item{`keep_inf` (`logical`)}{ defines whether to keep or remove `Inf` values - applies only
-    #' to `RangeFilterState`}
     #' }
     set_state = function(state) {
       stopifnot(is.list(state) && all(names(state) %in% c("selected", "keep_na")))
