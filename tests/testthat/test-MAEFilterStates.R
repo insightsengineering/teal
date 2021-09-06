@@ -101,8 +101,7 @@ testthat::test_that("MAEFilterStates$set_bookmark_state sets filters in FilterSt
     gender = "female"
   )
 
-  library(MultiAssayExperiment)
-  maefs$set_bookmark_state(state = fs, data = miniACC)
+  maefs$set_bookmark_state(state = fs, data = MultiAssayExperiment::miniACC)
   expect_equal(
     isolate(maefs$get_call()),
     quote(
