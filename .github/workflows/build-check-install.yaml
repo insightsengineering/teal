@@ -111,9 +111,10 @@ jobs:
           } else {
             remotes::install_deps(dependencies = TRUE, upgrade = "never", Ncpus = ncores)
           }
+
           if (file.exists("staged_dependencies.yaml")) {
             cat("\nInstall Staged Dependencies\n\n\n")
-            if (!require("staged.dependencies")) remotes::install_github("openpharma/staged.dependencies", ref = "main", Ncpus = ncores)
+            if (!require("staged.dependencies")) remotes::install_github("openpharma/staged.dependencies", ref = "v0.1", Ncpus = ncores)
             cat("\nCalculating Staged Dependency Table...\n\n")
             print(staged.dependencies::dependency_table(), width = 120)
             cat("\n\n")
@@ -122,7 +123,6 @@ jobs:
         shell: Rscript {0}
         env:
           GITHUB_PAT: ${{ secrets.REPO_GITHUB_TOKEN }} # or ${{ secrets.GITHUB_TOKEN }}
-
 
       - name: Build R package
         run: |
