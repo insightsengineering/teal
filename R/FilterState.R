@@ -1067,7 +1067,7 @@ RangeFilterState <- R6::R6Class( # nolint
       if (!is.null(state$keep_inf)) {
         self$set_keep_inf(state$keep_inf)
       }
-      super$set_state(state[c("selected", "keep_na")])
+      super$set_state(state[names(state) %in% c("selected", "keep_na")])
       invisible(NULL)
     }
   ),
