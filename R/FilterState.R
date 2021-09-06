@@ -612,9 +612,7 @@ EmptyFilterState <- R6::R6Class( # nolint
     #' @param state (`list`)\cr
     #'  should contain fields relevant for specific class
     #' \itemize{
-    #' \item{`selected`}{ defines initial selection}
     #' \item{`keep_na` (`logical`)}{ defines whether to keep or remove `NA` values}
-    #' \item{`keep_inf` (`logical`)}{ defines whether to keep or remove `Inf` values}
     #' }
     set_state = function(state) {
       if (!is.null(state$selected)) {
@@ -1066,19 +1064,12 @@ RangeFilterState <- R6::R6Class( # nolint
     #' }
     set_state = function(state) {
       stopifnot(is.list(state) && all(names(state) %in% c("selected", "keep_na", "keep_inf")))
-      if (!is.null(state$keep_na)) {
-        self$set_keep_na(state$keep_na)
-      }
       if (!is.null(state$keep_inf)) {
         self$set_keep_inf(state$keep_inf)
       }
-      if (!is.null(state$selected)) {
-        self$set_selected(state$selected)
-      }
-
+      super$set_state(state[c("selected", "keep_na")])
       invisible(NULL)
     }
-
   ),
   private = list(
     histogram_data = data.frame(),

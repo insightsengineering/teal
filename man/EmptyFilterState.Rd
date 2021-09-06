@@ -160,9 +160,7 @@ Set state
 \item{\code{state}}{(\code{list})\cr
 should contain fields relevant for specific class
 \itemize{
-\item{\code{selected}}{ defines initial selection}
 \item{\code{keep_na} (\code{logical})}{ defines whether to keep or remove \code{NA} values}
-\item{\code{keep_inf} (\code{logical})}{ defines whether to keep or remove \code{Inf} values}
 }}
 }
 \if{html}{\out{</div>}}
