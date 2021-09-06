@@ -2,9 +2,18 @@
 % Please edit documentation in R/set_filter_state.R
 \name{set_filter_state}
 \alias{set_filter_state}
+\alias{set_filter_state.default}
+\alias{set_filter_state.default_filter}
+\alias{set_filter_state.list}
 \title{Set filter state in \code{FilterState} object}
 \usage{
 set_filter_state(x, filter_state)
+
+\method{set_filter_state}{default}(x, filter_state)
+
+\method{set_filter_state}{default_filter}(x, filter_state)
+
+\method{set_filter_state}{list}(x, filter_state)
 }
 \arguments{
 \item{x}{(\code{list},\code{vector}, \code{default_filter})\cr
@@ -21,6 +30,7 @@ adding \code{NA} and \code{Inf} to the selection vector.}
 \item{filter_state}{(\code{FilterState})\cr}
 }
 \description{
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
 Sets values of the selection in \code{FilterState} object
 }
 \examples{

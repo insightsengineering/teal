@@ -1,5 +1,6 @@
 #' Set filter state in `FilterState` object
 #'
+#' @description `r lifecycle::badge("experimental")`
 #' Sets values of the selection in `FilterState` object
 #' @param x (`list`,`vector`, `default_filter`)\cr
 #'  values of the variable used in filter. Depending on the `FilterState` type
@@ -30,6 +31,7 @@ set_filter_state <- function(x, filter_state) {
   UseMethod("set_filter_state")
 }
 
+#' @rdname set_filter_state
 #' @export
 set_filter_state.default <- function(x, filter_state) { #nousage
   state <- list()
@@ -48,11 +50,13 @@ set_filter_state.default <- function(x, filter_state) { #nousage
   filter_state$set_state(state)
 }
 
+#' @rdname set_filter_state
 #' @export
 set_filter_state.default_filter <- function(x, filter_state) { #nolint #nousage
   invisible(NULL)
 }
 
+#' @rdname set_filter_state
 #' @export
 set_filter_state.list <- function(x, filter_state) { #nousage
   filter_state$set_state(state = x)
