@@ -859,7 +859,7 @@ MAEFilterStates <- R6::R6Class( # nolint
     set_bookmark_state = function(data, state) {
       stopifnot(is(data, "MultiAssayExperiment"))
       stopifnot(
-        all(names(state) %in% names(colData(data))) || is(state, "default_filter")
+        all(names(state) %in% names(SummarizedExperiment::colData(data))) || is(state, "default_filter")
       )
 
       html_id_mapping <- private$map_vars_to_html_ids(get_filterable_varnames(SummarizedExperiment::colData(data)))
@@ -1074,11 +1074,11 @@ SEFilterStates <- R6::R6Class( # nolint
       stopifnot(is(data, "SummarizedExperiment"))
       stopifnot(
         all(names(state) %in% c("subset", "select")) || is(state, "default_filter"),
-        is.null(state$subset) || all(names(state$subset) %in% names(rowData(data))),
-        is.null(state$select) || all(names(state$select) %in% names(colData(data)))
+        is.null(state$subset) || all(names(state$subset) %in% names(SummarizedExperiment::rowData(data))),
+        is.null(state$select) || all(names(state$select) %in% names(SummarizedExperiment::colData(data)))
       )
 
-      row_html_mapping <- private$map_vars_to_html_ids(get_filterable_varnames(rowData(data)))
+      row_html_mapping <- private$map_vars_to_html_ids(get_filterable_varnames(SummarizedExperiment::rowData(data)))
       row_html_mapping <- setNames(object = paste0("rowData_", row_html_mapping), nm = names(row_html_mapping))
       for (varname in names(state$subset)) {
         value <- state$subset[[varname]]
@@ -1110,7 +1110,7 @@ SEFilterStates <- R6::R6Class( # nolint
       }
 
 
-      col_html_mapping <- private$map_vars_to_html_ids(get_filterable_varnames(colData(data)))
+      col_html_mapping <- private$map_vars_to_html_ids(get_filterable_varnames(SummarizedExperiment::colData(data)))
       col_html_mapping <- setNames(object = paste0("colData_", col_html_mapping), nm = names(col_html_mapping))
       for (varname in names(state$select)) {
         value <- state$select[[varname]]
@@ -1380,7 +1380,7 @@ MatrixFilterStates <- R6::R6Class( # nolint
     set_bookmark_state = function(data, state) {
       stopifnot(is(data, "matrix"))
       stopifnot(
-        all(names(state) %in% names(colData(data))) || is(state, "default_filter")
+        all(names(state) %in% names(SummarizedExperiment::colData(data))) || is(state, "default_filter")
       )
 
       html_id_mapping <- private$map_vars_to_html_ids(get_filterable_varnames(data))
