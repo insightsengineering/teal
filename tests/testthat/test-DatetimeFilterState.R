@@ -70,14 +70,14 @@ testthat::test_that("set_selected throws when the values are not within the rang
 })
 
 testthat::test_that("set_state needs a named list with selected and keep_na elements", {
-  objects <- as.POSIXct(c(1:5), origin = "1900/01/01")
+  objects <- as.POSIXct(c(1:4), origin = "1900/01/01")
   filter_state <- DatetimeFilterState$new(objects, varname = "test")
-  filter_state$set_state(list(selected = c(objects[2], objects[2]), keep_na = TRUE))
-  testthat::expect_identical(isolate(filter_state$get_selected()), c(objects[2], objects[2]))
+  filter_state$set_state(list(selected = c(objects[2], objects[3]), keep_na = TRUE))
+  testthat::expect_identical(isolate(filter_state$get_selected()), c(objects[2], objects[3]))
   testthat::expect_true(isolate(filter_state$get_keep_na()))
   testthat::expect_error(
     filter_state$set_state(
-      list(selected = c(objects[2], objects[2]), unknown = TRUE)
+      list(selected = c(objects[3], objects[4]), unknown = TRUE)
     ),
     "all\\(names\\(state\\)"
   )
@@ -86,8 +86,8 @@ testthat::test_that("set_state needs a named list with selected and keep_na elem
 testthat::test_that("set_state overwrites fields included in the input only", {
   objects <- as.POSIXct(c(1:5), origin = "1900/01/01")
   filter_state <- DatetimeFilterState$new(objects, varname = "test")
-  filter_state$set_state(list(selected = c(objects[2], objects[2]), keep_na = TRUE))
-  testthat::expect_error(filter_state$set_state(list(selected = c(objects[2], objects[2])))
-  testthat::expect_identical(isolate(filter_state$get_selected()), c(objects[2], objects[2]))
+  filter_state$set_state(list(selected = c(objects[2], objects[3]), keep_na = TRUE))
+  testthat::expect_error(filter_state$set_state(list(selected = c(objects[3], objects[4]))), NA)
+  testthat::expect_identical(isolate(filter_state$get_selected()), c(objects[3], objects[4]))
   testthat::expect_true(isolate(filter_state$get_keep_na()))
 })
