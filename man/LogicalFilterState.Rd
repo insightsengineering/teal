@@ -30,7 +30,6 @@ isolate(filter_state$get_call())
 \item \href{#method-get_call}{\code{LogicalFilterState$get_call()}}
 \item \href{#method-ui}{\code{LogicalFilterState$ui()}}
 \item \href{#method-server}{\code{LogicalFilterState$server()}}
-\item \href{#method-set_state}{\code{LogicalFilterState$set_state()}}
 \item \href{#method-clone}{\code{LogicalFilterState$clone()}}
 }
 }
@@ -45,6 +44,7 @@ isolate(filter_state$get_call())
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="FilterState" data-id="get_varname">}\href{../../teal/html/FilterState.html#method-get_varname}{\code{teal::FilterState$get_varname()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="FilterState" data-id="set_keep_na">}\href{../../teal/html/FilterState.html#method-set_keep_na}{\code{teal::FilterState$set_keep_na()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="FilterState" data-id="set_selected">}\href{../../teal/html/FilterState.html#method-set_selected}{\code{teal::FilterState$set_selected()}}\out{</span>}
+\item \out{<span class="pkg-link" data-pkg="teal" data-topic="FilterState" data-id="set_state">}\href{../../teal/html/FilterState.html#method-set_state}{\code{teal::FilterState$set_state()}}\out{</span>}
 }
 \out{</details>}
 }
@@ -143,28 +143,6 @@ Server module
 }
 \subsection{Returns}{
 nothing
-}
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-set_state"></a>}}
-\if{latex}{\out{\hypertarget{method-set_state}{}}}
-\subsection{Method \code{set_state()}}{
-Set state
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{LogicalFilterState$set_state(state)}\if{html}{\out{</div>}}
-}
-
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{state}}{(\code{list})\cr
-should contain fields relevant for specific class
-\itemize{
-\item{\code{selected}}{ defines initial selection}
-\item{\code{keep_na} (\code{logical})}{ defines whether to keep or remove \code{NA} values}
-}}
-}
-\if{html}{\out{</div>}}
 }
 }
 \if{html}{\out{<hr>}}

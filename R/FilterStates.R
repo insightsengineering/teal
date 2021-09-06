@@ -206,8 +206,10 @@ FilterStates <- R6::R6Class( # nolint
       # queue (list) names must be the same as argument of the function
       # for ... list should be unnamed
       queue_list <- private$queue
-      filter_items <- lapply(
+      filter_items <- sapply(
         X = queue_list,
+        USE.NAMES = TRUE,
+        simplify = FALSE,
         function(queue) {
           items <- queue$get()
           calls <- lapply(
@@ -874,17 +876,8 @@ MAEFilterStates <- R6::R6Class( # nolint
           set_filter_state(x  = value, fstate)
         }
 
-        id <- html_id_mapping[[varname]]
-        callModule(
-          private$add_filter_state,
-          id = id,
-          filter_state = fstate,
-          queue_index = "y",
-          element_id = varname
-        )
-
         if (shiny::isRunning()) {
-          id <- digest::digest(sprintf("%s_%s", "y", varname), algo = "md5")
+          id <- html_id_mapping[[varname]]
           callModule(
             private$add_filter_state,
             id = id,
@@ -1085,7 +1078,7 @@ SEFilterStates <- R6::R6Class( # nolint
         is.null(state$select) || all(names(state$select) %in% names(colData(data)))
       )
 
-      row_html_mapping <- private$map_vars_to_html_ids(get_filterable_varnames(row_data))
+      row_html_mapping <- private$map_vars_to_html_ids(get_filterable_varnames(rowData(data)))
       row_html_mapping <- setNames(object = paste0("rowData_", row_html_mapping), nm = names(row_html_mapping))
       for (varname in names(state$subset)) {
         value <- state$subset[[varname]]
@@ -1098,18 +1091,26 @@ SEFilterStates <- R6::R6Class( # nolint
           set_filter_state(x = value, fstate)
         }
 
-        id <- row_html_mapping[[varname]]
-        callModule(
-          private$add_filter_state,
-          id = id,
-          filter_state = fstate,
-          queue_index = "subset",
-          element_id = varname
-        )
+        if (shiny::isRunning()) {
+          id <- row_html_mapping[[varname]]
+          callModule(
+            private$add_filter_state,
+            id = id,
+            filter_state = fstate,
+            queue_index = "subset",
+            element_id = varname
+          )
+        } else {
+          self$queue_push(
+            x = fstate,
+            queue_index = "subset",
+            element_id = varname
+          )
+        }
       }
 
 
-      col_html_mapping <- private$map_vars_to_html_ids(get_filterable_varnames(col_data))
+      col_html_mapping <- private$map_vars_to_html_ids(get_filterable_varnames(colData(data)))
       col_html_mapping <- setNames(object = paste0("colData_", col_html_mapping), nm = names(col_html_mapping))
       for (varname in names(state$select)) {
         value <- state$select[[varname]]
@@ -1122,16 +1123,8 @@ SEFilterStates <- R6::R6Class( # nolint
           set_filter_state(x = value, fstate)
         }
 
-        id <- col_html_mapping[[varname]]
-        callModule(
-          private$add_filter_state,
-          id = id,
-          filter_state = fstate,
-          queue_index = "select",
-          element_id = varname
-        )
         if (shiny::isRunning()) {
-          id <- digest::digest(sprintf("%s_%s", "select", varname), algo = "md5")
+          id <- col_html_mapping[[varname]]
           callModule(
             private$add_filter_state,
             id = id,
@@ -1404,14 +1397,22 @@ MatrixFilterStates <- R6::R6Class( # nolint
           set_filter_state(x = value, fstate)
         }
 
-        id <- html_id_mapping[[varname]]
-        callModule(
-          private$add_filter_state,
-          id = id,
-          filter_state = fstate,
-          queue_index = "subset",
-          element_id = varname
-        )
+        if (shiny::isRunning()) {
+          id <- html_id_mapping[[varname]]
+          callModule(
+            private$add_filter_state,
+            id = id,
+            filter_state = fstate,
+            queue_index = "subset",
+            element_id = varname
+          )
+        } else {
+          self$queue_push(
+            x = fstate,
+            queue_index = 1L,
+            element_id = varname
+          )
+        }
       }
     },
 

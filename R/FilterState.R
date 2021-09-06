@@ -388,10 +388,19 @@ FilterState <- R6::R6Class( # nolint
     #' \itemize{
     #' \item{`selected`}{ defines initial selection}
     #' \item{`keep_na` (`logical`)}{ defines whether to keep or remove `NA` values}
-    #' \item{`keep_inf` (`logical`)}{ defines whether to keep or remove `Inf` values}
+    #' \item{`keep_inf` (`logical`)}{ defines whether to keep or remove `Inf` values - applies only
+    #' to `RangeFilterState`}
     #' }
     set_state = function(state) {
-      stop("Pure virtual method.")
+      stopifnot(is.list(state) && all(names(state) %in% c("selected", "keep_na")))
+      if (!is.null(state$keep_na)) {
+        self$set_keep_na(state$keep_na)
+      }
+      if (!is.null(state$selected)) {
+        self$set_selected(state$selected)
+      }
+
+      invisible(NULL)
     },
 
     #' @description
@@ -804,25 +813,6 @@ LogicalFilterState <- R6::R6Class( # nolint
       private$observe_keep_na(input)
 
       NULL
-    },
-    #' @description
-    #' Set state
-    #' @param state (`list`)\cr
-    #'  should contain fields relevant for specific class
-    #' \itemize{
-    #' \item{`selected`}{ defines initial selection}
-    #' \item{`keep_na` (`logical`)}{ defines whether to keep or remove `NA` values}
-    #' }
-    set_state = function(state) {
-      stopifnot(is.list(state) && all(names(state) %in% c("selected", "keep_na", "keep_inf")))
-      if (!is.null(state$keep_na)) {
-        self$set_keep_na(state$keep_na)
-      }
-      if (!is.null(state$selected)) {
-        self$set_selected(state$selected)
-      }
-
-      invisible(NULL)
     }
   ),
   private = list(
@@ -1339,16 +1329,10 @@ ChoicesFilterState <- R6::R6Class( # nolint
     #' \item{`keep_na` (`logical`)}{ defines whether to keep or remove `NA` values}
     #' }
     set_state = function(state) {
-      stopifnot(is.list(state) && all(names(state) %in% c("selected", "keep_na")))
-      if (!is.null(state$keep_na)) {
-        self$set_keep_na(state$keep_na)
-      }
       if (!is.null(state$selected)) {
-        # converted to character because init_filter_state can initialize
-        # ChoicesFilterState from numeric input (choices < .threshold_slider_vs_checkboxgroup)
-        self$set_selected(as.character(state$selected))
+        state$selected <- as.character(state$selected)
       }
-
+      super$set_state(state)
       invisible(NULL)
     }
   ),
@@ -1544,26 +1528,6 @@ DateFilterState <- R6::R6Class( # nolint
       })
 
       return(NULL)
-    },
-
-    #' @description
-    #' Set state
-    #' @param state (`list`)\cr
-    #'  should contain fields relevant for specific class
-    #' \itemize{
-    #' \item{`selected`}{ defines initial selection}
-    #' \item{`keep_na` (`logical`)}{ defines whether to keep or remove `NA` values}
-    #' }
-    set_state = function(state) {
-      stopifnot(is.list(state) && all(names(state) %in% c("selected", "keep_na", "keep_inf")))
-      if (!is.null(state$keep_na)) {
-        self$set_keep_na(state$keep_na)
-      }
-      if (!is.null(state$selected)) {
-        self$set_selected(state$selected)
-      }
-
-      invisible(NULL)
     }
   ),
   private = list(
@@ -1812,26 +1776,6 @@ DatetimeFilterState <- R6::R6Class( # nolint
       })
 
       return(NULL)
-    },
-
-    #' @description
-    #' Set state
-    #' @param state (`list`)\cr
-    #'  should contain fields relevant for specific class
-    #' \itemize{
-    #' \item{`selected`}{ defines initial selection}
-    #' \item{`keep_na` (`logical`)}{ defines whether to keep or remove `NA` values}
-    #' }
-    set_state = function(state) {
-      stopifnot(is.list(state) && all(names(state) %in% c("selected", "keep_na", "keep_inf")))
-      if (!is.null(state$keep_na)) {
-        self$set_keep_na(state$keep_na)
-      }
-      if (!is.null(state$selected)) {
-        self$set_selected(state$selected)
-      }
-
-      invisible(NULL)
     }
   ),
   private = list(

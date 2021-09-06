@@ -77,3 +77,14 @@ testthat::test_that("MAEFilteredDataset$set_bookmark_state sets filters in Filte
     )
   )
 })
+n <- 1
+elo <- function(n) {
+  print(isolate(dataset$get_call())[[2]][[3]][[n]])
+  print(quote(
+    MAE_FILTERED[["RPPAArray"]] <- subset( # nolint
+      MAE_FILTERED[["RPPAArray"]],
+      subset = ARRAY_TYPE == ""
+    )
+  )[[3]][[n]])
+}
+
