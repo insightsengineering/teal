@@ -51,10 +51,15 @@ testthat::test_that("get_call returns a condition true for the values passed in 
 
 testthat::test_that("set_state needs a named list with selected and keep_na elements", {
   filter_state <- LogicalFilterState$new(x = c(TRUE, FALSE, NA), varname = "test")
+  testthat::expect_error(filter_state$set_state(list(selected = FALSE, keep_na = TRUE)), NA)
+  testthat::expect_error(filter_state$set_state(list(selected = TRUE, unknown = TRUE)), "all\\(names\\(state\\)")
+})
+
+testthat::test_that("set_state sets values of selected and keep_na as provided in the list", {
+  filter_state <- LogicalFilterState$new(x = c(TRUE, FALSE, NA), varname = "test")
   filter_state$set_state(list(selected = FALSE, keep_na = TRUE))
   testthat::expect_identical(isolate(filter_state$get_selected()), FALSE)
   testthat::expect_true(isolate(filter_state$get_keep_na()))
-  testthat::expect_error(filter_state$set_state(list(selected = TRUE, unknown = TRUE)), "all\\(names\\(state\\)")
 })
 
 testthat::test_that("set_state overwrites fields included in the input only", {

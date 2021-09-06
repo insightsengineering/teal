@@ -42,25 +42,20 @@ testthat::test_that("get_call reutrns a condition evaluating to TRUE for NA valu
 testthat::test_that("set_selected throw when selection not within allowed choices", {
   test_date <- as.Date(c("2013/07/13", "2013/07/14", "2013/07/15"))
   filter_state <- DateFilterState$new(test_date, varname = "test_date")
-
-
-  testthat::expect_error(
-    filter_state$set_selected("a"),
-    "should be a Date"
-  )
-
+  testthat::expect_error(filter_state$set_selected("a"), "should be a Date")
   testthat::expect_error(
     filter_state$set_selected(c(test_date[1] - 3, test_date[2])),
     "not valid for full range"
   )
 })
 
-testthat::test_that("set_state needs a named list with selected and keep_na elements", {
+testthat::test_that("set_state accepts a named list with selected and keep_na elements", {
   test_date <- as.Date(c("2013/07/13", "2013/07/14", "2013/07/15", "2013/08/16"))
   filter_state <- DateFilterState$new(test_date, varname = "test")
-  filter_state$set_state(list(selected = c(test_date[2], test_date[3]), keep_na = TRUE))
-  testthat::expect_identical(isolate(filter_state$get_selected()), c(test_date[2], test_date[3]))
-  testthat::expect_true(isolate(filter_state$get_keep_na()))
+  testthat::expect_error(
+    filter_state$set_state(list(selected = c(test_date[2], test_date[3]), keep_na = TRUE)),
+    NA
+  )
   testthat::expect_error(
     filter_state$set_state(
       list(selected = c(test_date[2], test_date[3]), unknown = TRUE)
@@ -68,6 +63,15 @@ testthat::test_that("set_state needs a named list with selected and keep_na elem
     "all\\(names\\(state\\)"
   )
 })
+
+testthat::test_that("set_state sets values of selected and keep_na as provided in the list", {
+  test_date <- as.Date(c("2013/07/13", "2013/07/14", "2013/07/15", "2013/08/16"))
+  filter_state <- DateFilterState$new(test_date, varname = "test")
+  filter_state$set_state(list(selected = c(test_date[2], test_date[3]), keep_na = TRUE))
+  testthat::expect_identical(isolate(filter_state$get_selected()), c(test_date[2], test_date[3]))
+  testthat::expect_true(isolate(filter_state$get_keep_na()))
+})
+
 
 testthat::test_that("set_state overwrites fields included in the input only", {
   test_date <- as.Date(c("2013/07/13", "2013/07/14", "2013/07/15", "2013/08/16", "2013/08/17"))
