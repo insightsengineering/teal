@@ -883,9 +883,10 @@ RangeFilterState <- R6::R6Class( # nolint
     #'  id of shiny element
     ui = function(id) {
       ns <- NS(id)
-      v_step <- ifelse(private$is_integer, 1L, shiny:::findStepSize(private$choices[[1]], private$choices[[2]], NULL))
-      v_min <- floor(private$choices[[1]] / v_step) * v_step
-      v_max <- ceiling(private$choices[[2]] / v_step) * v_step
+      v_pretty_range <- pretty(private$choices, n = 100)
+      v_step <- v_pretty_range[2] - v_pretty_range[1]
+      v_min <- v_pretty_range[1]
+      v_max <- v_pretty_range[length(v_pretty_range)]
       fluidRow(
         div(
           class = "filterPlotOverlayRange",
