@@ -883,6 +883,9 @@ RangeFilterState <- R6::R6Class( # nolint
     #'  id of shiny element
     ui = function(id) {
       ns <- NS(id)
+      v_step <- ifelse(private$is_integer, 1L, shiny:::findStepSize(private$choices[[1]], private$choices[[2]], NULL))
+      v_min <- floor(private$choices[[1]] / v_step) * v_step
+      v_max <- ceiling(private$choices[[2]] / v_step) * v_step
       fluidRow(
         div(
           class = "filterPlotOverlayRange",
@@ -891,12 +894,11 @@ RangeFilterState <- R6::R6Class( # nolint
         optionalSliderInput(
           inputId = ns("selection"),
           label = NULL,
-          # `round()` may return a slightly smaller interval e.g. round(c(-0.3, 1.4)) for doubles
-          min = private$choices[[1]],
-          max = private$choices[[2]],
-          value = private$choices,
+          min = v_min,
+          max = v_max,
+          value = c(v_min, v_max),
           width = "100%",
-          step = if (private$is_integer) 1L
+          step = v_step
         ),
         if (private$inf_count > 0) {
           checkboxInput(
@@ -947,7 +949,8 @@ RangeFilterState <- R6::R6Class( # nolint
         ignoreInit = TRUE, # ignoreInit: should not matter because we set the UI with the desired initial state
         eventExpr = input$selection,
         handlerExpr = {
-          selection_state <- input$selection
+          # # because we extended real range into rounded one we need to apply intersect(range_input, range_real)
+          selection_state <- c(max(input$selection[1], private$choices[1]), min(input$selection[2], private$choices[2]))
           if (!setequal(selection_state, private$selected())) {
             validate(
               need(
@@ -977,8 +980,6 @@ RangeFilterState <- R6::R6Class( # nolint
           private$log_state()
         }
       )
-
-
     },
 
     #' @description
