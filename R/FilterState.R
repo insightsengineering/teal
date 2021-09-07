@@ -283,7 +283,7 @@ FilterState <- R6::R6Class( # nolint
       private$na_count <- sum(is.na(x))
       private$keep_na <- reactiveVal(value = FALSE)
 
-      return(invisible(self))
+      invisible(self)
     },
 
     #' @description
@@ -369,6 +369,7 @@ FilterState <- R6::R6Class( # nolint
     #'  `private$selected` which is reactive. Values type have to be the
     #'  same as `private$choices`.
     set_selected = function(value) {
+      value <- private$remove_wrong_values(value)
       private$validate_selection(value)
       private$selected(value)
       invisible(NULL)
@@ -477,6 +478,12 @@ FilterState <- R6::R6Class( # nolint
     # has a wrong class or is outside of possible choices
     validate_selection = function(value) {
       invisible(NULL)
+    },
+
+    # Filters out errouneous values from an array.
+    # Sanitizes the input of set_selected.
+    remove_wrong_values = function(values) {
+        stop("Pure virtual method.")
     }
   )
 )
@@ -583,6 +590,10 @@ EmptyFilterState <- R6::R6Class( # nolint
   private = list(
     log_state = function() {
       .log("all elements in", self$get_varname(deparse = TRUE), "are NA")
+    },
+
+    remove_wrong_values = function(values) {
+      values
     }
   )
 )
@@ -773,7 +784,7 @@ LogicalFilterState <- R6::R6Class( # nolint
       if (!(is_logical_empty(value) || is_logical_single(value))) {
         stop(
           sprintf(
-            "value of the selection for `%s` in `%s` should be a logical",
+            "value of the selection for `%s` in `%s` should be a logical scalar (TRUE or FALSE)",
             self$get_varname(deparse = TRUE),
             self$get_dataname(deparse = TRUE)
           )
@@ -787,6 +798,14 @@ LogicalFilterState <- R6::R6Class( # nolint
       )
       check_in_subset(value, private$choices, pre_msg = pre_msg)
 
+    },
+    remove_wrong_values = function(values) {
+      values_logical <- as.logical(values)
+      not_logical_values <- values[is.na(values_logical)]
+      if (length(not_logical_values) > 0) {
+        warning(paste("Values:", paste(not_logical_values, collapse = ", "), "are not logical."))
+      }
+      values <- Filter(Negate(is.na), values_logical)
     }
   )
 )
@@ -1037,6 +1056,19 @@ RangeFilterState <- R6::R6Class( # nolint
         self$get_varname(deparse = TRUE)
       )
       check_in_range(value, private$choices, pre_msg = pre_msg)
+    },
+
+    remove_wrong_values = function(values) {
+      if (values[1] < private$choices[1]) {
+        warning(paste("Value: ", values[1], "is outside of the possible range."))
+        values[1] <- private$choices[1]
+      }
+
+      if (values[length(values)] > private$choices[2]) {
+        warning(paste("Value: ", values[length(values)], "is outside of the possible range."))
+        values[length(values)] <- private$choices[2]
+      }
+      values
     }
   )
 )
@@ -1260,6 +1292,13 @@ ChoicesFilterState <- R6::R6Class( # nolint
         self$get_varname(deparse = TRUE)
       )
       check_in_subset(value, private$choices, pre_msg = pre_msg)
+    },
+    remove_wrong_values = function(values) {
+      in_choices_mask <- values %in% private$choices
+      if(length(values[!in_choices_mask]) > 0) {
+        warning(paste("Values:", paste(values[!in_choices_mask], collapse = ", "), "are not in choices."))
+      }
+      values[in_choices_mask]
     }
   )
 )
@@ -1449,6 +1488,19 @@ DateFilterState <- R6::R6Class( # nolint
         self$get_varname(deparse = TRUE)
       )
       check_in_range(value, private$choices, pre_msg = pre_msg)
+    },
+
+    remove_wrong_values = function(values) {
+      if (values[1] < private$choices[1]) {
+        warning(paste("Value: ", values[1], "is outside of the possible range."))
+        values[1] <- private$choices[1]
+      }
+
+      if (values[length(values)] > private$choices[2]) {
+        warning(paste("Value: ", values[length(values)], "is outside of the possible range."))
+        values[length(values)] <- private$choices[2]
+      }
+      values
     }
   )
 )
@@ -1700,6 +1752,19 @@ DatetimeFilterState <- R6::R6Class( # nolint
         self$get_varname(deparse = TRUE)
       )
       check_in_range(value, private$choices, pre_msg = pre_msg)
+    },
+
+    remove_wrong_values = function(values) {
+      if (values[1] < private$choices[1]) {
+        warning(paste("Value: ", values[1], "is outside of the possible range."))
+        values[1] <- private$choices[1]
+      }
+
+      if (values[length(values)] > private$choices[2]) {
+        warning(paste("Value: ", values[length(values)], "is outside of the possible range."))
+        values[length(values)] <- private$choices[2]
+      }
+      values
     }
   )
 )
