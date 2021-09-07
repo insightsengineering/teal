@@ -29,6 +29,7 @@ isolate(filter_state$get_call())
 \item \href{#method-get_call}{\code{EmptyFilterState$get_call()}}
 \item \href{#method-ui}{\code{EmptyFilterState$ui()}}
 \item \href{#method-server}{\code{EmptyFilterState$server()}}
+\item \href{#method-set_state}{\code{EmptyFilterState$set_state()}}
 \item \href{#method-clone}{\code{EmptyFilterState$clone()}}
 }
 }
@@ -37,6 +38,7 @@ isolate(filter_state$get_call())
 \itemize{
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="FilterState" data-id="destroy_observers">}\href{../../teal/html/FilterState.html#method-destroy_observers}{\code{teal::FilterState$destroy_observers()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="FilterState" data-id="get_dataname">}\href{../../teal/html/FilterState.html#method-get_dataname}{\code{teal::FilterState$get_dataname()}}\out{</span>}
+\item \out{<span class="pkg-link" data-pkg="teal" data-topic="FilterState" data-id="get_keep_na">}\href{../../teal/html/FilterState.html#method-get_keep_na}{\code{teal::FilterState$get_keep_na()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="FilterState" data-id="get_selected">}\href{../../teal/html/FilterState.html#method-get_selected}{\code{teal::FilterState$get_selected()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="FilterState" data-id="get_varlabel">}\href{../../teal/html/FilterState.html#method-get_varlabel}{\code{teal::FilterState$get_varlabel()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="FilterState" data-id="get_varname">}\href{../../teal/html/FilterState.html#method-get_varname}{\code{teal::FilterState$get_varname()}}\out{</span>}
@@ -141,6 +143,27 @@ Controls selection of \code{keep_na} checkbox input
 }
 \subsection{Returns}{
 nothing
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-set_state"></a>}}
+\if{latex}{\out{\hypertarget{method-set_state}{}}}
+\subsection{Method \code{set_state()}}{
+Set state
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{EmptyFilterState$set_state(state)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{state}}{(\code{list})\cr
+contains fields relevant for a specific class
+\itemize{
+\item{\code{keep_na} (\code{logical})}{ defines whether to keep or remove \code{NA} values}
+}}
+}
+\if{html}{\out{</div>}}
 }
 }
 \if{html}{\out{<hr>}}
