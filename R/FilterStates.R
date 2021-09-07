@@ -204,8 +204,10 @@ FilterStates <- R6::R6Class( # nolint
       # queue (list) names must be the same as argument of the function
       # for ... list should be unnamed
       queue_list <- private$queue
-      filter_items <- lapply(
+      filter_items <- sapply(
         X = queue_list,
+        USE.NAMES = TRUE,
+        simplify = FALSE,
         function(queue) {
           items <- queue$get()
           calls <- lapply(
@@ -469,13 +471,13 @@ FilterStates <- R6::R6Class( # nolint
                 class = "no-left-right-padding",
                 tags$div(
                   tags$span(filter_state$get_varname(),
-                    class = "filter_panel_varname"
+                            class = "filter_panel_varname"
                   ),
                   if_not_character_empty(
                     filter_state$get_varlabel(),
                     if (tolower(filter_state$get_varname()) != tolower(filter_state$get_varlabel())) {
                       tags$span(filter_state$get_varlabel(),
-                        class = "filter_panel_varlabel"
+                                class = "filter_panel_varlabel"
                       )
                     }
                   )
@@ -623,7 +625,7 @@ DFFilterStates <- R6::R6Class( # nolint
     #'   column in `data`.
     set_bookmark_state = function(data, state) {
       stopifnot(is.data.frame(data))
-      stopifnot(all(names(state) %in% names(data)))
+      stopifnot(all(names(state) %in% names(data)) || is(state, "default_filter"))
 
       html_id_mapping <- private$map_vars_to_html_ids(get_filterable_varnames(colnames(data)))
       for (varname in names(state)) {
@@ -634,7 +636,9 @@ DFFilterStates <- R6::R6Class( # nolint
           varlabel = private$get_varlabels(varname),
           input_dataname = private$input_dataname
         )
-        fstate$set_selected(value = value)
+        if (!is(value, "default_filter")) {
+          set_filter_state(x = value, fstate)
+        }
 
         if (shiny::isRunning()) {
           id <- html_id_mapping[[varname]]
@@ -850,7 +854,7 @@ MAEFilterStates <- R6::R6Class( # nolint
     set_bookmark_state = function(data, state) {
       stopifnot(is(data, "MultiAssayExperiment"))
       stopifnot(
-        all(names(state) %in% names(colData(data)))
+        all(names(state) %in% names(SummarizedExperiment::colData(data))) || is(state, "default_filter")
       )
 
       html_id_mapping <- private$map_vars_to_html_ids(get_filterable_varnames(SummarizedExperiment::colData(data)))
@@ -863,17 +867,26 @@ MAEFilterStates <- R6::R6Class( # nolint
           input_dataname = private$input_dataname,
           extract_type = "list"
         )
-        fstate$set_selected(value = value)
+        if (!is(state, "default_filter")) {
+          set_filter_state(x  = value, fstate)
+        }
 
-        id <- html_id_mapping[[varname]]
-        callModule(
-          private$add_filter_state,
-          id = id,
-          filter_state = fstate,
-          queue_index = "y",
-          element_id = varname
-        )
-
+        if (shiny::isRunning()) {
+          id <- html_id_mapping[[varname]]
+          callModule(
+            private$add_filter_state,
+            id = id,
+            filter_state = fstate,
+            queue_index = "y",
+            element_id = varname
+          )
+        } else {
+          self$queue_push(
+            x = fstate,
+            queue_index = "y",
+            element_id = varname
+          )
+        }
       }
     },
 
@@ -1059,7 +1072,7 @@ SEFilterStates <- R6::R6Class( # nolint
         is.null(state$select) || (is(state$select, "list") && all(names(state$select) %in% names(colData(data))))
       )
 
-      row_html_mapping <- private$map_vars_to_html_ids(get_filterable_varnames(row_data))
+      row_html_mapping <- private$map_vars_to_html_ids(get_filterable_varnames(SummarizedExperiment::rowData(data)))
       row_html_mapping <- setNames(object = paste0("rowData_", row_html_mapping), nm = names(row_html_mapping))
       for (varname in names(state$subset)) {
         value <- state$subset[[varname]]
@@ -1068,37 +1081,58 @@ SEFilterStates <- R6::R6Class( # nolint
           varname = as.name(varname),
           input_dataname = private$input_dataname
         )
-        fstate$set_selected(value = value)
+        if (!is(state, "default_filter")) {
+          set_filter_state(x = value, fstate)
+        }
 
-        id <- row_html_mapping[[varname]]
-        callModule(
-          private$add_filter_state,
-          id = id,
-          filter_state = fstate,
-          queue_index = "subset",
-          element_id = varname
-        )
+        if (shiny::isRunning()) {
+          id <- row_html_mapping[[varname]]
+          callModule(
+            private$add_filter_state,
+            id = id,
+            filter_state = fstate,
+            queue_index = "subset",
+            element_id = varname
+          )
+        } else {
+          self$queue_push(
+            x = fstate,
+            queue_index = "subset",
+            element_id = varname
+          )
+        }
       }
 
 
-      col_html_mapping <- private$map_vars_to_html_ids(get_filterable_varnames(col_data))
+      col_html_mapping <- private$map_vars_to_html_ids(get_filterable_varnames(SummarizedExperiment::colData(data)))
       col_html_mapping <- setNames(object = paste0("colData_", col_html_mapping), nm = names(col_html_mapping))
       for (varname in names(state$select)) {
         value <- state$select[[varname]]
         fstate <- init_filter_state(
           SummarizedExperiment::colData(data)[[varname]],
-          varname = as.name(varname)
+          varname = as.name(varname),
+          input_dataname = private$input_dataname
         )
-        fstate$set_selected(value = value)
+        if (!is(state, "default_filter")) {
+          set_filter_state(x = value, fstate)
+        }
 
-        id <- col_html_mapping[[varname]]
-        callModule(
-          private$add_filter_state,
-          id = id,
-          filter_state = fstate,
-          queue_index = "select",
-          element_id = varname
-        )
+        if (shiny::isRunning()) {
+          id <- col_html_mapping[[varname]]
+          callModule(
+            private$add_filter_state,
+            id = id,
+            filter_state = fstate,
+            queue_index = "select",
+            element_id = varname
+          )
+        } else {
+          self$queue_push(
+            x = fstate,
+            queue_index = "select",
+            element_id = varname
+          )
+        }
       }
 
       return(NULL)
@@ -1338,7 +1372,7 @@ MatrixFilterStates <- R6::R6Class( # nolint
     set_bookmark_state = function(data, state) {
       stopifnot(is(data, "matrix"))
       stopifnot(
-        all(names(state) %in% names(colData(data)))
+        all(names(state) %in% names(SummarizedExperiment::colData(data))) || is(state, "default_filter")
       )
 
       html_id_mapping <- private$map_vars_to_html_ids(get_filterable_varnames(data))
@@ -1351,16 +1385,26 @@ MatrixFilterStates <- R6::R6Class( # nolint
           input_dataname = private$input_dataname,
           extract_type = "matrix"
         )
-        fstate$set_selected(value = value)
+        if (!is(state, "default_filter")) {
+          set_filter_state(x = value, fstate)
+        }
 
-        id <- html_id_mapping[[varname]]
-        callModule(
-          private$add_filter_state,
-          id = id,
-          filter_state = fstate,
-          queue_index = "subset",
-          element_id = varname
-        )
+        if (shiny::isRunning()) {
+          id <- html_id_mapping[[varname]]
+          callModule(
+            private$add_filter_state,
+            id = id,
+            filter_state = fstate,
+            queue_index = "subset",
+            element_id = varname
+          )
+        } else {
+          self$queue_push(
+            x = fstate,
+            queue_index = 1L,
+            element_id = varname
+          )
+        }
       }
     },
 
