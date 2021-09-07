@@ -55,7 +55,11 @@ update and get information from the ui:
 ```{r, eval = FALSE}
 shinyApp(
   ui = fluidPage(
-    selectInput(inputId = "select_data", label = "select data", choices = c("iris", "mtcars")),
+    selectInput(
+      inputId = "select_data",
+      label = "select data",
+      choices = c("iris", "mtcars")
+    ),
     plotOutput(outputId = "scatterplotmatrix")
   ),
   server = function(input, output, session) {
@@ -81,7 +85,11 @@ ui code created by running the following code in the R console:
 
 ```{r, eval=FALSE}
 fluidPage(
-  selectInput(inputId = "select_data", label = "select data", choices = c("iris", "mtcars")),
+  selectInput(
+    inputId = "select_data",
+    label = "select data",
+    choices = c("iris", "mtcars")
+  ),
   plotOutput(outputId = "scatterplotmatrix")
 )
 ```
@@ -96,7 +104,11 @@ modularize the selection and the plotting of the data as follows:
 ui_example <- function(id) {
   ns <- NS(id)
   tagList(
-    selectInput(inputId = ns("select_data"), label = "select data", choices = c("iris", "mtcars")),
+    selectInput(
+      inputId = ns("select_data"),
+      label = "select data",
+      choices = c("iris", "mtcars")
+    ),
     plotOutput(outputId = ns("scatterplotmatrix"))
   )
 }
@@ -119,10 +131,8 @@ module. To use this module twice in an app run the following code:
 ```{r, eval = FALSE}
 shinyApp(
   ui = function() {
-    tagList(
-      ui_example(id = "first"),
-      ui_example(id = "second")
-    )
+    tagList(ui_example(id = "first"),
+            ui_example(id = "second"))
   },
   server = function(input, output, session) {
     callModule(srv_example, id = "first")
@@ -338,14 +348,6 @@ datasets$set_dataset(cdisc_dataset("ADTTE", ADTTE))
 shiny:::flushReact() # force evaluation outside of Shiny apps
 ```
 
-Note that this code also runs outside of a teal instance.
-
-```{r, eval=FALSE}
-datasets$print_filter_info("ADSL")
-# for all variables
-datasets$print_filter_info("ADSL", filtered_vars_only = FALSE)
-```
-
 Now say we want to filter out all the patients in `ADSL` except patients with `USUBJID`
 equal to `id-1`, `id-2`, `id-3`, or `id-4`:
 
@@ -473,9 +475,7 @@ create_teal_app <- function(title, id) {
       module(
         "ADSL AGE histogram",
         server = function(input, output, session, datasets) {
-          output$hist <- renderPlot(
-            hist(datasets$get_data("ADSL", filtered = TRUE)$AGE)
-          )
+          output$hist <- renderPlot(hist(datasets$get_data("ADSL", filtered = TRUE)$AGE))
         },
         ui = function(id, ...) {
           ns <- NS(id)
@@ -492,15 +492,14 @@ create_teal_app <- function(title, id) {
 }
 app1 <- create_teal_app("Sample App1", id = "app1")
 app2 <- create_teal_app("Sample App2", id = "app2")
-shinyApp(ui = fluidPage(
-  fluidRow(
-    column(6, app1$ui),
-    column(6, app2$ui)
-  )
-), server = function(input, output, session) {
-  callModule(app1$server, "app1")
-  callModule(app2$server, "app2")
-})
+shinyApp(
+  ui = fluidPage(fluidRow(column(6, app1$ui),
+                          column(6, app2$ui))),
+  server = function(input, output, session) {
+    callModule(app1$server, "app1")
+    callModule(app2$server, "app2")
+  }
+)
 ```
 
 However, we recommend to use `ui_teal_with_splash` and `srv_teal_with_splash` if you would
@@ -517,9 +516,7 @@ modules <- root_modules(
   module(
     "ADSL AGE histogram",
     server = function(input, output, session, datasets) {
-      output$hist <- renderPlot(
-        hist(datasets$get_data("ADSL", filtered = TRUE)$AGE)
-      )
+      output$hist <- renderPlot(hist(datasets$get_data("ADSL", filtered = TRUE)$AGE))
     },
     ui = function(id, ...) {
       ns <- NS(id)
@@ -530,30 +527,24 @@ modules <- root_modules(
 )
 
 shinyApp(
-  ui = fluidPage(
-    fluidRow(
-      column(
-        6,
-        ui_teal_with_splash(
-          "app1",
-          data = cdisc_data(
-            cdisc_dataset("ADSL", ADSL, code = "ADSL <- radsl(cached = TRUE)")
-          ),
-          title = "Sample app 1"
-        )
-      ),
-      column(
-        6,
-        ui_teal_with_splash(
-          "app2",
-          data = cdisc_data(
-            cdisc_dataset("ADSL", ADSL, code = "ADSL <- radsl(cached = TRUE)")
-          ),
-          title = "Sample app 2"
-        )
-      )
+  ui = fluidPage(fluidRow(
+    column(
+      6,
+      ui_teal_with_splash("app1",
+                          data = cdisc_data(
+                            cdisc_dataset("ADSL", ADSL, code = "ADSL <- radsl(cached = TRUE)")
+                          ),
+                          title = "Sample app 1")
+    ),
+    column(
+      6,
+      ui_teal_with_splash("app2",
+                          data = cdisc_data(
+                            cdisc_dataset("ADSL", ADSL, code = "ADSL <- radsl(cached = TRUE)")
+                          ),
+                          title = "Sample app 2")
     )
-  ),
+  )),
   server = function(input, output, session) {
     callModule(
       module = srv_teal_with_splash,
