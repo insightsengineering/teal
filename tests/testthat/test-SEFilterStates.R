@@ -1,3 +1,22 @@
+get_test_data <- function() {
+  library(SummarizedExperiment)
+  nrows <- 200
+  ncols <- 6
+  counts <- matrix(runif(nrows * ncols, 1, 1e4), nrows)
+  row_ranges <- GRanges(rep(c("chr1", "chr2"), c(50, 150)),
+                        IRanges(floor(runif(200, 1e5, 1e6)), width = 100),
+                        strand = sample(c("+", "-"), 200, TRUE),
+                        feature_id = sprintf("ID%03d", 1:200))
+  cdata <- DataFrame(Treatment = rep(c("ChIP", "Input"), 3),
+                     row.names = LETTERS[1:6])
+
+  obj <- SummarizedExperiment(
+    assays = list(counts = counts),
+    rowRanges = row_ranges,
+    colData = cdata
+  )
+}
+
 testthat::test_that("The constructor does not throw", {
   testthat::expect_error(SEFilterStates$new(
     input_dataname = "test",
@@ -74,9 +93,10 @@ testthat::test_that("set_bookmark_state returns NULL when state argument contain
     output_dataname = "test",
     datalabel = "test"
   )
-  data <- data.frame(a = "test")
-  class(data) <- "SummarizedExperiment"
-  testthat::expect_null(filter_states$set_bookmark_state(data = data, state = list(subset = NULL, select = NULL)))
+
+  obj <- get_test_data()
+
+  testthat::expect_null(filter_states$set_bookmark_state(data = obj, state = list(subset = NULL, select = NULL)))
 })
 
 testthat::test_that("set_bookmark_state returns NULL when state argument is an empty list", {
@@ -85,9 +105,8 @@ testthat::test_that("set_bookmark_state returns NULL when state argument is an e
     output_dataname = "test",
     datalabel = "test"
   )
-  data <- data.frame(a = "test")
-  class(data) <- "SummarizedExperiment"
-  testthat::expect_null(filter_states$set_bookmark_state(data = data, state = list()))
+  obj <- get_test_data()
+  testthat::expect_null(filter_states$set_bookmark_state(data = obj, state = list()))
 })
 
 testthat::test_that("clone method returns object with the same state", {
@@ -123,22 +142,8 @@ testthat::test_that("SEFilterStates$set_bookmark_state sets filters in ReactiveQ
     output_dataname = "test_filtered",
     datalabel = character(0)
   )
-  library(SummarizedExperiment)
-  nrows <- 200
-  ncols <- 6
-  counts <- matrix(runif(nrows * ncols, 1, 1e4), nrows)
-  row_ranges <- GRanges(rep(c("chr1", "chr2"), c(50, 150)),
-                       IRanges(floor(runif(200, 1e5, 1e6)), width = 100),
-                       strand = sample(c("+", "-"), 200, TRUE),
-                       feature_id = sprintf("ID%03d", 1:200))
-  cdata <- DataFrame(Treatment = rep(c("ChIP", "Input"), 3),
-                       row.names = LETTERS[1:6])
 
-  obj <- SummarizedExperiment(
-    assays = list(counts = counts),
-    rowRanges = row_ranges,
-    colData = cdata
-  )
+  obj <- get_test_data()
 
   fs <- list(
     select = list(Treatment = "ChIP"),
