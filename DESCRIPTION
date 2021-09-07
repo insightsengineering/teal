@@ -123,6 +123,7 @@ Collate:
     'resolve_delayed.R'
     'select_spec.R'
     'set_args.R'
+    'set_filter_state.R'
     'stop_shiny.R'
     'teal.R'
     'teal_data.R'

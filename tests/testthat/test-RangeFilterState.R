@@ -2,9 +2,19 @@ testthat::test_that("The constructor accepts numerical values", {
   testthat::expect_error(RangeFilterState$new(c(1), varname = "test"), NA)
 })
 
-testthat::test_that("The constructor accepts infinite values", {
+testthat::test_that("The constructor accepts infinite values but not infinite only", {
   testthat::expect_error(RangeFilterState$new(c(1, Inf, -Inf), varname = "test"), NA)
-  testthat::expect_error(RangeFilterState$new(Inf, varname = "test"), NA)
+  testthat::expect_error(RangeFilterState$new(Inf, varname = "test"), "any\\(is.finite\\(x")
+  testthat::expect_error(RangeFilterState$new(c(Inf, NA), varname = "test"), "any\\(is.finite\\(x")
+})
+
+testthat::test_that("get_selected returns range computed on a vector containing c(1, Inf, -Inf, NA)", {
+  test <- c(1, Inf, -Inf, NA)
+  filter_state <- RangeFilterState$new(test, varname = "test")
+  expect_identical(
+    isolate(filter_state$get_selected()),
+    c(1, 1)
+  )
 })
 
 testthat::test_that("get_call returns a condition TRUE for all values passed to the constructor", {
@@ -109,4 +119,30 @@ testthat::test_that("get_call returns a condition true for NAs and Inf values af
   filter_state$set_keep_inf(TRUE)
   test <- c(NA, Inf)
   testthat::expect_true(all(eval(isolate(filter_state$get_call()))))
+})
+
+testthat::test_that("set_state needs a named list with selected, keep_na and keep_inf elements", {
+  filter_state <- RangeFilterState$new(c(1, 8, NA_real_, Inf), varname = "test")
+  testthat::expect_error(
+    filter_state$set_state(list(selected = c(1, 2), keep_na = TRUE, keep_inf = TRUE)),
+    NA
+  )
+  testthat::expect_error(filter_state$set_state(list(selected = c(1, 2), unknown = TRUE)), "all\\(names\\(state\\)")
+})
+
+testthat::test_that("set_state sets values of selected and keep_na as provided in the list", {
+  filter_state <- RangeFilterState$new(c(1, 8, NA_real_, Inf), varname = "test")
+  filter_state$set_state(list(selected = c(1, 2), keep_na = TRUE, keep_inf = TRUE))
+  testthat::expect_identical(isolate(filter_state$get_selected()), c(1, 2))
+  testthat::expect_true(isolate(filter_state$get_keep_na()))
+  testthat::expect_true(isolate(filter_state$get_keep_inf()))
+})
+
+testthat::test_that("set_state overwrites fields included in the input only", {
+  filter_state <- RangeFilterState$new(c(1, 8, NA_real_, Inf), varname = "test")
+  filter_state$set_state(list(selected = c(1, 2), keep_na = TRUE, keep_inf = TRUE))
+  testthat::expect_error(filter_state$set_state(list(selected = c(5, 6), keep_na = TRUE, keep_inf = TRUE)), NA)
+  testthat::expect_identical(isolate(filter_state$get_selected()), c(5, 6))
+  testthat::expect_true(isolate(filter_state$get_keep_na()))
+  testthat::expect_true(isolate(filter_state$get_keep_inf()))
 })

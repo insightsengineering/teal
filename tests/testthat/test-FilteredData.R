@@ -120,6 +120,47 @@ testthat::test_that("get call returns a call assigning the filtered object to <n
   testthat::expect_equal(mock_iris_FILTERED, mock_iris)
 })
 
+testthat::test_that("FilteredData$set_bookmark_state sets filters is FilteredDataset specified by the named list", {
+  datasets <- teal:::FilteredData$new()
+  datasets$set_dataset(dataset("iris", iris))
+  datasets$set_dataset(dataset("mtcars", mtcars))
+  fs <- list(
+      iris = list(
+        Sepal.Length = list(selected = c(5.1, 6.4)),
+        Species = c("setosa", "versicolor")
+      ),
+      mtcars = list(
+        cyl = c(4, 6),
+        disp = default_filter()
+      )
+    )
+  datasets$set_bookmark_state(fs)
+  expect_equal(
+    isolate(datasets$get_call("iris")),
+    list(
+      filter = quote(
+        iris_FILTERED <- dplyr::filter( # nolint
+          iris,
+          Sepal.Length >= 5.1 & Sepal.Length <= 6.4 &
+          Species %in% c("setosa", "versicolor")
+        )
+      )
+    )
+  )
+
+  expect_equal(
+    isolate(datasets$get_call("mtcars")),
+    list(
+      filter = quote(
+        mtcars_FILTERED <- dplyr::filter( # nolint
+          mtcars,
+          cyl %in% c("4", "6") & (disp >= 71.1 & disp <= 472)
+        )
+      )
+    )
+  )
+})
+
 library(MultiAssayExperiment)
 datasets <- FilteredData$new()
 adsl <- as.data.frame(as.list(setNames(nm = c(get_cdisc_keys("ADSL")))))

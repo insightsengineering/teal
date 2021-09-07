@@ -1,15 +1,15 @@
 testthat::test_that("The constructor accepts a Date object", {
-  testthat::expect_error(DateFilterState$new(as.Date("13/07/2013"), varname = "test"), NA)
+  testthat::expect_error(DateFilterState$new(as.Date("2013-07-13"), varname = "test"), NA)
 })
 
 testthat::test_that("get_call returns a condition true for the object passed in the constructor", {
-  test_date <- as.Date("13/07/2013")
+  test_date <- as.Date("2013-07-13")
   filter_state <- DateFilterState$new(test_date, varname = "test_date")
   testthat::expect_true(eval(isolate(filter_state$get_call())))
 })
 
 testthat::test_that("set_selected accepts an array of two Date objects", {
-  test_date <- as.Date("13/07/2013")
+  test_date <- as.Date("2013-07-13")
   filter_state <- DateFilterState$new(test_date, varname = "test_date")
   testthat::expect_error(filter_state$set_selected(c(test_date, test_date)), NA)
 })
@@ -60,25 +60,58 @@ testthat::test_that("set_selected throws when selection is not Date", {
 })
 
 testthat::test_that("get_call returns a condition true for the objects in the selected range", {
-  test_date <- as.Date(c("13/07/2013", "14/07/2013", "15/07/2013"))
+  test_date <- as.Date(c("2013-07-13", "2013-07-14", "2013-07-15"))
   filter_state <- DateFilterState$new(test_date, varname = "test_date")
   filter_state$set_selected(c(test_date[2], test_date[2]))
   testthat::expect_equal(eval(isolate(filter_state$get_call())), c(FALSE, TRUE, FALSE))
   testthat::expect_equal(
     isolate(filter_state$get_call()),
-    quote(test_date >= as.Date("14-07-20") & test_date <= as.Date("14-07-20"))
+    quote(test_date >= as.Date("2013-07-14") & test_date <= as.Date("2013-07-14"))
   )
 })
 
 testthat::test_that("get_call returns a condition evaluating to NA for NA values", {
-  test_date <- as.Date(c("13/07/2013", NA))
+  test_date <- as.Date(c("2013-07-13", NA))
   filter_state <- DateFilterState$new(test_date, varname = "test_date")
   testthat::expect_equal(eval(isolate(filter_state$get_call()))[2], NA)
 })
 
 testthat::test_that("get_call reutrns a condition evaluating to TRUE for NA values after set_keep_na(TRUE)", {
-  test_date <- as.Date(c("13/07/2013", NA))
+  test_date <- as.Date(c("2013-07-13", NA))
   filter_state <- DateFilterState$new(test_date, varname = "test_date")
   filter_state$set_keep_na(TRUE)
   testthat::expect_true(eval(isolate(filter_state$get_call()))[2])
+})
+
+testthat::test_that("set_state accepts a named list with selected and keep_na elements", {
+  test_date <- as.Date(c("2013/07/13", "2013/07/14", "2013/07/15", "2013/08/16"))
+  filter_state <- DateFilterState$new(test_date, varname = "test")
+  testthat::expect_error(
+    filter_state$set_state(list(selected = c(test_date[2], test_date[3]), keep_na = TRUE)),
+    NA
+  )
+  testthat::expect_error(
+    filter_state$set_state(
+      list(selected = c(test_date[2], test_date[3]), unknown = TRUE)
+    ),
+    "all\\(names\\(state\\)"
+  )
+})
+
+testthat::test_that("set_state sets values of selected and keep_na as provided in the list", {
+  test_date <- as.Date(c("2013/07/13", "2013/07/14", "2013/07/15", "2013/08/16"))
+  filter_state <- DateFilterState$new(test_date, varname = "test")
+  filter_state$set_state(list(selected = c(test_date[2], test_date[3]), keep_na = TRUE))
+  testthat::expect_identical(isolate(filter_state$get_selected()), c(test_date[2], test_date[3]))
+  testthat::expect_true(isolate(filter_state$get_keep_na()))
+})
+
+
+testthat::test_that("set_state overwrites fields included in the input only", {
+  test_date <- as.Date(c("2013/07/13", "2013/07/14", "2013/07/15", "2013/08/16", "2013/08/17"))
+  filter_state <- DateFilterState$new(test_date, varname = "test")
+  filter_state$set_state(list(selected = c(test_date[2], test_date[3]), keep_na = TRUE))
+  testthat::expect_error(filter_state$set_state(list(selected = c(test_date[3], test_date[4]))), NA)
+  testthat::expect_identical(isolate(filter_state$get_selected()), c(test_date[3], test_date[4]))
+  testthat::expect_true(isolate(filter_state$get_keep_na()))
 })

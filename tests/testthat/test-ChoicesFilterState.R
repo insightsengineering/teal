@@ -43,3 +43,24 @@ testthat::test_that("set_selected sets the intersection of choices and the passe
   suppressWarnings(filter_state$set_selected(c("test1", 7)))
   testthat::expect_equal(isolate(filter_state$get_selected()), "test1")
 })
+
+testthat::test_that("set_state need named list with selected and keep_na elements", {
+  filter_state <- ChoicesFilterState$new(x = c("a", "b", NA_character_), varname = "test")
+  testthat::expect_error(filter_state$set_state(list(selected = "a", keep_na = TRUE)), NA)
+  testthat::expect_error(filter_state$set_state(list(selected = "a", unknown = TRUE)), "all\\(names\\(state\\)")
+})
+
+testthat::test_that("set_state sets values of selected and keep_na as provided in the list", {
+  filter_state <- ChoicesFilterState$new(x = c("a", "b", NA_character_), varname = "test")
+  filter_state$set_state(list(selected = "a", keep_na = TRUE))
+  testthat::expect_identical(isolate(filter_state$get_selected()), "a")
+  testthat::expect_true(isolate(filter_state$get_keep_na()))
+})
+
+testthat::test_that("set_state overwrites fields included in the input only", {
+  filter_state <- ChoicesFilterState$new(x = c("a", "b", NA_character_), varname = "test")
+  filter_state$set_state(list(selected = "a", keep_na = TRUE))
+  testthat::expect_error(filter_state$set_state(list(selected = "b")), NA)
+  testthat::expect_identical(isolate(filter_state$get_selected()), "b")
+  testthat::expect_true(isolate(filter_state$get_keep_na()))
+})
