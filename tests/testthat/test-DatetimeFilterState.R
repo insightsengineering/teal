@@ -25,7 +25,7 @@ testthat::test_that("get_call returns a condition true for the object in the sel
     isolate(filter_state$get_call()),
     bquote(
       test >= as.POSIXct(.(as.character(test[2])), tz = .(Sys.timezone())) &
-      test < as.POSIXct(.(as.character(test[4])), tz = .(Sys.timezone()))
+        test < as.POSIXct(.(as.character(test[4])), tz = .(Sys.timezone()))
     )
   )
 })
@@ -62,9 +62,40 @@ testthat::test_that("set_selected throws when the values are not within the rang
     filter_state$set_selected("a"),
     "should be a POSIXct or POSIXlt"
   )
-
   testthat::expect_error(
     filter_state$set_selected(c(objects[2], objects[3] + 1)),
     "not valid for full range"
   )
+})
+
+testthat::test_that("set_state needs a named list with selected and keep_na elements", {
+  objects <- as.POSIXct(c(1:4), origin = "1900/01/01")
+  filter_state <- DatetimeFilterState$new(objects, varname = "test")
+  testthat::expect_error(
+    filter_state$set_state(list(selected = c(objects[2], objects[3]), keep_na = TRUE)),
+    NA
+  )
+  testthat::expect_error(
+    filter_state$set_state(
+      list(selected = c(objects[3], objects[4]), unknown = TRUE)
+    ),
+    "all\\(names\\(state\\)"
+  )
+})
+
+testthat::test_that("set_state sets values of selected and keep_na as provided in the list", {
+  objects <- as.POSIXct(c(1:4), origin = "1900/01/01")
+  filter_state <- DatetimeFilterState$new(objects, varname = "test")
+  filter_state$set_state(list(selected = c(objects[2], objects[3]), keep_na = TRUE))
+  testthat::expect_identical(isolate(filter_state$get_selected()), c(objects[2], objects[3]))
+  testthat::expect_true(isolate(filter_state$get_keep_na()))
+})
+
+testthat::test_that("set_state overwrites fields included in the input only", {
+  objects <- as.POSIXct(c(1:5), origin = "1900/01/01")
+  filter_state <- DatetimeFilterState$new(objects, varname = "test")
+  filter_state$set_state(list(selected = c(objects[2], objects[3]), keep_na = TRUE))
+  testthat::expect_error(filter_state$set_state(list(selected = c(objects[3], objects[4]))), NA)
+  testthat::expect_identical(isolate(filter_state$get_selected()), c(objects[3], objects[4]))
+  testthat::expect_true(isolate(filter_state$get_keep_na()))
 })

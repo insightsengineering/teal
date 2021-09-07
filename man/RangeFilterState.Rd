@@ -29,9 +29,11 @@ isolate(filter_state$get_call())
 \itemize{
 \item \href{#method-new}{\code{RangeFilterState$new()}}
 \item \href{#method-get_call}{\code{RangeFilterState$get_call()}}
+\item \href{#method-get_keep_inf}{\code{RangeFilterState$get_keep_inf()}}
 \item \href{#method-ui}{\code{RangeFilterState$ui()}}
 \item \href{#method-server}{\code{RangeFilterState$server()}}
 \item \href{#method-set_keep_inf}{\code{RangeFilterState$set_keep_inf()}}
+\item \href{#method-set_state}{\code{RangeFilterState$set_state()}}
 \item \href{#method-clone}{\code{RangeFilterState$clone()}}
 }
 }
@@ -40,6 +42,7 @@ isolate(filter_state$get_call())
 \itemize{
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="FilterState" data-id="destroy_observers">}\href{../../teal/html/FilterState.html#method-destroy_observers}{\code{teal::FilterState$destroy_observers()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="FilterState" data-id="get_dataname">}\href{../../teal/html/FilterState.html#method-get_dataname}{\code{teal::FilterState$get_dataname()}}\out{</span>}
+\item \out{<span class="pkg-link" data-pkg="teal" data-topic="FilterState" data-id="get_keep_na">}\href{../../teal/html/FilterState.html#method-get_keep_na}{\code{teal::FilterState$get_keep_na()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="FilterState" data-id="get_selected">}\href{../../teal/html/FilterState.html#method-get_selected}{\code{teal::FilterState$get_selected()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="FilterState" data-id="get_varlabel">}\href{../../teal/html/FilterState.html#method-get_varlabel}{\code{teal::FilterState$get_varlabel()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="FilterState" data-id="get_varname">}\href{../../teal/html/FilterState.html#method-get_varname}{\code{teal::FilterState$get_varname()}}\out{</span>}
@@ -103,6 +106,19 @@ optional \verb{is.na(<varname>)} and \verb{is.finite(<varname>)}.
 
 \subsection{Returns}{
 (\code{call})
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-get_keep_inf"></a>}}
+\if{latex}{\out{\hypertarget{method-get_keep_inf}{}}}
+\subsection{Method \code{get_keep_inf()}}{
+Returns current \code{keep_inf} selection
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{RangeFilterState$get_keep_inf()}\if{html}{\out{</div>}}
+}
+
+\subsection{Returns}{
+(\code{logical(1)})
 UI Module for \code{EmptyFilterState}.
 This UI element contains two values for \code{min} and \code{max}
 of the range and two checkboxes whether to keep the \code{NA} or \code{Inf}  values.
@@ -164,7 +180,30 @@ Set if \code{Inf} should be kept
 \item{\code{value}}{(\code{logical(1)})\cr
 Value(s) which come from the filter selection. Value is set in \code{server}
 modules after selecting check-box-input in the shiny interface. Values are set to
-\code{private$keep_inf} which is reactive.
+\code{private$keep_inf} which is reactive.}
+}
+\if{html}{\out{</div>}}
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-set_state"></a>}}
+\if{latex}{\out{\hypertarget{method-set_state}{}}}
+\subsection{Method \code{set_state()}}{
+Set state
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{RangeFilterState$set_state(state)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{state}}{(\code{list})\cr
+contains fields relevant for a specific class
+\itemize{
+\item{\code{selected}}{ defines initial selection}
+\item{\code{keep_na} (\code{logical})}{ defines whether to keep or remove \code{NA} values}
+\item{\code{keep_inf} (\code{logical})}{ defines whether to keep or remove \code{Inf} values}
+}
 Adds \code{is.infinite(varname)} before existing condition calls if keep_inf is selected
 returns a call}
 }
