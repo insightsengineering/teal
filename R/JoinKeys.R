@@ -313,7 +313,7 @@ join_key <- function(dataset_1, dataset_2, keys) {
   stopifnot(is_character_vector(keys, min_length = 0))
 
   if (!is_empty(keys)) {
-    if (is.null(names(keys))) {
+    if (is.null(names(keys)) || any(names(keys) == "")) {
       names(keys) <- keys
     }
     stopifnot(!is.null(names(keys)))
