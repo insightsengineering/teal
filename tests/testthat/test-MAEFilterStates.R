@@ -86,3 +86,31 @@ testthat::test_that("get_call returns a call filtering an MAE object using Range
     )
   )
 })
+
+testthat::test_that("MAEFilterStates$set_bookmark_state sets filters in FilterState(s) specified by the named list", {
+  maefs <- teal:::MAEFilterStates$new(
+    input_dataname = "test",
+    output_dataname = "test_filtered",
+    datalabel = character(0),
+    varlabels = character(0),
+    keys = character(0)
+  )
+  fs <- list(
+    years_to_birth = c(30, 50),
+    vital_status = 1,
+    gender = "female"
+  )
+
+  maefs$set_bookmark_state(state = fs, data = MultiAssayExperiment::miniACC)
+  expect_equal(
+    isolate(maefs$get_call()),
+    quote(
+      test_filtered <- MultiAssayExperiment::subsetByColData(
+        test,
+        y = test$years_to_birth >=  30 & test$years_to_birth <= 50 &
+          test$vital_status == "1" &
+          test$gender == "female"
+      )
+    )
+  )
+})
