@@ -41,7 +41,7 @@
 #' # setting the data
 #' datasets$set_dataset(dataset("iris", iris))
 #' datasets$set_dataset(dataset("mtcars", mtcars))
-#' 
+#'
 #' isolate({
 #'   datasets$datanames()
 #'   datasets$get_filter_overview("iris")
@@ -366,19 +366,28 @@ FilteredData <- R6::R6Class( # nolint
 
     #' @description
     #' Sets bookmark state
+    #' @param id (`character(1)`)\cr
+    #'   An ID string that corresponds with the ID used to call the module's UI function.
     #' @param state (`named list`)\cr
     #'  nested list of filter selections applied to datasets.
     #' @return invisibly NULL
-    set_bookmark_state = function(state) {
+    set_bookmark_state = function(id, state) {
       stopifnot(
         all(names(state) %in% self$datanames())
       )
-      for(dataname in names(state)) {
-        fd <- self$get_filtered_datasets(dataname = dataname)
-        fd$set_bookmark_state(state = state[[dataname]])
-      }
-
-      invisible(NULL)
+      moduleServer(
+        id,
+        function(input, output, session) {
+          for(dataname in names(state)) {
+            fd <- self$get_filtered_datasets(dataname = dataname)
+            fd$set_bookmark_state(
+              id = sprintf("add_%s_filter", dataname),
+              state = state[[dataname]]
+            )
+          }
+          invisible(NULL)
+        }
+      )
     },
 
     #' @description
@@ -537,98 +546,95 @@ FilteredData <- R6::R6Class( # nolint
 
     #' Server function for filter panel
     #'
-    #' @param input (`shiny`)\cr
-    #' @param output (`shiny`)\cr
-    #' @param session (`shiny`)\cr
+    #' @param id (`character(1)`)\cr
+    #'   An ID string that corresponds with the ID used to call the module's UI function.
     #' @param active_datanames `function / reactive` returning datanames that
     #'   should be shown on the filter panel,
     #'   must be a subset of the `datanames` argument provided to `ui_filter_panel`;
     #'   if the function returns `NULL` (as opposed to `character(0)`), the filter
     #'   panel will be hidden
     #'
-    srv_filter_panel = function(input, output, session, active_datanames = function() "all") {
+    srv_filter_panel = function(id, active_datanames = function() "all") {
       stopifnot(
         is.function(active_datanames) || is.reactive(active_datanames)
       )
-      callModule(
-        self$srv_filter_overview,
-        "teal_filters_info",
-        active_datanames = active_datanames
-      )
-
-      # use isolate because we assume that the number of datasets does not change over the course of the teal app
-      # alternatively, one can proceed as in modules_filter_items to dynamically insert, remove UIs
-      isol_datanames <- isolate(self$datanames()) # they are already ordered
-      # should not use for-loop as variables are otherwise only bound by reference and last dataname would be used
-      lapply(
-        isol_datanames,
-        function(dataname) {
-          dataset_filters <- self$get_filtered_datasets(dataname)
-          callModule(
-            module = dataset_filters$server,
-            id = sprintf("%s_filters", dataname)
+      moduleServer(
+        id = id,
+        function(input, output, session) {
+          self$srv_filter_overview(
+            id = "teal_filters_info",
+            active_datanames = active_datanames
           )
-        }
-      )
 
-      lapply(
-        isol_datanames,
-        function(dataname) {
-          dataset_filters <- self$get_filtered_datasets(dataname)
-          callModule(
-            module = dataset_filters$srv_add_filter_state,
-            id = sprintf("add_%s_filter", dataname)
-          )
-        }
-      )
-
-
-      # we keep anything that may be selected to add (happens when the variable is not available for filtering)
-      # lapply(isol_datanames, function(dataname) paste0("teal_add_", dataname, "_filter")) #nolint
-      setBookmarkExclude(names = c(
-        # these will be regenerated dynamically
-        lapply(isol_datanames, function(dataname) paste0(dataname, "filters"))
-      ))
-
-      # rather than regenerating the UI dynamically for the dataset filtering,
-      # we instead choose to hide/show the elements
-      # the filters for this dataset are just hidden from the UI, but still applied
-      # optimization: we set `priority = 1` to execute it before the other
-      # observers (default priority 0), so that they are not computed if they are hidden anyways
-      observeEvent(active_datanames(), priority = 1, {
-        if (length(active_datanames()) == 0 || is.null(active_datanames())) {
-          # hide whole module UI when no datasets or when NULL
-          shinyjs::hide("filter_panel_whole")
-        } else {
-          shinyjs::show("filter_panel_whole")
-
-          # selectively hide / show to only show `active_datanames` out of all datanames
+          # use isolate because we assume that the number of datasets does not change over the course of the teal app
+          # alternatively, one can proceed as in modules_filter_items to dynamically insert, remove UIs
+          isol_datanames <- isolate(self$datanames()) # they are already ordered
+          # should not use for-loop as variables are otherwise only bound by reference and last dataname would be used
           lapply(
-            self$datanames(),
+            isol_datanames,
             function(dataname) {
-              id_add_filter <- sprintf("add_%s_filter", dataname)
-              id_filter_dataname <- sprintf("%s_filters", dataname)
-
-              if (dataname %in% active_datanames()) {
-                # shinyjs takes care of the namespace around the id
-                shinyjs::show(id_add_filter)
-                shinyjs::show(id_filter_dataname)
-              } else {
-                shinyjs::hide(id_add_filter)
-                shinyjs::hide(id_filter_dataname)
-              }
+              dataset_filters <- self$get_filtered_datasets(dataname)
+              dataset_filters$server(id = sprintf("%s_filters", dataname))
             }
           )
-        }
-      }, ignoreNULL = FALSE)
 
-      observeEvent(input$remove_all_filters, {
-        .log("removing all active filters from filter panel")
-        lapply(self$datanames(), function(dataname) {
-          dataset_filter <- self$get_filtered_datasets(dataname = dataname)
-          dataset_filter$queues_empty()
-        })
-      })
+          lapply(
+            isol_datanames,
+            function(dataname) {
+              dataset_filters <- self$get_filtered_datasets(dataname)
+              dataset_filters$srv_add_filter_state(id = sprintf("add_%s_filter", dataname))
+            }
+          )
+
+
+          # we keep anything that may be selected to add (happens when the variable is not available for filtering)
+          # lapply(isol_datanames, function(dataname) paste0("teal_add_", dataname, "_filter")) #nolint
+          setBookmarkExclude(names = c(
+            # these will be regenerated dynamically
+            lapply(isol_datanames, function(dataname) paste0(dataname, "filters"))
+          ))
+
+          # rather than regenerating the UI dynamically for the dataset filtering,
+          # we instead choose to hide/show the elements
+          # the filters for this dataset are just hidden from the UI, but still applied
+          # optimization: we set `priority = 1` to execute it before the other
+          # observers (default priority 0), so that they are not computed if they are hidden anyways
+          observeEvent(active_datanames(), priority = 1, {
+            if (length(active_datanames()) == 0 || is.null(active_datanames())) {
+              # hide whole module UI when no datasets or when NULL
+              shinyjs::hide("filter_panel_whole")
+            } else {
+              shinyjs::show("filter_panel_whole")
+
+              # selectively hide / show to only show `active_datanames` out of all datanames
+              lapply(
+                self$datanames(),
+                function(dataname) {
+                  id_add_filter <- sprintf("add_%s_filter", dataname)
+                  id_filter_dataname <- sprintf("%s_filters", dataname)
+
+                  if (dataname %in% active_datanames()) {
+                    # shinyjs takes care of the namespace around the id
+                    shinyjs::show(id_add_filter)
+                    shinyjs::show(id_filter_dataname)
+                  } else {
+                    shinyjs::hide(id_add_filter)
+                    shinyjs::hide(id_filter_dataname)
+                  }
+                }
+              )
+            }
+          }, ignoreNULL = FALSE)
+
+          observeEvent(input$remove_all_filters, {
+            .log("removing all active filters from filter panel")
+            lapply(self$datanames(), function(dataname) {
+              dataset_filter <- self$get_filtered_datasets(dataname = dataname)
+              dataset_filter$queues_empty()
+            })
+          })
+        }
+      )
     },
 
     #' Creates the UI for the module showing counts for each dataset
@@ -651,58 +657,61 @@ FilteredData <- R6::R6Class( # nolint
     #' Server function to display the number of patients in the filtered and unfiltered
     #' data
     #'
-    #' @param input (`shiny`)\cr
-    #' @param output (`shiny`)\cr
-    #' @param session (`shiny`)\cr
+    #' @param id (`character(1)`)\cr
+    #'   An ID string that corresponds with the ID used to call the module's UI function.
     #' @param active_datanames (`function`, `reactive`)\cr
     #'   returning datanames that should be shown on the filter panel,
     #'   must be a subset of the `datanames` argument provided to `ui_filter_panel`;
     #'   if the function returns `NULL` (as opposed to `character(0)`), the filter
     #'   panel will be hidden.
-    srv_filter_overview = function(input, output, session, active_datanames = function() "all") {
+    srv_filter_overview = function(id, active_datanames = function() "all") {
       stopifnot(
         is.function(active_datanames) || is.reactive(active_datanames)
       )
+      moduleServer(
+        id = id,
+        function(input, output, session) {
+          output$table <- renderUI({
+            .log("update uifiltersinfo")
+            datanames <- if (identical(active_datanames(), "all")) {
+              self$datanames()
+            } else {
+              active_datanames()
+            }
 
-      output$table <- renderUI({
-        .log("update uifiltersinfo")
-        datanames <- if (identical(active_datanames(), "all")) {
-          self$datanames()
-        } else {
-          active_datanames()
-        }
+            datasets_df <- self$get_filter_overview(datanames = datanames)
 
-        datasets_df <- self$get_filter_overview(datanames = datanames)
-
-        body_html <- lapply(
-          seq_len(nrow(datasets_df)),
-          function(x) {
-            tags$tr(
-              tags$td(rownames(datasets_df)[x]),
-              tags$td(datasets_df[x, 1]),
-              tags$td(datasets_df[x, 2])
+            body_html <- lapply(
+              seq_len(nrow(datasets_df)),
+              function(x) {
+                tags$tr(
+                  id = session$ns(rownames(datasets_df)[x]),
+                  tags$td(rownames(datasets_df)[x]),
+                  tags$td(datasets_df[x, 1]),
+                  tags$td(datasets_df[x, 2])
+                )
+              }
             )
-          }
-        )
 
-        header_html <- tags$tr(
-          tags$td(""),
-          tags$td(colnames(datasets_df)[1]),
-          tags$td(colnames(datasets_df)[2])
-        )
+            header_html <- tags$tr(
+              tags$td(""),
+              tags$td(colnames(datasets_df)[1]),
+              tags$td(colnames(datasets_df)[2])
+            )
 
-        table_html <- tags$table(
-          class = "table custom-table",
-          tags$thead(header_html),
-          tags$tbody(body_html)
-        )
+            table_html <- tags$table(
+              class = "table custom-table",
+              tags$thead(header_html),
+              tags$tbody(body_html)
+            )
 
-        table_html
-      })
+            table_html
+          })
 
-      return(invisible(NULL))
+          return(invisible(NULL))
+        }
+      )
     }
-
   ),
 
   ## __Private Methods ====

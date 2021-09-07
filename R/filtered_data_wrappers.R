@@ -60,7 +60,7 @@ filtered_data_set_filters <- function(datasets, filter) {
   )
 
   if (length(filter) > 0) {
-    datasets$set_bookmark_state(filter)
+    datasets$set_bookmark_state("main_ui-filter_panel", filter)
   }
 
 
