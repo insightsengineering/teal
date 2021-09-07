@@ -207,10 +207,10 @@ check_in_range <- function(subinterval, range, pre_msg = "") {
   }
   if (subinterval[[2]] + epsilon < subinterval[[1]]) {
     stop(sprintf(
-        "%s unexpected: the upper bound of the range lower than the lower bound \n %s < %s",
-        pre_msg,
-        subinterval[[2]],
-        subinterval[[1]]
+      "%s unexpected: the upper bound of the range lower than the lower bound \n %s < %s",
+      pre_msg,
+      subinterval[[2]],
+      subinterval[[1]]
     ))
   }
 

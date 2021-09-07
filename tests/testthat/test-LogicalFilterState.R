@@ -37,17 +37,10 @@ testthat::test_that("set_selected sets an intersection of logical values and the
   testthat::expect_equal(isolate(filter_state$get_selected()), TRUE)
 })
 
-testthat::test_that("set_selected throws when selection not in c(TRUE, FALSE)", {
-  filter_state <- LogicalFilterState$new(TRUE, varname = "test")
-  testthat::expect_error(
-    filter_state$set_selected("YES"),
-    "should be a single logical"
-  )
-
-  testthat::expect_error(
-    filter_state$set_selected(1),
-    "should be a single logical value"
-  )
+testthat::test_that("set_selected set logical(0) when the intersection of the arguments and c(TRUE, FALSE) is empty", {
+  filter_state <- LogicalFilterState$new(c(TRUE, FALSE), varname = "test")
+  suppressWarnings(filter_state$set_selected("test"))
+  testthat::expect_equal(isolate(filter_state$get_selected()), logical(0))
 })
 
 testthat::test_that("get_call returns a condition true for the values passed in set_selected", {
