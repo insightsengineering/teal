@@ -26,11 +26,14 @@ test_that("can set key on empty variable name equal to '' ", {
 
   # not fully named keys, same datasets
   expect_error(join_keys(join_key("d1", "d2", keys = c("B", "C" = "D")),
-                         join_key("d1", "d2", keys = c("A" = "B", "C" = "D"))))
-
+                         join_key("d1", "d2", keys = c(
+                           "A" = "B", "C" = "D"
+                         ))))
   # not fully named keys, swapped datasets
   expect_error(join_keys(join_key("d2", "d1", keys = c("B", "C" = "D")),
-                         join_key("d1", "d2", keys = c("A" = "B", "C" = "D"))))
+                         join_key("d1", "d2", keys = c(
+                           "A" = "B", "C" = "D"
+                         ))))
 
 })
 
