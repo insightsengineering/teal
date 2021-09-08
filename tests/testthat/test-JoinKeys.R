@@ -13,14 +13,26 @@ test_that("join_key throws error with invalid keys arguments", {
 })
 
 test_that("can set key on empty variable name equal to '' ", {
-  # not fully named
-  expect_silent(join_key("d1", "d2", keys = c("X" = "A",  "")))
-  expect_silent(join_key("d1", "d2", keys = c("X" = "A", "B")))
   keys <- c("A", "C" = "B")
   names(keys)[1] <- ""
   expect_silent(join_key("d1", "d2", keys))
-})
 
+  # not fully named
+  expect_silent(join_key("d1", "d2", keys = c("X" = "A",  "")))
+  expect_silent(join_key("d1", "d2", keys = c("X" = "A", "B")))
+
+  #dataset_1 and dataset_2 can be the same if keys match and not fully named
+  expect_silent(join_key("d1", "d1", keys = c("A", "B")))
+
+  # not fully named keys, same datasets
+  expect_error(join_keys(join_key("d1", "d2", keys = c("B", "C" = "D")),
+                         join_key("d1", "d2", keys = c("A" = "B", "C" = "D"))))
+
+  # not fully named keys, swapped datasets
+  expect_error(join_keys(join_key("d2", "d1", keys = c("B", "C" = "D")),
+                         join_key("d1", "d2", keys = c("A" = "B", "C" = "D"))))
+
+})
 
 test_that("join_key throws error with invalid dataset arguments", {
 
