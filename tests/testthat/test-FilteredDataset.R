@@ -112,7 +112,7 @@ testthat::test_that("set_bookmark state is pure virtual", {
   )
 
   testthat::expect_error(
-    shiny::testServer(filtered_dataset$set_bookmark_state, expr = {}),
+    shiny::testServer(filtered_dataset$set_bookmark_state, expr = NULL),
     regex = "Pure virtual"
   )
 })

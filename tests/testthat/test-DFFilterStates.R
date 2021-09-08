@@ -89,13 +89,13 @@ testthat::test_that("Adding 'var_to_add' adds another filter state", {
     }
   )
 
-  # testthat::expect_identical(
-  #   isolate(dffs$get_call()),
-  #   quote(
-  #     iris_filtered <- dplyr::filter(
-  #       iris,
-  #       Sepal.Length >= 4.3 & Sepal.Length <= 7.9 & Species %in% c("setosa", "versicolor", "virginica")
-  #     )
-  #   )
-  # )
+  testthat::expect_identical(
+    isolate(dffs$get_call()),
+    quote(
+      iris_filtered <- dplyr::filter(
+        iris,
+        Sepal.Length >= 4.3 & Sepal.Length <= 7.9 & Species %in% c("setosa", "versicolor", "virginica")
+      )
+    )
+  )
 })
