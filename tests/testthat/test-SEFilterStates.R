@@ -31,20 +31,17 @@ testthat::test_that("SEFilterStates$set_bookmark_state sets filters in ReactiveQ
                        feature_id = sprintf("ID%03d", 1:200))
   cdata <- DataFrame(Treatment = rep(c("ChIP", "Input"), 3),
                        row.names = LETTERS[1:6])
-
   obj <- SummarizedExperiment(
     assays = list(counts = counts),
     rowRanges = row_ranges,
     colData = cdata
   )
-
   fs <- list(
     select = list(Treatment = "ChIP"),
     subset = list(feature_id = c("ID001", "ID002"))
   )
-
-  sefs$set_bookmark_state(state = fs, data = obj)
-  expect_equal(
+  shiny::testServer(sefs$set_bookmark_state, args = list(state = fs, data = obj), expr = NULL)
+  testthat::expect_equal(
     isolate(sefs$get_call()),
     quote(
       test_filtered <- subset(

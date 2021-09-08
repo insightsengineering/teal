@@ -110,7 +110,11 @@ testthat::test_that("set_bookmark state is pure virtual", {
   filtered_dataset <- FilteredDataset$new(
     dataset = Dataset$new("iris", head(iris))
   )
-  testthat::expect_error(filtered_dataset$set_bookmark_state(), regex = "Pure virtual")
+
+  testthat::expect_error(
+    shiny::testServer(filtered_dataset$set_bookmark_state, expr = {}),
+    regex = "Pure virtual"
+  )
 })
 
 testthat::test_that("ui_add_filter_state is pure virtual", {

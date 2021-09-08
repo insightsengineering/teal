@@ -60,6 +60,8 @@ filtered_data_set_filters <- function(datasets, filter) {
   )
 
   if (length(filter) > 0) {
+    # preceeded by main_ui to adjust htmlid of filterstate added by bookmark
+    # to htmlid of element added by selecting in the app
     datasets$set_bookmark_state("main_ui-filter_panel", filter)
   }
 
