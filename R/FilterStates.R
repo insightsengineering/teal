@@ -809,8 +809,8 @@ DFFilterStates <- R6::R6Class( # nolint
 
       } else {
         varlabels <- private$varlabels[variables]
-        varlabels[is.na(varlabels) || varlabels == ""] <- variables[
-          is.na(varlabels) || varlabels == ""
+        varlabels[is.na(varlabels) | varlabels == ""] <- variables[
+          is.na(varlabels) | varlabels == ""
           ]
         varlabels
       }
