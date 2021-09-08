@@ -88,12 +88,15 @@ filter \code{call} or \code{list} of filter calls
 \subsection{Method \code{set_bookmark_state()}}{
 Set bookmark state
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{DefaultFilteredDataset$set_bookmark_state(state)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{DefaultFilteredDataset$set_bookmark_state(id, state)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
+\item{\code{id}}{(\code{character(1)})\cr
+An ID string that corresponds with the ID used to call the module's UI function.}
+
 \item{\code{state}}{(\verb{named list})\cr
 containing values of the initial filter. Values should be relevant
 to the referred column.}
@@ -138,17 +141,14 @@ For this class \code{srv_add_filter_state} calls single module
 \code{srv_add_filter_state} from \code{FilterStates} (\code{DefaultFilteredDataset}
 contains single \code{FilterStates})
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{DefaultFilteredDataset$srv_add_filter_state(input, output, session)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{DefaultFilteredDataset$srv_add_filter_state(id)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{input}}{(\code{shiny})\cr}
-
-\item{\code{output}}{(\code{shiny})\cr}
-
-\item{\code{session}}{(\code{shiny})\cr}
+\item{\code{id}}{(\code{character(1)})\cr
+An ID string that corresponds with the ID used to call the module's UI function.}
 }
 \if{html}{\out{</div>}}
 }

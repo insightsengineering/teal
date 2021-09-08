@@ -539,12 +539,15 @@ named list
 \subsection{Method \code{set_bookmark_state()}}{
 Sets bookmark state
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{FilteredData$set_bookmark_state(state)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{FilteredData$set_bookmark_state(id, state)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
+\item{\code{id}}{(\code{character(1)})\cr
+An ID string that corresponds with the ID used to call the module's UI function.}
+
 \item{\code{state}}{(\verb{named list})\cr
 nested list of filter selections applied to datasets.}
 }
@@ -612,22 +615,14 @@ Server function for filter panel}
 \if{latex}{\out{\hypertarget{method-srv_filter_panel}{}}}
 \subsection{Method \code{srv_filter_panel()}}{
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{FilteredData$srv_filter_panel(
-  input,
-  output,
-  session,
-  active_datanames = function() "all"
-)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{FilteredData$srv_filter_panel(id, active_datanames = function() "all")}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{input}}{(\code{shiny})\cr}
-
-\item{\code{output}}{(\code{shiny})\cr}
-
-\item{\code{session}}{(\code{shiny})\cr}
+\item{\code{id}}{(\code{character(1)})\cr
+An ID string that corresponds with the ID used to call the module's UI function.}
 
 \item{\code{active_datanames}}{\verb{function / reactive} returning datanames that
 should be shown on the filter panel,
@@ -668,22 +663,14 @@ data}
 \if{latex}{\out{\hypertarget{method-srv_filter_overview}{}}}
 \subsection{Method \code{srv_filter_overview()}}{
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{FilteredData$srv_filter_overview(
-  input,
-  output,
-  session,
-  active_datanames = function() "all"
-)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{FilteredData$srv_filter_overview(id, active_datanames = function() "all")}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{input}}{(\code{shiny})\cr}
-
-\item{\code{output}}{(\code{shiny})\cr}
-
-\item{\code{session}}{(\code{shiny})\cr}
+\item{\code{id}}{(\code{character(1)})\cr
+An ID string that corresponds with the ID used to call the module's UI function.}
 
 \item{\code{active_datanames}}{(\code{function}, \code{reactive})\cr
 returning datanames that should be shown on the filter panel,

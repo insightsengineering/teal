@@ -56,8 +56,7 @@ shinyApp(
     verbatimTextOutput("expr"),
   ),
   server = function(input, output, session) {
-    callModule(
-      module = rf$srv_add_filter_state,
+    rf$srv_add_filter_state(
       id = "add",
       data = df
     )

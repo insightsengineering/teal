@@ -71,12 +71,15 @@ R object which \code{subset} function is applied on.}
 \subsection{Method \code{set_bookmark_state()}}{
 Set bookmark state
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{SEFilterStates$set_bookmark_state(data, state)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{SEFilterStates$set_bookmark_state(id, data, state)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
+\item{\code{id}}{(\code{character(1)})\cr
+An ID string that corresponds with the ID used to call the module's UI function.}
+
 \item{\code{data}}{(\code{SummarizedExperiment})\cr
 data which are supposed to be filtered}
 
@@ -128,17 +131,14 @@ This module unlike other \code{FilterStates} classes manages two
 sets of filter variables - one for \code{colData} and another for
 \code{rowData}.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{SEFilterStates$srv_add_filter_state(input, output, session, data)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{SEFilterStates$srv_add_filter_state(id, data)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{input}}{(\code{Shiny})\cr input object}
-
-\item{\code{output}}{(\code{Shiny})\cr output object}
-
-\item{\code{session}}{(\code{Shiny})\cr session object}
+\item{\code{id}}{(\code{character(1)})\cr
+An ID string that corresponds with the ID used to call the module's UI function.}
 
 \item{\code{data}}{(\code{SummarizedExperiment})\cr
 object containing \code{colData} and \code{rowData} which columns

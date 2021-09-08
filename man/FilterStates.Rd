@@ -261,12 +261,15 @@ shiny.tag
 \subsection{Method \code{set_bookmark_state()}}{
 Set bookmark state
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{FilterStates$set_bookmark_state(data, state)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{FilterStates$set_bookmark_state(id, data, state)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
+\item{\code{id}}{(\code{character(1)})\cr
+An ID string that corresponds with the ID used to call the module's UI function.}
+
 \item{\code{data}}{(\code{data.frame})\cr
 data which are supposed to be filtered}
 
@@ -308,17 +311,14 @@ shiny.tag
 \subsection{Method \code{srv_add_filter_state()}}{
 Shiny server module to add filter variable
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{FilterStates$srv_add_filter_state(input, output, session, data)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{FilterStates$srv_add_filter_state(id, data)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{input}}{(\code{Shiny})\cr input object}
-
-\item{\code{output}}{(\code{Shiny})\cr output object}
-
-\item{\code{session}}{(\code{Shiny})\cr session object}
+\item{\code{id}}{(\code{character(1)})\cr
+An ID string that corresponds with the ID used to call the module's UI function.}
 
 \item{\code{data}}{(\code{data.frame}, \code{MultiAssayExperiment}, \code{SummarizedExperiment}, \code{matrix})\cr
 object containing columns to be used as filter variables.}
