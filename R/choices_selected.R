@@ -135,22 +135,6 @@ choices_selected <- function(choices,
   choices <- vector_remove_dups(choices)
   selected <- vector_remove_dups(selected)
 
-  # add selected choices if they are missing
-  selected_to_add_idx <- which(!(selected %in% choices))
-  if (length(selected_to_add_idx) > 0) {
-    selected_to_add <- vector_keep(selected, selected_to_add_idx)
-
-    choices <- if (is(choices, "choices_labeled") && !is(selected_to_add, "choices_labeled")) {
-      # if choices is of choices_labeled class then create new choices_labeled object
-      choices_labeled(c(selected_to_add, choices), c(selected_to_add, attr(choices, "raw_labels")))
-    } else {
-      # else append to vector with keeping all existing attributes
-      vector_append(choices, selected_to_add)
-    }
-
-  }
-
-
   if (!keep_order) {
     choices <- vector_reorder(
       choices,
