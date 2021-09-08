@@ -59,3 +59,8 @@ testthat::test_that("delayed version of choices_selected", {
   res_obj <- isolate(resolve_delayed(obj, datasets = ds))
   testthat::expect_equal(res_obj, exp_obj)
 })
+
+testthat::test_that("choices_selected does not add selected to choices when selected is not found in choices", {
+  test <- choices_selected(choices = c("a"), selected = "b")
+  testthat::expect_equal(test$choices, "a")
+})
