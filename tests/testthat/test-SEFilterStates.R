@@ -138,6 +138,85 @@ testthat::test_that("get_fun method returns subset", {
   testthat::expect_equal(se$get_fun(), "subset")
 })
 
+testthat::test_that("get_call returns `output_dataname <- input_dataname` when no state is set", {
+  sefs <- teal:::SEFilterStates$new(
+    input_dataname = "test",
+    output_dataname = "test_filtered",
+    datalabel = character(0)
+  )
+
+  testthat::expect_identical(
+    isolate(sefs$get_call()),
+    quote(test_filtered <- test)
+  )
+})
+
+testthat::test_that("SEFilterStates$set_bookmark_state sets state with only select", {
+  sefs <- teal:::SEFilterStates$new(
+    input_dataname = "test",
+    output_dataname = "test_filtered",
+    datalabel = character(0)
+  )
+
+  obj <- get_test_data()
+
+  fs <- list(
+    select = list(Treatment = "ChIP")
+  )
+
+  sefs$set_bookmark_state(state = fs, data = obj)
+  testthat::expect_identical(
+    isolate(sefs$get_call()),
+    quote(
+      test_filtered <- subset(
+        test,
+        select = Treatment == "ChIP"
+      )
+    )
+  )
+})
+
+testthat::test_that("SEFilterStates$set_bookmark_state sets state with only subset", {
+  sefs <- teal:::SEFilterStates$new(
+    input_dataname = "test",
+    output_dataname = "test_filtered",
+    datalabel = character(0)
+  )
+
+  obj <- get_test_data()
+
+  fs <- list(
+    subset = list(feature_id = c("ID001", "ID002"))
+  )
+
+  sefs$set_bookmark_state(state = fs, data = obj)
+  testthat::expect_identical(
+    isolate(sefs$get_call()),
+    quote(
+      test_filtered <- subset(
+        test,
+        subset = feature_id %in% c("ID001", "ID002")
+      )
+    )
+  )
+})
+
+testthat::test_that("SEFilterStates$set_bookmark_state sets state with neither subset nor select", {
+  sefs <- teal:::SEFilterStates$new(
+    input_dataname = "test",
+    output_dataname = "test_filtered",
+    datalabel = character(0)
+  )
+
+  obj <- get_test_data()
+
+  sefs$set_bookmark_state(data = obj)
+  testthat::expect_identical(
+    isolate(sefs$get_call()),
+    quote(test_filtered <- test)
+  )
+})
+
 testthat::test_that("SEFilterStates$set_bookmark_state sets filters in ReactiveQueue specified by the named list", {
   sefs <- teal:::SEFilterStates$new(
     input_dataname = "test",
