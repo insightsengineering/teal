@@ -153,7 +153,7 @@ testthat::test_that("SEFilterStates$set_bookmark_state sets filters in ReactiveQ
   )
 
   sefs$set_bookmark_state(state = fs, data = obj)
-  expect_equal(
+  testthat::expect_identical(
     isolate(sefs$get_call()),
     quote(
       test_filtered <- subset(
