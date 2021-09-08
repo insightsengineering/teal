@@ -6,7 +6,6 @@ on.exit(unlink(temp_file_csv))
 
 # Test DatasetConnector ------
 testthat::test_that("DatasetConnector", {
-
   fun <- callable_function(function() synthetic_cdisc_data("rcd_2021_05_05")$adsl)
 
   testthat::expect_error(
@@ -139,7 +138,7 @@ testthat::test_that("rcd_dataset_connector", {
   ) %>%
     as_cdisc()
   testthat::expect_equal(x, x2)
-  expect_true(is(x, c("DatasetConnector", "R6")))
+  testthat::expect_true(is(x, c("DatasetConnector", "R6")))
 
   testthat::expect_identical(
     x$.__enclos_env__$private$pull_callable$.__enclos_env__$private$fun_name,
@@ -300,15 +299,15 @@ testthat::test_that("csv_dataset_connector non-standard datasets multi/space cha
     stringsAsFactors = FALSE
   )
 
-  # next check can pass arguments to read_delim (using '|||')
-  write.table(test_adsl_ns, file = temp_file_csv, row.names = FALSE, sep = "|||")
-  x <- csv_cdisc_dataset_connector("ADSL", file = temp_file_csv, delim = "|||")
+  # next check can pass arguments to read_delim (using '$')
+  write.table(test_adsl_ns, file = temp_file_csv, row.names = FALSE, sep = "$")
+  x <- csv_cdisc_dataset_connector("ADSL", file = temp_file_csv, delim = "$")
   x$pull()
   testthat::expect_true(is_pulled(x))
   testthat::expect_identical(get_dataname(x), "ADSL")
   testthat::expect_identical(
     get_code(x),
-    paste0("ADSL <- readr::read_delim(file = \"", temp_file_csv, "\", delim = \"|||\")")
+    paste0("ADSL <- readr::read_delim(file = \"", temp_file_csv, "\", delim = \"$\")")
   )
   data <- get_raw_data(x)
   testthat::expect_true(is.data.frame(data))
@@ -556,8 +555,8 @@ testthat::test_that("fun_cdisc_dataset_connector", {
   data_1 <- get_raw_data(fun_direct)
   data_2 <- get_raw_data(fun_direct2)
 
-  expect_true(is.data.frame(data_1))
-  expect_true(is.data.frame(data_2))
+  testthat::expect_true(is.data.frame(data_1))
+  testthat::expect_true(is.data.frame(data_2))
   expect_identical(data_1, data_2)
 })
 
@@ -633,7 +632,7 @@ testthat::test_that("code_dataset_connector - Modify vars", {
 
   expect_silent(adtte$pull(try = TRUE))
 
-  expect_true(
+  testthat::expect_true(
     grepl("Modification of the local variable", adtte$get_error_message())
   )
 })
@@ -1039,10 +1038,10 @@ testthat::test_that("Initializing DatasetConnector with code argument works", {
     attr(t_dc$get_code_class()$code[[3]], "dataname"),
     "test_dc"
   )
-  # mutate code passed in as string values will not have dataname attribute.
+  # mutate code passed in as string values will have dataset name as its dataname attribute
   testthat::expect_equal(
     attr(t_dc$get_code_class()$code[[4]], "dataname"),
-    character(0)
+    "test_dc"
   )
   t_dc$pull()
   testthat::expect_equal(

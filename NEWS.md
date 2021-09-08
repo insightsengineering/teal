@@ -2,10 +2,13 @@
 
 ### New features
 * Added `cdse_dataset_connector` to create delayed data objects from `CDSE`.
+* Added `split` and `merge` methods to the `JoinKeys` object.
 
 ### Bug fixes
 * Fixed the bug caused by calling `mutate_dataset` multiple times on the same `DatasetConnector` or `Dataset` object.
 * Fixed a bug that caused the output of `get_code` function to not reproduce its raw data set.
+* Changed `filter_spec` to allow no variable selection upon app initialization, where the first possible value was previously selected.
+* Fixed reference bug in `FilteredData` that caused error message on initial application load.
 
 ### Enhancements
 * The `append` method of a `CodeClass` object has been modified to print a warning message when the argument does not result in any code being added because it is duplicated.
@@ -13,12 +16,17 @@
 * Implemented delayed functionality to the mutate method of the `Dataset` and `DatasetConnector` objects.
 * Redesigned variable filter labels in `Active Filter Variables` panel.
 * Modified `teal_data` to return a `CDISCData` object whenever any of its arguments is a type of `CDISCData` object.
+* Updated `Active Filter Summary` to show information of MAE datasets and their experiments.
+* Updated filters to show both levels of a logical variable TRUE/FALSE even if one is missing from the original array.
 
 ### Miscellaneous
 * Added a method `get_hash` to the `Dataset` class returning the MD5 hash of the object stored inside the `Dataset` object.
 * Removed mentions of internal Roche services from the documentation.
 * Replaced `random.cdisc.data` with `scda` in examples and tests.
 * Implemented functionality to store `JoinKeys` in `Dataset` and `DatasetConnector` classes.
+* `FilteredData` contains `Dataset` objects (via `FilteredDataset`) and copying keys and attributes is no longer needed.
+* Added `error_on_lintr: TRUE` to `.lintr`
+* Changed how the id of an HTML element in the filter panel is created to make it deterministic.
 
 # teal 0.9.5
 

@@ -2,20 +2,20 @@
 % Please edit documentation in R/FilterStates.R
 \name{get_filterable_varnames}
 \alias{get_filterable_varnames}
-\title{Get filterable variable names}
+\title{Gets filterable variable names}
 \usage{
 get_filterable_varnames(data)
 }
 \arguments{
-\item{data}{(\code{list}, \code{matrix})\cr
-R object containing columns which class can be checked through \code{vapply} or \code{apply}.}
+\item{data}{(\code{object})\cr
+the R object containing elements which class can be checked through \code{vapply} or \code{apply}.}
 }
 \value{
-\code{character} vector
+\code{character} the array of the matched element names
 }
 \description{
-Get filterable variable names from given data which class
-matches \code{.filterable_class}
+Gets filterable variable names from a given object. The names match variables
+of classes in the \code{teal:::.filterable_class} enum.
 }
 \examples{
 df <- data.frame(

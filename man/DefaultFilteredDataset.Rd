@@ -27,16 +27,15 @@
 \itemize{
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="FilteredDataset" data-id="add_to_eval_env">}\href{../../teal/html/FilteredDataset.html#method-add_to_eval_env}{\code{teal::FilteredDataset$add_to_eval_env()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="FilteredDataset" data-id="get_data">}\href{../../teal/html/FilteredDataset.html#method-get_data}{\code{teal::FilteredDataset$get_data()}}\out{</span>}
-\item \out{<span class="pkg-link" data-pkg="teal" data-topic="FilteredDataset" data-id="get_data_info">}\href{../../teal/html/FilteredDataset.html#method-get_data_info}{\code{teal::FilteredDataset$get_data_info()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="FilteredDataset" data-id="get_data_reactive">}\href{../../teal/html/FilteredDataset.html#method-get_data_reactive}{\code{teal::FilteredDataset$get_data_reactive()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="FilteredDataset" data-id="get_dataname">}\href{../../teal/html/FilteredDataset.html#method-get_dataname}{\code{teal::FilteredDataset$get_dataname()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="FilteredDataset" data-id="get_dataset">}\href{../../teal/html/FilteredDataset.html#method-get_dataset}{\code{teal::FilteredDataset$get_dataset()}}\out{</span>}
+\item \out{<span class="pkg-link" data-pkg="teal" data-topic="FilteredDataset" data-id="get_filter_overview_info">}\href{../../teal/html/FilteredDataset.html#method-get_filter_overview_info}{\code{teal::FilteredDataset$get_filter_overview_info()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="FilteredDataset" data-id="get_filter_states">}\href{../../teal/html/FilteredDataset.html#method-get_filter_states}{\code{teal::FilteredDataset$get_filter_states()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="FilteredDataset" data-id="get_filtered_dataname">}\href{../../teal/html/FilteredDataset.html#method-get_filtered_dataname}{\code{teal::FilteredDataset$get_filtered_dataname()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="FilteredDataset" data-id="get_hash">}\href{../../teal/html/FilteredDataset.html#method-get_hash}{\code{teal::FilteredDataset$get_hash()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="FilteredDataset" data-id="get_join_keys">}\href{../../teal/html/FilteredDataset.html#method-get_join_keys}{\code{teal::FilteredDataset$get_join_keys()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="FilteredDataset" data-id="get_keys">}\href{../../teal/html/FilteredDataset.html#method-get_keys}{\code{teal::FilteredDataset$get_keys()}}\out{</span>}
-\item \out{<span class="pkg-link" data-pkg="teal" data-topic="FilteredDataset" data-id="get_subjects_info">}\href{../../teal/html/FilteredDataset.html#method-get_subjects_info}{\code{teal::FilteredDataset$get_subjects_info()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="FilteredDataset" data-id="get_varlabels">}\href{../../teal/html/FilteredDataset.html#method-get_varlabels}{\code{teal::FilteredDataset$get_varlabels()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="FilteredDataset" data-id="get_varnames">}\href{../../teal/html/FilteredDataset.html#method-get_varnames}{\code{teal::FilteredDataset$get_varnames()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="FilteredDataset" data-id="queues_empty">}\href{../../teal/html/FilteredDataset.html#method-queues_empty}{\code{teal::FilteredDataset$queues_empty()}}\out{</span>}
@@ -49,9 +48,9 @@
 \if{html}{\out{<a id="method-new"></a>}}
 \if{latex}{\out{\hypertarget{method-new}{}}}
 \subsection{Method \code{new()}}{
-Initialize \code{DefaultFilteredDataset} object
+Initializes this \code{DefaultFilteredDataset} object
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{DefaultFilteredDataset$new(dataset, join_keys)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{DefaultFilteredDataset$new(dataset)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
@@ -59,9 +58,6 @@ Initialize \code{DefaultFilteredDataset} object
 \describe{
 \item{\code{dataset}}{(\code{Dataset})\cr
 single dataset for which filters are rendered}
-
-\item{\code{join_keys}}{(\code{list})\cr
-keys to join this \code{dataset} with the other}
 }
 \if{html}{\out{</div>}}
 }
@@ -70,7 +66,7 @@ keys to join this \code{dataset} with the other}
 \if{html}{\out{<a id="method-get_call"></a>}}
 \if{latex}{\out{\hypertarget{method-get_call}{}}}
 \subsection{Method \code{get_call()}}{
-Get filter expression
+Gets the filter expression
 
 This functions returns filter calls equivalent to selected items
 within each of \code{filter_states}. Configuration of the calls is constant and
@@ -103,6 +99,9 @@ containing values of the initial filter. Values should be relevant
 to the referred column.}
 }
 \if{html}{\out{</div>}}
+}
+\subsection{Returns}{
+invisibly \code{NULL}
 }
 }
 \if{html}{\out{<hr>}}

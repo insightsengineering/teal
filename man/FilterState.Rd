@@ -38,11 +38,13 @@ chain.
 \item \href{#method-destroy_observers}{\code{FilterState$destroy_observers()}}
 \item \href{#method-get_call}{\code{FilterState$get_call()}}
 \item \href{#method-get_dataname}{\code{FilterState$get_dataname()}}
+\item \href{#method-get_keep_na}{\code{FilterState$get_keep_na()}}
 \item \href{#method-get_varlabel}{\code{FilterState$get_varlabel()}}
 \item \href{#method-get_varname}{\code{FilterState$get_varname()}}
 \item \href{#method-get_selected}{\code{FilterState$get_selected()}}
 \item \href{#method-set_keep_na}{\code{FilterState$set_keep_na()}}
 \item \href{#method-set_selected}{\code{FilterState$set_selected()}}
+\item \href{#method-set_state}{\code{FilterState$set_state()}}
 \item \href{#method-server}{\code{FilterState$server()}}
 \item \href{#method-ui}{\code{FilterState$ui()}}
 \item \href{#method-clone}{\code{FilterState$clone()}}
@@ -59,7 +61,7 @@ Initialize a \code{FilterState} object
   varname,
   varlabel = character(0),
   input_dataname = NULL,
-  use_dataname = FALSE
+  extract_type = character(0)
 )}\if{html}{\out{</div>}}
 }
 
@@ -76,11 +78,16 @@ name of the variable}
 label of the variable (optional).}
 
 \item{\code{input_dataname}}{(\code{name} or \code{call})\cr
-name of dataset where \code{x} is taken from}
+name of dataset where \code{x} is taken from. Must be specified if \code{extract_type} argument
+is not empty.}
 
-\item{\code{use_dataname}}{(\code{logical(1)})\cr
-whether to prefix condition calls with \verb{input_dataname$}.
-For example \code{input_dataname$variable == "selection"}}
+\item{\code{extract_type}}{(\code{character(0)}, \code{character(1)})\cr
+whether condition calls should be prefixed by dataname. Possible values:
+\itemize{
+\item{\code{character(0)} (default)}{ \code{varname} in the condition call will not be prefixed}
+\item{\code{"list"}}{ \code{varname} in the condition call will be returned as \verb{<input_dataname>$<varname>}}
+\item{\code{"matrix"}}{ \code{varname} in the condition call will be returned as \verb{<input_dataname>[, <varname>]}}
+}}
 }
 \if{html}{\out{</div>}}
 }
@@ -127,6 +134,19 @@ whether dataname should be deparsed. \code{TRUE} by default}
 }
 \subsection{Returns}{
 (\code{name} or \code{character(1)})
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-get_keep_na"></a>}}
+\if{latex}{\out{\hypertarget{method-get_keep_na}{}}}
+\subsection{Method \code{get_keep_na()}}{
+Returns current \code{keep_na} selection
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{FilterState$get_keep_na()}\if{html}{\out{</div>}}
+}
+
+\subsection{Returns}{
+(\code{logical(1)})
 }
 }
 \if{html}{\out{<hr>}}
@@ -214,6 +234,28 @@ Value(s) which come from the filter selection. Values are set in \code{server}
 modules after choosing value in app interface. Values are set to
 \code{private$selected} which is reactive. Values type have to be the
 same as \code{private$choices}.}
+}
+\if{html}{\out{</div>}}
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-set_state"></a>}}
+\if{latex}{\out{\hypertarget{method-set_state}{}}}
+\subsection{Method \code{set_state()}}{
+Set state
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{FilterState$set_state(state)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{state}}{(\code{list})\cr
+contains fields relevant for a specific class
+\itemize{
+\item{\code{selected}}{ defines initial selection}
+\item{\code{keep_na} (\code{logical})}{ defines whether to keep or remove \code{NA} values}
+}}
 }
 \if{html}{\out{</div>}}
 }

@@ -11,6 +11,10 @@ queue and returns reproducible R expression relevant to specific
 Currently \code{data.frame}, \code{MultiAssayExperiment},
 \code{SummarizedExperiment} and \code{matrix} are available.
 }
+\note{
+throws an exception if the length of \code{x} does not match the length of
+\code{element_id}
+}
 \examples{
 library(shiny)
 filter_states <- teal:::DFFilterStates$new(
@@ -25,7 +29,7 @@ filter_state <- teal:::RangeFilterState$new(
   varname = "x",
   varlabel = "x variable",
   input_dataname = as.name("data"),
-  use_dataname = TRUE
+  extract_type = "list"
 )
 isolate(filter_state$set_selected(c(3L, 8L)))
 
@@ -58,7 +62,7 @@ isolate(filter_states$get_call())
 \if{html}{\out{<a id="method-new"></a>}}
 \if{latex}{\out{\hypertarget{method-new}{}}}
 \subsection{Method \code{new()}}{
-Initialize \code{FilterStates} object
+Initializes this \code{FilterStates} object.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{FilterStates$new(input_dataname, output_dataname, datalabel)}\if{html}{\out{</div>}}
 }
@@ -107,7 +111,7 @@ no-op call such as \code{x <- x}.
 \if{html}{\out{<a id="method-get_fun"></a>}}
 \if{latex}{\out{\hypertarget{method-get_fun}{}}}
 \subsection{Method \code{get_fun()}}{
-Get function name
+Gets the name of the function used to filter the data in this FilterStates.
 
 Get function name used to create filter call. By default it's a
 "subset" but can be overridden by child class method.
@@ -116,24 +120,27 @@ Get function name used to create filter call. By default it's a
 }
 
 \subsection{Returns}{
-\code{character(1)}
+\code{character(1)} the name of the function
 }
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-queue_empty"></a>}}
 \if{latex}{\out{\hypertarget{method-queue_empty}{}}}
 \subsection{Method \code{queue_empty()}}{
-Empty reactive queue from active filters
+Remove all FilterState objects from all queues in this FilterStates.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{FilterStates$queue_empty()}\if{html}{\out{</div>}}
 }
 
+\subsection{Returns}{
+NULL
+}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-queue_get"></a>}}
 \if{latex}{\out{\hypertarget{method-queue_get}{}}}
 \subsection{Method \code{queue_get()}}{
-Get queue elements
+Returns a list of FilterState objects stored in this FilterStates.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{FilterStates$queue_get(queue_index, element_id = character(0))}\if{html}{\out{</div>}}
 }
@@ -157,7 +164,7 @@ name of \code{ReactiveQueue} element.}
 \if{html}{\out{<a id="method-queue_initialize"></a>}}
 \if{latex}{\out{\hypertarget{method-queue_initialize}{}}}
 \subsection{Method \code{queue_initialize()}}{
-Sets \code{ReactiveQueue} objects
+Sets \code{ReactiveQueue} objects.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{FilterStates$queue_initialize(x)}\if{html}{\out{</div>}}
 }
@@ -175,7 +182,7 @@ Must be a list even if single \code{ReactiveQueue} is set.}
 \if{html}{\out{<a id="method-queue_push"></a>}}
 \if{latex}{\out{\hypertarget{method-queue_push}{}}}
 \subsection{Method \code{queue_push()}}{
-Add new \code{FilterState} to the queue
+Adds a new \code{FilterState} object to this FilterStates
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{FilterStates$queue_push(x, queue_index, element_id)}\if{html}{\out{</div>}}
 }
@@ -189,7 +196,7 @@ Add new \code{FilterState} to the queue
 index of the \code{private$queue} list where \code{ReactiveQueue} are kept.}
 
 \item{\code{element_id}}{(\code{character(1)})\cr
-name of \code{ReactiveQueue} element.}
+name of the \code{ReactiveQueue} element.}
 }
 \if{html}{\out{</div>}}
 }
@@ -198,9 +205,9 @@ name of \code{ReactiveQueue} element.}
 \if{html}{\out{<a id="method-queue_remove"></a>}}
 \if{latex}{\out{\hypertarget{method-queue_remove}{}}}
 \subsection{Method \code{queue_remove()}}{
-Removes single filter state
+Removes a single filter state
 
-Removes single filter state with all shiny elements associated
+Removes a single filter state with all shiny elements associated
 with this state. It removes:\cr
 \itemize{
 \item particular \code{FilterState} from \code{private$queue}
@@ -320,7 +327,6 @@ object containing columns to be used as filter variables.}
 }
 \subsection{Returns}{
 \code{NULL}
-Module to add \code{FilterState} to queue
 
 This module adds \code{FilterState} object to queue, inserts
 shiny UI to the Active Filter Variables, calls \code{FilterState} modules and
@@ -330,7 +336,6 @@ parameter queue_index (\code{character(1)}, \code{logical(1)})\cr
 index of the \code{private$queue} list where \code{ReactiveQueue} are kept.
 parameter element_id (\code{character(1)})\cr
 name of \code{ReactiveQueue} element.
-Remove shiny element. Method can be called from reactive session where
 \code{observeEvent} for remove-filter-state is set and also from \code{FilteredDataset}
 level, where shiny-session-namespace is different. That is why it's important
 to remove shiny elements from anywhere. In \code{add_filter_state} \code{session$ns(NULL)}

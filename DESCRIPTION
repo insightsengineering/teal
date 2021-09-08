@@ -21,7 +21,7 @@ Description: teal is a shiny based interactive exploration framework for
     analyzing clinical trials data. teal currently provides a dynamic filtering
     facility and different data viewers. teal shiny applications are built using
     standard shiny modules.
-License: file LICENSE
+License: Apache License 2.0 | file LICENSE
 Encoding: UTF-8
 LazyData: true
 biocViews:
@@ -54,7 +54,6 @@ Suggests:
     covr,
     httr,
     knitr,
-    nomnoml,
     random.cdisc.data (>= 0.3.11),
     readr,
     rmarkdown,
@@ -98,7 +97,6 @@ Collate:
     'data_label.R'
     'dummy_functions.R'
     'filter_spec.R'
-    'filter_utils.R'
     'filtered_data_wrappers.R'
     'get_attrs.R'
     'get_code.R'
@@ -125,6 +123,7 @@ Collate:
     'resolve_delayed.R'
     'select_spec.R'
     'set_args.R'
+    'set_filter_state.R'
     'stop_shiny.R'
     'teal.R'
     'teal_data.R'

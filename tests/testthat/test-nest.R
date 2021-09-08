@@ -1,3 +1,1 @@
-library(test.nest)
-
-test_all()
+test.nest::test_all()

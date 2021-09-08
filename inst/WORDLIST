@@ -34,10 +34,15 @@ dataname
 datanames
 Datanames
 DatasetConnector
+DDL
 debuggable
 dropdown
+enum
 extensibility
 FilteredData
+FilteredDataset
+FilterState
+FilterStates
 funder
 Gabe
 Genetech
