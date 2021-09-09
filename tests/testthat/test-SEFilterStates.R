@@ -138,6 +138,9 @@ testthat::test_that("get_fun method returns subset", {
 })
 
 testthat::test_that("get_call returns `output_dataname <- input_dataname` when no state is set", {
+  obj <- get_test_data()
+  test <- obj
+
   sefs <- teal:::SEFilterStates$new(
     input_dataname = "test",
     output_dataname = "test_filtered",
@@ -148,16 +151,21 @@ testthat::test_that("get_call returns `output_dataname <- input_dataname` when n
     isolate(sefs$get_call()),
     quote(test_filtered <- test)
   )
+
+  # now testing for equality of object
+  eval(isolate(sefs$get_call()))
+  testthat::expect_identical(test_filtered, test)
 })
 
 testthat::test_that("SEFilterStates$set_bookmark_state sets state with only select", {
+  obj <- get_test_data()
+  test <- obj
+
   sefs <- teal:::SEFilterStates$new(
     input_dataname = "test",
     output_dataname = "test_filtered",
     datalabel = character(0)
   )
-
-  obj <- get_test_data()
 
   fs <- list(
     select = list(Treatment = "ChIP")
@@ -173,16 +181,24 @@ testthat::test_that("SEFilterStates$set_bookmark_state sets state with only sele
       )
     )
   )
+
+  # now testing for equality of object
+  eval(isolate(sefs$get_call()))
+  testthat::expect_identical(test_filtered, subset(
+    test,
+    select = Treatment == "ChIP"
+  ))
 })
 
 testthat::test_that("SEFilterStates$set_bookmark_state sets state with only subset", {
+  obj <- get_test_data()
+  test <- obj
+
   sefs <- teal:::SEFilterStates$new(
     input_dataname = "test",
     output_dataname = "test_filtered",
     datalabel = character(0)
   )
-
-  obj <- get_test_data()
 
   fs <- list(
     subset = list(feature_id = c("ID001", "ID002"))
@@ -198,32 +214,44 @@ testthat::test_that("SEFilterStates$set_bookmark_state sets state with only subs
       )
     )
   )
+
+  # now testing for equality of object
+  eval(isolate(sefs$get_call()))
+  testthat::expect_identical(test_filtered, subset(
+    test,
+    subset = feature_id %in% c("ID001", "ID002")
+  ))
 })
 
 testthat::test_that("SEFilterStates$set_bookmark_state sets state with neither subset nor select", {
+  obj <- get_test_data()
+  test <- obj
+
   sefs <- teal:::SEFilterStates$new(
     input_dataname = "test",
     output_dataname = "test_filtered",
     datalabel = character(0)
   )
-
-  obj <- get_test_data()
 
   sefs$set_bookmark_state(data = obj)
   testthat::expect_identical(
     isolate(sefs$get_call()),
     quote(test_filtered <- test)
   )
+
+  # now testing for equality of object
+  eval(isolate(sefs$get_call()))
+  testthat::expect_identical(test_filtered, test)
 })
 
 testthat::test_that("SEFilterStates$set_bookmark_state sets filters in ReactiveQueue specified by the named list", {
+  obj <- get_test_data()
+  test <- obj
   sefs <- teal:::SEFilterStates$new(
     input_dataname = "test",
     output_dataname = "test_filtered",
     datalabel = character(0)
   )
-
-  obj <- get_test_data()
 
   fs <- list(
     select = list(Treatment = "ChIP"),
@@ -241,4 +269,12 @@ testthat::test_that("SEFilterStates$set_bookmark_state sets filters in ReactiveQ
       )
     )
   )
+
+  # now testing for equality of object
+  eval(isolate(sefs$get_call()))
+  testthat::expect_identical(test_filtered, subset(
+    test,
+    subset = feature_id %in% c("ID001", "ID002"),
+    select = Treatment == "ChIP"
+  ))
 })
