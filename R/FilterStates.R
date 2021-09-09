@@ -44,13 +44,11 @@
 #'     callModule(
 #'       module = rf$srv_add_filter_state,
 #'       id = "add",
-#'       data = df,
+#'       data = df
 #'     )
-#'
 #'     output$expr <- renderText({
 #'       pdeparse(rf$get_call())
 #'     })
-#'
 #'     observeEvent(
 #'       input$clear,
 #'       rf$queue_empty()
@@ -142,7 +140,7 @@ init_filter_states.SummarizedExperiment <- function(data, #nolint #nousage
 #'   varname = "x",
 #'   varlabel = "x variable",
 #'   input_dataname = as.name("data"),
-#'   use_dataname = TRUE
+#'   extract_type = "list"
 #' )
 #' isolate(filter_state$set_selected(c(3L, 8L)))
 #'
@@ -156,7 +154,7 @@ FilterStates <- R6::R6Class( # nolint
   classname = "FilterStates",
   public = list(
     #' @description
-    #' Initialize `FilterStates` object
+    #' Initializes this `FilterStates` object.
     #' @param data (`data.frame`, `MultiAssayExperiment`, `SummarizedExperiment`, `matrix`)\cr
     #'   R object which `subset` function is applied on.
     #'
@@ -177,6 +175,7 @@ FilterStates <- R6::R6Class( # nolint
       stopifnot(
         is.call(output_dataname) || is.name(output_dataname) || is_character_single(output_dataname)
       )
+      stopifnot(is_character_vector(datalabel, min = 0, max = 1))
 
       char_to_name <- function(x) {
         if (is.character(x)) {
@@ -189,7 +188,7 @@ FilterStates <- R6::R6Class( # nolint
       private$input_dataname <- char_to_name(input_dataname)
       private$output_dataname <- char_to_name(output_dataname)
       private$datalabel <- datalabel
-      return(invisible(self))
+      invisible(self)
     },
     #' @description
     #' Filter call
@@ -209,6 +208,8 @@ FilterStates <- R6::R6Class( # nolint
       queue_list <- private$queue
       filter_items <- sapply(
         X = queue_list,
+        USE.NAMES = TRUE,
+        simplify = FALSE,
         function(queue) {
           items <- queue$get()
           calls <- lapply(
@@ -217,17 +218,11 @@ FilterStates <- R6::R6Class( # nolint
               state$get_call()
             }
           )
-          calls <- Filter(
-            f = Negate(is.null),
-            x = calls
-          )
           if (length(calls) > 0) {
-            calls_combine_by(
+            utils.nest::calls_combine_by(
               operator = "&",
               calls = calls
             )
-          } else {
-            NULL
           }
         }
       )
@@ -238,7 +233,7 @@ FilterStates <- R6::R6Class( # nolint
 
       if (length(filter_items) > 0) {
         # below code translates to call by the names of filter_items
-        rhs <- call_with_colon(
+        rhs <- utils.nest::call_with_colon(
           self$get_fun(),
           private$input_dataname,
           unlist_args = filter_items
@@ -263,22 +258,21 @@ FilterStates <- R6::R6Class( # nolint
         # avoid no-op call
         NULL
       }
-
-
     },
 
     #' @description
-    #' Get function name
+    #' Gets the name of the function used to filter the data in this FilterStates.
     #'
     #' Get function name used to create filter call. By default it's a
     #' "subset" but can be overridden by child class method.
-    #' @return `character(1)`
+    #' @return `character(1)` the name of the function
     get_fun = function() {
-      return("subset")
+      "subset"
     },
 
     #' @description
-    #' Empty reactive queue from active filters
+    #' Remove all FilterState objects from all queues in this FilterStates.
+    #' @return NULL
     queue_empty = function() {
       queue_indices <- if (is.null(names(private$queue))) {
         seq_along(private$queue)
@@ -296,18 +290,18 @@ FilterStates <- R6::R6Class( # nolint
         })
       })
 
-      return(invisible(NULL))
+      invisible(NULL)
     },
 
     #' @description
-    #' Get queue elements
+    #' Returns a list of FilterState objects stored in this FilterStates.
     #' @param queue_index (`character(1)`, `integer(1)`)\cr
     #'   index of the `private$queue` list where `ReactiveQueue` are kept.
     #' @param element_id (`character(1)`)\cr
     #'   name of `ReactiveQueue` element.
     #' @return `list` of `FilterState` objects
     queue_get = function(queue_index, element_id = character(0)) {
-      stopifnot(is_character_single(queue_index) || is_integer_single(queue_index))
+      private$validate_queue_exists(queue_index)
       stopifnot(is_empty(element_id) || is_character_single(element_id))
 
       if (is_empty(element_id)) {
@@ -318,24 +312,26 @@ FilterStates <- R6::R6Class( # nolint
     },
 
     #' @description
-    #' Sets `ReactiveQueue` objects
+    #' Sets `ReactiveQueue` objects.
     #' @param x (`list` of `ReactiveQueue`)\cr
     #'  Must be a list even if single `ReactiveQueue` is set.
     queue_initialize = function(x) {
       stopifnot(is_class_list("ReactiveQueue")(x))
       private$queue <- x
-      return(NULL)
+      invisible(NULL)
     },
 
     #' @description
-    #' Add new `FilterState` to the queue
+    #' Adds a new `FilterState` object to this FilterStates
     #' @param x (`FilterState`)
     #' @param queue_index (`character(1)`, `integer(1)`)\cr
     #'   index of the `private$queue` list where `ReactiveQueue` are kept.
     #' @param element_id (`character(1)`)\cr
-    #'   name of `ReactiveQueue` element.
+    #'   name of the `ReactiveQueue` element.
+    #' @note throws an exception if the length of `x` does not match the length of
+    #'   `element_id`
     queue_push = function(x, queue_index, element_id) {
-      stopifnot(is_character_single(queue_index) || is_integer_single(queue_index))
+      private$validate_queue_exists(queue_index)
       stopifnot(is_character_single(element_id))
 
       states <- if (is.list(x)) {
@@ -345,13 +341,13 @@ FilterStates <- R6::R6Class( # nolint
       }
       state <- setNames(states, element_id)
       private$queue[[queue_index]]$push(state)
-      return(NULL)
+      invisible(NULL)
     },
 
     #' @description
-    #' Removes single filter state
+    #' Removes a single filter state
     #'
-    #' Removes single filter state with all shiny elements associated
+    #' Removes a single filter state with all shiny elements associated
     #' with this state. It removes:\cr
     #' * particular `FilterState` from `private$queue`
     #' * UI card created for this filter
@@ -361,8 +357,10 @@ FilterStates <- R6::R6Class( # nolint
     #' @param element_id (`character(1)`)\cr
     #'   name of `ReactiveQueue` element.
     queue_remove = function(queue_index, element_id) {
+      private$validate_queue_exists(queue_index)
+      stopifnot(is_character_single(element_id))
       .log("removing filter item", element_id, "from queue", queue_index)
-      stopifnot(is_character_single(queue_index) || is_integer_single(queue_index))
+      stopifnot(is_character_single(queue_index) || is_numeric_single(queue_index))
       stopifnot(is_character_single(element_id))
 
       filters <- self$queue_get(queue_index = queue_index, element_id = element_id)
@@ -399,7 +397,7 @@ FilterStates <- R6::R6Class( # nolint
     #'   Names of the `list` element should correspond to the name of the
     #'   column in `data`.
     set_bookmark_state = function(data, state) {
-      stop("Abstract class")
+      stop("Pure virtual method.")
     },
 
     #' @description
@@ -410,7 +408,7 @@ FilterStates <- R6::R6Class( # nolint
     #'  object containing columns to be used as filter variables.
     #' @return shiny.tag
     ui_add_filter_state = function(id, data) {
-      div("This object can't be filtered")
+      div("This object cannot be filtered")
     },
 
     #' @description
@@ -436,7 +434,7 @@ FilterStates <- R6::R6Class( # nolint
     observers = list(), # observers
     queue = NULL, # list of ReactiveQueue(s) initialized by self$queue_initialize
 
-    #' Module to add `FilterState` to queue
+    # Module to add `FilterState` to queue
     #'
     #' This module adds `FilterState` object to queue, inserts
     #' shiny UI to the Active Filter Variables, calls `FilterState` modules and
@@ -475,13 +473,13 @@ FilterStates <- R6::R6Class( # nolint
                 class = "no-left-right-padding",
                 tags$div(
                   tags$span(filter_state$get_varname(),
-                    class = "filter_panel_varname"
+                            class = "filter_panel_varname"
                   ),
                   if_not_character_empty(
                     filter_state$get_varlabel(),
                     if (tolower(filter_state$get_varname()) != tolower(filter_state$get_varlabel())) {
                       tags$span(filter_state$get_varlabel(),
-                        class = "filter_panel_varlabel"
+                                class = "filter_panel_varlabel"
                       )
                     }
                   )
@@ -518,7 +516,7 @@ FilterStates <- R6::R6Class( # nolint
       return(invisible(NULL))
     },
 
-    #' Remove shiny element. Method can be called from reactive session where
+    # Remove shiny element. Method can be called from reactive session where
     #' `observeEvent` for remove-filter-state is set and also from `FilteredDataset`
     #' level, where shiny-session-namespace is different. That is why it's important
     #' to remove shiny elements from anywhere. In `add_filter_state` `session$ns(NULL)`
@@ -534,27 +532,53 @@ FilterStates <- R6::R6Class( # nolint
 
       private$observers[[queue_id]]$destroy()
       private$observers[[queue_id]] <- NULL
+    },
+
+    # Checks if the queue of the given index was initialized in this FilterStates
+    # @param queue_index (character or integer)
+    validate_queue_exists = function(queue_index) {
+      stopifnot(is_character_single(queue_index) || is_numeric_single(queue_index))
+      if (
+        !(
+          is.numeric(queue_index) && all(queue_index <= length(private$queue) && queue_index > 0) ||
+          is.character(queue_index) && all(queue_index %in% names(private$queue))
+        )
+      ) {
+        stop(
+          paste(
+            "ReactiveQueue",
+            queue_index,
+            "has not been initialized in FilterStates object belonging to the dataset",
+            private$datalabel
+          )
+        )
+      }
+    },
+
+    # Maps the array of strings to sanitized unique HTML ids.
+    # @param keys `character` the array of strings
+    # @return `list` the mapping
+    map_vars_to_html_ids = function(keys) {
+      sanitized_values <- make.unique(gsub("[^[:alnum:]]", perl = TRUE, replacement = "", x = keys))
+      sanitized_values <- paste0("var_", sanitized_values)
+      stats::setNames(object = sanitized_values, nm = keys)
     }
   )
 )
 
 # DFFilterStates -----
-
 DFFilterStates <- R6::R6Class( # nolint
   classname = "DFFilterStates",
   inherit = FilterStates,
   public = list(
 
-    #' Initialize `DFFilterStates` object
+    #' Initializes `DFFilterStates` object
     #'
-    #' Initialize `DFFilterStates` object by setting `input_dataname`,
-    #' `output_dataname` and initializing `ReactiveQueue`. This class contains
+    #' Initializes `DFFilterStates` object by setting `input_dataname`,
+    #' `output_dataname` and initializing `ReactiveQueue`. This class contains a
     #' single `ReactiveQueue` with no specified name which means that
-    #' when calling function associated to this class (`dplyr::filter`), a list of
+    #' when calling the function associated to this class (`dplyr::filter`), a list of
     #' conditions are passed to unnamed arguments (`...`).
-    #'
-    #' @param data (`data.frame`)\cr
-    #'   R object which `dplyr::filter` function is applied on.
     #'
     #' @param input_dataname (`character(1)` or `name` or `call`)\cr
     #'   name of the data used on lhs of the expression
@@ -603,28 +627,37 @@ DFFilterStates <- R6::R6Class( # nolint
     #'   column in `data`.
     set_bookmark_state = function(data, state) {
       stopifnot(is.data.frame(data))
-      stopifnot(all(names(state) %in% names(data)))
+      stopifnot(all(names(state) %in% names(data)) || is(state, "default_filter"))
 
+      html_id_mapping <- private$map_vars_to_html_ids(get_filterable_varnames(colnames(data)))
       for (varname in names(state)) {
         value <- state[[varname]]
         fstate <- init_filter_state(
           data[[varname]],
           varname = as.name(varname),
           varlabel = private$get_varlabels(varname),
-          input_dataname = private$input_dataname,
-          use_dataname = FALSE
+          input_dataname = private$input_dataname
         )
-        fstate$set_selected(value = value)
+        if (!is(value, "default_filter")) {
+          set_filter_state(x = value, fstate)
+        }
 
-        id <- digest::digest(sprintf("%s_%s", 1L, varname), algo = "md5")
-        callModule(
-          module = private$add_filter_state,
-          id = id,
-          filter_state = fstate,
-          queue_index = 1L,
-          element_id = varname
-        )
-
+        if (shiny::isRunning()) {
+          id <- html_id_mapping[[varname]]
+          callModule(
+            module = private$add_filter_state,
+            id = id,
+            filter_state = fstate,
+            queue_index = 1L,
+            element_id = varname
+          )
+        } else {
+          self$queue_push(
+            x = fstate,
+            queue_index = 1L,
+            element_id = varname
+          )
+        }
       }
     },
 
@@ -675,7 +708,6 @@ DFFilterStates <- R6::R6Class( # nolint
       stopifnot(is.data.frame(data))
 
       active_filter_vars <- reactive({
-
         vapply(
           X = self$queue_get(queue_index = 1L),
           FUN.VALUE = character(1),
@@ -715,10 +747,11 @@ DFFilterStates <- R6::R6Class( # nolint
         }
       )
 
+      html_id_mapping <- private$map_vars_to_html_ids(get_filterable_varnames(colnames(data)))
       observeEvent(
         eventExpr = input$var_to_add,
         handlerExpr = {
-          id <- digest::digest(sprintf("%s_%s", 1L, input$var_to_add), algo = "md5")
+          id <- html_id_mapping[[input$var_to_add]]
           callModule(
             private$add_filter_state,
             id = id,
@@ -726,8 +759,7 @@ DFFilterStates <- R6::R6Class( # nolint
               data[[input$var_to_add]],
               varname = as.name(input$var_to_add),
               varlabel = private$get_varlabels(input$var_to_add),
-              input_dataname = private$input_dataname,
-              use_dataname = FALSE
+              input_dataname = private$input_dataname
             ),
             queue_index = 1L,
             element_id = input$var_to_add
@@ -736,7 +768,7 @@ DFFilterStates <- R6::R6Class( # nolint
         }
       )
 
-      return(NULL)
+      NULL
     }
   ),
   private = list(
@@ -827,9 +859,10 @@ MAEFilterStates <- R6::R6Class( # nolint
     set_bookmark_state = function(data, state) {
       stopifnot(is(data, "MultiAssayExperiment"))
       stopifnot(
-        all(names(state) %in% names(colData(data)))
+        all(names(state) %in% names(SummarizedExperiment::colData(data))) || is(state, "default_filter")
       )
 
+      html_id_mapping <- private$map_vars_to_html_ids(get_filterable_varnames(SummarizedExperiment::colData(data)))
       for (varname in names(state)) {
         value <- state[[varname]]
         fstate <- init_filter_state(
@@ -837,19 +870,28 @@ MAEFilterStates <- R6::R6Class( # nolint
           varname = as.name(varname),
           varlabel = private$get_varlabels(varname),
           input_dataname = private$input_dataname,
-          use_dataname = TRUE
+          extract_type = "list"
         )
-        fstate$set_selected(value = value)
+        if (!is(state, "default_filter")) {
+          set_filter_state(x  = value, fstate)
+        }
 
-        id <- digest::digest(sprintf("%s_%s", "y", varname), algo = "md5")
-        callModule(
-          private$add_filter_state,
-          id = id,
-          filter_state = fstate,
-          queue_index = "y",
-          element_id = varname
-        )
-
+        if (shiny::isRunning()) {
+          id <- html_id_mapping[[varname]]
+          callModule(
+            private$add_filter_state,
+            id = id,
+            filter_state = fstate,
+            queue_index = "y",
+            element_id = varname
+          )
+        } else {
+          self$queue_push(
+            x = fstate,
+            queue_index = "y",
+            element_id = varname
+          )
+        }
       }
     },
 
@@ -882,7 +924,7 @@ MAEFilterStates <- R6::R6Class( # nolint
     },
 
     #' @description
-    #' Shiny server module to add filter variable
+    #' Shiny server module to add filter variable.
     #'
     #' Module controls available choices to select as a filter variable.
     #' Selected filter variable is being removed from available choices.
@@ -936,10 +978,11 @@ MAEFilterStates <- R6::R6Class( # nolint
         }
       )
 
+      html_id_mapping <- private$map_vars_to_html_ids(get_filterable_varnames(SummarizedExperiment::colData(data)))
       observeEvent(
         eventExpr = input$var_to_add,
         handlerExpr = {
-          id <- digest::digest(sprintf("%s_%s", "y", input$var_to_add), algo = "md5")
+          id <- html_id_mapping[[input$var_to_add]]
           callModule(
             private$add_filter_state,
             id = id,
@@ -948,7 +991,7 @@ MAEFilterStates <- R6::R6Class( # nolint
               varname = as.name(input$var_to_add),
               varlabel = private$get_varlabels(input$var_to_add),
               input_dataname = private$input_dataname,
-              use_dataname = TRUE
+              extract_type = "list"
             ),
             queue_index = "y",
             element_id = input$var_to_add
@@ -1030,50 +1073,72 @@ SEFilterStates <- R6::R6Class( # nolint
     set_bookmark_state = function(data, state) {
       stopifnot(is(data, "SummarizedExperiment"))
       stopifnot(
-        all(names(state) %in% c("subset", "select")),
-        is.null(state$subset) || all(names(state$subset) %in% names(rowData(data))),
-        is.null(state$select) || all(names(state$select) %in% names(colData(data)))
+        all(names(state) %in% c("subset", "select")) || is(state, "default_filter"),
+        is.null(state$subset) || all(names(state$subset) %in% names(SummarizedExperiment::rowData(data))),
+        is.null(state$select) || all(names(state$select) %in% names(SummarizedExperiment::colData(data)))
       )
 
+      row_html_mapping <- private$map_vars_to_html_ids(get_filterable_varnames(SummarizedExperiment::rowData(data)))
+      row_html_mapping <- setNames(object = paste0("rowData_", row_html_mapping), nm = names(row_html_mapping))
       for (varname in names(state$subset)) {
         value <- state$subset[[varname]]
         fstate <- init_filter_state(
           SummarizedExperiment::rowData(data)[[varname]],
           varname = as.name(varname),
-          input_dataname = private$input_dataname,
-          use_dataname = FALSE
+          input_dataname = private$input_dataname
         )
-        fstate$set_selected(value = value)
+        if (!is(state, "default_filter")) {
+          set_filter_state(x = value, fstate)
+        }
 
-        id <- digest::digest(sprintf("%s_%s", "subset", varname), algo = "md5")
-        callModule(
-          private$add_filter_state,
-          id = id,
-          filter_state = fstate,
-          queue_index = "subset",
-          element_id = varname
-        )
+        if (shiny::isRunning()) {
+          id <- row_html_mapping[[varname]]
+          callModule(
+            private$add_filter_state,
+            id = id,
+            filter_state = fstate,
+            queue_index = "subset",
+            element_id = varname
+          )
+        } else {
+          self$queue_push(
+            x = fstate,
+            queue_index = "subset",
+            element_id = varname
+          )
+        }
       }
 
 
+      col_html_mapping <- private$map_vars_to_html_ids(get_filterable_varnames(SummarizedExperiment::colData(data)))
+      col_html_mapping <- setNames(object = paste0("colData_", col_html_mapping), nm = names(col_html_mapping))
       for (varname in names(state$select)) {
         value <- state$select[[varname]]
         fstate <- init_filter_state(
           SummarizedExperiment::colData(data)[[varname]],
           varname = as.name(varname),
-          input_dataname = private$input_dataname,
-          use_dataname = FALSE
+          input_dataname = private$input_dataname
         )
-        fstate$set_selected(value = value)
+        if (!is(state, "default_filter")) {
+          set_filter_state(x = value, fstate)
+        }
 
-        id <- digest::digest(sprintf("%s_%s", "select", varname), algo = "md5")
-        callModule(
-          private$add_filter_state,
-          id = id,
-          filter_state = fstate,
-          queue_index = "select",
-          element_id = varname
-        )
+        if (shiny::isRunning()) {
+          id <- col_html_mapping[[varname]]
+          callModule(
+            private$add_filter_state,
+            id = id,
+            filter_state = fstate,
+            queue_index = "select",
+            element_id = varname
+          )
+        } else {
+          self$queue_push(
+            x = fstate,
+            queue_index = "select",
+            element_id = varname
+          )
+        }
       }
 
       return(NULL)
@@ -1228,18 +1293,19 @@ SEFilterStates <- R6::R6Class( # nolint
         }
       )
 
+      col_html_mapping <- private$map_vars_to_html_ids(get_filterable_varnames(col_data))
+      col_html_mapping <- setNames(object = paste0("colData_", col_html_mapping), nm = names(col_html_mapping))
       observeEvent(
         eventExpr = input$col_to_add,
         handlerExpr = {
-          id <- digest::digest(sprintf("%s_%s", "select", input$col_to_add), algo = "md5")
+          id <- col_html_mapping[[input$col_to_add]]
           callModule(
             private$add_filter_state,
             id = id,
             filter_state = init_filter_state(
               SummarizedExperiment::colData(data)[[input$col_to_add]],
               varname = as.name(input$col_to_add),
-              input_dataname = private$input_dataname,
-              use_dataname = FALSE
+              input_dataname = private$input_dataname
             ),
             queue_index = "select",
             element_id = input$col_to_add
@@ -1247,18 +1313,19 @@ SEFilterStates <- R6::R6Class( # nolint
         }
       )
 
+      row_html_mapping <- private$map_vars_to_html_ids(get_filterable_varnames(row_data))
+      row_html_mapping <- setNames(object = paste0("rowData_", row_html_mapping), nm = names(row_html_mapping))
       observeEvent(
         eventExpr = input$row_to_add,
         handlerExpr = {
-          id <- digest::digest(sprintf("%s_%s", "subset", input$row_to_add), algo = "md5")
+          id <- row_html_mapping[[input$row_to_add]]
           callModule(
             private$add_filter_state,
             id = id,
             filter_state = init_filter_state(
               SummarizedExperiment::rowData(data)[[input$row_to_add]],
               varname = as.name(input$row_to_add),
-              input_dataname = private$input_dataname,
-              use_dataname = FALSE
+              input_dataname = private$input_dataname
             ),
             queue_index = "subset",
             element_id = input$row_to_add
@@ -1266,11 +1333,10 @@ SEFilterStates <- R6::R6Class( # nolint
         }
       )
 
-      return(NULL)
+      NULL
     }
   )
 )
-
 
 # MatrixFilterStates -----
 MatrixFilterStates <- R6::R6Class( # nolint
@@ -1314,9 +1380,10 @@ MatrixFilterStates <- R6::R6Class( # nolint
     set_bookmark_state = function(data, state) {
       stopifnot(is(data, "matrix"))
       stopifnot(
-        all(names(state) %in% names(colData(data)))
+        all(names(state) %in% names(SummarizedExperiment::colData(data))) || is(state, "default_filter")
       )
 
+      html_id_mapping <- private$map_vars_to_html_ids(get_filterable_varnames(data))
       for (varname in names(state)) {
         value <- state[[varname]]
         fstate <- init_filter_state(
@@ -1324,18 +1391,28 @@ MatrixFilterStates <- R6::R6Class( # nolint
           varname = as.name(varname),
           varlabel = private$get_varlabels(varname),
           input_dataname = private$input_dataname,
-          use_dataname = FALSE
+          extract_type = "matrix"
         )
-        fstate$set_selected(value = value)
+        if (!is(state, "default_filter")) {
+          set_filter_state(x = value, fstate)
+        }
 
-        id <- digest::digest(sprintf("%s_%s", "subset", varname), algo = "md5")
-        callModule(
-          private$add_filter_state,
-          id = id,
-          filter_state = fstate,
-          queue_index = "subset",
-          element_id = varname
-        )
+        if (shiny::isRunning()) {
+          id <- html_id_mapping[[varname]]
+          callModule(
+            private$add_filter_state,
+            id = id,
+            filter_state = fstate,
+            queue_index = "subset",
+            element_id = varname
+          )
+        } else {
+          self$queue_push(
+            x = fstate,
+            queue_index = 1L,
+            element_id = varname
+          )
+        }
       }
     },
 
@@ -1425,10 +1502,11 @@ MatrixFilterStates <- R6::R6Class( # nolint
         }
       )
 
+      html_id_mapping <- private$map_vars_to_html_ids(get_filterable_varnames(data))
       observeEvent(
         eventExpr = input$var_to_add,
         handlerExpr = {
-          id <- digest::digest(sprintf("%s_%s", "subset", input$var_to_add), algo = "md5")
+          id <- html_id_mapping[[input$var_to_add]]
           callModule(
             private$add_filter_state,
             id = id,
@@ -1437,7 +1515,7 @@ MatrixFilterStates <- R6::R6Class( # nolint
               varname = as.name(input$var_to_add),
               varlabel = private$get_varlabel(input$var_to_add),
               input_dataname = private$input_dataname,
-              use_dataname = FALSE
+              extract_type = "matrix"
             ),
             queue_index = "subset",
             element_id = input$var_to_add
@@ -1445,7 +1523,7 @@ MatrixFilterStates <- R6::R6Class( # nolint
         }
       )
 
-      return(NULL)
+      NULL
     }
   )
 )
@@ -1453,12 +1531,12 @@ MatrixFilterStates <- R6::R6Class( # nolint
 # utils -----
 .filterable_class <- c("logical", "integer", "numeric", "factor", "character", "Date", "POSIXct", "POSIXlt")
 
-#' Get filterable variable names
+#' Gets filterable variable names
 #'
-#' Get filterable variable names from given data which class
-#' matches `.filterable_class`
-#' @param data (`list`, `matrix`)\cr
-#'   R object containing columns which class can be checked through `vapply` or `apply`.
+#' Gets filterable variable names from a given object. The names match variables
+#' of classes in the `teal:::.filterable_class` enum.
+#' @param data (`object`)\cr
+#'   the R object containing elements which class can be checked through `vapply` or `apply`.
 #'
 #' @examples
 #' df <- data.frame(
@@ -1469,7 +1547,7 @@ MatrixFilterStates <- R6::R6Class( # nolint
 #'   z = complex(3)
 #' )
 #' teal:::get_filterable_varnames(df)
-#' @return `character` vector
+#' @return `character` the array of the matched element names
 get_filterable_varnames <- function(data) {
   UseMethod("get_filterable_varnames")
 }
@@ -1488,17 +1566,24 @@ get_filterable_varnames.default <- function(data) { #nolint #nousage
 get_filterable_varnames.matrix <- function(data) { #nolint #nousage
   # all columns are the same type in matrix
   is_expected_class <- class(data[, 1]) %in% .filterable_class
-  if (is_expected_class) {
+  if (is_expected_class && !is.null(names(data))) {
     names(data)
   } else {
     character(0)
   }
 }
 
-
+#' @title Returns a `choices_labeled` object
+#'
+#' @param data `data.frame`
+#' @param choices `character` the array of chosen variables
+#' @param varlabels `character` the labels of variables in data
+#' @param keys `character` the names of the key columns in data
+#' @return `character(0)` if choices are empty; a `choices_labeled` object otherwise
+#' @noRd
 data_choices_labeled <- function(data, choices, varlabels = character(0), keys = character(0)) {
   if (is_empty(choices)) {
-    character(0)
+    return(character(0))
   }
 
   choice_labels <- if (identical(varlabels, character(0))) {

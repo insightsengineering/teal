@@ -20,7 +20,7 @@ Queue <- R6::R6Class( # nolint
         private$set(new_elements, append = TRUE)
       } else {
         for (i in seq_along(new_elements)) {
-          if (length(new_elements) == 1 || is.R6(new_elements)) {
+          if (length(new_elements[i]) == 1 || is.R6(new_elements[i])) {
             # new_elements[i] does not discard names if it's a names list
             private$set(new_elements[i], append = TRUE)
           }

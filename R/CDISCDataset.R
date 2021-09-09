@@ -76,9 +76,10 @@ CDISCDataset <- R6::R6Class( # nolint
                         x = self$get_raw_data(),
                         keys = self$get_keys(),
                         parent = self$get_parent(),
-                        code = self$get_code_class(),
+                        code = private$code,
                         label = self$get_dataset_label(),
                         vars = list()) {
+
       res <- self$initialize(
         dataname = dataname,
         x = x,

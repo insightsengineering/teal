@@ -1,10 +1,7 @@
-#' Initialize `FilteredDataset`
+#' Initializes `FilteredDataset`
 #'
 #' `FilteredDataset` contains `Dataset`
 #' @param dataset (`Dataset`)\cr
-#' @param join_keys (`named list`)\cr
-#'   named list of join keys to merge this dataset with
-#'   it's relatives.
 #' @examples
 #' library(scda)
 #' adsl <- cdisc_dataset("ADSL", synthetic_cdisc_data("latest")$adsl)
@@ -12,8 +9,7 @@
 #' data <- cdisc_data(adsl, adtte)
 #'
 #' filtered_dataset <- teal:::init_filtered_dataset(
-#'   dataset = adtte,
-#'   join_keys = data$get_join_keys()$get("ADTTE")
+#'   dataset = adtte
 #' )
 #'
 #' \dontrun{
@@ -51,23 +47,23 @@
 #'   }
 #' )
 #' }
-init_filtered_dataset <- function(dataset, join_keys) { #nolint
+init_filtered_dataset <- function(dataset) { #nolint
   UseMethod("init_filtered_dataset")
 }
 
 #' @export
-init_filtered_dataset.Dataset <- function(dataset, join_keys) { #nolint #nousage
-  DefaultFilteredDataset$new(dataset, join_keys)
+init_filtered_dataset.Dataset <- function(dataset) { #nolint #nousage
+  DefaultFilteredDataset$new(dataset)
 }
 
 #' @export
-init_filtered_dataset.CDISCDataset <- function(dataset, join_keys) { #nolint #nousage
-  CDISCFilteredDataset$new(dataset, join_keys)
+init_filtered_dataset.CDISCDataset <- function(dataset) { #nolint #nousage
+  CDISCFilteredDataset$new(dataset)
 }
 
 #' @export
-init_filtered_dataset.MAEDataset <- function(dataset, join_keys) { #nolint #nousage
-  MAEFilteredDataset$new(dataset, join_keys)
+init_filtered_dataset.MAEDataset <- function(dataset) { #nolint #nousage
+  MAEFilteredDataset$new(dataset)
 }
 
 # FilteredDataset abstract --------
@@ -83,17 +79,13 @@ FilteredDataset <- R6::R6Class( # nolint
   ## __Public Methods ====
   public = list(
     #' @description
-    #' Initialize `FilteredDataset` object
+    #' Initializes this `FilteredDataset` object
     #'
     #' @param dataset (`Dataset`)\cr
     #'  single dataset for which filters are rendered
-    #' @param join_keys (`list`)\cr
-    #'  keys to join this `dataset` with the other
-    initialize = function(dataset, join_keys) {
-      stopifnot(is.null(join_keys) || is_fully_named_list(join_keys))
+    initialize = function(dataset) {
       stopifnot(is(dataset, "Dataset"))
       private$dataset <- dataset
-      private$join_keys <- join_keys
 
       dataname <- self$get_dataname()
       private$reactive_data <- reactive({
@@ -112,44 +104,46 @@ FilteredDataset <- R6::R6Class( # nolint
         get(x = self$get_filtered_dataname(), envir = env)
       })
 
-      return(invisible(self))
+      invisible(self)
     },
 
     #' @description
-    #' Add objects to the filter call evaluation environment
+    #' Adds objects to the filter call evaluation environment
     #' @param name (`character`) object name
     #' @param value object value
+    #' @return invisibly this FilteredDataset
     add_to_eval_env = function(name, value) {
       stopifnot(is_character_single(name))
       private$eval_env <- c(private$eval_env, setNames(value, name))
-      return(invisible(self))
+      invisible(self)
     },
 
 
     #' @description
     #' Removes all active filter items applied to this dataset
+    #' @return NULL
     queues_empty = function() {
       lapply(
         self$get_filter_states(),
         function(queue) queue$queue_empty()
       )
-      return(NULL)
+      NULL
     },
 
     # getters ----
     #' @description
-    #' Get filter expression
+    #' Gets a filter expression
     #'
     #' This functions returns filter calls equivalent to selected items
     #' within each of `filter_states`. Configuration of the calls is constant and
     #' depends on `filter_states` type and order which are set during initialization.
     #' @return filter `call` or `list` of filter calls
     get_call = function() {
-      stop("Abstract class method")
+      stop("Pure virtual method.")
     },
 
     #' @description
-    #' Get raw data of this dataset
+    #' Gets raw data of this dataset
     #' @param filtered (`logical(1)`)\cr
     #'   whether returned data should be filtered or not
     #' @return type of returned object depending on a data stored in
@@ -163,16 +157,16 @@ FilteredDataset <- R6::R6Class( # nolint
     },
 
     #' @description
-    #' Get reactive object which returns filtered data
+    #' Gets the reactive object which returns filtered data
     #' @return (`reactive`)
     get_data_reactive = function() {
       private$reactive_data
     },
 
     #' @description
-    #' Get filter states
+    #' Gets the filter states
     #' @param id (`character(1)`, `character(0)`)\cr
-    #'   id of the `private$filter_states` list element where `FilterStates` is kept.
+    #'   the id of the `private$filter_states` list element where `FilterStates` is kept.
     #' @return `FilterStates` or `list` of `FilterStates` objects.
     get_filter_states = function(id = character(0)) {
       if (is_empty(id)) {
@@ -180,24 +174,6 @@ FilteredDataset <- R6::R6Class( # nolint
       } else {
         private$filter_states[[id]]
       }
-    },
-
-    #' @description
-    #' Get data info
-    #' @param filtered (`logical(1)`)\cr
-    #'   whether `data.info` should depend on filtered data.
-    #' @return `integer(1)` number of rows
-    get_data_info = function(filtered = FALSE) {
-      nrow(self$get_data(filtered = filtered))
-    },
-
-    #' @description
-    #' Get subjects info
-    #' @param filtered (`logical(1)`)\cr
-    #'   whether `data.info` should depend on filtered data.
-    #' @return `integer` number of unique subjects
-    get_subjects_info = function(filtered) {
-      integer(0)
     },
 
     #' @description
@@ -210,34 +186,46 @@ FilteredDataset <- R6::R6Class( # nolint
     },
 
     #' @description
-    #' Get dataset
+    #' Gets the dataset in this FilteredDataset
     #' @return `Dataset`
     get_dataset = function() {
       private$dataset
     },
 
     #' @description
+    #' Get filter overview rows of a dataset
+    #'
+    #' @return (`matrix`) matrix of observations and subjects
+    get_filter_overview_info = function() {
+      df <- cbind(private$get_filter_overview_nobs(), "")
+      rownames(df) <- self$get_dataname()
+      colnames(df) <- c("Obs", "Subjects")
+      df
+    },
+
+    #' @description
     #' Returns the hash of the unfiltered dataset
-    #' @return (`character(1)`)
+    #' @return (`character(1)`) the hash
     get_hash = function() {
       private$dataset$get_hash()
     },
 
     #' @description
-    #' Get keys for the dataset
-    #' @return (`character`) keys of dataset
+    #' Gets the keys for the dataset of this FilteredDataset
+    #' @return (`character`) the keys of dataset
     get_keys = function() {
       self$get_dataset()$get_keys()
     },
 
-    #' Get join keys to join this dataset with others
+    #' Gets join keys to join the dataset of this FilteredDataset
+    #' with other Dataset objects.
     #' @return `list` of keys
     get_join_keys = function() {
-      private$join_keys
+      private$dataset$get_join_keys()$get(self$get_dataname())
     },
 
     #' @description
-    #' Get labels of variables in the data
+    #' Gets labels of variables in the data
     #'
     #' Variables are the column names of the data.
     #' Either, all labels must have been provided for all variables
@@ -254,28 +242,19 @@ FilteredDataset <- R6::R6Class( # nolint
       if (is.null(labels)) {
         return(NULL)
       }
-
-      if (!is.null(variables)) {
-        check_in_subset(
-          variables,
-          self$get_varnames(),
-          pre_msg = sprintf("Variables do not exist in data %s:", self$get_dataname())
-        ) # otherwise, NA values will be added (also as names)
-        labels <- labels[variables]
-      }
-
-      return(labels)
+      if (!is.null(variables)) labels <- labels[intersect(self$get_varnames(), variables)]
+      labels
     },
 
     #' @description
-    #' Get variable names from dataset
-    #' @return `character`
+    #' Gets variable names from dataset
+    #' @return `character` the variable names
     get_varnames = function() {
       colnames(self$get_data(filtered = FALSE))
     },
 
     #' @description
-    #' Get suffixed dataname
+    #' Gets the suffixed dataname
     #' Used when filtering the data to get `<dataname>_FILTERED`,
     #' `<dataname>_FILTERED_ALONE` or any other name.
     #' @param dataname (`character(1)`) dataname
@@ -286,13 +265,13 @@ FilteredDataset <- R6::R6Class( # nolint
     },
 
     #' @description
-    #' Set bookmark state
+    #' Sets the bookmark state
     #'
     #' @param state (`named list`)\cr
     #'  containing values of the initial filter. Values should be relevant
     #'  to the referred column.
     set_bookmark_state = function(state) {
-      stop("Abstract class")
+      stop("Pure virtual method.")
     },
 
     # modules ------
@@ -382,7 +361,7 @@ FilteredDataset <- R6::R6Class( # nolint
     #'
     #' @return function - shiny UI module
     ui_add_filter_state = function(id) {
-      stop("Abstract class method")
+      stop("Pure virtual method")
     },
 
     #' @description
@@ -394,7 +373,7 @@ FilteredDataset <- R6::R6Class( # nolint
     #' @param session (`shiny`)\cr
     #' @return function - shiny server module
     srv_add_filter_state = function(input, output, session) {
-      stop("Abstract class method")
+      stop("Pure virtual method")
     }
   ),
   ## __Private Fields ====
@@ -403,7 +382,6 @@ FilteredDataset <- R6::R6Class( # nolint
     reactive_data = NULL, # reactive
     eval_env = list(),
     filter_states = list(),
-    join_keys = NULL, # JoinKeySet
 
     # Adds `FilterStates` to the `private$filter_states`.
     # `FilterStates` is added once for each element of the dataset.
@@ -449,15 +427,13 @@ DefaultFilteredDataset <- R6::R6Class( # nolint
   public = list(
 
     #' @description
-    #' Initialize `DefaultFilteredDataset` object
+    #' Initializes this `DefaultFilteredDataset` object
     #'
     #' @param dataset (`Dataset`)\cr
     #'  single dataset for which filters are rendered
-    #' @param join_keys (`list`)\cr
-    #'  keys to join this `dataset` with the other
-    initialize = function(dataset, join_keys) {
+    initialize = function(dataset) {
       stopifnot(is(dataset, "Dataset"))
-      super$initialize(dataset, join_keys)
+      super$initialize(dataset)
       dataname <- get_dataname(dataset)
 
       private$add_filter_states(
@@ -470,11 +446,11 @@ DefaultFilteredDataset <- R6::R6Class( # nolint
         ),
         id = "filter"
       )
-      return(invisible(self))
+      invisible(self)
     },
 
     #' @description
-    #' Get filter expression
+    #' Gets the filter expression
     #'
     #' This functions returns filter calls equivalent to selected items
     #' within each of `filter_states`. Configuration of the calls is constant and
@@ -499,6 +475,7 @@ DefaultFilteredDataset <- R6::R6Class( # nolint
     #' @param state (`named list`)\cr
     #'  containing values of the initial filter. Values should be relevant
     #'  to the referred column.
+    #' @return invisibly `NULL`
     set_bookmark_state = function(state) {
       stopifnot(is.list(state))
       data <- self$get_data(filtered = FALSE)
@@ -507,7 +484,7 @@ DefaultFilteredDataset <- R6::R6Class( # nolint
         state = state,
         data = data
       )
-      return(invisible(NULL))
+      invisible(NULL)
     },
 
     #' @description
@@ -551,6 +528,15 @@ DefaultFilteredDataset <- R6::R6Class( # nolint
     }
   ),
   private = list(
+    # Gets filter overview observations number and returns a
+    # list of the number of observations of filtered/non-filtered datasets
+    get_filter_overview_nobs = function() {
+      f_rows <- nrow(self$get_data(filtered = TRUE))
+      nf_rows <- nrow(self$get_data(filtered = FALSE))
+      list(
+        paste0(f_rows, "/", nf_rows)
+      )
+    }
   )
 )
 
@@ -603,7 +589,7 @@ CDISCFilteredDataset <- R6::R6Class( # nolint
             y = if (is_empty(parent_keys)) {
               as.name(filtered_parentname)
             } else {
-              call_extract_array(
+              utils.nest::call_extract_array(
                 dataname = filtered_parentname,
                 column = parent_keys,
                 aisle = call("=", as.name("drop"), FALSE)
@@ -623,21 +609,17 @@ CDISCFilteredDataset <- R6::R6Class( # nolint
     },
 
     #' @description
-    #' Get subjects info
-    #' @param filtered (`logical(1)`)\cr
-    #'   whether subject number should depend on filtered data.
-    #' @return `integer(1)` number of unique subjects
-    get_subjects_info = function(filtered) {
-      subject_keys <- if (!is_empty(self$get_dataset()$get_parent())) {
-        self$get_join_keys()[[self$get_dataset()$get_parent()]]
-      } else {
-        self$get_keys()
-      }
-      if (is_empty(subject_keys)) {
-        dplyr::n_distinct(self$get_data(filtered = filtered))
-      } else {
-        dplyr::n_distinct(self$get_data(filtered = filtered)[subject_keys])
-      }
+    #' Get filter overview rows of a dataset
+    #'
+    #' @return (`matrix`) matrix of observations and subjects
+    get_filter_overview_info = function() {
+      df <- cbind(
+        private$get_filter_overview_nobs(),
+        private$get_filter_overview_nsubjs()
+      )
+      rownames(df) <- self$get_dataname()
+      colnames(df) <- c("Obs", "Subjects")
+      df
     },
 
     #' @description
@@ -690,6 +672,30 @@ CDISCFilteredDataset <- R6::R6Class( # nolint
         join_columns_names <- self$get_join_keys()[[self$get_dataset()$get_parent()]]
         dplyr::select(self$get_dataset()$data, -all_of(join_columns_names))
       }
+    },
+
+    # Gets filter overview subjects number and returns a list
+    # of the number of subjects of filtered/non-filtered datasets
+    get_filter_overview_nsubjs = function() {
+      subject_keys <- if (!is_empty(self$get_dataset()$get_parent())) {
+        self$get_join_keys()[[self$get_dataset()$get_parent()]]
+      } else {
+        self$get_keys()
+      }
+
+      f_rows <- if (is_empty(subject_keys)) {
+        dplyr::n_distinct(self$get_data(filtered = TRUE))
+      } else {
+        dplyr::n_distinct(self$get_data(filtered = TRUE)[subject_keys])
+      }
+
+      nf_rows <- if (is_empty(subject_keys)) {
+        dplyr::n_distinct(self$get_data(filtered = FALSE))
+      } else {
+        dplyr::n_distinct(self$get_data(filtered = FALSE)[subject_keys])
+      }
+
+      list(paste0(f_rows, "/", nf_rows))
     }
   )
 )
@@ -707,11 +713,9 @@ MAEFilteredDataset <- R6::R6Class( # nolint
     #'
     #' @param dataset (`MAEDataset`)\cr
     #'  single dataset for which filters are rendered
-    #' @param join_keys (`list`)\cr
-    #'  keys to join this `dataset` with the other
-    initialize = function(dataset, join_keys) {
+    initialize = function(dataset) {
       stopifnot(is(dataset, "MAEDataset"))
-      super$initialize(dataset, join_keys)
+      super$initialize(dataset)
 
       dataname <- self$get_dataname()
       raw_data <- get_raw_data(dataset)
@@ -736,7 +740,7 @@ MAEFilteredDataset <- R6::R6Class( # nolint
       lapply(
         experiment_names,
         function(experiment_name) {
-          input_dataname <- call_extract_list(
+          input_dataname <- utils.nest::call_extract_list(
             sprintf("%s_FILTERED", dataname),
             experiment_name,
             dollar = FALSE
@@ -782,16 +786,22 @@ MAEFilteredDataset <- R6::R6Class( # nolint
     },
 
     #' @description
-    #' Get data info
-    #' @param filtered (`logical(1)`)\cr
-    #'   whether `data.info` should depend on filtered data.
-    #' @return `integer(1)` number of rows in `colData(data)`
-    get_data_info = function(filtered = FALSE) {
-      nrow(
-        SummarizedExperiment::colData(
-          self$get_data(filtered = filtered)
-        )
+    #' Get filter overview rows of a dataset
+    #'
+    #' @return (`matrix`) matrix of observations and subjects
+    get_filter_overview_info = function() {
+      names_exps <- paste0("- ", names(self$get_data(filtered = FALSE)))
+      mae_and_exps <- c(self$get_dataname(), names_exps)
+
+      df <- cbind(
+        private$get_filter_overview_nobs(),
+        private$get_filter_overview_nsubjs()
       )
+
+      rownames(df) <- mae_and_exps
+      colnames(df) <- c("Obs", "Subjects")
+
+      df
     },
 
     #' @description
@@ -891,6 +901,65 @@ MAEFilteredDataset <- R6::R6Class( # nolint
             data = data[[experiment_name]] # SummarizedExperiment or matrix
           )
         }
+      )
+    }
+  ),
+  private = list(
+    # Gets filter overview observations number and returns a
+    # list of the number of observations of filtered/non-filtered datasets
+    get_filter_overview_nobs = function() {
+      data_f <- self$get_data(filtered = TRUE)
+      data_nf <- self$get_data(filtered = FALSE)
+      experiment_names <- names(data_nf)
+      mae_total_data_info <- ""
+
+      data_info <- lapply(
+        experiment_names,
+        function(experiment_name) {
+          data_f_rows <- ncol(data_f[[experiment_name]])
+          data_nf_rows <- ncol(data_nf[[experiment_name]])
+
+          data_info <- paste0(data_f_rows, "/", data_nf_rows)
+          data_info
+        }
+      )
+
+      append(
+        list(mae_total_data_info),
+        data_info
+      )
+    },
+
+    # Gets filter overview subjects number and returns a list
+    # of the number of subjects of filtered/non-filtered datasets
+    get_filter_overview_nsubjs = function() {
+      data_f <- self$get_data(filtered = TRUE)
+      data_nf <- self$get_data(filtered = FALSE)
+      experiment_names <- names(data_nf)
+
+      data_f_subjects_info <- nrow(SummarizedExperiment::colData(self$get_data(filtered = TRUE)))
+      data_nf_subjects_info <- nrow(SummarizedExperiment::colData(self$get_data(filtered = FALSE)))
+      mae_total_subjects_info <- paste0(data_f_subjects_info, "/", data_nf_subjects_info)
+
+      get_experiment_rows <- function(mae, experiment) {
+        sample_subset <- subset(MultiAssayExperiment::sampleMap(mae), colname %in% colnames(experiment))
+        length(unique(sample_subset$primary))
+      }
+
+      subjects_info <- lapply(
+        experiment_names,
+        function(experiment_name) {
+          subjects_f_rows <- get_experiment_rows(data_f, data_f[[experiment_name]])
+          subjects_nf_rows <- get_experiment_rows(data_nf, data_nf[[experiment_name]])
+
+          subjects_info <- paste0(subjects_f_rows, "/", subjects_nf_rows)
+          subjects_info
+        }
+      )
+
+      append(
+        list(mae_total_subjects_info),
+        subjects_info
       )
     }
   )

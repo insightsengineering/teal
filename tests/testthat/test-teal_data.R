@@ -1,5 +1,5 @@
 testthat::test_that("teal_data returns CDISCData object rather than RelationalData
-  object when arguments contain any type of CDISCData object", {
+  object when arguments contain any type of a CDISCData object", {
   dummy_adsl <- as.data.frame(as.list(setNames(nm = get_cdisc_keys("ADSL"))))
   adsl <- cdisc_dataset("ADSL", dummy_adsl)
   dummy_adtte <- as.data.frame(as.list(setNames(nm = get_cdisc_keys("ADTTE"))))

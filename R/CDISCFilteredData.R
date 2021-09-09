@@ -46,18 +46,16 @@
 #'
 #' # setting the data
 #' isolate({
-#'   datasets$set_dataset(adsl,  data$get_join_keys()$get(dataset_1 = "ADSL"))
-#'   datasets$set_dataset(adtte, data$get_join_keys()$get(dataset_1 = "ADTTE"))
-#'   datasets$set_join_keys(join_keys())
+#'   datasets$set_dataset(adsl)
+#'   datasets$set_dataset(adtte)
 #'  })
 #'
 #'
 #' isolate({
 #'   datasets$datanames()
-#'   datasets$get_data_info("ADSL", filtered = FALSE)
 #'
-#'   # filters dataset to obtain information
-#'   datasets$get_data_info("ADSL", filtered = TRUE)
+#'   # number observations and subjects of filtered/non-filtered dataset
+#'   datasets$get_filter_overview("ADSL")
 #'
 #'   print(datasets$get_call("ADSL"))
 #'   print(datasets$get_call("ADTTE"))
@@ -71,7 +69,7 @@
 #'   ADTTE$PARAMCD,
 #'   varname = "PARAMCD",
 #'   input_dataname = as.name("ADTTE"),
-#'   use_dataname = TRUE
+#'   extract_type = "list"
 #' )
 #' filter_state_adtte$set_selected("OS")
 #'
@@ -85,7 +83,7 @@
 #'   ADSL$SEX,
 #'   varname = "SEX",
 #'   input_dataname = as.name("SEX"),
-#'   use_dataname = TRUE
+#'   extract_type = "list"
 #' )
 #' filter_state_adsl$set_selected("F")
 #'
@@ -143,27 +141,6 @@ CDISCFilteredData <- R6::R6Class( # nolint
     },
 
     #' @description
-    #' Get info about dataname, i.e. number of rows, subjects.
-    #'
-    #' @param dataname (`character`) name of the dataset
-    #' @param filtered (`logical`) whether to obtain this info for the
-    #'   filtered dataset
-    #' @return a named vector
-    get_data_info = function(dataname, filtered) {
-      private$check_data_varname_exists(dataname)
-      stopifnot(is_logical_single(filtered))
-
-      nrows <- self$get_filtered_datasets(dataname)$get_data_info(filtered = filtered)
-      nsubjects <- self$get_filtered_datasets(dataname)$get_subjects_info(filtered = filtered)
-
-      list(
-        Obs = nrows,
-        Subjects = nsubjects
-      )
-    },
-
-
-    #' @description
     #' Get names of datasets available for filtering
     #'
     #' @param dataname (`character` vector) names of the dataset
@@ -200,11 +177,9 @@ CDISCFilteredData <- R6::R6Class( # nolint
     #'
     #' @param dataset (`Dataset`)\cr
     #'   object containing data and attributes.
-    #' @param join_key_set (`JoinKeySet`)\cr
-    #'   keys to merge this `dataset` to the other datasets
     #' @return (`self`) object of this class
-    set_dataset = function(dataset, join_key_set = NULL) {
-      super$set_dataset(dataset, join_key_set)
+    set_dataset = function(dataset) {
+      super$set_dataset(dataset)
 
       dataname <- get_dataname(dataset)
       parent_dataname <- self$get_parentname(dataname)
@@ -227,13 +202,10 @@ CDISCFilteredData <- R6::R6Class( # nolint
     # this is a reactive and kept as a field for caching
     ordered_datanames = NULL,
 
-    join_keys = NULL,
-
     validate = function() {
       stopifnot(
         setequal(private$ordered_datanames, names(private$dataset_filters)),
       )
-      stopifnot(is.null(join_keys))
       super$validate()
     }
   )

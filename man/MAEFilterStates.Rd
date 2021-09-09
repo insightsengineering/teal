@@ -146,7 +146,7 @@ shiny.tag
 \if{html}{\out{<a id="method-srv_add_filter_state"></a>}}
 \if{latex}{\out{\hypertarget{method-srv_add_filter_state}{}}}
 \subsection{Method \code{srv_add_filter_state()}}{
-Shiny server module to add filter variable
+Shiny server module to add filter variable.
 
 Module controls available choices to select as a filter variable.
 Selected filter variable is being removed from available choices.

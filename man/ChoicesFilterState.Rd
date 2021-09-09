@@ -12,7 +12,7 @@ filter_state <- teal:::init_filter_state(
   c(LETTERS, NA),
   varname = "x",
   input_dataname = as.name("data"),
-  use_dataname = TRUE
+  extract_type = character(0)
 )
 isolate(filter_state$get_call())
 isolate(filter_state$set_selected("B"))
@@ -29,6 +29,7 @@ isolate(filter_state$get_call())
 \item \href{#method-get_call}{\code{ChoicesFilterState$get_call()}}
 \item \href{#method-ui}{\code{ChoicesFilterState$ui()}}
 \item \href{#method-server}{\code{ChoicesFilterState$server()}}
+\item \href{#method-set_state}{\code{ChoicesFilterState$set_state()}}
 \item \href{#method-clone}{\code{ChoicesFilterState$clone()}}
 }
 }
@@ -37,6 +38,7 @@ isolate(filter_state$get_call())
 \itemize{
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="FilterState" data-id="destroy_observers">}\href{../../teal/html/FilterState.html#method-destroy_observers}{\code{teal::FilterState$destroy_observers()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="FilterState" data-id="get_dataname">}\href{../../teal/html/FilterState.html#method-get_dataname}{\code{teal::FilterState$get_dataname()}}\out{</span>}
+\item \out{<span class="pkg-link" data-pkg="teal" data-topic="FilterState" data-id="get_keep_na">}\href{../../teal/html/FilterState.html#method-get_keep_na}{\code{teal::FilterState$get_keep_na()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="FilterState" data-id="get_selected">}\href{../../teal/html/FilterState.html#method-get_selected}{\code{teal::FilterState$get_selected()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="FilterState" data-id="get_varlabel">}\href{../../teal/html/FilterState.html#method-get_varlabel}{\code{teal::FilterState$get_varlabel()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="FilterState" data-id="get_varname">}\href{../../teal/html/FilterState.html#method-get_varname}{\code{teal::FilterState$get_varname()}}\out{</span>}
@@ -54,9 +56,9 @@ Initialize a \code{FilterState} object
 \if{html}{\out{<div class="r">}}\preformatted{ChoicesFilterState$new(
   x,
   varname,
-  varlabel,
-  input_dataname,
-  use_dataname = FALSE
+  varlabel = character(0),
+  input_dataname = NULL,
+  extract_type = character(0)
 )}\if{html}{\out{</div>}}
 }
 
@@ -75,9 +77,13 @@ label of the variable (optional).}
 \item{\code{input_dataname}}{(\code{name} or \code{call})\cr
 name of dataset where \code{x} is taken from}
 
-\item{\code{use_dataname}}{(\code{logical(1)})\cr
-whether to prefix condition calls with \verb{input_dataname$}.
-For example \code{input_dataname$variable == "selection"}}
+\item{\code{extract_type}}{(\code{character(0)}, \code{character(1)})\cr
+whether condition calls should be prefixed by dataname. Possible values:
+\itemize{
+\item{\code{character(0)} (default)}{ \code{varname} in the condition call will not be prefixed}
+\item{\code{"list"}}{ \code{varname} in the condition call will be returned as \verb{<input_dataname>$<varname>}}
+\item{\code{"matrix"}}{ \code{varname} in the condition call will be returned as \verb{<input_dataname>[, <varname>]}}
+}}
 }
 \if{html}{\out{</div>}}
 }
@@ -140,6 +146,28 @@ Server module
 }
 \subsection{Returns}{
 nothing
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-set_state"></a>}}
+\if{latex}{\out{\hypertarget{method-set_state}{}}}
+\subsection{Method \code{set_state()}}{
+Set state
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{ChoicesFilterState$set_state(state)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{state}}{(\code{list})\cr
+contains fields relevant for a specific class
+\itemize{
+\item{\code{selected}}{ defines initial selection}
+\item{\code{keep_na} (\code{logical})}{ defines whether to keep or remove \code{NA} values}
+}}
+}
+\if{html}{\out{</div>}}
 }
 }
 \if{html}{\out{<hr>}}

@@ -33,5 +33,5 @@
 ^templates$
 ^test_full_example$
 ^TODO\.md$
-^staged_dependencies.yaml$
+^staged_dependencies\.yaml$
 .gitlab-ci.yml$
