@@ -147,14 +147,14 @@ testthat::test_that("get_call returns `output_dataname <- input_dataname` when n
     datalabel = character(0)
   )
 
-  testthat::expect_identical(
+  testthat::expect_equal(
     isolate(sefs$get_call()),
     quote(test_filtered <- test)
   )
 
   # now testing for equality of object
   eval(isolate(sefs$get_call()))
-  testthat::expect_identical(test_filtered, test)
+  testthat::expect_equal(test_filtered, test)
 })
 
 testthat::test_that("SEFilterStates$set_bookmark_state sets state with only select", {
@@ -174,7 +174,7 @@ testthat::test_that("SEFilterStates$set_bookmark_state sets state with only sele
   sefs$set_bookmark_state(state = fs, data = obj)
 
   eval(isolate(sefs$get_call()))
-  testthat::expect_identical(test_filtered, subset(
+  testthat::expect_equal(test_filtered, subset(
     test,
     select = Treatment == "ChIP"
   ))
@@ -197,7 +197,7 @@ testthat::test_that("SEFilterStates$set_bookmark_state sets state with only subs
   sefs$set_bookmark_state(state = fs, data = obj)
 
   eval(isolate(sefs$get_call()))
-  testthat::expect_identical(test_filtered, subset(
+  testthat::expect_equal(test_filtered, subset(
     test,
     subset = feature_id %in% c("ID001", "ID002")
   ))
@@ -216,7 +216,7 @@ testthat::test_that("SEFilterStates$set_bookmark_state sets state with neither s
   sefs$set_bookmark_state(data = obj)
 
   eval(isolate(sefs$get_call()))
-  testthat::expect_identical(test_filtered, test)
+  testthat::expect_equal(test_filtered, test)
 })
 
 testthat::test_that("SEFilterStates$set_bookmark_state sets filters in ReactiveQueue specified by the named list", {
@@ -236,7 +236,7 @@ testthat::test_that("SEFilterStates$set_bookmark_state sets filters in ReactiveQ
   sefs$set_bookmark_state(state = fs, data = obj)
 
   eval(isolate(sefs$get_call()))
-  testthat::expect_identical(test_filtered, subset(
+  testthat::expect_equal(test_filtered, subset(
     test,
     subset = feature_id %in% c("ID001", "ID002"),
     select = Treatment == "ChIP"
