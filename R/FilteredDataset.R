@@ -272,6 +272,7 @@ FilteredDataset <- R6::R6Class( # nolint
     #' @param state (`named list`)\cr
     #'  containing values of the initial filter. Values should be relevant
     #'  to the referred column.
+    #' @return `moduleServer` function which returns `NULL`
     set_bookmark_state = function(id, state) {
       moduleServer(
         id = id,
@@ -491,7 +492,7 @@ DefaultFilteredDataset <- R6::R6Class( # nolint
     #' @param state (`named list`)\cr
     #'  containing values of the initial filter. Values should be relevant
     #'  to the referred column.
-    #' @return invisibly `NULL`
+    #' @return `moduleServer` function which returns `NULL`
     set_bookmark_state = function(id, state) {
       stopifnot(is.list(state))
       moduleServer(
@@ -842,7 +843,7 @@ MAEFilteredDataset <- R6::R6Class( # nolint
     #'  kept in `private$filter_states`. For this object they are `"subjects"` and
     #'  names of the experiments. Values of initial state should be relevant
     #'  to the referred column.
-    #'
+    #' @return `moduleServer` function which returns `NULL`
     set_bookmark_state = function(id, state) {
       stopifnot(
         is.list(state),

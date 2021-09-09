@@ -91,6 +91,9 @@ the name of the column in \code{rowData(data)} and \code{colData(data)}.}
 }
 \if{html}{\out{</div>}}
 }
+\subsection{Returns}{
+\code{moduleServer} function which returns \code{NULL}
+}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-ui_add_filter_state"></a>}}

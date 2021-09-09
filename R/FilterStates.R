@@ -397,6 +397,7 @@ FilterStates <- R6::R6Class( # nolint
     #'   should contain values which are initial selection in the `FilterState`.
     #'   Names of the `list` element should correspond to the name of the
     #'   column in `data`.
+    #' @return `moduleServer` function which throws an error
     set_bookmark_state = function(id, data, state) {
       moduleServer(
         id = id,
@@ -641,6 +642,7 @@ DFFilterStates <- R6::R6Class( # nolint
     #'   should contain values which are initial selection in the `FilterState`.
     #'   Names of the `list` element should correspond to the name of the
     #'   column in `data`.
+    #' @return `moduleServer` function which returns `NULL`
     set_bookmark_state = function(id, data, state) {
       stopifnot(is.data.frame(data))
       stopifnot(all(names(state) %in% names(data)) || is(state, "default_filter"))
@@ -880,6 +882,7 @@ MAEFilterStates <- R6::R6Class( # nolint
     #'   should contain values which are initial selection in the `FilterState`.
     #'   Names of the `list` element should correspond to the name of the
     #'   column in `colData(data)`
+    #' @return `moduleServer` function which returns `NULL`
     set_bookmark_state = function(id, data, state) {
       stopifnot(is(data, "MultiAssayExperiment"))
       stopifnot(
@@ -1103,6 +1106,7 @@ SEFilterStates <- R6::R6Class( # nolint
     #'   each should be a named list containing values as a selection in the `FilterState`.
     #'   Names of each the `list` element in `subset` and `select` should correspond to
     #'   the name of the column in `rowData(data)` and `colData(data)`.
+    #' @return `moduleServer` function which returns `NULL`
     set_bookmark_state = function(id, data, state) {
       stopifnot(is(data, "SummarizedExperiment"))
       stopifnot(
@@ -1413,6 +1417,7 @@ MatrixFilterStates <- R6::R6Class( # nolint
     #'   should contain values which are initial selection in the `FilterState`.
     #'   Names of the `list` element should correspond to the name of the
     #'   column in `data`.
+    #' @return `moduleServer` function which returns `NULL`
     set_bookmark_state = function(id, data, state) {
       stopifnot(is(data, "matrix"))
       stopifnot(

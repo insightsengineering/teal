@@ -104,7 +104,7 @@ to the referred column.}
 \if{html}{\out{</div>}}
 }
 \subsection{Returns}{
-invisibly \code{NULL}
+\code{moduleServer} function which returns \code{NULL}
 }
 }
 \if{html}{\out{<hr>}}

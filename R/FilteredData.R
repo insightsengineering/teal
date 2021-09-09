@@ -370,7 +370,7 @@ FilteredData <- R6::R6Class( # nolint
     #'   An ID string that corresponds with the ID used to call the module's UI function.
     #' @param state (`named list`)\cr
     #'  nested list of filter selections applied to datasets.
-    #' @return invisibly NULL
+    #' @return `moduleServer` function which returns `NULL`
     set_bookmark_state = function(id, state) {
       stopifnot(
         all(names(state) %in% self$datanames())

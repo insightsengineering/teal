@@ -554,7 +554,7 @@ nested list of filter selections applied to datasets.}
 \if{html}{\out{</div>}}
 }
 \subsection{Returns}{
-invisibly NULL
+\code{moduleServer} function which returns \code{NULL}
 }
 }
 \if{html}{\out{<hr>}}

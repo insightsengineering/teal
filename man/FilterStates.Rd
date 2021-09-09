@@ -280,6 +280,9 @@ column in \code{data}.}
 }
 \if{html}{\out{</div>}}
 }
+\subsection{Returns}{
+\code{moduleServer} function which throws an error
+}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-ui_add_filter_state"></a>}}
