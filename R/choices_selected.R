@@ -205,6 +205,8 @@ no_selected_as_NULL <- function(x) { #nolint
   }
 }
 
+## Non-exported utils functions ----
+## Modify vectors and keep attributes
 vector_reorder <- function(vec, idx) {
   stopifnot(is.atomic(vec))
   stopifnot(is_integer_vector(idx))
