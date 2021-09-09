@@ -56,7 +56,10 @@ testthat::test_that("set_selected throws when selection is completely outside of
 testthat::test_that("set_selected throws when selection is not Date", {
   test_date <- as.Date(c("2013/07/13", "2013/07/14", "2013/07/15"))
   filter_state <- DateFilterState$new(test_date, varname = "test_date")
-  testthat::expect_error(filter_state$set_selected("a"), "character string is not in a standard unambiguous format")
+  testthat::expect_error(
+    filter_state$set_selected(c("a", "b")),
+    "character string is not in a standard unambiguous format"
+  )
 })
 
 testthat::test_that("get_call returns a condition true for the objects in the selected range", {

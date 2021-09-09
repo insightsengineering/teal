@@ -92,7 +92,10 @@ testthat::test_that("set_selected limits the selected range to the lower and the
 testthat::test_that("set_selected throws when the value type cannot be interpreted as datetime", {
   objects <- as.POSIXct(c(1, 2, 3), origin = "1900/01/01")
   filter_state <- DatetimeFilterState$new(objects, varname = "objects")
-  testthat::expect_error(filter_state$set_selected("a"), "character string is not in a standard unambiguous format")
+  testthat::expect_error(
+    filter_state$set_selected(c("a", "b")),
+    "character string is not in a standard unambiguous format"
+  )
 })
 
 testthat::test_that("set_state needs a named list with selected and keep_na elements", {
