@@ -213,7 +213,7 @@ testthat::test_that("SEFilterStates$set_bookmark_state sets state with neither s
     datalabel = character(0)
   )
 
-  sefs$set_bookmark_state(data = obj)
+  sefs$set_bookmark_state(data = obj, state = list())
 
   eval(isolate(sefs$get_call()))
   testthat::expect_equal(test_filtered, test)
