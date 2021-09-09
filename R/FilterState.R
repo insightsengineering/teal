@@ -509,6 +509,7 @@ FilterState <- R6::R6Class( # nolint
 
     # Filters out errouneous values from an array.
     # Sanitizes the input of set_selected.
+    # Must provide strong exception safety.
     remove_out_of_bound_values = function(values) {
         stop("Pure virtual method.")
     }
@@ -851,12 +852,15 @@ LogicalFilterState <- R6::R6Class( # nolint
 
     },
     remove_out_of_bound_values = function(values) {
-      values_logical <- as.logical(values)
-      not_logical_values <- values[is.na(values_logical)]
-      if (length(not_logical_values) > 0) {
-        warning(paste("Values:", paste(not_logical_values, collapse = ", "), "are not logical."))
-      }
-      values <- Filter(Negate(is.na), values_logical)
+      try({
+        values_logical <- as.logical(values)
+        not_logical_values <- values[is.na(values_logical)]
+        if (length(not_logical_values) > 0) {
+          warning(paste("Values:", paste(not_logical_values, collapse = ", "), "are not logical."))
+        }
+        values <- Filter(Negate(is.na), values_logical)
+      })
+      values
     }
   )
 )
@@ -1140,15 +1144,19 @@ RangeFilterState <- R6::R6Class( # nolint
     },
 
     remove_out_of_bound_values = function(values) {
-      if (values[1] < private$choices[1]) {
-        warning(paste("Value: ", values[1], "is outside of the possible range."))
-        values[1] <- private$choices[1]
-      }
+      try({
+        new_values <- values
+        if (new_values[1] < private$choices[1]) {
+          warning(paste("Value: ", new_values[1], "is outside of the possible range."))
+          new_values[1] <- private$choices[1]
+        }
 
-      if (values[length(values)] > private$choices[2]) {
-        warning(paste("Value: ", values[length(values)], "is outside of the possible range."))
-        values[length(values)] <- private$choices[2]
-      }
+        if (new_values[length(new_values)] > private$choices[2]) {
+          warning(paste("Value: ", new_values[length(new_values)], "is outside of the possible range."))
+          new_values[length(new_values)] <- private$choices[2]
+        }
+        values <- new_values
+      })
       values
     }
   )
@@ -1391,11 +1399,14 @@ ChoicesFilterState <- R6::R6Class( # nolint
       check_in_subset(value, private$choices, pre_msg = pre_msg)
     },
     remove_out_of_bound_values = function(values) {
-      in_choices_mask <- values %in% private$choices
-      if(length(values[!in_choices_mask]) > 0) {
-        warning(paste("Values:", paste(values[!in_choices_mask], collapse = ", "), "are not in choices."))
-      }
-      values[in_choices_mask]
+      try({
+        in_choices_mask <- values %in% private$choices
+        if (length(values[!in_choices_mask]) > 0) {
+          warning(paste("Values:", paste(values[!in_choices_mask], collapse = ", "), "are not in choices."))
+        }
+        values[in_choices_mask]
+      })
+      values
     }
   )
 )
@@ -1588,15 +1599,19 @@ DateFilterState <- R6::R6Class( # nolint
     },
 
     remove_out_of_bound_values = function(values) {
-      if (values[1] < private$choices[1]) {
-        warning(paste("Value: ", values[1], "is outside of the possible range."))
-        values[1] <- private$choices[1]
-      }
+      try({
+        new_values <- values
+        if (new_values[1] < private$choices[1]) {
+          warning(paste("Value: ", new_values[1], "is outside of the possible range."))
+          new_values[1] <- private$choices[1]
+        }
 
-      if (values[length(values)] > private$choices[2]) {
-        warning(paste("Value: ", values[length(values)], "is outside of the possible range."))
-        values[length(values)] <- private$choices[2]
-      }
+        if (new_values[length(new_values)] > private$choices[2]) {
+          warning(paste("Value: ", new_values[length(new_values)], "is outside of the possible range."))
+          new_values[length(new_values)] <- private$choices[2]
+        }
+        values <- new_values
+      })
       values
     }
   )
@@ -1852,15 +1867,19 @@ DatetimeFilterState <- R6::R6Class( # nolint
     },
 
     remove_out_of_bound_values = function(values) {
-      if (values[1] < private$choices[1]) {
-        warning(paste("Value: ", values[1], "is outside of the possible range."))
-        values[1] <- private$choices[1]
-      }
+      try({
+        new_values <- values
+        if (new_values[1] < private$choices[1]) {
+          warning(paste("Value: ", new_values[1], "is outside of the possible range."))
+          new_values[1] <- private$choices[1]
+        }
 
-      if (values[length(values)] > private$choices[2]) {
-        warning(paste("Value: ", values[length(values)], "is outside of the possible range."))
-        values[length(values)] <- private$choices[2]
-      }
+        if (new_values[length(new_values)] > private$choices[2]) {
+          warning(paste("Value: ", new_values[length(new_values)], "is outside of the possible range."))
+          new_values[length(new_values)] <- private$choices[2]
+        }
+        values <- new_values
+      })
       values
     }
   )
