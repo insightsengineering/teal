@@ -27,6 +27,7 @@
 * `FilteredData` contains `Dataset` objects (via `FilteredDataset`) and copying keys and attributes is no longer needed.
 * Added `error_on_lintr: TRUE` to `.lintr`
 * Changed how the id of an HTML element in the filter panel is created to make it deterministic.
+* Changed `FilterState`'s method `set_selected` to accept values out of bounds of the possible range with a warning instead of throwing an error.
 
 # teal 0.9.5
 
