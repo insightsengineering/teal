@@ -1,10 +1,6 @@
-library(random.cdisc.data)
-ADSL <- radsl(cached = TRUE) # nolint
-ADTTE <- radtte(cached = TRUE) # nolint
-data <- cdisc_data(
-  cdisc_dataset("ADSL", ADSL),
-  cdisc_dataset("ADTTE", ADTTE)
-)
+adsl <- as.data.frame(as.list(setNames(nm = get_cdisc_keys("ADSL"))))
+adtte <- as.data.frame(as.list(setNames(nm = get_cdisc_keys("ADTTE"))))
+data <- cdisc_data(cdisc_dataset("ADSL", adsl), cdisc_dataset("ADTTE", adtte))
 
 ds <- teal:::CDISCFilteredData$new()
 isolate(filtered_data_set(data, ds))
@@ -46,8 +42,8 @@ testthat::test_that("delayed version of choices_selected", {
 
   res_obj <- isolate(resolve_delayed(obj, datasets = ds))
   exp_obj <- choices_selected(
-    variable_choices(ADSL, subset = c("STUDYID", "USUBJID"), key = get_cdisc_keys("ADSL")),
-    selected = variable_choices(ADSL, subset = c("STUDYID"), key = get_cdisc_keys("ADSL")))
+    variable_choices(adsl, subset = c("STUDYID", "USUBJID"), key = get_cdisc_keys("ADSL")),
+    selected = variable_choices(adsl, subset = c("STUDYID"), key = get_cdisc_keys("ADSL")))
   testthat::expect_equal(res_obj, exp_obj, check.attributes = TRUE)
 
   # functional choices and selected
@@ -62,4 +58,9 @@ testthat::test_that("delayed version of choices_selected", {
 
   res_obj <- isolate(resolve_delayed(obj, datasets = ds))
   testthat::expect_equal(res_obj, exp_obj)
+})
+
+testthat::test_that("choices_selected does not add selected to choices when selected is not found in choices", {
+  test <- choices_selected(choices = c("a"), selected = "b")
+  testthat::expect_equal(test$choices, "a")
 })
