@@ -1141,8 +1141,11 @@ RangeFilterState <- R6::R6Class( # nolint
     },
 
     remove_out_of_bound_values = function(values) {
+      values <- as.numeric(values)
       if (length(values) != 2) stop("The array of set values must have length two.")
-      if (any(is.null(values) | is.na(values))) stop("The array of set values must not contain NULL or NA values.")
+      if (any(is.null(values) | is.na(values))) {
+        stop("The array of set values must contain values coercable to numeric.")
+      }
       if (values[1] < private$choices[1]) {
         warning(paste("Value: ", values[1], "is outside of the possible range."))
         values[1] <- private$choices[1]
@@ -1592,8 +1595,9 @@ DateFilterState <- R6::R6Class( # nolint
     },
 
     remove_out_of_bound_values = function(values) {
+      values <- as.Date(values)
       if (length(values) != 2) stop("The array of set values must have length two.")
-      if (any(is.null(values) | is.na(values))) stop("The array of set values must not contain NULL or NA values.")
+      if (any(is.null(values) | is.na(values))) stop("The array of set values must contain values coercable to Date.")
       if (values[1] < private$choices[1]) {
         warning(paste("Value: ", values[1], "is outside of the possible range."))
         values[1] <- private$choices[1]
@@ -1858,8 +1862,9 @@ DatetimeFilterState <- R6::R6Class( # nolint
     },
 
     remove_out_of_bound_values = function(values) {
+      values <- as.POSIXct(values)
       if (length(values) != 2) stop("The array of set values must have length two.")
-      if (any(is.null(values) | is.na(values))) stop("The array of set values must not contain NULL or NA values.")
+      if (any(is.null(values) | is.na(values))) stop("The array of set values must contain values coercable to POSIX.")
       if (values[1] < private$choices[1]) {
         warning(paste("Value: ", values[1], "is outside of the possible range."))
         values[1] <- private$choices[1]
