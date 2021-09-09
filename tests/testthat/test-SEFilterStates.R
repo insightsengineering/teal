@@ -35,7 +35,6 @@ testthat::test_that("The constructor initializes two queues", {
   )
   testthat::expect_null(filter_states$queue_get(1))
   testthat::expect_null(filter_states$queue_get(2))
-  testthat::expect_error(filter_states$queue_get(3))
 })
 
 testthat::test_that("set_bookmark_state throws error when input is missing", {
