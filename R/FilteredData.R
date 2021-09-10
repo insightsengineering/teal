@@ -760,14 +760,14 @@ FilteredData <- R6::R6Class( # nolint
     # @param dataname (`character`) name of the dataset
     # @param varname (`character`) column within the dataset;
     #   if `NULL`, this check is not performed
-    check_data_varname_exists = function(dataname, varname = NULL) {
-      stopifnot(is_character_single(dataname))
+    check_data_varname_exists = function(datanames, varname = NULL) {
+      stopifnot(is_character_vector(datanames))
       stopifnot(is.null(varname) || is_character_single(varname))
 
       isolate({
         # we isolate everything because we don't want to trigger again when datanames
         # change (which also triggers when any of the data changes)
-        if (!(dataname %in% names(self$get_filtered_datasets()))) {
+        if (!all(datanames %in% names(self$get_filtered_datasets()))) {
           # data must be set already
           stop(paste("data", dataname, "is not available"))
         }
