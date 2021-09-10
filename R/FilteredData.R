@@ -41,7 +41,7 @@
 #' # setting the data
 #' datasets$set_dataset(dataset("iris", iris))
 #' datasets$set_dataset(dataset("mtcars", mtcars))
-#' 
+#'
 #' isolate({
 #'   datasets$datanames()
 #'   datasets$get_filter_overview("iris")
@@ -306,12 +306,14 @@ FilteredData <- R6::R6Class( # nolint
       if (identical(datanames, "all")) {
         datanames <- self$datanames()
       } else {
+        for (dataname in datanames) {
         tryCatch(
-          private$check_data_varname_exists(dataname = datanames),
+          check_in_subset(datanames, self$datanames(), "Some datasets are not available: "),
           error = function(e) {
             message(e$message)
           }
         )
+        }
       }
       datanames <- self$get_filterable_datanames(datanames)
       intersect(self$datanames(), datanames)
@@ -767,7 +769,7 @@ FilteredData <- R6::R6Class( # nolint
       isolate({
         # we isolate everything because we don't want to trigger again when datanames
         # change (which also triggers when any of the data changes)
-        if (!(dataname %in% names(self$get_filtered_datasets()))) {
+        if (!dataname %in% names(self$get_filtered_datasets())) {
           # data must be set already
           stop(paste("data", dataname, "is not available"))
         }
