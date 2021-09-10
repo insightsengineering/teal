@@ -74,6 +74,7 @@ Dataset <- R6::R6Class( # nolint
       self$set_dataset_label(label)
       self$set_keys(keys)
       private$calculate_hash()
+      
       # needed if recreating dataset - we need to preserve code order and uniqueness
       private$code <- CodeClass$new()
       if (is.character(code)) {
@@ -663,8 +664,8 @@ Dataset <- R6::R6Class( # nolint
     # Calculates the MD5 hash of the raw data stored in this Dataset.
     # @return NULL
     calculate_hash = function() {
-        private$data_hash <- digest::digest(self$get_raw_data(), algo = "md5")
-        NULL
+      private$data_hash <- digest::digest(self$get_raw_data(), algo = "md5")
+      invisible(NULL)
     },
 
     # Set the name for the dataset
