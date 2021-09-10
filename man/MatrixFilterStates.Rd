@@ -58,9 +58,6 @@ name of the output data on the lhs of the assignment expression.}
 
 \item{\code{datalabel}}{(\code{character(0)} or \code{character(1)})\cr
 text label value.}
-
-\item{\code{data}}{(\code{matrix})\cr
-R object which \code{subset} function is applied on.}
 }
 \if{html}{\out{</div>}}
 }
