@@ -306,12 +306,14 @@ FilteredData <- R6::R6Class( # nolint
       if (identical(datanames, "all")) {
         datanames <- self$datanames()
       } else {
-        tryCatch(
-          private$check_data_varname_exists(dataname = datanames),
-          error = function(e) {
-            message(e$message)
-          }
+        for (dataname in datanames) {
+          tryCatch(
+            private$check_data_varname_exists(dataname = dataname),
+            error = function(e) {
+              message(e$message)
+            }
         )
+      }
       }
       datanames <- self$get_filterable_datanames(datanames)
       intersect(self$datanames(), datanames)
@@ -757,17 +759,17 @@ FilteredData <- R6::R6Class( # nolint
     #
     # Stops when this is not the case.
     #
-    # @param datanames (`character`) names of the datasets
+    # @param dataname (`character`) names of the dataset
     # @param varname (`character`) column within the dataset;
     #   if `NULL`, this check is not performed
-    check_data_varname_exists = function(datanames, varname = NULL) {
-      stopifnot(is_character_vector(datanames))
+    check_data_varname_exists = function(dataname, varname = NULL) {
+      stopifnot(is_character_single(dataname))
       stopifnot(is.null(varname) || is_character_single(varname))
 
       isolate({
         # we isolate everything because we don't want to trigger again when datanames
         # change (which also triggers when any of the data changes)
-        if (!all(datanames %in% names(self$get_filtered_datasets()))) {
+        if (!dataname %in% names(self$get_filtered_datasets())) {
           # data must be set already
           stop(paste("data", dataname, "is not available"))
         }
