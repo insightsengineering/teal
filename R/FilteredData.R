@@ -313,7 +313,7 @@ FilteredData <- R6::R6Class( # nolint
               message(e$message)
             }
         )
-      }
+        }
       }
       datanames <- self$get_filterable_datanames(datanames)
       intersect(self$datanames(), datanames)
