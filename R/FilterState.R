@@ -857,7 +857,7 @@ LogicalFilterState <- R6::R6Class( # nolint
       tryCatch(
         values_logical <- as.logical(values),
         error = function(cond) {
-          stop("The array of set values must contain values coercable to logical.")
+          stop("The array of set values must contain values coercible to logical.")
         }
       )
       values_logical
@@ -1155,12 +1155,12 @@ RangeFilterState <- R6::R6Class( # nolint
       tryCatch(
         values <- as.numeric(values),
         error = function(error) {
-          stop("The array of set values must contain values coercable to numeric.")
+          stop("The array of set values must contain values coercible to numeric.")
         }
       )
       if (length(values) != 2) stop("The array of set values must have length two.")
       if (any(is.null(values) | is.na(values))) {
-        stop("The array of set values must contain values coercable to numeric.")
+        stop("The array of set values must contain values coercible to numeric.")
       }
       values
     },
@@ -1404,7 +1404,7 @@ ChoicesFilterState <- R6::R6Class( # nolint
       if (!is.character(value)) {
         stop(
           sprintf(
-            "value of the selection for `%s` in `%s` should be a character",
+            "Values of the selection for `%s` in `%s` should be an array of character.",
             self$get_varname(deparse = TRUE),
             self$get_dataname(deparse = TRUE)
           )
@@ -1624,11 +1624,11 @@ DateFilterState <- R6::R6Class( # nolint
       tryCatch(
         values <- as.Date(values),
         error = function(error) {
-          stop("The array of set values must contain values coercable to Date.")
+          stop("The array of set values must contain values coercible to Date.")
         }
       )
       if (length(values) != 2) stop("The array of set values must have length two.")
-      if (any(is.null(values) | is.na(values))) stop("The array of set values must contain values coercable to Date.")
+      if (any(is.null(values) | is.na(values))) stop("The array of set values must contain values coercible to Date.")
       values
     },
 
@@ -1900,11 +1900,11 @@ DatetimeFilterState <- R6::R6Class( # nolint
       tryCatch(
         values <- as.POSIXct(values),
         error = function(error) {
-          stop("The array of set values must contain values coercable to POSIX.")
+          stop("The array of set values must contain values coercible to POSIX.")
         }
       )
       if (length(values) != 2) stop("The array of set values must have length two.")
-      if (any(is.null(values) | is.na(values))) stop("The array of set values must contain values coercable to POSIX.")
+      if (any(is.null(values) | is.na(values))) stop("The array of set values must contain values coercible to POSIX.")
       values
     },
 

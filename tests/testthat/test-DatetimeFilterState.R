@@ -94,7 +94,7 @@ testthat::test_that("set_selected throws when the value type cannot be interpret
   filter_state <- DatetimeFilterState$new(objects, varname = "objects")
   testthat::expect_error(
     filter_state$set_selected(c("a", "b")),
-    "The array of set values must contain values coercable to POSIX."
+    "The array of set values must contain values coercible to POSIX."
   )
 })
 

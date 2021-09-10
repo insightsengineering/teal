@@ -43,6 +43,14 @@ testthat::test_that("set_selected set logical(0) when the intersection of the ar
   testthat::expect_equal(isolate(filter_state$get_selected()), logical(0))
 })
 
+testthat::test_that("set_selected throws when the passed values are not coercible to logical", {
+  filter_state <- LogicalFilterState$new(c(TRUE, FALSE), varname = "test")
+  testthat::expect_error(
+    filter_state$set_selected(c(print)),
+    "The array of set values must contain values coercible to logical."
+  )
+})
+
 testthat::test_that("get_call returns a condition true for the values passed in set_selected", {
   filter_state <- LogicalFilterState$new(c(TRUE, FALSE), varname = "test")
   filter_state$set_selected(TRUE)

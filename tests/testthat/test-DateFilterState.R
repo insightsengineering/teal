@@ -58,7 +58,7 @@ testthat::test_that("set_selected throws when selection is not Date", {
   filter_state <- DateFilterState$new(test_date, varname = "test_date")
   testthat::expect_error(
     filter_state$set_selected(c("a", "b")),
-    "The array of set values must contain values coercable to Date."
+    "The array of set values must contain values coercible to Date."
   )
 })
 

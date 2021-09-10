@@ -58,6 +58,14 @@ testthat::test_that("set_selected defaults to the lower and the upper bound of t
   testthat::expect_equal(isolate(filter_state$get_selected()), c(7, 8))
 })
 
+testthat::test_that("set_selected throws when the passed values are not coercible to numeric", {
+  filter_state <- RangeFilterState$new(7, varname = "test")
+  testthat::expect_error(
+    filter_state$set_selected(c(print)),
+    "The array of set values must contain values coercible to numeric."
+  )
+})
+
 testthat::test_that("get_call returns a valid call after an unsuccessfull set_selected", {
   filter_state <- RangeFilterState$new(7, varname = "test")
   testthat::expect_error(suppressWarnings(
