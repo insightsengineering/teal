@@ -307,12 +307,12 @@ FilteredData <- R6::R6Class( # nolint
         datanames <- self$datanames()
       } else {
         for (dataname in datanames) {
-          tryCatch(
-            private$check_data_varname_exists(dataname = dataname),
-            error = function(e) {
-              message(e$message)
-            }
-          )
+        tryCatch(
+          check_in_subset(datanames, self$datanames(), "Some datasets are not available: "),
+          error = function(e) {
+            message(e$message)
+          }
+        )
         }
       }
       datanames <- self$get_filterable_datanames(datanames)
