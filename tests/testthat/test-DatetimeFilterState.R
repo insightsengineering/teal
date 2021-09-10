@@ -89,12 +89,12 @@ testthat::test_that("set_selected limits the selected range to the lower and the
   testthat::expect_equal(isolate(filter_state$get_selected()), c(objects[1], objects[2]))
 })
 
-testthat::test_that("set_selected throws when the value type cannot be interpreted as datetime", {
+testthat::test_that("set_selected throws when the value type cannot be interpreted as POSIX", {
   objects <- as.POSIXct(c(1, 2, 3), origin = "1900/01/01")
   filter_state <- DatetimeFilterState$new(objects, varname = "objects")
   testthat::expect_error(
     filter_state$set_selected(c("a", "b")),
-    "character string is not in a standard unambiguous format"
+    "The array of set values must contain values coercable to POSIX."
   )
 })
 

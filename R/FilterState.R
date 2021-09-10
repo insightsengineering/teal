@@ -376,6 +376,7 @@ FilterState <- R6::R6Class( # nolint
     #'  `private$selected` which is reactive. Values type have to be the
     #'  same as `private$choices`.
     set_selected = function(value) {
+      value <- private$cast_and_validate(value)
       value <- private$remove_out_of_bound_values(value)
       private$validate_selection(value)
       private$selected(value)
@@ -507,11 +508,14 @@ FilterState <- R6::R6Class( # nolint
       invisible(NULL)
     },
 
-    # Filters out errouneous values from an array.
+    # Filters out erroneous values from an array.
     # Sanitizes the input of set_selected.
-    # Must provide strong exception safety.
     remove_out_of_bound_values = function(values) {
-        stop("Pure virtual method.")
+      values
+    },
+
+    cast_and_validate = function(values) {
+      values
     }
   )
 )
@@ -642,10 +646,6 @@ EmptyFilterState <- R6::R6Class( # nolint
   private = list(
     log_state = function() {
       .log("all elements in", self$get_varname(deparse = TRUE), "are NA")
-    },
-
-    remove_out_of_bound_values = function(values) {
-      values
     }
   )
 )
@@ -832,6 +832,7 @@ LogicalFilterState <- R6::R6Class( # nolint
         "NA:", toString(self$get_keep_na())
       )
     },
+
     validate_selection = function(value) {
       if (!(is_logical_empty(value) || is_logical_single(value))) {
         stop(
@@ -850,14 +851,24 @@ LogicalFilterState <- R6::R6Class( # nolint
       )
       check_in_subset(value, private$choices, pre_msg = pre_msg)
     },
-    remove_out_of_bound_values = function(values) {
+
+    cast_and_validate = function(values) {
       if (any(is.null(values))) stop("The array of set values must not contain NULL values.")
-      values_logical <- as.logical(values)
-      not_logical_values <- values[is.na(values_logical)]
+      tryCatch(
+        values_logical <- as.logical(values),
+        error = function(cond) {
+          stop("The array of set values must contain values coercable to logical.")
+        }
+      )
+      values_logical
+    },
+
+    remove_out_of_bound_values = function(values) {
+      not_logical_values <- values[is.na(values)]
       if (length(not_logical_values) > 0) {
         warning(paste("Values:", paste(not_logical_values, collapse = ", "), "are not logical."))
       }
-      values <- Filter(Negate(is.na), values_logical)
+      values <- Filter(Negate(is.na), values)
     }
   )
 )
@@ -1140,12 +1151,21 @@ RangeFilterState <- R6::R6Class( # nolint
       check_in_range(value, private$choices, pre_msg = pre_msg)
     },
 
-    remove_out_of_bound_values = function(values) {
-      values <- as.numeric(values)
+    cast_and_validate = function(values) {
+      tryCatch(
+        values <- as.numeric(values),
+        error = function(error) {
+          stop("The array of set values must contain values coercable to numeric.")
+        }
+      )
       if (length(values) != 2) stop("The array of set values must have length two.")
       if (any(is.null(values) | is.na(values))) {
         stop("The array of set values must contain values coercable to numeric.")
       }
+      values
+    },
+
+    remove_out_of_bound_values = function(values) {
       if (values[1] < private$choices[1]) {
         warning(paste("Value: ", values[1], "is outside of the possible range."))
         values[1] <- private$choices[1]
@@ -1379,6 +1399,7 @@ ChoicesFilterState <- R6::R6Class( # nolint
         "NA:", toString(self$get_keep_na())
       )
     },
+
     validate_selection = function(value) {
       if (!is.character(value)) {
         stop(
@@ -1396,8 +1417,13 @@ ChoicesFilterState <- R6::R6Class( # nolint
       )
       check_in_subset(value, private$choices, pre_msg = pre_msg)
     },
-    remove_out_of_bound_values = function(values) {
+
+    cast_and_validate = function(values) {
       if (any(is.null(values))) stop("The array of set values must not contain NULL values.")
+      values
+    },
+
+    remove_out_of_bound_values = function(values) {
       in_choices_mask <- values %in% private$choices
       if (length(values[!in_choices_mask]) > 0) {
         warning(paste("Values:", paste(values[!in_choices_mask], collapse = ", "), "are not in choices."))
@@ -1594,10 +1620,19 @@ DateFilterState <- R6::R6Class( # nolint
       check_in_range(value, private$choices, pre_msg = pre_msg)
     },
 
-    remove_out_of_bound_values = function(values) {
-      values <- as.Date(values)
+    cast_and_validate = function(values) {
+      tryCatch(
+        values <- as.Date(values),
+        error = function(error) {
+          stop("The array of set values must contain values coercable to Date.")
+        }
+      )
       if (length(values) != 2) stop("The array of set values must have length two.")
       if (any(is.null(values) | is.na(values))) stop("The array of set values must contain values coercable to Date.")
+      values
+    },
+
+    remove_out_of_bound_values = function(values) {
       if (values[1] < private$choices[1]) {
         warning(paste("Value: ", values[1], "is outside of the possible range."))
         values[1] <- private$choices[1]
@@ -1607,7 +1642,7 @@ DateFilterState <- R6::R6Class( # nolint
         warning(paste("Value: ", values[length(values)], "is outside of the possible range."))
         values[length(values)] <- private$choices[2]
       }
-      values <- values
+      values
     }
   )
 )
@@ -1861,10 +1896,19 @@ DatetimeFilterState <- R6::R6Class( # nolint
       check_in_range(value, private$choices, pre_msg = pre_msg)
     },
 
-    remove_out_of_bound_values = function(values) {
-      values <- as.POSIXct(values)
+    cast_and_validate = function(values) {
+      tryCatch(
+        values <- as.POSIXct(values),
+        error = function(error) {
+          stop("The array of set values must contain values coercable to POSIX.")
+        }
+      )
       if (length(values) != 2) stop("The array of set values must have length two.")
       if (any(is.null(values) | is.na(values))) stop("The array of set values must contain values coercable to POSIX.")
+      values
+    },
+
+    remove_out_of_bound_values = function(values) {
       if (values[1] < private$choices[1]) {
         warning(paste("Value: ", values[1], "is outside of the possible range."))
         values[1] <- private$choices[1]
@@ -1874,7 +1918,7 @@ DatetimeFilterState <- R6::R6Class( # nolint
         warning(paste("Value: ", values[2], "is outside of the possible range."))
         values[2] <- private$choices[2]
       }
-      values <- values
+      values
     }
   )
 )
