@@ -312,7 +312,7 @@ FilteredData <- R6::R6Class( # nolint
             error = function(e) {
               message(e$message)
             }
-        )
+          )
         }
       }
       datanames <- self$get_filterable_datanames(datanames)
