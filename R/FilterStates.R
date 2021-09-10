@@ -154,8 +154,6 @@ FilterStates <- R6::R6Class( # nolint
   public = list(
     #' @description
     #' Initializes this `FilterStates` object.
-    #' @param data (`data.frame`, `MultiAssayExperiment`, `SummarizedExperiment`, `matrix`)\cr
-    #'   R object which `subset` function is applied on.
     #'
     #' @param input_dataname (`character(1)` or `name` or `call`)\cr
     #'   name of the data used on lhs of the expression
@@ -683,7 +681,6 @@ DFFilterStates <- R6::R6Class( # nolint
       )
     },
 
-
     #' @description
     #' Shiny UI module to add filter variable
     #' @param id (`character(1)`)\cr
@@ -830,8 +827,6 @@ MAEFilterStates <- R6::R6Class( # nolint
     #' Initialize `MAEFilterStates` object
     #'
     #' Initialize `MAEFilterStates` object
-    #' @param data (`MultiAssayExperiment`)\cr
-    #'   R object which `SummarizedExperiment::summarizeByColData` function is applied on.
     #'
     #' @param input_dataname (`character(1)` or `name` or `call`)\cr
     #'   name of the data used on lhs of the expression
@@ -1072,8 +1067,6 @@ SEFilterStates <- R6::R6Class( # nolint
     #' Initialize `SEFilterStates` object
     #'
     #' Initialize `SEFilterStates` object
-    #' @param data (`SummarizedExperiment`)\cr
-    #'   R object which `subset` function is applied on.
     #'
     #' @param input_dataname (`character(1)` or `name` or `call`)\cr
     #'   name of the data used on lhs of the expression
@@ -1110,9 +1103,12 @@ SEFilterStates <- R6::R6Class( # nolint
     set_bookmark_state = function(id, data, state) {
       stopifnot(is(data, "SummarizedExperiment"))
       stopifnot(
+        is(state, "list"),
         all(names(state) %in% c("subset", "select")) || is(state, "default_filter"),
-        is.null(state$subset) || all(names(state$subset) %in% names(SummarizedExperiment::rowData(data))),
-        is.null(state$select) || all(names(state$select) %in% names(SummarizedExperiment::colData(data)))
+        is.null(state$subset) ||
+          (is(state$subset, "list") && all(names(state$subset) %in% names(SummarizedExperiment::rowData(data)))),
+        is.null(state$select) ||
+          (is(state$select, "list") && all(names(state$select) %in% names(SummarizedExperiment::colData(data))))
       )
       moduleServer(
         id = id,
@@ -1385,8 +1381,6 @@ MatrixFilterStates <- R6::R6Class( # nolint
     #' Initialize `MatrixFilterStates` object
     #'
     #' Initialize `MatrixFilterStates` object
-    #' @param data (`matrix`)\cr
-    #'   R object which `subset` function is applied on.
     #'
     #' @param input_dataname (`character(1)` or `name` or `call`)\cr
     #'   name of the data used on lhs of the expression

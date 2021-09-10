@@ -75,9 +75,6 @@ Get function name
 Get function name used to create filter call.
 For \code{MAEFilterStates}
 \code{MultiAssayExperiment::subsetByColData} is used.}
-
-\item{\code{data}}{(\code{MultiAssayExperiment})\cr
-R object which \code{SummarizedExperiment::summarizeByColData} function is applied on.}
 }
 \if{html}{\out{</div>}}
 }
