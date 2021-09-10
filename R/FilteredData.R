@@ -759,7 +759,7 @@ FilteredData <- R6::R6Class( # nolint
     #
     # Stops when this is not the case.
     #
-    # @param dataname (`character`) names of the dataset
+    # @param dataname (`character`) name of the dataset
     # @param varname (`character`) column within the dataset;
     #   if `NULL`, this check is not performed
     check_data_varname_exists = function(dataname, varname = NULL) {
