@@ -26,23 +26,6 @@ testthat::test_that("set_selected does not throw when passed a scalar logical va
   testthat::expect_error(filter_state$set_selected(FALSE), NA)
 })
 
-testthat::test_that("set_selected warns about passed values which are not logical", {
-  filter_state <- LogicalFilterState$new(c(TRUE, FALSE), varname = "test")
-  testthat::expect_warning(filter_state$set_selected(c(TRUE, "test")), "are not logical")
-})
-
-testthat::test_that("set_selected sets an intersection of logical values and the passed array", {
-  filter_state <- LogicalFilterState$new(c(TRUE, FALSE), varname = "test")
-  suppressWarnings(filter_state$set_selected(c(TRUE, "test")))
-  testthat::expect_equal(isolate(filter_state$get_selected()), TRUE)
-})
-
-testthat::test_that("set_selected set logical(0) when the intersection of the arguments and c(TRUE, FALSE) is empty", {
-  filter_state <- LogicalFilterState$new(c(TRUE, FALSE), varname = "test")
-  suppressWarnings(filter_state$set_selected("test"))
-  testthat::expect_equal(isolate(filter_state$get_selected()), logical(0))
-})
-
 testthat::test_that("set_selected throws when the passed values are not coercible to logical", {
   filter_state <- LogicalFilterState$new(c(TRUE, FALSE), varname = "test")
   testthat::expect_error(
