@@ -509,11 +509,19 @@ FilterState <- R6::R6Class( # nolint
     },
 
     # Filters out erroneous values from an array.
-    # Sanitizes the input of set_selected.
+    # @param the array of values
+    # @return the array of values without elements, which are outside of
+    # the accepted set for this FilterState
     remove_out_of_bound_values = function(values) {
       values
     },
 
+    # Casts an array of values to the type fitting this FilterState
+    # and validates the elements of the casted array
+    # satisfy the requirements of this FilterState.
+    # @param the array of values
+    # @return the casted array
+    # @note throws an error if the casting did not execute successfully.
     cast_and_validate = function(values) {
       values
     }
@@ -1152,16 +1160,15 @@ RangeFilterState <- R6::R6Class( # nolint
     },
 
     cast_and_validate = function(values) {
-      tryCatch(
-        values <- as.numeric(values),
+      tryCatch({
+        values <- as.numeric(values)
+        if (any(is.null(values) | is.na(values))) stop()
+      },
         error = function(error) {
           stop("The array of set values must contain values coercible to numeric.")
         }
       )
       if (length(values) != 2) stop("The array of set values must have length two.")
-      if (any(is.null(values) | is.na(values))) {
-        stop("The array of set values must contain values coercible to numeric.")
-      }
       values
     },
 
@@ -1621,14 +1628,15 @@ DateFilterState <- R6::R6Class( # nolint
     },
 
     cast_and_validate = function(values) {
-      tryCatch(
-        values <- as.Date(values),
+      tryCatch({
+        values <- as.Date(values)
+        if (any(is.null(values) | is.na(values))) stop()
+      },
         error = function(error) {
           stop("The array of set values must contain values coercible to Date.")
         }
       )
       if (length(values) != 2) stop("The array of set values must have length two.")
-      if (any(is.null(values) | is.na(values))) stop("The array of set values must contain values coercible to Date.")
       values
     },
 
@@ -1897,14 +1905,15 @@ DatetimeFilterState <- R6::R6Class( # nolint
     },
 
     cast_and_validate = function(values) {
-      tryCatch(
-        values <- as.POSIXct(values),
+      tryCatch({
+        values <- as.POSIXct(values)
+        if (any(is.null(values) | is.na(values))) stop()
+      },
         error = function(error) {
           stop("The array of set values must contain values coercible to POSIX.")
         }
       )
       if (length(values) != 2) stop("The array of set values must have length two.")
-      if (any(is.null(values) | is.na(values))) stop("The array of set values must contain values coercible to POSIX.")
       values
     },
 
