@@ -5,7 +5,7 @@
 \alias{set_filter_state.default}
 \alias{set_filter_state.default_filter}
 \alias{set_filter_state.list}
-\title{Set filter state in \code{FilterState} object}
+\title{Sets the filter state in \code{FilterState} object}
 \usage{
 set_filter_state(x, filter_state)
 
@@ -20,7 +20,7 @@ set_filter_state(x, filter_state)
 values of the variable used in filter. Depending on the \code{FilterState} type
 list should contain:
 \itemize{
-\item{\code{selected}}{ defines initial selection}
+\item{\code{selected}}{ defines initial selection. See notes for more details}
 \item{\code{keep_na} (\code{logical})}{ defines whether to keep or remove \code{NA} values}
 \item{\code{keep_inf} (\code{logical})}{ defines whether to keep or remove \code{Inf} values}
 }
@@ -32,6 +32,10 @@ adding \code{NA} and \code{Inf} to the selection vector.}
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
 Sets values of the selection in \code{FilterState} object
+}
+\note{
+The value of the \code{x$selected} needs to be modified according to the type
+of the passed \code{filter_state}.
 }
 \examples{
 filter_state <- teal:::RangeFilterState$new(
@@ -45,4 +49,13 @@ teal:::set_filter_state(
 )
 teal:::set_filter_state(c(1, 2, Inf), filter_state)
 teal:::set_filter_state(default_filter(), filter_state)
+}
+\seealso{
+\itemize{
+\item{\code{\link{LogicalFilterState}}}
+\item{\code{\link{ChoicesFilterState}}}
+\item{\code{\link{RangeFilterState}}}
+\item{\code{\link{DateFilterState}}}
+\item{\code{\link{DatetimeFilterState}}}
+}
 }

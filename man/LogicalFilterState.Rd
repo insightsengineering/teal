@@ -4,8 +4,15 @@
 \name{LogicalFilterState}
 \alias{LogicalFilterState}
 \title{\code{FilterState} object for logical variable}
+\value{
+invisibly \code{NULL}.
+}
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
+}
+\note{
+Casts the passed object to \code{logical} before validating the input
+making it possible to pass any object coercible to \code{logical} to this method.
 }
 \examples{
 filter_state <- teal:::LogicalFilterState$new(
@@ -19,6 +26,13 @@ isolate(filter_state$get_call())
 isolate(filter_state$set_selected(TRUE))
 isolate(filter_state$set_keep_na(TRUE))
 isolate(filter_state$get_call())
+
+## ------------------------------------------------
+## Method `LogicalFilterState$set_selected`
+## ------------------------------------------------
+
+filter <- teal:::LogicalFilterState$new(c(TRUE), varname = "name")
+filter$set_selected(TRUE)
 }
 \section{Super class}{
 \code{\link[teal:FilterState]{teal::FilterState}} -> \code{LogicalFilterState}
@@ -30,6 +44,7 @@ isolate(filter_state$get_call())
 \item \href{#method-get_call}{\code{LogicalFilterState$get_call()}}
 \item \href{#method-ui}{\code{LogicalFilterState$ui()}}
 \item \href{#method-server}{\code{LogicalFilterState$server()}}
+\item \href{#method-set_selected}{\code{LogicalFilterState$set_selected()}}
 \item \href{#method-clone}{\code{LogicalFilterState$clone()}}
 }
 }
@@ -43,7 +58,6 @@ isolate(filter_state$get_call())
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="FilterState" data-id="get_varlabel">}\href{../../teal/html/FilterState.html#method-get_varlabel}{\code{teal::FilterState$get_varlabel()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="FilterState" data-id="get_varname">}\href{../../teal/html/FilterState.html#method-get_varname}{\code{teal::FilterState$get_varname()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="FilterState" data-id="set_keep_na">}\href{../../teal/html/FilterState.html#method-set_keep_na}{\code{teal::FilterState$set_keep_na()}}\out{</span>}
-\item \out{<span class="pkg-link" data-pkg="teal" data-topic="FilterState" data-id="set_selected">}\href{../../teal/html/FilterState.html#method-set_selected}{\code{teal::FilterState$set_selected()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="FilterState" data-id="set_state">}\href{../../teal/html/FilterState.html#method-set_state}{\code{teal::FilterState$set_state()}}\out{</span>}
 }
 \out{</details>}
@@ -144,6 +158,32 @@ Server module
 \subsection{Returns}{
 nothing
 }
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-set_selected"></a>}}
+\if{latex}{\out{\hypertarget{method-set_selected}{}}}
+\subsection{Method \code{set_selected()}}{
+Sets the selected values of this \code{LogicalFilterState}.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{LogicalFilterState$set_selected(value)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{value}}{(\code{logical(1)}) the value to set. Must not contain the NA value.}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Examples}{
+\if{html}{\out{<div class="r example copy">}}
+\preformatted{filter <- teal:::LogicalFilterState$new(c(TRUE), varname = "name")
+filter$set_selected(TRUE)
+}
+\if{html}{\out{</div>}}
+
+}
+
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-clone"></a>}}

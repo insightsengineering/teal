@@ -7,6 +7,10 @@
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
 }
+\note{
+Casts the passed object to \code{POSIXct} before validating the input
+making it possible to pass any object coercible to \code{POSIXct} to this method.
+}
 \examples{
 filter_state <- teal:::init_filter_state(
   c(Sys.time() + seq(0, by = 3600, length.out = 10), NA),
@@ -19,6 +23,17 @@ isolate(filter_state$get_call())
 isolate(filter_state$set_selected(c(Sys.time() + 3L, Sys.time() + 8L)))
 isolate(filter_state$set_keep_na(TRUE))
 isolate(filter_state$get_call())
+
+## ------------------------------------------------
+## Method `DatetimeFilterState$set_selected`
+## ------------------------------------------------
+
+date <- as.POSIXct(1, origin = "01/01/1970")
+filter <- teal:::DatetimeFilterState$new(
+  c(date, date + 1, date + 2, date + 3),
+  varname = "name"
+)
+filter$set_selected(c(date + 1, date + 2))
 }
 \section{Super class}{
 \code{\link[teal:FilterState]{teal::FilterState}} -> \code{DatetimeFilterState}
@@ -30,6 +45,7 @@ isolate(filter_state$get_call())
 \item \href{#method-get_call}{\code{DatetimeFilterState$get_call()}}
 \item \href{#method-ui}{\code{DatetimeFilterState$ui()}}
 \item \href{#method-server}{\code{DatetimeFilterState$server()}}
+\item \href{#method-set_selected}{\code{DatetimeFilterState$set_selected()}}
 \item \href{#method-clone}{\code{DatetimeFilterState$clone()}}
 }
 }
@@ -43,7 +59,6 @@ isolate(filter_state$get_call())
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="FilterState" data-id="get_varlabel">}\href{../../teal/html/FilterState.html#method-get_varlabel}{\code{teal::FilterState$get_varlabel()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="FilterState" data-id="get_varname">}\href{../../teal/html/FilterState.html#method-get_varname}{\code{teal::FilterState$get_varname()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="FilterState" data-id="set_keep_na">}\href{../../teal/html/FilterState.html#method-set_keep_na}{\code{teal::FilterState$set_keep_na()}}\out{</span>}
-\item \out{<span class="pkg-link" data-pkg="teal" data-topic="FilterState" data-id="set_selected">}\href{../../teal/html/FilterState.html#method-set_selected}{\code{teal::FilterState$set_selected()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="FilterState" data-id="set_state">}\href{../../teal/html/FilterState.html#method-set_state}{\code{teal::FilterState$set_state()}}\out{</span>}
 }
 \out{</details>}
@@ -149,6 +164,40 @@ Server module
 \subsection{Returns}{
 nothing
 }
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-set_selected"></a>}}
+\if{latex}{\out{\hypertarget{method-set_selected}{}}}
+\subsection{Method \code{set_selected()}}{
+Sets the selected time frame of this \code{DatetimeFilterState}.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{DatetimeFilterState$set_selected(bounds)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{bounds}}{(\code{POSIX(2)}) the lower and the upper bound of the selected
+time frame. Must not contain NA values.}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Returns}{
+invisibly \code{NULL}.
+}
+\subsection{Examples}{
+\if{html}{\out{<div class="r example copy">}}
+\preformatted{date <- as.POSIXct(1, origin = "01/01/1970")
+filter <- teal:::DatetimeFilterState$new(
+  c(date, date + 1, date + 2, date + 3),
+  varname = "name"
+)
+filter$set_selected(c(date + 1, date + 2))
+}
+\if{html}{\out{</div>}}
+
+}
+
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-clone"></a>}}
