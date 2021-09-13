@@ -660,21 +660,13 @@ DFFilterStates <- R6::R6Class( # nolint
               set_filter_state(x = value, fstate)
             }
 
-            if (shiny::isRunning()) {
-              id <- html_id_mapping[[varname]]
-              private$add_filter_state(
-                id = id,
-                filter_state = fstate,
-                queue_index = 1L,
-                element_id = varname
-              )
-            } else {
-              self$queue_push(
-                x = fstate,
-                queue_index = 1L,
-                element_id = varname
-              )
-            }
+            id <- html_id_mapping[[varname]]
+            private$add_filter_state(
+              id = id,
+              filter_state = fstate,
+              queue_index = 1L,
+              element_id = varname
+            )
           }
           NULL
         }
@@ -899,22 +891,14 @@ MAEFilterStates <- R6::R6Class( # nolint
             if (!is(state, "default_filter")) {
               set_filter_state(x  = value, fstate)
             }
+            id <- html_id_mapping[[varname]]
+            private$add_filter_state(
+              id = id,
+              filter_state = fstate,
+              queue_index = "y",
+              element_id = varname
+            )
 
-            if (shiny::isRunning()) {
-              id <- html_id_mapping[[varname]]
-              private$add_filter_state(
-                id = id,
-                filter_state = fstate,
-                queue_index = "y",
-                element_id = varname
-              )
-            } else {
-              self$queue_push(
-                x = fstate,
-                queue_index = "y",
-                element_id = varname
-              )
-            }
           }
           NULL
         }
@@ -1126,21 +1110,13 @@ SEFilterStates <- R6::R6Class( # nolint
               set_filter_state(x = value, fstate)
             }
 
-            if (shiny::isRunning()) {
-              id <- row_html_mapping[[varname]]
-              private$add_filter_state(
-                id = id,
-                filter_state = fstate,
-                queue_index = "subset",
-                element_id = varname
-              )
-            } else {
-              self$queue_push(
-                x = fstate,
-                queue_index = "subset",
-                element_id = varname
-              )
-            }
+            id <- row_html_mapping[[varname]]
+            private$add_filter_state(
+              id = id,
+              filter_state = fstate,
+              queue_index = "subset",
+              element_id = varname
+            )
           }
 
           col_html_mapping <- private$map_vars_to_html_ids(get_filterable_varnames(SummarizedExperiment::colData(data)))
@@ -1156,21 +1132,13 @@ SEFilterStates <- R6::R6Class( # nolint
               set_filter_state(x = value, fstate)
             }
 
-            if (shiny::isRunning()) {
-              id <- col_html_mapping[[varname]]
-              private$add_filter_state(
-                id = id,
-                filter_state = fstate,
-                queue_index = "select",
-                element_id = varname
-              )
-            } else {
-              self$queue_push(
-                x = fstate,
-                queue_index = "select",
-                element_id = varname
-              )
-            }
+            id <- col_html_mapping[[varname]]
+            private$add_filter_state(
+              id = id,
+              filter_state = fstate,
+              queue_index = "select",
+              element_id = varname
+            )
           }
           NULL
         }
@@ -1434,21 +1402,13 @@ MatrixFilterStates <- R6::R6Class( # nolint
               set_filter_state(x = value, fstate)
             }
 
-            if (shiny::isRunning()) {
-              id <- html_id_mapping[[varname]]
-              private$add_filter_state(
-                id = id,
-                filter_state = fstate,
-                queue_index = "subset",
-                element_id = varname
-              )
-            } else {
-              self$queue_push(
-                x = fstate,
-                queue_index = 1L,
-                element_id = varname
-              )
-            }
+            id <- html_id_mapping[[varname]]
+            private$add_filter_state(
+              id = id,
+              filter_state = fstate,
+              queue_index = "subset",
+              element_id = varname
+            )
           }
           NULL
         }
