@@ -22,11 +22,11 @@ filter_state <- teal:::RangeFilterState$new(
   extract_type = character(0)
 )
 isolate(filter_state$get_call())
-
 isolate(filter_state$set_selected(c(3L, 8L)))
 isolate(filter_state$set_keep_na(TRUE))
 isolate(filter_state$set_keep_inf(TRUE))
 isolate(filter_state$get_call())
+
 
 ## ------------------------------------------------
 ## Method `RangeFilterState$set_selected`
@@ -34,8 +34,7 @@ isolate(filter_state$get_call())
 
 filter <- teal:::RangeFilterState$new(c(1, 2, 3, 4), varname = "name")
 filter$set_selected(c(2, 3))
-Adds `is.infinite(varname)` before existing condition calls if keep_inf is selected
-returns a call
+
 }
 \section{Super class}{
 \code{\link[teal:FilterState]{teal::FilterState}} -> \code{RangeFilterState}
@@ -245,8 +244,7 @@ of the selected range. Must not contain NA values.}
 \if{html}{\out{<div class="r example copy">}}
 \preformatted{filter <- teal:::RangeFilterState$new(c(1, 2, 3, 4), varname = "name")
 filter$set_selected(c(2, 3))
-Adds `is.infinite(varname)` before existing condition calls if keep_inf is selected
-returns a call
+
 }
 \if{html}{\out{</div>}}
 

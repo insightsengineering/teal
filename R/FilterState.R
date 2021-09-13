@@ -911,11 +911,11 @@ LogicalFilterState <- R6::R6Class( # nolint
 #'   extract_type = character(0)
 #' )
 #' isolate(filter_state$get_call())
-#'
 #' isolate(filter_state$set_selected(c(3L, 8L)))
 #' isolate(filter_state$set_keep_na(TRUE))
 #' isolate(filter_state$set_keep_inf(TRUE))
 #' isolate(filter_state$get_call())
+#'
 RangeFilterState <- R6::R6Class( # nolint
   "RangeFilterState",
   inherit = FilterState,
@@ -1141,6 +1141,7 @@ RangeFilterState <- R6::R6Class( # nolint
     #' @examples
     #' filter <- teal:::RangeFilterState$new(c(1, 2, 3, 4), varname = "name")
     #' filter$set_selected(c(2, 3))
+    #'
     set_selected = function(bounds) {
       super$set_selected(bounds)
     }
@@ -1151,8 +1152,8 @@ RangeFilterState <- R6::R6Class( # nolint
     inf_count = integer(0),
     is_integer = logical(0),
 
-    #' Adds `is.infinite(varname)` before existing condition calls if keep_inf is selected
-    #' returns a call
+    # Adds is.infinite(varname) before existing condition calls if keep_inf is selected
+    # returns a call
     add_keep_inf_call = function(filter_call) {
       if (isTRUE(self$get_keep_inf())) {
         call(
