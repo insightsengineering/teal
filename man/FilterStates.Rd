@@ -311,7 +311,7 @@ shiny.tag
 \subsection{Method \code{srv_add_filter_state()}}{
 Shiny server module to add filter variable
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{FilterStates$srv_add_filter_state(id, data)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{FilterStates$srv_add_filter_state(id, data, ...)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
@@ -322,6 +322,8 @@ An ID string that corresponds with the ID used to call the module's UI function.
 
 \item{\code{data}}{(\code{data.frame}, \code{MultiAssayExperiment}, \code{SummarizedExperiment}, \code{matrix})\cr
 object containing columns to be used as filter variables.}
+
+\item{\code{...}}{ignored}
 }
 \if{html}{\out{</div>}}
 }

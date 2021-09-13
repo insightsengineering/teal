@@ -72,7 +72,7 @@ filter_state_iris <- teal:::init_filter_state(
 )
 filter_state_iris$set_selected("virginica")
 
-queue <- datasets$get_filtered_datasets("iris")$get_filter_states(1)
+queue <- datasets$get_filtered_dataset("iris")$get_filter_states(1)
 queue$queue_push(filter_state_iris, queue_index = 1L, element_id = "virginica")
 
 isolate(datasets$get_call("iris"))
@@ -87,7 +87,7 @@ filter_state_mtcars <- teal:::init_filter_state(
 )
 filter_state_mtcars$set_selected(c(15, 20))
 
-queue <- datasets$get_filtered_datasets("mtcars")$get_filter_states("filter")
+queue <- datasets$get_filtered_dataset("mtcars")$get_filter_states("filter")
 queue$queue_push(filter_state_mtcars, queue_index = 1L, element_id = "mpg")
 
 isolate(datasets$get_call("iris"))
@@ -103,7 +103,7 @@ isolate(datasets$get_call("mtcars"))
 \item \href{#method-get_filterable_varnames}{\code{FilteredData$get_filterable_varnames()}}
 \item \href{#method-get_call}{\code{FilteredData$get_call()}}
 \item \href{#method-get_code}{\code{FilteredData$get_code()}}
-\item \href{#method-get_filtered_datasets}{\code{FilteredData$get_filtered_datasets()}}
+\item \href{#method-get_filtered_dataset}{\code{FilteredData$get_filtered_dataset()}}
 \item \href{#method-get_data}{\code{FilteredData$get_data()}}
 \item \href{#method-get_data_attr}{\code{FilteredData$get_data_attr()}}
 \item \href{#method-get_join_keys}{\code{FilteredData$get_join_keys()}}
@@ -269,13 +269,13 @@ Gets the R preprocessing code string that generates the unfiltered datasets
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-get_filtered_datasets"></a>}}
-\if{latex}{\out{\hypertarget{method-get_filtered_datasets}{}}}
-\subsection{Method \code{get_filtered_datasets()}}{
+\if{html}{\out{<a id="method-get_filtered_dataset"></a>}}
+\if{latex}{\out{\hypertarget{method-get_filtered_dataset}{}}}
+\subsection{Method \code{get_filtered_dataset()}}{
 Gets \code{FilteredDataset} object which contains all informations
 related to specific dataset.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{FilteredData$get_filtered_datasets(dataname = character(0))}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{FilteredData$get_filtered_dataset(dataname = character(0))}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{

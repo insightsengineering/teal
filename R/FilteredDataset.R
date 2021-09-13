@@ -5,11 +5,11 @@
 #' @examples
 #' iris_d <- dataset("iris", iris)
 #' iris_fd <- teal:::init_filtered_dataset(iris_d)
-#' 
+#'
 #' library(scda)
 #' adsl_d <- cdisc_dataset("ADSL", synthetic_cdisc_data("latest")$adsl)
 #' adsl_fd <- teal:::init_filtered_dataset(adsl_d)
-#' 
+#'
 #' library(MultiAssayExperiment)
 #' MAE_d <- dataset("MAE", miniACC)
 #'
@@ -386,6 +386,7 @@ FilteredDataset <- R6::R6Class( # nolint
     #' Server module to add filter variable for this dataset
     #' @param id (`character(1)`)\cr
     #'   An ID string that corresponds with the ID used to call the module's UI function.
+    #' @param ... ignored
     #' @return function - shiny server module
     srv_add_filter_state = function(id, ...) {
       moduleServer(
@@ -544,6 +545,8 @@ DefaultFilteredDataset <- R6::R6Class( # nolint
     #'
     #' @param id (`character(1)`)\cr
     #'   An ID string that corresponds with the ID used to call the module's UI function.
+    #' @param ... \cr
+    #'   Other arguments passed on to child `FilterStates` method.
     #' @return function - shiny server module
     srv_add_filter_state = function(id, ...) {
       moduleServer(
@@ -870,6 +873,8 @@ MAEFilteredDataset <- R6::R6Class( # nolint
     #'
     #' @param id (`character(1)`)\cr
     #'   An ID string that corresponds with the ID used to call the module's UI function.
+    #' @param ... \cr
+    #'   Other arguments passed on to child `FilterStates` method.
     #' @return function - shiny server module
     srv_add_filter_state = function(id, ...) {
       moduleServer(

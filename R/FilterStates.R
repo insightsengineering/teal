@@ -423,6 +423,7 @@ FilterStates <- R6::R6Class( # nolint
     #'   An ID string that corresponds with the ID used to call the module's UI function.
     #' @param data (`data.frame`, `MultiAssayExperiment`, `SummarizedExperiment`, `matrix`)\cr
     #'  object containing columns to be used as filter variables.
+    #' @param ... ignored
     #' @return `NULL`
     srv_add_filter_state =  function(id, data, ...) {
       moduleServer(
@@ -721,6 +722,9 @@ DFFilterStates <- R6::R6Class( # nolint
     #'   An ID string that corresponds with the ID used to call the module's UI function.
     #' @param data (`data.frame`)\cr
     #'  object which columns are used to choose filter variables.
+    #' @param vars_include (`character(n)`)\cr
+    #'  optional, vector of column names to be included.
+    #' @param ... ignored
     #' @return `NULL`
     srv_add_filter_state = function(id, data, vars_include = get_filterable_varnames(data = data), ...) {
       stopifnot(is.data.frame(data))
@@ -742,13 +746,13 @@ DFFilterStates <- R6::R6Class( # nolint
               active_filter_vars()
             )
 
-            #' TODO: maybe we can move it to srv fun argument (i.e. static map) so that it won't be re-executed
             data_choices_labeled(
               data = data,
               choices = choices,
               varlabels = private$get_varlabels(choices),
               keys = private$keys
             )
+            data_cl[]
           })
           observeEvent(
             avail_column_choices(),
@@ -964,6 +968,7 @@ MAEFilterStates <- R6::R6Class( # nolint
     #'  object containing `colData` which columns are used to be used
     #'  to choose filter variables.
     #'  in `optionalSelectInput`
+    #' @param ... ignored
     #' @return `NULL`
     srv_add_filter_state = function(id, data, ...) {
       stopifnot(is(data, "MultiAssayExperiment"))
@@ -1242,6 +1247,7 @@ SEFilterStates <- R6::R6Class( # nolint
     #'  object containing `colData` and `rowData` which columns
     #'  are used to choose filter variables. Column selection from `colData`
     #'  and `rowData` are separate shiny entities.
+    #' @param ... ignored
     #' @return `NULL`
     srv_add_filter_state = function(id, data, ...) {
       stopifnot(is(data, "SummarizedExperiment"))
@@ -1494,6 +1500,7 @@ MatrixFilterStates <- R6::R6Class( # nolint
     #'   An ID string that corresponds with the ID used to call the module's UI function.
     #' @param data (`matrix`)\cr
     #'  object which columns are used to choose filter variables.
+    #' @param ... ignored
     #' @return `NULL`
     srv_add_filter_state = function(id, data, ...) {
       stopifnot(is.matrix(data))

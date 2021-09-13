@@ -151,7 +151,7 @@ CDISCFilteredData <- R6::R6Class( # nolint
 
       return(unique(c(parents, dataname)))
     },
-    
+
     #' @description
     #' Gets variable names of a given dataname for the filtering.
     #'
@@ -160,8 +160,11 @@ CDISCFilteredData <- R6::R6Class( # nolint
     get_filterable_varnames = function(dataname) {
       varnames <- self$get_filtered_dataset(dataname)$get_filterable_varnames()
       parent_dataname <- self$get_parentname(dataname)
-      parent_varnames <- if_not_empty(parent_dataname, self$get_filtered_dataset(parent_dataname)$get_filterable_varnames())
-      setdiff(varnames, parent_varnames) # TODO: should we add always keys?
+      parent_varnames <- if_not_empty(
+        parent_dataname,
+        self$get_filtered_dataset(parent_dataname)$get_filterable_varnames()
+      )
+      setdiff(varnames, parent_varnames)
     },
 
     #' @description

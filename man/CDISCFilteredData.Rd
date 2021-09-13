@@ -75,7 +75,7 @@ filter_state_adtte <- teal:::init_filter_state(
 )
 filter_state_adtte$set_selected("OS")
 
-states <- datasets$get_filtered_datasets("ADTTE")$get_filter_states(1)
+states <- datasets$get_filtered_dataset("ADTTE")$get_filter_states(1)
 states$queue_push(filter_state_adtte, queue_index = 1L, element_id = "PARAMCD")
 
 isolate(datasets$get_call("ADTTE"))
@@ -89,7 +89,7 @@ filter_state_adsl <- teal:::init_filter_state(
 )
 filter_state_adsl$set_selected("F")
 
-states <- datasets$get_filtered_datasets("ADSL")$get_filter_states("filter")
+states <- datasets$get_filtered_dataset("ADSL")$get_filter_states("filter")
 states$queue_push(filter_state_adsl, queue_index = 1L, element_id = "SEX")
 
 isolate(datasets$get_call("ADSL"))
@@ -104,10 +104,10 @@ isolate(datasets$get_call("ADTTE"))
 \section{Methods}{
 \subsection{Public methods}{
 \itemize{
-\item \href{#method-new}{\code{CDISCFilteredData$new()}}
 \item \href{#method-datanames}{\code{CDISCFilteredData$datanames()}}
 \item \href{#method-get_call}{\code{CDISCFilteredData$get_call()}}
 \item \href{#method-get_filterable_datanames}{\code{CDISCFilteredData$get_filterable_datanames()}}
+\item \href{#method-get_filterable_varnames}{\code{CDISCFilteredData$get_filterable_varnames()}}
 \item \href{#method-get_parentname}{\code{CDISCFilteredData$get_parentname()}}
 \item \href{#method-set_dataset}{\code{CDISCFilteredData$set_dataset()}}
 \item \href{#method-clone}{\code{CDISCFilteredData$clone()}}
@@ -122,13 +122,13 @@ isolate(datasets$get_call("ADTTE"))
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="FilteredData" data-id="get_data_attr">}\href{../../teal/html/FilteredData.html#method-get_data_attr}{\code{teal::FilteredData$get_data_attr()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="FilteredData" data-id="get_datalabel">}\href{../../teal/html/FilteredData.html#method-get_datalabel}{\code{teal::FilteredData$get_datalabel()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="FilteredData" data-id="get_filter_overview">}\href{../../teal/html/FilteredData.html#method-get_filter_overview}{\code{teal::FilteredData$get_filter_overview()}}\out{</span>}
-\item \out{<span class="pkg-link" data-pkg="teal" data-topic="FilteredData" data-id="get_filterable_varnames">}\href{../../teal/html/FilteredData.html#method-get_filterable_varnames}{\code{teal::FilteredData$get_filterable_varnames()}}\out{</span>}
-\item \out{<span class="pkg-link" data-pkg="teal" data-topic="FilteredData" data-id="get_filtered_datasets">}\href{../../teal/html/FilteredData.html#method-get_filtered_datasets}{\code{teal::FilteredData$get_filtered_datasets()}}\out{</span>}
+\item \out{<span class="pkg-link" data-pkg="teal" data-topic="FilteredData" data-id="get_filtered_dataset">}\href{../../teal/html/FilteredData.html#method-get_filtered_dataset}{\code{teal::FilteredData$get_filtered_dataset()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="FilteredData" data-id="get_join_keys">}\href{../../teal/html/FilteredData.html#method-get_join_keys}{\code{teal::FilteredData$get_join_keys()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="FilteredData" data-id="get_keys">}\href{../../teal/html/FilteredData.html#method-get_keys}{\code{teal::FilteredData$get_keys()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="FilteredData" data-id="get_varlabels">}\href{../../teal/html/FilteredData.html#method-get_varlabels}{\code{teal::FilteredData$get_varlabels()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="FilteredData" data-id="get_varnames">}\href{../../teal/html/FilteredData.html#method-get_varnames}{\code{teal::FilteredData$get_varnames()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="FilteredData" data-id="handle_active_datanames">}\href{../../teal/html/FilteredData.html#method-handle_active_datanames}{\code{teal::FilteredData$handle_active_datanames()}}\out{</span>}
+\item \out{<span class="pkg-link" data-pkg="teal" data-topic="FilteredData" data-id="initialize">}\href{../../teal/html/FilteredData.html#method-initialize}{\code{teal::FilteredData$initialize()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="FilteredData" data-id="restore_state_from_bookmark">}\href{../../teal/html/FilteredData.html#method-restore_state_from_bookmark}{\code{teal::FilteredData$restore_state_from_bookmark()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="FilteredData" data-id="set_bookmark_state">}\href{../../teal/html/FilteredData.html#method-set_bookmark_state}{\code{teal::FilteredData$set_bookmark_state()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="FilteredData" data-id="set_code">}\href{../../teal/html/FilteredData.html#method-set_code}{\code{teal::FilteredData$set_code()}}\out{</span>}
@@ -138,16 +138,6 @@ isolate(datasets$get_call("ADTTE"))
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="FilteredData" data-id="ui_filter_panel">}\href{../../teal/html/FilteredData.html#method-ui_filter_panel}{\code{teal::FilteredData$ui_filter_panel()}}\out{</span>}
 }
 \out{</details>}
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-new"></a>}}
-\if{latex}{\out{\hypertarget{method-new}{}}}
-\subsection{Method \code{new()}}{
-Initialize a \code{CDISCFilteredData} object
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{CDISCFilteredData$new()}\if{html}{\out{</div>}}
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-datanames"></a>}}
@@ -205,6 +195,26 @@ Get names of datasets available for filtering
 }
 \subsection{Returns}{
 (\code{character} vector) of dataset names
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-get_filterable_varnames"></a>}}
+\if{latex}{\out{\hypertarget{method-get_filterable_varnames}{}}}
+\subsection{Method \code{get_filterable_varnames()}}{
+Gets variable names of a given dataname for the filtering.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{CDISCFilteredData$get_filterable_varnames(dataname)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{dataname}}{(\code{character}) name of the dataset}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Returns}{
+(\code{character} vector) of variable names
 }
 }
 \if{html}{\out{<hr>}}
