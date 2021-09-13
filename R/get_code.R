@@ -343,8 +343,6 @@ find_source_code <- function(lines) {
 #' @inheritParams enclosed_with
 #' @param dir of the file where source is called from.
 #' @return lines of code with source text included
-#'
-#' @importFrom magrittr %>%
 include_source_code <- function(lines, dir = NULL) {
   stopifnot(is_character_vector(lines))
   stopifnot(is.null(dir) || dir.exists(dir))

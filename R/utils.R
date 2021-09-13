@@ -324,8 +324,6 @@ code_from_script <- function(code, script, dataname = NULL) {
 #' writeLines(c("x <- 2", "#second line comment", "x <- x + 2"), file_example)
 #'
 #' read_script(file_example)
-#'
-#' @importFrom magrittr %>%
 read_script <- function(file, dataname = NULL) {
   stopifnot(is_character_single(file))
   stopifnot(file.exists(file))
