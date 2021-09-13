@@ -652,7 +652,7 @@ the number of unique subjects.}
 \if{html}{\out{<div class="arguments">}}
 \describe{
 \item{\code{id}}{module id
-Server function to display the number of patients in the filtered and unfiltered
+Server function to display the number of records in the filtered and unfiltered
 data}
 }
 \if{html}{\out{</div>}}
