@@ -509,7 +509,7 @@ FilterState <- R6::R6Class( # nolint
     },
 
     # Filters out erroneous values from an array.
-    # @param the array of values
+    # @param values the array of values
     # @return the array of values without elements, which are outside of
     # the accepted set for this FilterState
     remove_out_of_bound_values = function(values) {
@@ -519,7 +519,7 @@ FilterState <- R6::R6Class( # nolint
     # Casts an array of values to the type fitting this FilterState
     # and validates the elements of the casted array
     # satisfy the requirements of this FilterState.
-    # @param the array of values
+    # @param values the array of values
     # @return the casted array
     # @note throws an error if the casting did not execute successfully.
     cast_and_validate = function(values) {
