@@ -4,8 +4,15 @@
 \name{RangeFilterState}
 \alias{RangeFilterState}
 \title{\code{FilterState} object for numeric variable}
+\value{
+invisibly \code{NULL}
+}
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
+}
+\note{
+Casts the passed object to \code{numeric} before validating the input
+making it possible to pass any object coercible to \code{numeric} to this method.
 }
 \examples{
 filter_state <- teal:::RangeFilterState$new(
@@ -15,11 +22,19 @@ filter_state <- teal:::RangeFilterState$new(
   extract_type = character(0)
 )
 isolate(filter_state$get_call())
-
 isolate(filter_state$set_selected(c(3L, 8L)))
 isolate(filter_state$set_keep_na(TRUE))
 isolate(filter_state$set_keep_inf(TRUE))
 isolate(filter_state$get_call())
+
+
+## ------------------------------------------------
+## Method `RangeFilterState$set_selected`
+## ------------------------------------------------
+
+filter <- teal:::RangeFilterState$new(c(1, 2, 3, 4), varname = "name")
+filter$set_selected(c(2, 3))
+
 }
 \section{Super class}{
 \code{\link[teal:FilterState]{teal::FilterState}} -> \code{RangeFilterState}
@@ -34,6 +49,7 @@ isolate(filter_state$get_call())
 \item \href{#method-server}{\code{RangeFilterState$server()}}
 \item \href{#method-set_keep_inf}{\code{RangeFilterState$set_keep_inf()}}
 \item \href{#method-set_state}{\code{RangeFilterState$set_state()}}
+\item \href{#method-set_selected}{\code{RangeFilterState$set_selected()}}
 \item \href{#method-clone}{\code{RangeFilterState$clone()}}
 }
 }
@@ -47,7 +63,6 @@ isolate(filter_state$get_call())
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="FilterState" data-id="get_varlabel">}\href{../../teal/html/FilterState.html#method-get_varlabel}{\code{teal::FilterState$get_varlabel()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="FilterState" data-id="get_varname">}\href{../../teal/html/FilterState.html#method-get_varname}{\code{teal::FilterState$get_varname()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="FilterState" data-id="set_keep_na">}\href{../../teal/html/FilterState.html#method-set_keep_na}{\code{teal::FilterState$set_keep_na()}}\out{</span>}
-\item \out{<span class="pkg-link" data-pkg="teal" data-topic="FilterState" data-id="set_selected">}\href{../../teal/html/FilterState.html#method-set_selected}{\code{teal::FilterState$set_selected()}}\out{</span>}
 }
 \out{</details>}
 }
@@ -203,12 +218,38 @@ contains fields relevant for a specific class
 \item{\code{selected}}{ defines initial selection}
 \item{\code{keep_na} (\code{logical})}{ defines whether to keep or remove \code{NA} values}
 \item{\code{keep_inf} (\code{logical})}{ defines whether to keep or remove \code{Inf} values}
-}
-Adds \code{is.infinite(varname)} before existing condition calls if keep_inf is selected
-returns a call}
+}}
 }
 \if{html}{\out{</div>}}
 }
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-set_selected"></a>}}
+\if{latex}{\out{\hypertarget{method-set_selected}{}}}
+\subsection{Method \code{set_selected()}}{
+Sets the selected values of this \code{RangeFilterState}.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{RangeFilterState$set_selected(bounds)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{bounds}}{(\code{numeric(2)}) the two-elements array of the lower and upper bound
+of the selected range. Must not contain NA values.}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Examples}{
+\if{html}{\out{<div class="r example copy">}}
+\preformatted{filter <- teal:::RangeFilterState$new(c(1, 2, 3, 4), varname = "name")
+filter$set_selected(c(2, 3))
+
+}
+\if{html}{\out{</div>}}
+
+}
+
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-clone"></a>}}
