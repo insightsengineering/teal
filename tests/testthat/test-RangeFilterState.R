@@ -31,14 +31,47 @@ testthat::test_that("get_call returns a condition TRUE for all values passed to 
   testthat::expect_true(all(eval(isolate(filter_state$get_call()))))
 })
 
-testthat::test_that("set_selected throws an error if selecting outside of the provided range", {
+testthat::test_that("set_selected throws an error if selecting completely outside of the possible range", {
   filter_state <- RangeFilterState$new(7, varname = "test")
-  testthat::expect_error(filter_state$set_selected(c(1, 3)), regexp = "not valid for full range")
+  testthat::expect_error(
+    suppressWarnings(filter_state$set_selected(c(1, 3))),
+    regexp = "the upper bound of the range lower than the lower bound"
+  )
+})
+
+testthat::test_that("set_selected warns when the selected range intersects the possible range
+  but is not fully included in it", {
+  filter_state <- RangeFilterState$new(7, varname = "test")
+  testthat::expect_warning(filter_state$set_selected(c(1, 7)), "outside of the possible range")
+  testthat::expect_warning(filter_state$set_selected(c(7, 13)), "outside of the possible range")
+  testthat::expect_warning(filter_state$set_selected(c(1, 13)), "outside of the possible range")
+})
+
+testthat::test_that("set_selected defaults to the lower and the upper bound of the possible range
+  if the passed values exceed the possible range", {
+  filter_state <- RangeFilterState$new(c(7, 8), varname = "test")
+  suppressWarnings(filter_state$set_selected(c(1, 7)))
+  testthat::expect_equal(isolate(filter_state$get_selected()), c(7, 7))
+  suppressWarnings(filter_state$set_selected(c(7, 13)))
+  testthat::expect_equal(isolate(filter_state$get_selected()), c(7, 8))
+  suppressWarnings(filter_state$set_selected(c(1, 13)))
+  testthat::expect_equal(isolate(filter_state$get_selected()), c(7, 8))
+})
+
+testthat::test_that("set_selected throws when the passed values are not coercible to numeric", {
+  filter_state <- RangeFilterState$new(7, varname = "test")
+  testthat::expect_error(
+    filter_state$set_selected(c(print)),
+    "The array of set values must contain values coercible to numeric."
+  )
 })
 
 testthat::test_that("get_call returns a valid call after an unsuccessfull set_selected", {
   filter_state <- RangeFilterState$new(7, varname = "test")
-  testthat::expect_error(filter_state$set_selected(c(1, 3)), regexp = "not valid for full range")
+  testthat::expect_error(suppressWarnings(
+    filter_state$set_selected(c(1, 3)),
+    regexp = "the upper bound of the range lower than the lower bound"
+  ))
   test <- 7
   testthat::expect_true(all(eval(isolate(filter_state$get_call()))))
 })
@@ -94,19 +127,6 @@ testthat::test_that("get_call returns a condition true for NAs and Inf values af
   filter_state$set_keep_inf(TRUE)
   test <- c(NA, Inf)
   testthat::expect_true(all(eval(isolate(filter_state$get_call()))))
-})
-
-testthat::test_that("set_selected throw when selection not within allowed choices", {
-  filter_state <- RangeFilterState$new(c(1, 8), varname = "test")
-  testthat::expect_error(
-    filter_state$set_selected("a"),
-    "should be a numeric"
-  )
-
-  testthat::expect_error(
-    filter_state$set_selected(c(0, 1)),
-    "not valid for full range"
-  )
 })
 
 testthat::test_that("set_state needs a named list with selected, keep_na and keep_inf elements", {
