@@ -7,9 +7,9 @@
 lhs \%>\% rhs
 }
 \arguments{
-\item{lhs}{A value or the magrittr placeholder.}
+\item{lhs}{A value or the \code{magrittr} placeholder.}
 
-\item{rhs}{A function call using the magrittr semantics.}
+\item{rhs}{A function call using the \code{magrittr} semantics.}
 }
 \value{
 The result of calling \code{rhs(lhs)}.
