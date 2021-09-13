@@ -1488,7 +1488,7 @@ ChoicesFilterState <- R6::R6Class( # nolint
     remove_out_of_bound_values = function(values) {
       in_choices_mask <- values %in% private$choices
       if (length(values[!in_choices_mask]) > 0) {
-        warning(paste("Values:", paste(values[!in_choices_mask], collapse = ", "), "are not in choices."))
+        warning(paste("Values:", strtrim(paste(values[!in_choices_mask], collapse = ", "), 360), "are not in choices."))
       }
       values[in_choices_mask]
     }
