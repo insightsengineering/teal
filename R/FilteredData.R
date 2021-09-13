@@ -656,7 +656,7 @@ FilteredData <- R6::R6Class( # nolint
       )
     },
 
-    #' Server function to display the number of patients in the filtered and unfiltered
+    #' Server function to display the number of records in the filtered and unfiltered
     #' data
     #'
     #' @param id (`character(1)`)\cr
