@@ -380,8 +380,8 @@ FilteredData <- R6::R6Class( # nolint
         id,
         function(input, output, session) {
           for(dataname in names(state)) {
-            fd <- self$get_filtered_dataset(dataname = dataname)
-            fd$set_bookmark_state(
+            fdataset <- self$get_filtered_dataset(dataname = dataname)
+            fdataset$set_bookmark_state(
               id = private$get_ui_add_filter_id(dataname),
               state = state[[dataname]]
             )
@@ -492,10 +492,8 @@ FilteredData <- R6::R6Class( # nolint
               lapply(
                 self$datanames(),
                 function(dataname) {
-                  dataset_filters <- self$get_filtered_dataset(dataname)
-                  dataset_filters$ui(
-                    id = ns(private$get_ui_id(dataname))
-                  )
+                  fdataset <- self$get_filtered_dataset(dataname)
+                  fdataset$ui(id = ns(private$get_ui_id(dataname)))
                 }
               )
             )
@@ -528,13 +526,13 @@ FilteredData <- R6::R6Class( # nolint
               lapply(
                 self$datanames(),
                 function(dataname) {
-                  dataset_filters <- self$get_filtered_dataset(dataname)
+                  fdataset <- self$get_filtered_dataset(dataname)
                   id <- ns(private$get_ui_add_filter_id(dataname))
                   # add span with same id to show / hide
                   return(
                     span(
                       id = id,
-                      dataset_filters$ui_add_filter_state(id)
+                      fdataset$ui_add_filter_state(id)
                     )
                   )
                 }
@@ -584,7 +582,7 @@ FilteredData <- R6::R6Class( # nolint
             function(dataname) {
               fdataset <- self$get_filtered_dataset(dataname)
               fdataset$srv_add_filter_state(
-                id = private$get_ui_add_filter_id(dataname), 
+                id = private$get_ui_add_filter_id(dataname),
                 vars_include = self$get_filterable_varnames(dataname)
               )
             }
@@ -633,8 +631,8 @@ FilteredData <- R6::R6Class( # nolint
           observeEvent(input$remove_all_filters, {
             .log("removing all active filters from filter panel")
             lapply(self$datanames(), function(dataname) {
-              dataset_filter <- self$get_filtered_dataset(dataname = dataname)
-              dataset_filter$queues_empty()
+              fdataset <- self$get_filtered_dataset(dataname = dataname)
+              fdataset$queues_empty()
             })
           })
         }
