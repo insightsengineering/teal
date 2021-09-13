@@ -691,9 +691,9 @@ CDISCFilteredDataset <- R6::R6Class( # nolint
     }
   ),
   private = list(
-  # Returns the data.frame object without the columns used to join
-  # with the parent dataset specified in the join_keys argument
-  # to the constructor.
+    # Returns the data.frame object without the columns used to join
+    # with the parent dataset specified in the join_keys argument
+    # to the constructor.
     get_data_without_parent_keys = function() {
       if (is_empty(self$get_dataset()$get_parent())) {
         self$get_dataset()$data
