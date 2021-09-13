@@ -382,7 +382,7 @@ FilteredData <- R6::R6Class( # nolint
           for(dataname in names(state)) {
             fd <- self$get_filtered_dataset(dataname = dataname)
             fd$set_bookmark_state(
-              id = sprintf("add_%s_filter", dataname),
+              id = private$get_ui_add_filter_id(dataname),
               state = state[[dataname]]
             )
           }
@@ -494,7 +494,7 @@ FilteredData <- R6::R6Class( # nolint
                 function(dataname) {
                   dataset_filters <- self$get_filtered_dataset(dataname)
                   dataset_filters$ui(
-                    id = ns(sprintf("%s_filters", dataname))
+                    id = ns(private$get_ui_id(dataname))
                   )
                 }
               )
@@ -529,7 +529,7 @@ FilteredData <- R6::R6Class( # nolint
                 self$datanames(),
                 function(dataname) {
                   dataset_filters <- self$get_filtered_dataset(dataname)
-                  id <- ns(sprintf("add_%s_filter", dataname))
+                  id <- ns(private$get_ui_add_filter_id(dataname))
                   # add span with same id to show / hide
                   return(
                     span(
@@ -575,7 +575,7 @@ FilteredData <- R6::R6Class( # nolint
             isol_datanames,
             function(dataname) {
               fdataset <- self$get_filtered_dataset(dataname)
-              fdataset$server(id = sprintf("%s_filters", dataname))
+              fdataset$server(id = private$get_ui_id(dataname))
             }
           )
 
@@ -584,7 +584,7 @@ FilteredData <- R6::R6Class( # nolint
             function(dataname) {
               fdataset <- self$get_filtered_dataset(dataname)
               fdataset$srv_add_filter_state(
-                id = sprintf("add_%s_filter", dataname), 
+                id = private$get_ui_add_filter_id(dataname), 
                 vars_include = self$get_filterable_varnames(dataname)
               )
             }
@@ -614,8 +614,8 @@ FilteredData <- R6::R6Class( # nolint
               lapply(
                 self$datanames(),
                 function(dataname) {
-                  id_add_filter <- sprintf("add_%s_filter", dataname)
-                  id_filter_dataname <- sprintf("%s_filters", dataname)
+                  id_add_filter <- private$get_ui_add_filter_id(dataname)
+                  id_filter_dataname <- private$get_ui_id(dataname)
 
                   if (dataname %in% active_datanames()) {
                     # shinyjs takes care of the namespace around the id
@@ -729,6 +729,22 @@ FilteredData <- R6::R6Class( # nolint
 
     # we implement these functions as checks rather than returning logicals so they can
     # give informative error messages immediately
+
+    # @details
+    # Composes id for the FilteredDataset shiny element (active filter vars)
+    # @param dataname (`character(1)`)
+    # @return `character(1)` - `<dataname>_filter`
+    get_ui_id = function(dataname) {
+      sprintf("%s_filter", dataname)
+    },
+
+    # @details
+    # Composes id for the FilteredDataset shiny element (add filter state)
+    # @param dataname (`character(1)`)
+    # @return `character(1)` - `<dataname>_filter`
+    get_ui_add_filter_id = function(dataname) {
+      sprintf("add_%s_filter", dataname)
+    },
 
     # @details
     # Validates the state of this FilteredData.
