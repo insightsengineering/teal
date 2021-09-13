@@ -656,10 +656,7 @@ DFFilterStates <- R6::R6Class( # nolint
               varlabel = private$get_varlabels(varname),
               input_dataname = private$input_dataname
             )
-            if (!is(value, "default_filter")) {
-              set_filter_state(x = value, fstate)
-            }
-
+            set_filter_state(x = value, fstate)
             id <- html_id_mapping[[varname]]
             private$add_filter_state(
               id = id,
@@ -888,9 +885,7 @@ MAEFilterStates <- R6::R6Class( # nolint
               input_dataname = private$input_dataname,
               extract_type = "list"
             )
-            if (!is(state, "default_filter")) {
-              set_filter_state(x  = value, fstate)
-            }
+            set_filter_state(x  = value, fstate)
             id <- html_id_mapping[[varname]]
             private$add_filter_state(
               id = id,
@@ -1106,10 +1101,7 @@ SEFilterStates <- R6::R6Class( # nolint
               varname = as.name(varname),
               input_dataname = private$input_dataname
             )
-            if (!is(state, "default_filter")) {
-              set_filter_state(x = value, fstate)
-            }
-
+            set_filter_state(x = value, fstate)
             id <- row_html_mapping[[varname]]
             private$add_filter_state(
               id = id,
@@ -1128,10 +1120,7 @@ SEFilterStates <- R6::R6Class( # nolint
               varname = as.name(varname),
               input_dataname = private$input_dataname
             )
-            if (!is(state, "default_filter")) {
-              set_filter_state(x = value, fstate)
-            }
-
+            set_filter_state(x = value, fstate)
             id <- col_html_mapping[[varname]]
             private$add_filter_state(
               id = id,
@@ -1398,10 +1387,7 @@ MatrixFilterStates <- R6::R6Class( # nolint
               input_dataname = private$input_dataname,
               extract_type = "matrix"
             )
-            if (!is(state, "default_filter")) {
-              set_filter_state(x = value, fstate)
-            }
-
+            set_filter_state(x = value, fstate)
             id <- html_id_mapping[[varname]]
             private$add_filter_state(
               id = id,
