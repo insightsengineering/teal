@@ -35,3 +35,6 @@
 ^TODO\.md$
 ^staged_dependencies\.yaml$
 ^\.gitlab-ci\.yml$
+README.*
+^\.drone\.yml$
+^LICENSE\.md$
