@@ -741,7 +741,6 @@ DFFilterStates <- R6::R6Class( # nolint
               varlabels = private$get_varlabels(choices),
               keys = private$keys
             )
-            data_cl[]
           })
           observeEvent(
             avail_column_choices(),

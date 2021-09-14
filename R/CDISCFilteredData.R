@@ -153,7 +153,7 @@ CDISCFilteredData <- R6::R6Class( # nolint
     },
 
     #' @description
-    #' Gets variable names of a given dataname for the filtering.
+    #' Gets variable names of a given dataname for the filtering. This excludes parent dataset variable names.
     #'
     #' @param dataname (`character`) name of the dataset
     #' @return (`character` vector) of variable names

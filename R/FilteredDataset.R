@@ -265,6 +265,10 @@ FilteredDataset <- R6::R6Class( # nolint
       paste0(dataname, suffix)
     },
 
+    #' @description
+    #' Gets variable names for the filtering.
+    #'
+    #' @return (`character` vector) of variable names
     get_filterable_varnames = function() {
       get_filterable_varnames(self$get_data(filtered = FALSE))
     },
