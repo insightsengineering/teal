@@ -210,6 +210,42 @@ MAEDataset <- R6::R6Class( # nolint
   )
 )
 
+#' S3 method to construct an MAEDataset object from MultiAssayExperiment
+#'
+#' @inheritParams dataset
+#' @param x (`MultiAssayExperiment`)
+#'
+#' @examples
+#' # Simple example
+#' \dontrun{
+#' library(MultiAssayExperiment)
+#' MAE_dataset <- dataset("MAE", miniACC, keys = c("STUDYID", "USUBJID"))
+#' MAE_dataset$get_dataname()
+#' MAE_dataset$get_dataset_label()
+#' MAE_dataset$get_code()
+#' MAE_dataset$get_raw_data()
+#' }
+#' @export
+dataset.MultiAssayExperiment <- function(dataname, # nousage
+                                         x,
+                                         keys = character(0),
+                                         label = data_label(x),
+                                         code = character(0),
+                                         vars = list()) {
+  stopifnot(is_character_single(dataname))
+  stopifnot(is_character_vector(code, min_length = 0, max_length = 1) || is(code, "CodeClass"))
+  stopifnot(identical(vars, list()) || is_fully_named_list(vars))
+
+  MAEDataset$new(
+    dataname = dataname,
+    x = x,
+    keys = keys,
+    code = code,
+    label = label,
+    vars = vars
+  )
+}
+
 #' Public facing constructor for MAEDataset
 #'
 #' @inheritParams dataset
@@ -232,7 +268,8 @@ mae_dataset <- function(dataname, # nousage
                         label = data_label(x),
                         code = character(0),
                         vars = list()) {
-  MAEDataset$new(
+  stopifnot(is(x, "MultiAssayExperiment"))
+  dataset(
     dataname = dataname,
     x = x,
     keys = keys,
@@ -241,20 +278,3 @@ mae_dataset <- function(dataname, # nousage
     vars = vars
   )
 }
-
-#' S3 method to construct an MAEDataset object from MultiAssayExperiment
-#'
-#' @inheritParams mae_dataset
-#'
-#' @examples
-#' # Simple example
-#' \dontrun{
-#' library(MultiAssayExperiment)
-#' MAE_dataset <- dataset("MAE", miniACC, keys = c("STUDYID", "USUBJID"))
-#' MAE_dataset$get_dataname()
-#' MAE_dataset$get_dataset_label()
-#' MAE_dataset$get_code()
-#' MAE_dataset$get_raw_data()
-#' }
-#' @export
-dataset.MultiAssayExperiment <- mae_dataset
