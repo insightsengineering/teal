@@ -193,8 +193,7 @@ Get selected values from \code{FilterState}
 }
 
 \subsection{Returns}{
-class of returned object depends of class of the
-\code{FilterState}
+class of the returned object depends of class of the \code{FilterState}
 }
 }
 \if{html}{\out{<hr>}}

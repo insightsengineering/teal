@@ -283,7 +283,7 @@ FilterState <- R6::R6Class( # nolint
       private$na_count <- sum(is.na(x))
       private$keep_na <- reactiveVal(value = FALSE)
 
-      return(invisible(self))
+      invisible(self)
     },
 
     #' @description
@@ -350,8 +350,8 @@ FilterState <- R6::R6Class( # nolint
 
     #' @description
     #' Get selected values from `FilterState`
-    #' @return class of returned object depends of class of the
-    #' `FilterState`
+    #'
+    #' @return class of the returned object depends of class of the `FilterState`
     get_selected = function() {
       private$selected()
     },
@@ -376,6 +376,8 @@ FilterState <- R6::R6Class( # nolint
     #'  `private$selected` which is reactive. Values type have to be the
     #'  same as `private$choices`.
     set_selected = function(value) {
+      value <- private$cast_and_validate(value)
+      value <- private$remove_out_of_bound_values(value)
       private$validate_selection(value)
       private$selected(value)
       invisible(NULL)
@@ -504,6 +506,29 @@ FilterState <- R6::R6Class( # nolint
     # has a wrong class or is outside of possible choices
     validate_selection = function(value) {
       invisible(NULL)
+    },
+
+    # Filters out erroneous values from an array.
+    #
+    # @param values the array of values
+    #
+    # @return the array of values without elements, which are outside of
+    # the accepted set for this FilterState
+    remove_out_of_bound_values = function(values) {
+      values
+    },
+
+    # Casts an array of values to the type fitting this `FilterState`
+    # and validates the elements of the casted array
+    # satisfy the requirements of this `FilterState`.
+    #
+    # @param values the array of values
+    #
+    # @return the casted array
+    #
+    # @note throws an error if the casting did not execute successfully.
+    cast_and_validate = function(values) {
+      values
     }
   )
 )
@@ -763,9 +788,11 @@ LogicalFilterState <- R6::R6Class( # nolint
 
     #' @description
     #' Server module
+    #'
     #' @param input (`Shiny`)\cr input object
     #' @param output (`Shiny`)\cr output object
     #' @param session (`Shiny`)\cr session object
+    #'
     #' @return nothing
     server = function(input, output, session) {
       output$plot <- renderPlot(
@@ -796,12 +823,7 @@ LogicalFilterState <- R6::R6Class( # nolint
         eventExpr = input$selection,
         handlerExpr = {
           selection_state <- input$selection
-          self$set_selected(
-            value = if_null(
-              as.logical(selection_state),
-              logical(0)
-            )
-          )
+          self$set_selected(if_null(as.logical(selection_state), logical(0)))
           private$log_state()
         }
       )
@@ -809,6 +831,23 @@ LogicalFilterState <- R6::R6Class( # nolint
       private$observe_keep_na(input)
 
       NULL
+    },
+
+    #' @description
+    #' Sets the selected values of this `LogicalFilterState`.
+    #'
+    #' @param value (`logical(1)`) the value to set. Must not contain the NA value.
+    #'
+    #' @returns invisibly `NULL`.
+    #'
+    #' @note Casts the passed object to `logical` before validating the input
+    #' making it possible to pass any object coercible to `logical` to this method.
+    #'
+    #' @examples
+    #' filter <- teal:::LogicalFilterState$new(c(TRUE), varname = "name")
+    #' filter$set_selected(TRUE)
+    set_selected = function(value) {
+      super$set_selected(value)
     }
   ),
   private = list(
@@ -820,11 +859,12 @@ LogicalFilterState <- R6::R6Class( # nolint
         "NA:", toString(self$get_keep_na())
       )
     },
+
     validate_selection = function(value) {
       if (!(is_logical_empty(value) || is_logical_single(value))) {
         stop(
           sprintf(
-            "value of the selection for `%s` in `%s` should be a single logical value",
+            "value of the selection for `%s` in `%s` should be a logical scalar (TRUE or FALSE)",
             self$get_varname(deparse = TRUE),
             self$get_dataname(deparse = TRUE)
           )
@@ -837,7 +877,16 @@ LogicalFilterState <- R6::R6Class( # nolint
         self$get_varname(deparse = TRUE)
       )
       check_in_subset(value, private$choices, pre_msg = pre_msg)
+    },
 
+    cast_and_validate = function(values) {
+      tryCatch({
+        values_logical <- as.logical(values)
+        if (any(is.na(values_logical))) stop()
+      },
+      error = function(cond) stop("The array of set values must contain values coercible to logical.")
+      )
+      values_logical
     }
   )
 )
@@ -857,11 +906,11 @@ LogicalFilterState <- R6::R6Class( # nolint
 #'   extract_type = character(0)
 #' )
 #' isolate(filter_state$get_call())
-#'
 #' isolate(filter_state$set_selected(c(3L, 8L)))
 #' isolate(filter_state$set_keep_na(TRUE))
 #' isolate(filter_state$set_keep_inf(TRUE))
 #' isolate(filter_state$get_call())
+#'
 RangeFilterState <- R6::R6Class( # nolint
   "RangeFilterState",
   inherit = FilterState,
@@ -1020,13 +1069,7 @@ RangeFilterState <- R6::R6Class( # nolint
                 "Left range boundary should be lower than right"
               )
             )
-
-            self$set_selected(
-              value = if_null(
-                selection_state,
-                numeric(0)
-              )
-            )
+            self$set_selected(if_null(selection_state, numeric(0)))
           }
           private$log_state()
         })
@@ -1071,6 +1114,25 @@ RangeFilterState <- R6::R6Class( # nolint
       }
       super$set_state(state[names(state) %in% c("selected", "keep_na")])
       invisible(NULL)
+    },
+
+    #' @description
+    #' Sets the selected values of this `RangeFilterState`.
+    #'
+    #' @param bounds (`numeric(2)`) the two-elements array of the lower and upper bound
+    #'   of the selected range. Must not contain NA values.
+    #'
+    #' @returns invisibly `NULL`
+    #'
+    #' @note Casts the passed object to `numeric` before validating the input
+    #' making it possible to pass any object coercible to `numeric` to this method.
+    #'
+    #' @examples
+    #' filter <- teal:::RangeFilterState$new(c(1, 2, 3, 4), varname = "name")
+    #' filter$set_selected(c(2, 3))
+    #'
+    set_selected = function(bounds) {
+      super$set_selected(bounds)
     }
   ),
   private = list(
@@ -1079,8 +1141,8 @@ RangeFilterState <- R6::R6Class( # nolint
     inf_count = integer(0),
     is_integer = logical(0),
 
-    #' Adds `is.infinite(varname)` before existing condition calls if keep_inf is selected
-    #' returns a call
+    # Adds is.infinite(varname) before existing condition calls if keep_inf is selected
+    # returns a call
     add_keep_inf_call = function(filter_call) {
       if (isTRUE(self$get_keep_inf())) {
         call(
@@ -1118,6 +1180,30 @@ RangeFilterState <- R6::R6Class( # nolint
         self$get_varname(deparse = TRUE)
       )
       check_in_range(value, private$choices, pre_msg = pre_msg)
+    },
+
+    cast_and_validate = function(values) {
+      tryCatch({
+        values <- as.numeric(values)
+        if (any(is.na(values))) stop()
+      },
+        error = function(error) stop("The array of set values must contain values coercible to numeric.")
+      )
+      if (length(values) != 2) stop("The array of set values must have length two.")
+      values
+    },
+
+    remove_out_of_bound_values = function(values) {
+      if (values[1] < private$choices[1]) {
+        warning(paste("Value: ", values[1], "is outside of the possible range."))
+        values[1] <- private$choices[1]
+      }
+
+      if (values[2] > private$choices[2]) {
+        warning(paste("Value: ", values[2], "is outside of the possible range."))
+        values[2] <- private$choices[2]
+      }
+      values
     }
   )
 )
@@ -1325,6 +1411,24 @@ ChoicesFilterState <- R6::R6Class( # nolint
       }
       super$set_state(state)
       invisible(NULL)
+    },
+
+    #' @description
+    #' Sets the selected values of this `ChoicesFilterState`.
+    #'
+    #' @param selection (`character`) the array of the selected choices.
+    #'   Must not contain NA values.
+    #'
+    #' @return invisibly `NULL`
+    #'
+    #' @note Casts the passed object to `character` before validating the input
+    #' making it possible to pass any object coercible to `character` to this method.
+    #'
+    #' @examples
+    #' filter <- teal:::ChoicesFilterState$new(c("a", "b", "c"), varname = "name")
+    #' filter$set_selected(c("c", "a"))
+    set_selected = function(selection) {
+      super$set_selected(selection)
     }
   ),
   private = list(
@@ -1341,11 +1445,12 @@ ChoicesFilterState <- R6::R6Class( # nolint
         "NA:", toString(self$get_keep_na())
       )
     },
+
     validate_selection = function(value) {
       if (!is.character(value)) {
         stop(
           sprintf(
-            "value of the selection for `%s` in `%s` should be a character",
+            "Values of the selection for `%s` in `%s` should be an array of character.",
             self$get_varname(deparse = TRUE),
             self$get_dataname(deparse = TRUE)
           )
@@ -1357,6 +1462,24 @@ ChoicesFilterState <- R6::R6Class( # nolint
         self$get_varname(deparse = TRUE)
       )
       check_in_subset(value, private$choices, pre_msg = pre_msg)
+    },
+
+    cast_and_validate = function(values) {
+      tryCatch({
+        values <- as.character(values)
+        if (any(is.na(values))) stop()
+      },
+        error = function(error) stop("The array of set values must contain values coercible to character.")
+      )
+      values
+    },
+
+    remove_out_of_bound_values = function(values) {
+      in_choices_mask <- values %in% private$choices
+      if (length(values[!in_choices_mask]) > 0) {
+        warning(paste("Values:", strtrim(paste(values[!in_choices_mask], collapse = ", "), 360), "are not in choices."))
+      }
+      values[in_choices_mask]
     }
   )
 )
@@ -1519,6 +1642,28 @@ DateFilterState <- R6::R6Class( # nolint
       })
 
       return(NULL)
+    },
+
+    #' @description
+    #' Sets the selected time frame of this `DateFilterState`.
+    #'
+    #' @param bounds (`Date(2)`) the lower and the upper bound of the selected
+    #'   time frame. Must not contain NA values.
+    #'
+    #' @return invisibly `NULL`.
+    #'
+    #' @note Casts the passed object to `Date` before validating the input
+    #' making it possible to pass any object coercible to `Date` to this method.
+    #'
+    #' @examples
+    #' date <- as.Date("13/09/2021")
+    #' filter <- teal:::DateFilterState$new(
+    #'   c(date, date + 1, date + 2, date + 3),
+    #'   varname = "name"
+    #' )
+    #' filter$set_selected(c(date + 1, date + 2))
+    set_selected = function(bounds) {
+      super$set_selected(bounds)
     }
   ),
   private = list(
@@ -1546,6 +1691,30 @@ DateFilterState <- R6::R6Class( # nolint
         self$get_varname(deparse = TRUE)
       )
       check_in_range(value, private$choices, pre_msg = pre_msg)
+    },
+
+    cast_and_validate = function(values) {
+      tryCatch({
+        values <- as.Date(values)
+        if (any(is.na(values))) stop()
+      },
+        error = function(error) stop("The array of set values must contain values coercible to Date.")
+      )
+      if (length(values) != 2) stop("The array of set values must have length two.")
+      values
+    },
+
+    remove_out_of_bound_values = function(values) {
+      if (values[1] < private$choices[1]) {
+        warning(paste("Value: ", values[1], "is outside of the possible range."))
+        values[1] <- private$choices[1]
+      }
+
+      if (values[length(values)] > private$choices[2]) {
+        warning(paste("Value: ", values[length(values)], "is outside of the possible range."))
+        values[length(values)] <- private$choices[2]
+      }
+      values
     }
   )
 )
@@ -1767,6 +1936,28 @@ DatetimeFilterState <- R6::R6Class( # nolint
       })
 
       return(NULL)
+    },
+
+    #' @description
+    #' Sets the selected time frame of this `DatetimeFilterState`.
+    #'
+    #' @param bounds (`POSIX(2)`) the lower and the upper bound of the selected
+    #'   time frame. Must not contain NA values.
+    #'
+    #' @return invisibly `NULL`.
+    #'
+    #' @note Casts the passed object to `POSIXct` before validating the input
+    #' making it possible to pass any object coercible to `POSIXct` to this method.
+    #'
+    #' @examples
+    #' date <- as.POSIXct(1, origin = "01/01/1970")
+    #' filter <- teal:::DatetimeFilterState$new(
+    #'   c(date, date + 1, date + 2, date + 3),
+    #'   varname = "name"
+    #' )
+    #' filter$set_selected(c(date + 1, date + 2))
+    set_selected = function(bounds) {
+      super$set_selected(bounds)
     }
   ),
   private = list(
@@ -1797,6 +1988,30 @@ DatetimeFilterState <- R6::R6Class( # nolint
         self$get_varname(deparse = TRUE)
       )
       check_in_range(value, private$choices, pre_msg = pre_msg)
+    },
+
+    cast_and_validate = function(values) {
+      tryCatch({
+        values <- as.POSIXct(values)
+        if (any(is.na(values))) stop()
+      },
+        error = function(error) stop("The array of set values must contain values coercible to POSIX.")
+      )
+      if (length(values) != 2) stop("The array of set values must have length two.")
+      values
+    },
+
+    remove_out_of_bound_values = function(values) {
+      if (values[1] < private$choices[1]) {
+        warning(paste("Value: ", values[1], "is outside of the possible range."))
+        values[1] <- private$choices[1]
+      }
+
+      if (values[2] > private$choices[2]) {
+        warning(paste("Value: ", values[2], "is outside of the possible range."))
+        values[2] <- private$choices[2]
+      }
+      values
     }
   )
 )

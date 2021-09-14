@@ -308,12 +308,12 @@ FilteredData <- R6::R6Class( # nolint
         datanames <- self$datanames()
       } else {
         for (dataname in datanames) {
-        tryCatch(
-          check_in_subset(datanames, self$datanames(), "Some datasets are not available: "),
-          error = function(e) {
-            message(e$message)
-          }
-        )
+          tryCatch(
+            check_in_subset(datanames, self$datanames(), "Some datasets are not available: "),
+            error = function(e) {
+              message(e$message)
+            }
+          )
         }
       }
       datanames <- self$get_filterable_datanames(datanames)
@@ -658,7 +658,7 @@ FilteredData <- R6::R6Class( # nolint
       )
     },
 
-    #' Server function to display the number of patients in the filtered and unfiltered
+    #' Server function to display the number of records in the filtered and unfiltered
     #' data
     #'
     #' @param id (`character(1)`)\cr
