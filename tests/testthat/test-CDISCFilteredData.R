@@ -30,7 +30,7 @@ test_that("set filter state", {
   filter_state_adsl <- ChoicesFilterState$new(adsl$sex, varname = "sex")
   filter_state_adsl$set_selected("F")
 
-  queue <- ds$get_filtered_datasets("ADSL")$get_filter_states(1)
+  queue <- ds$get_filtered_dataset("ADSL")$get_filter_states(1)
   queue$queue_push(filter_state_adsl, queue_index = 1L, element_id = "sex")
 
   expect_identical(
