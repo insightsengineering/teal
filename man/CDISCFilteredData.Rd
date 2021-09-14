@@ -201,7 +201,7 @@ Get names of datasets available for filtering
 \if{html}{\out{<a id="method-get_filterable_varnames"></a>}}
 \if{latex}{\out{\hypertarget{method-get_filterable_varnames}{}}}
 \subsection{Method \code{get_filterable_varnames()}}{
-Gets variable names of a given dataname for the filtering.
+Gets variable names of a given dataname for the filtering. This excludes parent dataset variable names.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{CDISCFilteredData$get_filterable_varnames(dataname)}\if{html}{\out{</div>}}
 }
