@@ -823,12 +823,7 @@ LogicalFilterState <- R6::R6Class( # nolint
         eventExpr = input$selection,
         handlerExpr = {
           selection_state <- input$selection
-          self$set_selected(
-            value = if_null(
-              as.logical(selection_state),
-              logical(0)
-            )
-          )
+          self$set_selected(if_null(as.logical(selection_state), logical(0)))
           private$log_state()
         }
       )
@@ -1074,13 +1069,7 @@ RangeFilterState <- R6::R6Class( # nolint
                 "Left range boundary should be lower than right"
               )
             )
-
-            self$set_selected(
-              value = if_null(
-                selection_state,
-                numeric(0)
-              )
-            )
+            self$set_selected(if_null(selection_state, numeric(0)))
           }
           private$log_state()
         })
