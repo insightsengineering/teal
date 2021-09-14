@@ -50,7 +50,7 @@ testthat::test_that("get_call returns a call filtering an MAE object using Choic
 
   test <- miniACC
   eval(isolate(filter_states$get_call()))
-  testthat::expect_identical(
+  testthat::expect_equal(
     output,
     MultiAssayExperiment::subsetByColData(test, test$race == "white")
   )
@@ -78,7 +78,7 @@ testthat::test_that("get_call returns a call filtering an MAE object using Range
 
   test <- miniACC
   eval(isolate(filter_states$get_call()))
-  testthat::expect_identical(
+  testthat::expect_equal(
     output,
     MultiAssayExperiment::subsetByColData(
       test,
