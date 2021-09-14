@@ -687,7 +687,6 @@ FilteredData <- R6::R6Class( # nolint
               seq_len(nrow(datasets_df)),
               function(x) {
                 tags$tr(
-                  id = session$ns(rownames(datasets_df)[x]),
                   tags$td(rownames(datasets_df)[x]),
                   tags$td(datasets_df[x, 1]),
                   tags$td(datasets_df[x, 2])
