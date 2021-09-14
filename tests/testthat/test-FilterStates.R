@@ -135,7 +135,7 @@ testthat::test_that("get_call returns a call filtering a data.frame base on a co
   choices_filter <- ChoicesFilterState$new(x = c("a", "c"), varname = "choices")
   logical_filter <- LogicalFilterState$new(x = c(FALSE), varname = "logical")
   date_filter <- DateFilterState$new(x = as.Date(c("2021/08/25", "2021/08/26")), varname = "date")
-  datetime_filter <- DatetimeFilterState$new(x = c(ISOdate(2021, 8, 25)), varname = "datetime")
+  datetime_filter <- DatetimeFilterState$new(x = c(ISOdate(2021, 8, 25, tz = Sys.timezone())), varname = "datetime")
   filter_states$queue_push(queue_index = 1, x = range_filter, element_id = "test")
   filter_states$queue_push(queue_index = 1, x = choices_filter, element_id = "test")
   filter_states$queue_push(queue_index = 1, x = logical_filter, element_id = "test")
@@ -148,7 +148,7 @@ testthat::test_that("get_call returns a call filtering a data.frame base on a co
     choices = letters[1:5],
     logical = c(FALSE, FALSE, FALSE, TRUE, FALSE),
     date = seq(as.Date("2021/08/25"), by = "day", length.out = 5),
-    datetime = seq(ISOdate(2021, 8, 25), by = "day", length.out = 5)
+    datetime = seq(ISOdate(2021, 8, 25, tz = Sys.timezone()), by = "day", length.out = 5)
   ))
 
   eval(isolate(filter_states$get_call()))
