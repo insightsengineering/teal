@@ -1,0 +1,16 @@
+---
+
+include:
+  - project: 'nest/automation/gitlab-shared-library'
+    ref: master
+    file: R/R.gitlab-ci.yml
+
+.r-check-matrix:
+  parallel:
+    matrix:
+      - R_IMAGE_NAME: ["rocker/verse"]
+        R_IMAGE_TAG: ["4.0.3", "4.1.0"]
+      - R_IMAGE_NAME: ["rocker/verse"]
+        R_IMAGE_TAG: ["3.6.3"]
+        DISABLE_SYS_DEPS_INSTALL: "true"
+        DISABLE_R_DEPS_INSTALL: "true"
