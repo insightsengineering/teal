@@ -97,7 +97,6 @@ get_code.DataAbstract <- function(x, dataname = character(0), deparse = TRUE, ..
 
 #' @rdname get_code
 #' @export
-#' @importFrom magrittr %>%
 get_code.default <- function(x,
                              exclude_comments = TRUE,
                              read_sources = TRUE,
@@ -343,8 +342,6 @@ find_source_code <- function(lines) {
 #' @inheritParams enclosed_with
 #' @param dir of the file where source is called from.
 #' @return lines of code with source text included
-#'
-#' @importFrom magrittr %>%
 include_source_code <- function(lines, dir = NULL) {
   stopifnot(is_character_vector(lines))
   stopifnot(is.null(dir) || dir.exists(dir))
