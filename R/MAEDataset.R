@@ -210,7 +210,7 @@ MAEDataset <- R6::R6Class( # nolint
   )
 )
 
-#' S3 method to construct an MAEDataset object from MultiAssayExperiment
+#' Public facing constructor for MAEDataset
 #'
 #' @inheritParams dataset
 #' @param x (`MultiAssayExperiment`)

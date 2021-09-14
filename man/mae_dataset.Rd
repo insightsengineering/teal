@@ -2,7 +2,7 @@
 % Please edit documentation in R/MAEDataset.R
 \name{mae_dataset}
 \alias{mae_dataset}
-\title{S3 method to construct an MAEDataset object from MultiAssayExperiment}
+\title{Public facing constructor for MAEDataset}
 \usage{
 mae_dataset(
   dataname,
@@ -39,7 +39,7 @@ are included to this object as local \code{vars} and they cannot be modified
 within another dataset.}
 }
 \description{
-S3 method to construct an MAEDataset object from MultiAssayExperiment
+Public facing constructor for MAEDataset
 }
 \examples{
 # Simple example
