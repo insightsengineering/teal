@@ -97,7 +97,6 @@ get_code.DataAbstract <- function(x, dataname = character(0), deparse = TRUE, ..
 
 #' @rdname get_code
 #' @export
-#' @importFrom magrittr %>%
 get_code.default <- function(x,
                              exclude_comments = TRUE,
                              read_sources = TRUE,
