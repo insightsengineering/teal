@@ -2,6 +2,7 @@
 
 ### New features
 * Added `cdse_dataset_connector` to create delayed data objects from `CDSE`.
+* Added `datasetdb_dataset_connector` to create delayed data objects from `DataSetDB`.
 * Added `split` and `merge` methods to the `JoinKeys` object.
 
 ### Bug fixes

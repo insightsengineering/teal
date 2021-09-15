@@ -183,6 +183,7 @@ cdisc_dataset_connector <- function(dataname,
   return(x)
 }
 
+
 #' Load `DatasetConnector` object from a file
 #'
 #' `r lifecycle::badge("experimental")`
@@ -193,6 +194,8 @@ cdisc_dataset_connector <- function(dataname,
 #' @inheritParams dataset_file
 #'
 #' @return `DatasetConnector` object
+#'
+#' @rdname dataset_connector_file
 #'
 #' @export
 #'
@@ -217,6 +220,7 @@ dataset_connector_file <- function(path) { # nolint
 }
 
 #' @inherit dataset_connector_file
+#' @rdname dataset_connector_file
 #' @description `r lifecycle::badge("soft-deprecated")`
 #' @export
 relational_dataset_connector_file <- function(path) { # nolint
@@ -228,7 +232,6 @@ relational_dataset_connector_file <- function(path) { # nolint
   dataset_connector_file(path = path)
 }
 
-
 #' Load `CDISCDatasetConnector` object from a file
 #'
 #' `r lifecycle::badge("experimental")`
@@ -239,6 +242,8 @@ relational_dataset_connector_file <- function(path) { # nolint
 #' @inheritParams dataset_connector_file
 #'
 #' @return `CDISCDatasetConnector` object
+#'
+#' @rdname dataset_connector_file
 #'
 #' @export
 #'
@@ -264,7 +269,6 @@ cdisc_dataset_connector_file <- function(path) { # nolint # nousage
 
 
 # RCD ====
-
 #' `RCD` `DatasetConnector`
 #'
 #' `r lifecycle::badge("experimental")`
@@ -284,6 +288,8 @@ cdisc_dataset_connector_file <- function(path) { # nolint # nousage
 #'   this/these object(s) should be included. Please note that `vars`
 #'   are included to this object as local `vars` and they cannot be modified
 #'   within another dataset.
+#'
+#' @rdname rcd_dataset_connector
 #'
 #' @export
 #'
@@ -347,6 +353,8 @@ rcd_dataset_connector <- function(dataname,
 #' @inheritParams rcd_dataset_connector
 #' @inheritParams cdisc_dataset_connector
 #'
+#' @rdname rcd_dataset_connector
+#'
 #' @export
 rcd_cdisc_dataset_connector <- function(dataname,
                                         fun,
@@ -376,7 +384,6 @@ rcd_cdisc_dataset_connector <- function(dataname,
 
 
 # RDS ====
-
 #' `RDS` `DatasetConnector`
 #'
 #' `r lifecycle::badge("experimental")`
@@ -394,6 +401,8 @@ rcd_cdisc_dataset_connector <- function(dataname,
 #'   additional arguments applied to \code{\link[base]{readRDS}} function
 #'
 #' @export
+#'
+#' @rdname rds_dataset_connector
 #'
 #' @examples
 #' \dontrun{
@@ -414,9 +423,6 @@ rds_dataset_connector <- function(dataname,
   stopifnot(is_fully_named_list(dot_args))
 
   stopifnot(is_character_single(file))
-  if (!file.exists(file)) {
-    stop("File ", file, " does not exist.", call. = FALSE)
-  }
 
   x_fun <- callable_function(readRDS) # nolint
   args <- c(list(file = file), dot_args)
@@ -442,6 +448,8 @@ rds_dataset_connector <- function(dataname,
 #'
 #' @inheritParams rds_dataset_connector
 #' @inheritParams cdisc_dataset_connector
+#'
+#' @rdname rds_dataset_connector
 #'
 #' @export
 rds_cdisc_dataset_connector <- function(dataname,
@@ -470,8 +478,8 @@ rds_cdisc_dataset_connector <- function(dataname,
   return(res)
 }
 
-# SCRIPT ====
 
+# SCRIPT ====
 #' Script `DatasetConnector`
 #'
 #' `r lifecycle::badge("experimental")`
@@ -486,6 +494,8 @@ rds_cdisc_dataset_connector <- function(dataname,
 #'   call from file will be returned to the connector - same as `source(file = file)$value`
 #'
 #' @export
+#'
+#' @rdname script_dataset_connector
 #'
 #' @examples
 #' \dontrun{
@@ -536,6 +546,8 @@ script_dataset_connector <- function(dataname,
 #' @inheritParams script_dataset_connector
 #' @inheritParams cdisc_dataset_connector
 #'
+#' @rdname script_dataset_connector
+#'
 #' @export
 script_cdisc_dataset_connector <- function(dataname,
                                            file,
@@ -564,8 +576,8 @@ script_cdisc_dataset_connector <- function(dataname,
   return(res)
 }
 
-# CODE ====
 
+# CODE ====
 #' Code `DatasetConnector`
 #'
 #' `r lifecycle::badge("experimental")`
@@ -586,6 +598,8 @@ script_cdisc_dataset_connector <- function(dataname,
 #'   Can't be used simultaneously with `mutate_script`.
 #'
 #' @export
+#'
+#' @rdname code_dataset_connector
 #'
 #' @examples
 #' library(scda)
@@ -650,6 +664,8 @@ code_dataset_connector <- function(dataname,
 #' @inheritParams code_dataset_connector
 #' @inheritParams cdisc_dataset_connector
 #'
+#' @rdname code_dataset_connector
+#'
 #' @export
 code_cdisc_dataset_connector <- function(dataname,
                                          code,
@@ -676,8 +692,8 @@ code_cdisc_dataset_connector <- function(dataname,
   return(res)
 }
 
-# RICE ====
 
+# RICE ====
 #' Rice `DatasetConnector`
 #'
 #' `r lifecycle::badge("experimental")`
@@ -695,8 +711,9 @@ code_cdisc_dataset_connector <- function(dataname,
 #'
 #' @export
 #'
-#' @examples
+#' @rdname rice_dataset_connector
 #'
+#' @examples
 #' if ("rice" %in% installed.packages()) {
 #'   x <- rice_dataset_connector(
 #'     dataname = "ADSL",
@@ -752,6 +769,8 @@ rice_dataset_connector <- function(dataname,
 #' @inheritParams rice_dataset_connector
 #' @inheritParams cdisc_dataset_connector
 #'
+#' @rdname rice_dataset_connector
+#'
 #' @export
 rice_cdisc_dataset_connector <- function(dataname,
                                          path,
@@ -781,7 +800,6 @@ rice_cdisc_dataset_connector <- function(dataname,
 
 
 # TERADATA ====
-
 #' `Teradata` `DatasetConnector`
 #'
 #' `r lifecycle::badge("experimental")`
@@ -792,6 +810,8 @@ rice_cdisc_dataset_connector <- function(dataname,
 #' @inheritParams rcd_dataset_connector
 #'
 #' @param table (`character`) table name
+#'
+#' @rdname teradata_dataset_connector
 #'
 #' @export
 teradata_dataset_connector <- function(dataname,
@@ -834,6 +854,8 @@ teradata_dataset_connector <- function(dataname,
 #' @inheritParams teradata_dataset_connector
 #' @inheritParams cdisc_dataset_connector
 #'
+#' @rdname teradata_dataset_connector
+#'
 #' @export
 teradata_cdisc_dataset_connector <- function(dataname, # nolint
                                              table,
@@ -863,7 +885,6 @@ teradata_cdisc_dataset_connector <- function(dataname, # nolint
 
 
 # SNOWFLAKE ====
-
 #' `Snowflake` `DatasetConnector`
 #'
 #' `r lifecycle::badge("experimental")`
@@ -874,6 +895,8 @@ teradata_cdisc_dataset_connector <- function(dataname, # nolint
 #' @inheritParams rcd_dataset_connector
 #'
 #' @param sql_query (`character`) SQL statement to extract data from snowflake
+#'
+#' @rdname snowflake_dataset_connector
 #'
 #' @export
 snowflake_dataset_connector <- function(dataname,
@@ -916,6 +939,8 @@ snowflake_dataset_connector <- function(dataname,
 #' @inheritParams snowflake_dataset_connector
 #' @inheritParams cdisc_dataset_connector
 #'
+#' @rdname snowflake_dataset_connector
+#'
 #' @export
 snowflake_cdisc_dataset_connector <- function(dataname, # nolint
                                               sql_query,
@@ -943,8 +968,8 @@ snowflake_cdisc_dataset_connector <- function(dataname, # nolint
   return(res)
 }
 
-# CDSE ====
 
+# CDSE ====
 #' `CDSE` `DatasetConnector`
 #'
 #' `r lifecycle::badge("experimental")`
@@ -957,6 +982,22 @@ snowflake_cdisc_dataset_connector <- function(dataname, # nolint
 #' @param cid (`character`) ID of dataset
 #'
 #' @export
+#'
+#' @rdname cdse_dataset_connector
+#'
+#' @examples
+#' if ("CDSE" %in% installed.packages()) {
+#'   x <- cdse_dataset_connector(
+#'     dataname = "MAE",
+#'     cid = "cid6828341065561714688"
+#'   )
+#'   x$get_code()
+#' }
+#' \dontrun{
+#' load_dataset(x)
+#' get_dataset(x)
+#' x$get_raw_data()
+#' }
 cdse_dataset_connector <- function(dataname,
                                    cid,
                                    keys = character(0),
@@ -998,6 +1039,8 @@ cdse_dataset_connector <- function(dataname,
 #' @inheritParams cdse_dataset_connector
 #' @inheritParams cdisc_dataset_connector
 #'
+#' @rdname cdse_dataset_connector
+#'
 #' @export
 cdse_cdisc_dataset_connector <- function(dataname,
                                          cid,
@@ -1026,9 +1069,7 @@ cdse_cdisc_dataset_connector <- function(dataname,
 }
 
 
-
 # CSV ====
-
 #' `csv` `DatasetConnector`
 #'
 #' `r lifecycle::badge("experimental")`
@@ -1047,6 +1088,8 @@ cdse_cdisc_dataset_connector <- function(dataname,
 #'   `delim = ","`.
 #'
 #' @export
+#'
+#' @rdname csv_dataset_connector
 #'
 #' @examples
 #' \dontrun{
@@ -1108,6 +1151,8 @@ csv_dataset_connector <- function(dataname,
 #' @inheritParams csv_dataset_connector
 #' @inheritParams cdisc_dataset_connector
 #'
+#' @rdname csv_dataset_connector
+#'
 #' @export
 csv_cdisc_dataset_connector <- function(dataname,
                                         file,
@@ -1136,8 +1181,71 @@ csv_cdisc_dataset_connector <- function(dataname,
 }
 
 
-# FUN ====
+# DataSetDB ====
+#' `DataSetDB` `DatasetConnector`
+#'
+#' `r lifecycle::badge("experimental")`
+#'
+#' Create a `DatasetConnector` from `DataSetDB`.
+#'
+#' @inheritParams dataset_connector
+#' @inheritParams rcd_dataset_connector
+#'
+#' @param id (`character`)\cr
+#'   identifier of the dataset in `DataSetDB`
+#'
+#' @param ... (`optional`)\cr
+#'   additional arguments applied to pull function
+#'
+#' @export
+#'
+#' @examples
+#' if ("dsassembly" %in% installed.packages()) {
+#'   x <- datasetdb_dataset_connector(
+#'     dataname = "MAE",
+#'     id = "DS000000267"
+#'   )
+#'   x$get_code()
+#' }
+#' \dontrun{
+#' load_dataset(x)
+#' get_dataset(x)
+#' x$get_raw_data()
+#' }
+datasetdb_dataset_connector <- function(dataname,
+                                        id,
+                                        keys = character(0),
+                                        label = character(0),
+                                        code = character(0),
+                                        script = character(0),
+                                        ...) {
+  dot_args <- list(...)
+  stopifnot(is_fully_named_list(dot_args))
 
+  check_pkg_quietly(
+    "dsassembly",
+    "library dsassembly is required to use DataSetDB connectors please install it."
+  )
+
+  stopifnot(is_character_single(id))
+
+  x_fun <- callable_function("dsassembly::getDataset") # nolint
+  args <- append(list(id = id), dot_args)
+  x_fun$set_args(args)
+
+  x <- dataset_connector(
+    dataname = dataname,
+    pull_callable = x_fun,
+    keys = keys,
+    label = label,
+    code = code_from_script(code, script)
+  )
+
+  return(x)
+}
+
+
+# FUN ====
 #' Function Dataset Connector
 #'
 #' `r lifecycle::badge("experimental")`
@@ -1156,8 +1264,9 @@ csv_cdisc_dataset_connector <- function(dataname,
 #'
 #' @export
 #'
+#' @rdname fun_dataset_connector
+#'
 #' @examples
-#' \dontrun{
 #' my_data <- function(...) {
 #'   # whatever code
 #'   set.seed(1234)
@@ -1185,60 +1294,6 @@ csv_cdisc_dataset_connector <- function(dataname,
 #' y$pull()
 #'
 #' get_raw_data(y)
-#' }
-#' # Error as global var is used in the function.
-#' # Thus not reproducible.
-#' \dontrun{
-#' x <- 40
-#' my_data <- function(global_var = x) {
-#'   # whatever code
-#'   set.seed(1234)
-#'   library(MASS)
-#'   x <- data.frame(
-#'     STUDYID = 1,
-#'     USUBJID = 1:global_var,
-#'     z = stats::rnorm(40),
-#'     zz = factor(sample(letters[1:3], 40, replace = TRUE)),
-#'     NAs = rep(NA, 40)
-#'   )
-#'   x$w <- as.numeric(MASS::mvrnorm(40, 0, 1))
-#'   x$ww <- as.numeric(MASS::mvrnorm(40, 0, 1))
-#'   rtables::var_labels(x) <- c("STUDYID", "USUBJID", "z", "zz", "NAs", "w", "ww")
-#'   x
-#' }
-#' y <- fun_cdisc_dataset_connector(
-#'   dataname = "ADSL",
-#'   fun = my_data
-#' )
-#'
-#' y$pull()
-#' }
-#' # Error - same as previous one
-#' \dontrun{
-#' global_var <- 40
-#' my_data <- function() {
-#'   # whatever code
-#'   set.seed(1234)
-#'   library(MASS)
-#'   x <- data.frame(
-#'     STUDYID = 1,
-#'     USUBJID = 1:global_var,
-#'     z = stats::rnorm(40),
-#'     zz = factor(sample(letters[1:3], 40, replace = TRUE)),
-#'     NAs = rep(NA, 40)
-#'   )
-#'   x$w <- as.numeric(MASS::mvrnorm(40, 0, 1))
-#'   x$ww <- as.numeric(MASS::mvrnorm(40, 0, 1))
-#'   rtables::var_labels(x) <- c("STUDYID", "USUBJID", "z", "zz", "NAs", "w", "ww")
-#'   x
-#' }
-#' y <- fun_cdisc_dataset_connector(
-#'   dataname = "ADSL",
-#'   fun = my_data
-#' )
-#'
-#' y$pull()
-#' }
 fun_dataset_connector <- function(dataname,
                                   fun,
                                   fun_args = NULL,
@@ -1318,6 +1373,8 @@ fun_dataset_connector <- function(dataname,
 #'
 #' @inheritParams fun_dataset_connector
 #' @inheritParams cdisc_dataset_connector
+#'
+#' @rdname fun_dataset_connector
 #'
 #' @export
 fun_cdisc_dataset_connector <- function(dataname,
@@ -1415,6 +1472,8 @@ fun_cdisc_dataset_connector <- function(dataname,
 #'   features and current limitations.
 #'
 #' @export
+#'
+#' @rdname python_dataset_connector
 #'
 #' @examples
 #' \dontrun{
@@ -1517,6 +1576,7 @@ python_dataset_connector <- function(dataname,
 #'
 #' @export
 #'
+#' @rdname python_dataset_connector
 python_cdisc_dataset_connector <- function(dataname,
                                            file,
                                            code,
