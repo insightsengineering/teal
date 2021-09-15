@@ -166,7 +166,7 @@ object which columns are used to choose filter variables.}
 \if{html}{\out{</div>}}
 }
 \subsection{Returns}{
-\code{NULL}
+\code{moduleServer} function which returns \code{NULL}
 description
 Get label of specific variable. In case when variable label is missing
 name of the variable is returned.

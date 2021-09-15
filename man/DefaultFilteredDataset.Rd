@@ -153,7 +153,7 @@ An ID string that corresponds with the ID used to call the module's UI function.
 \if{html}{\out{</div>}}
 }
 \subsection{Returns}{
-function - shiny server module
+\code{moduleServer} function which returns \code{NULL}
 }
 }
 \if{html}{\out{<hr>}}

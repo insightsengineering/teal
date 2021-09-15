@@ -326,16 +326,18 @@ object containing columns to be used as filter variables.}
 \if{html}{\out{</div>}}
 }
 \subsection{Returns}{
-\code{NULL}
+\code{moduleServer} function which returns \code{NULL}
+Module to add \code{FilterState} to queue
 
 This module adds \code{FilterState} object to queue, inserts
 shiny UI to the Active Filter Variables, calls \code{FilterState} modules and
 create observer to remove state
-parameter filter_state (\code{FilterState})
-parameter queue_index (\code{character(1)}, \code{logical(1)})\cr
+parame filter_state (\code{FilterState})
+param queue_index (\code{character(1)}, \code{logical(1)})\cr
 index of the \code{private$queue} list where \code{ReactiveQueue} are kept.
-parameter element_id (\code{character(1)})\cr
+param element_id (\code{character(1)})\cr
 name of \code{ReactiveQueue} element.
+return \code{moduleServer} function which returns \code{NULL}
 \code{observeEvent} for remove-filter-state is set and also from \code{FilteredDataset}
 level, where shiny-session-namespace is different. That is why it's important
 to remove shiny elements from anywhere. In \code{add_filter_state} \code{session$ns(NULL)}

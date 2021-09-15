@@ -628,16 +628,18 @@ An ID string that corresponds with the ID used to call the module's UI function.
 should be shown on the filter panel,
 must be a subset of the \code{datanames} argument provided to \code{ui_filter_panel};
 if the function returns \code{NULL} (as opposed to \code{character(0)}), the filter
-panel will be hidden
-
+panel will be hidden}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Returns}{
+\code{moduleServer} function which returns \code{NULL}
 Creates the UI for the module showing counts for each dataset
 contrasting the filtered to the full unfiltered dataset
 
 Per dataset, it displays
 the number of rows/observations in each dataset,
-the number of unique subjects.}
-}
-\if{html}{\out{</div>}}
+the number of unique subjects.
 }
 }
 \if{html}{\out{<hr>}}
@@ -679,6 +681,9 @@ if the function returns \code{NULL} (as opposed to \code{character(0)}), the fil
 panel will be hidden.}
 }
 \if{html}{\out{</div>}}
+}
+\subsection{Returns}{
+\code{moduleServer} function which returns \code{NULL}
 }
 }
 \if{html}{\out{<hr>}}
