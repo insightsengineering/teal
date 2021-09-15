@@ -187,13 +187,13 @@ contains fields relevant for a specific class
 \subsection{Method \code{set_selected()}}{
 Sets the selected values of this \code{ChoicesFilterState}.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{ChoicesFilterState$set_selected(selection)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{ChoicesFilterState$set_selected(value)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{selection}}{(\code{character}) the array of the selected choices.
+\item{\code{value}}{(\code{character}) the array of the selected choices.
 Must not contain NA values.}
 }
 \if{html}{\out{</div>}}
