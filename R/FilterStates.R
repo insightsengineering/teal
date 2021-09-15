@@ -1560,7 +1560,7 @@ get_filterable_varnames.matrix <- function(data) { #nolint #nousage
 
 #' @title Returns a `choices_labeled` object
 #'
-#' @param data (`data.frame`)\cr
+#' @param data (`data.frame`, `DFrame`, `list`)\cr
 #'   where labels can be taken from in case when `varlabels` is not specified.
 #'   `data` must be specified if `varlabels` is not specified.
 #' @param choices (`character`)\cr
@@ -1577,7 +1577,6 @@ data_choices_labeled <- function(data, choices, varlabels = character(0), keys =
   }
 
   choice_labels <- if (identical(varlabels, character(0))) {
-    stopifnot(is.data.frame(data))
     vapply(
       X = data,
       FUN = function(x) {
