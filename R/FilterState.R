@@ -1206,12 +1206,18 @@ RangeFilterState <- R6::R6Class( # nolint
 
     remove_out_of_bound_values = function(values) {
       if (values[1] < private$choices[1]) {
-        warning(paste("Value: ", values[1], "is outside of the possible range."))
+        warning(paste(
+          "Value:", values[1], "is outside of the possible range for column", private$varname,
+          "of dataset", private$input_dataname, "."
+        ))
         values[1] <- private$choices[1]
       }
 
       if (values[2] > private$choices[2]) {
-        warning(paste("Value: ", values[2], "is outside of the possible range."))
+        warning(paste(
+          "Value:", values[2], "is outside of the possible range for column", private$varname,
+          "of dataset", private$input_dataname, "."
+        ))
         values[2] <- private$choices[2]
       }
       values
@@ -1488,7 +1494,10 @@ ChoicesFilterState <- R6::R6Class( # nolint
     remove_out_of_bound_values = function(values) {
       in_choices_mask <- values %in% private$choices
       if (length(values[!in_choices_mask]) > 0) {
-        warning(paste("Values:", strtrim(paste(values[!in_choices_mask], collapse = ", "), 360), "are not in choices."))
+        warning(paste(
+          "Values:", strtrim(paste(values[!in_choices_mask], collapse = ", "), 360),
+          "are not in choices of column", private$varname, "in dataset", private$input_dataname, "."
+        ))
       }
       values[in_choices_mask]
     }
@@ -1717,13 +1726,19 @@ DateFilterState <- R6::R6Class( # nolint
 
     remove_out_of_bound_values = function(values) {
       if (values[1] < private$choices[1]) {
-        warning(paste("Value: ", values[1], "is outside of the possible range."))
+        warning(paste(
+          "Value:", values[1], "is outside of the possible range for column", private$varname,
+          "of dataset", private$input_dataname, "."
+        ))
         values[1] <- private$choices[1]
       }
 
-      if (values[length(values)] > private$choices[2]) {
-        warning(paste("Value: ", values[length(values)], "is outside of the possible range."))
-        values[length(values)] <- private$choices[2]
+      if (values[2] > private$choices[2]) {
+        warning(paste(
+          "Value:", values[2], "is outside of the possible range for column", private$varname,
+          "of dataset", private$input_dataname, "."
+        ))
+        values[2] <- private$choices[2]
       }
       values
     }
@@ -2014,12 +2029,18 @@ DatetimeFilterState <- R6::R6Class( # nolint
 
     remove_out_of_bound_values = function(values) {
       if (values[1] < private$choices[1]) {
-        warning(paste("Value: ", values[1], "is outside of the possible range."))
+        warning(paste(
+          "Value:", values[1], "is outside of the possible range for column", private$varname,
+          "of dataset", private$input_dataname, "."
+        ))
         values[1] <- private$choices[1]
       }
 
       if (values[2] > private$choices[2]) {
-        warning(paste("Value: ", values[2], "is outside of the possible range."))
+        warning(paste(
+          "Value:", values[2], "is outside of the possible range for column", private$varname,
+          "of dataset", private$input_dataname, "."
+        ))
         values[2] <- private$choices[2]
       }
       values
