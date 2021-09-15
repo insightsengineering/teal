@@ -55,8 +55,8 @@ testthat::test_that("MAEFilteredDataset$set_bookmark_state sets filters in Filte
       subset = list(ARRAY_TYPE = "")
     )
   )
-  dataset$set_bookmark_state(fs)
-  expect_equal(
+  shiny::testServer(dataset$set_bookmark_state, args = list(state = fs), expr = NULL)
+  testthat::expect_equal(
     isolate(dataset$get_call()),
     list(
       subjects = quote(

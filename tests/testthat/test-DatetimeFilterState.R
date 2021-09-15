@@ -44,13 +44,13 @@ testthat::test_that("get_call returns a condition evaluating to NA for NA values
 })
 
 testthat::test_that("DatetimeFilterState echoes the timezone of the ISO object passed to the constructor", {
-  objects <- ISOdate(2021, 8, 25, tz = "GTM+10")
+  objects <- ISOdate(2021, 8, 25, tz = "Australia/Brisbane")
   filter_state <- DatetimeFilterState$new(objects, varname = "objects")
   testthat::expect_equal(
     isolate(filter_state$get_call()),
     quote(
-      objects >= as.POSIXct("2021-08-25 12:00:00", tz = "GTM+10") &
-        objects < as.POSIXct("2021-08-25 12:00:01", tz = "GTM+10")
+      objects >= as.POSIXct("2021-08-25 12:00:00", tz = "Australia/Brisbane") &
+        objects < as.POSIXct("2021-08-25 12:00:01", tz = "Australia/Brisbane")
     )
   )
 })
