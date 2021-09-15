@@ -423,7 +423,7 @@ FilterStates <- R6::R6Class( # nolint
     #'   An ID string that corresponds with the ID used to call the module's UI function.
     #' @param data (`data.frame`, `MultiAssayExperiment`, `SummarizedExperiment`, `matrix`)\cr
     #'  object containing columns to be used as filter variables.
-    #' @return `NULL`
+    #' @return `moduleServer` function which returns `NULL`
     srv_add_filter_state =  function(id, data) {
       moduleServer(
         id = id,
@@ -443,16 +443,17 @@ FilterStates <- R6::R6Class( # nolint
     observers = list(), # observers
     queue = NULL, # list of ReactiveQueue(s) initialized by self$queue_initialize
 
-    # Module to add `FilterState` to queue
+    #' Module to add `FilterState` to queue
     #'
     #' This module adds `FilterState` object to queue, inserts
     #' shiny UI to the Active Filter Variables, calls `FilterState` modules and
     #' create observer to remove state
-    #' parameter filter_state (`FilterState`)
-    #' parameter queue_index (`character(1)`, `logical(1)`)\cr
+    #' parame filter_state (`FilterState`)
+    #' param queue_index (`character(1)`, `logical(1)`)\cr
     #'   index of the `private$queue` list where `ReactiveQueue` are kept.
-    #' parameter element_id (`character(1)`)\cr
+    #' param element_id (`character(1)`)\cr
     #'   name of `ReactiveQueue` element.
+    #' return `moduleServer` function which returns `NULL`
     add_filter_state = function(id, filter_state, queue_index, element_id) {
       stopifnot(is(filter_state, "FilterState"))
       stopifnot(is_character_single(queue_index) || is_integer_single(queue_index))
@@ -710,7 +711,7 @@ DFFilterStates <- R6::R6Class( # nolint
     #'   An ID string that corresponds with the ID used to call the module's UI function.
     #' @param data (`data.frame`)\cr
     #'  object which columns are used to choose filter variables.
-    #' @return `NULL`
+    #' @return `moduleServer` function which returns `NULL`
     srv_add_filter_state = function(id, data) {
       stopifnot(is.data.frame(data))
       moduleServer(
@@ -942,7 +943,7 @@ MAEFilterStates <- R6::R6Class( # nolint
     #'  object containing `colData` which columns are used to be used
     #'  to choose filter variables.
     #'  in `optionalSelectInput`
-    #' @return `NULL`
+    #' @return `moduleServer` function which returns `NULL`
     srv_add_filter_state = function(id, data) {
       stopifnot(is(data, "MultiAssayExperiment"))
       moduleServer(
@@ -1006,7 +1007,7 @@ MAEFilterStates <- R6::R6Class( # nolint
             }
           )
 
-          return(NULL)
+          NULL
         }
       )
     }
@@ -1198,7 +1199,7 @@ SEFilterStates <- R6::R6Class( # nolint
     #'  object containing `colData` and `rowData` which columns
     #'  are used to choose filter variables. Column selection from `colData`
     #'  and `rowData` are separate shiny entities.
-    #' @return `NULL`
+    #' @return `moduleServer` function which returns `NULL`
     srv_add_filter_state = function(id, data) {
       stopifnot(is(data, "SummarizedExperiment"))
       moduleServer(
@@ -1439,7 +1440,7 @@ MatrixFilterStates <- R6::R6Class( # nolint
     #'   An ID string that corresponds with the ID used to call the module's UI function.
     #' @param data (`matrix`)\cr
     #'  object which columns are used to choose filter variables.
-    #' @return `NULL`
+    #' @return `moduleServer` function which returns `NULL`
     srv_add_filter_state = function(id, data) {
       stopifnot(is.matrix(data))
       moduleServer(

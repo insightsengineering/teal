@@ -272,7 +272,7 @@ FilteredDataset <- R6::R6Class( # nolint
     #' @param state (`named list`)\cr
     #'  containing values of the initial filter. Values should be relevant
     #'  to the referred column.
-    #' @return `moduleServer` function which returns `NULL`
+    #' @return `moduleServer` function.
     set_bookmark_state = function(id, state) {
       moduleServer(
         id = id,
@@ -342,7 +342,7 @@ FilteredDataset <- R6::R6Class( # nolint
     #' Server module managing a  active filters.
     #' @param id (`character(1)`)\cr
     #'   An ID string that corresponds with the ID used to call the module's UI function.
-    #' @return function - shiny server module
+    #' @return `moduleServer` function which returns `NULL`
     server = function(id) {
       moduleServer(
         id = id,
@@ -359,6 +359,7 @@ FilteredDataset <- R6::R6Class( # nolint
               function(x) x$queue_empty()
             )
           })
+          NULL
         }
       )
     },
@@ -381,7 +382,7 @@ FilteredDataset <- R6::R6Class( # nolint
     #' Server module to add filter variable for this dataset
     #' @param id (`character(1)`)\cr
     #'   An ID string that corresponds with the ID used to call the module's UI function.
-    #' @return function - shiny server module
+    #' @return `moduleServer` function.
     srv_add_filter_state = function(id) {
       moduleServer(
         id = id,
@@ -539,7 +540,7 @@ DefaultFilteredDataset <- R6::R6Class( # nolint
     #'
     #' @param id (`character(1)`)\cr
     #'   An ID string that corresponds with the ID used to call the module's UI function.
-    #' @return function - shiny server module
+    #' @return `moduleServer` function which returns `NULL`
     srv_add_filter_state = function(id) {
       moduleServer(
         id = id,
@@ -549,6 +550,7 @@ DefaultFilteredDataset <- R6::R6Class( # nolint
             id = "filter",
             data = data
           )
+          NULL
         }
       )
     }
@@ -677,7 +679,7 @@ CDISCFilteredDataset <- R6::R6Class( # nolint
     #'
     #' @param id (`character(1)`)\cr
     #'   An ID string that corresponds with the ID used to call the module's UI function.
-    #' @return function - shiny server module
+    #' @return `moduleServer` function which returns `NULL`
     srv_add_filter_state = function(id) {
       moduleServer(
         id = id,
@@ -686,6 +688,7 @@ CDISCFilteredDataset <- R6::R6Class( # nolint
             id = "filter",
             data = private$get_data_without_parent_keys()
           )
+          NULL
         }
       )
     }
@@ -918,7 +921,7 @@ MAEFilteredDataset <- R6::R6Class( # nolint
     #'
     #' @param id (`character(1)`)\cr
     #'   An ID string that corresponds with the ID used to call the module's UI function.
-    #' @return function - shiny server module
+    #' @return `moduleServer` function which returns `NULL`
     srv_add_filter_state = function(id) {
       moduleServer(
         id = id,
@@ -939,6 +942,7 @@ MAEFilteredDataset <- R6::R6Class( # nolint
               )
             }
           )
+          NULL
         }
       )
     }

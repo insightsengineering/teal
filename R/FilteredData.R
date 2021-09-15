@@ -555,7 +555,7 @@ FilteredData <- R6::R6Class( # nolint
     #'   must be a subset of the `datanames` argument provided to `ui_filter_panel`;
     #'   if the function returns `NULL` (as opposed to `character(0)`), the filter
     #'   panel will be hidden
-    #'
+    #' @return `moduleServer` function which returns `NULL`
     srv_filter_panel = function(id, active_datanames = function() "all") {
       stopifnot(
         is.function(active_datanames) || is.reactive(active_datanames)
@@ -635,6 +635,8 @@ FilteredData <- R6::R6Class( # nolint
               dataset_filter$queues_empty()
             })
           })
+
+          NULL
         }
       )
     },
@@ -666,6 +668,7 @@ FilteredData <- R6::R6Class( # nolint
     #'   must be a subset of the `datanames` argument provided to `ui_filter_panel`;
     #'   if the function returns `NULL` (as opposed to `character(0)`), the filter
     #'   panel will be hidden.
+    #' @return `moduleServer` function which returns `NULL`
     srv_filter_overview = function(id, active_datanames = function() "all") {
       stopifnot(
         is.function(active_datanames) || is.reactive(active_datanames)
@@ -729,7 +732,7 @@ FilteredData <- R6::R6Class( # nolint
 
     # @details
     # Composes id for the FilteredDataset shiny element (active filter vars)
-    # @param dataname (`character(1)`)
+    # @param dataname (`character(1)`) name of the dataset which ui is composed for.
     # @return `character(1)` - `<dataname>_filter`
     get_ui_id = function(dataname) {
       sprintf("%s_filter", dataname)
@@ -737,7 +740,7 @@ FilteredData <- R6::R6Class( # nolint
 
     # @details
     # Composes id for the FilteredDataset shiny element (add filter state)
-    # @param dataname (`character(1)`)
+    # @param dataname (`character(1)`)  name of the dataset which ui is composed for.
     # @return `character(1)` - `<dataname>_filter`
     get_ui_add_filter_id = function(dataname) {
       sprintf("add_%s_filter", dataname)
