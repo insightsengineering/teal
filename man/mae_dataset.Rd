@@ -39,12 +39,10 @@ Public facing constructor for MAEDataset
 }
 \examples{
 # Simple example
-\dontrun{
 library(MultiAssayExperiment)
 MAE_dataset <- mae_dataset("MAE", miniACC)
 MAE_dataset$get_dataname()
 MAE_dataset$get_dataset_label()
 MAE_dataset$get_code()
 MAE_dataset$get_raw_data()
-}
 }
