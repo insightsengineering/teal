@@ -405,12 +405,16 @@ FilterState <- R6::R6Class( # nolint
 
     #' @description
     #' Server module
-    #' @param input (`Shiny`)\cr input object
-    #' @param output (`Shiny`)\cr output object
-    #' @param session (`Shiny`)\cr session object
-    #' @return nothing
-    server = function(input, output, session) {
-      NULL
+    #' @param id (`character(1)`)\cr
+    #'   An ID string that corresponds with the ID used to call the module's UI function.
+    #' @return `moduleServer` function which returns `NULL`
+    server = function(id) {
+      moduleServer(
+        id = id,
+        function(input, output, session) {
+          NULL
+        }
+      )
     },
 
     #' @description
@@ -623,13 +627,17 @@ EmptyFilterState <- R6::R6Class( # nolint
     },
     #' @description
     #' Controls selection of `keep_na` checkbox input
-    #' @param input (`Shiny`)\cr input object
-    #' @param output (`Shiny`)\cr output object
-    #' @param session (`Shiny`)\cr session object
-    #' @return nothing
-    server = function(input, output, session) {
-      private$observe_keep_na(input)
-      return(NULL)
+    #' @param id (`character(1)`)\cr
+    #'   An ID string that corresponds with the ID used to call the module's UI function.
+    #' @return `moduleServer` function which returns `NULL`
+    server = function(id) {
+      moduleServer(
+        id = id,
+        function(input, output, session) {
+          private$observe_keep_na(input)
+          NULL
+        }
+      )
     },
 
     #' @description
@@ -789,48 +797,51 @@ LogicalFilterState <- R6::R6Class( # nolint
     #' @description
     #' Server module
     #'
-    #' @param input (`Shiny`)\cr input object
-    #' @param output (`Shiny`)\cr output object
-    #' @param session (`Shiny`)\cr session object
-    #'
-    #' @return nothing
-    server = function(input, output, session) {
-      output$plot <- renderPlot(
-        bg = "transparent",
-        expr = {
-          data <- private$histogram_data
-          data$y <- rev(data$y / sum(data$y)) # we have to reverse because the histogram is turned by 90 degrees
-          data$x <- seq_len(nrow(data)) # to prevent ggplot reordering columns using the characters in x column
-          ggplot2::ggplot(data) +
-            # sort factor so that it reflects checkbox order
-            ggplot2::aes_string(x = "x", y = "y") +
-            ggplot2::geom_col(
-              width = 0.95,
-              fill = grDevices::rgb(66 / 255, 139 / 255, 202 / 255),
-              color = NA,
-              alpha = 0.2
-            ) +
-            ggplot2::coord_flip() +
-            ggplot2::theme_void() +
-            ggplot2::scale_x_discrete(expand = c(0, 0)) +
-            ggplot2::scale_y_continuous(expand = c(0, 0), limits = c(0, 1))
+    #' @param id (`character(1)`)\cr
+    #'   An ID string that corresponds with the ID used to call the module's UI function.
+    #' @return `moduleServer` function which returns `NULL`
+    server = function(id) {
+      moduleServer(
+        id = id,
+        function(input, output, session) {
+          output$plot <- renderPlot(
+            bg = "transparent",
+            expr = {
+              data <- private$histogram_data
+              data$y <- rev(data$y / sum(data$y)) # we have to reverse because the histogram is turned by 90 degrees
+              data$x <- seq_len(nrow(data)) # to prevent ggplot reordering columns using the characters in x column
+              ggplot2::ggplot(data) +
+                # sort factor so that it reflects checkbox order
+                ggplot2::aes_string(x = "x", y = "y") +
+                ggplot2::geom_col(
+                  width = 0.95,
+                  fill = grDevices::rgb(66 / 255, 139 / 255, 202 / 255),
+                  color = NA,
+                  alpha = 0.2
+                ) +
+                ggplot2::coord_flip() +
+                ggplot2::theme_void() +
+                ggplot2::scale_x_discrete(expand = c(0, 0)) +
+                ggplot2::scale_y_continuous(expand = c(0, 0), limits = c(0, 1))
+            }
+          )
+
+          private$observers$selection <- observeEvent(
+            ignoreNULL = FALSE,
+            ignoreInit = TRUE,
+            eventExpr = input$selection,
+            handlerExpr = {
+              selection_state <- input$selection
+              self$set_selected(if_null(as.logical(selection_state), logical(0)))
+              private$log_state()
+            }
+          )
+
+          private$observe_keep_na(input)
+
+          NULL
         }
       )
-
-      private$observers$selection <- observeEvent(
-        ignoreNULL = FALSE,
-        ignoreInit = TRUE,
-        eventExpr = input$selection,
-        handlerExpr = {
-          selection_state <- input$selection
-          self$set_selected(if_null(as.logical(selection_state), logical(0)))
-          private$log_state()
-        }
-      )
-
-      private$observe_keep_na(input)
-
-      NULL
     },
 
     #' @description
@@ -1031,57 +1042,63 @@ RangeFilterState <- R6::R6Class( # nolint
 
     #' @description
     #' Server module
-    #' @param input (`Shiny`)\cr input object
-    #' @param output (`Shiny`)\cr output object
-    #' @param session (`Shiny`)\cr session object
-    #' @return nothing
-    server = function(input, output, session) {
-      output$plot <- renderPlot(
-        bg = "transparent",
-        height = 25,
-        expr = {
-          ggplot2::ggplot(private$histogram_data) +
-            ggplot2::aes_string(x = "x", y = "y") +
-            ggplot2::geom_area(
-              fill = grDevices::rgb(66 / 255, 139 / 255, 202 / 255),
-              color = NA,
-              alpha = 0.2) +
-            ggplot2::theme_void() +
-            ggplot2::scale_y_continuous(expand = c(0, 0)) +
-            ggplot2::scale_x_continuous(expand = c(0, 0))
+    #' @param id (`character(1)`)\cr
+    #'   An ID string that corresponds with the ID used to call the module's UI function.
+    #' @return `moduleServer` function which returns `NULL`
+    server = function(id) {
+      moduleServer(
+        id = id,
+        function(input, output, session) {
+          output$plot <- renderPlot(
+            bg = "transparent",
+            height = 25,
+            expr = {
+              ggplot2::ggplot(private$histogram_data) +
+                ggplot2::aes_string(x = "x", y = "y") +
+                ggplot2::geom_area(
+                  fill = grDevices::rgb(66 / 255, 139 / 255, 202 / 255),
+                  color = NA,
+                  alpha = 0.2) +
+                ggplot2::theme_void() +
+                ggplot2::scale_y_continuous(expand = c(0, 0)) +
+                ggplot2::scale_x_continuous(expand = c(0, 0))
+            }
+          )
+
+          private$observers$selection <- observeEvent(
+            ignoreNULL = FALSE, # ignoreNULL: we don't want to ignore NULL when nothing is selected in the `selectInput`,
+            ignoreInit = TRUE, # ignoreInit: should not matter because we set the UI with the desired initial state
+            eventExpr = input$selection,
+            handlerExpr = {
+              # because we extended real range into rounded one we need to apply intersect(range_input, range_real)
+              selection_state <- c(max(input$selection[1], private$choices[1]), min(input$selection[2], private$choices[2]))
+              if (!setequal(selection_state, self$get_selected())) {
+                validate(
+                  need(
+                    input$selection[1] <= input$selection[2],
+                    "Left range boundary should be lower than right"
+                  )
+                )
+                self$set_selected(if_null(selection_state, numeric(0)))
+              }
+              private$log_state()
+            })
+
+          private$observe_keep_na(input)
+
+          private$observers$keep_inf <- observeEvent(
+            ignoreNULL = FALSE, # ignoreNULL: we don't want to ignore NULL when nothing is selected in the `selectInput`,
+            ignoreInit = TRUE, # ignoreInit: should not matter because we set the UI with the desired initial state
+            eventExpr = input$keep_inf,
+            handlerExpr = {
+              self$set_keep_inf(if_null(input$keep_inf, FALSE))
+              private$log_state()
+            }
+          )
+          NULL
         }
       )
 
-      private$observers$selection <- observeEvent(
-        ignoreNULL = FALSE, # ignoreNULL: we don't want to ignore NULL when nothing is selected in the `selectInput`,
-        ignoreInit = TRUE, # ignoreInit: should not matter because we set the UI with the desired initial state
-        eventExpr = input$selection,
-        handlerExpr = {
-          # because we extended real range into rounded one we need to apply intersect(range_input, range_real)
-          selection_state <- c(max(input$selection[1], private$choices[1]), min(input$selection[2], private$choices[2]))
-          if (!setequal(selection_state, self$get_selected())) {
-            validate(
-              need(
-                input$selection[1] <= input$selection[2],
-                "Left range boundary should be lower than right"
-              )
-            )
-            self$set_selected(if_null(selection_state, numeric(0)))
-          }
-          private$log_state()
-        })
-
-      private$observe_keep_na(input)
-
-      private$observers$keep_inf <- observeEvent(
-        ignoreNULL = FALSE, # ignoreNULL: we don't want to ignore NULL when nothing is selected in the `selectInput`,
-        ignoreInit = TRUE, # ignoreInit: should not matter because we set the UI with the desired initial state
-        eventExpr = input$keep_inf,
-        handlerExpr = {
-          self$set_keep_inf(if_null(input$keep_inf, FALSE))
-          private$log_state()
-        }
-      )
     },
 
     #' @description
@@ -1362,49 +1379,53 @@ ChoicesFilterState <- R6::R6Class( # nolint
 
     #' @description
     #' Server module
-    #' @param input (`Shiny`)\cr input object
-    #' @param output (`Shiny`)\cr output object
-    #' @param session (`Shiny`)\cr session object
-    #' @return nothing
-    server = function(input, output, session) {
-      output$plot <- renderPlot(
-        bg = "transparent",
-        expr = {
-          if (length(private$choices) <= .threshold_slider_vs_checkboxgroup) {
-            # Proportional
-            data <- private$histogram_data
-            data$y <- rev(data$y / sum(data$y)) # we have to reverse because the histogram is turned by 90 degrees
-            data$x <- seq_len(nrow(data)) # to prevent ggplot reordering columns using the characters in x column
-            ggplot2::ggplot(data) +
-              # sort factor so that it reflects checkbox order
-              ggplot2::aes_string(x = "x", y = "y") +
-              ggplot2::geom_col(
-                width = 0.95,
-                fill = grDevices::rgb(66 / 255, 139 / 255, 202 / 255),
-                color = NA,
-                alpha = 0.2
-              ) +
-              ggplot2::coord_flip() +
-              ggplot2::theme_void() +
-              ggplot2::scale_x_discrete(expand = c(0, 0)) +
-              ggplot2::scale_y_continuous(expand = c(0, 0), limits = c(0, 1))
-          }
+    #' @param id (`character(1)`)\cr
+    #'   An ID string that corresponds with the ID used to call the module's UI function.
+    #' @return `moduleServer` function which returns `NULL`
+    server = function(id) {
+      moduleServer(
+        id = id,
+        function(input, output, session) {
+          output$plot <- renderPlot(
+            bg = "transparent",
+            expr = {
+              if (length(private$choices) <= .threshold_slider_vs_checkboxgroup) {
+                # Proportional
+                data <- private$histogram_data
+                data$y <- rev(data$y / sum(data$y)) # we have to reverse because the histogram is turned by 90 degrees
+                data$x <- seq_len(nrow(data)) # to prevent ggplot reordering columns using the characters in x column
+                ggplot2::ggplot(data) +
+                  # sort factor so that it reflects checkbox order
+                  ggplot2::aes_string(x = "x", y = "y") +
+                  ggplot2::geom_col(
+                    width = 0.95,
+                    fill = grDevices::rgb(66 / 255, 139 / 255, 202 / 255),
+                    color = NA,
+                    alpha = 0.2
+                  ) +
+                  ggplot2::coord_flip() +
+                  ggplot2::theme_void() +
+                  ggplot2::scale_x_discrete(expand = c(0, 0)) +
+                  ggplot2::scale_y_continuous(expand = c(0, 0), limits = c(0, 1))
+              }
+            }
+          )
+
+
+          private$observers$selection <- observeEvent(
+            ignoreNULL = FALSE, # ignoreNULL: we don't want to ignore NULL when nothing is selected in the `selectInput`,
+            ignoreInit = TRUE, # ignoreInit: should not matter because we set the UI with the desired initial state
+            eventExpr = input$selection,
+            handlerExpr = {
+              self$set_selected(if_null(input$selection, character(0)))
+              private$log_state()
+            }
+          )
+          private$observe_keep_na(input)
+
+          NULL
         }
       )
-
-
-      private$observers$selection <- observeEvent(
-        ignoreNULL = FALSE, # ignoreNULL: we don't want to ignore NULL when nothing is selected in the `selectInput`,
-        ignoreInit = TRUE, # ignoreInit: should not matter because we set the UI with the desired initial state
-        eventExpr = input$selection,
-        handlerExpr = {
-          self$set_selected(if_null(input$selection, character(0)))
-          private$log_state()
-        }
-      )
-      private$observe_keep_na(input)
-
-      return(NULL)
     },
 
     #' @description
@@ -1615,43 +1636,46 @@ DateFilterState <- R6::R6Class( # nolint
 
     #' @description
     #' Server module
-    #' @param input (`Shiny`)\cr input object
-    #' @param output (`Shiny`)\cr output object
-    #' @param session (`Shiny`)\cr session object
-    #' @return nothing
-    server = function(input, output, session) {
-      private$observers$selection <- observeEvent(
-        ignoreNULL = FALSE, # ignoreNULL: we don't want to ignore NULL when nothing is selected in the `selectInput`,
-        ignoreInit = TRUE, # ignoreInit: should not matter because we set the UI with the desired initial state
-        eventExpr = input$selection,
-        handlerExpr = {
-          start_date <- input$selection[1]
-          end_date <- input$selection[2]
+    #' @param id (`character(1)`)\cr
+    #'   An ID string that corresponds with the ID used to call the module's UI function.
+    #' @return `moduleServer` function which returns `NULL`
+    server = function(id) {
+      moduleServer(
+        id = id,
+        function(input, output, session) {
+          private$observers$selection <- observeEvent(
+            ignoreNULL = FALSE, # ignoreNULL: we don't want to ignore NULL when nothing is selected in the `selectInput`,
+            ignoreInit = TRUE, # ignoreInit: should not matter because we set the UI with the desired initial state
+            eventExpr = input$selection,
+            handlerExpr = {
+              start_date <- input$selection[1]
+              end_date <- input$selection[2]
 
-          self$set_selected(c(start_date, end_date))
-          private$log_state()
+              self$set_selected(c(start_date, end_date))
+              private$log_state()
+            }
+          )
+
+          private$observe_keep_na(input)
+
+          private$observers$reset1 <- observeEvent(input$start_date_reset, {
+            updateDateRangeInput(
+              session = session,
+              inputId = "selection",
+              start = private$choices[1]
+            )
+          })
+
+          private$observers$reset2 <- observeEvent(input$end_date_reset, {
+            updateDateRangeInput(
+              session = session,
+              inputId = "selection",
+              end = private$choices[2]
+            )
+          })
+          NULL
         }
       )
-
-      private$observe_keep_na(input)
-
-      private$observers$reset1 <- observeEvent(input$start_date_reset, {
-        updateDateRangeInput(
-          session = session,
-          inputId = "selection",
-          start = private$choices[1]
-        )
-      })
-
-      private$observers$reset2 <- observeEvent(input$end_date_reset, {
-        updateDateRangeInput(
-          session = session,
-          inputId = "selection",
-          end = private$choices[2]
-        )
-      })
-
-      return(NULL)
     },
 
     #' @description
@@ -1897,55 +1921,58 @@ DatetimeFilterState <- R6::R6Class( # nolint
 
     #' @description
     #' Server module
-    #' @param input (`Shiny`)\cr input object
-    #' @param output (`Shiny`)\cr output object
-    #' @param session (`Shiny`)\cr session object
-    #' @return nothing
-    server = function(input, output, session) {
-      private$observers$selection <- observeEvent(
-        ignoreNULL = FALSE, # ignoreNULL: we don't want to ignore NULL when nothing is selected in the `selectInput`,
-        ignoreInit = TRUE, # ignoreInit: should not matter because we set the UI with the desired initial state
-        eventExpr = {
-          input$selection_start
-          input$selection_end
-        },
-        handlerExpr = {
-          start_date <- input$selection_start
-          end_date <- input$selection_end
+    #' @param id (`character(1)`)\cr
+    #'   An ID string that corresponds with the ID used to call the module's UI function.
+    #' @return `moduleServer` function which returns `NULL`
+    server = function(id) {
+      moduleServer(
+        id = id,
+        function(input, output, session) {
+          private$observers$selection <- observeEvent(
+            ignoreNULL = FALSE, # ignoreNULL: we don't want to ignore NULL when nothing is selected in the `selectInput`,
+            ignoreInit = TRUE, # ignoreInit: should not matter because we set the UI with the desired initial state
+            eventExpr = {
+              input$selection_start
+              input$selection_end
+            },
+            handlerExpr = {
+              start_date <- input$selection_start
+              end_date <- input$selection_end
 
-          if (start_date < private$choices[1]) {
-            start_date <- private$choices[1]
-          }
+              if (start_date < private$choices[1]) {
+                start_date <- private$choices[1]
+              }
 
-          if (end_date > private$choices[2]) {
-            end_date <- private$choices[2]
-          }
+              if (end_date > private$choices[2]) {
+                end_date <- private$choices[2]
+              }
 
 
-          self$set_selected(c(start_date, end_date))
-          private$log_state()
+              self$set_selected(c(start_date, end_date))
+              private$log_state()
+            }
+          )
+
+
+          private$observe_keep_na(input)
+
+          private$observers$reset1 <- observeEvent(input$start_date_reset, {
+            shinyWidgets::updateAirDateInput(
+              session = session,
+              inputId = "selection_start",
+              value = private$choices[1]
+            )
+          })
+          private$observers$reset2 <- observeEvent(input$end_date_reset, {
+            shinyWidgets::updateAirDateInput(
+              session = session,
+              inputId = "selection_end",
+              value = private$choices[2]
+            )
+          })
+          NULL
         }
       )
-
-
-      private$observe_keep_na(input)
-
-      private$observers$reset1 <- observeEvent(input$start_date_reset, {
-        shinyWidgets::updateAirDateInput(
-          session = session,
-          inputId = "selection_start",
-          value = private$choices[1]
-        )
-      })
-      private$observers$reset2 <- observeEvent(input$end_date_reset, {
-        shinyWidgets::updateAirDateInput(
-          session = session,
-          inputId = "selection_end",
-          value = private$choices[2]
-        )
-      })
-
-      return(NULL)
     },
 
     #' @description

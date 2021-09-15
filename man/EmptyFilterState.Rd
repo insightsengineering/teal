@@ -127,22 +127,19 @@ id of shiny element}
 \subsection{Method \code{server()}}{
 Controls selection of \code{keep_na} checkbox input
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{EmptyFilterState$server(input, output, session)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{EmptyFilterState$server(id)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{input}}{(\code{Shiny})\cr input object}
-
-\item{\code{output}}{(\code{Shiny})\cr output object}
-
-\item{\code{session}}{(\code{Shiny})\cr session object}
+\item{\code{id}}{(\code{character(1)})\cr
+An ID string that corresponds with the ID used to call the module's UI function.}
 }
 \if{html}{\out{</div>}}
 }
 \subsection{Returns}{
-nothing
+\code{moduleServer} function which returns \code{NULL}
 }
 }
 \if{html}{\out{<hr>}}

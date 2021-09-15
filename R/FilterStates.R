@@ -513,8 +513,7 @@ FilterStates <- R6::R6Class( # nolint
             )
           )
 
-          moduleServer(id = "content", filter_state$server)
-
+          filter_state$server(id = "content")
           private$observers[[queue_id]] <- observeEvent(
             ignoreInit = TRUE,
             ignoreNULL = TRUE,
