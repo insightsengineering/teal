@@ -736,4 +736,3 @@ testthat::test_that("dataset$merge_join_keys does not throw on basic input", {
   testthat::expect_true(length(before_merge) < length(after_merge))
   testthat::expect_equal(names(after_merge), c("iris", "other_dataset", "other_dataset_2"))
 })
-

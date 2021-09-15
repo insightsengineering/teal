@@ -1155,4 +1155,3 @@ testthat::test_that("DatasetConnector$get_dataset calls dataset$merge_join_keys 
   t_dc$mutate_join_keys("other_dataset", c("Sepal.Length" = "some_other_col"))
   testthat::expect_equal(t_dc$get_dataset()$get_join_keys(), t_dc$get_join_keys())
 })
-
