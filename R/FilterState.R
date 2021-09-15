@@ -1004,7 +1004,7 @@ RangeFilterState <- R6::R6Class( # nolint
     #'  id of shiny element
     ui = function(id) {
       ns <- NS(id)
-      pretty_range_inputs <- private$get_pretty_range_inputs(private$choices())
+      pretty_range_inputs <- private$get_pretty_range_inputs(private$choices)
       fluidRow(
         div(
           class = "filterPlotOverlayRange",
