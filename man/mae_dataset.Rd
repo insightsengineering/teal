@@ -7,7 +7,6 @@
 mae_dataset(
   dataname,
   x,
-  keys = character(0),
   label = data_label(x),
   code = character(0),
   vars = list()
@@ -18,9 +17,6 @@ mae_dataset(
 A given name for the dataset it may not contain spaces}
 
 \item{x}{(\code{MultiAssayExperiment})}
-
-\item{keys}{optional, (\code{character})\cr
-vector with primary keys}
 
 \item{label}{(\code{character})\cr
 Label to describe the dataset}
@@ -45,7 +41,7 @@ Public facing constructor for MAEDataset
 # Simple example
 \dontrun{
 library(MultiAssayExperiment)
-MAE_dataset <- mae_dataset("MAE", miniACC, keys = c("STUDYID", "USUBJID"))
+MAE_dataset <- mae_dataset("MAE", miniACC)
 MAE_dataset$get_dataname()
 MAE_dataset$get_dataset_label()
 MAE_dataset$get_code()

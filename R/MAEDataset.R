@@ -255,7 +255,7 @@ dataset.MultiAssayExperiment <- function(dataname, # nousage
 #' # Simple example
 #' \dontrun{
 #' library(MultiAssayExperiment)
-#' MAE_dataset <- mae_dataset("MAE", miniACC, keys = c("STUDYID", "USUBJID"))
+#' MAE_dataset <- mae_dataset("MAE", miniACC)
 #' MAE_dataset$get_dataname()
 #' MAE_dataset$get_dataset_label()
 #' MAE_dataset$get_code()
@@ -264,7 +264,6 @@ dataset.MultiAssayExperiment <- function(dataname, # nousage
 #' @export
 mae_dataset <- function(dataname, # nousage
                         x,
-                        keys = character(0),
                         label = data_label(x),
                         code = character(0),
                         vars = list()) {
@@ -272,7 +271,6 @@ mae_dataset <- function(dataname, # nousage
   dataset(
     dataname = dataname,
     x = x,
-    keys = keys,
     code = code,
     label = label,
     vars = vars
