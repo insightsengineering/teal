@@ -352,12 +352,16 @@ Now say we want to filter out all the patients in `ADSL` except patients with `U
 equal to `id-1`, `id-2`, `id-3`, or `id-4`:
 
 ```{r}
-datasets$set_bookmark_state(
-  state = list(
-    ADSL = list(
-      USUBJID = sprintf("id-%s", 1:4)
+shiny::testServer(
+  datasets$set_bookmark_state,
+  args = list(
+    state = list(
+      ADSL = list(
+        USUBJID = sprintf("id-%s", 1:4)
+      )
     )
-  )
+  ),
+  expr = NULL
 )
 
 datasets$get_data("ADSL", filtered = TRUE)

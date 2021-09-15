@@ -209,7 +209,7 @@ Set if \code{NA} should be kept
 \if{html}{\out{<div class="arguments">}}
 \describe{
 \item{\code{value}}{(\code{logical(1)})\cr
-Value(s) which come from the filter selection. Value is set in \code{server}
+value(s) which come from the filter selection. Value is set in \code{server}
 modules after selecting check-box-input in the shiny interface. Values are set to
 \code{private$keep_na} which is reactive.}
 }
@@ -229,7 +229,7 @@ Set selection
 \if{html}{\out{<div class="arguments">}}
 \describe{
 \item{\code{value}}{(\code{vector})\cr
-Value(s) which come from the filter selection. Values are set in \code{server}
+value(s) which come from the filter selection. Values are set in \code{server}
 modules after choosing value in app interface. Values are set to
 \code{private$selected} which is reactive. Values type have to be the
 same as \code{private$choices}.}
@@ -265,22 +265,19 @@ contains fields relevant for a specific class
 \subsection{Method \code{server()}}{
 Server module
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{FilterState$server(input, output, session)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{FilterState$server(id)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{input}}{(\code{Shiny})\cr input object}
-
-\item{\code{output}}{(\code{Shiny})\cr output object}
-
-\item{\code{session}}{(\code{Shiny})\cr session object}
+\item{\code{id}}{(\code{character(1)})\cr
+an ID string that corresponds with the ID used to call the module's UI function.}
 }
 \if{html}{\out{</div>}}
 }
 \subsection{Returns}{
-nothing
+\code{moduleServer} function which returns \code{NULL}
 }
 }
 \if{html}{\out{<hr>}}

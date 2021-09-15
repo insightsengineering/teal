@@ -17,8 +17,8 @@ testthat::test_that("DefaultFilteredDataset$set_bookmark_state sets filters in F
     Sepal.Length = list(selected = c(5.1, 6.4)),
     Species = c("setosa", "versicolor")
   )
-  dataset$set_bookmark_state(fs)
-  expect_equal(
+  shiny::testServer(dataset$set_bookmark_state, args = list(state = fs), expr = NULL)
+  testthat::expect_equal(
     isolate(dataset$get_call()),
     list(
       filter = quote(
@@ -43,10 +43,8 @@ testthat::test_that("get_filter_overview_info returns overview matrix for Defaul
   dataset_iris <- DefaultFilteredDataset$new(dataset = Dataset$new("iris", head(iris)))
   filter_state_iris <- ChoicesFilterState$new(c("setosa", "virginica"), varname = "Species")
   filter_state_iris$set_selected("virginica")
-
   queue <- dataset_iris$get_filter_states(1)
   queue$queue_push(filter_state_iris, queue_index = 1L, element_id = "Species")
-
   testthat::expect_equal(
     isolate(dataset_iris$get_filter_overview_info()),
     matrix(list("0/6", ""), nrow = 1, dimnames = list(c("iris"), c("Obs", "Subjects")))
