@@ -317,7 +317,7 @@ Set choices
 
 Set choices is supposed to be executed once in the constructor
 to define set/range which selection is made from.
-param choices (\code{vector})\cr
+parameter choices (\code{vector})\cr
 class of the vector depends on the \code{FilterState} class.
 return a \code{NULL}}
 }

@@ -333,11 +333,11 @@ Module to add \code{FilterState} to queue
 This module adds \code{FilterState} object to queue, inserts
 shiny UI to the Active Filter Variables, calls \code{FilterState} modules and
 create observer to remove state
-param filter_state (\code{FilterState})
+parameter filter_state (\code{FilterState})
 
-param queue_index (\code{character(1)}, \code{logical(1)})\cr
+parameter queue_index (\code{character(1)}, \code{logical(1)})\cr
 index of the \code{private$queue} list where \code{ReactiveQueue} are kept.
-param element_id (\code{character(1)})\cr
+parameter element_id (\code{character(1)})\cr
 name of \code{ReactiveQueue} element.
 return \code{moduleServer} function which returns \code{NULL}
 \code{observeEvent} for remove-filter-state is set and also from \code{FilteredDataset}

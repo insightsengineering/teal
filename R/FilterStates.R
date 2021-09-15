@@ -449,11 +449,11 @@ FilterStates <- R6::R6Class( # nolint
     #' This module adds `FilterState` object to queue, inserts
     #' shiny UI to the Active Filter Variables, calls `FilterState` modules and
     #' create observer to remove state
-    #' param filter_state (`FilterState`)
+    #' parameter filter_state (`FilterState`)
     #'
-    #' param queue_index (`character(1)`, `logical(1)`)\cr
+    #' parameter queue_index (`character(1)`, `logical(1)`)\cr
     #'   index of the `private$queue` list where `ReactiveQueue` are kept.
-    #' param element_id (`character(1)`)\cr
+    #' parameter element_id (`character(1)`)\cr
     #'   name of `ReactiveQueue` element.
     #' return `moduleServer` function which returns `NULL`
     add_filter_state = function(id, filter_state, queue_index, element_id) {
@@ -789,7 +789,7 @@ DFFilterStates <- R6::R6Class( # nolint
     #' description
     #' Get label of specific variable. In case when variable label is missing
     #' name of the variable is returned.
-    #' param variable (`character(1)`)\cr
+    #' parameter variable (`character(1)`)\cr
     #'  name of the variable for which label should be returned
     #' return `character(1)`
     get_varlabels = function(variables = character(0)) {
@@ -1019,7 +1019,7 @@ MAEFilterStates <- R6::R6Class( # nolint
     #' description
     #' Get label of specific variable. In case when variable label is missing
     #' name of the variable is returned.
-    #' param variable (`character(1)`)\cr
+    #' parameter variable (`character(1)`)\cr
     #'  name of the variable for which label should be returned
     #' return `character(1)`
     get_varlabels = function(variables = character(0)) {

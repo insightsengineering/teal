@@ -176,7 +176,7 @@ in \code{optionalSelectInput}}
 description
 Get label of specific variable. In case when variable label is missing
 name of the variable is returned.
-param variable (\code{character(1)})\cr
+parameter variable (\code{character(1)})\cr
 name of the variable for which label should be returned
 return \code{character(1)}
 }

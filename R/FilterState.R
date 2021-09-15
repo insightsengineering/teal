@@ -497,7 +497,7 @@ FilterState <- R6::R6Class( # nolint
     #'
     #' Set choices is supposed to be executed once in the constructor
     #' to define set/range which selection is made from.
-    #' param choices (`vector`)\cr
+    #' parameter choices (`vector`)\cr
     #'  class of the vector depends on the `FilterState` class.
     #' return a `NULL`
     set_choices = function(choices) {
