@@ -993,10 +993,7 @@ RangeFilterState <- R6::R6Class( # nolint
     #'  id of shiny element
     ui = function(id) {
       ns <- NS(id)
-      v_pretty_range <- pretty(private$choices, n = 100)
-      v_step <- ifelse(private$is_integer, 1L, v_pretty_range[2] - v_pretty_range[1])
-      v_min <- v_pretty_range[1]
-      v_max <- v_pretty_range[length(v_pretty_range)]
+      pretty_range_inputs <- private$get_pretty_range_inputs(private$choices())
       fluidRow(
         div(
           class = "filterPlotOverlayRange",
@@ -1005,11 +1002,11 @@ RangeFilterState <- R6::R6Class( # nolint
         optionalSliderInput(
           inputId = ns("selection"),
           label = NULL,
-          min = v_min,
-          max = v_max,
-          value = c(v_min, v_max),
+          min = pretty_range_inputs["min"],
+          max = pretty_range_inputs["max"],
+          value = isolate(self$get_selected()),
           width = "100%",
-          step = v_step
+          step = pretty_range_inputs["step"]
         ),
         if (private$inf_count > 0) {
           checkboxInput(
@@ -1153,6 +1150,19 @@ RangeFilterState <- R6::R6Class( # nolint
       } else {
         filter_call
       }
+    },
+
+    # @description
+    # formats range to pretty numbers to reduce decimal precision
+    # @param values (numeric) initial range to be formatted
+    # @return numeric(3) with names min, max, step - relevant for sliderInput
+    get_pretty_range_inputs = function(values) {
+      v_pretty_range <- pretty(isolate(self$get_selected()), n = 100)
+      c(
+        min = v_pretty_range[1],
+        max = v_pretty_range[length(v_pretty_range)],
+        step = `if`(private$is_integer, 1L, v_pretty_range[2] - v_pretty_range[1])
+      )
     },
 
     log_state = function() {
@@ -1584,8 +1594,8 @@ DateFilterState <- R6::R6Class( # nolint
             dateRangeInput(
               inputId = ns("selection"),
               label = NULL,
-              start = private$choices[1],
-              end = private$choices[2],
+              start = isolate(self$get_selected())[1],
+              end = isolate(self$get_selected())[2],
               min = private$choices[1],
               max = private$choices[2]
             )
@@ -1835,8 +1845,8 @@ DatetimeFilterState <- R6::R6Class( # nolint
               {
                 x <- shinyWidgets::airDatepickerInput(
                   inputId = ns("selection_start"),
-                  value = private$choices[1],
-                  startView = private$choices[1],
+                  value = isolate(self$get_selected())[1],
+                  startView = isolate(self$get_selected())[1],
                   timepicker = TRUE,
                   minDate = private$choices[1],
                   maxDate = private$choices[2],
@@ -1858,8 +1868,8 @@ DatetimeFilterState <- R6::R6Class( # nolint
               {
                 x <- shinyWidgets::airDatepickerInput(
                   inputId = ns("selection_end"),
-                  value = private$choices[2],
-                  startView = private$choices[2],
+                  value = isolate(self$get_selected())[2],
+                  startView = isolate(self$get_selected())[2],
                   timepicker = TRUE,
                   minDate = private$choices[1],
                   maxDate = private$choices[2],
