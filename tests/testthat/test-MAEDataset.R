@@ -184,6 +184,11 @@ testthat::test_that("dataset() constructor returns the same as MAEDataset$new()"
   testthat::expect_equal(mae1, mae2)
 })
 
+testthat::test_that("mae_dataset() does not throw on basic usage", {
+  mae1 <- mae_dataset("mae", miniACC)
+  testthat::expect_error(mae1, NA)
+})
+
 testthat::test_that("mae_dataset() constructor returns the same as MAEDataset$new()", {
   mae1 <- mae_dataset("mae", miniACC)
   mae2 <- MAEDataset$new("mae", miniACC)
