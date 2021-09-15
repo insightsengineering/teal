@@ -2,7 +2,7 @@
 #'
 #' Initialize `FilterStates` object
 #' @param data (`data.frame`, `MultiAssayExperiment`, `SummarizedExperiment`, `matrix`)\cr
-#'   R object which `subset` function is applied on.
+#'   the R object which `subset` function is applied on.
 #'
 #' @param input_dataname (`character(1)` or `name` or `call`)\cr
 #'   name of the data used on lhs of the expression
@@ -311,7 +311,7 @@ FilterStates <- R6::R6Class( # nolint
     #' @description
     #' Sets `ReactiveQueue` objects.
     #' @param x (`list` of `ReactiveQueue`)\cr
-    #'  Must be a list even if single `ReactiveQueue` is set.
+    #'  must be a list even if single `ReactiveQueue` is set.
     queue_initialize = function(x) {
       stopifnot(is_class_list("ReactiveQueue")(x))
       private$queue <- x
@@ -319,8 +319,9 @@ FilterStates <- R6::R6Class( # nolint
     },
 
     #' @description
-    #' Adds a new `FilterState` object to this FilterStates
-    #' @param x (`FilterState`)
+    #' Adds a new `FilterState` object to this `FilterStates`
+    #' @param x (`FilterState`)\cr
+    #'   object to be added to the queue
     #' @param queue_index (`character(1)`, `integer(1)`)\cr
     #'   index of the `private$queue` list where `ReactiveQueue` are kept.
     #' @param element_id (`character(1)`)\cr
@@ -388,7 +389,7 @@ FilterStates <- R6::R6Class( # nolint
     #' Set bookmark state
     #'
     #' @param id (`character(1)`)\cr
-    #'   An ID string that corresponds with the ID used to call the module's UI function.
+    #'   an ID string that corresponds with the ID used to call the module's UI function.
     #' @param data (`data.frame`)\cr
     #'   data which are supposed to be filtered
     #' @param state (`named list`)\cr
@@ -420,7 +421,7 @@ FilterStates <- R6::R6Class( # nolint
     #' Shiny server module to add filter variable
     #'
     #' @param id (`character(1)`)\cr
-    #'   An ID string that corresponds with the ID used to call the module's UI function.
+    #'   an ID string that corresponds with the ID used to call the module's UI function.
     #' @param data (`data.frame`, `MultiAssayExperiment`, `SummarizedExperiment`, `matrix`)\cr
     #'  object containing columns to be used as filter variables.
     #' @return `moduleServer` function which returns `NULL`
@@ -448,7 +449,8 @@ FilterStates <- R6::R6Class( # nolint
     #' This module adds `FilterState` object to queue, inserts
     #' shiny UI to the Active Filter Variables, calls `FilterState` modules and
     #' create observer to remove state
-    #' parame filter_state (`FilterState`)
+    #' param filter_state (`FilterState`)
+    #'
     #' param queue_index (`character(1)`, `logical(1)`)\cr
     #'   index of the `private$queue` list where `ReactiveQueue` are kept.
     #' param element_id (`character(1)`)\cr
@@ -633,7 +635,7 @@ DFFilterStates <- R6::R6Class( # nolint
     #' Set bookmark state
     #'
     #' @param id (`character(1)`)\cr
-    #'   An ID string that corresponds with the ID used to call the module's UI function.
+    #'   an ID string that corresponds with the ID used to call the module's UI function.
     #' @param data (`data.frame`)\cr
     #'   data which are supposed to be filtered
     #' @param state (`named list`)\cr
@@ -707,7 +709,7 @@ DFFilterStates <- R6::R6Class( # nolint
     #' Removed filter variable gets back to available choices.
     #'
     #' @param id (`character(1)`)\cr
-    #'   An ID string that corresponds with the ID used to call the module's UI function.
+    #'   an ID string that corresponds with the ID used to call the module's UI function.
     #' @param data (`data.frame`)\cr
     #'  object which columns are used to choose filter variables.
     #' @return `moduleServer` function which returns `NULL`
@@ -787,7 +789,7 @@ DFFilterStates <- R6::R6Class( # nolint
     #' description
     #' Get label of specific variable. In case when variable label is missing
     #' name of the variable is returned.
-    #' parameter variable (`character(1)`)\cr
+    #' param variable (`character(1)`)\cr
     #'  name of the variable for which label should be returned
     #' return `character(1)`
     get_varlabels = function(variables = character(0)) {
@@ -859,7 +861,7 @@ MAEFilterStates <- R6::R6Class( # nolint
     #' Set bookmark state
     #'
     #' @param id (`character(1)`)\cr
-    #'   An ID string that corresponds with the ID used to call the module's UI function.
+    #'   an ID string that corresponds with the ID used to call the module's UI function.
     #' @param data (`MultiAssayExperiment`)\cr
     #'   data which are supposed to be filtered
     #' @param state (`named list`)\cr
@@ -937,7 +939,7 @@ MAEFilterStates <- R6::R6Class( # nolint
     #' Removed filter variable gets back to available choices.
     #'
     #' @param id (`character(1)`)\cr
-    #'   An ID string that corresponds with the ID used to call the module's UI function.
+    #'   an ID string that corresponds with the ID used to call the module's UI function.
     #' @param data (`MultiAssayExperiment`)\cr
     #'  object containing `colData` which columns are used to be used
     #'  to choose filter variables.
@@ -1017,7 +1019,7 @@ MAEFilterStates <- R6::R6Class( # nolint
     #' description
     #' Get label of specific variable. In case when variable label is missing
     #' name of the variable is returned.
-    #' parameter variable (`character(1)`)\cr
+    #' param variable (`character(1)`)\cr
     #'  name of the variable for which label should be returned
     #' return `character(1)`
     get_varlabels = function(variables = character(0)) {
@@ -1070,11 +1072,11 @@ SEFilterStates <- R6::R6Class( # nolint
     #' Set bookmark state
     #'
     #' @param id (`character(1)`)\cr
-    #'   An ID string that corresponds with the ID used to call the module's UI function.
+    #'   an ID string that corresponds with the ID used to call the module's UI function.
     #' @param data (`SummarizedExperiment`)\cr
     #'   data which are supposed to be filtered
     #' @param state (`named list`)\cr
-    #'   This list should contain `subset` and `select` element where
+    #'   this list should contain `subset` and `select` element where
     #'   each should be a named list containing values as a selection in the `FilterState`.
     #'   Names of each the `list` element in `subset` and `select` should correspond to
     #'   the name of the column in `rowData(data)` and `colData(data)`.
@@ -1193,7 +1195,7 @@ SEFilterStates <- R6::R6Class( # nolint
     #' `rowData`.
     #'
     #' @param id (`character(1)`)\cr
-    #'   An ID string that corresponds with the ID used to call the module's UI function.
+    #'   an ID string that corresponds with the ID used to call the module's UI function.
     #' @param data (`SummarizedExperiment`)\cr
     #'  object containing `colData` and `rowData` which columns
     #'  are used to choose filter variables. Column selection from `colData`
@@ -1361,7 +1363,7 @@ MatrixFilterStates <- R6::R6Class( # nolint
     #' Set bookmark state
     #'
     #' @param id (`character(1)`)\cr
-    #'   An ID string that corresponds with the ID used to call the module's UI function.
+    #'   an ID string that corresponds with the ID used to call the module's UI function.
     #' @param data (`matrix`)\cr
     #'   data which are supposed to be filtered
     #' @param state (`named list`)\cr
@@ -1436,7 +1438,7 @@ MatrixFilterStates <- R6::R6Class( # nolint
     #' Removed filter variable gets back to available choices.
     #'
     #' @param id (`character(1)`)\cr
-    #'   An ID string that corresponds with the ID used to call the module's UI function.
+    #'   an ID string that corresponds with the ID used to call the module's UI function.
     #' @param data (`matrix`)\cr
     #'  object which columns are used to choose filter variables.
     #' @return `moduleServer` function which returns `NULL`
@@ -1558,10 +1560,15 @@ get_filterable_varnames.matrix <- function(data) { #nolint #nousage
 
 #' @title Returns a `choices_labeled` object
 #'
-#' @param data `data.frame`
-#' @param choices `character` the array of chosen variables
-#' @param varlabels `character` the labels of variables in data
-#' @param keys `character` the names of the key columns in data
+#' @param data (`data.frame`)\cr
+#'   where labels can be taken from in case when `varlabels` is not specified.
+#'   `data` must be specified if `varlabels` is not specified.
+#' @param choices (`character`)\cr
+#'  the array of chosen variables
+#' @param varlabels (`character`)\cr
+#'  the labels of variables in data
+#' @param keys (`character`)\cr
+#'  the names of the key columns in data
 #' @return `character(0)` if choices are empty; a `choices_labeled` object otherwise
 #' @noRd
 data_choices_labeled <- function(data, choices, varlabels = character(0), keys = character(0)) {
@@ -1570,6 +1577,7 @@ data_choices_labeled <- function(data, choices, varlabels = character(0), keys =
   }
 
   choice_labels <- if (identical(varlabels, character(0))) {
+    stopifnot(is.data.frame(data))
     vapply(
       X = data,
       FUN = function(x) {

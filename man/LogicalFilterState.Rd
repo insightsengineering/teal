@@ -148,7 +148,7 @@ Server module
 \if{html}{\out{<div class="arguments">}}
 \describe{
 \item{\code{id}}{(\code{character(1)})\cr
-An ID string that corresponds with the ID used to call the module's UI function.}
+an ID string that corresponds with the ID used to call the module's UI function.}
 }
 \if{html}{\out{</div>}}
 }
@@ -168,7 +168,8 @@ Sets the selected values of this \code{LogicalFilterState}.
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{value}}{(\code{logical(1)}) the value to set. Must not contain the NA value.}
+\item{\code{value}}{(\code{logical(1)})\cr
+the value to set. Must not contain the NA value.}
 }
 \if{html}{\out{</div>}}
 }

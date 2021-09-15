@@ -112,7 +112,7 @@ Set bookmark state
 \if{html}{\out{<div class="arguments">}}
 \describe{
 \item{\code{id}}{(\code{character(1)})\cr
-An ID string that corresponds with the ID used to call the module's UI function.}
+an ID string that corresponds with the ID used to call the module's UI function.}
 
 \item{\code{state}}{(\verb{named list})\cr
 names of the list should correspond to the names of the initialized \code{FilterStates}
@@ -168,7 +168,7 @@ experiment.
 \if{html}{\out{<div class="arguments">}}
 \describe{
 \item{\code{id}}{(\code{character(1)})\cr
-An ID string that corresponds with the ID used to call the module's UI function.}
+an ID string that corresponds with the ID used to call the module's UI function.}
 }
 \if{html}{\out{</div>}}
 }

@@ -268,7 +268,7 @@ FilteredDataset <- R6::R6Class( # nolint
     #' Sets the bookmark state
     #'
     #' @param id (`character(1)`)\cr
-    #'   An ID string that corresponds with the ID used to call the module's UI function.
+    #'   an ID string that corresponds with the ID used to call the module's UI function.
     #' @param state (`named list`)\cr
     #'  containing values of the initial filter. Values should be relevant
     #'  to the referred column.
@@ -341,7 +341,7 @@ FilteredDataset <- R6::R6Class( # nolint
     #'
     #' Server module managing a  active filters.
     #' @param id (`character(1)`)\cr
-    #'   An ID string that corresponds with the ID used to call the module's UI function.
+    #'   an ID string that corresponds with the ID used to call the module's UI function.
     #' @return `moduleServer` function which returns `NULL`
     server = function(id) {
       moduleServer(
@@ -381,7 +381,7 @@ FilteredDataset <- R6::R6Class( # nolint
     #'
     #' Server module to add filter variable for this dataset
     #' @param id (`character(1)`)\cr
-    #'   An ID string that corresponds with the ID used to call the module's UI function.
+    #'   an ID string that corresponds with the ID used to call the module's UI function.
     #' @return `moduleServer` function.
     srv_add_filter_state = function(id) {
       moduleServer(
@@ -489,7 +489,7 @@ DefaultFilteredDataset <- R6::R6Class( # nolint
     #' Set bookmark state
     #'
     #' @param id (`character(1)`)\cr
-    #'   An ID string that corresponds with the ID used to call the module's UI function.
+    #'   an ID string that corresponds with the ID used to call the module's UI function.
     #' @param state (`named list`)\cr
     #'  containing values of the initial filter. Values should be relevant
     #'  to the referred column.
@@ -506,7 +506,7 @@ DefaultFilteredDataset <- R6::R6Class( # nolint
             state = state,
             data = data
           )
-          invisible(NULL)
+          NULL
         }
       )
     },
@@ -539,7 +539,7 @@ DefaultFilteredDataset <- R6::R6Class( # nolint
     #' contains single `FilterStates`)
     #'
     #' @param id (`character(1)`)\cr
-    #'   An ID string that corresponds with the ID used to call the module's UI function.
+    #'   an ID string that corresponds with the ID used to call the module's UI function.
     #' @return `moduleServer` function which returns `NULL`
     srv_add_filter_state = function(id) {
       moduleServer(
@@ -678,7 +678,7 @@ CDISCFilteredDataset <- R6::R6Class( # nolint
     #' contains single `FilterStates`)
     #'
     #' @param id (`character(1)`)\cr
-    #'   An ID string that corresponds with the ID used to call the module's UI function.
+    #'   an ID string that corresponds with the ID used to call the module's UI function.
     #' @return `moduleServer` function which returns `NULL`
     srv_add_filter_state = function(id) {
       moduleServer(
@@ -840,7 +840,7 @@ MAEFilteredDataset <- R6::R6Class( # nolint
     #' Set bookmark state
     #'
     #' @param id (`character(1)`)\cr
-    #'   An ID string that corresponds with the ID used to call the module's UI function.
+    #'   an ID string that corresponds with the ID used to call the module's UI function.
     #' @param state (`named list`)\cr
     #'  names of the list should correspond to the names of the initialized `FilterStates`
     #'  kept in `private$filter_states`. For this object they are `"subjects"` and
@@ -865,7 +865,7 @@ MAEFilteredDataset <- R6::R6Class( # nolint
             )
           }
 
-          return(invisible(NULL))
+          NULL
         }
       )
     },
@@ -920,7 +920,7 @@ MAEFilteredDataset <- R6::R6Class( # nolint
     #' experiment.
     #'
     #' @param id (`character(1)`)\cr
-    #'   An ID string that corresponds with the ID used to call the module's UI function.
+    #'   an ID string that corresponds with the ID used to call the module's UI function.
     #' @return `moduleServer` function which returns `NULL`
     srv_add_filter_state = function(id) {
       moduleServer(

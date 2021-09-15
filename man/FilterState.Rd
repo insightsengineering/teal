@@ -209,7 +209,7 @@ Set if \code{NA} should be kept
 \if{html}{\out{<div class="arguments">}}
 \describe{
 \item{\code{value}}{(\code{logical(1)})\cr
-Value(s) which come from the filter selection. Value is set in \code{server}
+value(s) which come from the filter selection. Value is set in \code{server}
 modules after selecting check-box-input in the shiny interface. Values are set to
 \code{private$keep_na} which is reactive.}
 }
@@ -229,7 +229,7 @@ Set selection
 \if{html}{\out{<div class="arguments">}}
 \describe{
 \item{\code{value}}{(\code{vector})\cr
-Value(s) which come from the filter selection. Values are set in \code{server}
+value(s) which come from the filter selection. Values are set in \code{server}
 modules after choosing value in app interface. Values are set to
 \code{private$selected} which is reactive. Values type have to be the
 same as \code{private$choices}.}
@@ -272,7 +272,7 @@ Server module
 \if{html}{\out{<div class="arguments">}}
 \describe{
 \item{\code{id}}{(\code{character(1)})\cr
-An ID string that corresponds with the ID used to call the module's UI function.}
+an ID string that corresponds with the ID used to call the module's UI function.}
 }
 \if{html}{\out{</div>}}
 }
@@ -317,7 +317,7 @@ Set choices
 
 Set choices is supposed to be executed once in the constructor
 to define set/range which selection is made from.
-parameter choices (\code{vector})\cr
+param choices (\code{vector})\cr
 class of the vector depends on the \code{FilterState} class.
 return a \code{NULL}}
 }

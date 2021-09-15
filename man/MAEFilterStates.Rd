@@ -104,7 +104,7 @@ Set bookmark state
 \if{html}{\out{<div class="arguments">}}
 \describe{
 \item{\code{id}}{(\code{character(1)})\cr
-An ID string that corresponds with the ID used to call the module's UI function.}
+an ID string that corresponds with the ID used to call the module's UI function.}
 
 \item{\code{data}}{(\code{MultiAssayExperiment})\cr
 data which are supposed to be filtered}
@@ -162,7 +162,7 @@ Removed filter variable gets back to available choices.
 \if{html}{\out{<div class="arguments">}}
 \describe{
 \item{\code{id}}{(\code{character(1)})\cr
-An ID string that corresponds with the ID used to call the module's UI function.}
+an ID string that corresponds with the ID used to call the module's UI function.}
 
 \item{\code{data}}{(\code{MultiAssayExperiment})\cr
 object containing \code{colData} which columns are used to be used
@@ -176,7 +176,7 @@ in \code{optionalSelectInput}}
 description
 Get label of specific variable. In case when variable label is missing
 name of the variable is returned.
-parameter variable (\code{character(1)})\cr
+param variable (\code{character(1)})\cr
 name of the variable for which label should be returned
 return \code{character(1)}
 }

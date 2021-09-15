@@ -546,7 +546,7 @@ Sets bookmark state
 \if{html}{\out{<div class="arguments">}}
 \describe{
 \item{\code{id}}{(\code{character(1)})\cr
-An ID string that corresponds with the ID used to call the module's UI function.}
+an ID string that corresponds with the ID used to call the module's UI function.}
 
 \item{\code{state}}{(\verb{named list})\cr
 nested list of filter selections applied to datasets.}
@@ -622,7 +622,7 @@ Server function for filter panel}
 \if{html}{\out{<div class="arguments">}}
 \describe{
 \item{\code{id}}{(\code{character(1)})\cr
-An ID string that corresponds with the ID used to call the module's UI function.}
+an ID string that corresponds with the ID used to call the module's UI function.}
 
 \item{\code{active_datanames}}{\verb{function / reactive} returning datanames that
 should be shown on the filter panel,
@@ -672,7 +672,7 @@ data}
 \if{html}{\out{<div class="arguments">}}
 \describe{
 \item{\code{id}}{(\code{character(1)})\cr
-An ID string that corresponds with the ID used to call the module's UI function.}
+an ID string that corresponds with the ID used to call the module's UI function.}
 
 \item{\code{active_datanames}}{(\code{function}, \code{reactive})\cr
 returning datanames that should be shown on the filter panel,

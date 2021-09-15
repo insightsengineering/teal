@@ -134,7 +134,7 @@ Returns current \code{keep_inf} selection
 
 \subsection{Returns}{
 (\code{logical(1)})
-UI Module for \code{EmptyFilterState}.
+UI Module for \code{RangeFilterState}.
 This UI element contains two values for \code{min} and \code{max}
 of the range and two checkboxes whether to keep the \code{NA} or \code{Inf}  values.
 }
@@ -169,7 +169,7 @@ Server module
 \if{html}{\out{<div class="arguments">}}
 \describe{
 \item{\code{id}}{(\code{character(1)})\cr
-An ID string that corresponds with the ID used to call the module's UI function.}
+an ID string that corresponds with the ID used to call the module's UI function.}
 }
 \if{html}{\out{</div>}}
 }
@@ -232,7 +232,8 @@ Sets the selected values of this \code{RangeFilterState}.
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{bounds}}{(\code{numeric(2)}) the two-elements array of the lower and upper bound
+\item{\code{bounds}}{(\code{numeric(2)})\cr
+the two-elements array of the lower and upper bound
 of the selected range. Must not contain NA values.}
 }
 \if{html}{\out{</div>}}

@@ -359,7 +359,7 @@ FilterState <- R6::R6Class( # nolint
     #' @description
     #' Set if `NA` should be kept
     #' @param value (`logical(1)`)\cr
-    #'  Value(s) which come from the filter selection. Value is set in `server`
+    #'  value(s) which come from the filter selection. Value is set in `server`
     #'  modules after selecting check-box-input in the shiny interface. Values are set to
     #'  `private$keep_na` which is reactive.
     set_keep_na = function(value) {
@@ -371,7 +371,7 @@ FilterState <- R6::R6Class( # nolint
     #' @description
     #' Set selection
     #' @param value (`vector`)\cr
-    #'  Value(s) which come from the filter selection. Values are set in `server`
+    #'  value(s) which come from the filter selection. Values are set in `server`
     #'  modules after choosing value in app interface. Values are set to
     #'  `private$selected` which is reactive. Values type have to be the
     #'  same as `private$choices`.
@@ -406,7 +406,7 @@ FilterState <- R6::R6Class( # nolint
     #' @description
     #' Server module
     #' @param id (`character(1)`)\cr
-    #'   An ID string that corresponds with the ID used to call the module's UI function.
+    #'   an ID string that corresponds with the ID used to call the module's UI function.
     #' @return `moduleServer` function which returns `NULL`
     server = function(id) {
       moduleServer(
@@ -497,7 +497,7 @@ FilterState <- R6::R6Class( # nolint
     #'
     #' Set choices is supposed to be executed once in the constructor
     #' to define set/range which selection is made from.
-    #' parameter choices (`vector`)\cr
+    #' param choices (`vector`)\cr
     #'  class of the vector depends on the `FilterState` class.
     #' return a `NULL`
     set_choices = function(choices) {
@@ -628,7 +628,7 @@ EmptyFilterState <- R6::R6Class( # nolint
     #' @description
     #' Controls selection of `keep_na` checkbox input
     #' @param id (`character(1)`)\cr
-    #'   An ID string that corresponds with the ID used to call the module's UI function.
+    #'   an ID string that corresponds with the ID used to call the module's UI function.
     #' @return `moduleServer` function which returns `NULL`
     server = function(id) {
       moduleServer(
@@ -798,7 +798,7 @@ LogicalFilterState <- R6::R6Class( # nolint
     #' Server module
     #'
     #' @param id (`character(1)`)\cr
-    #'   An ID string that corresponds with the ID used to call the module's UI function.
+    #'   an ID string that corresponds with the ID used to call the module's UI function.
     #' @return `moduleServer` function which returns `NULL`
     server = function(id) {
       moduleServer(
@@ -847,7 +847,8 @@ LogicalFilterState <- R6::R6Class( # nolint
     #' @description
     #' Sets the selected values of this `LogicalFilterState`.
     #'
-    #' @param value (`logical(1)`) the value to set. Must not contain the NA value.
+    #' @param value (`logical(1)`)\cr
+    #'  the value to set. Must not contain the NA value.
     #'
     #' @returns invisibly `NULL`.
     #'
@@ -997,7 +998,7 @@ RangeFilterState <- R6::R6Class( # nolint
       private$keep_inf()
     },
 
-    #' UI Module for `EmptyFilterState`.
+    #' UI Module for `RangeFilterState`.
     #' This UI element contains two values for `min` and `max`
     #' of the range and two checkboxes whether to keep the `NA` or `Inf`  values.
     #' @param id (`character(1)`)\cr
@@ -1043,7 +1044,7 @@ RangeFilterState <- R6::R6Class( # nolint
     #' @description
     #' Server module
     #' @param id (`character(1)`)\cr
-    #'   An ID string that corresponds with the ID used to call the module's UI function.
+    #'   an ID string that corresponds with the ID used to call the module's UI function.
     #' @return `moduleServer` function which returns `NULL`
     server = function(id) {
       moduleServer(
@@ -1133,8 +1134,9 @@ RangeFilterState <- R6::R6Class( # nolint
     #' @description
     #' Sets the selected values of this `RangeFilterState`.
     #'
-    #' @param bounds (`numeric(2)`) the two-elements array of the lower and upper bound
-    #'   of the selected range. Must not contain NA values.
+    #' @param bounds (`numeric(2)`)\cr
+    #'  the two-elements array of the lower and upper bound
+    #'  of the selected range. Must not contain NA values.
     #'
     #' @returns invisibly `NULL`
     #'
@@ -1174,7 +1176,7 @@ RangeFilterState <- R6::R6Class( # nolint
     # @param values (numeric) initial range to be formatted
     # @return numeric(3) with names min, max, step - relevant for sliderInput
     get_pretty_range_inputs = function(values) {
-      v_pretty_range <- pretty(isolate(self$get_selected()), n = 100)
+      v_pretty_range <- pretty(values, n = 100)
       c(
         min = v_pretty_range[1],
         max = v_pretty_range[length(v_pretty_range)],
@@ -1329,7 +1331,7 @@ ChoicesFilterState <- R6::R6Class( # nolint
 
 
     #' @description
-    #' UI Module for `EmptyFilterState`.
+    #' UI Module for `ChoicesFilterState`.
     #' This UI element contains available choices selection and
     #' checkbox whether to keep or not keep the `NA` values.
     #' @param id (`character(1)`)\cr
@@ -1380,7 +1382,7 @@ ChoicesFilterState <- R6::R6Class( # nolint
     #' @description
     #' Server module
     #' @param id (`character(1)`)\cr
-    #'   An ID string that corresponds with the ID used to call the module's UI function.
+    #'   an ID string that corresponds with the ID used to call the module's UI function.
     #' @return `moduleServer` function which returns `NULL`
     server = function(id) {
       moduleServer(
@@ -1447,8 +1449,8 @@ ChoicesFilterState <- R6::R6Class( # nolint
     #' @description
     #' Sets the selected values of this `ChoicesFilterState`.
     #'
-    #' @param selection (`character`) the array of the selected choices.
-    #'   Must not contain NA values.
+    #' @param selection (`character`)\cr
+    #' the array of the selected choices. Must not contain NA values.
     #'
     #' @return invisibly `NULL`
     #'
@@ -1589,7 +1591,7 @@ DateFilterState <- R6::R6Class( # nolint
     },
 
     #' @description
-    #' UI Module for `EmptyFilterState`.
+    #' UI Module for `DateFilterState`.
     #' This UI element contains two date selections for `min` and `max`
     #' of the range and a checkbox whether to keep the `NA` values.
     #' @param id (`character(1)`)\cr
@@ -1637,7 +1639,7 @@ DateFilterState <- R6::R6Class( # nolint
     #' @description
     #' Server module
     #' @param id (`character(1)`)\cr
-    #'   An ID string that corresponds with the ID used to call the module's UI function.
+    #'   an ID string that corresponds with the ID used to call the module's UI function.
     #' @return `moduleServer` function which returns `NULL`
     server = function(id) {
       moduleServer(
@@ -1840,7 +1842,7 @@ DatetimeFilterState <- R6::R6Class( # nolint
     },
 
     #' @description
-    #' UI Module for `EmptyFilterState`.
+    #' UI Module for `DatetimeFilterState`.
     #' This UI element contains two date-time selections for `min` and `max`
     #' of the range and a checkbox whether to keep the `NA` values.
     #' @param id (`character(1)`)\cr
@@ -1922,7 +1924,7 @@ DatetimeFilterState <- R6::R6Class( # nolint
     #' @description
     #' Server module
     #' @param id (`character(1)`)\cr
-    #'   An ID string that corresponds with the ID used to call the module's UI function.
+    #'   an ID string that corresponds with the ID used to call the module's UI function.
     #' @return `moduleServer` function which returns `NULL`
     server = function(id) {
       moduleServer(

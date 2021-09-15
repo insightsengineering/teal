@@ -119,7 +119,7 @@ optional \verb{is.na(<varname>)}.
 \if{html}{\out{<a id="method-ui"></a>}}
 \if{latex}{\out{\hypertarget{method-ui}{}}}
 \subsection{Method \code{ui()}}{
-UI Module for \code{EmptyFilterState}.
+UI Module for \code{ChoicesFilterState}.
 This UI element contains available choices selection and
 checkbox whether to keep or not keep the \code{NA} values.
 \subsection{Usage}{
@@ -148,7 +148,7 @@ Server module
 \if{html}{\out{<div class="arguments">}}
 \describe{
 \item{\code{id}}{(\code{character(1)})\cr
-An ID string that corresponds with the ID used to call the module's UI function.}
+an ID string that corresponds with the ID used to call the module's UI function.}
 }
 \if{html}{\out{</div>}}
 }
@@ -190,8 +190,8 @@ Sets the selected values of this \code{ChoicesFilterState}.
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{selection}}{(\code{character}) the array of the selected choices.
-Must not contain NA values.}
+\item{\code{selection}}{(\code{character})\cr
+the array of the selected choices. Must not contain NA values.}
 }
 \if{html}{\out{</div>}}
 }

@@ -125,7 +125,7 @@ with optional \verb{is.na(<varname>)}.
 \if{html}{\out{<a id="method-ui"></a>}}
 \if{latex}{\out{\hypertarget{method-ui}{}}}
 \subsection{Method \code{ui()}}{
-UI Module for \code{EmptyFilterState}.
+UI Module for \code{DatetimeFilterState}.
 This UI element contains two date-time selections for \code{min} and \code{max}
 of the range and a checkbox whether to keep the \code{NA} values.
 \subsection{Usage}{
@@ -154,7 +154,7 @@ Server module
 \if{html}{\out{<div class="arguments">}}
 \describe{
 \item{\code{id}}{(\code{character(1)})\cr
-An ID string that corresponds with the ID used to call the module's UI function.}
+an ID string that corresponds with the ID used to call the module's UI function.}
 }
 \if{html}{\out{</div>}}
 }

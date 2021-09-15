@@ -369,7 +369,7 @@ FilteredData <- R6::R6Class( # nolint
     #' @description
     #' Sets bookmark state
     #' @param id (`character(1)`)\cr
-    #'   An ID string that corresponds with the ID used to call the module's UI function.
+    #'   an ID string that corresponds with the ID used to call the module's UI function.
     #' @param state (`named list`)\cr
     #'  nested list of filter selections applied to datasets.
     #' @return `moduleServer` function which returns `NULL`
@@ -549,7 +549,7 @@ FilteredData <- R6::R6Class( # nolint
     #' Server function for filter panel
     #'
     #' @param id (`character(1)`)\cr
-    #'   An ID string that corresponds with the ID used to call the module's UI function.
+    #'   an ID string that corresponds with the ID used to call the module's UI function.
     #' @param active_datanames `function / reactive` returning datanames that
     #'   should be shown on the filter panel,
     #'   must be a subset of the `datanames` argument provided to `ui_filter_panel`;
@@ -662,7 +662,7 @@ FilteredData <- R6::R6Class( # nolint
     #' data
     #'
     #' @param id (`character(1)`)\cr
-    #'   An ID string that corresponds with the ID used to call the module's UI function.
+    #'   an ID string that corresponds with the ID used to call the module's UI function.
     #' @param active_datanames (`function`, `reactive`)\cr
     #'   returning datanames that should be shown on the filter panel,
     #'   must be a subset of the `datanames` argument provided to `ui_filter_panel`;
@@ -712,7 +712,7 @@ FilteredData <- R6::R6Class( # nolint
             table_html
           })
 
-          return(invisible(NULL))
+          NULL
         }
       )
     }
