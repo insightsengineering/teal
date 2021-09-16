@@ -101,7 +101,9 @@ testthat::test_that("MAEFilterStates$set_bookmark_state sets filters in FilterSt
     gender = "female"
   )
   shiny::testServer(
-    maefs$set_bookmark_state, args = list(state = fs, data = MultiAssayExperiment::miniACC), expr = NULL
+    maefs$set_bookmark_state,
+    args = list(state = fs, data = MultiAssayExperiment::miniACC),
+    expr = NULL
   )
   testthat::expect_equal(
     isolate(maefs$get_call()),

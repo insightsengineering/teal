@@ -370,7 +370,7 @@ FilteredData <- R6::R6Class( # nolint
     #' @description
     #' Sets bookmark state
     #' @param id (`character(1)`)\cr
-    #'   An ID string that corresponds with the ID used to call the module's UI function.
+    #'   an ID string that corresponds with the ID used to call the module's UI function.
     #' @param state (`named list`)\cr
     #'  nested list of filter selections applied to datasets.
     #' @return `moduleServer` function which returns `NULL`
@@ -548,13 +548,13 @@ FilteredData <- R6::R6Class( # nolint
     #' Server function for filter panel
     #'
     #' @param id (`character(1)`)\cr
-    #'   An ID string that corresponds with the ID used to call the module's UI function.
+    #'   an ID string that corresponds with the ID used to call the module's UI function.
     #' @param active_datanames `function / reactive` returning datanames that
     #'   should be shown on the filter panel,
     #'   must be a subset of the `datanames` argument provided to `ui_filter_panel`;
     #'   if the function returns `NULL` (as opposed to `character(0)`), the filter
     #'   panel will be hidden
-    #'
+    #' @return `moduleServer` function which returns `NULL`
     srv_filter_panel = function(id, active_datanames = function() "all") {
       stopifnot(
         is.function(active_datanames) || is.reactive(active_datanames)
@@ -637,6 +637,8 @@ FilteredData <- R6::R6Class( # nolint
               fdataset$queues_empty()
             })
           })
+
+          NULL
         }
       )
     },
@@ -662,12 +664,13 @@ FilteredData <- R6::R6Class( # nolint
     #' data
     #'
     #' @param id (`character(1)`)\cr
-    #'   An ID string that corresponds with the ID used to call the module's UI function.
+    #'   an ID string that corresponds with the ID used to call the module's UI function.
     #' @param active_datanames (`function`, `reactive`)\cr
     #'   returning datanames that should be shown on the filter panel,
     #'   must be a subset of the `datanames` argument provided to `ui_filter_panel`;
     #'   if the function returns `NULL` (as opposed to `character(0)`), the filter
     #'   panel will be hidden.
+    #' @return `moduleServer` function which returns `NULL`
     srv_filter_overview = function(id, active_datanames = function() "all") {
       stopifnot(
         is.function(active_datanames) || is.reactive(active_datanames)
@@ -689,7 +692,6 @@ FilteredData <- R6::R6Class( # nolint
               seq_len(nrow(datasets_df)),
               function(x) {
                 tags$tr(
-                  id = session$ns(rownames(datasets_df)[x]),
                   tags$td(rownames(datasets_df)[x]),
                   tags$td(datasets_df[x, 1]),
                   tags$td(datasets_df[x, 2])
@@ -712,7 +714,7 @@ FilteredData <- R6::R6Class( # nolint
             table_html
           })
 
-          return(invisible(NULL))
+          NULL
         }
       )
     }
@@ -732,7 +734,7 @@ FilteredData <- R6::R6Class( # nolint
 
     # @details
     # Composes id for the FilteredDataset shiny element (active filter vars)
-    # @param dataname (`character(1)`)
+    # @param dataname (`character(1)`) name of the dataset which ui is composed for.
     # @return `character(1)` - `<dataname>_filter`
     get_ui_id = function(dataname) {
       sprintf("%s_filter", dataname)
@@ -740,7 +742,7 @@ FilteredData <- R6::R6Class( # nolint
 
     # @details
     # Composes id for the FilteredDataset shiny element (add filter state)
-    # @param dataname (`character(1)`)
+    # @param dataname (`character(1)`)  name of the dataset which ui is composed for.
     # @return `character(1)` - `<dataname>_filter`
     get_ui_add_filter_id = function(dataname) {
       sprintf("add_%s_filter", dataname)

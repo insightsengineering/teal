@@ -226,6 +226,24 @@ vector_reorder <- function(vec, idx) {
 
   return(vec)
 }
+
+vector_pop <- function(vec, idx) {
+  stopifnot(is.atomic(vec))
+  stopifnot(is_integer_vector(idx, min_length = 0))
+
+  if (length(idx) == 0) {
+    return(vec)
+  }
+
+  vec_attrs <- attributes(vec)
+
+  for (vec_attrs_idx in seq_along(vec_attrs)) {
+    if (length(vec_attrs[[vec_attrs_idx]]) == length(vec)) {
+      vec_attrs[[vec_attrs_idx]] <- vec_attrs[[vec_attrs_idx]][-idx]
+    }
+  }
+}
+
 vector_remove_dups <- function(vec) {
   stopifnot(is.atomic(vec))
 

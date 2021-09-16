@@ -44,13 +44,16 @@ testthat::test_that("DFFilterStates$set_bookmark_state sets filters in FilterSta
   )
 })
 
-testthat::test_that("Selecting a new 'var_to_add' initializes a new filter state", {
+testthat::test_that("Selecting a new variable initializes a new filter state", {
   dffs <- teal:::DFFilterStates$new(
     input_dataname = "iris",
     output_dataname = "iris_filtered",
     datalabel = character(0),
     varlabels = character(0),
     keys = character(0)
+  )
+  expect_null(
+    dffs$queue_get(queue_index = 1, element_id = "Sepal.Length")
   )
   shiny::testServer(
     dffs$srv_add_filter_state,
@@ -60,9 +63,17 @@ testthat::test_that("Selecting a new 'var_to_add' initializes a new filter state
     }
   )
 
-  testthat::expect_identical(
-    isolate(dffs$get_call()),
-    quote(iris_filtered <- dplyr::filter(iris, Sepal.Length >= 4.3 & Sepal.Length <= 7.9))
+  expect_is(
+    dffs$queue_get(queue_index = 1, element_id = "Sepal.Length"),
+    "list"
+  )
+  expect_is(
+    dffs$queue_get(queue_index = 1, element_id = "Sepal.Length")[[1]],
+    "RangeFilterState"
+  )
+  expect_identical(
+    dffs$queue_get(queue_index = 1, element_id = "Sepal.Length")[[1]]$get_varname(deparse = TRUE),
+    "Sepal.Length"
   )
 })
 

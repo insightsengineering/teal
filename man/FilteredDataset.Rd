@@ -337,7 +337,7 @@ Sets the bookmark state
 \if{html}{\out{<div class="arguments">}}
 \describe{
 \item{\code{id}}{(\code{character(1)})\cr
-An ID string that corresponds with the ID used to call the module's UI function.}
+an ID string that corresponds with the ID used to call the module's UI function.}
 
 \item{\code{state}}{(\verb{named list})\cr
 containing values of the initial filter. Values should be relevant
@@ -346,7 +346,7 @@ to the referred column.}
 \if{html}{\out{</div>}}
 }
 \subsection{Returns}{
-\code{moduleServer} function which returns \code{NULL}
+\code{moduleServer} function.
 }
 }
 \if{html}{\out{<hr>}}
@@ -388,12 +388,12 @@ Server module managing a  active filters.
 \if{html}{\out{<div class="arguments">}}
 \describe{
 \item{\code{id}}{(\code{character(1)})\cr
-An ID string that corresponds with the ID used to call the module's UI function.}
+an ID string that corresponds with the ID used to call the module's UI function.}
 }
 \if{html}{\out{</div>}}
 }
 \subsection{Returns}{
-function - shiny server module
+\code{moduleServer} function which returns \code{NULL}
 }
 }
 \if{html}{\out{<hr>}}
@@ -434,14 +434,12 @@ Server module to add filter variable for this dataset
 \if{html}{\out{<div class="arguments">}}
 \describe{
 \item{\code{id}}{(\code{character(1)})\cr
-An ID string that corresponds with the ID used to call the module's UI function.}
-
-\item{\code{...}}{ignored}
+an ID string that corresponds with the ID used to call the module's UI function.}
 }
 \if{html}{\out{</div>}}
 }
 \subsection{Returns}{
-function - shiny server module
+\code{moduleServer} function.
 }
 }
 \if{html}{\out{<hr>}}

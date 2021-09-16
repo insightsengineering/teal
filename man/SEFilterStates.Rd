@@ -75,13 +75,13 @@ Set bookmark state
 \if{html}{\out{<div class="arguments">}}
 \describe{
 \item{\code{id}}{(\code{character(1)})\cr
-An ID string that corresponds with the ID used to call the module's UI function.}
+an ID string that corresponds with the ID used to call the module's UI function.}
 
 \item{\code{data}}{(\code{SummarizedExperiment})\cr
 data which are supposed to be filtered}
 
 \item{\code{state}}{(\verb{named list})\cr
-This list should contain \code{subset} and \code{select} element where
+this list should contain \code{subset} and \code{select} element where
 each should be a named list containing values as a selection in the \code{FilterState}.
 Names of each the \code{list} element in \code{subset} and \code{select} should correspond to
 the name of the column in \code{rowData(data)} and \code{colData(data)}.}
@@ -138,7 +138,7 @@ sets of filter variables - one for \code{colData} and another for
 \if{html}{\out{<div class="arguments">}}
 \describe{
 \item{\code{id}}{(\code{character(1)})\cr
-An ID string that corresponds with the ID used to call the module's UI function.}
+an ID string that corresponds with the ID used to call the module's UI function.}
 
 \item{\code{data}}{(\code{SummarizedExperiment})\cr
 object containing \code{colData} and \code{rowData} which columns
@@ -150,7 +150,7 @@ and \code{rowData} are separate shiny entities.}
 \if{html}{\out{</div>}}
 }
 \subsection{Returns}{
-\code{NULL}
+\code{moduleServer} function which returns \code{NULL}
 }
 }
 \if{html}{\out{<hr>}}
