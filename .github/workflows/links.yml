@@ -17,7 +17,7 @@ jobs:
       - name: Check URLs in docs
         uses: lycheeverse/lychee-action@v1
         with:
-          args: --exclude-private --exclude "https://github.com.*.git" --verbose --no-progress **/*.md **/*.html **/*.Rmd
+          args: --exclude-private --exclude "https://github.com.*.git" --verbose --no-progress **/*.md **/*.html **/*.Rmd **/*.yaml **/*.yml
         env:
           GITHUB_TOKEN: ${{ secrets.REPO_GITHUB_TOKEN }}
 
