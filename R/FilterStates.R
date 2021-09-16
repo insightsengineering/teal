@@ -720,7 +720,7 @@ DFFilterStates <- R6::R6Class( # nolint
     #' @return `moduleServer` function which returns `NULL`
     srv_add_filter_state = function(id, data, vars_include = get_filterable_varnames(data = data), ...) {
       stopifnot(is.data.frame(data))
-      check_ellipsis(..., stop = FALSE, allowed_args = "vars_include")
+      check_ellipsis(..., stop = FALSE)
       moduleServer(
         id = id,
         function(input, output, session) {

@@ -555,6 +555,7 @@ DefaultFilteredDataset <- R6::R6Class( # nolint
     #'   Other arguments passed on to child `FilterStates` method.
     #' @return `moduleServer` function which returns `NULL`
     srv_add_filter_state = function(id, ...) {
+      check_ellipsis(..., stop = FALSE, allowed_args = "vars_include")
       moduleServer(
         id = id,
         function(input, output, session) {
