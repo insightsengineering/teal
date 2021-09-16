@@ -119,7 +119,7 @@ optional \verb{is.na(<varname>)}.
 \if{html}{\out{<a id="method-ui"></a>}}
 \if{latex}{\out{\hypertarget{method-ui}{}}}
 \subsection{Method \code{ui()}}{
-UI Module for \code{EmptyFilterState}.
+UI Module for \code{ChoicesFilterState}.
 This UI element contains available choices selection and
 checkbox whether to keep or not keep the \code{NA} values.
 \subsection{Usage}{
@@ -141,22 +141,19 @@ id of shiny element}
 \subsection{Method \code{server()}}{
 Server module
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{ChoicesFilterState$server(input, output, session)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{ChoicesFilterState$server(id)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{input}}{(\code{Shiny})\cr input object}
-
-\item{\code{output}}{(\code{Shiny})\cr output object}
-
-\item{\code{session}}{(\code{Shiny})\cr session object}
+\item{\code{id}}{(\code{character(1)})\cr
+an ID string that corresponds with the ID used to call the module's UI function.}
 }
 \if{html}{\out{</div>}}
 }
 \subsection{Returns}{
-nothing
+\code{moduleServer} function which returns \code{NULL}
 }
 }
 \if{html}{\out{<hr>}}

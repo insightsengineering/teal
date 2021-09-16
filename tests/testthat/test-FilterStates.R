@@ -94,7 +94,7 @@ testthat::test_that("get_call returns a call filtering a data.frame based on a L
 })
 
 testthat::test_that("get_call returns a call filtering a data.frame based on a DateFilterState", {
-  date_dataset <- as.data.frame(list(date = seq(as.Date("2021/08/25"), by = "day", length.out = 3)))
+  date_dataset <- data.frame(date = seq(as.Date("2021/08/25"), by = "day", length.out = 3))
   filter_states <- FilterStates$new(
     input_dataname = "date_dataset",
     output_dataname = "date_output",
@@ -143,13 +143,13 @@ testthat::test_that("get_call returns a call filtering a data.frame base on a co
   filter_states$queue_push(queue_index = 1, x = datetime_filter, element_id = "test")
 
   # setting up the test dataset
-  test_dataset <- as.data.frame(list(
+  test_dataset <- data.frame(
     a = c(seq(1, 5, by = 1)),
     choices = letters[1:5],
     logical = c(FALSE, FALSE, FALSE, TRUE, FALSE),
     date = seq(as.Date("2021/08/25"), by = "day", length.out = 5),
     datetime = seq(ISOdate(2021, 8, 25, tz = Sys.timezone()), by = "day", length.out = 5)
-  ))
+  )
 
   eval(isolate(filter_states$get_call()))
   testthat::expect_equal(output, test_dataset[1, , drop = FALSE])
@@ -296,11 +296,11 @@ testthat::test_that("data_choices_labeled returns an empty character array if ch
 })
 
 testthat::test_that("data_choices_labeled returns a choices_labeled object if choices are not empty", {
-  testthat::expect_true(is(data_choices_labeled(list(a = 1), choices = c("a")), "choices_labeled"))
+  testthat::expect_true(is(data_choices_labeled(data.frame(a = 1), choices = c("a")), "choices_labeled"))
 })
 
 testthat::test_that("data_choices_labeled returns names of the elements matching the choices", {
-  testthat::expect_equal(data_choices_labeled(list(a = 1, b = 2), choices = c("a"))[1], c("a: a" = "a"))
+  testthat::expect_equal(data_choices_labeled(data.frame(a = 1, b = 2), choices = c("a"))[1], c("a: a" = "a"))
 })
 
 testthat::test_that("data_choices_labeled returns labels of the elements matching the choices
