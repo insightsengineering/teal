@@ -70,6 +70,7 @@ x$get_parent()
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="Dataset" data-id="get_vars">}\href{../../teal/html/Dataset.html#method-get_vars}{\code{teal::Dataset$get_vars()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="Dataset" data-id="is_mutate_delayed">}\href{../../teal/html/Dataset.html#method-is_mutate_delayed}{\code{teal::Dataset$is_mutate_delayed()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="Dataset" data-id="is_pulled">}\href{../../teal/html/Dataset.html#method-is_pulled}{\code{teal::Dataset$is_pulled()}}\out{</span>}
+\item \out{<span class="pkg-link" data-pkg="teal" data-topic="Dataset" data-id="merge_join_keys">}\href{../../teal/html/Dataset.html#method-merge_join_keys}{\code{teal::Dataset$merge_join_keys()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="Dataset" data-id="mutate">}\href{../../teal/html/Dataset.html#method-mutate}{\code{teal::Dataset$mutate()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="Dataset" data-id="mutate_join_keys">}\href{../../teal/html/Dataset.html#method-mutate_join_keys}{\code{teal::Dataset$mutate_join_keys()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="Dataset" data-id="print">}\href{../../teal/html/Dataset.html#method-print}{\code{teal::Dataset$print()}}\out{</span>}
