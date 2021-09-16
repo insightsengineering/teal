@@ -394,6 +394,7 @@ FilteredDataset <- R6::R6Class( # nolint
     #' @param ... ignored
     #' @return `moduleServer` function.
     srv_add_filter_state = function(id, ...) {
+      check_ellipsis(..., stop = FALSE)
       moduleServer(
         id = id,
         function(input, output, session) {
@@ -879,10 +880,10 @@ MAEFilteredDataset <- R6::R6Class( # nolint
     #'
     #' @param id (`character(1)`)\cr
     #'   an ID string that corresponds with the ID used to call the module's UI function.
-    #' @param ... \cr
-    #'   Other arguments passed on to child `FilterStates` method.
+    #' @param ... ignored.
     #' @return `moduleServer` function which returns `NULL`
     srv_add_filter_state = function(id, ...) {
+      check_ellipsis(..., stop = FALSE)
       moduleServer(
         id = id,
         function(input, output, session) {
