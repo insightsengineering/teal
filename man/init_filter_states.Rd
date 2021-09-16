@@ -14,7 +14,7 @@ init_filter_states(
 }
 \arguments{
 \item{data}{(\code{data.frame}, \code{MultiAssayExperiment}, \code{SummarizedExperiment}, \code{matrix})\cr
-R object which \code{subset} function is applied on.}
+the R object which \code{subset} function is applied on.}
 
 \item{input_dataname}{(\code{character(1)} or \code{name} or \code{call})\cr
 name of the data used on lhs of the expression
@@ -56,8 +56,7 @@ shinyApp(
     verbatimTextOutput("expr"),
   ),
   server = function(input, output, session) {
-    callModule(
-      module = rf$srv_add_filter_state,
+    rf$srv_add_filter_state(
       id = "add",
       data = df
     )

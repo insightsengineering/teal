@@ -137,7 +137,7 @@ srv_tabs_with_filters <- function(input, output, session, datasets, modules) {
       datasets$handle_active_datanames(datanames = active_module()$filter)
   })
 
-  callModule(datasets$srv_filter_panel, "filter_panel", active_datanames)
+  datasets$srv_filter_panel(id = "filter_panel", active_datanames = active_datanames)
 
   return(active_module)
 }

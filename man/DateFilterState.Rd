@@ -124,7 +124,7 @@ optional \verb{is.na(<varname>)}.
 \if{html}{\out{<a id="method-ui"></a>}}
 \if{latex}{\out{\hypertarget{method-ui}{}}}
 \subsection{Method \code{ui()}}{
-UI Module for \code{EmptyFilterState}.
+UI Module for \code{DateFilterState}.
 This UI element contains two date selections for \code{min} and \code{max}
 of the range and a checkbox whether to keep the \code{NA} values.
 \subsection{Usage}{
@@ -146,22 +146,19 @@ id of shiny element}
 \subsection{Method \code{server()}}{
 Server module
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{DateFilterState$server(input, output, session)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{DateFilterState$server(id)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{input}}{(\code{Shiny})\cr input object}
-
-\item{\code{output}}{(\code{Shiny})\cr output object}
-
-\item{\code{session}}{(\code{Shiny})\cr session object}
+\item{\code{id}}{(\code{character(1)})\cr
+an ID string that corresponds with the ID used to call the module's UI function.}
 }
 \if{html}{\out{</div>}}
 }
 \subsection{Returns}{
-nothing
+\code{moduleServer} function which returns \code{NULL}
 }
 }
 \if{html}{\out{<hr>}}
@@ -170,13 +167,13 @@ nothing
 \subsection{Method \code{set_selected()}}{
 Sets the selected time frame of this \code{DateFilterState}.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{DateFilterState$set_selected(bounds)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{DateFilterState$set_selected(value)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{bounds}}{(\code{Date(2)}) the lower and the upper bound of the selected
+\item{\code{value}}{(\code{Date(2)}) the lower and the upper bound of the selected
 time frame. Must not contain NA values.}
 }
 \if{html}{\out{</div>}}
