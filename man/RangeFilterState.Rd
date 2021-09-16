@@ -226,14 +226,13 @@ contains fields relevant for a specific class
 \subsection{Method \code{set_selected()}}{
 Sets the selected values of this \code{RangeFilterState}.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{RangeFilterState$set_selected(bounds)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{RangeFilterState$set_selected(value)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{bounds}}{(\code{numeric(2)})\cr
-the two-elements array of the lower and upper bound
+\item{\code{value}}{(\code{numeric(2)}) the two-elements array of the lower and upper bound
 of the selected range. Must not contain NA values.}
 }
 \if{html}{\out{</div>}}

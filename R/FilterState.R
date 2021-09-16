@@ -1134,9 +1134,8 @@ RangeFilterState <- R6::R6Class( # nolint
     #' @description
     #' Sets the selected values of this `RangeFilterState`.
     #'
-    #' @param bounds (`numeric(2)`)\cr
-    #'  the two-elements array of the lower and upper bound
-    #'  of the selected range. Must not contain NA values.
+    #' @param value (`numeric(2)`) the two-elements array of the lower and upper bound
+    #'   of the selected range. Must not contain NA values.
     #'
     #' @returns invisibly `NULL`
     #'
@@ -1147,8 +1146,8 @@ RangeFilterState <- R6::R6Class( # nolint
     #' filter <- teal:::RangeFilterState$new(c(1, 2, 3, 4), varname = "name")
     #' filter$set_selected(c(2, 3))
     #'
-    set_selected = function(bounds) {
-      super$set_selected(bounds)
+    set_selected = function(value) {
+      super$set_selected(value)
     }
   ),
   private = list(
@@ -1224,12 +1223,18 @@ RangeFilterState <- R6::R6Class( # nolint
 
     remove_out_of_bound_values = function(values) {
       if (values[1] < private$choices[1]) {
-        warning(paste("Value: ", values[1], "is outside of the possible range."))
+        warning(paste(
+          "Value:", values[1], "is outside of the possible range for column", private$varname,
+          "of dataset", private$input_dataname, "."
+        ))
         values[1] <- private$choices[1]
       }
 
       if (values[2] > private$choices[2]) {
-        warning(paste("Value: ", values[2], "is outside of the possible range."))
+        warning(paste(
+          "Value:", values[2], "is outside of the possible range for column", private$varname,
+          "of dataset", private$input_dataname, "."
+        ))
         values[2] <- private$choices[2]
       }
       values
@@ -1449,8 +1454,8 @@ ChoicesFilterState <- R6::R6Class( # nolint
     #' @description
     #' Sets the selected values of this `ChoicesFilterState`.
     #'
-    #' @param selection (`character`)\cr
-    #' the array of the selected choices. Must not contain NA values.
+    #' @param value (`character`) the array of the selected choices.
+    #'   Must not contain NA values.
     #'
     #' @return invisibly `NULL`
     #'
@@ -1460,8 +1465,8 @@ ChoicesFilterState <- R6::R6Class( # nolint
     #' @examples
     #' filter <- teal:::ChoicesFilterState$new(c("a", "b", "c"), varname = "name")
     #' filter$set_selected(c("c", "a"))
-    set_selected = function(selection) {
-      super$set_selected(selection)
+    set_selected = function(value) {
+      super$set_selected(value)
     }
   ),
   private = list(
@@ -1510,7 +1515,10 @@ ChoicesFilterState <- R6::R6Class( # nolint
     remove_out_of_bound_values = function(values) {
       in_choices_mask <- values %in% private$choices
       if (length(values[!in_choices_mask]) > 0) {
-        warning(paste("Values:", strtrim(paste(values[!in_choices_mask], collapse = ", "), 360), "are not in choices."))
+        warning(paste(
+          "Values:", strtrim(paste(values[!in_choices_mask], collapse = ", "), 360),
+          "are not in choices of column", private$varname, "in dataset", private$input_dataname, "."
+        ))
       }
       values[in_choices_mask]
     }
@@ -1683,7 +1691,7 @@ DateFilterState <- R6::R6Class( # nolint
     #' @description
     #' Sets the selected time frame of this `DateFilterState`.
     #'
-    #' @param bounds (`Date(2)`) the lower and the upper bound of the selected
+    #' @param value (`Date(2)`) the lower and the upper bound of the selected
     #'   time frame. Must not contain NA values.
     #'
     #' @return invisibly `NULL`.
@@ -1698,8 +1706,8 @@ DateFilterState <- R6::R6Class( # nolint
     #'   varname = "name"
     #' )
     #' filter$set_selected(c(date + 1, date + 2))
-    set_selected = function(bounds) {
-      super$set_selected(bounds)
+    set_selected = function(value) {
+      super$set_selected(value)
     }
   ),
   private = list(
@@ -1742,13 +1750,19 @@ DateFilterState <- R6::R6Class( # nolint
 
     remove_out_of_bound_values = function(values) {
       if (values[1] < private$choices[1]) {
-        warning(paste("Value: ", values[1], "is outside of the possible range."))
+        warning(paste(
+          "Value:", values[1], "is outside of the possible range for column", private$varname,
+          "of dataset", private$input_dataname, "."
+        ))
         values[1] <- private$choices[1]
       }
 
-      if (values[length(values)] > private$choices[2]) {
-        warning(paste("Value: ", values[length(values)], "is outside of the possible range."))
-        values[length(values)] <- private$choices[2]
+      if (values[2] > private$choices[2]) {
+        warning(paste(
+          "Value:", values[2], "is outside of the possible range for column", private$varname,
+          "of dataset", private$input_dataname, "."
+        ))
+        values[2] <- private$choices[2]
       }
       values
     }
@@ -1980,7 +1994,7 @@ DatetimeFilterState <- R6::R6Class( # nolint
     #' @description
     #' Sets the selected time frame of this `DatetimeFilterState`.
     #'
-    #' @param bounds (`POSIX(2)`) the lower and the upper bound of the selected
+    #' @param value (`POSIX(2)`) the lower and the upper bound of the selected
     #'   time frame. Must not contain NA values.
     #'
     #' @return invisibly `NULL`.
@@ -1995,8 +2009,8 @@ DatetimeFilterState <- R6::R6Class( # nolint
     #'   varname = "name"
     #' )
     #' filter$set_selected(c(date + 1, date + 2))
-    set_selected = function(bounds) {
-      super$set_selected(bounds)
+    set_selected = function(value) {
+      super$set_selected(value)
     }
   ),
   private = list(
@@ -2042,12 +2056,18 @@ DatetimeFilterState <- R6::R6Class( # nolint
 
     remove_out_of_bound_values = function(values) {
       if (values[1] < private$choices[1]) {
-        warning(paste("Value: ", values[1], "is outside of the possible range."))
+        warning(paste(
+          "Value:", values[1], "is outside of the possible range for column", private$varname,
+          "of dataset", private$input_dataname, "."
+        ))
         values[1] <- private$choices[1]
       }
 
       if (values[2] > private$choices[2]) {
-        warning(paste("Value: ", values[2], "is outside of the possible range."))
+        warning(paste(
+          "Value:", values[2], "is outside of the possible range for column", private$varname,
+          "of dataset", private$input_dataname, "."
+        ))
         values[2] <- private$choices[2]
       }
       values

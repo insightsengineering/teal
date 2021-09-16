@@ -312,7 +312,7 @@ shiny.tag
 \subsection{Method \code{srv_add_filter_state()}}{
 Shiny server module to add filter variable
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{FilterStates$srv_add_filter_state(id, data, ...)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{FilterStates$srv_add_filter_state(id, data)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
