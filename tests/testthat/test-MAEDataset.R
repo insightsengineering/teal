@@ -1,7 +1,7 @@
 testthat::test_that("MAEDataset constructors do not raise exceptions", {
   testthat::expect_silent(MAEDataset$new("testMAE", MultiAssayExperiment::miniACC))
   code_class <- CodeClass$new(
-    'testMAE <- MultiAssayExperiment::miniACC',
+    "testMAE <- MultiAssayExperiment::miniACC",
     dataname = "testMAE"
   )
   testthat::expect_silent(MAEDataset$new(dataname = "testMAE", x = MultiAssayExperiment::miniACC, code = code_class))
