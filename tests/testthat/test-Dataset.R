@@ -728,7 +728,6 @@ testthat::test_that("dataset$merge_join_keys does not throw on basic input", {
   dataset2$set_join_keys(join_key("iris", "other_dataset_2", c("Sepal.Length" = "some_col2")))
 
   before_merge <- dataset1$get_join_keys()$get()
-
   after_merge <- dataset1$merge_join_keys(dataset2$get_join_keys())$get_join_keys()$get()
 
 
