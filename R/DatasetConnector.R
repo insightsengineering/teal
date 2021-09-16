@@ -159,6 +159,7 @@ DatasetConnector <- R6::R6Class( #nolint
           call. = FALSE
         )
       }
+      private$dataset$merge_join_keys(self$get_join_keys())
       private$dataset$get_dataset()
       return(private$dataset)
     },
