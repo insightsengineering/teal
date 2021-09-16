@@ -56,3 +56,44 @@ test_that("get_varlabels returns the column labels of the passed dataset", {
     rtables::var_labels(adsl)[c("sex")]
   )
 })
+
+test_that("get_filterable_varnames does not return child duplicates", {
+  adsl <- cdisc_dataset(
+    dataname = "ADSL",
+    x = data.frame(USUBJID = 1L, STUDYID = 1L, a = 1L, c = 1L)
+  )
+  child <- cdisc_dataset(
+    dataname = "ADTTE",
+    x = data.frame(USUBJID = 1L, STUDYID = 1L, PARAMCD = 1L, a = 1L, b = 1L)
+  )
+  data <- cdisc_data(adsl, child)
+
+  fd <- filtered_data_new(data)
+  filtered_data_set(data, fd)
+
+  expect_identical(
+    fd$get_filterable_varnames("ADTTE"),
+    c("PARAMCD", "b")
+  )
+})
+
+
+test_that("get_filterable_varnames return all from parent dataset", {
+  adsl <- cdisc_dataset(
+    dataname = "ADSL",
+    x = data.frame(USUBJID = 1L, STUDYID = 1L, a = 1L, c = 1L)
+  )
+  child <- cdisc_dataset(
+    dataname = "ADTTE",
+    x = data.frame(USUBJID = 1L, STUDYID = 1L, PARAMCD = 1L, a = 1L, b = 1L)
+  )
+  data <- cdisc_data(adsl, child)
+
+  fd <- filtered_data_new(data)
+  filtered_data_set(data, fd)
+
+  expect_identical(
+    fd$get_filterable_varnames("ADSL"),
+    c("USUBJID", "STUDYID", "a", "c")
+  )
+})
