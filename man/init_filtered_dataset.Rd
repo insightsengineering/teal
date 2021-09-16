@@ -33,12 +33,12 @@ shinyApp(
     tableOutput("tbl")
   ),
   server = function(input, output, session) {
-    filtered_dataset$srv_add_filter_state(
-      filtered_dataset$srv_add_filter_state,
+    adsl_fd$srv_add_filter_state(
+      adsl_fd$srv_add_filter_state,
       id = "add"
     )
 
-    filtered_dataset$server(id = "dataset")
+    adsl_fd$server(id = "dataset")
 
     output$call <- renderText({
       paste(

@@ -131,7 +131,7 @@ This module unlike other \code{FilterStates} classes manages two
 sets of filter variables - one for \code{colData} and another for
 \code{rowData}.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{SEFilterStates$srv_add_filter_state(id, data)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{SEFilterStates$srv_add_filter_state(id, data, ...)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
