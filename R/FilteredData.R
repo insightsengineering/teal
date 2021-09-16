@@ -798,7 +798,7 @@ FilteredData <- R6::R6Class( # nolint
       isolate({
         # we isolate everything because we don't want to trigger again when datanames
         # change (which also triggers when any of the data changes)
-        if (!(dataname %in% names(self$get_filtered_dataset()))) {
+        if (!dataname %in% names(self$get_filtered_dataset())) {
           # data must be set already
           stop(paste("data", dataname, "is not available"))
         }
