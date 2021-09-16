@@ -162,7 +162,7 @@ CDISCFilteredData <- R6::R6Class( # nolint
       parent_dataname <- self$get_parentname(dataname)
       parent_varnames <- if_not_empty(
         parent_dataname,
-        super$get_filterable_varnames(parent_dataaname)
+        super$get_filterable_varnames(parent_dataname)
       )
       setdiff(varnames, parent_varnames)
     },
