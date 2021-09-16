@@ -196,5 +196,5 @@ testthat::test_that("mae_dataset() constructor returns the same as MAEDataset$ne
 })
 
 testthat::test_that("mae_dataset() constructor throws error when x is not a MultiAssayExperiment object", {
-  testthat::expect_error(mae_dataset("mae", mtcars))
+  testthat::expect_error(mae_dataset("mae", mtcars), "Argument x must be a MultiAssayExperiment object")
 })

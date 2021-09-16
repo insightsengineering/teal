@@ -263,7 +263,11 @@ mae_dataset <- function(dataname, # nousage
                         label = data_label(x),
                         code = character(0),
                         vars = list()) {
-  stopifnot(is(x, "MultiAssayExperiment"))
+
+  if (!is(x, "MultiAssayExperiment")) {
+    stop("Argument x must be a MultiAssayExperiment object")
+  }
+
   dataset(
     dataname = dataname,
     x = x,
