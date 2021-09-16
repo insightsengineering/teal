@@ -268,7 +268,7 @@ Dataset <- R6::R6Class( # nolint
       return(invisible(self))
     },
     #' @description
-    #' set join_keys for a given dataset and self
+    #' set join_keys for a given dataset and object
     #' @param x `list` of `JoinKeySet` objects (which are created using the `join_key` function)
     #' or single `JoinKeySet` objects
     #' @return (`self`) invisibly for chaining
@@ -277,7 +277,15 @@ Dataset <- R6::R6Class( # nolint
       return(invisible(self))
     },
     #' @description
-    #' mutate the join_keys for a given dataset and self
+    #' merge input join key with join key inside of object
+    #' @param x `list` of `JoinKeys` objects or single `JoinKeys` object
+    #' @return (`self`) invisibly for chaining
+    merge_join_keys = function(x) {
+      self$get_join_keys()$merge(x)
+      return(invisible(self))
+    },
+    #' @description
+    #' mutate the join_keys for a given dataset and object
     #' @param dataset (`character`) dataset for which join_keys are to be set against self
     #' @param val (named `character`) column names used to join
     #' @return (`self`) invisibly for chaining

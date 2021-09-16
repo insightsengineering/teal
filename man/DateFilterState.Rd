@@ -167,13 +167,13 @@ an ID string that corresponds with the ID used to call the module's UI function.
 \subsection{Method \code{set_selected()}}{
 Sets the selected time frame of this \code{DateFilterState}.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{DateFilterState$set_selected(bounds)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{DateFilterState$set_selected(value)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{bounds}}{(\code{Date(2)}) the lower and the upper bound of the selected
+\item{\code{value}}{(\code{Date(2)}) the lower and the upper bound of the selected
 time frame. Must not contain NA values.}
 }
 \if{html}{\out{</div>}}

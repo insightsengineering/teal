@@ -66,6 +66,7 @@ be automatically derived.
 \item \href{#method-set_dataset_label}{\code{Dataset$set_dataset_label()}}
 \item \href{#method-set_keys}{\code{Dataset$set_keys()}}
 \item \href{#method-set_join_keys}{\code{Dataset$set_join_keys()}}
+\item \href{#method-merge_join_keys}{\code{Dataset$merge_join_keys()}}
 \item \href{#method-mutate_join_keys}{\code{Dataset$mutate_join_keys()}}
 \item \href{#method-set_vars}{\code{Dataset$set_vars()}}
 \item \href{#method-set_code}{\code{Dataset$set_code()}}
@@ -468,7 +469,7 @@ Vector with primary keys}
 \if{html}{\out{<a id="method-set_join_keys"></a>}}
 \if{latex}{\out{\hypertarget{method-set_join_keys}{}}}
 \subsection{Method \code{set_join_keys()}}{
-set join_keys for a given dataset and self
+set join_keys for a given dataset and object
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{Dataset$set_join_keys(x)}\if{html}{\out{</div>}}
 }
@@ -486,10 +487,30 @@ or single \code{JoinKeySet} objects}
 }
 }
 \if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-merge_join_keys"></a>}}
+\if{latex}{\out{\hypertarget{method-merge_join_keys}{}}}
+\subsection{Method \code{merge_join_keys()}}{
+merge input join key with join key inside of object
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{Dataset$merge_join_keys(x)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{x}}{\code{list} of \code{JoinKeys} objects or single \code{JoinKeys} object}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Returns}{
+(\code{self}) invisibly for chaining
+}
+}
+\if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-mutate_join_keys"></a>}}
 \if{latex}{\out{\hypertarget{method-mutate_join_keys}{}}}
 \subsection{Method \code{mutate_join_keys()}}{
-mutate the join_keys for a given dataset and self
+mutate the join_keys for a given dataset and object
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{Dataset$mutate_join_keys(dataset, val)}\if{html}{\out{</div>}}
 }
@@ -775,6 +796,7 @@ The objects of this class are cloneable with this method.
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="Dataset" data-id="get_vars">}\href{../../teal/html/Dataset.html#method-get_vars}{\code{teal::Dataset$get_vars()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="Dataset" data-id="is_mutate_delayed">}\href{../../teal/html/Dataset.html#method-is_mutate_delayed}{\code{teal::Dataset$is_mutate_delayed()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="Dataset" data-id="is_pulled">}\href{../../teal/html/Dataset.html#method-is_pulled}{\code{teal::Dataset$is_pulled()}}\out{</span>}
+\item \out{<span class="pkg-link" data-pkg="teal" data-topic="Dataset" data-id="merge_join_keys">}\href{../../teal/html/Dataset.html#method-merge_join_keys}{\code{teal::Dataset$merge_join_keys()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="Dataset" data-id="mutate">}\href{../../teal/html/Dataset.html#method-mutate}{\code{teal::Dataset$mutate()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="Dataset" data-id="mutate_join_keys">}\href{../../teal/html/Dataset.html#method-mutate_join_keys}{\code{teal::Dataset$mutate_join_keys()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="Dataset" data-id="recreate">}\href{../../teal/html/Dataset.html#method-recreate}{\code{teal::Dataset$recreate()}}\out{</span>}

@@ -1135,3 +1135,23 @@ testthat::test_that("DatasetConnector$set_join_keys works with DatasetConnector$
     t_dc$get_join_keys()$get()$other_dataset$iris, c("some_col" = "Species")
   )
 })
+
+testthat::test_that("DatasetConnector$get_dataset calls dataset$merge_join_keys before returning", {
+  pull_fun <- callable_function(data.frame)
+  pull_fun$set_args(args = list(head_letters = head(letters)))
+  t_dc <- dataset_connector(
+    "test_dc",
+    pull_fun,
+    code = "test_dc$tail_letters = tail(letters)"
+  )
+  t_dc$pull()
+
+  testthat::expect_equal(t_dc$get_dataset()$get_join_keys()$get(), list())
+  # initial call
+  t_dc$mutate_join_keys("other_dataset", c("Sepal.Length" = "some_col2"))
+  testthat::expect_equal(t_dc$get_dataset()$get_join_keys(), t_dc$get_join_keys())
+
+  # subsequent calls
+  t_dc$mutate_join_keys("other_dataset", c("Sepal.Length" = "some_other_col"))
+  testthat::expect_equal(t_dc$get_dataset()$get_join_keys(), t_dc$get_join_keys())
+})
