@@ -595,18 +595,16 @@ cdse_data <- function(..., connection = cdse_connection()) {
   return(x)
 }
 
-#' \code{RelationalDataConnector} connector for \code{RICE}
+#' \code{RelationalDataConnector} connector for \code{DataSetDB}
 #'
 #' @description `r lifecycle::badge("experimental")`
-#' Build data connector for \code{RICE} datasets
+#' Build data connector for \code{DataSetDB} datasets
 #'
 #' @export
 #'
 #' @param ... (\code{DatasetConnector} objects)\cr
-#'  dataset connectors created using \code{\link{rice_dataset_connector}}
-#' @param connection (\code{DataConnection}) object returned from \code{rice_connection}.
-#' @param additional_ui (\code{shiny.tag})\cr
-#'  additional user interface to be visible over login panel
+#'  dataset connectors created using \code{\link{datasetdb_dataset_connector}}
+#' @param connection (\code{DataConnection}) object returned from \code{datasetdb_connection}.
 #'
 #' @return An object of class \code{RelatonalDataConnector}
 #'

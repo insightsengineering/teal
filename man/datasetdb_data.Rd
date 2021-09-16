@@ -2,25 +2,22 @@
 % Please edit documentation in R/RelationalDataConnector_constructors.R
 \name{datasetdb_data}
 \alias{datasetdb_data}
-\title{\code{RelationalDataConnector} connector for \code{RICE}}
+\title{\code{RelationalDataConnector} connector for \code{DataSetDB}}
 \usage{
 datasetdb_data(..., connection = datasetdb_connection())
 }
 \arguments{
 \item{...}{(\code{DatasetConnector} objects)\cr
-dataset connectors created using \code{\link{rice_dataset_connector}}}
+dataset connectors created using \code{\link{datasetdb_dataset_connector}}}
 
-\item{connection}{(\code{DataConnection}) object returned from \code{rice_connection}.}
-
-\item{additional_ui}{(\code{shiny.tag})\cr
-additional user interface to be visible over login panel}
+\item{connection}{(\code{DataConnection}) object returned from \code{datasetdb_connection}.}
 }
 \value{
 An object of class \code{RelatonalDataConnector}
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
-Build data connector for \code{RICE} datasets
+Build data connector for \code{DataSetDB} datasets
 }
 \examples{
 

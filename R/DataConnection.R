@@ -1068,7 +1068,6 @@ datasetdb_connection <- function() {
   ping_fun <- callable_function("gdbauth::is_active")
 
   open_fun <- callable_function("gdbauth::login")
-  #open_args$password <- as.call(parse(text = "askpass::askpass"))
 
   close_fun <- callable_function("gdbauth::logout")
 

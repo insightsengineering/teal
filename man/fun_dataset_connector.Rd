@@ -83,24 +83,15 @@ with keys and parent name assigned automatically by \code{dataname}.
 }
 \examples{
 my_data <- function(...) {
-  # whatever code
-  set.seed(1234)
-  library(MASS)
-  require(dplyr)
-  x <- data.frame(
-    STUDYID = 1,
-    USUBJID = 1:40,
-    z = stats::rnorm(40),
-    zz = factor(sample(letters[1:3], 40, replace = TRUE)),
-    NAs = rep(NA, 40)
+  data.frame(
+    ID = paste0("ABC_", seq_len(10)),
+    var1 = rnorm(n = 10),
+    var2 = rnorm(n = 10),
+    var3 = rnorm(n = 10)
   )
-  x$w <- as.numeric(MASS::mvrnorm(40, 0, 1))
-  x$ww <- as.numeric(MASS::mvrnorm(40, 0, 1))
-  rtables::var_labels(x) <- c("STUDYID", "USUBJID", "z", "zz", "NAs", "w", "ww")
-  x
 }
-y <- fun_cdisc_dataset_connector(
-  dataname = "ADSL",
+y <- fun_dataset_connector(
+  dataname = "XYZ",
   fun = my_data
 )
 
