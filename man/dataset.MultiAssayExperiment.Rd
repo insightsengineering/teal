@@ -43,8 +43,7 @@ S3 method to construct an MAEDataset object from MultiAssayExperiment
 }
 \examples{
 # Simple example
-library(MultiAssayExperiment)
-MAE_dataset <- dataset("MAE", miniACC, keys = c("STUDYID", "USUBJID"))
+MAE_dataset <- dataset("MAE", MultiAssayExperiment::miniACC, keys = c("STUDYID", "USUBJID"))
 MAE_dataset$get_dataname()
 MAE_dataset$get_dataset_label()
 MAE_dataset$get_code()
