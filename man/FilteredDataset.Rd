@@ -435,6 +435,8 @@ Server module to add filter variable for this dataset
 \describe{
 \item{\code{id}}{(\code{character(1)})\cr
 an ID string that corresponds with the ID used to call the module's UI function.}
+
+\item{\code{...}}{ignored}
 }
 \if{html}{\out{</div>}}
 }

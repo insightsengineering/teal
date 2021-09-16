@@ -81,55 +81,6 @@ Get filter overview rows of a dataset
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-ui_add_filter_state"></a>}}
-\if{latex}{\out{\hypertarget{method-ui_add_filter_state}{}}}
-\subsection{Method \code{ui_add_filter_state()}}{
-UI module to add filter variable for this dataset
-
-UI module to add filter variable for this dataset
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{CDISCFilteredDataset$ui_add_filter_state(id)}\if{html}{\out{</div>}}
-}
-
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{id}}{(\code{character(1)})\cr
-identifier of the element - preferably containing dataset name}
-}
-\if{html}{\out{</div>}}
-}
-\subsection{Returns}{
-function - shiny UI module
-}
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-srv_add_filter_state"></a>}}
-\if{latex}{\out{\hypertarget{method-srv_add_filter_state}{}}}
-\subsection{Method \code{srv_add_filter_state()}}{
-Server module to add filter variable for this dataset
-
-Server module to add filter variable for this dataset.
-For this class \code{srv_add_filter_state} calls single module
-\code{srv_add_filter_state} from \code{FilterStates} (\code{DefaultFilteredDataset}
-contains single \code{FilterStates})
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{CDISCFilteredDataset$srv_add_filter_state(id)}\if{html}{\out{</div>}}
-}
-
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{id}}{(\code{character(1)})\cr
-an ID string that corresponds with the ID used to call the module's UI function.}
-}
-\if{html}{\out{</div>}}
-}
-\subsection{Returns}{
-\code{moduleServer} function which returns \code{NULL}
-}
-}
-\if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-clone"></a>}}
 \if{latex}{\out{\hypertarget{method-clone}{}}}
 \subsection{Method \code{clone()}}{
