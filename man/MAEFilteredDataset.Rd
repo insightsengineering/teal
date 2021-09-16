@@ -17,6 +17,7 @@
 \item \href{#method-new}{\code{MAEFilteredDataset$new()}}
 \item \href{#method-get_call}{\code{MAEFilteredDataset$get_call()}}
 \item \href{#method-get_filter_overview_info}{\code{MAEFilteredDataset$get_filter_overview_info()}}
+\item \href{#method-get_filterable_varnames}{\code{MAEFilteredDataset$get_filterable_varnames()}}
 \item \href{#method-set_bookmark_state}{\code{MAEFilteredDataset$set_bookmark_state()}}
 \item \href{#method-ui_add_filter_state}{\code{MAEFilteredDataset$ui_add_filter_state()}}
 \item \href{#method-srv_add_filter_state}{\code{MAEFilteredDataset$srv_add_filter_state()}}
@@ -32,7 +33,6 @@
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="FilteredDataset" data-id="get_dataname">}\href{../../teal/html/FilteredDataset.html#method-get_dataname}{\code{teal::FilteredDataset$get_dataname()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="FilteredDataset" data-id="get_dataset">}\href{../../teal/html/FilteredDataset.html#method-get_dataset}{\code{teal::FilteredDataset$get_dataset()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="FilteredDataset" data-id="get_filter_states">}\href{../../teal/html/FilteredDataset.html#method-get_filter_states}{\code{teal::FilteredDataset$get_filter_states()}}\out{</span>}
-\item \out{<span class="pkg-link" data-pkg="teal" data-topic="FilteredDataset" data-id="get_filterable_varnames">}\href{../../teal/html/FilteredDataset.html#method-get_filterable_varnames}{\code{teal::FilteredDataset$get_filterable_varnames()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="FilteredDataset" data-id="get_filtered_dataname">}\href{../../teal/html/FilteredDataset.html#method-get_filtered_dataname}{\code{teal::FilteredDataset$get_filtered_dataname()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="FilteredDataset" data-id="get_hash">}\href{../../teal/html/FilteredDataset.html#method-get_hash}{\code{teal::FilteredDataset$get_hash()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="FilteredDataset" data-id="get_join_keys">}\href{../../teal/html/FilteredDataset.html#method-get_join_keys}{\code{teal::FilteredDataset$get_join_keys()}}\out{</span>}
@@ -98,6 +98,19 @@ Get filter overview rows of a dataset
 
 \subsection{Returns}{
 (\code{matrix}) matrix of observations and subjects
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-get_filterable_varnames"></a>}}
+\if{latex}{\out{\hypertarget{method-get_filterable_varnames}{}}}
+\subsection{Method \code{get_filterable_varnames()}}{
+Gets variable names for the filtering.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{MAEFilteredDataset$get_filterable_varnames()}\if{html}{\out{</div>}}
+}
+
+\subsection{Returns}{
+(\code{character(0)})
 }
 }
 \if{html}{\out{<hr>}}
