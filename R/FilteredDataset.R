@@ -797,6 +797,14 @@ MAEFilteredDataset <- R6::R6Class( # nolint
     },
 
     #' @description
+    #' Gets variable names for the filtering.
+    #'
+    #' @return (`character(0)`)
+    get_filterable_varnames = function() {
+      character(0)
+    },
+
+    #' @description
     #' Set bookmark state
     #'
     #' @param id (`character(1)`)\cr
