@@ -217,11 +217,11 @@ MAEDataset <- R6::R6Class( # nolint
 #'
 #' @examples
 #' # Simple example
-#' mae_dataset <- dataset("MAE", MultiAssayExperiment::miniACC, keys = c("STUDYID", "USUBJID"))
-#' mae_dataset$get_dataname()
-#' mae_dataset$get_dataset_label()
-#' mae_dataset$get_code()
-#' mae_dataset$get_raw_data()
+#' mae_d <- dataset("MAE", MultiAssayExperiment::miniACC, keys = c("STUDYID", "USUBJID"))
+#' mae_d$get_dataname()
+#' mae_d$get_dataset_label()
+#' mae_d$get_code()
+#' mae_d$get_raw_data()
 #' @export
 dataset.MultiAssayExperiment <- function(dataname, # nousage
                                          x,
@@ -250,11 +250,11 @@ dataset.MultiAssayExperiment <- function(dataname, # nousage
 #'
 #' @examples
 #' # Simple example
-#' mae_dataset <- mae_dataset("MAE", MultiAssayExperiment::miniACC)
-#' mae_dataset$get_dataname()
-#' mae_dataset$get_dataset_label()
-#' mae_dataset$get_code()
-#' mae_dataset$get_raw_data()
+#' mae_d <- mae_dataset("MAE", MultiAssayExperiment::miniACC)
+#' mae_d$get_dataname()
+#' mae_d$get_dataset_label()
+#' mae_d$get_code()
+#' mae_d$get_raw_data()
 #' @export
 mae_dataset <- function(dataname, # nousage
                         x,

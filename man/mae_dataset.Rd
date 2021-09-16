@@ -39,9 +39,9 @@ Public facing constructor for MAEDataset
 }
 \examples{
 # Simple example
-mae_dataset <- mae_dataset("MAE", MultiAssayExperiment::miniACC)
-mae_dataset$get_dataname()
-mae_dataset$get_dataset_label()
-mae_dataset$get_code()
-mae_dataset$get_raw_data()
+mae_d <- mae_dataset("MAE", MultiAssayExperiment::miniACC)
+mae_d$get_dataname()
+mae_d$get_dataset_label()
+mae_d$get_code()
+mae_d$get_raw_data()
 }
