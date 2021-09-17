@@ -570,13 +570,13 @@ shinyApp(
 )
 ```
 
-[shiny_modules]: https://shiny.rstudio.com/articles/modules.HTML
-[shiny_reactivity]: https://shiny.rstudio.com/articles/reactivity-overview.HTML
+[shiny_modules]: https://shiny.rstudio.com/articles/modules.html
+[shiny_reactivity]: https://shiny.rstudio.com/articles/reactivity-overview.html
 [bootstrap_3]: http://bootstrapdocs.com/v3.0.3/docs/
-[r6]: https://cran.r-project.org/web/packages/R6/vignettes/Introduction.HTML
+[r6]: https://r6.r-lib.org/articles/Introduction.html
 [sdtm]: https://www.cdisc.org/standards/foundational/sdtm
 [adam]: https://www.cdisc.org/standards/foundational/adam
 [cdisc]: https://www.cdisc.org
-[tabsetpanel]: https://shiny.rstudio.com/reference/shiny/1.0.5/tabsetPanel.HTML
+[tabsetpanel]: https://shiny.rstudio.com/reference/shiny/1.0.5/tabsetPanel.html
 [tealgithub]: https://github.com/insightsengineering/teal
 [expressionsets]: https://www.bioconductor.org/packages/3.7/bioc/vignettes/Biobase/inst/doc/ExpressionSetIntroduction.pdf
