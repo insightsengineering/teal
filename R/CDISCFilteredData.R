@@ -73,7 +73,7 @@
 #' )
 #' filter_state_adtte$set_selected("OS")
 #'
-#' states <- datasets$get_filtered_datasets("ADTTE")$get_filter_states(1)
+#' states <- datasets$get_filtered_dataset("ADTTE")$get_filter_states(1)
 #' states$queue_push(filter_state_adtte, queue_index = 1L, element_id = "PARAMCD")
 #'
 #' isolate(datasets$get_call("ADTTE"))
@@ -87,7 +87,7 @@
 #' )
 #' filter_state_adsl$set_selected("F")
 #'
-#' states <- datasets$get_filtered_datasets("ADSL")$get_filter_states("filter")
+#' states <- datasets$get_filtered_dataset("ADSL")$get_filter_states("filter")
 #' states$queue_push(filter_state_adsl, queue_index = 1L, element_id = "SEX")
 #'
 #' isolate(datasets$get_call("ADSL"))
@@ -98,13 +98,6 @@ CDISCFilteredData <- R6::R6Class( # nolint
   ## CDISCFilteredData ====
   ## __Public Methods ====
   public = list(
-    #' @description
-    #' Initialize a `CDISCFilteredData` object
-    initialize = function() {
-      super$initialize()
-      return(invisible(self))
-    },
-
     #' @description
     #' Get datanames
     #'
@@ -136,7 +129,7 @@ CDISCFilteredData <- R6::R6Class( # nolint
       if (is_empty(parent_dataname)) {
         super$get_call(dataname)
       } else {
-        self$get_filtered_datasets(dataname)$get_call()
+        self$get_filtered_dataset(dataname)$get_call()
       }
     },
 
@@ -157,6 +150,21 @@ CDISCFilteredData <- R6::R6Class( # nolint
       }
 
       return(unique(c(parents, dataname)))
+    },
+
+    #' @description
+    #' Gets variable names of a given dataname for the filtering. This excludes parent dataset variable names.
+    #'
+    #' @param dataname (`character`) name of the dataset
+    #' @return (`character` vector) of variable names
+    get_filterable_varnames = function(dataname) {
+      varnames <- self$get_filtered_dataset(dataname)$get_filterable_varnames()
+      parent_dataname <- self$get_parentname(dataname)
+      parent_varnames <- if_not_empty(
+        parent_dataname,
+        super$get_filterable_varnames(parent_dataname)
+      )
+      setdiff(varnames, parent_varnames)
     },
 
     #' @description
@@ -185,8 +193,8 @@ CDISCFilteredData <- R6::R6Class( # nolint
       parent_dataname <- self$get_parentname(dataname)
 
       if (!is_empty(parent_dataname)) {
-        parent_dataset <- self$get_filtered_datasets(parent_dataname)
-        fdataset <- self$get_filtered_datasets(dataname)
+        parent_dataset <- self$get_filtered_dataset(parent_dataname)
+        fdataset <- self$get_filtered_dataset(dataname)
         fdataset$add_to_eval_env(
           parent_dataset$get_filtered_dataname(),
           list(parent_dataset$get_data_reactive())
