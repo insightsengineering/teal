@@ -1,0 +1,28 @@
+name: Check URLs
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+
+jobs:
+  linkChecker:
+    name: Validate Links
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v2
+
+      - name: Check URLs in docs
+        uses: lycheeverse/lychee-action@v1
+        with:
+          args: --exclude-private --exclude "https://github.com.*.git|https://insightsengineering.github.io.*" --verbose --no-progress **/*.md **/*.html **/*.Rmd **/*.yaml **/*.yml
+        env:
+          GITHUB_TOKEN: ${{ secrets.REPO_GITHUB_TOKEN }}
+
+      - name: Upload lychee report
+        uses: actions/upload-artifact@v2
+        with:
+          name: urls-check-report.md
+          path: ./lychee/out.md
