@@ -30,7 +30,7 @@ test_that("set filter state", {
   filter_state_adsl <- ChoicesFilterState$new(adsl$sex, varname = "sex")
   filter_state_adsl$set_selected("F")
 
-  queue <- ds$get_filtered_datasets("ADSL")$get_filter_states(1)
+  queue <- ds$get_filtered_dataset("ADSL")$get_filter_states(1)
   queue$queue_push(filter_state_adsl, queue_index = 1L, element_id = "sex")
 
   expect_identical(
@@ -54,5 +54,47 @@ test_that("get_varlabels returns the column labels of the passed dataset", {
   expect_equal(
     ds$get_varlabels("ADSL", variables = c("sex")),
     rtables::var_labels(adsl)[c("sex")]
+  )
+})
+
+test_that("get_filterable_varnames does not return child duplicates", {
+  adsl <- cdisc_dataset(
+    dataname = "ADSL",
+    x = data.frame(USUBJID = 1L, STUDYID = 1L, a = 1L, b = 1L)
+  )
+  child <- cdisc_dataset(
+    dataname = "ADTTE",
+    parent = "ADSL",
+    x = data.frame(USUBJID = 1L, STUDYID = 1L, PARAMCD = 1L, a = 1L, c = 1L)
+  )
+  data <- cdisc_data(adsl, child)
+
+  fd <- filtered_data_new(data)
+  filtered_data_set(data, fd)
+
+  expect_identical(
+    fd$get_filterable_varnames("ADTTE"),
+    c("PARAMCD", "c")
+  )
+})
+
+
+test_that("get_filterable_varnames return all from parent dataset", {
+  adsl <- cdisc_dataset(
+    dataname = "ADSL",
+    x = data.frame(USUBJID = 1L, STUDYID = 1L, a = 1L, b = 1L)
+  )
+  child <- cdisc_dataset(
+    dataname = "ADTTE",
+    x = data.frame(USUBJID = 1L, STUDYID = 1L, PARAMCD = 1L, a = 1L, c = 1L)
+  )
+  data <- cdisc_data(adsl, child)
+
+  fd <- filtered_data_new(data)
+  filtered_data_set(data, fd)
+
+  expect_identical(
+    fd$get_filterable_varnames("ADSL"),
+    c("USUBJID", "STUDYID", "a", "b")
   )
 })

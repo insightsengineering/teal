@@ -155,7 +155,7 @@ Module controls available choices to select as a filter variable.
 Selected filter variable is being removed from available choices.
 Removed filter variable gets back to available choices.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{MAEFilterStates$srv_add_filter_state(id, data)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{MAEFilterStates$srv_add_filter_state(id, data, ...)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
@@ -168,6 +168,8 @@ an ID string that corresponds with the ID used to call the module's UI function.
 object containing \code{colData} which columns are used to be used
 to choose filter variables.
 in \code{optionalSelectInput}}
+
+\item{\code{...}}{ignored}
 }
 \if{html}{\out{</div>}}
 }

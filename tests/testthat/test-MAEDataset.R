@@ -1,20 +1,16 @@
-library(MultiAssayExperiment)
-
-data("miniACC")
-
 testthat::test_that("MAEDataset constructors do not raise exceptions", {
-  testthat::expect_silent(MAEDataset$new("testMAE", miniACC))
+  testthat::expect_silent(MAEDataset$new("testMAE", MultiAssayExperiment::miniACC))
   code_class <- CodeClass$new(
-    'library(MultiAssayExperiment); data("miniACC"); testMAE <- miniACC',
+    "testMAE <- MultiAssayExperiment::miniACC",
     dataname = "testMAE"
   )
-  testthat::expect_silent(MAEDataset$new(dataname = "testMAE", x = miniACC, code = code_class))
+  testthat::expect_silent(MAEDataset$new(dataname = "testMAE", x = MultiAssayExperiment::miniACC, code = code_class))
 })
 
 testthat::test_that("MAEDataset$recreate updates the class fields", {
-  mae <- MAEDataset$new("testMAE", miniACC)
+  mae <- MAEDataset$new("testMAE", MultiAssayExperiment::miniACC)
 
-  suppressWarnings(new_data <- miniACC[, , "RNASeq2GeneNorm"]) # warning only on rocker 4.1
+  suppressWarnings(new_data <- MultiAssayExperiment::miniACC[, , "RNASeq2GeneNorm"]) # warning only on rocker 4.1
   new_name <- "new_name"
   new_label <- "new_label"
   new_code <- "new_code"
@@ -35,12 +31,12 @@ testthat::test_that("MAEDataset$recreate updates the class fields", {
 })
 
 testthat::test_that("MAEDataset getters and setters", {
-  mae <- MAEDataset$new(dataname = "miniACC", x = miniACC)
+  mae <- MAEDataset$new(dataname = "miniACC", x = MultiAssayExperiment::miniACC)
 
   testthat::expect_equal(mae$get_dataname(), "miniACC")
   testthat::expect_equal(mae$get_datanames(), mae$get_dataname())
 
-  testthat::expect_equal(mae$get_raw_data(), miniACC)
+  testthat::expect_equal(mae$get_raw_data(), MultiAssayExperiment::miniACC)
 
   new_label <- "new_label"
   testthat::expect_silent(mae$set_dataset_label(new_label))
@@ -59,7 +55,7 @@ testthat::test_that("MAEDataset getters and setters", {
 })
 
 testthat::test_that("MAEDataset$is_pulled returns true", {
-  mae <- MAEDataset$new(dataname = "miniACC", x = miniACC)
+  mae <- MAEDataset$new(dataname = "miniACC", x = MultiAssayExperiment::miniACC)
   testthat::expect_true(mae$is_pulled())
 })
 
@@ -145,12 +141,12 @@ testthat::test_that("Error raised when executing MAEDataset$check and code is em
 })
 
 testthat::test_that("MAEDataset$check_keys doesn't throw if constructed with correct keys", {
-  mae <- MAEDataset$new(dataname = "miniACC", x = miniACC, keys = "patientID")
+  mae <- MAEDataset$new(dataname = "miniACC", x = MultiAssayExperiment::miniACC, keys = "patientID")
   testthat::expect_silent(mae$check_keys())
 })
 
 testthat::test_that("MAEDataset$check_keys throws if constructed with keys not present in colData", {
-  mae <- MAEDataset$new(dataname = "miniACC", x = miniACC, keys = "wrong keys")
+  mae <- MAEDataset$new(dataname = "miniACC", x = MultiAssayExperiment::miniACC, keys = "wrong keys")
   testthat::expect_error(
     mae$check_keys(),
     regexp = "do not exist in the data"
@@ -179,7 +175,15 @@ testthat::test_that("Error raised executing MAEDataset$check_keys and duplicate 
 })
 
 testthat::test_that("dataset() constructor returns the same as MAEDataset$new()", {
-  mae1 <- dataset("mae", miniACC)
-  mae2 <- MAEDataset$new("mae", miniACC)
+  mae1 <- dataset("mae", MultiAssayExperiment::miniACC)
+  mae2 <- MAEDataset$new("mae", MultiAssayExperiment::miniACC)
   testthat::expect_equal(mae1, mae2)
+})
+
+testthat::test_that("mae_dataset() does not throw when passed a MultiAssayExperiment object", {
+  testthat::expect_error(mae_dataset("mae", MultiAssayExperiment::miniACC), NA)
+})
+
+testthat::test_that("mae_dataset() constructor throws error when x is not a MultiAssayExperiment object", {
+  testthat::expect_error(mae_dataset("mae", mtcars), "Argument x must be a MultiAssayExperiment object")
 })

@@ -29,6 +29,7 @@ components of the \code{Dataset}.
 \item \href{#method-get_varlabels}{\code{FilteredDataset$get_varlabels()}}
 \item \href{#method-get_varnames}{\code{FilteredDataset$get_varnames()}}
 \item \href{#method-get_filtered_dataname}{\code{FilteredDataset$get_filtered_dataname()}}
+\item \href{#method-get_filterable_varnames}{\code{FilteredDataset$get_filterable_varnames()}}
 \item \href{#method-set_bookmark_state}{\code{FilteredDataset$set_bookmark_state()}}
 \item \href{#method-ui}{\code{FilteredDataset$ui()}}
 \item \href{#method-server}{\code{FilteredDataset$server()}}
@@ -311,6 +312,19 @@ Used when filtering the data to get \verb{<dataname>_FILTERED},
 }
 }
 \if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-get_filterable_varnames"></a>}}
+\if{latex}{\out{\hypertarget{method-get_filterable_varnames}{}}}
+\subsection{Method \code{get_filterable_varnames()}}{
+Gets variable names for the filtering.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{FilteredDataset$get_filterable_varnames()}\if{html}{\out{</div>}}
+}
+
+\subsection{Returns}{
+(\code{character} vector) of variable names
+}
+}
+\if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-set_bookmark_state"></a>}}
 \if{latex}{\out{\hypertarget{method-set_bookmark_state}{}}}
 \subsection{Method \code{set_bookmark_state()}}{
@@ -413,7 +427,7 @@ Server module to add filter variable for this dataset
 
 Server module to add filter variable for this dataset
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{FilteredDataset$srv_add_filter_state(id)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{FilteredDataset$srv_add_filter_state(id, ...)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
@@ -421,6 +435,8 @@ Server module to add filter variable for this dataset
 \describe{
 \item{\code{id}}{(\code{character(1)})\cr
 an ID string that corresponds with the ID used to call the module's UI function.}
+
+\item{\code{...}}{ignored}
 }
 \if{html}{\out{</div>}}
 }

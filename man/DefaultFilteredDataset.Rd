@@ -32,6 +32,7 @@
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="FilteredDataset" data-id="get_dataset">}\href{../../teal/html/FilteredDataset.html#method-get_dataset}{\code{teal::FilteredDataset$get_dataset()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="FilteredDataset" data-id="get_filter_overview_info">}\href{../../teal/html/FilteredDataset.html#method-get_filter_overview_info}{\code{teal::FilteredDataset$get_filter_overview_info()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="FilteredDataset" data-id="get_filter_states">}\href{../../teal/html/FilteredDataset.html#method-get_filter_states}{\code{teal::FilteredDataset$get_filter_states()}}\out{</span>}
+\item \out{<span class="pkg-link" data-pkg="teal" data-topic="FilteredDataset" data-id="get_filterable_varnames">}\href{../../teal/html/FilteredDataset.html#method-get_filterable_varnames}{\code{teal::FilteredDataset$get_filterable_varnames()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="FilteredDataset" data-id="get_filtered_dataname">}\href{../../teal/html/FilteredDataset.html#method-get_filtered_dataname}{\code{teal::FilteredDataset$get_filtered_dataname()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="FilteredDataset" data-id="get_hash">}\href{../../teal/html/FilteredDataset.html#method-get_hash}{\code{teal::FilteredDataset$get_hash()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="FilteredDataset" data-id="get_join_keys">}\href{../../teal/html/FilteredDataset.html#method-get_join_keys}{\code{teal::FilteredDataset$get_join_keys()}}\out{</span>}
@@ -141,7 +142,7 @@ For this class \code{srv_add_filter_state} calls single module
 \code{srv_add_filter_state} from \code{FilterStates} (\code{DefaultFilteredDataset}
 contains single \code{FilterStates})
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{DefaultFilteredDataset$srv_add_filter_state(id)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{DefaultFilteredDataset$srv_add_filter_state(id, ...)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
@@ -149,6 +150,9 @@ contains single \code{FilterStates})
 \describe{
 \item{\code{id}}{(\code{character(1)})\cr
 an ID string that corresponds with the ID used to call the module's UI function.}
+
+\item{\code{...}}{\cr
+Other arguments passed on to child \code{FilterStates} method.}
 }
 \if{html}{\out{</div>}}
 }

@@ -125,7 +125,7 @@ Module controls available choices to select as a filter variable.
 Selected filter variable is being removed from available choices.
 Removed filter variable gets back to available choices.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{MatrixFilterStates$srv_add_filter_state(id, data)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{MatrixFilterStates$srv_add_filter_state(id, data, ...)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
@@ -136,6 +136,8 @@ an ID string that corresponds with the ID used to call the module's UI function.
 
 \item{\code{data}}{(\code{matrix})\cr
 object which columns are used to choose filter variables.}
+
+\item{\code{...}}{ignored}
 }
 \if{html}{\out{</div>}}
 }

@@ -4,6 +4,7 @@
 * Added `cdse_dataset_connector` to create delayed data objects from `CDSE`.
 * Added `datasetdb_dataset_connector` to create delayed data objects from `DataSetDB`.
 * Added `split` and `merge` methods to the `JoinKeys` object.
+* Added a new public facing constructor wrapper, `mae_dataset`.
 
 ### Bug fixes
 * Fixed the bug caused by calling `mutate_dataset` multiple times on the same `DatasetConnector` or `Dataset` object.
