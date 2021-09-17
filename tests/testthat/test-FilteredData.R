@@ -99,7 +99,7 @@ testthat::test_that("get_filtered_dataset returns a list of FilteredDataset", {
   testthat::expect_true(is_class_list("FilteredDataset")(filtered_data$get_filtered_dataset()))
 })
 
-testthat::test_that("get_filtered_dataset returns a list with elements names after set datasets", {
+testthat::test_that("get_filtered_dataset returns a list with elements named after set datasets", {
   filtered_data <- FilteredData$new()
   filtered_data$set_dataset(Dataset$new("iris", head(iris)))
   filtered_data$set_dataset(Dataset$new("mtcars", head(mtcars)))
