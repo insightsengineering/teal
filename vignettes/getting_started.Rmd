@@ -34,15 +34,15 @@ library(random.cdisc.data)
 library(teal.modules.general)
 library(teal.modules.clinical)
 
-ADSL <-  radsl(cached = TRUE)
-ADRS <-  radrs(cached = TRUE)
-ADTTE <-  radtte(cached = TRUE)
+adsl <- radsl(cached = TRUE)
+adrs <- radrs(cached = TRUE)
+adtte <- radtte(cached = TRUE)
 
 app <- teal::init(
-  data =  cdisc_data(
-    cdisc_dataset("ADSL", ADSL, code = "radsl(cached = TRUE)"),
-    cdisc_dataset("ADRS", ADRS, code = "radrs(cached = TRUE)"),
-    cdisc_dataset("ADTTE", ADTTE, code ="radtte(cached = TRUE)")
+  data = cdisc_data(
+    cdisc_dataset("ADSL", adsl, code = "radsl(cached = TRUE)"),
+    cdisc_dataset("ADRS", adrs, code = "radrs(cached = TRUE)"),
+    cdisc_dataset("ADTTE", adtte, code = "radtte(cached = TRUE)")
   ),
   modules = root_modules(
     teal.modules.general::tm_data_table("Data Table"),
@@ -182,7 +182,7 @@ all datasets other than `ADSL` will also be filtered with the remaining subjects
 in `ADSL` through the `ADSL.USUBJID` and `ADSL.STUDYID` variables. Hence, assume
 you have the following three filters
 
- - `ADSL.STUDYID %in% c('BP29392', 'WP29945')`
+ - `ADSL.STUDYID %in% c("BP29392", "WP29945")`
  - `ADSL.AGE > 15 & ADSL.AGE < 35`
  - `ADRS.ADY > 0 & ADRS.ADY < 500`
 
@@ -190,11 +190,11 @@ Then then `FilteredData` object will perform the following operations to obtain
 the filtered `ADRS` object in one of your modules:
 
 ```{r, eval=FALSE}
-ADSL_FILTERED <- dplyr::filter(ADSL, STUDYID %in% c('BP29392', 'WP29945') & AGE > 15 & AGE < 35)
-ADRS_FILTERED_ALONE <- dplyr::filter(ADRS, ADY > 0 & ADY < 500)
+adsl_filtered <- dplyr::filter(adsl, STUDYID %in% c("BP29392", "WP29945") & AGE > 15 & AGE < 35)
+adrs_filtered_alone <- dplyr::filter(adrs, ADY > 0 & ADY < 500)
 
-ADRS_FILTERED <- dplyr::inner_join(x = ADSL_FILTERED,
-                      y = ADRS_FILTERED_ALONE,
+adrs_filtered <- dplyr::inner_join(x = adsl_filtered,
+                      y = adrs_filtered_alone,
                       by = c("USUBJID", "STUDYID"))
 ```
 
@@ -209,7 +209,7 @@ stored in the `tags` list (exported by shiny). So, a possible header could be
 defined as follows:
 
 ```{r, eval=FALSE}
-tags$div(tags$h1("My New Analysis Web-app"), tags$p(class="pull-left", "Logo"))
+tags$div(tags$h1("My New Analysis Web-app"), tags$p(class = "pull-left", "Logo"))
 ```
 
 
