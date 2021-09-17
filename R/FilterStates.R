@@ -424,8 +424,10 @@ FilterStates <- R6::R6Class( # nolint
     #'   an ID string that corresponds with the ID used to call the module's UI function.
     #' @param data (`data.frame`, `MultiAssayExperiment`, `SummarizedExperiment`, `matrix`)\cr
     #'  object containing columns to be used as filter variables.
+    #' @param ... ignored
     #' @return `moduleServer` function which returns `NULL`
-    srv_add_filter_state =  function(id, data) {
+    srv_add_filter_state =  function(id, data, ...) {
+      check_ellipsis(..., stop = FALSE)
       moduleServer(
         id = id,
         function(input, output, session) {
@@ -712,9 +714,13 @@ DFFilterStates <- R6::R6Class( # nolint
     #'   an ID string that corresponds with the ID used to call the module's UI function.
     #' @param data (`data.frame`)\cr
     #'  object which columns are used to choose filter variables.
+    #' @param vars_include (`character(n)`)\cr
+    #'  optional, vector of column names to be included.
+    #' @param ... ignored
     #' @return `moduleServer` function which returns `NULL`
-    srv_add_filter_state = function(id, data) {
+    srv_add_filter_state = function(id, data, vars_include = get_filterable_varnames(data = data), ...) {
       stopifnot(is.data.frame(data))
+      check_ellipsis(..., stop = FALSE)
       moduleServer(
         id = id,
         function(input, output, session) {
@@ -729,7 +735,7 @@ DFFilterStates <- R6::R6Class( # nolint
           # available choices to display
           avail_column_choices <- reactive({
             choices <- setdiff(
-              get_filterable_varnames(data = data),
+              vars_include,
               active_filter_vars()
             )
 
@@ -944,9 +950,11 @@ MAEFilterStates <- R6::R6Class( # nolint
     #'  object containing `colData` which columns are used to be used
     #'  to choose filter variables.
     #'  in `optionalSelectInput`
+    #' @param ... ignored
     #' @return `moduleServer` function which returns `NULL`
-    srv_add_filter_state = function(id, data) {
+    srv_add_filter_state = function(id, data, ...) {
       stopifnot(is(data, "MultiAssayExperiment"))
+      check_ellipsis(..., stop = FALSE)
       moduleServer(
         id = id,
         function(input, output, session) {
@@ -1200,9 +1208,11 @@ SEFilterStates <- R6::R6Class( # nolint
     #'  object containing `colData` and `rowData` which columns
     #'  are used to choose filter variables. Column selection from `colData`
     #'  and `rowData` are separate shiny entities.
+    #' @param ... ignored
     #' @return `moduleServer` function which returns `NULL`
-    srv_add_filter_state = function(id, data) {
+    srv_add_filter_state = function(id, data, ...) {
       stopifnot(is(data, "SummarizedExperiment"))
+      check_ellipsis(..., stop = FALSE)
       moduleServer(
         id = id,
         function(input, output, session) {
@@ -1441,9 +1451,11 @@ MatrixFilterStates <- R6::R6Class( # nolint
     #'   an ID string that corresponds with the ID used to call the module's UI function.
     #' @param data (`matrix`)\cr
     #'  object which columns are used to choose filter variables.
+    #' @param ... ignored
     #' @return `moduleServer` function which returns `NULL`
-    srv_add_filter_state = function(id, data) {
+    srv_add_filter_state = function(id, data, ...) {
       stopifnot(is.matrix(data))
+      check_ellipsis(..., stop = FALSE)
       moduleServer(
         id = id,
         function(input, output, session) {

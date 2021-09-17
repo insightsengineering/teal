@@ -66,7 +66,7 @@
 #' )
 #' filter_state_iris$set_selected("virginica")
 #'
-#' queue <- datasets$get_filtered_datasets("iris")$get_filter_states(1)
+#' queue <- datasets$get_filtered_dataset("iris")$get_filter_states(1)
 #' queue$queue_push(filter_state_iris, queue_index = 1L, element_id = "virginica")
 #'
 #' isolate(datasets$get_call("iris"))
@@ -81,7 +81,7 @@
 #' )
 #' filter_state_mtcars$set_selected(c(15, 20))
 #'
-#' queue <- datasets$get_filtered_datasets("mtcars")$get_filter_states("filter")
+#' queue <- datasets$get_filtered_dataset("mtcars")$get_filter_states("filter")
 #' queue$queue_push(filter_state_mtcars, queue_index = 1L, element_id = "mpg")
 #'
 #' isolate(datasets$get_call("iris"))
@@ -124,13 +124,14 @@ FilteredData <- R6::R6Class( # nolint
     get_filterable_datanames = function(dataname) {
       dataname
     },
+
     #' @description
     #' Gets variable names of a given dataname for the filtering.
     #'
     #' @param dataname (`character`) name of the dataset
     #' @return (`character` vector) of variable names
     get_filterable_varnames = function(dataname) {
-      self$get_varnames(dataname)
+      self$get_filtered_dataset(dataname)$get_filterable_varnames()
     },
 
     # datasets methods ----
@@ -157,7 +158,7 @@ FilteredData <- R6::R6Class( # nolint
     #'  calls
     get_call = function(dataname) {
       private$check_data_varname_exists(dataname)
-      self$get_filtered_datasets(dataname)$get_call()
+      self$get_filtered_dataset(dataname)$get_call()
     },
 
     #' @description
@@ -174,7 +175,7 @@ FilteredData <- R6::R6Class( # nolint
     #' @param dataname (`character(1)`)\cr
     #'  name of the dataset.
     #' @return `FilteredDataset` object or list of `FilteredDataset`
-    get_filtered_datasets = function(dataname = character(0)) {
+    get_filtered_dataset = function(dataname = character(0)) {
       if (is_empty(dataname)) {
         private$filtered_datasets
       } else {
@@ -194,7 +195,7 @@ FilteredData <- R6::R6Class( # nolint
       private$check_data_varname_exists(dataname)
       stopifnot(is_logical_single(filtered))
 
-      self$get_filtered_datasets(dataname)$get_data(filtered = filtered)
+      self$get_filtered_dataset(dataname)$get_data(filtered = filtered)
     },
 
     #' @description
@@ -209,7 +210,7 @@ FilteredData <- R6::R6Class( # nolint
     get_data_attr = function(dataname, attr) {
       private$check_data_varname_exists(dataname)
       stopifnot(is_character_single(attr))
-      get_attrs(self$get_filtered_datasets(dataname)$get_dataset())[[attr]]
+      get_attrs(self$get_filtered_dataset(dataname)$get_dataset())[[attr]]
     },
 
     #' @description
@@ -219,15 +220,15 @@ FilteredData <- R6::R6Class( # nolint
     #' @return (`named character`) vector with column names
     get_join_keys = function(dataset_1, dataset_2) {
       res <- if (!missing(dataset_1) && !missing(dataset_2)) {
-        self$get_filtered_datasets(dataset_1)$get_join_keys()[[dataset_2]]
+        self$get_filtered_dataset(dataset_1)$get_join_keys()[[dataset_2]]
       } else if (!missing(dataset_1)) {
-        self$get_filtered_datasets(dataset_1)$get_join_keys()
+        self$get_filtered_dataset(dataset_1)$get_join_keys()
       } else if (!missing(dataset_2)) {
-        self$get_filtered_datasets(dataset_2)$get_join_keys()
+        self$get_filtered_dataset(dataset_2)$get_join_keys()
       } else {
         res_list <- lapply(
           self$datanames(), function(dat_name) {
-            self$get_filtered_datasets(dat_name)$get_join_keys()
+            self$get_filtered_dataset(dat_name)$get_join_keys()
           }
         )
         names(res_list) <- self$datanames()
@@ -258,7 +259,7 @@ FilteredData <- R6::R6Class( # nolint
       rows <- lapply(
         datanames,
         function(dataname) {
-          self$get_filtered_datasets(dataname)$get_filter_overview_info()
+          self$get_filtered_dataset(dataname)$get_filter_overview_info()
         }
       )
 
@@ -269,7 +270,7 @@ FilteredData <- R6::R6Class( # nolint
     #' @param dataname (`character`) name of the dataset
     #' @return (`character`) keys of dataset
     get_keys = function(dataname) {
-      self$get_filtered_datasets(dataname)$get_keys()
+      self$get_filtered_dataset(dataname)$get_keys()
     },
     #' @description
     #' Gets labels of variables in the data
@@ -284,7 +285,7 @@ FilteredData <- R6::R6Class( # nolint
     #' @return (`character` or `NULL`) variable labels, `NULL` if `column_labels`
     #'   attribute does not exist for the data
     get_varlabels = function(dataname, variables = NULL) {
-      self$get_filtered_datasets(dataname)$get_varlabels(variables = variables)
+      self$get_filtered_dataset(dataname)$get_varlabels(variables = variables)
     },
 
     #' @description
@@ -293,7 +294,7 @@ FilteredData <- R6::R6Class( # nolint
     #' @param dataname (`character`) the name of the dataset
     #' @return (`character` vector) of variable names
     get_varnames = function(dataname) {
-      self$get_filtered_datasets(dataname)$get_varnames()
+      self$get_filtered_dataset(dataname)$get_varnames()
     },
 
     #' When active_datanames is "all", sets them to all datanames
@@ -381,8 +382,8 @@ FilteredData <- R6::R6Class( # nolint
         id,
         function(input, output, session) {
           for(dataname in names(state)) {
-            fd <- self$get_filtered_datasets(dataname = dataname)
-            fd$set_bookmark_state(
+            fdataset <- self$get_filtered_dataset(dataname = dataname)
+            fdataset$set_bookmark_state(
               id = private$get_ui_add_filter_id(dataname),
               state = state[[dataname]]
             )
@@ -493,10 +494,8 @@ FilteredData <- R6::R6Class( # nolint
               lapply(
                 self$datanames(),
                 function(dataname) {
-                  dataset_filters <- self$get_filtered_datasets(dataname)
-                  dataset_filters$ui(
-                    id = ns(private$get_ui_id(dataname))
-                  )
+                  fdataset <- self$get_filtered_dataset(dataname)
+                  fdataset$ui(id = ns(private$get_ui_id(dataname)))
                 }
               )
             )
@@ -529,13 +528,13 @@ FilteredData <- R6::R6Class( # nolint
               lapply(
                 self$datanames(),
                 function(dataname) {
-                  dataset_filters <- self$get_filtered_datasets(dataname)
+                  fdataset <- self$get_filtered_dataset(dataname)
                   id <- ns(private$get_ui_add_filter_id(dataname))
                   # add span with same id to show / hide
                   return(
                     span(
                       id = id,
-                      dataset_filters$ui_add_filter_state(id)
+                      fdataset$ui_add_filter_state(id)
                     )
                   )
                 }
@@ -575,16 +574,19 @@ FilteredData <- R6::R6Class( # nolint
           lapply(
             isol_datanames,
             function(dataname) {
-              dataset_filters <- self$get_filtered_datasets(dataname)
-              dataset_filters$server(id = private$get_ui_id(dataname))
+              fdataset <- self$get_filtered_dataset(dataname)
+              fdataset$server(id = private$get_ui_id(dataname))
             }
           )
 
           lapply(
             isol_datanames,
             function(dataname) {
-              dataset_filters <- self$get_filtered_datasets(dataname)
-              dataset_filters$srv_add_filter_state(id = private$get_ui_add_filter_id(dataname))
+              fdataset <- self$get_filtered_dataset(dataname)
+              fdataset$srv_add_filter_state(
+                id = private$get_ui_add_filter_id(dataname),
+                vars_include = self$get_filterable_varnames(dataname)
+              )
             }
           )
 
@@ -631,8 +633,8 @@ FilteredData <- R6::R6Class( # nolint
           observeEvent(input$remove_all_filters, {
             .log("removing all active filters from filter panel")
             lapply(self$datanames(), function(dataname) {
-              dataset_filter <- self$get_filtered_datasets(dataname = dataname)
-              dataset_filter$queues_empty()
+              fdataset <- self$get_filtered_dataset(dataname = dataname)
+              fdataset$queues_empty()
             })
           })
 
@@ -796,7 +798,7 @@ FilteredData <- R6::R6Class( # nolint
       isolate({
         # we isolate everything because we don't want to trigger again when datanames
         # change (which also triggers when any of the data changes)
-        if (!dataname %in% names(self$get_filtered_datasets())) {
+        if (!dataname %in% names(self$get_filtered_dataset())) {
           # data must be set already
           stop(paste("data", dataname, "is not available"))
         }
