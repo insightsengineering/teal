@@ -1,0 +1,14 @@
+pandoc: 2.11.4
+pkgdown: 1.6.1
+pkgdown_sha: ~
+articles:
+  delayed_data_loading: delayed_data_loading.html
+  developer_apps: developer_apps.html
+  filter_panel: filter_panel.html
+  getting_started: getting_started.html
+  teal_design_and_implementation: teal_design_and_implementation.html
+last_built: 2021-09-17T14:29Z
+urls:
+  reference: https://insightsengineering.github.io/teal/reference
+  article: https://insightsengineering.github.io/teal/articles
+
