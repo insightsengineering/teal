@@ -7,6 +7,14 @@ on:
   pull_request:
     branches:
       - main
+    paths:
+      - inst/templates/**
+      - _pkgdown.yml
+      - DESCRIPTION
+      - '**.md'
+      - man/**
+      - LICENSE.*
+      - NAMESPACE
 
 jobs:
   pkgdown:
