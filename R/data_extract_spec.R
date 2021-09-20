@@ -114,15 +114,18 @@
 #'
 #' @references \code{\link{select_spec}} \code{\link{filter_spec}}
 data_extract_spec <- function(dataname, select = NULL, filter = NULL, reshape = FALSE) {
+#
+#   browser()
+
   stopifnot(is_character_single(dataname))
   stopifnot(
     is.null(select) ||
-    (is(select, "select_spec") && length(select) >= 1)
+      ((is(select, "select_spec") || is_class_list("select_spec")(select)) && length(select) >= 1)
   )
   stopifnot(
     is.null(filter) ||
-    is(filter, "filter_spec") ||
-    is_class_list("filter_spec")(filter)
+      is(filter, "filter_spec") ||
+      is_class_list("filter_spec")(filter)
   )
   stopifnot(is_logical_single(reshape))
   stop_if_not(list(!is.null(select) || !is.null(filter), "Either select or filter should be not empty"))
@@ -132,6 +135,7 @@ data_extract_spec <- function(dataname, select = NULL, filter = NULL, reshape = 
   for (idx in seq_along(filter)) filter[[idx]]$dataname <- dataname
 
   if (is(select, "delayed_select_spec") ||
+      is_class_list("delayed_select_spec")(select) ||
       any(vapply(filter, is, logical(1), "delayed_filter_spec"))) {
     structure(
       list(dataname = dataname, select = select, filter = filter, reshape = reshape),
