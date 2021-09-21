@@ -2,12 +2,24 @@
 % Please edit documentation in R/DatasetConnector_constructors.R
 \name{rice_dataset_connector}
 \alias{rice_dataset_connector}
+\alias{rice_cdisc_dataset_connector}
 \title{Rice \code{DatasetConnector}}
 \usage{
 rice_dataset_connector(
   dataname,
   path,
   keys = character(0),
+  label = character(0),
+  code = character(0),
+  script = character(0),
+  ...
+)
+
+rice_cdisc_dataset_connector(
+  dataname,
+  path,
+  keys = get_cdisc_keys(dataname),
+  parent = if (identical(dataname, "ADSL")) character(0L) else "ADSL",
   label = character(0),
   code = character(0),
   script = character(0),
@@ -39,15 +51,22 @@ Can't be used simultaneously with \code{script}.}
 
 \item{...}{(\code{optional})\cr
 additional arguments applied to pull function}
+
+\item{parent}{optional, (\code{character}) \cr
+parent dataset name}
 }
 \description{
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
+
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
 }
 \details{
 Create a \code{DatasetConnector} from \code{RICE}.
+
+Create a \code{CDISCDatasetConnector} from \code{RICE} dataset with keys and parent name assigned
+automatically by \code{dataname}.
 }
 \examples{
-
 if ("rice" \%in\% installed.packages()) {
   x <- rice_dataset_connector(
     dataname = "ADSL",

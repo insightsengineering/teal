@@ -2,12 +2,24 @@
 % Please edit documentation in R/DatasetConnector_constructors.R
 \name{csv_dataset_connector}
 \alias{csv_dataset_connector}
+\alias{csv_cdisc_dataset_connector}
 \title{\code{csv} \code{DatasetConnector}}
 \usage{
 csv_dataset_connector(
   dataname,
   file,
   keys = character(0),
+  label = character(0),
+  code = character(0),
+  script = character(0),
+  ...
+)
+
+csv_cdisc_dataset_connector(
+  dataname,
+  file,
+  keys = get_cdisc_keys(dataname),
+  parent = if (identical(dataname, "ADSL")) character(0L) else "ADSL",
   label = character(0),
   code = character(0),
   script = character(0),
@@ -40,12 +52,20 @@ Can't be used simultaneously with \code{script}.}
 \item{...}{(\code{optional})\cr
 additional arguments applied to pull function (\code{readr::read_delim}) by default
 \code{delim = ","}.}
+
+\item{parent}{optional, (\code{character}) \cr
+parent dataset name}
 }
 \description{
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
+
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
 }
 \details{
 Create a \code{DatasetConnector} from \code{csv} (or general delimited file).
+
+Create a \code{CDISCDatasetConnector} from \code{csv} (or general delimited) file
+with keys and parent name assigned automatically by \code{dataname}.
 }
 \examples{
 \dontrun{

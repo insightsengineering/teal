@@ -2,12 +2,24 @@
 % Please edit documentation in R/DatasetConnector_constructors.R
 \name{rcd_dataset_connector}
 \alias{rcd_dataset_connector}
+\alias{rcd_cdisc_dataset_connector}
 \title{\code{RCD} \code{DatasetConnector}}
 \usage{
 rcd_dataset_connector(
   dataname,
   fun,
   keys = character(0),
+  label = character(0),
+  code = character(0),
+  script = character(0),
+  ...
+)
+
+rcd_cdisc_dataset_connector(
+  dataname,
+  fun,
+  keys = get_cdisc_keys(dataname),
+  parent = if (identical(dataname, "ADSL")) character(0L) else "ADSL",
   label = character(0),
   code = character(0),
   script = character(0),
@@ -45,12 +57,19 @@ In case when this object code depends on the \code{raw_data} from the other
 this/these object(s) should be included. Please note that \code{vars}
 are included to this object as local \code{vars} and they cannot be modified
 within another dataset.}
+
+\item{parent}{optional, (\code{character}) \cr
+parent dataset name}
 }
 \description{
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
+
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
 }
 \details{
 Create a \code{DatasetConnector} from function in \code{random.cdisc.data}.
+
+Create a \code{CDISCDatasetConnector} from function in \code{random.cdisc.data}.
 }
 \examples{
 library(random.cdisc.data)
