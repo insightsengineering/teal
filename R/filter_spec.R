@@ -384,6 +384,7 @@ filter_spec_internal.delayed_data <- function(vars_choices, # nolint
     is.null(selected) ||
       is_character_vector(selected) ||
       is_numeric_vector(selected) ||
+      is_logical_vector(selected) ||
       is(selected, "delayed_data")
   )
 
