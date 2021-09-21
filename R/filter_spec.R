@@ -451,7 +451,7 @@ filter_spec_internal.default <- function(vars_choices, # nousage
 
   if (!is.null(selected)) {
     stopifnot(multiple || length(selected) == 1)
-    stopifnot(is_character_vector(selected) || is_numeric_vector(selected))
+    stopifnot(is_character_vector(selected) || is_numeric_vector(selected) || is_logical_vector(selected))
     stopifnot(all(!duplicated(selected)))
     stopifnot(all(selected %in% choices))
   }
