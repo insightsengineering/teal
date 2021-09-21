@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Load RelationalData object from a file — teal_data_file • teal</title>
+<title>RelationalDataConnector connector for DataSetDB — datasetdb_data • teal</title>
 
 
 <!-- jquery -->
@@ -39,9 +39,9 @@
 
 
 
-<meta property="og:title" content="Load RelationalData object from a file — teal_data_file" />
+<meta property="og:title" content="RelationalDataConnector connector for DataSetDB — datasetdb_data" />
 <meta property="og:description" content="
-Please note that the script has to end with a call creating desired object. The error will be raised otherwise." />
+Build data connector for DataSetDB datasets" />
 
 
 
@@ -136,103 +136,66 @@ Please note that the script has to end with a call creating desired object. The 
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Load <code>RelationalData</code> object from a file</h1>
+    <h1><code>RelationalDataConnector</code> connector for <code>DataSetDB</code></h1>
     
-    <div class="hidden name"><code>teal_data_file.Rd</code></div>
+    <div class="hidden name"><code>datasetdb_data.Rd</code></div>
     </div>
 
     <div class="ref-description">
     <p><a href='https://lifecycle.r-lib.org/articles/stages.html#experimental'><img src='figures/lifecycle-experimental.svg' alt='[Experimental]' /></a>
-Please note that the script has to end with a call creating desired object. The error will be raised otherwise.</p>
+Build data connector for <code>DataSetDB</code> datasets</p>
     </div>
 
-    <pre class="usage"><span class='fu'>teal_data_file</span><span class='op'>(</span><span class='va'>path</span>, code <span class='op'>=</span> <span class='fu'><a href='get_code.html'>get_code</a></span><span class='op'>(</span><span class='va'>path</span><span class='op'>)</span><span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'>datasetdb_data</span><span class='op'>(</span><span class='va'>...</span>, connection <span class='op'>=</span> <span class='fu'><a href='datasetdb_connection.html'>datasetdb_connection</a></span><span class='op'>(</span><span class='op'>)</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>path</th>
-      <td><p>A (<code>connection</code>) or a (<code>character</code>)<br />
-string giving the pathname of the file or URL to read from. "" indicates the connection <code>stdin</code>.</p></td>
+      <th>...</th>
+      <td><p>(<code>DatasetConnector</code> objects)<br />
+dataset connectors created using <code><a href='datasetdb_dataset_connector.html'>datasetdb_dataset_connector</a></code></p></td>
     </tr>
     <tr>
-      <th>code</th>
-      <td><p>(<code>character</code>)<br />
-reproducible code to re-create object</p></td>
+      <th>connection</th>
+      <td><p>(<code>DataConnection</code>) object returned from <code>datasetdb_connection</code>.</p></td>
     </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p><code>RelationalData</code> object</p>
+    <p>An object of class <code>RelatonalDataConnector</code></p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='co'># simple example</span>
-<span class='va'>file_example</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/tempfile.html'>tempfile</a></span><span class='op'>(</span>fileext <span class='op'>=</span> <span class='st'>".R"</span><span class='op'>)</span>
-<span class='fu'><a href='https://rdrr.io/r/base/writeLines.html'>writeLines</a></span><span class='op'>(</span>
-  text <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span>
-    <span class='st'>"library(teal)
+    <pre class="examples"><div class='input'>
+<span class='kw'>if</span> <span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/all.html'>all</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"dsassembly"</span>, <span class='st'>"gdbauth"</span><span class='op'>)</span> <span class='op'>%in%</span> <span class='fu'><a href='https://rdrr.io/r/utils/installed.packages.html'>installed.packages</a></span><span class='op'>(</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>{</span>
+  <span class='va'>x</span> <span class='op'>&lt;-</span> <span class='fu'>datasetdb_data</span><span class='op'>(</span>
+    <span class='fu'><a href='datasetdb_dataset_connector.html'>datasetdb_dataset_connector</a></span><span class='op'>(</span><span class='st'>"MAE"</span>, id <span class='op'>=</span> <span class='st'>"DS000000267"</span><span class='op'>)</span>
+  <span class='op'>)</span>
+  <span class='va'>app</span> <span class='op'>&lt;-</span> <span class='fu'><a href='init.html'>init</a></span><span class='op'>(</span>
+    data <span class='op'>=</span> <span class='fu'><a href='teal_data.html'>teal_data</a></span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span>,
+    modules <span class='op'>=</span> <span class='fu'><a href='root_modules.html'>root_modules</a></span><span class='op'>(</span>
+      <span class='fu'><a href='module.html'>module</a></span><span class='op'>(</span>
+        <span class='st'>"dummy module"</span>,
+        server <span class='op'>=</span> <span class='kw'>function</span><span class='op'>(</span><span class='va'>input</span>, <span class='va'>output</span>, <span class='va'>session</span>, <span class='va'>datasets</span><span class='op'>)</span> <span class='op'>{</span>
+          <span class='va'>output</span><span class='op'>$</span><span class='va'>str</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/shiny/man/renderPrint.html'>renderText</a></span><span class='op'>(</span><span class='op'>{</span>
+            <span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste0</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/utils/capture.output.html'>capture.output</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/utils/str.html'>str</a></span><span class='op'>(</span>
+              <span class='va'>datasets</span><span class='op'>$</span><span class='fu'>get_data</span><span class='op'>(</span><span class='st'>"MAE"</span>, filtered <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
+            <span class='op'>)</span><span class='op'>)</span>, collapse <span class='op'>=</span> <span class='st'>"\n"</span><span class='op'>)</span>
+          <span class='op'>}</span><span class='op'>)</span>
+        <span class='op'>}</span>,
+        ui <span class='op'>=</span> <span class='kw'>function</span><span class='op'>(</span><span class='va'>id</span>, <span class='va'>...</span><span class='op'>)</span> <span class='op'>{</span><span class='va'>ns</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/shiny/man/NS.html'>NS</a></span><span class='op'>(</span><span class='va'>id</span><span class='op'>)</span>; <span class='fu'><a href='https://rdrr.io/pkg/shiny/man/textOutput.html'>verbatimTextOutput</a></span><span class='op'>(</span><span class='fu'>ns</span><span class='op'>(</span><span class='st'>'str'</span><span class='op'>)</span><span class='op'>)</span><span class='op'>}</span>,
+        filters <span class='op'>=</span> <span class='st'>"MAE"</span>
+      <span class='op'>)</span>
+    <span class='op'>)</span>,
+    header <span class='op'>=</span> <span class='va'>tags</span><span class='op'>$</span><span class='fu'>h1</span><span class='op'>(</span><span class='st'>"Sample App"</span><span class='op'>)</span>
+  <span class='op'>)</span>
+<span class='op'>}</span>
+<span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span>
+<span class='fu'><a href='https://rdrr.io/pkg/shiny/man/shinyApp.html'>shinyApp</a></span><span class='op'>(</span><span class='va'>app</span><span class='op'>$</span><span class='va'>ui</span>, <span class='va'>app</span><span class='op'>$</span><span class='va'>server</span><span class='op'>)</span>
+<span class='op'>}</span>
 
-     x1 &lt;- dataset(dataname = \"IRIS\",
-                   x = iris,
-                   code = \"IRIS &lt;- iris\")
-
-     x2 &lt;- dataset(dataname = \"MTCARS\",
-                   x = mtcars,
-                   code = \"MTCARS &lt;- mtcars\")
-
-     teal_data(x1, x2)"</span>
-  <span class='op'>)</span>,
-  con <span class='op'>=</span> <span class='va'>file_example</span>
-<span class='op'>)</span>
-<span class='fu'>teal_data_file</span><span class='op'>(</span><span class='va'>file_example</span>, code <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/character.html'>character</a></span><span class='op'>(</span><span class='fl'>0</span><span class='op'>)</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; &lt;RelationalData&gt;
-#&gt;   Inherits from: &lt;DataAbstract&gt;
-#&gt;   Public:
-#&gt;     check: function () 
-#&gt;     check_metadata: function () 
-#&gt;     check_reproducibility: function () 
-#&gt;     clone: function (deep = FALSE) 
-#&gt;     execute_mutate: function () 
-#&gt;     get_check_result: function () 
-#&gt;     get_code: function (dataname = NULL, deparse = TRUE) 
-#&gt;     get_code_class: function (only_pull = FALSE) 
-#&gt;     get_connectors: function () 
-#&gt;     get_datanames: function () 
-#&gt;     get_dataset: function (dataname = NULL) 
-#&gt;     get_datasets: function () 
-#&gt;     get_items: function (dataname = NULL) 
-#&gt;     get_join_keys: function () 
-#&gt;     get_server: function () 
-#&gt;     get_ui: function (id) 
-#&gt;     id: 314924866
-#&gt;     initialize: function (..., check = FALSE, join_keys) 
-#&gt;     is_pulled: function () 
-#&gt;     launch: function () 
-#&gt;     mutate: function (code, vars = list()) 
-#&gt;     mutate_dataset: function (dataname, code, vars = list()) 
-#&gt;     mutate_join_keys: function (dataset_1, dataset_2, val) 
-#&gt;     set_check: function (check = FALSE) 
-#&gt;     set_pull_code: function (code) 
-#&gt;   Private:
-#&gt;     .check: FALSE
-#&gt;     check_combined_code: function () 
-#&gt;     check_names: function (x) 
-#&gt;     check_result: NULL
-#&gt;     datasets: list
-#&gt;     deep_clone: function (name, value) 
-#&gt;     get_datasets_code_class: function () 
-#&gt;     get_mutate_code_class: function () 
-#&gt;     get_pull_code_class: function () 
-#&gt;     join_keys: NULL
-#&gt;     mutate_code: CodeClass, R6
-#&gt;     mutate_vars: list
-#&gt;     pull_code: CodeClass, R6
-#&gt;     server: function (input, output, session) 
-#&gt;     set_mutate_code: function (code, dataname = self$get_datanames(), deps = names(private_mutate_vars)) 
-#&gt;     set_mutate_vars: function (vars) 
-#&gt;     ui: function (id) </div></pre>
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

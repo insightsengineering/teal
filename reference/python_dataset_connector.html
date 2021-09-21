@@ -41,7 +41,9 @@
 
 <meta property="og:title" content="Python DatasetConnector — python_dataset_connector" />
 <meta property="og:description" content="
-Create a DatasetConnector from .py file or through python code supplied directly." />
+Create a DatasetConnector from .py file or through python code supplied directly.
+
+Create a CDISCDatasetConnector from .py file or through python code supplied directly." />
 
 
 
@@ -144,6 +146,8 @@ Create a DatasetConnector from .py file or through python code supplied directly
     <div class="ref-description">
     <p><a href='https://lifecycle.r-lib.org/articles/stages.html#experimental'><img src='figures/lifecycle-experimental.svg' alt='[Experimental]' /></a>
 Create a <code>DatasetConnector</code> from <code>.py</code> file or through python code supplied directly.</p>
+<p><a href='https://lifecycle.r-lib.org/articles/stages.html#experimental'><img src='figures/lifecycle-experimental.svg' alt='[Experimental]' /></a>
+Create a <code>CDISCDatasetConnector</code> from <code>.py</code> file or through python code supplied directly.</p>
     </div>
 
     <pre class="usage"><span class='fu'>python_dataset_connector</span><span class='op'>(</span>
@@ -155,6 +159,19 @@ Create a <code>DatasetConnector</code> from <code>.py</code> file or through pyt
   label <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/character.html'>character</a></span><span class='op'>(</span><span class='fl'>0</span><span class='op'>)</span>,
   mutate_code <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/character.html'>character</a></span><span class='op'>(</span><span class='fl'>0</span><span class='op'>)</span>,
   mutate_script <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/character.html'>character</a></span><span class='op'>(</span><span class='fl'>0</span><span class='op'>)</span>,
+  vars <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='op'>)</span>
+<span class='op'>)</span>
+
+<span class='fu'>python_cdisc_dataset_connector</span><span class='op'>(</span>
+  <span class='va'>dataname</span>,
+  <span class='va'>file</span>,
+  <span class='va'>code</span>,
+  <span class='va'>object</span>,
+  keys <span class='op'>=</span> <span class='fu'><a href='get_cdisc_keys.html'>get_cdisc_keys</a></span><span class='op'>(</span><span class='va'>dataname</span><span class='op'>)</span>,
+  parent <span class='op'>=</span> <span class='kw'>if</span> <span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/identical.html'>identical</a></span><span class='op'>(</span><span class='va'>dataname</span>, <span class='st'>"ADSL"</span><span class='op'>)</span><span class='op'>)</span> <span class='fu'><a href='https://rdrr.io/r/base/character.html'>character</a></span><span class='op'>(</span><span class='fl'>0L</span><span class='op'>)</span> <span class='kw'>else</span> <span class='st'>"ADSL"</span>,
+  mutate_code <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/character.html'>character</a></span><span class='op'>(</span><span class='fl'>0</span><span class='op'>)</span>,
+  mutate_script <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/character.html'>character</a></span><span class='op'>(</span><span class='fl'>0</span><span class='op'>)</span>,
+  label <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/character.html'>character</a></span><span class='op'>(</span><span class='fl'>0</span><span class='op'>)</span>,
   vars <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='op'>)</span>
 <span class='op'>)</span></pre>
 
@@ -215,6 +232,11 @@ It's recommended to include <code>Dataset</code> or <code>DatasetConnector</code
 the <code>vars</code> list to preserve reproducibility. Please note that <code>vars</code>
 are included to this object as local <code>vars</code> and they cannot be modified
 within another dataset.</p></td>
+    </tr>
+    <tr>
+      <th>parent</th>
+      <td><p>optional, (<code>character</code>) <br />
+parent dataset name</p></td>
     </tr>
     </table>
 

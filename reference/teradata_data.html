@@ -168,8 +168,8 @@ Build data connector for <code>TERADATA</code> functions or datasets</p>
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span>
 <span class='va'>x</span> <span class='op'>&lt;-</span> <span class='fu'>teradata_data</span><span class='op'>(</span>
-  <span class='fu'><a href='teradata_cdisc_dataset_connector.html'>teradata_cdisc_dataset_connector</a></span><span class='op'>(</span><span class='st'>"ADSL"</span>, <span class='st'>"ADSL_table"</span><span class='op'>)</span>,
-  <span class='fu'><a href='teradata_cdisc_dataset_connector.html'>teradata_cdisc_dataset_connector</a></span><span class='op'>(</span><span class='st'>"ADAE"</span>, <span class='st'>"ADAE_table"</span><span class='op'>)</span>,
+  <span class='fu'><a href='teradata_dataset_connector.html'>teradata_cdisc_dataset_connector</a></span><span class='op'>(</span><span class='st'>"ADSL"</span>, <span class='st'>"ADSL_table"</span><span class='op'>)</span>,
+  <span class='fu'><a href='teradata_dataset_connector.html'>teradata_cdisc_dataset_connector</a></span><span class='op'>(</span><span class='st'>"ADAE"</span>, <span class='st'>"ADAE_table"</span><span class='op'>)</span>,
   connection <span class='op'>=</span> <span class='fu'><a href='teradata_connection.html'>teradata_connection</a></span><span class='op'>(</span>open_args <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>datalab <span class='op'>=</span> <span class='st'>"my_custom_datalab"</span><span class='op'>)</span><span class='op'>)</span>
 <span class='op'>)</span>
 

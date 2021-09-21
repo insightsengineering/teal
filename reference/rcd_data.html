@@ -182,8 +182,8 @@ please create the <code>ADSL</code> dataset first.</p>
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'>random.cdisc.data</span><span class='op'>)</span>
 <span class='va'>x</span> <span class='op'>&lt;-</span> <span class='fu'>rcd_data</span><span class='op'>(</span>
-  <span class='fu'><a href='rcd_cdisc_dataset_connector.html'>rcd_cdisc_dataset_connector</a></span><span class='op'>(</span><span class='st'>"ADSL"</span>, <span class='va'>radsl</span>, cached <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>,
-  <span class='fu'><a href='rcd_cdisc_dataset_connector.html'>rcd_cdisc_dataset_connector</a></span><span class='op'>(</span><span class='st'>"ADLB"</span>, <span class='va'>radlb</span>, cached <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
+  <span class='fu'><a href='rcd_dataset_connector.html'>rcd_cdisc_dataset_connector</a></span><span class='op'>(</span><span class='st'>"ADSL"</span>, <span class='va'>radsl</span>, cached <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>,
+  <span class='fu'><a href='rcd_dataset_connector.html'>rcd_cdisc_dataset_connector</a></span><span class='op'>(</span><span class='st'>"ADLB"</span>, <span class='va'>radlb</span>, cached <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
 <span class='op'>)</span>
 
 <span class='co'># add the data to a proper teal app</span>

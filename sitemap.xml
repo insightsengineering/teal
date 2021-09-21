@@ -148,13 +148,7 @@
     <loc>https://insightsengineering.github.io/teal/reference/cdisc_dataset_connector.html</loc>
   </url>
   <url>
-    <loc>https://insightsengineering.github.io/teal/reference/cdisc_dataset_connector_file.html</loc>
-  </url>
-  <url>
     <loc>https://insightsengineering.github.io/teal/reference/cdisc_dataset_file.html</loc>
-  </url>
-  <url>
-    <loc>https://insightsengineering.github.io/teal/reference/cdse_cdisc_dataset_connector.html</loc>
   </url>
   <url>
     <loc>https://insightsengineering.github.io/teal/reference/cdse_connection.html</loc>
@@ -181,9 +175,6 @@
     <loc>https://insightsengineering.github.io/teal/reference/choices_selected.html</loc>
   </url>
   <url>
-    <loc>https://insightsengineering.github.io/teal/reference/code_cdisc_dataset_connector.html</loc>
-  </url>
-  <url>
     <loc>https://insightsengineering.github.io/teal/reference/code_dataset_connector.html</loc>
   </url>
   <url>
@@ -191,9 +182,6 @@
   </url>
   <url>
     <loc>https://insightsengineering.github.io/teal/reference/code_from_script.html</loc>
-  </url>
-  <url>
-    <loc>https://insightsengineering.github.io/teal/reference/csv_cdisc_dataset_connector.html</loc>
   </url>
   <url>
     <loc>https://insightsengineering.github.io/teal/reference/csv_dataset_connector.html</loc>
@@ -224,6 +212,15 @@
   </url>
   <url>
     <loc>https://insightsengineering.github.io/teal/reference/dataset_file.html</loc>
+  </url>
+  <url>
+    <loc>https://insightsengineering.github.io/teal/reference/datasetdb_connection.html</loc>
+  </url>
+  <url>
+    <loc>https://insightsengineering.github.io/teal/reference/datasetdb_data.html</loc>
+  </url>
+  <url>
+    <loc>https://insightsengineering.github.io/teal/reference/datasetdb_dataset_connector.html</loc>
   </url>
   <url>
     <loc>https://insightsengineering.github.io/teal/reference/debug_browser_module.html</loc>
@@ -260,9 +257,6 @@
   </url>
   <url>
     <loc>https://insightsengineering.github.io/teal/reference/find_source_code.html</loc>
-  </url>
-  <url>
-    <loc>https://insightsengineering.github.io/teal/reference/fun_cdisc_dataset_connector.html</loc>
   </url>
   <url>
     <loc>https://insightsengineering.github.io/teal/reference/fun_dataset_connector.html</loc>
@@ -463,9 +457,6 @@
     <loc>https://insightsengineering.github.io/teal/reference/print.teal_modules.html</loc>
   </url>
   <url>
-    <loc>https://insightsengineering.github.io/teal/reference/python_cdisc_dataset_connector.html</loc>
-  </url>
-  <url>
     <loc>https://insightsengineering.github.io/teal/reference/python_code.html</loc>
   </url>
   <url>
@@ -478,9 +469,6 @@
     <loc>https://insightsengineering.github.io/teal/reference/raw_dataset_connector.html</loc>
   </url>
   <url>
-    <loc>https://insightsengineering.github.io/teal/reference/rcd_cdisc_dataset_connector.html</loc>
-  </url>
-  <url>
     <loc>https://insightsengineering.github.io/teal/reference/rcd_connection.html</loc>
   </url>
   <url>
@@ -488,9 +476,6 @@
   </url>
   <url>
     <loc>https://insightsengineering.github.io/teal/reference/rcd_dataset_connector.html</loc>
-  </url>
-  <url>
-    <loc>https://insightsengineering.github.io/teal/reference/rds_cdisc_dataset_connector.html</loc>
   </url>
   <url>
     <loc>https://insightsengineering.github.io/teal/reference/rds_dataset_connector.html</loc>
@@ -505,9 +490,6 @@
     <loc>https://insightsengineering.github.io/teal/reference/relational_dataset_connector.html</loc>
   </url>
   <url>
-    <loc>https://insightsengineering.github.io/teal/reference/relational_dataset_connector_file.html</loc>
-  </url>
-  <url>
     <loc>https://insightsengineering.github.io/teal/reference/relational_dataset_file.html</loc>
   </url>
   <url>
@@ -518,9 +500,6 @@
   </url>
   <url>
     <loc>https://insightsengineering.github.io/teal/reference/resolve_delayed_expr.html</loc>
-  </url>
-  <url>
-    <loc>https://insightsengineering.github.io/teal/reference/rice_cdisc_dataset_connector.html</loc>
   </url>
   <url>
     <loc>https://insightsengineering.github.io/teal/reference/rice_connection.html</loc>
@@ -538,9 +517,6 @@
     <loc>https://insightsengineering.github.io/teal/reference/run_js_files.html</loc>
   </url>
   <url>
-    <loc>https://insightsengineering.github.io/teal/reference/script_cdisc_dataset_connector.html</loc>
-  </url>
-  <url>
     <loc>https://insightsengineering.github.io/teal/reference/script_dataset_connector.html</loc>
   </url>
   <url>
@@ -554,9 +530,6 @@
   </url>
   <url>
     <loc>https://insightsengineering.github.io/teal/reference/set_keys.html</loc>
-  </url>
-  <url>
-    <loc>https://insightsengineering.github.io/teal/reference/snowflake_cdisc_dataset_connector.html</loc>
   </url>
   <url>
     <loc>https://insightsengineering.github.io/teal/reference/snowflake_connection.html</loc>
@@ -599,9 +572,6 @@
   </url>
   <url>
     <loc>https://insightsengineering.github.io/teal/reference/teal_data_file.html</loc>
-  </url>
-  <url>
-    <loc>https://insightsengineering.github.io/teal/reference/teradata_cdisc_dataset_connector.html</loc>
   </url>
   <url>
     <loc>https://insightsengineering.github.io/teal/reference/teradata_connection.html</loc>

@@ -40,7 +40,8 @@
 
 
 <meta property="og:title" content="Function Dataset Connector — fun_dataset_connector" />
-<meta property="og:description" content="" />
+<meta property="og:description" content="
+" />
 
 
 
@@ -142,6 +143,7 @@
 
     <div class="ref-description">
     <p><a href='https://lifecycle.r-lib.org/articles/stages.html#experimental'><img src='figures/lifecycle-experimental.svg' alt='[Experimental]' /></a></p>
+<p><a href='https://lifecycle.r-lib.org/articles/stages.html#experimental'><img src='figures/lifecycle-experimental.svg' alt='[Experimental]' /></a></p>
     </div>
 
     <pre class="usage"><span class='fu'>fun_dataset_connector</span><span class='op'>(</span>
@@ -149,6 +151,19 @@
   <span class='va'>fun</span>,
   fun_args <span class='op'>=</span> <span class='cn'>NULL</span>,
   keys <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/character.html'>character</a></span><span class='op'>(</span><span class='fl'>0</span><span class='op'>)</span>,
+  label <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/character.html'>character</a></span><span class='op'>(</span><span class='fl'>0</span><span class='op'>)</span>,
+  code <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/character.html'>character</a></span><span class='op'>(</span><span class='fl'>0</span><span class='op'>)</span>,
+  script <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/character.html'>character</a></span><span class='op'>(</span><span class='fl'>0</span><span class='op'>)</span>,
+  func_name <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/substitute.html'>substitute</a></span><span class='op'>(</span><span class='va'>fun</span><span class='op'>)</span>,
+  <span class='va'>...</span>
+<span class='op'>)</span>
+
+<span class='fu'>fun_cdisc_dataset_connector</span><span class='op'>(</span>
+  <span class='va'>dataname</span>,
+  <span class='va'>fun</span>,
+  fun_args <span class='op'>=</span> <span class='cn'>NULL</span>,
+  keys <span class='op'>=</span> <span class='fu'><a href='get_cdisc_keys.html'>get_cdisc_keys</a></span><span class='op'>(</span><span class='va'>dataname</span><span class='op'>)</span>,
+  parent <span class='op'>=</span> <span class='kw'>if</span> <span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/identical.html'>identical</a></span><span class='op'>(</span><span class='va'>dataname</span>, <span class='st'>"ADSL"</span><span class='op'>)</span><span class='op'>)</span> <span class='fu'><a href='https://rdrr.io/r/base/character.html'>character</a></span><span class='op'>(</span><span class='fl'>0L</span><span class='op'>)</span> <span class='kw'>else</span> <span class='st'>"ADSL"</span>,
   label <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/character.html'>character</a></span><span class='op'>(</span><span class='fl'>0</span><span class='op'>)</span>,
   code <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/character.html'>character</a></span><span class='op'>(</span><span class='fl'>0</span><span class='op'>)</span>,
   script <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/character.html'>character</a></span><span class='op'>(</span><span class='fl'>0</span><span class='op'>)</span>,
@@ -213,96 +228,49 @@ this/these object(s) should be included. Please note that <code>vars</code>
 are included to this object as local <code>vars</code> and they cannot be modified
 within another dataset.</p></td>
     </tr>
+    <tr>
+      <th>parent</th>
+      <td><p>optional, (<code>character</code>) <br />
+parent dataset name</p></td>
+    </tr>
     </table>
 
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
     <p>Create a <code>DatasetConnector</code> from <code>function</code> and its arguments.</p>
+<p>Create a <code>CDISCDatasetConnector</code> from <code>function</code> and its arguments
+with keys and parent name assigned automatically by <code>dataname</code>.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span>
-<span class='va'>my_data</span> <span class='op'>&lt;-</span> <span class='kw'>function</span><span class='op'>(</span><span class='va'>...</span><span class='op'>)</span> <span class='op'>{</span>
-  <span class='co'># whatever code</span>
-  <span class='fu'><a href='https://rdrr.io/r/base/Random.html'>set.seed</a></span><span class='op'>(</span><span class='fl'>1234</span><span class='op'>)</span>
-  <span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='http://www.stats.ox.ac.uk/pub/MASS4/'>MASS</a></span><span class='op'>)</span>
-  <span class='kw'><a href='https://rdrr.io/r/base/library.html'>require</a></span><span class='op'>(</span><span class='va'><a href='https://dplyr.tidyverse.org'>dplyr</a></span><span class='op'>)</span>
-  <span class='va'>x</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span><span class='op'>(</span>
-    STUDYID <span class='op'>=</span> <span class='fl'>1</span>,
-    USUBJID <span class='op'>=</span> <span class='fl'>1</span><span class='op'>:</span><span class='fl'>40</span>,
-    z <span class='op'>=</span> <span class='fu'>stats</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span><span class='op'>(</span><span class='fl'>40</span><span class='op'>)</span>,
-    zz <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/factor.html'>factor</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/sample.html'>sample</a></span><span class='op'>(</span><span class='va'>letters</span><span class='op'>[</span><span class='fl'>1</span><span class='op'>:</span><span class='fl'>3</span><span class='op'>]</span>, <span class='fl'>40</span>, replace <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span><span class='op'>)</span>,
-    NAs <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/rep.html'>rep</a></span><span class='op'>(</span><span class='cn'>NA</span>, <span class='fl'>40</span><span class='op'>)</span>
+    <pre class="examples"><div class='input'><span class='va'>my_data</span> <span class='op'>&lt;-</span> <span class='kw'>function</span><span class='op'>(</span><span class='va'>...</span><span class='op'>)</span> <span class='op'>{</span>
+  <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span><span class='op'>(</span>
+    ID <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste0</a></span><span class='op'>(</span><span class='st'>"ABC_"</span>, <span class='fu'><a href='https://rdrr.io/r/base/seq.html'>seq_len</a></span><span class='op'>(</span><span class='fl'>10</span><span class='op'>)</span><span class='op'>)</span>,
+    var1 <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span><span class='op'>(</span>n <span class='op'>=</span> <span class='fl'>10</span><span class='op'>)</span>,
+    var2 <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span><span class='op'>(</span>n <span class='op'>=</span> <span class='fl'>10</span><span class='op'>)</span>,
+    var3 <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span><span class='op'>(</span>n <span class='op'>=</span> <span class='fl'>10</span><span class='op'>)</span>
   <span class='op'>)</span>
-  <span class='va'>x</span><span class='op'>$</span><span class='va'>w</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/numeric.html'>as.numeric</a></span><span class='op'>(</span><span class='fu'>MASS</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/pkg/MASS/man/mvrnorm.html'>mvrnorm</a></span><span class='op'>(</span><span class='fl'>40</span>, <span class='fl'>0</span>, <span class='fl'>1</span><span class='op'>)</span><span class='op'>)</span>
-  <span class='va'>x</span><span class='op'>$</span><span class='va'>ww</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/numeric.html'>as.numeric</a></span><span class='op'>(</span><span class='fu'>MASS</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/pkg/MASS/man/mvrnorm.html'>mvrnorm</a></span><span class='op'>(</span><span class='fl'>40</span>, <span class='fl'>0</span>, <span class='fl'>1</span><span class='op'>)</span><span class='op'>)</span>
-  <span class='fu'>rtables</span><span class='fu'>::</span><span class='fu'><a href='https://roche.github.io/rtables/reference/var_labels.html'>var_labels</a></span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"STUDYID"</span>, <span class='st'>"USUBJID"</span>, <span class='st'>"z"</span>, <span class='st'>"zz"</span>, <span class='st'>"NAs"</span>, <span class='st'>"w"</span>, <span class='st'>"ww"</span><span class='op'>)</span>
-  <span class='va'>x</span>
 <span class='op'>}</span>
-<span class='va'>y</span> <span class='op'>&lt;-</span> <span class='fu'><a href='fun_cdisc_dataset_connector.html'>fun_cdisc_dataset_connector</a></span><span class='op'>(</span>
-  dataname <span class='op'>=</span> <span class='st'>"ADSL"</span>,
+<span class='va'>y</span> <span class='op'>&lt;-</span> <span class='fu'>fun_dataset_connector</span><span class='op'>(</span>
+  dataname <span class='op'>=</span> <span class='st'>"XYZ"</span>,
   fun <span class='op'>=</span> <span class='va'>my_data</span>
 <span class='op'>)</span>
 
 <span class='va'>y</span><span class='op'>$</span><span class='fu'>get_code</span><span class='op'>(</span><span class='op'>)</span>
-
+</div><div class='output co'>#&gt; [1] "my_data &lt;- function(...) {\n    data.frame(ID = paste0(\"ABC_\", seq_len(10)), var1 = rnorm(n = 10), var2 = rnorm(n = 10), var3 = rnorm(n = 10))\n}\nXYZ &lt;- (function(...) {\n    data.frame(ID = paste0(\"ABC_\", seq_len(10)), var1 = rnorm(n = 10), var2 = rnorm(n = 10), var3 = rnorm(n = 10))\n})()"</div><div class='input'>
 <span class='va'>y</span><span class='op'>$</span><span class='fu'>pull</span><span class='op'>(</span><span class='op'>)</span>
 
 <span class='fu'><a href='get_raw_data.html'>get_raw_data</a></span><span class='op'>(</span><span class='va'>y</span><span class='op'>)</span>
-<span class='op'>}</span>
-<span class='co'># Error as global var is used in the function.</span>
-<span class='co'># Thus not reproducible.</span>
-<span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span>
-<span class='va'>x</span> <span class='op'>&lt;-</span> <span class='fl'>40</span>
-<span class='va'>my_data</span> <span class='op'>&lt;-</span> <span class='kw'>function</span><span class='op'>(</span><span class='va'>global_var</span> <span class='op'>=</span> <span class='va'>x</span><span class='op'>)</span> <span class='op'>{</span>
-  <span class='co'># whatever code</span>
-  <span class='fu'><a href='https://rdrr.io/r/base/Random.html'>set.seed</a></span><span class='op'>(</span><span class='fl'>1234</span><span class='op'>)</span>
-  <span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='http://www.stats.ox.ac.uk/pub/MASS4/'>MASS</a></span><span class='op'>)</span>
-  <span class='va'>x</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span><span class='op'>(</span>
-    STUDYID <span class='op'>=</span> <span class='fl'>1</span>,
-    USUBJID <span class='op'>=</span> <span class='fl'>1</span><span class='op'>:</span><span class='va'>global_var</span>,
-    z <span class='op'>=</span> <span class='fu'>stats</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span><span class='op'>(</span><span class='fl'>40</span><span class='op'>)</span>,
-    zz <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/factor.html'>factor</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/sample.html'>sample</a></span><span class='op'>(</span><span class='va'>letters</span><span class='op'>[</span><span class='fl'>1</span><span class='op'>:</span><span class='fl'>3</span><span class='op'>]</span>, <span class='fl'>40</span>, replace <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span><span class='op'>)</span>,
-    NAs <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/rep.html'>rep</a></span><span class='op'>(</span><span class='cn'>NA</span>, <span class='fl'>40</span><span class='op'>)</span>
-  <span class='op'>)</span>
-  <span class='va'>x</span><span class='op'>$</span><span class='va'>w</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/numeric.html'>as.numeric</a></span><span class='op'>(</span><span class='fu'>MASS</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/pkg/MASS/man/mvrnorm.html'>mvrnorm</a></span><span class='op'>(</span><span class='fl'>40</span>, <span class='fl'>0</span>, <span class='fl'>1</span><span class='op'>)</span><span class='op'>)</span>
-  <span class='va'>x</span><span class='op'>$</span><span class='va'>ww</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/numeric.html'>as.numeric</a></span><span class='op'>(</span><span class='fu'>MASS</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/pkg/MASS/man/mvrnorm.html'>mvrnorm</a></span><span class='op'>(</span><span class='fl'>40</span>, <span class='fl'>0</span>, <span class='fl'>1</span><span class='op'>)</span><span class='op'>)</span>
-  <span class='fu'>rtables</span><span class='fu'>::</span><span class='fu'><a href='https://roche.github.io/rtables/reference/var_labels.html'>var_labels</a></span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"STUDYID"</span>, <span class='st'>"USUBJID"</span>, <span class='st'>"z"</span>, <span class='st'>"zz"</span>, <span class='st'>"NAs"</span>, <span class='st'>"w"</span>, <span class='st'>"ww"</span><span class='op'>)</span>
-  <span class='va'>x</span>
-<span class='op'>}</span>
-<span class='va'>y</span> <span class='op'>&lt;-</span> <span class='fu'><a href='fun_cdisc_dataset_connector.html'>fun_cdisc_dataset_connector</a></span><span class='op'>(</span>
-  dataname <span class='op'>=</span> <span class='st'>"ADSL"</span>,
-  fun <span class='op'>=</span> <span class='va'>my_data</span>
-<span class='op'>)</span>
-
-<span class='va'>y</span><span class='op'>$</span><span class='fu'>pull</span><span class='op'>(</span><span class='op'>)</span>
-<span class='op'>}</span>
-<span class='co'># Error - same as previous one</span>
-<span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span>
-<span class='va'>global_var</span> <span class='op'>&lt;-</span> <span class='fl'>40</span>
-<span class='va'>my_data</span> <span class='op'>&lt;-</span> <span class='kw'>function</span><span class='op'>(</span><span class='op'>)</span> <span class='op'>{</span>
-  <span class='co'># whatever code</span>
-  <span class='fu'><a href='https://rdrr.io/r/base/Random.html'>set.seed</a></span><span class='op'>(</span><span class='fl'>1234</span><span class='op'>)</span>
-  <span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='http://www.stats.ox.ac.uk/pub/MASS4/'>MASS</a></span><span class='op'>)</span>
-  <span class='va'>x</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span><span class='op'>(</span>
-    STUDYID <span class='op'>=</span> <span class='fl'>1</span>,
-    USUBJID <span class='op'>=</span> <span class='fl'>1</span><span class='op'>:</span><span class='va'>global_var</span>,
-    z <span class='op'>=</span> <span class='fu'>stats</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span><span class='op'>(</span><span class='fl'>40</span><span class='op'>)</span>,
-    zz <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/factor.html'>factor</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/sample.html'>sample</a></span><span class='op'>(</span><span class='va'>letters</span><span class='op'>[</span><span class='fl'>1</span><span class='op'>:</span><span class='fl'>3</span><span class='op'>]</span>, <span class='fl'>40</span>, replace <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span><span class='op'>)</span>,
-    NAs <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/rep.html'>rep</a></span><span class='op'>(</span><span class='cn'>NA</span>, <span class='fl'>40</span><span class='op'>)</span>
-  <span class='op'>)</span>
-  <span class='va'>x</span><span class='op'>$</span><span class='va'>w</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/numeric.html'>as.numeric</a></span><span class='op'>(</span><span class='fu'>MASS</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/pkg/MASS/man/mvrnorm.html'>mvrnorm</a></span><span class='op'>(</span><span class='fl'>40</span>, <span class='fl'>0</span>, <span class='fl'>1</span><span class='op'>)</span><span class='op'>)</span>
-  <span class='va'>x</span><span class='op'>$</span><span class='va'>ww</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/numeric.html'>as.numeric</a></span><span class='op'>(</span><span class='fu'>MASS</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/pkg/MASS/man/mvrnorm.html'>mvrnorm</a></span><span class='op'>(</span><span class='fl'>40</span>, <span class='fl'>0</span>, <span class='fl'>1</span><span class='op'>)</span><span class='op'>)</span>
-  <span class='fu'>rtables</span><span class='fu'>::</span><span class='fu'><a href='https://roche.github.io/rtables/reference/var_labels.html'>var_labels</a></span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"STUDYID"</span>, <span class='st'>"USUBJID"</span>, <span class='st'>"z"</span>, <span class='st'>"zz"</span>, <span class='st'>"NAs"</span>, <span class='st'>"w"</span>, <span class='st'>"ww"</span><span class='op'>)</span>
-  <span class='va'>x</span>
-<span class='op'>}</span>
-<span class='va'>y</span> <span class='op'>&lt;-</span> <span class='fu'><a href='fun_cdisc_dataset_connector.html'>fun_cdisc_dataset_connector</a></span><span class='op'>(</span>
-  dataname <span class='op'>=</span> <span class='st'>"ADSL"</span>,
-  fun <span class='op'>=</span> <span class='va'>my_data</span>
-<span class='op'>)</span>
-
-<span class='va'>y</span><span class='op'>$</span><span class='fu'>pull</span><span class='op'>(</span><span class='op'>)</span>
-<span class='op'>}</span>
-</div></pre>
+</div><div class='output co'>#&gt;        ID       var1        var2        var3
+#&gt; 1   ABC_1 -1.8218177 -0.52201251 -0.93584735
+#&gt; 2   ABC_2 -0.2473253 -0.05260191 -0.01595031
+#&gt; 3   ABC_3 -0.2441996  0.54299634 -0.82678895
+#&gt; 4   ABC_4 -0.2827054 -0.91407483 -1.51239965
+#&gt; 5   ABC_5 -0.5536994  0.46815442  0.93536319
+#&gt; 6   ABC_6  0.6289820  0.36295126  0.17648861
+#&gt; 7   ABC_7  2.0650249 -1.30454355  0.24368546
+#&gt; 8   ABC_8 -1.6309894  0.73777632  1.62354888
+#&gt; 9   ABC_9  0.5124269  1.88850493  0.11203808
+#&gt; 10 ABC_10 -1.8630115 -0.09744510 -0.13399701</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

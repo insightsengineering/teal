@@ -40,7 +40,8 @@
 
 
 <meta property="og:title" content="Snowflake DatasetConnector — snowflake_dataset_connector" />
-<meta property="og:description" content="" />
+<meta property="og:description" content="
+" />
 
 
 
@@ -142,12 +143,24 @@
 
     <div class="ref-description">
     <p><a href='https://lifecycle.r-lib.org/articles/stages.html#experimental'><img src='figures/lifecycle-experimental.svg' alt='[Experimental]' /></a></p>
+<p><a href='https://lifecycle.r-lib.org/articles/stages.html#experimental'><img src='figures/lifecycle-experimental.svg' alt='[Experimental]' /></a></p>
     </div>
 
     <pre class="usage"><span class='fu'>snowflake_dataset_connector</span><span class='op'>(</span>
   <span class='va'>dataname</span>,
   <span class='va'>sql_query</span>,
   keys <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/character.html'>character</a></span><span class='op'>(</span><span class='fl'>0</span><span class='op'>)</span>,
+  label <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/character.html'>character</a></span><span class='op'>(</span><span class='fl'>0</span><span class='op'>)</span>,
+  code <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/character.html'>character</a></span><span class='op'>(</span><span class='fl'>0</span><span class='op'>)</span>,
+  script <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/character.html'>character</a></span><span class='op'>(</span><span class='fl'>0</span><span class='op'>)</span>,
+  <span class='va'>...</span>
+<span class='op'>)</span>
+
+<span class='fu'>snowflake_cdisc_dataset_connector</span><span class='op'>(</span>
+  <span class='va'>dataname</span>,
+  <span class='va'>sql_query</span>,
+  keys <span class='op'>=</span> <span class='fu'><a href='get_cdisc_keys.html'>get_cdisc_keys</a></span><span class='op'>(</span><span class='va'>dataname</span><span class='op'>)</span>,
+  parent <span class='op'>=</span> <span class='kw'>if</span> <span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/identical.html'>identical</a></span><span class='op'>(</span><span class='va'>dataname</span>, <span class='st'>"ADSL"</span><span class='op'>)</span><span class='op'>)</span> <span class='fu'><a href='https://rdrr.io/r/base/character.html'>character</a></span><span class='op'>(</span><span class='fl'>0L</span><span class='op'>)</span> <span class='kw'>else</span> <span class='st'>"ADSL"</span>,
   label <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/character.html'>character</a></span><span class='op'>(</span><span class='fl'>0</span><span class='op'>)</span>,
   code <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/character.html'>character</a></span><span class='op'>(</span><span class='fl'>0</span><span class='op'>)</span>,
   script <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/character.html'>character</a></span><span class='op'>(</span><span class='fl'>0</span><span class='op'>)</span>,
@@ -200,11 +213,18 @@ this/these object(s) should be included. Please note that <code>vars</code>
 are included to this object as local <code>vars</code> and they cannot be modified
 within another dataset.</p></td>
     </tr>
+    <tr>
+      <th>parent</th>
+      <td><p>optional, (<code>character</code>) <br />
+parent dataset name</p></td>
+    </tr>
     </table>
 
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
     <p>Create a <code>DatasetConnector</code> from <code>Snowflake</code>.</p>
+<p>Create a <code>CDISCDatasetConnector</code> from <code>Snowflake</code> with keys and parent name assigned
+automatically by <code>dataname</code>.</p>
 
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

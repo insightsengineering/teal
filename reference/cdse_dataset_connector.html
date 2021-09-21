@@ -40,7 +40,8 @@
 
 
 <meta property="og:title" content="CDSE DatasetConnector — cdse_dataset_connector" />
-<meta property="og:description" content="" />
+<meta property="og:description" content="
+" />
 
 
 
@@ -142,12 +143,24 @@
 
     <div class="ref-description">
     <p><a href='https://lifecycle.r-lib.org/articles/stages.html#experimental'><img src='figures/lifecycle-experimental.svg' alt='[Experimental]' /></a></p>
+<p><a href='https://lifecycle.r-lib.org/articles/stages.html#experimental'><img src='figures/lifecycle-experimental.svg' alt='[Experimental]' /></a></p>
     </div>
 
     <pre class="usage"><span class='fu'>cdse_dataset_connector</span><span class='op'>(</span>
   <span class='va'>dataname</span>,
   <span class='va'>cid</span>,
   keys <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/character.html'>character</a></span><span class='op'>(</span><span class='fl'>0</span><span class='op'>)</span>,
+  label <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/character.html'>character</a></span><span class='op'>(</span><span class='fl'>0</span><span class='op'>)</span>,
+  code <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/character.html'>character</a></span><span class='op'>(</span><span class='fl'>0</span><span class='op'>)</span>,
+  script <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/character.html'>character</a></span><span class='op'>(</span><span class='fl'>0</span><span class='op'>)</span>,
+  <span class='va'>...</span>
+<span class='op'>)</span>
+
+<span class='fu'>cdse_cdisc_dataset_connector</span><span class='op'>(</span>
+  <span class='va'>dataname</span>,
+  <span class='va'>cid</span>,
+  keys <span class='op'>=</span> <span class='fu'><a href='get_cdisc_keys.html'>get_cdisc_keys</a></span><span class='op'>(</span><span class='va'>dataname</span><span class='op'>)</span>,
+  parent <span class='op'>=</span> <span class='kw'>if</span> <span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/identical.html'>identical</a></span><span class='op'>(</span><span class='va'>dataname</span>, <span class='st'>"ADSL"</span><span class='op'>)</span><span class='op'>)</span> <span class='fu'><a href='https://rdrr.io/r/base/character.html'>character</a></span><span class='op'>(</span><span class='fl'>0L</span><span class='op'>)</span> <span class='kw'>else</span> <span class='st'>"ADSL"</span>,
   label <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/character.html'>character</a></span><span class='op'>(</span><span class='fl'>0</span><span class='op'>)</span>,
   code <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/character.html'>character</a></span><span class='op'>(</span><span class='fl'>0</span><span class='op'>)</span>,
   script <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/character.html'>character</a></span><span class='op'>(</span><span class='fl'>0</span><span class='op'>)</span>,
@@ -200,12 +213,33 @@ this/these object(s) should be included. Please note that <code>vars</code>
 are included to this object as local <code>vars</code> and they cannot be modified
 within another dataset.</p></td>
     </tr>
+    <tr>
+      <th>parent</th>
+      <td><p>optional, (<code>character</code>) <br />
+parent dataset name</p></td>
+    </tr>
     </table>
 
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
     <p>Create a <code>DatasetConnector</code> from <code>CDSE</code>.</p>
+<p>Create a <code>CDISCDatasetConnector</code> from <code>CDSE</code> with keys and parent name assigned
+automatically by <code>dataname</code>.</p>
 
+    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
+    <pre class="examples"><div class='input'><span class='kw'>if</span> <span class='op'>(</span><span class='st'>"CDSE"</span> <span class='op'>%in%</span> <span class='fu'><a href='https://rdrr.io/r/utils/installed.packages.html'>installed.packages</a></span><span class='op'>(</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>{</span>
+  <span class='va'>x</span> <span class='op'>&lt;-</span> <span class='fu'>cdse_dataset_connector</span><span class='op'>(</span>
+    dataname <span class='op'>=</span> <span class='st'>"MAE"</span>,
+    cid <span class='op'>=</span> <span class='st'>"cid6828341065561714688"</span>
+  <span class='op'>)</span>
+  <span class='va'>x</span><span class='op'>$</span><span class='fu'>get_code</span><span class='op'>(</span><span class='op'>)</span>
+<span class='op'>}</span>
+<span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span>
+<span class='fu'><a href='load_dataset.html'>load_dataset</a></span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span>
+<span class='fu'><a href='get_dataset.html'>get_dataset</a></span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span>
+<span class='va'>x</span><span class='op'>$</span><span class='fu'>get_raw_data</span><span class='op'>(</span><span class='op'>)</span>
+<span class='op'>}</span>
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
