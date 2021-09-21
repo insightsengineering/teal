@@ -94,7 +94,8 @@ The \code{sep} input has to be \code{" - "} in this case.
 \item{selected}{(\code{character} or \code{numeric} or \code{logical} or (\code{delayed_data}) object.
 Named character vector to define the selected
 values of a shiny \code{\link[shiny]{selectInput}} (default values). This value will
-be displayed inside the shiny app upon start.}
+be displayed inside the shiny app upon start. If \code{TRUE} then selects all possible choices,
+if \code{FALSE} then selects no choices.}
 
 \item{label}{optional (\code{character}). Define a label
 on top of this specific shiny \code{\link[shiny]{selectInput}}.}

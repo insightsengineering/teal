@@ -41,7 +41,8 @@ The \code{sep} input has to be \code{" - "} in this case.
 \item{selected}{(\code{character} or \code{numeric} or \code{logical} or (\code{delayed_data}) object.
 Named character vector to define the selected
 values of a shiny \code{\link[shiny]{selectInput}} (default values). This value will
-be displayed inside the shiny app upon start.}
+be displayed inside the shiny app upon start. If \code{TRUE} then selects all possible choices,
+if \code{FALSE} then selects no choices.}
 
 \item{multiple}{(\code{logical}) Whether multiple values shall be allowed in the
 shiny \code{\link[shiny]{selectInput}}.}
@@ -153,6 +154,15 @@ the drop-down menu the app user will see:
       adsl_filter2 <- filter_spec(
         vars = choices_selected("ADSL", "SEX", fixed = TRUE),
         multiple = TRUE
+      )
+    }
+
+\item{Select all possible choices}
+\preformatted{
+      adsl_filter <- filter_spec(
+        vars = "SEX",
+        multiple = TRUE,
+        selected = TRUE
       )
     }
 }

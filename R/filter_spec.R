@@ -34,7 +34,8 @@
 #' @param selected (\code{character} or \code{numeric} or \code{logical} or (\code{delayed_data}) object.
 #'  Named character vector to define the selected
 #'  values of a shiny \code{\link[shiny]{selectInput}} (default values). This value will
-#'  be displayed inside the shiny app upon start.
+#'  be displayed inside the shiny app upon start. If `TRUE` then selects all possible choices,
+#'  if `FALSE` then selects no choices.
 #'
 #' @param drop_keys optional, (\code{logical}) whether to drop filter column from the dataset keys,
 #'   \code{TRUE} on default
@@ -152,6 +153,15 @@
 #'         multiple = TRUE
 #'       )
 #'     }
+#'
+#'   \item{Select all possible choices}
+#'     \preformatted{
+#'       adsl_filter <- filter_spec(
+#'         vars = "SEX",
+#'         multiple = TRUE,
+#'         selected = TRUE
+#'       )
+#'     }
 #' }
 #'
 #' @examples
@@ -185,13 +195,20 @@ filter_spec <- function(vars,
     is.null(selected) ||
     is_character_vector(selected) ||
     is_numeric_vector(selected) ||
-    is_logical_vector(selected) ||
+    is_logical_single(selected) ||
     is(selected, "delayed_data")
   )
   stopifnot(is_logical_single(multiple))
   stopifnot(is.null(label) || is_character_single(label))
   stopifnot(is_character_single(sep))
   stopifnot(is_logical_single(drop_keys))
+
+  selected <- if (is.logical(selected)) {
+    if(selected) {
+      multiple <- length(choices) > 1
+      choices
+    } else NULL
+  } else selected
 
   if (is(vars, "choices_selected")) {
     filter_spec_internal(
@@ -367,11 +384,10 @@ filter_spec_internal.delayed_data <- function(vars_choices, # nolint
     is.null(selected) ||
       is_character_vector(selected) ||
       is_numeric_vector(selected) ||
-      is_logical_vector(selected) ||
       is(selected, "delayed_data")
   )
 
-  out <- structure(
+  structure(
     list(
       vars_choices = vars_choices,
       vars_selected = vars_selected,
@@ -393,7 +409,6 @@ filter_spec_internal.delayed_data <- function(vars_choices, # nolint
       "filter_spec",
       "delayed_data")
     )
-  return(out)
 }
 
 #' @rdname filter_spec_internal
@@ -435,28 +450,28 @@ filter_spec_internal.default <- function(vars_choices, # nousage
 
   if (!is.null(selected)) {
     stopifnot(multiple || length(selected) == 1)
-    stopifnot(is_character_vector(selected) || is_numeric_vector(selected) || is_logical_vector(selected))
+    stopifnot(is_character_vector(selected) || is_numeric_vector(selected))
     stopifnot(all(!duplicated(selected)))
     stopifnot(all(selected %in% choices))
   }
 
-  res <- list(
-    vars_choices = vars_choices,
-    vars_selected = vars_selected,
-    vars_label = vars_label,
-    vars_fixed = vars_fixed,
-    vars_multiple = vars_multiple,
-    choices = choices,
-    selected = selected,
-    label = label,
-    multiple = multiple,
-    fixed = fixed,
-    sep = sep,
-    drop_keys = drop_keys,
-    dataname = dataname, # modified by data_extract_spec
-    initialized = initialized
+  structure(
+    list(
+      vars_choices = vars_choices,
+      vars_selected = vars_selected,
+      vars_label = vars_label,
+      vars_fixed = vars_fixed,
+      vars_multiple = vars_multiple,
+      choices = choices,
+      selected = selected,
+      label = label,
+      multiple = multiple,
+      fixed = fixed,
+      sep = sep,
+      drop_keys = drop_keys,
+      dataname = dataname, # modified by data_extract_spec
+      initialized = initialized
+    ),
+    class = "filter_spec"
   )
-  class(res) <- "filter_spec"
-
-  return(res)
 }

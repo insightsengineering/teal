@@ -4,6 +4,7 @@
 * Added `cdse_dataset_connector` to create delayed data objects from `CDSE`.
 * Added `split` and `merge` methods to the `JoinKeys` object.
 * Added a new public facing constructor wrapper, `mae_dataset`.
+* Expanded the meaning of the `selected` parameter to `filter_spec`. Pass `TRUE` to select all choices and `FALSE` to select nothing.
 
 ### Bug fixes
 * Fixed the bug caused by calling `mutate_dataset` multiple times on the same `DatasetConnector` or `Dataset` object.
