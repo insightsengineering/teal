@@ -1,5 +1,5 @@
 
-url: https://go.roche.com/nest-docs/releases/latest/api-reference/teal
+url: https://insightsengineering.github.io/teal
 
 template:
   params:
@@ -8,7 +8,7 @@ template:
 navbar:
   right:
     - icon: fa-github
-      href: https://github.roche.com/NEST/teal
+      href: https://github.com/insightsengineering/teal
 
 reference:
   - title: Teal Core Functions
