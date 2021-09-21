@@ -204,7 +204,7 @@ filter_spec <- function(vars,
   stopifnot(is_logical_single(drop_keys))
 
   selected <- if (is.logical(selected)) {
-    if(selected) {
+    if (selected) {
       multiple <- length(choices) > 1
       choices
     } else NULL
