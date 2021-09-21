@@ -208,6 +208,14 @@ rice_data <- function(..., connection = rice_connection(), additional_ui = NULL)
     }
   )
 
+  x$set_preopen_server(
+    function(input, output, session, connectors, connection) {
+      callModule(connection$get_preopen_server(),
+                 id = "open_connection",
+                 connection = connection)
+    }
+  )
+
   x$set_server(
     function(input, output, session, connectors, connection) {
       # opens connection
@@ -237,8 +245,6 @@ rice_data <- function(..., connection = rice_connection(), additional_ui = NULL)
   )
   return(x)
 }
-
-
 
 #' \code{RelationalDataConnector} connector for \code{TERADATA}
 #'
