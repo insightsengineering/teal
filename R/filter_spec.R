@@ -35,7 +35,7 @@
 #'  Named character vector to define the selected
 #'  values of a shiny \code{\link[shiny]{selectInput}} (default values). This value will
 #'  be displayed inside the shiny app upon start. If `TRUE` then selects all possible choices,
-#'  if `FALSE` then selects no choices.
+#'  if `FALSE`, `NULL` then selects no choices. Defaut: `NULL`.
 #'
 #' @param drop_keys optional, (\code{logical}) whether to drop filter column from the dataset keys,
 #'   \code{TRUE} on default
