@@ -5,6 +5,7 @@
 #' @description
 #' Implements the queue abstract data type. The last element added to this queue is
 #' the last one to be returned from it.
+#' @export
 #'
 Queue <- R6::R6Class( # nolint
   classname = "Queue",
