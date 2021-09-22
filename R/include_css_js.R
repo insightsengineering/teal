@@ -8,6 +8,8 @@
 #' @param package (`character`) package name of files to be included
 #'
 #' @return HTML code that includes `CSS` files
+#'
+#' @export
 include_css_files <- function(pattern = "*", package = "teal") {
   css_files <- list.files(
     system.file("css", package = package, mustWork = TRUE),
@@ -16,6 +18,7 @@ include_css_files <- function(pattern = "*", package = "teal") {
   )
   return(singleton(lapply(css_files, includeCSS)))
 }
+
 
 #' Include `JS` files from `/inst/js/` package directory to application header
 #'
@@ -28,6 +31,8 @@ include_css_files <- function(pattern = "*", package = "teal") {
 #' @param except (`character`) vector of basename filenames to be excluded
 #'
 #' @return HTML code that includes `JS` files
+#'
+#' @export
 include_js_files <- function(pattern = "*", package = "teal", except = NULL) {
   stopifnot(is.null(except) || is_character_vector(except))
 
