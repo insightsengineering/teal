@@ -91,10 +91,12 @@ The \code{sep} input has to be \code{" - "} in this case.
 
 \code{delayed_data} objects can be created via \code{\link{variable_choices}} or \code{\link{value_choices}}.}
 
-\item{selected}{(\code{character} or \code{numeric} or \code{logical} or (\code{delayed_data}) object.
+\item{selected}{(\code{character} or \code{numeric} or \code{logical} or
+(\code{delayed_data} or (\code{all_choices})) object.
 Named character vector to define the selected
 values of a shiny \code{\link[shiny]{selectInput}} (default values). This value will
-be displayed inside the shiny app upon start.}
+be displayed inside the shiny app upon start. The \code{all_choices} object indicates selecting
+all possible choices.}
 
 \item{label}{optional (\code{character}). Define a label
 on top of this specific shiny \code{\link[shiny]{selectInput}}.}
