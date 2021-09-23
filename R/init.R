@@ -127,20 +127,30 @@ init <- function(data,
                  header = tags$p("Add Title Here"),
                  footer = tags$p("Add Footer Here"),
                  id = character(0)) {
+  if (is(data, "list")) {
+    data_names_call <- substitute(data)
+    data_names_list <- lapply(1:length(data_names_call), function(x) as.character(data_names_call[[x]]))
+    data_names <- unlist(data_names_list[2:length(data_names_list)])
+  } else if (is(data, "data.frame")) {
+    data_names <- as.character(substitute(data))
+    data <- list(data)
+  }
+
   stopifnot(
     is(data, "RelationalData") || is(data, "list"),
     is(modules, "list") || is(modules, "teal_modules"),
     is.null(title) || is_character_single(title),
     is_fully_named_list(filter),
-    ifelse(!is.list(data), all(names(filter) %in% get_dataname(data)), all(names(filter) %in% names(data))),
+    ifelse(!is.list(data), all(names(filter) %in% get_dataname(data)), all(names(filter) %in% data_names)),
     is_character_vector(id, min_length = 0, max_length = 1)
   )
 
   if(is(modules, "list"))  modules <- do.call(root_modules, modules)
+
   if(is(data, "list")) {
     data <- do.call(
       teal_data,
-      lapply(seq_len(length(names(data))), function(y) dataset(dataname = names(data)[y], x = data[[y]]))
+      lapply(seq_len(length(data)), function(y) dataset(dataname = data_names[y], x = data[[y]]))
     )
   }
 
