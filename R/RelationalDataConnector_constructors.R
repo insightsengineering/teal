@@ -368,14 +368,14 @@ teradata_data <- function(..., connection = teradata_connection()) {
 #' data <- snowflake_data(
 #'   snowflake_cdisc_dataset_connector(
 #'     dataname ="ADSL",
-#'     sql_query = <<sql_query>>,
-#'   ) %>% mutate_dataset(<<any mutations required, e.g. to convert data types>>),
+#'     sql_query = "sql_query",
+#'   ) %>% mutate_dataset("any mutations required, e.g. to convert data types"),
 #'   connection = snowflake_connection(
 #'     open_args = list(
-#'       role = <<role>>,
-#'       database = <<database>>,
-#'       schema = <<schema>>,
-#'       warehouse = <<warehouse>>
+#'       role = "role",
+#'       database = "database",
+#'       schema = "schema",
+#'       warehouse = "warehouse"
 #'     )
 #'   )
 #' )
@@ -399,6 +399,7 @@ teradata_data <- function(..., connection = teradata_connection()) {
 #'
 #' shinyApp(app$ui, app$server)
 #' }
+#'
 #' @export
 snowflake_data <- function(..., connection) {
   connectors <- list(...)
