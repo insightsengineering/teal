@@ -1,0 +1,11 @@
+pandoc: 1.19.2.1
+pkgdown: 1.3.0
+pkgdown_sha: ~
+articles:
+  01_getting_started: 01_getting_started.html
+  10_teal_design_and_implementation: 10_teal_design_and_implementation.html
+  11_teal_desiderata: 11_teal_desiderata.html
+urls:
+  reference: https://pages.github.roche.com/NEST/teal/reference
+  article: https://pages.github.roche.com/NEST/teal/articles
+
