@@ -64,3 +64,10 @@ testthat::test_that("choices_selected does not add selected to choices when sele
   test <- choices_selected(choices = c("a"), selected = "b")
   testthat::expect_equal(test$choices, "a")
 })
+
+testthat::test_that("all_choices is the same as selecting all choices", {
+  testthat::expect_equal(
+    choices_selected(choices = letters, selected = letters),
+    choices_selected(choices = letters, selected = all_choices())
+  )
+})
