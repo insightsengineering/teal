@@ -5,14 +5,20 @@
 #' as needed. Thus, we do not export this method
 #'
 #' @param pattern (`character`) pattern of files to be included
+#' @param package (`character`) name of package that contains the files to be included
 #'
 #' @return HTML code that includes `CSS` files
-include_css_files <- function(pattern = "*") {
+#'
+#' @export
+include_css_files <- function(pattern = "*", package = "teal") {
   css_files <- list.files(
-    system.file("css", package = "teal", mustWork = TRUE), pattern = pattern, full.names = TRUE
+    system.file("css", package = package, mustWork = TRUE),
+    pattern = pattern,
+    full.names = TRUE
   )
   return(singleton(lapply(css_files, includeCSS)))
 }
+
 
 #' Include `JS` files from `/inst/js/` package directory to application header
 #'
@@ -21,13 +27,16 @@ include_css_files <- function(pattern = "*") {
 #' as needed. Thus, we do not export this method
 #'
 #' @param pattern (`character`) pattern of files to be included, passed to `system.file`
+#' @param package (`character`) name of package that contains the files to be included
 #' @param except (`character`) vector of basename filenames to be excluded
 #'
 #' @return HTML code that includes `JS` files
-include_js_files <- function(pattern = "*", except = NULL) {
+#'
+#' @export
+include_js_files <- function(pattern = "*", package = "teal", except = NULL) {
   stopifnot(is.null(except) || is_character_vector(except))
 
-  js_files <- list.files(system.file("js", package = "teal", mustWork = TRUE), pattern = pattern, full.names = TRUE)
+  js_files <- list.files(system.file("js", package = package, mustWork = TRUE), pattern = pattern, full.names = TRUE)
   js_files <- js_files[!(basename(js_files) %in% except)] # no-op if except is NULL
 
   return(singleton(lapply(js_files, includeScript)))
