@@ -204,8 +204,12 @@ filter_spec <- function(vars,
   stopifnot(is_logical_single(drop_keys))
 
   if (is(selected, "all_choices")) {
-    selected <- choices
-    multiple <- length(selected) > 1
+    if (is.null(choices)) {
+      multiple <- TRUE
+    } else {
+      selected <- choices
+      multiple <- length(selected) > 1
+    }
   }
 
   if (is(vars, "choices_selected")) {
@@ -383,7 +387,8 @@ filter_spec_internal.delayed_data <- function(vars_choices, # nolint
       is_character_vector(selected) ||
       is_numeric_vector(selected) ||
       is_logical_vector(selected) ||
-      is(selected, "delayed_data")
+      is(selected, "delayed_data") ||
+      is(selected, "all_choices")
   )
 
   out <- structure(
@@ -448,7 +453,7 @@ filter_spec_internal.default <- function(vars_choices, # nousage
     stopifnot(all(vapply(split_choices, length, integer(1)) == length(vars_selected)))
   }
 
-  if (!is.null(selected)) {
+  if (!is.null(selected) && !is(selected, "all_choices")) {
     stopifnot(multiple || length(selected) == 1)
     stopifnot(is_character_vector(selected) || is_numeric_vector(selected) || is_logical_vector(selected))
     stopifnot(all(!duplicated(selected)))
