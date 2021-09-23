@@ -1,5 +1,5 @@
 #' An S3 structure representing the selection of all
-#' possible choices in the `filter_spec` object.
+#' possible choices in a `filter_spec` or `choices_selected` object.
 #'
 #' @return `all_choices` object
 #'
