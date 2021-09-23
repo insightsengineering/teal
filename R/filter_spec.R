@@ -186,12 +186,18 @@ filter_spec <- function(vars,
     is_character_vector(selected) ||
     is_numeric_vector(selected) ||
     is_logical_vector(selected) ||
-    is(selected, "delayed_data")
+    is(selected, "delayed_data") ||
+    is(selected, "all_choices")
   )
   stopifnot(is_logical_single(multiple))
   stopifnot(is.null(label) || is_character_single(label))
   stopifnot(is_character_single(sep))
   stopifnot(is_logical_single(drop_keys))
+
+  if (is(selected, "all_choices")) {
+    selected <- choices
+    multiple = length(selected) > 1
+  }
 
   if (is(vars, "choices_selected")) {
     filter_spec_internal(
