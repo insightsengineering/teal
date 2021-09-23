@@ -27,7 +27,7 @@ include_css_files <- function(pattern = "*", package = "teal") {
 #' as needed. Thus, we do not export this method
 #'
 #' @param pattern (`character`) pattern of files to be included, passed to `system.file`
-#' @param package (`character`) package name of files to be included
+#' @param package (`character`) name of package that contains the files to be included
 #' @param except (`character`) vector of basename filenames to be excluded
 #'
 #' @return HTML code that includes `JS` files
