@@ -9,7 +9,7 @@ include_js_files(pattern = "*", package = "teal", except = NULL)
 \arguments{
 \item{pattern}{(\code{character}) pattern of files to be included, passed to \code{system.file}}
 
-\item{package}{(\code{character}) package name of files to be included}
+\item{package}{(\code{character}) name of package that contains the files to be included}
 
 \item{except}{(\code{character}) vector of basename filenames to be excluded}
 }
