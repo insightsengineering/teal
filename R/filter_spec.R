@@ -196,7 +196,7 @@ filter_spec <- function(vars,
 
   if (is(selected, "all_choices")) {
     selected <- choices
-    multiple = length(selected) > 1
+    multiple <- length(selected) > 1
   }
 
   if (is(vars, "choices_selected")) {
