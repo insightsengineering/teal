@@ -5,7 +5,7 @@
 #' as needed. Thus, we do not export this method
 #'
 #' @param pattern (`character`) pattern of files to be included
-#' @param package (`character`) package name of files to be included
+#' @param package (`character`) name of package that contains the files to be included
 #'
 #' @return HTML code that includes `CSS` files
 #'
