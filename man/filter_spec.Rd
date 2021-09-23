@@ -142,8 +142,7 @@ the drop-down menu the app user will see:
       )
     }
 }
-
-\item{The version with \code{choices_selected}}
+\item{The version with \code{choices_selected}
 \preformatted{
       adsl_filter <- filter_spec(
         vars = choices_selected("ADSL", "SEX", fixed = FALSE),
@@ -155,6 +154,20 @@ the drop-down menu the app user will see:
         multiple = TRUE
       )
     }
+}
+\item{Choose all choices
+\preformatted{
+      adsl_filter <- filter_spec(
+        vars = choices_selected("ADSL", "SEX", fixed = FALSE),
+        multiple = TRUE
+      )
+
+      adsl_filter2 <- filter_spec(
+        vars = choices_selected("ADSL", "SEX", fixed = TRUE),
+        multiple = TRUE
+      )
+    }
+}
 }
 }
 \examples{
