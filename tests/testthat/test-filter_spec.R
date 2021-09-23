@@ -406,5 +406,6 @@ testthat::test_that("delayed version of filter_spec", {
 testthat::test_that("all_choices passed to selected identical to all choices", {
   testthat::expect_equal(
     filter_spec(vars = "test", choices = c(1, 2), selected = c(1, 2)),
-    filter_spec(vars = "test", choices = c(1, 2), selected = all_choices()))
+    filter_spec(vars = "test", choices = c(1, 2), selected = all_choices())
+  )
 })
