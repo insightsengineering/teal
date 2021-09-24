@@ -129,7 +129,7 @@
 #' )
 #'
 #' # Both below objects are semantically the same
-#' select_spec(chocies = variable_choices("ADSL"), selected = variable_choices("ADSL"))
+#' select_spec(choices = variable_choices("ADSL"), selected = variable_choices("ADSL"))
 #' select_spec(choices = variable_choices("ADSL"), selected = all_choices())
 #'
 select_spec <- function(choices,
