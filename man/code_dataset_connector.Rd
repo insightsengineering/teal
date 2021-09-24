@@ -2,6 +2,7 @@
 % Please edit documentation in R/DatasetConnector_constructors.R
 \name{code_dataset_connector}
 \alias{code_dataset_connector}
+\alias{code_cdisc_dataset_connector}
 \title{Code \code{DatasetConnector}}
 \usage{
 code_dataset_connector(
@@ -11,6 +12,16 @@ code_dataset_connector(
   label = character(0),
   mutate_code = character(0),
   mutate_script = character(0),
+  ...
+)
+
+code_cdisc_dataset_connector(
+  dataname,
+  code,
+  keys = get_cdisc_keys(dataname),
+  parent = if (identical(dataname, "ADSL")) character(0L) else "ADSL",
+  label = character(0),
+  mutate_code = character(0),
   ...
 )
 }
@@ -43,12 +54,20 @@ In case when this object code depends on the \code{raw_data} from the other
 this/these object(s) should be included. Please note that \code{vars}
 are included to this object as local \code{vars} and they cannot be modified
 within another dataset.}
+
+\item{parent}{optional, (\code{character}) \cr
+parent dataset name}
 }
 \description{
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
+
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
 }
 \details{
 Create a \code{DatasetConnector} from a string of code.
+
+Create a \code{CDISCDatasetConnector} from a string of code with keys
+assigned automatically by \code{dataname}.
 }
 \examples{
 library(scda)

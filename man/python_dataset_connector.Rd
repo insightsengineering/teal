@@ -2,6 +2,7 @@
 % Please edit documentation in R/DatasetConnector_constructors.R
 \name{python_dataset_connector}
 \alias{python_dataset_connector}
+\alias{python_cdisc_dataset_connector}
 \title{\code{Python} \code{DatasetConnector}}
 \usage{
 python_dataset_connector(
@@ -13,6 +14,19 @@ python_dataset_connector(
   label = character(0),
   mutate_code = character(0),
   mutate_script = character(0),
+  vars = list()
+)
+
+python_cdisc_dataset_connector(
+  dataname,
+  file,
+  code,
+  object,
+  keys = get_cdisc_keys(dataname),
+  parent = if (identical(dataname, "ADSL")) character(0L) else "ADSL",
+  mutate_code = character(0),
+  mutate_script = character(0),
+  label = character(0),
   vars = list()
 )
 }
@@ -53,10 +67,16 @@ It's recommended to include \code{Dataset} or \code{DatasetConnector} objects to
 the \code{vars} list to preserve reproducibility. Please note that \code{vars}
 are included to this object as local \code{vars} and they cannot be modified
 within another dataset.}
+
+\item{parent}{optional, (\code{character}) \cr
+parent dataset name}
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
 Create a \code{DatasetConnector} from \code{.py} file or through python code supplied directly.
+
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
+Create a \code{CDISCDatasetConnector} from \code{.py} file or through python code supplied directly.
 }
 \details{
 Note that in addition to the \code{reticulate} package, support for python requires an

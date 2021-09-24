@@ -2,12 +2,24 @@
 % Please edit documentation in R/DatasetConnector_constructors.R
 \name{cdse_dataset_connector}
 \alias{cdse_dataset_connector}
+\alias{cdse_cdisc_dataset_connector}
 \title{\code{CDSE} \code{DatasetConnector}}
 \usage{
 cdse_dataset_connector(
   dataname,
   cid,
   keys = character(0),
+  label = character(0),
+  code = character(0),
+  script = character(0),
+  ...
+)
+
+cdse_cdisc_dataset_connector(
+  dataname,
+  cid,
+  keys = get_cdisc_keys(dataname),
+  parent = if (identical(dataname, "ADSL")) character(0L) else "ADSL",
   label = character(0),
   code = character(0),
   script = character(0),
@@ -43,10 +55,32 @@ In case when this object code depends on the \code{raw_data} from the other
 this/these object(s) should be included. Please note that \code{vars}
 are included to this object as local \code{vars} and they cannot be modified
 within another dataset.}
+
+\item{parent}{optional, (\code{character}) \cr
+parent dataset name}
 }
 \description{
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
+
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
 }
 \details{
 Create a \code{DatasetConnector} from \code{CDSE}.
+
+Create a \code{CDISCDatasetConnector} from \code{CDSE} with keys and parent name assigned
+automatically by \code{dataname}.
+}
+\examples{
+if ("CDSE" \%in\% installed.packages()) {
+  x <- cdse_dataset_connector(
+    dataname = "MAE",
+    cid = "cid6828341065561714688"
+  )
+  x$get_code()
+}
+\dontrun{
+load_dataset(x)
+get_dataset(x)
+x$get_raw_data()
+}
 }

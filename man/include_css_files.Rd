@@ -4,10 +4,12 @@
 \alias{include_css_files}
 \title{Include \code{CSS} files from \verb{/inst/css/} package directory to application header}
 \usage{
-include_css_files(pattern = "*")
+include_css_files(pattern = "*", package = "teal")
 }
 \arguments{
 \item{pattern}{(\code{character}) pattern of files to be included}
+
+\item{package}{(\code{character}) name of package that contains the files to be included}
 }
 \value{
 HTML code that includes \code{CSS} files
