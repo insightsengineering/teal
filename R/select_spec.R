@@ -184,6 +184,7 @@ select_spec.default <- function(choices,
                                 fixed = FALSE,
                                 always_selected = NULL,
                                 label = NULL) {
+  stopifnot(is.null(choices) || is.atomic(choices))
   stopifnot(is.null(selected) || is.atomic(selected))
 
   # if names is NULL, shiny will put strange labels (with quotes etc.) in the selectInputs, so we set it to the values
