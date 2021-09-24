@@ -15,7 +15,7 @@
 #' an end-user, don't use this function, but instead this module.
 #'
 #' @param data (`RelationalData` or `list`) R6 object where \code{cdisc_data} or \code{teal_data} returns such a one
-#'   or a list of data frames.
+#'   or a list of data frames and datasets (\code{cdisc_dataset} and \code {dataset} outputs).
 #' @param modules nested list with one list per module with the
 #'   following named list elements:
 #'   \tabular{ll}{
@@ -143,17 +143,20 @@ init <- function(data,
 
     named_data_list <- unlist(lapply(seq_along(data), function(y) {
       data_y <- list(data[[y]])
+      names_data_y <- names(data)[y]
       if (is(data[[y]], "data.frame")) {
-        names_data_y <- names(data)[y]
         if (is.null(names_data_y) || names_data_y == "") {
           names(data_y) <- as.character(data_names_call[[y]])
-          data_y
         } else {
           names(data_y) <- names_data[y]
-          data_y
-         }
+        }
+        data_y
        } else {
-         names(data_y) <- get_dataname(data[[y]])
+         if (is.null(names_data_y) || names_data_y == "") {
+          names(data_y) <- get_dataname(data[[y]])
+         } else {
+           names(data_y) <- names_data[y]
+         }
          data_y
        }
     }),

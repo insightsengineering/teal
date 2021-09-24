@@ -15,7 +15,8 @@ init(
 )
 }
 \arguments{
-\item{data}{(\code{RelationalData}) R6 object where \code{cdisc_data} or \code{teal_data} returns such a one.}
+\item{data}{(\code{RelationalData} or \code{list}) R6 object where \code{cdisc_data} or \code{teal_data} returns such a one
+or a list of data frames and datasets (\code{cdisc_dataset} and \code {dataset} outputs).}
 
 \item{modules}{nested list with one list per module with the
 following named list elements:
