@@ -15,7 +15,7 @@
 #' an end-user, don't use this function, but instead this module.
 #'
 #' @param data (`RelationalData` or `list`) R6 object where \code{cdisc_data} or \code{teal_data} returns such a one
-#'   or a list of data frames and datasets (\code{cdisc_dataset} and \code {dataset} outputs).
+#'   or a list of data frames and datasets as returned by \code{cdisc_dataset} or \code{dataset}.
 #' @param modules nested list with one list per module with the
 #'   following named list elements:
 #'   \tabular{ll}{
@@ -129,6 +129,7 @@ init <- function(data,
                  footer = tags$p("Add Footer Here"),
                  id = character(0)) {
   if (!is(data, "RelationalData")) {
+    #browser()
     if (is(data, "data.frame")) {
       names_data <- as.character(substitute(data))
       data <- list(data)
@@ -141,40 +142,36 @@ init <- function(data,
     data_names_call <- substitute(data)
     data_names_call[[1]] <- NULL
 
-    named_data_list <- unlist(lapply(seq_along(data), function(y) {
+    data <- unlist(lapply(seq_along(data), function(y) {
       data_y <- list(data[[y]])
       names_data_y <- names(data)[y]
-      if (is(data[[y]], "data.frame")) {
-        if (is.null(names_data_y) || names_data_y == "") {
+      if (is.null(names_data_y) || names_data_y == "") {
+        if (is(data[[y]], "data.frame")) {
           names(data_y) <- as.character(data_names_call[[y]])
         } else {
-          names(data_y) <- names_data[y]
+          names(data_y) <- get_dataname(data[[y]])
         }
         data_y
-       } else {
-         if (is.null(names_data_y) || names_data_y == "") {
-          names(data_y) <- get_dataname(data[[y]])
-         } else {
-           names(data_y) <- names_data[y]
-         }
-         data_y
-       }
+      } else {
+        names(data_y) <- names_data[y]
+        data_y
+      }
     }),
     recursive = FALSE)
 
-    named_datasets_list <- lapply(seq_along(named_data_list), function(y) {
-      if(is(named_data_list[[y]], "Dataset")) {
-        named_data_list[[y]]
-      } else if (names(named_data_list)[y] %in% names(default_cdisc_keys)) {
-        cdisc_dataset(dataname = names(named_data_list)[y], x = named_data_list[[y]])
+    data <- lapply(seq_along(data), function(y) {
+      if(is(data[[y]], "Dataset")) {
+        data[[y]]
+      } else if (names(data)[y] %in% names(default_cdisc_keys)) {
+        cdisc_dataset(dataname = names(data)[y], x = data[[y]])
       } else {
-        dataset(dataname = names(named_data_list)[y], x = named_data_list[[y]])
+        dataset(dataname = names(data)[y], x = data[[y]])
       }
     })
 
     data <- do.call(
       teal_data,
-      named_datasets_list
+      data
     )
   }
 
