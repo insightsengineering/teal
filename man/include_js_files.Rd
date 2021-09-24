@@ -4,12 +4,10 @@
 \alias{include_js_files}
 \title{Include \code{JS} files from \verb{/inst/js/} package directory to application header}
 \usage{
-include_js_files(pattern = "*", package = "teal", except = NULL)
+include_js_files(pattern = "*", except = NULL)
 }
 \arguments{
 \item{pattern}{(\code{character}) pattern of files to be included, passed to \code{system.file}}
-
-\item{package}{(\code{character}) name of package that contains the files to be included}
 
 \item{except}{(\code{character}) vector of basename filenames to be excluded}
 }
