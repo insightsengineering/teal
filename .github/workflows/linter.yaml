@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - main
+      - pre-release
   pull_request:
 
 jobs:
@@ -20,12 +21,12 @@ jobs:
       - name: Lint Code Base
         uses: github/super-linter@v4
         env:
+          DEFAULT_BRANCH: main
           FILTER_REGEX_EXCLUDE: NEWS.md
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          DEFAULT_BRANCH: main
           VALIDATE_ALL_CODEBASE: false
           VALIDATE_BASH: true
           VALIDATE_DOCKERFILE: true
           VALIDATE_MARKDOWN: true
-          VALIDATE_R: true
+          VALIDATE_R: TRUE
           VALIDATE_YAML: true
