@@ -3,7 +3,7 @@
 \name{all_choices}
 \alias{all_choices}
 \title{An S3 structure representing the selection of all
-possible choices in a \code{filter_spec} or \code{choices_selected} object.}
+possible choices in a \code{filter_spec}, \code{select_spec} or \code{choices_selected} object.}
 \usage{
 all_choices()
 }
@@ -12,7 +12,7 @@ all_choices()
 }
 \description{
 An S3 structure representing the selection of all
-possible choices in a \code{filter_spec} or \code{choices_selected} object.
+possible choices in a \code{filter_spec}, \code{select_spec} or \code{choices_selected} object.
 }
 \examples{
 # Both structures are semantically identical
