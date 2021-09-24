@@ -35,7 +35,7 @@ no_select_keyword <- "-- no selection --"
 #'
 #' @examples
 #'
-#' # all_choices example-  semantically the same objects
+#' # all_choices example - semantically the same objects
 #' choices_selected(choices = letters, selected = all_choices())
 #' choices_selected(choices = letters, selected = letters)
 #'
