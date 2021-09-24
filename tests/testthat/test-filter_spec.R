@@ -290,7 +290,6 @@ vc_fun_short_exp <- structure(
 )
 
 testthat::test_that("delayed version of filter_spec", {
-
   # hard-coded vars & choices & selected
   obj <- filter_spec(
     vars = variable_choices("ADSL", subset = "ARMCD"),
@@ -401,5 +400,12 @@ testthat::test_that("delayed version of filter_spec", {
   testthat::expect_equal(
     res_obj[-match(c("choices", "selected"), names(res_obj))],
     exp_obj[-match(c("choices", "selected"), names(exp_obj))]
+  )
+})
+
+testthat::test_that("all_choices passed to selected identical to all choices", {
+  testthat::expect_equal(
+    filter_spec(vars = "test", choices = c(1, 2), selected = c(1, 2)),
+    filter_spec(vars = "test", choices = c(1, 2), selected = all_choices())
   )
 })

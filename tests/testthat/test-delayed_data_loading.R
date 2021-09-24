@@ -1,6 +1,5 @@
 # Contains integration tests between delayed data loading objects and
 # the objects responsible for loading, pulling and filtering the data
-
 library(random.cdisc.data)
 ADSL <- radsl(cached = TRUE) # nolint
 ADTTE <- radtte(cached = TRUE) # nolint

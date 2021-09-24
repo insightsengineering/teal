@@ -5,6 +5,7 @@
 * Added `datasetdb_dataset_connector` to create delayed data objects from `DataSetDB`.
 * Added `split` and `merge` methods to the `JoinKeys` object.
 * Added a new public facing constructor wrapper, `mae_dataset`.
+* Added `all_choices()` as a possible argument to the `selected` parameter of `filter_spec`, `select_spec` and `choices_selected` indicating that all choices are selected.
 
 ### Bug fixes
 * Fixed the bug caused by calling `mutate_dataset` multiple times on the same `DatasetConnector` or `Dataset` object.
