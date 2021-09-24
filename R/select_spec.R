@@ -144,7 +144,12 @@ select_spec <- function(choices,
   stopifnot(multiple || !is(selected, "all_choices"))
   if (fixed) stopifnot(is.null(always_selected))
 
-  UseMethod("select_spec", choices)
+  if(is(selected, "all_choices")) selected <- choices
+  if (is(choices, "delayed_data") || is(selected, "delayed_data")) {
+    select_spec.delayed_data(choices, selected, multiple, fixed, always_selected, label)
+  } else {
+    select_spec.default(choices, selected, multiple, fixed, always_selected, label)
+  }
 }
 
 #' @rdname select_spec
@@ -155,7 +160,6 @@ select_spec.delayed_data <- function(choices,
                                      fixed = FALSE,
                                      always_selected = NULL,
                                      label = NULL) {
-  if (is(selected, "all_choices")) selected <- choices
   stopifnot(is.null(selected) || is.atomic(selected) || is(selected, "delayed_data"))
 
   structure(
@@ -178,7 +182,6 @@ select_spec.default <- function(choices,
                                 fixed = FALSE,
                                 always_selected = NULL,
                                 label = NULL) {
-  if (is(selected, "all_choices")) selected <- choices
   stopifnot(is.null(selected) || is.atomic(selected))
 
   # if names is NULL, shiny will put strange labels (with quotes etc.) in the selectInputs, so we set it to the values

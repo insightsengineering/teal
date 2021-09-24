@@ -15,7 +15,7 @@ select_spec(
   label = NULL
 )
 
-\method{select_spec}{delayed_data}(
+select_spec.delayed_data(
   choices,
   selected = NULL,
   multiple = length(selected) > 1,
@@ -24,7 +24,7 @@ select_spec(
   label = NULL
 )
 
-\method{select_spec}{default}(
+select_spec.default(
   choices,
   selected = choices[1],
   multiple = length(selected) > 1,
