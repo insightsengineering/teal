@@ -40,8 +40,9 @@ of a shiny \code{\link[shiny]{selectInput}}. These have to be columns in the
 dataset defined in the \code{\link{data_extract_spec}} where this is called.
 \code{delayed_data} objects can be created via \code{\link{variable_choices}} or \code{\link{value_choices}}.}
 
-\item{selected}{optional (\code{character} or \code{NULL} or \code{delayed_data} object).
+\item{selected}{optional (\code{character} or \code{NULL} or \code{all_choices} or \code{delayed_data} object).
 Named character vector to define the selected values of a shiny \code{\link[shiny]{selectInput}}.
+Passing an \code{all_choices()} object indicates selecting all possible choices.
 Defaults to the first value of \code{choices} or \code{NULL} for delayed data loading.}
 
 \item{multiple}{(\code{logical}) Whether multiple values shall be allowed in the
