@@ -9,7 +9,7 @@
 select_spec(
   choices,
   selected = if (is(choices, "delayed_data")) NULL else choices[1],
-  multiple = length(selected) > 1,
+  multiple = length(selected) > 1 || is(selected, "all_choices"),
   fixed = FALSE,
   always_selected = NULL,
   label = NULL
@@ -132,6 +132,15 @@ select = select_spec(
       )
     }
 }
+\item{all_choices passed to selected}{
+\preformatted{
+      adsl_select <- select_spec(
+        label = "Select variable:",
+        choices = variable_choices("ADSL", c("BMRKR1", "BMRKR2")),
+        selected = all_choices()
+      )
+    }
+}
 }
 }
 \examples{
@@ -148,4 +157,9 @@ select_spec(
   }),
   multiple = TRUE
 )
+
+# Both below objects are semantically the same
+select_spec(chocies = variable_choices("ADSL"), selected = variable_choices("ADSL"))
+select_spec(choices = variable_choices("ADSL"), selected = all_choices())
+
 }

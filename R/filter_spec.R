@@ -180,7 +180,7 @@
 filter_spec <- function(vars,
                         choices = NULL,
                         selected = `if`(is(choices, "delayed_data"), NULL, choices[1]),
-                        multiple = length(selected) > 1,
+                        multiple = length(selected) > 1 || is(selected, "all_choices"),
                         label = NULL,
                         sep = if_null(attr(choices, "sep"), " - "),
                         drop_keys = FALSE) {
@@ -204,11 +204,9 @@ filter_spec <- function(vars,
   stopifnot(is.null(label) || is_character_single(label))
   stopifnot(is_character_single(sep))
   stopifnot(is_logical_single(drop_keys))
+  stopifnot(multiple || !is(selected, "all_choices"))
 
-  if (is(selected, "all_choices")) {
-    multiple <- TRUE
-    if (!is.null(choices)) selected <- choices
-  }
+  if (is(selected, "all_choices") && !is.null(choices)) selected <- choices
 
   if (is(vars, "choices_selected")) {
     filter_spec_internal(

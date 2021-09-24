@@ -97,6 +97,15 @@
 #'       )
 #'     }
 #'   }
+#'   \item{all_choices passed to selected}{
+#'     \preformatted{
+#'       adsl_select <- select_spec(
+#'         label = "Select variable:",
+#'         choices = variable_choices("ADSL", c("BMRKR1", "BMRKR2")),
+#'         selected = all_choices()
+#'       )
+#'     }
+#'   }
 #' }
 #'
 #' @rdname select_spec
@@ -117,9 +126,14 @@
 #'   }),
 #'   multiple = TRUE
 #' )
+#'
+#' # Both below objects are semantically the same
+#' select_spec(chocies = variable_choices("ADSL"), selected = variable_choices("ADSL"))
+#' select_spec(choices = variable_choices("ADSL"), selected = all_choices())
+#'
 select_spec <- function(choices,
                         selected = `if`(is(choices, "delayed_data"), NULL, choices[1]),
-                        multiple = length(selected) > 1,
+                        multiple = length(selected) > 1 || is(selected, "all_choices"),
                         fixed = FALSE,
                         always_selected = NULL,
                         label = NULL) {
@@ -127,11 +141,10 @@ select_spec <- function(choices,
   stopifnot(is_logical_single(fixed))
   stopifnot(is.null(always_selected) || is_character_vector(always_selected, 1))
   stopifnot(is.null(label) || is_character_single(label))
-  if (fixed) {
-    stopifnot(is.null(always_selected))
-  }
+  stopifnot(multiple || !is(selected, "all_choices"))
+  if (fixed) stopifnot(is.null(always_selected))
 
-  UseMethod("select_spec")
+  UseMethod("select_spec", choices)
 }
 
 #' @rdname select_spec
@@ -142,9 +155,10 @@ select_spec.delayed_data <- function(choices,
                                      fixed = FALSE,
                                      always_selected = NULL,
                                      label = NULL) {
+  if (is(selected, "all_choices")) selected <- choices
   stopifnot(is.null(selected) || is.atomic(selected) || is(selected, "delayed_data"))
 
-  out <- structure(
+  structure(
     list(
       choices = choices,
       selected = selected,
@@ -152,9 +166,8 @@ select_spec.delayed_data <- function(choices,
       multiple = multiple,
       fixed = fixed,
       label = label),
-    class = c("delayed_select_spec", "delayed_data", "select_spec"))
-
-  return(out)
+    class = c("delayed_select_spec", "delayed_data", "select_spec")
+  )
 }
 
 #' @rdname select_spec
@@ -165,6 +178,7 @@ select_spec.default <- function(choices,
                                 fixed = FALSE,
                                 always_selected = NULL,
                                 label = NULL) {
+  if (is(selected, "all_choices")) selected <- choices
   stopifnot(is.null(selected) || is.atomic(selected))
 
   # if names is NULL, shiny will put strange labels (with quotes etc.) in the selectInputs, so we set it to the values

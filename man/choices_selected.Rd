@@ -47,7 +47,7 @@ in case you want to keep your specific order of choices, set \code{keep_order} t
 }
 \examples{
 
-# all_choices example-  semantically the same objects
+# all_choices example - semantically the same objects
 choices_selected(choices = letters, selected = all_choices())
 choices_selected(choices = letters, selected = letters)
 
