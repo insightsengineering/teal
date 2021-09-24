@@ -162,6 +162,7 @@ select_spec.delayed_data <- function(choices,
                                      always_selected = NULL,
                                      label = NULL) {
   stopifnot(is.null(selected) || is.atomic(selected) || is(selected, "delayed_data"))
+  stopifnot(is.null(choices) || is.atomic(choices) || is(choices, "delayed_data"))
 
   structure(
     list(
