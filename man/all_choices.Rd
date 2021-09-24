@@ -28,4 +28,6 @@ filter_spec(
   selected = all_choices()
 )
 
+choices_selected(choices = letters, selected = letters)
+choices_selected(choices = letters, selected = all_choices())
 }
