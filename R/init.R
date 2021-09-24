@@ -14,7 +14,8 @@
 #' This is a wrapper function around the `module_teal.R` functions. Unless you are
 #' an end-user, don't use this function, but instead this module.
 #'
-#' @param data (`RelationalData`) R6 object where \code{cdisc_data} or \code{teal_data} returns such a one.
+#' @param data (`RelationalData` or `list`) R6 object where \code{cdisc_data} or \code{teal_data} returns such a one
+#'   or a list of data frames.
 #' @param modules nested list with one list per module with the
 #'   following named list elements:
 #'   \tabular{ll}{
@@ -127,32 +128,63 @@ init <- function(data,
                  header = tags$p("Add Title Here"),
                  footer = tags$p("Add Footer Here"),
                  id = character(0)) {
-  if (is(data, "list")) {
+  if (!is(data, "RelationalData")) {
+    if (is(data, "data.frame")) {
+      names_data <- as.character(substitute(data))
+      data <- list(data)
+      names(data) <- names_data
+    } else if (is(data, "Dataset")) {
+      data <- list(data)
+    }
+
+    names_data <- names(data)
     data_names_call <- substitute(data)
-    data_names_list <- lapply(1:length(data_names_call), function(x) as.character(data_names_call[[x]]))
-    data_names <- unlist(data_names_list[2:length(data_names_list)])
-  } else if (is(data, "data.frame")) {
-    data_names <- as.character(substitute(data))
-    data <- list(data)
+    data_names_call[[1]] <- NULL
+
+    named_data_list <- unlist(lapply(seq_along(data), function(y) {
+      data_y <- list(data[[y]])
+      if (is(data[[y]], "data.frame")) {
+        names_data_y <- names(data)[y]
+        if (is.null(names_data_y) || names_data_y == "") {
+          names(data_y) <- as.character(data_names_call[[y]])
+          data_y
+        } else {
+          names(data_y) <- names_data[y]
+          data_y
+         }
+       } else {
+         names(data_y) <- get_dataname(data[[y]])
+         data_y
+       }
+    }),
+    recursive = FALSE)
+
+    named_datasets_list <- lapply(seq_along(named_data_list), function(y) {
+      if(is(named_data_list[[y]], "Dataset")) {
+        named_data_list[[y]]
+      } else if (names(named_data_list)[y] %in% names(default_cdisc_keys)) {
+        cdisc_dataset(dataname = names(named_data_list)[y], x = named_data_list[[y]])
+      } else {
+        dataset(dataname = names(named_data_list)[y], x = named_data_list[[y]])
+      }
+    })
+
+    data <- do.call(
+      teal_data,
+      named_datasets_list
+    )
   }
 
   stopifnot(
-    is(data, "RelationalData") || is(data, "list"),
+    is(data, "RelationalData"),
     is(modules, "list") || is(modules, "teal_modules"),
     is.null(title) || is_character_single(title),
     is_fully_named_list(filter),
-    ifelse(!is.list(data), all(names(filter) %in% get_dataname(data)), all(names(filter) %in% data_names)),
+    all(names(filter) %in% get_dataname(data)),
     is_character_vector(id, min_length = 0, max_length = 1)
   )
 
   if(is(modules, "list"))  modules <- do.call(root_modules, modules)
-
-  if(is(data, "list")) {
-    data <- do.call(
-      teal_data,
-      lapply(seq_len(length(data)), function(y) dataset(dataname = data_names[y], x = data[[y]]))
-    )
-  }
 
   # Note regarding case `id = character(0)`:
   # rather than using `callModule` and creating a submodule of this module, we directly modify
