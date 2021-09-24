@@ -208,7 +208,6 @@ filter_spec <- function(vars,
   if (is(selected, "all_choices")) {
     multiple <- TRUE
     if (!is.null(choices)) selected <- choices
-    }
   }
 
   if (is(vars, "choices_selected")) {
