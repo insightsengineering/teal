@@ -129,9 +129,8 @@ init <- function(data,
                  footer = tags$p("Add Footer Here"),
                  id = character(0)) {
   if (!is(data, "RelationalData")) {
-    #browser()
     if (is(data, "data.frame")) {
-      names_data <- as.character(substitute(data))
+      names_data <- as.character(substitute(data))[1]
       data <- list(data)
       names(data) <- names_data
     } else if (is(data, "Dataset")) {
@@ -140,32 +139,36 @@ init <- function(data,
 
     names_data <- names(data)
     data_names_call <- substitute(data)
-    data_names_call[[1]] <- NULL
+    data_names_call <- if (is.name(data_names_call)) list(data_names_call) else data_names_call
+    if (length(data_names_call) > 1 && data_names_call[[1]] == "list") data_names_call[[1]] <- NULL
 
-    data <- unlist(lapply(seq_along(data), function(y) {
+    data_names_new <- unlist(lapply(seq_along(data), function(y) {
       data_y <- list(data[[y]])
       names_data_y <- names(data)[y]
       if (is.null(names_data_y) || names_data_y == "") {
         if (is(data[[y]], "data.frame")) {
-          names(data_y) <- as.character(data_names_call[[y]])
-        } else {
-          names(data_y) <- get_dataname(data[[y]])
+          as.character(data_names_call[[y]])[1]
+        } else if (is(data[[y]], "Dataset")){
+          get_dataname(data[[y]])
         }
-        data_y
       } else {
-        names(data_y) <- names_data[y]
-        data_y
+        names_data[y]
       }
     }),
     recursive = FALSE)
+    names(data) <- data_names_new
 
     data <- lapply(seq_along(data), function(y) {
       if(is(data[[y]], "Dataset")) {
         data[[y]]
-      } else if (names(data)[y] %in% names(default_cdisc_keys)) {
-        cdisc_dataset(dataname = names(data)[y], x = data[[y]])
+      } else if (is(data[[y]], "data.frame")) {
+        if (names(data)[y] %in% names(default_cdisc_keys)) {
+          cdisc_dataset(dataname = names(data)[y], x = data[[y]])
+        } else {
+          dataset(dataname = names(data)[y], x = data[[y]])
+        }
       } else {
-        dataset(dataname = names(data)[y], x = data[[y]])
+        stop("Dataset and data.frame inputs are only supported for data.")
       }
     })
 
