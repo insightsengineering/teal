@@ -145,7 +145,7 @@ select_spec <- function(choices,
   stopifnot(multiple || !is(selected, "all_choices"))
   if (fixed) stopifnot(is.null(always_selected))
 
-  if(is(selected, "all_choices")) selected <- choices
+  if (is(selected, "all_choices")) selected <- choices
   if (is(choices, "delayed_data") || is(selected, "delayed_data")) {
     select_spec.delayed_data(choices, selected, multiple, fixed, always_selected, label)
   } else {
@@ -162,6 +162,7 @@ select_spec.delayed_data <- function(choices,
                                      always_selected = NULL,
                                      label = NULL) {
   stopifnot(is.null(selected) || is.atomic(selected) || is(selected, "delayed_data"))
+  stopifnot(is.null(choices) || is.atomic(choices) || is(choices, "delayed_data"))
 
   structure(
     list(
