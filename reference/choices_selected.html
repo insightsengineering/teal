@@ -169,10 +169,10 @@ See <code><a href='variable_choices.html'>variable_choices</a></code> and <code>
     </tr>
     <tr>
       <th>selected</th>
-      <td><p>(<code>character</code>) vector of pre-selected options or (<code>delayed_data</code>) object<br />
-If <code>delayed_data</code> object then <code>choices</code> must also be a <code>delayed_data</code> object.
-If not supplied it will default to the first element of <code>choices</code> if <code>choices</code> is
-a vector, or <code>NULL</code> if <code>choices</code> is a <code>delayed_data</code> object.</p></td>
+      <td><p>(<code>character</code>) vector of pre-selected options, (<code>all_choices</code>) object
+or (<code>delayed_data</code>) object. If <code>delayed_data</code> object then <code>choices</code> must also be
+a <code>delayed_data</code> object. If not supplied it will default to the first element of
+<code>choices</code> if <code>choices</code> is a vector, or <code>NULL</code> if <code>choices</code> is a <code>delayed_data</code> object.</p></td>
     </tr>
     <tr>
       <th>keep_order</th>
@@ -199,6 +199,34 @@ argument is set to false which will run the following code inside:</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'>
+<span class='co'># all_choices example - semantically the same objects</span>
+<span class='fu'>choices_selected</span><span class='op'>(</span>choices <span class='op'>=</span> <span class='va'>letters</span>, selected <span class='op'>=</span> <span class='fu'><a href='all_choices.html'>all_choices</a></span><span class='op'>(</span><span class='op'>)</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; $choices
+#&gt;  [1] "a" "b" "c" "d" "e" "f" "g" "h" "i" "j" "k" "l" "m" "n" "o" "p" "q" "r" "s"
+#&gt; [20] "t" "u" "v" "w" "x" "y" "z"
+#&gt; 
+#&gt; $selected
+#&gt;  [1] "a" "b" "c" "d" "e" "f" "g" "h" "i" "j" "k" "l" "m" "n" "o" "p" "q" "r" "s"
+#&gt; [20] "t" "u" "v" "w" "x" "y" "z"
+#&gt; 
+#&gt; $fixed
+#&gt; [1] FALSE
+#&gt; 
+#&gt; attr(,"class")
+#&gt; [1] "choices_selected"</div><div class='input'><span class='fu'>choices_selected</span><span class='op'>(</span>choices <span class='op'>=</span> <span class='va'>letters</span>, selected <span class='op'>=</span> <span class='va'>letters</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; $choices
+#&gt;  [1] "a" "b" "c" "d" "e" "f" "g" "h" "i" "j" "k" "l" "m" "n" "o" "p" "q" "r" "s"
+#&gt; [20] "t" "u" "v" "w" "x" "y" "z"
+#&gt; 
+#&gt; $selected
+#&gt;  [1] "a" "b" "c" "d" "e" "f" "g" "h" "i" "j" "k" "l" "m" "n" "o" "p" "q" "r" "s"
+#&gt; [20] "t" "u" "v" "w" "x" "y" "z"
+#&gt; 
+#&gt; $fixed
+#&gt; [1] FALSE
+#&gt; 
+#&gt; attr(,"class")
+#&gt; [1] "choices_selected"</div><div class='input'>
 <span class='fu'>choices_selected</span><span class='op'>(</span>
    choices <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/stats/setNames.html'>setNames</a></span><span class='op'>(</span><span class='va'>LETTERS</span><span class='op'>[</span><span class='fl'>1</span><span class='op'>:</span><span class='fl'>5</span><span class='op'>]</span>, <span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste</a></span><span class='op'>(</span><span class='st'>"Letter"</span>, <span class='va'>LETTERS</span><span class='op'>[</span><span class='fl'>1</span><span class='op'>:</span><span class='fl'>5</span><span class='op'>]</span><span class='op'>)</span><span class='op'>)</span>,
    selected <span class='op'>=</span> <span class='st'>"X"</span>
@@ -381,7 +409,7 @@ argument is set to false which will run the following code inside:</p>
 #&gt;   idx &lt;- vapply(data, is.factor, logical(1))
 #&gt;   return(names(data)[idx])
 #&gt; }
-#&gt; &lt;environment: 0x560ccbc64630&gt;
+#&gt; &lt;environment: 0x564d6f395048&gt;
 #&gt;   $ key
 #&gt;   NULL
 #&gt; $ selected

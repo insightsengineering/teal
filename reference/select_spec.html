@@ -151,14 +151,13 @@ that will select columns from a dataset.</p>
     <pre class="usage"><span class='fu'>select_spec</span><span class='op'>(</span>
   <span class='va'>choices</span>,
   selected <span class='op'>=</span> <span class='kw'>if</span> <span class='op'>(</span><span class='fu'>is</span><span class='op'>(</span><span class='va'>choices</span>, <span class='st'>"delayed_data"</span><span class='op'>)</span><span class='op'>)</span> <span class='cn'>NULL</span> <span class='kw'>else</span> <span class='va'>choices</span><span class='op'>[</span><span class='fl'>1</span><span class='op'>]</span>,
-  multiple <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/length.html'>length</a></span><span class='op'>(</span><span class='va'>selected</span><span class='op'>)</span> <span class='op'>&gt;</span> <span class='fl'>1</span>,
+  multiple <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/length.html'>length</a></span><span class='op'>(</span><span class='va'>selected</span><span class='op'>)</span> <span class='op'>&gt;</span> <span class='fl'>1</span> <span class='op'>||</span> <span class='fu'>is</span><span class='op'>(</span><span class='va'>selected</span>, <span class='st'>"all_choices"</span><span class='op'>)</span>,
   fixed <span class='op'>=</span> <span class='cn'>FALSE</span>,
   always_selected <span class='op'>=</span> <span class='cn'>NULL</span>,
   label <span class='op'>=</span> <span class='cn'>NULL</span>
 <span class='op'>)</span>
 
-<span class='co'># S3 method for delayed_data</span>
-<span class='fu'>select_spec</span><span class='op'>(</span>
+<span class='fu'>select_spec.delayed_data</span><span class='op'>(</span>
   <span class='va'>choices</span>,
   selected <span class='op'>=</span> <span class='cn'>NULL</span>,
   multiple <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/length.html'>length</a></span><span class='op'>(</span><span class='va'>selected</span><span class='op'>)</span> <span class='op'>&gt;</span> <span class='fl'>1</span>,
@@ -167,8 +166,7 @@ that will select columns from a dataset.</p>
   label <span class='op'>=</span> <span class='cn'>NULL</span>
 <span class='op'>)</span>
 
-<span class='co'># S3 method for default</span>
-<span class='fu'>select_spec</span><span class='op'>(</span>
+<span class='fu'>select_spec.default</span><span class='op'>(</span>
   <span class='va'>choices</span>,
   selected <span class='op'>=</span> <span class='va'>choices</span><span class='op'>[</span><span class='fl'>1</span><span class='op'>]</span>,
   multiple <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/length.html'>length</a></span><span class='op'>(</span><span class='va'>selected</span><span class='op'>)</span> <span class='op'>&gt;</span> <span class='fl'>1</span>,
@@ -190,8 +188,9 @@ dataset defined in the <code><a href='data_extract_spec.html'>data_extract_spec<
     </tr>
     <tr>
       <th>selected</th>
-      <td><p>optional (<code>character</code> or <code>NULL</code> or <code>delayed_data</code> object).
+      <td><p>optional (<code>character</code> or <code>NULL</code> or <code>all_choices</code> or <code>delayed_data</code> object).
 Named character vector to define the selected values of a shiny <code><a href='https://rdrr.io/pkg/shiny/man/selectInput.html'>selectInput</a></code>.
+Passing an <code><a href='all_choices.html'>all_choices()</a></code> object indicates selecting all possible choices.
 Defaults to the first value of <code>choices</code> or <code>NULL</code> for delayed data loading.</p></td>
     </tr>
     <tr>
@@ -268,6 +267,14 @@ start by a data set containing the columns <code>"AGE"</code>, <code>"AVAL"</cod
         fixed <span class='op'>=</span> <span class='cn'>FALSE</span>
       <span class='op'>)</span>
     </pre></p></li>
+<li><p>all_choices passed to selected
+<pre>
+      <span class='va'>adsl_select</span> <span class='op'>&lt;-</span> <span class='fu'>select_spec</span><span class='op'>(</span>
+        label <span class='op'>=</span> <span class='st'>"Select variable:"</span>,
+        choices <span class='op'>=</span> <span class='fu'><a href='variable_choices.html'>variable_choices</a></span><span class='op'>(</span><span class='st'>"ADSL"</span>, <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"BMRKR1"</span>, <span class='st'>"BMRKR2"</span><span class='op'>)</span><span class='op'>)</span>,
+        selected <span class='op'>=</span> <span class='fu'><a href='all_choices.html'>all_choices</a></span><span class='op'>(</span><span class='op'>)</span>
+      <span class='op'>)</span>
+    </pre></p></li>
 </ol>
 
 
@@ -295,7 +302,7 @@ start by a data set containing the columns <code>"AGE"</code>, <code>"AVAL"</cod
 #&gt;     idx &lt;- vapply(data, is.factor, logical(1))
 #&gt;     return(names(data)[idx])
 #&gt;   }
-#&gt; &lt;environment: 0x560cfaaf9590&gt;
+#&gt; &lt;environment: 0x564d9e1868d0&gt;
 #&gt;   $ key
 #&gt;   NULL
 #&gt; $ selected
@@ -307,7 +314,7 @@ start by a data set containing the columns <code>"AGE"</code>, <code>"AVAL"</cod
 #&gt;     idx &lt;- vapply(data, is.factor, logical(1))
 #&gt;     return(names(data)[idx][1])
 #&gt;   }
-#&gt; &lt;environment: 0x560cfaaf9590&gt;
+#&gt; &lt;environment: 0x564d9e1868d0&gt;
 #&gt;   $ key
 #&gt;   NULL
 #&gt; $ always_selected
@@ -317,7 +324,60 @@ start by a data set containing the columns <code>"AGE"</code>, <code>"AVAL"</cod
 #&gt; $ fixed
 #&gt; [1] FALSE
 #&gt; $ label
-#&gt; NULL</div></pre>
+#&gt; NULL</div><div class='input'>
+<span class='co'># Both below objects are semantically the same</span>
+<span class='fu'>select_spec</span><span class='op'>(</span>choices <span class='op'>=</span> <span class='fu'><a href='variable_choices.html'>variable_choices</a></span><span class='op'>(</span><span class='st'>"ADSL"</span><span class='op'>)</span>, selected <span class='op'>=</span> <span class='fu'><a href='variable_choices.html'>variable_choices</a></span><span class='op'>(</span><span class='st'>"ADSL"</span><span class='op'>)</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; select_spec with delayed data: ADSL
+#&gt; $ choices
+#&gt;   variable_choices with delayed data: ADSL
+#&gt;   $ data
+#&gt;   [1] "ADSL"
+#&gt;   $ subset
+#&gt;   NULL
+#&gt;   $ key
+#&gt;   NULL
+#&gt; $ selected
+#&gt;   variable_choices with delayed data: ADSL
+#&gt;   $ data
+#&gt;   [1] "ADSL"
+#&gt;   $ subset
+#&gt;   NULL
+#&gt;   $ key
+#&gt;   NULL
+#&gt; $ always_selected
+#&gt; NULL
+#&gt; $ multiple
+#&gt; [1] TRUE
+#&gt; $ fixed
+#&gt; [1] FALSE
+#&gt; $ label
+#&gt; NULL</div><div class='input'><span class='fu'>select_spec</span><span class='op'>(</span>choices <span class='op'>=</span> <span class='fu'><a href='variable_choices.html'>variable_choices</a></span><span class='op'>(</span><span class='st'>"ADSL"</span><span class='op'>)</span>, selected <span class='op'>=</span> <span class='fu'><a href='all_choices.html'>all_choices</a></span><span class='op'>(</span><span class='op'>)</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; select_spec with delayed data: ADSL
+#&gt; $ choices
+#&gt;   variable_choices with delayed data: ADSL
+#&gt;   $ data
+#&gt;   [1] "ADSL"
+#&gt;   $ subset
+#&gt;   NULL
+#&gt;   $ key
+#&gt;   NULL
+#&gt; $ selected
+#&gt;   variable_choices with delayed data: ADSL
+#&gt;   $ data
+#&gt;   [1] "ADSL"
+#&gt;   $ subset
+#&gt;   NULL
+#&gt;   $ key
+#&gt;   NULL
+#&gt; $ always_selected
+#&gt; NULL
+#&gt; $ multiple
+#&gt; [1] TRUE
+#&gt; $ fixed
+#&gt; [1] FALSE
+#&gt; $ label
+#&gt; NULL</div><div class='input'>
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

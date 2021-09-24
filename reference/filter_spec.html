@@ -150,7 +150,7 @@ It consists in choices and additionally the variable names for the choices</p>
   <span class='va'>vars</span>,
   choices <span class='op'>=</span> <span class='cn'>NULL</span>,
   selected <span class='op'>=</span> <span class='kw'>if</span> <span class='op'>(</span><span class='fu'>is</span><span class='op'>(</span><span class='va'>choices</span>, <span class='st'>"delayed_data"</span><span class='op'>)</span><span class='op'>)</span> <span class='cn'>NULL</span> <span class='kw'>else</span> <span class='va'>choices</span><span class='op'>[</span><span class='fl'>1</span><span class='op'>]</span>,
-  multiple <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/length.html'>length</a></span><span class='op'>(</span><span class='va'>selected</span><span class='op'>)</span> <span class='op'>&gt;</span> <span class='fl'>1</span>,
+  multiple <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/length.html'>length</a></span><span class='op'>(</span><span class='va'>selected</span><span class='op'>)</span> <span class='op'>&gt;</span> <span class='fl'>1</span> <span class='op'>||</span> <span class='fu'>is</span><span class='op'>(</span><span class='va'>selected</span>, <span class='st'>"all_choices"</span><span class='op'>)</span>,
   label <span class='op'>=</span> <span class='cn'>NULL</span>,
   sep <span class='op'>=</span> <span class='fu'>if_null</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/attr.html'>attr</a></span><span class='op'>(</span><span class='va'>choices</span>, <span class='st'>"sep"</span><span class='op'>)</span>, <span class='st'>" - "</span><span class='op'>)</span>,
   drop_keys <span class='op'>=</span> <span class='cn'>FALSE</span>
@@ -184,10 +184,12 @@ will lead to a filtering of
     </tr>
     <tr>
       <th>selected</th>
-      <td><p>(<code>character</code> or <code>numeric</code> or <code>logical</code> or (<code>delayed_data</code>) object.
+      <td><p>(<code>character</code> or <code>numeric</code> or <code>logical</code> or
+(<code>delayed_data</code> or (<code>all_choices</code>)) object.
 Named character vector to define the selected
 values of a shiny <code><a href='https://rdrr.io/pkg/shiny/man/selectInput.html'>selectInput</a></code> (default values). This value will
-be displayed inside the shiny app upon start.</p></td>
+be displayed inside the shiny app upon start. The <code>all_choices</code> object indicates selecting
+all possible choices.</p></td>
     </tr>
     <tr>
       <th>multiple</th>
@@ -267,17 +269,24 @@ the drop-down menu the app user will see:</p>
         label <span class='op'>=</span> <span class='st'>"Choose endpoint and Censor"</span>
       <span class='op'>)</span>
     </pre></p></li>
-<li><p>The version with <code>choices_selected</code></p><pre>
+<li><p>The version with <code>choices_selected</code>
+<pre>
       <span class='va'>adsl_filter</span> <span class='op'>&lt;-</span> <span class='fu'>filter_spec</span><span class='op'>(</span>
         vars <span class='op'>=</span> <span class='fu'><a href='choices_selected.html'>choices_selected</a></span><span class='op'>(</span><span class='st'>"ADSL"</span>, <span class='st'>"SEX"</span>, fixed <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span>,
         multiple <span class='op'>=</span> <span class='cn'>TRUE</span>
-      <span class='op'>)</span>
-
-      <span class='va'>adsl_filter2</span> <span class='op'>&lt;-</span> <span class='fu'>filter_spec</span><span class='op'>(</span>
+      <span class='op'>)</span>      <span class='va'>adsl_filter2</span> <span class='op'>&lt;-</span> <span class='fu'>filter_spec</span><span class='op'>(</span>
         vars <span class='op'>=</span> <span class='fu'><a href='choices_selected.html'>choices_selected</a></span><span class='op'>(</span><span class='st'>"ADSL"</span>, <span class='st'>"SEX"</span>, fixed <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>,
         multiple <span class='op'>=</span> <span class='cn'>TRUE</span>
       <span class='op'>)</span>
-    </pre></li>
+    </pre></p></li>
+<li><p>Choose all choices
+<pre>
+      <span class='va'>adsl_filter</span> <span class='op'>&lt;-</span> <span class='fu'>filter_spec</span><span class='op'>(</span>
+        vars <span class='op'>=</span> <span class='fu'><a href='choices_selected.html'>choices_selected</a></span><span class='op'>(</span><span class='st'>"ADSL"</span>, <span class='st'>"SEX"</span>, fixed <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span>,
+        choices <span class='op'>=</span> <span class='fu'><a href='value_choices.html'>value_choices</a></span><span class='op'>(</span><span class='st'>"ADSL"</span>, <span class='st'>"SEX"</span><span class='op'>)</span>,
+        selected <span class='op'>=</span> <span class='fu'><a href='all_choices.html'>all_choices</a></span><span class='op'>(</span><span class='op'>)</span>
+      <span class='op'>)</span>
+    </pre></p></li>
 </ol>
 
 
@@ -400,7 +409,7 @@ the drop-down menu the app user will see:</p>
 #&gt;   function(data) {
 #&gt;     levels(data$ARMCD)[1:2]
 #&gt;   }
-#&gt; &lt;environment: 0x560cebb78330&gt;
+#&gt; &lt;environment: 0x564d8f117530&gt;
 #&gt;   $ sep
 #&gt;   [1] " - "
 #&gt; $ selected
@@ -415,7 +424,7 @@ the drop-down menu the app user will see:</p>
 #&gt;   function(data) {
 #&gt;     levels(data$ARMCD)[1]
 #&gt;   }
-#&gt; &lt;environment: 0x560cebb78330&gt;
+#&gt; &lt;environment: 0x564d8f117530&gt;
 #&gt;   $ sep
 #&gt;   [1] " - "
 #&gt; $ label

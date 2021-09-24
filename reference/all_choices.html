@@ -6,7 +6,8 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Load RelationalData object from a file — teal_data_file • teal</title>
+<title>An S3 structure representing the selection of all
+possible choices in a filter_spec, select_spec or choices_selected object. — all_choices • teal</title>
 
 
 <!-- jquery -->
@@ -39,9 +40,10 @@
 
 
 
-<meta property="og:title" content="Load RelationalData object from a file — teal_data_file" />
-<meta property="og:description" content="
-Please note that the script has to end with a call creating desired object. The error will be raised otherwise." />
+<meta property="og:title" content="An S3 structure representing the selection of all
+possible choices in a filter_spec, select_spec or choices_selected object. — all_choices" />
+<meta property="og:description" content="An S3 structure representing the selection of all
+possible choices in a filter_spec, select_spec or choices_selected object." />
 
 
 
@@ -136,103 +138,121 @@ Please note that the script has to end with a call creating desired object. The 
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Load <code>RelationalData</code> object from a file</h1>
+    <h1>An S3 structure representing the selection of all
+possible choices in a <code>filter_spec</code>, <code>select_spec</code> or <code>choices_selected</code> object.</h1>
     
-    <div class="hidden name"><code>teal_data_file.Rd</code></div>
+    <div class="hidden name"><code>all_choices.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p><a href='https://lifecycle.r-lib.org/articles/stages.html#experimental'><img src='figures/lifecycle-experimental.svg' alt='[Experimental]' /></a>
-Please note that the script has to end with a call creating desired object. The error will be raised otherwise.</p>
+    <p>An S3 structure representing the selection of all
+possible choices in a <code>filter_spec</code>, <code>select_spec</code> or <code>choices_selected</code> object.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>teal_data_file</span><span class='op'>(</span><span class='va'>path</span>, code <span class='op'>=</span> <span class='fu'><a href='get_code.html'>get_code</a></span><span class='op'>(</span><span class='va'>path</span><span class='op'>)</span><span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'>all_choices</span><span class='op'>(</span><span class='op'>)</span></pre>
 
-    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
-    <table class="ref-arguments">
-    <colgroup><col class="name" /><col class="desc" /></colgroup>
-    <tr>
-      <th>path</th>
-      <td><p>A (<code>connection</code>) or a (<code>character</code>)<br />
-string giving the pathname of the file or URL to read from. "" indicates the connection <code>stdin</code>.</p></td>
-    </tr>
-    <tr>
-      <th>code</th>
-      <td><p>(<code>character</code>)<br />
-reproducible code to re-create object</p></td>
-    </tr>
-    </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p><code>RelationalData</code> object</p>
+    <p><code>all_choices</code> object</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='co'># simple example</span>
-<span class='va'>file_example</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/tempfile.html'>tempfile</a></span><span class='op'>(</span>fileext <span class='op'>=</span> <span class='st'>".R"</span><span class='op'>)</span>
-<span class='fu'><a href='https://rdrr.io/r/base/writeLines.html'>writeLines</a></span><span class='op'>(</span>
-  text <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span>
-    <span class='st'>"library(teal)
-
-     x1 &lt;- dataset(dataname = \"IRIS\",
-                   x = iris,
-                   code = \"IRIS &lt;- iris\")
-
-     x2 &lt;- dataset(dataname = \"MTCARS\",
-                   x = mtcars,
-                   code = \"MTCARS &lt;- mtcars\")
-
-     teal_data(x1, x2)"</span>
-  <span class='op'>)</span>,
-  con <span class='op'>=</span> <span class='va'>file_example</span>
+    <pre class="examples"><div class='input'><span class='co'># Both structures are semantically identical</span>
+<span class='fu'><a href='filter_spec.html'>filter_spec</a></span><span class='op'>(</span>
+  vars <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"selected_variable"</span><span class='op'>)</span>,
+  choices <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"value1"</span>, <span class='st'>"value2"</span><span class='op'>)</span>,
+  selected <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"value1"</span>, <span class='st'>"value2"</span><span class='op'>)</span>
 <span class='op'>)</span>
-<span class='fu'>teal_data_file</span><span class='op'>(</span><span class='va'>file_example</span>, code <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/character.html'>character</a></span><span class='op'>(</span><span class='fl'>0</span><span class='op'>)</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; &lt;RelationalData&gt;
-#&gt;   Inherits from: &lt;DataAbstract&gt;
-#&gt;   Public:
-#&gt;     check: function () 
-#&gt;     check_metadata: function () 
-#&gt;     check_reproducibility: function () 
-#&gt;     clone: function (deep = FALSE) 
-#&gt;     execute_mutate: function () 
-#&gt;     get_check_result: function () 
-#&gt;     get_code: function (dataname = NULL, deparse = TRUE) 
-#&gt;     get_code_class: function (only_pull = FALSE) 
-#&gt;     get_connectors: function () 
-#&gt;     get_datanames: function () 
-#&gt;     get_dataset: function (dataname = NULL) 
-#&gt;     get_datasets: function () 
-#&gt;     get_items: function (dataname = NULL) 
-#&gt;     get_join_keys: function () 
-#&gt;     get_server: function () 
-#&gt;     get_ui: function (id) 
-#&gt;     id: -10929033
-#&gt;     initialize: function (..., check = FALSE, join_keys) 
-#&gt;     is_pulled: function () 
-#&gt;     launch: function () 
-#&gt;     mutate: function (code, vars = list()) 
-#&gt;     mutate_dataset: function (dataname, code, vars = list()) 
-#&gt;     mutate_join_keys: function (dataset_1, dataset_2, val) 
-#&gt;     set_check: function (check = FALSE) 
-#&gt;     set_pull_code: function (code) 
-#&gt;   Private:
-#&gt;     .check: FALSE
-#&gt;     check_combined_code: function () 
-#&gt;     check_names: function (x) 
-#&gt;     check_result: NULL
-#&gt;     datasets: list
-#&gt;     deep_clone: function (name, value) 
-#&gt;     get_datasets_code_class: function () 
-#&gt;     get_mutate_code_class: function () 
-#&gt;     get_pull_code_class: function () 
-#&gt;     join_keys: NULL
-#&gt;     mutate_code: CodeClass, R6
-#&gt;     mutate_vars: list
-#&gt;     pull_code: CodeClass, R6
-#&gt;     server: function (input, output, session) 
-#&gt;     set_mutate_code: function (code, dataname = self$get_datanames(), deps = names(private_mutate_vars)) 
-#&gt;     set_mutate_vars: function (vars) 
-#&gt;     ui: function (id) </div></pre>
+</div><div class='output co'>#&gt; filter_spec with delayed data: value1 filter_spec with delayed data: value2
+#&gt; $ vars_choices
+#&gt; [1] "selected_variable"
+#&gt; $ vars_selected
+#&gt; [1] "selected_variable"
+#&gt; $ vars_label
+#&gt; NULL
+#&gt; $ vars_fixed
+#&gt; [1] TRUE
+#&gt; $ vars_multiple
+#&gt; [1] TRUE
+#&gt; $ choices
+#&gt; [1] "value1" "value2"
+#&gt; $ selected
+#&gt; [1] "value1" "value2"
+#&gt; $ label
+#&gt; NULL
+#&gt; $ multiple
+#&gt; [1] TRUE
+#&gt; $ fixed
+#&gt; [1] FALSE
+#&gt; $ sep
+#&gt; [1] " - "
+#&gt; $ drop_keys
+#&gt; [1] FALSE
+#&gt; $ dataname
+#&gt; NULL
+#&gt; $ initialized
+#&gt; [1] FALSE</div><div class='input'>
+<span class='fu'><a href='filter_spec.html'>filter_spec</a></span><span class='op'>(</span>
+  vars <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"selected_variable"</span><span class='op'>)</span>,
+  choices <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"value1"</span>, <span class='st'>"value2"</span><span class='op'>)</span>,
+  selected <span class='op'>=</span> <span class='fu'>all_choices</span><span class='op'>(</span><span class='op'>)</span>
+<span class='op'>)</span>
+</div><div class='output co'>#&gt; filter_spec with delayed data: value1 filter_spec with delayed data: value2
+#&gt; $ vars_choices
+#&gt; [1] "selected_variable"
+#&gt; $ vars_selected
+#&gt; [1] "selected_variable"
+#&gt; $ vars_label
+#&gt; NULL
+#&gt; $ vars_fixed
+#&gt; [1] TRUE
+#&gt; $ vars_multiple
+#&gt; [1] TRUE
+#&gt; $ choices
+#&gt; [1] "value1" "value2"
+#&gt; $ selected
+#&gt; [1] "value1" "value2"
+#&gt; $ label
+#&gt; NULL
+#&gt; $ multiple
+#&gt; [1] TRUE
+#&gt; $ fixed
+#&gt; [1] FALSE
+#&gt; $ sep
+#&gt; [1] " - "
+#&gt; $ drop_keys
+#&gt; [1] FALSE
+#&gt; $ dataname
+#&gt; NULL
+#&gt; $ initialized
+#&gt; [1] FALSE</div><div class='input'>
+<span class='fu'><a href='choices_selected.html'>choices_selected</a></span><span class='op'>(</span>choices <span class='op'>=</span> <span class='va'>letters</span>, selected <span class='op'>=</span> <span class='va'>letters</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; $choices
+#&gt;  [1] "a" "b" "c" "d" "e" "f" "g" "h" "i" "j" "k" "l" "m" "n" "o" "p" "q" "r" "s"
+#&gt; [20] "t" "u" "v" "w" "x" "y" "z"
+#&gt; 
+#&gt; $selected
+#&gt;  [1] "a" "b" "c" "d" "e" "f" "g" "h" "i" "j" "k" "l" "m" "n" "o" "p" "q" "r" "s"
+#&gt; [20] "t" "u" "v" "w" "x" "y" "z"
+#&gt; 
+#&gt; $fixed
+#&gt; [1] FALSE
+#&gt; 
+#&gt; attr(,"class")
+#&gt; [1] "choices_selected"</div><div class='input'><span class='fu'><a href='choices_selected.html'>choices_selected</a></span><span class='op'>(</span>choices <span class='op'>=</span> <span class='va'>letters</span>, selected <span class='op'>=</span> <span class='fu'>all_choices</span><span class='op'>(</span><span class='op'>)</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; $choices
+#&gt;  [1] "a" "b" "c" "d" "e" "f" "g" "h" "i" "j" "k" "l" "m" "n" "o" "p" "q" "r" "s"
+#&gt; [20] "t" "u" "v" "w" "x" "y" "z"
+#&gt; 
+#&gt; $selected
+#&gt;  [1] "a" "b" "c" "d" "e" "f" "g" "h" "i" "j" "k" "l" "m" "n" "o" "p" "q" "r" "s"
+#&gt; [20] "t" "u" "v" "w" "x" "y" "z"
+#&gt; 
+#&gt; $fixed
+#&gt; [1] FALSE
+#&gt; 
+#&gt; attr(,"class")
+#&gt; [1] "choices_selected"</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
