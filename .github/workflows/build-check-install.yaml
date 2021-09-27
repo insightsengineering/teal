@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - main
+      - pre-release
   pull_request:
 
 jobs:
@@ -115,7 +116,7 @@ jobs:
           if (file.exists("staged_dependencies.yaml")) {
             cat("\nInstall Staged Dependencies\n\n\n")
             if (!require("staged.dependencies")) {
-              remotes::install_github("openpharma/staged.dependencies", ref = "v0.2", Ncpus = ncores, upgrade = "never")
+              remotes::install_github("openpharma/staged.dependencies", ref = "v0.2.1", Ncpus = ncores, upgrade = "never")
             }
             cat("\nCalculating Staged Dependency Table...\n\n")
             x <- staged.dependencies::dependency_table()
@@ -141,6 +142,19 @@ jobs:
         env:
           TESTING_DEPTH: 1
           _R_CHECK_TESTS_NLINES_: 0
+
+      - name: Check whether JUnit XML report exists
+        id: check_junit_xml
+        uses: andstor/file-existence-action@v1
+        with:
+          files: "${{ github.event.repository.name }}.Rcheck/tests/testthat/junit-result.xml"
+
+      - name: Publish Unit Test Summary
+        uses: EnricoMi/publish-unit-test-result-action@v1
+        if: ${{ steps.check_junit_xml.outputs.files_exists == 'true' && github.event_name == 'pull_request' }}
+        with:
+          check_name: Unit Tests Summary
+          files: "${{ github.event.repository.name }}.Rcheck/tests/testthat/junit-result.xml"
 
       - name: Catch warnings in R CMD check output
         id: catch-errors

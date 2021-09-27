@@ -10,8 +10,9 @@
 #'   dataset defined in the \code{\link{data_extract_spec}} where this is called.
 #'   \code{delayed_data} objects can be created via \code{\link{variable_choices}} or \code{\link{value_choices}}.
 #'
-#' @param selected optional (\code{character} or \code{NULL} or \code{delayed_data} object).
+#' @param selected optional (\code{character} or \code{NULL} or \code{all_choices} or \code{delayed_data} object).
 #' Named character vector to define the selected values of a shiny \code{\link[shiny]{selectInput}}.
+#' Passing an `all_choices()` object indicates selecting all possible choices.
 #' Defaults to the first value of \code{choices} or \code{NULL} for delayed data loading.
 #'
 #' @param multiple (\code{logical}) Whether multiple values shall be allowed in the
@@ -97,6 +98,15 @@
 #'       )
 #'     }
 #'   }
+#'   \item{all_choices passed to selected}{
+#'     \preformatted{
+#'       adsl_select <- select_spec(
+#'         label = "Select variable:",
+#'         choices = variable_choices("ADSL", c("BMRKR1", "BMRKR2")),
+#'         selected = all_choices()
+#'       )
+#'     }
+#'   }
 #' }
 #'
 #' @rdname select_spec
@@ -117,9 +127,14 @@
 #'   }),
 #'   multiple = TRUE
 #' )
+#'
+#' # Both below objects are semantically the same
+#' select_spec(choices = variable_choices("ADSL"), selected = variable_choices("ADSL"))
+#' select_spec(choices = variable_choices("ADSL"), selected = all_choices())
+#'
 select_spec <- function(choices,
                         selected = `if`(is(choices, "delayed_data"), NULL, choices[1]),
-                        multiple = length(selected) > 1,
+                        multiple = length(selected) > 1 || is(selected, "all_choices"),
                         fixed = FALSE,
                         always_selected = NULL,
                         label = NULL) {
@@ -127,11 +142,15 @@ select_spec <- function(choices,
   stopifnot(is_logical_single(fixed))
   stopifnot(is.null(always_selected) || is_character_vector(always_selected, 1))
   stopifnot(is.null(label) || is_character_single(label))
-  if (fixed) {
-    stopifnot(is.null(always_selected))
-  }
+  stopifnot(multiple || !is(selected, "all_choices"))
+  if (fixed) stopifnot(is.null(always_selected))
 
-  UseMethod("select_spec")
+  if (is(selected, "all_choices")) selected <- choices
+  if (is(choices, "delayed_data") || is(selected, "delayed_data")) {
+    select_spec.delayed_data(choices, selected, multiple, fixed, always_selected, label)
+  } else {
+    select_spec.default(choices, selected, multiple, fixed, always_selected, label)
+  }
 }
 
 #' @rdname select_spec
@@ -143,8 +162,9 @@ select_spec.delayed_data <- function(choices,
                                      always_selected = NULL,
                                      label = NULL) {
   stopifnot(is.null(selected) || is.atomic(selected) || is(selected, "delayed_data"))
+  stopifnot(is.null(choices) || is.atomic(choices) || is(choices, "delayed_data"))
 
-  out <- structure(
+  structure(
     list(
       choices = choices,
       selected = selected,
@@ -152,9 +172,8 @@ select_spec.delayed_data <- function(choices,
       multiple = multiple,
       fixed = fixed,
       label = label),
-    class = c("delayed_select_spec", "delayed_data", "select_spec"))
-
-  return(out)
+    class = c("delayed_select_spec", "delayed_data", "select_spec")
+  )
 }
 
 #' @rdname select_spec
@@ -165,6 +184,7 @@ select_spec.default <- function(choices,
                                 fixed = FALSE,
                                 always_selected = NULL,
                                 label = NULL) {
+  stopifnot(is.null(choices) || is.atomic(choices))
   stopifnot(is.null(selected) || is.atomic(selected))
 
   # if names is NULL, shiny will put strange labels (with quotes etc.) in the selectInputs, so we set it to the values

@@ -13,46 +13,47 @@ init_filtered_dataset(dataset)
 \code{FilteredDataset} contains \code{Dataset}
 }
 \examples{
-library(scda)
-adsl <- cdisc_dataset("ADSL", synthetic_cdisc_data("latest")$adsl)
-adtte <- cdisc_dataset("ADTTE", synthetic_cdisc_data("latest")$adtte)
-data <- cdisc_data(adsl, adtte)
+iris_d <- dataset("iris", iris)
+iris_fd <- teal:::init_filtered_dataset(iris_d)
 
-filtered_dataset <- teal:::init_filtered_dataset(
-  dataset = adtte
-)
+library(scda)
+adsl_d <- cdisc_dataset("ADSL", synthetic_cdisc_data("latest")$adsl)
+adsl_fd <- teal:::init_filtered_dataset(adsl_d)
+
+library(MultiAssayExperiment)
+MAE_d <- dataset("MAE", miniACC)
 
 \dontrun{
 shinyApp(
   ui = fluidPage(
     actionButton("clear", span(icon("times"), "Remove all filters")),
-    filtered_dataset$ui_add_filter_state(id = "add"),
-    filtered_dataset$ui("dataset"),
+    adsl_fd$ui_add_filter_state(id = "add"),
+    adsl_fd$ui("dataset"),
     verbatimTextOutput("call"),
     tableOutput("tbl")
   ),
   server = function(input, output, session) {
-    callModule(
-      filtered_dataset$srv_add_filter_state,
+    adsl_fd$srv_add_filter_state(
+      adsl_fd$srv_add_filter_state,
       id = "add"
     )
 
-    callModule(filtered_dataset$server, id = "dataset")
+    adsl_fd$server(id = "dataset")
 
     output$call <- renderText({
       paste(
-        vapply(filtered_dataset$get_call(), pdeparse, character(1)),
+        vapply(adsl_fd$get_call(), pdeparse, character(1)),
         collapse = "\n"
       )
     })
 
     output$tbl <- renderTable({
-      filtered_dataset$get_data(filtered = TRUE)
+      adsl_fd$get_data(filtered = TRUE)
     })
 
     observeEvent(
       input$clear,
-      filtered_dataset$queues_empty()
+      adsl_fd$queues_empty()
     )
   }
 )

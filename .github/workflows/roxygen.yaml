@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - main
+      - pre-release
   pull_request:
 
 jobs:
@@ -96,7 +97,7 @@ jobs:
           if (file.exists("staged_dependencies.yaml")) {
             cat("\nInstall Staged Dependencies\n\n\n")
             if (!require("staged.dependencies")) {
-              remotes::install_github("openpharma/staged.dependencies", ref = "v0.2", Ncpus = ncores, upgrade = "never")
+              remotes::install_github("openpharma/staged.dependencies", ref = "v0.2.1", Ncpus = ncores, upgrade = "never")
             }
             cat("\nCalculating Staged Dependency Table...\n\n")
             x <- staged.dependencies::dependency_table()
@@ -120,11 +121,14 @@ jobs:
           git status -s
           if [[ -n `git status -s | grep man` ]]
           then
+            ROXYGEN_VERSION="$(Rscript -e 'packageVersion("roxygen2")' | awk '{print $NF}')"
             echo "🙈 Manuals are not up-to-date with roxygen comments!"
             echo "💻 Please rerun the following command on your workstation and push your changes"
             echo "--------------------------------------------------------------------"
             echo "roxygen2::roxygenize('.', roclets = c('rd', 'collate', 'namespace'))"
             echo "--------------------------------------------------------------------"
+            echo "ℹ roxygen2 version that was used in this workflow: $ROXYGEN_VERSION"
+            echo "🙏 Please ensure that the 'RoxygenNote' field in the DESCRIPTION file matches this version"
             exit 1
           else
                echo "💚 Manuals are up-to-date with roxygen comments"

@@ -26,17 +26,11 @@ testthat::test_that("set_selected does not throw when passed a scalar logical va
   testthat::expect_error(filter_state$set_selected(FALSE), NA)
 })
 
-testthat::test_that("set_selected throw when selection not in c(TRUE, FALSE)", {
-  filter_state <- LogicalFilterState$new(TRUE, varname = "test")
-
+testthat::test_that("set_selected throws when the passed values are not coercible to logical", {
+  filter_state <- LogicalFilterState$new(c(TRUE, FALSE), varname = "test")
   testthat::expect_error(
-    filter_state$set_selected("YES"),
-    "should be a single logical"
-  )
-
-  testthat::expect_error(
-    filter_state$set_selected(1),
-    "should be a single logical value"
+    filter_state$set_selected(c(print)),
+    "The array of set values must contain values coercible to logical."
   )
 })
 

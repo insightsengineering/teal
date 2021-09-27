@@ -29,6 +29,7 @@ components of the \code{Dataset}.
 \item \href{#method-get_varlabels}{\code{FilteredDataset$get_varlabels()}}
 \item \href{#method-get_varnames}{\code{FilteredDataset$get_varnames()}}
 \item \href{#method-get_filtered_dataname}{\code{FilteredDataset$get_filtered_dataname()}}
+\item \href{#method-get_filterable_varnames}{\code{FilteredDataset$get_filterable_varnames()}}
 \item \href{#method-set_bookmark_state}{\code{FilteredDataset$set_bookmark_state()}}
 \item \href{#method-ui}{\code{FilteredDataset$ui()}}
 \item \href{#method-server}{\code{FilteredDataset$server()}}
@@ -311,22 +312,41 @@ Used when filtering the data to get \verb{<dataname>_FILTERED},
 }
 }
 \if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-get_filterable_varnames"></a>}}
+\if{latex}{\out{\hypertarget{method-get_filterable_varnames}{}}}
+\subsection{Method \code{get_filterable_varnames()}}{
+Gets variable names for the filtering.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{FilteredDataset$get_filterable_varnames()}\if{html}{\out{</div>}}
+}
+
+\subsection{Returns}{
+(\code{character} vector) of variable names
+}
+}
+\if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-set_bookmark_state"></a>}}
 \if{latex}{\out{\hypertarget{method-set_bookmark_state}{}}}
 \subsection{Method \code{set_bookmark_state()}}{
 Sets the bookmark state
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{FilteredDataset$set_bookmark_state(state)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{FilteredDataset$set_bookmark_state(id, state)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
+\item{\code{id}}{(\code{character(1)})\cr
+an ID string that corresponds with the ID used to call the module's UI function.}
+
 \item{\code{state}}{(\verb{named list})\cr
 containing values of the initial filter. Values should be relevant
 to the referred column.}
 }
 \if{html}{\out{</div>}}
+}
+\subsection{Returns}{
+\code{moduleServer} function.
 }
 }
 \if{html}{\out{<hr>}}
@@ -361,23 +381,19 @@ Server module for a dataset active filters
 
 Server module managing a  active filters.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{FilteredDataset$server(input, output, session)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{FilteredDataset$server(id)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{input}}{(\code{shiny})\cr}
-
-\item{\code{output}}{(\code{shiny})\cr}
-
-\item{\code{session}}{(\code{shiny})\cr
-single dataset for which filters are rendered}
+\item{\code{id}}{(\code{character(1)})\cr
+an ID string that corresponds with the ID used to call the module's UI function.}
 }
 \if{html}{\out{</div>}}
 }
 \subsection{Returns}{
-function - shiny server module
+\code{moduleServer} function which returns \code{NULL}
 }
 }
 \if{html}{\out{<hr>}}
@@ -411,22 +427,21 @@ Server module to add filter variable for this dataset
 
 Server module to add filter variable for this dataset
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{FilteredDataset$srv_add_filter_state(input, output, session)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{FilteredDataset$srv_add_filter_state(id, ...)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{input}}{(\code{shiny})\cr}
+\item{\code{id}}{(\code{character(1)})\cr
+an ID string that corresponds with the ID used to call the module's UI function.}
 
-\item{\code{output}}{(\code{shiny})\cr}
-
-\item{\code{session}}{(\code{shiny})\cr}
+\item{\code{...}}{ignored}
 }
 \if{html}{\out{</div>}}
 }
 \subsection{Returns}{
-function - shiny server module
+\code{moduleServer} function.
 }
 }
 \if{html}{\out{<hr>}}

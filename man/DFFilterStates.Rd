@@ -94,12 +94,15 @@ For \code{DFFilterStates} \code{dplyr::filter} is used}
 \subsection{Method \code{set_bookmark_state()}}{
 Set bookmark state
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{DFFilterStates$set_bookmark_state(data, state)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{DFFilterStates$set_bookmark_state(id, data, state)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
+\item{\code{id}}{(\code{character(1)})\cr
+an ID string that corresponds with the ID used to call the module's UI function.}
+
 \item{\code{data}}{(\code{data.frame})\cr
 data which are supposed to be filtered}
 
@@ -109,6 +112,9 @@ Names of the \code{list} element should correspond to the name of the
 column in \code{data}.}
 }
 \if{html}{\out{</div>}}
+}
+\subsection{Returns}{
+\code{moduleServer} function which returns \code{NULL}
 }
 }
 \if{html}{\out{<hr>}}
@@ -145,25 +151,32 @@ Module controls available choices to select as a filter variable.
 Selected filter variable is being removed from available choices.
 Removed filter variable gets back to available choices.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{DFFilterStates$srv_add_filter_state(input, output, session, data)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{DFFilterStates$srv_add_filter_state(
+  id,
+  data,
+  vars_include = get_filterable_varnames(data = data),
+  ...
+)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{input}}{(\code{Shiny})\cr input object}
-
-\item{\code{output}}{(\code{Shiny})\cr output object}
-
-\item{\code{session}}{(\code{Shiny})\cr session object}
+\item{\code{id}}{(\code{character(1)})\cr
+an ID string that corresponds with the ID used to call the module's UI function.}
 
 \item{\code{data}}{(\code{data.frame})\cr
 object which columns are used to choose filter variables.}
+
+\item{\code{vars_include}}{(\code{character(n)})\cr
+optional, vector of column names to be included.}
+
+\item{\code{...}}{ignored}
 }
 \if{html}{\out{</div>}}
 }
 \subsection{Returns}{
-\code{NULL}
+\code{moduleServer} function which returns \code{NULL}
 description
 Get label of specific variable. In case when variable label is missing
 name of the variable is returned.

@@ -719,3 +719,19 @@ testthat::test_that("get_hash returns the correct hash after mutating the Datase
   ds <- Dataset$new("iris", iris) %>% mutate_dataset("iris$test <- 1")
   testthat::expect_equal(ds$get_hash(), mutated_iris_hash)
 })
+
+testthat::test_that("dataset$merge_join_keys does not throw on basic input", {
+  dataset1 <- Dataset$new("iris", head(iris))
+  dataset1$set_join_keys(join_key("iris", "other_dataset", c("Species" = "some_col")))
+
+  dataset2 <- Dataset$new("iris", head(iris))
+  dataset2$set_join_keys(join_key("iris", "other_dataset_2", c("Sepal.Length" = "some_col2")))
+
+  before_merge <- dataset1$get_join_keys()$get()
+  after_merge <- dataset1$merge_join_keys(dataset2$get_join_keys())$get_join_keys()$get()
+
+
+  testthat::expect_true(all(names(before_merge) %in% names(after_merge)))
+  testthat::expect_true(length(before_merge) < length(after_merge))
+  testthat::expect_equal(names(after_merge), c("iris", "other_dataset", "other_dataset_2"))
+})

@@ -93,17 +93,17 @@ testthat::test_that("get_data does not throw when passed a dataset name", {
   testthat::expect_equal(isolate(filtered_data$get_data("iris")), head(iris))
 })
 
-testthat::test_that("get_filtered_datasets returns a list of FilteredDataset", {
+testthat::test_that("get_filtered_dataset returns a list of FilteredDataset", {
   filtered_data <- FilteredData$new()
   filtered_data$set_dataset(Dataset$new("iris", head(iris)))
-  testthat::expect_true(is_class_list("FilteredDataset")(filtered_data$get_filtered_datasets()))
+  testthat::expect_true(is_class_list("FilteredDataset")(filtered_data$get_filtered_dataset()))
 })
 
-testthat::test_that("get_filtered_datasets returns a list with elements names after set datasets", {
+testthat::test_that("get_filtered_dataset returns a list with elements named after set datasets", {
   filtered_data <- FilteredData$new()
   filtered_data$set_dataset(Dataset$new("iris", head(iris)))
   filtered_data$set_dataset(Dataset$new("mtcars", head(mtcars)))
-  testthat::expect_equal(names(filtered_data$get_filtered_datasets()), c("iris", "mtcars"))
+  testthat::expect_equal(names(filtered_data$get_filtered_dataset()), c("iris", "mtcars"))
 })
 
 testthat::test_that("get_call returns a list of language objects", {
@@ -134,8 +134,8 @@ testthat::test_that("FilteredData$set_bookmark_state sets filters is FilteredDat
         disp = default_filter()
       )
     )
-  datasets$set_bookmark_state(fs)
-  expect_equal(
+  shiny::testServer(datasets$set_bookmark_state, args = list(state = fs), expr = NULL)
+  testthat::expect_equal(
     isolate(datasets$get_call("iris")),
     list(
       filter = quote(
@@ -148,7 +148,7 @@ testthat::test_that("FilteredData$set_bookmark_state sets filters is FilteredDat
     )
   )
 
-  expect_equal(
+  testthat::expect_equal(
     isolate(datasets$get_call("mtcars")),
     list(
       filter = quote(
@@ -161,15 +161,12 @@ testthat::test_that("FilteredData$set_bookmark_state sets filters is FilteredDat
   )
 })
 
-library(MultiAssayExperiment)
 datasets <- FilteredData$new()
 adsl <- as.data.frame(as.list(setNames(nm = c(get_cdisc_keys("ADSL")))))
 adsl$sex <- c("F")
-data("miniACC")
-
 datasets$set_dataset(cdisc_dataset("ADSL", adsl))
 datasets$set_dataset(dataset("mock_iris", head(iris)))
-datasets$set_dataset(dataset("miniACC", miniACC))
+datasets$set_dataset(dataset("miniACC", MultiAssayExperiment::miniACC))
 
 testthat::test_that("get_filter_overview accepts all datasets argument input", {
   testthat::expect_error(isolate(datasets$get_filter_overview("all")), NA)
@@ -212,20 +209,16 @@ testthat::test_that("get_filter_overview returns overview matrix for non-filtere
 testthat::test_that("get_filter_overview returns overview matrix for filtered datasets", {
   filter_state_adsl <- ChoicesFilterState$new(c("F", "M"), varname = "sex")
   filter_state_adsl$set_selected("M")
-
-  queue <- datasets$get_filtered_datasets("ADSL")$get_filter_states(1)
+  queue <- datasets$get_filtered_dataset("ADSL")$get_filter_states(1)
   queue$queue_push(filter_state_adsl, queue_index = 1L, element_id = "sex")
-
   filter_state_mae <- ChoicesFilterState$new(
     x = c("white"),
     varname = as.name("race"),
     input_dataname = as.name("miniACC"),
     extract_type = "list"
   )
-
-  queue <- datasets$get_filtered_datasets("miniACC")$get_filter_states(1)
+  queue <- datasets$get_filtered_dataset("miniACC")$get_filter_states(1)
   queue$queue_push(filter_state_mae, queue_index = 1L, element_id = "race")
-
   testthat::expect_equal(
     isolate(datasets$get_filter_overview(datasets$datanames())),
     matrix(

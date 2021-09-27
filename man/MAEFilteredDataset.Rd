@@ -17,6 +17,7 @@
 \item \href{#method-new}{\code{MAEFilteredDataset$new()}}
 \item \href{#method-get_call}{\code{MAEFilteredDataset$get_call()}}
 \item \href{#method-get_filter_overview_info}{\code{MAEFilteredDataset$get_filter_overview_info()}}
+\item \href{#method-get_filterable_varnames}{\code{MAEFilteredDataset$get_filterable_varnames()}}
 \item \href{#method-set_bookmark_state}{\code{MAEFilteredDataset$set_bookmark_state()}}
 \item \href{#method-ui_add_filter_state}{\code{MAEFilteredDataset$ui_add_filter_state()}}
 \item \href{#method-srv_add_filter_state}{\code{MAEFilteredDataset$srv_add_filter_state()}}
@@ -100,17 +101,33 @@ Get filter overview rows of a dataset
 }
 }
 \if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-get_filterable_varnames"></a>}}
+\if{latex}{\out{\hypertarget{method-get_filterable_varnames}{}}}
+\subsection{Method \code{get_filterable_varnames()}}{
+Gets variable names for the filtering.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{MAEFilteredDataset$get_filterable_varnames()}\if{html}{\out{</div>}}
+}
+
+\subsection{Returns}{
+(\code{character(0)})
+}
+}
+\if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-set_bookmark_state"></a>}}
 \if{latex}{\out{\hypertarget{method-set_bookmark_state}{}}}
 \subsection{Method \code{set_bookmark_state()}}{
 Set bookmark state
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{MAEFilteredDataset$set_bookmark_state(state)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{MAEFilteredDataset$set_bookmark_state(id, state)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
+\item{\code{id}}{(\code{character(1)})\cr
+an ID string that corresponds with the ID used to call the module's UI function.}
+
 \item{\code{state}}{(\verb{named list})\cr
 names of the list should correspond to the names of the initialized \code{FilterStates}
 kept in \code{private$filter_states}. For this object they are \code{"subjects"} and
@@ -118,6 +135,9 @@ names of the experiments. Values of initial state should be relevant
 to the referred column.}
 }
 \if{html}{\out{</div>}}
+}
+\subsection{Returns}{
+\code{moduleServer} function which returns \code{NULL}
 }
 }
 \if{html}{\out{<hr>}}
@@ -155,22 +175,21 @@ of the same name from \code{FilterStates} as \code{MAEFilteredDataset}
 contains one \code{FilterStates} object for \code{colData} and one for each
 experiment.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{MAEFilteredDataset$srv_add_filter_state(input, output, session)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{MAEFilteredDataset$srv_add_filter_state(id, ...)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{input}}{(\code{shiny})\cr}
+\item{\code{id}}{(\code{character(1)})\cr
+an ID string that corresponds with the ID used to call the module's UI function.}
 
-\item{\code{output}}{(\code{shiny})\cr}
-
-\item{\code{session}}{(\code{shiny})\cr}
+\item{\code{...}}{ignored.}
 }
 \if{html}{\out{</div>}}
 }
 \subsection{Returns}{
-function - shiny server module
+\code{moduleServer} function which returns \code{NULL}
 }
 }
 \if{html}{\out{<hr>}}

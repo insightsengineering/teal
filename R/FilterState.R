@@ -283,7 +283,7 @@ FilterState <- R6::R6Class( # nolint
       private$na_count <- sum(is.na(x))
       private$keep_na <- reactiveVal(value = FALSE)
 
-      return(invisible(self))
+      invisible(self)
     },
 
     #' @description
@@ -350,8 +350,8 @@ FilterState <- R6::R6Class( # nolint
 
     #' @description
     #' Get selected values from `FilterState`
-    #' @return class of returned object depends of class of the
-    #' `FilterState`
+    #'
+    #' @return class of the returned object depends of class of the `FilterState`
     get_selected = function() {
       private$selected()
     },
@@ -359,7 +359,7 @@ FilterState <- R6::R6Class( # nolint
     #' @description
     #' Set if `NA` should be kept
     #' @param value (`logical(1)`)\cr
-    #'  Value(s) which come from the filter selection. Value is set in `server`
+    #'  value(s) which come from the filter selection. Value is set in `server`
     #'  modules after selecting check-box-input in the shiny interface. Values are set to
     #'  `private$keep_na` which is reactive.
     set_keep_na = function(value) {
@@ -371,11 +371,13 @@ FilterState <- R6::R6Class( # nolint
     #' @description
     #' Set selection
     #' @param value (`vector`)\cr
-    #'  Value(s) which come from the filter selection. Values are set in `server`
+    #'  value(s) which come from the filter selection. Values are set in `server`
     #'  modules after choosing value in app interface. Values are set to
     #'  `private$selected` which is reactive. Values type have to be the
     #'  same as `private$choices`.
     set_selected = function(value) {
+      value <- private$cast_and_validate(value)
+      value <- private$remove_out_of_bound_values(value)
       private$validate_selection(value)
       private$selected(value)
       invisible(NULL)
@@ -403,12 +405,16 @@ FilterState <- R6::R6Class( # nolint
 
     #' @description
     #' Server module
-    #' @param input (`Shiny`)\cr input object
-    #' @param output (`Shiny`)\cr output object
-    #' @param session (`Shiny`)\cr session object
-    #' @return nothing
-    server = function(input, output, session) {
-      NULL
+    #' @param id (`character(1)`)\cr
+    #'   an ID string that corresponds with the ID used to call the module's UI function.
+    #' @return `moduleServer` function which returns `NULL`
+    server = function(id) {
+      moduleServer(
+        id = id,
+        function(input, output, session) {
+          NULL
+        }
+      )
     },
 
     #' @description
@@ -504,6 +510,29 @@ FilterState <- R6::R6Class( # nolint
     # has a wrong class or is outside of possible choices
     validate_selection = function(value) {
       invisible(NULL)
+    },
+
+    # Filters out erroneous values from an array.
+    #
+    # @param values the array of values
+    #
+    # @return the array of values without elements, which are outside of
+    # the accepted set for this FilterState
+    remove_out_of_bound_values = function(values) {
+      values
+    },
+
+    # Casts an array of values to the type fitting this `FilterState`
+    # and validates the elements of the casted array
+    # satisfy the requirements of this `FilterState`.
+    #
+    # @param values the array of values
+    #
+    # @return the casted array
+    #
+    # @note throws an error if the casting did not execute successfully.
+    cast_and_validate = function(values) {
+      values
     }
   )
 )
@@ -598,13 +627,17 @@ EmptyFilterState <- R6::R6Class( # nolint
     },
     #' @description
     #' Controls selection of `keep_na` checkbox input
-    #' @param input (`Shiny`)\cr input object
-    #' @param output (`Shiny`)\cr output object
-    #' @param session (`Shiny`)\cr session object
-    #' @return nothing
-    server = function(input, output, session) {
-      private$observe_keep_na(input)
-      return(NULL)
+    #' @param id (`character(1)`)\cr
+    #'   an ID string that corresponds with the ID used to call the module's UI function.
+    #' @return `moduleServer` function which returns `NULL`
+    server = function(id) {
+      moduleServer(
+        id = id,
+        function(input, output, session) {
+          private$observe_keep_na(input)
+          NULL
+        }
+      )
     },
 
     #' @description
@@ -763,52 +796,70 @@ LogicalFilterState <- R6::R6Class( # nolint
 
     #' @description
     #' Server module
-    #' @param input (`Shiny`)\cr input object
-    #' @param output (`Shiny`)\cr output object
-    #' @param session (`Shiny`)\cr session object
-    #' @return nothing
-    server = function(input, output, session) {
-      output$plot <- renderPlot(
-        bg = "transparent",
-        expr = {
-          data <- private$histogram_data
-          data$y <- rev(data$y / sum(data$y)) # we have to reverse because the histogram is turned by 90 degrees
-          data$x <- seq_len(nrow(data)) # to prevent ggplot reordering columns using the characters in x column
-          ggplot2::ggplot(data) +
-            # sort factor so that it reflects checkbox order
-            ggplot2::aes_string(x = "x", y = "y") +
-            ggplot2::geom_col(
-              width = 0.95,
-              fill = grDevices::rgb(66 / 255, 139 / 255, 202 / 255),
-              color = NA,
-              alpha = 0.2
-            ) +
-            ggplot2::coord_flip() +
-            ggplot2::theme_void() +
-            ggplot2::scale_x_discrete(expand = c(0, 0)) +
-            ggplot2::scale_y_continuous(expand = c(0, 0), limits = c(0, 1))
-        }
-      )
-
-      private$observers$selection <- observeEvent(
-        ignoreNULL = FALSE,
-        ignoreInit = TRUE,
-        eventExpr = input$selection,
-        handlerExpr = {
-          selection_state <- input$selection
-          self$set_selected(
-            value = if_null(
-              as.logical(selection_state),
-              logical(0)
-            )
+    #'
+    #' @param id (`character(1)`)\cr
+    #'   an ID string that corresponds with the ID used to call the module's UI function.
+    #' @return `moduleServer` function which returns `NULL`
+    server = function(id) {
+      moduleServer(
+        id = id,
+        function(input, output, session) {
+          output$plot <- renderPlot(
+            bg = "transparent",
+            expr = {
+              data <- private$histogram_data
+              data$y <- rev(data$y / sum(data$y)) # we have to reverse because the histogram is turned by 90 degrees
+              data$x <- seq_len(nrow(data)) # to prevent ggplot reordering columns using the characters in x column
+              ggplot2::ggplot(data) +
+                # sort factor so that it reflects checkbox order
+                ggplot2::aes_string(x = "x", y = "y") +
+                ggplot2::geom_col(
+                  width = 0.95,
+                  fill = grDevices::rgb(66 / 255, 139 / 255, 202 / 255),
+                  color = NA,
+                  alpha = 0.2
+                ) +
+                ggplot2::coord_flip() +
+                ggplot2::theme_void() +
+                ggplot2::scale_x_discrete(expand = c(0, 0)) +
+                ggplot2::scale_y_continuous(expand = c(0, 0), limits = c(0, 1))
+            }
           )
-          private$log_state()
+
+          private$observers$selection <- observeEvent(
+            ignoreNULL = FALSE,
+            ignoreInit = TRUE,
+            eventExpr = input$selection,
+            handlerExpr = {
+              selection_state <- input$selection
+              self$set_selected(if_null(as.logical(selection_state), logical(0)))
+              private$log_state()
+            }
+          )
+
+          private$observe_keep_na(input)
+
+          NULL
         }
       )
+    },
 
-      private$observe_keep_na(input)
-
-      NULL
+    #' @description
+    #' Sets the selected values of this `LogicalFilterState`.
+    #'
+    #' @param value (`logical(1)`)\cr
+    #'  the value to set. Must not contain the NA value.
+    #'
+    #' @returns invisibly `NULL`.
+    #'
+    #' @note Casts the passed object to `logical` before validating the input
+    #' making it possible to pass any object coercible to `logical` to this method.
+    #'
+    #' @examples
+    #' filter <- teal:::LogicalFilterState$new(c(TRUE), varname = "name")
+    #' filter$set_selected(TRUE)
+    set_selected = function(value) {
+      super$set_selected(value)
     }
   ),
   private = list(
@@ -820,11 +871,12 @@ LogicalFilterState <- R6::R6Class( # nolint
         "NA:", toString(self$get_keep_na())
       )
     },
+
     validate_selection = function(value) {
       if (!(is_logical_empty(value) || is_logical_single(value))) {
         stop(
           sprintf(
-            "value of the selection for `%s` in `%s` should be a single logical value",
+            "value of the selection for `%s` in `%s` should be a logical scalar (TRUE or FALSE)",
             self$get_varname(deparse = TRUE),
             self$get_dataname(deparse = TRUE)
           )
@@ -837,7 +889,16 @@ LogicalFilterState <- R6::R6Class( # nolint
         self$get_varname(deparse = TRUE)
       )
       check_in_subset(value, private$choices, pre_msg = pre_msg)
+    },
 
+    cast_and_validate = function(values) {
+      tryCatch({
+        values_logical <- as.logical(values)
+        if (any(is.na(values_logical))) stop()
+      },
+      error = function(cond) stop("The array of set values must contain values coercible to logical.")
+      )
+      values_logical
     }
   )
 )
@@ -857,11 +918,11 @@ LogicalFilterState <- R6::R6Class( # nolint
 #'   extract_type = character(0)
 #' )
 #' isolate(filter_state$get_call())
-#'
 #' isolate(filter_state$set_selected(c(3L, 8L)))
 #' isolate(filter_state$set_keep_na(TRUE))
 #' isolate(filter_state$set_keep_inf(TRUE))
 #' isolate(filter_state$get_call())
+#'
 RangeFilterState <- R6::R6Class( # nolint
   "RangeFilterState",
   inherit = FilterState,
@@ -937,17 +998,14 @@ RangeFilterState <- R6::R6Class( # nolint
       private$keep_inf()
     },
 
-    #' UI Module for `EmptyFilterState`.
+    #' UI Module for `RangeFilterState`.
     #' This UI element contains two values for `min` and `max`
     #' of the range and two checkboxes whether to keep the `NA` or `Inf`  values.
     #' @param id (`character(1)`)\cr
     #'  id of shiny element
     ui = function(id) {
       ns <- NS(id)
-      v_pretty_range <- pretty(private$choices, n = 100)
-      v_step <- ifelse(private$is_integer, 1L, v_pretty_range[2] - v_pretty_range[1])
-      v_min <- v_pretty_range[1]
-      v_max <- v_pretty_range[length(v_pretty_range)]
+      pretty_range_inputs <- private$get_pretty_range_inputs(private$choices)
       fluidRow(
         div(
           class = "filterPlotOverlayRange",
@@ -956,11 +1014,11 @@ RangeFilterState <- R6::R6Class( # nolint
         optionalSliderInput(
           inputId = ns("selection"),
           label = NULL,
-          min = v_min,
-          max = v_max,
-          value = c(v_min, v_max),
+          min = pretty_range_inputs["min"],
+          max = pretty_range_inputs["max"],
+          value = isolate(self$get_selected()),
           width = "100%",
-          step = v_step
+          step = pretty_range_inputs["step"]
         ),
         if (private$inf_count > 0) {
           checkboxInput(
@@ -985,63 +1043,63 @@ RangeFilterState <- R6::R6Class( # nolint
 
     #' @description
     #' Server module
-    #' @param input (`Shiny`)\cr input object
-    #' @param output (`Shiny`)\cr output object
-    #' @param session (`Shiny`)\cr session object
-    #' @return nothing
-    server = function(input, output, session) {
-      output$plot <- renderPlot(
-        bg = "transparent",
-        height = 25,
-        expr = {
-          ggplot2::ggplot(private$histogram_data) +
-            ggplot2::aes_string(x = "x", y = "y") +
-            ggplot2::geom_area(
-              fill = grDevices::rgb(66 / 255, 139 / 255, 202 / 255),
-              color = NA,
-              alpha = 0.2) +
-            ggplot2::theme_void() +
-            ggplot2::scale_y_continuous(expand = c(0, 0)) +
-            ggplot2::scale_x_continuous(expand = c(0, 0))
+    #' @param id (`character(1)`)\cr
+    #'   an ID string that corresponds with the ID used to call the module's UI function.
+    #' @return `moduleServer` function which returns `NULL`
+    server = function(id) {
+      moduleServer(
+        id = id,
+        function(input, output, session) {
+          output$plot <- renderPlot(
+            bg = "transparent",
+            height = 25,
+            expr = {
+              ggplot2::ggplot(private$histogram_data) +
+                ggplot2::aes_string(x = "x", y = "y") +
+                ggplot2::geom_area(
+                  fill = grDevices::rgb(66 / 255, 139 / 255, 202 / 255),
+                  color = NA,
+                  alpha = 0.2) +
+                ggplot2::theme_void() +
+                ggplot2::scale_y_continuous(expand = c(0, 0)) +
+                ggplot2::scale_x_continuous(expand = c(0, 0))
+            }
+          )
+
+          private$observers$selection <- observeEvent(
+            ignoreNULL = FALSE, # ignoreNULL: we don't want to ignore NULL when nothing is selected in the `selectInput`,
+            ignoreInit = TRUE, # ignoreInit: should not matter because we set the UI with the desired initial state
+            eventExpr = input$selection,
+            handlerExpr = {
+              # because we extended real range into rounded one we need to apply intersect(range_input, range_real)
+              selection_state <- c(max(input$selection[1], private$choices[1]), min(input$selection[2], private$choices[2]))
+              if (!setequal(selection_state, self$get_selected())) {
+                validate(
+                  need(
+                    input$selection[1] <= input$selection[2],
+                    "Left range boundary should be lower than right"
+                  )
+                )
+                self$set_selected(if_null(selection_state, numeric(0)))
+              }
+              private$log_state()
+            })
+
+          private$observe_keep_na(input)
+
+          private$observers$keep_inf <- observeEvent(
+            ignoreNULL = FALSE, # ignoreNULL: we don't want to ignore NULL when nothing is selected in the `selectInput`,
+            ignoreInit = TRUE, # ignoreInit: should not matter because we set the UI with the desired initial state
+            eventExpr = input$keep_inf,
+            handlerExpr = {
+              self$set_keep_inf(if_null(input$keep_inf, FALSE))
+              private$log_state()
+            }
+          )
+          NULL
         }
       )
 
-      private$observers$selection <- observeEvent(
-        ignoreNULL = FALSE, # ignoreNULL: we don't want to ignore NULL when nothing is selected in the `selectInput`,
-        ignoreInit = TRUE, # ignoreInit: should not matter because we set the UI with the desired initial state
-        eventExpr = input$selection,
-        handlerExpr = {
-          # because we extended real range into rounded one we need to apply intersect(range_input, range_real)
-          selection_state <- c(max(input$selection[1], private$choices[1]), min(input$selection[2], private$choices[2]))
-          if (!setequal(selection_state, self$get_selected())) {
-            validate(
-              need(
-                input$selection[1] <= input$selection[2],
-                "Left range boundary should be lower than right"
-              )
-            )
-
-            self$set_selected(
-              value = if_null(
-                selection_state,
-                numeric(0)
-              )
-            )
-          }
-          private$log_state()
-        })
-
-      private$observe_keep_na(input)
-
-      private$observers$keep_inf <- observeEvent(
-        ignoreNULL = FALSE, # ignoreNULL: we don't want to ignore NULL when nothing is selected in the `selectInput`,
-        ignoreInit = TRUE, # ignoreInit: should not matter because we set the UI with the desired initial state
-        eventExpr = input$keep_inf,
-        handlerExpr = {
-          self$set_keep_inf(if_null(input$keep_inf, FALSE))
-          private$log_state()
-        }
-      )
     },
 
     #' @description
@@ -1071,6 +1129,25 @@ RangeFilterState <- R6::R6Class( # nolint
       }
       super$set_state(state[names(state) %in% c("selected", "keep_na")])
       invisible(NULL)
+    },
+
+    #' @description
+    #' Sets the selected values of this `RangeFilterState`.
+    #'
+    #' @param value (`numeric(2)`) the two-elements array of the lower and upper bound
+    #'   of the selected range. Must not contain NA values.
+    #'
+    #' @returns invisibly `NULL`
+    #'
+    #' @note Casts the passed object to `numeric` before validating the input
+    #' making it possible to pass any object coercible to `numeric` to this method.
+    #'
+    #' @examples
+    #' filter <- teal:::RangeFilterState$new(c(1, 2, 3, 4), varname = "name")
+    #' filter$set_selected(c(2, 3))
+    #'
+    set_selected = function(value) {
+      super$set_selected(value)
     }
   ),
   private = list(
@@ -1079,8 +1156,8 @@ RangeFilterState <- R6::R6Class( # nolint
     inf_count = integer(0),
     is_integer = logical(0),
 
-    #' Adds `is.infinite(varname)` before existing condition calls if keep_inf is selected
-    #' returns a call
+    # Adds is.infinite(varname) before existing condition calls if keep_inf is selected
+    # returns a call
     add_keep_inf_call = function(filter_call) {
       if (isTRUE(self$get_keep_inf())) {
         call(
@@ -1091,6 +1168,19 @@ RangeFilterState <- R6::R6Class( # nolint
       } else {
         filter_call
       }
+    },
+
+    # @description
+    # formats range to pretty numbers to reduce decimal precision
+    # @param values (numeric) initial range to be formatted
+    # @return numeric(3) with names min, max, step - relevant for sliderInput
+    get_pretty_range_inputs = function(values) {
+      v_pretty_range <- pretty(values, n = 100)
+      c(
+        min = v_pretty_range[1],
+        max = v_pretty_range[length(v_pretty_range)],
+        step = `if`(private$is_integer, 1L, v_pretty_range[2] - v_pretty_range[1])
+      )
     },
 
     log_state = function() {
@@ -1118,6 +1208,36 @@ RangeFilterState <- R6::R6Class( # nolint
         self$get_varname(deparse = TRUE)
       )
       check_in_range(value, private$choices, pre_msg = pre_msg)
+    },
+
+    cast_and_validate = function(values) {
+      tryCatch({
+        values <- as.numeric(values)
+        if (any(is.na(values))) stop()
+      },
+        error = function(error) stop("The array of set values must contain values coercible to numeric.")
+      )
+      if (length(values) != 2) stop("The array of set values must have length two.")
+      values
+    },
+
+    remove_out_of_bound_values = function(values) {
+      if (values[1] < private$choices[1]) {
+        warning(paste(
+          "Value:", values[1], "is outside of the possible range for column", private$varname,
+          "of dataset", private$input_dataname, "."
+        ))
+        values[1] <- private$choices[1]
+      }
+
+      if (values[2] > private$choices[2]) {
+        warning(paste(
+          "Value:", values[2], "is outside of the possible range for column", private$varname,
+          "of dataset", private$input_dataname, "."
+        ))
+        values[2] <- private$choices[2]
+      }
+      values
     }
   )
 )
@@ -1216,7 +1336,7 @@ ChoicesFilterState <- R6::R6Class( # nolint
 
 
     #' @description
-    #' UI Module for `EmptyFilterState`.
+    #' UI Module for `ChoicesFilterState`.
     #' This UI element contains available choices selection and
     #' checkbox whether to keep or not keep the `NA` values.
     #' @param id (`character(1)`)\cr
@@ -1266,49 +1386,53 @@ ChoicesFilterState <- R6::R6Class( # nolint
 
     #' @description
     #' Server module
-    #' @param input (`Shiny`)\cr input object
-    #' @param output (`Shiny`)\cr output object
-    #' @param session (`Shiny`)\cr session object
-    #' @return nothing
-    server = function(input, output, session) {
-      output$plot <- renderPlot(
-        bg = "transparent",
-        expr = {
-          if (length(private$choices) <= .threshold_slider_vs_checkboxgroup) {
-            # Proportional
-            data <- private$histogram_data
-            data$y <- rev(data$y / sum(data$y)) # we have to reverse because the histogram is turned by 90 degrees
-            data$x <- seq_len(nrow(data)) # to prevent ggplot reordering columns using the characters in x column
-            ggplot2::ggplot(data) +
-              # sort factor so that it reflects checkbox order
-              ggplot2::aes_string(x = "x", y = "y") +
-              ggplot2::geom_col(
-                width = 0.95,
-                fill = grDevices::rgb(66 / 255, 139 / 255, 202 / 255),
-                color = NA,
-                alpha = 0.2
-              ) +
-              ggplot2::coord_flip() +
-              ggplot2::theme_void() +
-              ggplot2::scale_x_discrete(expand = c(0, 0)) +
-              ggplot2::scale_y_continuous(expand = c(0, 0), limits = c(0, 1))
-          }
+    #' @param id (`character(1)`)\cr
+    #'   an ID string that corresponds with the ID used to call the module's UI function.
+    #' @return `moduleServer` function which returns `NULL`
+    server = function(id) {
+      moduleServer(
+        id = id,
+        function(input, output, session) {
+          output$plot <- renderPlot(
+            bg = "transparent",
+            expr = {
+              if (length(private$choices) <= .threshold_slider_vs_checkboxgroup) {
+                # Proportional
+                data <- private$histogram_data
+                data$y <- rev(data$y / sum(data$y)) # we have to reverse because the histogram is turned by 90 degrees
+                data$x <- seq_len(nrow(data)) # to prevent ggplot reordering columns using the characters in x column
+                ggplot2::ggplot(data) +
+                  # sort factor so that it reflects checkbox order
+                  ggplot2::aes_string(x = "x", y = "y") +
+                  ggplot2::geom_col(
+                    width = 0.95,
+                    fill = grDevices::rgb(66 / 255, 139 / 255, 202 / 255),
+                    color = NA,
+                    alpha = 0.2
+                  ) +
+                  ggplot2::coord_flip() +
+                  ggplot2::theme_void() +
+                  ggplot2::scale_x_discrete(expand = c(0, 0)) +
+                  ggplot2::scale_y_continuous(expand = c(0, 0), limits = c(0, 1))
+              }
+            }
+          )
+
+
+          private$observers$selection <- observeEvent(
+            ignoreNULL = FALSE, # ignoreNULL: we don't want to ignore NULL when nothing is selected in the `selectInput`,
+            ignoreInit = TRUE, # ignoreInit: should not matter because we set the UI with the desired initial state
+            eventExpr = input$selection,
+            handlerExpr = {
+              self$set_selected(if_null(input$selection, character(0)))
+              private$log_state()
+            }
+          )
+          private$observe_keep_na(input)
+
+          NULL
         }
       )
-
-
-      private$observers$selection <- observeEvent(
-        ignoreNULL = FALSE, # ignoreNULL: we don't want to ignore NULL when nothing is selected in the `selectInput`,
-        ignoreInit = TRUE, # ignoreInit: should not matter because we set the UI with the desired initial state
-        eventExpr = input$selection,
-        handlerExpr = {
-          self$set_selected(if_null(input$selection, character(0)))
-          private$log_state()
-        }
-      )
-      private$observe_keep_na(input)
-
-      return(NULL)
     },
 
     #' @description
@@ -1325,6 +1449,24 @@ ChoicesFilterState <- R6::R6Class( # nolint
       }
       super$set_state(state)
       invisible(NULL)
+    },
+
+    #' @description
+    #' Sets the selected values of this `ChoicesFilterState`.
+    #'
+    #' @param value (`character`) the array of the selected choices.
+    #'   Must not contain NA values.
+    #'
+    #' @return invisibly `NULL`
+    #'
+    #' @note Casts the passed object to `character` before validating the input
+    #' making it possible to pass any object coercible to `character` to this method.
+    #'
+    #' @examples
+    #' filter <- teal:::ChoicesFilterState$new(c("a", "b", "c"), varname = "name")
+    #' filter$set_selected(c("c", "a"))
+    set_selected = function(value) {
+      super$set_selected(value)
     }
   ),
   private = list(
@@ -1341,11 +1483,12 @@ ChoicesFilterState <- R6::R6Class( # nolint
         "NA:", toString(self$get_keep_na())
       )
     },
+
     validate_selection = function(value) {
       if (!is.character(value)) {
         stop(
           sprintf(
-            "value of the selection for `%s` in `%s` should be a character",
+            "Values of the selection for `%s` in `%s` should be an array of character.",
             self$get_varname(deparse = TRUE),
             self$get_dataname(deparse = TRUE)
           )
@@ -1357,6 +1500,27 @@ ChoicesFilterState <- R6::R6Class( # nolint
         self$get_varname(deparse = TRUE)
       )
       check_in_subset(value, private$choices, pre_msg = pre_msg)
+    },
+
+    cast_and_validate = function(values) {
+      tryCatch({
+        values <- as.character(values)
+        if (any(is.na(values))) stop()
+      },
+        error = function(error) stop("The array of set values must contain values coercible to character.")
+      )
+      values
+    },
+
+    remove_out_of_bound_values = function(values) {
+      in_choices_mask <- values %in% private$choices
+      if (length(values[!in_choices_mask]) > 0) {
+        warning(paste(
+          "Values:", strtrim(paste(values[!in_choices_mask], collapse = ", "), 360),
+          "are not in choices of column", private$varname, "in dataset", private$input_dataname, "."
+        ))
+      }
+      values[in_choices_mask]
     }
   )
 )
@@ -1435,7 +1599,7 @@ DateFilterState <- R6::R6Class( # nolint
     },
 
     #' @description
-    #' UI Module for `EmptyFilterState`.
+    #' UI Module for `DateFilterState`.
     #' This UI element contains two date selections for `min` and `max`
     #' of the range and a checkbox whether to keep the `NA` values.
     #' @param id (`character(1)`)\cr
@@ -1461,8 +1625,8 @@ DateFilterState <- R6::R6Class( # nolint
             dateRangeInput(
               inputId = ns("selection"),
               label = NULL,
-              start = private$choices[1],
-              end = private$choices[2],
+              start = isolate(self$get_selected())[1],
+              end = isolate(self$get_selected())[2],
               min = private$choices[1],
               max = private$choices[2]
             )
@@ -1482,43 +1646,68 @@ DateFilterState <- R6::R6Class( # nolint
 
     #' @description
     #' Server module
-    #' @param input (`Shiny`)\cr input object
-    #' @param output (`Shiny`)\cr output object
-    #' @param session (`Shiny`)\cr session object
-    #' @return nothing
-    server = function(input, output, session) {
-      private$observers$selection <- observeEvent(
-        ignoreNULL = FALSE, # ignoreNULL: we don't want to ignore NULL when nothing is selected in the `selectInput`,
-        ignoreInit = TRUE, # ignoreInit: should not matter because we set the UI with the desired initial state
-        eventExpr = input$selection,
-        handlerExpr = {
-          start_date <- input$selection[1]
-          end_date <- input$selection[2]
+    #' @param id (`character(1)`)\cr
+    #'   an ID string that corresponds with the ID used to call the module's UI function.
+    #' @return `moduleServer` function which returns `NULL`
+    server = function(id) {
+      moduleServer(
+        id = id,
+        function(input, output, session) {
+          private$observers$selection <- observeEvent(
+            ignoreNULL = FALSE, # ignoreNULL: we don't want to ignore NULL when nothing is selected in the `selectInput`,
+            ignoreInit = TRUE, # ignoreInit: should not matter because we set the UI with the desired initial state
+            eventExpr = input$selection,
+            handlerExpr = {
+              start_date <- input$selection[1]
+              end_date <- input$selection[2]
 
-          self$set_selected(c(start_date, end_date))
-          private$log_state()
+              self$set_selected(c(start_date, end_date))
+              private$log_state()
+            }
+          )
+
+          private$observe_keep_na(input)
+
+          private$observers$reset1 <- observeEvent(input$start_date_reset, {
+            updateDateRangeInput(
+              session = session,
+              inputId = "selection",
+              start = private$choices[1]
+            )
+          })
+
+          private$observers$reset2 <- observeEvent(input$end_date_reset, {
+            updateDateRangeInput(
+              session = session,
+              inputId = "selection",
+              end = private$choices[2]
+            )
+          })
+          NULL
         }
       )
+    },
 
-      private$observe_keep_na(input)
-
-      private$observers$reset1 <- observeEvent(input$start_date_reset, {
-        updateDateRangeInput(
-          session = session,
-          inputId = "selection",
-          start = private$choices[1]
-        )
-      })
-
-      private$observers$reset2 <- observeEvent(input$end_date_reset, {
-        updateDateRangeInput(
-          session = session,
-          inputId = "selection",
-          end = private$choices[2]
-        )
-      })
-
-      return(NULL)
+    #' @description
+    #' Sets the selected time frame of this `DateFilterState`.
+    #'
+    #' @param value (`Date(2)`) the lower and the upper bound of the selected
+    #'   time frame. Must not contain NA values.
+    #'
+    #' @return invisibly `NULL`.
+    #'
+    #' @note Casts the passed object to `Date` before validating the input
+    #' making it possible to pass any object coercible to `Date` to this method.
+    #'
+    #' @examples
+    #' date <- as.Date("13/09/2021")
+    #' filter <- teal:::DateFilterState$new(
+    #'   c(date, date + 1, date + 2, date + 3),
+    #'   varname = "name"
+    #' )
+    #' filter$set_selected(c(date + 1, date + 2))
+    set_selected = function(value) {
+      super$set_selected(value)
     }
   ),
   private = list(
@@ -1546,6 +1735,36 @@ DateFilterState <- R6::R6Class( # nolint
         self$get_varname(deparse = TRUE)
       )
       check_in_range(value, private$choices, pre_msg = pre_msg)
+    },
+
+    cast_and_validate = function(values) {
+      tryCatch({
+        values <- as.Date(values)
+        if (any(is.na(values))) stop()
+      },
+        error = function(error) stop("The array of set values must contain values coercible to Date.")
+      )
+      if (length(values) != 2) stop("The array of set values must have length two.")
+      values
+    },
+
+    remove_out_of_bound_values = function(values) {
+      if (values[1] < private$choices[1]) {
+        warning(paste(
+          "Value:", values[1], "is outside of the possible range for column", private$varname,
+          "of dataset", private$input_dataname, "."
+        ))
+        values[1] <- private$choices[1]
+      }
+
+      if (values[2] > private$choices[2]) {
+        warning(paste(
+          "Value:", values[2], "is outside of the possible range for column", private$varname,
+          "of dataset", private$input_dataname, "."
+        ))
+        values[2] <- private$choices[2]
+      }
+      values
     }
   )
 )
@@ -1637,7 +1856,7 @@ DatetimeFilterState <- R6::R6Class( # nolint
     },
 
     #' @description
-    #' UI Module for `EmptyFilterState`.
+    #' UI Module for `DatetimeFilterState`.
     #' This UI element contains two date-time selections for `min` and `max`
     #' of the range and a checkbox whether to keep the `NA` values.
     #' @param id (`character(1)`)\cr
@@ -1666,8 +1885,8 @@ DatetimeFilterState <- R6::R6Class( # nolint
               {
                 x <- shinyWidgets::airDatepickerInput(
                   inputId = ns("selection_start"),
-                  value = private$choices[1],
-                  startView = private$choices[1],
+                  value = isolate(self$get_selected())[1],
+                  startView = isolate(self$get_selected())[1],
                   timepicker = TRUE,
                   minDate = private$choices[1],
                   maxDate = private$choices[2],
@@ -1689,8 +1908,8 @@ DatetimeFilterState <- R6::R6Class( # nolint
               {
                 x <- shinyWidgets::airDatepickerInput(
                   inputId = ns("selection_end"),
-                  value = private$choices[2],
-                  startView = private$choices[2],
+                  value = isolate(self$get_selected())[2],
+                  startView = isolate(self$get_selected())[2],
                   timepicker = TRUE,
                   minDate = private$choices[1],
                   maxDate = private$choices[2],
@@ -1718,55 +1937,80 @@ DatetimeFilterState <- R6::R6Class( # nolint
 
     #' @description
     #' Server module
-    #' @param input (`Shiny`)\cr input object
-    #' @param output (`Shiny`)\cr output object
-    #' @param session (`Shiny`)\cr session object
-    #' @return nothing
-    server = function(input, output, session) {
-      private$observers$selection <- observeEvent(
-        ignoreNULL = FALSE, # ignoreNULL: we don't want to ignore NULL when nothing is selected in the `selectInput`,
-        ignoreInit = TRUE, # ignoreInit: should not matter because we set the UI with the desired initial state
-        eventExpr = {
-          input$selection_start
-          input$selection_end
-        },
-        handlerExpr = {
-          start_date <- input$selection_start
-          end_date <- input$selection_end
+    #' @param id (`character(1)`)\cr
+    #'   an ID string that corresponds with the ID used to call the module's UI function.
+    #' @return `moduleServer` function which returns `NULL`
+    server = function(id) {
+      moduleServer(
+        id = id,
+        function(input, output, session) {
+          private$observers$selection <- observeEvent(
+            ignoreNULL = FALSE, # ignoreNULL: we don't want to ignore NULL when nothing is selected in the `selectInput`,
+            ignoreInit = TRUE, # ignoreInit: should not matter because we set the UI with the desired initial state
+            eventExpr = {
+              input$selection_start
+              input$selection_end
+            },
+            handlerExpr = {
+              start_date <- input$selection_start
+              end_date <- input$selection_end
 
-          if (start_date < private$choices[1]) {
-            start_date <- private$choices[1]
-          }
+              if (start_date < private$choices[1]) {
+                start_date <- private$choices[1]
+              }
 
-          if (end_date > private$choices[2]) {
-            end_date <- private$choices[2]
-          }
+              if (end_date > private$choices[2]) {
+                end_date <- private$choices[2]
+              }
 
 
-          self$set_selected(c(start_date, end_date))
-          private$log_state()
+              self$set_selected(c(start_date, end_date))
+              private$log_state()
+            }
+          )
+
+
+          private$observe_keep_na(input)
+
+          private$observers$reset1 <- observeEvent(input$start_date_reset, {
+            shinyWidgets::updateAirDateInput(
+              session = session,
+              inputId = "selection_start",
+              value = private$choices[1]
+            )
+          })
+          private$observers$reset2 <- observeEvent(input$end_date_reset, {
+            shinyWidgets::updateAirDateInput(
+              session = session,
+              inputId = "selection_end",
+              value = private$choices[2]
+            )
+          })
+          NULL
         }
       )
+    },
 
-
-      private$observe_keep_na(input)
-
-      private$observers$reset1 <- observeEvent(input$start_date_reset, {
-        shinyWidgets::updateAirDateInput(
-          session = session,
-          inputId = "selection_start",
-          value = private$choices[1]
-        )
-      })
-      private$observers$reset2 <- observeEvent(input$end_date_reset, {
-        shinyWidgets::updateAirDateInput(
-          session = session,
-          inputId = "selection_end",
-          value = private$choices[2]
-        )
-      })
-
-      return(NULL)
+    #' @description
+    #' Sets the selected time frame of this `DatetimeFilterState`.
+    #'
+    #' @param value (`POSIX(2)`) the lower and the upper bound of the selected
+    #'   time frame. Must not contain NA values.
+    #'
+    #' @return invisibly `NULL`.
+    #'
+    #' @note Casts the passed object to `POSIXct` before validating the input
+    #' making it possible to pass any object coercible to `POSIXct` to this method.
+    #'
+    #' @examples
+    #' date <- as.POSIXct(1, origin = "01/01/1970")
+    #' filter <- teal:::DatetimeFilterState$new(
+    #'   c(date, date + 1, date + 2, date + 3),
+    #'   varname = "name"
+    #' )
+    #' filter$set_selected(c(date + 1, date + 2))
+    set_selected = function(value) {
+      super$set_selected(value)
     }
   ),
   private = list(
@@ -1797,6 +2041,36 @@ DatetimeFilterState <- R6::R6Class( # nolint
         self$get_varname(deparse = TRUE)
       )
       check_in_range(value, private$choices, pre_msg = pre_msg)
+    },
+
+    cast_and_validate = function(values) {
+      tryCatch({
+        values <- as.POSIXct(values)
+        if (any(is.na(values))) stop()
+      },
+        error = function(error) stop("The array of set values must contain values coercible to POSIX.")
+      )
+      if (length(values) != 2) stop("The array of set values must have length two.")
+      values
+    },
+
+    remove_out_of_bound_values = function(values) {
+      if (values[1] < private$choices[1]) {
+        warning(paste(
+          "Value:", values[1], "is outside of the possible range for column", private$varname,
+          "of dataset", private$input_dataname, "."
+        ))
+        values[1] <- private$choices[1]
+      }
+
+      if (values[2] > private$choices[2]) {
+        warning(paste(
+          "Value:", values[2], "is outside of the possible range for column", private$varname,
+          "of dataset", private$input_dataname, "."
+        ))
+        values[2] <- private$choices[2]
+      }
+      values
     }
   )
 )

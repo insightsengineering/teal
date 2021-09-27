@@ -2,20 +2,35 @@
 % Please edit documentation in R/DatasetConnector_constructors.R
 \name{dataset_connector_file}
 \alias{dataset_connector_file}
+\alias{relational_dataset_connector_file}
+\alias{cdisc_dataset_connector_file}
 \title{Load \code{DatasetConnector} object from a file}
 \usage{
 dataset_connector_file(path)
+
+relational_dataset_connector_file(path)
+
+cdisc_dataset_connector_file(path)
 }
 \arguments{
 \item{path}{(\code{character}) string giving the pathname of the file to read from.}
 }
 \value{
 \code{DatasetConnector} object
+
+\code{CDISCDatasetConnector} object
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
+
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#soft-deprecated}{\figure{lifecycle-soft-deprecated.svg}{options: alt='[Soft-deprecated]'}}}{\strong{[Soft-deprecated]}}
+
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
 }
 \details{
+Please note that the script has to end with a call creating desired object. The error will
+be raised otherwise.
+
 Please note that the script has to end with a call creating desired object. The error will
 be raised otherwise.
 }
@@ -33,5 +48,19 @@ writeLines(
   con = file_example
 )
 x <- dataset_connector_file(file_example)
+get_code(x)
+# simple example
+file_example <- tempfile(fileext = ".R")
+writeLines(
+  text = c(
+    "library(teal)
+     library(scda)
+
+     pull_callable <- callable_function(function() {synthetic_cdisc_data('latest')$adsl})
+     cdisc_dataset_connector(\"ADSL\", pull_callable, get_cdisc_keys(\"ADSL\"))"
+  ),
+  con = file_example
+)
+x <- cdisc_dataset_connector_file(file_example)
 get_code(x)
 }

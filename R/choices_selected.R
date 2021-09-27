@@ -10,10 +10,10 @@ no_select_keyword <- "-- no selection --"
 #'
 #' @param choices (`character`) vector of possible choices or `delayed_data` object\cr
 #'   See [`variable_choices`] and [`value_choices`].
-#' @param selected (`character`) vector of pre-selected options or (`delayed_data`) object\cr
-#'  If `delayed_data` object then `choices` must also be a `delayed_data` object.
-#'  If not supplied it will default to the first element of `choices` if `choices` is
-#'  a vector, or `NULL` if `choices` is a `delayed_data` object.
+#' @param selected (`character`) vector of pre-selected options, (`all_choices`) object
+#'  or (`delayed_data`) object. If `delayed_data` object then `choices` must also be
+#'  a `delayed_data` object. If not supplied it will default to the first element of
+#'  `choices` if `choices` is a vector, or `NULL` if `choices` is a `delayed_data` object.
 #' @param keep_order (`logical`)\cr
 #'  In case of `FALSE` the selected variables will be on top of the drop-down field.
 #' @param fixed optional, (`logical`)\cr
@@ -34,6 +34,10 @@ no_select_keyword <- "-- no selection --"
 #' @export
 #'
 #' @examples
+#'
+#' # all_choices example - semantically the same objects
+#' choices_selected(choices = letters, selected = all_choices())
+#' choices_selected(choices = letters, selected = letters)
 #'
 #' choices_selected(
 #'    choices = setNames(LETTERS[1:5], paste("Letter", LETTERS[1:5])),
@@ -112,9 +116,11 @@ choices_selected <- function(choices,
                              fixed = FALSE) {
 
   stopifnot(is.atomic(choices) || is(choices, "delayed_data"))
-  stopifnot(is.atomic(selected) || is(selected, "delayed_data"))
+  stopifnot(is.atomic(selected) || is(selected, "delayed_data") || is(selected, "all_choices"))
   stopifnot(is_logical_single(keep_order))
   stopifnot(is_logical_single(fixed))
+
+  if (is(selected, "all_choices")) selected <- choices
 
   if (is(selected, "delayed_data") && !is(choices, "delayed_data")) {
     stop("If 'selected' is of class 'delayed_data', so must be 'choices'.")
@@ -226,6 +232,24 @@ vector_reorder <- function(vec, idx) {
 
   return(vec)
 }
+
+vector_pop <- function(vec, idx) {
+  stopifnot(is.atomic(vec))
+  stopifnot(is_integer_vector(idx, min_length = 0))
+
+  if (length(idx) == 0) {
+    return(vec)
+  }
+
+  vec_attrs <- attributes(vec)
+
+  for (vec_attrs_idx in seq_along(vec_attrs)) {
+    if (length(vec_attrs[[vec_attrs_idx]]) == length(vec)) {
+      vec_attrs[[vec_attrs_idx]] <- vec_attrs[[vec_attrs_idx]][-idx]
+    }
+  }
+}
+
 vector_remove_dups <- function(vec) {
   stopifnot(is.atomic(vec))
 

@@ -15,10 +15,10 @@ choices_selected(
 \item{choices}{(\code{character}) vector of possible choices or \code{delayed_data} object\cr
 See \code{\link{variable_choices}} and \code{\link{value_choices}}.}
 
-\item{selected}{(\code{character}) vector of pre-selected options or (\code{delayed_data}) object\cr
-If \code{delayed_data} object then \code{choices} must also be a \code{delayed_data} object.
-If not supplied it will default to the first element of \code{choices} if \code{choices} is
-a vector, or \code{NULL} if \code{choices} is a \code{delayed_data} object.}
+\item{selected}{(\code{character}) vector of pre-selected options, (\code{all_choices}) object
+or (\code{delayed_data}) object. If \code{delayed_data} object then \code{choices} must also be
+a \code{delayed_data} object. If not supplied it will default to the first element of
+\code{choices} if \code{choices} is a vector, or \code{NULL} if \code{choices} is a \code{delayed_data} object.}
 
 \item{keep_order}{(\code{logical})\cr
 In case of \code{FALSE} the selected variables will be on top of the drop-down field.}
@@ -46,6 +46,10 @@ argument is set to false which will run the following code inside:
 in case you want to keep your specific order of choices, set \code{keep_order} to \code{TRUE}.
 }
 \examples{
+
+# all_choices example - semantically the same objects
+choices_selected(choices = letters, selected = all_choices())
+choices_selected(choices = letters, selected = letters)
 
 choices_selected(
    choices = setNames(LETTERS[1:5], paste("Letter", LETTERS[1:5])),

@@ -68,12 +68,15 @@ text label value.}
 \subsection{Method \code{set_bookmark_state()}}{
 Set bookmark state
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{MatrixFilterStates$set_bookmark_state(data, state)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{MatrixFilterStates$set_bookmark_state(id, data, state)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
+\item{\code{id}}{(\code{character(1)})\cr
+an ID string that corresponds with the ID used to call the module's UI function.}
+
 \item{\code{data}}{(\code{matrix})\cr
 data which are supposed to be filtered}
 
@@ -83,6 +86,9 @@ Names of the \code{list} element should correspond to the name of the
 column in \code{data}.}
 }
 \if{html}{\out{</div>}}
+}
+\subsection{Returns}{
+\code{moduleServer} function which returns \code{NULL}
 }
 }
 \if{html}{\out{<hr>}}
@@ -119,34 +125,24 @@ Module controls available choices to select as a filter variable.
 Selected filter variable is being removed from available choices.
 Removed filter variable gets back to available choices.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{MatrixFilterStates$srv_add_filter_state(input, output, session, data)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{MatrixFilterStates$srv_add_filter_state(id, data, ...)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{input}}{(\code{Shiny})\cr input object}
-
-\item{\code{output}}{(\code{Shiny})\cr output object}
-
-\item{\code{session}}{(\code{Shiny})\cr session object}
+\item{\code{id}}{(\code{character(1)})\cr
+an ID string that corresponds with the ID used to call the module's UI function.}
 
 \item{\code{data}}{(\code{matrix})\cr
 object which columns are used to choose filter variables.}
 
-\item{\code{varnames}}{(\code{character})\cr}
-
-\item{\code{varlabels}}{(\code{character})\cr
-labels of the variables displayed under name of the variable in UI element}
-
-\item{\code{keys}}{(\code{character})\cr
-names of the primary keys to distinguish from other variables
-in \code{optionalSelectInput}}
+\item{\code{...}}{ignored}
 }
 \if{html}{\out{</div>}}
 }
 \subsection{Returns}{
-\code{NULL}
+\code{moduleServer} function which returns \code{NULL}
 }
 }
 \if{html}{\out{<hr>}}

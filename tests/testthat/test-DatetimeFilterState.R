@@ -44,27 +44,57 @@ testthat::test_that("get_call returns a condition evaluating to NA for NA values
 })
 
 testthat::test_that("DatetimeFilterState echoes the timezone of the ISO object passed to the constructor", {
-  objects <- ISOdate(2021, 8, 25, tz = "GTM+10")
+  objects <- ISOdate(2021, 8, 25, tz = "Australia/Brisbane")
   filter_state <- DatetimeFilterState$new(objects, varname = "objects")
   testthat::expect_equal(
     isolate(filter_state$get_call()),
     quote(
-      objects >= as.POSIXct("2021-08-25 12:00:00", tz = "GTM+10") &
-        objects < as.POSIXct("2021-08-25 12:00:01", tz = "GTM+10")
+      objects >= as.POSIXct("2021-08-25 12:00:00", tz = "Australia/Brisbane") &
+        objects < as.POSIXct("2021-08-25 12:00:01", tz = "Australia/Brisbane")
     )
   )
 })
 
-testthat::test_that("set_selected throws when the values are not within the range passed to the constructor", {
+testthat::test_that("set_selected warns when the selected range intersects the possible range
+  but is not fully included in it", {
+  objects <- as.POSIXct(c(2, 3), origin = "1900/01/01")
+  filter_state <- DatetimeFilterState$new(objects, varname = "objects")
+  testthat::expect_warning(filter_state$set_selected(c(objects[1] - 1, objects[1])), "outside of the possible range")
+  testthat::expect_warning(filter_state$set_selected(c(objects[2], objects[2] + 1)), "outside of the possible range")
+  testthat::expect_warning(
+    filter_state$set_selected(c(objects[1] - 1, objects[2] + 1)),
+    "outside of the possible range"
+  )
+})
+
+testthat::test_that("set_selected throws when the selected range is completely outside of the possible range", {
+  objects <- as.POSIXct(c(2, 3), origin = "1900/01/01")
+  filter_state <- DatetimeFilterState$new(objects, varname = "objects")
+  testthat::expect_error(
+    suppressWarnings(filter_state$set_selected(c(objects[2] + 1, objects[2] + 2))),
+    "the upper bound of the range lower than the lower bound"
+  )
+})
+
+testthat::test_that("set_selected limits the selected range to the lower and the upper bound of the possible range", {
+  objects <- as.POSIXct(c(2, 3), origin = "1900/01/01")
+  filter_state <- DatetimeFilterState$new(objects, varname = "objects")
+  suppressWarnings(filter_state$set_selected(c(objects[1] - 1, objects[1])))
+  testthat::expect_equal(isolate(filter_state$get_selected()), c(objects[1], objects[1]))
+
+  suppressWarnings(filter_state$set_selected(c(objects[2], objects[2] + 1)))
+  testthat::expect_equal(isolate(filter_state$get_selected()), c(objects[2], objects[2]))
+
+  suppressWarnings(filter_state$set_selected(c(objects[1] - 1, objects[2] + 1)))
+  testthat::expect_equal(isolate(filter_state$get_selected()), c(objects[1], objects[2]))
+})
+
+testthat::test_that("set_selected throws when the value type cannot be interpreted as POSIX", {
   objects <- as.POSIXct(c(1, 2, 3), origin = "1900/01/01")
   filter_state <- DatetimeFilterState$new(objects, varname = "objects")
   testthat::expect_error(
-    filter_state$set_selected("a"),
-    "should be a POSIXct or POSIXlt"
-  )
-  testthat::expect_error(
-    filter_state$set_selected(c(objects[2], objects[3] + 1)),
-    "not valid for full range"
+    filter_state$set_selected(c("a", "b")),
+    "The array of set values must contain values coercible to POSIX."
   )
 })
 

@@ -1,4 +1,4 @@
-#' Set filter state in `FilterState` object
+#' Sets the filter state in `FilterState` object
 #'
 #' @description `r lifecycle::badge("experimental")`
 #' Sets values of the selection in `FilterState` object
@@ -6,7 +6,7 @@
 #'  values of the variable used in filter. Depending on the `FilterState` type
 #'  list should contain:
 #'  \itemize{
-#'  \item{`selected`}{ defines initial selection}
+#'  \item{`selected`}{ defines initial selection. See notes for more details}
 #'  \item{`keep_na` (`logical`)}{ defines whether to keep or remove `NA` values}
 #'  \item{`keep_inf` (`logical`)}{ defines whether to keep or remove `Inf` values}
 #'  }
@@ -14,6 +14,19 @@
 #'  adding `NA` and `Inf` to the selection vector.
 #'
 #' @param filter_state (`FilterState`)\cr
+#'
+#' @note
+#' The value of the `x$selected` needs to be modified according to the type
+#' of the passed `filter_state`.
+#'
+#' @seealso
+#' \itemize{
+#' \item{\code{\link{LogicalFilterState}}}
+#' \item{\code{\link{ChoicesFilterState}}}
+#' \item{\code{\link{RangeFilterState}}}
+#' \item{\code{\link{DateFilterState}}}
+#' \item{\code{\link{DatetimeFilterState}}}
+#' }
 #'
 #' @examples
 #' filter_state <- teal:::RangeFilterState$new(

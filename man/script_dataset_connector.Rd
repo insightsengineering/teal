@@ -2,12 +2,24 @@
 % Please edit documentation in R/DatasetConnector_constructors.R
 \name{script_dataset_connector}
 \alias{script_dataset_connector}
+\alias{script_cdisc_dataset_connector}
 \title{Script \code{DatasetConnector}}
 \usage{
 script_dataset_connector(
   dataname,
   file,
   keys = character(0),
+  label = character(0),
+  code = character(0),
+  script = character(0),
+  ...
+)
+
+script_cdisc_dataset_connector(
+  dataname,
+  file,
+  keys = get_cdisc_keys(dataname),
+  parent = if (identical(dataname, "ADSL")) character(0L) else "ADSL",
   label = character(0),
   code = character(0),
   script = character(0),
@@ -45,12 +57,20 @@ In case when this object code depends on the \code{raw_data} from the other
 this/these object(s) should be included. Please note that \code{vars}
 are included to this object as local \code{vars} and they cannot be modified
 within another dataset.}
+
+\item{parent}{optional, (\code{character}) \cr
+parent dataset name}
 }
 \description{
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
+
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
 }
 \details{
 Create a \code{DatasetConnector} from \code{.R} file.
+
+Create a \code{CDISCDatasetConnector} from \code{script} file with keys assigned
+automatically by \code{dataname}.
 }
 \examples{
 \dontrun{

@@ -66,7 +66,7 @@
 #' )
 #' filter_state_iris$set_selected("virginica")
 #'
-#' queue <- datasets$get_filtered_datasets("iris")$get_filter_states(1)
+#' queue <- datasets$get_filtered_dataset("iris")$get_filter_states(1)
 #' queue$queue_push(filter_state_iris, queue_index = 1L, element_id = "virginica")
 #'
 #' isolate(datasets$get_call("iris"))
@@ -81,7 +81,7 @@
 #' )
 #' filter_state_mtcars$set_selected(c(15, 20))
 #'
-#' queue <- datasets$get_filtered_datasets("mtcars")$get_filter_states("filter")
+#' queue <- datasets$get_filtered_dataset("mtcars")$get_filter_states("filter")
 #' queue$queue_push(filter_state_mtcars, queue_index = 1L, element_id = "mpg")
 #'
 #' isolate(datasets$get_call("iris"))
@@ -124,13 +124,14 @@ FilteredData <- R6::R6Class( # nolint
     get_filterable_datanames = function(dataname) {
       dataname
     },
+
     #' @description
     #' Gets variable names of a given dataname for the filtering.
     #'
     #' @param dataname (`character`) name of the dataset
     #' @return (`character` vector) of variable names
     get_filterable_varnames = function(dataname) {
-      self$get_varnames(dataname)
+      self$get_filtered_dataset(dataname)$get_filterable_varnames()
     },
 
     # datasets methods ----
@@ -157,7 +158,7 @@ FilteredData <- R6::R6Class( # nolint
     #'  calls
     get_call = function(dataname) {
       private$check_data_varname_exists(dataname)
-      self$get_filtered_datasets(dataname)$get_call()
+      self$get_filtered_dataset(dataname)$get_call()
     },
 
     #' @description
@@ -174,7 +175,7 @@ FilteredData <- R6::R6Class( # nolint
     #' @param dataname (`character(1)`)\cr
     #'  name of the dataset.
     #' @return `FilteredDataset` object or list of `FilteredDataset`
-    get_filtered_datasets = function(dataname = character(0)) {
+    get_filtered_dataset = function(dataname = character(0)) {
       if (is_empty(dataname)) {
         private$filtered_datasets
       } else {
@@ -194,7 +195,7 @@ FilteredData <- R6::R6Class( # nolint
       private$check_data_varname_exists(dataname)
       stopifnot(is_logical_single(filtered))
 
-      self$get_filtered_datasets(dataname)$get_data(filtered = filtered)
+      self$get_filtered_dataset(dataname)$get_data(filtered = filtered)
     },
 
     #' @description
@@ -209,7 +210,7 @@ FilteredData <- R6::R6Class( # nolint
     get_data_attr = function(dataname, attr) {
       private$check_data_varname_exists(dataname)
       stopifnot(is_character_single(attr))
-      get_attrs(self$get_filtered_datasets(dataname)$get_dataset())[[attr]]
+      get_attrs(self$get_filtered_dataset(dataname)$get_dataset())[[attr]]
     },
 
     #' @description
@@ -219,15 +220,15 @@ FilteredData <- R6::R6Class( # nolint
     #' @return (`named character`) vector with column names
     get_join_keys = function(dataset_1, dataset_2) {
       res <- if (!missing(dataset_1) && !missing(dataset_2)) {
-        self$get_filtered_datasets(dataset_1)$get_join_keys()[[dataset_2]]
+        self$get_filtered_dataset(dataset_1)$get_join_keys()[[dataset_2]]
       } else if (!missing(dataset_1)) {
-        self$get_filtered_datasets(dataset_1)$get_join_keys()
+        self$get_filtered_dataset(dataset_1)$get_join_keys()
       } else if (!missing(dataset_2)) {
-        self$get_filtered_datasets(dataset_2)$get_join_keys()
+        self$get_filtered_dataset(dataset_2)$get_join_keys()
       } else {
         res_list <- lapply(
           self$datanames(), function(dat_name) {
-            self$get_filtered_datasets(dat_name)$get_join_keys()
+            self$get_filtered_dataset(dat_name)$get_join_keys()
           }
         )
         names(res_list) <- self$datanames()
@@ -258,7 +259,7 @@ FilteredData <- R6::R6Class( # nolint
       rows <- lapply(
         datanames,
         function(dataname) {
-          self$get_filtered_datasets(dataname)$get_filter_overview_info()
+          self$get_filtered_dataset(dataname)$get_filter_overview_info()
         }
       )
 
@@ -269,7 +270,7 @@ FilteredData <- R6::R6Class( # nolint
     #' @param dataname (`character`) name of the dataset
     #' @return (`character`) keys of dataset
     get_keys = function(dataname) {
-      self$get_filtered_datasets(dataname)$get_keys()
+      self$get_filtered_dataset(dataname)$get_keys()
     },
     #' @description
     #' Gets labels of variables in the data
@@ -284,7 +285,7 @@ FilteredData <- R6::R6Class( # nolint
     #' @return (`character` or `NULL`) variable labels, `NULL` if `column_labels`
     #'   attribute does not exist for the data
     get_varlabels = function(dataname, variables = NULL) {
-      self$get_filtered_datasets(dataname)$get_varlabels(variables = variables)
+      self$get_filtered_dataset(dataname)$get_varlabels(variables = variables)
     },
 
     #' @description
@@ -293,7 +294,7 @@ FilteredData <- R6::R6Class( # nolint
     #' @param dataname (`character`) the name of the dataset
     #' @return (`character` vector) of variable names
     get_varnames = function(dataname) {
-      self$get_filtered_datasets(dataname)$get_varnames()
+      self$get_filtered_dataset(dataname)$get_varnames()
     },
 
     #' When active_datanames is "all", sets them to all datanames
@@ -307,12 +308,12 @@ FilteredData <- R6::R6Class( # nolint
         datanames <- self$datanames()
       } else {
         for (dataname in datanames) {
-        tryCatch(
-          check_in_subset(datanames, self$datanames(), "Some datasets are not available: "),
-          error = function(e) {
-            message(e$message)
-          }
-        )
+          tryCatch(
+            check_in_subset(datanames, self$datanames(), "Some datasets are not available: "),
+            error = function(e) {
+              message(e$message)
+            }
+          )
         }
       }
       datanames <- self$get_filterable_datanames(datanames)
@@ -368,19 +369,28 @@ FilteredData <- R6::R6Class( # nolint
 
     #' @description
     #' Sets bookmark state
+    #' @param id (`character(1)`)\cr
+    #'   an ID string that corresponds with the ID used to call the module's UI function.
     #' @param state (`named list`)\cr
     #'  nested list of filter selections applied to datasets.
-    #' @return invisibly NULL
-    set_bookmark_state = function(state) {
+    #' @return `moduleServer` function which returns `NULL`
+    set_bookmark_state = function(id, state) {
       stopifnot(
         all(names(state) %in% self$datanames())
       )
-      for(dataname in names(state)) {
-        fd <- self$get_filtered_datasets(dataname = dataname)
-        fd$set_bookmark_state(state = state[[dataname]])
-      }
-
-      invisible(NULL)
+      moduleServer(
+        id,
+        function(input, output, session) {
+          for(dataname in names(state)) {
+            fdataset <- self$get_filtered_dataset(dataname = dataname)
+            fdataset$set_bookmark_state(
+              id = private$get_ui_add_filter_id(dataname),
+              state = state[[dataname]]
+            )
+          }
+          invisible(NULL)
+        }
+      )
     },
 
     #' @description
@@ -484,10 +494,8 @@ FilteredData <- R6::R6Class( # nolint
               lapply(
                 self$datanames(),
                 function(dataname) {
-                  dataset_filters <- self$get_filtered_datasets(dataname)
-                  dataset_filters$ui(
-                    id = ns(sprintf("%s_filters", dataname))
-                  )
+                  fdataset <- self$get_filtered_dataset(dataname)
+                  fdataset$ui(id = ns(private$get_ui_id(dataname)))
                 }
               )
             )
@@ -520,13 +528,13 @@ FilteredData <- R6::R6Class( # nolint
               lapply(
                 self$datanames(),
                 function(dataname) {
-                  dataset_filters <- self$get_filtered_datasets(dataname)
-                  id <- ns(sprintf("add_%s_filter", dataname))
+                  fdataset <- self$get_filtered_dataset(dataname)
+                  id <- ns(private$get_ui_add_filter_id(dataname))
                   # add span with same id to show / hide
                   return(
                     span(
                       id = id,
-                      dataset_filters$ui_add_filter_state(id)
+                      fdataset$ui_add_filter_state(id)
                     )
                   )
                 }
@@ -539,98 +547,100 @@ FilteredData <- R6::R6Class( # nolint
 
     #' Server function for filter panel
     #'
-    #' @param input (`shiny`)\cr
-    #' @param output (`shiny`)\cr
-    #' @param session (`shiny`)\cr
+    #' @param id (`character(1)`)\cr
+    #'   an ID string that corresponds with the ID used to call the module's UI function.
     #' @param active_datanames `function / reactive` returning datanames that
     #'   should be shown on the filter panel,
     #'   must be a subset of the `datanames` argument provided to `ui_filter_panel`;
     #'   if the function returns `NULL` (as opposed to `character(0)`), the filter
     #'   panel will be hidden
-    #'
-    srv_filter_panel = function(input, output, session, active_datanames = function() "all") {
+    #' @return `moduleServer` function which returns `NULL`
+    srv_filter_panel = function(id, active_datanames = function() "all") {
       stopifnot(
         is.function(active_datanames) || is.reactive(active_datanames)
       )
-      callModule(
-        self$srv_filter_overview,
-        "teal_filters_info",
-        active_datanames = active_datanames
-      )
-
-      # use isolate because we assume that the number of datasets does not change over the course of the teal app
-      # alternatively, one can proceed as in modules_filter_items to dynamically insert, remove UIs
-      isol_datanames <- isolate(self$datanames()) # they are already ordered
-      # should not use for-loop as variables are otherwise only bound by reference and last dataname would be used
-      lapply(
-        isol_datanames,
-        function(dataname) {
-          dataset_filters <- self$get_filtered_datasets(dataname)
-          callModule(
-            module = dataset_filters$server,
-            id = sprintf("%s_filters", dataname)
+      moduleServer(
+        id = id,
+        function(input, output, session) {
+          self$srv_filter_overview(
+            id = "teal_filters_info",
+            active_datanames = active_datanames
           )
-        }
-      )
 
-      lapply(
-        isol_datanames,
-        function(dataname) {
-          dataset_filters <- self$get_filtered_datasets(dataname)
-          callModule(
-            module = dataset_filters$srv_add_filter_state,
-            id = sprintf("add_%s_filter", dataname)
-          )
-        }
-      )
-
-
-      # we keep anything that may be selected to add (happens when the variable is not available for filtering)
-      # lapply(isol_datanames, function(dataname) paste0("teal_add_", dataname, "_filter")) #nolint
-      setBookmarkExclude(names = c(
-        # these will be regenerated dynamically
-        lapply(isol_datanames, function(dataname) paste0(dataname, "filters"))
-      ))
-
-      # rather than regenerating the UI dynamically for the dataset filtering,
-      # we instead choose to hide/show the elements
-      # the filters for this dataset are just hidden from the UI, but still applied
-      # optimization: we set `priority = 1` to execute it before the other
-      # observers (default priority 0), so that they are not computed if they are hidden anyways
-      observeEvent(active_datanames(), priority = 1, {
-        if (length(active_datanames()) == 0 || is.null(active_datanames())) {
-          # hide whole module UI when no datasets or when NULL
-          shinyjs::hide("filter_panel_whole")
-        } else {
-          shinyjs::show("filter_panel_whole")
-
-          # selectively hide / show to only show `active_datanames` out of all datanames
+          # use isolate because we assume that the number of datasets does not change over the course of the teal app
+          # alternatively, one can proceed as in modules_filter_items to dynamically insert, remove UIs
+          isol_datanames <- isolate(self$datanames()) # they are already ordered
+          # should not use for-loop as variables are otherwise only bound by reference and last dataname would be used
           lapply(
-            self$datanames(),
+            isol_datanames,
             function(dataname) {
-              id_add_filter <- sprintf("add_%s_filter", dataname)
-              id_filter_dataname <- sprintf("%s_filters", dataname)
-
-              if (dataname %in% active_datanames()) {
-                # shinyjs takes care of the namespace around the id
-                shinyjs::show(id_add_filter)
-                shinyjs::show(id_filter_dataname)
-              } else {
-                shinyjs::hide(id_add_filter)
-                shinyjs::hide(id_filter_dataname)
-              }
+              fdataset <- self$get_filtered_dataset(dataname)
+              fdataset$server(id = private$get_ui_id(dataname))
             }
           )
-        }
-      }, ignoreNULL = FALSE)
 
-      observeEvent(input$remove_all_filters, {
-        .log("removing all active filters from filter panel")
-        lapply(self$datanames(), function(dataname) {
-          dataset_filter <- self$get_filtered_datasets(dataname = dataname)
-          dataset_filter$queues_empty()
-        })
-      })
+          lapply(
+            isol_datanames,
+            function(dataname) {
+              fdataset <- self$get_filtered_dataset(dataname)
+              fdataset$srv_add_filter_state(
+                id = private$get_ui_add_filter_id(dataname),
+                vars_include = self$get_filterable_varnames(dataname)
+              )
+            }
+          )
+
+
+          # we keep anything that may be selected to add (happens when the variable is not available for filtering)
+          # lapply(isol_datanames, function(dataname) paste0("teal_add_", dataname, "_filter")) #nolint
+          setBookmarkExclude(names = c(
+            # these will be regenerated dynamically
+            lapply(isol_datanames, function(dataname) paste0(dataname, "filters"))
+          ))
+
+          # rather than regenerating the UI dynamically for the dataset filtering,
+          # we instead choose to hide/show the elements
+          # the filters for this dataset are just hidden from the UI, but still applied
+          # optimization: we set `priority = 1` to execute it before the other
+          # observers (default priority 0), so that they are not computed if they are hidden anyways
+          observeEvent(active_datanames(), priority = 1, {
+            if (length(active_datanames()) == 0 || is.null(active_datanames())) {
+              # hide whole module UI when no datasets or when NULL
+              shinyjs::hide("filter_panel_whole")
+            } else {
+              shinyjs::show("filter_panel_whole")
+
+              # selectively hide / show to only show `active_datanames` out of all datanames
+              lapply(
+                self$datanames(),
+                function(dataname) {
+                  id_add_filter <- private$get_ui_add_filter_id(dataname)
+                  id_filter_dataname <- private$get_ui_id(dataname)
+
+                  if (dataname %in% active_datanames()) {
+                    # shinyjs takes care of the namespace around the id
+                    shinyjs::show(id_add_filter)
+                    shinyjs::show(id_filter_dataname)
+                  } else {
+                    shinyjs::hide(id_add_filter)
+                    shinyjs::hide(id_filter_dataname)
+                  }
+                }
+              )
+            }
+          }, ignoreNULL = FALSE)
+
+          observeEvent(input$remove_all_filters, {
+            .log("removing all active filters from filter panel")
+            lapply(self$datanames(), function(dataname) {
+              fdataset <- self$get_filtered_dataset(dataname = dataname)
+              fdataset$queues_empty()
+            })
+          })
+
+          NULL
+        }
+      )
     },
 
     #' Creates the UI for the module showing counts for each dataset
@@ -650,61 +660,64 @@ FilteredData <- R6::R6Class( # nolint
       )
     },
 
-    #' Server function to display the number of patients in the filtered and unfiltered
+    #' Server function to display the number of records in the filtered and unfiltered
     #' data
     #'
-    #' @param input (`shiny`)\cr
-    #' @param output (`shiny`)\cr
-    #' @param session (`shiny`)\cr
+    #' @param id (`character(1)`)\cr
+    #'   an ID string that corresponds with the ID used to call the module's UI function.
     #' @param active_datanames (`function`, `reactive`)\cr
     #'   returning datanames that should be shown on the filter panel,
     #'   must be a subset of the `datanames` argument provided to `ui_filter_panel`;
     #'   if the function returns `NULL` (as opposed to `character(0)`), the filter
     #'   panel will be hidden.
-    srv_filter_overview = function(input, output, session, active_datanames = function() "all") {
+    #' @return `moduleServer` function which returns `NULL`
+    srv_filter_overview = function(id, active_datanames = function() "all") {
       stopifnot(
         is.function(active_datanames) || is.reactive(active_datanames)
       )
+      moduleServer(
+        id = id,
+        function(input, output, session) {
+          output$table <- renderUI({
+            .log("update uifiltersinfo")
+            datanames <- if (identical(active_datanames(), "all")) {
+              self$datanames()
+            } else {
+              active_datanames()
+            }
 
-      output$table <- renderUI({
-        .log("update uifiltersinfo")
-        datanames <- if (identical(active_datanames(), "all")) {
-          self$datanames()
-        } else {
-          active_datanames()
-        }
+            datasets_df <- self$get_filter_overview(datanames = datanames)
 
-        datasets_df <- self$get_filter_overview(datanames = datanames)
-
-        body_html <- lapply(
-          seq_len(nrow(datasets_df)),
-          function(x) {
-            tags$tr(
-              tags$td(rownames(datasets_df)[x]),
-              tags$td(datasets_df[x, 1]),
-              tags$td(datasets_df[x, 2])
+            body_html <- lapply(
+              seq_len(nrow(datasets_df)),
+              function(x) {
+                tags$tr(
+                  tags$td(rownames(datasets_df)[x]),
+                  tags$td(datasets_df[x, 1]),
+                  tags$td(datasets_df[x, 2])
+                )
+              }
             )
-          }
-        )
 
-        header_html <- tags$tr(
-          tags$td(""),
-          tags$td(colnames(datasets_df)[1]),
-          tags$td(colnames(datasets_df)[2])
-        )
+            header_html <- tags$tr(
+              tags$td(""),
+              tags$td(colnames(datasets_df)[1]),
+              tags$td(colnames(datasets_df)[2])
+            )
 
-        table_html <- tags$table(
-          class = "table custom-table",
-          tags$thead(header_html),
-          tags$tbody(body_html)
-        )
+            table_html <- tags$table(
+              class = "table custom-table",
+              tags$thead(header_html),
+              tags$tbody(body_html)
+            )
 
-        table_html
-      })
+            table_html
+          })
 
-      return(invisible(NULL))
+          NULL
+        }
+      )
     }
-
   ),
 
   ## __Private Methods ====
@@ -718,6 +731,22 @@ FilteredData <- R6::R6Class( # nolint
 
     # we implement these functions as checks rather than returning logicals so they can
     # give informative error messages immediately
+
+    # @details
+    # Composes id for the FilteredDataset shiny element (active filter vars)
+    # @param dataname (`character(1)`) name of the dataset which ui is composed for.
+    # @return `character(1)` - `<dataname>_filter`
+    get_ui_id = function(dataname) {
+      sprintf("%s_filter", dataname)
+    },
+
+    # @details
+    # Composes id for the FilteredDataset shiny element (add filter state)
+    # @param dataname (`character(1)`)  name of the dataset which ui is composed for.
+    # @return `character(1)` - `<dataname>_filter`
+    get_ui_add_filter_id = function(dataname) {
+      sprintf("add_%s_filter", dataname)
+    },
 
     # @details
     # Validates the state of this FilteredData.
@@ -769,7 +798,7 @@ FilteredData <- R6::R6Class( # nolint
       isolate({
         # we isolate everything because we don't want to trigger again when datanames
         # change (which also triggers when any of the data changes)
-        if (!dataname %in% names(self$get_filtered_datasets())) {
+        if (!dataname %in% names(self$get_filtered_dataset())) {
           # data must be set already
           stop(paste("data", dataname, "is not available"))
         }

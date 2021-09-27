@@ -50,7 +50,7 @@ testthat::test_that("get_call returns a call filtering an MAE object using Choic
 
   test <- miniACC
   eval(isolate(filter_states$get_call()))
-  testthat::expect_identical(
+  testthat::expect_equal(
     output,
     MultiAssayExperiment::subsetByColData(test, test$race == "white")
   )
@@ -78,7 +78,7 @@ testthat::test_that("get_call returns a call filtering an MAE object using Range
 
   test <- miniACC
   eval(isolate(filter_states$get_call()))
-  testthat::expect_identical(
+  testthat::expect_equal(
     output,
     MultiAssayExperiment::subsetByColData(
       test,
@@ -100,9 +100,12 @@ testthat::test_that("MAEFilterStates$set_bookmark_state sets filters in FilterSt
     vital_status = 1,
     gender = "female"
   )
-
-  maefs$set_bookmark_state(state = fs, data = MultiAssayExperiment::miniACC)
-  expect_equal(
+  shiny::testServer(
+    maefs$set_bookmark_state,
+    args = list(state = fs, data = MultiAssayExperiment::miniACC),
+    expr = NULL
+  )
+  testthat::expect_equal(
     isolate(maefs$get_call()),
     quote(
       test_filtered <- MultiAssayExperiment::subsetByColData(

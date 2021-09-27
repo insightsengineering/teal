@@ -171,3 +171,15 @@ testthat::test_that("delayed version of select_spec", {
   res_obj <- isolate(resolve_delayed(obj, datasets = ds))
   testthat::expect_equal(res_obj, exp_obj)
 })
+
+testthat::test_that("all_choices passed to selected is the same as passing all choices", {
+  testthat::expect_equal(
+    select_spec(choices = letters, selected = letters),
+    select_spec(choices = letters, selected = all_choices())
+  )
+})
+
+testthat::test_that("multiple is set to TRUE if all_choices is passed to selected", {
+  testthat::expect_true(select_spec(choices = variable_choices("test"), selected = all_choices())$multiple)
+  testthat::expect_true(select_spec(choices = variable_choices(iris), selected = all_choices())$multiple)
+})

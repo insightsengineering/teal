@@ -17,7 +17,7 @@
 \item{dataname}{(\code{character})\cr
 A given name for the dataset it may not contain spaces}
 
-\item{x}{(\code{data.frame} or \code{MultiAssayExperiment})\cr}
+\item{x}{(\code{MultiAssayExperiment})}
 
 \item{keys}{optional, (\code{character})\cr
 vector with primary keys}
@@ -43,12 +43,9 @@ S3 method to construct an MAEDataset object from MultiAssayExperiment
 }
 \examples{
 # Simple example
-\dontrun{
-library(MultiAssayExperiment)
-MAE_dataset <- dataset("MAE", miniACC, keys = c("STUDYID", "USUBJID"))
-MAE_dataset$get_dataname()
-MAE_dataset$get_dataset_label()
-MAE_dataset$get_code()
-MAE_dataset$get_raw_data()
-}
+mae_d <- dataset("MAE", MultiAssayExperiment::miniACC, keys = c("STUDYID", "USUBJID"))
+mae_d$get_dataname()
+mae_d$get_dataset_label()
+mae_d$get_code()
+mae_d$get_raw_data()
 }

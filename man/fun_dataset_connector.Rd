@@ -2,6 +2,7 @@
 % Please edit documentation in R/DatasetConnector_constructors.R
 \name{fun_dataset_connector}
 \alias{fun_dataset_connector}
+\alias{fun_cdisc_dataset_connector}
 \title{Function Dataset Connector}
 \usage{
 fun_dataset_connector(
@@ -9,6 +10,19 @@ fun_dataset_connector(
   fun,
   fun_args = NULL,
   keys = character(0),
+  label = character(0),
+  code = character(0),
+  script = character(0),
+  func_name = substitute(fun),
+  ...
+)
+
+fun_cdisc_dataset_connector(
+  dataname,
+  fun,
+  fun_args = NULL,
+  keys = get_cdisc_keys(dataname),
+  parent = if (identical(dataname, "ADSL")) character(0L) else "ADSL",
   label = character(0),
   code = character(0),
   script = character(0),
@@ -52,34 +66,32 @@ In case when this object code depends on the \code{raw_data} from the other
 this/these object(s) should be included. Please note that \code{vars}
 are included to this object as local \code{vars} and they cannot be modified
 within another dataset.}
+
+\item{parent}{optional, (\code{character}) \cr
+parent dataset name}
 }
 \description{
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
+
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
 }
 \details{
 Create a \code{DatasetConnector} from \code{function} and its arguments.
+
+Create a \code{CDISCDatasetConnector} from \code{function} and its arguments
+with keys and parent name assigned automatically by \code{dataname}.
 }
 \examples{
-\dontrun{
 my_data <- function(...) {
-  # whatever code
-  set.seed(1234)
-  library(MASS)
-  require(dplyr)
-  x <- data.frame(
-    STUDYID = 1,
-    USUBJID = 1:40,
-    z = stats::rnorm(40),
-    zz = factor(sample(letters[1:3], 40, replace = TRUE)),
-    NAs = rep(NA, 40)
+  data.frame(
+    ID = paste0("ABC_", seq_len(10)),
+    var1 = rnorm(n = 10),
+    var2 = rnorm(n = 10),
+    var3 = rnorm(n = 10)
   )
-  x$w <- as.numeric(MASS::mvrnorm(40, 0, 1))
-  x$ww <- as.numeric(MASS::mvrnorm(40, 0, 1))
-  rtables::var_labels(x) <- c("STUDYID", "USUBJID", "z", "zz", "NAs", "w", "ww")
-  x
 }
-y <- fun_cdisc_dataset_connector(
-  dataname = "ADSL",
+y <- fun_dataset_connector(
+  dataname = "XYZ",
   fun = my_data
 )
 
@@ -88,58 +100,4 @@ y$get_code()
 y$pull()
 
 get_raw_data(y)
-}
-# Error as global var is used in the function.
-# Thus not reproducible.
-\dontrun{
-x <- 40
-my_data <- function(global_var = x) {
-  # whatever code
-  set.seed(1234)
-  library(MASS)
-  x <- data.frame(
-    STUDYID = 1,
-    USUBJID = 1:global_var,
-    z = stats::rnorm(40),
-    zz = factor(sample(letters[1:3], 40, replace = TRUE)),
-    NAs = rep(NA, 40)
-  )
-  x$w <- as.numeric(MASS::mvrnorm(40, 0, 1))
-  x$ww <- as.numeric(MASS::mvrnorm(40, 0, 1))
-  rtables::var_labels(x) <- c("STUDYID", "USUBJID", "z", "zz", "NAs", "w", "ww")
-  x
-}
-y <- fun_cdisc_dataset_connector(
-  dataname = "ADSL",
-  fun = my_data
-)
-
-y$pull()
-}
-# Error - same as previous one
-\dontrun{
-global_var <- 40
-my_data <- function() {
-  # whatever code
-  set.seed(1234)
-  library(MASS)
-  x <- data.frame(
-    STUDYID = 1,
-    USUBJID = 1:global_var,
-    z = stats::rnorm(40),
-    zz = factor(sample(letters[1:3], 40, replace = TRUE)),
-    NAs = rep(NA, 40)
-  )
-  x$w <- as.numeric(MASS::mvrnorm(40, 0, 1))
-  x$ww <- as.numeric(MASS::mvrnorm(40, 0, 1))
-  rtables::var_labels(x) <- c("STUDYID", "USUBJID", "z", "zz", "NAs", "w", "ww")
-  x
-}
-y <- fun_cdisc_dataset_connector(
-  dataname = "ADSL",
-  fun = my_data
-)
-
-y$pull()
-}
 }

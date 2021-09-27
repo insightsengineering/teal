@@ -3,46 +3,47 @@
 #' `FilteredDataset` contains `Dataset`
 #' @param dataset (`Dataset`)\cr
 #' @examples
-#' library(scda)
-#' adsl <- cdisc_dataset("ADSL", synthetic_cdisc_data("latest")$adsl)
-#' adtte <- cdisc_dataset("ADTTE", synthetic_cdisc_data("latest")$adtte)
-#' data <- cdisc_data(adsl, adtte)
+#' iris_d <- dataset("iris", iris)
+#' iris_fd <- teal:::init_filtered_dataset(iris_d)
 #'
-#' filtered_dataset <- teal:::init_filtered_dataset(
-#'   dataset = adtte
-#' )
+#' library(scda)
+#' adsl_d <- cdisc_dataset("ADSL", synthetic_cdisc_data("latest")$adsl)
+#' adsl_fd <- teal:::init_filtered_dataset(adsl_d)
+#'
+#' library(MultiAssayExperiment)
+#' MAE_d <- dataset("MAE", miniACC)
 #'
 #' \dontrun{
 #' shinyApp(
 #'   ui = fluidPage(
 #'     actionButton("clear", span(icon("times"), "Remove all filters")),
-#'     filtered_dataset$ui_add_filter_state(id = "add"),
-#'     filtered_dataset$ui("dataset"),
+#'     adsl_fd$ui_add_filter_state(id = "add"),
+#'     adsl_fd$ui("dataset"),
 #'     verbatimTextOutput("call"),
 #'     tableOutput("tbl")
 #'   ),
 #'   server = function(input, output, session) {
-#'     callModule(
-#'       filtered_dataset$srv_add_filter_state,
+#'     adsl_fd$srv_add_filter_state(
+#'       adsl_fd$srv_add_filter_state,
 #'       id = "add"
 #'     )
 #'
-#'     callModule(filtered_dataset$server, id = "dataset")
+#'     adsl_fd$server(id = "dataset")
 #'
 #'     output$call <- renderText({
 #'       paste(
-#'         vapply(filtered_dataset$get_call(), pdeparse, character(1)),
+#'         vapply(adsl_fd$get_call(), pdeparse, character(1)),
 #'         collapse = "\n"
 #'       )
 #'     })
 #'
 #'     output$tbl <- renderTable({
-#'       filtered_dataset$get_data(filtered = TRUE)
+#'       adsl_fd$get_data(filtered = TRUE)
 #'     })
 #'
 #'     observeEvent(
 #'       input$clear,
-#'       filtered_dataset$queues_empty()
+#'       adsl_fd$queues_empty()
 #'     )
 #'   }
 #' )
@@ -265,13 +266,29 @@ FilteredDataset <- R6::R6Class( # nolint
     },
 
     #' @description
+    #' Gets variable names for the filtering.
+    #'
+    #' @return (`character` vector) of variable names
+    get_filterable_varnames = function() {
+      get_filterable_varnames(self$get_data(filtered = FALSE))
+    },
+
+    #' @description
     #' Sets the bookmark state
     #'
+    #' @param id (`character(1)`)\cr
+    #'   an ID string that corresponds with the ID used to call the module's UI function.
     #' @param state (`named list`)\cr
     #'  containing values of the initial filter. Values should be relevant
     #'  to the referred column.
-    set_bookmark_state = function(state) {
-      stop("Pure virtual method.")
+    #' @return `moduleServer` function.
+    set_bookmark_state = function(id, state) {
+      moduleServer(
+        id = id,
+        function(input, output, session) {
+          stop("Pure virtual method.")
+        }
+      )
     },
 
     # modules ------
@@ -332,24 +349,28 @@ FilteredDataset <- R6::R6Class( # nolint
     #' Server module for a dataset active filters
     #'
     #' Server module managing a  active filters.
-    #' @param input (`shiny`)\cr
-    #' @param output (`shiny`)\cr
-    #' @param session (`shiny`)\cr
-    #'  single dataset for which filters are rendered
-    #' @return function - shiny server module
-    server = function(input, output, session) {
-      dataname <- self$get_dataname()
-      stopifnot(
-        is_character_single(dataname)
-      )
+    #' @param id (`character(1)`)\cr
+    #'   an ID string that corresponds with the ID used to call the module's UI function.
+    #' @return `moduleServer` function which returns `NULL`
+    server = function(id) {
+      moduleServer(
+        id = id,
+        function(input, output, session) {
+          dataname <- self$get_dataname()
+          stopifnot(
+            is_character_single(dataname)
+          )
 
-      observeEvent(input$remove_filters, {
-        .log("removing all filters for data", self$get_dataname())
-        lapply(
-          self$get_filter_states(),
-          function(x) x$queue_empty()
-        )
-      })
+          observeEvent(input$remove_filters, {
+            .log("removing all filters for data", self$get_dataname())
+            lapply(
+              self$get_filter_states(),
+              function(x) x$queue_empty()
+            )
+          })
+          NULL
+        }
+      )
     },
 
     #' @description
@@ -368,12 +389,18 @@ FilteredDataset <- R6::R6Class( # nolint
     #' Server module to add filter variable for this dataset
     #'
     #' Server module to add filter variable for this dataset
-    #' @param input (`shiny`)\cr
-    #' @param output (`shiny`)\cr
-    #' @param session (`shiny`)\cr
-    #' @return function - shiny server module
-    srv_add_filter_state = function(input, output, session) {
-      stop("Pure virtual method")
+    #' @param id (`character(1)`)\cr
+    #'   an ID string that corresponds with the ID used to call the module's UI function.
+    #' @param ... ignored
+    #' @return `moduleServer` function.
+    srv_add_filter_state = function(id, ...) {
+      check_ellipsis(..., stop = FALSE)
+      moduleServer(
+        id = id,
+        function(input, output, session) {
+          stop("Pure virtual method")
+        }
+      )
     }
   ),
   ## __Private Fields ====
@@ -472,19 +499,27 @@ DefaultFilteredDataset <- R6::R6Class( # nolint
     #' @description
     #' Set bookmark state
     #'
+    #' @param id (`character(1)`)\cr
+    #'   an ID string that corresponds with the ID used to call the module's UI function.
     #' @param state (`named list`)\cr
     #'  containing values of the initial filter. Values should be relevant
     #'  to the referred column.
-    #' @return invisibly `NULL`
-    set_bookmark_state = function(state) {
+    #' @return `moduleServer` function which returns `NULL`
+    set_bookmark_state = function(id, state) {
       stopifnot(is.list(state))
-      data <- self$get_data(filtered = FALSE)
-      fs <- self$get_filter_states()[[1]]
-      fs$set_bookmark_state(
-        state = state,
-        data = data
+      moduleServer(
+        id = id,
+        function(input, output, session) {
+          data <- self$get_data(filtered = FALSE)
+          fs <- self$get_filter_states()[[1]]
+          fs$set_bookmark_state(
+            id = "filter",
+            state = state,
+            data = data
+          )
+          NULL
+        }
       )
-      invisible(NULL)
     },
 
     #' @description
@@ -514,16 +549,24 @@ DefaultFilteredDataset <- R6::R6Class( # nolint
     #' `srv_add_filter_state` from `FilterStates` (`DefaultFilteredDataset`
     #' contains single `FilterStates`)
     #'
-    #' @param input (`shiny`)\cr
-    #' @param output (`shiny`)\cr
-    #' @param session (`shiny`)\cr
-    #' @return function - shiny server module
-    srv_add_filter_state = function(input, output, session) {
-      data <- get_raw_data(self$get_dataset())
-      callModule(
-        module = self$get_filter_states(id = "filter")$srv_add_filter_state,
-        id = "filter",
-        data = data
+    #' @param id (`character(1)`)\cr
+    #'   an ID string that corresponds with the ID used to call the module's UI function.
+    #' @param ... other arguments passed on to child `FilterStates` methods.
+    #'
+    #' @return `moduleServer` function which returns `NULL`
+    srv_add_filter_state = function(id, ...) {
+      check_ellipsis(..., stop = FALSE, allowed_args = "vars_include")
+      moduleServer(
+        id = id,
+        function(input, output, session) {
+          data <- get_raw_data(self$get_dataset())
+          self$get_filter_states(id = "filter")$srv_add_filter_state(
+            id = "filter",
+            data = data,
+            ...
+          )
+          NULL
+        }
       )
     }
   ),
@@ -620,60 +663,9 @@ CDISCFilteredDataset <- R6::R6Class( # nolint
       rownames(df) <- self$get_dataname()
       colnames(df) <- c("Obs", "Subjects")
       df
-    },
-
-    #' @description
-    #' UI module to add filter variable for this dataset
-    #'
-    #' UI module to add filter variable for this dataset
-    #' @param id (`character(1)`)\cr
-    #'  identifier of the element - preferably containing dataset name
-    #'
-    #' @return function - shiny UI module
-    ui_add_filter_state = function(id) {
-      ns <- NS(id)
-      tagList(
-        tags$label("Add", tags$code(self$get_dataname()), "filter"),
-        self$get_filter_states(id = "filter")$ui_add_filter_state(
-          id = ns("filter"),
-          data = private$get_data_without_parent_keys()
-        )
-      )
-    },
-
-    #' @description
-    #' Server module to add filter variable for this dataset
-    #'
-    #' Server module to add filter variable for this dataset.
-    #' For this class `srv_add_filter_state` calls single module
-    #' `srv_add_filter_state` from `FilterStates` (`DefaultFilteredDataset`
-    #' contains single `FilterStates`)
-    #'
-    #' @param input (`shiny`)\cr
-    #' @param output (`shiny`)\cr
-    #' @param session (`shiny`)\cr
-    #' @return function - shiny server module
-    srv_add_filter_state = function(input, output, session) {
-      callModule(
-        module = self$get_filter_states(id = "filter")$srv_add_filter_state,
-        id = "filter",
-        data = private$get_data_without_parent_keys()
-      )
     }
   ),
   private = list(
-  # Returns the data.frame object without the columns used to join
-  # with the parent dataset specified in the join_keys argument
-  # to the constructor.
-    get_data_without_parent_keys = function() {
-      if (is_empty(self$get_dataset()$get_parent())) {
-        self$get_dataset()$data
-      } else {
-        join_columns_names <- self$get_join_keys()[[self$get_dataset()$get_parent()]]
-        dplyr::select(self$get_dataset()$data, -all_of(join_columns_names))
-      }
-    },
-
     # Gets filter overview subjects number and returns a list
     # of the number of subjects of filtered/non-filtered datasets
     get_filter_overview_nsubjs = function() {
@@ -805,29 +797,45 @@ MAEFilteredDataset <- R6::R6Class( # nolint
     },
 
     #' @description
+    #' Gets variable names for the filtering.
+    #'
+    #' @return (`character(0)`)
+    get_filterable_varnames = function() {
+      character(0)
+    },
+
+    #' @description
     #' Set bookmark state
     #'
+    #' @param id (`character(1)`)\cr
+    #'   an ID string that corresponds with the ID used to call the module's UI function.
     #' @param state (`named list`)\cr
     #'  names of the list should correspond to the names of the initialized `FilterStates`
     #'  kept in `private$filter_states`. For this object they are `"subjects"` and
     #'  names of the experiments. Values of initial state should be relevant
     #'  to the referred column.
-    #'
-    set_bookmark_state = function(state) {
+    #' @return `moduleServer` function which returns `NULL`
+    set_bookmark_state = function(id, state) {
       stopifnot(
         is.list(state),
         all(names(state) %in% c(names(self$get_filter_states())))
       )
-      data <- self$get_data(filtered = FALSE)
-      for (fs_name in names(state)) {
-        fs <- self$get_filter_states()[[fs_name]]
-        fs$set_bookmark_state(
-          state = state[[fs_name]],
-          data = `if`(fs_name == "subjects", data, data[[fs_name]])
-        )
-      }
+      moduleServer(
+        id = id,
+        function(input, output, session) {
+          data <- self$get_data(filtered = FALSE)
+          for (fs_name in names(state)) {
+            fs <- self$get_filter_states()[[fs_name]]
+            fs$set_bookmark_state(
+              id = fs_name,
+              state = state[[fs_name]],
+              data = `if`(fs_name == "subjects", data, data[[fs_name]])
+            )
+          }
 
-      return(invisible(NULL))
+          NULL
+        }
+      )
     },
 
     #' @description
@@ -879,27 +887,32 @@ MAEFilteredDataset <- R6::R6Class( # nolint
     #' contains one `FilterStates` object for `colData` and one for each
     #' experiment.
     #'
-    #' @param input (`shiny`)\cr
-    #' @param output (`shiny`)\cr
-    #' @param session (`shiny`)\cr
-    #' @return function - shiny server module
-    srv_add_filter_state = function(input, output, session) {
-      data <- get_raw_data(self$get_dataset())
-      callModule(
-        module = self$get_filter_states("subjects")$srv_add_filter_state,
-        id = "subjects",
-        data = data # MultiAssayExperiment
-      )
-
-      experiment_names <- names(data)
-      lapply(
-        experiment_names,
-        function(experiment_name) {
-          callModule(
-            module = self$get_filter_states(experiment_name)$srv_add_filter_state,
-            id = experiment_name,
-            data = data[[experiment_name]] # SummarizedExperiment or matrix
+    #' @param id (`character(1)`)\cr
+    #'   an ID string that corresponds with the ID used to call the module's UI function.
+    #' @param ... ignored.
+    #' @return `moduleServer` function which returns `NULL`
+    srv_add_filter_state = function(id, ...) {
+      check_ellipsis(..., stop = FALSE)
+      moduleServer(
+        id = id,
+        function(input, output, session) {
+          data <- get_raw_data(self$get_dataset())
+          self$get_filter_states("subjects")$srv_add_filter_state(
+            id = "subjects",
+            data = data # MultiAssayExperiment
           )
+
+          experiment_names <- names(data)
+          lapply(
+            experiment_names,
+            function(experiment_name) {
+              self$get_filter_states(experiment_name)$srv_add_filter_state(
+                id = experiment_name,
+                data = data[[experiment_name]] # SummarizedExperiment or matrix
+              )
+            }
+          )
+          NULL
         }
       )
     }

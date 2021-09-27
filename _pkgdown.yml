@@ -1,5 +1,5 @@
 
-url: https://go.roche.com/nest-docs/releases/latest/api-reference/teal
+url: https://insightsengineering.github.io/teal
 
 template:
   params:
@@ -8,7 +8,7 @@ template:
 navbar:
   right:
     - icon: fa-github
-      href: https://github.roche.com/NEST/teal
+      href: https://github.com/insightsengineering/teal
 
 reference:
   - title: Teal Core Functions
@@ -43,48 +43,67 @@ reference:
   - title: Delayed Dataset Constructors
     desc: For creating delayed dataset objects.
     contents:
-    - dataset
-    - dataset_file
     - cdisc_dataset
     - cdisc_dataset_file
+    - dataset
+    - dataset_file
+    - mae_dataset
+    - named_dataset
+    - raw_dataset
+    - relational_dataset
+    - relational_dataset_file
   - title: Delayed Dataset Connectors Constructors
     desc: For creating delayed dataset objects.
     contents:
-    - dataset_connector
-    - dataset_connector_file
     - cdisc_dataset_connector
     - cdisc_dataset_connector_file
+    - cdse_dataset_connector
     - code_cdisc_dataset_connector
     - code_dataset_connector
     - csv_cdisc_dataset_connector
     - csv_dataset_connector
+    - datasetdb_dataset_connector
+    - dataset_connector
+    - dataset_connector_file
     - fun_cdisc_dataset_connector
     - fun_dataset_connector
-    - python_dataset_connector
+    - named_dataset_connector
     - python_cdisc_dataset_connector
+    - python_dataset_connector
+    - raw_dataset_connector
     - rcd_cdisc_dataset_connector
     - rcd_dataset_connector
     - rds_cdisc_dataset_connector
     - rds_dataset_connector
+    - relational_dataset_connector
     - rice_cdisc_dataset_connector
     - rice_dataset_connector
     - script_cdisc_dataset_connector
     - script_dataset_connector
+    - snowflake_dataset_connector
     - teradata_cdisc_dataset_connector
     - teradata_dataset_connector
   - title: Delayed Data Connection Constructors
     desc: For creating delayed dataset objects.
     contents:
+    - cdse_connection
+    - datasetdb_connection
     - rcd_connection
     - rice_connection
+    - snowflake_connection
+    - snowflake_connection_function
     - teradata_connection
   - title: Delayed Data Constructors
     desc: For creating delayed data objects.
     contents:
     - cdisc_data
     - cdisc_data_file
+    - cdse_data
+    - datasetdb_data
+    - named_dataset_file
     - rcd_data
     - rice_data
+    - snowflake_data
     - teal_data
     - teal_data_file
     - teradata_data
@@ -92,6 +111,8 @@ reference:
     desc: For loading and modifying delayed data objects.
     contents:
     - as_cdisc
+    - as_cdisc_relational
+    - as_relational
     - callable_code
     - callable_function
     - get_attrs
@@ -117,50 +138,92 @@ reference:
     desc: Other useful functions for users and developers.
     contents:
     - bookmarkableShinyApp
+    - bookmark_module
     - data_label
     - data_label<-
+    - debug_browser_module
+    - deep_clone_r6
     - default_filter
+    - execute_in_next_cycle
+    - filter_calls_module
+    - filter_spec_internal
+    - get_binding_name
+    - get_dummy_cdisc_data
+    - get_dummy_datasets
+    - get_dummy_filter
+    - get_dummy_modules
+    - get_filterable_varnames
     - get_filter_expr
-    - get_labels
     - get_key_duplicates
-    - get_key_duplicates.Dataset
     - get_key_duplicates.data.frame
+    - get_key_duplicates.Dataset
+    - get_key_duplicates_util
+    - get_labels
+    - init_filtered_dataset
+    - init_filter_state
+    - init_filter_states
     - join_key
     - join_keys
+    - keys
     - log_app_usage
     - no_selected_as_NULL
+    - pdeparse
+    - predefined_filters_module
     - print.choices_labeled
     - print.teal_module
     - print.teal_modules
     - python_code
     - read_script
+    - reset_filters_module
     - run_js_files
+    - set_filter_state
     - split_by_sep
     - stop_shiny
+    - trigger_after_first_cycle
+    - "%>%"
     - "%is_in%"
   - title: For Developers
   - subtitle: R6 Classes
     desc: Abstract and concrete classes used to build teal functionality.
     contents:
-    - FilteredData
-    - CDISCFilteredData
-    - Dataset
-    - CDISCDataset
-    - DatasetConnector
-    - CDISCDatasetConnector
-    - DataConnection
-    - DataAbstract
-    - RelationalData
-    - CDISCData
-    - RelationalDataConnector
-    - CDISCDataConnector
     - Callable
     - CallableCode
-    - CallablePythonCode
     - CallableFunction
+    - CallablePythonCode
+    - CDISCData
+    - CDISCDataConnector
+    - CDISCDataset
+    - CDISCDatasetConnector
+    - CDISCFilteredData
+    - CDISCFilteredDataset
+    - ChoicesFilterState
     - CodeClass
-    - PythonCodeClass
+    - DataAbstract
+    - DataConnection
+    - Dataset
+    - dataset.MultiAssayExperiment
+    - DatasetConnector
+    - DateFilterState
+    - DatetimeFilterState
+    - DefaultFilteredDataset
+    - DFFilterStates
+    - EmptyFilterState
+    - FilteredData
+    - FilteredDataset
+    - FilterState
+    - FilterStates
     - JoinKeys
+    - LogicalFilterState
+    - MAEFilteredDataset
+    - MAEFilterStates
+    - MatrixFilterStates
+    - PythonCodeClass
+    - Queue
+    - RangeFilterState
+    - ReactiveQueue
+    - RelationalData
+    - RelationalDataConnector
+    - SEFilterStates
     - srv_teal_with_splash
     - ui_teal_with_splash
   - subtitle: Unexported Functions
@@ -175,11 +238,9 @@ reference:
     - enclosed_with_dataname
     - extract_choices_labels
     - extract_raw_choices
-    - filter_state_to_str
     - find_source_code
     - get_client_timezone
     - get_code_single
-    - get_filter_vars
     - include_css_files
     - include_js_files
     - include_source_code
@@ -189,7 +250,6 @@ reference:
     - picker_options
     - picker_options_content
     - pretty_code_string
-    - set_single_filter_state
     - srv_nested_tabs
     - srv_shiny_module_arguments
     - srv_tabs_with_filters
