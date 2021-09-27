@@ -1,4 +1,4 @@
-# teal 0.9.5.9000
+# teal 0.10.0
 
 ### New features
 * Added `cdse_dataset_connector` to create delayed data objects from `CDSE`.
