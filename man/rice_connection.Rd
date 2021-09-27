@@ -2,7 +2,7 @@
 % Please edit documentation in R/DataConnection.R
 \name{rice_connection}
 \alias{rice_connection}
-\title{Open connection to \code{rice}}
+\title{Open connection to \code{entimICE} via \code{rice}}
 \usage{
 rice_connection(open_args = list(), close_args = list(), ping_args = list())
 }

@@ -90,6 +90,7 @@ reference:
     - datasetdb_connection
     - rcd_connection
     - rice_connection
+    - ricepass_connection
     - snowflake_connection
     - snowflake_connection_function
     - teradata_connection
