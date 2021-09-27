@@ -727,6 +727,8 @@ rice_connection <- function(open_args = list(), close_args = list(), ping_args =
     }
   )
 
+  class(x) <- c("rice_connection", class(x))
+
   return(x)
 }
 
@@ -757,38 +759,30 @@ ricepass_connection <- function() {
   x$set_open_ui(
     function(id) {
       ns <- NS(id)
-      print(ns("aaa"))
       tagList(
-        ricepass::rice_ui_icepass(),
-        tags$p("ricepass")
+        ricepass::rice_ui_icepass(ns(character(0))),
+        actionButton(ns("ricepass_login_button"), "Click here to login")
       )
     }
   )
 
-  x$set_open_server(
+  x$set_preopen_server(
     function(input, output, session, connection) {
-      print(0)
-      observe({
-        print(1)
-        print(session$ns("aaa"))
-        browser()
-        print(input$entimiceAuthSid)
-        req(input$entimiceAuthSid)
-        print(2)
-        ricepass::rice_server_icepass(input, session)
+      observeEvent(input$ricepass_login_button, {
+        ricepass::rice_server_icepass()
+        # need to set connection status object to TRUE
+        # executes ping() and if response is "opened" then sets to TRUE
         connection$open()
-      })
+        if (connection$is_opened()) {
+          shinyjs::html("ricepass_login_button", "Already logged in!")
+          shinyjs::disable("ricepass_login_button")
+        }
+      })      
       return(invisible(connection))
     }
   )
 
-  #x$set_preopen_server(
-  #  function(input, output, session, connection) {
-  #    print(0)
-  #    observeEvent(input$ricepass_auth, {print(1); ricepass::rice_server_icepass(input, session)})
-  #    return(invisible(connection))
-  #  }
-  #)
+  class(x) <- c("ricepass_connection", class(x))
 
   return(x)
 }

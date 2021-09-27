@@ -185,7 +185,7 @@ rice_data <- function(..., connection = rice_connection(), additional_ui = NULL)
       ns <- NS(id)
       div(
         div(
-          h1("TEAL - Access data on entimICE using rice"),
+          h1("TEAL - Access data on entimICE using ", `if`(is(connection, "rice_connection"), tags$code("rice"), tags$code("ricepass"))),
           br(),
           h5("Data access requested for:"),
           fluidRow(
@@ -210,9 +210,11 @@ rice_data <- function(..., connection = rice_connection(), additional_ui = NULL)
 
   x$set_preopen_server(
     function(input, output, session, connectors, connection) {
-      callModule(connection$get_preopen_server(),
-                 id = "open_connection",
-                 connection = connection)
+      if (!is.null(connection$get_preopen_server())) {
+        callModule(connection$get_preopen_server(),
+                  id = "open_connection",
+                  connection = connection)
+      }
     }
   )
 
