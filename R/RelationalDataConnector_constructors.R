@@ -211,8 +211,8 @@ rice_data <- function(..., connection = rice_connection(), additional_ui = NULL)
     function(input, output, session, connectors, connection) {
       if (!is.null(connection$get_preopen_server())) {
         callModule(connection$get_preopen_server(),
-                  id = "open_connection",
-                  connection = connection)
+                   id = "open_connection",
+                   connection = connection)
       }
     }
   )
