@@ -3,6 +3,7 @@
 ### New features
 * Added `cdse_dataset_connector` to create delayed data objects from `CDSE`.
 * Added `datasetdb_dataset_connector` to create delayed data objects from `DataSetDB`.
+* Added `ricepass_connection` to create delayed data objects from `entimICE` via `ricepass`.
 * Added `split` and `merge` methods to the `JoinKeys` object.
 * Added a new public facing constructor wrapper, `mae_dataset`.
 * Added `all_choices()` as a possible argument to the `selected` parameter of `filter_spec`, `select_spec` and `choices_selected` indicating that all choices are selected.
