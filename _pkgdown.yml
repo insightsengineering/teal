@@ -137,6 +137,7 @@ reference:
   - title: Helpers
     desc: Other useful functions for users and developers.
     contents:
+    - all_choices
     - bookmarkableShinyApp
     - bookmark_module
     - data_label
