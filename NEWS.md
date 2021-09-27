@@ -32,6 +32,7 @@
 * Changed how the id of an HTML element in the filter panel is created to make it deterministic.
 * Changed `FilterState`'s method `set_selected` to accept values out of bounds of the possible range with a warning instead of throwing an error.
 * The pipe operator `%>%` is now exported such that downstream code and packages can use it.
+* Removed hyperlinks to the `rice` package from the documentation.
 
 # teal 0.9.5
 
