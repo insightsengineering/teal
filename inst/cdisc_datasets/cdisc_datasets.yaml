@@ -34,7 +34,7 @@ ADEX:
   parent: "ADSL"
 
 ADLB:
-  primary: ["STUDYID", "USUBJID", "PARAMCD", "AVISITN", "ATPTN", "DTYPE", "ADTM", "BSEQ", "ASPID"]
+  primary: ["STUDYID", "USUBJID", "PARAMCD", "AVISITN", "ATPTN", "DTYPE", "ADTM", "LBSEQ", "ASPID"]
   foreign: ["STUDYID", "USUBJID"]
   parent: "ADSL"
 
