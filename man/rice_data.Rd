@@ -8,7 +8,7 @@ rice_data(..., connection = rice_connection(), additional_ui = NULL)
 }
 \arguments{
 \item{...}{(\code{DatasetConnector} objects)\cr
-dataset connectors created using \code{\link{rice_dataset_connector}}}
+dataset connectors created using \code{rice_dataset_connector}}
 
 \item{connection}{(\code{DataConnection}) object returned from \code{rice_connection}.}
 
