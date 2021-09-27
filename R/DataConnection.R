@@ -760,7 +760,7 @@ ricepass_connection <- function() {
     function(id) {
       ns <- NS(id)
       tagList(
-        ricepass::rice_ui_icepass(ns(character(0))),
+        eval(parse(text = "ricepass::rice_ui_icepass(ns(character(0)))")),
         actionButton(ns("ricepass_login_button"), "Click here to login")
       )
     }
@@ -769,7 +769,7 @@ ricepass_connection <- function() {
   x$set_preopen_server(
     function(input, output, session, connection) {
       observeEvent(input$ricepass_login_button, {
-        ricepass::rice_server_icepass()
+        eval(parse(text = "ricepass::rice_server_icepass()"))
         # need to set connection status object to TRUE
         # executes ping() and if response is "opened" then sets to TRUE
         connection$open()
@@ -777,7 +777,7 @@ ricepass_connection <- function() {
           shinyjs::html("ricepass_login_button", "Already logged in!")
           shinyjs::disable("ricepass_login_button")
         }
-      })      
+      })
       return(invisible(connection))
     }
   )
