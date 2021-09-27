@@ -9,7 +9,7 @@ ADAE:
   parent: "ADSL"
 
 ADEG:
-  primary: ["STUDYID", "USUBJID", "PARAMCD", "AVISIT"]
+  primary: ["STUDYID", "USUBJID", "PARAMCD", "AVISITN", "BASETYPE", "ATPTN", "DTYPE", "ADTM", "EGSEQ", "ASPID"]
   foreign: ["STUDYID", "USUBJID"]
   parent: "ADSL"
 
@@ -29,12 +29,12 @@ ADCM:
   parent: "ADSL"
 
 ADEX:
-  primary: ["STUDYID", "USUBJID", "PARCAT1", "PARAMCD", "AVISITN", "ASTDTM", "EXSEQ"]
+  primary: ["STUDYID", "USUBJID", "PARCAT1", "PARCAT2", "PARAMCD", "AVISITN", "ASTDTM", "EXSEQ"]
   foreign: ["STUDYID", "USUBJID"]
   parent: "ADSL"
 
 ADLB:
-  primary: ["STUDYID", "USUBJID", "PARAMCD", "AVISIT"]
+  primary: ["STUDYID", "USUBJID", "PARAMCD", "AVISITN", "ATPTN", "DTYPE", "ADTM", "BSEQ", "ASPID"]
   foreign: ["STUDYID", "USUBJID"]
   parent: "ADSL"
 
@@ -49,7 +49,7 @@ ADQS:
   parent: "ADSL"
 
 ADRS:
-  primary: ["STUDYID", "USUBJID", "PARAMCD", "AVISIT"]
+  primary: ["STUDYID", "USUBJID", "PARAMCD", "AVISITN", "RSSEQ"]
   foreign: ["STUDYID", "USUBJID"]
   parent: "ADSL"
 
@@ -59,7 +59,7 @@ ADSAFTTE:
   parent: "ADSL"
 
 ADVS:
-  primary: ["STUDYID", "USUBJID", "PARAMCD", "AVISIT"]
+  primary: ["STUDYID", "USUBJID", "PARAMCD", "BASETYPE", "AVISITN", "ATPTN", "DTYPE", "ADTM", "VSSEQ", "ASPID"]
   foreign: ["STUDYID", "USUBJID"]
   parent: "ADSL"
 
