@@ -686,6 +686,10 @@ FilteredData <- R6::R6Class( # nolint
               active_datanames()
             }
 
+            if (length(datanames) == 0) {
+              return(NULL)
+            }
+
             datasets_df <- self$get_filter_overview(datanames = datanames)
 
             body_html <- lapply(
