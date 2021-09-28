@@ -24,6 +24,7 @@ reference:
     desc: Functions used to filter observations and select variables from dataset.
     contents:
     - add_no_selected_choices
+    - all_choices
     - choices_labeled
     - choices_selected
     - data_extract_spec
@@ -137,7 +138,6 @@ reference:
   - title: Helpers
     desc: Other useful functions for users and developers.
     contents:
-    - all_choices
     - bookmarkableShinyApp
     - bookmark_module
     - data_label
