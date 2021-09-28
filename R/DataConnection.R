@@ -748,6 +748,9 @@ ricepass_connection <- function() {
       "Please install it from https://github.roche.com/Rpackages/ricepass."
     )
   )
+  if (compareVersion(as.character(packageVersion("ricepass")), "1.1.0") == -1) {
+    stop("ricepass is supported starting from v1.1.0. Please upgrade.")
+  }
 
   ping_fun <- callable_function("rice::rice_session_active")
 
