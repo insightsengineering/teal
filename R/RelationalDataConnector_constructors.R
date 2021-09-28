@@ -130,7 +130,7 @@ rcd_data <- function(..., connection = rcd_connection(), check = TRUE) {
 #' @export
 #'
 #' @param ... (\code{DatasetConnector} objects)\cr
-#'  dataset connectors created using \code{\link{rice_dataset_connector}}
+#'  dataset connectors created using \code{rice_dataset_connector}
 #' @param connection (\code{DataConnection}) object returned from \code{rice_connection}.
 #' @param additional_ui (\code{shiny.tag})\cr
 #'  additional user interface to be visible over login panel

@@ -642,13 +642,13 @@ rcd_connection <- function(open_args = list()) {
 #' @description `r lifecycle::badge("experimental")`
 #'
 #' @param open_args optional, named (`list`) of additional parameters for the connection's
-#'   \code{\link[rice]{rice_session_open}} open function. Please note that the `password` argument will be
+#'   \code{rice_session_open} open function. Please note that the `password` argument will be
 #'   overwritten with `askpass::askpass`.
 #' @param close_args optional, named (`list`) of additional parameters for the connection's
-#'   \code{\link[rice]{rice_session_close}} close function. Please note that the `message` argument
+#'   \code{rice_session_close} close function. Please note that the `message` argument
 #'   will be overwritten with `FALSE`.
 #' @param ping_args optional, named (`list`) of additional parameters for the connection's
-#'   \code{\link[rice]{rice_session_active}} ping function.
+#'   \code{rice_session_active} ping function.
 #'
 #' @return (`DataConnection`) type of object
 #'
