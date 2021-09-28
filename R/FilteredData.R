@@ -688,16 +688,19 @@ FilteredData <- R6::R6Class( # nolint
 
             datasets_df <- self$get_filter_overview(datanames = datanames)
 
-            body_html <- lapply(
-              seq_len(nrow(datasets_df)),
-              function(x) {
-                tags$tr(
-                  tags$td(rownames(datasets_df)[x]),
-                  tags$td(datasets_df[x, 1]),
-                  tags$td(datasets_df[x, 2])
-                )
-              }
-            )
+            body_html <- NULL
+            if (!is.null(datasets_df)) {
+              body_html <- lapply(
+                seq_len(nrow(datasets_df)),
+                function(x) {
+                  tags$tr(
+                    tags$td(rownames(datasets_df)[x]),
+                    tags$td(datasets_df[x, 1]),
+                    tags$td(datasets_df[x, 2])
+                  )
+                }
+              )
+            }
 
             header_html <- tags$tr(
               tags$td(""),
