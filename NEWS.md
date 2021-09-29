@@ -1,27 +1,28 @@
 # teal 0.10.0
 
 ### New features
-* Refactored filter-panel to be `Dataset` specific:
-    * Added support to `MultiAssayExperiment` objects. Filters can be set on a subject level
-    (`colData` of `MAE` object) and on a experiment level (`colData` and `rowData` of an assay).
-    * `Datasets` are passed (by reference) from `DDL` to `FilteredData` skipping extracting data and
-    their attributes.
-    * Fix filter panel modules to new `shiny::moduleServer` to allow testing without running shiny 
-    app.
-    * Redesigned variable filter labels in "Active Filter Variables" panel.
-    * `FilteredData` and it's elements are encapsulated, object oriented objects.
+* Allow passing `MultiAssayExperiment` to the `teal::init` using `mae_dataset` function or through
+the connectors.
+* Refactored filter panel to use `MultiAssayExperiment` objects. Filters can be set on a subject level
+(`colData` of `MAE` object) and on a experiment level (`colData` and `rowData` of an assay).
 * Added `cdse_dataset_connector` to create delayed data objects from `CDSE`.
 * Added `datasetdb_dataset_connector` to create delayed data objects from `DataSetDB`.
 * Added `ricepass_connection` to create delayed data objects from `entimICE` via `ricepass`.
-
+* Refactor of the filter panel:
+    * `Dataset` type determines an appearance and a functionality of related filters and filters summary.
+    * `Datasets` are passed (by reference) from `DDL` to `FilteredData` skipping extracting data and
+    their attributes.
+    * Redesigned variable filter labels in "Active Filter Variables" panel.
+    * Fully testable server functions.
+* `modules` parameter of `teal::init` function can also receive a `list` except `root_modules`
+function call.
+    
 ### Bug fixes
 * Fixed the bug caused by calling `mutate_dataset` multiple times on the same `DatasetConnector` or `Dataset` object.
 * Fixed a bug that caused the output of `get_code` function to not reproduce its raw data set.
 * Changed `filter_spec` to allow no variable selection upon app initialization, where the first possible value was previously selected.
 
 ### Enhancements
-* Added a new public facing constructor wrapper, `mae_dataset`.
-* `modules` parameter of `teal::init` function can now receive a `list` instead of `root_modules` function call.
 * Added `split` and `merge` methods to the `JoinKeys` object.
 * Added `all_choices()` as a possible argument to the `selected` parameter of `filter_spec`, `select_spec` and `choices_selected` indicating that all choices are selected.
 * The `append` method of a `CodeClass` object has been modified to print a warning message when the argument does not result in any code being added because it is duplicated.
@@ -32,11 +33,9 @@
 ### Miscellaneous
 * Updated `LICENCE` and `README` with new package reference.
 * Added a method `get_hash` to the `Dataset` class returning the MD5 hash of the object stored inside the `Dataset` object.
-* Removed mentions of internal Roche services from the documentation.
 * Replaced `random.cdisc.data` with `scda` in examples and tests.
 * Implemented functionality to store `JoinKeys` in `Dataset` and `DatasetConnector` classes.
 * Added `error_on_lintr: TRUE` to `.lintr`
-* Changed how the id of an HTML element in the filter panel is created to make it deterministic.
 * The pipe operator `%>%` is now exported such that downstream code and packages can use it.
 * Removed hyperlinks to the `rice` package from the documentation.
 
