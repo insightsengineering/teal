@@ -14,8 +14,6 @@ the connectors.
     their attributes.
     * Redesigned variable filter labels in "Active Filter Variables" panel.
     * Fully testable server functions.
-* `modules` parameter of `teal::init` function can also receive a `list` except `root_modules`
-function call.
     
 ### Bug fixes
 * Fixed the bug caused by calling `mutate_dataset` multiple times on the same `DatasetConnector` or `Dataset` object.
@@ -23,6 +21,8 @@ function call.
 * Changed `filter_spec` to allow no variable selection upon app initialization, where the first possible value was previously selected.
 
 ### Enhancements
+* `modules` parameter of `teal::init` function can also receive a `list` except `root_modules`
+function call.
 * Added `split` and `merge` methods to the `JoinKeys` object.
 * Added `all_choices()` as a possible argument to the `selected` parameter of `filter_spec`, `select_spec` and `choices_selected` indicating that all choices are selected.
 * The `append` method of a `CodeClass` object has been modified to print a warning message when the argument does not result in any code being added because it is duplicated.
