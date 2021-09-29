@@ -24,6 +24,7 @@ reference:
     desc: Functions used to filter observations and select variables from dataset.
     contents:
     - add_no_selected_choices
+    - all_choices
     - choices_labeled
     - choices_selected
     - data_extract_spec
@@ -90,6 +91,7 @@ reference:
     - datasetdb_connection
     - rcd_connection
     - rice_connection
+    - ricepass_connection
     - snowflake_connection
     - snowflake_connection_function
     - teradata_connection

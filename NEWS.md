@@ -1,8 +1,9 @@
-# teal 0.9.5.9000
+# teal 0.10.0
 
 ### New features
 * Added `cdse_dataset_connector` to create delayed data objects from `CDSE`.
 * Added `datasetdb_dataset_connector` to create delayed data objects from `DataSetDB`.
+* Added `ricepass_connection` to create delayed data objects from `entimICE` via `ricepass`.
 * Added `split` and `merge` methods to the `JoinKeys` object.
 * Added a new public facing constructor wrapper, `mae_dataset`.
 * Added `all_choices()` as a possible argument to the `selected` parameter of `filter_spec`, `select_spec` and `choices_selected` indicating that all choices are selected.
@@ -32,6 +33,7 @@
 * Changed how the id of an HTML element in the filter panel is created to make it deterministic.
 * Changed `FilterState`'s method `set_selected` to accept values out of bounds of the possible range with a warning instead of throwing an error.
 * The pipe operator `%>%` is now exported such that downstream code and packages can use it.
+* Removed hyperlinks to the `rice` package from the documentation.
 
 # teal 0.9.5
 

@@ -130,7 +130,7 @@ rcd_data <- function(..., connection = rcd_connection(), check = TRUE) {
 #' @export
 #'
 #' @param ... (\code{DatasetConnector} objects)\cr
-#'  dataset connectors created using \code{\link{rice_dataset_connector}}
+#'  dataset connectors created using \code{rice_dataset_connector}
 #' @param connection (\code{DataConnection}) object returned from \code{rice_connection}.
 #' @param additional_ui (\code{shiny.tag})\cr
 #'  additional user interface to be visible over login panel
@@ -184,7 +184,7 @@ rice_data <- function(..., connection = rice_connection(), additional_ui = NULL)
       ns <- NS(id)
       div(
         div(
-          h1("TEAL - Access data on entimICE using rice"),
+          h1("TEAL - Access data on entimICE using ", `if`(is(connection, "rice_connection"), tags$code("rice"), tags$code("ricepass"))),
           br(),
           h5("Data access requested for:"),
           fluidRow(
@@ -204,6 +204,16 @@ rice_data <- function(..., connection = rice_connection(), additional_ui = NULL)
         br(),
         connection$get_open_ui(ns("open_connection"))
       )
+    }
+  )
+
+  x$set_preopen_server(
+    function(input, output, session, connectors, connection) {
+      if (!is.null(connection$get_preopen_server())) {
+        callModule(connection$get_preopen_server(),
+                   id = "open_connection",
+                   connection = connection)
+      }
     }
   )
 

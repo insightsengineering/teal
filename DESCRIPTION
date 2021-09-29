@@ -1,8 +1,8 @@
 Package: teal
 Type: Package
 Title: Exploratory Web Apps for Analyzing Clinical Trials Data
-Date: 2021-07-07
-Version: 0.9.5.9000
+Date: 2021-10-13
+Version: 0.10.0
 Authors@R: c(
   person("NEST", email = "nestcicd@roche.com", role = c("aut", "cre")),
   person("Adrian", "Waddell", email = "adrian.waddell@roche.com", role = "aut"),
@@ -45,7 +45,7 @@ Imports:
   stats,
   SummarizedExperiment,
   utils,
-  utils.nest (>= 0.2.9),
+  utils.nest (>= 0.2.11),
   yaml
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.1.2
@@ -54,12 +54,12 @@ Suggests:
   covr,
   httr,
   knitr,
-  random.cdisc.data (>= 0.3.11),
+  random.cdisc.data (>= 0.3.12),
   readr,
   rmarkdown,
   scda,
-  tern (>= 0.7.4),
-  test.nest (>= 0.2.9),
+  tern (>= 0.7.5),
+  test.nest (>= 0.2.11),
   testthat (>= 2.0)
 VignetteBuilder: knitr
 RdMacros: lifecycle
