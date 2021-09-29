@@ -16,3 +16,11 @@
 #' @importFrom stats setNames
 #' @importFrom methods is
 NULL
+
+# Fix R CMD check notes
+#' @importFrom digest digest
+#' @importFrom ggplot2 ggplot
+#' @importFrom grDevices rgb
+#' @importFrom MultiAssayExperiment MultiAssayExperiment
+#' @importFrom SummarizedExperiment colData
+NULL
