@@ -1,6 +1,14 @@
 # teal 0.10.0
 
 ### New features
+* Refactored filtered panel to be `Dataset` specific:
+    * Added support to `MultiAssayExperiment` objects. Filters can be set on a subject level 
+    (`colData` of `MAE` object) and on a experiment level (`colData` and `rowData` of an assay).
+    * `Datasets` are passed (by reference) from `DDL` to `FilteredData` skipping extracting data and
+    their attributes.
+    * Fix filter panel modules to new `shiny::moduleServer` to allow testing without running shiny 
+    app.
+    * `FilteredData` and it's elements are encapsulated, object oriented objects.
 * Added `cdse_dataset_connector` to create delayed data objects from `CDSE`.
 * Added `datasetdb_dataset_connector` to create delayed data objects from `DataSetDB`.
 * Added `ricepass_connection` to create delayed data objects from `entimICE` via `ricepass`.
@@ -12,26 +20,23 @@
 * Fixed the bug caused by calling `mutate_dataset` multiple times on the same `DatasetConnector` or `Dataset` object.
 * Fixed a bug that caused the output of `get_code` function to not reproduce its raw data set.
 * Changed `filter_spec` to allow no variable selection upon app initialization, where the first possible value was previously selected.
-* Fixed reference bug in `FilteredData` that caused error message on initial application load.
 
 ### Enhancements
 * The `append` method of a `CodeClass` object has been modified to print a warning message when the argument does not result in any code being added because it is duplicated.
 * `modules` parameter of `teal::init` function can now receive a `list` instead of `root_modules` function call.
 * Implemented delayed functionality to the mutate method of the `Dataset` and `DatasetConnector` objects.
-* Redesigned variable filter labels in `Active Filter Variables` panel.
+* Redesigned variable filter labels in "Active Filter Variables" panel.
 * Modified `teal_data` to return a `CDISCData` object whenever any of its arguments is a type of `CDISCData` object.
-* Updated `Active Filter Summary` to show information of MAE datasets and their experiments.
 * Updated filters to show both levels of a logical variable TRUE/FALSE even if one is missing from the original array.
 
 ### Miscellaneous
+* Updated `LICENCE` and `README` with new package reference.
 * Added a method `get_hash` to the `Dataset` class returning the MD5 hash of the object stored inside the `Dataset` object.
 * Removed mentions of internal Roche services from the documentation.
 * Replaced `random.cdisc.data` with `scda` in examples and tests.
 * Implemented functionality to store `JoinKeys` in `Dataset` and `DatasetConnector` classes.
-* `FilteredData` contains `Dataset` objects (via `FilteredDataset`) and copying keys and attributes is no longer needed.
 * Added `error_on_lintr: TRUE` to `.lintr`
 * Changed how the id of an HTML element in the filter panel is created to make it deterministic.
-* Changed `FilterState`'s method `set_selected` to accept values out of bounds of the possible range with a warning instead of throwing an error.
 * The pipe operator `%>%` is now exported such that downstream code and packages can use it.
 * Removed hyperlinks to the `rice` package from the documentation.
 
