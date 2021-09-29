@@ -1,20 +1,18 @@
 # teal 0.10.0
 
 ### New features
-* Refactored filtered panel to be `Dataset` specific:
-    * Added support to `MultiAssayExperiment` objects. Filters can be set on a subject level 
+* Refactored filter-panel to be `Dataset` specific:
+    * Added support to `MultiAssayExperiment` objects. Filters can be set on a subject level
     (`colData` of `MAE` object) and on a experiment level (`colData` and `rowData` of an assay).
     * `Datasets` are passed (by reference) from `DDL` to `FilteredData` skipping extracting data and
     their attributes.
     * Fix filter panel modules to new `shiny::moduleServer` to allow testing without running shiny 
     app.
+    * Redesigned variable filter labels in "Active Filter Variables" panel.
     * `FilteredData` and it's elements are encapsulated, object oriented objects.
 * Added `cdse_dataset_connector` to create delayed data objects from `CDSE`.
 * Added `datasetdb_dataset_connector` to create delayed data objects from `DataSetDB`.
 * Added `ricepass_connection` to create delayed data objects from `entimICE` via `ricepass`.
-* Added `split` and `merge` methods to the `JoinKeys` object.
-* Added a new public facing constructor wrapper, `mae_dataset`.
-* Added `all_choices()` as a possible argument to the `selected` parameter of `filter_spec`, `select_spec` and `choices_selected` indicating that all choices are selected.
 
 ### Bug fixes
 * Fixed the bug caused by calling `mutate_dataset` multiple times on the same `DatasetConnector` or `Dataset` object.
@@ -22,10 +20,12 @@
 * Changed `filter_spec` to allow no variable selection upon app initialization, where the first possible value was previously selected.
 
 ### Enhancements
-* The `append` method of a `CodeClass` object has been modified to print a warning message when the argument does not result in any code being added because it is duplicated.
+* Added a new public facing constructor wrapper, `mae_dataset`.
 * `modules` parameter of `teal::init` function can now receive a `list` instead of `root_modules` function call.
+* Added `split` and `merge` methods to the `JoinKeys` object.
+* Added `all_choices()` as a possible argument to the `selected` parameter of `filter_spec`, `select_spec` and `choices_selected` indicating that all choices are selected.
+* The `append` method of a `CodeClass` object has been modified to print a warning message when the argument does not result in any code being added because it is duplicated.
 * Implemented delayed functionality to the mutate method of the `Dataset` and `DatasetConnector` objects.
-* Redesigned variable filter labels in "Active Filter Variables" panel.
 * Modified `teal_data` to return a `CDISCData` object whenever any of its arguments is a type of `CDISCData` object.
 * Updated filters to show both levels of a logical variable TRUE/FALSE even if one is missing from the original array.
 
