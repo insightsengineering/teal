@@ -136,7 +136,7 @@ jobs:
 
 # TODO: if configurable then --as-cran optionally
       - name: Run R CMD CHECK
-        run: R CMD check --no-manual ${{ env.PKGBUILD }}
+        run: R CMD check ${{ env.PKGBUILD }}
         shell: bash
         continue-on-error: true
         env:
