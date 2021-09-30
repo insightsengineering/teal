@@ -108,7 +108,7 @@ RelationalData <- R6::R6Class( # nolint
         }
       }
 
-      self$id <- digest::digest2int(as.character(Sys.time()))
+      self$id <- sample.int(1e11, 1)
 
       return(invisible(self))
     },
