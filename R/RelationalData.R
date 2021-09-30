@@ -108,7 +108,9 @@ RelationalData <- R6::R6Class( # nolint
         }
       }
 
-      self$id <- sample.int(1e11, 1)
+
+      self$id <- sample.int(1e11, 1, useHash = TRUE)
+
 
       return(invisible(self))
     },
