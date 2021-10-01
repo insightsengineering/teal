@@ -57,7 +57,7 @@ RelationalDataConnector <- R6::R6Class( #nolint
       private$pull_code <- CodeClass$new()
       private$mutate_code <- CodeClass$new()
 
-      self$id <- digest::digest2int(as.character(Sys.time()))
+      self$id <- sample.int(1e11, 1, useHash = TRUE)
 
       return(invisible(self))
     },
