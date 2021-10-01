@@ -20,18 +20,12 @@
   # Fixes https://github.com/insightsengineering/teal/issues/210
   # R versions < 4.1 don't have the access to the updated version of S4Vectors
   # hence we need to copy the fix explicitly
-  normSubsetIndex <- function(i) { # nolint
-    i <- try(as.logical(i), silent = TRUE)
-    if (inherits(i, "try-error"))
-      stop("'subset' must be coercible to logical")
-    i & !is.na(i)
-  }
   evalqForSubset <- function(expr, envir, ...) { # nolint
-    if (methods::missingArg(substitute(expr), parent.frame())) {
+    if (methods::missingArg(substitute(expr), parent.frame(), eval = TRUE)) {
       rep(TRUE, NROW(envir))
     } else {
-      i <- evalArg(substitute(expr), envir, ..., where = parent.frame())
-      normSubsetIndex(i)
+      i <- S4Vectors:::evalArg(substitute(expr), envir, ..., where = parent.frame())
+      S4Vectors:::normSubsetIndex(i)
     }
   }
   library(S4Vectors)
