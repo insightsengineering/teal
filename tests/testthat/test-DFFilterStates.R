@@ -28,7 +28,7 @@ testthat::test_that("DFFilterStates$set_bookmark_state sets filters in FilterSta
     keys = character(0)
   )
   fs <- list(
-    Sepal.Length = list(selected = c(5.1, 6.4)),
+    Sepal.Length = c(5.1, 6.4),
     Species = c("setosa", "versicolor")
   )
   shiny::testServer(dffs$set_bookmark_state, args = list(state = fs, data = iris), expr = NULL)

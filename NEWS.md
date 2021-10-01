@@ -31,7 +31,7 @@ function call.
 * Updated filters to show both levels of a logical variable TRUE/FALSE even if one is missing from the original array.
 
 ### Miscellaneous
-* Updated `LICENCE` and `README` with new package reference.
+* Updated `LICENCE` and `README` with new package references.
 * Added a method `get_hash` to the `Dataset` class returning the MD5 hash of the object stored inside the `Dataset` object.
 * Replaced `random.cdisc.data` with `scda` in examples and tests.
 * Implemented functionality to store `JoinKeys` in `Dataset` and `DatasetConnector` classes.
