@@ -34,7 +34,8 @@
       normSubsetIndex(i)
     }
   }
-  R.utils::reassignInPackage(name = "evalqForSubset", pkgname = "S4Vectors", value = evalqForSubset())
+  library(S4Vectors)
+  R.utils::reassignInPackage(name = "evalqForSubset", pkgName = "S4Vectors", value = evalqForSubset)
 
   return(invisible())
 }
