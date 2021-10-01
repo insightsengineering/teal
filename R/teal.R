@@ -10,6 +10,7 @@
 "_PACKAGE"
 
 #'
+#' @import S4Vectors
 #' @import shiny
 #' @import utils.nest
 #' @import R6
@@ -22,5 +23,6 @@ NULL
 #' @importFrom ggplot2 ggplot
 #' @importFrom grDevices rgb
 #' @importFrom MultiAssayExperiment MultiAssayExperiment
+#' @importFrom R.utils reassignInPackage
 #' @importFrom SummarizedExperiment colData
 NULL

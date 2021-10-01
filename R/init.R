@@ -138,6 +138,8 @@ init <- function(data,
 
   if(is(modules, "list"))  modules <- do.call(root_modules, modules)
 
+  fix_s4_vectors()
+
   # Note regarding case `id = character(0)`:
   # rather than using `callModule` and creating a submodule of this module, we directly modify
   # the `ui` and `server` with `id = character(0)` and calling the server function directly
@@ -209,4 +211,61 @@ bookmarkableShinyApp <- function(ui, server, ...) { #nolint
     }
   }
   return(shinyApp(ui = ui_new, server = server, ...))
+}
+
+
+fix_s4_vectors <- function() {
+  # Fixes https://github.com/insightsengineering/teal/issues/210
+  # R versions < 4.1 don't have the access to the updated version of S4Vectors
+  # hence we need to copy the fix explicitly
+  makeGlobalWarningEnv <- function(expr, envir, enclos) {
+    envir <- as.env(envir, enclos)
+    globals <- setdiff(all.names(expr, functions = FALSE), ls(envir))
+    env <- new.env(parent = enclos)
+    lapply(globals, function(g) {
+      makeActiveBinding(g, function() {
+        val <- get(g, enclos)
+        warning(
+          "Symbol '", g, "' resolved from calling frame; ",
+          "escape with .(", g, ") for safety."
+        )
+        val
+      }, env)
+    })
+    env
+  }
+
+  safeEval <- function(expr, envir, enclos=parent.env(envir), strict=FALSE) {
+    expr <- eval(call("bquote", expr, enclos))
+    if (strict) {
+      enclos <- makeGlobalWarningEnv(expr, envir, enclos)
+    }
+    eval(expr, envir, enclos)
+  }
+
+  evalArg <- function(expr, envir, ..., where=parent.frame()) {
+    enclos <- eval(call("top_prenv", expr, where))
+    expr <- eval(call("substitute", expr), where)
+    safeEval(expr, envir, enclos, ...)
+  }
+
+  normSubsetIndex <- function(i) {
+    i <- try(as.logical(i), silent=TRUE)
+    if (inherits(i, "try-error"))
+      stop("'subset' must be coercible to logical")
+    i & !is.na(i)
+  }
+
+  evalqForSubset <- function(expr, envir, ...) { # nolint
+    if (methods::missingArg(substitute(expr), parent.frame(), eval = TRUE)) {
+      rep(TRUE, NROW(envir))
+    } else {
+      i <- evalArg(substitute(expr), envir, ..., where = parent.frame())
+      normSubsetIndex(i)
+    }
+  }
+  try(loadNamespace("S4Vectors"))
+  if (requireNamespace("S4Vectors")) {
+    R.utils::reassignInPackage(name = "evalqForSubset", pkgName = "S4Vectors", value = evalqForSubset)
+  }
 }
