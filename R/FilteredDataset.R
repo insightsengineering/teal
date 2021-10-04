@@ -782,11 +782,7 @@ MAEFilteredDataset <- R6::R6Class( # nolint
       if (isTRUE(filtered)) {
         tryCatch(
           self$get_data_reactive()(),
-          error = function(error) {
-            validate(
-              need(FALSE, label = "Filtering expression returned errors. Change filters.")
-            )
-          }
+          error = function(error) shiny::validate("Filtering expression returned errors. Change filters.")
         )
       } else {
         get_raw_data(self$get_dataset())
