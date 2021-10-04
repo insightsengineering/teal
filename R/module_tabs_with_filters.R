@@ -102,7 +102,7 @@ ui_tabs_with_filters <- function(id, modules, datasets) {
       href = "javascript:void(0)",
       class = "menubtn",
       onclick = "toggle_sidebar();",
-      title = "toggle filter panels",
+      title = "Toggle filter panels",
       tags$span(icon("navicon", lib = "font-awesome"))
     )
   )
