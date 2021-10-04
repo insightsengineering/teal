@@ -777,6 +777,22 @@ MAEFilteredDataset <- R6::R6Class( # nolint
       )
     },
 
+    #' Returns data
+    get_data = function(filtered) {
+      if (isTRUE(filtered)) {
+        tryCatch(
+          self$get_data_reactive()(),
+          error = function(error) {
+            validate(
+              need(FALSE, label = "Filtering expression returned errors. Change filters.")
+            )
+          }
+        )
+      } else {
+        get_raw_data(self$get_dataset())
+      }
+    },
+
     #' @description
     #' Get filter overview rows of a dataset
     #'
