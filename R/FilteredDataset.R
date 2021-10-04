@@ -784,6 +784,10 @@ MAEFilteredDataset <- R6::R6Class( # nolint
     #' @return `MultiAssayExperiment`
     get_data = function(filtered) {
       if (isTRUE(filtered)) {
+        # This try is specific for MAEFilteredDataset due to a bug in
+        # S4Vectors causing errors when using the subset function on MAE objects.
+        # The bug was fixed in S4Vectors 0.30.1, but is unavailable for R versions < 4.1
+        # Link to the issue: https://github.com/insightsengineering/teal/issues/210
         tryCatch(
           self$get_data_reactive()(),
           error = function(error) shiny::validate("Filtering expression returned errors. Change filters.")
