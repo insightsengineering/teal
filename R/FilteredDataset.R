@@ -777,7 +777,11 @@ MAEFilteredDataset <- R6::R6Class( # nolint
       )
     },
 
-    #' Returns data
+    #' @description
+    #' Gets raw data of this dataset
+    #' @param filtered (`logical(1)`)\cr
+    #'   whether returned data should be filtered or not
+    #' @return `MultiAssayExperiment`
     get_data = function(filtered) {
       if (isTRUE(filtered)) {
         tryCatch(
