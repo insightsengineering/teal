@@ -9,6 +9,7 @@ the connectors.
 * Added `datasetdb_dataset_connector` to create delayed data objects from `DataSetDB`.
 * Added `ricepass_connection` to create delayed data objects from `entimICE` via `ricepass`.
 * Refactor of the filter panel:
+    * Simplified setting of initial filter state without need to specify "choices" or "range" named list element depending on the variable class.
     * `Dataset` type determines an appearance and a functionality of related filters and filters summary.
     * `Datasets` are passed (by reference) from `DDL` to `FilteredData` skipping extracting data and
     their attributes.
