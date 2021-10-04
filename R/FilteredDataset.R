@@ -791,7 +791,7 @@ MAEFilteredDataset <- R6::R6Class( # nolint
         tryCatch(
           self$get_data_reactive()(),
           error = function(error) shiny::validate(paste(
-            "Filtering expression returned errors. Change filters. The error message was:",
+            "Filtering expression returned error(s). Please change filters.\nThe error message was:",
             error$message,
             sep = "\n"
           ))
