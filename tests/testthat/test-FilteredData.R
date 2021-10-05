@@ -126,7 +126,7 @@ testthat::test_that("FilteredData$set_bookmark_state sets filters is FilteredDat
   datasets$set_dataset(dataset("mtcars", mtcars))
   fs <- list(
       iris = list(
-        Sepal.Length = list(selected = c(5.1, 6.4)),
+        Sepal.Length = list(c(5.1, 6.4)),
         Species = c("setosa", "versicolor")
       ),
       mtcars = list(

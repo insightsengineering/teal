@@ -9,6 +9,7 @@ the connectors.
 * Added `datasetdb_dataset_connector` to create delayed data objects from `DataSetDB`.
 * Added `ricepass_connection` to create delayed data objects from `entimICE` via `ricepass`.
 * Refactor of the filter panel:
+    * Simplified setting of initial filter state without need to specify "choices" or "range" named list element depending on the variable class.
     * `Dataset` type determines an appearance and a functionality of related filters and filters summary.
     * `Datasets` are passed (by reference) from `DDL` to `FilteredData` skipping extracting data and
     their attributes.
@@ -31,7 +32,7 @@ function call.
 * Updated filters to show both levels of a logical variable TRUE/FALSE even if one is missing from the original array.
 
 ### Miscellaneous
-* Updated `LICENCE` and `README` with new package reference.
+* Updated `LICENCE` and `README` with new package references.
 * Added a method `get_hash` to the `Dataset` class returning the MD5 hash of the object stored inside the `Dataset` object.
 * Replaced `random.cdisc.data` with `scda` in examples and tests.
 * Implemented functionality to store `JoinKeys` in `Dataset` and `DatasetConnector` classes.
