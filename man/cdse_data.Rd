@@ -13,7 +13,7 @@ dataset connectors created using \code{\link{cdse_dataset_connector}}}
 \item{connection}{(\code{DataConnection}) object returned from \code{cdse_connection}.}
 }
 \value{
-An object of class \code{RelatonalDataConnector}
+An object of class \code{RelationalDataConnector}
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
