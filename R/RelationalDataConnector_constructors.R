@@ -135,7 +135,7 @@ rcd_data <- function(..., connection = rcd_connection(), check = TRUE) {
 #' @param additional_ui (\code{shiny.tag})\cr
 #'  additional user interface to be visible over login panel
 #'
-#' @return An object of class \code{RelatonalDataConnector}
+#' @return An object of class \code{RelationalDataConnector}
 #'
 #' @examples
 #'
@@ -496,7 +496,7 @@ snowflake_data <- function(..., connection) {
 #'  dataset connectors created using \code{\link{cdse_dataset_connector}}
 #' @param connection (\code{DataConnection}) object returned from \code{cdse_connection}.
 #'
-#' @return An object of class \code{RelatonalDataConnector}
+#' @return An object of class \code{RelationalDataConnector}
 #'
 #' @examples
 #'
@@ -617,7 +617,7 @@ cdse_data <- function(..., connection = cdse_connection()) {
 #'  dataset connectors created using \code{\link{datasetdb_dataset_connector}}
 #' @param connection (\code{DataConnection}) object returned from \code{datasetdb_connection}.
 #'
-#' @return An object of class \code{RelatonalDataConnector}
+#' @return An object of class \code{RelationalDataConnector}
 #'
 #' @examples
 #'
