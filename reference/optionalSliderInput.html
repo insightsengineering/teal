@@ -165,18 +165,20 @@ input widgets that provide only a single choice.</p>
     </tr>
     <tr>
       <th>min</th>
-      <td><p>The minimum value (inclusive) that can be selected.</p></td>
+      <td><p>The minimum and maximum values (inclusive) that can be
+selected.</p></td>
     </tr>
     <tr>
       <th>max</th>
-      <td><p>The maximum value (inclusive) that can be selected.</p></td>
+      <td><p>The minimum and maximum values (inclusive) that can be
+selected.</p></td>
     </tr>
     <tr>
       <th>value</th>
-      <td><p>The initial value of the slider. A numeric vector of length one
-will create a regular slider; a numeric vector of length two will create a
-double-ended range slider. A warning will be issued if the value doesn't
-fit between <code>min</code> and <code>max</code>.</p></td>
+      <td><p>The initial value of the slider, either a number, a date
+(class Date), or a date-time (class POSIXt). A length one vector will
+create a regular slider; a length two vector will create a double-ended
+range slider. Must lie between <code>min</code> and <code>max</code>.</p></td>
     </tr>
     <tr>
       <th>label_help</th>

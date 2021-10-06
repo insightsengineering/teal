@@ -200,7 +200,7 @@
   label <span class="op">=</span> <span class="st">"Frequency Table"</span>,
   ui <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">id</span>, <span class="va">...</span><span class="op">)</span> <span class="op">{</span>
     <span class="va">ns</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/NS.html">NS</a></span><span class="op">(</span><span class="va">id</span><span class="op">)</span>
-    <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/tableOutput.html">tableOutput</a></span><span class="op">(</span><span class="fu">ns</span><span class="op">(</span><span class="st">"freq_table"</span><span class="op">)</span><span class="op">)</span>
+    <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/renderTable.html">tableOutput</a></span><span class="op">(</span><span class="fu">ns</span><span class="op">(</span><span class="st">"freq_table"</span><span class="op">)</span><span class="op">)</span>
   <span class="op">}</span>,
   server <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">input</span>, <span class="va">output</span>, <span class="va">session</span>, <span class="va">datasets</span><span class="op">)</span> <span class="op">{</span>
     <span class="va">output</span><span class="op">$</span><span class="va">freq_table</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/renderTable.html">renderTable</a></span><span class="op">(</span><span class="op">{</span>

@@ -174,7 +174,7 @@
     <span class='va'>adsl_fd</span><span class='op'>$</span><span class='fu'>ui_add_filter_state</span><span class='op'>(</span>id <span class='op'>=</span> <span class='st'>"add"</span><span class='op'>)</span>,
     <span class='va'>adsl_fd</span><span class='op'>$</span><span class='fu'>ui</span><span class='op'>(</span><span class='st'>"dataset"</span><span class='op'>)</span>,
     <span class='fu'><a href='https://rdrr.io/pkg/shiny/man/textOutput.html'>verbatimTextOutput</a></span><span class='op'>(</span><span class='st'>"call"</span><span class='op'>)</span>,
-    <span class='fu'><a href='https://rdrr.io/pkg/shiny/man/tableOutput.html'>tableOutput</a></span><span class='op'>(</span><span class='st'>"tbl"</span><span class='op'>)</span>
+    <span class='fu'><a href='https://rdrr.io/pkg/shiny/man/renderTable.html'>tableOutput</a></span><span class='op'>(</span><span class='st'>"tbl"</span><span class='op'>)</span>
   <span class='op'>)</span>,
   server <span class='op'>=</span> <span class='kw'>function</span><span class='op'>(</span><span class='va'>input</span>, <span class='va'>output</span>, <span class='va'>session</span><span class='op'>)</span> <span class='op'>{</span>
     <span class='va'>adsl_fd</span><span class='op'>$</span><span class='fu'>srv_add_filter_state</span><span class='op'>(</span>
