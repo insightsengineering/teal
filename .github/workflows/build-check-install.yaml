@@ -5,6 +5,7 @@ on:
     branches:
       - main
       - pre-release
+      - 41_introduce_TESTING_DEPTH
   pull_request:
 
 jobs:
@@ -51,7 +52,7 @@ jobs:
           if [[ -z "${TESTING_DEPTH}" ]]; then
             echo "TESTING_DEPTH=1" >> $GITHUB_ENV
           fi
-          echo "TESTING_DEPTH = ${TESTING_DEPTH}"
+          echo "TESTING_DEPTH = ${{ env.TESTING_DEPTH }}"
         shell: bash
       
       - name: Gather info from PR
