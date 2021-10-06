@@ -52,7 +52,6 @@ jobs:
           if [[ -z "${TESTING_DEPTH}" ]]; then
             echo "TESTING_DEPTH=1" >> $GITHUB_ENV
           fi
-          echo "TESTING_DEPTH = ${{ env.TESTING_DEPTH }}"
         shell: bash
       
       - name: Gather info from PR
@@ -159,6 +158,7 @@ jobs:
 # TODO: if configurable then --as-cran optionally
       - name: Run R CMD CHECK
         run: |
+          echo "TESTING_DEPTH = $TESTING_DEPTH"
           if [[ -z "${NO_TESTS}" ]]; then
             R CMD check --no-manual ${{ env.PKGBUILD }}
           else
