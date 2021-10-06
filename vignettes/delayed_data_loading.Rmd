@@ -102,7 +102,7 @@ one has to use `$assign_to_env()` to copy object and
 `$set_args(list(ADSL = as.symbol(ADSL)))` to link object with function argument.
 
 ```{r}
-ADSL <- radsl(cached = TRUE)
+ADSL <- radsl(cached = TRUE) # nolint
 
 fun <- callable_function(fun = radtte)
 
@@ -165,7 +165,7 @@ allows datasets to have parents and is needed for CDISC analysis.
 
 ```{r}
 library(magrittr)
-ADSL <- radsl(cached = TRUE) %>% head(3)
+ADSL <- radsl(cached = TRUE) %>% head(3) # nolint
 
 adsl <- cdisc_dataset(dataname = "ADSL",
                       x = ADSL,
@@ -677,7 +677,7 @@ In the code block below, the default version of `variable_choices` is presented
 where the function uses an `ADSL` object containing "physical" data.
 
 ```{r}
-ADSL <- radsl(cached = TRUE)
+ADSL <- radsl(cached = TRUE) # nolint
 variable_choices(data = ADSL)
 ```
 
@@ -708,7 +708,7 @@ By default `value_choices` uses a `data.frame` from the `data` argument and
 choices will be immediately constructed from this object.
 
 ```{r}
-ADTTE <- radtte(cached = TRUE)
+ADTTE <- radtte(cached = TRUE) # nolint
 value_choices(
   data = ADTTE,
   var_choices = "PARAMCD",
@@ -750,7 +750,7 @@ data_extract_x <- data_extract_spec(
   ),
   filter = filter_spec(
     label = "Select endpoints:",
-    vars = "ARMCD", #variable_choices("ADSL", "ARMCD")
+    vars = "ARMCD", #variable_choices("ADSL", "ARMCD") # nolint
     choices = value_choices("ADSL",
                             var_choices = "ARMCD",
                             var_label = "ARM",
