@@ -48,7 +48,7 @@ Imports:
   utils.nest (>= 0.2.9),
   yaml
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.1.1
+RoxygenNote: 7.1.2
 Suggests:
   askpass,
   covr,

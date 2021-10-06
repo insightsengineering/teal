@@ -5,8 +5,10 @@ date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{Delayed Data Loading}
-  %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
+  %\VignetteEngine{knitr::rmarkdown}
+editor_options: 
+  chunk_output_type: console
 ---
 
 ```{r setup, include = FALSE, echo=FALSE}
@@ -17,6 +19,7 @@ knitr::opts_chunk$set(
 ```
 
 ### Overview
+
 Data plays an essential role in data analysis and `teal` provides several ways to
 include datasets into shiny applications. Normally, one develops an application
 in such a way that data are available before the app starts. This always involves
@@ -71,7 +74,8 @@ fun <- callable_function(fun = radsl)
 fun$set_args(list(cached = TRUE, na_percentage = 0.05))
 
 # execute function with arguments set
-fun$run()
+df <- fun$run()
+head(df)
 
 # check reproducible code
 cat(fun$get_call())
@@ -84,7 +88,8 @@ stages of the documentation.
 
 ```{r}
 # add arguments on the fly
-fun$run(args = list(seed = 1, na_percentage = 0.1, N = 3))
+df <- fun$run(args = list(seed = 1, na_percentage = 0.1, N = 3))
+head(df)
 
 # dynamic arguments not reflected in the call
 cat(fun$get_call())
@@ -97,7 +102,7 @@ one has to use `$assign_to_env()` to copy object and
 `$set_args(list(ADSL = as.symbol(ADSL)))` to link object with function argument.
 
 ```{r}
-ADSL <- radsl(cached = TRUE)
+ADSL <- radsl(cached = TRUE) # nolint
 
 fun <- callable_function(fun = radtte)
 
@@ -108,7 +113,8 @@ fun$assign_to_env("ADSL", ADSL)
 fun$set_args(args = list(ADSL = as.name("ADSL"), cached = TRUE))
 
 # execute function
-fun$run()
+df <- fun$run()
+head(df)
 
 # get R code
 fun$get_call()
@@ -123,6 +129,7 @@ contain multiple lines code and also allows `library` calls.
 Please note that objects assigned to this independent environment can't be modified
 because they are locked immediately. This means that in `CallableCode` created
 below it is not allowed to make any changes in `ADSL`.
+
 ```{r}
 code <- callable_code(
   "ADTTE <- radtte(
@@ -140,7 +147,8 @@ cat(code$get_call())
 code$assign_to_env("ADSL", ADSL)
 
 # evaluate call
-code$run()
+df <- code$run()
+head(df)
 ```
 
 ### `Dataset` (including `CDISCDataset`)
@@ -157,7 +165,7 @@ allows datasets to have parents and is needed for CDISC analysis.
 
 ```{r}
 library(magrittr)
-ADSL <- radsl(cached = TRUE) %>% head(3)
+ADSL <- radsl(cached = TRUE) %>% head(3) # nolint
 
 adsl <- cdisc_dataset(dataname = "ADSL",
                       x = ADSL,
@@ -669,7 +677,7 @@ In the code block below, the default version of `variable_choices` is presented
 where the function uses an `ADSL` object containing "physical" data.
 
 ```{r}
-ADSL <- radsl(cached = TRUE)
+ADSL <- radsl(cached = TRUE) # nolint
 variable_choices(data = ADSL)
 ```
 
@@ -700,7 +708,7 @@ By default `value_choices` uses a `data.frame` from the `data` argument and
 choices will be immediately constructed from this object.
 
 ```{r}
-ADTTE <- radtte(cached = TRUE)
+ADTTE <- radtte(cached = TRUE) # nolint
 value_choices(
   data = ADTTE,
   var_choices = "PARAMCD",
@@ -742,7 +750,7 @@ data_extract_x <- data_extract_spec(
   ),
   filter = filter_spec(
     label = "Select endpoints:",
-    vars = "ARMCD", #variable_choices("ADSL", "ARMCD")
+    vars = "ARMCD", #variable_choices("ADSL", "ARMCD") # nolint
     choices = value_choices("ADSL",
                             var_choices = "ARMCD",
                             var_label = "ARM",
