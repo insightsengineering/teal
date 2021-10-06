@@ -53,6 +53,10 @@ jobs:
             echo "TESTING_DEPTH=1" >> $GITHUB_ENV
           fi
         shell: bash
+      - name: Display TESTING_DEPTH and NO_TESTS
+        run: |
+          echo "TESTING_DEPTH = $TESTING_DEPTH"
+          echo "NO_TESTS = $NO_TESTS"
       
       - name: Gather info from PR
         uses: actions/github-script@v4
@@ -158,7 +162,6 @@ jobs:
 # TODO: if configurable then --as-cran optionally
       - name: Run R CMD CHECK
         run: |
-          echo "TESTING_DEPTH = $TESTING_DEPTH"
           if [[ -z "${NO_TESTS}" ]]; then
             R CMD check --no-manual ${{ env.PKGBUILD }}
           else
