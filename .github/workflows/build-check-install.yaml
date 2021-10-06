@@ -52,7 +52,7 @@ jobs:
           fi
           # default TESTING_DEPTH
           if [[ -z "${TESTING_DEPTH}" ]]; then
-            echo "Set TESTING_DEPTH=1 for as default"
+            echo "Set TESTING_DEPTH=1 as default"
             echo "TESTING_DEPTH=1" >> $GITHUB_ENV
           fi
         shell: bash
