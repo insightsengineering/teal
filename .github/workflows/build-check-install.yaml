@@ -40,6 +40,7 @@ jobs:
           COMMIT_OLDEST_MESSAGE: ${{ github.event.commits[0].message }}
         run: |
           # set TESTING_DEPTH for PR
+          echo "GH ref: $GITHUB_HEAD_REF"
           if [[ ! -z "${GITHUB_HEAD_REF}" ]]; then
             echo "TESTING_DEPTH=3" >> $GITHUB_ENV
           fi
@@ -51,7 +52,7 @@ jobs:
           # default TESTING_DEPTH
           if [[ -z "${TESTING_DEPTH}" ]]; then
             echo "TESTING_DEPTH=1" >> $GITHUB_ENV
-            
+
           fi
         shell: bash
 
