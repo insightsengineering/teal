@@ -33,6 +33,27 @@ jobs:
           done
         shell: bash
 
+      - name: Set TESTING_DEPTH
+        env:
+          COMMIT_NEWEST_MESSAGE: ${{ github.event.head_commit.message }}
+          COMMIT_OLDEST_MESSAGE: ${{ github.event.commits[0].message }}
+        run: |
+          # set TESTING_DEPTH for PR
+          if [[ ! -z "${GITHUB_HEAD_REF}" ]]; then
+            echo "TESTING_DEPTH=3" >> $GITHUB_ENV
+          fi
+          echo "commit msg = $COMMIT_NEWEST_MESSAGE"
+          if [[ $COMMIT_NEWEST_MESSAGE == *"[skip tests]"* ]]; then
+            echo "NO TESTING!"
+            echo "NO_TESTS=1" >> $GITHUB_ENV
+          fi
+          # default TESTING_DEPTH
+          if [[ -z "${TESTING_DEPTH}" ]]; then
+            echo "TESTING_DEPTH=1" >> $GITHUB_ENV
+          fi
+          echo "TESTING_DEPTH = $TESTING_DEPTH"
+        shell: bash
+      
       - name: Gather info from PR
         uses: actions/github-script@v4
         id: get-pr
@@ -136,11 +157,16 @@ jobs:
 
 # TODO: if configurable then --as-cran optionally
       - name: Run R CMD CHECK
-        run: R CMD check --no-manual ${{ env.PKGBUILD }}
+        run: |
+          if [[ -z "${NO_TESTS}" ]]; then
+            R CMD check --no-manual ${{ env.PKGBUILD }}
+          else
+            R CMD check --no-manual --no-tests ${{ env.PKGBUILD }}
+          fi
         shell: bash
         continue-on-error: true
         env:
-          TESTING_DEPTH: 1
+          # TESTING_DEPTH: 1
           _R_CHECK_TESTS_NLINES_: 0
 
       - name: Check whether JUnit XML report exists
