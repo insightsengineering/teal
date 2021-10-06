@@ -51,8 +51,10 @@ jobs:
           # default TESTING_DEPTH
           if [[ -z "${TESTING_DEPTH}" ]]; then
             echo "TESTING_DEPTH=1" >> $GITHUB_ENV
+            
           fi
         shell: bash
+
       - name: Display TESTING_DEPTH and NO_TESTS
         run: |
           echo "TESTING_DEPTH = $TESTING_DEPTH"
