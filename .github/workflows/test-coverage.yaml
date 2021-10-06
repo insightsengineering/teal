@@ -117,19 +117,38 @@ jobs:
 
       - name: Run coverage
         run: |
-          x <- covr::package_coverage()
-          print(x)
-          covr::to_cobertura(x, filename = "coverage.xml")
-          p <- covr::percent_coverage(x)
-          cat(p, file="coverage.txt", sep="")
-          covr::report(
-            x,
-            file = "coverage-report.html",
-            browse = FALSE
+          tryCatch(
+            expr = {
+                x <- covr::package_coverage()
+                print(x)
+                covr::to_cobertura(x, filename = "coverage.xml")
+                p <- covr::percent_coverage(x)
+                cat(p, file = "coverage.txt", sep = "")
+                covr::report(
+                    x,
+                    file = "coverage-report.html",
+                    browse = FALSE
+                )
+            },
+            error = function(e) {
+                message("Errors generated during coverage analysis:")
+                print(e)
+            },
+            warning = function(w) {
+                message("Warnings generated during coverage analysis:")
+                print(w)
+            }
           )
         shell: Rscript {0}
 
+      - name: Check whether coverage reports exists
+        id: check_coverage_reports
+        uses: andstor/file-existence-action@v1
+        with:
+          files: "coverage.xml, coverage.txt, coverage-report.html"
+
       - name: cobertura-report
+        if: steps.check_coverage_reports.outputs.files_exists == 'true'
         uses: 5monkeys/cobertura-action@v9
         with:
           path: coverage.xml
@@ -139,9 +158,11 @@ jobs:
           skip_covered: true
 
       - name: Set env
+        if: steps.check_coverage_reports.outputs.files_exists == 'true'
         run: echo "OVERALL_COVERAGE=$(cat coverage.txt)" >> $GITHUB_ENV
 
       - name: Badge for coverage
+        if: steps.check_coverage_reports.outputs.files_exists == 'true'
         uses: knightdave/anybadge-action@v1.1.0
         with:
           file: coverage.svg
@@ -149,12 +170,14 @@ jobs:
           anybadge_args: coverage
 
       - name: Upload badge
+        if: steps.check_coverage_reports.outputs.files_exists == 'true'
         uses: actions/upload-artifact@v2
         with:
           name: coverage
           path: coverage.svg
 
       - name: Upload report
+        if: steps.check_coverage_reports.outputs.files_exists == 'true'
         uses: actions/upload-artifact@v2
         with:
           name: coverage-report
