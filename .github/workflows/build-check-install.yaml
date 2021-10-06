@@ -42,7 +42,7 @@ jobs:
           if [[ ! -z "${GITHUB_HEAD_REF}" ]]; then
             echo "TESTING_DEPTH=3" >> $GITHUB_ENV
           fi
-          echo "commit msg = $COMMIT_NEWEST_MESSAGE"
+          echo "commit msg = ${COMMIT_NEWEST_MESSAGE}"
           if [[ $COMMIT_NEWEST_MESSAGE == *"[skip tests]"* ]]; then
             echo "NO TESTING!"
             echo "NO_TESTS=1" >> $GITHUB_ENV
@@ -51,7 +51,7 @@ jobs:
           if [[ -z "${TESTING_DEPTH}" ]]; then
             echo "TESTING_DEPTH=1" >> $GITHUB_ENV
           fi
-          echo "TESTING_DEPTH = $TESTING_DEPTH"
+          echo "TESTING_DEPTH = ${TESTING_DEPTH}"
         shell: bash
       
       - name: Gather info from PR
