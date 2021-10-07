@@ -372,6 +372,9 @@ teradata_data <- function(..., connection = teradata_connection()) {
 #'
 #' @return An object of class \code{RelationalDataConnector}
 #'
+#' @details Note the server location and token_provider must be provided as arguments to
+#'   the snowflake_connection function, see example below.
+#'
 #' @examples
 #' \dontrun{
 #' library(magrittr)
@@ -379,6 +382,7 @@ teradata_data <- function(..., connection = teradata_connection()) {
 #'   snowflake_cdisc_dataset_connector(
 #'     dataname ="ADSL",
 #'     sql_query = "sql_query",
+#'    connection = snowflake_connection(open_args = list(server = <<server>>, token_provider = <<url>>))
 #'   ) %>% mutate_dataset("any mutations required, e.g. to convert data types"),
 #'   connection = snowflake_connection(
 #'     open_args = list(
