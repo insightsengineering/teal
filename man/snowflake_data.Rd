@@ -32,8 +32,8 @@ data <- snowflake_data(
   ) \%>\% mutate_dataset("any mutations required, e.g. to convert data types"),
   connection = snowflake_connection(
     open_args = list(
-      server = <<server>>,
-      token_provider = <<url>>,
+      server = "<<server>>",
+      token_provider = "<<url>>",
       role = "role",
       database = "database",
       schema = "schema",
