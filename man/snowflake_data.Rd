@@ -29,10 +29,11 @@ data <- snowflake_data(
   snowflake_cdisc_dataset_connector(
     dataname ="ADSL",
     sql_query = "sql_query",
-   connection = snowflake_connection(open_args = list(server = <<server>>, token_provider = <<url>>))
   ) \%>\% mutate_dataset("any mutations required, e.g. to convert data types"),
   connection = snowflake_connection(
     open_args = list(
+      server = <<server>>,
+      token_provider = <<url>>,
       role = "role",
       database = "database",
       schema = "schema",
