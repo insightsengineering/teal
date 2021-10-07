@@ -990,7 +990,7 @@ snowflake_connection <- function(open_args = list(), close_args = list(), ping_a
   stopifnot(is_fully_named_list(close_args))
   stopifnot(is_fully_named_list(ping_args))
 
-  if (!all(c("server", "token_provider"  %in% names(open_args)))) {
+  if (!all(c("server", "token_provider")  %in% names(open_args))) {
     stop("When using a snowflake connection function
       you must give the location of the snowflake server and auth token provider.
       See 'help(snowflake_data)' for an example.
