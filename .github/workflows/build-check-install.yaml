@@ -2,6 +2,8 @@ name: R CMD Check
 
 on:
   push:
+    tags:
+      - "v*"
     branches:
       - main
       - pre-release
@@ -116,10 +118,16 @@ jobs:
           if (file.exists("staged_dependencies.yaml")) {
             cat("\nInstall Staged Dependencies\n\n\n")
             if (!require("staged.dependencies")) {
-              remotes::install_github("openpharma/staged.dependencies", ref = "v0.2.1", Ncpus = ncores, upgrade = "never")
+              remotes::install_github("openpharma/staged.dependencies", ref = "97tags@main", Ncpus = ncores, upgrade = "never")
             }
-            cat("\nCalculating Staged Dependency Table...\n\n")
-            x <- staged.dependencies::dependency_table()
+            cat("\nCalculating Staged Dependency Table for ref: ${{ github.ref }} ...\n\n")
+            ref = "${{ github.ref }}"
+            if (startsWith(ref, "refs/tags")){
+              x <- staged.dependencies::dependency_table(ref=ref)
+            }
+            else {
+              x <- staged.dependencies::dependency_table()
+            }
             print(x, width = 120)
             cat("\n\n")
             staged.dependencies::install_deps(dep_structure = x, install_project = FALSE, verbose = TRUE)
@@ -175,3 +183,43 @@ jobs:
       - name: Install R package
         run: R CMD INSTALL ${{ env.PKGBUILD }}
         shell: bash
+
+      - name: Upload package
+        if: startsWith(github.ref, 'refs/tags/v')
+        uses: actions/upload-artifact@v2
+        with:
+          path: ${{ env.PKGBUILD }}
+          name: ${{ env.PKGBUILD }}
+
+  upload-release-assets:
+    name: Upload build tar.gz
+    needs: build-install-check
+    runs-on: ubuntu-latest
+    if: startsWith(github.ref, 'refs/tags/v')
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Wait for release to succeed
+        timeout-minutes: 2
+        uses: lewagon/wait-on-check-action@v1.1.1
+        with:
+          ref: "${{ github.ref }}"
+          check-name: 'Release'
+          repo-token: ${{ secrets.REPO_GITHUB_TOKEN }}
+          wait-interval: 10
+      - name: Set env
+        run: echo "RELEASE_VERSION=${GITHUB_REF#refs/*/v}" >> $GITHUB_ENV
+      - name: Get package name
+        run: echo "PKGBUILD=${{ github.event.repository.name }}_${{ env.RELEASE_VERSION }}.tar.gz" >> $GITHUB_ENV
+      - name: Download artifact
+        uses: actions/download-artifact@v2
+        with:
+          name: "${{ env.PKGBUILD }}"
+      - name: Upload binaries to release
+        uses: svenstaro/upload-release-action@v2
+        with:
+          repo_token: ${{ secrets.REPO_GITHUB_TOKEN }}
+          file: "${{ env.PKGBUILD }}"
+          asset_name: "${{ env.PKGBUILD }}"
+          tag: "${{ github.ref }}"
+          overwrite: false
