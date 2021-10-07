@@ -130,12 +130,12 @@ rcd_data <- function(..., connection = rcd_connection(), check = TRUE) {
 #' @export
 #'
 #' @param ... (\code{DatasetConnector} objects)\cr
-#'  dataset connectors created using \code{\link{rice_dataset_connector}}
+#'  dataset connectors created using \code{rice_dataset_connector}
 #' @param connection (\code{DataConnection}) object returned from \code{rice_connection}.
 #' @param additional_ui (\code{shiny.tag})\cr
 #'  additional user interface to be visible over login panel
 #'
-#' @return An object of class \code{RelatonalDataConnector}
+#' @return An object of class \code{RelationalDataConnector}
 #'
 #' @examples
 #'
@@ -184,7 +184,7 @@ rice_data <- function(..., connection = rice_connection(), additional_ui = NULL)
       ns <- NS(id)
       div(
         div(
-          h1("TEAL - Access data on entimICE using rice"),
+          h1("TEAL - Access data on entimICE using ", `if`(is(connection, "rice_connection"), tags$code("rice"), tags$code("ricepass"))),
           br(),
           h5("Data access requested for:"),
           fluidRow(
@@ -204,6 +204,16 @@ rice_data <- function(..., connection = rice_connection(), additional_ui = NULL)
         br(),
         connection$get_open_ui(ns("open_connection"))
       )
+    }
+  )
+
+  x$set_preopen_server(
+    function(input, output, session, connectors, connection) {
+      if (!is.null(connection$get_preopen_server())) {
+        callModule(connection$get_preopen_server(),
+                   id = "open_connection",
+                   connection = connection)
+      }
     }
   )
 
@@ -486,7 +496,7 @@ snowflake_data <- function(..., connection) {
 #'  dataset connectors created using \code{\link{cdse_dataset_connector}}
 #' @param connection (\code{DataConnection}) object returned from \code{cdse_connection}.
 #'
-#' @return An object of class \code{RelatonalDataConnector}
+#' @return An object of class \code{RelationalDataConnector}
 #'
 #' @examples
 #'
@@ -607,7 +617,7 @@ cdse_data <- function(..., connection = cdse_connection()) {
 #'  dataset connectors created using \code{\link{datasetdb_dataset_connector}}
 #' @param connection (\code{DataConnection}) object returned from \code{datasetdb_connection}.
 #'
-#' @return An object of class \code{RelatonalDataConnector}
+#' @return An object of class \code{RelationalDataConnector}
 #'
 #' @examples
 #'

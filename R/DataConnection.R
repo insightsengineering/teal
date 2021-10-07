@@ -129,18 +129,24 @@ DataConnection <- R6::R6Class( # nolint
         ),
         server = function(input, output, session) {
           session$onSessionEnded(stopApp)
-          callModule(
+          if_not_null(
             self$get_preopen_server(),
-            id = "data_connection",
-            connection = self
+            callModule(
+              self$get_preopen_server(),
+              id = "data_connection",
+              connection = self
+            )
           )
           observeEvent(input$submit, {
             rv <- reactiveVal(NULL)
             rv(
-              callModule(
+              if_not_null(
                 self$get_open_server(),
-                id = "data_connection",
-                connection = self
+                callModule(
+                  self$get_open_server(),
+                  id = "data_connection",
+                  connection = self
+                )
               )
             )
 
@@ -174,6 +180,7 @@ DataConnection <- R6::R6Class( # nolint
       stopifnot(is.null(args) || (is.list(args) && is_fully_named_list(args)))
       if_cond(private$check_open_fun(silent = silent), return(), isFALSE)
       if (isTRUE(private$opened) && isTRUE(private$ping())) {
+        private$opened <- TRUE
         return(invisible(self))
       } else {
         open_res <- private$open_fun$run(args = args, try = try)
@@ -629,18 +636,19 @@ rcd_connection <- function(open_args = list()) {
   return(x)
 }
 
-#' Open connection to `rice`
+
+#' Open connection to `entimICE` via `rice`
 #'
 #' @description `r lifecycle::badge("experimental")`
 #'
 #' @param open_args optional, named (`list`) of additional parameters for the connection's
-#'   \code{\link[rice]{rice_session_open}} open function. Please note that the `password` argument will be
+#'   \code{rice_session_open} open function. Please note that the `password` argument will be
 #'   overwritten with `askpass::askpass`.
 #' @param close_args optional, named (`list`) of additional parameters for the connection's
-#'   \code{\link[rice]{rice_session_close}} close function. Please note that the `message` argument
+#'   \code{rice_session_close} close function. Please note that the `message` argument
 #'   will be overwritten with `FALSE`.
 #' @param ping_args optional, named (`list`) of additional parameters for the connection's
-#'   \code{\link[rice]{rice_session_active}} ping function.
+#'   \code{rice_session_active} ping function.
 #'
 #' @return (`DataConnection`) type of object
 #'
@@ -719,8 +727,69 @@ rice_connection <- function(open_args = list(), close_args = list(), ping_args =
     }
   )
 
+  class(x) <- c("rice_connection", class(x))
+
   return(x)
 }
+
+
+#' Open connection to `entimICE` via `ricepass`
+#'
+#' @description `r lifecycle::badge("experimental")`
+#'
+#' @return (`DataConnection`) type of object
+#'
+#' @export
+ricepass_connection <- function() {
+  check_pkg_quietly(
+    "ricepass",
+    paste0(
+      "Connection to entimICE via ricepass was requested, but ricepass package is not available.",
+      "Please install it from https://github.roche.com/Rpackages/ricepass."
+    )
+  )
+  if (utils::compareVersion(as.character(utils::packageVersion("ricepass")), "1.1.0") == -1) {
+    stop("ricepass is supported starting from v1.1.0. Please upgrade.")
+  }
+
+  ping_fun <- callable_function("rice::rice_session_active")
+
+  open_fun <- callable_function("rice::rice_session_open")
+
+  x <- DataConnection$new(open_fun = open_fun, ping_fun = ping_fun)
+
+  # open connection
+  x$set_open_ui(
+    function(id) {
+      ns <- NS(id)
+      tagList(
+        eval(parse(text = "ricepass::rice_ui_icepass(ns(character(0)))")),
+        actionButton(ns("ricepass_login_button"), "Click here to login")
+      )
+    }
+  )
+
+  x$set_preopen_server(
+    function(input, output, session, connection) {
+      observeEvent(input$ricepass_login_button, {
+        eval(parse(text = "ricepass::rice_server_icepass()"))
+        # need to set connection status object to TRUE
+        # executes ping() and if response is "opened" then sets to TRUE
+        connection$open()
+        if (connection$is_opened()) {
+          shinyjs::html("ricepass_login_button", "Already logged in!")
+          shinyjs::disable("ricepass_login_button")
+        }
+      })
+      return(invisible(connection))
+    }
+  )
+
+  class(x) <- c("ricepass_connection", class(x))
+
+  return(x)
+}
+
 
 #' Open connection to `Teradata`
 #'

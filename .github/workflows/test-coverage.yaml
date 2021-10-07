@@ -1,27 +1,17 @@
-name: Pkgdown Docs
+name: Coverage
 
 on:
   push:
-    tags:
-      - "v*"
     branches:
       - main
   pull_request:
     branches:
       - main
       - pre-release
-    paths:
-      - inst/templates/**
-      - _pkgdown.yml
-      - DESCRIPTION
-      - '**.md'
-      - man/**
-      - LICENSE.*
-      - NAMESPACE
 
 jobs:
-  pkgdown:
-    name: Generate
+  test-coverage:
+    name: Coverage
     runs-on: ubuntu-latest
     container:
       image: ghcr.io/insightsengineering/rstudio_4.1.0_bioc_3.13:latest
@@ -50,14 +40,13 @@ jobs:
 
       - name: Install remotes R package if needed
         run: |
-           options(repos = c(CRAN = "https://cloud.r-project.org/"))
-           ncores <- parallel::detectCores(all.tests = FALSE, logical = TRUE)
-           cat(paste("\n\nnumber of cores detected:", ncores, "\n\n"))
-           if (!require("remotes")) install.packages("remotes", upgrade = "never", Ncpus = ncores)
+          options(repos = c(CRAN = "https://cloud.r-project.org/"))
+          ncores <- parallel::detectCores(all.tests = FALSE, logical = TRUE)
+          cat(paste("\n\nnumber of cores detected:", ncores, "\n\n"))
+          if (!require("remotes")) install.packages("remotes", upgrade = "never", Ncpus = ncores)
         shell: Rscript {0}
         env:
           GITHUB_PAT: ${{ secrets.REPO_GITHUB_TOKEN }} # or ${{ secrets.GITHUB_TOKEN }}
-
 
       - name: Checkout repo during PR
         uses: actions/checkout@v2
@@ -106,16 +95,10 @@ jobs:
           if (file.exists("staged_dependencies.yaml")) {
             cat("\nInstall Staged Dependencies\n\n\n")
             if (!require("staged.dependencies")) {
-              remotes::install_github("openpharma/staged.dependencies", ref = "v0.2.2", Ncpus = ncores, upgrade = "never")
+              remotes::install_github("openpharma/staged.dependencies", ref = "v0.2.1", Ncpus = ncores, upgrade = "never")
             }
-            cat("\nCalculating Staged Dependency Table for ref: ${{ github.ref }} ...\n\n")
-            ref = "${{ github.ref }}"
-            if (startsWith(ref, "refs/tags")){
-              x <- staged.dependencies::dependency_table(ref=ref)
-            }
-            else {
-              x <- staged.dependencies::dependency_table()
-            }
+            cat("\nCalculating Staged Dependency Table...\n\n")
+            x <- staged.dependencies::dependency_table()
             print(x, width = 120)
             cat("\n\n")
             staged.dependencies::install_deps(dep_structure = x, install_project = FALSE, verbose = TRUE)
@@ -128,73 +111,74 @@ jobs:
         run: R CMD INSTALL ${{ github.event.repository.name }}
         shell: bash
 
-      - name: Build docs
-        run: |
-          options(repos = c(CRAN = "https://cloud.r-project.org/"))
-          "pkgdown" %in% installed.packages() || install.packages("pkgdown", upgrade = "never")
-          logfile <- "pkgdown_${{ github.event.repository.name }}.log"
-          con <- file(logfile)
-          sink(con, append = TRUE, split = TRUE)
-          sink(con, append = TRUE, type = "message")
-          pkgdown::build_site("${{ github.event.repository.name }}", devel = TRUE)
-          sink()
-          sink(type = "message")
-          logs <- readLines(logfile)
-          warnings_marker <- grep("Warning message", logs)
-          if (length(warnings_marker) > 0) {
-            cat("⚠ One or more warnings were generated during the pkgdown build:\n")
-            cat(logs[warnings_marker[[1]]:length(logs)], sep = "\n")
-            stop("Please 🙏 fix the warnings show below this message 👇")
-          }
+      - name: Install covr
+        run: if (!require("covr")) install.packages("covr", repos="http://cran.rstudio.com/", upgrade = "never")
         shell: Rscript {0}
 
-      - name: Create artifacts
+      - name: Run coverage
         run: |
-          pushd ${{ github.event.repository.name }}/docs/
-          zip -r9 $OLDPWD/pkgdown.zip *
-          popd
-        shell: bash
+          tryCatch(
+            expr = {
+                x <- covr::package_coverage()
+                print(x)
+                covr::to_cobertura(x, filename = "coverage.xml")
+                p <- covr::percent_coverage(x)
+                cat(p, file = "coverage.txt", sep = "")
+                covr::report(
+                    x,
+                    file = "coverage-report.html",
+                    browse = FALSE
+                )
+            },
+            error = function(e) {
+                message("Errors generated during coverage analysis:")
+                print(e)
+            },
+            warning = function(w) {
+                message("Warnings generated during coverage analysis:")
+                print(w)
+            }
+          )
+        shell: Rscript {0}
 
-      - name: Upload docs for review
-        if: github.ref != 'refs/heads/main'
+      - name: Check whether coverage reports exists
+        id: check_coverage_reports
+        uses: andstor/file-existence-action@v1
+        with:
+          files: "coverage.xml, coverage.txt, coverage-report.html"
+
+      - name: cobertura-report
+        if: steps.check_coverage_reports.outputs.files_exists == 'true'
+        uses: 5monkeys/cobertura-action@v9
+        with:
+          path: coverage.xml
+          repo_token: ${{ secrets.REPO_GITHUB_TOKEN }}
+          minimum_coverage: 80
+          fail_below_threshold: false
+          skip_covered: true
+
+      - name: Set env
+        if: steps.check_coverage_reports.outputs.files_exists == 'true'
+        run: echo "OVERALL_COVERAGE=$(cat coverage.txt)" >> $GITHUB_ENV
+
+      - name: Badge for coverage
+        if: steps.check_coverage_reports.outputs.files_exists == 'true'
+        uses: knightdave/anybadge-action@v1.1.0
+        with:
+          file: coverage.svg
+          value: ${{ env.OVERALL_COVERAGE }}
+          anybadge_args: coverage
+
+      - name: Upload badge
+        if: steps.check_coverage_reports.outputs.files_exists == 'true'
         uses: actions/upload-artifact@v2
         with:
-          name: pkgdown.zip
-          path: pkgdown.zip
+          name: coverage
+          path: coverage.svg
 
-      - name: Publish docs
-        if: github.ref == 'refs/heads/main' # Only after merge or push to main
-        run: |
-          cd ${{ github.event.repository.name }}
-          git config --local user.email "actions@github.com"
-          git config --local user.name "GitHub Actions"
-          Rscript -e 'pkgdown::deploy_to_branch(new_process = FALSE)'
-
-  upload-release-assets:
-    name: Upload documentation assets
-    needs: pkgdown
-    runs-on: ubuntu-latest
-    if: startsWith(github.ref, 'refs/tags/v')
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v2
-      - name: Wait for release to succeed
-        timeout-minutes: 2
-        uses: lewagon/wait-on-check-action@v1.1.1
+      - name: Upload report
+        if: steps.check_coverage_reports.outputs.files_exists == 'true'
+        uses: actions/upload-artifact@v2
         with:
-          ref: "${{ github.ref }}"
-          check-name: 'Release'
-          repo-token: ${{ secrets.REPO_GITHUB_TOKEN }}
-          wait-interval: 10
-      - name: Download artifact
-        uses: actions/download-artifact@v2
-        with:
-          name: pkgdown.zip
-      - name: Upload binaries to release
-        uses: svenstaro/upload-release-action@v2
-        with:
-          repo_token: ${{ secrets.REPO_GITHUB_TOKEN }}
-          file: pkgdown.zip
-          asset_name: pkgdown.zip
-          tag: ${{ github.ref }}
-          overwrite: false
+          name: coverage-report
+          path: "coverage-report.html"

@@ -2,21 +2,21 @@
 % Please edit documentation in R/DataConnection.R
 \name{rice_connection}
 \alias{rice_connection}
-\title{Open connection to \code{rice}}
+\title{Open connection to \code{entimICE} via \code{rice}}
 \usage{
 rice_connection(open_args = list(), close_args = list(), ping_args = list())
 }
 \arguments{
 \item{open_args}{optional, named (\code{list}) of additional parameters for the connection's
-\code{\link[rice]{rice_session_open}} open function. Please note that the \code{password} argument will be
+\code{rice_session_open} open function. Please note that the \code{password} argument will be
 overwritten with \code{askpass::askpass}.}
 
 \item{close_args}{optional, named (\code{list}) of additional parameters for the connection's
-\code{\link[rice]{rice_session_close}} close function. Please note that the \code{message} argument
+\code{rice_session_close} close function. Please note that the \code{message} argument
 will be overwritten with \code{FALSE}.}
 
 \item{ping_args}{optional, named (\code{list}) of additional parameters for the connection's
-\code{\link[rice]{rice_session_active}} ping function.}
+\code{rice_session_active} ping function.}
 }
 \value{
 (\code{DataConnection}) type of object
