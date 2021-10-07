@@ -108,7 +108,6 @@ jobs:
             echo "Set TESTING_DEPTH=1 as default"
             echo "TESTING_DEPTH=1" >> $GITHUB_ENV
           fi
-          
         shell: bash
 
       - name: Display TESTING_DEPTH and NO_TESTS
