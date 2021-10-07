@@ -57,7 +57,7 @@ jobs:
             echo "Set TESTING_DEPTH=1 as default"
             echo "TESTING_DEPTH=1" >> $GITHUB_ENV
           fi
-          echo $(git log --format=%B -n 1 ${{ github.event.after }}
+          echo $(git log --format=%B -n 1 ${{ github.event.after }})
         shell: bash
 
       - name: Display TESTING_DEPTH and NO_TESTS
