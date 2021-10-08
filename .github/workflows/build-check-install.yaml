@@ -151,18 +151,15 @@ jobs:
           # set TESTING_DEPTH for PR
           if [[ ! -z "${GITHUB_HEAD_REF}" ]]; then
             TESTING_DEPTH=3
-            echo "Set TESTING_DEPTH=3 for PR"
             echo "TESTING_DEPTH=3" >> $GITHUB_ENV
             COMMIT_NEWEST_MESSAGE=$(git log --format=%B -n 1 ${{ github.event.after }})
           fi
           echo "commit msg = ${COMMIT_NEWEST_MESSAGE}"
           if [[ $COMMIT_NEWEST_MESSAGE == *"[skip tests]"* ]]; then
-            echo "Set NO_TESTS=1, because of commit msg: '$(grep "\[skip tests\]" <<< $COMMIT_NEWEST_MESSAGE)'"
             echo "NO_TESTS=1" >> $GITHUB_ENV
           fi
           # default TESTING_DEPTH
           if [[ -z "${TESTING_DEPTH}" ]]; then
-            echo "Set TESTING_DEPTH=1 as default"
             echo "TESTING_DEPTH=1" >> $GITHUB_ENV
           fi
         shell: bash
