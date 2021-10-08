@@ -18,6 +18,10 @@ An object of class \code{RelationalDataConnector}
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
 Build data connector for \code{SNOWFLAKE} functions or datasets
 }
+\details{
+Note the server location and token_provider must be provided as arguments to
+the snowflake_connection function, see example below.
+}
 \examples{
 \dontrun{
 library(magrittr)
@@ -28,6 +32,8 @@ data <- snowflake_data(
   ) \%>\% mutate_dataset("any mutations required, e.g. to convert data types"),
   connection = snowflake_connection(
     open_args = list(
+      server = "<<server>>",
+      token_provider = "<<url>>",
       role = "role",
       database = "database",
       schema = "schema",

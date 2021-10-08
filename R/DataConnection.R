@@ -904,6 +904,7 @@ teradata_connection <- function(open_args = list(), close_args = list(), ping_ar
 #' @param server the `Snowflake`server to connect to.
 #' @param port the port to connect to the `Snowflake` instance.
 #' @param driver the driver to use to connect to the `Snowflake` instance.
+#' @param token_provider location of the auth token provider needed to access `Snowflake`.
 #' @export
 snowflake_connection_function <- function(username = askpass::askpass("Please enter your username"),
                                           password = askpass::askpass("Please enter your password"),
@@ -911,11 +912,12 @@ snowflake_connection_function <- function(username = askpass::askpass("Please en
                                           database,
                                           schema,
                                           warehouse,
-                                          server = "roche_pd.eu-central-1.snowflakecomputing.com",
+                                          server,
                                           port = 443,
-                                          driver = "SnowflakeDSIIDriver") {
+                                          driver = "SnowflakeDSIIDriver",
+                                          token_provider) {
 
-  res <- httr::POST("https://wam.roche.com/as/token.oauth2",
+  res <- httr::POST(token_provider,
     body = list(
       client_id = "snowflake",
       grant_type = "password",
@@ -948,7 +950,7 @@ snowflake_connection_function <- function(username = askpass::askpass("Please en
       Warehouse = warehouse,
       role = role,
       authenticator = \"oauth\",
-      token = token")),
+      token = token)")),
     error = function(cond){
       stop(paste("Unable to connect to snowflake. Error message:", cond$message), call. = FALSE)
     }
@@ -987,6 +989,14 @@ snowflake_connection <- function(open_args = list(), close_args = list(), ping_a
   stopifnot(is_fully_named_list(open_args))
   stopifnot(is_fully_named_list(close_args))
   stopifnot(is_fully_named_list(ping_args))
+
+  if (!all(c("server", "token_provider")  %in% names(open_args))) {
+    stop("When using a snowflake connection function
+      you must give the location of the snowflake server and auth token provider.
+      See 'help(snowflake_data)' for an example.
+      Please consult your internal documentation/support team for your server and token provider locations.")
+  }
+
 
   open_fun <- callable_function("teal::snowflake_connection_function")
   open_fun$set_args(open_args)
