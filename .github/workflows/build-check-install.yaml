@@ -142,13 +142,44 @@ jobs:
           echo "PKGBUILD=$(echo *.tar.gz)" >> $GITHUB_ENV
         shell: bash
 
+      - name: Set TESTING_DEPTH
+        env:
+          COMMIT_NEWEST_MESSAGE: ${{ github.event.head_commit.message }}
+          COMMIT_OLDEST_MESSAGE: ${{ github.event.commits[0].message }}
+        run: |
+          cd ${{ github.event.repository.name }}
+          # set TESTING_DEPTH for PR
+          if [[ ! -z "${GITHUB_HEAD_REF}" ]]; then
+            TESTING_DEPTH=3
+            echo "TESTING_DEPTH=3" >> $GITHUB_ENV
+            COMMIT_NEWEST_MESSAGE=$(git log --format=%B -n 1 ${{ github.event.after }})
+          fi
+          if [[ $COMMIT_NEWEST_MESSAGE == *"[skip tests]"* ]]; then
+            echo "NO_TESTS=1" >> $GITHUB_ENV
+          fi
+          # default TESTING_DEPTH
+          if [[ -z "${TESTING_DEPTH}" ]]; then
+            echo "TESTING_DEPTH=1" >> $GITHUB_ENV
+          fi
+        shell: bash
+
+      - name: Print TESTING_DEPTH and NO_TESTS
+        run: |
+          echo "TESTING_DEPTH = $TESTING_DEPTH"
+          echo "NO_TESTS = $NO_TESTS"
+
 # TODO: if configurable then --as-cran optionally
       - name: Run R CMD CHECK
-        run: R CMD check ${{ env.PKGBUILD }}
+        run: |
+          if [[ -z "${{ env.NO_TESTS }}" ]]; then
+            R CMD check ${{ env.PKGBUILD }}
+          else
+            R CMD check --no-tests ${{ env.PKGBUILD }}
+          fi
         shell: bash
         continue-on-error: true
         env:
-          TESTING_DEPTH: 1
+          # TESTING_DEPTH: 1
           _R_CHECK_TESTS_NLINES_: 0
 
       - name: Check whether JUnit XML report exists
