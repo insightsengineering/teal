@@ -950,7 +950,7 @@ snowflake_connection_function <- function(username = askpass::askpass("Please en
       Warehouse = warehouse,
       role = role,
       authenticator = \"oauth\",
-      token = token")),
+      token = token)")),
     error = function(cond){
       stop(paste("Unable to connect to snowflake. Error message:", cond$message), call. = FALSE)
     }
