@@ -157,7 +157,7 @@ jobs:
           fi
           echo "commit msg = ${COMMIT_NEWEST_MESSAGE}"
           if [[ $COMMIT_NEWEST_MESSAGE == *"[skip tests]"* ]]; then
-            echo "Set NO_TESTS=1, because of commit msg: '$COMMIT_NEWEST_MESSAGE'"
+            echo "Set NO_TESTS=1, because of commit msg: '$(grep "\[skip tests\]" <<< $COMMIT_NEWEST_MESSAGE)'"
             echo "NO_TESTS=1" >> $GITHUB_ENV
           fi
           # default TESTING_DEPTH
@@ -176,9 +176,9 @@ jobs:
       - name: Run R CMD CHECK
         run: |
           if [[ -z "${NO_TESTS}" ]]; then
-            R CMD check --no-manual ${{ env.PKGBUILD }}
+            R CMD check ${{ env.PKGBUILD }}
           else
-            R CMD check --no-manual --no-tests ${{ env.PKGBUILD }}
+            R CMD check --no-tests ${{ env.PKGBUILD }}
           fi
         shell: bash
         continue-on-error: true
