@@ -171,7 +171,7 @@ jobs:
 # TODO: if configurable then --as-cran optionally
       - name: Run R CMD CHECK
         run: |
-          if [[ -z "${NO_TESTS}" ]]; then
+          if [[ -z "${{ env.NO_TESTS }}" ]]; then
             R CMD check ${{ env.PKGBUILD }}
           else
             R CMD check --no-tests ${{ env.PKGBUILD }}
