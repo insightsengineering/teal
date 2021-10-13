@@ -100,8 +100,8 @@ app <- init(
     teal:::reset_filters_module("Reset", active_datanames = c("ADSL", "ADLB"))
   ),
   filter = list(
-    ADSL = list(SEX = list(selected = "M", keep_na = TRUE), AGE = default_filter()),
-    ADLB = list(ASEQ = list(selected = c(5.6, 20), keep_na = FALSE))
+    ADSL = list(SEX = list("M", keep_na = TRUE), AGE = default_filter()),
+    ADLB = list(ASEQ = list(c(5.6, 20), keep_na = FALSE))
   ),
   header = "App with Debugging Modules",
   footer = tags$p(class = "text-muted", "Source: agile-R website")
@@ -129,7 +129,7 @@ app <- init(
   ),
   filter = list(
     ADSL = list(
-      SEX = list(selected = "M", keep_na = TRUE),
+      SEX = list("M", keep_na = TRUE),
       COUNTRY = c("USA", NA),
       AGE = default_filter()
     )
@@ -162,7 +162,7 @@ app <- init(
   ),
   filter = list(
     ADSL = list(
-      SEX = list(selected = "M", keep_na = TRUE),
+      SEX = list("M", keep_na = TRUE),
       COUNTRY = c("USA", NA),
       AGE = default_filter()
     )
@@ -198,7 +198,7 @@ app <- init(
   ),
   filter = list(
     ADSL = list(
-      SEX = list(selected = "M", keep_na = TRUE),
+      SEX = list("M", keep_na = TRUE),
       COUNTRY = c("USA", NA),
       AGE = default_filter()
     )
@@ -242,8 +242,8 @@ app <- init(
     ADSL = list(
       SEX1 = c("M"),
       SEX2 = c("M", NA),
-      SEX3 = list(selected = "M"),
-      SEX4 = list(selected = "M", keep_na = TRUE),
+      SEX3 = list("M"),
+      SEX4 = list("M", keep_na = TRUE),
       SEX5 = default_filter()
     )
   ),
@@ -297,7 +297,7 @@ app <- init(
   ),
   filter = list(
     ADSL = list(
-      SEX = list(selected = "M", keep_na = TRUE),
+      SEX = list("M", keep_na = TRUE),
       COUNTRY = c("USA", NA),
       AGE = default_filter()
     ),

@@ -11,9 +11,10 @@ snowflake_connection_function(
   database,
   schema,
   warehouse,
-  server = "roche_pd.eu-central-1.snowflakecomputing.com",
+  server,
   port = 443,
-  driver = "SnowflakeDSIIDriver"
+  driver = "SnowflakeDSIIDriver",
+  token_provider
 )
 }
 \arguments{
@@ -34,6 +35,8 @@ snowflake_connection_function(
 \item{port}{the port to connect to the \code{Snowflake} instance.}
 
 \item{driver}{the driver to use to connect to the \code{Snowflake} instance.}
+
+\item{token_provider}{location of the auth token provider needed to access \code{Snowflake}.}
 }
 \description{
 This is used by \code{snowflake_connection} and does not need to be called directly
