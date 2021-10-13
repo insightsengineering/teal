@@ -71,7 +71,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">teal</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.9.5.9000</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.10.0.9000</span>
       </span>
     </div>
 
@@ -138,18 +138,33 @@
       
     </div>
 
-    <div id="teal-0959000" class="section level1">
-<h1 class="page-header" data-toc-text="0.9.5.9000">
-<a href="#teal-0959000" class="anchor"></a>teal 0.9.5.9000</h1>
+    <div id="teal-01009000" class="section level1">
+<h1 class="page-header" data-toc-text="0.10.0.9000">
+<a href="#teal-01009000" class="anchor"></a>teal 0.10.0.9000</h1>
+</div>
+    <div id="teal-0100" class="section level1">
+<h1 class="page-header" data-toc-text="0.10.0">
+<a href="#teal-0100" class="anchor"></a>teal 0.10.0</h1>
 <div id="new-features" class="section level3">
 <h3 class="hasAnchor">
 <a href="#new-features" class="anchor"></a>New features</h3>
 <ul>
+<li>Allow passing <code>MultiAssayExperiment</code> to the <code><a href="../reference/init.html">teal::init</a></code> using <code>mae_dataset</code> function or through the connectors.</li>
+<li>Refactored filter panel to use <code>MultiAssayExperiment</code> objects. Filters can be set on a subject level (<code>colData</code> of <code>MAE</code> object) and on a experiment level (<code>colData</code> and <code>rowData</code> of an assay).</li>
 <li>Added <code>cdse_dataset_connector</code> to create delayed data objects from <code>CDSE</code>.</li>
 <li>Added <code>datasetdb_dataset_connector</code> to create delayed data objects from <code>DataSetDB</code>.</li>
-<li>Added <code>split</code> and <code>merge</code> methods to the <code>JoinKeys</code> object.</li>
-<li>Added a new public facing constructor wrapper, <code>mae_dataset</code>.</li>
-<li>Added <code><a href="../reference/all_choices.html">all_choices()</a></code> as a possible argument to the <code>selected</code> parameter of <code>filter_spec</code>, <code>select_spec</code> and <code>choices_selected</code> indicating that all choices are selected.</li>
+<li>Added <code>ricepass_connection</code> to create delayed data objects from <code>entimICE</code> via <code>ricepass</code>.</li>
+<li>Refactor of the filter panel:
+<ul>
+<li>Simplified setting of initial filter state without need to specify “choices” or “range” named list element depending on the variable class.</li>
+<li>
+<code>Dataset</code> type determines an appearance and a functionality of related filters and filters summary.</li>
+<li>
+<code>Datasets</code> are passed (by reference) from <code>DDL</code> to <code>FilteredData</code> skipping extracting data and their attributes.</li>
+<li>Redesigned variable filter labels in “Active Filter Variables” panel.</li>
+<li>Fully testable server functions.</li>
+</ul>
+</li>
 </ul>
 </div>
 <div id="bug-fixes" class="section level3">
@@ -159,20 +174,19 @@
 <li>Fixed the bug caused by calling <code>mutate_dataset</code> multiple times on the same <code>DatasetConnector</code> or <code>Dataset</code> object.</li>
 <li>Fixed a bug that caused the output of <code>get_code</code> function to not reproduce its raw data set.</li>
 <li>Changed <code>filter_spec</code> to allow no variable selection upon app initialization, where the first possible value was previously selected.</li>
-<li>Fixed reference bug in <code>FilteredData</code> that caused error message on initial application load.</li>
 </ul>
 </div>
 <div id="enhancements" class="section level3">
 <h3 class="hasAnchor">
 <a href="#enhancements" class="anchor"></a>Enhancements</h3>
 <ul>
-<li>The <code>append</code> method of a <code>CodeClass</code> object has been modified to print a warning message when the argument does not result in any code being added because it is duplicated.</li>
 <li>
-<code>modules</code> parameter of <code><a href="../reference/init.html">teal::init</a></code> function can now receive a <code>list</code> instead of <code>root_modules</code> function call.</li>
+<code>modules</code> parameter of <code><a href="../reference/init.html">teal::init</a></code> function can also receive a <code>list</code> except <code>root_modules</code> function call.</li>
+<li>Added <code>split</code> and <code>merge</code> methods to the <code>JoinKeys</code> object.</li>
+<li>Added <code><a href="../reference/all_choices.html">all_choices()</a></code> as a possible argument to the <code>selected</code> parameter of <code>filter_spec</code>, <code>select_spec</code> and <code>choices_selected</code> indicating that all choices are selected.</li>
+<li>The <code>append</code> method of a <code>CodeClass</code> object has been modified to print a warning message when the argument does not result in any code being added because it is duplicated.</li>
 <li>Implemented delayed functionality to the mutate method of the <code>Dataset</code> and <code>DatasetConnector</code> objects.</li>
-<li>Redesigned variable filter labels in <code>Active Filter Variables</code> panel.</li>
 <li>Modified <code>teal_data</code> to return a <code>CDISCData</code> object whenever any of its arguments is a type of <code>CDISCData</code> object.</li>
-<li>Updated <code>Active Filter Summary</code> to show information of MAE datasets and their experiments.</li>
 <li>Updated filters to show both levels of a logical variable TRUE/FALSE even if one is missing from the original array.</li>
 </ul>
 </div>
@@ -180,17 +194,14 @@
 <h3 class="hasAnchor">
 <a href="#miscellaneous" class="anchor"></a>Miscellaneous</h3>
 <ul>
+<li>Updated <code>LICENCE</code> and <code>README</code> with new package references.</li>
 <li>Added a method <code>get_hash</code> to the <code>Dataset</code> class returning the MD5 hash of the object stored inside the <code>Dataset</code> object.</li>
-<li>Removed mentions of internal Roche services from the documentation.</li>
 <li>Replaced <code>random.cdisc.data</code> with <code>scda</code> in examples and tests.</li>
 <li>Implemented functionality to store <code>JoinKeys</code> in <code>Dataset</code> and <code>DatasetConnector</code> classes.</li>
-<li>
-<code>FilteredData</code> contains <code>Dataset</code> objects (via <code>FilteredDataset</code>) and copying keys and attributes is no longer needed.</li>
 <li>Added <code>error_on_lintr: TRUE</code> to <code>.lintr</code>
 </li>
-<li>Changed how the id of an HTML element in the filter panel is created to make it deterministic.</li>
-<li>Changed <code>FilterState</code>’s method <code>set_selected</code> to accept values out of bounds of the possible range with a warning instead of throwing an error.</li>
 <li>The pipe operator <code><a href="../reference/%&gt;%.html">%&gt;%</a></code> is now exported such that downstream code and packages can use it.</li>
+<li>Removed hyperlinks to the <code>rice</code> package from the documentation.</li>
 </ul>
 </div>
 </div>

@@ -31,7 +31,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">teal</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.9.5.9000</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.10.0.9000</span>
       </span>
     </div>
 
@@ -97,7 +97,7 @@
       <h1 data-toc-skip>Delayed Data Loading</h1>
                         <h4 class="author">Dawid Kałędkowski</h4>
             
-            <h4 class="date">2021-10-06</h4>
+            <h4 class="date">2021-10-13</h4>
       
       
       <div class="hidden name"><code>delayed_data_loading.Rmd</code></div>
@@ -141,7 +141,7 @@
 <code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va">teal</span><span class="op">)</span>
 <span class="co">#&gt; Loading required package: shiny</span>
 <span class="co">#&gt; </span>
-<span class="co">#&gt; You are using teal version 0.9.5.9000</span>
+<span class="co">#&gt; You are using teal version 0.10.0.9000</span>
 <span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va">random.cdisc.data</span><span class="op">)</span>
 
 <span class="co"># initialize object</span>
@@ -153,48 +153,22 @@
 <span class="co"># execute function with arguments set</span>
 <span class="va">df</span> <span class="op">&lt;-</span> <span class="va">fun</span><span class="op">$</span><span class="fu">run</span><span class="op">(</span><span class="op">)</span>
 <span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">df</span><span class="op">)</span>
-<span class="co">#&gt;   STUDYID               USUBJID SUBJID SITEID AGE SEX                      RACE</span>
-<span class="co">#&gt; 1 AB12345  AB12345-CHN-3-id-128 id-128  CHN-3  32   M                     ASIAN</span>
-<span class="co">#&gt; 2 AB12345 AB12345-CHN-15-id-262 id-262 CHN-15  35   M BLACK OR AFRICAN AMERICAN</span>
-<span class="co">#&gt; 3 AB12345  AB12345-RUS-3-id-378 id-378  RUS-3  30   F                     ASIAN</span>
-<span class="co">#&gt; 4 AB12345 AB12345-CHN-11-id-220 id-220 CHN-11  26   F                     ASIAN</span>
-<span class="co">#&gt; 5 AB12345  AB12345-CHN-7-id-267 id-267  CHN-7  40   M                     ASIAN</span>
-<span class="co">#&gt; 6 AB12345 AB12345-CHN-15-id-201 id-201 CHN-15  49   M                     ASIAN</span>
-<span class="co">#&gt;   COUNTRY DTHFL         INVID         INVNAM            ARM ARMCD</span>
-<span class="co">#&gt; 1     CHN     N  INV ID CHN-3  Dr. CHN-3 Doe      A: Drug X ARM A</span>
-<span class="co">#&gt; 2     CHN     N INV ID CHN-15 Dr. CHN-15 Doe C: Combination ARM C</span>
-<span class="co">#&gt; 3     RUS     N  INV ID RUS-3  Dr. RUS-3 Doe C: Combination ARM C</span>
-<span class="co">#&gt; 4     CHN     N INV ID CHN-11 Dr. CHN-11 Doe     B: Placebo ARM B</span>
-<span class="co">#&gt; 5     CHN     N  INV ID CHN-7  Dr. CHN-7 Doe     B: Placebo ARM B</span>
-<span class="co">#&gt; 6     CHN     N INV ID CHN-15 Dr. CHN-15 Doe C: Combination ARM C</span>
-<span class="co">#&gt;           ACTARM ACTARMCD REGION1 STRATA1 STRATA2    BMRKR1 BMRKR2 ITTFL SAFFL</span>
-<span class="co">#&gt; 1      A: Drug X    ARM A    Asia       C      S2 14.424934 MEDIUM     Y     Y</span>
-<span class="co">#&gt; 2 C: Combination    ARM C    Asia       C      S1  4.055463    LOW     Y     Y</span>
-<span class="co">#&gt; 3 C: Combination    ARM C Eurasia       A      S1  2.803240   HIGH     Y     Y</span>
-<span class="co">#&gt; 4     B: Placebo    ARM B    Asia       B      S2 10.262734 MEDIUM     Y     Y</span>
-<span class="co">#&gt; 5     B: Placebo    ARM B    Asia       C      S1  6.206763    LOW     Y     Y</span>
-<span class="co">#&gt; 6 C: Combination    ARM C    Asia       C      S2  6.906799 MEDIUM     Y     Y</span>
-<span class="co">#&gt;   BMEASIFL BEP01FL     RANDDT             TRTSDTM             TRTEDTM</span>
-<span class="co">#&gt; 1        Y       Y 2019-02-22 2019-02-24 11:09:18 2021-02-23 22:47:42</span>
-<span class="co">#&gt; 2        N       N 2019-02-26 2019-02-26 09:05:00 2021-02-25 20:43:24</span>
-<span class="co">#&gt; 3        Y       N 2019-02-24 2019-02-28 03:19:08 2021-02-27 14:57:32</span>
-<span class="co">#&gt; 4        Y       Y 2019-02-27 2019-03-01 13:33:03 2021-03-01 01:11:27</span>
-<span class="co">#&gt; 5        N       N 2019-03-01 2019-03-02 00:09:16 2021-03-01 11:47:40</span>
-<span class="co">#&gt; 6        Y       N 2019-03-05 2019-03-05 15:23:44 2021-02-17 20:23:53</span>
-<span class="co">#&gt;         EOSSTT       EOTSTT      EOSDT EOSDY          DCSREAS DTHDT DTHCAUS</span>
-<span class="co">#&gt; 1    COMPLETED    COMPLETED 2021-02-23   731             &lt;NA&gt;  &lt;NA&gt;    &lt;NA&gt;</span>
-<span class="co">#&gt; 2    COMPLETED    COMPLETED 2021-02-25   731             &lt;NA&gt;  &lt;NA&gt;    &lt;NA&gt;</span>
-<span class="co">#&gt; 3    COMPLETED    COMPLETED 2021-02-27   731             &lt;NA&gt;  &lt;NA&gt;    &lt;NA&gt;</span>
-<span class="co">#&gt; 4    COMPLETED    COMPLETED 2021-03-01   731             &lt;NA&gt;  &lt;NA&gt;    &lt;NA&gt;</span>
-<span class="co">#&gt; 5    COMPLETED    COMPLETED 2021-03-01   731             &lt;NA&gt;  &lt;NA&gt;    &lt;NA&gt;</span>
-<span class="co">#&gt; 6 DISCONTINUED DISCONTINUED 2021-02-17   716 LACK OF EFFICACY  &lt;NA&gt;    &lt;NA&gt;</span>
-<span class="co">#&gt;   DTHCAT LDDTHELD LDDTHGR1   LSTALVDT study_duration_secs</span>
-<span class="co">#&gt; 1   &lt;NA&gt;       NA     &lt;NA&gt; 2021-03-05            63113904</span>
-<span class="co">#&gt; 2   &lt;NA&gt;       NA     &lt;NA&gt; 2021-03-15            63113904</span>
-<span class="co">#&gt; 3   &lt;NA&gt;       NA     &lt;NA&gt; 2021-03-15            63113904</span>
-<span class="co">#&gt; 4   &lt;NA&gt;       NA     &lt;NA&gt; 2021-03-17            63113904</span>
-<span class="co">#&gt; 5   &lt;NA&gt;       NA     &lt;NA&gt; 2021-03-25            63113904</span>
-<span class="co">#&gt; 6   &lt;NA&gt;       NA     &lt;NA&gt; 2021-03-01            63113904</span>
+<span class="co">#&gt; # A tibble: 6 × 39</span>
+<span class="co">#&gt;   STUDYID USUBJID   SUBJID SITEID   AGE SEX   RACE    COUNTRY DTHFL INVID INVNAM</span>
+<span class="co">#&gt;   &lt;chr&gt;   &lt;chr&gt;     &lt;chr&gt;  &lt;chr&gt;  &lt;int&gt; &lt;fct&gt; &lt;fct&gt;   &lt;fct&gt;   &lt;fct&gt; &lt;chr&gt; &lt;chr&gt; </span>
+<span class="co">#&gt; 1 AB12345 AB12345-… id-128 CHN-3     32 M     ASIAN   CHN     N     INV … Dr. C…</span>
+<span class="co">#&gt; 2 AB12345 AB12345-… id-262 CHN-15    35 M     BLACK … CHN     N     INV … Dr. C…</span>
+<span class="co">#&gt; 3 AB12345 AB12345-… id-378 RUS-3     30 F     ASIAN   RUS     N     INV … Dr. R…</span>
+<span class="co">#&gt; 4 AB12345 AB12345-… id-220 CHN-11    26 F     ASIAN   CHN     N     INV … Dr. C…</span>
+<span class="co">#&gt; 5 AB12345 AB12345-… id-267 CHN-7     40 M     ASIAN   CHN     N     INV … Dr. C…</span>
+<span class="co">#&gt; 6 AB12345 AB12345-… id-201 CHN-15    49 M     ASIAN   CHN     N     INV … Dr. C…</span>
+<span class="co">#&gt; # … with 28 more variables: ARM &lt;fct&gt;, ARMCD &lt;fct&gt;, ACTARM &lt;fct&gt;,</span>
+<span class="co">#&gt; #   ACTARMCD &lt;fct&gt;, REGION1 &lt;fct&gt;, STRATA1 &lt;fct&gt;, STRATA2 &lt;fct&gt;, BMRKR1 &lt;dbl&gt;,</span>
+<span class="co">#&gt; #   BMRKR2 &lt;fct&gt;, ITTFL &lt;fct&gt;, SAFFL &lt;fct&gt;, BMEASIFL &lt;fct&gt;, BEP01FL &lt;fct&gt;,</span>
+<span class="co">#&gt; #   RANDDT &lt;date&gt;, TRTSDTM &lt;dttm&gt;, TRTEDTM &lt;dttm&gt;, EOSSTT &lt;fct&gt;, EOTSTT &lt;fct&gt;,</span>
+<span class="co">#&gt; #   EOSDT &lt;date&gt;, EOSDY &lt;int&gt;, DCSREAS &lt;fct&gt;, DTHDT &lt;date&gt;, DTHCAUS &lt;fct&gt;,</span>
+<span class="co">#&gt; #   DTHCAT &lt;fct&gt;, LDDTHELD &lt;int&gt;, LDDTHGR1 &lt;fct&gt;, LSTALVDT &lt;date&gt;,</span>
+<span class="co">#&gt; #   study_duration_secs &lt;dbl&gt;</span>
 
 <span class="co"># check reproducible code</span>
 <span class="fu"><a href="https://rdrr.io/r/base/cat.html">cat</a></span><span class="op">(</span><span class="va">fun</span><span class="op">$</span><span class="fu">get_call</span><span class="op">(</span><span class="op">)</span><span class="op">)</span>
@@ -204,48 +178,22 @@
 <code class="sourceCode R"><span class="co"># add arguments on the fly</span>
 <span class="va">df</span> <span class="op">&lt;-</span> <span class="va">fun</span><span class="op">$</span><span class="fu">run</span><span class="op">(</span>args <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>seed <span class="op">=</span> <span class="fl">1</span>, na_percentage <span class="op">=</span> <span class="fl">0.1</span>, N <span class="op">=</span> <span class="fl">3</span><span class="op">)</span><span class="op">)</span>
 <span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">df</span><span class="op">)</span>
-<span class="co">#&gt;   STUDYID               USUBJID SUBJID SITEID AGE SEX                      RACE</span>
-<span class="co">#&gt; 1 AB12345  AB12345-CHN-3-id-128 id-128  CHN-3  32   M                     ASIAN</span>
-<span class="co">#&gt; 2 AB12345 AB12345-CHN-15-id-262 id-262 CHN-15  35   M BLACK OR AFRICAN AMERICAN</span>
-<span class="co">#&gt; 3 AB12345  AB12345-RUS-3-id-378 id-378  RUS-3  30   F                     ASIAN</span>
-<span class="co">#&gt; 4 AB12345 AB12345-CHN-11-id-220 id-220 CHN-11  26   F                     ASIAN</span>
-<span class="co">#&gt; 5 AB12345  AB12345-CHN-7-id-267 id-267  CHN-7  40   M                     ASIAN</span>
-<span class="co">#&gt; 6 AB12345 AB12345-CHN-15-id-201 id-201 CHN-15  49   M                     ASIAN</span>
-<span class="co">#&gt;   COUNTRY DTHFL         INVID         INVNAM            ARM ARMCD</span>
-<span class="co">#&gt; 1     CHN     N  INV ID CHN-3  Dr. CHN-3 Doe      A: Drug X ARM A</span>
-<span class="co">#&gt; 2     CHN     N INV ID CHN-15 Dr. CHN-15 Doe C: Combination ARM C</span>
-<span class="co">#&gt; 3     RUS     N  INV ID RUS-3  Dr. RUS-3 Doe C: Combination ARM C</span>
-<span class="co">#&gt; 4     CHN     N INV ID CHN-11 Dr. CHN-11 Doe     B: Placebo ARM B</span>
-<span class="co">#&gt; 5     CHN     N  INV ID CHN-7  Dr. CHN-7 Doe     B: Placebo ARM B</span>
-<span class="co">#&gt; 6     CHN     N INV ID CHN-15 Dr. CHN-15 Doe C: Combination ARM C</span>
-<span class="co">#&gt;           ACTARM ACTARMCD REGION1 STRATA1 STRATA2    BMRKR1 BMRKR2 ITTFL SAFFL</span>
-<span class="co">#&gt; 1      A: Drug X    ARM A    Asia       C      S2 14.424934 MEDIUM     Y     Y</span>
-<span class="co">#&gt; 2 C: Combination    ARM C    Asia       C      S1  4.055463    LOW     Y     Y</span>
-<span class="co">#&gt; 3 C: Combination    ARM C Eurasia       A      S1  2.803240   HIGH     Y     Y</span>
-<span class="co">#&gt; 4     B: Placebo    ARM B    Asia       B      S2 10.262734 MEDIUM     Y     Y</span>
-<span class="co">#&gt; 5     B: Placebo    ARM B    Asia       C      S1  6.206763    LOW     Y     Y</span>
-<span class="co">#&gt; 6 C: Combination    ARM C    Asia       C      S2  6.906799 MEDIUM     Y     Y</span>
-<span class="co">#&gt;   BMEASIFL BEP01FL     RANDDT             TRTSDTM             TRTEDTM</span>
-<span class="co">#&gt; 1        Y       Y 2019-02-22 2019-02-24 11:09:18 2021-02-23 22:47:42</span>
-<span class="co">#&gt; 2        N       N 2019-02-26 2019-02-26 09:05:00 2021-02-25 20:43:24</span>
-<span class="co">#&gt; 3        Y       N 2019-02-24 2019-02-28 03:19:08 2021-02-27 14:57:32</span>
-<span class="co">#&gt; 4        Y       Y 2019-02-27 2019-03-01 13:33:03 2021-03-01 01:11:27</span>
-<span class="co">#&gt; 5        N       N 2019-03-01 2019-03-02 00:09:16 2021-03-01 11:47:40</span>
-<span class="co">#&gt; 6        Y       N 2019-03-05 2019-03-05 15:23:44 2021-02-17 20:23:53</span>
-<span class="co">#&gt;         EOSSTT       EOTSTT      EOSDT EOSDY          DCSREAS DTHDT DTHCAUS</span>
-<span class="co">#&gt; 1    COMPLETED    COMPLETED 2021-02-23   731             &lt;NA&gt;  &lt;NA&gt;    &lt;NA&gt;</span>
-<span class="co">#&gt; 2    COMPLETED    COMPLETED 2021-02-25   731             &lt;NA&gt;  &lt;NA&gt;    &lt;NA&gt;</span>
-<span class="co">#&gt; 3    COMPLETED    COMPLETED 2021-02-27   731             &lt;NA&gt;  &lt;NA&gt;    &lt;NA&gt;</span>
-<span class="co">#&gt; 4    COMPLETED    COMPLETED 2021-03-01   731             &lt;NA&gt;  &lt;NA&gt;    &lt;NA&gt;</span>
-<span class="co">#&gt; 5    COMPLETED    COMPLETED 2021-03-01   731             &lt;NA&gt;  &lt;NA&gt;    &lt;NA&gt;</span>
-<span class="co">#&gt; 6 DISCONTINUED DISCONTINUED 2021-02-17   716 LACK OF EFFICACY  &lt;NA&gt;    &lt;NA&gt;</span>
-<span class="co">#&gt;   DTHCAT LDDTHELD LDDTHGR1   LSTALVDT study_duration_secs</span>
-<span class="co">#&gt; 1   &lt;NA&gt;       NA     &lt;NA&gt; 2021-03-05            63113904</span>
-<span class="co">#&gt; 2   &lt;NA&gt;       NA     &lt;NA&gt; 2021-03-15            63113904</span>
-<span class="co">#&gt; 3   &lt;NA&gt;       NA     &lt;NA&gt; 2021-03-15            63113904</span>
-<span class="co">#&gt; 4   &lt;NA&gt;       NA     &lt;NA&gt; 2021-03-17            63113904</span>
-<span class="co">#&gt; 5   &lt;NA&gt;       NA     &lt;NA&gt; 2021-03-25            63113904</span>
-<span class="co">#&gt; 6   &lt;NA&gt;       NA     &lt;NA&gt; 2021-03-01            63113904</span>
+<span class="co">#&gt; # A tibble: 6 × 39</span>
+<span class="co">#&gt;   STUDYID USUBJID   SUBJID SITEID   AGE SEX   RACE    COUNTRY DTHFL INVID INVNAM</span>
+<span class="co">#&gt;   &lt;chr&gt;   &lt;chr&gt;     &lt;chr&gt;  &lt;chr&gt;  &lt;int&gt; &lt;fct&gt; &lt;fct&gt;   &lt;fct&gt;   &lt;fct&gt; &lt;chr&gt; &lt;chr&gt; </span>
+<span class="co">#&gt; 1 AB12345 AB12345-… id-128 CHN-3     32 M     ASIAN   CHN     N     INV … Dr. C…</span>
+<span class="co">#&gt; 2 AB12345 AB12345-… id-262 CHN-15    35 M     BLACK … CHN     N     INV … Dr. C…</span>
+<span class="co">#&gt; 3 AB12345 AB12345-… id-378 RUS-3     30 F     ASIAN   RUS     N     INV … Dr. R…</span>
+<span class="co">#&gt; 4 AB12345 AB12345-… id-220 CHN-11    26 F     ASIAN   CHN     N     INV … Dr. C…</span>
+<span class="co">#&gt; 5 AB12345 AB12345-… id-267 CHN-7     40 M     ASIAN   CHN     N     INV … Dr. C…</span>
+<span class="co">#&gt; 6 AB12345 AB12345-… id-201 CHN-15    49 M     ASIAN   CHN     N     INV … Dr. C…</span>
+<span class="co">#&gt; # … with 28 more variables: ARM &lt;fct&gt;, ARMCD &lt;fct&gt;, ACTARM &lt;fct&gt;,</span>
+<span class="co">#&gt; #   ACTARMCD &lt;fct&gt;, REGION1 &lt;fct&gt;, STRATA1 &lt;fct&gt;, STRATA2 &lt;fct&gt;, BMRKR1 &lt;dbl&gt;,</span>
+<span class="co">#&gt; #   BMRKR2 &lt;fct&gt;, ITTFL &lt;fct&gt;, SAFFL &lt;fct&gt;, BMEASIFL &lt;fct&gt;, BEP01FL &lt;fct&gt;,</span>
+<span class="co">#&gt; #   RANDDT &lt;date&gt;, TRTSDTM &lt;dttm&gt;, TRTEDTM &lt;dttm&gt;, EOSSTT &lt;fct&gt;, EOTSTT &lt;fct&gt;,</span>
+<span class="co">#&gt; #   EOSDT &lt;date&gt;, EOSDY &lt;int&gt;, DCSREAS &lt;fct&gt;, DTHDT &lt;date&gt;, DTHCAUS &lt;fct&gt;,</span>
+<span class="co">#&gt; #   DTHCAT &lt;fct&gt;, LDDTHELD &lt;int&gt;, LDDTHGR1 &lt;fct&gt;, LSTALVDT &lt;date&gt;,</span>
+<span class="co">#&gt; #   study_duration_secs &lt;dbl&gt;</span>
 
 <span class="co"># dynamic arguments not reflected in the call</span>
 <span class="fu"><a href="https://rdrr.io/r/base/cat.html">cat</a></span><span class="op">(</span><span class="va">fun</span><span class="op">$</span><span class="fu">get_call</span><span class="op">(</span><span class="op">)</span><span class="op">)</span>
@@ -265,62 +213,22 @@
 <span class="co"># execute function</span>
 <span class="va">df</span> <span class="op">&lt;-</span> <span class="va">fun</span><span class="op">$</span><span class="fu">run</span><span class="op">(</span><span class="op">)</span>
 <span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">df</span><span class="op">)</span>
-<span class="co">#&gt;   STUDYID              USUBJID SUBJID SITEID AGE SEX                      RACE</span>
-<span class="co">#&gt; 1 AB12345 AB12345-BRA-1-id-105 id-105  BRA-1  38   M BLACK OR AFRICAN AMERICAN</span>
-<span class="co">#&gt; 2 AB12345 AB12345-BRA-1-id-105 id-105  BRA-1  38   M BLACK OR AFRICAN AMERICAN</span>
-<span class="co">#&gt; 3 AB12345 AB12345-BRA-1-id-105 id-105  BRA-1  38   M BLACK OR AFRICAN AMERICAN</span>
-<span class="co">#&gt; 4 AB12345 AB12345-BRA-1-id-105 id-105  BRA-1  38   M BLACK OR AFRICAN AMERICAN</span>
-<span class="co">#&gt; 5 AB12345 AB12345-BRA-1-id-134 id-134  BRA-1  47   M                     WHITE</span>
-<span class="co">#&gt; 6 AB12345 AB12345-BRA-1-id-134 id-134  BRA-1  47   M                     WHITE</span>
-<span class="co">#&gt;   COUNTRY DTHFL        INVID        INVNAM       ARM ARMCD    ACTARM ACTARMCD</span>
-<span class="co">#&gt; 1     BRA     N INV ID BRA-1 Dr. BRA-1 Doe A: Drug X ARM A A: Drug X    ARM A</span>
-<span class="co">#&gt; 2     BRA     N INV ID BRA-1 Dr. BRA-1 Doe A: Drug X ARM A A: Drug X    ARM A</span>
-<span class="co">#&gt; 3     BRA     N INV ID BRA-1 Dr. BRA-1 Doe A: Drug X ARM A A: Drug X    ARM A</span>
-<span class="co">#&gt; 4     BRA     N INV ID BRA-1 Dr. BRA-1 Doe A: Drug X ARM A A: Drug X    ARM A</span>
-<span class="co">#&gt; 5     BRA     N INV ID BRA-1 Dr. BRA-1 Doe A: Drug X ARM A A: Drug X    ARM A</span>
-<span class="co">#&gt; 6     BRA     N INV ID BRA-1 Dr. BRA-1 Doe A: Drug X ARM A A: Drug X    ARM A</span>
-<span class="co">#&gt;         REGION1 STRATA1 STRATA2   BMRKR1 BMRKR2 ITTFL SAFFL BMEASIFL BEP01FL</span>
-<span class="co">#&gt; 1 South America       B      S1 4.156914 MEDIUM     Y     Y        Y       Y</span>
-<span class="co">#&gt; 2 South America       B      S1 4.156914 MEDIUM     Y     Y        Y       Y</span>
-<span class="co">#&gt; 3 South America       B      S1 4.156914 MEDIUM     Y     Y        Y       Y</span>
-<span class="co">#&gt; 4 South America       B      S1 4.156914 MEDIUM     Y     Y        Y       Y</span>
-<span class="co">#&gt; 5 South America       B      S2 6.462991    LOW     Y     Y        Y       N</span>
-<span class="co">#&gt; 6 South America       B      S2 6.462991    LOW     Y     Y        Y       N</span>
-<span class="co">#&gt;       RANDDT             TRTSDTM             TRTEDTM       EOSSTT       EOTSTT</span>
-<span class="co">#&gt; 1 2020-03-08 2020-03-08 05:28:11 2021-02-17 18:49:47 DISCONTINUED DISCONTINUED</span>
-<span class="co">#&gt; 2 2020-03-08 2020-03-08 05:28:11 2021-02-17 18:49:47 DISCONTINUED DISCONTINUED</span>
-<span class="co">#&gt; 3 2020-03-08 2020-03-08 05:28:11 2021-02-17 18:49:47 DISCONTINUED DISCONTINUED</span>
-<span class="co">#&gt; 4 2020-03-08 2020-03-08 05:28:11 2021-02-17 18:49:47 DISCONTINUED DISCONTINUED</span>
-<span class="co">#&gt; 5 2020-11-03 2020-11-04 03:50:33 2022-11-04 15:28:57    COMPLETED    COMPLETED</span>
-<span class="co">#&gt; 6 2020-11-03 2020-11-04 03:50:33 2022-11-04 15:28:57    COMPLETED    COMPLETED</span>
-<span class="co">#&gt;        EOSDT EOSDY       DCSREAS DTHDT DTHCAUS DTHCAT LDDTHELD LDDTHGR1</span>
-<span class="co">#&gt; 1 2021-02-17   347 ADVERSE EVENT  &lt;NA&gt;    &lt;NA&gt;   &lt;NA&gt;       NA     &lt;NA&gt;</span>
-<span class="co">#&gt; 2 2021-02-17   347 ADVERSE EVENT  &lt;NA&gt;    &lt;NA&gt;   &lt;NA&gt;       NA     &lt;NA&gt;</span>
-<span class="co">#&gt; 3 2021-02-17   347 ADVERSE EVENT  &lt;NA&gt;    &lt;NA&gt;   &lt;NA&gt;       NA     &lt;NA&gt;</span>
-<span class="co">#&gt; 4 2021-02-17   347 ADVERSE EVENT  &lt;NA&gt;    &lt;NA&gt;   &lt;NA&gt;       NA     &lt;NA&gt;</span>
-<span class="co">#&gt; 5 2022-11-04   731          &lt;NA&gt;  &lt;NA&gt;    &lt;NA&gt;   &lt;NA&gt;       NA     &lt;NA&gt;</span>
-<span class="co">#&gt; 6 2022-11-04   731          &lt;NA&gt;  &lt;NA&gt;    &lt;NA&gt;   &lt;NA&gt;       NA     &lt;NA&gt;</span>
-<span class="co">#&gt;     LSTALVDT study_duration_secs ASEQ TTESEQ                          PARAM</span>
-<span class="co">#&gt; 1 2021-03-07            63113904    2      2 Duration of Confirmed Response</span>
-<span class="co">#&gt; 2 2021-03-07            63113904    4      4            Event Free Survival</span>
-<span class="co">#&gt; 3 2021-03-07            63113904    3      3               Overall Survival</span>
-<span class="co">#&gt; 4 2021-03-07            63113904    1      1      Progression Free Survival</span>
-<span class="co">#&gt; 5 2022-11-15            63113904    4      4 Duration of Confirmed Response</span>
-<span class="co">#&gt; 6 2022-11-15            63113904    2      2            Event Free Survival</span>
-<span class="co">#&gt;   PARAMCD      AVAL AVALU       ADTM ADY CNSR                    EVNTDESC</span>
-<span class="co">#&gt; 1    CRSD 1273.8498  DAYS 2020-08-13 158    1 Last Date Known To Be Alive</span>
-<span class="co">#&gt; 2     EFS  135.9787  DAYS 2021-02-16 345    0       Last Tumor Assessment</span>
-<span class="co">#&gt; 3      OS 1759.8678  DAYS 2020-11-05 242    0         Disease Progression</span>
-<span class="co">#&gt; 4     PFS  241.1912  DAYS 2020-07-23 137    0               Adverse Event</span>
-<span class="co">#&gt; 5    CRSD  544.5728  DAYS 2021-10-25 355    0         Disease Progression</span>
-<span class="co">#&gt; 6     EFS  401.2725  DAYS 2021-05-05 182    1 Last Date Known To Be Alive</span>
-<span class="co">#&gt;                        CNSDTDSC</span>
-<span class="co">#&gt; 1    End of AE Reporting Period</span>
-<span class="co">#&gt; 2                              </span>
-<span class="co">#&gt; 3                              </span>
-<span class="co">#&gt; 4                              </span>
-<span class="co">#&gt; 5                              </span>
-<span class="co">#&gt; 6 Completion or Discontinuation</span>
+<span class="co">#&gt; # A tibble: 6 × 50</span>
+<span class="co">#&gt;   STUDYID USUBJID   SUBJID SITEID   AGE SEX   RACE    COUNTRY DTHFL INVID INVNAM</span>
+<span class="co">#&gt;   &lt;chr&gt;   &lt;chr&gt;     &lt;chr&gt;  &lt;chr&gt;  &lt;int&gt; &lt;fct&gt; &lt;fct&gt;   &lt;fct&gt;   &lt;fct&gt; &lt;chr&gt; &lt;chr&gt; </span>
+<span class="co">#&gt; 1 AB12345 AB12345-… id-105 BRA-1     38 M     BLACK … BRA     N     INV … Dr. B…</span>
+<span class="co">#&gt; 2 AB12345 AB12345-… id-105 BRA-1     38 M     BLACK … BRA     N     INV … Dr. B…</span>
+<span class="co">#&gt; 3 AB12345 AB12345-… id-105 BRA-1     38 M     BLACK … BRA     N     INV … Dr. B…</span>
+<span class="co">#&gt; 4 AB12345 AB12345-… id-105 BRA-1     38 M     BLACK … BRA     N     INV … Dr. B…</span>
+<span class="co">#&gt; 5 AB12345 AB12345-… id-134 BRA-1     47 M     WHITE   BRA     N     INV … Dr. B…</span>
+<span class="co">#&gt; 6 AB12345 AB12345-… id-134 BRA-1     47 M     WHITE   BRA     N     INV … Dr. B…</span>
+<span class="co">#&gt; # … with 39 more variables: ARM &lt;fct&gt;, ARMCD &lt;fct&gt;, ACTARM &lt;fct&gt;,</span>
+<span class="co">#&gt; #   ACTARMCD &lt;fct&gt;, REGION1 &lt;fct&gt;, STRATA1 &lt;fct&gt;, STRATA2 &lt;fct&gt;, BMRKR1 &lt;dbl&gt;,</span>
+<span class="co">#&gt; #   BMRKR2 &lt;fct&gt;, ITTFL &lt;fct&gt;, SAFFL &lt;fct&gt;, BMEASIFL &lt;fct&gt;, BEP01FL &lt;fct&gt;,</span>
+<span class="co">#&gt; #   RANDDT &lt;date&gt;, TRTSDTM &lt;dttm&gt;, TRTEDTM &lt;dttm&gt;, EOSSTT &lt;fct&gt;, EOTSTT &lt;fct&gt;,</span>
+<span class="co">#&gt; #   EOSDT &lt;date&gt;, EOSDY &lt;int&gt;, DCSREAS &lt;fct&gt;, DTHDT &lt;date&gt;, DTHCAUS &lt;fct&gt;,</span>
+<span class="co">#&gt; #   DTHCAT &lt;fct&gt;, LDDTHELD &lt;int&gt;, LDDTHGR1 &lt;fct&gt;, LSTALVDT &lt;date&gt;,</span>
+<span class="co">#&gt; #   study_duration_secs &lt;dbl&gt;, ASEQ &lt;int&gt;, TTESEQ &lt;int&gt;, PARAM &lt;fct&gt;, …</span>
 
 <span class="co"># get R code</span>
 <span class="va">fun</span><span class="op">$</span><span class="fu">get_call</span><span class="op">(</span><span class="op">)</span>

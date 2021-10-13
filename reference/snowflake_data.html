@@ -73,7 +73,7 @@ Build data connector for SNOWFLAKE functions or datasets" />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">teal</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.9.5.9000</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.10.0.9000</span>
       </span>
     </div>
 
@@ -164,6 +164,10 @@ Build data connector for <code>SNOWFLAKE</code> functions or datasets</p>
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
     <p>An object of class <code>RelationalDataConnector</code></p>
+    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
+
+    <p>Note the server location and token_provider must be provided as arguments to
+the snowflake_connection function, see example below.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span>
@@ -175,6 +179,8 @@ Build data connector for <code>SNOWFLAKE</code> functions or datasets</p>
   <span class='op'>)</span> <span class='op'>%&gt;%</span> <span class='fu'><a href='mutate_dataset.html'>mutate_dataset</a></span><span class='op'>(</span><span class='st'>"any mutations required, e.g. to convert data types"</span><span class='op'>)</span>,
   connection <span class='op'>=</span> <span class='fu'><a href='snowflake_connection.html'>snowflake_connection</a></span><span class='op'>(</span>
     open_args <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      server <span class='op'>=</span> <span class='st'>"&lt;&lt;server&gt;&gt;"</span>,
+      token_provider <span class='op'>=</span> <span class='st'>"&lt;&lt;url&gt;&gt;"</span>,
       role <span class='op'>=</span> <span class='st'>"role"</span>,
       database <span class='op'>=</span> <span class='st'>"database"</span>,
       schema <span class='op'>=</span> <span class='st'>"schema"</span>,
