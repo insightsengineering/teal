@@ -64,6 +64,7 @@ get_raw_data(tc)
 \subsection{Public methods}{
 \itemize{
 \item \href{#method-new}{\code{RelationalData$new()}}
+\item \href{#method-print}{\code{RelationalData$print()}}
 \item \href{#method-get_datanames}{\code{RelationalData$get_datanames()}}
 \item \href{#method-get_join_keys}{\code{RelationalData$get_join_keys()}}
 \item \href{#method-get_connectors}{\code{RelationalData$get_connectors()}}
@@ -100,6 +101,7 @@ get_raw_data(tc)
 \if{latex}{\out{\hypertarget{method-new}{}}}
 \subsection{Method \code{new()}}{
 Create a new object of \code{RelationalData} class
+Prints this RelationalData.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{RelationalData$new(..., check = FALSE, join_keys)}\if{html}{\out{</div>}}
 }
@@ -118,6 +120,25 @@ as provided in arguments. Check is run only if flag is true and preprocessing co
 If empty then no joins between pairs of objects}
 }
 \if{html}{\out{</div>}}
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-print"></a>}}
+\if{latex}{\out{\hypertarget{method-print}{}}}
+\subsection{Method \code{print()}}{
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{RelationalData$print(...)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{...}}{additional arguments to the printing method}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Returns}{
+invisibly self
 }
 }
 \if{html}{\out{<hr>}}

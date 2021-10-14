@@ -61,6 +61,27 @@ RelationalDataConnector <- R6::R6Class( #nolint
 
       return(invisible(self))
     },
+    #' Prints this RelationalDataConnector.
+    #'
+    #' @param ... additional arguments to the printing method
+    #' @return invisibly self
+    print = function(...) {
+      check_ellipsis(...)
+
+      cat(sprintf(
+        "A currently %s %s object containing %d Dataset/DatasetConnector object(s) as element(s):\n",
+        ifelse(self$get_connection()$is_opened(), "opened", "not yet opened"),
+        class(self)[1],
+        length(private$datasets)
+      ))
+
+      for (i in seq_along(private$datasets)) {
+        cat(sprintf("--> Element %d:\n", i))
+        print(private$datasets[[1]])
+      }
+
+      invisible(self)
+    },
 
     # ___ getters ====
     #' @description

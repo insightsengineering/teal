@@ -49,6 +49,7 @@ ds$launch()
 \subsection{Public methods}{
 \itemize{
 \item \href{#method-new}{\code{DatasetConnector$new()}}
+\item \href{#method-print}{\code{DatasetConnector$print()}}
 \item \href{#method-get_dataname}{\code{DatasetConnector$get_dataname()}}
 \item \href{#method-get_datanames}{\code{DatasetConnector$get_datanames()}}
 \item \href{#method-get_dataset_label}{\code{DatasetConnector$get_dataset_label()}}
@@ -87,6 +88,7 @@ ds$launch()
 Create a new \code{DatasetConnector} object. Set the pulling function
 \code{CallableFunction} which returns a \code{data.frame} or \code{MultiAssayExperiment},
 e.g. by reading from a function or creating it on the fly.
+Prints this DatasetConnector.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{DatasetConnector$new(
   dataname,
@@ -130,6 +132,25 @@ are included to this object as local \code{vars} and they cannot be modified
 within another dataset.}
 }
 \if{html}{\out{</div>}}
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-print"></a>}}
+\if{latex}{\out{\hypertarget{method-print}{}}}
+\subsection{Method \code{print()}}{
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{DatasetConnector$print(...)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{...}}{additional arguments to the printing method}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Returns}{
+invisibly self
 }
 }
 \if{html}{\out{<hr>}}
