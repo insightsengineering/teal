@@ -73,4 +73,3 @@ testthat::test_that("RelationalDataConnector$print prints out expected output on
   )
 
 })
-
