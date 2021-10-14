@@ -69,10 +69,14 @@ RelationalDataConnector <- R6::R6Class( #nolint
       check_ellipsis(...)
 
       cat(sprintf(
-        "A currently %s %s object containing %d Dataset/DatasetConnector object(s) as element(s):\n",
+        "A currently %s %s object containing %d Dataset/DatasetConnector object(s) as element(s).\n",
         ifelse(self$get_connection()$is_opened(), "opened", "not yet opened"),
         class(self)[1],
         length(private$datasets)
+      ))
+      cat(sprintf(
+        "%d of which is/are loaded/pulled:\n",
+        sum(vapply(private$datasets, function (x) x$is_pulled(), FUN.VALUE = logical(1)))
       ))
 
       for (i in seq_along(private$datasets)) {
