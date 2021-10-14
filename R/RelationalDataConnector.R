@@ -77,7 +77,7 @@ RelationalDataConnector <- R6::R6Class( #nolint
 
       for (i in seq_along(private$datasets)) {
         cat(sprintf("--> Element %d:\n", i))
-        print(private$datasets[[1]])
+        print(private$datasets[[i]])
       }
 
       invisible(self)
