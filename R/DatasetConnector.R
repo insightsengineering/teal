@@ -82,10 +82,14 @@ DatasetConnector <- R6::R6Class( #nolint
       check_ellipsis(...)
 
       cat(sprintf(
-        "A DatasetConnector object, named %s, containing a Dataset object that has %sbeen loaded/pulled\n",
+        "A DatasetConnector object, named %s, containing a Dataset object that has %sbeen loaded/pulled%s\n",
         self$get_dataname(),
-        ifelse(self$is_pulled(), "", "not ")
+        ifelse(self$is_pulled(), "", "not "),
+        ifelse(self$is_pulled(), ":", "")
       ))
+      if (self$is_pulled()) {
+        print(self$get_dataset())
+      }
 
       invisible(self)
     },
