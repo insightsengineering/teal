@@ -735,3 +735,15 @@ testthat::test_that("dataset$merge_join_keys does not throw on basic input", {
   testthat::expect_true(length(before_merge) < length(after_merge))
   testthat::expect_equal(names(after_merge), c("iris", "other_dataset", "other_dataset_2"))
 })
+
+testthat::test_that("dataset$print warns of superfluous arguments", {
+  x <- data.frame(x = c(1, 2), y = c("a", "b"), stringsAsFactors = FALSE)
+  test_ds <- dataset(
+    dataname = "x",
+    x = x,
+    code = "data.frame(x = c(1, 2), y = c('a', 'b'), stringsAsFactors = FALSE)"
+  )
+  testthat::expect_warning(
+    capture.output(print(test_ds, "un used argument"))
+  )
+})

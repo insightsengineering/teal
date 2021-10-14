@@ -46,3 +46,31 @@ testthat::test_that("RelationalDataConnector with DataConnection", {
   testthat::expect_true(is(x$get_server(), "function"))
   testthat::expect_true(is(x$get_ui(id = ""), c("shiny.tag")))
 })
+
+testthat::test_that("RelationalDataConnector$print prints out expected output on basic input", {
+  adsl_cf <- CallableFunction$new(function() as.data.frame(as.list(setNames(nm = get_cdisc_keys("ADSL")))))
+  adae_cf <- CallableFunction$new(function() as.data.frame(as.list(setNames(nm = get_cdisc_keys("ADAE")))))
+  adsl  <- CDISCDatasetConnector$new("ADSL", adsl_cf, keys = get_cdisc_keys("ADSL"), parent = character(0))
+  adae <- CDISCDatasetConnector$new("ADAE", adae_cf, keys = get_cdisc_keys("ADAE"), parent = "ADSL")
+  data <- CDISCDataConnector$new(
+    connection = DataConnection$new(open_fun = CallableFunction$new(function() "open function")),
+    connectors = list(adsl, adae)
+  )
+
+  out <- capture.output(print(data))
+  testthat::expect_equal(
+    out,
+    c(paste0(
+        "A currently not yet opened CDISCDataConnector object containing ",
+        "2 Dataset/DatasetConnector object(s) as element(s)."
+      ),
+      "0 of which is/are loaded/pulled:",
+      "--> Element 1:",
+      "A DatasetConnector object, named ADSL, containing a Dataset object that has not been loaded/pulled",
+      "--> Element 2:",
+      "A DatasetConnector object, named ADAE, containing a Dataset object that has not been loaded/pulled"
+    )
+  )
+
+})
+

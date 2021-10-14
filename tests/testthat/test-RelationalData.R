@@ -363,3 +363,37 @@ testthat::test_that("RelationalData with mutliple datasets and connectors", {
     init(data = data, modules = mods)
   )
 })
+
+testthat::test_that("RelationalData$print prints out expected output on basic input", {
+  adsl_raw <- as.data.frame(as.list(setNames(nm = get_cdisc_keys("ADSL"), object = list(1:3, letters[1:3]))))
+  adsl <- cdisc_dataset(
+    dataname = "ADSL",
+    x = adsl_raw,
+    code = "ADSL <- as.data.frame(as.list(setNames(nm = get_cdisc_keys(\"ADSL\"), object = list(1:3, letters[1:3]))))"
+  )
+  adtte_raw <- as.data.frame(as.list(setNames(nm = get_cdisc_keys("ADTTE"))))
+  adtte <- cdisc_dataset(
+    dataname = "ADTTE",
+    x = adtte_raw,
+    code = "ADTTE <- as.data.frame(as.list(setNames(nm = get_cdisc_keys(\"ADTTE\"))))"
+  )
+  data <- cdisc_data(adsl, adtte, check = TRUE)
+
+  out <- capture.output(print(data))
+  testthat::expect_equal(
+    out,
+    c("A CDISCData object containing 2 Dataset/DatasetConnector object(s) as element(s):",
+      "--> Element 1:",
+      "A Dataset object containing the following data.frame (3 rows and 2 columns):",
+      "  STUDYID USUBJID",
+      "1       1       a",
+      "2       2       b",
+      "3       3       c",
+      "--> Element 2:",
+      "A Dataset object containing the following data.frame (1 rows and 3 columns):",
+      "  STUDYID USUBJID PARAMCD",
+      "1 STUDYID USUBJID PARAMCD"
+    )
+  )
+
+})
