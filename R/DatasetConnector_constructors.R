@@ -268,110 +268,81 @@ cdisc_dataset_connector_file <- function(path) { # nolint # nousage
 }
 
 
-# RCD ====
-#' `RCD` `DatasetConnector`
+# SCDA ====
+#' `scda` `DatasetConnector`
 #'
 #' `r lifecycle::badge("experimental")`
 #'
-#' Create a `DatasetConnector` from function in `random.cdisc.data`.
+#' Create a `DatasetConnector` for dataset in `scda`
 #'
 #' @inheritParams dataset_connector
-#'
-#' @param fun (`function`)\cr
-#'   any R function which generates `data.frame`, especially functions from
-#'   `random.cdisc.data` like \code{\link[random.cdisc.data]{radsl}}
-#'
-#' @param ... (`optional`)\cr
-#'   Additional arguments applied to pull function.
-#'   In case when this object code depends on the `raw_data` from the other
-#'   `Dataset`, `DatasetConnector` object(s) or other constant value,
-#'   this/these object(s) should be included. Please note that `vars`
-#'   are included to this object as local `vars` and they cannot be modified
-#'   within another dataset.
-#'
-#' @rdname rcd_dataset_connector
+#' @rdname scda_dataset_connector
 #'
 #' @export
 #'
 #' @examples
-#' library(random.cdisc.data)
-#' x <- rcd_dataset_connector(
-#'   dataname = "ADSL",
-#'   fun = radsl,
-#'   cached = TRUE
+#' library(scda)
+#' x <- scda_dataset_connector(
+#'   dataname = "ADSL", scda_dataname = "adsl",
 #' )
 #' x$get_code()
 #' load_dataset(x)
 #' get_dataset(x)
 #' x$get_raw_data()
-rcd_dataset_connector <- function(dataname,
-                                  fun,
-                                  keys = character(0),
-                                  label = character(0),
-                                  code = character(0),
-                                  script = character(0),
-                                  ...) {
-  stopifnot(is.function(fun))
+scda_dataset_connector <- function(dataname,
+                                   scda_dataname,
+                                   scda_name = "latest",
+                                   keys = character(0),
+                                   label = character(0),
+                                   code = character(0),
+                                   script = character(0)) {
 
-  dot_args <- list(...)
-  stopifnot(is_fully_named_list(dot_args))
+  #TODO do we need this - aren't all scda datsaets cdisc?
 
-  x_fun <- callable_function(fun) # nolint
+  check_pkg_quietly("scda", "scda package not available.")
+  stopifnot(utils.nest::is_character_single(scda_dataname))
+  stopifnot(utils.nest::is_character_single(scda_name))
 
-  adsl <- if ("ADSL" %in% names(dot_args)) {
-    # ADSL argument to be included in radxxx
-    x_fun$set_args(
-      c(
-        list(ADSL = as.name("ADSL")),
-        dot_args[!names(dot_args) %in% "ADSL"]
-      )
-    )
-    dot_args["ADSL"]
-  } else {
-    x_fun$set_args(dot_args)
-    list()
-  }
-
-  x <- dataset_connector(
+  x <- fun_dataset_connector(
     dataname = dataname,
-    pull_callable = x_fun,
+    fun = scda::synthetic_cdisc_dataset,
+    fun_args = list(dataset_name = scda_dataname, name = scda_name),
     keys = keys,
     label = label,
-    code = code_from_script(code, script),
-    vars = adsl
+    code = code_from_script(code, script)
   )
 
   return(x)
 }
 
-#' `RCD` `CDISCDatasetConnector`
+#' `SCDA` `CDISCDatasetConnector`
 #'
 #' `r lifecycle::badge("experimental")`
 #'
-#' Create a `CDISCDatasetConnector` from function in `random.cdisc.data`.
+#' Create a `CDISCDatasetConnector` from `scda` data
 #'
-#' @inheritParams rcd_dataset_connector
+#' @inheritParams scda_dataset_connector
 #' @inheritParams cdisc_dataset_connector
 #'
-#' @rdname rcd_dataset_connector
+#' @rdname scda_dataset_connector
 #'
 #' @export
-rcd_cdisc_dataset_connector <- function(dataname,
-                                        fun,
-                                        keys = get_cdisc_keys(dataname),
-                                        parent = `if`(identical(dataname, "ADSL"), character(0L), "ADSL"),
-                                        label = character(0),
-                                        code = character(0),
-                                        script = character(0),
-                                        ...) {
-  x <- rcd_dataset_connector(
+scda_cdisc_dataset_connector <- function(dataname,
+                                         scda_dataname,
+                                         scda_name = "latest",
+                                         keys = get_cdisc_keys(dataname),
+                                         parent = `if`(identical(dataname, "ADSL"), character(0L), "ADSL"),
+                                         label = character(0),
+                                         code = character(0),
+                                         script = character(0)) {
+  x <- scda_dataset_connector(
     dataname = dataname,
-    fun = fun,
+    scda_dataname = scda_dataname,
+    scda_name = scda_name,
     keys = keys,
     code = code,
     script = script,
-    label = label,
-    ...
+    label = label
   )
 
   res <- as_cdisc(

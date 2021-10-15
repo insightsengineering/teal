@@ -17,9 +17,6 @@ upstream_repos:
   insightsengineering/test.nest:
     repo: insightsengineering/test.nest
     host: https://github.com
-  insightsengineering/random.cdisc.data:
-    repo: insightsengineering/random.cdisc.data
-    host: https://github.com
 downstream_repos:
   insightsengineering/teal.devel:
     repo: insightsengineering/teal.devel

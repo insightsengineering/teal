@@ -14,20 +14,21 @@
 #'   list with dataset connectors
 #'
 #' @examples
+#'
+#' 'TODO what if scda not available
+#'
 #' library(scda)
-#' adsl_cf <- callable_function(function() synthetic_cdisc_data("latest")$adsl)
-#' adsl <- cdisc_dataset_connector(dataname = "ADSL",
-#'                                 pull_callable = adsl_cf,
-#'                                 keys = get_cdisc_keys("ADSL"))
-#' adlb_cf <- callable_function(function() synthetic_cdisc_data("latest")$adlb)
-#' adlb <- cdisc_dataset_connector(dataname = "ADLB",
-#'                                 pull_callable = adlb_cf,
-#'                                 keys = get_cdisc_keys("ADLB"))
-#' con <- teal:::rcd_connection()
+#' adsl <- scda_cdisc_dataset_connector(dataname = "ADSL", "adsl")
+#' adlb <- scda_cdisc_dataset_connector(dataname = "ADLB", "adlb")
+#'
+#' open_fun <-callable_function(library)
+#' open_fun$set_args(list(package = "teal"))
+#'
+#' con <- teal:::DataConnection$new(open_fun = open_fun)
 #' x <- teal:::RelationalDataConnector$new(connection = con, connectors = list(adsl, adlb))
 #'
 #' \dontrun{
-#' x$launch()
+#' x$launch() # TODO does the launch work at the moment? Do we even need launch?
 #' x$get_datasets()
 #' }
 #'

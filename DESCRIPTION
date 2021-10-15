@@ -54,7 +54,6 @@ Suggests:
   covr,
   httr,
   knitr,
-  random.cdisc.data (>= 0.3.12),
   readr,
   rmarkdown,
   scda,
