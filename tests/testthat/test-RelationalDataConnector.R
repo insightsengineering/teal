@@ -30,7 +30,7 @@ testthat::test_that("RelationalDataConnector with DataConnection", {
       sliderInput(ns("N"), "Choose number of observations", min = 1, max = 400, value = 10)
     )
   })
-  x$set_server(function(input, output, session, connectors, connection) {
+  x$set_server(function(id, connectors, connection) {
     lapply(connectors, function(connector) {
       if (get_dataname(connector) == "ADSL") {
         set_args(connector, args = list(seed = input$seed, N = input$N))

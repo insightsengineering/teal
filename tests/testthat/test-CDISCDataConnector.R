@@ -100,7 +100,7 @@ testthat::test_that("RelationalDataConnector with custom UI and server", {
     )
   )
 
-  cdisc_data_connector$set_server(function(input, output, session, connectors, connection) {
+  cdisc_data_connector$set_server(function(id, connectors, connection) {
       raw_datasets <- lapply(connectors, function(connector) {
         set_args(connector, args(test = input$test))
         connector$pull(try = TRUE)
