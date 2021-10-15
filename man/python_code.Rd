@@ -27,8 +27,8 @@ Used to mutate dataset connector objects with python code. See
 }
 \examples{
 \dontrun{
-library #TODO what if no scda and reticulate isn't even in the suggests
-library(reticulate)
+library(scda)
+library(reticulate) # TODO reticulate is not in suggests
 
 # mutate dataset object
 

@@ -80,7 +80,7 @@ get_dataset.Dataset <- function(x, dataname = NULL) { # nolint
 #'
 #'\dontrun{
 #' get_dataset(rdc, dataname = "ADSL")
-#' load_datasets(rdc)  #TODO get this to work
+#' load_datasets(rdc)  #TODO get this to work (didn't on main)
 #' get_datasets(rdc)
 #' get_dataset(rdc, dataname = "ADSL")
 #'}

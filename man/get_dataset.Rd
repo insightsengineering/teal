@@ -51,7 +51,7 @@ x <- dataset("ADSL", ADSL)
 get_dataset(x)
 
 # RelationalData  (not containing connectors) --------
-library(scda) #TODO what if not scda available
+library(scda)
 adsl <- cdisc_dataset(dataname = "ADSL",
                       x = synthetic_cdisc_data("latest")$adsl,
                       code = "library(scda)\nADSL <- synthetic_cdisc_data(\"latest\")$adsl")
@@ -74,7 +74,7 @@ rdc <- teal:::RelationalDataConnector$new(
 
 \dontrun{
 get_dataset(rdc, dataname = "ADSL")
-load_datasets(rdc)  #TODO get this to work
+load_datasets(rdc)  #TODO get this to work (didn't on main)
 get_datasets(rdc)
 get_dataset(rdc, dataname = "ADSL")
 }

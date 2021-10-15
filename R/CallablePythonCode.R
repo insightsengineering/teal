@@ -233,7 +233,7 @@ PythonCodeClass <- R6::R6Class( # nolint
 #' @examples
 #' \dontrun{
 #' library(scda)
-#' library(reticulate) # TODO reticulateis not in suggests
+#' library(reticulate) # TODO reticulate is not in suggests
 #'
 #' # mutate dataset object
 #'

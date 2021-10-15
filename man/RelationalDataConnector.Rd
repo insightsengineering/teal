@@ -11,7 +11,6 @@ open/close connection.
 }
 \examples{
 
-#'TODO what if scda not available
 
 library(scda)
 adsl <- scda_cdisc_dataset_connector(dataname = "ADSL", "adsl")
@@ -22,6 +21,8 @@ open_fun$set_args(list(package = "teal"))
 
 con <- teal:::DataConnection$new(open_fun = open_fun)
 x <- teal:::RelationalDataConnector$new(connection = con, connectors = list(adsl, adlb))
+
+x$set_ui(f = function(id, connection, connectors){NULL})
 
 \dontrun{
 x$launch() # TODO this fails on main as well
