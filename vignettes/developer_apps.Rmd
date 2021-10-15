@@ -58,8 +58,9 @@ safeBookmarkableShinyApp <- function(..., execute_app = execute_like_interactive
 ```
 
 ```{r createDatasets, eval=FALSE}
-library(scda.2021)
+library(scda.2021) #TODO move to scda?
 # Create the dataset with some NA values and a logical value
+
 ADSL <- rcd_2021_07_07$adsl# nolint
 ADSL$logical_test <- sample(c(TRUE, FALSE, NA), size = nrow(ADSL), replace = TRUE)
 ADSL$SEX[1:150] <- NA
@@ -147,11 +148,9 @@ This app tests that the app works with delayed data that is not available initia
 ```{r delayedDataApp, eval=FALSE}
 app <- init(
   data = cdisc_data(
-    rcd_data(
-      cdisc_dataset(dataname = "ADSL", x = ADSL, code = "rcd_2021_07_07$adsl"),
-      cdisc_dataset(dataname = "ADAE", x = ADAE, code = "rcd_2021_07_07$adae"),
-      cdisc_dataset(dataname = "ADLB", x = ADLB, code = "rcd_2021_07_07$adlb"),
-    )
+    cdisc_dataset(dataname = "ADSL", x = ADSL, code = "rcd_2021_07_07$adsl"),
+    cdisc_dataset(dataname = "ADAE", x = ADAE, code = "rcd_2021_07_07$adae"),
+    cdisc_dataset(dataname = "ADLB", x = ADLB, code = "rcd_2021_07_07$adlb"),
   ),
   modules = root_modules(
     teal:::filter_calls_module("ADAE", active_datanames = c("ADAE")),
