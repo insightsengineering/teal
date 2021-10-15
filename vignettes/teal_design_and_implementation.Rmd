@@ -457,7 +457,7 @@ Here is an example of an app with two independent teal applications side-by-side
 We use the `id` argument of the `init` function for this.
 
 ```{r, eval=FALSE}
-library(scda) #TODO what if scda not here
+library(scda)
 
 ADSL <- synthetic_cdisc_data("latest")$adsl #nolint
 

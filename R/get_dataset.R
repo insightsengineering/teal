@@ -57,7 +57,7 @@ get_dataset.Dataset <- function(x, dataname = NULL) { # nolint
 #' @examples
 #'
 #' # RelationalData  (not containing connectors) --------
-#' library(scda) #TODO what if not scda available
+#' library(scda)
 #' adsl <- cdisc_dataset(dataname = "ADSL",
 #'                       x = synthetic_cdisc_data("latest")$adsl,
 #'                       code = "library(scda)\nADSL <- synthetic_cdisc_data(\"latest\")$adsl")

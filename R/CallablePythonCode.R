@@ -232,8 +232,8 @@ PythonCodeClass <- R6::R6Class( # nolint
 #'
 #' @examples
 #' \dontrun{
-#' library #TODO what if no scda and reticulate isn't even in the suggests
-#' library(reticulate)
+#' library(scda)
+#' library(reticulate) # TODO reticulateis not in suggests
 #'
 #' # mutate dataset object
 #'

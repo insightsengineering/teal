@@ -65,7 +65,7 @@ created which runs `synthetic_cdisc_dataset` function with arguments set before.
 
 ```{r}
 library(teal)
-library(scda) #TODO what if not installed
+library(scda)
 
 # initialize object
 fun <- callable_function(fun = synthetic_cdisc_dataset)
