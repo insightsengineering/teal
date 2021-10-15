@@ -464,7 +464,7 @@ data$set_ui(
 )
 
 data$set_server(
-  function(input, output, session, connection, connectors) {
+  function(id, connection, connectors) {
     # opens connection
     if (!is.null(connection$get_open_server())) {
       connection$get_open_server()(
