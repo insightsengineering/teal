@@ -1155,3 +1155,40 @@ testthat::test_that("DatasetConnector$get_dataset calls dataset$merge_join_keys 
   t_dc$mutate_join_keys("other_dataset", c("Sepal.Length" = "some_other_col"))
   testthat::expect_equal(t_dc$get_dataset()$get_join_keys(), t_dc$get_join_keys())
 })
+
+testthat::test_that("DatasetConnect$print does not print dataset when not yet pulled", {
+  test_ds1 <- Dataset$new("head_mtcars", head(mtcars), code = "head_mtcars <- head(mtcars)")
+  pull_fun <- callable_function(data.frame)
+  pull_fun$set_args(args = list(head_letters = head(letters)))
+  t_dc <- dataset_connector("test_dc", pull_fun, vars = list(test_ds1 = test_ds1))
+
+  out <- capture.output(print(t_dc))
+
+  testthat::expect_equal(
+    out,
+    "A DatasetConnector object, named test_dc, containing a Dataset object that has not been loaded/pulled"
+  )
+})
+
+testthat::test_that("DatasetConnect$print prints dataset when it is pulled", {
+  test_ds1 <- Dataset$new("head_mtcars", head(mtcars), code = "head_mtcars <- head(mtcars)")
+  pull_fun <- callable_function(data.frame)
+  pull_fun$set_args(args = list(head_letters = head(letters)))
+  t_dc <- dataset_connector("test_dc", pull_fun, vars = list(test_ds1 = test_ds1))
+  t_dc$pull()
+  out <- capture.output(print(t_dc))
+
+  testthat::expect_equal(
+    out,
+    c("A DatasetConnector object, named test_dc, containing a Dataset object that has been loaded/pulled:",
+      "A Dataset object containing the following data.frame (6 rows and 1 columns):",
+      "  head_letters",
+      "1            a",
+      "2            b",
+      "3            c",
+      "4            d",
+      "5            e",
+      "6            f"
+    )
+  )
+})

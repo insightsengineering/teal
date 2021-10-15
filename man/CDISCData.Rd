@@ -46,6 +46,7 @@ Class also decides whether to launch app before initialize teal application.
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="RelationalData" data-id="get_ui">}\href{../../teal/html/RelationalData.html#method-get_ui}{\code{teal::RelationalData$get_ui()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="RelationalData" data-id="launch">}\href{../../teal/html/RelationalData.html#method-launch}{\code{teal::RelationalData$launch()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="RelationalData" data-id="mutate_join_keys">}\href{../../teal/html/RelationalData.html#method-mutate_join_keys}{\code{teal::RelationalData$mutate_join_keys()}}\out{</span>}
+\item \out{<span class="pkg-link" data-pkg="teal" data-topic="RelationalData" data-id="print">}\href{../../teal/html/RelationalData.html#method-print}{\code{teal::RelationalData$print()}}\out{</span>}
 }
 \out{</details>}
 }
