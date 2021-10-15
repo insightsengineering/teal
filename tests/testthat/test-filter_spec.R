@@ -1,6 +1,3 @@
-library(scda)
-library(random.cdisc.data)
-
 choices <- c("val1", "val2", "val3")
 choices_d <- c("val1", "val1", "val2", "val3")
 choices_f <- as.factor(choices)

@@ -22,7 +22,7 @@ testthat::test_that("Single scda dataset connector", {
         tags$div(
           id = "main-app-inputs",
           h4("Dataset Connector for ", code("ADSL")),
-          textInput(inputId = ns("name"), label = "scda name", value = "latest")
+          textInput(inputId = "main-app-name", label = "scda name", value = "latest")
         )
       )
     )

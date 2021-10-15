@@ -1,4 +1,4 @@
-library(random.cdisc.data)
+library(scda)
 
 cc <- teal:::CodeClass$new()
 
@@ -15,33 +15,33 @@ test_that("Basic example CodeClass", {
   )
 })
 
-cc$set_code(c("ADSL <- radsl()", "ADSL$var <- 1"), "ADSL")
+cc$set_code(c("ADSL <- synthetic_cdisc_data(\"latest\")$adsl", "ADSL$var <- 1"), "ADSL")
 cc$set_code("ADSL$a <- foo()", "ADSL")
 
-cc$set_code("ADAE <- radae(ADSL = ADSL)", "ADAE", deps = "ADSL")
+cc$set_code("ADSL_2 <- head(ADSL, 5)", "ADSL_2", deps = "ADSL")
 
 
 cc$set_code("baz <- function() {2}")
-cc$set_code("ADAE$a <- baz()", "ADAE")
+cc$set_code("ADSL_2$a <- baz()", "ADSL_2")
 
 test_that("example datasets", {
   expect_identical(
     cc$get_code("ADSL"),
-    "foo <- function() {\n    1\n}\nfoo2 <- function() {\n    2\n}\nADSL <- radsl()\nADSL$var <- 1\nADSL$a <- foo()"
+    "foo <- function() {\n    1\n}\nfoo2 <- function() {\n    2\n}\nADSL <- synthetic_cdisc_data(\"latest\")$adsl\nADSL$var <- 1\nADSL$a <- foo()"
   )
 })
 
 adsl_code <- cc$get_code("ADSL", deparse = FALSE)
-adae_code <- cc$get_code("ADAE", deparse = FALSE)
+adsl2_code <- cc$get_code("ADSL_2", deparse = FALSE)
 
 test_that("example datasets deps", {
-  expect_true(all(adsl_code %in% adae_code))
-  expect_equal(adae_code[!adae_code %in% adsl_code], list(
-    rlang::expr(ADAE <- radae(ADSL = ADSL)), # nolint
+  expect_true(all(adsl_code %in% adsl2_code))
+  expect_equal(adsl2_code[!adsl2_code %in% adsl_code], list(
+    rlang::expr(ADSL_2 <- head(ADSL, 5)), # nolint
     rlang::expr(baz <- function() {
       2
     }),
-    rlang::expr(ADAE$a <- baz())
+    rlang::expr(ADSL_2$a <- baz())
   ))
 })
 
@@ -50,10 +50,10 @@ test_that("example datasets deps", {
 #########################################
 
 x1 <- teal:::CodeClass$new()
-x1$set_code("ADSL <- radsl(cached = TRUE)", "ADSL")
+x1$set_code("ADSL <- synthetic_cdisc_data(\"latest\")$adsl", "ADSL")
 
 x2 <- teal:::CodeClass$new()
-x2$set_code("ADAE <- radae(ADSL = ADSL)", "ADAE", "ADSL")
+x2$set_code("ADSL_2 <- head(ADSL, 5)", "ADSL_2", "ADSL")
 
 x <- teal:::CodeClass$new()
 x$append(x1)
@@ -62,19 +62,19 @@ x$append(x2)
 test_that("CodeClass append", {
   expect_identical(x$get_code(), paste0(c(x1$get_code(), x2$get_code()), collapse = "\n"))
   expect_identical(x$get_code(deparse = FALSE), append(x1$get_code(deparse = FALSE), x2$get_code(deparse = FALSE)))
-  expect_identical(x$get_code(c("ADSL", "ADAE")), paste0(c(x$get_code("ADSL"), x2$get_code("ADAE")), collapse = "\n"))
+  expect_identical(x$get_code(c("ADSL", "ADSL_2")), paste0(c(x$get_code("ADSL"), x2$get_code("ADSL_2")), collapse = "\n"))
 })
 
 
 x3 <- teal:::CodeClass$new()
-x3$set_code("ADRS <- radae(cached = TRUE)", "ADRS")
+x3$set_code("ADRS <- synthetic_cdisc_data(\"latest\")$adrs", "ADRS")
 x$append(x3)
 
 
 test_that("CodeClass append deps", {
   expect_identical(
     x$get_code(),
-    "ADSL <- radsl(cached = TRUE)\nADAE <- radae(ADSL = ADSL)\nADRS <- radae(cached = TRUE)"
+    "ADSL <- synthetic_cdisc_data(\"latest\")$adsl\nADSL_2 <- head(ADSL, 5)\nADRS <- synthetic_cdisc_data(\"latest\")$adrs"
   )
 })
 
@@ -84,16 +84,16 @@ x$set_code("", "ADRS")
 test_that("CodeClass append deps", {
   expect_identical(
     x$get_code("ADRS"),
-    "ADSL <- radsl(cached = TRUE)\nADRS <- radae(cached = TRUE)\nADRS$x <- foo(ADSL$x)\n"
+    "ADSL <- synthetic_cdisc_data(\"latest\")$adsl\nADRS <- synthetic_cdisc_data(\"latest\")$adrs\nADRS$x <- foo(ADSL$x)\n"
   )
   expect_equal(x$get_code("ADRS", deparse = FALSE), list(
-    rlang::expr(ADSL <- radsl(cached = TRUE)), # nolint
-    rlang::expr(ADRS <- radae(cached = TRUE)), # nolint
+    rlang::expr(ADSL <- synthetic_cdisc_data("latest")$adsl), # nolint
+    rlang::expr(ADRS <- synthetic_cdisc_data("latest")$adrs), # nolint
     rlang::expr(ADRS$x <- foo(ADSL$x))
   ))
   expect_identical(
     x$get_code("ADSL"),
-    "ADSL <- radsl(cached = TRUE)"
+    "ADSL <- synthetic_cdisc_data(\"latest\")$adsl"
   )
 })
 
@@ -133,10 +133,11 @@ test_that("Exception handling with dataname of *xyz", {
   )
 })
 
-adsl <- rcd_cdisc_dataset_connector("ADSL", radsl)
-adae <- rcd_cdisc_dataset_connector("ADAE", radae, ADSL = adsl)
+# TODO are the some tests missing here?
+adsl <- scda_cdisc_dataset_connector("ADSL", "adsl")
+adae <- scda_cdisc_dataset_connector("ADAE", "adae")
 adaem <- adae %>% mutate_dataset("ADAE$vv=nrow(ADSL); attr(ADSL$vv, 'label') <- 'vv'", vars = list(ADSL = adsl))
-adae <- rcd_cdisc_dataset_connector("ADAE", radae, ADSL = adsl)
+adae <- scda_cdisc_dataset_connector("ADAE", "adae")
 adaem2 <- adae %>% mutate_dataset("ADAE$vv=nrow(ADSL); attr(ADSL$vv, 'label') <- 'vv'", vars = list(ADSL = ""))
 
 test_that("CodeClass list_to_code_class", {

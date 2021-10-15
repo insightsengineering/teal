@@ -1,5 +1,3 @@
-library(random.cdisc.data)
-
 test_that("data_extract_spec argument checking", {
   expect_error(
     data_extract_spec("toyDataset", select = NULL),
