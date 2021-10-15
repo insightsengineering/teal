@@ -114,7 +114,26 @@ RelationalData <- R6::R6Class( # nolint
 
       return(invisible(self))
     },
+    #' Prints this RelationalData.
+    #'
+    #' @param ... additional arguments to the printing method
+    #' @return invisibly self
+    print = function(...) {
+      check_ellipsis(...)
 
+      cat(sprintf(
+        "A %s object containing %d Dataset/DatasetConnector object(s) as element(s):\n",
+        class(self)[1],
+        length(private$datasets)
+      ))
+
+      for (i in seq_along(private$datasets)) {
+        cat(sprintf("--> Element %d:\n", i))
+        print(private$datasets[[i]])
+      }
+
+      invisible(self)
+    },
     # ___ getters ====
     #' @description
     #'
