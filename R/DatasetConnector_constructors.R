@@ -362,7 +362,6 @@ scda_cdisc_dataset_connector <- function(dataname,
 #' Create a `DatasetConnector` from `RDS` file.
 #'
 #' @inheritParams dataset_connector
-#' @inheritParams rcd_dataset_connector
 #'
 #' @param file (`character`)\cr
 #'   path to (`.rds` or `.R`) that contains `data.frame` object or
@@ -461,8 +460,6 @@ rds_cdisc_dataset_connector <- function(dataname,
 #' Create a `DatasetConnector` from `.R` file.
 #'
 #' @inheritParams dataset_connector
-#' @inheritParams rcd_dataset_connector
-#'
 #' @param file (`character`)\cr
 #'   file location containing code to be evaluated in connector. Object obtained in the last
 #'   call from file will be returned to the connector - same as `source(file = file)$value`
@@ -559,7 +556,6 @@ script_cdisc_dataset_connector <- function(dataname,
 #' Create a `DatasetConnector` from a string of code.
 #'
 #' @inheritParams dataset_connector
-#' @inheritParams rcd_dataset_connector
 #'
 #' @param code (`character`)\cr
 #'   String containing the code to produce the object.
@@ -675,7 +671,6 @@ code_cdisc_dataset_connector <- function(dataname,
 #' Create a `DatasetConnector` from `RICE`.
 #'
 #' @inheritParams dataset_connector
-#' @inheritParams rcd_dataset_connector
 #'
 #' @param path (`character`)\cr
 #'   path to the file
@@ -781,8 +776,6 @@ rice_cdisc_dataset_connector <- function(dataname,
 #' Create a `DatasetConnector` from `Teradata`.
 #'
 #' @inheritParams dataset_connector
-#' @inheritParams rcd_dataset_connector
-#'
 #' @param table (`character`) table name
 #'
 #' @rdname teradata_dataset_connector
@@ -866,7 +859,6 @@ teradata_cdisc_dataset_connector <- function(dataname, # nolint
 #' Create a `DatasetConnector` from `Snowflake`.
 #'
 #' @inheritParams dataset_connector
-#' @inheritParams rcd_dataset_connector
 #'
 #' @param sql_query (`character`) SQL statement to extract data from snowflake
 #'
@@ -951,7 +943,6 @@ snowflake_cdisc_dataset_connector <- function(dataname, # nolint
 #' Create a `DatasetConnector` from `CDSE`.
 #'
 #' @inheritParams dataset_connector
-#' @inheritParams rcd_dataset_connector
 #'
 #' @param cid (`character`) ID of dataset
 #'
@@ -1052,7 +1043,6 @@ cdse_cdisc_dataset_connector <- function(dataname,
 #'
 #'
 #' @inheritParams dataset_connector
-#' @inheritParams rcd_dataset_connector
 #'
 #' @param file (`character`)\cr
 #'   path to (`.csv)` (or general delimited) file that contains `data.frame` object
@@ -1163,7 +1153,6 @@ csv_cdisc_dataset_connector <- function(dataname,
 #' Create a `DatasetConnector` from `DataSetDB`.
 #'
 #' @inheritParams dataset_connector
-#' @inheritParams rcd_dataset_connector
 #'
 #' @param id (`character`)\cr
 #'   identifier of the dataset in `DataSetDB`
@@ -1227,7 +1216,6 @@ datasetdb_dataset_connector <- function(dataname,
 #' Create a `DatasetConnector` from `function` and its arguments.
 #'
 #' @inheritParams dataset_connector
-#' @inheritParams rcd_dataset_connector
 #'
 #' @param fun (`function`)\cr
 #'   a custom function to obtain dataset.

@@ -57,7 +57,7 @@ parent dataset name}
 \details{
 Create a \code{DatasetConnector} for dataset in \code{scda}
 
-Create a \code{CDISCDatasetConnector} from \code{scda}
+Create a \code{CDISCDatasetConnector} from \code{scda} data
 }
 \examples{
 library(scda)

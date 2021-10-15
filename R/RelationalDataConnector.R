@@ -15,7 +15,7 @@
 #'
 #' @examples
 #'
-#' 'TODO what if scda not available
+#' #'TODO what if scda not available
 #'
 #' library(scda)
 #' adsl <- scda_cdisc_dataset_connector(dataname = "ADSL", "adsl")
@@ -28,7 +28,7 @@
 #' x <- teal:::RelationalDataConnector$new(connection = con, connectors = list(adsl, adlb))
 #'
 #' \dontrun{
-#' x$launch() # TODO does the launch work at the moment? Do we even need launch?
+#' x$launch() # TODO this fails on main as well
 #' x$get_datasets()
 #' }
 #'
