@@ -89,33 +89,38 @@ rcd_data <- function(..., connection = rcd_connection(), check = TRUE) {
   )
 
   x$set_server(
-    function(input, output, session, connection, connectors) {
-      # opens connection
-      if (!is.null(connection$get_open_server())) {
-        callModule(connection$get_open_server(),
-          id = "open_connection",
-          connection = connection
-        )
-      }
-      if (connection$is_opened()) {
-        for (connector in connectors) {
-          # set_args before to return them in the code (fixed args)
-          set_args(connector, args = list(seed = input$seed))
+    function(id, connection, connectors) {
+      moduleServer(
+        id = id,
+        module = function(input, output, session) {
+          # opens connection
+          if (!is.null(connection$get_open_server())) {
+            connection$get_open_server() (
+              id = "open_connection",
+              connection = connection
+            )
+          }
+          if (connection$is_opened()) {
+            for (connector in connectors) {
+              # set_args before to return them in the code (fixed args)
+              set_args(connector, args = list(seed = input$seed))
 
-          # pull each dataset
-          callModule(connector$get_server(), id = connector$get_dataname())
-          if (connector$is_failed()) {
-            break
+              # pull each dataset
+              connector$get_server()(id = connector$get_dataname())
+              if (connector$is_failed()) {
+                break
+              }
+            }
+
+            if (!is.null(connection$get_close_server())) {
+              connection$get_close_server()(
+                id = "close_connection",
+                connection = connection
+              )
+            }
           }
         }
-
-        if (!is.null(connection$get_close_server())) {
-          callModule(connection$get_close_server(),
-            id = "close_connection",
-            connection = connection
-          )
-        }
-      }
+      )
     }
   )
 
@@ -208,40 +213,51 @@ rice_data <- function(..., connection = rice_connection(), additional_ui = NULL)
   )
 
   x$set_preopen_server(
-    function(input, output, session, connectors, connection) {
+    function(id, connection) {
       if (!is.null(connection$get_preopen_server())) {
-        callModule(connection$get_preopen_server(),
-                   id = "open_connection",
-                   connection = connection)
+        moduleServer(
+          id = id,
+          module = connection$get_preopen_server()(
+            id = "open_connection",
+            connection = connection
+          )
+        )
       }
     }
   )
 
   x$set_server(
-    function(input, output, session, connectors, connection) {
-      # opens connection
-      if (!is.null(connection$get_open_server())) {
-        callModule(connection$get_open_server(),
-                   id = "open_connection",
-                   connection = connection)
-      }
+    function(id, connection, connectors) {
+      moduleServer(
+        id = id,
+        module = function(input, output, session) {
+          # opens connection
+          if (!is.null(connection$get_open_server())) {
+            connection$get_open_server()(
+              id = "open_connection",
+              connection = connection
+            )
+          }
 
-      # rice::rice_read doesn't need arguments from data-level
-      if (connection$is_opened()) {
-        # call connectors$pull
-        for (connector in connectors) {
-          callModule(connector$get_server(), id = connector$get_dataname())
-          if (connector$is_failed()) {
-            break
+          # rice::rice_read doesn't need arguments from data-level
+          if (connection$is_opened()) {
+            # call connectors$pull
+            for (connector in connectors) {
+              connector$get_server()(id = connector$get_dataname())
+              if (connector$is_failed()) {
+                break
+              }
+            }
+
+            if (!is.null(connection$get_close_server())) {
+              connection$get_close_server()(
+                id = "close_connection",
+                connection = connection
+              )
+            }
           }
         }
-
-        if (!is.null(connection$get_close_server())) {
-          callModule(connection$get_close_server(),
-                     id = "close_connection",
-                     connection = connection)
-        }
-      }
+      )
     }
   )
   return(x)
@@ -325,36 +341,43 @@ teradata_data <- function(..., connection = teradata_connection()) {
   )
 
   x$set_server(
-    function(input, output, session, connectors, connection) {
-      # opens connection
-      if (!is.null(connection$get_open_server())) {
-        callModule(connection$get_open_server(),
-                   id = "open_connection",
-                   connection = connection)
-      }
+    function(id, connection, connectors) {
+      moduleServer(
+        id = id,
+        module = function(input, output, session) {
+          # opens connection
+          if (!is.null(connection$get_open_server())) {
+            connection$get_open_server()(
+              id = "open_connection",
+              connection = connection
+            )
+          }
 
-      if (connection$is_opened()) {
-        conn <- connection$get_conn()
-        if (!is.null(conn)) {
-          for (connector in connectors) {
-            connector$get_pull_callable()$assign_to_env("conn", conn)
+          if (connection$is_opened()) {
+            conn <- connection$get_conn()
+            if (!is.null(conn)) {
+              for (connector in connectors) {
+                connector$get_pull_callable()$assign_to_env("conn", conn)
+              }
+            }
+
+            # call connectors$pull
+            for (connector in connectors) {
+              connector$get_server()(id = connector$get_dataname())
+              if (connector$is_failed()) {
+                break
+              }
+            }
+
+            if (!is.null(connection$get_close_server())) {
+              connection$get_close_server()(
+                id = "close_connection",
+                connection = connection
+              )
+            }
           }
         }
-
-        # call connectors$pull
-        for (connector in connectors) {
-          callModule(connector$get_server(), id = connector$get_dataname())
-          if (connector$is_failed()) {
-            break
-          }
-        }
-
-        if (!is.null(connection$get_close_server())) {
-          callModule(connection$get_close_server(),
-                     id = "close_connection",
-                     connection = connection)
-        }
-      }
+      )
     }
   )
   return(x)
@@ -455,36 +478,43 @@ snowflake_data <- function(..., connection) {
   )
 
   x$set_server(
-    function(input, output, session, connectors, connection) {
-      # opens connection
-      if (!is.null(connection$get_open_server())) {
-        callModule(connection$get_open_server(),
-                   id = "open_connection",
-                   connection = connection)
-      }
+    function(id, connection, connectors) {
+      moduleServer(
+        id = id,
+        module = function(input, output, session) {
+          # opens connection
+          if (!is.null(connection$get_open_server())) {
+            connection$get_open_server()(
+              id = "open_connection",
+              connection = connection
+            )
+          }
 
-      if (connection$is_opened()) {
-        conn <- connection$get_conn()
-        if (!is.null(conn)) {
-          for (connector in connectors) {
-            connector$get_pull_callable()$assign_to_env("conn", conn)
+          if (connection$is_opened()) {
+            conn <- connection$get_conn()
+            if (!is.null(conn)) {
+              for (connector in connectors) {
+                connector$get_pull_callable()$assign_to_env("conn", conn)
+              }
+            }
+
+            # call connectors$pull
+            for (connector in connectors) {
+              connector$get_server()(id = connector$get_dataname())
+              if (connector$is_failed()) {
+                break
+              }
+            }
+
+            if (!is.null(connection$get_close_server())) {
+              connection$get_close_server()(
+                id = "close_connection",
+                connection = connection
+              )
+            }
           }
         }
-
-        # call connectors$pull
-        for (connector in connectors) {
-          callModule(connector$get_server(), id = connector$get_dataname())
-          if (connector$is_failed()) {
-            break
-          }
-        }
-
-        if (!is.null(connection$get_close_server())) {
-          callModule(connection$get_close_server(),
-                     id = "close_connection",
-                     connection = connection)
-        }
-      }
+      )
     }
   )
   return(x)
@@ -567,44 +597,57 @@ cdse_data <- function(..., connection = cdse_connection()) {
   )
 
   x$set_server(
-    function(input, output, session, connectors, connection) {
-      # opens connection
-      if (!is.null(connection$get_open_server())) {
-        callModule(connection$get_open_server(),
-                   id = "open_connection",
-                   connection = connection)
-      }
+    function(id, connection, connectors) {
+      moduleServer(
+        id = id,
+        module = function(input, output, session) {
+          # opens connection
+          if (!is.null(connection$get_open_server())) {
+            connection$get_open_server()(
+              id = "open_connection",
+              connection = connection
+            )
+          }
 
-      if (connection$is_opened()) {
-        conn <- connection$get_conn()
-        if (!is.null(conn)) {
-          for (connector in connectors) {
-            connector$get_pull_callable()$assign_to_env("conn", conn)
+          if (connection$is_opened()) {
+            conn <- connection$get_conn()
+            if (!is.null(conn)) {
+              for (connector in connectors) {
+                connector$get_pull_callable()$assign_to_env("conn", conn)
+              }
+            }
+
+            # call connectors$pull
+            for (connector in connectors) {
+              connector$get_server()(id = connector$get_dataname())
+              if (connector$is_failed()) {
+                break
+              }
+            }
+
+            if (!is.null(connection$get_close_server())) {
+              connection$get_close_server()(
+                id = "close_connection",
+                connection = connection
+              )
+            }
           }
         }
-
-        # call connectors$pull
-        for (connector in connectors) {
-          callModule(connector$get_server(), id = connector$get_dataname())
-          if (connector$is_failed()) {
-            break
-          }
-        }
-
-        if (!is.null(connection$get_close_server())) {
-          callModule(connection$get_close_server(),
-                     id = "close_connection",
-                     connection = connection)
-        }
-      }
+      )
     }
   )
 
   x$set_preopen_server(
-    function(input, output, session, connection) {
-      callModule(connection$get_preopen_server(),
-                 id = "open_connection",
-                 connection = connection)
+    function(id, connection) {
+      moduleServer(
+        id = id,
+        module = function(input, output, session) {
+          connection$get_preopen_server()(
+            id = "open_connection",
+            connection = connection
+          )
+        }
+      )
     }
   )
 
@@ -699,28 +742,35 @@ datasetdb_data <- function(..., connection = datasetdb_connection()) {
   )
 
   x$set_server(
-    function(input, output, session, connectors, connection) {
-      if (!is.null(connection$get_open_server())) {
-        callModule(connection$get_open_server(),
-                   id = "open_connection",
-                   connection = connection)
-      }
+    function(id, connection, connectors) {
+      moduleServer(
+        id = id,
+        module = function(input, output, session) {
+          if (!is.null(connection$get_open_server())) {
+            connection$get_open_server()(
+              id = "open_connection",
+              connection = connection
+            )
+          }
 
-      if (connection$is_opened()) {
-        # call connectors$pull
-        for (connector in connectors) {
-          callModule(connector$get_server(), id = connector$get_dataname())
-          if (connector$is_failed()) {
-            break
+          if (connection$is_opened()) {
+            # call connectors$pull
+            for (connector in connectors) {
+              connector$get_server()(id = connector$get_dataname())
+              if (connector$is_failed()) {
+                break
+              }
+            }
+
+            if (!is.null(connection$get_close_server())) {
+              connection$get_close_server()(
+                id = "close_connection",
+                connection = connection
+              )
+            }
           }
         }
-
-        if (!is.null(connection$get_close_server())) {
-          callModule(connection$get_close_server(),
-                     id = "close_connection",
-                     connection = connection)
-        }
-      }
+      )
     }
   )
   return(x)

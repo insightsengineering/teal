@@ -125,9 +125,14 @@ RelationalDataConnector <- R6::R6Class( #nolint
       if (is.null(private$server)) {
         stop("No server function set yet. Please use set_server method first.")
       }
-      function(input, output, session, connection = private$connection, connectors = private$datasets) {
+      function(id, connection = private$connection, connectors = private$datasets) {
         rv <- reactiveVal(NULL)
-        callModule(private$server, id = "data_input", connection = connection, connectors = connectors)
+        moduleServer(
+          id = id,
+          module = function(input, output, session) {
+            private$server(id = "data_input", connection = connection, connectors = connectors)
+          }
+        )
 
         if (self$is_pulled()) {
           return(rv(TRUE))
@@ -140,10 +145,15 @@ RelationalDataConnector <- R6::R6Class( #nolint
     #'
     #' @return the \code{server} function
     get_preopen_server = function() {
-      function(input, output, session, connection = private$connection) {
+      function(id, connection = private$connection) {
         if_not_null(
           private$preopen_server,
-          callModule(private$preopen_server, id = "data_input", connection = connection)
+          moduleServer(
+            id = id,
+            module = function(input, output, session) {
+              private$preopen_server(id = "data_input", connection = connection)
+            }
+          )
         )
       }
     },
@@ -212,7 +222,7 @@ RelationalDataConnector <- R6::R6Class( #nolint
     #' @return nothing
     set_server = function(f) {
       stopifnot(is(f, "function"))
-      stopifnot(all(c("input", "output", "session") %in% names(formals(f))))
+      stopifnot(all(c("id", "connection", "connectors") %in% names(formals(f))))
 
       private$server <- f
       return(invisible(NULL))
@@ -228,7 +238,7 @@ RelationalDataConnector <- R6::R6Class( #nolint
     #' @return nothing
     set_preopen_server = function(f) {
       stopifnot(is(f, "function"))
-      stopifnot(all(c("input", "output", "session") %in% names(formals(f))))
+      stopifnot(all(c("id", "connection") %in% names(formals(f))))
 
       private$preopen_server <- f
       return(invisible(NULL))
@@ -319,18 +329,18 @@ RelationalDataConnector <- R6::R6Class( #nolint
         ),
         server = function(input, output, session) {
           session$onSessionEnded(stopApp)
-          callModule(
-            self$get_preopen_server(),
+          self$get_preopen_server()(
             id = "data_connector",
             connection = private$connection
           )
           observeEvent(input$submit, {
             rv <- reactiveVal(NULL)
             rv(
-              callModule(self$get_server(),
-                         id = "data_connector",
-                         connection = private$connection,
-                         connectors = private$datasets)
+              self$get_server()(
+                id = "data_connector",
+                connection = private$connection,
+                connectors = private$datasets
+              )
             )
 
             observeEvent(rv(), {

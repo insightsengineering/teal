@@ -473,10 +473,15 @@ DataConnection <- R6::R6Class( # nolint
       stopifnot(is(close_module, "function"))
       stopifnot(names(formals(close_module)) %in% c("id", "connection"))
 
-      private$close_server <- function(input, output, session, connection) {
-        withProgress(message = "Closing connection", value = 1, {
-          close_module(id = "close_conn", connection = connection)
-        })
+      private$close_server <- function(id, connection) {
+        moduduleServer(
+          id = id,
+          module = function(input, output, session) {
+            withProgress(message = "Closing connection", value = 1, {
+              close_module(id = "close_conn", connection = connection)
+            })
+          }
+        )
       }
       return(invisible(self))
     }

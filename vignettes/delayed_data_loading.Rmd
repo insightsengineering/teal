@@ -467,9 +467,10 @@ data$set_server(
   function(input, output, session, connection, connectors) {
     # opens connection
     if (!is.null(connection$get_open_server())) {
-      callModule(connection$get_open_server(),
-                 id = "open_connection",
-                 connection = connection)
+      connection$get_open_server()(
+        id = "open_connection",
+        connection = connection
+      )
     }
 
     for (connector in connectors) {
@@ -477,7 +478,7 @@ data$set_server(
       set_args(connector, args = list(seed = input$seed))
 
       # pull each dataset
-      callModule(connector$get_server(), id = connector$get_dataname())
+      connector$get_server()(id = connector$get_dataname())
       if (connector$is_failed()) {
         break
       }
