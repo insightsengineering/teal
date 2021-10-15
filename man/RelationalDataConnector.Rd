@@ -37,6 +37,7 @@ x$get_datasets()
 \subsection{Public methods}{
 \itemize{
 \item \href{#method-new}{\code{RelationalDataConnector$new()}}
+\item \href{#method-print}{\code{RelationalDataConnector$print()}}
 \item \href{#method-get_connection}{\code{RelationalDataConnector$get_connection()}}
 \item \href{#method-get_code_class}{\code{RelationalDataConnector$get_code_class()}}
 \item \href{#method-get_server}{\code{RelationalDataConnector$get_server()}}
@@ -77,6 +78,7 @@ x$get_datasets()
 \if{latex}{\out{\hypertarget{method-new}{}}}
 \subsection{Method \code{new()}}{
 Create a new \code{RelationalDataConnector} object
+Prints this RelationalDataConnector.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{RelationalDataConnector$new(connection, connectors)}\if{html}{\out{</div>}}
 }
@@ -91,6 +93,25 @@ connection to data source}
 list with dataset connectors}
 }
 \if{html}{\out{</div>}}
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-print"></a>}}
+\if{latex}{\out{\hypertarget{method-print}{}}}
+\subsection{Method \code{print()}}{
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{RelationalDataConnector$print(...)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{...}}{additional arguments to the printing method}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Returns}{
+invisibly self
 }
 }
 \if{html}{\out{<hr>}}

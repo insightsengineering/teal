@@ -735,3 +735,66 @@ testthat::test_that("dataset$merge_join_keys does not throw on basic input", {
   testthat::expect_true(length(before_merge) < length(after_merge))
   testthat::expect_equal(names(after_merge), c("iris", "other_dataset", "other_dataset_2"))
 })
+
+testthat::test_that("dataset$print warns of superfluous arguments", {
+  x <- data.frame(x = c(1, 2), y = c("a", "b"), stringsAsFactors = FALSE)
+  test_ds <- dataset(
+    dataname = "x",
+    x = x,
+    code = "data.frame(x = c(1, 2), y = c('a', 'b'), stringsAsFactors = FALSE)"
+  )
+  testthat::expect_warning(
+    capture.output(print(test_ds, "un used argument"))
+  )
+})
+
+testthat::test_that("dataset$print prints out all rows when less than 6", {
+  x <- data.frame(x = c(1, 2), y = c("a", "b"), stringsAsFactors = FALSE)
+  test_ds <- dataset(
+    dataname = "x",
+    x = x,
+    code = "data.frame(x = c(1, 2), y = c('a', 'b'), stringsAsFactors = FALSE)"
+  )
+
+  testthat::expect_equal(
+    capture.output(print(test_ds)),
+    c(
+      "A Dataset object containing the following data.frame (2 rows and 2 columns):",
+      "  x y",
+      "1 1 a",
+      "2 2 b"
+    )
+  )
+})
+
+testthat::test_that("dataset$print prints out both head and tail when more than 6 rows", {
+  x <- head(iris, 7)
+  test_ds <- dataset(
+    dataname = "x",
+    x = x,
+    code = "data.frame(x = c(1, 2), y = c('a', 'b'), stringsAsFactors = FALSE)"
+  )
+
+  testthat::expect_equal(
+    capture.output(print(test_ds)),
+    c(
+      "A Dataset object containing the following data.frame (7 rows and 5 columns):",
+      "  Sepal.Length Sepal.Width Petal.Length Petal.Width Species",
+      "1          5.1         3.5          1.4         0.2  setosa",
+      "2          4.9         3.0          1.4         0.2  setosa",
+      "3          4.7         3.2          1.3         0.2  setosa",
+      "4          4.6         3.1          1.5         0.2  setosa",
+      "5          5.0         3.6          1.4         0.2  setosa",
+      "6          5.4         3.9          1.7         0.4  setosa",
+      "",
+      "...",
+      "  Sepal.Length Sepal.Width Petal.Length Petal.Width Species",
+      "2          4.9         3.0          1.4         0.2  setosa",
+      "3          4.7         3.2          1.3         0.2  setosa",
+      "4          4.6         3.1          1.5         0.2  setosa",
+      "5          5.0         3.6          1.4         0.2  setosa",
+      "6          5.4         3.9          1.7         0.4  setosa",
+      "7          4.6         3.4          1.4         0.3  setosa"
+    )
+  )
+})
