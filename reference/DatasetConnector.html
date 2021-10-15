@@ -174,6 +174,7 @@ Pulled data inherits from the class <code><a href='Dataset.html'>Dataset</a></co
 
 <ul>
 <li><p><a href='#method-new'><code>DatasetConnector$new()</code></a></p></li>
+<li><p><a href='#method-print'><code>DatasetConnector$print()</code></a></p></li>
 <li><p><a href='#method-get_dataname'><code>DatasetConnector$get_dataname()</code></a></p></li>
 <li><p><a href='#method-get_datanames'><code>DatasetConnector$get_datanames()</code></a></p></li>
 <li><p><a href='#method-get_dataset_label'><code>DatasetConnector$get_dataset_label()</code></a></p></li>
@@ -208,7 +209,8 @@ Pulled data inherits from the class <code><a href='Dataset.html'>Dataset</a></co
 <a id="method-new"></a></p><h3 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Method <code>new()</code></h3>
 <p>Create a new <code>DatasetConnector</code> object. Set the pulling function
 <code>CallableFunction</code> which returns a <code>data.frame</code> or <code>MultiAssayExperiment</code>,
-e.g. by reading from a function or creating it on the fly.</p><h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Usage</h4>
+e.g. by reading from a function or creating it on the fly.
+Prints this DatasetConnector.</p><h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Usage</h4>
 <p><div class="r"></p><pre><span class='va'>DatasetConnector</span><span class='op'>$</span><span class='fu'>new</span><span class='op'>(</span>
   <span class='va'>dataname</span>,
   <span class='va'>pull_callable</span>,
@@ -249,6 +251,19 @@ are included to this object as local <code>vars</code> and they cannot be modifi
 within another dataset.</p></dd>
 
 </dl><p></div></p>
+<p><hr>
+<a id="method-print"></a></p><h3 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Method <code><a href='https://rdrr.io/r/base/print.html'>print()</a></code></h3>
+
+<h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Usage</h4>
+<p><div class="r"></p><pre><span class='va'>DatasetConnector</span><span class='op'>$</span><span class='fu'>print</span><span class='op'>(</span><span class='va'>...</span><span class='op'>)</span></pre><p></div></p>
+
+<h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Arguments</h4>
+<p><div class="arguments"></p><dl>
+<dt><code>...</code></dt><dd><p>additional arguments to the printing method</p></dd>
+
+</dl><p></div></p>
+<h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Returns</h4>
+<p>invisibly self</p>
 <p><hr>
 <a id="method-get_dataname"></a></p><h3 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Method <code><a href='get_dataname.html'>get_dataname()</a></code></h3>
 <p>Get dataname of dataset</p><h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Usage</h4>

@@ -454,64 +454,7 @@ parent dataset name</p></td>
     keys <span class='op'>=</span> <span class='fu'><a href='get_cdisc_keys.html'>get_cdisc_keys</a></span><span class='op'>(</span><span class='st'>"ADSL"</span><span class='op'>)</span>
   <span class='op'>)</span>
 <span class='op'>)</span>
-</div><div class='output co'>#&gt; &lt;CDISCDatasetConnector&gt;
-#&gt;   Inherits from: &lt;DatasetConnector&gt;
-#&gt;   Public:
-#&gt;     check: function () 
-#&gt;     clone: function (deep = FALSE) 
-#&gt;     get_code: function (deparse = TRUE) 
-#&gt;     get_code_class: function () 
-#&gt;     get_dataname: function () 
-#&gt;     get_datanames: function () 
-#&gt;     get_dataset: function () 
-#&gt;     get_dataset_label: function () 
-#&gt;     get_error_message: function () 
-#&gt;     get_join_keys: function () 
-#&gt;     get_keys: function () 
-#&gt;     get_parent: function () 
-#&gt;     get_pull_args: function () 
-#&gt;     get_pull_callable: function () 
-#&gt;     get_raw_data: function () 
-#&gt;     get_server: function () 
-#&gt;     get_ui: function (id) 
-#&gt;     get_var_r6: function () 
-#&gt;     initialize: function (dataname, pull_callable, keys, parent, code = character(0), 
-#&gt;     is_failed: function () 
-#&gt;     is_mutate_delayed: function () 
-#&gt;     is_pulled: function () 
-#&gt;     launch: function () 
-#&gt;     mutate: function (code, vars = list()) 
-#&gt;     mutate_join_keys: function (dataset, val) 
-#&gt;     pull: function (args = NULL, try = FALSE) 
-#&gt;     set_args: function (args) 
-#&gt;     set_dataset_label: function (label) 
-#&gt;     set_join_keys: function (x) 
-#&gt;     set_keys: function (keys) 
-#&gt;     set_ui_input: function (inputs = NULL) 
-#&gt;   Private:
-#&gt;     dataname: ADSL
-#&gt;     dataset: NULL
-#&gt;     dataset_label: 
-#&gt;     deep_clone: function (name, value) 
-#&gt;     get_pull_code_class: function (args = NULL) 
-#&gt;     is_pulled_flag: FALSE
-#&gt;     join_keys: NULL
-#&gt;     keys: STUDYID USUBJID
-#&gt;     parent: 
-#&gt;     pull_callable: CallableFunction, Callable, R6
-#&gt;     pull_internal: function (args = NULL, try = FALSE) 
-#&gt;     pull_vars: list
-#&gt;     server: function (input, output, session, data_args = NULL) 
-#&gt;     set_dataname: function (dataname) 
-#&gt;     set_failure: function (res) 
-#&gt;     set_parent: function (parent) 
-#&gt;     set_pull_callable: function (pull_callable) 
-#&gt;     set_pull_vars: function (pull_vars) 
-#&gt;     set_ui: function (ui_args = NULL) 
-#&gt;     set_var_r6: function (vars) 
-#&gt;     ui: function (id) 
-#&gt;     ui_input: NULL
-#&gt;     var_r6: list</div><div class='input'>
+</div><div class='output co'>#&gt; A DatasetConnector object, named ADSL, containing a Dataset object that has not been loaded/pulled</div><div class='input'>
 <span class='va'>pull_fun_adae</span> <span class='op'>&lt;-</span> <span class='fu'><a href='callable_function.html'>callable_function</a></span><span class='op'>(</span>
   <span class='kw'>function</span><span class='op'>(</span><span class='op'>)</span> <span class='op'>{</span><span class='fu'><a href='https://rdrr.io/pkg/scda/man/synthetic_cdisc_data.html'>synthetic_cdisc_data</a></span><span class='op'>(</span><span class='st'>"latest"</span><span class='op'>)</span><span class='op'>$</span><span class='va'>adae</span><span class='op'>}</span>
 <span class='op'>)</span>
@@ -523,64 +466,7 @@ parent dataset name</p></td>
   <span class='op'>)</span>,
   parent <span class='op'>=</span> <span class='st'>"ADSL"</span>
 <span class='op'>)</span>
-</div><div class='output co'>#&gt; &lt;CDISCDatasetConnector&gt;
-#&gt;   Inherits from: &lt;DatasetConnector&gt;
-#&gt;   Public:
-#&gt;     check: function () 
-#&gt;     clone: function (deep = FALSE) 
-#&gt;     get_code: function (deparse = TRUE) 
-#&gt;     get_code_class: function () 
-#&gt;     get_dataname: function () 
-#&gt;     get_datanames: function () 
-#&gt;     get_dataset: function () 
-#&gt;     get_dataset_label: function () 
-#&gt;     get_error_message: function () 
-#&gt;     get_join_keys: function () 
-#&gt;     get_keys: function () 
-#&gt;     get_parent: function () 
-#&gt;     get_pull_args: function () 
-#&gt;     get_pull_callable: function () 
-#&gt;     get_raw_data: function () 
-#&gt;     get_server: function () 
-#&gt;     get_ui: function (id) 
-#&gt;     get_var_r6: function () 
-#&gt;     initialize: function (dataname, pull_callable, keys, parent, code = character(0), 
-#&gt;     is_failed: function () 
-#&gt;     is_mutate_delayed: function () 
-#&gt;     is_pulled: function () 
-#&gt;     launch: function () 
-#&gt;     mutate: function (code, vars = list()) 
-#&gt;     mutate_join_keys: function (dataset, val) 
-#&gt;     pull: function (args = NULL, try = FALSE) 
-#&gt;     set_args: function (args) 
-#&gt;     set_dataset_label: function (label) 
-#&gt;     set_join_keys: function (x) 
-#&gt;     set_keys: function (keys) 
-#&gt;     set_ui_input: function (inputs = NULL) 
-#&gt;   Private:
-#&gt;     dataname: ADAE
-#&gt;     dataset: NULL
-#&gt;     dataset_label: 
-#&gt;     deep_clone: function (name, value) 
-#&gt;     get_pull_code_class: function (args = NULL) 
-#&gt;     is_pulled_flag: FALSE
-#&gt;     join_keys: NULL
-#&gt;     keys: STUDYID USUBJID ASTDTM AETERM AESEQ
-#&gt;     parent: ADSL
-#&gt;     pull_callable: CallableFunction, Callable, R6
-#&gt;     pull_internal: function (args = NULL, try = FALSE) 
-#&gt;     pull_vars: list
-#&gt;     server: function (input, output, session, data_args = NULL) 
-#&gt;     set_dataname: function (dataname) 
-#&gt;     set_failure: function (res) 
-#&gt;     set_parent: function (parent) 
-#&gt;     set_pull_callable: function (pull_callable) 
-#&gt;     set_pull_vars: function (pull_vars) 
-#&gt;     set_ui: function (ui_args = NULL) 
-#&gt;     set_var_r6: function (vars) 
-#&gt;     ui: function (id) 
-#&gt;     ui_input: NULL
-#&gt;     var_r6: list</div><div class='input'>
+</div><div class='output co'>#&gt; A DatasetConnector object, named ADAE, containing a Dataset object that has not been loaded/pulled</div><div class='input'>
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

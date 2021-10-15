@@ -162,6 +162,7 @@ Class also decides whether to launch app before initialize teal application.</p>
 
 <ul>
 <li><p><a href='#method-new'><code>RelationalData$new()</code></a></p></li>
+<li><p><a href='#method-print'><code>RelationalData$print()</code></a></p></li>
 <li><p><a href='#method-get_datanames'><code>RelationalData$get_datanames()</code></a></p></li>
 <li><p><a href='#method-get_join_keys'><code>RelationalData$get_join_keys()</code></a></p></li>
 <li><p><a href='#method-get_connectors'><code>RelationalData$get_connectors()</code></a></p></li>
@@ -193,7 +194,8 @@ Class also decides whether to launch app before initialize teal application.</p>
 
 <hr>
 <a id="method-new"></a></p><h3 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Method <code>new()</code></h3>
-<p>Create a new object of <code>RelationalData</code> class</p><h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Usage</h4>
+<p>Create a new object of <code>RelationalData</code> class
+Prints this RelationalData.</p><h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Usage</h4>
 <p><div class="r"></p><pre><span class='va'>RelationalData</span><span class='op'>$</span><span class='fu'>new</span><span class='op'>(</span><span class='va'>...</span>, check <span class='op'>=</span> <span class='cn'>FALSE</span>, <span class='va'>join_keys</span><span class='op'>)</span></pre><p></div></p>
 
 <h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Arguments</h4>
@@ -209,6 +211,19 @@ as provided in arguments. Check is run only if flag is true and preprocessing co
 If empty then no joins between pairs of objects</p></dd>
 
 </dl><p></div></p>
+<p><hr>
+<a id="method-print"></a></p><h3 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Method <code><a href='https://rdrr.io/r/base/print.html'>print()</a></code></h3>
+
+<h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Usage</h4>
+<p><div class="r"></p><pre><span class='va'>RelationalData</span><span class='op'>$</span><span class='fu'>print</span><span class='op'>(</span><span class='va'>...</span><span class='op'>)</span></pre><p></div></p>
+
+<h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Arguments</h4>
+<p><div class="arguments"></p><dl>
+<dt><code>...</code></dt><dd><p>additional arguments to the printing method</p></dd>
+
+</dl><p></div></p>
+<h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Returns</h4>
+<p>invisibly self</p>
 <p><hr>
 <a id="method-get_datanames"></a></p><h3 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Method <code>get_datanames()</code></h3>
 <p>Derive the names of all datasets</p><h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Usage</h4>
@@ -333,124 +348,10 @@ derive <code>RelationalDataConnector</code> object's data</p><h4 class='hasAncho
 <span class='op'>}</span>
 <span class='va'>tc</span><span class='op'>$</span><span class='fu'>get_items</span><span class='op'>(</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; $ADSL
-#&gt; &lt;CDISCDatasetConnector&gt;
-#&gt;   Inherits from: &lt;DatasetConnector&gt;
-#&gt;   Public:
-#&gt;     check: function () 
-#&gt;     clone: function (deep = FALSE) 
-#&gt;     get_code: function (deparse = TRUE) 
-#&gt;     get_code_class: function () 
-#&gt;     get_dataname: function () 
-#&gt;     get_datanames: function () 
-#&gt;     get_dataset: function () 
-#&gt;     get_dataset_label: function () 
-#&gt;     get_error_message: function () 
-#&gt;     get_join_keys: function () 
-#&gt;     get_keys: function () 
-#&gt;     get_parent: function () 
-#&gt;     get_pull_args: function () 
-#&gt;     get_pull_callable: function () 
-#&gt;     get_raw_data: function () 
-#&gt;     get_server: function () 
-#&gt;     get_ui: function (id) 
-#&gt;     get_var_r6: function () 
-#&gt;     initialize: function (dataname, pull_callable, keys, parent, code = character(0), 
-#&gt;     is_failed: function () 
-#&gt;     is_mutate_delayed: function () 
-#&gt;     is_pulled: function () 
-#&gt;     launch: function () 
-#&gt;     mutate: function (code, vars = list()) 
-#&gt;     mutate_join_keys: function (dataset, val) 
-#&gt;     pull: function (args = NULL, try = FALSE) 
-#&gt;     set_args: function (args) 
-#&gt;     set_dataset_label: function (label) 
-#&gt;     set_join_keys: function (x) 
-#&gt;     set_keys: function (keys) 
-#&gt;     set_ui_input: function (inputs = NULL) 
-#&gt;   Private:
-#&gt;     dataname: ADSL
-#&gt;     dataset: NULL
-#&gt;     dataset_label: 
-#&gt;     deep_clone: function (name, value) 
-#&gt;     get_pull_code_class: function (args = NULL) 
-#&gt;     is_pulled_flag: FALSE
-#&gt;     join_keys: JoinKeys, R6
-#&gt;     keys: STUDYID USUBJID
-#&gt;     parent: 
-#&gt;     pull_callable: CallableFunction, Callable, R6
-#&gt;     pull_internal: function (args = NULL, try = FALSE) 
-#&gt;     pull_vars: list
-#&gt;     server: function (input, output, session, data_args = NULL) 
-#&gt;     set_dataname: function (dataname) 
-#&gt;     set_failure: function (res) 
-#&gt;     set_parent: function (parent) 
-#&gt;     set_pull_callable: function (pull_callable) 
-#&gt;     set_pull_vars: function (pull_vars) 
-#&gt;     set_ui: function (ui_args = NULL) 
-#&gt;     set_var_r6: function (vars) 
-#&gt;     ui: function (id) 
-#&gt;     ui_input: NULL
-#&gt;     var_r6: list
+#&gt; A DatasetConnector object, named ADSL, containing a Dataset object that has not been loaded/pulled
 #&gt; 
 #&gt; $ADRS
-#&gt; &lt;CDISCDatasetConnector&gt;
-#&gt;   Inherits from: &lt;DatasetConnector&gt;
-#&gt;   Public:
-#&gt;     check: function () 
-#&gt;     clone: function (deep = FALSE) 
-#&gt;     get_code: function (deparse = TRUE) 
-#&gt;     get_code_class: function () 
-#&gt;     get_dataname: function () 
-#&gt;     get_datanames: function () 
-#&gt;     get_dataset: function () 
-#&gt;     get_dataset_label: function () 
-#&gt;     get_error_message: function () 
-#&gt;     get_join_keys: function () 
-#&gt;     get_keys: function () 
-#&gt;     get_parent: function () 
-#&gt;     get_pull_args: function () 
-#&gt;     get_pull_callable: function () 
-#&gt;     get_raw_data: function () 
-#&gt;     get_server: function () 
-#&gt;     get_ui: function (id) 
-#&gt;     get_var_r6: function () 
-#&gt;     initialize: function (dataname, pull_callable, keys, parent, code = character(0), 
-#&gt;     is_failed: function () 
-#&gt;     is_mutate_delayed: function () 
-#&gt;     is_pulled: function () 
-#&gt;     launch: function () 
-#&gt;     mutate: function (code, vars = list()) 
-#&gt;     mutate_join_keys: function (dataset, val) 
-#&gt;     pull: function (args = NULL, try = FALSE) 
-#&gt;     set_args: function (args) 
-#&gt;     set_dataset_label: function (label) 
-#&gt;     set_join_keys: function (x) 
-#&gt;     set_keys: function (keys) 
-#&gt;     set_ui_input: function (inputs = NULL) 
-#&gt;   Private:
-#&gt;     dataname: ADRS
-#&gt;     dataset: NULL
-#&gt;     dataset_label: 
-#&gt;     deep_clone: function (name, value) 
-#&gt;     get_pull_code_class: function (args = NULL) 
-#&gt;     is_pulled_flag: FALSE
-#&gt;     join_keys: JoinKeys, R6
-#&gt;     keys: STUDYID USUBJID PARAMCD AVISIT
-#&gt;     parent: ADSL
-#&gt;     pull_callable: CallableFunction, Callable, R6
-#&gt;     pull_internal: function (args = NULL, try = FALSE) 
-#&gt;     pull_vars: list
-#&gt;     server: function (input, output, session, data_args = NULL) 
-#&gt;     set_dataname: function (dataname) 
-#&gt;     set_failure: function (res) 
-#&gt;     set_parent: function (parent) 
-#&gt;     set_pull_callable: function (pull_callable) 
-#&gt;     set_pull_vars: function (pull_vars) 
-#&gt;     set_ui: function (ui_args = NULL) 
-#&gt;     set_var_r6: function (vars) 
-#&gt;     ui: function (id) 
-#&gt;     ui_input: NULL
-#&gt;     var_r6: list
+#&gt; A DatasetConnector object, named ADRS, containing a Dataset object that has not been loaded/pulled
 #&gt; 
 #&gt; $ADAE
 #&gt; A Dataset object containing the following data.frame (1934 rows and 66 columns):
@@ -598,64 +499,7 @@ derive <code>RelationalDataConnector</code> object's data</p><h4 class='hasAncho
 #&gt; 1934    &lt;NA&gt;    &lt;NA&gt;       Y
 #&gt; 
 #&gt; $ADTTE
-#&gt; &lt;CDISCDatasetConnector&gt;
-#&gt;   Inherits from: &lt;DatasetConnector&gt;
-#&gt;   Public:
-#&gt;     check: function () 
-#&gt;     clone: function (deep = FALSE) 
-#&gt;     get_code: function (deparse = TRUE) 
-#&gt;     get_code_class: function () 
-#&gt;     get_dataname: function () 
-#&gt;     get_datanames: function () 
-#&gt;     get_dataset: function () 
-#&gt;     get_dataset_label: function () 
-#&gt;     get_error_message: function () 
-#&gt;     get_join_keys: function () 
-#&gt;     get_keys: function () 
-#&gt;     get_parent: function () 
-#&gt;     get_pull_args: function () 
-#&gt;     get_pull_callable: function () 
-#&gt;     get_raw_data: function () 
-#&gt;     get_server: function () 
-#&gt;     get_ui: function (id) 
-#&gt;     get_var_r6: function () 
-#&gt;     initialize: function (dataname, pull_callable, keys, parent, code = character(0), 
-#&gt;     is_failed: function () 
-#&gt;     is_mutate_delayed: function () 
-#&gt;     is_pulled: function () 
-#&gt;     launch: function () 
-#&gt;     mutate: function (code, vars = list()) 
-#&gt;     mutate_join_keys: function (dataset, val) 
-#&gt;     pull: function (args = NULL, try = FALSE) 
-#&gt;     set_args: function (args) 
-#&gt;     set_dataset_label: function (label) 
-#&gt;     set_join_keys: function (x) 
-#&gt;     set_keys: function (keys) 
-#&gt;     set_ui_input: function (inputs = NULL) 
-#&gt;   Private:
-#&gt;     dataname: ADTTE
-#&gt;     dataset: NULL
-#&gt;     dataset_label: 
-#&gt;     deep_clone: function (name, value) 
-#&gt;     get_pull_code_class: function (args = NULL) 
-#&gt;     is_pulled_flag: FALSE
-#&gt;     join_keys: JoinKeys, R6
-#&gt;     keys: STUDYID USUBJID PARAMCD
-#&gt;     parent: ADSL
-#&gt;     pull_callable: CallableFunction, Callable, R6
-#&gt;     pull_internal: function (args = NULL, try = FALSE) 
-#&gt;     pull_vars: list
-#&gt;     server: function (input, output, session, data_args = NULL) 
-#&gt;     set_dataname: function (dataname) 
-#&gt;     set_failure: function (res) 
-#&gt;     set_parent: function (parent) 
-#&gt;     set_pull_callable: function (pull_callable) 
-#&gt;     set_pull_vars: function (pull_vars) 
-#&gt;     set_ui: function (ui_args = NULL) 
-#&gt;     set_var_r6: function (vars) 
-#&gt;     ui: function (id) 
-#&gt;     ui_input: NULL
-#&gt;     var_r6: list
+#&gt; A DatasetConnector object, named ADTTE, containing a Dataset object that has not been loaded/pulled
 #&gt; </div><div class='input'><span class='va'>tc</span><span class='op'>$</span><span class='fu'>get_code</span><span class='op'>(</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; [1] "ADSL &lt;- (function() synthetic_cdisc_data(\"latest\")$adsl)()\nADRS &lt;- (function() synthetic_cdisc_data(\"latest\")$adrs)()\nlibrary(scda)\nADAE &lt;- synthetic_cdisc_data(\"latest\")$adae\nADTTE &lt;- (function() synthetic_cdisc_data(\"latest\")$adtte)()"</div><div class='input'><span class='va'>tc</span><span class='op'>$</span><span class='fu'>get_code</span><span class='op'>(</span><span class='st'>"ADAE"</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; [1] "library(scda)\nADAE &lt;- synthetic_cdisc_data(\"latest\")$adae"</div><div class='input'><span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span>

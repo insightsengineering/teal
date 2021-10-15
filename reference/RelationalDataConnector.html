@@ -160,6 +160,7 @@ open/close connection.</p>
 
 <ul>
 <li><p><a href='#method-new'><code>RelationalDataConnector$new()</code></a></p></li>
+<li><p><a href='#method-print'><code>RelationalDataConnector$print()</code></a></p></li>
 <li><p><a href='#method-get_connection'><code>RelationalDataConnector$get_connection()</code></a></p></li>
 <li><p><a href='#method-get_code_class'><code>RelationalDataConnector$get_code_class()</code></a></p></li>
 <li><p><a href='#method-get_server'><code>RelationalDataConnector$get_server()</code></a></p></li>
@@ -195,7 +196,8 @@ open/close connection.</p>
 
 <hr>
 <a id="method-new"></a></p><h3 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Method <code>new()</code></h3>
-<p>Create a new <code>RelationalDataConnector</code> object</p><h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Usage</h4>
+<p>Create a new <code>RelationalDataConnector</code> object
+Prints this RelationalDataConnector.</p><h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Usage</h4>
 <p><div class="r"></p><pre><span class='va'>RelationalDataConnector</span><span class='op'>$</span><span class='fu'>new</span><span class='op'>(</span><span class='va'>connection</span>, <span class='va'>connectors</span><span class='op'>)</span></pre><p></div></p>
 
 <h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Arguments</h4>
@@ -207,6 +209,19 @@ connection to data source</p></dd>
 list with dataset connectors</p></dd>
 
 </dl><p></div></p>
+<p><hr>
+<a id="method-print"></a></p><h3 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Method <code><a href='https://rdrr.io/r/base/print.html'>print()</a></code></h3>
+
+<h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Usage</h4>
+<p><div class="r"></p><pre><span class='va'>RelationalDataConnector</span><span class='op'>$</span><span class='fu'>print</span><span class='op'>(</span><span class='va'>...</span><span class='op'>)</span></pre><p></div></p>
+
+<h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Arguments</h4>
+<p><div class="arguments"></p><dl>
+<dt><code>...</code></dt><dd><p>additional arguments to the printing method</p></dd>
+
+</dl><p></div></p>
+<h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Returns</h4>
+<p>invisibly self</p>
 <p><hr>
 <a id="method-get_connection"></a></p><h3 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Method <code>get_connection()</code></h3>
 <p>Get connection to data source</p><h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Usage</h4>
