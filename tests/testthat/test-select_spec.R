@@ -1,4 +1,4 @@
-library(random.cdisc.data)
+library(scda)
 
 test_that("Proper argument types", {
   choices <- c("c1", "c2", "c3")
@@ -99,8 +99,9 @@ test_that("resolve_delayed select_spec works", {
   expect_identical(expected_spec, isolate(resolve_delayed(delayed_spec, ds)))
 })
 
-ADSL <- radsl(cached = TRUE) # nolint
-ADTTE <- radtte(cached = TRUE) # nolint
+scda_data <- synthetic_cdisc_data("latest")
+ADSL <- scda_data$adsl # nolint
+ADTTE <- scda_data$adtte # nolint
 data <- cdisc_data(
   cdisc_dataset("ADSL", ADSL),
   cdisc_dataset("ADTTE", ADTTE)

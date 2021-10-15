@@ -1,6 +1,7 @@
-library(random.cdisc.data)
-ADSL <- radsl(cached = TRUE) # nolint
-ADTTE <- radtte(cached = TRUE) # nolint
+library(scda)
+scda_data <- synthetic_cdisc_data("latest")
+ADSL <- scda_data$adsl # nolint
+ADTTE <- scda_data$adtte # nolint
 data <- cdisc_data(
   cdisc_dataset("ADSL", ADSL),
   cdisc_dataset("ADTTE", ADTTE)

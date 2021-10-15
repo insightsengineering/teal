@@ -1,26 +1,18 @@
-library(random.cdisc.data)
+library(scda)
 
 # Single rcd dataset connector ----
-testthat::test_that("Single rcd dataset connector", {
+testthat::test_that("Single scda dataset connector", {
   # create object
-  adsl <- rcd_cdisc_dataset_connector("ADSL", radsl, cached = TRUE)
+  adsl <- scda_cdisc_dataset_connector("ADSL", "adsl")
   default_ui <- adsl$get_ui("main-app")
   adsl$set_ui_input(function(ns) {
     list(
-      numericInput(inputId = ns("seed"), label = "ADSL seed", min = 0, value = 1),
-      optionalSliderInput(inputId = ns("study_duration"),
-                          label = "Duration of study in years",
-                          min = 0,
-                          max = 5,
-                          value = 2,
-                          step = 1)
+      textInput(inputId = ns("name"), label = "scda name", value = "latest")
     )
   }
   )
   set_ui <- adsl$get_ui("main-app")
   testthat::expect_false(isTRUE(all.equal(default_ui, set_ui)))
-
-
 
   # check UI
   testthat::expect_equal(
@@ -30,13 +22,7 @@ testthat::test_that("Single rcd dataset connector", {
         tags$div(
           id = "main-app-inputs",
           h4("Dataset Connector for ", code("ADSL")),
-          numericInput(inputId = "main-app-seed", label = "ADSL seed", min = 0, value = 1),
-          optionalSliderInput(inputId = "main-app-study_duration",
-                              label = "Duration of study in years",
-                              min = 0,
-                              max = 5,
-                              value = 2,
-                              step = 1)
+          textInput(inputId = ns("name"), label = "scda name", value = "latest")
         )
       )
     )
@@ -49,6 +35,6 @@ testthat::test_that("Single rcd dataset connector", {
 
   # check reproducible code
   testthat::expect_equal(
-    get_code(adsl), "ADSL <- radsl(cached = TRUE)"
+    get_code(adsl), 'ADSL <- synthetic_cdisc_dataset(dataset_name = "adsl", name = "latest")'
   )
 })
