@@ -242,7 +242,7 @@ element with name `ADSL`.
 # there is also a cdisc_dataset_connector function which pulls an object of type CDISCDataset
 adsl_2 <- dataset_connector(
   dataname = "ADSL_2",
-  pull_callable = callable_function(fun = function(ADSL) ADSL_2 <- ADSL) %>%
+  pull_callable = callable_function(fun = function(ADSL) ADSL_2 <- ADSL) %>% # nolint
     set_args(list(ADSL = as.name("ADSL"))),
   keys = get_cdisc_keys("ADSL"),
   label = "Example label",
