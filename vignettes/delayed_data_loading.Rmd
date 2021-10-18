@@ -166,19 +166,14 @@ allows datasets to have parents and is needed for CDISC analysis.
 
 ```{r}
 library(magrittr)
-<<<<<<< Updated upstream
+
 ADSL <- synthetic_cdisc_dataset(dataset_name = "adsl", name = "latest") %>% head(3) # nolint
 
 adsl <- cdisc_dataset(dataname = "ADSL",
                       x = ADSL,
-                      code = "ADSL <- synthetic_cdisc_dataset(dataset_name = \"adsl\", name = \"latest\") %>% head(3)")
-=======
-adsl <- radsl(cached = TRUE) %>% head(3)
+                      code = "ADSL <- synthetic_cdisc_dataset(dataset_name = \"adsl\", name = \"latest\") %>% head(3)"
+)
 
-adsl_dataset <- cdisc_dataset(dataname = "ADSL",
-                      x = adsl,
-                      code = "ADSL <- radsl(cached = TRUE) %>% head(3)")
->>>>>>> Stashed changes
 ```
 
 The object created above contains all previously defined attributes which can be
@@ -685,13 +680,8 @@ In the code block below, the default version of `variable_choices` is presented
 where the function uses an `ADSL` object containing "physical" data.
 
 ```{r}
-<<<<<<< Updated upstream
-ADSL <- synthetic_cdisc_data("latest")$adsl # nolint
-variable_choices(data = ADSL)
-=======
-adsl_data <- radsl(cached = TRUE)
+adsl_data <- synthetic_cdisc_data("latest")$adsl 
 variable_choices(data = adsl_data)
->>>>>>> Stashed changes
 ```
 
 An alternative option is to put a dataname into `data` argument, which will result
