@@ -525,7 +525,7 @@ data <- cdisc_data(
 One can combine multiple delayed data objects using `[teal|cdisc]_data` functions and
 include them in a shiny application. `RelationalData` gathers all objects and sets
 combined UI with shiny inputs from all objects.
-In the code chunk below we specified four dataset connectors with  but
+In the code chunk below we specified four dataset connectors but
 developers can include any number and any type of objects.
 
 ```{r}
@@ -628,7 +628,7 @@ cat(get_code(data, "ADSL"))
 cat(get_code(data, "ADTTE"))
 ```
 
-Sometimes code of one object can depend on  another, in this case we can link
+Sometimes code of one object can depend on another, in this case we can link
 them in the same way how we link `DatasetConnector` objects. If object code
 is dependent on another, as ADTTE depends on ADSL below, `get_code`
 will return everything we need to be executed to reproduce this dataset.
@@ -745,7 +745,7 @@ get_continuous <- function(data) {
 
 data_extract_x <- data_extract_spec(
   dataname = "ADSL",
-  select =  select_spec(
+  select = select_spec(
     choices = variable_choices("ADSL", subset = get_continuous)
   ),
   filter = filter_spec(
@@ -762,7 +762,7 @@ data_extract_x <- data_extract_spec(
 
 data_extract_y <- data_extract_spec(
   dataname = "ADRS",
-  select =  select_spec(
+  select = select_spec(
     choices = variable_choices("ADRS", subset = get_continuous)
   ),
   filter = filter_spec(
