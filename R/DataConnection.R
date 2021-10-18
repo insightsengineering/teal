@@ -129,16 +129,18 @@ DataConnection <- R6::R6Class( # nolint
         ),
         server = function(input, output, session) {
           session$onSessionEnded(stopApp)
+          preopen_server <- self$get_preopen_server()
           if_not_null(
-            self$get_preopen_server(),
-            self$get_preopen_server()(id = "data_connection", connection = self),
+            preopen_server,
+            preopen_server(id = "data_connection", connection = self),
           )
           observeEvent(input$submit, {
             rv <- reactiveVal(NULL)
+            open_server <- self$get_open_server()
             rv(
               if_not_null(
-                self$get_open_server(),
-                self$get_open_server()(id = "data_connection", connection = self),
+                open_server,
+                open_server(id = "data_connection", connection = self),
               )
             )
 
