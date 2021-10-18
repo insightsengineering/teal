@@ -111,7 +111,7 @@ fun <- callable_function(fun = function(ADSL) { # nolint
 })
 
 # copy ADSL to CallableFunction environment
-fun$assign_to_env("ADSL", adsl)
+fun$assign_to_env("ADSL", ADSL)
 
 # set arguments
 fun$set_args(args = list(ADSL = as.name("ADSL")))
