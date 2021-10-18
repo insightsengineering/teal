@@ -102,7 +102,11 @@ one has to use `$assign_to_env()` to copy object and
 `$set_args(list(ADSL = as.symbol(ADSL)))` to link object with function argument.
 
 ```{r}
+<<<<<<< Updated upstream
 ADSL <- synthetic_cdisc_dataset(dataset_name = "adsl", name = "latest") # nolint
+=======
+adsl <- radsl(cached = TRUE)
+>>>>>>> Stashed changes
 
 fun <- callable_function(fun = function(ADSL) {
   ADSL_2 <- ADSL # nolint
@@ -111,7 +115,7 @@ fun <- callable_function(fun = function(ADSL) {
 })
 
 # copy ADSL to CallableFunction environment
-fun$assign_to_env("ADSL", ADSL)
+fun$assign_to_env("ADSL", adsl)
 
 # set arguments
 fun$set_args(args = list(ADSL = as.name("ADSL")))
@@ -145,7 +149,7 @@ code <- callable_code(
 cat(code$get_call())
 
 # assign ADSL to environment
-code$assign_to_env("ADSL", ADSL)
+code$assign_to_env("ADSL", adsl)
 
 # evaluate call
 df <- code$run()
@@ -166,11 +170,19 @@ allows datasets to have parents and is needed for CDISC analysis.
 
 ```{r}
 library(magrittr)
+<<<<<<< Updated upstream
 ADSL <- synthetic_cdisc_dataset(dataset_name = "adsl", name = "latest") %>% head(3) # nolint
 
 adsl <- cdisc_dataset(dataname = "ADSL",
                       x = ADSL,
                       code = "ADSL <- synthetic_cdisc_dataset(dataset_name = \"adsl\", name = \"latest\") %>% head(3)")
+=======
+adsl <- radsl(cached = TRUE) %>% head(3)
+
+adsl_dataset <- cdisc_dataset(dataname = "ADSL",
+                      x = adsl,
+                      code = "ADSL <- radsl(cached = TRUE) %>% head(3)")
+>>>>>>> Stashed changes
 ```
 
 The object created above contains all previously defined attributes which can be
@@ -178,19 +190,19 @@ extracted in any occasion.
 
 ```{r}
 # check if code is reproducible
-get_dataname(adsl)
+get_dataname(adsl_dataset)
 
 # get label
-get_dataset_label(adsl)
+get_dataset_label(adsl_dataset)
 
 # get reproducible code
-get_code(adsl)
+get_code(adsl_dataset)
 
 # get data.frame
-get_raw_data(adsl)
+get_raw_data(adsl_dataset)
 
 # get keys (i.e. the primary keys of the dataset)
-adsl$get_keys()
+adsl_dataset$get_keys()
 ```
 
 ### `DatasetConnector` (including `CDISCDatasetConnector`)
@@ -201,7 +213,7 @@ the code chunk below, connector is created basing on `synthetic_cdisc_dataset`
 function
 
 ```{r}
-adsl <- dataset_connector(
+adsl_conn <- dataset_connector(
   dataname = "ADSL",
   pull_callable = callable_function("synthetic_cdisc_dataset") %>% 
     set_args(list(dataset_name = "adsl", name = "latest")),
@@ -210,19 +222,19 @@ adsl <- dataset_connector(
 )
 ```
 
-Initially, `adsl` doesn't contain any data, but they can be loaded using
-`load_dataset()` function. Before data loading, `adsl` contains reproducible
+Initially, `adsl_conn` doesn't contain any data, but they can be loaded using
+`load_dataset()` function. Before data loading, `adsl_conn` contains reproducible
 code which is also an execution code to pull the data.
 
 ```{r}
 # execution/reproducible code
-get_code(adsl)
+get_code(adsl_conn)
 
 # pull data
-load_dataset(adsl)
+load_dataset(adsl_conn)
 
 # get raw data
-get_raw_data(adsl)
+get_raw_data(adsl_conn)
 ```
 
 `teal` also allows other variables to be passed to the connector which `Callable` object
@@ -677,8 +689,13 @@ In the code block below, the default version of `variable_choices` is presented
 where the function uses an `ADSL` object containing "physical" data.
 
 ```{r}
+<<<<<<< Updated upstream
 ADSL <- synthetic_cdisc_data("latest")$adsl # nolint
 variable_choices(data = ADSL)
+=======
+adsl_data <- radsl(cached = TRUE)
+variable_choices(data = adsl_data)
+>>>>>>> Stashed changes
 ```
 
 An alternative option is to put a dataname into `data` argument, which will result
