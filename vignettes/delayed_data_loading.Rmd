@@ -102,11 +102,7 @@ one has to use `$assign_to_env()` to copy object and
 `$set_args(list(ADSL = as.symbol(ADSL)))` to link object with function argument.
 
 ```{r}
-<<<<<<< Updated upstream
 ADSL <- synthetic_cdisc_dataset(dataset_name = "adsl", name = "latest") # nolint
-=======
-adsl <- radsl(cached = TRUE)
->>>>>>> Stashed changes
 
 fun <- callable_function(fun = function(ADSL) {
   ADSL_2 <- ADSL # nolint
