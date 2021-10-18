@@ -2,6 +2,7 @@
 
 ### New features
 * Added print methods to the `DatasetConnector`, `RelationalData`, and `RelationalDataconnector` classes and added input validation to the implementation of the print method that was already in the `Dataset` object.
+* Replaced the servers from `DataConnection`, `RelationalDataConnector`, and `DatasetConnector`, and `RelationalData` with `moduleServer`.
 
 # teal 0.10.0
 
