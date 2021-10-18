@@ -74,7 +74,7 @@ testthat::test_that("Case 2: CDISCDataset$get_code() does not return duplicated 
     adsl_d <- cdisc_dataset("ADSL", head(iris))
     adsl_d %>% mutate_dataset("ADSL$a <- x", vars = list(x = 1)) %>% mutate_dataset("ADSL$b <- y", vars = list(y = 2))
 
-    adae_d <- fun_cdisc_dataset_connector("ADAE", function() head(mtcars))
+    adae_d <- code_cdisc_dataset_connector("ADAE", "head(mtcars)")
     adae_d %>% mutate_dataset("ADAE$a <- x", vars = list(x = 1))
     adae_d %>% mutate_dataset("ADAE$a <- ADAE$a*2")
     adae_d %>% load_dataset() %>% mutate_dataset("ADAE$a <- ADAE$a*2")
@@ -86,7 +86,7 @@ testthat::test_that("Case 2: CDISCDataset$get_code() does not return duplicated 
       c("x <- 1",
         "y <- 2",
         "z <- 3",
-        "ADAE <- (function() head(mtcars))()",
+        "ADAE <- head(mtcars)",
         "ADAE$a <- x",
         "ADAE$a <- ADAE$a * 2",
         "ADAE$a <- ADAE$a * 2",
