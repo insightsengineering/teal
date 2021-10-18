@@ -30,6 +30,10 @@ scda_cdisc_dataset_connector(
 \item{dataname}{(\code{character})\cr
 A given name for the dataset it may not contain spaces}
 
+\item{scda_dataname}{(\code{character}) which scda dataset to use (e.g. "adsl").}
+
+\item{scda_name}{(\code{character}) which version of scda data to take, default "latest".}
+
 \item{keys}{optional, (\code{character})\cr
 vector of dataset primary keys column names}
 

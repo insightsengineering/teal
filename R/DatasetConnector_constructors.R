@@ -276,6 +276,9 @@ cdisc_dataset_connector_file <- function(path) { # nolint # nousage
 #' Create a `DatasetConnector` for dataset in `scda`
 #'
 #' @inheritParams dataset_connector
+#' @inheritParams fun_dataset_connector
+#' @param scda_dataname (`character`) which scda dataset to use (e.g. "adsl").
+#' @param scda_name (`character`) which version of scda data to take, default "latest".
 #' @rdname scda_dataset_connector
 #'
 #' @export
@@ -362,7 +365,7 @@ scda_cdisc_dataset_connector <- function(dataname,
 #' Create a `DatasetConnector` from `RDS` file.
 #'
 #' @inheritParams dataset_connector
-#'
+#' @inheritParams fun_dataset_connector
 #' @param file (`character`)\cr
 #'   path to (`.rds` or `.R`) that contains `data.frame` object or
 #'   code to `source`
@@ -460,6 +463,7 @@ rds_cdisc_dataset_connector <- function(dataname,
 #' Create a `DatasetConnector` from `.R` file.
 #'
 #' @inheritParams dataset_connector
+#' @inheritParams fun_dataset_connector
 #' @param file (`character`)\cr
 #'   file location containing code to be evaluated in connector. Object obtained in the last
 #'   call from file will be returned to the connector - same as `source(file = file)$value`
@@ -556,6 +560,7 @@ script_cdisc_dataset_connector <- function(dataname,
 #' Create a `DatasetConnector` from a string of code.
 #'
 #' @inheritParams dataset_connector
+#' @inheritParams fun_dataset_connector
 #'
 #' @param code (`character`)\cr
 #'   String containing the code to produce the object.
@@ -776,6 +781,7 @@ rice_cdisc_dataset_connector <- function(dataname,
 #' Create a `DatasetConnector` from `Teradata`.
 #'
 #' @inheritParams dataset_connector
+#' @inheritParams fun_dataset_connector
 #' @param table (`character`) table name
 #'
 #' @rdname teradata_dataset_connector
@@ -859,7 +865,7 @@ teradata_cdisc_dataset_connector <- function(dataname, # nolint
 #' Create a `DatasetConnector` from `Snowflake`.
 #'
 #' @inheritParams dataset_connector
-#'
+#' @inheritParams fun_dataset_connector
 #' @param sql_query (`character`) SQL statement to extract data from snowflake
 #'
 #' @rdname snowflake_dataset_connector
@@ -943,7 +949,7 @@ snowflake_cdisc_dataset_connector <- function(dataname, # nolint
 #' Create a `DatasetConnector` from `CDSE`.
 #'
 #' @inheritParams dataset_connector
-#'
+#' @inheritParams fun_dataset_connector
 #' @param cid (`character`) ID of dataset
 #'
 #' @export
@@ -1043,6 +1049,7 @@ cdse_cdisc_dataset_connector <- function(dataname,
 #'
 #'
 #' @inheritParams dataset_connector
+#' @inheritParams fun_dataset_connector
 #'
 #' @param file (`character`)\cr
 #'   path to (`.csv)` (or general delimited) file that contains `data.frame` object
@@ -1223,7 +1230,12 @@ datasetdb_dataset_connector <- function(dataname,
 #'   additional arguments for (`func`).
 #' @param func_name (`name`)\cr
 #'   for internal purposes, please keep it default
-#'
+#' @param ... Additional arguments applied to pull function.
+#'   In case when this object code depends on the `raw_data` from the other
+#'   `Dataset`, `DatasetConnector` object(s) or other constant value,
+#'   this/these object(s) should be included. Please note that `vars`
+#'   are included to this object as local `vars` and they cannot be modified
+#'   within another dataset.
 #' @export
 #'
 #' @rdname fun_dataset_connector

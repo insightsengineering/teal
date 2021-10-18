@@ -47,6 +47,13 @@ after it is produced.}
 Alternatively to \code{mutate_code} - location of the file containing modification code.
 Can't be used simultaneously with \code{mutate_script}.}
 
+\item{...}{Additional arguments applied to pull function.
+In case when this object code depends on the \code{raw_data} from the other
+\code{Dataset}, \code{DatasetConnector} object(s) or other constant value,
+this/these object(s) should be included. Please note that \code{vars}
+are included to this object as local \code{vars} and they cannot be modified
+within another dataset.}
+
 \item{parent}{optional, (\code{character}) \cr
 parent dataset name}
 }

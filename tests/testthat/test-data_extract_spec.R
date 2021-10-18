@@ -1,3 +1,5 @@
+library(scda)
+
 test_that("data_extract_spec argument checking", {
   expect_error(
     data_extract_spec("toyDataset", select = NULL),
@@ -201,8 +203,9 @@ test_that("delayed data_extract_spec works", {
   expect_identical(expected_spec, mix3_res)
 })
 
-adsl <- radsl(cached = TRUE)
-adtte <- radtte(cached = TRUE)
+scda_data <- synthetic_cdisc_data("latest")
+adsl <- scda_data$adsl # nolint
+adtte <- scda_data$adtte # nolint
 data <- cdisc_data(
   cdisc_dataset("ADSL", adsl),
   cdisc_dataset("ADTTE", adtte)

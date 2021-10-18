@@ -1,3 +1,5 @@
+library(scda)
+
 choices <- c("val1", "val2", "val3")
 choices_d <- c("val1", "val1", "val2", "val3")
 choices_f <- as.factor(choices)
@@ -252,8 +254,10 @@ test_that("delayed filter_spec works", {
   expect_identical(expected_spec, isolate(resolve_delayed(delayed, ds)))
 })
 
-ADSL <- radsl(cached = TRUE) # nolint
-ADTTE <- radtte(cached = TRUE) # nolint
+
+scda_data <- synthetic_cdisc_data("latest")
+ADSL <- scda_data$adsl # nolint
+ADTTE <- scda_data$adtte # nolint
 data <- cdisc_data(
   cdisc_dataset("ADSL", ADSL),
   cdisc_dataset("ADTTE", ADTTE)

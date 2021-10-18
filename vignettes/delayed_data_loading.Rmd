@@ -105,7 +105,7 @@ one has to use `$assign_to_env()` to copy object and
 ADSL <- synthetic_cdisc_dataset(dataset_name = "adsl", name = "latest") # nolint
 
 fun <- callable_function(fun = function(ADSL) {
-  ADSL_2 <- ADSL
+  ADSL_2 <- ADSL # nolint
   ADSL_2$new_col <- TRUE
   ADSL_2
 })
@@ -259,7 +259,7 @@ passing ui module function, with `ns` argument (shiny namespaced ID object).
 ```{r eval=FALSE}
 adsl_3 <- dataset_connector(
   dataname = "ADSL_3",
-  pull_callable = callable_function(fun = function(ADSL, n) ADSL_3 <- head(ADSL, n)) %>%
+  pull_callable = callable_function(fun = function(ADSL, n) ADSL_3 <- head(ADSL, n)) %>% # nolint
     set_args(list(ADSL = as.name("ADSL"))),
   keys = get_cdisc_keys("ADSL"),
   label = "Example label",
@@ -383,7 +383,7 @@ adsl <- dataset_connector(
 
 adsl_3 <- dataset_connector(
   dataname = "ADSL_3",
-  pull_callable = callable_function(fun = function(ADSL, name, n = 5) ADSL_3 <- head(ADSL, n)) %>%
+  pull_callable = callable_function(fun = function(ADSL, name, n = 5) ADSL_3 <- head(ADSL, n)) %>% # nolint
     set_args(list(ADSL = as.name("ADSL"))),
   keys = get_cdisc_keys("ADSL"),
   label = "Example label",
@@ -436,7 +436,7 @@ extend the module using `set_ui()` and `set_server()` to specify
 the UI and server function themselves. The general rule for creating these modules is that callback
 from server to UI is not possible, because server module is executed after the submit
 button is clicked. Although see `set_preopen_server` of `DataConnection` object for a slight
-relaxation fo this rule.
+relaxation of this rule.
 Below we extend the app interface by adding a text input which will be passed to the
 `scda` function. The UI is created from `scda_conn` and
 `connectors` object while the server module requires `connectors` and `connection`
