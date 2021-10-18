@@ -137,7 +137,6 @@ test_that("Exception handling with dataname of *xyz", {
   )
 })
 
-# TODO are the some tests missing here?
 adsl <- scda_cdisc_dataset_connector("ADSL", "adsl")
 adae <- scda_cdisc_dataset_connector("ADAE", "adae")
 adaem <- adae %>% mutate_dataset("ADAE$vv=nrow(ADSL); attr(ADSL$vv, 'label') <- 'vv'", vars = list(ADSL = adsl))
