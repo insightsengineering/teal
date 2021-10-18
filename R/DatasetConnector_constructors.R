@@ -300,8 +300,6 @@ scda_dataset_connector <- function(dataname,
                                    code = character(0),
                                    script = character(0)) {
 
-  #TODO do we need this - aren't all scda datsaets cdisc?
-
   check_pkg_quietly("scda", "scda package not available.")
   stopifnot(utils.nest::is_character_single(scda_dataname))
   stopifnot(utils.nest::is_character_single(scda_name))

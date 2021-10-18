@@ -55,6 +55,7 @@ Suggests:
   httr,
   knitr,
   readr,
+  reticulate,
   rmarkdown,
   scda,
   tern (>= 0.7.5),
