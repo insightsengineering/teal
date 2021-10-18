@@ -284,50 +284,69 @@ testthat::test_that("RelationalData with single dataset and connector", {
 
 # RelationalData with mutliple datasets and connectors ----
 testthat::test_that("RelationalData with mutliple datasets and connectors", {
-  adsl <- rcd_cdisc_dataset_connector("ADSL", radsl, N = 1)
-  adsl_data <- rcd_data(adsl)
+
+  example_data_connector <- function(...) {
+    connectors <- list(...)
+    open_fun <- callable_function(library)
+    open_fun$set_args(list(package = "teal"))
+    con <- teal:::DataConnection$new(open_fun = open_fun)
+    x <- teal:::RelationalDataConnector$new(connection = con, connectors = connectors)
+    x$set_ui(
+      function(id, connection, connectors) {
+        ns <- NS(id)
+        tagList(
+          connection$get_open_ui(ns("open_connection")),
+          do.call(
+            what = "tagList",
+            args = lapply(
+              connectors,
+              function(connector) {
+                div(
+                  connector$get_ui(
+                    id = ns(connector$get_dataname())
+                  ),
+                  br()
+                )
+              }
+            )
+          )
+        )
+      }
+    )
+    return(x)
+  }
+
+  adsl <- scda_cdisc_dataset_connector("ADSL", "adsl")
+  adsl_data <- example_data_connector(adsl)
 
   adtte <- cdisc_dataset(
     dataname = "ADTTE",
-    x = radtte(cached = TRUE),
-    code = "ADTTE <- radtte(cached = TRUE)"
+    x = synthetic_cdisc_dataset(dataset_name = "adtte", name = "latest"),
+    code = "ADTTE <- synthetic_cdisc_dataset(dataset_name = \"adtte\", name = \"latest\")"
   )
 
-  adae <- rcd_cdisc_dataset_connector("ADAE", radae, ADSL = adsl)
+  adsl_2 <- code_cdisc_dataset_connector("ADSL_2", "ADSL", keys = get_cdisc_keys("ADSL"), ADSL = adsl)
   # add custom input
-  adae$set_ui_input(function(ns) {
+  adsl_2$set_ui_input(function(ns) {
     list(
-      numericInput(inputId = ns("seed"), label = "ADSL seed", min = 0, value = 2),
-      optionalSliderInput(inputId = ns("max_n_aes"),
-                          label = "Maximum number of AEs per patient",
-                          min = 0,
-                          max = 5,
-                          value = 3,
-                          step = 1)
+      numericInput(inputId = ns("seed"), label = "Example UI", min = 0, value = 2)
       )
     }
   )
 
-  advs <- rcd_cdisc_dataset_connector("ADVS", radvs, ADSL = adsl)
+  advs <- scda_cdisc_dataset_connector("ADVS", "advs")
   advs$set_ui_input(function(ns) {
     list(
-      numericInput(inputId = ns("seed"), label = "ADSL seed", min = 0, value = 4),
-      optionalSliderInput(inputId = ns("max_n_aes"),
-                          label = "Number of weeks or cycles",
-                          min = 0,
-                          max = 10,
-                          value = 5,
-                          step = 1)
-      )
-    }
+      numericInput(inputId = ns("seed"), label = "Example UI", min = 0, value = 4)
+    )}
   )
 
-  adlb <- rcd_cdisc_dataset_connector("ADLB", radlb, ADSL = adsl)
+  adlb <- scda_cdisc_dataset_connector("ADLB", "adlb")
 
-  advs_adlb_data <- rcd_data(advs, adlb)
+  advs_adlb_data <- example_data_connector(advs, adlb)
 
   temp_file <- tempfile()
-  saveRDS(radrs(cached = TRUE), file = temp_file)
+  saveRDS(synthetic_cdisc_dataset(dataset_name = "adrs", name = "latest"), file = temp_file)
   adrs <- rds_cdisc_dataset_connector(dataname = "ADRS", file = temp_file)
 
   adsamp <- script_cdisc_dataset_connector(
@@ -338,17 +357,17 @@ testthat::test_that("RelationalData with mutliple datasets and connectors", {
     ADVS = advs
   )
 
-  data <- cdisc_data(adsl_data, adtte, adae, advs_adlb_data, adrs, adsamp)
+  data <- cdisc_data(adsl_data, adtte, adsl_2, advs_adlb_data, adrs, adsamp)
 
   testthat::expect_true(inherits(data, "RelationalData"))
   items <- data$get_items()
   testthat::expect_true(all(vapply(items[-2], inherits, logical(1), "DatasetConnector")))
   testthat::expect_true(inherits(items$ADTTE, "Dataset"))
 
-  testthat::expect_equal(items$ADSL$get_pull_callable()$get_call(), "radsl(N = 1)")
-  testthat::expect_equal(items$ADAE$get_pull_callable()$get_call(), "radae(ADSL = ADSL)")
-  testthat::expect_equal(items$ADVS$get_pull_callable()$get_call(), "radvs(ADSL = ADSL)")
-  testthat::expect_equal(items$ADLB$get_pull_callable()$get_call(), "radlb(ADSL = ADSL)")
+  testthat::expect_equal(items$ADSL$get_pull_callable()$get_call(), "synthetic_cdisc_dataset(dataset_name = \"adsl\", name = \"latest\")")
+  testthat::expect_equal(items$ADSL_2$get_pull_callable()$get_call(), "ADSL")
+  testthat::expect_equal(items$ADVS$get_pull_callable()$get_call(), "synthetic_cdisc_dataset(dataset_name = \"advs\", name = \"latest\")")
+  testthat::expect_equal(items$ADLB$get_pull_callable()$get_call(), "synthetic_cdisc_dataset(dataset_name = \"adlb\", name = \"latest\")")
   testthat::expect_equal(
     items$ADSAMP$get_pull_callable()$get_call(),
     "source(file = \"delayed_data_script/asdamp_with_adsl.R\", local = TRUE)$value"
@@ -357,27 +376,31 @@ testthat::test_that("RelationalData with mutliple datasets and connectors", {
 
   testthat::expect_equal(
     get_code(data, "ADSL"),
-    "library(package = \"random.cdisc.data\")\nADSL <- radsl(N = 1)"
+    "library(package = \"teal\")\nADSL <- synthetic_cdisc_dataset(dataset_name = \"adsl\", name = \"latest\")"
   )
   testthat::expect_equal(
-    get_code(data, "ADAE"),
-    "library(package = \"random.cdisc.data\")\nADSL <- radsl(N = 1)\nADAE <- radae(ADSL = ADSL)"
+    get_code(data, "ADSL_2"),
+    "library(package = \"teal\")\nADSL <- synthetic_cdisc_dataset(dataset_name = \"adsl\", name = \"latest\")\nADSL_2 <- ADSL"
   )
   testthat::expect_equal(
     get_code(data, "ADVS"),
-    "library(package = \"random.cdisc.data\")\nADSL <- radsl(N = 1)\nADVS <- radvs(ADSL = ADSL)"
+    "library(package = \"teal\")\nADVS <- synthetic_cdisc_dataset(dataset_name = \"advs\", name = \"latest\")"
   )
   testthat::expect_equal(
     get_code(data, "ADLB"),
-    "library(package = \"random.cdisc.data\")\nADSL <- radsl(N = 1)\nADLB <- radlb(ADSL = ADSL)"
+    "library(package = \"teal\")\nADLB <- synthetic_cdisc_dataset(dataset_name = \"adlb\", name = \"latest\")"
   )
   testthat::expect_equal(
     get_code(data, "ADSAMP"),
-    "library(package = \"random.cdisc.data\")\nADSL <- radsl(N = 1)\nADVS <- radvs(ADSL = ADSL)\nADSAMP <- source(file = \"delayed_data_script/asdamp_with_adsl.R\", local = TRUE)$value" # nolint
+    paste0("library(package = \"teal\")\n",
+      "ADSL <- synthetic_cdisc_dataset(dataset_name = \"adsl\", name = \"latest\")\n",
+      "ADVS <- synthetic_cdisc_dataset(dataset_name = \"advs\", name = \"latest\")\n",
+      "ADSAMP <- source(file = \"delayed_data_script/asdamp_with_adsl.R\", local = TRUE)$value"
+    )
   )
   testthat::expect_equal(
     get_code(data, "ADTTE"),
-    "library(package = \"random.cdisc.data\")\nADTTE <- radtte(cached = TRUE)"
+    "library(package = \"teal\")\nADTTE <- synthetic_cdisc_dataset(dataset_name = \"adtte\", name = \"latest\")"
   )
 
   # can the shiny app be initialized without error?
