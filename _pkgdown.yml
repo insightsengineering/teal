@@ -71,12 +71,12 @@ reference:
     - python_cdisc_dataset_connector
     - python_dataset_connector
     - raw_dataset_connector
-    - rcd_cdisc_dataset_connector
     - rds_cdisc_dataset_connector
     - rds_dataset_connector
     - relational_dataset_connector
     - rice_cdisc_dataset_connector
     - rice_dataset_connector
+    - scda_cdisc_dataset_connector
     - scda_dataset_connector
     - script_cdisc_dataset_connector
     - script_dataset_connector
