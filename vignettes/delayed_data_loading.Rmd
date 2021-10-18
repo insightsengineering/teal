@@ -145,7 +145,7 @@ code <- callable_code(
 cat(code$get_call())
 
 # assign ADSL to environment
-code$assign_to_env("ADSL", adsl)
+code$assign_to_env("ADSL", ADSL)
 
 # evaluate call
 df <- code$run()
@@ -169,7 +169,7 @@ library(magrittr)
 
 ADSL <- synthetic_cdisc_dataset(dataset_name = "adsl", name = "latest") %>% head(3) # nolint
 
-adsl <- cdisc_dataset(dataname = "ADSL",
+adsl_dataset <- cdisc_dataset(dataname = "ADSL",
                       x = ADSL,
                       code = "ADSL <- synthetic_cdisc_dataset(dataset_name = \"adsl\", name = \"latest\") %>% head(3)"
 )
@@ -246,7 +246,7 @@ adsl_2 <- dataset_connector(
     set_args(list(ADSL = as.name("ADSL"))),
   keys = get_cdisc_keys("ADSL"),
   label = "Example label",
-  vars = list(ADSL = adsl)
+  vars = list(ADSL = ADSL)
 )
 
 load_dataset(adsl_2)
@@ -266,7 +266,7 @@ adsl_3 <- dataset_connector(
     set_args(list(ADSL = as.name("ADSL"))),
   keys = get_cdisc_keys("ADSL"),
   label = "Example label",
-  vars = list(ADSL = adsl)
+  vars = list(ADSL = ADSL)
 )
 
 adsl_3$set_ui_input(function(ns) {
