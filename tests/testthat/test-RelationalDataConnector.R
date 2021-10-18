@@ -17,10 +17,10 @@ testthat::test_that("RelationalDataConnector with DataConnection", {
   adsl_cf <- callable_function(function() synthetic_cdisc_data("rcd_2021_05_05")$adsl)
   adlb_cf <- callable_function(function() synthetic_cdisc_data("rcd_2021_05_05")$adlb)
 
-  rcd1 <- cdisc_dataset_connector(dataname = "ADSL", adsl_cf, keys = get_cdisc_keys("ADSL"))
-  rcd2 <- cdisc_dataset_connector(dataname = "ADLB", adlb_cf, keys = get_cdisc_keys("ADLB"))
+  scda1 <- cdisc_dataset_connector(dataname = "ADSL", adsl_cf, keys = get_cdisc_keys("ADSL"))
+  scda2 <- cdisc_dataset_connector(dataname = "ADLB", adlb_cf, keys = get_cdisc_keys("ADLB"))
 
-  x <- RelationalDataConnector$new(connection = con, connectors = list(rcd1, rcd2))
+  x <- RelationalDataConnector$new(connection = con, connectors = list(scda1, scda2))
   testthat::expect_true(is(x, "RelationalDataConnector"))
 
   x$set_ui(function(id, ...) {

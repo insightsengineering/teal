@@ -37,14 +37,14 @@ vc_fun_short_exp <- structure(
   class = c("delayed_variable_choices", "delayed_data", "choices_labeled")
 )
 
-# Delayed data extract - single data connector with two rcd dataset connectors ----
+# Delayed data extract - single data connector with two scda dataset connectors ----
 get_continuous <- function(data) {
   # example function to show selections from delayed data
   idx <- vapply(data, function(x) is.numeric(x) && length(unique(x)) > 6, logical(1))
   colnames(data)[idx]
 }
 
-test_that("Delayed data extract - single data connector with two rcd dataset connectors", {
+test_that("Delayed data extract - single data connector with two scda dataset connectors", {
   adsl <- scda_cdisc_dataset_connector("ADSL", "adsl")
   adae <- scda_cdisc_dataset_connector("ADAE", "adae")
   data <- cdisc_data(adsl, adae)
@@ -91,9 +91,9 @@ test_that("Delayed data extract - single data connector with two rcd dataset con
   expect_identical(y_result, y_expected)
 })
 
-# Delayed choices selected - single data connector with two rcd dataset connectors ----
+# Delayed choices selected - single data connector with two scda dataset connectors ----
 
-test_that("Delayed choices selected - single data connector with two rcd dataset connectors", {
+test_that("Delayed choices selected - single data connector with two scda dataset connectors", {
 
   adsl <- scda_cdisc_dataset_connector("ADSL", "adsl")
   adae <- scda_cdisc_dataset_connector("ADAE", "adae")
@@ -188,8 +188,8 @@ test_that("Delayed data extract - filtered", {
   expect_identical(y_result, y_expected)
 })
 
-# Delayed extract filter concatenated - single data connector with two rcd dataset connectors ----
-test_that("Delayed extract filter concatenated - single data connector with two rcd dataset connectors", {
+# Delayed extract filter concatenated - single data connector with two scda dataset connectors ----
+test_that("Delayed extract filter concatenated - single data connector with two scda dataset connectors", {
   adsl <- scda_cdisc_dataset_connector("ADSL", "adsl")
   adrs <- scda_cdisc_dataset_connector("ADRS", "adrs")
   data <- teal_data(adsl, adrs)
@@ -293,8 +293,8 @@ test_that("Delayed extract filter concatenated - single data connector with two 
   expect_identical(y_result, y_expected)
 })
 
-# Delayed extract two filters - single data connector with two rcd dataset connectors ----
-test_that("Delayed extract two filters - single data connector with two rcd dataset connectors", {
+# Delayed extract two filters - single data connector with two scda dataset connectors ----
+test_that("Delayed extract two filters - single data connector with two scda dataset connectors", {
   adsl <- scda_cdisc_dataset_connector("ADSL", "adsl")
   adrs <- scda_cdisc_dataset_connector("ADRS", "adrs")
   data <- teal_data(adsl, adrs)

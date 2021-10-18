@@ -1,6 +1,6 @@
 library(scda)
 
-# Single rcd dataset connector ----
+# Single scda dataset connector ----
 testthat::test_that("Single scda dataset connector", {
   # create object
   adsl <- scda_cdisc_dataset_connector("ADSL", "adsl")
