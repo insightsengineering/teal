@@ -357,7 +357,7 @@ testthat::test_that("csv_dataset_connector attritubes", {
 })
 
 # test csv_cdisc_dataset_connector
-testthat::test_that("csv_cdisc_dataset_connector random.cdisc.data", {
+testthat::test_that("csv_cdisc_dataset_connector scda", {
   # create csv file
   ADSL <- synthetic_cdisc_dataset(dataset_name = "adsl", name = "latest") # nolint
   write.csv(ADSL, file = temp_file_csv, row.names = FALSE)

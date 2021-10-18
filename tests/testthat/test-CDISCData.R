@@ -1051,19 +1051,21 @@ testthat::test_that("List values", {
 })
 
 testthat::test_that("Keys in cached datasets", {
-  testthat::expect_true(all(get_cdisc_keys("ADSL") %in% names(random.cdisc.data::cadsl)))
+  scda_data <- scda::synthetic_cdisc_data("latest")
 
-  testthat::expect_true(all(get_cdisc_keys("ADAE") %in% names(random.cdisc.data::cadae)))
+  testthat::expect_true(all(get_cdisc_keys("ADSL") %in% names(scda_data$adsl)))
 
-  testthat::expect_true(all(get_cdisc_keys("ADTTE") %in% names(random.cdisc.data::cadtte)))
+  testthat::expect_true(all(get_cdisc_keys("ADAE") %in% names(scda_data$adae)))
 
-  testthat::expect_true(all(get_cdisc_keys("ADCM") %in% names(random.cdisc.data::cadcm)))
+  testthat::expect_true(all(get_cdisc_keys("ADTTE") %in% names(scda_data$adtte)))
 
-  testthat::expect_true(all(get_cdisc_keys("ADLB") %in% names(random.cdisc.data::cadlb)))
+  testthat::expect_true(all(get_cdisc_keys("ADCM") %in% names(scda_data$adcm)))
 
-  testthat::expect_true(all(get_cdisc_keys("ADRS") %in% names(random.cdisc.data::cadrs)))
+  testthat::expect_true(all(get_cdisc_keys("ADLB") %in% names(scda_data$adlb)))
 
-  testthat::expect_true(all(get_cdisc_keys("ADVS") %in% names(random.cdisc.data::cadvs)))
+  testthat::expect_true(all(get_cdisc_keys("ADRS") %in% names(scda_data$adrs)))
+
+  testthat::expect_true(all(get_cdisc_keys("ADVS") %in% names(scda_data$advs)))
 })
 
 testthat::test_that("Empty code", {
