@@ -34,7 +34,7 @@ library(teal.modules.general)
 library(teal.modules.clinical)
 library(scda)
 
-adsl <- synthetic_cdisc_data("latest")$adsl 
+adsl <- synthetic_cdisc_data("latest")$adsl
 adrs <- synthetic_cdisc_data("latest")$adrs
 adtte <- synthetic_cdisc_data("latest")$adtte
 

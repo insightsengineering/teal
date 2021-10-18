@@ -104,7 +104,7 @@ one has to use `$assign_to_env()` to copy object and
 ```{r}
 ADSL <- synthetic_cdisc_dataset(dataset_name = "adsl", name = "latest") # nolint
 
-fun <- callable_function(fun = function(ADSL){
+fun <- callable_function(fun = function(ADSL) {
   ADSL_2 <- ADSL
   ADSL_2$new_col <- TRUE
   ADSL_2
@@ -259,7 +259,7 @@ passing ui module function, with `ns` argument (shiny namespaced ID object).
 ```{r eval=FALSE}
 adsl_3 <- dataset_connector(
   dataname = "ADSL_3",
-  pull_callable = callable_function(fun = function(ADSL, n) ADSL_3 <- head(ADSL, n)) %>% 
+  pull_callable = callable_function(fun = function(ADSL, n) ADSL_3 <- head(ADSL, n)) %>%
     set_args(list(ADSL = as.name("ADSL"))),
   keys = get_cdisc_keys("ADSL"),
   label = "Example label",
@@ -316,7 +316,7 @@ rice_conn$set_open_args(list(username = "your username"))
 # open the rice connection
 rice_conn$open(args = list(password = "your password"))
 
-# check if open (open function evaluated successfuly)
+# check if open (open function evaluated successfully)
 rice_conn$is_opened()
 
 # check if open failed
@@ -375,7 +375,7 @@ together in a `RelationalDataConnector` object.
 # create DatasetConnectors
 adsl <- dataset_connector(
   dataname = "ADSL",
-  pull_callable = callable_function("synthetic_cdisc_dataset") %>% 
+  pull_callable = callable_function("synthetic_cdisc_dataset") %>%
     set_args(list(dataset_name = "adsl", name = "latest")),
   keys = get_cdisc_keys("ADSL"),
   label = "Subject-Level Analysis Dataset"
@@ -383,7 +383,7 @@ adsl <- dataset_connector(
 
 adsl_3 <- dataset_connector(
   dataname = "ADSL_3",
-  pull_callable = callable_function(fun = function(ADSL, name, n = 5) ADSL_3 <- head(ADSL, n)) %>% 
+  pull_callable = callable_function(fun = function(ADSL, name, n = 5) ADSL_3 <- head(ADSL, n)) %>%
     set_args(list(ADSL = as.name("ADSL"))),
   keys = get_cdisc_keys("ADSL"),
   label = "Example label",
@@ -401,7 +401,7 @@ connectors <- list(adsl, adsl_3)
 # create connection
 scda_open_fun <- callable_function(fun = library)
 scda_open_fun$set_args(list(package = "scda"))
-scda_conn <- teal:::DataConnection$new(open_fun = scda_open_fun)  # nolint
+scda_conn <- teal:::DataConnection$new(open_fun = scda_open_fun) # nolint
 
 # create DataConnector
 data <- teal:::RelationalDataConnector$new(

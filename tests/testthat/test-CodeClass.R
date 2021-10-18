@@ -27,7 +27,8 @@ cc$set_code("ADSL_2$a <- baz()", "ADSL_2")
 test_that("example datasets", {
   expect_identical(
     cc$get_code("ADSL"),
-    "foo <- function() {\n    1\n}\nfoo2 <- function() {\n    2\n}\nADSL <- synthetic_cdisc_data(\"latest\")$adsl\nADSL$var <- 1\nADSL$a <- foo()"
+    paste0("foo <- function() {\n    1\n}\nfoo2 <- function() {\n    2\n}\n",
+           "ADSL <- synthetic_cdisc_data(\"latest\")$adsl\nADSL$var <- 1\nADSL$a <- foo()")
   )
 })
 
@@ -62,7 +63,8 @@ x$append(x2)
 test_that("CodeClass append", {
   expect_identical(x$get_code(), paste0(c(x1$get_code(), x2$get_code()), collapse = "\n"))
   expect_identical(x$get_code(deparse = FALSE), append(x1$get_code(deparse = FALSE), x2$get_code(deparse = FALSE)))
-  expect_identical(x$get_code(c("ADSL", "ADSL_2")), paste0(c(x$get_code("ADSL"), x2$get_code("ADSL_2")), collapse = "\n"))
+  expect_identical(x$get_code(c("ADSL", "ADSL_2")),
+    paste0(c(x$get_code("ADSL"), x2$get_code("ADSL_2")), collapse = "\n"))
 })
 
 
@@ -74,7 +76,8 @@ x$append(x3)
 test_that("CodeClass append deps", {
   expect_identical(
     x$get_code(),
-    "ADSL <- synthetic_cdisc_data(\"latest\")$adsl\nADSL_2 <- head(ADSL, 5)\nADRS <- synthetic_cdisc_data(\"latest\")$adrs"
+    paste0("ADSL <- synthetic_cdisc_data(\"latest\")$adsl\nADSL_2 <- head(ADSL, 5)\n",
+      "ADRS <- synthetic_cdisc_data(\"latest\")$adrs")
   )
 })
 
@@ -84,7 +87,8 @@ x$set_code("", "ADRS")
 test_that("CodeClass append deps", {
   expect_identical(
     x$get_code("ADRS"),
-    "ADSL <- synthetic_cdisc_data(\"latest\")$adsl\nADRS <- synthetic_cdisc_data(\"latest\")$adrs\nADRS$x <- foo(ADSL$x)\n"
+    paste0("ADSL <- synthetic_cdisc_data(\"latest\")$adsl\nADRS <- synthetic_cdisc_data(\"latest\")$adrs\n",
+      "ADRS$x <- foo(ADSL$x)\n")
   )
   expect_equal(x$get_code("ADRS", deparse = FALSE), list(
     rlang::expr(ADSL <- synthetic_cdisc_data("latest")$adsl), # nolint
