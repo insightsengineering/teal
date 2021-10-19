@@ -60,6 +60,7 @@ safeBookmarkableShinyApp <- function(..., execute_app = execute_like_interactive
 ```{r createDatasets, eval=FALSE}
 # Create the datasets 
 
+# nolint start
 ADSL <- data.frame(
   STUDYID = "ABC123", 
   USUBJID = factor(1:100), 
@@ -114,8 +115,7 @@ ADLB$PARAMCD <- rep(paste0("ALT", 1:8), 25)
 ADLB$AVISIT <- rep(c("SCREENING", "BASELINE", "WEEK 1 DAY 8", "WEEK 2 DAY 15"), 50)  
 ADLB$ASEQ <-  rep(1:20, 10)'
 
-
-
+# nolint end
 adsl <- cdisc_dataset(dataname = "ADSL", x = ADSL, code = ADSL_code)
 adae <- cdisc_dataset(dataname = "ADAE", x = ADAE, code = ADAE_code, vars = list(ADSL = adsl))
 adlb <- cdisc_dataset(dataname = "ADLB", x = ADLB, code = ADLB_code, vars = list(ADSL = adsl))
