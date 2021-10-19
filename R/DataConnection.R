@@ -49,15 +49,15 @@ DataConnection <- R6::R6Class( # nolint
     initialize = function(open_fun = NULL, close_fun = NULL, ping_fun = NULL, if_conn_obj = FALSE) {
       stopifnot(is_logical_single(if_conn_obj))
       if (!is.null(open_fun)) {
-        # stopifnot(is(open_fun, "CallableFunction"))
+        stopifnot(is(open_fun, "Callable"))
         private$set_open_fun(open_fun)
       }
       if (!is.null(close_fun)) {
-        # stopifnot(is(close_fun, "CallableFunction"))
+        stopifnot(is(close_fun, "Callable"))
         private$set_close_fun(close_fun)
       }
       if (!is.null(ping_fun)) {
-        # stopifnot(is(ping_fun, "CallableFunction"))
+        stopifnot(is(ping_fun, "Callable"))
         private$set_ping_fun(ping_fun)
       }
       private$if_conn_obj <- if_conn_obj
@@ -598,7 +598,7 @@ DataConnection <- R6::R6Class( # nolint
 #' @export
 data_connection <- function(open_fun = NULL, close_fun = NULL, ping_fun = NULL, if_conn_obj = FALSE) {
   DataConnection$new(
-    open_fun = NULL, close_fun = NULL, ping_fun = NULL, if_conn_obj = FALSE
+    open_fun = open_fun, close_fun = close_fun, ping_fun = ping_fun, if_conn_obj = if_conn_obj
   )
 }
 
