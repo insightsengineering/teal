@@ -251,7 +251,7 @@ testthat::test_that("csv_dataset_connector scda", {
   testthat::expect_true(is.data.frame(data))
   testthat::expect_identical(nrow(data), nrow(adsl))
   testthat::expect_identical(ncol(data), ncol(adsl))
-  testthat::expect_identical(colnames(data), colnames(ADSL))
+  testthat::expect_identical(colnames(data), colnames(adsl))
 
   # next check can pass arguments to read_delim (using '\t')
   write.table(adsl, file = temp_file_csv, row.names = FALSE, sep = "\t")

@@ -256,8 +256,8 @@ test_that("delayed filter_spec works", {
 
 
 scda_data <- synthetic_cdisc_data("latest")
-adsl <- scda_data$adsl # nolint
-adtte <- scda_data$adtte # nolint
+adsl <- scda_data$adsl
+adtte <- scda_data$adtte
 data <- cdisc_data(
   cdisc_dataset("ADSL", adsl),
   cdisc_dataset("ADTTE", adtte)
@@ -328,9 +328,9 @@ testthat::test_that("delayed version of filter_spec", {
 
   res_obj <- isolate(resolve_delayed(obj, datasets = ds))
   exp_obj <- filter_spec(
-    vars = variable_choices(ADSL, subset = "ARMCD"),
-    choices = value_choices(ADSL, var_choices = "ARMCD", var_label = "ARM", subset = c("ARM A", "ARM B")),
-    selected = value_choices(ADSL, var_choices = "ARMCD", var_label = "ARM", subset = "ARM A"),
+    vars = variable_choices(adsl, subset = "ARMCD"),
+    choices = value_choices(adsl, var_choices = "ARMCD", var_label = "ARM", subset = c("ARM A", "ARM B")),
+    selected = value_choices(adsl, var_choices = "ARMCD", var_label = "ARM", subset = "ARM A"),
     multiple = FALSE
   )
 
