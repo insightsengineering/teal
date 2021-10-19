@@ -248,7 +248,7 @@ testthat::test_that("two datasets / datasets code", {
     cdisc_data(
       adsl,
       adtte,
-      code = "ADSL <- synthetic_cdisc_data(\"latest\")$adsl\nADTTE <- synthetic_cdisc_data(\"rlatest\")$adtte", #nolint
+      code = "ADSL <- synthetic_cdisc_data(\"latest\")$adsl\nADTTE <- synthetic_cdisc_data(\"latest\")$adtte", #nolint
       check = TRUE
     )
   )
