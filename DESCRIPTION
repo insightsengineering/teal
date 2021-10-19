@@ -58,7 +58,6 @@ Suggests:
   reticulate,
   rmarkdown,
   scda,
-  tern (>= 0.7.5),
   test.nest (>= 0.2.11),
   testthat (>= 2.0)
 VignetteBuilder: knitr
