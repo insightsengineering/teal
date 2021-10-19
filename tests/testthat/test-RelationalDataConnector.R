@@ -62,8 +62,8 @@ testthat::test_that("RelationalDataConnector$print prints out expected output on
   testthat::expect_equal(
     out,
     c(paste0(
-        "A currently not yet opened CDISCDataConnector object containing ",
-        "2 Dataset/DatasetConnector object(s) as element(s)."
+      "A currently not yet opened CDISCDataConnector object containing ",
+      "2 Dataset/DatasetConnector object(s) as element(s)."
       ),
       "0 of which is/are loaded/pulled:",
       "--> Element 1:",

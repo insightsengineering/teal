@@ -43,3 +43,14 @@ testthat::test_that("data connection", {
   )
   testthat::expect_false(con$is_opened())
 })
+
+testthat::test_that("data_connection returns a DataConnection object on basic input", {
+  open_fun <- callable_function(data.frame)
+  open_fun$set_args(list(x = 1:5))
+
+  close_fun <- callable_function(data.frame)
+  close_fun$set_args(list(x = 1:2))
+
+  con <- data_connection(open_fun = open_fun, close_fun = close_fun)
+  testthat::expect_true(is(con, c("DataConnection", "R6" )))
+})
