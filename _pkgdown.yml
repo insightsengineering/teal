@@ -141,7 +141,6 @@ reference:
     contents:
     - bookmarkableShinyApp
     - bookmark_module
-    - check_pkg_quietly
     - data_label
     - data_label<-
     - debug_browser_module
@@ -234,6 +233,7 @@ reference:
     contents:
     - check_in_range
     - check_in_subset
+    - check_pkg_quietly
     - code_exclude
     - code_from_script
     - enclosed_with
