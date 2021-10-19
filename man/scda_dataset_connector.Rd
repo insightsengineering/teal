@@ -7,7 +7,7 @@
 \usage{
 scda_dataset_connector(
   dataname,
-  scda_dataname,
+  scda_dataname = tolower(dataname),
   scda_name = "latest",
   keys = character(0),
   label = character(0),
@@ -17,7 +17,7 @@ scda_dataset_connector(
 
 scda_cdisc_dataset_connector(
   dataname,
-  scda_dataname,
+  scda_dataname = tolower(dataname),
   scda_name = "latest",
   keys = get_cdisc_keys(dataname),
   parent = if (identical(dataname, "ADSL")) character(0L) else "ADSL",

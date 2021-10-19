@@ -293,7 +293,7 @@ cdisc_dataset_connector_file <- function(path) { # nolint # nousage
 #' get_dataset(x)
 #' x$get_raw_data()
 scda_dataset_connector <- function(dataname,
-                                   scda_dataname,
+                                   scda_dataname = tolower(dataname),
                                    scda_name = "latest",
                                    keys = character(0),
                                    label = character(0),
@@ -303,6 +303,9 @@ scda_dataset_connector <- function(dataname,
   check_pkg_quietly("scda", "scda package not available.")
   stopifnot(utils.nest::is_character_single(scda_dataname))
   stopifnot(utils.nest::is_character_single(scda_name))
+  if (scda_dataname == "latest") {
+    stop("scda_dataname should be a datset name e.g 'adsl' not 'latest'")
+  }
 
   x <- fun_dataset_connector(
     dataname = dataname,
@@ -329,7 +332,7 @@ scda_dataset_connector <- function(dataname,
 #'
 #' @export
 scda_cdisc_dataset_connector <- function(dataname,
-                                         scda_dataname,
+                                         scda_dataname = tolower(dataname),
                                          scda_name = "latest",
                                          keys = get_cdisc_keys(dataname),
                                          parent = `if`(identical(dataname, "ADSL"), character(0L), "ADSL"),
