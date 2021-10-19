@@ -37,6 +37,7 @@
 #'     ns <- NS(id)
 #'     tagList(
 #'       connection$get_open_ui(ns("open_connection")),
+#'       textInput(ns("name"), p("Choose", code("scda data version")), value = "latest"),
 #'       do.call(
 #'         what = "tagList",
 #'         args = lapply(
@@ -64,6 +65,7 @@
 #'     )
 #'     if (connection$is_opened()) {
 #'       for (connector in connectors) {
+#'         set_args(connector, args = list(name = input$name))
 #'         # pull each dataset
 #'         callModule(connector$get_server(), id = connector$get_dataname())
 #'         if (connector$is_failed()) {
