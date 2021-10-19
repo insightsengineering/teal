@@ -248,7 +248,7 @@ testthat::test_that("two datasets / datasets code", {
     cdisc_data(
       adsl,
       adtte,
-      code = "ADSL <- synthetic_cdisc_data(\"rcd_2021_05_05\")$adsl\nADTTE <- synthetic_cdisc_data(\"rcd_2021_05_05\")$adtte", #nolint
+      code = "ADSL <- synthetic_cdisc_data(\"latest\")$adsl\nADTTE <- synthetic_cdisc_data(\"rlatest\")$adtte", #nolint
       check = TRUE
     )
   )
@@ -1102,7 +1102,7 @@ testthat::test_that("Error - ADSL is missing in cdisc_data", {
   testthat::expect_error({
     x <- cdisc_data(
       cdisc_dataset("ADTTE", adtte_raw),
-      code = "ADTTE <- synthetic_cdisc_data(\"rcd_2021_05_05\")$adtte", check = FALSE
+      code = "ADTTE <- synthetic_cdisc_data(\"latest\")$adtte", check = FALSE
     )
     x$check_metadata()
   },

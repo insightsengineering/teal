@@ -181,7 +181,7 @@ test_that("filter_spec_internal", {
 })
 
 test_that("filter_spec_internal contains dataname", {
-  ADSL <- synthetic_cdisc_data("rcd_2021_05_05")$adsl # nolint
+  ADSL <- synthetic_cdisc_data("latest")$adsl # nolint
 
   x_filter <- filter_spec_internal(
     vars_choices = variable_choices(ADSL)
