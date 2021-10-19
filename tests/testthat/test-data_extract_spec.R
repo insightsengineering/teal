@@ -204,8 +204,8 @@ test_that("delayed data_extract_spec works", {
 })
 
 scda_data <- synthetic_cdisc_data("latest")
-adsl <- scda_data$adsl # nolint
-adtte <- scda_data$adtte # nolint
+adsl <- scda_data$adsl
+adtte <- scda_data$adtte
 data <- cdisc_data(
   cdisc_dataset("ADSL", adsl),
   cdisc_dataset("ADTTE", adtte)

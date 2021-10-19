@@ -256,11 +256,11 @@ test_that("delayed filter_spec works", {
 
 
 scda_data <- synthetic_cdisc_data("latest")
-ADSL <- scda_data$adsl # nolint
-ADTTE <- scda_data$adtte # nolint
+adsl <- scda_data$adsl # nolint
+adtte <- scda_data$adtte # nolint
 data <- cdisc_data(
-  cdisc_dataset("ADSL", ADSL),
-  cdisc_dataset("ADTTE", ADTTE)
+  cdisc_dataset("ADSL", adsl),
+  cdisc_dataset("ADTTE", adtte)
 )
 
 ds <- teal:::CDISCFilteredData$new()

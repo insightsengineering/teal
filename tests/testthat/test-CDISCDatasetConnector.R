@@ -6,9 +6,7 @@ testthat::test_that("Single scda dataset connector", {
   adsl <- scda_cdisc_dataset_connector("ADSL", "adsl")
   default_ui <- adsl$get_ui("main-app")
   adsl$set_ui_input(function(ns) {
-    list(
-      textInput(inputId = ns("name"), label = "scda name", value = "latest")
-    )
+    list(textInput(inputId = ns("name"), label = "scda name", value = "latest"))
   }
   )
   set_ui <- adsl$get_ui("main-app")
@@ -34,7 +32,5 @@ testthat::test_that("Single scda dataset connector", {
   testthat::expect_s3_class(get_raw_data(adsl), "data.frame")
 
   # check reproducible code
-  testthat::expect_equal(
-    get_code(adsl), 'ADSL <- synthetic_cdisc_dataset(dataset_name = "adsl", name = "latest")'
-  )
+  testthat::expect_equal(get_code(adsl), 'ADSL <- synthetic_cdisc_dataset(dataset_name = "adsl", name = "latest")')
 })

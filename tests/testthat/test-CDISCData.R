@@ -1050,7 +1050,7 @@ testthat::test_that("List values", {
   test_relational_data_equal(result, result_to_compare)
 })
 
-testthat::test_that("Keys in cached datasets", {
+testthat::test_that("get_cdisc_keys returns column names present in the cached datasets", {
   scda_data <- scda::synthetic_cdisc_data("latest")
 
   testthat::expect_true(all(get_cdisc_keys("ADSL") %in% names(scda_data$adsl)))
