@@ -397,3 +397,19 @@ RelationalDataConnector <- R6::R6Class( #nolint
     }
   )
 )
+
+#' Public facing object constructor for \code{RelationalDataConnector} class.
+#'
+#' @param connection (\code{DataConnection})\cr
+#'   connection to data source
+#' @param connectors (\code{list} of \code{DatasetConnector} elements)\cr
+#'   list with dataset connectors
+#'
+#' @return \code{RelationalDataConnector} object
+#' @export
+relational_data_connector <- function(connection, connectors) {
+  stopifnot(is(connection, "DataConnection"))
+  stopifnot(is_class_list( "CDISCDatasetConnector")(connectors))
+
+  RelationalDataConnector$new(connection, connectors)
+}
