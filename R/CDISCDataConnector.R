@@ -67,7 +67,7 @@ CDISCDataConnector <- R6::R6Class( #nolint
 #' @export
 cdisc_data_connector <- function(connection, connectors) {
   stopifnot(is(connection, "DataConnection"))
-  stopifnot(is_class_list( "CDISCDatasetConnector")(connectors))
+  stopifnot(is_class_list("CDISCDatasetConnector")(connectors))
 
   CDISCDataConnector$new(connection, connectors)
 }
