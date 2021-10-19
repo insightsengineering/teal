@@ -58,7 +58,7 @@ safeBookmarkableShinyApp <- function(..., execute_app = execute_like_interactive
 ```
 
 ```{r createDatasets, eval=FALSE}
-# Create the datasets 
+# Create the datasets
 
 # nolint start
 ADSL <- data.frame(
