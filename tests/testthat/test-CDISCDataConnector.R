@@ -154,9 +154,9 @@ testthat::test_that("cdisc_data_connector returns a CDISCDataConnector object on
 
 testthat::test_that("cdisc_data_connector has input validation", {
   testthat::expect_error(cdisc_data_connector(
-    connection= 1,
+    connection = 1,
     connectors = list(adsl, adae)))
   testthat::expect_error(cdisc_data_connector(
-    connection=  DataConnection$new(open_fun = CallableFunction$new(function() "open function")),
+    connection =  DataConnection$new(open_fun = CallableFunction$new(function() "open function")),
     connectors = "a"))
 })

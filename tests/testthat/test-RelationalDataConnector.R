@@ -85,9 +85,9 @@ testthat::test_that("relational_data_connector returns a RelationalDataConnector
 
 testthat::test_that("relational_data_connector has input validation", {
   testthat::expect_error(cdisc_data_connector(
-    connection= 1,
+    connection = 1,
     connectors = list(adsl, adae)))
   testthat::expect_error(cdisc_data_connector(
-    connection=  DataConnection$new(open_fun = CallableFunction$new(function() "open function")),
+    connection =  DataConnection$new(open_fun = CallableFunction$new(function() "open function")),
     connectors = "a"))
 })
