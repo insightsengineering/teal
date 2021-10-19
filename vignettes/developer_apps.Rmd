@@ -198,7 +198,7 @@ This app tests that the app works with delayed data that is not available initia
 ```{r delayedDataApp, eval=FALSE}
 app <- init(
   data = cdisc_data(
-    
+    code_cdisc_dataset_connector("ADSL", code = adsl_code)
   ),
   modules = root_modules(
     teal:::filter_calls_module("ADSL", active_datanames = c("ADSL")),
