@@ -148,7 +148,7 @@ testthat::test_that("The hashes of Datasets objects are correct after mutating t
   testthat::expect_equal(rd$get_dataset("iris")$get_hash(), mutated_iris_hash)
 })
 
-# Multiple rcd_data connectors ----
+# Multiple connectors ----
 testthat::test_that("Multiple connectors wrapped in cdisc_data", {
 
   example_data_connector <- function(...) {
