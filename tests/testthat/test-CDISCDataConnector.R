@@ -1,8 +1,9 @@
+adsl_cf <- CallableFunction$new(function() as.data.frame(as.list(setNames(nm = get_cdisc_keys("ADSL")))))
+adae_cf <- CallableFunction$new(function() as.data.frame(as.list(setNames(nm = get_cdisc_keys("ADAE")))))
+adsl  <- CDISCDatasetConnector$new("ADSL", adsl_cf, keys = get_cdisc_keys("ADSL"), parent = character(0))
+adae <- CDISCDatasetConnector$new("ADAE", adae_cf, keys = get_cdisc_keys("ADAE"), parent = "ADSL")
+
 testthat::test_that("get_code returns the correct code for two CDISCDatasetConnector objects", {
-  adsl_cf <- CallableFunction$new(function() as.data.frame(as.list(setNames(nm = get_cdisc_keys("ADSL")))))
-  adae_cf <- CallableFunction$new(function() as.data.frame(as.list(setNames(nm = get_cdisc_keys("ADAE")))))
-  adsl  <- CDISCDatasetConnector$new("ADSL", adsl_cf, keys = get_cdisc_keys("ADSL"), parent = character(0))
-  adae <- CDISCDatasetConnector$new("ADAE", adae_cf, keys = get_cdisc_keys("ADAE"), parent = "ADSL")
   data <- CDISCDataConnector$new(
     connection = DataConnection$new(open_fun = CallableFunction$new(function() "open function")),
     connectors = list(adsl, adae)
@@ -141,4 +142,21 @@ testthat::test_that("RelationalDataConnector with custom UI and server", {
       sep = "\n"
     )
   )
+})
+
+testthat::test_that("cdisc_data_connector returns a CDISCDataConnector object on basic input", {
+  data <- cdisc_data_connector(
+    connection = DataConnection$new(open_fun = CallableFunction$new(function() "open function")),
+    connectors = list(adsl, adae)
+  )
+  testthat::expect_true(is(data, c("CDISCDataConnector", "RelationalDataConnector", "DataAbstract", "R6")))
+})
+
+testthat::test_that("cdisc_data_connector has input validation", {
+  testthat::expect_error(cdisc_data_connector(
+    connection= 1,
+    connectors = list(adsl, adae)))
+  testthat::expect_error(cdisc_data_connector(
+    connection=  DataConnection$new(open_fun = CallableFunction$new(function() "open function")),
+    connectors = "a"))
 })

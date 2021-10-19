@@ -307,7 +307,7 @@ code_from_script <- function(code, script, dataname = NULL) {
   }
 
   return(code)
-  }
+}
 
 #' Read .R file into character
 #'

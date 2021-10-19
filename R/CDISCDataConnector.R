@@ -55,3 +55,19 @@ CDISCDataConnector <- R6::R6Class( #nolint
     parent = list() # list with dataset names and its parent dataset names
   )
 )
+
+#' Public facing object constructor for \code{CDISCDataConnector} class.
+#'
+#' @param connection (\code{DataConnection})\cr
+#'   connection to data source
+#' @param connectors (\code{list} of \code{DatasetConnector} elements)\cr
+#'   list with dataset connectors
+#'
+#' @return \code{CDISCDataConnector} object
+#' @export
+cdisc_data_connector <- function(connection, connectors) {
+  stopifnot(is(connection, "DataConnection"))
+  stopifnot(is_class_list( "CDISCDatasetConnector")(connectors))
+
+  CDISCDataConnector$new(connection, connectors)
+}
