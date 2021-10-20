@@ -16,7 +16,7 @@
 #'
 #' ping_fun <- callable_function(function() TRUE)
 #'
-#' x <- teal:::DataConnection$new( # define connection
+#' x <- data_connection( # define connection
 #'   ping_fun = ping_fun, # define ping function
 #'   open_fun = open_fun, # define opening function
 #'   close_fun = close_fun) # define closing function

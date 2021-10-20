@@ -22,7 +22,7 @@
 #' open_fun <- callable_function(library)
 #' open_fun$set_args(list(package = "scda"))
 #'
-#' con <- teal:::DataConnection$new(open_fun = open_fun)
+#' con <- data_connection(open_fun = open_fun)
 #' con$set_open_server(
 #'   function(input, output, session, connection) {
 #'     connection$open(try = TRUE)
@@ -462,7 +462,7 @@ RelationalDataConnector <- R6::R6Class( #nolint
 #' open_fun <- callable_function(library)
 #' open_fun$set_args(list(package = "scda"))
 #'
-#' con <- teal:::DataConnection$new(open_fun = open_fun)
+#' con <- data_connection(open_fun = open_fun)
 #' con$set_open_server(
 #'   function(input, output, session, connection) {
 #'     connection$open(try = TRUE)

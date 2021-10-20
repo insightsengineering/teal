@@ -28,7 +28,7 @@ adlb <- scda_cdisc_dataset_connector(dataname = "ADLB", "adlb")
 open_fun <- callable_function(library)
 open_fun$set_args(list(package = "scda"))
 
-con <- teal:::DataConnection$new(open_fun = open_fun)
+con <- data_connection(open_fun = open_fun)
 con$set_open_server(
   function(input, output, session, connection) {
     connection$open(try = TRUE)

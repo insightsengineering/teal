@@ -80,8 +80,8 @@ get_raw_data.DatasetConnector <- function(x, dataname = NULL) { # nolint
 #'                                 pull_callable = adlb_cf,
 #'                                 keys = get_cdisc_keys("ADLB"))
 #'
-#' rdc <- teal:::RelationalDataConnector$new(
-#'   connection = teal:::DataConnection$new(),
+#' rdc <- relational_data_connector(
+#'   connection = data_connection,
 #'   connectors = list(adsl, adlb)
 #' )
 #'
