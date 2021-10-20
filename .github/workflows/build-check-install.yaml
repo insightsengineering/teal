@@ -136,6 +136,11 @@ jobs:
         env:
           GITHUB_PAT: ${{ secrets.REPO_GITHUB_TOKEN }} # or ${{ secrets.GITHUB_TOKEN }}
 
+      - name: Installed packages
+        run: |
+          Rscript -e 'sessionInfo();as.data.frame(installed.packages()[,c("LibPath","Version")])'
+        shell: bash
+
       - name: Build R package
         run: |
           R CMD build ${{ github.event.repository.name }}
