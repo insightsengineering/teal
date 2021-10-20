@@ -603,58 +603,6 @@ data_connection <- function(open_fun = NULL, close_fun = NULL, ping_fun = NULL, 
 }
 
 # DataConnection wrappers ----
-#' Open connection to `random.cdisc.data`
-#'
-#' @description `r lifecycle::badge("experimental")`
-#'
-#' @param open_args optional, named (`list`) of additional parameters for \code{\link{library}} open
-#'   function such as `quietly.` Please note that the `package` argument will be overwritten
-#'   with `random.cdisc.data`.
-#'
-#' @return (`DataConnection`) type of object.
-#'
-#' @export
-rcd_connection <- function(open_args = list()) {
-
-  check_pkg_quietly("random.cdisc.data", "random.cdisc.data package not available.")
-
-  stopifnot(is_fully_named_list(open_args))
-  stopifnot(all(names(open_args) %in% names(formals(library))))
-
-  open_fun <- callable_function(library)
-
-  open_args$package <- "random.cdisc.data"
-  open_fun$set_args(open_args)
-
-  x <- DataConnection$new(open_fun = open_fun)
-
-  # open connection
-  x$set_open_server(
-    function(input, output, session, connection) {
-      connection$open(try = TRUE)
-
-      if (connection$is_open_failed()) {
-        shinyjs::alert(
-          paste(
-            "Error opening rcd connection\nError message: ",
-            connection$get_open_error_message()
-          )
-        )
-      }
-
-      # we want the connection closed (if it's opened) when the user shiny session ends
-      session$onSessionEnded(function() {
-        suppressWarnings(connection$close(silent = TRUE, try = TRUE))
-      })
-
-      return(invisible(connection))
-    }
-  )
-
-  return(x)
-}
-
-
 #' Open connection to `entimICE` via `rice`
 #'
 #' @description `r lifecycle::badge("experimental")`

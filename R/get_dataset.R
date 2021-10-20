@@ -5,7 +5,7 @@
 #' Get dataset from \code{DatasetConnector}
 #' @param x (`DatasetConnector` or `DatasetConnector` or `DataAbstract`)
 #' @param dataname \code{character} a name of dataset to be retrieved
-#'
+#' @details See `help(RelationalDataConnector)` and `help(RelationalData)` for more complex examples.
 #' @return (`Dataset`)
 #' @export
 get_dataset <- function(x, dataname) {
@@ -58,7 +58,6 @@ get_dataset.Dataset <- function(x, dataname = NULL) { # nolint
 #'
 #' # RelationalData  (not containing connectors) --------
 #' library(scda)
-#' library(random.cdisc.data)
 #' adsl <- cdisc_dataset(dataname = "ADSL",
 #'                       x = synthetic_cdisc_data("latest")$adsl,
 #'                       code = "library(scda)\nADSL <- synthetic_cdisc_data(\"latest\")$adsl")
@@ -70,25 +69,6 @@ get_dataset.Dataset <- function(x, dataname = NULL) { # nolint
 #' rd <- teal:::RelationalData$new(adsl, adae)
 #' get_dataset(rd, "ADSL")
 #'
-#' # RelationalDataConnector --------
-#' rdc <- rcd_data(
-#'   rcd_cdisc_dataset_connector("ADSL", radsl, cached = TRUE),
-#'   rcd_cdisc_dataset_connector("ADTTE", radtte, cached = TRUE)
-#' )
-#'
-#'\dontrun{
-#' get_dataset(rdc, dataname = "ADSL")
-#' load_datasets(rdc)
-#' get_datasets(rdc)
-#' get_dataset(rdc, dataname = "ADSL")
-#'}
-#'
-#' # RelationalData (containing connectors) --------
-#' rd <- cdisc_data(rdc, adae)
-#'
-#'\dontrun{
-#' get_dataset(rd, "ADSL")
-#' }
 get_dataset.DataAbstract <- function(x, dataname = NULL) {
   if (is.null(dataname)) {
     stop(paste("To get single dataset from data class one must specify the name of the dataset.",

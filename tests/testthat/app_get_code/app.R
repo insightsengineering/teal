@@ -12,15 +12,15 @@ source("app_source2.R")
 
 x <- teal::init(
   data = cdisc_data(
-    ADSL = ADSL,
-    ADTTE = ADTTE,
+    ADSL = adsl,
+    ADTTE = adtte,
     code = get_code("app.R", exclude_comments = TRUE),
     check = TRUE
   ),
   modules = root_modules(
       tm_made_up_lm(
       label = "Regression",
-      dataname = c("ADSL", "ADTTE"),
+      dataname = c("adsl", "adtte"),
       response = list(adtte_extracted),
       regressor = list(
         adsl_extracted,

@@ -99,7 +99,7 @@ line_usage_log <- function(...) {
 #' }
 line_pkg_log <- function(fields) {
   nest_packages <- c(
-    "test.nest", "utils.nest", "devtools.nest", "random.cdisc.data", "rtables",
+    "test.nest", "utils.nest", "devtools.nest", "rtables",
     "tern", "teal", "teal.devel", "teal.modules.general", "teal.modules.clinical",
     "oosprey", "teal.osprey", "goshawk", "teal.goshawk", "tlgdown")
   pkg_desc <- utils::sessionInfo()$otherPkgs

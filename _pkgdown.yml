@@ -1,4 +1,3 @@
-
 url: https://insightsengineering.github.io/teal
 
 template:
@@ -74,14 +73,14 @@ reference:
     - python_cdisc_dataset_connector
     - python_dataset_connector
     - raw_dataset_connector
-    - rcd_cdisc_dataset_connector
-    - rcd_dataset_connector
     - rds_cdisc_dataset_connector
     - rds_dataset_connector
     - relational_data_connector
     - relational_dataset_connector
     - rice_cdisc_dataset_connector
     - rice_dataset_connector
+    - scda_cdisc_dataset_connector
+    - scda_dataset_connector
     - script_cdisc_dataset_connector
     - script_dataset_connector
     - snowflake_dataset_connector
@@ -92,7 +91,6 @@ reference:
     contents:
     - cdse_connection
     - datasetdb_connection
-    - rcd_connection
     - rice_connection
     - ricepass_connection
     - snowflake_connection
@@ -106,7 +104,6 @@ reference:
     - cdse_data
     - datasetdb_data
     - named_dataset_file
-    - rcd_data
     - rice_data
     - snowflake_data
     - teal_data
