@@ -61,17 +61,17 @@ a single `data.frame` object. `Data` is a collection of `Dataset` objects.
 This class won't be used often by the developers but it's essential for all
 connectors to store and execute R function with possibility to get code to
 reproduce function calls. In the example below and object of class `CallableFunction` is
-created which runs `radsl` function with arguments set before.
+created which runs `synthetic_cdisc_dataset` function with arguments set before.
 
 ```{r}
 library(teal)
-library(random.cdisc.data)
+library(scda)
 
 # initialize object
-fun <- callable_function(fun = radsl)
+fun <- callable_function(fun = synthetic_cdisc_dataset)
 
 # set arguments to function
-fun$set_args(list(cached = TRUE, na_percentage = 0.05))
+fun$set_args(list(dataset_name = "adsl", name = "latest"))
 
 # execute function with arguments set
 df <- fun$run()
@@ -88,29 +88,33 @@ stages of the documentation.
 
 ```{r}
 # add arguments on the fly
-df <- fun$run(args = list(seed = 1, na_percentage = 0.1, N = 3))
+df <- fun$run(args = list(dataset_name = "adae", name = "latest"))
 head(df)
 
 # dynamic arguments not reflected in the call
 cat(fun$get_call())
 ```
 
-`CallableFunction` can also depend on other R objects as the `radtte` function
+`CallableFunction` can also depend on other R objects as the example function below
 depends on `ADSL`. The function can be executed in specific environment where we can
 copy objects needed to execute call. To include object in the function call,
 one has to use `$assign_to_env()` to copy object and
 `$set_args(list(ADSL = as.symbol(ADSL)))` to link object with function argument.
 
 ```{r}
-ADSL <- radsl(cached = TRUE) # nolint
+ADSL <- synthetic_cdisc_dataset(dataset_name = "adsl", name = "latest") # nolint
 
-fun <- callable_function(fun = radtte)
+fun <- callable_function(fun = function(ADSL) { # nolint
+  ADSL_2 <- ADSL # nolint
+  ADSL_2$new_col <- TRUE
+  ADSL_2
+})
 
 # copy ADSL to CallableFunction environment
 fun$assign_to_env("ADSL", ADSL)
 
 # set arguments
-fun$set_args(args = list(ADSL = as.name("ADSL"), cached = TRUE))
+fun$set_args(args = list(ADSL = as.name("ADSL")))
 
 # execute function
 df <- fun$run()
@@ -132,10 +136,7 @@ below it is not allowed to make any changes in `ADSL`.
 
 ```{r}
 code <- callable_code(
-  "ADTTE <- radtte(
-    ADSL = head(ADSL, 3),
-    seed = 1
-  )
+  "ADTTE <- synthetic_cdisc_dataset(dataset_name = \"adtte\", name = \"latest\")
   ADTTE$x1 <- 1
   ADTTE <- dplyr::filter(ADTTE, PARAMCD %in% c('EFS', 'OS'))"
 )
@@ -165,11 +166,14 @@ allows datasets to have parents and is needed for CDISC analysis.
 
 ```{r}
 library(magrittr)
-ADSL <- radsl(cached = TRUE) %>% head(3) # nolint
 
-adsl <- cdisc_dataset(dataname = "ADSL",
+ADSL <- synthetic_cdisc_dataset(dataset_name = "adsl", name = "latest") %>% head(3) # nolint
+
+adsl_dataset <- cdisc_dataset(dataname = "ADSL",
                       x = ADSL,
-                      code = "ADSL <- radsl(cached = TRUE) %>% head(3)")
+                      code = "ADSL <- synthetic_cdisc_dataset(dataset_name = \"adsl\", name = \"latest\") %>% head(3)"
+)
+
 ```
 
 The object created above contains all previously defined attributes which can be
@@ -177,57 +181,57 @@ extracted in any occasion.
 
 ```{r}
 # check if code is reproducible
-get_dataname(adsl)
+get_dataname(adsl_dataset)
 
 # get label
-get_dataset_label(adsl)
+get_dataset_label(adsl_dataset)
 
 # get reproducible code
-get_code(adsl)
+get_code(adsl_dataset)
 
 # get data.frame
-get_raw_data(adsl)
+get_raw_data(adsl_dataset)
 
 # get keys (i.e. the primary keys of the dataset)
-adsl$get_keys()
+adsl_dataset$get_keys()
 ```
 
 ### `DatasetConnector` (including `CDISCDatasetConnector`)
 
 `DatasetConnector` contains `Callable` object to obtain a single dataset along
 with other information such as keys, dataname, label and reproducible code. In
-the code chunk below, connector is created basing on `radsl` function with
-prespecified `cached = TRUE` argument.
+the code chunk below, connector is created basing on `synthetic_cdisc_dataset`
+function
 
 ```{r}
-adsl <- dataset_connector(
+adsl_conn <- dataset_connector(
   dataname = "ADSL",
-  pull_callable = callable_function(radsl) %>% set_args(list(N = 3, seed = 1)),
+  pull_callable = callable_function("synthetic_cdisc_dataset") %>%
+    set_args(list(dataset_name = "adsl", name = "latest")),
   keys = get_cdisc_keys("ADSL"),
   label = "Subject-Level Analysis Dataset"
 )
 ```
 
-Initially, `adsl` doesn't contain any data, but they can be loaded using
-`load_dataset()` function. Before data loading, `adsl` contains reproducible
+Initially, `adsl_conn` doesn't contain any data, but they can be loaded using
+`load_dataset()` function. Before data loading, `adsl_conn` contains reproducible
 code which is also an execution code to pull the data.
 
 ```{r}
 # execution/reproducible code
-get_code(adsl)
+get_code(adsl_conn)
 
 # pull data
-load_dataset(adsl)
+load_dataset(adsl_conn)
 
 # get raw data
-get_raw_data(adsl)
+get_raw_data(adsl_conn)
 ```
 
 `teal` also allows other variables to be passed to the connector which `Callable` object
-can depend on. Let's think about `radlb(ADSL, ...)` function which requires
-`data.frame` (`ADSL`) as an argument. In the code below, one can add an `adsl`
+can depend on. In the code below, one can add an `adsl`
 object created above and `set_args` to `CallableFunction`. To properly link
-`ADSL` argument in `radlb` function several parameters have to match:
+`ADSL` argument several parameters have to match:
 1. `dataname` of `adsl` should be `"ADSL"`
 2. `vars = list(ADSL = adsl)` - `adsl` object should be passed to vars as a list
 element with name `ADSL`.
@@ -236,15 +240,16 @@ element with name `ADSL`.
 ```{r eval=TRUE}
 # here we use the general dataset_connector function which pulls an object of type Dataset
 # there is also a cdisc_dataset_connector function which pulls an object of type CDISCDataset
-adlb <- dataset_connector(
-  dataname = "ADLB",
-  pull_callable = callable_function(fun = radlb) %>% set_args(list(ADSL = as.name("ADSL"))),
-  keys = get_cdisc_keys("ADLB"),
-  label = "Laboratory Data Analysis Dataset",
-  vars = list(ADSL = adsl)
+adsl_2 <- dataset_connector(
+  dataname = "ADSL_2",
+  pull_callable = callable_function(fun = function(ADSL) ADSL_2 <- ADSL) %>% # nolint
+    set_args(list(ADSL = as.name("ADSL"))),
+  keys = get_cdisc_keys("ADSL"),
+  label = "Example label",
+  vars = list(ADSL = ADSL)
 )
 
-load_dataset(adlb)
+load_dataset(adsl_2)
 ```
 
 `DatasetConnector` like the other delayed data objects contains  a
@@ -255,28 +260,22 @@ datasets until we specify them. To set inputs we should use `$set_ui_input()`, b
 passing ui module function, with `ns` argument (shiny namespaced ID object).
 
 ```{r eval=FALSE}
-adtte <- dataset_connector(
-  dataname = "ADTTE",
-  pull_callable = callable_function(radtte) %>% set_args(list(ADSL = as.name("ADSL"))),
-  keys = get_cdisc_keys("ADTTE"),
-  label = "Laboratory Data Analysis Dataset",
-  vars = list(ADSL = adsl)
+adsl_3 <- dataset_connector(
+  dataname = "ADSL_3",
+  pull_callable = callable_function(fun = function(ADSL, n) ADSL_3 <- head(ADSL, n)) %>% # nolint
+    set_args(list(ADSL = as.name("ADSL"))),
+  keys = get_cdisc_keys("ADSL"),
+  label = "Example label",
+  vars = list(ADSL = ADSL)
 )
 
-adtte$set_ui_input(function(ns) {
+adsl_3$set_ui_input(function(ns) {
   list(
-    numericInput(inputId = ns("seed"), label = "Choose seed", min = 0, value = 1),
-    optionalSliderInput(inputId = ns("na_percentage"),
-                        label = "NA percentage",
-                        min = 0,
-                        max = 1,
-                        value = 0.5,
-                        step = 0.1)
+    numericInput(inputId = ns("n"), label = "Choose number of records", min = 0, value = 1)
   )
-  }
-)
+})
 
-adtte$launch()
+adsl_3$launch()
 ```
 
 ### `DataConnection`
@@ -320,7 +319,7 @@ rice_conn$set_open_args(list(username = "your username"))
 # open the rice connection
 rice_conn$open(args = list(password = "your password"))
 
-# check if open (open function evaluated successfuly)
+# check if open (open function evaluated successfully)
 rice_conn$is_opened()
 
 # check if open failed
@@ -379,28 +378,37 @@ together in a `RelationalDataConnector` object.
 # create DatasetConnectors
 adsl <- dataset_connector(
   dataname = "ADSL",
-  pull_callable = callable_code("radsl(N = 3, seed = 1)"),
+  pull_callable = callable_function("synthetic_cdisc_dataset") %>%
+    set_args(list(dataset_name = "adsl", name = "latest")),
   keys = get_cdisc_keys("ADSL"),
-  label = "ADSL"
+  label = "Subject-Level Analysis Dataset"
 )
 
-adlb <- dataset_connector(
-  dataname = "ADLB",
-  pull_callable = callable_function(radlb) %>% set_args(list(ADSL = as.name("ADSL"))),
-  keys = get_cdisc_keys("ADLB"),
-  label = "ADLB",
+adsl_3 <- dataset_connector(
+  dataname = "ADSL_3",
+  pull_callable = callable_function(fun = function(ADSL, name, n = 5) ADSL_3 <- head(ADSL, n)) %>% # nolint
+    set_args(list(ADSL = as.name("ADSL"))),
+  keys = get_cdisc_keys("ADSL"),
+  label = "Example label",
   vars = list(ADSL = adsl)
 )
-connectors <- list(adsl, adlb)
+
+adsl_3$set_ui_input(function(ns) {
+  list(
+    numericInput(inputId = ns("n"), label = "Choose number of records", min = 0, value = 1)
+  )
+})
+
+connectors <- list(adsl, adsl_3)
 
 # create connection
-rcd_open_fun <- callable_function(fun = library)
-rcd_open_fun$set_args(list(package = "random.cdisc.data"))
-rcd_conn <- teal:::DataConnection$new(open_fun = rcd_open_fun)  # nolint
+scda_open_fun <- callable_function(fun = library)
+scda_open_fun$set_args(list(package = "scda"))
+scda_conn <- teal:::DataConnection$new(open_fun = scda_open_fun) # nolint
 
 # create DataConnector
 data <- teal:::RelationalDataConnector$new(
-  connection = rcd_conn,
+  connection = scda_conn,
   connectors = connectors
 )
 ```
@@ -410,30 +418,30 @@ code to pull the datasets preceded by any open connection code and followed by
 any close connection code. Please note that `DataConnector` doesn't limit
 what kind of connectors are set within, but one must be aware that it should
 rather contain similar connectors (i.e. calling functions which share some arguments).
-For example, if we execute `data$set_pull_args(args = list(seed = 2))`, this
+For example, if we execute `data$set_pull_args(args = list(name = "latest"))`, this
 argument will be set for all connectors. In case when one connector contains
-`CallableFunction` which won't have `seed` in its formals then it will fail.
+`CallableFunction` which doesn't have `seed` in its formals then it will fail.
 `CallableCode` can't hold any additional arguments as it's fixed and it will
 ignore every arguments set with `set_pull_args`.
 
 ```{r}
 cat(get_code(data))
 
-# pull ADSL and ADLB
-data$set_pull_args(args = list(seed = 2))
+#pull ADSL and ADSL_3
+data$set_pull_args(args = list(name = "latest"))
 data$pull()
-get_code(data)
 ```
 
 By default `RelationalDataConnector` creates simple shiny module without any
 inputs for connectors and datasets. This means that connection opening/closing
 and pulling datasets are done on default arguments. However, users can easily
-extend the module using `rcd_data$set_ui()` and `rcd_data$set_server()` to specify
+extend the module using `set_ui()` and `set_server()` to specify
 the UI and server function themselves. The general rule for creating these modules is that callback
 from server to UI is not possible, because server module is executed after the submit
-button is clicked.
-Below we extend the app interface by adding a numeric input which will be passed to the
-`random.cdisc.data` function as a seed. The UI is created from `rcd_conn` and
+button is clicked. Although see `set_preopen_server` of `DataConnection` object for a slight
+relaxation of this rule.
+Below we extend the app interface by adding a text input which will be passed to the
+`scda` function. The UI is created from `scda_conn` and
 `connectors` object while the server module requires `connectors` and `connection`
 objects as additional arguments.
 
@@ -443,8 +451,8 @@ data$set_ui(
   function(id, ...) {
     ns <- NS(id)
     tagList(
-      rcd_conn$get_open_ui(ns("open_connection")),
-      numericInput(ns("seed"), p("Choose", code("seed")), min = 1, max = 1000, value = 1),
+      scda_conn$get_open_ui(ns("open_connection")),
+      textInput(ns("name"), p("Choose", code("name")), value = "latest"),
       do.call(
         what = "tagList",
         args = lapply(
@@ -475,7 +483,7 @@ data$set_server(
 
     for (connector in connectors) {
       # set_args before to return them in the code (fixed args)
-      set_args(connector, args = list(seed = input$seed))
+      set_args(connector, args = list(name = input$name))
 
       # pull each dataset
       connector$get_server()(id = connector$get_dataname())
@@ -508,31 +516,29 @@ objects are passed as the `data` argument into `teal::init`.
 ```{r}
 data <- cdisc_data(
   cdisc_dataset(dataname = "ADSL",
-                x = radsl(cached = TRUE),
-                code = "ADSL <- radsl(cached = TRUE)"),
-
+    synthetic_cdisc_dataset(dataset_name = "adsl", name = "latest"),
+    code = "ADSL <- synthetic_cdisc_dataset(dataset_name = \"adsl\", name = \"latest\")"
+  ),
   cdisc_dataset(dataname = "ADTTE",
-                x = radtte(cached = TRUE),
-                code = "ADTTE <- radtte(cached = TRUE)")
+    synthetic_cdisc_dataset(dataset_name = "adtte", name = "latest"),
+    code = "ADTTE <- synthetic_cdisc_dataset(dataset_name = \"adtte\", name = \"latest\")"
+  )
 )
 ```
 
 One can combine multiple delayed data objects using `[teal|cdisc]_data` functions and
-include them in a  shiny application. `RelationalData` gathers all objects and sets
+include them in a shiny application. `RelationalData` gathers all objects and sets
 combined UI with shiny inputs from all objects.
-In the code chunk below we specified two connectors with `rcd_data()`, but
+In the code chunk below we specified four dataset connectors but
 developers can include any number and any type of objects.
 
 ```{r}
-adsl <- rcd_cdisc_dataset_connector("ADSL", radsl)
-adae <- rcd_cdisc_dataset_connector("ADAE", radae, ADSL = adsl)
-advs <- rcd_cdisc_dataset_connector("ADVS", radvs, ADSL = adsl)
-adtte <- rcd_cdisc_dataset_connector("ADTTE", radtte, ADSL = adsl)
+adsl <- scda_cdisc_dataset_connector("ADSL", "adsl")
+adae <- scda_cdisc_dataset_connector("ADAE", "adae")
+advs <- scda_cdisc_dataset_connector("ADVS", "advs")
+adtte <- scda_cdisc_dataset_connector("ADTTE", "adtte")
 
-adsl_adae <- rcd_data(adsl, adae)
-advs_adtte <- rcd_data(advs, adtte)
-
-data <- cdisc_data(adsl_adae, advs_adtte)
+data <- cdisc_data(adsl, adae, advs, adtte)
 ```
 
 Similar to other connectors one can use `launch()` method to investigate if data is set
@@ -576,18 +582,15 @@ character or `script` with location of the script file.
 
 ```{r}
 adsl <- cdisc_dataset(
-    dataname = "ADSL",
-    x = radsl(cached = TRUE),
-    code = "ADSL <- radsl(cached = TRUE)"
-  ) %>%
-    mutate_dataset(code = "ADSL$x1 <- 1")
+  dataname = "ADSL",
+  synthetic_cdisc_dataset(dataset_name = "adsl", name = "latest"),
+  code = "ADSL <- synthetic_cdisc_dataset(dataset_name = \"adsl\", name = \"latest\")"
+) %>%
+  mutate_dataset(code = "ADSL$x1 <- 1")
 
 
-adtte <- rcd_cdisc_dataset_connector(
-    dataname = "ADTTE",
-    fun = radtte,
-    cached = TRUE
-  ) %>%
+adtte <- scda_cdisc_dataset_connector(
+  dataname = "ADTTE", "adtte") %>%
   mutate_dataset(code = "ADTTE$x2 <- 2")
 ```
 
@@ -612,7 +615,7 @@ data <- cdisc_data(adsl, adtte) %>%
   mutate_dataset(code = "ADSL$x3 <- 3", dataname = "ADSL")
 
 # get reproducible code of all datasets
-cat(get_code(data, dataname = "ADSL"))
+cat(get_code(data))
 
 # get ADSL reproducible code
 cat(get_code(data, dataname = "ADSL"))
@@ -629,7 +632,7 @@ cat(get_code(data, "ADSL"))
 cat(get_code(data, "ADTTE"))
 ```
 
-Sometimes code of one object can depend on  another, in this case we can link
+Sometimes code of one object can depend on another, in this case we can link
 them in the same way how we link `DatasetConnector` objects. If object code
 is dependent on another, as ADTTE depends on ADSL below, `get_code`
 will return everything we need to be executed to reproduce this dataset.
@@ -678,8 +681,8 @@ In the code block below, the default version of `variable_choices` is presented
 where the function uses an `ADSL` object containing "physical" data.
 
 ```{r}
-ADSL <- radsl(cached = TRUE) # nolint
-variable_choices(data = ADSL)
+adsl_data <- synthetic_cdisc_data("latest")$adsl
+variable_choices(data = adsl_data)
 ```
 
 An alternative option is to put a dataname into `data` argument, which will result
@@ -709,7 +712,7 @@ By default `value_choices` uses a `data.frame` from the `data` argument and
 choices will be immediately constructed from this object.
 
 ```{r}
-ADTTE <- radtte(cached = TRUE) # nolint
+ADTTE <- synthetic_cdisc_data("latest")$adtte # nolint
 value_choices(
   data = ADTTE,
   var_choices = "PARAMCD",
@@ -735,8 +738,8 @@ value_choices(
 `select_spec` or `filter_spec` to properly declare data extracts.
 
 ```{r}
-adsl <- rcd_cdisc_dataset_connector("ADSL", radsl, cached = TRUE)
-adrs <- rcd_cdisc_dataset_connector("ADRS", radrs, cached = TRUE)
+adsl <- scda_cdisc_dataset_connector("ADSL", "adsl")
+adrs <- scda_cdisc_dataset_connector("ADRS", "adrs")
 
 
 get_continuous <- function(data) {
@@ -746,7 +749,7 @@ get_continuous <- function(data) {
 
 data_extract_x <- data_extract_spec(
   dataname = "ADSL",
-  select =  select_spec(
+  select = select_spec(
     choices = variable_choices("ADSL", subset = get_continuous)
   ),
   filter = filter_spec(
@@ -763,7 +766,7 @@ data_extract_x <- data_extract_spec(
 
 data_extract_y <- data_extract_spec(
   dataname = "ADRS",
-  select =  select_spec(
+  select = select_spec(
     choices = variable_choices("ADRS", subset = get_continuous)
   ),
   filter = filter_spec(
@@ -791,15 +794,16 @@ The `delayed_data_extract_spec` objects created above can be included in
 teal modules to create an application.
 
 ```{r, eval=FALSE}
+library(ggplot2)
 app <- init(
-  data = teal_data(rcd_data(adsl, adrs)),
+  data = teal_data(adsl, adrs),
   modules = root_modules(
     teal.modules.general::tm_g_bivariate(
       x = data_extract_x,
       y = data_extract_y,
       use_density = FALSE,
       plot_height = c(600L, 200L, 2000L),
-      ggtheme = "grey"
+      ggtheme = "gray"
     )
   )
 )

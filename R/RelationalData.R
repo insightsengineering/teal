@@ -34,20 +34,12 @@
 #' tc <- teal:::RelationalData$new(x1, x2, x3, x4)
 #' tc$get_datanames()
 #' \dontrun{
-#' tc$get_datasets()
-#' tc$get_dataset("ADAE")
-#' }
-#' tc$get_items()
-#' tc$get_code()
-#' tc$get_code("ADAE")
-#' \dontrun{
 #' tc$launch()
-#' tc$get_datasets()
+#' get_datasets(tc) # equivalent to tc$get_datasets()
 #' tc$get_dataset("ADAE")
 #' tc$check()
 #' }
 #'
-#' library(scda)
 #' x <- cdisc_dataset(
 #'   dataname = "ADSL",
 #'   x = synthetic_cdisc_data("latest")$adsl,
@@ -57,9 +49,11 @@
 #' x2 <- cdisc_dataset_connector("ADTTE", adtte_cf, keys = get_cdisc_keys("ADTTE"))
 #' tc <- teal:::RelationalData$new(x, x2)
 #' \dontrun{
-#' tc$get_datasets()
-#' get_raw_data(tc)
+#' # This errors as we have not pulled the data
+#' # tc$get_datasets()
+#' # pull the data and then we can get the datasets
 #' tc$launch()
+#' tc$get_datasets()
 #' get_raw_data(tc)
 #' }
 #'

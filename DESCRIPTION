@@ -26,7 +26,7 @@ Encoding: UTF-8
 LazyData: true
 biocViews:
 Depends:
-  R (>= 3.3),
+  R (>= 3.6),
   shiny
 Imports:
   digest,
@@ -54,11 +54,11 @@ Suggests:
   covr,
   httr,
   knitr,
-  random.cdisc.data (>= 0.3.12),
   readr,
+  reticulate,
   rmarkdown,
   scda,
-  tern (>= 0.7.5),
+  scda.2021,
   test.nest (>= 0.2.11),
   testthat (>= 2.0)
 VignetteBuilder: knitr
