@@ -19,3 +19,71 @@ list with dataset connectors}
 \description{
 Public facing object constructor for \code{RelationalDataConnector} class.
 }
+\examples{
+
+library(scda)
+adsl <- scda_cdisc_dataset_connector(dataname = "ADSL", "adsl")
+adlb <- scda_cdisc_dataset_connector(dataname = "ADLB", "adlb")
+
+open_fun <- callable_function(library)
+open_fun$set_args(list(package = "scda"))
+
+con <- teal:::DataConnection$new(open_fun = open_fun)
+con$set_open_server(
+  function(input, output, session, connection) {
+    connection$open(try = TRUE)
+    return(invisible(connection))
+  }
+)
+
+x <- relational_data_connector(connection = con, connectors = list(adsl, adlb))
+
+x$set_ui(
+  function(id, connection, connectors) {
+    ns <- NS(id)
+    tagList(
+      connection$get_open_ui(ns("open_connection")),
+      textInput(ns("name"), p("Choose", code("scda data version")), value = "latest"),
+      do.call(
+        what = "tagList",
+        args = lapply(
+          connectors,
+          function(connector) {
+            div(
+              connector$get_ui(
+                id = ns(connector$get_dataname())
+              ),
+              br()
+            )
+          }
+        )
+      )
+    )
+  }
+)
+
+x$set_server(
+  function(input, output, session, connection, connectors) {
+    # opens connection
+    callModule(connection$get_open_server(),
+               id = "open_connection",
+               connection = connection
+    )
+    if (connection$is_opened()) {
+      for (connector in connectors) {
+        set_args(connector, args = list(name = input$name))
+        # pull each dataset
+        callModule(connector$get_server(), id = connector$get_dataname())
+        if (connector$is_failed()) {
+          break
+        }
+      }
+    }
+  }
+)
+\dontrun{
+x$launch()
+x$get_datasets()
+}
+
+}

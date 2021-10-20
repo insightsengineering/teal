@@ -19,3 +19,15 @@ list with dataset connectors}
 \description{
 Public facing object constructor for \code{CDISCDataConnector} class.
 }
+\examples{
+\dontrun{
+adsl_cf <- CallableFunction$new(function() as.data.frame(as.list(setNames(nm = get_cdisc_keys("ADSL")))))
+adae_cf <- CallableFunction$new(function() as.data.frame(as.list(setNames(nm = get_cdisc_keys("ADAE")))))
+adsl <- CDISCDatasetConnector$new("ADSL", adsl_cf, keys = get_cdisc_keys("ADSL"), parent = character(0))
+adae <- CDISCDatasetConnector$new("ADAE", adae_cf, keys = get_cdisc_keys("ADAE"), parent = "ADSL")
+data <- cdisc_data_connector(
+  connection = DataConnection$new(open_fun = CallableFunction$new(function() "open function")),
+  connectors = list(adsl, adae)
+)
+}
+}

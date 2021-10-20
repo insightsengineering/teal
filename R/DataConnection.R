@@ -594,6 +594,32 @@ DataConnection <- R6::R6Class( # nolint
 #' @param ping_fun (`CallableFunction`) function to ping connection
 #' @param if_conn_obj optional, (`logical`) whether to store `conn` object returned from opening
 #'
+#' @examples
+#' open_fun <- callable_function(data.frame) # define opening function
+#' open_fun$set_args(list(x = 1:5)) # define fixed arguments to opening function
+#'
+#' close_fun <- callable_function(print) # define closing function
+#' close_fun$set_args(list(x = "Hi there")) # define fixed arguments to closing function
+#'
+#' ping_fun <- callable_function(function() TRUE)
+#'
+#' x <- data_connection( # define connection
+#'   ping_fun = ping_fun, # define ping function
+#'   open_fun = open_fun, # define opening function
+#'   close_fun = close_fun) # define closing function
+#'
+#' x$set_open_args(args = list(y = letters[1:5])) # define additional arguments if necessary
+#'
+#' x$open() # call opening function
+#' x$get_open_call() # check reproducible R code
+#'
+#' # get data from connection via DataConnector$get_dataset()
+#'
+#' \dontrun{
+#' x$open(args = list(x = 1:5, y = letters[1:5])) # able to call opening function with arguments
+#' x$close() # call closing function
+#' }
+#'
 #' @return \code{DataConnection} object
 #' @export
 data_connection <- function(open_fun = NULL, close_fun = NULL, ping_fun = NULL, if_conn_obj = FALSE) {
