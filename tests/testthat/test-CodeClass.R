@@ -137,13 +137,13 @@ test_that("Exception handling with dataname of *xyz", {
   )
 })
 
-adsl <- scda_cdisc_dataset_connector("ADSL", "adsl")
-adae <- scda_cdisc_dataset_connector("ADAE", "adae")
-adaem <- adae %>% mutate_dataset("ADAE$vv=nrow(ADSL); attr(ADSL$vv, 'label') <- 'vv'", vars = list(ADSL = adsl))
-adae <- scda_cdisc_dataset_connector("ADAE", "adae")
-adaem2 <- adae %>% mutate_dataset("ADAE$vv=nrow(ADSL); attr(ADSL$vv, 'label') <- 'vv'", vars = list(ADSL = ""))
 
 test_that("CodeClass list_to_code_class", {
+  adsl <- scda_cdisc_dataset_connector("ADSL", "adsl")
+  adae <- scda_cdisc_dataset_connector("ADAE", "adae")
+  adaem <- adae %>% mutate_dataset("ADAE$vv=nrow(ADSL); attr(ADSL$vv, 'label') <- 'vv'", vars = list(ADSL = adsl))
+  adae <- scda_cdisc_dataset_connector("ADAE", "adae")
+  adaem2 <- adae %>% mutate_dataset("ADAE$vv=nrow(ADSL); attr(ADSL$vv, 'label') <- 'vv'", vars = list(ADSL = ""))
   expect_true(inherits(adaem$get_code_class(), "CodeClass"))
   expect_true(inherits(adaem2$get_code_class(), "CodeClass"))
 })
