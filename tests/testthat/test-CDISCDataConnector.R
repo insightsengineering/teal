@@ -152,7 +152,7 @@ testthat::test_that("cdisc_data_connector returns a CDISCDataConnector object on
   testthat::expect_true(is(data, c("CDISCDataConnector", "RelationalDataConnector", "DataAbstract", "R6")))
 })
 
-testthat::test_that("cdisc_data_connector has input validation", {
+testthat::test_that("cdisc_data_connector validates the 'connection' and 'connectors' arguments", {
   testthat::expect_error(cdisc_data_connector(
     connection = 1,
     connectors = list(adsl, adae)))
