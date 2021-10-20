@@ -81,7 +81,7 @@ get_raw_data.DatasetConnector <- function(x, dataname = NULL) { # nolint
 #'                                 keys = get_cdisc_keys("ADLB"))
 #'
 #' rdc <- relational_data_connector(
-#'   connection = data_connection,
+#'   connection = data_connection(),
 #'   connectors = list(adsl, adlb)
 #' )
 #'

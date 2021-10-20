@@ -72,7 +72,7 @@ adlb <- cdisc_dataset_connector(dataname = "ADLB",
                                 keys = get_cdisc_keys("ADLB"))
 
 rdc <- relational_data_connector(
-  connection = data_connection,
+  connection = data_connection(),
   connectors = list(adsl, adlb)
 )
 
