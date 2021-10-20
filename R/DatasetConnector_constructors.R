@@ -304,7 +304,7 @@ scda_dataset_connector <- function(dataname,
   stopifnot(utils.nest::is_character_single(scda_dataname))
   stopifnot(utils.nest::is_character_single(scda_name))
   if (scda_dataname == "latest") {
-    stop("scda_dataname should be a datset name e.g 'adsl' not 'latest'")
+    stop("scda_dataname should be a dataset name e.g 'adsl' not 'latest'")
   }
 
   x <- fun_dataset_connector(
