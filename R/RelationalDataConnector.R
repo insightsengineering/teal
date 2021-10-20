@@ -457,7 +457,7 @@ RelationalDataConnector <- R6::R6Class( #nolint
 #' @export
 relational_data_connector <- function(connection, connectors) {
   stopifnot(is(connection, "DataConnection"))
-  stopifnot(is_class_list("CDISCDatasetConnector")(connectors))
+  stopifnot(is_class_list("DatasetConnector")(connectors))
 
   RelationalDataConnector$new(connection, connectors)
 }
