@@ -4,7 +4,7 @@
 * Added print methods to the `DatasetConnector`, `RelationalData`, and `RelationalDataconnector` classes and added input validation to the implementation of the print method that was already in the `Dataset` object.
 
 ### Miscellaneous
-* Update R version requirement to >= 3.6.
+* Updated R version requirement to >= 3.6.
 
 # teal 0.10.0
 
