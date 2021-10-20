@@ -173,6 +173,9 @@ Get dataset from DatasetConnector" />
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
     <p>(<code>Dataset</code>)</p>
+    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
+
+    <p>See <code><a href='RelationalDataConnector.html'>help(RelationalDataConnector)</a></code> and <code><a href='RelationalData.html'>help(RelationalData)</a></code> for more complex examples.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'>
@@ -433,7 +436,6 @@ Get dataset from DatasetConnector" />
 #&gt; 400            63113904</div><div class='input'>
 <span class='co'># RelationalData  (not containing connectors) --------</span>
 <span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'>scda</span><span class='op'>)</span>
-<span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'>random.cdisc.data</span><span class='op'>)</span>
 <span class='va'>adsl</span> <span class='op'>&lt;-</span> <span class='fu'><a href='cdisc_dataset.html'>cdisc_dataset</a></span><span class='op'>(</span>dataname <span class='op'>=</span> <span class='st'>"ADSL"</span>,
                       x <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/pkg/scda/man/synthetic_cdisc_data.html'>synthetic_cdisc_data</a></span><span class='op'>(</span><span class='st'>"latest"</span><span class='op'>)</span><span class='op'>$</span><span class='va'>adsl</span>,
                       code <span class='op'>=</span> <span class='st'>"library(scda)\nADSL &lt;- synthetic_cdisc_data(\"latest\")$adsl"</span><span class='op'>)</span>
@@ -538,25 +540,6 @@ Get dataset from DatasetConnector" />
 #&gt; 398            63113904
 #&gt; 399            63113904
 #&gt; 400            63113904</div><div class='input'>
-<span class='co'># RelationalDataConnector --------</span>
-<span class='va'>rdc</span> <span class='op'>&lt;-</span> <span class='fu'><a href='rcd_data.html'>rcd_data</a></span><span class='op'>(</span>
-  <span class='fu'><a href='rcd_dataset_connector.html'>rcd_cdisc_dataset_connector</a></span><span class='op'>(</span><span class='st'>"ADSL"</span>, <span class='va'>radsl</span>, cached <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>,
-  <span class='fu'><a href='rcd_dataset_connector.html'>rcd_cdisc_dataset_connector</a></span><span class='op'>(</span><span class='st'>"ADTTE"</span>, <span class='va'>radtte</span>, cached <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
-<span class='op'>)</span>
-
-<span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span>
-<span class='fu'>get_dataset</span><span class='op'>(</span><span class='va'>rdc</span>, dataname <span class='op'>=</span> <span class='st'>"ADSL"</span><span class='op'>)</span>
-<span class='fu'><a href='load_datasets.html'>load_datasets</a></span><span class='op'>(</span><span class='va'>rdc</span><span class='op'>)</span>
-<span class='fu'><a href='get_datasets.html'>get_datasets</a></span><span class='op'>(</span><span class='va'>rdc</span><span class='op'>)</span>
-<span class='fu'>get_dataset</span><span class='op'>(</span><span class='va'>rdc</span>, dataname <span class='op'>=</span> <span class='st'>"ADSL"</span><span class='op'>)</span>
-<span class='op'>}</span>
-
-<span class='co'># RelationalData (containing connectors) --------</span>
-<span class='va'>rd</span> <span class='op'>&lt;-</span> <span class='fu'><a href='cdisc_data.html'>cdisc_data</a></span><span class='op'>(</span><span class='va'>rdc</span>, <span class='va'>adae</span><span class='op'>)</span>
-
-<span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span>
-<span class='fu'>get_dataset</span><span class='op'>(</span><span class='va'>rd</span>, <span class='st'>"ADSL"</span><span class='op'>)</span>
-<span class='op'>}</span>
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

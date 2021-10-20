@@ -472,15 +472,6 @@
     <loc>https://insightsengineering.github.io/teal/reference/raw_dataset_connector.html</loc>
   </url>
   <url>
-    <loc>https://insightsengineering.github.io/teal/reference/rcd_connection.html</loc>
-  </url>
-  <url>
-    <loc>https://insightsengineering.github.io/teal/reference/rcd_data.html</loc>
-  </url>
-  <url>
-    <loc>https://insightsengineering.github.io/teal/reference/rcd_dataset_connector.html</loc>
-  </url>
-  <url>
     <loc>https://insightsengineering.github.io/teal/reference/rds_dataset_connector.html</loc>
   </url>
   <url>
@@ -521,6 +512,9 @@
   </url>
   <url>
     <loc>https://insightsengineering.github.io/teal/reference/run_js_files.html</loc>
+  </url>
+  <url>
+    <loc>https://insightsengineering.github.io/teal/reference/scda_dataset_connector.html</loc>
   </url>
   <url>
     <loc>https://insightsengineering.github.io/teal/reference/script_dataset_connector.html</loc>

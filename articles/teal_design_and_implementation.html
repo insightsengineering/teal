@@ -390,17 +390,15 @@
 <a href="#embed-teal-into-other-applications" class="anchor"></a>Embed teal into other applications</h1>
 <p>Here is an example of an app with two independent teal applications side-by-side. The same idea can be used to embed it into other Shiny modules. We use the <code>id</code> argument of the <code>init</code> function for this.</p>
 <div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va">random.cdisc.data</span><span class="op">)</span>
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va">scda</span><span class="op">)</span>
 
-<span class="va">ADSL</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/random.cdisc.data/man/radsl.html">radsl</a></span><span class="op">(</span>cached <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="co">#nolint</span>
-
-<span class="fu"><a href="https://rdrr.io/r/base/options.html">options</a></span><span class="op">(</span>teal_logging <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>
+<span class="va">ADSL</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/scda/man/synthetic_cdisc_data.html">synthetic_cdisc_data</a></span><span class="op">(</span><span class="st">"latest"</span><span class="op">)</span><span class="op">$</span><span class="va">adsl</span> <span class="co">#nolint</span>
 
 <span class="co"># Code to have two teal apps side-by-side or embed it in a larger application</span>
 <span class="va">create_teal_app</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">title</span>, <span class="va">id</span><span class="op">)</span> <span class="op">{</span>
   <span class="fu"><a href="../reference/init.html">init</a></span><span class="op">(</span>
     data <span class="op">=</span> <span class="fu"><a href="../reference/cdisc_data.html">cdisc_data</a></span><span class="op">(</span>
-      <span class="fu"><a href="../reference/cdisc_dataset.html">cdisc_dataset</a></span><span class="op">(</span><span class="st">"ADSL"</span>, <span class="va">ADSL</span>, code <span class="op">=</span> <span class="st">"ADSL &lt;- radsl(cached = TRUE)"</span><span class="op">)</span>
+      <span class="fu"><a href="../reference/cdisc_dataset.html">cdisc_dataset</a></span><span class="op">(</span><span class="st">"ADSL"</span>, <span class="va">ADSL</span>, code <span class="op">=</span> <span class="st">"ADSL &lt;- synthetic_cdisc_data(\"latest\")$adsl"</span><span class="op">)</span>
     <span class="op">)</span>,
     modules <span class="op">=</span> <span class="fu"><a href="../reference/root_modules.html">root_modules</a></span><span class="op">(</span>
       <span class="fu"><a href="../reference/module.html">module</a></span><span class="op">(</span>
@@ -465,7 +463,7 @@
       <span class="fl">6</span>,
       <span class="fu"><a href="../reference/ui_teal_with_splash.html">ui_teal_with_splash</a></span><span class="op">(</span><span class="st">"app1"</span>,
                           data <span class="op">=</span> <span class="fu"><a href="../reference/cdisc_data.html">cdisc_data</a></span><span class="op">(</span>
-                            <span class="fu"><a href="../reference/cdisc_dataset.html">cdisc_dataset</a></span><span class="op">(</span><span class="st">"ADSL"</span>, <span class="va">ADSL</span>, code <span class="op">=</span> <span class="st">"ADSL &lt;- radsl(cached = TRUE)"</span><span class="op">)</span>
+                            <span class="fu"><a href="../reference/cdisc_dataset.html">cdisc_dataset</a></span><span class="op">(</span><span class="st">"ADSL"</span>, <span class="va">ADSL</span>, code <span class="op">=</span> <span class="st">"ADSL &lt;- synthetic_cdisc_data(\"latest\")$adsl"</span><span class="op">)</span>
                           <span class="op">)</span>,
                           title <span class="op">=</span> <span class="st">"Sample app 1"</span><span class="op">)</span>
     <span class="op">)</span>,
@@ -473,7 +471,7 @@
       <span class="fl">6</span>,
       <span class="fu"><a href="../reference/ui_teal_with_splash.html">ui_teal_with_splash</a></span><span class="op">(</span><span class="st">"app2"</span>,
                           data <span class="op">=</span> <span class="fu"><a href="../reference/cdisc_data.html">cdisc_data</a></span><span class="op">(</span>
-                            <span class="fu"><a href="../reference/cdisc_dataset.html">cdisc_dataset</a></span><span class="op">(</span><span class="st">"ADSL"</span>, <span class="va">ADSL</span>, code <span class="op">=</span> <span class="st">"ADSL &lt;- radsl(cached = TRUE)"</span><span class="op">)</span>
+                            <span class="fu"><a href="../reference/cdisc_dataset.html">cdisc_dataset</a></span><span class="op">(</span><span class="st">"ADSL"</span>, <span class="va">ADSL</span>, code <span class="op">=</span> <span class="st">"ADSL &lt;- synthetic_cdisc_data(\"latest\")$adsl"</span><span class="op">)</span>
                           <span class="op">)</span>,
                           title <span class="op">=</span> <span class="st">"Sample app 2"</span><span class="op">)</span>
     <span class="op">)</span>
@@ -483,7 +481,7 @@
       module <span class="op">=</span> <span class="va">srv_teal_with_splash</span>,
       id <span class="op">=</span> <span class="st">"app1"</span>,
       data <span class="op">=</span> <span class="fu"><a href="../reference/cdisc_data.html">cdisc_data</a></span><span class="op">(</span>
-        <span class="fu"><a href="../reference/cdisc_dataset.html">cdisc_dataset</a></span><span class="op">(</span><span class="st">"ADSL"</span>, <span class="va">ADSL</span>, code <span class="op">=</span> <span class="st">"ADSL &lt;- radsl(cached = TRUE)"</span><span class="op">)</span>
+        <span class="fu"><a href="../reference/cdisc_dataset.html">cdisc_dataset</a></span><span class="op">(</span><span class="st">"ADSL"</span>, <span class="va">ADSL</span>, code <span class="op">=</span> <span class="st">"ADSL &lt;- synthetic_cdisc_data(\"latest\")$adsl"</span><span class="op">)</span>
       <span class="op">)</span>,
       modules <span class="op">=</span> <span class="va">modules</span>
     <span class="op">)</span>
@@ -491,7 +489,7 @@
       module <span class="op">=</span> <span class="va">srv_teal_with_splash</span>,
       id <span class="op">=</span> <span class="st">"app2"</span>,
       data <span class="op">=</span> <span class="fu"><a href="../reference/cdisc_data.html">cdisc_data</a></span><span class="op">(</span>
-        <span class="fu"><a href="../reference/cdisc_dataset.html">cdisc_dataset</a></span><span class="op">(</span><span class="st">"ADSL"</span>, <span class="va">ADSL</span>, code <span class="op">=</span> <span class="st">"ADSL &lt;- radsl(cached = TRUE)"</span><span class="op">)</span>
+        <span class="fu"><a href="../reference/cdisc_dataset.html">cdisc_dataset</a></span><span class="op">(</span><span class="st">"ADSL"</span>, <span class="va">ADSL</span>, code <span class="op">=</span> <span class="st">"ADSL &lt;- synthetic_cdisc_data(\"latest\")$adsl"</span><span class="op">)</span>
       <span class="op">)</span>,
       modules <span class="op">=</span> <span class="va">modules</span>
     <span class="op">)</span>

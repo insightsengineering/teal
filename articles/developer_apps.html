@@ -144,14 +144,67 @@
   <span class="op">}</span>
 <span class="op">}</span></code></pre></div>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va">scda.2021</span><span class="op">)</span>
-<span class="co"># Create the dataset with some NA values and a logical value</span>
-<span class="va">ADSL</span> <span class="op">&lt;-</span> <span class="va">rcd_2021_07_07</span><span class="op">$</span><span class="va">adsl</span><span class="co"># nolint</span>
-<span class="va">ADSL</span><span class="op">$</span><span class="va">logical_test</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/sample.html">sample</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="cn">TRUE</span>, <span class="cn">FALSE</span>, <span class="cn">NA</span><span class="op">)</span>, size <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/nrow.html">nrow</a></span><span class="op">(</span><span class="va">ADSL</span><span class="op">)</span>, replace <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
-<span class="va">ADSL</span><span class="op">$</span><span class="va">SEX</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">150</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="cn">NA</span>
+<code class="sourceCode R"><span class="co"># Create the datasets</span>
 
-<span class="va">ADAE</span> <span class="op">&lt;-</span> <span class="va">rcd_2021_07_07</span><span class="op">$</span><span class="va">adae</span> <span class="co"># nolint</span>
-<span class="va">ADLB</span> <span class="op">&lt;-</span> <span class="va">rcd_2021_07_07</span><span class="op">$</span><span class="va">adlb</span> <span class="co"># nolint</span></code></pre></div>
+<span class="co"># nolint start</span>
+<span class="va">ADSL</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span>
+  STUDYID <span class="op">=</span> <span class="st">"ABC123"</span>,
+  USUBJID <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html">factor</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">100</span><span class="op">)</span>,
+  AGE <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html">rep</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">34</span>, <span class="fl">43</span>, <span class="fl">23</span>, <span class="fl">34</span><span class="op">)</span>, <span class="fl">25</span><span class="op">)</span>,
+  SEX <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html">rep</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"M"</span>, <span class="st">"F"</span>, <span class="cn">NA</span>, <span class="st">"F"</span><span class="op">)</span>, <span class="fl">25</span><span class="op">)</span>,
+  COUNTRY <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html">rep</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"USA"</span>, <span class="st">"BRAZIL"</span><span class="op">)</span>, <span class="fl">50</span><span class="op">)</span>,
+  logical_test <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html">rep</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="cn">TRUE</span>, <span class="cn">FALSE</span>, <span class="cn">NA</span>, <span class="cn">TRUE</span>, <span class="fl">25</span><span class="op">)</span><span class="op">)</span>
+<span class="op">)</span>
+
+<span class="va">ADSL_code</span> <span class="op">&lt;-</span> <span class="st">'ADSL &lt;- data.frame(
+  STUDYID = "ABC123",
+  USUBJID = factor(1:100),
+  AGE = rep(c(34, 43, 23, 34), 25),
+  SEX = rep(c("M", "F", NA, "F"), 25),
+  COUNTRY = rep(c("USA", "BRAZIL"), 50),
+  logical_test = rep(c(TRUE, FALSE, NA, TRUE, 25))
+)'</span>
+
+
+<span class="va">ADAE</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html">rbind</a></span><span class="op">(</span><span class="va">ADSL</span>, <span class="va">ADSL</span><span class="op">)</span>
+<span class="va">ADAE</span><span class="op">$</span><span class="va">ASTDTM</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/as.Date.html">as.Date</a></span><span class="op">(</span><span class="fl">18586</span><span class="op">:</span><span class="fl">18785</span>, origin <span class="op">=</span> <span class="st">"1970-01-01"</span><span class="op">)</span>
+<span class="va">ADAE</span><span class="op">$</span><span class="va">AETERM</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html">rep</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"trm A.1.1.1.1"</span>,
+                 <span class="st">"trm A.1.1.1.2"</span>,
+                 <span class="st">"trm B.1.1.1.1"</span>,
+                 <span class="st">"trm B.2.1.2.1"</span>,
+                 <span class="st">"trm B.2.2.3.1"</span>,
+                 <span class="st">"trm C.1.1.1.3"</span>,
+                 <span class="st">"trm C.2.1.2.1"</span>,
+                 <span class="st">"trm D.1.1.1.1"</span><span class="op">)</span>, <span class="fl">25</span><span class="op">)</span>
+<span class="va">ADAE</span><span class="op">$</span><span class="va">AESEQ</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html">rep</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">10</span>, <span class="fl">20</span><span class="op">)</span>
+
+<span class="va">ADAE_code</span> <span class="op">&lt;-</span> <span class="st">'ADAE &lt;- rbind(ADSL, ADSL)
+ADAE$ASTDTM &lt;- as.Date(18586:18785, origin = "1970-01-01")
+ADAE$AETERM &lt;- rep(c("trm A.1.1.1.1",
+                 "trm A.1.1.1.2",
+                 "trm B.1.1.1.1",
+                 "trm B.2.1.2.1",
+                 "trm B.2.2.3.1",
+                 "trm C.1.1.1.3",
+                 "trm C.2.1.2.1",
+                 "trm D.1.1.1.1"), 25)
+ADAE$AESEQ &lt;- rep(1:10, 20)'</span>
+
+
+<span class="va">ADLB</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html">rbind</a></span><span class="op">(</span><span class="va">ADSL</span>, <span class="va">ADSL</span><span class="op">)</span>
+<span class="va">ADLB</span><span class="op">$</span><span class="va">PARAMCD</span> <span class="op">&lt;-</span>  <span class="fu"><a href="https://rdrr.io/r/base/rep.html">rep</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span><span class="op">(</span><span class="st">"ALT"</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">8</span><span class="op">)</span>, <span class="fl">25</span><span class="op">)</span>
+<span class="va">ADLB</span><span class="op">$</span><span class="va">AVISIT</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html">rep</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"SCREENING"</span>, <span class="st">"BASELINE"</span>, <span class="st">"WEEK 1 DAY 8"</span>, <span class="st">"WEEK 2 DAY 15"</span><span class="op">)</span>, <span class="fl">50</span><span class="op">)</span>
+<span class="va">ADLB</span><span class="op">$</span><span class="va">ASEQ</span> <span class="op">&lt;-</span>  <span class="fu"><a href="https://rdrr.io/r/base/rep.html">rep</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">20</span>, <span class="fl">10</span><span class="op">)</span>
+
+<span class="va">ADLB_code</span> <span class="op">&lt;-</span> <span class="st">'ADLB &lt;- rbind(ADSL, ADSL)
+ADLB$PARAMCD &lt;- rep(paste0("ALT", 1:8), 25)
+ADLB$AVISIT &lt;- rep(c("SCREENING", "BASELINE", "WEEK 1 DAY 8", "WEEK 2 DAY 15"), 50)
+ADLB$ASEQ &lt;-  rep(1:20, 10)'</span>
+
+<span class="co"># nolint end</span>
+<span class="va">adsl</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/cdisc_dataset.html">cdisc_dataset</a></span><span class="op">(</span>dataname <span class="op">=</span> <span class="st">"ADSL"</span>, x <span class="op">=</span> <span class="va">ADSL</span>, code <span class="op">=</span> <span class="va">ADSL_code</span><span class="op">)</span>
+<span class="va">adae</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/cdisc_dataset.html">cdisc_dataset</a></span><span class="op">(</span>dataname <span class="op">=</span> <span class="st">"ADAE"</span>, x <span class="op">=</span> <span class="va">ADAE</span>, code <span class="op">=</span> <span class="va">ADAE_code</span>, vars <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>ADSL <span class="op">=</span> <span class="va">adsl</span><span class="op">)</span><span class="op">)</span>
+<span class="va">adlb</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/cdisc_dataset.html">cdisc_dataset</a></span><span class="op">(</span>dataname <span class="op">=</span> <span class="st">"ADLB"</span>, x <span class="op">=</span> <span class="va">ADLB</span>, code <span class="op">=</span> <span class="va">ADLB_code</span>, vars <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>ADSL <span class="op">=</span> <span class="va">adsl</span><span class="op">)</span><span class="op">)</span></code></pre></div>
 <div id="apps" class="section level1">
 <h1 class="hasAnchor">
 <a href="#apps" class="anchor"></a>Apps</h1>
@@ -166,11 +219,10 @@
 <p>This is the main debugging app to check that the functionality still works after code changes:</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va">teal</span><span class="op">)</span>
+
 <span class="va">app</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/init.html">init</a></span><span class="op">(</span>
   data <span class="op">=</span> <span class="fu"><a href="../reference/cdisc_data.html">cdisc_data</a></span><span class="op">(</span>
-    <span class="fu"><a href="../reference/cdisc_dataset.html">cdisc_dataset</a></span><span class="op">(</span>dataname <span class="op">=</span> <span class="st">"ADSL"</span>, x <span class="op">=</span> <span class="va">ADSL</span>, code <span class="op">=</span> <span class="st">"rcd_2021_07_07$adsl"</span><span class="op">)</span>,
-    <span class="fu"><a href="../reference/cdisc_dataset.html">cdisc_dataset</a></span><span class="op">(</span>dataname <span class="op">=</span> <span class="st">"ADAE"</span>, x <span class="op">=</span> <span class="va">ADAE</span>, code <span class="op">=</span> <span class="st">"rcd_2021_07_07$adae"</span><span class="op">)</span>,
-    <span class="fu"><a href="../reference/cdisc_dataset.html">cdisc_dataset</a></span><span class="op">(</span>dataname <span class="op">=</span> <span class="st">"ADLB"</span>, x <span class="op">=</span> <span class="va">ADLB</span>, code <span class="op">=</span> <span class="st">"rcd_2021_07_07$adlb"</span><span class="op">)</span>,
+    <span class="va">adsl</span>, <span class="va">adae</span>, <span class="va">adlb</span>,
     check <span class="op">=</span> <span class="cn">TRUE</span>
   <span class="op">)</span>,
   modules <span class="op">=</span> <span class="fu"><a href="../reference/root_modules.html">root_modules</a></span><span class="op">(</span>
@@ -195,9 +247,7 @@
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">app</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/init.html">init</a></span><span class="op">(</span>
   data <span class="op">=</span> <span class="fu"><a href="../reference/cdisc_data.html">cdisc_data</a></span><span class="op">(</span>
-    <span class="fu"><a href="../reference/cdisc_dataset.html">cdisc_dataset</a></span><span class="op">(</span>dataname <span class="op">=</span> <span class="st">"ADSL"</span>, x <span class="op">=</span> <span class="va">ADSL</span>, code <span class="op">=</span> <span class="st">"rcd_2021_07_07$adsl"</span><span class="op">)</span>,
-    <span class="fu"><a href="../reference/cdisc_dataset.html">cdisc_dataset</a></span><span class="op">(</span>dataname <span class="op">=</span> <span class="st">"ADAE"</span>, x <span class="op">=</span> <span class="va">ADAE</span>, code <span class="op">=</span> <span class="st">"rcd_2021_07_07$adae"</span><span class="op">)</span>,
-    <span class="fu"><a href="../reference/cdisc_dataset.html">cdisc_dataset</a></span><span class="op">(</span>dataname <span class="op">=</span> <span class="st">"ADLB"</span>, x <span class="op">=</span> <span class="va">ADLB</span>, code <span class="op">=</span> <span class="st">"rcd_2021_07_07$adlb"</span><span class="op">)</span>
+    <span class="va">adsl</span>, <span class="va">adae</span>, <span class="va">adlb</span>
   <span class="op">)</span>,
   modules <span class="op">=</span> <span class="fu"><a href="../reference/root_modules.html">root_modules</a></span><span class="op">(</span>
     <span class="fu">teal</span><span class="fu">:::</span><span class="fu"><a href="../reference/filter_calls_module.html">filter_calls_module</a></span><span class="op">(</span><span class="st">"ADAE"</span>, active_datanames <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"ADAE"</span><span class="op">)</span><span class="op">)</span>,
@@ -225,16 +275,10 @@
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">app</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/init.html">init</a></span><span class="op">(</span>
   data <span class="op">=</span> <span class="fu"><a href="../reference/cdisc_data.html">cdisc_data</a></span><span class="op">(</span>
-    <span class="fu"><a href="../reference/rcd_data.html">rcd_data</a></span><span class="op">(</span>
-      <span class="fu"><a href="../reference/cdisc_dataset.html">cdisc_dataset</a></span><span class="op">(</span>dataname <span class="op">=</span> <span class="st">"ADSL"</span>, x <span class="op">=</span> <span class="va">ADSL</span>, code <span class="op">=</span> <span class="st">"rcd_2021_07_07$adsl"</span><span class="op">)</span>,
-      <span class="fu"><a href="../reference/cdisc_dataset.html">cdisc_dataset</a></span><span class="op">(</span>dataname <span class="op">=</span> <span class="st">"ADAE"</span>, x <span class="op">=</span> <span class="va">ADAE</span>, code <span class="op">=</span> <span class="st">"rcd_2021_07_07$adae"</span><span class="op">)</span>,
-      <span class="fu"><a href="../reference/cdisc_dataset.html">cdisc_dataset</a></span><span class="op">(</span>dataname <span class="op">=</span> <span class="st">"ADLB"</span>, x <span class="op">=</span> <span class="va">ADLB</span>, code <span class="op">=</span> <span class="st">"rcd_2021_07_07$adlb"</span><span class="op">)</span>,
-    <span class="op">)</span>
+    <span class="fu"><a href="../reference/code_dataset_connector.html">code_cdisc_dataset_connector</a></span><span class="op">(</span><span class="st">"ADSL"</span>, code <span class="op">=</span> <span class="va">adsl_code</span><span class="op">)</span>
   <span class="op">)</span>,
   modules <span class="op">=</span> <span class="fu"><a href="../reference/root_modules.html">root_modules</a></span><span class="op">(</span>
-    <span class="fu">teal</span><span class="fu">:::</span><span class="fu"><a href="../reference/filter_calls_module.html">filter_calls_module</a></span><span class="op">(</span><span class="st">"ADAE"</span>, active_datanames <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"ADAE"</span><span class="op">)</span><span class="op">)</span>,
     <span class="fu">teal</span><span class="fu">:::</span><span class="fu"><a href="../reference/filter_calls_module.html">filter_calls_module</a></span><span class="op">(</span><span class="st">"ADSL"</span>, active_datanames <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"ADSL"</span><span class="op">)</span><span class="op">)</span>,
-    <span class="fu">teal</span><span class="fu">:::</span><span class="fu"><a href="../reference/filter_calls_module.html">filter_calls_module</a></span><span class="op">(</span><span class="st">"ADLB"</span>, active_datanames <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"ADLB"</span><span class="op">)</span><span class="op">)</span>,
     <span class="fu">teal</span><span class="fu">:::</span><span class="fu"><a href="../reference/bookmark_module.html">bookmark_module</a></span><span class="op">(</span><span class="op">)</span>,
     <span class="fu">teal</span><span class="fu">:::</span><span class="fu"><a href="../reference/debug_browser_module.html">debug_browser_module</a></span><span class="op">(</span><span class="op">)</span>
   <span class="op">)</span>,
@@ -257,9 +301,7 @@
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">app</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/init.html">init</a></span><span class="op">(</span>
   data <span class="op">=</span> <span class="fu"><a href="../reference/cdisc_data.html">cdisc_data</a></span><span class="op">(</span>
-    <span class="fu"><a href="../reference/cdisc_dataset.html">cdisc_dataset</a></span><span class="op">(</span>dataname <span class="op">=</span> <span class="st">"ADSL"</span>, x <span class="op">=</span> <span class="va">ADSL</span>, code <span class="op">=</span> <span class="st">"rcd_2021_07_07$adsl"</span><span class="op">)</span>,
-    <span class="fu"><a href="../reference/cdisc_dataset.html">cdisc_dataset</a></span><span class="op">(</span>dataname <span class="op">=</span> <span class="st">"ADAE"</span>, x <span class="op">=</span> <span class="va">ADAE</span>, code <span class="op">=</span> <span class="st">"rcd_2021_07_07$adae"</span><span class="op">)</span>,
-    <span class="fu"><a href="../reference/cdisc_dataset.html">cdisc_dataset</a></span><span class="op">(</span>dataname <span class="op">=</span> <span class="st">"ADLB"</span>, x <span class="op">=</span> <span class="va">ADLB</span>, code <span class="op">=</span> <span class="st">"rcd_2021_07_07$adlb"</span><span class="op">)</span>,
+    <span class="va">adsl</span>, <span class="va">adae</span>, <span class="va">adlb</span>
   <span class="op">)</span>,
   modules <span class="op">=</span> <span class="fu"><a href="../reference/root_modules.html">root_modules</a></span><span class="op">(</span>
     <span class="fu"><a href="../reference/modules.html">modules</a></span><span class="op">(</span>
@@ -335,8 +377,8 @@
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">app</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/init.html">init</a></span><span class="op">(</span>
   data <span class="op">=</span> <span class="fu"><a href="../reference/cdisc_data.html">cdisc_data</a></span><span class="op">(</span>
-    <span class="fu"><a href="../reference/cdisc_dataset.html">cdisc_dataset</a></span><span class="op">(</span>dataname <span class="op">=</span> <span class="st">"ADSL"</span>, x <span class="op">=</span> <span class="va">ADSL</span>, code <span class="op">=</span> <span class="st">"ADSL &lt;- radsl(cached = TRUE)"</span><span class="op">)</span>,
-    <span class="fu"><a href="../reference/cdisc_dataset.html">cdisc_dataset</a></span><span class="op">(</span>dataname <span class="op">=</span> <span class="st">"ADLB"</span>, x <span class="op">=</span> <span class="va">ADLB</span>, code <span class="op">=</span> <span class="st">"ADLB &lt;- radlb(cached = TRUE)"</span><span class="op">)</span>
+    <span class="fu"><a href="../reference/cdisc_dataset.html">cdisc_dataset</a></span><span class="op">(</span>dataname <span class="op">=</span> <span class="st">"ADSL"</span>, x <span class="op">=</span> <span class="va">ADSL</span>, code <span class="op">=</span> <span class="st">"ADSL &lt;- rcd_2021_07_07$adsl"</span><span class="op">)</span>,
+    <span class="fu"><a href="../reference/cdisc_dataset.html">cdisc_dataset</a></span><span class="op">(</span>dataname <span class="op">=</span> <span class="st">"ADLB"</span>, x <span class="op">=</span> <span class="va">ADLB</span>, code <span class="op">=</span> <span class="st">"ADLB &lt;- rcd_2021_07_07$adlb"</span><span class="op">)</span>
   <span class="op">)</span>,
   modules <span class="op">=</span> <span class="fu"><a href="../reference/root_modules.html">root_modules</a></span><span class="op">(</span>
     <span class="fu">teal</span><span class="fu">:::</span><span class="fu"><a href="../reference/filter_calls_module.html">filter_calls_module</a></span><span class="op">(</span><span class="st">"ADAE"</span>, active_datanames <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"ADAE"</span><span class="op">)</span><span class="op">)</span>,
@@ -360,9 +402,9 @@
 <span class="op">)</span>
 <span class="va">app</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/init.html">init</a></span><span class="op">(</span>
   data <span class="op">=</span> <span class="fu"><a href="../reference/cdisc_data.html">cdisc_data</a></span><span class="op">(</span>
-    <span class="fu"><a href="../reference/cdisc_dataset.html">cdisc_dataset</a></span><span class="op">(</span>dataname <span class="op">=</span> <span class="st">"ADSL"</span>, x <span class="op">=</span> <span class="va">ADSL</span>, code <span class="op">=</span> <span class="st">"ADSL &lt;- radsl(cached = TRUE)"</span><span class="op">)</span>,
-    <span class="fu"><a href="../reference/cdisc_dataset.html">cdisc_dataset</a></span><span class="op">(</span>dataname <span class="op">=</span> <span class="st">"ADAE"</span>, x <span class="op">=</span> <span class="va">ADAE</span>, code <span class="op">=</span> <span class="st">"ADAE &lt;- radae(cached = TRUE)"</span><span class="op">)</span>,
-    <span class="fu"><a href="../reference/cdisc_dataset.html">cdisc_dataset</a></span><span class="op">(</span>dataname <span class="op">=</span> <span class="st">"ADLB"</span>, x <span class="op">=</span> <span class="va">ADLB</span>, code <span class="op">=</span> <span class="st">"ADLB &lt;- radlb(cached = TRUE)"</span><span class="op">)</span>
+    <span class="fu"><a href="../reference/cdisc_dataset.html">cdisc_dataset</a></span><span class="op">(</span>dataname <span class="op">=</span> <span class="st">"ADSL"</span>, x <span class="op">=</span> <span class="va">ADSL</span>, code <span class="op">=</span> <span class="st">"ADSL &lt;- rcd_2021_07_07$adsl"</span><span class="op">)</span>,
+    <span class="fu"><a href="../reference/cdisc_dataset.html">cdisc_dataset</a></span><span class="op">(</span>dataname <span class="op">=</span> <span class="st">"ADAE"</span>, x <span class="op">=</span> <span class="va">ADAE</span>, code <span class="op">=</span> <span class="st">"ADAE &lt;- rcd_2021_07_07$adae"</span><span class="op">)</span>,
+    <span class="fu"><a href="../reference/cdisc_dataset.html">cdisc_dataset</a></span><span class="op">(</span>dataname <span class="op">=</span> <span class="st">"ADLB"</span>, x <span class="op">=</span> <span class="va">ADLB</span>, code <span class="op">=</span> <span class="st">"ADLB &lt;- rcd_2021_07_07$adlb"</span><span class="op">)</span>
   <span class="op">)</span>,
   modules <span class="op">=</span> <span class="fu"><a href="../reference/root_modules.html">root_modules</a></span><span class="op">(</span>
     <span class="fu">teal</span><span class="fu">:::</span><span class="fu"><a href="../reference/predefined_filters_module.html">predefined_filters_module</a></span><span class="op">(</span>filter <span class="op">=</span> <span class="va">safety_filter</span><span class="op">)</span>,
@@ -399,8 +441,8 @@
 <span class="op">)</span>
 <span class="va">app</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/init.html">init</a></span><span class="op">(</span>
   data <span class="op">=</span> <span class="fu"><a href="../reference/cdisc_data.html">cdisc_data</a></span><span class="op">(</span>
-    <span class="fu"><a href="../reference/cdisc_dataset.html">cdisc_dataset</a></span><span class="op">(</span>dataname <span class="op">=</span> <span class="st">"ADSL"</span>, x <span class="op">=</span> <span class="va">ADSL</span>, code <span class="op">=</span> <span class="st">"ADSL &lt;- radsl(cached = TRUE)"</span><span class="op">)</span>,
-    <span class="fu"><a href="../reference/cdisc_dataset.html">cdisc_dataset</a></span><span class="op">(</span>dataname <span class="op">=</span> <span class="st">"ADLB"</span>, x <span class="op">=</span> <span class="va">ADLB</span>, code <span class="op">=</span> <span class="st">"ADLB &lt;- radlb(cached = TRUE)"</span><span class="op">)</span>
+    <span class="fu"><a href="../reference/cdisc_dataset.html">cdisc_dataset</a></span><span class="op">(</span>dataname <span class="op">=</span> <span class="st">"ADSL"</span>, x <span class="op">=</span> <span class="va">ADSL</span>, code <span class="op">=</span> <span class="st">"ADSL &lt;- rcd_2021_07_07$adsl"</span><span class="op">)</span>,
+    <span class="fu"><a href="../reference/cdisc_dataset.html">cdisc_dataset</a></span><span class="op">(</span>dataname <span class="op">=</span> <span class="st">"ADLB"</span>, x <span class="op">=</span> <span class="va">ADLB</span>, code <span class="op">=</span> <span class="st">"ADLB &lt;- rcd_2021_07_07$adlb"</span><span class="op">)</span>
   <span class="op">)</span>,
   modules <span class="op">=</span> <span class="fu"><a href="../reference/root_modules.html">root_modules</a></span><span class="op">(</span>
     <span class="va">module_hidden_filters</span>,
@@ -418,8 +460,8 @@
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">app</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/init.html">init</a></span><span class="op">(</span>
   data <span class="op">=</span> <span class="fu"><a href="../reference/cdisc_data.html">cdisc_data</a></span><span class="op">(</span>
-    <span class="fu"><a href="../reference/cdisc_dataset.html">cdisc_dataset</a></span><span class="op">(</span>dataname <span class="op">=</span> <span class="st">"ADSL"</span>, x <span class="op">=</span> <span class="va">ADSL</span>, code <span class="op">=</span> <span class="st">"ADSL &lt;- radsl(cached = TRUE)"</span><span class="op">)</span>,
-    <span class="fu"><a href="../reference/cdisc_dataset.html">cdisc_dataset</a></span><span class="op">(</span>dataname <span class="op">=</span> <span class="st">"ADLB"</span>, x <span class="op">=</span> <span class="va">ADLB</span>, code <span class="op">=</span> <span class="st">"ADLB &lt;- radlb(cached = TRUE)"</span><span class="op">)</span>
+    <span class="fu"><a href="../reference/cdisc_dataset.html">cdisc_dataset</a></span><span class="op">(</span>dataname <span class="op">=</span> <span class="st">"ADSL"</span>, x <span class="op">=</span> <span class="va">ADSL</span>, code <span class="op">=</span> <span class="st">"ADSL &lt;- rcd_2021_07_07$adsl"</span><span class="op">)</span>,
+    <span class="fu"><a href="../reference/cdisc_dataset.html">cdisc_dataset</a></span><span class="op">(</span>dataname <span class="op">=</span> <span class="st">"ADLB"</span>, x <span class="op">=</span> <span class="va">ADLB</span>, code <span class="op">=</span> <span class="st">"ADLB &lt;- rcd_2021_07_07$adlb"</span><span class="op">)</span>
   <span class="op">)</span>,
   modules <span class="op">=</span> <span class="fu"><a href="../reference/root_modules.html">root_modules</a></span><span class="op">(</span>
     <span class="fu">teal</span><span class="fu">:::</span><span class="fu"><a href="../reference/debug_browser_module.html">debug_browser_module</a></span><span class="op">(</span><span class="op">)</span>

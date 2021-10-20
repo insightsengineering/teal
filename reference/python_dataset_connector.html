@@ -245,10 +245,10 @@ parent dataset name</p></td>
     <p>Note that in addition to the <code>reticulate</code> package, support for python requires an
 existing python installation. By default, <code>reticulate</code> will attempt to use the
 location <code><a href='https://rdrr.io/r/base/Sys.which.html'>Sys.which("python")</a></code>, however the path to the python installation can be
-supplied directly via <code>reticulate::use_python</code>.</p>
+supplied directly via <code><a href='https://rdrr.io/pkg/reticulate/man/use_python.html'>reticulate::use_python</a></code>.</p>
 <p>The <code>teal</code> API for delayed data requires the python code or script to return a
 data.frame object. For this, the <code>pandas</code> package is required. This can be installed
-using <code>reticulate::py_install("pandas")</code>.</p>
+using <code><a href='https://rdrr.io/pkg/reticulate/man/py_install.html'>reticulate::py_install("pandas")</a></code>.</p>
 <p>Please see the package documentation for more details.</p>
     <h2 class="hasAnchor" id="note"><a class="anchor" href="#note"></a>Note</h2>
 
@@ -285,7 +285,7 @@ features and current limitations.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span>
-<span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'>reticulate</span><span class='op'>)</span>
+<span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://github.com/rstudio/reticulate'>reticulate</a></span><span class='op'>)</span>
 
 <span class='co'># supply python code directly in R</span>
 

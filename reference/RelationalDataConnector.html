@@ -393,23 +393,71 @@ connection.</p>
 
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'>scda</span><span class='op'>)</span>
-<span class='va'>adsl_cf</span> <span class='op'>&lt;-</span> <span class='fu'><a href='callable_function.html'>callable_function</a></span><span class='op'>(</span><span class='kw'>function</span><span class='op'>(</span><span class='op'>)</span> <span class='fu'><a href='https://rdrr.io/pkg/scda/man/synthetic_cdisc_data.html'>synthetic_cdisc_data</a></span><span class='op'>(</span><span class='st'>"latest"</span><span class='op'>)</span><span class='op'>$</span><span class='va'>adsl</span><span class='op'>)</span>
-<span class='va'>adsl</span> <span class='op'>&lt;-</span> <span class='fu'><a href='cdisc_dataset_connector.html'>cdisc_dataset_connector</a></span><span class='op'>(</span>dataname <span class='op'>=</span> <span class='st'>"ADSL"</span>,
-                                pull_callable <span class='op'>=</span> <span class='va'>adsl_cf</span>,
-                                keys <span class='op'>=</span> <span class='fu'><a href='get_cdisc_keys.html'>get_cdisc_keys</a></span><span class='op'>(</span><span class='st'>"ADSL"</span><span class='op'>)</span><span class='op'>)</span>
-<span class='va'>adlb_cf</span> <span class='op'>&lt;-</span> <span class='fu'><a href='callable_function.html'>callable_function</a></span><span class='op'>(</span><span class='kw'>function</span><span class='op'>(</span><span class='op'>)</span> <span class='fu'><a href='https://rdrr.io/pkg/scda/man/synthetic_cdisc_data.html'>synthetic_cdisc_data</a></span><span class='op'>(</span><span class='st'>"latest"</span><span class='op'>)</span><span class='op'>$</span><span class='va'>adlb</span><span class='op'>)</span>
-<span class='va'>adlb</span> <span class='op'>&lt;-</span> <span class='fu'><a href='cdisc_dataset_connector.html'>cdisc_dataset_connector</a></span><span class='op'>(</span>dataname <span class='op'>=</span> <span class='st'>"ADLB"</span>,
-                                pull_callable <span class='op'>=</span> <span class='va'>adlb_cf</span>,
-                                keys <span class='op'>=</span> <span class='fu'><a href='get_cdisc_keys.html'>get_cdisc_keys</a></span><span class='op'>(</span><span class='st'>"ADLB"</span><span class='op'>)</span><span class='op'>)</span>
-<span class='va'>con</span> <span class='op'>&lt;-</span> <span class='fu'>teal</span><span class='fu'>:::</span><span class='fu'><a href='rcd_connection.html'>rcd_connection</a></span><span class='op'>(</span><span class='op'>)</span>
+    <pre class="examples"><div class='input'>
+<span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'>scda</span><span class='op'>)</span>
+<span class='va'>adsl</span> <span class='op'>&lt;-</span> <span class='fu'><a href='scda_dataset_connector.html'>scda_cdisc_dataset_connector</a></span><span class='op'>(</span>dataname <span class='op'>=</span> <span class='st'>"ADSL"</span>, <span class='st'>"adsl"</span><span class='op'>)</span>
+<span class='va'>adlb</span> <span class='op'>&lt;-</span> <span class='fu'><a href='scda_dataset_connector.html'>scda_cdisc_dataset_connector</a></span><span class='op'>(</span>dataname <span class='op'>=</span> <span class='st'>"ADLB"</span>, <span class='st'>"adlb"</span><span class='op'>)</span>
+
+<span class='va'>open_fun</span> <span class='op'>&lt;-</span> <span class='fu'><a href='callable_function.html'>callable_function</a></span><span class='op'>(</span><span class='va'>library</span><span class='op'>)</span>
+<span class='va'>open_fun</span><span class='op'>$</span><span class='fu'>set_args</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>package <span class='op'>=</span> <span class='st'>"scda"</span><span class='op'>)</span><span class='op'>)</span>
+
+<span class='va'>con</span> <span class='op'>&lt;-</span> <span class='fu'>teal</span><span class='fu'>:::</span><span class='va'><a href='DataConnection.html'>DataConnection</a></span><span class='op'>$</span><span class='fu'>new</span><span class='op'>(</span>open_fun <span class='op'>=</span> <span class='va'>open_fun</span><span class='op'>)</span>
+<span class='va'>con</span><span class='op'>$</span><span class='fu'>set_open_server</span><span class='op'>(</span>
+  <span class='kw'>function</span><span class='op'>(</span><span class='va'>input</span>, <span class='va'>output</span>, <span class='va'>session</span>, <span class='va'>connection</span><span class='op'>)</span> <span class='op'>{</span>
+    <span class='va'>connection</span><span class='op'>$</span><span class='fu'>open</span><span class='op'>(</span>try <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
+    <span class='kw'><a href='https://rdrr.io/r/base/function.html'>return</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/invisible.html'>invisible</a></span><span class='op'>(</span><span class='va'>connection</span><span class='op'>)</span><span class='op'>)</span>
+  <span class='op'>}</span>
+<span class='op'>)</span>
+
 <span class='va'>x</span> <span class='op'>&lt;-</span> <span class='fu'>teal</span><span class='fu'>:::</span><span class='va'>RelationalDataConnector</span><span class='op'>$</span><span class='fu'>new</span><span class='op'>(</span>connection <span class='op'>=</span> <span class='va'>con</span>, connectors <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='va'>adsl</span>, <span class='va'>adlb</span><span class='op'>)</span><span class='op'>)</span>
 
+<span class='va'>x</span><span class='op'>$</span><span class='fu'>set_ui</span><span class='op'>(</span>
+  <span class='kw'>function</span><span class='op'>(</span><span class='va'>id</span>, <span class='va'>connection</span>, <span class='va'>connectors</span><span class='op'>)</span> <span class='op'>{</span>
+    <span class='va'>ns</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/shiny/man/NS.html'>NS</a></span><span class='op'>(</span><span class='va'>id</span><span class='op'>)</span>
+    <span class='fu'><a href='https://rdrr.io/pkg/htmltools/man/tagList.html'>tagList</a></span><span class='op'>(</span>
+      <span class='va'>connection</span><span class='op'>$</span><span class='fu'>get_open_ui</span><span class='op'>(</span><span class='fu'>ns</span><span class='op'>(</span><span class='st'>"open_connection"</span><span class='op'>)</span><span class='op'>)</span>,
+      <span class='fu'><a href='https://rdrr.io/pkg/shiny/man/textInput.html'>textInput</a></span><span class='op'>(</span><span class='fu'>ns</span><span class='op'>(</span><span class='st'>"name"</span><span class='op'>)</span>, <span class='fu'><a href='https://rdrr.io/pkg/htmltools/man/builder.html'>p</a></span><span class='op'>(</span><span class='st'>"Choose"</span>, <span class='fu'><a href='https://rdrr.io/pkg/htmltools/man/builder.html'>code</a></span><span class='op'>(</span><span class='st'>"scda data version"</span><span class='op'>)</span><span class='op'>)</span>, value <span class='op'>=</span> <span class='st'>"latest"</span><span class='op'>)</span>,
+      <span class='fu'><a href='https://rdrr.io/r/base/do.call.html'>do.call</a></span><span class='op'>(</span>
+        what <span class='op'>=</span> <span class='st'>"tagList"</span>,
+        args <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/lapply.html'>lapply</a></span><span class='op'>(</span>
+          <span class='va'>connectors</span>,
+          <span class='kw'>function</span><span class='op'>(</span><span class='va'>connector</span><span class='op'>)</span> <span class='op'>{</span>
+            <span class='fu'><a href='https://rdrr.io/pkg/htmltools/man/builder.html'>div</a></span><span class='op'>(</span>
+              <span class='va'>connector</span><span class='op'>$</span><span class='fu'>get_ui</span><span class='op'>(</span>
+                id <span class='op'>=</span> <span class='fu'>ns</span><span class='op'>(</span><span class='va'>connector</span><span class='op'>$</span><span class='fu'>get_dataname</span><span class='op'>(</span><span class='op'>)</span><span class='op'>)</span>
+              <span class='op'>)</span>,
+              <span class='fu'><a href='https://rdrr.io/pkg/htmltools/man/builder.html'>br</a></span><span class='op'>(</span><span class='op'>)</span>
+            <span class='op'>)</span>
+          <span class='op'>}</span>
+        <span class='op'>)</span>
+      <span class='op'>)</span>
+    <span class='op'>)</span>
+  <span class='op'>}</span>
+<span class='op'>)</span>
+
+<span class='va'>x</span><span class='op'>$</span><span class='fu'>set_server</span><span class='op'>(</span>
+  <span class='kw'>function</span><span class='op'>(</span><span class='va'>input</span>, <span class='va'>output</span>, <span class='va'>session</span>, <span class='va'>connection</span>, <span class='va'>connectors</span><span class='op'>)</span> <span class='op'>{</span>
+    <span class='co'># opens connection</span>
+    <span class='fu'><a href='https://rdrr.io/pkg/shiny/man/callModule.html'>callModule</a></span><span class='op'>(</span><span class='va'>connection</span><span class='op'>$</span><span class='fu'>get_open_server</span><span class='op'>(</span><span class='op'>)</span>,
+               id <span class='op'>=</span> <span class='st'>"open_connection"</span>,
+               connection <span class='op'>=</span> <span class='va'>connection</span>
+    <span class='op'>)</span>
+    <span class='kw'>if</span> <span class='op'>(</span><span class='va'>connection</span><span class='op'>$</span><span class='fu'>is_opened</span><span class='op'>(</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>{</span>
+      <span class='kw'>for</span> <span class='op'>(</span><span class='va'>connector</span> <span class='kw'>in</span> <span class='va'>connectors</span><span class='op'>)</span> <span class='op'>{</span>
+        <span class='fu'><a href='set_args.html'>set_args</a></span><span class='op'>(</span><span class='va'>connector</span>, args <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>name <span class='op'>=</span> <span class='va'>input</span><span class='op'>$</span><span class='va'>name</span><span class='op'>)</span><span class='op'>)</span>
+        <span class='co'># pull each dataset</span>
+        <span class='fu'><a href='https://rdrr.io/pkg/shiny/man/callModule.html'>callModule</a></span><span class='op'>(</span><span class='va'>connector</span><span class='op'>$</span><span class='fu'>get_server</span><span class='op'>(</span><span class='op'>)</span>, id <span class='op'>=</span> <span class='va'>connector</span><span class='op'>$</span><span class='fu'>get_dataname</span><span class='op'>(</span><span class='op'>)</span><span class='op'>)</span>
+        <span class='kw'>if</span> <span class='op'>(</span><span class='va'>connector</span><span class='op'>$</span><span class='fu'>is_failed</span><span class='op'>(</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>{</span>
+          <span class='kw'>break</span>
+        <span class='op'>}</span>
+      <span class='op'>}</span>
+    <span class='op'>}</span>
+  <span class='op'>}</span>
+<span class='op'>)</span>
 <span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span>
 <span class='va'>x</span><span class='op'>$</span><span class='fu'>launch</span><span class='op'>(</span><span class='op'>)</span>
 <span class='va'>x</span><span class='op'>$</span><span class='fu'>get_datasets</span><span class='op'>(</span><span class='op'>)</span>
 <span class='op'>}</span>
-
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

@@ -119,19 +119,19 @@
 <p>Note this app require the libraries <code>teal.modules.general</code> and <code>teal.modules.clinical</code> as these libraries provide standard modules for teal apps (see below for details of modules).</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va">teal</span><span class="op">)</span>
-<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va">random.cdisc.data</span><span class="op">)</span>
 <span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va">teal.modules.general</span><span class="op">)</span>
 <span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va">teal.modules.clinical</span><span class="op">)</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va">scda</span><span class="op">)</span>
 
-<span class="va">adsl</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/random.cdisc.data/man/radsl.html">radsl</a></span><span class="op">(</span>cached <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
-<span class="va">adrs</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/random.cdisc.data/man/radrs.html">radrs</a></span><span class="op">(</span>cached <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
-<span class="va">adtte</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/random.cdisc.data/man/radtte.html">radtte</a></span><span class="op">(</span>cached <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
+<span class="va">adsl</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/scda/man/synthetic_cdisc_data.html">synthetic_cdisc_data</a></span><span class="op">(</span><span class="st">"latest"</span><span class="op">)</span><span class="op">$</span><span class="va">adsl</span>
+<span class="va">adrs</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/scda/man/synthetic_cdisc_data.html">synthetic_cdisc_data</a></span><span class="op">(</span><span class="st">"latest"</span><span class="op">)</span><span class="op">$</span><span class="va">adrs</span>
+<span class="va">adtte</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/scda/man/synthetic_cdisc_data.html">synthetic_cdisc_data</a></span><span class="op">(</span><span class="st">"latest"</span><span class="op">)</span><span class="op">$</span><span class="va">adtte</span>
 
 <span class="va">app</span> <span class="op">&lt;-</span> <span class="fu">teal</span><span class="fu">::</span><span class="fu"><a href="../reference/init.html">init</a></span><span class="op">(</span>
   data <span class="op">=</span> <span class="fu"><a href="../reference/cdisc_data.html">cdisc_data</a></span><span class="op">(</span>
-    <span class="fu"><a href="../reference/cdisc_dataset.html">cdisc_dataset</a></span><span class="op">(</span><span class="st">"ADSL"</span>, <span class="va">adsl</span>, code <span class="op">=</span> <span class="st">"radsl(cached = TRUE)"</span><span class="op">)</span>,
-    <span class="fu"><a href="../reference/cdisc_dataset.html">cdisc_dataset</a></span><span class="op">(</span><span class="st">"ADRS"</span>, <span class="va">adrs</span>, code <span class="op">=</span> <span class="st">"radrs(cached = TRUE)"</span><span class="op">)</span>,
-    <span class="fu"><a href="../reference/cdisc_dataset.html">cdisc_dataset</a></span><span class="op">(</span><span class="st">"ADTTE"</span>, <span class="va">adtte</span>, code <span class="op">=</span> <span class="st">"radtte(cached = TRUE)"</span><span class="op">)</span>
+    <span class="fu"><a href="../reference/cdisc_dataset.html">cdisc_dataset</a></span><span class="op">(</span><span class="st">"ADSL"</span>, <span class="va">adsl</span>, code <span class="op">=</span> <span class="st">"ADSL &lt;- synthetic_cdisc_data(\"latest\")$adsl"</span><span class="op">)</span>,
+    <span class="fu"><a href="../reference/cdisc_dataset.html">cdisc_dataset</a></span><span class="op">(</span><span class="st">"ADRS"</span>, <span class="va">adrs</span>, code <span class="op">=</span> <span class="st">"ADRS &lt;- synthetic_cdisc_data(\"latest\")$adrs"</span><span class="op">)</span>,
+    <span class="fu"><a href="../reference/cdisc_dataset.html">cdisc_dataset</a></span><span class="op">(</span><span class="st">"ADTTE"</span>, <span class="va">adtte</span>, code <span class="op">=</span> <span class="st">"ADTTE &lt;- synthetic_cdisc_data(\"latest\")$adtte"</span><span class="op">)</span>
   <span class="op">)</span>,
   modules <span class="op">=</span> <span class="fu"><a href="../reference/root_modules.html">root_modules</a></span><span class="op">(</span>
     <span class="fu">teal.modules.general</span><span class="fu">::</span><span class="fu">tm_data_table</span><span class="op">(</span><span class="st">"Data Table"</span><span class="op">)</span>,
