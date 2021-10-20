@@ -251,16 +251,14 @@ PythonCodeClass <- R6::R6Class( # nolint
 #' # mutate data object
 #'
 #' y <- 8
-#' x <- teal:::RelationalDataConnector$new(
-#'   connectors = list(
-#'     scda_cdisc_dataset_connector("ADSL", "adsl"),
-#'     scda_cdisc_dataset_connector("ADLB", "adlb")
-#'   )
+#' tc <- cdisc_data(
+#'   scda_cdisc_dataset_connector("ADSL", "adsl"),
+#'   scda_cdisc_dataset_connector("ADLB", "adlb")
 #' )
 #'
-#' tc <- teal:::RelationalData$new(x)
 #' tc %>% mutate_data(python_code("import pandas as pd
 #' r.ADSL = pd.DataFrame({'STUDYID': [r.y], 'USUBJID': [r.y]})"), vars = list(y = y))
+#'
 #'
 #' load_datasets(tc) # submit all
 #' ds <- tc$get_dataset("ADSL")
