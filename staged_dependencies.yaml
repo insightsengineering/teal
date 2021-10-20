@@ -11,6 +11,9 @@ upstream_repos:
   insightsengineering/scda:
     repo: insightsengineering/scda
     host: https://github.com
+  insightsengineering/scda.2021:
+    repo: insightsengineering/scda.2021
+    host: https://github.com
   insightsengineering/test.nest:
     repo: insightsengineering/test.nest
     host: https://github.com
