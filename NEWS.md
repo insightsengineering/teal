@@ -6,9 +6,9 @@
 
 ### New features
 * Added print methods to the `DatasetConnector`, `RelationalData`, and `RelationalDataconnector` classes and added input validation to the implementation of the print method that was already in the `Dataset` object.
-* Replaced the servers from `DataConnection`, `RelationalDataConnector`, and `DatasetConnector`, and `RelationalData` with `moduleServer`.
 
 ### Miscellaneous
+* Replaced the servers from `DataConnection`, `RelationalDataConnector`, `DatasetConnector`, and `RelationalData` with `moduleServer`.
 * Updated R version requirement to >= 3.6.
 
 # teal 0.10.0
