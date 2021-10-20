@@ -29,7 +29,6 @@ object containing datasets.}
 
 # RelationalData --------
 library(scda)
-library(random.cdisc.data)
 adsl <- cdisc_dataset(dataname = "ADSL",
                       x = synthetic_cdisc_data("latest")$adsl,
                       code = "library(scda)\nADSL <- synthetic_cdisc_data(\"latest\")$adsl")

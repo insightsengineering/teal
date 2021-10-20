@@ -34,7 +34,7 @@ library(reticulate)
 
 ADSL <- synthetic_cdisc_data("latest")$adsl
 
-x <- rcd_cdisc_dataset_connector("ADSL", radsl, cached = TRUE)
+x <- scda_cdisc_dataset_connector("ADSL", "adsl")
 
 x \%>\% mutate_dataset(python_code("import pandas as pd
 r.ADSL = pd.DataFrame({'x': [1]})"))
@@ -46,14 +46,14 @@ x$get_raw_data()
 # mutate data object
 
 y <- 8
-x <- rcd_data( # RelationalDataConnector
-  rcd_cdisc_dataset_connector("ADSL", radsl, cached = TRUE),
-  rcd_cdisc_dataset_connector("ADLB", radlb, cached = TRUE)
-  )
+tc <- cdisc_data(
+  scda_cdisc_dataset_connector("ADSL", "adsl"),
+  scda_cdisc_dataset_connector("ADLB", "adlb")
+)
 
-tc <- teal:::RelationalData$new(x)
 tc \%>\% mutate_data(python_code("import pandas as pd
 r.ADSL = pd.DataFrame({'STUDYID': [r.y], 'USUBJID': [r.y]})"), vars = list(y = y))
+
 
 load_datasets(tc) # submit all
 ds <- tc$get_dataset("ADSL")

@@ -1,9 +1,10 @@
-library(random.cdisc.data)
-ADSL <- radsl(cached = TRUE) # nolint
-ADTTE <- radtte(cached = TRUE) # nolint
+library(scda)
+scda_data <- synthetic_cdisc_data("latest")
+adsl <- scda_data$adsl # nolint
+adtte <- scda_data$adtte # nolint
 data <- cdisc_data(
-  cdisc_dataset("ADSL", ADSL),
-  cdisc_dataset("ADTTE", ADTTE)
+  cdisc_dataset("ADSL", adsl),
+  cdisc_dataset("ADTTE", adtte)
 )
 
 ds <- teal:::CDISCFilteredData$new()
@@ -52,7 +53,7 @@ testthat::test_that("delayed version of value_choices", {
   res_obj <- isolate(resolve_delayed(obj, datasets = ds))
   testthat::expect_equal(
     res_obj,
-    value_choices(ADSL, var_choices = "ARMCD", var_label = "ARM", subset = c("ARM A", "ARM B"))
+    value_choices(adsl, var_choices = "ARMCD", var_label = "ARM", subset = c("ARM A", "ARM B"))
   )
 
 
@@ -82,7 +83,7 @@ testthat::test_that("delayed version of value_choices", {
   res_obj <- isolate(resolve_delayed(obj, datasets = ds))
   testthat::expect_equal(
     res_obj,
-    value_choices(ADSL, var_choices = "ARMCD", var_label = "ARM",
+    value_choices(adsl, var_choices = "ARMCD", var_label = "ARM",
                   subset = function(data) {
                     levels(data$ARMCD)[1:2]
                   })
@@ -119,7 +120,7 @@ testthat::test_that("delayed version of value_choices", {
   res_obj <- isolate(resolve_delayed(obj, datasets = ds))
   testthat::expect_equal(
     res_obj,
-    value_choices(ADSL, var_choices = c("ARMCD", "BMRKR2"), var_label = c("ARM", "BMRKR2"),
+    value_choices(adsl, var_choices = c("ARMCD", "BMRKR2"), var_label = c("ARM", "BMRKR2"),
                   subset = combine_armcd_bmrkr2)
   )
 })

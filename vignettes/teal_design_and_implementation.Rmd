@@ -457,17 +457,15 @@ Here is an example of an app with two independent teal applications side-by-side
 We use the `id` argument of the `init` function for this.
 
 ```{r, eval=FALSE}
-library(random.cdisc.data)
+library(scda)
 
-ADSL <- radsl(cached = TRUE) #nolint
-
-options(teal_logging = FALSE)
+ADSL <- synthetic_cdisc_data("latest")$adsl #nolint
 
 # Code to have two teal apps side-by-side or embed it in a larger application
 create_teal_app <- function(title, id) {
   init(
     data = cdisc_data(
-      cdisc_dataset("ADSL", ADSL, code = "ADSL <- radsl(cached = TRUE)")
+      cdisc_dataset("ADSL", ADSL, code = "ADSL <- synthetic_cdisc_data(\"latest\")$adsl")
     ),
     modules = root_modules(
       module(
@@ -536,7 +534,7 @@ shinyApp(
       6,
       ui_teal_with_splash("app1",
                           data = cdisc_data(
-                            cdisc_dataset("ADSL", ADSL, code = "ADSL <- radsl(cached = TRUE)")
+                            cdisc_dataset("ADSL", ADSL, code = "ADSL <- synthetic_cdisc_data(\"latest\")$adsl")
                           ),
                           title = "Sample app 1")
     ),
@@ -544,7 +542,7 @@ shinyApp(
       6,
       ui_teal_with_splash("app2",
                           data = cdisc_data(
-                            cdisc_dataset("ADSL", ADSL, code = "ADSL <- radsl(cached = TRUE)")
+                            cdisc_dataset("ADSL", ADSL, code = "ADSL <- synthetic_cdisc_data(\"latest\")$adsl")
                           ),
                           title = "Sample app 2")
     )
@@ -554,7 +552,7 @@ shinyApp(
       module = srv_teal_with_splash,
       id = "app1",
       data = cdisc_data(
-        cdisc_dataset("ADSL", ADSL, code = "ADSL <- radsl(cached = TRUE)")
+        cdisc_dataset("ADSL", ADSL, code = "ADSL <- synthetic_cdisc_data(\"latest\")$adsl")
       ),
       modules = modules
     )
@@ -562,7 +560,7 @@ shinyApp(
       module = srv_teal_with_splash,
       id = "app2",
       data = cdisc_data(
-        cdisc_dataset("ADSL", ADSL, code = "ADSL <- radsl(cached = TRUE)")
+        cdisc_dataset("ADSL", ADSL, code = "ADSL <- synthetic_cdisc_data(\"latest\")$adsl")
       ),
       modules = modules
     )
