@@ -1,5 +1,10 @@
 library(scda)
 
+adsl_cf <- CallableFunction$new(function() as.data.frame(as.list(setNames(nm = get_cdisc_keys("ADSL")))))
+adae_cf <- CallableFunction$new(function() as.data.frame(as.list(setNames(nm = get_cdisc_keys("ADAE")))))
+adsl  <- CDISCDatasetConnector$new("ADSL", adsl_cf, keys = get_cdisc_keys("ADSL"), parent = character(0))
+adae <- CDISCDatasetConnector$new("ADAE", adae_cf, keys = get_cdisc_keys("ADAE"), parent = "ADSL")
+
 testthat::test_that("RelationalDataConnector with DataConnection", {
   open_fun <- callable_function(data.frame)
   open_fun$set_args(list(x = 1:5))
@@ -66,10 +71,6 @@ testthat::test_that("RelationalDataConnector$print prints out expected output on
 })
 
 testthat::test_that("relational_data_connector returns a RelationalDataConnector object on basic input", {
-  adsl_cf <- CallableFunction$new(function() as.data.frame(as.list(setNames(nm = get_cdisc_keys("ADSL")))))
-  adae_cf <- CallableFunction$new(function() as.data.frame(as.list(setNames(nm = get_cdisc_keys("ADAE")))))
-  adsl  <- CDISCDatasetConnector$new("ADSL", adsl_cf, keys = get_cdisc_keys("ADSL"), parent = character(0))
-  adae <- CDISCDatasetConnector$new("ADAE", adae_cf, keys = get_cdisc_keys("ADAE"), parent = "ADSL")
   data <- cdisc_data_connector(
     connection = DataConnection$new(open_fun = CallableFunction$new(function() "open function")),
     connectors = list(adsl, adae)
@@ -78,10 +79,6 @@ testthat::test_that("relational_data_connector returns a RelationalDataConnector
 })
 
 testthat::test_that("relational_data_connector has input validation", {
-  adsl_cf <- CallableFunction$new(function() as.data.frame(as.list(setNames(nm = get_cdisc_keys("ADSL")))))
-  adae_cf <- CallableFunction$new(function() as.data.frame(as.list(setNames(nm = get_cdisc_keys("ADAE")))))
-  adsl  <- CDISCDatasetConnector$new("ADSL", adsl_cf, keys = get_cdisc_keys("ADSL"), parent = character(0))
-  adae <- CDISCDatasetConnector$new("ADAE", adae_cf, keys = get_cdisc_keys("ADAE"), parent = "ADSL")
   testthat::expect_error(cdisc_data_connector(
     connection = 1,
     connectors = list(adsl, adae)))
