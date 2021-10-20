@@ -1,9 +1,10 @@
-library(random.cdisc.data)
-ADSL <- radsl(cached = TRUE) # nolint
-ADTTE <- radtte(cached = TRUE) # nolint
+library(scda)
+scda_data <- synthetic_cdisc_data("latest")
+adsl <- scda_data$adsl # nolint
+adtte <- scda_data$adtte # nolint
 data <- cdisc_data(
-  cdisc_dataset("ADSL", ADSL),
-  cdisc_dataset("ADTTE", ADTTE)
+  cdisc_dataset("ADSL", adsl),
+  cdisc_dataset("ADTTE", adtte)
 )
 ds <- teal:::CDISCFilteredData$new()
 isolate(filtered_data_set(data, ds))
@@ -40,7 +41,7 @@ test_that("delayed version of variable_choices", {
   res_obj <- isolate(resolve_delayed(obj, datasets = ds))
   expect_equal(
     res_obj,
-    variable_choices(ADSL, subset = c("SEX", "ARMCD", "COUNTRY"))
+    variable_choices(adsl, subset = c("SEX", "ARMCD", "COUNTRY"))
   )
 
 
@@ -57,7 +58,7 @@ test_that("delayed version of variable_choices", {
   res_obj <- isolate(resolve_delayed(obj, datasets = ds))
   expect_equal(
     res_obj,
-    variable_choices(ADSL, subset = colnames(ADSL)[1:2], key = get_cdisc_keys("ADSL"))
+    variable_choices(adsl, subset = colnames(adsl)[1:2], key = get_cdisc_keys("ADSL"))
   )
 
   # non-null key value
@@ -73,6 +74,6 @@ test_that("delayed version of variable_choices", {
   res_obj <- isolate(resolve_delayed(obj, datasets = ds))
   expect_equal(
     res_obj,
-    variable_choices(ADSL, key = c("USUBJID", "STUDYID"))
+    variable_choices(adsl, key = c("USUBJID", "STUDYID"))
   )
 })

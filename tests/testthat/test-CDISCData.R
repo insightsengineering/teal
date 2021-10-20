@@ -248,7 +248,7 @@ testthat::test_that("two datasets / datasets code", {
     cdisc_data(
       adsl,
       adtte,
-      code = "ADSL <- synthetic_cdisc_data(\"rcd_2021_05_05\")$adsl\nADTTE <- synthetic_cdisc_data(\"rcd_2021_05_05\")$adtte", #nolint
+      code = "ADSL <- synthetic_cdisc_data(\"latest\")$adsl\nADTTE <- synthetic_cdisc_data(\"latest\")$adtte", #nolint
       check = TRUE
     )
   )
@@ -1050,20 +1050,22 @@ testthat::test_that("List values", {
   test_relational_data_equal(result, result_to_compare)
 })
 
-testthat::test_that("Keys in cached datasets", {
-  testthat::expect_true(all(get_cdisc_keys("ADSL") %in% names(random.cdisc.data::cadsl)))
+testthat::test_that("get_cdisc_keys returns column names present in the cached datasets", {
+  scda_data <- scda::synthetic_cdisc_data("latest")
 
-  testthat::expect_true(all(get_cdisc_keys("ADAE") %in% names(random.cdisc.data::cadae)))
+  testthat::expect_true(all(get_cdisc_keys("ADSL") %in% names(scda_data$adsl)))
 
-  testthat::expect_true(all(get_cdisc_keys("ADTTE") %in% names(random.cdisc.data::cadtte)))
+  testthat::expect_true(all(get_cdisc_keys("ADAE") %in% names(scda_data$adae)))
 
-  testthat::expect_true(all(get_cdisc_keys("ADCM") %in% names(random.cdisc.data::cadcm)))
+  testthat::expect_true(all(get_cdisc_keys("ADTTE") %in% names(scda_data$adtte)))
 
-  testthat::expect_true(all(get_cdisc_keys("ADLB") %in% names(random.cdisc.data::cadlb)))
+  testthat::expect_true(all(get_cdisc_keys("ADCM") %in% names(scda_data$adcm)))
 
-  testthat::expect_true(all(get_cdisc_keys("ADRS") %in% names(random.cdisc.data::cadrs)))
+  testthat::expect_true(all(get_cdisc_keys("ADLB") %in% names(scda_data$adlb)))
 
-  testthat::expect_true(all(get_cdisc_keys("ADVS") %in% names(random.cdisc.data::cadvs)))
+  testthat::expect_true(all(get_cdisc_keys("ADRS") %in% names(scda_data$adrs)))
+
+  testthat::expect_true(all(get_cdisc_keys("ADVS") %in% names(scda_data$advs)))
 })
 
 testthat::test_that("Empty code", {
@@ -1100,7 +1102,7 @@ testthat::test_that("Error - ADSL is missing in cdisc_data", {
   testthat::expect_error({
     x <- cdisc_data(
       cdisc_dataset("ADTTE", adtte_raw),
-      code = "ADTTE <- synthetic_cdisc_data(\"rcd_2021_05_05\")$adtte", check = FALSE
+      code = "ADTTE <- synthetic_cdisc_data(\"latest\")$adtte", check = FALSE
     )
     x$check_metadata()
   },

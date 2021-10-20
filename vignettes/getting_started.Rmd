@@ -30,19 +30,19 @@ as these libraries provide standard modules for teal apps (see below for details
 
 ```{r, eval=FALSE}
 library(teal)
-library(random.cdisc.data)
 library(teal.modules.general)
 library(teal.modules.clinical)
+library(scda)
 
-adsl <- radsl(cached = TRUE)
-adrs <- radrs(cached = TRUE)
-adtte <- radtte(cached = TRUE)
+adsl <- synthetic_cdisc_data("latest")$adsl
+adrs <- synthetic_cdisc_data("latest")$adrs
+adtte <- synthetic_cdisc_data("latest")$adtte
 
 app <- teal::init(
   data = cdisc_data(
-    cdisc_dataset("ADSL", adsl, code = "radsl(cached = TRUE)"),
-    cdisc_dataset("ADRS", adrs, code = "radrs(cached = TRUE)"),
-    cdisc_dataset("ADTTE", adtte, code = "radtte(cached = TRUE)")
+    cdisc_dataset("ADSL", adsl, code = "ADSL <- synthetic_cdisc_data(\"latest\")$adsl"),
+    cdisc_dataset("ADRS", adrs, code = "ADRS <- synthetic_cdisc_data(\"latest\")$adrs"),
+    cdisc_dataset("ADTTE", adtte, code = "ADTTE <- synthetic_cdisc_data(\"latest\")$adtte")
   ),
   modules = root_modules(
     teal.modules.general::tm_data_table("Data Table"),

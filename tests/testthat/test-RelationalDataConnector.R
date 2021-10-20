@@ -14,29 +14,24 @@ testthat::test_that("RelationalDataConnector with DataConnection", {
   code <- "ADSL$x <- 1"
   check <- TRUE
 
-  adsl_cf <- callable_function(function() synthetic_cdisc_data("rcd_2021_05_05")$adsl)
-  adlb_cf <- callable_function(function() synthetic_cdisc_data("rcd_2021_05_05")$adlb)
+  adsl_cf <- callable_function(function(scda_name) synthetic_cdisc_data(scda_name)$adsl)
+  adlb_cf <- callable_function(function(scda_name) synthetic_cdisc_data(scda_name)$adlb)
 
-  rcd1 <- cdisc_dataset_connector(dataname = "ADSL", adsl_cf, keys = get_cdisc_keys("ADSL"))
-  rcd2 <- cdisc_dataset_connector(dataname = "ADLB", adlb_cf, keys = get_cdisc_keys("ADLB"))
+  scda1 <- cdisc_dataset_connector(dataname = "ADSL", adsl_cf, keys = get_cdisc_keys("ADSL"))
+  scda2 <- cdisc_dataset_connector(dataname = "ADLB", adlb_cf, keys = get_cdisc_keys("ADLB"))
 
-  x <- RelationalDataConnector$new(connection = con, connectors = list(rcd1, rcd2))
+  x <- RelationalDataConnector$new(connection = con, connectors = list(scda1, scda2))
   testthat::expect_true(is(x, "RelationalDataConnector"))
 
   x$set_ui(function(id, ...) {
     ns <- NS(id)
     tagList(
-      numericInput(ns("seed"), "Choose seed", min = 1, max = 1000, value = 1),
-      sliderInput(ns("N"), "Choose number of observations", min = 1, max = 400, value = 10)
+      textInput(ns("scda_name"), label = "Example", value = "latest")
     )
   })
   x$set_server(function(input, output, session, connectors, connection) {
     lapply(connectors, function(connector) {
-      if (get_dataname(connector) == "ADSL") {
-        set_args(connector, args = list(seed = input$seed, N = input$N))
-      } else {
-        set_args(connector, args = list(seed = input$seed))
-      }
+      set_args(connector, args = list(scda_name = input$scda_name))
       connector$pull(try = TRUE)
     })
   })
