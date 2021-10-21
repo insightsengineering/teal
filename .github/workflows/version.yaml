@@ -54,13 +54,14 @@ jobs:
           echo "NEW_PKG_VERSION=$DESC_VERSION" >> $GITHUB_ENV
         shell: bash
 
-      - name: Commit files wieth new version
+      - name: Commit files with new version
         run: |
           git config --local user.email "actions@github.com"
           git config --local user.name "GitHub Actions"
           git add NEWS.md DESCRIPTION
           git commit -m "Bump version to ${{ env.NEW_PKG_VERSION }}"
-          
+        shell: bash
+
       - name: Wait for other jobs
         uses: lewagon/wait-on-check-action@v1.1.1
         with:
