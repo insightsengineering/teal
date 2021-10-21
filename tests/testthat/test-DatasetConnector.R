@@ -230,7 +230,7 @@ testthat::test_that("csv_dataset_connector scda", {
   testthat::expect_identical(get_dataname(x), "ADSL")
   testthat::expect_identical(
     get_code(x),
-    paste0("ADSL <- readr::read_delim(file = \"", temp_file_csv, "\", delim = \",\")")
+    paste0("ADSL <- readr::read_delim(file = \"", encodeString(temp_file_csv), "\", delim = \",\")")
   )
   data <- get_raw_data(x)
   testthat::expect_true(is.data.frame(data))
@@ -245,7 +245,7 @@ testthat::test_that("csv_dataset_connector scda", {
   testthat::expect_identical(get_dataname(x), "ADSL")
   testthat::expect_identical(
     get_code(x),
-    paste0("ADSL <- readr::read_delim(file = \"", temp_file_csv, "\", delim = \"|\")")
+    paste0("ADSL <- readr::read_delim(file = \"", encodeString(temp_file_csv), "\", delim = \"|\")")
   )
   data <- get_raw_data(x)
   testthat::expect_true(is.data.frame(data))
@@ -261,7 +261,7 @@ testthat::test_that("csv_dataset_connector scda", {
   testthat::expect_identical(get_dataname(x), "ADSL")
   testthat::expect_identical(
     get_code(x),
-    paste0("ADSL <- readr::read_delim(file = \"", temp_file_csv, "\", delim = \"\\t\")")
+    paste0("ADSL <- readr::read_delim(file = \"", encodeString(temp_file_csv), "\", delim = \"\\t\")")
   )
   data <- get_raw_data(x)
   testthat::expect_true(is.data.frame(data))
@@ -277,7 +277,7 @@ testthat::test_that("csv_dataset_connector scda", {
   testthat::expect_identical(get_dataname(x), "ADSL")
   testthat::expect_identical(
     get_code(x),
-    paste0("ADSL <- readr::read_delim(file = \"", temp_file_csv, "\", delim = \";\")")
+    paste0("ADSL <- readr::read_delim(file = \"", encodeString(temp_file_csv), "\", delim = \";\")")
   )
   data <- get_raw_data(x)
   testthat::expect_true(is.data.frame(data))
@@ -305,7 +305,7 @@ testthat::test_that("csv_dataset_connector non-standard datasets multi/space cha
   testthat::expect_identical(get_dataname(x), "ADSL")
   testthat::expect_identical(
     get_code(x),
-    paste0("ADSL <- readr::read_delim(file = \"", temp_file_csv, "\", delim = \"$\")")
+    paste0("ADSL <- readr::read_delim(file = \"", encodeString(temp_file_csv), "\", delim = \"$\")")
   )
   data <- get_raw_data(x)
   testthat::expect_true(is.data.frame(data))
@@ -320,7 +320,7 @@ testthat::test_that("csv_dataset_connector non-standard datasets multi/space cha
   testthat::expect_identical(get_dataname(x), "ADSL")
   testthat::expect_identical(
     get_code(x), paste0("ADSL <- readr::read_delim(file = \"",
-    temp_file_csv, "\", delim = \" \")")
+    encodeString(temp_file_csv), "\", delim = \" \")")
   )
   data <- get_raw_data(x)
   testthat::expect_true(is.data.frame(data))
@@ -346,7 +346,7 @@ testthat::test_that("csv_dataset_connector attritubes", {
   testthat::expect_identical(get_dataname(x), "ADSL")
   testthat::expect_identical(
     get_code(x),
-    paste0("ADSL <- readr::read_delim(file = \"", temp_file_csv, "\", delim = \",\")")
+    paste0("ADSL <- readr::read_delim(file = \"", encodeString(temp_file_csv), "\", delim = \",\")")
   )
   data <- get_raw_data(x)
   testthat::expect_null(attributes(data[[1]])$label)
@@ -369,7 +369,7 @@ testthat::test_that("csv_cdisc_dataset_connector scda", {
   testthat::expect_identical(get_dataname(x), "ADSL")
   testthat::expect_identical(
     get_code(x),
-    paste0("ADSL <- readr::read_delim(file = \"", temp_file_csv, "\", delim = \",\")")
+    paste0("ADSL <- readr::read_delim(file = \"", encodeString(temp_file_csv), "\", delim = \",\")")
   )
   data <- get_raw_data(x)
   testthat::expect_true(is.data.frame(data))
@@ -384,7 +384,7 @@ testthat::test_that("csv_cdisc_dataset_connector scda", {
   testthat::expect_identical(get_dataname(x), "ADSL")
   testthat::expect_identical(
     get_code(x),
-    paste0("ADSL <- readr::read_delim(file = \"", temp_file_csv, "\", delim = \"|\")")
+    paste0("ADSL <- readr::read_delim(file = \"", encodeString(temp_file_csv), "\", delim = \"|\")")
   )
   data <- get_raw_data(x)
   testthat::expect_true(is.data.frame(data))
