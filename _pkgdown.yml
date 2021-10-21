@@ -83,7 +83,6 @@ reference:
     - scda_dataset_connector
     - script_cdisc_dataset_connector
     - script_dataset_connector
-    - snowflake_dataset_connector
     - teradata_cdisc_dataset_connector
     - teradata_dataset_connector
   - title: Delayed Data Connection Constructors
@@ -93,8 +92,6 @@ reference:
     - datasetdb_connection
     - rice_connection
     - ricepass_connection
-    - snowflake_connection
-    - snowflake_connection_function
     - teradata_connection
   - title: Delayed Data Constructors
     desc: For creating delayed data objects.
@@ -105,7 +102,6 @@ reference:
     - datasetdb_data
     - named_dataset_file
     - rice_data
-    - snowflake_data
     - teal_data
     - teal_data_file
     - teradata_data
