@@ -55,6 +55,7 @@ reference:
   - title: Delayed Dataset Connectors Constructors
     desc: For creating delayed dataset objects.
     contents:
+    - cdisc_data_connector
     - cdisc_dataset_connector
     - cdisc_dataset_connector_file
     - cdse_dataset_connector
@@ -62,6 +63,7 @@ reference:
     - code_dataset_connector
     - csv_cdisc_dataset_connector
     - csv_dataset_connector
+    - data_connection
     - datasetdb_dataset_connector
     - dataset_connector
     - dataset_connector_file
@@ -73,6 +75,7 @@ reference:
     - raw_dataset_connector
     - rds_cdisc_dataset_connector
     - rds_dataset_connector
+    - relational_data_connector
     - relational_dataset_connector
     - rice_cdisc_dataset_connector
     - rice_dataset_connector

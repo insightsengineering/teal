@@ -16,7 +16,7 @@
 #'
 #' ping_fun <- callable_function(function() TRUE)
 #'
-#' x <- teal:::DataConnection$new( # define connection
+#' x <- data_connection( # define connection
 #'   ping_fun = ping_fun, # define ping function
 #'   open_fun = open_fun, # define opening function
 #'   close_fun = close_fun) # define closing function
@@ -49,12 +49,15 @@ DataConnection <- R6::R6Class( # nolint
     initialize = function(open_fun = NULL, close_fun = NULL, ping_fun = NULL, if_conn_obj = FALSE) {
       stopifnot(is_logical_single(if_conn_obj))
       if (!is.null(open_fun)) {
+        stopifnot(is(open_fun, "Callable"))
         private$set_open_fun(open_fun)
       }
       if (!is.null(close_fun)) {
+        stopifnot(is(close_fun, "Callable"))
         private$set_close_fun(close_fun)
       }
       if (!is.null(ping_fun)) {
+        stopifnot(is(ping_fun, "Callable"))
         private$set_ping_fun(ping_fun)
       }
       private$if_conn_obj <- if_conn_obj
@@ -583,6 +586,47 @@ DataConnection <- R6::R6Class( # nolint
     }
   )
 )
+
+#' Public facing object constructor for \code{DataConnection} class.
+#'
+#' @param open_fun (`CallableFunction`) function to open connection
+#' @param close_fun (`CallableFunction`) function to close connection
+#' @param ping_fun (`CallableFunction`) function to ping connection
+#' @param if_conn_obj optional, (`logical`) whether to store `conn` object returned from opening
+#'
+#' @examples
+#' open_fun <- callable_function(data.frame) # define opening function
+#' open_fun$set_args(list(x = 1:5)) # define fixed arguments to opening function
+#'
+#' close_fun <- callable_function(print) # define closing function
+#' close_fun$set_args(list(x = "Hi there")) # define fixed arguments to closing function
+#'
+#' ping_fun <- callable_function(function() TRUE)
+#'
+#' x <- data_connection( # define connection
+#'   ping_fun = ping_fun, # define ping function
+#'   open_fun = open_fun, # define opening function
+#'   close_fun = close_fun) # define closing function
+#'
+#' x$set_open_args(args = list(y = letters[1:5])) # define additional arguments if necessary
+#'
+#' x$open() # call opening function
+#' x$get_open_call() # check reproducible R code
+#'
+#' # get data from connection via DataConnector$get_dataset()
+#'
+#' \dontrun{
+#' x$open(args = list(x = 1:5, y = letters[1:5])) # able to call opening function with arguments
+#' x$close() # call closing function
+#' }
+#'
+#' @return \code{DataConnection} object
+#' @export
+data_connection <- function(open_fun = NULL, close_fun = NULL, ping_fun = NULL, if_conn_obj = FALSE) {
+  DataConnection$new(
+    open_fun = open_fun, close_fun = close_fun, ping_fun = ping_fun, if_conn_obj = if_conn_obj
+  )
+}
 
 # DataConnection wrappers ----
 #' Open connection to `entimICE` via `rice`
