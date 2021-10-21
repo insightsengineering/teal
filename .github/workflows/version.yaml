@@ -40,6 +40,7 @@ jobs:
 
       - name: Version Increment
         # if: github.ref == 'refs/heads/main' # Only after merge or push to main
+        if: github.ref == 'refs/heads/bump_dev_version'
         run: |
           DESC_VERSION=$(awk -F: '/Version:/{gsub(/[ ]+/,"") ; print $2}' DESCRIPTION)
           NEWS_VERSION=$(awk '/^#+ /{print $3; exit}' NEWS.md)
@@ -67,6 +68,7 @@ jobs:
 
       - name: Commit files with new version
         # if: github.ref == 'refs/heads/main' # Only after merge or push to main
+        if: github.ref == 'refs/heads/bump_dev_version'
         run: |
           git config --local user.email "actions@github.com"
           git config --local user.name "GitHub Actions"
@@ -76,6 +78,7 @@ jobs:
 
       - name: Wait for other jobs
         # if: github.ref == 'refs/heads/main' # Only after merge or push to main
+        if: github.ref == 'refs/heads/bump_dev_version'
         uses: lewagon/wait-on-check-action@v1.1.1
         with:
           ref: ${{ github.ref }}
@@ -85,6 +88,7 @@ jobs:
 
       - name: Push changes
         # if: github.ref == 'refs/heads/main' # Only after merge or push to main
+        if: github.ref == 'refs/heads/bump_dev_version'
         uses: ad-m/github-push-action@master
         with:
           github_token: ${{ secrets.REPO_GITHUB_TOKEN }}
