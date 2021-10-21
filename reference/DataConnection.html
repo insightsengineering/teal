@@ -504,7 +504,7 @@ A shiny module server function that should load data from all connectors</p></dd
 
 <span class='va'>ping_fun</span> <span class='op'>&lt;-</span> <span class='fu'><a href='callable_function.html'>callable_function</a></span><span class='op'>(</span><span class='kw'>function</span><span class='op'>(</span><span class='op'>)</span> <span class='cn'>TRUE</span><span class='op'>)</span>
 
-<span class='va'>x</span> <span class='op'>&lt;-</span> <span class='fu'>teal</span><span class='fu'>:::</span><span class='va'>DataConnection</span><span class='op'>$</span><span class='fu'>new</span><span class='op'>(</span> <span class='co'># define connection</span>
+<span class='va'>x</span> <span class='op'>&lt;-</span> <span class='fu'><a href='data_connection.html'>data_connection</a></span><span class='op'>(</span> <span class='co'># define connection</span>
   ping_fun <span class='op'>=</span> <span class='va'>ping_fun</span>, <span class='co'># define ping function</span>
   open_fun <span class='op'>=</span> <span class='va'>open_fun</span>, <span class='co'># define opening function</span>
   close_fun <span class='op'>=</span> <span class='va'>close_fun</span><span class='op'>)</span> <span class='co'># define closing function</span>

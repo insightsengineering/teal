@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Get dataset label attribute — data_label • teal</title>
+<title>Public facing object constructor for CDISCDataConnector class. — cdisc_data_connector • teal</title>
 
 
 <!-- jquery -->
@@ -39,8 +39,8 @@
 
 
 
-<meta property="og:title" content="Get dataset label attribute — data_label" />
-<meta property="og:description" content="" />
+<meta property="og:title" content="Public facing object constructor for CDISCDataConnector class. — cdisc_data_connector" />
+<meta property="og:description" content="Public facing object constructor for CDISCDataConnector class." />
 
 
 
@@ -135,34 +135,48 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Get dataset label attribute</h1>
+    <h1>Public facing object constructor for <code>CDISCDataConnector</code> class.</h1>
     
-    <div class="hidden name"><code>data_label.Rd</code></div>
+    <div class="hidden name"><code>cdisc_data_connector.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p><a href='https://lifecycle.r-lib.org/articles/stages.html#maturing'><img src='figures/lifecycle-maturing.svg' alt='[Maturing]' /></a></p>
+    <p>Public facing object constructor for <code>CDISCDataConnector</code> class.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>data_label</span><span class='op'>(</span><span class='va'>data</span><span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'>cdisc_data_connector</span><span class='op'>(</span><span class='va'>connection</span>, <span class='va'>connectors</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>data</th>
-      <td><p><code>data.frame</code> from which attribute is extracted</p></td>
+      <th>connection</th>
+      <td><p>(<code>DataConnection</code>)<br />
+connection to data source</p></td>
+    </tr>
+    <tr>
+      <th>connectors</th>
+      <td><p>(<code>list</code> of <code>DatasetConnector</code> elements)<br />
+list with dataset connectors</p></td>
     </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>(<code>character</code>) label or <code>NULL</code> if it's missing</p>
+    <p><code>CDISCDataConnector</code> object</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'>scda</span><span class='op'>)</span>
-<span class='fu'>data_label</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/pkg/scda/man/synthetic_cdisc_data.html'>synthetic_cdisc_data</a></span><span class='op'>(</span><span class='st'>"latest"</span><span class='op'>)</span><span class='op'>$</span><span class='va'>adsl</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; [1] "Subject Level Analysis Dataset"</div><div class='output co'>#&gt; [1] "Hi there"</div></pre>
+    <pre class="examples"><div class='input'><span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span>
+<span class='va'>adsl_cf</span> <span class='op'>&lt;-</span> <span class='va'><a href='CallableFunction.html'>CallableFunction</a></span><span class='op'>$</span><span class='fu'>new</span><span class='op'>(</span><span class='kw'>function</span><span class='op'>(</span><span class='op'>)</span> <span class='fu'><a href='https://rdrr.io/r/base/as.data.frame.html'>as.data.frame</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/list.html'>as.list</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/stats/setNames.html'>setNames</a></span><span class='op'>(</span>nm <span class='op'>=</span> <span class='fu'><a href='get_cdisc_keys.html'>get_cdisc_keys</a></span><span class='op'>(</span><span class='st'>"ADSL"</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span>
+<span class='va'>adae_cf</span> <span class='op'>&lt;-</span> <span class='va'><a href='CallableFunction.html'>CallableFunction</a></span><span class='op'>$</span><span class='fu'>new</span><span class='op'>(</span><span class='kw'>function</span><span class='op'>(</span><span class='op'>)</span> <span class='fu'><a href='https://rdrr.io/r/base/as.data.frame.html'>as.data.frame</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/list.html'>as.list</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/stats/setNames.html'>setNames</a></span><span class='op'>(</span>nm <span class='op'>=</span> <span class='fu'><a href='get_cdisc_keys.html'>get_cdisc_keys</a></span><span class='op'>(</span><span class='st'>"ADAE"</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span>
+<span class='va'>adsl</span> <span class='op'>&lt;-</span> <span class='va'><a href='CDISCDatasetConnector.html'>CDISCDatasetConnector</a></span><span class='op'>$</span><span class='fu'>new</span><span class='op'>(</span><span class='st'>"ADSL"</span>, <span class='va'>adsl_cf</span>, keys <span class='op'>=</span> <span class='fu'><a href='get_cdisc_keys.html'>get_cdisc_keys</a></span><span class='op'>(</span><span class='st'>"ADSL"</span><span class='op'>)</span>, parent <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/character.html'>character</a></span><span class='op'>(</span><span class='fl'>0</span><span class='op'>)</span><span class='op'>)</span>
+<span class='va'>adae</span> <span class='op'>&lt;-</span> <span class='va'><a href='CDISCDatasetConnector.html'>CDISCDatasetConnector</a></span><span class='op'>$</span><span class='fu'>new</span><span class='op'>(</span><span class='st'>"ADAE"</span>, <span class='va'>adae_cf</span>, keys <span class='op'>=</span> <span class='fu'><a href='get_cdisc_keys.html'>get_cdisc_keys</a></span><span class='op'>(</span><span class='st'>"ADAE"</span><span class='op'>)</span>, parent <span class='op'>=</span> <span class='st'>"ADSL"</span><span class='op'>)</span>
+<span class='va'>data</span> <span class='op'>&lt;-</span> <span class='fu'>cdisc_data_connector</span><span class='op'>(</span>
+  connection <span class='op'>=</span> <span class='fu'><a href='data_connection.html'>data_connection</a></span><span class='op'>(</span>open_fun <span class='op'>=</span> <span class='va'><a href='CallableFunction.html'>CallableFunction</a></span><span class='op'>$</span><span class='fu'>new</span><span class='op'>(</span><span class='kw'>function</span><span class='op'>(</span><span class='op'>)</span> <span class='st'>"open function"</span><span class='op'>)</span><span class='op'>)</span>,
+  connectors <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='va'>adsl</span>, <span class='va'>adae</span><span class='op'>)</span>
+<span class='op'>)</span>
+<span class='op'>}</span>
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

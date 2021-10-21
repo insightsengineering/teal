@@ -142,6 +142,9 @@
     <loc>https://insightsengineering.github.io/teal/reference/cdisc_data.html</loc>
   </url>
   <url>
+    <loc>https://insightsengineering.github.io/teal/reference/cdisc_data_connector.html</loc>
+  </url>
+  <url>
     <loc>https://insightsengineering.github.io/teal/reference/cdisc_data_file.html</loc>
   </url>
   <url>
@@ -188,6 +191,9 @@
   </url>
   <url>
     <loc>https://insightsengineering.github.io/teal/reference/csv_dataset_connector.html</loc>
+  </url>
+  <url>
+    <loc>https://insightsengineering.github.io/teal/reference/data_connection.html</loc>
   </url>
   <url>
     <loc>https://insightsengineering.github.io/teal/reference/data_extract_spec.html</loc>
@@ -476,6 +482,9 @@
   </url>
   <url>
     <loc>https://insightsengineering.github.io/teal/reference/read_script.html</loc>
+  </url>
+  <url>
+    <loc>https://insightsengineering.github.io/teal/reference/relational_data_connector.html</loc>
   </url>
   <url>
     <loc>https://insightsengineering.github.io/teal/reference/relational_dataset.html</loc>

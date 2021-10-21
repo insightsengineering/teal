@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Get dataset label attribute — data_label • teal</title>
+<title>Public facing object constructor for DataConnection class. — data_connection • teal</title>
 
 
 <!-- jquery -->
@@ -39,8 +39,8 @@
 
 
 
-<meta property="og:title" content="Get dataset label attribute — data_label" />
-<meta property="og:description" content="" />
+<meta property="og:title" content="Public facing object constructor for DataConnection class. — data_connection" />
+<meta property="og:description" content="Public facing object constructor for DataConnection class." />
 
 
 
@@ -135,34 +135,74 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Get dataset label attribute</h1>
+    <h1>Public facing object constructor for <code>DataConnection</code> class.</h1>
     
-    <div class="hidden name"><code>data_label.Rd</code></div>
+    <div class="hidden name"><code>data_connection.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p><a href='https://lifecycle.r-lib.org/articles/stages.html#maturing'><img src='figures/lifecycle-maturing.svg' alt='[Maturing]' /></a></p>
+    <p>Public facing object constructor for <code>DataConnection</code> class.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>data_label</span><span class='op'>(</span><span class='va'>data</span><span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'>data_connection</span><span class='op'>(</span>
+  open_fun <span class='op'>=</span> <span class='cn'>NULL</span>,
+  close_fun <span class='op'>=</span> <span class='cn'>NULL</span>,
+  ping_fun <span class='op'>=</span> <span class='cn'>NULL</span>,
+  if_conn_obj <span class='op'>=</span> <span class='cn'>FALSE</span>
+<span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>data</th>
-      <td><p><code>data.frame</code> from which attribute is extracted</p></td>
+      <th>open_fun</th>
+      <td><p>(<code>CallableFunction</code>) function to open connection</p></td>
+    </tr>
+    <tr>
+      <th>close_fun</th>
+      <td><p>(<code>CallableFunction</code>) function to close connection</p></td>
+    </tr>
+    <tr>
+      <th>ping_fun</th>
+      <td><p>(<code>CallableFunction</code>) function to ping connection</p></td>
+    </tr>
+    <tr>
+      <th>if_conn_obj</th>
+      <td><p>optional, (<code>logical</code>) whether to store <code>conn</code> object returned from opening</p></td>
     </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>(<code>character</code>) label or <code>NULL</code> if it's missing</p>
+    <p><code>DataConnection</code> object</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'>scda</span><span class='op'>)</span>
-<span class='fu'>data_label</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/pkg/scda/man/synthetic_cdisc_data.html'>synthetic_cdisc_data</a></span><span class='op'>(</span><span class='st'>"latest"</span><span class='op'>)</span><span class='op'>$</span><span class='va'>adsl</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; [1] "Subject Level Analysis Dataset"</div><div class='output co'>#&gt; [1] "Hi there"</div></pre>
+    <pre class="examples"><div class='input'><span class='va'>open_fun</span> <span class='op'>&lt;-</span> <span class='fu'><a href='callable_function.html'>callable_function</a></span><span class='op'>(</span><span class='va'>data.frame</span><span class='op'>)</span> <span class='co'># define opening function</span>
+<span class='va'>open_fun</span><span class='op'>$</span><span class='fu'>set_args</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>x <span class='op'>=</span> <span class='fl'>1</span><span class='op'>:</span><span class='fl'>5</span><span class='op'>)</span><span class='op'>)</span> <span class='co'># define fixed arguments to opening function</span>
+
+<span class='va'>close_fun</span> <span class='op'>&lt;-</span> <span class='fu'><a href='callable_function.html'>callable_function</a></span><span class='op'>(</span><span class='va'>print</span><span class='op'>)</span> <span class='co'># define closing function</span>
+<span class='va'>close_fun</span><span class='op'>$</span><span class='fu'>set_args</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>x <span class='op'>=</span> <span class='st'>"Hi there"</span><span class='op'>)</span><span class='op'>)</span> <span class='co'># define fixed arguments to closing function</span>
+
+<span class='va'>ping_fun</span> <span class='op'>&lt;-</span> <span class='fu'><a href='callable_function.html'>callable_function</a></span><span class='op'>(</span><span class='kw'>function</span><span class='op'>(</span><span class='op'>)</span> <span class='cn'>TRUE</span><span class='op'>)</span>
+
+<span class='va'>x</span> <span class='op'>&lt;-</span> <span class='fu'>data_connection</span><span class='op'>(</span> <span class='co'># define connection</span>
+  ping_fun <span class='op'>=</span> <span class='va'>ping_fun</span>, <span class='co'># define ping function</span>
+  open_fun <span class='op'>=</span> <span class='va'>open_fun</span>, <span class='co'># define opening function</span>
+  close_fun <span class='op'>=</span> <span class='va'>close_fun</span><span class='op'>)</span> <span class='co'># define closing function</span>
+
+<span class='va'>x</span><span class='op'>$</span><span class='fu'>set_open_args</span><span class='op'>(</span>args <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>y <span class='op'>=</span> <span class='va'>letters</span><span class='op'>[</span><span class='fl'>1</span><span class='op'>:</span><span class='fl'>5</span><span class='op'>]</span><span class='op'>)</span><span class='op'>)</span> <span class='co'># define additional arguments if necessary</span>
+
+<span class='va'>x</span><span class='op'>$</span><span class='fu'>open</span><span class='op'>(</span><span class='op'>)</span> <span class='co'># call opening function</span>
+<span class='va'>x</span><span class='op'>$</span><span class='fu'>get_open_call</span><span class='op'>(</span><span class='op'>)</span> <span class='co'># check reproducible R code</span>
+</div><div class='output co'>#&gt; [1] "data.frame(x = 1:5, y = c(\"a\", \"b\", \"c\", \"d\", \"e\"))"</div><div class='input'>
+<span class='co'># get data from connection via DataConnector$get_dataset()</span>
+
+<span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span>
+<span class='va'>x</span><span class='op'>$</span><span class='fu'>open</span><span class='op'>(</span>args <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>x <span class='op'>=</span> <span class='fl'>1</span><span class='op'>:</span><span class='fl'>5</span>, y <span class='op'>=</span> <span class='va'>letters</span><span class='op'>[</span><span class='fl'>1</span><span class='op'>:</span><span class='fl'>5</span><span class='op'>]</span><span class='op'>)</span><span class='op'>)</span> <span class='co'># able to call opening function with arguments</span>
+<span class='va'>x</span><span class='op'>$</span><span class='fu'>close</span><span class='op'>(</span><span class='op'>)</span> <span class='co'># call closing function</span>
+<span class='op'>}</span>
+
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

@@ -298,8 +298,8 @@ if user doesn't specify <code>dataname</code> - (<code>get_raw_data</code> from 
                                 pull_callable <span class='op'>=</span> <span class='va'>adlb_cf</span>,
                                 keys <span class='op'>=</span> <span class='fu'><a href='get_cdisc_keys.html'>get_cdisc_keys</a></span><span class='op'>(</span><span class='st'>"ADLB"</span><span class='op'>)</span><span class='op'>)</span>
 
-<span class='va'>rdc</span> <span class='op'>&lt;-</span> <span class='fu'>teal</span><span class='fu'>:::</span><span class='va'><a href='RelationalDataConnector.html'>RelationalDataConnector</a></span><span class='op'>$</span><span class='fu'>new</span><span class='op'>(</span>
-  connection <span class='op'>=</span> <span class='fu'>teal</span><span class='fu'>:::</span><span class='va'><a href='DataConnection.html'>DataConnection</a></span><span class='op'>$</span><span class='fu'>new</span><span class='op'>(</span><span class='op'>)</span>,
+<span class='va'>rdc</span> <span class='op'>&lt;-</span> <span class='fu'><a href='relational_data_connector.html'>relational_data_connector</a></span><span class='op'>(</span>
+  connection <span class='op'>=</span> <span class='fu'><a href='data_connection.html'>data_connection</a></span><span class='op'>(</span><span class='op'>)</span>,
   connectors <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='va'>adsl</span>, <span class='va'>adlb</span><span class='op'>)</span>
 <span class='op'>)</span>
 
