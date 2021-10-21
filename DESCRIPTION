@@ -2,7 +2,7 @@ Package: teal
 Type: Package
 Title: Exploratory Web Apps for Analyzing Clinical Trials Data
 Date: 2021-10-13
-Version: 0.10.0.9000
+Version: 0.10.0.9001
 Authors@R: c(
   person("NEST", email = "nestcicd@roche.com", role = c("aut", "cre")),
   person("Adrian", "Waddell", email = "adrian.waddell@roche.com", role = "aut"),
