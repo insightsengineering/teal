@@ -68,7 +68,6 @@ jobs:
         shell: bash
 
       - name: Commit files with new version
-        # if: github.ref == 'refs/heads/main' # Only after merge or push to main
         if: ${{ env.NEW_PKG_VERSION }}
         run: |
           git config --local user.email "actions@github.com"
@@ -78,7 +77,6 @@ jobs:
         shell: bash
 
       - name: Wait for other jobs
-        # if: github.ref == 'refs/heads/main' # Only after merge or push to main
         if: ${{ env.NEW_PKG_VERSION }}
         uses: lewagon/wait-on-check-action@v1.1.1
         with:
@@ -88,10 +86,8 @@ jobs:
           wait-interval: 10
 
       - name: Push changes
-        # if: github.ref == 'refs/heads/main' # Only after merge or push to main
         if: ${{ env.NEW_PKG_VERSION }}
         uses: ad-m/github-push-action@master
         with:
           github_token: ${{ secrets.REPO_GITHUB_TOKEN }}
           branch: ${{ github.ref }}
-# dummy change
