@@ -7,6 +7,7 @@ on:
     branches:
       - main
       - pre-release
+      - bump_dev_version # TODO: remove after testing
   pull_request:
 
 jobs:
