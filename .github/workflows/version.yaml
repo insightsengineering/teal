@@ -38,7 +38,7 @@ jobs:
       - name: Checkout repo
         uses: actions/checkout@v2
 
-      - name: Version Increment
+      - name: Version increment for main branch
         # if: github.ref == 'refs/heads/main' # Only after merge or push to main
         if: github.ref == 'refs/heads/bump_dev_version'
         run: |
@@ -49,10 +49,11 @@ jobs:
           regex="([0-9]+).([0-9]+).([0-9]+).9([0-9]{3})"
           if [[ $DESC_VERSION =~ $regex ]]; then
             NEW_DESC_VERSION=$(echo $DESC_VERSION | awk -F. '{$NF = $NF + 1;} 1' | sed 's/ /./g')
-            echo "New version: $NEW_DESC_VERSION in DESCRIPTION"
             sed -i "s/$DESC_VERSION/$NEW_DESC_VERSION/" DESCRIPTION
-            echo "New version: $NEW_DESC_VERSION in NEWS.md"
             sed -i "s/$NEWS_VERSION/$NEW_DESC_VERSION/" NEWS.md
+          else
+            ehco "🔥 Wrong version format in DESCRIPTION!!!"
+            exit 1
           fi
           DESC_VERSION=$(awk -F: '/Version:/{gsub(/[ ]+/,"") ; print $2}' DESCRIPTION)
           NEWS_VERSION=$(awk '/^#+ /{print $3; exit}' NEWS.md)
@@ -68,7 +69,7 @@ jobs:
 
       - name: Commit files with new version
         # if: github.ref == 'refs/heads/main' # Only after merge or push to main
-        if: github.ref == 'refs/heads/bump_dev_version'
+        if: ${{ env.NEW_PKG_VERSION }}
         run: |
           git config --local user.email "actions@github.com"
           git config --local user.name "GitHub Actions"
@@ -78,7 +79,7 @@ jobs:
 
       - name: Wait for other jobs
         # if: github.ref == 'refs/heads/main' # Only after merge or push to main
-        if: github.ref == 'refs/heads/bump_dev_version'
+        if: ${{ env.NEW_PKG_VERSION }}
         uses: lewagon/wait-on-check-action@v1.1.1
         with:
           ref: ${{ github.ref }}
@@ -88,7 +89,7 @@ jobs:
 
       - name: Push changes
         # if: github.ref == 'refs/heads/main' # Only after merge or push to main
-        if: github.ref == 'refs/heads/bump_dev_version'
+        if: ${{ env.NEW_PKG_VERSION }}
         uses: ad-m/github-push-action@master
         with:
           github_token: ${{ secrets.REPO_GITHUB_TOKEN }}
