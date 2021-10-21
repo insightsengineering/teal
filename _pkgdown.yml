@@ -63,7 +63,6 @@ reference:
     - csv_cdisc_dataset_connector
     - csv_dataset_connector
     - data_connection
-    - datasetdb_dataset_connector
     - dataset_connector
     - dataset_connector_file
     - fun_cdisc_dataset_connector
@@ -83,13 +82,11 @@ reference:
   - title: Delayed Data Connection Constructors
     desc: For creating delayed dataset objects.
     contents:
-    - datasetdb_connection
   - title: Delayed Data Constructors
     desc: For creating delayed data objects.
     contents:
     - cdisc_data
     - cdisc_data_file
-    - datasetdb_data
     - named_dataset_file
     - teal_data
     - teal_data_file
