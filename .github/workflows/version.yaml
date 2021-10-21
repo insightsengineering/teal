@@ -77,4 +77,5 @@ jobs:
         uses: ad-m/github-push-action@master
         with:
           github_token: ${{ secrets.REPO_GITHUB_TOKEN }}
+          branch: ${{ github.ref }}
 
