@@ -58,7 +58,6 @@ reference:
     - cdisc_data_connector
     - cdisc_dataset_connector
     - cdisc_dataset_connector_file
-    - cdse_dataset_connector
     - code_cdisc_dataset_connector
     - code_dataset_connector
     - csv_cdisc_dataset_connector
@@ -88,7 +87,6 @@ reference:
   - title: Delayed Data Connection Constructors
     desc: For creating delayed dataset objects.
     contents:
-    - cdse_connection
     - datasetdb_connection
     - rice_connection
     - ricepass_connection
@@ -98,7 +96,6 @@ reference:
     contents:
     - cdisc_data
     - cdisc_data_file
-    - cdse_data
     - datasetdb_data
     - named_dataset_file
     - rice_data
