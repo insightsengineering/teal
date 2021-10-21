@@ -39,8 +39,8 @@ jobs:
         uses: actions/checkout@v2
 
       - name: Version increment for main branch
-        # if: github.ref == 'refs/heads/main' # Only after merge or push to main
-        if: github.ref == 'refs/heads/bump_dev_version'
+        # if: github.ref == 'refs/heads/main' # Only after merge or push to main 
+        if: github.ref == 'refs/heads/bump_dev_version' # TODO: remove after testing and uncomment line above
         run: |
           DESC_VERSION=$(awk -F: '/Version:/{gsub(/[ ]+/,"") ; print $2}' DESCRIPTION)
           NEWS_VERSION=$(awk '/^#+ /{print $3; exit}' NEWS.md)
