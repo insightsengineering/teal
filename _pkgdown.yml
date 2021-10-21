@@ -76,8 +76,6 @@ reference:
     - rds_dataset_connector
     - relational_data_connector
     - relational_dataset_connector
-    - rice_cdisc_dataset_connector
-    - rice_dataset_connector
     - scda_cdisc_dataset_connector
     - scda_dataset_connector
     - script_cdisc_dataset_connector
@@ -86,8 +84,6 @@ reference:
     desc: For creating delayed dataset objects.
     contents:
     - datasetdb_connection
-    - rice_connection
-    - ricepass_connection
   - title: Delayed Data Constructors
     desc: For creating delayed data objects.
     contents:
@@ -95,7 +91,6 @@ reference:
     - cdisc_data_file
     - datasetdb_data
     - named_dataset_file
-    - rice_data
     - teal_data
     - teal_data_file
   - title: Delayed Dataset Functions
