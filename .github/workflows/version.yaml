@@ -5,10 +5,11 @@ on:
     branches:
       - main
       - pre-release
+      - bump_dev_version
   pull_request:
 
 jobs:
-  man-pages:
+  version-check:
     name: Version check
     runs-on: ubuntu-latest
     steps:
@@ -29,4 +30,46 @@ jobs:
               exit 1
           fi
         shell: bash
+      
+      - name: Wait for other jobs
+        uses: lewagon/wait-on-check-action@v1.1.1
+        with:
+          ref: ${{ github.ref }}
+          running-workflow-name: 'Version check'
+          repo-token: ${{ secrets.REPO_GITHUB_TOKEN }}
+          wait-interval: 10
+
+      - name: Version Increment
+        if: github.ref == 'refs/heads/main' # Only after merge or push to main
+        run: |
+          DESC_VERSION=$(awk -F: '/Version:/{gsub(/[ ]+/,"") ; print $2}' DESCRIPTION)
+          NEWS_VERSION=$(awk '/^#+ /{print $3; exit}' NEWS.md)
+          echo "NEWS.md version: $NEWS_VERSION"
+          echo "DESCRIPTION version: $DESC_VERSION"
+          regex="([0-9]+).([0-9]+).([0-9]+).9([0-9]{3})"
+          if [[ $DESC_VERSION =~ $regex ]]; then
+            NEW_DESC_VERSION=$(echo $DESC_VERSION | awk -F. '{$NF = $NF + 1;} 1' | sed 's/ /./g')
+            echo "New version: $NEW_DESC_VERSION in DESCRIPTION"
+            sed -i "s/$DESC_VERSION/$NEW_DESC_VERSION/" DESCRIPTION
+            echo "New version: $NEW_DESC_VERSION in NEWS.md"
+            sed -i "s/$DESC_VERSION/$NEW_DESC_VERSION/" NEWS.md
+          fi
+          DESC_VERSION=$(awk -F: '/Version:/{gsub(/[ ]+/,"") ; print $2}' DESCRIPTION)
+          NEWS_VERSION=$(awk '/^#+ /{print $3; exit}' NEWS.md)
+          echo "NEWS.md version: $NEWS_VERSION"
+          echo "DESCRIPTION version: $DESC_VERSION"
+
+          echo "NEW_PKG_VERSION=$DESC_VERSION" >> $GITHUB_ENV
+        shell: bash
+
+      - name: Commit files # transfer the new html files back into the repository
+        run: |
+          git config --local user.email "actions@github.com"
+          git config --local user.name "GitHub Actions"
+          git add NEWS.md DESCRIPTION
+          git commit -m "Bump version to ${{ env.NEW_PKG_VERSION }}"
+      - name: Push changes # push the output folder to your repo
+        uses: ad-m/github-push-action@master
+        with:
+          github_token: ${{ secrets.REPO_GITHUB_TOKEN }}
 
