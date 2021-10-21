@@ -1,9 +1,5 @@
 library(scda)
 
-# test csv_dataset_connector
-temp_file_csv <- tempfile(fileext = ".csv")
-on.exit(unlink(temp_file_csv))
-
 # Test DatasetConnector ------
 testthat::test_that("DatasetConnector", {
   fun <- callable_function(function() synthetic_cdisc_data("latest")$adsl)
@@ -221,6 +217,7 @@ testthat::test_that("csv_dataset_connector not expected input", {
 testthat::test_that("csv_dataset_connector scda", {
   # create csv file
   adsl <- synthetic_cdisc_dataset(dataset_name = "adsl", name = "latest")
+  temp_file_csv <- tempfile(fileext = ".csv")
   write.csv(adsl, file = temp_file_csv, row.names = FALSE)
 
   # check can pull data and get code without delimiter assigned
@@ -238,6 +235,7 @@ testthat::test_that("csv_dataset_connector scda", {
   testthat::expect_identical(colnames(data), colnames(adsl))
 
   # next check can pass arguments to read_delim (e.g. delim = '|')
+  temp_file_csv <- tempfile(fileext = ".csv")
   write.table(adsl, file = temp_file_csv, row.names = FALSE, sep = "|")
   x <- csv_cdisc_dataset_connector("ADSL", file = temp_file_csv, delim = "|")
   x$pull()
@@ -254,6 +252,7 @@ testthat::test_that("csv_dataset_connector scda", {
   testthat::expect_identical(colnames(data), colnames(adsl))
 
   # next check can pass arguments to read_delim (using '\t')
+  temp_file_csv <- tempfile(fileext = ".csv")
   write.table(adsl, file = temp_file_csv, row.names = FALSE, sep = "\t")
   x <- csv_cdisc_dataset_connector("ADSL", file = temp_file_csv, delim = "\t")
   x$pull()
@@ -270,6 +269,7 @@ testthat::test_that("csv_dataset_connector scda", {
   testthat::expect_identical(colnames(data), colnames(adsl))
 
   # next check can pass arguments to read_delim (using ';')
+  temp_file_csv <- tempfile(fileext = ".csv")
   write.table(adsl, file = temp_file_csv, row.names = FALSE, sep = ";")
   x <- csv_cdisc_dataset_connector("ADSL", file = temp_file_csv, delim = ";")
   x$pull()
@@ -298,6 +298,7 @@ testthat::test_that("csv_dataset_connector non-standard datasets multi/space cha
   )
 
   # next check can pass arguments to read_delim (using '$')
+  temp_file_csv <- tempfile(fileext = ".csv")
   write.table(test_adsl_ns, file = temp_file_csv, row.names = FALSE, sep = "$")
   x <- csv_cdisc_dataset_connector("ADSL", file = temp_file_csv, delim = "$")
   x$pull()
@@ -313,6 +314,7 @@ testthat::test_that("csv_dataset_connector non-standard datasets multi/space cha
   testthat::expect_equal(colnames(x$get_raw_data()), colnames(test_adsl_ns))
 
   # next check can pass arguments to read_delim (using space ' ')
+  temp_file_csv <- tempfile(fileext = ".csv")
   write.table(test_adsl, file = temp_file_csv, row.names = FALSE, sep = " ")
   x <- csv_cdisc_dataset_connector("ADSL", file = temp_file_csv, keys = get_cdisc_keys("ADSL"), delim = " ")
   testthat::expect_warning(x$pull())
@@ -337,6 +339,7 @@ testthat::test_that("csv_dataset_connector attritubes", {
     stringsAsFactors = FALSE
   )
   rtables::var_labels(ADSL_ns) <- letters[1:4]
+  temp_file_csv <- tempfile(fileext = ".csv")
   write.table(ADSL_ns, file = temp_file_csv, row.names = FALSE, sep = ",")
 
   # check can pull data and get code
@@ -360,6 +363,7 @@ testthat::test_that("csv_dataset_connector attritubes", {
 testthat::test_that("csv_cdisc_dataset_connector scda", {
   # create csv file
   adsl <- synthetic_cdisc_dataset(dataset_name = "adsl", name = "latest")
+  temp_file_csv <- tempfile(fileext = ".csv")
   write.csv(adsl, file = temp_file_csv, row.names = FALSE)
 
   # check can pull data and get code without delimiter assigned
@@ -377,6 +381,7 @@ testthat::test_that("csv_cdisc_dataset_connector scda", {
   testthat::expect_identical(colnames(data), colnames(adsl))
 
   # next check can pass arguments to read_delim (e.g. delim = '|')
+  temp_file_csv <- tempfile(fileext = ".csv")
   write.table(adsl, file = temp_file_csv, row.names = FALSE, sep = "|")
   x <- csv_cdisc_dataset_connector("ADSL", file = temp_file_csv, delim = "|")
   x$pull()
