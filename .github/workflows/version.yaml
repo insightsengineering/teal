@@ -30,7 +30,14 @@ jobs:
               exit 1
           fi
         shell: bash
-      
+  
+  version-bump:
+    name: Bump version
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v2
+        
       - name: Version Increment
         # if: github.ref == 'refs/heads/main' # Only after merge or push to main
         run: |
@@ -44,13 +51,17 @@ jobs:
             echo "New version: $NEW_DESC_VERSION in DESCRIPTION"
             sed -i "s/$DESC_VERSION/$NEW_DESC_VERSION/" DESCRIPTION
             echo "New version: $NEW_DESC_VERSION in NEWS.md"
-            sed -i "s/$DESC_VERSION/$NEW_DESC_VERSION/" NEWS.md
+            sed -i "s/$NEWS_VERSION/$NEW_DESC_VERSION/" NEWS.md
           fi
           DESC_VERSION=$(awk -F: '/Version:/{gsub(/[ ]+/,"") ; print $2}' DESCRIPTION)
           NEWS_VERSION=$(awk '/^#+ /{print $3; exit}' NEWS.md)
-          echo "NEWS.md version: $NEWS_VERSION"
-          echo "DESCRIPTION version: $DESC_VERSION"
-
+          echo "Updated NEWS.md version: $NEWS_VERSION"
+          echo "Updated DESCRIPTION version: $DESC_VERSION"
+          if (test $DESC_VERSION != $NEWS_VERSION ); then
+            echo "🙈 Updated NEWS.md and DESCRIPTION have different versions!!!"
+            echo "Check what is going on, please 🙏"
+            exit 1
+          fi
           echo "NEW_PKG_VERSION=$DESC_VERSION" >> $GITHUB_ENV
         shell: bash
 
@@ -68,7 +79,7 @@ jobs:
         uses: lewagon/wait-on-check-action@v1.1.1
         with:
           ref: ${{ github.ref }}
-          running-workflow-name: 'Version check'
+          running-workflow-name: 'Bump version'
           repo-token: ${{ secrets.REPO_GITHUB_TOKEN }}
           wait-interval: 10
 
