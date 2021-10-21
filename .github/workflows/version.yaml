@@ -5,7 +5,7 @@ on:
     branches:
       - main
       - pre-release
-      - bump_dev_version
+      - bump_dev_version # TODO: remove after testing
   pull_request:
 
 jobs:
@@ -37,7 +37,7 @@ jobs:
     steps:
       - name: Checkout repo
         uses: actions/checkout@v2
-        
+
       - name: Version Increment
         # if: github.ref == 'refs/heads/main' # Only after merge or push to main
         run: |
@@ -66,7 +66,7 @@ jobs:
         shell: bash
 
       - name: Commit files with new version
-      # if: github.ref == 'refs/heads/main' # Only after merge or push to main
+        # if: github.ref == 'refs/heads/main' # Only after merge or push to main
         run: |
           git config --local user.email "actions@github.com"
           git config --local user.name "GitHub Actions"
@@ -75,7 +75,7 @@ jobs:
         shell: bash
 
       - name: Wait for other jobs
-      # if: github.ref == 'refs/heads/main' # Only after merge or push to main
+        # if: github.ref == 'refs/heads/main' # Only after merge or push to main
         uses: lewagon/wait-on-check-action@v1.1.1
         with:
           ref: ${{ github.ref }}
@@ -84,7 +84,7 @@ jobs:
           wait-interval: 10
 
       - name: Push changes
-      # if: github.ref == 'refs/heads/main' # Only after merge or push to main
+        # if: github.ref == 'refs/heads/main' # Only after merge or push to main
         uses: ad-m/github-push-action@master
         with:
           github_token: ${{ secrets.REPO_GITHUB_TOKEN }}
