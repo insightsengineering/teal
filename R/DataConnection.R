@@ -875,82 +875,17 @@ cdse_connection <- function(env = "prod") {
 
 #' Open connection to `DataSetDB`
 #'
-#' @description `r lifecycle::badge("experimental")`
+#' @description `r lifecycle::badge("defunct")`
 #'
 #' @return (`DataConnection`) type of object
 #'
 #' @export
 datasetdb_connection <- function() {
-  check_pkg_quietly(
-    "gdbauth",
-    "Connection to DataSetDB via gdbauth was requested, but gdbauth package is not available."
+  lifecycle::deprecate_stop(
+    when = "0.10.0",
+    what = "teal::datasetdb_connection()",
+    details = paste(
+      "Please use teal.connectors.datasetdb::datasetdb_connection().",
+      "Please ensure that teal.connectors.datasetdb is loaded after teal.")
   )
-  ping_fun <- callable_function("gdbauth::is_active")
-
-  open_fun <- callable_function("gdbauth::login")
-
-  close_fun <- callable_function("gdbauth::logout")
-
-  x <- DataConnection$new(open_fun = open_fun, close_fun = close_fun, ping_fun = ping_fun)
-
-  # open connection
-  x$set_open_ui(
-    function(id) {
-      ns <- NS(id)
-      div(
-        textInput(ns("user"), "User"),
-        passwordInput(ns("password"), "Password")
-      )
-    }
-  )
-
-  x$set_open_server(
-    function(id, connection) {
-      moduleServer(
-        id,
-        function(input, output, session) {
-          connection$open(args = list(user = input$user, password = input$password), try = TRUE)
-
-          if (connection$is_open_failed()) {
-            shinyjs::alert(
-              paste(
-                "Error opening connection\nError message: ",
-                connection$get_open_error_message()
-              )
-            )
-          }
-
-          session$onSessionEnded(function() {
-            suppressWarnings(connection$close(silent = TRUE, try = TRUE))
-          })
-
-          return(invisible(connection))
-        }
-      )
-    }
-  )
-
-  # close connection
-  x$set_close_server(
-    function(id, connection) {
-      moduleServer(
-        id,
-        function(input, output, session) {
-          connection$close(try = TRUE)
-
-          if (connection$is_close_failed()) {
-            shinyjs::alert(
-              paste(
-                "Error closing connection\nError message: ",
-                connection$get_close_error_message()
-              )
-            )
-          }
-          return(invisible(connection))
-        }
-      )
-    }
-  )
-
-  return(x)
 }

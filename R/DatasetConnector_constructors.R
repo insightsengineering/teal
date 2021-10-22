@@ -1033,7 +1033,7 @@ csv_cdisc_dataset_connector <- function(dataname,
 # DataSetDB ====
 #' `DataSetDB` `DatasetConnector`
 #'
-#' `r lifecycle::badge("experimental")`
+#' `r lifecycle::badge("defunct")`
 #'
 #' Create a `DatasetConnector` from `DataSetDB`.
 #'
@@ -1046,20 +1046,6 @@ csv_cdisc_dataset_connector <- function(dataname,
 #'   additional arguments applied to pull function
 #'
 #' @export
-#'
-#' @examples
-#' if ("dsassembly" %in% installed.packages()) {
-#'   x <- datasetdb_dataset_connector(
-#'     dataname = "MAE",
-#'     id = "DS000000267"
-#'   )
-#'   x$get_code()
-#' }
-#' \dontrun{
-#' load_dataset(x)
-#' get_dataset(x)
-#' x$get_raw_data()
-#' }
 datasetdb_dataset_connector <- function(dataname,
                                         id,
                                         keys = character(0),
@@ -1067,29 +1053,13 @@ datasetdb_dataset_connector <- function(dataname,
                                         code = character(0),
                                         script = character(0),
                                         ...) {
-  dot_args <- list(...)
-  stopifnot(is_fully_named_list(dot_args))
-
-  check_pkg_quietly(
-    "dsassembly",
-    "library dsassembly is required to use DataSetDB connectors please install it."
+  lifecycle::deprecate_stop(
+    when = "0.10.0",
+    what = "teal::datasetdb_dataset_connector()",
+    details = paste(
+      "Please use teal.connectors.datasetdb::datasetdb_dataset_connector().",
+      "Please ensure that teal.connectors.datasetdb is loaded after teal.")
   )
-
-  stopifnot(is_character_single(id))
-
-  x_fun <- callable_function("dsassembly::getDataset") # nolint
-  args <- append(list(id = id), dot_args)
-  x_fun$set_args(args)
-
-  x <- dataset_connector(
-    dataname = dataname,
-    pull_callable = x_fun,
-    keys = keys,
-    label = label,
-    code = code_from_script(code, script)
-  )
-
-  return(x)
 }
 
 
