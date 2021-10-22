@@ -78,7 +78,7 @@ DataConnection <- R6::R6Class( # nolint
     #' @return NULL
     finalize = function() {
       self$close(silent = TRUE, try = TRUE)
-      return(NULL)
+      NULL
     },
     #' @description
     #' If connection is opened
@@ -293,18 +293,27 @@ DataConnection <- R6::R6Class( # nolint
     #' @return (`self`) invisibly for chaining.
     set_preopen_server = function(preopen_module) {
       stopifnot(is(preopen_module, "function"))
-      stopifnot(names(formals(preopen_module)) %in% c("id", "connection"))
-
-      private$preopen_server <- function(id, connection) {
-        moduleServer(
-          id = id,
-          module = function(input, output, session) {
-            preopen_module(id = "open_conn", connection = connection)
-          }
-        )
+      module_name <- "open_conn"
+      if (all(names(formals(preopen_module)) %in% c("input", "output", "session", "connection"))) {
+        private$preopen_server <- function(input, output, session, connection) {
+          callModule(preopen_module, id = module_name, connection = connection)
+        }
+      } else if (all(names(formals(preopen_module)) %in% c("id", "connection"))) {
+        private$preopen_server <- function(id, connection) {
+          moduleServer(
+            id = id,
+            module = function(input, output, session) {
+              module(id = module_name, connection = connection)
+            }
+          )
+        }
+      } else {
+        stop(paste(
+          "set_preopen_server accepts only a valid shiny module",
+          "definition with a single additional parameter 'connection'."
+        ))
       }
-
-      return(invisible(self))
+      invisible(self)
     },
     #' @description
     #' Set open connection server function
@@ -319,20 +328,31 @@ DataConnection <- R6::R6Class( # nolint
     #' @return (`self`) invisibly for chaining.
     set_open_server = function(open_module) {
       stopifnot(is(open_module, "function"))
-      stopifnot(names(formals(open_module)) %in% c("id", "connection"))
-
-      private$open_server <- function(id, connection) {
-        moduleServer(
-          id = id,
-          module = function(input, output, session) {
-            withProgress(message = "Opening connection", value = 1, {
-              open_module(id = "open_conn", connection = connection)
-            })
-          }
-        )
+      module_name <- "open_conn"
+      if (all(names(formals(open_module)) %in% c("input", "output", "session", "connection"))) {
+        private$open_server <- function(input, output, session, connection) {
+          withProgress(message = "Opening connection", value = 1, {
+            callModule(open_module, id = module_name, connection = connection)
+          })
+        }
+      } else if (all(names(formals(open_module)) %in% c("id", "connection"))) {
+        private$open_server <- function(id, connection) {
+          moduleServer(
+            id = id,
+            module = function(input, output, session) {
+              withProgress(message = "Opening connection", value = 1, {
+                open_module(id = module_name, connection = connection)
+              })
+            }
+          )
+        }
+      } else {
+        stop(paste(
+          "set_open_server accepts only a valid shiny module",
+          "definition with a single additional parameter 'connection'."
+        ))
       }
-
-      return(invisible(self))
+      invisible(self)
     },
     #' @description
     #' Set open connection UI function
@@ -356,7 +376,7 @@ DataConnection <- R6::R6Class( # nolint
         )
       }
 
-      return(invisible(self))
+      invisible(self)
     },
     # ___ close connection -------
     #' @description
@@ -471,19 +491,46 @@ DataConnection <- R6::R6Class( # nolint
     #' @return (`self`) invisibly for chaining.
     set_close_server = function(close_module) {
       stopifnot(is(close_module, "function"))
-      stopifnot(names(formals(close_module)) %in% c("id", "connection"))
+      if (all(names(formals(close_module)) %in% c("input", "output", "session", "connection"))) {
+        function(input, output, session, connection) {
+          connection$close(try = TRUE)
 
-      private$close_server <- function(id, connection) {
-        moduduleServer(
-          id = id,
-          module = function(input, output, session) {
-            withProgress(message = "Closing connection", value = 1, {
-              close_module(id = "close_conn", connection = connection)
-            })
+          if (connection$is_close_failed()) {
+            shinyjs::alert(
+              paste(
+                "Error closing connection\nError message: ",
+                connection$get_close_error_message()
+              )
+            )
           }
-        )
+          invisible(connection)
+        }
+      } else if (all(names(formals(close_module)) %in% c("id", "connection"))) {
+        function(id, connection) {
+          moduleServer(
+            id,
+            function(input, output, session) {
+              connection$close(try = TRUE)
+
+              if (connection$is_close_failed()) {
+                shinyjs::alert(
+                  paste(
+                    "Error closing connection\nError message: ",
+                    connection$get_close_error_message()
+                  )
+                )
+              }
+              invisible(connection)
+            }
+          )
+        }
+      } else {
+        stop(paste(
+          "set_close_server accepts only a valid shiny module",
+          "definition with a single additional parameter 'connection'."
+        ))
       }
-      return(invisible(self))
+      invisible(self)
     }
   ),
   ## __Private Fields ====
