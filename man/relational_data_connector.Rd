@@ -68,19 +68,19 @@ x$set_ui(
 )
 
 x$set_server(
-  function(input, output, session, connection, connectors) {
-    # opens connection
-    callModule(connection$get_open_server(),
-               id = "open_connection",
-               connection = connection
-    )
-    if (connection$is_opened()) {
-      for (connector in connectors) {
-        set_args(connector, args = list(name = input$name))
-        # pull each dataset
-        callModule(connector$get_server(), id = connector$get_dataname())
-        if (connector$is_failed()) {
-          break
+  function(id, connection, connectors) {
+    id = id,
+    module = function(input, output, session) {
+      # opens connection
+      get_open_server()(id = "open_connection", connection = connection)
+      if (connection$is_opened()) {
+        for (connector in connectors) {
+          set_args(connector, args = list(name = input$name))
+          # pull each dataset
+          connector$get_server()(id = connector$get_dataname())
+          if (connector$is_failed()) {
+            break
+          }
         }
       }
     }
