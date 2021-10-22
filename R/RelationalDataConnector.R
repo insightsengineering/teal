@@ -63,21 +63,23 @@
 #'
 #' x$set_server(
 #'   function(id, connection, connectors) {
+#'     moduleServer(
 #'     id = id,
-#'     module = function(input, output, session) {
-#'       # opens connection
-#'       get_open_server()(id = "open_connection", connection = connection)
-#'       if (connection$is_opened()) {
-#'         for (connector in connectors) {
-#'           set_args(connector, args = list(name = input$name))
-#'           # pull each dataset
-#'           connector$get_server()(id = connector$get_dataname())
-#'           if (connector$is_failed()) {
-#'             break
+#'       module = function(input, output, session) {
+#'         # opens connection
+#'         get_open_server()(id = "open_connection", connection = connection)
+#'         if (connection$is_opened()) {
+#'           for (connector in connectors) {
+#'             set_args(connector, args = list(name = input$name))
+#'             # pull each dataset
+#'             connector$get_server()(id = connector$get_dataname())
+#'             if (connector$is_failed()) {
+#'               break
+#'             }
 #'           }
 #'         }
 #'       }
-#'     }
+#'     )
 #'   }
 #' )
 #' \dontrun{
@@ -518,21 +520,23 @@ RelationalDataConnector <- R6::R6Class( #nolint
 #'
 #' x$set_server(
 #'   function(id, connection, connectors) {
+#'     moduleServer(
 #'     id = id,
-#'     module = function(input, output, session) {
-#'       # opens connection
-#'       get_open_server()(id = "open_connection", connection = connection)
-#'       if (connection$is_opened()) {
-#'         for (connector in connectors) {
-#'           set_args(connector, args = list(name = input$name))
-#'           # pull each dataset
-#'           connector$get_server()(id = connector$get_dataname())
-#'           if (connector$is_failed()) {
-#'             break
+#'       module = function(input, output, session) {
+#'         # opens connection
+#'         get_open_server()(id = "open_connection", connection = connection)
+#'         if (connection$is_opened()) {
+#'           for (connector in connectors) {
+#'             set_args(connector, args = list(name = input$name))
+#'             # pull each dataset
+#'             connector$get_server()(id = connector$get_dataname())
+#'             if (connector$is_failed()) {
+#'               break
+#'             }
 #'           }
 #'         }
 #'       }
-#'     }
+#'     )
 #'   }
 #' )
 #' \dontrun{
