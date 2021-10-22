@@ -84,6 +84,7 @@
 #' )
 #' \dontrun{
 #' x$launch()
+#' x$pull()
 #' x$get_datasets()
 #' }
 RelationalDataConnector <- R6::R6Class( #nolint
@@ -541,6 +542,7 @@ RelationalDataConnector <- R6::R6Class( #nolint
 #' )
 #' \dontrun{
 #' x$launch()
+#' x$pull()
 #' x$get_datasets()
 #' }
 #'

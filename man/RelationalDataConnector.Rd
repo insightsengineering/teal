@@ -80,6 +80,7 @@ x$set_server(
 )
 \dontrun{
 x$launch()
+x$pull()
 x$get_datasets()
 }
 }
