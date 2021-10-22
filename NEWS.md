@@ -9,6 +9,7 @@
 * Added public facing constructor functions for `CDISCDataConnector`, `RelationalDataConnector`, and `DataConnection` classes.
 
 ### Miscellaneous
+* Replaced the servers from `DataConnection`, `RelationalDataConnector`, `DatasetConnector`, and `RelationalData` with `moduleServer`.
 * Updated R version requirement to >= 3.6.
 
 # teal 0.10.0

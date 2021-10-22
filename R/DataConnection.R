@@ -78,7 +78,7 @@ DataConnection <- R6::R6Class( # nolint
     #' @return NULL
     finalize = function() {
       self$close(silent = TRUE, try = TRUE)
-      return(NULL)
+      NULL
     },
     #' @description
     #' If connection is opened
@@ -132,27 +132,16 @@ DataConnection <- R6::R6Class( # nolint
         ),
         server = function(input, output, session) {
           session$onSessionEnded(stopApp)
-          if_not_null(
-            self$get_preopen_server(),
-            callModule(
-              self$get_preopen_server(),
-              id = "data_connection",
-              connection = self
-            )
-          )
+          preopen_server <- self$get_preopen_server()
+          if (!is.null(preopen_server)) {
+            preopen_server(id = "data_connection", connection = self)
+          }
           observeEvent(input$submit, {
             rv <- reactiveVal(NULL)
-            rv(
-              if_not_null(
-                self$get_open_server(),
-                callModule(
-                  self$get_open_server(),
-                  id = "data_connection",
-                  connection = self
-                )
-              )
-            )
-
+            open_server <- self$get_open_server()
+            if (!is.null(open_server)) {
+              rv(open_server(id = "data_connection", connection = self))
+            }
             observeEvent(rv(), {
               if (self$is_opened()) {
                 removeUI(sprintf("#%s", session$ns("connection_inputs")))
@@ -304,13 +293,27 @@ DataConnection <- R6::R6Class( # nolint
     #' @return (`self`) invisibly for chaining.
     set_preopen_server = function(preopen_module) {
       stopifnot(is(preopen_module, "function"))
-      stopifnot(names(formals(preopen_module)) %in% c("input", "output", "session", "connection"))
-
-      private$preopen_server <- function(input, output, session, connection) {
-        callModule(preopen_module, id = "open_conn", connection = connection)
+      module_name <- "open_conn"
+      if (all(names(formals(preopen_module)) %in% c("input", "output", "session", "connection"))) {
+        private$preopen_server <- function(input, output, session, connection) {
+          callModule(preopen_module, id = module_name, connection = connection)
+        }
+      } else if (all(names(formals(preopen_module)) %in% c("id", "connection"))) {
+        private$preopen_server <- function(id, connection) {
+          moduleServer(
+            id = id,
+            module = function(input, output, session) {
+              preopen_module(id = module_name, connection = connection)
+            }
+          )
+        }
+      } else {
+        stop(paste(
+          "set_preopen_server accepts only a valid shiny module",
+          "definition with a single additional parameter 'connection'."
+        ))
       }
-
-      return(invisible(self))
+      invisible(self)
     },
     #' @description
     #' Set open connection server function
@@ -325,15 +328,31 @@ DataConnection <- R6::R6Class( # nolint
     #' @return (`self`) invisibly for chaining.
     set_open_server = function(open_module) {
       stopifnot(is(open_module, "function"))
-      stopifnot(names(formals(open_module)) %in% c("input", "output", "session", "connection"))
-
-      private$open_server <- function(input, output, session, connection) {
-        withProgress(message = "Opening connection", value = 1, {
-          callModule(open_module, id = "open_conn", connection = connection)
-        })
+      module_name <- "open_conn"
+      if (all(names(formals(open_module)) %in% c("input", "output", "session", "connection"))) {
+        private$open_server <- function(input, output, session, connection) {
+          withProgress(message = "Opening connection", value = 1, {
+            callModule(open_module, id = module_name, connection = connection)
+          })
+        }
+      } else if (all(names(formals(open_module)) %in% c("id", "connection"))) {
+        private$open_server <- function(id, connection) {
+          moduleServer(
+            id = id,
+            module = function(input, output, session) {
+              withProgress(message = "Opening connection", value = 1, {
+                open_module(id = module_name, connection = connection)
+              })
+            }
+          )
+        }
+      } else {
+        stop(paste(
+          "set_open_server accepts only a valid shiny module",
+          "definition with a single additional parameter 'connection'."
+        ))
       }
-
-      return(invisible(self))
+      invisible(self)
     },
     #' @description
     #' Set open connection UI function
@@ -357,7 +376,7 @@ DataConnection <- R6::R6Class( # nolint
         )
       }
 
-      return(invisible(self))
+      invisible(self)
     },
     # ___ close connection -------
     #' @description
@@ -472,14 +491,46 @@ DataConnection <- R6::R6Class( # nolint
     #' @return (`self`) invisibly for chaining.
     set_close_server = function(close_module) {
       stopifnot(is(close_module, "function"))
-      stopifnot(names(formals(close_module)) %in% c("input", "output", "session", "connection"))
+      if (all(names(formals(close_module)) %in% c("input", "output", "session", "connection"))) {
+        function(input, output, session, connection) {
+          connection$close(try = TRUE)
 
-      private$close_server <- function(input, output, session, connection) {
-        withProgress(message = "Closing connection", value = 1, {
-          callModule(close_module, id = "close_conn", connection = connection)
-        })
+          if (connection$is_close_failed()) {
+            shinyjs::alert(
+              paste(
+                "Error closing connection\nError message: ",
+                connection$get_close_error_message()
+              )
+            )
+          }
+          invisible(connection)
+        }
+      } else if (all(names(formals(close_module)) %in% c("id", "connection"))) {
+        function(id, connection) {
+          moduleServer(
+            id,
+            function(input, output, session) {
+              connection$close(try = TRUE)
+
+              if (connection$is_close_failed()) {
+                shinyjs::alert(
+                  paste(
+                    "Error closing connection\nError message: ",
+                    connection$get_close_error_message()
+                  )
+                )
+              }
+              invisible(connection)
+            }
+          )
+        }
+      } else {
+        stop(paste(
+          "set_close_server accepts only a valid shiny module",
+          "definition with a single additional parameter 'connection'."
+        ))
       }
-      return(invisible(self))
+      invisible(self)
     }
   ),
   ## __Private Fields ====
@@ -682,40 +733,50 @@ rice_connection <- function(open_args = list(), close_args = list(), ping_args =
   )
 
   x$set_open_server(
-    function(input, output, session, connection) {
-      connection$open(args = list(username = input$username, password = input$password), try = TRUE)
+    function(id, connection) {
+      moduleServer(
+        id,
+        function(input, output, session) {
+          connection$open(args = list(username = input$username, password = input$password), try = TRUE)
 
-      if (connection$is_open_failed()) {
-        shinyjs::alert(
-          paste(
-            "Error opening connection\nError message: ",
-            connection$get_open_error_message()
-          )
-        )
-      }
+          if (connection$is_open_failed()) {
+            shinyjs::alert(
+              paste(
+                "Error opening connection\nError message: ",
+                connection$get_open_error_message()
+              )
+            )
+          }
 
-      session$onSessionEnded(function() {
-        suppressWarnings(connection$close(silent = TRUE, try = TRUE))
-      })
+          session$onSessionEnded(function() {
+            suppressWarnings(connection$close(silent = TRUE, try = TRUE))
+          })
 
-      return(invisible(connection))
+          return(invisible(connection))
+        }
+      )
     }
   )
 
   # close connection
   x$set_close_server(
-    function(input, output, session, connection) {
-      connection$close(try = TRUE)
+    function(id, connection) {
+      moduleServer(
+        id,
+        function(input, output, session) {
+          connection$close(try = TRUE)
 
-      if (connection$is_close_failed()) {
-        shinyjs::alert(
-          paste(
-            "Error closing connection\nError message: ",
-            connection$get_close_error_message()
-          )
-        )
-      }
-      return(invisible(connection))
+          if (connection$is_close_failed()) {
+            shinyjs::alert(
+              paste(
+                "Error closing connection\nError message: ",
+                connection$get_close_error_message()
+              )
+            )
+          }
+          return(invisible(connection))
+        }
+      )
     }
   )
 
@@ -762,18 +823,23 @@ ricepass_connection <- function() {
   )
 
   x$set_preopen_server(
-    function(input, output, session, connection) {
-      observeEvent(input$ricepass_login_button, {
-        eval(parse(text = "ricepass::rice_server_icepass()"))
-        # need to set connection status object to TRUE
-        # executes ping() and if response is "opened" then sets to TRUE
-        connection$open()
-        if (connection$is_opened()) {
-          shinyjs::html("ricepass_login_button", "Already logged in!")
-          shinyjs::disable("ricepass_login_button")
+    function(id, connection) {
+      moduleServer(
+        id,
+        function(input, output, session) {
+          observeEvent(input$ricepass_login_button, {
+            eval(parse(text = "ricepass::rice_server_icepass()"))
+            # need to set connection status object to TRUE
+            # executes ping() and if response is "opened" then sets to TRUE
+            connection$open()
+            if (connection$is_opened()) {
+              shinyjs::html("ricepass_login_button", "Already logged in!")
+              shinyjs::disable("ricepass_login_button")
+            }
+          })
+          return(invisible(connection))
         }
-      })
-      return(invisible(connection))
+      )
     }
   )
 
@@ -838,23 +904,28 @@ teradata_connection <- function(open_args = list(), close_args = list(), ping_ar
   )
 
   x$set_open_server(
-    function(input, output, session, connection) {
-      connection$open(args = list(uid = input$username, pwd = input$password), try = TRUE)
+    function(id, connection) {
+      moduleServer(
+        id,
+        function(input, output, session) {
+          connection$open(args = list(uid = input$username, pwd = input$password), try = TRUE)
 
-      if (connection$is_open_failed()) {
-        shinyjs::alert(
-          paste(
-            "Error opening connection\nError message: ",
-            connection$get_open_error_message()
-          )
-        )
-      }
+          if (connection$is_open_failed()) {
+            shinyjs::alert(
+              paste(
+                "Error opening connection\nError message: ",
+                connection$get_open_error_message()
+              )
+            )
+          }
 
-      session$onSessionEnded(function() {
-        suppressWarnings(connection$close(silent = TRUE, try = TRUE))
-      })
+          session$onSessionEnded(function() {
+            suppressWarnings(connection$close(silent = TRUE, try = TRUE))
+          })
 
-      return(invisible(connection))
+          return(invisible(connection))
+        }
+      )
     }
   )
 
@@ -866,18 +937,23 @@ teradata_connection <- function(open_args = list(), close_args = list(), ping_ar
   )
 
   x$set_close_server(
-    function(input, output, session, connection) {
-      connection$close(try = TRUE)
+    function(id, connection) {
+      moduleServer(
+        id,
+        function(input, output, session) {
+          connection$close(try = TRUE)
 
-      if (connection$is_close_failed()) {
-        shinyjs::alert(
-          paste(
-            "Error closing connection\nError message: ",
-            connection$get_close_error_message()
-          )
-        )
-      }
-      return(invisible(connection))
+          if (connection$is_close_failed()) {
+            shinyjs::alert(
+              paste(
+                "Error closing connection\nError message: ",
+                connection$get_close_error_message()
+              )
+            )
+          }
+          return(invisible(connection))
+        }
+      )
     }
   )
 
@@ -1015,23 +1091,28 @@ snowflake_connection <- function(open_args = list(), close_args = list(), ping_a
   )
 
   x$set_open_server(
-    function(input, output, session, connection) {
-      connection$open(args = list(username = input$username, password = input$password), try = TRUE)
+    function(id, connection) {
+      moduleServer(
+        id,
+        function(input, output, session) {
+          connection$open(args = list(username = input$username, password = input$password), try = TRUE)
 
-      if (connection$is_open_failed()) {
-        shinyjs::alert(
-          paste(
-            "Error opening connection\nError message: ",
-            connection$get_open_error_message()
-          )
-        )
-      }
+          if (connection$is_open_failed()) {
+            shinyjs::alert(
+              paste(
+                "Error opening connection\nError message: ",
+                connection$get_open_error_message()
+              )
+            )
+          }
 
-      session$onSessionEnded(function() {
-        suppressWarnings(connection$close(silent = TRUE, try = TRUE))
-      })
+          session$onSessionEnded(function() {
+            suppressWarnings(connection$close(silent = TRUE, try = TRUE))
+          })
 
-      return(invisible(connection))
+          return(invisible(connection))
+        }
+      )
     }
   )
 
@@ -1043,18 +1124,23 @@ snowflake_connection <- function(open_args = list(), close_args = list(), ping_a
   )
 
   x$set_close_server(
-    function(input, output, session, connection) {
-      connection$close(try = TRUE)
+    function(id, connection) {
+      moduleServer(
+        id,
+        function(input, output, session) {
+          connection$close(try = TRUE)
 
-      if (connection$is_close_failed()) {
-        shinyjs::alert(
-          paste(
-            "Error closing connection\nError message: ",
-            connection$get_close_error_message()
-          )
-        )
-      }
-      return(invisible(connection))
+          if (connection$is_close_failed()) {
+            shinyjs::alert(
+              paste(
+                "Error closing connection\nError message: ",
+                connection$get_close_error_message()
+              )
+            )
+          }
+          return(invisible(connection))
+        }
+      )
     }
   )
 
@@ -1103,21 +1189,26 @@ cdse_connection <- function(env = "prod") {
   )
 
   x$set_preopen_server(
-    function(input, output, session, connection) {
-      conn <- connection$get_conn()
-      callModule(module = eval(parse(text = "CDSE::cdse_login_shiny")), id = "cdse_login", env = env, con = conn)
+    function(id, connection) {
+      moduleServer(
+        id,
+        function(input, output, session) {
+          conn <- connection$get_conn()
+          callModule(module = eval(parse(text = "CDSE::cdse_login_shiny")), id = "cdse_login", env = env, con = conn)
 
-      observeEvent(conn$reactive()(), {
-        if (!conn$is_valid()) {
-          connection$open()
+          observeEvent(conn$reactive()(), {
+            if (!conn$is_valid()) {
+              connection$open()
+            }
+          })
+
+          session$onSessionEnded(function() {
+            suppressWarnings(connection$close(silent = TRUE, try = TRUE))
+          })
+
+          return(invisible(connection))
         }
-      })
-
-      session$onSessionEnded(function() {
-        suppressWarnings(connection$close(silent = TRUE, try = TRUE))
-      })
-
-      return(invisible(connection))
+      )
     }
   )
 
@@ -1156,40 +1247,50 @@ datasetdb_connection <- function() {
   )
 
   x$set_open_server(
-    function(input, output, session, connection) {
-      connection$open(args = list(user = input$user, password = input$password), try = TRUE)
+    function(id, connection) {
+      moduleServer(
+        id,
+        function(input, output, session) {
+          connection$open(args = list(user = input$user, password = input$password), try = TRUE)
 
-      if (connection$is_open_failed()) {
-        shinyjs::alert(
-          paste(
-            "Error opening connection\nError message: ",
-            connection$get_open_error_message()
-          )
-        )
-      }
+          if (connection$is_open_failed()) {
+            shinyjs::alert(
+              paste(
+                "Error opening connection\nError message: ",
+                connection$get_open_error_message()
+              )
+            )
+          }
 
-      session$onSessionEnded(function() {
-        suppressWarnings(connection$close(silent = TRUE, try = TRUE))
-      })
+          session$onSessionEnded(function() {
+            suppressWarnings(connection$close(silent = TRUE, try = TRUE))
+          })
 
-      return(invisible(connection))
+          return(invisible(connection))
+        }
+      )
     }
   )
 
   # close connection
   x$set_close_server(
-    function(input, output, session, connection) {
-      connection$close(try = TRUE)
+    function(id, connection) {
+      moduleServer(
+        id,
+        function(input, output, session) {
+          connection$close(try = TRUE)
 
-      if (connection$is_close_failed()) {
-        shinyjs::alert(
-          paste(
-            "Error closing connection\nError message: ",
-            connection$get_close_error_message()
-          )
-        )
-      }
-      return(invisible(connection))
+          if (connection$is_close_failed()) {
+            shinyjs::alert(
+              paste(
+                "Error closing connection\nError message: ",
+                connection$get_close_error_message()
+              )
+            )
+          }
+          return(invisible(connection))
+        }
+      )
     }
   )
 

@@ -68,7 +68,7 @@ srv_teal_with_splash <- function(input, output, session, data, modules, filter =
     raw_data <- reactiveVal(data) # will trigger by setting it
   } else {
     .log("fetching the data through delayed loading - showing start screen")
-    raw_data <- callModule(data$get_server(), "startapp_module")
+    raw_data <- data$get_server()(id ="startapp_module")
     stop_if_not(list(is.reactive(raw_data), "The delayed loading module has to return a reactive object."))
   }
 

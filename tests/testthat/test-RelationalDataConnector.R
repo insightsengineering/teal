@@ -34,7 +34,7 @@ testthat::test_that("RelationalDataConnector with DataConnection", {
       textInput(ns("scda_name"), label = "Example", value = "latest")
     )
   })
-  x$set_server(function(input, output, session, connectors, connection) {
+  x$set_server(function(id, connectors, connection) {
     lapply(connectors, function(connector) {
       set_args(connector, args = list(scda_name = input$scda_name))
       connector$pull(try = TRUE)

@@ -30,9 +30,14 @@ open_fun$set_args(list(package = "scda"))
 
 con <- data_connection(open_fun = open_fun)
 con$set_open_server(
-  function(input, output, session, connection) {
-    connection$open(try = TRUE)
-    return(invisible(connection))
+  function(id, connection) {
+    moduleServer(
+      id = id,
+      module = function(input, output, session) {
+        connection$open(try = TRUE)
+        return(invisible(connection))
+      }
+    )
   }
 )
 
@@ -63,24 +68,27 @@ x$set_ui(
 )
 
 x$set_server(
-  function(input, output, session, connection, connectors) {
-    # opens connection
-    callModule(connection$get_open_server(),
-               id = "open_connection",
-               connection = connection
-    )
-    if (connection$is_opened()) {
-      for (connector in connectors) {
-        set_args(connector, args = list(name = input$name))
-        # pull each dataset
-        callModule(connector$get_server(), id = connector$get_dataname())
-        if (connector$is_failed()) {
-          break
+  function(id, connection, connectors) {
+    moduleServer(
+      id = id,
+      module = function(input, output, session) {
+        # opens connection
+        connection$get_open_server()(id = "open_connection", connection = connection)
+        if (connection$is_opened()) {
+          for (connector in connectors) {
+            set_args(connector, args = list(name = input$name))
+            # pull each dataset
+            connector$get_server()(id = connector$get_dataname())
+            if (connector$is_failed()) {
+              break
+            }
+          }
         }
       }
-    }
+    )
   }
 )
+
 \dontrun{
 x$launch()
 x$get_datasets()

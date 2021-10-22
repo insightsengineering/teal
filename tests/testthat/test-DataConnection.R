@@ -54,3 +54,43 @@ testthat::test_that("data_connection returns a DataConnection object on basic in
   con <- data_connection(open_fun = open_fun, close_fun = close_fun)
   testthat::expect_true(is(con, c("DataConnection", "R6")))
 })
+
+testthat::test_that("DataConnection can be initialized", {
+  testthat::expect_error(DataConnection$new(), NA)
+})
+
+testthat::test_that("DataConnection$set_preopen_server accepts the old Shiny module definition", {
+  mock_module <- function(input, output, session, connection) "7"
+  connection <- DataConnection$new()
+  testthat::expect_error(connection$set_preopen_server(mock_module), NA)
+})
+
+testthat::test_that("DataConnection$set_preopen_server accepts the new Shiny module definition", {
+  mock_module <- function(id, connection) shiny::moduleServer(id, module = function(input, output, session) "7")
+  connection <- DataConnection$new()
+  testthat::expect_error(connection$set_preopen_server(mock_module), NA)
+})
+
+testthat::test_that("DataConnection$set_open_server accepts the old Shiny module definition", {
+  mock_module <- function(input, output, session, connection) "7"
+  connection <- DataConnection$new()
+  testthat::expect_error(connection$set_open_server(mock_module), NA)
+})
+
+testthat::test_that("DataConnection$set_open_server accepts the new Shiny module definition", {
+  mock_module <- function(id, connection) shiny::moduleServer(id, module = function(input, output, session) "7")
+  connection <- DataConnection$new()
+  testthat::expect_error(connection$set_open_server(mock_module), NA)
+})
+
+testthat::test_that("DataConnection$set_close_server accepts the old Shiny module definition", {
+  mock_module <- function(input, output, session, connection) "7"
+  connection <- DataConnection$new()
+  testthat::expect_error(connection$set_close_server(mock_module), NA)
+})
+
+testthat::test_that("DataConnection$set_close_server accepts the new Shiny module definition", {
+  mock_module <- function(id, connection) shiny::moduleServer(id, module = function(input, output, session) "7")
+  connection <- DataConnection$new()
+  testthat::expect_error(connection$set_close_server(mock_module), NA)
+})
