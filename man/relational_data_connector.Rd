@@ -30,9 +30,14 @@ open_fun$set_args(list(package = "scda"))
 
 con <- data_connection(open_fun = open_fun)
 con$set_open_server(
-  function(input, output, session, connection) {
-    connection$open(try = TRUE)
-    return(invisible(connection))
+  function(id, connection) {
+    moduleServer(
+      id = id,
+      module = function(input, connection, connectors) {
+        connection$open(try = TRUE)
+        return(invisible(connection))
+      }
+    )
   }
 )
 

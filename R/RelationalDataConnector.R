@@ -24,9 +24,14 @@
 #'
 #' con <- data_connection(open_fun = open_fun)
 #' con$set_open_server(
-#'   function(input, output, session, connection) {
-#'     connection$open(try = TRUE)
-#'     return(invisible(connection))
+#'   function(id, connection) {
+#'     moduleServer(
+#'       id = id,
+#'       module = function(input, connection, connectors) {
+#'         connection$open(try = TRUE)
+#'         return(invisible(connection))
+#'       }
+#'     )
 #'   }
 #' )
 #'
@@ -474,9 +479,14 @@ RelationalDataConnector <- R6::R6Class( #nolint
 #'
 #' con <- data_connection(open_fun = open_fun)
 #' con$set_open_server(
-#'   function(input, output, session, connection) {
-#'     connection$open(try = TRUE)
-#'     return(invisible(connection))
+#'   function(id, connection) {
+#'     moduleServer(
+#'       id = id,
+#'       module = function(input, connection, connectors) {
+#'         connection$open(try = TRUE)
+#'         return(invisible(connection))
+#'       }
+#'     )
 #'   }
 #' )
 #'
