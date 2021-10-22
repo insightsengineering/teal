@@ -256,7 +256,7 @@ teradata_data <- function(..., connection = teradata_connection()) {
 
 #' \code{RelationalDataConnector} connector for \code{SNOWFLAKE}
 #'
-#' @description `r lifecycle::badge("experimental")`
+#' @description `r lifecycle::badge("defunct")`
 #' Build data connector for \code{SNOWFLAKE} functions or datasets
 #'
 #' @export
@@ -268,127 +268,15 @@ teradata_data <- function(..., connection = teradata_connection()) {
 #'
 #' @details Note the server location and token_provider must be provided as arguments to
 #'   the snowflake_connection function, see example below.
-#'
-#' @examples
-#' \dontrun{
-#' library(magrittr)
-#' data <- snowflake_data(
-#'   snowflake_cdisc_dataset_connector(
-#'     dataname ="ADSL",
-#'     sql_query = "sql_query",
-#'   ) %>% mutate_dataset("any mutations required, e.g. to convert data types"),
-#'   connection = snowflake_connection(
-#'     open_args = list(
-#'       server = "<<server>>",
-#'       token_provider = "<<url>>",
-#'       role = "role",
-#'       database = "database",
-#'       schema = "schema",
-#'       warehouse = "warehouse"
-#'     )
-#'   )
-#' )
-#'
-#' app <- init(
-#'   data = cdisc_data(data),
-#'   root_modules(
-#'     module(
-#'       "ADSL AGE histogram",
-#'       server = function(input, output, session, datasets) {
-#'         output$hist <- renderPlot(
-#'           hist(datasets$get_data("ADSL", filtered = TRUE)$AGE)
-#'         )
-#'       },
-#'       ui = function(id, ...) {ns <- NS(id); plotOutput(ns('hist'))},
-#'       filters = "ADSL"
-#'     )
-#'   ),
-#'   header = tags$h1("Sample App")
-#' )
-#'
-#' shinyApp(app$ui, app$server)
-#' }
-#'
 #' @export
 snowflake_data <- function(..., connection) {
-  connectors <- list(...)
-  stopifnot(is_class_list("DatasetConnector")(connectors))
-
-  x <- if (any(vapply(connectors, is, logical(1), "CDISCDatasetConnector"))) {
-    CDISCDataConnector$new(connection = connection, connectors = connectors)
-  } else {
-    RelationalDataConnector$new(connection = connection, connectors = connectors)
-  }
-
-  x$set_check(FALSE)
-
-  x$set_ui(
-    function(id, connection, connectors) {
-      ns <- NS(id)
-      div(
-        div(
-          h1("TEAL - Access data on Snowflake"),
-          br(),
-          h5("Data access requested for:"),
-          fluidRow(
-            column(
-              11,
-              offset = 1,
-              lapply(seq_along(connectors), function(i) {
-                tags$li(code(connectors[[i]]$get_dataname()),
-                        ": ",
-                        code(connectors[[i]]$get_pull_args()$statement))
-              })
-            )
-          )
-        ),
-        br(),
-        connection$get_open_ui(ns("open_connection"))
-      )
-    }
+  lifecycle::deprecate_stop(
+    when = "0.10.0",
+    what = "teal::snowflake_data()",
+    details = paste(
+      "Please use teal.connectors.snowflake::snowflake_data().",
+      "Please ensure that teal.connectors.snowflake is loaded after teal.")
   )
-
-  x$set_server(
-    function(id, connection, connectors) {
-      moduleServer(
-        id = id,
-        module = function(input, output, session) {
-          # opens connection
-          if (!is.null(connection$get_open_server())) {
-            connection$get_open_server()(
-              id = "open_connection",
-              connection = connection
-            )
-          }
-
-          if (connection$is_opened()) {
-            conn <- connection$get_conn()
-            if (!is.null(conn)) {
-              for (connector in connectors) {
-                connector$get_pull_callable()$assign_to_env("conn", conn)
-              }
-            }
-
-            # call connectors$pull
-            for (connector in connectors) {
-              connector$get_server()(id = connector$get_dataname())
-              if (connector$is_failed()) {
-                break
-              }
-            }
-
-            if (!is.null(connection$get_close_server())) {
-              connection$get_close_server()(
-                id = "close_connection",
-                connection = connection
-              )
-            }
-          }
-        }
-      )
-    }
-  )
-  return(x)
 }
 
 #' \code{RelationalDataConnector} connector for \code{CDSE}

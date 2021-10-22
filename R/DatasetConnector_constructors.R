@@ -861,7 +861,7 @@ teradata_cdisc_dataset_connector <- function(dataname, # nolint
 # SNOWFLAKE ====
 #' `Snowflake` `DatasetConnector`
 #'
-#' `r lifecycle::badge("experimental")`
+#' `r lifecycle::badge("defunct")`
 #'
 #' Create a `DatasetConnector` from `Snowflake`.
 #'
@@ -879,32 +879,18 @@ snowflake_dataset_connector <- function(dataname,
                                         code = character(0),
                                         script = character(0),
                                         ...) {
-  dot_args <- list(...)
-  stopifnot(is_fully_named_list(dot_args))
-
-  check_pkg_quietly(
-    "DBI",
-    "Connection to Snowflake requested, but DBI package is not available."
+  lifecycle::deprecate_stop(
+    when = "0.10.0",
+    what = "teal::snowflake_dataset_connector()",
+    details = paste(
+      "Please use teal.connectors.snowflake::snowflake_dataset_connector().",
+      "Please ensure that teal.connectors.snowflake is loaded after teal.")
   )
-
-  x_fun <- callable_function("DBI::dbGetQuery")
-  args <- append(list(conn = as.name("conn"), statement = sql_query), dot_args)
-  x_fun$set_args(args)
-
-  x <- dataset_connector(
-    dataname = dataname,
-    pull_callable = x_fun,
-    keys = keys,
-    label = label,
-    code = code_from_script(code, script)
-  )
-
-  return(x)
 }
 
 #' `Snowflake` `CDISCDatasetConnector`
 #'
-#' `r lifecycle::badge("experimental")`
+#' `r lifecycle::badge("defunct")`
 #'
 #' Create a `CDISCDatasetConnector` from `Snowflake` with keys and parent name assigned
 #' automatically by `dataname`.
@@ -923,22 +909,13 @@ snowflake_cdisc_dataset_connector <- function(dataname, # nolint
                                               code = character(0),
                                               script = character(0),
                                               ...) {
-
-  x <- snowflake_dataset_connector(
-    dataname = dataname,
-    sql_query = sql_query,
-    keys = keys,
-    code = code_from_script(code, script),
-    label = label,
-    ...
+  lifecycle::deprecate_stop(
+    when = "0.10.0",
+    what = "teal::snowflake_cdisc_dataset_connector()",
+    details = paste(
+      "Please use teal.connectors.snowflake::snowflake_cdisc_dataset_connector().",
+      "Please ensure that teal.connectors.snowflake is loaded after teal.")
   )
-
-  res <- as_cdisc(
-    x,
-    parent = parent
-  )
-
-  return(res)
 }
 
 
