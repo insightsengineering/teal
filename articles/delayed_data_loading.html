@@ -97,7 +97,7 @@
       <h1 data-toc-skip>Delayed Data Loading</h1>
                         <h4 class="author">Dawid Kałędkowski</h4>
             
-            <h4 class="date">2021-10-21</h4>
+            <h4 class="date">2021-10-22</h4>
       
       
       <div class="hidden name"><code>delayed_data_loading.Rmd</code></div>
@@ -546,12 +546,13 @@
 <span class="op">)</span>
 
 <span class="va">data</span><span class="op">$</span><span class="fu">set_server</span><span class="op">(</span>
-  <span class="kw">function</span><span class="op">(</span><span class="va">input</span>, <span class="va">output</span>, <span class="va">session</span>, <span class="va">connection</span>, <span class="va">connectors</span><span class="op">)</span> <span class="op">{</span>
+  <span class="kw">function</span><span class="op">(</span><span class="va">id</span>, <span class="va">connection</span>, <span class="va">connectors</span><span class="op">)</span> <span class="op">{</span>
     <span class="co"># opens connection</span>
     <span class="kw">if</span> <span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/NULL.html">is.null</a></span><span class="op">(</span><span class="va">connection</span><span class="op">$</span><span class="fu">get_open_server</span><span class="op">(</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span>
-      <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/callModule.html">callModule</a></span><span class="op">(</span><span class="va">connection</span><span class="op">$</span><span class="fu">get_open_server</span><span class="op">(</span><span class="op">)</span>,
-                 id <span class="op">=</span> <span class="st">"open_connection"</span>,
-                 connection <span class="op">=</span> <span class="va">connection</span><span class="op">)</span>
+      <span class="va">connection</span><span class="op">$</span><span class="fu">get_open_server</span><span class="op">(</span><span class="op">)</span><span class="op">(</span>
+        id <span class="op">=</span> <span class="st">"open_connection"</span>,
+        connection <span class="op">=</span> <span class="va">connection</span>
+      <span class="op">)</span>
     <span class="op">}</span>
 
     <span class="kw">for</span> <span class="op">(</span><span class="va">connector</span> <span class="kw">in</span> <span class="va">connectors</span><span class="op">)</span> <span class="op">{</span>
@@ -559,7 +560,7 @@
       <span class="fu"><a href="../reference/set_args.html">set_args</a></span><span class="op">(</span><span class="va">connector</span>, args <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>name <span class="op">=</span> <span class="va">input</span><span class="op">$</span><span class="va">name</span><span class="op">)</span><span class="op">)</span>
 
       <span class="co"># pull each dataset</span>
-      <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/callModule.html">callModule</a></span><span class="op">(</span><span class="va">connector</span><span class="op">$</span><span class="fu">get_server</span><span class="op">(</span><span class="op">)</span>, id <span class="op">=</span> <span class="va">connector</span><span class="op">$</span><span class="fu">get_dataname</span><span class="op">(</span><span class="op">)</span><span class="op">)</span>
+      <span class="va">connector</span><span class="op">$</span><span class="fu">get_server</span><span class="op">(</span><span class="op">)</span><span class="op">(</span>id <span class="op">=</span> <span class="va">connector</span><span class="op">$</span><span class="fu">get_dataname</span><span class="op">(</span><span class="op">)</span><span class="op">)</span>
       <span class="kw">if</span> <span class="op">(</span><span class="va">connector</span><span class="op">$</span><span class="fu">is_failed</span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span>
         <span class="kw">break</span>
       <span class="op">}</span>
