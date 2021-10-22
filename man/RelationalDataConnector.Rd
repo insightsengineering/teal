@@ -63,7 +63,7 @@ x$set_server(
     id = id,
       module = function(input, output, session) {
         # opens connection
-        get_open_server()(id = "open_connection", connection = connection)
+        connection$get_open_server()(id = "open_connection", connection = connection)
         if (connection$is_opened()) {
           for (connector in connectors) {
             set_args(connector, args = list(name = input$name))
@@ -80,7 +80,6 @@ x$set_server(
 )
 \dontrun{
 x$launch()
-x$pull()
 x$get_datasets()
 }
 }

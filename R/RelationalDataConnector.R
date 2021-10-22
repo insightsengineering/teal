@@ -67,7 +67,7 @@
 #'     id = id,
 #'       module = function(input, output, session) {
 #'         # opens connection
-#'         get_open_server()(id = "open_connection", connection = connection)
+#'         connection$get_open_server()(id = "open_connection", connection = connection)
 #'         if (connection$is_opened()) {
 #'           for (connector in connectors) {
 #'             set_args(connector, args = list(name = input$name))
@@ -84,7 +84,6 @@
 #' )
 #' \dontrun{
 #' x$launch()
-#' x$pull()
 #' x$get_datasets()
 #' }
 RelationalDataConnector <- R6::R6Class( #nolint
@@ -525,7 +524,7 @@ RelationalDataConnector <- R6::R6Class( #nolint
 #'       id = id,
 #'       module = function(input, output, session) {
 #'         # opens connection
-#'         get_open_server()(id = "open_connection", connection = connection)
+#'         connection$get_open_server()(id = "open_connection", connection = connection)
 #'         if (connection$is_opened()) {
 #'           for (connector in connectors) {
 #'             set_args(connector, args = list(name = input$name))
@@ -540,9 +539,9 @@ RelationalDataConnector <- R6::R6Class( #nolint
 #'     )
 #'   }
 #' )
+#'
 #' \dontrun{
 #' x$launch()
-#' x$pull()
 #' x$get_datasets()
 #' }
 #'
