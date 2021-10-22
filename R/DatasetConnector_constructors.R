@@ -945,7 +945,7 @@ snowflake_cdisc_dataset_connector <- function(dataname, # nolint
 # CDSE ====
 #' `CDSE` `DatasetConnector`
 #'
-#' `r lifecycle::badge("experimental")`
+#' @description `r lifecycle::badge("defunct")`
 #'
 #' Create a `DatasetConnector` from `CDSE`.
 #'
@@ -956,20 +956,6 @@ snowflake_cdisc_dataset_connector <- function(dataname, # nolint
 #' @export
 #'
 #' @rdname cdse_dataset_connector
-#'
-#' @examples
-#' if ("CDSE" %in% installed.packages()) {
-#'   x <- cdse_dataset_connector(
-#'     dataname = "MAE",
-#'     cid = "cid6828341065561714688"
-#'   )
-#'   x$get_code()
-#' }
-#' \dontrun{
-#' load_dataset(x)
-#' get_dataset(x)
-#' x$get_raw_data()
-#' }
 cdse_dataset_connector <- function(dataname,
                                    cid,
                                    keys = character(0),
@@ -977,33 +963,18 @@ cdse_dataset_connector <- function(dataname,
                                    code = character(0),
                                    script = character(0),
                                    ...) {
-  stopifnot(is_character_single(cid))
-  dot_args <- list(...)
-  stopifnot(is_fully_named_list(dot_args))
-
-  check_pkg_quietly(
-    "CDSE",
-    "Connection to CDSE requested, but CDSE package is not available."
+  lifecycle::deprecate_stop(
+    when = "0.10.0",
+    what = "teal::cdse_dataset_connector()",
+    details = paste(
+      "Please use teal.connectors.cdse::cdse_dataset_connector().",
+      "Please ensure that teal.connectors.cdse is loaded after teal.")
   )
-
-  x_fun <- callable_function("CDSE::cdse_read_dataset")
-  args <- append(list(dataset = cid, con = as.name("conn")), dot_args)
-  x_fun$set_args(args)
-
-  x <- dataset_connector(
-    dataname = dataname,
-    pull_callable = x_fun,
-    keys = keys,
-    label = label,
-    code = code_from_script(code, script)
-  )
-
-  return(x)
 }
 
 #' `CDSE` `CDISCDatasetConnector`
 #'
-#' `r lifecycle::badge("experimental")`
+#' `r lifecycle::badge("defunct")`
 #'
 #' Create a `CDISCDatasetConnector` from `CDSE` with keys and parent name assigned
 #' automatically by `dataname`.
@@ -1022,22 +993,13 @@ cdse_cdisc_dataset_connector <- function(dataname,
                                          code = character(0),
                                          script = character(0),
                                          ...) {
-
-  x <- cdse_dataset_connector(
-    dataname = dataname,
-    cid = cid,
-    keys = keys,
-    code = code_from_script(code, script),
-    label = label,
-    ...
+  lifecycle::deprecate_stop(
+    when = "0.10.0",
+    what = "teal::cdse_cdisc_dataset_connector()",
+    details = paste(
+      "Please use teal.connectors.cdse::cdse_cdisc_dataset_connector().",
+      "Please ensure that teal.connectors.cdse is loaded after teal.")
   )
-
-  res <- as_cdisc(
-    x,
-    parent = parent
-  )
-
-  return(res)
 }
 
 

@@ -1149,7 +1149,7 @@ snowflake_connection <- function(open_args = list(), close_args = list(), ping_a
 
 #' Open connection to `CDSE`
 #'
-#' @description `r lifecycle::badge("experimental")`
+#' @description `r lifecycle::badge("defunct")`
 #'
 #' @param env optional, `CDSE` environment name.
 #'
@@ -1157,62 +1157,13 @@ snowflake_connection <- function(open_args = list(), close_args = list(), ping_a
 #'
 #' @export
 cdse_connection <- function(env = "prod") {
-  check_pkg_quietly(
-    "CDSE",
-    "Connection to CDSE was requested, but CDSE package is not available."
+  lifecycle::deprecate_stop(
+    when = "0.10.0",
+    what = "teal::cdse_connection()",
+    details = paste(
+      "Please use teal.connectors.cdse::cdse_connection().",
+      "Please ensure that teal.connectors.cdse is loaded after teal.")
   )
-
-  open_call <- callable_code(sprintf("
-  if (require(\"shiny\") && is.null(shiny::getDefaultReactiveDomain())) {
-    CDSE::cdse_login()
-    CDSE::cdse_set_environment(\"%s\")
-    Sys.wait(1)
-    NULL
-  }", env))
-
-  x <- DataConnection$new(open_fun = open_call, if_conn_obj = TRUE)
-
-  # ugly hack to silent CDSE dependency note
-  x$.__enclos_env__$private$conn <- eval(parse(text = "CDSE::cdse_connection$new()"))
-
-  # open connection
-  x$set_open_ui(
-    function(id) {
-      ns <- NS(id)
-      div(
-        eval(parse(text = "CDSE::useCDSElogin()")),
-        "Please login to CDSE first before submitting!",
-        br(),
-        eval(parse(text = "CDSE::cdse_login_button(id = ns(\"cdse_login\"), label = \"Login to CDSE\")"))
-      )
-    }
-  )
-
-  x$set_preopen_server(
-    function(id, connection) {
-      moduleServer(
-        id,
-        function(input, output, session) {
-          conn <- connection$get_conn()
-          callModule(module = eval(parse(text = "CDSE::cdse_login_shiny")), id = "cdse_login", env = env, con = conn)
-
-          observeEvent(conn$reactive()(), {
-            if (!conn$is_valid()) {
-              connection$open()
-            }
-          })
-
-          session$onSessionEnded(function() {
-            suppressWarnings(connection$close(silent = TRUE, try = TRUE))
-          })
-
-          return(invisible(connection))
-        }
-      )
-    }
-  )
-
-  return(x)
 }
 
 #' Open connection to `DataSetDB`
