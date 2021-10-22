@@ -303,7 +303,7 @@ DataConnection <- R6::R6Class( # nolint
           moduleServer(
             id = id,
             module = function(input, output, session) {
-              module(id = module_name, connection = connection)
+              preopen_module(id = module_name, connection = connection)
             }
           )
         }
