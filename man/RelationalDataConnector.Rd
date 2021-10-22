@@ -23,7 +23,7 @@ con$set_open_server(
   function(id, connection) {
     moduleServer(
       id = id,
-      module = function(input, connection, connectors) {
+      module = function(input, output, session) {
         connection$open(try = TRUE)
         return(invisible(connection))
       }
@@ -80,6 +80,7 @@ x$set_server(
 )
 \dontrun{
 x$launch()
+x$pull()
 x$get_datasets()
 }
 }
