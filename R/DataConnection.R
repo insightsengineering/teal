@@ -772,7 +772,7 @@ ricepass_connection <- function() {
 
 #' Open connection to `Teradata`
 #'
-#' @description `r lifecycle::badge("experimental")`
+#' @description `r lifecycle::badge("defunct")`
 #'
 #' @param open_args optional, named (`list`) of additional parameters for the connection's
 #'   `RocheTeradata::connect_teradata` open function. Please note that the `type`
@@ -786,99 +786,13 @@ ricepass_connection <- function() {
 #'
 #' @export
 teradata_connection <- function(open_args = list(), close_args = list(), ping_args = list()) {
-  check_pkg_quietly(
-    "RocheTeradata",
-    "Connection to Teradata was requested, but RocheTeradata package is not available."
+  lifecycle::deprecate_stop(
+    when = "0.10.0",
+    what = "teal::teradata_connection()",
+    details = paste(
+      "Please use teal.connectors.teradata::teradata_connection().",
+      "Please ensure that teal.connectors.teradata is loaded after teal.")
   )
-  check_pkg_quietly(
-    "DBI",
-    "Connection to Teradata was requested, but RocheTeradata package is not available."
-  )
-
-  stopifnot(is_fully_named_list(open_args))
-  stopifnot(is_fully_named_list(close_args))
-  stopifnot(is_fully_named_list(ping_args))
-
-  open_fun <- callable_function("RocheTeradata::connect_teradata")
-  open_args$type <- "ODBC"
-  open_fun$set_args(open_args)
-
-  close_fun <- callable_function("DBI::dbDisconnect")
-  close_args$conn <- as.name("conn")
-  close_fun$set_args(close_args)
-
-  ping_fun <- callable_function("DBI::dbIsValid")
-  ping_args$dbObj <- as.name("conn") # nolint
-  ping_fun$set_args(ping_args)
-
-  x <- DataConnection$new(open_fun = open_fun, close_fun = close_fun, ping_fun = ping_fun, if_conn_obj = TRUE)
-
-  # open connection
-  x$set_open_ui(
-    function(id) {
-      ns <- NS(id)
-      div(
-        textInput(ns("username"), "uid"),
-        passwordInput(ns("password"), "pwd")
-      )
-    }
-  )
-
-  x$set_open_server(
-    function(id, connection) {
-      moduleServer(
-        id,
-        function(input, output, session) {
-          connection$open(args = list(uid = input$username, pwd = input$password), try = TRUE)
-
-          if (connection$is_open_failed()) {
-            shinyjs::alert(
-              paste(
-                "Error opening connection\nError message: ",
-                connection$get_open_error_message()
-              )
-            )
-          }
-
-          session$onSessionEnded(function() {
-            suppressWarnings(connection$close(silent = TRUE, try = TRUE))
-          })
-
-          return(invisible(connection))
-        }
-      )
-    }
-  )
-
-  # close connection
-  x$set_close_ui(
-    function(id) {
-      NULL
-    }
-  )
-
-  x$set_close_server(
-    function(id, connection) {
-      moduleServer(
-        id,
-        function(input, output, session) {
-          connection$close(try = TRUE)
-
-          if (connection$is_close_failed()) {
-            shinyjs::alert(
-              paste(
-                "Error closing connection\nError message: ",
-                connection$get_close_error_message()
-              )
-            )
-          }
-          return(invisible(connection))
-        }
-      )
-    }
-  )
-
-  return(x)
 }
 
 #' Helper function to connect to `Snowflake`

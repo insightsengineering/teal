@@ -738,7 +738,7 @@ rice_cdisc_dataset_connector <- function(dataname,
 # TERADATA ====
 #' `Teradata` `DatasetConnector`
 #'
-#' `r lifecycle::badge("experimental")`
+#' `r lifecycle::badge("defunct")`
 #'
 #' Create a `DatasetConnector` from `Teradata`.
 #'
@@ -756,32 +756,18 @@ teradata_dataset_connector <- function(dataname,
                                        code = character(0),
                                        script = character(0),
                                        ...) {
-  dot_args <- list(...)
-  stopifnot(is_fully_named_list(dot_args))
-
-  check_pkg_quietly(
-    "DBI",
-    "Connection to Teradata tables was requested, but DBI package is not available."
+  lifecycle::deprecate_stop(
+    when = "0.10.0",
+    what = "teal::teradata_dataset_connector()",
+    details = paste(
+      "Please use teal.connectors.teradata::teradata_dataset_connector().",
+      "Please ensure that teal.connectors.teradata is loaded after teal.")
   )
-
-  x_fun <- callable_function("DBI::dbReadTable")
-  args <- append(list(conn = as.name("conn"), name = table), dot_args)
-  x_fun$set_args(args)
-
-  x <- dataset_connector(
-    dataname = dataname,
-    pull_callable = x_fun,
-    keys = keys,
-    label = label,
-    code = code_from_script(code, script)
-  )
-
-  return(x)
 }
 
 #' `Teradata` `CDISCDatasetConnector`
 #'
-#' `r lifecycle::badge("experimental")`
+#' `r lifecycle::badge("defunct")`
 #'
 #' Create a `CDISCDatasetConnector` from `Teradata` with keys and parent name assigned
 #' automatically by `dataname`.
@@ -800,22 +786,13 @@ teradata_cdisc_dataset_connector <- function(dataname, # nolint
                                              code = character(0),
                                              script = character(0),
                                              ...) {
-
-  x <- teradata_dataset_connector(
-    dataname = dataname,
-    table = table,
-    keys = keys,
-    code = code_from_script(code, script),
-    label = label,
-    ...
+  lifecycle::deprecate_stop(
+    when = "0.10.0",
+    what = "teal::teradata_cdisc_dataset_connector()",
+    details = paste(
+      "Please use teal.connectors.teradata::teradata_cdisc_dataset_connector().",
+      "Please ensure that teal.connectors.teradata is loaded after teal.")
   )
-
-  res <- as_cdisc(
-    x,
-    parent = parent
-  )
-
-  return(res)
 }
 
 
