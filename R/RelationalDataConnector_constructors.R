@@ -1,6 +1,6 @@
 #' \code{RelationalDataConnector} connector for \code{RICE}
 #'
-#' @description `r lifecycle::badge("experimental")`
+#' @description `r lifecycle::badge("defunct")`
 #' Build data connector for \code{RICE} datasets
 #'
 #' @export
@@ -13,125 +13,14 @@
 #'
 #' @return An object of class \code{RelationalDataConnector}
 #'
-#' @examples
-#'
-#' if ("rice" %in% installed.packages()) {
-#'   x <- rice_data(
-#'     rice_cdisc_dataset_connector("ADSL", "/path/to/ADSL"),
-#'     rice_cdisc_dataset_connector("ADLB", "/path/to/ADLB")
-#'   )
-#'   app <- init(
-#'     data = cdisc_data(x),
-#'     modules = root_modules(
-#'       module(
-#'         "ADSL AGE histogram",
-#'         server = function(input, output, session, datasets) {
-#'           output$hist <- renderPlot({
-#'             hist(datasets$get_data("ADSL", filtered = TRUE)$AGE)
-#'           })
-#'         },
-#'         ui = function(id, ...) {ns <- NS(id); plotOutput(ns('hist'))},
-#'         filters = "ADSL"
-#'       )
-#'     ),
-#'     header = tags$h1("Sample App")
-#'   )
-#' }
-#' \dontrun{
-#' shinyApp(app$ui, app$server)
-#' }
-#'
 rice_data <- function(..., connection = rice_connection(), additional_ui = NULL) {
-  connectors <- list(...)
-  stopifnot(is_class_list("DatasetConnector")(connectors))
-  stopifnot(inherits(connection, "DataConnection"))
-  stopifnot(is.null(additional_ui) || is_html_like(additional_ui))
-
-  x <- if (any(vapply(connectors, is, logical(1), "CDISCDatasetConnector"))) {
-    CDISCDataConnector$new(connection = connection, connectors = connectors)
-  } else {
-    RelationalDataConnector$new(connection = connection, connectors = connectors)
-  }
-
-  x$set_check(FALSE)
-
-  x$set_ui(
-    function(id, connection, connectors) {
-      ns <- NS(id)
-      div(
-        div(
-          h1("TEAL - Access data on entimICE using ", `if`(is(connection, "rice_connection"), tags$code("rice"), tags$code("ricepass"))),
-          br(),
-          h5("Data access requested for:"),
-          fluidRow(
-            column(
-              11,
-              offset = 1,
-              lapply(seq_along(connectors), function(i) {
-                tags$li(code(connectors[[i]]$get_dataname()),
-                        ": ",
-                        code(connectors[[i]]$get_pull_args()$node))
-              })
-            )
-          )
-        ),
-        br(),
-        additional_ui,
-        br(),
-        connection$get_open_ui(ns("open_connection"))
-      )
-    }
+  lifecycle::deprecate_stop(
+    when = "0.10.0",
+    what = "teal::rice_data()",
+    details = paste(
+      "Please use teal.connectors.rice::rice_data().",
+      "Please ensure that teal.connectors.rice is loaded after teal.")
   )
-
-  x$set_preopen_server(
-    function(id, connection) {
-      if (!is.null(connection$get_preopen_server())) {
-        moduleServer(
-          id = id,
-          module = connection$get_preopen_server()(
-            id = "open_connection",
-            connection = connection
-          )
-        )
-      }
-    }
-  )
-
-  x$set_server(
-    function(id, connection, connectors) {
-      moduleServer(
-        id = id,
-        module = function(input, output, session) {
-          # opens connection
-          if (!is.null(connection$get_open_server())) {
-            connection$get_open_server()(
-              id = "open_connection",
-              connection = connection
-            )
-          }
-
-          # rice::rice_read doesn't need arguments from data-level
-          if (connection$is_opened()) {
-            # call connectors$pull
-            for (connector in connectors) {
-              connector$get_server()(id = connector$get_dataname())
-              if (connector$is_failed()) {
-                break
-              }
-            }
-
-            if (!is.null(connection$get_close_server())) {
-              connection$get_close_server()(
-                id = "close_connection",
-                connection = connection
-              )
-            }
-          }
-        }
-      )
-    }
-  )
-  return(x)
 }
 
 #' \code{RelationalDataConnector} connector for \code{TERADATA}

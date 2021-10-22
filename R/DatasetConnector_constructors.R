@@ -672,7 +672,7 @@ code_cdisc_dataset_connector <- function(dataname,
 # RICE ====
 #' Rice `DatasetConnector`
 #'
-#' `r lifecycle::badge("experimental")`
+#' `r lifecycle::badge("defunct")`
 #'
 #' Create a `DatasetConnector` from `RICE`.
 #'
@@ -688,20 +688,6 @@ code_cdisc_dataset_connector <- function(dataname,
 #'
 #' @rdname rice_dataset_connector
 #'
-#' @examples
-#' if ("rice" %in% installed.packages()) {
-#'   x <- rice_dataset_connector(
-#'     dataname = "ADSL",
-#'     path = "/path/to/file.sas7bdat"
-#'   )
-#'   x$get_code()
-#' }
-#' \dontrun{
-#' load_dataset(x)
-#' get_dataset(x)
-#' x$get_raw_data()
-#' }
-#'
 rice_dataset_connector <- function(dataname,
                                    path,
                                    keys = character(0),
@@ -709,34 +695,18 @@ rice_dataset_connector <- function(dataname,
                                    code = character(0),
                                    script = character(0),
                                    ...) {
-  dot_args <- list(...)
-  stopifnot(is_fully_named_list(dot_args))
-  stopifnot(is_character_single(path))
-  check_pkg_quietly(
-    "rice",
-    paste0(
-      "Connection to entimICE via rice was requested, but rice package is not available.",
-      "Please install it from https://github.roche.com/Rpackages/rice.")
+  lifecycle::deprecate_stop(
+    when = "0.10.0",
+    what = "teal::rice_dataset_connector()",
+    details = paste(
+      "Please use teal.connectors.rice::rice_dataset_connector().",
+      "Please ensure that teal.connectors.rice is loaded after teal.")
   )
-
-  x_fun <- callable_function("rice::rice_read") # nolint
-  args <- append(list(node = path, prolong = TRUE), dot_args)
-  x_fun$set_args(args)
-
-  x <- dataset_connector(
-    dataname = dataname,
-    pull_callable = x_fun,
-    keys = keys,
-    code = code_from_script(code, script),
-    label = label
-  )
-
-  return(x)
 }
 
 #' Rice `CDISCDatasetConnector`
 #'
-#' `r lifecycle::badge("experimental")`
+#' `r lifecycle::badge("defunct")`
 #'
 #' Create a `CDISCDatasetConnector` from `RICE` dataset with keys and parent name assigned
 #' automatically by `dataname`.
@@ -755,22 +725,13 @@ rice_cdisc_dataset_connector <- function(dataname,
                                          code = character(0),
                                          script = character(0),
                                          ...) {
-
-  x <- rice_dataset_connector(
-    dataname = dataname,
-    path = path,
-    keys = keys,
-    code = code_from_script(code, script),
-    label = label,
-    ...
+  lifecycle::deprecate_stop(
+    when = "0.10.0",
+    what = "teal::rice_cdisc_dataset_connector()",
+    details = paste(
+      "Please use teal.connectors.rice::rice_cdisc_dataset_connector().",
+      "Please ensure that teal.connectors.rice is loaded after teal.")
   )
-
-  res <- as_cdisc(
-    x,
-    parent = parent
-  )
-
-  return(res)
 }
 
 

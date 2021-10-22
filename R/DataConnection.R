@@ -682,7 +682,7 @@ data_connection <- function(open_fun = NULL, close_fun = NULL, ping_fun = NULL, 
 # DataConnection wrappers ----
 #' Open connection to `entimICE` via `rice`
 #'
-#' @description `r lifecycle::badge("experimental")`
+#' @description `r lifecycle::badge("defunct")`
 #'
 #' @param open_args optional, named (`list`) of additional parameters for the connection's
 #'   \code{rice_session_open} open function. Please note that the `password` argument will be
@@ -697,92 +697,13 @@ data_connection <- function(open_fun = NULL, close_fun = NULL, ping_fun = NULL, 
 #'
 #' @export
 rice_connection <- function(open_args = list(), close_args = list(), ping_args = list()) {
-  check_pkg_quietly(
-    "rice",
-    paste0(
-      "Connection to entimICE via rice was requested, but rice package is not available.",
-      "Please install it from https://github.roche.com/Rpackages/rice."
-    )
+  lifecycle::deprecate_stop(
+    when = "0.10.0",
+    what = "teal::rice_connection()",
+    details = paste(
+      "Please use teal.connectors.rice::rice_connection().",
+      "Please ensure that teal.connectors.rice is loaded after teal.")
   )
-  stopifnot(is_fully_named_list(open_args))
-  stopifnot(is_fully_named_list(close_args))
-  stopifnot(is_fully_named_list(ping_args))
-
-  ping_fun <- callable_function("rice::rice_session_active")
-  ping_fun$set_args(ping_args)
-
-  open_fun <- callable_function("rice::rice_session_open")
-  open_args$password <- as.call(parse(text = "askpass::askpass"))
-  open_fun$set_args(open_args)
-
-  close_fun <- callable_function("rice::rice_session_close")
-  close_args$message <- FALSE
-  close_fun$set_args(close_args)
-
-  x <- DataConnection$new(open_fun = open_fun, close_fun = close_fun, ping_fun = ping_fun)
-
-  # open connection
-  x$set_open_ui(
-    function(id) {
-      ns <- NS(id)
-      div(
-        textInput(ns("username"), "Username"),
-        passwordInput(ns("password"), "Password")
-      )
-    }
-  )
-
-  x$set_open_server(
-    function(id, connection) {
-      moduleServer(
-        id,
-        function(input, output, session) {
-          connection$open(args = list(username = input$username, password = input$password), try = TRUE)
-
-          if (connection$is_open_failed()) {
-            shinyjs::alert(
-              paste(
-                "Error opening connection\nError message: ",
-                connection$get_open_error_message()
-              )
-            )
-          }
-
-          session$onSessionEnded(function() {
-            suppressWarnings(connection$close(silent = TRUE, try = TRUE))
-          })
-
-          return(invisible(connection))
-        }
-      )
-    }
-  )
-
-  # close connection
-  x$set_close_server(
-    function(id, connection) {
-      moduleServer(
-        id,
-        function(input, output, session) {
-          connection$close(try = TRUE)
-
-          if (connection$is_close_failed()) {
-            shinyjs::alert(
-              paste(
-                "Error closing connection\nError message: ",
-                connection$get_close_error_message()
-              )
-            )
-          }
-          return(invisible(connection))
-        }
-      )
-    }
-  )
-
-  class(x) <- c("rice_connection", class(x))
-
-  return(x)
 }
 
 
