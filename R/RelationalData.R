@@ -231,10 +231,12 @@ RelationalData <- R6::R6Class( # nolint
           }
         )
       } else {
-        moduleServer(
-          id = id,
-          module = private$server
-        )
+        function(id) {
+          moduleServer(
+            id = id,
+            module = private$server
+          )
+        }
       }
     },
     #' @description
