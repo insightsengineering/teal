@@ -133,7 +133,7 @@ init <- function(data,
       names_data <- as.character(substitute(data))[1]
       data <- list(data)
       names(data) <- names_data
-    } else if (is(data, "Dataset")) {
+    } else if (is(data, "Dataset") || is(data, "DatasetConnector")) {
       data <- list(data)
     }
 
@@ -148,7 +148,7 @@ init <- function(data,
       if (is.null(names_data_y) || names_data_y == "") {
         if (is(data[[y]], "data.frame")) {
           as.character(data_names_call[[y]])[1]
-        } else if (is(data[[y]], "Dataset")){
+        } else if (is(data[[y]], "Dataset") || is(data[[y]], "DatasetConnector")){
           get_dataname(data[[y]])
         }
       } else {
@@ -159,7 +159,7 @@ init <- function(data,
     names(data) <- data_names_new
 
     data <- lapply(seq_along(data), function(y) {
-      if(is(data[[y]], "Dataset")) {
+      if(is(data[[y]], "Dataset") || is(data[[y]], "DatasetConnector") ) {
         data[[y]]
       } else if (is(data[[y]], "data.frame")) {
         if (names(data)[y] %in% names(default_cdisc_keys)) {
