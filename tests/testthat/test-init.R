@@ -5,7 +5,9 @@ mods <- teal:::get_dummy_modules()
 
 testthat::test_that("init data accepts a single Dataset/CDISCDataset", {
   testthat::expect_error(init(data = Dataset$new("iris", head(iris)), modules = mods), NA)
-  testthat::expect_error(init(data = CDISCDataset$new("ADSL", adsl_raw, parent = character(0), keys = get_cdisc_keys("ADSL")), modules = mods), NA)
+  testthat::expect_error(init(
+    data = CDISCDataset$new("ADSL", adsl_df, parent = character(0), keys = get_cdisc_keys("ADSL")),
+    modules = mods), NA)
   testthat::expect_error(init(data = dataset, modules = mods), NA)
   testthat::expect_error(init(data = adsl_dataset, modules = mods), NA)
 })
@@ -17,10 +19,12 @@ testthat::test_that("init data accepts a single dataframe", {
 
 testthat::test_that("init data accepts a list of single Dataset/CDISCDataset without renaming", {
   dataset_list = list(dataset)
-  cdisc_dataset_list <- list(CDISCDataset$new("ADSL", adsl_raw, parent = character(0), keys = get_cdisc_keys("ADSL")))
+  cdisc_dataset_list <- list(CDISCDataset$new("ADSL", adsl_df, parent = character(0), keys = get_cdisc_keys("ADSL")))
   mods <- teal:::get_dummy_modules()
   testthat::expect_error(init(data = list(Dataset$new("iris", head(iris))), modules = mods), NA)
-  testthat::expect_error(init(data = list(CDISCDataset$new("ADSL", adsl_raw, parent = character(0), keys = get_cdisc_keys("ADSL"))), modules = mods), NA)
+  testthat::expect_error(init(
+    data = list(CDISCDataset$new("ADSL", adsl_df, parent = character(0), keys = get_cdisc_keys("ADSL"))),
+    modules = mods), NA)
   testthat::expect_error(init(data = dataset_list, modules = mods), NA)
   testthat::expect_error(init(data = cdisc_dataset_list, modules = mods), NA)
 })
@@ -34,10 +38,15 @@ testthat::test_that("init data accepts a list of single dataframe without renami
 
 testthat::test_that("init data accepts a list of single Dataset/CDISCDataset with renaming", {
   dataset_list = list(data1 = dataset)
-  cdisc_dataset_list <- list(data2 = CDISCDataset$new("ADSL", adsl_raw, parent = character(0), keys = get_cdisc_keys("ADSL")))
+  cdisc_dataset_list <- list(
+    data2 = CDISCDataset$new("ADSL", adsl_df, parent = character(0), keys = get_cdisc_keys("ADSL"))
+  )
   mods <- teal:::get_dummy_modules()
   testthat::expect_error(init(data = list(data1 = Dataset$new("iris", head(iris))), modules = mods), NA)
-  testthat::expect_error(init(data = list(data2 = CDISCDataset$new("ADSL", adsl_raw, parent = character(0), keys = get_cdisc_keys("ADSL"))), modules = mods), NA)
+  testthat::expect_error(init(
+    data = list(data2 = CDISCDataset$new("ADSL", adsl_df, parent = character(0), keys = get_cdisc_keys("ADSL"))),
+    modules = mods
+  ), NA)
   testthat::expect_error(init(data = dataset_list, modules = mods), NA)
   testthat::expect_error(init(data = cdisc_dataset_list, modules = mods), NA)
 })
@@ -86,7 +95,7 @@ testthat::test_that("init data accepts a list of mixed Dataset and dataframe wit
   modules = mods), NA)
   testthat::expect_error(init(data = list(
     dataset,
-    data2 = adsl
+    data2 = adsl_df
   ),
   modules = mods), NA)
 })
