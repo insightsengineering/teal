@@ -34,16 +34,6 @@ jobs:
               core.setFailed(`Request failed with error ${err}`)
             }
 
-      - name: Install remotes R package if needed
-        run: |
-           options(repos = c(CRAN = "https://cloud.r-project.org/"))
-           ncores <- parallel::detectCores(all.tests = FALSE, logical = TRUE)
-           cat(paste("\n\nnumber of cores detected:", ncores, "\n\n"))
-           if (!require("remotes")) install.packages("remotes", upgrade = "never", Ncpus = ncores)
-        shell: Rscript {0}
-        env:
-          GITHUB_PAT: ${{ secrets.REPO_GITHUB_TOKEN }}
-
       - name: Checkout repo during PR
         uses: actions/checkout@v2
         if: github.event_name == 'pull_request'
@@ -58,56 +48,12 @@ jobs:
         with:
           path: ${{ github.event.repository.name }}
 
-      - name: Print branch name
-        run: |
-           cd ${{ github.event.repository.name }}
-           git branch --show-current
-        shell: bash
-
-      - name: Install system dependencies for R package
-        run: |
-          ubuntu_info <- read.csv("/etc/os-release", sep = "=", header = FALSE)
-          v_ubuntu_info <- setNames(ubuntu_info$V2, ubuntu_info$V1)
-          if (v_ubuntu_info[['NAME']] != "Ubuntu") stop("only works on ubuntu")
-          ubuntu_version <- v_ubuntu_info[['VERSION_ID']]
-
-          sys_deps_for_pkg <- remotes::system_requirements("ubuntu", ubuntu_version, path = "${{ github.event.repository.name }}")
-
-          sys_pgks <- gsub("^apt-get install -y ", "", sys_deps_for_pkg)
-
-          has_pkgs <- vapply(sys_pgks, function(pkg) system2("dpkg", c("-l", pkg), stdout = NULL, stderr = NULL) == 0,  logical(1))
-
-          if (any(!has_pkgs)) {
-            system2("apt-get", "update")
-            system2("apt-get", c("install", "-y", sys_pgks[!has_pkgs]))
-          }
-        shell: Rscript {0}
-
-      - name: Install R package dependencies
-        run: |
-          setwd("${{ github.event.repository.name }}")
-          options(repos = c(CRAN = "https://cloud.r-project.org/"))
-          ncores <- parallel::detectCores(all.tests = FALSE, logical = TRUE)
-          cat(paste("\n\nnumber of cores detected:", ncores, "\n\n"))
-          if (file.exists("renv.lock")) {
-            renv::restore()
-          } else {
-            remotes::install_deps(dependencies = TRUE, upgrade = "never", Ncpus = ncores)
-          }
-          if (file.exists("staged_dependencies.yaml")) {
-            cat("\nInstall Staged Dependencies\n\n\n")
-            if (!require("staged.dependencies")) {
-              remotes::install_github("openpharma/staged.dependencies", ref = "v0.2.2", Ncpus = ncores, upgrade = "never")
-            }
-            cat("\nCalculating Staged Dependency Table...\n\n")
-            x <- staged.dependencies::dependency_table()
-            print(x, width = 120)
-            cat("\n\n")
-            staged.dependencies::install_deps(dep_structure = x, install_project = FALSE, verbose = TRUE)
-          }
-        shell: Rscript {0}
+      - name: Run Staged dependencies
+        uses: insightsengineering/staged-dependencies-action@v1
         env:
           GITHUB_PAT: ${{ secrets.REPO_GITHUB_TOKEN }}
+          SD_REPO_PATH: ${{ github.event.repository.name }}
+          SD_ENABLE_CHECK: "false"
 
       - name: Generate man pages
         run: |
