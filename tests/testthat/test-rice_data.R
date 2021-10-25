@@ -1,5 +1,3 @@
-library(random.cdisc.data)
-
 # Single rice_data connector ----
 testthat::test_that("Single rice_data connector with two rice dataset connectors", {
   if (!"rice" %in% installed.packages()) {

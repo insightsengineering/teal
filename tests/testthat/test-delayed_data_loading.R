@@ -1,13 +1,14 @@
 # Contains integration tests between delayed data loading objects and
 # the objects responsible for loading, pulling and filtering the data
-
-library(random.cdisc.data)
-ADSL <- radsl(cached = TRUE) # nolint
-ADTTE <- radtte(cached = TRUE) # nolint
+library(scda)
+scda_data <- synthetic_cdisc_data("latest")
+ADSL <- scda_data$adsl # nolint
+ADTTE <- scda_data$adtte # nolint
 data <- cdisc_data(
   cdisc_dataset("ADSL", ADSL),
   cdisc_dataset("ADTTE", ADTTE)
 )
+
 
 ds <- teal:::CDISCFilteredData$new()
 isolate(filtered_data_set(data, ds))
@@ -36,17 +37,17 @@ vc_fun_short_exp <- structure(
   class = c("delayed_variable_choices", "delayed_data", "choices_labeled")
 )
 
-# Delayed data extract - single data connector with two rcd dataset connectors ----
+# Delayed data extract - single data connector with two scda dataset connectors ----
 get_continuous <- function(data) {
   # example function to show selections from delayed data
   idx <- vapply(data, function(x) is.numeric(x) && length(unique(x)) > 6, logical(1))
   colnames(data)[idx]
 }
 
-test_that("Delayed data extract - single data connector with two rcd dataset connectors", {
-  adsl <- rcd_cdisc_dataset_connector("ADSL", radsl, cached = TRUE)
-  adae <- rcd_cdisc_dataset_connector("ADAE", radae, cached = TRUE)
-  data <- cdisc_data(rcd_data(adsl, adae))
+test_that("Delayed data extract - single data connector with two scda dataset connectors", {
+  adsl <- scda_cdisc_dataset_connector("ADSL", "adsl")
+  adae <- scda_cdisc_dataset_connector("ADAE", "adae")
+  data <- cdisc_data(adsl, adae)
 
   x <- data_extract_spec(
     dataname = "ADSL",
@@ -90,13 +91,13 @@ test_that("Delayed data extract - single data connector with two rcd dataset con
   expect_identical(y_result, y_expected)
 })
 
-# Delayed choices selected - single data connector with two rcd dataset connectors ----
+# Delayed choices selected - single data connector with two scda dataset connectors ----
 
-test_that("Delayed choices selected - single data connector with two rcd dataset connectors", {
+test_that("Delayed choices selected - single data connector with two scda dataset connectors", {
 
-  adsl <- rcd_cdisc_dataset_connector("ADSL", radsl, cached = TRUE)
-  adae <- rcd_cdisc_dataset_connector("ADAE", radae, cached = TRUE)
-  data <- cdisc_data(rcd_data(adsl, adae))
+  adsl <- scda_cdisc_dataset_connector("ADSL", "adsl")
+  adae <- scda_cdisc_dataset_connector("ADAE", "adae")
+  data <- cdisc_data(adsl, adae)
 
   choices <- variable_choices("ADSL")
   for (connector in data$get_connectors()) {
@@ -114,21 +115,15 @@ test_that("Delayed choices selected - single data connector with two rcd dataset
 # Delayed data extract - filtered ----
 
 test_that("Delayed data extract - filtered", {
-  adsl <- rcd_cdisc_dataset_connector("ADSL", radsl, cached = TRUE)
+  adsl <- scda_cdisc_dataset_connector("ADSL", "adsl")
   adsl$set_ui_input(function(ns) {
     list(
-      numericInput(inputId = ns("seed"), label = "ADSL seed", min = 0, value = 1),
-      optionalSliderInput(inputId = ns("study_duration"),
-                          label = "Duration of study in years",
-                          min = 0,
-                          max = 5,
-                          value = 2,
-                          step = 1)
+      textInput(inputId = ns("name"), label = "scda name", value = "latest")
     )
   }
   )
-  adrs <- rcd_cdisc_dataset_connector("ADRS", radrs, cached = TRUE)
-  data <- cdisc_data(rcd_data(adsl, adrs))
+  adrs <- scda_cdisc_dataset_connector("ADRS", "adrs")
+  data <- cdisc_data(adsl, adrs)
 
   x <- data_extract_spec(
     dataname = "ADSL",
@@ -193,11 +188,11 @@ test_that("Delayed data extract - filtered", {
   expect_identical(y_result, y_expected)
 })
 
-# Delayed extract filter concatenated - single data connector with two rcd dataset connectors ----
-test_that("Delayed extract filter concatenated - single data connector with two rcd dataset connectors", {
-  adsl <- rcd_cdisc_dataset_connector("ADSL", radsl, cached = TRUE)
-  adrs <- rcd_cdisc_dataset_connector("ADRS", radrs, cached = TRUE)
-  data <- teal_data(rcd_data(adsl, adrs))
+# Delayed extract filter concatenated - single data connector with two scda dataset connectors ----
+test_that("Delayed extract filter concatenated - single data connector with two scda dataset connectors", {
+  adsl <- scda_cdisc_dataset_connector("ADSL", "adsl")
+  adrs <- scda_cdisc_dataset_connector("ADRS", "adrs")
+  data <- teal_data(adsl, adrs)
 
   x <- data_extract_spec(
     dataname = "ADSL",
@@ -298,11 +293,11 @@ test_that("Delayed extract filter concatenated - single data connector with two 
   expect_identical(y_result, y_expected)
 })
 
-# Delayed extract two filters - single data connector with two rcd dataset connectors ----
-test_that("Delayed extract two filters - single data connector with two rcd dataset connectors", {
-  adsl <- rcd_cdisc_dataset_connector("ADSL", radsl, cached = TRUE)
-  adrs <- rcd_cdisc_dataset_connector("ADRS", radrs, cached = TRUE)
-  data <- teal_data(rcd_data(adsl, adrs))
+# Delayed extract two filters - single data connector with two scda dataset connectors ----
+test_that("Delayed extract two filters - single data connector with two scda dataset connectors", {
+  adsl <- scda_cdisc_dataset_connector("ADSL", "adsl")
+  adrs <- scda_cdisc_dataset_connector("ADRS", "adrs")
+  data <- teal_data(adsl, adrs)
 
   x <- data_extract_spec(
     dataname = "ADSL",
@@ -423,14 +418,14 @@ test_that("Delayed extract two filters - single data connector with two rcd data
 test_that("Delayed extract - RelationalData with single dataset and multiple connectors", {
 
   adsl <- dataset(
-    radsl(cached = TRUE),
     dataname = "ADSL",
+    synthetic_cdisc_data("latest")$adsl,
     keys = get_cdisc_keys("ADSL"),
-    code = "ADSL <- radsl(cached = TRUE)",
+    code = "ADSL <- synthetic_cdisc_data(\"latest\")$adsl",
     label = "ADSL")
-  adrs <- rcd_cdisc_dataset_connector("ADRS", radrs, cached = TRUE, ADSL = adsl, keys = get_cdisc_keys("ADRS"))
-  adtte <- rcd_cdisc_dataset_connector("ADTTE", radtte, cached = TRUE, ADSL = adsl, keys = get_cdisc_keys("ADTTE"))
-  data <- cdisc_data(adsl, rcd_data(adrs, adtte))
+  adrs <- scda_cdisc_dataset_connector("ADRS", "adrs", keys = get_cdisc_keys("ADRS"))
+  adtte <- scda_cdisc_dataset_connector("ADTTE", "adtte", keys = get_cdisc_keys("ADTTE"))
+  data <- cdisc_data(adsl, adrs, adtte)
 
   x <- data_extract_spec(
     dataname = "ADSL",

@@ -2,9 +2,6 @@ current_repo:
   repo: insightsengineering/teal
   host: https://github.com
 upstream_repos:
-  insightsengineering/tern:
-    repo: insightsengineering/tern
-    host: https://github.com
   Roche/rtables:
     repo: Roche/rtables
     host: https://github.com
@@ -14,11 +11,11 @@ upstream_repos:
   insightsengineering/scda:
     repo: insightsengineering/scda
     host: https://github.com
+  insightsengineering/scda.2021:
+    repo: insightsengineering/scda.2021
+    host: https://github.com
   insightsengineering/test.nest:
     repo: insightsengineering/test.nest
-    host: https://github.com
-  insightsengineering/random.cdisc.data:
-    repo: insightsengineering/random.cdisc.data
     host: https://github.com
 downstream_repos:
   insightsengineering/teal.devel:

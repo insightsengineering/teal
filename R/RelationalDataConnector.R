@@ -14,23 +14,78 @@
 #'   list with dataset connectors
 #'
 #' @examples
+#'
 #' library(scda)
-#' adsl_cf <- callable_function(function() synthetic_cdisc_data("latest")$adsl)
-#' adsl <- cdisc_dataset_connector(dataname = "ADSL",
-#'                                 pull_callable = adsl_cf,
-#'                                 keys = get_cdisc_keys("ADSL"))
-#' adlb_cf <- callable_function(function() synthetic_cdisc_data("latest")$adlb)
-#' adlb <- cdisc_dataset_connector(dataname = "ADLB",
-#'                                 pull_callable = adlb_cf,
-#'                                 keys = get_cdisc_keys("ADLB"))
-#' con <- teal:::rcd_connection()
+#' adsl <- scda_cdisc_dataset_connector(dataname = "ADSL", "adsl")
+#' adlb <- scda_cdisc_dataset_connector(dataname = "ADLB", "adlb")
+#'
+#' open_fun <- callable_function(library)
+#' open_fun$set_args(list(package = "scda"))
+#'
+#' con <- data_connection(open_fun = open_fun)
+#' con$set_open_server(
+#'   function(id, connection) {
+#'     moduleServer(
+#'       id = id,
+#'       module = function(input, output, session) {
+#'         connection$open(try = TRUE)
+#'         return(invisible(connection))
+#'       }
+#'     )
+#'   }
+#' )
+#'
 #' x <- teal:::RelationalDataConnector$new(connection = con, connectors = list(adsl, adlb))
 #'
+#' x$set_ui(
+#'   function(id, connection, connectors) {
+#'     ns <- NS(id)
+#'     tagList(
+#'       connection$get_open_ui(ns("open_connection")),
+#'       textInput(ns("name"), p("Choose", code("scda data version")), value = "latest"),
+#'       do.call(
+#'         what = "tagList",
+#'         args = lapply(
+#'           connectors,
+#'           function(connector) {
+#'             div(
+#'               connector$get_ui(
+#'                 id = ns(connector$get_dataname())
+#'               ),
+#'               br()
+#'             )
+#'           }
+#'         )
+#'       )
+#'     )
+#'   }
+#' )
+#'
+#' x$set_server(
+#'   function(id, connection, connectors) {
+#'     moduleServer(
+#'     id = id,
+#'       module = function(input, output, session) {
+#'         # opens connection
+#'         connection$get_open_server()(id = "open_connection", connection = connection)
+#'         if (connection$is_opened()) {
+#'           for (connector in connectors) {
+#'             set_args(connector, args = list(name = input$name))
+#'             # pull each dataset
+#'             connector$get_server()(id = connector$get_dataname())
+#'             if (connector$is_failed()) {
+#'               break
+#'             }
+#'           }
+#'         }
+#'       }
+#'     )
+#'   }
+#' )
 #' \dontrun{
 #' x$launch()
 #' x$get_datasets()
 #' }
-#'
 RelationalDataConnector <- R6::R6Class( #nolint
   classname = "RelationalDataConnector",
   inherit = DataAbstract,
@@ -57,9 +112,34 @@ RelationalDataConnector <- R6::R6Class( #nolint
       private$pull_code <- CodeClass$new()
       private$mutate_code <- CodeClass$new()
 
-      self$id <- digest::digest2int(as.character(Sys.time()))
+      self$id <- sample.int(1e11, 1, useHash = TRUE)
 
       return(invisible(self))
+    },
+    #' Prints this RelationalDataConnector.
+    #'
+    #' @param ... additional arguments to the printing method
+    #' @return invisibly self
+    print = function(...) {
+      check_ellipsis(...)
+
+      cat(sprintf(
+        "A currently %s %s object containing %d Dataset/DatasetConnector object(s) as element(s).\n",
+        ifelse(self$get_connection()$is_opened(), "opened", "not yet opened"),
+        class(self)[1],
+        length(private$datasets)
+      ))
+      cat(sprintf(
+        "%d of which is/are loaded/pulled:\n",
+        sum(vapply(private$datasets, function (x) x$is_pulled(), FUN.VALUE = logical(1)))
+      ))
+
+      for (i in seq_along(private$datasets)) {
+        cat(sprintf("--> Element %d:\n", i))
+        print(private$datasets[[i]])
+      }
+
+      invisible(self)
     },
 
     # ___ getters ====
@@ -100,9 +180,14 @@ RelationalDataConnector <- R6::R6Class( #nolint
       if (is.null(private$server)) {
         stop("No server function set yet. Please use set_server method first.")
       }
-      function(input, output, session, connection = private$connection, connectors = private$datasets) {
+      function(id, connection = private$connection, connectors = private$datasets) {
         rv <- reactiveVal(NULL)
-        callModule(private$server, id = "data_input", connection = connection, connectors = connectors)
+        moduleServer(
+          id = id,
+          module = function(input, output, session) {
+            private$server(id = "data_input", connection = connection, connectors = connectors)
+          }
+        )
 
         if (self$is_pulled()) {
           return(rv(TRUE))
@@ -115,10 +200,15 @@ RelationalDataConnector <- R6::R6Class( #nolint
     #'
     #' @return the \code{server} function
     get_preopen_server = function() {
-      function(input, output, session, connection = private$connection) {
+      function(id, connection = private$connection) {
         if_not_null(
           private$preopen_server,
-          callModule(private$preopen_server, id = "data_input", connection = connection)
+          moduleServer(
+            id = id,
+            module = function(input, output, session) {
+              private$preopen_server(id = "data_input", connection = connection)
+            }
+          )
         )
       }
     },
@@ -187,7 +277,7 @@ RelationalDataConnector <- R6::R6Class( #nolint
     #' @return nothing
     set_server = function(f) {
       stopifnot(is(f, "function"))
-      stopifnot(all(c("input", "output", "session") %in% names(formals(f))))
+      stopifnot(all(c("id", "connection", "connectors") %in% names(formals(f))))
 
       private$server <- f
       return(invisible(NULL))
@@ -203,7 +293,7 @@ RelationalDataConnector <- R6::R6Class( #nolint
     #' @return nothing
     set_preopen_server = function(f) {
       stopifnot(is(f, "function"))
-      stopifnot(all(c("input", "output", "session") %in% names(formals(f))))
+      stopifnot(all(c("id", "connection") %in% names(formals(f))))
 
       private$preopen_server <- f
       return(invisible(NULL))
@@ -294,18 +384,18 @@ RelationalDataConnector <- R6::R6Class( #nolint
         ),
         server = function(input, output, session) {
           session$onSessionEnded(stopApp)
-          callModule(
-            self$get_preopen_server(),
+          self$get_preopen_server()(
             id = "data_connector",
             connection = private$connection
           )
           observeEvent(input$submit, {
             rv <- reactiveVal(NULL)
             rv(
-              callModule(self$get_server(),
-                         id = "data_connector",
-                         connection = private$connection,
-                         connectors = private$datasets)
+              self$get_server()(
+                id = "data_connector",
+                connection = private$connection,
+                connectors = private$datasets
+              )
             )
 
             observeEvent(rv(), {
@@ -372,3 +462,94 @@ RelationalDataConnector <- R6::R6Class( #nolint
     }
   )
 )
+
+#' Public facing object constructor for \code{RelationalDataConnector} class.
+#'
+#' @param connection (\code{DataConnection})\cr
+#'   connection to data source
+#' @param connectors (\code{list} of \code{DatasetConnector} elements)\cr
+#'   list with dataset connectors
+#'
+#' @examples
+#'
+#' library(scda)
+#' adsl <- scda_cdisc_dataset_connector(dataname = "ADSL", "adsl")
+#' adlb <- scda_cdisc_dataset_connector(dataname = "ADLB", "adlb")
+#'
+#' open_fun <- callable_function(library)
+#' open_fun$set_args(list(package = "scda"))
+#'
+#' con <- data_connection(open_fun = open_fun)
+#' con$set_open_server(
+#'   function(id, connection) {
+#'     moduleServer(
+#'       id = id,
+#'       module = function(input, output, session) {
+#'         connection$open(try = TRUE)
+#'         return(invisible(connection))
+#'       }
+#'     )
+#'   }
+#' )
+#'
+#' x <- relational_data_connector(connection = con, connectors = list(adsl, adlb))
+#'
+#' x$set_ui(
+#'   function(id, connection, connectors) {
+#'     ns <- NS(id)
+#'     tagList(
+#'       connection$get_open_ui(ns("open_connection")),
+#'       textInput(ns("name"), p("Choose", code("scda data version")), value = "latest"),
+#'       do.call(
+#'         what = "tagList",
+#'         args = lapply(
+#'           connectors,
+#'           function(connector) {
+#'             div(
+#'               connector$get_ui(
+#'                 id = ns(connector$get_dataname())
+#'               ),
+#'               br()
+#'             )
+#'           }
+#'         )
+#'       )
+#'     )
+#'   }
+#' )
+#'
+#' x$set_server(
+#'   function(id, connection, connectors) {
+#'     moduleServer(
+#'       id = id,
+#'       module = function(input, output, session) {
+#'         # opens connection
+#'         connection$get_open_server()(id = "open_connection", connection = connection)
+#'         if (connection$is_opened()) {
+#'           for (connector in connectors) {
+#'             set_args(connector, args = list(name = input$name))
+#'             # pull each dataset
+#'             connector$get_server()(id = connector$get_dataname())
+#'             if (connector$is_failed()) {
+#'               break
+#'             }
+#'           }
+#'         }
+#'       }
+#'     )
+#'   }
+#' )
+#'
+#' \dontrun{
+#' x$launch()
+#' x$get_datasets()
+#' }
+#'
+#' @return \code{RelationalDataConnector} object
+#' @export
+relational_data_connector <- function(connection, connectors) {
+  stopifnot(is(connection, "DataConnection"))
+  stopifnot(utils.nest::is_class_list("DatasetConnector")(connectors))
+
+  RelationalDataConnector$new(connection, connectors)
+}

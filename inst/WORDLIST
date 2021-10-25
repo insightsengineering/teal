@@ -12,6 +12,7 @@ ADRS
 ADSL
 ADTTE
 ADVS
+adsl
 analyse
 analysis
 anl
@@ -80,6 +81,7 @@ NEST
 npaszty
 numericInput
 PARAMCD
+POSIXt
 PowerShell
 PR
 pre
@@ -91,6 +93,7 @@ reactively
 reactives
 recurse
 refiltered
+RelationalData
 RelationalDataCollection
 RelationalDataConnector
 RelationalDataset
@@ -101,6 +104,7 @@ roche
 Roche
 rsconnect
 RSConnect
+scda
 SDTM
 shiny's
 shinyServer

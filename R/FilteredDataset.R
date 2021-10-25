@@ -551,8 +551,8 @@ DefaultFilteredDataset <- R6::R6Class( # nolint
     #'
     #' @param id (`character(1)`)\cr
     #'   an ID string that corresponds with the ID used to call the module's UI function.
-    #' @param ... \cr
-    #'   Other arguments passed on to child `FilterStates` method.
+    #' @param ... other arguments passed on to child `FilterStates` methods.
+    #'
     #' @return `moduleServer` function which returns `NULL`
     srv_add_filter_state = function(id, ...) {
       check_ellipsis(..., stop = FALSE, allowed_args = "vars_include")
@@ -778,6 +778,30 @@ MAEFilteredDataset <- R6::R6Class( # nolint
     },
 
     #' @description
+    #' Gets raw data of this dataset
+    #' @param filtered (`logical(1)`)\cr
+    #'   whether returned data should be filtered or not
+    #' @return `MultiAssayExperiment`
+    get_data = function(filtered) {
+      if (isTRUE(filtered)) {
+        # This try is specific for MAEFilteredDataset due to a bug in
+        # S4Vectors causing errors when using the subset function on MAE objects.
+        # The fix was introduced in S4Vectors 0.30.1, but is unavailable for R versions < 4.1
+        # Link to the issue: https://github.com/insightsengineering/teal/issues/210
+        tryCatch(
+          self$get_data_reactive()(),
+          error = function(error) shiny::validate(paste(
+            "Filtering expression returned error(s). Please change filters.\nThe error message was:",
+            error$message,
+            sep = "\n"
+          ))
+        )
+      } else {
+        get_raw_data(self$get_dataset())
+      }
+    },
+
+    #' @description
     #' Get filter overview rows of a dataset
     #'
     #' @return (`matrix`) matrix of observations and subjects
@@ -892,7 +916,6 @@ MAEFilteredDataset <- R6::R6Class( # nolint
     #' @param ... ignored.
     #' @return `moduleServer` function which returns `NULL`
     srv_add_filter_state = function(id, ...) {
-      check_ellipsis(..., stop = FALSE)
       moduleServer(
         id = id,
         function(input, output, session) {

@@ -25,12 +25,12 @@ testthat::test_that("callable_code throws an error when supplied code is not val
   testthat::expect_error(callable_code(""), "Code supplied is not valid")
   # double ;;
   testthat::expect_error(
-    callable_code("library(scda);; ADSL <- synthetic_cdisc_data(\"rcd_2021_05_05\")$adsl\nADSL;"),
+    callable_code("library(scda);; ADSL <- synthetic_cdisc_data(\"latest\")$adsl\nADSL;"),
     "Code supplied is not valid"
   )
   # we have to use newline or ; to separate the code lines
   testthat::expect_error(
-    callable_code("library(scda) ADSL <- synthetic_cdisc_data(\"rcd_2021_05_05\")$adsl\nADSL"),
+    callable_code("library(scda) ADSL <- synthetic_cdisc_data(\"latest\")$adsl\nADSL"),
     "Code supplied is not valid"
   )
 })

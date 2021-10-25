@@ -59,8 +59,7 @@ Can't be used simultaneously with \code{script}.}
 \item{func_name}{(\code{name})\cr
 for internal purposes, please keep it default}
 
-\item{...}{(\code{optional})\cr
-Additional arguments applied to pull function.
+\item{...}{Additional arguments applied to pull function.
 In case when this object code depends on the \code{raw_data} from the other
 \code{Dataset}, \code{DatasetConnector} object(s) or other constant value,
 this/these object(s) should be included. Please note that \code{vars}

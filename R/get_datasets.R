@@ -16,7 +16,6 @@ get_datasets <- function(x) {
 #'
 #' # RelationalData --------
 #' library(scda)
-#' library(random.cdisc.data)
 #' adsl <- cdisc_dataset(dataname = "ADSL",
 #'                       x = synthetic_cdisc_data("latest")$adsl,
 #'                       code = "library(scda)\nADSL <- synthetic_cdisc_data(\"latest\")$adsl")
@@ -38,8 +37,8 @@ get_datasets <- function(x) {
 #'                                 pull_callable = adlb_cf,
 #'                                 keys = get_cdisc_keys("ADLB"))
 #'
-#' rdc <- teal:::RelationalDataConnector$new(
-#'   connection = teal:::DataConnection$new(),
+#' rdc <- relational_data_connector(
+#'   connection = data_connection(),
 #'   connectors = list(adsl, adlb)
 #' )
 #'

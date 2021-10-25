@@ -28,6 +28,9 @@ get_dataset(x, dataname)
 
 Get dataset from \code{DatasetConnector}
 }
+\details{
+See \code{help(RelationalDataConnector)} and \code{help(RelationalData)} for more complex examples.
+}
 \examples{
 
 # DatasetConnector --------
@@ -52,7 +55,6 @@ get_dataset(x)
 
 # RelationalData  (not containing connectors) --------
 library(scda)
-library(random.cdisc.data)
 adsl <- cdisc_dataset(dataname = "ADSL",
                       x = synthetic_cdisc_data("latest")$adsl,
                       code = "library(scda)\nADSL <- synthetic_cdisc_data(\"latest\")$adsl")
@@ -64,23 +66,4 @@ adae <- cdisc_dataset(dataname = "ADAE",
 rd <- teal:::RelationalData$new(adsl, adae)
 get_dataset(rd, "ADSL")
 
-# RelationalDataConnector --------
-rdc <- rcd_data(
-  rcd_cdisc_dataset_connector("ADSL", radsl, cached = TRUE),
-  rcd_cdisc_dataset_connector("ADTTE", radtte, cached = TRUE)
-)
-
-\dontrun{
-get_dataset(rdc, dataname = "ADSL")
-load_datasets(rdc)
-get_datasets(rdc)
-get_dataset(rdc, dataname = "ADSL")
-}
-
-# RelationalData (containing connectors) --------
-rd <- cdisc_data(rdc, adae)
-
-\dontrun{
-get_dataset(rd, "ADSL")
-}
 }

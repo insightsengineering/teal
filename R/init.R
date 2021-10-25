@@ -43,7 +43,7 @@
 #'   More generally, the filters for the variable, e.g. `Species` can be
 #'   specified as follows:
 #'   `list(Species = c("setosa", "versicolor"))`,
-#'   `list(Species = c("setosa", "versicolor"), keep_na = TRUE))`,
+#'   `list(Species = list(c("setosa", "versicolor"), keep_na = TRUE))`,
 #'   or equivalently with:
 #'   `list(Species = c("setosa", "versicolor", NA))`,
 #'   or for the default filter (not very restrictive):

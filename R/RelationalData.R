@@ -34,20 +34,12 @@
 #' tc <- teal:::RelationalData$new(x1, x2, x3, x4)
 #' tc$get_datanames()
 #' \dontrun{
-#' tc$get_datasets()
-#' tc$get_dataset("ADAE")
-#' }
-#' tc$get_items()
-#' tc$get_code()
-#' tc$get_code("ADAE")
-#' \dontrun{
 #' tc$launch()
-#' tc$get_datasets()
+#' get_datasets(tc) # equivalent to tc$get_datasets()
 #' tc$get_dataset("ADAE")
 #' tc$check()
 #' }
 #'
-#' library(scda)
 #' x <- cdisc_dataset(
 #'   dataname = "ADSL",
 #'   x = synthetic_cdisc_data("latest")$adsl,
@@ -57,9 +49,11 @@
 #' x2 <- cdisc_dataset_connector("ADTTE", adtte_cf, keys = get_cdisc_keys("ADTTE"))
 #' tc <- teal:::RelationalData$new(x, x2)
 #' \dontrun{
-#' tc$get_datasets()
-#' get_raw_data(tc)
+#' # This errors as we have not pulled the data
+#' # tc$get_datasets()
+#' # pull the data and then we can get the datasets
 #' tc$launch()
+#' tc$get_datasets()
 #' get_raw_data(tc)
 #' }
 #'
@@ -108,11 +102,32 @@ RelationalData <- R6::R6Class( # nolint
         }
       }
 
-      self$id <- digest::digest2int(as.character(Sys.time()))
+
+      self$id <- sample.int(1e11, 1, useHash = TRUE)
+
 
       return(invisible(self))
     },
+    #' Prints this RelationalData.
+    #'
+    #' @param ... additional arguments to the printing method
+    #' @return invisibly self
+    print = function(...) {
+      check_ellipsis(...)
 
+      cat(sprintf(
+        "A %s object containing %d Dataset/DatasetConnector object(s) as element(s):\n",
+        class(self)[1],
+        length(private$datasets)
+      ))
+
+      for (i in seq_along(private$datasets)) {
+        cat(sprintf("--> Element %d:\n", i))
+        print(private$datasets[[i]])
+      }
+
+      invisible(self)
+    },
     # ___ getters ====
     #' @description
     #'
@@ -205,11 +220,23 @@ RelationalData <- R6::R6Class( # nolint
     #' @return \code{shiny} \code{server} module.
     get_server = function() {
       if (is.null(private$server)) {
-        return(function(input, output, session) {
-          reactive(self)
-        })
+        return(
+          function(id) {
+            moduleServer(
+              id = id,
+              module = function(input, output, session) {
+                reactive(self)
+              }
+            )
+          }
+        )
       } else {
-        private$server
+        function(id) {
+          moduleServer(
+            id = id,
+            module = private$server
+          )
+        }
       }
     },
     #' @description
@@ -251,7 +278,7 @@ RelationalData <- R6::R6Class( # nolint
         ),
         server = function(input, output, session) {
           session$onSessionEnded(stopApp)
-          dat <- callModule(self$get_server(), id = "main_app")
+          dat <- self$get_server()(id = "main_app")
 
           observeEvent(dat(), {
             if (self$is_pulled()) {
@@ -387,8 +414,7 @@ RelationalData <- R6::R6Class( # nolint
       shinyjs::show("delayed_data")
       for (dc in self$get_connectors()) {
         if (is(dc, class2 = "RelationalDataConnector")) {
-          callModule(dc$get_preopen_server(),
-                     id = dc$id)
+          dc$get_preopen_server()(id = dc$id)
         }
       }
       rv <- reactiveVal(NULL)
@@ -396,16 +422,14 @@ RelationalData <- R6::R6Class( # nolint
         # load data from all connectors
         for (dc in self$get_connectors()) {
           if (is(dc, class2 = "RelationalDataConnector")) {
-            callModule(dc$get_server(),
-                       id = dc$id,
-                       connection = dc$get_connection(),
-                       connectors = dc$get_items()
+            dc$get_server()(
+              id = dc$id,
+              connection = dc$get_connection(),
+              connectors = dc$get_items()
             )
 
           } else if (is(dc, class2 = "DatasetConnector")) {
-            callModule(dc$get_server(),
-                       id = dc$get_dataname()
-            )
+            dc$get_server()(id = dc$get_dataname())
           }
           if (dc$is_failed()) {
             break
