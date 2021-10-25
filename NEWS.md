@@ -1,37 +1,58 @@
-# teal 0.9.5.9000
+# teal 0.10.0.9000
+
+### Breaking changes
+* Replaced `rcd_dataset_connector` and `rcd_cdisc_dataset_connector` with `scda_dataset_connector` and `scda_cdisc_dataset_connector` respectively.
+* Removed `rcd_connection` and `rcd_data`; `scda_dataset_connectors` can be passed into `cdisc_data` and `teal_data` directly.
 
 ### New features
+* Added print methods to the `DatasetConnector`, `RelationalData`, and `RelationalDataconnector` classes and added input validation to the implementation of the print method that was already in the `Dataset` object.
+* Added public facing constructor functions for `CDISCDataConnector`, `RelationalDataConnector`, and `DataConnection` classes.
+
+### Miscellaneous
+* Replaced the servers from `DataConnection`, `RelationalDataConnector`, `DatasetConnector`, and `RelationalData` with `moduleServer`.
+* Updated R version requirement to >= 3.6.
+
+# teal 0.10.0
+
+### New features
+* Allow passing `MultiAssayExperiment` to the `teal::init` using `mae_dataset` function or through
+the connectors.
+* Refactored filter panel to use `MultiAssayExperiment` objects. Filters can be set on a subject level
+(`colData` of `MAE` object) and on a experiment level (`colData` and `rowData` of an assay).
 * Added `cdse_dataset_connector` to create delayed data objects from `CDSE`.
 * Added `datasetdb_dataset_connector` to create delayed data objects from `DataSetDB`.
-* Added `split` and `merge` methods to the `JoinKeys` object.
-* Added a new public facing constructor wrapper, `mae_dataset`.
-
+* Added `ricepass_connection` to create delayed data objects from `entimICE` via `ricepass`.
+* Refactor of the filter panel:
+    * Simplified setting of initial filter state without need to specify "choices" or "range" named list element depending on the variable class.
+    * `Dataset` type determines an appearance and a functionality of related filters and filters summary.
+    * `Datasets` are passed (by reference) from `DDL` to `FilteredData` skipping extracting data and
+    their attributes.
+    * Redesigned variable filter labels in "Active Filter Variables" panel.
+    * Fully testable server functions.
+    
 ### Bug fixes
 * Fixed the bug caused by calling `mutate_dataset` multiple times on the same `DatasetConnector` or `Dataset` object.
 * Fixed a bug that caused the output of `get_code` function to not reproduce its raw data set.
 * Changed `filter_spec` to allow no variable selection upon app initialization, where the first possible value was previously selected.
-* Fixed reference bug in `FilteredData` that caused error message on initial application load.
 
 ### Enhancements
+* `modules` parameter of `teal::init` function can also receive a `list` except `root_modules`
+function call.
+* Added `split` and `merge` methods to the `JoinKeys` object.
+* Added `all_choices()` as a possible argument to the `selected` parameter of `filter_spec`, `select_spec` and `choices_selected` indicating that all choices are selected.
 * The `append` method of a `CodeClass` object has been modified to print a warning message when the argument does not result in any code being added because it is duplicated.
-* `modules` parameter of `teal::init` function can now receive a `list` instead of `root_modules` function call.
 * Implemented delayed functionality to the mutate method of the `Dataset` and `DatasetConnector` objects.
-* Redesigned variable filter labels in `Active Filter Variables` panel.
 * Modified `teal_data` to return a `CDISCData` object whenever any of its arguments is a type of `CDISCData` object.
-* Updated `Active Filter Summary` to show information of MAE datasets and their experiments.
 * Updated filters to show both levels of a logical variable TRUE/FALSE even if one is missing from the original array.
 
 ### Miscellaneous
+* Updated `LICENCE` and `README` with new package references.
 * Added a method `get_hash` to the `Dataset` class returning the MD5 hash of the object stored inside the `Dataset` object.
-* Removed mentions of internal Roche services from the documentation.
 * Replaced `random.cdisc.data` with `scda` in examples and tests.
 * Implemented functionality to store `JoinKeys` in `Dataset` and `DatasetConnector` classes.
-* `FilteredData` contains `Dataset` objects (via `FilteredDataset`) and copying keys and attributes is no longer needed.
 * Added `error_on_lintr: TRUE` to `.lintr`
-* Changed how the id of an HTML element in the filter panel is created to make it deterministic.
-* Changed `FilterState`'s method `set_selected` to accept values out of bounds of the possible range with a warning instead of throwing an error.
 * The pipe operator `%>%` is now exported such that downstream code and packages can use it.
-* Added parameter `package` to `include_css_files` and `include_js_files` functions and made them publicly accessible
+* Removed hyperlinks to the `rice` package from the documentation.
 
 # teal 0.9.5
 

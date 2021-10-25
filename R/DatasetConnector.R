@@ -74,6 +74,25 @@ DatasetConnector <- R6::R6Class( #nolint
 
       return(invisible(self))
     },
+    #' Prints this DatasetConnector.
+    #'
+    #' @param ... additional arguments to the printing method
+    #' @return invisibly self
+    print = function(...) {
+      check_ellipsis(...)
+
+      cat(sprintf(
+        "A DatasetConnector object, named %s, containing a Dataset object that has %sbeen loaded/pulled%s\n",
+        self$get_dataname(),
+        ifelse(self$is_pulled(), "", "not "),
+        ifelse(self$is_pulled(), ":", "")
+      ))
+      if (self$is_pulled()) {
+        print(self$get_dataset())
+      }
+
+      invisible(self)
+    },
 
     # ___ getters ====
     #' @description
@@ -423,7 +442,7 @@ DatasetConnector <- R6::R6Class( #nolint
         server = function(input, output, session) {
           session$onSessionEnded(stopApp)
           observeEvent(input$pull, {
-            callModule(self$get_server(), id = "main_app")
+            self$get_server()(id = "main_app")
             if (self$is_pulled()) {
               output$result <- renderTable(head(self$get_raw_data()))
             }
@@ -483,29 +502,33 @@ DatasetConnector <- R6::R6Class( #nolint
         )
       )
     },
-    server = function(input, output, session, data_args = NULL) {
-      withProgress(value = 1, message = paste("Pulling", self$get_dataname()), {
-        # set args to save them - args set will be returned in the call
-        dataset_args <- if_not_null(private$ui_input, reactiveValuesToList(input))
-        if (!is_empty(dataset_args)) {
-          self$set_args(args = dataset_args)
+    server = function(id, data_args = NULL) {
+      moduleServer(
+        id = id,
+        function(input, output, session) {
+          withProgress(value = 1, message = paste("Pulling", self$get_dataname()), {
+            # set args to save them - args set will be returned in the call
+            dataset_args <- if_not_null(private$ui_input, reactiveValuesToList(input))
+            if (!is_empty(dataset_args)) {
+              self$set_args(args = dataset_args)
+            }
+
+            self$pull(args = data_args, try = TRUE)
+
+            # print error if any
+            # error doesn't break an app
+            if (self$is_failed()) {
+              shinyjs::alert(
+                sprintf(
+                  "Error pulling %s:\nError message: %s",
+                  self$get_dataname(),
+                  self$get_error_message()
+                )
+              )
+            }
+          })
         }
-
-        self$pull(args = data_args, try = TRUE)
-
-        # print error if any
-        # error doesn't break an app
-        if (self$is_failed()) {
-          shinyjs::alert(
-            sprintf(
-              "Error pulling %s:\nError message: %s",
-              self$get_dataname(),
-              self$get_error_message()
-            )
-          )
-        }
-      })
-
+      )
       return(invisible(self))
     },
 

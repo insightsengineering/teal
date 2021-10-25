@@ -35,7 +35,7 @@
 #' )
 #'
 #' teal:::set_filter_state(
-#'   list(selected = c(1, 2), keep_na = FALSE, keep_inf = TRUE),
+#'   list(c(1, 2), keep_na = FALSE, keep_inf = TRUE),
 #'   filter_state
 #' )
 #' teal:::set_filter_state(c(1, 2, Inf), filter_state)
@@ -72,5 +72,19 @@ set_filter_state.default_filter <- function(x, filter_state) { #nolint #nousage
 #' @rdname set_filter_state
 #' @export
 set_filter_state.list <- function(x, filter_state) { #nousage
+  if (is.null(names(x))) {
+    names(x) <- rep("", length(x))
+  }
+  x_names <- names(x)
+  if (sum(x_names == "") > 1) {
+    stop("More than one element of filter state is unnamed.")
+  } else if (sum(x_names == "") == 1) {
+    if ("selected" %in% x_names) {
+      stop("Unnamed element of filter state cannot be intepreted as 'selected' because it already exists.")
+    } else {
+      x_idx <- which(x_names == "")
+      names(x)[[x_idx]] <- "selected"
+    }
+  }
   filter_state$set_state(state = x)
 }

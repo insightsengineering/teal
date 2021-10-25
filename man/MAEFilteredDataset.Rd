@@ -16,6 +16,7 @@
 \itemize{
 \item \href{#method-new}{\code{MAEFilteredDataset$new()}}
 \item \href{#method-get_call}{\code{MAEFilteredDataset$get_call()}}
+\item \href{#method-get_data}{\code{MAEFilteredDataset$get_data()}}
 \item \href{#method-get_filter_overview_info}{\code{MAEFilteredDataset$get_filter_overview_info()}}
 \item \href{#method-get_filterable_varnames}{\code{MAEFilteredDataset$get_filterable_varnames()}}
 \item \href{#method-set_bookmark_state}{\code{MAEFilteredDataset$set_bookmark_state()}}
@@ -28,7 +29,6 @@
 \out{<details ><summary>Inherited methods</summary>}
 \itemize{
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="FilteredDataset" data-id="add_to_eval_env">}\href{../../teal/html/FilteredDataset.html#method-add_to_eval_env}{\code{teal::FilteredDataset$add_to_eval_env()}}\out{</span>}
-\item \out{<span class="pkg-link" data-pkg="teal" data-topic="FilteredDataset" data-id="get_data">}\href{../../teal/html/FilteredDataset.html#method-get_data}{\code{teal::FilteredDataset$get_data()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="FilteredDataset" data-id="get_data_reactive">}\href{../../teal/html/FilteredDataset.html#method-get_data_reactive}{\code{teal::FilteredDataset$get_data_reactive()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="FilteredDataset" data-id="get_dataname">}\href{../../teal/html/FilteredDataset.html#method-get_dataname}{\code{teal::FilteredDataset$get_dataname()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="FilteredDataset" data-id="get_dataset">}\href{../../teal/html/FilteredDataset.html#method-get_dataset}{\code{teal::FilteredDataset$get_dataset()}}\out{</span>}
@@ -85,6 +85,27 @@ which returns \code{subsetByColData} call}
 
 \subsection{Returns}{
 filter \code{call} or \code{list} of filter calls
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-get_data"></a>}}
+\if{latex}{\out{\hypertarget{method-get_data}{}}}
+\subsection{Method \code{get_data()}}{
+Gets raw data of this dataset
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{MAEFilteredDataset$get_data(filtered)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{filtered}}{(\code{logical(1)})\cr
+whether returned data should be filtered or not}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Returns}{
+\code{MultiAssayExperiment}
 }
 }
 \if{html}{\out{<hr>}}

@@ -1,4 +1,4 @@
-library(random.cdisc.data)
+library(scda)
 
 test_that("Proper argument types", {
   choices <- c("c1", "c2", "c3")
@@ -99,11 +99,12 @@ test_that("resolve_delayed select_spec works", {
   expect_identical(expected_spec, isolate(resolve_delayed(delayed_spec, ds)))
 })
 
-ADSL <- radsl(cached = TRUE) # nolint
-ADTTE <- radtte(cached = TRUE) # nolint
+scda_data <- synthetic_cdisc_data("latest")
+adsl <- scda_data$adsl # nolint
+adtte <- scda_data$adtte # nolint
 data <- cdisc_data(
-  cdisc_dataset("ADSL", ADSL),
-  cdisc_dataset("ADTTE", ADTTE)
+  cdisc_dataset("ADSL", adsl),
+  cdisc_dataset("ADTTE", adtte)
 )
 
 ds <- teal:::CDISCFilteredData$new()
@@ -150,8 +151,8 @@ testthat::test_that("delayed version of select_spec", {
 
   res_obj <- isolate(resolve_delayed(obj, datasets = ds))
   exp_obj <- select_spec(
-    variable_choices(ADSL, subset = c("STUDYID", "USUBJID"), key = get_cdisc_keys("ADSL")),
-    selected = variable_choices(ADSL, "STUDYID", key = get_cdisc_keys("ADSL")))
+    variable_choices(adsl, subset = c("STUDYID", "USUBJID"), key = get_cdisc_keys("ADSL")),
+    selected = variable_choices(adsl, "STUDYID", key = get_cdisc_keys("ADSL")))
   testthat::expect_equal(res_obj, exp_obj)
 
   # functional choices & selected
@@ -170,4 +171,16 @@ testthat::test_that("delayed version of select_spec", {
 
   res_obj <- isolate(resolve_delayed(obj, datasets = ds))
   testthat::expect_equal(res_obj, exp_obj)
+})
+
+testthat::test_that("all_choices passed to selected is the same as passing all choices", {
+  testthat::expect_equal(
+    select_spec(choices = letters, selected = letters),
+    select_spec(choices = letters, selected = all_choices())
+  )
+})
+
+testthat::test_that("multiple is set to TRUE if all_choices is passed to selected", {
+  testthat::expect_true(select_spec(choices = variable_choices("test"), selected = all_choices())$multiple)
+  testthat::expect_true(select_spec(choices = variable_choices(iris), selected = all_choices())$multiple)
 })

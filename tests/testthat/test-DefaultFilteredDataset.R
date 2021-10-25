@@ -14,7 +14,7 @@ testthat::test_that("get_call returns a list of calls", {
 testthat::test_that("DefaultFilteredDataset$set_bookmark_state sets filters in FilterStates specified by list names", {
   dataset <- teal:::DefaultFilteredDataset$new(dataset("iris", iris))
   fs <- list(
-    Sepal.Length = list(selected = c(5.1, 6.4)),
+    Sepal.Length = c(5.1, 6.4),
     Species = c("setosa", "versicolor")
   )
   shiny::testServer(dataset$set_bookmark_state, args = list(state = fs), expr = NULL)

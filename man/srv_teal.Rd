@@ -29,7 +29,7 @@ An example is:
 More generally, the filters for the variable, e.g. \code{Species} can be
 specified as follows:
 \code{list(Species = c("setosa", "versicolor"))},
-\verb{list(Species = c("setosa", "versicolor"), keep_na = TRUE))},
+\code{list(Species = list(c("setosa", "versicolor"), keep_na = TRUE))},
 or equivalently with:
 \code{list(Species = c("setosa", "versicolor", NA))},
 or for the default filter (not very restrictive):

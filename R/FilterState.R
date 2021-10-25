@@ -1016,7 +1016,14 @@ RangeFilterState <- R6::R6Class( # nolint
           label = NULL,
           min = pretty_range_inputs["min"],
           max = pretty_range_inputs["max"],
-          value = isolate(self$get_selected()),
+          # on filter init without predefined value select "pretty" (wider) range
+          value = isolate({
+            if (identical(private$choices, self$get_selected())) {
+              pretty_range_inputs[c("min", "max")]
+            } else {
+              self$get_selected()
+            }
+          }),
           width = "100%",
           step = pretty_range_inputs["step"]
         ),

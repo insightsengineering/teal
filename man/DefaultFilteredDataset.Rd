@@ -151,8 +151,7 @@ contains single \code{FilterStates})
 \item{\code{id}}{(\code{character(1)})\cr
 an ID string that corresponds with the ID used to call the module's UI function.}
 
-\item{\code{...}}{\cr
-Other arguments passed on to child \code{FilterStates} method.}
+\item{\code{...}}{other arguments passed on to child \code{FilterStates} methods.}
 }
 \if{html}{\out{</div>}}
 }

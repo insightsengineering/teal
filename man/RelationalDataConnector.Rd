@@ -10,23 +10,78 @@ Class manages \code{DatasetConnector} to specify additional dynamic arguments an
 open/close connection.
 }
 \examples{
+
 library(scda)
-adsl_cf <- callable_function(function() synthetic_cdisc_data("latest")$adsl)
-adsl <- cdisc_dataset_connector(dataname = "ADSL",
-                                pull_callable = adsl_cf,
-                                keys = get_cdisc_keys("ADSL"))
-adlb_cf <- callable_function(function() synthetic_cdisc_data("latest")$adlb)
-adlb <- cdisc_dataset_connector(dataname = "ADLB",
-                                pull_callable = adlb_cf,
-                                keys = get_cdisc_keys("ADLB"))
-con <- teal:::rcd_connection()
+adsl <- scda_cdisc_dataset_connector(dataname = "ADSL", "adsl")
+adlb <- scda_cdisc_dataset_connector(dataname = "ADLB", "adlb")
+
+open_fun <- callable_function(library)
+open_fun$set_args(list(package = "scda"))
+
+con <- data_connection(open_fun = open_fun)
+con$set_open_server(
+  function(id, connection) {
+    moduleServer(
+      id = id,
+      module = function(input, output, session) {
+        connection$open(try = TRUE)
+        return(invisible(connection))
+      }
+    )
+  }
+)
+
 x <- teal:::RelationalDataConnector$new(connection = con, connectors = list(adsl, adlb))
 
+x$set_ui(
+  function(id, connection, connectors) {
+    ns <- NS(id)
+    tagList(
+      connection$get_open_ui(ns("open_connection")),
+      textInput(ns("name"), p("Choose", code("scda data version")), value = "latest"),
+      do.call(
+        what = "tagList",
+        args = lapply(
+          connectors,
+          function(connector) {
+            div(
+              connector$get_ui(
+                id = ns(connector$get_dataname())
+              ),
+              br()
+            )
+          }
+        )
+      )
+    )
+  }
+)
+
+x$set_server(
+  function(id, connection, connectors) {
+    moduleServer(
+    id = id,
+      module = function(input, output, session) {
+        # opens connection
+        connection$get_open_server()(id = "open_connection", connection = connection)
+        if (connection$is_opened()) {
+          for (connector in connectors) {
+            set_args(connector, args = list(name = input$name))
+            # pull each dataset
+            connector$get_server()(id = connector$get_dataname())
+            if (connector$is_failed()) {
+              break
+            }
+          }
+        }
+      }
+    )
+  }
+)
 \dontrun{
 x$launch()
 x$get_datasets()
 }
-
 }
 \section{Super class}{
 \code{\link[teal:DataAbstract]{teal::DataAbstract}} -> \code{RelationalDataConnector}
@@ -35,6 +90,7 @@ x$get_datasets()
 \subsection{Public methods}{
 \itemize{
 \item \href{#method-new}{\code{RelationalDataConnector$new()}}
+\item \href{#method-print}{\code{RelationalDataConnector$print()}}
 \item \href{#method-get_connection}{\code{RelationalDataConnector$get_connection()}}
 \item \href{#method-get_code_class}{\code{RelationalDataConnector$get_code_class()}}
 \item \href{#method-get_server}{\code{RelationalDataConnector$get_server()}}
@@ -75,6 +131,7 @@ x$get_datasets()
 \if{latex}{\out{\hypertarget{method-new}{}}}
 \subsection{Method \code{new()}}{
 Create a new \code{RelationalDataConnector} object
+Prints this RelationalDataConnector.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{RelationalDataConnector$new(connection, connectors)}\if{html}{\out{</div>}}
 }
@@ -89,6 +146,25 @@ connection to data source}
 list with dataset connectors}
 }
 \if{html}{\out{</div>}}
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-print"></a>}}
+\if{latex}{\out{\hypertarget{method-print}{}}}
+\subsection{Method \code{print()}}{
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{RelationalDataConnector$print(...)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{...}}{additional arguments to the printing method}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Returns}{
+invisibly self
 }
 }
 \if{html}{\out{<hr>}}

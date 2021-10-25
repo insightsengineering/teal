@@ -55,3 +55,30 @@ CDISCDataConnector <- R6::R6Class( #nolint
     parent = list() # list with dataset names and its parent dataset names
   )
 )
+
+#' Public facing object constructor for \code{CDISCDataConnector} class.
+#'
+#' @param connection (\code{DataConnection})\cr
+#'   connection to data source
+#' @param connectors (\code{list} of \code{DatasetConnector} elements)\cr
+#'   list with dataset connectors
+#'
+#' @examples
+#' \dontrun{
+#' adsl_cf <- CallableFunction$new(function() as.data.frame(as.list(setNames(nm = get_cdisc_keys("ADSL")))))
+#' adae_cf <- CallableFunction$new(function() as.data.frame(as.list(setNames(nm = get_cdisc_keys("ADAE")))))
+#' adsl <- CDISCDatasetConnector$new("ADSL", adsl_cf, keys = get_cdisc_keys("ADSL"), parent = character(0))
+#' adae <- CDISCDatasetConnector$new("ADAE", adae_cf, keys = get_cdisc_keys("ADAE"), parent = "ADSL")
+#' data <- cdisc_data_connector(
+#'   connection = data_connection(open_fun = CallableFunction$new(function() "open function")),
+#'   connectors = list(adsl, adae)
+#' )
+#' }
+#' @return \code{CDISCDataConnector} object
+#' @export
+cdisc_data_connector <- function(connection, connectors) {
+  stopifnot(is(connection, "DataConnection"))
+  stopifnot(utils.nest::is_class_list("DatasetConnector")(connectors))
+
+  CDISCDataConnector$new(connection, connectors)
+}

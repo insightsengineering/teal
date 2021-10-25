@@ -9,13 +9,13 @@
 select_spec(
   choices,
   selected = if (is(choices, "delayed_data")) NULL else choices[1],
-  multiple = length(selected) > 1,
+  multiple = length(selected) > 1 || is(selected, "all_choices"),
   fixed = FALSE,
   always_selected = NULL,
   label = NULL
 )
 
-\method{select_spec}{delayed_data}(
+select_spec.delayed_data(
   choices,
   selected = NULL,
   multiple = length(selected) > 1,
@@ -24,7 +24,7 @@ select_spec(
   label = NULL
 )
 
-\method{select_spec}{default}(
+select_spec.default(
   choices,
   selected = choices[1],
   multiple = length(selected) > 1,
@@ -40,8 +40,9 @@ of a shiny \code{\link[shiny]{selectInput}}. These have to be columns in the
 dataset defined in the \code{\link{data_extract_spec}} where this is called.
 \code{delayed_data} objects can be created via \code{\link{variable_choices}} or \code{\link{value_choices}}.}
 
-\item{selected}{optional (\code{character} or \code{NULL} or \code{delayed_data} object).
+\item{selected}{optional (\code{character} or \code{NULL} or \code{all_choices} or \code{delayed_data} object).
 Named character vector to define the selected values of a shiny \code{\link[shiny]{selectInput}}.
+Passing an \code{all_choices()} object indicates selecting all possible choices.
 Defaults to the first value of \code{choices} or \code{NULL} for delayed data loading.}
 
 \item{multiple}{(\code{logical}) Whether multiple values shall be allowed in the
@@ -132,6 +133,15 @@ select = select_spec(
       )
     }
 }
+\item{all_choices passed to selected}{
+\preformatted{
+      adsl_select <- select_spec(
+        label = "Select variable:",
+        choices = variable_choices("ADSL", c("BMRKR1", "BMRKR2")),
+        selected = all_choices()
+      )
+    }
+}
 }
 }
 \examples{
@@ -148,4 +158,9 @@ select_spec(
   }),
   multiple = TRUE
 )
+
+# Both below objects are semantically the same
+select_spec(choices = variable_choices("ADSL"), selected = variable_choices("ADSL"))
+select_spec(choices = variable_choices("ADSL"), selected = all_choices())
+
 }

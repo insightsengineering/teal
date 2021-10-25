@@ -1,6 +1,6 @@
 # comment in source 3
 adtte_extracted1 <- data_extract_spec(
-  dataname = "ADTTE",
+  dataname = "adtte",
   filter = adtte_filters,
   select = select_spec(
     choices = c("AVAL", "AVALU", "BMRKR1", "SITEID"),
@@ -12,7 +12,7 @@ adtte_extracted1 <- data_extract_spec(
 )
 
 adtte_extracted <- data_extract_spec(
-  dataname = "ADTTE",
+  dataname = "adtte",
   filter = adtte_filters,
   select = select_spec(
     choices = c("AVAL", "BMRKR1"),
@@ -24,7 +24,7 @@ adtte_extracted <- data_extract_spec(
 )
 
 adsl_extracted <- data_extract_spec(
-  dataname = "ADSL",
+  dataname = "adsl",
   select = select_spec(
     choices = c("SEX", "AGE"),
     selected = c("AGE"),

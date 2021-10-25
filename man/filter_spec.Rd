@@ -8,7 +8,7 @@ filter_spec(
   vars,
   choices = NULL,
   selected = if (is(choices, "delayed_data")) NULL else choices[1],
-  multiple = length(selected) > 1,
+  multiple = length(selected) > 1 || is(selected, "all_choices"),
   label = NULL,
   sep = if_null(attr(choices, "sep"), " - "),
   drop_keys = FALSE
@@ -38,10 +38,12 @@ The \code{sep} input has to be \code{" - "} in this case.
 
 \code{delayed_data} objects can be created via \code{\link{variable_choices}} or \code{\link{value_choices}}.}
 
-\item{selected}{(\code{character} or \code{numeric} or \code{logical} or (\code{delayed_data}) object.
+\item{selected}{(\code{character} or \code{numeric} or \code{logical} or
+(\code{delayed_data} or (\code{all_choices})) object.
 Named character vector to define the selected
 values of a shiny \code{\link[shiny]{selectInput}} (default values). This value will
-be displayed inside the shiny app upon start.}
+be displayed inside the shiny app upon start. The \code{all_choices} object indicates selecting
+all possible choices.}
 
 \item{multiple}{(\code{logical}) Whether multiple values shall be allowed in the
 shiny \code{\link[shiny]{selectInput}}.}
@@ -142,8 +144,7 @@ the drop-down menu the app user will see:
       )
     }
 }
-
-\item{The version with \code{choices_selected}}
+\item{The version with \code{choices_selected}
 \preformatted{
       adsl_filter <- filter_spec(
         vars = choices_selected("ADSL", "SEX", fixed = FALSE),
@@ -155,6 +156,16 @@ the drop-down menu the app user will see:
         multiple = TRUE
       )
     }
+}
+\item{Choose all choices
+\preformatted{
+      adsl_filter <- filter_spec(
+        vars = choices_selected("ADSL", "SEX", fixed = FALSE),
+        choices = value_choices("ADSL", "SEX"),
+        selected = all_choices()
+      )
+    }
+}
 }
 }
 \examples{

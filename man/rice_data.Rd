@@ -8,7 +8,7 @@ rice_data(..., connection = rice_connection(), additional_ui = NULL)
 }
 \arguments{
 \item{...}{(\code{DatasetConnector} objects)\cr
-dataset connectors created using \code{\link{rice_dataset_connector}}}
+dataset connectors created using \code{rice_dataset_connector}}
 
 \item{connection}{(\code{DataConnection}) object returned from \code{rice_connection}.}
 
@@ -16,7 +16,7 @@ dataset connectors created using \code{\link{rice_dataset_connector}}}
 additional user interface to be visible over login panel}
 }
 \value{
-An object of class \code{RelatonalDataConnector}
+An object of class \code{RelationalDataConnector}
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}

@@ -1,4 +1,3 @@
-
 url: https://insightsengineering.github.io/teal
 
 template:
@@ -24,6 +23,7 @@ reference:
     desc: Functions used to filter observations and select variables from dataset.
     contents:
     - add_no_selected_choices
+    - all_choices
     - choices_labeled
     - choices_selected
     - data_extract_spec
@@ -55,6 +55,7 @@ reference:
   - title: Delayed Dataset Connectors Constructors
     desc: For creating delayed dataset objects.
     contents:
+    - cdisc_data_connector
     - cdisc_dataset_connector
     - cdisc_dataset_connector_file
     - cdse_dataset_connector
@@ -62,6 +63,7 @@ reference:
     - code_dataset_connector
     - csv_cdisc_dataset_connector
     - csv_dataset_connector
+    - data_connection
     - datasetdb_dataset_connector
     - dataset_connector
     - dataset_connector_file
@@ -71,13 +73,14 @@ reference:
     - python_cdisc_dataset_connector
     - python_dataset_connector
     - raw_dataset_connector
-    - rcd_cdisc_dataset_connector
-    - rcd_dataset_connector
     - rds_cdisc_dataset_connector
     - rds_dataset_connector
+    - relational_data_connector
     - relational_dataset_connector
     - rice_cdisc_dataset_connector
     - rice_dataset_connector
+    - scda_cdisc_dataset_connector
+    - scda_dataset_connector
     - script_cdisc_dataset_connector
     - script_dataset_connector
     - snowflake_dataset_connector
@@ -88,8 +91,8 @@ reference:
     contents:
     - cdse_connection
     - datasetdb_connection
-    - rcd_connection
     - rice_connection
+    - ricepass_connection
     - snowflake_connection
     - snowflake_connection_function
     - teradata_connection
@@ -101,7 +104,6 @@ reference:
     - cdse_data
     - datasetdb_data
     - named_dataset_file
-    - rcd_data
     - rice_data
     - snowflake_data
     - teal_data

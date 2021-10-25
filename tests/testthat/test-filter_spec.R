@@ -1,5 +1,4 @@
 library(scda)
-library(random.cdisc.data)
 
 choices <- c("val1", "val2", "val3")
 choices_d <- c("val1", "val1", "val2", "val3")
@@ -182,7 +181,7 @@ test_that("filter_spec_internal", {
 })
 
 test_that("filter_spec_internal contains dataname", {
-  ADSL <- synthetic_cdisc_data("rcd_2021_05_05")$adsl # nolint
+  ADSL <- synthetic_cdisc_data("latest")$adsl # nolint
 
   x_filter <- filter_spec_internal(
     vars_choices = variable_choices(ADSL)
@@ -255,11 +254,13 @@ test_that("delayed filter_spec works", {
   expect_identical(expected_spec, isolate(resolve_delayed(delayed, ds)))
 })
 
-ADSL <- radsl(cached = TRUE) # nolint
-ADTTE <- radtte(cached = TRUE) # nolint
+
+scda_data <- synthetic_cdisc_data("latest")
+adsl <- scda_data$adsl
+adtte <- scda_data$adtte
 data <- cdisc_data(
-  cdisc_dataset("ADSL", ADSL),
-  cdisc_dataset("ADTTE", ADTTE)
+  cdisc_dataset("ADSL", adsl),
+  cdisc_dataset("ADTTE", adtte)
 )
 
 ds <- teal:::CDISCFilteredData$new()
@@ -290,7 +291,6 @@ vc_fun_short_exp <- structure(
 )
 
 testthat::test_that("delayed version of filter_spec", {
-
   # hard-coded vars & choices & selected
   obj <- filter_spec(
     vars = variable_choices("ADSL", subset = "ARMCD"),
@@ -328,9 +328,9 @@ testthat::test_that("delayed version of filter_spec", {
 
   res_obj <- isolate(resolve_delayed(obj, datasets = ds))
   exp_obj <- filter_spec(
-    vars = variable_choices(ADSL, subset = "ARMCD"),
-    choices = value_choices(ADSL, var_choices = "ARMCD", var_label = "ARM", subset = c("ARM A", "ARM B")),
-    selected = value_choices(ADSL, var_choices = "ARMCD", var_label = "ARM", subset = "ARM A"),
+    vars = variable_choices(adsl, subset = "ARMCD"),
+    choices = value_choices(adsl, var_choices = "ARMCD", var_label = "ARM", subset = c("ARM A", "ARM B")),
+    selected = value_choices(adsl, var_choices = "ARMCD", var_label = "ARM", subset = "ARM A"),
     multiple = FALSE
   )
 
@@ -401,5 +401,12 @@ testthat::test_that("delayed version of filter_spec", {
   testthat::expect_equal(
     res_obj[-match(c("choices", "selected"), names(res_obj))],
     exp_obj[-match(c("choices", "selected"), names(exp_obj))]
+  )
+})
+
+testthat::test_that("all_choices passed to selected identical to all choices", {
+  testthat::expect_equal(
+    filter_spec(vars = "test", choices = c(1, 2), selected = c(1, 2)),
+    filter_spec(vars = "test", choices = c(1, 2), selected = all_choices())
   )
 })

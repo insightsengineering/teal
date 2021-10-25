@@ -113,6 +113,7 @@ Dataset <- R6::R6Class( # nolint
     #' @param ... additional arguments to the printing method
     #' @return invisibly self
     print = function(...) {
+      check_ellipsis(...)
       cat(sprintf(
         "A Dataset object containing the following data.frame (%s rows and %s columns):\n",
         private$.nrow,
