@@ -15,7 +15,7 @@
 #'
 rice_data <- function(..., connection = rice_connection(), additional_ui = NULL) {
   lifecycle::deprecate_stop(
-    when = "0.10.0",
+    when = "0.10.1",
     what = "teal::rice_data()",
     details = paste(
       "Please use teal.connectors.rice::rice_data().",
@@ -36,7 +36,7 @@ rice_data <- function(..., connection = rice_connection(), additional_ui = NULL)
 #' @return An object of class \code{RelationalDataConnector}
 teradata_data <- function(..., connection = teradata_connection()) {
   lifecycle::deprecate_stop(
-    when = "0.10.0",
+    when = "0.10.1",
     what = "teal::teradata_data()",
     details = paste(
       "Please use teal.connectors.teradata::teradata_data().",
@@ -61,7 +61,7 @@ teradata_data <- function(..., connection = teradata_connection()) {
 #' @export
 snowflake_data <- function(..., connection) {
   lifecycle::deprecate_stop(
-    when = "0.10.0",
+    when = "0.10.1",
     what = "teal::snowflake_data()",
     details = paste(
       "Please use teal.connectors.snowflake::snowflake_data().",
@@ -83,7 +83,7 @@ snowflake_data <- function(..., connection) {
 #' @return An object of class \code{RelationalDataConnector}
 cdse_data <- function(..., connection = cdse_connection()) {
   lifecycle::deprecate_stop(
-    when = "0.10.0",
+    when = "0.10.1",
     what = "teal::cdse_data()",
     details = paste(
       "Please use teal.connectors.cdse::cdse_data().",
@@ -106,7 +106,7 @@ cdse_data <- function(..., connection = cdse_connection()) {
 #'
 datasetdb_data <- function(..., connection = datasetdb_connection()) {
   lifecycle::deprecate_stop(
-    when = "0.10.0",
+    when = "0.10.1",
     what = "teal::datasetdb_data()",
     details = paste(
       "Please use teal.connectors.datasetdb::datasetdb_data().",
