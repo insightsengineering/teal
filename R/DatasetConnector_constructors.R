@@ -700,7 +700,7 @@ rice_dataset_connector <- function(dataname,
     what = "teal::rice_dataset_connector()",
     details = paste(
       "Please use teal.connectors.rice::rice_dataset_connector().",
-      "Please ensure that teal.connectors.rice is loaded after teal.")
+      "Please ensure that teal.connectors.rice package is loaded after teal.")
   )
 }
 
@@ -730,7 +730,7 @@ rice_cdisc_dataset_connector <- function(dataname,
     what = "teal::rice_cdisc_dataset_connector()",
     details = paste(
       "Please use teal.connectors.rice::rice_cdisc_dataset_connector().",
-      "Please ensure that teal.connectors.rice is loaded after teal.")
+      "Please ensure that teal.connectors.rice package is loaded after teal.")
   )
 }
 
@@ -761,7 +761,7 @@ teradata_dataset_connector <- function(dataname,
     what = "teal::teradata_dataset_connector()",
     details = paste(
       "Please use teal.connectors.teradata::teradata_dataset_connector().",
-      "Please ensure that teal.connectors.teradata is loaded after teal.")
+      "Please ensure that teal.connectors.teradata package is loaded after teal.")
   )
 }
 
@@ -791,7 +791,7 @@ teradata_cdisc_dataset_connector <- function(dataname, # nolint
     what = "teal::teradata_cdisc_dataset_connector()",
     details = paste(
       "Please use teal.connectors.teradata::teradata_cdisc_dataset_connector().",
-      "Please ensure that teal.connectors.teradata is loaded after teal.")
+      "Please ensure that teal.connectors.teradata package is loaded after teal.")
   )
 }
 
@@ -822,7 +822,7 @@ snowflake_dataset_connector <- function(dataname,
     what = "teal::snowflake_dataset_connector()",
     details = paste(
       "Please use teal.connectors.snowflake::snowflake_dataset_connector().",
-      "Please ensure that teal.connectors.snowflake is loaded after teal.")
+      "Please ensure that teal.connectors.snowflake package is loaded after teal.")
   )
 }
 
@@ -852,7 +852,7 @@ snowflake_cdisc_dataset_connector <- function(dataname, # nolint
     what = "teal::snowflake_cdisc_dataset_connector()",
     details = paste(
       "Please use teal.connectors.snowflake::snowflake_cdisc_dataset_connector().",
-      "Please ensure that teal.connectors.snowflake is loaded after teal.")
+      "Please ensure that teal.connectors.snowflake package is loaded after teal.")
   )
 }
 
@@ -883,7 +883,7 @@ cdse_dataset_connector <- function(dataname,
     what = "teal::cdse_dataset_connector()",
     details = paste(
       "Please use teal.connectors.cdse::cdse_dataset_connector().",
-      "Please ensure that teal.connectors.cdse is loaded after teal.")
+      "Please ensure that teal.connectors.cdse package is loaded after teal.")
   )
 }
 
@@ -913,7 +913,7 @@ cdse_cdisc_dataset_connector <- function(dataname,
     what = "teal::cdse_cdisc_dataset_connector()",
     details = paste(
       "Please use teal.connectors.cdse::cdse_cdisc_dataset_connector().",
-      "Please ensure that teal.connectors.cdse is loaded after teal.")
+      "Please ensure that teal.connectors.cdse package is loaded after teal.")
   )
 }
 
@@ -1058,7 +1058,7 @@ datasetdb_dataset_connector <- function(dataname,
     what = "teal::datasetdb_dataset_connector()",
     details = paste(
       "Please use teal.connectors.datasetdb::datasetdb_dataset_connector().",
-      "Please ensure that teal.connectors.datasetdb is loaded after teal.")
+      "Please ensure that teal.connectors.datasetdb package is loaded after teal.")
   )
 }
 

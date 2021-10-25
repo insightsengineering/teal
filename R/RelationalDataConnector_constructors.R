@@ -19,7 +19,7 @@ rice_data <- function(..., connection = rice_connection(), additional_ui = NULL)
     what = "teal::rice_data()",
     details = paste(
       "Please use teal.connectors.rice::rice_data().",
-      "Please ensure that teal.connectors.rice is loaded after teal.")
+      "Please ensure that teal.connectors.rice package is loaded after teal.")
   )
 }
 
@@ -40,7 +40,7 @@ teradata_data <- function(..., connection = teradata_connection()) {
     what = "teal::teradata_data()",
     details = paste(
       "Please use teal.connectors.teradata::teradata_data().",
-      "Please ensure that teal.connectors.teradata is loaded after teal.")
+      "Please ensure that teal.connectors.teradata package is loaded after teal.")
   )
 }
 
@@ -65,7 +65,7 @@ snowflake_data <- function(..., connection) {
     what = "teal::snowflake_data()",
     details = paste(
       "Please use teal.connectors.snowflake::snowflake_data().",
-      "Please ensure that teal.connectors.snowflake is loaded after teal.")
+      "Please ensure that teal.connectors.snowflake package is loaded after teal.")
   )
 }
 
@@ -87,7 +87,7 @@ cdse_data <- function(..., connection = cdse_connection()) {
     what = "teal::cdse_data()",
     details = paste(
       "Please use teal.connectors.cdse::cdse_data().",
-      "Please ensure that teal.connectors.cdse is loaded after teal.")
+      "Please ensure that teal.connectors.cdse package is loaded after teal.")
   )
 }
 
@@ -110,6 +110,6 @@ datasetdb_data <- function(..., connection = datasetdb_connection()) {
     what = "teal::datasetdb_data()",
     details = paste(
       "Please use teal.connectors.datasetdb::datasetdb_data().",
-      "Please ensure that teal.connectors.datasetdb is loaded after teal.")
+      "Please ensure that teal.connectors.datasetdb package is loaded after teal.")
   )
 }

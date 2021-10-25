@@ -702,7 +702,7 @@ rice_connection <- function(open_args = list(), close_args = list(), ping_args =
     what = "teal::rice_connection()",
     details = paste(
       "Please use teal.connectors.rice::rice_connection().",
-      "Please ensure that teal.connectors.rice is loaded after teal.")
+      "Please ensure that teal.connectors.rice package is loaded after teal.")
   )
 }
 
@@ -791,7 +791,7 @@ teradata_connection <- function(open_args = list(), close_args = list(), ping_ar
     what = "teal::teradata_connection()",
     details = paste(
       "Please use teal.connectors.teradata::teradata_connection().",
-      "Please ensure that teal.connectors.teradata is loaded after teal.")
+      "Please ensure that teal.connectors.teradata package is loaded after teal.")
   )
 }
 
@@ -826,7 +826,7 @@ snowflake_connection_function <- function(username = askpass::askpass("Please en
     what = "teal::snowflake_connection_function()",
     details = paste(
       "Please use teal.connectors.snowflake::snowflake_connection_function().",
-      "Please ensure that teal.connectors.snowflake is loaded after teal.")
+      "Please ensure that teal.connectors.snowflake package is loaded after teal.")
   )
 }
 
@@ -850,7 +850,7 @@ snowflake_connection <- function(open_args = list(), close_args = list(), ping_a
     what = "teal::snowflake_connection()",
     details = paste(
       "Please use teal.connectors.snowflake::snowflake_connection().",
-      "Please ensure that teal.connectors.snowflake is loaded after teal.")
+      "Please ensure that teal.connectors.snowflake package is loaded after teal.")
   )
 }
 
@@ -869,7 +869,7 @@ cdse_connection <- function(env = "prod") {
     what = "teal::cdse_connection()",
     details = paste(
       "Please use teal.connectors.cdse::cdse_connection().",
-      "Please ensure that teal.connectors.cdse is loaded after teal.")
+      "Please ensure that teal.connectors.cdse package is loaded after teal.")
   )
 }
 
@@ -886,6 +886,6 @@ datasetdb_connection <- function() {
     what = "teal::datasetdb_connection()",
     details = paste(
       "Please use teal.connectors.datasetdb::datasetdb_connection().",
-      "Please ensure that teal.connectors.datasetdb is loaded after teal.")
+      "Please ensure that teal.connectors.datasetdb package is loaded after teal.")
   )
 }
