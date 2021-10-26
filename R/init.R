@@ -133,8 +133,12 @@ init <- function(data,
                  footer = tags$p("Add Footer Here"),
                  id = character(0)) {
   if (!is(data, "RelationalData")) {
+    names_data <- deparse(substitute(data), width.cutoff = 500L)
     if (is(data, "data.frame")) {
-      names_data <- as.character(substitute(data))[1]
+      if (grepl("\\)$", names_data)) {
+        stop("Single data.frame shouldn't be provided as a result of a function call. Please name
+             the object first or use a named list.")
+      }
       data <- list(data)
       names(data) <- names_data
     } else if (is(data, "Dataset") || is(data, "DatasetConnector")) {
@@ -144,7 +148,13 @@ init <- function(data,
     names_data <- names(data)
     data_names_call <- substitute(data)
     data_names_call <- if (is.name(data_names_call)) list(data_names_call) else data_names_call
+
     if (length(data_names_call) > 1 && data_names_call[[1]] == "list") data_names_call[[1]] <- NULL
+
+    if (!grepl("list", deparse(data_names_call)) &&
+        utils.nest::if_false(any(names_data == ""), length(names_data) != length(data))) {
+      stop("Unnamed lists shouldn't be provided as a result of a function call. Please use a named list.")
+    }
 
     data_names_new <- unlist(lapply(seq_along(data), function(y) {
       data_y <- list(data[[y]])
