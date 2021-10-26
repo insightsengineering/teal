@@ -15,12 +15,14 @@ init(
 )
 }
 \arguments{
-\item{data}{(\code{RelationalData} or \code{list} or \code{data.frame}) R6 object where \code{cdisc_data} or \code{teal_data}
-returns such a one or a list of data frames and datasets as returned by \code{cdisc_dataset} or \code{dataset}
-or a list of data frames and the previous objects or a single data frame.
-NOTE: when a list or data.frame alone is provided, teal does not guarantee reproducibility of the code when names
-of the list elements does not match the original object names. \code{check = TRUE} should be used to ensure
-reproducibility.}
+\item{data}{(\code{RelationalData} or \code{list} or \code{data.frame}) R6 object where \code{\link{cdisc_data}}
+or \code{\link{teal_data}} returns such a one or a list of data frames and datasets as returned
+by \code{\link{cdisc_dataset}} or \code{\link{dataset}} or a list of data frames and the previous
+objects or a single data frame.\cr
+NOTE: when a \code{list} or \code{data.frame} alone is provided, teal does not guarantee
+reproducibility of the code when names of the list elements does not match the original object
+names. To ensure reproducibility please use \code{\link{teal_data}} or \code{\link{cdisc_data}}
+with \code{check = TRUE} enabled.}
 
 \item{modules}{nested list with one list per module with the
 following named list elements:
