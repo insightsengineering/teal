@@ -111,7 +111,6 @@ testthat::test_that("init data accepts teal_data/cdisc_data objects", {
 testthat::test_that("init data throws an error with input other than Dataset or data.frame", {
   character_vector <- c("a", "b", "c")
   numeric_vector <- c(1, 2, 3)
-  logical_Vector <- c(TRUE)
   matrix_d <- as.matrix(c(1, 2, 3))
   teal_data_list <- list(teal_data(dataset))
   mods <- teal:::get_dummy_modules()

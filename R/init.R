@@ -14,8 +14,12 @@
 #' This is a wrapper function around the `module_teal.R` functions. Unless you are
 #' an end-user, don't use this function, but instead this module.
 #'
-#' @param data (`RelationalData` or `list`) R6 object where \code{cdisc_data} or \code{teal_data} returns such a one
-#'   or a list of data frames and datasets as returned by \code{cdisc_dataset} or \code{dataset}.
+#' @param data (`RelationalData` or `list` or `data.frame`) R6 object where \code{cdisc_data} or \code{teal_data}
+#' returns such a one or a list of data frames and datasets as returned by \code{cdisc_dataset} or \code{dataset}
+#' or a list of data frames and the previous objects or a single data frame.
+#' NOTE: when a list or data.frame alone is provided, teal does not guarantee reproducibility of the code when names
+#' of the list elements does not match the original object names. `check = TRUE` should be used to ensure
+#' reproducibility.
 #' @param modules nested list with one list per module with the
 #'   following named list elements:
 #'   \tabular{ll}{
