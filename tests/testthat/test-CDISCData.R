@@ -1009,7 +1009,7 @@ testthat::test_that("List values", {
   test_relational_data_equal <- function(data1, data2) {
     testthat::expect_equal(data1$get_items(), data2$get_items())
     testthat::expect_equal(data1$get_join_keys(), data2$get_join_keys())
-    mapply(function(...) testthat::expect_equal(...), data1$get_ui("test"), data2$get_ui("test"))
+    mapply(testthat::expect_equal, data1$get_ui("test"), data2$get_ui("test"))
   }
 
   result <- cdisc_data(cdisc_dataset("ADSL", adsl_raw, label = "test_label"))
