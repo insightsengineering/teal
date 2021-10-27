@@ -923,7 +923,6 @@ snowflake_cdisc_dataset_connector <- function(dataname, # nolint
                                               code = character(0),
                                               script = character(0),
                                               ...) {
-
   x <- snowflake_dataset_connector(
     dataname = dataname,
     sql_query = sql_query,
@@ -958,6 +957,7 @@ snowflake_cdisc_dataset_connector <- function(dataname, # nolint
 #' @rdname cdse_dataset_connector
 #'
 #' @examples
+#' \dontrun{
 #' if ("CDSE" %in% installed.packages()) {
 #'   x <- cdse_dataset_connector(
 #'     dataname = "MAE",
@@ -965,7 +965,6 @@ snowflake_cdisc_dataset_connector <- function(dataname, # nolint
 #'   )
 #'   x$get_code()
 #' }
-#' \dontrun{
 #' load_dataset(x)
 #' get_dataset(x)
 #' x$get_raw_data()
