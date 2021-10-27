@@ -607,6 +607,7 @@ FilteredData <- R6::R6Class( # nolint
             if (length(active_datanames()) == 0 || is.null(active_datanames())) {
               # hide whole module UI when no datasets or when NULL
               shinyjs::hide("filter_panel_whole")
+              shinyjs::runjs('$("#teal_primary_col").attr("class", "col-sm-12").resize()')
             } else {
               shinyjs::show("filter_panel_whole")
 

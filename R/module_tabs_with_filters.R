@@ -134,7 +134,7 @@ srv_tabs_with_filters <- function(input, output, session, datasets, modules) {
   active_datanames <- eventReactive(
     eventExpr = active_module(),
     valueExpr = {
-      datasets$handle_active_datanames(datanames = active_module()$filter)
+      datasets$handle_active_datanames(datanames = active_module()$filters)
   })
 
   datasets$srv_filter_panel(id = "filter_panel", active_datanames = active_datanames)
