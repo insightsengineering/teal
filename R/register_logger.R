@@ -21,7 +21,7 @@
 #' }
 #'
 register_logger <- function(namespace = NA_character_) {
-  if (!is.na(namespace) && !(is.character(namespace) && length(namespace) == 1)) {
+  if (!((is.character(namespace) && length(namespace) == 1) || is.na(namespace))) {
     stop("namespace argument to register_logger must be a scalar character or NA.")
   }
   logger::log_threshold(logger::INFO, namespace = namespace)
@@ -32,7 +32,7 @@ register_logger <- function(namespace = NA_character_) {
     logger::log_appender(logger::appender_stdout, namespace = namespace)
   },
     error = function(condition)
-      stop("Error setting the layout of the logger. Check the layout is correct in `getOption(teal_logging_layout)`.")
+      stop("Error setting the layout of the logger. Check that the layout is correct in `getOption(teal_logging_layout)`.")
   )
 
   invisible(NULL)
