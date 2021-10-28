@@ -1,68 +1,70 @@
-Package: teal
 Type: Package
+Package: teal
 Title: Exploratory Web Apps for Analyzing Clinical Trials Data
+Version: 0.10.0.9001
 Date: 2021-10-13
-Version: 0.10.0.9000
 Authors@R: c(
-  person("NEST", email = "nestcicd@roche.com", role = c("aut", "cre")),
-  person("Adrian", "Waddell", email = "adrian.waddell@roche.com", role = "aut"),
-  person("Tadeusz", "Lewandowski", email = "tadeusz.lewandowski@roche.com", role = "ctb"),
-  person("Pawel", "Rucki", email = "pawel.rucki@contractors.roche.com", role = "aut"),
-  person("Dawid", "Kaledkowski", email = "dawid.kaledkowski@contractors.roche.com", role = "aut"),
-  person("Sebastian", "Wolf", email = "sebastian.wolf.sw1@roche.com", role = "aut"),
-  person("Maximilian", "Mordig", email = "maximilian_oliver.mordig@roche.com", role = "aut"),
-  person("Bartosz", "Baranowski", email = "bartosz.baranowski@roche.com", role = "aut"),
-  person("Ondrej", "Slama", email = "ondrej.slama@roche.com", role = "aut"),
-  person("Nikolas", "Burkoff", email = "nikolas.burkoff@roche.com", role = "aut"),
-  person("Maciej", "Nasinski", email = "maciej.nasinski@contractors.roche.com", role = "aut"),
-  person("Roche", role = c("cph", "fnd"))
+    person("NEST", , , "nestcicd@roche.com", role = c("aut", "cre")),
+    person("Adrian", "Waddell", , "adrian.waddell@roche.com", role = "aut"),
+    person("Tadeusz", "Lewandowski", , "tadeusz.lewandowski@roche.com", role = "ctb"),
+    person("Pawel", "Rucki", , "pawel.rucki@contractors.roche.com", role = "aut"),
+    person("Dawid", "Kaledkowski", , "dawid.kaledkowski@contractors.roche.com", role = "aut"),
+    person("Sebastian", "Wolf", , "sebastian.wolf.sw1@roche.com", role = "aut"),
+    person("Maximilian", "Mordig", , "maximilian_oliver.mordig@roche.com", role = "aut"),
+    person("Bartosz", "Baranowski", , "bartosz.baranowski@roche.com", role = "aut"),
+    person("Ondrej", "Slama", , "ondrej.slama@roche.com", role = "aut"),
+    person("Nikolas", "Burkoff", , "nikolas.burkoff@roche.com", role = "aut"),
+    person("Maciej", "Nasinski", , "maciej.nasinski@contractors.roche.com", role = "aut"),
+    person("Roche", role = c("cph", "fnd"))
   )
 Description: teal is a shiny based interactive exploration framework for
-    analyzing clinical trials data. teal currently provides a dynamic filtering
-    facility and different data viewers. teal shiny applications are built using
-    standard shiny modules.
+    analyzing clinical trials data. teal currently provides a dynamic
+    filtering facility and different data viewers. teal shiny applications
+    are built using standard shiny modules.
 License: Apache License 2.0 | file LICENSE
+Depends:
+    R (>= 3.6),
+    shiny
+Imports:
+    digest,
+    dplyr,
+    ggplot2,
+    grDevices,
+    lifecycle,
+    magrittr,
+    methods,
+    MultiAssayExperiment,
+    R6,
+    rlang,
+    rtables (>= 0.3.8),
+    shinyjs,
+    shinyWidgets (>= 0.5.0),
+    stats,
+    SummarizedExperiment,
+    utils,
+    utils.nest (>= 0.2.11),
+    yaml
+Suggests:
+    askpass,
+    covr,
+    httr,
+    knitr,
+    readr,
+    reticulate,
+    rmarkdown,
+    scda,
+    scda.2021,
+    test.nest (>= 0.2.11),
+    testthat (>= 2.0)
+VignetteBuilder: 
+    knitr
+RdMacros: 
+    lifecycle
+biocViews:
 Encoding: UTF-8
 LazyData: true
-biocViews:
-Depends:
-  R (>= 3.6),
-  shiny
-Imports:
-  digest,
-  dplyr,
-  ggplot2,
-  grDevices,
-  lifecycle,
-  magrittr,
-  methods,
-  MultiAssayExperiment,
-  R6,
-  rlang,
-  rtables (>= 0.3.8),
-  shinyjs,
-  shinyWidgets (>= 0.5.0),
-  stats,
-  SummarizedExperiment,
-  utils,
-  utils.nest (>= 0.2.11),
-  yaml
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.1.2
-Suggests:
-  askpass,
-  covr,
-  httr,
-  knitr,
-  readr,
-  reticulate,
-  rmarkdown,
-  scda,
-  scda.2021,
-  test.nest (>= 0.2.11),
-  testthat (>= 2.0)
-VignetteBuilder: knitr
-RdMacros: lifecycle
 Collate:
     'CDISCData.R'
     'CDISCDataConnector.R'

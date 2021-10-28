@@ -1,3 +1,4 @@
+---
 name: Version bump
 
 on:
@@ -11,13 +12,15 @@ jobs:
     runs-on: ubuntu-latest
     container:
       image: ghcr.io/insightsengineering/rstudio_4.1.0_bioc_3.13:latest
-    
+
     steps:
       - name: Checkout repo
         uses: actions/checkout@v2
+        with:
+          token: ${{ secrets.REPO_GITHUB_TOKEN }}
 
       - name: Bump version of DESCRIPTION on main branch
-        if: github.ref == 'refs/heads/main' # Only after merge or push to main 
+        if: github.ref == 'refs/heads/main'
         run: |
           options(repos = c(CRAN = "https://cloud.r-project.org/"))
           packages <- c("desc")
@@ -30,9 +33,10 @@ jobs:
         shell: Rscript {0}
 
       - name: Bump version of NEWS.md on main branch
-        if: github.ref == 'refs/heads/main' # Only after merge or push to main 
+        if: github.ref == 'refs/heads/main'
         run: |
-          DESC_VERSION=$(awk -F: '/Version:/{gsub(/[ ]+/,"") ; print $2}' DESCRIPTION)
+          DESC_VERSION=$(awk \
+            -F: '/Version:/{gsub(/[ ]+/,"") ; print $2}' DESCRIPTION)
           NEWS_VERSION=$(awk '/^#+ /{print $3; exit}' NEWS.md)
           echo "NEWS.md version: $NEWS_VERSION"
           echo "DESCRIPTION version: $DESC_VERSION"
@@ -53,28 +57,22 @@ jobs:
           echo "NEW_PKG_VERSION=$DESC_VERSION" >> $GITHUB_ENV
         shell: bash
 
-      - name: Commit files with new version
-        if: ${{ env.NEW_PKG_VERSION }}
-        run: |
-          git config --local user.email "actions@github.com"
-          git config --local user.name "GitHub Actions"
-          git add NEWS.md DESCRIPTION
-          git commit -m "[ci skip] Bump version to ${{ env.NEW_PKG_VERSION }}"
-        shell: bash
-
       - name: Wait for other jobs
         if: ${{ env.NEW_PKG_VERSION }}
-        uses: lewagon/wait-on-check-action@v1.0.0 # Changed to 1.0.0 because of error: https://github.com/lewagon/wait-on-check-action/issues/52
+        uses: lewagon/wait-on-check-action@v1.0.0
         with:
           ref: ${{ github.ref }}
           running-workflow-name: 'Bump version'
-          repo-token: ${{ secrets.REPO_GITHUB_TOKEN }}
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
           wait-interval: 10
 
-      - name: Push changes
+      - name: Commit and push changes
         if: ${{ env.NEW_PKG_VERSION }}
-        uses: ad-m/github-push-action@master
+        uses: stefanzweifel/git-auto-commit-action@v4
         with:
-          github_token: ${{ secrets.REPO_GITHUB_TOKEN }}
-          branch: ${{ github.ref }}
-          
+          commit_message: "[ci skip] Bump version to ${{ env.NEW_PKG_VERSION }}"
+          branch: main
+          file_pattern: NEWS.md DESCRIPTION
+          commit_user_name: insights-engineering-bot
+          commit_user_email: >-
+            68416928+insights-engineering-bot@users.noreply.github.com
