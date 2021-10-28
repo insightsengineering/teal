@@ -70,6 +70,7 @@ Create a \code{CDISCDatasetConnector} from \code{CDSE} with keys and parent name
 automatically by \code{dataname}.
 }
 \examples{
+\dontrun{
 if ("CDSE" \%in\% installed.packages()) {
   x <- cdse_dataset_connector(
     dataname = "MAE",
@@ -77,7 +78,6 @@ if ("CDSE" \%in\% installed.packages()) {
   )
   x$get_code()
 }
-\dontrun{
 load_dataset(x)
 get_dataset(x)
 x$get_raw_data()
