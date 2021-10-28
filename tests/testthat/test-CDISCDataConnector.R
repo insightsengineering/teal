@@ -14,11 +14,11 @@ testthat::test_that("get_code returns the correct code for two CDISCDatasetConne
   testthat::expect_true(all(vapply(items, inherits, logical(1), "DatasetConnector")))
 
   testthat::expect_equal(
-    items$ADSL$get_code(),
+    get_code(items$ADSL),
     "ADSL <- (function() as.data.frame(as.list(setNames(nm = get_cdisc_keys(\"ADSL\")))))()"
   )
   testthat::expect_equal(
-    items$ADAE$get_code(),
+    get_code(items$ADAE),
     "ADAE <- (function() as.data.frame(as.list(setNames(nm = get_cdisc_keys(\"ADAE\")))))()"
   )
   data$pull()

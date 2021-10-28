@@ -51,7 +51,7 @@ testthat::test_that("single dataset / dataset code", {
     )
   )
   testthat::expect_reference(
-    data$get_dataset("ADSL")$get_raw_data(),
+    get_raw_data(data$get_dataset("ADSL")),
     adsl_raw
   )
 
@@ -61,10 +61,10 @@ testthat::test_that("single dataset / dataset code", {
   data$check_metadata()
 
   new_env <- new.env()
-  eval(parse(text = data$get_code("ADSL")), envir = new_env)
+  eval(parse(text = get_code(data, dataname ="ADSL")), envir = new_env)
   testthat::expect_identical(
     get(x = "ADSL", envir = new_env),
-    data$get_dataset("ADSL")$get_raw_data()
+    get_raw_data(data$get_dataset("ADSL"))
   )
 })
 
@@ -218,7 +218,7 @@ testthat::test_that("Duplicated code from datasets is shown", {
   data <- cdisc_data(adsl, adae)
 
   testthat::expect_equal(
-    data$get_code(),
+    get_code(data),
     paste(
       "ADSL <- as.data.frame(as.list(setNames(nm = get_cdisc_keys(\"ADSL\"))))",
       "some_var <- \"TEST\"",
@@ -355,24 +355,24 @@ testthat::test_that("two datasets / datasets code", {
   )
 
   testthat::expect_reference(
-    data$get_dataset("ADSL")$get_raw_data(),
+    get_raw_data(data$get_dataset("ADSL")),
     adsl_raw
   )
   testthat::expect_reference(
-    data$get_dataset("ADTTE")$get_raw_data(),
+    get_raw_data(data$get_dataset("ADTTE")),
     adtte_raw
   )
   data$execute_mutate()
 
   new_env <- new.env()
-  eval(parse(text = data$get_code()), envir = new_env)
+  eval(parse(text = get_code(data)), envir = new_env)
   testthat::expect_identical(
     get(x = "ADSL", envir = new_env),
-    data$get_dataset("ADSL")$get_raw_data()
+    get_raw_data(data$get_dataset("ADSL"))
   )
   testthat::expect_identical(
     get(x = "ADTTE", envir = new_env),
-    data$get_dataset("ADTTE")$get_raw_data()
+    get_raw_data(data$get_dataset("ADTTE"))
   )
 })
 

@@ -19,12 +19,12 @@ testthat::test_that("DatasetConnector", {
 
 
   testthat::expect_identical(
-    x1$get_code(deparse = TRUE),
+    get_code(x1, deparse = TRUE),
     "ADSL <- (function() synthetic_cdisc_data(\"latest\")$adsl)()"
   )
 
   testthat::expect_equal(
-    x1$get_code(deparse = FALSE),
+    get_code(x1, deparse = FALSE),
     as.list(as.call(parse(text = 'ADSL <- (function() synthetic_cdisc_data("latest")$adsl)()')))
   )
 
@@ -39,7 +39,7 @@ testthat::test_that("DatasetConnector", {
   )
 
   testthat::expect_error(
-    x1$get_raw_data(),
+    get_raw_data(x1),
     "'ADSL' has not been pulled yet"
   )
 
@@ -145,7 +145,7 @@ testthat::test_that("scda_dataset_connector", {
   )
 
   testthat::expect_equal(
-    x$get_code(),
+    get_code(x),
     "ADSL <- synthetic_cdisc_dataset(dataset_name = \"adsl\", name = \"latest\")"
   )
 
@@ -154,7 +154,7 @@ testthat::test_that("scda_dataset_connector", {
   )
 
   testthat::expect_identical(
-    x$get_raw_data(),
+    get_raw_data(x),
     synthetic_cdisc_dataset(dataset_name = "adsl", name = "latest")
   )
 })
@@ -179,7 +179,7 @@ testthat::test_that("rds_dataset_connector", {
   testthat::expect_true(is(x, c("DatasetConnector", "R6")))
 
   testthat::expect_equal(
-    x$get_code(),
+    get_code(x),
     "ADSL <- readRDS(file = \"./data_connectors/table.rds\")"
   )
 })
@@ -311,7 +311,7 @@ testthat::test_that("csv_dataset_connector non-standard datasets multi/space cha
   data <- get_raw_data(x)
   testthat::expect_true(is.data.frame(data))
   testthat::expect_identical(nrow(data), nrow(test_adsl_ns))
-  testthat::expect_equal(colnames(x$get_raw_data()), colnames(test_adsl_ns))
+  testthat::expect_equal(colnames(get_raw_data(x)), colnames(test_adsl_ns))
 
   # next check can pass arguments to read_delim (using space ' ')
   temp_file_csv <- tempfile(fileext = ".csv")
@@ -476,7 +476,7 @@ test_that("rice_dataset", {
   )
 
   testthat::expect_identical(
-    x$get_items()[[1]]$get_code(),
+    get_code(x$get_items()[[1]]),
     "ADSL <- rice::rice_read(node = \"/path/to/ADSL\", prolong = TRUE)"
   )
 
@@ -577,9 +577,9 @@ testthat::test_that("code_dataset_connector - Test various inputs", {
     code = paste0(readLines(file_example), collapse = "\n")
   )
 
-  expect_equal(from_file$get_code(),
+  expect_equal(get_code(from_file),
     "ADSL <- synthetic_cdisc_dataset(dataset_name = \"adsl\", name = \"latest\")\nADSL <- ADSL")
-  expect_identical(from_file$pull()$get_raw_data(), adsl)
+  expect_identical(get_raw_data(from_file$pull()), adsl)
 
   adsl <- synthetic_cdisc_dataset(dataset_name = "adsl", name = "latest")
 
@@ -602,9 +602,9 @@ testthat::test_that("code_dataset_connector - Test various inputs", {
     code = get_code(file_example, dataname = "ADSL")
   )
 
-  expect_equal(get_code_file$get_code(),
+  expect_equal(get_code(get_code_file),
     "library(scda)\nADSL <- synthetic_cdisc_dataset(dataset_name = \"adsl\", name = \"latest\")\nADSL <- ADSL")
-  expect_identical(get_code_file$pull()$get_raw_data(), adsl)
+  expect_identical(get_raw_data(get_code_file$pull()), adsl)
 
 })
 
@@ -716,7 +716,7 @@ testthat::test_that("DatasetConnector mutate method with delayed logic", {
   mutate_dataset(t_dc, code = "test_dc$tail_letters <- tail(letters)")
   testthat::expect_true(t_dc$is_mutate_delayed())
   testthat::expect_equal(
-    pretty_code_string(t_dc$get_code()),
+    pretty_code_string(get_code(t_dc)),
     c("head_mtcars <- head(mtcars)",
       "test_ds1 <- head_mtcars",
       "test_dc <- data.frame(head_letters = c(\"a\", \"b\", \"c\", \"d\", \"e\", \"f\"))",
@@ -729,7 +729,7 @@ testthat::test_that("DatasetConnector mutate method with delayed logic", {
   testthat::expect_true(all(c("head_letters", "tail_letters") %in% names(get_raw_data(t_dc))))
 
   testthat::expect_equal(
-    pretty_code_string(t_dc$get_code()),
+    pretty_code_string(get_code(t_dc)),
     c("head_mtcars <- head(mtcars)",
       "test_ds1 <- head_mtcars",
       "test_dc <- data.frame(head_letters = c(\"a\", \"b\", \"c\", \"d\", \"e\", \"f\"))",
@@ -741,7 +741,7 @@ testthat::test_that("DatasetConnector mutate method with delayed logic", {
   mutate_dataset(t_dc, code = "test_dc$head_integers <- t_dc2$head_integers", vars = list(t_dc2 = t_dc2))
   testthat::expect_true(t_dc$is_mutate_delayed())
   testthat::expect_equal(
-    pretty_code_string(t_dc$get_code()),
+    pretty_code_string(get_code(t_dc)),
     c("head_mtcars <- head(mtcars)",
       "test_ds1 <- head_mtcars",
       "test_dc <- data.frame(head_letters = c(\"a\", \"b\", \"c\", \"d\", \"e\", \"f\"))",
@@ -757,7 +757,7 @@ testthat::test_that("DatasetConnector mutate method with delayed logic", {
   mutate_dataset(t_dc, code = "test_dc$one <- 1")
   testthat::expect_true(t_dc$is_mutate_delayed())
   testthat::expect_equal(
-    pretty_code_string(t_dc$get_code()),
+    pretty_code_string(get_code(t_dc)),
     c("head_mtcars <- head(mtcars)",
       "test_ds1 <- head_mtcars",
       "test_dc <- data.frame(head_letters = c(\"a\", \"b\", \"c\", \"d\", \"e\", \"f\"))",
@@ -810,12 +810,12 @@ testthat::test_that("DatasetConnector mutate method with delayed logic", {
 
   testthat::expect_true(
     all(c("test_dc2$neg_integers <- t_dc3$neg_integers", "test_dc$six <- test_dc$five + 1") %in%
-      pretty_code_string(t_dc$get_code()))
+      pretty_code_string(get_code(t_dc)))
   )
   testthat::expect_true(t_dc$is_mutate_delayed())
 
   mutate_dataset(t_dc, code = "test_dc$seven <- 7")
-  testthat::expect_true("test_dc$seven <- 7" %in% pretty_code_string(t_dc$get_code()))
+  testthat::expect_true("test_dc$seven <- 7" %in% pretty_code_string(get_code(t_dc)))
   testthat::expect_true(t_dc$is_mutate_delayed())
   # confirming that mutation has not happened
   testthat::expect_silent(get_raw_data(t_dc))
@@ -835,7 +835,7 @@ testthat::test_that("DatasetConnector mutate method with delayed logic", {
   testthat::expect_true(all(names(get_raw_data(t_dc)) %in% c("head_letters")))
   # still it must return code from all previously inputted mutate statements
   testthat::expect_true(
-    "test_dc$seven <- 7" %in% pretty_code_string(t_dc$get_code()),
+    "test_dc$seven <- 7" %in% pretty_code_string(get_code(t_dc)),
   )
 
   # confirming that mutation has not happened
@@ -918,7 +918,7 @@ testthat::test_that("Identical mutation expressions are added to the mutation co
   dc <- DatasetConnector$new("mtcars", cf)
   dc$mutate("mtcars$test <- 1")
   dc$mutate("mtcars$test <- 1")
-  testthat::expect_equal(dc$get_code(), "mtcars <- (function() head(mtcars))()\nmtcars$test <- 1\nmtcars$test <- 1")
+  testthat::expect_equal(get_code(dc), "mtcars <- (function() head(mtcars))()\nmtcars$test <- 1\nmtcars$test <- 1")
 })
 
 testthat::test_that("Identical mutation expressions are executed upon pulling the Connector object", {
@@ -928,7 +928,7 @@ testthat::test_that("Identical mutation expressions are executed upon pulling th
   dc$mutate("mtcars$test <- mtcars$test * 2")
   dc$mutate("mtcars$test <- mtcars$test * 2")
   dc$pull()
-  testthat::expect_equal(dc$get_raw_data()$test, rep(4, 6))
+  testthat::expect_equal(get_raw_data(dc)$test, rep(4, 6))
 })
 
 testthat::test_that("Identical mutation expressions are shown in the returned code after pulling", {
@@ -939,7 +939,7 @@ testthat::test_that("Identical mutation expressions are shown in the returned co
   dc$mutate("mtcars$test <- mtcars$test * 2")
   dc$pull()
   testthat::expect_equal(
-    dc$get_code(),
+    get_code(dc),
     paste(
       "mtcars <- (function() head(mtcars))()",
       "mtcars$test <- 1",
@@ -1002,7 +1002,7 @@ testthat::test_that("Pulling an already pulled DatasetConnector after mutating i
   dc$mutate(code = "mtcars[1] <- NULL")
   dc$mutate(code = "", vars = list(delayed = DatasetConnector$new("iris", CallableFunction$new(function() head(iris)))))
   dc$pull()
-  testthat::expect_equal(dc$get_raw_data(), head(mtcars))
+  testthat::expect_equal(get_raw_data(dc), head(mtcars))
 })
 
 testthat::test_that("Pulling an already pulled DatasetConnector after mutating it with a delayed object
@@ -1012,9 +1012,9 @@ testthat::test_that("Pulling an already pulled DatasetConnector after mutating i
   dc$pull()
   dc$mutate(code = "mtcars[1] <- NULL")
   dc$mutate(code = "", vars = list(delayed = DatasetConnector$new("iris", CallableFunction$new(function() head(iris)))))
-  pre_pull_code <- dc$get_code()
+  pre_pull_code <- get_code(dc)
   dc$pull()
-  testthat::expect_equal(dc$get_code(), pre_pull_code)
+  testthat::expect_equal(get_code(dc), pre_pull_code)
 })
 
 testthat::test_that("Initializing DatasetConnector with code argument works", {
@@ -1029,7 +1029,7 @@ testthat::test_that("Initializing DatasetConnector with code argument works", {
     vars = list(test_ds1 = test_ds1)
   )
   testthat::expect_equal(
-    t_dc$get_code(),
+    get_code(t_dc),
     "head_mtcars <- head(mtcars)\ntest_ds1 <- head_mtcars\ntest_dc <- data.frame(head_letters = c(\"a\", \"b\", \"c\", \"d\", \"e\", \"f\"))\ntest_dc$tail_letters = tail(letters)" #nolint
   )
   testthat::expect_equal(
@@ -1051,7 +1051,7 @@ testthat::test_that("Initializing DatasetConnector with code argument works", {
   )
   t_dc$pull()
   testthat::expect_equal(
-    t_dc$get_raw_data(),
+    get_raw_data(t_dc),
     data.frame(head_letters = head(letters), tail_letters = tail(letters))
   )
 })

@@ -175,13 +175,13 @@ testthat::test_that("Multiple connectors wrapped in cdisc_data", {
 
   testthat::expect_equal(unname(get_dataname(data)), c("ADSL", "ADAE", "ADVS", "ADSL_2"))
 
-  testthat::expect_equal(items$ADSL$get_code(),
+  testthat::expect_equal(get_code(items$ADSL),
     "ADSL <- synthetic_cdisc_dataset(dataset_name = \"adsl\", name = \"latest\")")
-  testthat::expect_equal(items$ADAE$get_code(),
+  testthat::expect_equal(get_code(items$ADAE),
     "ADAE <- synthetic_cdisc_dataset(dataset_name = \"adae\", name = \"latest\")")
-  testthat::expect_equal(items$ADVS$get_code(),
+  testthat::expect_equal(get_code(items$ADVS),
     "ADVS <- synthetic_cdisc_dataset(dataset_name = \"advs\", name = \"latest\")")
-  testthat::expect_equal(items$ADSL_2$get_code(),
+  testthat::expect_equal(get_code(items$ADSL_2),
     "ADSL <- synthetic_cdisc_dataset(dataset_name = \"adsl\", name = \"latest\")\nADSL_2 <- ADSL")
 
   testthat::expect_equal(
@@ -258,7 +258,7 @@ testthat::test_that("RelationalData with single dataset and connector", {
     "synthetic_cdisc_dataset(dataset_name = \"adsl\", name = \"latest\")")
   testthat::expect_equal(items$ADAE$get_pull_callable()$get_call(),
     "synthetic_cdisc_dataset(dataset_name = \"adae\", name = \"latest\")")
-  testthat::expect_identical(adtte$get_raw_data, items$ADTTE$get_raw_data)
+  testthat::expect_identical(get_raw_data(adtte), get_raw_data(items$ADTTE))
 
   # simulate pull with a click of the submit button
   for (connector in data$get_connectors()) {
@@ -380,7 +380,7 @@ testthat::test_that("RelationalData with mutliple datasets and connectors", {
     items$ADSAMP$get_pull_callable()$get_call(),
     "source(file = \"delayed_data_script/asdamp_with_adsl.R\", local = TRUE)$value"
   )
-  testthat::expect_identical(adtte$get_raw_data, items$ADTTE$get_raw_data)
+  testthat::expect_identical(get_raw_data(adtte), get_raw_data(items$ADTTE))
 
   testthat::expect_equal(
     get_code(data, "ADSL"),

@@ -231,18 +231,18 @@ testthat::test_that("Dataset mutate method with delayed logic", {
   t_dc <- dataset_connector("test_dc", pull_fun2, vars = list(test_ds1 = test_ds1))
 
   testthat::expect_false(test_ds0$is_mutate_delayed())
-  testthat::expect_equal(test_ds0$get_code(), "head_mtcars <- head(mtcars)")
+  testthat::expect_equal(get_code(test_ds0), "head_mtcars <- head(mtcars)")
 
   mutate_dataset(test_ds0, code = "head_mtcars$carb <- head_mtcars$carb * 2")
   testthat::expect_equal(get_raw_data(test_ds0)$carb, 2 * head(mtcars)$carb)
   testthat::expect_false(test_ds0$is_mutate_delayed())
-  testthat::expect_equal(test_ds0$get_code(), "head_mtcars <- head(mtcars)\nhead_mtcars$carb <- head_mtcars$carb * 2")
+  testthat::expect_equal(get_code(test_ds0), "head_mtcars <- head(mtcars)\nhead_mtcars$carb <- head_mtcars$carb * 2")
 
   mutate_dataset(test_ds0, code = "head_mtcars$Species <- ds1$Species", vars = list(ds1 = test_ds1))
   testthat::expect_false(test_ds0$is_mutate_delayed())
   testthat::expect_equal(get_raw_data(test_ds0)$Species, get_raw_data(test_ds1)$Species)
   testthat::expect_equal(
-    pretty_code_string(test_ds0$get_code()),
+    pretty_code_string(get_code(test_ds0)),
     c("head_iris <- head(iris)",
       "ds1 <- head_iris",
       "head_mtcars <- head(mtcars)",
@@ -254,7 +254,7 @@ testthat::test_that("Dataset mutate method with delayed logic", {
   mutate_dataset(test_ds0, code = "head_mtcars$head_letters <- dc$head_letters", vars = list(dc = t_dc))
 
   testthat::expect_equal(
-    pretty_code_string(test_ds0$get_code()),
+    pretty_code_string(get_code(test_ds0)),
     c("head_iris <- head(iris)",
       "ds1 <- head_iris",
       "test_ds1 <- head_iris",
@@ -272,7 +272,7 @@ testthat::test_that("Dataset mutate method with delayed logic", {
 
   testthat::expect_true(test_ds0$is_mutate_delayed())
   testthat::expect_equal(
-    pretty_code_string(test_ds0$get_code()),
+    pretty_code_string(get_code(test_ds0)),
     c("head_iris <- head(iris)",
       "ds1 <- head_iris",
       "test_ds1 <- head_iris",
@@ -290,7 +290,7 @@ testthat::test_that("Dataset mutate method with delayed logic", {
   testthat::expect_true(test_ds0$is_mutate_delayed())
 
   testthat::expect_equal(
-    pretty_code_string(test_ds0$get_code()),
+    pretty_code_string(get_code(test_ds0)),
     c("head_iris <- head(iris)",
       "ds1 <- head_iris",
       "test_ds1 <- head_iris",
@@ -308,7 +308,7 @@ testthat::test_that("Dataset mutate method with delayed logic", {
 
   mutate_dataset(test_ds0, code = "head_mtcars$perm <- ds2$perm", vars = list(ds2 = test_ds2))
   testthat::expect_equal(
-    pretty_code_string(test_ds0$get_code()),
+    pretty_code_string(get_code(test_ds0)),
     c("head_iris <- head(iris)",
       "ds1 <- head_iris",
       "test_ds1 <- head_iris",
@@ -327,7 +327,7 @@ testthat::test_that("Dataset mutate method with delayed logic", {
 
   expect_null(get_raw_data(test_ds0)$perm)
   testthat::expect_equal(
-    pretty_code_string(test_ds0$get_code()),
+    pretty_code_string(get_code(test_ds0)),
     c("head_iris <- head(iris)",
       "ds1 <- head_iris",
       "test_ds1 <- head_iris",
@@ -368,13 +368,13 @@ testthat::test_that("Dataset mutate method with delayed logic", {
     "head_mtcars$perm <- ds2$perm"
   )
   testthat::expect_equal(
-    pretty_code_string(test_ds0$get_code()),
+    pretty_code_string(get_code(test_ds0)),
     expect_code
   )
 
   mutate_dataset(test_ds0, code = "head_mtcars$new_var2 <- 2")
   testthat::expect_equal(
-    pretty_code_string(test_ds0$get_code()),
+    pretty_code_string(get_code(test_ds0)),
     c(expect_code, "head_mtcars$new_var2 <- 2")
   )
   testthat::expect_false(test_ds0$is_mutate_delayed())
@@ -443,9 +443,9 @@ testthat::test_that("Dataset$recreate does not reset the mutation code", {
   dataset_connector1 <- DatasetConnector$new("mtcars", cf)
   dataset1 <- Dataset$new("iris", head(iris))
   dataset1$mutate(code = "test", vars = list(test = dataset_connector1))
-  code_before_recreating <- dataset1$get_code()
+  code_before_recreating <- get_code(dataset1)
   dataset1$recreate()
-  code_after_recreating <- dataset1$get_code()
+  code_after_recreating <- get_code(dataset1)
   testthat::expect_equal(code_after_recreating, code_before_recreating)
 })
 
@@ -549,7 +549,7 @@ testthat::test_that("Dupliated mutation code is shown via get_code()", {
   dataset <- Dataset$new("iris", head(iris))
   dataset$mutate("7")
   dataset$mutate("7")
-  testthat::expect_equal(dataset$get_code(), paste("7", "7", sep = "\n"))
+  testthat::expect_equal(get_code(dataset), paste("7", "7", sep = "\n"))
 })
 
 test_that("mutate_dataset", {
@@ -581,7 +581,7 @@ test_that("mutate_dataset", {
   })
 
   expect_equal(
-    test_ds$get_raw_data(),
+    get_raw_data(test_ds),
     data.frame(x = c(1, 2), y = c("a", "b"), stringsAsFactors = FALSE)
   )
 
@@ -623,7 +623,7 @@ test_that("mutate_dataset", {
   })
 
   expect_equal(
-    test_ds_mut$get_raw_data(),
+    get_raw_data(test_ds_mut),
     data.frame(x = c(1, 2), y = c("a", "b"),
                z = c("one", "two"),
                stringsAsFactors = FALSE)
@@ -634,14 +634,14 @@ test_that("mutate_dataset", {
   })
 
   expect_equal(
-    test_ds_mut$get_raw_data(),
+    get_raw_data(test_ds_mut),
     data.frame(x = c(1, 2), y = c("a", "b"),
                z = c(1, 1),
                stringsAsFactors = FALSE)
   )
 
   expect_equal(
-    test_ds_mut$get_code(),
+    get_code(test_ds_mut),
     "testds <- whatever\ntestds$z <- c(\"one\", \"two\")\nmut_fun <- function(x) {\n    x$z <- 1\n    return(x)\n}\ntestds <- mut_fun(testds)" # nolint
   )
 
@@ -652,14 +652,14 @@ test_that("mutate_dataset", {
   })
 
   expect_equal(
-    test_ds_mut$get_raw_data(),
+    get_raw_data(test_ds_mut),
     data.frame(x = c(1, 2), y = c("a", "b"),
                z = c(1, 1),
                stringsAsFactors = FALSE)
   )
 
   expect_equal(
-    test_ds_mut$get_code(),
+    get_code(test_ds_mut),
     "testds <- whatever\ntestds$z <- c(\"one\", \"two\")\nmut_fun <- function(x) {\n    x$z <- 1\n    return(x)\n}\ntestds <- mut_fun(testds)\nmut_fun <- function(x) {\n    x$z <- 1\n    return(x)\n}\ntestds <- mut_fun(testds)" # nolint
   )
 

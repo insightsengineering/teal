@@ -25,9 +25,9 @@ testthat::test_that("MAEDataset$recreate updates the class fields", {
     vars = new_vars
   ))
   testthat::expect_equal(mae$get_dataname(), new_name)
-  testthat::expect_equal(mae$get_raw_data(), new_data)
+  testthat::expect_equal(get_raw_data(mae), new_data)
   testthat::expect_equal(mae$get_keys(), new_keys)
-  testthat::expect_equal(mae$get_code(), "new_var <- \"new_var\"\nnew_code")
+  testthat::expect_equal(get_code(mae), "new_var <- \"new_var\"\nnew_code")
 })
 
 testthat::test_that("MAEDataset getters and setters", {
@@ -36,7 +36,7 @@ testthat::test_that("MAEDataset getters and setters", {
   testthat::expect_equal(mae$get_dataname(), "miniACC")
   testthat::expect_equal(mae$get_datanames(), mae$get_dataname())
 
-  testthat::expect_equal(mae$get_raw_data(), MultiAssayExperiment::miniACC)
+  testthat::expect_equal(get_raw_data(mae), MultiAssayExperiment::miniACC)
 
   new_label <- "new_label"
   testthat::expect_silent(mae$set_dataset_label(new_label))
@@ -48,7 +48,7 @@ testthat::test_that("MAEDataset getters and setters", {
 
   new_code <- "new_code"
   testthat::expect_silent(mae$set_code(new_code))
-  testthat::expect_equal(mae$get_code(), new_code)
+  testthat::expect_equal(get_code(mae), new_code)
 
   new_vars <- list(new_var = "new_var")
   testthat::expect_silent(mae$set_vars(new_vars))

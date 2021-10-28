@@ -57,7 +57,7 @@ testthat::test_that("Case 1: CDISCDataset$get_code() does not return duplicated 
 
   iris_dataset$mutate("'mutating dataset'", vars = list(mtcars_dataset = mtcars_dataset))
   testthat::expect_equal(
-    iris_dataset$get_code(),
+    get_code(iris_dataset),
     paste(
       "mtcars <- (function() head(mtcars))()",
       "\"mutating connector\"",
