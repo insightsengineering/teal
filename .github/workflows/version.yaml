@@ -8,7 +8,7 @@ on:
   pull_request:
 
 jobs:
-  man-pages:
+  version-check:
     name: Version check
     runs-on: ubuntu-latest
     steps:
