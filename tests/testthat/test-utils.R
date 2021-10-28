@@ -57,7 +57,7 @@ test_that("get_key_duplicates_util function", {
 test_that("cast_to_list returns a list when data.frame, dataset or datasetConnector are passed", {
   dataset <- Dataset$new("iris", head(iris))
   dsc <- DatasetConnector$new("iris", CallableFunction$new(function() head(iris)))
-  adsl_df <- as.data.frame(as.list(setNames(nm = get_cdisc_keys("ADSL"))))
+  adsl_df <- iris
 
   class_dataset <- cast_to_list(dataset, names(dataset))
   expect_true(is(class_dataset, "list"))
@@ -65,7 +65,7 @@ test_that("cast_to_list returns a list when data.frame, dataset or datasetConnec
   class_dsc <- cast_to_list(dsc, names(dsc))
   expect_true(is(class_dsc, "list"))
 
-  class_df <- cast_to_list(adsl_df, deparse(substitute(adsl_df), width.cutoff = 500L))
+  class_df <- cast_to_list(adsl_df, "adsl_df")
   expect_true(is(class_df, "list"))
 })
 
@@ -92,14 +92,6 @@ test_that("cast_to_list throws error with missing names_data input for dataframe
   expect_error(cast_to_list(dataset), NA)
 })
 
-test_that("cast_to_list throws error with data.frame function input", {
-  fun <- function() head(iris)
-  data_names_call <- substitute(fun())
-  names_data <- deparse(data_names_call, width.cutoff = 500L)
-  expect_error(cast_to_list(fun(), names_data), "Single data.frame shouldn't be provided as a result of a function call. Please name
-           the object first or use a named list.")
-})
-
 test_that("list_to_named_list throws error with a function returning a list", {
   fun <- function() list(head(iris))
   data_names_call <- substitute(fun())
@@ -108,18 +100,6 @@ test_that("list_to_named_list throws error with a function returning a list", {
 })
 
 test_that("list_to_named_list returns named list when the input is a named list", {
-  #dataframe
-  adsl_df <- as.data.frame(as.list(setNames(nm = get_cdisc_keys("ADSL"))))
-  data_names_call <- substitute(adsl_df)
-  names_data <- deparse(substitute(adsl_df), width.cutoff = 500L)
-  data_list <- cast_to_list(adsl_df, names_data)
-  names_data_list <- names(data_list)
-
-  named_list <- list_to_named_list(data_list, names_data_list, data_names_call)
-  expect_identical(names(named_list), "adsl_df")
-  expect_identical(named_list$adsl_df, data_list[[1]])
-
-  #Dataset
   data_names_call <- substitute(Dataset$new("iris", head(iris)))
   names_data <- deparse(data_names_call, width.cutoff = 500L)
   data_list <- cast_to_list(Dataset$new("iris", head(iris)), names_data)
@@ -132,6 +112,17 @@ test_that("list_to_named_list returns named list when the input is a named list"
 })
 
 test_that("list_to_named_list returns named list when the input is not a named list", {
+  #dataframe
+  adsl_df <- as.data.frame(as.list(setNames(nm = get_cdisc_keys("ADSL"))))
+  data_names_call <- substitute(adsl_df)
+  data_list <- cast_to_list(adsl_df, "adsl_df")
+  names_data_list <- names(data_list)
+
+  named_list <- list_to_named_list(data_list, names_data_list, data_names_call)
+  expect_identical(names(named_list), "adsl_df")
+  expect_identical(named_list$adsl_df, data_list[[1]])
+
+  #dataset
   data_names_call <- substitute(Dataset$new("iris", head(iris)))
   names_data <- deparse(data_names_call, width.cutoff = 500L)
   data_list <- cast_to_list(Dataset$new("iris", head(iris)), names_data)
@@ -211,5 +202,5 @@ test_that("named_list_to_dataset throws error when the input is not a list of da
   expect_error(named_list_to_dataset(1))
   expect_error(named_list_to_dataset("A"))
   expect_error(named_list_to_dataset(TRUE))
-  expect_error(named_list_to_dataset(c(1,2,3)))
+  expect_error(named_list_to_dataset(c(1, 2, 3)))
 })
