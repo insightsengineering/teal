@@ -27,7 +27,9 @@ testthat::test_that("get_raw_data.Dataset gives warning when dataname is supplie
 
 testthat::test_that("get_raw_data.DatasetConnector returns a SCDA data frame verbatim ", {
   pull_fun_adsl <- callable_function(
-    function() {synthetic_cdisc_data("latest")$adsl}
+    function() {
+      synthetic_cdisc_data("latest")$adsl
+    }
   )
   dc <- dataset_connector("ADSL", pull_fun_adsl)
   load_dataset(dc)
