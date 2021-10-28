@@ -161,15 +161,15 @@ testthat::test_that("Dataset supplementary constructors", {
   )
 
   # Deprecation warnings
-  testthat::expect_warning(x2 <- named_dataset_file(file_example))
-  testthat::expect_warning(x3 <- relational_dataset_file(file_example))
+  lifecycle::expect_deprecated(x2 <- named_dataset_file(file_example))
+  lifecycle::expect_deprecated(x3 <- relational_dataset_file(file_example))
   testthat::expect_equal(x, x2)
   testthat::expect_equal(x, x3)
 
   # Deprecated constructors
-  testthat::expect_error(raw_dataset(iris))
-  testthat::expect_warning(ds1 <- named_dataset("ds", iris))
-  testthat::expect_warning(ds2 <- relational_dataset("ds", iris))
+  lifecycle::expect_defunct(raw_dataset(iris))
+  lifecycle::expect_deprecated(ds1 <- named_dataset("ds", iris))
+  lifecycle::expect_deprecated(ds2 <- relational_dataset("ds", iris))
   testthat::expect_equal(ds1, ds2)
 })
 

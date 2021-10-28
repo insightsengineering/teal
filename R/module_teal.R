@@ -175,7 +175,6 @@ srv_teal <- function(input, output, session, modules, raw_data, filter = list())
   # usually not change afterwards
   # if restored from bookmarked state, `filter` is ignored
   observeEvent(raw_data(), ignoreNULL = TRUE, once = TRUE, {
-    .log("data loaded successfully")
     progress <- shiny::Progress$new(session)
     on.exit(progress$close())
     progress$set(0.25, message = "Setting data")
@@ -205,7 +204,6 @@ srv_teal <- function(input, output, session, modules, raw_data, filter = list())
       # for example, the data may only be loaded once a password is provided
       # however, onRestore only runs in the first flush and not in the flush when the
       # password was finally provided
-      .log("restoring filter state from bookmarked state - filter is ignored")
       tryCatch({
         progress$set(0.75, message = "Restoring from bookmarked state")
         datasets$restore_state_from_bookmark(saved_datasets_state)
@@ -233,7 +231,6 @@ srv_teal <- function(input, output, session, modules, raw_data, filter = list())
       )
     } else {
       progress$set(0.75, message = "Setting initial filter state")
-      .log("Setting initial filter state")
       filtered_data_set_filters(datasets, filter)
     }
 

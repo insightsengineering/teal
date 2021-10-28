@@ -32,6 +32,11 @@ log_app_usage <- function(ta,
                           anl_type,
                           pkg_meta = c("Package", "Title", "Version", "RemoteRef")) {
 
+  lifecycle::deprecate_soft(
+    when = "0.10.1",
+    what = "log_app_usage()",
+    details = "teal now uses a logging package `logger`. See `logger` for more information about how to use it."
+  )
 
   # conditionally create logs directory
   if (!dir.exists("./logs")) {
@@ -101,7 +106,7 @@ line_pkg_log <- function(fields) {
   nest_packages <- c(
     "test.nest", "utils.nest", "devtools.nest", "rtables",
     "tern", "teal", "teal.devel", "teal.modules.general", "teal.modules.clinical",
-    "oosprey", "teal.osprey", "goshawk", "teal.goshawk", "tlgdown")
+    "osprey", "teal.osprey", "goshawk", "teal.goshawk", "tlgdown")
   pkg_desc <- utils::sessionInfo()$otherPkgs
   pkg_desc <- lapply(pkg_desc, function(x) if (x$Package %in% nest_packages) x[fields] else NULL)
   pkg_desc <- Filter(Negate(is.null), pkg_desc)
