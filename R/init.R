@@ -135,63 +135,15 @@ init <- function(data,
                  footer = tags$p("Add Footer Here"),
                  id = character(0)) {
   if (!is(data, "RelationalData")) {
-    names_data <- deparse(substitute(data), width.cutoff = 500L)
-    if (is(data, "data.frame")) {
-      if (grepl("\\)$", names_data)) {
-        stop("Single data.frame shouldn't be provided as a result of a function call. Please name
-             the object first or use a named list.")
-      }
-      data <- list(data)
-      names(data) <- names_data
-    } else if (is(data, "Dataset") || is(data, "DatasetConnector")) {
-      data <- list(data)
-    }
-
-    names_data <- names(data)
     data_names_call <- substitute(data)
-    data_names_call <- if (is.name(data_names_call)) list(data_names_call) else data_names_call
+    names_data <- deparse(data_names_call, width.cutoff = 500L)
+    data_list <- cast_to_list(data, names_data)
 
-    if (length(data_names_call) > 1 && data_names_call[[1]] == "list") data_names_call[[1]] <- NULL
+    names_data_list <- names(data_list)
+    named_list <- list_to_named_list(data_list, names_data_list, data_names_call)
+    dataset_list <- named_list_to_dataset(named_list)
 
-    if (!grepl("list", deparse(data_names_call)) &&
-        utils.nest::if_false(any(names_data == ""), length(names_data) != length(data))) {
-      stop("Unnamed lists shouldn't be provided as a result of a function call. Please use a named list.")
-    }
-
-    data_names_new <- unlist(lapply(seq_along(data), function(y) {
-      data_y <- list(data[[y]])
-      names_data_y <- names(data)[y]
-      if (is.null(names_data_y) || names_data_y == "") {
-        if (is(data[[y]], "data.frame")) {
-          as.character(data_names_call[[y]])[1]
-        } else if (is(data[[y]], "Dataset") || is(data[[y]], "DatasetConnector")){
-          get_dataname(data[[y]])
-        }
-      } else {
-        names_data[y]
-      }
-    }),
-    recursive = FALSE)
-    names(data) <- data_names_new
-
-    data <- lapply(seq_along(data), function(y) {
-      if(is(data[[y]], "Dataset") || is(data[[y]], "DatasetConnector") ) {
-        data[[y]]
-      } else if (is(data[[y]], "data.frame")) {
-        if (names(data)[y] %in% names(default_cdisc_keys)) {
-          cdisc_dataset(dataname = names(data)[y], x = data[[y]])
-        } else {
-          dataset(dataname = names(data)[y], x = data[[y]])
-        }
-      } else {
-        stop("Dataset and data.frame inputs are only supported for data.")
-      }
-    })
-
-    data <- do.call(
-      teal_data,
-      data
-    )
+    data <- do.call(teal_data, dataset_list)
   }
 
   stopifnot(
