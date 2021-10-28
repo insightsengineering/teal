@@ -61,7 +61,7 @@ testthat::test_that("single dataset / dataset code", {
   data$check_metadata()
 
   new_env <- new.env()
-  eval(parse(text = get_code(data, dataname ="ADSL")), envir = new_env)
+  eval(parse(text = get_code(data, dataname = "ADSL")), envir = new_env)
   testthat::expect_identical(
     get(x = "ADSL", envir = new_env),
     get_raw_data(data$get_dataset("ADSL"))
