@@ -298,8 +298,10 @@ Dataset <- R6::R6Class( # nolint
     #' @description
     #' Adds variables which code depends on
     #'
+    #' @param vars (`named list`) contains any R object which code depends on
+    #' @param override (`logical(1)`) whether variable should be reassigned
     #' @return (`self`) invisibly for chaining
-    set_vars = function(vars) {
+    set_vars = function(vars, override = FALSE) {
       private$set_vars_internal(vars, is_mutate_vars = FALSE)
       return(invisible(NULL))
     },
@@ -364,6 +366,7 @@ Dataset <- R6::R6Class( # nolint
     #' @return `\code{list}`
     get_vars = function() {
       return(c(
+        list(), # list() in the beginning to ensure c.list - to avoid c.Dataset from CDSE
         private$vars,
         private$mutate_vars[!names(private$mutate_vars) %in% names(private$vars)])
       )
@@ -600,7 +603,11 @@ Dataset <- R6::R6Class( # nolint
       )
     },
 
-    set_vars_internal = function(vars, is_mutate_vars = FALSE) {
+    #' Set variables which code depends on
+    #' param vars (`named list`) contains any R object which code depends on
+    #' param is_mutate_vars (`logical(1)`) whether this var is used in mutate code
+    #' param override (`logical(1)`) whether variable should be reassigned
+    set_vars_internal = function(vars, is_mutate_vars = FALSE, override = FALSE) {
       stopifnot(is_fully_named_list(vars))
 
       total_vars <- c(private$vars, private$mutate_vars)
@@ -618,9 +625,17 @@ Dataset <- R6::R6Class( # nolint
           stop(paste("Variable name(s) already used:", paste(over_rides, collapse = ", ")))
         }
         if (is_mutate_vars) {
-          private$mutate_vars <- c(private$mutate_vars[!names(private$mutate_vars) %in% names(vars)], vars)
+          private$mutate_vars <- c(
+            list(), # to ensure c.list - to avoid c.Dataset from CDSE
+            private$mutate_vars[!names(private$mutate_vars) %in% names(vars)],
+            vars
+          )
         } else {
-          private$vars <- c(private$vars[!names(private$vars) %in% names(vars)], vars)
+          private$vars <- c(
+            list(), # to ensure c.list - to avoid c.Dataset from CDSE,
+            private$vars[!names(private$vars) %in% names(vars)],
+            vars
+          )
         }
       }
       # only adding dependencies if checks passed
@@ -698,7 +713,11 @@ Dataset <- R6::R6Class( # nolint
           # this may cause duplicates.
           # as of now, no reason why it makes any difference
           # so nothing is done
-          private$var_r6 <- c(private$var_r6, var, var$get_var_r6())
+          private$var_r6 <- c(
+            list(), # to ensure c.list - to avoid c.Dataset from CDSE
+            private$var_r6,
+            var, var$get_var_r6()
+          )
         }
       }
       return(invisible(self))

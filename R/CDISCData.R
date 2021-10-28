@@ -103,7 +103,6 @@ CDISCData <- R6::R6Class( # nolint
       if (!("ADSL" %in% self$get_datanames())) {
         stop("ADSL dataset is missing.")
       }
-
       super$check_metadata()
       for (idx1 in seq_along(private$parent)) {
         name_from <- names(private$parent)[[idx1]]

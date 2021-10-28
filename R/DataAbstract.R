@@ -62,6 +62,7 @@ DataAbstract <- R6::R6Class( #nolint
     #' delayed and can be evaluated using this method.
     execute_mutate = function() {
       # this will be pulled already! - not needed?
+      browser()
       if (is_empty(private$mutate_code$code)) {
         res <- ulapply(
           private$datasets,
@@ -346,6 +347,41 @@ DataAbstract <- R6::R6Class( #nolint
         dataname = self$get_datanames()
       )
       return(invisible(self))
+    },
+
+
+    #' Reassign vars
+    reasign_datasets_vars = function() {
+      for (dataset in self$get_items()) {
+        if (is(dataset, "Dataset")) {
+          pull_vars <- dataset$.__enclos_env__$private$vars
+          mutate_vars <- dataset$.__enclos_env__$private$mutate_vars
+          if (length(pull_vars) > 0) {
+
+            self$set_vars(
+              self$get_datasets()[names(pull_vars)],
+              is_mutate_vars = FALSE,
+              override = TRUE
+            )
+          }
+          if (length(mutate_vars) > 0) {
+            self$set_vars(
+              self$get_datasets()[names(mutate_vars)],
+              is_mutate_vars = TRUE,
+              override = TRUE
+            )
+
+
+          }
+        } else if (is(dataset, "DatasetConnector")) {
+          pull_vars <- dataset$.__enclos_env__$private$pull_vars
+          if (length(pull_vars) > 0) {
+            self$set_pull_vars(
+              self$get_datasets()[names(pull_vars)]
+            )
+          }
+        }
+      }
     }
   ),
 
@@ -378,6 +414,20 @@ DataAbstract <- R6::R6Class( #nolint
         logical(1)
       ))
     },
+
+    check_names = function(x) {
+      if (any(vapply(x, is_empty_string, logical(1)))) {
+        stop("Cannot extract some dataset names")
+      }
+      if (any(duplicated(x))) {
+        stop("Datasets names should be unique")
+      }
+      if (any(x %in% self$get_datanames())) {
+        stop("Some datanames already exists")
+      }
+      return(TRUE)
+    },
+
     get_datasets_code_class = function() {
       res <- CodeClass$new()
       if (is.null(private$datasets)) {
@@ -427,18 +477,6 @@ DataAbstract <- R6::R6Class( #nolint
       }
 
       return(invisible(self))
-    },
-    check_names = function(x) {
-      if (any(vapply(x, is_empty_string, logical(1)))) {
-        stop("Cannot extract some dataset names")
-      }
-      if (any(duplicated(x))) {
-        stop("Datasets names should be unique")
-      }
-      if (any(x %in% self$get_datanames())) {
-        stop("Some datanames already exists")
-      }
-      return(TRUE)
     }
   )
 )

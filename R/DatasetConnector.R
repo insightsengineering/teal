@@ -60,7 +60,7 @@ DatasetConnector <- R6::R6Class( #nolint
                           vars = list()) {
       private$set_pull_callable(pull_callable)
       private$set_var_r6(vars)
-      private$set_pull_vars(vars)
+      self$set_pull_vars(vars)
 
       private$set_dataname(dataname)
       self$set_dataset_label(label)
@@ -249,6 +249,17 @@ DatasetConnector <- R6::R6Class( #nolint
       self$get_join_keys()$set(x)
       return(invisible(self))
     },
+
+    #' @description
+    #' Set vars which pull-code depends on
+    #' @param pull_vars (anything) any R object which pulling code refers to
+    #' @return (`self`) invisibly for chaining
+    set_pull_vars = function(pull_vars) {
+      stopifnot(is_fully_named_list(pull_vars))
+      private$pull_vars <- pull_vars
+      return(invisible(self))
+    },
+
     #' @description
     #' mutate the join_keys for a given dataset and self
     #' @param dataset (`character`) dataset for which join_keys are to be set against self
@@ -560,11 +571,6 @@ DatasetConnector <- R6::R6Class( #nolint
     set_pull_callable = function(pull_callable) {
       stopifnot(is(pull_callable, "Callable"))
       private$pull_callable <- pull_callable
-      return(invisible(self))
-    },
-    set_pull_vars = function(pull_vars) {
-      stopifnot(is_fully_named_list(pull_vars))
-      private$pull_vars <- pull_vars
       return(invisible(self))
     },
     pull_internal = function(args = NULL, try = FALSE) {
