@@ -66,3 +66,67 @@ test_that("Include sourced code", {
   expect_true(all(c(source1, source2, source3) %in% code_lines8))
 
 })
+
+testthat::test_that("get_code.Dataset returns identical code to Dataset$get_code", {
+  test_ds1 <- Dataset$new("head_mtcars", head(mtcars), code = "head_mtcars <- head(mtcars)")
+
+  testthat::expect_identical(get_code(test_ds1, deparse = TRUE), test_ds1$get_code(deparse = TRUE))
+  testthat::expect_identical(get_code(test_ds1, deparse = FALSE), test_ds1$get_code(deparse = FALSE))
+
+  testthat::expect_warning(get_code(test_ds1, unused_arg = FALSE))
+})
+
+testthat::test_that("get_code.DatasetConnector returns identical code to DatasetConnector$get_code", {
+  test_ds1 <- Dataset$new("head_mtcars", head(mtcars), code = "head_mtcars <- head(mtcars)")
+
+  pull_fun <- callable_function(data.frame)
+  t_dc <- dataset_connector("test_dc", pull_fun, vars = list(test_ds1 = test_ds1))
+
+  testthat::expect_identical(get_code(t_dc, deparse = TRUE), t_dc$get_code(deparse = TRUE))
+  testthat::expect_identical(get_code(t_dc, deparse = FALSE), t_dc$get_code(deparse = FALSE))
+
+  testthat::expect_warning(get_code(t_dc, unused_arg = FALSE))
+})
+
+testthat::test_that("get_code.DataAbstract returns identical code to DataAbstract$get_code", {
+  x1 <- dataset(
+    x = data.frame(x = c(1, 2), y = c("a", "b"), stringsAsFactors = FALSE),
+    keys = "y",
+    dataname = "XY",
+    code = "XY <- data.frame(x = c(1, 2), y = c('aa', 'bb'), stringsAsFactors = FALSE)",
+    label = character(0)
+  )
+
+  x2 <- dataset(
+    x = data.frame(x = c(1, 2), y = c("a", "b"), stringsAsFactors = FALSE),
+    keys = "y",
+    dataname = "XYZ",
+    code = "XYZ <- data.frame(x = c(1, 2), y = c('aa', 'bb'), stringsAsFactors = FALSE)",
+    label = character(0)
+  )
+
+  rd <- teal_data(x1, x2)
+
+  testthat::expect_identical(get_code(rd, deparse = TRUE), rd$get_code(deparse = TRUE))
+  testthat::expect_identical(get_code(rd, deparse = FALSE), rd$get_code(deparse = FALSE))
+
+  testthat::expect_identical(
+    get_code(rd, dataname = "XY", deparse = TRUE),
+    rd$get_code(dataname = "XY", deparse = TRUE)
+  )
+  testthat::expect_identical(
+    get_code(rd, dataname = "XY", deparse = FALSE),
+    rd$get_code(dataname = "XY", deparse = FALSE)
+  )
+
+  testthat::expect_identical(
+    get_code(rd, dataname = "XYZ", deparse = TRUE),
+    rd$get_code(dataname = "XYZ", deparse = TRUE)
+  )
+  testthat::expect_identical(
+    get_code(rd, dataname = "XYZ", deparse = FALSE),
+    rd$get_code(dataname = "XYZ", deparse = FALSE)
+  )
+
+  testthat::expect_warning(get_code(rd, unused_arg = FALSE))
+})
