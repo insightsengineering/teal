@@ -25,3 +25,12 @@ NULL
 #' @importFrom MultiAssayExperiment MultiAssayExperiment
 #' @importFrom SummarizedExperiment colData
 NULL
+
+# This is a dummy function, which only purpose is to call
+# `lifecycle::badge`. `test.nest` gives a false positive error
+# when testing usage of an imported function used only in the
+# Roxygen docstring context. To remove the error, teal needs
+# to call this function somewhere else - so here it is.
+dummy_function_for_test_nest <- function() { # nousage
+  lifecycle::badge("experimental")
+}
