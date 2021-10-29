@@ -106,7 +106,7 @@ testthat::test_that("RelationalDataConnector with custom UI and server", {
         set_args(connector, args(test = input$test))
         connector$pull(try = TRUE)
 
-        get_raw_data(connector)
+        connector$get_raw_data()
       })
   })
   set_server <- cdisc_data_connector$get_server()

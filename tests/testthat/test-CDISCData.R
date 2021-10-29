@@ -184,13 +184,25 @@ testthat::test_that("two datasets / datasets code", {
   )
 
   testthat::expect_identical(
-    vapply(get_raw_data(data), nrow, numeric(1)),
+    vapply(
+      list(
+        ADSL =  data$get_dataset("ADSL")$get_raw_data(),
+        ADTTE = data$get_dataset("ADTTE")$get_raw_data()),
+      nrow,
+      numeric(1)
+    ),
     c(ADSL = 3, ADTTE = 1)
   )
 
   data$execute_mutate()
   testthat::expect_identical(
-    vapply(get_raw_data(data), nrow, numeric(1)),
+    vapply(
+      list(
+        ADSL =  data$get_dataset("ADSL")$get_raw_data(),
+        ADTTE = data$get_dataset("ADSL")$get_raw_data()),
+      nrow,
+      numeric(1)
+    ),
     c(ADSL = 1, ADTTE = 1)
   )
 })
@@ -766,8 +778,14 @@ testthat::test_that("two datasets / datasets code", {
   testthat::expect_true(data$check()) # TRUE
   data$execute_mutate()
   testthat::expect_identical(
-    vapply(get_raw_data(data), nrow, integer(1)),
-    c(ADSL = 1L, ADTTE = 1L)
+    vapply(
+      list(
+        ADSL =  data$get_dataset("ADSL")$get_raw_data(),
+        ADTTE = data$get_dataset("ADSL")$get_raw_data()),
+      nrow,
+      numeric(1)
+    ),
+    c(ADSL = 1, ADTTE = 1)
   )
 })
 

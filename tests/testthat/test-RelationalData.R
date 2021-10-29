@@ -258,7 +258,7 @@ testthat::test_that("RelationalData with single dataset and connector", {
     "synthetic_cdisc_dataset(dataset_name = \"adsl\", name = \"latest\")")
   testthat::expect_equal(items$ADAE$get_pull_callable()$get_call(),
     "synthetic_cdisc_dataset(dataset_name = \"adae\", name = \"latest\")")
-  testthat::expect_identical(adtte$get_raw_data, items$ADTTE$get_raw_data)
+  testthat::expect_identical(adtte$get_raw_data(), items$ADTTE$get_raw_data())
 
   # simulate pull with a click of the submit button
   for (connector in data$get_connectors()) {
@@ -380,7 +380,7 @@ testthat::test_that("RelationalData with mutliple datasets and connectors", {
     items$ADSAMP$get_pull_callable()$get_call(),
     "source(file = \"delayed_data_script/asdamp_with_adsl.R\", local = TRUE)$value"
   )
-  testthat::expect_identical(adtte$get_raw_data, items$ADTTE$get_raw_data)
+  testthat::expect_identical(adtte$get_raw_data(), items$ADTTE$get_raw_data())
 
   testthat::expect_equal(
     data$get_code("ADSL"),
