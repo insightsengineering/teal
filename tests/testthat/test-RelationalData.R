@@ -185,25 +185,25 @@ testthat::test_that("Multiple connectors wrapped in cdisc_data", {
     "ADSL <- synthetic_cdisc_dataset(dataset_name = \"adsl\", name = \"latest\")\nADSL_2 <- ADSL")
 
   testthat::expect_equal(
-    get_code(data, "ADSL"),
+    data$get_code("ADSL"),
     "library(package = \"teal\")\nADSL <- synthetic_cdisc_dataset(dataset_name = \"adsl\", name = \"latest\")"
   )
   testthat::expect_equal(
-    get_code(data, "ADAE"),
+    data$get_code("ADAE"),
     "library(package = \"teal\")\nADAE <- synthetic_cdisc_dataset(dataset_name = \"adae\", name = \"latest\")"
   )
   testthat::expect_equal(
-    get_code(data, "ADVS"),
+    data$get_code("ADVS"),
     "library(package = \"teal\")\nADVS <- synthetic_cdisc_dataset(dataset_name = \"advs\", name = \"latest\")"
   )
   testthat::expect_equal(
-    get_code(data, "ADSL_2"),
+    data$get_code("ADSL_2"),
     paste0("library(package = \"teal\")\n",
       "ADSL <- synthetic_cdisc_dataset(dataset_name = \"adsl\", name = \"latest\")\n",
       "ADSL_2 <- ADSL")
   )
   testthat::expect_equal(
-    get_code(data),
+    data$get_code(),
     paste0("library(package = \"teal\")\n",
       "ADSL <- synthetic_cdisc_dataset(dataset_name = \"adsl\", name = \"latest\")\n",
       "ADAE <- synthetic_cdisc_dataset(dataset_name = \"adae\", name = \"latest\")\n",
@@ -266,19 +266,19 @@ testthat::test_that("RelationalData with single dataset and connector", {
   }
 
   testthat::expect_equal(
-    get_code(data, "ADSL"),
+    data$get_code("ADSL"),
     "library(package = \"teal\")\nADSL <- synthetic_cdisc_dataset(dataset_name = \"adsl\", name = \"latest\")"
   )
   testthat::expect_equal(
-    get_code(data, "ADTTE"),
+    data$get_code("ADTTE"),
     "library(package = \"teal\")\nADTTE <- synthetic_cdisc_dataset(dataset_name = \"adtte\", name = \"latest\")"
   )
   testthat::expect_equal(
-    get_code(data, "ADAE"),
+    data$get_code("ADAE"),
     "library(package = \"teal\")\nADAE <- synthetic_cdisc_dataset(dataset_name = \"adae\", name = \"latest\")"
   )
   testthat::expect_equal(
-    get_code(data),
+    data$get_code(),
     paste0("library(package = \"teal\")\n",
            "ADSL <- synthetic_cdisc_dataset(dataset_name = \"adsl\", name = \"latest\")\n",
            "ADTTE <- synthetic_cdisc_dataset(dataset_name = \"adtte\", name = \"latest\")\n",
@@ -383,26 +383,26 @@ testthat::test_that("RelationalData with mutliple datasets and connectors", {
   testthat::expect_identical(adtte$get_raw_data, items$ADTTE$get_raw_data)
 
   testthat::expect_equal(
-    get_code(data, "ADSL"),
+    data$get_code("ADSL"),
     "library(package = \"teal\")\nADSL <- synthetic_cdisc_dataset(dataset_name = \"adsl\", name = \"latest\")"
   )
   testthat::expect_equal(
-    get_code(data, "ADSL_2"),
+    data$get_code("ADSL_2"),
     paste0("library(package = \"teal\")\n",
       "ADSL <- synthetic_cdisc_dataset(dataset_name = \"adsl\", name = \"latest\")\n",
       "ADSL_2 <- ADSL"
     )
   )
   testthat::expect_equal(
-    get_code(data, "ADVS"),
+    data$get_code("ADVS"),
     "library(package = \"teal\")\nADVS <- synthetic_cdisc_dataset(dataset_name = \"advs\", name = \"latest\")"
   )
   testthat::expect_equal(
-    get_code(data, "ADLB"),
+    data$get_code("ADLB"),
     "library(package = \"teal\")\nADLB <- synthetic_cdisc_dataset(dataset_name = \"adlb\", name = \"latest\")"
   )
   testthat::expect_equal(
-    get_code(data, "ADSAMP"),
+    data$get_code("ADSAMP"),
     paste0("library(package = \"teal\")\n",
       "ADSL <- synthetic_cdisc_dataset(dataset_name = \"adsl\", name = \"latest\")\n",
       "ADVS <- synthetic_cdisc_dataset(dataset_name = \"advs\", name = \"latest\")\n",
@@ -410,7 +410,7 @@ testthat::test_that("RelationalData with mutliple datasets and connectors", {
     )
   )
   testthat::expect_equal(
-    get_code(data, "ADTTE"),
+    data$get_code("ADTTE"),
     "library(package = \"teal\")\nADTTE <- synthetic_cdisc_dataset(dataset_name = \"adtte\", name = \"latest\")"
   )
 

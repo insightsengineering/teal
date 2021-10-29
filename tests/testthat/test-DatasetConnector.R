@@ -94,7 +94,7 @@ testthat::test_that("DatasetConnector", {
   )
 
   testthat::expect_identical(
-    get_code(x3),
+    x3$get_code(),
     "ADSL <- data.frame(id = 1:3, marker = c(100, 1, 10), alive = TRUE, new_feature = c(3, 4, 1))"
   )
 
@@ -226,7 +226,7 @@ testthat::test_that("csv_dataset_connector scda", {
   testthat::expect_true(is_pulled(x))
   testthat::expect_identical(get_dataname(x), "ADSL")
   testthat::expect_identical(
-    get_code(x),
+    x$get_code(),
     paste0("ADSL <- readr::read_delim(file = \"", encodeString(temp_file_csv), "\", delim = \",\")")
   )
   data <- get_raw_data(x)
@@ -242,7 +242,7 @@ testthat::test_that("csv_dataset_connector scda", {
   testthat::expect_true(is_pulled(x))
   testthat::expect_identical(get_dataname(x), "ADSL")
   testthat::expect_identical(
-    get_code(x),
+    x$get_code(),
     paste0("ADSL <- readr::read_delim(file = \"", encodeString(temp_file_csv), "\", delim = \"|\")")
   )
   data <- get_raw_data(x)
@@ -259,7 +259,7 @@ testthat::test_that("csv_dataset_connector scda", {
   testthat::expect_true(is_pulled(x))
   testthat::expect_identical(get_dataname(x), "ADSL")
   testthat::expect_identical(
-    get_code(x),
+    x$get_code(),
     paste0("ADSL <- readr::read_delim(file = \"", encodeString(temp_file_csv), "\", delim = \"\\t\")")
   )
   data <- get_raw_data(x)
@@ -276,7 +276,7 @@ testthat::test_that("csv_dataset_connector scda", {
   testthat::expect_true(is_pulled(x))
   testthat::expect_identical(get_dataname(x), "ADSL")
   testthat::expect_identical(
-    get_code(x),
+    x$get_code(),
     paste0("ADSL <- readr::read_delim(file = \"", encodeString(temp_file_csv), "\", delim = \";\")")
   )
   data <- get_raw_data(x)
@@ -305,7 +305,7 @@ testthat::test_that("csv_dataset_connector non-standard datasets multi/space cha
   testthat::expect_true(is_pulled(x))
   testthat::expect_identical(get_dataname(x), "ADSL")
   testthat::expect_identical(
-    get_code(x),
+    x$get_code(),
     paste0("ADSL <- readr::read_delim(file = \"", encodeString(temp_file_csv), "\", delim = \"$\")")
   )
   data <- get_raw_data(x)
@@ -321,7 +321,7 @@ testthat::test_that("csv_dataset_connector non-standard datasets multi/space cha
   testthat::expect_true(is_pulled(x))
   testthat::expect_identical(get_dataname(x), "ADSL")
   testthat::expect_identical(
-    get_code(x), paste0("ADSL <- readr::read_delim(file = \"",
+    x$get_code(), paste0("ADSL <- readr::read_delim(file = \"",
     encodeString(temp_file_csv), "\", delim = \" \")")
   )
   data <- get_raw_data(x)
@@ -348,7 +348,7 @@ testthat::test_that("csv_dataset_connector attritubes", {
   testthat::expect_true(is_pulled(x))
   testthat::expect_identical(get_dataname(x), "ADSL")
   testthat::expect_identical(
-    get_code(x),
+    x$get_code(),
     paste0("ADSL <- readr::read_delim(file = \"", encodeString(temp_file_csv), "\", delim = \",\")")
   )
   data <- get_raw_data(x)
@@ -372,7 +372,7 @@ testthat::test_that("csv_cdisc_dataset_connector scda", {
   testthat::expect_true(is_pulled(x))
   testthat::expect_identical(get_dataname(x), "ADSL")
   testthat::expect_identical(
-    get_code(x),
+    x$get_code(),
     paste0("ADSL <- readr::read_delim(file = \"", encodeString(temp_file_csv), "\", delim = \",\")")
   )
   data <- get_raw_data(x)
@@ -388,7 +388,7 @@ testthat::test_that("csv_cdisc_dataset_connector scda", {
   testthat::expect_true(is_pulled(x))
   testthat::expect_identical(get_dataname(x), "ADSL")
   testthat::expect_identical(
-    get_code(x),
+    x$get_code(),
     paste0("ADSL <- readr::read_delim(file = \"", encodeString(temp_file_csv), "\", delim = \"|\")")
   )
   data <- get_raw_data(x)
@@ -484,7 +484,7 @@ test_that("rice_dataset", {
   x <- rice_cdisc_dataset_connector("ADLB", "/path/to/ADLB")
   mutate_dataset(x, code = "ADLB$x <- 1")
 
-  testthat::expect_equal(get_code(x), "ADLB <- rice::rice_read(node = \"/path/to/ADLB\", prolong = TRUE)\nADLB$x <- 1")
+  testthat::expect_equal(x$get_code(), "ADLB <- rice::rice_read(node = \"/path/to/ADLB\", prolong = TRUE)\nADLB$x <- 1")
 })
 
 testthat::test_that("fun_cdisc_dataset_connector", {
@@ -599,6 +599,10 @@ testthat::test_that("code_dataset_connector - Test various inputs", {
 
   get_code_file <- code_dataset_connector(
     dataname = "ADSL",
+    # This get_code is the method for a character data type,
+    # which is unrelated and not a wrapper to any of the R6 classes' $get_code.
+    # So it does not break convention to leave it here instead.
+    # It needs to be called here.
     code = get_code(file_example, dataname = "ADSL")
   )
 

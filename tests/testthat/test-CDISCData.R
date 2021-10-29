@@ -16,8 +16,8 @@ testthat::test_that("single dataset / dataset code", {
 
   testthat::expect_true(adsl_dataset$check())
   testthat::expect_true(data$check())
-  testthat::expect_identical(get_code(data), "as.data.frame(as.list(setNames(nm = get_cdisc_keys(\"ADSL\"))))")
-  testthat::expect_identical(get_code(data), get_code(adsl_dataset))
+  testthat::expect_identical(data$get_code(), "as.data.frame(as.list(setNames(nm = get_cdisc_keys(\"ADSL\"))))")
+  testthat::expect_identical(data$get_code(), adsl_dataset$get_code())
 
   # MUTATE
   testthat::expect_silent(
@@ -30,7 +30,7 @@ testthat::test_that("single dataset / dataset code", {
 
   testthat::expect_true(data$check())
   testthat::expect_identical(
-    get_code(data),
+    data$get_code(),
     paste(
       "ADSL <- as.data.frame(as.list(setNames(nm = get_cdisc_keys(\"ADSL\"))))",
       "ADSL <- dplyr::filter(ADSL, USUBJID == \"F\")",
@@ -92,15 +92,15 @@ testthat::test_that("two datasets / datasets code", {
   testthat::expect_true(data$check())
 
   testthat::expect_identical(
-    get_code(adsl),
+    adsl$get_code(),
     "ADSL <- as.data.frame(as.list(setNames(nm = get_cdisc_keys(\"ADSL\"), object = list(1:3, letters[1:3]))))"
   )
   testthat::expect_identical(
-    get_code(adtte),
+    adtte$get_code(),
     "ADTTE <- as.data.frame(as.list(setNames(nm = get_cdisc_keys(\"ADTTE\"))))"
   )
   testthat::expect_identical(
-    get_code(data),
+    data$get_code(),
     paste(
       "ADSL <- as.data.frame(as.list(setNames(nm = get_cdisc_keys(\"ADSL\"), object = list(1:3, letters[1:3]))))",
       "ADTTE <- as.data.frame(as.list(setNames(nm = get_cdisc_keys(\"ADTTE\"))))",
@@ -152,7 +152,7 @@ testthat::test_that("two datasets / datasets code", {
   )
 
   testthat::expect_identical(
-    get_code(data, "ADSL"),
+    data$get_code("ADSL"),
     paste(
       "ADSL <- as.data.frame(as.list(setNames(nm = get_cdisc_keys(\"ADSL\"), object = list(1:3, letters[1:3]))))",
       "ADSL <- dplyr::filter(ADSL, USUBJID == \"a\")",
@@ -161,7 +161,7 @@ testthat::test_that("two datasets / datasets code", {
     )
   )
   testthat::expect_identical(
-    get_code(data, "ADTTE"),
+    data$get_code("ADTTE"),
     paste(
       "ADSL <- as.data.frame(as.list(setNames(nm = get_cdisc_keys(\"ADSL\"), object = list(1:3, letters[1:3]))))",
       "ADTTE <- as.data.frame(as.list(setNames(nm = get_cdisc_keys(\"ADTTE\"))))",
@@ -172,7 +172,7 @@ testthat::test_that("two datasets / datasets code", {
   )
 
   testthat::expect_identical(
-    get_code(data),
+    data$get_code(),
     paste(
       "ADSL <- as.data.frame(as.list(setNames(nm = get_cdisc_keys(\"ADSL\"), object = list(1:3, letters[1:3]))))",
       "ADTTE <- as.data.frame(as.list(setNames(nm = get_cdisc_keys(\"ADTTE\"))))",
@@ -267,7 +267,7 @@ testthat::test_that("two datasets / datasets code", {
   )
 
   testthat::expect_identical(
-    get_code(data),
+    data$get_code(),
     paste(
       "ADSL <- as.data.frame(as.list(setNames(nm = get_cdisc_keys(\"ADSL\"), object = list(1:3, letters[1:3]))))",
       "ADTTE <- as.data.frame(as.list(setNames(nm = get_cdisc_keys(\"ADTTE\"))))",
@@ -276,12 +276,12 @@ testthat::test_that("two datasets / datasets code", {
   )
 
   testthat::expect_identical(
-    get_code(data, "ADSL"),
-    get_code(data),
+    data$get_code("ADSL"),
+    data$get_code(),
   )
   testthat::expect_identical(
-    get_code(data, "ADTTE"),
-    get_code(data)
+    data$get_code("ADTTE"),
+    data$get_code()
   )
   testthat::expect_error(cdisc_dataset("ADSL", adsl_raw)$check(), "code is empty")
   testthat::expect_error(cdisc_dataset("ADTTE", adtte_raw)$check(), "code is empty")
@@ -322,7 +322,7 @@ testthat::test_that("two datasets / datasets code", {
   )
 
   testthat::expect_identical(
-    get_code(data),
+    data$get_code(),
     paste(
       "ADSL <- as.data.frame(as.list(setNames(nm = get_cdisc_keys(\"ADSL\"), object = list(1:3, letters[1:3]))))",
       "ADTTE <- as.data.frame(as.list(setNames(nm = get_cdisc_keys(\"ADTTE\"))))",
@@ -334,7 +334,7 @@ testthat::test_that("two datasets / datasets code", {
   )
 
   testthat::expect_identical(
-    get_code(data, "ADTTE"),
+    data$get_code("ADTTE"),
     paste(
       "ADSL <- as.data.frame(as.list(setNames(nm = get_cdisc_keys(\"ADSL\"), object = list(1:3, letters[1:3]))))",
       "ADTTE <- as.data.frame(as.list(setNames(nm = get_cdisc_keys(\"ADTTE\"))))",
@@ -344,7 +344,7 @@ testthat::test_that("two datasets / datasets code", {
     )
   )
   testthat::expect_identical(
-    get_code(data, "ADSL"),
+    data$get_code("ADSL"),
     paste(
       "ADSL <- as.data.frame(as.list(setNames(nm = get_cdisc_keys(\"ADSL\"), object = list(1:3, letters[1:3]))))",
       "ADTTE <- as.data.frame(as.list(setNames(nm = get_cdisc_keys(\"ADTTE\"))))",
@@ -396,7 +396,7 @@ testthat::test_that("dataset + connector / global code", {
   )
 
   testthat::expect_identical(
-    get_code(data),
+    data$get_code(),
     paste(
       "ADSL <- as.data.frame(as.list(setNames(nm = get_cdisc_keys(\"ADSL\"), object = list(1:3, letters[1:3]))))",
       "x <- ADSL",
@@ -407,7 +407,7 @@ testthat::test_that("dataset + connector / global code", {
     )
   )
   testthat::expect_identical(
-    get_code(data, "ADSL"),
+    data$get_code("ADSL"),
     paste(
       "ADSL <- as.data.frame(as.list(setNames(nm = get_cdisc_keys(\"ADSL\"), object = list(1:3, letters[1:3]))))",
       "x <- ADSL",
@@ -415,7 +415,7 @@ testthat::test_that("dataset + connector / global code", {
     )
   )
   testthat::expect_identical(
-    get_code(data, "ADTTE"),
+    data$get_code("ADTTE"),
     paste(
       "ADTTE <- (function() {",
       "    as.data.frame(as.list(setNames(nm = get_cdisc_keys(\"ADTTE\"))))",
@@ -448,7 +448,7 @@ testthat::test_that("dataset + connector / global code", {
   )
 
   testthat::expect_identical(
-    get_code(data),
+    data$get_code(),
     paste(
       "ADSL <- as.data.frame(as.list(setNames(nm = get_cdisc_keys(\"ADSL\"), object = list(1:3, letters[1:3]))))",
       "x <- ADSL",
@@ -463,7 +463,7 @@ testthat::test_that("dataset + connector / global code", {
   )
 
   testthat::expect_identical(
-    get_code(data, "ADTTE"),
+    data$get_code("ADTTE"),
     paste(
       "ADSL <- as.data.frame(as.list(setNames(nm = get_cdisc_keys(\"ADSL\"), object = list(1:3, letters[1:3]))))",
       "x <- ADSL",
@@ -477,7 +477,7 @@ testthat::test_that("dataset + connector / global code", {
   )
 
   testthat::expect_identical(
-    get_code(data, "ADSL"),
+    data$get_code("ADSL"),
     paste(
       "ADSL <- as.data.frame(as.list(setNames(nm = get_cdisc_keys(\"ADSL\"), object = list(1:3, letters[1:3]))))",
       "x <- ADSL",
@@ -520,7 +520,7 @@ testthat::test_that("dataset + connector / global code", {
   )
 
   testthat::expect_identical(
-    get_code(data, "ADTTE"),
+    data$get_code("ADTTE"),
     paste(
       "ADSL <- as.data.frame(as.list(setNames(nm = get_cdisc_keys(\"ADSL\"), object = list(1:3, letters[1:3]))))",
       "x <- ADSL",
@@ -557,7 +557,7 @@ testthat::test_that("two datasets / datasets code", {
   adlb <- cdisc_dataset_connector("ADLB", adlb_cf, keys = get_cdisc_keys("ADLB"), vars = list(x = adsl))
 
   testthat::expect_identical(
-    get_code(adtte),
+    adtte$get_code(),
     paste(
       "x <- ADSL",
       "ADTTE <- (function() {",
@@ -581,7 +581,7 @@ testthat::test_that("two datasets / datasets code", {
   )
 
   testthat::expect_identical(
-    get_code(data),
+    data$get_code(),
     paste(
       "ADSL <- as.data.frame(as.list(setNames(nm = get_cdisc_keys(\"ADSL\"), object = list(1:3, letters[1:3]))))",
       "ADRS <- as.data.frame(as.list(setNames(nm = get_cdisc_keys(\"ADRS\"))))",
@@ -597,7 +597,7 @@ testthat::test_that("two datasets / datasets code", {
   )
 
   testthat::expect_identical(
-    get_code(data, "ADSL"),
+    data$get_code("ADSL"),
     paste(
       "ADSL <- as.data.frame(as.list(setNames(nm = get_cdisc_keys(\"ADSL\"), object = list(1:3, letters[1:3]))))",
       "ADRS <- as.data.frame(as.list(setNames(nm = get_cdisc_keys(\"ADRS\"))))",
@@ -607,7 +607,7 @@ testthat::test_that("two datasets / datasets code", {
   )
 
   testthat::expect_identical(
-    get_code(data, "ADTTE"),
+    data$get_code("ADTTE"),
     paste(
       "ADSL <- as.data.frame(as.list(setNames(nm = get_cdisc_keys(\"ADSL\"), object = list(1:3, letters[1:3]))))",
       "ADRS <- as.data.frame(as.list(setNames(nm = get_cdisc_keys(\"ADRS\"))))",
@@ -690,7 +690,7 @@ testthat::test_that("two datasets / datasets code", {
     mutate_dataset(dataname = "ADSL", code = "ADSL$x <- 1")
 
   testthat::expect_identical(
-    get_code(data),
+    data$get_code(),
     paste(
       "ADSL <- as.data.frame(as.list(setNames(nm = get_cdisc_keys(\"ADSL\"), object = list(1:3, letters[1:3]))))",
       "x <- ADSL",
@@ -705,7 +705,7 @@ testthat::test_that("two datasets / datasets code", {
   )
 
   testthat::expect_identical(
-    get_code(data, "ADSL"),
+    data$get_code("ADSL"),
     paste(
       "ADSL <- as.data.frame(as.list(setNames(nm = get_cdisc_keys(\"ADSL\"), object = list(1:3, letters[1:3]))))",
       "x <- ADSL",
@@ -719,7 +719,7 @@ testthat::test_that("two datasets / datasets code", {
   )
 
   testthat::expect_identical(
-    get_code(data, "ADTTE"),
+    data$get_code("ADTTE"),
     paste(
       "ADSL <- as.data.frame(as.list(setNames(nm = get_cdisc_keys(\"ADSL\"), object = list(1:3, letters[1:3]))))",
       "x <- ADSL",
@@ -837,7 +837,7 @@ testthat::test_that("only connectors", {
   )
 
   testthat::expect_identical(
-    get_code(data, "ADSL"),
+    data$get_code("ADSL"),
     paste(
       "ADSL <- (function() {\n    as.data.frame(as.list(setNames(nm = get_cdisc_keys(\"ADSL\"))))",
       "})()",
@@ -848,7 +848,7 @@ testthat::test_that("only connectors", {
     )
   )
   testthat::expect_identical(
-    get_code(data, "ADTTE"),
+    data$get_code("ADTTE"),
     paste(
       "ADSL <- (function() {\n    as.data.frame(as.list(setNames(nm = get_cdisc_keys(\"ADSL\"))))",
       "})()",
@@ -1071,11 +1071,11 @@ testthat::test_that("get_cdisc_keys returns column names present in the cached d
 testthat::test_that("Empty code", {
   # missing code
   result <- cdisc_data(cdisc_dataset("ADSL", adsl_raw), check = FALSE)
-  testthat::expect_identical(get_code(result), "")
+  testthat::expect_identical(result$get_code(), "")
 
   # empty code
   result <- cdisc_data(cdisc_dataset("ADSL", adsl_raw), code = "", check = FALSE)
-  testthat::expect_identical(get_code(result), "")
+  testthat::expect_identical(result$get_code(), "")
 
   # NULL code
   testthat::expect_silent(cdisc_data(cdisc_dataset("ADSL", adsl_raw), code = NULL, check = FALSE))
