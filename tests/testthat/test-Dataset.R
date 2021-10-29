@@ -159,18 +159,6 @@ testthat::test_that("Dataset supplementary constructors", {
     regexp = "The object returned from the file is not of Dataset class.",
     fixed = TRUE
   )
-
-  # Deprecation warnings
-  testthat::expect_warning(x2 <- named_dataset_file(file_example))
-  testthat::expect_warning(x3 <- relational_dataset_file(file_example))
-  testthat::expect_equal(x, x2)
-  testthat::expect_equal(x, x3)
-
-  # Deprecated constructors
-  testthat::expect_error(raw_dataset(iris))
-  testthat::expect_warning(ds1 <- named_dataset("ds", iris))
-  testthat::expect_warning(ds2 <- relational_dataset("ds", iris))
-  testthat::expect_equal(ds1, ds2)
 })
 
 testthat::test_that("Dataset$set_vars throws an error if passed the enclosing Dataset object directly", {

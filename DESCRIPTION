@@ -30,7 +30,6 @@ Imports:
     dplyr,
     ggplot2,
     grDevices,
-    lifecycle,
     magrittr,
     methods,
     MultiAssayExperiment,
@@ -49,6 +48,7 @@ Suggests:
     covr,
     httr,
     knitr,
+    lifecycle,
     readr,
     reticulate,
     rmarkdown,
@@ -56,9 +56,9 @@ Suggests:
     scda.2021,
     test.nest (>= 0.2.11),
     testthat (>= 2.0)
-VignetteBuilder: 
+VignetteBuilder:
     knitr
-RdMacros: 
+RdMacros:
     lifecycle
 biocViews:
 Encoding: UTF-8
@@ -93,7 +93,6 @@ Collate:
     'RelationalDataConnector_constructors.R'
     'all_choices.R'
     'as_cdisc.R'
-    'as_relational.R'
     'choices_labeled.R'
     'choices_selected.R'
     'data_extract_spec.R'

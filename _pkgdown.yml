@@ -48,10 +48,6 @@ reference:
     - dataset
     - dataset_file
     - mae_dataset
-    - named_dataset
-    - raw_dataset
-    - relational_dataset
-    - relational_dataset_file
   - title: Delayed Dataset Connectors Constructors
     desc: For creating delayed dataset objects.
     contents:
@@ -69,14 +65,11 @@ reference:
     - dataset_connector_file
     - fun_cdisc_dataset_connector
     - fun_dataset_connector
-    - named_dataset_connector
     - python_cdisc_dataset_connector
     - python_dataset_connector
-    - raw_dataset_connector
     - rds_cdisc_dataset_connector
     - rds_dataset_connector
     - relational_data_connector
-    - relational_dataset_connector
     - rice_cdisc_dataset_connector
     - rice_dataset_connector
     - scda_cdisc_dataset_connector
@@ -103,7 +96,6 @@ reference:
     - cdisc_data_file
     - cdse_data
     - datasetdb_data
-    - named_dataset_file
     - rice_data
     - snowflake_data
     - teal_data
@@ -113,8 +105,6 @@ reference:
     desc: For loading and modifying delayed data objects.
     contents:
     - as_cdisc
-    - as_cdisc_relational
-    - as_relational
     - callable_code
     - callable_function
     - get_attrs
@@ -166,7 +156,6 @@ reference:
     - init_filter_states
     - join_key
     - join_keys
-    - keys
     - log_app_usage
     - no_selected_as_NULL
     - pdeparse
