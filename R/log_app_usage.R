@@ -104,9 +104,9 @@ line_usage_log <- function(...) {
 #' }
 line_pkg_log <- function(fields) {
   nest_packages <- c(
-    "test.nest", "utils.nest", "devtools.nest", "rtables",
+    "test.nest", "utils.nest", "rtables", "hermes", "teal.modules.hermes",
     "tern", "teal", "teal.devel", "teal.modules.general", "teal.modules.clinical",
-    "osprey", "teal.osprey", "goshawk", "teal.goshawk", "tlgdown")
+    "osprey", "teal.osprey", "goshawk", "teal.goshawk")
   pkg_desc <- utils::sessionInfo()$otherPkgs
   pkg_desc <- lapply(pkg_desc, function(x) if (x$Package %in% nest_packages) x[fields] else NULL)
   pkg_desc <- Filter(Negate(is.null), pkg_desc)
