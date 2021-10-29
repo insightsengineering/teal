@@ -21,6 +21,7 @@ NULL
 #' @importFrom digest digest
 #' @importFrom ggplot2 ggplot
 #' @importFrom grDevices rgb
+#' @importFrom lifecycle badge
 #' @importFrom MultiAssayExperiment MultiAssayExperiment
 #' @importFrom SummarizedExperiment colData
 NULL
