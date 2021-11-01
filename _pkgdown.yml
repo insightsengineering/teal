@@ -231,7 +231,6 @@ reference:
   - subtitle: Unexported Functions
     desc: These functions are useful for teal developers.
     contents:
-    - cast_to_list
     - check_in_range
     - check_in_subset
     - check_pkg_quietly
@@ -249,9 +248,7 @@ reference:
     - include_source_code
     - include_teal_css_js
     - label_to_id
-    - list_to_named_list
     - modules_depth
-    - named_list_to_dataset
     - picker_options
     - picker_options_content
     - pretty_code_string
@@ -259,8 +256,9 @@ reference:
     - srv_shiny_module_arguments
     - srv_tabs_with_filters
     - srv_teal
-    - topological_sort
     - text_to_call
+    - topological_sort
+    - to_relational_data
     - ui_nested_tabs
     - ui_tabs_with_filters
     - ui_teal

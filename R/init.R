@@ -135,15 +135,10 @@ init <- function(data,
                  footer = tags$p("Add Footer Here"),
                  id = character(0)) {
   if (!is(data, "RelationalData")) {
-    data_names_call <- substitute(data)
-    names_data <- deparse(data_names_call, width.cutoff = 500L)
-    data_list <- cast_to_list(data, names_data)
-
-    names_data_list <- names(data_list)
-    named_list <- list_to_named_list(data_list, names_data_list, data_names_call)
-    dataset_list <- named_list_to_dataset(named_list)
-
-    data <- do.call(teal_data, dataset_list)
+    data <- do.call(
+      what = to_relational_data,
+      args = list(data = substitute(data))
+    )
   }
 
   stopifnot(

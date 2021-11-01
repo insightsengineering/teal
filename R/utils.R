@@ -522,95 +522,106 @@ eval_expr_with_msg <- function(expr, env) {
           )
         }
       )
-
     }
   )
 }
 
-#' Cast data in input to list.
+#' S3 generic for \code{to_relational_data} function.
 #'
-#' @details wraps the data input as a list when necessary.
+#' Takes the input of data argument and translates them to relational data objects.
 #'
-#' @param data `RelationalData` or `list` or `data.frame`.
-#' @param names_data `character` of given names of data.
+#' @param data `RelationalData`, `Dataset`, `data.frame`, `list` or `function` returning a named list.
 #'
-#' @return list of `RelationalData` or `data.frame`.
+#' @return list of `RelationalData` objects
 #'
-cast_to_list <- function(data, names_data) {
-  if (is(data, "data.frame")) {
-    if (grepl("\\)$", names_data)) {
-      stop("Single data.frame shouldn't be provided as a result of a function call. Please name
-           the object first or use a named list.")
-    }
-    data <- list(data)
-    names(data) <- names_data
-    data
-  } else if (is(data, "Dataset") || is(data, "DatasetConnector")) {
-    list(data)
-  } else if (is(data, "list")) {
-    data
+to_relational_data <- function(data) {
+  UseMethod("to_relational_data")
+}
+
+#' data.frame input method for \code{\link{to_relational_data}}
+#'
+#' @inheritParams to_relational_data
+#'
+#' @seealso \code{\link{to_relational_data}}
+to_relational_data.data.frame <- function(data) {
+  dataname <- deparse(substitute(data), width.cutoff = 500L)
+  if (grepl("\\)$", dataname)) {
+    stop("Single data.frame shouldn't be provided as a result of a function call. Please name
+         the object first or use a named list.")
+  }
+
+  if (dataname %in% names(default_cdisc_keys)) {
+    cdisc_data(cdisc_dataset(dataname, data))
+  } else {
+    teal_data(dataset(dataname, data))
   }
 }
 
-#' Create a named list from a list.
+#' Dataset input method for \code{\link{to_relational_data}}
 #'
-#' @details takes the list output of `cast_to_list` and returns a named list.
+#' @inheritParams to_relational_data
 #'
-#' @param data_list `RelationalData` or `list` or `data.frame`.
-#' @param names_data_list `character` names of `data_list` input.
-#' @param data_names_call `call` output of `substitute` function of data.
-#'
-#' @return named list.
-#'
-list_to_named_list <- function(data_list, names_data_list, data_names_call) {
-  data_names_call <- if (is.name(data_names_call)) list(data_names_call) else data_names_call
+#' @seealso \code{\link{to_relational_data}}
+to_relational_data.Dataset <- function(data) {
+  dataname <- get_dataname(data)
 
-  if (length(data_names_call) > 1 && data_names_call[[1]] == "list") data_names_call[[1]] <- NULL
-
-  if (is(data_names_call, "call") &&
-      !grepl("dataset|Dataset", deparse(data_names_call)) &&
-      utils.nest::if_false(any(names_data_list == ""), length(names_data_list) != length(data_list))) {
-    stop("Unnamed lists shouldn't be provided as a result of a function call. Please use a named list.")
+  if (dataname %in% names(default_cdisc_keys)) {
+    cdisc_data(data)
+  } else {
+    teal_data(data)
   }
-
-  data_names_new <- unlist(lapply(seq_along(data_list), function(y) {
-    data_y <- list(data_list[[y]])
-    names_data_y <- names(data_list)[y]
-    if (is.null(names_data_y) || names_data_y == "") {
-      if (is(data_list[[y]], "data.frame")) {
-        as.character(data_names_call[[y]])[1]
-      } else if (is(data_list[[y]], "Dataset") || is(data_list[[y]], "DatasetConnector")){
-        get_dataname(data_list[[y]])
-      }
-    } else {
-      names_data_list[y]
-    }
-  }),
-  recursive = FALSE)
-  names(data_list) <- data_names_new
-  data_list
 }
 
-#' Wrap the contents of list in `cdisc_dataset` or `dataset`.
+#' DatasetConnector input method for \code{\link{to_relational_data}}
 #'
-#' @details Takes the output of `list_to_named_list` function and wraps the content in
-#' `cdisc_dataset` or `dataset` to return a list of `Dataset`.
-#' @param named_list `list` returned by `list_to_named_list` function.
+#' @inheritParams to_relational_data
 #'
-#' @return list of `Dataset`.
+#' @seealso \code{\link{to_relational_data}}
+to_relational_data.DatasetConnector <- function(data) {
+  to_relational_data.Dataset(data)
+}
+
+#' list input method for \code{\link{to_relational_data}}
 #'
-named_list_to_dataset <- function(named_list) {
-  data <- lapply(seq_along(named_list), function(y) {
-    if(is(named_list[[y]], "Dataset") || is(named_list[[y]], "DatasetConnector")) {
-      named_list[[y]]
-    } else if (is(named_list[[y]], "data.frame")) {
-      if (names(named_list)[y] %in% names(default_cdisc_keys)) {
-        cdisc_dataset(dataname = names(named_list)[y], x = named_list[[y]])
-      } else {
-        dataset(dataname = names(named_list)[y], x = named_list[[y]])
+#' @inheritParams to_relational_data
+#'
+#' @seealso \code{\link{to_relational_data}}
+to_relational_data.list <- function(data) {
+  call <- substitute(data)
+  list_names <- names(data)
+  parsed_names <- as.character(call)[-1]
+
+  if (
+    (is_empty(list_names) && is_empty(parsed_names)) ||
+    (any(list_names == "") && is_empty(parsed_names))
+  ) {
+    stop("Unnamed lists shouldn't be provided as input for data. Please use a named list.")
+  }
+
+  datasets_list <- lapply(
+    seq_along(data),
+    function(idx) {
+      if (is.data.frame(data[[idx]])) {
+        dataname <- if (is_empty(list_names) || list_names[[idx]] == "") {
+          parsed_names[[idx]]
+        } else {
+          list_names[[idx]]
+        }
+
+        if (dataname %in% names(default_cdisc_keys)) {
+          cdisc_dataset(dataname, data[[idx]])
+        } else {
+          dataset(dataname, data[[idx]])
+        }
+      } else if (is(data[[idx]], "Dataset") || is(data[[idx]], "DatasetConnector")) {
+        data[[idx]]
       }
-    } else {
-      stop("Dataset and data.frame inputs are only supported for data.")
     }
-  })
+  )
+
+  if (any(sapply(datasets_list, function(x) is(x, "CDISCData")))) {
+    do.call("cdisc_data", args = datasets_list)
+  } else {
+    do.call("teal_data", args = datasets_list)
+  }
 }
