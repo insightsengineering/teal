@@ -16,8 +16,8 @@
 #' When deciding what to use (either argument, an R option or system variable), the function
 #' picks the first non `NULL` value, checking in order:
 #' 1. Function argument.
-#' 2. R option.
-#' 3. System variable.
+#' 2. System variable.
+#' 3. R option.
 #'
 #' The logs are output to `stdout` by default. Check `logger` for more information
 #' about layouts and how to use `logger`.
@@ -40,14 +40,14 @@
 #' }
 #'
 register_logger <- function(namespace = NA_character_,
-                            teal_log_layout = getOption("teal.log_layout"),
-                            teal_log_level = getOption("teal.log_level")) {
+                            teal_log_layout = NULL,
+                            teal_log_level = NULL) {
   if (!((is.character(namespace) && length(namespace) == 1) || is.na(namespace))) {
     stop("namespace argument to register_logger must be a scalar character or NA.")
   }
 
-  if (is.null(teal_log_level)) teal_log_level <- getOption("teal.log_level")
   if (is.null(teal_log_level)) teal_log_level <- Sys.getenv("TEAL.LOG_LEVEL")
+  if (is.null(teal_log_level) || teal_log_level == "") teal_log_level <- getOption("teal.log_level")
   tryCatch(
     logger::log_threshold(teal_log_level, namespace = namespace),
     error = function(condition) {
@@ -59,8 +59,8 @@ register_logger <- function(namespace = NA_character_,
     }
   )
 
-  if (is.null(teal_log_layout)) teal_log_layout <- getOption("teal.log_layout")
   if (is.null(teal_log_layout)) teal_log_layout <- Sys.getenv("TEAL.LOG_LAYOUT")
+  if (is.null(teal_log_layout) || teal_log_layout == "") teal_log_layout <- getOption("teal.log_layout")
   tryCatch({
     logger::log_layout(logger::layout_glue_generator(teal_log_layout), namespace = namespace)
     logger::log_appender(logger::appender_file(nullfile()), namespace = namespace)

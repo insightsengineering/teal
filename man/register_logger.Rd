@@ -6,8 +6,8 @@
 \usage{
 register_logger(
   namespace = NA_character_,
-  teal_log_layout = getOption("teal.log_layout"),
-  teal_log_level = getOption("teal.log_level")
+  teal_log_layout = NULL,
+  teal_log_level = NULL
 )
 }
 \arguments{
@@ -45,8 +45,8 @@ When deciding what to use (either argument, an R option or system variable), the
 picks the first non \code{NULL} value, checking in order:
 \enumerate{
 \item Function argument.
-\item R option.
 \item System variable.
+\item R option.
 }
 
 The logs are output to \code{stdout} by default. Check \code{logger} for more information
