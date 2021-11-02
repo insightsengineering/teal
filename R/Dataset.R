@@ -448,7 +448,11 @@ Dataset <- R6::R6Class( # nolint
 
       new_set <- private$execute_code(
         code = self$get_code_class(),
-        vars = c(private$vars, setNames(list(self), self$get_dataname()))
+        vars = c(
+          list(), # list() in the beginning to ensure c.list
+          private$vars,
+          setNames(list(self), self$get_dataname())
+        )
       )
 
       res_check <- tryCatch({
@@ -523,6 +527,7 @@ Dataset <- R6::R6Class( # nolint
       new_df <- private$execute_code(
         code = private$mutate_list_to_code_class(),
         vars = c(
+          list(), # list() in the beginning to ensure c.list
           private$vars,
           # if they have the same name, then they are guaranteed to be identical objects.
           private$mutate_vars[!names(private$mutate_vars) %in% names(private$vars)],
@@ -598,7 +603,7 @@ Dataset <- R6::R6Class( # nolint
 
     is_any_dependency_delayed = function(vars = list()) {
       any(vapply(
-        c(private$var_r6, vars),
+        c(list(), private$var_r6, vars),
         FUN = function(var) {
           if (is(var, "DatasetConnector")) {
             !var$is_pulled() || var$is_mutate_delayed()
@@ -620,7 +625,7 @@ Dataset <- R6::R6Class( # nolint
       stopifnot(is_logical_single(override))
       stopifnot(is_fully_named_list(vars))
 
-      total_vars <- c(private$vars, private$mutate_vars)
+      total_vars <- c(list(), private$vars, private$mutate_vars)
 
       if (length(vars) > 0) {
         # not allowing overriding variable names
@@ -715,7 +720,7 @@ Dataset <- R6::R6Class( # nolint
       stopifnot(is_fully_named_list(vars))
       for (var in vars) {
         if (is(var, "DatasetConnector") || is(var, "Dataset")) {
-          for (var_dep in c(var, var$get_var_r6())) {
+          for (var_dep in c(list(), var, var$get_var_r6())) {
             if (identical(self, var_dep)) {
               stop("Circular dependencies detected")
             }

@@ -289,21 +289,14 @@ DatasetConnector <- R6::R6Class( #nolint
     #'
     #' @return (`self`) if successful.
     pull = function(args = NULL, try = FALSE) {
-      data <- if (self$is_pulled()) {
-        self$get_raw_data()
-      } else {
-        private$pull_internal(args = args, try = try)
-      }
+      data <- private$pull_internal(args = args, try = try)
 
       if (!self$is_failed()) {
         # The first time object is pulled, private$dataset may be NULL if mutate method was never called
         has_dataset <- !is.null(private$dataset)
         if (has_dataset) {
-          code_in_dataset <- private$dataset$get_mutate_code_class(nodeps = TRUE)
+          code_in_dataset <- private$dataset$get_code_class(nodeps = TRUE)
           vars_in_dataset <- private$dataset$get_vars()
-          pull_code <- private$dataset$get_code_class(nodeps = TRUE, nomutate = TRUE)
-        } else {
-          pull_code <- private$get_pull_code_class()
         }
 
         private$dataset <- dataset(
@@ -311,7 +304,7 @@ DatasetConnector <- R6::R6Class( #nolint
           x = data,
           keys = character(0), # keys need to be set after mutate
           label = self$get_dataset_label(),
-          code = pull_code
+          code = private$get_pull_code_class()
         )
 
         if (has_dataset) {
