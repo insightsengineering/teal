@@ -1,6 +1,11 @@
 name: gitleaks
 
-on: [push, pull_request]
+on:
+  push:
+    branches:
+      - main
+      - pre-release
+  pull_request:
 
 jobs:
   gitleaks:
