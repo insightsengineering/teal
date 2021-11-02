@@ -18,7 +18,10 @@
   assign("default_cdisc_keys", default_cdisc_keys, envir = parent.env(environment()))
 
   # Set up the teal logger instance
-  options(teal_logging_layout = "{format(time, \"%Y-%m-%d %H:%M:%OS4\")} pid:{pid} {ans} fun:{fn} [{level}] {msg}")
+  options(
+    teal.log_layout = "{format(time, \"%Y-%m-%d %H:%M:%OS4\")} pid:{pid} {ans} fun:{fn} [{level}] {msg}",
+    teal.log_level = logger::INFO
+  )
   register_logger("teal")
 
   invisible()

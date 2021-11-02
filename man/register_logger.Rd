@@ -4,10 +4,20 @@
 \alias{register_logger}
 \title{Registers a logger instance in a given logging namespace.}
 \usage{
-register_logger(namespace = NA_character_)
+register_logger(
+  namespace = NA_character_,
+  teal_log_layout = getOption("teal.log_layout"),
+  teal_log_level = getOption("teal.log_level")
+)
 }
 \arguments{
-\item{namespace}{(\code{character} or \code{NA}) the name of the logging namespace}
+\item{namespace}{(\code{character(1)} or \code{NA}) the name of the logging namespace}
+
+\item{teal_log_layout}{(\code{character(1)}) the log layout}
+
+\item{teal_log_level}{(\code{character(1)} or \code{call}) the log level. Can be passed as
+character or one of the \code{logger}'s objects.
+See \code{\link[logger:log_threshold]{logger::log_threshold}} for more information.}
 }
 \value{
 \code{invisible(NULL)}
@@ -17,9 +27,28 @@ Registers a logger instance in a given logging namespace.
 }
 \details{
 Creates a new logging namespace specified by the \code{namespace} argument.
-Sets the logging level to \code{logger::INFO} and updates the logging layout.
-Uses \code{getOption(teal_logging_layout)} to determine the layout of logs and
-passes it to \code{\link[logger:layout_glue_generator]{logger::layout_glue_generator}}.
+Uses a few R options:
+\itemize{
+\item \code{options(teal.log_layout)}, which is passed to
+\code{\link[logger:layout_glue_generator]{logger::layout_glue_generator}},
+\item \code{options(teal.log_level)}, which is passed to
+\code{\link[logger:log_threshold]{logger::log_threshold}}.
+}
+
+These options can also be set as system environment variables, respectively:
+\itemize{
+\item \code{teal.log_layout} as \code{TEAL.LOG_LAYOUT},
+\item \code{teal.log_level} as \code{TEAL.LOG_LAYOUT}.
+}
+
+When deciding what to use (either argument, an R option or system variable), the function
+picks the first non \code{NULL} value, checking in order:
+\enumerate{
+\item Function argument.
+\item R option.
+\item System variable.
+}
+
 The logs are output to \code{stdout} by default. Check \code{logger} for more information
 about layouts and how to use \code{logger}.
 }
@@ -27,9 +56,11 @@ about layouts and how to use \code{logger}.
 It's a thin wrapper around the \code{logger} package.
 }
 \examples{
+options(teal.log_layout = "{msg}")
+options(teal.log_level = logger::INFO)
 register_logger(namespace = "new_namespace")
 \dontrun{
-logger::log_info("Hello from new_namespace")
+logger::log_info("Hello from new_namespace", namespace = "new_namespace")
 }
 
 }

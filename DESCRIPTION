@@ -116,6 +116,7 @@ Collate:
     'is_pulled.R'
     'load_dataset.R'
     'log_app_usage.R'
+    'logging.R'
     'module_nested_tabs.R'
     'module_tabs_with_filters.R'
     'module_teal.R'

@@ -3,36 +3,77 @@
 #' @note It's a thin wrapper around the `logger` package.
 #'
 #' @details Creates a new logging namespace specified by the `namespace` argument.
-#' Sets the logging level to `logger::INFO` and updates the logging layout.
-#' Uses `getOption(teal_logging_layout)` to determine the layout of logs and
-#' passes it to \code{\link[logger:layout_glue_generator]{logger::layout_glue_generator}}.
+#' Uses a few R options:
+#' * `options(teal.log_layout)`, which is passed to
+#' \code{\link[logger:layout_glue_generator]{logger::layout_glue_generator}},
+#' * `options(teal.log_level)`, which is passed to
+#' \code{\link[logger:log_threshold]{logger::log_threshold}}.
+#'
+#' These options can also be set as system environment variables, respectively:
+#' * `teal.log_layout` as `TEAL.LOG_LAYOUT`,
+#' * `teal.log_level` as `TEAL.LOG_LAYOUT`.
+#'
+#' When deciding what to use (either argument, an R option or system variable), the function
+#' picks the first non `NULL` value, checking in order:
+#' 1. Function argument.
+#' 2. R option.
+#' 3. System variable.
+#'
 #' The logs are output to `stdout` by default. Check `logger` for more information
 #' about layouts and how to use `logger`.
 #'
-#' @param namespace (`character` or `NA`) the name of the logging namespace
+#' @param namespace (`character(1)` or `NA`) the name of the logging namespace
+#' @param teal_log_layout (`character(1)`) the log layout
+#' @param teal_log_level (`character(1)` or `call`) the log level. Can be passed as
+#'   character or one of the `logger`'s objects.
+#'   See \code{\link[logger:log_threshold]{logger::log_threshold}} for more information.
 #'
 #' @return `invisible(NULL)`
 #' @export
 #'
 #' @examples
+#' options(teal.log_layout = "{msg}")
+#' options(teal.log_level = logger::INFO)
 #' register_logger(namespace = "new_namespace")
 #' \dontrun{
-#' logger::log_info("Hello from new_namespace")
+#' logger::log_info("Hello from new_namespace", namespace = "new_namespace")
 #' }
 #'
-register_logger <- function(namespace = NA_character_) {
+register_logger <- function(namespace = NA_character_,
+                            teal_log_layout = getOption("teal.log_layout"),
+                            teal_log_level = getOption("teal.log_level")) {
   if (!((is.character(namespace) && length(namespace) == 1) || is.na(namespace))) {
     stop("namespace argument to register_logger must be a scalar character or NA.")
   }
-  logger::log_threshold(logger::INFO, namespace = namespace)
+
+  if (is.null(teal_log_level)) teal_log_level <- getOption("teal.log_level")
+  if (is.null(teal_log_level)) teal_log_level <- Sys.getenv("TEAL.LOG_LEVEL")
+  tryCatch(
+    logger::log_threshold(teal_log_level, namespace = namespace),
+    error = function(condition) {
+      stop(paste(
+        "The log level passed to logger::log_threshold was invalid.",
+        "Make sure you pass or set the correct log level.",
+        "See `logger::log_threshold` for more information"
+      ))
+    }
+  )
+
+  if (is.null(teal_log_layout)) teal_log_layout <- getOption("teal.log_layout")
+  if (is.null(teal_log_layout)) teal_log_layout <- Sys.getenv("TEAL.LOG_LAYOUT")
   tryCatch({
-    logger::log_layout(logger::layout_glue_generator(getOption("teal_logging_layout")), namespace = namespace)
+    logger::log_layout(logger::layout_glue_generator(teal_log_layout), namespace = namespace)
     logger::log_appender(logger::appender_file(nullfile()), namespace = namespace)
     logger::log_success("Set up the logger", namespace = namespace)
     logger::log_appender(logger::appender_stdout, namespace = namespace)
   },
-    error = function(condition)
-      stop("Error setting the layout of the logger. Check that the layout is correct in `getOption(teal_logging_layout)`.")
+    error = function(condition) {
+      stop(paste(
+        "Error setting the layout of the logger.",
+        "Make sure you pass or set the correct log layout.",
+        "See `logger::teal_log_layout` for more information."
+      ))
+    }
   )
 
   invisible(NULL)
@@ -45,28 +86,26 @@ register_logger <- function(namespace = NA_character_) {
 #' @noRd
 #'
 log_system_info <- function() {
-  info <- sessionInfo()
+  paste_pkgs_name_with_version <- function(names) {
+    vapply(
+      names,
+      function(name) paste(name, utils::packageVersion(name)),
+      FUN.VALUE = character(1),
+      USE.NAMES = FALSE
+    )
+  }
+
+  info <- utils::sessionInfo()
 
   logger::log_trace("Platform: { info$platform }")
   logger::log_trace("Running under: { info$running }")
   logger::log_trace("{ info$R.version$version.string }")
   logger::log_trace("Base packages: { paste(info$basePkgs, collapse = ' ') }")
 
-  # Paste package names and descriptions
+  # Paste package names and versions
   pasted_names_and_versions <- paste(paste_pkgs_name_with_version(names(info$otherPkgs)), collapse = ", ")
   logger::log_trace("Other attached packages: { pasted_names_and_versions }")
 
   pasted_names_and_versions <- paste(paste_pkgs_name_with_version(names(info$loadedOnly)), collapse = ", ")
   logger::log_trace("Loaded packages: { pasted_names_and_versions }")
-}
-
-#' @noRd
-#'
-paste_pkgs_name_with_version <- function(names) {
-  vapply(
-    names,
-    function(name) paste(name, packageVersion(name)),
-    FUN.VALUE = character(1),
-    USE.NAMES = FALSE
-  )
 }
