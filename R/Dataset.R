@@ -340,13 +340,18 @@ Dataset <- R6::R6Class( # nolint
     #' Get internal \code{CodeClass} object
     #'
     #' @return `\code{CodeClass}`
-    get_code_class = function() {
+    get_code_class = function(nodeps = FALSE, nomutate = FALSE) {
       res <- CodeClass$new()
       # precise order matters
-      res$append(list_to_code_class(private$vars))
-      res$append(list_to_code_class(private$mutate_vars))
+      if (!nodeps) {
+        res$append(list_to_code_class(private$vars))
+        res$append(list_to_code_class(private$mutate_vars))
+      }
       res$append(private$code)
-      res$append(private$mutate_list_to_code_class())
+      if (!nomutate) {
+        res$append(private$mutate_list_to_code_class())
+      }
+
 
       return(res)
     },
@@ -532,6 +537,7 @@ Dataset <- R6::R6Class( # nolint
       self$set_vars(private$mutate_vars)
       private$mutate_code <- list()
       private$mutate_vars <- list()
+
 
       # dataset is recreated by replacing data by mutated object
       # mutation code is added to the code which replicates the data

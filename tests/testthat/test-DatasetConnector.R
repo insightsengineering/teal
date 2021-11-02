@@ -828,6 +828,7 @@ testthat::test_that("DatasetConnector mutate method with delayed logic", {
   )
 
   # load_dataset, which calls pull method, will reset to original state because dependencies have changed
+  # todo: it should pull again and execute the whole (combined) code - containing only test_dc elements
   load_dataset(t_dc)
 
   testthat::expect_true(t_dc$is_mutate_delayed())
@@ -835,7 +836,7 @@ testthat::test_that("DatasetConnector mutate method with delayed logic", {
   testthat::expect_true(all(names(get_raw_data(t_dc)) %in% c("head_letters")))
   # still it must return code from all previously inputted mutate statements
   testthat::expect_true(
-    "test_dc$seven <- 7" %in% pretty_code_string(t_dc$get_code()),
+    "test_dc$seven <- 7" %in% pretty_code_string(t_dc$get_code())
   )
 
   # confirming that mutation has not happened
