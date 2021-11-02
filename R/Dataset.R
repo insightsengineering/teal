@@ -299,10 +299,11 @@ Dataset <- R6::R6Class( # nolint
     #' Adds variables which code depends on
     #'
     #' @param vars (`named list`) contains any R object which code depends on
+    #' @param is_mutate_vars (`logical(1)`) whether this var is used in mutate code
     #' @param override (`logical(1)`) whether variable should be reassigned
     #' @return (`self`) invisibly for chaining
-    set_vars = function(vars, override = FALSE) {
-      private$set_vars_internal(vars, is_mutate_vars = FALSE)
+    set_vars = function(vars, is_mutate_vars = FALSE, override = FALSE) {
+      private$set_vars_internal(vars, is_mutate_vars = is_mutate_vars, override = override)
       return(invisible(NULL))
     },
     #' @description
@@ -353,9 +354,11 @@ Dataset <- R6::R6Class( # nolint
     #' Get internal \code{CodeClass} object
     #'
     #' @return `\code{CodeClass}`
-    get_mutate_code_class = function() {
+    get_mutate_code_class = function(nodeps = FALSE) {
       res <- CodeClass$new()
-      res$append(list_to_code_class(private$mutate_vars))
+      if (!nodeps) {
+        res$append(list_to_code_class(private$mutate_vars))
+      }
       res$append(private$mutate_list_to_code_class())
 
       return(res)
@@ -592,7 +595,7 @@ Dataset <- R6::R6Class( # nolint
         c(private$var_r6, vars),
         FUN = function(var) {
           if (is(var, "DatasetConnector")) {
-            (! var$is_pulled()) || var$is_mutate_delayed()
+            !var$is_pulled() || var$is_mutate_delayed()
           } else if (is(var, "Dataset")) {
             var$is_mutate_delayed()
           } else {
@@ -608,6 +611,7 @@ Dataset <- R6::R6Class( # nolint
     #' param is_mutate_vars (`logical(1)`) whether this var is used in mutate code
     #' param override (`logical(1)`) whether variable should be reassigned
     set_vars_internal = function(vars, is_mutate_vars = FALSE, override = FALSE) {
+      stopifnot(is_logical_single(override))
       stopifnot(is_fully_named_list(vars))
 
       total_vars <- c(private$vars, private$mutate_vars)
@@ -621,18 +625,18 @@ Dataset <- R6::R6Class( # nolint
           },
           FUN.VALUE = logical(1)
         )]
-        if (length(over_rides) > 0) {
+        if (!override && length(over_rides) > 0) {
           stop(paste("Variable name(s) already used:", paste(over_rides, collapse = ", ")))
         }
         if (is_mutate_vars) {
           private$mutate_vars <- c(
-            list(), # to ensure c.list - to avoid c.Dataset from CDSE
+            list(), # to ensure c.list - to avoid c.Dataset
             private$mutate_vars[!names(private$mutate_vars) %in% names(vars)],
             vars
           )
         } else {
           private$vars <- c(
-            list(), # to ensure c.list - to avoid c.Dataset from CDSE,
+            list(), # to ensure c.list - to avoid c.Dataset,
             private$vars[!names(private$vars) %in% names(vars)],
             vars
           )

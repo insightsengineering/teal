@@ -68,7 +68,10 @@ DatasetConnector <- R6::R6Class( #nolint
 
       if (!is_empty(code)) {
         # just needs a dummy Dataset object to store mutate code, hence col = 1
-        private$dataset <- Dataset$new(dataname = self$get_dataname(), x = data.frame(col = 1))
+        private$dataset <- Dataset$new(
+          dataname = self$get_dataname(),
+          x = data.frame(col = 1)
+        )
         private$dataset$mutate(code = code, vars = vars, force_delay = TRUE)
       }
 
@@ -149,7 +152,6 @@ DatasetConnector <- R6::R6Class( #nolint
     #' @return `\code{CodeClass}`
     get_code_class = function() {
       code_class <- CodeClass$new()
-
       pull_code_class <- private$get_pull_code_class()
       code_class$append(pull_code_class)
 
@@ -292,9 +294,11 @@ DatasetConnector <- R6::R6Class( #nolint
         # The first time object is pulled, private$dataset may be NULL if mutate method was never called
         has_dataset <- !is.null(private$dataset)
         if (has_dataset) {
-          code_in_dataset <- private$dataset$get_code_class()
+          browser()
+          code_in_dataset <- private$dataset$get_mutate_code_class(nodeps = TRUE)
           vars_in_dataset <- private$dataset$get_vars()
         }
+
         private$dataset <- dataset(
           dataname = self$get_dataname(),
           x = data,
@@ -620,12 +624,17 @@ DatasetConnector <- R6::R6Class( #nolint
       stopifnot(is_fully_named_list(vars))
       for (var in vars) {
         if (is(var, "DatasetConnector") || is(var, "Dataset")) {
-          for (var_dep in c(var, var$get_var_r6())) {
+          for (var_dep in c(list(), var, var$get_var_r6())) {
             if (identical(self, var_dep)) {
               stop("Circular dependencies detected")
             }
           }
-          private$var_r6 <- c(private$var_r6, var, var$get_var_r6())
+          private$var_r6 <- c(
+            list(), # to ensure c.list - to avoid c.Dataset from CDSE
+            private$var_r6,
+            var,
+            var$get_var_r6()
+          )
         }
       }
       return(invisible(self))

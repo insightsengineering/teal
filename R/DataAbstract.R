@@ -62,7 +62,6 @@ DataAbstract <- R6::R6Class( #nolint
     #' delayed and can be evaluated using this method.
     execute_mutate = function() {
       # this will be pulled already! - not needed?
-      browser()
       if (is_empty(private$mutate_code$code)) {
         res <- ulapply(
           private$datasets,
@@ -351,33 +350,43 @@ DataAbstract <- R6::R6Class( #nolint
 
 
     #' Reassign vars
-    reasign_datasets_vars = function() {
+    reassign_datasets_vars = function() {
       for (dataset in self$get_items()) {
         if (is(dataset, "Dataset")) {
           pull_vars <- dataset$.__enclos_env__$private$vars
           mutate_vars <- dataset$.__enclos_env__$private$mutate_vars
-          if (length(pull_vars) > 0) {
 
-            self$set_vars(
-              self$get_datasets()[names(pull_vars)],
+          if (length(pull_vars) > 0) {
+            dataset$set_vars(
+              self$get_items()[names(pull_vars)],
               is_mutate_vars = FALSE,
               override = TRUE
             )
           }
           if (length(mutate_vars) > 0) {
-            self$set_vars(
-              self$get_datasets()[names(mutate_vars)],
+            dataset$set_vars(
+              self$get_items()[names(mutate_vars)],
               is_mutate_vars = TRUE,
               override = TRUE
             )
-
-
           }
         } else if (is(dataset, "DatasetConnector")) {
-          pull_vars <- dataset$.__enclos_env__$private$pull_vars
+          dataset_in_connector <- dataset$.__enclos_env__$private$dataset
+          pull_vars <- dataset_in_connector$.__enclos_env__$private$vars
+          mutate_vars <- dataset_in_connector$.__enclos_env__$private$mutate_vars
+
           if (length(pull_vars) > 0) {
-            self$set_pull_vars(
-              self$get_datasets()[names(pull_vars)]
+            dataset_in_connector$set_vars(
+              self$get_items()[names(pull_vars)],
+              is_mutate_vars = FALSE,
+              override = TRUE
+            )
+          }
+          if (length(mutate_vars) > 0) {
+            dataset_in_connector$set_vars(
+              self$get_items()[names(mutate_vars)],
+              is_mutate_vars = TRUE,
+              override = TRUE
             )
           }
         }

@@ -147,7 +147,7 @@ init <- function(data,
     server = function(input, output, session) {
       # copy object so that load won't be shared between the session
       data <- data$clone(deep = TRUE)
-      data$reasign_datasets_vars()
+      data$reassign_datasets_vars()
 
       srv_teal_with_splash(
         input, output, session,
