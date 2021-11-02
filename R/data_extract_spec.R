@@ -26,7 +26,9 @@
 #' @param filter (`NULL` or `filter_spec` or its respective delayed version)
 #'  Setup of the filtering of key columns inside the dataset.
 #'  This setup can be created using the \code{\link{filter_spec}} function.
-#'  Please note that both select and filter cannot be empty at the same time.
+#'  Please note that if both select and filter are set to NULL, then the result will be a filter spec UI with all
+#'  variables as possible choices. This is the most sensible default option because a filter spec can function as a
+#'  select spec as well.
 #' @param reshape (\code{logical}) whether reshape long to wide. Note that it will be used only in case of long dataset
 #'  with multiple keys selected in filter part.
 #'
@@ -125,7 +127,13 @@ data_extract_spec <- function(dataname, select = NULL, filter = NULL, reshape = 
     is_class_list("filter_spec")(filter)
   )
   stopifnot(is_logical_single(reshape))
-  stop_if_not(list(!is.null(select) || !is.null(filter), "Either select or filter should be not empty"))
+
+  if (is.null(select) && is.null(filter)) {
+    filter <- filter_spec(
+      vars = choices_selected(variable_choices(dataname)),
+      selected = all_choices()
+    )
+  }
 
   if (is(filter, "filter_spec")) filter <- list(filter)
 
