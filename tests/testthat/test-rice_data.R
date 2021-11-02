@@ -21,15 +21,15 @@ testthat::test_that("Single rice_data connector with two rice dataset connectors
   )
 
   testthat::expect_equal(
-    get_code(adsl_adlb, "ADSL"),
+    adsl_adlb$get_code("ADSL"),
     "rice::rice_session_open(password = askpass::askpass())\nADSL <- rice::rice_read(node = \"/path/to/ADSL\", prolong = TRUE)\nrice::rice_session_close(message = FALSE)" # nolint
   )
   testthat::expect_equal(
-    get_code(adsl_adlb, "ADLB"),
+    adsl_adlb$get_code("ADLB"),
     "rice::rice_session_open(password = askpass::askpass())\nADLB <- rice::rice_read(node = \"/path/to/ADLB\", prolong = TRUE)\nrice::rice_session_close(message = FALSE)" # nolint
   )
   testthat::expect_equal(
-    get_code(adsl_adlb),
+    adsl_adlb$get_code(),
     "rice::rice_session_open(password = askpass::askpass())\nADSL <- rice::rice_read(node = \"/path/to/ADSL\", prolong = TRUE)\nADLB <- rice::rice_read(node = \"/path/to/ADLB\", prolong = TRUE)\nrice::rice_session_close(message = FALSE)" # nolint
   )
 })
