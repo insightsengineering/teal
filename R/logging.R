@@ -1,7 +1,6 @@
 .log_depth <- 0
 
 # Teal Internally Used Logger functions
-
 #' @export
 .log <- function(..., sep = " ", type = "debug") {
   lifecycle::deprecate_soft(

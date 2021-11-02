@@ -232,7 +232,6 @@ reference:
   - subtitle: Unexported Functions
     desc: These functions are useful for teal developers.
     contents:
-    - .log
     - check_in_range
     - check_in_subset
     - check_pkg_quietly
