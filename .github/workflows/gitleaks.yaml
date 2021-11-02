@@ -15,8 +15,6 @@ jobs:
           GITLEAKS_VERSION=$(curl -s https://api.github.com/repos/zricethezav/gitleaks/releases/latest |  grep -oP '"tag_name": "\K(.*)(?=")') && wget https://github.com/zricethezav/gitleaks/releases/download/$GITLEAKS_VERSION/gitleaks-linux-amd64
           mv gitleaks-linux-amd64 gitleaks
           chmod +x gitleaks
-          ./gitleaks -v --path .
+          sudo mv gitleaks /usr/bin/
+          gitleaks -v --path . --no-git
         shell: bash
-
-      - name: gitleaks-action
-        uses: zricethezav/gitleaks-action@master
