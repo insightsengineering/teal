@@ -3,28 +3,30 @@
 #' @note It's a thin wrapper around the `logger` package.
 #'
 #' @details Creates a new logging namespace specified by the `namespace` argument.
-#' Uses a few R options:
-#' * `options(teal.log_layout)`, which is passed to
-#' \code{\link[logger:layout_glue_generator]{logger::layout_glue_generator}},
-#' * `options(teal.log_level)`, which is passed to
-#' \code{\link[logger:log_threshold]{logger::log_threshold}}.
-#'
-#' These options can also be set as system environment variables, respectively:
-#' * `teal.log_layout` as `TEAL.LOG_LAYOUT`,
-#' * `teal.log_level` as `TEAL.LOG_LAYOUT`.
-#'
+#' When the `layout` and `level` arguments are set to `NULL` (default), the functions
+#' gets the values for them from system variables or R options.
 #' When deciding what to use (either argument, an R option or system variable), the function
 #' picks the first non `NULL` value, checking in order:
 #' 1. Function argument.
 #' 2. System variable.
 #' 3. R option.
 #'
+#' The function uses the following R options:
+#' * `options(teal.log_layout)`, which is passed to
+#' \code{\link[logger:layout_glue_generator]{logger::layout_glue_generator}},
+#' * `options(teal.log_level)`, which is passed to
+#' \code{\link[logger:log_threshold]{logger::log_threshold}}.
+#'
+#' `layout` and `level` can also be set as system environment variables, respectively:
+#' * `teal.log_layout` as `TEAL.LOG_LAYOUT`,
+#' * `teal.log_level` as `TEAL.LOG_LAYOUT`.
+#'
 #' The logs are output to `stdout` by default. Check `logger` for more information
 #' about layouts and how to use `logger`.
 #'
 #' @param namespace (`character(1)` or `NA`) the name of the logging namespace
-#' @param teal_log_layout (`character(1)`) the log layout
-#' @param teal_log_level (`character(1)` or `call`) the log level. Can be passed as
+#' @param layout (`character(1)`) the log layout
+#' @param level (`character(1)` or `call`) the log level. Can be passed as
 #'   character or one of the `logger`'s objects.
 #'   See \code{\link[logger:log_threshold]{logger::log_threshold}} for more information.
 #'
@@ -40,16 +42,16 @@
 #' }
 #'
 register_logger <- function(namespace = NA_character_,
-                            teal_log_layout = NULL,
-                            teal_log_level = NULL) {
+                            layout = NULL,
+                            level = NULL) {
   if (!((is.character(namespace) && length(namespace) == 1) || is.na(namespace))) {
     stop("namespace argument to register_logger must be a scalar character or NA.")
   }
 
-  if (is.null(teal_log_level)) teal_log_level <- Sys.getenv("TEAL.LOG_LEVEL")
-  if (is.null(teal_log_level) || teal_log_level == "") teal_log_level <- getOption("teal.log_level")
+  if (is.null(level)) level <- Sys.getenv("TEAL.LOG_LEVEL")
+  if (is.null(level) || level == "") level <- getOption("teal.log_level")
   tryCatch(
-    logger::log_threshold(teal_log_level, namespace = namespace),
+    logger::log_threshold(level, namespace = namespace),
     error = function(condition) {
       stop(paste(
         "The log level passed to logger::log_threshold was invalid.",
@@ -59,10 +61,10 @@ register_logger <- function(namespace = NA_character_,
     }
   )
 
-  if (is.null(teal_log_layout)) teal_log_layout <- Sys.getenv("TEAL.LOG_LAYOUT")
-  if (is.null(teal_log_layout) || teal_log_layout == "") teal_log_layout <- getOption("teal.log_layout")
+  if (is.null(layout)) layout <- Sys.getenv("TEAL.LOG_LAYOUT")
+  if (is.null(layout) || layout == "") layout <- getOption("teal.log_layout")
   tryCatch({
-    logger::log_layout(logger::layout_glue_generator(teal_log_layout), namespace = namespace)
+    logger::log_layout(logger::layout_glue_generator(layout), namespace = namespace)
     logger::log_appender(logger::appender_file(nullfile()), namespace = namespace)
     logger::log_success("Set up the logger", namespace = namespace)
     logger::log_appender(logger::appender_stdout, namespace = namespace)
@@ -71,7 +73,7 @@ register_logger <- function(namespace = NA_character_,
       stop(paste(
         "Error setting the layout of the logger.",
         "Make sure you pass or set the correct log layout.",
-        "See `logger::teal_log_layout` for more information."
+        "See `logger::layout` for more information."
       ))
     }
   )

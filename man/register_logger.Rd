@@ -4,18 +4,14 @@
 \alias{register_logger}
 \title{Registers a logger instance in a given logging namespace.}
 \usage{
-register_logger(
-  namespace = NA_character_,
-  teal_log_layout = NULL,
-  teal_log_level = NULL
-)
+register_logger(namespace = NA_character_, layout = NULL, level = NULL)
 }
 \arguments{
 \item{namespace}{(\code{character(1)} or \code{NA}) the name of the logging namespace}
 
-\item{teal_log_layout}{(\code{character(1)}) the log layout}
+\item{layout}{(\code{character(1)}) the log layout}
 
-\item{teal_log_level}{(\code{character(1)} or \code{call}) the log level. Can be passed as
+\item{level}{(\code{character(1)} or \code{call}) the log level. Can be passed as
 character or one of the \code{logger}'s objects.
 See \code{\link[logger:log_threshold]{logger::log_threshold}} for more information.}
 }
@@ -27,7 +23,17 @@ Registers a logger instance in a given logging namespace.
 }
 \details{
 Creates a new logging namespace specified by the \code{namespace} argument.
-Uses a few R options:
+When the \code{layout} and \code{level} arguments are set to \code{NULL} (default), the functions
+gets the values for them from system variables or R options.
+When deciding what to use (either argument, an R option or system variable), the function
+picks the first non \code{NULL} value, checking in order:
+\enumerate{
+\item Function argument.
+\item System variable.
+\item R option.
+}
+
+The function uses the following R options:
 \itemize{
 \item \code{options(teal.log_layout)}, which is passed to
 \code{\link[logger:layout_glue_generator]{logger::layout_glue_generator}},
@@ -35,18 +41,10 @@ Uses a few R options:
 \code{\link[logger:log_threshold]{logger::log_threshold}}.
 }
 
-These options can also be set as system environment variables, respectively:
+\code{layout} and \code{level} can also be set as system environment variables, respectively:
 \itemize{
 \item \code{teal.log_layout} as \code{TEAL.LOG_LAYOUT},
 \item \code{teal.log_level} as \code{TEAL.LOG_LAYOUT}.
-}
-
-When deciding what to use (either argument, an R option or system variable), the function
-picks the first non \code{NULL} value, checking in order:
-\enumerate{
-\item Function argument.
-\item System variable.
-\item R option.
 }
 
 The logs are output to \code{stdout} by default. Check \code{logger} for more information

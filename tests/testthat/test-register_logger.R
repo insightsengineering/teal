@@ -21,7 +21,7 @@ testthat::test_that("register_logger throws an error when setting the logger lay
 
 testthat::test_that("register_logger throws an error if the passed log level is invalid", {
   testthat::expect_error(
-    register_logger("test", teal_log_level = "WRONG level"),
+    register_logger("test", level = "WRONG level"),
     regexp = "The log level passed to logger::log_threshold was invalid"
   )
 })
@@ -39,14 +39,14 @@ testthat::test_that("An additional logging namespace is created after register_l
 testthat::test_that("register_logger does not throw if passed a correct logger layout", {
   withr::with_options(
     new = list(teal.log_level = logger::INFO),
-    code = testthat::expect_error(register_logger(namespace = "test", teal_log_layout = "{msg}"), NA)
+    code = testthat::expect_error(register_logger(namespace = "test", layout = "{msg}"), NA)
   )
 })
 
 testthat::test_that("register_logger does not throw if passed a correct logger level", {
     withr::with_options(
     new = list(teal.log_layout = "{msg}"),
-    code = testthat::expect_error(register_logger(namespace = "test", teal_log_level = logger::INFO), NA)
+    code = testthat::expect_error(register_logger(namespace = "test", level = logger::INFO), NA)
   )
 })
 
@@ -55,7 +55,7 @@ testthat::test_that("register_logger does not throw if passed NULL to either log
     withr::with_options(
       new = list(teal.log_layout = "{msg}", teal.log_level = logger::INFO),
       code = testthat::expect_error(
-        register_logger(namespace = "test", teal_log_level = NULL, teal_log_layout = NULL),
+        register_logger(namespace = "test", level = NULL, layout = NULL),
         NA
       )
     )
@@ -65,7 +65,7 @@ testthat::test_that("register_logger does not throw if passed NULL to arguments,
   the system variables are set to valid value", {
   withr::local_envvar(.new = list(TEAL.LOG_LAYOUT = "{msg}", TEAL.LOG_LEVEL = "INFO"))
   withr::local_options(.new = list(teal.log_layout = NULL, teal.log_level = NULL))
-  testthat::expect_error(register_logger(namespace = "test", teal_log_layout = NULL, teal_log_level = NULL), NA)
+  testthat::expect_error(register_logger(namespace = "test", layout = NULL, level = NULL), NA)
 })
 
 testthat::test_that("log_system_info does not throw an error", {
