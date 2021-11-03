@@ -350,7 +350,7 @@ has \code{code} set already.}
 Reassign \code{vars} in \code{Dataset} and \code{DatasetConnector} objects
 to keep the valid reference after deep cloning
 For example if \code{DatasetConnector} has a dependency on some \code{Dataset}, this
-\code{Dataset} is reasigned inside of \code{DatasetConnector}.
+\code{Dataset} is reassigned inside of \code{DatasetConnector}.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{DataAbstract$reassign_datasets_vars()}\if{html}{\out{</div>}}
 }

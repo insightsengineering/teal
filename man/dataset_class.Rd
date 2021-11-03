@@ -622,7 +622,7 @@ Get internal \code{CodeClass} object
 \if{html}{\out{<div class="arguments">}}
 \describe{
 \item{\code{nodeps}}{(\code{logical(1)}) whether \code{CodeClass} should not contain the code
-of the dependendent \code{vars}
+of the dependent \code{vars}
 the \code{mutate}}
 }
 \if{html}{\out{</div>}}

@@ -353,7 +353,7 @@ DataAbstract <- R6::R6Class( #nolint
     #' Reassign `vars` in `Dataset` and `DatasetConnector` objects
     #' to keep the valid reference after deep cloning
     #' For example if `DatasetConnector` has a dependency on some `Dataset`, this
-    #' `Dataset` is reasigned inside of `DatasetConnector`.
+    #' `Dataset` is reassigned inside of `DatasetConnector`.
     reassign_datasets_vars = function() {
       for (dataset in self$get_items()) {
         if (is(dataset, "Dataset")) {

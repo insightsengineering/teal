@@ -346,7 +346,7 @@ Dataset <- R6::R6Class( # nolint
     #' @description
     #' Get internal \code{CodeClass} object
     #' @param nodeps (`logical(1)`) whether `CodeClass` should not contain the code
-    #' of the dependendent `vars`
+    #' of the dependent `vars`
     #' the `mutate`
     #' @return `\code{CodeClass}`
     get_code_class = function(nodeps = FALSE) {
