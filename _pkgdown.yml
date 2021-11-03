@@ -227,6 +227,11 @@ reference:
     - RelationalDataConnector
     - SEFilterStates
     - srv_teal_with_splash
+    - to_relational_data
+    - to_relational_data.Dataset
+    - to_relational_data.DatasetConnector
+    - to_relational_data.data.frame
+    - to_relational_data.list
     - ui_teal_with_splash
   - subtitle: Unexported Functions
     desc: These functions are useful for teal developers.
@@ -258,10 +263,6 @@ reference:
     - srv_teal
     - text_to_call
     - topological_sort
-    - to_relational_data.Dataset
-    - to_relational_data.DatasetConnector
-    - to_relational_data.data.frame
-    - to_relational_data.list
     - ui_nested_tabs
     - ui_tabs_with_filters
     - ui_teal

@@ -90,7 +90,7 @@ test_that("to_relational_data accepts a mixed named list of objects as input", {
 })
 
 test_that("to_relational_data accepts a function returning a named list as input", {
-  fun <- function() {list(AA = adsl_df, BB = adsl_df)}
+  fun <- function() list(AA = adsl_df, BB = adsl_df)
 
   output_dataset_fun <- to_relational_data(fun(), substitute(fun()))
   testthat::expect_error(output_dataset_fun, NA)
@@ -99,7 +99,7 @@ test_that("to_relational_data accepts a function returning a named list as input
 })
 
 test_that("to_relational_data accepts a function returning a Dataset as input", {
-  fun <- function() {cdisc_dataset("ADSL", adsl_df)}
+  fun <- function() cdisc_dataset("ADSL", adsl_df)
 
   output_dataset_fun <- to_relational_data(fun(), substitute(fun()))
   testthat::expect_error(output_dataset_fun, NA)

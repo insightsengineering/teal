@@ -1,7 +1,7 @@
-dataset_1 = Dataset$new("iris", head(iris))
-adsl_df = as.data.frame(as.list(setNames(nm = get_cdisc_keys("ADSL"))))
-adsl_dataset = CDISCDataset$new("ADSL", adsl_df, parent = character(0), keys = get_cdisc_keys("ADSL"))
-mods = teal:::get_dummy_modules()
+dataset_1 <- Dataset$new("iris", head(iris))
+adsl_df <- as.data.frame(as.list(setNames(nm = get_cdisc_keys("ADSL"))))
+adsl_dataset <- CDISCDataset$new("ADSL", adsl_df, parent = character(0), keys = get_cdisc_keys("ADSL"))
+mods <- teal:::get_dummy_modules()
 
 testthat::test_that("init data accepts RelationalData objects", {
   teal_data_object <- teal_data(dataset_1)

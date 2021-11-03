@@ -8,6 +8,8 @@ to_relational_data(data, data_call = NULL)
 }
 \arguments{
 \item{data}{\code{RelationalData}, \code{Dataset}, \code{data.frame}, \code{list} or \code{function} returning a named list.}
+
+\item{data_call}{\code{call} output of \code{substitute(data)}.}
 }
 \value{
 list of \code{RelationalData} objects

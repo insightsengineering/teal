@@ -8,6 +8,8 @@
 }
 \arguments{
 \item{data}{\code{RelationalData}, \code{Dataset}, \code{data.frame}, \code{list} or \code{function} returning a named list.}
+
+\item{data_call}{\code{call} output of \code{substitute(data)}.}
 }
 \description{
 Dataset input method for \code{\link{to_relational_data}}

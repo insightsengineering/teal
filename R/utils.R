@@ -531,9 +531,11 @@ eval_expr_with_msg <- function(expr, env) {
 #' Takes the input of data argument and translates them to relational data objects.
 #'
 #' @param data `RelationalData`, `Dataset`, `data.frame`, `list` or `function` returning a named list.
+#' @param data_call \code{call} output of `substitute(data)`.
 #'
 #' @return list of `RelationalData` objects
 #'
+#' @export
 to_relational_data <- function(data, data_call = NULL) {
   UseMethod("to_relational_data")
 }
