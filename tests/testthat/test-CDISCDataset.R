@@ -82,7 +82,7 @@ testthat::test_that("Case 2: CDISCDataset$get_code() does not return duplicated 
     adsl_d %>% mutate_dataset("ADSL$c <- z", vars = list(z = 3))
     adsl_d %>% mutate_dataset("ADSL$d <- ADAE$a[[1]]", vars = list(ADAE = adae_d))
     testthat::expect_equal(
-      adsl_d %>% get_code() %>% pretty_code_string(),
+      adsl_d$get_code() %>% pretty_code_string(),
       c("x <- 1",
         "y <- 2",
         "z <- 3",

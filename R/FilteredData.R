@@ -637,7 +637,6 @@ FilteredData <- R6::R6Class( # nolint
           }, ignoreNULL = FALSE)
 
           observeEvent(input$remove_all_filters, {
-            .log("removing all active filters from filter panel")
             lapply(self$datanames(), function(dataname) {
               fdataset <- self$get_filtered_dataset(dataname = dataname)
               fdataset$queues_empty()
@@ -685,7 +684,6 @@ FilteredData <- R6::R6Class( # nolint
         id = id,
         function(input, output, session) {
           output$table <- renderUI({
-            .log("update uifiltersinfo")
             datanames <- if (identical(active_datanames(), "all")) {
               self$datanames()
             } else {
@@ -763,8 +761,6 @@ FilteredData <- R6::R6Class( # nolint
     # The call to this function should be isolated to avoid a reactive dependency.
     # Getting the names of a reactivevalues also needs a reactive context.
     validate = function() {
-      .log("## validating FilteredData object consistency")
-
       # Note: Here, we directly refer to the private attributes because the goal of this
       # function is to check the underlying attributes and the get / set functions might be corrupted
 

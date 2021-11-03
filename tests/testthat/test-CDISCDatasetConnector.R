@@ -26,11 +26,11 @@ testthat::test_that("Single scda dataset connector", {
     )
   )
 
-  testthat::expect_error(get_raw_data(adsl), regexp = "'ADSL' has not been pulled yet")
+  testthat::expect_error(adsl$get_raw_data(), regexp = "'ADSL' has not been pulled yet")
   adsl$pull()
 
-  testthat::expect_s3_class(get_raw_data(adsl), "data.frame")
+  testthat::expect_s3_class(adsl$get_raw_data(), "data.frame")
 
   # check reproducible code
-  testthat::expect_equal(get_code(adsl), 'ADSL <- synthetic_cdisc_dataset(dataset_name = "adsl", name = "latest")')
+  testthat::expect_equal(adsl$get_code(), 'ADSL <- synthetic_cdisc_dataset(dataset_name = "adsl", name = "latest")')
 })
