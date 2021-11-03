@@ -611,8 +611,11 @@ FilteredData <- R6::R6Class( # nolint
               shinyjs::runjs('$("#teal_primary_col").attr("class", "col-sm-12").resize();')
             } else {
               shinyjs::show("filter_panel_whole")
-              shinyjs::runjs('$("#teal_primary_col").attr("class", "col-sm-9").resize();')
-              shinyjs::runjs('$("#teal_secondary_col").show();')
+              shinyjs::runjs('if (filter_open) {
+              $("#teal_primary_col").attr("class", "col-sm-9").resize();
+              $("#teal_secondary_col").show();}
+                             ')
+              shinyjs::runjs('')
               # selectively hide / show to only show `active_datanames` out of all datanames
               lapply(
                 self$datanames(),
