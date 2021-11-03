@@ -1,6 +1,6 @@
 #' Teal Application Usage Logging.
 #'
-#' @description `r lifecycle::badge("maturing")`
+#' @description `r lifecycle::badge("deprecated")`
 #' Analysis of Teal application utilization is a key component towards ongoing enhancements
 #' of the framework. The utilization logs provide source data for better understanding
 #' frequency and extent of use.
