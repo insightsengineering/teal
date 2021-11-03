@@ -347,6 +347,10 @@ has \code{code} set already.}
 \if{html}{\out{<a id="method-reassign_datasets_vars"></a>}}
 \if{latex}{\out{\hypertarget{method-reassign_datasets_vars}{}}}
 \subsection{Method \code{reassign_datasets_vars()}}{
+Reassign \code{vars} in \code{Dataset} and \code{DatasetConnector} objects
+to keep the valid reference after deep cloning
+For example if \code{DatasetConnector} has a dependency on some \code{Dataset}, this
+\code{Dataset} is reasigned inside of \code{DatasetConnector}.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{DataAbstract$reassign_datasets_vars()}\if{html}{\out{</div>}}
 }
