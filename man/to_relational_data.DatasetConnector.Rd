@@ -4,7 +4,7 @@
 \alias{to_relational_data.DatasetConnector}
 \title{DatasetConnector input method for \code{\link{to_relational_data}}}
 \usage{
-\method{to_relational_data}{DatasetConnector}(data)
+\method{to_relational_data}{DatasetConnector}(data, data_call = NULL)
 }
 \arguments{
 \item{data}{\code{RelationalData}, \code{Dataset}, \code{data.frame}, \code{list} or \code{function} returning a named list.}

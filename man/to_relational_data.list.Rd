@@ -4,7 +4,7 @@
 \alias{to_relational_data.list}
 \title{list input method for \code{\link{to_relational_data}}}
 \usage{
-\method{to_relational_data}{list}(data)
+\method{to_relational_data}{list}(data, data_call = NULL)
 }
 \arguments{
 \item{data}{\code{RelationalData}, \code{Dataset}, \code{data.frame}, \code{list} or \code{function} returning a named list.}

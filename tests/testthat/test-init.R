@@ -1,7 +1,7 @@
-dataset_1 <- Dataset$new("iris", head(iris))
-adsl_df <- as.data.frame(as.list(setNames(nm = get_cdisc_keys("ADSL"))))
-adsl_dataset <- CDISCDataset$new("ADSL", adsl_df, parent = character(0), keys = get_cdisc_keys("ADSL"))
-mods <- teal:::get_dummy_modules()
+dataset_1 = Dataset$new("iris", head(iris))
+adsl_df = as.data.frame(as.list(setNames(nm = get_cdisc_keys("ADSL"))))
+adsl_dataset = CDISCDataset$new("ADSL", adsl_df, parent = character(0), keys = get_cdisc_keys("ADSL"))
+mods = teal:::get_dummy_modules()
 
 testthat::test_that("init data accepts RelationalData objects", {
   teal_data_object <- teal_data(dataset_1)
@@ -25,9 +25,11 @@ testthat::test_that("init data throws an error with input other than accepted in
 
 testthat::test_that("init data accepts a single Dataset/CDISCDataset", {
   testthat::expect_error(init(data = Dataset$new("iris", head(iris)), modules = mods), NA)
-  testthat::expect_error(init(
-    data = CDISCDataset$new("ADSL", adsl_df, parent = character(0), keys = get_cdisc_keys("ADSL")),
-    modules = mods), NA)
+  testthat::expect_error(
+    init(
+      data = CDISCDataset$new("ADSL", adsl_df, parent = character(0), keys = get_cdisc_keys("ADSL")),
+      modules = mods),
+  NA)
   testthat::expect_error(init(data = dataset_1, modules = mods), NA)
   testthat::expect_error(init(data = adsl_dataset, modules = mods), NA)
 })
@@ -59,27 +61,17 @@ testthat::test_that("init data accepts a list of single dataframe with renaming"
 })
 
 testthat::test_that("init data accepts a list of a Dataset and a dataframe without renaming", {
-  testthat::expect_error(
-    init(
-      data = list(
-        dataset_1,
-        adsl_df
-      ),
-      modules = mods),
-  NA)
+  testthat::expect_error(init(data = list(dataset_1, adsl_df), modules = mods), NA)
 })
 
 testthat::test_that("init data accepts a list of a Dataset and a dataframe with renaming", {
-  testthat::expect_error(init(data = list(
-    data1 = Dataset$new("iris", head(iris)),
-    data2 = as.data.frame(as.list(setNames(nm = get_cdisc_keys("ADSL"))))
+  testthat::expect_error(init(
+    data = list(
+      data1 = Dataset$new("iris", head(iris)),
+      data2 = as.data.frame(as.list(setNames(nm = get_cdisc_keys("ADSL"))))
     ),
     modules = mods), NA)
-  testthat::expect_error(init(data = list(
-    data1 = dataset_1,
-    data2 = adsl_df
-  ),
-  modules = mods), NA)
+  testthat::expect_error(init(data = list(data1 = dataset_1, data2 = adsl_df), modules = mods), NA)
 })
 
 testthat::test_that("init data accepts a list of mixed Dataset and dataframe with mixed renaming", {
@@ -93,8 +85,7 @@ testthat::test_that("init data accepts DatasetConnector object", {
   testthat::expect_error(init(
     data = DatasetConnector$new("iris", CallableFunction$new(function() head(iris))),
     modules = mods
-    ),
-  NA)
+    ), NA)
 })
 
 testthat::test_that("init data accepts a list of DatasetConnector object", {

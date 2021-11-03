@@ -4,7 +4,7 @@
 \alias{to_relational_data}
 \title{S3 generic for \code{to_relational_data} function.}
 \usage{
-to_relational_data(data)
+to_relational_data(data, data_call = NULL)
 }
 \arguments{
 \item{data}{\code{RelationalData}, \code{Dataset}, \code{data.frame}, \code{list} or \code{function} returning a named list.}

@@ -534,8 +534,7 @@ eval_expr_with_msg <- function(expr, env) {
 #'
 #' @return list of `RelationalData` objects
 #'
-#' @export
-to_relational_data <- function(data) {
+to_relational_data <- function(data, data_call = NULL) {
   UseMethod("to_relational_data")
 }
 
@@ -546,9 +545,11 @@ to_relational_data <- function(data) {
 #' @seealso \code{\link{to_relational_data}}
 #'
 #' @export
-to_relational_data.data.frame <- function(data) {
-  dataname <- deparse(substitute(data), width.cutoff = 500L)
-  if (grepl("\\)$", dataname)) {
+to_relational_data.data.frame <- function(data, data_call = NULL) {
+  #browser()
+  dataname <- deparse(data_call, width.cutoff = 500L)
+
+  if (grepl("\\)$", dataname) && is(data, "data.frame")) {
     stop("Single data.frame shouldn't be provided as a result of a function call. Please name
          the object first or use a named list.")
   }
@@ -567,7 +568,10 @@ to_relational_data.data.frame <- function(data) {
 #' @seealso \code{\link{to_relational_data}}
 #'
 #' @export
-to_relational_data.Dataset <- function(data) {
+to_relational_data.Dataset <- function(data, data_call = NULL) {
+  #browser()
+  cat("dataset", "\n", file = "~/Desktop/log.txt", append = TRUE)
+
   dataname <- get_dataname(data)
 
   if (dataname %in% names(default_cdisc_keys)) {
@@ -584,7 +588,9 @@ to_relational_data.Dataset <- function(data) {
 #' @seealso \code{\link{to_relational_data}}
 #'
 #' @export
-to_relational_data.DatasetConnector <- function(data) {
+to_relational_data.DatasetConnector <- function(data, data_call = NULL) {
+  cat("dataset", "\n", file = "~/Desktop/log.txt", append = TRUE)
+
   to_relational_data.Dataset(data)
 }
 
@@ -595,8 +601,10 @@ to_relational_data.DatasetConnector <- function(data) {
 #' @seealso \code{\link{to_relational_data}}
 #'
 #' @export
-to_relational_data.list <- function(data) {
-  call <- substitute(data)
+to_relational_data.list <- function(data, data_call = NULL) {
+  cat("list", "\n", file = "~/Desktop/log.txt", append = TRUE)
+
+  call <- data_call
   list_names <- names(data)
   parsed_names <- as.character(call)[-1]
 

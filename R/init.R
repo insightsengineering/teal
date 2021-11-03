@@ -135,10 +135,7 @@ init <- function(data,
                  footer = tags$p("Add Footer Here"),
                  id = character(0)) {
   if (!is(data, "RelationalData")) {
-    data <- do.call(
-      what = to_relational_data,
-      args = list(data = substitute(data))
-    )
+    data <- to_relational_data(data = data, data_call = substitute(data))
   }
 
   stopifnot(
