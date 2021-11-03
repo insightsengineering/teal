@@ -139,7 +139,7 @@ Get internal \code{CodeClass} object
 \if{html}{\out{<div class="arguments">}}
 \describe{
 \item{\code{only_pull}}{(\code{logical} value)\cr
-if \code{TRUE} only code to pull datasets will be returned without mutate code.}
+if \code{TRUE} only code to pull datasets will be returned without the mutate code.}
 }
 \if{html}{\out{</div>}}
 }
@@ -341,7 +341,6 @@ has \code{code} set already.}
 }
 \subsection{Returns}{
 (\code{self}) invisibly for chaining.
-Reassign vars
 }
 }
 \if{html}{\out{<hr>}}

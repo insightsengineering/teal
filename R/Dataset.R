@@ -345,9 +345,11 @@ Dataset <- R6::R6Class( # nolint
     },
     #' @description
     #' Get internal \code{CodeClass} object
-    #'
+    #' @param nodeps (`logical(1)`) whether `CodeClass` should not contain the code
+    #' of the dependendent `vars`
+    #' the `mutate`
     #' @return `\code{CodeClass}`
-    get_code_class = function(nodeps = FALSE, nomutate = FALSE) {
+    get_code_class = function(nodeps = FALSE) {
       res <- CodeClass$new()
       # precise order matters
       if (!nodeps) {
@@ -355,10 +357,7 @@ Dataset <- R6::R6Class( # nolint
         res$append(list_to_code_class(private$mutate_vars))
       }
       res$append(private$code)
-      if (!nomutate) {
-        res$append(private$mutate_list_to_code_class())
-      }
-
+      res$append(private$mutate_list_to_code_class())
 
       return(res)
     },
@@ -366,11 +365,9 @@ Dataset <- R6::R6Class( # nolint
     #' Get internal \code{CodeClass} object
     #'
     #' @return `\code{CodeClass}`
-    get_mutate_code_class = function(nodeps = FALSE) {
+    get_mutate_code_class = function() {
       res <- CodeClass$new()
-      if (!nodeps) {
-        res$append(list_to_code_class(private$mutate_vars))
-      }
+      res$append(list_to_code_class(private$mutate_vars))
       res$append(private$mutate_list_to_code_class())
 
       return(res)

@@ -615,9 +615,18 @@ optionally deparsed \code{call} object
 \subsection{Method \code{get_code_class()}}{
 Get internal \code{CodeClass} object
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{Dataset$get_code_class(nodeps = FALSE, nomutate = FALSE)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{Dataset$get_code_class(nodeps = FALSE)}\if{html}{\out{</div>}}
 }
 
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{nodeps}}{(\code{logical(1)}) whether \code{CodeClass} should not contain the code
+of the dependendent \code{vars}
+the \code{mutate}}
+}
+\if{html}{\out{</div>}}
+}
 \subsection{Returns}{
 \verb{\code{CodeClass}}
 }
@@ -628,7 +637,7 @@ Get internal \code{CodeClass} object
 \subsection{Method \code{get_mutate_code_class()}}{
 Get internal \code{CodeClass} object
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{Dataset$get_mutate_code_class(nodeps = FALSE)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{Dataset$get_mutate_code_class()}\if{html}{\out{</div>}}
 }
 
 \subsection{Returns}{
