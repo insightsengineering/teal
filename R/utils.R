@@ -571,9 +571,6 @@ to_relational_data.data.frame <- function(data, data_call = NULL) {
 #'
 #' @export
 to_relational_data.Dataset <- function(data, data_call = NULL) {
-  #browser()
-  cat("dataset", "\n", file = "~/Desktop/log.txt", append = TRUE)
-
   dataname <- get_dataname(data)
 
   if (dataname %in% names(default_cdisc_keys)) {
@@ -591,8 +588,6 @@ to_relational_data.Dataset <- function(data, data_call = NULL) {
 #'
 #' @export
 to_relational_data.DatasetConnector <- function(data, data_call = NULL) {
-  cat("dataset", "\n", file = "~/Desktop/log.txt", append = TRUE)
-
   to_relational_data.Dataset(data)
 }
 
@@ -604,8 +599,6 @@ to_relational_data.DatasetConnector <- function(data, data_call = NULL) {
 #'
 #' @export
 to_relational_data.list <- function(data, data_call = NULL) {
-  cat("list", "\n", file = "~/Desktop/log.txt", append = TRUE)
-
   call <- data_call
   list_names <- names(data)
   parsed_names <- as.character(call)[-1]
