@@ -19,8 +19,7 @@ to_relational_data <- function(data, data_call = NULL) {
 #' @seealso \code{\link{to_relational_data}}
 #'
 #' @export
-to_relational_data.data.frame <- function(data, data_call = NULL) {
-  #browser()
+to_relational_data.data.frame <- function(data, data_call = NULL) { # nolint
   dataname <- deparse(data_call, width.cutoff = 500L)
 
   if (grepl("\\)$", dataname) && is(data, "data.frame")) {
@@ -59,7 +58,7 @@ to_relational_data.Dataset <- function(data, data_call = NULL) {
 #' @seealso \code{\link{to_relational_data}}
 #'
 #' @export
-to_relational_data.DatasetConnector <- function(data, data_call = NULL) {
+to_relational_data.DatasetConnector <- function(data, data_call = NULL) { # nolint
   to_relational_data.Dataset(data)
 }
 
