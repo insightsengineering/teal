@@ -63,6 +63,7 @@ be automatically derived.
 \item \href{#method-get_join_keys}{\code{Dataset$get_join_keys()}}
 \item \href{#method-get_hash}{\code{Dataset$get_hash()}}
 \item \href{#method-get_var_r6}{\code{Dataset$get_var_r6()}}
+\item \href{#method-get_pull_vars}{\code{Dataset$get_pull_vars()}}
 \item \href{#method-set_dataset_label}{\code{Dataset$set_dataset_label()}}
 \item \href{#method-set_keys}{\code{Dataset$set_keys()}}
 \item \href{#method-set_join_keys}{\code{Dataset$set_join_keys()}}
@@ -417,6 +418,19 @@ Returns the string representation of the raw data hashed with the MD5 hash algor
 Get the list of dependencies that are Dataset or DatasetConnector objects
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{Dataset$get_var_r6()}\if{html}{\out{</div>}}
+}
+
+\subsection{Returns}{
+\code{list}
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-get_pull_vars"></a>}}
+\if{latex}{\out{\hypertarget{method-get_pull_vars}{}}}
+\subsection{Method \code{get_pull_vars()}}{
+Get the list of dependencies that are Dataset or DatasetConnector objects
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{Dataset$get_pull_vars()}\if{html}{\out{</div>}}
 }
 
 \subsection{Returns}{
@@ -789,6 +803,7 @@ The objects of this class are cloneable with this method.
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="Dataset" data-id="get_mutate_code_class">}\href{../../teal/html/Dataset.html#method-get_mutate_code_class}{\code{teal::Dataset$get_mutate_code_class()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="Dataset" data-id="get_mutate_vars">}\href{../../teal/html/Dataset.html#method-get_mutate_vars}{\code{teal::Dataset$get_mutate_vars()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="Dataset" data-id="get_numeric_colnames">}\href{../../teal/html/Dataset.html#method-get_numeric_colnames}{\code{teal::Dataset$get_numeric_colnames()}}\out{</span>}
+\item \out{<span class="pkg-link" data-pkg="teal" data-topic="Dataset" data-id="get_pull_vars">}\href{../../teal/html/Dataset.html#method-get_pull_vars}{\code{teal::Dataset$get_pull_vars()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="Dataset" data-id="get_raw_data">}\href{../../teal/html/Dataset.html#method-get_raw_data}{\code{teal::Dataset$get_raw_data()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="Dataset" data-id="get_row_labels">}\href{../../teal/html/Dataset.html#method-get_row_labels}{\code{teal::Dataset$get_row_labels()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="Dataset" data-id="get_rownames">}\href{../../teal/html/Dataset.html#method-get_rownames}{\code{teal::Dataset$get_rownames()}}\out{</span>}

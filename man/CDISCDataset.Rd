@@ -63,6 +63,7 @@ x$get_parent()
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="Dataset" data-id="get_mutate_code_class">}\href{../../teal/html/Dataset.html#method-get_mutate_code_class}{\code{teal::Dataset$get_mutate_code_class()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="Dataset" data-id="get_mutate_vars">}\href{../../teal/html/Dataset.html#method-get_mutate_vars}{\code{teal::Dataset$get_mutate_vars()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="Dataset" data-id="get_numeric_colnames">}\href{../../teal/html/Dataset.html#method-get_numeric_colnames}{\code{teal::Dataset$get_numeric_colnames()}}\out{</span>}
+\item \out{<span class="pkg-link" data-pkg="teal" data-topic="Dataset" data-id="get_pull_vars">}\href{../../teal/html/Dataset.html#method-get_pull_vars}{\code{teal::Dataset$get_pull_vars()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="Dataset" data-id="get_raw_data">}\href{../../teal/html/Dataset.html#method-get_raw_data}{\code{teal::Dataset$get_raw_data()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="Dataset" data-id="get_row_labels">}\href{../../teal/html/Dataset.html#method-get_row_labels}{\code{teal::Dataset$get_row_labels()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="Dataset" data-id="get_rownames">}\href{../../teal/html/Dataset.html#method-get_rownames}{\code{teal::Dataset$get_rownames()}}\out{</span>}

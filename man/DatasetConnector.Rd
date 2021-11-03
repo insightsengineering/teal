@@ -63,6 +63,7 @@ ds$launch()
 \item \href{#method-get_pull_callable}{\code{DatasetConnector$get_pull_callable()}}
 \item \href{#method-get_raw_data}{\code{DatasetConnector$get_raw_data()}}
 \item \href{#method-get_var_r6}{\code{DatasetConnector$get_var_r6()}}
+\item \href{#method-get_pull_vars}{\code{DatasetConnector$get_pull_vars()}}
 \item \href{#method-set_dataset_label}{\code{DatasetConnector$set_dataset_label()}}
 \item \href{#method-set_keys}{\code{DatasetConnector$set_keys()}}
 \item \href{#method-set_join_keys}{\code{DatasetConnector$set_join_keys()}}
@@ -326,6 +327,19 @@ Get raw data from dataset
 Get the list of dependencies that are Dataset or DatasetConnector objects
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{DatasetConnector$get_var_r6()}\if{html}{\out{</div>}}
+}
+
+\subsection{Returns}{
+\code{list}
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-get_pull_vars"></a>}}
+\if{latex}{\out{\hypertarget{method-get_pull_vars}{}}}
+\subsection{Method \code{get_pull_vars()}}{
+Get the list of dependencies that are Dataset or DatasetConnector objects
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{DatasetConnector$get_pull_vars()}\if{html}{\out{</div>}}
 }
 
 \subsection{Returns}{
