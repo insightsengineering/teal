@@ -24,7 +24,7 @@ log_app_usage(
 \item{pkg_meta}{package metadata fields. default values: \code{c("Package", "Title", "Version", "RemoteRef")}.}
 }
 \description{
-\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#maturing}{\figure{lifecycle-maturing.svg}{options: alt='[Maturing]'}}}{\strong{[Maturing]}}
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}}
 Analysis of Teal application utilization is a key component towards ongoing enhancements
 of the framework. The utilization logs provide source data for better understanding
 frequency and extent of use.
