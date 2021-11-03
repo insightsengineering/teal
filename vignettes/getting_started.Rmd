@@ -88,7 +88,7 @@ specified to get to this application.
 The following mockup shows an abstraction of the elements that are created in
 each teal application:
 
-<img src="images/teal_containers.png" alt="Simple Example Of Teal" style="width: 100%;"/>
+<img src="images/teal_containers.png" alt="Simple Example Of Teal Containers" style="width: 100%;"/>
 
 These containers correspond to actual html block elements and we use shiny's
 default layout manager (currently [bootstrap 3](http://getbootstrap.com)) with a
