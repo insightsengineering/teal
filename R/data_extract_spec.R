@@ -27,8 +27,7 @@
 #'  Setup of the filtering of key columns inside the dataset.
 #'  This setup can be created using the \code{\link{filter_spec}} function.
 #'  Please note that if both select and filter are set to NULL, then the result will be a filter spec UI with all
-#'  variables as possible choices. This is the most sensible default option because a filter spec can function as a
-#'  select spec as well.
+#'  variables as possible choices. 
 #' @param reshape (\code{logical}) whether reshape long to wide. Note that it will be used only in case of long dataset
 #'  with multiple keys selected in filter part.
 #'
