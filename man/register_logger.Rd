@@ -36,7 +36,7 @@ picks the first non \code{NULL} value, checking in order:
 \code{layout} and \code{level} can also be set as system environment variables, respectively:
 \itemize{
 \item \code{teal.log_layout} as \code{TEAL.LOG_LAYOUT},
-\item \code{teal.log_level} as \code{TEAL.LOG_LAYOUT}.
+\item \code{teal.log_level} as \code{TEAL.LOG_LEVEL}.
 }
 
 The function uses the following R options:

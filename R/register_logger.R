@@ -13,7 +13,7 @@
 #'
 #' `layout` and `level` can also be set as system environment variables, respectively:
 #' * `teal.log_layout` as `TEAL.LOG_LAYOUT`,
-#' * `teal.log_level` as `TEAL.LOG_LAYOUT`.
+#' * `teal.log_level` as `TEAL.LOG_LEVEL`.
 #'
 #' The function uses the following R options:
 #' * `options(teal.log_layout)`, which is passed to
