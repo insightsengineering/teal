@@ -306,10 +306,6 @@ If \code{isTRUE(private$use_dataset)} variable is prefixed by
 dataname to be evaluated as extracted object, for example
 \code{data$var}
 return (\code{name} or \code{call})
-Print the state in a nice format
-
-The \code{keep_na} and \code{keep_inf} is not printed.
-
 Sets \code{keep_na} field according to observed \code{input$keep_na}
 If \code{keep_na = TRUE} \code{is.na(varname)} is added to the returned call.
 Otherwise returned call excludes \code{NA} when executed.

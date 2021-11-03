@@ -31,6 +31,7 @@ Imports:
     ggplot2,
     grDevices,
     lifecycle,
+    logger,
     magrittr,
     methods,
     MultiAssayExperiment,
@@ -56,9 +57,9 @@ Suggests:
     scda.2021,
     test.nest (>= 0.2.11),
     testthat (>= 2.0)
-VignetteBuilder: 
+VignetteBuilder:
     knitr
-RdMacros: 
+RdMacros:
     lifecycle
 biocViews:
 Encoding: UTF-8
@@ -123,6 +124,7 @@ Collate:
     'modules_debugging.R'
     'mutate_dataset.R'
     'optionalInput.R'
+    'register_logger.R'
     'resolve_delayed.R'
     'select_spec.R'
     'set_args.R'

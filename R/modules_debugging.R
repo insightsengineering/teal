@@ -292,7 +292,6 @@ predefined_filters_module <- function(label = "Apply filters", filter) { # nousa
       }
 
       set_dataset_filters <- function() {
-        .log("Setting dataset filters")
         isolate(Map(function(dataname, filters) {
           datasets$set_filter_state(dataname, state = filters)
         }, names(filters()), filters()))

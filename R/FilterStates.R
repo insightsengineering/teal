@@ -357,7 +357,6 @@ FilterStates <- R6::R6Class( # nolint
     queue_remove = function(queue_index, element_id) {
       private$validate_queue_exists(queue_index)
       stopifnot(is_character_single(element_id))
-      .log("removing filter item", element_id, "from queue", queue_index)
       stopifnot(is_character_single(queue_index) || is_numeric_single(queue_index))
       stopifnot(is_character_single(element_id))
 
@@ -750,7 +749,6 @@ DFFilterStates <- R6::R6Class( # nolint
             avail_column_choices(),
             ignoreNULL = TRUE,
             handlerExpr = {
-              .log("updating column choices to add filter variables for", deparse(private$input_dataname))
               if (is.null(avail_column_choices())) {
                 shinyjs::hide("var_to_add")
               } else {
@@ -981,7 +979,6 @@ MAEFilterStates <- R6::R6Class( # nolint
             avail_column_choices(),
             ignoreNULL = TRUE,
             handlerExpr = {
-              .log("updating column choices to add filter variables for", deparse(private$input_dataname))
               if (is.null(avail_column_choices())) {
                 shinyjs::hide("var_to_add")
               } else {
@@ -1264,7 +1261,6 @@ SEFilterStates <- R6::R6Class( # nolint
             avail_row_data_choices(),
             ignoreNULL = TRUE,
             handlerExpr = {
-              .log("updating rowData choices to add filter variables for", deparse(private$input_dataname))
               if (is.null(avail_row_data_choices())) {
                 shinyjs::hide("row_to_add")
               } else {
@@ -1282,7 +1278,6 @@ SEFilterStates <- R6::R6Class( # nolint
             avail_col_data_choices(),
             ignoreNULL = TRUE,
             handlerExpr = {
-              .log("updating colData choices to add filter variables for", deparse(private$input_dataname))
               if (is.null(avail_col_data_choices())) {
                 shinyjs::hide("col_to_add")
               } else {
@@ -1482,7 +1477,6 @@ MatrixFilterStates <- R6::R6Class( # nolint
             avail_column_choices(),
             ignoreNULL = TRUE,
             handlerExpr = {
-              .log("updating column choices to add filter variables for", deparse(private$input_dataname))
               if (length(avail_column_choices()) < 0) {
                 shinyjs::hide("var_to_add")
               } else {
