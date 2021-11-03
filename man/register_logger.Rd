@@ -33,18 +33,18 @@ picks the first non \code{NULL} value, checking in order:
 \item R option.
 }
 
+\code{layout} and \code{level} can also be set as system environment variables, respectively:
+\itemize{
+\item \code{teal.log_layout} as \code{TEAL.LOG_LAYOUT},
+\item \code{teal.log_level} as \code{TEAL.LOG_LAYOUT}.
+}
+
 The function uses the following R options:
 \itemize{
 \item \code{options(teal.log_layout)}, which is passed to
 \code{\link[logger:layout_glue_generator]{logger::layout_glue_generator}},
 \item \code{options(teal.log_level)}, which is passed to
 \code{\link[logger:log_threshold]{logger::log_threshold}}.
-}
-
-\code{layout} and \code{level} can also be set as system environment variables, respectively:
-\itemize{
-\item \code{teal.log_layout} as \code{TEAL.LOG_LAYOUT},
-\item \code{teal.log_level} as \code{TEAL.LOG_LAYOUT}.
 }
 
 The logs are output to \code{stdout} by default. Check \code{logger} for more information

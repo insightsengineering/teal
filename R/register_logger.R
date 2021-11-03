@@ -11,15 +11,17 @@
 #' 2. System variable.
 #' 3. R option.
 #'
+#' `layout` and `level` can also be set as system environment variables, respectively:
+#' * `teal.log_layout` as `TEAL.LOG_LAYOUT`,
+#' * `teal.log_level` as `TEAL.LOG_LAYOUT`.
+#'
 #' The function uses the following R options:
 #' * `options(teal.log_layout)`, which is passed to
 #' \code{\link[logger:layout_glue_generator]{logger::layout_glue_generator}},
 #' * `options(teal.log_level)`, which is passed to
 #' \code{\link[logger:log_threshold]{logger::log_threshold}}.
 #'
-#' `layout` and `level` can also be set as system environment variables, respectively:
-#' * `teal.log_layout` as `TEAL.LOG_LAYOUT`,
-#' * `teal.log_level` as `TEAL.LOG_LAYOUT`.
+
 #'
 #' The logs are output to `stdout` by default. Check `logger` for more information
 #' about layouts and how to use `logger`.
