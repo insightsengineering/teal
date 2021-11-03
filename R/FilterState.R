@@ -289,12 +289,6 @@ FilterState <- R6::R6Class( # nolint
     #' @description
     #' Destroy observers stored in `private$observers`.
     destroy_observers = function() {
-      .log(
-        "Destroying observers for varname ",
-        self$get_varname(deparse = TRUE),
-        "in dataset",
-        self$get_dataname(deparse = TRUE)
-      )
       lapply(private$observers, function(x) x$destroy())
       return(invisible(NULL))
     },
@@ -470,14 +464,6 @@ FilterState <- R6::R6Class( # nolint
       }
     },
 
-    #' Print the state in a nice format
-    #'
-    #' The `keep_na` and `keep_inf` is not printed.
-    #'
-    log_state = function() {
-      NULL
-    },
-
     #' Sets `keep_na` field according to observed `input$keep_na`
     #' If `keep_na = TRUE` `is.na(varname)` is added to the returned call.
     #' Otherwise returned call excludes `NA` when executed.
@@ -486,10 +472,7 @@ FilterState <- R6::R6Class( # nolint
         ignoreNULL = FALSE, # ignoreNULL: we don't want to ignore NULL when nothing is selected in the `selectInput`,
         ignoreInit = TRUE, # ignoreInit: should not matter because we set the UI with the desired initial state
         eventExpr = input$keep_na,
-        handlerExpr = {
-          self$set_keep_na(if_null(input$keep_na, FALSE))
-          private$log_state()
-        }
+        handlerExpr = self$set_keep_na(if_null(input$keep_na, FALSE))
       )
       invisible(NULL)
     },
@@ -663,11 +646,6 @@ EmptyFilterState <- R6::R6Class( # nolint
       }
       invisible(NULL)
     }
-  ),
-  private = list(
-    log_state = function() {
-      .log("all elements in", self$get_varname(deparse = TRUE), "are NA")
-    }
   )
 )
 
@@ -833,7 +811,6 @@ LogicalFilterState <- R6::R6Class( # nolint
             handlerExpr = {
               selection_state <- input$selection
               self$set_selected(if_null(as.logical(selection_state), logical(0)))
-              private$log_state()
             }
           )
 
@@ -864,14 +841,6 @@ LogicalFilterState <- R6::R6Class( # nolint
   ),
   private = list(
     histogram_data = data.frame(),
-    log_state = function() {
-      .log(
-        "State for", self$get_varname(deparse = TRUE),
-        "set to:", toString(self$get_selected()),
-        "NA:", toString(self$get_keep_na())
-      )
-    },
-
     validate_selection = function(value) {
       if (!(is_logical_empty(value) || is_logical_single(value))) {
         stop(
@@ -1089,7 +1058,6 @@ RangeFilterState <- R6::R6Class( # nolint
                 )
                 self$set_selected(if_null(selection_state, numeric(0)))
               }
-              private$log_state()
             })
 
           private$observe_keep_na(input)
@@ -1100,7 +1068,6 @@ RangeFilterState <- R6::R6Class( # nolint
             eventExpr = input$keep_inf,
             handlerExpr = {
               self$set_keep_inf(if_null(input$keep_inf, FALSE))
-              private$log_state()
             }
           )
           NULL
@@ -1187,15 +1154,6 @@ RangeFilterState <- R6::R6Class( # nolint
         min = v_pretty_range[1],
         max = v_pretty_range[length(v_pretty_range)],
         step = `if`(private$is_integer, 1L, v_pretty_range[2] - v_pretty_range[1])
-      )
-    },
-
-    log_state = function() {
-      .log(
-        "State for", self$get_varname(deparse = TRUE),
-        "set to:", paste(self$get_selected(), collapse = " - "),
-        "NA:", toString(self$get_keep_na()),
-        "Inf:", toString(self$get_keep_inf())
       )
     },
 
@@ -1430,10 +1388,7 @@ ChoicesFilterState <- R6::R6Class( # nolint
             ignoreNULL = FALSE, # ignoreNULL: we don't want to ignore NULL when nothing is selected in the `selectInput`,
             ignoreInit = TRUE, # ignoreInit: should not matter because we set the UI with the desired initial state
             eventExpr = input$selection,
-            handlerExpr = {
-              self$set_selected(if_null(input$selection, character(0)))
-              private$log_state()
-            }
+            handlerExpr = self$set_selected(if_null(input$selection, character(0)))
           )
           private$observe_keep_na(input)
 
@@ -1478,18 +1433,6 @@ ChoicesFilterState <- R6::R6Class( # nolint
   ),
   private = list(
     histogram_data = data.frame(),
-    log_state = function() {
-      .log(
-        "State for", self$get_varname(deparse = TRUE),
-        "set to:",
-        if (length(self$get_selected()) > 5) {
-          paste0(toString(self$get_selected()[1:5]), ", ...")
-        } else {
-          toString(self$get_selected())
-        },
-        "NA:", toString(self$get_keep_na())
-      )
-    },
 
     validate_selection = function(value) {
       if (!is.character(value)) {
@@ -1669,7 +1612,6 @@ DateFilterState <- R6::R6Class( # nolint
               end_date <- input$selection[2]
 
               self$set_selected(c(start_date, end_date))
-              private$log_state()
             }
           )
 
@@ -1718,14 +1660,6 @@ DateFilterState <- R6::R6Class( # nolint
     }
   ),
   private = list(
-    log_state = function() {
-      .log(
-        "State for", self$get_varname(deparse = TRUE),
-        "set to:", paste(self$get_selected(), collapse = " - "),
-        "NA:", toString(self$get_keep_na())
-      )
-    },
-
     validate_selection = function(value) {
       if (!is(value, "Date")) {
         stop(
@@ -1972,7 +1906,6 @@ DatetimeFilterState <- R6::R6Class( # nolint
 
 
               self$set_selected(c(start_date, end_date))
-              private$log_state()
             }
           )
 
@@ -2022,14 +1955,6 @@ DatetimeFilterState <- R6::R6Class( # nolint
   ),
   private = list(
     timezone = Sys.timezone(),
-
-    log_state = function() {
-      .log(
-        "State for", self$get_varname(deparse = TRUE),
-        "set to:", paste(self$get_selected(), collapse = " - "),
-        "NA:", toString(self$get_keep_na())
-      )
-    },
 
     validate_selection = function(value) {
       if (!(is(value, "POSIXct") || is(value, "POSIXlt"))) {

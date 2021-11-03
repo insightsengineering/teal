@@ -176,6 +176,7 @@ reference:
     - print.teal_modules
     - python_code
     - read_script
+    - register_logger
     - reset_filters_module
     - run_js_files
     - set_filter_state
