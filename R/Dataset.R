@@ -625,9 +625,9 @@ Dataset <- R6::R6Class( # nolint
     },
 
     #' Set variables which code depends on
-    #' param vars (`named list`) contains any R object which code depends on
-    #' param is_mutate_vars (`logical(1)`) whether this var is used in mutate code
-    #' param override (`logical(1)`) whether variable should be reassigned
+    #' parameter vars (`named list`) contains any R object which code depends on
+    #' parameter is_mutate_vars (`logical(1)`) whether this var is used in mutate code
+    #' parameter override (`logical(1)`) whether variable should be reassigned
     set_vars_internal = function(vars, is_mutate_vars = FALSE, override = FALSE) {
       stopifnot(is_logical_single(override))
       stopifnot(is_fully_named_list(vars))

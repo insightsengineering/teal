@@ -747,9 +747,9 @@ Check if dataset has already been pulled.
 \subsection{Returns}{
 \code{TRUE} if dataset has been already pulled, else \code{FALSE}
 Set variables which code depends on
-param vars (\verb{named list}) contains any R object which code depends on
-param is_mutate_vars (\code{logical(1)}) whether this var is used in mutate code
-param override (\code{logical(1)}) whether variable should be reassigned
+parameter vars (\verb{named list}) contains any R object which code depends on
+parameter is_mutate_vars (\code{logical(1)}) whether this var is used in mutate code
+parameter override (\code{logical(1)}) whether variable should be reassigned
 }
 }
 \if{html}{\out{<hr>}}
