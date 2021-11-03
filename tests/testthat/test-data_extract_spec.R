@@ -305,8 +305,22 @@ testthat::test_that("delayed version of data_extract_spec", {
 
 testthat::test_that("data_extract_spec allows both select and filter parameters to be NULL", {
   testthat::expect_error(des <- data_extract_spec("ADSL"), NA)
-  testthat::expect_null(des$select)
-  testthat::expect_true(is(des$filter[[1]],  c("delayed_filter_spec", "filter_spec", "delayed_data")))
+})
+
+testthat::test_that("data_extract_spec returns filter_spec with multiple set to TRUE", {
+  des <- data_extract_spec("ADSL")
+  testthat::expect_equal(class(des$filter[[1]]),  c("delayed_filter_spec", "filter_spec", "delayed_data"))
   testthat::expect_equal(length(des$filter), 1)
   testthat::expect_true(des$filter[[1]]$multiple)
+})
+
+testthat::test_that("data_extract_spec returns select_spec with multiple set to TRUE", {
+  des <- data_extract_spec("ADSL")
+  testthat::expect_equal(length(des$select), 6)
+  testthat::expect_equal(class(des$select$choices),  c("delayed_variable_choices", "delayed_data", "choices_labeled"))
+  testthat::expect_true(des$select$multiple)
+  testthat::expect_null(des$select$selected)
+  testthat::expect_null(des$select$always_selected)
+  testthat::expect_false(des$select$fixed)
+  testthat::expect_null(des$select$label)
 })
