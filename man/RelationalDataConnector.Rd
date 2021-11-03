@@ -121,6 +121,7 @@ x$get_datasets()
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="DataAbstract" data-id="get_items">}\href{../../teal/html/DataAbstract.html#method-get_items}{\code{teal::DataAbstract$get_items()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="DataAbstract" data-id="is_pulled">}\href{../../teal/html/DataAbstract.html#method-is_pulled}{\code{teal::DataAbstract$is_pulled()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="DataAbstract" data-id="mutate_dataset">}\href{../../teal/html/DataAbstract.html#method-mutate_dataset}{\code{teal::DataAbstract$mutate_dataset()}}\out{</span>}
+\item \out{<span class="pkg-link" data-pkg="teal" data-topic="DataAbstract" data-id="reassign_datasets_vars">}\href{../../teal/html/DataAbstract.html#method-reassign_datasets_vars}{\code{teal::DataAbstract$reassign_datasets_vars()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="DataAbstract" data-id="set_check">}\href{../../teal/html/DataAbstract.html#method-set_check}{\code{teal::DataAbstract$set_check()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="DataAbstract" data-id="set_pull_code">}\href{../../teal/html/DataAbstract.html#method-set_pull_code}{\code{teal::DataAbstract$set_pull_code()}}\out{</span>}
 }

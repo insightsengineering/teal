@@ -534,21 +534,17 @@ mutate the join_keys for a given dataset and object
 \subsection{Method \code{set_vars()}}{
 Adds variables which code depends on
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{Dataset$set_vars(vars)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{Dataset$set_vars(vars, is_mutate_vars = FALSE, override = FALSE)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{vars}}{(named \code{list})) \cr
-In case when this object code depends on other \code{Dataset} object(s) or
-other constant value, this/these object(s) should be included as named
-element(s) of the list. For example if this object code needs \code{ADSL}
-object we should specify \verb{vars = list(ADSL = <adsl object>)}.
-It's recommended to include \code{Dataset} or \code{DatasetConnector} objects to
-the \code{vars} list to preserve reproducibility. Please note that \code{vars}
-are included to this object as local \code{vars} and they cannot be modified
-within another dataset.}
+\item{\code{vars}}{(\verb{named list}) contains any R object which code depends on}
+
+\item{\code{is_mutate_vars}}{(\code{logical(1)}) whether this var is used in mutate code}
+
+\item{\code{override}}{(\code{logical(1)}) whether variable should be reassigned}
 }
 \if{html}{\out{</div>}}
 }
@@ -605,7 +601,7 @@ optionally deparsed \code{call} object
 \subsection{Method \code{get_code_class()}}{
 Get internal \code{CodeClass} object
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{Dataset$get_code_class()}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{Dataset$get_code_class(nodeps = FALSE, nomutate = FALSE)}\if{html}{\out{</div>}}
 }
 
 \subsection{Returns}{
@@ -618,7 +614,7 @@ Get internal \code{CodeClass} object
 \subsection{Method \code{get_mutate_code_class()}}{
 Get internal \code{CodeClass} object
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{Dataset$get_mutate_code_class()}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{Dataset$get_mutate_code_class(nodeps = FALSE)}\if{html}{\out{</div>}}
 }
 
 \subsection{Returns}{
@@ -736,6 +732,10 @@ Check if dataset has already been pulled.
 
 \subsection{Returns}{
 \code{TRUE} if dataset has been already pulled, else \code{FALSE}
+Set variables which code depends on
+param vars (\verb{named list}) contains any R object which code depends on
+param is_mutate_vars (\code{logical(1)}) whether this var is used in mutate code
+param override (\code{logical(1)}) whether variable should be reassigned
 }
 }
 \if{html}{\out{<hr>}}

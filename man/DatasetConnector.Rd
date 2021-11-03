@@ -66,6 +66,7 @@ ds$launch()
 \item \href{#method-set_dataset_label}{\code{DatasetConnector$set_dataset_label()}}
 \item \href{#method-set_keys}{\code{DatasetConnector$set_keys()}}
 \item \href{#method-set_join_keys}{\code{DatasetConnector$set_join_keys()}}
+\item \href{#method-set_pull_vars}{\code{DatasetConnector$set_pull_vars()}}
 \item \href{#method-mutate_join_keys}{\code{DatasetConnector$mutate_join_keys()}}
 \item \href{#method-pull}{\code{DatasetConnector$pull()}}
 \item \href{#method-set_args}{\code{DatasetConnector$set_args()}}
@@ -387,6 +388,26 @@ set join_keys for a given dataset and self
 \describe{
 \item{\code{x}}{\code{list} of \code{JoinKeySet} objects (which are created using the \code{join_key} function)
 or single \code{JoinKeySet} objects}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Returns}{
+(\code{self}) invisibly for chaining
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-set_pull_vars"></a>}}
+\if{latex}{\out{\hypertarget{method-set_pull_vars}{}}}
+\subsection{Method \code{set_pull_vars()}}{
+Set vars which pull-code depends on
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{DatasetConnector$set_pull_vars(pull_vars)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{pull_vars}}{(anything) any R object which pulling code refers to}
 }
 \if{html}{\out{</div>}}
 }

@@ -34,6 +34,7 @@ Abstract class containing code for handling set of datasets.
 \item \href{#method-mutate_dataset}{\code{DataAbstract$mutate_dataset()}}
 \item \href{#method-set_check}{\code{DataAbstract$set_check()}}
 \item \href{#method-set_pull_code}{\code{DataAbstract$set_pull_code()}}
+\item \href{#method-reassign_datasets_vars}{\code{DataAbstract$reassign_datasets_vars()}}
 \item \href{#method-clone}{\code{DataAbstract$clone()}}
 }
 }
@@ -340,7 +341,17 @@ has \code{code} set already.}
 }
 \subsection{Returns}{
 (\code{self}) invisibly for chaining.
+Reassign vars
 }
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-reassign_datasets_vars"></a>}}
+\if{latex}{\out{\hypertarget{method-reassign_datasets_vars}{}}}
+\subsection{Method \code{reassign_datasets_vars()}}{
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{DataAbstract$reassign_datasets_vars()}\if{html}{\out{</div>}}
+}
+
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-clone"></a>}}
