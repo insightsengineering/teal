@@ -372,6 +372,8 @@ DataAbstract <- R6::R6Class( #nolint
           }
         } else if (is(dataset, "DatasetConnector")) {
           dataset_in_connector <- dataset$.__enclos_env__$private$dataset
+          if (is.null(dataset_in_connector)) next
+
           pull_vars <- dataset_in_connector$get_pull_vars()
           mutate_vars <- dataset_in_connector$get_mutate_vars()
 
