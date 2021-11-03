@@ -19,7 +19,7 @@ mentioned in \code{dataname}. The setup can be created using \code{\link{select_
 Setup of the filtering of key columns inside the dataset.
 This setup can be created using the \code{\link{filter_spec}} function.
 Please note that if both select and filter are set to NULL, then the result will be a filter spec UI with all
-variables as possible choices.}
+variables as possible choices and a select spec with multiple set to TRUE.}
 
 \item{reshape}{(\code{logical}) whether reshape long to wide. Note that it will be used only in case of long dataset
 with multiple keys selected in filter part.}
