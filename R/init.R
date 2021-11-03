@@ -147,6 +147,8 @@ init <- function(data,
     is_character_vector(id, min_length = 0, max_length = 1)
   )
 
+  log_system_info()
+
   if(is(modules, "list"))  modules <- do.call(root_modules, modules)
 
   # Note regarding case `id = character(0)`:
