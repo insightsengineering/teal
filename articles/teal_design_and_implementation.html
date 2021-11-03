@@ -31,7 +31,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">teal</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.10.0.9004</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.10.0.9005</span>
       </span>
     </div>
 
@@ -310,7 +310,7 @@
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va">teal</span><span class="op">)</span></code></pre></div>
 <pre><code>## 
-## You are using teal version 0.10.0.9004</code></pre>
+## You are using teal version 0.10.0.9005</code></pre>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/options.html">options</a></span><span class="op">(</span>teal_logging <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>
 
@@ -433,66 +433,6 @@
   server <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">input</span>, <span class="va">output</span>, <span class="va">session</span><span class="op">)</span> <span class="op">{</span>
     <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/callModule.html">callModule</a></span><span class="op">(</span><span class="va">app1</span><span class="op">$</span><span class="va">server</span>, <span class="st">"app1"</span><span class="op">)</span>
     <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/callModule.html">callModule</a></span><span class="op">(</span><span class="va">app2</span><span class="op">$</span><span class="va">server</span>, <span class="st">"app2"</span><span class="op">)</span>
-  <span class="op">}</span>
-<span class="op">)</span></code></pre></div>
-<p>However, we recommend to use <code>ui_teal_with_splash</code> and <code>srv_teal_with_splash</code> if you would want to use the teal app in the same way as Shiny modules with <code>callModule</code>.</p>
-<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">modules</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/root_modules.html">root_modules</a></span><span class="op">(</span>
-  <span class="fu"><a href="../reference/module.html">module</a></span><span class="op">(</span>
-    <span class="st">"data source"</span>,
-    server <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">input</span>, <span class="va">output</span>, <span class="va">session</span>, <span class="va">datasets</span><span class="op">)</span> <span class="cn">NULL</span>,
-    ui <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">id</span>, <span class="va">...</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/pkg/htmltools/man/builder.html">div</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/htmltools/man/builder.html">p</a></span><span class="op">(</span><span class="st">"information about data source"</span><span class="op">)</span><span class="op">)</span>,
-    filters <span class="op">=</span> <span class="st">"all"</span>
-  <span class="op">)</span>,
-  <span class="fu"><a href="../reference/module.html">module</a></span><span class="op">(</span>
-    <span class="st">"ADSL AGE histogram"</span>,
-    server <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">input</span>, <span class="va">output</span>, <span class="va">session</span>, <span class="va">datasets</span><span class="op">)</span> <span class="op">{</span>
-      <span class="va">output</span><span class="op">$</span><span class="va">hist</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/renderPlot.html">renderPlot</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/graphics/hist.html">hist</a></span><span class="op">(</span><span class="va">datasets</span><span class="op">$</span><span class="fu">get_data</span><span class="op">(</span><span class="st">"ADSL"</span>, filtered <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">$</span><span class="va">AGE</span><span class="op">)</span><span class="op">)</span>
-    <span class="op">}</span>,
-    ui <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">id</span>, <span class="va">...</span><span class="op">)</span> <span class="op">{</span>
-      <span class="va">ns</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/NS.html">NS</a></span><span class="op">(</span><span class="va">id</span><span class="op">)</span>
-      <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/plotOutput.html">plotOutput</a></span><span class="op">(</span><span class="fu">ns</span><span class="op">(</span><span class="st">"hist"</span><span class="op">)</span><span class="op">)</span>
-    <span class="op">}</span>,
-    filters <span class="op">=</span> <span class="st">"ADSL"</span>
-  <span class="op">)</span>
-<span class="op">)</span>
-
-<span class="fu"><a href="https://rdrr.io/pkg/shiny/man/shinyApp.html">shinyApp</a></span><span class="op">(</span>
-  ui <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/fluidPage.html">fluidPage</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/shiny/man/fluidPage.html">fluidRow</a></span><span class="op">(</span>
-    <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/column.html">column</a></span><span class="op">(</span>
-      <span class="fl">6</span>,
-      <span class="fu"><a href="../reference/ui_teal_with_splash.html">ui_teal_with_splash</a></span><span class="op">(</span><span class="st">"app1"</span>,
-                          data <span class="op">=</span> <span class="fu"><a href="../reference/cdisc_data.html">cdisc_data</a></span><span class="op">(</span>
-                            <span class="fu"><a href="../reference/cdisc_dataset.html">cdisc_dataset</a></span><span class="op">(</span><span class="st">"ADSL"</span>, <span class="va">ADSL</span>, code <span class="op">=</span> <span class="st">"ADSL &lt;- synthetic_cdisc_data(\"latest\")$adsl"</span><span class="op">)</span>
-                          <span class="op">)</span>,
-                          title <span class="op">=</span> <span class="st">"Sample app 1"</span><span class="op">)</span>
-    <span class="op">)</span>,
-    <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/column.html">column</a></span><span class="op">(</span>
-      <span class="fl">6</span>,
-      <span class="fu"><a href="../reference/ui_teal_with_splash.html">ui_teal_with_splash</a></span><span class="op">(</span><span class="st">"app2"</span>,
-                          data <span class="op">=</span> <span class="fu"><a href="../reference/cdisc_data.html">cdisc_data</a></span><span class="op">(</span>
-                            <span class="fu"><a href="../reference/cdisc_dataset.html">cdisc_dataset</a></span><span class="op">(</span><span class="st">"ADSL"</span>, <span class="va">ADSL</span>, code <span class="op">=</span> <span class="st">"ADSL &lt;- synthetic_cdisc_data(\"latest\")$adsl"</span><span class="op">)</span>
-                          <span class="op">)</span>,
-                          title <span class="op">=</span> <span class="st">"Sample app 2"</span><span class="op">)</span>
-    <span class="op">)</span>
-  <span class="op">)</span><span class="op">)</span>,
-  server <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">input</span>, <span class="va">output</span>, <span class="va">session</span><span class="op">)</span> <span class="op">{</span>
-    <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/callModule.html">callModule</a></span><span class="op">(</span>
-      module <span class="op">=</span> <span class="va">srv_teal_with_splash</span>,
-      id <span class="op">=</span> <span class="st">"app1"</span>,
-      data <span class="op">=</span> <span class="fu"><a href="../reference/cdisc_data.html">cdisc_data</a></span><span class="op">(</span>
-        <span class="fu"><a href="../reference/cdisc_dataset.html">cdisc_dataset</a></span><span class="op">(</span><span class="st">"ADSL"</span>, <span class="va">ADSL</span>, code <span class="op">=</span> <span class="st">"ADSL &lt;- synthetic_cdisc_data(\"latest\")$adsl"</span><span class="op">)</span>
-      <span class="op">)</span>,
-      modules <span class="op">=</span> <span class="va">modules</span>
-    <span class="op">)</span>
-    <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/callModule.html">callModule</a></span><span class="op">(</span>
-      module <span class="op">=</span> <span class="va">srv_teal_with_splash</span>,
-      id <span class="op">=</span> <span class="st">"app2"</span>,
-      data <span class="op">=</span> <span class="fu"><a href="../reference/cdisc_data.html">cdisc_data</a></span><span class="op">(</span>
-        <span class="fu"><a href="../reference/cdisc_dataset.html">cdisc_dataset</a></span><span class="op">(</span><span class="st">"ADSL"</span>, <span class="va">ADSL</span>, code <span class="op">=</span> <span class="st">"ADSL &lt;- synthetic_cdisc_data(\"latest\")$adsl"</span><span class="op">)</span>
-      <span class="op">)</span>,
-      modules <span class="op">=</span> <span class="va">modules</span>
-    <span class="op">)</span>
   <span class="op">}</span>
 <span class="op">)</span></code></pre></div>
 </div>
