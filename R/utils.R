@@ -534,6 +534,7 @@ eval_expr_with_msg <- function(expr, env) {
 #'
 #' @return list of `RelationalData` objects
 #'
+#' @export
 to_relational_data <- function(data) {
   UseMethod("to_relational_data")
 }
@@ -543,6 +544,8 @@ to_relational_data <- function(data) {
 #' @inheritParams to_relational_data
 #'
 #' @seealso \code{\link{to_relational_data}}
+#'
+#' @export
 to_relational_data.data.frame <- function(data) {
   dataname <- deparse(substitute(data), width.cutoff = 500L)
   if (grepl("\\)$", dataname)) {
@@ -562,6 +565,8 @@ to_relational_data.data.frame <- function(data) {
 #' @inheritParams to_relational_data
 #'
 #' @seealso \code{\link{to_relational_data}}
+#'
+#' @export
 to_relational_data.Dataset <- function(data) {
   dataname <- get_dataname(data)
 
@@ -577,6 +582,8 @@ to_relational_data.Dataset <- function(data) {
 #' @inheritParams to_relational_data
 #'
 #' @seealso \code{\link{to_relational_data}}
+#'
+#' @export
 to_relational_data.DatasetConnector <- function(data) {
   to_relational_data.Dataset(data)
 }
@@ -586,14 +593,18 @@ to_relational_data.DatasetConnector <- function(data) {
 #' @inheritParams to_relational_data
 #'
 #' @seealso \code{\link{to_relational_data}}
+#'
+#' @export
 to_relational_data.list <- function(data) {
   call <- substitute(data)
   list_names <- names(data)
   parsed_names <- as.character(call)[-1]
 
   if (
-    (is_empty(list_names) && is_empty(parsed_names)) ||
-    (any(list_names == "") && is_empty(parsed_names))
+    (is_empty(list_names) && is_empty(parsed_names) &&
+     (any(sapply(data, function(x) is(x, "dataset"))) || any(sapply(data, function(x) is(x, "data.frame"))))) ||
+    (any(list_names == "") && is_empty(parsed_names)) ||
+    (any(is.na(list_names)))
   ) {
     stop("Unnamed lists shouldn't be provided as input for data. Please use a named list.")
   }
@@ -615,11 +626,13 @@ to_relational_data.list <- function(data) {
         }
       } else if (is(data[[idx]], "Dataset") || is(data[[idx]], "DatasetConnector")) {
         data[[idx]]
+      } else {
+        stop("Unknown class to create Dataset from.")
       }
     }
   )
 
-  if (any(sapply(datasets_list, function(x) is(x, "CDISCData")))) {
+  if (any(sapply(datasets_list, function(x) is(x, "CDISCDataset")))) {
     do.call("cdisc_data", args = datasets_list)
   } else {
     do.call("teal_data", args = datasets_list)
