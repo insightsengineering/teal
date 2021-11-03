@@ -1,9 +1,14 @@
 .log_depth <- 0
 
 # Teal Internally Used Logger functions
-
 #' @export
 .log <- function(..., sep = " ", type = "debug") {
+  lifecycle::deprecate_soft(
+    when = "0.10.1",
+    what = ".log()",
+    details = "teal now uses the package `logger`. Please see `teal::register_logger` for more information."
+  )
+
   if (!isTRUE(getOption("teal_logging"))) {
     return()
   }

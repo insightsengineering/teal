@@ -161,15 +161,15 @@ testthat::test_that("Dataset supplementary constructors", {
   )
 
   # Deprecation warnings
-  testthat::expect_warning(x2 <- named_dataset_file(file_example))
-  testthat::expect_warning(x3 <- relational_dataset_file(file_example))
+  lifecycle::expect_deprecated(x2 <- named_dataset_file(file_example))
+  lifecycle::expect_deprecated(x3 <- relational_dataset_file(file_example))
   testthat::expect_equal(x, x2)
   testthat::expect_equal(x, x3)
 
   # Deprecated constructors
-  testthat::expect_error(raw_dataset(iris))
-  testthat::expect_warning(ds1 <- named_dataset("ds", iris))
-  testthat::expect_warning(ds2 <- relational_dataset("ds", iris))
+  lifecycle::expect_defunct(raw_dataset(iris))
+  lifecycle::expect_deprecated(ds1 <- named_dataset("ds", iris))
+  lifecycle::expect_deprecated(ds2 <- relational_dataset("ds", iris))
   testthat::expect_equal(ds1, ds2)
 })
 
@@ -234,13 +234,13 @@ testthat::test_that("Dataset mutate method with delayed logic", {
   testthat::expect_equal(test_ds0$get_code(), "head_mtcars <- head(mtcars)")
 
   mutate_dataset(test_ds0, code = "head_mtcars$carb <- head_mtcars$carb * 2")
-  testthat::expect_equal(get_raw_data(test_ds0)$carb, 2 * head(mtcars)$carb)
+  testthat::expect_equal(test_ds0$get_raw_data()$carb, 2 * head(mtcars)$carb)
   testthat::expect_false(test_ds0$is_mutate_delayed())
   testthat::expect_equal(test_ds0$get_code(), "head_mtcars <- head(mtcars)\nhead_mtcars$carb <- head_mtcars$carb * 2")
 
   mutate_dataset(test_ds0, code = "head_mtcars$Species <- ds1$Species", vars = list(ds1 = test_ds1))
   testthat::expect_false(test_ds0$is_mutate_delayed())
-  testthat::expect_equal(get_raw_data(test_ds0)$Species, get_raw_data(test_ds1)$Species)
+  testthat::expect_equal(test_ds0$get_raw_data()$Species, test_ds1$get_raw_data()$Species)
   testthat::expect_equal(
     pretty_code_string(test_ds0$get_code()),
     c("head_iris <- head(iris)",
@@ -268,7 +268,7 @@ testthat::test_that("Dataset mutate method with delayed logic", {
   )
 
 
-  testthat::expect_null(get_raw_data(test_ds0)$head_mtcars)
+  testthat::expect_null(test_ds0$get_raw_data()$head_mtcars)
 
   testthat::expect_true(test_ds0$is_mutate_delayed())
   testthat::expect_equal(
@@ -303,7 +303,7 @@ testthat::test_that("Dataset mutate method with delayed logic", {
       "head_mtcars$new_var <- 1"
     )
   )
-  expect_null(get_raw_data(test_ds0)$new_var)
+  expect_null(test_ds0$get_raw_data()$new_var)
   testthat::expect_true(test_ds0$is_mutate_delayed())
 
   mutate_dataset(test_ds0, code = "head_mtcars$perm <- ds2$perm", vars = list(ds2 = test_ds2))
@@ -325,7 +325,7 @@ testthat::test_that("Dataset mutate method with delayed logic", {
     )
   )
 
-  expect_null(get_raw_data(test_ds0)$perm)
+  expect_null(test_ds0$get_raw_data()$perm)
   testthat::expect_equal(
     pretty_code_string(test_ds0$get_code()),
     c("head_iris <- head(iris)",
@@ -349,9 +349,9 @@ testthat::test_that("Dataset mutate method with delayed logic", {
   testthat::expect_true(test_ds0$is_mutate_delayed())
 
   load_dataset(test_ds0)
-  testthat::expect_silent(get_raw_data(test_ds0))
+  testthat::expect_silent(test_ds0$get_raw_data())
   testthat::expect_false(test_ds0$is_mutate_delayed())
-  testthat::expect_true(all(c("head_letters", "new_var", "perm") %in% names(get_raw_data(test_ds0))))
+  testthat::expect_true(all(c("head_letters", "new_var", "perm") %in% names(test_ds0$get_raw_data())))
   expect_code <- c(
     "head_iris <- head(iris)",
     "ds1 <- head_iris",
@@ -378,7 +378,7 @@ testthat::test_that("Dataset mutate method with delayed logic", {
     c(expect_code, "head_mtcars$new_var2 <- 2")
   )
   testthat::expect_false(test_ds0$is_mutate_delayed())
-  testthat::expect_equal(get_raw_data(test_ds0)$new_var2, rep(2, 6))
+  testthat::expect_equal(test_ds0$get_raw_data()$new_var2, rep(2, 6))
 })
 
 testthat::test_that("Dataset check method", {
@@ -586,7 +586,7 @@ test_that("mutate_dataset", {
   )
 
   expect_equal(
-    get_raw_data(test_ds),
+    test_ds$get_raw_data(),
     data.frame(x = c(1, 2), y = c("a", "b"), stringsAsFactors = FALSE)
   )
 

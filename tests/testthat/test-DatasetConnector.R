@@ -56,7 +56,7 @@ testthat::test_that("DatasetConnector", {
   )
 
   testthat::expect_identical(
-    get_raw_data(x1),
+    x1$get_raw_data(),
     synthetic_cdisc_data("latest")$adsl
   )
 
@@ -94,7 +94,7 @@ testthat::test_that("DatasetConnector", {
   )
 
   testthat::expect_identical(
-    get_code(x3),
+    x3$get_code(),
     "ADSL <- data.frame(id = 1:3, marker = c(100, 1, 10), alive = TRUE, new_feature = c(3, 4, 1))"
   )
 
@@ -111,7 +111,7 @@ testthat::test_that("DatasetConnector", {
   )
 
   testthat::expect_identical(
-    get_raw_data(m),
+    m$get_raw_data(),
     data.frame(
       id = 1:3, marker = c(100, 1, 10), alive = TRUE, new_feature = c(3, 4, 1),
       newest = "xxx", newest2 = "best", stringsAsFactors = FALSE
@@ -226,10 +226,10 @@ testthat::test_that("csv_dataset_connector scda", {
   testthat::expect_true(is_pulled(x))
   testthat::expect_identical(get_dataname(x), "ADSL")
   testthat::expect_identical(
-    get_code(x),
+    x$get_code(),
     paste0("ADSL <- readr::read_delim(file = \"", encodeString(temp_file_csv), "\", delim = \",\")")
   )
-  data <- get_raw_data(x)
+  data <- x$get_raw_data()
   testthat::expect_true(is.data.frame(data))
   testthat::expect_identical(nrow(data), nrow(adsl))
   testthat::expect_identical(colnames(data), colnames(adsl))
@@ -242,10 +242,10 @@ testthat::test_that("csv_dataset_connector scda", {
   testthat::expect_true(is_pulled(x))
   testthat::expect_identical(get_dataname(x), "ADSL")
   testthat::expect_identical(
-    get_code(x),
+    x$get_code(),
     paste0("ADSL <- readr::read_delim(file = \"", encodeString(temp_file_csv), "\", delim = \"|\")")
   )
-  data <- get_raw_data(x)
+  data <- x$get_raw_data()
   testthat::expect_true(is.data.frame(data))
   testthat::expect_identical(nrow(data), nrow(adsl))
   testthat::expect_identical(ncol(data), ncol(adsl))
@@ -259,10 +259,10 @@ testthat::test_that("csv_dataset_connector scda", {
   testthat::expect_true(is_pulled(x))
   testthat::expect_identical(get_dataname(x), "ADSL")
   testthat::expect_identical(
-    get_code(x),
+    x$get_code(),
     paste0("ADSL <- readr::read_delim(file = \"", encodeString(temp_file_csv), "\", delim = \"\\t\")")
   )
-  data <- get_raw_data(x)
+  data <- x$get_raw_data()
   testthat::expect_true(is.data.frame(data))
   testthat::expect_identical(nrow(data), nrow(adsl))
   testthat::expect_identical(ncol(data), ncol(adsl))
@@ -276,10 +276,10 @@ testthat::test_that("csv_dataset_connector scda", {
   testthat::expect_true(is_pulled(x))
   testthat::expect_identical(get_dataname(x), "ADSL")
   testthat::expect_identical(
-    get_code(x),
+    x$get_code(),
     paste0("ADSL <- readr::read_delim(file = \"", encodeString(temp_file_csv), "\", delim = \";\")")
   )
-  data <- get_raw_data(x)
+  data <- x$get_raw_data()
   testthat::expect_true(is.data.frame(data))
   testthat::expect_identical(nrow(data), nrow(adsl))
   testthat::expect_identical(ncol(data), ncol(adsl))
@@ -305,10 +305,10 @@ testthat::test_that("csv_dataset_connector non-standard datasets multi/space cha
   testthat::expect_true(is_pulled(x))
   testthat::expect_identical(get_dataname(x), "ADSL")
   testthat::expect_identical(
-    get_code(x),
+    x$get_code(),
     paste0("ADSL <- readr::read_delim(file = \"", encodeString(temp_file_csv), "\", delim = \"$\")")
   )
-  data <- get_raw_data(x)
+  data <- x$get_raw_data()
   testthat::expect_true(is.data.frame(data))
   testthat::expect_identical(nrow(data), nrow(test_adsl_ns))
   testthat::expect_equal(colnames(x$get_raw_data()), colnames(test_adsl_ns))
@@ -321,10 +321,10 @@ testthat::test_that("csv_dataset_connector non-standard datasets multi/space cha
   testthat::expect_true(is_pulled(x))
   testthat::expect_identical(get_dataname(x), "ADSL")
   testthat::expect_identical(
-    get_code(x), paste0("ADSL <- readr::read_delim(file = \"",
+    x$get_code(), paste0("ADSL <- readr::read_delim(file = \"",
     encodeString(temp_file_csv), "\", delim = \" \")")
   )
-  data <- get_raw_data(x)
+  data <- x$get_raw_data()
   testthat::expect_true(is.data.frame(data))
   testthat::expect_false(identical(data, test_adsl))
 })
@@ -348,14 +348,14 @@ testthat::test_that("csv_dataset_connector attritubes", {
   testthat::expect_true(is_pulled(x))
   testthat::expect_identical(get_dataname(x), "ADSL")
   testthat::expect_identical(
-    get_code(x),
+    x$get_code(),
     paste0("ADSL <- readr::read_delim(file = \"", encodeString(temp_file_csv), "\", delim = \",\")")
   )
-  data <- get_raw_data(x)
+  data <- x$get_raw_data()
   testthat::expect_null(attributes(data[[1]])$label)
 
   # we should use mutate_dataset
-  data <- get_raw_data(x %>% mutate_dataset("rtables::var_labels(ADSL) <- letters[1:4]"))
+  data <- (x %>% mutate_dataset("rtables::var_labels(ADSL) <- letters[1:4]"))$get_raw_data()
   testthat::expect_identical(attributes(data[[1]])$label, "a")
 })
 
@@ -372,10 +372,10 @@ testthat::test_that("csv_cdisc_dataset_connector scda", {
   testthat::expect_true(is_pulled(x))
   testthat::expect_identical(get_dataname(x), "ADSL")
   testthat::expect_identical(
-    get_code(x),
+    x$get_code(),
     paste0("ADSL <- readr::read_delim(file = \"", encodeString(temp_file_csv), "\", delim = \",\")")
   )
-  data <- get_raw_data(x)
+  data <- x$get_raw_data()
   testthat::expect_true(is.data.frame(data))
   testthat::expect_identical(nrow(data), nrow(adsl))
   testthat::expect_identical(colnames(data), colnames(adsl))
@@ -388,10 +388,10 @@ testthat::test_that("csv_cdisc_dataset_connector scda", {
   testthat::expect_true(is_pulled(x))
   testthat::expect_identical(get_dataname(x), "ADSL")
   testthat::expect_identical(
-    get_code(x),
+    x$get_code(),
     paste0("ADSL <- readr::read_delim(file = \"", encodeString(temp_file_csv), "\", delim = \"|\")")
   )
-  data <- get_raw_data(x)
+  data <- x$get_raw_data()
   testthat::expect_true(is.data.frame(data))
   testthat::expect_identical(nrow(data), nrow(adsl))
   testthat::expect_identical(ncol(data), ncol(adsl))
@@ -430,7 +430,7 @@ testthat::test_that("script_dataset_connector", {
 
   testthat::expect_true(is(get_dataset(x), c("RelationalDataset", "R6")))
 
-  testthat::expect_true(is(get_raw_data(x), c("data.frame")))
+  testthat::expect_true(is(x$get_raw_data(), c("data.frame")))
 })
 
 testthat::test_that("script_cdisc_dataset_connector", {
@@ -454,7 +454,7 @@ testthat::test_that("script_cdisc_dataset_connector", {
 
   testthat::expect_true(is(get_dataset(x), c("RelationalDataset", "R6")))
 
-  testthat::expect_true(is(get_raw_data(x), c("data.frame")))
+  testthat::expect_true(is(x$get_raw_data(), c("data.frame")))
 })
 
 test_that("rice_dataset", {
@@ -484,7 +484,7 @@ test_that("rice_dataset", {
   x <- rice_cdisc_dataset_connector("ADLB", "/path/to/ADLB")
   mutate_dataset(x, code = "ADLB$x <- 1")
 
-  testthat::expect_equal(get_code(x), "ADLB <- rice::rice_read(node = \"/path/to/ADLB\", prolong = TRUE)\nADLB$x <- 1")
+  testthat::expect_equal(x$get_code(), "ADLB <- rice::rice_read(node = \"/path/to/ADLB\", prolong = TRUE)\nADLB$x <- 1")
 })
 
 testthat::test_that("fun_cdisc_dataset_connector", {
@@ -538,7 +538,7 @@ testthat::test_that("fun_cdisc_dataset_connector", {
 
   expect_error(y_wrong$pull())
 
-  expect_identical(get_raw_data(y_1), my_data_1())
+  expect_identical(y_1$get_raw_data(), my_data_1())
 
   fun_direct <- fun_cdisc_dataset_connector(
     dataname = "ADSL",
@@ -555,8 +555,8 @@ testthat::test_that("fun_cdisc_dataset_connector", {
 
   fun_direct2$pull()
 
-  data_1 <- get_raw_data(fun_direct)
-  data_2 <- get_raw_data(fun_direct2)
+  data_1 <- fun_direct$get_raw_data()
+  data_2 <- fun_direct2$get_raw_data()
 
   testthat::expect_true(is.data.frame(data_1))
   testthat::expect_true(is.data.frame(data_2))
@@ -599,6 +599,10 @@ testthat::test_that("code_dataset_connector - Test various inputs", {
 
   get_code_file <- code_dataset_connector(
     dataname = "ADSL",
+    # This get_code is the method for a character data type,
+    # which is unrelated and not a wrapper to any of the R6 classes' $get_code.
+    # So it does not break convention to leave it here instead.
+    # It needs to be called here.
     code = get_code(file_example, dataname = "ADSL")
   )
 
@@ -683,17 +687,17 @@ testthat::test_that("code_dataset_connector - library calls", {
 
   datasets <- get_datasets(data)
   expect_identical(
-    get_raw_data(datasets[[1]]),
+    datasets[[1]]$get_raw_data(),
     synthetic_cdisc_dataset(dataset_name = "adsl", name = "latest")
   )
 
   expect_identical(
-    unique(get_raw_data(datasets[[2]])$SEX),
+    unique(datasets[[2]]$get_raw_data()$SEX),
     factor("F", levels = c("F", "M"))
   )
 
   expect_identical(
-    unique(get_raw_data(datasets[[3]])$SEX),
+    unique(datasets[[3]]$get_raw_data()$SEX),
     factor("F", levels = c("F", "M"))
   )
 })
@@ -726,7 +730,7 @@ testthat::test_that("DatasetConnector mutate method with delayed logic", {
   testthat::expect_false(t_dc$is_pulled())
   load_dataset(t_dc)
   testthat::expect_false(t_dc$is_mutate_delayed())
-  testthat::expect_true(all(c("head_letters", "tail_letters") %in% names(get_raw_data(t_dc))))
+  testthat::expect_true(all(c("head_letters", "tail_letters") %in% names(t_dc$get_raw_data())))
 
   testthat::expect_equal(
     pretty_code_string(t_dc$get_code()),
@@ -776,22 +780,22 @@ testthat::test_that("DatasetConnector mutate method with delayed logic", {
   # "head_letters" and "tail_letters" columns had already been executed
   # "head_integers" and "one" columns are delayed
   load_dataset(t_dc)
-  testthat::expect_true(all(c("head_letters", "tail_letters", "head_integers", "one") %in% names(get_raw_data(t_dc))))
+  testthat::expect_true(all(c("head_letters", "tail_letters", "head_integers", "one") %in% names(t_dc$get_raw_data())))
   testthat::expect_false(t_dc$is_mutate_delayed())
 
   # mutate should again be eager
   mutate_dataset(t_dc2, code = "test_dc2$five <- 5")
-  testthat::expect_equal(get_raw_data(t_dc2)$five, rep(5, 6))
+  testthat::expect_equal(t_dc2$get_raw_data()$five, rep(5, 6))
 
   mutate_dataset(t_dc, code = "test_dc$five <- t_dc2$five", vars = list(t_dc2 = t_dc2))
-  testthat::expect_equal(get_raw_data(t_dc)$five, rep(5, 6))
+  testthat::expect_equal(t_dc$get_raw_data()$five, rep(5, 6))
   testthat::expect_false(t_dc$is_mutate_delayed())
 
   # multiple lines of identical code
   mutate_dataset(t_dc, code = "test_dc$five <- 2 * test_dc$five")
   mutate_dataset(t_dc, code = "test_dc$five <- 2 * test_dc$five")
   mutate_dataset(t_dc, code = "test_dc$five <- 2 * test_dc$five")
-  testthat::expect_equal(get_raw_data(t_dc)$five, rep(40, 6))
+  testthat::expect_equal(t_dc$get_raw_data()$five, rep(40, 6))
   testthat::expect_false(t_dc$is_mutate_delayed())
 
   # multi layer dependencies
@@ -818,13 +822,13 @@ testthat::test_that("DatasetConnector mutate method with delayed logic", {
   testthat::expect_true("test_dc$seven <- 7" %in% pretty_code_string(t_dc$get_code()))
   testthat::expect_true(t_dc$is_mutate_delayed())
   # confirming that mutation has not happened
-  testthat::expect_silent(get_raw_data(t_dc))
+  testthat::expect_silent(t_dc$get_raw_data())
   load_dataset(t_dc3)
-  testthat::expect_false(any(c("six", "seven") %in% names(get_raw_data(t_dc))))
+  testthat::expect_false(any(c("six", "seven") %in% names(t_dc$get_raw_data())))
 
   # current state
   testthat::expect_true(all(
-    names(get_raw_data(t_dc)) %in% c("head_letters", "tail_letters", "head_integers", "one", "five"))
+    names(t_dc$get_raw_data()) %in% c("head_letters", "tail_letters", "head_integers", "one", "five"))
   )
 
   # load_dataset, which calls pull method, will reset to original state because dependencies have changed
@@ -832,33 +836,33 @@ testthat::test_that("DatasetConnector mutate method with delayed logic", {
 
   testthat::expect_true(t_dc$is_mutate_delayed())
   # original state. all columns resulting from mutations have been removed
-  testthat::expect_true(all(names(get_raw_data(t_dc)) %in% c("head_letters")))
+  testthat::expect_true(all(names(t_dc$get_raw_data()) %in% c("head_letters")))
   # still it must return code from all previously inputted mutate statements
   testthat::expect_true(
     "test_dc$seven <- 7" %in% pretty_code_string(t_dc$get_code())
   )
 
   # confirming that mutation has not happened
-  testthat::expect_false(any(c("six", "seven") %in% names(get_raw_data(t_dc))))
+  testthat::expect_false(any(c("six", "seven") %in% names(t_dc$get_raw_data())))
   # confirming that mutation is delayed
   testthat::expect_true(t_dc2$is_mutate_delayed())
 
   # confirming get_raw_data will eager mutate t_dc2 because t_dc3 has been loaded
-  testthat::expect_true(all(c("head_integers", "five", "neg_integers") %in% names(get_raw_data(t_dc2))))
+  testthat::expect_true(all(c("head_integers", "five", "neg_integers") %in% names(t_dc2$get_raw_data())))
 
   # re running all mutation statements
   load_dataset(t_dc)
   testthat::expect_false(t_dc$is_mutate_delayed())
   testthat::expect_true(all(c(
-    "head_integers", "tail_letters", "head_integers", "one", "five", "six", "seven") %in% names(get_raw_data(t_dc)))
+    "head_integers", "tail_letters", "head_integers", "one", "five", "six", "seven") %in% names(t_dc$get_raw_data()))
   )
 
-  testthat::expect_equal(get_raw_data(t_dc)$seven, rep(7, 6))
-  testthat::expect_equal(get_raw_data(t_dc)$six, rep(41, 6))
-  testthat::expect_equal(get_raw_data(t_dc)$five, rep(40, 6))
+  testthat::expect_equal(t_dc$get_raw_data()$seven, rep(7, 6))
+  testthat::expect_equal(t_dc$get_raw_data()$six, rep(41, 6))
+  testthat::expect_equal(t_dc$get_raw_data()$five, rep(40, 6))
   # back to eager mutate
   mutate_dataset(t_dc, code = "test_dc$eight <- 8")
-  testthat::expect_equal(get_raw_data(t_dc)$eight, rep(8, 6))
+  testthat::expect_equal(t_dc$get_raw_data()$eight, rep(8, 6))
 })
 
 testthat::test_that("DatasetConnector mutate method edge cases", {
@@ -872,7 +876,7 @@ testthat::test_that("DatasetConnector mutate method edge cases", {
   testthat::expect_silent(
     mutate_dataset(t_dc, code = "test_dc$new_var <- head_mtcars$carb", vars = list(head_mtcars = test_ds1))
   )
-  testthat::expect_equal(get_raw_data(t_dc)$new_var, c(4, 4, 1, 1, 2, 1))
+  testthat::expect_equal(t_dc$get_raw_data()$new_var, c(4, 4, 1, 1, 2, 1))
 })
 
 testthat::test_that("get_code_class returns the correct CodeClass object", {
