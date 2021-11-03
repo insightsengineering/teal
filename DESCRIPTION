@@ -1,7 +1,7 @@
 Type: Package
 Package: teal
 Title: Exploratory Web Apps for Analyzing Clinical Trials Data
-Version: 0.10.0.9003
+Version: 0.10.0.9006
 Date: 2021-10-13
 Authors@R: c(
     person("NEST", , , "nestcicd@roche.com", role = c("aut", "cre")),
@@ -31,6 +31,7 @@ Imports:
     ggplot2,
     grDevices,
     lifecycle,
+    logger,
     magrittr,
     methods,
     MultiAssayExperiment,
@@ -56,9 +57,9 @@ Suggests:
     scda.2021,
     test.nest (>= 0.2.11),
     testthat (>= 2.0)
-VignetteBuilder: 
+VignetteBuilder:
     knitr
-RdMacros: 
+RdMacros:
     lifecycle
 biocViews:
 Encoding: UTF-8
@@ -123,6 +124,7 @@ Collate:
     'modules_debugging.R'
     'mutate_dataset.R'
     'optionalInput.R'
+    'register_logger.R'
     'resolve_delayed.R'
     'select_spec.R'
     'set_args.R'
