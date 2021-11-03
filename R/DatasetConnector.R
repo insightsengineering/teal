@@ -214,6 +214,13 @@ DatasetConnector <- R6::R6Class( #nolint
     get_var_r6 = function() {
       return(private$var_r6)
     },
+    #' @description
+    #' Get the list of dependencies that are Dataset or DatasetConnector objects
+    #'
+    #' @return \code{list}
+    get_pull_vars = function() {
+      return(private$pull_vars)
+    },
 
     # ___ setters ====
     #' @description

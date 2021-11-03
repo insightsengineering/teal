@@ -353,8 +353,8 @@ DataAbstract <- R6::R6Class( #nolint
     reassign_datasets_vars = function() {
       for (dataset in self$get_items()) {
         if (is(dataset, "Dataset")) {
-          pull_vars <- dataset$.__enclos_env__$private$vars
-          mutate_vars <- dataset$.__enclos_env__$private$mutate_vars
+          pull_vars <- dataset$get_pull_vars()
+          mutate_vars <- dataset$get_mutate_vars()
 
           if (length(pull_vars) > 0) {
             dataset$set_vars(
@@ -372,8 +372,8 @@ DataAbstract <- R6::R6Class( #nolint
           }
         } else if (is(dataset, "DatasetConnector")) {
           dataset_in_connector <- dataset$.__enclos_env__$private$dataset
-          pull_vars <- dataset_in_connector$.__enclos_env__$private$vars
-          mutate_vars <- dataset_in_connector$.__enclos_env__$private$mutate_vars
+          pull_vars <- dataset_in_connector$get_pull_vars()
+          mutate_vars <- dataset_in_connector$get_mutate_vars()
 
           if (length(pull_vars) > 0) {
             dataset_in_connector$set_vars(
