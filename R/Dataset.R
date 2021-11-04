@@ -259,7 +259,7 @@ Dataset <- R6::R6Class( # nolint
       private$var_r6 <- datasets[names(private$var_r6)]
       private$vars <- datasets[names(private$vars)]
       private$mutate_vars <- datasets[names(private$mutate_vars)]
-      return(invisible(NULL))
+      invisible(NULL)
     },
     #' @description
     #' Set the label for the dataset
