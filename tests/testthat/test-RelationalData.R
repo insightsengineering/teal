@@ -454,7 +454,7 @@ testthat::test_that("RelationalData$print prints out expected output on basic in
   )
 })
 
-testthat::test_that("deep_clone changes the references", {
+testthat::test_that("clone(deep = TRUE) changes the references of the items", {
   test_ds0 <- Dataset$new("head_mtcars", head(mtcars), code = "head_mtcars <- head(mtcars)")
   test_ds1 <- dataset_connector(
     dataname = "test_dc",
@@ -467,6 +467,17 @@ testthat::test_that("deep_clone changes the references", {
   testthat::expect_false(
     identical(data, data_cloned)
   )
+})
+
+testthat::test_that("valid references to the items after init", {
+  test_ds0 <- Dataset$new("test_ds0", head(mtcars), code = "test_ds0 <- head(mtcars)")
+  test_ds1 <- dataset_connector(
+    dataname = "test_ds1",
+    pull_callable = callable_function(data.frame),
+    vars = list(test_ds0 = test_ds0)
+  )
+  data <- teal_data(test_ds0, test_ds1)
+  testthat::expect_identical(data$get_items(), list(test_ds0 = test_ds0, test_ds1 = test_ds1))
 })
 
 testthat::test_that("reassign_datasets_vars updates the references of the vars", {

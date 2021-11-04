@@ -1203,13 +1203,28 @@ testthat::test_that("DatasetConnect$print prints dataset when it is pulled", {
   )
 })
 
-testthat::test_that("deep_clone changes the references", {
-  pull_fun <- callable_function(data.frame)
-  t_dc <- dataset_connector("test_dc", pull_fun)
+testthat::test_that("valid references to vars after init", {
+  test_ds0 <- Dataset$new("head_mtcars", head(mtcars), code = "head_mtcars <- head(mtcars)")
+  test_ds1 <- dataset_connector(
+    dataname = "test_dc",
+    pull_callable = callable_function(data.frame),
+    vars = list(test_ds0 = test_ds0)
+  )
 
-  t_dc_cloned <- t_dc$clone(deep = TRUE)
+  vars <- test_ds1$get_var_r6()
+  testthat::expect_identical(vars$test_ds0, test_ds0)
+})
+
+testthat::test_that("clone(deep = TRUE) changes the references of the vars", {
+  test_ds0 <- Dataset$new("head_mtcars", head(mtcars), code = "head_mtcars <- head(mtcars)")
+  test_ds1 <- dataset_connector(
+    dataname = "test_dc",
+    pull_callable = callable_function(data.frame),
+    vars = list(test_ds0 = test_ds0)
+  )
+  test_ds1_cloned <- test_ds1$clone(deep = TRUE)
   testthat::expect_false(
-    identical(t_dc, t_dc_cloned)
+    identical(test_ds1_cloned$get_var_r6()$test_ds0, test_ds0)
   )
 })
 
@@ -1221,16 +1236,26 @@ testthat::test_that("reassign_datasets_vars updates the references of the vars",
     vars = list(test_ds0 = test_ds0)
   )
 
-  # same references after init
-  vars <- test_ds1$get_var_r6()
-  testthat::expect_identical(vars$test_ds0, test_ds0)
+  # after reassignment vars_r6, vars and muatate_vars match new reference
+  test_ds0_cloned <- test_ds0$clone(deep = TRUE)
+  test_ds1$reassign_datasets_vars(datasets = list(test_ds0 = test_ds0_cloned))
+
+  vars <- test_ds1$.__enclos_env__$private$pull_vars
+  testthat::expect_identical(vars$test_ds0, test_ds0_cloned)
+})
+
+testthat::test_that("reassign_datasets_vars updates the references of the vars_r6", {
+  test_ds0 <- Dataset$new("head_mtcars", head(mtcars), code = "head_mtcars <- head(mtcars)")
+  test_ds1 <- dataset_connector(
+    dataname = "test_dc",
+    pull_callable = callable_function(data.frame),
+    vars = list(test_ds0 = test_ds0)
+  )
 
   # after reassignment vars_r6, vars and muatate_vars match new reference
   test_ds0_cloned <- test_ds0$clone(deep = TRUE)
   test_ds1$reassign_datasets_vars(datasets = list(test_ds0 = test_ds0_cloned))
 
   vars_r6 <- test_ds1$get_var_r6()
-  vars <- test_ds1$.__enclos_env__$private$pull_vars
   testthat::expect_identical(vars_r6$test_ds0, test_ds0_cloned)
-  testthat::expect_identical(vars$test_ds0, test_ds0_cloned)
 })
