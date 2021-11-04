@@ -9,6 +9,7 @@
 * Added print methods to the `DatasetConnector`, `RelationalData`, and `RelationalDataconnector` classes and added input validation to the implementation of the print method that was already in the `Dataset` object.
 * Added public facing constructor functions for `CDISCDataConnector`, `RelationalDataConnector`, and `DataConnection` classes.
 * Added support for logging using the `logger` package. Added a new function `register_logger`, which registers a logger in a given namespace.
+* Added support of the full screen for a `module` when the `filters` argument is equal `NULL`.
 
 ### Miscellaneous
 * Replaced the servers from `DataConnection`, `RelationalDataConnector`, `DatasetConnector`, and `RelationalData` with `moduleServer`.
