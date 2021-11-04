@@ -4,16 +4,17 @@
 \alias{to_relational_data}
 \title{S3 generic for \code{to_relational_data} function.}
 \usage{
-to_relational_data(data, data_call = NULL)
+to_relational_data(data)
 }
 \arguments{
-\item{data}{\code{RelationalData}, \code{Dataset}, \code{data.frame}, \code{list} or \code{function} returning a named list.}
-
-\item{data_call}{\code{call} output of \code{substitute(data)}.}
+\item{data}{\code{Dataset}, \code{DatasetConnector}, \code{data.frame}, \code{list} or \code{function} returning a named list.}
 }
 \value{
 list of \code{RelationalData} objects
 }
 \description{
 Takes the input of data argument and translates them to relational data objects.
+}
+\note{
+\code{to_relational_data} should only be used inside \code{init} call to guarantee correct behavior.
 }

@@ -228,7 +228,6 @@ reference:
     - RelationalDataConnector
     - SEFilterStates
     - srv_teal_with_splash
-    - to_relational_data
     - ui_teal_with_splash
   - subtitle: Unexported Functions
     desc: These functions are useful for teal developers.
@@ -260,6 +259,7 @@ reference:
     - srv_teal
     - text_to_call
     - topological_sort
+    - to_relational_data
     - ui_nested_tabs
     - ui_tabs_with_filters
     - ui_teal

@@ -14,14 +14,14 @@
 #' This is a wrapper function around the `module_teal.R` functions. Unless you are
 #' an end-user, don't use this function, but instead this module.
 #'
-#' @param data (`RelationalData` or `list` or `data.frame`) R6 object where \code{\link{cdisc_data}}
-#' or \code{\link{teal_data}} returns such a one or a list of data frames and datasets as returned
-#' by \code{\link{cdisc_dataset}} or \code{\link{dataset}} or a list of data frames and the previous
-#' objects or a single data frame.\cr
-#' NOTE: when a \code{list} or \code{data.frame} alone is provided, teal does not guarantee
-#' reproducibility of the code when names of the list elements does not match the original object
-#' names. To ensure reproducibility please use \code{\link{teal_data}} or \code{\link{cdisc_data}}
-#' with `check = TRUE` enabled.
+#' @param data (`RelationalData` or `Dataset` or `DatasetConnector` or `list` or `data.frame`)
+#' R6 object as returned by \code{\link{cdisc_data}}, \code{\link{teal_data}}, \code{\link{cdisc_dataset}},
+#' \code{\link{dataset}}, \code{\link{dataset}}, \code{\link{dataset_connector}} or
+#' \code{\link{cdisc_dataset_connector}} or a single `data.frame` or a list of the previous objects or
+#' function returning a named list.
+#' NOTE: teal does not guarantee reproducibility of the code when names of the list elements do not match
+#' the original object names. To ensure reproducibility please use \code{\link{teal_data}} or
+#' \code{\link{cdisc_data}} with `check = TRUE` enabled.
 #' @param modules nested list with one list per module with the
 #'   following named list elements:
 #'   \tabular{ll}{
@@ -135,7 +135,7 @@ init <- function(data,
                  footer = tags$p("Add Footer Here"),
                  id = character(0)) {
   if (!is(data, "RelationalData")) {
-    data <- to_relational_data(data = data, data_call = substitute(data))
+    data <- to_relational_data(data = data)
   }
 
   stopifnot(

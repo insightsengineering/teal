@@ -2,16 +2,19 @@ dataset_1 <- Dataset$new("iris", head(iris))
 adsl_df <- as.data.frame(as.list(setNames(nm = get_cdisc_keys("ADSL"))))
 adsl_dataset <- CDISCDataset$new("ADSL", adsl_df, parent = character(0), keys = get_cdisc_keys("ADSL"))
 mods <- teal:::get_dummy_modules()
+merge_module_wrapper <- function(data) {
+  to_relational_data(data)
+}
 
 test_that("to_relational_data accepts data.frame as input", {
   iris <- head(iris)
-  output <- to_relational_data(iris, substitute(adsl_df))
+  output <- merge_module_wrapper(iris)
   testthat::expect_error(output, NA)
   testthat::expect_is(output, "RelationalData")
 })
 
 test_that("to_relational_data accepts cdisc data.frame as input", {
-  output <- to_relational_data(adsl_df, substitute(adsl_df))
+  output <- merge_module_wrapper(adsl_df)
   testthat::expect_error(output, NA)
   testthat::expect_is(output, "RelationalData")
 })
@@ -35,34 +38,28 @@ test_that("to_relational_data accepts DatasetConnector as input", {
 })
 
 test_that("to_relational_data accepts an unnamed list of data.frame as input", {
-  output_dataset_list <- to_relational_data(list(iris), substitute(list(iris)))
+  output_dataset_list <- merge_module_wrapper(list(iris))
   testthat::expect_error(output_dataset_list, NA)
   testthat::expect_is(output_dataset_list, "RelationalData")
   testthat::expect_identical(output_dataset_list$get_datanames(), "iris")
 })
 
 test_that("to_relational_data accepts a named list of data.frame as input", {
-  output_dataset_list <- to_relational_data(list(AA = head(iris)))
+  output_dataset_list <- merge_module_wrapper(list(AA = head(iris)))
   testthat::expect_error(output_dataset_list, NA)
   testthat::expect_is(output_dataset_list, "RelationalData")
   testthat::expect_identical(output_dataset_list$get_datanames(), "AA")
 })
 
 test_that("to_relational_data accepts a mixed named list of data.frame as input", {
-  output_dataset_list <- to_relational_data(
-    list(AA = head(iris), head(mtcars)),
-    substitute(list(AA = head(iris), head(mtcars)))
-  )
+  output_dataset_list <- merge_module_wrapper(list(AA = head(iris), head(mtcars)))
   testthat::expect_error(output_dataset_list, NA)
   testthat::expect_is(output_dataset_list, "RelationalData")
   testthat::expect_identical(output_dataset_list$get_datanames(), c("AA", "head(mtcars)"))
 })
 
 test_that("to_relational_data accepts a complete named list of data.frame as input", {
-  output_dataset_list <- to_relational_data(
-    list(AA = head(iris), BB = head(mtcars)),
-    substitute(list(AA = head(iris), BB = head(mtcars)))
-  )
+  output_dataset_list <- merge_module_wrapper(list(AA = head(iris), BB = head(mtcars)))
   testthat::expect_error(output_dataset_list, NA)
   testthat::expect_is(output_dataset_list, "RelationalData")
   testthat::expect_identical(output_dataset_list$get_datanames(), c("AA", "BB"))
@@ -72,18 +69,12 @@ test_that("to_relational_data accepts a mixed named list of objects as input", {
   dataset_22 <- Dataset$new("iris22", head(iris))
   dsc1 <- DatasetConnector$new("dsc1", CallableFunction$new(function() head(iris)))
 
-  output_dataset_list <- to_relational_data(
-    list(AA = head(iris), dataset_22),
-    substitute(list(AA = head(iris), dataset_22, mtcars, dsc1))
-  )
+  output_dataset_list <- merge_module_wrapper(list(AA = head(iris), dataset_22))
   testthat::expect_error(output_dataset_list, NA)
   testthat::expect_is(output_dataset_list, "RelationalData")
   testthat::expect_identical(output_dataset_list$get_datanames(), c("AA", "iris22"))
 
-  output_dataset_list2 <- to_relational_data(
-    list(AA = head(iris), dataset_22, mtcars, dsc1),
-    substitute(list(AA = head(iris), dataset_22, mtcars, dsc1))
-  )
+  output_dataset_list2 <- merge_module_wrapper(list(AA = head(iris), dataset_22, mtcars, dsc1))
   testthat::expect_error(output_dataset_list2, NA)
   testthat::expect_is(output_dataset_list2, "RelationalData")
   testthat::expect_identical(output_dataset_list2$get_datanames(), c("AA", "iris22", "mtcars", "dsc1"))
@@ -92,7 +83,7 @@ test_that("to_relational_data accepts a mixed named list of objects as input", {
 test_that("to_relational_data accepts a function returning a named list as input", {
   fun <- function() list(AA = adsl_df, BB = adsl_df)
 
-  output_dataset_fun <- to_relational_data(fun(), substitute(fun()))
+  output_dataset_fun <- merge_module_wrapper(fun())
   testthat::expect_error(output_dataset_fun, NA)
   testthat::expect_is(output_dataset_fun, "RelationalData")
   testthat::expect_identical(output_dataset_fun$get_datanames(), c("AA", "BB"))
@@ -101,7 +92,7 @@ test_that("to_relational_data accepts a function returning a named list as input
 test_that("to_relational_data accepts a function returning a Dataset as input", {
   fun <- function() cdisc_dataset("ADSL", adsl_df)
 
-  output_dataset_fun <- to_relational_data(fun(), substitute(fun()))
+  output_dataset_fun <- to_relational_data(fun())
   testthat::expect_error(output_dataset_fun, NA)
   testthat::expect_is(output_dataset_fun, "RelationalData")
   testthat::expect_identical(output_dataset_fun$get_datanames(), "ADSL")
@@ -111,7 +102,7 @@ test_that("to_relational_data throws error with a function returning a non-named
   fun <- function() list(iris, mtcars)
 
   testthat::expect_error(
-    to_relational_data(fun(), substitute(fun())),
+    merge_module_wrapper(fun()),
     "Unnamed lists shouldn't be provided as input for data. Please use a named list.")
 })
 
@@ -119,7 +110,7 @@ test_that("to_relational_data throws error with a function returning a semi-name
   fun <- function() list(iris = iris, mtcars)
 
   testthat::expect_error(
-    to_relational_data(fun(), substitute(fun())),
+    merge_module_wrapper(fun()),
     "Unnamed lists shouldn't be provided as input for data. Please use a named list.")
 })
 
@@ -128,8 +119,6 @@ test_that("to_relational_data throws error with a multiple functions returning d
   fun_mtcars <- function() mtcars
 
   testthat::expect_error(
-    to_relational_data(
-      setNames(nm = c("AA"), list(fun_iris(), fun_mtcars())),
-      substitute(setNames(nm = c("AA"), list(fun_iris(), fun_mtcars())))),
+    merge_module_wrapper(setNames(nm = c("AA"), list(fun_iris(), fun_mtcars()))),
     "Unnamed lists shouldn't be provided as input for data. Please use a named list.")
 })

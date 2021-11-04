@@ -2,18 +2,19 @@
 #'
 #' Takes the input of data argument and translates them to relational data objects.
 #'
-#' @param data `RelationalData`, `Dataset`, `data.frame`, `list` or `function` returning a named list.
-#' @param data_call \code{call} output of `substitute(data)`.
+#' @param data `Dataset`, `DatasetConnector`, `data.frame`, `list` or `function` returning a named list.
 #'
 #' @return list of `RelationalData` objects
 #'
-to_relational_data <- function(data, data_call = NULL) {
+#' @note `to_relational_data` should only be used inside `init` call to guarantee correct behavior.
+#'
+to_relational_data <- function(data) {
   UseMethod("to_relational_data")
 }
 
 #' @export
-to_relational_data.data.frame <- function(data, data_call = NULL) { # nolint #nousage
-  dataname <- deparse(data_call, width.cutoff = 500L)
+to_relational_data.data.frame <- function(data) { # nolint #nousage
+  dataname <- deparse(substitute(data, parent.frame()), width.cutoff = 500L)
 
   if (grepl("\\)$", dataname) && is(data, "data.frame")) {
     stop("Single data.frame shouldn't be provided as a result of a function call. Please name
@@ -28,7 +29,7 @@ to_relational_data.data.frame <- function(data, data_call = NULL) { # nolint #no
 }
 
 #' @export
-to_relational_data.Dataset <- function(data, data_call = NULL) { #nousage
+to_relational_data.Dataset <- function(data) { #nousage
   dataname <- get_dataname(data)
 
   if (dataname %in% names(default_cdisc_keys)) {
@@ -39,13 +40,13 @@ to_relational_data.Dataset <- function(data, data_call = NULL) { #nousage
 }
 
 #' @export
-to_relational_data.DatasetConnector <- function(data, data_call = NULL) { # nolint #nousage
+to_relational_data.DatasetConnector <- function(data) { # nolint #nousage
   to_relational_data.Dataset(data)
 }
 
 #' @export
-to_relational_data.list <- function(data, data_call = NULL) { #nousage
-  call <- data_call
+to_relational_data.list <- function(data) { #nousage
+  call <- substitute(data, parent.frame())
   list_names <- names(data)
   parsed_names <- as.character(call)[-1]
 
