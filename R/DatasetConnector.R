@@ -225,7 +225,7 @@ DatasetConnector <- R6::R6Class( #nolint
       if (!is.null(private$dataset)) {
         private$dataset$reassign_datasets_vars(datasets)
       }
-      return(NULL)
+      invisible(NULL)
     },
     #' @description
     #' Set label of the \code{dataset} object

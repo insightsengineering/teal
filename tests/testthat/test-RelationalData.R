@@ -497,8 +497,5 @@ testthat::test_that("reassign_datasets_vars updates the references of the vars",
   cloned_items <- data$get_items()
   data$reassign_datasets_vars()
 
-  testthat::expect_identical(
-    data$get_items(),
-    cloned_items
-  )
+  testthat::expect_identical(data$get_items(), cloned_items)
 })
