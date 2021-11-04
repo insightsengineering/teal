@@ -63,11 +63,10 @@ ds$launch()
 \item \href{#method-get_pull_callable}{\code{DatasetConnector$get_pull_callable()}}
 \item \href{#method-get_raw_data}{\code{DatasetConnector$get_raw_data()}}
 \item \href{#method-get_var_r6}{\code{DatasetConnector$get_var_r6()}}
-\item \href{#method-get_pull_vars}{\code{DatasetConnector$get_pull_vars()}}
+\item \href{#method-reassign_datasets_vars}{\code{DatasetConnector$reassign_datasets_vars()}}
 \item \href{#method-set_dataset_label}{\code{DatasetConnector$set_dataset_label()}}
 \item \href{#method-set_keys}{\code{DatasetConnector$set_keys()}}
 \item \href{#method-set_join_keys}{\code{DatasetConnector$set_join_keys()}}
-\item \href{#method-set_pull_vars}{\code{DatasetConnector$set_pull_vars()}}
 \item \href{#method-mutate_join_keys}{\code{DatasetConnector$mutate_join_keys()}}
 \item \href{#method-pull}{\code{DatasetConnector$pull()}}
 \item \href{#method-set_args}{\code{DatasetConnector$set_args()}}
@@ -334,16 +333,25 @@ Get the list of dependencies that are Dataset or DatasetConnector objects
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-get_pull_vars"></a>}}
-\if{latex}{\out{\hypertarget{method-get_pull_vars}{}}}
-\subsection{Method \code{get_pull_vars()}}{
-Get the list of dependencies that are Dataset or DatasetConnector objects
+\if{html}{\out{<a id="method-reassign_datasets_vars"></a>}}
+\if{latex}{\out{\hypertarget{method-reassign_datasets_vars}{}}}
+\subsection{Method \code{reassign_datasets_vars()}}{
+Reassign \code{vars} in this object to keep references up to date after deep clone.
+Update is done based on the objects passed in \code{datasets} argument.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{DatasetConnector$get_pull_vars()}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{DatasetConnector$reassign_datasets_vars(datasets)}\if{html}{\out{</div>}}
 }
 
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{datasets}}{(\verb{named list} of \code{Dataset(s)} or \code{DatasetConnector(s)})\cr
+objects with valid pointers.}
+}
+\if{html}{\out{</div>}}
+}
 \subsection{Returns}{
-\code{list}
+NULL invisible
 }
 }
 \if{html}{\out{<hr>}}
@@ -402,26 +410,6 @@ set join_keys for a given dataset and self
 \describe{
 \item{\code{x}}{\code{list} of \code{JoinKeySet} objects (which are created using the \code{join_key} function)
 or single \code{JoinKeySet} objects}
-}
-\if{html}{\out{</div>}}
-}
-\subsection{Returns}{
-(\code{self}) invisibly for chaining
-}
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-set_pull_vars"></a>}}
-\if{latex}{\out{\hypertarget{method-set_pull_vars}{}}}
-\subsection{Method \code{set_pull_vars()}}{
-Set vars which pull-code depends on
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{DatasetConnector$set_pull_vars(pull_vars)}\if{html}{\out{</div>}}
-}
-
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{pull_vars}}{(anything) any R object which pulling code refers to}
 }
 \if{html}{\out{</div>}}
 }

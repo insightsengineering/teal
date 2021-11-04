@@ -39,7 +39,6 @@ be empty (i.e. \code{character(0)}).}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="DatasetConnector" data-id="get_keys">}\href{../../teal/html/DatasetConnector.html#method-get_keys}{\code{teal::DatasetConnector$get_keys()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="DatasetConnector" data-id="get_pull_args">}\href{../../teal/html/DatasetConnector.html#method-get_pull_args}{\code{teal::DatasetConnector$get_pull_args()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="DatasetConnector" data-id="get_pull_callable">}\href{../../teal/html/DatasetConnector.html#method-get_pull_callable}{\code{teal::DatasetConnector$get_pull_callable()}}\out{</span>}
-\item \out{<span class="pkg-link" data-pkg="teal" data-topic="DatasetConnector" data-id="get_pull_vars">}\href{../../teal/html/DatasetConnector.html#method-get_pull_vars}{\code{teal::DatasetConnector$get_pull_vars()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="DatasetConnector" data-id="get_raw_data">}\href{../../teal/html/DatasetConnector.html#method-get_raw_data}{\code{teal::DatasetConnector$get_raw_data()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="DatasetConnector" data-id="get_server">}\href{../../teal/html/DatasetConnector.html#method-get_server}{\code{teal::DatasetConnector$get_server()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="DatasetConnector" data-id="get_ui">}\href{../../teal/html/DatasetConnector.html#method-get_ui}{\code{teal::DatasetConnector$get_ui()}}\out{</span>}
@@ -51,11 +50,11 @@ be empty (i.e. \code{character(0)}).}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="DatasetConnector" data-id="mutate">}\href{../../teal/html/DatasetConnector.html#method-mutate}{\code{teal::DatasetConnector$mutate()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="DatasetConnector" data-id="mutate_join_keys">}\href{../../teal/html/DatasetConnector.html#method-mutate_join_keys}{\code{teal::DatasetConnector$mutate_join_keys()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="DatasetConnector" data-id="print">}\href{../../teal/html/DatasetConnector.html#method-print}{\code{teal::DatasetConnector$print()}}\out{</span>}
+\item \out{<span class="pkg-link" data-pkg="teal" data-topic="DatasetConnector" data-id="reassign_datasets_vars">}\href{../../teal/html/DatasetConnector.html#method-reassign_datasets_vars}{\code{teal::DatasetConnector$reassign_datasets_vars()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="DatasetConnector" data-id="set_args">}\href{../../teal/html/DatasetConnector.html#method-set_args}{\code{teal::DatasetConnector$set_args()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="DatasetConnector" data-id="set_dataset_label">}\href{../../teal/html/DatasetConnector.html#method-set_dataset_label}{\code{teal::DatasetConnector$set_dataset_label()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="DatasetConnector" data-id="set_join_keys">}\href{../../teal/html/DatasetConnector.html#method-set_join_keys}{\code{teal::DatasetConnector$set_join_keys()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="DatasetConnector" data-id="set_keys">}\href{../../teal/html/DatasetConnector.html#method-set_keys}{\code{teal::DatasetConnector$set_keys()}}\out{</span>}
-\item \out{<span class="pkg-link" data-pkg="teal" data-topic="DatasetConnector" data-id="set_pull_vars">}\href{../../teal/html/DatasetConnector.html#method-set_pull_vars}{\code{teal::DatasetConnector$set_pull_vars()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="DatasetConnector" data-id="set_ui_input">}\href{../../teal/html/DatasetConnector.html#method-set_ui_input}{\code{teal::DatasetConnector$set_ui_input()}}\out{</span>}
 }
 \out{</details>}

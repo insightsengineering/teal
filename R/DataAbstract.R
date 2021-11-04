@@ -348,7 +348,6 @@ DataAbstract <- R6::R6Class( #nolint
       return(invisible(self))
     },
 
-
     #' @description
     #' Reassign `vars` in `Dataset` and `DatasetConnector` objects
     #' to keep the valid reference after deep cloning
@@ -453,6 +452,6 @@ DataAbstract <- R6::R6Class( #nolint
         stop("Some datanames already exists")
       }
       return(TRUE)
-    },
+    }
   )
 )

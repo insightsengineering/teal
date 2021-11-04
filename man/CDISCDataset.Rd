@@ -63,7 +63,6 @@ x$get_parent()
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="Dataset" data-id="get_mutate_code_class">}\href{../../teal/html/Dataset.html#method-get_mutate_code_class}{\code{teal::Dataset$get_mutate_code_class()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="Dataset" data-id="get_mutate_vars">}\href{../../teal/html/Dataset.html#method-get_mutate_vars}{\code{teal::Dataset$get_mutate_vars()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="Dataset" data-id="get_numeric_colnames">}\href{../../teal/html/Dataset.html#method-get_numeric_colnames}{\code{teal::Dataset$get_numeric_colnames()}}\out{</span>}
-\item \out{<span class="pkg-link" data-pkg="teal" data-topic="Dataset" data-id="get_pull_vars">}\href{../../teal/html/Dataset.html#method-get_pull_vars}{\code{teal::Dataset$get_pull_vars()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="Dataset" data-id="get_raw_data">}\href{../../teal/html/Dataset.html#method-get_raw_data}{\code{teal::Dataset$get_raw_data()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="Dataset" data-id="get_row_labels">}\href{../../teal/html/Dataset.html#method-get_row_labels}{\code{teal::Dataset$get_row_labels()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="Dataset" data-id="get_rownames">}\href{../../teal/html/Dataset.html#method-get_rownames}{\code{teal::Dataset$get_rownames()}}\out{</span>}
@@ -75,6 +74,7 @@ x$get_parent()
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="Dataset" data-id="mutate">}\href{../../teal/html/Dataset.html#method-mutate}{\code{teal::Dataset$mutate()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="Dataset" data-id="mutate_join_keys">}\href{../../teal/html/Dataset.html#method-mutate_join_keys}{\code{teal::Dataset$mutate_join_keys()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="Dataset" data-id="print">}\href{../../teal/html/Dataset.html#method-print}{\code{teal::Dataset$print()}}\out{</span>}
+\item \out{<span class="pkg-link" data-pkg="teal" data-topic="Dataset" data-id="reassign_datasets_vars">}\href{../../teal/html/Dataset.html#method-reassign_datasets_vars}{\code{teal::Dataset$reassign_datasets_vars()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="Dataset" data-id="set_code">}\href{../../teal/html/Dataset.html#method-set_code}{\code{teal::Dataset$set_code()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="Dataset" data-id="set_dataset_label">}\href{../../teal/html/Dataset.html#method-set_dataset_label}{\code{teal::Dataset$set_dataset_label()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="Dataset" data-id="set_join_keys">}\href{../../teal/html/Dataset.html#method-set_join_keys}{\code{teal::Dataset$set_join_keys()}}\out{</span>}

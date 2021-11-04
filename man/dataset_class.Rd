@@ -63,7 +63,7 @@ be automatically derived.
 \item \href{#method-get_join_keys}{\code{Dataset$get_join_keys()}}
 \item \href{#method-get_hash}{\code{Dataset$get_hash()}}
 \item \href{#method-get_var_r6}{\code{Dataset$get_var_r6()}}
-\item \href{#method-get_pull_vars}{\code{Dataset$get_pull_vars()}}
+\item \href{#method-reassign_datasets_vars}{\code{Dataset$reassign_datasets_vars()}}
 \item \href{#method-set_dataset_label}{\code{Dataset$set_dataset_label()}}
 \item \href{#method-set_keys}{\code{Dataset$set_keys()}}
 \item \href{#method-set_join_keys}{\code{Dataset$set_join_keys()}}
@@ -425,16 +425,25 @@ Get the list of dependencies that are Dataset or DatasetConnector objects
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-get_pull_vars"></a>}}
-\if{latex}{\out{\hypertarget{method-get_pull_vars}{}}}
-\subsection{Method \code{get_pull_vars()}}{
-Get the list of dependencies that are Dataset or DatasetConnector objects
+\if{html}{\out{<a id="method-reassign_datasets_vars"></a>}}
+\if{latex}{\out{\hypertarget{method-reassign_datasets_vars}{}}}
+\subsection{Method \code{reassign_datasets_vars()}}{
+Reassign \code{vars} in this object to keep references up to date after deep clone.
+Update is done based on the objects passed in \code{datasets} argument.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{Dataset$get_pull_vars()}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{Dataset$reassign_datasets_vars(datasets)}\if{html}{\out{</div>}}
 }
 
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{datasets}}{(\verb{named list} of \code{Dataset(s)} or \code{DatasetConnector(s)})\cr
+objects with valid pointers.}
+}
+\if{html}{\out{</div>}}
+}
 \subsection{Returns}{
-\code{list}
+NULL invisible
 }
 }
 \if{html}{\out{<hr>}}
@@ -548,17 +557,13 @@ mutate the join_keys for a given dataset and object
 \subsection{Method \code{set_vars()}}{
 Adds variables which code depends on
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{Dataset$set_vars(vars, is_mutate_vars = FALSE, override = FALSE)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{Dataset$set_vars(vars)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
 \item{\code{vars}}{(\verb{named list}) contains any R object which code depends on}
-
-\item{\code{is_mutate_vars}}{(\code{logical(1)}) whether this var is used in mutate code}
-
-\item{\code{override}}{(\code{logical(1)}) whether variable should be reassigned}
 }
 \if{html}{\out{</div>}}
 }
@@ -755,10 +760,6 @@ Check if dataset has already been pulled.
 
 \subsection{Returns}{
 \code{TRUE} if dataset has been already pulled, else \code{FALSE}
-Set variables which code depends on
-parameter vars (\verb{named list}) contains any R object which code depends on
-parameter is_mutate_vars (\code{logical(1)}) whether this var is used in mutate code
-parameter override (\code{logical(1)}) whether variable should be reassigned
 }
 }
 \if{html}{\out{<hr>}}
@@ -812,7 +813,6 @@ The objects of this class are cloneable with this method.
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="Dataset" data-id="get_mutate_code_class">}\href{../../teal/html/Dataset.html#method-get_mutate_code_class}{\code{teal::Dataset$get_mutate_code_class()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="Dataset" data-id="get_mutate_vars">}\href{../../teal/html/Dataset.html#method-get_mutate_vars}{\code{teal::Dataset$get_mutate_vars()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="Dataset" data-id="get_numeric_colnames">}\href{../../teal/html/Dataset.html#method-get_numeric_colnames}{\code{teal::Dataset$get_numeric_colnames()}}\out{</span>}
-\item \out{<span class="pkg-link" data-pkg="teal" data-topic="Dataset" data-id="get_pull_vars">}\href{../../teal/html/Dataset.html#method-get_pull_vars}{\code{teal::Dataset$get_pull_vars()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="Dataset" data-id="get_raw_data">}\href{../../teal/html/Dataset.html#method-get_raw_data}{\code{teal::Dataset$get_raw_data()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="Dataset" data-id="get_row_labels">}\href{../../teal/html/Dataset.html#method-get_row_labels}{\code{teal::Dataset$get_row_labels()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="Dataset" data-id="get_rownames">}\href{../../teal/html/Dataset.html#method-get_rownames}{\code{teal::Dataset$get_rownames()}}\out{</span>}
@@ -823,6 +823,7 @@ The objects of this class are cloneable with this method.
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="Dataset" data-id="merge_join_keys">}\href{../../teal/html/Dataset.html#method-merge_join_keys}{\code{teal::Dataset$merge_join_keys()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="Dataset" data-id="mutate">}\href{../../teal/html/Dataset.html#method-mutate}{\code{teal::Dataset$mutate()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="Dataset" data-id="mutate_join_keys">}\href{../../teal/html/Dataset.html#method-mutate_join_keys}{\code{teal::Dataset$mutate_join_keys()}}\out{</span>}
+\item \out{<span class="pkg-link" data-pkg="teal" data-topic="Dataset" data-id="reassign_datasets_vars">}\href{../../teal/html/Dataset.html#method-reassign_datasets_vars}{\code{teal::Dataset$reassign_datasets_vars()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="Dataset" data-id="recreate">}\href{../../teal/html/Dataset.html#method-recreate}{\code{teal::Dataset$recreate()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="Dataset" data-id="set_code">}\href{../../teal/html/Dataset.html#method-set_code}{\code{teal::Dataset$set_code()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="Dataset" data-id="set_dataset_label">}\href{../../teal/html/Dataset.html#method-set_dataset_label}{\code{teal::Dataset$set_dataset_label()}}\out{</span>}

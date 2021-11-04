@@ -249,7 +249,12 @@ Dataset <- R6::R6Class( # nolint
       return(private$var_r6)
     },
     # ___ setters ====
-    #
+    #' @description
+    #' Reassign `vars` in this object to keep references up to date after deep clone.
+    #' Update is done based on the objects passed in `datasets` argument.
+    #' @param datasets (`named list` of `Dataset(s)` or `DatasetConnector(s)`)\cr
+    #'   objects with valid pointers.
+    #' @return NULL invisible
     reassign_datasets_vars = function(datasets) {
       private$var_r6 <- datasets[names(private$var_r6)]
       private$vars <- datasets[names(private$vars)]
@@ -718,17 +723,19 @@ Dataset <- R6::R6Class( # nolint
     },
     set_var_r6 = function(vars) {
       stopifnot(is_fully_named_list(vars))
-      for (var_id in seq_along(vars)) {
-        var <- vars[[var_id]]
-        varname <- names(vars)[var_id]
+      for (varname in names(vars)) {
+        var <- vars[[varname]]
 
         if (is(var, "DatasetConnector") || is(var, "Dataset")) {
-          for (var_dep in c(list(), var, var$get_var_r6())) {
+          var_deps <- var$get_var_r6()
+          var_deps[[varname]] <- var
+          for (var_dep_name in names(var_deps)) {
+            var_dep <- var_deps[[var_dep_name]]
             if (identical(self, var_dep)) {
               stop("Circular dependencies detected")
             }
+            private$var_r6[[var_dep_name]] <- var_dep
           }
-          private$var_r6[[varname]] <- var
         }
       }
       return(invisible(self))

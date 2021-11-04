@@ -192,7 +192,8 @@ testthat::test_that("Dataset$set_vars throws an error if passed the enclosing Da
   test_ds1$set_vars(vars = list(test_ds0 = test_ds0))
   test_ds2$set_vars(vars = list(test_ds1 = test_ds1))
 
-  testthat::expect_error(test_ds0$set_vars(vars = list(test_ds2 = test_ds2)), regexp = "Circular dependencies detected")
+  testthat::expect_error(
+    test_ds0$set_vars(vars = list(test_ds2 = test_ds2)), regexp = "Circular dependencies detected")
 })
 
 testthat::test_that("Dataset$set_vars throws an error if passed the enclosing DatasetConnector", {
