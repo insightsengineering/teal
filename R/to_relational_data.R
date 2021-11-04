@@ -7,17 +7,10 @@
 #'
 #' @return list of `RelationalData` objects
 #'
-#' @export
 to_relational_data <- function(data, data_call = NULL) {
   UseMethod("to_relational_data")
 }
 
-#' data.frame input method for \code{\link{to_relational_data}}
-#'
-#' @inheritParams to_relational_data
-#'
-#' @seealso \code{\link{to_relational_data}}
-#'
 #' @export
 to_relational_data.data.frame <- function(data, data_call = NULL) { # nolint
   dataname <- deparse(data_call, width.cutoff = 500L)
@@ -34,12 +27,6 @@ to_relational_data.data.frame <- function(data, data_call = NULL) { # nolint
   }
 }
 
-#' Dataset input method for \code{\link{to_relational_data}}
-#'
-#' @inheritParams to_relational_data
-#'
-#' @seealso \code{\link{to_relational_data}}
-#'
 #' @export
 to_relational_data.Dataset <- function(data, data_call = NULL) {
   dataname <- get_dataname(data)
@@ -51,23 +38,11 @@ to_relational_data.Dataset <- function(data, data_call = NULL) {
   }
 }
 
-#' DatasetConnector input method for \code{\link{to_relational_data}}
-#'
-#' @inheritParams to_relational_data
-#'
-#' @seealso \code{\link{to_relational_data}}
-#'
 #' @export
 to_relational_data.DatasetConnector <- function(data, data_call = NULL) { # nolint
   to_relational_data.Dataset(data)
 }
 
-#' list input method for \code{\link{to_relational_data}}
-#'
-#' @inheritParams to_relational_data
-#'
-#' @seealso \code{\link{to_relational_data}}
-#'
 #' @export
 to_relational_data.list <- function(data, data_call = NULL) {
   call <- data_call

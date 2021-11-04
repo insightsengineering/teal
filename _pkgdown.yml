@@ -229,10 +229,6 @@ reference:
     - SEFilterStates
     - srv_teal_with_splash
     - to_relational_data
-    - to_relational_data.Dataset
-    - to_relational_data.DatasetConnector
-    - to_relational_data.data.frame
-    - to_relational_data.list
     - ui_teal_with_splash
   - subtitle: Unexported Functions
     desc: These functions are useful for teal developers.
