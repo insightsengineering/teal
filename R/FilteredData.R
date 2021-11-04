@@ -562,6 +562,7 @@ FilteredData <- R6::R6Class( # nolint
       moduleServer(
         id = id,
         function(input, output, session) {
+          logger::log_trace("FilteredData$srv_filter_panel initializing")
           self$srv_filter_overview(
             id = "teal_filters_info",
             active_datanames = active_datanames
@@ -631,12 +632,15 @@ FilteredData <- R6::R6Class( # nolint
           }, ignoreNULL = FALSE)
 
           observeEvent(input$remove_all_filters, {
+            logger::log_trace("FilteredData$srv_filter_panel@1 removing all filters")
             lapply(self$datanames(), function(dataname) {
               fdataset <- self$get_filtered_dataset(dataname = dataname)
               fdataset$queues_empty()
             })
+            logger::log_trace("FilteredData$srv_filter_panel@1 removed all filters")
           })
 
+          logger::log_trace("FilteredData$srv_filter_panel initialized")
           NULL
         }
       )
@@ -677,6 +681,7 @@ FilteredData <- R6::R6Class( # nolint
       moduleServer(
         id = id,
         function(input, output, session) {
+          logger::log_trace("FilteredData$srv_filter_overview initializing")
           output$table <- renderUI({
             datanames <- if (identical(active_datanames(), "all")) {
               self$datanames()
@@ -716,6 +721,7 @@ FilteredData <- R6::R6Class( # nolint
             table_html
           })
 
+          logger::log_trace("FilteredData$srv_filter_overview initialized")
           NULL
         }
       )

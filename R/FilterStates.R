@@ -464,6 +464,9 @@ FilterStates <- R6::R6Class( # nolint
       moduleServer(
         id = id,
         function(input, output, session) {
+          logger::log_trace(
+            "FilterStates$add_filter_state, adding FilterState, input_dataname: { private$input_dataname }"
+          )
           self$queue_push(
             x = filter_state,
             queue_index = queue_index,
@@ -522,11 +525,16 @@ FilterStates <- R6::R6Class( # nolint
             ignoreNULL = TRUE,
             eventExpr = input$remove,
             handlerExpr = {
+              logger::log_trace("FilterStates$add_filter_state@1 removing FilterState from queue no { queue_index }")
               self$queue_remove(queue_index, element_id)
               private$remove_filter_state(queue_index, element_id)
+              logger::log_trace("FilterStates$add_filter_state@1 removed FilterState from queue no { queue_index }")
             }
           )
 
+          logger::log_trace(
+            "FilterStates$add_filter_state, added FilterState, input_dataname: { private$input_dataname }"
+          )
           NULL
         }
       )
@@ -723,6 +731,9 @@ DFFilterStates <- R6::R6Class( # nolint
       moduleServer(
         id = id,
         function(input, output, session) {
+          logger::log_trace(
+            "DFFilterStates$srv_add_filter_state initializing, dataname: { private$input_dataname }"
+          )
           active_filter_vars <- reactive({
             vapply(
               X = self$queue_get(queue_index = 1L),
@@ -749,6 +760,10 @@ DFFilterStates <- R6::R6Class( # nolint
             avail_column_choices(),
             ignoreNULL = TRUE,
             handlerExpr = {
+              logger::log_trace(paste(
+                "DFFilterStates$srv_add_filter_state@1 updating available column choices,",
+                "dataname { private$input_dataname }"
+              ))
               if (is.null(avail_column_choices())) {
                 shinyjs::hide("var_to_add")
               } else {
@@ -759,6 +774,10 @@ DFFilterStates <- R6::R6Class( # nolint
                 "var_to_add",
                 choices = avail_column_choices()
               )
+              logger::log_trace(paste(
+                "DFFilterStates$srv_add_filter_state@1 updated available column choices,",
+                "dataname { private$input_dataname }"
+              ))
             }
           )
 
@@ -766,6 +785,9 @@ DFFilterStates <- R6::R6Class( # nolint
           observeEvent(
             eventExpr = input$var_to_add,
             handlerExpr = {
+              logger::log_trace(
+                "DFFilterStates$srv_add_filter_state@2 adding FilterState, dataname: { private$input_dataname }"
+              )
               id <- html_id_mapping[[input$var_to_add]]
               private$add_filter_state(
                 id = id,
@@ -778,10 +800,15 @@ DFFilterStates <- R6::R6Class( # nolint
                 queue_index = 1L,
                 element_id = input$var_to_add
               )
-
+              logger::log_trace(
+                "DFFilterStates$srv_add_filter_state@2 added FilterState, dataname: { private$input_dataname }"
+              )
             }
           )
 
+          logger::log_trace(
+            "DFFilterStates$srv_add_filter_state initialized, dataname: { private$input_dataname }"
+          )
           NULL
         }
       )
@@ -956,6 +983,7 @@ MAEFilterStates <- R6::R6Class( # nolint
       moduleServer(
         id = id,
         function(input, output, session) {
+          logger::log_trace("MAEFilterState$srv_add_filter_state initializing, dataname: { private$input_dataname }")
           active_filter_vars <- reactive({
             vapply(
               X = self$queue_get(queue_index = "y"),
@@ -979,6 +1007,10 @@ MAEFilterStates <- R6::R6Class( # nolint
             avail_column_choices(),
             ignoreNULL = TRUE,
             handlerExpr = {
+              logger::log_trace(paste(
+                "MAEFilterStates$srv_add_filter_state@1 updating available column choices,",
+                "dataname { private$input_dataname }"
+              ))
               if (is.null(avail_column_choices())) {
                 shinyjs::hide("var_to_add")
               } else {
@@ -989,6 +1021,10 @@ MAEFilterStates <- R6::R6Class( # nolint
                 "var_to_add",
                 choices = avail_column_choices()
               )
+              logger::log_trace(paste(
+                "MAEFilterStates$srv_add_filter_state@1 updated available column choices,",
+                "dataname { private$input_dataname }"
+              ))
             }
           )
 
@@ -996,6 +1032,9 @@ MAEFilterStates <- R6::R6Class( # nolint
           observeEvent(
             eventExpr = input$var_to_add,
             handlerExpr = {
+              logger::log_trace(
+                "MAEFilterStates$srv_add_filter_state@2 adding FilterState, dataname: { private$input_dataname }"
+              )
               id <- html_id_mapping[[input$var_to_add]]
               private$add_filter_state(
                 id = id,
@@ -1009,10 +1048,13 @@ MAEFilterStates <- R6::R6Class( # nolint
                 queue_index = "y",
                 element_id = input$var_to_add
               )
-
+              logger::log_trace(
+                "MAEFilterStates$srv_add_filter_state@2 added FilterState, dataname: { private$input_dataname }"
+              )
             }
           )
 
+          logger::log_trace("MAEFilterState$srv_add_filter_state initialized, dataname: { private$input_dataname }")
           NULL
         }
       )
@@ -1213,6 +1255,7 @@ SEFilterStates <- R6::R6Class( # nolint
       moduleServer(
         id = id,
         function(input, output, session) {
+          logger::log_trace("SEFilterState$srv_add_filter_state initializing, dataname: { private$input_dataname }")
           active_filter_col_vars <- reactive({
             vapply(
               X = self$queue_get(queue_index = "select"),
@@ -1261,6 +1304,10 @@ SEFilterStates <- R6::R6Class( # nolint
             avail_row_data_choices(),
             ignoreNULL = TRUE,
             handlerExpr = {
+              logger::log_trace(paste(
+                "SEFilterStates$srv_add_filter_state@1 updating available row data choices,",
+                "dataname { private$input_dataname }"
+              ))
               if (is.null(avail_row_data_choices())) {
                 shinyjs::hide("row_to_add")
               } else {
@@ -1271,6 +1318,10 @@ SEFilterStates <- R6::R6Class( # nolint
                 "row_to_add",
                 choices = avail_row_data_choices()
               )
+              logger::log_trace(paste(
+                "SEFilterStates$srv_add_filter_state@1 updated available row data choices,",
+                "dataname { private$input_dataname }"
+              ))
             }
           )
 
@@ -1278,6 +1329,10 @@ SEFilterStates <- R6::R6Class( # nolint
             avail_col_data_choices(),
             ignoreNULL = TRUE,
             handlerExpr = {
+              logger::log_trace(paste(
+                "SEFilterStates$srv_add_filter_state@2 updating available col data choices,",
+                "dataname { private$input_dataname }"
+              ))
               if (is.null(avail_col_data_choices())) {
                 shinyjs::hide("col_to_add")
               } else {
@@ -1288,6 +1343,10 @@ SEFilterStates <- R6::R6Class( # nolint
                 "col_to_add",
                 choices = avail_col_data_choices()
               )
+              logger::log_trace(paste(
+                "SEFilterStates$srv_add_filter_state@2 updated available col data choices,",
+                "dataname { private$input_dataname }"
+              ))
             }
           )
 
@@ -1296,6 +1355,10 @@ SEFilterStates <- R6::R6Class( # nolint
           observeEvent(
             eventExpr = input$col_to_add,
             handlerExpr = {
+              logger::log_trace(paste(
+                "SEFilterStates$srv_add_filter_state@3 adding FilterState to col data,",
+                "dataname: { private$input_dataname }"
+              ))
               id <- col_html_mapping[[input$col_to_add]]
               private$add_filter_state(
                 id = id,
@@ -1307,6 +1370,10 @@ SEFilterStates <- R6::R6Class( # nolint
                 queue_index = "select",
                 element_id = input$col_to_add
               )
+              logger::log_trace(paste(
+                "SEFilterStates$srv_add_filter_state@3 added FilterState to col data,",
+                "dataname: { private$input_dataname }"
+              ))
             }
           )
 
@@ -1315,6 +1382,10 @@ SEFilterStates <- R6::R6Class( # nolint
           observeEvent(
             eventExpr = input$row_to_add,
             handlerExpr = {
+              logger::log_trace(paste(
+                "SEFilterStates$srv_add_filter_state@4 adding FilterState to row data,",
+                "dataname: { private$input_dataname }"
+              ))
               id <- row_html_mapping[[input$row_to_add]]
               private$add_filter_state(
                 id = id,
@@ -1326,9 +1397,14 @@ SEFilterStates <- R6::R6Class( # nolint
                 queue_index = "subset",
                 element_id = input$row_to_add
               )
+              logger::log_trace(paste(
+                "SEFilterStates$srv_add_filter_state@4 added FilterState to row data,",
+                "dataname: { private$input_dataname }"
+              ))
             }
           )
 
+          logger::log_trace("SEFilterState$srv_add_filter_state initialized, dataname: { private$input_dataname }")
           NULL
         }
       )
@@ -1454,6 +1530,9 @@ MatrixFilterStates <- R6::R6Class( # nolint
       moduleServer(
         id = id,
         function(input, output, session) {
+          logger::log_trace(
+            "MatrixFilterStates$srv_add_filter_state initializing, dataname: { private$input_dataname }"
+          )
           active_filter_vars <- reactive({
             vapply(
               X = self$queue_get(queue_index = "subset"),
@@ -1477,6 +1556,10 @@ MatrixFilterStates <- R6::R6Class( # nolint
             avail_column_choices(),
             ignoreNULL = TRUE,
             handlerExpr = {
+              logger::log_trace(paste(
+                "MatrixFilterStates$srv_add_filter_state@1 updating column choices,",
+                "dataname: { private$input_dataname }"
+              ))
               if (length(avail_column_choices()) < 0) {
                 shinyjs::hide("var_to_add")
               } else {
@@ -1487,6 +1570,10 @@ MatrixFilterStates <- R6::R6Class( # nolint
                 "var_to_add",
                 choices = avail_column_choices()
               )
+              logger::log_trace(paste(
+                "MatrixFilterStates$srv_add_filter_state@1 updated column choices,",
+                "dataname: { private$input_dataname }"
+              ))
             }
           )
 
@@ -1494,6 +1581,10 @@ MatrixFilterStates <- R6::R6Class( # nolint
           observeEvent(
             eventExpr = input$var_to_add,
             handlerExpr = {
+              logger::log_trace(paste(
+                "MatrixFilterState$srv_add_filter_state@2 adding FilterState,",
+                "dataname: { private$input_dataname }"
+              ))
               id <- html_id_mapping[[input$var_to_add]]
               private$add_filter_state(
                 id = id,
@@ -1507,9 +1598,16 @@ MatrixFilterStates <- R6::R6Class( # nolint
                 queue_index = "subset",
                 element_id = input$var_to_add
               )
+              logger::log_trace(paste(
+                "MatrixFilterState$srv_add_filter_state@2 added FilterState,",
+                "dataname: { private$input_dataname }"
+              ))
             }
           )
 
+          logger::log_trace(
+            "MatrixFilterStates$srv_add_filter_state initialized, dataname: { private$input_dataname }"
+          )
           NULL
         }
       )

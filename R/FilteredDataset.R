@@ -123,10 +123,12 @@ FilteredDataset <- R6::R6Class( # nolint
     #' Removes all active filter items applied to this dataset
     #' @return NULL
     queues_empty = function() {
+      logger::log_trace("Removing all filters from FilteredDataset: { self$get_dataname() }")
       lapply(
         self$get_filter_states(),
         function(queue) queue$queue_empty()
       )
+      logger::log_trace("Removed all filters from FilteredDataset: { self$get_dataname() }")
       NULL
     },
 
@@ -356,6 +358,7 @@ FilteredDataset <- R6::R6Class( # nolint
         id = id,
         function(input, output, session) {
           dataname <- self$get_dataname()
+          logger::log_trace("Initializing server of FilteredDataset, name: { dataname }")
           stopifnot(
             is_character_single(dataname)
           )
@@ -366,6 +369,8 @@ FilteredDataset <- R6::R6Class( # nolint
               function(x) x$queue_empty()
             )
           })
+
+          logger::log_trace("Initialized server of FilteredDataset, name: { dataname }")
           NULL
         }
       )
@@ -508,12 +513,18 @@ DefaultFilteredDataset <- R6::R6Class( # nolint
       moduleServer(
         id = id,
         function(input, output, session) {
+          logger::log_trace(
+            "DefaultFilteredDataset$set_bookmark_state setting up bookmarked filters in : { self$get_dataname() }"
+          )
           data <- self$get_data(filtered = FALSE)
           fs <- self$get_filter_states()[[1]]
           fs$set_bookmark_state(
             id = "filter",
             state = state,
             data = data
+          )
+          logger::log_trace(
+            "DefaultFilteredDataset$set_bookmark_state done setting up bookmarked filters in : { self$get_dataname() }"
           )
           NULL
         }
@@ -557,12 +568,14 @@ DefaultFilteredDataset <- R6::R6Class( # nolint
       moduleServer(
         id = id,
         function(input, output, session) {
+          logger::log_trace("DefaultFilteredDataset$srv_add_filter_state initializing, name: { self$get_dataname() }")
           data <- get_raw_data(self$get_dataset())
           self$get_filter_states(id = "filter")$srv_add_filter_state(
             id = "filter",
             data = data,
             ...
           )
+          logger::log_trace("DefaultFilteredDataset$srv_add_filter_state initialized, name: { self$get_dataname() }")
           NULL
         }
       )
@@ -845,6 +858,7 @@ MAEFilteredDataset <- R6::R6Class( # nolint
       moduleServer(
         id = id,
         function(input, output, session) {
+          logger::log_trace("MAEFilteredDataset$set_bookmark_state setting up filters: { self$get_dataname() }")
           data <- self$get_data(filtered = FALSE)
           for (fs_name in names(state)) {
             fs <- self$get_filter_states()[[fs_name]]
@@ -855,6 +869,7 @@ MAEFilteredDataset <- R6::R6Class( # nolint
             )
           }
 
+          logger::log_trace("MAEFilteredDataset$set_bookmark_state done setting filters: { self$get_dataname() }")
           NULL
         }
       )
@@ -917,6 +932,7 @@ MAEFilteredDataset <- R6::R6Class( # nolint
       moduleServer(
         id = id,
         function(input, output, session) {
+          logger::log_trace("MAEFilteredDataset$srv_add_filter_state initializing, name: { self$get_dataname() }")
           data <- get_raw_data(self$get_dataset())
           self$get_filter_states("subjects")$srv_add_filter_state(
             id = "subjects",
@@ -933,6 +949,7 @@ MAEFilteredDataset <- R6::R6Class( # nolint
               )
             }
           )
+          logger::log_trace("MAEFilteredDataset$srv_add_filter_state initialized, name: { self$get_dataname() }")
           NULL
         }
       )
