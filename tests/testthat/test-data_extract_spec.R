@@ -2,10 +2,6 @@ library(scda)
 
 test_that("data_extract_spec argument checking", {
   expect_error(
-    data_extract_spec("toyDataset", select = NULL),
-    "Either select or filter should be not empty", fixed = TRUE
-  )
-  expect_error(
     data_extract_spec("toyDataset", select = c("A", "B")),
     "select, \"select_spec\"", fixed = TRUE
   )
@@ -305,4 +301,26 @@ testthat::test_that("delayed version of data_extract_spec", {
   testthat::expect_equal(res_obj$select, exp_obj$select)
   testthat::expect_equal(res_obj$filter[[1]]$choices, exp_obj$filter[[1]]$choices)
   testthat::expect_equal(res_obj$filter[[1]]$selected, exp_obj$filter[[1]]$selected)
+})
+
+testthat::test_that("data_extract_spec allows both select and filter parameters to be NULL", {
+  testthat::expect_error(des <- data_extract_spec("ADSL"), NA)
+})
+
+testthat::test_that("data_extract_spec returns filter_spec with multiple set to TRUE", {
+  des <- data_extract_spec("ADSL")
+  testthat::expect_equal(class(des$filter[[1]]),  c("delayed_filter_spec", "filter_spec", "delayed_data"))
+  testthat::expect_equal(length(des$filter), 1)
+  testthat::expect_true(des$filter[[1]]$multiple)
+})
+
+testthat::test_that("data_extract_spec returns select_spec with multiple set to TRUE", {
+  des <- data_extract_spec("ADSL")
+  testthat::expect_equal(length(des$select), 6)
+  testthat::expect_equal(class(des$select$choices),  c("delayed_variable_choices", "delayed_data", "choices_labeled"))
+  testthat::expect_true(des$select$multiple)
+  testthat::expect_null(des$select$selected)
+  testthat::expect_null(des$select$always_selected)
+  testthat::expect_false(des$select$fixed)
+  testthat::expect_null(des$select$label)
 })

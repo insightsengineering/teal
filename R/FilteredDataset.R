@@ -90,7 +90,6 @@ FilteredDataset <- R6::R6Class( # nolint
 
       dataname <- self$get_dataname()
       private$reactive_data <- reactive({
-        .log("################################################# Refiltering dataset ", dataname)
         env <- new.env(parent = parent.env(globalenv()))
         for (idx in seq_along(private$eval_env)) {
           env[[names(private$eval_env)[idx]]] <- if (is.reactive(private$eval_env[[idx]])) {
@@ -362,7 +361,6 @@ FilteredDataset <- R6::R6Class( # nolint
           )
 
           observeEvent(input$remove_filters, {
-            .log("removing all filters for data", self$get_dataname())
             lapply(
               self$get_filter_states(),
               function(x) x$queue_empty()

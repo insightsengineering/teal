@@ -14,7 +14,14 @@
 #' This is a wrapper function around the `module_teal.R` functions. Unless you are
 #' an end-user, don't use this function, but instead this module.
 #'
-#' @param data (`RelationalData`) R6 object where \code{cdisc_data} or \code{teal_data} returns such a one.
+#' @param data (`RelationalData` or `Dataset` or `DatasetConnector` or `list` or `data.frame`)
+#' R6 object as returned by \code{\link{cdisc_data}}, \code{\link{teal_data}}, \code{\link{cdisc_dataset}},
+#' \code{\link{dataset}}, \code{\link{dataset}}, \code{\link{dataset_connector}} or
+#' \code{\link{cdisc_dataset_connector}} or a single `data.frame` or a list of the previous objects or
+#' function returning a named list.
+#' NOTE: teal does not guarantee reproducibility of the code when names of the list elements do not match
+#' the original object names. To ensure reproducibility please use \code{\link{teal_data}} or
+#' \code{\link{cdisc_data}} with `check = TRUE` enabled.
 #' @param modules nested list with one list per module with the
 #'   following named list elements:
 #'   \tabular{ll}{
@@ -127,6 +134,10 @@ init <- function(data,
                  header = tags$p("Add Title Here"),
                  footer = tags$p("Add Footer Here"),
                  id = character(0)) {
+  if (!is(data, "RelationalData")) {
+    data <- to_relational_data(data = data)
+  }
+
   stopifnot(
     is(data, "RelationalData"),
     is(modules, "list") || is(modules, "teal_modules"),
@@ -135,6 +146,8 @@ init <- function(data,
     all(names(filter) %in% get_dataname(data)),
     is_character_vector(id, min_length = 0, max_length = 1)
   )
+
+  log_system_info()
 
   if(is(modules, "list"))  modules <- do.call(root_modules, modules)
 
