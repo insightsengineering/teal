@@ -255,6 +255,10 @@ Dataset <- R6::R6Class( # nolint
     #' @param datasets (`named list` of `Dataset(s)` or `DatasetConnector(s)`)\cr
     #'   objects with valid pointers.
     #' @return NULL invisible
+    #' @examples
+    #' test_dataset <- Dataset$new("iris", iris, vars = list(dep = Dataset$new("iris2", iris)))
+    #' test_dataset$reassign_datasets_vars(list(iris2 = Dataset$new("iris2", head(iris))))
+    #'
     reassign_datasets_vars = function(datasets) {
       private$var_r6 <- datasets[names(private$var_r6)]
       private$vars <- datasets[names(private$vars)]
