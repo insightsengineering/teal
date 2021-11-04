@@ -77,7 +77,7 @@ an end-user, don't use this function, but instead this module." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">teal</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.10.0.9006</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.10.0.9007</span>
       </span>
     </div>
 
@@ -169,7 +169,14 @@ an end-user, don't use this function, but instead this module.</p>
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>data</th>
-      <td><p>(<code>RelationalData</code>) R6 object where <code>cdisc_data</code> or <code>teal_data</code> returns such a one.</p></td>
+      <td><p>(<code>RelationalData</code> or <code>Dataset</code> or <code>DatasetConnector</code> or <code>list</code> or <code>data.frame</code>)
+R6 object as returned by <code><a href='cdisc_data.html'>cdisc_data</a></code>, <code><a href='teal_data.html'>teal_data</a></code>, <code><a href='cdisc_dataset.html'>cdisc_dataset</a></code>,
+<code><a href='dataset.html'>dataset</a></code>, <code><a href='dataset.html'>dataset</a></code>, <code><a href='dataset_connector.html'>dataset_connector</a></code> or
+<code><a href='cdisc_dataset_connector.html'>cdisc_dataset_connector</a></code> or a single <code>data.frame</code> or a list of the previous objects or
+function returning a named list.
+NOTE: teal does not guarantee reproducibility of the code when names of the list elements do not match
+the original object names. To ensure reproducibility please use <code><a href='teal_data.html'>teal_data</a></code> or
+<code><a href='cdisc_data.html'>cdisc_data</a></code> with <code>check = TRUE</code> enabled.</p></td>
     </tr>
     <tr>
       <th>modules</th>

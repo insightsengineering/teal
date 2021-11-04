@@ -71,7 +71,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">teal</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.10.0.9006</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.10.0.9007</span>
       </span>
     </div>
 
@@ -138,9 +138,9 @@
       
     </div>
 
-    <div id="teal-01009006" class="section level1">
-<h1 class="page-header" data-toc-text="0.10.0.9006">
-<a href="#teal-01009006" class="anchor"></a>teal 0.10.0.9006</h1>
+    <div id="teal-01009007" class="section level1">
+<h1 class="page-header" data-toc-text="0.10.0.9007">
+<a href="#teal-01009007" class="anchor"></a>teal 0.10.0.9007</h1>
 <div id="breaking-changes" class="section level3">
 <h3 class="hasAnchor">
 <a href="#breaking-changes" class="anchor"></a>Breaking changes</h3>
@@ -148,6 +148,7 @@
 <li>Replaced <code>rcd_dataset_connector</code> and <code>rcd_cdisc_dataset_connector</code> with <code>scda_dataset_connector</code> and <code>scda_cdisc_dataset_connector</code> respectively.</li>
 <li>Removed <code>rcd_connection</code> and <code>rcd_data</code>; <code>scda_dataset_connectors</code> can be passed into <code>cdisc_data</code> and <code>teal_data</code> directly.</li>
 <li>Running <code>teal</code> application via <code>ui_teal_with_splash</code> and <code>srv_teal_with_splash</code> is now no longer recommended because it doesn’t support some new features (e.g. logging, bookmarking). Use <code>init</code> instead.</li>
+<li>Updated <code>init</code> to accept <code>RelationalData</code>, <code>data.frame</code>, <code>Dataset</code>, <code>DatasetConnector</code>, <code>list</code> or a function returning a named list as data input.</li>
 </ul>
 </div>
 <div id="new-features" class="section level3">
