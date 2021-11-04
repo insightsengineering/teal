@@ -223,6 +223,13 @@ DatasetConnector <- R6::R6Class( #nolint
     },
 
     # ___ setters ====
+    reassign_datasets_vars = function(datasets) {
+      browser()
+      private$var_r6 <- datasets[names(private$var_r6)]
+      private$pull_vars <- datasets[names(private$pull_vars)]
+      private$dataset$reassign_datasets_vars(datasets)
+      return(NULL)
+    },
     #' @description
     #' Set label of the \code{dataset} object
     #'
@@ -630,19 +637,17 @@ DatasetConnector <- R6::R6Class( #nolint
     },
     set_var_r6 = function(vars) {
       stopifnot(is_fully_named_list(vars))
-      for (var in vars) {
+      for (var_id in seq_along(vars)) {
+        var <- vars[[var_id]]
+        varname <- names(vars)[var_id]
+
         if (is(var, "DatasetConnector") || is(var, "Dataset")) {
           for (var_dep in c(list(), var, var$get_var_r6())) {
             if (identical(self, var_dep)) {
               stop("Circular dependencies detected")
             }
           }
-          private$var_r6 <- c(
-            list(), # to ensure c.list - to avoid c.Dataset from CDSE
-            private$var_r6,
-            var,
-            var$get_var_r6()
-          )
+          private$var_r6[[varname]] <- var
         }
       }
       return(invisible(self))

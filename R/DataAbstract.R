@@ -356,46 +356,9 @@ DataAbstract <- R6::R6Class( #nolint
     #' `Dataset` is reassigned inside of `DatasetConnector`.
     reassign_datasets_vars = function() {
       for (dataset in self$get_items()) {
-        if (is(dataset, "Dataset")) {
-          pull_vars <- dataset$get_pull_vars()
-          mutate_vars <- dataset$get_mutate_vars()
-
-          if (length(pull_vars) > 0) {
-            dataset$set_vars(
-              self$get_items()[names(pull_vars)],
-              is_mutate_vars = FALSE,
-              override = TRUE
-            )
-          }
-          if (length(mutate_vars) > 0) {
-            dataset$set_vars(
-              self$get_items()[names(mutate_vars)],
-              is_mutate_vars = TRUE,
-              override = TRUE
-            )
-          }
-        } else if (is(dataset, "DatasetConnector")) {
-          dataset_in_connector <- dataset$.__enclos_env__$private$dataset
-          if (is.null(dataset_in_connector)) next
-
-          pull_vars <- dataset_in_connector$get_pull_vars()
-          mutate_vars <- dataset_in_connector$get_mutate_vars()
-
-          if (length(pull_vars) > 0) {
-            dataset_in_connector$set_vars(
-              self$get_items()[names(pull_vars)],
-              is_mutate_vars = FALSE,
-              override = TRUE
-            )
-          }
-          if (length(mutate_vars) > 0) {
-            dataset_in_connector$set_vars(
-              self$get_items()[names(mutate_vars)],
-              is_mutate_vars = TRUE,
-              override = TRUE
-            )
-          }
-        }
+        dataset$reassign_datasets_vars(
+          datasets = self$get_items()
+        )
       }
     }
   ),

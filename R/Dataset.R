@@ -257,6 +257,13 @@ Dataset <- R6::R6Class( # nolint
     },
 
     # ___ setters ====
+    #
+    reassign_datasets_vars = function(datasets) {
+      private$var_r6 <- datasets[names(private$var_r6)]
+      private$vars <- datasets[names(private$vars)]
+      private$mutate_vars <- datasets[names(private$mutate_vars)]
+      return(invisible(NULL))
+    },
     #' @description
     #' Set the label for the dataset
     #' @return (`self`) invisibly for chaining
@@ -309,8 +316,8 @@ Dataset <- R6::R6Class( # nolint
     #' @param is_mutate_vars (`logical(1)`) whether this var is used in mutate code
     #' @param override (`logical(1)`) whether variable should be reassigned
     #' @return (`self`) invisibly for chaining
-    set_vars = function(vars, is_mutate_vars = FALSE, override = FALSE) {
-      private$set_vars_internal(vars, is_mutate_vars = is_mutate_vars, override = override)
+    set_vars = function(vars) {
+      private$set_vars_internal(vars)
       return(invisible(NULL))
     },
     #' @description
@@ -621,12 +628,11 @@ Dataset <- R6::R6Class( # nolint
       )
     },
 
-    #' Set variables which code depends on
-    #' parameter vars (`named list`) contains any R object which code depends on
-    #' parameter is_mutate_vars (`logical(1)`) whether this var is used in mutate code
-    #' parameter override (`logical(1)`) whether variable should be reassigned
-    set_vars_internal = function(vars, is_mutate_vars = FALSE, override = FALSE) {
-      stopifnot(is_logical_single(override))
+    # Set variables which code depends on
+    # @param vars (`named list`) contains any R object which code depends on
+    # @param is_mutate_vars (`logical(1)`) whether this var is used in mutate code
+    set_vars_internal = function(vars, is_mutate_vars = FALSE) {
+      stopifnot(is_logical_single(is_mutate_vars))
       stopifnot(is_fully_named_list(vars))
 
       total_vars <- c(list(), private$vars, private$mutate_vars)
@@ -640,7 +646,7 @@ Dataset <- R6::R6Class( # nolint
           },
           FUN.VALUE = logical(1)
         )]
-        if (!override && length(over_rides) > 0) {
+        if (length(over_rides) > 0) {
           stop(paste("Variable name(s) already used:", paste(over_rides, collapse = ", ")))
         }
         if (is_mutate_vars) {
@@ -722,21 +728,17 @@ Dataset <- R6::R6Class( # nolint
     },
     set_var_r6 = function(vars) {
       stopifnot(is_fully_named_list(vars))
-      for (var in vars) {
+      for (var_id in seq_along(vars)) {
+        var <- vars[[var_id]]
+        varname <- names(vars)[var_id]
+
         if (is(var, "DatasetConnector") || is(var, "Dataset")) {
           for (var_dep in c(list(), var, var$get_var_r6())) {
             if (identical(self, var_dep)) {
               stop("Circular dependencies detected")
             }
           }
-          # this may cause duplicates.
-          # as of now, no reason why it makes any difference
-          # so nothing is done
-          private$var_r6 <- c(
-            list(), # to ensure c.list - to avoid c.Dataset from CDSE
-            private$var_r6,
-            var, var$get_var_r6()
-          )
+          private$var_r6[[varname]] <- var
         }
       }
       return(invisible(self))
