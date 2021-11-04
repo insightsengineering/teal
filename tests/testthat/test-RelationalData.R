@@ -452,5 +452,42 @@ testthat::test_that("RelationalData$print prints out expected output on basic in
       "1 STUDYID USUBJID PARAMCD"
     )
   )
+})
 
+testthat::test_that("deep_clone changes the references", {
+  test_ds0 <- Dataset$new("head_mtcars", head(mtcars), code = "head_mtcars <- head(mtcars)")
+  test_ds1 <- dataset_connector(
+    dataname = "test_dc",
+    pull_callable = callable_function(data.frame),
+    vars = list(test_ds0 = test_ds0)
+  )
+  data <- teal_data(test_ds0, test_ds1)
+
+  data_cloned <- data$clone(deep = TRUE)
+  testthat::expect_false(
+    identical(data, data_cloned)
+  )
+})
+
+testthat::test_that("reassign_datasets_vars updates the references of the vars", {
+  test_ds0 <- Dataset$new("test_ds0", head(mtcars), code = "test_ds0 <- head(mtcars)")
+  test_ds1 <- dataset_connector(
+    dataname = "test_ds1",
+    pull_callable = callable_function(data.frame),
+    vars = list(test_ds0 = test_ds0)
+  )
+  data <- teal_data(test_ds0, test_ds1)
+
+  # same references after init
+  testthat::expect_identical(data$get_items(), list(test_ds0 = test_ds0, test_ds1 = test_ds1))
+
+  # after reassignment vars_r6, vars and muatate_vars match new reference
+  data_cloned <- data$clone(deep = TRUE)
+  cloned_items <- data$get_items()
+  data$reassign_datasets_vars()
+
+  testthat::expect_identical(
+    data$get_items(),
+    cloned_items
+  )
 })

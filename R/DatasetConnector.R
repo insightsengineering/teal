@@ -222,7 +222,9 @@ DatasetConnector <- R6::R6Class( #nolint
     reassign_datasets_vars = function(datasets) {
       private$var_r6 <- datasets[names(private$var_r6)]
       private$pull_vars <- datasets[names(private$pull_vars)]
-      private$dataset$reassign_datasets_vars(datasets)
+      if (!is.null(private$dataset)) {
+        private$dataset$reassign_datasets_vars(datasets)
+      }
       return(NULL)
     },
     #' @description
