@@ -1,9 +1,10 @@
-# teal 0.10.0.9007
+# teal 0.10.0.9008
 
 ### Breaking changes
 * Replaced `rcd_dataset_connector` and `rcd_cdisc_dataset_connector` with `scda_dataset_connector` and `scda_cdisc_dataset_connector` respectively.
 * Removed `rcd_connection` and `rcd_data`; `scda_dataset_connectors` can be passed into `cdisc_data` and `teal_data` directly.
 * Running `teal` application via `ui_teal_with_splash` and `srv_teal_with_splash` is now no longer recommended because it doesn't support some new features (e.g. logging, bookmarking). Use `init` instead.
+* Updated `init` to accept `RelationalData`, `data.frame`, `Dataset`, `DatasetConnector`, `list` or a function returning a named list as data input.
 
 ### New features
 * Added print methods to the `DatasetConnector`, `RelationalData`, and `RelationalDataconnector` classes and added input validation to the implementation of the print method that was already in the `Dataset` object.
