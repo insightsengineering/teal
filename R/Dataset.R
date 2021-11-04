@@ -248,14 +248,6 @@ Dataset <- R6::R6Class( # nolint
     get_var_r6 = function() {
       return(private$var_r6)
     },
-    #' @description
-    #' Get the list of dependencies that are Dataset or DatasetConnector objects
-    #'
-    #' @return \code{list}
-    get_pull_vars = function() {
-      return(private$vars)
-    },
-
     # ___ setters ====
     #
     reassign_datasets_vars = function(datasets) {
@@ -313,11 +305,9 @@ Dataset <- R6::R6Class( # nolint
     #' Adds variables which code depends on
     #'
     #' @param vars (`named list`) contains any R object which code depends on
-    #' @param is_mutate_vars (`logical(1)`) whether this var is used in mutate code
-    #' @param override (`logical(1)`) whether variable should be reassigned
     #' @return (`self`) invisibly for chaining
     set_vars = function(vars) {
-      private$set_vars_internal(vars)
+      private$set_vars_internal(vars, is_mutate_vars = FALSE)
       return(invisible(NULL))
     },
     #' @description

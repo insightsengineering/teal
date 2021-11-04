@@ -60,7 +60,7 @@ DatasetConnector <- R6::R6Class( #nolint
                           vars = list()) {
       private$set_pull_callable(pull_callable)
       private$set_var_r6(vars)
-      self$set_pull_vars(vars)
+      private$set_pull_vars(vars)
 
       private$set_dataname(dataname)
       self$set_dataset_label(label)
@@ -68,10 +68,7 @@ DatasetConnector <- R6::R6Class( #nolint
 
       if (!is_empty(code)) {
         # just needs a dummy Dataset object to store mutate code, hence col = 1
-        private$dataset <- Dataset$new(
-          dataname = self$get_dataname(),
-          x = data.frame(col = 1)
-        )
+        private$dataset <- Dataset$new(dataname = self$get_dataname(), x = data.frame(col = 1))
         private$dataset$mutate(code = code, vars = vars, force_delay = TRUE)
       }
 
@@ -214,13 +211,6 @@ DatasetConnector <- R6::R6Class( #nolint
     get_var_r6 = function() {
       return(private$var_r6)
     },
-    #' @description
-    #' Get the list of dependencies that are Dataset or DatasetConnector objects
-    #'
-    #' @return \code{list}
-    get_pull_vars = function() {
-      return(private$pull_vars)
-    },
 
     # ___ setters ====
     reassign_datasets_vars = function(datasets) {
@@ -263,16 +253,6 @@ DatasetConnector <- R6::R6Class( #nolint
     #' @return (`self`) invisibly for chaining
     set_join_keys = function(x) {
       self$get_join_keys()$set(x)
-      return(invisible(self))
-    },
-
-    #' @description
-    #' Set vars which pull-code depends on
-    #' @param pull_vars (anything) any R object which pulling code refers to
-    #' @return (`self`) invisibly for chaining
-    set_pull_vars = function(pull_vars) {
-      stopifnot(is_fully_named_list(pull_vars))
-      private$pull_vars <- pull_vars
       return(invisible(self))
     },
 
@@ -586,10 +566,14 @@ DatasetConnector <- R6::R6Class( #nolint
       res$set_code(code = code, dataname = private$dataname, deps = names(private$pull_vars))
       return(res)
     },
-
     set_pull_callable = function(pull_callable) {
       stopifnot(is(pull_callable, "Callable"))
       private$pull_callable <- pull_callable
+      return(invisible(self))
+    },
+    set_pull_vars = function(pull_vars) {
+      stopifnot(is_fully_named_list(pull_vars))
+      private$pull_vars <- pull_vars
       return(invisible(self))
     },
     pull_internal = function(args = NULL, try = FALSE) {
