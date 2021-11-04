@@ -1,4 +1,4 @@
-# teal 0.10.0.9006
+# teal 0.10.0.9007
 
 ### Breaking changes
 * Replaced `rcd_dataset_connector` and `rcd_cdisc_dataset_connector` with `scda_dataset_connector` and `scda_cdisc_dataset_connector` respectively.
@@ -8,6 +8,7 @@
 ### New features
 * Added print methods to the `DatasetConnector`, `RelationalData`, and `RelationalDataconnector` classes and added input validation to the implementation of the print method that was already in the `Dataset` object.
 * Added public facing constructor functions for `CDISCDataConnector`, `RelationalDataConnector`, and `DataConnection` classes.
+* Modified `data_extract_spec` to allow both the `filter` and `select` parameters to be `NULL`, which results in the `data_extract_input` acting as if a `filter_spec` with all variables as possible choices had been supplied as the `filter` argument and a `select_spec` with the `multiple` parameter set to `TRUE` had been supplied as the `select` argument.
 * Added support for logging using the `logger` package. Added a new function `register_logger`, which registers a logger in a given namespace.
 * Added support of the full screen for a `module` when the `filters` argument is equal `NULL`.
 
