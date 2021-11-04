@@ -76,7 +76,7 @@ Note that no checks based on columns can be done because the data is only referr
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">teal</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.10.0.9005</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.10.0.9006</span>
       </span>
     </div>
 
@@ -174,7 +174,8 @@ mentioned in <code>dataname</code>. The setup can be created using <code><a href
       <td><p>(<code>NULL</code> or <code>filter_spec</code> or its respective delayed version)
 Setup of the filtering of key columns inside the dataset.
 This setup can be created using the <code><a href='filter_spec.html'>filter_spec</a></code> function.
-Please note that both select and filter cannot be empty at the same time.</p></td>
+Please note that if both select and filter are set to NULL, then the result will be a filter spec UI with all
+variables as possible choices and a select spec with multiple set to TRUE.</p></td>
     </tr>
     <tr>
       <th>reshape</th>

@@ -71,7 +71,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">teal</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.10.0.9005</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.10.0.9006</span>
       </span>
     </div>
 
@@ -138,9 +138,9 @@
       
     </div>
 
-    <div id="teal-01009005" class="section level1">
-<h1 class="page-header" data-toc-text="0.10.0.9005">
-<a href="#teal-01009005" class="anchor"></a>teal 0.10.0.9005</h1>
+    <div id="teal-01009006" class="section level1">
+<h1 class="page-header" data-toc-text="0.10.0.9006">
+<a href="#teal-01009006" class="anchor"></a>teal 0.10.0.9006</h1>
 <div id="breaking-changes" class="section level3">
 <h3 class="hasAnchor">
 <a href="#breaking-changes" class="anchor"></a>Breaking changes</h3>
@@ -156,6 +156,7 @@
 <ul>
 <li>Added print methods to the <code>DatasetConnector</code>, <code>RelationalData</code>, and <code>RelationalDataconnector</code> classes and added input validation to the implementation of the print method that was already in the <code>Dataset</code> object.</li>
 <li>Added public facing constructor functions for <code>CDISCDataConnector</code>, <code>RelationalDataConnector</code>, and <code>DataConnection</code> classes.</li>
+<li>Modified <code>data_extract_spec</code> to allow both the <code>filter</code> and <code>select</code> parameters to be <code>NULL</code>, which results in the <code>data_extract_input</code> acting as if a <code>filter_spec</code> with all variables as possible choices had been supplied as the <code>filter</code> argument and a <code>select_spec</code> with the <code>multiple</code> parameter set to <code>TRUE</code> had been supplied as the <code>select</code> argument.</li>
 <li>Added support for logging using the <code>logger</code> package. Added a new function <code>register_logger</code>, which registers a logger in a given namespace.</li>
 </ul>
 </div>
