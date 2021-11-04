@@ -252,6 +252,8 @@ Dataset <- R6::R6Class( # nolint
     #' @description
     #' Reassign `vars` in this object to keep references up to date after deep clone.
     #' Update is done based on the objects passed in `datasets` argument.
+    #' Overwrites dependencies with names matching the names of the objects passed
+    #' in `datasets`.
     #' @param datasets (`named list` of `Dataset(s)` or `DatasetConnector(s)`)\cr
     #'   objects with valid pointers.
     #' @return NULL invisible
