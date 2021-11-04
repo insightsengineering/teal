@@ -132,6 +132,7 @@ Collate:
     'stop_shiny.R'
     'teal.R'
     'teal_data.R'
+    'to_relational_data.R'
     'utils-pipe.R'
     'utils.R'
     'zzz.R'
