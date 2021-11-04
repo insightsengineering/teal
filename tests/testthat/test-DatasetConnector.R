@@ -1207,9 +1207,9 @@ testthat::test_that("deep_clone changes the references", {
   pull_fun <- callable_function(data.frame)
   t_dc <- dataset_connector("test_dc", pull_fun)
 
-  test_ds0_cloned <- test_ds0$clone(deep = TRUE)
+  t_dc_cloned <- t_dc$clone(deep = TRUE)
   testthat::expect_false(
-    identical(test_ds0, test_ds0_cloned)
+    identical(t_dc, t_dc_cloned)
   )
 })
 
