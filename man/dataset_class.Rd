@@ -17,6 +17,16 @@ Any \code{MultiAssayExperiment} object can be stored inside this MAEDataset.
 Some attributes like colnames, dimension or column names for a specific type will
 be automatically derived.
 }
+\examples{
+
+## ------------------------------------------------
+## Method `Dataset$reassign_datasets_vars`
+## ------------------------------------------------
+
+test_dataset <- Dataset$new("iris", iris, vars = list(dep = Dataset$new("iris2", iris)))
+test_dataset$reassign_datasets_vars(list(iris2 = Dataset$new("iris2", head(iris))))
+
+}
 \section{Active bindings}{
 \if{html}{\out{<div class="r6-active-bindings">}}
 \describe{
@@ -428,8 +438,8 @@ Get the list of dependencies that are Dataset or DatasetConnector objects
 \if{html}{\out{<a id="method-reassign_datasets_vars"></a>}}
 \if{latex}{\out{\hypertarget{method-reassign_datasets_vars}{}}}
 \subsection{Method \code{reassign_datasets_vars()}}{
-Reassign \code{vars} in this object to keep references up to date after deep clone.
-Update is done based on the objects passed in \code{datasets} argument.
+Overwrites \code{Dataset} or \code{DatasetConnector} dependencies of this \code{Dataset} with
+those found in \code{datasets}.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{Dataset$reassign_datasets_vars(datasets)}\if{html}{\out{</div>}}
 }
@@ -442,9 +452,26 @@ objects with valid pointers.}
 }
 \if{html}{\out{</div>}}
 }
+\subsection{Details}{
+Reassign \code{vars} in this object to keep references up to date after deep clone.
+Update is done based on the objects passed in \code{datasets} argument.
+Overwrites dependencies with names matching the names of the objects passed
+in \code{datasets}.
+}
+
 \subsection{Returns}{
 NULL invisible
 }
+\subsection{Examples}{
+\if{html}{\out{<div class="r example copy">}}
+\preformatted{test_dataset <- Dataset$new("iris", iris, vars = list(dep = Dataset$new("iris2", iris)))
+test_dataset$reassign_datasets_vars(list(iris2 = Dataset$new("iris2", head(iris))))
+
+}
+\if{html}{\out{</div>}}
+
+}
+
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-set_dataset_label"></a>}}

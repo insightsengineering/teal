@@ -469,6 +469,36 @@ testthat::test_that("clone(deep = TRUE) changes the references of the items", {
   )
 })
 
+testthat::test_that("copy(deep = TRUE) makes deep copy", {
+  test_ds0 <- Dataset$new("test_ds0", head(mtcars), code = "test_ds0 <- head(mtcars)")
+  test_ds1 <- dataset_connector(
+    dataname = "test_ds1",
+    pull_callable = callable_function(data.frame),
+    vars = list(test_ds0 = test_ds0)
+  )
+  data <- teal_data(test_ds0, test_ds1)
+  data_cloned <- data$copy(deep = TRUE)
+  testthat::expect_false(identical(data, data_cloned))
+  testthat::expect_false(identical(data_cloned$get_items()$test_ds0, test_ds0))
+})
+
+testthat::test_that("copy(deep = TRUE)keeps valid references between items", {
+  test_ds0 <- Dataset$new("test_ds0", head(mtcars), code = "test_ds0 <- head(mtcars)")
+  test_ds1 <- dataset_connector(
+    dataname = "test_ds1",
+    pull_callable = callable_function(data.frame),
+    vars = list(test_ds0 = test_ds0)
+  )
+  data <- teal_data(test_ds0, test_ds1)
+  data_cloned <- data$copy(deep = TRUE)
+  new_test_ds0 <- data_cloned$get_items()$test_ds0
+  new_test_ds1 <- data_cloned$get_items()$test_ds1
+  testthat::expect_identical(
+    new_test_ds1$get_var_r6()$test_ds0,
+    new_test_ds0
+  )
+})
+
 testthat::test_that("valid references to the items after init", {
   test_ds0 <- Dataset$new("test_ds0", head(mtcars), code = "test_ds0 <- head(mtcars)")
   test_ds1 <- dataset_connector(
