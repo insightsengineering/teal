@@ -12,7 +12,7 @@ to_relational_data <- function(data, data_call = NULL) {
 }
 
 #' @export
-to_relational_data.data.frame <- function(data, data_call = NULL) { # nolint
+to_relational_data.data.frame <- function(data, data_call = NULL) { # nolint #nousage
   dataname <- deparse(data_call, width.cutoff = 500L)
 
   if (grepl("\\)$", dataname) && is(data, "data.frame")) {
@@ -28,7 +28,7 @@ to_relational_data.data.frame <- function(data, data_call = NULL) { # nolint
 }
 
 #' @export
-to_relational_data.Dataset <- function(data, data_call = NULL) {
+to_relational_data.Dataset <- function(data, data_call = NULL) { #nousage
   dataname <- get_dataname(data)
 
   if (dataname %in% names(default_cdisc_keys)) {
@@ -39,12 +39,12 @@ to_relational_data.Dataset <- function(data, data_call = NULL) {
 }
 
 #' @export
-to_relational_data.DatasetConnector <- function(data, data_call = NULL) { # nolint
+to_relational_data.DatasetConnector <- function(data, data_call = NULL) { # nolint #nousage
   to_relational_data.Dataset(data)
 }
 
 #' @export
-to_relational_data.list <- function(data, data_call = NULL) {
+to_relational_data.list <- function(data, data_call = NULL) { #nousage
   call <- data_call
   list_names <- names(data)
   parsed_names <- as.character(call)[-1]
