@@ -800,7 +800,7 @@ testthat::test_that("dataset$print prints out both head and tail when more than 
   )
 })
 
-testthat::test_that("valid references to vars on init", {
+testthat::test_that("get_var_r6 returns references to R6 objects passed to set_vars", {
   test_ds0 <- Dataset$new("mtcars", mtcars)
   test_ds1 <- Dataset$new("iris", iris)
   test_ds1$set_vars(vars = list(test_ds0 = test_ds0))
