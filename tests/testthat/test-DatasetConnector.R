@@ -1203,11 +1203,12 @@ testthat::test_that("DatasetConnect$print prints dataset when it is pulled", {
   )
 })
 
-testthat::test_that("get_var_r6 returns the objects passed to the vars argument in the constructor", {
+testthat::test_that("get_var_r6 returns indentical objects as these passed to the vars argument in
+                    the constructor", {
   test_ds0 <- Dataset$new("head_mtcars", head(mtcars), code = "head_mtcars <- head(mtcars)")
-  test_ds1 <- dataset_connector(
+  test_ds1 <- DatasetConnector$new(
     dataname = "test_dc",
-    pull_callable = callable_function(data.frame),
+    pull_callable = CallableFunction$new(data.frame),
     vars = list(test_ds0 = test_ds0)
   )
 
@@ -1215,11 +1216,11 @@ testthat::test_that("get_var_r6 returns the objects passed to the vars argument 
   testthat::expect_identical(vars$test_ds0, test_ds0)
 })
 
-testthat::test_that("clone(deep = TRUE) changes the references of the vars", {
+testthat::test_that("clone(deep = TRUE) deep clones dependencies, which are Dataset objects", {
   test_ds0 <- Dataset$new("head_mtcars", head(mtcars), code = "head_mtcars <- head(mtcars)")
-  test_ds1 <- dataset_connector(
+  test_ds1 <- DatasetConnector$new(
     dataname = "test_dc",
-    pull_callable = callable_function(data.frame),
+    pull_callable = CallableFunction$new(data.frame),
     vars = list(test_ds0 = test_ds0)
   )
   test_ds1_cloned <- test_ds1$clone(deep = TRUE)
@@ -1228,11 +1229,12 @@ testthat::test_that("clone(deep = TRUE) changes the references of the vars", {
   )
 })
 
-testthat::test_that("reassign_datasets_vars updates the references of the vars", {
+testthat::test_that("reassign_datasets_vars updates the references of the vars to
+                    addresses of passed objects", {
   test_ds0 <- Dataset$new("head_mtcars", head(mtcars), code = "head_mtcars <- head(mtcars)")
-  test_ds1 <- dataset_connector(
+  test_ds1 <- DatasetConnector$new(
     dataname = "test_dc",
-    pull_callable = callable_function(data.frame),
+    pull_callable = CallableFunction$new(data.frame),
     vars = list(test_ds0 = test_ds0)
   )
 
@@ -1244,11 +1246,12 @@ testthat::test_that("reassign_datasets_vars updates the references of the vars",
   testthat::expect_identical(vars$test_ds0, test_ds0_cloned)
 })
 
-testthat::test_that("reassign_datasets_vars updates the references of the vars_r6", {
+testthat::test_that("reassign_datasets_vars updates the references of the vars_r6 to
+                    addresses of passed objects", {
   test_ds0 <- Dataset$new("head_mtcars", head(mtcars), code = "head_mtcars <- head(mtcars)")
-  test_ds1 <- dataset_connector(
+  test_ds1 <- DatasetConnector$new(
     dataname = "test_dc",
-    pull_callable = callable_function(data.frame),
+    pull_callable = CallableFunction$new(data.frame),
     vars = list(test_ds0 = test_ds0)
   )
 

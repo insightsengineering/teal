@@ -800,7 +800,7 @@ testthat::test_that("dataset$print prints out both head and tail when more than 
   )
 })
 
-testthat::test_that("get_var_r6 returns references to R6 objects passed to set_vars", {
+testthat::test_that("get_var_r6 returns identical R6 objects as passed with set_vars", {
   test_ds0 <- Dataset$new("mtcars", mtcars)
   test_ds1 <- Dataset$new("iris", iris)
   test_ds1$set_vars(vars = list(test_ds0 = test_ds0))
@@ -819,7 +819,8 @@ testthat::test_that("clone(deep = TRUE) deep clones dependencies, which are Data
   )
 })
 
-testthat::test_that("reassign_datasets_vars updates the references of the vars", {
+testthat::test_that("reassign_datasets_vars updates the references of the vars to
+                    addresses of passed objects", {
   test_ds0 <- Dataset$new("mtcars", mtcars)
   test_ds1 <- Dataset$new("iris", iris)
   test_ds1$set_vars(vars = list(test_ds0 = test_ds0))
@@ -832,7 +833,8 @@ testthat::test_that("reassign_datasets_vars updates the references of the vars",
   testthat::expect_identical(vars$test_ds0, test_ds0_cloned)
 })
 
-testthat::test_that("reassign_datasets_vars updates the references of the vars_r6", {
+testthat::test_that("reassign_datasets_vars updates the references of the vars_r6 to
+                    addresses of passed objects", {
   test_ds0 <- Dataset$new("mtcars", mtcars)
   test_ds1 <- Dataset$new("iris", iris)
   test_ds1$set_vars(vars = list(test_ds0 = test_ds0))
