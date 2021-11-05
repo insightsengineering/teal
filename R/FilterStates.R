@@ -762,7 +762,7 @@ DFFilterStates <- R6::R6Class( # nolint
             handlerExpr = {
               logger::log_trace(paste(
                 "DFFilterStates$srv_add_filter_state@1 updating available column choices,",
-                "dataname { private$input_dataname }"
+                "dataname: { private$input_dataname }"
               ))
               if (is.null(avail_column_choices())) {
                 shinyjs::hide("var_to_add")
@@ -776,7 +776,7 @@ DFFilterStates <- R6::R6Class( # nolint
               )
               logger::log_trace(paste(
                 "DFFilterStates$srv_add_filter_state@1 updated available column choices,",
-                "dataname { private$input_dataname }"
+                "dataname: { private$input_dataname }"
               ))
             }
           )
@@ -1009,7 +1009,7 @@ MAEFilterStates <- R6::R6Class( # nolint
             handlerExpr = {
               logger::log_trace(paste(
                 "MAEFilterStates$srv_add_filter_state@1 updating available column choices,",
-                "dataname { private$input_dataname }"
+                "dataname: { private$input_dataname }"
               ))
               if (is.null(avail_column_choices())) {
                 shinyjs::hide("var_to_add")
@@ -1023,7 +1023,7 @@ MAEFilterStates <- R6::R6Class( # nolint
               )
               logger::log_trace(paste(
                 "MAEFilterStates$srv_add_filter_state@1 updated available column choices,",
-                "dataname { private$input_dataname }"
+                "dataname: { private$input_dataname }"
               ))
             }
           )
@@ -1306,7 +1306,7 @@ SEFilterStates <- R6::R6Class( # nolint
             handlerExpr = {
               logger::log_trace(paste(
                 "SEFilterStates$srv_add_filter_state@1 updating available row data choices,",
-                "dataname { private$input_dataname }"
+                "dataname: { private$input_dataname }"
               ))
               if (is.null(avail_row_data_choices())) {
                 shinyjs::hide("row_to_add")
@@ -1320,7 +1320,7 @@ SEFilterStates <- R6::R6Class( # nolint
               )
               logger::log_trace(paste(
                 "SEFilterStates$srv_add_filter_state@1 updated available row data choices,",
-                "dataname { private$input_dataname }"
+                "dataname: { private$input_dataname }"
               ))
             }
           )
@@ -1331,7 +1331,7 @@ SEFilterStates <- R6::R6Class( # nolint
             handlerExpr = {
               logger::log_trace(paste(
                 "SEFilterStates$srv_add_filter_state@2 updating available col data choices,",
-                "dataname { private$input_dataname }"
+                "dataname: { private$input_dataname }"
               ))
               if (is.null(avail_col_data_choices())) {
                 shinyjs::hide("col_to_add")
@@ -1345,7 +1345,7 @@ SEFilterStates <- R6::R6Class( # nolint
               )
               logger::log_trace(paste(
                 "SEFilterStates$srv_add_filter_state@2 updated available col data choices,",
-                "dataname { private$input_dataname }"
+                "dataname: { private$input_dataname }"
               ))
             }
           )
