@@ -108,6 +108,17 @@ RelationalData <- R6::R6Class( # nolint
 
       return(invisible(self))
     },
+    #' @description
+    #' Creates a copy of the object with keeping valid references
+    #' between `Dataset` and `DatasetConnector` objects
+    #' @param deep (`logical(1)`)\cr
+    #'  argument passed to `clone` method. If `TRUE` deep copy is made
+    #' @return self invisible
+    copy = function(deep = FALSE) {
+      new_self <- self$clone(deep = deep)
+      new_self$reassign_datasets_vars()
+      invisible(new_self)
+    },
     #' Prints this RelationalData.
     #'
     #' @param ... additional arguments to the printing method
