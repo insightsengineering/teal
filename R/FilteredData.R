@@ -607,8 +607,13 @@ FilteredData <- R6::R6Class( # nolint
             if (length(active_datanames()) == 0 || is.null(active_datanames())) {
               # hide whole module UI when no datasets or when NULL
               shinyjs::hide("filter_panel_whole")
+              shinyjs::runjs('$("#teal_secondary_col").hide();
+                             $("#teal_primary_col").attr("class", "col-sm-12").resize();')
             } else {
               shinyjs::show("filter_panel_whole")
+              shinyjs::runjs('if (filter_open) {
+              $("#teal_primary_col").attr("class", "col-sm-9").resize();
+              $("#teal_secondary_col").show();}')
 
               # selectively hide / show to only show `active_datanames` out of all datanames
               lapply(
