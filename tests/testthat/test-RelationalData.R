@@ -469,7 +469,7 @@ testthat::test_that("clone(deep = TRUE) changes the references of the items", {
   )
 })
 
-testthat::test_that("copy(deep = TRUE) makes deep copy", {
+testthat::test_that("copy(deep = TRUE) makes a deep copy", {
   test_ds0 <- Dataset$new("test_ds0", head(mtcars), code = "test_ds0 <- head(mtcars)")
   test_ds1 <- dataset_connector(
     dataname = "test_ds1",
