@@ -137,7 +137,7 @@ DataAbstract <- R6::R6Class( #nolint
     #' @description
     #' Get internal \code{CodeClass} object
     #' @param only_pull (\code{logical} value)\cr
-    #'   if \code{TRUE} only code to pull datasets will be returned without mutate code.
+    #'   if \code{TRUE} only code to pull datasets will be returned without the mutate code.
     #'
     #' @return `\code{CodeClass}`
     get_code_class = function(only_pull = FALSE) {
@@ -346,6 +346,19 @@ DataAbstract <- R6::R6Class( #nolint
         dataname = self$get_datanames()
       )
       return(invisible(self))
+    },
+
+    #' @description
+    #' Reassign `vars` in `Dataset` and `DatasetConnector` objects
+    #' to keep the valid reference after deep cloning
+    #' For example if `DatasetConnector` has a dependency on some `Dataset`, this
+    #' `Dataset` is reassigned inside of `DatasetConnector`.
+    reassign_datasets_vars = function() {
+      for (dataset in self$get_items()) {
+        dataset$reassign_datasets_vars(
+          datasets = self$get_items()
+        )
+      }
     }
   ),
 

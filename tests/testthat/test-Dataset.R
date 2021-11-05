@@ -192,7 +192,8 @@ testthat::test_that("Dataset$set_vars throws an error if passed the enclosing Da
   test_ds1$set_vars(vars = list(test_ds0 = test_ds0))
   test_ds2$set_vars(vars = list(test_ds1 = test_ds1))
 
-  testthat::expect_error(test_ds0$set_vars(vars = list(test_ds2 = test_ds2)), regexp = "Circular dependencies detected")
+  testthat::expect_error(
+    test_ds0$set_vars(vars = list(test_ds2 = test_ds2)), regexp = "Circular dependencies detected")
 })
 
 testthat::test_that("Dataset$set_vars throws an error if passed the enclosing DatasetConnector", {
@@ -797,4 +798,51 @@ testthat::test_that("dataset$print prints out both head and tail when more than 
       "7          4.6         3.4          1.4         0.3  setosa"
     )
   )
+})
+
+testthat::test_that("get_var_r6 returns identical R6 objects as passed with set_vars", {
+  test_ds0 <- Dataset$new("mtcars", mtcars)
+  test_ds1 <- Dataset$new("iris", iris)
+  test_ds1$set_vars(vars = list(test_ds0 = test_ds0))
+
+  vars <- test_ds1$get_var_r6()
+  testthat::expect_identical(vars$test_ds0, test_ds0)
+})
+
+testthat::test_that("clone(deep = TRUE) deep clones dependencies, which are Dataset objects", {
+  test_ds0 <- Dataset$new("mtcars", mtcars)
+  test_ds1 <- Dataset$new("iris", iris)
+  test_ds1$set_vars(vars = list(test_ds0 = test_ds0))
+  test_ds1_cloned <- test_ds1$clone(deep = TRUE)
+  testthat::expect_false(
+    identical(test_ds1_cloned$get_var_r6()$test_ds0, test_ds0)
+  )
+})
+
+testthat::test_that("reassign_datasets_vars updates the references of the vars to
+                    addresses of passed objects", {
+  test_ds0 <- Dataset$new("mtcars", mtcars)
+  test_ds1 <- Dataset$new("iris", iris)
+  test_ds1$set_vars(vars = list(test_ds0 = test_ds0))
+
+  # after reassignment vars_r6, vars and muatate_vars match new reference
+  test_ds0_cloned <- test_ds0$clone(deep = TRUE)
+  test_ds1$reassign_datasets_vars(list(test_ds0 = test_ds0_cloned))
+
+  vars <- test_ds1$get_vars()
+  testthat::expect_identical(vars$test_ds0, test_ds0_cloned)
+})
+
+testthat::test_that("reassign_datasets_vars updates the references of the vars_r6 to
+                    addresses of passed objects", {
+  test_ds0 <- Dataset$new("mtcars", mtcars)
+  test_ds1 <- Dataset$new("iris", iris)
+  test_ds1$set_vars(vars = list(test_ds0 = test_ds0))
+
+  # after reassignment vars_r6, vars and muatate_vars match new reference
+  test_ds0_cloned <- test_ds0$clone(deep = TRUE)
+  test_ds1$reassign_datasets_vars(list(test_ds0 = test_ds0_cloned))
+
+  vars_r6 <- test_ds1$get_var_r6()
+  testthat::expect_identical(vars_r6$test_ds0, test_ds0_cloned)
 })

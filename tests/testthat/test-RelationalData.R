@@ -452,5 +452,79 @@ testthat::test_that("RelationalData$print prints out expected output on basic in
       "1 STUDYID USUBJID PARAMCD"
     )
   )
+})
 
+testthat::test_that("clone(deep = TRUE) deep copies self and the items", {
+  test_ds0 <- Dataset$new("test_ds0", head(mtcars), code = "test_ds0 <- head(mtcars)")
+  test_ds1 <- DatasetConnector$new(
+    dataname = "test_ds1",
+    pull_callable = CallableFunction$new(data.frame),
+    vars = list(test_ds0 = test_ds0)
+  )
+  data <- RelationalData$new(test_ds0, test_ds1)
+  data_cloned <- data$clone(deep = TRUE)
+  testthat::expect_false(identical(data, data_cloned))
+  testthat::expect_false(identical(data_cloned$get_items()$test_ds0, test_ds0))
+})
+
+testthat::test_that("copy(deep = TRUE) deep copies self and the items", {
+  test_ds0 <- Dataset$new("test_ds0", head(mtcars), code = "test_ds0 <- head(mtcars)")
+  test_ds1 <- DatasetConnector$new(
+    dataname = "test_ds1",
+    pull_callable = CallableFunction$new(data.frame),
+    vars = list(test_ds0 = test_ds0)
+  )
+  data <- RelationalData$new(test_ds0, test_ds1)
+  data_cloned <- data$copy(deep = TRUE)
+  testthat::expect_false(identical(data, data_cloned))
+  testthat::expect_false(identical(data_cloned$get_items()$test_ds0, test_ds0))
+})
+
+testthat::test_that("copy(deep = TRUE) keeps valid references between items", {
+  test_ds0 <- Dataset$new("test_ds0", head(mtcars), code = "test_ds0 <- head(mtcars)")
+  test_ds1 <- DatasetConnector$new(
+    dataname = "test_ds1",
+    pull_callable = CallableFunction$new(data.frame),
+    vars = list(test_ds0 = test_ds0)
+  )
+  data <- RelationalData$new(test_ds0, test_ds1)
+  data_cloned <- data$copy(deep = TRUE)
+  new_test_ds0 <- data_cloned$get_items()$test_ds0
+  new_test_ds1 <- data_cloned$get_items()$test_ds1
+  testthat::expect_identical(
+    new_test_ds1$get_var_r6()$test_ds0,
+    new_test_ds0
+  )
+})
+
+testthat::test_that("valid references to the items after init", {
+  test_ds0 <- Dataset$new("test_ds0", head(mtcars), code = "test_ds0 <- head(mtcars)")
+  test_ds1 <- DatasetConnector$new(
+    dataname = "test_ds1",
+    pull_callable = CallableFunction$new(data.frame),
+    vars = list(test_ds0 = test_ds0)
+  )
+  data <- RelationalData$new(test_ds0, test_ds1)
+  testthat::expect_identical(data$get_items(), list(test_ds0 = test_ds0, test_ds1 = test_ds1))
+})
+
+testthat::test_that("reassign_datasets_vars updates the references of vars in items according
+                    to items addresses", {
+  test_ds0 <- Dataset$new("test_ds0", head(mtcars), code = "test_ds0 <- head(mtcars)")
+  test_ds1 <- DatasetConnector$new(
+    dataname = "test_ds1",
+    pull_callable = CallableFunction$new(data.frame),
+    vars = list(test_ds0 = test_ds0)
+  )
+  data <- RelationalData$new(test_ds0, test_ds1)
+
+  # after reassignment vars_r6, vars and muatate_vars match new reference
+  data_cloned <- data$clone(deep = TRUE)
+  cloned_items <- data$get_items()
+  data$reassign_datasets_vars()
+
+  testthat::expect_identical(
+    data$get_items()$test_ds1$get_var_r6()$test_ds0,
+    cloned_items$test_ds0
+  )
 })
