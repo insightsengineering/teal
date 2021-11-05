@@ -23,8 +23,14 @@ be automatically derived.
 ## Method `Dataset$reassign_datasets_vars`
 ## ------------------------------------------------
 
-test_dataset <- Dataset$new("iris", iris, vars = list(dep = Dataset$new("iris2", iris)))
-test_dataset$reassign_datasets_vars(list(iris2 = Dataset$new("iris2", head(iris))))
+test_dataset <- teal:::Dataset$new(
+  dataname = "iris",
+  x = iris,
+  vars = list(dep = teal:::Dataset$new("iris2", iris))
+)
+test_dataset$reassign_datasets_vars(
+  list(iris2 = teal:::Dataset$new("iris2", head(iris)))
+)
 
 }
 \section{Active bindings}{
@@ -464,8 +470,14 @@ NULL invisible
 }
 \subsection{Examples}{
 \if{html}{\out{<div class="r example copy">}}
-\preformatted{test_dataset <- Dataset$new("iris", iris, vars = list(dep = Dataset$new("iris2", iris)))
-test_dataset$reassign_datasets_vars(list(iris2 = Dataset$new("iris2", head(iris))))
+\preformatted{test_dataset <- teal:::Dataset$new(
+  dataname = "iris",
+  x = iris,
+  vars = list(dep = teal:::Dataset$new("iris2", iris))
+)
+test_dataset$reassign_datasets_vars(
+  list(iris2 = teal:::Dataset$new("iris2", head(iris)))
+)
 
 }
 \if{html}{\out{</div>}}

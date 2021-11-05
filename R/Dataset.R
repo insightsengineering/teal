@@ -261,8 +261,14 @@ Dataset <- R6::R6Class( # nolint
     #'   objects with valid pointers.
     #' @return NULL invisible
     #' @examples
-    #' test_dataset <- Dataset$new("iris", iris, vars = list(dep = Dataset$new("iris2", iris)))
-    #' test_dataset$reassign_datasets_vars(list(iris2 = Dataset$new("iris2", head(iris))))
+    #' test_dataset <- teal:::Dataset$new(
+    #'   dataname = "iris",
+    #'   x = iris,
+    #'   vars = list(dep = teal:::Dataset$new("iris2", iris))
+    #' )
+    #' test_dataset$reassign_datasets_vars(
+    #'   list(iris2 = teal:::Dataset$new("iris2", head(iris)))
+    #' )
     #'
     reassign_datasets_vars = function(datasets) {
       private$var_r6 <- datasets[names(private$var_r6)]
