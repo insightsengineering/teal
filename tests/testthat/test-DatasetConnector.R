@@ -839,7 +839,7 @@ testthat::test_that("DatasetConnector mutate method with delayed logic", {
   testthat::expect_true(all(names(t_dc$get_raw_data()) %in% c("head_letters")))
   # still it must return code from all previously inputted mutate statements
   testthat::expect_true(
-    "test_dc$seven <- 7" %in% pretty_code_string(t_dc$get_code()),
+    "test_dc$seven <- 7" %in% pretty_code_string(t_dc$get_code())
   )
 
   # confirming that mutation has not happened
@@ -1201,4 +1201,64 @@ testthat::test_that("DatasetConnect$print prints dataset when it is pulled", {
       "6            f"
     )
   )
+})
+
+testthat::test_that("get_var_r6 returns indentical objects as these passed to the vars argument in
+                    the constructor", {
+  test_ds0 <- Dataset$new("head_mtcars", head(mtcars), code = "head_mtcars <- head(mtcars)")
+  test_ds1 <- DatasetConnector$new(
+    dataname = "test_dc",
+    pull_callable = CallableFunction$new(data.frame),
+    vars = list(test_ds0 = test_ds0)
+  )
+
+  vars <- test_ds1$get_var_r6()
+  testthat::expect_identical(vars$test_ds0, test_ds0)
+})
+
+testthat::test_that("clone(deep = TRUE) deep clones dependencies, which are Dataset objects", {
+  test_ds0 <- Dataset$new("head_mtcars", head(mtcars), code = "head_mtcars <- head(mtcars)")
+  test_ds1 <- DatasetConnector$new(
+    dataname = "test_dc",
+    pull_callable = CallableFunction$new(data.frame),
+    vars = list(test_ds0 = test_ds0)
+  )
+  test_ds1_cloned <- test_ds1$clone(deep = TRUE)
+  testthat::expect_false(
+    identical(test_ds1_cloned$get_var_r6()$test_ds0, test_ds0)
+  )
+})
+
+testthat::test_that("reassign_datasets_vars updates the references of the vars to
+                    addresses of passed objects", {
+  test_ds0 <- Dataset$new("head_mtcars", head(mtcars), code = "head_mtcars <- head(mtcars)")
+  test_ds1 <- DatasetConnector$new(
+    dataname = "test_dc",
+    pull_callable = CallableFunction$new(data.frame),
+    vars = list(test_ds0 = test_ds0)
+  )
+
+  # after reassignment vars_r6, vars and muatate_vars match new reference
+  test_ds0_cloned <- test_ds0$clone(deep = TRUE)
+  test_ds1$reassign_datasets_vars(datasets = list(test_ds0 = test_ds0_cloned))
+
+  vars <- test_ds1$.__enclos_env__$private$pull_vars
+  testthat::expect_identical(vars$test_ds0, test_ds0_cloned)
+})
+
+testthat::test_that("reassign_datasets_vars updates the references of the vars_r6 to
+                    addresses of passed objects", {
+  test_ds0 <- Dataset$new("head_mtcars", head(mtcars), code = "head_mtcars <- head(mtcars)")
+  test_ds1 <- DatasetConnector$new(
+    dataname = "test_dc",
+    pull_callable = CallableFunction$new(data.frame),
+    vars = list(test_ds0 = test_ds0)
+  )
+
+  # after reassignment vars_r6, vars and muatate_vars match new reference
+  test_ds0_cloned <- test_ds0$clone(deep = TRUE)
+  test_ds1$reassign_datasets_vars(datasets = list(test_ds0 = test_ds0_cloned))
+
+  vars_r6 <- test_ds1$get_var_r6()
+  testthat::expect_identical(vars_r6$test_ds0, test_ds0_cloned)
 })

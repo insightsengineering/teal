@@ -58,6 +58,7 @@ get_raw_data(tc)
 \subsection{Public methods}{
 \itemize{
 \item \href{#method-new}{\code{RelationalData$new()}}
+\item \href{#method-copy}{\code{RelationalData$copy()}}
 \item \href{#method-print}{\code{RelationalData$print()}}
 \item \href{#method-get_datanames}{\code{RelationalData$get_datanames()}}
 \item \href{#method-get_join_keys}{\code{RelationalData$get_join_keys()}}
@@ -85,6 +86,7 @@ get_raw_data(tc)
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="DataAbstract" data-id="is_pulled">}\href{../../teal/html/DataAbstract.html#method-is_pulled}{\code{teal::DataAbstract$is_pulled()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="DataAbstract" data-id="mutate">}\href{../../teal/html/DataAbstract.html#method-mutate}{\code{teal::DataAbstract$mutate()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="DataAbstract" data-id="mutate_dataset">}\href{../../teal/html/DataAbstract.html#method-mutate_dataset}{\code{teal::DataAbstract$mutate_dataset()}}\out{</span>}
+\item \out{<span class="pkg-link" data-pkg="teal" data-topic="DataAbstract" data-id="reassign_datasets_vars">}\href{../../teal/html/DataAbstract.html#method-reassign_datasets_vars}{\code{teal::DataAbstract$reassign_datasets_vars()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="DataAbstract" data-id="set_check">}\href{../../teal/html/DataAbstract.html#method-set_check}{\code{teal::DataAbstract$set_check()}}\out{</span>}
 \item \out{<span class="pkg-link" data-pkg="teal" data-topic="DataAbstract" data-id="set_pull_code">}\href{../../teal/html/DataAbstract.html#method-set_pull_code}{\code{teal::DataAbstract$set_pull_code()}}\out{</span>}
 }
@@ -95,7 +97,6 @@ get_raw_data(tc)
 \if{latex}{\out{\hypertarget{method-new}{}}}
 \subsection{Method \code{new()}}{
 Create a new object of \code{RelationalData} class
-Prints this RelationalData.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{RelationalData$new(..., check = FALSE, join_keys)}\if{html}{\out{</div>}}
 }
@@ -114,6 +115,29 @@ as provided in arguments. Check is run only if flag is true and preprocessing co
 If empty then no joins between pairs of objects}
 }
 \if{html}{\out{</div>}}
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-copy"></a>}}
+\if{latex}{\out{\hypertarget{method-copy}{}}}
+\subsection{Method \code{copy()}}{
+Creates a copy of the object with keeping valid references
+between \code{Dataset} and \code{DatasetConnector} objects
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{RelationalData$copy(deep = FALSE)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{deep}}{(\code{logical(1)})\cr
+argument passed to \code{clone} method. If \code{TRUE} deep copy is made}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Returns}{
+self invisible
+Prints this RelationalData.
 }
 }
 \if{html}{\out{<hr>}}

@@ -248,8 +248,34 @@ Dataset <- R6::R6Class( # nolint
     get_var_r6 = function() {
       return(private$var_r6)
     },
-
     # ___ setters ====
+    #' @description
+    #' Overwrites `Dataset` or `DatasetConnector` dependencies of this `Dataset` with
+    #' those found in `datasets`.
+    #' @details
+    #' Reassign `vars` in this object to keep references up to date after deep clone.
+    #' Update is done based on the objects passed in `datasets` argument.
+    #' Overwrites dependencies with names matching the names of the objects passed
+    #' in `datasets`.
+    #' @param datasets (`named list` of `Dataset(s)` or `DatasetConnector(s)`)\cr
+    #'   objects with valid pointers.
+    #' @return NULL invisible
+    #' @examples
+    #' test_dataset <- teal:::Dataset$new(
+    #'   dataname = "iris",
+    #'   x = iris,
+    #'   vars = list(dep = teal:::Dataset$new("iris2", iris))
+    #' )
+    #' test_dataset$reassign_datasets_vars(
+    #'   list(iris2 = teal:::Dataset$new("iris2", head(iris)))
+    #' )
+    #'
+    reassign_datasets_vars = function(datasets) {
+      private$var_r6 <- datasets[names(private$var_r6)]
+      private$vars <- datasets[names(private$vars)]
+      private$mutate_vars <- datasets[names(private$mutate_vars)]
+      invisible(NULL)
+    },
     #' @description
     #' Set the label for the dataset
     #' @return (`self`) invisibly for chaining
@@ -298,6 +324,7 @@ Dataset <- R6::R6Class( # nolint
     #' @description
     #' Adds variables which code depends on
     #'
+    #' @param vars (`named list`) contains any R object which code depends on
     #' @return (`self`) invisibly for chaining
     set_vars = function(vars) {
       private$set_vars_internal(vars, is_mutate_vars = FALSE)
@@ -335,13 +362,17 @@ Dataset <- R6::R6Class( # nolint
     },
     #' @description
     #' Get internal \code{CodeClass} object
-    #'
+    #' @param nodeps (`logical(1)`) whether `CodeClass` should not contain the code
+    #' of the dependent `vars`
+    #' the `mutate`
     #' @return `\code{CodeClass}`
-    get_code_class = function() {
+    get_code_class = function(nodeps = FALSE) {
       res <- CodeClass$new()
       # precise order matters
-      res$append(list_to_code_class(private$vars))
-      res$append(list_to_code_class(private$mutate_vars))
+      if (!nodeps) {
+        res$append(list_to_code_class(private$vars))
+        res$append(list_to_code_class(private$mutate_vars))
+      }
       res$append(private$code)
       res$append(private$mutate_list_to_code_class())
 
@@ -364,6 +395,7 @@ Dataset <- R6::R6Class( # nolint
     #' @return `\code{list}`
     get_vars = function() {
       return(c(
+        list(), # list() in the beginning to ensure c.list - to avoid c.Dataset from CDSE
         private$vars,
         private$mutate_vars[!names(private$mutate_vars) %in% names(private$vars)])
       )
@@ -437,7 +469,11 @@ Dataset <- R6::R6Class( # nolint
 
       new_set <- private$execute_code(
         code = self$get_code_class(),
-        vars = c(private$vars, setNames(list(self), self$get_dataname()))
+        vars = c(
+          list(), # list() in the beginning to ensure c.list
+          private$vars,
+          setNames(list(self), self$get_dataname())
+        )
       )
 
       res_check <- tryCatch({
@@ -512,6 +548,7 @@ Dataset <- R6::R6Class( # nolint
       new_df <- private$execute_code(
         code = private$mutate_list_to_code_class(),
         vars = c(
+          list(), # list() in the beginning to ensure c.list
           private$vars,
           # if they have the same name, then they are guaranteed to be identical objects.
           private$mutate_vars[!names(private$mutate_vars) %in% names(private$vars)],
@@ -526,6 +563,7 @@ Dataset <- R6::R6Class( # nolint
       self$set_vars(private$mutate_vars)
       private$mutate_code <- list()
       private$mutate_vars <- list()
+
 
       # dataset is recreated by replacing data by mutated object
       # mutation code is added to the code which replicates the data
@@ -586,10 +624,10 @@ Dataset <- R6::R6Class( # nolint
 
     is_any_dependency_delayed = function(vars = list()) {
       any(vapply(
-        c(private$var_r6, vars),
+        c(list(), private$var_r6, vars),
         FUN = function(var) {
           if (is(var, "DatasetConnector")) {
-            (! var$is_pulled()) || var$is_mutate_delayed()
+            !var$is_pulled() || var$is_mutate_delayed()
           } else if (is(var, "Dataset")) {
             var$is_mutate_delayed()
           } else {
@@ -600,10 +638,14 @@ Dataset <- R6::R6Class( # nolint
       )
     },
 
+    # Set variables which code depends on
+    # @param vars (`named list`) contains any R object which code depends on
+    # @param is_mutate_vars (`logical(1)`) whether this var is used in mutate code
     set_vars_internal = function(vars, is_mutate_vars = FALSE) {
+      stopifnot(is_logical_single(is_mutate_vars))
       stopifnot(is_fully_named_list(vars))
 
-      total_vars <- c(private$vars, private$mutate_vars)
+      total_vars <- c(list(), private$vars, private$mutate_vars)
 
       if (length(vars) > 0) {
         # not allowing overriding variable names
@@ -618,9 +660,17 @@ Dataset <- R6::R6Class( # nolint
           stop(paste("Variable name(s) already used:", paste(over_rides, collapse = ", ")))
         }
         if (is_mutate_vars) {
-          private$mutate_vars <- c(private$mutate_vars[!names(private$mutate_vars) %in% names(vars)], vars)
+          private$mutate_vars <- c(
+            list(), # to ensure c.list - to avoid c.Dataset
+            private$mutate_vars[!names(private$mutate_vars) %in% names(vars)],
+            vars
+          )
         } else {
-          private$vars <- c(private$vars[!names(private$vars) %in% names(vars)], vars)
+          private$vars <- c(
+            list(), # to ensure c.list - to avoid c.Dataset,
+            private$vars[!names(private$vars) %in% names(vars)],
+            vars
+          )
         }
       }
       # only adding dependencies if checks passed
@@ -688,17 +738,19 @@ Dataset <- R6::R6Class( # nolint
     },
     set_var_r6 = function(vars) {
       stopifnot(is_fully_named_list(vars))
-      for (var in vars) {
+      for (varname in names(vars)) {
+        var <- vars[[varname]]
+
         if (is(var, "DatasetConnector") || is(var, "Dataset")) {
-          for (var_dep in c(var, var$get_var_r6())) {
+          var_deps <- var$get_var_r6()
+          var_deps[[varname]] <- var
+          for (var_dep_name in names(var_deps)) {
+            var_dep <- var_deps[[var_dep_name]]
             if (identical(self, var_dep)) {
               stop("Circular dependencies detected")
             }
+            private$var_r6[[var_dep_name]] <- var_dep
           }
-          # this may cause duplicates.
-          # as of now, no reason why it makes any difference
-          # so nothing is done
-          private$var_r6 <- c(private$var_r6, var, var$get_var_r6())
         }
       }
       return(invisible(self))

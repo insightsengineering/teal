@@ -14,6 +14,9 @@
 * Added logging at the info and trace level to the filter panel.
 * Added support of the full screen for a `module` when the `filters` argument is equal `NULL`.
 
+### Bug fixes
+* Fixed data loading of `DatasetConnector` being dependent on other `Dataset` or `DatasetConnector` objects. 
+
 ### Miscellaneous
 * Replaced the servers from `DataConnection`, `RelationalDataConnector`, `DatasetConnector`, and `RelationalData` with `moduleServer`.
 * Updated R version requirement to >= 3.6.

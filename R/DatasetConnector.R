@@ -149,7 +149,6 @@ DatasetConnector <- R6::R6Class( #nolint
     #' @return `\code{CodeClass}`
     get_code_class = function() {
       code_class <- CodeClass$new()
-
       pull_code_class <- private$get_pull_code_class()
       code_class$append(pull_code_class)
 
@@ -215,6 +214,20 @@ DatasetConnector <- R6::R6Class( #nolint
 
     # ___ setters ====
     #' @description
+    #' Reassign `vars` in this object to keep references up to date after deep clone.
+    #' Update is done based on the objects passed in `datasets` argument.
+    #' @param datasets (`named list` of `Dataset(s)` or `DatasetConnector(s)`)\cr
+    #'   objects with valid pointers.
+    #' @return NULL invisible
+    reassign_datasets_vars = function(datasets) {
+      private$var_r6 <- datasets[names(private$var_r6)]
+      private$pull_vars <- datasets[names(private$pull_vars)]
+      if (!is.null(private$dataset)) {
+        private$dataset$reassign_datasets_vars(datasets)
+      }
+      invisible(NULL)
+    },
+    #' @description
     #' Set label of the \code{dataset} object
     #'
     #' @return (`self`) invisibly for chaining
@@ -249,6 +262,7 @@ DatasetConnector <- R6::R6Class( #nolint
       self$get_join_keys()$set(x)
       return(invisible(self))
     },
+
     #' @description
     #' mutate the join_keys for a given dataset and self
     #' @param dataset (`character`) dataset for which join_keys are to be set against self
@@ -277,13 +291,15 @@ DatasetConnector <- R6::R6Class( #nolint
     #' @return (`self`) if successful.
     pull = function(args = NULL, try = FALSE) {
       data <- private$pull_internal(args = args, try = try)
+
       if (!self$is_failed()) {
         # The first time object is pulled, private$dataset may be NULL if mutate method was never called
         has_dataset <- !is.null(private$dataset)
         if (has_dataset) {
-          code_in_dataset <- private$dataset$get_code_class()
+          code_in_dataset <- private$dataset$get_code_class(nodeps = TRUE)
           vars_in_dataset <- private$dataset$get_vars()
         }
+
         private$dataset <- dataset(
           dataname = self$get_dataname(),
           x = data,
@@ -291,6 +307,7 @@ DatasetConnector <- R6::R6Class( #nolint
           label = self$get_dataset_label(),
           code = private$get_pull_code_class()
         )
+
         if (has_dataset) {
           private$dataset$mutate(
             code = code_in_dataset,
@@ -556,7 +573,6 @@ DatasetConnector <- R6::R6Class( #nolint
       res$set_code(code = code, dataname = private$dataname, deps = names(private$pull_vars))
       return(res)
     },
-
     set_pull_callable = function(pull_callable) {
       stopifnot(is(pull_callable, "Callable"))
       private$pull_callable <- pull_callable
@@ -612,14 +628,19 @@ DatasetConnector <- R6::R6Class( #nolint
     },
     set_var_r6 = function(vars) {
       stopifnot(is_fully_named_list(vars))
-      for (var in vars) {
+      for (varname in names(vars)) {
+        var <- vars[[varname]]
+
         if (is(var, "DatasetConnector") || is(var, "Dataset")) {
-          for (var_dep in c(var, var$get_var_r6())) {
+          var_deps <- var$get_var_r6()
+          var_deps[[varname]] <- var
+          for (var_dep_name in names(var_deps)) {
+            var_dep <- var_deps[[var_dep_name]]
             if (identical(self, var_dep)) {
               stop("Circular dependencies detected")
             }
+            private$var_r6[[var_dep_name]] <- var_dep
           }
-          private$var_r6 <- c(private$var_r6, var, var$get_var_r6())
         }
       }
       return(invisible(self))

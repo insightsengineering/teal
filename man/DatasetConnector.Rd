@@ -63,6 +63,7 @@ ds$launch()
 \item \href{#method-get_pull_callable}{\code{DatasetConnector$get_pull_callable()}}
 \item \href{#method-get_raw_data}{\code{DatasetConnector$get_raw_data()}}
 \item \href{#method-get_var_r6}{\code{DatasetConnector$get_var_r6()}}
+\item \href{#method-reassign_datasets_vars}{\code{DatasetConnector$reassign_datasets_vars()}}
 \item \href{#method-set_dataset_label}{\code{DatasetConnector$set_dataset_label()}}
 \item \href{#method-set_keys}{\code{DatasetConnector$set_keys()}}
 \item \href{#method-set_join_keys}{\code{DatasetConnector$set_join_keys()}}
@@ -329,6 +330,28 @@ Get the list of dependencies that are Dataset or DatasetConnector objects
 
 \subsection{Returns}{
 \code{list}
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-reassign_datasets_vars"></a>}}
+\if{latex}{\out{\hypertarget{method-reassign_datasets_vars}{}}}
+\subsection{Method \code{reassign_datasets_vars()}}{
+Reassign \code{vars} in this object to keep references up to date after deep clone.
+Update is done based on the objects passed in \code{datasets} argument.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{DatasetConnector$reassign_datasets_vars(datasets)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{datasets}}{(\verb{named list} of \code{Dataset(s)} or \code{DatasetConnector(s)})\cr
+objects with valid pointers.}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Returns}{
+NULL invisible
 }
 }
 \if{html}{\out{<hr>}}
