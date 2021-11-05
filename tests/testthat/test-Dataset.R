@@ -809,7 +809,7 @@ testthat::test_that("get_var_r6 returns references to R6 objects passed to set_v
   testthat::expect_identical(vars$test_ds0, test_ds0)
 })
 
-testthat::test_that("clone(deep = TRUE) changes the references of the vars", {
+testthat::test_that("clone(deep = TRUE) deep clones dependencies, which are Dataset objects", {
   test_ds0 <- Dataset$new("mtcars", mtcars)
   test_ds1 <- Dataset$new("iris", iris)
   test_ds1$set_vars(vars = list(test_ds0 = test_ds0))
