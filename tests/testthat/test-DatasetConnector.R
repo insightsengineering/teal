@@ -1203,7 +1203,7 @@ testthat::test_that("DatasetConnect$print prints dataset when it is pulled", {
   )
 })
 
-testthat::test_that("valid references to vars after init", {
+testthat::test_that("get_var_r6 returns the objects passed to the vars argument in the constructor", {
   test_ds0 <- Dataset$new("head_mtcars", head(mtcars), code = "head_mtcars <- head(mtcars)")
   test_ds1 <- dataset_connector(
     dataname = "test_dc",
