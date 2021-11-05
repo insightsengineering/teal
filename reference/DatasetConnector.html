@@ -86,7 +86,7 @@ Pulled data inherits from the class Dataset — DatasetConnector" />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">teal</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.10.0.9008</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.10.0.9009</span>
       </span>
     </div>
 
@@ -188,6 +188,7 @@ Pulled data inherits from the class <code><a href='Dataset.html'>Dataset</a></co
 <li><p><a href='#method-get_pull_callable'><code>DatasetConnector$get_pull_callable()</code></a></p></li>
 <li><p><a href='#method-get_raw_data'><code>DatasetConnector$get_raw_data()</code></a></p></li>
 <li><p><a href='#method-get_var_r6'><code>DatasetConnector$get_var_r6()</code></a></p></li>
+<li><p><a href='#method-reassign_datasets_vars'><code>DatasetConnector$reassign_datasets_vars()</code></a></p></li>
 <li><p><a href='#method-set_dataset_label'><code>DatasetConnector$set_dataset_label()</code></a></p></li>
 <li><p><a href='#method-set_keys'><code>DatasetConnector$set_keys()</code></a></p></li>
 <li><p><a href='#method-set_join_keys'><code>DatasetConnector$set_join_keys()</code></a></p></li>
@@ -362,6 +363,20 @@ pull was successful.</p>
 
 <h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Returns</h4>
 <p><code>list</code></p>
+<p><hr>
+<a id="method-reassign_datasets_vars"></a></p><h3 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Method <code>reassign_datasets_vars()</code></h3>
+<p>Reassign <code>vars</code> in this object to keep references up to date after deep clone.
+Update is done based on the objects passed in <code>datasets</code> argument.</p><h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Usage</h4>
+<p><div class="r"></p><pre><span class='va'>DatasetConnector</span><span class='op'>$</span><span class='fu'>reassign_datasets_vars</span><span class='op'>(</span><span class='va'>datasets</span><span class='op'>)</span></pre><p></div></p>
+
+<h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Arguments</h4>
+<p><div class="arguments"></p><dl>
+<dt><code>datasets</code></dt><dd><p>(<code>named list</code> of <code><a href='Dataset.html'>Dataset(s)</a></code> or <code>DatasetConnector(s)</code>)<br />
+objects with valid pointers.</p></dd>
+
+</dl><p></div></p>
+<h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Returns</h4>
+<p>NULL invisible</p>
 <p><hr>
 <a id="method-set_dataset_label"></a></p><h3 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Method <code>set_dataset_label()</code></h3>
 <p>Set label of the <code>dataset</code> object</p><h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Usage</h4>

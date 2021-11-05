@@ -75,7 +75,7 @@ Class also decides whether to launch app before initialize teal application." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">teal</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.10.0.9008</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.10.0.9009</span>
       </span>
     </div>
 
@@ -162,6 +162,7 @@ Class also decides whether to launch app before initialize teal application.</p>
 
 <ul>
 <li><p><a href='#method-new'><code>RelationalData$new()</code></a></p></li>
+<li><p><a href='#method-copy'><code>RelationalData$copy()</code></a></p></li>
 <li><p><a href='#method-print'><code>RelationalData$print()</code></a></p></li>
 <li><p><a href='#method-get_datanames'><code>RelationalData$get_datanames()</code></a></p></li>
 <li><p><a href='#method-get_join_keys'><code>RelationalData$get_join_keys()</code></a></p></li>
@@ -187,6 +188,7 @@ Class also decides whether to launch app before initialize teal application.</p>
 <li><p><span class="pkg-link" data-pkg="teal" data-topic="DataAbstract" data-id="is_pulled"><a href='../../teal/html/DataAbstract.html#method-is_pulled'><code>teal::DataAbstract$is_pulled()</code></a></span></p></li>
 <li><p><span class="pkg-link" data-pkg="teal" data-topic="DataAbstract" data-id="mutate"><a href='../../teal/html/DataAbstract.html#method-mutate'><code>teal::DataAbstract$mutate()</code></a></span></p></li>
 <li><p><span class="pkg-link" data-pkg="teal" data-topic="DataAbstract" data-id="mutate_dataset"><a href='../../teal/html/DataAbstract.html#method-mutate_dataset'><code>teal::DataAbstract$mutate_dataset()</code></a></span></p></li>
+<li><p><span class="pkg-link" data-pkg="teal" data-topic="DataAbstract" data-id="reassign_datasets_vars"><a href='../../teal/html/DataAbstract.html#method-reassign_datasets_vars'><code>teal::DataAbstract$reassign_datasets_vars()</code></a></span></p></li>
 <li><p><span class="pkg-link" data-pkg="teal" data-topic="DataAbstract" data-id="set_check"><a href='../../teal/html/DataAbstract.html#method-set_check'><code>teal::DataAbstract$set_check()</code></a></span></p></li>
 <li><p><span class="pkg-link" data-pkg="teal" data-topic="DataAbstract" data-id="set_pull_code"><a href='../../teal/html/DataAbstract.html#method-set_pull_code'><code>teal::DataAbstract$set_pull_code()</code></a></span></p></li>
 </ul>
@@ -194,8 +196,7 @@ Class also decides whether to launch app before initialize teal application.</p>
 
 <hr>
 <a id="method-new"></a></p><h3 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Method <code>new()</code></h3>
-<p>Create a new object of <code>RelationalData</code> class
-Prints this RelationalData.</p><h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Usage</h4>
+<p>Create a new object of <code>RelationalData</code> class</p><h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Usage</h4>
 <p><div class="r"></p><pre><span class='va'>RelationalData</span><span class='op'>$</span><span class='fu'>new</span><span class='op'>(</span><span class='va'>...</span>, check <span class='op'>=</span> <span class='cn'>FALSE</span>, <span class='va'>join_keys</span><span class='op'>)</span></pre><p></div></p>
 
 <h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Arguments</h4>
@@ -211,6 +212,21 @@ as provided in arguments. Check is run only if flag is true and preprocessing co
 If empty then no joins between pairs of objects</p></dd>
 
 </dl><p></div></p>
+<p><hr>
+<a id="method-copy"></a></p><h3 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Method <code>copy()</code></h3>
+<p>Creates a copy of the object with keeping valid references
+between <code>Dataset</code> and <code>DatasetConnector</code> objects</p><h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Usage</h4>
+<p><div class="r"></p><pre><span class='va'>RelationalData</span><span class='op'>$</span><span class='fu'>copy</span><span class='op'>(</span>deep <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span></pre><p></div></p>
+
+<h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Arguments</h4>
+<p><div class="arguments"></p><dl>
+<dt><code>deep</code></dt><dd><p>(<code><a href='https://rdrr.io/r/base/logical.html'>logical(1)</a></code>)<br />
+argument passed to <code>clone</code> method. If <code>TRUE</code> deep copy is made</p></dd>
+
+</dl><p></div></p>
+<h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Returns</h4>
+<p>self invisible
+Prints this RelationalData.</p>
 <p><hr>
 <a id="method-print"></a></p><h3 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Method <code><a href='https://rdrr.io/r/base/print.html'>print()</a></code></h3>
 

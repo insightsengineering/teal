@@ -73,7 +73,7 @@ Abstract class containing code for handling set of datasets." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">teal</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.10.0.9008</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.10.0.9009</span>
       </span>
     </div>
 
@@ -176,6 +176,7 @@ Abstract class containing code for handling set of datasets." />
 <li><p><a href='#method-mutate_dataset'><code>DataAbstract$mutate_dataset()</code></a></p></li>
 <li><p><a href='#method-set_check'><code>DataAbstract$set_check()</code></a></p></li>
 <li><p><a href='#method-set_pull_code'><code>DataAbstract$set_pull_code()</code></a></p></li>
+<li><p><a href='#method-reassign_datasets_vars'><code>DataAbstract$reassign_datasets_vars()</code></a></p></li>
 <li><p><a href='#method-clone'><code>DataAbstract$clone()</code></a></p></li>
 </ul>
 <p><hr>
@@ -237,7 +238,7 @@ delayed and can be evaluated using this method.</p><h4 class='hasAnchor' id='arg
 <h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Arguments</h4>
 <p><div class="arguments"></p><dl>
 <dt><code>only_pull</code></dt><dd><p>(<code>logical</code> value)<br />
-if <code>TRUE</code> only code to pull datasets will be returned without mutate code.</p></dd>
+if <code>TRUE</code> only code to pull datasets will be returned without the mutate code.</p></dd>
 
 </dl><p></div></p>
 <h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Returns</h4>
@@ -372,6 +373,14 @@ has <code>code</code> set already.</p></dd>
 </dl><p></div></p>
 <h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Returns</h4>
 <p>(<code>self</code>) invisibly for chaining.</p>
+<p><hr>
+<a id="method-reassign_datasets_vars"></a></p><h3 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Method <code>reassign_datasets_vars()</code></h3>
+<p>Reassign <code>vars</code> in <code>Dataset</code> and <code>DatasetConnector</code> objects
+to keep the valid reference after deep cloning
+For example if <code>DatasetConnector</code> has a dependency on some <code>Dataset</code>, this
+<code>Dataset</code> is reassigned inside of <code>DatasetConnector</code>.</p><h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Usage</h4>
+<p><div class="r"></p><pre><span class='va'>DataAbstract</span><span class='op'>$</span><span class='fu'>reassign_datasets_vars</span><span class='op'>(</span><span class='op'>)</span></pre><p></div></p>
+
 <p><hr>
 <a id="method-clone"></a></p><h3 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Method <code>clone()</code></h3>
 <p>The objects of this class are cloneable with this method.</p><h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Usage</h4>

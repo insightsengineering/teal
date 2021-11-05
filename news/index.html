@@ -71,7 +71,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">teal</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.10.0.9008</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.10.0.9009</span>
       </span>
     </div>
 
@@ -138,9 +138,9 @@
       
     </div>
 
-    <div id="teal-01009008" class="section level1">
-<h1 class="page-header" data-toc-text="0.10.0.9008">
-<a href="#teal-01009008" class="anchor"></a>teal 0.10.0.9008</h1>
+    <div id="teal-01009009" class="section level1">
+<h1 class="page-header" data-toc-text="0.10.0.9009">
+<a href="#teal-01009009" class="anchor"></a>teal 0.10.0.9009</h1>
 <div id="breaking-changes" class="section level3">
 <h3 class="hasAnchor">
 <a href="#breaking-changes" class="anchor"></a>Breaking changes</h3>
@@ -160,6 +160,13 @@
 <li>Modified <code>data_extract_spec</code> to allow both the <code>filter</code> and <code>select</code> parameters to be <code>NULL</code>, which results in the <code>data_extract_input</code> acting as if a <code>filter_spec</code> with all variables as possible choices had been supplied as the <code>filter</code> argument and a <code>select_spec</code> with the <code>multiple</code> parameter set to <code>TRUE</code> had been supplied as the <code>select</code> argument.</li>
 <li>Added support for logging using the <code>logger</code> package. Added a new function <code>register_logger</code>, which registers a logger in a given namespace.</li>
 <li>Added support of the full screen for a <code>module</code> when the <code>filters</code> argument is equal <code>NULL</code>.</li>
+</ul>
+</div>
+<div id="bug-fixes" class="section level3">
+<h3 class="hasAnchor">
+<a href="#bug-fixes" class="anchor"></a>Bug fixes</h3>
+<ul>
+<li>Fixed data loading of <code>DatasetConnector</code> being dependent on other <code>Dataset</code> or <code>DatasetConnector</code> objects.</li>
 </ul>
 </div>
 <div id="miscellaneous" class="section level3">
@@ -196,9 +203,9 @@
 </li>
 </ul>
 </div>
-<div id="bug-fixes" class="section level3">
+<div id="bug-fixes-1" class="section level3">
 <h3 class="hasAnchor">
-<a href="#bug-fixes" class="anchor"></a>Bug fixes</h3>
+<a href="#bug-fixes-1" class="anchor"></a>Bug fixes</h3>
 <ul>
 <li>Fixed the bug caused by calling <code>mutate_dataset</code> multiple times on the same <code>DatasetConnector</code> or <code>Dataset</code> object.</li>
 <li>Fixed a bug that caused the output of <code>get_code</code> function to not reproduce its raw data set.</li>
@@ -249,9 +256,9 @@
 <li>Added CSS styling to tool tips in teal modules.</li>
 </ul>
 </div>
-<div id="bug-fixes-1" class="section level3">
+<div id="bug-fixes-2" class="section level3">
 <h3 class="hasAnchor">
-<a href="#bug-fixes-1" class="anchor"></a>Bug fixes</h3>
+<a href="#bug-fixes-2" class="anchor"></a>Bug fixes</h3>
 <ul>
 <li>Fixed an edge case error when creating a filter on variable with all missing values crashed the app.</li>
 <li>Fixed a bug that crashes app whenever a <code>Date</code> or <code>datetime</code> column is selected from a <code>filter_spec</code>.</li>
@@ -272,9 +279,9 @@
 <li>Extended the <code>filter_spec</code> function: the parameter <code>choices</code> is no longer mandatory (the function will take all possible choices by default) and the <code>vars</code> parameter additionally accepts the <code>choices_selected</code> and allows to change the variables for filtering using the UI elements in the encoding panel.</li>
 </ul>
 </div>
-<div id="bug-fixes-2" class="section level3">
+<div id="bug-fixes-3" class="section level3">
 <h3 class="hasAnchor">
-<a href="#bug-fixes-2" class="anchor"></a>Bug fixes</h3>
+<a href="#bug-fixes-3" class="anchor"></a>Bug fixes</h3>
 <ul>
 <li>Cleaned up imports in the package.</li>
 <li>Modified <code>value_choices</code> function to handle edge case when <code>"NA"</code> and <code>NA</code> values exist in the <code>character</code> column that choices are derived from.
@@ -298,9 +305,9 @@
 <li>Unexported <code>filtered_data_new</code>, <code>filtered_data_set</code> and <code>filtered_data_set_filters</code>.</li>
 </ul>
 </div>
-<div id="bug-fixes-3" class="section level3">
+<div id="bug-fixes-4" class="section level3">
 <h3 class="hasAnchor">
-<a href="#bug-fixes-3" class="anchor"></a>Bug fixes</h3>
+<a href="#bug-fixes-4" class="anchor"></a>Bug fixes</h3>
 <ul>
 <li>Duplicated lines of code passed to <code><a href="../reference/cdisc_dataset.html">teal::cdisc_dataset</a></code> and other <code>teal::RelationalDataset</code> constructors should now be shown when getting the code from <code><a href="../reference/cdisc_data.html">teal::cdisc_data</a></code> objects and other <code><a href="../reference/RelationalData.html">teal::RelationalData</a></code> objects.</li>
 <li>Added ability to press “Enter” key without having to set focus to the Submit button for delayed data loading.</li>
