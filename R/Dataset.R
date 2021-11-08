@@ -271,9 +271,17 @@ Dataset <- R6::R6Class( # nolint
     #' )
     #'
     reassign_datasets_vars = function(datasets) {
-      private$var_r6 <- datasets[names(private$var_r6)]
-      private$vars <- datasets[names(private$vars)]
-      private$mutate_vars <- datasets[names(private$mutate_vars)]
+      stopifnot(is_fully_named_list(datasets))
+
+      common_var_r6 <- intersect(names(datasets), names(private$var_r6))
+      private$var_r6[common_var_r6] <- datasets[common_var_r6]
+
+      common_vars <- intersect(names(datasets), names(private$vars))
+      private$vars[common_vars] <- datasets[common_vars]
+
+      common_mutate_vars <- intersect(names(datasets), names(private$mutate_vars))
+      private$mutate_vars[common_mutate_vars] <- datasets[common_mutate_vars]
+
       invisible(NULL)
     },
     #' @description

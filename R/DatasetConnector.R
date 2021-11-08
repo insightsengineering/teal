@@ -220,8 +220,14 @@ DatasetConnector <- R6::R6Class( #nolint
     #'   objects with valid pointers.
     #' @return NULL invisible
     reassign_datasets_vars = function(datasets) {
-      private$var_r6 <- datasets[names(private$var_r6)]
-      private$pull_vars <- datasets[names(private$pull_vars)]
+      stopifnot(is_fully_named_list(datasets))
+
+      common_var_r6 <- intersect(names(datasets), names(private$var_r6))
+      private$var_r6[common_var_r6] <- datasets[common_var_r6]
+
+      common_vars <- intersect(names(datasets), names(private$pull_vars))
+      private$pull_vars[common_vars] <- datasets[common_vars]
+
       if (!is.null(private$dataset)) {
         private$dataset$reassign_datasets_vars(datasets)
       }
