@@ -251,7 +251,8 @@ Dataset <- R6::R6Class( # nolint
     # ___ setters ====
     #' @description
     #' Overwrites `Dataset` or `DatasetConnector` dependencies of this `Dataset` with
-    #' those found in `datasets`.
+    #' those found in `datasets`. Reassignment
+    #' refers only to the provided `datasets`, other `vars` remains the same.
     #' @details
     #' Reassign `vars` in this object to keep references up to date after deep clone.
     #' Update is done based on the objects passed in `datasets` argument.
