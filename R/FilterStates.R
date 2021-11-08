@@ -525,11 +525,16 @@ FilterStates <- R6::R6Class( # nolint
             ignoreNULL = TRUE,
             eventExpr = input$remove,
             handlerExpr = {
-              logger::log_trace("FilterStates$add_filter_state@1 removing FilterState from queue no { queue_index }")
+              logger::log_trace(paste(
+                "FilterStates$add_filter_state@1 removing FilterState from queue no { queue_index },",
+                "input_dataname: { private$input_dataname }"
+              ))
               self$queue_remove(queue_index, element_id)
               private$remove_filter_state(queue_index, element_id)
-              logger::log_trace("FilterStates$add_filter_state@1 removed FilterState from queue no { queue_index }")
-            }
+              logger::log_trace(paste(
+                "FilterStates$add_filter_state@1 removed FilterState from queue no { queue_index },",
+                "input_dataname: { private$input_dataname }"
+              ))            }
           )
 
           logger::log_trace(
@@ -1255,7 +1260,10 @@ SEFilterStates <- R6::R6Class( # nolint
       moduleServer(
         id = id,
         function(input, output, session) {
-          logger::log_trace("SEFilterState$srv_add_filter_state initializing, dataname: { deparse(private$input_dataname) }")
+          logger::log_trace(paste(
+            "SEFilterState$srv_add_filter_state initializing,",
+            "dataname: { deparse(private$input_dataname) }"
+          ))
           active_filter_col_vars <- reactive({
             vapply(
               X = self$queue_get(queue_index = "select"),
