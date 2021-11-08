@@ -1255,7 +1255,7 @@ SEFilterStates <- R6::R6Class( # nolint
       moduleServer(
         id = id,
         function(input, output, session) {
-          logger::log_trace("SEFilterState$srv_add_filter_state initializing, dataname: { private$input_dataname }")
+          logger::log_trace("SEFilterState$srv_add_filter_state initializing, dataname: { deparse(private$input_dataname) }")
           active_filter_col_vars <- reactive({
             vapply(
               X = self$queue_get(queue_index = "select"),
