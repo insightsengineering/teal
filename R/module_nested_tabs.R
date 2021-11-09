@@ -121,8 +121,8 @@ srv_nested_tabs <- function(input, output, session, datasets, modules) {
       },
       teal_module = {
         modules$server_args <- resolve_delayed(modules$server_args, datasets)
-        is_moduleServer <- isTRUE("id" %in% names(formals(modules$server)))
-        if (is_moduleServer) {
+        is_module_server <- isTRUE("id" %in% names(formals(modules$server)))
+        if (is_module_server) {
           modules$server(id, datasets = datasets)
         } else {
           do.call(
