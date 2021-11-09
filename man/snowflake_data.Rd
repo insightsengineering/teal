@@ -15,51 +15,10 @@ snowflake_data(..., connection)
 An object of class \code{RelationalDataConnector}
 }
 \description{
-\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#defunct}{\figure{lifecycle-defunct.svg}{options: alt='[Defunct]'}}}{\strong{[Defunct]}}
 Build data connector for \code{SNOWFLAKE} functions or datasets
 }
 \details{
 Note the server location and token_provider must be provided as arguments to
 the snowflake_connection function, see example below.
-}
-\examples{
-\dontrun{
-library(magrittr)
-data <- snowflake_data(
-  snowflake_cdisc_dataset_connector(
-    dataname ="ADSL",
-    sql_query = "sql_query",
-  ) \%>\% mutate_dataset("any mutations required, e.g. to convert data types"),
-  connection = snowflake_connection(
-    open_args = list(
-      server = "<<server>>",
-      token_provider = "<<url>>",
-      role = "role",
-      database = "database",
-      schema = "schema",
-      warehouse = "warehouse"
-    )
-  )
-)
-
-app <- init(
-  data = cdisc_data(data),
-  root_modules(
-    module(
-      "ADSL AGE histogram",
-      server = function(input, output, session, datasets) {
-        output$hist <- renderPlot(
-          hist(datasets$get_data("ADSL", filtered = TRUE)$AGE)
-        )
-      },
-      ui = function(id, ...) {ns <- NS(id); plotOutput(ns('hist'))},
-      filters = "ADSL"
-    )
-  ),
-  header = tags$h1("Sample App")
-)
-
-shinyApp(app$ui, app$server)
-}
-
 }

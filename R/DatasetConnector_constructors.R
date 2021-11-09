@@ -596,7 +596,7 @@ code_cdisc_dataset_connector <- function(dataname,
 # RICE ====
 #' Rice `DatasetConnector`
 #'
-#' `r lifecycle::badge("experimental")`
+#' `r lifecycle::badge("defunct")`
 #'
 #' Create a `DatasetConnector` from `RICE`.
 #'
@@ -612,20 +612,6 @@ code_cdisc_dataset_connector <- function(dataname,
 #'
 #' @rdname rice_dataset_connector
 #'
-#' @examples
-#' if ("rice" %in% installed.packages()) {
-#'   x <- rice_dataset_connector(
-#'     dataname = "ADSL",
-#'     path = "/path/to/file.sas7bdat"
-#'   )
-#'   x$get_code()
-#' }
-#' \dontrun{
-#' load_dataset(x)
-#' get_dataset(x)
-#' x$get_raw_data()
-#' }
-#'
 rice_dataset_connector <- function(dataname,
                                    path,
                                    keys = character(0),
@@ -633,34 +619,18 @@ rice_dataset_connector <- function(dataname,
                                    code = character(0),
                                    script = character(0),
                                    ...) {
-  dot_args <- list(...)
-  stopifnot(is_fully_named_list(dot_args))
-  stopifnot(is_character_single(path))
-  check_pkg_quietly(
-    "rice",
-    paste0(
-      "Connection to entimICE via rice was requested, but rice package is not available.",
-      "Please install it from https://github.roche.com/Rpackages/rice.")
+  lifecycle::deprecate_stop(
+    when = "0.10.1",
+    what = "teal::rice_dataset_connector()",
+    details = paste(
+      "Please use teal.connectors.rice::rice_dataset_connector().",
+      "Please ensure that teal.connectors.rice package is loaded after teal.")
   )
-
-  x_fun <- callable_function("rice::rice_read") # nolint
-  args <- append(list(node = path, prolong = TRUE), dot_args)
-  x_fun$set_args(args)
-
-  x <- dataset_connector(
-    dataname = dataname,
-    pull_callable = x_fun,
-    keys = keys,
-    code = code_from_script(code, script),
-    label = label
-  )
-
-  return(x)
 }
 
 #' Rice `CDISCDatasetConnector`
 #'
-#' `r lifecycle::badge("experimental")`
+#' `r lifecycle::badge("defunct")`
 #'
 #' Create a `CDISCDatasetConnector` from `RICE` dataset with keys and parent name assigned
 #' automatically by `dataname`.
@@ -679,29 +649,20 @@ rice_cdisc_dataset_connector <- function(dataname,
                                          code = character(0),
                                          script = character(0),
                                          ...) {
-
-  x <- rice_dataset_connector(
-    dataname = dataname,
-    path = path,
-    keys = keys,
-    code = code_from_script(code, script),
-    label = label,
-    ...
+  lifecycle::deprecate_stop(
+    when = "0.10.1",
+    what = "teal::rice_cdisc_dataset_connector()",
+    details = paste(
+      "Please use teal.connectors.rice::rice_cdisc_dataset_connector().",
+      "Please ensure that teal.connectors.rice package is loaded after teal.")
   )
-
-  res <- as_cdisc(
-    x,
-    parent = parent
-  )
-
-  return(res)
 }
 
 
 # TERADATA ====
 #' `Teradata` `DatasetConnector`
 #'
-#' `r lifecycle::badge("experimental")`
+#' `r lifecycle::badge("defunct")`
 #'
 #' Create a `DatasetConnector` from `Teradata`.
 #'
@@ -719,32 +680,18 @@ teradata_dataset_connector <- function(dataname,
                                        code = character(0),
                                        script = character(0),
                                        ...) {
-  dot_args <- list(...)
-  stopifnot(is_fully_named_list(dot_args))
-
-  check_pkg_quietly(
-    "DBI",
-    "Connection to Teradata tables was requested, but DBI package is not available."
+  lifecycle::deprecate_stop(
+    when = "0.10.1",
+    what = "teal::teradata_dataset_connector()",
+    details = paste(
+      "Please use teal.connectors.teradata::teradata_dataset_connector().",
+      "Please ensure that teal.connectors.teradata package is loaded after teal.")
   )
-
-  x_fun <- callable_function("DBI::dbReadTable")
-  args <- append(list(conn = as.name("conn"), name = table), dot_args)
-  x_fun$set_args(args)
-
-  x <- dataset_connector(
-    dataname = dataname,
-    pull_callable = x_fun,
-    keys = keys,
-    label = label,
-    code = code_from_script(code, script)
-  )
-
-  return(x)
 }
 
 #' `Teradata` `CDISCDatasetConnector`
 #'
-#' `r lifecycle::badge("experimental")`
+#' `r lifecycle::badge("defunct")`
 #'
 #' Create a `CDISCDatasetConnector` from `Teradata` with keys and parent name assigned
 #' automatically by `dataname`.
@@ -763,29 +710,20 @@ teradata_cdisc_dataset_connector <- function(dataname, # nolint
                                              code = character(0),
                                              script = character(0),
                                              ...) {
-
-  x <- teradata_dataset_connector(
-    dataname = dataname,
-    table = table,
-    keys = keys,
-    code = code_from_script(code, script),
-    label = label,
-    ...
+  lifecycle::deprecate_stop(
+    when = "0.10.1",
+    what = "teal::teradata_cdisc_dataset_connector()",
+    details = paste(
+      "Please use teal.connectors.teradata::teradata_cdisc_dataset_connector().",
+      "Please ensure that teal.connectors.teradata package is loaded after teal.")
   )
-
-  res <- as_cdisc(
-    x,
-    parent = parent
-  )
-
-  return(res)
 }
 
 
 # SNOWFLAKE ====
 #' `Snowflake` `DatasetConnector`
 #'
-#' `r lifecycle::badge("experimental")`
+#' `r lifecycle::badge("defunct")`
 #'
 #' Create a `DatasetConnector` from `Snowflake`.
 #'
@@ -803,32 +741,18 @@ snowflake_dataset_connector <- function(dataname,
                                         code = character(0),
                                         script = character(0),
                                         ...) {
-  dot_args <- list(...)
-  stopifnot(is_fully_named_list(dot_args))
-
-  check_pkg_quietly(
-    "DBI",
-    "Connection to Snowflake requested, but DBI package is not available."
+  lifecycle::deprecate_stop(
+    when = "0.10.1",
+    what = "teal::snowflake_dataset_connector()",
+    details = paste(
+      "Please use teal.connectors.snowflake::snowflake_dataset_connector().",
+      "Please ensure that teal.connectors.snowflake package is loaded after teal.")
   )
-
-  x_fun <- callable_function("DBI::dbGetQuery")
-  args <- append(list(conn = as.name("conn"), statement = sql_query), dot_args)
-  x_fun$set_args(args)
-
-  x <- dataset_connector(
-    dataname = dataname,
-    pull_callable = x_fun,
-    keys = keys,
-    label = label,
-    code = code_from_script(code, script)
-  )
-
-  return(x)
 }
 
 #' `Snowflake` `CDISCDatasetConnector`
 #'
-#' `r lifecycle::badge("experimental")`
+#' `r lifecycle::badge("defunct")`
 #'
 #' Create a `CDISCDatasetConnector` from `Snowflake` with keys and parent name assigned
 #' automatically by `dataname`.
@@ -847,28 +771,20 @@ snowflake_cdisc_dataset_connector <- function(dataname, # nolint
                                               code = character(0),
                                               script = character(0),
                                               ...) {
-  x <- snowflake_dataset_connector(
-    dataname = dataname,
-    sql_query = sql_query,
-    keys = keys,
-    code = code_from_script(code, script),
-    label = label,
-    ...
+  lifecycle::deprecate_stop(
+    when = "0.10.1",
+    what = "teal::snowflake_cdisc_dataset_connector()",
+    details = paste(
+      "Please use teal.connectors.snowflake::snowflake_cdisc_dataset_connector().",
+      "Please ensure that teal.connectors.snowflake package is loaded after teal.")
   )
-
-  res <- as_cdisc(
-    x,
-    parent = parent
-  )
-
-  return(res)
 }
 
 
 # CDSE ====
 #' `CDSE` `DatasetConnector`
 #'
-#' `r lifecycle::badge("experimental")`
+#' @description `r lifecycle::badge("defunct")`
 #'
 #' Create a `DatasetConnector` from `CDSE`.
 #'
@@ -879,20 +795,6 @@ snowflake_cdisc_dataset_connector <- function(dataname, # nolint
 #' @export
 #'
 #' @rdname cdse_dataset_connector
-#'
-#' @examples
-#' \dontrun{
-#' if ("CDSE" %in% installed.packages()) {
-#'   x <- cdse_dataset_connector(
-#'     dataname = "MAE",
-#'     cid = "cid6828341065561714688"
-#'   )
-#'   x$get_code()
-#' }
-#' load_dataset(x)
-#' get_dataset(x)
-#' x$get_raw_data()
-#' }
 cdse_dataset_connector <- function(dataname,
                                    cid,
                                    keys = character(0),
@@ -900,33 +802,18 @@ cdse_dataset_connector <- function(dataname,
                                    code = character(0),
                                    script = character(0),
                                    ...) {
-  stopifnot(is_character_single(cid))
-  dot_args <- list(...)
-  stopifnot(is_fully_named_list(dot_args))
-
-  check_pkg_quietly(
-    "CDSE",
-    "Connection to CDSE requested, but CDSE package is not available."
+  lifecycle::deprecate_stop(
+    when = "0.10.1",
+    what = "teal::cdse_dataset_connector()",
+    details = paste(
+      "Please use teal.connectors.cdse::cdse_dataset_connector().",
+      "Please ensure that teal.connectors.cdse package is loaded after teal.")
   )
-
-  x_fun <- callable_function("CDSE::cdse_read_dataset")
-  args <- append(list(dataset = cid, con = as.name("conn")), dot_args)
-  x_fun$set_args(args)
-
-  x <- dataset_connector(
-    dataname = dataname,
-    pull_callable = x_fun,
-    keys = keys,
-    label = label,
-    code = code_from_script(code, script)
-  )
-
-  return(x)
 }
 
 #' `CDSE` `CDISCDatasetConnector`
 #'
-#' `r lifecycle::badge("experimental")`
+#' `r lifecycle::badge("defunct")`
 #'
 #' Create a `CDISCDatasetConnector` from `CDSE` with keys and parent name assigned
 #' automatically by `dataname`.
@@ -945,22 +832,13 @@ cdse_cdisc_dataset_connector <- function(dataname,
                                          code = character(0),
                                          script = character(0),
                                          ...) {
-
-  x <- cdse_dataset_connector(
-    dataname = dataname,
-    cid = cid,
-    keys = keys,
-    code = code_from_script(code, script),
-    label = label,
-    ...
+  lifecycle::deprecate_stop(
+    when = "0.10.1",
+    what = "teal::cdse_cdisc_dataset_connector()",
+    details = paste(
+      "Please use teal.connectors.cdse::cdse_cdisc_dataset_connector().",
+      "Please ensure that teal.connectors.cdse package is loaded after teal.")
   )
-
-  res <- as_cdisc(
-    x,
-    parent = parent
-  )
-
-  return(res)
 }
 
 
@@ -1079,7 +957,7 @@ csv_cdisc_dataset_connector <- function(dataname,
 # DataSetDB ====
 #' `DataSetDB` `DatasetConnector`
 #'
-#' `r lifecycle::badge("experimental")`
+#' `r lifecycle::badge("defunct")`
 #'
 #' Create a `DatasetConnector` from `DataSetDB`.
 #'
@@ -1092,20 +970,6 @@ csv_cdisc_dataset_connector <- function(dataname,
 #'   additional arguments applied to pull function
 #'
 #' @export
-#'
-#' @examples
-#' if ("dsassembly" %in% installed.packages()) {
-#'   x <- datasetdb_dataset_connector(
-#'     dataname = "MAE",
-#'     id = "DS000000267"
-#'   )
-#'   x$get_code()
-#' }
-#' \dontrun{
-#' load_dataset(x)
-#' get_dataset(x)
-#' x$get_raw_data()
-#' }
 datasetdb_dataset_connector <- function(dataname,
                                         id,
                                         keys = character(0),
@@ -1113,29 +977,13 @@ datasetdb_dataset_connector <- function(dataname,
                                         code = character(0),
                                         script = character(0),
                                         ...) {
-  dot_args <- list(...)
-  stopifnot(is_fully_named_list(dot_args))
-
-  check_pkg_quietly(
-    "dsassembly",
-    "library dsassembly is required to use DataSetDB connectors please install it."
+  lifecycle::deprecate_stop(
+    when = "0.10.1",
+    what = "teal::datasetdb_dataset_connector()",
+    details = paste(
+      "Please use teal.connectors.datasetdb::datasetdb_dataset_connector().",
+      "Please ensure that teal.connectors.datasetdb package is loaded after teal.")
   )
-
-  stopifnot(is_character_single(id))
-
-  x_fun <- callable_function("dsassembly::getDataset") # nolint
-  args <- append(list(id = id), dot_args)
-  x_fun$set_args(args)
-
-  x <- dataset_connector(
-    dataname = dataname,
-    pull_callable = x_fun,
-    keys = keys,
-    label = label,
-    code = code_from_script(code, script)
-  )
-
-  return(x)
 }
 
 
