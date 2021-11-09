@@ -17,7 +17,14 @@
     utils.nest::get_package_file("teal", "cdisc_datasets/cdisc_datasets.yaml")) #nolint
   assign("default_cdisc_keys", default_cdisc_keys, envir = parent.env(environment()))
 
-  return(invisible())
+  # Set up the teal logger instance
+  options(
+    teal.log_layout = "{format(time, \"%Y-%m-%d %H:%M:%OS4\")} pid:{pid} {ans} fun:{fn} [{level}] {msg}",
+    teal.log_level = logger::INFO
+  )
+  register_logger("teal")
+
+  invisible()
 }
 
 .onAttach <- function(libname, pkgname) { # nolint

@@ -180,7 +180,8 @@ testthat::test_that("Dataset$set_vars throws an error if passed the enclosing Da
   test_ds1$set_vars(vars = list(test_ds0 = test_ds0))
   test_ds2$set_vars(vars = list(test_ds1 = test_ds1))
 
-  testthat::expect_error(test_ds0$set_vars(vars = list(test_ds2 = test_ds2)), regexp = "Circular dependencies detected")
+  testthat::expect_error(
+    test_ds0$set_vars(vars = list(test_ds2 = test_ds2)), regexp = "Circular dependencies detected")
 })
 
 testthat::test_that("Dataset$set_vars throws an error if passed the enclosing DatasetConnector", {
@@ -222,13 +223,13 @@ testthat::test_that("Dataset mutate method with delayed logic", {
   testthat::expect_equal(test_ds0$get_code(), "head_mtcars <- head(mtcars)")
 
   mutate_dataset(test_ds0, code = "head_mtcars$carb <- head_mtcars$carb * 2")
-  testthat::expect_equal(get_raw_data(test_ds0)$carb, 2 * head(mtcars)$carb)
+  testthat::expect_equal(test_ds0$get_raw_data()$carb, 2 * head(mtcars)$carb)
   testthat::expect_false(test_ds0$is_mutate_delayed())
   testthat::expect_equal(test_ds0$get_code(), "head_mtcars <- head(mtcars)\nhead_mtcars$carb <- head_mtcars$carb * 2")
 
   mutate_dataset(test_ds0, code = "head_mtcars$Species <- ds1$Species", vars = list(ds1 = test_ds1))
   testthat::expect_false(test_ds0$is_mutate_delayed())
-  testthat::expect_equal(get_raw_data(test_ds0)$Species, get_raw_data(test_ds1)$Species)
+  testthat::expect_equal(test_ds0$get_raw_data()$Species, test_ds1$get_raw_data()$Species)
   testthat::expect_equal(
     pretty_code_string(test_ds0$get_code()),
     c("head_iris <- head(iris)",
@@ -256,7 +257,7 @@ testthat::test_that("Dataset mutate method with delayed logic", {
   )
 
 
-  testthat::expect_null(get_raw_data(test_ds0)$head_mtcars)
+  testthat::expect_null(test_ds0$get_raw_data()$head_mtcars)
 
   testthat::expect_true(test_ds0$is_mutate_delayed())
   testthat::expect_equal(
@@ -291,7 +292,7 @@ testthat::test_that("Dataset mutate method with delayed logic", {
       "head_mtcars$new_var <- 1"
     )
   )
-  expect_null(get_raw_data(test_ds0)$new_var)
+  expect_null(test_ds0$get_raw_data()$new_var)
   testthat::expect_true(test_ds0$is_mutate_delayed())
 
   mutate_dataset(test_ds0, code = "head_mtcars$perm <- ds2$perm", vars = list(ds2 = test_ds2))
@@ -313,7 +314,7 @@ testthat::test_that("Dataset mutate method with delayed logic", {
     )
   )
 
-  expect_null(get_raw_data(test_ds0)$perm)
+  expect_null(test_ds0$get_raw_data()$perm)
   testthat::expect_equal(
     pretty_code_string(test_ds0$get_code()),
     c("head_iris <- head(iris)",
@@ -337,9 +338,9 @@ testthat::test_that("Dataset mutate method with delayed logic", {
   testthat::expect_true(test_ds0$is_mutate_delayed())
 
   load_dataset(test_ds0)
-  testthat::expect_silent(get_raw_data(test_ds0))
+  testthat::expect_silent(test_ds0$get_raw_data())
   testthat::expect_false(test_ds0$is_mutate_delayed())
-  testthat::expect_true(all(c("head_letters", "new_var", "perm") %in% names(get_raw_data(test_ds0))))
+  testthat::expect_true(all(c("head_letters", "new_var", "perm") %in% names(test_ds0$get_raw_data())))
   expect_code <- c(
     "head_iris <- head(iris)",
     "ds1 <- head_iris",
@@ -366,7 +367,7 @@ testthat::test_that("Dataset mutate method with delayed logic", {
     c(expect_code, "head_mtcars$new_var2 <- 2")
   )
   testthat::expect_false(test_ds0$is_mutate_delayed())
-  testthat::expect_equal(get_raw_data(test_ds0)$new_var2, rep(2, 6))
+  testthat::expect_equal(test_ds0$get_raw_data()$new_var2, rep(2, 6))
 })
 
 testthat::test_that("Dataset check method", {
@@ -574,7 +575,7 @@ test_that("mutate_dataset", {
   )
 
   expect_equal(
-    get_raw_data(test_ds),
+    test_ds$get_raw_data(),
     data.frame(x = c(1, 2), y = c("a", "b"), stringsAsFactors = FALSE)
   )
 
@@ -785,4 +786,51 @@ testthat::test_that("dataset$print prints out both head and tail when more than 
       "7          4.6         3.4          1.4         0.3  setosa"
     )
   )
+})
+
+testthat::test_that("get_var_r6 returns identical R6 objects as passed with set_vars", {
+  test_ds0 <- Dataset$new("mtcars", mtcars)
+  test_ds1 <- Dataset$new("iris", iris)
+  test_ds1$set_vars(vars = list(test_ds0 = test_ds0))
+
+  vars <- test_ds1$get_var_r6()
+  testthat::expect_identical(vars$test_ds0, test_ds0)
+})
+
+testthat::test_that("clone(deep = TRUE) deep clones dependencies, which are Dataset objects", {
+  test_ds0 <- Dataset$new("mtcars", mtcars)
+  test_ds1 <- Dataset$new("iris", iris)
+  test_ds1$set_vars(vars = list(test_ds0 = test_ds0))
+  test_ds1_cloned <- test_ds1$clone(deep = TRUE)
+  testthat::expect_false(
+    identical(test_ds1_cloned$get_var_r6()$test_ds0, test_ds0)
+  )
+})
+
+testthat::test_that("reassign_datasets_vars updates the references of the vars to
+                    addresses of passed objects", {
+  test_ds0 <- Dataset$new("mtcars", mtcars)
+  test_ds1 <- Dataset$new("iris", iris)
+  test_ds1$set_vars(vars = list(test_ds0 = test_ds0))
+
+  # after reassignment vars_r6, vars and muatate_vars match new reference
+  test_ds0_cloned <- test_ds0$clone(deep = TRUE)
+  test_ds1$reassign_datasets_vars(list(test_ds0 = test_ds0_cloned))
+
+  vars <- test_ds1$get_vars()
+  testthat::expect_identical(vars$test_ds0, test_ds0_cloned)
+})
+
+testthat::test_that("reassign_datasets_vars updates the references of the vars_r6 to
+                    addresses of passed objects", {
+  test_ds0 <- Dataset$new("mtcars", mtcars)
+  test_ds1 <- Dataset$new("iris", iris)
+  test_ds1$set_vars(vars = list(test_ds0 = test_ds0))
+
+  # after reassignment vars_r6, vars and muatate_vars match new reference
+  test_ds0_cloned <- test_ds0$clone(deep = TRUE)
+  test_ds1$reassign_datasets_vars(list(test_ds0 = test_ds0_cloned))
+
+  vars_r6 <- test_ds1$get_var_r6()
+  testthat::expect_identical(vars_r6$test_ds0, test_ds0_cloned)
 })

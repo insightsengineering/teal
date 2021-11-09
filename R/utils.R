@@ -522,7 +522,6 @@ eval_expr_with_msg <- function(expr, env) {
           )
         }
       )
-
     }
   )
 }

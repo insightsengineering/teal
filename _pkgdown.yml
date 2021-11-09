@@ -165,6 +165,7 @@ reference:
     - print.teal_modules
     - python_code
     - read_script
+    - register_logger
     - reset_filters_module
     - run_js_files
     - set_filter_state
@@ -246,8 +247,9 @@ reference:
     - srv_shiny_module_arguments
     - srv_tabs_with_filters
     - srv_teal
-    - topological_sort
     - text_to_call
+    - topological_sort
+    - to_relational_data
     - ui_nested_tabs
     - ui_tabs_with_filters
     - ui_teal

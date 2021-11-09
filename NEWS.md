@@ -1,12 +1,21 @@
-# teal 0.10.0.9003
+# teal 0.10.0.9011
 
 ### Breaking changes
 * Replaced `rcd_dataset_connector` and `rcd_cdisc_dataset_connector` with `scda_dataset_connector` and `scda_cdisc_dataset_connector` respectively.
 * Removed `rcd_connection` and `rcd_data`; `scda_dataset_connectors` can be passed into `cdisc_data` and `teal_data` directly.
 * Removed `raw_dataset`, `raw_dataset_connector`, `named_dataset`, `named_dataset_file`, `named_dataset_connector`, `relational_dataset`, `relational_dataset_file`, `relational_dataset_connector`, `key`, `as_cdisc`, `as_cdisc_relational`.
+* Running `teal` application via `ui_teal_with_splash` and `srv_teal_with_splash` is now no longer recommended because it doesn't support some new features (e.g. logging, bookmarking). Use `init` instead.
+* Updated `init` to accept `RelationalData`, `data.frame`, `Dataset`, `DatasetConnector`, `list` or a function returning a named list as data input.
+
 ### New features
 * Added print methods to the `DatasetConnector`, `RelationalData`, and `RelationalDataconnector` classes and added input validation to the implementation of the print method that was already in the `Dataset` object.
 * Added public facing constructor functions for `CDISCDataConnector`, `RelationalDataConnector`, and `DataConnection` classes.
+* Modified `data_extract_spec` to allow both the `filter` and `select` parameters to be `NULL`, which results in the `data_extract_input` acting as if a `filter_spec` with all variables as possible choices had been supplied as the `filter` argument and a `select_spec` with the `multiple` parameter set to `TRUE` had been supplied as the `select` argument.
+* Added support for logging using the `logger` package. Added a new function `register_logger`, which registers a logger in a given namespace.
+* Added support of the full screen for a `module` when the `filters` argument is equal `NULL`.
+
+### Bug fixes
+* Fixed data loading of `DatasetConnector` being dependent on other `Dataset` or `DatasetConnector` objects.
 
 ### Miscellaneous
 * Replaced the servers from `DataConnection`, `RelationalDataConnector`, `DatasetConnector`, and `RelationalData` with `moduleServer`.

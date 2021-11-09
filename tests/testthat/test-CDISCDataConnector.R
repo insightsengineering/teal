@@ -24,7 +24,7 @@ testthat::test_that("get_code returns the correct code for two CDISCDatasetConne
   data$pull()
 
   testthat::expect_equal(
-    get_code(data, "ADSL"),
+    data$get_code("ADSL"),
     paste(
       "(function() \"open function\")()",
       "ADSL <- (function() as.data.frame(as.list(setNames(nm = get_cdisc_keys(\"ADSL\")))))()",
@@ -32,7 +32,7 @@ testthat::test_that("get_code returns the correct code for two CDISCDatasetConne
     )
   )
   testthat::expect_equal(
-    get_code(data, "ADAE"),
+    data$get_code("ADAE"),
     paste(
       "(function() \"open function\")()",
       "ADAE <- (function() as.data.frame(as.list(setNames(nm = get_cdisc_keys(\"ADAE\")))))()",
@@ -40,7 +40,7 @@ testthat::test_that("get_code returns the correct code for two CDISCDatasetConne
     )
   )
   testthat::expect_equal(
-    get_code(data),
+    data$get_code(),
     paste(
       "(function() \"open function\")()",
       "ADSL <- (function() as.data.frame(as.list(setNames(nm = get_cdisc_keys(\"ADSL\")))))()",
@@ -106,7 +106,7 @@ testthat::test_that("RelationalDataConnector with custom UI and server", {
         set_args(connector, args(test = input$test))
         connector$pull(try = TRUE)
 
-        get_raw_data(connector)
+        connector$get_raw_data()
       })
   })
   set_server <- cdisc_data_connector$get_server()
@@ -121,7 +121,7 @@ testthat::test_that("RelationalDataConnector with custom UI and server", {
   testthat::expect_true(all(vapply(datasets, inherits, logical(1), "Dataset")))
 
   testthat::expect_equal(
-    get_code(cdisc_data_connector, "ADSL"),
+    cdisc_data_connector$get_code("ADSL"),
     paste(
       "(function() \"open function\")()",
       "ADSL <- (function(test) {",
@@ -132,7 +132,7 @@ testthat::test_that("RelationalDataConnector with custom UI and server", {
     )
   )
   testthat::expect_equal(
-    get_code(cdisc_data_connector),
+    cdisc_data_connector$get_code(),
     paste(
       "(function() \"open function\")()",
       "ADSL <- (function(test) {",
