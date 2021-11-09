@@ -105,7 +105,7 @@ module <- function(label, server, ui, filters, server_args = NULL, ui_args = NUL
   server_args <- names(formals(server))
   if (!(identical(server_args[1:4], c("input", "output", "session", "datasets")) ||
         identical(server_args[1:2], c("id", "datasets")))) {
-    stop(paste("all teal module server functions need arguments ",
+    stop(paste("teal modules server functions needs arguments ",
                "\ninput, output, session, and datasets (callModule) or id and datasets (moduleServer)"))
   }
 
