@@ -226,7 +226,6 @@ reference:
     - check_pkg_quietly
     - code_exclude
     - code_from_script
-    - dummy_function_for_test_nest
     - enclosed_with
     - enclosed_with_dataname
     - extract_choices_labels
