@@ -121,13 +121,18 @@ srv_nested_tabs <- function(input, output, session, datasets, modules) {
       },
       teal_module = {
         modules$server_args <- resolve_delayed(modules$server_args, datasets)
-        do.call(
-          callModule,
-          c(
-            list(module = modules$server, id = id, datasets = datasets),
-            modules$server_args
+        is_moduleServer <- isTRUE("id" %in% names(formals(modules$server)))
+        if (is_moduleServer) {
+          modules$server(id, datasets = datasets)
+        } else {
+          do.call(
+            callModule,
+            c(
+              list(module = modules$server, id = id, datasets = datasets),
+              modules$server_args
+            )
           )
-        )
+        }
       },
       stop("unsupported class ", class(modules), ", id_parent is ", id_parent)
     )
