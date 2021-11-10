@@ -123,7 +123,7 @@ srv_nested_tabs <- function(input, output, session, datasets, modules) {
         modules$server_args <- resolve_delayed(modules$server_args, datasets)
         is_module_server <- isTRUE("id" %in% names(formals(modules$server)))
         if (is_module_server) {
-          modules$server(id, datasets = datasets)
+          da.call(modules$server, c(list(id, datasets = datasets), modules$server_args))
         } else {
           do.call(
             callModule,
