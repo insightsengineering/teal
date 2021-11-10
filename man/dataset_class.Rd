@@ -445,7 +445,8 @@ Get the list of dependencies that are Dataset or DatasetConnector objects
 \if{latex}{\out{\hypertarget{method-reassign_datasets_vars}{}}}
 \subsection{Method \code{reassign_datasets_vars()}}{
 Overwrites \code{Dataset} or \code{DatasetConnector} dependencies of this \code{Dataset} with
-those found in \code{datasets}.
+those found in \code{datasets}. Reassignment
+refers only to the provided \code{datasets}, other \code{vars} remains the same.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{Dataset$reassign_datasets_vars(datasets)}\if{html}{\out{</div>}}
 }
