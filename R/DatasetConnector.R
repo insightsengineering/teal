@@ -215,13 +215,20 @@ DatasetConnector <- R6::R6Class( #nolint
     # ___ setters ====
     #' @description
     #' Reassign `vars` in this object to keep references up to date after deep clone.
-    #' Update is done based on the objects passed in `datasets` argument.
+    #' Update is done based on the objects passed in `datasets` argument. Reassignment
+    #' refers only to the provided `datasets`, other `vars` remains the same.
     #' @param datasets (`named list` of `Dataset(s)` or `DatasetConnector(s)`)\cr
     #'   objects with valid pointers.
     #' @return NULL invisible
     reassign_datasets_vars = function(datasets) {
-      private$var_r6 <- datasets[names(private$var_r6)]
-      private$pull_vars <- datasets[names(private$pull_vars)]
+      stopifnot(is_fully_named_list(datasets))
+
+      common_var_r6 <- intersect(names(datasets), names(private$var_r6))
+      private$var_r6[common_var_r6] <- datasets[common_var_r6]
+
+      common_vars <- intersect(names(datasets), names(private$pull_vars))
+      private$pull_vars[common_vars] <- datasets[common_vars]
+
       if (!is.null(private$dataset)) {
         private$dataset$reassign_datasets_vars(datasets)
       }
