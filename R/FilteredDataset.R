@@ -86,6 +86,7 @@ FilteredDataset <- R6::R6Class( # nolint
     #'  single dataset for which filters are rendered
     initialize = function(dataset) {
       stopifnot(is(dataset, "Dataset"))
+      logger::log_trace("Instantiating { class(self)[1] }, dataname: { dataset$get_dataname() }")
       private$dataset <- dataset
 
       dataname <- self$get_dataname()

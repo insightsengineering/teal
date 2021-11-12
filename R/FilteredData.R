@@ -304,6 +304,7 @@ FilteredData <- R6::R6Class( # nolint
     #'
     #' @return the intersection of `self$datanames()` and `datanames`
     handle_active_datanames = function(datanames) {
+      logger::log_trace("FilteredData$handle_active_datanames handling { paste(datanames, collapse = \" \") }")
       if (identical(datanames, "all")) {
         datanames <- self$datanames()
       } else {
@@ -333,6 +334,7 @@ FilteredData <- R6::R6Class( # nolint
     #' @return (`self`) invisibly this FilteredData
     set_dataset = function(dataset) {
       stopifnot(is(dataset, "Dataset") || is(dataset, "DatasetConnector"))
+      logger::log_trace("FilteredData$set_dataset setting dataset, name; { get_dataname(dataset) }")
       dataname <- get_dataname(dataset)
       # to include it nicely in the Show R Code; the UI also uses datanames in ids, so no whitespaces allowed
       check_simple_name(dataname)
@@ -351,6 +353,7 @@ FilteredData <- R6::R6Class( # nolint
     #' @return (`self`)
     set_code = function(code) {
       stopifnot(inherits(code, "CodeClass"))
+      logger::log_trace("FilteredData$set_code setting code")
       private$code <- code
       invisible(self)
     },
@@ -368,7 +371,7 @@ FilteredData <- R6::R6Class( # nolint
     },
 
     #' @description
-    #' Sets bookmark state
+    #' Sets a bookmarked state
     #' @param id (`character(1)`)\cr
     #'   an ID string that corresponds with the ID used to call the module's UI function.
     #' @param state (`named list`)\cr
@@ -381,6 +384,7 @@ FilteredData <- R6::R6Class( # nolint
       moduleServer(
         id,
         function(input, output, session) {
+          logger::log_trace("FilteredData$set_bookmark_state initializing")
           for(dataname in names(state)) {
             fdataset <- self$get_filtered_dataset(dataname = dataname)
             fdataset$set_bookmark_state(
@@ -388,6 +392,7 @@ FilteredData <- R6::R6Class( # nolint
               state = state[[dataname]]
             )
           }
+          logger::log_trace("FilteredData$set_bookmark_state initialized")
           invisible(NULL)
         }
       )
@@ -605,6 +610,9 @@ FilteredData <- R6::R6Class( # nolint
           # optimization: we set `priority = 1` to execute it before the other
           # observers (default priority 0), so that they are not computed if they are hidden anyways
           observeEvent(active_datanames(), priority = 1, {
+            logger::log_trace(
+              "FilteredData$srv_filter_panel@1 active datanames: { paste(active_datanames(), collapse = \" \") }"
+            )
             if (length(active_datanames()) == 0 || is.null(active_datanames())) {
               # hide whole module UI when no datasets or when NULL
               shinyjs::hide("filter_panel_whole")

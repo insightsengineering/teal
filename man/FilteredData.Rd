@@ -537,7 +537,7 @@ named list
 \if{html}{\out{<a id="method-set_bookmark_state"></a>}}
 \if{latex}{\out{\hypertarget{method-set_bookmark_state}{}}}
 \subsection{Method \code{set_bookmark_state()}}{
-Sets bookmark state
+Sets a bookmarked state
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{FilteredData$set_bookmark_state(id, state)}\if{html}{\out{</div>}}
 }
