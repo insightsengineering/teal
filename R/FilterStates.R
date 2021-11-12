@@ -826,9 +826,10 @@ DFFilterStates <- R6::R6Class( # nolint
                 queue_index = 1L,
                 element_id = input$var_to_add
               )
-              logger::log_trace(
-                "DFFilterStates$srv_add_filter_state@2 added FilterState, dataname: { deparse1(private$input_dataname) }"
-              )
+              logger::log_trace(paste(
+                "DFFilterStates$srv_add_filter_state@2 added FilterState,",
+                "dataname: { deparse1(private$input_dataname) }"
+              ))
             }
           )
 
