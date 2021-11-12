@@ -894,65 +894,6 @@ dataset.data.frame <- function(dataname,
   )
 }
 
-#' @inherit dataset
-#' @description `r lifecycle::badge("defunct")`
-#' @export
-raw_dataset <- function(x) {
-  lifecycle::deprecate_stop(
-    "0.9.2",
-    "teal::raw_dataset()",
-    details = "Please use `teal::dataset()` instead"
-  )
-}
-
-#' @inherit dataset
-#' @description `r lifecycle::badge("soft-deprecated")`
-#' @export
-named_dataset <- function(dataname,
-                          x,
-                          code = character(0),
-                          label = character(0),
-                          vars = list()) {
-  lifecycle::deprecate_warn(
-    "0.9.2",
-    "teal::named_dataset()",
-    details = "Please use teal::dataset() instead."
-  )
-
-  dataset(
-    dataname = dataname,
-    x = x,
-    code = code,
-    label = label,
-    vars = vars
-  )
-}
-
-#' @inherit dataset
-#' @description `r lifecycle::badge("soft-deprecated")`
-#' @export
-relational_dataset <- function(dataname,
-                               x,
-                               keys = character(0),
-                               code = character(0),
-                               label = character(0),
-                               vars = list()) {
-  lifecycle::deprecate_warn(
-    "0.9.2",
-    "teal::relational_dataset()",
-    details = "Please use teal::dataset() instead."
-  )
-
-  dataset(
-    dataname = dataname,
-    x = x,
-    keys = keys,
-    code = code,
-    label = label,
-    vars = vars
-  )
-}
-
 #' Load \code{Dataset} object from a file
 #'
 #' @description `r lifecycle::badge("experimental")`
@@ -1002,28 +943,4 @@ dataset_file <- function(path, code = get_code(path)) {
   object <- object_file(path, "Dataset")
   object$set_code(code)
   return(object)
-}
-
-#' @inherit dataset_file
-#' @description `r lifecycle::badge("soft-deprecated")`
-#' @export
-named_dataset_file <- function(path, code = get_code(path)) {
-  lifecycle::deprecate_warn(
-    "0.9.2",
-    "teal::named_dataset_file()",
-    details = "Please use teal::dataset_file() instead."
-  )
-  dataset_file(path = path, code = code)
-}
-
-#' @inherit dataset_file
-#' @description `r lifecycle::badge("soft-deprecated")`
-#' @export
-relational_dataset_file <- function(path, code = get_code(path)) {
-  lifecycle::deprecate_warn(
-    "0.9.2",
-    "teal::relational_dataset_file()",
-    details = "Please use teal::dataset_file() instead."
-  )
-  dataset_file(path = path, code = code)
 }

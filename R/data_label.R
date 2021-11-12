@@ -39,26 +39,6 @@ data_label <- function(data) {
   x
 }
 
-#' Function that returns a keys object
-#'
-#' @description `r lifecycle::badge("soft-deprecated")`
-#'
-#' @param primary vector of primary key values
-#' @param foreign vector of foreign key values
-#' @param parent (`character`) indicating parent dataname
-#'
-#' @return keys
-#'
-#' @export
-keys <- function(primary, foreign, parent) {
-  lifecycle::deprecate_warn(
-    "0.9.2",
-    "teal::keys()",
-    details = "Please just pass on primary keys as a character vector to the keys argument."
-  )
-  return(primary)
-}
-
 #' Function that returns the default keys for a `CDISC` dataset by name
 #'
 #' @description `r lifecycle::badge("maturing")`
