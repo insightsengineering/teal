@@ -265,7 +265,6 @@ FilterState <- R6::R6Class( # nolint
           length(extract_type) == 1 && !is.null(input_dataname)
       )
       stopifnot(extract_type %in% c("list", "matrix"))
-
       private$input_dataname <- input_dataname
       private$varname <- if (is.character(varname)) {
         as.name(varname)
@@ -369,6 +368,7 @@ FilterState <- R6::R6Class( # nolint
     set_na_rm = function(value) {
       stopifnot(is_logical_single(value))
       private$na_rm <- value
+      invisible(NULL)
     },
 
     #' @description

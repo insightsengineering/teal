@@ -43,6 +43,7 @@ chain.
 \item \href{#method-get_varname}{\code{FilterState$get_varname()}}
 \item \href{#method-get_selected}{\code{FilterState$get_selected()}}
 \item \href{#method-set_keep_na}{\code{FilterState$set_keep_na()}}
+\item \href{#method-set_na_rm}{\code{FilterState$set_na_rm()}}
 \item \href{#method-set_selected}{\code{FilterState$set_selected()}}
 \item \href{#method-set_state}{\code{FilterState$set_state()}}
 \item \href{#method-server}{\code{FilterState$server()}}
@@ -217,6 +218,18 @@ modules after selecting check-box-input in the shiny interface. Values are set t
 }
 }
 \if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-set_na_rm"></a>}}
+\if{latex}{\out{\hypertarget{method-set_na_rm}{}}}
+\subsection{Method \code{set_na_rm()}}{
+Some methods needs additional \code{!is.na(varame)} condition to not include
+missing values. When \code{private$na_rm = TRUE} is set, \code{self$get_call} returns
+condition extended by \code{!is.na} condition.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{FilterState$set_na_rm(value)}\if{html}{\out{</div>}}
+}
+
+}
+\if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-set_selected"></a>}}
 \if{latex}{\out{\hypertarget{method-set_selected}{}}}
 \subsection{Method \code{set_selected()}}{
@@ -296,7 +309,8 @@ UI Module
 id of shiny element. UI for this class contains simple message
 informing that it's not supported
 description
-Adds \code{is.na(varname)} before existing condition calls if \code{keep_na} is selected
+Adds \code{is.na(varname)} before existing condition calls if \code{keep_na} is selected.
+In case \code{private$na_rm = TRUE} when \code{keep_na = FALSE}
 return (\code{call})
 description
 Prefixed (or not) variable
