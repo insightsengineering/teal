@@ -17,9 +17,7 @@ rice_data <- function(..., connection = rice_connection(), additional_ui = NULL)
   lifecycle::deprecate_stop(
     when = "0.10.1",
     what = "teal::rice_data()",
-    details = paste(
-      "Please use teal.connectors.rice::rice_data().",
-      "Please ensure that teal.connectors.rice package is loaded after teal.")
+    details = "Please use teal.connectors.rice::rice_data()."
   )
 }
 
