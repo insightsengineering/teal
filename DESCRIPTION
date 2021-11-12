@@ -94,7 +94,6 @@ Collate:
     'RelationalDataConnector_constructors.R'
     'all_choices.R'
     'as_cdisc.R'
-    'as_relational.R'
     'choices_labeled.R'
     'choices_selected.R'
     'data_extract_spec.R'
