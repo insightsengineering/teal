@@ -59,27 +59,13 @@ within another dataset.}
 parent dataset name}
 }
 \description{
-\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#defunct}{\figure{lifecycle-defunct.svg}{options: alt='[Defunct]'}}}{\strong{[Defunct]}}
 
-\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
-}
-\details{
 Create a \code{DatasetConnector} from \code{CDSE}.
 
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#defunct}{\figure{lifecycle-defunct.svg}{options: alt='[Defunct]'}}}{\strong{[Defunct]}}
+}
+\details{
 Create a \code{CDISCDatasetConnector} from \code{CDSE} with keys and parent name assigned
 automatically by \code{dataname}.
-}
-\examples{
-\dontrun{
-if ("CDSE" \%in\% installed.packages()) {
-  x <- cdse_dataset_connector(
-    dataname = "MAE",
-    cid = "cid6828341065561714688"
-  )
-  x$get_code()
-}
-load_dataset(x)
-get_dataset(x)
-x$get_raw_data()
-}
 }
