@@ -36,9 +36,7 @@ teradata_data <- function(..., connection = teradata_connection()) {
   lifecycle::deprecate_stop(
     when = "0.10.1",
     what = "teal::teradata_data()",
-    details = paste(
-      "Please use teal.connectors.teradata::teradata_data().",
-      "Please ensure that teal.connectors.teradata package is loaded after teal.")
+    details = "Please use teal.connectors.teradata::teradata_data()."
   )
 }
 
@@ -61,9 +59,7 @@ snowflake_data <- function(..., connection) {
   lifecycle::deprecate_stop(
     when = "0.10.1",
     what = "teal::snowflake_data()",
-    details = paste(
-      "Please use teal.connectors.snowflake::snowflake_data().",
-      "Please ensure that teal.connectors.snowflake package is loaded after teal.")
+    details = "Please use teal.connectors.snowflake::snowflake_data()."
   )
 }
 
@@ -83,9 +79,7 @@ cdse_data <- function(..., connection = cdse_connection()) {
   lifecycle::deprecate_stop(
     when = "0.10.1",
     what = "teal::cdse_data()",
-    details = paste(
-      "Please use teal.connectors.cdse::cdse_data().",
-      "Please ensure that teal.connectors.cdse package is loaded after teal.")
+    details = "Please use teal.connectors.cdse::cdse_data()."
   )
 }
 
@@ -106,8 +100,6 @@ datasetdb_data <- function(..., connection = datasetdb_connection()) {
   lifecycle::deprecate_stop(
     when = "0.10.1",
     what = "teal::datasetdb_data()",
-    details = paste(
-      "Please use teal.connectors.datasetdb::datasetdb_data().",
-      "Please ensure that teal.connectors.datasetdb package is loaded after teal.")
+    details = "Please use teal.connectors.datasetdb::datasetdb_data()."
   )
 }
