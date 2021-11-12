@@ -129,9 +129,11 @@ testthat::test_that(
     library(MultiAssayExperiment)
     data(miniACC)
     miniACC$test <- sample(c(TRUE, NA), size = nrow(miniACC@colData), replace = TRUE)
-    testthat::expect_error(
-      subsetByColData(miniACC, miniACC$test),
-      "logical subscript contains NAs"
-    )
+    if (compareVersion(as.character(BiocManager::version()), "3.14") >= 0) {
+      testthat::expect_error(
+        subsetByColData(miniACC, miniACC$test),
+        "logical subscript contains NAs"
+      )
+    }
   }
 )
