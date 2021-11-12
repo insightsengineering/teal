@@ -42,7 +42,7 @@ testthat::test_that("get_call returns a call filtering an MAE object using Choic
   )
   filter_state <- ChoicesFilterState$new(
     x = c("white", NA_character_),
-    varname = c("race"),
+    varname = as.name("race"),
     input_dataname = as.name("test"),
     extract_type = "list"
   )
@@ -129,7 +129,7 @@ testthat::test_that(
     library(MultiAssayExperiment)
     data(miniACC)
     miniACC$test <- sample(c(TRUE, NA), size = nrow(miniACC@colData), replace = TRUE)
-    if (compareVersion(as.character(BiocManager::version()), "3.14") >= 0) {
+    if (compareVersion(as.character(packageVersion("MultiAssayExperiment")), "1.20.0") >= 0) {
       testthat::expect_error(
         subsetByColData(miniACC, miniACC$test),
         "logical subscript contains NAs"
