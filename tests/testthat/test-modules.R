@@ -96,25 +96,27 @@ testthat::test_that("overall test of modules under server function defined with 
 })
 
 testthat::test_that("error when duplicated labels in modules", {
-  expect_error(modules(
-    "aa",
-    module(
-      "ccc",
-      server = function(input, output, session, datasets) {},
-      ui = function(id, datasets) {
-        tags$p(paste0("id: ", id))
-      },
-      filters = "all"
-    ),
-    module(
-      "ccc",
-      server = function(input, output, session, datasets) {},
-      ui = function(id, datasets) {
-        tags$p(paste0("id: ", id))
-      },
-      filters = "all"
+  expect_error(
+    modules(
+      "aa",
+      module(
+        "ccc",
+        server = function(input, output, session, datasets) {},
+        ui = function(id, datasets) {
+          tags$p(paste0("id: ", id))
+        },
+        filters = "all"
+      ),
+      module(
+        "ccc",
+        server = function(input, output, session, datasets) {},
+        ui = function(id, datasets) {
+          tags$p(paste0("id: ", id))
+        },
+        filters = "all"
+      )
     )
-  ))
+  )
 })
 
 testthat::test_that("no error when duplicated labels in modules as added after init", {

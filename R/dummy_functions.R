@@ -95,18 +95,20 @@ get_dummy_datasets <- function() { # nousage # nolint
 #' @return `teal_modules`
 #'
 get_dummy_modules <- function(moduleServer = FALSE) { # nousage # nolint
-  create_mod <- function(module_name) module(
-    module_name,
-    server = if (moduleServer) {
-      function(id, datasets) {}
+  create_mod <- function(module_name) {
+    module(
+      module_name,
+      server = if (moduleServer) {
+        function(id, datasets) {}
       } else {
-      function(input, output, session, datasets) {}
+        function(input, output, session, datasets) {}
       },
-    ui = function(id, ...) {
-      tags$p(paste0("id: ", id))
-    },
-    filters = "all"
-  )
+      ui = function(id, ...) {
+        tags$p(paste0("id: ", id))
+      },
+      filters = "all"
+    )
+  }
   mods <- modules(
     "d1",
     modules(
