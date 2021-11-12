@@ -71,7 +71,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">teal</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.10.0.9013</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.10.0.9014</span>
       </span>
     </div>
 
@@ -138,9 +138,9 @@
       
     </div>
 
-    <div id="teal-01009013" class="section level1">
-<h1 class="page-header" data-toc-text="0.10.0.9013">
-<a href="#teal-01009013" class="anchor"></a>teal 0.10.0.9013</h1>
+    <div id="teal-01009014" class="section level1">
+<h1 class="page-header" data-toc-text="0.10.0.9014">
+<a href="#teal-01009014" class="anchor"></a>teal 0.10.0.9014</h1>
 <div id="breaking-changes" class="section level3">
 <h3 class="hasAnchor">
 <a href="#breaking-changes" class="anchor"></a>Breaking changes</h3>
@@ -169,6 +169,7 @@
 <a href="#bug-fixes" class="anchor"></a>Bug fixes</h3>
 <ul>
 <li>Fixed data loading of <code>DatasetConnector</code> being dependent on other <code>Dataset</code> or <code>DatasetConnector</code> objects.</li>
+<li>Fixed call returned by <code>FilterState</code> in case of using <code><a href="http://waldronlab.io/MultiAssayExperiment/reference/subsetBy.html">MultiAssayExperiment::subsetByColData</a></code>. Now single condition for variable containing <code>NA</code> values is <code>!is.na(var) &amp; var == &lt;condition&gt;</code>.</li>
 </ul>
 </div>
 <div id="miscellaneous" class="section level3">

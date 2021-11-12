@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">teal</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.10.0.9013</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.10.0.9014</span>
       </span>
     </div>
 
@@ -185,6 +185,7 @@ chain.</p></li>
 <li><p><a href='#method-get_varname'><code>FilterState$get_varname()</code></a></p></li>
 <li><p><a href='#method-get_selected'><code>FilterState$get_selected()</code></a></p></li>
 <li><p><a href='#method-set_keep_na'><code>FilterState$set_keep_na()</code></a></p></li>
+<li><p><a href='#method-set_na_rm'><code>FilterState$set_na_rm()</code></a></p></li>
 <li><p><a href='#method-set_selected'><code>FilterState$set_selected()</code></a></p></li>
 <li><p><a href='#method-set_state'><code>FilterState$set_state()</code></a></p></li>
 <li><p><a href='#method-server'><code>FilterState$server()</code></a></p></li>
@@ -300,6 +301,13 @@ modules after selecting check-box-input in the shiny interface. Values are set t
 
 </dl><p></div></p>
 <p><hr>
+<a id="method-set_na_rm"></a></p><h3 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Method <code>set_na_rm()</code></h3>
+<p>Some methods needs additional <code>!is.na(varame)</code> condition to not include
+missing values. When <code>private$na_rm = TRUE</code> is set, <code>self$get_call</code> returns
+condition extended by <code>!is.na</code> condition.</p><h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Usage</h4>
+<p><div class="r"></p><pre><span class='va'>FilterState</span><span class='op'>$</span><span class='fu'>set_na_rm</span><span class='op'>(</span><span class='va'>value</span><span class='op'>)</span></pre><p></div></p>
+
+<p><hr>
 <a id="method-set_selected"></a></p><h3 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Method <code>set_selected()</code></h3>
 <p>Set selection</p><h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Usage</h4>
 <p><div class="r"></p><pre><span class='va'>FilterState</span><span class='op'>$</span><span class='fu'>set_selected</span><span class='op'>(</span><span class='va'>value</span><span class='op'>)</span></pre><p></div></p>
@@ -352,7 +360,9 @@ an ID string that corresponds with the ID used to call the module's UI function.
 id of shiny element. UI for this class contains simple message
 informing that it's not supported
 description
-Adds <code><a href='https://rdrr.io/r/base/NA.html'>is.na(varname)</a></code> before existing condition calls if <code>keep_na</code> is selected
+Adds <code><a href='https://rdrr.io/r/base/NA.html'>is.na(varname)</a></code> before existing condition calls if <code>keep_na</code> is selected.
+Otherwise, if missings are found in the variable <code>!is.na</code> will be added
+only if <code>private$na_rm = TRUE</code>
 return (<code>call</code>)
 description
 Prefixed (or not) variableReturn variable name needed to condition call.
