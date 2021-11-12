@@ -337,7 +337,8 @@ Get the list of dependencies that are Dataset or DatasetConnector objects
 \if{latex}{\out{\hypertarget{method-reassign_datasets_vars}{}}}
 \subsection{Method \code{reassign_datasets_vars()}}{
 Reassign \code{vars} in this object to keep references up to date after deep clone.
-Update is done based on the objects passed in \code{datasets} argument.
+Update is done based on the objects passed in \code{datasets} argument. Reassignment
+refers only to the provided \code{datasets}, other \code{vars} remains the same.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{DatasetConnector$reassign_datasets_vars(datasets)}\if{html}{\out{</div>}}
 }
