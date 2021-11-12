@@ -251,7 +251,8 @@ Dataset <- R6::R6Class( # nolint
     # ___ setters ====
     #' @description
     #' Overwrites `Dataset` or `DatasetConnector` dependencies of this `Dataset` with
-    #' those found in `datasets`.
+    #' those found in `datasets`. Reassignment
+    #' refers only to the provided `datasets`, other `vars` remains the same.
     #' @details
     #' Reassign `vars` in this object to keep references up to date after deep clone.
     #' Update is done based on the objects passed in `datasets` argument.
@@ -271,9 +272,17 @@ Dataset <- R6::R6Class( # nolint
     #' )
     #'
     reassign_datasets_vars = function(datasets) {
-      private$var_r6 <- datasets[names(private$var_r6)]
-      private$vars <- datasets[names(private$vars)]
-      private$mutate_vars <- datasets[names(private$mutate_vars)]
+      stopifnot(is_fully_named_list(datasets))
+
+      common_var_r6 <- intersect(names(datasets), names(private$var_r6))
+      private$var_r6[common_var_r6] <- datasets[common_var_r6]
+
+      common_vars <- intersect(names(datasets), names(private$vars))
+      private$vars[common_vars] <- datasets[common_vars]
+
+      common_mutate_vars <- intersect(names(datasets), names(private$mutate_vars))
+      private$mutate_vars[common_mutate_vars] <- datasets[common_mutate_vars]
+
       invisible(NULL)
     },
     #' @description
