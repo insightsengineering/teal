@@ -310,7 +310,8 @@ id of shiny element. UI for this class contains simple message
 informing that it's not supported
 description
 Adds \code{is.na(varname)} before existing condition calls if \code{keep_na} is selected.
-In case \code{private$na_rm = TRUE} when \code{keep_na = FALSE}
+Otherwise, if missings are found in the variable \code{!is.na} will be added
+only if \code{private$na_rm = TRUE}
 return (\code{call})
 description
 Prefixed (or not) variable

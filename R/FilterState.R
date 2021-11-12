@@ -443,7 +443,8 @@ FilterState <- R6::R6Class( # nolint
 
     #' description
     #' Adds `is.na(varname)` before existing condition calls if `keep_na` is selected.
-    #' In case `private$na_rm = TRUE` when `keep_na = FALSE`
+    #' Otherwise, if missings are found in the variable `!is.na` will be added
+    #' only if `private$na_rm = TRUE`
     #' return (`call`)
     add_keep_na_call = function(filter_call) {
       if (isTRUE(self$get_keep_na())) {
