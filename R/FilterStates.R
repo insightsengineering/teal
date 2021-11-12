@@ -892,6 +892,8 @@ MAEFilterStates <- R6::R6Class( # nolint
               extract_type = "list"
             )
             set_filter_state(x  = value, fstate)
+            fstate$set_na_rm(TRUE)
+
             id <- html_id_mapping[[varname]]
             private$add_filter_state(
               id = id,
@@ -997,15 +999,19 @@ MAEFilterStates <- R6::R6Class( # nolint
             eventExpr = input$var_to_add,
             handlerExpr = {
               id <- html_id_mapping[[input$var_to_add]]
+
+              fstate <- init_filter_state(
+                SummarizedExperiment::colData(data)[[input$var_to_add]],
+                varname = as.name(input$var_to_add),
+                varlabel = private$get_varlabels(input$var_to_add),
+                input_dataname = private$input_dataname,
+                extract_type = "list"
+              )
+              fstate$set_na_rm(TRUE)
+
               private$add_filter_state(
                 id = id,
-                filter_state = init_filter_state(
-                  SummarizedExperiment::colData(data)[[input$var_to_add]],
-                  varname = as.name(input$var_to_add),
-                  varlabel = private$get_varlabels(input$var_to_add),
-                  input_dataname = private$input_dataname,
-                  extract_type = "list"
-                ),
+                filter_state = fstate,
                 queue_index = "y",
                 element_id = input$var_to_add
               )
