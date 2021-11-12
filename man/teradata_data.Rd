@@ -15,34 +15,6 @@ teradata_data(..., connection = teradata_connection())
 An object of class \code{RelationalDataConnector}
 }
 \description{
-\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#defunct}{\figure{lifecycle-defunct.svg}{options: alt='[Defunct]'}}}{\strong{[Defunct]}}
 Build data connector for \code{TERADATA} functions or datasets
-}
-\examples{
-\dontrun{
-x <- teradata_data(
-  teradata_cdisc_dataset_connector("ADSL", "ADSL_table"),
-  teradata_cdisc_dataset_connector("ADAE", "ADAE_table"),
-  connection = teradata_connection(open_args = list(datalab = "my_custom_datalab"))
-)
-
-# add the data to a proper teal app
-app <- init(
-  data = teal_data(x),
-  modules = root_modules(
-    module(
-      "ADSL AGE histogram",
-      server = function(input, output, session, datasets) {
-        output$hist <- renderPlot(
-          hist(datasets$get_data("ADSL", filtered = TRUE)$AGE)
-        )
-      },
-      ui = function(id, ...) {ns <- NS(id); plotOutput(ns('hist'))},
-      filters = "ADSL"
-    )
-  ),
-  header = tags$h1("Sample App")
-)
-shinyApp(app$ui, app$server)
-}
 }
