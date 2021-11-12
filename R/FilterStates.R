@@ -914,6 +914,10 @@ MAEFilterStates <- R6::R6Class( # nolint
       moduleServer(
         id = id,
         function(input, output, session) {
+          logger::log_trace(paste(
+            "MAEFilterState$set_bookmark_state initializing,",
+            "dataname: { deparse1(private$input_dataname) }"
+          ))
           html_id_mapping <- private$map_vars_to_html_ids(get_filterable_varnames(SummarizedExperiment::colData(data)))
           for (varname in names(state)) {
             value <- state[[varname]]
@@ -924,7 +928,7 @@ MAEFilterStates <- R6::R6Class( # nolint
               input_dataname = private$input_dataname,
               extract_type = "list"
             )
-            set_filter_state(x  = value, fstate)
+            set_filter_state(x = value, fstate)
             id <- html_id_mapping[[varname]]
             private$add_filter_state(
               id = id,
@@ -932,8 +936,11 @@ MAEFilterStates <- R6::R6Class( # nolint
               queue_index = "y",
               element_id = varname
             )
-
           }
+          logger::log_trace(paste(
+            "MAEFilterState$set_bookmark_state initialized,",
+            "dataname: { deparse1(private$input_dataname) }"
+          ))
           NULL
         }
       )
@@ -1153,6 +1160,10 @@ SEFilterStates <- R6::R6Class( # nolint
       moduleServer(
         id = id,
         function(input, output, session) {
+          logger::log_trace(paste(
+            "SEFilterState$set_bookmark_state initializing,",
+            "dataname: { deparse1(private$input_dataname) }"
+          ))
           row_html_mapping <- private$map_vars_to_html_ids(get_filterable_varnames(SummarizedExperiment::rowData(data)))
           row_html_mapping <- setNames(object = paste0("rowData_", row_html_mapping), nm = names(row_html_mapping))
           for (varname in names(state$subset)) {
@@ -1190,6 +1201,10 @@ SEFilterStates <- R6::R6Class( # nolint
               element_id = varname
             )
           }
+          logger::log_trace(paste(
+            "SEFilterState$set_bookmark_state initialized,",
+            "dataname: { deparse1(private$input_dataname) }"
+          ))
           NULL
         }
       )
@@ -1269,7 +1284,7 @@ SEFilterStates <- R6::R6Class( # nolint
         function(input, output, session) {
           logger::log_trace(paste(
             "SEFilterState$srv_add_filter_state initializing,",
-            "dataname: { deparse(private$input_dataname) }"
+            "dataname: { deparse1(private$input_dataname) }"
           ))
           active_filter_col_vars <- reactive({
             vapply(
@@ -1458,7 +1473,7 @@ MatrixFilterStates <- R6::R6Class( # nolint
     },
 
     #' @description
-    #' Set bookmark state
+    #' Sets a bookmarked state
     #'
     #' @param id (`character(1)`)\cr
     #'   an ID string that corresponds with the ID used to call the module's UI function.
@@ -1477,6 +1492,10 @@ MatrixFilterStates <- R6::R6Class( # nolint
       moduleServer(
         id = id,
         function(input, output, session) {
+          logger::log_trace(paste(
+            "MatrixFilterState$set_bookmark_state initializing,",
+            "dataname: { deparse1(private$input_dataname) }"
+          ))
           html_id_mapping <- private$map_vars_to_html_ids(get_filterable_varnames(data))
           for (varname in names(state)) {
             value <- state[[varname]]
@@ -1496,6 +1515,10 @@ MatrixFilterStates <- R6::R6Class( # nolint
               element_id = varname
             )
           }
+          logger::log_trace(paste(
+            "MatrixFilterState$set_bookmark_state initialized,",
+            "dataname: { deparse1(private$input_dataname) }"
+          ))
           NULL
         }
       )
