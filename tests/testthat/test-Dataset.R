@@ -834,3 +834,26 @@ testthat::test_that("reassign_datasets_vars updates the references of the vars_r
   vars_r6 <- test_ds1$get_var_r6()
   testthat::expect_identical(vars_r6$test_ds0, test_ds0_cloned)
 })
+
+testthat::test_that("reassign_datasets_vars does not change `vars` elements of
+                    class different than Dataset and DatasetConnector", {
+  test_ds0 <- mtcars
+  test_ds1 <- Dataset$new("mtcars", mtcars)
+  test_ds2 <- Dataset$new("iris", iris)
+  test_ds2$set_vars(vars = list(test_ds0 = test_ds0, test_ds1 = test_ds1))
+
+  test_ds2$reassign_datasets_vars(list(test_ds1 = test_ds1))
+  testthat::expect_identical(test_ds2$get_vars()$test_ds0, test_ds0)
+})
+
+testthat::test_that("reassign_datasets_vars does not change any `vars` while
+                    empty list is provided", {
+  test_ds0 <- mtcars
+  test_ds1 <- Dataset$new("mtcars", mtcars)
+  test_ds2 <- Dataset$new("iris", iris)
+  test_ds2$set_vars(vars = list(test_ds0 = test_ds0, test_ds1 = test_ds1))
+
+  test_ds2$reassign_datasets_vars(list())
+  testthat::expect_identical(test_ds2$get_vars()$test_ds0, test_ds0)
+  testthat::expect_identical(test_ds2$get_vars()$test_ds1, test_ds1)
+})
