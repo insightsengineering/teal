@@ -123,8 +123,7 @@ testthat::test_that("MAEFilterStates$set_bookmark_state sets filters in FilterSt
 })
 
 testthat::test_that(
-  "MultiAssayExperiment::subsetByColData returns error when variable contains NAs",
-  {
+  "MultiAssayExperiment::subsetByColData returns error when variable contains NAs", {
     # if this test fails it means that we can remove FilterState$set_na_rm which
     # has been created after breaking change in MAE
     library(MultiAssayExperiment)
