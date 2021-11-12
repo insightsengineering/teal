@@ -96,7 +96,7 @@ testthat::test_that("overall test of modules under server function defined with 
 })
 
 testthat::test_that("error when duplicated labels in modules", {
-  modules(
+  expect_error(modules(
     "aa",
     module(
       "ccc",
@@ -114,18 +114,19 @@ testthat::test_that("error when duplicated labels in modules", {
       },
       filters = "all"
     )
-  )
+  ))
 })
 
 testthat::test_that("no error when duplicated labels in modules as added after init", {
-  mods_call_module$children$wrong_mod <- module(
+  expect_silent(mods_call_module$children$wrong_mod <- module(
     "ccc",
     server = function(input, output, session, datasets) {},
     ui = function(id, datasets) {
       tags$p(paste0("id: ", id))
     },
     filters = "all"
-  )
+  ))
+
   mods_call_module$children$wrong_mod <- NULL
 })
 
