@@ -73,7 +73,7 @@ Build data connector for RICE datasets" />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">teal</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.10.0.9011</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.10.0.9012</span>
       </span>
     </div>
 
@@ -142,7 +142,7 @@ Build data connector for RICE datasets" />
     </div>
 
     <div class="ref-description">
-    <p><a href='https://lifecycle.r-lib.org/articles/stages.html#experimental'><img src='figures/lifecycle-experimental.svg' alt='[Experimental]' /></a>
+    <p><a href='https://lifecycle.r-lib.org/articles/stages.html#defunct'><img src='figures/lifecycle-defunct.svg' alt='[Defunct]' /></a>
 Build data connector for <code>RICE</code> datasets</p>
     </div>
 
@@ -171,35 +171,6 @@ additional user interface to be visible over login panel</p></td>
 
     <p>An object of class <code>RelationalDataConnector</code></p>
 
-    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'>
-<span class='kw'>if</span> <span class='op'>(</span><span class='st'>"rice"</span> <span class='op'>%in%</span> <span class='fu'><a href='https://rdrr.io/r/utils/installed.packages.html'>installed.packages</a></span><span class='op'>(</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>{</span>
-  <span class='va'>x</span> <span class='op'>&lt;-</span> <span class='fu'>rice_data</span><span class='op'>(</span>
-    <span class='fu'><a href='rice_dataset_connector.html'>rice_cdisc_dataset_connector</a></span><span class='op'>(</span><span class='st'>"ADSL"</span>, <span class='st'>"/path/to/ADSL"</span><span class='op'>)</span>,
-    <span class='fu'><a href='rice_dataset_connector.html'>rice_cdisc_dataset_connector</a></span><span class='op'>(</span><span class='st'>"ADLB"</span>, <span class='st'>"/path/to/ADLB"</span><span class='op'>)</span>
-  <span class='op'>)</span>
-  <span class='va'>app</span> <span class='op'>&lt;-</span> <span class='fu'><a href='init.html'>init</a></span><span class='op'>(</span>
-    data <span class='op'>=</span> <span class='fu'><a href='cdisc_data.html'>cdisc_data</a></span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span>,
-    modules <span class='op'>=</span> <span class='fu'><a href='root_modules.html'>root_modules</a></span><span class='op'>(</span>
-      <span class='fu'><a href='module.html'>module</a></span><span class='op'>(</span>
-        <span class='st'>"ADSL AGE histogram"</span>,
-        server <span class='op'>=</span> <span class='kw'>function</span><span class='op'>(</span><span class='va'>input</span>, <span class='va'>output</span>, <span class='va'>session</span>, <span class='va'>datasets</span><span class='op'>)</span> <span class='op'>{</span>
-          <span class='va'>output</span><span class='op'>$</span><span class='va'>hist</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/shiny/man/renderPlot.html'>renderPlot</a></span><span class='op'>(</span><span class='op'>{</span>
-            <span class='fu'><a href='https://rdrr.io/r/graphics/hist.html'>hist</a></span><span class='op'>(</span><span class='va'>datasets</span><span class='op'>$</span><span class='fu'>get_data</span><span class='op'>(</span><span class='st'>"ADSL"</span>, filtered <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span><span class='op'>$</span><span class='va'>AGE</span><span class='op'>)</span>
-          <span class='op'>}</span><span class='op'>)</span>
-        <span class='op'>}</span>,
-        ui <span class='op'>=</span> <span class='kw'>function</span><span class='op'>(</span><span class='va'>id</span>, <span class='va'>...</span><span class='op'>)</span> <span class='op'>{</span><span class='va'>ns</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/shiny/man/NS.html'>NS</a></span><span class='op'>(</span><span class='va'>id</span><span class='op'>)</span>; <span class='fu'><a href='https://rdrr.io/pkg/shiny/man/plotOutput.html'>plotOutput</a></span><span class='op'>(</span><span class='fu'>ns</span><span class='op'>(</span><span class='st'>'hist'</span><span class='op'>)</span><span class='op'>)</span><span class='op'>}</span>,
-        filters <span class='op'>=</span> <span class='st'>"ADSL"</span>
-      <span class='op'>)</span>
-    <span class='op'>)</span>,
-    header <span class='op'>=</span> <span class='va'>tags</span><span class='op'>$</span><span class='fu'>h1</span><span class='op'>(</span><span class='st'>"Sample App"</span><span class='op'>)</span>
-  <span class='op'>)</span>
-<span class='op'>}</span>
-<span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span>
-<span class='fu'><a href='https://rdrr.io/pkg/shiny/man/shinyApp.html'>shinyApp</a></span><span class='op'>(</span><span class='va'>app</span><span class='op'>$</span><span class='va'>ui</span>, <span class='va'>app</span><span class='op'>$</span><span class='va'>server</span><span class='op'>)</span>
-<span class='op'>}</span>
-
-</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
