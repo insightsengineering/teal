@@ -121,12 +121,6 @@
     <loc>https://insightsengineering.github.io/teal/reference/as_cdisc.html</loc>
   </url>
   <url>
-    <loc>https://insightsengineering.github.io/teal/reference/as_cdisc_relational.html</loc>
-  </url>
-  <url>
-    <loc>https://insightsengineering.github.io/teal/reference/as_relational.html</loc>
-  </url>
-  <url>
     <loc>https://insightsengineering.github.io/teal/reference/bookmark_module.html</loc>
   </url>
   <url>
@@ -382,9 +376,6 @@
     <loc>https://insightsengineering.github.io/teal/reference/join_keys.html</loc>
   </url>
   <url>
-    <loc>https://insightsengineering.github.io/teal/reference/keys.html</loc>
-  </url>
-  <url>
     <loc>https://insightsengineering.github.io/teal/reference/label_to_id.html</loc>
   </url>
   <url>
@@ -416,15 +407,6 @@
   </url>
   <url>
     <loc>https://insightsengineering.github.io/teal/reference/mutate_join_keys.html</loc>
-  </url>
-  <url>
-    <loc>https://insightsengineering.github.io/teal/reference/named_dataset.html</loc>
-  </url>
-  <url>
-    <loc>https://insightsengineering.github.io/teal/reference/named_dataset_connector.html</loc>
-  </url>
-  <url>
-    <loc>https://insightsengineering.github.io/teal/reference/named_dataset_file.html</loc>
   </url>
   <url>
     <loc>https://insightsengineering.github.io/teal/reference/no_selected_as_NULL.html</loc>
@@ -472,12 +454,6 @@
     <loc>https://insightsengineering.github.io/teal/reference/python_dataset_connector.html</loc>
   </url>
   <url>
-    <loc>https://insightsengineering.github.io/teal/reference/raw_dataset.html</loc>
-  </url>
-  <url>
-    <loc>https://insightsengineering.github.io/teal/reference/raw_dataset_connector.html</loc>
-  </url>
-  <url>
     <loc>https://insightsengineering.github.io/teal/reference/rds_dataset_connector.html</loc>
   </url>
   <url>
@@ -488,15 +464,6 @@
   </url>
   <url>
     <loc>https://insightsengineering.github.io/teal/reference/relational_data_connector.html</loc>
-  </url>
-  <url>
-    <loc>https://insightsengineering.github.io/teal/reference/relational_dataset.html</loc>
-  </url>
-  <url>
-    <loc>https://insightsengineering.github.io/teal/reference/relational_dataset_connector.html</loc>
-  </url>
-  <url>
-    <loc>https://insightsengineering.github.io/teal/reference/relational_dataset_file.html</loc>
   </url>
   <url>
     <loc>https://insightsengineering.github.io/teal/reference/reset_filters_module.html</loc>
