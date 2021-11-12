@@ -99,9 +99,11 @@ get_dummy_modules <- function(moduleServer = FALSE) { # nousage # nolint
     module(
       module_name,
       server = if (moduleServer) {
-        function(id, datasets) {}
+        function(id, datasets) {
+        }
       } else {
-        function(input, output, session, datasets) {}
+        function(input, output, session, datasets) {
+        }
       },
       ui = function(id, ...) {
         tags$p(paste0("id: ", id))

@@ -8,7 +8,8 @@ mods_module_server <- teal:::get_dummy_modules(moduleServer = TRUE)
 testthat::test_that("module correct server and ui arguments", {
   expect_silent(module(
     "callModule",
-    server = function(input, output, session, datasets) {},
+    server = function(input, output, session, datasets) {
+    },
     ui = function(id, ...) {
       tags$p(paste0("id: ", id))
     },
@@ -17,7 +18,8 @@ testthat::test_that("module correct server and ui arguments", {
 
   expect_silent(module(
     "callModule",
-    server = function(input, output, session, datasets) {},
+    server = function(input, output, session, datasets) {
+    },
     ui = function(id, datasets) {
       tags$p(paste0("id: ", id))
     },
@@ -26,7 +28,8 @@ testthat::test_that("module correct server and ui arguments", {
 
   expect_silent(module(
     "moduleServer",
-    server = function(id, datasets) {},
+    server = function(id, datasets) {
+    },
     ui = function(id, datasets) {
       tags$p(paste0("id: ", id))
     },
@@ -35,7 +38,8 @@ testthat::test_that("module correct server and ui arguments", {
 
   expect_silent(module(
     "moduleServer",
-    server = function(id, datasets) {},
+    server = function(id, datasets) {
+    },
     ui = function(id, ...) {
       tags$p(paste0("id: ", id))
     },
@@ -46,7 +50,8 @@ testthat::test_that("module correct server and ui arguments", {
 testthat::test_that("module with incorrect server and/or ui arguments", {
   expect_error(module(
     "callModule",
-    server = function(input, sth, session, datasets) {},
+    server = function(input, sth, session, datasets) {
+    },
     ui = function(id, ...) {
       tags$p(paste0("id: ", id))
     },
@@ -55,7 +60,8 @@ testthat::test_that("module with incorrect server and/or ui arguments", {
 
   expect_error(module(
     "callModule",
-    server = function(input, output, session, datasets) {},
+    server = function(input, output, session, datasets) {
+    },
     ui = function(sth, id, ...) {
       tags$p(paste0("id: ", id))
     },
@@ -64,7 +70,8 @@ testthat::test_that("module with incorrect server and/or ui arguments", {
 
   expect_error(module(
     "callModule",
-    server = function(input, output, session, datasets) {},
+    server = function(input, output, session, datasets) {
+    },
     ui = function(id, sth) {
       tags$p(paste0("id: ", id))
     },
@@ -73,7 +80,8 @@ testthat::test_that("module with incorrect server and/or ui arguments", {
 
   expect_error(module(
     "moduleServer",
-    server = function(id, sth, datasets) {},
+    server = function(id, sth, datasets) {
+    },
     ui = function(id, ...) {
       tags$p(paste0("id: ", id))
     },
@@ -101,7 +109,8 @@ testthat::test_that("error when duplicated labels in modules", {
       "aa",
       module(
         "ccc",
-        server = function(input, output, session, datasets) {},
+        server = function(input, output, session, datasets) {
+        },
         ui = function(id, datasets) {
           tags$p(paste0("id: ", id))
         },
@@ -109,7 +118,8 @@ testthat::test_that("error when duplicated labels in modules", {
       ),
       module(
         "ccc",
-        server = function(input, output, session, datasets) {},
+        server = function(input, output, session, datasets) {
+        },
         ui = function(id, datasets) {
           tags$p(paste0("id: ", id))
         },
@@ -122,7 +132,8 @@ testthat::test_that("error when duplicated labels in modules", {
 testthat::test_that("no error when duplicated labels in modules as added after init", {
   expect_silent(mods_call_module$children$wrong_mod <- module(
     "ccc",
-    server = function(input, output, session, datasets) {},
+    server = function(input, output, session, datasets) {
+    },
     ui = function(id, datasets) {
       tags$p(paste0("id: ", id))
     },
