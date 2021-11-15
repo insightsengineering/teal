@@ -52,8 +52,7 @@ testthat::test_that("module correct server and ui arguments", {
 testthat::test_that("module with incorrect server and/or ui arguments", {
   expect_error(module(
     "callModule",
-    server = function(input, sth, session, datasets) {
-    },
+    server = call_module_server_fun,
     ui = uiFun1,
     filters = "all"
   ))
