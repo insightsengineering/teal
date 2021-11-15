@@ -29,38 +29,51 @@ mods_call_module <- structure(list(label = "d1", children = list(
             server_args = NULL,
             ui_args = NULL
           ),
-          class = "teal_module"),
-          aaa2 = structure(list(label = "aaa2",
-                                server = call_module_server_fun,
-                                ui = ui_fun1,
-                                filters = "all",
-                                server_args = NULL,
-                                ui_args = NULL),
-                           class = "teal_module"),
-          aaa3 = structure(list(label = "aaa3",
-                                server = call_module_server_fun,
-                                ui = ui_fun1,
-                                filters = "all",
-                                server_args = NULL,
-                                ui_args = NULL),
-                           class = "teal_module")
+          class = "teal_module"
+          ),
+          aaa2 = structure(list(
+            label = "aaa2",
+            server = call_module_server_fun,
+            ui = ui_fun1,
+            filters = "all",
+            server_args = NULL,
+            ui_args = NULL
+          ),
+          class = "teal_module"
+          ),
+          aaa3 = structure(list(
+            label = "aaa3",
+            server = call_module_server_fun,
+            ui = ui_fun1,
+            filters = "all",
+            server_args = NULL,
+            ui_args = NULL
+          ),
+          class = "teal_module"
+          )
         )
       ), class = "teal_modules"),
-      bbb = structure(list(label = "bbb",
-                           server = call_module_server_fun,
-                           ui = ui_fun1,
-                           filters = "all",
-                           server_args = NULL,
-                           ui_args = NULL),
-                      class = "teal_module")
+      bbb = structure(list(
+        label = "bbb",
+        server = call_module_server_fun,
+        ui = ui_fun1,
+        filters = "all",
+        server_args = NULL,
+        ui_args = NULL
+      ),
+      class = "teal_module"
+      )
     )
   ), class = "teal_modules"),
-  ccc = structure(list(label = "ccc",
-                       server = call_module_server_fun,
-                       ui = ui_fun1,
-                       filters = "all",
-                       server_args = NULL, ui_args = NULL),
-                  class = "teal_module")
+  ccc = structure(list(
+    label = "ccc",
+    server = call_module_server_fun,
+    ui = ui_fun1,
+    filters = "all",
+    server_args = NULL, ui_args = NULL
+  ),
+  class = "teal_module"
+  )
 )), class = "teal_modules")
 
 mods_module_server <- structure(list(label = "d1", children = list(
@@ -76,37 +89,49 @@ mods_module_server <- structure(list(label = "d1", children = list(
             server_args = NULL,
             ui_args = NULL
           ), class = "teal_module"),
-          aaa2 = structure(list(label = "aaa2",
-                                server = module_server_fun,
-                                ui = ui_fun1,
-                                filters = "all",
-                                server_args = NULL,
-                                ui_args = NULL),
-                           class = "teal_module"),
-          aaa3 = structure(list(label = "aaa3",
-                                server = module_server_fun,
-                                ui = ui_fun1,
-                                filters = "all",
-                                server_args = NULL,
-                                ui_args = NULL),
-                           class = "teal_module")
+          aaa2 = structure(list(
+            label = "aaa2",
+            server = module_server_fun,
+            ui = ui_fun1,
+            filters = "all",
+            server_args = NULL,
+            ui_args = NULL
+          ),
+          class = "teal_module"
+          ),
+          aaa3 = structure(list(
+            label = "aaa3",
+            server = module_server_fun,
+            ui = ui_fun1,
+            filters = "all",
+            server_args = NULL,
+            ui_args = NULL
+          ),
+          class = "teal_module"
+          )
         )
       ), class = "teal_modules"),
-      bbb = structure(list(label = "bbb",
-                           server = module_server_fun,
-                           ui = ui_fun1,
-                           filters = "all",
-                           server_args = NULL,
-                           ui_args = NULL),
-                      class = "teal_module")
+      bbb = structure(list(
+        label = "bbb",
+        server = module_server_fun,
+        ui = ui_fun1,
+        filters = "all",
+        server_args = NULL,
+        ui_args = NULL
+      ),
+      class = "teal_module"
+      )
     )
   ), class = "teal_modules"),
-  ccc = structure(list(label = "ccc",
-                       server = module_server_fun,
-                       ui = ui_fun1,
-                       filters = "all",
-                       server_args = NULL, ui_args = NULL),
-                  class = "teal_module")
+  ccc = structure(list(
+    label = "ccc",
+    server = module_server_fun,
+    ui = ui_fun1,
+    filters = "all",
+    server_args = NULL, ui_args = NULL
+  ),
+  class = "teal_module"
+  )
 )), class = "teal_modules")
 
 testthat::test_that("module correct server and ui arguments", {
