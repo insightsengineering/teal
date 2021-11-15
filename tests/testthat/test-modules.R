@@ -202,18 +202,6 @@ testthat::test_that("error when duplicated labels in modules", {
   )
 })
 
-testthat::test_that("no error when duplicated labels in modules as added after init", {
-  expect_silent(mods_call_module$children$wrong_mod <- module(
-    "ccc",
-    server = call_module_server_fun,
-    ui = uiFun2,
-    filters = "all"
-  ))
-
-  mods_call_module$children$wrong_mod <- NULL
-})
-
-
 testthat::test_that("each modules and module needs a label", {
   expect_error(modules())
   expect_error(module())
