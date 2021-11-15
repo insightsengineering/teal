@@ -77,8 +77,9 @@ root_modules <- function(...) {
 #'
 #' @param label (\code{character}) Label shown in the navigation item for the module.
 #' @param server (\code{function}) Shiny server module function, see
-#'   \code{\link[shiny]{callModule}}.
-#' @param ui (\code{function}) Shiny ui module function (see \code{\link[shiny]{callModule}})
+#'   \code{\link[shiny]{callModule}} or \code{\link[shiny]{moduleServer}}.
+#' @param ui (\code{function}) Shiny ui module function
+#'   (see \code{\link[shiny]{callModule}} or \code{\link[shiny]{moduleServer}})
 #'   with additional teal-specific \code{datasets} argument.
 #' @param filters (\code{character}) A vector with datanames that are relevant for the item. The
 #'   filter panel will automatically update the shown filters to include only
