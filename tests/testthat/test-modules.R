@@ -155,7 +155,7 @@ testthat::test_that("module with incorrect server and/or ui arguments", {
       tags$p(paste0("id: ", id))
     },
     filters = "all"
-  ), "teal modules server functions need ordered arguments")
+  ), "teal modules need 'id' argument as a first argument in their ui function")
 
   expect_error(module(
     "callModule",
@@ -164,7 +164,7 @@ testthat::test_that("module with incorrect server and/or ui arguments", {
       tags$p(paste0("id: ", id))
     },
     filters = "all"
-  ), "teal modules server functions need ordered arguments")
+  ), "teal modules need 'datasets' or '...' argument as a second argument in their ui function")
 
   expect_error(module(
     "moduleServer",
