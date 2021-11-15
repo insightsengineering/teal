@@ -128,7 +128,8 @@ testthat::test_that("overall test of modules under server function defined with 
       server = call_module_server_fun,
       ui = ui_fun1,
       filters = "all",
-      server_args = NULL, ui_args = NULL
+      server_args = NULL, 
+      ui_args = NULL
     )
   )
 
