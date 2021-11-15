@@ -5,44 +5,46 @@ adsl_dataset <- CDISCDataset$new("ADSL", adsl_df, parent = character(0), keys = 
 mods_call_module <- teal:::get_dummy_modules()
 mods_module_server <- teal:::get_dummy_modules(moduleServer = TRUE)
 
+callModuleServerFun <- function(input, output, session, datasets) {
+}
+
+moduleServerFun <- function(id, datasets) {
+}
+
+uiFun1 <- function(id, ...) {
+  tags$p(paste0("id: ", id))
+}
+
+uiFun2 <- function(id, datasets) {
+  tags$p(paste0("id: ", id))
+}
+
 testthat::test_that("module correct server and ui arguments", {
   expect_error(module(
     "callModule",
-    server = function(input, output, session, datasets) {
-    },
-    ui = function(id, ...) {
-      tags$p(paste0("id: ", id))
-    },
+    server = callModuleServerFun,
+    ui = uiFun1,
     filters = "all"
   ), NA)
 
   expect_error(module(
     "callModule",
-    server = function(input, output, session, datasets) {
-    },
-    ui = function(id, datasets) {
-      tags$p(paste0("id: ", id))
-    },
+    server = callModuleServerFun,
+    ui = uiFun2,
     filters = "all"
   ), NA)
 
   expect_error(module(
     "moduleServer",
-    server = function(id, datasets) {
-    },
-    ui = function(id, datasets) {
-      tags$p(paste0("id: ", id))
-    },
+    server = moduleServerFun,
+    ui = uiFun2,
     filters = "all"
   ), NA)
 
   expect_error(module(
     "moduleServer",
-    server = function(id, datasets) {
-    },
-    ui = function(id, ...) {
-      tags$p(paste0("id: ", id))
-    },
+    server = moduleServerFun,
+    ui = uiFun1,
     filters = "all"
   ), NA)
 })
@@ -52,16 +54,13 @@ testthat::test_that("module with incorrect server and/or ui arguments", {
     "callModule",
     server = function(input, sth, session, datasets) {
     },
-    ui = function(id, ...) {
-      tags$p(paste0("id: ", id))
-    },
+    ui = uiFun1,
     filters = "all"
   ))
 
   expect_error(module(
     "callModule",
-    server = function(input, output, session, datasets) {
-    },
+    server = callModuleServerFun,
     ui = function(sth, id, ...) {
       tags$p(paste0("id: ", id))
     },
@@ -70,8 +69,7 @@ testthat::test_that("module with incorrect server and/or ui arguments", {
 
   expect_error(module(
     "callModule",
-    server = function(input, output, session, datasets) {
-    },
+    server = callModuleServerFun,
     ui = function(id, sth) {
       tags$p(paste0("id: ", id))
     },
@@ -82,9 +80,7 @@ testthat::test_that("module with incorrect server and/or ui arguments", {
     "moduleServer",
     server = function(id, sth, datasets) {
     },
-    ui = function(id, ...) {
-      tags$p(paste0("id: ", id))
-    },
+    ui = uiFun1,
     filters = "all"
   ))
 })
@@ -109,20 +105,14 @@ testthat::test_that("error when duplicated labels in modules", {
       "aa",
       module(
         "ccc",
-        server = function(input, output, session, datasets) {
-        },
-        ui = function(id, datasets) {
-          tags$p(paste0("id: ", id))
-        },
+        server = callModuleServerFun,
+        ui = uiFun2,
         filters = "all"
       ),
       module(
         "ccc",
-        server = function(input, output, session, datasets) {
-        },
-        ui = function(id, datasets) {
-          tags$p(paste0("id: ", id))
-        },
+        server = callModuleServerFun,
+        ui = uiFun2,
         filters = "all"
       )
     )
@@ -132,11 +122,8 @@ testthat::test_that("error when duplicated labels in modules", {
 testthat::test_that("no error when duplicated labels in modules as added after init", {
   expect_silent(mods_call_module$children$wrong_mod <- module(
     "ccc",
-    server = function(input, output, session, datasets) {
-    },
-    ui = function(id, datasets) {
-      tags$p(paste0("id: ", id))
-    },
+    server = callModuleServerFun,
+    ui = uiFun2,
     filters = "all"
   ))
 
@@ -160,45 +147,30 @@ testthat::test_that("all modules arguments are of class teal_module or teal_modu
 
   expect_error(modules(
     "aa", module("aaa",
-      server = function(input, output, session, datasets) {
-      },
-      ui = function(id, ...) {
-        tags$p(paste0("id: ", id))
-      },
+      server = callModuleServerFun,
+      ui = uiFun1,
       filters = "all"
     ),
     module("bbb",
-      server = function(id, datasets) {
-      },
-      ui = function(id, ...) {
-        tags$p(paste0("id: ", id))
-      },
+      server = moduleServerFun,
+      ui = uiFun1,
       filters = "all"
     )
   ), NA)
 
   expect_error(modules("aa", module("aaa",
-    server = function(input, output, session, datasets) {
-    },
-    ui = function(id, ...) {
-      tags$p(paste0("id: ", id))
-    },
+    server = callModuleServerFun,
+    ui = uiFun1,
     filters = "all"
   ), list()))
 
   expect_error(modules("aa", list(module("aaa",
-    server = function(input, output, session, datasets) {
-    },
-    ui = function(id, ...) {
-      tags$p(paste0("id: ", id))
-    },
+    server = callModuleServerFun,
+    ui = uiFun1,
     filters = "all"
   ), module("bbb",
-    server = function(id, datasets) {
-    },
-    ui = function(id, ...) {
-      tags$p(paste0("id: ", id))
-    },
+    server = moduleServerFun,
+    ui = uiFun1,
     filters = "all"
   ))))
 
