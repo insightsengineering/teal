@@ -265,7 +265,6 @@ FilterState <- R6::R6Class( # nolint
           length(extract_type) == 1 && !is.null(input_dataname)
       )
       stopifnot(extract_type %in% c("list", "matrix"))
-
       private$input_dataname <- input_dataname
       private$varname <- if (is.character(varname)) {
         as.name(varname)
@@ -363,6 +362,16 @@ FilterState <- R6::R6Class( # nolint
     },
 
     #' @description
+    #' Some methods needs additional `!is.na(varame)` condition to not include
+    #' missing values. When `private$na_rm = TRUE` is set, `self$get_call` returns
+    #' condition extended by `!is.na` condition.
+    set_na_rm = function(value) {
+      stopifnot(is_logical_single(value))
+      private$na_rm <- value
+      invisible(NULL)
+    },
+
+    #' @description
     #' Set selection
     #' @param value (`vector`)\cr
     #'  value(s) which come from the filter selection. Values are set in `server`
@@ -425,6 +434,7 @@ FilterState <- R6::R6Class( # nolint
     input_dataname = character(0),
     keep_na = NULL,  # reactiveVal logical()
     na_count = integer(0),
+    na_rm = FALSE, # logical(1)
     observers = NULL, # here observers are stored
     selected = NULL,  # because it holds reactiveVal and each class has different choices type
     varname = character(0),
@@ -432,13 +442,21 @@ FilterState <- R6::R6Class( # nolint
     extract_type = logical(0),
 
     #' description
-    #' Adds `is.na(varname)` before existing condition calls if `keep_na` is selected
+    #' Adds `is.na(varname)` before existing condition calls if `keep_na` is selected.
+    #' Otherwise, if missings are found in the variable `!is.na` will be added
+    #' only if `private$na_rm = TRUE`
     #' return (`call`)
     add_keep_na_call = function(filter_call) {
       if (isTRUE(self$get_keep_na())) {
         call(
           "|",
           call("is.na", private$get_varname_prefixed()),
+          filter_call
+        )
+      } else if (isTRUE(private$na_rm) && private$na_count > 0){
+        call(
+          "&",
+          substitute(!is.na(var), list(var = private$get_varname_prefixed())),
           filter_call
         )
       } else {
