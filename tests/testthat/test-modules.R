@@ -6,7 +6,7 @@ mods_call_module <- teal:::get_dummy_modules()
 mods_module_server <- teal:::get_dummy_modules(moduleServer = TRUE)
 
 testthat::test_that("module correct server and ui arguments", {
-  expect_silent(module(
+  expect_error(module(
     "callModule",
     server = function(input, output, session, datasets) {
     },
@@ -14,9 +14,9 @@ testthat::test_that("module correct server and ui arguments", {
       tags$p(paste0("id: ", id))
     },
     filters = "all"
-  ))
+  ), NA)
 
-  expect_silent(module(
+  expect_error(module(
     "callModule",
     server = function(input, output, session, datasets) {
     },
@@ -24,9 +24,9 @@ testthat::test_that("module correct server and ui arguments", {
       tags$p(paste0("id: ", id))
     },
     filters = "all"
-  ))
+  ), NA)
 
-  expect_silent(module(
+  expect_error(module(
     "moduleServer",
     server = function(id, datasets) {
     },
@@ -34,9 +34,9 @@ testthat::test_that("module correct server and ui arguments", {
       tags$p(paste0("id: ", id))
     },
     filters = "all"
-  ))
+  ), NA)
 
-  expect_silent(module(
+  expect_error(module(
     "moduleServer",
     server = function(id, datasets) {
     },
@@ -44,7 +44,7 @@ testthat::test_that("module correct server and ui arguments", {
       tags$p(paste0("id: ", id))
     },
     filters = "all"
-  ))
+  ), NA)
 })
 
 testthat::test_that("module with incorrect server and/or ui arguments", {
