@@ -90,20 +90,13 @@ get_dummy_datasets <- function() { # nousage # nolint
 #' Create an example hierarchy of `teal_modules` from which
 #' a teal app can be created.
 #'
-#' @param moduleServer logical if the module should be based on `callModule` or `moduleServer`.
-#' This will results in different arguments of a server function.
 #' @return `teal_modules`
 #'
-get_dummy_modules <- function(moduleServer = FALSE) { # nousage
+get_dummy_modules <- function() { # nousage
   create_mod <- function(module_name) {
     module(
       module_name,
-      server = if (moduleServer) {
-        function(id, datasets) {
-        }
-      } else {
-        function(input, output, session, datasets) {
-        }
+      server = function(input, output, session, datasets) {
       },
       ui = function(id, ...) {
         tags$p(paste0("id: ", id))

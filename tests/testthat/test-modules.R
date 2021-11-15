@@ -2,8 +2,6 @@ dataset_1 <- Dataset$new("iris", head(iris))
 adsl_df <- as.data.frame(as.list(setNames(nm = get_cdisc_keys("ADSL"))))
 adsl_dataset <- CDISCDataset$new("ADSL", adsl_df, parent = character(0), keys = get_cdisc_keys("ADSL"))
 
-mods_call_module <- teal:::get_dummy_modules()
-mods_module_server <- teal:::get_dummy_modules(moduleServer = TRUE)
 
 call_module_server_fun <- function(input, output, session, datasets) {
 }
@@ -18,6 +16,92 @@ uiFun1 <- function(id, ...) {
 uiFun2 <- function(id, datasets) {
   tags$p(paste0("id: ", id))
 }
+
+mods_call_module <- structure(list(label = "d1", children = list(
+  d2 = structure(list(
+    label = "d2", children = list(
+      d3 = structure(list(
+        label = "d3",
+        children = list(
+          aaa1 = structure(list(
+            label = "aaa1",
+            server = call_module_server_fun,
+            ui = uiFun1, filters = "all",
+            server_args = NULL,
+            ui_args = NULL
+          ), class = "teal_module"),
+          aaa2 = structure(list(label = "aaa2",
+                                server = call_module_server_fun,
+                                ui = uiFun1,
+                                filters = "all",
+                                server_args = NULL,
+                                ui_args = NULL), class = "teal_module"),
+          aaa3 = structure(list(label = "aaa3",
+                                server = call_module_server_fun,
+                                ui = uiFun1,
+                                filters = "all",
+                                server_args = NULL,
+                                ui_args = NULL), class = "teal_module")
+        )
+      ), class = "teal_modules"),
+      bbb = structure(list(label = "bbb",
+                           server = call_module_server_fun,
+                           ui = uiFun1,
+                           filters = "all",
+                           server_args = NULL,
+                           ui_args = NULL), class = "teal_module")
+    )
+  ), class = "teal_modules"),
+  ccc = structure(list(label = "ccc",
+                       server = call_module_server_fun,
+                       ui = uiFun1,
+                       filters = "all",
+                       server_args = NULL, ui_args = NULL),
+                  class = "teal_module")
+)), class = "teal_modules")
+
+mods_module_server <- structure(list(label = "d1", children = list(
+  d2 = structure(list(
+    label = "d2", children = list(
+      d3 = structure(list(
+        label = "d3",
+        children = list(
+          aaa1 = structure(list(
+            label = "aaa1",
+            server = module_server_fun,
+            ui = uiFun1, filters = "all",
+            server_args = NULL,
+            ui_args = NULL
+          ), class = "teal_module"),
+          aaa2 = structure(list(label = "aaa2",
+                                server = module_server_fun,
+                                ui = uiFun1,
+                                filters = "all",
+                                server_args = NULL,
+                                ui_args = NULL), class = "teal_module"),
+          aaa3 = structure(list(label = "aaa3",
+                                server = module_server_fun,
+                                ui = uiFun1,
+                                filters = "all",
+                                server_args = NULL,
+                                ui_args = NULL), class = "teal_module")
+        )
+      ), class = "teal_modules"),
+      bbb = structure(list(label = "bbb",
+                           server = module_server_fun,
+                           ui = uiFun1,
+                           filters = "all",
+                           server_args = NULL,
+                           ui_args = NULL), class = "teal_module")
+    )
+  ), class = "teal_modules"),
+  ccc = structure(list(label = "ccc",
+                       server = module_server_fun,
+                       ui = uiFun1,
+                       filters = "all",
+                       server_args = NULL, ui_args = NULL),
+                  class = "teal_module")
+)), class = "teal_modules")
 
 testthat::test_that("module correct server and ui arguments", {
   expect_error(module(

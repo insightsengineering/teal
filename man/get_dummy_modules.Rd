@@ -4,11 +4,7 @@
 \alias{get_dummy_modules}
 \title{Get dummy modules}
 \usage{
-get_dummy_modules(moduleServer = FALSE)
-}
-\arguments{
-\item{moduleServer}{logical if the module should be based on \code{callModule} or \code{moduleServer}.
-This will results in different arguments of a server function.}
+get_dummy_modules()
 }
 \value{
 \code{teal_modules}
