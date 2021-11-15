@@ -80,69 +80,6 @@ dataset_connector <- function(dataname,
   return(x)
 }
 
-
-#' @inherit dataset_connector
-#' @description `r lifecycle::badge("defunct")`
-#' @export
-raw_dataset_connector <- function(pull_callable) {
-  lifecycle::deprecate_stop(
-    "0.9.2",
-    "teal::raw_dataset_connector()",
-    details = "Please use `teal::dataset_connector()` instead"
-  )
-}
-
-#' @inherit dataset_connector
-#' @description `r lifecycle::badge("soft-deprecated")`
-#' @export
-named_dataset_connector <- function(dataname,
-                                    pull_callable,
-                                    label = character(0),
-                                    code = character(0),
-                                    script = character(0),
-                                    vars = list()) {
-  lifecycle::deprecate_warn(
-    "0.9.2",
-    "teal::named_dataset_connector()",
-    details = "Please use teal::dataset_connector() instead."
-  )
-
-  dataset_connector(
-    dataname = dataname,
-    pull_callable = pull_callable,
-    code = code_from_script(code, script),
-    label = label,
-    vars = vars
-  )
-}
-
-
-#' @inherit dataset_connector
-#' @description `r lifecycle::badge("soft-deprecated")`
-#' @export
-relational_dataset_connector <- function(dataname,
-                                         pull_callable,
-                                         keys,
-                                         label = character(0),
-                                         code = character(0),
-                                         script = character(0),
-                                         vars = list()) {
-  lifecycle::deprecate_warn(
-    "0.9.2",
-    "teal::relational_dataset_connector()",
-    details = "Please use teal::dataset_connector() instead."
-  )
-
-  dataset_connector(
-    dataname = dataname,
-    pull_callable = pull_callable,
-    keys = keys,
-    code = code_from_script(code, script),
-    label = label,
-    vars = vars
-  )
-}
-
 #' Create a new `CDISCDatasetConnector` object
 #'
 #' `r lifecycle::badge("experimental")`
@@ -217,19 +154,6 @@ cdisc_dataset_connector <- function(dataname,
 dataset_connector_file <- function(path) { # nolint
   object <- object_file(path, "DatasetConnector")
   return(object)
-}
-
-#' @inherit dataset_connector_file
-#' @rdname dataset_connector_file
-#' @description `r lifecycle::badge("soft-deprecated")`
-#' @export
-relational_dataset_connector_file <- function(path) { # nolint
-  lifecycle::deprecate_warn(
-    "0.9.2",
-    "teal::relational_dataset_connector_file()",
-    details = "Please use teal::dataset_connector_file() instead."
-  )
-  dataset_connector_file(path = path)
 }
 
 #' Load `CDISCDatasetConnector` object from a file

@@ -212,11 +212,12 @@ testthat::test_that("get_filter_overview returns overview matrix for filtered da
   queue <- datasets$get_filtered_dataset("ADSL")$get_filter_states(1)
   queue$queue_push(filter_state_adsl, queue_index = 1L, element_id = "sex")
   filter_state_mae <- ChoicesFilterState$new(
-    x = c("white"),
+    x = c("white", NA),
     varname = as.name("race"),
     input_dataname = as.name("miniACC"),
     extract_type = "list"
   )
+  filter_state_mae$set_na_rm(TRUE)
   queue <- datasets$get_filtered_dataset("miniACC")$get_filter_states(1)
   queue$queue_push(filter_state_mae, queue_index = 1L, element_id = "race")
   testthat::expect_equal(

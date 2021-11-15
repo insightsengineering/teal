@@ -2,13 +2,10 @@
 % Please edit documentation in R/DatasetConnector_constructors.R
 \name{dataset_connector_file}
 \alias{dataset_connector_file}
-\alias{relational_dataset_connector_file}
 \alias{cdisc_dataset_connector_file}
 \title{Load \code{DatasetConnector} object from a file}
 \usage{
 dataset_connector_file(path)
-
-relational_dataset_connector_file(path)
 
 cdisc_dataset_connector_file(path)
 }
@@ -22,8 +19,6 @@ cdisc_dataset_connector_file(path)
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
-
-\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#soft-deprecated}{\figure{lifecycle-soft-deprecated.svg}{options: alt='[Soft-deprecated]'}}}{\strong{[Soft-deprecated]}}
 
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
 }

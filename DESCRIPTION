@@ -1,7 +1,7 @@
 Type: Package
 Package: teal
 Title: Exploratory Web Apps for Analyzing Clinical Trials Data
-Version: 0.10.0.9013
+Version: 0.10.0.9015
 Date: 2021-10-13
 Authors@R: c(
     person("NEST", , , "nestcicd@roche.com", role = c("aut", "cre")),
@@ -94,7 +94,6 @@ Collate:
     'RelationalDataConnector_constructors.R'
     'all_choices.R'
     'as_cdisc.R'
-    'as_relational.R'
     'choices_labeled.R'
     'choices_selected.R'
     'data_extract_spec.R'

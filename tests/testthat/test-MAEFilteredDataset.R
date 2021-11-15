@@ -20,12 +20,12 @@ testthat::test_that("get_filter_overview_info returns overview matrix for MAEFil
   filtered_dataset <- MAEFilteredDataset$new(dataset = MAEDataset$new("miniACC", miniACC))
 
   filter_state_mae <- ChoicesFilterState$new(
-    x = c("white"),
+    x = c("white", NA_character_),
     varname = as.name("race"),
     input_dataname = as.name("miniACC"),
     extract_type = "list"
   )
-
+  filter_state_mae$set_na_rm(TRUE)
   queue <- filtered_dataset$get_filter_states(1)
   queue$queue_push(filter_state_mae, queue_index = 1L, element_id = "race")
 
