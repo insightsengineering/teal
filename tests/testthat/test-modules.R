@@ -95,14 +95,23 @@ testthat::test_that("overall test of modules under server function defined with 
           ui = ui_fun1, filters = "all",
           server_args = NULL,
           ui_args = NULL
-        ), module(
+        ),
+        module(
           label = "aaa2",
           server = call_module_server_fun,
           ui = ui_fun1,
           filters = "all",
           server_args = NULL,
           ui_args = NULL
-        ), create_mod("aaa3")
+        ),
+        module(
+          label = "aaa3",
+          server = call_module_server_fun,
+          ui = ui_fun1,
+          filters = "all",
+          server_args = NULL,
+          ui_args = NULL
+        )
       ),
       module(
         label = "bbb",
@@ -134,14 +143,23 @@ testthat::test_that("overall test of modules under server function defined with 
           ui = ui_fun1, filters = "all",
           server_args = NULL,
           ui_args = NULL
-        ), module(
+        ),
+        module(
           label = "aaa2",
           server = module_server_fun,
           ui = ui_fun1,
           filters = "all",
           server_args = NULL,
           ui_args = NULL
-        ), create_mod("aaa3")
+        ),
+        module(
+          label = "aaa3",
+          server = module_server_fun,
+          ui = ui_fun1,
+          filters = "all",
+          server_args = NULL,
+          ui_args = NULL
+        )
       ),
       module(
         label = "bbb",
