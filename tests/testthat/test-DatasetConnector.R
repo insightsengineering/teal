@@ -457,36 +457,6 @@ testthat::test_that("script_cdisc_dataset_connector", {
   testthat::expect_true(is(x$get_raw_data(), c("data.frame")))
 })
 
-test_that("rice_dataset", {
-  if (!"rice" %in% installed.packages()) {
-    testthat::skip("rice package not available")
-  }
-  x <- rice_data(
-    rice_dataset_connector("ADSL", "/path/to/ADSL", keys = get_cdisc_keys("ADSL")),
-    rice_cdisc_dataset_connector("ADLB", "/path/to/ADLB")
-  )
-
-  testthat::expect_equal(
-    x$get_items()[[1]],
-    rice_dataset_connector("ADSL", "/path/to/ADSL", keys = get_cdisc_keys("ADSL"))
-  )
-  testthat::expect_equal(
-    x$get_items()[[2]],
-    rice_cdisc_dataset_connector("ADLB", "/path/to/ADLB")
-  )
-
-  testthat::expect_identical(
-    x$get_items()[[1]]$get_code(),
-    "ADSL <- rice::rice_read(node = \"/path/to/ADSL\", prolong = TRUE)"
-  )
-
-
-  x <- rice_cdisc_dataset_connector("ADLB", "/path/to/ADLB")
-  mutate_dataset(x, code = "ADLB$x <- 1")
-
-  testthat::expect_equal(x$get_code(), "ADLB <- rice::rice_read(node = \"/path/to/ADLB\", prolong = TRUE)\nADLB$x <- 1")
-})
-
 testthat::test_that("fun_cdisc_dataset_connector", {
   my_data_1 <- function() {
     set.seed(1234)
@@ -1261,4 +1231,43 @@ testthat::test_that("reassign_datasets_vars updates the references of the vars_r
 
   vars_r6 <- test_ds1$get_var_r6()
   testthat::expect_identical(vars_r6$test_ds0, test_ds0_cloned)
+})
+
+testthat::test_that("reassign_datasets_vars does not change `vars` elements of
+                    class different than Dataset and DatasetConnector", {
+  test_ds0 <- mtcars
+  test_ds1 <- Dataset$new("mtcars", mtcars)
+  test_ds2 <- DatasetConnector$new(
+    dataname = "iris",
+    pull_callable = callable_function(data.frame),
+    vars = list(test_ds0 = test_ds0, test_ds1 = test_ds1)
+  )
+
+  test_ds2$reassign_datasets_vars(list(test_ds1 = test_ds1))
+  testthat::expect_identical(
+    test_ds2$.__enclos_env__$private$pull_vars$test_ds0,
+    test_ds0
+  )
+})
+
+testthat::test_that("reassign_datasets_vars does not change any `vars` while
+                    empty list is provided", {
+  test_ds0 <- mtcars
+  test_ds1 <- Dataset$new("mtcars", mtcars)
+  test_ds2 <- Dataset$new("iris", iris)
+  test_ds2 <- DatasetConnector$new(
+    dataname = "iris",
+    pull_callable = callable_function(data.frame),
+    vars = list(test_ds0 = test_ds0, test_ds1 = test_ds1)
+  )
+
+  test_ds2$reassign_datasets_vars(list())
+  testthat::expect_identical(
+    test_ds2$.__enclos_env__$private$pull_vars$test_ds0,
+    test_ds0
+  )
+  testthat::expect_identical(
+    test_ds2$.__enclos_env__$private$pull_vars$test_ds1,
+    test_ds1
+  )
 })

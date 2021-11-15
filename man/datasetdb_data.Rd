@@ -16,36 +16,6 @@ dataset connectors created using \code{\link{datasetdb_dataset_connector}}}
 An object of class \code{RelationalDataConnector}
 }
 \description{
-\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#defunct}{\figure{lifecycle-defunct.svg}{options: alt='[Defunct]'}}}{\strong{[Defunct]}}
 Build data connector for \code{DataSetDB} datasets
-}
-\examples{
-
-if (all(c("dsassembly", "gdbauth") \%in\% installed.packages())) {
-  x <- datasetdb_data(
-    datasetdb_dataset_connector("MAE", id = "DS000000267")
-  )
-  app <- init(
-    data = teal_data(x),
-    modules = root_modules(
-      module(
-        "dummy module",
-        server = function(input, output, session, datasets) {
-          output$str <- renderText({
-            paste0(capture.output(str(
-              datasets$get_data("MAE", filtered = TRUE)
-            )), collapse = "\n")
-          })
-        },
-        ui = function(id, ...) {ns <- NS(id); verbatimTextOutput(ns('str'))},
-        filters = "MAE"
-      )
-    ),
-    header = tags$h1("Sample App")
-  )
-}
-\dontrun{
-shinyApp(app$ui, app$server)
-}
-
 }

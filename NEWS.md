@@ -1,8 +1,10 @@
-# teal 0.10.0.9011
+# teal 0.10.0.9015
 
 ### Breaking changes
 * Replaced `rcd_dataset_connector` and `rcd_cdisc_dataset_connector` with `scda_dataset_connector` and `scda_cdisc_dataset_connector` respectively.
 * Removed `rcd_connection` and `rcd_data`; `scda_dataset_connectors` can be passed into `cdisc_data` and `teal_data` directly.
+* Removed `raw_dataset`, `raw_dataset_connector`, `named_dataset`, `named_dataset_file`, `named_dataset_connector`, `relational_dataset`, `relational_dataset_file`, `relational_dataset_connector`, `key`, `as_cdisc`, `as_cdisc_relational`.
+* Deprecated all functions related to connectors that have been moved to their own separate packages.
 * Running `teal` application via `ui_teal_with_splash` and `srv_teal_with_splash` is now no longer recommended because it doesn't support some new features (e.g. logging, bookmarking). Use `init` instead.
 * Updated `init` to accept `RelationalData`, `data.frame`, `Dataset`, `DatasetConnector`, `list` or a function returning a named list as data input.
 
@@ -16,6 +18,7 @@
 
 ### Bug fixes
 * Fixed data loading of `DatasetConnector` being dependent on other `Dataset` or `DatasetConnector` objects. 
+* Fixed call returned by `FilterState` in case of using `MultiAssayExperiment::subsetByColData`. Now single condition for variable containing `NA` values is `!is.na(var) & var == <condition>`.
 
 ### Miscellaneous
 * Replaced the servers from `DataConnection`, `RelationalDataConnector`, `DatasetConnector`, and `RelationalData` with `moduleServer`.

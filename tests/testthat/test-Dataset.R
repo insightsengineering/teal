@@ -159,18 +159,6 @@ testthat::test_that("Dataset supplementary constructors", {
     regexp = "The object returned from the file is not of Dataset class.",
     fixed = TRUE
   )
-
-  # Deprecation warnings
-  lifecycle::expect_deprecated(x2 <- named_dataset_file(file_example))
-  lifecycle::expect_deprecated(x3 <- relational_dataset_file(file_example))
-  testthat::expect_equal(x, x2)
-  testthat::expect_equal(x, x3)
-
-  # Deprecated constructors
-  lifecycle::expect_defunct(raw_dataset(iris))
-  lifecycle::expect_deprecated(ds1 <- named_dataset("ds", iris))
-  lifecycle::expect_deprecated(ds2 <- relational_dataset("ds", iris))
-  testthat::expect_equal(ds1, ds2)
 })
 
 testthat::test_that("Dataset$set_vars throws an error if passed the enclosing Dataset object directly", {
@@ -845,4 +833,27 @@ testthat::test_that("reassign_datasets_vars updates the references of the vars_r
 
   vars_r6 <- test_ds1$get_var_r6()
   testthat::expect_identical(vars_r6$test_ds0, test_ds0_cloned)
+})
+
+testthat::test_that("reassign_datasets_vars does not change `vars` elements of
+                    class different than Dataset and DatasetConnector", {
+  test_ds0 <- mtcars
+  test_ds1 <- Dataset$new("mtcars", mtcars)
+  test_ds2 <- Dataset$new("iris", iris)
+  test_ds2$set_vars(vars = list(test_ds0 = test_ds0, test_ds1 = test_ds1))
+
+  test_ds2$reassign_datasets_vars(list(test_ds1 = test_ds1))
+  testthat::expect_identical(test_ds2$get_vars()$test_ds0, test_ds0)
+})
+
+testthat::test_that("reassign_datasets_vars does not change any `vars` while
+                    empty list is provided", {
+  test_ds0 <- mtcars
+  test_ds1 <- Dataset$new("mtcars", mtcars)
+  test_ds2 <- Dataset$new("iris", iris)
+  test_ds2$set_vars(vars = list(test_ds0 = test_ds0, test_ds1 = test_ds1))
+
+  test_ds2$reassign_datasets_vars(list())
+  testthat::expect_identical(test_ds2$get_vars()$test_ds0, test_ds0)
+  testthat::expect_identical(test_ds2$get_vars()$test_ds1, test_ds1)
 })
