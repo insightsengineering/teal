@@ -157,23 +157,49 @@ testthat::test_that("root_modules needs at least one argument", {
 
 
 testthat::test_that("all modules arguments are of class teal_module or teal_modules", {
-  check_modules <- function(modules) {
-    for (x in modules$children) {
-      if (inherits(x, "teal_modules")) {
-        check_modules(x)
-      } else if (inherits(x, "teal_module")) {
-        NULL
-      } else if (!inherits(x, "teal_module")) {
-        stop("all modules arguments are of class teal_module or teal_modules")
-      }
-    }
-  }
 
-  expect_silent(check_modules(mods_call_module))
+  expect_error(modules(
+    "aa", module("aaa",
+      server = function(input, output, session, datasets) {
+      },
+      ui = function(id, ...) {
+        tags$p(paste0("id: ", id))
+      },
+      filters = "all"
+    ),
+    module("bbb",
+      server = function(id, datasets) {
+      },
+      ui = function(id, ...) {
+        tags$p(paste0("id: ", id))
+      },
+      filters = "all"
+    )
+  ), NA)
 
-  mods_call_module$children$wrong_mod <- list()
+  expect_error(modules("aa", module("aaa",
+    server = function(input, output, session, datasets) {
+    },
+    ui = function(id, ...) {
+      tags$p(paste0("id: ", id))
+    },
+    filters = "all"
+  ), list()))
 
-  expect_error(check_modules(mods_call_module))
+  expect_error(modules("aa", list(module("aaa",
+    server = function(input, output, session, datasets) {
+    },
+    ui = function(id, ...) {
+      tags$p(paste0("id: ", id))
+    },
+    filters = "all"
+  ), module("bbb",
+    server = function(id, datasets) {
+    },
+    ui = function(id, ...) {
+      tags$p(paste0("id: ", id))
+    },
+    filters = "all"
+  ))))
 
-  mods_call_module$children$wrong_mod <- NULL
 })
