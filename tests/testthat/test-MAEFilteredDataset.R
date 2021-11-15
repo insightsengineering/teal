@@ -37,7 +37,7 @@ testthat::test_that("MAEFilteredDataset$get_call returns a call with applying fi
   testthat::expect_identical(
     get_call_output$subjects,
     quote(
-      miniACC_FILTERED <- MultiAssayExperiment::subsetByColData(
+      miniACC_FILTERED <- MultiAssayExperiment::subsetByColData( #nolint
         miniACC,
         y = !is.na(miniACC$race) & miniACC$race == "white"
       )
@@ -222,5 +222,5 @@ testthat::test_that("MAEFilteredDataset filters removed using remove_filters", {
     }
   )
 
-  testthat::expect_identical(isolate(filtered_dataset$get_call()), list(subjects = quote(MAE_FILTERED <- MAE)))
+  testthat::expect_identical(isolate(filtered_dataset$get_call()), list(subjects = quote(MAE_FILTERED <- MAE))) #nolint
 })
