@@ -94,7 +94,7 @@ get_dummy_datasets <- function() { # nousage # nolint
 #' This will results in different arguments of a server function.
 #' @return `teal_modules`
 #'
-get_dummy_modules <- function(moduleServer = FALSE) { # nousage # nolint
+get_dummy_modules <- function(moduleServer = FALSE) { # nousage
   create_mod <- function(module_name) {
     module(
       module_name,
