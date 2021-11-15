@@ -9,8 +9,8 @@ module(label, server, ui, filters, server_args = NULL, ui_args = NULL)
 \arguments{
 \item{label}{(\code{character}) Label shown in the navigation item for the module.}
 
-\item{server}{(\code{function}) Shiny server module function, see
-\code{\link[shiny]{callModule}} or \code{\link[shiny]{moduleServer}}.}
+\item{server}{(\code{function}) Shiny server module function
+(see \code{\link[shiny]{callModule}} or \code{\link[shiny]{moduleServer}}).}
 
 \item{ui}{(\code{function}) Shiny ui module function
 (see \code{\link[shiny]{callModule}} or \code{\link[shiny]{moduleServer}})

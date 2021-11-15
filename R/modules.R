@@ -76,8 +76,8 @@ root_modules <- function(...) {
 #' Tab items allows you to add a shiny module to the teal app
 #'
 #' @param label (\code{character}) Label shown in the navigation item for the module.
-#' @param server (\code{function}) Shiny server module function, see
-#'   \code{\link[shiny]{callModule}} or \code{\link[shiny]{moduleServer}}.
+#' @param server (\code{function}) Shiny server module function
+#'   (see \code{\link[shiny]{callModule}} or \code{\link[shiny]{moduleServer}}).
 #' @param ui (\code{function}) Shiny ui module function
 #'   (see \code{\link[shiny]{callModule}} or \code{\link[shiny]{moduleServer}})
 #'   with additional teal-specific \code{datasets} argument.
