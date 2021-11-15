@@ -2,7 +2,6 @@ dataset_1 <- Dataset$new("iris", head(iris))
 adsl_df <- as.data.frame(as.list(setNames(nm = get_cdisc_keys("ADSL"))))
 adsl_dataset <- CDISCDataset$new("ADSL", adsl_df, parent = character(0), keys = get_cdisc_keys("ADSL"))
 
-
 call_module_server_fun <- function(input, output, session, datasets) {
 }
 
@@ -147,7 +146,7 @@ testthat::test_that("module with incorrect server and/or ui arguments", {
     },
     ui = ui_fun1,
     filters = "all"
-  ))
+  ), "teal modules server functions need ordered arguments")
 
   expect_error(module(
     "callModule",
@@ -156,7 +155,7 @@ testthat::test_that("module with incorrect server and/or ui arguments", {
       tags$p(paste0("id: ", id))
     },
     filters = "all"
-  ))
+  ), "teal modules server functions need ordered arguments")
 
   expect_error(module(
     "callModule",
@@ -165,7 +164,7 @@ testthat::test_that("module with incorrect server and/or ui arguments", {
       tags$p(paste0("id: ", id))
     },
     filters = "all"
-  ))
+  ), "teal modules server functions need ordered arguments")
 
   expect_error(module(
     "moduleServer",
@@ -173,7 +172,7 @@ testthat::test_that("module with incorrect server and/or ui arguments", {
     },
     ui = ui_fun1,
     filters = "all"
-  ))
+  ), "teal modules server functions need ordered arguments")
 })
 
 testthat::test_that("overall test of modules under server function defined with moduleServer or callModule", {
@@ -206,19 +205,19 @@ testthat::test_that("error when duplicated labels in modules", {
         ui = ui_fun2,
         filters = "all"
       )
-    )
+    ), "Please choose unique labels for each tab"
   )
 })
 
 testthat::test_that("each modules and module needs a label", {
-  expect_error(modules())
-  expect_error(module())
-  expect_error(modules("aa", modules()))
-  expect_error(modules("aa", module()))
+  expect_error(modules(), 'argument "label" is missing, with no default')
+  expect_error(module(), 'argument "label" is missing, with no default')
+  expect_error(modules("aa", modules()), 'argument "label" is missing, with no default')
+  expect_error(modules("aa", module()), 'argument "label" is missing, with no default')
 })
 
 testthat::test_that("root_modules needs at least one argument", {
-  expect_error(root_modules())
+  expect_error(root_modules(), "You must provide at least one module.")
 })
 
 
@@ -241,7 +240,7 @@ testthat::test_that("all modules arguments are of class teal_module or teal_modu
     server = call_module_server_fun,
     ui = ui_fun1,
     filters = "all"
-  ), list()))
+  ), list()), "modules: not all arguments are of class teal_module or teal_modules.")
 
   expect_error(modules("aa", list(module("aaa",
     server = call_module_server_fun,
@@ -251,6 +250,6 @@ testthat::test_that("all modules arguments are of class teal_module or teal_modu
     server = module_server_fun,
     ui = ui_fun1,
     filters = "all"
-  ))))
+  ))), "modules: not all arguments are of class teal_module or teal_modules.")
 
 })
