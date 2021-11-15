@@ -539,13 +539,13 @@ FilterStates <- R6::R6Class( # nolint
             eventExpr = input$remove,
             handlerExpr = {
               logger::log_trace(paste(
-                "{ class(self)[1] }$add_filter_state@1 removing FilterState from queue no { queue_index },",
+                "{ class(self)[1] }$add_filter_state@1 removing FilterState from queue '{ queue_index }',",
                 "input_dataname: { deparse1(private$input_dataname) }"
               ))
               self$queue_remove(queue_index, element_id)
               private$remove_filter_state(queue_index, element_id)
               logger::log_trace(paste(
-                "{ class(self)[1] }$add_filter_state@1 removed FilterState from queue no { queue_index },",
+                "{ class(self)[1] }$add_filter_state@1 removed FilterState from queue '{ queue_index }',",
                 "input_dataname: { deparse1(private$input_dataname) }"
               ))            }
           )
