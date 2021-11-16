@@ -1,4 +1,5 @@
-name: Release
+---
+name: Release 🎈
 
 on:
   push:
@@ -6,19 +7,20 @@ on:
       - "v*"
 
 jobs:
+  build:
+    name: Build package 🎁
+    needs: release
+    uses: insightsengineering/r.pkg.template/.github/workflows/build-check-install.yaml@main
+    secrets:
+      REPO_GITHUB_TOKEN: ${{ secrets.REPO_GITHUB_TOKEN }}
+  docs:
+    name: Pkgdown Docs 📚
+    needs: release
+    uses: insightsengineering/r.pkg.template/.github/workflows/pkgdown.yaml@main
+    secrets:
+      REPO_GITHUB_TOKEN: ${{ secrets.REPO_GITHUB_TOKEN }}
   release:
-    name: Release
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v2
-      - name: Generate Changelog
-        run: |
-          RELEASE_VERSION=$(awk -F: '/Version:/{gsub(/[ ]+/,"") ; print $2}' DESCRIPTION)
-          REPOSITORY_NAME="${{ github.event.repository.name }}"
-          (awk "/^#+.*${REPOSITORY_NAME//./\.}.*${RELEASE_VERSION//./\.}$/{flag=1;next}/^#+.*${REPOSITORY_NAME//./\.}.*/{flag=0}flag" NEWS.md |grep -v "^$" || echo "* ${RELEASE_VERSION}") > RELEASE_BODY.txt
-      - name: Release
-        uses: softprops/action-gh-release@v1
-        with:
-          body_path: RELEASE_BODY.txt
-          token: ${{ secrets.REPO_GITHUB_TOKEN }}
+    name: Create release 🎉
+    uses: insightsengineering/r.pkg.template/.github/workflows/release.yaml@main
+    permissions:
+      contents: write

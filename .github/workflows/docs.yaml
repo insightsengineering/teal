@@ -1,0 +1,34 @@
+---
+name: Docs 📚
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - inst/templates/**
+      - _pkgdown.yml
+      - DESCRIPTION
+      - '**.md'
+      - man/**
+      - LICENSE.*
+      - NAMESPACE
+  pull_request:
+    branches:
+      - main
+      - pre-release
+    paths:
+      - inst/templates/**
+      - _pkgdown.yml
+      - DESCRIPTION
+      - '**.md'
+      - man/**
+      - LICENSE.*
+      - NAMESPACE
+
+jobs:
+  docs:
+    name: Pkgdown Docs 📚 
+    uses: insightsengineering/r.pkg.template/.github/workflows/pkgdown.yaml@main
+    secrets:
+      REPO_GITHUB_TOKEN: ${{ secrets.REPO_GITHUB_TOKEN }}
