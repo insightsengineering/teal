@@ -76,9 +76,10 @@ root_modules <- function(...) {
 #' Tab items allows you to add a shiny module to the teal app
 #'
 #' @param label (\code{character}) Label shown in the navigation item for the module.
-#' @param server (\code{function}) Shiny server module function, see
-#'   \code{\link[shiny]{callModule}}.
-#' @param ui (\code{function}) Shiny ui module function (see \code{\link[shiny]{callModule}})
+#' @param server (\code{function}) Shiny server module function
+#'   (see \code{\link[shiny]{callModule}} or \code{\link[shiny]{moduleServer}}).
+#' @param ui (\code{function}) Shiny ui module function
+#'   (see \code{\link[shiny]{callModule}} or \code{\link[shiny]{moduleServer}})
 #'   with additional teal-specific \code{datasets} argument.
 #' @param filters (\code{character}) A vector with datanames that are relevant for the item. The
 #'   filter panel will automatically update the shown filters to include only
@@ -102,8 +103,11 @@ module <- function(label, server, ui, filters, server_args = NULL, ui_args = NUL
   stopifnot(is.null(server_args) || is.list(server_args))
   stopifnot(is.null(ui_args) || is.list(ui_args))
 
-  if (!identical(names(formals(server))[1:4], c("input", "output", "session", "datasets"))) {
-    stop("teal modules need the arguments input, output, session, and datasets in that order in their server function")
+  server_main_args <- names(formals(server))
+  if (!(identical(server_main_args[1:4], c("input", "output", "session", "datasets")) ||
+        identical(server_main_args[1:2], c("id", "datasets")))) {
+    stop(paste("teal modules server functions need ordered arguments ",
+               "\ninput, output, session, and datasets (callModule) or id and datasets (moduleServer)"))
   }
 
   if (!identical(names(formals(ui))[[1]], "id")) {
