@@ -219,8 +219,6 @@ testthat::test_that("error when duplicated labels in modules", {
 testthat::test_that("each modules and module needs a label", {
   expect_error(modules(), 'argument "label" is missing, with no default')
   expect_error(module(), 'argument "label" is missing, with no default')
-  expect_error(modules("aa", modules()), 'argument "label" is missing, with no default')
-  expect_error(modules("aa", module()), 'argument "label" is missing, with no default')
 })
 
 testthat::test_that("root_modules needs at least one argument", {
@@ -248,15 +246,5 @@ testthat::test_that("all modules arguments are of class teal_module or teal_modu
     ui = ui_fun1,
     filters = "all"
   ), list()), "modules: not all arguments are of class teal_module or teal_modules.")
-
-  expect_error(modules("aa", list(module("aaa",
-    server = call_module_server_fun,
-    ui = ui_fun1,
-    filters = "all"
-  ), module("bbb",
-    server = module_server_fun,
-    ui = ui_fun1,
-    filters = "all"
-  ))), "modules: not all arguments are of class teal_module or teal_modules.")
 
 })
