@@ -228,6 +228,14 @@ condition extended by \code{!is.na} condition.
 \if{html}{\out{<div class="r">}}\preformatted{FilterState$set_na_rm(value)}\if{html}{\out{</div>}}
 }
 
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{value}}{(\code{logical(1)}) when \code{TRUE}, \code{FilterState$get_call} appends an expression
+removing \code{NA} values to the filter expression returned by \code{get_call}}
+}
+\if{html}{\out{</div>}}
+}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-set_selected"></a>}}

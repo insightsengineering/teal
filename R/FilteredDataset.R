@@ -359,19 +359,21 @@ FilteredDataset <- R6::R6Class( # nolint
         id = id,
         function(input, output, session) {
           dataname <- self$get_dataname()
-          logger::log_trace("Initializing server of FilteredDataset, name: { dataname }")
+          logger::log_trace("FilteredDataset$server initializing, name: { dataname }")
           stopifnot(
             is_character_single(dataname)
           )
 
           observeEvent(input$remove_filters, {
+            logger::log_trace("FilteredDataset$server@1 removing filters, name: { dataname }")
             lapply(
               self$get_filter_states(),
               function(x) x$queue_empty()
             )
+            logger::log_trace("FilteredDataset$server@1 removed filters, name: { dataname }")
           })
 
-          logger::log_trace("Initialized server of FilteredDataset, name: { dataname }")
+          logger::log_trace("FilteredDataset$initialized, name: { dataname }")
           NULL
         }
       )

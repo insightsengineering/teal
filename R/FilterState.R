@@ -367,6 +367,8 @@ FilterState <- R6::R6Class( # nolint
     #' Some methods needs additional `!is.na(varame)` condition to not include
     #' missing values. When `private$na_rm = TRUE` is set, `self$get_call` returns
     #' condition extended by `!is.na` condition.
+    #' @param value (`logical(1)`) when `TRUE`, `FilterState$get_call` appends an expression
+    #'  removing `NA` values to the filter expression returned by `get_call`
     set_na_rm = function(value) {
       stopifnot(is_logical_single(value))
       private$na_rm <- value

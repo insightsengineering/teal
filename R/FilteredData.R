@@ -696,6 +696,7 @@ FilteredData <- R6::R6Class( # nolint
         function(input, output, session) {
           logger::log_trace("FilteredData$srv_filter_overview initializing")
           output$table <- renderUI({
+            logger::log_trace("FilteredData$srv_filter_overview@1 updating counts")
             datanames <- if (identical(active_datanames(), "all")) {
               self$datanames()
             } else {
@@ -730,7 +731,7 @@ FilteredData <- R6::R6Class( # nolint
               tags$thead(header_html),
               tags$tbody(body_html)
             )
-
+            logger::log_trace("FilteredData$srv_filter_overview@1 updated counts")
             table_html
           })
 
