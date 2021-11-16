@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">teal</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.10.0.9014</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.10.0.9016</span>
       </span>
     </div>
 
@@ -293,11 +293,11 @@ time frame. Must not contain NA values.</p></dd>
   extract_type <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/character.html'>character</a></span><span class='op'>(</span><span class='fl'>0</span><span class='op'>)</span>
 <span class='op'>)</span>
 <span class='fu'><a href='https://rdrr.io/pkg/shiny/man/isolate.html'>isolate</a></span><span class='op'>(</span><span class='va'>filter_state</span><span class='op'>$</span><span class='fu'>get_call</span><span class='op'>(</span><span class='op'>)</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; x &gt;= as.Date("2021-11-13") &amp; x &lt;= as.Date("2021-11-22")</div><div class='input'>
+</div><div class='output co'>#&gt; x &gt;= as.Date("2021-11-17") &amp; x &lt;= as.Date("2021-11-26")</div><div class='input'>
 <span class='fu'><a href='https://rdrr.io/pkg/shiny/man/isolate.html'>isolate</a></span><span class='op'>(</span><span class='va'>filter_state</span><span class='op'>$</span><span class='fu'>set_selected</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/Sys.time.html'>Sys.Date</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'>+</span> <span class='fl'>3L</span>, <span class='fu'><a href='https://rdrr.io/r/base/Sys.time.html'>Sys.Date</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'>+</span> <span class='fl'>8L</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span>
 <span class='fu'><a href='https://rdrr.io/pkg/shiny/man/isolate.html'>isolate</a></span><span class='op'>(</span><span class='va'>filter_state</span><span class='op'>$</span><span class='fu'>set_keep_na</span><span class='op'>(</span><span class='cn'>TRUE</span><span class='op'>)</span><span class='op'>)</span>
 <span class='fu'><a href='https://rdrr.io/pkg/shiny/man/isolate.html'>isolate</a></span><span class='op'>(</span><span class='va'>filter_state</span><span class='op'>$</span><span class='fu'>get_call</span><span class='op'>(</span><span class='op'>)</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; is.na(x) | x &gt;= as.Date("2021-11-15") &amp; x &lt;= as.Date("2021-11-20")</div><div class='input'>
+</div><div class='output co'>#&gt; is.na(x) | x &gt;= as.Date("2021-11-19") &amp; x &lt;= as.Date("2021-11-24")</div><div class='input'>
 <span class='co'>## ------------------------------------------------</span>
 <span class='co'>## Method `DateFilterState$set_selected`</span>
 <span class='co'>## ------------------------------------------------</span>

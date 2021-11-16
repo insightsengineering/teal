@@ -71,7 +71,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">teal</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.10.0.9014</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.10.0.9016</span>
       </span>
     </div>
 
@@ -138,9 +138,9 @@
       
     </div>
 
-    <div id="teal-01009014" class="section level1">
-<h1 class="page-header" data-toc-text="0.10.0.9014">
-<a href="#teal-01009014" class="anchor"></a>teal 0.10.0.9014</h1>
+    <div id="teal-01009016" class="section level1">
+<h1 class="page-header" data-toc-text="0.10.0.9016">
+<a href="#teal-01009016" class="anchor"></a>teal 0.10.0.9016</h1>
 <div id="breaking-changes" class="section level3">
 <h3 class="hasAnchor">
 <a href="#breaking-changes" class="anchor"></a>Breaking changes</h3>
@@ -161,6 +161,7 @@
 <li>Added public facing constructor functions for <code>CDISCDataConnector</code>, <code>RelationalDataConnector</code>, and <code>DataConnection</code> classes.</li>
 <li>Modified <code>data_extract_spec</code> to allow both the <code>filter</code> and <code>select</code> parameters to be <code>NULL</code>, which results in the <code>data_extract_input</code> acting as if a <code>filter_spec</code> with all variables as possible choices had been supplied as the <code>filter</code> argument and a <code>select_spec</code> with the <code>multiple</code> parameter set to <code>TRUE</code> had been supplied as the <code>select</code> argument.</li>
 <li>Added support for logging using the <code>logger</code> package. Added a new function <code>register_logger</code>, which registers a logger in a given namespace.</li>
+<li>Added logging at the info and trace level to the filter panel.</li>
 <li>Added support of the full screen for a <code>module</code> when the <code>filters</code> argument is equal <code>NULL</code>.</li>
 </ul>
 </div>

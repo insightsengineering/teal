@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">teal</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.10.0.9014</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.10.0.9016</span>
       </span>
     </div>
 
@@ -307,6 +307,12 @@ missing values. When <code>private$na_rm = TRUE</code> is set, <code>self$get_ca
 condition extended by <code>!is.na</code> condition.</p><h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Usage</h4>
 <p><div class="r"></p><pre><span class='va'>FilterState</span><span class='op'>$</span><span class='fu'>set_na_rm</span><span class='op'>(</span><span class='va'>value</span><span class='op'>)</span></pre><p></div></p>
 
+<h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Arguments</h4>
+<p><div class="arguments"></p><dl>
+<dt><code>value</code></dt><dd><p>(<code><a href='https://rdrr.io/r/base/logical.html'>logical(1)</a></code>) when <code>TRUE</code>, <code>FilterState$get_call</code> appends an expression
+removing <code>NA</code> values to the filter expression returned by <code>get_call</code></p></dd>
+
+</dl><p></div></p>
 <p><hr>
 <a id="method-set_selected"></a></p><h3 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Method <code>set_selected()</code></h3>
 <p>Set selection</p><h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Usage</h4>
