@@ -479,7 +479,7 @@ RelationalData <- R6::R6Class( # nolint
             self$execute_mutate()
             self$check_metadata()
           })
-
+          logger::log_info("Data ready to pass to the application.")
           shinyjs::hide("delayed_data")
           rv(self)
         }

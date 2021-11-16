@@ -102,9 +102,9 @@ CDISCDatasetConnector <- R6::R6Class( #nolint
           private$dataset,
           parent = self$get_parent()
         )
-        logger::log_trace("DatasetConnector$pull pulled dataset: { self$get_dataname() }.")
+        logger::log_info("DatasetConnector$pull pulled dataset: { self$get_dataname() }.")
       } else {
-        logger::log_trace(
+        logger::log_error(
           "DatasetConnector$pull failed to pull dataset: { self$get_dataname() }."
         )
       }

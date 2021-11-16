@@ -189,11 +189,11 @@ DataConnection <- R6::R6Class( # nolint
             if_not_null(private$close_fun, private$close_fun$assign_to_env("conn", private$conn))
             if_not_null(private$ping_fun, private$ping_fun$assign_to_env("conn", private$conn))
           }
-          logger::log_trace("DataConnection$open connection opened.")
+          logger::log_info("DataConnection$open connection opened.")
         } else {
           private$opened <- FALSE
           private$conn <- NULL
-          logger::log_trace("DataConnection$open connection failed to open.")
+          logger::log_error("DataConnection$open connection failed to open.")
         }
 
         return(invisible(self))
