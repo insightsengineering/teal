@@ -48,7 +48,7 @@ jobs:
     uses: insightsengineering/r.pkg.template/.github/workflows/links.yaml@main
   vbump:
     name: Version Bump 🤜🤛
-    if: github.event_name == 'push' && github.event.pull_request.head.ref == 'main'
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     uses: insightsengineering/r.pkg.template/.github/workflows/version-bump.yaml@main
     secrets:
       REPO_GITHUB_TOKEN: ${{ secrets.REPO_GITHUB_TOKEN }}
