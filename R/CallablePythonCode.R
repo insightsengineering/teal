@@ -20,6 +20,10 @@ CallablePythonCode <- R6::R6Class( #nolint
     #' @return new `CallablePythonCode` object
     initialize = function(fun) {
       super$initialize(fun = fun)
+      logger::log_trace(
+        "CallablePythonCode$initialize initialized with fun: { fun }"
+      )
+
       return(invisible(self))
     },
     #' @description
@@ -121,7 +125,7 @@ CallablePythonCode <- R6::R6Class( #nolint
       )
 
       private$call <- rlang::parse_expr(
-        sprintf("%s[[%s]]", pdeparse(private$call), pdeparse(private$object))
+        sprintf("%s[[%s]]", deparse1(private$call), deparse1(private$object))
         )
     }
   )

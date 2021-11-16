@@ -26,6 +26,7 @@ DataAbstract <- R6::R6Class( #nolint
     #'   \code{get_code()} code are identical to the raw data, else \code{FALSE}.
     check = function() {
       # code can be put only to the mutate with empty code in datasets
+      logger::log_trace("DataAbstract$check executing the code to reproduce the data...")
       res <- if (isFALSE(private$.check)) {
         NULL
       } else {
@@ -44,6 +45,7 @@ DataAbstract <- R6::R6Class( #nolint
         }
       }
       private$check_result <- res
+      logger::log_trace("DataAbstract$check executed the code to reproduce the data.")
       return(res)
     },
     #' @description
@@ -54,6 +56,7 @@ DataAbstract <- R6::R6Class( #nolint
       if (isFALSE(self$get_check_result())) {
         stop("Reproducibility check failed.")
       }
+      logger::log_trace("DataAbstract$check_reproducibility reproducibility check passed.")
       return(invisible(NULL))
     },
     #' @description
@@ -61,6 +64,7 @@ DataAbstract <- R6::R6Class( #nolint
     #' does not cause instant execution, the \code{mutate_code} is
     #' delayed and can be evaluated using this method.
     execute_mutate = function() {
+      logger::log_trace("DataAbstract$execute_mutate evaluating mutate code...")
       # this will be pulled already! - not needed?
       if (is_empty(private$mutate_code$code)) {
         res <- ulapply(
@@ -74,8 +78,10 @@ DataAbstract <- R6::R6Class( #nolint
           }
         )
         # exit early if mutate isn't required
+        logger::log_trace("DataAbstract$execute_mutate no code to evaluate.")
         return(if_not_null(res, setNames(res, vapply(res, get_dataname, character(1)))))
       }
+
 
       if (inherits(private$mutate_code, "PythonCodeClass")) {
         items <- lapply(self$get_items(), get_raw_data)
@@ -113,7 +119,7 @@ DataAbstract <- R6::R6Class( #nolint
           )
         }
       )
-
+      logger::log_trace("DataAbstract$execute_mutate evaluated mutate code.")
       return(invisible(NULL))
 
     },
@@ -253,6 +259,7 @@ DataAbstract <- R6::R6Class( #nolint
       )
 
       private$check_result <- NULL
+      logger::log_trace("DataAbstract$mutate mutate code and vars set.")
 
       return(invisible(self))
     },
@@ -287,6 +294,7 @@ DataAbstract <- R6::R6Class( #nolint
       )
 
       private$check_result <- NULL
+      logger::log_trace("DataAbstract$mutate_dataset mutate code set for dataset: { dataname }")
 
       return(invisible(self))
     },
@@ -299,6 +307,8 @@ DataAbstract <- R6::R6Class( #nolint
     set_check = function(check = FALSE) {
       stopifnot(is_logical_single(check))
       private$.check <- check
+      logger::log_trace("DataAbstract$set_check set check: { check }")
+
       return(invisible(self))
     },
     #' @description
@@ -345,6 +355,8 @@ DataAbstract <- R6::R6Class( #nolint
         code = code,
         dataname = self$get_datanames()
       )
+      logger::log_trace("DataAbstract$set_pull_code pull code is set")
+
       return(invisible(self))
     },
 
@@ -354,11 +366,14 @@ DataAbstract <- R6::R6Class( #nolint
     #' For example if `DatasetConnector` has a dependency on some `Dataset`, this
     #' `Dataset` is reassigned inside of `DatasetConnector`.
     reassign_datasets_vars = function() {
+      logger::log_trace("DataAbstract$reassign_datasets_vars reassigning vars...")
       for (dataset in self$get_items()) {
         dataset$reassign_datasets_vars(
           datasets = self$get_items()
         )
       }
+      logger::log_trace("DataAbstract$reassign_datasets_vars reassigned vars.")
+      NULL
     }
   ),
 

@@ -135,7 +135,7 @@ get_code.default <- function(x,
         lines,
         function(x) {
           paste(
-            pdeparse(x),
+            deparse1(x),
             collapse = "\n"
           )
         },

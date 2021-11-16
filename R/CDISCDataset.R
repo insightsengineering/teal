@@ -65,6 +65,9 @@ CDISCDataset <- R6::R6Class( # nolint
       super$initialize(dataname = dataname, x = x, keys = keys, code = code, label = label, vars = vars)
 
       self$set_parent(parent)
+      logger::log_trace(
+        "CDISCDataset$initialize initialized data: { self$get_dataname() }"
+      )
       return(invisible(self))
     },
     #' @description

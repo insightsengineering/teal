@@ -92,6 +92,10 @@ MAEDataset <- R6::R6Class( # nolint
         private$code$append(code)
       }
 
+      logger::log_trace(
+        "MAEDataset$initialize initialized data: { self$get_dataname() }"
+      )
+
       return(invisible(self))
     },
     # ___ check ====

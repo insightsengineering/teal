@@ -47,6 +47,9 @@ CallableCode <- R6::R6Class( # nolint
 
       private$code <- code
       private$call <- private$get_callable_code(code)
+      logger::log_trace(
+        "CallableCode$initialize initialized with call: { deparse1(private$call) }"
+      )
 
       return(invisible(self))
     },
@@ -69,7 +72,7 @@ CallableCode <- R6::R6Class( # nolint
         )
 
       res <- if (deparse) {
-        paste0(vapply(private$call, pdeparse, character(1)), collapse = "\n")
+        paste0(vapply(private$call, deparse1, character(1)), collapse = "\n")
       } else {
         private$call
       }

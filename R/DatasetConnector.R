@@ -72,6 +72,10 @@ DatasetConnector <- R6::R6Class( #nolint
         private$dataset$mutate(code = code, vars = vars, force_delay = TRUE)
       }
 
+      logger::log_trace(
+        "DatasetConnector$initialize initialized dataname: { paste(self$get_dataname(), collapse = ' ') }"
+      )
+
       return(invisible(self))
     },
     #' Prints this DatasetConnector.
@@ -221,6 +225,10 @@ DatasetConnector <- R6::R6Class( #nolint
     #'   objects with valid pointers.
     #' @return NULL invisible
     reassign_datasets_vars = function(datasets) {
+      logger::log_trace(sprintf(
+        "DatasetConnector$reassign_datasets_vars reassigning vars in dataset: %s",
+        self$get_dataname()
+      ))
       stopifnot(is_fully_named_list(datasets))
 
       common_var_r6 <- intersect(names(datasets), names(private$var_r6))
@@ -232,6 +240,11 @@ DatasetConnector <- R6::R6Class( #nolint
       if (!is.null(private$dataset)) {
         private$dataset$reassign_datasets_vars(datasets)
       }
+      logger::log_trace(sprintf(
+        "DatasetConnector$reassign_datasets_vars reassigned vars in dataset: %s",
+        self$get_dataname()
+      ))
+
       invisible(NULL)
     },
     #' @description
@@ -247,6 +260,10 @@ DatasetConnector <- R6::R6Class( #nolint
       if (self$is_pulled()) {
         private$dataset$set_dataset_label(label)
       }
+      logger::log_trace(
+        "DatasetConnector$set_dataset_label label set for dataset: { self$get_dataname() }",
+      )
+
       return(invisible(self))
     },
     #' @description
@@ -569,9 +586,9 @@ DatasetConnector <- R6::R6Class( #nolint
       code <- if (inherits(private$pull_callable, "CallableCode")) {
         tmp <- private$pull_callable$get_call(deparse = FALSE)
         tmp[[length(tmp)]] <- substitute(a <- b, list(a = as.name(private$dataname), b = tmp[[length(tmp)]]))
-        paste0(vapply(tmp, pdeparse, character(1)), collapse = "\n")
+        paste0(vapply(tmp, deparse1, character(1)), collapse = "\n")
       } else {
-        pdeparse(substitute(
+        deparse1(substitute(
           a <- b,
           list(a = as.name(private$dataname),
                b = private$pull_callable$get_call(deparse = FALSE, args = args))))

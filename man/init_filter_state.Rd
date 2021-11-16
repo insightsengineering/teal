@@ -63,7 +63,7 @@ shinyApp(
     callModule(filter_state$server, "app")
 
     output$call <- renderText(
-      pdeparse(filter_state$get_call())
+      deparse1(filter_state$get_call())
     )
   }
 )
