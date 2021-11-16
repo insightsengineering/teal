@@ -84,7 +84,7 @@ Dataset <- R6::R6Class( # nolint
       }
 
       logger::log_trace(
-        "Dataset$initialize initialized data: { self$get_dataname() }"
+        "Dataset$initialize initialized dataset: { self$get_dataname() }"
       )
       return(invisible(self))
     },
@@ -108,7 +108,7 @@ Dataset <- R6::R6Class( # nolint
         label = label,
         vars = vars
       )
-
+      logger::log_trace("Dataset$recreate recreated dataset: { self$get_dataname() }")
       return(res)
     },
     #' Prints this Dataset.
@@ -275,6 +275,7 @@ Dataset <- R6::R6Class( # nolint
     #' )
     #'
     reassign_datasets_vars = function(datasets) {
+      logger::log_trace("Dataset$reassign_datasets_vars reassigning vars for dataset: { self$get_dataname() }.")
       stopifnot(is_fully_named_list(datasets))
 
       common_var_r6 <- intersect(names(datasets), names(private$var_r6))
@@ -286,6 +287,7 @@ Dataset <- R6::R6Class( # nolint
       common_mutate_vars <- intersect(names(datasets), names(private$mutate_vars))
       private$mutate_vars[common_mutate_vars] <- datasets[common_mutate_vars]
 
+      logger::log_trace("Dataset$reassign_datasets_vars reassigned vars for dataset: { self$get_dataname() }.")
       invisible(NULL)
     },
     #' @description
@@ -297,6 +299,8 @@ Dataset <- R6::R6Class( # nolint
       }
       stopifnot(is_character_vector(label, min_length = 0, max_length = 1))
       private$dataset_label <- label
+
+      logger::log_trace("Dataset$set_dataset_label dataset_label set for dataset: { self$get_dataname() }.")
       return(invisible(self))
     },
     #' @description
@@ -305,6 +309,7 @@ Dataset <- R6::R6Class( # nolint
     set_keys = function(keys) {
       stopifnot(is_character_vector(keys, min_length = 0))
       private$.keys <- keys
+      logger::log_trace("Dataset$set_keys keys set for dataset: { self$get_dataname() }.")
       return(invisible(self))
     },
     #' @description
@@ -314,6 +319,7 @@ Dataset <- R6::R6Class( # nolint
     #' @return (`self`) invisibly for chaining
     set_join_keys = function(x) {
       self$get_join_keys()$set(x)
+      logger::log_trace("Dataset$set_join_keys join_keys set for dataset: { self$get_dataname() }.")
       return(invisible(self))
     },
     #' @description
@@ -322,6 +328,8 @@ Dataset <- R6::R6Class( # nolint
     #' @return (`self`) invisibly for chaining
     merge_join_keys = function(x) {
       self$get_join_keys()$merge(x)
+      logger::log_trace("Dataset$merge_join_keys join_keys merged for dataset: { self$get_dataname() }.")
+
       return(invisible(self))
     },
     #' @description
@@ -331,6 +339,7 @@ Dataset <- R6::R6Class( # nolint
     #' @return (`self`) invisibly for chaining
     mutate_join_keys = function(dataset, val) {
       self$get_join_keys()$mutate(private$dataname, dataset, val)
+      logger::log_trace("Dataset$mutate_join_keys join_keys modified for dataset: { self$get_dataname() }.")
       return(invisible(self))
     },
     #' @description
@@ -340,6 +349,8 @@ Dataset <- R6::R6Class( # nolint
     #' @return (`self`) invisibly for chaining
     set_vars = function(vars) {
       private$set_vars_internal(vars, is_mutate_vars = FALSE)
+      logger::log_trace("Dataset$set_vars vars set for dataset: { self$get_dataname() }.")
+
       return(invisible(NULL))
     },
     #' @description
@@ -356,7 +367,7 @@ Dataset <- R6::R6Class( # nolint
           deps = names(private$vars)
         )
       }
-
+      logger::log_trace("Dataset$set_code code set for dataset: { self$get_dataname() }.")
       return(invisible(NULL))
     },
 
@@ -438,6 +449,8 @@ Dataset <- R6::R6Class( # nolint
     #'
     #' @return (`self`) invisibly for chaining
     mutate = function(code, vars = list(), force_delay = FALSE) {
+      logger::log_trace("Dataset$mutate mutating dataset: { self$get_dataname() }.")
+
       stopifnot(is_logical_single(force_delay))
       stopifnot(is_fully_named_list(vars))
       stopifnot(is_character_single(code) || is(code, "CodeClass"))
@@ -459,6 +472,7 @@ Dataset <- R6::R6Class( # nolint
           private$mutate_eager()
         }
       }
+      logger::log_trace("Dataset$mutate mutated dataset: { self$get_dataname() }.")
 
       return(invisible(self))
     },
@@ -470,6 +484,7 @@ Dataset <- R6::R6Class( # nolint
     #'   \code{TRUE} if the dataset generated from evaluating the
     #'   \code{get_code()} code is identical to the raw data, else \code{FALSE}.
     check = function() {
+      logger::log_trace("Dataset$check executing the code to reproduce dataset: { self$get_dataname() }...")
       if (!is_character_single(self$get_code()) || !grepl("\\w+", self$get_code())) {
         stop(
           sprintf(
@@ -493,6 +508,7 @@ Dataset <- R6::R6Class( # nolint
       }, error = function(e) {
         FALSE
       })
+      logger::log_trace("Dataset$check dataset '{ self$get_dataname() }' reproducibility result: { res_check }")
 
       return(res_check)
     },
@@ -514,9 +530,9 @@ Dataset <- R6::R6Class( # nolint
             paste0(utils::capture.output(print(duplicates))[-c(1, 3)], collapse = "\n"),
             call. = FALSE
           )
-
         }
       }
+      logger::log_trace("Dataset$check_keys keys checking passed.")
 
     },
     #' @description

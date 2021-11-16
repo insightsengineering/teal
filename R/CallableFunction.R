@@ -104,6 +104,10 @@ CallableFunction <- R6::R6Class( #nolint
         self$set_arg_value(name = names(args)[[idx]],
                            value = args[[idx]])
       }
+      logger::log_trace(
+        "CallableFunction$set_args args set for function: { deparse1(private$fun_name) }"
+      )
+
       return(invisible(self))
     },
     #' @description
@@ -124,6 +128,10 @@ CallableFunction <- R6::R6Class( #nolint
       private$args[[name]] <- value
 
       private$refresh()
+      logger::log_trace(
+        "CallableFunction$set_arg_value args values set for arg: { name }"
+      )
+
       return(invisible(self))
     }
   ),

@@ -38,7 +38,7 @@ CallablePythonCode <- R6::R6Class( #nolint
     set_object = function(x) {
       private$object <- x
       private$refresh()
-
+      logger::log_trace("CallablePythonCode$set_object object set.")
       return(invisible(self))
     },
     #' @description
@@ -55,12 +55,12 @@ CallablePythonCode <- R6::R6Class( #nolint
     #'
     #' @return (`self`) invisibly for chaining.
     assign_to_env = function(x, value) {
-
       if (exists(x, .GlobalEnv)) {
         private$duplicate_vars[[x]] <- get(x, envir = .GlobalEnv)
       }
 
       private$vars_to_assign[[x]] <- value
+      logger::log_trace("CallablePythonCode$assign_to_env assigned '{ x }' to the environment.")
 
       return(invisible(self))
     },

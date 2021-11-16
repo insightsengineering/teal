@@ -45,7 +45,6 @@ DataAbstract <- R6::R6Class( #nolint
         }
       }
       private$check_result <- res
-      logger::log_trace("DataAbstract$check executed the code to reproduce the data.")
       return(res)
     },
     #' @description

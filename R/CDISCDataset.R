@@ -66,7 +66,7 @@ CDISCDataset <- R6::R6Class( # nolint
 
       self$set_parent(parent)
       logger::log_trace(
-        "CDISCDataset$initialize initialized data: { self$get_dataname() }"
+        "CDISCDataset$initialize initialized dataset: { self$get_dataname() }"
       )
       return(invisible(self))
     },
@@ -92,7 +92,7 @@ CDISCDataset <- R6::R6Class( # nolint
         label = label,
         vars = vars
       )
-
+      logger::log_trace("Dataset$recreate recreated dataset: { self$get_dataname() }")
       return(res)
     },
     #' @description
@@ -121,6 +121,8 @@ CDISCDataset <- R6::R6Class( # nolint
     set_parent = function(parent) {
       stopifnot(is_character_empty(parent) || is_character_single(parent))
       private$parent <- parent
+
+      logger::log_trace("Dataset$set_parent parent set for dataset: { self$get_dataname() }")
       return(invisible(self))
     }
   ),
