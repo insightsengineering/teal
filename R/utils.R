@@ -259,6 +259,16 @@ check_in_subset <- function(subset, choices, pre_msg = "") {
   return(invisible(NULL))
 }
 
+#' Deparses and concatenates an expression
+#'
+#' Deparses and concatenates an expression
+#' @param x (`language`)\cr
+#' @inheritParams base::deparse
+#' @return `character`
+pdeparse <- function(x, width.cutoff = 500L) { # nolint
+  paste0(deparse(x, width.cutoff = width.cutoff), collapse = "\n") # nolint
+}
+
 teal_with_pkg <- function(pkg, code) {
   pkg_name <- paste0("package:", pkg)
   if (!pkg_name %in% search()) {

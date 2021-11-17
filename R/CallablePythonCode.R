@@ -122,9 +122,7 @@ CallablePythonCode <- R6::R6Class( #nolint
         c(rlang::parse_expr(private$fun_name), private$args)
       )
 
-      private$call <- rlang::parse_expr(
-        sprintf("%s[[%s]]", deparse1(private$call), deparse1(private$object))
-        )
+      private$call <- rlang::parse_expr(sprintf("%s[[%s]]", pdeparse(private$call), pdeparse(private$object)))
     }
   )
 )

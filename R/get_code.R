@@ -130,7 +130,19 @@ get_code.default <- function(x,
   lines <- l_lines %>% unlist()
 
   if (deparse) {
-    return(paste(vapply(lines, pdeparse, FUN.VALUE = character(1)), collapse = "\n"))
+    return(paste(
+      vapply(
+        lines,
+        function(x) {
+          paste(
+            pdeparse(x),
+            collapse = "\n"
+          )
+        },
+        FUN.VALUE = character(1)
+      ),
+      collapse = "\n"
+    ))
   } else {
     return(paste(lines, collapse = "\n"))
   }
