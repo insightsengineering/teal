@@ -320,7 +320,6 @@ DatasetConnector <- R6::R6Class( #nolint
           code_in_dataset <- private$dataset$get_code_class(nodeps = TRUE)
           vars_in_dataset <- private$dataset$get_vars()
         }
-
         private$dataset <- dataset(
           dataname = self$get_dataname(),
           x = data,
@@ -337,7 +336,7 @@ DatasetConnector <- R6::R6Class( #nolint
         }
         set_keys(private$dataset, self$get_keys())
         private$is_pulled_flag <- TRUE
-        logger::log_info("DatasetConnector$pull pulled dataset: {self$get_dataname() }.")
+        logger::log_trace("DatasetConnector$pull pulled dataset: {self$get_dataname() }.")
       } else {
         logger::log_error("DatasetConnector$pull failed to pull dataset: {self$get_dataname() }.")
       }
@@ -585,13 +584,12 @@ DatasetConnector <- R6::R6Class( #nolint
     get_pull_code_class = function(args = NULL) {
       res <- CodeClass$new()
       res$append(list_to_code_class(private$pull_vars))
-
       code <- if (inherits(private$pull_callable, "CallableCode")) {
         tmp <- private$pull_callable$get_call(deparse = FALSE)
         tmp[[length(tmp)]] <- substitute(a <- b, list(a = as.name(private$dataname), b = tmp[[length(tmp)]]))
-        paste0(vapply(tmp, deparse1, character(1)), collapse = "\n")
+        paste0(vapply(tmp, pdeparse, character(1)), collapse = "\n")
       } else {
-        deparse1(substitute(
+        pdeparse(substitute(
           a <- b,
           list(a = as.name(private$dataname),
                b = private$pull_callable$get_call(deparse = FALSE, args = args))))

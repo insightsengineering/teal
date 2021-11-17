@@ -34,11 +34,11 @@ CallableFunction <- R6::R6Class( #nolint
       ))
 
       fun_name <- private$get_callable_function(fun)
-      private$fun_name <- deparse1(fun_name)
+      private$fun_name <- pdeparse(fun_name)
 
       private$refresh()
 
-      logger::log_trace("CallableFunction$initialize initialized with function: { deparse1(fun_name) }")
+      logger::log_trace("CallableFunction$initialize initialized with function: { private$fun_name }")
 
       return(invisible(self))
     },
@@ -67,7 +67,7 @@ CallableFunction <- R6::R6Class( #nolint
       if_not_empty(args, self$set_args(args))
 
       res <- if (deparse) {
-        deparse1(private$call)
+        pdeparse(private$call)
       } else {
         private$call
       }
@@ -102,7 +102,7 @@ CallableFunction <- R6::R6Class( #nolint
         self$set_arg_value(name = names(args)[[idx]],
                            value = args[[idx]])
       }
-      logger::log_trace("CallableFunction$set_args args set for function: { deparse1(private$fun_name) }")
+      logger::log_trace("CallableFunction$set_args args set for function: { pdeparse(private$fun_name) }")
 
       return(invisible(self))
     },
@@ -151,11 +151,11 @@ CallableFunction <- R6::R6Class( #nolint
         # exception for source(...)$value
         if (private$fun_name == "source") {
           private$call <- rlang::parse_expr(
-            sprintf("%s$value", deparse1(private$call))
+            sprintf("%s$value", pdeparse(private$call))
           )
         } else if (private$fun_name %in% c("py_run_file", "py_run_string"))
           private$call <- rlang::parse_expr(
-            sprintf("%s[[%s]]", deparse1(private$call), deparse1(private$object))
+            sprintf("%s[[%s]]", pdeparse(private$call), pdeparse(private$object))
           )
       }
     },

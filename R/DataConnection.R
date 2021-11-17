@@ -189,7 +189,7 @@ DataConnection <- R6::R6Class( # nolint
             if_not_null(private$close_fun, private$close_fun$assign_to_env("conn", private$conn))
             if_not_null(private$ping_fun, private$ping_fun$assign_to_env("conn", private$conn))
           }
-          logger::log_info("DataConnection$open connection opened.")
+          logger::log_trace("DataConnection$open connection opened.")
         } else {
           private$opened <- FALSE
           private$conn <- NULL
@@ -227,7 +227,7 @@ DataConnection <- R6::R6Class( # nolint
       }
 
       if (isTRUE(deparse)) {
-        return(deparse1(open_call))
+        return(pdeparse(open_call))
       } else {
         return(open_call)
       }

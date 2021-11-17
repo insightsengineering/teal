@@ -70,7 +70,7 @@ CallableCode <- R6::R6Class( # nolint
         )
 
       res <- if (deparse) {
-        paste0(vapply(private$call, deparse1, character(1)), collapse = "\n")
+        paste0(vapply(private$call, pdeparse, character(1)), collapse = "\n")
       } else {
         private$call
       }

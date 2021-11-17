@@ -507,7 +507,7 @@ eval_expr_with_msg <- function(expr, env) {
           stop(
             sprintf(
               "Call execution failed:\n - call:\n   %s\n - message:\n   %s ",
-              deparse1(x), e
+              pdeparse(x), e
             )
           )
         }
