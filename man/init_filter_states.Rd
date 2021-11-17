@@ -61,7 +61,7 @@ shinyApp(
       data = df
     )
     output$expr <- renderText({
-      deparse1(rf$get_call())
+      pdeparse(rf$get_call())
     })
     observeEvent(
       input$clear,

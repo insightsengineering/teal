@@ -136,9 +136,7 @@ CodeClass <- R6::R6Class( # nolint
        )
 
        if (is(out, "error")) {
-         error_msg <- sprintf("%s\n\nEvaluation of the code failed:\n %s",
-                              pdeparse(x),
-                              conditionMessage(out))
+         error_msg <- sprintf("%s\n\nEvaluation of the code failed:\n %s", pdeparse(x), conditionMessage(out))
 
          rlang::with_options(
            stop(error_msg, call. = FALSE),
@@ -282,12 +280,11 @@ pretty_code_string <- function(code_vector) {
   ulapply(
     code_vector,
     function(code_single) {
-
       if (is_empty(parse(text = code_single))) {
         # if string code cannot be passed into expression (e.g. code comment) then pass on the string
         code_single
       } else {
-        pdeparse(as.call(parse(text = code_single)))
+        vapply(as.list(as.call(parse(text = code_single))), pdeparse, character(1))
       }
     }
   )

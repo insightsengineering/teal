@@ -338,7 +338,7 @@ DatasetConnector <- R6::R6Class( #nolint
         private$is_pulled_flag <- TRUE
         logger::log_trace("DatasetConnector$pull pulled dataset: {self$get_dataname() }.")
       } else {
-        logger::log_error("DatasetConnector$pull failed to pull dataset: {self$get_dataname() }.")
+        logger::log_trace("DatasetConnector$pull failed to pull dataset: {self$get_dataname() }.")
       }
 
       return(invisible(self))

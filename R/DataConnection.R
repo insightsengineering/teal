@@ -193,7 +193,7 @@ DataConnection <- R6::R6Class( # nolint
         } else {
           private$opened <- FALSE
           private$conn <- NULL
-          logger::log_error("DataConnection$open connection failed to open.")
+          logger::log_trace("DataConnection$open connection failed to open.")
         }
 
         return(invisible(self))
