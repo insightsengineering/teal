@@ -40,7 +40,7 @@ CDISCDataConnector <- R6::R6Class( #nolint
 
       private$parent <- new_parent
       logger::log_trace(
-        "CDISCDataConnector$initialize initialized data: { paste(self$get_datanames(), collapse = ' ') }"
+        "CDISCDataConnector initialized with data: { paste(self$get_datanames(), collapse = ' ') }"
       )
       return(invisible(self))
     },

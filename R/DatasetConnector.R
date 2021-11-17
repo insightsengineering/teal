@@ -72,7 +72,7 @@ DatasetConnector <- R6::R6Class( #nolint
         private$dataset$mutate(code = code, vars = vars, force_delay = TRUE)
       }
 
-      logger::log_trace("DatasetConnector$initialize initialized dataset: { self$get_dataname() }")
+      logger::log_trace("DatasetConnector initialized for dataset: { self$get_dataname() }")
 
       return(invisible(self))
     },

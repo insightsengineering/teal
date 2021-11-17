@@ -20,8 +20,7 @@ CallablePythonCode <- R6::R6Class( #nolint
     #' @return new `CallablePythonCode` object
     initialize = function(fun) {
       super$initialize(fun = fun)
-      logger::log_trace("CallablePythonCode$initialize initialized with fun: { fun }")
-
+      logger::log_trace("CallablePythonCode initialized with fun: { fun }")
       return(invisible(self))
     },
     #' @description

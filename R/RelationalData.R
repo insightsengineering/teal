@@ -106,7 +106,7 @@ RelationalData <- R6::R6Class( # nolint
       self$id <- sample.int(1e11, 1, useHash = TRUE)
 
       logger::log_trace(
-        "RelationalData$initialize initialized data: { paste(self$get_datanames(), collapse = ' ') }"
+        "RelationalData initialized with data: { paste(self$get_datanames(), collapse = ' ') }"
       )
       return(invisible(self))
     },

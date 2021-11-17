@@ -86,10 +86,7 @@ CDISCData <- R6::R6Class( # nolint
         }
       }
 
-
-      logger::log_trace(
-        "CDISCData$initialize initialized data: { paste(self$get_datanames(), collapse = ' ') }"
-      )
+      logger::log_trace("CDISCData initialized with data: { paste(self$get_datanames(), collapse = ' ') }")
       return(invisible(self))
     },
     #' @description

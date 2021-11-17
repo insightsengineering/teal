@@ -38,7 +38,7 @@ CallableFunction <- R6::R6Class( #nolint
 
       private$refresh()
 
-      logger::log_trace("CallableFunction$initialize initialized with function: { private$fun_name }")
+      logger::log_trace("CallableFunction initialized with function: { private$fun_name }")
 
       return(invisible(self))
     },

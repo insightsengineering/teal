@@ -21,7 +21,7 @@ Callable <- R6::R6Class( #nolint
     initialize = function(env) {
       stopifnot(is.environment(env))
       private$env <- env
-      logger::log_trace("Callable$initialize initialized")
+      logger::log_trace("Callable initialized.")
       return(invisible(self))
     },
     #' @description

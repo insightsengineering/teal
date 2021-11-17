@@ -69,6 +69,7 @@ CodeClass <- R6::R6Class( # nolint
     initialize = function(code = character(0), dataname = character(0), deps = character(0)) {
       if (length(code) > 0)
         self$set_code(code, dataname, deps)
+         logger::log_trace("CodeClass initialized.")
       return(invisible(self))
     },
     #' @description

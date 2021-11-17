@@ -72,7 +72,7 @@ DataConnection <- R6::R6Class( # nolint
         NULL
       }
 
-      logger::log_trace("DataConnection$initialize initialized")
+      logger::log_trace("DataConnection initialized.")
 
       invisible(self)
     },

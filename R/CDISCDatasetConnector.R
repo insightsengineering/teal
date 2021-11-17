@@ -69,6 +69,8 @@ CDISCDatasetConnector <- R6::R6Class( #nolint
         vars = vars
       )
       private$set_parent(parent)
+      logger::log_trace("CDISCDatasetConnector initialized for dataset: { self$get_dataname() }")
+
       return(invisible(self))
     },
     #' @description
