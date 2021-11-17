@@ -119,7 +119,7 @@ RelationalData <- R6::R6Class( # nolint
     copy = function(deep = FALSE) {
       new_self <- self$clone(deep = deep)
       new_self$reassign_datasets_vars()
-      logger::log_trace("RelationalData$copy copied self.")
+      logger::log_trace("RelationalData$copy{if (deep) ' deep-' else ' '}copied self.")
       invisible(new_self)
     },
     #' Prints this RelationalData.
