@@ -72,9 +72,7 @@ DatasetConnector <- R6::R6Class( #nolint
         private$dataset$mutate(code = code, vars = vars, force_delay = TRUE)
       }
 
-      logger::log_trace(
-        "DatasetConnector$initialize initialized dataset: { paste(self$get_dataname(), collapse = ' ') }"
-      )
+      logger::log_trace("DatasetConnector$initialize initialized dataset: { self$get_dataname() }")
 
       return(invisible(self))
     },
@@ -225,10 +223,7 @@ DatasetConnector <- R6::R6Class( #nolint
     #'   objects with valid pointers.
     #' @return NULL invisible
     reassign_datasets_vars = function(datasets) {
-      logger::log_trace(sprintf(
-        "DatasetConnector$reassign_datasets_vars reassigning vars in dataset: %s",
-        self$get_dataname()
-      ))
+      logger::log_trace("DatasetConnector$reassign_datasets_vars reassigning vars in dataset: { self$get_dataname() }")
       stopifnot(is_fully_named_list(datasets))
 
       common_var_r6 <- intersect(names(datasets), names(private$var_r6))
@@ -240,10 +235,7 @@ DatasetConnector <- R6::R6Class( #nolint
       if (!is.null(private$dataset)) {
         private$dataset$reassign_datasets_vars(datasets)
       }
-      logger::log_trace(sprintf(
-        "DatasetConnector$reassign_datasets_vars reassigned vars in dataset: %s",
-        self$get_dataname()
-      ))
+      logger::log_trace("DatasetConnector$reassign_datasets_vars reassigned vars in dataset: { self$get_dataname() }")
 
       invisible(NULL)
     },
@@ -260,9 +252,7 @@ DatasetConnector <- R6::R6Class( #nolint
       if (self$is_pulled()) {
         private$dataset$set_dataset_label(label)
       }
-      logger::log_trace(
-        "DatasetConnector$set_dataset_label label set for dataset: { self$get_dataname() }"
-      )
+      logger::log_trace("DatasetConnector$set_dataset_label label set for dataset: { self$get_dataname() }")
 
       return(invisible(self))
     },
@@ -286,9 +276,7 @@ DatasetConnector <- R6::R6Class( #nolint
     #' @return (`self`) invisibly for chaining
     set_join_keys = function(x) {
       self$get_join_keys()$set(x)
-      logger::log_trace(
-        "DatasetConnector$set_join_keys join_keys set for dataset: { self$get_dataname() }."
-      )
+      logger::log_trace("DatasetConnector$set_join_keys join_keys set for dataset: { self$get_dataname() }.")
 
       return(invisible(self))
     },
@@ -300,9 +288,7 @@ DatasetConnector <- R6::R6Class( #nolint
     #' @return (`self`) invisibly for chaining
     mutate_join_keys = function(dataset, val) {
       self$get_join_keys()$mutate(private$dataname, dataset, val)
-      logger::log_trace(
-        "DatasetConnector$mutate_join_keys join_keys modified for dataset: { self$get_dataname() }."
-      )
+      logger::log_trace("DatasetConnector$mutate_join_keys join_keys modified for dataset: { self$get_dataname() }.")
 
       return(invisible(self))
     },
@@ -456,7 +442,7 @@ DatasetConnector <- R6::R6Class( #nolint
         ))
       }
       private$ui_input <- inputs
-      logger::log_trace("DatasetConnector$set_ui_input ui_input set for dataset: {self$get_dataname() }.")
+      logger::log_trace("DatasetConnector$set_ui_input ui_input set for dataset: { self$get_dataname() }.")
       return(invisible(self))
     },
     #' @description Get shiny ui function

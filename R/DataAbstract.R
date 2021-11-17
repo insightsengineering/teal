@@ -26,7 +26,6 @@ DataAbstract <- R6::R6Class( #nolint
     #'   \code{get_code()} code are identical to the raw data, else \code{FALSE}.
     check = function() {
       # code can be put only to the mutate with empty code in datasets
-      logger::log_trace("DataAbstract$check executing the code to reproduce the data...")
       res <- if (isFALSE(private$.check)) {
         NULL
       } else {
@@ -45,6 +44,7 @@ DataAbstract <- R6::R6Class( #nolint
         }
       }
       private$check_result <- res
+      logger::log_trace("DataAbstract$check executed the code to reproduce the data - result: { res }")
       return(res)
     },
     #' @description
@@ -259,7 +259,6 @@ DataAbstract <- R6::R6Class( #nolint
 
       private$check_result <- NULL
       logger::log_trace("DataAbstract$mutate mutate code and vars set.")
-
       return(invisible(self))
     },
     #' @description
@@ -306,8 +305,7 @@ DataAbstract <- R6::R6Class( #nolint
     set_check = function(check = FALSE) {
       stopifnot(is_logical_single(check))
       private$.check <- check
-      logger::log_trace("DataAbstract$set_check set check: { check }")
-
+      logger::log_trace("DataAbstract$set_check check set to: { check }")
       return(invisible(self))
     },
     #' @description
@@ -365,7 +363,6 @@ DataAbstract <- R6::R6Class( #nolint
     #' For example if `DatasetConnector` has a dependency on some `Dataset`, this
     #' `Dataset` is reassigned inside of `DatasetConnector`.
     reassign_datasets_vars = function() {
-      logger::log_trace("DataAbstract$reassign_datasets_vars reassigning vars...")
       for (dataset in self$get_items()) {
         dataset$reassign_datasets_vars(
           datasets = self$get_items()
@@ -395,7 +392,7 @@ DataAbstract <- R6::R6Class( #nolint
     check_combined_code = function() {
       execution_environment <- new.env(parent = parent.env(globalenv()))
       self$get_code_class(only_pull = TRUE)$eval(envir = execution_environment)
-      all(vapply(
+      res <- all(vapply(
         Filter(is_pulled, self$get_items()),
         function(dataset) {
           data <- get_raw_data(dataset)
@@ -404,6 +401,8 @@ DataAbstract <- R6::R6Class( #nolint
         },
         logical(1)
       ))
+      logger::log_trace("DataAbstract$check_combined_code reproducibility result of the combined code: { res }")
+      res
     },
     get_datasets_code_class = function() {
       res <- CodeClass$new()

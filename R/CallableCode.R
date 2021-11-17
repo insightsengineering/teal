@@ -47,9 +47,7 @@ CallableCode <- R6::R6Class( # nolint
 
       private$code <- code
       private$call <- private$get_callable_code(code)
-      logger::log_trace(
-        "CallableCode$initialize initialized with call: { deparse1(private$call) }"
-      )
+      logger::log_trace("CallableCode$initialize initialized.")
 
       return(invisible(self))
     },

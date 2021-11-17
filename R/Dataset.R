@@ -83,9 +83,7 @@ Dataset <- R6::R6Class( # nolint
         private$code$append(code)
       }
 
-      logger::log_trace(
-        "Dataset$initialize initialized dataset: { self$get_dataname() }"
-      )
+      logger::log_trace("Dataset$initialize initialized dataset: { self$get_dataname() }")
       return(invisible(self))
     },
 
@@ -275,7 +273,6 @@ Dataset <- R6::R6Class( # nolint
     #' )
     #'
     reassign_datasets_vars = function(datasets) {
-      logger::log_trace("Dataset$reassign_datasets_vars reassigning vars for dataset: { self$get_dataname() }.")
       stopifnot(is_fully_named_list(datasets))
 
       common_var_r6 <- intersect(names(datasets), names(private$var_r6))

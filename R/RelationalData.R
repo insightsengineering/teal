@@ -117,7 +117,6 @@ RelationalData <- R6::R6Class( # nolint
     #'  argument passed to `clone` method. If `TRUE` deep copy is made
     #' @return self invisible
     copy = function(deep = FALSE) {
-      logger::log_trace("RelationalData$copy copying self...")
       new_self <- self$clone(deep = deep)
       new_self$reassign_datasets_vars()
       logger::log_trace("RelationalData$copy copied self.")
@@ -292,9 +291,6 @@ RelationalData <- R6::R6Class( # nolint
           )
         ),
         server = function(input, output, session) {
-          logger::log_trace(
-            "RelationalData$launch initializing server in the interactive session..."
-          )
           session$onSessionEnded(stopApp)
           dat <- self$get_server()(id = "main_app")
 
@@ -305,9 +301,6 @@ RelationalData <- R6::R6Class( # nolint
               stopApp()
             }
           })
-          logger::log_trace(
-            "RelationalData$launch initialized server in the interactive session"
-          )
           NULL
         }
       )
@@ -336,7 +329,7 @@ RelationalData <- R6::R6Class( # nolint
       data_obj_1$mutate_join_keys(dataset_2, val)
       data_obj_2$mutate_join_keys(dataset_1, val)
 
-      logger::log_trace("RelationalData$mutate_join_keys modified join keys.")
+      logger::log_trace("RelationalData$mutate_join_keys modified the join keys.")
       return(invisible(self))
     },
 
@@ -380,6 +373,7 @@ RelationalData <- R6::R6Class( # nolint
         }
         dataset$check_keys()
       }
+      logger::log_trace("CDISCData$check_metadata metadata check passed")
 
       return(invisible(TRUE))
     }
