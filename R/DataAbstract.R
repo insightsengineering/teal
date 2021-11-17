@@ -256,9 +256,14 @@ DataAbstract <- R6::R6Class( #nolint
         code = code,
         deps = names(vars)
       )
-
       private$check_result <- NULL
-      logger::log_trace("DataAbstract$mutate mutate code and vars set.")
+      logger::log_trace(
+        sprintf(
+          "DataAbstract$mutate code (%s lines) and vars (%s) set.",
+          length(parse(text = code)),
+          paste(names(vars), collapse = ', ')
+        )
+      )
       return(invisible(self))
     },
     #' @description
@@ -292,7 +297,14 @@ DataAbstract <- R6::R6Class( #nolint
       )
 
       private$check_result <- NULL
-      logger::log_trace("DataAbstract$mutate_dataset mutate code set for dataset: { dataname }")
+      logger::log_trace(
+        sprintf(
+          "DataAbstract$mutate code (%s lines) and vars (%s) set for dataset: %s",
+          length(parse(text = code)),
+          paste(names(vars), collapse = ', '),
+          dataname
+        )
+      )
 
       return(invisible(self))
     },

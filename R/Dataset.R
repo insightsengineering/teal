@@ -448,7 +448,14 @@ Dataset <- R6::R6Class( # nolint
     #'
     #' @return (`self`) invisibly for chaining
     mutate = function(code, vars = list(), force_delay = FALSE) {
-      logger::log_trace("Dataset$mutate mutating dataset: { self$get_dataname() }.")
+      logger::log_trace(
+        sprintf(
+          "DatasetConnector$mutate mutating dataset '%s' using the code (%s lines) and vars (%s)",
+          self$get_dataname(),
+          length(parse(text = code)),
+          paste(names(vars), collapse = ', ')
+        )
+      )
 
       stopifnot(is_logical_single(force_delay))
       stopifnot(is_fully_named_list(vars))
@@ -471,7 +478,14 @@ Dataset <- R6::R6Class( # nolint
           private$mutate_eager()
         }
       }
-      logger::log_trace("Dataset$mutate mutated dataset: { self$get_dataname() }.")
+      logger::log_trace(
+        sprintf(
+          "Dataset$mutate mutated dataset '%s' using the code (%s lines) and vars (%s)",
+          self$get_dataname(),
+          length(parse(text = code)),
+          paste(names(vars), collapse = ', ')
+        )
+      )
 
       return(invisible(self))
     },
@@ -568,6 +582,14 @@ Dataset <- R6::R6Class( # nolint
     mutate_delayed = function(code, vars) {
       private$set_vars_internal(vars, is_mutate_vars = TRUE)
       private$mutate_code[[length(private$mutate_code) + 1]] <- list(code = code, deps = names(vars))
+      logger::log_trace(
+        sprintf(
+          "DatasetConnector$mutate_delayed set the code (%s lines) and vars (%s) for dataset: %s",
+          length(parse(text = code)),
+          paste(names(vars), collapse = ', '),
+          self$get_dataname()
+        )
+      )
       return(invisible(self))
     },
 
@@ -591,14 +613,17 @@ Dataset <- R6::R6Class( # nolint
       private$mutate_code <- list()
       private$mutate_vars <- list()
 
-
       # dataset is recreated by replacing data by mutated object
       # mutation code is added to the code which replicates the data
       # because new_code contains also code of the
-      self$recreate(
+      new_self <- self$recreate(
         x = new_df,
         vars = list()
       )
+
+      logger::log_trace("DatasetConnector$mutate_eager executed mutate code for dataset: { self$get_dataname() }")
+
+      new_self
     },
 
     # need to have a custom deep_clone because one of the key fields are reference-type object

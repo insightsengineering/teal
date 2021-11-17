@@ -374,7 +374,16 @@ DatasetConnector <- R6::R6Class( #nolint
       private$dataset$mutate(code = code, vars = vars, force_delay = !self$is_pulled())
       # should be called at the end so that failure in Dataset object will prevent it.
       private$set_var_r6(vars)
-      logger::log_trace("DatasetConnector$mutate mutated dataset: {self$get_dataname() }.")
+      logger::log_trace(
+        sprintf(
+          "DatasetConnector$mutate mutated dataset '%s' using the code (%s lines) and vars (%s)",
+          self$get_dataname(),
+          length(parse(text = code)),
+          paste(names(vars), collapse = ', ')
+        )
+      )
+
+
       return(invisible(self))
     },
 
