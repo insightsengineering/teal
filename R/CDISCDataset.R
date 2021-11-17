@@ -122,7 +122,7 @@ CDISCDataset <- R6::R6Class( # nolint
       stopifnot(is_character_empty(parent) || is_character_single(parent))
       private$parent <- parent
 
-      logger::log_trace("Dataset$set_parent parent set for dataset: { self$get_dataname() }")
+      logger::log_trace("CDISCDataset$set_parent parent set for dataset: { self$get_dataname() }")
       return(invisible(self))
     }
   ),
