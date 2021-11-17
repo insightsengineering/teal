@@ -158,6 +158,7 @@ reference:
     - join_keys
     - log_app_usage
     - no_selected_as_NULL
+    - pdeparse
     - predefined_filters_module
     - print.choices_labeled
     - print.teal_module
