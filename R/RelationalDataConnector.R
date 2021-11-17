@@ -348,6 +348,7 @@ RelationalDataConnector <- R6::R6Class( #nolint
 
       # close connection
       if_not_null(private$connection, private$connection$close(silent = TRUE))
+      
       logger::log_trace("RelationalDataConnector$pull data pulled.")
 
       return(invisible(self))
