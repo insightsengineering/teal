@@ -430,9 +430,7 @@ RelationalData <- R6::R6Class( # nolint
       )
     },
     server = function(input, output, session) {
-      logger::log_trace(
-        "RelationalData$server initializing..."
-      )
+      logger::log_trace("RelationalData$server initializing...")
 
       shinyjs::show("delayed_data")
       for (dc in self$get_connectors()) {
