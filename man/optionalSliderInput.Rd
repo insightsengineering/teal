@@ -11,14 +11,16 @@ optionalSliderInput(inputId, label, min, max, value, label_help = NULL, ...)
 
 \item{label}{Display label for the control, or \code{NULL} for no label.}
 
-\item{min}{The minimum value (inclusive) that can be selected.}
+\item{min}{The minimum and maximum values (inclusive) that can be
+selected.}
 
-\item{max}{The maximum value (inclusive) that can be selected.}
+\item{max}{The minimum and maximum values (inclusive) that can be
+selected.}
 
-\item{value}{The initial value of the slider. A numeric vector of length one
-will create a regular slider; a numeric vector of length two will create a
-double-ended range slider. A warning will be issued if the value doesn't
-fit between \code{min} and \code{max}.}
+\item{value}{The initial value of the slider, either a number, a date
+(class Date), or a date-time (class POSIXt). A length one vector will
+create a regular slider; a length two vector will create a double-ended
+range slider. Must lie between \code{min} and \code{max}.}
 
 \item{label_help}{optional an object of class \code{shiny.tag}. E.g. an object
 returned by \code{\link[shiny]{helpText}}}
