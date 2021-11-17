@@ -125,7 +125,7 @@ CDISCData <- R6::R6Class( # nolint
           }
         }
       }
-      logger::log_trace("CDISCData$check_metadata metadata check passed")
+      logger::log_trace("CDISCData$check_metadata metadata check passed.")
 
       return(invisible(TRUE))
     }

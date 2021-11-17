@@ -649,6 +649,7 @@ DataConnection <- R6::R6Class( # nolint
     #
     # @return (`logical`)
     ping = function() {
+      logger::log_trace("DataConnection$ping pinging the connection...")
       if (!is.null(private$ping_fun)) {
         ping_res <- private$ping_fun$run()
         return(isTRUE(ping_res))

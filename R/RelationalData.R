@@ -375,7 +375,7 @@ RelationalData <- R6::R6Class( # nolint
         }
         dataset$check_keys()
       }
-      logger::log_trace("CDISCData$check_metadata metadata check passed")
+      logger::log_trace("RelationalData$check_metadata metadata check passed")
 
       return(invisible(TRUE))
     }

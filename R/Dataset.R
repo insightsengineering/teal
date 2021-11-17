@@ -594,6 +594,7 @@ Dataset <- R6::R6Class( # nolint
     },
 
     mutate_eager = function() {
+      logger::log_trace("DatasetConnector$mutate_eager executing mutate code for dataset: { self$get_dataname() }...")
       new_df <- private$execute_code(
         code = private$mutate_list_to_code_class(),
         vars = c(

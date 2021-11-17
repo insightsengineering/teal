@@ -69,7 +69,7 @@ CodeClass <- R6::R6Class( # nolint
     initialize = function(code = character(0), dataname = character(0), deps = character(0)) {
       if (length(code) > 0)
         self$set_code(code, dataname, deps)
-         logger::log_trace("CodeClass initialized.")
+      logger::log_trace("CodeClass initialized.")
       return(invisible(self))
     },
     #' @description
@@ -78,14 +78,14 @@ CodeClass <- R6::R6Class( # nolint
     #' @return changed \code{CodeClass} object
     append = function(x) {
       stopifnot(is(x, "CodeClass"))
-      if (is_empty(x$code)) {
-        return(invisible(self))
-      } else {
+      if (!is_empty(x$code)) {
         for (code_i in x$code) {
           private$set_code_single(code_i)
         }
-        return(invisible(self))
+        logger::log_trace("CodeClass$append CodeClass appended.")
       }
+
+      return(invisible(self))
     },
     #' @description
     #' Set code in form of character
@@ -107,7 +107,7 @@ CodeClass <- R6::R6Class( # nolint
       for (code_single in code) {
         private$set_code_single(code_single, dataname, deps)
       }
-
+      logger::log_trace("CodeClass$set_code code is set.")
       return(invisible(self))
     },
     #' @description
@@ -130,22 +130,23 @@ CodeClass <- R6::R6Class( # nolint
     #' @param envir (\code{environment}) environment in which code will be evaluated
     #' @return invisibly \code{NULL}
     eval = function(envir = new.env(parent = parent.env(.GlobalEnv))) {
-     for (x in self$get_code(deparse = FALSE)) {
-       out <- tryCatch(
-         base::eval(x, envir = envir),
-         error = function(e) e
-       )
+      for (x in self$get_code(deparse = FALSE)) {
+        out <- tryCatch(
+          base::eval(x, envir = envir),
+          error = function(e) e
+        )
 
-       if (is(out, "error")) {
-         error_msg <- sprintf("%s\n\nEvaluation of the code failed:\n %s", pdeparse(x), conditionMessage(out))
+        if (is(out, "error")) {
+          error_msg <- sprintf("%s\n\nEvaluation of the code failed:\n %s", pdeparse(x), conditionMessage(out))
 
-         rlang::with_options(
-           stop(error_msg, call. = FALSE),
-           warning.length = max(min(8170, nchar(error_msg) + 30), 100)
-         )
-       }
-     }
-     return(invisible(NULL))
+          rlang::with_options(
+            stop(error_msg, call. = FALSE),
+            warning.length = max(min(8170, nchar(error_msg) + 30), 100)
+          )
+        }
+      }
+      logger::log_trace("CodeClass$eval successfuly evaluated the code.")
+      return(invisible(NULL))
     }
   ),
 
@@ -220,9 +221,9 @@ CodeClass <- R6::R6Class( # nolint
   ## __Active Fields ====
   active = list(
     #' @field code (\code{list}) Derive the code of the dataset.
-    code = function() {
-      private$.code
-    }
+       code = function() {
+         private$.code
+       }
   )
 )
 

@@ -205,6 +205,7 @@ PythonCodeClass <- R6::R6Class( # nolint
       }
 
       new_set <- execution_environment[[dataname]]
+      logger::log_trace("PythonCodeClass$eval successfuly evaluated the code.")
 
       return(new_set)
     }
