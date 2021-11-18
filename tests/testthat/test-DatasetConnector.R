@@ -609,7 +609,7 @@ testthat::test_that("code_dataset_connector - Modify vars", {
     "Modification of the local variable 'ADSL' is not allowed."
   )
 
-  expect_silent(adtte$pull(try = TRUE))
+  testthat::expect_output(adtte$pull(try = TRUE), "\\[ERROR\\] DatasetConnector\\$pull failed to pull")
 
   testthat::expect_true(
     grepl("Modification of the local variable", adtte$get_error_message())
