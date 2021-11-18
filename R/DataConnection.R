@@ -558,7 +558,7 @@ DataConnection <- R6::R6Class( # nolint
           "definition with a single additional parameter 'connection'."
         ))
       }
-      logger::log_trace("DataConnection$set_close_server close_server set")
+      logger::log_trace("DataConnection$set_close_server close_server set.")
 
       invisible(self)
     }
