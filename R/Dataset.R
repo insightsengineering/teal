@@ -450,7 +450,7 @@ Dataset <- R6::R6Class( # nolint
     mutate = function(code, vars = list(), force_delay = FALSE) {
       logger::log_trace(
         sprintf(
-          "DatasetConnector$mutate mutating dataset '%s' using the code (%s lines) and vars (%s)",
+          "DatasetConnector$mutate mutating dataset '%s' using the code (%s lines) and vars (%s).",
           self$get_dataname(),
           length(parse(text = if (is(code, "CodeClass")) code$get_code() else code)),
           paste(names(vars), collapse = ', ')
