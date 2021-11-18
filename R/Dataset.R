@@ -545,7 +545,7 @@ Dataset <- R6::R6Class( # nolint
           )
         }
       }
-      logger::log_trace("Dataset$check_keys keys checking passed.")
+      logger::log_trace("Dataset$check_keys keys checking passed for dataset: { self$get_dataname() }.")
 
     },
     #' @description
