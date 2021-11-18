@@ -193,7 +193,7 @@ DataConnection <- R6::R6Class( # nolint
         } else {
           private$opened <- FALSE
           private$conn <- NULL
-          logger::log_trace("DataConnection$open connection failed to open.")
+          logger::log_error("DataConnection$open connection failed to open.")
         }
 
         return(invisible(self))
@@ -406,7 +406,7 @@ DataConnection <- R6::R6Class( # nolint
       if_cond(private$check_close_fun(silent = silent), return(), isFALSE)
       close_res <- private$close_fun$run(try = try)
       if (is(close_res, "error")) {
-        logger::log_trace("DataConnection$close failed to close the connection.")
+        logger::log_error("DataConnection$close failed to close the connection.")
         return(close_res)
       } else {
         private$opened <- FALSE

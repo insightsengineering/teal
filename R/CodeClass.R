@@ -221,9 +221,9 @@ CodeClass <- R6::R6Class( # nolint
   ## __Active Fields ====
   active = list(
     #' @field code (\code{list}) Derive the code of the dataset.
-       code = function() {
-         private$.code
-       }
+    code = function() {
+      private$.code
+    }
   )
 )
 
