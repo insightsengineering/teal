@@ -480,7 +480,7 @@ Dataset <- R6::R6Class( # nolint
       }
       logger::log_trace(
         sprintf(
-          "Dataset$mutate mutated dataset '%s' using the code (%s lines) and vars (%s)",
+          "Dataset$mutate mutated dataset '%s' using the code (%s lines) and vars (%s).",
           self$get_dataname(),
           length(parse(text = if (is(code, "CodeClass")) code$get_code() else code)),
           paste(names(vars), collapse = ', ')
