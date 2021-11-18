@@ -83,7 +83,7 @@ Dataset <- R6::R6Class( # nolint
         private$code$append(code)
       }
 
-      logger::log_trace("Dataset initialized for dataset: { self$get_dataname() }")
+      logger::log_trace("Dataset initialized for dataset: { self$get_dataname() }.")
       return(invisible(self))
     },
 
