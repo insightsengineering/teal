@@ -381,7 +381,7 @@ DataAbstract <- R6::R6Class( #nolint
         )
       }
       logger::log_trace("DataAbstract$reassign_datasets_vars reassigned vars.")
-      NULL
+      invisible(NULL)
     }
   ),
 
