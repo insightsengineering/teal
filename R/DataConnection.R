@@ -79,7 +79,6 @@ DataConnection <- R6::R6Class( # nolint
           if (!is.null(close_fun)) " close_fun" else "",
           if (!is.null(ping_fun))  " ping_fun"  else "",
           if (if_conn_obj)         " conn"      else ""
-
         )
       )
       invisible(self)
