@@ -186,6 +186,7 @@ DataConnection <- R6::R6Class( # nolint
       if_cond(private$check_open_fun(silent = silent), return(), isFALSE)
       if (isTRUE(private$opened) && isTRUE(private$ping())) {
         private$opened <- TRUE
+        logger::log_trace("DataConnection$open connection already opened - skipped.")
         return(invisible(self))
       } else {
         open_res <- private$open_fun$run(args = args, try = try)
