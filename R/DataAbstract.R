@@ -299,7 +299,7 @@ DataAbstract <- R6::R6Class( #nolint
       private$check_result <- NULL
       logger::log_trace(
         sprintf(
-          "DataAbstract$mutate code (%s lines) and vars (%s) set for dataset: %s",
+          "DataAbstract$mutate code (%s lines) and vars (%s) set for dataset: %s.",
           length(parse(text = code)),
           paste(names(vars), collapse = ', '),
           dataname
