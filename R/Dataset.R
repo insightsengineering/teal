@@ -106,7 +106,7 @@ Dataset <- R6::R6Class( # nolint
         label = label,
         vars = vars
       )
-      logger::log_trace("Dataset$recreate recreated dataset: { self$get_dataname() }")
+      logger::log_trace("Dataset$recreate recreated dataset: { self$get_dataname() }.")
       return(res)
     },
     #' Prints this Dataset.
