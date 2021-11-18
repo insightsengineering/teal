@@ -501,7 +501,7 @@ DataConnection <- R6::R6Class( # nolint
           )
         )
       }
-      logger::log_trace("DataConnection$close_ui close_ui set")
+      logger::log_trace("DataConnection$close_ui close_ui set.")
 
       return(invisible(self))
     },
