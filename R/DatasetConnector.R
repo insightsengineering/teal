@@ -252,7 +252,7 @@ DatasetConnector <- R6::R6Class( #nolint
       if (self$is_pulled()) {
         private$dataset$set_dataset_label(label)
       }
-      logger::log_trace("DatasetConnector$set_dataset_label label set for dataset: { self$get_dataname() }")
+      logger::log_trace("DatasetConnector$set_dataset_label label set for dataset: { self$get_dataname() }.")
 
       return(invisible(self))
     },
