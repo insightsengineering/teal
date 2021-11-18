@@ -584,7 +584,7 @@ Dataset <- R6::R6Class( # nolint
       private$mutate_code[[length(private$mutate_code) + 1]] <- list(code = code, deps = names(vars))
       logger::log_trace(
         sprintf(
-          "DatasetConnector$mutate_delayed set the code (%s lines) and vars (%s) for dataset: %s",
+          "DatasetConnector$mutate_delayed set the code (%s lines) and vars (%s) for dataset: %s.",
           length(parse(text = if (is(code, "CodeClass")) code$get_code() else code)),
           paste(names(vars), collapse = ', '),
           self$get_dataname()
