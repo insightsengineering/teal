@@ -72,7 +72,7 @@ DatasetConnector <- R6::R6Class( #nolint
         private$dataset$mutate(code = code, vars = vars, force_delay = TRUE)
       }
 
-      logger::log_trace("DatasetConnector initialized for dataset: { self$get_dataname() }")
+      logger::log_trace("DatasetConnector initialized for dataset: { self$get_dataname() }.")
 
       return(invisible(self))
     },
@@ -223,7 +223,7 @@ DatasetConnector <- R6::R6Class( #nolint
     #'   objects with valid pointers.
     #' @return NULL invisible
     reassign_datasets_vars = function(datasets) {
-      logger::log_trace("DatasetConnector$reassign_datasets_vars reassigning vars in dataset: { self$get_dataname() }")
+      logger::log_trace("DatasetConnector$reassign_datasets_vars reassigning vars in dataset: { self$get_dataname() }.")
       stopifnot(is_fully_named_list(datasets))
 
       common_var_r6 <- intersect(names(datasets), names(private$var_r6))
@@ -235,7 +235,7 @@ DatasetConnector <- R6::R6Class( #nolint
       if (!is.null(private$dataset)) {
         private$dataset$reassign_datasets_vars(datasets)
       }
-      logger::log_trace("DatasetConnector$reassign_datasets_vars reassigned vars in dataset: { self$get_dataname() }")
+      logger::log_trace("DatasetConnector$reassign_datasets_vars reassigned vars in dataset: { self$get_dataname() }.")
 
       invisible(NULL)
     },

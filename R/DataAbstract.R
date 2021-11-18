@@ -44,7 +44,7 @@ DataAbstract <- R6::R6Class( #nolint
         }
       }
       private$check_result <- res
-      logger::log_trace("DataAbstract$check executed the code to reproduce the data - result: { res }")
+      logger::log_trace("DataAbstract$check executed the code to reproduce the data - result: { res }.")
       return(res)
     },
     #' @description
@@ -317,7 +317,7 @@ DataAbstract <- R6::R6Class( #nolint
     set_check = function(check = FALSE) {
       stopifnot(is_logical_single(check))
       private$.check <- check
-      logger::log_trace("DataAbstract$set_check check set to: { check }")
+      logger::log_trace("DataAbstract$set_check check set to: { check }.")
       return(invisible(self))
     },
     #' @description
@@ -364,7 +364,7 @@ DataAbstract <- R6::R6Class( #nolint
         code = code,
         dataname = self$get_datanames()
       )
-      logger::log_trace("DataAbstract$set_pull_code pull code is set")
+      logger::log_trace("DataAbstract$set_pull_code pull code is set.")
 
       return(invisible(self))
     },
@@ -413,7 +413,7 @@ DataAbstract <- R6::R6Class( #nolint
         },
         logical(1)
       ))
-      logger::log_trace("DataAbstract$check_combined_code reproducibility result of the combined code: { res }")
+      logger::log_trace("DataAbstract$check_combined_code reproducibility result of the combined code: { res }.")
       res
     },
     get_datasets_code_class = function() {

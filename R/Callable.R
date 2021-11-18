@@ -42,7 +42,7 @@ Callable <- R6::R6Class( #nolint
 
         # variable can't be modified
         lockBinding(sym = x, env = private$env)
-        logger::log_trace("Callable$assign_to_env assigned '{ x }' to the environment")
+        logger::log_trace("Callable$assign_to_env assigned '{ x }' to the environment.")
       }
 
       return(invisible(self))
@@ -77,7 +77,7 @@ Callable <- R6::R6Class( #nolint
       )
       private$check_run_output(res, try = try)
 
-      logger::log_trace("Callable$run callable has been run")
+      logger::log_trace("Callable$run callable has been run.")
       if (return) {
         return(res)
       } else {
@@ -135,7 +135,7 @@ Callable <- R6::R6Class( #nolint
         if (try) {
           private$failed <- TRUE
           private$error_msg <- error_msg
-          logger::log_error("Callable$check_run_output { error_msg }")
+          logger::log_error("Callable$check_run_output { error_msg }.")
         } else {
           stop(error_msg, call. = FALSE)
         }

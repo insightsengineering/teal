@@ -31,7 +31,7 @@ JoinKeys <- R6::R6Class( # nolint
     #' Create a new object of `JoinKeys`
     #' @return empty (`JoinKeys`)
     initialize = function() {
-      logger::log_trace("JoinKeys initialized")
+      logger::log_trace("JoinKeys initialized.")
       return(invisible(self))
     },
     #' @description
