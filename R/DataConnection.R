@@ -74,7 +74,7 @@ DataConnection <- R6::R6Class( # nolint
 
       logger::log_trace(
         sprintf(
-          "DataConnection initialized with:%s%s%s%s",
+          "DataConnection initialized with:%s%s%s%s.",
           if (!is.null(open_fun))  " open_fun"  else "",
           if (!is.null(close_fun)) " close_fun" else "",
           if (!is.null(ping_fun))  " ping_fun"  else "",

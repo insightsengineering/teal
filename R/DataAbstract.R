@@ -364,7 +364,7 @@ DataAbstract <- R6::R6Class( #nolint
         code = code,
         dataname = self$get_datanames()
       )
-      logger::log_trace("DataAbstract$set_pull_code pull code is set.")
+      logger::log_trace("DataAbstract$set_pull_code pull code set.")
 
       return(invisible(self))
     },

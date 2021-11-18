@@ -107,7 +107,7 @@ CodeClass <- R6::R6Class( # nolint
       for (code_single in code) {
         private$set_code_single(code_single, dataname, deps)
       }
-      logger::log_trace("CodeClass$set_code code is set.")
+      logger::log_trace("CodeClass$set_code code set.")
       return(invisible(self))
     },
     #' @description
