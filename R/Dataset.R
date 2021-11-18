@@ -452,7 +452,7 @@ Dataset <- R6::R6Class( # nolint
         sprintf(
           "DatasetConnector$mutate mutating dataset '%s' using the code (%s lines) and vars (%s)",
           self$get_dataname(),
-          length(parse(text = code)),
+          length(parse(text = if (is(code, "CodeClass")) code$get_code() else code)),
           paste(names(vars), collapse = ', ')
         )
       )
@@ -482,7 +482,7 @@ Dataset <- R6::R6Class( # nolint
         sprintf(
           "Dataset$mutate mutated dataset '%s' using the code (%s lines) and vars (%s)",
           self$get_dataname(),
-          length(parse(text = code)),
+          length(parse(text = if (is(code, "CodeClass")) code$get_code() else code)),
           paste(names(vars), collapse = ', ')
         )
       )
@@ -585,7 +585,7 @@ Dataset <- R6::R6Class( # nolint
       logger::log_trace(
         sprintf(
           "DatasetConnector$mutate_delayed set the code (%s lines) and vars (%s) for dataset: %s",
-          length(parse(text = code)),
+          length(parse(text = if (is(code, "CodeClass")) code$get_code() else code)),
           paste(names(vars), collapse = ', '),
           self$get_dataname()
         )

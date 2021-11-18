@@ -314,7 +314,6 @@ DatasetConnector <- R6::R6Class( #nolint
     pull = function(args = NULL, try = FALSE) {
       logger::log_trace("DatasetConnector$pull pulling dataset: {self$get_dataname() }.")
       data <- private$pull_internal(args = args, try = try)
-
       if (!self$is_failed()) {
         # The first time object is pulled, private$dataset may be NULL if mutate method was never called
         has_dataset <- !is.null(private$dataset)
@@ -378,7 +377,7 @@ DatasetConnector <- R6::R6Class( #nolint
         sprintf(
           "DatasetConnector$mutate mutated dataset '%s' using the code (%s lines) and vars (%s)",
           self$get_dataname(),
-          length(parse(text = code)),
+          length(parse(text = if (is(code, "CodeClass")) code$get_code() else code)),
           paste(names(vars), collapse = ', ')
         )
       )
