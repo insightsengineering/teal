@@ -437,7 +437,6 @@ RelationalData <- R6::R6Class( # nolint
       shinyjs::show("delayed_data")
       for (dc in self$get_connectors()) {
         if (is(dc, class2 = "RelationalDataConnector")) {
-          logger::log_trace("RelationalData$server@1 calling preopen module of { dc$get_dataname() }.")
           dc$get_preopen_server()(id = dc$id)
         }
       }
