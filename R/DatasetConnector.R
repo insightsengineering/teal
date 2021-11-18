@@ -289,7 +289,7 @@ DatasetConnector <- R6::R6Class( #nolint
     mutate_join_keys = function(dataset, val) {
       self$get_join_keys()$mutate(private$dataname, dataset, val)
       logger::log_trace(
-        "DatasetConnector$mutate_join_keys join_keys modified keys of '{ self$get_dataname() }' against '{ dataset }'."
+        "DatasetConnector$mutate_join_keys join_keys modified keys of { self$get_dataname() } against { dataset }."
       )
 
       return(invisible(self))

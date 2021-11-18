@@ -337,7 +337,7 @@ Dataset <- R6::R6Class( # nolint
     mutate_join_keys = function(dataset, val) {
       self$get_join_keys()$mutate(private$dataname, dataset, val)
       logger::log_trace(
-        "DatasetConnector$mutate_join_keys join_keys modified keys of '{ self$get_dataname() }' against '{ dataset }'."
+        "DatasetConnector$mutate_join_keys join_keys modified keys of { self$get_dataname() } against { dataset }."
       )
       return(invisible(self))
     },
@@ -521,7 +521,7 @@ Dataset <- R6::R6Class( # nolint
       }, error = function(e) {
         FALSE
       })
-      logger::log_trace("Dataset$check dataset '{ self$get_dataname() }' reproducibility result: { res_check }.")
+      logger::log_trace("Dataset$check { self$get_dataname() } reproducibility result: { res_check }.")
 
       return(res_check)
     },

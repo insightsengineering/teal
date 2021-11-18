@@ -122,7 +122,7 @@ MAEDataset <- R6::R6Class( # nolint
       }, error = function(e) {
         FALSE
       })
-      logger::log_trace("Dataset$check dataset '{ self$get_dataname() }' reproducibility result: { res_check }.")
+      logger::log_trace("Dataset$check { self$get_dataname() } reproducibility result: { res_check }.")
 
       return(res_check)
     },

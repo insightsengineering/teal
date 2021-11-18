@@ -57,7 +57,7 @@ CallablePythonCode <- R6::R6Class( #nolint
       }
 
       private$vars_to_assign[[x]] <- value
-      logger::log_trace("CallablePythonCode$assign_to_env assigned '{ x }' to the environment.")
+      logger::log_trace("CallablePythonCode$assign_to_env assigned { x } to the environment.")
 
       return(invisible(self))
     },

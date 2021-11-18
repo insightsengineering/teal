@@ -330,7 +330,7 @@ RelationalData <- R6::R6Class( # nolint
       data_obj_2$mutate_join_keys(dataset_1, val)
 
       logger::log_trace(
-        "RelationalData$mutate_join_keys modified the join keys between '{ dataset_1 }' and '{ dataset_2 }'"
+        "RelationalData$mutate_join_keys modified the join keys between { dataset_1 } and { dataset_2 }"
       )
       return(invisible(self))
     },
