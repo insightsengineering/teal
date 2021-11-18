@@ -116,7 +116,7 @@ RelationalDataConnector <- R6::R6Class( #nolint
 
 
       logger::log_trace(
-        "RelationalDataConnector initialized with data: { paste(self$get_datanames(), collapse = ' ') }"
+        "RelationalDataConnector initialized with data: { paste(self$get_datanames(), collapse = ' ') }."
       )
       return(invisible(self))
     },
