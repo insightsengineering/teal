@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">teal</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.10.0.9017</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.10.0.9019</span>
       </span>
     </div>
 
@@ -214,7 +214,7 @@ whether condition calls should be prefixed by dataname. Possible values:</p><ul>
     <span class='fu'><a href='https://rdrr.io/pkg/shiny/man/callModule.html'>callModule</a></span><span class='op'>(</span><span class='va'>filter_state</span><span class='op'>$</span><span class='va'>server</span>, <span class='st'>"app"</span><span class='op'>)</span>
 
     <span class='va'>output</span><span class='op'>$</span><span class='va'>call</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/shiny/man/renderPrint.html'>renderText</a></span><span class='op'>(</span>
-      <span class='fu'><a href='pdeparse.html'>pdeparse</a></span><span class='op'>(</span><span class='va'>filter_state</span><span class='op'>$</span><span class='fu'>get_call</span><span class='op'>(</span><span class='op'>)</span><span class='op'>)</span>
+      <span class='fu'><a href='pdeparse.html'>pdeparse</a></span><span class='op'>(</span><span class='va'>filter_state</span><span class='op'>$</span><span class='fu'>get_call</span><span class='op'>(</span><span class='op'>)</span>, collapse <span class='op'>=</span> <span class='st'>"\n"</span><span class='op'>)</span>
     <span class='op'>)</span>
   <span class='op'>}</span>
 <span class='op'>)</span>
