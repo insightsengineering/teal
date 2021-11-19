@@ -105,7 +105,9 @@ RelationalData <- R6::R6Class( # nolint
 
       self$id <- sample.int(1e11, 1, useHash = TRUE)
 
-
+      logger::log_trace(
+        "RelationalData initialized with data: { paste(self$get_datanames(), collapse = ' ') }."
+      )
       return(invisible(self))
     },
     #' @description
@@ -117,6 +119,7 @@ RelationalData <- R6::R6Class( # nolint
     copy = function(deep = FALSE) {
       new_self <- self$clone(deep = deep)
       new_self$reassign_datasets_vars()
+      logger::log_trace("RelationalData$copy{if (deep) ' deep-' else ' '}copied self.")
       invisible(new_self)
     },
     #' Prints this RelationalData.
@@ -292,11 +295,13 @@ RelationalData <- R6::R6Class( # nolint
           dat <- self$get_server()(id = "main_app")
 
           observeEvent(dat(), {
+
             if (self$is_pulled()) {
               shinyjs::show("data_loaded")
               stopApp()
             }
           })
+          NULL
         }
       )
     },
@@ -324,6 +329,9 @@ RelationalData <- R6::R6Class( # nolint
       data_obj_1$mutate_join_keys(dataset_2, val)
       data_obj_2$mutate_join_keys(dataset_1, val)
 
+      logger::log_trace(
+        "RelationalData$mutate_join_keys modified the join keys between { dataset_1 } and { dataset_2 }"
+      )
       return(invisible(self))
     },
 
@@ -367,6 +375,8 @@ RelationalData <- R6::R6Class( # nolint
         }
         dataset$check_keys()
       }
+      logger::log_trace("RelationalData$check_metadata metadata check passed.")
+
       return(invisible(TRUE))
     }
   ),
@@ -422,6 +432,8 @@ RelationalData <- R6::R6Class( # nolint
       )
     },
     server = function(input, output, session) {
+      logger::log_trace("RelationalData$server initializing...")
+
       shinyjs::show("delayed_data")
       for (dc in self$get_connectors()) {
         if (is(dc, class2 = "RelationalDataConnector")) {
@@ -430,6 +442,7 @@ RelationalData <- R6::R6Class( # nolint
       }
       rv <- reactiveVal(NULL)
       observeEvent(input$submit, {
+        logger::log_trace("RelationalData$server@1 submit button clicked.")
         # load data from all connectors
         for (dc in self$get_connectors()) {
           if (is(dc, class2 = "RelationalDataConnector")) {
@@ -448,7 +461,7 @@ RelationalData <- R6::R6Class( # nolint
         }
 
         if (self$is_pulled()) {
-
+          logger::log_trace("RelationalData$server@1 data is pulled.")
           withProgress(value = 1, message = "Checking data reproducibility", {
             # We check first and then mutate.
             #  mutate_code is reproducible by default we assume that we don't
@@ -460,7 +473,7 @@ RelationalData <- R6::R6Class( # nolint
             self$execute_mutate()
             self$check_metadata()
           })
-
+          logger::log_info("Data ready to pass to the application.")
           shinyjs::hide("delayed_data")
           rv(self)
         }

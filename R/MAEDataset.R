@@ -92,6 +92,8 @@ MAEDataset <- R6::R6Class( # nolint
         private$code$append(code)
       }
 
+      logger::log_trace("MAEDataset$initialize initialized dataset: { self$get_dataname() }.")
+
       return(invisible(self))
     },
     # ___ check ====
@@ -101,6 +103,7 @@ MAEDataset <- R6::R6Class( # nolint
     #'   \code{TRUE} if the dataset generated from evaluating the
     #'   \code{get_code()} code is identical to the raw data, else \code{FALSE}.
     check = function() {
+      logger::log_trace("Dataset$check executing the code to reproduce dataset: { self$get_dataname() }...")
       if (!is_character_single(self$get_code()) || !grepl("\\w+", self$get_code())) {
         stop(
           sprintf(
@@ -119,6 +122,7 @@ MAEDataset <- R6::R6Class( # nolint
       }, error = function(e) {
         FALSE
       })
+      logger::log_trace("Dataset$check { self$get_dataname() } reproducibility result: { res_check }.")
 
       return(res_check)
     },

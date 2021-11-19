@@ -52,7 +52,7 @@ label_keep_na_count <- function(na_count) {
 #'     callModule(filter_state$server, "app")
 #'
 #'     output$call <- renderText(
-#'       pdeparse(filter_state$get_call())
+#'       pdeparse(filter_state$get_call(), collapse = "\n")
 #'     )
 #'   }
 #' )

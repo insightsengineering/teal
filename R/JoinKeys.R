@@ -31,6 +31,7 @@ JoinKeys <- R6::R6Class( # nolint
     #' Create a new object of `JoinKeys`
     #' @return empty (`JoinKeys`)
     initialize = function() {
+      logger::log_trace("JoinKeys initialized.")
       return(invisible(self))
     },
     #' @description
@@ -52,6 +53,8 @@ JoinKeys <- R6::R6Class( # nolint
         }
       )
       names(res) <- names(self$get())
+
+      logger::log_trace("JoinKeys$split keys split.")
       return(res)
     },
     #' @description
@@ -69,6 +72,7 @@ JoinKeys <- R6::R6Class( # nolint
             self$mutate(dataset_1, dataset_2, jk$get()[[dataset_1]][[dataset_2]])
         }
       }
+      logger::log_trace("JoinKeys$merge keys merged.")
       return(invisible(self))
     },
     #' @description
@@ -104,6 +108,8 @@ JoinKeys <- R6::R6Class( # nolint
       stopifnot(is_character_vector(val, min_length = 0L))
 
       private$join_pair(join_key(dataset_1, dataset_2, val))
+
+      logger::log_trace("JoinKeys$mutate changed the keys between { dataset_1 } and { dataset_2 }.")
       return(invisible(self))
     },
     #' @description
@@ -130,6 +136,8 @@ JoinKeys <- R6::R6Class( # nolint
 
       stopifnot(is_class_list("JoinKeySet")(x))
       lapply(x, private$join_pair)
+
+      logger::log_trace("JoinKeys$set keys are set.")
       return(invisible(self))
     }
   ),

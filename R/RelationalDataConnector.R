@@ -114,6 +114,10 @@ RelationalDataConnector <- R6::R6Class( #nolint
 
       self$id <- sample.int(1e11, 1, useHash = TRUE)
 
+
+      logger::log_trace(
+        "RelationalDataConnector initialized with data: { paste(self$get_datanames(), collapse = ' ') }."
+      )
       return(invisible(self))
     },
     #' Prints this RelationalDataConnector.
@@ -246,6 +250,7 @@ RelationalDataConnector <- R6::R6Class( #nolint
     #' @return nothing
     set_pull_args = function(args) {
       lapply(private$datasets, function(x) set_args(x, args))
+      logger::log_trace("RelationalDataConnector$set_pull_args pull args set.")
       return(invisible(NULL))
     },
     #' @description
@@ -260,8 +265,8 @@ RelationalDataConnector <- R6::R6Class( #nolint
       stopifnot(is(f, "function"))
       stopifnot("id" %in% names(formals(f)))
       stopifnot(all(c("connection", "connectors") %in% names(formals(f))) || "..." %in% names(formals(f)))
-
       private$ui <- f
+      logger::log_trace("RelationalDataConnector$set_ui ui set.")
       return(invisible(NULL))
     },
     #' @description
@@ -278,8 +283,8 @@ RelationalDataConnector <- R6::R6Class( #nolint
     set_server = function(f) {
       stopifnot(is(f, "function"))
       stopifnot(all(c("id", "connection", "connectors") %in% names(formals(f))))
-
       private$server <- f
+      logger::log_trace("RelationalDataConnector$set_server server set.")
       return(invisible(NULL))
     },
     #' @description
@@ -294,8 +299,8 @@ RelationalDataConnector <- R6::R6Class( #nolint
     set_preopen_server = function(f) {
       stopifnot(is(f, "function"))
       stopifnot(all(c("id", "connection") %in% names(formals(f))))
-
       private$preopen_server <- f
+      logger::log_trace("RelationalDataConnector$set_preopen_server preopen_server set.")
       return(invisible(NULL))
     },
 
@@ -322,6 +327,7 @@ RelationalDataConnector <- R6::R6Class( #nolint
     #'
     #' @return (`self`) invisibly for chaining. In order to get the data please use \code{get_datasets} method.
     pull = function(con_args = NULL, args = NULL, try = TRUE) {
+      logger::log_trace("RelationalDataConnector$pull pulling data...")
       # open connection
       if (!is.null(private$connection)) {
         private$connection$open(args = con_args, try = try)
@@ -339,6 +345,8 @@ RelationalDataConnector <- R6::R6Class( #nolint
 
       # close connection
       if_not_null(private$connection, private$connection$close(silent = TRUE))
+
+      logger::log_trace("RelationalDataConnector$pull data pulled.")
 
       return(invisible(self))
     },

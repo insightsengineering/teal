@@ -20,6 +20,7 @@ CallablePythonCode <- R6::R6Class( #nolint
     #' @return new `CallablePythonCode` object
     initialize = function(fun) {
       super$initialize(fun = fun)
+      logger::log_trace("CallablePythonCode initialized.")
       return(invisible(self))
     },
     #' @description
@@ -34,7 +35,7 @@ CallablePythonCode <- R6::R6Class( #nolint
     set_object = function(x) {
       private$object <- x
       private$refresh()
-
+      logger::log_trace("CallablePythonCode$set_object object set.")
       return(invisible(self))
     },
     #' @description
@@ -51,12 +52,12 @@ CallablePythonCode <- R6::R6Class( #nolint
     #'
     #' @return (`self`) invisibly for chaining.
     assign_to_env = function(x, value) {
-
       if (exists(x, .GlobalEnv)) {
         private$duplicate_vars[[x]] <- get(x, envir = .GlobalEnv)
       }
 
       private$vars_to_assign[[x]] <- value
+      logger::log_trace("CallablePythonCode$assign_to_env assigned { x } to the environment.")
 
       return(invisible(self))
     },
@@ -120,9 +121,7 @@ CallablePythonCode <- R6::R6Class( #nolint
         c(rlang::parse_expr(private$fun_name), private$args)
       )
 
-      private$call <- rlang::parse_expr(
-        sprintf("%s[[%s]]", pdeparse(private$call), pdeparse(private$object))
-        )
+      private$call <- rlang::parse_expr(sprintf("%s[[%s]]", pdeparse(private$call), pdeparse(private$object)))
     }
   )
 )
@@ -206,6 +205,7 @@ PythonCodeClass <- R6::R6Class( # nolint
       }
 
       new_set <- execution_environment[[dataname]]
+      logger::log_trace("PythonCodeClass$eval successfuly evaluated the code.")
 
       return(new_set)
     }

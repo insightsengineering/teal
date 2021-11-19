@@ -86,6 +86,7 @@ CDISCData <- R6::R6Class( # nolint
         }
       }
 
+      logger::log_trace("CDISCData initialized with data: { paste(self$get_datanames(), collapse = ' ') }.")
       return(invisible(self))
     },
     #' @description
@@ -100,6 +101,7 @@ CDISCData <- R6::R6Class( # nolint
     #' Check correctness of stored joining keys and presence of keys to parent
     #' @return raise and error or invisible `TRUE`
     check_metadata = function() {
+      logger::log_trace("CDISCData$check_metadata checking metadata...")
       if (!("ADSL" %in% self$get_datanames())) {
         stop("ADSL dataset is missing.")
       }
@@ -113,16 +115,17 @@ CDISCData <- R6::R6Class( # nolint
           keys_to <- self$get_join_keys()$get(name_to, name_from)
 
           if (is_empty(keys_from) && is_empty(keys_to)) {
-            stop(paste0("No join keys from ", name_from, " to its parent (", name_to, ") and vice versa"))
+            stop(sprintf("No join keys from %s to its parent (%s) and vice versa", name_from, name_to))
           }
           if (is_empty(keys_from)) {
-            stop(paste0("No join keys from ", name_from, " to its parent (", name_to, ")"))
+            stop(sprintf("No join keys from %s to its parent (%s)", name_from, name_to))
           }
           if (is_empty(keys_to)) {
-            stop(paste0("No join keys from ", name_from, " parent name (", name_to, ") to ", name_from))
+            stop(sprintf("No join keys from %s parent name (%s) to %s", name_from, name_to, name_from))
           }
         }
       }
+      logger::log_trace("CDISCData$check_metadata metadata check passed.")
 
       return(invisible(TRUE))
     }

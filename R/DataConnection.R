@@ -71,6 +71,17 @@ DataConnection <- R6::R6Class( # nolint
       private$close_ui <- function(id) {
         NULL
       }
+
+      logger::log_trace(
+        sprintf(
+          "DataConnection initialized with:%s%s%s%s.",
+          if (!is.null(open_fun))  " open_fun"  else "",
+          if (!is.null(close_fun)) " close_fun" else "",
+          if (!is.null(ping_fun))  " ping_fun"  else "",
+          if (if_conn_obj)         " conn"      else ""
+        )
+      )
+      invisible(self)
     },
     #' @description
     #' Finalize method closing the connection.
@@ -169,10 +180,12 @@ DataConnection <- R6::R6Class( # nolint
     #' `shinyjs::alert` (if `try = TRUE`) or breaks the app (if `try = FALSE`)
     #'
     open = function(args = NULL, silent = FALSE, try = FALSE) {
+      logger::log_trace("DataConnection$open opening the connection...")
       stopifnot(is.null(args) || (is.list(args) && is_fully_named_list(args)))
       if_cond(private$check_open_fun(silent = silent), return(), isFALSE)
       if (isTRUE(private$opened) && isTRUE(private$ping())) {
         private$opened <- TRUE
+        logger::log_trace("DataConnection$open connection already opened - skipped.")
         return(invisible(self))
       } else {
         open_res <- private$open_fun$run(args = args, try = try)
@@ -184,9 +197,11 @@ DataConnection <- R6::R6Class( # nolint
             if_not_null(private$close_fun, private$close_fun$assign_to_env("conn", private$conn))
             if_not_null(private$ping_fun, private$ping_fun$assign_to_env("conn", private$conn))
           }
+          logger::log_trace("DataConnection$open connection opened.")
         } else {
           private$opened <- FALSE
           private$conn <- NULL
+          logger::log_error("DataConnection$open connection failed to open.")
         }
 
         return(invisible(self))
@@ -279,6 +294,7 @@ DataConnection <- R6::R6Class( # nolint
       stopifnot(is.null(args) || (is.list(args) && is_fully_named_list(args)))
       if_cond(private$check_open_fun(silent = silent), return(), isFALSE)
       private$open_fun$set_args(args)
+      logger::log_trace("DataConnection$set_open_args open args set.")
 
       return(invisible(self))
     },
@@ -313,6 +329,8 @@ DataConnection <- R6::R6Class( # nolint
           "definition with a single additional parameter 'connection'."
         ))
       }
+      logger::log_trace("DataConnection$set_preopen_server preopen_server set.")
+
       invisible(self)
     },
     #' @description
@@ -352,6 +370,8 @@ DataConnection <- R6::R6Class( # nolint
           "definition with a single additional parameter 'connection'."
         ))
       }
+      logger::log_trace("DataConnection$set_open_server open_server set.")
+
       invisible(self)
     },
     #' @description
@@ -375,6 +395,7 @@ DataConnection <- R6::R6Class( # nolint
           )
         )
       }
+      logger::log_trace("DataConnection$set_open_ui open_ui set.")
 
       invisible(self)
     },
@@ -389,13 +410,16 @@ DataConnection <- R6::R6Class( # nolint
     #' depends on `try` argument: if `try = TRUE` then returns
     #' `error`, for `try = FALSE` otherwise
     close = function(silent = FALSE, try = FALSE) {
+      logger::log_trace("DataConnection$close closing the connection...")
       if_cond(private$check_close_fun(silent = silent), return(), isFALSE)
       close_res <- private$close_fun$run(try = try)
       if (is(close_res, "error")) {
+        logger::log_error("DataConnection$close failed to close the connection.")
         return(close_res)
       } else {
         private$opened <- FALSE
         private$conn <- NULL
+        logger::log_trace("DataConnection$close connection closed.")
         return(invisible(NULL))
       }
     },
@@ -450,6 +474,7 @@ DataConnection <- R6::R6Class( # nolint
       stopifnot(is.null(args) || (is.list(args) && is_fully_named_list(args)))
       if_cond(private$check_close_fun(silent = silent), return(), isFALSE)
       private$close_fun$set_args(args)
+      logger::log_trace("DataConnection$set_close_args close_args set")
 
       return(invisible(self))
     },
@@ -475,6 +500,8 @@ DataConnection <- R6::R6Class( # nolint
           )
         )
       }
+      logger::log_trace("DataConnection$close_ui close_ui set.")
+
       return(invisible(self))
     },
 
@@ -530,6 +557,8 @@ DataConnection <- R6::R6Class( # nolint
           "definition with a single additional parameter 'connection'."
         ))
       }
+      logger::log_trace("DataConnection$set_close_server close_server set.")
+
       invisible(self)
     }
   ),
@@ -628,9 +657,11 @@ DataConnection <- R6::R6Class( # nolint
     #
     # @return (`logical`)
     ping = function() {
+      logger::log_trace("DataConnection$ping pinging the connection...")
       if (!is.null(private$ping_fun)) {
-        ping_res <- private$ping_fun$run()
-        return(isTRUE(ping_res))
+        ping_res <- isTRUE(private$ping_fun$run())
+        logger::log_trace("DataConnection$ping ping result: { ping_res }.")
+        return(ping_res)
       } else {
         return(invisible(NULL))
       }

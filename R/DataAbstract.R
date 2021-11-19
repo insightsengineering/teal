@@ -44,6 +44,7 @@ DataAbstract <- R6::R6Class( #nolint
         }
       }
       private$check_result <- res
+      logger::log_trace("DataAbstract$check executed the code to reproduce the data - result: { res }.")
       return(res)
     },
     #' @description
@@ -54,6 +55,7 @@ DataAbstract <- R6::R6Class( #nolint
       if (isFALSE(self$get_check_result())) {
         stop("Reproducibility check failed.")
       }
+      logger::log_trace("DataAbstract$check_reproducibility reproducibility check passed.")
       return(invisible(NULL))
     },
     #' @description
@@ -61,6 +63,7 @@ DataAbstract <- R6::R6Class( #nolint
     #' does not cause instant execution, the \code{mutate_code} is
     #' delayed and can be evaluated using this method.
     execute_mutate = function() {
+      logger::log_trace("DataAbstract$execute_mutate evaluating mutate code...")
       # this will be pulled already! - not needed?
       if (is_empty(private$mutate_code$code)) {
         res <- ulapply(
@@ -74,8 +77,10 @@ DataAbstract <- R6::R6Class( #nolint
           }
         )
         # exit early if mutate isn't required
+        logger::log_trace("DataAbstract$execute_mutate no code to evaluate.")
         return(if_not_null(res, setNames(res, vapply(res, get_dataname, character(1)))))
       }
+
 
       if (inherits(private$mutate_code, "PythonCodeClass")) {
         items <- lapply(self$get_items(), get_raw_data)
@@ -113,7 +118,7 @@ DataAbstract <- R6::R6Class( #nolint
           )
         }
       )
-
+      logger::log_trace("DataAbstract$execute_mutate evaluated mutate code.")
       return(invisible(NULL))
 
     },
@@ -251,9 +256,14 @@ DataAbstract <- R6::R6Class( #nolint
         code = code,
         deps = names(vars)
       )
-
       private$check_result <- NULL
-
+      logger::log_trace(
+        sprintf(
+          "DataAbstract$mutate code (%s lines) and vars (%s) set.",
+          length(parse(text = code)),
+          paste(names(vars), collapse = ', ')
+        )
+      )
       return(invisible(self))
     },
     #' @description
@@ -287,6 +297,14 @@ DataAbstract <- R6::R6Class( #nolint
       )
 
       private$check_result <- NULL
+      logger::log_trace(
+        sprintf(
+          "DataAbstract$mutate code (%s lines) and vars (%s) set for dataset: %s.",
+          length(parse(text = code)),
+          paste(names(vars), collapse = ', '),
+          dataname
+        )
+      )
 
       return(invisible(self))
     },
@@ -299,6 +317,7 @@ DataAbstract <- R6::R6Class( #nolint
     set_check = function(check = FALSE) {
       stopifnot(is_logical_single(check))
       private$.check <- check
+      logger::log_trace("DataAbstract$set_check check set to: { check }.")
       return(invisible(self))
     },
     #' @description
@@ -345,6 +364,8 @@ DataAbstract <- R6::R6Class( #nolint
         code = code,
         dataname = self$get_datanames()
       )
+      logger::log_trace("DataAbstract$set_pull_code pull code set.")
+
       return(invisible(self))
     },
 
@@ -359,6 +380,8 @@ DataAbstract <- R6::R6Class( #nolint
           datasets = self$get_items()
         )
       }
+      logger::log_trace("DataAbstract$reassign_datasets_vars reassigned vars.")
+      invisible(NULL)
     }
   ),
 
@@ -381,7 +404,7 @@ DataAbstract <- R6::R6Class( #nolint
     check_combined_code = function() {
       execution_environment <- new.env(parent = parent.env(globalenv()))
       self$get_code_class(only_pull = TRUE)$eval(envir = execution_environment)
-      all(vapply(
+      res <- all(vapply(
         Filter(is_pulled, self$get_items()),
         function(dataset) {
           data <- get_raw_data(dataset)
@@ -390,6 +413,8 @@ DataAbstract <- R6::R6Class( #nolint
         },
         logical(1)
       ))
+      logger::log_trace("DataAbstract$check_combined_code reproducibility result of the combined code: { res }.")
+      res
     },
     get_datasets_code_class = function() {
       res <- CodeClass$new()

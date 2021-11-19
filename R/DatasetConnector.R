@@ -72,6 +72,8 @@ DatasetConnector <- R6::R6Class( #nolint
         private$dataset$mutate(code = code, vars = vars, force_delay = TRUE)
       }
 
+      logger::log_trace("DatasetConnector initialized for dataset: { self$get_dataname() }.")
+
       return(invisible(self))
     },
     #' Prints this DatasetConnector.
@@ -221,6 +223,7 @@ DatasetConnector <- R6::R6Class( #nolint
     #'   objects with valid pointers.
     #' @return NULL invisible
     reassign_datasets_vars = function(datasets) {
+      logger::log_trace("DatasetConnector$reassign_datasets_vars reassigning vars in dataset: { self$get_dataname() }.")
       stopifnot(is_fully_named_list(datasets))
 
       common_var_r6 <- intersect(names(datasets), names(private$var_r6))
@@ -232,6 +235,8 @@ DatasetConnector <- R6::R6Class( #nolint
       if (!is.null(private$dataset)) {
         private$dataset$reassign_datasets_vars(datasets)
       }
+      logger::log_trace("DatasetConnector$reassign_datasets_vars reassigned vars in dataset: { self$get_dataname() }.")
+
       invisible(NULL)
     },
     #' @description
@@ -247,6 +252,8 @@ DatasetConnector <- R6::R6Class( #nolint
       if (self$is_pulled()) {
         private$dataset$set_dataset_label(label)
       }
+      logger::log_trace("DatasetConnector$set_dataset_label label set for dataset: { self$get_dataname() }.")
+
       return(invisible(self))
     },
     #' @description
@@ -258,6 +265,8 @@ DatasetConnector <- R6::R6Class( #nolint
         set_keys(private$dataset, keys)
       }
       private$keys <- keys
+      logger::log_trace("DatasetConnector$set_keys keys set for dataset: { self$get_dataname() }.")
+
       return(invisible(self))
     },
     #' @description
@@ -267,6 +276,8 @@ DatasetConnector <- R6::R6Class( #nolint
     #' @return (`self`) invisibly for chaining
     set_join_keys = function(x) {
       self$get_join_keys()$set(x)
+      logger::log_trace("DatasetConnector$set_join_keys join_keys set for dataset: { self$get_dataname() }.")
+
       return(invisible(self))
     },
 
@@ -277,6 +288,10 @@ DatasetConnector <- R6::R6Class( #nolint
     #' @return (`self`) invisibly for chaining
     mutate_join_keys = function(dataset, val) {
       self$get_join_keys()$mutate(private$dataname, dataset, val)
+      logger::log_trace(
+        "DatasetConnector$mutate_join_keys join_keys modified keys of { self$get_dataname() } against { dataset }."
+      )
+
       return(invisible(self))
     },
 
@@ -297,8 +312,8 @@ DatasetConnector <- R6::R6Class( #nolint
     #'
     #' @return (`self`) if successful.
     pull = function(args = NULL, try = FALSE) {
+      logger::log_trace("DatasetConnector$pull pulling dataset: {self$get_dataname() }.")
       data <- private$pull_internal(args = args, try = try)
-
       if (!self$is_failed()) {
         # The first time object is pulled, private$dataset may be NULL if mutate method was never called
         has_dataset <- !is.null(private$dataset)
@@ -306,7 +321,6 @@ DatasetConnector <- R6::R6Class( #nolint
           code_in_dataset <- private$dataset$get_code_class(nodeps = TRUE)
           vars_in_dataset <- private$dataset$get_vars()
         }
-
         private$dataset <- dataset(
           dataname = self$get_dataname(),
           x = data,
@@ -323,6 +337,9 @@ DatasetConnector <- R6::R6Class( #nolint
         }
         set_keys(private$dataset, self$get_keys())
         private$is_pulled_flag <- TRUE
+        logger::log_trace("DatasetConnector$pull pulled dataset: {self$get_dataname() }.")
+      } else {
+        logger::log_error("DatasetConnector$pull failed to pull dataset: {self$get_dataname() }.")
       }
 
       return(invisible(self))
@@ -335,6 +352,7 @@ DatasetConnector <- R6::R6Class( #nolint
     #' @return (`self`) invisibly for chaining
     set_args = function(args) {
       set_args(private$pull_callable, args)
+      logger::log_trace("DatasetConnector$set_args pull args set for dataset: {self$get_dataname() }.")
       return(invisible(self))
     },
 
@@ -355,6 +373,16 @@ DatasetConnector <- R6::R6Class( #nolint
       private$dataset$mutate(code = code, vars = vars, force_delay = !self$is_pulled())
       # should be called at the end so that failure in Dataset object will prevent it.
       private$set_var_r6(vars)
+      logger::log_trace(
+        sprintf(
+          "DatasetConnector$mutate mutated dataset '%s' using the code (%s lines) and vars (%s).",
+          self$get_dataname(),
+          length(parse(text = if (is(code, "CodeClass")) code$get_code() else code)),
+          paste(names(vars), collapse = ', ')
+        )
+      )
+
+
       return(invisible(self))
     },
 
@@ -423,6 +451,7 @@ DatasetConnector <- R6::R6Class( #nolint
         ))
       }
       private$ui_input <- inputs
+      logger::log_trace("DatasetConnector$set_ui_input ui_input set for dataset: { self$get_dataname() }.")
       return(invisible(self))
     },
     #' @description Get shiny ui function
@@ -565,7 +594,6 @@ DatasetConnector <- R6::R6Class( #nolint
     get_pull_code_class = function(args = NULL) {
       res <- CodeClass$new()
       res$append(list_to_code_class(private$pull_vars))
-
       code <- if (inherits(private$pull_callable, "CallableCode")) {
         tmp <- private$pull_callable$get_call(deparse = FALSE)
         tmp[[length(tmp)]] <- substitute(a <- b, list(a = as.name(private$dataname), b = tmp[[length(tmp)]]))

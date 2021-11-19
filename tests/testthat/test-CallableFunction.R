@@ -291,9 +291,11 @@ testthat::test_that("is failed", {
     fun$run(args = list(x = "")),
     "non-numeric argument to mathematical function"
   )
-  testthat::expect_s3_class(
-    fun$run(args = list(x = ""), try = TRUE),
-    "error"
+  testthat::expect_output(
+    testthat::expect_s3_class(
+      fun$run(args = list(x = ""), try = TRUE),
+      "error"
+    )
   )
   testthat::expect_true(fun$is_failed())
   testthat::expect_identical(
