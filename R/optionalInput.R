@@ -182,7 +182,7 @@ updateOptionalSelectInput <- function(session, # nolint
     label = label,
     selected = as.character(raw_selected),
     choices = raw_choices,
-    choicesOpt = picker_options(as.character(choices))
+    choicesOpt = picker_options(choices)
   )
 
   shinyjs::show(inputId)
