@@ -259,7 +259,7 @@ FilterStates <- R6::R6Class( # nolint
     },
 
     #' @description
-    #' Gets the name of the function used to filter the data in this FilterStates.
+    #' Gets the name of the function used to filter the data in this `FilterStates`.
     #'
     #' Get function name used to create filter call. By default it's a
     #' "subset" but can be overridden by child class method.
@@ -269,7 +269,7 @@ FilterStates <- R6::R6Class( # nolint
     },
 
     #' @description
-    #' Remove all FilterState objects from all queues in this FilterStates.
+    #' Remove all `FilterState` objects from all queues in this `FilterStates`.
     #' @return NULL
     queue_empty = function() {
       logger::log_trace("{ class(self)[1] } emptying queue, dataname: { deparse1(private$input_dataname) }")
@@ -294,7 +294,7 @@ FilterStates <- R6::R6Class( # nolint
     },
 
     #' @description
-    #' Returns a list of FilterState objects stored in this FilterStates.
+    #' Returns a list of `FilterState` objects stored in this `FilterStates.`
     #' @param queue_index (`character(1)`, `integer(1)`)\cr
     #'   index of the `private$queue` list where `ReactiveQueue` are kept.
     #' @param element_id (`character(1)`)\cr
@@ -577,7 +577,7 @@ FilterStates <- R6::R6Class( # nolint
       private$observers[[queue_id]] <- NULL
     },
 
-    # Checks if the queue of the given index was initialized in this FilterStates
+    # Checks if the queue of the given index was initialized in this `FilterStates`
     # @param queue_index (character or integer)
     validate_queue_exists = function(queue_index) {
       stopifnot(is_character_single(queue_index) || is_numeric_single(queue_index))

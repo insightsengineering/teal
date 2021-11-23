@@ -3,9 +3,9 @@
 #' @description `r lifecycle::badge("experimental")`
 #'   S3 method to determine if dataset is pulled (loaded).
 #'
-#' @param x (\code{object}) of class \code{\link{DatasetConnector}}, \code{\link{Dataset}} or \code{\link{DataAbstract}}
+#' @param x (\code{\link{TealDatasetConnector}}, \code{\link{TealDataset}} or \code{\link{TealDataAbstract}})
 #'
-#' @return (\code{logical}) \code{TRUE} if connector has been already pulled, else \code{FALSE}.
+#' @return (`logical`) `TRUE` if connector has been already pulled, else `FALSE`.
 #' @export
 is_pulled <- function(x) {
   UseMethod("is_pulled")
@@ -15,7 +15,7 @@ is_pulled <- function(x) {
 #' @export
 #'
 #' @examples
-#' # DatasetConnector --------
+#' # TealDatasetConnector --------
 #' library(scda)
 #' pull_fun_adsl <- callable_function(
 #'   function() {synthetic_cdisc_data("latest")$adsl}
@@ -26,7 +26,7 @@ is_pulled <- function(x) {
 #'
 #' load_dataset(x)
 #' is_pulled(x)
-is_pulled.DatasetConnector <- function(x) {
+is_pulled.TealDatasetConnector <- function(x) {
   return(x$is_pulled())
 }
 
@@ -34,7 +34,7 @@ is_pulled.DatasetConnector <- function(x) {
 #' @export
 #'
 #' @examples
-#' # Dataset --------
+#' # TealDataset --------
 #' x <- dataset(
 #'   dataname = "XY",
 #'   x = data.frame(x = c(1, 2), y = c("a", "b"), stringsAsFactors = FALSE),
@@ -44,7 +44,7 @@ is_pulled.DatasetConnector <- function(x) {
 #' )
 #'
 #' is_pulled(x)
-is_pulled.Dataset <- function(x) {
+is_pulled.TealDataset <- function(x) {
   return(x$is_pulled())
 }
 
@@ -52,7 +52,7 @@ is_pulled.Dataset <- function(x) {
 #' @export
 #'
 #' @examples
-#' # RelationalData --------
+#' # TealData --------
 #' library(scda)
 #' x1 <- dataset(
 #'   x = synthetic_cdisc_data("latest")$adsl,
@@ -73,7 +73,7 @@ is_pulled.Dataset <- function(x) {
 #' rd <- teal_data(x1, x2)
 #' is_pulled(rd)
 #'
-#' # RelationalDataConnector --------
+#' # TealDataConnector --------
 #' library(scda)
 #' adsl_cf <- callable_function(
 #'   function() {synthetic_cdisc_data("latest")$adsl}
@@ -98,6 +98,6 @@ is_pulled.Dataset <- function(x) {
 #' load_datasets(rdc)
 #' is_pulled(rdc)
 #' }
-is_pulled.DataAbstract <- function(x) { # nolint
+is_pulled.TealDataAbstract <- function(x) { # nolint
   return(x$is_pulled())
 }

@@ -5,15 +5,15 @@
 #' for \code{\link[shiny]{selectInput}}.
 #'
 #' @param choices a character / numeric / logical vector
-#' @param labels character vector containing labels to be applied to \code{choices}. If `NA` then
+#' @param labels character vector containing labels to be applied to `choices`. If `NA` then
 #' "Label Missing" will be used.
-#' @param subset a vector that is a subset of \code{choices}. This is useful if
+#' @param subset a vector that is a subset of `choices`. This is useful if
 #'   only a few variables need to be named. If this argument is used, the returned vector will
 #'   match its order.
 #' @param types vector containing the types of the columns to be used for applying the appropriate
 #'   icons to the \code{\link[teal]{choices_selected}} drop down box
-#' @details If either \code{choices} or \code{labels} are factors, they are coerced to character.
-#' Duplicated elements from \code{choices} get removed.
+#' @details If either `choices` or `labels` are factors, they are coerced to character.
+#' Duplicated elements from `choices` get removed.
 #'
 #' @return a named character vector
 #'
@@ -120,22 +120,22 @@ choices_labeled <- function(choices, labels, subset = NULL, types = NULL) {
 #'
 #' @description `r lifecycle::badge("maturing")`
 #'
-#' @param data (`data.frame`, `character`, `Dataset`, `DatasetConnector`)
+#' @param data (`data.frame`, `character`, `TealDataset`, `TealDatasetConnector`)
 #' If `data.frame`, then data to extract labels from
 #' If `character`, then name of the dataset to extract data from once available
-#' If `Dataset` or `DatasetConnector`, then raw data to extract labels from.
-#' @param subset (\code{character} or \code{function})
-#' If \code{character}, then a vector of column names.
-#' If \code{function}, then this function is used to determine the possible columns (e.g. all factor columns).
+#' If `TealDataset` or `TealDatasetConnector`, then raw data to extract labels from.
+#' @param subset (`character` or `function`)
+#' If `character`, then a vector of column names.
+#' If `function`, then this function is used to determine the possible columns (e.g. all factor columns).
 #' In this case, the function must take only single argument "data" and return a character vector.
 #' See examples for more details.
-#' @param key (\code{character}) vector with names of the variables, which are part of the primary key
-#' of the \code{data} argument. This is an optional argument, which allows to identify variables
+#' @param key (`character`) vector with names of the variables, which are part of the primary key
+#' of the `data` argument. This is an optional argument, which allows to identify variables
 #' associated with the primary key and display the appropriate icon for them in the
 #' \code{\link{optionalSelectInput}} widget.
 #' @inheritParams rtables::var_labels
 #'
-#' @return named character vector with additional attributes or \code{delayed_data} object
+#' @return named character vector with additional attributes or `delayed_data` object
 #'
 #' @rdname variable_choices
 #'
@@ -153,7 +153,7 @@ choices_labeled <- function(choices, labels, subset = NULL, types = NULL) {
 #' # delayed version
 #' variable_choices("ADRS", subset = c("USUBJID", "STUDYID"))
 #'
-#' # also works with Dataset and DatasetConnector
+#' # also works with TealDataset and TealDatasetConnector
 #' ADRS_dataset <- dataset("ADRS", ADRS, key = get_cdisc_keys("ADRS"))
 #' variable_choices(ADRS_dataset)
 #'
@@ -234,7 +234,7 @@ variable_choices.data.frame <- function(data, subset = NULL, fill = FALSE, key =
 
 #' @rdname variable_choices
 #' @export
-variable_choices.Dataset <- function(data, subset = NULL, fill = FALSE, key = get_keys(data)) {
+variable_choices.TealDataset <- function(data, subset = NULL, fill = FALSE, key = get_keys(data)) {
   variable_choices(
     data = get_raw_data(data),
     subset = subset,
@@ -245,10 +245,10 @@ variable_choices.Dataset <- function(data, subset = NULL, fill = FALSE, key = ge
 
 #' @rdname variable_choices
 #' @export
-variable_choices.DatasetConnector <- function(data, # nolint
-                                              subset = NULL,
-                                              fill = FALSE,
-                                              key = get_keys(data)) {
+variable_choices.TealDatasetConnector <- function(data, # nolint
+                                                  subset = NULL,
+                                                  fill = FALSE,
+                                                  key = get_keys(data)) {
   if (is_pulled(data)) {
     variable_choices(
       data = get_raw_data(data),
@@ -271,10 +271,10 @@ variable_choices.DatasetConnector <- function(data, # nolint
 #'
 #' @description `r lifecycle::badge("maturing")`
 #'
-#' @param data (`data.frame`, `character`, `Dataset`, `DatasetConnector`)
+#' @param data (`data.frame`, `character`, `TealDataset`, `TealDatasetConnector`)
 #' If `data.frame`, then data to extract labels from
 #' If `character`, then name of the dataset to extract data from once available
-#' If `Dataset` or `DatasetConnector`, then raw data to extract labels from.
+#' If `TealDataset` or `TealDatasetConnector`, then raw data to extract labels from.
 #' @param var_choices (`character` or `NULL`) vector with choices column names
 #' @param var_label (`character`) vector with labels column names
 #' @param subset (`character` or `function`)
@@ -406,11 +406,11 @@ value_choices.data.frame <- function(data, # nolint
 
 #' @rdname value_choices
 #' @export
-value_choices.Dataset <- function(data,
-                                  var_choices,
-                                  var_label = NULL,
-                                  subset = NULL,
-                                  sep = " - ") {
+value_choices.TealDataset <- function(data,
+                                      var_choices,
+                                      var_label = NULL,
+                                      subset = NULL,
+                                      sep = " - ") {
   value_choices(
     data = get_raw_data(data),
     var_choices = var_choices,
@@ -422,11 +422,11 @@ value_choices.Dataset <- function(data,
 
 #' @rdname value_choices
 #' @export
-value_choices.DatasetConnector <- function(data, # nolint
-                                           var_choices,
-                                           var_label = NULL,
-                                           subset = NULL,
-                                           sep = " - ") {
+value_choices.TealDatasetConnector <- function(data, # nolint
+                                               var_choices,
+                                               var_label = NULL,
+                                               subset = NULL,
+                                               sep = " - ") {
   if (is_pulled(data)) {
     value_choices(
       data = get_raw_data(data),
@@ -449,11 +449,11 @@ value_choices.DatasetConnector <- function(data, # nolint
 
 #' Get classes selected columns from dataset
 #'
-#' @param data (\code{data.frame}) data to determine variable types from
-#' @param columns (atomic vector of \code{character} or \code{NULL}) column names chosen chosen from \code{data},
-#'   \code{NULL} for all data columns
+#' @param data (`data.frame`) data to determine variable types from
+#' @param columns (atomic vector of `character` or `NULL`) column names chosen chosen from `data`,
+#'   `NULL` for all data columns
 #'
-#' @return (atomic vector of \code{character}) classes of \code{columns} from provided \code{data}
+#' @return (atomic vector of `character`) classes of `columns` from provided `data`
 #'
 #' @examples
 #' teal:::variable_types(

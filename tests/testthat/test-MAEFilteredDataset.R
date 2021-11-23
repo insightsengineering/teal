@@ -1,23 +1,23 @@
-testthat::test_that("MAEFilteredDataset accepts a MAEDataset object", {
-  testthat::expect_error(MAEFilteredDataset$new(dataset = MAEDataset$new("miniACC", MultiAssayExperiment::miniACC)), NA)
+testthat::test_that("MAEFilteredDataset accepts a MAETealDataset object", {
+  testthat::expect_error(MAEFilteredDataset$new(dataset = MAETealDataset$new("miniACC", MultiAssayExperiment::miniACC)), NA)
 })
 
-testthat::test_that("MAEFilteredDataset throws error with non-MAEDataset dataset", {
+testthat::test_that("MAEFilteredDataset throws error with non-MAETealDataset dataset", {
   testthat::expect_error(
-    MAEFilteredDataset$new(dataset = Dataset$new("iris", head(iris))),
-    "is(dataset, \"MAEDataset\") is not TRUE"
+    MAEFilteredDataset$new(dataset = TealDataset$new("iris", head(iris))),
+    "is(dataset, \"MAETealDataset\") is not TRUE"
     , fixed = TRUE)
 })
 
 testthat::test_that("MAEFilteredDataset$get_call returns a call without applying filter", {
-  filtered_dataset <- MAEFilteredDataset$new(dataset = MAEDataset$new("miniACC", MultiAssayExperiment::miniACC))
+  filtered_dataset <- MAEFilteredDataset$new(dataset = MAETealDataset$new("miniACC", MultiAssayExperiment::miniACC))
   get_call_output <- filtered_dataset$get_call()
   testthat::expect_true(is_class_list("language")(get_call_output))
   testthat::expect_identical(deparse(get_call_output$subjects), "miniACC_FILTERED <- miniACC")
 })
 
 testthat::test_that("MAEFilteredDataset$get_call returns a call with applying filter", {
-  filtered_dataset <- MAEFilteredDataset$new(dataset = MAEDataset$new("miniACC", MultiAssayExperiment::miniACC))
+  filtered_dataset <- MAEFilteredDataset$new(dataset = MAETealDataset$new("miniACC", MultiAssayExperiment::miniACC))
   filter_state_mae <- ChoicesFilterState$new(
     x = MultiAssayExperiment::miniACC$race,
     varname = as.name("race"),
@@ -46,20 +46,20 @@ testthat::test_that("MAEFilteredDataset$get_call returns a call with applying fi
 })
 
 testthat::test_that("MAEFilteredDataset$get_data throws error without filtered argument given", {
-  filtered_dataset <- MAEFilteredDataset$new(dataset = MAEDataset$new("miniACC", MultiAssayExperiment::miniACC))
+  filtered_dataset <- MAEFilteredDataset$new(dataset = MAETealDataset$new("miniACC", MultiAssayExperiment::miniACC))
   expect_error(isolate(filtered_dataset$get_data()), "argument \"filtered\" is missing, with no default")
 })
 
 testthat::test_that("MAEFilteredDataset$get_data returns identical filtered and
                     non-filtered MAE data when no filter is applied", {
-  filtered_dataset <- MAEFilteredDataset$new(dataset = MAEDataset$new("miniACC", MultiAssayExperiment::miniACC))
+  filtered_dataset <- MAEFilteredDataset$new(dataset = MAETealDataset$new("miniACC", MultiAssayExperiment::miniACC))
   filtered_mae <- isolate(filtered_dataset$get_data(filtered = TRUE))
   non_filtered_mae <- isolate(filtered_dataset$get_data(filtered = FALSE))
   expect_identical(filtered_mae, non_filtered_mae)
 })
 
 testthat::test_that("MAEFilteredDataset get_data returns filtered MAE data when filter is applied", {
-  filtered_dataset <- MAEFilteredDataset$new(dataset = MAEDataset$new("miniACC", MultiAssayExperiment::miniACC))
+  filtered_dataset <- MAEFilteredDataset$new(dataset = MAETealDataset$new("miniACC", MultiAssayExperiment::miniACC))
   filter_state_mae <- ChoicesFilterState$new(
     x = MultiAssayExperiment::miniACC$race,
     varname = as.name("race"),
@@ -81,7 +81,7 @@ testthat::test_that("MAEFilteredDataset get_data returns filtered MAE data when 
 })
 
 testthat::test_that("get_filter_overview_info returns overview matrix for MAEFilteredDataset without filtering", {
-  filtered_dataset <- MAEFilteredDataset$new(dataset = MAEDataset$new("miniACC", MultiAssayExperiment::miniACC))
+  filtered_dataset <- MAEFilteredDataset$new(dataset = MAETealDataset$new("miniACC", MultiAssayExperiment::miniACC))
   testthat::expect_equal(
     isolate(filtered_dataset$get_filter_overview_info()),
     matrix(
@@ -97,7 +97,7 @@ testthat::test_that("get_filter_overview_info returns overview matrix for MAEFil
 })
 
 testthat::test_that("get_filter_overview_info returns overview matrix for MAEFilteredDataset with filtering", {
-  filtered_dataset <- MAEFilteredDataset$new(dataset = MAEDataset$new("miniACC", MultiAssayExperiment::miniACC))
+  filtered_dataset <- MAEFilteredDataset$new(dataset = MAETealDataset$new("miniACC", MultiAssayExperiment::miniACC))
 
   filter_state_mae <- ChoicesFilterState$new(
     x = c("white", NA_character_),
@@ -168,7 +168,7 @@ testthat::test_that("MAEFilteredDataset$set_bookmark_state throws error if state
 })
 
 testthat::test_that("MAEFilteredDataset$get_filterable_varnames returns character(0)", {
-  filtered_dataset <- MAEFilteredDataset$new(dataset = MAEDataset$new("miniACC", MultiAssayExperiment::miniACC))
+  filtered_dataset <- MAEFilteredDataset$new(dataset = MAETealDataset$new("miniACC", MultiAssayExperiment::miniACC))
   testthat::expect_identical(filtered_dataset$get_filterable_varnames(), character(0))
 })
 

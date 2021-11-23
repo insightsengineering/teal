@@ -2,9 +2,9 @@
 #'
 #' @description `r lifecycle::badge("experimental")`
 #'
-#' @param x an object that inherits from `RelationalData`
+#' @param x an object that inherits from `TealData`
 #'
-#' @return a (`CDISCDataset`, `CDISCDatasetConnector`) object
+#' @return a (`CDISCTealDataset`, `CDISCTealDatasetConnector`) object
 #'
 #' @noRd
 filtered_data_new <- function(x) {
@@ -12,20 +12,20 @@ filtered_data_new <- function(x) {
 }
 
 #' @export
-filtered_data_new.RelationalData <- function(x) { # nolintr # nousage
+filtered_data_new.TealData <- function(x) { # nolintr # nousage
   FilteredData$new()
 }
 
 #' @export
-filtered_data_new.CDISCData <- function(x) { # nolintr # nousage
+filtered_data_new.CDISCTealData <- function(x) { # nolintr # nousage
   CDISCFilteredData$new()
 }
 
-#' Set `FilteredData` with data from `RelationalData`
+#' Set `FilteredData` with data from `TealData`
 #'
 #' @description `r lifecycle::badge("experimental")`
 #'
-#' @param data an object that inherits from `RelationalData`
+#' @param data an object that inherits from `TealData`
 #' @param datasets an object that inherits from `FilteredData`
 #'
 #' @return modified `FilteredData` object
@@ -36,7 +36,7 @@ filtered_data_set <- function(data, datasets) { # nolintr # nousage
 }
 
 #' @export
-filtered_data_set.RelationalData <- function(data, datasets) { # nolintr # nousage
+filtered_data_set.TealData <- function(data, datasets) { # nolintr # nousage
   datasets$set_code(data$get_code_class())
   for (dataset in data$get_datasets()) {
     datasets$set_dataset(dataset)

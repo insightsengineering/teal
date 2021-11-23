@@ -14,7 +14,7 @@
 #' This is a wrapper function around the `module_teal.R` functions. Unless you are
 #' an end-user, don't use this function, but instead this module.
 #'
-#' @param data (`RelationalData` or `Dataset` or `DatasetConnector` or `list` or `data.frame`)
+#' @param data (`TealData` or `TealDataset` or `TealDatasetConnector` or `list` or `data.frame`)
 #' R6 object as returned by \code{\link{cdisc_data}}, \code{\link{teal_data}}, \code{\link{cdisc_dataset}},
 #' \code{\link{dataset}}, \code{\link{dataset}}, \code{\link{dataset_connector}} or
 #' \code{\link{cdisc_dataset_connector}} or a single `data.frame` or a list of the previous objects or
@@ -134,12 +134,12 @@ init <- function(data,
                  header = tags$p("Add Title Here"),
                  footer = tags$p("Add Footer Here"),
                  id = character(0)) {
-  if (!is(data, "RelationalData")) {
+  if (!is(data, "TealData")) {
     data <- to_relational_data(data = data)
   }
 
   stopifnot(
-    is(data, "RelationalData"),
+    is(data, "TealData"),
     is(modules, "list") || is(modules, "teal_modules"),
     is.null(title) || is_character_single(title),
     is_fully_named_list(filter),

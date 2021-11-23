@@ -1,4 +1,4 @@
-test_that("Test Dataset is_pulled", {
+test_that("Test TealDataset is_pulled", {
   rel_data <- dataset(
     dataname = "XY",
     x = head(iris),
@@ -7,15 +7,15 @@ test_that("Test Dataset is_pulled", {
   expect_true(is_pulled(rel_data))
 })
 
-test_that("Test DatasetConnector is_pulled", {
-  iris <- DatasetConnector$new(dataname = "iris", CallableFunction$new(function() head(iris)))
+test_that("Test TealDatasetConnector is_pulled", {
+  iris <- TealDatasetConnector$new(dataname = "iris", CallableFunction$new(function() head(iris)))
   testthat::expect_false(is_pulled(iris))
 
   load_dataset(iris)
   testthat::expect_true(is_pulled(iris))
 })
 
-test_that("Test RelationalDataConnector is_pulled", {
+test_that("Test TealDataConnector is_pulled", {
   adsl_cf <- callable_function(
     function() {
       as.data.frame(as.list(setNames(nm = get_cdisc_keys("ADSL"))))

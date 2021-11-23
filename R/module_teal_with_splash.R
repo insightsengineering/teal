@@ -15,7 +15,7 @@
 #'
 #' @param id (`character` value)\cr
 #'   module id
-#' @param data (`DataAbstract`)\cr
+#' @param data (`TealDataAbstract`)\cr
 #'   object containing data
 #' @param title (`NULL` or `character`) The browser window title (defaults to the host URL of the page).
 #' @param header (`character` or `shiny.tag`) the header of the app
@@ -26,7 +26,7 @@ ui_teal_with_splash <- function(id,
                                 title,
                                 header = tags$p("Add Title Here"),
                                 footer = tags$p("Add Footer Here")) {
-  stopifnot(is(data, "DataAbstract"))
+  stopifnot(is(data, "TealDataAbstract"))
   is_pulled_data <- is_pulled(data)
   ns <- NS(id)
 
@@ -52,16 +52,16 @@ ui_teal_with_splash <- function(id,
 #' Please also refer to the doc of \code{\link{init}}.
 #'
 #' @inheritParams srv_shiny_module_arguments
-#' @param data `DataAbstract` R6 object and container for data
+#' @param data `TealDataAbstract` R6 object and container for data
 #' @inheritParams srv_teal
 #' @return `reactive`, return value of \code{\link{srv_teal}}
 #' @export
 srv_teal_with_splash <- function(input, output, session, data, modules, filter = list()) {
-  stopifnot(is(data, "DataAbstract"))
+  stopifnot(is(data, "TealDataAbstract"))
 
   is_pulled_data <- is_pulled(data)
 
-  # raw_data contains DataAbstract, i.e. R6 object and container for data
+  # raw_data contains `TealDataAbstract`, i.e. R6 object and container for data
   # reactive to get data through delayed loading
   # we must leave it inside the server because of callModule which needs to pick up the right session
   if (is_pulled_data) {

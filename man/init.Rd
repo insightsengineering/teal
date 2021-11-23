@@ -15,7 +15,7 @@ init(
 )
 }
 \arguments{
-\item{data}{(\code{RelationalData} or \code{Dataset} or \code{DatasetConnector} or \code{list} or \code{data.frame})
+\item{data}{(\code{TealData} or \code{TealDataset} or \code{TealDatasetConnector} or \code{list} or \code{data.frame})
 R6 object as returned by \code{\link{cdisc_data}}, \code{\link{teal_data}}, \code{\link{cdisc_dataset}},
 \code{\link{dataset}}, \code{\link{dataset}}, \code{\link{dataset_connector}} or
 \code{\link{cdisc_dataset_connector}} or a single \code{data.frame} or a list of the previous objects or

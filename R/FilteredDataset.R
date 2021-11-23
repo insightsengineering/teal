@@ -1,7 +1,7 @@
 #' Initializes `FilteredDataset`
 #'
-#' `FilteredDataset` contains `Dataset`
-#' @param dataset (`Dataset`)\cr
+#' `FilteredDataset` contains `TealDataset`
+#' @param dataset (`TealDataset`)\cr
 #' @examples
 #' iris_d <- dataset("iris", iris)
 #' iris_fd <- teal:::init_filtered_dataset(iris_d)
@@ -53,28 +53,28 @@ init_filtered_dataset <- function(dataset) { #nolint
 }
 
 #' @export
-init_filtered_dataset.Dataset <- function(dataset) { #nolint #nousage
+init_filtered_dataset.TealDataset <- function(dataset) { #nolint #nousage
   DefaultFilteredDataset$new(dataset)
 }
 
 #' @export
-init_filtered_dataset.CDISCDataset <- function(dataset) { #nolint #nousage
+init_filtered_dataset.CDISCTealDataset <- function(dataset) { #nolint #nousage
   CDISCFilteredDataset$new(dataset)
 }
 
 #' @export
-init_filtered_dataset.MAEDataset <- function(dataset) { #nolint #nousage
+init_filtered_dataset.MAETealDataset <- function(dataset) { #nolint #nousage
   MAEFilteredDataset$new(dataset)
 }
 
 # FilteredDataset abstract --------
 #' @title `FilterStates` R6 class
 #' @description
-#' `FilteredDataset` is a class which renders/controls `FilterStates`(s) for `Dataset`.
+#' `FilteredDataset` is a class which renders/controls `FilterStates`(s) for `TealDataset`.
 #' Each `FilteredDataset` contains `filter_states` field - a `list` which contains one
 #' (`data.frame`) or multiple (`MultiAssayExperiment`) `FilterStates` objects.
 #' Each `FilterStates` is responsible for one filter/subset expression applied for specific
-#' components of the `Dataset`.
+#' components of the `TealDataset`.
 FilteredDataset <- R6::R6Class( # nolint
   "FilteredDataset",
   ## __Public Methods ====
@@ -82,10 +82,10 @@ FilteredDataset <- R6::R6Class( # nolint
     #' @description
     #' Initializes this `FilteredDataset` object
     #'
-    #' @param dataset (`Dataset`)\cr
+    #' @param dataset (`TealDataset`)\cr
     #'  single dataset for which filters are rendered
     initialize = function(dataset) {
-      stopifnot(is(dataset, "Dataset"))
+      stopifnot(is(dataset, "TealDataset"))
       logger::log_trace("Instantiating { class(self)[1] }, dataname: { dataset$get_dataname() }")
       private$dataset <- dataset
 
@@ -112,7 +112,7 @@ FilteredDataset <- R6::R6Class( # nolint
     #' Adds objects to the filter call evaluation environment
     #' @param name (`character`) object name
     #' @param value object value
-    #' @return invisibly this FilteredDataset
+    #' @return invisibly this `FilteredDataset`
     add_to_eval_env = function(name, value) {
       stopifnot(is_character_single(name))
       private$eval_env <- c(private$eval_env, setNames(value, name))
@@ -150,7 +150,7 @@ FilteredDataset <- R6::R6Class( # nolint
     #' @param filtered (`logical(1)`)\cr
     #'   whether returned data should be filtered or not
     #' @return type of returned object depending on a data stored in
-    #' `Dataset`. Currently `data.frame` or `MultiAssayExperiment`
+    #' `TealDataset`. Currently `data.frame` or `MultiAssayExperiment`
     get_data = function(filtered) {
       if (isTRUE(filtered)) {
         self$get_data_reactive()()
@@ -189,8 +189,8 @@ FilteredDataset <- R6::R6Class( # nolint
     },
 
     #' @description
-    #' Gets the dataset in this FilteredDataset
-    #' @return `Dataset`
+    #' Gets the dataset in this `FilteredDataset`
+    #' @return `TealDataset`
     get_dataset = function() {
       private$dataset
     },
@@ -214,14 +214,14 @@ FilteredDataset <- R6::R6Class( # nolint
     },
 
     #' @description
-    #' Gets the keys for the dataset of this FilteredDataset
+    #' Gets the keys for the dataset of this `FilteredDataset`
     #' @return (`character`) the keys of dataset
     get_keys = function() {
       self$get_dataset()$get_keys()
     },
 
-    #' Gets join keys to join the dataset of this FilteredDataset
-    #' with other Dataset objects.
+    #' Gets join keys to join the dataset of this `FilteredDataset`
+    #' with other `TealDataset` objects.
     #' @return `list` of keys
     get_join_keys = function() {
       private$dataset$get_join_keys()$get(self$get_dataname())
@@ -411,7 +411,7 @@ FilteredDataset <- R6::R6Class( # nolint
   ),
   ## __Private Fields ====
   private = list(
-    dataset = NULL, # Dataset
+    dataset = NULL, # TealDataset
     reactive_data = NULL, # reactive
     eval_env = list(),
     filter_states = list(),
@@ -462,10 +462,10 @@ DefaultFilteredDataset <- R6::R6Class( # nolint
     #' @description
     #' Initializes this `DefaultFilteredDataset` object
     #'
-    #' @param dataset (`Dataset`)\cr
+    #' @param dataset (`TealDataset`)\cr
     #'  single dataset for which filters are rendered
     initialize = function(dataset) {
-      stopifnot(is(dataset, "Dataset"))
+      stopifnot(is(dataset, "TealDataset"))
       super$initialize(dataset)
       dataname <- get_dataname(dataset)
 
@@ -717,10 +717,10 @@ MAEFilteredDataset <- R6::R6Class( # nolint
     #' @description
     #' Initialize `MAEFilteredDataset` object
     #'
-    #' @param dataset (`MAEDataset`)\cr
+    #' @param dataset (`MAETealDataset`)\cr
     #'  single dataset for which filters are rendered
     initialize = function(dataset) {
-      stopifnot(is(dataset, "MAEDataset"))
+      stopifnot(is(dataset, "MAETealDataset"))
       super$initialize(dataset)
 
       dataname <- self$get_dataname()

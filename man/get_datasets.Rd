@@ -2,32 +2,32 @@
 % Please edit documentation in R/get_datasets.R
 \name{get_datasets}
 \alias{get_datasets}
-\alias{get_datasets.DataAbstract}
-\alias{get_datasets.DatasetConnector}
-\alias{get_datasets.Dataset}
-\title{Get a \code{\link{Dataset}} objects.}
+\alias{get_datasets.TealDataAbstract}
+\alias{get_datasets.TealDatasetConnector}
+\alias{get_datasets.TealDataset}
+\title{Get a \code{\link{TealDataset}} objects.}
 \usage{
 get_datasets(x)
 
-\method{get_datasets}{DataAbstract}(x)
+\method{get_datasets}{TealDataAbstract}(x)
 
-\method{get_datasets}{DatasetConnector}(x)
+\method{get_datasets}{TealDatasetConnector}(x)
 
-\method{get_datasets}{Dataset}(x)
+\method{get_datasets}{TealDataset}(x)
 }
 \arguments{
-\item{x}{(\code{\link{RelationalData}})\cr
+\item{x}{(\code{\link{TealData}})\cr
 object containing datasets.}
 }
 \value{
-\code{list} or \code{Dataset} objects
+\code{list} or \code{TealDataset} objects
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
 }
 \examples{
 
-# RelationalData --------
+# TealData --------
 library(scda)
 adsl <- cdisc_dataset(dataname = "ADSL",
                       x = synthetic_cdisc_data("latest")$adsl,
@@ -40,7 +40,7 @@ adae <- cdisc_dataset(dataname = "ADAE",
 rd <- cdisc_data(adsl, adae)
 get_datasets(rd)
 
-# RelationalDataConnector --------
+# TealDataConnector --------
 adsl_cf <- callable_function(function() synthetic_cdisc_data("latest")$adsl)
 adsl <- cdisc_dataset_connector(dataname = "ADSL",
                                 pull_callable = adsl_cf,
@@ -60,13 +60,13 @@ load_datasets(rdc)
 get_datasets(rdc)
 }
 
-# RelationalData --------
+# TealData --------
 drc <- cdisc_data(rdc, adae)
 \dontrun{
 get_datasets(drc)
 }
 
-# DatasetConnector --------
+# TealDatasetConnector --------
 library(scda)
 adsl_cf <- callable_function(
   function() {synthetic_cdisc_data("latest")$adsl}
@@ -78,7 +78,7 @@ load_datasets(rdc)
 get_datasets(rdc)
 }
 
-# Dataset --------
+# TealDataset --------
 library(scda)
 adsl <- cdisc_dataset(dataname = "ADSL",
                       x = synthetic_cdisc_data("latest")$adsl,

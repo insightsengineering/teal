@@ -2,18 +2,18 @@
 % Please edit documentation in R/load_dataset.R
 \name{load_dataset}
 \alias{load_dataset}
-\alias{load_dataset.Dataset}
-\alias{load_dataset.DatasetConnector}
+\alias{load_dataset.TealDataset}
+\alias{load_dataset.TealDatasetConnector}
 \title{Load data from connection}
 \usage{
 load_dataset(x, ...)
 
-\method{load_dataset}{Dataset}(x, ...)
+\method{load_dataset}{TealDataset}(x, ...)
 
-\method{load_dataset}{DatasetConnector}(x, args = NULL, try = FALSE, conn = NULL, ...)
+\method{load_dataset}{TealDatasetConnector}(x, args = NULL, try = FALSE, conn = NULL, ...)
 }
 \arguments{
-\item{x}{(\code{DatasetConnector} or \code{Dataset})}
+\item{x}{(\code{TealDatasetConnector} or \code{TealDataset})}
 
 \item{...}{not used, only for support of S3}
 
@@ -22,26 +22,26 @@ additional dynamic arguments passed to function which loads the data.}
 
 \item{try}{(\code{logical}) whether perform function evaluation inside \code{try} clause}
 
-\item{conn}{Optional (\code{DataConnection}) object required to pull the data.}
+\item{conn}{Optional (\code{TealDataConnection}) object required to pull the data.}
 }
 \value{
 \code{x} with loaded \code{dataset} object
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
-Load data from connection. Function used on \code{\link{DatasetConnector}} and
-\code{\link{Dataset}} to obtain data from connection.
+Load data from connection. Function used on \code{\link{TealDatasetConnector}} and
+\code{\link{TealDataset}} to obtain data from connection.
 }
 \examples{
 
-# Dataset --------
+# TealDataset --------
 library(scda)
 ADSL <- synthetic_cdisc_data("latest")$adsl
 ADSL_dataset <- dataset("ADSL", x = ADSL)
 
 load_dataset(ADSL_dataset)
 
-# DatasetConnector --------
+# TealDatasetConnector --------
 library(scda)
 pull_fun_adsl <- callable_function(
   function() {synthetic_cdisc_data("latest")$adsl}

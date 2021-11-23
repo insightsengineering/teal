@@ -2,19 +2,19 @@
 % Please edit documentation in R/get_dataset_label.R
 \name{get_dataset_label}
 \alias{get_dataset_label}
-\alias{get_dataset_label.DatasetConnector}
-\alias{get_dataset_label.Dataset}
+\alias{get_dataset_label.TealDatasetConnector}
+\alias{get_dataset_label.TealDataset}
 \title{S3 method for getting a label of
-(\code{DatasetConnector} or \code{Dataset}) R6 object}
+(\code{TealDatasetConnector} or \code{TealDataset}) R6 object}
 \usage{
 get_dataset_label(x)
 
-\method{get_dataset_label}{DatasetConnector}(x)
+\method{get_dataset_label}{TealDatasetConnector}(x)
 
-\method{get_dataset_label}{Dataset}(x)
+\method{get_dataset_label}{TealDataset}(x)
 }
 \arguments{
-\item{x}{(\code{DatasetConnector} or \code{Dataset}) R6 object}
+\item{x}{(\code{TealDatasetConnector} or \code{TealDataset}) R6 object}
 }
 \value{
 label (\code{character}) Label to describe the dataset

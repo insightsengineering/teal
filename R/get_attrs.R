@@ -3,7 +3,7 @@
 #' @description `r lifecycle::badge("experimental")`
 #' Get dataset attributes in form of named list.
 #'
-#' @param x an object of (`Dataset`) class
+#' @param x an object of (`TealDataset`) class
 #'
 #' @return named `list` of object attributes
 #'
@@ -16,7 +16,7 @@ get_attrs <- function(x) {
 #' @rdname get_attrs
 #' @export
 #' @examples
-#' # Dataset --------
+#' # TealDataset --------
 #'
 #' library(scda)
 #' ADSL <- synthetic_cdisc_data("latest")$adsl
@@ -32,7 +32,7 @@ get_attrs <- function(x) {
 #' )
 #' get_attrs(x2)
 #'
-#' # CDISCDataset --------
+#' # CDISCTealDataset --------
 #'
 #' library(scda)
 #' ADSL <- synthetic_cdisc_data("latest")$adsl
@@ -43,6 +43,6 @@ get_attrs <- function(x) {
 #'   label = "custom label"
 #' )
 #' get_attrs(x3)
-get_attrs.Dataset <- function(x) {
+get_attrs.TealDataset <- function(x) {
   return(x$get_attrs())
 }

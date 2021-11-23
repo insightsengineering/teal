@@ -5,7 +5,7 @@
 #'
 #' This can be used for the argument `filter` in \code{\link{srv_teal}}.
 #'
-#' @param data (`RelationalData`)
+#' @param data (`TealData`)
 #' @return dummy filter states
 get_dummy_filter <- function(data) { # nousage # nolint
   ADSL <- get_raw_data(x = data, dataname = "ADSL") #nolint

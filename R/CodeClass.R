@@ -61,10 +61,10 @@ CodeClass <- R6::R6Class( # nolint
   public = list(
     #' @description
     #' CodeClass constructor
-    #' @param code (\code{character}) vector of code text to be set
-    #' @param dataname optional, (\code{character}) vector of datanames to assign code to. If empty then the code
+    #' @param code (`character`) vector of code text to be set
+    #' @param dataname optional, (`character`) vector of datanames to assign code to. If empty then the code
     #' is considered to be "global"
-    #' @param deps optional, (\code{character}) vector of datanames that given code depends on
+    #' @param deps optional, (`character`) vector of datanames that given code depends on
     #' @return object of class CodeClass
     initialize = function(code = character(0), dataname = character(0), deps = character(0)) {
       if (length(code) > 0)
@@ -73,9 +73,9 @@ CodeClass <- R6::R6Class( # nolint
       return(invisible(self))
     },
     #' @description
-    #' Append \code{CodeClass} object to a given \code{CodeClass} object
-    #' @param x (\code{CodeClass}) object to be appended
-    #' @return changed \code{CodeClass} object
+    #' Append `CodeClass` object to a given `CodeClass` object
+    #' @param x (`CodeClass`) object to be appended
+    #' @return changed `CodeClass` object
     append = function(x) {
       stopifnot(is(x, "CodeClass"))
       if (!is_empty(x$code)) {
@@ -89,12 +89,12 @@ CodeClass <- R6::R6Class( # nolint
     },
     #' @description
     #' Set code in form of character
-    #' @param code (\code{character}) vector of code text to be set
-    #' @param dataname optional, (\code{character}) vector of datanames to assign code to. If empty then the code
+    #' @param code (`character`) vector of code text to be set
+    #' @param dataname optional, (`character`) vector of datanames to assign code to. If empty then the code
     #' is considered to be "global"
-    #' @param deps optional, (\code{character}) vector of datanames that given code depends on
+    #' @param deps optional, (`character`) vector of datanames that given code depends on
     #'
-    #' @return changed \code{CodeClass} object
+    #' @return changed `CodeClass` object
     set_code = function(code, dataname = character(0), deps = character(0)) {
       stopifnot(
         is_character_vector(code),
@@ -112,10 +112,10 @@ CodeClass <- R6::R6Class( # nolint
     },
     #' @description
     #' Get the code for a given data names
-    #' @param dataname optional, (\code{character}) vector of datanames for which the code is extracted.
-    #' If \code{NULL} then get the code for all data names
-    #' @param deparse optional, (\code{logical}) whether to return the deparsed form of a call
-    #' @return \code{character} or \code{list} of calls
+    #' @param dataname optional, (`character`) vector of datanames for which the code is extracted.
+    #' If `NULL` then get the code for all data names
+    #' @param deparse optional, (`logical`) whether to return the deparsed form of a call
+    #' @return `character` or `list` of calls
     get_code = function(dataname = NULL, deparse = TRUE) {
       stopifnot(is.null(dataname) || is_character_vector(dataname))
       stopifnot(is_logical_single(deparse))
@@ -127,8 +127,8 @@ CodeClass <- R6::R6Class( # nolint
     },
     #' @description
     #' Evaluates internal code within given environment
-    #' @param envir (\code{environment}) environment in which code will be evaluated
-    #' @return invisibly \code{NULL}
+    #' @param envir (`environment`) environment in which code will be evaluated
+    #' @return invisibly `NULL`
     eval = function(envir = new.env(parent = parent.env(.GlobalEnv))) {
       for (x in self$get_code(deparse = FALSE)) {
         out <- tryCatch(
@@ -220,7 +220,7 @@ CodeClass <- R6::R6Class( # nolint
 
   ## __Active Fields ====
   active = list(
-    #' @field code (\code{list}) Derive the code of the dataset.
+    #' @field code (`list`) Derive the code of the dataset.
     code = function() {
       private$.code
     }
@@ -230,7 +230,7 @@ CodeClass <- R6::R6Class( # nolint
 
 ## Functions ====
 
-# Convert named list to \code{CodeClass} utilizing both \code{DatasetConnector} and \code{Dataset}
+# Convert named list to `CodeClass` utilizing both `TealDatasetConnector` and `TealDataset`
 list_to_code_class <- function(x) {
   stopifnot(is_fully_named_list(x))
 
@@ -240,7 +240,7 @@ list_to_code_class <- function(x) {
     for (var_idx in seq_along(x)) {
       var_value <- x[[var_idx]]
       var_name <- names(x)[[var_idx]]
-      if (is(var_value, "DatasetConnector") || is(var_value, "Dataset")) {
+      if (is(var_value, "TealDatasetConnector") || is(var_value, "TealDataset")) {
         res$append(var_value$get_code_class())
         if (var_name != var_value$get_dataname()) {
           res$set_code(
@@ -259,9 +259,9 @@ list_to_code_class <- function(x) {
 
 #' Create call from string
 #'
-#' @param x (\code{character}) string containing the code.
+#' @param x (`character`) string containing the code.
 #'
-#' @return (\code{call}) object.
+#' @return (`call`) object.
 text_to_call <- function(x) {
   parsed <- parse(text = x)
   if (is_empty(parsed)) {
@@ -273,10 +273,10 @@ text_to_call <- function(x) {
 
 #' Format a vector of code into a string
 #'
-#' @param code_vector (\code{character}) vector containing lines of
+#' @param code_vector (`character`) vector containing lines of
 #'   code to format into a string.
 #'
-#' @return (\code{character}) string containing the formatted code.
+#' @return (`character`) string containing the formatted code.
 pretty_code_string <- function(code_vector) {
   # in order to remove bad formatting: text -> code -> text
   ulapply(

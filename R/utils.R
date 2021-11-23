@@ -340,7 +340,7 @@ read_script <- function(file, dataname = NULL) {
 #' @details The information summary provides row numbers and number of duplicates
 #' for each duplicated key value.
 #'
-#' @param dataset \code{Dataset} or \code{dataframe} a dataset, which will be tested
+#' @param dataset \code{TealDataset} or \code{dataframe} a dataset, which will be tested
 #' @param keys \code{character} vector of variable names in `dataset` consisting the key
 #' or \code{keys} object, which does have a `primary` element with a vector of variable
 #' names in `dataset` consisting the key. Optional, default: NULL
@@ -351,7 +351,7 @@ read_script <- function(file, dataname = NULL) {
 #' library(scda)
 #'
 #' adsl <- synthetic_cdisc_data("latest")$adsl
-#' # create a Dataset with default keys
+#' # create a TealDataset with default keys
 #' rel_adsl <- cdisc_dataset("ADSL", adsl)
 #' get_key_duplicates(rel_adsl)
 #'
@@ -367,7 +367,7 @@ read_script <- function(file, dataname = NULL) {
 #'
 #' @seealso \itemize{
 #' \item{\code{\link{get_key_duplicates_util}}}
-#' \item{\code{\link{get_key_duplicates.Dataset}}}
+#' \item{\code{\link{get_key_duplicates.TealDataset}}}
 #' \item{\code{\link{get_key_duplicates.data.frame}}}
 #' }
 #'
@@ -380,13 +380,13 @@ get_key_duplicates <- function(dataset, keys = NULL) {
 #'
 #' @description `r lifecycle::badge("experimental")`
 #' @details S3 method for get_key_duplicates. Uses the public API of
-#' `Dataset` to read the primary key and the raw data.
+#' `TealDataset` to read the primary key and the raw data.
 #'
 #' If `keys` argument is provided, then checks against that, if it's `NULL`, then checks
 #' against the \code{get_keys()$primary} method of the `dataset` argument.
 #'
 #' @inheritParams get_key_duplicates
-#' @param dataset a \code{Dataset} object, which will be used to detect duplicated
+#' @param dataset a \code{TealDataset} object, which will be used to detect duplicated
 #' primary keys
 #'
 #' @examples
@@ -401,7 +401,7 @@ get_key_duplicates <- function(dataset, keys = NULL) {
 #' @seealso \code{\link{get_key_duplicates}} \code{\link{get_key_duplicates_util}}
 #'
 #' @export
-get_key_duplicates.Dataset <- function(dataset, keys = NULL) { #nolint
+get_key_duplicates.TealDataset <- function(dataset, keys = NULL) { #nolint
   df <- get_raw_data(dataset)
   keys <- if_null(keys, if_null(get_keys(dataset), character(0)))
 

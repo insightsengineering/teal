@@ -9,7 +9,7 @@
 #'     Includes code from source if reading from files. Method reads code without
 #'   }
 #' }
-#' \code{library()} or \code{require()} calls. Function created for teal app, but can be used with any file.
+#' `library()` or `require()` calls. Function created for teal app, but can be used with any file.
 #' Get code from certain files and for specific datasets
 #'
 #' Reads code from specified files and specific code chunks.
@@ -21,20 +21,20 @@
 #'   \item{to close chunk }{\code{#<code} or \code{#<ADSL code} or \code{#<ADSL ADTTE code}}
 #' }
 #'
-#' @param x (\code{object}) of class \code{\link{DatasetConnector}} or \code{\link{Dataset}}. If of
-#'   class \code{character} will be treated as file to read.
-#' @param exclude_comments (\code{logical}) whether exclude commented-out lines of code. Lines to be excluded
-#' should be ended with \code{# nocode}. For multiple line exclusions one should enclose ignored block of code with
-#' \code{# nocode>} and \code{# <nocode}
-#' @param read_sources (\code{logical}) whether to replace \code{source("path")} with code lines from sourced file.
-#' If \code{read_sources = TRUE} changing working directory inside preprocessing is not allowed.
-#' @param deparse (\code{logical}) whether return deparsed form of a call
-#' @param files_path (\code{character}) (optional) vector of files path to be read for preprocessing. Code from
+#' @param x (\code{\link{TealDatasetConnector}} or \code{\link{TealDataset}}). If of
+#'   class `character` will be treated as file to read.
+#' @param exclude_comments (`logical`) whether exclude commented-out lines of code. Lines to be excluded
+#' should be ended with `# nocode`. For multiple line exclusions one should enclose ignored block of code with
+#' `# nocode>` and `# <nocode`
+#' @param read_sources (`logical`) whether to replace `source("path")` with code lines from sourced file.
+#' If `read_sources = TRUE` changing working directory inside preprocessing is not allowed.
+#' @param deparse (`logical`) whether return deparsed form of a call
+#' @param files_path (`character`) (optional) vector of files path to be read for preprocessing. Code from
 #' multiple files is joined together.
-#' @param dataname (\code{character}) Name of dataset to return code for.
+#' @param dataname (`character`) Name of dataset to return code for.
 #' @param ... not used, only for support of S3
 #' @export
-#' @return (\code{character}) code of import and preparation of data for teal application.
+#' @return (`character`) code of import and preparation of data for teal application.
 get_code <- function(x, ...) {
   UseMethod("get_code")
 }
@@ -44,14 +44,14 @@ get_code <- function(x, ...) {
 
 #' @export
 #' @rdname get_code
-get_code.DatasetConnector <- function(x, deparse = TRUE, ...) {
+get_code.TealDatasetConnector <- function(x, deparse = TRUE, ...) {
   check_ellipsis(...)
   x$get_code(deparse = deparse)
 }
 
 #' @export
 #' @rdname get_code
-get_code.Dataset <- function(x, deparse = TRUE, ...) {
+get_code.TealDataset <- function(x, deparse = TRUE, ...) {
   check_ellipsis(...)
   x$get_code(deparse = deparse)
 }
@@ -81,7 +81,7 @@ get_code.Dataset <- function(x, deparse = TRUE, ...) {
 #' get_code(rd)
 #' get_code(rd, "XY")
 #' get_code(rd, "XYZ")
-get_code.DataAbstract <- function(x, dataname = character(0), deparse = TRUE, ...) { # nolint
+get_code.TealDataAbstract <- function(x, dataname = character(0), deparse = TRUE, ...) { # nolint
   check_ellipsis(...)
   if (!is_empty(dataname)) {
     if (any(!(dataname %in% x$get_datanames()))) {
@@ -155,11 +155,11 @@ get_code.default <- function(x,
 #' Get code
 #'
 #' Get code from specified file.
-#' @param file_path (\code{character}) path or URL address of the file to be parsed
-#' @param if_url (\code{logical}) (optional) TRUE when URL address is provided
+#' @param file_path (`character`) path or URL address of the file to be parsed
+#' @param if_url (`logical`) (optional) TRUE when URL address is provided
 #' @inheritParams get_code
 #'
-#' @return lines (\code{character}) of preprocessing code
+#' @return lines (`character`) of preprocessing code
 get_code_single <- function(file_path, read_sources, if_url = grepl("^http[s]", file_path)) {
   stopifnot(is_character_single(file_path))
   if (!if_url) {
@@ -185,8 +185,8 @@ get_code_single <- function(file_path, read_sources, if_url = grepl("^http[s]", 
 #' Get code enclosed within
 #'
 #' Extracts lines from code which are enclosed within regexp starts_at and stops_at
-#' @param lines (\code{character}) of preprocessing code.
-#' @return (\code{character}) subset of lines which start and end with preprocessing
+#' @param lines (`character`) of preprocessing code.
+#' @return (`character`) subset of lines which start and end with preprocessing
 #'   start and stop tags.
 enclosed_with <- function(lines) {
   stopifnot(is_character_vector(lines))
@@ -222,8 +222,8 @@ enclosed_with <- function(lines) {
 #'
 #' Extracts lines from code which are enclosed within regexp starts_at and stops_at
 #' @inheritParams enclosed_with
-#' @param dataname (\code{character}) metadata for returned lines
-#' @return  (\code{list}) list of lines and their numbers from certain chunks of code at the specific file.
+#' @param dataname (`character`) metadata for returned lines
+#' @return  (`list`) list of lines and their numbers from certain chunks of code at the specific file.
 enclosed_with_dataname <- function(lines, dataname = NULL) {
   stopifnot(is_character_vector(lines))
   dataname <- if_blank(dataname, "")
@@ -279,7 +279,7 @@ enclosed_with_dataname <- function(lines, dataname = NULL) {
 
 #' Exclude from code
 #'
-#' Excludes lines from code. It is possible to exclude one line ended by \code{# nocode}
+#' Excludes lines from code. It is possible to exclude one line ended by `# nocode`
 #' @inheritParams enclosed_with
 #' @inheritParams get_code
 #' @inheritParams get_code_single
@@ -316,7 +316,7 @@ code_exclude <- function(lines, exclude_comments, file_path) {
 
 #' Finds lines of code with source call
 #'
-#' Finds lines in preprocessing code where \code{source()} call is located
+#' Finds lines in preprocessing code where `source()` call is located
 #' @inheritParams enclosed_with
 find_source_code <- function(lines) {
   stopifnot(is_character_vector(lines))

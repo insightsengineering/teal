@@ -114,7 +114,7 @@ ui_teal <- function(id,
 #' For more doc, see \code{\link{ui_teal}}.
 #'
 #' @inheritParams srv_shiny_module_arguments
-#' @param raw_data `reactive` which returns the `RelationalData`, only evaluated once,
+#' @param raw_data `reactive` which returns the `TealData`, only evaluated once,
 #'   `NULL` value is ignored
 #' @inheritParams srv_tabs_with_filters
 #' @inheritParams init

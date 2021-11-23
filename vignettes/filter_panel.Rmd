@@ -205,7 +205,7 @@ list.
 `dplyr::filter` for `ADTTE` is followed by the merge call with `FILTERED_ADSL` - to be filtered by
 keys available parent.
 
-(7) `FilteredDatasetMAE` is based on MAEDataset where `raw_data` contains multiple object which can
+(7) `FilteredDatasetMAE` is based on `MAEDataset` where `raw_data` contains multiple object which can
 be filtered on. In general `MultiAssayExperiment` contains `colData(MAE)` which is a `DataFrame`
 with ADSL-like patient data. `MAE` contains also multiple experiments which can be extracted using
 `MAE[["experiment name"]]` and they can also be filtered in filter-panel. This means that

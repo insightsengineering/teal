@@ -45,7 +45,7 @@ be constructed. This input can be read by a \code{teal.devel::data_extract_modul
 
 \describe{
 \enumerate{
-\item{Dataset with multiple filters and column selection}{
+\item{\code{TealDataset} with multiple filters and column selection}{
 \preformatted{
 adtte_filters <- filter_spec(
 vars = c("PARAMCD", "CNSR"),
@@ -69,13 +69,13 @@ data_extract_spec(
 )
     }
 \if{html}{
-      \figure{data_extract_spec_1.png}{options: alt="Dataset with multiple filters and column selection"}
+      \figure{data_extract_spec_1.png}{options: alt="TealDataset with multiple filters and column selection"}
     }
 \if{html}{
-      \figure{data_extract_spec_12.png}{options: alt="Dataset with multiple filters and column selection"}
+      \figure{data_extract_spec_12.png}{options: alt="TealDataset with multiple filters and column selection"}
     }
 \if{html}{
-      \figure{data_extract_spec_11.png}{options: alt="Dataset with multiple filters and column selection"}
+      \figure{data_extract_spec_11.png}{options: alt="TealDataset with multiple filters and column selection"}
     }
 }
 \item{Data extract without filtering}{

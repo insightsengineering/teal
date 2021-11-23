@@ -7,7 +7,7 @@
 teal_data(..., join_keys, code = "", check = FALSE)
 }
 \arguments{
-\item{...}{(\code{RelationalDataConnector}, \code{Dataset}, \code{DatasetConnector})\cr
+\item{...}{(\code{TealDataConnector}, \code{TealDataset}, \code{TealDatasetConnector})\cr
 objects}
 
 \item{join_keys}{(\code{JoinKeys}) or a single (\code{JoinKeySet})\cr
@@ -20,7 +20,7 @@ If empty then no joins between pairs of objects}
 as provided in arguments. Check is run only if flag is true and preprocessing code is not empty.}
 }
 \value{
-(\code{RelationalData})
+(\code{TealData})
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}

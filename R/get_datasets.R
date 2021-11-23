@@ -1,11 +1,11 @@
-#' Get a \code{\link{Dataset}} objects.
+#' Get a \code{\link{TealDataset}} objects.
 #'
 #' @description `r lifecycle::badge("experimental")`
 #'
-#' @param x (\code{\link{RelationalData}})\cr
+#' @param x (\code{\link{TealData}})\cr
 #'  object containing datasets.
 #' @export
-#' @return \code{list} or \code{Dataset} objects
+#' @return `list` or `TealDataset` objects
 get_datasets <- function(x) {
   UseMethod("get_datasets")
 }
@@ -14,7 +14,7 @@ get_datasets <- function(x) {
 #' @export
 #' @examples
 #'
-#' # RelationalData --------
+#' # TealData --------
 #' library(scda)
 #' adsl <- cdisc_dataset(dataname = "ADSL",
 #'                       x = synthetic_cdisc_data("latest")$adsl,
@@ -27,7 +27,7 @@ get_datasets <- function(x) {
 #' rd <- cdisc_data(adsl, adae)
 #' get_datasets(rd)
 #'
-#' # RelationalDataConnector --------
+#' # TealDataConnector --------
 #' adsl_cf <- callable_function(function() synthetic_cdisc_data("latest")$adsl)
 #' adsl <- cdisc_dataset_connector(dataname = "ADSL",
 #'                                 pull_callable = adsl_cf,
@@ -47,12 +47,12 @@ get_datasets <- function(x) {
 #' get_datasets(rdc)
 #'}
 #'
-#' # RelationalData --------
+#' # TealData --------
 #' drc <- cdisc_data(rdc, adae)
 #' \dontrun{
 #' get_datasets(drc)
 #' }
-get_datasets.DataAbstract <- function(x) { # nolint
+get_datasets.TealDataAbstract <- function(x) { # nolint
   res <- x$get_datasets()
   if (is_empty(res)) {
     return(invisible(NULL))
@@ -64,7 +64,7 @@ get_datasets.DataAbstract <- function(x) { # nolint
 #' @export
 #' @examples
 #'
-#' # DatasetConnector --------
+#' # TealDatasetConnector --------
 #' library(scda)
 #' adsl_cf <- callable_function(
 #'   function() {synthetic_cdisc_data("latest")$adsl}
@@ -75,7 +75,7 @@ get_datasets.DataAbstract <- function(x) { # nolint
 #' load_datasets(rdc)
 #' get_datasets(rdc)
 #'}
-get_datasets.DatasetConnector <- function(x) { # nolint
+get_datasets.TealDatasetConnector <- function(x) { # nolint
   res <- x$get_dataset()
   if (is_empty(res)) {
     return(invisible(NULL))
@@ -87,13 +87,13 @@ get_datasets.DatasetConnector <- function(x) { # nolint
 #' @export
 #' @examples
 #'
-#' # Dataset --------
+#' # TealDataset --------
 #' library(scda)
 #' adsl <- cdisc_dataset(dataname = "ADSL",
 #'                       x = synthetic_cdisc_data("latest")$adsl,
 #'                       code = "library(scda)\nADSL <- synthetic_cdisc_data(\"latest\")$adsl")
 #'
 #' get_datasets(adsl)
-get_datasets.Dataset <- function(x) {
+get_datasets.TealDataset <- function(x) {
   x
 }
