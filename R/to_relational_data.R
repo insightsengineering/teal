@@ -51,9 +51,16 @@ to_relational_data.list <- function(data) { #nousage
   parsed_names <- as.character(call)[-1]
 
   if (
-    (is_empty(list_names) && is_empty(parsed_names) &&
-     (any(sapply(data, function(x) inherits(x, "dataset"))) || any(sapply(data, function(x) inherits(x, "data.frame"))))) ||
-     (any(list_names == "") && is_empty(parsed_names)) || (any(is.na(list_names)))
+    (
+      is_empty(list_names) &&
+      is_empty(parsed_names) &&
+      (
+        any(sapply(data, function(x) inherits(x, "dataset"))) ||
+        any(sapply(data, function(x) inherits(x, "data.frame")))
+      )
+    ) ||
+    (any(list_names == "") && is_empty(parsed_names)) ||
+    (any(is.na(list_names)))
   ) {
     stop("Unnamed lists shouldn't be provided as input for data. Please use a named list.")
   }

@@ -4,7 +4,9 @@ testthat::test_that("MAETealDataset constructors do not raise exceptions", {
     "testMAE <- MultiAssayExperiment::miniACC",
     dataname = "testMAE"
   )
-  testthat::expect_silent(MAETealDataset$new(dataname = "testMAE", x = MultiAssayExperiment::miniACC, code = code_class))
+  testthat::expect_silent(
+    MAETealDataset$new(dataname = "testMAE", x = MultiAssayExperiment::miniACC, code = code_class)
+  )
 })
 
 testthat::test_that("MAETealDataset$recreate updates the class fields", {

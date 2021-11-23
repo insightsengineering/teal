@@ -944,7 +944,7 @@ testthat::test_that("TealDatasetConnector$is_mutate_delayed returns TRUE if not 
   testthat::expect_true(dc$is_mutate_delayed())
 })
 
-testthat::test_that("TealDatasetConnector$is_mutate_delayed returns TRUE if mutated with no delayed objects and pulled", {
+testthat::test_that("TealDatasetConnector$is_mutate_delayed returns TRUE if mutated with no delayed objects and pulled", { # nolint
   cf <- CallableFunction$new(function() head(mtcars))
   dc <- TealDatasetConnector$new("mtcars", cf)
   dc$mutate(code = "")
@@ -974,7 +974,10 @@ testthat::test_that("Pulling an already pulled TealDatasetConnector after mutati
   dc <- TealDatasetConnector$new("mtcars", cf)
   dc$pull()
   dc$mutate(code = "mtcars[1] <- NULL")
-  dc$mutate(code = "", vars = list(delayed = TealDatasetConnector$new("iris", CallableFunction$new(function() head(iris)))))
+  dc$mutate(
+    code = "",
+    vars = list(delayed = TealDatasetConnector$new("iris", CallableFunction$new(function() head(iris))))
+  )
   dc$pull()
   testthat::expect_equal(dc$get_raw_data(), head(mtcars))
 })
@@ -985,7 +988,10 @@ testthat::test_that("Pulling an already pulled TealDatasetConnector after mutati
   dc <- TealDatasetConnector$new("mtcars", cf)
   dc$pull()
   dc$mutate(code = "mtcars[1] <- NULL")
-  dc$mutate(code = "", vars = list(delayed = TealDatasetConnector$new("iris", CallableFunction$new(function() head(iris)))))
+  dc$mutate(
+    code = "",
+    vars = list(delayed = TealDatasetConnector$new("iris", CallableFunction$new(function() head(iris))))
+  )
   pre_pull_code <- dc$get_code()
   dc$pull()
   testthat::expect_equal(dc$get_code(), pre_pull_code)

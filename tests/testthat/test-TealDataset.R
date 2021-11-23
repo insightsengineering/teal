@@ -166,14 +166,14 @@ testthat::test_that("TealDataset$set_vars throws an error if passed the enclosin
   testthat::expect_error(test_ds$set_vars(vars = list(itself = test_ds)), regexp = "Circular dependencies detected")
 })
 
-testthat::test_that("TealDataset$set_vars throws an error if passed the enclosing TealDataset object indirectly, distance 1", {
+testthat::test_that("TealDataset$set_vars throws an error if passed the enclosing TealDataset object indirectly, distance 1", { # nolint
   test_ds0 <- TealDataset$new("mtcars", mtcars)
   test_ds1 <- TealDataset$new("iris", iris)
   test_ds1$set_vars(vars = list(test_ds0 = test_ds0))
   testthat::expect_error(test_ds0$set_vars(vars = list(test_ds1 = test_ds1)), regexp = "Circular dependencies detected")
 })
 
-testthat::test_that("TealDataset$set_vars throws an error if passed the enclosing TealDataset object indirectly, distance 2", {
+testthat::test_that("TealDataset$set_vars throws an error if passed the enclosing TealDataset object indirectly, distance 2", { # nolint
   test_ds0 <- TealDataset$new("mtcars", mtcars)
   test_ds1 <- TealDataset$new("iris", iris)
   test_ds2 <- TealDataset$new("rock", rock)

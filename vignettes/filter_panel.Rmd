@@ -18,7 +18,7 @@ of several classes but `FilteredData` is the only class which app developer will
 `FilteredData` is accessible in teal modules as a `dataset` argument.
 
 ```{r echo=FALSE, out.width='75%'}
-knitr::include_graphics('./images/filter_panel/filter_panel_uml_all.jpg')
+knitr::include_graphics("./images/filter_panel/filter_panel_uml_all.jpg")
 ```
 
 `FilteredData` contains one-to-many `FilteredDataset` objects which contain `Dataset` passed from
@@ -32,7 +32,7 @@ call.
 ## Initialization
 
 ```{r echo=FALSE, out.width='100%'}
-knitr::include_graphics('./images/filter_panel/filtered_data_init.jpg')
+knitr::include_graphics("./images/filter_panel/filtered_data_init.jpg")
 ```
 
 `FilteredData` is initialized in `srv_teal` when `RelationalData$is_pulled()` returns `TRUE`.
@@ -60,7 +60,7 @@ This section describes in detail each class managing filter panel.
 ### `FilteredData`
 
 ```{r echo=FALSE, out.width='75%'}
-knitr::include_graphics('./images/filter_panel/class_details_filtered_data.jpg')
+knitr::include_graphics("./images/filter_panel/class_details_filtered_data.jpg")
 ```
 
 `FilteredData` is exposed to the apps/modules developer as a `dataset` argument in the modules.
@@ -84,7 +84,7 @@ In the analytical modules `datasets` can be used to:
 ### `FilteredDataset`
 
 ```{r echo=FALSE, out.width='100%'}
-knitr::include_graphics('./images/filter_panel/class_details_filtered_dataset.jpg')
+knitr::include_graphics("./images/filter_panel/class_details_filtered_dataset.jpg")
 ```
 
 `FilteredDataset` is a class which keeps unfiltered data and returns filtered data based on the
@@ -105,7 +105,7 @@ Following `FilteredDataset` derived classes are already implemented:
 ### `FilterStates`
 
 ```{r echo=FALSE, out.width='100%'}
-knitr::include_graphics('./images/filter_panel/class_details_filter_states.jpg')
+knitr::include_graphics("./images/filter_panel/class_details_filter_states.jpg")
 ```
 
 `FilterStates` are initialized by the `FilteredDataset` when teal app starts. The type and number of
@@ -136,7 +136,7 @@ Currently following variants are possible:
 ### `FilterState`
 
 ```{r echo=FALSE, out.width='100%'}
-knitr::include_graphics('./images/filter_panel/class_details_filter_state.jpg')
+knitr::include_graphics("./images/filter_panel/class_details_filter_state.jpg")
 ```
 
 This class controls single filter card and returns condition call depending on what is selected.
@@ -157,7 +157,7 @@ in returned condition call. For example if `FilterState` is initialized with
 ### Overview
 
 ```{r echo=FALSE, out.width='100%'}
-knitr::include_graphics('./images/filter_panel/get_call_overview.jpg')
+knitr::include_graphics("./images/filter_panel/get_call_overview.jpg")
 ```
 
 Above diagram presents filter panel classes and their responsibilities when composing filter calls.
@@ -173,7 +173,7 @@ Above diagram presents filter panel classes and their responsibilities when comp
 ### Example
 
 ```{r echo=FALSE, out.width='100%'}
-knitr::include_graphics('./images/filter_panel/get_call_example.jpg')
+knitr::include_graphics("./images/filter_panel/get_call_example.jpg")
 ```
 
 Calling `datasets$get_call(<dataname>)` in teal modules executes chain of calls in all filter panel

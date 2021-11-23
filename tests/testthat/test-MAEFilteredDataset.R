@@ -1,12 +1,16 @@
 testthat::test_that("MAEFilteredDataset accepts a MAETealDataset object", {
-  testthat::expect_error(MAEFilteredDataset$new(dataset = MAETealDataset$new("miniACC", MultiAssayExperiment::miniACC)), NA)
+  testthat::expect_error(
+    MAEFilteredDataset$new(dataset = MAETealDataset$new("miniACC", MultiAssayExperiment::miniACC)),
+    NA
+  )
 })
 
 testthat::test_that("MAEFilteredDataset throws error with non-MAETealDataset dataset", {
   testthat::expect_error(
     MAEFilteredDataset$new(dataset = TealDataset$new("iris", head(iris))),
-    "is(dataset, \"MAETealDataset\") is not TRUE"
-    , fixed = TRUE)
+    "is(dataset, \"MAETealDataset\") is not TRUE",
+    fixed = TRUE
+  )
 })
 
 testthat::test_that("MAEFilteredDataset$get_call returns a call without applying filter", {
