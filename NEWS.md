@@ -18,12 +18,13 @@
 * Added support for `shiny::moduleServer` passed to the `server` parameter of `teal::module`.
 
 ### Bug fixes
-* Fixed data loading of `DatasetConnector` being dependent on other `Dataset` or `DatasetConnector` objects. 
+* Fixed data loading of `DatasetConnector` being dependent on other `Dataset` or `DatasetConnector` objects.
 * Fixed call returned by `FilterState` in case of using `MultiAssayExperiment::subsetByColData`. Now single condition for variable containing `NA` values is `!is.na(var) & var == <condition>`.
 
 ### Miscellaneous
 * Replaced the servers from `DataConnection`, `RelationalDataConnector`, `DatasetConnector`, and `RelationalData` with `moduleServer`.
 * Updated R version requirement to >= 3.6.
+* Changed references to outdated functions of `teal.devel` in the documentation.
 
 # teal 0.10.0
 
