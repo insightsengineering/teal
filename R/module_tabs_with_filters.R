@@ -129,7 +129,7 @@ ui_tabs_with_filters <- function(id, modules, datasets) {
 #' @inheritParams srv_shiny_module_arguments
 #' @return `reactive` currently selected active_module
 srv_tabs_with_filters <- function(input, output, session, datasets, modules) {
-  active_module <- callModule(srv_nested_tabs, "modules_ui", datasets = datasets, modules = modules)
+  active_module <- srv_nested_tabs(id = "modules_ui", datasets = datasets, modules = modules)
 
   active_datanames <- eventReactive(
     eventExpr = active_module(),
