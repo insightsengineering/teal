@@ -21,8 +21,7 @@
 #'   \item{to close chunk }{`#<code` or `#<ADSL code` or `#<ADSL ADTTE code`}
 #' }
 #'
-#' @param x ([TealDatasetConnector] or [TealDataset]). If of
-#'   class `character` will be treated as file to read.
+#' @param x ([`TealDatasetConnector`] or [`TealDataset`]). If of class `character` will be treated as file to read.
 #' @param exclude_comments (`logical`) whether exclude commented-out lines of code. Lines to be excluded
 #' should be ended with `# nocode`. For multiple line exclusions one should enclose ignored block of code with
 #' `# nocode>` and `# <nocode`

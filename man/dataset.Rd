@@ -3,7 +3,7 @@
 \name{dataset}
 \alias{dataset}
 \alias{dataset.data.frame}
-\title{Constructor for \link{TealDataset} class}
+\title{Constructor for \code{\link{TealDataset}} class}
 \usage{
 dataset(
   dataname,
@@ -49,7 +49,7 @@ are included to this object as local \code{vars} and they cannot be modified
 within another dataset.}
 }
 \value{
-\link{TealDataset} object
+\code{\link{TealDataset}} object
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}

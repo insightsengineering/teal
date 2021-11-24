@@ -9,7 +9,7 @@ data_extract_spec(dataname, select = NULL, filter = NULL, reshape = FALSE)
 \arguments{
 \item{dataname}{(\code{character}) The name of the dataset to
 be extracted. This dataset has to be handed over to the \code{data} argument of the
-\link{init} function.}
+\code{\link{init}} function.}
 
 \item{select}{(\code{NULL} or \code{select_spec}-S3 class or \code{delayed_select_spec}-S3-class object)
 Columns to be selected from the input dataset

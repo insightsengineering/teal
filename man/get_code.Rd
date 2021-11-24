@@ -27,8 +27,7 @@ get_code(x, ...)
 )
 }
 \arguments{
-\item{x}{(\link{TealDatasetConnector} or \link{TealDataset}). If of
-class \code{character} will be treated as file to read.}
+\item{x}{(\code{\link{TealDatasetConnector}} or \code{\link{TealDataset}}). If of class \code{character} will be treated as file to read.}
 
 \item{...}{not used, only for support of S3}
 

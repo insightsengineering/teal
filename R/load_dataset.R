@@ -1,8 +1,8 @@
 #' Load data from connection
 #'
 #' @description `r lifecycle::badge("experimental")`
-#' Load data from connection. Function used on [TealDatasetConnector] and
-#' [TealDataset] to obtain data from connection.
+#' Load data from connection. Function used on [`TealDatasetConnector`] and
+#' [`TealDataset`] to obtain data from connection.
 #'
 #' @param x (`TealDatasetConnector` or `TealDataset`)
 #' @param args (`NULL` or named `list`)\cr
@@ -70,13 +70,11 @@ load_dataset.TealDatasetConnector <- function(x, args = NULL, try = FALSE, conn 
 #'
 #' @description `r lifecycle::badge("experimental")`
 #'
-#' @param x ([TealData], [TealDataset] or [TealDatasetConnector])
+#' @param x ([`TealData`], [`TealDataset`] or [`TealDatasetConnector`])
 #' @param args (`NULL` or named `list`)\cr
-#'   additional dynamic arguments passed to function which loads the data. Applicable only on
-#'   [TealDatasetConnector])
+#'   additional dynamic arguments passed to function which loads the data. Applicable only on [`TealDatasetConnector`])
 #' @param try (`logical`)\cr
-#'   whether perform function evaluation inside `try` clause. Applicable only on
-#'   [TealDatasetConnector])
+#'   whether perform function evaluation inside `try` clause. Applicable only on [`TealDatasetConnector`])
 #' @param ... (not used)\cr
 #'  only for support of S3
 #'

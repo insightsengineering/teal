@@ -23,7 +23,7 @@
 #' @param id module id
 #' @param splash_ui `shiny.tag` UI to display initially,
 #'   can be a splash screen or a Shiny module UI. For the latter, see
-#'   [init] about how to call the corresponding server function.
+#'   [`init`] about how to call the corresponding server function.
 #' @param title (`character`) The browser window title (defaults to the host URL of the page)
 #' @param header `shiny.tag or character` header to display above the app
 #' @param footer `shiny.tag or character` footer to display below the app

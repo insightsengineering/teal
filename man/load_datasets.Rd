@@ -19,18 +19,16 @@ load_datasets(x, ...)
 \method{load_datasets}{TealData}(x, ...)
 }
 \arguments{
-\item{x}{(\link{TealData}, \link{TealDataset} or \link{TealDatasetConnector})}
+\item{x}{(\code{\link{TealData}}, \code{\link{TealDataset}} or \code{\link{TealDatasetConnector}})}
 
 \item{...}{(not used)\cr
 only for support of S3}
 
 \item{args}{(\code{NULL} or named \code{list})\cr
-additional dynamic arguments passed to function which loads the data. Applicable only on
-\link{TealDatasetConnector})}
+additional dynamic arguments passed to function which loads the data. Applicable only on \code{\link{TealDatasetConnector}})}
 
 \item{try}{(\code{logical})\cr
-whether perform function evaluation inside \code{try} clause. Applicable only on
-\link{TealDatasetConnector})}
+whether perform function evaluation inside \code{try} clause. Applicable only on \code{\link{TealDatasetConnector}})}
 }
 \value{
 If executed in the interactive session shiny app is opened to load the data. If executed in

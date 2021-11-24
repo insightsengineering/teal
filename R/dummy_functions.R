@@ -3,7 +3,7 @@
 
 #' Get dummy filter states to apply initially
 #'
-#' This can be used for the argument `filter` in [srv_teal].
+#' This can be used for the argument `filter` in [`srv_teal`].
 #'
 #' @param data (`TealData`)
 #' @return dummy filter states

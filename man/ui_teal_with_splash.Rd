@@ -2,7 +2,7 @@
 % Please edit documentation in R/module_teal_with_splash.R
 \name{ui_teal_with_splash}
 \alias{ui_teal_with_splash}
-\title{UI to show a splash screen in the beginning, then delegate to \link{srv_teal}}
+\title{UI to show a splash screen in the beginning, then delegate to \code{\link{srv_teal}}}
 \usage{
 ui_teal_with_splash(
   id,
@@ -28,12 +28,12 @@ object containing data}
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#maturing}{\figure{lifecycle-maturing.svg}{options: alt='[Maturing]'}}}{\strong{[Maturing]}}
 The splash screen could be used to query for a password to fetch the data.
-\link{init} is a very thin wrapper around this module useful for end-users which
+\code{\link{init}} is a very thin wrapper around this module useful for end-users which
 assumes that it is a top-level module and cannot be embedded.
 This function instead adheres to the Shiny module conventions.
 
 If data is obtained through delayed loading, its splash screen is used. Otherwise,
 a default splash screen is shown.
 
-Please also refer to the doc of \link{init}.
+Please also refer to the doc of \code{\link{init}}.
 }

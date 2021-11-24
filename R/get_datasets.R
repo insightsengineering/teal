@@ -1,8 +1,8 @@
-#' Get a [TealDataset] objects.
+#' Get a [`TealDataset`] objects.
 #'
 #' @description `r lifecycle::badge("experimental")`
 #'
-#' @param x ([TealData])\cr
+#' @param x ([`TealData`])\cr
 #'  object containing datasets.
 #' @export
 #' @return `list` or `TealDataset` objects

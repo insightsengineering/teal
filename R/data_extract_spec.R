@@ -19,7 +19,7 @@
 #'
 #' @param dataname (`character`) The name of the dataset to
 #'   be extracted. This dataset has to be handed over to the `data` argument of the
-#'   [init] function.
+#'   [`init`] function.
 #' @param select (`NULL` or `select_spec`-S3 class or `delayed_select_spec`-S3-class object)
 #'  Columns to be selected from the input dataset
 #'  mentioned in `dataname`. The setup can be created using [select_spec] function.
