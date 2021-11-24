@@ -6,7 +6,7 @@
 \alias{variable_choices.data.frame}
 \alias{variable_choices.TealDataset}
 \alias{variable_choices.TealDatasetConnector}
-\title{Wrapper on \code{\link{choices_labeled}} to label variables basing on existing labels in data}
+\title{Wrapper on \link{choices_labeled} to label variables basing on existing labels in data}
 \usage{
 variable_choices(data, subset = NULL, fill = FALSE, key = NULL)
 
@@ -36,7 +36,7 @@ See examples for more details.}
 \item{key}{(\code{character}) vector with names of the variables, which are part of the primary key
 of the \code{data} argument. This is an optional argument, which allows to identify variables
 associated with the primary key and display the appropriate icon for them in the
-\code{\link{optionalSelectInput}} widget.}
+\link{optionalSelectInput} widget.}
 }
 \value{
 named character vector with additional attributes or \code{delayed_data} object

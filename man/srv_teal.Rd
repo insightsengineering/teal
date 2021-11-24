@@ -15,7 +15,7 @@ srv_teal(input, output, session, modules, raw_data, filter = list())
 
 \item{modules}{(\code{teal_module} or \code{teal_modules})
 single or multiple modules. \code{teal_modules}  can be used for nested
-tabs, see \code{\link{ui_nested_tabs}}}
+tabs, see \link{ui_nested_tabs}}
 
 \item{raw_data}{\code{reactive} which returns the \code{TealData}, only evaluated once,
 \code{NULL} value is ignored}
@@ -60,5 +60,5 @@ The initially displayed filter states can be provided, bookmarked filter
 states always take precedence over them.
 }
 \details{
-For more doc, see \code{\link{ui_teal}}.
+For more doc, see \link{ui_teal}.
 }

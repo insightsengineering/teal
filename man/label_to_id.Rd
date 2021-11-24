@@ -22,7 +22,7 @@ to "}".
 This can be used to create a hierarchy within a Shiny module namespace
 itself, e.g. create nested tabs whose ids all live in one namespace,
 but where a child tab's name is prefixed with the parent tab's name.
-See \code{\link{ui_nested_tabs}}.
+See \link{ui_nested_tabs}.
 }
 \examples{
 label_to_id <- teal:::label_to_id

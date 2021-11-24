@@ -807,9 +807,9 @@ ricepass_connection <- function() {
 #'   `RocheTeradata::connect_teradata` open function. Please note that the `type`
 #'   argument will be overwritten with `ODBC`.
 #' @param close_args optional, named (`list`) of additional parameters for the connection's
-#'   \code{\link[DBI]{dbDisconnect}} close function.
+#'   [DBI::dbDisconnect()] close function.
 #' @param ping_args optional, named (`list`) of additional parameters for the connection's
-#'   \code{\link[DBI]{dbIsValid}} ping function.
+#'   [DBI::dbIsValid()] ping function.
 #'
 #' @return (`TealDataConnection`) type of object
 #'
@@ -862,9 +862,9 @@ snowflake_connection_function <- function(username = askpass::askpass("Please en
 #' @param open_args optional, named (`list`) of additional parameters for the connection's
 #'   `teal::snowflake_connection_function` open function.
 #' @param close_args optional, named (`list`) of additional parameters for the connection's
-#'   \code{\link[DBI]{dbDisconnect}} close function.
+#'   [DBI::dbDisconnect()] close function.
 #' @param ping_args optional, named (`list`) of additional parameters for the connection's
-#'   \code{\link[DBI]{dbIsValid}} ping function.
+#'   [DBI::dbIsValid()] ping function.
 #'
 #' @return (`TealDataConnection`) type of object
 #'

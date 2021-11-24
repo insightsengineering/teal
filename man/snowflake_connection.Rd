@@ -15,10 +15,10 @@ snowflake_connection(
 \code{teal::snowflake_connection_function} open function.}
 
 \item{close_args}{optional, named (\code{list}) of additional parameters for the connection's
-\code{\link[DBI]{dbDisconnect}} close function.}
+\code{\link[DBI:dbDisconnect]{DBI::dbDisconnect()}} close function.}
 
 \item{ping_args}{optional, named (\code{list}) of additional parameters for the connection's
-\code{\link[DBI]{dbIsValid}} ping function.}
+\code{\link[DBI:dbIsValid]{DBI::dbIsValid()}} ping function.}
 }
 \value{
 (\code{TealDataConnection}) type of object

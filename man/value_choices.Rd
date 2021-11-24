@@ -6,7 +6,7 @@
 \alias{value_choices.data.frame}
 \alias{value_choices.TealDataset}
 \alias{value_choices.TealDatasetConnector}
-\title{Wrapper on \code{\link{choices_labeled}} to label variable values basing on other variable values}
+\title{Wrapper on \link{choices_labeled} to label variable values basing on other variable values}
 \usage{
 value_choices(data, var_choices, var_label = NULL, subset = NULL, sep = " - ")
 

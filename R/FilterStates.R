@@ -117,7 +117,7 @@ init_filter_states.SummarizedExperiment <- function(data, #nolint #nousage
 #' @title `FilterStates` R6 class
 #'
 #' @description
-#' Implements \code{\link{ReactiveQueue}} to the `teal` filters.
+#' Implements [ReactiveQueue] to the `teal` filters.
 #' Class manages adding and removing `FilterState` to the reactive
 #' queue and returns reproducible R expression relevant to specific
 #' `FilterStates` subclass.

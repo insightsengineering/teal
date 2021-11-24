@@ -9,7 +9,7 @@
 #' an object of class `TealDataConnection` must be provided.
 #' Data can be pulled via the `pull` method and accessed directly
 #' through the `dataset` active binding.
-#' Pulled data inherits from the class \code{\link{TealDataset}}
+#' Pulled data inherits from the class [TealDataset]
 #'
 #' @param dataname (`character`)\cr
 #'  A given name for the dataset it may not contain spaces

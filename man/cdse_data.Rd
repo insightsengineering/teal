@@ -8,7 +8,7 @@ cdse_data(..., connection = cdse_connection())
 }
 \arguments{
 \item{...}{(\code{TealDatasetConnector} objects)\cr
-dataset connectors created using \code{\link{cdse_dataset_connector}}}
+dataset connectors created using \link{cdse_dataset_connector}}
 
 \item{connection}{(\code{TealDataConnection}) object returned from \code{cdse_connection}.}
 }

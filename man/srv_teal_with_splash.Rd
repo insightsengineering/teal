@@ -3,7 +3,7 @@
 \name{srv_teal_with_splash}
 \alias{srv_teal_with_splash}
 \title{Server function that loads the data through reactive loading and then delegates
-to \code{\link{srv_teal}}.}
+to \link{srv_teal}.}
 \usage{
 srv_teal_with_splash(input, output, session, data, modules, filter = list())
 }
@@ -18,7 +18,7 @@ srv_teal_with_splash(input, output, session, data, modules, filter = list())
 
 \item{modules}{(\code{teal_module} or \code{teal_modules})
 single or multiple modules. \code{teal_modules}  can be used for nested
-tabs, see \code{\link{ui_nested_tabs}}}
+tabs, see \link{ui_nested_tabs}}
 
 \item{filter}{(\code{list}) You can define filters that show when
 the app starts.
@@ -46,9 +46,9 @@ Ignored if the app is restored from a bookmarked state.
 }}
 }
 \value{
-\code{reactive}, return value of \code{\link{srv_teal}}
+\code{reactive}, return value of \link{srv_teal}
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#maturing}{\figure{lifecycle-maturing.svg}{options: alt='[Maturing]'}}}{\strong{[Maturing]}}
-Please also refer to the doc of \code{\link{init}}.
+Please also refer to the doc of \link{init}.
 }

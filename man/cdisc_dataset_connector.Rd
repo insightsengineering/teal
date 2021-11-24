@@ -58,5 +58,5 @@ new \code{CDISCTealDatasetConnector} object
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
 }
 \details{
-Create \code{CDISCTealDatasetConnector} from \code{\link{callable_function}}.
+Create \code{CDISCTealDatasetConnector} from \link{callable_function}.
 }

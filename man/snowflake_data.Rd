@@ -7,7 +7,7 @@
 snowflake_data(..., connection)
 }
 \arguments{
-\item{...}{(\code{TealDatasetConnector}) dataset connectors created using \code{\link{snowflake_dataset_connector}}}
+\item{...}{(\code{TealDatasetConnector}) dataset connectors created using \link{snowflake_dataset_connector}}
 
 \item{connection}{(\code{TealDataConnection}) object returned from \code{snowflake_connection}.}
 }

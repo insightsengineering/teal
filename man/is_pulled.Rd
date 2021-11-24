@@ -16,7 +16,7 @@ is_pulled(x)
 \method{is_pulled}{TealDataAbstract}(x)
 }
 \arguments{
-\item{x}{(\code{\link{TealDatasetConnector}}, \code{\link{TealDataset}} or \code{\link{TealDataAbstract}})}
+\item{x}{(\link{TealDatasetConnector}, \link{TealDataset} or \link{TealDataAbstract})}
 }
 \value{
 (\code{logical}) \code{TRUE} if connector has been already pulled, else \code{FALSE}.

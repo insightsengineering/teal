@@ -51,7 +51,7 @@ Alternatively to \code{code} - location of the file containing modification code
 Can't be used simultaneously with \code{script}.}
 
 \item{...}{(\code{optional})\cr
-additional arguments applied to \code{\link[base]{readRDS}} function}
+additional arguments applied to \code{\link[base:readRDS]{base::readRDS()}} function}
 
 \item{parent}{optional, (\code{character}) \cr
 parent dataset name}

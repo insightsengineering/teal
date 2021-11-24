@@ -4,7 +4,7 @@
 \alias{FilterStates}
 \title{\code{FilterStates} R6 class}
 \description{
-Implements \code{\link{ReactiveQueue}} to the \code{teal} filters.
+Implements \link{ReactiveQueue} to the \code{teal} filters.
 Class manages adding and removing \code{FilterState} to the reactive
 queue and returns reproducible R expression relevant to specific
 \code{FilterStates} subclass.

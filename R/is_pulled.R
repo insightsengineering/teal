@@ -3,7 +3,7 @@
 #' @description `r lifecycle::badge("experimental")`
 #'   S3 method to determine if dataset is pulled (loaded).
 #'
-#' @param x (\code{\link{TealDatasetConnector}}, \code{\link{TealDataset}} or \code{\link{TealDataAbstract}})
+#' @param x ([TealDatasetConnector], [TealDataset] or [TealDataAbstract])
 #'
 #' @return (`logical`) `TRUE` if connector has been already pulled, else `FALSE`.
 #' @export

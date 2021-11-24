@@ -28,7 +28,7 @@ rice_data <- function(..., connection = rice_connection(), additional_ui = NULL)
 #'
 #' @export
 #'
-#' @param ... (`TealDatasetConnector`) dataset connectors created using \code{\link{teradata_dataset_connector}}
+#' @param ... (`TealDatasetConnector`) dataset connectors created using [teradata_dataset_connector]
 #' @param connection (`TealDataConnection`) object returned from `teradata_connection`.
 #'
 #' @return An object of class `TealDataConnector`
@@ -47,7 +47,7 @@ teradata_data <- function(..., connection = teradata_connection()) {
 #'
 #' @export
 #'
-#' @param ... (`TealDatasetConnector`) dataset connectors created using \code{\link{snowflake_dataset_connector}}
+#' @param ... (`TealDatasetConnector`) dataset connectors created using [snowflake_dataset_connector]
 #' @param connection (`TealDataConnection`) object returned from `snowflake_connection`.
 #'
 #' @return An object of class `TealDataConnector`
@@ -71,7 +71,7 @@ snowflake_data <- function(..., connection) {
 #' @export
 #'
 #' @param ... (`TealDatasetConnector` objects)\cr
-#'  dataset connectors created using \code{\link{cdse_dataset_connector}}
+#'  dataset connectors created using [cdse_dataset_connector]
 #' @param connection (`TealDataConnection`) object returned from `cdse_connection`.
 #'
 #' @return An object of class `TealDataConnector`
@@ -91,7 +91,7 @@ cdse_data <- function(..., connection = cdse_connection()) {
 #' @export
 #'
 #' @param ... (`TealDatasetConnector` objects)\cr
-#'  dataset connectors created using \code{\link{datasetdb_dataset_connector}}
+#'  dataset connectors created using [datasetdb_dataset_connector]
 #' @param connection (`TealDataConnection`) object returned from `datasetdb_connection`.
 #'
 #' @return An object of class `TealDataConnector`

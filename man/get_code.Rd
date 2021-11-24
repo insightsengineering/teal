@@ -27,7 +27,7 @@ get_code(x, ...)
 )
 }
 \arguments{
-\item{x}{(\code{\link{TealDatasetConnector}} or \code{\link{TealDataset}}). If of
+\item{x}{(\link{TealDatasetConnector} or \link{TealDataset}). If of
 class \code{character} will be treated as file to read.}
 
 \item{...}{not used, only for support of S3}
@@ -67,8 +67,8 @@ Reads code from specified files and specific code chunks.
 Code chunks are described with:
 
 \itemize{
-\item{to open chunk }{\code{#code>} or \code{#code ADSL>} or \code{#code ADSL ADTTE>}}
-\item{to close chunk }{\code{#<code} or \code{#<ADSL code} or \code{#<ADSL ADTTE code}}
+\item{to open chunk }{\verb{#code>} or \verb{#code ADSL>} or \verb{#code ADSL ADTTE>}}
+\item{to close chunk }{\verb{#<code} or \verb{#<ADSL code} or \verb{#<ADSL ADTTE code}}
 }
 }
 \examples{

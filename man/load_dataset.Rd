@@ -29,8 +29,8 @@ additional dynamic arguments passed to function which loads the data.}
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
-Load data from connection. Function used on \code{\link{TealDatasetConnector}} and
-\code{\link{TealDataset}} to obtain data from connection.
+Load data from connection. Function used on \link{TealDatasetConnector} and
+\link{TealDataset} to obtain data from connection.
 }
 \examples{
 

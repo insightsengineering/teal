@@ -2,7 +2,7 @@
 #'
 #' `r lifecycle::badge("experimental")`
 #'
-#' Create `TealDatasetConnector` from \code{\link{callable_function}}.
+#' Create `TealDatasetConnector` from [callable_function].
 #'
 #' @param dataname (`character`)\cr
 #'  A given name for the dataset it may not contain spaces
@@ -84,7 +84,7 @@ dataset_connector <- function(dataname,
 #'
 #' `r lifecycle::badge("experimental")`
 #'
-#' Create `CDISCTealDatasetConnector` from \code{\link{callable_function}}.
+#' Create `CDISCTealDatasetConnector` from [callable_function].
 #'
 #' @inheritParams dataset_connector
 #' @inheritParams cdisc_dataset
@@ -296,7 +296,7 @@ scda_cdisc_dataset_connector <- function(dataname,
 #'   code to `source`
 #'
 #' @param ... (`optional`)\cr
-#'   additional arguments applied to \code{\link[base]{readRDS}} function
+#'   additional arguments applied to [base::readRDS()] function
 #'
 #' @export
 #'

@@ -849,7 +849,7 @@ TealDataset <- R6::R6Class( # nolint
 
 ## Constructors ====
 
-#' Constructor for \code{\link{TealDataset}} class
+#' Constructor for [TealDataset] class
 #'
 #' @description `r lifecycle::badge("experimental")`
 #'
@@ -877,7 +877,7 @@ TealDataset <- R6::R6Class( # nolint
 #'   are included to this object as local `vars` and they cannot be modified
 #'   within another dataset.
 #'
-#' @return \code{\link{TealDataset}} object
+#' @return [TealDataset] object
 #'
 #' @rdname dataset
 #'

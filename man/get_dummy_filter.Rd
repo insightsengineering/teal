@@ -13,5 +13,5 @@ get_dummy_filter(data)
 dummy filter states
 }
 \description{
-This can be used for the argument \code{filter} in \code{\link{srv_teal}}.
+This can be used for the argument \code{filter} in \link{srv_teal}.
 }

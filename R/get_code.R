@@ -17,11 +17,11 @@
 #' Code chunks are described with:
 #'
 #' \itemize{
-#'   \item{to open chunk }{\code{#code>} or \code{#code ADSL>} or \code{#code ADSL ADTTE>}}
-#'   \item{to close chunk }{\code{#<code} or \code{#<ADSL code} or \code{#<ADSL ADTTE code}}
+#'   \item{to open chunk }{`#code>` or `#code ADSL>` or `#code ADSL ADTTE>`}
+#'   \item{to close chunk }{`#<code` or `#<ADSL code` or `#<ADSL ADTTE code`}
 #' }
 #'
-#' @param x (\code{\link{TealDatasetConnector}} or \code{\link{TealDataset}}). If of
+#' @param x ([TealDatasetConnector] or [TealDataset]). If of
 #'   class `character` will be treated as file to read.
 #' @param exclude_comments (`logical`) whether exclude commented-out lines of code. Lines to be excluded
 #' should be ended with `# nocode`. For multiple line exclusions one should enclose ignored block of code with

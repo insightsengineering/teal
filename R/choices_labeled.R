@@ -1,8 +1,8 @@
 #' Set "`<choice>:<label>`" type of Names
 #'
 #' @description `r lifecycle::badge("maturing")`
-#' This is often useful for \code{\link[teal]{choices_selected}} as it marks up the dropdown boxes
-#' for \code{\link[shiny]{selectInput}}.
+#' This is often useful for [choices_selected] as it marks up the dropdown boxes
+#' for [shiny::selectInput()].
 #'
 #' @param choices a character / numeric / logical vector
 #' @param labels character vector containing labels to be applied to `choices`. If `NA` then
@@ -11,7 +11,7 @@
 #'   only a few variables need to be named. If this argument is used, the returned vector will
 #'   match its order.
 #' @param types vector containing the types of the columns to be used for applying the appropriate
-#'   icons to the \code{\link[teal]{choices_selected}} drop down box
+#'   icons to the [choices_selected] drop down box
 #' @details If either `choices` or `labels` are factors, they are coerced to character.
 #' Duplicated elements from `choices` get removed.
 #'
@@ -116,7 +116,7 @@ choices_labeled <- function(choices, labels, subset = NULL, types = NULL) {
 }
 
 
-#' Wrapper on \code{\link{choices_labeled}} to label variables basing on existing labels in data
+#' Wrapper on [choices_labeled] to label variables basing on existing labels in data
 #'
 #' @description `r lifecycle::badge("maturing")`
 #'
@@ -132,7 +132,7 @@ choices_labeled <- function(choices, labels, subset = NULL, types = NULL) {
 #' @param key (`character`) vector with names of the variables, which are part of the primary key
 #' of the `data` argument. This is an optional argument, which allows to identify variables
 #' associated with the primary key and display the appropriate icon for them in the
-#' \code{\link{optionalSelectInput}} widget.
+#' [optionalSelectInput] widget.
 #' @inheritParams rtables::var_labels
 #'
 #' @return named character vector with additional attributes or `delayed_data` object
@@ -267,7 +267,7 @@ variable_choices.TealDatasetConnector <- function(data, # nolint
 }
 
 
-#' Wrapper on \code{\link{choices_labeled}} to label variable values basing on other variable values
+#' Wrapper on [choices_labeled] to label variable values basing on other variable values
 #'
 #' @description `r lifecycle::badge("maturing")`
 #'
