@@ -38,8 +38,7 @@
 #'     teal:::ui_teal("dummy")
 #'   },
 #'   server = function(input, output, session) {
-#'     active_module <- callModule(teal:::srv_teal, "dummy", modules = mods, raw_data = raw_data,
-#'     )
+#'     active_module <- teal:::srv_teal(id = "dummy", modules = mods, raw_data = raw_data)
 #'   }
 #' )
 #' \dontrun{
@@ -121,129 +120,124 @@ ui_teal <- function(id,
 #'
 #' @return `reactive` which returns the currently active module
 srv_teal <- function(id, modules, raw_data, filter = list()) {
-
-  moduleServer(id, function(input, output, session) {
   stopifnot(is.reactive(raw_data))
+  moduleServer(id, function(input, output, session) {
+    # Javascript code ----
 
-  # Javascript code ----
-
-  if (getOption("teal_show_js_log", default = FALSE)) {
-    shinyjs::showLog() # to show Javascript console logs in the R console
-  }
-  run_js_files(files = "init.js") # Javascript code to make the clipboard accessible
-  # set timezone in shiny app
-  # timezone is set in the early beginning so it will be available also
-  # for DDL and all shiny modules
-  get_client_timezone(session$ns)
-  observeEvent(
-    eventExpr = input$timezone,
-    once = TRUE,
-    handlerExpr = {
-      session$userData$timezone <- input$timezone
+    if (getOption("teal_show_js_log", default = FALSE)) {
+      shinyjs::showLog() # to show Javascript console logs in the R console
     }
-  )
-
-  # Shiny bookmarking ----
-
-  # The Shiny bookmarking functionality by default only stores inputs.
-  # We need to add `FilteredData` object to the state so we restore it as well.
-  # To test bookmarking, include the `bookmark_module`, click on the bookmark
-  # button and then get the link. Keep the Shiny app running and open the
-  # obtained link in another browser tab.
-  onBookmark(function(state) {
-    # this function is isolated  by Shiny
-    # We store the entire R6 class with reactive values in it, but set the data to NULL.
-    # Note that we cannnot directly do this on datasets as this would trigger
-    # reactivity to recompute the filtered datasets, which is not needed.
-    state$values$datasets_state <- datasets$get_bookmark_state()
-  })
-  saved_datasets_state <- NULL # set when restored because data must already be populated
-  onRestore(function(state) {
-    # The saved datasets mainly contains the filter states as the data
-    # was set to NULL before storing. The data should have been set again
-    # by the user, so we just need to set the filters.
-    saved_datasets_state <<- state$values$datasets_state
-  })
-
-  # This will be a FilteredData object - needs to be at this scope
-  # so the bookmarking functions above work. See inside the
-  # observeEvent below for where this is initialized.
-  datasets <- NULL
-
-  # Replace splash / welcome screen once data is loaded ----
-
-  # ignoreNULL to not trigger at the beginning when data is NULL
-  # just handle it once because data obtained through delayed loading should
-  # usually not change afterwards
-  # if restored from bookmarked state, `filter` is ignored
-  observeEvent(raw_data(), ignoreNULL = TRUE, once = TRUE, {
-    progress <- shiny::Progress$new(session)
-    on.exit(progress$close())
-    progress$set(0.25, message = "Setting data")
-    # create the FilteredData object (here called 'datasets') whose class depends on the class of raw_data()
-    # this is placed in the module scope so that bookmarking can be used with FilteredData object
-    datasets <<- filtered_data_new(isolate(raw_data()))
-    # transfer the datasets from raw_data() into the FilteredData object
-    filtered_data_set(raw_data(), datasets)
-
-    progress$set(0.5, message = "Setting up main UI")
-    # main_ui_container contains splash screen first and we remove it and replace it by the real UI
-    removeUI(sprintf("#%s:first-child", session$ns("main_ui_container")))
-    insertUI(
-      selector = paste0("#", session$ns("main_ui_container")),
-      where = "beforeEnd",
-      # we put it into a div, so it can easily be removed as a whole, also when it is a tagList (and not
-      # just the first item of the tagList)
-      ui = div(ui_tabs_with_filters(session$ns("main_ui"), modules = modules, datasets = datasets)),
-      # needed so that the UI inputs are available and can be immediately updated, otherwise, updating may not
-      # have any effect as they are ignored when not present, see note in `module_add_filter_variable.R`
-      immediate = TRUE
+    run_js_files(files = "init.js") # Javascript code to make the clipboard accessible
+    # set timezone in shiny app
+    # timezone is set in the early beginning so it will be available also
+    # for DDL and all shiny modules
+    get_client_timezone(session$ns)
+    observeEvent(
+      eventExpr = input$timezone,
+      once = TRUE,
+      handlerExpr = {
+        session$userData$timezone <- input$timezone
+      }
     )
 
-    if (!is.null(saved_datasets_state)) {
-      # actual thing to restore
-      # cannot call this directly in onRestore because the data is not set at that time
-      # for example, the data may only be loaded once a password is provided
-      # however, onRestore only runs in the first flush and not in the flush when the
-      # password was finally provided
-      tryCatch({
-        progress$set(0.75, message = "Restoring from bookmarked state")
-        datasets$restore_state_from_bookmark(saved_datasets_state)
-      },
-      error = function(cnd) {
-        showModal(
-          modalDialog(
-            div(
-              p("Could not restore the session: "),
-              tags$pre(id = session$ns("error_msg"), cnd$message)
-            ),
-            title = "Error restoring the bookmarked state",
-            footer = tagList(
-              actionButton(
-                "copy_code", "Copy to Clipboard",
-                `data-clipboard-target` = paste0("#", session$ns("error_msg"))
-              ),
-              modalButton("Dismiss")
-            ),
-            size = "l",
-            easyClose = TRUE
-          )
-        )
-      }
+    # Shiny bookmarking ----
+    # The Shiny bookmarking functionality by default only stores inputs.
+    # We need to add `FilteredData` object to the state so we restore it as well.
+    # To test bookmarking, include the `bookmark_module`, click on the bookmark
+    # button and then get the link. Keep the Shiny app running and open the
+    # obtained link in another browser tab.
+    onBookmark(function(state) {
+      # this function is isolated  by Shiny
+      # We store the entire R6 class with reactive values in it, but set the data to NULL.
+      # Note that we cannnot directly do this on datasets as this would trigger
+      # reactivity to recompute the filtered datasets, which is not needed.
+      browser()
+      state$values$datasets_state <- datasets_reactive()$get_bookmark_state()
+    })
+    saved_datasets_state <- reactiveVal(NULL) # set when restored because data must already be populated
+    onRestore(function(state) {
+      # The saved datasets mainly contains the filter states as the data
+      # was set to NULL before storing. The data should have been set again
+      # by the user, so we just need to set the filters.
+      saved_datasets_state(state$values$datasets_state)
+    })
+
+    progress <- shiny::Progress$new(session)
+    # initialize datasets ------
+    datasets_reactive <- reactive({
+      progress$set(0.25, message = "Setting data")
+      # create the FilteredData object (here called 'datasets') whose class depends on the class of raw_data()
+      # this is placed in the module scope so that bookmarking can be used with FilteredData object
+      datasets <- filtered_data_new(raw_data())
+      # transfer the datasets from raw_data() into the FilteredData object
+      filtered_data_set(raw_data(), datasets)
+      progress$set(0.5, message = "Setting up main UI")
+      datasets
+    })
+
+    # Replace splash / welcome screen once data is loaded ----
+    # ignoreNULL to not trigger at the beginning when data is NULL
+    # just handle it once because data obtained through delayed loading should
+    # usually not change afterwards
+    # if restored from bookmarked state, `filter` is ignored
+    observeEvent(datasets_reactive(), ignoreNULL = TRUE, once = TRUE, {
+      on.exit(progress$close())
+      # main_ui_container contains splash screen first and we remove it and replace it by the real UI
+      removeUI(sprintf("#%s:first-child", session$ns("main_ui_container")))
+      insertUI(
+        selector = paste0("#", session$ns("main_ui_container")),
+        where = "beforeEnd",
+        # we put it into a div, so it can easily be removed as a whole, also when it is a tagList (and not
+        # just the first item of the tagList)
+        ui = div(ui_tabs_with_filters(session$ns("main_ui"), modules = modules, datasets =  datasets_reactive())),
+        # needed so that the UI inputs are available and can be immediately updated, otherwise, updating may not
+        # have any effect as they are ignored when not present, see note in `module_add_filter_variable.R`
+        immediate = TRUE
       )
-    } else {
-      progress$set(0.75, message = "Setting initial filter state")
-      filtered_data_set_filters(datasets, filter)
-    }
 
-    # must make sure that this is only executed once as modules assume their observers are only
-    # registered once (calling server functions twice would trigger observers twice each time)
-    # `once = TRUE` ensures this
-      active_module <- srv_tabs_with_filters(id = "main_ui", datasets = datasets, modules = modules)
+      if (!is.null(saved_datasets_state())) {
+        # actual thing to restore
+        # cannot call this directly in onRestore because the data is not set at that time
+        # for example, the data may only be loaded once a password is provided
+        # however, onRestore only runs in the first flush and not in the flush when the
+        # password was finally provided
+        tryCatch({
+          progress$set(0.75, message = "Restoring from bookmarked state")
+          filtered_data_set_filters(datasets_reactive(), saved_datasets_state())
+        },
+        error = function(cnd) {
+          showModal(
+            modalDialog(
+              div(
+                p("Could not restore the session: "),
+                tags$pre(id = session$ns("error_msg"), cnd$message)
+              ),
+              title = "Error restoring the bookmarked state",
+              footer = tagList(
+                actionButton(
+                  "copy_code", "Copy to Clipboard",
+                  `data-clipboard-target` = paste0("#", session$ns("error_msg"))
+                ),
+                modalButton("Dismiss")
+              ),
+              size = "l",
+              easyClose = TRUE
+            )
+          )
+        }
+        )
+      } else {
+        progress$set(0.75, message = "Setting initial filter state")
+        filtered_data_set_filters(datasets_reactive(), filter)
+      }
+      # must make sure that this is only executed once as modules assume their observers are only
+      # registered once (calling server functions twice would trigger observers twice each time)
+      # `once = TRUE` ensures this
+      active_module <- srv_tabs_with_filters(id = "main_ui", datasets =  datasets_reactive(), modules = modules)
 
-    showNotification("Data loaded - App fully started up")
+      showNotification("Data loaded - App fully started up")
 
-    return(active_module)
-  })
+      return(active_module)
+    })
   })
 }
