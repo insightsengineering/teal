@@ -34,7 +34,7 @@
 #'     )
 #'   },
 #'   server = function(input, output, session) {
-#'     active_module <- callModule(srv_tabs_with_filters, "dummy", datasets = datasets, modules = mods)
+#'     active_module <- srv_tabs_with_filters(id = "dummy", datasets = datasets, modules = mods)
 #'     output$info <- renderText({
 #'       paste0("The currently active tab name is ", active_module()$label)
 #'     })
@@ -62,12 +62,8 @@
 #'     )
 #'   },
 #'   server = function(input, output, session) {
-#'     active_module1 <- callModule(
-#'       srv_tabs_with_filters, "app1", datasets = datasets1, modules = mods
-#'     )
-#'     active_module2 <- callModule(
-#'       srv_tabs_with_filters, "app2", datasets = datasets2, modules = mods
-#'     )
+#'     active_module1 <- srv_tabs_with_filters(id = "app1", datasets = datasets1, modules = mods)
+#'     active_module2 <- srv_tabs_with_filters(id = "app2", datasets = datasets2, modules = mods)
 #'     output$info <- renderText({
 #'       paste0(
 #'         "The currently active tab names are: ",
@@ -128,16 +124,18 @@ ui_tabs_with_filters <- function(id, modules, datasets) {
 #'
 #' @inheritParams srv_shiny_module_arguments
 #' @return `reactive` currently selected active_module
-srv_tabs_with_filters <- function(input, output, session, datasets, modules) {
-  active_module <- srv_nested_tabs(id = "modules_ui", datasets = datasets, modules = modules)
+srv_tabs_with_filters <- function(id, datasets, modules) {
+  moduleServer(id, function(input, output, session) {
+    active_module <- srv_nested_tabs(id = "modules_ui", datasets = datasets, modules = modules)
 
-  active_datanames <- eventReactive(
-    eventExpr = active_module(),
-    valueExpr = {
-      datasets$handle_active_datanames(datanames = active_module()$filters)
+    active_datanames <- eventReactive(
+      eventExpr = active_module(),
+      valueExpr = {
+        datasets$handle_active_datanames(datanames = active_module()$filters)
+      })
+
+    datasets$srv_filter_panel(id = "filter_panel", active_datanames = active_datanames)
+
+    return(active_module)
   })
-
-  datasets$srv_filter_panel(id = "filter_panel", active_datanames = active_datanames)
-
-  return(active_module)
 }
