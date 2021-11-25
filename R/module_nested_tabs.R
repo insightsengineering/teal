@@ -29,9 +29,7 @@
 #'     )
 #'   },
 #'   server = function(input, output, session) {
-#'     active_module <- callModule(
-#'       teal:::srv_nested_tabs, "dummy", datasets = datasets, modules = mods
-#'     )
+#'     active_module <- teal:::srv_nested_tabs("dummy", datasets = datasets, modules = mods)
 #'     output$info <- renderText({
 #'       paste0("The currently active tab name is ", active_module()$label)
 #'     })
@@ -166,13 +164,11 @@ srv_nested_tabs <- function(id, datasets, modules) {
       )
       return(res)
     }
-
     active_module <- eventReactive(
-      eventExpr = input[[label_to_id(modules$label)]],
+      eventExpr = input[[label_to_id(modules$label)]], # this reacts only on the root tabs - nested tabs ignored
       ignoreNULL = TRUE,
-      valueExpr = {
-        get_active_module(modules, id_parent = NULL)
-      })
+      valueExpr = get_active_module(modules, id_parent = NULL)
+    )
     return(active_module)
   })
 
