@@ -120,7 +120,9 @@ ui_teal <- function(id,
 #' @inheritParams init
 #'
 #' @return `reactive` which returns the currently active module
-srv_teal <- function(input, output, session, modules, raw_data, filter = list()) {
+srv_teal <- function(id, modules, raw_data, filter = list()) {
+
+  moduleServer(id, function(input, output, session) {
   stopifnot(is.reactive(raw_data))
 
   # Javascript code ----
@@ -237,10 +239,11 @@ srv_teal <- function(input, output, session, modules, raw_data, filter = list())
     # must make sure that this is only executed once as modules assume their observers are only
     # registered once (calling server functions twice would trigger observers twice each time)
     # `once = TRUE` ensures this
-    active_module <- callModule(srv_tabs_with_filters, "main_ui", datasets = datasets, modules = modules)
+      active_module <- srv_tabs_with_filters(id = "main_ui", datasets = datasets, modules = modules)
 
     showNotification("Data loaded - App fully started up")
 
     return(active_module)
+  })
   })
 }

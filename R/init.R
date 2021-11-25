@@ -160,10 +160,7 @@ init <- function(data,
     server = function(input, output, session) {
       # copy object so that load won't be shared between the session
       data <- data$copy(deep = TRUE)
-      srv_teal_with_splash(
-        input, output, session,
-        data = data, modules = modules, filter = filter
-      )
+      srv_teal_with_splash(id = id, data = data, modules = modules, filter = filter)
     }
   )
   return(res)

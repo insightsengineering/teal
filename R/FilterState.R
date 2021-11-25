@@ -49,10 +49,10 @@ label_keep_na_count <- function(na_count) {
 #'     verbatimTextOutput("call")
 #'   ),
 #'   server = function(input, output, session) {
-#'     callModule(filter_state$server, "app")
+#'     filter_state$server("app")
 #'
 #'     output$call <- renderText(
-#'       pdeparse(filter_state$get_call(), collapse = "\n")
+#'       deparse1(filter_state$get_call(), collapse = "\n")
 #'     )
 #'   }
 #' )
