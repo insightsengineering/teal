@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">teal</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.10.0.9019</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.10.0.9020</span>
       </span>
     </div>
 
@@ -114,33 +114,6 @@
 <li>
   <a href="../news/index.html">Changelog</a>
 </li>
-<!-- start_releases -->
-<li class="dropdown">
-	<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-Other releases
-<span class="caret"></span></a><ul class="dropdown-menu" role="menu">
-   <li><a href="../index.html">latest</a></li>
-   <li><a href="../pre-release/index.html">pre-release</a></li>
-   <li><a href="../v0.10.0/index.html">v0.10.0</a></li>
-   <li><a href="../v0.9.5/index.html">v0.9.5</a></li>
-   <li><a href="../v0.9.4/index.html">v0.9.4</a></li>
-   <li><a href="../v0.9.3/index.html">v0.9.3</a></li>
-   <li><a href="../v0.9.2/index.html">v0.9.2</a></li>
-   <li><a href="../v0.9.1/index.html">v0.9.1</a></li>
-   <li><a href="../v0.9.0/index.html">v0.9.0</a></li>
-   <li><a href="../v0.8.5/index.html">v0.8.5</a></li>
-   <li><a href="../v0.8.4/index.html">v0.8.4</a></li>
-   <li><a href="../v0.8.3/index.html">v0.8.3</a></li>
-   <li><a href="../v0.8.2/index.html">v0.8.2</a></li>
-   <li><a href="../v0.7.0/index.html">v0.7.0</a></li>
-   <li><a href="../v0.6.0/index.html">v0.6.0</a></li>
-   <li><a href="../v0.0.5/index.html">v0.0.5</a></li>
-   <li><a href="../v0.0.4/index.html">v0.0.4</a></li>
-   <li><a href="../v0.0.3/index.html">v0.0.3</a></li>
-   <li><a href="../v0.0.2/index.html">v0.0.2</a></li>
-   <li><a href="../v0.0.1/index.html">v0.0.1</a></li>
-</ul></li>
-<!-- end_releases -->
       </ul>
       <ul class="nav navbar-nav navbar-right">
         <li>
@@ -213,7 +186,7 @@ making it possible to pass any object coercible to <code>numeric</code> to this 
 </details>
 
 <hr>
-<a id="method-new"></a></p><h3 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Method <code>new()</code></h3>
+<a id="method-new"></a></p><h3 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Method <code><a href='https://rdrr.io/r/methods/new.html'>new()</a></code></h3>
 <p>Initialize a <code>FilterState</code> object</p><h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Usage</h4>
 <p><div class="r"></p><pre><span class='va'>RangeFilterState</span><span class='op'>$</span><span class='fu'>new</span><span class='op'>(</span>
   <span class='va'>x</span>,
@@ -231,16 +204,16 @@ values of the variable used in filter</p></dd>
 <dt><code>varname</code></dt><dd><p>(<code>character</code>, <code>name</code>)<br />
 name of the variable</p></dd>
 
-<dt><code>varlabel</code></dt><dd><p>(<code><a href='https://rdrr.io/r/base/character.html'>character(1)</a></code>)<br />
+<dt><code>varlabel</code></dt><dd><p>(<code>character(1)</code>)<br />
 label of the variable (optional).</p></dd>
 
 <dt><code>input_dataname</code></dt><dd><p>(<code>name</code> or <code>call</code>)<br />
 name of dataset where <code>x</code> is taken from</p></dd>
 
-<dt><code>extract_type</code></dt><dd><p>(<code><a href='https://rdrr.io/r/base/character.html'>character(0)</a></code>, <code><a href='https://rdrr.io/r/base/character.html'>character(1)</a></code>)<br />
+<dt><code>extract_type</code></dt><dd><p>(<code>character(0)</code>, <code>character(1)</code>)<br />
 whether condition calls should be prefixed by dataname. Possible values:
 <ul>
-<li><p><code><a href='https://rdrr.io/r/base/character.html'>character(0)</a></code> (default) <code>varname</code> in the condition call will not be prefixed</p></li>
+<li><p><code>character(0)</code> (default) <code>varname</code> in the condition call will not be prefixed</p></li>
 <li><p><code>"list"</code> <code>varname</code> in the condition call will be returned as <code>&lt;input_dataname&gt;$&lt;varname&gt;</code></p></li>
 <li><p><code>"matrix"</code> <code>varname</code> in the condition call will be returned as <code>&lt;input_dataname&gt;[, &lt;varname&gt;]</code></p></li>
 </ul></p></dd>
@@ -262,7 +235,7 @@ optional <code>is.na(&lt;varname&gt;)</code> and <code>is.finite(&lt;varname&gt;
 <p><div class="r"></p><pre><span class='va'>RangeFilterState</span><span class='op'>$</span><span class='fu'>get_keep_inf</span><span class='op'>(</span><span class='op'>)</span></pre><p></div></p>
 
 <h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Returns</h4>
-<p>(<code><a href='https://rdrr.io/r/base/logical.html'>logical(1)</a></code>)
+<p>(<code>logical(1)</code>)
 UI Module for <code>RangeFilterState</code>.
 This UI element contains two values for <code>min</code> and <code>max</code>
 of the range and two checkboxes whether to keep the <code>NA</code> or <code>Inf</code>  values.</p>
@@ -274,7 +247,7 @@ of the range and two checkboxes whether to keep the <code>NA</code> or <code>Inf
 
 <h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Arguments</h4>
 <p><div class="arguments"></p><dl>
-<dt><code>id</code></dt><dd><p>(<code><a href='https://rdrr.io/r/base/character.html'>character(1)</a></code>)<br />
+<dt><code>id</code></dt><dd><p>(<code>character(1)</code>)<br />
 id of shiny element</p></dd>
 
 </dl><p></div></p>
@@ -285,7 +258,7 @@ id of shiny element</p></dd>
 
 <h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Arguments</h4>
 <p><div class="arguments"></p><dl>
-<dt><code>id</code></dt><dd><p>(<code><a href='https://rdrr.io/r/base/character.html'>character(1)</a></code>)<br />
+<dt><code>id</code></dt><dd><p>(<code>character(1)</code>)<br />
 an ID string that corresponds with the ID used to call the module's UI function.</p></dd>
 
 </dl><p></div></p>
@@ -298,7 +271,7 @@ an ID string that corresponds with the ID used to call the module's UI function.
 
 <h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Arguments</h4>
 <p><div class="arguments"></p><dl>
-<dt><code>value</code></dt><dd><p>(<code><a href='https://rdrr.io/r/base/logical.html'>logical(1)</a></code>)<br />
+<dt><code>value</code></dt><dd><p>(<code>logical(1)</code>)<br />
 Value(s) which come from the filter selection. Value is set in <code>server</code>
 modules after selecting check-box-input in the shiny interface. Values are set to
 <code>private$keep_inf</code> which is reactive.</p></dd>
@@ -327,7 +300,7 @@ contains fields relevant for a specific class
 
 <h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Arguments</h4>
 <p><div class="arguments"></p><dl>
-<dt><code>value</code></dt><dd><p>(<code><a href='https://rdrr.io/r/base/numeric.html'>numeric(2)</a></code>) the two-elements array of the lower and upper bound
+<dt><code>value</code></dt><dd><p>(<code>numeric(2)</code>) the two-elements array of the lower and upper bound
 of the selected range. Must not contain NA values.</p></dd>
 
 </dl><p></div></p>
@@ -351,27 +324,29 @@ of the selected range. Must not contain NA values.</p></dd>
 
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='va'>filter_state</span> <span class='op'>&lt;-</span> <span class='fu'>teal</span><span class='fu'>:::</span><span class='va'>RangeFilterState</span><span class='op'>$</span><span class='fu'>new</span><span class='op'>(</span>
-  <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='cn'>NA</span>, <span class='cn'>Inf</span>, <span class='fu'><a href='https://rdrr.io/r/base/seq.html'>seq</a></span><span class='op'>(</span><span class='fl'>1</span><span class='op'>:</span><span class='fl'>10</span><span class='op'>)</span><span class='op'>)</span>,
-  varname <span class='op'>=</span> <span class='st'>"x"</span>,
-  input_dataname <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/name.html'>as.name</a></span><span class='op'>(</span><span class='st'>"data"</span><span class='op'>)</span>,
-  extract_type <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/character.html'>character</a></span><span class='op'>(</span><span class='fl'>0</span><span class='op'>)</span>
-<span class='op'>)</span>
-<span class='fu'><a href='https://rdrr.io/pkg/shiny/man/isolate.html'>isolate</a></span><span class='op'>(</span><span class='va'>filter_state</span><span class='op'>$</span><span class='fu'>get_call</span><span class='op'>(</span><span class='op'>)</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; x &gt;= 1 &amp; x &lt;= 10</div><div class='input'><span class='fu'><a href='https://rdrr.io/pkg/shiny/man/isolate.html'>isolate</a></span><span class='op'>(</span><span class='va'>filter_state</span><span class='op'>$</span><span class='fu'>set_selected</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>3L</span>, <span class='fl'>8L</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span>
-<span class='fu'><a href='https://rdrr.io/pkg/shiny/man/isolate.html'>isolate</a></span><span class='op'>(</span><span class='va'>filter_state</span><span class='op'>$</span><span class='fu'>set_keep_na</span><span class='op'>(</span><span class='cn'>TRUE</span><span class='op'>)</span><span class='op'>)</span>
-<span class='fu'><a href='https://rdrr.io/pkg/shiny/man/isolate.html'>isolate</a></span><span class='op'>(</span><span class='va'>filter_state</span><span class='op'>$</span><span class='fu'>set_keep_inf</span><span class='op'>(</span><span class='cn'>TRUE</span><span class='op'>)</span><span class='op'>)</span>
-<span class='fu'><a href='https://rdrr.io/pkg/shiny/man/isolate.html'>isolate</a></span><span class='op'>(</span><span class='va'>filter_state</span><span class='op'>$</span><span class='fu'>get_call</span><span class='op'>(</span><span class='op'>)</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; is.na(x) | (is.infinite(x) | x &gt;= 3 &amp; x &lt;= 8)</div><div class='input'>
-
-<span class='co'>## ------------------------------------------------</span>
-<span class='co'>## Method `RangeFilterState$set_selected`</span>
-<span class='co'>## ------------------------------------------------</span>
-
-<span class='va'>filter</span> <span class='op'>&lt;-</span> <span class='fu'>teal</span><span class='fu'>:::</span><span class='va'>RangeFilterState</span><span class='op'>$</span><span class='fu'>new</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>1</span>, <span class='fl'>2</span>, <span class='fl'>3</span>, <span class='fl'>4</span><span class='op'>)</span>, varname <span class='op'>=</span> <span class='st'>"name"</span><span class='op'>)</span>
-<span class='va'>filter</span><span class='op'>$</span><span class='fu'>set_selected</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>2</span>, <span class='fl'>3</span><span class='op'>)</span><span class='op'>)</span>
-
-</div></pre>
+    <pre class="examples"><span class='r-in'><span class='va'>filter_state</span> <span class='op'>&lt;-</span> <span class='fu'>teal</span><span class='fu'>:::</span><span class='va'>RangeFilterState</span><span class='op'>$</span><span class='fu'>new</span><span class='op'>(</span></span>
+<span class='r-in'>  <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='cn'>NA</span>, <span class='cn'>Inf</span>, <span class='fu'><a href='https://rdrr.io/r/base/seq.html'>seq</a></span><span class='op'>(</span><span class='fl'>1</span><span class='op'>:</span><span class='fl'>10</span><span class='op'>)</span><span class='op'>)</span>,</span>
+<span class='r-in'>  varname <span class='op'>=</span> <span class='st'>"x"</span>,</span>
+<span class='r-in'>  input_dataname <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/name.html'>as.name</a></span><span class='op'>(</span><span class='st'>"data"</span><span class='op'>)</span>,</span>
+<span class='r-in'>  extract_type <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/character.html'>character</a></span><span class='op'>(</span><span class='fl'>0</span><span class='op'>)</span></span>
+<span class='r-in'><span class='op'>)</span></span>
+<span class='r-in'><span class='fu'><a href='https://rdrr.io/pkg/shiny/man/isolate.html'>isolate</a></span><span class='op'>(</span><span class='va'>filter_state</span><span class='op'>$</span><span class='fu'>get_call</span><span class='op'>(</span><span class='op'>)</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> x &gt;= 1 &amp; x &lt;= 10</span>
+<span class='r-in'><span class='fu'><a href='https://rdrr.io/pkg/shiny/man/isolate.html'>isolate</a></span><span class='op'>(</span><span class='va'>filter_state</span><span class='op'>$</span><span class='fu'>set_selected</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>3L</span>, <span class='fl'>8L</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span></span>
+<span class='r-in'><span class='fu'><a href='https://rdrr.io/pkg/shiny/man/isolate.html'>isolate</a></span><span class='op'>(</span><span class='va'>filter_state</span><span class='op'>$</span><span class='fu'>set_keep_na</span><span class='op'>(</span><span class='cn'>TRUE</span><span class='op'>)</span><span class='op'>)</span></span>
+<span class='r-in'><span class='fu'><a href='https://rdrr.io/pkg/shiny/man/isolate.html'>isolate</a></span><span class='op'>(</span><span class='va'>filter_state</span><span class='op'>$</span><span class='fu'>set_keep_inf</span><span class='op'>(</span><span class='cn'>TRUE</span><span class='op'>)</span><span class='op'>)</span></span>
+<span class='r-in'><span class='fu'><a href='https://rdrr.io/pkg/shiny/man/isolate.html'>isolate</a></span><span class='op'>(</span><span class='va'>filter_state</span><span class='op'>$</span><span class='fu'>get_call</span><span class='op'>(</span><span class='op'>)</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> is.na(x) | (is.infinite(x) | x &gt;= 3 &amp; x &lt;= 8)</span>
+<span class='r-in'></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'>## ------------------------------------------------</span></span>
+<span class='r-in'><span class='co'>## Method `RangeFilterState$set_selected`</span></span>
+<span class='r-in'><span class='co'>## ------------------------------------------------</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='va'>filter</span> <span class='op'>&lt;-</span> <span class='fu'>teal</span><span class='fu'>:::</span><span class='va'>RangeFilterState</span><span class='op'>$</span><span class='fu'>new</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>1</span>, <span class='fl'>2</span>, <span class='fl'>3</span>, <span class='fl'>4</span><span class='op'>)</span>, varname <span class='op'>=</span> <span class='st'>"name"</span><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>filter</span><span class='op'>$</span><span class='fu'>set_selected</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>2</span>, <span class='fl'>3</span><span class='op'>)</span><span class='op'>)</span></span>
+<span class='r-in'></span>
+</pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

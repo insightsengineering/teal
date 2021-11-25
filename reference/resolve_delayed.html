@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">teal</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.10.0.9019</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.10.0.9020</span>
       </span>
     </div>
 
@@ -114,33 +114,6 @@
 <li>
   <a href="../news/index.html">Changelog</a>
 </li>
-<!-- start_releases -->
-<li class="dropdown">
-	<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-Other releases
-<span class="caret"></span></a><ul class="dropdown-menu" role="menu">
-   <li><a href="../index.html">latest</a></li>
-   <li><a href="../pre-release/index.html">pre-release</a></li>
-   <li><a href="../v0.10.0/index.html">v0.10.0</a></li>
-   <li><a href="../v0.9.5/index.html">v0.9.5</a></li>
-   <li><a href="../v0.9.4/index.html">v0.9.4</a></li>
-   <li><a href="../v0.9.3/index.html">v0.9.3</a></li>
-   <li><a href="../v0.9.2/index.html">v0.9.2</a></li>
-   <li><a href="../v0.9.1/index.html">v0.9.1</a></li>
-   <li><a href="../v0.9.0/index.html">v0.9.0</a></li>
-   <li><a href="../v0.8.5/index.html">v0.8.5</a></li>
-   <li><a href="../v0.8.4/index.html">v0.8.4</a></li>
-   <li><a href="../v0.8.3/index.html">v0.8.3</a></li>
-   <li><a href="../v0.8.2/index.html">v0.8.2</a></li>
-   <li><a href="../v0.7.0/index.html">v0.7.0</a></li>
-   <li><a href="../v0.6.0/index.html">v0.6.0</a></li>
-   <li><a href="../v0.0.5/index.html">v0.0.5</a></li>
-   <li><a href="../v0.0.4/index.html">v0.0.4</a></li>
-   <li><a href="../v0.0.3/index.html">v0.0.3</a></li>
-   <li><a href="../v0.0.2/index.html">v0.0.2</a></li>
-   <li><a href="../v0.0.1/index.html">v0.0.1</a></li>
-</ul></li>
-<!-- end_releases -->
       </ul>
       <ul class="nav navbar-nav navbar-right">
         <li>
@@ -191,149 +164,150 @@ Other releases
     <p>Resolved object.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'>scda</span><span class='op'>)</span>
-
-<span class='va'>ds</span> <span class='op'>&lt;-</span> <span class='fu'>teal</span><span class='fu'>:::</span><span class='va'><a href='FilteredData.html'>FilteredData</a></span><span class='op'>$</span><span class='fu'>new</span><span class='op'>(</span><span class='op'>)</span>
-<span class='va'>ADSL</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/scda/man/synthetic_cdisc_data.html'>synthetic_cdisc_data</a></span><span class='op'>(</span><span class='st'>"latest"</span><span class='op'>)</span><span class='op'>$</span><span class='va'>adsl</span>
-<span class='fu'><a href='https://rdrr.io/r/base/attr.html'>attr</a></span><span class='op'>(</span><span class='va'>ADSL</span>, <span class='st'>"keys"</span><span class='op'>)</span> <span class='op'>&lt;-</span> <span class='fu'><a href='get_cdisc_keys.html'>get_cdisc_keys</a></span><span class='op'>(</span><span class='st'>"ADSL"</span><span class='op'>)</span>
-<span class='fu'><a href='https://rdrr.io/pkg/shiny/man/isolate.html'>isolate</a></span><span class='op'>(</span><span class='op'>{</span>
-  <span class='va'>ds</span><span class='op'>$</span><span class='fu'>set_dataset</span><span class='op'>(</span><span class='fu'><a href='dataset.html'>dataset</a></span><span class='op'>(</span><span class='st'>"ADSL"</span>, <span class='va'>ADSL</span><span class='op'>)</span><span class='op'>)</span>
-
-  <span class='co'># value_choices example</span>
-  <span class='va'>v1</span> <span class='op'>&lt;-</span> <span class='fu'><a href='value_choices.html'>value_choices</a></span><span class='op'>(</span><span class='st'>"ADSL"</span>, <span class='st'>"SEX"</span>, <span class='st'>"SEX"</span><span class='op'>)</span>
-  <span class='va'>v1</span>
-  <span class='fu'>resolve_delayed</span><span class='op'>(</span><span class='va'>v1</span>, <span class='va'>ds</span><span class='op'>)</span>
-
-  <span class='co'># variable_choices example</span>
-  <span class='va'>v2</span> <span class='op'>&lt;-</span> <span class='fu'><a href='variable_choices.html'>variable_choices</a></span><span class='op'>(</span><span class='st'>"ADSL"</span>, <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"BMRKR1"</span>, <span class='st'>"BMRKR2"</span><span class='op'>)</span><span class='op'>)</span>
-  <span class='va'>v2</span>
-  <span class='fu'>resolve_delayed</span><span class='op'>(</span><span class='va'>v2</span>, <span class='va'>ds</span><span class='op'>)</span>
-
-  <span class='co'># data_extract_spec example</span>
-  <span class='va'>adsl_filter</span> <span class='op'>&lt;-</span> <span class='fu'><a href='filter_spec.html'>filter_spec</a></span><span class='op'>(</span>
-    vars <span class='op'>=</span> <span class='fu'><a href='variable_choices.html'>variable_choices</a></span><span class='op'>(</span><span class='st'>"ADSL"</span>, <span class='st'>"SEX"</span><span class='op'>)</span>,
-    sep <span class='op'>=</span> <span class='st'>"-"</span>,
-    choices <span class='op'>=</span> <span class='fu'><a href='value_choices.html'>value_choices</a></span><span class='op'>(</span><span class='st'>"ADSL"</span>, <span class='st'>"SEX"</span>, <span class='st'>"SEX"</span><span class='op'>)</span>,
-    selected <span class='op'>=</span> <span class='st'>"F"</span>,
-    multiple <span class='op'>=</span> <span class='cn'>FALSE</span>,
-    label <span class='op'>=</span> <span class='st'>"Choose endpoint and Censor"</span>
-  <span class='op'>)</span>
-
-  <span class='va'>adsl_select</span> <span class='op'>&lt;-</span> <span class='fu'><a href='select_spec.html'>select_spec</a></span><span class='op'>(</span>
-    label <span class='op'>=</span> <span class='st'>"Select variable:"</span>,
-    choices <span class='op'>=</span> <span class='fu'><a href='variable_choices.html'>variable_choices</a></span><span class='op'>(</span><span class='st'>"ADSL"</span>, <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"BMRKR1"</span>, <span class='st'>"BMRKR2"</span><span class='op'>)</span><span class='op'>)</span>,
-    selected <span class='op'>=</span> <span class='st'>"BMRKR1"</span>,
-    multiple <span class='op'>=</span> <span class='cn'>FALSE</span>,
-    fixed <span class='op'>=</span> <span class='cn'>FALSE</span>
-  <span class='op'>)</span>
-
-  <span class='va'>adsl_de</span> <span class='op'>&lt;-</span> <span class='fu'><a href='data_extract_spec.html'>data_extract_spec</a></span><span class='op'>(</span>
-    dataname <span class='op'>=</span> <span class='st'>"ADSL"</span>,
-    select <span class='op'>=</span> <span class='va'>adsl_select</span>,
-    filter <span class='op'>=</span> <span class='va'>adsl_filter</span>
-  <span class='op'>)</span>
-
-  <span class='fu'>resolve_delayed</span><span class='op'>(</span><span class='va'>adsl_filter</span>, <span class='va'>ds</span><span class='op'>)</span>
-  <span class='fu'>resolve_delayed</span><span class='op'>(</span><span class='va'>adsl_select</span>, <span class='va'>ds</span><span class='op'>)</span>
-  <span class='fu'>resolve_delayed</span><span class='op'>(</span><span class='va'>adsl_de</span>, <span class='va'>ds</span><span class='op'>)</span>
-
-  <span class='co'># nested list (arm_ref_comp)</span>
-  <span class='va'>arm_ref_comp</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
-    ARMCD <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>ref <span class='op'>=</span> <span class='fu'><a href='variable_choices.html'>variable_choices</a></span><span class='op'>(</span><span class='st'>"ADSL"</span><span class='op'>)</span>,
-    comp <span class='op'>=</span> <span class='fu'><a href='variable_choices.html'>variable_choices</a></span><span class='op'>(</span><span class='st'>"ADSL"</span><span class='op'>)</span>
-    <span class='op'>)</span>
-  <span class='op'>)</span>
-
-  <span class='fu'>resolve_delayed</span><span class='op'>(</span><span class='va'>arm_ref_comp</span>, <span class='va'>ds</span><span class='op'>)</span>
-<span class='op'>}</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; $ARMCD
-#&gt; $ARMCD$ref
-#&gt; number of choices: 38 
-#&gt; 
-#&gt; STUDYID: Study Identifier
-#&gt; USUBJID: Unique Subject Identifier
-#&gt; SUBJID: Subject Identifier for the Study
-#&gt; SITEID: Study Site Identifier
-#&gt; AGE: Age
-#&gt; SEX: Sex
-#&gt; RACE: Race
-#&gt; COUNTRY: Country
-#&gt; DTHFL: Subject Death Flag
-#&gt; INVID: Investigator Identifier
-#&gt; INVNAM: Investigator Name
-#&gt; ARM: Description of Planned Arm
-#&gt; ARMCD: Planned Arm Code
-#&gt; ACTARM: Description of Actual Arm
-#&gt; ACTARMCD: Actual Arm Code
-#&gt; REGION1: Geographic Region 1
-#&gt; STRATA1: Stratification Factor 1
-#&gt; STRATA2: Stratification Factor 2
-#&gt; BMRKR1: Continous Level Biomarker 1
-#&gt; BMRKR2: Categorical Level Biomarker 2
-#&gt; ITTFL: Intent-To-Treat Population Flag
-#&gt; SAFFL: Safety Population Flag
-#&gt; BMEASIFL: Response Evaluable Population Flag
-#&gt; BEP01FL: Biomarker Evaluable Population Flag
-#&gt; RANDDT: Date of Randomization
-#&gt; TRTSDTM: Datetime of First Exposure to Treatment
-#&gt; TRTEDTM: Datetime of Last Exposure to Treatment
-#&gt; EOSSTT: End of Study Status
-#&gt; EOSDT: End of Study Date
-#&gt; EOSDY: End of Study Relative Day
-#&gt; DCSREAS: Reason for Discontinuation from Study
-#&gt; DTHDT: Date of Death
-#&gt; DTHCAUS: Cause of Death
-#&gt; DTHCAT: Cause of Death Category
-#&gt; LDDTHELD: Elapsed Days from Last Dose to Death
-#&gt; LDDTHGR1: Last Dose to Death - Days Elapsed Grp 1
-#&gt; LSTALVDT: Date Last Known Alive
-#&gt; study_duration_secs: NOT A STANDARD BUT NEEDED FOR RCD
-#&gt; 
-#&gt; 
-#&gt; $ARMCD$comp
-#&gt; number of choices: 38 
-#&gt; 
-#&gt; STUDYID: Study Identifier
-#&gt; USUBJID: Unique Subject Identifier
-#&gt; SUBJID: Subject Identifier for the Study
-#&gt; SITEID: Study Site Identifier
-#&gt; AGE: Age
-#&gt; SEX: Sex
-#&gt; RACE: Race
-#&gt; COUNTRY: Country
-#&gt; DTHFL: Subject Death Flag
-#&gt; INVID: Investigator Identifier
-#&gt; INVNAM: Investigator Name
-#&gt; ARM: Description of Planned Arm
-#&gt; ARMCD: Planned Arm Code
-#&gt; ACTARM: Description of Actual Arm
-#&gt; ACTARMCD: Actual Arm Code
-#&gt; REGION1: Geographic Region 1
-#&gt; STRATA1: Stratification Factor 1
-#&gt; STRATA2: Stratification Factor 2
-#&gt; BMRKR1: Continous Level Biomarker 1
-#&gt; BMRKR2: Categorical Level Biomarker 2
-#&gt; ITTFL: Intent-To-Treat Population Flag
-#&gt; SAFFL: Safety Population Flag
-#&gt; BMEASIFL: Response Evaluable Population Flag
-#&gt; BEP01FL: Biomarker Evaluable Population Flag
-#&gt; RANDDT: Date of Randomization
-#&gt; TRTSDTM: Datetime of First Exposure to Treatment
-#&gt; TRTEDTM: Datetime of Last Exposure to Treatment
-#&gt; EOSSTT: End of Study Status
-#&gt; EOSDT: End of Study Date
-#&gt; EOSDY: End of Study Relative Day
-#&gt; DCSREAS: Reason for Discontinuation from Study
-#&gt; DTHDT: Date of Death
-#&gt; DTHCAUS: Cause of Death
-#&gt; DTHCAT: Cause of Death Category
-#&gt; LDDTHELD: Elapsed Days from Last Dose to Death
-#&gt; LDDTHGR1: Last Dose to Death - Days Elapsed Grp 1
-#&gt; LSTALVDT: Date Last Known Alive
-#&gt; study_duration_secs: NOT A STANDARD BUT NEEDED FOR RCD
-#&gt; 
-#&gt; 
-#&gt; </div></pre>
+    <pre class="examples"><span class='r-in'><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'>scda</span><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='va'>ds</span> <span class='op'>&lt;-</span> <span class='fu'>teal</span><span class='fu'>:::</span><span class='va'><a href='FilteredData.html'>FilteredData</a></span><span class='op'>$</span><span class='fu'>new</span><span class='op'>(</span><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>ADSL</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/scda/man/synthetic_cdisc_data.html'>synthetic_cdisc_data</a></span><span class='op'>(</span><span class='st'>"latest"</span><span class='op'>)</span><span class='op'>$</span><span class='va'>adsl</span></span>
+<span class='r-in'><span class='fu'><a href='https://rdrr.io/r/base/attr.html'>attr</a></span><span class='op'>(</span><span class='va'>ADSL</span>, <span class='st'>"keys"</span><span class='op'>)</span> <span class='op'>&lt;-</span> <span class='fu'><a href='get_cdisc_keys.html'>get_cdisc_keys</a></span><span class='op'>(</span><span class='st'>"ADSL"</span><span class='op'>)</span></span>
+<span class='r-in'><span class='fu'><a href='https://rdrr.io/pkg/shiny/man/isolate.html'>isolate</a></span><span class='op'>(</span><span class='op'>{</span></span>
+<span class='r-in'>  <span class='va'>ds</span><span class='op'>$</span><span class='fu'>set_dataset</span><span class='op'>(</span><span class='fu'><a href='dataset.html'>dataset</a></span><span class='op'>(</span><span class='st'>"ADSL"</span>, <span class='va'>ADSL</span><span class='op'>)</span><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'>  <span class='co'># value_choices example</span></span>
+<span class='r-in'>  <span class='va'>v1</span> <span class='op'>&lt;-</span> <span class='fu'><a href='value_choices.html'>value_choices</a></span><span class='op'>(</span><span class='st'>"ADSL"</span>, <span class='st'>"SEX"</span>, <span class='st'>"SEX"</span><span class='op'>)</span></span>
+<span class='r-in'>  <span class='va'>v1</span></span>
+<span class='r-in'>  <span class='fu'>resolve_delayed</span><span class='op'>(</span><span class='va'>v1</span>, <span class='va'>ds</span><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'>  <span class='co'># variable_choices example</span></span>
+<span class='r-in'>  <span class='va'>v2</span> <span class='op'>&lt;-</span> <span class='fu'><a href='variable_choices.html'>variable_choices</a></span><span class='op'>(</span><span class='st'>"ADSL"</span>, <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"BMRKR1"</span>, <span class='st'>"BMRKR2"</span><span class='op'>)</span><span class='op'>)</span></span>
+<span class='r-in'>  <span class='va'>v2</span></span>
+<span class='r-in'>  <span class='fu'>resolve_delayed</span><span class='op'>(</span><span class='va'>v2</span>, <span class='va'>ds</span><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'>  <span class='co'># data_extract_spec example</span></span>
+<span class='r-in'>  <span class='va'>adsl_filter</span> <span class='op'>&lt;-</span> <span class='fu'><a href='filter_spec.html'>filter_spec</a></span><span class='op'>(</span></span>
+<span class='r-in'>    vars <span class='op'>=</span> <span class='fu'><a href='variable_choices.html'>variable_choices</a></span><span class='op'>(</span><span class='st'>"ADSL"</span>, <span class='st'>"SEX"</span><span class='op'>)</span>,</span>
+<span class='r-in'>    sep <span class='op'>=</span> <span class='st'>"-"</span>,</span>
+<span class='r-in'>    choices <span class='op'>=</span> <span class='fu'><a href='value_choices.html'>value_choices</a></span><span class='op'>(</span><span class='st'>"ADSL"</span>, <span class='st'>"SEX"</span>, <span class='st'>"SEX"</span><span class='op'>)</span>,</span>
+<span class='r-in'>    selected <span class='op'>=</span> <span class='st'>"F"</span>,</span>
+<span class='r-in'>    multiple <span class='op'>=</span> <span class='cn'>FALSE</span>,</span>
+<span class='r-in'>    label <span class='op'>=</span> <span class='st'>"Choose endpoint and Censor"</span></span>
+<span class='r-in'>  <span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'>  <span class='va'>adsl_select</span> <span class='op'>&lt;-</span> <span class='fu'><a href='select_spec.html'>select_spec</a></span><span class='op'>(</span></span>
+<span class='r-in'>    label <span class='op'>=</span> <span class='st'>"Select variable:"</span>,</span>
+<span class='r-in'>    choices <span class='op'>=</span> <span class='fu'><a href='variable_choices.html'>variable_choices</a></span><span class='op'>(</span><span class='st'>"ADSL"</span>, <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"BMRKR1"</span>, <span class='st'>"BMRKR2"</span><span class='op'>)</span><span class='op'>)</span>,</span>
+<span class='r-in'>    selected <span class='op'>=</span> <span class='st'>"BMRKR1"</span>,</span>
+<span class='r-in'>    multiple <span class='op'>=</span> <span class='cn'>FALSE</span>,</span>
+<span class='r-in'>    fixed <span class='op'>=</span> <span class='cn'>FALSE</span></span>
+<span class='r-in'>  <span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'>  <span class='va'>adsl_de</span> <span class='op'>&lt;-</span> <span class='fu'><a href='data_extract_spec.html'>data_extract_spec</a></span><span class='op'>(</span></span>
+<span class='r-in'>    dataname <span class='op'>=</span> <span class='st'>"ADSL"</span>,</span>
+<span class='r-in'>    select <span class='op'>=</span> <span class='va'>adsl_select</span>,</span>
+<span class='r-in'>    filter <span class='op'>=</span> <span class='va'>adsl_filter</span></span>
+<span class='r-in'>  <span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'>  <span class='fu'>resolve_delayed</span><span class='op'>(</span><span class='va'>adsl_filter</span>, <span class='va'>ds</span><span class='op'>)</span></span>
+<span class='r-in'>  <span class='fu'>resolve_delayed</span><span class='op'>(</span><span class='va'>adsl_select</span>, <span class='va'>ds</span><span class='op'>)</span></span>
+<span class='r-in'>  <span class='fu'>resolve_delayed</span><span class='op'>(</span><span class='va'>adsl_de</span>, <span class='va'>ds</span><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'>  <span class='co'># nested list (arm_ref_comp)</span></span>
+<span class='r-in'>  <span class='va'>arm_ref_comp</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span></span>
+<span class='r-in'>    ARMCD <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>ref <span class='op'>=</span> <span class='fu'><a href='variable_choices.html'>variable_choices</a></span><span class='op'>(</span><span class='st'>"ADSL"</span><span class='op'>)</span>,</span>
+<span class='r-in'>    comp <span class='op'>=</span> <span class='fu'><a href='variable_choices.html'>variable_choices</a></span><span class='op'>(</span><span class='st'>"ADSL"</span><span class='op'>)</span></span>
+<span class='r-in'>    <span class='op'>)</span></span>
+<span class='r-in'>  <span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'>  <span class='fu'>resolve_delayed</span><span class='op'>(</span><span class='va'>arm_ref_comp</span>, <span class='va'>ds</span><span class='op'>)</span></span>
+<span class='r-in'><span class='op'>}</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> $ARMCD</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> $ARMCD$ref</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> number of choices: 38 </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> STUDYID: Study Identifier</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> USUBJID: Unique Subject Identifier</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> SUBJID: Subject Identifier for the Study</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> SITEID: Study Site Identifier</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> AGE: Age</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> SEX: Sex</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> RACE: Race</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> COUNTRY: Country</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> DTHFL: Subject Death Flag</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> INVID: Investigator Identifier</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> INVNAM: Investigator Name</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> ARM: Description of Planned Arm</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> ARMCD: Planned Arm Code</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> ACTARM: Description of Actual Arm</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> ACTARMCD: Actual Arm Code</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> REGION1: Geographic Region 1</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> STRATA1: Stratification Factor 1</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> STRATA2: Stratification Factor 2</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> BMRKR1: Continous Level Biomarker 1</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> BMRKR2: Categorical Level Biomarker 2</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> ITTFL: Intent-To-Treat Population Flag</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> SAFFL: Safety Population Flag</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> BMEASIFL: Response Evaluable Population Flag</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> BEP01FL: Biomarker Evaluable Population Flag</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> RANDDT: Date of Randomization</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> TRTSDTM: Datetime of First Exposure to Treatment</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> TRTEDTM: Datetime of Last Exposure to Treatment</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> EOSSTT: End of Study Status</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> EOSDT: End of Study Date</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> EOSDY: End of Study Relative Day</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> DCSREAS: Reason for Discontinuation from Study</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> DTHDT: Date of Death</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> DTHCAUS: Cause of Death</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> DTHCAT: Cause of Death Category</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> LDDTHELD: Elapsed Days from Last Dose to Death</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> LDDTHGR1: Last Dose to Death - Days Elapsed Grp 1</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> LSTALVDT: Date Last Known Alive</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> study_duration_secs: NOT A STANDARD BUT NEEDED FOR RCD</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> $ARMCD$comp</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> number of choices: 38 </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> STUDYID: Study Identifier</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> USUBJID: Unique Subject Identifier</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> SUBJID: Subject Identifier for the Study</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> SITEID: Study Site Identifier</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> AGE: Age</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> SEX: Sex</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> RACE: Race</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> COUNTRY: Country</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> DTHFL: Subject Death Flag</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> INVID: Investigator Identifier</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> INVNAM: Investigator Name</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> ARM: Description of Planned Arm</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> ARMCD: Planned Arm Code</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> ACTARM: Description of Actual Arm</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> ACTARMCD: Actual Arm Code</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> REGION1: Geographic Region 1</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> STRATA1: Stratification Factor 1</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> STRATA2: Stratification Factor 2</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> BMRKR1: Continous Level Biomarker 1</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> BMRKR2: Categorical Level Biomarker 2</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> ITTFL: Intent-To-Treat Population Flag</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> SAFFL: Safety Population Flag</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> BMEASIFL: Response Evaluable Population Flag</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> BEP01FL: Biomarker Evaluable Population Flag</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> RANDDT: Date of Randomization</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> TRTSDTM: Datetime of First Exposure to Treatment</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> TRTEDTM: Datetime of Last Exposure to Treatment</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> EOSSTT: End of Study Status</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> EOSDT: End of Study Date</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> EOSDY: End of Study Relative Day</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> DCSREAS: Reason for Discontinuation from Study</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> DTHDT: Date of Death</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> DTHCAUS: Cause of Death</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> DTHCAT: Cause of Death Category</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> LDDTHELD: Elapsed Days from Last Dose to Death</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> LDDTHGR1: Last Dose to Death - Days Elapsed Grp 1</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> LSTALVDT: Date Last Known Alive</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> study_duration_secs: NOT A STANDARD BUT NEEDED FOR RCD</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+</pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

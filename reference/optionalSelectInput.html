@@ -75,7 +75,7 @@ input widgets that provide only a single choice." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">teal</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.10.0.9019</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.10.0.9020</span>
       </span>
     </div>
 
@@ -117,33 +117,6 @@ input widgets that provide only a single choice." />
 <li>
   <a href="../news/index.html">Changelog</a>
 </li>
-<!-- start_releases -->
-<li class="dropdown">
-	<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-Other releases
-<span class="caret"></span></a><ul class="dropdown-menu" role="menu">
-   <li><a href="../index.html">latest</a></li>
-   <li><a href="../pre-release/index.html">pre-release</a></li>
-   <li><a href="../v0.10.0/index.html">v0.10.0</a></li>
-   <li><a href="../v0.9.5/index.html">v0.9.5</a></li>
-   <li><a href="../v0.9.4/index.html">v0.9.4</a></li>
-   <li><a href="../v0.9.3/index.html">v0.9.3</a></li>
-   <li><a href="../v0.9.2/index.html">v0.9.2</a></li>
-   <li><a href="../v0.9.1/index.html">v0.9.1</a></li>
-   <li><a href="../v0.9.0/index.html">v0.9.0</a></li>
-   <li><a href="../v0.8.5/index.html">v0.8.5</a></li>
-   <li><a href="../v0.8.4/index.html">v0.8.4</a></li>
-   <li><a href="../v0.8.3/index.html">v0.8.3</a></li>
-   <li><a href="../v0.8.2/index.html">v0.8.2</a></li>
-   <li><a href="../v0.7.0/index.html">v0.7.0</a></li>
-   <li><a href="../v0.6.0/index.html">v0.6.0</a></li>
-   <li><a href="../v0.0.5/index.html">v0.0.5</a></li>
-   <li><a href="../v0.0.4/index.html">v0.0.4</a></li>
-   <li><a href="../v0.0.3/index.html">v0.0.3</a></li>
-   <li><a href="../v0.0.2/index.html">v0.0.2</a></li>
-   <li><a href="../v0.0.1/index.html">v0.0.1</a></li>
-</ul></li>
-<!-- end_releases -->
       </ul>
       <ul class="nav navbar-nav navbar-right">
         <li>
@@ -250,89 +223,95 @@ e.g. 'auto', 'fit', '100px' or '75%'</p></td>
 
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'>
-<span class='fu'>optionalSelectInput</span><span class='op'>(</span>inputId <span class='op'>=</span> <span class='st'>"xvar"</span>, label <span class='op'>=</span> <span class='st'>"x variable"</span>, choices <span class='op'>=</span> <span class='st'>"A"</span>, selected <span class='op'>=</span> <span class='st'>"A"</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; &lt;div class="form-group shiny-input-container"&gt;
-#&gt;   &lt;label class="control-label" for="xvar"&gt;x variable&lt;/label&gt;
-#&gt;   &lt;select data-actions-box="false" data-none-selected-text="- Nothing selected -" data-max-options="1" data-show-subtext="true" data-live-search="false" id="xvar" class="selectpicker form-control" multiple="multiple"&gt;&lt;option value="A" selected&gt;A&lt;/option&gt;&lt;/select&gt;
-#&gt; &lt;/div&gt;</div><div class='input'><span class='fu'>optionalSelectInput</span><span class='op'>(</span>inputId <span class='op'>=</span> <span class='st'>"xvar"</span>,
-                    label <span class='op'>=</span> <span class='st'>"x variable"</span>,
-                    choices <span class='op'>=</span> <span class='va'>LETTERS</span><span class='op'>[</span><span class='fl'>1</span><span class='op'>:</span><span class='fl'>5</span><span class='op'>]</span>,
-                     selected <span class='op'>=</span> <span class='st'>"A"</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; &lt;div class="form-group shiny-input-container"&gt;
-#&gt;   &lt;label class="control-label" for="xvar"&gt;x variable&lt;/label&gt;
-#&gt;   &lt;select data-actions-box="false" data-none-selected-text="- Nothing selected -" data-max-options="1" data-show-subtext="true" data-live-search="false" id="xvar" class="selectpicker form-control" multiple="multiple"&gt;&lt;option value="A" selected&gt;A&lt;/option&gt;
-#&gt; &lt;option value="B"&gt;B&lt;/option&gt;
-#&gt; &lt;option value="C"&gt;C&lt;/option&gt;
-#&gt; &lt;option value="D"&gt;D&lt;/option&gt;
-#&gt; &lt;option value="E"&gt;E&lt;/option&gt;&lt;/select&gt;
-#&gt; &lt;/div&gt;</div><div class='input'><span class='fu'>optionalSelectInput</span><span class='op'>(</span>inputId <span class='op'>=</span> <span class='st'>"xvar"</span>,
-                    label <span class='op'>=</span> <span class='st'>"x variable"</span>,
-                    choices <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"A - value A"</span> <span class='op'>=</span> <span class='st'>"A"</span><span class='op'>)</span>,
-                    selected <span class='op'>=</span> <span class='st'>"A"</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; &lt;div class="form-group shiny-input-container"&gt;
-#&gt;   &lt;label class="control-label" for="xvar"&gt;x variable&lt;/label&gt;
-#&gt;   &lt;select data-actions-box="false" data-none-selected-text="- Nothing selected -" data-max-options="1" data-show-subtext="true" data-live-search="false" id="xvar" class="selectpicker form-control" multiple="multiple"&gt;&lt;option value="A" selected&gt;A - value A&lt;/option&gt;&lt;/select&gt;
-#&gt; &lt;/div&gt;</div><div class='input'>
-<span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'>scda</span><span class='op'>)</span>
-<span class='va'>ADRS</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/scda/man/synthetic_cdisc_data.html'>synthetic_cdisc_data</a></span><span class='op'>(</span><span class='st'>"latest"</span><span class='op'>)</span><span class='op'>$</span><span class='va'>adrs</span>
-<span class='fu'>optionalSelectInput</span><span class='op'>(</span>inputId <span class='op'>=</span> <span class='st'>"xvar"</span>,
-                    label <span class='op'>=</span> <span class='st'>"x variable"</span>,
-                    choices <span class='op'>=</span> <span class='fu'><a href='choices_labeled.html'>choices_labeled</a></span><span class='op'>(</span>
-                      choices <span class='op'>=</span> <span class='va'>letters</span>,
-                      labels <span class='op'>=</span> <span class='va'>LETTERS</span>,
-                      types <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/sample.html'>sample</a></span><span class='op'>(</span>
-                        <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"primary_key"</span>, <span class='st'>"numeric"</span>, <span class='st'>"factor"</span>, <span class='st'>"Date"</span><span class='op'>)</span>,
-                        <span class='fu'><a href='https://rdrr.io/r/base/length.html'>length</a></span><span class='op'>(</span><span class='va'>letters</span><span class='op'>)</span>,
-                        <span class='cn'>TRUE</span>
-                      <span class='op'>)</span>,
-                      subset <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"a"</span>, <span class='st'>"b"</span>, <span class='st'>"c"</span><span class='op'>)</span>
-                    <span class='op'>)</span>,
-                    selected <span class='op'>=</span> <span class='st'>"a"</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; &lt;div class="form-group shiny-input-container"&gt;
-#&gt;   &lt;label class="control-label" for="xvar"&gt;x variable&lt;/label&gt;
-#&gt;   &lt;select data-actions-box="false" data-none-selected-text="- Nothing selected -" data-max-options="1" data-show-subtext="true" data-live-search="false" id="xvar" class="selectpicker form-control" multiple="multiple"&gt;
-#&gt;     &lt;option value="a" data-content="&amp;lt;i class=&amp;quot;fa fa-sort-numeric-up&amp;quot; role=&amp;quot;presentation&amp;quot; aria-label=&amp;quot;sort-numeric-up icon&amp;quot;&amp;gt;&amp;lt;/i&amp;gt; a &amp;lt;small class=&amp;quot;text-muted&amp;quot;&amp;gt;A&amp;lt;/small&amp;gt;" selected="selected"&gt;a&lt;/option&gt;
-#&gt;     &lt;option value="b" data-content="&amp;lt;i class=&amp;quot;fa fa-key&amp;quot; role=&amp;quot;presentation&amp;quot; aria-label=&amp;quot;key icon&amp;quot;&amp;gt;&amp;lt;/i&amp;gt; b &amp;lt;small class=&amp;quot;text-muted&amp;quot;&amp;gt;B&amp;lt;/small&amp;gt;"&gt;b&lt;/option&gt;
-#&gt;     &lt;option value="c" data-content="&amp;lt;i class=&amp;quot;fa fa-sort-numeric-up&amp;quot; role=&amp;quot;presentation&amp;quot; aria-label=&amp;quot;sort-numeric-up icon&amp;quot;&amp;gt;&amp;lt;/i&amp;gt; c &amp;lt;small class=&amp;quot;text-muted&amp;quot;&amp;gt;C&amp;lt;/small&amp;gt;"&gt;c&lt;/option&gt;
-#&gt;   &lt;/select&gt;
-#&gt; &lt;/div&gt;</div><div class='input'><span class='fu'>optionalSelectInput</span><span class='op'>(</span>inputId <span class='op'>=</span> <span class='st'>"xvar"</span>,
-                    label <span class='op'>=</span> <span class='st'>"x variable"</span>,
-                    choices <span class='op'>=</span> <span class='fu'><a href='variable_choices.html'>variable_choices</a></span><span class='op'>(</span>data <span class='op'>=</span> <span class='va'>ADRS</span>, subset <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"AGE"</span>, <span class='st'>"SEX"</span>, <span class='st'>"PARAMCD"</span><span class='op'>)</span><span class='op'>)</span>,
-                    selected <span class='op'>=</span> <span class='st'>"PARAMCD"</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; &lt;div class="form-group shiny-input-container"&gt;
-#&gt;   &lt;label class="control-label" for="xvar"&gt;x variable&lt;/label&gt;
-#&gt;   &lt;select data-actions-box="false" data-none-selected-text="- Nothing selected -" data-max-options="1" data-show-subtext="true" data-live-search="false" id="xvar" class="selectpicker form-control" multiple="multiple"&gt;
-#&gt;     &lt;option value="AGE" data-content="&amp;lt;i class=&amp;quot;fa fa-sort-numeric-up&amp;quot; role=&amp;quot;presentation&amp;quot; aria-label=&amp;quot;sort-numeric-up icon&amp;quot;&amp;gt;&amp;lt;/i&amp;gt; AGE &amp;lt;small class=&amp;quot;text-muted&amp;quot;&amp;gt;Age&amp;lt;/small&amp;gt;"&gt;AGE&lt;/option&gt;
-#&gt;     &lt;option value="SEX" data-content="&amp;lt;i class=&amp;quot;fa fa-chart-bar&amp;quot; role=&amp;quot;presentation&amp;quot; aria-label=&amp;quot;chart-bar icon&amp;quot;&amp;gt;&amp;lt;/i&amp;gt; SEX &amp;lt;small class=&amp;quot;text-muted&amp;quot;&amp;gt;Sex&amp;lt;/small&amp;gt;"&gt;SEX&lt;/option&gt;
-#&gt;     &lt;option value="PARAMCD" data-content="&amp;lt;i class=&amp;quot;fa fa-chart-bar&amp;quot; role=&amp;quot;presentation&amp;quot; aria-label=&amp;quot;chart-bar icon&amp;quot;&amp;gt;&amp;lt;/i&amp;gt; PARAMCD &amp;lt;small class=&amp;quot;text-muted&amp;quot;&amp;gt;Parameter Code&amp;lt;/small&amp;gt;" selected="selected"&gt;PARAMCD&lt;/option&gt;
-#&gt;   &lt;/select&gt;
-#&gt; &lt;/div&gt;</div><div class='input'>
-<span class='va'>selected_value</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste0</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/lapply.html'>lapply</a></span><span class='op'>(</span><span class='va'>ADRS</span><span class='op'>[</span><span class='fl'>1</span>, <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"PARAMCD"</span>, <span class='st'>"AVISIT"</span><span class='op'>)</span><span class='op'>]</span>, <span class='va'>as.character</span><span class='op'>)</span>, collapse <span class='op'>=</span> <span class='st'>" - "</span><span class='op'>)</span>
-<span class='fu'>optionalSelectInput</span><span class='op'>(</span>inputId <span class='op'>=</span> <span class='st'>"xvar"</span>,
-                    label <span class='op'>=</span> <span class='st'>"x variable"</span>,
-                    choices <span class='op'>=</span> <span class='fu'><a href='value_choices.html'>value_choices</a></span><span class='op'>(</span>data <span class='op'>=</span> <span class='va'>ADRS</span>,
-                                            var_choices <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"PARAMCD"</span>, <span class='st'>"AVISIT"</span><span class='op'>)</span>,
-                                            var_label <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"PARAM"</span>, <span class='st'>"AVISIT"</span><span class='op'>)</span><span class='op'>)</span>,
-                    selected <span class='op'>=</span> <span class='va'>selected_value</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; &lt;div class="form-group shiny-input-container"&gt;
-#&gt;   &lt;label class="control-label" for="xvar"&gt;x variable&lt;/label&gt;
-#&gt;   &lt;select data-actions-box="false" data-none-selected-text="- Nothing selected -" data-max-options="1" data-show-subtext="true" data-live-search="true" id="xvar" class="selectpicker form-control" multiple="multiple"&gt;
-#&gt;     &lt;option value="BESRSPI - CYCLE 2 DAY 1" data-content="BESRSPI - CYCLE 2 DAY 1 &amp;lt;small class=&amp;quot;text-muted&amp;quot;&amp;gt;Best Confirmed Overall Response by Investigator - CYCLE 2 DAY 1&amp;lt;/small&amp;gt;" selected="selected"&gt;BESRSPI - CYCLE 2 DAY 1: Best Confirmed Overall Response by Investigator - CYCLE 2 DAY 1&lt;/option&gt;
-#&gt;     &lt;option value="INVET - END OF INDUCTION" data-content="INVET - END OF INDUCTION &amp;lt;small class=&amp;quot;text-muted&amp;quot;&amp;gt;Investigator End Of Induction Response - END OF INDUCTION&amp;lt;/small&amp;gt;"&gt;INVET - END OF INDUCTION: Investigator End Of Induction Response - END OF INDUCTION&lt;/option&gt;
-#&gt;     &lt;option value="OVRINV - SCREENING" data-content="OVRINV - SCREENING &amp;lt;small class=&amp;quot;text-muted&amp;quot;&amp;gt;Overall Response by Investigator - by visit - SCREENING&amp;lt;/small&amp;gt;"&gt;OVRINV - SCREENING: Overall Response by Investigator - by visit - SCREENING&lt;/option&gt;
-#&gt;     &lt;option value="OVRINV - BASELINE" data-content="OVRINV - BASELINE &amp;lt;small class=&amp;quot;text-muted&amp;quot;&amp;gt;Overall Response by Investigator - by visit - BASELINE&amp;lt;/small&amp;gt;"&gt;OVRINV - BASELINE: Overall Response by Investigator - by visit - BASELINE&lt;/option&gt;
-#&gt;     &lt;option value="OVRINV - CYCLE 2 DAY 1" data-content="OVRINV - CYCLE 2 DAY 1 &amp;lt;small class=&amp;quot;text-muted&amp;quot;&amp;gt;Overall Response by Investigator - by visit - CYCLE 2 DAY 1&amp;lt;/small&amp;gt;"&gt;OVRINV - CYCLE 2 DAY 1: Overall Response by Investigator - by visit - CYCLE 2 DAY 1&lt;/option&gt;
-#&gt;     &lt;option value="OVRINV - CYCLE 4 DAY 1" data-content="OVRINV - CYCLE 4 DAY 1 &amp;lt;small class=&amp;quot;text-muted&amp;quot;&amp;gt;Overall Response by Investigator - by visit - CYCLE 4 DAY 1&amp;lt;/small&amp;gt;"&gt;OVRINV - CYCLE 4 DAY 1: Overall Response by Investigator - by visit - CYCLE 4 DAY 1&lt;/option&gt;
-#&gt;     &lt;option value="OVRINV - END OF INDUCTION" data-content="OVRINV - END OF INDUCTION &amp;lt;small class=&amp;quot;text-muted&amp;quot;&amp;gt;Overall Response by Investigator - by visit - END OF INDUCTION&amp;lt;/small&amp;gt;"&gt;OVRINV - END OF INDUCTION: Overall Response by Investigator - by visit - END OF INDUCTION&lt;/option&gt;
-#&gt;     &lt;option value="OVRINV - FOLLOW UP" data-content="OVRINV - FOLLOW UP &amp;lt;small class=&amp;quot;text-muted&amp;quot;&amp;gt;Overall Response by Investigator - by visit - FOLLOW UP&amp;lt;/small&amp;gt;"&gt;OVRINV - FOLLOW UP: Overall Response by Investigator - by visit - FOLLOW UP&lt;/option&gt;
-#&gt;     &lt;option value="BESRSPI - CYCLE 4 DAY 1" data-content="BESRSPI - CYCLE 4 DAY 1 &amp;lt;small class=&amp;quot;text-muted&amp;quot;&amp;gt;Best Confirmed Overall Response by Investigator - CYCLE 4 DAY 1&amp;lt;/small&amp;gt;"&gt;BESRSPI - CYCLE 4 DAY 1: Best Confirmed Overall Response by Investigator - CYCLE 4 DAY 1&lt;/option&gt;
-#&gt;     &lt;option value="BESRSPI - END OF INDUCTION" data-content="BESRSPI - END OF INDUCTION &amp;lt;small class=&amp;quot;text-muted&amp;quot;&amp;gt;Best Confirmed Overall Response by Investigator - END OF INDUCTION&amp;lt;/small&amp;gt;"&gt;BESRSPI - END OF INDUCTION: Best Confirmed Overall Response by Investigator - END OF INDUCTION&lt;/option&gt;
-#&gt;     &lt;option value="BESRSPI - FOLLOW UP" data-content="BESRSPI - FOLLOW UP &amp;lt;small class=&amp;quot;text-muted&amp;quot;&amp;gt;Best Confirmed Overall Response by Investigator - FOLLOW UP&amp;lt;/small&amp;gt;"&gt;BESRSPI - FOLLOW UP: Best Confirmed Overall Response by Investigator - FOLLOW UP&lt;/option&gt;
-#&gt;     &lt;option value="BESRSPI - SCREENING" data-content="BESRSPI - SCREENING &amp;lt;small class=&amp;quot;text-muted&amp;quot;&amp;gt;Best Confirmed Overall Response by Investigator - SCREENING&amp;lt;/small&amp;gt;"&gt;BESRSPI - SCREENING: Best Confirmed Overall Response by Investigator - SCREENING&lt;/option&gt;
-#&gt;   &lt;/select&gt;
-#&gt; &lt;/div&gt;</div><div class='input'>
-</div></pre>
+    <pre class="examples"><span class='r-in'></span>
+<span class='r-in'><span class='fu'>optionalSelectInput</span><span class='op'>(</span>inputId <span class='op'>=</span> <span class='st'>"xvar"</span>, label <span class='op'>=</span> <span class='st'>"x variable"</span>, choices <span class='op'>=</span> <span class='st'>"A"</span>, selected <span class='op'>=</span> <span class='st'>"A"</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> &lt;div class="form-group shiny-input-container"&gt;</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   &lt;label class="control-label" for="xvar"&gt;x variable&lt;/label&gt;</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   &lt;select data-actions-box="false" data-none-selected-text="- Nothing selected -" data-max-options="1" data-show-subtext="true" data-live-search="false" id="xvar" class="selectpicker form-control" multiple="multiple"&gt;&lt;option value="A" selected&gt;A&lt;/option&gt;&lt;/select&gt;</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> &lt;/div&gt;</span>
+<span class='r-in'><span class='fu'>optionalSelectInput</span><span class='op'>(</span>inputId <span class='op'>=</span> <span class='st'>"xvar"</span>,</span>
+<span class='r-in'>                    label <span class='op'>=</span> <span class='st'>"x variable"</span>,</span>
+<span class='r-in'>                    choices <span class='op'>=</span> <span class='va'>LETTERS</span><span class='op'>[</span><span class='fl'>1</span><span class='op'>:</span><span class='fl'>5</span><span class='op'>]</span>,</span>
+<span class='r-in'>                     selected <span class='op'>=</span> <span class='st'>"A"</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> &lt;div class="form-group shiny-input-container"&gt;</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   &lt;label class="control-label" for="xvar"&gt;x variable&lt;/label&gt;</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   &lt;select data-actions-box="false" data-none-selected-text="- Nothing selected -" data-max-options="1" data-show-subtext="true" data-live-search="false" id="xvar" class="selectpicker form-control" multiple="multiple"&gt;&lt;option value="A" selected&gt;A&lt;/option&gt;</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> &lt;option value="B"&gt;B&lt;/option&gt;</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> &lt;option value="C"&gt;C&lt;/option&gt;</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> &lt;option value="D"&gt;D&lt;/option&gt;</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> &lt;option value="E"&gt;E&lt;/option&gt;&lt;/select&gt;</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> &lt;/div&gt;</span>
+<span class='r-in'><span class='fu'>optionalSelectInput</span><span class='op'>(</span>inputId <span class='op'>=</span> <span class='st'>"xvar"</span>,</span>
+<span class='r-in'>                    label <span class='op'>=</span> <span class='st'>"x variable"</span>,</span>
+<span class='r-in'>                    choices <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"A - value A"</span> <span class='op'>=</span> <span class='st'>"A"</span><span class='op'>)</span>,</span>
+<span class='r-in'>                    selected <span class='op'>=</span> <span class='st'>"A"</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> &lt;div class="form-group shiny-input-container"&gt;</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   &lt;label class="control-label" for="xvar"&gt;x variable&lt;/label&gt;</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   &lt;select data-actions-box="false" data-none-selected-text="- Nothing selected -" data-max-options="1" data-show-subtext="true" data-live-search="false" id="xvar" class="selectpicker form-control" multiple="multiple"&gt;&lt;option value="A" selected&gt;A - value A&lt;/option&gt;&lt;/select&gt;</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> &lt;/div&gt;</span>
+<span class='r-in'></span>
+<span class='r-in'><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'>scda</span><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>ADRS</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/scda/man/synthetic_cdisc_data.html'>synthetic_cdisc_data</a></span><span class='op'>(</span><span class='st'>"latest"</span><span class='op'>)</span><span class='op'>$</span><span class='va'>adrs</span></span>
+<span class='r-in'><span class='fu'>optionalSelectInput</span><span class='op'>(</span>inputId <span class='op'>=</span> <span class='st'>"xvar"</span>,</span>
+<span class='r-in'>                    label <span class='op'>=</span> <span class='st'>"x variable"</span>,</span>
+<span class='r-in'>                    choices <span class='op'>=</span> <span class='fu'><a href='choices_labeled.html'>choices_labeled</a></span><span class='op'>(</span></span>
+<span class='r-in'>                      choices <span class='op'>=</span> <span class='va'>letters</span>,</span>
+<span class='r-in'>                      labels <span class='op'>=</span> <span class='va'>LETTERS</span>,</span>
+<span class='r-in'>                      types <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/sample.html'>sample</a></span><span class='op'>(</span></span>
+<span class='r-in'>                        <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"primary_key"</span>, <span class='st'>"numeric"</span>, <span class='st'>"factor"</span>, <span class='st'>"Date"</span><span class='op'>)</span>,</span>
+<span class='r-in'>                        <span class='fu'><a href='https://rdrr.io/r/base/length.html'>length</a></span><span class='op'>(</span><span class='va'>letters</span><span class='op'>)</span>,</span>
+<span class='r-in'>                        <span class='cn'>TRUE</span></span>
+<span class='r-in'>                      <span class='op'>)</span>,</span>
+<span class='r-in'>                      subset <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"a"</span>, <span class='st'>"b"</span>, <span class='st'>"c"</span><span class='op'>)</span></span>
+<span class='r-in'>                    <span class='op'>)</span>,</span>
+<span class='r-in'>                    selected <span class='op'>=</span> <span class='st'>"a"</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> &lt;div class="form-group shiny-input-container"&gt;</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   &lt;label class="control-label" for="xvar"&gt;x variable&lt;/label&gt;</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   &lt;select data-actions-box="false" data-none-selected-text="- Nothing selected -" data-max-options="1" data-show-subtext="true" data-live-search="false" id="xvar" class="selectpicker form-control" multiple="multiple"&gt;</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>     &lt;option value="a" data-content="&amp;lt;i class=&amp;quot;fa fa-sort-numeric-up&amp;quot; role=&amp;quot;presentation&amp;quot; aria-label=&amp;quot;sort-numeric-up icon&amp;quot;&amp;gt;&amp;lt;/i&amp;gt; a &amp;lt;small class=&amp;quot;text-muted&amp;quot;&amp;gt;A&amp;lt;/small&amp;gt;" selected="selected"&gt;a&lt;/option&gt;</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>     &lt;option value="b" data-content="&amp;lt;i class=&amp;quot;fa fa-key&amp;quot; role=&amp;quot;presentation&amp;quot; aria-label=&amp;quot;key icon&amp;quot;&amp;gt;&amp;lt;/i&amp;gt; b &amp;lt;small class=&amp;quot;text-muted&amp;quot;&amp;gt;B&amp;lt;/small&amp;gt;"&gt;b&lt;/option&gt;</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>     &lt;option value="c" data-content="&amp;lt;i class=&amp;quot;fa fa-sort-numeric-up&amp;quot; role=&amp;quot;presentation&amp;quot; aria-label=&amp;quot;sort-numeric-up icon&amp;quot;&amp;gt;&amp;lt;/i&amp;gt; c &amp;lt;small class=&amp;quot;text-muted&amp;quot;&amp;gt;C&amp;lt;/small&amp;gt;"&gt;c&lt;/option&gt;</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   &lt;/select&gt;</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> &lt;/div&gt;</span>
+<span class='r-in'><span class='fu'>optionalSelectInput</span><span class='op'>(</span>inputId <span class='op'>=</span> <span class='st'>"xvar"</span>,</span>
+<span class='r-in'>                    label <span class='op'>=</span> <span class='st'>"x variable"</span>,</span>
+<span class='r-in'>                    choices <span class='op'>=</span> <span class='fu'><a href='variable_choices.html'>variable_choices</a></span><span class='op'>(</span>data <span class='op'>=</span> <span class='va'>ADRS</span>, subset <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"AGE"</span>, <span class='st'>"SEX"</span>, <span class='st'>"PARAMCD"</span><span class='op'>)</span><span class='op'>)</span>,</span>
+<span class='r-in'>                    selected <span class='op'>=</span> <span class='st'>"PARAMCD"</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> &lt;div class="form-group shiny-input-container"&gt;</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   &lt;label class="control-label" for="xvar"&gt;x variable&lt;/label&gt;</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   &lt;select data-actions-box="false" data-none-selected-text="- Nothing selected -" data-max-options="1" data-show-subtext="true" data-live-search="false" id="xvar" class="selectpicker form-control" multiple="multiple"&gt;</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>     &lt;option value="AGE" data-content="&amp;lt;i class=&amp;quot;fa fa-sort-numeric-up&amp;quot; role=&amp;quot;presentation&amp;quot; aria-label=&amp;quot;sort-numeric-up icon&amp;quot;&amp;gt;&amp;lt;/i&amp;gt; AGE &amp;lt;small class=&amp;quot;text-muted&amp;quot;&amp;gt;Age&amp;lt;/small&amp;gt;"&gt;AGE&lt;/option&gt;</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>     &lt;option value="SEX" data-content="&amp;lt;i class=&amp;quot;fa fa-chart-bar&amp;quot; role=&amp;quot;presentation&amp;quot; aria-label=&amp;quot;chart-bar icon&amp;quot;&amp;gt;&amp;lt;/i&amp;gt; SEX &amp;lt;small class=&amp;quot;text-muted&amp;quot;&amp;gt;Sex&amp;lt;/small&amp;gt;"&gt;SEX&lt;/option&gt;</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>     &lt;option value="PARAMCD" data-content="&amp;lt;i class=&amp;quot;fa fa-chart-bar&amp;quot; role=&amp;quot;presentation&amp;quot; aria-label=&amp;quot;chart-bar icon&amp;quot;&amp;gt;&amp;lt;/i&amp;gt; PARAMCD &amp;lt;small class=&amp;quot;text-muted&amp;quot;&amp;gt;Parameter Code&amp;lt;/small&amp;gt;" selected="selected"&gt;PARAMCD&lt;/option&gt;</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   &lt;/select&gt;</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> &lt;/div&gt;</span>
+<span class='r-in'></span>
+<span class='r-in'><span class='va'>selected_value</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste0</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/lapply.html'>lapply</a></span><span class='op'>(</span><span class='va'>ADRS</span><span class='op'>[</span><span class='fl'>1</span>, <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"PARAMCD"</span>, <span class='st'>"AVISIT"</span><span class='op'>)</span><span class='op'>]</span>, <span class='va'>as.character</span><span class='op'>)</span>, collapse <span class='op'>=</span> <span class='st'>" - "</span><span class='op'>)</span></span>
+<span class='r-in'><span class='fu'>optionalSelectInput</span><span class='op'>(</span>inputId <span class='op'>=</span> <span class='st'>"xvar"</span>,</span>
+<span class='r-in'>                    label <span class='op'>=</span> <span class='st'>"x variable"</span>,</span>
+<span class='r-in'>                    choices <span class='op'>=</span> <span class='fu'><a href='value_choices.html'>value_choices</a></span><span class='op'>(</span>data <span class='op'>=</span> <span class='va'>ADRS</span>,</span>
+<span class='r-in'>                                            var_choices <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"PARAMCD"</span>, <span class='st'>"AVISIT"</span><span class='op'>)</span>,</span>
+<span class='r-in'>                                            var_label <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"PARAM"</span>, <span class='st'>"AVISIT"</span><span class='op'>)</span><span class='op'>)</span>,</span>
+<span class='r-in'>                    selected <span class='op'>=</span> <span class='va'>selected_value</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> &lt;div class="form-group shiny-input-container"&gt;</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   &lt;label class="control-label" for="xvar"&gt;x variable&lt;/label&gt;</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   &lt;select data-actions-box="false" data-none-selected-text="- Nothing selected -" data-max-options="1" data-show-subtext="true" data-live-search="true" id="xvar" class="selectpicker form-control" multiple="multiple"&gt;</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>     &lt;option value="BESRSPI - CYCLE 2 DAY 1" data-content="BESRSPI - CYCLE 2 DAY 1 &amp;lt;small class=&amp;quot;text-muted&amp;quot;&amp;gt;Best Confirmed Overall Response by Investigator - CYCLE 2 DAY 1&amp;lt;/small&amp;gt;" selected="selected"&gt;BESRSPI - CYCLE 2 DAY 1: Best Confirmed Overall Response by Investigator - CYCLE 2 DAY 1&lt;/option&gt;</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>     &lt;option value="INVET - END OF INDUCTION" data-content="INVET - END OF INDUCTION &amp;lt;small class=&amp;quot;text-muted&amp;quot;&amp;gt;Investigator End Of Induction Response - END OF INDUCTION&amp;lt;/small&amp;gt;"&gt;INVET - END OF INDUCTION: Investigator End Of Induction Response - END OF INDUCTION&lt;/option&gt;</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>     &lt;option value="OVRINV - SCREENING" data-content="OVRINV - SCREENING &amp;lt;small class=&amp;quot;text-muted&amp;quot;&amp;gt;Overall Response by Investigator - by visit - SCREENING&amp;lt;/small&amp;gt;"&gt;OVRINV - SCREENING: Overall Response by Investigator - by visit - SCREENING&lt;/option&gt;</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>     &lt;option value="OVRINV - BASELINE" data-content="OVRINV - BASELINE &amp;lt;small class=&amp;quot;text-muted&amp;quot;&amp;gt;Overall Response by Investigator - by visit - BASELINE&amp;lt;/small&amp;gt;"&gt;OVRINV - BASELINE: Overall Response by Investigator - by visit - BASELINE&lt;/option&gt;</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>     &lt;option value="OVRINV - CYCLE 2 DAY 1" data-content="OVRINV - CYCLE 2 DAY 1 &amp;lt;small class=&amp;quot;text-muted&amp;quot;&amp;gt;Overall Response by Investigator - by visit - CYCLE 2 DAY 1&amp;lt;/small&amp;gt;"&gt;OVRINV - CYCLE 2 DAY 1: Overall Response by Investigator - by visit - CYCLE 2 DAY 1&lt;/option&gt;</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>     &lt;option value="OVRINV - CYCLE 4 DAY 1" data-content="OVRINV - CYCLE 4 DAY 1 &amp;lt;small class=&amp;quot;text-muted&amp;quot;&amp;gt;Overall Response by Investigator - by visit - CYCLE 4 DAY 1&amp;lt;/small&amp;gt;"&gt;OVRINV - CYCLE 4 DAY 1: Overall Response by Investigator - by visit - CYCLE 4 DAY 1&lt;/option&gt;</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>     &lt;option value="OVRINV - END OF INDUCTION" data-content="OVRINV - END OF INDUCTION &amp;lt;small class=&amp;quot;text-muted&amp;quot;&amp;gt;Overall Response by Investigator - by visit - END OF INDUCTION&amp;lt;/small&amp;gt;"&gt;OVRINV - END OF INDUCTION: Overall Response by Investigator - by visit - END OF INDUCTION&lt;/option&gt;</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>     &lt;option value="OVRINV - FOLLOW UP" data-content="OVRINV - FOLLOW UP &amp;lt;small class=&amp;quot;text-muted&amp;quot;&amp;gt;Overall Response by Investigator - by visit - FOLLOW UP&amp;lt;/small&amp;gt;"&gt;OVRINV - FOLLOW UP: Overall Response by Investigator - by visit - FOLLOW UP&lt;/option&gt;</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>     &lt;option value="BESRSPI - CYCLE 4 DAY 1" data-content="BESRSPI - CYCLE 4 DAY 1 &amp;lt;small class=&amp;quot;text-muted&amp;quot;&amp;gt;Best Confirmed Overall Response by Investigator - CYCLE 4 DAY 1&amp;lt;/small&amp;gt;"&gt;BESRSPI - CYCLE 4 DAY 1: Best Confirmed Overall Response by Investigator - CYCLE 4 DAY 1&lt;/option&gt;</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>     &lt;option value="BESRSPI - END OF INDUCTION" data-content="BESRSPI - END OF INDUCTION &amp;lt;small class=&amp;quot;text-muted&amp;quot;&amp;gt;Best Confirmed Overall Response by Investigator - END OF INDUCTION&amp;lt;/small&amp;gt;"&gt;BESRSPI - END OF INDUCTION: Best Confirmed Overall Response by Investigator - END OF INDUCTION&lt;/option&gt;</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>     &lt;option value="BESRSPI - FOLLOW UP" data-content="BESRSPI - FOLLOW UP &amp;lt;small class=&amp;quot;text-muted&amp;quot;&amp;gt;Best Confirmed Overall Response by Investigator - FOLLOW UP&amp;lt;/small&amp;gt;"&gt;BESRSPI - FOLLOW UP: Best Confirmed Overall Response by Investigator - FOLLOW UP&lt;/option&gt;</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>     &lt;option value="BESRSPI - SCREENING" data-content="BESRSPI - SCREENING &amp;lt;small class=&amp;quot;text-muted&amp;quot;&amp;gt;Best Confirmed Overall Response by Investigator - SCREENING&amp;lt;/small&amp;gt;"&gt;BESRSPI - SCREENING: Best Confirmed Overall Response by Investigator - SCREENING&lt;/option&gt;</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   &lt;/select&gt;</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> &lt;/div&gt;</span>
+<span class='r-in'></span>
+</pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

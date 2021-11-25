@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">teal</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.10.0.9019</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.10.0.9020</span>
       </span>
     </div>
 
@@ -114,33 +114,6 @@
 <li>
   <a href="../news/index.html">Changelog</a>
 </li>
-<!-- start_releases -->
-<li class="dropdown">
-	<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-Other releases
-<span class="caret"></span></a><ul class="dropdown-menu" role="menu">
-   <li><a href="../index.html">latest</a></li>
-   <li><a href="../pre-release/index.html">pre-release</a></li>
-   <li><a href="../v0.10.0/index.html">v0.10.0</a></li>
-   <li><a href="../v0.9.5/index.html">v0.9.5</a></li>
-   <li><a href="../v0.9.4/index.html">v0.9.4</a></li>
-   <li><a href="../v0.9.3/index.html">v0.9.3</a></li>
-   <li><a href="../v0.9.2/index.html">v0.9.2</a></li>
-   <li><a href="../v0.9.1/index.html">v0.9.1</a></li>
-   <li><a href="../v0.9.0/index.html">v0.9.0</a></li>
-   <li><a href="../v0.8.5/index.html">v0.8.5</a></li>
-   <li><a href="../v0.8.4/index.html">v0.8.4</a></li>
-   <li><a href="../v0.8.3/index.html">v0.8.3</a></li>
-   <li><a href="../v0.8.2/index.html">v0.8.2</a></li>
-   <li><a href="../v0.7.0/index.html">v0.7.0</a></li>
-   <li><a href="../v0.6.0/index.html">v0.6.0</a></li>
-   <li><a href="../v0.0.5/index.html">v0.0.5</a></li>
-   <li><a href="../v0.0.4/index.html">v0.0.4</a></li>
-   <li><a href="../v0.0.3/index.html">v0.0.3</a></li>
-   <li><a href="../v0.0.2/index.html">v0.0.2</a></li>
-   <li><a href="../v0.0.1/index.html">v0.0.1</a></li>
-</ul></li>
-<!-- end_releases -->
       </ul>
       <ul class="nav navbar-nav navbar-right">
         <li>
@@ -240,65 +213,90 @@ within another dataset.</p></td>
     <p>Create <code>DatasetConnector</code> from <code><a href='callable_function.html'>callable_function</a></code>.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='http://waldronlab.io/MultiAssayExperiment/'>MultiAssayExperiment</a></span><span class='op'>)</span>
-</div><div class='output co'>#&gt; <span class='message'>Loading required package: SummarizedExperiment</span></div><div class='output co'>#&gt; <span class='message'>Loading required package: MatrixGenerics</span></div><div class='output co'>#&gt; <span class='message'>Loading required package: matrixStats</span></div><div class='output co'>#&gt; <span class='message'></span>
-#&gt; <span class='message'>Attaching package: ‘MatrixGenerics’</span></div><div class='output co'>#&gt; <span class='message'>The following objects are masked from ‘package:matrixStats’:</span>
-#&gt; <span class='message'></span>
-#&gt; <span class='message'>    colAlls, colAnyNAs, colAnys, colAvgsPerRowSet, colCollapse,</span>
-#&gt; <span class='message'>    colCounts, colCummaxs, colCummins, colCumprods, colCumsums,</span>
-#&gt; <span class='message'>    colDiffs, colIQRDiffs, colIQRs, colLogSumExps, colMadDiffs,</span>
-#&gt; <span class='message'>    colMads, colMaxs, colMeans2, colMedians, colMins, colOrderStats,</span>
-#&gt; <span class='message'>    colProds, colQuantiles, colRanges, colRanks, colSdDiffs, colSds,</span>
-#&gt; <span class='message'>    colSums2, colTabulates, colVarDiffs, colVars, colWeightedMads,</span>
-#&gt; <span class='message'>    colWeightedMeans, colWeightedMedians, colWeightedSds,</span>
-#&gt; <span class='message'>    colWeightedVars, rowAlls, rowAnyNAs, rowAnys, rowAvgsPerColSet,</span>
-#&gt; <span class='message'>    rowCollapse, rowCounts, rowCummaxs, rowCummins, rowCumprods,</span>
-#&gt; <span class='message'>    rowCumsums, rowDiffs, rowIQRDiffs, rowIQRs, rowLogSumExps,</span>
-#&gt; <span class='message'>    rowMadDiffs, rowMads, rowMaxs, rowMeans2, rowMedians, rowMins,</span>
-#&gt; <span class='message'>    rowOrderStats, rowProds, rowQuantiles, rowRanges, rowRanks,</span>
-#&gt; <span class='message'>    rowSdDiffs, rowSds, rowSums2, rowTabulates, rowVarDiffs, rowVars,</span>
-#&gt; <span class='message'>    rowWeightedMads, rowWeightedMeans, rowWeightedMedians,</span>
-#&gt; <span class='message'>    rowWeightedSds, rowWeightedVars</span></div><div class='output co'>#&gt; <span class='message'>Loading required package: GenomicRanges</span></div><div class='output co'>#&gt; <span class='message'>Loading required package: stats4</span></div><div class='output co'>#&gt; <span class='message'>Loading required package: BiocGenerics</span></div><div class='output co'>#&gt; <span class='message'>Loading required package: parallel</span></div><div class='output co'>#&gt; <span class='message'></span>
-#&gt; <span class='message'>Attaching package: ‘BiocGenerics’</span></div><div class='output co'>#&gt; <span class='message'>The following objects are masked from ‘package:parallel’:</span>
-#&gt; <span class='message'></span>
-#&gt; <span class='message'>    clusterApply, clusterApplyLB, clusterCall, clusterEvalQ,</span>
-#&gt; <span class='message'>    clusterExport, clusterMap, parApply, parCapply, parLapply,</span>
-#&gt; <span class='message'>    parLapplyLB, parRapply, parSapply, parSapplyLB</span></div><div class='output co'>#&gt; <span class='message'>The following objects are masked from ‘package:stats’:</span>
-#&gt; <span class='message'></span>
-#&gt; <span class='message'>    IQR, mad, sd, var, xtabs</span></div><div class='output co'>#&gt; <span class='message'>The following objects are masked from ‘package:base’:</span>
-#&gt; <span class='message'></span>
-#&gt; <span class='message'>    anyDuplicated, append, as.data.frame, basename, cbind, colnames,</span>
-#&gt; <span class='message'>    dirname, do.call, duplicated, eval, evalq, Filter, Find, get, grep,</span>
-#&gt; <span class='message'>    grepl, intersect, is.unsorted, lapply, Map, mapply, match, mget,</span>
-#&gt; <span class='message'>    order, paste, pmax, pmax.int, pmin, pmin.int, Position, rank,</span>
-#&gt; <span class='message'>    rbind, Reduce, rownames, sapply, setdiff, sort, table, tapply,</span>
-#&gt; <span class='message'>    union, unique, unsplit, which.max, which.min</span></div><div class='output co'>#&gt; <span class='message'>Loading required package: S4Vectors</span></div><div class='output co'>#&gt; <span class='message'></span>
-#&gt; <span class='message'>Attaching package: ‘S4Vectors’</span></div><div class='output co'>#&gt; <span class='message'>The following objects are masked from ‘package:base’:</span>
-#&gt; <span class='message'></span>
-#&gt; <span class='message'>    expand.grid, I, unname</span></div><div class='output co'>#&gt; <span class='message'>Loading required package: IRanges</span></div><div class='output co'>#&gt; <span class='message'>Loading required package: GenomeInfoDb</span></div><div class='output co'>#&gt; <span class='message'>Loading required package: Biobase</span></div><div class='output co'>#&gt; <span class='message'>Welcome to Bioconductor</span>
-#&gt; <span class='message'></span>
-#&gt; <span class='message'>    Vignettes contain introductory material; view with</span>
-#&gt; <span class='message'>    'browseVignettes()'. To cite Bioconductor, see</span>
-#&gt; <span class='message'>    'citation("Biobase")', and for packages 'citation("pkgname")'.</span></div><div class='output co'>#&gt; <span class='message'></span>
-#&gt; <span class='message'>Attaching package: ‘Biobase’</span></div><div class='output co'>#&gt; <span class='message'>The following object is masked from ‘package:MatrixGenerics’:</span>
-#&gt; <span class='message'></span>
-#&gt; <span class='message'>    rowMedians</span></div><div class='output co'>#&gt; <span class='message'>The following objects are masked from ‘package:matrixStats’:</span>
-#&gt; <span class='message'></span>
-#&gt; <span class='message'>    anyMissing, rowMedians</span></div><div class='input'><span class='co'># data.frame example</span>
-<span class='va'>pull_fun2</span> <span class='op'>&lt;-</span> <span class='fu'><a href='callable_function.html'>callable_function</a></span><span class='op'>(</span><span class='va'>data.frame</span><span class='op'>)</span>
-<span class='va'>pull_fun2</span><span class='op'>$</span><span class='fu'>set_args</span><span class='op'>(</span>args <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>a <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>1</span>,<span class='fl'>2</span>,<span class='fl'>3</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span>
-<span class='fu'>dataset_connector</span><span class='op'>(</span><span class='st'>"test"</span>, <span class='va'>pull_fun2</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; A DatasetConnector object, named test, containing a Dataset object that has not been loaded/pulled</div><div class='input'>
-<span class='co'># MultiAssayExperiment example</span>
-<span class='va'>pull_fun</span> <span class='op'>&lt;-</span> <span class='fu'><a href='callable_function.html'>callable_function</a></span><span class='op'>(</span>
-  <span class='kw'>function</span><span class='op'>(</span><span class='op'>)</span> <span class='op'>{</span> <span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='st'><a href='http://waldronlab.io/MultiAssayExperiment/'>"MultiAssayExperiment"</a></span><span class='op'>)</span>; <span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span><span class='op'>(</span><span class='st'>"miniACC"</span><span class='op'>)</span>; <span class='kw'><a href='https://rdrr.io/r/base/function.html'>return</a></span><span class='op'>(</span><span class='va'>miniACC</span><span class='op'>)</span> <span class='op'>}</span><span class='op'>)</span>
-<span class='fu'>dataset_connector</span><span class='op'>(</span>
-  <span class='st'>"miniacc"</span>,
-  <span class='va'>pull_fun</span>,
-  code <span class='op'>=</span> <span class='st'>'library("MultiAssayExperiment"); data("miniACC"); return(miniACC)'</span>
-<span class='op'>)</span>
-</div><div class='output co'>#&gt; A DatasetConnector object, named miniacc, containing a Dataset object that has not been loaded/pulled</div><div class='input'>
-</div></pre>
+    <pre class="examples"><span class='r-in'><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='http://waldronlab.io/MultiAssayExperiment/'>MultiAssayExperiment</a></span><span class='op'>)</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> Loading required package: SummarizedExperiment</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> Loading required package: MatrixGenerics</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> Loading required package: matrixStats</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> Attaching package: ‘MatrixGenerics’</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> The following objects are masked from ‘package:matrixStats’:</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>     colAlls, colAnyNAs, colAnys, colAvgsPerRowSet, colCollapse,</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>     colCounts, colCummaxs, colCummins, colCumprods, colCumsums,</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>     colDiffs, colIQRDiffs, colIQRs, colLogSumExps, colMadDiffs,</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>     colMads, colMaxs, colMeans2, colMedians, colMins, colOrderStats,</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>     colProds, colQuantiles, colRanges, colRanks, colSdDiffs, colSds,</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>     colSums2, colTabulates, colVarDiffs, colVars, colWeightedMads,</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>     colWeightedMeans, colWeightedMedians, colWeightedSds,</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>     colWeightedVars, rowAlls, rowAnyNAs, rowAnys, rowAvgsPerColSet,</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>     rowCollapse, rowCounts, rowCummaxs, rowCummins, rowCumprods,</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>     rowCumsums, rowDiffs, rowIQRDiffs, rowIQRs, rowLogSumExps,</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>     rowMadDiffs, rowMads, rowMaxs, rowMeans2, rowMedians, rowMins,</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>     rowOrderStats, rowProds, rowQuantiles, rowRanges, rowRanks,</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>     rowSdDiffs, rowSds, rowSums2, rowTabulates, rowVarDiffs, rowVars,</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>     rowWeightedMads, rowWeightedMeans, rowWeightedMedians,</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>     rowWeightedSds, rowWeightedVars</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> Loading required package: GenomicRanges</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> Loading required package: stats4</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> Loading required package: BiocGenerics</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> Loading required package: parallel</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> Attaching package: ‘BiocGenerics’</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> The following objects are masked from ‘package:parallel’:</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>     clusterApply, clusterApplyLB, clusterCall, clusterEvalQ,</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>     clusterExport, clusterMap, parApply, parCapply, parLapply,</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>     parLapplyLB, parRapply, parSapply, parSapplyLB</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> The following objects are masked from ‘package:stats’:</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>     IQR, mad, sd, var, xtabs</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> The following objects are masked from ‘package:base’:</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>     anyDuplicated, append, as.data.frame, basename, cbind, colnames,</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>     dirname, do.call, duplicated, eval, evalq, Filter, Find, get, grep,</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>     grepl, intersect, is.unsorted, lapply, Map, mapply, match, mget,</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>     order, paste, pmax, pmax.int, pmin, pmin.int, Position, rank,</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>     rbind, Reduce, rownames, sapply, setdiff, sort, table, tapply,</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>     union, unique, unsplit, which.max, which.min</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> Loading required package: S4Vectors</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> Attaching package: ‘S4Vectors’</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> The following objects are masked from ‘package:base’:</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>     expand.grid, I, unname</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> Loading required package: IRanges</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> Loading required package: GenomeInfoDb</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> Loading required package: Biobase</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> Welcome to Bioconductor</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>     Vignettes contain introductory material; view with</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>     'browseVignettes()'. To cite Bioconductor, see</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>     'citation("Biobase")', and for packages 'citation("pkgname")'.</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> Attaching package: ‘Biobase’</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> The following object is masked from ‘package:MatrixGenerics’:</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>     rowMedians</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> The following objects are masked from ‘package:matrixStats’:</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>     anyMissing, rowMedians</span>
+<span class='r-in'><span class='co'># data.frame example</span></span>
+<span class='r-in'><span class='va'>pull_fun2</span> <span class='op'>&lt;-</span> <span class='fu'><a href='callable_function.html'>callable_function</a></span><span class='op'>(</span><span class='va'>data.frame</span><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>pull_fun2</span><span class='op'>$</span><span class='fu'>set_args</span><span class='op'>(</span>args <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>a <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>1</span>,<span class='fl'>2</span>,<span class='fl'>3</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span></span>
+<span class='r-in'><span class='fu'>dataset_connector</span><span class='op'>(</span><span class='st'>"test"</span>, <span class='va'>pull_fun2</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> A DatasetConnector object, named test, containing a Dataset object that has not been loaded/pulled</span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># MultiAssayExperiment example</span></span>
+<span class='r-in'><span class='va'>pull_fun</span> <span class='op'>&lt;-</span> <span class='fu'><a href='callable_function.html'>callable_function</a></span><span class='op'>(</span></span>
+<span class='r-in'>  <span class='kw'>function</span><span class='op'>(</span><span class='op'>)</span> <span class='op'>{</span> <span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='st'><a href='http://waldronlab.io/MultiAssayExperiment/'>"MultiAssayExperiment"</a></span><span class='op'>)</span>; <span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span><span class='op'>(</span><span class='st'>"miniACC"</span><span class='op'>)</span>; <span class='kw'><a href='https://rdrr.io/r/base/function.html'>return</a></span><span class='op'>(</span><span class='va'>miniACC</span><span class='op'>)</span> <span class='op'>}</span><span class='op'>)</span></span>
+<span class='r-in'><span class='fu'>dataset_connector</span><span class='op'>(</span></span>
+<span class='r-in'>  <span class='st'>"miniacc"</span>,</span>
+<span class='r-in'>  <span class='va'>pull_fun</span>,</span>
+<span class='r-in'>  code <span class='op'>=</span> <span class='st'>'library("MultiAssayExperiment"); data("miniACC"); return(miniACC)'</span></span>
+<span class='r-in'><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> A DatasetConnector object, named miniacc, containing a Dataset object that has not been loaded/pulled</span>
+<span class='r-in'></span>
+</pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

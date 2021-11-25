@@ -74,7 +74,7 @@ is obtained by calling the ui function on it." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">teal</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.10.0.9019</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.10.0.9020</span>
       </span>
     </div>
 
@@ -116,33 +116,6 @@ is obtained by calling the ui function on it." />
 <li>
   <a href="../news/index.html">Changelog</a>
 </li>
-<!-- start_releases -->
-<li class="dropdown">
-	<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-Other releases
-<span class="caret"></span></a><ul class="dropdown-menu" role="menu">
-   <li><a href="../index.html">latest</a></li>
-   <li><a href="../pre-release/index.html">pre-release</a></li>
-   <li><a href="../v0.10.0/index.html">v0.10.0</a></li>
-   <li><a href="../v0.9.5/index.html">v0.9.5</a></li>
-   <li><a href="../v0.9.4/index.html">v0.9.4</a></li>
-   <li><a href="../v0.9.3/index.html">v0.9.3</a></li>
-   <li><a href="../v0.9.2/index.html">v0.9.2</a></li>
-   <li><a href="../v0.9.1/index.html">v0.9.1</a></li>
-   <li><a href="../v0.9.0/index.html">v0.9.0</a></li>
-   <li><a href="../v0.8.5/index.html">v0.8.5</a></li>
-   <li><a href="../v0.8.4/index.html">v0.8.4</a></li>
-   <li><a href="../v0.8.3/index.html">v0.8.3</a></li>
-   <li><a href="../v0.8.2/index.html">v0.8.2</a></li>
-   <li><a href="../v0.7.0/index.html">v0.7.0</a></li>
-   <li><a href="../v0.6.0/index.html">v0.6.0</a></li>
-   <li><a href="../v0.0.5/index.html">v0.0.5</a></li>
-   <li><a href="../v0.0.4/index.html">v0.0.4</a></li>
-   <li><a href="../v0.0.3/index.html">v0.0.3</a></li>
-   <li><a href="../v0.0.2/index.html">v0.0.2</a></li>
-   <li><a href="../v0.0.1/index.html">v0.0.1</a></li>
-</ul></li>
-<!-- end_releases -->
       </ul>
       <ul class="nav navbar-nav navbar-right">
         <li>
@@ -211,31 +184,31 @@ calling this function on it</p></li>
 isolated context (with respect to reactivity)</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='va'>mods</span> <span class='op'>&lt;-</span> <span class='fu'>teal</span><span class='fu'>:::</span><span class='fu'><a href='get_dummy_modules.html'>get_dummy_modules</a></span><span class='op'>(</span><span class='op'>)</span>
-<span class='va'>datasets</span> <span class='op'>&lt;-</span> <span class='fu'>teal</span><span class='fu'>:::</span><span class='fu'><a href='get_dummy_datasets.html'>get_dummy_datasets</a></span><span class='op'>(</span><span class='op'>)</span>
-<span class='va'>app</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/shiny/man/shinyApp.html'>shinyApp</a></span><span class='op'>(</span>
-  ui <span class='op'>=</span> <span class='kw'>function</span><span class='op'>(</span><span class='op'>)</span> <span class='op'>{</span>
-    <span class='fu'><a href='https://rdrr.io/pkg/htmltools/man/tagList.html'>tagList</a></span><span class='op'>(</span>
-      <span class='fu'>teal</span><span class='fu'>:::</span><span class='fu'><a href='include_teal_css_js.html'>include_teal_css_js</a></span><span class='op'>(</span><span class='op'>)</span>,
-      <span class='fu'><a href='https://rdrr.io/pkg/shiny/man/textOutput.html'>textOutput</a></span><span class='op'>(</span><span class='st'>"info"</span><span class='op'>)</span>,
-      <span class='fu'><a href='https://rdrr.io/pkg/shiny/man/fluidPage.html'>fluidPage</a></span><span class='op'>(</span> <span class='co'># needed for nice tabs</span>
-        <span class='fu'>teal</span><span class='fu'>:::</span><span class='fu'>ui_nested_tabs</span><span class='op'>(</span><span class='st'>"dummy"</span>, modules <span class='op'>=</span> <span class='va'>mods</span>, datasets <span class='op'>=</span> <span class='va'>datasets</span><span class='op'>)</span>
-      <span class='op'>)</span>
-    <span class='op'>)</span>
-  <span class='op'>}</span>,
-  server <span class='op'>=</span> <span class='kw'>function</span><span class='op'>(</span><span class='va'>input</span>, <span class='va'>output</span>, <span class='va'>session</span><span class='op'>)</span> <span class='op'>{</span>
-    <span class='va'>active_module</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/shiny/man/callModule.html'>callModule</a></span><span class='op'>(</span>
-      <span class='fu'>teal</span><span class='fu'>:::</span><span class='va'><a href='srv_nested_tabs.html'>srv_nested_tabs</a></span>, <span class='st'>"dummy"</span>, datasets <span class='op'>=</span> <span class='va'>datasets</span>, modules <span class='op'>=</span> <span class='va'>mods</span>
-    <span class='op'>)</span>
-    <span class='va'>output</span><span class='op'>$</span><span class='va'>info</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/shiny/man/renderPrint.html'>renderText</a></span><span class='op'>(</span><span class='op'>{</span>
-      <span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste0</a></span><span class='op'>(</span><span class='st'>"The currently active tab name is "</span>, <span class='fu'>active_module</span><span class='op'>(</span><span class='op'>)</span><span class='op'>$</span><span class='va'>label</span><span class='op'>)</span>
-    <span class='op'>}</span><span class='op'>)</span>
-  <span class='op'>}</span>
-<span class='op'>)</span>
-<span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span>
-<span class='fu'><a href='https://rdrr.io/pkg/shiny/man/runApp.html'>runApp</a></span><span class='op'>(</span><span class='va'>app</span><span class='op'>)</span>
-<span class='op'>}</span>
-</div></pre>
+    <pre class="examples"><span class='r-in'><span class='va'>mods</span> <span class='op'>&lt;-</span> <span class='fu'>teal</span><span class='fu'>:::</span><span class='fu'><a href='get_dummy_modules.html'>get_dummy_modules</a></span><span class='op'>(</span><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>datasets</span> <span class='op'>&lt;-</span> <span class='fu'>teal</span><span class='fu'>:::</span><span class='fu'><a href='get_dummy_datasets.html'>get_dummy_datasets</a></span><span class='op'>(</span><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>app</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/shiny/man/shinyApp.html'>shinyApp</a></span><span class='op'>(</span></span>
+<span class='r-in'>  ui <span class='op'>=</span> <span class='kw'>function</span><span class='op'>(</span><span class='op'>)</span> <span class='op'>{</span></span>
+<span class='r-in'>    <span class='fu'><a href='https://rdrr.io/pkg/htmltools/man/tagList.html'>tagList</a></span><span class='op'>(</span></span>
+<span class='r-in'>      <span class='fu'>teal</span><span class='fu'>:::</span><span class='fu'><a href='include_teal_css_js.html'>include_teal_css_js</a></span><span class='op'>(</span><span class='op'>)</span>,</span>
+<span class='r-in'>      <span class='fu'><a href='https://rdrr.io/pkg/shiny/man/textOutput.html'>textOutput</a></span><span class='op'>(</span><span class='st'>"info"</span><span class='op'>)</span>,</span>
+<span class='r-in'>      <span class='fu'><a href='https://rdrr.io/pkg/shiny/man/fluidPage.html'>fluidPage</a></span><span class='op'>(</span> <span class='co'># needed for nice tabs</span></span>
+<span class='r-in'>        <span class='fu'>teal</span><span class='fu'>:::</span><span class='fu'>ui_nested_tabs</span><span class='op'>(</span><span class='st'>"dummy"</span>, modules <span class='op'>=</span> <span class='va'>mods</span>, datasets <span class='op'>=</span> <span class='va'>datasets</span><span class='op'>)</span></span>
+<span class='r-in'>      <span class='op'>)</span></span>
+<span class='r-in'>    <span class='op'>)</span></span>
+<span class='r-in'>  <span class='op'>}</span>,</span>
+<span class='r-in'>  server <span class='op'>=</span> <span class='kw'>function</span><span class='op'>(</span><span class='va'>input</span>, <span class='va'>output</span>, <span class='va'>session</span><span class='op'>)</span> <span class='op'>{</span></span>
+<span class='r-in'>    <span class='va'>active_module</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/shiny/man/callModule.html'>callModule</a></span><span class='op'>(</span></span>
+<span class='r-in'>      <span class='fu'>teal</span><span class='fu'>:::</span><span class='va'><a href='srv_nested_tabs.html'>srv_nested_tabs</a></span>, <span class='st'>"dummy"</span>, datasets <span class='op'>=</span> <span class='va'>datasets</span>, modules <span class='op'>=</span> <span class='va'>mods</span></span>
+<span class='r-in'>    <span class='op'>)</span></span>
+<span class='r-in'>    <span class='va'>output</span><span class='op'>$</span><span class='va'>info</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/shiny/man/renderPrint.html'>renderText</a></span><span class='op'>(</span><span class='op'>{</span></span>
+<span class='r-in'>      <span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste0</a></span><span class='op'>(</span><span class='st'>"The currently active tab name is "</span>, <span class='fu'>active_module</span><span class='op'>(</span><span class='op'>)</span><span class='op'>$</span><span class='va'>label</span><span class='op'>)</span></span>
+<span class='r-in'>    <span class='op'>}</span><span class='op'>)</span></span>
+<span class='r-in'>  <span class='op'>}</span></span>
+<span class='r-in'><span class='op'>)</span></span>
+<span class='r-in'><span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span></span>
+<span class='r-in'><span class='fu'><a href='https://rdrr.io/pkg/shiny/man/runApp.html'>runApp</a></span><span class='op'>(</span><span class='va'>app</span><span class='op'>)</span></span>
+<span class='r-in'><span class='op'>}</span></span>
+</pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

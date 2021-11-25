@@ -86,7 +86,7 @@ to close chunk #&amp;lt;code or #&amp;lt;ADSL code or #&amp;lt;ADSL ADTTE code
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">teal</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.10.0.9019</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.10.0.9020</span>
       </span>
     </div>
 
@@ -128,33 +128,6 @@ to close chunk #&amp;lt;code or #&amp;lt;ADSL code or #&amp;lt;ADSL ADTTE code
 <li>
   <a href="../news/index.html">Changelog</a>
 </li>
-<!-- start_releases -->
-<li class="dropdown">
-	<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-Other releases
-<span class="caret"></span></a><ul class="dropdown-menu" role="menu">
-   <li><a href="../index.html">latest</a></li>
-   <li><a href="../pre-release/index.html">pre-release</a></li>
-   <li><a href="../v0.10.0/index.html">v0.10.0</a></li>
-   <li><a href="../v0.9.5/index.html">v0.9.5</a></li>
-   <li><a href="../v0.9.4/index.html">v0.9.4</a></li>
-   <li><a href="../v0.9.3/index.html">v0.9.3</a></li>
-   <li><a href="../v0.9.2/index.html">v0.9.2</a></li>
-   <li><a href="../v0.9.1/index.html">v0.9.1</a></li>
-   <li><a href="../v0.9.0/index.html">v0.9.0</a></li>
-   <li><a href="../v0.8.5/index.html">v0.8.5</a></li>
-   <li><a href="../v0.8.4/index.html">v0.8.4</a></li>
-   <li><a href="../v0.8.3/index.html">v0.8.3</a></li>
-   <li><a href="../v0.8.2/index.html">v0.8.2</a></li>
-   <li><a href="../v0.7.0/index.html">v0.7.0</a></li>
-   <li><a href="../v0.6.0/index.html">v0.6.0</a></li>
-   <li><a href="../v0.0.5/index.html">v0.0.5</a></li>
-   <li><a href="../v0.0.4/index.html">v0.0.4</a></li>
-   <li><a href="../v0.0.3/index.html">v0.0.3</a></li>
-   <li><a href="../v0.0.2/index.html">v0.0.2</a></li>
-   <li><a href="../v0.0.1/index.html">v0.0.1</a></li>
-</ul></li>
-<!-- end_releases -->
       </ul>
       <ul class="nav navbar-nav navbar-right">
         <li>
@@ -249,7 +222,7 @@ should be ended with <code># nocode</code>. For multiple line exclusions one sho
     </tr>
     <tr>
       <th>read_sources</th>
-      <td><p>(<code>logical</code>) whether to replace <code><a href='https://rdrr.io/r/base/source.html'>source("path")</a></code> with code lines from sourced file.
+      <td><p>(<code>logical</code>) whether to replace <code>source("path")</code> with code lines from sourced file.
 If <code>read_sources = TRUE</code> changing working directory inside preprocessing is not allowed.</p></td>
     </tr>
     <tr>
@@ -264,28 +237,31 @@ multiple files is joined together.</p></td>
     <p>(<code>character</code>) code of import and preparation of data for teal application.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='va'>x1</span> <span class='op'>&lt;-</span> <span class='fu'><a href='dataset.html'>dataset</a></span><span class='op'>(</span>
-  x <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span><span class='op'>(</span>x <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>1</span>, <span class='fl'>2</span><span class='op'>)</span>, y <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"a"</span>, <span class='st'>"b"</span><span class='op'>)</span>, stringsAsFactors <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span>,
-  keys <span class='op'>=</span> <span class='st'>"y"</span>,
-  dataname <span class='op'>=</span> <span class='st'>"XY"</span>,
-  code <span class='op'>=</span> <span class='st'>"XY &lt;- data.frame(x = c(1, 2), y = c('aa', 'bb'), stringsAsFactors = FALSE)"</span>,
-  label <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/character.html'>character</a></span><span class='op'>(</span><span class='fl'>0</span><span class='op'>)</span>
-<span class='op'>)</span>
-
-<span class='va'>x2</span> <span class='op'>&lt;-</span> <span class='fu'><a href='dataset.html'>dataset</a></span><span class='op'>(</span>
-  x <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span><span class='op'>(</span>x <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>1</span>, <span class='fl'>2</span><span class='op'>)</span>, y <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"a"</span>, <span class='st'>"b"</span><span class='op'>)</span>, stringsAsFactors <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span>,
-  keys <span class='op'>=</span> <span class='st'>"y"</span>,
-  dataname <span class='op'>=</span> <span class='st'>"XYZ"</span>,
-  code <span class='op'>=</span> <span class='st'>"XYZ &lt;- data.frame(x = c(1, 2), y = c('aa', 'bb'), stringsAsFactors = FALSE)"</span>,
-  label <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/character.html'>character</a></span><span class='op'>(</span><span class='fl'>0</span><span class='op'>)</span>
-<span class='op'>)</span>
-
-<span class='va'>rd</span> <span class='op'>&lt;-</span> <span class='fu'><a href='teal_data.html'>teal_data</a></span><span class='op'>(</span><span class='va'>x1</span>, <span class='va'>x2</span><span class='op'>)</span>
-
-<span class='fu'>get_code</span><span class='op'>(</span><span class='va'>rd</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; [1] "XY &lt;- data.frame(x = c(1, 2), y = c(\"aa\", \"bb\"), stringsAsFactors = FALSE)\nXYZ &lt;- data.frame(x = c(1, 2), y = c(\"aa\", \"bb\"), stringsAsFactors = FALSE)"</div><div class='input'><span class='fu'>get_code</span><span class='op'>(</span><span class='va'>rd</span>, <span class='st'>"XY"</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; [1] "XY &lt;- data.frame(x = c(1, 2), y = c(\"aa\", \"bb\"), stringsAsFactors = FALSE)"</div><div class='input'><span class='fu'>get_code</span><span class='op'>(</span><span class='va'>rd</span>, <span class='st'>"XYZ"</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; [1] "XYZ &lt;- data.frame(x = c(1, 2), y = c(\"aa\", \"bb\"), stringsAsFactors = FALSE)"</div></pre>
+    <pre class="examples"><span class='r-in'><span class='va'>x1</span> <span class='op'>&lt;-</span> <span class='fu'><a href='dataset.html'>dataset</a></span><span class='op'>(</span></span>
+<span class='r-in'>  x <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span><span class='op'>(</span>x <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>1</span>, <span class='fl'>2</span><span class='op'>)</span>, y <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"a"</span>, <span class='st'>"b"</span><span class='op'>)</span>, stringsAsFactors <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span>,</span>
+<span class='r-in'>  keys <span class='op'>=</span> <span class='st'>"y"</span>,</span>
+<span class='r-in'>  dataname <span class='op'>=</span> <span class='st'>"XY"</span>,</span>
+<span class='r-in'>  code <span class='op'>=</span> <span class='st'>"XY &lt;- data.frame(x = c(1, 2), y = c('aa', 'bb'), stringsAsFactors = FALSE)"</span>,</span>
+<span class='r-in'>  label <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/character.html'>character</a></span><span class='op'>(</span><span class='fl'>0</span><span class='op'>)</span></span>
+<span class='r-in'><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='va'>x2</span> <span class='op'>&lt;-</span> <span class='fu'><a href='dataset.html'>dataset</a></span><span class='op'>(</span></span>
+<span class='r-in'>  x <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span><span class='op'>(</span>x <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>1</span>, <span class='fl'>2</span><span class='op'>)</span>, y <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"a"</span>, <span class='st'>"b"</span><span class='op'>)</span>, stringsAsFactors <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span>,</span>
+<span class='r-in'>  keys <span class='op'>=</span> <span class='st'>"y"</span>,</span>
+<span class='r-in'>  dataname <span class='op'>=</span> <span class='st'>"XYZ"</span>,</span>
+<span class='r-in'>  code <span class='op'>=</span> <span class='st'>"XYZ &lt;- data.frame(x = c(1, 2), y = c('aa', 'bb'), stringsAsFactors = FALSE)"</span>,</span>
+<span class='r-in'>  label <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/character.html'>character</a></span><span class='op'>(</span><span class='fl'>0</span><span class='op'>)</span></span>
+<span class='r-in'><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='va'>rd</span> <span class='op'>&lt;-</span> <span class='fu'><a href='teal_data.html'>teal_data</a></span><span class='op'>(</span><span class='va'>x1</span>, <span class='va'>x2</span><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='fu'>get_code</span><span class='op'>(</span><span class='va'>rd</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] "XY &lt;- data.frame(x = c(1, 2), y = c(\"aa\", \"bb\"), stringsAsFactors = FALSE)\nXYZ &lt;- data.frame(x = c(1, 2), y = c(\"aa\", \"bb\"), stringsAsFactors = FALSE)"</span>
+<span class='r-in'><span class='fu'>get_code</span><span class='op'>(</span><span class='va'>rd</span>, <span class='st'>"XY"</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] "XY &lt;- data.frame(x = c(1, 2), y = c(\"aa\", \"bb\"), stringsAsFactors = FALSE)"</span>
+<span class='r-in'><span class='fu'>get_code</span><span class='op'>(</span><span class='va'>rd</span>, <span class='st'>"XYZ"</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] "XYZ &lt;- data.frame(x = c(1, 2), y = c(\"aa\", \"bb\"), stringsAsFactors = FALSE)"</span>
+</pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

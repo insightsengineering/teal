@@ -73,7 +73,7 @@ Function that creates CDISCDataset object" />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">teal</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.10.0.9019</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.10.0.9020</span>
       </span>
     </div>
 
@@ -115,33 +115,6 @@ Function that creates CDISCDataset object" />
 <li>
   <a href="../news/index.html">Changelog</a>
 </li>
-<!-- start_releases -->
-<li class="dropdown">
-	<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-Other releases
-<span class="caret"></span></a><ul class="dropdown-menu" role="menu">
-   <li><a href="../index.html">latest</a></li>
-   <li><a href="../pre-release/index.html">pre-release</a></li>
-   <li><a href="../v0.10.0/index.html">v0.10.0</a></li>
-   <li><a href="../v0.9.5/index.html">v0.9.5</a></li>
-   <li><a href="../v0.9.4/index.html">v0.9.4</a></li>
-   <li><a href="../v0.9.3/index.html">v0.9.3</a></li>
-   <li><a href="../v0.9.2/index.html">v0.9.2</a></li>
-   <li><a href="../v0.9.1/index.html">v0.9.1</a></li>
-   <li><a href="../v0.9.0/index.html">v0.9.0</a></li>
-   <li><a href="../v0.8.5/index.html">v0.8.5</a></li>
-   <li><a href="../v0.8.4/index.html">v0.8.4</a></li>
-   <li><a href="../v0.8.3/index.html">v0.8.3</a></li>
-   <li><a href="../v0.8.2/index.html">v0.8.2</a></li>
-   <li><a href="../v0.7.0/index.html">v0.7.0</a></li>
-   <li><a href="../v0.6.0/index.html">v0.6.0</a></li>
-   <li><a href="../v0.0.5/index.html">v0.0.5</a></li>
-   <li><a href="../v0.0.4/index.html">v0.0.4</a></li>
-   <li><a href="../v0.0.3/index.html">v0.0.3</a></li>
-   <li><a href="../v0.0.2/index.html">v0.0.2</a></li>
-   <li><a href="../v0.0.1/index.html">v0.0.1</a></li>
-</ul></li>
-<!-- end_releases -->
       </ul>
       <ul class="nav navbar-nav navbar-right">
         <li>
@@ -234,105 +207,106 @@ within another dataset.</p></td>
     <p>(<code>CDISCDataset</code>) a dataset with connected metadata</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'>scda</span><span class='op'>)</span>
-
-<span class='va'>ADSL</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/scda/man/synthetic_cdisc_data.html'>synthetic_cdisc_data</a></span><span class='op'>(</span><span class='st'>"latest"</span><span class='op'>)</span><span class='op'>$</span><span class='va'>adsl</span>
-
-<span class='fu'>cdisc_dataset</span><span class='op'>(</span><span class='st'>"ADSL"</span>, <span class='va'>ADSL</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; A Dataset object containing the following data.frame (400 rows and 38 columns):
-#&gt;   STUDYID               USUBJID SUBJID SITEID AGE SEX                      RACE
-#&gt; 1 AB12345  AB12345-CHN-3-id-128 id-128  CHN-3  32   M                     ASIAN
-#&gt; 2 AB12345 AB12345-CHN-15-id-262 id-262 CHN-15  35   M BLACK OR AFRICAN AMERICAN
-#&gt; 3 AB12345  AB12345-RUS-3-id-378 id-378  RUS-3  30   F                     ASIAN
-#&gt; 4 AB12345 AB12345-CHN-11-id-220 id-220 CHN-11  26   F                     ASIAN
-#&gt; 5 AB12345  AB12345-CHN-7-id-267 id-267  CHN-7  40   M                     ASIAN
-#&gt; 6 AB12345 AB12345-CHN-15-id-201 id-201 CHN-15  49   M                     ASIAN
-#&gt;   COUNTRY DTHFL         INVID         INVNAM            ARM ARMCD
-#&gt; 1     CHN     N  INV ID CHN-3  Dr. CHN-3 Doe      A: Drug X ARM A
-#&gt; 2     CHN     N INV ID CHN-15 Dr. CHN-15 Doe C: Combination ARM C
-#&gt; 3     RUS     N  INV ID RUS-3  Dr. RUS-3 Doe C: Combination ARM C
-#&gt; 4     CHN     N INV ID CHN-11 Dr. CHN-11 Doe     B: Placebo ARM B
-#&gt; 5     CHN     N  INV ID CHN-7  Dr. CHN-7 Doe     B: Placebo ARM B
-#&gt; 6     CHN     N INV ID CHN-15 Dr. CHN-15 Doe C: Combination ARM C
-#&gt;           ACTARM ACTARMCD REGION1 STRATA1 STRATA2    BMRKR1 BMRKR2 ITTFL SAFFL
-#&gt; 1      A: Drug X    ARM A    Asia       C      S2 14.424934 MEDIUM     Y     Y
-#&gt; 2 C: Combination    ARM C    Asia       C      S1  4.055463    LOW     Y     Y
-#&gt; 3 C: Combination    ARM C Eurasia       A      S1  2.803240   HIGH     Y     Y
-#&gt; 4     B: Placebo    ARM B    Asia       B      S2 10.262734 MEDIUM     Y     Y
-#&gt; 5     B: Placebo    ARM B    Asia       C      S1  6.206763    LOW     Y     Y
-#&gt; 6 C: Combination    ARM C    Asia       C      S2  6.906799 MEDIUM     Y     Y
-#&gt;   BMEASIFL BEP01FL     RANDDT             TRTSDTM             TRTEDTM
-#&gt; 1        Y       Y 2019-02-22 2019-02-24 11:09:18 2021-02-23 22:47:42
-#&gt; 2        N       N 2019-02-26 2019-02-26 09:05:00 2021-02-25 20:43:24
-#&gt; 3        Y       N 2019-02-24 2019-02-28 03:19:08 2021-02-27 14:57:32
-#&gt; 4        Y       Y 2019-02-27 2019-03-01 13:33:03 2021-03-01 01:11:27
-#&gt; 5        N       N 2019-03-01 2019-03-02 00:09:16 2021-03-01 11:47:40
-#&gt; 6        Y       N 2019-03-05 2019-03-05 15:23:44 2021-02-17 20:23:53
-#&gt;         EOSSTT      EOSDT EOSDY          DCSREAS DTHDT DTHCAUS DTHCAT LDDTHELD
-#&gt; 1    COMPLETED 2021-02-23   731             &lt;NA&gt;  &lt;NA&gt;    &lt;NA&gt;   &lt;NA&gt;       NA
-#&gt; 2    COMPLETED 2021-02-25   731             &lt;NA&gt;  &lt;NA&gt;    &lt;NA&gt;   &lt;NA&gt;       NA
-#&gt; 3    COMPLETED 2021-02-27   731             &lt;NA&gt;  &lt;NA&gt;    &lt;NA&gt;   &lt;NA&gt;       NA
-#&gt; 4    COMPLETED 2021-03-01   731             &lt;NA&gt;  &lt;NA&gt;    &lt;NA&gt;   &lt;NA&gt;       NA
-#&gt; 5    COMPLETED 2021-03-01   731             &lt;NA&gt;  &lt;NA&gt;    &lt;NA&gt;   &lt;NA&gt;       NA
-#&gt; 6 DISCONTINUED 2021-02-17   716 LACK OF EFFICACY  &lt;NA&gt;    &lt;NA&gt;   &lt;NA&gt;       NA
-#&gt;   LDDTHGR1   LSTALVDT study_duration_secs
-#&gt; 1     &lt;NA&gt; 2021-03-05            63113904
-#&gt; 2     &lt;NA&gt; 2021-03-15            63113904
-#&gt; 3     &lt;NA&gt; 2021-03-15            63113904
-#&gt; 4     &lt;NA&gt; 2021-03-17            63113904
-#&gt; 5     &lt;NA&gt; 2021-03-25            63113904
-#&gt; 6     &lt;NA&gt; 2021-03-01            63113904
-#&gt; 
-#&gt; ...
-#&gt;     STUDYID               USUBJID SUBJID SITEID AGE SEX
-#&gt; 395 AB12345   AB12345-CHN-9-id-11  id-11  CHN-9  28   F
-#&gt; 396 AB12345 AB12345-CHN-16-id-352 id-352 CHN-16  28   M
-#&gt; 397 AB12345  AB12345-CHN-1-id-186 id-186  CHN-1  27   M
-#&gt; 398 AB12345  AB12345-CHN-1-id-371 id-371  CHN-1  28   F
-#&gt; 399 AB12345  AB12345-CHN-1-id-233 id-233  CHN-1  36   F
-#&gt; 400 AB12345 AB12345-USA-12-id-131 id-131 USA-12  44   F
-#&gt;                                          RACE COUNTRY DTHFL         INVID
-#&gt; 395 NATIVE HAWAIIAN OR OTHER PACIFIC ISLANDER     CHN     N  INV ID CHN-9
-#&gt; 396                                     ASIAN     CHN     N INV ID CHN-16
-#&gt; 397                                     ASIAN     CHN     N  INV ID CHN-1
-#&gt; 398                                     ASIAN     CHN     Y  INV ID CHN-1
-#&gt; 399                 BLACK OR AFRICAN AMERICAN     CHN     N  INV ID CHN-1
-#&gt; 400          AMERICAN INDIAN OR ALASKA NATIVE     USA     N INV ID USA-12
-#&gt;             INVNAM            ARM ARMCD         ACTARM ACTARMCD       REGION1
-#&gt; 395  Dr. CHN-9 Doe     B: Placebo ARM B     B: Placebo    ARM B          Asia
-#&gt; 396 Dr. CHN-16 Doe C: Combination ARM C C: Combination    ARM C          Asia
-#&gt; 397  Dr. CHN-1 Doe     B: Placebo ARM B     B: Placebo    ARM B          Asia
-#&gt; 398  Dr. CHN-1 Doe      A: Drug X ARM A      A: Drug X    ARM A          Asia
-#&gt; 399  Dr. CHN-1 Doe C: Combination ARM C C: Combination    ARM C          Asia
-#&gt; 400 Dr. USA-12 Doe      A: Drug X ARM A      A: Drug X    ARM A North America
-#&gt;     STRATA1 STRATA2   BMRKR1 BMRKR2 ITTFL SAFFL BMEASIFL BEP01FL     RANDDT
-#&gt; 395       C      S1 4.267916 MEDIUM     Y     Y        Y       Y 2021-01-26
-#&gt; 396       A      S2 4.216812 MEDIUM     Y     Y        N       Y 2021-01-30
-#&gt; 397       A      S2 4.521179   HIGH     Y     Y        Y       N 2021-01-30
-#&gt; 398       A      S2 6.326863    LOW     Y     Y        N       Y 2021-02-07
-#&gt; 399       C      S1 4.076818    LOW     Y     Y        N       Y 2021-02-09
-#&gt; 400       B      S1 3.726935    LOW     Y     Y        Y       N 2021-02-14
-#&gt;                 TRTSDTM             TRTEDTM       EOSSTT      EOSDT EOSDY
-#&gt; 395 2021-01-27 01:57:07 2023-01-27 13:35:31    COMPLETED 2023-01-27   731
-#&gt; 396 2021-02-02 09:04:52 2023-02-02 20:43:16    COMPLETED 2023-02-02   731
-#&gt; 397 2021-02-02 19:14:46 2023-02-03 06:53:10    COMPLETED 2023-02-03   731
-#&gt; 398 2021-02-09 05:28:52 2021-02-19 19:06:01 DISCONTINUED 2021-02-19    11
-#&gt; 399 2021-02-11 21:33:08 2021-02-17 09:12:06 DISCONTINUED 2021-02-17     6
-#&gt; 400 2021-02-17 14:42:27 2023-02-18 02:20:51    COMPLETED 2023-02-18   731
-#&gt;                DCSREAS      DTHDT DTHCAUS DTHCAT LDDTHELD LDDTHGR1   LSTALVDT
-#&gt; 395               &lt;NA&gt;       &lt;NA&gt;    &lt;NA&gt;   &lt;NA&gt;       NA     &lt;NA&gt; 2023-02-22
-#&gt; 396               &lt;NA&gt;       &lt;NA&gt;    &lt;NA&gt;   &lt;NA&gt;       NA     &lt;NA&gt; 2023-02-23
-#&gt; 397               &lt;NA&gt;       &lt;NA&gt;    &lt;NA&gt;   &lt;NA&gt;       NA     &lt;NA&gt; 2023-03-03
-#&gt; 398              DEATH 2021-03-29 MISSING  OTHER       38      &gt;30 2021-03-29
-#&gt; 399 PHYSICIAN DECISION       &lt;NA&gt;    &lt;NA&gt;   &lt;NA&gt;       NA     &lt;NA&gt; 2021-03-17
-#&gt; 400               &lt;NA&gt;       &lt;NA&gt;    &lt;NA&gt;   &lt;NA&gt;       NA     &lt;NA&gt; 2023-03-01
-#&gt;     study_duration_secs
-#&gt; 395            63113904
-#&gt; 396            63113904
-#&gt; 397            63113904
-#&gt; 398            63113904
-#&gt; 399            63113904
-#&gt; 400            63113904</div></pre>
+    <pre class="examples"><span class='r-in'><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'>scda</span><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='va'>ADSL</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/scda/man/synthetic_cdisc_data.html'>synthetic_cdisc_data</a></span><span class='op'>(</span><span class='st'>"latest"</span><span class='op'>)</span><span class='op'>$</span><span class='va'>adsl</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='fu'>cdisc_dataset</span><span class='op'>(</span><span class='st'>"ADSL"</span>, <span class='va'>ADSL</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> A Dataset object containing the following data.frame (400 rows and 38 columns):</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   STUDYID               USUBJID SUBJID SITEID AGE SEX                      RACE</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 1 AB12345  AB12345-CHN-3-id-128 id-128  CHN-3  32   M                     ASIAN</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 2 AB12345 AB12345-CHN-15-id-262 id-262 CHN-15  35   M BLACK OR AFRICAN AMERICAN</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 3 AB12345  AB12345-RUS-3-id-378 id-378  RUS-3  30   F                     ASIAN</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 4 AB12345 AB12345-CHN-11-id-220 id-220 CHN-11  26   F                     ASIAN</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 5 AB12345  AB12345-CHN-7-id-267 id-267  CHN-7  40   M                     ASIAN</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 6 AB12345 AB12345-CHN-15-id-201 id-201 CHN-15  49   M                     ASIAN</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   COUNTRY DTHFL         INVID         INVNAM            ARM ARMCD</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 1     CHN     N  INV ID CHN-3  Dr. CHN-3 Doe      A: Drug X ARM A</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 2     CHN     N INV ID CHN-15 Dr. CHN-15 Doe C: Combination ARM C</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 3     RUS     N  INV ID RUS-3  Dr. RUS-3 Doe C: Combination ARM C</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 4     CHN     N INV ID CHN-11 Dr. CHN-11 Doe     B: Placebo ARM B</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 5     CHN     N  INV ID CHN-7  Dr. CHN-7 Doe     B: Placebo ARM B</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 6     CHN     N INV ID CHN-15 Dr. CHN-15 Doe C: Combination ARM C</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>           ACTARM ACTARMCD REGION1 STRATA1 STRATA2    BMRKR1 BMRKR2 ITTFL SAFFL</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 1      A: Drug X    ARM A    Asia       C      S2 14.424934 MEDIUM     Y     Y</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 2 C: Combination    ARM C    Asia       C      S1  4.055463    LOW     Y     Y</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 3 C: Combination    ARM C Eurasia       A      S1  2.803240   HIGH     Y     Y</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 4     B: Placebo    ARM B    Asia       B      S2 10.262734 MEDIUM     Y     Y</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 5     B: Placebo    ARM B    Asia       C      S1  6.206763    LOW     Y     Y</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 6 C: Combination    ARM C    Asia       C      S2  6.906799 MEDIUM     Y     Y</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   BMEASIFL BEP01FL     RANDDT             TRTSDTM             TRTEDTM</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 1        Y       Y 2019-02-22 2019-02-24 11:09:18 2021-02-23 22:47:42</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 2        N       N 2019-02-26 2019-02-26 09:05:00 2021-02-25 20:43:24</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 3        Y       N 2019-02-24 2019-02-28 03:19:08 2021-02-27 14:57:32</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 4        Y       Y 2019-02-27 2019-03-01 13:33:03 2021-03-01 01:11:27</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 5        N       N 2019-03-01 2019-03-02 00:09:16 2021-03-01 11:47:40</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 6        Y       N 2019-03-05 2019-03-05 15:23:44 2021-02-17 20:23:53</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>         EOSSTT      EOSDT EOSDY          DCSREAS DTHDT DTHCAUS DTHCAT LDDTHELD</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 1    COMPLETED 2021-02-23   731             &lt;NA&gt;  &lt;NA&gt;    &lt;NA&gt;   &lt;NA&gt;       NA</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 2    COMPLETED 2021-02-25   731             &lt;NA&gt;  &lt;NA&gt;    &lt;NA&gt;   &lt;NA&gt;       NA</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 3    COMPLETED 2021-02-27   731             &lt;NA&gt;  &lt;NA&gt;    &lt;NA&gt;   &lt;NA&gt;       NA</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 4    COMPLETED 2021-03-01   731             &lt;NA&gt;  &lt;NA&gt;    &lt;NA&gt;   &lt;NA&gt;       NA</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 5    COMPLETED 2021-03-01   731             &lt;NA&gt;  &lt;NA&gt;    &lt;NA&gt;   &lt;NA&gt;       NA</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 6 DISCONTINUED 2021-02-17   716 LACK OF EFFICACY  &lt;NA&gt;    &lt;NA&gt;   &lt;NA&gt;       NA</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   LDDTHGR1   LSTALVDT study_duration_secs</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 1     &lt;NA&gt; 2021-03-05            63113904</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 2     &lt;NA&gt; 2021-03-15            63113904</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 3     &lt;NA&gt; 2021-03-15            63113904</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 4     &lt;NA&gt; 2021-03-17            63113904</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 5     &lt;NA&gt; 2021-03-25            63113904</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 6     &lt;NA&gt; 2021-03-01            63113904</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> ...</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>     STUDYID               USUBJID SUBJID SITEID AGE SEX</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 395 AB12345   AB12345-CHN-9-id-11  id-11  CHN-9  28   F</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 396 AB12345 AB12345-CHN-16-id-352 id-352 CHN-16  28   M</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 397 AB12345  AB12345-CHN-1-id-186 id-186  CHN-1  27   M</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 398 AB12345  AB12345-CHN-1-id-371 id-371  CHN-1  28   F</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 399 AB12345  AB12345-CHN-1-id-233 id-233  CHN-1  36   F</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 400 AB12345 AB12345-USA-12-id-131 id-131 USA-12  44   F</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>                                          RACE COUNTRY DTHFL         INVID</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 395 NATIVE HAWAIIAN OR OTHER PACIFIC ISLANDER     CHN     N  INV ID CHN-9</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 396                                     ASIAN     CHN     N INV ID CHN-16</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 397                                     ASIAN     CHN     N  INV ID CHN-1</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 398                                     ASIAN     CHN     Y  INV ID CHN-1</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 399                 BLACK OR AFRICAN AMERICAN     CHN     N  INV ID CHN-1</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 400          AMERICAN INDIAN OR ALASKA NATIVE     USA     N INV ID USA-12</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>             INVNAM            ARM ARMCD         ACTARM ACTARMCD       REGION1</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 395  Dr. CHN-9 Doe     B: Placebo ARM B     B: Placebo    ARM B          Asia</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 396 Dr. CHN-16 Doe C: Combination ARM C C: Combination    ARM C          Asia</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 397  Dr. CHN-1 Doe     B: Placebo ARM B     B: Placebo    ARM B          Asia</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 398  Dr. CHN-1 Doe      A: Drug X ARM A      A: Drug X    ARM A          Asia</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 399  Dr. CHN-1 Doe C: Combination ARM C C: Combination    ARM C          Asia</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 400 Dr. USA-12 Doe      A: Drug X ARM A      A: Drug X    ARM A North America</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>     STRATA1 STRATA2   BMRKR1 BMRKR2 ITTFL SAFFL BMEASIFL BEP01FL     RANDDT</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 395       C      S1 4.267916 MEDIUM     Y     Y        Y       Y 2021-01-26</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 396       A      S2 4.216812 MEDIUM     Y     Y        N       Y 2021-01-30</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 397       A      S2 4.521179   HIGH     Y     Y        Y       N 2021-01-30</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 398       A      S2 6.326863    LOW     Y     Y        N       Y 2021-02-07</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 399       C      S1 4.076818    LOW     Y     Y        N       Y 2021-02-09</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 400       B      S1 3.726935    LOW     Y     Y        Y       N 2021-02-14</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>                 TRTSDTM             TRTEDTM       EOSSTT      EOSDT EOSDY</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 395 2021-01-27 01:57:07 2023-01-27 13:35:31    COMPLETED 2023-01-27   731</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 396 2021-02-02 09:04:52 2023-02-02 20:43:16    COMPLETED 2023-02-02   731</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 397 2021-02-02 19:14:46 2023-02-03 06:53:10    COMPLETED 2023-02-03   731</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 398 2021-02-09 05:28:52 2021-02-19 19:06:01 DISCONTINUED 2021-02-19    11</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 399 2021-02-11 21:33:08 2021-02-17 09:12:06 DISCONTINUED 2021-02-17     6</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 400 2021-02-17 14:42:27 2023-02-18 02:20:51    COMPLETED 2023-02-18   731</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>                DCSREAS      DTHDT DTHCAUS DTHCAT LDDTHELD LDDTHGR1   LSTALVDT</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 395               &lt;NA&gt;       &lt;NA&gt;    &lt;NA&gt;   &lt;NA&gt;       NA     &lt;NA&gt; 2023-02-22</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 396               &lt;NA&gt;       &lt;NA&gt;    &lt;NA&gt;   &lt;NA&gt;       NA     &lt;NA&gt; 2023-02-23</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 397               &lt;NA&gt;       &lt;NA&gt;    &lt;NA&gt;   &lt;NA&gt;       NA     &lt;NA&gt; 2023-03-03</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 398              DEATH 2021-03-29 MISSING  OTHER       38      &gt;30 2021-03-29</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 399 PHYSICIAN DECISION       &lt;NA&gt;    &lt;NA&gt;   &lt;NA&gt;       NA     &lt;NA&gt; 2021-03-17</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 400               &lt;NA&gt;       &lt;NA&gt;    &lt;NA&gt;   &lt;NA&gt;       NA     &lt;NA&gt; 2023-03-01</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>     study_duration_secs</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 395            63113904</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 396            63113904</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 397            63113904</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 398            63113904</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 399            63113904</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 400            63113904</span>
+</pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

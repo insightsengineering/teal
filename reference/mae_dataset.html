@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">teal</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.10.0.9019</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.10.0.9020</span>
       </span>
     </div>
 
@@ -114,33 +114,6 @@
 <li>
   <a href="../news/index.html">Changelog</a>
 </li>
-<!-- start_releases -->
-<li class="dropdown">
-	<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-Other releases
-<span class="caret"></span></a><ul class="dropdown-menu" role="menu">
-   <li><a href="../index.html">latest</a></li>
-   <li><a href="../pre-release/index.html">pre-release</a></li>
-   <li><a href="../v0.10.0/index.html">v0.10.0</a></li>
-   <li><a href="../v0.9.5/index.html">v0.9.5</a></li>
-   <li><a href="../v0.9.4/index.html">v0.9.4</a></li>
-   <li><a href="../v0.9.3/index.html">v0.9.3</a></li>
-   <li><a href="../v0.9.2/index.html">v0.9.2</a></li>
-   <li><a href="../v0.9.1/index.html">v0.9.1</a></li>
-   <li><a href="../v0.9.0/index.html">v0.9.0</a></li>
-   <li><a href="../v0.8.5/index.html">v0.8.5</a></li>
-   <li><a href="../v0.8.4/index.html">v0.8.4</a></li>
-   <li><a href="../v0.8.3/index.html">v0.8.3</a></li>
-   <li><a href="../v0.8.2/index.html">v0.8.2</a></li>
-   <li><a href="../v0.7.0/index.html">v0.7.0</a></li>
-   <li><a href="../v0.6.0/index.html">v0.6.0</a></li>
-   <li><a href="../v0.0.5/index.html">v0.0.5</a></li>
-   <li><a href="../v0.0.4/index.html">v0.0.4</a></li>
-   <li><a href="../v0.0.3/index.html">v0.0.3</a></li>
-   <li><a href="../v0.0.2/index.html">v0.0.2</a></li>
-   <li><a href="../v0.0.1/index.html">v0.0.1</a></li>
-</ul></li>
-<!-- end_releases -->
       </ul>
       <ul class="nav navbar-nav navbar-right">
         <li>
@@ -217,28 +190,32 @@ within another dataset.</p></td>
 
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='co'># Simple example</span>
-<span class='va'>mae_d</span> <span class='op'>&lt;-</span> <span class='fu'>mae_dataset</span><span class='op'>(</span><span class='st'>"MAE"</span>, <span class='fu'>MultiAssayExperiment</span><span class='fu'>::</span><span class='va'><a href='http://waldronlab.io/MultiAssayExperiment/reference/miniACC.html'>miniACC</a></span><span class='op'>)</span>
-<span class='va'>mae_d</span><span class='op'>$</span><span class='fu'>get_dataname</span><span class='op'>(</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; [1] "MAE"</div><div class='input'><span class='va'>mae_d</span><span class='op'>$</span><span class='fu'>get_dataset_label</span><span class='op'>(</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; character(0)</div><div class='input'><span class='va'>mae_d</span><span class='op'>$</span><span class='fu'>get_code</span><span class='op'>(</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; [1] ""</div><div class='input'><span class='va'>mae_d</span><span class='op'>$</span><span class='fu'>get_raw_data</span><span class='op'>(</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; A MultiAssayExperiment object of 5 listed
-#&gt;  experiments with user-defined names and respective classes.
-#&gt;  Containing an ExperimentList class object of length 5:
-#&gt;  [1] RNASeq2GeneNorm: SummarizedExperiment with 198 rows and 79 columns
-#&gt;  [2] gistict: SummarizedExperiment with 198 rows and 90 columns
-#&gt;  [3] RPPAArray: SummarizedExperiment with 33 rows and 46 columns
-#&gt;  [4] Mutations: matrix with 97 rows and 90 columns
-#&gt;  [5] miRNASeqGene: SummarizedExperiment with 471 rows and 80 columns
-#&gt; Functionality:
-#&gt;  experiments() - obtain the ExperimentList instance
-#&gt;  colData() - the primary/phenotype DataFrame
-#&gt;  sampleMap() - the sample coordination DataFrame
-#&gt;  `$`, `[`, `[[` - extract colData columns, subset, or experiment
-#&gt;  *Format() - convert into a long or wide DataFrame
-#&gt;  assays() - convert ExperimentList to a SimpleList of matrices
-#&gt;  exportClass() - save all data to files</div></pre>
+    <pre class="examples"><span class='r-in'><span class='co'># Simple example</span></span>
+<span class='r-in'><span class='va'>mae_d</span> <span class='op'>&lt;-</span> <span class='fu'>mae_dataset</span><span class='op'>(</span><span class='st'>"MAE"</span>, <span class='fu'>MultiAssayExperiment</span><span class='fu'>::</span><span class='va'><a href='http://waldronlab.io/MultiAssayExperiment/reference/miniACC.html'>miniACC</a></span><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>mae_d</span><span class='op'>$</span><span class='fu'>get_dataname</span><span class='op'>(</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] "MAE"</span>
+<span class='r-in'><span class='va'>mae_d</span><span class='op'>$</span><span class='fu'>get_dataset_label</span><span class='op'>(</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> character(0)</span>
+<span class='r-in'><span class='va'>mae_d</span><span class='op'>$</span><span class='fu'>get_code</span><span class='op'>(</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] ""</span>
+<span class='r-in'><span class='va'>mae_d</span><span class='op'>$</span><span class='fu'>get_raw_data</span><span class='op'>(</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> A MultiAssayExperiment object of 5 listed</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  experiments with user-defined names and respective classes.</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  Containing an ExperimentList class object of length 5:</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  [1] RNASeq2GeneNorm: SummarizedExperiment with 198 rows and 79 columns</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  [2] gistict: SummarizedExperiment with 198 rows and 90 columns</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  [3] RPPAArray: SummarizedExperiment with 33 rows and 46 columns</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  [4] Mutations: matrix with 97 rows and 90 columns</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  [5] miRNASeqGene: SummarizedExperiment with 471 rows and 80 columns</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Functionality:</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  experiments() - obtain the ExperimentList instance</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  colData() - the primary/phenotype DataFrame</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  sampleMap() - the sample coordination DataFrame</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  `$`, `[`, `[[` - extract colData columns, subset, or experiment</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  *Format() - convert into a long or wide DataFrame</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  assays() - convert ExperimentList to a SimpleList of matrices</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  exportClass() - save all data to files</span>
+</pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

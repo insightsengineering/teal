@@ -79,7 +79,7 @@ be automatically derived." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">teal</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.10.0.9019</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.10.0.9020</span>
       </span>
     </div>
 
@@ -121,33 +121,6 @@ be automatically derived." />
 <li>
   <a href="../news/index.html">Changelog</a>
 </li>
-<!-- start_releases -->
-<li class="dropdown">
-	<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-Other releases
-<span class="caret"></span></a><ul class="dropdown-menu" role="menu">
-   <li><a href="../index.html">latest</a></li>
-   <li><a href="../pre-release/index.html">pre-release</a></li>
-   <li><a href="../v0.10.0/index.html">v0.10.0</a></li>
-   <li><a href="../v0.9.5/index.html">v0.9.5</a></li>
-   <li><a href="../v0.9.4/index.html">v0.9.4</a></li>
-   <li><a href="../v0.9.3/index.html">v0.9.3</a></li>
-   <li><a href="../v0.9.2/index.html">v0.9.2</a></li>
-   <li><a href="../v0.9.1/index.html">v0.9.1</a></li>
-   <li><a href="../v0.9.0/index.html">v0.9.0</a></li>
-   <li><a href="../v0.8.5/index.html">v0.8.5</a></li>
-   <li><a href="../v0.8.4/index.html">v0.8.4</a></li>
-   <li><a href="../v0.8.3/index.html">v0.8.3</a></li>
-   <li><a href="../v0.8.2/index.html">v0.8.2</a></li>
-   <li><a href="../v0.7.0/index.html">v0.7.0</a></li>
-   <li><a href="../v0.6.0/index.html">v0.6.0</a></li>
-   <li><a href="../v0.0.5/index.html">v0.0.5</a></li>
-   <li><a href="../v0.0.4/index.html">v0.0.4</a></li>
-   <li><a href="../v0.0.3/index.html">v0.0.3</a></li>
-   <li><a href="../v0.0.2/index.html">v0.0.2</a></li>
-   <li><a href="../v0.0.1/index.html">v0.0.1</a></li>
-</ul></li>
-<!-- end_releases -->
       </ul>
       <ul class="nav navbar-nav navbar-right">
         <li>
@@ -194,7 +167,7 @@ be automatically derived.</p>
 
 <dt><code>nrow</code></dt><dd><p>Number of rows</p></dd>
 
-<dt><code>dim</code></dt><dd><p>Dimension <code><a href='https://rdrr.io/r/base/c.html'>c(x, y)</a></code></p></dd>
+<dt><code>dim</code></dt><dd><p>Dimension <code>c(x, y)</code></p></dd>
 
 <dt><code>colnames</code></dt><dd><p>The column names of the data</p></dd>
 
@@ -256,7 +229,7 @@ be automatically derived.</p>
 <li><p><a href='#method-clone'><code>Dataset$clone()</code></a></p></li>
 </ul>
 <p><hr>
-<a id="method-new"></a></p><h3 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Method <code>new()</code></h3>
+<a id="method-new"></a></p><h3 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Method <code><a href='https://rdrr.io/r/methods/new.html'>new()</a></code></h3>
 <p>Create a new object of <code>Dataset</code> class</p><h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Usage</h4>
 <p><div class="r"></p><pre><span class='va'>Dataset</span><span class='op'>$</span><span class='fu'>new</span><span class='op'>(</span>
   <span class='va'>dataname</span>,
@@ -279,7 +252,7 @@ Vector with primary keys</p></dd>
 
 <dt><code>code</code></dt><dd><p>(<code>character</code>)<br />
 A character string defining the code needed to produce the data set in <code>x</code>.
-<code>initialize()</code> and <code>recreate()</code> accept code as <code>CodeClass</code> also
+<code><a href='https://rdrr.io/r/methods/new.html'>initialize()</a></code> and <code>recreate()</code> accept code as <code>CodeClass</code> also
 which is needed to preserve the code uniqueness and correct order.</p></dd>
 
 <dt><code>label</code></dt><dd><p>(<code>character</code>)<br />
@@ -320,7 +293,7 @@ Vector with primary keys</p></dd>
 
 <dt><code>code</code></dt><dd><p>(<code>character</code>)<br />
 A character string defining the code needed to produce the data set in <code>x</code>.
-<code>initialize()</code> and <code>recreate()</code> accept code as <code>CodeClass</code> also
+<code><a href='https://rdrr.io/r/methods/new.html'>initialize()</a></code> and <code>recreate()</code> accept code as <code>CodeClass</code> also
 which is needed to preserve the code uniqueness and correct order.</p></dd>
 
 <dt><code>label</code></dt><dd><p>(<code>character</code>)<br />
@@ -481,7 +454,7 @@ refers only to the provided <code>datasets</code>, other <code>vars</code> remai
 
 <h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Arguments</h4>
 <p><div class="arguments"></p><dl>
-<dt><code>datasets</code></dt><dd><p>(<code>named list</code> of <code>Dataset(s)</code> or <code><a href='DatasetConnector.html'>DatasetConnector(s)</a></code>)<br />
+<dt><code>datasets</code></dt><dd><p>(<code>named list</code> of <code>Dataset(s)</code> or <code>DatasetConnector(s)</code>)<br />
 objects with valid pointers.</p></dd>
 
 </dl><p></div></p>
@@ -591,7 +564,7 @@ or single <code>JoinKeySet</code> objects</p></dd>
 <p><div class="arguments"></p><dl>
 <dt><code>code</code></dt><dd><p>(<code>character</code>)<br />
 A character string defining the code needed to produce the data set in <code>x</code>.
-<code>initialize()</code> and <code>recreate()</code> accept code as <code>CodeClass</code> also
+<code><a href='https://rdrr.io/r/methods/new.html'>initialize()</a></code> and <code>recreate()</code> accept code as <code>CodeClass</code> also
 which is needed to preserve the code uniqueness and correct order.</p></dd>
 
 </dl><p></div></p>
@@ -616,7 +589,7 @@ which is needed to preserve the code uniqueness and correct order.</p></dd>
 
 <h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Arguments</h4>
 <p><div class="arguments"></p><dl>
-<dt><code>nodeps</code></dt><dd><p>(<code><a href='https://rdrr.io/r/base/logical.html'>logical(1)</a></code>) whether <code>CodeClass</code> should not contain the code
+<dt><code>nodeps</code></dt><dd><p>(<code>logical(1)</code>) whether <code>CodeClass</code> should not contain the code
 of the dependent <code>vars</code>
 the <code>mutate</code></p></dd>
 
@@ -677,7 +650,7 @@ the <code>mutate</code></p></dd>
 <p><code>TRUE</code> if the dataset generated from evaluating the
 <code><a href='get_code.html'>get_code()</a></code> code is identical to the raw data, else <code>FALSE</code>.
 Check if keys has been specified correctly for dataset. Set of <code>keys</code>
-should distinguish unique rows or be <code><a href='https://rdrr.io/r/base/character.html'>character(0)</a></code>.</p>
+should distinguish unique rows or be <code>character(0)</code>.</p>
 <p><hr>
 <a id="method-check_keys"></a></p><h3 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Method <code>check_keys()</code></h3>
 
@@ -766,7 +739,7 @@ Vector with primary keys</p></dd>
 </details>
 
 <hr>
-<a id="method-new"></a></p><h3 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Method <code>new()</code></h3>
+<a id="method-new"></a></p><h3 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Method <code><a href='https://rdrr.io/r/methods/new.html'>new()</a></code></h3>
 <p>Create a new object of <code>MAEDataset</code> class</p><h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Usage</h4>
 <p><div class="r"></p><pre><span class='va'>MAEDataset</span><span class='op'>$</span><span class='fu'>new</span><span class='op'>(</span>
   <span class='va'>dataname</span>,
@@ -789,7 +762,7 @@ vector with primary keys</p></dd>
 
 <dt><code>code</code></dt><dd><p>(<code>character</code> or <code>CodeClass</code>)<br />
 A character string defining the code needed to produce the data set in <code>x</code>.
-<code>initialize()</code> and <code>recreate()</code> accept code as <code>CodeClass</code> also
+<code><a href='https://rdrr.io/r/methods/new.html'>initialize()</a></code> and <code>recreate()</code> accept code as <code>CodeClass</code> also
 which is needed to preserve the code uniqueness and correct order.</p></dd>
 
 <dt><code>label</code></dt><dd><p>(<code>character</code>)<br />
@@ -815,7 +788,7 @@ within another dataset.</p></dd>
 <p><code>TRUE</code> if the dataset generated from evaluating the
 <code><a href='get_code.html'>get_code()</a></code> code is identical to the raw data, else <code>FALSE</code>.
 Check if keys has been specified correctly for dataset. Set of <code>keys</code>
-should distinguish unique rows or be <code><a href='https://rdrr.io/r/base/character.html'>character(0)</a></code>.</p>
+should distinguish unique rows or be <code>character(0)</code>.</p>
 <p><hr>
 <a id="method-check_keys"></a></p><h3 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Method <code>check_keys()</code></h3>
 
@@ -858,21 +831,21 @@ Prints this MAEDataset.</p>
 
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'>
-<span class='co'>## ------------------------------------------------</span>
-<span class='co'>## Method `Dataset$reassign_datasets_vars`</span>
-<span class='co'>## ------------------------------------------------</span>
-
-<span class='va'>test_dataset</span> <span class='op'>&lt;-</span> <span class='fu'>teal</span><span class='fu'>:::</span><span class='va'>Dataset</span><span class='op'>$</span><span class='fu'>new</span><span class='op'>(</span>
-  dataname <span class='op'>=</span> <span class='st'>"iris"</span>,
-  x <span class='op'>=</span> <span class='va'>iris</span>,
-  vars <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>dep <span class='op'>=</span> <span class='fu'>teal</span><span class='fu'>:::</span><span class='va'>Dataset</span><span class='op'>$</span><span class='fu'>new</span><span class='op'>(</span><span class='st'>"iris2"</span>, <span class='va'>iris</span><span class='op'>)</span><span class='op'>)</span>
-<span class='op'>)</span>
-<span class='va'>test_dataset</span><span class='op'>$</span><span class='fu'>reassign_datasets_vars</span><span class='op'>(</span>
-  <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>iris2 <span class='op'>=</span> <span class='fu'>teal</span><span class='fu'>:::</span><span class='va'>Dataset</span><span class='op'>$</span><span class='fu'>new</span><span class='op'>(</span><span class='st'>"iris2"</span>, <span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span><span class='op'>(</span><span class='va'>iris</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span>
-<span class='op'>)</span>
-
-</div></pre>
+    <pre class="examples"><span class='r-in'></span>
+<span class='r-in'><span class='co'>## ------------------------------------------------</span></span>
+<span class='r-in'><span class='co'>## Method `Dataset$reassign_datasets_vars`</span></span>
+<span class='r-in'><span class='co'>## ------------------------------------------------</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='va'>test_dataset</span> <span class='op'>&lt;-</span> <span class='fu'>teal</span><span class='fu'>:::</span><span class='va'>Dataset</span><span class='op'>$</span><span class='fu'>new</span><span class='op'>(</span></span>
+<span class='r-in'>  dataname <span class='op'>=</span> <span class='st'>"iris"</span>,</span>
+<span class='r-in'>  x <span class='op'>=</span> <span class='va'>iris</span>,</span>
+<span class='r-in'>  vars <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>dep <span class='op'>=</span> <span class='fu'>teal</span><span class='fu'>:::</span><span class='va'>Dataset</span><span class='op'>$</span><span class='fu'>new</span><span class='op'>(</span><span class='st'>"iris2"</span>, <span class='va'>iris</span><span class='op'>)</span><span class='op'>)</span></span>
+<span class='r-in'><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>test_dataset</span><span class='op'>$</span><span class='fu'>reassign_datasets_vars</span><span class='op'>(</span></span>
+<span class='r-in'>  <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>iris2 <span class='op'>=</span> <span class='fu'>teal</span><span class='fu'>:::</span><span class='va'>Dataset</span><span class='op'>$</span><span class='fu'>new</span><span class='op'>(</span><span class='st'>"iris2"</span>, <span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span><span class='op'>(</span><span class='va'>iris</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span></span>
+<span class='r-in'><span class='op'>)</span></span>
+<span class='r-in'></span>
+</pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

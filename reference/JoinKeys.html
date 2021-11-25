@@ -76,7 +76,7 @@ of these columns." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">teal</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.10.0.9019</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.10.0.9020</span>
       </span>
     </div>
 
@@ -118,33 +118,6 @@ of these columns." />
 <li>
   <a href="../news/index.html">Changelog</a>
 </li>
-<!-- start_releases -->
-<li class="dropdown">
-	<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-Other releases
-<span class="caret"></span></a><ul class="dropdown-menu" role="menu">
-   <li><a href="../index.html">latest</a></li>
-   <li><a href="../pre-release/index.html">pre-release</a></li>
-   <li><a href="../v0.10.0/index.html">v0.10.0</a></li>
-   <li><a href="../v0.9.5/index.html">v0.9.5</a></li>
-   <li><a href="../v0.9.4/index.html">v0.9.4</a></li>
-   <li><a href="../v0.9.3/index.html">v0.9.3</a></li>
-   <li><a href="../v0.9.2/index.html">v0.9.2</a></li>
-   <li><a href="../v0.9.1/index.html">v0.9.1</a></li>
-   <li><a href="../v0.9.0/index.html">v0.9.0</a></li>
-   <li><a href="../v0.8.5/index.html">v0.8.5</a></li>
-   <li><a href="../v0.8.4/index.html">v0.8.4</a></li>
-   <li><a href="../v0.8.3/index.html">v0.8.3</a></li>
-   <li><a href="../v0.8.2/index.html">v0.8.2</a></li>
-   <li><a href="../v0.7.0/index.html">v0.7.0</a></li>
-   <li><a href="../v0.6.0/index.html">v0.6.0</a></li>
-   <li><a href="../v0.0.5/index.html">v0.0.5</a></li>
-   <li><a href="../v0.0.4/index.html">v0.0.4</a></li>
-   <li><a href="../v0.0.3/index.html">v0.0.3</a></li>
-   <li><a href="../v0.0.2/index.html">v0.0.2</a></li>
-   <li><a href="../v0.0.1/index.html">v0.0.1</a></li>
-</ul></li>
-<!-- end_releases -->
       </ul>
       <ul class="nav navbar-nav navbar-right">
         <li>
@@ -196,7 +169,7 @@ of these columns.</p>
 <li><p><a href='#method-clone'><code>JoinKeys$clone()</code></a></p></li>
 </ul>
 <p><hr>
-<a id="method-new"></a></p><h3 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Method <code>new()</code></h3>
+<a id="method-new"></a></p><h3 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Method <code><a href='https://rdrr.io/r/methods/new.html'>new()</a></code></h3>
 <p>Create a new object of <code>JoinKeys</code></p><h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Usage</h4>
 <p><div class="r"></p><pre><span class='va'>JoinKeys</span><span class='op'>$</span><span class='fu'>new</span><span class='op'>(</span><span class='op'>)</span></pre><p></div></p>
 
@@ -240,7 +213,7 @@ underlying keys structure is returned for further processing</p>
 <h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Returns</h4>
 <p>(<code>character</code>) named character vector x with names(x) the
 columns of <code>dataset_1</code> and the values of <code>(x)</code> the corresponding join
-keys in <code>dataset_2</code> or <code><a href='https://rdrr.io/r/base/character.html'>character(0)</a></code> if no relationship</p>
+keys in <code>dataset_2</code> or <code>character(0)</code> if no relationship</p>
 <p><hr>
 <a id="method-mutate"></a></p><h3 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Method <code>mutate()</code></h3>
 <p>Change join_keys for a given pair of dataset names (or
@@ -289,39 +262,41 @@ to be specified once</p>
 
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='va'>x</span> <span class='op'>&lt;-</span> <span class='fu'>teal</span><span class='fu'>:::</span><span class='va'>JoinKeys</span><span class='op'>$</span><span class='fu'>new</span><span class='op'>(</span><span class='op'>)</span>
-<span class='va'>x</span><span class='op'>$</span><span class='fu'>set</span><span class='op'>(</span>
-  <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
-    <span class='fu'><a href='join_key.html'>join_key</a></span><span class='op'>(</span><span class='st'>"dataset_A"</span>, <span class='st'>"dataset_B"</span>, <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"col_1"</span> <span class='op'>=</span> <span class='st'>"col_a"</span><span class='op'>)</span><span class='op'>)</span>,
-    <span class='fu'><a href='join_key.html'>join_key</a></span><span class='op'>(</span><span class='st'>"dataset_A"</span>, <span class='st'>"dataset_C"</span>, <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"col_2"</span> <span class='op'>=</span> <span class='st'>"col_x"</span>, <span class='st'>"col_3"</span> <span class='op'>=</span> <span class='st'>"col_y"</span><span class='op'>)</span><span class='op'>)</span>
-  <span class='op'>)</span>
-<span class='op'>)</span>
-<span class='va'>x</span><span class='op'>$</span><span class='fu'>get</span><span class='op'>(</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; $dataset_A
-#&gt; $dataset_A$dataset_B
-#&gt;   col_1 
-#&gt; "col_a" 
-#&gt; 
-#&gt; $dataset_A$dataset_C
-#&gt;   col_2   col_3 
-#&gt; "col_x" "col_y" 
-#&gt; 
-#&gt; 
-#&gt; $dataset_B
-#&gt; $dataset_B$dataset_A
-#&gt;   col_a 
-#&gt; "col_1" 
-#&gt; 
-#&gt; 
-#&gt; $dataset_C
-#&gt; $dataset_C$dataset_A
-#&gt;   col_x   col_y 
-#&gt; "col_2" "col_3" 
-#&gt; 
-#&gt; </div><div class='input'><span class='va'>x</span><span class='op'>$</span><span class='fu'>mutate</span><span class='op'>(</span><span class='st'>"dataset_A"</span>, <span class='st'>"dataset_B"</span>, <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"col1"</span> <span class='op'>=</span> <span class='st'>"col10"</span><span class='op'>)</span><span class='op'>)</span>
-<span class='va'>x</span><span class='op'>$</span><span class='fu'>get</span><span class='op'>(</span><span class='st'>"dataset_A"</span>, <span class='st'>"dataset_B"</span><span class='op'>)</span>
-</div><div class='output co'>#&gt;    col1 
-#&gt; "col10" </div></pre>
+    <pre class="examples"><span class='r-in'><span class='va'>x</span> <span class='op'>&lt;-</span> <span class='fu'>teal</span><span class='fu'>:::</span><span class='va'>JoinKeys</span><span class='op'>$</span><span class='fu'>new</span><span class='op'>(</span><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>x</span><span class='op'>$</span><span class='fu'>set</span><span class='op'>(</span></span>
+<span class='r-in'>  <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span></span>
+<span class='r-in'>    <span class='fu'><a href='join_key.html'>join_key</a></span><span class='op'>(</span><span class='st'>"dataset_A"</span>, <span class='st'>"dataset_B"</span>, <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"col_1"</span> <span class='op'>=</span> <span class='st'>"col_a"</span><span class='op'>)</span><span class='op'>)</span>,</span>
+<span class='r-in'>    <span class='fu'><a href='join_key.html'>join_key</a></span><span class='op'>(</span><span class='st'>"dataset_A"</span>, <span class='st'>"dataset_C"</span>, <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"col_2"</span> <span class='op'>=</span> <span class='st'>"col_x"</span>, <span class='st'>"col_3"</span> <span class='op'>=</span> <span class='st'>"col_y"</span><span class='op'>)</span><span class='op'>)</span></span>
+<span class='r-in'>  <span class='op'>)</span></span>
+<span class='r-in'><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>x</span><span class='op'>$</span><span class='fu'>get</span><span class='op'>(</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> $dataset_A</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> $dataset_A$dataset_B</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   col_1 </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> "col_a" </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> $dataset_A$dataset_C</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   col_2   col_3 </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> "col_x" "col_y" </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> $dataset_B</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> $dataset_B$dataset_A</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   col_a </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> "col_1" </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> $dataset_C</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> $dataset_C$dataset_A</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   col_x   col_y </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> "col_2" "col_3" </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-in'><span class='va'>x</span><span class='op'>$</span><span class='fu'>mutate</span><span class='op'>(</span><span class='st'>"dataset_A"</span>, <span class='st'>"dataset_B"</span>, <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"col1"</span> <span class='op'>=</span> <span class='st'>"col10"</span><span class='op'>)</span><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>x</span><span class='op'>$</span><span class='fu'>get</span><span class='op'>(</span><span class='st'>"dataset_A"</span>, <span class='st'>"dataset_B"</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>    col1 </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> "col10" </span>
+</pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

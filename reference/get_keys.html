@@ -73,7 +73,7 @@ Get dataset primary keys" />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">teal</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.10.0.9019</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.10.0.9020</span>
       </span>
     </div>
 
@@ -115,33 +115,6 @@ Get dataset primary keys" />
 <li>
   <a href="../news/index.html">Changelog</a>
 </li>
-<!-- start_releases -->
-<li class="dropdown">
-	<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-Other releases
-<span class="caret"></span></a><ul class="dropdown-menu" role="menu">
-   <li><a href="../index.html">latest</a></li>
-   <li><a href="../pre-release/index.html">pre-release</a></li>
-   <li><a href="../v0.10.0/index.html">v0.10.0</a></li>
-   <li><a href="../v0.9.5/index.html">v0.9.5</a></li>
-   <li><a href="../v0.9.4/index.html">v0.9.4</a></li>
-   <li><a href="../v0.9.3/index.html">v0.9.3</a></li>
-   <li><a href="../v0.9.2/index.html">v0.9.2</a></li>
-   <li><a href="../v0.9.1/index.html">v0.9.1</a></li>
-   <li><a href="../v0.9.0/index.html">v0.9.0</a></li>
-   <li><a href="../v0.8.5/index.html">v0.8.5</a></li>
-   <li><a href="../v0.8.4/index.html">v0.8.4</a></li>
-   <li><a href="../v0.8.3/index.html">v0.8.3</a></li>
-   <li><a href="../v0.8.2/index.html">v0.8.2</a></li>
-   <li><a href="../v0.7.0/index.html">v0.7.0</a></li>
-   <li><a href="../v0.6.0/index.html">v0.6.0</a></li>
-   <li><a href="../v0.0.5/index.html">v0.0.5</a></li>
-   <li><a href="../v0.0.4/index.html">v0.0.4</a></li>
-   <li><a href="../v0.0.3/index.html">v0.0.3</a></li>
-   <li><a href="../v0.0.2/index.html">v0.0.2</a></li>
-   <li><a href="../v0.0.1/index.html">v0.0.1</a></li>
-</ul></li>
-<!-- end_releases -->
       </ul>
       <ul class="nav navbar-nav navbar-right">
         <li>
@@ -206,40 +179,43 @@ Get dataset primary keys</p>
     <p>(<code>character</code>) vector of column names</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='co'># Dataset --------</span>
-
-<span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'>scda</span><span class='op'>)</span>
-<span class='fu'>get_keys</span><span class='op'>(</span>
-  <span class='fu'><a href='dataset.html'>dataset</a></span><span class='op'>(</span>
-    <span class='st'>"ADSL"</span>,
-    <span class='fu'><a href='https://rdrr.io/pkg/scda/man/synthetic_cdisc_data.html'>synthetic_cdisc_data</a></span><span class='op'>(</span><span class='st'>"latest"</span><span class='op'>)</span><span class='op'>$</span><span class='va'>adsl</span>,
-    keys <span class='op'>=</span> <span class='fu'><a href='get_cdisc_keys.html'>get_cdisc_keys</a></span><span class='op'>(</span><span class='st'>"ADSL"</span><span class='op'>)</span>,
-    code <span class='op'>=</span> <span class='st'>"ADSL &lt;- synthetic_cdisc_data(\"latest\")$adsl"</span>
-  <span class='op'>)</span>
-<span class='op'>)</span>
-</div><div class='output co'>#&gt; [1] "STUDYID" "USUBJID"</div><div class='input'><span class='co'># DatasetConnector --------</span>
-
-<span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'>scda</span><span class='op'>)</span>
-<span class='va'>pull_fun_adsl</span> <span class='op'>&lt;-</span> <span class='fu'><a href='callable_function.html'>callable_function</a></span><span class='op'>(</span>
-  <span class='kw'>function</span><span class='op'>(</span><span class='op'>)</span> <span class='op'>{</span><span class='fu'><a href='https://rdrr.io/pkg/scda/man/synthetic_cdisc_data.html'>synthetic_cdisc_data</a></span><span class='op'>(</span><span class='st'>"latest"</span><span class='op'>)</span><span class='op'>$</span><span class='va'>adsl</span><span class='op'>}</span>
-<span class='op'>)</span>
-<span class='fu'>get_keys</span><span class='op'>(</span>
-  <span class='fu'><a href='dataset_connector.html'>dataset_connector</a></span><span class='op'>(</span>
-    <span class='st'>"ADSL"</span>,
-    <span class='va'>pull_fun_adsl</span>,
-    keys <span class='op'>=</span> <span class='fu'><a href='get_cdisc_keys.html'>get_cdisc_keys</a></span><span class='op'>(</span><span class='st'>"ADSL"</span><span class='op'>)</span>,
-  <span class='op'>)</span>
-<span class='op'>)</span>
-</div><div class='output co'>#&gt; [1] "STUDYID" "USUBJID"</div><div class='input'><span class='co'># RelationalData --------</span>
-
-<span class='fu'>get_keys</span><span class='op'>(</span>
-  <span class='fu'><a href='teal_data.html'>teal_data</a></span><span class='op'>(</span>
-    <span class='fu'><a href='dataset.html'>dataset</a></span><span class='op'>(</span><span class='st'>"x"</span>, <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span><span class='op'>(</span>x1 <span class='op'>=</span> <span class='fl'>1</span><span class='op'>:</span><span class='fl'>10</span>, y1 <span class='op'>=</span> <span class='fl'>11</span><span class='op'>:</span><span class='fl'>20</span><span class='op'>)</span>, keys <span class='op'>=</span> <span class='st'>"x1"</span><span class='op'>)</span>,
-    <span class='fu'><a href='dataset.html'>dataset</a></span><span class='op'>(</span><span class='st'>"y"</span>, <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span><span class='op'>(</span>x2 <span class='op'>=</span> <span class='fl'>1</span><span class='op'>:</span><span class='fl'>10</span>, y2 <span class='op'>=</span> <span class='fl'>11</span><span class='op'>:</span><span class='fl'>20</span><span class='op'>)</span>, keys <span class='op'>=</span> <span class='st'>"x2"</span><span class='op'>)</span>
-  <span class='op'>)</span>,
-  <span class='st'>"x"</span>
-<span class='op'>)</span>
-</div><div class='output co'>#&gt; [1] "x1"</div></pre>
+    <pre class="examples"><span class='r-in'><span class='co'># Dataset --------</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'>scda</span><span class='op'>)</span></span>
+<span class='r-in'><span class='fu'>get_keys</span><span class='op'>(</span></span>
+<span class='r-in'>  <span class='fu'><a href='dataset.html'>dataset</a></span><span class='op'>(</span></span>
+<span class='r-in'>    <span class='st'>"ADSL"</span>,</span>
+<span class='r-in'>    <span class='fu'><a href='https://rdrr.io/pkg/scda/man/synthetic_cdisc_data.html'>synthetic_cdisc_data</a></span><span class='op'>(</span><span class='st'>"latest"</span><span class='op'>)</span><span class='op'>$</span><span class='va'>adsl</span>,</span>
+<span class='r-in'>    keys <span class='op'>=</span> <span class='fu'><a href='get_cdisc_keys.html'>get_cdisc_keys</a></span><span class='op'>(</span><span class='st'>"ADSL"</span><span class='op'>)</span>,</span>
+<span class='r-in'>    code <span class='op'>=</span> <span class='st'>"ADSL &lt;- synthetic_cdisc_data(\"latest\")$adsl"</span></span>
+<span class='r-in'>  <span class='op'>)</span></span>
+<span class='r-in'><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] "STUDYID" "USUBJID"</span>
+<span class='r-in'><span class='co'># DatasetConnector --------</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'>scda</span><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>pull_fun_adsl</span> <span class='op'>&lt;-</span> <span class='fu'><a href='callable_function.html'>callable_function</a></span><span class='op'>(</span></span>
+<span class='r-in'>  <span class='kw'>function</span><span class='op'>(</span><span class='op'>)</span> <span class='op'>{</span><span class='fu'><a href='https://rdrr.io/pkg/scda/man/synthetic_cdisc_data.html'>synthetic_cdisc_data</a></span><span class='op'>(</span><span class='st'>"latest"</span><span class='op'>)</span><span class='op'>$</span><span class='va'>adsl</span><span class='op'>}</span></span>
+<span class='r-in'><span class='op'>)</span></span>
+<span class='r-in'><span class='fu'>get_keys</span><span class='op'>(</span></span>
+<span class='r-in'>  <span class='fu'><a href='dataset_connector.html'>dataset_connector</a></span><span class='op'>(</span></span>
+<span class='r-in'>    <span class='st'>"ADSL"</span>,</span>
+<span class='r-in'>    <span class='va'>pull_fun_adsl</span>,</span>
+<span class='r-in'>    keys <span class='op'>=</span> <span class='fu'><a href='get_cdisc_keys.html'>get_cdisc_keys</a></span><span class='op'>(</span><span class='st'>"ADSL"</span><span class='op'>)</span>,</span>
+<span class='r-in'>  <span class='op'>)</span></span>
+<span class='r-in'><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] "STUDYID" "USUBJID"</span>
+<span class='r-in'><span class='co'># RelationalData --------</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='fu'>get_keys</span><span class='op'>(</span></span>
+<span class='r-in'>  <span class='fu'><a href='teal_data.html'>teal_data</a></span><span class='op'>(</span></span>
+<span class='r-in'>    <span class='fu'><a href='dataset.html'>dataset</a></span><span class='op'>(</span><span class='st'>"x"</span>, <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span><span class='op'>(</span>x1 <span class='op'>=</span> <span class='fl'>1</span><span class='op'>:</span><span class='fl'>10</span>, y1 <span class='op'>=</span> <span class='fl'>11</span><span class='op'>:</span><span class='fl'>20</span><span class='op'>)</span>, keys <span class='op'>=</span> <span class='st'>"x1"</span><span class='op'>)</span>,</span>
+<span class='r-in'>    <span class='fu'><a href='dataset.html'>dataset</a></span><span class='op'>(</span><span class='st'>"y"</span>, <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span><span class='op'>(</span>x2 <span class='op'>=</span> <span class='fl'>1</span><span class='op'>:</span><span class='fl'>10</span>, y2 <span class='op'>=</span> <span class='fl'>11</span><span class='op'>:</span><span class='fl'>20</span><span class='op'>)</span>, keys <span class='op'>=</span> <span class='st'>"x2"</span><span class='op'>)</span></span>
+<span class='r-in'>  <span class='op'>)</span>,</span>
+<span class='r-in'>  <span class='st'>"x"</span></span>
+<span class='r-in'><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] "x1"</span>
+</pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

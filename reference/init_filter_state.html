@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">teal</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.10.0.9019</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.10.0.9020</span>
       </span>
     </div>
 
@@ -114,33 +114,6 @@
 <li>
   <a href="../news/index.html">Changelog</a>
 </li>
-<!-- start_releases -->
-<li class="dropdown">
-	<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-Other releases
-<span class="caret"></span></a><ul class="dropdown-menu" role="menu">
-   <li><a href="../index.html">latest</a></li>
-   <li><a href="../pre-release/index.html">pre-release</a></li>
-   <li><a href="../v0.10.0/index.html">v0.10.0</a></li>
-   <li><a href="../v0.9.5/index.html">v0.9.5</a></li>
-   <li><a href="../v0.9.4/index.html">v0.9.4</a></li>
-   <li><a href="../v0.9.3/index.html">v0.9.3</a></li>
-   <li><a href="../v0.9.2/index.html">v0.9.2</a></li>
-   <li><a href="../v0.9.1/index.html">v0.9.1</a></li>
-   <li><a href="../v0.9.0/index.html">v0.9.0</a></li>
-   <li><a href="../v0.8.5/index.html">v0.8.5</a></li>
-   <li><a href="../v0.8.4/index.html">v0.8.4</a></li>
-   <li><a href="../v0.8.3/index.html">v0.8.3</a></li>
-   <li><a href="../v0.8.2/index.html">v0.8.2</a></li>
-   <li><a href="../v0.7.0/index.html">v0.7.0</a></li>
-   <li><a href="../v0.6.0/index.html">v0.6.0</a></li>
-   <li><a href="../v0.0.5/index.html">v0.0.5</a></li>
-   <li><a href="../v0.0.4/index.html">v0.0.4</a></li>
-   <li><a href="../v0.0.3/index.html">v0.0.3</a></li>
-   <li><a href="../v0.0.2/index.html">v0.0.2</a></li>
-   <li><a href="../v0.0.1/index.html">v0.0.1</a></li>
-</ul></li>
-<!-- end_releases -->
       </ul>
       <ul class="nav navbar-nav navbar-right">
         <li>
@@ -189,12 +162,12 @@ values of the variable used in filter</p></td>
     </tr>
     <tr>
       <th>varname</th>
-      <td><p>(<code><a href='https://rdrr.io/r/base/character.html'>character(1)</a></code>, <code>name</code>)<br />
+      <td><p>(<code>character(1)</code>, <code>name</code>)<br />
 name of the variable</p></td>
     </tr>
     <tr>
       <th>varlabel</th>
-      <td><p>(<code><a href='https://rdrr.io/r/base/character.html'>character(1)</a></code>)<br />
+      <td><p>(<code>character(1)</code>)<br />
 label of the variable (optional).</p></td>
     </tr>
     <tr>
@@ -205,9 +178,9 @@ is not empty.</p></td>
     </tr>
     <tr>
       <th>extract_type</th>
-      <td><p>(<code><a href='https://rdrr.io/r/base/character.html'>character(0)</a></code>, <code><a href='https://rdrr.io/r/base/character.html'>character(1)</a></code>)<br />
+      <td><p>(<code>character(0)</code>, <code>character(1)</code>)<br />
 whether condition calls should be prefixed by dataname. Possible values:</p><ul>
-<li><p><code><a href='https://rdrr.io/r/base/character.html'>character(0)</a></code> (default) <code>varname</code> in the condition call will not be prefixed</p></li>
+<li><p><code>character(0)</code> (default) <code>varname</code> in the condition call will not be prefixed</p></li>
 <li><p><code>"list"</code> <code>varname</code> in the condition call will be returned as <code>&lt;input_dataname&gt;$&lt;varname&gt;</code></p></li>
 <li><p><code>"matrix"</code> <code>varname</code> in the condition call will be returned as <code>&lt;input_dataname&gt;[, &lt;varname&gt;]</code></p></li>
 </ul></td>
@@ -219,34 +192,37 @@ whether condition calls should be prefixed by dataname. Possible values:</p><ul>
     <p><code>FilterState</code> object</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='va'>filter_state</span> <span class='op'>&lt;-</span> <span class='fu'>teal</span><span class='fu'>:::</span><span class='va'><a href='RangeFilterState.html'>RangeFilterState</a></span><span class='op'>$</span><span class='fu'>new</span><span class='op'>(</span>
-  <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>1</span><span class='op'>:</span><span class='fl'>10</span>, <span class='cn'>NA</span>, <span class='cn'>Inf</span><span class='op'>)</span>,
-  varname <span class='op'>=</span> <span class='st'>"x"</span>,
-  varlabel <span class='op'>=</span> <span class='st'>"Pretty name"</span>,
-  input_dataname <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/name.html'>as.name</a></span><span class='op'>(</span><span class='st'>"dataname"</span><span class='op'>)</span>,
-  extract_type <span class='op'>=</span> <span class='st'>"matrix"</span>
-<span class='op'>)</span>
-
-<span class='va'>filter_state</span><span class='op'>$</span><span class='fu'>get_varname</span><span class='op'>(</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; x</div><div class='input'><span class='va'>filter_state</span><span class='op'>$</span><span class='fu'>get_varlabel</span><span class='op'>(</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; [1] "Pretty name"</div><div class='input'><span class='fu'><a href='https://rdrr.io/pkg/shiny/man/isolate.html'>isolate</a></span><span class='op'>(</span><span class='va'>filter_state</span><span class='op'>$</span><span class='fu'>get_call</span><span class='op'>(</span><span class='op'>)</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; dataname[, "x"] &gt;= 1 &amp; dataname[, "x"] &lt;= 10</div><div class='input'>
-<span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span>
-<span class='fu'><a href='https://rdrr.io/pkg/shiny/man/shinyApp.html'>shinyApp</a></span><span class='op'>(</span>
-  ui <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/pkg/shiny/man/fluidPage.html'>fluidPage</a></span><span class='op'>(</span>
-    <span class='fu'><a href='https://rdrr.io/pkg/shiny/man/isolate.html'>isolate</a></span><span class='op'>(</span><span class='va'>filter_state</span><span class='op'>$</span><span class='fu'>ui</span><span class='op'>(</span>id <span class='op'>=</span> <span class='st'>"app"</span><span class='op'>)</span><span class='op'>)</span>,
-    <span class='fu'><a href='https://rdrr.io/pkg/shiny/man/textOutput.html'>verbatimTextOutput</a></span><span class='op'>(</span><span class='st'>"call"</span><span class='op'>)</span>
-  <span class='op'>)</span>,
-  server <span class='op'>=</span> <span class='kw'>function</span><span class='op'>(</span><span class='va'>input</span>, <span class='va'>output</span>, <span class='va'>session</span><span class='op'>)</span> <span class='op'>{</span>
-    <span class='fu'><a href='https://rdrr.io/pkg/shiny/man/callModule.html'>callModule</a></span><span class='op'>(</span><span class='va'>filter_state</span><span class='op'>$</span><span class='va'>server</span>, <span class='st'>"app"</span><span class='op'>)</span>
-
-    <span class='va'>output</span><span class='op'>$</span><span class='va'>call</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/shiny/man/renderPrint.html'>renderText</a></span><span class='op'>(</span>
-      <span class='fu'><a href='pdeparse.html'>pdeparse</a></span><span class='op'>(</span><span class='va'>filter_state</span><span class='op'>$</span><span class='fu'>get_call</span><span class='op'>(</span><span class='op'>)</span>, collapse <span class='op'>=</span> <span class='st'>"\n"</span><span class='op'>)</span>
-    <span class='op'>)</span>
-  <span class='op'>}</span>
-<span class='op'>)</span>
-<span class='op'>}</span>
-</div></pre>
+    <pre class="examples"><span class='r-in'><span class='va'>filter_state</span> <span class='op'>&lt;-</span> <span class='fu'>teal</span><span class='fu'>:::</span><span class='va'><a href='RangeFilterState.html'>RangeFilterState</a></span><span class='op'>$</span><span class='fu'>new</span><span class='op'>(</span></span>
+<span class='r-in'>  <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>1</span><span class='op'>:</span><span class='fl'>10</span>, <span class='cn'>NA</span>, <span class='cn'>Inf</span><span class='op'>)</span>,</span>
+<span class='r-in'>  varname <span class='op'>=</span> <span class='st'>"x"</span>,</span>
+<span class='r-in'>  varlabel <span class='op'>=</span> <span class='st'>"Pretty name"</span>,</span>
+<span class='r-in'>  input_dataname <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/name.html'>as.name</a></span><span class='op'>(</span><span class='st'>"dataname"</span><span class='op'>)</span>,</span>
+<span class='r-in'>  extract_type <span class='op'>=</span> <span class='st'>"matrix"</span></span>
+<span class='r-in'><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='va'>filter_state</span><span class='op'>$</span><span class='fu'>get_varname</span><span class='op'>(</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> x</span>
+<span class='r-in'><span class='va'>filter_state</span><span class='op'>$</span><span class='fu'>get_varlabel</span><span class='op'>(</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] "Pretty name"</span>
+<span class='r-in'><span class='fu'><a href='https://rdrr.io/pkg/shiny/man/isolate.html'>isolate</a></span><span class='op'>(</span><span class='va'>filter_state</span><span class='op'>$</span><span class='fu'>get_call</span><span class='op'>(</span><span class='op'>)</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> dataname[, "x"] &gt;= 1 &amp; dataname[, "x"] &lt;= 10</span>
+<span class='r-in'></span>
+<span class='r-in'><span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span></span>
+<span class='r-in'><span class='fu'><a href='https://rdrr.io/pkg/shiny/man/shinyApp.html'>shinyApp</a></span><span class='op'>(</span></span>
+<span class='r-in'>  ui <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/pkg/shiny/man/fluidPage.html'>fluidPage</a></span><span class='op'>(</span></span>
+<span class='r-in'>    <span class='fu'><a href='https://rdrr.io/pkg/shiny/man/isolate.html'>isolate</a></span><span class='op'>(</span><span class='va'>filter_state</span><span class='op'>$</span><span class='fu'>ui</span><span class='op'>(</span>id <span class='op'>=</span> <span class='st'>"app"</span><span class='op'>)</span><span class='op'>)</span>,</span>
+<span class='r-in'>    <span class='fu'><a href='https://rdrr.io/pkg/shiny/man/textOutput.html'>verbatimTextOutput</a></span><span class='op'>(</span><span class='st'>"call"</span><span class='op'>)</span></span>
+<span class='r-in'>  <span class='op'>)</span>,</span>
+<span class='r-in'>  server <span class='op'>=</span> <span class='kw'>function</span><span class='op'>(</span><span class='va'>input</span>, <span class='va'>output</span>, <span class='va'>session</span><span class='op'>)</span> <span class='op'>{</span></span>
+<span class='r-in'>    <span class='fu'><a href='https://rdrr.io/pkg/shiny/man/callModule.html'>callModule</a></span><span class='op'>(</span><span class='va'>filter_state</span><span class='op'>$</span><span class='va'>server</span>, <span class='st'>"app"</span><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'>    <span class='va'>output</span><span class='op'>$</span><span class='va'>call</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/shiny/man/renderPrint.html'>renderText</a></span><span class='op'>(</span></span>
+<span class='r-in'>      <span class='fu'><a href='pdeparse.html'>pdeparse</a></span><span class='op'>(</span><span class='va'>filter_state</span><span class='op'>$</span><span class='fu'>get_call</span><span class='op'>(</span><span class='op'>)</span>, collapse <span class='op'>=</span> <span class='st'>"\n"</span><span class='op'>)</span></span>
+<span class='r-in'>    <span class='op'>)</span></span>
+<span class='r-in'>  <span class='op'>}</span></span>
+<span class='r-in'><span class='op'>)</span></span>
+<span class='r-in'><span class='op'>}</span></span>
+</pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

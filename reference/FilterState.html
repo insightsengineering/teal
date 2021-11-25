@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">teal</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.10.0.9019</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.10.0.9020</span>
       </span>
     </div>
 
@@ -114,33 +114,6 @@
 <li>
   <a href="../news/index.html">Changelog</a>
 </li>
-<!-- start_releases -->
-<li class="dropdown">
-	<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-Other releases
-<span class="caret"></span></a><ul class="dropdown-menu" role="menu">
-   <li><a href="../index.html">latest</a></li>
-   <li><a href="../pre-release/index.html">pre-release</a></li>
-   <li><a href="../v0.10.0/index.html">v0.10.0</a></li>
-   <li><a href="../v0.9.5/index.html">v0.9.5</a></li>
-   <li><a href="../v0.9.4/index.html">v0.9.4</a></li>
-   <li><a href="../v0.9.3/index.html">v0.9.3</a></li>
-   <li><a href="../v0.9.2/index.html">v0.9.2</a></li>
-   <li><a href="../v0.9.1/index.html">v0.9.1</a></li>
-   <li><a href="../v0.9.0/index.html">v0.9.0</a></li>
-   <li><a href="../v0.8.5/index.html">v0.8.5</a></li>
-   <li><a href="../v0.8.4/index.html">v0.8.4</a></li>
-   <li><a href="../v0.8.3/index.html">v0.8.3</a></li>
-   <li><a href="../v0.8.2/index.html">v0.8.2</a></li>
-   <li><a href="../v0.7.0/index.html">v0.7.0</a></li>
-   <li><a href="../v0.6.0/index.html">v0.6.0</a></li>
-   <li><a href="../v0.0.5/index.html">v0.0.5</a></li>
-   <li><a href="../v0.0.4/index.html">v0.0.4</a></li>
-   <li><a href="../v0.0.3/index.html">v0.0.3</a></li>
-   <li><a href="../v0.0.2/index.html">v0.0.2</a></li>
-   <li><a href="../v0.0.1/index.html">v0.0.1</a></li>
-</ul></li>
-<!-- end_releases -->
       </ul>
       <ul class="nav navbar-nav navbar-right">
         <li>
@@ -220,7 +193,7 @@ chain.</p></li>
 <li><p><a href='#method-clone'><code>FilterState$clone()</code></a></p></li>
 </ul>
 <p><hr>
-<a id="method-new"></a></p><h3 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Method <code>new()</code></h3>
+<a id="method-new"></a></p><h3 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Method <code><a href='https://rdrr.io/r/methods/new.html'>new()</a></code></h3>
 <p>Initialize a <code>FilterState</code> object</p><h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Usage</h4>
 <p><div class="r"></p><pre><span class='va'>FilterState</span><span class='op'>$</span><span class='fu'>new</span><span class='op'>(</span>
   <span class='va'>x</span>,
@@ -238,17 +211,17 @@ values of the variable used in filter</p></dd>
 <dt><code>varname</code></dt><dd><p>(<code>character</code>, <code>name</code>)<br />
 name of the variable</p></dd>
 
-<dt><code>varlabel</code></dt><dd><p>(<code><a href='https://rdrr.io/r/base/character.html'>character(1)</a></code>)<br />
+<dt><code>varlabel</code></dt><dd><p>(<code>character(1)</code>)<br />
 label of the variable (optional).</p></dd>
 
 <dt><code>input_dataname</code></dt><dd><p>(<code>name</code> or <code>call</code>)<br />
 name of dataset where <code>x</code> is taken from. Must be specified if <code>extract_type</code> argument
 is not empty.</p></dd>
 
-<dt><code>extract_type</code></dt><dd><p>(<code><a href='https://rdrr.io/r/base/character.html'>character(0)</a></code>, <code><a href='https://rdrr.io/r/base/character.html'>character(1)</a></code>)<br />
+<dt><code>extract_type</code></dt><dd><p>(<code>character(0)</code>, <code>character(1)</code>)<br />
 whether condition calls should be prefixed by dataname. Possible values:
 <ul>
-<li><p><code><a href='https://rdrr.io/r/base/character.html'>character(0)</a></code> (default) <code>varname</code> in the condition call will not be prefixed</p></li>
+<li><p><code>character(0)</code> (default) <code>varname</code> in the condition call will not be prefixed</p></li>
 <li><p><code>"list"</code> <code>varname</code> in the condition call will be returned as <code>&lt;input_dataname&gt;$&lt;varname&gt;</code></p></li>
 <li><p><code>"matrix"</code> <code>varname</code> in the condition call will be returned as <code>&lt;input_dataname&gt;[, &lt;varname&gt;]</code></p></li>
 </ul></p></dd>
@@ -274,26 +247,26 @@ and must be executed in reactive or isolated context.</p><h4 class='hasAnchor' i
 
 <h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Arguments</h4>
 <p><div class="arguments"></p><dl>
-<dt><code>deparse</code></dt><dd><p>(<code><a href='https://rdrr.io/r/base/logical.html'>logical(1)</a></code>)<br />
+<dt><code>deparse</code></dt><dd><p>(<code>logical(1)</code>)<br />
 whether dataname should be deparsed. <code>TRUE</code> by default</p></dd>
 
 </dl><p></div></p>
 <h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Returns</h4>
-<p>(<code>name</code> or <code><a href='https://rdrr.io/r/base/character.html'>character(1)</a></code>)</p>
+<p>(<code>name</code> or <code>character(1)</code>)</p>
 <p><hr>
 <a id="method-get_keep_na"></a></p><h3 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Method <code>get_keep_na()</code></h3>
 <p>Returns current <code>keep_na</code> selection</p><h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Usage</h4>
 <p><div class="r"></p><pre><span class='va'>FilterState</span><span class='op'>$</span><span class='fu'>get_keep_na</span><span class='op'>(</span><span class='op'>)</span></pre><p></div></p>
 
 <h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Returns</h4>
-<p>(<code><a href='https://rdrr.io/r/base/logical.html'>logical(1)</a></code>)</p>
+<p>(<code>logical(1)</code>)</p>
 <p><hr>
 <a id="method-get_varlabel"></a></p><h3 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Method <code>get_varlabel()</code></h3>
 <p>Returns variable label</p><h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Usage</h4>
 <p><div class="r"></p><pre><span class='va'>FilterState</span><span class='op'>$</span><span class='fu'>get_varlabel</span><span class='op'>(</span><span class='op'>)</span></pre><p></div></p>
 
 <h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Returns</h4>
-<p>(<code><a href='https://rdrr.io/r/base/character.html'>character(1)</a></code>)</p>
+<p>(<code>character(1)</code>)</p>
 <p><hr>
 <a id="method-get_varname"></a></p><h3 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Method <code>get_varname()</code></h3>
 <p>Get variable name</p><h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Usage</h4>
@@ -301,12 +274,12 @@ whether dataname should be deparsed. <code>TRUE</code> by default</p></dd>
 
 <h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Arguments</h4>
 <p><div class="arguments"></p><dl>
-<dt><code>deparse</code></dt><dd><p>(<code><a href='https://rdrr.io/r/base/logical.html'>logical(1)</a></code>)<br />
+<dt><code>deparse</code></dt><dd><p>(<code>logical(1)</code>)<br />
 whether variable name should be deparsed. <code>FALSE</code> by default</p></dd>
 
 </dl><p></div></p>
 <h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Returns</h4>
-<p>(<code>name</code> or <code><a href='https://rdrr.io/r/base/character.html'>character(1)</a></code>)</p>
+<p>(<code>name</code> or <code>character(1)</code>)</p>
 <p><hr>
 <a id="method-get_selected"></a></p><h3 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Method <code>get_selected()</code></h3>
 <p>Get selected values from <code>FilterState</code></p><h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Usage</h4>
@@ -321,7 +294,7 @@ whether variable name should be deparsed. <code>FALSE</code> by default</p></dd>
 
 <h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Arguments</h4>
 <p><div class="arguments"></p><dl>
-<dt><code>value</code></dt><dd><p>(<code><a href='https://rdrr.io/r/base/logical.html'>logical(1)</a></code>)<br />
+<dt><code>value</code></dt><dd><p>(<code>logical(1)</code>)<br />
 value(s) which come from the filter selection. Value is set in <code>server</code>
 modules after selecting check-box-input in the shiny interface. Values are set to
 <code>private$keep_na</code> which is reactive.</p></dd>
@@ -336,7 +309,7 @@ condition extended by <code>!is.na</code> condition.</p><h4 class='hasAnchor' id
 
 <h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Arguments</h4>
 <p><div class="arguments"></p><dl>
-<dt><code>value</code></dt><dd><p>(<code><a href='https://rdrr.io/r/base/logical.html'>logical(1)</a></code>) when <code>TRUE</code>, <code>FilterState$get_call</code> appends an expression
+<dt><code>value</code></dt><dd><p>(<code>logical(1)</code>) when <code>TRUE</code>, <code>FilterState$get_call</code> appends an expression
 removing <code>NA</code> values to the filter expression returned by <code>get_call</code></p></dd>
 
 </dl><p></div></p>
@@ -376,7 +349,7 @@ contains fields relevant for a specific class
 
 <h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Arguments</h4>
 <p><div class="arguments"></p><dl>
-<dt><code>id</code></dt><dd><p>(<code><a href='https://rdrr.io/r/base/character.html'>character(1)</a></code>)<br />
+<dt><code>id</code></dt><dd><p>(<code>character(1)</code>)<br />
 an ID string that corresponds with the ID used to call the module's UI function.</p></dd>
 
 </dl><p></div></p>
@@ -389,22 +362,22 @@ an ID string that corresponds with the ID used to call the module's UI function.
 
 <h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Arguments</h4>
 <p><div class="arguments"></p><dl>
-<dt><code>id</code></dt><dd><p>(<code><a href='https://rdrr.io/r/base/character.html'>character(1)</a></code>)<br />
+<dt><code>id</code></dt><dd><p>(<code>character(1)</code>)<br />
 id of shiny element. UI for this class contains simple message
 informing that it's not supported
 description
-Adds <code><a href='https://rdrr.io/r/base/NA.html'>is.na(varname)</a></code> before existing condition calls if <code>keep_na</code> is selected.
+Adds <code>is.na(varname)</code> before existing condition calls if <code>keep_na</code> is selected.
 Otherwise, if missings are found in the variable <code>!is.na</code> will be added
 only if <code>private$na_rm = TRUE</code>
 return (<code>call</code>)
 description
 Prefixed (or not) variableReturn variable name needed to condition call.
-If <code><a href='https://rdrr.io/r/base/Logic.html'>isTRUE(private$use_dataset)</a></code> variable is prefixed by
+If <code>isTRUE(private$use_dataset)</code> variable is prefixed by
 dataname to be evaluated as extracted object, for example
 <code>data$var</code>
 return (<code>name</code> or <code>call</code>)
 Sets <code>keep_na</code> field according to observed <code>input$keep_na</code>
-If <code>keep_na = TRUE</code> <code><a href='https://rdrr.io/r/base/NA.html'>is.na(varname)</a></code> is added to the returned call.
+If <code>keep_na = TRUE</code> <code>is.na(varname)</code> is added to the returned call.
 Otherwise returned call excludes <code>NA</code> when executed.
 Set choicesSet choices is supposed to be executed once in the constructor
 to define set/range which selection is made from.

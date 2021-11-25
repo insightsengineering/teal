@@ -31,7 +31,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">teal</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.10.0.9019</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.10.0.9020</span>
       </span>
     </div>
 
@@ -73,33 +73,6 @@
 <li>
   <a href="../news/index.html">Changelog</a>
 </li>
-<!-- start_releases -->
-<li class="dropdown">
-	<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-Other releases
-<span class="caret"></span></a><ul class="dropdown-menu" role="menu">
-   <li><a href="../index.html">latest</a></li>
-   <li><a href="../pre-release/index.html">pre-release</a></li>
-   <li><a href="../v0.10.0/index.html">v0.10.0</a></li>
-   <li><a href="../v0.9.5/index.html">v0.9.5</a></li>
-   <li><a href="../v0.9.4/index.html">v0.9.4</a></li>
-   <li><a href="../v0.9.3/index.html">v0.9.3</a></li>
-   <li><a href="../v0.9.2/index.html">v0.9.2</a></li>
-   <li><a href="../v0.9.1/index.html">v0.9.1</a></li>
-   <li><a href="../v0.9.0/index.html">v0.9.0</a></li>
-   <li><a href="../v0.8.5/index.html">v0.8.5</a></li>
-   <li><a href="../v0.8.4/index.html">v0.8.4</a></li>
-   <li><a href="../v0.8.3/index.html">v0.8.3</a></li>
-   <li><a href="../v0.8.2/index.html">v0.8.2</a></li>
-   <li><a href="../v0.7.0/index.html">v0.7.0</a></li>
-   <li><a href="../v0.6.0/index.html">v0.6.0</a></li>
-   <li><a href="../v0.0.5/index.html">v0.0.5</a></li>
-   <li><a href="../v0.0.4/index.html">v0.0.4</a></li>
-   <li><a href="../v0.0.3/index.html">v0.0.3</a></li>
-   <li><a href="../v0.0.2/index.html">v0.0.2</a></li>
-   <li><a href="../v0.0.1/index.html">v0.0.1</a></li>
-</ul></li>
-<!-- end_releases -->
       </ul>
 <ul class="nav navbar-nav navbar-right">
 <li>
@@ -242,7 +215,7 @@ Other releases
 <div id="filtering" class="section level2">
 <h2 class="hasAnchor">
 <a href="#filtering" class="anchor"></a>Filtering</h2>
-<p>For clinical trial data analysis (as opposed to more general relational data) we apply a specific filtering mechanism that requires an <code>ADSL</code> analysis dataset to be part of every <code>teal</code> app. That is, the filter framework lets the user dynamically specify which variables she/he wants to use for filtering (using ranges or categories). Teal then creates the <code>filter</code> code for each filter condition and links them with an elementwise logical <strong>AND</strong> operator (i.e. <code><a href="https://rdrr.io/r/base/Logic.html">&amp;</a></code>). Further, all datasets other than <code>ADSL</code> will also be filtered with the remaining subjects in <code>ADSL</code> through the <code>ADSL.USUBJID</code> and <code>ADSL.STUDYID</code> variables. Hence, assume you have the following three filters</p>
+<p>For clinical trial data analysis (as opposed to more general relational data) we apply a specific filtering mechanism that requires an <code>ADSL</code> analysis dataset to be part of every <code>teal</code> app. That is, the filter framework lets the user dynamically specify which variables she/he wants to use for filtering (using ranges or categories). Teal then creates the <code>filter</code> code for each filter condition and links them with an elementwise logical <strong>AND</strong> operator (i.e. <code>&amp;</code>). Further, all datasets other than <code>ADSL</code> will also be filtered with the remaining subjects in <code>ADSL</code> through the <code>ADSL.USUBJID</code> and <code>ADSL.STUDYID</code> variables. Hence, assume you have the following three filters</p>
 <ul>
 <li><code>ADSL.STUDYID %in% c("BP29392", "WP29945")</code></li>
 <li><code>ADSL.AGE &gt; 15 &amp; ADSL.AGE &lt; 35</code></li>
@@ -250,7 +223,7 @@ Other releases
 </ul>
 <p>Then then <code>FilteredData</code> object will perform the following operations to obtain the filtered <code>ADRS</code> object in one of your modules:</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">adsl_filtered</span> <span class="op">&lt;-</span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">adsl</span>, <span class="va">STUDYID</span> <span class="op">%in%</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"BP29392"</span>, <span class="st">"WP29945"</span><span class="op">)</span> <span class="op">&amp;</span> <span class="va">AGE</span> <span class="op">&gt;</span> <span class="fl">15</span> <span class="op">&amp;</span> <span class="va">AGE</span> <span class="op">&lt;</span> <span class="fl">35</span><span class="op">)</span>
+<code class="sourceCode R"><span class="va">adsl_filtered</span> <span class="op">&lt;-</span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">adsl</span>, <span class="va">STUDYID</span> <span class="op"><a href="https://rdrr.io/r/base/match.html">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"BP29392"</span>, <span class="st">"WP29945"</span><span class="op">)</span> <span class="op">&amp;</span> <span class="va">AGE</span> <span class="op">&gt;</span> <span class="fl">15</span> <span class="op">&amp;</span> <span class="va">AGE</span> <span class="op">&lt;</span> <span class="fl">35</span><span class="op">)</span>
 <span class="va">adrs_filtered_alone</span> <span class="op">&lt;-</span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">adrs</span>, <span class="va">ADY</span> <span class="op">&gt;</span> <span class="fl">0</span> <span class="op">&amp;</span> <span class="va">ADY</span> <span class="op">&lt;</span> <span class="fl">500</span><span class="op">)</span>
 
 <span class="va">adrs_filtered</span> <span class="op">&lt;-</span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate-joins.html">inner_join</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">adsl_filtered</span>,

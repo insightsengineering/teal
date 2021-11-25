@@ -74,7 +74,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">teal</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.10.0.9019</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.10.0.9020</span>
       </span>
     </div>
 
@@ -116,33 +116,6 @@
 <li>
   <a href="../news/index.html">Changelog</a>
 </li>
-<!-- start_releases -->
-<li class="dropdown">
-	<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-Other releases
-<span class="caret"></span></a><ul class="dropdown-menu" role="menu">
-   <li><a href="../index.html">latest</a></li>
-   <li><a href="../pre-release/index.html">pre-release</a></li>
-   <li><a href="../v0.10.0/index.html">v0.10.0</a></li>
-   <li><a href="../v0.9.5/index.html">v0.9.5</a></li>
-   <li><a href="../v0.9.4/index.html">v0.9.4</a></li>
-   <li><a href="../v0.9.3/index.html">v0.9.3</a></li>
-   <li><a href="../v0.9.2/index.html">v0.9.2</a></li>
-   <li><a href="../v0.9.1/index.html">v0.9.1</a></li>
-   <li><a href="../v0.9.0/index.html">v0.9.0</a></li>
-   <li><a href="../v0.8.5/index.html">v0.8.5</a></li>
-   <li><a href="../v0.8.4/index.html">v0.8.4</a></li>
-   <li><a href="../v0.8.3/index.html">v0.8.3</a></li>
-   <li><a href="../v0.8.2/index.html">v0.8.2</a></li>
-   <li><a href="../v0.7.0/index.html">v0.7.0</a></li>
-   <li><a href="../v0.6.0/index.html">v0.6.0</a></li>
-   <li><a href="../v0.0.5/index.html">v0.0.5</a></li>
-   <li><a href="../v0.0.4/index.html">v0.0.4</a></li>
-   <li><a href="../v0.0.3/index.html">v0.0.3</a></li>
-   <li><a href="../v0.0.2/index.html">v0.0.2</a></li>
-   <li><a href="../v0.0.1/index.html">v0.0.1</a></li>
-</ul></li>
-<!-- end_releases -->
       </ul>
       <ul class="nav navbar-nav navbar-right">
         <li>
@@ -196,20 +169,22 @@ Other releases
     <p>label (<code>character</code>) Label to describe the dataset</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='va'>fun</span> <span class='op'>&lt;-</span> <span class='fu'><a href='callable_function.html'>callable_function</a></span><span class='op'>(</span><span class='va'>data.frame</span><span class='op'>)</span>
-<span class='va'>fun</span><span class='op'>$</span><span class='fu'>set_args</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>c1 <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/seq.html'>seq_len</a></span><span class='op'>(</span><span class='fl'>10</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span>
-
-<span class='va'>x</span> <span class='op'>&lt;-</span> <span class='fu'><a href='dataset_connector.html'>dataset_connector</a></span><span class='op'>(</span>
-  pull_callable <span class='op'>=</span> <span class='va'>fun</span>,
-  dataname <span class='op'>=</span> <span class='st'>"ADSL"</span>,
-  label <span class='op'>=</span> <span class='st'>"My custom label"</span>
-<span class='op'>)</span>
-<span class='fu'>get_dataset_label</span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; [1] "My custom label"</div><div class='input'><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'>scda</span><span class='op'>)</span>
-<span class='va'>ADSL</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/scda/man/synthetic_cdisc_data.html'>synthetic_cdisc_data</a></span><span class='op'>(</span><span class='st'>"latest"</span><span class='op'>)</span><span class='op'>$</span><span class='va'>adsl</span>
-<span class='va'>ADSL_dataset</span> <span class='op'>&lt;-</span> <span class='fu'><a href='dataset.html'>dataset</a></span><span class='op'>(</span>dataname <span class='op'>=</span> <span class='st'>"ADSL"</span>, x <span class='op'>=</span> <span class='va'>ADSL</span>, label <span class='op'>=</span> <span class='st'>"My custom label"</span><span class='op'>)</span>
-<span class='fu'>get_dataset_label</span><span class='op'>(</span><span class='va'>ADSL_dataset</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; [1] "My custom label"</div></pre>
+    <pre class="examples"><span class='r-in'><span class='va'>fun</span> <span class='op'>&lt;-</span> <span class='fu'><a href='callable_function.html'>callable_function</a></span><span class='op'>(</span><span class='va'>data.frame</span><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>fun</span><span class='op'>$</span><span class='fu'>set_args</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>c1 <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/seq.html'>seq_len</a></span><span class='op'>(</span><span class='fl'>10</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='va'>x</span> <span class='op'>&lt;-</span> <span class='fu'><a href='dataset_connector.html'>dataset_connector</a></span><span class='op'>(</span></span>
+<span class='r-in'>  pull_callable <span class='op'>=</span> <span class='va'>fun</span>,</span>
+<span class='r-in'>  dataname <span class='op'>=</span> <span class='st'>"ADSL"</span>,</span>
+<span class='r-in'>  label <span class='op'>=</span> <span class='st'>"My custom label"</span></span>
+<span class='r-in'><span class='op'>)</span></span>
+<span class='r-in'><span class='fu'>get_dataset_label</span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] "My custom label"</span>
+<span class='r-in'><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'>scda</span><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>ADSL</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/scda/man/synthetic_cdisc_data.html'>synthetic_cdisc_data</a></span><span class='op'>(</span><span class='st'>"latest"</span><span class='op'>)</span><span class='op'>$</span><span class='va'>adsl</span></span>
+<span class='r-in'><span class='va'>ADSL_dataset</span> <span class='op'>&lt;-</span> <span class='fu'><a href='dataset.html'>dataset</a></span><span class='op'>(</span>dataname <span class='op'>=</span> <span class='st'>"ADSL"</span>, x <span class='op'>=</span> <span class='va'>ADSL</span>, label <span class='op'>=</span> <span class='st'>"My custom label"</span><span class='op'>)</span></span>
+<span class='r-in'><span class='fu'>get_dataset_label</span><span class='op'>(</span><span class='va'>ADSL_dataset</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] "My custom label"</span>
+</pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

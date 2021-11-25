@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">teal</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.10.0.9019</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.10.0.9020</span>
       </span>
     </div>
 
@@ -114,33 +114,6 @@
 <li>
   <a href="../news/index.html">Changelog</a>
 </li>
-<!-- start_releases -->
-<li class="dropdown">
-	<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-Other releases
-<span class="caret"></span></a><ul class="dropdown-menu" role="menu">
-   <li><a href="../index.html">latest</a></li>
-   <li><a href="../pre-release/index.html">pre-release</a></li>
-   <li><a href="../v0.10.0/index.html">v0.10.0</a></li>
-   <li><a href="../v0.9.5/index.html">v0.9.5</a></li>
-   <li><a href="../v0.9.4/index.html">v0.9.4</a></li>
-   <li><a href="../v0.9.3/index.html">v0.9.3</a></li>
-   <li><a href="../v0.9.2/index.html">v0.9.2</a></li>
-   <li><a href="../v0.9.1/index.html">v0.9.1</a></li>
-   <li><a href="../v0.9.0/index.html">v0.9.0</a></li>
-   <li><a href="../v0.8.5/index.html">v0.8.5</a></li>
-   <li><a href="../v0.8.4/index.html">v0.8.4</a></li>
-   <li><a href="../v0.8.3/index.html">v0.8.3</a></li>
-   <li><a href="../v0.8.2/index.html">v0.8.2</a></li>
-   <li><a href="../v0.7.0/index.html">v0.7.0</a></li>
-   <li><a href="../v0.6.0/index.html">v0.6.0</a></li>
-   <li><a href="../v0.0.5/index.html">v0.0.5</a></li>
-   <li><a href="../v0.0.4/index.html">v0.0.4</a></li>
-   <li><a href="../v0.0.3/index.html">v0.0.3</a></li>
-   <li><a href="../v0.0.2/index.html">v0.0.2</a></li>
-   <li><a href="../v0.0.1/index.html">v0.0.1</a></li>
-</ul></li>
-<!-- end_releases -->
       </ul>
       <ul class="nav navbar-nav navbar-right">
         <li>
@@ -326,119 +299,124 @@ object containing data and attributes.</p></dd>
 
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'>scda</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; </div><div class='input'><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://shiny.rstudio.com/'>shiny</a></span><span class='op'>)</span>
-
-<span class='va'>ADSL</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/scda/man/synthetic_cdisc_data.html'>synthetic_cdisc_data</a></span><span class='op'>(</span><span class='st'>"latest"</span><span class='op'>)</span><span class='op'>$</span><span class='va'>adsl</span>
-<span class='va'>ADTTE</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/scda/man/synthetic_cdisc_data.html'>synthetic_cdisc_data</a></span><span class='op'>(</span><span class='st'>"latest"</span><span class='op'>)</span><span class='op'>$</span><span class='va'>adtte</span>
-
-<span class='va'>adsl</span> <span class='op'>&lt;-</span> <span class='fu'><a href='cdisc_dataset.html'>cdisc_dataset</a></span><span class='op'>(</span><span class='st'>"ADSL"</span>, <span class='va'>ADSL</span><span class='op'>)</span>
-<span class='va'>adtte</span> <span class='op'>&lt;-</span> <span class='fu'><a href='cdisc_dataset.html'>cdisc_dataset</a></span><span class='op'>(</span><span class='st'>"ADTTE"</span>, <span class='va'>ADTTE</span><span class='op'>)</span>
-<span class='va'>data</span> <span class='op'>&lt;-</span> <span class='fu'><a href='cdisc_data.html'>cdisc_data</a></span><span class='op'>(</span><span class='va'>adsl</span>, <span class='va'>adtte</span><span class='op'>)</span>
-<span class='va'>datasets</span> <span class='op'>&lt;-</span> <span class='fu'>teal</span><span class='fu'>:::</span><span class='va'>CDISCFilteredData</span><span class='op'>$</span><span class='fu'>new</span><span class='op'>(</span><span class='op'>)</span>
-
-<span class='co'># to avoid using isolate(), you can provide a default isolate context by calling</span>
-<span class='co'># options(shiny.suppressMissingContextError = TRUE) #nolint</span>
-<span class='co'># don't forget to deactivate this option at the end</span>
-<span class='co'># options(shiny.suppressMissingContextError = FALSE) #nolint</span>
-
-<span class='co'># setting the data</span>
-<span class='fu'><a href='https://rdrr.io/pkg/shiny/man/isolate.html'>isolate</a></span><span class='op'>(</span><span class='op'>{</span>
-  <span class='va'>datasets</span><span class='op'>$</span><span class='fu'>set_dataset</span><span class='op'>(</span><span class='va'>adsl</span><span class='op'>)</span>
-  <span class='va'>datasets</span><span class='op'>$</span><span class='fu'>set_dataset</span><span class='op'>(</span><span class='va'>adtte</span><span class='op'>)</span>
- <span class='op'>}</span><span class='op'>)</span>
-
-
-<span class='fu'><a href='https://rdrr.io/pkg/shiny/man/isolate.html'>isolate</a></span><span class='op'>(</span><span class='op'>{</span>
-  <span class='va'>datasets</span><span class='op'>$</span><span class='fu'>datanames</span><span class='op'>(</span><span class='op'>)</span>
-
-  <span class='co'># number observations and subjects of filtered/non-filtered dataset</span>
-  <span class='va'>datasets</span><span class='op'>$</span><span class='fu'>get_filter_overview</span><span class='op'>(</span><span class='st'>"ADSL"</span><span class='op'>)</span>
-
-  <span class='fu'><a href='https://rdrr.io/r/base/print.html'>print</a></span><span class='op'>(</span><span class='va'>datasets</span><span class='op'>$</span><span class='fu'>get_call</span><span class='op'>(</span><span class='st'>"ADSL"</span><span class='op'>)</span><span class='op'>)</span>
-  <span class='fu'><a href='https://rdrr.io/r/base/print.html'>print</a></span><span class='op'>(</span><span class='va'>datasets</span><span class='op'>$</span><span class='fu'>get_call</span><span class='op'>(</span><span class='st'>"ADTTE"</span><span class='op'>)</span><span class='op'>)</span>
-
-  <span class='va'>df</span> <span class='op'>&lt;-</span> <span class='va'>datasets</span><span class='op'>$</span><span class='fu'>get_data</span><span class='op'>(</span><span class='st'>"ADSL"</span>, filtered <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span>
-  <span class='fu'><a href='https://rdrr.io/r/base/print.html'>print</a></span><span class='op'>(</span><span class='va'>df</span><span class='op'>)</span>
- <span class='op'>}</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; $filter
-#&gt; ADSL_FILTERED &lt;- ADSL
-#&gt; 
-#&gt; $filter
-#&gt; ADTTE_FILTERED_ALONE &lt;- ADTTE
-#&gt; 
-#&gt; [[2]]
-#&gt; ADTTE_FILTERED &lt;- dplyr::inner_join(x = ADTTE_FILTERED_ALONE, 
-#&gt;     y = ADSL_FILTERED[, c("STUDYID", "USUBJID"), drop = FALSE], 
-#&gt;     by = c("STUDYID", "USUBJID"))
-#&gt; 
-#&gt; <span style='color: #949494;'># A tibble: 400 × 38</span>
-#&gt;    STUDYID USUBJID  SUBJID SITEID   AGE SEX   RACE    COUNTRY DTHFL INVID INVNAM
-#&gt;    <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>   <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>    <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>  <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>  <span style='color: #949494; font-style: italic;'>&lt;int&gt;</span> <span style='color: #949494; font-style: italic;'>&lt;fct&gt;</span> <span style='color: #949494; font-style: italic;'>&lt;fct&gt;</span>   <span style='color: #949494; font-style: italic;'>&lt;fct&gt;</span>   <span style='color: #949494; font-style: italic;'>&lt;fct&gt;</span> <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span> <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span> 
-#&gt; <span style='color: #BCBCBC;'> 1</span> AB12345 AB12345… id-128 CHN-3     32 M     ASIAN   CHN     N     INV … Dr. C…
-#&gt; <span style='color: #BCBCBC;'> 2</span> AB12345 AB12345… id-262 CHN-15    35 M     BLACK … CHN     N     INV … Dr. C…
-#&gt; <span style='color: #BCBCBC;'> 3</span> AB12345 AB12345… id-378 RUS-3     30 F     ASIAN   RUS     N     INV … Dr. R…
-#&gt; <span style='color: #BCBCBC;'> 4</span> AB12345 AB12345… id-220 CHN-11    26 F     ASIAN   CHN     N     INV … Dr. C…
-#&gt; <span style='color: #BCBCBC;'> 5</span> AB12345 AB12345… id-267 CHN-7     40 M     ASIAN   CHN     N     INV … Dr. C…
-#&gt; <span style='color: #BCBCBC;'> 6</span> AB12345 AB12345… id-201 CHN-15    49 M     ASIAN   CHN     N     INV … Dr. C…
-#&gt; <span style='color: #BCBCBC;'> 7</span> AB12345 AB12345… id-45  USA-1     34 F     ASIAN   USA     N     INV … Dr. U…
-#&gt; <span style='color: #BCBCBC;'> 8</span> AB12345 AB12345… id-261 USA-1     32 F     ASIAN   USA     N     INV … Dr. U…
-#&gt; <span style='color: #BCBCBC;'> 9</span> AB12345 AB12345… id-173 NGA-11    24 F     BLACK … NGA     N     INV … Dr. N…
-#&gt; <span style='color: #BCBCBC;'>10</span> AB12345 AB12345… id-307 CHN-1     24 M     ASIAN   CHN     N     INV … Dr. C…
-#&gt; <span style='color: #949494;'># … with 390 more rows, and 27 more variables: ARM &lt;fct&gt;, ARMCD &lt;fct&gt;,</span>
-#&gt; <span style='color: #949494;'>#   ACTARM &lt;fct&gt;, ACTARMCD &lt;fct&gt;, REGION1 &lt;fct&gt;, STRATA1 &lt;fct&gt;, STRATA2 &lt;fct&gt;,</span>
-#&gt; <span style='color: #949494;'>#   BMRKR1 &lt;dbl&gt;, BMRKR2 &lt;fct&gt;, ITTFL &lt;fct&gt;, SAFFL &lt;fct&gt;, BMEASIFL &lt;fct&gt;,</span>
-#&gt; <span style='color: #949494;'>#   BEP01FL &lt;fct&gt;, RANDDT &lt;date&gt;, TRTSDTM &lt;dttm&gt;, TRTEDTM &lt;dttm&gt;, EOSSTT &lt;fct&gt;,</span>
-#&gt; <span style='color: #949494;'>#   EOSDT &lt;date&gt;, EOSDY &lt;int&gt;, DCSREAS &lt;fct&gt;, DTHDT &lt;date&gt;, DTHCAUS &lt;fct&gt;,</span>
-#&gt; <span style='color: #949494;'>#   DTHCAT &lt;fct&gt;, LDDTHELD &lt;int&gt;, LDDTHGR1 &lt;fct&gt;, LSTALVDT &lt;date&gt;,</span>
-#&gt; <span style='color: #949494;'>#   study_duration_secs &lt;dbl&gt;</span></div><div class='input'>
-
-<span class='va'>filter_state_adtte</span> <span class='op'>&lt;-</span> <span class='fu'>teal</span><span class='fu'>:::</span><span class='fu'><a href='init_filter_state.html'>init_filter_state</a></span><span class='op'>(</span>
-  <span class='va'>ADTTE</span><span class='op'>$</span><span class='va'>PARAMCD</span>,
-  varname <span class='op'>=</span> <span class='st'>"PARAMCD"</span>,
-  input_dataname <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/name.html'>as.name</a></span><span class='op'>(</span><span class='st'>"ADTTE"</span><span class='op'>)</span>,
-  extract_type <span class='op'>=</span> <span class='st'>"list"</span>
-<span class='op'>)</span>
-<span class='va'>filter_state_adtte</span><span class='op'>$</span><span class='fu'>set_selected</span><span class='op'>(</span><span class='st'>"OS"</span><span class='op'>)</span>
-
-<span class='va'>states</span> <span class='op'>&lt;-</span> <span class='va'>datasets</span><span class='op'>$</span><span class='fu'>get_filtered_dataset</span><span class='op'>(</span><span class='st'>"ADTTE"</span><span class='op'>)</span><span class='op'>$</span><span class='fu'>get_filter_states</span><span class='op'>(</span><span class='fl'>1</span><span class='op'>)</span>
-<span class='va'>states</span><span class='op'>$</span><span class='fu'>queue_push</span><span class='op'>(</span><span class='va'>filter_state_adtte</span>, queue_index <span class='op'>=</span> <span class='fl'>1L</span>, element_id <span class='op'>=</span> <span class='st'>"PARAMCD"</span><span class='op'>)</span>
-
-<span class='fu'><a href='https://rdrr.io/pkg/shiny/man/isolate.html'>isolate</a></span><span class='op'>(</span><span class='va'>datasets</span><span class='op'>$</span><span class='fu'>get_call</span><span class='op'>(</span><span class='st'>"ADTTE"</span><span class='op'>)</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; $filter
-#&gt; ADTTE_FILTERED_ALONE &lt;- dplyr::filter(ADTTE, ADTTE$PARAMCD == 
-#&gt;     "OS")
-#&gt; 
-#&gt; [[2]]
-#&gt; ADTTE_FILTERED &lt;- dplyr::inner_join(x = ADTTE_FILTERED_ALONE, 
-#&gt;     y = ADSL_FILTERED[, c("STUDYID", "USUBJID"), drop = FALSE], 
-#&gt;     by = c("STUDYID", "USUBJID"))
-#&gt; </div><div class='input'>
-
-<span class='va'>filter_state_adsl</span> <span class='op'>&lt;-</span> <span class='fu'>teal</span><span class='fu'>:::</span><span class='fu'><a href='init_filter_state.html'>init_filter_state</a></span><span class='op'>(</span>
-  <span class='va'>ADSL</span><span class='op'>$</span><span class='va'>SEX</span>,
-  varname <span class='op'>=</span> <span class='st'>"SEX"</span>,
-  input_dataname <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/name.html'>as.name</a></span><span class='op'>(</span><span class='st'>"SEX"</span><span class='op'>)</span>,
-  extract_type <span class='op'>=</span> <span class='st'>"list"</span>
-<span class='op'>)</span>
-<span class='va'>filter_state_adsl</span><span class='op'>$</span><span class='fu'>set_selected</span><span class='op'>(</span><span class='st'>"F"</span><span class='op'>)</span>
-
-<span class='va'>states</span> <span class='op'>&lt;-</span> <span class='va'>datasets</span><span class='op'>$</span><span class='fu'>get_filtered_dataset</span><span class='op'>(</span><span class='st'>"ADSL"</span><span class='op'>)</span><span class='op'>$</span><span class='fu'>get_filter_states</span><span class='op'>(</span><span class='st'>"filter"</span><span class='op'>)</span>
-<span class='va'>states</span><span class='op'>$</span><span class='fu'>queue_push</span><span class='op'>(</span><span class='va'>filter_state_adsl</span>, queue_index <span class='op'>=</span> <span class='fl'>1L</span>, element_id <span class='op'>=</span> <span class='st'>"SEX"</span><span class='op'>)</span>
-
-<span class='fu'><a href='https://rdrr.io/pkg/shiny/man/isolate.html'>isolate</a></span><span class='op'>(</span><span class='va'>datasets</span><span class='op'>$</span><span class='fu'>get_call</span><span class='op'>(</span><span class='st'>"ADSL"</span><span class='op'>)</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; $filter
-#&gt; ADSL_FILTERED &lt;- dplyr::filter(ADSL, SEX$SEX == "F")
-#&gt; </div><div class='input'><span class='fu'><a href='https://rdrr.io/pkg/shiny/man/isolate.html'>isolate</a></span><span class='op'>(</span><span class='va'>datasets</span><span class='op'>$</span><span class='fu'>get_call</span><span class='op'>(</span><span class='st'>"ADTTE"</span><span class='op'>)</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; $filter
-#&gt; ADTTE_FILTERED_ALONE &lt;- dplyr::filter(ADTTE, ADTTE$PARAMCD == 
-#&gt;     "OS")
-#&gt; 
-#&gt; [[2]]
-#&gt; ADTTE_FILTERED &lt;- dplyr::inner_join(x = ADTTE_FILTERED_ALONE, 
-#&gt;     y = ADSL_FILTERED[, c("STUDYID", "USUBJID"), drop = FALSE], 
-#&gt;     by = c("STUDYID", "USUBJID"))
-#&gt; </div></pre>
+    <pre class="examples"><span class='r-in'><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'>scda</span><span class='op'>)</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-in'><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://shiny.rstudio.com/'>shiny</a></span><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='va'>ADSL</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/scda/man/synthetic_cdisc_data.html'>synthetic_cdisc_data</a></span><span class='op'>(</span><span class='st'>"latest"</span><span class='op'>)</span><span class='op'>$</span><span class='va'>adsl</span></span>
+<span class='r-in'><span class='va'>ADTTE</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/scda/man/synthetic_cdisc_data.html'>synthetic_cdisc_data</a></span><span class='op'>(</span><span class='st'>"latest"</span><span class='op'>)</span><span class='op'>$</span><span class='va'>adtte</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='va'>adsl</span> <span class='op'>&lt;-</span> <span class='fu'><a href='cdisc_dataset.html'>cdisc_dataset</a></span><span class='op'>(</span><span class='st'>"ADSL"</span>, <span class='va'>ADSL</span><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>adtte</span> <span class='op'>&lt;-</span> <span class='fu'><a href='cdisc_dataset.html'>cdisc_dataset</a></span><span class='op'>(</span><span class='st'>"ADTTE"</span>, <span class='va'>ADTTE</span><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>data</span> <span class='op'>&lt;-</span> <span class='fu'><a href='cdisc_data.html'>cdisc_data</a></span><span class='op'>(</span><span class='va'>adsl</span>, <span class='va'>adtte</span><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>datasets</span> <span class='op'>&lt;-</span> <span class='fu'>teal</span><span class='fu'>:::</span><span class='va'>CDISCFilteredData</span><span class='op'>$</span><span class='fu'>new</span><span class='op'>(</span><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># to avoid using isolate(), you can provide a default isolate context by calling</span></span>
+<span class='r-in'><span class='co'># options(shiny.suppressMissingContextError = TRUE) #nolint</span></span>
+<span class='r-in'><span class='co'># don't forget to deactivate this option at the end</span></span>
+<span class='r-in'><span class='co'># options(shiny.suppressMissingContextError = FALSE) #nolint</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># setting the data</span></span>
+<span class='r-in'><span class='fu'><a href='https://rdrr.io/pkg/shiny/man/isolate.html'>isolate</a></span><span class='op'>(</span><span class='op'>{</span></span>
+<span class='r-in'>  <span class='va'>datasets</span><span class='op'>$</span><span class='fu'>set_dataset</span><span class='op'>(</span><span class='va'>adsl</span><span class='op'>)</span></span>
+<span class='r-in'>  <span class='va'>datasets</span><span class='op'>$</span><span class='fu'>set_dataset</span><span class='op'>(</span><span class='va'>adtte</span><span class='op'>)</span></span>
+<span class='r-in'> <span class='op'>}</span><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='fu'><a href='https://rdrr.io/pkg/shiny/man/isolate.html'>isolate</a></span><span class='op'>(</span><span class='op'>{</span></span>
+<span class='r-in'>  <span class='va'>datasets</span><span class='op'>$</span><span class='fu'>datanames</span><span class='op'>(</span><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'>  <span class='co'># number observations and subjects of filtered/non-filtered dataset</span></span>
+<span class='r-in'>  <span class='va'>datasets</span><span class='op'>$</span><span class='fu'>get_filter_overview</span><span class='op'>(</span><span class='st'>"ADSL"</span><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'>  <span class='fu'><a href='https://rdrr.io/r/base/print.html'>print</a></span><span class='op'>(</span><span class='va'>datasets</span><span class='op'>$</span><span class='fu'>get_call</span><span class='op'>(</span><span class='st'>"ADSL"</span><span class='op'>)</span><span class='op'>)</span></span>
+<span class='r-in'>  <span class='fu'><a href='https://rdrr.io/r/base/print.html'>print</a></span><span class='op'>(</span><span class='va'>datasets</span><span class='op'>$</span><span class='fu'>get_call</span><span class='op'>(</span><span class='st'>"ADTTE"</span><span class='op'>)</span><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'>  <span class='va'>df</span> <span class='op'>&lt;-</span> <span class='va'>datasets</span><span class='op'>$</span><span class='fu'>get_data</span><span class='op'>(</span><span class='st'>"ADSL"</span>, filtered <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span></span>
+<span class='r-in'>  <span class='fu'><a href='https://rdrr.io/r/base/print.html'>print</a></span><span class='op'>(</span><span class='va'>df</span><span class='op'>)</span></span>
+<span class='r-in'> <span class='op'>}</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> $filter</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> ADSL_FILTERED &lt;- ADSL</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> $filter</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> ADTTE_FILTERED_ALONE &lt;- ADTTE</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [[2]]</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> ADTTE_FILTERED &lt;- dplyr::inner_join(x = ADTTE_FILTERED_ALONE, </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>     y = ADSL_FILTERED[, c("STUDYID", "USUBJID"), drop = FALSE], </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>     by = c("STUDYID", "USUBJID"))</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #949494;'># A tibble: 400 × 38</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>    STUDYID USUBJID  SUBJID SITEID   AGE SEX   RACE    COUNTRY DTHFL INVID INVNAM</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>    <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>   <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>    <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>  <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>  <span style='color: #949494; font-style: italic;'>&lt;int&gt;</span> <span style='color: #949494; font-style: italic;'>&lt;fct&gt;</span> <span style='color: #949494; font-style: italic;'>&lt;fct&gt;</span>   <span style='color: #949494; font-style: italic;'>&lt;fct&gt;</span>   <span style='color: #949494; font-style: italic;'>&lt;fct&gt;</span> <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span> <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'> 1</span> AB12345 AB12345… id-128 CHN-3     32 M     ASIAN   CHN     N     INV … Dr. C…</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'> 2</span> AB12345 AB12345… id-262 CHN-15    35 M     BLACK … CHN     N     INV … Dr. C…</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'> 3</span> AB12345 AB12345… id-378 RUS-3     30 F     ASIAN   RUS     N     INV … Dr. R…</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'> 4</span> AB12345 AB12345… id-220 CHN-11    26 F     ASIAN   CHN     N     INV … Dr. C…</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'> 5</span> AB12345 AB12345… id-267 CHN-7     40 M     ASIAN   CHN     N     INV … Dr. C…</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'> 6</span> AB12345 AB12345… id-201 CHN-15    49 M     ASIAN   CHN     N     INV … Dr. C…</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'> 7</span> AB12345 AB12345… id-45  USA-1     34 F     ASIAN   USA     N     INV … Dr. U…</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'> 8</span> AB12345 AB12345… id-261 USA-1     32 F     ASIAN   USA     N     INV … Dr. U…</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'> 9</span> AB12345 AB12345… id-173 NGA-11    24 F     BLACK … NGA     N     INV … Dr. N…</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'>10</span> AB12345 AB12345… id-307 CHN-1     24 M     ASIAN   CHN     N     INV … Dr. C…</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #949494;'># … with 390 more rows, and 27 more variables: ARM &lt;fct&gt;, ARMCD &lt;fct&gt;,</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #949494;'>#   ACTARM &lt;fct&gt;, ACTARMCD &lt;fct&gt;, REGION1 &lt;fct&gt;, STRATA1 &lt;fct&gt;, STRATA2 &lt;fct&gt;,</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #949494;'>#   BMRKR1 &lt;dbl&gt;, BMRKR2 &lt;fct&gt;, ITTFL &lt;fct&gt;, SAFFL &lt;fct&gt;, BMEASIFL &lt;fct&gt;,</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #949494;'>#   BEP01FL &lt;fct&gt;, RANDDT &lt;date&gt;, TRTSDTM &lt;dttm&gt;, TRTEDTM &lt;dttm&gt;, EOSSTT &lt;fct&gt;,</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #949494;'>#   EOSDT &lt;date&gt;, EOSDY &lt;int&gt;, DCSREAS &lt;fct&gt;, DTHDT &lt;date&gt;, DTHCAUS &lt;fct&gt;,</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #949494;'>#   DTHCAT &lt;fct&gt;, LDDTHELD &lt;int&gt;, LDDTHGR1 &lt;fct&gt;, LSTALVDT &lt;date&gt;,</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #949494;'>#   study_duration_secs &lt;dbl&gt;</span></span>
+<span class='r-in'></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='va'>filter_state_adtte</span> <span class='op'>&lt;-</span> <span class='fu'>teal</span><span class='fu'>:::</span><span class='fu'><a href='init_filter_state.html'>init_filter_state</a></span><span class='op'>(</span></span>
+<span class='r-in'>  <span class='va'>ADTTE</span><span class='op'>$</span><span class='va'>PARAMCD</span>,</span>
+<span class='r-in'>  varname <span class='op'>=</span> <span class='st'>"PARAMCD"</span>,</span>
+<span class='r-in'>  input_dataname <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/name.html'>as.name</a></span><span class='op'>(</span><span class='st'>"ADTTE"</span><span class='op'>)</span>,</span>
+<span class='r-in'>  extract_type <span class='op'>=</span> <span class='st'>"list"</span></span>
+<span class='r-in'><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>filter_state_adtte</span><span class='op'>$</span><span class='fu'>set_selected</span><span class='op'>(</span><span class='st'>"OS"</span><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='va'>states</span> <span class='op'>&lt;-</span> <span class='va'>datasets</span><span class='op'>$</span><span class='fu'>get_filtered_dataset</span><span class='op'>(</span><span class='st'>"ADTTE"</span><span class='op'>)</span><span class='op'>$</span><span class='fu'>get_filter_states</span><span class='op'>(</span><span class='fl'>1</span><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>states</span><span class='op'>$</span><span class='fu'>queue_push</span><span class='op'>(</span><span class='va'>filter_state_adtte</span>, queue_index <span class='op'>=</span> <span class='fl'>1L</span>, element_id <span class='op'>=</span> <span class='st'>"PARAMCD"</span><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='fu'><a href='https://rdrr.io/pkg/shiny/man/isolate.html'>isolate</a></span><span class='op'>(</span><span class='va'>datasets</span><span class='op'>$</span><span class='fu'>get_call</span><span class='op'>(</span><span class='st'>"ADTTE"</span><span class='op'>)</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> $filter</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> ADTTE_FILTERED_ALONE &lt;- dplyr::filter(ADTTE, ADTTE$PARAMCD == </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>     "OS")</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [[2]]</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> ADTTE_FILTERED &lt;- dplyr::inner_join(x = ADTTE_FILTERED_ALONE, </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>     y = ADSL_FILTERED[, c("STUDYID", "USUBJID"), drop = FALSE], </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>     by = c("STUDYID", "USUBJID"))</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-in'></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='va'>filter_state_adsl</span> <span class='op'>&lt;-</span> <span class='fu'>teal</span><span class='fu'>:::</span><span class='fu'><a href='init_filter_state.html'>init_filter_state</a></span><span class='op'>(</span></span>
+<span class='r-in'>  <span class='va'>ADSL</span><span class='op'>$</span><span class='va'>SEX</span>,</span>
+<span class='r-in'>  varname <span class='op'>=</span> <span class='st'>"SEX"</span>,</span>
+<span class='r-in'>  input_dataname <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/name.html'>as.name</a></span><span class='op'>(</span><span class='st'>"SEX"</span><span class='op'>)</span>,</span>
+<span class='r-in'>  extract_type <span class='op'>=</span> <span class='st'>"list"</span></span>
+<span class='r-in'><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>filter_state_adsl</span><span class='op'>$</span><span class='fu'>set_selected</span><span class='op'>(</span><span class='st'>"F"</span><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='va'>states</span> <span class='op'>&lt;-</span> <span class='va'>datasets</span><span class='op'>$</span><span class='fu'>get_filtered_dataset</span><span class='op'>(</span><span class='st'>"ADSL"</span><span class='op'>)</span><span class='op'>$</span><span class='fu'>get_filter_states</span><span class='op'>(</span><span class='st'>"filter"</span><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>states</span><span class='op'>$</span><span class='fu'>queue_push</span><span class='op'>(</span><span class='va'>filter_state_adsl</span>, queue_index <span class='op'>=</span> <span class='fl'>1L</span>, element_id <span class='op'>=</span> <span class='st'>"SEX"</span><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='fu'><a href='https://rdrr.io/pkg/shiny/man/isolate.html'>isolate</a></span><span class='op'>(</span><span class='va'>datasets</span><span class='op'>$</span><span class='fu'>get_call</span><span class='op'>(</span><span class='st'>"ADSL"</span><span class='op'>)</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> $filter</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> ADSL_FILTERED &lt;- dplyr::filter(ADSL, SEX$SEX == "F")</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-in'><span class='fu'><a href='https://rdrr.io/pkg/shiny/man/isolate.html'>isolate</a></span><span class='op'>(</span><span class='va'>datasets</span><span class='op'>$</span><span class='fu'>get_call</span><span class='op'>(</span><span class='st'>"ADTTE"</span><span class='op'>)</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> $filter</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> ADTTE_FILTERED_ALONE &lt;- dplyr::filter(ADTTE, ADTTE$PARAMCD == </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>     "OS")</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [[2]]</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> ADTTE_FILTERED &lt;- dplyr::inner_join(x = ADTTE_FILTERED_ALONE, </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>     y = ADSL_FILTERED[, c("STUDYID", "USUBJID"), drop = FALSE], </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>     by = c("STUDYID", "USUBJID"))</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+</pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

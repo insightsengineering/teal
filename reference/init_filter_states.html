@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">teal</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.10.0.9019</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.10.0.9020</span>
       </span>
     </div>
 
@@ -114,33 +114,6 @@
 <li>
   <a href="../news/index.html">Changelog</a>
 </li>
-<!-- start_releases -->
-<li class="dropdown">
-	<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-Other releases
-<span class="caret"></span></a><ul class="dropdown-menu" role="menu">
-   <li><a href="../index.html">latest</a></li>
-   <li><a href="../pre-release/index.html">pre-release</a></li>
-   <li><a href="../v0.10.0/index.html">v0.10.0</a></li>
-   <li><a href="../v0.9.5/index.html">v0.9.5</a></li>
-   <li><a href="../v0.9.4/index.html">v0.9.4</a></li>
-   <li><a href="../v0.9.3/index.html">v0.9.3</a></li>
-   <li><a href="../v0.9.2/index.html">v0.9.2</a></li>
-   <li><a href="../v0.9.1/index.html">v0.9.1</a></li>
-   <li><a href="../v0.9.0/index.html">v0.9.0</a></li>
-   <li><a href="../v0.8.5/index.html">v0.8.5</a></li>
-   <li><a href="../v0.8.4/index.html">v0.8.4</a></li>
-   <li><a href="../v0.8.3/index.html">v0.8.3</a></li>
-   <li><a href="../v0.8.2/index.html">v0.8.2</a></li>
-   <li><a href="../v0.7.0/index.html">v0.7.0</a></li>
-   <li><a href="../v0.6.0/index.html">v0.6.0</a></li>
-   <li><a href="../v0.0.5/index.html">v0.0.5</a></li>
-   <li><a href="../v0.0.4/index.html">v0.0.4</a></li>
-   <li><a href="../v0.0.3/index.html">v0.0.3</a></li>
-   <li><a href="../v0.0.2/index.html">v0.0.2</a></li>
-   <li><a href="../v0.0.1/index.html">v0.0.1</a></li>
-</ul></li>
-<!-- end_releases -->
       </ul>
       <ul class="nav navbar-nav navbar-right">
         <li>
@@ -189,18 +162,18 @@ the R object which <code>subset</code> function is applied on.</p></td>
     </tr>
     <tr>
       <th>input_dataname</th>
-      <td><p>(<code><a href='https://rdrr.io/r/base/character.html'>character(1)</a></code> or <code>name</code> or <code>call</code>)<br />
+      <td><p>(<code>character(1)</code> or <code>name</code> or <code>call</code>)<br />
 name of the data used on lhs of the expression
 specified to the function argument attached to this <code>FilterStates</code>.</p></td>
     </tr>
     <tr>
       <th>output_dataname</th>
-      <td><p>(<code><a href='https://rdrr.io/r/base/character.html'>character(1)</a></code> or <code>name</code> or <code>call</code>)<br />
+      <td><p>(<code>character(1)</code> or <code>name</code> or <code>call</code>)<br />
 name of the output data on the lhs of the assignment expression.</p></td>
     </tr>
     <tr>
       <th>datalabel</th>
-      <td><p>(<code><a href='https://rdrr.io/r/base/character.html'>character(0)</a></code> or <code><a href='https://rdrr.io/r/base/character.html'>character(1)</a></code>)<br />
+      <td><p>(<code>character(0)</code> or <code>character(1)</code>)<br />
 text label value.</p></td>
     </tr>
     <tr>
@@ -212,44 +185,44 @@ additional arguments for specific classes: keys</p></td>
 
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='va'>df</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span><span class='op'>(</span>
-  character <span class='op'>=</span> <span class='va'>letters</span>,
-  numeric <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/seq.html'>seq_along</a></span><span class='op'>(</span><span class='va'>letters</span><span class='op'>)</span>,
-  date <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/seq.html'>seq</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/Sys.time.html'>Sys.Date</a></span><span class='op'>(</span><span class='op'>)</span>, length.out <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/length.html'>length</a></span><span class='op'>(</span><span class='va'>letters</span><span class='op'>)</span>, by <span class='op'>=</span> <span class='st'>"1 day"</span><span class='op'>)</span>,
-  datetime <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/seq.html'>seq</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/Sys.time.html'>Sys.time</a></span><span class='op'>(</span><span class='op'>)</span>, length.out <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/length.html'>length</a></span><span class='op'>(</span><span class='va'>letters</span><span class='op'>)</span>, by <span class='op'>=</span> <span class='st'>"33.33 hours"</span><span class='op'>)</span>
-<span class='op'>)</span>
-<span class='va'>rf</span> <span class='op'>&lt;-</span> <span class='fu'>teal</span><span class='fu'>:::</span><span class='fu'>init_filter_states</span><span class='op'>(</span>
-  data <span class='op'>=</span> <span class='va'>df</span>,
-  input_dataname <span class='op'>=</span> <span class='st'>"DF"</span>,
-  output_dataname <span class='op'>=</span> <span class='st'>"DF_FILTERED"</span>,
-  varlabels <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span>
-    <span class='st'>"character variable"</span>, <span class='st'>"numeric variable"</span>, <span class='st'>"date variable"</span>, <span class='st'>"datetime variable"</span>
-  <span class='op'>)</span>
-<span class='op'>)</span>
-<span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span>
-<span class='fu'><a href='https://rdrr.io/pkg/shiny/man/shinyApp.html'>shinyApp</a></span><span class='op'>(</span>
-  ui <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/pkg/shiny/man/fluidPage.html'>fluidPage</a></span><span class='op'>(</span>
-    <span class='fu'><a href='https://rdrr.io/pkg/shiny/man/actionButton.html'>actionButton</a></span><span class='op'>(</span><span class='st'>"clear"</span>, <span class='fu'><a href='https://rdrr.io/pkg/htmltools/man/builder.html'>span</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/pkg/shiny/man/icon.html'>icon</a></span><span class='op'>(</span><span class='st'>"times"</span><span class='op'>)</span>, <span class='st'>"Remove all filters"</span><span class='op'>)</span><span class='op'>)</span>,
-    <span class='va'>rf</span><span class='op'>$</span><span class='fu'>ui_add_filter_state</span><span class='op'>(</span>id <span class='op'>=</span> <span class='st'>"add"</span>, data <span class='op'>=</span> <span class='va'>df</span><span class='op'>)</span>,
-    <span class='va'>rf</span><span class='op'>$</span><span class='fu'>ui</span><span class='op'>(</span><span class='st'>"active"</span><span class='op'>)</span>,
-    <span class='fu'><a href='https://rdrr.io/pkg/shiny/man/textOutput.html'>verbatimTextOutput</a></span><span class='op'>(</span><span class='st'>"expr"</span><span class='op'>)</span>,
-  <span class='op'>)</span>,
-  server <span class='op'>=</span> <span class='kw'>function</span><span class='op'>(</span><span class='va'>input</span>, <span class='va'>output</span>, <span class='va'>session</span><span class='op'>)</span> <span class='op'>{</span>
-    <span class='va'>rf</span><span class='op'>$</span><span class='fu'>srv_add_filter_state</span><span class='op'>(</span>
-      id <span class='op'>=</span> <span class='st'>"add"</span>,
-      data <span class='op'>=</span> <span class='va'>df</span>
-    <span class='op'>)</span>
-    <span class='va'>output</span><span class='op'>$</span><span class='va'>expr</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/shiny/man/renderPrint.html'>renderText</a></span><span class='op'>(</span><span class='op'>{</span>
-      <span class='fu'><a href='pdeparse.html'>pdeparse</a></span><span class='op'>(</span><span class='va'>rf</span><span class='op'>$</span><span class='fu'>get_call</span><span class='op'>(</span><span class='op'>)</span><span class='op'>)</span>
-    <span class='op'>}</span><span class='op'>)</span>
-    <span class='fu'><a href='https://rdrr.io/pkg/shiny/man/observeEvent.html'>observeEvent</a></span><span class='op'>(</span>
-      <span class='va'>input</span><span class='op'>$</span><span class='va'>clear</span>,
-      <span class='va'>rf</span><span class='op'>$</span><span class='fu'>queue_empty</span><span class='op'>(</span><span class='op'>)</span>
-    <span class='op'>)</span>
-  <span class='op'>}</span>
-<span class='op'>)</span>
-<span class='op'>}</span>
-</div></pre>
+    <pre class="examples"><span class='r-in'><span class='va'>df</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span><span class='op'>(</span></span>
+<span class='r-in'>  character <span class='op'>=</span> <span class='va'>letters</span>,</span>
+<span class='r-in'>  numeric <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/seq.html'>seq_along</a></span><span class='op'>(</span><span class='va'>letters</span><span class='op'>)</span>,</span>
+<span class='r-in'>  date <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/seq.html'>seq</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/Sys.time.html'>Sys.Date</a></span><span class='op'>(</span><span class='op'>)</span>, length.out <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/length.html'>length</a></span><span class='op'>(</span><span class='va'>letters</span><span class='op'>)</span>, by <span class='op'>=</span> <span class='st'>"1 day"</span><span class='op'>)</span>,</span>
+<span class='r-in'>  datetime <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/seq.html'>seq</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/Sys.time.html'>Sys.time</a></span><span class='op'>(</span><span class='op'>)</span>, length.out <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/length.html'>length</a></span><span class='op'>(</span><span class='va'>letters</span><span class='op'>)</span>, by <span class='op'>=</span> <span class='st'>"33.33 hours"</span><span class='op'>)</span></span>
+<span class='r-in'><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>rf</span> <span class='op'>&lt;-</span> <span class='fu'>teal</span><span class='fu'>:::</span><span class='fu'>init_filter_states</span><span class='op'>(</span></span>
+<span class='r-in'>  data <span class='op'>=</span> <span class='va'>df</span>,</span>
+<span class='r-in'>  input_dataname <span class='op'>=</span> <span class='st'>"DF"</span>,</span>
+<span class='r-in'>  output_dataname <span class='op'>=</span> <span class='st'>"DF_FILTERED"</span>,</span>
+<span class='r-in'>  varlabels <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span></span>
+<span class='r-in'>    <span class='st'>"character variable"</span>, <span class='st'>"numeric variable"</span>, <span class='st'>"date variable"</span>, <span class='st'>"datetime variable"</span></span>
+<span class='r-in'>  <span class='op'>)</span></span>
+<span class='r-in'><span class='op'>)</span></span>
+<span class='r-in'><span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span></span>
+<span class='r-in'><span class='fu'><a href='https://rdrr.io/pkg/shiny/man/shinyApp.html'>shinyApp</a></span><span class='op'>(</span></span>
+<span class='r-in'>  ui <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/pkg/shiny/man/fluidPage.html'>fluidPage</a></span><span class='op'>(</span></span>
+<span class='r-in'>    <span class='fu'><a href='https://rdrr.io/pkg/shiny/man/actionButton.html'>actionButton</a></span><span class='op'>(</span><span class='st'>"clear"</span>, <span class='fu'><a href='https://rdrr.io/pkg/htmltools/man/builder.html'>span</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/pkg/shiny/man/icon.html'>icon</a></span><span class='op'>(</span><span class='st'>"times"</span><span class='op'>)</span>, <span class='st'>"Remove all filters"</span><span class='op'>)</span><span class='op'>)</span>,</span>
+<span class='r-in'>    <span class='va'>rf</span><span class='op'>$</span><span class='fu'>ui_add_filter_state</span><span class='op'>(</span>id <span class='op'>=</span> <span class='st'>"add"</span>, data <span class='op'>=</span> <span class='va'>df</span><span class='op'>)</span>,</span>
+<span class='r-in'>    <span class='va'>rf</span><span class='op'>$</span><span class='fu'>ui</span><span class='op'>(</span><span class='st'>"active"</span><span class='op'>)</span>,</span>
+<span class='r-in'>    <span class='fu'><a href='https://rdrr.io/pkg/shiny/man/textOutput.html'>verbatimTextOutput</a></span><span class='op'>(</span><span class='st'>"expr"</span><span class='op'>)</span>,</span>
+<span class='r-in'>  <span class='op'>)</span>,</span>
+<span class='r-in'>  server <span class='op'>=</span> <span class='kw'>function</span><span class='op'>(</span><span class='va'>input</span>, <span class='va'>output</span>, <span class='va'>session</span><span class='op'>)</span> <span class='op'>{</span></span>
+<span class='r-in'>    <span class='va'>rf</span><span class='op'>$</span><span class='fu'>srv_add_filter_state</span><span class='op'>(</span></span>
+<span class='r-in'>      id <span class='op'>=</span> <span class='st'>"add"</span>,</span>
+<span class='r-in'>      data <span class='op'>=</span> <span class='va'>df</span></span>
+<span class='r-in'>    <span class='op'>)</span></span>
+<span class='r-in'>    <span class='va'>output</span><span class='op'>$</span><span class='va'>expr</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/shiny/man/renderPrint.html'>renderText</a></span><span class='op'>(</span><span class='op'>{</span></span>
+<span class='r-in'>      <span class='fu'><a href='pdeparse.html'>pdeparse</a></span><span class='op'>(</span><span class='va'>rf</span><span class='op'>$</span><span class='fu'>get_call</span><span class='op'>(</span><span class='op'>)</span><span class='op'>)</span></span>
+<span class='r-in'>    <span class='op'>}</span><span class='op'>)</span></span>
+<span class='r-in'>    <span class='fu'><a href='https://rdrr.io/pkg/shiny/man/observeEvent.html'>observeEvent</a></span><span class='op'>(</span></span>
+<span class='r-in'>      <span class='va'>input</span><span class='op'>$</span><span class='va'>clear</span>,</span>
+<span class='r-in'>      <span class='va'>rf</span><span class='op'>$</span><span class='fu'>queue_empty</span><span class='op'>(</span><span class='op'>)</span></span>
+<span class='r-in'>    <span class='op'>)</span></span>
+<span class='r-in'>  <span class='op'>}</span></span>
+<span class='r-in'><span class='op'>)</span></span>
+<span class='r-in'><span class='op'>}</span></span>
+</pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

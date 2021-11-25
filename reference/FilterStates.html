@@ -77,7 +77,7 @@ SummarizedExperiment and matrix are available." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">teal</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.10.0.9019</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.10.0.9020</span>
       </span>
     </div>
 
@@ -119,33 +119,6 @@ SummarizedExperiment and matrix are available." />
 <li>
   <a href="../news/index.html">Changelog</a>
 </li>
-<!-- start_releases -->
-<li class="dropdown">
-	<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-Other releases
-<span class="caret"></span></a><ul class="dropdown-menu" role="menu">
-   <li><a href="../index.html">latest</a></li>
-   <li><a href="../pre-release/index.html">pre-release</a></li>
-   <li><a href="../v0.10.0/index.html">v0.10.0</a></li>
-   <li><a href="../v0.9.5/index.html">v0.9.5</a></li>
-   <li><a href="../v0.9.4/index.html">v0.9.4</a></li>
-   <li><a href="../v0.9.3/index.html">v0.9.3</a></li>
-   <li><a href="../v0.9.2/index.html">v0.9.2</a></li>
-   <li><a href="../v0.9.1/index.html">v0.9.1</a></li>
-   <li><a href="../v0.9.0/index.html">v0.9.0</a></li>
-   <li><a href="../v0.8.5/index.html">v0.8.5</a></li>
-   <li><a href="../v0.8.4/index.html">v0.8.4</a></li>
-   <li><a href="../v0.8.3/index.html">v0.8.3</a></li>
-   <li><a href="../v0.8.2/index.html">v0.8.2</a></li>
-   <li><a href="../v0.7.0/index.html">v0.7.0</a></li>
-   <li><a href="../v0.6.0/index.html">v0.6.0</a></li>
-   <li><a href="../v0.0.5/index.html">v0.0.5</a></li>
-   <li><a href="../v0.0.4/index.html">v0.0.4</a></li>
-   <li><a href="../v0.0.3/index.html">v0.0.3</a></li>
-   <li><a href="../v0.0.2/index.html">v0.0.2</a></li>
-   <li><a href="../v0.0.1/index.html">v0.0.1</a></li>
-</ul></li>
-<!-- end_releases -->
       </ul>
       <ul class="nav navbar-nav navbar-right">
         <li>
@@ -208,20 +181,20 @@ Currently <code>data.frame</code>, <code>MultiAssayExperiment</code>,
 <li><p><a href='#method-clone'><code>FilterStates$clone()</code></a></p></li>
 </ul>
 <p><hr>
-<a id="method-new"></a></p><h3 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Method <code>new()</code></h3>
+<a id="method-new"></a></p><h3 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Method <code><a href='https://rdrr.io/r/methods/new.html'>new()</a></code></h3>
 <p>Initializes this <code>FilterStates</code> object.</p><h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Usage</h4>
 <p><div class="r"></p><pre><span class='va'>FilterStates</span><span class='op'>$</span><span class='fu'>new</span><span class='op'>(</span><span class='va'>input_dataname</span>, <span class='va'>output_dataname</span>, <span class='va'>datalabel</span><span class='op'>)</span></pre><p></div></p>
 
 <h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Arguments</h4>
 <p><div class="arguments"></p><dl>
-<dt><code>input_dataname</code></dt><dd><p>(<code><a href='https://rdrr.io/r/base/character.html'>character(1)</a></code> or <code>name</code> or <code>call</code>)<br />
+<dt><code>input_dataname</code></dt><dd><p>(<code>character(1)</code> or <code>name</code> or <code>call</code>)<br />
 name of the data used on lhs of the expression
 specified to the function argument attached to this <code>FilterStates</code>.</p></dd>
 
-<dt><code>output_dataname</code></dt><dd><p>(<code><a href='https://rdrr.io/r/base/character.html'>character(1)</a></code> or <code>name</code> or <code>call</code>)<br />
+<dt><code>output_dataname</code></dt><dd><p>(<code>character(1)</code> or <code>name</code> or <code>call</code>)<br />
 name of the output data on the lhs of the assignment expression.</p></dd>
 
-<dt><code>datalabel</code></dt><dd><p>(<code><a href='https://rdrr.io/r/base/character.html'>character(0)</a></code> or <code><a href='https://rdrr.io/r/base/character.html'>character(1)</a></code>)<br />
+<dt><code>datalabel</code></dt><dd><p>(<code>character(0)</code> or <code>character(1)</code>)<br />
 text label value.</p></dd>
 
 </dl><p></div></p>
@@ -247,7 +220,7 @@ no-op call such as <code>x &lt;- x</code>.</p><h4 class='hasAnchor' id='argument
 <p><div class="r"></p><pre><span class='va'>FilterStates</span><span class='op'>$</span><span class='fu'>get_fun</span><span class='op'>(</span><span class='op'>)</span></pre><p></div></p>
 
 <h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Returns</h4>
-<p><code><a href='https://rdrr.io/r/base/character.html'>character(1)</a></code> the name of the function</p>
+<p><code>character(1)</code> the name of the function</p>
 <p><hr>
 <a id="method-queue_empty"></a></p><h3 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Method <code>queue_empty()</code></h3>
 <p>Remove all FilterState objects from all queues in this FilterStates.</p><h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Usage</h4>
@@ -262,10 +235,10 @@ no-op call such as <code>x &lt;- x</code>.</p><h4 class='hasAnchor' id='argument
 
 <h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Arguments</h4>
 <p><div class="arguments"></p><dl>
-<dt><code>queue_index</code></dt><dd><p>(<code><a href='https://rdrr.io/r/base/character.html'>character(1)</a></code>, <code><a href='https://rdrr.io/r/base/integer.html'>integer(1)</a></code>)<br />
+<dt><code>queue_index</code></dt><dd><p>(<code>character(1)</code>, <code>integer(1)</code>)<br />
 index of the <code>private$queue</code> list where <code>ReactiveQueue</code> are kept.</p></dd>
 
-<dt><code>element_id</code></dt><dd><p>(<code><a href='https://rdrr.io/r/base/character.html'>character(1)</a></code>)<br />
+<dt><code>element_id</code></dt><dd><p>(<code>character(1)</code>)<br />
 name of <code>ReactiveQueue</code> element.</p></dd>
 
 </dl><p></div></p>
@@ -292,10 +265,10 @@ must be a list even if single <code>ReactiveQueue</code> is set.</p></dd>
 <dt><code>x</code></dt><dd><p>(<code>FilterState</code>)<br />
 object to be added to the queue</p></dd>
 
-<dt><code>queue_index</code></dt><dd><p>(<code><a href='https://rdrr.io/r/base/character.html'>character(1)</a></code>, <code><a href='https://rdrr.io/r/base/integer.html'>integer(1)</a></code>)<br />
+<dt><code>queue_index</code></dt><dd><p>(<code>character(1)</code>, <code>integer(1)</code>)<br />
 index of the <code>private$queue</code> list where <code>ReactiveQueue</code> are kept.</p></dd>
 
-<dt><code>element_id</code></dt><dd><p>(<code><a href='https://rdrr.io/r/base/character.html'>character(1)</a></code>)<br />
+<dt><code>element_id</code></dt><dd><p>(<code>character(1)</code>)<br />
 name of the <code>ReactiveQueue</code> element.</p></dd>
 
 </dl><p></div></p>
@@ -313,10 +286,10 @@ with this state. It removes:<br /></p><ul>
 
 <h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Arguments</h4>
 <p><div class="arguments"></p><dl>
-<dt><code>queue_index</code></dt><dd><p>(<code><a href='https://rdrr.io/r/base/character.html'>character(1)</a></code>, <code><a href='https://rdrr.io/r/base/logical.html'>logical(1)</a></code>)<br />
+<dt><code>queue_index</code></dt><dd><p>(<code>character(1)</code>, <code>logical(1)</code>)<br />
 index of the <code>private$queue</code> list where <code>ReactiveQueue</code> are kept.</p></dd>
 
-<dt><code>element_id</code></dt><dd><p>(<code><a href='https://rdrr.io/r/base/character.html'>character(1)</a></code>)<br />
+<dt><code>element_id</code></dt><dd><p>(<code>character(1)</code>)<br />
 name of <code>ReactiveQueue</code> element.</p></dd>
 
 </dl><p></div></p>
@@ -330,7 +303,7 @@ Content of this container is created using <code>renderUI</code> in
 
 <h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Arguments</h4>
 <p><div class="arguments"></p><dl>
-<dt><code>id</code></dt><dd><p>(<code><a href='https://rdrr.io/r/base/character.html'>character(1)</a></code>)<br />
+<dt><code>id</code></dt><dd><p>(<code>character(1)</code>)<br />
 id of the shiny element</p></dd>
 
 </dl><p></div></p>
@@ -343,7 +316,7 @@ id of the shiny element</p></dd>
 
 <h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Arguments</h4>
 <p><div class="arguments"></p><dl>
-<dt><code>id</code></dt><dd><p>(<code><a href='https://rdrr.io/r/base/character.html'>character(1)</a></code>)<br />
+<dt><code>id</code></dt><dd><p>(<code>character(1)</code>)<br />
 an ID string that corresponds with the ID used to call the module's UI function.</p></dd>
 
 <dt><code>data</code></dt><dd><p>(<code>data.frame</code>)<br />
@@ -364,7 +337,7 @@ column in <code>data</code>.</p></dd>
 
 <h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Arguments</h4>
 <p><div class="arguments"></p><dl>
-<dt><code>id</code></dt><dd><p>(<code><a href='https://rdrr.io/r/base/character.html'>character(1)</a></code>)<br />
+<dt><code>id</code></dt><dd><p>(<code>character(1)</code>)<br />
 id of shiny module</p></dd>
 
 <dt><code>data</code></dt><dd><p>(<code>data.frame</code>, <code>MultiAssayExperiment</code>, <code>SummarizedExperiment</code>, <code>matrix</code>)<br />
@@ -380,7 +353,7 @@ object containing columns to be used as filter variables.</p></dd>
 
 <h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Arguments</h4>
 <p><div class="arguments"></p><dl>
-<dt><code>id</code></dt><dd><p>(<code><a href='https://rdrr.io/r/base/character.html'>character(1)</a></code>)<br />
+<dt><code>id</code></dt><dd><p>(<code>character(1)</code>)<br />
 an ID string that corresponds with the ID used to call the module's UI function.</p></dd>
 
 <dt><code>data</code></dt><dd><p>(<code>data.frame</code>, <code>MultiAssayExperiment</code>, <code>SummarizedExperiment</code>, <code>matrix</code>)<br />
@@ -396,9 +369,9 @@ Module to add <code>FilterState</code> to queue</p>
 shiny UI to the Active Filter Variables, calls <code>FilterState</code> modules and
 create observer to remove state
 parameter filter_state (<code>FilterState</code>)</p>
-<p>parameter queue_index (<code><a href='https://rdrr.io/r/base/character.html'>character(1)</a></code>, <code><a href='https://rdrr.io/r/base/logical.html'>logical(1)</a></code>)<br />
+<p>parameter queue_index (<code>character(1)</code>, <code>logical(1)</code>)<br />
 index of the <code>private$queue</code> list where <code>ReactiveQueue</code> are kept.
-parameter element_id (<code><a href='https://rdrr.io/r/base/character.html'>character(1)</a></code>)<br />
+parameter element_id (<code>character(1)</code>)<br />
 name of <code>ReactiveQueue</code> element.
 return <code>moduleServer</code> function which returns <code>NULL</code>
 <code>observeEvent</code> for remove-filter-state is set and also from <code>FilteredDataset</code>
@@ -419,31 +392,32 @@ is equivalent to <code>private$ns(queue_index)</code>. This means that</p>
 
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://shiny.rstudio.com/'>shiny</a></span><span class='op'>)</span>
-<span class='va'>filter_states</span> <span class='op'>&lt;-</span> <span class='fu'>teal</span><span class='fu'>:::</span><span class='va'><a href='DFFilterStates.html'>DFFilterStates</a></span><span class='op'>$</span><span class='fu'>new</span><span class='op'>(</span>
-  input_dataname <span class='op'>=</span> <span class='st'>"data"</span>,
-  output_dataname <span class='op'>=</span> <span class='st'>"data_filtered"</span>,
-  varlabels <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span>x <span class='op'>=</span> <span class='st'>"x variable"</span>, SEX <span class='op'>=</span> <span class='st'>"Sex"</span><span class='op'>)</span>,
-  datalabel <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/character.html'>character</a></span><span class='op'>(</span><span class='fl'>0</span><span class='op'>)</span>,
-  keys <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/character.html'>character</a></span><span class='op'>(</span><span class='fl'>0</span><span class='op'>)</span>
-<span class='op'>)</span>
-<span class='va'>filter_state</span> <span class='op'>&lt;-</span> <span class='fu'>teal</span><span class='fu'>:::</span><span class='va'><a href='RangeFilterState.html'>RangeFilterState</a></span><span class='op'>$</span><span class='fu'>new</span><span class='op'>(</span>
-  <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='cn'>NA</span>, <span class='cn'>Inf</span>, <span class='fu'><a href='https://rdrr.io/r/base/seq.html'>seq</a></span><span class='op'>(</span><span class='fl'>1</span><span class='op'>:</span><span class='fl'>10</span><span class='op'>)</span><span class='op'>)</span>,
-  varname <span class='op'>=</span> <span class='st'>"x"</span>,
-  varlabel <span class='op'>=</span> <span class='st'>"x variable"</span>,
-  input_dataname <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/name.html'>as.name</a></span><span class='op'>(</span><span class='st'>"data"</span><span class='op'>)</span>,
-  extract_type <span class='op'>=</span> <span class='st'>"list"</span>
-<span class='op'>)</span>
-<span class='fu'><a href='https://rdrr.io/pkg/shiny/man/isolate.html'>isolate</a></span><span class='op'>(</span><span class='va'>filter_state</span><span class='op'>$</span><span class='fu'>set_selected</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>3L</span>, <span class='fl'>8L</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span>
-
-<span class='va'>filter_states</span><span class='op'>$</span><span class='fu'>queue_push</span><span class='op'>(</span>
-  x <span class='op'>=</span> <span class='va'>filter_state</span>,
-  queue_index <span class='op'>=</span> <span class='fl'>1L</span>,
-  element_id <span class='op'>=</span> <span class='st'>"x"</span>
-<span class='op'>)</span>
-<span class='fu'><a href='https://rdrr.io/pkg/shiny/man/isolate.html'>isolate</a></span><span class='op'>(</span><span class='va'>filter_states</span><span class='op'>$</span><span class='fu'>get_call</span><span class='op'>(</span><span class='op'>)</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; data_filtered &lt;- dplyr::filter(data, data$x &gt;= 3 &amp; data$x &lt;= 
-#&gt;     8)</div></pre>
+    <pre class="examples"><span class='r-in'><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://shiny.rstudio.com/'>shiny</a></span><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>filter_states</span> <span class='op'>&lt;-</span> <span class='fu'>teal</span><span class='fu'>:::</span><span class='va'><a href='DFFilterStates.html'>DFFilterStates</a></span><span class='op'>$</span><span class='fu'>new</span><span class='op'>(</span></span>
+<span class='r-in'>  input_dataname <span class='op'>=</span> <span class='st'>"data"</span>,</span>
+<span class='r-in'>  output_dataname <span class='op'>=</span> <span class='st'>"data_filtered"</span>,</span>
+<span class='r-in'>  varlabels <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span>x <span class='op'>=</span> <span class='st'>"x variable"</span>, SEX <span class='op'>=</span> <span class='st'>"Sex"</span><span class='op'>)</span>,</span>
+<span class='r-in'>  datalabel <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/character.html'>character</a></span><span class='op'>(</span><span class='fl'>0</span><span class='op'>)</span>,</span>
+<span class='r-in'>  keys <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/character.html'>character</a></span><span class='op'>(</span><span class='fl'>0</span><span class='op'>)</span></span>
+<span class='r-in'><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>filter_state</span> <span class='op'>&lt;-</span> <span class='fu'>teal</span><span class='fu'>:::</span><span class='va'><a href='RangeFilterState.html'>RangeFilterState</a></span><span class='op'>$</span><span class='fu'>new</span><span class='op'>(</span></span>
+<span class='r-in'>  <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='cn'>NA</span>, <span class='cn'>Inf</span>, <span class='fu'><a href='https://rdrr.io/r/base/seq.html'>seq</a></span><span class='op'>(</span><span class='fl'>1</span><span class='op'>:</span><span class='fl'>10</span><span class='op'>)</span><span class='op'>)</span>,</span>
+<span class='r-in'>  varname <span class='op'>=</span> <span class='st'>"x"</span>,</span>
+<span class='r-in'>  varlabel <span class='op'>=</span> <span class='st'>"x variable"</span>,</span>
+<span class='r-in'>  input_dataname <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/name.html'>as.name</a></span><span class='op'>(</span><span class='st'>"data"</span><span class='op'>)</span>,</span>
+<span class='r-in'>  extract_type <span class='op'>=</span> <span class='st'>"list"</span></span>
+<span class='r-in'><span class='op'>)</span></span>
+<span class='r-in'><span class='fu'><a href='https://rdrr.io/pkg/shiny/man/isolate.html'>isolate</a></span><span class='op'>(</span><span class='va'>filter_state</span><span class='op'>$</span><span class='fu'>set_selected</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>3L</span>, <span class='fl'>8L</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='va'>filter_states</span><span class='op'>$</span><span class='fu'>queue_push</span><span class='op'>(</span></span>
+<span class='r-in'>  x <span class='op'>=</span> <span class='va'>filter_state</span>,</span>
+<span class='r-in'>  queue_index <span class='op'>=</span> <span class='fl'>1L</span>,</span>
+<span class='r-in'>  element_id <span class='op'>=</span> <span class='st'>"x"</span></span>
+<span class='r-in'><span class='op'>)</span></span>
+<span class='r-in'><span class='fu'><a href='https://rdrr.io/pkg/shiny/man/isolate.html'>isolate</a></span><span class='op'>(</span><span class='va'>filter_states</span><span class='op'>$</span><span class='fu'>get_call</span><span class='op'>(</span><span class='op'>)</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> data_filtered &lt;- dplyr::filter(data, data$x &gt;= 3 &amp; data$x &lt;= </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>     8)</span>
+</pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

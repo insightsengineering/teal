@@ -31,7 +31,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">teal</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.10.0.9019</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.10.0.9020</span>
       </span>
     </div>
 
@@ -73,33 +73,6 @@
 <li>
   <a href="../news/index.html">Changelog</a>
 </li>
-<!-- start_releases -->
-<li class="dropdown">
-	<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-Other releases
-<span class="caret"></span></a><ul class="dropdown-menu" role="menu">
-   <li><a href="../index.html">latest</a></li>
-   <li><a href="../pre-release/index.html">pre-release</a></li>
-   <li><a href="../v0.10.0/index.html">v0.10.0</a></li>
-   <li><a href="../v0.9.5/index.html">v0.9.5</a></li>
-   <li><a href="../v0.9.4/index.html">v0.9.4</a></li>
-   <li><a href="../v0.9.3/index.html">v0.9.3</a></li>
-   <li><a href="../v0.9.2/index.html">v0.9.2</a></li>
-   <li><a href="../v0.9.1/index.html">v0.9.1</a></li>
-   <li><a href="../v0.9.0/index.html">v0.9.0</a></li>
-   <li><a href="../v0.8.5/index.html">v0.8.5</a></li>
-   <li><a href="../v0.8.4/index.html">v0.8.4</a></li>
-   <li><a href="../v0.8.3/index.html">v0.8.3</a></li>
-   <li><a href="../v0.8.2/index.html">v0.8.2</a></li>
-   <li><a href="../v0.7.0/index.html">v0.7.0</a></li>
-   <li><a href="../v0.6.0/index.html">v0.6.0</a></li>
-   <li><a href="../v0.0.5/index.html">v0.0.5</a></li>
-   <li><a href="../v0.0.4/index.html">v0.0.4</a></li>
-   <li><a href="../v0.0.3/index.html">v0.0.3</a></li>
-   <li><a href="../v0.0.2/index.html">v0.0.2</a></li>
-   <li><a href="../v0.0.1/index.html">v0.0.1</a></li>
-</ul></li>
-<!-- end_releases -->
       </ul>
 <ul class="nav navbar-nav navbar-right">
 <li>
@@ -235,7 +208,7 @@ Described objects are created instantly when data is loaded and they remain unch
 <li>
 <code>ReactiveQueue</code> is a container which stores multiple condition calls. <code>ReactiveQueue</code> objects are kept in list where the names of each element is named after argument name.</li>
 <li>
-<code>FilterStates$get_call()</code> returns single filter call by gathering conditions returned from <code>FilterState</code> and combining them by <code><a href="https://rdrr.io/r/base/Logic.html">&amp;</a></code> operator grouped by argument name.</li>
+<code>FilterStates$get_call()</code> returns single filter call by gathering conditions returned from <code>FilterState</code> and combining them by <code>&amp;</code> operator grouped by argument name.</li>
 <li>
 <code>FilteredDataset$get_call()</code> returns the list of calls taken from <code>FilterStates</code> object(s).</li>
 <li>
@@ -252,7 +225,7 @@ Described objects are created instantly when data is loaded and they remain unch
 <li><p><code>CDISCFilteredDataset</code> contains <code>data.frame</code> (ADSL) which can be filtered only in one way executing single <code><a href="https://dplyr.tidyverse.org/reference/filter.html">dplyr::filter</a></code> call (this is why <code>CDISCFilteredDataset</code> has a single <code>FilterStates</code>)</p></li>
 <li><p><code>FilterStates</code> construct <code><a href="https://dplyr.tidyverse.org/reference/filter.html">dplyr::filter</a></code> call is based on the <code>FilterState</code> objects added to the <code>ReactiveQueue</code>.</p></li>
 <li><p><code>ReactiveQueue</code> is just a class to manage addition, storage and removal of <code>FilterStates</code> objects. This is it’s only responsibility and the class does not generate any code. <code>DFFilterState</code> contains only one <code>ReactiveQueue</code> which is not named - this tells <code>FilterState</code> that calls from each <code>FilterState</code> should go to unnamed argument in <code><a href="https://dplyr.tidyverse.org/reference/filter.html">dplyr::filter</a></code>.</p></li>
-<li><p>When end-user chooses some variable in “Add Filter Variable” section, then new <code>FilterState</code> is added to the <code>ReactiveQueue</code> and this new conditions are added to <code><a href="https://dplyr.tidyverse.org/reference/filter.html">dplyr::filter(ADSL, ...)</a></code> call. In the example <code>SEX</code> and <code>AGE</code> has been added - which are automatically dispatched to relevant <code>FilterState</code> class (<code>ChoiceFilterState</code> and <code>RangeFilterState</code>). Since (5) have been added or changed, conditions (<code>SEX == "F"</code> and <code>AGE &gt;= 20 &amp; AGE &lt;= 60</code>) are returned to the <code>DFFilterStates</code> (3) which combines them with <code><a href="https://rdrr.io/r/base/Logic.html">&amp;</a></code> operator and puts to <code><a href="https://dplyr.tidyverse.org/reference/filter.html">dplyr::filter</a></code> call. <code>CDISCFilteredDataset</code> takes this one call and return to <code>FilteredData</code> as a list.</p></li>
+<li><p>When end-user chooses some variable in “Add Filter Variable” section, then new <code>FilterState</code> is added to the <code>ReactiveQueue</code> and this new conditions are added to <code>dplyr::filter(ADSL, ...)</code> call. In the example <code>SEX</code> and <code>AGE</code> has been added - which are automatically dispatched to relevant <code>FilterState</code> class (<code>ChoiceFilterState</code> and <code>RangeFilterState</code>). Since (5) have been added or changed, conditions (<code>SEX == "F"</code> and <code>AGE &gt;= 20 &amp; AGE &lt;= 60</code>) are returned to the <code>DFFilterStates</code> (3) which combines them with <code>&amp;</code> operator and puts to <code><a href="https://dplyr.tidyverse.org/reference/filter.html">dplyr::filter</a></code> call. <code>CDISCFilteredDataset</code> takes this one call and return to <code>FilteredData</code> as a list.</p></li>
 <li><p>Second <code>FilteredDataset</code> for <code>ADTTE</code> works the same way as <code>ADSL</code> with one difference. <code><a href="https://dplyr.tidyverse.org/reference/filter.html">dplyr::filter</a></code> for <code>ADTTE</code> is followed by the merge call with <code>FILTERED_ADSL</code> - to be filtered by keys available parent.</p></li>
 <li><p><code>FilteredDatasetMAE</code> is based on MAEDataset where <code>raw_data</code> contains multiple object which can be filtered on. In general <code>MultiAssayExperiment</code> contains <code>colData(MAE)</code> which is a <code>DataFrame</code> with ADSL-like patient data. <code>MAE</code> contains also multiple experiments which can be extracted using <code>MAE[["experiment name"]]</code> and they can also be filtered in filter-panel. This means that <code>FilteredDatasetMAE</code> has multiple <code>FilterStates</code> objects: one for subjects data and one for each experiment.</p></li>
 <li><p><code>MAEFilterStates</code> object is initialized for subjects data and for this object <code>SummarizedExperiment::subsetByColData</code> function is applied. <code>SummarizedExperiment::subsetByColData</code> has two arguments <code>x</code> (data) and <code>y</code> (conditions). <code>MAEFilterStates</code> similar to <code>DFFilterStates</code> has one <code>ReactiveQueue</code> (9) list for <code>y</code> argument in the function. Adding new <code>FilterStates</code> triggers returning of the code similar to (4) and (5)</p></li>

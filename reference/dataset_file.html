@@ -73,7 +73,7 @@ Please note that the script has to end with a call creating desired object. The 
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">teal</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.10.0.9019</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.10.0.9020</span>
       </span>
     </div>
 
@@ -115,33 +115,6 @@ Please note that the script has to end with a call creating desired object. The 
 <li>
   <a href="../news/index.html">Changelog</a>
 </li>
-<!-- start_releases -->
-<li class="dropdown">
-	<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-Other releases
-<span class="caret"></span></a><ul class="dropdown-menu" role="menu">
-   <li><a href="../index.html">latest</a></li>
-   <li><a href="../pre-release/index.html">pre-release</a></li>
-   <li><a href="../v0.10.0/index.html">v0.10.0</a></li>
-   <li><a href="../v0.9.5/index.html">v0.9.5</a></li>
-   <li><a href="../v0.9.4/index.html">v0.9.4</a></li>
-   <li><a href="../v0.9.3/index.html">v0.9.3</a></li>
-   <li><a href="../v0.9.2/index.html">v0.9.2</a></li>
-   <li><a href="../v0.9.1/index.html">v0.9.1</a></li>
-   <li><a href="../v0.9.0/index.html">v0.9.0</a></li>
-   <li><a href="../v0.8.5/index.html">v0.8.5</a></li>
-   <li><a href="../v0.8.4/index.html">v0.8.4</a></li>
-   <li><a href="../v0.8.3/index.html">v0.8.3</a></li>
-   <li><a href="../v0.8.2/index.html">v0.8.2</a></li>
-   <li><a href="../v0.7.0/index.html">v0.7.0</a></li>
-   <li><a href="../v0.6.0/index.html">v0.6.0</a></li>
-   <li><a href="../v0.0.5/index.html">v0.0.5</a></li>
-   <li><a href="../v0.0.4/index.html">v0.0.4</a></li>
-   <li><a href="../v0.0.3/index.html">v0.0.3</a></li>
-   <li><a href="../v0.0.2/index.html">v0.0.2</a></li>
-   <li><a href="../v0.0.1/index.html">v0.0.1</a></li>
-</ul></li>
-<!-- end_releases -->
       </ul>
       <ul class="nav navbar-nav navbar-right">
         <li>
@@ -193,39 +166,41 @@ Please note that the script has to end with a call creating desired object. The 
     <p><code>Dataset</code> object</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='co'># simple example</span>
-<span class='va'>file_example</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/tempfile.html'>tempfile</a></span><span class='op'>(</span>fileext <span class='op'>=</span> <span class='st'>".R"</span><span class='op'>)</span>
-<span class='fu'><a href='https://rdrr.io/r/base/writeLines.html'>writeLines</a></span><span class='op'>(</span>
-  text <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span>
-    <span class='st'>"library(teal)
-     dataset(dataname = \"iris\",
-             x = iris,
-             code = \"iris\")"</span>
-  <span class='op'>)</span>,
-  con <span class='op'>=</span> <span class='va'>file_example</span>
-<span class='op'>)</span>
-<span class='va'>x</span> <span class='op'>&lt;-</span> <span class='fu'>dataset_file</span><span class='op'>(</span><span class='va'>file_example</span>, code <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/character.html'>character</a></span><span class='op'>(</span><span class='fl'>0</span><span class='op'>)</span><span class='op'>)</span>
-<span class='fu'><a href='get_code.html'>get_code</a></span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; [1] "iris"</div><div class='input'>
-<span class='co'># custom code</span>
-<span class='va'>file_example</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/tempfile.html'>tempfile</a></span><span class='op'>(</span>fileext <span class='op'>=</span> <span class='st'>".R"</span><span class='op'>)</span>
-<span class='fu'><a href='https://rdrr.io/r/base/writeLines.html'>writeLines</a></span><span class='op'>(</span>
-  text <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span>
-    <span class='st'>"library(teal)
-
-     # code&gt;
-     x &lt;- iris
-     x$a1 &lt;- 1
-     x$a2 &lt;- 2
-
-     # &lt;code
-     dataset(dataname = \"iris_mod\", x = x)"</span>
-  <span class='op'>)</span>,
-  con <span class='op'>=</span> <span class='va'>file_example</span>
-<span class='op'>)</span>
-<span class='va'>x</span> <span class='op'>&lt;-</span> <span class='fu'>dataset_file</span><span class='op'>(</span><span class='va'>file_example</span><span class='op'>)</span>
-<span class='fu'><a href='get_code.html'>get_code</a></span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; [1] "x &lt;- iris\nx$a1 &lt;- 1\nx$a2 &lt;- 2"</div></pre>
+    <pre class="examples"><span class='r-in'><span class='co'># simple example</span></span>
+<span class='r-in'><span class='va'>file_example</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/tempfile.html'>tempfile</a></span><span class='op'>(</span>fileext <span class='op'>=</span> <span class='st'>".R"</span><span class='op'>)</span></span>
+<span class='r-in'><span class='fu'><a href='https://rdrr.io/r/base/writeLines.html'>writeLines</a></span><span class='op'>(</span></span>
+<span class='r-in'>  text <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span></span>
+<span class='r-in'>    <span class='st'>"library(teal)</span>
+<span class='r-in'>     dataset(dataname = \"iris\",</span>
+<span class='r-in'>             x = iris,</span>
+<span class='r-in'>             code = \"iris\")"</span></span>
+<span class='r-in'>  <span class='op'>)</span>,</span>
+<span class='r-in'>  con <span class='op'>=</span> <span class='va'>file_example</span></span>
+<span class='r-in'><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>x</span> <span class='op'>&lt;-</span> <span class='fu'>dataset_file</span><span class='op'>(</span><span class='va'>file_example</span>, code <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/character.html'>character</a></span><span class='op'>(</span><span class='fl'>0</span><span class='op'>)</span><span class='op'>)</span></span>
+<span class='r-in'><span class='fu'><a href='get_code.html'>get_code</a></span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] "iris"</span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># custom code</span></span>
+<span class='r-in'><span class='va'>file_example</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/tempfile.html'>tempfile</a></span><span class='op'>(</span>fileext <span class='op'>=</span> <span class='st'>".R"</span><span class='op'>)</span></span>
+<span class='r-in'><span class='fu'><a href='https://rdrr.io/r/base/writeLines.html'>writeLines</a></span><span class='op'>(</span></span>
+<span class='r-in'>  text <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span></span>
+<span class='r-in'>    <span class='st'>"library(teal)</span>
+<span class='r-in'></span>
+<span class='r-in'>     # code&gt;</span>
+<span class='r-in'>     x &lt;- iris</span>
+<span class='r-in'>     x$a1 &lt;- 1</span>
+<span class='r-in'>     x$a2 &lt;- 2</span>
+<span class='r-in'></span>
+<span class='r-in'>     # &lt;code</span>
+<span class='r-in'>     dataset(dataname = \"iris_mod\", x = x)"</span></span>
+<span class='r-in'>  <span class='op'>)</span>,</span>
+<span class='r-in'>  con <span class='op'>=</span> <span class='va'>file_example</span></span>
+<span class='r-in'><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>x</span> <span class='op'>&lt;-</span> <span class='fu'>dataset_file</span><span class='op'>(</span><span class='va'>file_example</span><span class='op'>)</span></span>
+<span class='r-in'><span class='fu'><a href='get_code.html'>get_code</a></span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] "x &lt;- iris\nx$a1 &lt;- 1\nx$a2 &lt;- 2"</span>
+</pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

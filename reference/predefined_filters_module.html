@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">teal</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.10.0.9019</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.10.0.9020</span>
       </span>
     </div>
 
@@ -114,33 +114,6 @@
 <li>
   <a href="../news/index.html">Changelog</a>
 </li>
-<!-- start_releases -->
-<li class="dropdown">
-	<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-Other releases
-<span class="caret"></span></a><ul class="dropdown-menu" role="menu">
-   <li><a href="../index.html">latest</a></li>
-   <li><a href="../pre-release/index.html">pre-release</a></li>
-   <li><a href="../v0.10.0/index.html">v0.10.0</a></li>
-   <li><a href="../v0.9.5/index.html">v0.9.5</a></li>
-   <li><a href="../v0.9.4/index.html">v0.9.4</a></li>
-   <li><a href="../v0.9.3/index.html">v0.9.3</a></li>
-   <li><a href="../v0.9.2/index.html">v0.9.2</a></li>
-   <li><a href="../v0.9.1/index.html">v0.9.1</a></li>
-   <li><a href="../v0.9.0/index.html">v0.9.0</a></li>
-   <li><a href="../v0.8.5/index.html">v0.8.5</a></li>
-   <li><a href="../v0.8.4/index.html">v0.8.4</a></li>
-   <li><a href="../v0.8.3/index.html">v0.8.3</a></li>
-   <li><a href="../v0.8.2/index.html">v0.8.2</a></li>
-   <li><a href="../v0.7.0/index.html">v0.7.0</a></li>
-   <li><a href="../v0.6.0/index.html">v0.6.0</a></li>
-   <li><a href="../v0.0.5/index.html">v0.0.5</a></li>
-   <li><a href="../v0.0.4/index.html">v0.0.4</a></li>
-   <li><a href="../v0.0.3/index.html">v0.0.3</a></li>
-   <li><a href="../v0.0.2/index.html">v0.0.2</a></li>
-   <li><a href="../v0.0.1/index.html">v0.0.1</a></li>
-</ul></li>
-<!-- end_releases -->
       </ul>
       <ul class="nav navbar-nav navbar-right">
         <li>
@@ -185,23 +158,23 @@ Other releases
       <td><p>(<code>list</code>) You can define filters that show when
 the app starts.
 The general pattern is:
-<code><a href='https://rdrr.io/r/base/list.html'>list(iris = list(Species = ..., Sepal.Length = ...), mtcars = ...)</a></code>.
+<code>list(iris = list(Species = ..., Sepal.Length = ...), mtcars = ...)</code>.
 An example is:
-<code><a href='https://rdrr.io/r/base/list.html'>list(iris = list(Species = c("setosa", "versicolor")))</a></code>.
+<code>list(iris = list(Species = c("setosa", "versicolor")))</code>.
 More generally, the filters for the variable, e.g. <code>Species</code> can be
 specified as follows:
-<code><a href='https://rdrr.io/r/base/list.html'>list(Species = c("setosa", "versicolor"))</a></code>,
-<code><a href='https://rdrr.io/r/base/list.html'>list(Species = list(c("setosa", "versicolor"), keep_na = TRUE))</a></code>,
+<code>list(Species = c("setosa", "versicolor"))</code>,
+<code>list(Species = list(c("setosa", "versicolor"), keep_na = TRUE))</code>,
 or equivalently with:
-<code><a href='https://rdrr.io/r/base/list.html'>list(Species = c("setosa", "versicolor", NA))</a></code>,
+<code>list(Species = c("setosa", "versicolor", NA))</code>,
 or for the default filter (not very restrictive):
-<code><a href='https://rdrr.io/r/base/list.html'>list(Species = default_filter())</a></code></p>
+<code>list(Species = default_filter())</code></p>
 <p>Instead of <code>choices</code> above, use the following names:</p><ul>
 <li><p><code>numerical</code>: <code>range</code></p></li>
 <li><p><code>factor</code>: <code>choices</code></p></li>
 <li><p><code>logical</code>: <code>logical</code>
 A general example is:
-<code><a href='https://rdrr.io/r/base/list.html'>list( iris = list(Sepal.Length = default_filter(), Species = c("M", NA)), mtcars = list(mpg = default_filter())   )</a></code>
+<code>list( iris = list(Sepal.Length = default_filter(), Species = c("M", NA)), mtcars = list(mpg = default_filter())   )</code>
 Ignored if the app is restored from a bookmarked state.</p></li>
 </ul></td>
     </tr>
