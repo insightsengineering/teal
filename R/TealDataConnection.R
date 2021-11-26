@@ -5,7 +5,7 @@
 #' @title A `TealDataConnection` class of objects
 #'
 #' Objects of this class store the connection to a data source.
-#' It can be a database or server (`RICE` or `SAICE`) connection.
+#' It can be a database or server (`RICE`) connection.
 #'
 #' @examples
 #' open_fun <- callable_function(data.frame) # define opening function
@@ -738,7 +738,7 @@ rice_connection <- function(open_args = list(), close_args = list(), ping_args =
 
 #' Open connection to `entimICE` via `ricepass`
 #'
-#' @description `r lifecycle::badge("experimental")`
+#' @description `r lifecycle::badge("defunct")`
 #'
 #' @return (`TealDataConnection`) type of object
 #'

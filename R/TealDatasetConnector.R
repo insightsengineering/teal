@@ -76,6 +76,7 @@ TealDatasetConnector <- R6::R6Class( #nolint
 
       return(invisible(self))
     },
+    #' @description
     #' Prints this `TealDatasetConnector`.
     #'
     #' @param ... additional arguments to the printing method
@@ -148,7 +149,7 @@ TealDatasetConnector <- R6::R6Class( #nolint
     #' @description
     #' Get internal `CodeClass` object
     #'
-    #' @return ``CodeClass``
+    #' @return `CodeClass`
     get_code_class = function() {
       code_class <- CodeClass$new()
       pull_code_class <- private$get_pull_code_class()
@@ -415,15 +416,16 @@ TealDatasetConnector <- R6::R6Class( #nolint
 
     # ___ check ====
     #' @description
-    #'   Check to determine if the raw data is reproducible from the
-    #'   `get_code()` code.
+    #' Check to determine if the raw data is reproducible from the
+    #' `get_code()` code.
     #' @return
-    #'   `TRUE` always for all connectors to avoid evaluating the same code multiple times.
+    #' `TRUE` always for all connectors to avoid evaluating the same code multiple times.
     check = function() {
       return(TRUE)
     },
     # ___ shiny ====
-    #' @description Sets the shiny UI according to the given inputs.
+    #' @description 
+    #' Sets the shiny UI according to the given inputs.
     #' Inputs must provide only scalar (length of 1) variables.
     #' @param inputs (`function`) A shiny module UI function with single argument `ns`.
     #' This function needs to return a list of shiny inputs with their `inputId` wrapped
@@ -454,19 +456,22 @@ TealDatasetConnector <- R6::R6Class( #nolint
       logger::log_trace("TealDatasetConnector$set_ui_input ui_input set for dataset: { self$get_dataname() }.")
       return(invisible(self))
     },
-    #' @description Get shiny ui function
+    #' @description 
+    #' Get shiny ui function
     #' @param id (`character`) namespace id
     #' @return shiny UI in given namespace id
     get_ui = function(id) {
       stopifnot(is_character_single(id))
       return(if_not_null(private$ui, private$ui(id)))
     },
-    #' @description Get shiny server function
+    #' @description 
+    #' Get shiny server function
     #' @return shiny server function
     get_server = function() {
       return(private$server)
     },
-    #' @description Launches a shiny app.
+    #' @description 
+    #' Launches a shiny app.
     #' @return Shiny app
     #' @examples
     #' ds <- dataset_connector("xyz", pull_callable = callable_function(data.frame))

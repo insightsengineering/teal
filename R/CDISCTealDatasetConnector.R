@@ -83,18 +83,18 @@ CDISCTealDatasetConnector <- R6::R6Class( #nolint
     #' @description
     #' Pull the data
     #'
-    #' Read or create the data using \code{pull_callable} specified in the constructor.
+    #' Read or create the data using `pull_callable` specified in the constructor.
     #'
-    #' @param args (\code{NULL} or named \code{list})\cr
-    #'  additional dynamic arguments for pull function. \code{args} can be omitted if \code{pull_callable}
+    #' @param args (`NULL` or named `list`)\cr
+    #'  additional dynamic arguments for pull function. `args` can be omitted if `pull_callable`
     #'  from constructor already contains all necessary arguments to pull data. One can try
-    #'  to execute \code{pull_callable} directly by \code{x$pull_callable$run()} or to get code using
-    #'  \code{x$pull_callable$get_code()}. \code{args} specified in pull are used temporary to get data but
+    #'  to execute `pull_callable` directly by `x$pull_callable$run()` or to get code using
+    #'  `x$pull_callable$get_code()`. `args` specified in pull are used temporary to get data but
     #'  not saved in code.
-    #' @param try (\code{logical} value)\cr
-    #'  whether perform function evaluation inside \code{try} clause
+    #' @param try (`logical` value)\cr
+    #'  whether perform function evaluation inside `try` clause
     #'
-    #' @return \code{self} invisibly for chaining.
+    #' @return `self` invisibly for chaining.
     pull = function(args = NULL, try = FALSE) {
       logger::log_trace("CDISCTealDatasetConnector$pull pulling dataset: { self$get_dataname() }.")
       super$pull(args = args, try = try)

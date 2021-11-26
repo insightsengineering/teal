@@ -146,14 +146,14 @@ Check to determine if the raw data is reproducible from the \code{get_code()} co
 \subsection{Returns}{
 \code{TRUE} if the dataset generated from evaluating the
 \code{get_code()} code is identical to the raw data, else \code{FALSE}.
-Check if keys has been specified correctly for dataset. Set of \code{keys}
-should distinguish unique rows or be \code{character(0)}.
 }
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-check_keys"></a>}}
 \if{latex}{\out{\hypertarget{method-check_keys}{}}}
 \subsection{Method \code{check_keys()}}{
+Check if keys has been specified correctly for dataset. Set of \code{keys}
+should distinguish unique rows or be \code{character(0)}.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{MAETealDataset$check_keys(keys = private$.keys)}\if{html}{\out{</div>}}
 }
@@ -168,13 +168,13 @@ vector with primary keys}
 }
 \subsection{Returns}{
 \code{TRUE} if dataset has been already pulled, else \code{FALSE}
-Prints this \code{MAETealDataset}.
 }
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-print"></a>}}
 \if{latex}{\out{\hypertarget{method-print}{}}}
 \subsection{Method \code{print()}}{
+Prints this \code{MAETealDataset}.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{MAETealDataset$print(...)}\if{html}{\out{</div>}}
 }
@@ -372,13 +372,13 @@ within another dataset.}
 }
 \subsection{Returns}{
 a new object of the \code{TealDataset} class
-Prints this \code{TealDataset}.
 }
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-print"></a>}}
 \if{latex}{\out{\hypertarget{method-print}{}}}
 \subsection{Method \code{print()}}{
+Prints this \code{TealDataset}.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{TealDataset$print(...)}\if{html}{\out{</div>}}
 }
@@ -430,7 +430,7 @@ Derive the raw data frame inside this object
 }
 
 \subsection{Returns}{
-\code{data.frame} or \code{rtable}
+\code{data.frame}
 }
 }
 \if{html}{\out{<hr>}}
@@ -894,6 +894,7 @@ Get internal \code{mutate_vars} object
 \if{html}{\out{<a id="method-is_mutate_delayed"></a>}}
 \if{latex}{\out{\hypertarget{method-is_mutate_delayed}{}}}
 \subsection{Method \code{is_mutate_delayed()}}{
+Whether mutate code has delayed evaluation.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{TealDataset$is_mutate_delayed()}\if{html}{\out{</div>}}
 }
@@ -940,14 +941,14 @@ Check to determine if the raw data is reproducible from the \code{get_code()} co
 \subsection{Returns}{
 \code{TRUE} if the dataset generated from evaluating the
 \code{get_code()} code is identical to the raw data, else \code{FALSE}.
-Check if keys has been specified correctly for dataset. Set of \code{keys}
-should distinguish unique rows or be \code{character(0)}.
 }
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-check_keys"></a>}}
 \if{latex}{\out{\hypertarget{method-check_keys}{}}}
 \subsection{Method \code{check_keys()}}{
+Check if keys has been specified correctly for dataset. Set of \code{keys}
+should distinguish unique rows or be \code{character(0)}.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{TealDataset$check_keys(keys = private$.keys)}\if{html}{\out{</div>}}
 }

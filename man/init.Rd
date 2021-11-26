@@ -16,8 +16,7 @@ init(
 }
 \arguments{
 \item{data}{(\code{TealData} or \code{TealDataset} or \code{TealDatasetConnector} or \code{list} or \code{data.frame})
-\code{R6} object as returned by \link{cdisc_data}, \link{teal_data}, \link{cdisc_dataset},
-\link{dataset}, \link{dataset}, \link{dataset_connector} or
+\code{R6} object as returned by \link{cdisc_data}, \link{teal_data}, \link{cdisc_dataset}, \link{dataset}, \link{dataset_connector} or
 \link{cdisc_dataset_connector} or a single \code{data.frame} or a list of the previous objects or
 function returning a named list.
 NOTE: teal does not guarantee reproducibility of the code when names of the list elements do not match

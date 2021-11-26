@@ -44,7 +44,6 @@ TealDataset <- R6::R6Class( # nolint
   public = list(
     #' @description
     #' Create a new object of `TealDataset` class
-    #'
     initialize = function(dataname,
                           x,
                           keys = character(0),
@@ -109,6 +108,7 @@ TealDataset <- R6::R6Class( # nolint
       logger::log_trace("TealDataset$recreate recreated dataset: { self$get_dataname() }.")
       return(res)
     },
+    #' @description
     #' Prints this `TealDataset`.
     #'
     #' @param ... additional arguments to the printing method
@@ -156,8 +156,7 @@ TealDataset <- R6::R6Class( # nolint
     },
     #' @description
     #' Derive the raw data frame inside this object
-    #' @return
-    #' `data.frame` or `rtable`
+    #' @return `data.frame`
     get_raw_data = function() {
       private$.raw_data
     },
@@ -387,7 +386,7 @@ TealDataset <- R6::R6Class( # nolint
     #' @param nodeps (`logical(1)`) whether `CodeClass` should not contain the code
     #' of the dependent `vars`
     #' the `mutate`
-    #' @return ``CodeClass``
+    #' @return `CodeClass`
     get_code_class = function(nodeps = FALSE) {
       res <- CodeClass$new()
       # precise order matters
@@ -403,7 +402,7 @@ TealDataset <- R6::R6Class( # nolint
     #' @description
     #' Get internal `CodeClass` object
     #'
-    #' @return ``CodeClass``
+    #' @return `CodeClass`
     get_mutate_code_class = function() {
       res <- CodeClass$new()
       res$append(list_to_code_class(private$mutate_vars))
@@ -414,7 +413,7 @@ TealDataset <- R6::R6Class( # nolint
     #' @description
     #' Get internal `vars` object
     #'
-    #' @return ``list``
+    #' @return `list`
     get_vars = function() {
       return(c(
         private$vars,
@@ -424,12 +423,13 @@ TealDataset <- R6::R6Class( # nolint
     #' @description
     #' Get internal `mutate_vars` object
     #'
-    #' @return ``list``
+    #' @return `list`
     get_mutate_vars = function() {
       return(private$mutate_vars)
     },
 
-    #'
+    #' @description
+    #' Whether mutate code has delayed evaluation.
     #' @return `logical`
     is_mutate_delayed = function() {
       return(!is_empty(private$mutate_code))
@@ -491,10 +491,10 @@ TealDataset <- R6::R6Class( # nolint
 
     # ___ check ====
     #' @description
-    #'   Check to determine if the raw data is reproducible from the `get_code()` code.
+    #' Check to determine if the raw data is reproducible from the `get_code()` code.
     #' @return
-    #'   `TRUE` if the dataset generated from evaluating the
-    #'   `get_code()` code is identical to the raw data, else `FALSE`.
+    #' `TRUE` if the dataset generated from evaluating the
+    #' `get_code()` code is identical to the raw data, else `FALSE`.
     check = function() {
       logger::log_trace("TealDataset$check executing the code to reproduce dataset: { self$get_dataname() }...")
       if (!is_character_single(self$get_code()) || !grepl("\\w+", self$get_code())) {
@@ -524,6 +524,7 @@ TealDataset <- R6::R6Class( # nolint
 
       return(res_check)
     },
+    #' @description
     #' Check if keys has been specified correctly for dataset. Set of `keys`
     #' should distinguish unique rows or be `character(0)`.
     #'

@@ -132,7 +132,6 @@ x$get_datasets()
 \if{latex}{\out{\hypertarget{method-new}{}}}
 \subsection{Method \code{new()}}{
 Create a new \code{TealDataConnector} object
-Prints this \code{TealDataConnector}.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{TealDataConnector$new(connection, connectors)}\if{html}{\out{</div>}}
 }
@@ -153,6 +152,7 @@ list with dataset connectors}
 \if{html}{\out{<a id="method-print"></a>}}
 \if{latex}{\out{\hypertarget{method-print}{}}}
 \subsection{Method \code{print()}}{
+Prints this \code{TealDataConnector}.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{TealDataConnector$print(...)}\if{html}{\out{</div>}}
 }

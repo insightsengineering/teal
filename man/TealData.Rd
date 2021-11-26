@@ -137,13 +137,13 @@ argument passed to \code{clone} method. If \code{TRUE} deep copy is made}
 }
 \subsection{Returns}{
 self invisible
-Prints this \code{TealData}.
 }
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-print"></a>}}
 \if{latex}{\out{\hypertarget{method-print}{}}}
 \subsection{Method \code{print()}}{
+Prints this \code{TealData}.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{TealData$print(...)}\if{html}{\out{</div>}}
 }
@@ -183,13 +183,13 @@ Get \code{JoinKeys} object with keys used for joining.
 
 \subsection{Returns}{
 (\code{JoinKeys})
-Get data connectors.
 }
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-get_connectors"></a>}}
 \if{latex}{\out{\hypertarget{method-get_connectors}{}}}
 \subsection{Method \code{get_connectors()}}{
+Get data connectors.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{TealData$get_connectors()}\if{html}{\out{</div>}}
 }
@@ -202,12 +202,7 @@ Get data connectors.
 \if{html}{\out{<a id="method-get_items"></a>}}
 \if{latex}{\out{\hypertarget{method-get_items}{}}}
 \subsection{Method \code{get_items()}}{
-
-
-
 Get all datasets and all dataset connectors
-
-name of dataset connector to be returned. If \code{NULL}, all connectors are returned.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{TealData$get_items(dataname = NULL)}\if{html}{\out{</div>}}
 }
@@ -215,7 +210,8 @@ name of dataset connector to be returned. If \code{NULL}, all connectors are ret
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{dataname}}{(\code{character} value)\cr}
+\item{\code{dataname}}{(\code{character} value)\cr
+name of dataset connector to be returned. If \code{NULL}, all connectors are returned.}
 }
 \if{html}{\out{</div>}}
 }

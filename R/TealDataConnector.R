@@ -120,6 +120,7 @@ TealDataConnector <- R6::R6Class( #nolint
       )
       return(invisible(self))
     },
+    #' @description
     #' Prints this `TealDataConnector`.
     #'
     #' @param ... additional arguments to the printing method
@@ -157,7 +158,7 @@ TealDataConnector <- R6::R6Class( #nolint
     #' @description
     #' Get internal `CodeClass` object
     #'
-    #' @return ``CodeClass``
+    #' @return `CodeClass`
     get_code_class = function() {
       all_code <- CodeClass$new()
 

@@ -98,10 +98,10 @@ MAETealDataset <- R6::R6Class( # nolint
     },
     # ___ check ====
     #' @description
-    #'   Check to determine if the raw data is reproducible from the `get_code()` code.
+    #' Check to determine if the raw data is reproducible from the `get_code()` code.
     #' @return
-    #'   `TRUE` if the dataset generated from evaluating the
-    #'   `get_code()` code is identical to the raw data, else `FALSE`.
+    #' `TRUE` if the dataset generated from evaluating the
+    #' `get_code()` code is identical to the raw data, else `FALSE`.
     check = function() {
       logger::log_trace("TealDataset$check executing the code to reproduce dataset: { self$get_dataname() }...")
       if (!is_character_single(self$get_code()) || !grepl("\\w+", self$get_code())) {
@@ -126,6 +126,7 @@ MAETealDataset <- R6::R6Class( # nolint
 
       return(res_check)
     },
+    #' @description
     #' Check if keys has been specified correctly for dataset. Set of `keys`
     #' should distinguish unique rows or be `character(0)`.
     #'
@@ -147,6 +148,7 @@ MAETealDataset <- R6::R6Class( # nolint
         }
       }
     },
+    #' @description
     #' Prints this `MAETealDataset`.
     #' @param ... additional arguments to the printing method
     #'

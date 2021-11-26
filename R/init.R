@@ -15,8 +15,7 @@
 #' an end-user, don't use this function, but instead this module.
 #'
 #' @param data (`TealData` or `TealDataset` or `TealDatasetConnector` or `list` or `data.frame`)
-#' `R6` object as returned by [cdisc_data], [teal_data], [cdisc_dataset],
-#' [dataset], [dataset], [dataset_connector] or
+#' `R6` object as returned by [cdisc_data], [teal_data], [cdisc_dataset], [dataset], [dataset_connector] or
 #' [cdisc_dataset_connector] or a single `data.frame` or a list of the previous objects or
 #' function returning a named list.
 #' NOTE: teal does not guarantee reproducibility of the code when names of the list elements do not match

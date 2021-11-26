@@ -89,7 +89,6 @@ ds$launch()
 Create a new \code{TealDatasetConnector} object. Set the pulling function
 \code{CallableFunction} which returns a \code{data.frame} or \code{MultiAssayExperiment},
 e.g. by reading from a function or creating it on the fly.
-Prints this \code{TealDatasetConnector}.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{TealDatasetConnector$new(
   dataname,
@@ -139,6 +138,7 @@ within another dataset.}
 \if{html}{\out{<a id="method-print"></a>}}
 \if{latex}{\out{\hypertarget{method-print}{}}}
 \subsection{Method \code{print()}}{
+Prints this \code{TealDatasetConnector}.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{TealDatasetConnector$print(...)}\if{html}{\out{</div>}}
 }

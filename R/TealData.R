@@ -122,6 +122,7 @@ TealData <- R6::R6Class( # nolint
       logger::log_trace("TealData$copy{if (deep) ' deep-' else ' '}copied self.")
       invisible(new_self)
     },
+    #' @description
     #' Prints this `TealData`.
     #'
     #' @param ... additional arguments to the printing method
@@ -166,6 +167,7 @@ TealData <- R6::R6Class( # nolint
       }
       return(res)
     },
+    #' @description
     #' Get data connectors.
     #'
     #' @return (`list`) with all `TealDatasetConnector` or `TealDataConnector` objects.
@@ -178,12 +180,10 @@ TealData <- R6::R6Class( # nolint
       ))
     },
     #' @description
-    #'
-    #' @description
     #' Get all datasets and all dataset connectors
     #'
-    #'   name of dataset connector to be returned. If `NULL`, all connectors are returned.
     #' @param dataname (`character` value)\cr
+    #'   name of dataset connector to be returned. If `NULL`, all connectors are returned.
     #'
     #' @return `list` with all datasets and all connectors
     get_items = function(dataname = NULL) {

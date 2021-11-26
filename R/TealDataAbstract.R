@@ -144,7 +144,7 @@ TealDataAbstract <- R6::R6Class( #nolint
     #' @param only_pull (`logical` value)\cr
     #'   if `TRUE` only code to pull datasets will be returned without the mutate code.
     #'
-    #' @return ``CodeClass``
+    #' @return `CodeClass`
     get_code_class = function(only_pull = FALSE) {
       all_code_class <- CodeClass$new()
 
