@@ -33,7 +33,7 @@ is displayed to the user.}
 
 \item{selected}{The initially selected value (or multiple values if \code{multiple = TRUE}).
 If not specified then defaults to the first value for single-select lists
-and no values for multiple select lists.}
+ and no values for multiple select lists.}
 
 \item{multiple}{Is selection of multiple items allowed?}
 
@@ -52,7 +52,7 @@ returned by \code{\link[shiny]{helpText}}}
 e.g. 'auto', 'fit', '100px' or '75\%'}
 }
 \description{
-\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#maturing}{\figure{lifecycle-maturing.svg}{options: alt='[Maturing]'}}}{\strong{[Maturing]}}
+\ifelse{html}{\out{<a href='https://www.tidyverse.org/lifecycle/#maturing'><img src='figures/lifecycle-maturing.svg' alt='Maturing lifecycle'></a>}}{\strong{Maturing}}
 Hidden input widgets are useful to have the \code{input[[inputId]]} variable
 on available in the server function but no corresponding visual clutter from
 input widgets that provide only a single choice.
