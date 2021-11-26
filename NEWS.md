@@ -25,7 +25,7 @@
 ### Miscellaneous
 * Replaced the servers from `DataConnection`, `RelationalDataConnector`, `DatasetConnector`, and `RelationalData` with `moduleServer`.
 * Updated R version requirement to >= 3.6.
-* Updated "filter panel collapse"" icon to remove warnings when using shiny version >= 1.7.
+* Updated "filter panel collapse" icon to remove warnings when using shiny version >= 1.7.
 
 # teal 0.10.0
 
