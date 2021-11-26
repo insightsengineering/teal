@@ -55,6 +55,3 @@ jobs:
   version:
     name: Version Check 🏁
     uses: insightsengineering/r.pkg.template/.github/workflows/version.yaml@main
-  validation:
-    name: R Package Validation report 📃
-    uses: insightsengineering/r.pkg.template/.github/workflows/validation.yaml@main
