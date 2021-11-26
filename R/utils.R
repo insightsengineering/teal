@@ -163,15 +163,13 @@ label_to_id <- function(label, prefix = NULL) {
 
 #' Function to inherit Shiny module arguments that must always be present
 #'
-#' @param input (`Shiny input object`)
-#' @param output (`Shiny output object`)
-#' @param session (`Shiny session object`)
+#' @inheritParams shiny::moduleServer
 #' @param modules (`teal_module` or `teal_modules`)
 #'  single or multiple modules. `teal_modules`  can be used for nested
-#'  tabs, see \code{\link{ui_nested_tabs}}
+#'  tabs, see `ui_nested_tabs`
 #' @param datasets (`FilteredData`)\cr
 #'   object to store filter state and filtered datasets, shared across modules
-srv_shiny_module_arguments <- function(input, output, session, datasets, modules) { # nousage # nolint
+srv_shiny_module_arguments <- function(id, datasets, modules) { # nousage # nolint
 }
 
 #' Check that a given range is valid

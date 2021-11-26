@@ -104,10 +104,7 @@ ui_nested_tabs <- function(id, modules, datasets) {
 #' @return `reactive` which returns the active module that corresponds to the selected tab
 srv_nested_tabs <- function(id, datasets, modules) {
   # modules checked below through recursion
-  stopifnot(
-    is(datasets, "FilteredData")
-  )
-
+  stopifnot(is(datasets, "FilteredData"))
   moduleServer(id = id, module = function(input, output, session) {
     # recursively call `callModule` on (nested) teal modules ----
     call_modules <- function(modules, id_parent) {

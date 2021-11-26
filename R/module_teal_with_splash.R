@@ -57,9 +57,8 @@ ui_teal_with_splash <- function(id,
 #' @return `reactive`, return value of \code{\link{srv_teal}}
 #' @export
 srv_teal_with_splash <- function(id, data, modules, filter = list()) {
+  stopifnot(is(data, "DataAbstract"))
   moduleServer(id, function(input, output, session) {
-    stopifnot(is(data, "DataAbstract"))
-
     is_pulled_data <- is_pulled(data)
 
     # raw_data contains DataAbstract, i.e. R6 object and container for data

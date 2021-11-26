@@ -4,18 +4,15 @@
 \alias{srv_teal}
 \title{Server function corresponding to teal}
 \usage{
-srv_teal(input, output, session, modules, raw_data, filter = list())
+srv_teal(id, modules, raw_data, filter = list())
 }
 \arguments{
-\item{input}{(\verb{Shiny input object})}
-
-\item{output}{(\verb{Shiny output object})}
-
-\item{session}{(\verb{Shiny session object})}
+\item{id}{An ID string that corresponds with the ID used to call the module's
+UI function.}
 
 \item{modules}{(\code{teal_module} or \code{teal_modules})
 single or multiple modules. \code{teal_modules}  can be used for nested
-tabs, see \code{\link{ui_nested_tabs}}}
+tabs, see \code{ui_nested_tabs}}
 
 \item{raw_data}{\code{reactive} which returns the \code{RelationalData}, only evaluated once,
 \code{NULL} value is ignored}

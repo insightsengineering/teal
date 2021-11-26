@@ -63,7 +63,7 @@ app <- shinyApp(
     )
   },
   server = function(input, output, session) {
-    active_module <- callModule(srv_tabs_with_filters, "dummy", datasets = datasets, modules = mods)
+    active_module <- srv_tabs_with_filters(id = "dummy", datasets = datasets, modules = mods)
     output$info <- renderText({
       paste0("The currently active tab name is ", active_module()$label)
     })
@@ -91,12 +91,8 @@ app <- shinyApp(
     )
   },
   server = function(input, output, session) {
-    active_module1 <- callModule(
-      srv_tabs_with_filters, "app1", datasets = datasets1, modules = mods
-    )
-    active_module2 <- callModule(
-      srv_tabs_with_filters, "app2", datasets = datasets2, modules = mods
-    )
+    active_module1 <- srv_tabs_with_filters(id = "app1", datasets = datasets1, modules = mods)
+    active_module2 <- srv_tabs_with_filters(id = "app2", datasets = datasets2, modules = mods)
     output$info <- renderText({
       paste0(
         "The currently active tab names are: ",

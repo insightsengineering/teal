@@ -5,20 +5,17 @@
 \title{Server function that loads the data through reactive loading and then delegates
 to \code{\link{srv_teal}}.}
 \usage{
-srv_teal_with_splash(input, output, session, data, modules, filter = list())
+srv_teal_with_splash(id, data, modules, filter = list())
 }
 \arguments{
-\item{input}{(\verb{Shiny input object})}
-
-\item{output}{(\verb{Shiny output object})}
-
-\item{session}{(\verb{Shiny session object})}
+\item{id}{An ID string that corresponds with the ID used to call the module's
+UI function.}
 
 \item{data}{\code{DataAbstract} R6 object and container for data}
 
 \item{modules}{(\code{teal_module} or \code{teal_modules})
 single or multiple modules. \code{teal_modules}  can be used for nested
-tabs, see \code{\link{ui_nested_tabs}}}
+tabs, see \code{ui_nested_tabs}}
 
 \item{filter}{(\code{list}) You can define filters that show when
 the app starts.

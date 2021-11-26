@@ -56,8 +56,7 @@ app <- shinyApp(
     teal:::ui_teal("dummy")
   },
   server = function(input, output, session) {
-    active_module <- callModule(teal:::srv_teal, "dummy", modules = mods, raw_data = raw_data,
-    )
+    active_module <- teal:::srv_teal(id = "dummy", modules = mods, raw_data = raw_data)
   }
 )
 \dontrun{

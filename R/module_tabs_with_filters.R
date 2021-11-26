@@ -125,6 +125,7 @@ ui_tabs_with_filters <- function(id, modules, datasets) {
 #' @inheritParams srv_shiny_module_arguments
 #' @return `reactive` currently selected active_module
 srv_tabs_with_filters <- function(id, datasets, modules) {
+  stopifnot(is(datasets, "FilteredData"))
   moduleServer(id, function(input, output, session) {
     active_module <- srv_nested_tabs(id = "modules_ui", datasets = datasets, modules = modules)
 

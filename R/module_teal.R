@@ -123,7 +123,6 @@ srv_teal <- function(id, modules, raw_data, filter = list()) {
   stopifnot(is.reactive(raw_data))
   moduleServer(id, function(input, output, session) {
     # Javascript code ----
-
     if (getOption("teal_show_js_log", default = FALSE)) {
       shinyjs::showLog() # to show Javascript console logs in the R console
     }
@@ -151,7 +150,6 @@ srv_teal <- function(id, modules, raw_data, filter = list()) {
       # We store the entire R6 class with reactive values in it, but set the data to NULL.
       # Note that we cannnot directly do this on datasets as this would trigger
       # reactivity to recompute the filtered datasets, which is not needed.
-      browser()
       state$values$datasets_state <- datasets_reactive()$get_bookmark_state()
     })
     saved_datasets_state <- reactiveVal(NULL) # set when restored because data must already be populated
@@ -165,6 +163,7 @@ srv_teal <- function(id, modules, raw_data, filter = list()) {
     progress <- shiny::Progress$new(session)
     # initialize datasets ------
     datasets_reactive <- reactive({
+      if (is.null(raw_data())) return(NULL)
       progress$set(0.25, message = "Setting data")
       # create the FilteredData object (here called 'datasets') whose class depends on the class of raw_data()
       # this is placed in the module scope so that bookmarking can be used with FilteredData object

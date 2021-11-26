@@ -74,27 +74,6 @@ testthat::test_that("nested teal-modules are initialized", {
   testthat::expect_identical(out, c("1\n", "2\n", "3\n", "4\n"))
 })
 
-testthat::test_that("", {
-  out <- shiny::testServer(
-    app = srv_nested_tabs,
-    args = list(
-      id = "test",
-      datasets = filtered_data,
-      modules = root_modules(test_module1)
-    ),
-    expr = {
-      session$setInputs(root = "test1")
-      expect_identical(get_active_module(modules, id_parent = NULL), test_module3)
-
-      session$setInputs(root_tab2 = "test4")
-      expect_identical(get_active_module(modules, id_parent = NULL), test_module4)
-
-      session$setInputs(root = "tab1", root_tab1 = "test2")
-      expect_identical(get_active_module(modules, id_parent = NULL), test_module2)
-    }
-  )
-})
-
 testthat::test_that("changing input value of tab name returns ", {
   out <- shiny::testServer(
       app = srv_nested_tabs,
@@ -108,13 +87,13 @@ testthat::test_that("changing input value of tab name returns ", {
       ),
       expr = {
         session$setInputs(root = "tab2", root_tab2 = "test3")
-        expect_identical(get_active_module(modules, id_parent = NULL), test_module3)
+        testthat::expect_identical(get_active_module(modules, id_parent = NULL), test_module3)
 
         session$setInputs(root_tab2 = "test4")
-        expect_identical(get_active_module(modules, id_parent = NULL), test_module4)
+        testthat::expect_identical(get_active_module(modules, id_parent = NULL), test_module4)
 
         session$setInputs(root = "tab1", root_tab1 = "test2")
-        expect_identical(get_active_module(modules, id_parent = NULL), test_module2)
+        testthat::expect_identical(get_active_module(modules, id_parent = NULL), test_module2)
       }
     )
 })
