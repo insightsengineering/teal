@@ -103,7 +103,7 @@ ui_tabs_with_filters <- function(id, modules, datasets) {
       class = "menubtn",
       onclick = "toggle_sidebar();",
       title = "Toggle filter panels",
-      tags$span(icon("navicon", lib = "font-awesome"))
+      tags$span(icon("fas fa-bars"))
     )
   )
 
