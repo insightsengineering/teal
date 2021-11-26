@@ -23,8 +23,6 @@ jobs:
     name: R Package Validation report 📃
     needs: release
     uses: insightsengineering/r.pkg.template/.github/workflows/validation.yaml@main
-    secrets:
-      GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
   release:
     name: Create release 🎉
     uses: insightsengineering/r.pkg.template/.github/workflows/release.yaml@main
