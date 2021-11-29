@@ -13,11 +13,11 @@
 #' Suggested values for ta: "Oncology" or "I2ON"
 #' Suggested values for anl_type: "Exploratory", "Interim Analysis", "CSR"
 #'
-#' @param ta therapeutic area name. required argument. e.g. \code{"I2ON"}.
-#' @param molecule molecule name. required argument. e.g. \code{"Lucentis"}.
-#' @param indication indication. required argument. e.g. \code{"AMD"}.
-#' @param anl_type analysis type. required argument. e.g. \code{"Interim Analysis"}.
-#' @param pkg_meta package metadata fields. default values: \code{c("Package", "Title", "Version", "RemoteRef")}.
+#' @param ta therapeutic area name. required argument. e.g. `"I2ON"`.
+#' @param molecule molecule name. required argument. e.g. `"Lucentis"`.
+#' @param indication indication. required argument. e.g. `"AMD"`.
+#' @param anl_type analysis type. required argument. e.g. `"Interim Analysis"`.
+#' @param pkg_meta package metadata fields. default values: `c("Package", "Title", "Version", "RemoteRef")`.
 #'
 #' @export
 #'

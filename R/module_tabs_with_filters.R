@@ -3,7 +3,7 @@
 
 #' Add right filter panel into each of the top-level `teal_modules` UIs.
 #'
-#' The \code{\link{ui_nested_tabs}} function returns a nested tabbed UI corresponding
+#' The [ui_nested_tabs] function returns a nested tabbed UI corresponding
 #' to the nested modules.
 #' This function adds the right filter panel to each main tab.
 #'
@@ -16,7 +16,7 @@
 #' @inheritParams init
 #' @inheritParams srv_shiny_module_arguments
 #'
-#' @return A \code{tagList} of The main menu, place holders for filters and
+#' @return A `tagList` of The main menu, place holders for filters and
 #'   place holders for the teal modules
 #'
 #' @import shiny

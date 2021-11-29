@@ -2,45 +2,45 @@
 % Please edit documentation in R/as_cdisc.R
 \name{as_cdisc}
 \alias{as_cdisc}
-\alias{as_cdisc.Dataset}
-\alias{as_cdisc.DatasetConnector}
-\title{Convert a \code{Dataset(Connector)} object to a \code{CDISCDataset(Connector)} object}
+\alias{as_cdisc.TealDataset}
+\alias{as_cdisc.TealDatasetConnector}
+\title{Convert a \code{TealDataset(Connector)} object to a \code{CDISCTealDataset(Connector)} object}
 \usage{
 as_cdisc(
   x,
   parent = if (identical(get_dataname(x), "ADSL")) character(0) else "ADSL"
 )
 
-\method{as_cdisc}{Dataset}(
+\method{as_cdisc}{TealDataset}(
   x,
   parent = if (identical(get_dataname(x), "ADSL")) character(0) else "ADSL"
 )
 
-\method{as_cdisc}{DatasetConnector}(
+\method{as_cdisc}{TealDatasetConnector}(
   x,
   parent = if (identical(get_dataname(x), "ADSL")) character(0) else "ADSL"
 )
 }
 \arguments{
-\item{x}{an object of \code{Dataset} or \code{DatasetConnector} class}
+\item{x}{an object of \code{TealDataset} or \code{TealDatasetConnector} class}
 
 \item{parent}{optional, (\code{character}) \cr
 parent dataset name}
 }
 \value{
-(\code{CDISCDataset} or \code{CDISCDatasetConnector}) object
+(\code{CDISCTealDataset} or \code{CDISCTealDatasetConnector}) object
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
 }
 \details{
-Convert a \code{Dataset(Connector)} object to a \code{CDISCDataset(Connector)} object
+Convert a \code{TealDataset(Connector)} object to a \code{CDISCTealDataset(Connector)} object
 }
 \note{
-If passed a \code{cdisc}-flavored object it returns the unmodified object.
+If passed a \code{CDISC}-flavored object it returns the unmodified object.
 }
 \examples{
-# Dataset --------
+# TealDataset --------
 
 library(scda)
 as_cdisc(
@@ -60,7 +60,7 @@ as_cdisc(
   ),
   parent = "ADSL"
 )
-# DatasetConnector --------
+# TealDatasetConnector --------
 
 library(scda)
 pull_fun_adsl <- callable_function(

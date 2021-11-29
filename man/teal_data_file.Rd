@@ -2,7 +2,7 @@
 % Please edit documentation in R/teal_data.R
 \name{teal_data_file}
 \alias{teal_data_file}
-\title{Load \code{RelationalData} object from a file}
+\title{Load \code{TealData} object from a file}
 \usage{
 teal_data_file(path, code = get_code(path))
 }
@@ -14,7 +14,7 @@ string giving the pathname of the file or URL to read from. "" indicates the con
 reproducible code to re-create object}
 }
 \value{
-\code{RelationalData} object
+\code{TealData} object
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}

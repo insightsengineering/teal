@@ -4,7 +4,7 @@
 \alias{FilterStates}
 \title{\code{FilterStates} R6 class}
 \description{
-Implements \code{\link{ReactiveQueue}} to the \code{teal} filters.
+Implements \link{ReactiveQueue} to the \code{teal} filters.
 Class manages adding and removing \code{FilterState} to the reactive
 queue and returns reproducible R expression relevant to specific
 \code{FilterStates} subclass.
@@ -108,7 +108,7 @@ no-op call such as \code{x <- x}.
 \if{html}{\out{<a id="method-get_fun"></a>}}
 \if{latex}{\out{\hypertarget{method-get_fun}{}}}
 \subsection{Method \code{get_fun()}}{
-Gets the name of the function used to filter the data in this FilterStates.
+Gets the name of the function used to filter the data in this \code{FilterStates}.
 
 Get function name used to create filter call. By default it's a
 "subset" but can be overridden by child class method.
@@ -124,7 +124,7 @@ Get function name used to create filter call. By default it's a
 \if{html}{\out{<a id="method-queue_empty"></a>}}
 \if{latex}{\out{\hypertarget{method-queue_empty}{}}}
 \subsection{Method \code{queue_empty()}}{
-Remove all FilterState objects from all queues in this FilterStates.
+Remove all \code{FilterState} objects from all queues in this \code{FilterStates}.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{FilterStates$queue_empty()}\if{html}{\out{</div>}}
 }
@@ -137,7 +137,7 @@ NULL
 \if{html}{\out{<a id="method-queue_get"></a>}}
 \if{latex}{\out{\hypertarget{method-queue_get}{}}}
 \subsection{Method \code{queue_get()}}{
-Returns a list of FilterState objects stored in this FilterStates.
+Returns a list of \code{FilterState} objects stored in this \code{FilterStates.}
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{FilterStates$queue_get(queue_index, element_id = character(0))}\if{html}{\out{</div>}}
 }

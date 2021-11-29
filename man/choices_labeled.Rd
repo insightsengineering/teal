@@ -17,15 +17,15 @@ only a few variables need to be named. If this argument is used, the returned ve
 match its order.}
 
 \item{types}{vector containing the types of the columns to be used for applying the appropriate
-icons to the \code{\link[teal]{choices_selected}} drop down box}
+icons to the \link{choices_selected} drop down box}
 }
 \value{
 a named character vector
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#maturing}{\figure{lifecycle-maturing.svg}{options: alt='[Maturing]'}}}{\strong{[Maturing]}}
-This is often useful for \code{\link[teal]{choices_selected}} as it marks up the dropdown boxes
-for \code{\link[shiny]{selectInput}}.
+This is often useful for \link{choices_selected} as it marks up the dropdown boxes
+for \code{\link[shiny:selectInput]{shiny::selectInput()}}.
 }
 \details{
 If either \code{choices} or \code{labels} are factors, they are coerced to character.

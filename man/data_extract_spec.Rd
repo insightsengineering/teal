@@ -7,17 +7,17 @@
 data_extract_spec(dataname, select = NULL, filter = NULL, reshape = FALSE)
 }
 \arguments{
-\item{dataname}{(\code{character}) The name of the \code{teal} dataset to
+\item{dataname}{(\code{character}) The name of the dataset to
 be extracted. This dataset has to be handed over to the \code{data} argument of the
-\code{\link[teal]{init}} function.}
+\code{\link{init}} function.}
 
 \item{select}{(\code{NULL} or \code{select_spec}-S3 class or \code{delayed_select_spec}-S3-class object)
 Columns to be selected from the input dataset
-mentioned in \code{dataname}. The setup can be created using \code{\link{select_spec}} function.}
+mentioned in \code{dataname}. The setup can be created using \link{select_spec} function.}
 
 \item{filter}{(\code{NULL} or \code{filter_spec} or its respective delayed version)
 Setup of the filtering of key columns inside the dataset.
-This setup can be created using the \code{\link{filter_spec}} function.
+This setup can be created using the \link{filter_spec} function.
 Please note that if both select and filter are set to NULL, then the result will be a filter spec UI with all
 variables as possible choices and a select spec with multiple set to TRUE.}
 
@@ -29,15 +29,15 @@ with multiple keys selected in filter part.}
 
 The Data Extract input can be used to filter and select columns from a data
 set. This function enables such an input in teal.
-Please use the constructor function \code{\link{data_extract_spec}} to set it up.
+Please use the constructor function \link{data_extract_spec} to set it up.
 
 Note that no checks based on columns can be done because the data is only referred to by name.
 }
 \section{Module Development}{
 
 \describe{
-From this function's output a \code{teal.devel::data_extract_ui} can
-be constructed. This input can be read by a \code{teal.devel::data_extract_module} module.
+From this function's output a \code{\link[teal.devel:data_extract_ui]{teal.devel::data_extract_ui()}} can be constructed.
+This input can be read by a \code{\link[teal.devel:data_extract_srv]{teal.devel::data_extract_srv()}} module.
 }
 }
 
@@ -45,7 +45,7 @@ be constructed. This input can be read by a \code{teal.devel::data_extract_modul
 
 \describe{
 \enumerate{
-\item{Dataset with multiple filters and column selection}{
+\item{\code{TealDataset} with multiple filters and column selection}{
 \preformatted{
 adtte_filters <- filter_spec(
 vars = c("PARAMCD", "CNSR"),
@@ -69,13 +69,13 @@ data_extract_spec(
 )
     }
 \if{html}{
-      \figure{data_extract_spec_1.png}{options: alt="Dataset with multiple filters and column selection"}
+      \figure{data_extract_spec_1.png}{options: alt="TealDataset with multiple filters and column selection"}
     }
 \if{html}{
-      \figure{data_extract_spec_12.png}{options: alt="Dataset with multiple filters and column selection"}
+      \figure{data_extract_spec_12.png}{options: alt="TealDataset with multiple filters and column selection"}
     }
 \if{html}{
-      \figure{data_extract_spec_11.png}{options: alt="Dataset with multiple filters and column selection"}
+      \figure{data_extract_spec_11.png}{options: alt="TealDataset with multiple filters and column selection"}
     }
 }
 \item{Data extract without filtering}{
@@ -126,5 +126,5 @@ data_extract_spec(
 }
 
 \references{
-\code{\link{select_spec}} \code{\link{filter_spec}}
+\link{select_spec} \link{filter_spec}
 }

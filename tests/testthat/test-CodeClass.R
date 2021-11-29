@@ -197,7 +197,7 @@ test_that("list_to_code_class: assigning dataname to the object name inside of t
     )
   )
 
-  ds <- Dataset$new("head_mtcars", x = head(mtcars), code = "head_mtcars <- head(mtcars)")
+  ds <- TealDataset$new("head_mtcars", x = head(mtcars), code = "head_mtcars <- head(mtcars)")
 
   mutate_dataset(t_dc, "test_dc$carb <- ds$carb", vars = list(ds = ds))
   expect_equal(
@@ -212,7 +212,7 @@ test_that("list_to_code_class: assigning dataname to the object name inside of t
     )
   )
 
-  ds2 <- Dataset$new("head_iris", x = head(iris), code = "head_iris <- head(iris)")
+  ds2 <- TealDataset$new("head_iris", x = head(iris), code = "head_iris <- head(iris)")
   mutate_dataset(t_dc2, "test_dc2$Species <- head_iris$Species", vars = list(head_iris = ds2))
   expect_equal(
     pretty_code_string(t_dc2$get_code()),

@@ -253,7 +253,7 @@ Technically \code{set_dataset} created \code{FilteredDataset} which keeps
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{dataset}}{(\code{Dataset})\cr
+\item{\code{dataset}}{(\code{TealDataset})\cr
 object containing data and attributes.}
 }
 \if{html}{\out{</div>}}

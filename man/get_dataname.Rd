@@ -2,24 +2,24 @@
 % Please edit documentation in R/get_dataname.R
 \name{get_dataname}
 \alias{get_dataname}
-\alias{get_dataname.DataAbstract}
-\alias{get_dataname.DatasetConnector}
-\alias{get_dataname.Dataset}
+\alias{get_dataname.TealDataAbstract}
+\alias{get_dataname.TealDatasetConnector}
+\alias{get_dataname.TealDataset}
 \title{S3 method for getting a dataname(s) of
-(\code{DataAbstract}, (\code{DatasetConnector} or
-\code{Dataset}) R6 object}
+(\code{TealDataAbstract}, (\code{TealDatasetConnector} or
+\code{TealDataset}) R6 object}
 \usage{
 get_dataname(x)
 
-\method{get_dataname}{DataAbstract}(x)
+\method{get_dataname}{TealDataAbstract}(x)
 
-\method{get_dataname}{DatasetConnector}(x)
+\method{get_dataname}{TealDatasetConnector}(x)
 
-\method{get_dataname}{Dataset}(x)
+\method{get_dataname}{TealDataset}(x)
 }
 \arguments{
-\item{x}{(\code{DataAbstract}, (\code{DatasetConnector} or
-\code{Dataset}) R6 object}
+\item{x}{(\code{TealDataAbstract}, \code{TealDatasetConnector} or
+\code{TealDataset}) object}
 }
 \value{
 dataname (\code{character}) A given name for the dataset(s)

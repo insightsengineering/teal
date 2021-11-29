@@ -2,36 +2,33 @@
 % Please edit documentation in R/load_dataset.R
 \name{load_datasets}
 \alias{load_datasets}
-\alias{load_datasets.Dataset}
-\alias{load_datasets.DatasetConnector}
-\alias{load_datasets.RelationalDataConnector}
-\alias{load_datasets.RelationalData}
+\alias{load_datasets.TealDataset}
+\alias{load_datasets.TealDatasetConnector}
+\alias{load_datasets.TealDataConnector}
+\alias{load_datasets.TealData}
 \title{Load datasets}
 \usage{
 load_datasets(x, ...)
 
-\method{load_datasets}{Dataset}(x, ...)
+\method{load_datasets}{TealDataset}(x, ...)
 
-\method{load_datasets}{DatasetConnector}(x, args = NULL, try = FALSE, ...)
+\method{load_datasets}{TealDatasetConnector}(x, args = NULL, try = FALSE, ...)
 
-\method{load_datasets}{RelationalDataConnector}(x, ...)
+\method{load_datasets}{TealDataConnector}(x, ...)
 
-\method{load_datasets}{RelationalData}(x, ...)
+\method{load_datasets}{TealData}(x, ...)
 }
 \arguments{
-\item{x}{(\code{object} of class \code{\link{RelationalData}}, \code{\link{Dataset}} or
-\code{\link{DatasetConnector}})}
+\item{x}{(\code{\link{TealData}}, \code{\link{TealDataset}} or \code{\link{TealDatasetConnector}})}
 
 \item{...}{(not used)\cr
 only for support of S3}
 
 \item{args}{(\code{NULL} or named \code{list})\cr
-additional dynamic arguments passed to function which loads the data. Applicable only on
-\code{\link{DatasetConnector}})}
+additional dynamic arguments passed to function which loads the data. Applicable only on \code{\link{TealDatasetConnector}})}
 
 \item{try}{(\code{logical})\cr
-whether perform function evaluation inside \code{try} clause. Applicable only on
-\code{\link{DatasetConnector}})}
+whether perform function evaluation inside \code{try} clause. Applicable only on \code{\link{TealDatasetConnector}})}
 }
 \value{
 If executed in the interactive session shiny app is opened to load the data. If executed in
@@ -42,14 +39,14 @@ shiny application - it returns shiny server module.
 }
 \examples{
 
-# Dataset ------
+# TealDataset ------
 library(scda)
 ADSL <- synthetic_cdisc_data("latest")$adsl
 x <- dataset("ADSL", x = ADSL)
 
 load_datasets(x)
 
-# DatasetConnector ------
+# TealDatasetConnector ------
 library(scda)
 pull_fun_adsl <- callable_function(
   function() {synthetic_cdisc_data("latest")$adsl}
@@ -64,7 +61,7 @@ pull_fun_adae <- callable_function(
 adae <- dataset_connector("ADAE", pull_fun_adae)
 load_datasets(adae)
 
-# RelationalDataConnector --------
+# TealDataConnector --------
 library(scda)
 adsl_cf <- callable_function(
   function() {synthetic_cdisc_data("latest")$adsl}
@@ -85,7 +82,7 @@ rdc <- cdisc_data(adsl, adrs)
 load_datasets(rdc)
 }
 
-# RelationalData --------
+# TealData --------
 library(scda)
 adsl_cf <- callable_function(
   function() {synthetic_cdisc_data("latest")$adsl}

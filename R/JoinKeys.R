@@ -279,7 +279,7 @@ mutate_join_keys.JoinKeys <- function(x, dataset_1, dataset_2, val) {
 #' @rdname mutate_join_keys
 #' @export
 #' @examples
-#' # RelationalData ----
+#' # TealData ----
 #'
 #' library(scda)
 #'
@@ -295,7 +295,7 @@ mutate_join_keys.JoinKeys <- function(x, dataset_1, dataset_2, val) {
 #' mutate_join_keys(x, "ADSL", "ADRS", c("COLUMN1" = "COLUMN2"))
 #' x$get_join_keys()$get("ADSL", "ADRS")
 #'
-mutate_join_keys.RelationalData <- function(x, dataset_1, dataset_2, val) { # nolint
+mutate_join_keys.TealData <- function(x, dataset_1, dataset_2, val) { # nolint
   x$mutate_join_keys(dataset_1, dataset_2, val)
 }
 

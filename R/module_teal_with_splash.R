@@ -1,21 +1,21 @@
 # This file adds a splash screen for delayed data loading on top of teal
 
-#' UI to show a splash screen in the beginning, then delegate to \code{\link{srv_teal}}
+#' UI to show a splash screen in the beginning, then delegate to [`srv_teal`]
 #'
 #' @description `r lifecycle::badge("maturing")`
 #' The splash screen could be used to query for a password to fetch the data.
-#' \code{\link{init}} is a very thin wrapper around this module useful for end-users which
+#' [`init`] is a very thin wrapper around this module useful for end-users which
 #' assumes that it is a top-level module and cannot be embedded.
 #' This function instead adheres to the Shiny module conventions.
 #'
 #' If data is obtained through delayed loading, its splash screen is used. Otherwise,
 #' a default splash screen is shown.
 #'
-#' Please also refer to the doc of \code{\link{init}}.
+#' Please also refer to the doc of [`init`].
 #'
 #' @param id (`character` value)\cr
 #'   module id
-#' @param data (`DataAbstract`)\cr
+#' @param data (`TealDataAbstract`)\cr
 #'   object containing data
 #' @param title (`NULL` or `character`) The browser window title (defaults to the host URL of the page).
 #' @param header (`character` or `shiny.tag`) the header of the app
@@ -26,7 +26,7 @@ ui_teal_with_splash <- function(id,
                                 title,
                                 header = tags$p("Add Title Here"),
                                 footer = tags$p("Add Footer Here")) {
-  stopifnot(is(data, "DataAbstract"))
+  stopifnot(is(data, "TealDataAbstract"))
   is_pulled_data <- is_pulled(data)
   ns <- NS(id)
 
@@ -46,22 +46,22 @@ ui_teal_with_splash <- function(id,
 }
 
 #' Server function that loads the data through reactive loading and then delegates
-#' to \code{\link{srv_teal}}.
+#' to [`srv_teal`].
 #'
 #' @description `r lifecycle::badge("maturing")`
-#' Please also refer to the doc of \code{\link{init}}.
+#' Please also refer to the doc of [`init`].
 #'
 #' @inheritParams srv_shiny_module_arguments
-#' @param data `DataAbstract` R6 object and container for data
+#' @param data `TealDataAbstract` R6 object and container for data
 #' @inheritParams srv_teal
-#' @return `reactive`, return value of \code{\link{srv_teal}}
+#' @return `reactive`, return value of [`srv_teal`]
 #' @export
 srv_teal_with_splash <- function(input, output, session, data, modules, filter = list()) {
-  stopifnot(is(data, "DataAbstract"))
+  stopifnot(is(data, "TealDataAbstract"))
 
   is_pulled_data <- is_pulled(data)
 
-  # raw_data contains DataAbstract, i.e. R6 object and container for data
+  # raw_data contains `TealDataAbstract`, i.e. R6 object and container for data
   # reactive to get data through delayed loading
   # we must leave it inside the server because of callModule which needs to pick up the right session
   if (is_pulled_data) {

@@ -7,10 +7,10 @@
 init_filtered_dataset(dataset)
 }
 \arguments{
-\item{dataset}{(\code{Dataset})\cr}
+\item{dataset}{(\code{TealDataset})\cr}
 }
 \description{
-\code{FilteredDataset} contains \code{Dataset}
+\code{FilteredDataset} contains \code{TealDataset}
 }
 \examples{
 iris_d <- dataset("iris", iris)

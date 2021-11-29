@@ -1,6 +1,6 @@
-testthat::test_that("The constructor accepts a CDISCDataset and an empty list", {
+testthat::test_that("The constructor accepts a CDISCTealDataset and an empty list", {
   testthat::expect_error(CDISCFilteredDataset$new(
-    dataset = CDISCDataset$new(
+    dataset = CDISCTealDataset$new(
       "iris",
       head(iris),
       parent = character(0),
@@ -11,7 +11,7 @@ testthat::test_that("The constructor accepts a CDISCDataset and an empty list", 
 
 testthat::test_that("get_call returns a list of calls", {
   filtered_dataset <- CDISCFilteredDataset$new(
-    dataset = CDISCDataset$new(
+    dataset = CDISCTealDataset$new(
       "iris",
       head(iris),
       parent = character(0),
@@ -21,9 +21,9 @@ testthat::test_that("get_call returns a list of calls", {
   testthat::expect_true(is_class_list("language")(filtered_dataset$get_call()))
 })
 
-testthat::test_that("get_call returns a list call for a CDISCDataset with a parent", {
+testthat::test_that("get_call returns a list call for a CDISCTealDataset with a parent", {
   filtered_dataset <- CDISCFilteredDataset$new(
-    dataset = CDISCDataset$new(
+    dataset = CDISCTealDataset$new(
       "iris",
       head(iris),
       parent = "test",
@@ -37,7 +37,7 @@ testthat::test_that("get_filter_overview_info returns right array for CDISCFilte
   adsl <- as.data.frame(as.list(setNames(nm = c(get_cdisc_keys("ADSL")))))
   adsl$sex <- c("F")
   filtered_dataset <- CDISCFilteredDataset$new(
-    dataset = CDISCDataset$new(
+    dataset = CDISCTealDataset$new(
       "ADSL",
       adsl,
       parent = character(0),
@@ -55,7 +55,7 @@ testthat::test_that("get_filter_overview_info returns right array for CDISCFilte
   adsl <- as.data.frame(as.list(setNames(nm = c(get_cdisc_keys("ADSL")))))
   adsl$sex <- c("F")
   filtered_dataset <- CDISCFilteredDataset$new(
-    dataset = CDISCDataset$new(
+    dataset = CDISCTealDataset$new(
       "ADSL",
       adsl,
       parent = character(0),

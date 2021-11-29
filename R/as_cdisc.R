@@ -1,19 +1,19 @@
-#' Convert a `Dataset(Connector)` object to a `CDISCDataset(Connector)` object
+#' Convert a `TealDataset(Connector)` object to a `CDISCTealDataset(Connector)` object
 #'
-#' Convert a `Dataset(Connector)` object to a `CDISCDataset(Connector)` object
+#' Convert a `TealDataset(Connector)` object to a `CDISCTealDataset(Connector)` object
 #'
 #' @description `r lifecycle::badge("experimental")`
 #'
-#' @note If passed a \code{cdisc}-flavored object it returns the unmodified object.
+#' @note If passed a `CDISC`-flavored object it returns the unmodified object.
 #'
-#' @param x an object of `Dataset` or `DatasetConnector` class
+#' @param x an object of `TealDataset` or `TealDatasetConnector` class
 #' @inheritParams cdisc_dataset
 #'
-#' @return (`CDISCDataset` or `CDISCDatasetConnector`) object
+#' @return (`CDISCTealDataset` or `CDISCTealDatasetConnector`) object
 #'
 #' @export
 as_cdisc <- function(x, parent = `if`(identical(get_dataname(x), "ADSL"), character(0), "ADSL")) {
-  if (any(class(x) %in% c("CDISCDataset", "CDISCDatasetConnector"))) {
+  if (any(class(x) %in% c("CDISCTealDataset", "CDISCTealDatasetConnector"))) {
     x
   } else {
     UseMethod("as_cdisc")
@@ -23,7 +23,7 @@ as_cdisc <- function(x, parent = `if`(identical(get_dataname(x), "ADSL"), charac
 #' @rdname as_cdisc
 #' @export
 #' @examples
-#' # Dataset --------
+#' # TealDataset --------
 #'
 #' library(scda)
 #' as_cdisc(
@@ -43,7 +43,7 @@ as_cdisc <- function(x, parent = `if`(identical(get_dataname(x), "ADSL"), charac
 #'   ),
 #'   parent = "ADSL"
 #' )
-as_cdisc.Dataset <- function(x, parent = `if`(identical(get_dataname(x), "ADSL"), character(0), "ADSL")) {
+as_cdisc.TealDataset <- function(x, parent = `if`(identical(get_dataname(x), "ADSL"), character(0), "ADSL")) {
   if (length(get_keys(x)) > 0 || !(get_dataname(x) %in% names(default_cdisc_keys))) {
     cdisc_dataset(
       dataname = get_dataname(x),
@@ -67,7 +67,7 @@ as_cdisc.Dataset <- function(x, parent = `if`(identical(get_dataname(x), "ADSL")
 #' @rdname as_cdisc
 #' @export
 #' @examples
-#' # DatasetConnector --------
+#' # TealDatasetConnector --------
 #'
 #' library(scda)
 #' pull_fun_adsl <- callable_function(
@@ -93,14 +93,14 @@ as_cdisc.Dataset <- function(x, parent = `if`(identical(get_dataname(x), "ADSL")
 #'   parent = "ADSL"
 #' )
 #'
-as_cdisc.DatasetConnector <- function(x, parent = `if`(identical(get_dataname(x), "ADSL"), character(0), "ADSL")) {
+as_cdisc.TealDatasetConnector <- function(x, parent = `if`(identical(get_dataname(x), "ADSL"), character(0), "ADSL")) {
   ds <- tryCatch(
     expr = get_dataset(x),
     error = function(e) NULL
   )
   if (!is.null(ds)) {
     warning(
-      "Pulled 'dataset' from 'x' will not be passed to CDISCDatasetConnector.
+      "Pulled 'dataset' from 'x' will not be passed to CDISCTealDatasetConnector.
       Avoid pulling before conversion."
     )
   }

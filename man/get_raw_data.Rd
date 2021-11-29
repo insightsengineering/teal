@@ -2,21 +2,21 @@
 % Please edit documentation in R/get_raw_data.R
 \name{get_raw_data}
 \alias{get_raw_data}
-\alias{get_raw_data.Dataset}
-\alias{get_raw_data.DatasetConnector}
-\alias{get_raw_data.DataAbstract}
+\alias{get_raw_data.TealDataset}
+\alias{get_raw_data.TealDatasetConnector}
+\alias{get_raw_data.TealDataAbstract}
 \title{Retrieve raw data}
 \usage{
 get_raw_data(x, dataname = NULL)
 
-\method{get_raw_data}{Dataset}(x, dataname = NULL)
+\method{get_raw_data}{TealDataset}(x, dataname = NULL)
 
-\method{get_raw_data}{DatasetConnector}(x, dataname = NULL)
+\method{get_raw_data}{TealDatasetConnector}(x, dataname = NULL)
 
-\method{get_raw_data}{DataAbstract}(x, dataname = NULL)
+\method{get_raw_data}{TealDataAbstract}(x, dataname = NULL)
 }
 \arguments{
-\item{x}{(\code{Dataset}, \code{DatasetConnector}, \code{DataAbstract})\cr
+\item{x}{(\code{TealDataset}, \code{TealDatasetConnector}, \code{TealDataAbstract})\cr
 object}
 
 \item{dataname}{(\code{character})\cr
@@ -24,7 +24,7 @@ Name of dataset to return raw data for.}
 }
 \value{
 \code{data.frame} with the raw data inserted into the R6 objects. In case of
-\code{DataAbstract}, \code{list} of \code{data.frame} can be returned
+\code{TealDataAbstract}, \code{list} of \code{data.frame} can be returned
 if user doesn't specify \code{dataname} - (\code{get_raw_data} from all datasets).
 }
 \description{
@@ -32,14 +32,14 @@ if user doesn't specify \code{dataname} - (\code{get_raw_data} from all datasets
 }
 \examples{
 
-# Dataset ---------
+# TealDataset ---------
 library(scda)
 ADSL <- synthetic_cdisc_data("latest")$adsl
 
 x <- dataset(dataname = "ADSL", x = ADSL)
 get_raw_data(x)
 
-# DatasetConnector ---------
+# TealDatasetConnector ---------
 library(scda)
 pull_fun_adsl <- callable_function(
   function() {synthetic_cdisc_data("latest")$adsl}
@@ -48,7 +48,7 @@ dc <- dataset_connector("ADSL", pull_fun_adsl)
 load_dataset(dc)
 get_raw_data(dc)
 
-# RelationalData ----------------
+# TealData ----------------
 library(scda)
 adsl <- cdisc_dataset(dataname = "ADSL",
                       x = synthetic_cdisc_data("latest")$adsl,
@@ -58,10 +58,10 @@ adtte <- cdisc_dataset(dataname = "ADTTE",
                        x = synthetic_cdisc_data("latest")$adtte,
                        code = "library(scda)\nADTTE <- synthetic_cdisc_data(\"latest\")$adtte")
 
-rd <- teal:::RelationalData$new(adsl, adtte)
+rd <- teal:::TealData$new(adsl, adtte)
 get_raw_data(rd)
 
-# RelationalDataConnector --------
+# TealDataConnector --------
 adsl_cf <- callable_function(function() synthetic_cdisc_data("latest")$adsl)
 adsl <- cdisc_dataset_connector(dataname = "ADSL",
                                 pull_callable = adsl_cf,
@@ -81,7 +81,7 @@ load_datasets(rdc)
 get_raw_data(rdc)
 }
 
-# RelationalData (with connectors) --------
+# TealData (with connectors) --------
 drc <- cdisc_data(rdc)
 \dontrun{
 get_raw_data(drc)

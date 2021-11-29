@@ -2,19 +2,19 @@
 % Please edit documentation in R/get_code.R
 \name{get_code}
 \alias{get_code}
-\alias{get_code.DatasetConnector}
-\alias{get_code.Dataset}
-\alias{get_code.DataAbstract}
+\alias{get_code.TealDatasetConnector}
+\alias{get_code.TealDataset}
+\alias{get_code.TealDataAbstract}
 \alias{get_code.default}
 \title{Get code}
 \usage{
 get_code(x, ...)
 
-\method{get_code}{DatasetConnector}(x, deparse = TRUE, ...)
+\method{get_code}{TealDatasetConnector}(x, deparse = TRUE, ...)
 
-\method{get_code}{Dataset}(x, deparse = TRUE, ...)
+\method{get_code}{TealDataset}(x, deparse = TRUE, ...)
 
-\method{get_code}{DataAbstract}(x, dataname = character(0), deparse = TRUE, ...)
+\method{get_code}{TealDataAbstract}(x, dataname = character(0), deparse = TRUE, ...)
 
 \method{get_code}{default}(
   x,
@@ -27,8 +27,7 @@ get_code(x, ...)
 )
 }
 \arguments{
-\item{x}{(\code{object}) of class \code{\link{DatasetConnector}} or \code{\link{Dataset}}. If of
-class \code{character} will be treated as file to read.}
+\item{x}{(\code{\link{TealDatasetConnector}} or \code{\link{TealDataset}}). If of class \code{character} will be treated as file to read.}
 
 \item{...}{not used, only for support of S3}
 
@@ -37,8 +36,8 @@ class \code{character} will be treated as file to read.}
 \item{dataname}{(\code{character}) Name of dataset to return code for.}
 
 \item{exclude_comments}{(\code{logical}) whether exclude commented-out lines of code. Lines to be excluded
-should be ended with \code{# nocode}. For multiple line exclusions one should enclose ignored block of code with
-\code{# nocode>} and \code{# <nocode}}
+should be ended with \verb{# nocode}. For multiple line exclusions one should enclose ignored block of code with
+\verb{# nocode>} and \verb{# <nocode}}
 
 \item{read_sources}{(\code{logical}) whether to replace \code{source("path")} with code lines from sourced file.
 If \code{read_sources = TRUE} changing working directory inside preprocessing is not allowed.}
@@ -67,8 +66,8 @@ Reads code from specified files and specific code chunks.
 Code chunks are described with:
 
 \itemize{
-\item{to open chunk }{\code{#code>} or \code{#code ADSL>} or \code{#code ADSL ADTTE>}}
-\item{to close chunk }{\code{#<code} or \code{#<ADSL code} or \code{#<ADSL ADTTE code}}
+\item{to open chunk }{\verb{#code>} or \verb{#code ADSL>} or \verb{#code ADSL ADTTE>}}
+\item{to close chunk }{\verb{#<code} or \verb{#<ADSL code} or \verb{#<ADSL ADTTE code}}
 }
 }
 \examples{

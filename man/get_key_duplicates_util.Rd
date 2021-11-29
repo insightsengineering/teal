@@ -9,7 +9,7 @@ get_key_duplicates_util(dataframe, keys)
 \arguments{
 \item{dataframe}{dataframe}
 
-\item{keys}{\code{character} list of variable names consisting the key to the \code{dataframe}}
+\item{keys}{\code{character} list of variable names consisting the key to the \code{data.frame}}
 }
 \value{
 \code{tibble} with a duplicate keys information summary
@@ -19,7 +19,7 @@ get_key_duplicates_util(dataframe, keys)
 }
 \details{
 Accepts a list of variable names - \code{keys}, which are treated as the
-key to the \code{dataframe} argument. An instance of duplicated key is
+key to the \code{data.frame} argument. An instance of duplicated key is
 defined as two rows, which have the same values in columns defined by \code{keys}.
 Per each key value with duplicates returns a row in a \code{tibble}. The return table
 has columns corresponding to the variable names passed in \code{keys} and
@@ -36,5 +36,5 @@ print(res) # outputs a tibble
 
 }
 \seealso{
-\code{\link{get_key_duplicates}}
+\link{get_key_duplicates}
 }

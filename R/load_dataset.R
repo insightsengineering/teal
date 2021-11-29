@@ -1,17 +1,17 @@
 #' Load data from connection
 #'
 #' @description `r lifecycle::badge("experimental")`
-#' Load data from connection. Function used on \code{\link{DatasetConnector}} and
-#' \code{\link{Dataset}} to obtain data from connection.
+#' Load data from connection. Function used on [`TealDatasetConnector`] and
+#' [`TealDataset`] to obtain data from connection.
 #'
-#' @param x (\code{DatasetConnector} or \code{Dataset})
-#' @param args (\code{NULL} or named \code{list})\cr
+#' @param x (`TealDatasetConnector` or `TealDataset`)
+#' @param args (`NULL` or named `list`)\cr
 #'   additional dynamic arguments passed to function which loads the data.
-#' @param try (\code{logical}) whether perform function evaluation inside \code{try} clause
-#' @param conn Optional (\code{DataConnection}) object required to pull the data.
+#' @param try (`logical`) whether perform function evaluation inside `try` clause
+#' @param conn Optional (`TealDataConnection`) object required to pull the data.
 #' @param ... not used, only for support of S3
 #'
-#' @return \code{x} with loaded \code{dataset} object
+#' @return `x` with loaded `dataset` object
 #' @export
 load_dataset <- function(x, ...) {
   UseMethod("load_dataset")
@@ -20,14 +20,14 @@ load_dataset <- function(x, ...) {
 #' @rdname load_dataset
 #' @examples
 #'
-#' # Dataset --------
+#' # TealDataset --------
 #' library(scda)
 #' ADSL <- synthetic_cdisc_data("latest")$adsl
 #' ADSL_dataset <- dataset("ADSL", x = ADSL)
 #'
 #' load_dataset(ADSL_dataset)
 #' @export
-load_dataset.Dataset <- function(x, ...) { # nolint
+load_dataset.TealDataset <- function(x, ...) { # nolint
   check_ellipsis(...)
   return(invisible(x$get_dataset()))
 }
@@ -35,7 +35,7 @@ load_dataset.Dataset <- function(x, ...) { # nolint
 #' @rdname load_dataset
 #' @examples
 #'
-#' # DatasetConnector --------
+#' # TealDatasetConnector --------
 #' library(scda)
 #' pull_fun_adsl <- callable_function(
 #'   function() {synthetic_cdisc_data("latest")$adsl}
@@ -50,10 +50,10 @@ load_dataset.Dataset <- function(x, ...) { # nolint
 #' adae <- dataset_connector("ADAE", pull_fun_adae)
 #' load_dataset(adae)
 #' @export
-load_dataset.DatasetConnector <- function(x, args = NULL, try = FALSE, conn = NULL, ...) { # nolint
+load_dataset.TealDatasetConnector <- function(x, args = NULL, try = FALSE, conn = NULL, ...) { # nolint
   check_ellipsis(...)
   if (!is.null(conn)) {
-    stopifnot(inherits(conn, "DataConnection"))
+    stopifnot(inherits(conn, "TealDataConnection"))
 
     conn$open()
     conn_obj <- conn$get_conn()
@@ -70,14 +70,11 @@ load_dataset.DatasetConnector <- function(x, args = NULL, try = FALSE, conn = NU
 #'
 #' @description `r lifecycle::badge("experimental")`
 #'
-#' @param x (\code{object} of class \code{\link{RelationalData}}, \code{\link{Dataset}} or
-#'  \code{\link{DatasetConnector}})
-#' @param args (\code{NULL} or named \code{list})\cr
-#'   additional dynamic arguments passed to function which loads the data. Applicable only on
-#'   \code{\link{DatasetConnector}})
-#' @param try (\code{logical})\cr
-#'   whether perform function evaluation inside \code{try} clause. Applicable only on
-#'   \code{\link{DatasetConnector}})
+#' @param x ([`TealData`], [`TealDataset`] or [`TealDatasetConnector`])
+#' @param args (`NULL` or named `list`)\cr
+#'   additional dynamic arguments passed to function which loads the data. Applicable only on [`TealDatasetConnector`])
+#' @param try (`logical`)\cr
+#'   whether perform function evaluation inside `try` clause. Applicable only on [`TealDatasetConnector`])
 #' @param ... (not used)\cr
 #'  only for support of S3
 #'
@@ -91,14 +88,14 @@ load_datasets <- function(x, ...) {
 #' @rdname load_datasets
 #' @examples
 #'
-#' # Dataset ------
+#' # TealDataset ------
 #' library(scda)
 #' ADSL <- synthetic_cdisc_data("latest")$adsl
 #' x <- dataset("ADSL", x = ADSL)
 #'
 #' load_datasets(x)
 #' @export
-load_datasets.Dataset <- function(x, ...) { # nolint
+load_datasets.TealDataset <- function(x, ...) { # nolint
   check_ellipsis(...)
   return(invisible(x$get_dataset()))
 }
@@ -106,7 +103,7 @@ load_datasets.Dataset <- function(x, ...) { # nolint
 #' @rdname load_datasets
 #' @examples
 #'
-#' # DatasetConnector ------
+#' # TealDatasetConnector ------
 #' library(scda)
 #' pull_fun_adsl <- callable_function(
 #'   function() {synthetic_cdisc_data("latest")$adsl}
@@ -121,7 +118,7 @@ load_datasets.Dataset <- function(x, ...) { # nolint
 #' adae <- dataset_connector("ADAE", pull_fun_adae)
 #' load_datasets(adae)
 #' @export
-load_datasets.DatasetConnector <- function(x, args = NULL, try = FALSE, ...) { # nolint
+load_datasets.TealDatasetConnector <- function(x, args = NULL, try = FALSE, ...) { # nolint
   check_ellipsis(...)
   x$pull(args = args, try = try)
   return(invisible(x))
@@ -132,7 +129,7 @@ load_datasets.DatasetConnector <- function(x, args = NULL, try = FALSE, ...) { #
 #' @export
 #' @examples
 #'
-#' # RelationalDataConnector --------
+#' # TealDataConnector --------
 #' library(scda)
 #' adsl_cf <- callable_function(
 #'   function() {synthetic_cdisc_data("latest")$adsl}
@@ -152,7 +149,7 @@ load_datasets.DatasetConnector <- function(x, args = NULL, try = FALSE, ...) { #
 #' \dontrun{
 #' load_datasets(rdc)
 #' }
-load_datasets.RelationalDataConnector <- function(x, ...) { # nolint
+load_datasets.TealDataConnector <- function(x, ...) { # nolint
   check_ellipsis(...)
   if (interactive()) {
     x$launch()
@@ -165,7 +162,7 @@ load_datasets.RelationalDataConnector <- function(x, ...) { # nolint
 #' @export
 #' @examples
 #'
-#' # RelationalData --------
+#' # TealData --------
 #' library(scda)
 #' adsl_cf <- callable_function(
 #'   function() {synthetic_cdisc_data("latest")$adsl}
@@ -191,7 +188,7 @@ load_datasets.RelationalDataConnector <- function(x, ...) { # nolint
 #' \dontrun{
 #' load_datasets(tc)
 #' }
-load_datasets.RelationalData <- function(x, ...) { # nolint
+load_datasets.TealData <- function(x, ...) { # nolint
   check_ellipsis(...)
   if (interactive()) {
     x$launch()
