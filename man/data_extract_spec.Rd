@@ -36,8 +36,8 @@ Note that no checks based on columns can be done because the data is only referr
 \section{Module Development}{
 
 \describe{
-From this function's output a \code{\link[teal.devel:data_extract_ui]{teal.devel::data_extract_ui()}} can
-be constructed. This input can be read by a \code{\link[teal.devel:data_extract_module]{teal.devel::data_extract_module()}} module.
+From this function's output a \code{\link[teal.devel:data_extract_ui]{teal.devel::data_extract_ui()}} can be constructed.
+This input can be read by a \code{\link[teal.devel:data_extract_srv]{teal.devel::data_extract_srv()}} module.
 }
 }
 
