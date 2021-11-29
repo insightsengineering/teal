@@ -117,7 +117,7 @@ shiny \code{\link[shiny]{selectInput}}.}
 the name of the dataset this filter covers. Set during the initialization of the teal application.}
 
 \item{initialized}{(\code{logical})\cr
-indicates whether this filter was already initialized by \code{data_extract_input_filter_srv}.
+indicates whether this filter was already initialized in the application.
 TRUE if this filter was already consumed by the server function; FALSE otherwise.}
 }
 \value{
@@ -125,7 +125,7 @@ TRUE if this filter was already consumed by the server function; FALSE otherwise
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
-This function returns a configuration for the \code{data_extract_input} module. This function covers
+This function returns a configuration for the \code{data_extract_ui} module. This function covers
 the configuration of filtering datasets (so called \code{filter_spec}), which then is used to build
 the UI element in the \code{teal} app.
 }
