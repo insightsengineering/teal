@@ -1,4 +1,4 @@
-# teal 0.10.0.9020
+# teal 0.10.0.9023
 
 ### Breaking changes
 * Replaced `rcd_dataset_connector` and `rcd_cdisc_dataset_connector` with `scda_dataset_connector` and `scda_cdisc_dataset_connector` respectively.
@@ -16,15 +16,18 @@
 * Added logging at the info and trace level to the filter panel.
 * Added support of the full screen for a `module` when the `filters` argument is equal `NULL`.
 * Added support for `shiny::moduleServer` passed to the `server` parameter of `teal::module`.
+* Added `pid` into footnote so app developers can identify logs for apps.
 
 ### Bug fixes
 * Fixed data loading of `DatasetConnector` being dependent on other `Dataset` or `DatasetConnector` objects.
 * Fixed call returned by `FilterState` in case of using `MultiAssayExperiment::subsetByColData`. Now single condition for variable containing `NA` values is `!is.na(var) & var == <condition>`.
-
+* `updateOptionalSelectInput` no longer sets input to `NULL` when `logical` value is passed to `selected`.
+ 
 ### Miscellaneous
 * Replaced the servers from `DataConnection`, `RelationalDataConnector`, `DatasetConnector`, and `RelationalData` with `moduleServer`.
 * Updated R version requirement to >= 3.6.
 * Changed references to outdated functions of `teal.devel` in the documentation.
+* Updated "filter panel collapse"" icon to remove warnings when using shiny version >= 1.7.
 
 # teal 0.10.0
 

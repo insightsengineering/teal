@@ -173,7 +173,6 @@ updateOptionalSelectInput <- function(session, # nolint
                                       label = NULL,
                                       selected = NULL,
                                       choices = NULL) {
-
   raw_choices <- extract_raw_choices(choices, attr(choices, "sep"))
   raw_selected <- extract_raw_choices(selected, attr(choices, "sep"))
 
@@ -181,7 +180,7 @@ updateOptionalSelectInput <- function(session, # nolint
     session = session,
     inputId = inputId,
     label = label,
-    selected = raw_selected,
+    selected = as.character(raw_selected),
     choices = raw_choices,
     choicesOpt = picker_options(choices)
   )
