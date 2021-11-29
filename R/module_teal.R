@@ -93,7 +93,7 @@ ui_teal <- function(id,
       shiny_busy_message_panel,
       splash_ui,
       tags$hr(),
-      tags$footer(footer)
+      tags$footer(div(footer, p(paste("Pid:", Sys.getpid()))))
     )
   )
   return(res)
