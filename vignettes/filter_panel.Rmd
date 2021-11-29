@@ -21,8 +21,8 @@ of several classes but `FilteredData` is the only class which app developer will
 knitr::include_graphics("./images/filter_panel/filter_panel_uml_all.jpg")
 ```
 
-`FilteredData` contains one-to-many `FilteredDataset` objects which contain `Dataset` passed from
-`RelationalData` after all datasets are loaded. While `FilteredData` manages whole filter panel,
+`FilteredData` contains one-to-many `FilteredDataset` objects which contain `TealDataset` passed from
+`TealData` after all datasets are loaded. While `FilteredData` manages whole filter panel,
 `FilteredDataset` is responsible for single dataset filtering. Depending on a variant of
 `FilteredDataset` it can contain one or many `FilterStates`. `FilterStates` class object has one or
 two `ReactiveQueue` where `FilterState` objects are stored. `FilterState` is a single filter applied
@@ -35,11 +35,11 @@ call.
 knitr::include_graphics("./images/filter_panel/filtered_data_init.jpg")
 ```
 
-`FilteredData` is initialized in `srv_teal` when `RelationalData$is_pulled()` returns `TRUE`.
-`FilteredData` is dispatched on type of `RelationalData`, and if DDL is `CDISCData` then
-`CDISCFilteredData` is initialized. Each `Dataset` from `CDISCData` determines the type of the
-`FilteredDataset`. In above diagram `CDISCDataset` initializes `CDISCFilteredDataset` and
-`MAEDataset` initializes `MAEFilteredDataset`.  
+`FilteredData` is initialized in `srv_teal` when `TealData$is_pulled()` returns `TRUE`.
+`FilteredData` is dispatched on type of `TealData`, and if DDL is `CDISCTealData` then
+`CDISCFilteredData` is initialized. Each `TealDataset` from `CDISCTealData` determines the type of the
+`FilteredDataset`. In above diagram `CDISCTealDataset` initializes `CDISCFilteredDataset` and
+`MAETealDataset` initializes `MAEFilteredDataset`.  
 Most complicated concept in the new filter panel is `FilterStates`, which are initialized in
 `FilteredDataset`. The type and number of `FilterStates` depends on the data kept in the
 `FilteredDataset`. You can imagine `FilterStates` as one `subset` call. In case of
@@ -67,7 +67,7 @@ knitr::include_graphics("./images/filter_panel/class_details_filtered_data.jpg")
 `FilteredData` manages filter panel by returning filtered data, combining reproducible filter call
 from `FilteredDatasets`. `FilteredData` also contains all shiny modules displayed on the right panel
 in teal apps. `FilteredData` is a single object which is initialized in `srv_teal` module and it's
-variant depends on `RelationalData`. If DDL returns `CDISCData` then `CDISCFilteredData` is
+variant depends on `TealData`. If DDL returns `CDISCTealData` then `CDISCFilteredData` is
 initialized, otherwise `FilteredData`.
 
 In the analytical modules `datasets` can be used to:
@@ -89,17 +89,17 @@ knitr::include_graphics("./images/filter_panel/class_details_filtered_dataset.jp
 
 `FilteredDataset` is a class which keeps unfiltered data and returns filtered data based on the
 filter call derived from `FilterStates`.
-`FilteredDataset` class objects are initialized by `FilteredData`, one for each `Dataset`.
-`FilteredDataset` contains single `Dataset` object and one-to-many `FilterStates` depending on the
+`FilteredDataset` class objects are initialized by `FilteredData`, one for each `TealDataset`.
+`FilteredDataset` contains single `TealDataset` object and one-to-many `FilterStates` depending on the
 type of object. `FilteredDataset` stores dataset attributes, join keys to other datasets, and also
 combines and executes the code taken from `FilterStates`.
 
 Following `FilteredDataset` derived classes are already implemented:
 
-- `DefaultFilteredDataset` dispatched by `Dataset` to manage filters for `data.frame` object.
-- `CDISCFilteredDataset` dispatched by `CDISCDataset` to manage filters for `data.frame` matching
+- `DefaultFilteredDataset` dispatched by `TealDataset` to manage filters for `data.frame` object.
+- `CDISCFilteredDataset` dispatched by `CDISCTealDataset` to manage filters for `data.frame` matching
   ADAM standards.
-- `MAEFilteredDataset` dispatched by `MAEDataset` to manage filters for `MultiAssayExperiment`
+- `MAEFilteredDataset` dispatched by `MAETealDataset` to manage filters for `MultiAssayExperiment`
   object.
 
 ### `FilterStates`
@@ -109,13 +109,13 @@ knitr::include_graphics("./images/filter_panel/class_details_filter_states.jpg")
 ```
 
 `FilterStates` are initialized by the `FilteredDataset` when teal app starts. The type and number of
-`FilterStates` depends on the type of data included in `Dataset`. If data in `FilteredDataset`
+`FilterStates` depends on the type of data included in `TealDataset`. If data in `FilteredDataset`
 is composed of multiple objects then the equivalent number of `FilterStates` is initialized. One
 `FilterStates` object is responsible to make one subset call.
 Consider the case of `MultiAssayExperiment` object which contains multiple experiments and patients data
 stored in separate slots. Each of the objects within `MultiAssayExperiment` can be filtered by
-separate calls. Each sub-element in `Dataset` needs also separate inputs to select subset variables,
-which then should be applied to the same sub-element of the `Dataset`.
+separate calls. Each sub-element in `TealDataset` needs also separate inputs to select subset variables,
+which then should be applied to the same sub-element of the `TealDataset`.
 
 Currently following variants are possible:
 
@@ -205,7 +205,7 @@ list.
 `dplyr::filter` for `ADTTE` is followed by the merge call with `FILTERED_ADSL` - to be filtered by
 keys available parent.
 
-(7) `FilteredDatasetMAE` is based on `MAEDataset` where `raw_data` contains multiple object which can
+(7) `FilteredDatasetMAE` is based on `MAETealDataset` where `raw_data` contains multiple object which can
 be filtered on. In general `MultiAssayExperiment` contains `colData(MAE)` which is a `DataFrame`
 with ADSL-like patient data. `MAE` contains also multiple experiments which can be extracted using
 `MAE[["experiment name"]]` and they can also be filtered in filter-panel. This means that
