@@ -1,4 +1,4 @@
-# teal 0.10.0.9021
+# teal 0.10.0.9022
 
 ### Breaking changes
 * Replaced `rcd_dataset_connector` and `rcd_cdisc_dataset_connector` with `scda_dataset_connector` and `scda_cdisc_dataset_connector` respectively.
@@ -26,6 +26,7 @@
 ### Miscellaneous
 * Replaced the servers from `DataConnection`, `RelationalDataConnector`, `DatasetConnector`, and `RelationalData` with `moduleServer`.
 * Updated R version requirement to >= 3.6.
+* Updated "filter panel collapse"" icon to remove warnings when using shiny version >= 1.7.
 
 # teal 0.10.0
 
