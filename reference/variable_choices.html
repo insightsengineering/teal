@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">teal</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.10.0.9023</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.10.0.9024</span>
       </span>
     </div>
 
@@ -114,33 +114,6 @@
 <li>
   <a href="../news/index.html">Changelog</a>
 </li>
-<!-- start_releases -->
-<li class="dropdown">
-	<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-Other releases
-<span class="caret"></span></a><ul class="dropdown-menu" role="menu">
-   <li><a href="../index.html">latest</a></li>
-   <li><a href="../pre-release/index.html">pre-release</a></li>
-   <li><a href="../v0.10.0/index.html">v0.10.0</a></li>
-   <li><a href="../v0.9.5/index.html">v0.9.5</a></li>
-   <li><a href="../v0.9.4/index.html">v0.9.4</a></li>
-   <li><a href="../v0.9.3/index.html">v0.9.3</a></li>
-   <li><a href="../v0.9.2/index.html">v0.9.2</a></li>
-   <li><a href="../v0.9.1/index.html">v0.9.1</a></li>
-   <li><a href="../v0.9.0/index.html">v0.9.0</a></li>
-   <li><a href="../v0.8.5/index.html">v0.8.5</a></li>
-   <li><a href="../v0.8.4/index.html">v0.8.4</a></li>
-   <li><a href="../v0.8.3/index.html">v0.8.3</a></li>
-   <li><a href="../v0.8.2/index.html">v0.8.2</a></li>
-   <li><a href="../v0.7.0/index.html">v0.7.0</a></li>
-   <li><a href="../v0.6.0/index.html">v0.6.0</a></li>
-   <li><a href="../v0.0.5/index.html">v0.0.5</a></li>
-   <li><a href="../v0.0.4/index.html">v0.0.4</a></li>
-   <li><a href="../v0.0.3/index.html">v0.0.3</a></li>
-   <li><a href="../v0.0.2/index.html">v0.0.2</a></li>
-   <li><a href="../v0.0.1/index.html">v0.0.1</a></li>
-</ul></li>
-<!-- end_releases -->
       </ul>
       <ul class="nav navbar-nav navbar-right">
         <li>
@@ -162,7 +135,7 @@ Other releases
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Wrapper on <code><a href='choices_labeled.html'>choices_labeled</a></code> to label variables basing on existing labels in data</h1>
+    <h1>Wrapper on <a href='choices_labeled.html'>choices_labeled</a> to label variables basing on existing labels in data</h1>
     
     <div class="hidden name"><code>variable_choices.Rd</code></div>
     </div>
@@ -179,10 +152,10 @@ Other releases
 <span class='co'># S3 method for data.frame</span>
 <span class='fu'>variable_choices</span><span class='op'>(</span><span class='va'>data</span>, subset <span class='op'>=</span> <span class='cn'>NULL</span>, fill <span class='op'>=</span> <span class='cn'>FALSE</span>, key <span class='op'>=</span> <span class='cn'>NULL</span><span class='op'>)</span>
 
-<span class='co'># S3 method for Dataset</span>
+<span class='co'># S3 method for TealDataset</span>
 <span class='fu'>variable_choices</span><span class='op'>(</span><span class='va'>data</span>, subset <span class='op'>=</span> <span class='cn'>NULL</span>, fill <span class='op'>=</span> <span class='cn'>FALSE</span>, key <span class='op'>=</span> <span class='fu'><a href='get_keys.html'>get_keys</a></span><span class='op'>(</span><span class='va'>data</span><span class='op'>)</span><span class='op'>)</span>
 
-<span class='co'># S3 method for DatasetConnector</span>
+<span class='co'># S3 method for TealDatasetConnector</span>
 <span class='fu'>variable_choices</span><span class='op'>(</span><span class='va'>data</span>, subset <span class='op'>=</span> <span class='cn'>NULL</span>, fill <span class='op'>=</span> <span class='cn'>FALSE</span>, key <span class='op'>=</span> <span class='fu'><a href='get_keys.html'>get_keys</a></span><span class='op'>(</span><span class='va'>data</span><span class='op'>)</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
@@ -190,10 +163,10 @@ Other releases
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>data</th>
-      <td><p>(<code>data.frame</code>, <code>character</code>, <code>Dataset</code>, <code>DatasetConnector</code>)
+      <td><p>(<code>data.frame</code>, <code>character</code>, <code>TealDataset</code>, <code>TealDatasetConnector</code>)
 If <code>data.frame</code>, then data to extract labels from
 If <code>character</code>, then name of the dataset to extract data from once available
-If <code>Dataset</code> or <code>DatasetConnector</code>, then raw data to extract labels from.</p></td>
+If <code>TealDataset</code> or <code>TealDatasetConnector</code>, then raw data to extract labels from.</p></td>
     </tr>
     <tr>
       <th>subset</th>
@@ -213,7 +186,7 @@ See examples for more details.</p></td>
       <td><p>(<code>character</code>) vector with names of the variables, which are part of the primary key
 of the <code>data</code> argument. This is an optional argument, which allows to identify variables
 associated with the primary key and display the appropriate icon for them in the
-<code><a href='optionalSelectInput.html'>optionalSelectInput</a></code> widget.</p></td>
+<a href='optionalSelectInput.html'>optionalSelectInput</a> widget.</p></td>
     </tr>
     </table>
 
@@ -308,7 +281,7 @@ associated with the primary key and display the appropriate icon for them in the
 <span class='r-out co'><span class='r-pr'>#&gt;</span> $ key</span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> NULL</span>
 <span class='r-in'></span>
-<span class='r-in'><span class='co'># also works with Dataset and DatasetConnector</span></span>
+<span class='r-in'><span class='co'># also works with TealDataset and TealDatasetConnector</span></span>
 <span class='r-in'><span class='va'>ADRS_dataset</span> <span class='op'>&lt;-</span> <span class='fu'><a href='dataset.html'>dataset</a></span><span class='op'>(</span><span class='st'>"ADRS"</span>, <span class='va'>ADRS</span>, key <span class='op'>=</span> <span class='fu'><a href='get_cdisc_keys.html'>get_cdisc_keys</a></span><span class='op'>(</span><span class='st'>"ADRS"</span><span class='op'>)</span><span class='op'>)</span></span>
 <span class='r-in'><span class='fu'>variable_choices</span><span class='op'>(</span><span class='va'>ADRS_dataset</span><span class='op'>)</span></span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> number of choices: 48 </span>
@@ -389,7 +362,7 @@ associated with the primary key and display the appropriate icon for them in the
 <span class='r-out co'><span class='r-pr'>#&gt;</span>   idx &lt;- vapply(data, is.factor, logical(1))</span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span>   return(names(data)[idx])</span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> }</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> &lt;environment: 0x55e53c988148&gt;</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> &lt;environment: 0x56478b3d5860&gt;</span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> $ key</span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> NULL</span>
 </pre>

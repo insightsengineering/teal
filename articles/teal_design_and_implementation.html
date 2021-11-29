@@ -31,7 +31,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">teal</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.10.0.9023</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.10.0.9024</span>
       </span>
     </div>
 
@@ -73,33 +73,6 @@
 <li>
   <a href="../news/index.html">Changelog</a>
 </li>
-<!-- start_releases -->
-<li class="dropdown">
-	<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-Other releases
-<span class="caret"></span></a><ul class="dropdown-menu" role="menu">
-   <li><a href="../index.html">latest</a></li>
-   <li><a href="../pre-release/index.html">pre-release</a></li>
-   <li><a href="../v0.10.0/index.html">v0.10.0</a></li>
-   <li><a href="../v0.9.5/index.html">v0.9.5</a></li>
-   <li><a href="../v0.9.4/index.html">v0.9.4</a></li>
-   <li><a href="../v0.9.3/index.html">v0.9.3</a></li>
-   <li><a href="../v0.9.2/index.html">v0.9.2</a></li>
-   <li><a href="../v0.9.1/index.html">v0.9.1</a></li>
-   <li><a href="../v0.9.0/index.html">v0.9.0</a></li>
-   <li><a href="../v0.8.5/index.html">v0.8.5</a></li>
-   <li><a href="../v0.8.4/index.html">v0.8.4</a></li>
-   <li><a href="../v0.8.3/index.html">v0.8.3</a></li>
-   <li><a href="../v0.8.2/index.html">v0.8.2</a></li>
-   <li><a href="../v0.7.0/index.html">v0.7.0</a></li>
-   <li><a href="../v0.6.0/index.html">v0.6.0</a></li>
-   <li><a href="../v0.0.5/index.html">v0.0.5</a></li>
-   <li><a href="../v0.0.4/index.html">v0.0.4</a></li>
-   <li><a href="../v0.0.3/index.html">v0.0.3</a></li>
-   <li><a href="../v0.0.2/index.html">v0.0.2</a></li>
-   <li><a href="../v0.0.1/index.html">v0.0.1</a></li>
-</ul></li>
-<!-- end_releases -->
       </ul>
 <ul class="nav navbar-nav navbar-right">
 <li>
@@ -288,7 +261,8 @@ Other releases
 <p>We now discuss each of the three core components in detail. This would be a good time to browse through the just mentioned <code>.R</code> files and see how much of what has just been said/written can be spotted in the code without further explanation.</p>
 <div id="filtereddata" class="section level2">
 <h2 class="hasAnchor">
-<a href="#filtereddata" class="anchor"></a>FilteredData</h2>
+<a href="#filtereddata" class="anchor"></a><code>FilteredData</code>
+</h2>
 <p>The <code>FilteredData</code> class is an <a href="https://r6.r-lib.org/articles/Introduction.html"><code>R6</code></a> reference class to handle the datasets and the filtering state. In general, every dataset can be filtered based on values of its variables.</p>
 <ul>
 <li><p>if a variable <code>xi</code> is continuous or date/date time then the filtering is based on a range: <code>xi in [a,b]</code> where <code>min(xi)&lt;=a&lt;b&lt;=max(xi)</code></p></li>
@@ -306,7 +280,7 @@ Other releases
 </div>
 <div id="filtereddata-class-for-clinical-trials-data" class="section level3">
 <h3 class="hasAnchor">
-<a href="#filtereddata-class-for-clinical-trials-data" class="anchor"></a>FilteredData Class for Clinical Trials Data</h3>
+<a href="#filtereddata-class-for-clinical-trials-data" class="anchor"></a><code>FilteredData</code> Class for Clinical Trials Data</h3>
 <p><code>teal</code> supports both general relational data (using <code>teal_data</code> function output as <code>data</code> argument to <code><a href="../reference/init.html">teal::init</a></code>) and CDISC specific data (using <code>cdisc_data</code> function instead)</p>
 <p>When using CDISC specific data, the filtering mechanism makes use of <code>ADSL</code> being a “special” dataset as described below.</p>
 <p><img src="images/design_cdisc_filtered_datasets.png" width="100%"></p>
@@ -337,7 +311,7 @@ Other releases
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va">teal</span><span class="op">)</span></code></pre></div>
 <pre><code>## 
-## You are using teal version 0.10.0.9023</code></pre>
+## You are using teal version 0.10.0.9024</code></pre>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/options.html">options</a></span><span class="op">(</span>teal_logging <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>
 
@@ -387,7 +361,7 @@ Other releases
 </div>
 <div id="filtereddata-for-general-relational-data" class="section level3">
 <h3 class="hasAnchor">
-<a href="#filtereddata-for-general-relational-data" class="anchor"></a>FilteredData for general relational data</h3>
+<a href="#filtereddata-for-general-relational-data" class="anchor"></a><code>FilteredData</code> for general relational data</h3>
 <p>The CDISC filtering mechanism which we have introduced in the previous section can be abstracted with the following diagram:</p>
 <p><img src="images/design_cdisc_filtered_data.png" width="213"></p>
 <p>This is, however, a very particular filtering setup that has not much use besides analyzing clinical trials data that follows CDISC standards. A more general filtering is to have variable based filtering for an arbitrary dataset:</p>

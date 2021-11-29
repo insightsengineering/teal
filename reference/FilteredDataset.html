@@ -40,11 +40,11 @@
 
 
 <meta property="og:title" content="FilterStates R6 class — FilteredDataset" />
-<meta property="og:description" content="FilteredDataset is a class which renders/controls FilterStates(s) for Dataset.
+<meta property="og:description" content="FilteredDataset is a class which renders/controls FilterStates(s) for TealDataset.
 Each FilteredDataset contains filter_states field - a list which contains one
 (data.frame) or multiple (MultiAssayExperiment) FilterStates objects.
 Each FilterStates is responsible for one filter/subset expression applied for specific
-components of the Dataset." />
+components of the TealDataset." />
 
 
 
@@ -76,7 +76,7 @@ components of the Dataset." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">teal</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.10.0.9023</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.10.0.9024</span>
       </span>
     </div>
 
@@ -118,33 +118,6 @@ components of the Dataset." />
 <li>
   <a href="../news/index.html">Changelog</a>
 </li>
-<!-- start_releases -->
-<li class="dropdown">
-	<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-Other releases
-<span class="caret"></span></a><ul class="dropdown-menu" role="menu">
-   <li><a href="../index.html">latest</a></li>
-   <li><a href="../pre-release/index.html">pre-release</a></li>
-   <li><a href="../v0.10.0/index.html">v0.10.0</a></li>
-   <li><a href="../v0.9.5/index.html">v0.9.5</a></li>
-   <li><a href="../v0.9.4/index.html">v0.9.4</a></li>
-   <li><a href="../v0.9.3/index.html">v0.9.3</a></li>
-   <li><a href="../v0.9.2/index.html">v0.9.2</a></li>
-   <li><a href="../v0.9.1/index.html">v0.9.1</a></li>
-   <li><a href="../v0.9.0/index.html">v0.9.0</a></li>
-   <li><a href="../v0.8.5/index.html">v0.8.5</a></li>
-   <li><a href="../v0.8.4/index.html">v0.8.4</a></li>
-   <li><a href="../v0.8.3/index.html">v0.8.3</a></li>
-   <li><a href="../v0.8.2/index.html">v0.8.2</a></li>
-   <li><a href="../v0.7.0/index.html">v0.7.0</a></li>
-   <li><a href="../v0.6.0/index.html">v0.6.0</a></li>
-   <li><a href="../v0.0.5/index.html">v0.0.5</a></li>
-   <li><a href="../v0.0.4/index.html">v0.0.4</a></li>
-   <li><a href="../v0.0.3/index.html">v0.0.3</a></li>
-   <li><a href="../v0.0.2/index.html">v0.0.2</a></li>
-   <li><a href="../v0.0.1/index.html">v0.0.1</a></li>
-</ul></li>
-<!-- end_releases -->
       </ul>
       <ul class="nav navbar-nav navbar-right">
         <li>
@@ -172,11 +145,11 @@ Other releases
     </div>
 
     <div class="ref-description">
-    <p><code>FilteredDataset</code> is a class which renders/controls <code>FilterStates</code>(s) for <code>Dataset</code>.
+    <p><code>FilteredDataset</code> is a class which renders/controls <code>FilterStates</code>(s) for <code>TealDataset</code>.
 Each <code>FilteredDataset</code> contains <code>filter_states</code> field - a <code>list</code> which contains one
 (<code>data.frame</code>) or multiple (<code>MultiAssayExperiment</code>) <code>FilterStates</code> objects.
 Each <code>FilterStates</code> is responsible for one filter/subset expression applied for specific
-components of the <code>Dataset</code>.</p>
+components of the <code>TealDataset</code>.</p>
     </div>
 
 
@@ -218,7 +191,7 @@ components of the <code>Dataset</code>.</p>
 
 <h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Arguments</h4>
 <p><div class="arguments"></p><dl>
-<dt><code>dataset</code></dt><dd><p>(<code>Dataset</code>)<br />
+<dt><code>dataset</code></dt><dd><p>(<code>TealDataset</code>)<br />
 single dataset for which filters are rendered</p></dd>
 
 </dl><p></div></p>
@@ -235,7 +208,7 @@ single dataset for which filters are rendered</p></dd>
 
 </dl><p></div></p>
 <h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Returns</h4>
-<p>invisibly this FilteredDataset</p>
+<p>invisibly this <code>FilteredDataset</code></p>
 <p><hr>
 <a id="method-queues_empty"></a></p><h3 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Method <code>queues_empty()</code></h3>
 <p>Removes all active filter items applied to this dataset</p><h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Usage</h4>
@@ -266,7 +239,7 @@ whether returned data should be filtered or not</p></dd>
 </dl><p></div></p>
 <h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Returns</h4>
 <p>type of returned object depending on a data stored in
-<code>Dataset</code>. Currently <code>data.frame</code> or <code>MultiAssayExperiment</code></p>
+<code>TealDataset</code>. Currently <code>data.frame</code> or <code>MultiAssayExperiment</code></p>
 <p><hr>
 <a id="method-get_data_reactive"></a></p><h3 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Method <code>get_data_reactive()</code></h3>
 <p>Gets the reactive object which returns filtered data</p><h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Usage</h4>
@@ -297,11 +270,11 @@ the id of the <code>private$filter_states</code> list element where <code>Filter
 <p><code>character(1)</code> as a name of this dataset</p>
 <p><hr>
 <a id="method-get_dataset"></a></p><h3 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Method <code><a href='get_dataset.html'>get_dataset()</a></code></h3>
-<p>Gets the dataset in this FilteredDataset</p><h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Usage</h4>
+<p>Gets the dataset in this <code>FilteredDataset</code></p><h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Usage</h4>
 <p><div class="r"></p><pre><span class='va'>FilteredDataset</span><span class='op'>$</span><span class='fu'>get_dataset</span><span class='op'>(</span><span class='op'>)</span></pre><p></div></p>
 
 <h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Returns</h4>
-<p><code>Dataset</code></p>
+<p><code>TealDataset</code></p>
 <p><hr>
 <a id="method-get_filter_overview_info"></a></p><h3 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Method <code>get_filter_overview_info()</code></h3>
 <p>Get filter overview rows of a dataset</p><h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Usage</h4>
@@ -318,13 +291,13 @@ the id of the <code>private$filter_states</code> list element where <code>Filter
 <p>(<code>character(1)</code>) the hash</p>
 <p><hr>
 <a id="method-get_keys"></a></p><h3 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Method <code><a href='get_keys.html'>get_keys()</a></code></h3>
-<p>Gets the keys for the dataset of this FilteredDataset</p><h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Usage</h4>
+<p>Gets the keys for the dataset of this <code>FilteredDataset</code></p><h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Usage</h4>
 <p><div class="r"></p><pre><span class='va'>FilteredDataset</span><span class='op'>$</span><span class='fu'>get_keys</span><span class='op'>(</span><span class='op'>)</span></pre><p></div></p>
 
 <h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Returns</h4>
 <p>(<code>character</code>) the keys of dataset
-Gets join keys to join the dataset of this FilteredDataset
-with other Dataset objects.</p>
+Gets join keys to join the dataset of this <code>FilteredDataset</code>
+with other <code>TealDataset</code> objects.</p>
 <p><hr>
 <a id="method-get_join_keys"></a></p><h3 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Method <code>get_join_keys()</code></h3>
 

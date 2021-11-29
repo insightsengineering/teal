@@ -4,22 +4,22 @@
     <loc>https://insightsengineering.github.io/teal/index.html</loc>
   </url>
   <url>
-    <loc>https://insightsengineering.github.io/teal/reference/CDISCData.html</loc>
-  </url>
-  <url>
-    <loc>https://insightsengineering.github.io/teal/reference/CDISCDataConnector.html</loc>
-  </url>
-  <url>
-    <loc>https://insightsengineering.github.io/teal/reference/CDISCDataset.html</loc>
-  </url>
-  <url>
-    <loc>https://insightsengineering.github.io/teal/reference/CDISCDatasetConnector.html</loc>
-  </url>
-  <url>
     <loc>https://insightsengineering.github.io/teal/reference/CDISCFilteredData.html</loc>
   </url>
   <url>
     <loc>https://insightsengineering.github.io/teal/reference/CDISCFilteredDataset.html</loc>
+  </url>
+  <url>
+    <loc>https://insightsengineering.github.io/teal/reference/CDISCTealData.html</loc>
+  </url>
+  <url>
+    <loc>https://insightsengineering.github.io/teal/reference/CDISCTealDataConnector.html</loc>
+  </url>
+  <url>
+    <loc>https://insightsengineering.github.io/teal/reference/CDISCTealDataset.html</loc>
+  </url>
+  <url>
+    <loc>https://insightsengineering.github.io/teal/reference/CDISCTealDatasetConnector.html</loc>
   </url>
   <url>
     <loc>https://insightsengineering.github.io/teal/reference/Callable.html</loc>
@@ -41,15 +41,6 @@
   </url>
   <url>
     <loc>https://insightsengineering.github.io/teal/reference/DFFilterStates.html</loc>
-  </url>
-  <url>
-    <loc>https://insightsengineering.github.io/teal/reference/DataAbstract.html</loc>
-  </url>
-  <url>
-    <loc>https://insightsengineering.github.io/teal/reference/DataConnection.html</loc>
-  </url>
-  <url>
-    <loc>https://insightsengineering.github.io/teal/reference/DatasetConnector.html</loc>
   </url>
   <url>
     <loc>https://insightsengineering.github.io/teal/reference/DateFilterState.html</loc>
@@ -103,13 +94,22 @@
     <loc>https://insightsengineering.github.io/teal/reference/ReactiveQueue.html</loc>
   </url>
   <url>
-    <loc>https://insightsengineering.github.io/teal/reference/RelationalData.html</loc>
-  </url>
-  <url>
-    <loc>https://insightsengineering.github.io/teal/reference/RelationalDataConnector.html</loc>
-  </url>
-  <url>
     <loc>https://insightsengineering.github.io/teal/reference/SEFilterStates.html</loc>
+  </url>
+  <url>
+    <loc>https://insightsengineering.github.io/teal/reference/TealData.html</loc>
+  </url>
+  <url>
+    <loc>https://insightsengineering.github.io/teal/reference/TealDataAbstract.html</loc>
+  </url>
+  <url>
+    <loc>https://insightsengineering.github.io/teal/reference/TealDataConnection.html</loc>
+  </url>
+  <url>
+    <loc>https://insightsengineering.github.io/teal/reference/TealDataConnector.html</loc>
+  </url>
+  <url>
+    <loc>https://insightsengineering.github.io/teal/reference/TealDatasetConnector.html</loc>
   </url>
   <url>
     <loc>https://insightsengineering.github.io/teal/reference/add_no_selected_choices.html</loc>
@@ -313,10 +313,10 @@
     <loc>https://insightsengineering.github.io/teal/reference/get_filterable_varnames.html</loc>
   </url>
   <url>
-    <loc>https://insightsengineering.github.io/teal/reference/get_key_duplicates.Dataset.html</loc>
+    <loc>https://insightsengineering.github.io/teal/reference/get_key_duplicates.html</loc>
   </url>
   <url>
-    <loc>https://insightsengineering.github.io/teal/reference/get_key_duplicates.html</loc>
+    <loc>https://insightsengineering.github.io/teal/reference/get_key_duplicates.TealDataset.html</loc>
   </url>
   <url>
     <loc>https://insightsengineering.github.io/teal/reference/get_key_duplicates.data.frame.html</loc>

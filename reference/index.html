@@ -71,7 +71,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">teal</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.10.0.9023</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.10.0.9024</span>
       </span>
     </div>
 
@@ -113,33 +113,6 @@
 <li>
   <a href="../news/index.html">Changelog</a>
 </li>
-<!-- start_releases -->
-<li class="dropdown">
-	<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-Other releases
-<span class="caret"></span></a><ul class="dropdown-menu" role="menu">
-   <li><a href="../index.html">latest</a></li>
-   <li><a href="../pre-release/index.html">pre-release</a></li>
-   <li><a href="../v0.10.0/index.html">v0.10.0</a></li>
-   <li><a href="../v0.9.5/index.html">v0.9.5</a></li>
-   <li><a href="../v0.9.4/index.html">v0.9.4</a></li>
-   <li><a href="../v0.9.3/index.html">v0.9.3</a></li>
-   <li><a href="../v0.9.2/index.html">v0.9.2</a></li>
-   <li><a href="../v0.9.1/index.html">v0.9.1</a></li>
-   <li><a href="../v0.9.0/index.html">v0.9.0</a></li>
-   <li><a href="../v0.8.5/index.html">v0.8.5</a></li>
-   <li><a href="../v0.8.4/index.html">v0.8.4</a></li>
-   <li><a href="../v0.8.3/index.html">v0.8.3</a></li>
-   <li><a href="../v0.8.2/index.html">v0.8.2</a></li>
-   <li><a href="../v0.7.0/index.html">v0.7.0</a></li>
-   <li><a href="../v0.6.0/index.html">v0.6.0</a></li>
-   <li><a href="../v0.0.5/index.html">v0.0.5</a></li>
-   <li><a href="../v0.0.4/index.html">v0.0.4</a></li>
-   <li><a href="../v0.0.3/index.html">v0.0.3</a></li>
-   <li><a href="../v0.0.2/index.html">v0.0.2</a></li>
-   <li><a href="../v0.0.1/index.html">v0.0.1</a></li>
-</ul></li>
-<!-- end_releases -->
       </ul>
       <ul class="nav navbar-nav navbar-right">
         <li>
@@ -293,13 +266,13 @@ possible choices in a <code>filter_spec</code>, <code>select_spec</code> or <cod
         <td>
           <p><code><a href="value_choices.html">value_choices()</a></code> </p>
         </td>
-        <td><p>Wrapper on <code>choices_labeled</code> to label variable values basing on other variable values</p></td>
+        <td><p>Wrapper on choices_labeled to label variable values basing on other variable values</p></td>
       </tr><tr>
         
         <td>
           <p><code><a href="variable_choices.html">variable_choices()</a></code> </p>
         </td>
-        <td><p>Wrapper on <code>choices_labeled</code> to label variables basing on existing labels in data</p></td>
+        <td><p>Wrapper on choices_labeled to label variables basing on existing labels in data</p></td>
       </tr>
     </tbody><tbody>
       <tr>
@@ -356,31 +329,31 @@ possible choices in a <code>filter_spec</code>, <code>select_spec</code> or <cod
         <td>
           <p><code><a href="cdisc_dataset.html">cdisc_dataset()</a></code> </p>
         </td>
-        <td><p>Create a new object of <code>CDISCDataset</code> class</p></td>
+        <td><p>Create a new object of <code>CDISCTealDataset</code> class</p></td>
       </tr><tr>
         
         <td>
           <p><code><a href="cdisc_dataset_file.html">cdisc_dataset_file()</a></code> </p>
         </td>
-        <td><p>Load <code>CDISCDataset</code> object from a file</p></td>
+        <td><p>Load <code>CDISCTealDataset</code> object from a file</p></td>
       </tr><tr>
         
         <td>
           <p><code><a href="dataset.html">dataset()</a></code> </p>
         </td>
-        <td><p>Constructor for <code>Dataset</code> class</p></td>
+        <td><p>Constructor for <code>TealDataset</code> class</p></td>
       </tr><tr>
         
         <td>
           <p><code><a href="dataset_file.html">dataset_file()</a></code> </p>
         </td>
-        <td><p>Load <code>Dataset</code> object from a file</p></td>
+        <td><p>Load <code>TealDataset</code> object from a file</p></td>
       </tr><tr>
         
         <td>
           <p><code><a href="mae_dataset.html">mae_dataset()</a></code> </p>
         </td>
-        <td><p>Public facing constructor for MAEDataset</p></td>
+        <td><p>Public facing constructor for <code>MAETealDataset</code></p></td>
       </tr>
     </tbody><tbody>
       <tr>
@@ -399,55 +372,55 @@ possible choices in a <code>filter_spec</code>, <code>select_spec</code> or <cod
         <td>
           <p><code><a href="cdisc_data_connector.html">cdisc_data_connector()</a></code> </p>
         </td>
-        <td><p>Public facing object constructor for <code>CDISCDataConnector</code> class.</p></td>
+        <td><p>Public facing object constructor for <code>CDISCTealDataConnector</code> class.</p></td>
       </tr><tr>
         
         <td>
           <p><code><a href="cdisc_dataset_connector.html">cdisc_dataset_connector()</a></code> </p>
         </td>
-        <td><p>Create a new <code>CDISCDatasetConnector</code> object</p></td>
+        <td><p>Create a new <code>CDISCTealDatasetConnector</code> object</p></td>
       </tr><tr>
         
         <td>
           <p><code><a href="dataset_connector_file.html">dataset_connector_file()</a></code> <code><a href="dataset_connector_file.html">cdisc_dataset_connector_file()</a></code> </p>
         </td>
-        <td><p>Load <code>DatasetConnector</code> object from a file</p></td>
+        <td><p>Load <code>TealDatasetConnector</code> object from a file</p></td>
       </tr><tr>
         
         <td>
           <p><code><a href="cdse_dataset_connector.html">cdse_dataset_connector()</a></code> <code><a href="cdse_dataset_connector.html">cdse_cdisc_dataset_connector()</a></code> </p>
         </td>
-        <td><p><code>CDSE</code> <code>DatasetConnector</code></p></td>
+        <td><p><code>CDSE</code> <code>TealDatasetConnector</code></p></td>
       </tr><tr>
         
         <td>
           <p><code><a href="code_dataset_connector.html">code_dataset_connector()</a></code> <code><a href="code_dataset_connector.html">code_cdisc_dataset_connector()</a></code> </p>
         </td>
-        <td><p>Code <code>DatasetConnector</code></p></td>
+        <td><p>Code <code>TealDatasetConnector</code></p></td>
       </tr><tr>
         
         <td>
           <p><code><a href="csv_dataset_connector.html">csv_dataset_connector()</a></code> <code><a href="csv_dataset_connector.html">csv_cdisc_dataset_connector()</a></code> </p>
         </td>
-        <td><p><code>csv</code> <code>DatasetConnector</code></p></td>
+        <td><p><code>csv</code> <code>TealDatasetConnector</code></p></td>
       </tr><tr>
         
         <td>
           <p><code><a href="data_connection.html">data_connection()</a></code> </p>
         </td>
-        <td><p>Public facing object constructor for <code>DataConnection</code> class.</p></td>
+        <td><p>Public facing object constructor for <code>TealDataConnection</code> class.</p></td>
       </tr><tr>
         
         <td>
           <p><code><a href="datasetdb_dataset_connector.html">datasetdb_dataset_connector()</a></code> </p>
         </td>
-        <td><p><code>DataSetDB</code> <code>DatasetConnector</code></p></td>
+        <td><p><code>DataSetDB</code> <code>TealDatasetConnector</code></p></td>
       </tr><tr>
         
         <td>
           <p><code><a href="dataset_connector.html">dataset_connector()</a></code> </p>
         </td>
-        <td><p>Create a new <code>DatasetConnector</code> object</p></td>
+        <td><p>Create a new <code>TealDatasetConnector</code> object</p></td>
       </tr><tr>
         
         <td>
@@ -459,49 +432,49 @@ possible choices in a <code>filter_spec</code>, <code>select_spec</code> or <cod
         <td>
           <p><code><a href="python_dataset_connector.html">python_dataset_connector()</a></code> <code><a href="python_dataset_connector.html">python_cdisc_dataset_connector()</a></code> </p>
         </td>
-        <td><p><code>Python</code> <code>DatasetConnector</code></p></td>
+        <td><p><code>Python</code> <code>TealDatasetConnector</code></p></td>
       </tr><tr>
         
         <td>
           <p><code><a href="rds_dataset_connector.html">rds_dataset_connector()</a></code> <code><a href="rds_dataset_connector.html">rds_cdisc_dataset_connector()</a></code> </p>
         </td>
-        <td><p><code>RDS</code> <code>DatasetConnector</code></p></td>
+        <td><p><code>RDS</code> <code>TealDatasetConnector</code></p></td>
       </tr><tr>
         
         <td>
           <p><code><a href="relational_data_connector.html">relational_data_connector()</a></code> </p>
         </td>
-        <td><p>Public facing object constructor for <code>RelationalDataConnector</code> class.</p></td>
+        <td><p>Public facing object constructor for <code>TealDataConnector</code> class.</p></td>
       </tr><tr>
         
         <td>
           <p><code><a href="rice_dataset_connector.html">rice_dataset_connector()</a></code> <code><a href="rice_dataset_connector.html">rice_cdisc_dataset_connector()</a></code> </p>
         </td>
-        <td><p>Rice <code>DatasetConnector</code></p></td>
+        <td><p>Rice <code>TealDatasetConnector</code></p></td>
       </tr><tr>
         
         <td>
           <p><code><a href="scda_dataset_connector.html">scda_dataset_connector()</a></code> <code><a href="scda_dataset_connector.html">scda_cdisc_dataset_connector()</a></code> </p>
         </td>
-        <td><p><code>scda</code> <code>DatasetConnector</code></p></td>
+        <td><p><code>scda</code> <code>TealDatasetConnector</code></p></td>
       </tr><tr>
         
         <td>
           <p><code><a href="script_dataset_connector.html">script_dataset_connector()</a></code> <code><a href="script_dataset_connector.html">script_cdisc_dataset_connector()</a></code> </p>
         </td>
-        <td><p>Script <code>DatasetConnector</code></p></td>
+        <td><p>Script <code>TealDatasetConnector</code></p></td>
       </tr><tr>
         
         <td>
           <p><code><a href="snowflake_dataset_connector.html">snowflake_dataset_connector()</a></code> <code><a href="snowflake_dataset_connector.html">snowflake_cdisc_dataset_connector()</a></code> </p>
         </td>
-        <td><p><code>Snowflake</code> <code>DatasetConnector</code></p></td>
+        <td><p><code>Snowflake</code> <code>TealDatasetConnector</code></p></td>
       </tr><tr>
         
         <td>
           <p><code><a href="teradata_dataset_connector.html">teradata_dataset_connector()</a></code> <code><a href="teradata_dataset_connector.html">teradata_cdisc_dataset_connector()</a></code> </p>
         </td>
-        <td><p><code>Teradata</code> <code>DatasetConnector</code></p></td>
+        <td><p><code>Teradata</code> <code>TealDatasetConnector</code></p></td>
       </tr>
     </tbody><tbody>
       <tr>
@@ -581,31 +554,31 @@ possible choices in a <code>filter_spec</code>, <code>select_spec</code> or <cod
         <td>
           <p><code><a href="cdisc_data_file.html">cdisc_data_file()</a></code> </p>
         </td>
-        <td><p>Load <code>CDISCData</code> object from a file</p></td>
+        <td><p>Load <code>CDISCTealData</code> object from a file</p></td>
       </tr><tr>
         
         <td>
           <p><code><a href="cdse_data.html">cdse_data()</a></code> </p>
         </td>
-        <td><p><code>RelationalDataConnector</code> connector for <code>CDSE</code></p></td>
+        <td><p><code>TealDataConnector</code> connector for <code>CDSE</code></p></td>
       </tr><tr>
         
         <td>
           <p><code><a href="datasetdb_data.html">datasetdb_data()</a></code> </p>
         </td>
-        <td><p><code>RelationalDataConnector</code> connector for <code>DataSetDB</code></p></td>
+        <td><p><code>TealDataConnector</code> connector for <code>DataSetDB</code></p></td>
       </tr><tr>
         
         <td>
           <p><code><a href="rice_data.html">rice_data()</a></code> </p>
         </td>
-        <td><p><code>RelationalDataConnector</code> connector for <code>RICE</code></p></td>
+        <td><p><code>TealDataConnector</code> connector for <code>RICE</code></p></td>
       </tr><tr>
         
         <td>
           <p><code><a href="snowflake_data.html">snowflake_data()</a></code> </p>
         </td>
-        <td><p><code>RelationalDataConnector</code> connector for <code>SNOWFLAKE</code></p></td>
+        <td><p><code>TealDataConnector</code> connector for <code>SNOWFLAKE</code></p></td>
       </tr><tr>
         
         <td>
@@ -617,13 +590,13 @@ possible choices in a <code>filter_spec</code>, <code>select_spec</code> or <cod
         <td>
           <p><code><a href="teal_data_file.html">teal_data_file()</a></code> </p>
         </td>
-        <td><p>Load <code>RelationalData</code> object from a file</p></td>
+        <td><p>Load <code>TealData</code> object from a file</p></td>
       </tr><tr>
         
         <td>
           <p><code><a href="teradata_data.html">teradata_data()</a></code> </p>
         </td>
-        <td><p><code>RelationalDataConnector</code> connector for <code>TERADATA</code></p></td>
+        <td><p><code>TealDataConnector</code> connector for <code>TERADATA</code></p></td>
       </tr>
     </tbody><tbody>
       <tr>
@@ -642,7 +615,7 @@ possible choices in a <code>filter_spec</code>, <code>select_spec</code> or <cod
         <td>
           <p><code><a href="as_cdisc.html">as_cdisc()</a></code> </p>
         </td>
-        <td><p>Convert a <code>Dataset(Connector)</code> object to a <code>CDISCDataset(Connector)</code> object</p></td>
+        <td><p>Convert a <code>TealDataset(Connector)</code> object to a <code>CDISCTealDataset(Connector)</code> object</p></td>
       </tr><tr>
         
         <td>
@@ -679,27 +652,27 @@ possible choices in a <code>filter_spec</code>, <code>select_spec</code> or <cod
           <p><code><a href="get_dataname.html">get_dataname()</a></code> </p>
         </td>
         <td><p>S3 method for getting a dataname(s) of
-(<code>DataAbstract</code>, (<code>DatasetConnector</code> or
-<code>Dataset</code>) R6 object</p></td>
+(<code>TealDataAbstract</code>, (<code>TealDatasetConnector</code> or
+<code>TealDataset</code>) R6 object</p></td>
       </tr><tr>
         
         <td>
           <p><code><a href="get_dataset.html">get_dataset()</a></code> </p>
         </td>
-        <td><p>Get dataset from <code>DatasetConnector</code></p></td>
+        <td><p>Get dataset from <code>TealDatasetConnector</code></p></td>
       </tr><tr>
         
         <td>
           <p><code><a href="get_dataset_label.html">get_dataset_label()</a></code> </p>
         </td>
         <td><p>S3 method for getting a label of
-(<code>DatasetConnector</code> or <code>Dataset</code>) R6 object</p></td>
+(<code>TealDatasetConnector</code> or <code>TealDataset</code>) R6 object</p></td>
       </tr><tr>
         
         <td>
           <p><code><a href="get_datasets.html">get_datasets()</a></code> </p>
         </td>
-        <td><p>Get a <code>Dataset</code> objects.</p></td>
+        <td><p>Get a <code>TealDataset</code> objects.</p></td>
       </tr><tr>
         
         <td>
@@ -902,7 +875,7 @@ possible choices in a <code>filter_spec</code>, <code>select_spec</code> or <cod
       </tr><tr>
         
         <td>
-          <p><code><a href="get_key_duplicates.Dataset.html">get_key_duplicates(<i>&lt;Dataset&gt;</i>)</a></code> </p>
+          <p><code><a href="get_key_duplicates.TealDataset.html">get_key_duplicates(<i>&lt;TealDataset&gt;</i>)</a></code> </p>
         </td>
         <td><p>Creates a short information summary about the duplicate primary key values in a dataset</p></td>
       </tr><tr>
@@ -1114,27 +1087,27 @@ Object that stores function name with its arguments. Methods to get call and run
       </tr><tr>
         
         <td>
-          <p><code><a href="CDISCData.html">CDISCData</a></code> </p>
+          <p><code><a href="CDISCTealData.html">CDISCTealData</a></code> </p>
         </td>
-        <td><p>Manage multiple <code>CDISCDataConnector</code>, <code>CDISCDatasetConnector</code> and <code>CDISCDataset</code> objects.</p></td>
+        <td><p>Manage multiple <code>CDISCTealDataConnector</code>, <code>CDISCTealDatasetConnector</code> and <code>CDISCTealDataset</code> objects.</p></td>
       </tr><tr>
         
         <td>
-          <p><code><a href="CDISCDataConnector.html">CDISCDataConnector</a></code> </p>
+          <p><code><a href="CDISCTealDataConnector.html">CDISCTealDataConnector</a></code> </p>
         </td>
-        <td><p>Manage multiple and <code>DatasetConnector</code> of the same type.</p></td>
+        <td><p>Manage multiple and <code>TealDatasetConnector</code> of the same type.</p></td>
       </tr><tr>
         
         <td>
-          <p><code><a href="CDISCDataset.html">CDISCDataset</a></code> </p>
+          <p><code><a href="CDISCTealDataset.html">CDISCTealDataset</a></code> </p>
         </td>
         <td><p>R6 Class representing a dataset with parent attribute</p></td>
       </tr><tr>
         
         <td>
-          <p><code><a href="CDISCDatasetConnector.html">CDISCDatasetConnector</a></code> </p>
+          <p><code><a href="CDISCTealDatasetConnector.html">CDISCTealDatasetConnector</a></code> </p>
         </td>
-        <td><p>A <code>CDISCDatasetConnector</code> class of objects
+        <td><p>A <code>CDISCTealDatasetConnector</code> class of objects
 
 Objects of this class store the connection function to fetch a single dataset.
 
@@ -1168,43 +1141,9 @@ be empty (i.e. <code>character(0)</code>).</p></td>
       </tr><tr>
         
         <td>
-          <p><code><a href="DataAbstract.html">DataAbstract</a></code> </p>
-        </td>
-        <td><p><code>DataAbstract</code> class</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="DataConnection.html">DataConnection</a></code> </p>
-        </td>
-        <td><p>A <code>DataConnection</code> class of objects
-
-Objects of this class store the connection to a data source.
-It can be a database or server (<code>RICE</code> or <code>SAICE</code>) connection.</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="dataset_class.html">Dataset</a></code> </p>
-        </td>
-        <td><p>R6 Class representing a dataset with its attributes</p></td>
-      </tr><tr>
-        
-        <td>
           <p><code><a href="dataset.MultiAssayExperiment.html">dataset(<i>&lt;MultiAssayExperiment&gt;</i>)</a></code> </p>
         </td>
-        <td><p>S3 method to construct an MAEDataset object from MultiAssayExperiment</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="DatasetConnector.html">DatasetConnector</a></code> </p>
-        </td>
-        <td><p>A <code>DatasetConnector</code> class of objects
-
-Objects of this class store the connection function to fetch a single dataset.
-Note that for some specific connection types (e.g. <code>RICE</code> or <code>SAICE</code>),
-an object of class <code>DataConnection</code> must be provided.
-Data can be pulled via the <code>pull</code> method and accessed directly
-through the <code>dataset</code> active binding.
-Pulled data inherits from the class <code>Dataset</code></p></td>
+        <td><p>S3 method to construct an <code>MAETealDataset</code> object from <code>MultiAssayExperiment</code></p></td>
       </tr><tr>
         
         <td>
@@ -1286,6 +1225,12 @@ Pulled data inherits from the class <code>Dataset</code></p></td>
       </tr><tr>
         
         <td>
+          <p><code><a href="dataset_class.html">MAETealDataset</a></code> </p>
+        </td>
+        <td><p>R6 Class representing a <code>MultiAssayExperiment</code> object with its attributes</p></td>
+      </tr><tr>
+        
+        <td>
           <p><code><a href="MatrixFilterStates.html">MatrixFilterStates</a></code> </p>
         </td>
         <td><p>Initialize <code>MatrixFilterStates</code> object</p></td>
@@ -1316,21 +1261,49 @@ Pulled data inherits from the class <code>Dataset</code></p></td>
       </tr><tr>
         
         <td>
-          <p><code><a href="RelationalData.html">RelationalData</a></code> </p>
-        </td>
-        <td><p>Manage multiple <code>RelationalDataConnector</code>, <code>DatasetConnector</code> and <code>Dataset</code> objects.</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="RelationalDataConnector.html">RelationalDataConnector</a></code> </p>
-        </td>
-        <td><p>Manage multiple and <code>DatasetConnector</code> of the same type.</p></td>
-      </tr><tr>
-        
-        <td>
           <p><code><a href="SEFilterStates.html">SEFilterStates</a></code> </p>
         </td>
         <td><p>Initialize <code>SEFilterStates</code> object</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="TealData.html">TealData</a></code> </p>
+        </td>
+        <td><p>Manage multiple <code>TealDataConnector</code>, <code>TealDatasetConnector</code> and <code>TealDataset</code> objects.</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="TealDataAbstract.html">TealDataAbstract</a></code> </p>
+        </td>
+        <td><p><code>TealDataAbstract</code> class</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="TealDataConnection.html">TealDataConnection</a></code> </p>
+        </td>
+        <td><p>A <code>TealDataConnection</code> class of objects
+
+Objects of this class store the connection to a data source.
+It can be a database or server (<code>RICE</code>) connection.</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="TealDataConnector.html">TealDataConnector</a></code> </p>
+        </td>
+        <td><p>Manage multiple and <code>TealDatasetConnector</code> of the same type.</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="TealDatasetConnector.html">TealDatasetConnector</a></code> </p>
+        </td>
+        <td><p>A <code>TealDatasetConnector</code> class of objects
+
+Objects of this class store the connection function to fetch a single dataset.
+Note that for some specific connection types,
+an object of class <code>TealDataConnection</code> must be provided.
+Data can be pulled via the <code>pull</code> method and accessed directly
+through the <code>dataset</code> active binding.
+Pulled data inherits from the class <code>TealDataset</code></p></td>
       </tr><tr>
         
         <td>

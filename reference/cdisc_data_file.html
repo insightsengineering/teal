@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Load CDISCData object from a file — cdisc_data_file • teal</title>
+<title>Load CDISCTealData object from a file — cdisc_data_file • teal</title>
 
 
 <!-- jquery -->
@@ -39,7 +39,7 @@
 
 
 
-<meta property="og:title" content="Load CDISCData object from a file — cdisc_data_file" />
+<meta property="og:title" content="Load CDISCTealData object from a file — cdisc_data_file" />
 <meta property="og:description" content="" />
 
 
@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">teal</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.10.0.9023</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.10.0.9024</span>
       </span>
     </div>
 
@@ -114,33 +114,6 @@
 <li>
   <a href="../news/index.html">Changelog</a>
 </li>
-<!-- start_releases -->
-<li class="dropdown">
-	<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-Other releases
-<span class="caret"></span></a><ul class="dropdown-menu" role="menu">
-   <li><a href="../index.html">latest</a></li>
-   <li><a href="../pre-release/index.html">pre-release</a></li>
-   <li><a href="../v0.10.0/index.html">v0.10.0</a></li>
-   <li><a href="../v0.9.5/index.html">v0.9.5</a></li>
-   <li><a href="../v0.9.4/index.html">v0.9.4</a></li>
-   <li><a href="../v0.9.3/index.html">v0.9.3</a></li>
-   <li><a href="../v0.9.2/index.html">v0.9.2</a></li>
-   <li><a href="../v0.9.1/index.html">v0.9.1</a></li>
-   <li><a href="../v0.9.0/index.html">v0.9.0</a></li>
-   <li><a href="../v0.8.5/index.html">v0.8.5</a></li>
-   <li><a href="../v0.8.4/index.html">v0.8.4</a></li>
-   <li><a href="../v0.8.3/index.html">v0.8.3</a></li>
-   <li><a href="../v0.8.2/index.html">v0.8.2</a></li>
-   <li><a href="../v0.7.0/index.html">v0.7.0</a></li>
-   <li><a href="../v0.6.0/index.html">v0.6.0</a></li>
-   <li><a href="../v0.0.5/index.html">v0.0.5</a></li>
-   <li><a href="../v0.0.4/index.html">v0.0.4</a></li>
-   <li><a href="../v0.0.3/index.html">v0.0.3</a></li>
-   <li><a href="../v0.0.2/index.html">v0.0.2</a></li>
-   <li><a href="../v0.0.1/index.html">v0.0.1</a></li>
-</ul></li>
-<!-- end_releases -->
       </ul>
       <ul class="nav navbar-nav navbar-right">
         <li>
@@ -162,7 +135,7 @@ Other releases
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Load <code>CDISCData</code> object from a file</h1>
+    <h1>Load <code>CDISCTealData</code> object from a file</h1>
     
     <div class="hidden name"><code>cdisc_data_file.Rd</code></div>
     </div>
@@ -190,7 +163,7 @@ reproducible code to re-create object</p></td>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p><code>CDISCData</code> object</p>
+    <p><code>CDISCTealData</code> object</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><span class='r-in'><span class='va'>file_example</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/tempfile.html'>tempfile</a></span><span class='op'>(</span>fileext <span class='op'>=</span> <span class='st'>".R"</span><span class='op'>)</span></span>
@@ -214,9 +187,9 @@ reproducible code to re-create object</p></td>
 <span class='r-in'><span class='op'>)</span></span>
 <span class='r-in'></span>
 <span class='r-in'><span class='fu'>cdisc_data_file</span><span class='op'>(</span><span class='va'>file_example</span><span class='op'>)</span></span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> A CDISCData object containing 2 Dataset/DatasetConnector object(s) as element(s):</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> A CDISCTealData object containing 2 TealDataset/TealDatasetConnector object(s) as element(s):</span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> --&gt; Element 1:</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> A Dataset object containing the following data.frame (400 rows and 38 columns):</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> A TealDataset object containing the following data.frame (400 rows and 38 columns):</span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span>   STUDYID               USUBJID SUBJID SITEID AGE SEX                      RACE</span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> 1 AB12345  AB12345-CHN-3-id-128 id-128  CHN-3  32   M                     ASIAN</span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> 2 AB12345 AB12345-CHN-15-id-262 id-262 CHN-15  35   M BLACK OR AFRICAN AMERICAN</span>
@@ -311,7 +284,7 @@ reproducible code to re-create object</p></td>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> 399            63113904</span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> 400            63113904</span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> --&gt; Element 2:</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> A Dataset object containing the following data.frame (1600 rows and 49 columns):</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> A TealDataset object containing the following data.frame (1600 rows and 49 columns):</span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span>   STUDYID              USUBJID SUBJID SITEID AGE SEX                      RACE</span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> 1 AB12345 AB12345-BRA-1-id-105 id-105  BRA-1  38   M BLACK OR AFRICAN AMERICAN</span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> 2 AB12345 AB12345-BRA-1-id-105 id-105  BRA-1  38   M BLACK OR AFRICAN AMERICAN</span>

@@ -77,7 +77,7 @@ SummarizedExperiment and matrix are available." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">teal</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.10.0.9023</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.10.0.9024</span>
       </span>
     </div>
 
@@ -119,33 +119,6 @@ SummarizedExperiment and matrix are available." />
 <li>
   <a href="../news/index.html">Changelog</a>
 </li>
-<!-- start_releases -->
-<li class="dropdown">
-	<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-Other releases
-<span class="caret"></span></a><ul class="dropdown-menu" role="menu">
-   <li><a href="../index.html">latest</a></li>
-   <li><a href="../pre-release/index.html">pre-release</a></li>
-   <li><a href="../v0.10.0/index.html">v0.10.0</a></li>
-   <li><a href="../v0.9.5/index.html">v0.9.5</a></li>
-   <li><a href="../v0.9.4/index.html">v0.9.4</a></li>
-   <li><a href="../v0.9.3/index.html">v0.9.3</a></li>
-   <li><a href="../v0.9.2/index.html">v0.9.2</a></li>
-   <li><a href="../v0.9.1/index.html">v0.9.1</a></li>
-   <li><a href="../v0.9.0/index.html">v0.9.0</a></li>
-   <li><a href="../v0.8.5/index.html">v0.8.5</a></li>
-   <li><a href="../v0.8.4/index.html">v0.8.4</a></li>
-   <li><a href="../v0.8.3/index.html">v0.8.3</a></li>
-   <li><a href="../v0.8.2/index.html">v0.8.2</a></li>
-   <li><a href="../v0.7.0/index.html">v0.7.0</a></li>
-   <li><a href="../v0.6.0/index.html">v0.6.0</a></li>
-   <li><a href="../v0.0.5/index.html">v0.0.5</a></li>
-   <li><a href="../v0.0.4/index.html">v0.0.4</a></li>
-   <li><a href="../v0.0.3/index.html">v0.0.3</a></li>
-   <li><a href="../v0.0.2/index.html">v0.0.2</a></li>
-   <li><a href="../v0.0.1/index.html">v0.0.1</a></li>
-</ul></li>
-<!-- end_releases -->
       </ul>
       <ul class="nav navbar-nav navbar-right">
         <li>
@@ -173,7 +146,7 @@ Other releases
     </div>
 
     <div class="ref-description">
-    <p>Implements <code><a href='ReactiveQueue.html'>ReactiveQueue</a></code> to the <code>teal</code> filters.
+    <p>Implements <a href='ReactiveQueue.html'>ReactiveQueue</a> to the <code>teal</code> filters.
 Class manages adding and removing <code>FilterState</code> to the reactive
 queue and returns reproducible R expression relevant to specific
 <code>FilterStates</code> subclass.
@@ -241,7 +214,7 @@ no-op call such as <code>x &lt;- x</code>.</p><h4 class='hasAnchor' id='argument
 <p><code>call</code> or <code>NULL</code></p>
 <p><hr>
 <a id="method-get_fun"></a></p><h3 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Method <code>get_fun()</code></h3>
-<p>Gets the name of the function used to filter the data in this FilterStates.</p>
+<p>Gets the name of the function used to filter the data in this <code>FilterStates</code>.</p>
 <p>Get function name used to create filter call. By default it's a
 "subset" but can be overridden by child class method.</p><h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Usage</h4>
 <p><div class="r"></p><pre><span class='va'>FilterStates</span><span class='op'>$</span><span class='fu'>get_fun</span><span class='op'>(</span><span class='op'>)</span></pre><p></div></p>
@@ -250,14 +223,14 @@ no-op call such as <code>x &lt;- x</code>.</p><h4 class='hasAnchor' id='argument
 <p><code>character(1)</code> the name of the function</p>
 <p><hr>
 <a id="method-queue_empty"></a></p><h3 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Method <code>queue_empty()</code></h3>
-<p>Remove all FilterState objects from all queues in this FilterStates.</p><h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Usage</h4>
+<p>Remove all <code>FilterState</code> objects from all queues in this <code>FilterStates</code>.</p><h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Usage</h4>
 <p><div class="r"></p><pre><span class='va'>FilterStates</span><span class='op'>$</span><span class='fu'>queue_empty</span><span class='op'>(</span><span class='op'>)</span></pre><p></div></p>
 
 <h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Returns</h4>
 <p>NULL</p>
 <p><hr>
 <a id="method-queue_get"></a></p><h3 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Method <code>queue_get()</code></h3>
-<p>Returns a list of FilterState objects stored in this FilterStates.</p><h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Usage</h4>
+<p>Returns a list of <code>FilterState</code> objects stored in this <code>FilterStates.</code></p><h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Usage</h4>
 <p><div class="r"></p><pre><span class='va'>FilterStates</span><span class='op'>$</span><span class='fu'>queue_get</span><span class='op'>(</span><span class='va'>queue_index</span>, element_id <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/character.html'>character</a></span><span class='op'>(</span><span class='fl'>0</span><span class='op'>)</span><span class='op'>)</span></pre><p></div></p>
 
 <h4 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Arguments</h4>

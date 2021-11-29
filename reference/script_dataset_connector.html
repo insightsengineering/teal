@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Script DatasetConnector — script_dataset_connector • teal</title>
+<title>Script TealDatasetConnector — script_dataset_connector • teal</title>
 
 
 <!-- jquery -->
@@ -39,7 +39,7 @@
 
 
 
-<meta property="og:title" content="Script DatasetConnector — script_dataset_connector" />
+<meta property="og:title" content="Script TealDatasetConnector — script_dataset_connector" />
 <meta property="og:description" content="
 " />
 
@@ -73,7 +73,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">teal</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.10.0.9023</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.10.0.9024</span>
       </span>
     </div>
 
@@ -115,33 +115,6 @@
 <li>
   <a href="../news/index.html">Changelog</a>
 </li>
-<!-- start_releases -->
-<li class="dropdown">
-	<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-Other releases
-<span class="caret"></span></a><ul class="dropdown-menu" role="menu">
-   <li><a href="../index.html">latest</a></li>
-   <li><a href="../pre-release/index.html">pre-release</a></li>
-   <li><a href="../v0.10.0/index.html">v0.10.0</a></li>
-   <li><a href="../v0.9.5/index.html">v0.9.5</a></li>
-   <li><a href="../v0.9.4/index.html">v0.9.4</a></li>
-   <li><a href="../v0.9.3/index.html">v0.9.3</a></li>
-   <li><a href="../v0.9.2/index.html">v0.9.2</a></li>
-   <li><a href="../v0.9.1/index.html">v0.9.1</a></li>
-   <li><a href="../v0.9.0/index.html">v0.9.0</a></li>
-   <li><a href="../v0.8.5/index.html">v0.8.5</a></li>
-   <li><a href="../v0.8.4/index.html">v0.8.4</a></li>
-   <li><a href="../v0.8.3/index.html">v0.8.3</a></li>
-   <li><a href="../v0.8.2/index.html">v0.8.2</a></li>
-   <li><a href="../v0.7.0/index.html">v0.7.0</a></li>
-   <li><a href="../v0.6.0/index.html">v0.6.0</a></li>
-   <li><a href="../v0.0.5/index.html">v0.0.5</a></li>
-   <li><a href="../v0.0.4/index.html">v0.0.4</a></li>
-   <li><a href="../v0.0.3/index.html">v0.0.3</a></li>
-   <li><a href="../v0.0.2/index.html">v0.0.2</a></li>
-   <li><a href="../v0.0.1/index.html">v0.0.1</a></li>
-</ul></li>
-<!-- end_releases -->
       </ul>
       <ul class="nav navbar-nav navbar-right">
         <li>
@@ -163,7 +136,7 @@ Other releases
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Script <code>DatasetConnector</code></h1>
+    <h1>Script <code>TealDatasetConnector</code></h1>
     
     <div class="hidden name"><code>script_dataset_connector.Rd</code></div>
     </div>
@@ -236,7 +209,7 @@ Can't be used simultaneously with <code>script</code>.</p></td>
       <th>...</th>
       <td><p>Additional arguments applied to pull function.
 In case when this object code depends on the <code>raw_data</code> from the other
-<code>Dataset</code>, <code>DatasetConnector</code> object(s) or other constant value,
+<code>TealDataset</code>, <code>TealDatasetConnector</code> object(s) or other constant value,
 this/these object(s) should be included. Please note that <code>vars</code>
 are included to this object as local <code>vars</code> and they cannot be modified
 within another dataset.</p></td>
@@ -250,8 +223,8 @@ parent dataset name</p></td>
 
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>Create a <code>DatasetConnector</code> from <code>.R</code> file.</p>
-<p>Create a <code>CDISCDatasetConnector</code> from <code>script</code> file with keys assigned
+    <p>Create a <code>TealDatasetConnector</code> from <code>.R</code> file.</p>
+<p>Create a <code>CDISCTealDatasetConnector</code> from <code>script</code> file with keys assigned
 automatically by <code>dataname</code>.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>

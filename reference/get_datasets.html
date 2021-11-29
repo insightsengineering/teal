@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Get a Dataset objects. — get_datasets • teal</title>
+<title>Get a TealDataset objects. — get_datasets • teal</title>
 
 
 <!-- jquery -->
@@ -39,7 +39,7 @@
 
 
 
-<meta property="og:title" content="Get a Dataset objects. — get_datasets" />
+<meta property="og:title" content="Get a TealDataset objects. — get_datasets" />
 <meta property="og:description" content="" />
 
 
@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">teal</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.10.0.9023</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.10.0.9024</span>
       </span>
     </div>
 
@@ -114,33 +114,6 @@
 <li>
   <a href="../news/index.html">Changelog</a>
 </li>
-<!-- start_releases -->
-<li class="dropdown">
-	<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-Other releases
-<span class="caret"></span></a><ul class="dropdown-menu" role="menu">
-   <li><a href="../index.html">latest</a></li>
-   <li><a href="../pre-release/index.html">pre-release</a></li>
-   <li><a href="../v0.10.0/index.html">v0.10.0</a></li>
-   <li><a href="../v0.9.5/index.html">v0.9.5</a></li>
-   <li><a href="../v0.9.4/index.html">v0.9.4</a></li>
-   <li><a href="../v0.9.3/index.html">v0.9.3</a></li>
-   <li><a href="../v0.9.2/index.html">v0.9.2</a></li>
-   <li><a href="../v0.9.1/index.html">v0.9.1</a></li>
-   <li><a href="../v0.9.0/index.html">v0.9.0</a></li>
-   <li><a href="../v0.8.5/index.html">v0.8.5</a></li>
-   <li><a href="../v0.8.4/index.html">v0.8.4</a></li>
-   <li><a href="../v0.8.3/index.html">v0.8.3</a></li>
-   <li><a href="../v0.8.2/index.html">v0.8.2</a></li>
-   <li><a href="../v0.7.0/index.html">v0.7.0</a></li>
-   <li><a href="../v0.6.0/index.html">v0.6.0</a></li>
-   <li><a href="../v0.0.5/index.html">v0.0.5</a></li>
-   <li><a href="../v0.0.4/index.html">v0.0.4</a></li>
-   <li><a href="../v0.0.3/index.html">v0.0.3</a></li>
-   <li><a href="../v0.0.2/index.html">v0.0.2</a></li>
-   <li><a href="../v0.0.1/index.html">v0.0.1</a></li>
-</ul></li>
-<!-- end_releases -->
       </ul>
       <ul class="nav navbar-nav navbar-right">
         <li>
@@ -162,7 +135,7 @@ Other releases
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Get a <code><a href='Dataset.html'>Dataset</a></code> objects.</h1>
+    <h1>Get a <code><a href='MAETealDataset.html'>TealDataset</a></code> objects.</h1>
     
     <div class="hidden name"><code>get_datasets.Rd</code></div>
     </div>
@@ -173,13 +146,13 @@ Other releases
 
     <pre class="usage"><span class='fu'>get_datasets</span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span>
 
-<span class='co'># S3 method for DataAbstract</span>
+<span class='co'># S3 method for TealDataAbstract</span>
 <span class='fu'>get_datasets</span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span>
 
-<span class='co'># S3 method for DatasetConnector</span>
+<span class='co'># S3 method for TealDatasetConnector</span>
 <span class='fu'>get_datasets</span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span>
 
-<span class='co'># S3 method for Dataset</span>
+<span class='co'># S3 method for TealDataset</span>
 <span class='fu'>get_datasets</span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
@@ -187,18 +160,18 @@ Other releases
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>x</th>
-      <td><p>(<code><a href='RelationalData.html'>RelationalData</a></code>)<br />
+      <td><p>(<code><a href='TealData.html'>TealData</a></code>)<br />
 object containing datasets.</p></td>
     </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p><code>list</code> or <code>Dataset</code> objects</p>
+    <p><code>list</code> or <code>TealDataset</code> objects</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><span class='r-in'></span>
-<span class='r-in'><span class='co'># RelationalData --------</span></span>
+<span class='r-in'><span class='co'># TealData --------</span></span>
 <span class='r-in'><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'>scda</span><span class='op'>)</span></span>
 <span class='r-in'><span class='va'>adsl</span> <span class='op'>&lt;-</span> <span class='fu'><a href='cdisc_dataset.html'>cdisc_dataset</a></span><span class='op'>(</span>dataname <span class='op'>=</span> <span class='st'>"ADSL"</span>,</span>
 <span class='r-in'>                      x <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/pkg/scda/man/synthetic_cdisc_data.html'>synthetic_cdisc_data</a></span><span class='op'>(</span><span class='st'>"latest"</span><span class='op'>)</span><span class='op'>$</span><span class='va'>adsl</span>,</span>
@@ -211,7 +184,7 @@ object containing datasets.</p></td>
 <span class='r-in'><span class='va'>rd</span> <span class='op'>&lt;-</span> <span class='fu'><a href='cdisc_data.html'>cdisc_data</a></span><span class='op'>(</span><span class='va'>adsl</span>, <span class='va'>adae</span><span class='op'>)</span></span>
 <span class='r-in'><span class='fu'>get_datasets</span><span class='op'>(</span><span class='va'>rd</span><span class='op'>)</span></span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> $ADSL</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> A Dataset object containing the following data.frame (400 rows and 38 columns):</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> A TealDataset object containing the following data.frame (400 rows and 38 columns):</span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span>   STUDYID               USUBJID SUBJID SITEID AGE SEX                      RACE</span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> 1 AB12345  AB12345-CHN-3-id-128 id-128  CHN-3  32   M                     ASIAN</span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> 2 AB12345 AB12345-CHN-15-id-262 id-262 CHN-15  35   M BLACK OR AFRICAN AMERICAN</span>
@@ -307,7 +280,7 @@ object containing datasets.</p></td>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> 400            63113904</span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> $ADAE</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> A Dataset object containing the following data.frame (1934 rows and 66 columns):</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> A TealDataset object containing the following data.frame (1934 rows and 66 columns):</span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span>   STUDYID              USUBJID SUBJID SITEID AGE SEX  RACE COUNTRY DTHFL</span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> 1 AB12345 AB12345-BRA-1-id-134 id-134  BRA-1  47   M WHITE     BRA     N</span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> 2 AB12345 AB12345-BRA-1-id-134 id-134  BRA-1  47   M WHITE     BRA     N</span>
@@ -452,7 +425,7 @@ object containing datasets.</p></td>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> 1934    &lt;NA&gt;    &lt;NA&gt;       Y</span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
 <span class='r-in'></span>
-<span class='r-in'><span class='co'># RelationalDataConnector --------</span></span>
+<span class='r-in'><span class='co'># TealDataConnector --------</span></span>
 <span class='r-in'><span class='va'>adsl_cf</span> <span class='op'>&lt;-</span> <span class='fu'><a href='callable_function.html'>callable_function</a></span><span class='op'>(</span><span class='kw'>function</span><span class='op'>(</span><span class='op'>)</span> <span class='fu'><a href='https://rdrr.io/pkg/scda/man/synthetic_cdisc_data.html'>synthetic_cdisc_data</a></span><span class='op'>(</span><span class='st'>"latest"</span><span class='op'>)</span><span class='op'>$</span><span class='va'>adsl</span><span class='op'>)</span></span>
 <span class='r-in'><span class='va'>adsl</span> <span class='op'>&lt;-</span> <span class='fu'><a href='cdisc_dataset_connector.html'>cdisc_dataset_connector</a></span><span class='op'>(</span>dataname <span class='op'>=</span> <span class='st'>"ADSL"</span>,</span>
 <span class='r-in'>                                pull_callable <span class='op'>=</span> <span class='va'>adsl_cf</span>,</span>
@@ -472,13 +445,13 @@ object containing datasets.</p></td>
 <span class='r-in'><span class='fu'>get_datasets</span><span class='op'>(</span><span class='va'>rdc</span><span class='op'>)</span></span>
 <span class='r-in'><span class='op'>}</span></span>
 <span class='r-in'></span>
-<span class='r-in'><span class='co'># RelationalData --------</span></span>
+<span class='r-in'><span class='co'># TealData --------</span></span>
 <span class='r-in'><span class='va'>drc</span> <span class='op'>&lt;-</span> <span class='fu'><a href='cdisc_data.html'>cdisc_data</a></span><span class='op'>(</span><span class='va'>rdc</span>, <span class='va'>adae</span><span class='op'>)</span></span>
 <span class='r-in'><span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span></span>
 <span class='r-in'><span class='fu'>get_datasets</span><span class='op'>(</span><span class='va'>drc</span><span class='op'>)</span></span>
 <span class='r-in'><span class='op'>}</span></span>
 <span class='r-in'></span>
-<span class='r-in'><span class='co'># DatasetConnector --------</span></span>
+<span class='r-in'><span class='co'># TealDatasetConnector --------</span></span>
 <span class='r-in'><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'>scda</span><span class='op'>)</span></span>
 <span class='r-in'><span class='va'>adsl_cf</span> <span class='op'>&lt;-</span> <span class='fu'><a href='callable_function.html'>callable_function</a></span><span class='op'>(</span></span>
 <span class='r-in'>  <span class='kw'>function</span><span class='op'>(</span><span class='op'>)</span> <span class='op'>{</span><span class='fu'><a href='https://rdrr.io/pkg/scda/man/synthetic_cdisc_data.html'>synthetic_cdisc_data</a></span><span class='op'>(</span><span class='st'>"latest"</span><span class='op'>)</span><span class='op'>$</span><span class='va'>adsl</span><span class='op'>}</span></span>
@@ -490,14 +463,14 @@ object containing datasets.</p></td>
 <span class='r-in'><span class='fu'>get_datasets</span><span class='op'>(</span><span class='va'>rdc</span><span class='op'>)</span></span>
 <span class='r-in'><span class='op'>}</span></span>
 <span class='r-in'></span>
-<span class='r-in'><span class='co'># Dataset --------</span></span>
+<span class='r-in'><span class='co'># TealDataset --------</span></span>
 <span class='r-in'><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'>scda</span><span class='op'>)</span></span>
 <span class='r-in'><span class='va'>adsl</span> <span class='op'>&lt;-</span> <span class='fu'><a href='cdisc_dataset.html'>cdisc_dataset</a></span><span class='op'>(</span>dataname <span class='op'>=</span> <span class='st'>"ADSL"</span>,</span>
 <span class='r-in'>                      x <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/pkg/scda/man/synthetic_cdisc_data.html'>synthetic_cdisc_data</a></span><span class='op'>(</span><span class='st'>"latest"</span><span class='op'>)</span><span class='op'>$</span><span class='va'>adsl</span>,</span>
 <span class='r-in'>                      code <span class='op'>=</span> <span class='st'>"library(scda)\nADSL &lt;- synthetic_cdisc_data(\"latest\")$adsl"</span><span class='op'>)</span></span>
 <span class='r-in'></span>
 <span class='r-in'><span class='fu'>get_datasets</span><span class='op'>(</span><span class='va'>adsl</span><span class='op'>)</span></span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> A Dataset object containing the following data.frame (400 rows and 38 columns):</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> A TealDataset object containing the following data.frame (400 rows and 38 columns):</span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span>   STUDYID               USUBJID SUBJID SITEID AGE SEX                      RACE</span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> 1 AB12345  AB12345-CHN-3-id-128 id-128  CHN-3  32   M                     ASIAN</span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> 2 AB12345 AB12345-CHN-15-id-262 id-262 CHN-15  35   M BLACK OR AFRICAN AMERICAN</span>
