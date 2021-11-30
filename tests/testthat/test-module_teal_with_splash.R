@@ -51,7 +51,7 @@ testthat::test_that("srv_teal_with_splash creates raw_data based on DDL returns 
     expr = {
       testthat::expect_null(raw_data())
       session$setInputs(`startapp_module-submit` = TRUE) # DDL has independent session id (without ns)
-      testthat::expect_is(raw_data(), "RelationalData")
+      testthat::expect_is(raw_data(), "TealData")
       testthat::expect_identical(raw_data()$get_dataset("test_dataset")$get_raw_data(), iris)
     }
   )

@@ -48,3 +48,4 @@ testthat::test_that("active_datanames() returns dataname from active tab after c
     }
   )
 })
+

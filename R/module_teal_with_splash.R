@@ -57,11 +57,11 @@ ui_teal_with_splash <- function(id,
 #' @return `reactive`, return value of [`srv_teal`]
 #' @export
 srv_teal_with_splash <- function(id, data, modules, filter = list()) {
-  stopifnot(is(data, "DataAbstract"))
+  stopifnot(is(data, "TealDataAbstract"))
   moduleServer(id, function(input, output, session) {
     is_pulled_data <- is_pulled(data)
 
-    # raw_data contains DataAbstract, i.e. R6 object and container for data
+    # raw_data contains TealDataAbstract, i.e. R6 object and container for data
     # reactive to get data through delayed loading
     # we must leave it inside the server because of callModule which needs to pick up the right session
     if (is_pulled_data) {
@@ -71,6 +71,7 @@ srv_teal_with_splash <- function(id, data, modules, filter = list()) {
       stop_if_not(list(is.reactive(raw_data), "The delayed loading module has to return a reactive object."))
     }
 
-    srv_teal(id = "teal", modules = modules, raw_data = raw_data, filter = filter)
+    res <- srv_teal(id = "teal", modules = modules, raw_data = raw_data, filter = filter)
+    return(res)
   })
 }
