@@ -1,5 +1,5 @@
 filtered_data <- FilteredData$new()
-filtered_data$set_dataset(Dataset$new("iris", head(iris)))
+filtered_data$set_dataset(dataset(dataname = "iris", x = head(iris)))
 test_module1 <- module(
   label = "test1",
   ui =  function(id, ...) NULL,
@@ -41,21 +41,6 @@ testthat::test_that("passed shiny module is initialized", {
   )
 })
 
-testthat::test_that("passed shiny 'moduleServer' is initialized", {
-  testthat::expect_message(
-    shiny::testServer(
-      app = srv_nested_tabs,
-      args = list(
-        id = "test",
-        datasets = filtered_data,
-        modules = root_modules(test_module1)
-      ),
-      expr = NULL
-    ),
-    "1"
-  )
-})
-
 testthat::test_that("nested teal-modules are initialized", {
   out <- testthat::capture_messages(
     shiny::testServer(
@@ -74,7 +59,7 @@ testthat::test_that("nested teal-modules are initialized", {
   testthat::expect_identical(out, c("1\n", "2\n", "3\n", "4\n"))
 })
 
-testthat::test_that("changing input value of tab name returns ", {
+testthat::test_that("changing input value of tab name updates the active module", {
   out <- shiny::testServer(
       app = srv_nested_tabs,
       args = list(

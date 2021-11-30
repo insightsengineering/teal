@@ -71,7 +71,6 @@ srv_teal_with_splash <- function(id, data, modules, filter = list()) {
       stop_if_not(list(is.reactive(raw_data), "The delayed loading module has to return a reactive object."))
     }
 
-    res <- srv_teal(id = "teal", modules = modules, raw_data = raw_data, filter = filter)
-    return(res)
+    srv_teal(id = "teal", modules = modules, raw_data = raw_data, filter = filter)
   })
 }

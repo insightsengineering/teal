@@ -245,7 +245,7 @@ filter_spec <- function(vars,
 #' Data extract dynamic filter specification
 #'
 #' @description `r lifecycle::badge("experimental")`
-#' This function returns a configuration for the \code{data_extract_input} module. This function covers
+#' This function returns a configuration for the \code{data_extract_ui} module. This function covers
 #' the configuration of filtering datasets (so called `filter_spec`), which then is used to build
 #' the UI element in the `teal` app.
 #'
@@ -266,7 +266,7 @@ filter_spec <- function(vars,
 #' @param dataname (`character`)\cr
 #'   the name of the dataset this filter covers. Set during the initialization of the teal application.
 #' @param initialized (`logical`)\cr
-#'   indicates whether this filter was already initialized by \code{data_extract_input_filter_srv}.
+#'   indicates whether this filter was already initialized by \code{data_extract_ui_filter_srv}.
 #'   TRUE if this filter was already consumed by the server function; FALSE otherwise.
 #'
 #' @return `filter_spec` or `delayed_filter_spec` S3-class object.

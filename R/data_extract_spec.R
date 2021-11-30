@@ -13,7 +13,7 @@
 #'
 #' @section Module Development:
 #' \describe{
-#' From this function's output a \code{teal.devel::data_extract_input} can
+#' From this function's output a \code{teal.devel::data_extract_ui} can
 #' be constructed. This input can be read by a \code{teal.devel::data_extract_module} module.
 #' }
 #'

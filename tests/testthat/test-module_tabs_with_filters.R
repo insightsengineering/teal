@@ -1,6 +1,6 @@
 filtered_data <- FilteredData$new()
-filtered_data$set_dataset(Dataset$new("iris", head(iris)))
-filtered_data$set_dataset(Dataset$new("mtcars", head(mtcars)))
+filtered_data$set_dataset(dataset(dataname = "iris", x = head(iris)))
+filtered_data$set_dataset(dataset(dataname = "mtcars", x = head(mtcars)))
 
 test_module1 <- module(
   label = "iris_tab",
