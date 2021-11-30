@@ -16,7 +16,7 @@ more details.}
 
 \item{datasets}{(\code{FilteredData})\cr
 object to store filter state and filtered datasets, shared across modules. For more
-details see \link{FilteredData}}
+details see \code{\link{FilteredData}}}
 }
 \value{
 A \code{tagList} of The main menu, place holders for filters and
