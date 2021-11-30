@@ -57,7 +57,7 @@ Initialize \code{MAEFilteredDataset} object
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{dataset}}{(\code{MAEDataset})\cr
+\item{\code{dataset}}{(\code{MAETealDataset})\cr
 single dataset for which filters are rendered}
 }
 \if{html}{\out{</div>}}

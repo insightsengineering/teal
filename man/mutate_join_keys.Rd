@@ -3,14 +3,14 @@
 \name{mutate_join_keys}
 \alias{mutate_join_keys}
 \alias{mutate_join_keys.JoinKeys}
-\alias{mutate_join_keys.RelationalData}
+\alias{mutate_join_keys.TealData}
 \title{Mutate \code{JoinKeys} with a new values}
 \usage{
 mutate_join_keys(x, dataset_1, dataset_2, val)
 
 \method{mutate_join_keys}{JoinKeys}(x, dataset_1, dataset_2, val)
 
-\method{mutate_join_keys}{RelationalData}(x, dataset_1, dataset_2, val)
+\method{mutate_join_keys}{TealData}(x, dataset_1, dataset_2, val)
 }
 \arguments{
 \item{x}{(\code{JoinKeys}) object to be modified}
@@ -39,7 +39,7 @@ x$get("dataset_A", "dataset_B")
 
 mutate_join_keys(x, "dataset_A", "dataset_B", c("col_1" = "col_10"))
 x$get("dataset_A", "dataset_B")
-# RelationalData ----
+# TealData ----
 
 library(scda)
 

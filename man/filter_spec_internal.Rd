@@ -117,7 +117,7 @@ shiny \code{\link[shiny]{selectInput}}.}
 the name of the dataset this filter covers. Set during the initialization of the teal application.}
 
 \item{initialized}{(\code{logical})\cr
-indicates whether this filter was already initialized by \code{data_extract_ui_filter_srv}.
+indicates whether this filter was already initialized in the application.
 TRUE if this filter was already consumed by the server function; FALSE otherwise.}
 }
 \value{

@@ -14,14 +14,13 @@
 #' This is a wrapper function around the `module_teal.R` functions. Unless you are
 #' an end-user, don't use this function, but instead this module.
 #'
-#' @param data (`RelationalData` or `Dataset` or `DatasetConnector` or `list` or `data.frame`)
-#' R6 object as returned by \code{\link{cdisc_data}}, \code{\link{teal_data}}, \code{\link{cdisc_dataset}},
-#' \code{\link{dataset}}, \code{\link{dataset}}, \code{\link{dataset_connector}} or
-#' \code{\link{cdisc_dataset_connector}} or a single `data.frame` or a list of the previous objects or
+#' @param data (`TealData` or `TealDataset` or `TealDatasetConnector` or `list` or `data.frame`)
+#' `R6` object as returned by [cdisc_data], [teal_data], [cdisc_dataset], [dataset], [dataset_connector] or
+#' [cdisc_dataset_connector] or a single `data.frame` or a list of the previous objects or
 #' function returning a named list.
 #' NOTE: teal does not guarantee reproducibility of the code when names of the list elements do not match
-#' the original object names. To ensure reproducibility please use \code{\link{teal_data}} or
-#' \code{\link{cdisc_data}} with `check = TRUE` enabled.
+#' the original object names. To ensure reproducibility please use [teal_data] or
+#' [cdisc_data] with `check = TRUE` enabled.
 #' @param modules nested list with one list per module with the
 #'   following named list elements:
 #'   \tabular{ll}{
@@ -71,7 +70,7 @@
 #' @param footer (`character` or `shiny.tag`) the footer of the app
 #' @param id (`character`) module id to embed it, if provided,
 #'   the server function must be called with `callModule`;
-#'   See the vignette for an example. However, \code{\link{ui_teal_with_splash}}
+#'   See the vignette for an example. However, [ui_teal_with_splash]
 #'   is then preferred to this function.
 #'
 #' @return named list with server and ui function
@@ -134,12 +133,12 @@ init <- function(data,
                  header = tags$p("Add Title Here"),
                  footer = tags$p("Add Footer Here"),
                  id = character(0)) {
-  if (!is(data, "RelationalData")) {
+  if (!is(data, "TealData")) {
     data <- to_relational_data(data = data)
   }
 
   stopifnot(
-    is(data, "RelationalData"),
+    is(data, "TealData"),
     is(modules, "list") || is(modules, "teal_modules"),
     is.null(title) || is_character_single(title),
     is_fully_named_list(filter),

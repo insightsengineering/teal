@@ -11,7 +11,7 @@ ui_nested_tabs(id, modules, datasets)
 
 \item{modules}{(\code{teal_module} or \code{teal_modules})
 single or multiple modules. \code{teal_modules}  can be used for nested
-tabs, see \code{ui_nested_tabs}}
+tabs, see \link{ui_nested_tabs}}
 
 \item{datasets}{(\code{FilteredData})\cr
 object to store filter state and filtered datasets, shared across modules}

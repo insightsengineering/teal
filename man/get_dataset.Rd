@@ -2,38 +2,38 @@
 % Please edit documentation in R/get_dataset.R
 \name{get_dataset}
 \alias{get_dataset}
-\alias{get_dataset.DatasetConnector}
-\alias{get_dataset.Dataset}
-\alias{get_dataset.DataAbstract}
-\title{Get dataset from \code{DatasetConnector}}
+\alias{get_dataset.TealDatasetConnector}
+\alias{get_dataset.TealDataset}
+\alias{get_dataset.TealDataAbstract}
+\title{Get dataset from \code{TealDatasetConnector}}
 \usage{
 get_dataset(x, dataname)
 
-\method{get_dataset}{DatasetConnector}(x, dataname = NULL)
+\method{get_dataset}{TealDatasetConnector}(x, dataname = NULL)
 
-\method{get_dataset}{Dataset}(x, dataname = NULL)
+\method{get_dataset}{TealDataset}(x, dataname = NULL)
 
-\method{get_dataset}{DataAbstract}(x, dataname = NULL)
+\method{get_dataset}{TealDataAbstract}(x, dataname = NULL)
 }
 \arguments{
-\item{x}{(\code{DatasetConnector} or \code{DatasetConnector} or \code{DataAbstract})}
+\item{x}{(\code{TealDatasetConnector} or \code{TealDatasetConnector} or \code{TealDataAbstract})}
 
-\item{dataname}{\code{character} a name of dataset to be retrieved}
+\item{dataname}{(\code{character}) a name of dataset to be retrieved}
 }
 \value{
-(\code{Dataset})
+(\code{TealDataset})
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
 
-Get dataset from \code{DatasetConnector}
+Get dataset from \code{TealDatasetConnector}
 }
 \details{
-See \code{help(RelationalDataConnector)} and \code{help(RelationalData)} for more complex examples.
+See \code{help(TealDataConnector)} and \code{help(TealData)} for more complex examples.
 }
 \examples{
 
-# DatasetConnector --------
+# TealDatasetConnector --------
 library(scda)
 pull_fun_adae <- callable_function(
   function() {synthetic_cdisc_data("latest")$adae}
@@ -46,14 +46,14 @@ dc <- dataset_connector(dataname = "ADAE", pull_callable = pull_fun_adae,
 load_dataset(dc)
 get_dataset(dc)
 
-# Dataset --------
+# TealDataset --------
 library(scda)
 ADSL <- synthetic_cdisc_data("latest")$adsl
 x <- dataset("ADSL", ADSL)
 
 get_dataset(x)
 
-# RelationalData  (not containing connectors) --------
+# TealData  (not containing connectors) --------
 library(scda)
 adsl <- cdisc_dataset(dataname = "ADSL",
                       x = synthetic_cdisc_data("latest")$adsl,
@@ -63,7 +63,7 @@ adae <- cdisc_dataset(dataname = "ADAE",
                        x = synthetic_cdisc_data("latest")$adsl,
                        code = "library(scda)\nADTTE <- synthetic_cdisc_data(\"latest\")$adsl")
 
-rd <- teal:::RelationalData$new(adsl, adae)
+rd <- teal:::TealData$new(adsl, adae)
 get_dataset(rd, "ADSL")
 
 }

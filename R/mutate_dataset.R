@@ -2,7 +2,7 @@
 #'
 #' @description `r lifecycle::badge("experimental")`
 #'
-#' @param x (`Dataset`)\cr
+#' @param x (`TealDataset`)\cr
 #'    object.
 #' @param dataname (`character`)\cr
 #'   Dataname to be mutated.
@@ -13,11 +13,11 @@
 #'   file that contains R Code that can be read using [`read_script`].
 #'   Preferred before `code` argument.
 #' @param vars (named `list`)) \cr
-#'   In case when this object code depends on other `Dataset` object(s) or
+#'   In case when this object code depends on other `TealDataset` object(s) or
 #'   other constant value, this/these object(s) should be included as named
 #'   element(s) of the list. For example if this object code needs `ADSL`
 #'   object we should specify `vars = list(ADSL = <adsl object>)`.
-#'   It's recommended to include `Dataset` or `DatasetConnector` objects to
+#'   It's recommended to include `TealDataset` or `TealDatasetConnector` objects to
 #'   the `vars` list to preserve reproducibility. Please note that `vars`
 #'   are included to this object as local `vars` and they cannot be modified
 #'   within another dataset.
@@ -69,11 +69,11 @@ mutate_dataset <- function(x, ...) {
 #' ADSL_mutated$get_raw_data()$new_variable[1]
 #'
 #' @export
-mutate_dataset.Dataset <- function(x,
-                                   code = character(0),
-                                   script = character(0),
-                                   vars = list(),
-                                   ...) {
+mutate_dataset.TealDataset <- function(x,
+                                       code = character(0),
+                                       script = character(0),
+                                       vars = list(),
+                                       ...) {
   check_ellipsis(...)
   stopifnot(is_fully_named_list(vars))
 
@@ -84,26 +84,26 @@ mutate_dataset.Dataset <- function(x,
 
 #' @rdname mutate_dataset
 #' @export
-mutate_dataset.DatasetConnector <- function(x, # nolint
+mutate_dataset.TealDatasetConnector <- function(x, # nolint
+                                                code = character(0),
+                                                script = character(0),
+                                                vars = list(),
+                                                ...) {
+  check_ellipsis(...)
+  stopifnot(is_fully_named_list(vars))
+  code <- code_from_script(code, script)
+  x$mutate(code = code, vars = vars, ...)
+}
+
+
+#' @rdname mutate_dataset
+#' @export
+mutate_dataset.TealDataAbstract <- function(x,
+                                            dataname,
                                             code = character(0),
                                             script = character(0),
                                             vars = list(),
                                             ...) {
-  check_ellipsis(...)
-  stopifnot(is_fully_named_list(vars))
-  code <- code_from_script(code, script)
-  x$mutate(code = code, vars = vars, ...)
-}
-
-
-#' @rdname mutate_dataset
-#' @export
-mutate_dataset.DataAbstract <- function(x,
-                                        dataname,
-                                        code = character(0),
-                                        script = character(0),
-                                        vars = list(),
-                                        ...) {
   check_ellipsis(...)
   stopifnot(is_fully_named_list(vars))
 
@@ -118,14 +118,14 @@ mutate_dataset.DataAbstract <- function(x,
 #' @description `r lifecycle::badge("experimental")`
 #' Code used in this mutation is not linked to particular
 #' but refers to all datasets.
-#' Consequence of this is that when using \code{get_code(<dataset>)} this
+#' Consequence of this is that when using `get_code(<dataset>)` this
 #' part of the code will be returned for each dataset specified. This method
 #' should be used only if particular call involve changing multiple datasets.
-#' Otherwise please use \code{mutate_dataset}.
+#' Otherwise please use `mutate_dataset`.
 #' Execution of the code is delayed after datasets are pulled
-#' (\code{isTRUE(is_pulled)}).
+#' (`isTRUE(is_pulled)`).
 #'
-#' @param x (\code{DataAbstract})\cr
+#' @param x (`TealDataAbstract`)\cr
 #'   object.
 #' @inheritParams mutate_dataset
 #'
@@ -141,10 +141,10 @@ mutate_data <- function(x,
 
 #' @rdname mutate_data
 #' @export
-mutate_data.DataAbstract <- function(x,
-                                     code = character(0),
-                                     script = character(0),
-                                     vars = list()) {
+mutate_data.TealDataAbstract <- function(x,
+                                         code = character(0),
+                                         script = character(0),
+                                         vars = list()) {
   stopifnot(is_fully_named_list(vars))
 
   code <- code_from_script(code, script)

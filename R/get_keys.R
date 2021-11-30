@@ -3,7 +3,7 @@
 #' @description `r lifecycle::badge("experimental")`
 #' Get dataset primary keys
 #'
-#' @param x an object of `Dataset` or `DatasetConnector` class
+#' @param x an object of `TealDataset` or `TealDatasetConnector` class
 #' @param dataname (`character`) name of dataset to return keys for
 #' @param ... not used, only for support of S3
 #'
@@ -17,7 +17,7 @@ get_keys <- function(x, ...) {
 #' @rdname get_keys
 #' @export
 #' @examples
-#' # Dataset --------
+#' # TealDataset --------
 #'
 #' library(scda)
 #' get_keys(
@@ -28,7 +28,7 @@ get_keys <- function(x, ...) {
 #'     code = "ADSL <- synthetic_cdisc_data(\"latest\")$adsl"
 #'   )
 #' )
-get_keys.Dataset <- function(x, ...) {
+get_keys.TealDataset <- function(x, ...) {
   check_ellipsis(...)
   x$get_keys()
 }
@@ -36,7 +36,7 @@ get_keys.Dataset <- function(x, ...) {
 #' @rdname get_keys
 #' @export
 #' @examples
-#' # DatasetConnector --------
+#' # TealDatasetConnector --------
 #'
 #' library(scda)
 #' pull_fun_adsl <- callable_function(
@@ -49,7 +49,7 @@ get_keys.Dataset <- function(x, ...) {
 #'     keys = get_cdisc_keys("ADSL"),
 #'   )
 #' )
-get_keys.DatasetConnector <- function(x, ...) {
+get_keys.TealDatasetConnector <- function(x, ...) {
   check_ellipsis(...)
   x$get_keys()
 }
@@ -57,7 +57,7 @@ get_keys.DatasetConnector <- function(x, ...) {
 #' @rdname get_keys
 #' @export
 #' @examples
-#' # RelationalData --------
+#' # TealData --------
 #'
 #' get_keys(
 #'   teal_data(
@@ -66,7 +66,7 @@ get_keys.DatasetConnector <- function(x, ...) {
 #'   ),
 #'   "x"
 #' )
-get_keys.DataAbstract <- function(x, dataname, ...) {
+get_keys.TealDataAbstract <- function(x, dataname, ...) {
   check_ellipsis(...)
   get_keys(x$get_items(dataname))
 }
@@ -78,7 +78,7 @@ get_keys.DataAbstract <- function(x, dataname, ...) {
 #' @description `r lifecycle::badge("experimental")`
 #' Set dataset primary keys
 #'
-#' @param x an object of `Dataset` or `DatasetConnector` class
+#' @param x an object of `TealDataset` or `TealDatasetConnector` class
 #' @param keys optional, (`character`) vector with primary keys
 #' @param dataname (`character`) name of dataset for which set the keys
 #' @param ... not used, only for support of S3
@@ -93,7 +93,7 @@ set_keys <- function(x, ...) {
 #' @rdname set_keys
 #' @export
 #' @examples
-#' # Dataset --------
+#' # TealDataset --------
 #'
 #' library(scda)
 #' set_keys(
@@ -104,7 +104,7 @@ set_keys <- function(x, ...) {
 #'   ),
 #'   keys = get_cdisc_keys("ADSL")
 #' )
-set_keys.Dataset <- function(x, keys, ...) {
+set_keys.TealDataset <- function(x, keys, ...) {
   check_ellipsis(...)
   x$set_keys(keys)
 }
@@ -112,7 +112,7 @@ set_keys.Dataset <- function(x, keys, ...) {
 #' @rdname set_keys
 #' @export
 #' @examples
-#' # DatasetConnector --------
+#' # TealDatasetConnector --------
 #'
 #' library(scda)
 #' pull_fun_adsl <- callable_function(
@@ -125,7 +125,7 @@ set_keys.Dataset <- function(x, keys, ...) {
 #'   ),
 #'   keys = get_cdisc_keys("ADSL")
 #' )
-set_keys.DatasetConnector <- function(x, keys, ...) {
+set_keys.TealDatasetConnector <- function(x, keys, ...) {
   check_ellipsis(...)
   x$set_keys(keys)
 }
@@ -133,7 +133,7 @@ set_keys.DatasetConnector <- function(x, keys, ...) {
 #' @rdname set_keys
 #' @export
 #' @examples
-#' # RelationalData --------
+#' # TealData --------
 #'
 #' set_keys(
 #'   teal_data(
@@ -143,7 +143,7 @@ set_keys.DatasetConnector <- function(x, keys, ...) {
 #'   "x",
 #'   c("x1", "y1")
 #' )
-set_keys.DataAbstract <- function(x, dataname, keys, ...) {
+set_keys.TealDataAbstract <- function(x, dataname, keys, ...) {
   check_ellipsis(...)
   set_keys(x$get_items(dataname), keys = keys)
   return(invisible(x))

@@ -36,7 +36,7 @@ Other variables cannot be used for filtering the data in this class.
 Common arguments are:
 \enumerate{
 \item \code{filtered}: whether to return a filtered result or not
-\item \code{dataname}: the name of one of the datasets in this FilteredData
+\item \code{dataname}: the name of one of the datasets in this \code{FilteredData}
 \item \code{varname}: one of the columns in a dataset
 }
 }
@@ -475,7 +475,7 @@ the intersection of \code{self$datanames()} and \code{datanames}
 \if{html}{\out{<a id="method-set_dataset"></a>}}
 \if{latex}{\out{\hypertarget{method-set_dataset}{}}}
 \subsection{Method \code{set_dataset()}}{
-Adds a \code{Dataset} object to this FilteredData
+Adds a \code{TealDataset} object to this \code{FilteredData}
 
 Adds a dataset and preserve all attributes attached to this object.
 Technically \code{set_dataset} created \code{FilteredDataset} which keeps
@@ -487,13 +487,13 @@ Technically \code{set_dataset} created \code{FilteredDataset} which keeps
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{dataset}}{(\code{Dataset} or \code{DatasetConnector})\cr
+\item{\code{dataset}}{(\code{TealDataset} or \code{TealDatasetConnector})\cr
 the object containing data and attributes.}
 }
 \if{html}{\out{</div>}}
 }
 \subsection{Returns}{
-(\code{self}) invisibly this FilteredData
+(\code{self}) invisibly this \code{FilteredTealData}
 }
 }
 \if{html}{\out{<hr>}}

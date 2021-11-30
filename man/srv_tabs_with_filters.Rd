@@ -15,7 +15,7 @@ object to store filter state and filtered datasets, shared across modules}
 
 \item{modules}{(\code{teal_module} or \code{teal_modules})
 single or multiple modules. \code{teal_modules}  can be used for nested
-tabs, see \code{ui_nested_tabs}}
+tabs, see \link{ui_nested_tabs}}
 }
 \value{
 \code{reactive} currently selected active_module

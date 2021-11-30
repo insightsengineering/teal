@@ -4,11 +4,11 @@
 \alias{FilteredDataset}
 \title{\code{FilterStates} R6 class}
 \description{
-\code{FilteredDataset} is a class which renders/controls \code{FilterStates}(s) for \code{Dataset}.
+\code{FilteredDataset} is a class which renders/controls \code{FilterStates}(s) for \code{TealDataset}.
 Each \code{FilteredDataset} contains \code{filter_states} field - a \code{list} which contains one
 (\code{data.frame}) or multiple (\code{MultiAssayExperiment}) \code{FilterStates} objects.
 Each \code{FilterStates} is responsible for one filter/subset expression applied for specific
-components of the \code{Dataset}.
+components of the \code{TealDataset}.
 }
 \section{Methods}{
 \subsection{Public methods}{
@@ -50,7 +50,7 @@ Initializes this \code{FilteredDataset} object
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{dataset}}{(\code{Dataset})\cr
+\item{\code{dataset}}{(\code{TealDataset})\cr
 single dataset for which filters are rendered}
 }
 \if{html}{\out{</div>}}
@@ -75,7 +75,7 @@ Adds objects to the filter call evaluation environment
 \if{html}{\out{</div>}}
 }
 \subsection{Returns}{
-invisibly this FilteredDataset
+invisibly this \code{FilteredDataset}
 }
 }
 \if{html}{\out{<hr>}}
@@ -127,7 +127,7 @@ whether returned data should be filtered or not}
 }
 \subsection{Returns}{
 type of returned object depending on a data stored in
-\code{Dataset}. Currently \code{data.frame} or \code{MultiAssayExperiment}
+\code{TealDataset}. Currently \code{data.frame} or \code{MultiAssayExperiment}
 }
 }
 \if{html}{\out{<hr>}}
@@ -183,13 +183,13 @@ Get name of the dataset
 \if{html}{\out{<a id="method-get_dataset"></a>}}
 \if{latex}{\out{\hypertarget{method-get_dataset}{}}}
 \subsection{Method \code{get_dataset()}}{
-Gets the dataset in this FilteredDataset
+Gets the dataset in this \code{FilteredDataset}
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{FilteredDataset$get_dataset()}\if{html}{\out{</div>}}
 }
 
 \subsection{Returns}{
-\code{Dataset}
+\code{TealDataset}
 }
 }
 \if{html}{\out{<hr>}}
@@ -222,15 +222,15 @@ Returns the hash of the unfiltered dataset
 \if{html}{\out{<a id="method-get_keys"></a>}}
 \if{latex}{\out{\hypertarget{method-get_keys}{}}}
 \subsection{Method \code{get_keys()}}{
-Gets the keys for the dataset of this FilteredDataset
+Gets the keys for the dataset of this \code{FilteredDataset}
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{FilteredDataset$get_keys()}\if{html}{\out{</div>}}
 }
 
 \subsection{Returns}{
 (\code{character}) the keys of dataset
-Gets join keys to join the dataset of this FilteredDataset
-with other Dataset objects.
+Gets join keys to join the dataset of this \code{FilteredDataset}
+with other \code{TealDataset} objects.
 }
 }
 \if{html}{\out{<hr>}}

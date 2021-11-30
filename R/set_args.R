@@ -1,10 +1,10 @@
-#' Set arguments of a \code{CallableFunction}
+#' Set arguments of a `CallableFunction`
 #'
 #' @description `r lifecycle::badge("experimental")`
-#' Set arguments of a \code{CallableFunction}
+#' Set arguments of a `CallableFunction`
 #'
-#' @param x \code{CallableFunction} or \code{DatasetConnector})
-#' @param args (\code{NULL} or named \code{list}) dynamic arguments to function
+#' @param x `CallableFunction` or `TealDatasetConnector`)
+#' @param args (`NULL` or named `list`) dynamic arguments to function
 #'
 #' @return nothing
 #' @rdname set_args
@@ -45,7 +45,7 @@ set_args.CallableCode <- function(x, args) {
 #' @examples
 #' ds <- dataset_connector("x", pull_callable = callable_function(data.frame))
 #' set_args(ds, list(x = 1:5, y = letters[1:5]))
-set_args.DatasetConnector <- function(x, args) {
+set_args.TealDatasetConnector <- function(x, args) {
   x$set_args(args)
   return(invisible(x))
 }

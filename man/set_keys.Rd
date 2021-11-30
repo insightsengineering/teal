@@ -2,21 +2,21 @@
 % Please edit documentation in R/get_keys.R
 \name{set_keys}
 \alias{set_keys}
-\alias{set_keys.Dataset}
-\alias{set_keys.DatasetConnector}
-\alias{set_keys.DataAbstract}
+\alias{set_keys.TealDataset}
+\alias{set_keys.TealDatasetConnector}
+\alias{set_keys.TealDataAbstract}
 \title{Set dataset primary keys}
 \usage{
 set_keys(x, ...)
 
-\method{set_keys}{Dataset}(x, keys, ...)
+\method{set_keys}{TealDataset}(x, keys, ...)
 
-\method{set_keys}{DatasetConnector}(x, keys, ...)
+\method{set_keys}{TealDatasetConnector}(x, keys, ...)
 
-\method{set_keys}{DataAbstract}(x, dataname, keys, ...)
+\method{set_keys}{TealDataAbstract}(x, dataname, keys, ...)
 }
 \arguments{
-\item{x}{an object of \code{Dataset} or \code{DatasetConnector} class}
+\item{x}{an object of \code{TealDataset} or \code{TealDatasetConnector} class}
 
 \item{...}{not used, only for support of S3}
 
@@ -32,7 +32,7 @@ set_keys(x, ...)
 Set dataset primary keys
 }
 \examples{
-# Dataset --------
+# TealDataset --------
 
 library(scda)
 set_keys(
@@ -43,7 +43,7 @@ set_keys(
   ),
   keys = get_cdisc_keys("ADSL")
 )
-# DatasetConnector --------
+# TealDatasetConnector --------
 
 library(scda)
 pull_fun_adsl <- callable_function(
@@ -56,7 +56,7 @@ set_keys(
   ),
   keys = get_cdisc_keys("ADSL")
 )
-# RelationalData --------
+# TealData --------
 
 set_keys(
   teal_data(

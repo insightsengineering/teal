@@ -32,5 +32,5 @@ print(res) # outputs a tibble
 
 }
 \seealso{
-\code{\link{get_key_duplicates}} \code{\link{get_key_duplicates_util}}
+\link{get_key_duplicates} \link{get_key_duplicates_util}
 }

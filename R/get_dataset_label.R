@@ -1,11 +1,11 @@
 #' S3 method for getting a label of
-#' (\code{DatasetConnector} or \code{Dataset}) R6 object
+#' (`TealDatasetConnector` or `TealDataset`) R6 object
 #'
 #' @description `r lifecycle::badge("experimental")`
 #'
-#' @param x (\code{DatasetConnector} or \code{Dataset}) R6 object
+#' @param x (`TealDatasetConnector` or `TealDataset`) R6 object
 #'
-#' @return label (\code{character}) Label to describe the dataset
+#' @return label (`character`) Label to describe the dataset
 #' @export
 get_dataset_label <- function(x) {
   UseMethod("get_dataset_label")
@@ -23,7 +23,7 @@ get_dataset_label <- function(x) {
 #'   label = "My custom label"
 #' )
 #' get_dataset_label(x)
-get_dataset_label.DatasetConnector <- function(x) { # nolint
+get_dataset_label.TealDatasetConnector <- function(x) { # nolint
   return(x$get_dataset_label())
 }
 
@@ -34,6 +34,6 @@ get_dataset_label.DatasetConnector <- function(x) { # nolint
 #' ADSL <- synthetic_cdisc_data("latest")$adsl
 #' ADSL_dataset <- dataset(dataname = "ADSL", x = ADSL, label = "My custom label")
 #' get_dataset_label(ADSL_dataset)
-get_dataset_label.Dataset <- function(x) {
+get_dataset_label.TealDataset <- function(x) {
   return(x$get_dataset_label())
 }

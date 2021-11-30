@@ -2,21 +2,21 @@
 % Please edit documentation in R/is_pulled.R
 \name{is_pulled}
 \alias{is_pulled}
-\alias{is_pulled.DatasetConnector}
-\alias{is_pulled.Dataset}
-\alias{is_pulled.DataAbstract}
+\alias{is_pulled.TealDatasetConnector}
+\alias{is_pulled.TealDataset}
+\alias{is_pulled.TealDataAbstract}
 \title{Is pulled}
 \usage{
 is_pulled(x)
 
-\method{is_pulled}{DatasetConnector}(x)
+\method{is_pulled}{TealDatasetConnector}(x)
 
-\method{is_pulled}{Dataset}(x)
+\method{is_pulled}{TealDataset}(x)
 
-\method{is_pulled}{DataAbstract}(x)
+\method{is_pulled}{TealDataAbstract}(x)
 }
 \arguments{
-\item{x}{(\code{object}) of class \code{\link{DatasetConnector}}, \code{\link{Dataset}} or \code{\link{DataAbstract}}}
+\item{x}{(\code{\link{TealDatasetConnector}}, \code{\link{TealDataset}} or \code{\link{TealDataAbstract}})}
 }
 \value{
 (\code{logical}) \code{TRUE} if connector has been already pulled, else \code{FALSE}.
@@ -26,7 +26,7 @@ is_pulled(x)
 S3 method to determine if dataset is pulled (loaded).
 }
 \examples{
-# DatasetConnector --------
+# TealDatasetConnector --------
 library(scda)
 pull_fun_adsl <- callable_function(
   function() {synthetic_cdisc_data("latest")$adsl}
@@ -37,7 +37,7 @@ is_pulled(x)
 
 load_dataset(x)
 is_pulled(x)
-# Dataset --------
+# TealDataset --------
 x <- dataset(
   dataname = "XY",
   x = data.frame(x = c(1, 2), y = c("a", "b"), stringsAsFactors = FALSE),
@@ -47,7 +47,7 @@ x <- dataset(
 )
 
 is_pulled(x)
-# RelationalData --------
+# TealData --------
 library(scda)
 x1 <- dataset(
   x = synthetic_cdisc_data("latest")$adsl,
@@ -68,7 +68,7 @@ x2 <- dataset(
 rd <- teal_data(x1, x2)
 is_pulled(rd)
 
-# RelationalDataConnector --------
+# TealDataConnector --------
 library(scda)
 adsl_cf <- callable_function(
   function() {synthetic_cdisc_data("latest")$adsl}

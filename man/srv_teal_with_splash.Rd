@@ -11,11 +11,11 @@ srv_teal_with_splash(id, data, modules, filter = list())
 \item{id}{An ID string that corresponds with the ID used to call the module's
 UI function.}
 
-\item{data}{\code{DataAbstract} R6 object and container for data}
+\item{data}{\code{TealDataAbstract} R6 object and container for data}
 
 \item{modules}{(\code{teal_module} or \code{teal_modules})
 single or multiple modules. \code{teal_modules}  can be used for nested
-tabs, see \code{ui_nested_tabs}}
+tabs, see \link{ui_nested_tabs}}
 
 \item{filter}{(\code{list}) You can define filters that show when
 the app starts.

@@ -4,7 +4,7 @@
 \alias{set_args}
 \alias{set_args.CallableFunction}
 \alias{set_args.CallableCode}
-\alias{set_args.DatasetConnector}
+\alias{set_args.TealDatasetConnector}
 \title{Set arguments of a \code{CallableFunction}}
 \usage{
 set_args(x, args)
@@ -13,10 +13,10 @@ set_args(x, args)
 
 \method{set_args}{CallableCode}(x, args)
 
-\method{set_args}{DatasetConnector}(x, args)
+\method{set_args}{TealDatasetConnector}(x, args)
 }
 \arguments{
-\item{x}{\code{CallableFunction} or \code{DatasetConnector})}
+\item{x}{\code{CallableFunction} or \code{TealDatasetConnector})}
 
 \item{args}{(\code{NULL} or named \code{list}) dynamic arguments to function}
 }

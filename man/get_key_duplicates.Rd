@@ -7,7 +7,7 @@
 get_key_duplicates(dataset, keys = NULL)
 }
 \arguments{
-\item{dataset}{\code{Dataset} or \code{dataframe} a dataset, which will be tested}
+\item{dataset}{\code{TealDataset} or \code{data.frame} a dataset, which will be tested}
 
 \item{keys}{\code{character} vector of variable names in \code{dataset} consisting the key
 or \code{keys} object, which does have a \code{primary} element with a vector of variable
@@ -27,7 +27,7 @@ for each duplicated key value.
 library(scda)
 
 adsl <- synthetic_cdisc_data("latest")$adsl
-# create a Dataset with default keys
+# create a TealDataset with default keys
 rel_adsl <- cdisc_dataset("ADSL", adsl)
 get_key_duplicates(rel_adsl)
 
@@ -44,8 +44,8 @@ get_key_duplicates(df) # raises an exception, because keys are missing with no d
 }
 \seealso{
 \itemize{
-\item{\code{\link{get_key_duplicates_util}}}
-\item{\code{\link{get_key_duplicates.Dataset}}}
-\item{\code{\link{get_key_duplicates.data.frame}}}
+\item{\link{get_key_duplicates_util}}
+\item{\link{get_key_duplicates.TealDataset}}
+\item{\link{get_key_duplicates.data.frame}}
 }
 }

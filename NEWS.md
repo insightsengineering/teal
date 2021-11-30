@@ -1,4 +1,4 @@
-# teal 0.10.0.9020
+# teal 0.10.0.9025
 
 ### Breaking changes
 * Replaced `rcd_dataset_connector` and `rcd_cdisc_dataset_connector` with `scda_dataset_connector` and `scda_cdisc_dataset_connector` respectively.
@@ -16,14 +16,19 @@
 * Added logging at the info and trace level to the filter panel.
 * Added support of the full screen for a `module` when the `filters` argument is equal `NULL`.
 * Added support for `shiny::moduleServer` passed to the `server` parameter of `teal::module`.
+* Added `pid` into footnote so app developers can identify logs for apps.
 
 ### Bug fixes
-* Fixed data loading of `DatasetConnector` being dependent on other `Dataset` or `DatasetConnector` objects. 
+* Fixed data loading of `DatasetConnector` being dependent on other `Dataset` or `DatasetConnector` objects.
 * Fixed call returned by `FilterState` in case of using `MultiAssayExperiment::subsetByColData`. Now single condition for variable containing `NA` values is `!is.na(var) & var == <condition>`.
-
+* `updateOptionalSelectInput` no longer sets input to `NULL` when `logical` value is passed to `selected`.
+ 
 ### Miscellaneous
 * Replaced the servers from `DataConnection`, `RelationalDataConnector`, `DatasetConnector`, and `RelationalData` with `moduleServer`.
 * Updated R version requirement to >= 3.6.
+* Changed references to outdated functions of `teal.devel` in the documentation.
+* Updated "filter panel collapse" icon to remove warnings when using shiny version >= 1.7.
+* Renamed `Dataset` class into `TealDataset`. Applied the same logic for the rest of the dataset and data class names.
 
 # teal 0.10.0
 
@@ -179,7 +184,7 @@ function call.
 * Moved helper functions into `utils.nest` and removed unused functions `set_labels_df` and `get_labels_df`.
 * `optionalSelectInput` now allows for grouped choices.
 
-## Refactor of FilteredData (for developers)
+## Refactor of `FilteredData` (for developers)
 
 * `FilteredData` is now fully reactive. Now filtered data is lazy evaluated as per need. This further opens the door to bookmarking `teal` apps (bookmarking currently works for the right filtering panel, but we will make this feature more sophisticated in a future release, each module must be reviewed and adapted if it contains `reactiveValues`).
 * Datasets and materialized connectors are provided to `FilteredData` by `set_datasets_data` function located in `init_datasets.R` file.
@@ -273,7 +278,7 @@ function call.
 # teal 0.0.2
 
  * New '01_getting_started' vignette.
- * Datanames in FilteredData are now case sensitive.
+ * Datanames in `FilteredData` are now case sensitive.
 
 # teal 0.0.1
 
