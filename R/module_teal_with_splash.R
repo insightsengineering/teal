@@ -11,15 +11,11 @@
 #' If data is obtained through delayed loading, its splash screen is used. Otherwise,
 #' a default splash screen is shown.
 #'
-#' Please also refer to the doc of [`init`].
+#' Please also refer to the doc of [init()].
 #'
-#' @param id (`character` value)\cr
+#' @param id (`character(1)`)\cr
 #'   module id
-#' @param data (`TealDataAbstract`)\cr
-#'   object containing data
-#' @param title (`NULL` or `character`) The browser window title (defaults to the host URL of the page).
-#' @param header (`character` or `shiny.tag`) the header of the app
-#' @param footer (`character` or `shiny.tag`) the footer of the app
+#' @inheritParams init
 #' @export
 ui_teal_with_splash <- function(id,
                                 data,
@@ -51,9 +47,8 @@ ui_teal_with_splash <- function(id,
 #' @description `r lifecycle::badge("maturing")`
 #' Please also refer to the doc of [`init`].
 #'
-#' @inheritParams srv_shiny_module_arguments
-#' @param data `TealDataAbstract` R6 object and container for data
-#' @inheritParams srv_teal
+#' @inheritParams init
+#' @inheritParams shiny::moduleServer
 #' @return `reactive`, return value of [`srv_teal`]
 #' @export
 srv_teal_with_splash <- function(id, data, modules, filter = list()) {

@@ -9,8 +9,7 @@
 #' The `datasets` argument is required to resolve the teal arguments in an
 #' isolated context (with respect to reactivity)
 #'
-#' @param id module id
-#' @inheritParams srv_shiny_module_arguments
+#' @inheritParams ui_tabs_with_filters
 #' @return depending on class of `modules`:
 #'   - `teal_module`: instantiated UI of the module
 #'   - `teal_modules`: `tabsetPanel` with each tab corresponding to recursively
@@ -100,7 +99,7 @@ ui_nested_tabs <- function(id, modules, datasets) {
 
 #' Server function that returns currently active module
 #'
-#' @inheritParams srv_shiny_module_arguments
+#' @inheritParams srv_tabs_with_filters
 #' @return `reactive` which returns the active module that corresponds to the selected tab
 srv_nested_tabs <- function(id, datasets, modules) {
   # modules checked below through recursion

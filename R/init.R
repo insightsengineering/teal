@@ -14,33 +14,20 @@
 #' This is a wrapper function around the `module_teal.R` functions. Unless you are
 #' an end-user, don't use this function, but instead this module.
 #'
-#' @param data (`TealData` or `TealDataset` or `TealDatasetConnector` or `list` or `data.frame`)
-#' `R6` object as returned by [cdisc_data], [teal_data], [cdisc_dataset], [dataset], [dataset_connector] or
-#' [cdisc_dataset_connector] or a single `data.frame` or a list of the previous objects or
-#' function returning a named list.
-#' NOTE: teal does not guarantee reproducibility of the code when names of the list elements do not match
-#' the original object names. To ensure reproducibility please use [teal_data] or
-#' [cdisc_data] with `check = TRUE` enabled.
-#' @param modules nested list with one list per module with the
-#'   following named list elements:
-#'   \tabular{ll}{
-#'   \cr name \tab string with name shown in menu for the analysis item
-#'   \cr server \tab required, shiny server module function, see
-#'   `\link[shiny]{callModule}` for more information
-#'   \cr ui \tab required, shiny ui module function, see
-#'   `\link[shiny]{callModule}` for more information. Note, due to the app's initialization by teal,
-#'   this `ui` function is actually part of the `server` function of the shiny app which means code which must
-#'   be included in the shiny `ui` function (such as using `htmltools::htmlDependency`) should not be placed here
-#'   but should instead be placed in the `header` argument to `teal::init` as that is included in the shiny `ui`
-#'   function.
-#'   \cr data \tab required, vector with datasets names that are passed
-#'   on (filtered) to the server function
-#'   \cr options \tab optional, other arguments passed on to the server
-#'   function
-#'   }
-#' @param title (`NULL` or `character`) The browser window title (defaults to the host URL of the page).
-#' @param filter (`list`) You can define filters that show when
-#'   the app starts.
+#' @param data (`TealData` or `TealDataset` or `TealDatasetConnector` or `list` or `data.frame`)\cr
+#' `R6` object as returned by [cdisc_data()], [teal_data()], [cdisc_dataset()], [dataset()],
+#' [dataset_connector()] or [cdisc_dataset_connector()] or a single `data.frame` or a list of
+#' the previous objects or function returning a named list.
+#' NOTE: teal does not guarantee reproducibility of the code when names of the list elements
+#' do not match the original object names. To ensure reproducibility please use [teal_data()]
+#' or [cdisc_data()] with `check = TRUE` enabled.
+#' @param modules (`list` or `teal_modules`)\cr
+#'   nested list of `teal_modules` or `module` objects. See [modules()] and [module()] for
+#'   more details.
+#' @param title (`NULL` or `character`)\cr
+#'   The browser window title (defaults to the host URL of the page).
+#' @param filter (`list`)\cr
+#'   You can define filters that show when the app starts.
 #'   The general pattern is:
 #'   `list(iris = list(Species = ..., Sepal.Length = ...), mtcars = ...)`.
 #'   An example is:
@@ -64,13 +51,16 @@
 #'     mtcars = list(mpg = default_filter())
 #'   )`
 #'   Ignored if the app is restored from a bookmarked state.
-#' @param header (`character` or `shiny.tag`) the header of the app. Note shiny code placed here (and in the footer
-#' argument) will be placed in the app's `ui` function so code which needs to be placed in the `ui` function
-#' (such as loading css via `htmltools::htmlDependency`) should be included here.
-#' @param footer (`character` or `shiny.tag`) the footer of the app
-#' @param id (`character`) module id to embed it, if provided,
-#'   the server function must be called with `callModule`;
-#'   See the vignette for an example. However, [ui_teal_with_splash]
+#' @param header (`character` or `shiny.tag`) \cr
+#'   the header of the app. Note shiny code placed here (and in the footer
+#'   argument) will be placed in the app's `ui` function so code which needs to be placed in the `ui` function
+#'   (such as loading css via [htmltools::htmlDependency()]) should be included here.
+#' @param footer (`character` or `shiny.tag`)\cr
+#'   the footer of the app
+#' @param id (`character`)\cr
+#'   module id to embed it, if provided,
+#'   the server function must be called with [shiny::moduleServer()];
+#'   See the vignette for an example. However, [ui_teal_with_splash()]
 #'   is then preferred to this function.
 #'
 #' @return named list with server and ui function

@@ -7,18 +7,21 @@
 srv_teal(id, modules, raw_data, filter = list())
 }
 \arguments{
-\item{id}{An ID string that corresponds with the ID used to call the module's
-UI function.}
+\item{id}{(\code{character})\cr
+module id to embed it, if provided,
+the server function must be called with \code{\link[shiny:moduleServer]{shiny::moduleServer()}};
+See the vignette for an example. However, \code{\link[=ui_teal_with_splash]{ui_teal_with_splash()}}
+is then preferred to this function.}
 
-\item{modules}{(\code{teal_module} or \code{teal_modules})
-single or multiple modules. \code{teal_modules}  can be used for nested
-tabs, see \link{ui_nested_tabs}}
+\item{modules}{(\code{list} or \code{teal_modules})\cr
+nested list of \code{teal_modules} or \code{module} objects. See \code{\link[=modules]{modules()}} and \code{\link[=module]{module()}} for
+more details.}
 
-\item{raw_data}{\code{reactive} which returns the \code{TealData}, only evaluated once,
-\code{NULL} value is ignored}
+\item{raw_data}{(\code{reactive})\cr
+returns the \code{TealData}, only evaluated once, \code{NULL} value is ignored}
 
-\item{filter}{(\code{list}) You can define filters that show when
-the app starts.
+\item{filter}{(\code{list})\cr
+You can define filters that show when the app starts.
 The general pattern is:
 \code{list(iris = list(Species = ..., Sepal.Length = ...), mtcars = ...)}.
 An example is:

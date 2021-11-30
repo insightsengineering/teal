@@ -7,31 +7,16 @@
 ui_tabs_with_filters(id, modules, datasets)
 }
 \arguments{
-\item{id}{(\code{character}) module id to embed it, if provided,
-the server function must be called with \code{callModule};
-See the vignette for an example. However, \link{ui_teal_with_splash}
-is then preferred to this function.}
+\item{id}{(\code{character(1)})\cr
+module id}
 
-\item{modules}{nested list with one list per module with the
-following named list elements:
-\tabular{ll}{
-\cr name \tab string with name shown in menu for the analysis item
-\cr server \tab required, shiny server module function, see
-\verb{\link[shiny]\{callModule\}} for more information
-\cr ui \tab required, shiny ui module function, see
-\verb{\link[shiny]\{callModule\}} for more information. Note, due to the app's initialization by teal,
-this \code{ui} function is actually part of the \code{server} function of the shiny app which means code which must
-be included in the shiny \code{ui} function (such as using \code{htmltools::htmlDependency}) should not be placed here
-but should instead be placed in the \code{header} argument to \code{teal::init} as that is included in the shiny \code{ui}
-function.
-\cr data \tab required, vector with datasets names that are passed
-on (filtered) to the server function
-\cr options \tab optional, other arguments passed on to the server
-function
-}}
+\item{modules}{(\code{list} or \code{teal_modules})\cr
+nested list of \code{teal_modules} or \code{module} objects. See \code{\link[=modules]{modules()}} and \code{\link[=module]{module()}} for
+more details.}
 
 \item{datasets}{(\code{FilteredData})\cr
-object to store filter state and filtered datasets, shared across modules}
+object to store filter state and filtered datasets, shared across modules. For more
+details see \link{FilteredData}}
 }
 \value{
 A \code{tagList} of The main menu, place holders for filters and

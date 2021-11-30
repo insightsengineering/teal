@@ -13,8 +13,11 @@
 #' This works with nested modules of depth greater than 2, though the filter
 #' panel is inserted at the right of the modules at depth 1 and not at the leaves.
 #'
+#' @inheritParams ui_teal_with_splash
 #' @inheritParams init
-#' @inheritParams srv_shiny_module_arguments
+#' @param datasets (`FilteredData`)\cr
+#'   object to store filter state and filtered datasets, shared across modules. For more
+#'   details see [FilteredData]
 #'
 #' @return A `tagList` of The main menu, place holders for filters and
 #'   place holders for the teal modules
@@ -122,7 +125,10 @@ ui_tabs_with_filters <- function(id, modules, datasets) {
 
 #' Server function
 #'
-#' @inheritParams srv_shiny_module_arguments
+#' @inheritParams srv_teal_with_splash
+#' @param datasets (`FilteredData`)\cr
+#'   object to store filter state and filtered datasets, shared across modules. For more
+#'   details see [FilteredData].
 #' @return `reactive` currently selected active_module
 srv_tabs_with_filters <- function(id, datasets, modules) {
   stopifnot(is(datasets, "FilteredData"))

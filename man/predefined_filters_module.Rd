@@ -9,8 +9,8 @@ predefined_filters_module(label = "Apply filters", filter)
 \arguments{
 \item{label}{\code{character} label of module}
 
-\item{filter}{(\code{list}) You can define filters that show when
-the app starts.
+\item{filter}{(\code{list})\cr
+You can define filters that show when the app starts.
 The general pattern is:
 \code{list(iris = list(Species = ..., Sepal.Length = ...), mtcars = ...)}.
 An example is:

@@ -20,13 +20,10 @@
 #'
 #' It is written as a Shiny module so it can be added into other apps as well.
 #'
-#' @param id module id
 #' @param splash_ui `shiny.tag` UI to display initially,
 #'   can be a splash screen or a Shiny module UI. For the latter, see
-#'   [`init`] about how to call the corresponding server function.
-#' @param title (`character`) The browser window title (defaults to the host URL of the page)
-#' @param header `shiny.tag or character` header to display above the app
-#' @param footer `shiny.tag or character` footer to display below the app
+#'   [init()] about how to call the corresponding server function.
+#' @inheritParams ui_teal_with_splash
 #'
 #' @return `HTML` for Shiny module UI
 #'
@@ -112,11 +109,9 @@ ui_teal <- function(id,
 #'
 #' For more doc, see [ui_teal].
 #'
-#' @inheritParams srv_shiny_module_arguments
-#' @param raw_data `reactive` which returns the `TealData`, only evaluated once,
-#'   `NULL` value is ignored
-#' @inheritParams srv_tabs_with_filters
 #' @inheritParams init
+#' @param raw_data (`reactive`)\cr
+#'   returns the `TealData`, only evaluated once, `NULL` value is ignored
 #'
 #' @return `reactive` which returns the currently active module
 srv_teal <- function(id, modules, raw_data, filter = list()) {

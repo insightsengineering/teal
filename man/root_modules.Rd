@@ -7,14 +7,15 @@
 root_modules(...)
 }
 \arguments{
-\item{...}{\code{\link{module}} and \code{\link{modules}} object}
+\item{...}{(\code{teal_module} or \code{teal_modules})\cr
+see \code{\link[=module]{module()}} and \code{\link[=modules]{modules()}} for more details}
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#maturing}{\figure{lifecycle-maturing.svg}{options: alt='[Maturing]'}}}{\strong{[Maturing]}}
-To be used with \code{\link{init}} in the \code{modules} argument.
+To be used with \code{\link[=init]{init()}} in the \code{modules} argument.
 }
 \details{
-The function \code{\link{modules}} can also be used. The purpose of this
+The function \code{\link[=modules]{modules()}} can also be used. The purpose of this
 function is to not confuse the end-user as the label of the top-module
 will not be displayed as a tab name (because the root is only one element
 which has multiple children).
