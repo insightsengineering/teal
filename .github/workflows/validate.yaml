@@ -1,0 +1,14 @@
+---
+name: Validation 📃
+
+on:
+  push:
+    branches:
+      - pre-release
+
+jobs:
+  validation:
+    name: R Package Validation report 📃
+    uses: insightsengineering/r.pkg.template/.github/workflows/validation.yaml@main
+    secrets:
+      REPO_GITHUB_TOKEN: ${{ secrets.REPO_GITHUB_TOKEN }}
