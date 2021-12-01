@@ -9,8 +9,7 @@
 #' The `datasets` argument is required to resolve the teal arguments in an
 #' isolated context (with respect to reactivity)
 #'
-#' @param id module id
-#' @inheritParams srv_shiny_module_arguments
+#' @inheritParams ui_tabs_with_filters
 #' @return depending on class of `modules`:
 #'   - `teal_module`: instantiated UI of the module
 #'   - `teal_modules`: `tabsetPanel` with each tab corresponding to recursively
@@ -29,9 +28,7 @@
 #'     )
 #'   },
 #'   server = function(input, output, session) {
-#'     active_module <- callModule(
-#'       teal:::srv_nested_tabs, "dummy", datasets = datasets, modules = mods
-#'     )
+#'     active_module <- teal:::srv_nested_tabs("dummy", datasets = datasets, modules = mods)
 #'     output$info <- renderText({
 #'       paste0("The currently active tab name is ", active_module()$label)
 #'     })
@@ -102,75 +99,73 @@ ui_nested_tabs <- function(id, modules, datasets) {
 
 #' Server function that returns currently active module
 #'
-#' @inheritParams srv_shiny_module_arguments
+#' @inheritParams srv_tabs_with_filters
 #' @return `reactive` which returns the active module that corresponds to the selected tab
-srv_nested_tabs <- function(input, output, session, datasets, modules) {
+srv_nested_tabs <- function(id, datasets, modules) {
   # modules checked below through recursion
-  stopifnot(
-    is(datasets, "FilteredData")
-  )
+  stopifnot(is(datasets, "FilteredData"))
+  moduleServer(id = id, module = function(input, output, session) {
+    # recursively call `callModule` on (nested) teal modules ----
+    call_modules <- function(modules, id_parent) {
+      id <- label_to_id(modules$label, prefix = id_parent)
 
-  # recursively call `callModule` on (nested) teal modules ----
-  call_modules <- function(modules, id_parent) {
-    id <- label_to_id(modules$label, prefix = id_parent)
-
-    switch(
-      class(modules)[[1]],
-      teal_modules = {
-        lapply(modules$children, call_modules, id_parent = id)
-      },
-      teal_module = {
-        modules$server_args <- resolve_delayed(modules$server_args, datasets)
-        is_module_server <- isTRUE("id" %in% names(formals(modules$server)))
-        if (is_module_server) {
-          do.call(modules$server, c(list(id = id, datasets = datasets), modules$server_args))
-        } else {
-          do.call(
-            callModule,
-            c(
-              list(module = modules$server, id = id, datasets = datasets),
-              modules$server_args
+      switch(
+        class(modules)[[1]],
+        teal_modules = {
+          lapply(modules$children, call_modules, id_parent = id)
+        },
+        teal_module = {
+          modules$server_args <- resolve_delayed(modules$server_args, datasets)
+          is_module_server <- isTRUE("id" %in% names(formals(modules$server)))
+          if (is_module_server) {
+            do.call(modules$server, c(list(id = id, datasets = datasets), modules$server_args))
+          } else {
+            do.call(
+              callModule,
+              c(
+                list(module = modules$server, id = id, datasets = datasets),
+                modules$server_args
+              )
             )
-          )
-        }
-      },
-      stop("unsupported class ", class(modules), ", id_parent is ", id_parent)
+          }
+        },
+        stop("unsupported class ", class(modules), ", id_parent is ", id_parent)
+      )
+      return(invisible(NULL))
+    }
+    call_modules(modules, id_parent = NULL)
+
+    # figure out currently active module -> `active_datanames` ----
+
+    # the call to `ui_tabs_with_filters` creates inputs that watch the tabs prefixed by `teal_modules`
+    # we observe them and react whenever a tab is clicked by:
+    # - displaying only the relevant datasets in the right hand filter in the
+    # sections: filter info, filtering vars per dataname and add filter variable per dataname
+    # recursively goes down tabs to figure out the active module
+    get_active_module <- function(modules, id_parent) {
+      id <- label_to_id(modules$label, id_parent)
+      res <- switch(
+        class(modules)[[1]],
+        teal_modules = {
+          # id is the id of the tabset, the corresponding input element states which tab is selected
+          active_submodule_label <- input[[id]]
+          stopifnot(!is.null(active_submodule_label))
+          get_active_module(modules$children[[active_submodule_label]], id_parent = id)
+        },
+        teal_module = {
+          stopifnot(is.null(input[[id]])) # id should not exist
+          modules
+        },
+        stop("unknown module class ", class(modules))
+      )
+      return(res)
+    }
+    active_module <- eventReactive(
+      eventExpr = input[[label_to_id(modules$label)]], # this reacts only on the root tabs - nested tabs ignored
+      ignoreNULL = TRUE,
+      valueExpr = get_active_module(modules, id_parent = NULL)
     )
-    return(invisible(NULL))
-  }
-  call_modules(modules, id_parent = NULL)
-
-  # figure out currently active module -> `active_datanames` ----
-
-  # the call to `ui_tabs_with_filters` creates inputs that watch the tabs prefixed by `teal_modules`
-  # we observe them and react whenever a tab is clicked by:
-  # - displaying only the relevant datasets in the right hand filter in the
-  # sections: filter info, filtering vars per dataname and add filter variable per dataname
-  # recursively goes down tabs to figure out the active module
-  get_active_module <- function(modules, id_parent) {
-    id <- label_to_id(modules$label, id_parent)
-    res <- switch(
-      class(modules)[[1]],
-      teal_modules = {
-        # id is the id of the tabset, the corresponding input element states which tab is selected
-        active_submodule_label <- input[[id]]
-        stopifnot(!is.null(active_submodule_label))
-        get_active_module(modules$children[[active_submodule_label]], id_parent = id)
-      },
-      teal_module = {
-        stopifnot(is.null(input[[id]])) # id should not exist
-        modules
-      },
-      stop("unknown module class ", class(modules))
-    )
-    return(res)
-  }
-
-  active_module <- eventReactive(
-    eventExpr = input[[label_to_id(modules$label)]],
-    ignoreNULL = TRUE,
-    valueExpr = {
-      get_active_module(modules, id_parent = NULL)
+    return(active_module)
   })
-  return(active_module)
+
 }

@@ -7,9 +7,9 @@
 modules_depth(modules, depth = 0)
 }
 \arguments{
-\item{modules}{(\code{teal_module} or \code{teal_modules})
-single or multiple modules. \code{teal_modules}  can be used for nested
-tabs, see \link{ui_nested_tabs}}
+\item{modules}{(\code{list} or \code{teal_modules})\cr
+nested list of \code{teal_modules} or \code{module} objects. See \code{\link[=modules]{modules()}} and \code{\link[=module]{module()}} for
+more details.}
 
 \item{depth}{optional, integer determining current depth level}
 }

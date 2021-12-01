@@ -1,7 +1,7 @@
 Type: Package
 Package: teal
 Title: Exploratory Web Apps for Analyzing Clinical Trials Data
-Version: 0.10.0.9025
+Version: 0.10.0.9026
 Date: 2021-10-13
 Authors@R: c(
     person("NEST", , , "nestcicd@roche.com", role = c("aut", "cre")),
@@ -23,7 +23,7 @@ Description: teal is a shiny based interactive exploration framework for
     are built using standard shiny modules.
 License: Apache License 2.0 | file LICENSE
 Depends:
-    R (>= 3.6),
+    R (>= 4.0),
     shiny
 Imports:
     digest,

@@ -15,36 +15,23 @@ init(
 )
 }
 \arguments{
-\item{data}{(\code{TealData} or \code{TealDataset} or \code{TealDatasetConnector} or \code{list} or \code{data.frame})
-\code{R6} object as returned by \link{cdisc_data}, \link{teal_data}, \link{cdisc_dataset}, \link{dataset}, \link{dataset_connector} or
-\link{cdisc_dataset_connector} or a single \code{data.frame} or a list of the previous objects or
-function returning a named list.
-NOTE: teal does not guarantee reproducibility of the code when names of the list elements do not match
-the original object names. To ensure reproducibility please use \link{teal_data} or
-\link{cdisc_data} with \code{check = TRUE} enabled.}
+\item{data}{(\code{TealData} or \code{TealDataset} or \code{TealDatasetConnector} or \code{list} or \code{data.frame})\cr
+\code{R6} object as returned by \code{\link[=cdisc_data]{cdisc_data()}}, \code{\link[=teal_data]{teal_data()}}, \code{\link[=cdisc_dataset]{cdisc_dataset()}}, \code{\link[=dataset]{dataset()}},
+\code{\link[=dataset_connector]{dataset_connector()}} or \code{\link[=cdisc_dataset_connector]{cdisc_dataset_connector()}} or a single \code{data.frame} or a list of
+the previous objects or function returning a named list.
+NOTE: teal does not guarantee reproducibility of the code when names of the list elements
+do not match the original object names. To ensure reproducibility please use \code{\link[=teal_data]{teal_data()}}
+or \code{\link[=cdisc_data]{cdisc_data()}} with \code{check = TRUE} enabled.}
 
-\item{modules}{nested list with one list per module with the
-following named list elements:
-\tabular{ll}{
-\cr name \tab string with name shown in menu for the analysis item
-\cr server \tab required, shiny server module function, see
-\verb{\link[shiny]\{callModule\}} for more information
-\cr ui \tab required, shiny ui module function, see
-\verb{\link[shiny]\{callModule\}} for more information. Note, due to the app's initialization by teal,
-this \code{ui} function is actually part of the \code{server} function of the shiny app which means code which must
-be included in the shiny \code{ui} function (such as using \code{htmltools::htmlDependency}) should not be placed here
-but should instead be placed in the \code{header} argument to \code{teal::init} as that is included in the shiny \code{ui}
-function.
-\cr data \tab required, vector with datasets names that are passed
-on (filtered) to the server function
-\cr options \tab optional, other arguments passed on to the server
-function
-}}
+\item{modules}{(\code{list} or \code{teal_modules})\cr
+nested list of \code{teal_modules} or \code{module} objects. See \code{\link[=modules]{modules()}} and \code{\link[=module]{module()}} for
+more details.}
 
-\item{title}{(\code{NULL} or \code{character}) The browser window title (defaults to the host URL of the page).}
+\item{title}{(\code{NULL} or \code{character})\cr
+The browser window title (defaults to the host URL of the page).}
 
-\item{filter}{(\code{list}) You can define filters that show when
-the app starts.
+\item{filter}{(\code{list})\cr
+You can define filters that show when the app starts.
 The general pattern is:
 \code{list(iris = list(Species = ..., Sepal.Length = ...), mtcars = ...)}.
 An example is:
@@ -68,15 +55,18 @@ A general example is:
 Ignored if the app is restored from a bookmarked state.
 }}
 
-\item{header}{(\code{character} or \code{shiny.tag}) the header of the app. Note shiny code placed here (and in the footer
+\item{header}{(\code{character} or \code{shiny.tag}) \cr
+the header of the app. Note shiny code placed here (and in the footer
 argument) will be placed in the app's \code{ui} function so code which needs to be placed in the \code{ui} function
-(such as loading css via \code{htmltools::htmlDependency}) should be included here.}
+(such as loading css via \code{\link[htmltools:htmlDependency]{htmltools::htmlDependency()}}) should be included here.}
 
-\item{footer}{(\code{character} or \code{shiny.tag}) the footer of the app}
+\item{footer}{(\code{character} or \code{shiny.tag})\cr
+the footer of the app}
 
-\item{id}{(\code{character}) module id to embed it, if provided,
-the server function must be called with \code{callModule};
-See the vignette for an example. However, \link{ui_teal_with_splash}
+\item{id}{(\code{character})\cr
+module id to embed it, if provided,
+the server function must be called with \code{\link[shiny:moduleServer]{shiny::moduleServer()}};
+See the vignette for an example. However, \code{\link[=ui_teal_with_splash]{ui_teal_with_splash()}}
 is then preferred to this function.}
 }
 \value{

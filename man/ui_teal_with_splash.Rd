@@ -13,17 +13,27 @@ ui_teal_with_splash(
 )
 }
 \arguments{
-\item{id}{(\code{character} value)\cr
+\item{id}{(\code{character(1)})\cr
 module id}
 
-\item{data}{(\code{TealDataAbstract})\cr
-object containing data}
+\item{data}{(\code{TealData} or \code{TealDataset} or \code{TealDatasetConnector} or \code{list} or \code{data.frame})\cr
+\code{R6} object as returned by \code{\link[=cdisc_data]{cdisc_data()}}, \code{\link[=teal_data]{teal_data()}}, \code{\link[=cdisc_dataset]{cdisc_dataset()}}, \code{\link[=dataset]{dataset()}},
+\code{\link[=dataset_connector]{dataset_connector()}} or \code{\link[=cdisc_dataset_connector]{cdisc_dataset_connector()}} or a single \code{data.frame} or a list of
+the previous objects or function returning a named list.
+NOTE: teal does not guarantee reproducibility of the code when names of the list elements
+do not match the original object names. To ensure reproducibility please use \code{\link[=teal_data]{teal_data()}}
+or \code{\link[=cdisc_data]{cdisc_data()}} with \code{check = TRUE} enabled.}
 
-\item{title}{(\code{NULL} or \code{character}) The browser window title (defaults to the host URL of the page).}
+\item{title}{(\code{NULL} or \code{character})\cr
+The browser window title (defaults to the host URL of the page).}
 
-\item{header}{(\code{character} or \code{shiny.tag}) the header of the app}
+\item{header}{(\code{character} or \code{shiny.tag}) \cr
+the header of the app. Note shiny code placed here (and in the footer
+argument) will be placed in the app's \code{ui} function so code which needs to be placed in the \code{ui} function
+(such as loading css via \code{\link[htmltools:htmlDependency]{htmltools::htmlDependency()}}) should be included here.}
 
-\item{footer}{(\code{character} or \code{shiny.tag}) the footer of the app}
+\item{footer}{(\code{character} or \code{shiny.tag})\cr
+the footer of the app}
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#maturing}{\figure{lifecycle-maturing.svg}{options: alt='[Maturing]'}}}{\strong{[Maturing]}}
@@ -35,5 +45,5 @@ This function instead adheres to the Shiny module conventions.
 If data is obtained through delayed loading, its splash screen is used. Otherwise,
 a default splash screen is shown.
 
-Please also refer to the doc of \code{\link{init}}.
+Please also refer to the doc of \code{\link[=init]{init()}}.
 }
