@@ -11,7 +11,7 @@
 ### New features
 * Added print methods to the `DatasetConnector`, `RelationalData`, and `RelationalDataconnector` classes and added input validation to the implementation of the print method that was already in the `Dataset` object.
 * Added public facing constructor functions for `CDISCDataConnector`, `RelationalDataConnector`, and `DataConnection` classes.
-* Modified `data_extract_spec` to allow both the `filter` and `select` parameters to be `NULL`, which results in the `data_extract_input` acting as if a `filter_spec` with all variables as possible choices had been supplied as the `filter` argument and a `select_spec` with the `multiple` parameter set to `TRUE` had been supplied as the `select` argument.
+* Modified `data_extract_spec` to allow both the `filter` and `select` parameters to be `NULL`, which results in the `data_extract_ui` acting as if a `filter_spec` with all variables as possible choices had been supplied as the `filter` argument and a `select_spec` with the `multiple` parameter set to `TRUE` had been supplied as the `select` argument.
 * Added support for logging using the `logger` package. Added a new function `register_logger`, which registers a logger in a given namespace.
 * Added logging at the info and trace level to the filter panel.
 * Added support of the full screen for a `module` when the `filters` argument is equal `NULL`.
@@ -25,7 +25,7 @@
  
 ### Miscellaneous
 * Replaced the servers from `DataConnection`, `RelationalDataConnector`, `DatasetConnector`, and `RelationalData` with `moduleServer`.
-* Updated R version requirement to >= 3.6.
+* Updated R version requirement to >= 4.0.
 * Changed references to outdated functions of `teal.devel` in the documentation.
 * Updated "filter panel collapse" icon to remove warnings when using shiny version >= 1.7.
 * Renamed `Dataset` class into `TealDataset`. Applied the same logic for the rest of the dataset and data class names.

@@ -5,11 +5,13 @@
 #' Create a collection of `module` and `modules` object
 #'
 #' @description `r lifecycle::badge("maturing")`
-#' Modules collects a tree of \code{\link{module}} and \code{\link{modules}}
+#' Modules collects a tree of [module()] and [modules()]
 #' objects. This is useful to define the navigation structure of a teal app.
 #'
-#' @param label label of modules collection
-#' @param ... \code{\link{module}} and \code{\link{modules}} object
+#' @param label (`character(1)`)\cr
+#'   label of modules collection
+#' @param ... (`teal_module` or `teal_modules`)\cr
+#'   see [module()] and [modules()] for more details
 #'
 #' @export
 #'
@@ -48,10 +50,10 @@ modules <- function(label, ...) {
 #' Create the root modules container
 #'
 #' @description `r lifecycle::badge("maturing")`
-#' To be used with \code{\link{init}} in the `modules` argument.
+#' To be used with [init()] in the `modules` argument.
 #'
 #' @details
-#' The function \code{\link{modules}} can also be used. The purpose of this
+#' The function [modules()] can also be used. The purpose of this
 #' function is to not confuse the end-user as the label of the top-module
 #' will not be displayed as a tab name (because the root is only one element
 #' which has multiple children).
@@ -132,7 +134,7 @@ module <- function(label, server, ui, filters, server_args = NULL, ui_args = NUL
 #' Depth starts at 0, so a single `teal.module` has depth 0.
 #' Nesting it increases overall depth by 1.
 #'
-#' @inheritParams srv_shiny_module_arguments
+#' @inheritParams init
 #' @param depth optional, integer determining current depth level
 #'
 #' @return depth level for given module

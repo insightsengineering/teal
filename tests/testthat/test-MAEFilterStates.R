@@ -121,19 +121,19 @@ testthat::test_that("MAEFilterStates$set_bookmark_state sets filters in FilterSt
     )
   )
 })
+if (compareVersion(as.character(packageVersion("MultiAssayExperiment")), "1.20.0") >= 0) {
+  testthat::test_that(
+    "MultiAssayExperiment::subsetByColData returns error when variable contains NAs", {
+      # if this test fails it means that we can remove FilterState$set_na_rm which
+      # has been created after breaking change in MAE
+      library(MultiAssayExperiment)
+      data(miniACC)
+      miniACC$test <- sample(c(TRUE, NA), size = nrow(miniACC@colData), replace = TRUE)
 
-testthat::test_that(
-  "MultiAssayExperiment::subsetByColData returns error when variable contains NAs", {
-    # if this test fails it means that we can remove FilterState$set_na_rm which
-    # has been created after breaking change in MAE
-    library(MultiAssayExperiment)
-    data(miniACC)
-    miniACC$test <- sample(c(TRUE, NA), size = nrow(miniACC@colData), replace = TRUE)
-    if (compareVersion(as.character(packageVersion("MultiAssayExperiment")), "1.20.0") >= 0) {
       testthat::expect_error(
         subsetByColData(miniACC, miniACC$test),
         "logical subscript contains NAs"
       )
     }
-  }
-)
+  )
+}
