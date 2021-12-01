@@ -13,17 +13,23 @@ ui_teal(
 )
 }
 \arguments{
-\item{id}{module id}
+\item{id}{(\code{character(1)})\cr
+module id}
 
 \item{splash_ui}{\code{shiny.tag} UI to display initially,
 can be a splash screen or a Shiny module UI. For the latter, see
-\code{\link{init}} about how to call the corresponding server function.}
+\code{\link[=init]{init()}} about how to call the corresponding server function.}
 
-\item{title}{(\code{character}) The browser window title (defaults to the host URL of the page)}
+\item{title}{(\code{NULL} or \code{character})\cr
+The browser window title (defaults to the host URL of the page).}
 
-\item{header}{\verb{shiny.tag or character} header to display above the app}
+\item{header}{(\code{character} or \code{shiny.tag}) \cr
+the header of the app. Note shiny code placed here (and in the footer
+argument) will be placed in the app's \code{ui} function so code which needs to be placed in the \code{ui} function
+(such as loading css via \code{\link[htmltools:htmlDependency]{htmltools::htmlDependency()}}) should be included here.}
 
-\item{footer}{\verb{shiny.tag or character} footer to display below the app}
+\item{footer}{(\code{character} or \code{shiny.tag})\cr
+the footer of the app}
 }
 \value{
 \code{HTML} for Shiny module UI
@@ -56,8 +62,7 @@ app <- shinyApp(
     teal:::ui_teal("dummy")
   },
   server = function(input, output, session) {
-    active_module <- callModule(teal:::srv_teal, "dummy", modules = mods, raw_data = raw_data,
-    )
+    active_module <- teal:::srv_teal(id = "dummy", modules = mods, raw_data = raw_data)
   }
 )
 \dontrun{

@@ -2,15 +2,15 @@
 % Please edit documentation in R/mutate_dataset.R
 \name{mutate_data}
 \alias{mutate_data}
-\alias{mutate_data.DataAbstract}
+\alias{mutate_data.TealDataAbstract}
 \title{Mutate data by code}
 \usage{
 mutate_data(x, code = character(0), script = character(0), vars = list())
 
-\method{mutate_data}{DataAbstract}(x, code = character(0), script = character(0), vars = list())
+\method{mutate_data}{TealDataAbstract}(x, code = character(0), script = character(0), vars = list())
 }
 \arguments{
-\item{x}{(\code{DataAbstract})\cr
+\item{x}{(\code{TealDataAbstract})\cr
 object.}
 
 \item{code}{(\code{character})\cr
@@ -22,11 +22,11 @@ file that contains R Code that can be read using \code{\link{read_script}}.
 Preferred before \code{code} argument.}
 
 \item{vars}{(named \code{list})) \cr
-In case when this object code depends on other \code{Dataset} object(s) or
+In case when this object code depends on other \code{TealDataset} object(s) or
 other constant value, this/these object(s) should be included as named
 element(s) of the list. For example if this object code needs \code{ADSL}
 object we should specify \verb{vars = list(ADSL = <adsl object>)}.
-It's recommended to include \code{Dataset} or \code{DatasetConnector} objects to
+It's recommended to include \code{TealDataset} or \code{TealDatasetConnector} objects to
 the \code{vars} list to preserve reproducibility. Please note that \code{vars}
 are included to this object as local \code{vars} and they cannot be modified
 within another dataset.}
@@ -38,7 +38,7 @@ modified \code{x} object
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
 Code used in this mutation is not linked to particular
 but refers to all datasets.
-Consequence of this is that when using \code{get_code(<dataset>)} this
+Consequence of this is that when using \verb{get_code(<dataset>)} this
 part of the code will be returned for each dataset specified. This method
 should be used only if particular call involve changing multiple datasets.
 Otherwise please use \code{mutate_dataset}.

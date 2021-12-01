@@ -46,12 +46,12 @@ two-staged:
 Before we jump to creating application it is important to define a few terms
 which are the key to understand new classes.
 
-1. `Dataset` and `DatasetConnector` - `Dataset` is a class which contains physical
-data in form of `data.frame` plus reproducible code. `DatasetConnector` is a
-class which contains R call to obtain `Dataset`.
+1. `TealDataset` and `TealDatasetConnector` - `TealDataset` is a class which contains physical
+data in form of `data.frame` plus reproducible code. `TealDatasetConnector` is a
+class which contains R call to obtain `TealDataset`.
 
-2. `data.frame`, `Dataset` and `Data`- object of class `Dataset` contains
-a single `data.frame` object. `Data` is a collection of `Dataset` objects.
+2. `data.frame`, `TealDataset` and `TealData`- object of class `TealDataset` contains
+a single `data.frame` object. `TealData` is a collection of `TealDataset` objects.
 
 ## Creating an app
 
@@ -152,16 +152,16 @@ df <- code$run()
 head(df)
 ```
 
-### `Dataset` (including `CDISCDataset`)
+### `TealDataset` (including `CDISCTealDataset`)
 
-`Dataset` object is an R6 class which keeps a `data.frame` in its `raw_data` slot. One
-can create a `Dataset` by including `data.frame` and setting data attributes. In
+`TealDataset` object is an R6 class which keeps a `data.frame` in its `raw_data` slot. One
+can create a `TealDataset` by including `data.frame` and setting data attributes. In
 the example below we first create `adsl` and then put this `data.frame` into the
 `cdisc_dataset` function. Together with `data.frame` one should always provide a
 `dataname` and `code` to reproduce the data. For irreproducible apps `code`
 can be omitted.
 
-Note `cdisc_dataset` returns an object of `CDISCDataset` (inherited from `Dataset`) which
+Note `cdisc_dataset` returns an object of `CDISCTealDataset` (inherited from `TealDataset`) which
 allows datasets to have parents and is needed for CDISC analysis.
 
 ```{r}
@@ -196,9 +196,9 @@ get_raw_data(adsl_dataset)
 adsl_dataset$get_keys()
 ```
 
-### `DatasetConnector` (including `CDISCDatasetConnector`)
+### `TealDatasetConnector` (including `CDISCTealDatasetConnector`)
 
-`DatasetConnector` contains `Callable` object to obtain a single dataset along
+`TealDatasetConnector` contains `Callable` object to obtain a single dataset along
 with other information such as keys, dataname, label and reproducible code. In
 the code chunk below, connector is created basing on `synthetic_cdisc_dataset`
 function
@@ -238,8 +238,8 @@ element with name `ADSL`.
 3. Value of the `ADSL` argument in the `CallableFunction` has to be `as.name("ADSL")`.
 
 ```{r eval=TRUE}
-# here we use the general dataset_connector function which pulls an object of type Dataset
-# there is also a cdisc_dataset_connector function which pulls an object of type CDISCDataset
+# here we use the general dataset_connector function which pulls an object of type TealDataset
+# there is also a cdisc_dataset_connector function which pulls an object of type CDISCTealDataset
 adsl_2 <- dataset_connector(
   dataname = "ADSL_2",
   pull_callable = callable_function(fun = function(ADSL) ADSL_2 <- ADSL) %>% # nolint
@@ -252,7 +252,7 @@ adsl_2 <- dataset_connector(
 load_dataset(adsl_2)
 ```
 
-`DatasetConnector` like the other delayed data objects contains  a
+`TealDatasetConnector` like the other delayed data objects contains  a
 `launch` method which can be used to obtain data using shiny application.
 This function can be used to check if the objects are specified correctly and to
 investigate potential mistakes. By default shiny app won't render any inputs for
@@ -278,11 +278,11 @@ adsl_3$set_ui_input(function(ns) {
 adsl_3$launch()
 ```
 
-### `DataConnection`
+### `TealDataConnection`
 Objects of this class are responsible to set connection with remote data sources.
-`DataConnection` opens and closes connections by calling `CallableFunction` with
+`TealDataConnection` opens and closes connections by calling `CallableFunction` with
 appropriate arguments. For example in a simplified version of `rice_connection`
-below, a `DataConnection `uses `rice_session_open` and `rice_session_close`
+below, a `TealDataConnection `uses `rice_session_open` and `rice_session_close`
 functions.
 
 ```{r eval=FALSE}
@@ -293,14 +293,14 @@ open_fun <- callable_function("rice::rice_session_open")
 close_fun <- callable_function("rice::rice_session_close")
 close_fun$set_args(list(message = FALSE))
 
-rice_conn <- teal:::DataConnection$new(
+rice_conn <- teal:::TealDataConnection$new(
   open_fun = open_fun,
   close_fun = close_fun
 )
 ```
 
 One can open and close connection by using `rice_conn$open()` and `rice_conn$close()`
-functions respectively. As in `DatasetConnector$pull()`, `open()` and `close()`
+functions respectively. As in `TealDatasetConnector$pull()`, `open()` and `close()`
 delegates function execution to `CallableFunction$run()`. Developers should use
 `rice_conn$set_open_args()` to set some argument values to the reproducible call.
 Arguments values set to the `CallableFunction` are saved persistently and will
@@ -334,7 +334,7 @@ rice_conn$get_close_call()
 ```
 
 In `shiny` application connection arguments needs to be linked with `inputs`,
-that is why `DataConnection` contains a module. Developers can customize UI inputs to
+that is why `TealDataConnection` contains a module. Developers can customize UI inputs to
 open the connection using `set_open_ui()` and specify a relevant server function
 using `set_open_server()`. It's important to keep in mind that the server module
 needs a connection as a argument to `open()` and `close()` if needed.
@@ -367,15 +367,15 @@ rice_conn$set_open_server(
 rice_conn$launch()
 ```
 
-### `RelationalDataConnector` (including `CDISCDataConnector`)
+### `TealDataConnector` (including `CDISCTealDataConnector`)
 
-This class combines multiple `DatasetConnector` (or `CDISCDatasetConnector`) and a single `DataConnection` object.
+This class combines multiple `TealDatasetConnector` (or `CDISCTealDatasetConnector`) and a single `TealDataConnection` object.
 It creates a module to manage connection and to load data. Below we create two
-`DatasetConnector` objects and a `DataConnection` and we combine them
-together in a `RelationalDataConnector` object.
+`TealDatasetConnector` objects and a `TealDataConnection` and we combine them
+together in a `TealDataConnector` object.
 
 ```{r}
-# create DatasetConnectors
+# create TealDatasetConnectors
 adsl <- dataset_connector(
   dataname = "ADSL",
   pull_callable = callable_function("synthetic_cdisc_dataset") %>%
@@ -404,10 +404,10 @@ connectors <- list(adsl, adsl_3)
 # create connection
 scda_open_fun <- callable_function(fun = library)
 scda_open_fun$set_args(list(package = "scda"))
-scda_conn <- teal:::DataConnection$new(open_fun = scda_open_fun) # nolint
+scda_conn <- teal:::TealDataConnection$new(open_fun = scda_open_fun) # nolint
 
-# create DataConnector
-data <- teal:::RelationalDataConnector$new(
+# create TealDataConnector
+data <- teal:::TealDataConnector$new(
   connection = scda_conn,
   connectors = connectors
 )
@@ -415,7 +415,7 @@ data <- teal:::RelationalDataConnector$new(
 
 The object created above can be used to pull data and obtain the code. It combines
 code to pull the datasets preceded by any open connection code and followed by
-any close connection code. Please note that `DataConnector` doesn't limit
+any close connection code. Please note that `TealDataConnector` doesn't limit
 what kind of connectors are set within, but one must be aware that it should
 rather contain similar connectors (i.e. calling functions which share some arguments).
 For example, if we execute `data$set_pull_args(args = list(name = "latest"))`, this
@@ -432,13 +432,13 @@ data$set_pull_args(args = list(name = "latest"))
 data$pull()
 ```
 
-By default `RelationalDataConnector` creates simple shiny module without any
+By default `TealDataConnector` creates simple shiny module without any
 inputs for connectors and datasets. This means that connection opening/closing
 and pulling datasets are done on default arguments. However, users can easily
 extend the module using `set_ui()` and `set_server()` to specify
 the UI and server function themselves. The general rule for creating these modules is that callback
 from server to UI is not possible, because server module is executed after the submit
-button is clicked. Although see `set_preopen_server` of `DataConnection` object for a slight
+button is clicked. Although see `set_preopen_server` of `TealDataConnection` object for a slight
 relaxation of this rule.
 Below we extend the app interface by adding a text input which will be passed to the
 `scda` function. The UI is created from `scda_conn` and
@@ -505,10 +505,10 @@ connection and data object again.
 data$launch()
 ```
 
-### `RelationalData` (including `CDISCData`)
+### `TealData` (including `CDISCTealData`)
 
- `RelationalData` manages `Dataset`, `DatasetConnector` and `RelationalDataConnector`
-objects. `CDISCData` is the equivalent object when creating apps to analyse CDISC data.
+ `TealData` manages `TealDataset`, `TealDatasetConnector` and `TealDataConnector`
+objects. `CDISCTealData` is the equivalent object when creating apps to analyse CDISC data.
 These objects are created using `teal_data` and `cdisc_data` respectively and these
 objects are passed as the `data` argument into `teal::init`.
 
@@ -527,7 +527,7 @@ data <- cdisc_data(
 ```
 
 One can combine multiple delayed data objects using `[teal|cdisc]_data` functions and
-include them in a shiny application. `RelationalData` gathers all objects and sets
+include them in a shiny application. `TealData` gathers all objects and sets
 combined UI with shiny inputs from all objects.
 In the code chunk below we specified four dataset connectors but
 developers can include any number and any type of objects.
@@ -557,7 +557,7 @@ get_code(data, dataname = "ADSL")
 get_code(data, dataname = "ADTTE")
 ```
 
-Developers can also extract datasets and connectors included in the `RelationalData`.
+Developers can also extract datasets and connectors included in the `TealData`.
 
 ```{r, eval=FALSE}
 # get loaded datasets
@@ -602,8 +602,8 @@ cat(get_code(adsl))
 cat(get_code(adtte))
 ```
 
-`mutate_dataset` can also be used on `RelationalData` objects which applies
-the `code` to the dataset specified in `dataname`. This is important, as `RelationalData`
+`mutate_dataset` can also be used on `TealData` objects which applies
+the `code` to the dataset specified in `dataname`. This is important, as `TealData`
 can track each call which affects this particular dataset. Check the code below,
 where we create data containing two datasets using the `cdisc_data` function.
 We can still use `mutate_dataset` on the object which contains multiple datasets,
@@ -633,7 +633,7 @@ cat(get_code(data, "ADTTE"))
 ```
 
 Sometimes code of one object can depend on another, in this case we can link
-them in the same way how we link `DatasetConnector` objects. If object code
+them in the same way how we link `TealDatasetConnector` objects. If object code
 is dependent on another, as ADTTE depends on ADSL below, `get_code`
 will return everything we need to be executed to reproduce this dataset.
 

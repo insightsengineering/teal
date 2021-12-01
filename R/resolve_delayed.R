@@ -4,8 +4,8 @@
 #'
 #' @description `r lifecycle::badge("maturing")`
 #'
-#' @param x Object of class \code{delayed_data} to resolve.
-#' @param datasets Object of class \code{FilteredData} to use for evaluation.
+#' @param x Object of class `delayed_data` to resolve.
+#' @param datasets Object of class `FilteredData` to use for evaluation.
 #'
 #' @return Resolved object.
 #'
@@ -156,12 +156,12 @@ resolve_delayed.default <- function(x, datasets) {
 #'
 #' @description `r lifecycle::badge("maturing")`
 #'
-#' @param x \code{function} Function that is applied on dataset.
+#' @param x (`function`) Function that is applied on dataset.
 #' It must take only a single argument "data" and return character vector with columns / values.
-#' @param ds \code{data.frame} Dataset on which the function is applied to.
-#' @param is_value_choices \code{logical} Determines which check of the returned value will be applied.
+#' @param ds (`data.frame`) `TealDataset` on which the function is applied to.
+#' @param is_value_choices (`logical`) Determines which check of the returned value will be applied.
 #'
-#' @return Character vector - result of calling function \code{x} on dataset \code{ds}.
+#' @return Character vector - result of calling function `x` on dataset `ds`.
 #'
 #' @examples
 #' \dontrun{

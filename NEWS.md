@@ -1,4 +1,4 @@
-# teal 0.10.0.9021
+# teal 0.10.0.9026
 
 ### Breaking changes
 * Replaced `rcd_dataset_connector` and `rcd_cdisc_dataset_connector` with `scda_dataset_connector` and `scda_cdisc_dataset_connector` respectively.
@@ -11,20 +11,24 @@
 ### New features
 * Added print methods to the `DatasetConnector`, `RelationalData`, and `RelationalDataconnector` classes and added input validation to the implementation of the print method that was already in the `Dataset` object.
 * Added public facing constructor functions for `CDISCDataConnector`, `RelationalDataConnector`, and `DataConnection` classes.
-* Modified `data_extract_spec` to allow both the `filter` and `select` parameters to be `NULL`, which results in the `data_extract_input` acting as if a `filter_spec` with all variables as possible choices had been supplied as the `filter` argument and a `select_spec` with the `multiple` parameter set to `TRUE` had been supplied as the `select` argument.
+* Modified `data_extract_spec` to allow both the `filter` and `select` parameters to be `NULL`, which results in the `data_extract_ui` acting as if a `filter_spec` with all variables as possible choices had been supplied as the `filter` argument and a `select_spec` with the `multiple` parameter set to `TRUE` had been supplied as the `select` argument.
 * Added support for logging using the `logger` package. Added a new function `register_logger`, which registers a logger in a given namespace.
 * Added logging at the info and trace level to the filter panel.
 * Added support of the full screen for a `module` when the `filters` argument is equal `NULL`.
 * Added support for `shiny::moduleServer` passed to the `server` parameter of `teal::module`.
+* Added `pid` into footnote so app developers can identify logs for apps.
 
 ### Bug fixes
-* Fixed data loading of `DatasetConnector` being dependent on other `Dataset` or `DatasetConnector` objects. 
+* Fixed data loading of `DatasetConnector` being dependent on other `Dataset` or `DatasetConnector` objects.
 * Fixed call returned by `FilterState` in case of using `MultiAssayExperiment::subsetByColData`. Now single condition for variable containing `NA` values is `!is.na(var) & var == <condition>`.
 * `updateOptionalSelectInput` no longer sets input to `NULL` when `logical` value is passed to `selected`.
  
 ### Miscellaneous
 * Replaced the servers from `DataConnection`, `RelationalDataConnector`, `DatasetConnector`, and `RelationalData` with `moduleServer`.
-* Updated R version requirement to >= 3.6.
+* Updated R version requirement to >= 4.0.
+* Changed references to outdated functions of `teal.devel` in the documentation.
+* Updated "filter panel collapse" icon to remove warnings when using shiny version >= 1.7.
+* Renamed `Dataset` class into `TealDataset`. Applied the same logic for the rest of the dataset and data class names.
 
 # teal 0.10.0
 
@@ -180,7 +184,7 @@ function call.
 * Moved helper functions into `utils.nest` and removed unused functions `set_labels_df` and `get_labels_df`.
 * `optionalSelectInput` now allows for grouped choices.
 
-## Refactor of FilteredData (for developers)
+## Refactor of `FilteredData` (for developers)
 
 * `FilteredData` is now fully reactive. Now filtered data is lazy evaluated as per need. This further opens the door to bookmarking `teal` apps (bookmarking currently works for the right filtering panel, but we will make this feature more sophisticated in a future release, each module must be reviewed and adapted if it contains `reactiveValues`).
 * Datasets and materialized connectors are provided to `FilteredData` by `set_datasets_data` function located in `init_datasets.R` file.
@@ -274,7 +278,7 @@ function call.
 # teal 0.0.2
 
  * New '01_getting_started' vignette.
- * Datanames in FilteredData are now case sensitive.
+ * Datanames in `FilteredData` are now case sensitive.
 
 # teal 0.0.1
 

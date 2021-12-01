@@ -156,7 +156,7 @@ PythonCodeClass <- R6::R6Class( # nolint
       for (vars_idx in seq_along(vars)) {
         var_name <- names(vars)[[vars_idx]]
         var_value <- vars[[vars_idx]]
-        if (is(var_value, "DatasetConnector") || is(var_value, "Dataset")) {
+        if (is(var_value, "TealDatasetConnector") || is(var_value, "TealDataset")) {
           var_value <- get_raw_data(var_value)
         }
 
@@ -178,7 +178,7 @@ PythonCodeClass <- R6::R6Class( # nolint
         for (idx in seq_along(dupl_vars)) {
           var_name <- names(dupl_vars)[idx]
           var_value <- dupl_vars[[idx]]
-          if (is(var_value, "DatasetConnector") || is(var_value, "Dataset")) {
+          if (is(var_value, "TealDatasetConnector") || is(var_value, "TealDataset")) {
             var_value <- get_raw_data(var_value)
           }
           assign(var_name, var_value, envir = execution_environment)

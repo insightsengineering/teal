@@ -7,7 +7,7 @@
 get_dummy_filter(data)
 }
 \arguments{
-\item{data}{(\code{RelationalData})}
+\item{data}{(\code{TealData})}
 }
 \value{
 dummy filter states

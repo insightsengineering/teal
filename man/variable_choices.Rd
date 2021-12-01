@@ -4,9 +4,9 @@
 \alias{variable_choices}
 \alias{variable_choices.character}
 \alias{variable_choices.data.frame}
-\alias{variable_choices.Dataset}
-\alias{variable_choices.DatasetConnector}
-\title{Wrapper on \code{\link{choices_labeled}} to label variables basing on existing labels in data}
+\alias{variable_choices.TealDataset}
+\alias{variable_choices.TealDatasetConnector}
+\title{Wrapper on \link{choices_labeled} to label variables basing on existing labels in data}
 \usage{
 variable_choices(data, subset = NULL, fill = FALSE, key = NULL)
 
@@ -14,15 +14,15 @@ variable_choices(data, subset = NULL, fill = FALSE, key = NULL)
 
 \method{variable_choices}{data.frame}(data, subset = NULL, fill = FALSE, key = NULL)
 
-\method{variable_choices}{Dataset}(data, subset = NULL, fill = FALSE, key = get_keys(data))
+\method{variable_choices}{TealDataset}(data, subset = NULL, fill = FALSE, key = get_keys(data))
 
-\method{variable_choices}{DatasetConnector}(data, subset = NULL, fill = FALSE, key = get_keys(data))
+\method{variable_choices}{TealDatasetConnector}(data, subset = NULL, fill = FALSE, key = get_keys(data))
 }
 \arguments{
-\item{data}{(\code{data.frame}, \code{character}, \code{Dataset}, \code{DatasetConnector})
+\item{data}{(\code{data.frame}, \code{character}, \code{TealDataset}, \code{TealDatasetConnector})
 If \code{data.frame}, then data to extract labels from
 If \code{character}, then name of the dataset to extract data from once available
-If \code{Dataset} or \code{DatasetConnector}, then raw data to extract labels from.}
+If \code{TealDataset} or \code{TealDatasetConnector}, then raw data to extract labels from.}
 
 \item{subset}{(\code{character} or \code{function})
 If \code{character}, then a vector of column names.
@@ -36,7 +36,7 @@ See examples for more details.}
 \item{key}{(\code{character}) vector with names of the variables, which are part of the primary key
 of the \code{data} argument. This is an optional argument, which allows to identify variables
 associated with the primary key and display the appropriate icon for them in the
-\code{\link{optionalSelectInput}} widget.}
+\link{optionalSelectInput} widget.}
 }
 \value{
 named character vector with additional attributes or \code{delayed_data} object
@@ -56,7 +56,7 @@ variable_choices(ADRS, subset = c("", "PARAM", "PARAMCD"), key = get_cdisc_keys(
 # delayed version
 variable_choices("ADRS", subset = c("USUBJID", "STUDYID"))
 
-# also works with Dataset and DatasetConnector
+# also works with TealDataset and TealDatasetConnector
 ADRS_dataset <- dataset("ADRS", ADRS, key = get_cdisc_keys("ADRS"))
 variable_choices(ADRS_dataset)
 

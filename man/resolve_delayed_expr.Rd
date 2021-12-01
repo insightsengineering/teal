@@ -7,12 +7,12 @@
 resolve_delayed_expr(x, ds, is_value_choices)
 }
 \arguments{
-\item{x}{\code{function} Function that is applied on dataset.
+\item{x}{(\code{function}) Function that is applied on dataset.
 It must take only a single argument "data" and return character vector with columns / values.}
 
-\item{ds}{\code{data.frame} Dataset on which the function is applied to.}
+\item{ds}{(\code{data.frame}) \code{TealDataset} on which the function is applied to.}
 
-\item{is_value_choices}{\code{logical} Determines which check of the returned value will be applied.}
+\item{is_value_choices}{(\code{logical}) Determines which check of the returned value will be applied.}
 }
 \value{
 Character vector - result of calling function \code{x} on dataset \code{ds}.

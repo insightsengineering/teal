@@ -250,7 +250,7 @@ time to browse through the just mentioned `.R` files and see how much of what
 has just been said/written can be spotted in the code without further
 explanation.
 
-## FilteredData
+## `FilteredData`
 
 The `FilteredData` class is an [`R6`][r6] reference class to handle the datasets
 and the filtering state. In general, every dataset can be filtered based on
@@ -293,7 +293,7 @@ merged to all other `ADaM` datasets as its information is frequently used for
 most outputs (e.g. `ARM`). The key for merging `ADSL` and any other analysis
 dataset is the `USUBJID` and `STUDYID` variable (if not specified otherwise).
 
-### FilteredData Class for Clinical Trials Data
+### `FilteredData` Class for Clinical Trials Data
 
 `teal` supports both general relational data (using `teal_data` function output as
 `data` argument to `teal::init`) and CDISC specific data (using `cdisc_data` function instead)
@@ -385,7 +385,7 @@ cat(
 )
 ```
 
-### FilteredData for general relational data
+### `FilteredData` for general relational data
 
 The CDISC filtering mechanism which we have introduced in the previous section
 can be abstracted with the following diagram:

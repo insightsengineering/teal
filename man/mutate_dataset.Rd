@@ -2,14 +2,14 @@
 % Please edit documentation in R/mutate_dataset.R
 \name{mutate_dataset}
 \alias{mutate_dataset}
-\alias{mutate_dataset.Dataset}
-\alias{mutate_dataset.DatasetConnector}
-\alias{mutate_dataset.DataAbstract}
+\alias{mutate_dataset.TealDataset}
+\alias{mutate_dataset.TealDatasetConnector}
+\alias{mutate_dataset.TealDataAbstract}
 \title{Mutate dataset by code}
 \usage{
 mutate_dataset(x, ...)
 
-\method{mutate_dataset}{Dataset}(
+\method{mutate_dataset}{TealDataset}(
   x,
   code = character(0),
   script = character(0),
@@ -17,7 +17,7 @@ mutate_dataset(x, ...)
   ...
 )
 
-\method{mutate_dataset}{DatasetConnector}(
+\method{mutate_dataset}{TealDatasetConnector}(
   x,
   code = character(0),
   script = character(0),
@@ -25,7 +25,7 @@ mutate_dataset(x, ...)
   ...
 )
 
-\method{mutate_dataset}{DataAbstract}(
+\method{mutate_dataset}{TealDataAbstract}(
   x,
   dataname,
   code = character(0),
@@ -35,7 +35,7 @@ mutate_dataset(x, ...)
 )
 }
 \arguments{
-\item{x}{(\code{Dataset})\cr
+\item{x}{(\code{TealDataset})\cr
 object.}
 
 \item{...}{not used, only for support of S3}
@@ -49,11 +49,11 @@ file that contains R Code that can be read using \code{\link{read_script}}.
 Preferred before \code{code} argument.}
 
 \item{vars}{(named \code{list})) \cr
-In case when this object code depends on other \code{Dataset} object(s) or
+In case when this object code depends on other \code{TealDataset} object(s) or
 other constant value, this/these object(s) should be included as named
 element(s) of the list. For example if this object code needs \code{ADSL}
 object we should specify \verb{vars = list(ADSL = <adsl object>)}.
-It's recommended to include \code{Dataset} or \code{DatasetConnector} objects to
+It's recommended to include \code{TealDataset} or \code{TealDatasetConnector} objects to
 the \code{vars} list to preserve reproducibility. Please note that \code{vars}
 are included to this object as local \code{vars} and they cannot be modified
 within another dataset.}

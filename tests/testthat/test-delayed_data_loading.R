@@ -415,7 +415,7 @@ test_that("Delayed extract two filters - single data connector with two scda dat
 })
 
 # Delayed extract - dataset & connector ----
-test_that("Delayed extract - RelationalData with single dataset and multiple connectors", {
+test_that("Delayed extract - TealData with single dataset and multiple connectors", {
 
   adsl <- dataset(
     dataname = "ADSL",

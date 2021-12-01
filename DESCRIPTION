@@ -1,7 +1,7 @@
 Type: Package
 Package: teal
 Title: Exploratory Web Apps for Analyzing Clinical Trials Data
-Version: 0.10.0.9021
+Version: 0.10.0.9026
 Date: 2021-10-13
 Authors@R: c(
     person("NEST", , , "nestcicd@roche.com", role = c("aut", "cre")),
@@ -23,7 +23,7 @@ Description: teal is a shiny based interactive exploration framework for
     are built using standard shiny modules.
 License: Apache License 2.0 | file LICENSE
 Depends:
-    R (>= 3.6),
+    R (>= 4.0),
     shiny
 Imports:
     digest,
@@ -67,31 +67,31 @@ LazyData: true
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.1.2
 Collate:
-    'CDISCData.R'
-    'CDISCDataConnector.R'
-    'CDISCDataset.R'
-    'CDISCDatasetConnector.R'
     'CDISCFilteredData.R'
+    'CDISCTealData.R'
+    'CDISCTealDataConnector.R'
+    'CDISCTealDataset.R'
+    'CDISCTealDatasetConnector.R'
     'Callable.R'
     'CallableCode.R'
     'CallableFunction.R'
     'CallablePythonCode.R'
     'CodeClass.R'
-    'DataAbstract.R'
-    'DataConnection.R'
-    'Dataset.R'
-    'DatasetConnector.R'
-    'DatasetConnector_constructors.R'
     'FilterState.R'
     'FilterStates.R'
     'FilteredData.R'
     'FilteredDataset.R'
     'JoinKeys.R'
-    'MAEDataset.R'
+    'MAETealDataset.R'
     'Queue.R'
-    'RelationalData.R'
-    'RelationalDataConnector.R'
-    'RelationalDataConnector_constructors.R'
+    'TealData.R'
+    'TealDataAbstract.R'
+    'TealDataConnection.R'
+    'TealDataConnector.R'
+    'TealDataConnector_constructors.R'
+    'TealDataset.R'
+    'TealDatasetConnector.R'
+    'TealDatasetConnector_constructors.R'
     'all_choices.R'
     'as_cdisc.R'
     'choices_labeled.R'

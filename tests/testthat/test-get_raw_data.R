@@ -8,7 +8,7 @@ testthat::test_that("get_raw_data validates the argument dataname", {
   testthat::expect_warning(get_raw_data(x, "dataname"))
 })
 
-testthat::test_that("get_raw_data.Dataset returns a data.frame verbatim ", {
+testthat::test_that("get_raw_data.TealDataset returns a data.frame verbatim ", {
   x <- dataset(dataname = "head_iris", x = head(iris))
 
   testthat::expect_identical(
@@ -17,7 +17,7 @@ testthat::test_that("get_raw_data.Dataset returns a data.frame verbatim ", {
   )
 })
 
-testthat::test_that("get_raw_data.Dataset gives warning when dataname is supplied ", {
+testthat::test_that("get_raw_data.TealDataset gives warning when dataname is supplied ", {
   x <- dataset(dataname = "head_iris", x = head(iris))
 
   testthat::expect_warning(
@@ -25,7 +25,7 @@ testthat::test_that("get_raw_data.Dataset gives warning when dataname is supplie
   )
 })
 
-testthat::test_that("get_raw_data.DatasetConnector returns a SCDA data frame verbatim ", {
+testthat::test_that("get_raw_data.TealDatasetConnector returns a SCDA data frame verbatim ", {
   pull_fun_adsl <- callable_function(
     function() {
       synthetic_cdisc_data("latest")$adsl
@@ -40,7 +40,7 @@ testthat::test_that("get_raw_data.DatasetConnector returns a SCDA data frame ver
   )
 })
 
-testthat::test_that("get_raw_data.DatasetConnector gives warning when dataname is supplied ", {
+testthat::test_that("get_raw_data.TealDatasetConnector gives warning when dataname is supplied ", {
   pull_fun_adsl <- callable_function(
     function() {
       synthetic_cdisc_data("latest")$adsl
@@ -54,12 +54,12 @@ testthat::test_that("get_raw_data.DatasetConnector gives warning when dataname i
   )
 })
 
-testthat::test_that("get_raw_data.DataAbstract returns dataset objects verbatim when input is RelationalData", {
+testthat::test_that("get_raw_data.TealDataAbstract returns dataset objects verbatim when input is TealData", {
   x <- dataset(dataname = "head_iris", x = head(iris))
 
   y <- dataset(dataname = "head_mtcars", x = head(mtcars))
 
-  rd <- teal:::RelationalData$new(x, y)
+  rd <- teal:::TealData$new(x, y)
 
   out <- get_raw_data(rd)
 
@@ -70,12 +70,12 @@ testthat::test_that("get_raw_data.DataAbstract returns dataset objects verbatim 
 })
 
 testthat::test_that(
-  "get_raw_data.DataAbstract returns dataset objects verbatim when input is RelationalData", {
+  "get_raw_data.TealDataAbstract returns dataset objects verbatim when input is TealData", {
   x <- dataset(dataname = "head_iris", x = head(iris))
 
   y <- dataset(dataname = "head_mtcars", x = head(mtcars))
 
-  rd <- teal:::RelationalData$new(x, y)
+  rd <- teal:::TealData$new(x, y)
 
   out <- get_raw_data(rd)
 
@@ -86,7 +86,7 @@ testthat::test_that(
 })
 
 testthat::test_that(
-  "get_raw_data.DataAbstract returns dataset objects verbatim when input is RelationalDataConnector or CDISCData", {
+  "get_raw_data.TealDataAbstract returns dataset objects verbatim when input is TealDataConnector or CDISCTealData", {
     adsl_cf <- callable_function(function() synthetic_cdisc_data("latest")$adsl)
     adsl <- cdisc_dataset_connector(dataname = "ADSL",
                                     pull_callable = adsl_cf,

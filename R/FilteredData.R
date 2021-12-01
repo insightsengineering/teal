@@ -31,7 +31,7 @@
 #'
 #' Common arguments are:
 #' 1. `filtered`: whether to return a filtered result or not
-#' 2. `dataname`: the name of one of the datasets in this FilteredData
+#' 2. `dataname`: the name of one of the datasets in this `FilteredData`
 #' 3. `varname`: one of the columns in a dataset
 #'
 #' @examples
@@ -323,17 +323,17 @@ FilteredData <- R6::R6Class( # nolint
 
 
     #' @description
-    #' Adds a `Dataset` object to this FilteredData
+    #' Adds a `TealDataset` object to this `FilteredData`
     #'
     #' Adds a dataset and preserve all attributes attached to this object.
     #' Technically `set_dataset` created `FilteredDataset` which keeps
     #' `dataset` for filtering purpose.
     #'
-    #' @param dataset (`Dataset` or `DatasetConnector`)\cr
+    #' @param dataset (`TealDataset` or `TealDatasetConnector`)\cr
     #'   the object containing data and attributes.
-    #' @return (`self`) invisibly this FilteredData
+    #' @return (`self`) invisibly this `FilteredTealData`
     set_dataset = function(dataset) {
-      stopifnot(is(dataset, "Dataset") || is(dataset, "DatasetConnector"))
+      stopifnot(is(dataset, "TealDataset") || is(dataset, "TealDatasetConnector"))
       logger::log_trace("FilteredData$set_dataset setting dataset, name; { get_dataname(dataset) }")
       dataname <- get_dataname(dataset)
       # to include it nicely in the Show R Code; the UI also uses datanames in ids, so no whitespaces allowed

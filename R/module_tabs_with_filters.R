@@ -3,7 +3,7 @@
 
 #' Add right filter panel into each of the top-level `teal_modules` UIs.
 #'
-#' The \code{\link{ui_nested_tabs}} function returns a nested tabbed UI corresponding
+#' The [ui_nested_tabs] function returns a nested tabbed UI corresponding
 #' to the nested modules.
 #' This function adds the right filter panel to each main tab.
 #'
@@ -13,10 +13,13 @@
 #' This works with nested modules of depth greater than 2, though the filter
 #' panel is inserted at the right of the modules at depth 1 and not at the leaves.
 #'
+#' @inheritParams ui_teal_with_splash
 #' @inheritParams init
-#' @inheritParams srv_shiny_module_arguments
+#' @param datasets (`FilteredData`)\cr
+#'   object to store filter state and filtered datasets, shared across modules. For more
+#'   details see [`FilteredData`]
 #'
-#' @return A \code{tagList} of The main menu, place holders for filters and
+#' @return A `tagList` of The main menu, place holders for filters and
 #'   place holders for the teal modules
 #'
 #' @import shiny
@@ -34,7 +37,7 @@
 #'     )
 #'   },
 #'   server = function(input, output, session) {
-#'     active_module <- callModule(srv_tabs_with_filters, "dummy", datasets = datasets, modules = mods)
+#'     active_module <- srv_tabs_with_filters(id = "dummy", datasets = datasets, modules = mods)
 #'     output$info <- renderText({
 #'       paste0("The currently active tab name is ", active_module()$label)
 #'     })
@@ -62,12 +65,8 @@
 #'     )
 #'   },
 #'   server = function(input, output, session) {
-#'     active_module1 <- callModule(
-#'       srv_tabs_with_filters, "app1", datasets = datasets1, modules = mods
-#'     )
-#'     active_module2 <- callModule(
-#'       srv_tabs_with_filters, "app2", datasets = datasets2, modules = mods
-#'     )
+#'     active_module1 <- srv_tabs_with_filters(id = "app1", datasets = datasets1, modules = mods)
+#'     active_module2 <- srv_tabs_with_filters(id = "app2", datasets = datasets2, modules = mods)
 #'     output$info <- renderText({
 #'       paste0(
 #'         "The currently active tab names are: ",
@@ -103,7 +102,7 @@ ui_tabs_with_filters <- function(id, modules, datasets) {
       class = "menubtn",
       onclick = "toggle_sidebar();",
       title = "Toggle filter panels",
-      tags$span(icon("navicon", lib = "font-awesome"))
+      tags$span(icon("fas fa-bars"))
     )
   )
 
@@ -126,18 +125,24 @@ ui_tabs_with_filters <- function(id, modules, datasets) {
 
 #' Server function
 #'
-#' @inheritParams srv_shiny_module_arguments
+#' @inheritParams srv_teal_with_splash
+#' @param datasets (`FilteredData`)\cr
+#'   object to store filter state and filtered datasets, shared across modules. For more
+#'   details see [`FilteredData`].
 #' @return `reactive` currently selected active_module
-srv_tabs_with_filters <- function(input, output, session, datasets, modules) {
-  active_module <- callModule(srv_nested_tabs, "modules_ui", datasets = datasets, modules = modules)
+srv_tabs_with_filters <- function(id, datasets, modules) {
+  stopifnot(is(datasets, "FilteredData"))
+  moduleServer(id, function(input, output, session) {
+    active_module <- srv_nested_tabs(id = "modules_ui", datasets = datasets, modules = modules)
 
-  active_datanames <- eventReactive(
-    eventExpr = active_module(),
-    valueExpr = {
-      datasets$handle_active_datanames(datanames = active_module()$filters)
+    active_datanames <- eventReactive(
+      eventExpr = active_module(),
+      valueExpr = {
+        datasets$handle_active_datanames(datanames = active_module()$filters)
+      })
+
+    datasets$srv_filter_panel(id = "filter_panel", active_datanames = active_datanames)
+
+    return(active_module)
   })
-
-  datasets$srv_filter_panel(id = "filter_panel", active_datanames = active_datanames)
-
-  return(active_module)
 }

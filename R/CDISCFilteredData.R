@@ -183,7 +183,7 @@ CDISCFilteredData <- R6::R6Class( # nolint
     #' Technically `set_dataset` created `FilteredDataset` which keeps
     #' `dataset` for filtering purpose.
     #'
-    #' @param dataset (`Dataset`)\cr
+    #' @param dataset (`TealDataset`)\cr
     #'   object containing data and attributes.
     #' @return (`self`) object of this class
     set_dataset = function(dataset) {

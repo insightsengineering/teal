@@ -148,7 +148,7 @@ reference:
     - get_filter_expr
     - get_key_duplicates
     - get_key_duplicates.data.frame
-    - get_key_duplicates.Dataset
+    - get_key_duplicates.TealDataset
     - get_key_duplicates_util
     - get_labels
     - init_filtered_dataset
@@ -182,19 +182,15 @@ reference:
     - CallableCode
     - CallableFunction
     - CallablePythonCode
-    - CDISCData
-    - CDISCDataConnector
-    - CDISCDataset
-    - CDISCDatasetConnector
+    - CDISCTealData
+    - CDISCTealDataConnector
+    - CDISCTealDataset
+    - CDISCTealDatasetConnector
     - CDISCFilteredData
     - CDISCFilteredDataset
     - ChoicesFilterState
     - CodeClass
-    - DataAbstract
-    - DataConnection
-    - Dataset
     - dataset.MultiAssayExperiment
-    - DatasetConnector
     - DateFilterState
     - DatetimeFilterState
     - DefaultFilteredDataset
@@ -208,14 +204,19 @@ reference:
     - LogicalFilterState
     - MAEFilteredDataset
     - MAEFilterStates
+    - MAETealDataset
     - MatrixFilterStates
     - PythonCodeClass
     - Queue
     - RangeFilterState
     - ReactiveQueue
-    - RelationalData
-    - RelationalDataConnector
     - SEFilterStates
+    - TealData
+    - TealDataAbstract
+    - TealDataConnection
+    - TealDataConnector
+    - TealDataset
+    - TealDatasetConnector
     - srv_teal_with_splash
     - ui_teal_with_splash
   - subtitle: Unexported Functions
@@ -243,7 +244,6 @@ reference:
     - picker_options_content
     - pretty_code_string
     - srv_nested_tabs
-    - srv_shiny_module_arguments
     - srv_tabs_with_filters
     - srv_teal
     - text_to_call

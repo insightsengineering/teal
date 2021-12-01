@@ -25,8 +25,8 @@ deep_clone_r6 <- function(name, value) {
 #'
 #' @description `r lifecycle::badge("maturing")`
 #'
-#' @param x (\code{character}) Character (single)
-#' @param sep (\code{character}) Separator
+#' @param x (`character`) Character (single)
+#' @param sep (`character`) Separator
 #' @export
 split_by_sep <- function(x, sep) {
   stopifnot(is.atomic(x))
@@ -40,13 +40,13 @@ split_by_sep <- function(x, sep) {
 #' List element in other list
 #'
 #' @description `r lifecycle::badge("maturing")`
-#' Checks if \code{x} element matches any of \code{y} element. If one of the arguments is a list then list elements
+#' Checks if `x` element matches any of `y` element. If one of the arguments is a list then list elements
 #' are treated as whole - in this case list elements can be a vector, so it looks
 #' for equal element in second vector to be matched.
 #'
-#' @param x \code{list} to be matched.
-#' @param y \code{list} to be matched against.
-#' @return \code{logical} vector length of \code{x} denoting if element was found in second list.
+#' @param x `list` to be matched.
+#' @param y `list` to be matched against.
+#' @return `logical` vector length of `x` denoting if element was found in second list.
 #' @export
 `%is_in%` <- function(x, y) {
   if (!is.list(x) & is.list(y)) {
@@ -61,10 +61,10 @@ split_by_sep <- function(x, sep) {
 
 #' Extract labels from choices basing on attributes and names
 #'
-#' @param choices (\code{list} or \code{vector}) select choices
-#' @param values optional, choices subset for which labels should be extracted, \code{NULL} for all choices
+#' @param choices (`list` or `vector`) select choices
+#' @param values optional, choices subset for which labels should be extracted, `NULL` for all choices
 #'
-#' @return (\code{character}) vector with labels
+#' @return (`character`) vector with labels
 extract_choices_labels <- function(choices, values = NULL) {
   res <- if (is(choices, "choices_labeled")) {
     attr(choices, "raw_labels")
@@ -106,8 +106,8 @@ get_client_timezone <- function(ns) {
 
 #' Check if package can be loaded
 #'
-#' @param pckg \code{character} package name.
-#' @param msg \code{character} error message to display if package is not available.
+#' @param pckg `character` package name.
+#' @param msg `character` error message to display if package is not available.
 #'
 #' @return Error or invisible NULL.
 #'
@@ -129,7 +129,7 @@ check_pkg_quietly <- function(pckg, msg) {
 #' This can be used to create a hierarchy within a Shiny module namespace
 #' itself, e.g. create nested tabs whose ids all live in one namespace,
 #' but where a child tab's name is prefixed with the parent tab's name.
-#' See \code{\link{ui_nested_tabs}}.
+#' See [ui_nested_tabs].
 #'
 #' @param label label of module
 #' @param prefix `character or NULL` to prepend to label;
@@ -159,19 +159,6 @@ label_to_id <- function(label, prefix = NULL) {
   } else {
     label
   }
-}
-
-#' Function to inherit Shiny module arguments that must always be present
-#'
-#' @param input (`Shiny input object`)
-#' @param output (`Shiny output object`)
-#' @param session (`Shiny session object`)
-#' @param modules (`teal_module` or `teal_modules`)
-#'  single or multiple modules. `teal_modules`  can be used for nested
-#'  tabs, see \code{\link{ui_nested_tabs}}
-#' @param datasets (`FilteredData`)\cr
-#'   object to store filter state and filtered datasets, shared across modules
-srv_shiny_module_arguments <- function(input, output, session, datasets, modules) { # nousage # nolint
 }
 
 #' Check that a given range is valid
@@ -314,9 +301,9 @@ code_from_script <- function(code, script, dataname = NULL) {
 #' @description `r lifecycle::badge("maturing")`
 #' Comments will be excluded
 #'
-#' @param file (\code{character}) File to be parsed into code
-#' @param dataname (\code{character}) dataset name to subset code from chunks
-#' @return (\code{character}) vector with the code
+#' @param file (`character`) File to be parsed into code
+#' @param dataname (`character`) dataset name to subset code from chunks
+#' @return (`character`) vector with the code
 #'
 #' @export
 #' @examples
@@ -340,18 +327,18 @@ read_script <- function(file, dataname = NULL) {
 #' @details The information summary provides row numbers and number of duplicates
 #' for each duplicated key value.
 #'
-#' @param dataset \code{Dataset} or \code{dataframe} a dataset, which will be tested
-#' @param keys \code{character} vector of variable names in `dataset` consisting the key
-#' or \code{keys} object, which does have a `primary` element with a vector of variable
+#' @param dataset `TealDataset` or `data.frame` a dataset, which will be tested
+#' @param keys `character` vector of variable names in `dataset` consisting the key
+#' or `keys` object, which does have a `primary` element with a vector of variable
 #' names in `dataset` consisting the key. Optional, default: NULL
 #'
-#' @return a \code{tibble} with variables consisting the key and \code{row_no} and \code{duplicates_count} columns
+#' @return a `tibble` with variables consisting the key and `row_no` and `duplicates_count` columns
 #'
 #' @examples
 #' library(scda)
 #'
 #' adsl <- synthetic_cdisc_data("latest")$adsl
-#' # create a Dataset with default keys
+#' # create a TealDataset with default keys
 #' rel_adsl <- cdisc_dataset("ADSL", adsl)
 #' get_key_duplicates(rel_adsl)
 #'
@@ -366,9 +353,9 @@ read_script <- function(file, dataname = NULL) {
 #' }
 #'
 #' @seealso \itemize{
-#' \item{\code{\link{get_key_duplicates_util}}}
-#' \item{\code{\link{get_key_duplicates.Dataset}}}
-#' \item{\code{\link{get_key_duplicates.data.frame}}}
+#' \item{[get_key_duplicates_util]}
+#' \item{[get_key_duplicates.TealDataset]}
+#' \item{[get_key_duplicates.data.frame]}
 #' }
 #'
 #' @export
@@ -380,13 +367,13 @@ get_key_duplicates <- function(dataset, keys = NULL) {
 #'
 #' @description `r lifecycle::badge("experimental")`
 #' @details S3 method for get_key_duplicates. Uses the public API of
-#' `Dataset` to read the primary key and the raw data.
+#' `TealDataset` to read the primary key and the raw data.
 #'
 #' If `keys` argument is provided, then checks against that, if it's `NULL`, then checks
-#' against the \code{get_keys()$primary} method of the `dataset` argument.
+#' against the `get_keys()$primary` method of the `dataset` argument.
 #'
 #' @inheritParams get_key_duplicates
-#' @param dataset a \code{Dataset} object, which will be used to detect duplicated
+#' @param dataset a `TealDataset` object, which will be used to detect duplicated
 #' primary keys
 #'
 #' @examples
@@ -398,10 +385,10 @@ get_key_duplicates <- function(dataset, keys = NULL) {
 #' rel_adsl <- cdisc_dataset("ADSL", adsl)
 #' get_key_duplicates(rel_adsl)
 #'
-#' @seealso \code{\link{get_key_duplicates}} \code{\link{get_key_duplicates_util}}
+#' @seealso [get_key_duplicates] [get_key_duplicates_util]
 #'
 #' @export
-get_key_duplicates.Dataset <- function(dataset, keys = NULL) { #nolint
+get_key_duplicates.TealDataset <- function(dataset, keys = NULL) { #nolint
   df <- get_raw_data(dataset)
   keys <- if_null(keys, if_null(get_keys(dataset), character(0)))
 
@@ -417,9 +404,9 @@ get_key_duplicates.Dataset <- function(dataset, keys = NULL) { #nolint
 #' looks for `primary_key` attribute of the `dataset`. If neither are provided raises an exception.
 #'
 #' @inheritParams get_key_duplicates
-#' @param dataset \code{data.frame} object
+#' @param dataset `data.frame` object
 #'
-#' @return a \code{tibble} with a short information summary
+#' @return a `tibble` with a short information summary
 #'
 #' @examples
 #' df <- as.data.frame(
@@ -428,7 +415,7 @@ get_key_duplicates.Dataset <- function(dataset, keys = NULL) { #nolint
 #' res <- get_key_duplicates(df, keys = c('a', 'b')) # duplicated keys are in rows 3 and 4
 #' print(res) # outputs a tibble
 #'
-#' @seealso \code{\link{get_key_duplicates}} \code{\link{get_key_duplicates_util}}
+#' @seealso [get_key_duplicates] [get_key_duplicates_util]
 #'
 #' @export
 get_key_duplicates.data.frame <- function(dataset, keys = NULL) { #nolint
@@ -442,19 +429,19 @@ get_key_duplicates.data.frame <- function(dataset, keys = NULL) { #nolint
 #' @description `r lifecycle::badge("experimental")`
 #'
 #' @details
-#' Accepts a list of variable names - \code{keys}, which are treated as the
-#' key to the \code{dataframe} argument. An instance of duplicated key is
-#' defined as two rows, which have the same values in columns defined by \code{keys}.
-#' Per each key value with duplicates returns a row in a \code{tibble}. The return table
-#' has columns corresponding to the variable names passed in \code{keys} and
-#' two additional columns: \code{row_no} and \code{duplicates_count}, which provide
+#' Accepts a list of variable names - `keys`, which are treated as the
+#' key to the `data.frame` argument. An instance of duplicated key is
+#' defined as two rows, which have the same values in columns defined by `keys`.
+#' Per each key value with duplicates returns a row in a `tibble`. The return table
+#' has columns corresponding to the variable names passed in `keys` and
+#' two additional columns: `row_no` and `duplicates_count`, which provide
 #' information about row numbers of the original dataframe, which contain duplicated keys
 #' and total duplicates counts.
 #'
 #' @param dataframe dataframe
-#' @param keys \code{character} list of variable names consisting the key to the \code{dataframe}
+#' @param keys `character` list of variable names consisting the key to the `data.frame`
 #'
-#' @return \code{tibble} with a duplicate keys information summary
+#' @return `tibble` with a duplicate keys information summary
 #'
 #' @importFrom rlang .data
 #'
@@ -465,7 +452,7 @@ get_key_duplicates.data.frame <- function(dataset, keys = NULL) { #nolint
 #' res <- teal:::get_key_duplicates_util(df, keys = c("a", "b")) # duplicated keys are in rows 3 and 4
 #' print(res) # outputs a tibble
 #'
-#' @seealso \code{\link{get_key_duplicates}}
+#' @seealso [get_key_duplicates]
 get_key_duplicates_util <- function(dataframe, keys) {
   stopifnot(!is.null(keys))
   stopifnot(is.data.frame(dataframe))

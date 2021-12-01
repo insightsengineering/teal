@@ -2,15 +2,15 @@
 % Please edit documentation in R/get_attrs.R
 \name{get_attrs}
 \alias{get_attrs}
-\alias{get_attrs.Dataset}
+\alias{get_attrs.TealDataset}
 \title{Get dataset attributes}
 \usage{
 get_attrs(x)
 
-\method{get_attrs}{Dataset}(x)
+\method{get_attrs}{TealDataset}(x)
 }
 \arguments{
-\item{x}{an object of (\code{Dataset}) class}
+\item{x}{an object of (\code{TealDataset}) class}
 }
 \value{
 named \code{list} of object attributes
@@ -20,7 +20,7 @@ named \code{list} of object attributes
 Get dataset attributes in form of named list.
 }
 \examples{
-# Dataset --------
+# TealDataset --------
 
 library(scda)
 ADSL <- synthetic_cdisc_data("latest")$adsl
@@ -36,7 +36,7 @@ x2 <- dataset(
 )
 get_attrs(x2)
 
-# CDISCDataset --------
+# CDISCTealDataset --------
 
 library(scda)
 ADSL <- synthetic_cdisc_data("latest")$adsl
