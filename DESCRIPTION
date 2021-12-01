@@ -23,7 +23,7 @@ Description: teal is a shiny based interactive exploration framework for
     are built using standard shiny modules.
 License: Apache License 2.0 | file LICENSE
 Depends:
-    R (>= 3.6),
+    R (>= 4.0),
     shiny
 Imports:
     digest,
