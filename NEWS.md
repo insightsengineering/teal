@@ -1,4 +1,4 @@
-# teal 0.10.0.9026
+# teal 0.10.0.9027
 
 ### Breaking changes
 * Replaced `rcd_dataset_connector` and `rcd_cdisc_dataset_connector` with `scda_dataset_connector` and `scda_cdisc_dataset_connector` respectively.
