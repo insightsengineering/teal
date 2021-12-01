@@ -77,7 +77,7 @@ an end-user, don't use this function, but instead this module." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">teal</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.10.0.9024</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.10.0.9025</span>
       </span>
     </div>
 
@@ -119,33 +119,6 @@ an end-user, don't use this function, but instead this module." />
 <li>
   <a href="../news/index.html">Changelog</a>
 </li>
-<!-- start_releases -->
-<li class="dropdown">
-	<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-Other releases
-<span class="caret"></span></a><ul class="dropdown-menu" role="menu">
-   <li><a href="../index.html">latest</a></li>
-   <li><a href="../pre-release/index.html">pre-release</a></li>
-   <li><a href="../v0.10.0/index.html">v0.10.0</a></li>
-   <li><a href="../v0.9.5/index.html">v0.9.5</a></li>
-   <li><a href="../v0.9.4/index.html">v0.9.4</a></li>
-   <li><a href="../v0.9.3/index.html">v0.9.3</a></li>
-   <li><a href="../v0.9.2/index.html">v0.9.2</a></li>
-   <li><a href="../v0.9.1/index.html">v0.9.1</a></li>
-   <li><a href="../v0.9.0/index.html">v0.9.0</a></li>
-   <li><a href="../v0.8.5/index.html">v0.8.5</a></li>
-   <li><a href="../v0.8.4/index.html">v0.8.4</a></li>
-   <li><a href="../v0.8.3/index.html">v0.8.3</a></li>
-   <li><a href="../v0.8.2/index.html">v0.8.2</a></li>
-   <li><a href="../v0.7.0/index.html">v0.7.0</a></li>
-   <li><a href="../v0.6.0/index.html">v0.6.0</a></li>
-   <li><a href="../v0.0.5/index.html">v0.0.5</a></li>
-   <li><a href="../v0.0.4/index.html">v0.0.4</a></li>
-   <li><a href="../v0.0.3/index.html">v0.0.3</a></li>
-   <li><a href="../v0.0.2/index.html">v0.0.2</a></li>
-   <li><a href="../v0.0.1/index.html">v0.0.1</a></li>
-</ul></li>
-<!-- end_releases -->
       </ul>
       <ul class="nav navbar-nav navbar-right">
         <li>
@@ -196,41 +169,29 @@ an end-user, don't use this function, but instead this module.</p>
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>data</th>
-      <td><p>(<code>TealData</code> or <code>TealDataset</code> or <code>TealDatasetConnector</code> or <code>list</code> or <code>data.frame</code>)
-<code>R6</code> object as returned by <a href='cdisc_data.html'>cdisc_data</a>, <a href='teal_data.html'>teal_data</a>, <a href='cdisc_dataset.html'>cdisc_dataset</a>, <a href='dataset.html'>dataset</a>, <a href='dataset_connector.html'>dataset_connector</a> or
-<a href='cdisc_dataset_connector.html'>cdisc_dataset_connector</a> or a single <code>data.frame</code> or a list of the previous objects or
-function returning a named list.
-NOTE: teal does not guarantee reproducibility of the code when names of the list elements do not match
-the original object names. To ensure reproducibility please use <a href='teal_data.html'>teal_data</a> or
-<a href='cdisc_data.html'>cdisc_data</a> with <code>check = TRUE</code> enabled.</p></td>
+      <td><p>(<code>TealData</code> or <code>TealDataset</code> or <code>TealDatasetConnector</code> or <code>list</code> or <code>data.frame</code>)<br />
+<code>R6</code> object as returned by <code><a href='cdisc_data.html'>cdisc_data()</a></code>, <code><a href='teal_data.html'>teal_data()</a></code>, <code><a href='cdisc_dataset.html'>cdisc_dataset()</a></code>, <code><a href='dataset.html'>dataset()</a></code>,
+<code><a href='dataset_connector.html'>dataset_connector()</a></code> or <code><a href='cdisc_dataset_connector.html'>cdisc_dataset_connector()</a></code> or a single <code>data.frame</code> or a list of
+the previous objects or function returning a named list.
+NOTE: teal does not guarantee reproducibility of the code when names of the list elements
+do not match the original object names. To ensure reproducibility please use <code><a href='teal_data.html'>teal_data()</a></code>
+or <code><a href='cdisc_data.html'>cdisc_data()</a></code> with <code>check = TRUE</code> enabled.</p></td>
     </tr>
     <tr>
       <th>modules</th>
-      <td><p>nested list with one list per module with the
-following named list elements:</p><table class='table'>
-<tr><td></td><td>name</td></tr>
-<tr><td>string with name shown in menu for the analysis item</td><td>server</td></tr>
-<tr><td>required, shiny server module function, see
-<code>\link[shiny]{callModule}</code> for more information</td><td>ui</td></tr>
-<tr><td>required, shiny ui module function, see
-<code>\link[shiny]{callModule}</code> for more information. Note, due to the app's initialization by teal,
-this <code>ui</code> function is actually part of the <code>server</code> function of the shiny app which means code which must
-be included in the shiny <code>ui</code> function (such as using <code><a href='https://rdrr.io/pkg/htmltools/man/htmlDependency.html'>htmltools::htmlDependency</a></code>) should not be placed here
-but should instead be placed in the <code>header</code> argument to <code>teal::init</code> as that is included in the shiny <code>ui</code>
-function.</td><td>data</td></tr>
-<tr><td>required, vector with datasets names that are passed
-on (filtered) to the server function</td><td>options</td></tr>
-</table>
-</td>
+      <td><p>(<code>list</code> or <code>teal_modules</code>)<br />
+nested list of <code>teal_modules</code> or <code>module</code> objects. See <code><a href='modules.html'>modules()</a></code> and <code><a href='module.html'>module()</a></code> for
+more details.</p></td>
     </tr>
     <tr>
       <th>title</th>
-      <td><p>(<code>NULL</code> or <code>character</code>) The browser window title (defaults to the host URL of the page).</p></td>
+      <td><p>(<code>NULL</code> or <code>character</code>)<br />
+The browser window title (defaults to the host URL of the page).</p></td>
     </tr>
     <tr>
       <th>filter</th>
-      <td><p>(<code>list</code>) You can define filters that show when
-the app starts.
+      <td><p>(<code>list</code>)<br />
+You can define filters that show when the app starts.
 The general pattern is:
 <code>list(iris = list(Species = ..., Sepal.Length = ...), mtcars = ...)</code>.
 An example is:
@@ -254,19 +215,22 @@ Ignored if the app is restored from a bookmarked state.</p></li>
     </tr>
     <tr>
       <th>header</th>
-      <td><p>(<code>character</code> or <code>shiny.tag</code>) the header of the app. Note shiny code placed here (and in the footer
+      <td><p>(<code>character</code> or <code>shiny.tag</code>) <br />
+the header of the app. Note shiny code placed here (and in the footer
 argument) will be placed in the app's <code>ui</code> function so code which needs to be placed in the <code>ui</code> function
-(such as loading css via <code><a href='https://rdrr.io/pkg/htmltools/man/htmlDependency.html'>htmltools::htmlDependency</a></code>) should be included here.</p></td>
+(such as loading css via <code><a href='https://rdrr.io/pkg/htmltools/man/htmlDependency.html'>htmltools::htmlDependency()</a></code>) should be included here.</p></td>
     </tr>
     <tr>
       <th>footer</th>
-      <td><p>(<code>character</code> or <code>shiny.tag</code>) the footer of the app</p></td>
+      <td><p>(<code>character</code> or <code>shiny.tag</code>)<br />
+the footer of the app</p></td>
     </tr>
     <tr>
       <th>id</th>
-      <td><p>(<code>character</code>) module id to embed it, if provided,
-the server function must be called with <code>callModule</code>;
-See the vignette for an example. However, <a href='ui_teal_with_splash.html'>ui_teal_with_splash</a>
+      <td><p>(<code>character</code>)<br />
+module id to embed it, if provided,
+the server function must be called with <code><a href='https://rdrr.io/pkg/shiny/man/moduleServer.html'>shiny::moduleServer()</a></code>;
+See the vignette for an example. However, <code><a href='ui_teal_with_splash.html'>ui_teal_with_splash()</a></code>
 is then preferred to this function.</p></td>
     </tr>
     </table>

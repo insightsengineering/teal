@@ -80,7 +80,7 @@ states always take precedence over them." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">teal</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.10.0.9024</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.10.0.9025</span>
       </span>
     </div>
 
@@ -122,33 +122,6 @@ states always take precedence over them." />
 <li>
   <a href="../news/index.html">Changelog</a>
 </li>
-<!-- start_releases -->
-<li class="dropdown">
-	<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-Other releases
-<span class="caret"></span></a><ul class="dropdown-menu" role="menu">
-   <li><a href="../index.html">latest</a></li>
-   <li><a href="../pre-release/index.html">pre-release</a></li>
-   <li><a href="../v0.10.0/index.html">v0.10.0</a></li>
-   <li><a href="../v0.9.5/index.html">v0.9.5</a></li>
-   <li><a href="../v0.9.4/index.html">v0.9.4</a></li>
-   <li><a href="../v0.9.3/index.html">v0.9.3</a></li>
-   <li><a href="../v0.9.2/index.html">v0.9.2</a></li>
-   <li><a href="../v0.9.1/index.html">v0.9.1</a></li>
-   <li><a href="../v0.9.0/index.html">v0.9.0</a></li>
-   <li><a href="../v0.8.5/index.html">v0.8.5</a></li>
-   <li><a href="../v0.8.4/index.html">v0.8.4</a></li>
-   <li><a href="../v0.8.3/index.html">v0.8.3</a></li>
-   <li><a href="../v0.8.2/index.html">v0.8.2</a></li>
-   <li><a href="../v0.7.0/index.html">v0.7.0</a></li>
-   <li><a href="../v0.6.0/index.html">v0.6.0</a></li>
-   <li><a href="../v0.0.5/index.html">v0.0.5</a></li>
-   <li><a href="../v0.0.4/index.html">v0.0.4</a></li>
-   <li><a href="../v0.0.3/index.html">v0.0.3</a></li>
-   <li><a href="../v0.0.2/index.html">v0.0.2</a></li>
-   <li><a href="../v0.0.1/index.html">v0.0.1</a></li>
-</ul></li>
-<!-- end_releases -->
       </ul>
       <ul class="nav navbar-nav navbar-right">
         <li>
@@ -187,38 +160,34 @@ The initially displayed filter states can be provided, bookmarked filter
 states always take precedence over them.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>srv_teal</span><span class='op'>(</span><span class='va'>input</span>, <span class='va'>output</span>, <span class='va'>session</span>, <span class='va'>modules</span>, <span class='va'>raw_data</span>, filter <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='op'>)</span><span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'>srv_teal</span><span class='op'>(</span><span class='va'>id</span>, <span class='va'>modules</span>, <span class='va'>raw_data</span>, filter <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='op'>)</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>input</th>
-      <td><p>(<code>Shiny input object</code>)</p></td>
-    </tr>
-    <tr>
-      <th>output</th>
-      <td><p>(<code>Shiny output object</code>)</p></td>
-    </tr>
-    <tr>
-      <th>session</th>
-      <td><p>(<code>Shiny session object</code>)</p></td>
+      <th>id</th>
+      <td><p>(<code>character</code>)<br />
+module id to embed it, if provided,
+the server function must be called with <code><a href='https://rdrr.io/pkg/shiny/man/moduleServer.html'>shiny::moduleServer()</a></code>;
+See the vignette for an example. However, <code><a href='ui_teal_with_splash.html'>ui_teal_with_splash()</a></code>
+is then preferred to this function.</p></td>
     </tr>
     <tr>
       <th>modules</th>
-      <td><p>(<code>teal_module</code> or <code>teal_modules</code>)
-single or multiple modules. <code>teal_modules</code>  can be used for nested
-tabs, see <a href='ui_nested_tabs.html'>ui_nested_tabs</a></p></td>
+      <td><p>(<code>list</code> or <code>teal_modules</code>)<br />
+nested list of <code>teal_modules</code> or <code>module</code> objects. See <code><a href='modules.html'>modules()</a></code> and <code><a href='module.html'>module()</a></code> for
+more details.</p></td>
     </tr>
     <tr>
       <th>raw_data</th>
-      <td><p><code>reactive</code> which returns the <code>TealData</code>, only evaluated once,
-<code>NULL</code> value is ignored</p></td>
+      <td><p>(<code>reactive</code>)<br />
+returns the <code>TealData</code>, only evaluated once, <code>NULL</code> value is ignored</p></td>
     </tr>
     <tr>
       <th>filter</th>
-      <td><p>(<code>list</code>) You can define filters that show when
-the app starts.
+      <td><p>(<code>list</code>)<br />
+You can define filters that show when the app starts.
 The general pattern is:
 <code>list(iris = list(Species = ..., Sepal.Length = ...), mtcars = ...)</code>.
 An example is:

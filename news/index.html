@@ -71,7 +71,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">teal</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.10.0.9024</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.10.0.9025</span>
       </span>
     </div>
 
@@ -113,33 +113,6 @@
 <li>
   <a href="../news/index.html">Changelog</a>
 </li>
-<!-- start_releases -->
-<li class="dropdown">
-	<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-Other releases
-<span class="caret"></span></a><ul class="dropdown-menu" role="menu">
-   <li><a href="../index.html">latest</a></li>
-   <li><a href="../pre-release/index.html">pre-release</a></li>
-   <li><a href="../v0.10.0/index.html">v0.10.0</a></li>
-   <li><a href="../v0.9.5/index.html">v0.9.5</a></li>
-   <li><a href="../v0.9.4/index.html">v0.9.4</a></li>
-   <li><a href="../v0.9.3/index.html">v0.9.3</a></li>
-   <li><a href="../v0.9.2/index.html">v0.9.2</a></li>
-   <li><a href="../v0.9.1/index.html">v0.9.1</a></li>
-   <li><a href="../v0.9.0/index.html">v0.9.0</a></li>
-   <li><a href="../v0.8.5/index.html">v0.8.5</a></li>
-   <li><a href="../v0.8.4/index.html">v0.8.4</a></li>
-   <li><a href="../v0.8.3/index.html">v0.8.3</a></li>
-   <li><a href="../v0.8.2/index.html">v0.8.2</a></li>
-   <li><a href="../v0.7.0/index.html">v0.7.0</a></li>
-   <li><a href="../v0.6.0/index.html">v0.6.0</a></li>
-   <li><a href="../v0.0.5/index.html">v0.0.5</a></li>
-   <li><a href="../v0.0.4/index.html">v0.0.4</a></li>
-   <li><a href="../v0.0.3/index.html">v0.0.3</a></li>
-   <li><a href="../v0.0.2/index.html">v0.0.2</a></li>
-   <li><a href="../v0.0.1/index.html">v0.0.1</a></li>
-</ul></li>
-<!-- end_releases -->
       </ul>
       <ul class="nav navbar-nav navbar-right">
         <li>
@@ -165,9 +138,9 @@ Other releases
       
     </div>
 
-    <div id="teal-01009024" class="section level1">
-<h1 class="page-header" data-toc-text="0.10.0.9024">
-<a href="#teal-01009024" class="anchor"></a>teal 0.10.0.9024</h1>
+    <div id="teal-01009025" class="section level1">
+<h1 class="page-header" data-toc-text="0.10.0.9025">
+<a href="#teal-01009025" class="anchor"></a>teal 0.10.0.9025</h1>
 <div id="breaking-changes" class="section level3">
 <h3 class="hasAnchor">
 <a href="#breaking-changes" class="anchor"></a>Breaking changes</h3>
@@ -186,7 +159,7 @@ Other releases
 <ul>
 <li>Added print methods to the <code>DatasetConnector</code>, <code>RelationalData</code>, and <code>RelationalDataconnector</code> classes and added input validation to the implementation of the print method that was already in the <code>Dataset</code> object.</li>
 <li>Added public facing constructor functions for <code>CDISCDataConnector</code>, <code>RelationalDataConnector</code>, and <code>DataConnection</code> classes.</li>
-<li>Modified <code>data_extract_spec</code> to allow both the <code>filter</code> and <code>select</code> parameters to be <code>NULL</code>, which results in the <code>data_extract_input</code> acting as if a <code>filter_spec</code> with all variables as possible choices had been supplied as the <code>filter</code> argument and a <code>select_spec</code> with the <code>multiple</code> parameter set to <code>TRUE</code> had been supplied as the <code>select</code> argument.</li>
+<li>Modified <code>data_extract_spec</code> to allow both the <code>filter</code> and <code>select</code> parameters to be <code>NULL</code>, which results in the <code>data_extract_ui</code> acting as if a <code>filter_spec</code> with all variables as possible choices had been supplied as the <code>filter</code> argument and a <code>select_spec</code> with the <code>multiple</code> parameter set to <code>TRUE</code> had been supplied as the <code>select</code> argument.</li>
 <li>Added support for logging using the <code>logger</code> package. Added a new function <code>register_logger</code>, which registers a logger in a given namespace.</li>
 <li>Added logging at the info and trace level to the filter panel.</li>
 <li>Added support of the full screen for a <code>module</code> when the <code>filters</code> argument is equal <code>NULL</code>.</li>
@@ -209,7 +182,7 @@ Other releases
 <a href="#miscellaneous" class="anchor"></a>Miscellaneous</h3>
 <ul>
 <li>Replaced the servers from <code>DataConnection</code>, <code>RelationalDataConnector</code>, <code>DatasetConnector</code>, and <code>RelationalData</code> with <code>moduleServer</code>.</li>
-<li>Updated R version requirement to &gt;= 3.6.</li>
+<li>Updated R version requirement to &gt;= 4.0.</li>
 <li>Changed references to outdated functions of <code>teal.devel</code> in the documentation.</li>
 <li>Updated “filter panel collapse” icon to remove warnings when using shiny version &gt;= 1.7.</li>
 <li>Renamed <code>Dataset</code> class into <code>TealDataset</code>. Applied the same logic for the rest of the dataset and data class names.</li>

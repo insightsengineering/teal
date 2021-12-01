@@ -41,7 +41,7 @@
 
 <meta property="og:title" content="Create the root modules container — root_modules" />
 <meta property="og:description" content="
-To be used with init in the modules argument." />
+To be used with init() in the modules argument." />
 
 
 
@@ -73,7 +73,7 @@ To be used with init in the modules argument." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">teal</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.10.0.9024</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.10.0.9025</span>
       </span>
     </div>
 
@@ -115,33 +115,6 @@ To be used with init in the modules argument." />
 <li>
   <a href="../news/index.html">Changelog</a>
 </li>
-<!-- start_releases -->
-<li class="dropdown">
-	<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-Other releases
-<span class="caret"></span></a><ul class="dropdown-menu" role="menu">
-   <li><a href="../index.html">latest</a></li>
-   <li><a href="../pre-release/index.html">pre-release</a></li>
-   <li><a href="../v0.10.0/index.html">v0.10.0</a></li>
-   <li><a href="../v0.9.5/index.html">v0.9.5</a></li>
-   <li><a href="../v0.9.4/index.html">v0.9.4</a></li>
-   <li><a href="../v0.9.3/index.html">v0.9.3</a></li>
-   <li><a href="../v0.9.2/index.html">v0.9.2</a></li>
-   <li><a href="../v0.9.1/index.html">v0.9.1</a></li>
-   <li><a href="../v0.9.0/index.html">v0.9.0</a></li>
-   <li><a href="../v0.8.5/index.html">v0.8.5</a></li>
-   <li><a href="../v0.8.4/index.html">v0.8.4</a></li>
-   <li><a href="../v0.8.3/index.html">v0.8.3</a></li>
-   <li><a href="../v0.8.2/index.html">v0.8.2</a></li>
-   <li><a href="../v0.7.0/index.html">v0.7.0</a></li>
-   <li><a href="../v0.6.0/index.html">v0.6.0</a></li>
-   <li><a href="../v0.0.5/index.html">v0.0.5</a></li>
-   <li><a href="../v0.0.4/index.html">v0.0.4</a></li>
-   <li><a href="../v0.0.3/index.html">v0.0.3</a></li>
-   <li><a href="../v0.0.2/index.html">v0.0.2</a></li>
-   <li><a href="../v0.0.1/index.html">v0.0.1</a></li>
-</ul></li>
-<!-- end_releases -->
       </ul>
       <ul class="nav navbar-nav navbar-right">
         <li>
@@ -170,7 +143,7 @@ Other releases
 
     <div class="ref-description">
     <p><a href='https://lifecycle.r-lib.org/articles/stages.html#maturing'><img src='figures/lifecycle-maturing.svg' alt='[Maturing]' /></a>
-To be used with <code><a href='init.html'>init</a></code> in the <code>modules</code> argument.</p>
+To be used with <code><a href='init.html'>init()</a></code> in the <code>modules</code> argument.</p>
     </div>
 
     <pre class="usage"><span class='fu'>root_modules</span><span class='op'>(</span><span class='va'>...</span><span class='op'>)</span></pre>
@@ -180,13 +153,14 @@ To be used with <code><a href='init.html'>init</a></code> in the <code>modules</
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>...</th>
-      <td><p><code><a href='module.html'>module</a></code> and <code><a href='modules.html'>modules</a></code> object</p></td>
+      <td><p>(<code>teal_module</code> or <code>teal_modules</code>)<br />
+see <code><a href='module.html'>module()</a></code> and <code><a href='modules.html'>modules()</a></code> for more details</p></td>
     </tr>
     </table>
 
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>The function <code><a href='modules.html'>modules</a></code> can also be used. The purpose of this
+    <p>The function <code><a href='modules.html'>modules()</a></code> can also be used. The purpose of this
 function is to not confuse the end-user as the label of the top-module
 will not be displayed as a tab name (because the root is only one element
 which has multiple children).</p>
