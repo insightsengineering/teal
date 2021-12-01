@@ -138,6 +138,7 @@ srv_teal <- function(input, output, session, modules, raw_data, filter = list())
     once = TRUE,
     handlerExpr = {
       session$userData$timezone <- input$timezone
+      logger::log_trace("Timezone set to client's timezone: { input$timezone }")
     }
   )
 
@@ -154,6 +155,7 @@ srv_teal <- function(input, output, session, modules, raw_data, filter = list())
     # Note that we cannnot directly do this on datasets as this would trigger
     # reactivity to recompute the filtered datasets, which is not needed.
     state$values$datasets_state <- datasets$get_bookmark_state()
+    logger::log_trace("Datasets state set prior to setting bookmark state: { datasets$get_bookmark_state() }")
   })
   saved_datasets_state <- NULL # set when restored because data must already be populated
   onRestore(function(state) {
@@ -161,6 +163,7 @@ srv_teal <- function(input, output, session, modules, raw_data, filter = list())
     # was set to NULL before storing. The data should have been set again
     # by the user, so we just need to set the filters.
     saved_datasets_state <<- state$values$datasets_state
+    logger::log_trace("Datatsets state saved priot to restoring session: { state$values$datasets_state }")
   })
 
   # This will be a FilteredData object - needs to be at this scope
@@ -183,6 +186,7 @@ srv_teal <- function(input, output, session, modules, raw_data, filter = list())
     datasets <<- filtered_data_new(isolate(raw_data()))
     # transfer the datasets from raw_data() into the FilteredData object
     filtered_data_set(raw_data(), datasets)
+    logger::log_trace("Raw Data transferred to FilteredData.")
 
     progress$set(0.5, message = "Setting up main UI")
     # main_ui_container contains splash screen first and we remove it and replace it by the real UI
@@ -207,8 +211,10 @@ srv_teal <- function(input, output, session, modules, raw_data, filter = list())
       tryCatch({
         progress$set(0.75, message = "Restoring from bookmarked state")
         datasets$restore_state_from_bookmark(saved_datasets_state)
+        logger::log_trace("Attempted to restore state from bookmark: {saved_datasets_state}")
       },
       error = function(cnd) {
+        logger::log_trace("Attempt to restore state from bookmark failed.")
         showModal(
           modalDialog(
             div(
@@ -232,6 +238,7 @@ srv_teal <- function(input, output, session, modules, raw_data, filter = list())
     } else {
       progress$set(0.75, message = "Setting initial filter state")
       filtered_data_set_filters(datasets, filter)
+      logger::log_trace("Initial filter state set")
     }
 
     # must make sure that this is only executed once as modules assume their observers are only

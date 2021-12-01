@@ -135,6 +135,7 @@ init <- function(data,
                  id = character(0)) {
   if (!is(data, "TealData")) {
     data <- to_relational_data(data = data)
+    logger::log_trace("data has been converted to a list of TealData objects")
   }
 
   stopifnot(
@@ -148,7 +149,10 @@ init <- function(data,
 
   log_system_info()
 
-  if(is(modules, "list"))  modules <- do.call(root_modules, modules)
+  if (is(modules, "list")) {
+    modules <- do.call(root_modules, modules)
+    logger::log_trace("teal_modules object has been created from the list of modules inputted")
+  }
 
   # Note regarding case `id = character(0)`:
   # rather than using `callModule` and creating a submodule of this module, we directly modify
