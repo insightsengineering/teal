@@ -25,7 +25,7 @@
  
 ### Miscellaneous
 * Replaced the servers from `DataConnection`, `RelationalDataConnector`, `DatasetConnector`, and `RelationalData` with `moduleServer`.
-* Updated R version requirement to >= 3.6.
+* Updated R version requirement to >= 4.0.
 * Changed references to outdated functions of `teal.devel` in the documentation.
 * Updated "filter panel collapse" icon to remove warnings when using shiny version >= 1.7.
 * Renamed `Dataset` class into `TealDataset`. Applied the same logic for the rest of the dataset and data class names.
