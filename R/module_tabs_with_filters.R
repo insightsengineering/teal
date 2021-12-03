@@ -133,16 +133,25 @@ ui_tabs_with_filters <- function(id, modules, datasets) {
 srv_tabs_with_filters <- function(id, datasets, modules) {
   stopifnot(is(datasets, "FilteredData"))
   moduleServer(id, function(input, output, session) {
+    logger::log_trace(
+      "srv_tabs_with_filters initializing the module with datasets { paste(datasets$datanames(), collapse = ' ' )}."
+    )
     active_module <- srv_nested_tabs(id = "modules_ui", datasets = datasets, modules = modules)
 
     active_datanames <- eventReactive(
       eventExpr = active_module(),
       valueExpr = {
+        logger::log_trace(
+          "srv_tabs_with_filters@1 changing active module to: { active_module()$label }."
+        )
         datasets$handle_active_datanames(datanames = active_module()$filters)
       })
 
     datasets$srv_filter_panel(id = "filter_panel", active_datanames = active_datanames)
 
+    logger::log_trace(
+      "srv_tabs_with_filters initialized the module with datasets { paste(datasets$datanames(), collapse = ' ' )}."
+    )
     return(active_module)
   })
 }
