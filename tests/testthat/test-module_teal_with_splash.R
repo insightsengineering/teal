@@ -67,7 +67,7 @@ testthat::test_that("srv_teal_with_splash gets observe event from srv_teal", {
       modules = root_modules(test_module1)
     ),
     expr = {
-      testthat::expect_is(res, "Observer.event")
+      testthat::expect_is(res, "Observer")
     }
   )
 })
