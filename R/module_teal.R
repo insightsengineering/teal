@@ -117,7 +117,7 @@ ui_teal <- function(id,
 srv_teal <- function(id, modules, raw_data, filter = list()) {
   stopifnot(is.reactive(raw_data))
   moduleServer(id, function(input, output, session) {
-    logger::log_trace("srv_teal initializing the module...")
+    logger::log_trace("srv_teal initializing the module.")
     # Javascript code ----
     if (getOption("teal_show_js_log", default = FALSE)) {
       shinyjs::showLog() # to show Javascript console logs in the R console
@@ -132,7 +132,7 @@ srv_teal <- function(id, modules, raw_data, filter = list()) {
       once = TRUE,
       handlerExpr = {
         session$userData$timezone <- input$timezone
-        logger::log_trace("srv_teal@1 Timezone set to client's timezone: { input$timezone }")
+        logger::log_trace("srv_teal@1 Timezone set to client's timezone: { input$timezone }.")
       }
     )
 
@@ -150,7 +150,7 @@ srv_teal <- function(id, modules, raw_data, filter = list()) {
       logger::log_trace(
         paste(
           "srv_teal@2 saving active filter state for",
-          "datasets: { paste(names(datasets_reactive()$get_bookmark_state()), collapse = ' ') }"
+          "datasets: { paste(names(datasets_reactive()$get_bookmark_state()), collapse = ' ') }."
         )
       )
       state$values$datasets_state <- datasets_reactive()$get_bookmark_state()
@@ -164,7 +164,7 @@ srv_teal <- function(id, modules, raw_data, filter = list()) {
       logger::log_trace(
         paste(
           "srv_teal@2 restoring filter states from the bookmark for",
-          "datasets: { paste(names(state$values$datasets_state), collapse = ' ') }"
+          "datasets: { paste(names(state$values$datasets_state), collapse = ' ') }."
         )
       )
       saved_datasets_state(state$values$datasets_state)

@@ -109,7 +109,7 @@ srv_nested_tabs <- function(id, datasets, modules) {
       paste(
         "srv_nested_tabs initializing the module with:",
         "datasets { paste(datasets$datanames(), collapse = ' ' )};",
-        "modules { gsub('\n', '', toString(modules)) }"
+        "modules { gsub('\n', '', toString(modules)) }."
       )
     )
 
@@ -172,7 +172,7 @@ srv_nested_tabs <- function(id, datasets, modules) {
       eventExpr = input[[label_to_id(modules$label)]], # this reacts only on the root tabs - nested tabs ignored
       ignoreNULL = TRUE,
       valueExpr = {
-        logger::log_trace("srv_nested_tabs@1 switched active tab to { input[[label_to_id(modules$label)]] }")
+        logger::log_trace("srv_nested_tabs@1 switched active tab to { input[[label_to_id(modules$label)]] }.")
         get_active_module(modules, id_parent = NULL)
       }
     )

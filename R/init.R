@@ -123,7 +123,7 @@ init <- function(data,
                  header = tags$p("Add Title Here"),
                  footer = tags$p("Add Footer Here"),
                  id = character(0)) {
-  logger::log_trace("init initializing teal app with: data ({ class(data)[1] })")
+  logger::log_trace("init initializing teal app with: data ({ class(data)[1] }).")
   if (!is(data, "TealData")) {
     data <- to_relational_data(data = data)
   }

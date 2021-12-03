@@ -55,7 +55,7 @@ srv_teal_with_splash <- function(id, data, modules, filter = list()) {
   stopifnot(is(data, "TealDataAbstract"))
   moduleServer(id, function(input, output, session) {
     logger::log_trace(
-      "srv_teal_with_splash initializing module with data { paste(data$get_datanames(), collapse = ' ') }"
+      "srv_teal_with_splash initializing module with data { paste(data$get_datanames(), collapse = ' ')}."
     )
     is_pulled_data <- is_pulled(data)
 
@@ -71,7 +71,7 @@ srv_teal_with_splash <- function(id, data, modules, filter = list()) {
 
     res <- srv_teal(id = "teal", modules = modules, raw_data = raw_data, filter = filter)
     logger::log_trace(
-      "srv_teal_with_splash initialized the module with data { paste(data$get_datanames(), collapse = ' ') }"
+      "srv_teal_with_splash initialized the module with data { paste(data$get_datanames(), collapse = ' ') }."
     )
     return(res)
   })
