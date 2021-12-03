@@ -123,9 +123,9 @@ init <- function(data,
                  header = tags$p("Add Title Here"),
                  footer = tags$p("Add Footer Here"),
                  id = character(0)) {
+  logger::log_trace("init initializing teal app with: data ({ class(data)[1] })")
   if (!is(data, "TealData")) {
     data <- to_relational_data(data = data)
-    logger::log_trace("data has been converted to a list of TealData objects")
   }
 
   stopifnot(
@@ -141,7 +141,6 @@ init <- function(data,
 
   if (is(modules, "list")) {
     modules <- do.call(root_modules, modules)
-    logger::log_trace("teal_modules object has been created from the list of modules inputted")
   }
 
   # Note regarding case `id = character(0)`:
@@ -156,6 +155,7 @@ init <- function(data,
       srv_teal_with_splash(id = id, data = data, modules = modules, filter = filter)
     }
   )
+  logger::log_trace("init teal app has been initialized.")
   return(res)
 }
 

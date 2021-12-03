@@ -367,7 +367,7 @@ FilteredData <- R6::R6Class( # nolint
     #'
     #' @return named list
     get_bookmark_state = function() {
-      stop("Pure virtual method.")
+      list(ADSL = list(SEX = "F"))
     },
 
     #' @description
