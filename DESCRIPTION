@@ -55,7 +55,6 @@ Suggests:
     rmarkdown,
     scda,
     scda.2021,
-    test.nest (>= 0.2.11),
     testthat (>= 2.0),
     withr
 VignetteBuilder:
